@@ -4,7 +4,9 @@ define('PUBLICR',		'http://game.expansion-lejeu.ch/server3/public/');
 # define('PUBLICR',		'http://localhost/expansion/dev12/public/');
 define('SYSTEMR',		'system/');
 
-CACA DANS LA BOUCHE
+
+CACA DANS LA COUUUCHE
+
 
 #ajotu d'un commenaitre sépcial pour git
 # définition des ROOT
