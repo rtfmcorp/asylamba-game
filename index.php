@@ -41,10 +41,6 @@ define('ARTEMIS', 		MODULES . 'artemis/main.php');
 define('APOLLON', 		MODULES . 'apollon/main.php');
 define('DEMETER', 		MODULES . 'demeter/main.php');
 
-# inclusion des fichiers de configurations
-include CONFIG . 'app_config.php';
-include CONFIG . 'app_loader.php';
-
 # Action du controller
 CTR::initialize();
 CTR::checkPermission();
