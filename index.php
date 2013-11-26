@@ -11,7 +11,11 @@ define('JS', 		 	PUBLICR . 'js/');
 define('MEDIA', 		PUBLICR . 'media/');
 define('LOG', 			PUBLICR . 'log/');
 
+<<<<<<< HEAD
 define('MODULE', 		SYSTEMR . 'modules/');
+=======
+define('MODULESV', 		SYSTEMR . 'modules/');
+>>>>>>> 73be4b70a3b5fd51cfa56600e06bce632f74f016
 define('CLASSES',		SYSTEMR . 'classes/');
 define('LIB', 			SYSTEMR . 'lib/');
 define('CONFIG', 		SYSTEMR . 'config/');
