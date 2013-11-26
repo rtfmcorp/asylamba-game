@@ -11,7 +11,7 @@ define('JS', 		 	PUBLICR . 'js/');
 define('MEDIA', 		PUBLICR . 'media/');
 define('LOG', 			PUBLICR . 'log/');
 
-define('MODULES', 		SYSTEMR . 'modules/');
+define('MODULE', 		SYSTEMR . 'modules/');
 define('CLASSES',		SYSTEMR . 'classes/');
 define('LIB', 			SYSTEMR . 'lib/');
 define('CONFIG', 		SYSTEMR . 'config/');
