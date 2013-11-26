@@ -1,0 +1,93 @@
+<?php
+# routeFinancial component
+# in athena package
+
+# détail les routes commerciales par base
+
+# require
+	# [{orbitalBase}]			ob_routeFinancial
+
+$totalIncome = 0;
+
+# bonus
+$incomeBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::COMMERCIAL_INCOME);
+
+# view part
+echo '<div class="component financial">';
+	echo '<div class="head skin-1">';
+		echo '<img src="' . MEDIA . 'financial/commercial-route.png" alt="route commerciale" />';
+		echo '<h2>Commerce</h2>';
+		echo '<em>Revenus des routes commerciales par planète</em>';
+	echo '</div>';
+	echo '<div class="fix-body">';
+		echo '<div class="body">';
+		echo '<ul class="list-type-1">';
+			foreach ($ob_routeFinancial as $base) {
+				$S_CRM1 = ASM::$crm->getCurrentSession();
+				ASM::$crm->changeSession($base->routeManager);
+				$nbRoute = 0;
+				for ($k = 0; $k < ASM::$crm->size(); $k++) {
+					if (ASM::$crm->get($k)->getStatement() == CRM_ACTIVE) {
+						$nbRoute++;
+					}
+				}
+				$routeIncome = 0;
+				for ($k = 0; $k < ASM::$crm->size(); $k++) {
+					if (ASM::$crm->get($k)->getStatement() == CRM_ACTIVE) {
+						$routeIncome += ASM::$crm->get($k)->getIncome();
+					}
+				}
+				$totalIncome += $routeIncome;
+
+				echo '<li>';
+					if ($nbRoute > 0) {
+						echo '<span class="buttons">';
+							echo '<a href="#" class="sh" data-target="rc-base-' . $base->getId() . '">↓</a>';
+						echo '</span>';
+					}
+					echo '<span class="label">' . $base->getName() . ' [' . $nbRoute . ' route' . Format::addPlural($nbRoute) . ']</span>';
+					echo '<span class="value">';
+						echo Format::numberFormat($routeIncome);
+						if ($incomeBonus > 0) {
+							echo '<span class="bonus">+' . Format::numberFormat($routeIncome * $incomeBonus / 100) . '</span>';
+						}
+						echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+					echo '</span>';
+
+					if ($nbRoute > 0) {
+						echo '<ul class="sub-list-type-1" id="rc-base-' . $base->getId() . '">';
+							for ($k = 0; $k < ASM::$crm->size(); $k++) {
+								$route = ASM::$crm->get($k);
+								if (ASM::$crm->get($k)->getStatement() == CRM_ACTIVE) {
+									echo '<li>';
+										$rBaseName = ($route->getBaseName1() == $base->getName()) ? $route->getBaseName2(): $route->getBaseName1();
+										echo '<span class="label">' . $rBaseName . '</span>';
+										echo '<span class="value">' . Format::numberFormat($route->getIncome()) . '</span>';
+									echo '</li>';
+								}
+							}
+						echo '</ul>';
+					}
+				echo '</li>';
+
+				ASM::$crm->changeSession($S_CRM1);
+			}
+
+			echo '<li class="strong">';
+				echo '<span class="label">total des routes commerciales</span>';
+				echo '<span class="value">';
+					echo Format::numberFormat($totalIncome);
+					if ($incomeBonus > 0) {
+						echo '<span class="bonus">+' . Format::numberFormat($totalIncome * $incomeBonus / 100) . '</span>';
+					}
+					echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+				echo '</span>';
+			echo '</li>';
+		echo '</ul>';
+
+		echo '<p class="info">La colonne « Commerce » est un compte rendu de la totalité des revenus de vos routes commerciales. Pour gérer les 
+		recettes de vos routes commerciales, il vous est nécessaire de vous rendre sur votre plateforme commerciale afin de créer ou supprimer 
+		des routes. </p>';
+		echo '</div>';
+	echo '</div>';
+echo '</div>';

@@ -1,0 +1,24 @@
+LISTE des clés valides dans l'arrayList $data :
+-----------------------------------------------
+- playerId
+
+- playerInfo (arrayList)
+	color
+	name
+	avatar
+	credit
+	actionPoint
+	experience
+	level
+
+- playerBase (arrayList)
+	stackList 'ob' : 'id', 'name', 'sector'
+	stackList 'ms' : 'id', 'name', 'sector'
+
+- playerEvent (eventList)
+
+- lastUpdate (arrayList)
+	game
+	event
+
+- playerTechno (arrayList)
