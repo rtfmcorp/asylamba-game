@@ -1,0 +1,4 @@
+public/log/*
+index.php
+system/classes/DataBase.class.php
+system/config/app_config.php
