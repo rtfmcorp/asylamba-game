@@ -6,6 +6,8 @@ abstract class CTR {
 	public static $post;
 	public static $alert;
 
+	public static $applyGalaxy = FALSE;
+
 	private static $page;
 	private static $title;
 
@@ -223,13 +225,18 @@ abstract class CTR {
 		# sauvegarde en db des objets
 		ASM::save();
 
+		# application de la galaxie si necessaire
+		if (CTR::$applyGalaxy) {
+			include_once GAIA;
+			GalaxyColorManager::applyAndSave();
+		}
+
 		# sauvegarde en session des données
 		$_SESSION[SERVER_SESS]['data'] = serialize(self::$data);
 		$_SESSION[SERVER_SESS]['alert'] = serialize(self::$alert);
 		$_SESSION[SERVER_SESS]['history'] = serialize(self::$history);
 
 		# fin du benchmark
-
 		self::getStat();
 
 		# redirection, si spécifié

@@ -80,7 +80,7 @@ echo '<div class="body">';
 							echo '<hr />';
 							echo '<p>propriété de</p>';
 							echo '<p>';
-								echo '<a class="color-name color' . $place->getPlayerColor() . '" href="' . APP_ROOT . 'diary/player-' . $place->getRPlayer() . '" class="color1">' . $place->getPlayerName() . '</a>';
+								echo '<a href="' . APP_ROOT . 'diary/player-' . $place->getRPlayer() . '" class="color1">' . $place->getPlayerName() . '</a>';
 							echo ($place->getPlayerColor() == 0 ? '(inactif)' : '') . '</p>';
 						} elseif (1 == 2) {
 							# réger les vaisseaux mères

@@ -3305,27 +3305,6 @@ body {
 	line-height: 28px;
 	font-size: 18px;
 }
-#action-box .body .system ul li.action .content .column.info a.color-name {
-	position: relative;
-	display: inline-block;
-	margin: 0 5px 0 20px;
-}
-#action-box .body .system ul li.action .content .column.info a.color-name:before {
-	content: '';
-	position: absolute;
-	top: 3px; left: -17px;
-	width: 12px; height: 12px;
-	border-radius: 100%;
-	background: #CCC;
-}
-#action-box .body .system ul li.action .content .column.info a.color-name:before { background: #CCC; }
-#action-box .body .system ul li.action .content .column.info a.color-name.color1:before { background: #b01e2d; }
-#action-box .body .system ul li.action .content .column.info a.color-name.color2:before { background: #2f23c0; }
-#action-box .body .system ul li.action .content .column.info a.color-name.color3:before { background: #ffdb0f; }
-#action-box .body .system ul li.action .content .column.info a.color-name.color4:before { background: #a935c7; }
-#action-box .body .system ul li.action .content .column.info a.color-name.color5:before { background: #57c632; }
-#action-box .body .system ul li.action .content .column.info a.color-name.color6:before { background: #05bed7; }
-#action-box .body .system ul li.action .content .column.info a.color-name.color7:before { background: #ac5832; }
 
 #action-box .body .system ul li.action .content .column .label {
 	display: inline-block;

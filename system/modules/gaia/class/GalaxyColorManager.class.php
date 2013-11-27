@@ -1,9 +1,10 @@
 <?php
 class GalaxyColorManager {
-	protected $system = array();
-	protected $sector = array();
-
 	public static function apply() {
+		CTR::$applyGalaxy = TRUE;
+	}
+
+	public static function applyAndSave() {
 		$gcm = new GalaxyColorManager();
 		$gcm->loadSystem();
 		$gcm->loadSector();
@@ -12,6 +13,9 @@ class GalaxyColorManager {
 		$gcm->saveSystem();
 		$gcm->saveSector();
 	}
+
+	protected $system = array();
+	protected $sector = array();
 
 	public function loadSystem() {
 		$db = DataBase::getInstance();
