@@ -12,4 +12,26 @@
 ### 10:53:15 #### path : /expansion/dev12/admin# time : 52ms
 ### 10:53:20 #### path : /expansion/dev12/profil# time : 1007ms
 ### 10:59:11 #### path : /expansion/dev12/profil# time : 2891ms
+### 11:17:46 #### path : /expansion/dev12/profil# time : 3668ms
+### 11:18:00 #### path : /expansion/dev12/admin# time : 85ms
+### 11:18:08 #### path : /expansion/dev12/profil# time : 867ms
+### 11:18:17 #### path : /expansion/dev12/bases/base-19050# time : 339ms
+### 11:18:21 #### path : /expansion/dev12/bases/base-19050/view-commercialplateforme# time : 169ms
+### 11:18:23 #### path : /expansion/dev12/bases/base-19050/view-dock2# time : 101ms
+### 11:18:24 #### path : /expansion/dev12/bases/base-19050/view-dock1# time : 148ms
+### 11:18:26 #### path : /expansion/dev12/bases/base-19050/view-technosphere# time : 109ms
+### 11:18:28 #### path : /expansion/dev12/action/a-buildtechno/baseid-19050/techno-19/sftr-1# time : 208ms
+### 11:18:29 #### path : /expansion/dev12/bases/base-19050/view-technosphere# time : 172ms
+### 11:18:29 #### path : /expansion/dev12/action/a-buildtechno/baseid-19050/techno-18/sftr-1# time : 97ms
+### 11:18:29 #### path : /expansion/dev12/bases/base-19050/view-technosphere# time : 99ms
+### 11:18:31 #### path : /expansion/dev12/bases/base-19050/view-dock2# time : 122ms
+### 11:18:37 #### path : /expansion/dev12/bases/base-19050/view-dock1# time : 121ms
+### 11:22:27 #### path : /expansion/dev12/faction# time : 176ms
+### 11:22:28 #### path : /expansion/dev12/faction/view-forum/forum-2# time : 51ms
+### 11:22:28 #### path : /expansion/dev12/faction/view-forum/forum-3# time : 56ms
+### 11:22:29 #### path : /expansion/dev12/faction/view-forum/forum-4# time : 52ms
+### 11:22:29 #### path : /expansion/dev12/faction/view-forum/forum-5# time : 53ms
+### 11:22:31 #### path : /expansion/dev12/faction/view-forum/forum-6# time : 57ms
+### 11:22:32 #### path : /expansion/dev12/faction/view-forum/forum-7# time : 55ms
+### 11:22:33 #### path : /expansion/dev12/faction/view-player# time : 97ms
 
