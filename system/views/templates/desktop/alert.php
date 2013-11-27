@@ -2,7 +2,8 @@
 echo '<ul id="alert"></ul>';
 
 # affichage
-if (CTR::$alert->size() > 0) {
+$redir = CTR::getRedirect();
+if (CTR::$alert->size() > 0 && empty($redir)) {
 	echo '<ul id="alert-content">';
 		for ($i = 0; $i < CTR::$alert->size(); $i++) {
 			$alert = CTR::$alert->get($i);
@@ -19,7 +20,8 @@ if (CTR::$alert->size() > 0) {
 			}
 		}
 	echo '</ul>';
+	
+	CTR::$alert->clear();
 }
 
-CTR::$alert->clear();
 ?>

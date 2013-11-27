@@ -1,4 +1,5 @@
 public/log/*
 index.php
 system/classes/DataBase.class.php
+system/classes/DataBaseAdmin.class.php
 system/config/app_config.php

@@ -15,19 +15,19 @@ if (CTR::$get->exist('relatedplace')) {
 	ASM::$obm->changeSession($S_OBM2);
 }
 
-// load the commanders of the default base in a session
+# load the commanders of the default base in a session
 $S_COM1 = ASM::$com->getCurrentSession();
 ASM::$com->newSession();
 ASM::$com->load(array('rBase' => $defaultBase->getRPlace(), 'statement' => array(COM_AFFECTED, COM_MOVING)));
 $localCommandersSession = ASM::$com->getCurrentSession();
 
-// load all the commanders moving in a session
+# load all the commanders moving in a session
 ASM::$com->newSession();
 ASM::$com->load(array('rPlayer' => CTR::$data->get('playerId'), 'statement' => COM_MOVING));
 $movingCommandersSession = ASM::$com->getCurrentSession();
 ASM::$com->changeSession($S_COM1);
 
-// load the technologies
+# load the technologies
 $technologies = new Technology(CTR::$data->get('playerId'));
 
 # header part
@@ -79,7 +79,9 @@ echo '<div class="body">';
 							echo '<p>' . Format::numberFormat($place->getPoints()) . ' points</p>';
 							echo '<hr />';
 							echo '<p>propriété de</p>';
-							echo '<p><a href="' . APP_ROOT . 'diary/player-' . $place->getRPlayer() . '" class="color1">' . $place->getPlayerName() . '</a></p>';
+							echo '<p>';
+								echo '<a class="color-name color' . $place->getPlayerColor() . '" href="' . APP_ROOT . 'diary/player-' . $place->getRPlayer() . '" class="color1">' . $place->getPlayerName() . '</a>';
+							echo ($place->getPlayerColor() == 0 ? '(inactif)' : '') . '</p>';
 						} elseif (1 == 2) {
 							# réger les vaisseaux mères
 						} else {

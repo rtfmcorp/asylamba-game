@@ -14,5 +14,6 @@ define('PAM_INACTIVE',			2);
 define('PAM_HOLIDAY',			3);
 define('PAM_BANNED',			4);
 define('PAM_DELETED',			5);
+define('PAM_DEAD',				6);
 
 define('PLAYER_TIME_INACTIVE',	60 * 60 * 24 * 7);

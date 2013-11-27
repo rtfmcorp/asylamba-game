@@ -25,6 +25,11 @@ echo '<div class="component profil thread">';
 				echo '<span class="value">' . $player_diaryRoplay->getLevel() . '</span>';
 			echo '</div>';
 
+			echo '<div class="number-box grey">';
+				echo '<span class="label">expérience</span>';
+				echo '<span class="value">' . Format::numberFormat($player_diaryRoplay->getExperience()) . '</span>';
+			echo '</div>';
+
 			echo '<img ';
 				echo 'src="' . MEDIA . '/avatar/big/' . $player_diaryRoplay->getAvatar() . '.png" ';
 				echo 'alt="avatar de ' . $player_diaryRoplay->getName() . '" ';

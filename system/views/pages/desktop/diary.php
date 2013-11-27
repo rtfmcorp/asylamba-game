@@ -50,6 +50,7 @@ echo '<div id="content">';
 			include COMPONENT . 'hermes/thread.php';
 		}
 	} else {
+		CTR::$alert->add('Le joueur a supprimé son compte ou a été défait.');
 		CTR::redirect('profil');
 	}
 
