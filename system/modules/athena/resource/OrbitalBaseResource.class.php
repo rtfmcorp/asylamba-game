@@ -54,7 +54,7 @@ class OrbitalBaseResource {
 					return -1;
 				}
 			} elseif ($info == 'level') {
-				if ($level <= 0 OR $level > 20) {
+				if ($level <= 0 OR $level > count(self::$building[$buildingNumber]['level'])) {
 					return FALSE;
 				}
 				if ($sup == 'time') {
@@ -76,6 +76,8 @@ class OrbitalBaseResource {
 						return self::$building[$buildingNumber][$info][$level-1][4];
 					} elseif($sup == 'nbRoutesMax' AND $buildingNumber == 6) {
 						return self::$building[$buildingNumber][$info][$level-1][4];
+					} elseif($sup == 'nbCommercialShip' AND $buildingNumber == 6) {
+						return self::$building[$buildingNumber][$info][$level-1][5];
 					} elseif($sup == 'protectionRate' AND $buildingNumber == 7) {
 						return self::$building[$buildingNumber][$info][$level-1][4];
 					} else {
@@ -392,23 +394,23 @@ class OrbitalBaseResource {
 			'frenchName' => 'Plateforme Commerciale',
 			'imageLink' => 'commercialplateforme',
 			'level' => array(
-				// (time, resourcePrice, pa, points, nbRoutesMax)
+				// (time, resourcePrice, pa, points, nbRoutesMax, nbCommercialShip)
 				// moin chère que le chantier
-				array(1000,  2000,  	3, 	30,		1),
-				array(2000,  5000,  	3, 	40,		1),
-				array(4000,  8000,  	4, 	50,		1),
-				array(6000,  15000, 		4, 	60,		2),
-				array(8000,  30000,  	5, 	70,		2),
-				array(10000,  55000,  	6, 	80,		2),
-				array(12000, 80000,  	6, 	100,	3),
-				array(15000, 100000,  	7, 	120,	3),
-				array(18000, 220000, 	8, 	140,  	3),
-				array(25000, 400000,  	10, 160, 	4),
-				array(36000, 550000,  	12, 200,  	5),
-				array(50000, 750000, 	14, 240, 	6),
-				array(70000, 950000, 	16, 280, 	7),
-				array(90000, 1350000, 	18, 320, 	8),
-				array(105000, 1800000, 	20, 380, 	9)
+				array(1000,  2000,  	3, 	30,		1, 1),
+				array(2000,  5000,  	3, 	40,		1, 2),
+				array(4000,  8000,  	4, 	50,		1, 5),
+				array(6000,  15000, 	4, 	60,		2, 10),
+				array(8000,  30000,  	5, 	70,		2, 20),
+				array(10000, 55000,  	6, 	80,		2, 50),
+				array(12000, 80000,  	6, 	100,	3, 100),
+				array(15000, 100000,  	7, 	120,	3, 200),
+				array(18000, 220000, 	8, 	140,  	3, 500),
+				array(25000, 400000,  	10, 160, 	4, 1000),
+				array(36000, 550000,  	12, 200,  	5, 1500),
+				array(50000, 750000, 	14, 240, 	6, 2000),
+				array(70000, 950000, 	16, 280, 	7, 3000),
+				array(90000, 1350000, 	18, 320, 	8, 4000),
+				array(105000,1800000, 	20, 380, 	9, 5000)
 			),
 			'description' => 'La <strong>Plateforme Commerciale</strong>, véritable plaque tournante du commerce dans votre domaine, permet, en fonction de sa taille, de créer et de gérer des <strong>routes commerciales</strong> sur le long terme avec vos partenaires. Pour valider une route commerciale vous devez la proposer et l’autre joueur doit l’accepter. <br /><br />Une route commerciale génère des revenus chez les deux parties. Plus la route est longue et plus les planètes sont peuplées, meilleurs sera son rendement. De plus, les routes commerciales entre deux secteurs différents ainsi qu\'avec des joueurs non-alliés ont tendance à générer plus de revenus.',
 			'techno' => 0
