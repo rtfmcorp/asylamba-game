@@ -122,7 +122,8 @@ body {
 
 #nav .box a.square img {
 	position: absolute;
-	top: 1px; left: 5px;
+	width: 24px;
+	top: 3px; left: 8px;
 }
 
 #nav .overbox {
@@ -215,17 +216,12 @@ body {
 }
 
 #nav .roadmap {
-	position: relative;
 	display: none;
 	position: absolute;
 	top: 50px; right: 142px;
-	max-height: 400px;
-	width: 350px;
-	padding: 8px 0;
 	background: #0A0A0A;
 	box-shadow: inset 0 0 2px #4F4F4F;
 	border-radius: 3px;
-	overflow: auto;
 }
 #nav .roadmap:before {
 	content: '';
@@ -234,6 +230,11 @@ body {
 	border-style: solid;
 	border-width: 9px;
 	border-color: transparent transparent #202020 transparent;
+}
+#nav .roadmap .overflow {
+	max-height: 400px;
+	width: 350px;
+	overflow: auto;
 }
 
 #nav .roadmap p {

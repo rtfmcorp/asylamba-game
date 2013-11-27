@@ -1,11 +1,14 @@
-### 10:41:05 #### path : /expansion/dev12/connection/bindkey-player1# time : 7439ms
-### 10:41:39 #### path : /expansion/dev12/# time : 2557ms
-### 10:41:44 #### path : /expansion/dev12/message# time : 2632ms
-### 10:41:47 #### path : /expansion/dev12/action/a-deleteallnotif/sftr-1# time : 1494ms
-### 10:41:47 #### path : /expansion/dev12/message# time : 114ms
-### 10:41:49 #### path : /expansion/dev12/bases# time : 313ms
-### 10:41:51 #### path : /expansion/dev12/bases/base-19050/view-generator# time : 258ms
-### 10:41:54 #### path : /expansion/dev12/bases/base-19050/view-university# time : 136ms
-### 10:42:01 #### path : /expansion/dev12/faction# time : 122ms
-### 10:42:03 #### path : /expansion/dev12/profil# time : 1095ms
+### 10:48:53 #### path : /expansion/dev12/bases/base-19050/view-main# time : 349ms
+### 10:49:02 #### path : /expansion/dev12/admin# time : 51ms
+### 10:50:29 #### path : /expansion/dev12/admin# time : 64ms
+### 10:51:29 #### path : /expansion/dev12/admin# time : 72ms
+### 10:51:48 #### path : /expansion/dev12/admin# time : 64ms
+### 10:52:22 #### path : /expansion/dev12/admin# time : 47ms
+### 10:52:50 #### path : /expansion/dev12/admin# time : 2987ms
+### 10:52:55 #### path : /expansion/dev12/admin# time : 72ms
+### 10:52:58 #### path : /expansion/dev12/admin# time : 55ms
+### 10:53:05 #### path : /expansion/dev12/admin# time : 62ms
+### 10:53:13 #### path : /expansion/dev12/admin# time : 87ms
+### 10:53:15 #### path : /expansion/dev12/admin# time : 52ms
+### 10:53:20 #### path : /expansion/dev12/profil# time : 1007ms
 

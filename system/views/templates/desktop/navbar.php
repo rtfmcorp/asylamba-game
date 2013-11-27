@@ -34,14 +34,16 @@ echo '<div id="nav">';
 	ASM::$rmm->load(array('statement' => RoadMap::DISPLAYED), array('dCreation', 'DESC'), array(0, 10));
 
 	echo '<div class="roadmap" id="roadmap">';
-		echo '<p>Dernières mises à jour effectuées.</p>';
-		for ($i = 0; $i < ASM::$rmm->size(); $i++) { 
-			echo '<hr />';
-			echo '<p>';
-				echo '<em>' . Chronos::transform(ASM::$rmm->get($i)->dCreation). '</em>';
-				echo ASM::$rmm->get($i)->pContent;
-			echo '</p>';
-		}
+		echo '<div class="overflow">';
+			echo '<p>Dernières mises à jour effectuées.</p>';
+			for ($i = 0; $i < ASM::$rmm->size(); $i++) { 
+				echo '<hr />';
+				echo '<p>';
+					echo '<em>' . Chronos::transform(ASM::$rmm->get($i)->dCreation). '</em>';
+					echo ASM::$rmm->get($i)->pContent;
+				echo '</p>';
+			}
+		echo '</div>';
 	echo '</div>';
 
 	ASM::$rmm->changeSession($S_RMM_1);
