@@ -692,13 +692,13 @@ body {
 	font-variant: small-caps;
 }
 
-.color1 .component h3 { border-bottom: solid 3px red; }
-.color2 .component h3 { border-bottom: solid 3px red; }
-.color3 .component h3 { border-bottom: solid 3px red; }
-.color4 .component h3 { border-bottom: solid 3px red; }
-.color5 .component h3 { border-bottom: solid 3px red; }
-.color6 .component h3 { border-bottom: solid 3px red; }
-.color7 .component h3 { border-bottom: solid 3px red; }
+.color1 .component h3 { border-bottom: solid 3px #b01e2d; }
+.color2 .component h3 { border-bottom: solid 3px #2f23c0; }
+.color3 .component h3 { border-bottom: solid 3px #ffdb0f; }
+.color4 .component h3 { border-bottom: solid 3px #a935c7; }
+.color5 .component h3 { border-bottom: solid 3px #57c632; }
+.color6 .component h3 { border-bottom: solid 3px #05bed7; }
+.color7 .component h3 { border-bottom: solid 3px #ac5832; }
 
 .component h4 {
 	margin: 10px;
