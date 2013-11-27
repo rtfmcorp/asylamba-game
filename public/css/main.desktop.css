@@ -235,6 +235,7 @@ body {
 	max-height: 400px;
 	width: 350px;
 	overflow: auto;
+	padding: 8px 0;
 }
 
 #nav .roadmap p {
