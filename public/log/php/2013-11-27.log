@@ -1,0 +1,28 @@
+[27-Nov-2013 10:41:47 Europe/Zurich] PHP Notice:  Undefined property: NotificationManager::$object in C:\wamp\www\expansion\dev12\system\modules\hermes\class\NotificationManager.class.php on line 122
+[27-Nov-2013 10:41:47 Europe/Zurich] PHP Stack trace:
+[27-Nov-2013 10:41:47 Europe/Zurich] PHP   1. {main}() C:\wamp\www\expansion\dev12\index.php:0
+[27-Nov-2013 10:41:47 Europe/Zurich] PHP   2. CTR::getInclude() C:\wamp\www\expansion\dev12\index.php:50
+[27-Nov-2013 10:41:47 Europe/Zurich] PHP   3. include() C:\wamp\www\expansion\dev12\system\classes\CTR.class.php:166
+[27-Nov-2013 10:41:47 Europe/Zurich] PHP   4. include() C:\wamp\www\expansion\dev12\system\action\std\main.php:38
+[27-Nov-2013 10:41:47 Europe/Zurich] PHP   5. NotificationManager->deleteByRPlayer() C:\wamp\www\expansion\dev12\system\action\std\hermes\notification\deleteAll.php:10
+[27-Nov-2013 10:41:47 Europe/Zurich] PHP Warning:  Invalid argument supplied for foreach() in C:\wamp\www\expansion\dev12\system\modules\hermes\class\NotificationManager.class.php on line 122
+[27-Nov-2013 10:41:47 Europe/Zurich] PHP Stack trace:
+[27-Nov-2013 10:41:47 Europe/Zurich] PHP   1. {main}() C:\wamp\www\expansion\dev12\index.php:0
+[27-Nov-2013 10:41:47 Europe/Zurich] PHP   2. CTR::getInclude() C:\wamp\www\expansion\dev12\index.php:50
+[27-Nov-2013 10:41:47 Europe/Zurich] PHP   3. include() C:\wamp\www\expansion\dev12\system\classes\CTR.class.php:166
+[27-Nov-2013 10:41:47 Europe/Zurich] PHP   4. include() C:\wamp\www\expansion\dev12\system\action\std\main.php:38
+[27-Nov-2013 10:41:47 Europe/Zurich] PHP   5. NotificationManager->deleteByRPlayer() C:\wamp\www\expansion\dev12\system\action\std\hermes\notification\deleteAll.php:10
+[27-Nov-2013 10:41:51 Europe/Zurich] PHP Notice:  Undefined offset: 15 in C:\wamp\www\expansion\dev12\system\modules\athena\resource\OrbitalBaseResource.class.php on line 63
+[27-Nov-2013 10:41:51 Europe/Zurich] PHP Stack trace:
+[27-Nov-2013 10:41:51 Europe/Zurich] PHP   1. {main}() C:\wamp\www\expansion\dev12\index.php:0
+[27-Nov-2013 10:41:51 Europe/Zurich] PHP   2. CTR::getInclude() C:\wamp\www\expansion\dev12\index.php:50
+[27-Nov-2013 10:41:51 Europe/Zurich] PHP   3. include() C:\wamp\www\expansion\dev12\system\classes\CTR.class.php:201
+[27-Nov-2013 10:41:51 Europe/Zurich] PHP   4. include() C:\wamp\www\expansion\dev12\system\views\pages\desktop\bases.php:54
+[27-Nov-2013 10:41:51 Europe/Zurich] PHP   5. OrbitalBaseResource::getBuildingInfo() C:\wamp\www\expansion\dev12\system\views\components\athena\bases\generator.php:84
+[27-Nov-2013 10:41:51 Europe/Zurich] PHP Notice:  Undefined offset: 15 in C:\wamp\www\expansion\dev12\system\modules\athena\resource\OrbitalBaseResource.class.php on line 61
+[27-Nov-2013 10:41:51 Europe/Zurich] PHP Stack trace:
+[27-Nov-2013 10:41:51 Europe/Zurich] PHP   1. {main}() C:\wamp\www\expansion\dev12\index.php:0
+[27-Nov-2013 10:41:51 Europe/Zurich] PHP   2. CTR::getInclude() C:\wamp\www\expansion\dev12\index.php:50
+[27-Nov-2013 10:41:51 Europe/Zurich] PHP   3. include() C:\wamp\www\expansion\dev12\system\classes\CTR.class.php:201
+[27-Nov-2013 10:41:51 Europe/Zurich] PHP   4. include() C:\wamp\www\expansion\dev12\system\views\pages\desktop\bases.php:54
+[27-Nov-2013 10:41:51 Europe/Zurich] PHP   5. OrbitalBaseResource::getBuildingInfo() C:\wamp\www\expansion\dev12\system\views\components\athena\bases\generator.php:85
