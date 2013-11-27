@@ -6,5 +6,5 @@ define('NTM_NOTIFARCHIVELIMITPREMIUM',	50);
 
 define('MRM_MSGDISPLAY',				50);
 
-define('MSM_STEPTHREAD',				10);
+define('MSM_STEPTHREAD',				8);
 define('MSM_STEPMESSAGE',				10);

@@ -1,7 +1,7 @@
 jQuery(document).ready(function($) {
 	// RENDERING MODULE
 	// ################
-	var render = {
+	render = {
 		calling: 0,
 
 		viewport: {
@@ -60,7 +60,7 @@ jQuery(document).ready(function($) {
 			}
 		},
 
-		addComponent: function(position, content, time) {
+		addComponent: function(position, content, time, callback) {
 			var newColumn;
 			var time = (time == undefined) ? 500 : time;
 
@@ -101,13 +101,22 @@ jQuery(document).ready(function($) {
 						left: 0,
 						opacity: 1
 					}, 300);
+
+					if (callback != undefined) {
+						callback();
+					}
 			});
 		},
 
 		removeComponent: function(position, time, callback) {
 			var time = (time == undefined) ? 500 : time;
-			var	component = $('.component:nth-child(' + (position + 1) + ')');
 
+			if (position > 0) {
+				var	component = $('.component:nth-child(' + (position + 1) + ')');
+			} else {
+				var	component = $('.component:last');
+			}
+			
 			component.find('.head').html('');
 			component.find('.body').html('');
 
@@ -280,7 +289,7 @@ jQuery(document).ready(function($) {
 // #############################
 // #### MOVING PANEL MODULE ####
 // #############################
-	var panelController = {
+	panelController = {
 		position: -2,
 		maxPosition: 0,
 

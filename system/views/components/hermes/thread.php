@@ -42,7 +42,7 @@ echo '<div class="component thread">';
 					echo '<span><a href="#" class="sh" data-target="textarea-' . $threadId_thread . '">continuer la conversation</a></span>';
 				echo '</div>';
 
-				echo '<form action="' . APP_ROOT . 'action/a-writemessage/thread-' . $messages_thread[0]->getThread() . '" method="post" id="textarea-' . $threadId_thread . '" />';
+				echo '<form action="' . APP_ROOT . 'action/a-writemessage/thread-' . $messages_thread[0]->getThread() . '" method="post" id="textarea-' . $threadId_thread . '">';
 					echo '<p class="input"><textarea name="message"></textarea></p>';
 					echo '<p class="button"><input type="submit" value="envoyer" /></p>';
 				echo '</form>';

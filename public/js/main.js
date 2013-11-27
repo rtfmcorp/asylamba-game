@@ -577,8 +577,6 @@ jQuery(document).ready(function($) {
 		}
 	});
 
-	/*()();*/
-
 	$('.releve-timer').each(function() {
 		var target = $(this);
 
@@ -655,13 +653,28 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		var link = $(this);
 
-
 		$.get(link.attr('href'))
 		 .done(function(data) {
 		 	link.after(data);
 		 	link.remove();
 
 		 	columnController.move($('.no-scrolling .component .fix-body.hover'), 'bottom');
+		}).fail(function() {
+			alertController.add(101, 'chargement des données interrompu');
+		});
+	});
+
+	$('.more-thread').live('click', function(e) {
+		e.preventDefault();
+		var link = $(this);
+
+		$.get(link.attr('href'))
+		 .done(function(data) {
+	 		render.removeComponent(-1, 500, function() {
+				render.addComponent(-1, data, 500, function() {
+					panelController.move(1, 'right');
+				});
+	 		});
 		}).fail(function() {
 			alertController.add(101, 'chargement des données interrompu');
 		});

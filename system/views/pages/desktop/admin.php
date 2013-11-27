@@ -1,6 +1,5 @@
 <?php
 # bases loading
-
 if (CTR::$data->get('playerInfo')->get('admin') == FALSE) {
 	header('Location: ' . APP_ROOT . 'profil');
 	exit();

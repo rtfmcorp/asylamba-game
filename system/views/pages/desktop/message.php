@@ -73,6 +73,7 @@ echo '<div id="content">';
 			include COMPONENT . 'hermes/thread.php';
 
 			if ($j > MSM_STEPTHREAD - 1) {
+				include COMPONENT . 'hermes/moreThread.php';
 				break;
 			}
 		}
