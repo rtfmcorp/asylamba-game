@@ -12,6 +12,7 @@ include CLASSES . 'Alert.class.php';
 include CLASSES . 'Benchmark.class.php';
 include CLASSES . 'Chronos.class.php';
 include CLASSES . 'DataBase.class.php';
+include CLASSES . 'DataBaseAdmin.class.php';
 include CLASSES . 'Parser.class.php';
 
 include CLASSES . 'ASM.class.php';
