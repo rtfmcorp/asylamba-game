@@ -33,10 +33,13 @@ if (ASM::$msm->size() > 0) {
 	
 	# thread component
 	$j = 0;
+	$begin  = MSM_STEPTHREAD + (($page - 1) * MSM_STEPNEXTTHREAD);
+	$ending = MSM_STEPTHREAD +  ($page * MSM_STEPNEXTTHREAD);
+
 	foreach ($thread as $k => $v) {
 		$j++;
-		if ($j >= MSM_STEPTHREAD + $page) {
-			if ($j > MSM_STEPTHREAD + $page) {
+		if ($j > $begin) {
+			if ($j > $ending) {
 				$moreThread_page = ++$page;
 				include COMPONENT . 'hermes/moreThread.php';
 				break;

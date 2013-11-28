@@ -667,13 +667,25 @@ jQuery(document).ready(function($) {
 	$('.more-thread').live('click', function(e) {
 		e.preventDefault();
 		var link = $(this);
+		var data;
 
 		$.get(link.attr('href'))
 		 .done(function(data) {
+		 	data = $.parseHTML(data);
+
+		 	console.log(data.length);
+
 	 		render.removeComponent(-1, 500, function() {
-				render.addComponent(-1, data, 500, function() {
-					panelController.move(1, 'right');
-				});
+	 			for (var i = 0; i < data.length; i++) {
+
+					if (i + 1 == data.length) {
+						render.addComponent(-1, data[i], 500, function() {
+							panelController.move((data.length - 1), 'right');
+						});
+					} else {
+						render.addComponent(-1, data[i], 500);
+					}
+	 			};
 	 		});
 		}).fail(function() {
 			alertController.add(101, 'chargement des données interrompu');
