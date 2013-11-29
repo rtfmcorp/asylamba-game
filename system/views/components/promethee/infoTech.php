@@ -30,13 +30,11 @@ echo '<div class="component panel-info">';
 
 			# description
 			echo '<h4>Prérequis</h4>';
-			echo '<p class="info">Technosphère niveau ' . $technosphere . '<br />';
-
-			// --------------------------------------------------------------
-			// FAIRE LA LISTE DES PRERQUIS ICI : (tout est dans $researchList)
-			//Bug::pre($researchList);
-			echo '<p class="info">Coming soon</p>';
-			// --------------------------------------------------------------
+			echo '<p class="info">';
+				echo 'Technosphère, niv. ' . $technosphere . '<br />';
+				foreach ($researchList as $research) {
+					echo ucfirst($research[0]) . ', niv. ' . $research[1] . '<br />';
+				}
 			echo '</p>';
 
 			# description
