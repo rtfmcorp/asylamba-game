@@ -25,7 +25,7 @@ echo '<div class="component player size3">';
 					echo '<span class="experience">niveau ' . $p->getLevel() . ' | ' . Format::numberFormat($p->getExperience()) . ' points</span>';
 					if (Utils::interval(Utils::now(), $p->getDLastActivity(), 's') < 600) {
 						echo '<span class="online hb lt" title="est en ligne actuellement"></span>';
-					} elseif (Utils::interval(Utils::now(), $p->getDLastActivity(), 's') > PLAYER_TIME_INACTIVE) {
+					} elseif (Utils::interval(Utils::now(), $p->getDLastActivity()) > PAM_TIME_ALLY_INACTIVE) {
 						echo '<span class="inactive hb lt" title="ne s\'est plus connecté depuis une semaine"></span>';
 					}
 				echo '</div>';

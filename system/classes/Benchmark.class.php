@@ -30,8 +30,16 @@ class Benchmark {
 		return $this->formatTime($mode, $precision);
 	}
 
+	public function getInterTime($mode = 's', $precision = 3) {
+		return $this->formatTime($mode, $precision);
+	}
+
 	public function printTime($mode = 's', $precision = 3) {
 		if ($this->running) { $this->end(); }
+		echo $this->formatTime($mode, $precision) . '<br />';
+	}
+
+	public function printInterTime($mode = 's', $precision = 3) {
 		echo $this->formatTime($mode, $precision) . '<br />';
 	}
 
@@ -59,8 +67,8 @@ class Benchmark {
 		$this->eTime = 0;
 		$this->rTime = 0;
 		$this->running = FALSE;
-		$this->$unity = 's';
-		$this->$precision = 3;
+		$this->formatTime = 's';
+		$this->precision = 3;
 	}
 
 	protected function formatTime($mode, $precision) {

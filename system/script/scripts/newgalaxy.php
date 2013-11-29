@@ -1,7 +1,6 @@
 <?php
-echo '<h2>Modification de la Galaxie</h2>';
+echo '<h1>Modification de la Galaxie</h1>';
 	include_once GAIA;
-	set_time_limit(0);
 
 	$gc = new GalaxyManager($mapGalaxyResource);
 	$gc->generateSystem(10);

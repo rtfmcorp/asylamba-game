@@ -8,14 +8,9 @@ $S_PAM1 = ASM::$pam->getCurrentSession();
 ASM::$pam->newSession(ASM_UMODE);
 ASM::$pam->load(array('bind' => CTR::$get->get('bindkey'), 'statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY)));
 
-# checker si PAM_INACTIVE
-	# mettre en actif
-
-# checker si PAM_HOLIDAY
-	# mettre en actif
-
 if (ASM::$pam->size() == 1) {
 	$player = ASM::$pam->get();
+	$player->setStatement(PAM_ACTIVE);
 
 	# création des tableaux de données dans le contrôler
 	CTRHelper::initializePlayerInfo();

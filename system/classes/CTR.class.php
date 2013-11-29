@@ -16,7 +16,7 @@ abstract class CTR {
 
 	private static $lastUpdate;
 
-	private static $benchmark;
+	public static $benchmark;
 
 	private static $pageResources = array(
 		'profil' => array('profil', 'Profil'),

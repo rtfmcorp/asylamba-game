@@ -1,7 +1,7 @@
 <?php
-echo '<h2>Ajout de la table bugTracker</h2>';
+echo '<h1>Ajout de la table bugTracker</h1>';
 
-$db = DataBase::getInstance();
+$db = DataBaseAdmin::getInstance();
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `bugtracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `url` varchar(150) NOT NULL,
