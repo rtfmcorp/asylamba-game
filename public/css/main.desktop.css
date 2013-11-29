@@ -3637,6 +3637,15 @@ body {
 #map #systems a {
 	display: block;
 	position: absolute;
+	border-radius: 100%;
+}
+
+#map #systems a.active {
+	z-index: 1;
+	background: black;
+	box-shadow:
+		0 0 0 2px black,
+		0 0 0 3px white;
 }
 
 #map #systems a img {

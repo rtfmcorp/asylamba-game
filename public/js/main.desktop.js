@@ -585,6 +585,8 @@ jQuery(document).ready(function($) {
 			actionbox.obj.animate({
 				bottom: -300
 			}, 300);
+
+			$('.loadSystem.active').removeClass('active');
 		},
 
 		// masque la box, charge le contenu et affiche la box
@@ -594,6 +596,8 @@ jQuery(document).ready(function($) {
 			 .done(function(data) {
 				actionbox.obj.html(data);
 				actionbox.open();
+
+				$('.loadSystem[data-system-id="' + systemid + '"]').addClass('active');
 			}).fail(function() {
 				alertController.add(101, 'chargement des données interrompu');
 			});
