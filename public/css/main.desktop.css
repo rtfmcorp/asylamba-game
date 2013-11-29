@@ -652,15 +652,7 @@ body {
 	background: #202020;
 	border: solid 1px #4F4F4F;
 }
-/*
-.color1 .component .tool > span a { background: #b01e2d; }
-.color2 .component .tool > span a { background: #2f23c0; }
-.color3 .component .tool > span a { background: #ffdb0f; }
-.color4 .component .tool > span a { background: #a935c7; }
-.color5 .component .tool > span a { background: #57c632; }
-.color6 .component .tool > span a { background: #05bed7; }
-.color7 .component .tool > span a { background: #ac5832; }
-*/
+
 .component .tool > span:first-child {
 	border: solid 5px transparent;
 	width: auto;
@@ -670,14 +662,6 @@ body {
 .component .tool > span a:hover {
 	background: #4F4F4F;
 }
-
-.color1 .component .tool { border-bottom: solid 3px #b01e2d; }
-.color2 .component .tool { border-bottom: solid 3px #2f23c0; }
-.color3 .component .tool { border-bottom: solid 3px #ffdb0f; }
-.color4 .component .tool { border-bottom: solid 3px #a935c7; }
-.color5 .component .tool { border-bottom: solid 3px #57c632; }
-.color6 .component .tool { border-bottom: solid 3px #05bed7; }
-.color7 .component .tool { border-bottom: solid 3px #ac5832; }
 
 .component h3 {
 	width: 100%;
@@ -692,13 +676,13 @@ body {
 	font-variant: small-caps;
 }
 
-.color1 .component h3 { border-bottom: solid 3px #b01e2d; }
-.color2 .component h3 { border-bottom: solid 3px #2f23c0; }
-.color3 .component h3 { border-bottom: solid 3px #ffdb0f; }
-.color4 .component h3 { border-bottom: solid 3px #a935c7; }
-.color5 .component h3 { border-bottom: solid 3px #57c632; }
-.color6 .component h3 { border-bottom: solid 3px #05bed7; }
-.color7 .component h3 { border-bottom: solid 3px #ac5832; }
+.color1 .component .tool, .color1 .component h3 { border-bottom: solid 1px #b01e2d; }
+.color2 .component .tool, .color2 .component h3 { border-bottom: solid 1px #2f23c0; }
+.color3 .component .tool, .color3 .component h3 { border-bottom: solid 1px #ffdb0f; }
+.color4 .component .tool, .color4 .component h3 { border-bottom: solid 1px #a935c7; }
+.color5 .component .tool, .color5 .component h3 { border-bottom: solid 1px #57c632; }
+.color6 .component .tool, .color6 .component h3 { border-bottom: solid 1px #05bed7; }
+.color7 .component .tool, .color7 .component h3 { border-bottom: solid 1px #ac5832; }
 
 .component h4 {
 	margin: 10px;
@@ -1034,16 +1018,25 @@ body {
 }
 
 .component .progress-bar .content {
-	display: block;
-	height: 3px;
+	position: relative;
+	top: -9px;
+	display: inline-block;
+	height: 5px;
 }
-.color1 .component .progress-bar .content { background: #b01e2d; }
-.color2 .component .progress-bar .content { background: #2f23c0; }
-.color3 .component .progress-bar .content { background: #ffdb0f; }
-.color4 .component .progress-bar .content { background: #a935c7; }
-.color5 .component .progress-bar .content { background: #57c632; }
-.color6 .component .progress-bar .content { background: #05bed7; }
-.color7 .component .progress-bar .content { background: #ac5832; }
+.color1 .component .progress-bar .content:nth-child(n)  { background: #b01e2d; }
+.color2 .component .progress-bar .content:nth-child(n)  { background: #2f23c0; }
+.color3 .component .progress-bar .content:nth-child(n)  { background: #ffdb0f; }
+.color4 .component .progress-bar .content:nth-child(n)  { background: #a935c7; }
+.color5 .component .progress-bar .content:nth-child(n)  { background: #57c632; }
+.color6 .component .progress-bar .content:nth-child(n)  { background: #05bed7; }
+.color7 .component .progress-bar .content:nth-child(n)  { background: #ac5832; }
+.color1 .component .progress-bar .content:nth-child(2n) { background: #510816; }
+.color2 .component .progress-bar .content:nth-child(2n) { background: #0c0d44; }
+.color3 .component .progress-bar .content:nth-child(2n) { background: #b17a00; }
+.color4 .component .progress-bar .content:nth-child(2n) { background: #310948; }
+.color5 .component .progress-bar .content:nth-child(2n) { background: #24500a; }
+.color6 .component .progress-bar .content:nth-child(2n) { background: #004948; }
+.color7 .component .progress-bar .content:nth-child(2n) { background: #401b13; }
 
 /* BONUS */
 .component .bonus {
@@ -1778,9 +1771,9 @@ body {
 .component .build-item .level {
 	display: block;
 	position: absolute;
-	width: 24px; line-height: 24px;
+	width: 22px; line-height: 22px;
 	text-align: center;
-	font-size: 15px;
+	font-size: 12px;
 	border-radius: 100%;
 	top: 38px; left: 58px;
 	border: solid 1px white;
