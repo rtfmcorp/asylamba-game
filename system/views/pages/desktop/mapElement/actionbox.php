@@ -78,10 +78,18 @@ echo '<div class="body">';
 							echo '<p><strong>' . $place->getBaseName() . '</strong></p>';
 							echo '<p>' . Format::numberFormat($place->getPoints()) . ' points</p>';
 							echo '<hr />';
-							echo '<p>propriété de</p>';
+							echo '<p>propriété du</p>';
 							echo '<p>';
-								echo '<a href="' . APP_ROOT . 'diary/player-' . $place->getRPlayer() . '" class="color1">' . $place->getPlayerName() . '</a>';
-							echo ($place->getPlayerColor() == 0 ? '(inactif)' : '') . '</p>';
+								if ($place->getPlayerColor() != 0) {
+									$status = ColorResource::getInfo(CTR::$data->get('playerInfo')->get('color'), 'status');
+									echo $status[$place->getPlayerStatus() - 1] . ' ';
+									echo '<span class="player-name">';
+										echo '<a href="' . APP_ROOT . 'diary/player-' . $place->getRPlayer() . '" class="color' . $place->getPlayerColor() . '">' . $place->getPlayerName() . '</a>';
+									echo '</span>';
+								} else {
+									echo 'rebelle <span class="player-name">' . $place->getPlayerName() . '</span>';
+								}
+							echo '</p>';
 						} elseif (1 == 2) {
 							# réger les vaisseaux mères
 						} else {

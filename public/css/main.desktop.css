@@ -3634,11 +3634,8 @@ body {
 }
 
 #map #systems a.active {
-	z-index: 1;
 	background: black;
-	box-shadow:
-		0 0 0 2px black,
-		0 0 0 3px white;
+	box-shadow: 0 0 25px 12px black;
 }
 
 #map #systems a img {

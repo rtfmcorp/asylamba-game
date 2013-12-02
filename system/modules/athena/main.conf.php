@@ -31,4 +31,4 @@ define('CRM_STANDBY',				2);
 define('OBM_COEFPRODUCTION', 		0.1);
 
 // limite du stock de ressources pour pouvoir en envoyer
-define('OBM_STOCKLIMIT', 			0.4);	// 40%
+define('OBM_STOCKLIMIT', 			0);	// 40%

@@ -35,6 +35,7 @@ class Place {
 	private $playerColor = 0;
 	private $playerName = '';
 	private $playerAvatar = '';
+	private $playerStatus = 0;
 
 	// BASE
 	private $typeOfBase = 0; // 0=empty, 1=ms1, 2=ms2, 3=ms3, 4=ob
@@ -71,6 +72,7 @@ class Place {
 	public function getPlayerColor() 					{ return $this->playerColor; }
 	public function getPlayerName() 					{ return $this->playerName; }
 	public function getPlayerAvatar() 					{ return $this->playerAvatar; }
+	public function getPlayerStatus() 					{ return $this->playerStatus; }
 	public function getTypeOfBase() 					{ return $this->typeOfBase; }
 	public function getBaseName() 						{ return $this->baseName; }
 	public function getPoints() 						{ return $this->points; }
@@ -96,6 +98,7 @@ class Place {
 	public function setPlayerColor($v) 					{ $this->playerColor = $v; }
 	public function setPlayerName($v) 					{ $this->playerName = $v; }
 	public function setPlayerAvatar($v) 				{ $this->playerAvatar = $v; }
+	public function setPlayerStatus($v) 				{ $this->playerStatus = $v; }
 	public function setTypeOfBase($v) 					{ $this->typeOfBase = $v; }
 	public function setBaseName($v) 					{ $this->baseName = $v; }
 	public function setPoints($v) 						{ $this->points = $v; }
