@@ -30,6 +30,7 @@ class ForumMessage {
 	public $playerName			= '';
 	public $playerColor			= '';
 	public $playerAvatar		= '';
+	public $playerStatus		= '';
 
 	public function getId() { return $this->id; }
 

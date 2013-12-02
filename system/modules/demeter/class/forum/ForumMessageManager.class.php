@@ -22,7 +22,8 @@ class ForumMessageManager extends Manager {
 		$qr = $db->prepare('SELECT m.*,
 				p.name AS playerName,
 				p.rColor AS playerColor,
-				p.avatar AS playerAvatar
+				p.avatar AS playerAvatar,
+				p.status AS playerStatus
 			FROM forumMessage AS m
 			LEFT JOIN player AS p
 				ON m.rPlayer = p.id
@@ -64,6 +65,7 @@ class ForumMessageManager extends Manager {
 			$message->playerName = $awMessage['playerName'];
 			$message->playerColor = $awMessage['playerColor'];
 			$message->playerAvatar = $awMessage['playerAvatar'];
+			$message->playerStatus = $awMessage['playerStatus'];
 
 			$this->_Add($message);
 		}

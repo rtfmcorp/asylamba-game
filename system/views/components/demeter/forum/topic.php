@@ -15,11 +15,17 @@ echo '<div class="component topic size2">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			foreach ($message_topic as $m) {
+				if ($m->playerColor > 0) {
+					$status = ColorResource::getInfo($m->playerColor, 'status');
+					$status = $status[$m->playerStatus - 1];
+				} else {
+					$status = 'Rebelle';
+				}
 				echo '<div class="message">';
 					echo '<a href="' . APP_ROOT . 'diary/player-' . $m->rPlayer . '"><img src="' . MEDIA . 'avatar/medium/' . $m->playerAvatar . '.png" alt="' . $m->playerName . '" class="avatar" /></a>';
 					echo '<div class="content">';
 						echo '<p class="text">';
-							echo '≡ ' . $m->playerName . '<br /><br />';
+							echo '≡ ' . $status . ' ' . $m->playerName . '<br /><br />';
 							echo $m->pContent;
 						echo '</p>';
 						echo '<p class="footer">';
