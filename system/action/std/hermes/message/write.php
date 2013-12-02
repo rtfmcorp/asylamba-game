@@ -39,7 +39,7 @@ if (CTR::$get->exist('message')) {
 // protection des inputs
 $p = new Parser();
 $name = $p->protect($name);
-$message = $p->protect($message);
+$message = $p->parse($message);
 
 if (($id OR $thread OR $name) AND $message !== '') {
 	$m = new Message();

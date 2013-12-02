@@ -33,16 +33,16 @@ class Parser {
 	}
 
 	protected function parseIcon($string) {
-		$string = preg_replace('#\[pa\]#', '<img src="' . MEDIA . 'resources/pa.png" alt="pa" class="hb lt" iconInText" title="point d\'action" />', $string);
-		$string = preg_replace('#\[pev\]#', '<img src="' . MEDIA . 'resources/pev.png" alt="pev" class="hb lt" iconInText" title="point équivalent vaisseaux" />', $string);
-		$string = preg_replace('#\[credit\]#', '<img src="' . MEDIA . 'resources/credit.png" alt="credit" class="hb lt" iconInText" title="crédit" />', $string);
-		$string = preg_replace('#\[ressource\]#', '<img src="' . MEDIA . 'resources/resource.png" alt="resource" class="hb lt" iconInText" title="ressource" />', $string);
-		$string = preg_replace('#\[releve\]#', '<img src="' . MEDIA . 'resources/time.png" alt="time" class="hb lt" iconInText" title="relève" />', $string);
+		$string = preg_replace('#\[pa\]#', '<img src="' . MEDIA . 'resources/pa.png" alt="pa" class="hb lt icon-color" title="point d\'action" />', $string);
+		$string = preg_replace('#\[pev\]#', '<img src="' . MEDIA . 'resources/pev.png" alt="pev" class="hb lt icon-color" title="point équivalent vaisseaux" />', $string);
+		$string = preg_replace('#\[credit\]#', '<img src="' . MEDIA . 'resources/credit.png" alt="credit" class="hb lt icon-color" title="crédit" />', $string);
+		$string = preg_replace('#\[ressource\]#', '<img src="' . MEDIA . 'resources/resource.png" alt="resource" class="hb lt icon-color" title="ressource" />', $string);
+		$string = preg_replace('#\[releve\]#', '<img src="' . MEDIA . 'resources/time.png" alt="time" class="hb lt icon-color" title="relève" />', $string);
 
-		$string = preg_replace('#\[attaque\]#', '<img src="' . MEDIA . 'resources/attack.png" alt="attack" class="hb lt" iconInText" title="point d\'attaque" />', $string);
-		$string = preg_replace('#\[vie\]#', '<img src="' . MEDIA . 'resources/life.png" alt="life" class="hb lt" iconInText" title="point de vie" />', $string);
-		$string = preg_replace('#\[defense\]#', '<img src="' . MEDIA . 'resources/defense.png" alt="defense" class="hb lt" iconInText" title="point de défense" />', $string);
-		$string = preg_replace('#\[vitesse\]#', '<img src="' . MEDIA . 'resources/speed.png" alt="speed" class="hb lt" iconInText" title="point de vitesse" />', $string);
+		$string = preg_replace('#\[attaque\]#', '<img src="' . MEDIA . 'resources/attack.png" alt="attack" class="hb lt icon-color" title="point d\'attaque" />', $string);
+		$string = preg_replace('#\[vie\]#', '<img src="' . MEDIA . 'resources/life.png" alt="life" class="hb lt icon-color" title="point de vie" />', $string);
+		$string = preg_replace('#\[defense\]#', '<img src="' . MEDIA . 'resources/defense.png" alt="defense" class="hb lt icon-color" title="point de défense" />', $string);
+		$string = preg_replace('#\[vitesse\]#', '<img src="' . MEDIA . 'resources/speed.png" alt="speed" class="hb lt icon-color" title="point de vitesse" />', $string);
 
 		return $string;
 	}

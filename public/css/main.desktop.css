@@ -1162,16 +1162,33 @@ body {
 .component.thread .message.color6 { border-bottom: solid 3px #05bed7; }
 .component.thread .message.color7 { border-bottom: solid 3px #ac5832; }
 
-.component.thread .message em {
+.component.thread .message em.name   {
+	padding: 0 0 5px 0;
+	display: block;
+	color: #CCC;
+}
+.component.thread .message em.option {
+	padding: 5px 0 0 0;
+	text-align: right;
 	display: block;
 	color: #CCC;
 }
 
-.component.thread .message em.name   { padding: 0 0 5px 0; }
-.component.thread .message em.option {
-	padding: 5px 0 0 0;
-	text-align: right;
+.component.thread .message .icon-color {
+	width: 15px;
 }
+
+.component.thread .message a {
+	color: #EFEFEF;
+}
+
+.component.thread .message a.color1 { color: #b01e2d; }
+.component.thread .message a.color2 { color: #2f23c0; }
+.component.thread .message a.color3 { color: #ffdb0f; }
+.component.thread .message a.color4 { color: #a935c7; }
+.component.thread .message a.color5 { color: #57c632; }
+.component.thread .message a.color6 { color: #05bed7; }
+.component.thread .message a.color7 { color: #ac5832; }
 
 .component.thread form {
 	display: none;
@@ -2364,6 +2381,10 @@ body {
 .component.topic .message .content .text a.color5 { color: #57c632; }
 .component.topic .message .content .text a.color6 { color: #05bed7; }
 .component.topic .message .content .text a.color7 { color: #ac5832; }
+
+.component.topic .message .content .text .icon-color {
+	width: 15px;
+}
 
 .component.topic .message .content .footer {
 	margin: 0; padding: 6px 10px;
