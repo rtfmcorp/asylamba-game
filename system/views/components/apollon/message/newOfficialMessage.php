@@ -17,9 +17,9 @@ echo '<div class="component new-message size2">';
 		echo '<div class="body">';
 			echo '<form action="' . APP_ROOT . 'action/a-writeofficial" method="POST" />';
 				echo '<p><label for="new-message-target">Destinataire</label></p>';
-				echo '<p class="input input-text"><input type="text" id="new-message-target" name="player" placeholder="laissez-vide pour envoyer un message à tout les joueurs" /></p>';
+				echo '<p class="input input-text"><input type="text" id="new-message-target" name="player" placeholder="Laissez-vide pour envoyer un message à tous les joueurs" /></p>';
 
-				echo '<p><label for="new-message-faction">Faction (ne rien selectionner pour envoyer à toutes les factions)</label></p>';
+				echo '<p><label for="new-message-faction">Faction (ne rien sélectionner pour envoyer à toutes les factions)</label></p>';
 				echo '<p class="input input-text">';
 					echo '<select id="new-message-faction" name="ally">';
 						echo '<option value="">Toutes les factions</option>';

@@ -23,7 +23,7 @@ echo '<div class="component nav">';
 			echo '<a href="' . APP_ROOT . 'admin/view-message" class="nav-element ' . $active . '">';
 				echo '<img src="' . MEDIA . 'orbitalbase/situation.png" alt="" />';
 				echo '<strong>Messagerie</strong>';
-				echo '<em>Envoie de mail groupés</em>';
+				echo '<em>Envoi de messages groupés</em>';
 			echo '</a>';
 
 			$active = (CTR::$get->get('view') == 'roadmap') ? 'active' : '';
@@ -37,7 +37,7 @@ echo '<div class="component nav">';
 			echo '<a href="' . APP_ROOT . 'admin/view-bugtracker" class="nav-element ' . $active . '">';
 				echo '<img src="' . MEDIA . 'orbitalbase/situation.png" alt="" />';
 				echo '<strong>Bugtracker</strong>';
-				echo '<em>Gestion du trackeur de bug et des améliorations</em>';
+				echo '<em>Gestion du rapports d\'erreurs et d\'améliorations</em>';
 			echo '</a>';
 
 		echo '</div>';
