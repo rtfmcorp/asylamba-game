@@ -81,7 +81,7 @@ echo '<div class="body">';
 							echo '<p>propriété du</p>';
 							echo '<p>';
 								if ($place->getPlayerColor() != 0) {
-									$status = ColorResource::getInfo(CTR::$data->get('playerInfo')->get('color'), 'status');
+									$status = ColorResource::getInfo($place->getPlayerColor(), 'status');
 									echo $status[$place->getPlayerStatus() - 1] . ' ';
 									echo '<span class="player-name">';
 										echo '<a href="' . APP_ROOT . 'diary/player-' . $place->getRPlayer() . '" class="color' . $place->getPlayerColor() . '">' . $place->getPlayerName() . '</a>';
