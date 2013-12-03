@@ -41,7 +41,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 		ASM::$crm->load(array('rOrbitalBaseLinked' => $acceptorBase->getId(), 'statement' => CRM_ACTIVE));
 		ASM::$crm->load(array('rOrbitalBaseLinked' => $acceptorBase->getId(), 'statement' => CRM_STANDBY));
 		$nbrCommercialRoute = ASM::$crm->size() - 1;
-		$nbrMaxCommercialRoute = OrbitalBaseResource::getBuildingInfo(6, 'level', $acceptorBase->getLevelCommercialPlateforme(), 'nbRoutesMax'); 
+		$nbrMaxCommercialRoute = OrbitalBaseResource::getBuildingInfo(6, 'level', $acceptorBase->getLevelCommercialPlateforme/mode-route(), 'nbRoutesMax'); 
 		
 		if ($nbrCommercialRoute < $nbrMaxCommercialRoute) {
 			if (CTR::$data->get('playerInfo')->get('credit') >= $cr->getPrice()) {
@@ -69,7 +69,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 				$n->addLnk('map/base-' . $proposerBase->getRPlace(), $proposerBase->getName());
 				$n->addSep()->addTxt('Cette route vous rapporte ' . Format::numberFormat($cr->getIncome()) . ' crédits par relève.');
 				$n->addBrk()->addTxt('Vous avez gagné ' . $exp . ' points d\'expérience.');
-				$n->addSep()->addLnk('bases/base-' . $proposerBase->getRPlace() . '/view-commercialplateforme', 'En savoir plus ?');
+				$n->addSep()->addLnk('bases/base-' . $proposerBase->getRPlace() . '/view-commercialplateforme/mode-route', 'En savoir plus ?');
 				$n->addEnd();
 				ASM::$ntm->add($n);
 
