@@ -15,6 +15,7 @@ if (DEVMODE || CTR::$get->exist('password')) {
 		case 'apitest':				include SCRIPT . 'scripts/apitest.php'; break;
 
 		case 'addbugtracker':		include SCRIPT . 'scripts/addbugtracker.php'; break;
+		case 'addtransaction':		include SCRIPT . 'scripts/addtransaction.php'; break;
 
 		case 'dailycron':			include SCRIPT . 'scripts/cron/daily.php'; break;
 
