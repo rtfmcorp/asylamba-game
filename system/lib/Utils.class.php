@@ -131,4 +131,14 @@ class Utils {
 	public static function hashAndSalt($string) {
 		return sha1($string . 'abdelazer');
 	}
+
+	public static function getHTTPData($dataName) {
+		if (CTR::$get->exist($dataName)) {
+			return CTR::$get->get($dataName);
+		} elseif (CTR::$post->exist($dataName)) {
+			return CTR::$post->get($dataName);
+		} else {
+			return FALSE;
+		}
+	}
 }
