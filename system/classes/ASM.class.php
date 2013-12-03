@@ -38,6 +38,7 @@ abstract class ASM {
 	protected static $runningDemeter = FALSE;
 	public static $tom;
 	public static $fmm;
+	public static $clm;
 
 	public static function runAres() {
 		if (!self::$runningAres) {
@@ -110,6 +111,7 @@ abstract class ASM {
 		if (!self::$runningDemeter) {
 			self::$tom = new ForumTopicManager();
 			self::$fmm = new ForumMessageManager();
+			self::$clm = new ColorManager();
 		}
 		self::$runningDemeter = TRUE;
 	}
@@ -151,6 +153,7 @@ abstract class ASM {
 		if (self::$runningDemeter) {
 			self::$tom->save();
 			self::$fmm->save();
+			self::$clm->save();
 		}
 	}
 }
