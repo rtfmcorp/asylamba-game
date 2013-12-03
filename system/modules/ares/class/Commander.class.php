@@ -141,7 +141,7 @@ class Commander {
 	public function setArmyInBegin($armyInBegin)					{ $this->armyInBegin = $armyInBegin; }
 
 	public function setArmy() {
-		for($i = 0; $i < count($this->squadronsIds); $i++) {
+		for($i = 0; $i < count($this->squadronsIds) AND $i < 25; $i++) {
 			$this->army[$i] = 
 			new Squadron($this->armyInBegin[$i], 
 				$this->squadronsIds[$i], 
