@@ -76,7 +76,7 @@ echo '<div id="nav">';
 		echo '<a target="_blank" href="' . GETOUT_ROOT . 'wiki">Consulter le wiki</a>';
 		echo '<hr />';
 		echo '<a target="_blank" href="' . FACEBOOK_LINK . '">Rejoindre la page Facebook</a>';
-		echo '<a target="_blank" href="' . TWEETER_LINK . '">Nous suivre sur Tweeter</a>';
+		echo '<a target="_blank" href="' . TWEETER_LINK . '">Nous suivre sur Twitter</a>';
 		echo '<a target="_blank" href="' . TWEETER_LINK . '">Nous suivre sur Google+</a>';
 	echo '</div>';
 echo '</div>';

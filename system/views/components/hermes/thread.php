@@ -73,7 +73,7 @@ echo '<div class="component thread">';
 			}
 
 			if ($i < count($messages_thread) - 1) {
-				echo '<a class="more-message" href="' . APP_ROOT . 'ajax/a-moremessage/thread-' . $threadId_thread . '/page-2">afficher plus de message</a>';
+				echo '<a class="more-message" href="' . APP_ROOT . 'ajax/a-moremessage/thread-' . $threadId_thread . '/page-2">afficher plus de messages</a>';
 			}
 		echo '</div>';
 	echo '</div>';
