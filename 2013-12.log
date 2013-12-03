@@ -1,0 +1,23 @@
+# ###################
+# Cron trace
+# 2013-12-03 21:54:07
+# ###################
+
+# Clean up redead notifications
+# [OK] Status
+# [0.16] Execution time
+# [0] Deleted notifications
+
+# Clean up unredead notifications
+# [OK] Status
+# [0.279] Execution time
+# [0] Deleted notifications
+
+# Check unactive players
+# [OK] Status
+# [0.013] Execution time
+# [11] Players unactivated
+# [16] Players deleted
+
+
+
