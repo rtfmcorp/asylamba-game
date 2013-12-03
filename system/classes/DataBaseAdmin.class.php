@@ -5,11 +5,17 @@ class DataBaseAdmin {
 	private static $nbrOfQuery = 0;
 	private static $nbrOfInstance = 0;
 
+	# server const 
+	const DEFAULT_SQL_USER = 'expansion_user';
+	const DEFAULT_SQL_HOST = 'localhost';
+	const DEFAULT_SQL_PASS = 'KtbMwzU3XqnnPwWG';
+	const DEFAULT_SQL_DTB  = 'expansion_s3';
+
 	# gil const
-	const DEFAULT_SQL_USER = 'root';
-	const DEFAULT_SQL_HOST = '127.0.0.1';
-	const DEFAULT_SQL_PASS = '';
-	const DEFAULT_SQL_DTB  = 'expansion_s2';
+	# const DEFAULT_SQL_USER = 'root';
+	# const DEFAULT_SQL_HOST = '127.0.0.1';
+	# const DEFAULT_SQL_PASS = '';
+	# const DEFAULT_SQL_DTB  = 'expansion_s2';
 	
 	public static function getNbrOfQuery() {
 		return self::$nbrOfQuery;
