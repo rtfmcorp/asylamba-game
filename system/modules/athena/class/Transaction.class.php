@@ -25,7 +25,8 @@ class Transaction {
 	public $rPlace = 0;
 	public $type;		// 0 = resource, 1 = ship, 2 = commander
 	public $quantity;
-	public $shipId;		// if $type == TYP_COMMANDER only
+	public $identifier;		// if ($type == TYP_COMMANDER) --> rCommander
+							// if ($type==TYP_SHIP) --> shipId
 	public $price = 0;
 	public $commercialShipQuantity = 0;	// ship needed for the transport
 	public $statement = 0;

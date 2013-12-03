@@ -30,6 +30,8 @@ switch (CTR::$get->get('a')) {
 	case 'increaseinvestuni':		include ACTION . 'athena/university/increaseInvest.php'; break;
 	case 'decreaseinvestuni':		include ACTION . 'athena/university/decreaseInvest.php'; break;
 
+	case 'proposetransaction': 		include ACTION . 'athena/transaction/propose.php'; break;
+
 	# HERMES
 	case 'writemessage': 			include ACTION . 'hermes/message/write.php'; break;
 	case 'writeofficial':			include ACTION . 'hermes/message/writeOfficial.php'; break;

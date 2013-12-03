@@ -182,4 +182,34 @@ class Game {
 			}
 		}
 	}
+
+	public static function getCommercialShipQuantityNeeded($transactionType, $quantity, $identifier = 0) {
+		include_once ATHENA;
+		switch ($transactionType) {
+			case Transaction::TYP_RESOURCE : 
+				# 1000 ressources => 1 commercialShip
+				$needed = ceil($quantity / 1000);
+				break;
+			case Transaction::TYP_SHIP :
+				# 1 PEV => 1 commercialShip
+				if (ShipResource::isAShip($identifier) AND $quantity > 0) {
+					$needed = $quantity * ShipResource::getInfo($identifier, 'pev');
+				} else {
+					$needed = FALSE;
+				}
+				break;
+			case Transaction::TYP_COMMANDER :
+				# 1 commander => 1 commercialShip
+				if ($quantity > 0) {
+					$needed = $quantity;
+				} else {
+					$needed = FALSE;
+				}
+				break;
+			default :
+				$needed = FALSE;
+				break;
+		}
+		return $needed;
+	}
 }

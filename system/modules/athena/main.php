@@ -16,6 +16,12 @@ include_once 'class/BuildingQueueManager.class.php';
 include_once 'class/ShipQueue.class.php';
 include_once 'class/ShipQueueManager.class.php';
 
+include_once 'class/Transaction.class.php';
+include_once 'class/TransactionManager.class.php';
+
+include_once 'class/CommercialShipping.class.php';
+include_once 'class/CommercialShippingManager.class.php';
+
 // ressources
 include_once 'resource/MotherShipResource.class.php';
 include_once 'resource/OrbitalBaseResource.class.php';
