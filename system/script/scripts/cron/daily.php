@@ -81,6 +81,7 @@ for ($i = ASM::$pam->size() - 1; $i >= 0; $i--) {
 
 		# détruire les rc
 		# message inbox
+		# api server
 
 		$deletedPlayers++;
 	} elseif (Utils::interval(Utils::now(), ASM::$pam->get($i)->getDLastConnection()) >= PAM_TIME_GLOBAL_INACTIVE) {

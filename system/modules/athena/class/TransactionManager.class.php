@@ -50,7 +50,7 @@ class TransactionManager extends Manager {
 			$t->rPlace = $aw['rPlace'];
 			$t->type = $aw['type'];
 			$t->quantity = $aw['quantity'];
-			$t->shipId = $aw['shipId'];
+			$t->identifier = $aw['identifier'];
 			$t->price = $aw['price'];
 			$t->shipQuantity = $aw['commercialShipQuantity'];
 			$t->statement = $aw['statement'];
@@ -63,14 +63,14 @@ class TransactionManager extends Manager {
 	public function add(Transaction $t) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			transaction(rPlayer, rPlace, type, quantity, shipId, price, commercialShipQuantity, statement, dPublication)
+			transaction(rPlayer, rPlace, type, quantity, identifier, price, commercialShipQuantity, statement, dPublication)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$t->rPlayer,
 			$t->rPlace,
 			$t->type,
 			$t->quantity,
-			$t->shipId,
+			$t->identifier,
 			$t->price,
 			$t->commercialShipQuantity,
 			$t->statement,
@@ -93,7 +93,7 @@ class TransactionManager extends Manager {
 					rPlace = ?,
 					type = ?,
 					quantity = ?,
-					shipId = ?,
+					identifier = ?,
 					price = ?,
 					commercialShipQuantity = ?,
 					statement = ?,
@@ -105,7 +105,7 @@ class TransactionManager extends Manager {
 				$t->rPlace,
 				$t->type,
 				$t->quantity,
-				$t->shipId,
+				$t->identifier,
 				$t->price,
 				$t->commercialShipQuantity,
 				$t->statement,

@@ -10,6 +10,7 @@ abstract class ASM {
 	public static $crm;
 	public static $obm;
 	public static $sqm;
+	public static $trm;
 
 	protected static $runningGaia = FALSE;
 	public static $plm;
@@ -53,6 +54,7 @@ abstract class ASM {
 			self::$crm = new CommercialRouteManager();
 			self::$bqm = new BuildingQueueManager();
 			self::$sqm = new ShipQueueManager();
+			self::$trm = new TransactionManager();
 		}
 		self::$runningAthena = TRUE;
 	}
@@ -122,6 +124,7 @@ abstract class ASM {
 			self::$crm->save();
 			self::$bqm->save();
 			self::$sqm->save();
+			self::$trm->save();
 		}
 		if (self::$runningGaia) {
 			self::$plm->save();
