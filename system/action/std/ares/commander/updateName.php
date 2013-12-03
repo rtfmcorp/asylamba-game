@@ -1,5 +1,4 @@
 <?php
-include_once ATHENA;
 include_once ARES;
 
 # affect a commander
@@ -8,54 +7,46 @@ include_once ARES;
 # string name 		nom du commandant
 
 if (CTR::$get->exist('id')) {
-	$commanderId = CTR::$get->get('id');
+	$id = CTR::$get->get('id');
 } elseif (CTR::$post->exist('id')) {
-	$commanderId = CTR::$post->get('id');
+	$id = CTR::$post->get('id');
 } else {
-	$commanderId = FALSE;
+	$id = FALSE;
 }
 
 if (CTR::$get->exist('name')) {
-	$commanderId = CTR::$get->get('name');
+	$name = CTR::$get->get('name');
 } elseif (CTR::$post->exist('name')) {
 	$name = CTR::$post->get('name');
 } else {
 	$name = FALSE;
 }
 
-
-if ($commanderId !== FALSE) {
-	$S_COM1 = ASM::$com->getCurrentSession();
-	ASM::$com->newSession();
-	ASM::$com->load(array('id' => $commanderId, 'rPlayer' => CTR::$data->get('playerId')));
-
-	if (ASM::$com->size() == 1) {
-		$commander = ASM::$com->get();
-		
-		# checker si on a assez de place !!!!!
-		$S_COM2 = ASM::$com->newSession();
-		ASM::$com->load(array('rBase' => $commander->getRBase(), 'statement' => COM_AFFECTED));
-		$nbr = ASM::$com->size();
-
-		ASM::$com->changeSession($S_COM2);
-
-		if ($nbr < 3) {
-			$commander->setDAffectation(Utils::now());
-			$commander->setStatement(COM_AFFECTED);
-
-			CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté', ALERT_STD_SUCCESS);
-			CTR::redirect('fleet/view-movement');
-			
+if ($id !== FALSE) {
+	if ($name !== FALSE) {
+		$S_COM1 = ASM::$com->getCurrentSession();
+		ASM::$com->newSession();
+		ASM::$com->load(array('id' => $id, 'rPlayer' => CTR::$data->get('playerId')));
+		if (ASM::$com->size() == 1) {
+			$commander = ASM::$com->get();
+			$p = new Parser();
+			$name = $p->protect($name);
+			if (strlen($name) > 1 AND strlen($name) < 26) {
+				$commander->setName($name);
+				CTR::$alert->add('le nom de votre commandant est maintenant ' . $name, ALERT_STD_SUCCESS);
+			} else {
+				CTR::$alert->add('le nom doit comporter entre 2 et 25 caractères', ALERT_STD_ERROR);
+			}
 		} else {
-			CTR::$alert->add('Votre base a dépassé la capacité limit de commandant en activité', ALERT_STD_ERROR);			
+			CTR::$alert->add('Ce commandant n\'existe pas ou ne vous appartient pas', ALERT_STD_ERROR);
 		}
-	} else {
-		CTR::$alert->add('Ce commandant n\'existe pas ou ne vous appartient pas', ALERT_STD_ERROR);
-	}
 
-	ASM::$com->changeSession($S_COM1);
+		ASM::$com->changeSession($S_COM1);
+	} else {
+		CTR::$alert->add('manque d\'information', ALERT_BUG_ERROR);
+	}
 } else {
-	CTR::$alert->add('erreur dans le traitement de la requête', ALERT_BUG_ERROR);
+	CTR::$alert->add('manque d\'information', ALERT_BUG_ERROR);
 }
 
 ?>

@@ -66,6 +66,7 @@ switch (CTR::$get->get('a')) {
 	case 'conquer':					include ACTION . 'ares/fleet/conquer.php'; break;
 
 	case 'affectcommander':			include ACTION . 'ares/commander/affect.php'; break;
+	case 'updatenamecommander':		include ACTION . 'ares/commander/updateName.php'; break;
 
 	# APOLLON
 	case 'writebugreport':			include ACTION . 'apollon/bugReport/write.php'; break;
