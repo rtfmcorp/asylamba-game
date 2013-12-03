@@ -69,7 +69,7 @@ echo '<div class="component report">';
 							echo '<a class="open-button" href="' . APP_ROOT . 'fleet/view-archive">&#215;</a>';
 						}
 						echo '<h4 class="switch-class-parent" data-class="open">' . $title . '</h4>';
-						echo '<div class="content">le combat à eu lieu ' . Chronos::transform($r->dFight) . '</div>';
+						echo '<div class="content">le combat a eu lieu ' . Chronos::transform($r->dFight) . '</div>';
 						echo '<div class="footer">';
 							# echo '<a href="' . APP_ROOT . 'action/a-archivereport/id-' . $r->id . '">archiver</a> ou ';
 							echo '<a href="#" class="hb lt" title="non implémenté">supprimer</a><br />';

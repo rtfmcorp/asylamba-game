@@ -17,7 +17,7 @@ echo '<div class="component size2 commander-fleet">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="fleet">';
-				echo '<h3>Représentation des esquadrilles dans la flotte</h3>';
+				echo '<h3>Représentation des escadrilles dans la flotte</h3>';
 				echo '<table class="army commanderTransfer"><tr>';
 					echo '<td>Lignes d\'attaque</td>';
 					for ($i = 5; $i > 0; $i--) { 
