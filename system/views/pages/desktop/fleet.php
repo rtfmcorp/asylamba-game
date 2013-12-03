@@ -14,6 +14,8 @@ echo '<div id="content">';
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'main') {
 		# inclusion des modules
 		include_once ARES;
+
+		ASM::$com->changeSession($S_COM1);
 		
 		# loading des objets
 		$commandersId = array(0);
