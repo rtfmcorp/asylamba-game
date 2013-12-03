@@ -102,13 +102,15 @@ class SectorManager {
 				$this->genStats[5] += $aw['nJaune'];
 				$this->genStats[6] += $aw['nRouge'];
 
-				$this->colStats[$aw['rColor'] - 1][0] += $aw['population'];
-				$this->colStats[$aw['rColor'] - 1][1] += $aw['lifePlanet'];
-				$this->colStats[$aw['rColor'] - 1][2] += $aw['ruine'];
-				$this->colStats[$aw['rColor'] - 1][3] += $aw['nebuleuse'];
-				$this->colStats[$aw['rColor'] - 1][4] += $aw['geante'];
-				$this->colStats[$aw['rColor'] - 1][5] += $aw['nJaune'];
-				$this->colStats[$aw['rColor'] - 1][6] += $aw['nRouge'];
+				if ($aw['rColor']) {
+					$this->colStats[$aw['rColor'] - 1][0] += $aw['population'];
+					$this->colStats[$aw['rColor'] - 1][1] += $aw['lifePlanet'];
+					$this->colStats[$aw['rColor'] - 1][2] += $aw['ruine'];
+					$this->colStats[$aw['rColor'] - 1][3] += $aw['nebuleuse'];
+					$this->colStats[$aw['rColor'] - 1][4] += $aw['geante'];
+					$this->colStats[$aw['rColor'] - 1][5] += $aw['nJaune'];
+					$this->colStats[$aw['rColor'] - 1][6] += $aw['nRouge'];
+				}
 
 				$k++;
 			}

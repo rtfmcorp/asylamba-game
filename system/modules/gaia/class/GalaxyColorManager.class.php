@@ -85,7 +85,17 @@ class GalaxyColorManager {
 
 	public function changeColorSystem() {
 		foreach ($this->system as $k => $v) {
-			if (($v['systemColor'] + array_sum($v['color'])) != 0) {
+
+			if ($v['systemColor'] + array_sum($v['color']) == 0) {
+				# system blanc qui ne change pas
+			} elseif ($v['systemColor'] != 0 && array_sum($v['color']) == 0) {
+				# system pas blanc devient blanc
+
+				$this->system[$k]['systemColor'] = 0;
+				$this->system[$k]['hasChanged'] = TRUE;
+			} else {
+				# autre cas
+
 				$currColor = $v['systemColor'];
 
 				$usedArray = $v['color'];
@@ -132,6 +142,9 @@ class GalaxyColorManager {
 					$this->sector[$k]['color'] = $maxColor[0] + 1;
 					$this->sector[$k]['hasChanged'] = TRUE;
 				}
+			} else {
+				$this->sector[$k]['color'] = 0;
+				$this->sector[$k]['hasChanged'] = TRUE;
 			}
 		}
 	}
