@@ -75,7 +75,6 @@ body {
 	padding: 0 3px;
 	background: url('src/desktop/nav/bNavBox.png') repeat-x;
 }
-
 #nav .box:before {
 	content: '';
 	position: absolute;
@@ -83,7 +82,6 @@ body {
 	width: 15px; height: 46px;
 	background: url('src/desktop/nav/bNavBoxLeft.png') no-repeat;
 }
-
 #nav .box:after {
 	content: '';
 	position: absolute;
@@ -92,33 +90,72 @@ body {
 	background: url('src/desktop/nav/bNavBoxRight.png') no-repeat;
 }
 
-#nav .box.left 	{ top: 0; left: 25px; }
-#nav .box.right { top: 0; right: 25px; }
+#nav .box.left 	 { top: 0; left: 25px; }
+#nav .box.left-2 { top: 0; left: 367px; }
+#nav .box.left-3 { top: 0; left: 593px; }
+#nav .box.right  { top: 0; right: 25px; }
 
 #nav .box a {
+	position: relative;
 	display: inline-block;
 	line-height: 32px;
-	padding: 0 10px; margin: 5px 2px;
+	padding: 0 25px; margin: 5px 2px;
 	font-size: 14px;
-	width: 80px;
-	text-align: center;
+	width: 150px;
 	color: white;
 	text-decoration: none;
 	font-variant: small-caps;
-	background: url('src/desktop/nav/bButton.png') no-repeat;
+	background: url('src/desktop/button/bButtonMiddle.png') repeat-x;
+}
+#nav .box a:before {
+	content: '';
+	position: absolute;
+	top: 0; left: 0;
+	width: 20px; height: 32px;
+	background: url('src/desktop/button/bButtonLeft.png') no-repeat;
+}
+#nav .box a:after {
+	content: '';
+	position: absolute;
+	top: 0; right: 0;
+	width: 20px; height: 32px;
+	background: url('src/desktop/button/bButtonRight.png') no-repeat;
+}
+#nav .box a.current-base {
+	padding-left: 60px;
+	margin-left: 12px;
+}
+#nav .box a.current-base img {
+	position: absolute;
+	top: -16px; left: -10px;
+	background: black;
+	border-radius: 100%;
+	border: solid 2px #4F4F4F;
+	width: 60px;
 }
 
-#nav .box a:hover, 
-#nav .box a:focus  { background: url('src/desktop/nav/bButtonHover.png') no-repeat; }
-#nav .box a.active { background: url('src/desktop/nav/bButtonActive.png') no-repeat; }
+#nav .box a:hover:before, 
+#nav .box a:focus.before  { background: url('src/desktop/button/bButtonLeftHover.png') repeat; }
+#nav .box a:hover:after, 
+#nav .box a:focus.after  { background: url('src/desktop/button/bButtonRightHover.png') repeat; }
+
+#nav .box a.active 		  { background: url('src/desktop/button/bButtonMiddleActive.png') repeat; }
+#nav .box a.active:before { background: url('src/desktop/button/bButtonLeftActive.png') repeat; }
+#nav .box a.active:after  { background: url('src/desktop/button/bButtonRightActive.png') repeat; }
 
 #nav .box a.square {
 	position: relative;
 	padding: 0 5px; margin: 5px 2px;
 	height: 32px; width: 30px;
-	background: url('src/desktop/nav/bLittleButton.png') no-repeat;
+	background: url('src/desktop/button/bLittleButton.png') no-repeat;
 	vertical-align: top;
 }
+#nav .box a.square:before { display: none; }
+#nav .box a.square:after  { display: none; }
+
+#nav .box a.square:hover, 
+#nav .box a.square:focus  { background: url('src/desktop/button/bLittleButtonHover.png') no-repeat; }
+#nav .box a.square.active { background: url('src/desktop/button/bLittleButtonActive.png') no-repeat; }
 
 #nav .box a.square img {
 	position: absolute;
@@ -126,11 +163,11 @@ body {
 	top: 3px; left: 8px;
 }
 
+/* overbox */
+
 #nav .overbox {
 	display: none;
 	position: absolute;
-	top: 50px; right: 10px;
-	width: 205px;
 	padding: 8px 0;
 	background: #0A0A0A;
 	box-shadow: inset 0 0 2px #4F4F4F;
@@ -140,19 +177,44 @@ body {
 #nav .overbox:before {
 	content: '';
 	position: absolute;
-	top: -18px; right: 30px;
 	border-style: solid;
 	border-width: 9px;
 	border-color: transparent transparent #202020 transparent;
+	top: -18px; right: 30px;
 }
 
-#nav .overbox hr {
+#nav .overbox#change-bases {
+	top: 50px; left: 10px;
+	width: 205px;
+}
+#nav .overbox#change-bases:before { left: 30px; right: auto; }
+#nav .overbox#change-bases a {
+	display: block;
+	padding: 3px 15px;
+	color: #4F4F4F; text-decoration: none;
+	font-size: 12px;
+	border-bottom: solid 1px #101010;
+}
+#nav .overbox#change-bases a:focus,
+#nav .overbox#change-bases a:hover {
+	background: #101010;
+}
+#nav .overbox#change-bases strong {
+	display: block;
+	color: #CCC;
+	font-size: 13px;
+}
+
+#nav .overbox#disconnect-box {
+	top: 50px; right: 10px;
+	width: 205px;
+}
+#nav .overbox#disconnect-box hr {
 	margin: 8px 0; border: none;
 	background: none;
 	border-top: solid 1px #202020;
 }
-
-#nav .overbox a {
+#nav .overbox#disconnect-box a {
 	display: block;
 	padding: 0 15px;
 	line-height: 25px;
@@ -160,46 +222,30 @@ body {
 	color: #CCC;
 	text-decoration: none;
 }
-
-#nav .overbox a:hover,
-#nav .overbox a:focus {
+#nav .overbox#disconnect-box a:hover,
+#nav .overbox#disconnect-box a:focus {
 	color: white;
 	background: #202020;
 }
 
-#nav .bug-tracker {
-	display: none;
-	position: absolute;
-	top: 50px; right: 98px;
+#nav .overbox#bug-tracker {
 	width: 350px;
-	padding: 8px 0;
-	background: #0A0A0A;
-	box-shadow: inset 0 0 2px #4F4F4F;
-	border-radius: 3px;
+	top: 50px; right: 98px;
 }
-#nav .bug-tracker:before {
-	content: '';
-	position: absolute;
-	top: -18px; right: 30px;
-	border-style: solid;
-	border-width: 9px;
-	border-color: transparent transparent #202020 transparent;
-}
-
-#nav .bug-tracker p {
+#nav .overbox#bug-tracker p {
 	color: #CCC;
 	font-size: 12px;
 	margin: 0 10px 10px 10px;
 }
 
-#nav .bug-tracker .option {
+#nav .overbox#bug-tracker .option {
 	margin: 3px 10px 10px 10px;
 	display: block;
 	width: 330px;
 	padding: 5px;
 }
 
-#nav .bug-tracker textarea {
+#nav .overbox#bug-tracker textarea {
 	display: block;
 	margin: 0 10px 10px 10px;
 	padding: 5px;
@@ -210,45 +256,33 @@ body {
 	font-size: 13px;
 }
 
-#nav .bug-tracker .button {
+#nav .overbox#bug-tracker .button {
 	display: block;
 	margin: 0 10px 2px 10px;
 }
 
-#nav .roadmap {
-	display: none;
-	position: absolute;
-	top: 50px; right: 142px;
-	background: #0A0A0A;
-	box-shadow: inset 0 0 2px #4F4F4F;
-	border-radius: 3px;
+#nav .overbox#roadmap {
+	width: 350px;
+	top: 50px; right: 143px;
 }
-#nav .roadmap:before {
-	content: '';
-	position: absolute;
-	top: -18px; right: 30px;
-	border-style: solid;
-	border-width: 9px;
-	border-color: transparent transparent #202020 transparent;
-}
-#nav .roadmap .overflow {
+#nav .overbox#roadmap .overflow {
 	max-height: 400px;
 	width: 350px;
 	overflow: auto;
 	padding: 8px 0;
 }
 
-#nav .roadmap p {
+#nav .overbox#roadmap p {
 	color: #CCC;
 	font-size: 12px;
 	margin: 0 10px 10px 10px;
 }
 
-#nav .roadmap p em {
+#nav .overbox#roadmap p em {
 	display: block;
 }
 
-#nav .roadmap hr {
+#nav .overbox#roadmap hr {
 	margin: 5px 0;
 	border: none;
 	border-top: solid 1px #202020;
@@ -365,6 +399,7 @@ body {
 	background: url('src/desktop/mover/right.png') no-repeat center transparent;
 }
 
+/*
 #profil-subnav {
 	position: fixed;
 	top: 45px; left: 0;
@@ -476,6 +511,7 @@ body {
 .color5 #profil-subnav .foot { background: url('src/desktop/profilSubnav/bFootColor5.png') no-repeat top left; }
 .color6 #profil-subnav .foot { background: url('src/desktop/profilSubnav/bFootColor6.png') no-repeat top left; }
 .color7 #profil-subnav .foot { background: url('src/desktop/profilSubnav/bFootColor7.png') no-repeat top left; }
+*/
 
 /* GENERAL RULES FOR ALERT */
 
@@ -2568,6 +2604,7 @@ body {
 .component .info-building h4 { margin: 10px; }
 .component .info-building p { font-size: 13px; }
 
+/*
 #bases-subnav {
 	z-index: 1000;
 	position: fixed;
@@ -2758,13 +2795,14 @@ body {
 .color5 #bases-subnav .foot { background: url('src/desktop/mapSubnav/bFootColor5.png') no-repeat top left; }
 .color6 #bases-subnav .foot { background: url('src/desktop/mapSubnav/bFootColor6.png') no-repeat top left; }
 .color7 #bases-subnav .foot { background: url('src/desktop/mapSubnav/bFootColor7.png') no-repeat top left; }
-
+*/
 
 /***********************************/
 /************ MAP STYLE ************/
 /***********************************/
 
 /****** SUBNAV *****/
+/*
 #map-subnav {
 	z-index: 1000;
 	position: fixed;
@@ -2907,6 +2945,7 @@ body {
 .color5 #map-subnav .foot { background: url('src/desktop/mapSubnav/bFootColor5.png') no-repeat top left; }
 .color6 #map-subnav .foot { background: url('src/desktop/mapSubnav/bFootColor6.png') no-repeat top left; }
 .color7 #map-subnav .foot { background: url('src/desktop/mapSubnav/bFootColor7.png') no-repeat top left; }
+*/
 
 /****** NAV & OPTION *****/
 #map-nav,

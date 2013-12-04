@@ -500,9 +500,15 @@ jQuery(document).ready(function($) {
 	// GENERAL SHOW/HIDE FUNCTION
 	// --------------------------
 	$('.sh').live('click', function(e) {
-		var target = $(this).data('target');
-		$('#' + target).fadeToggle(0);
 		e.preventDefault();
+		var target = $('#' + $(this).data('target'));
+
+		if (target.css('display') == 'none') {
+			$('.overbox').css('display', 'none');
+			target.css('display', 'block');
+		} else {
+			target.css('display', 'none');
+		}
 	});
 
 	$('.switch-class').live('click', function(e) {

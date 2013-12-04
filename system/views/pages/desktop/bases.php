@@ -3,23 +3,7 @@
 include_once ATHENA;
 
 # choix de la base
-# si base donnée en argument
-if (CTR::$get->exist('base')) {
-	if (CTRHelper::baseExist(CTR::$get->get('base'))) {
-		ASM::$obm->load(array('rPlace' => CTR::$get->get('base')));
-		CTR::$data->get('playerParams')->add('base', CTR::$get->get('base'));
-	} else {
-		header('Location: ' . APP_ROOT);
-		exit();
-	}
-# si paramètre de base initialisé
-} elseif (CTR::$data->get('playerParams')->exist('base')) {
-	ASM::$obm->load(array('rPlace' => CTR::$data->get('playerParams')->get('base')));
-# sinon base par défaut
-} else {
-	ASM::$obm->load(array('rPlace' => CTR::$data->get('playerBase')->get('ob')->get(0)->get('id')));
-}
-
+ASM::$obm->load(array('rPlace' => CTR::$data->get('playerParams')->get('base')));
 $base = ASM::$obm->get(0);
 
 # background paralax
@@ -27,7 +11,6 @@ echo '<div id="background-paralax" class="bases"></div>';
 
 # inclusion des elements
 include 'basesElement/movers.php';
-include 'basesElement/subnav.php';
 
 # contenu spécifique
 echo '<div id="content">';

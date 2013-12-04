@@ -12,8 +12,8 @@ LISTE des clés valides dans l'arrayList $data :
 	level
 
 - playerBase (arrayList)
-	stackList 'ob' : 'id', 'name', 'sector'
-	stackList 'ms' : 'id', 'name', 'sector'
+	stackList 'ob' : 'id', 'name', 'sector', 'img'
+	stackList 'ms' : 'id', 'name', 'sector', 'img'
 
 - playerEvent (eventList)
 

@@ -197,6 +197,8 @@ abstract class CTR {
 			include EVENT . 'executeEvent.php';
 			include EVENT . 'updateGame.php';
 			
+			include TEMPLATE . 'checkBase.php';
+
 			include TEMPLATE . self::$data->get('screenmode') . '/open.php';
 			include TEMPLATE . self::$data->get('screenmode') . '/navbar.php';
 			

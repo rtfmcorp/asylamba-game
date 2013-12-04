@@ -40,7 +40,13 @@ if (ASM::$pam->size() == 1) {
 	ASM::$obm->load(array('rPlayer' => $player->getId()), array('dCreation', 'ASC'));
 	for ($i = 0; $i < ASM::$obm->size(); $i++) {
 		$base = ASM::$obm->get($i);
-		CTRHelper::addBase('ob', $base->getId(), $base->getName(), $base->getSector(), $base->getSystem());
+		CTRHelper::addBase(
+			'ob', $base->getId(), 
+			$base->getName(), 
+			$base->getSector(), 
+			$base->getSystem(), 
+			'1-' . Game::getSizeOfPlanet($base->getPlanetPopulation())
+		);
 	}
 	ASM::$obm->changeSession($S_OBM1);
 

@@ -12,21 +12,7 @@ ASM::$obm->newSession();
 ASM::$obm->load(array('rPlayer' => CTR::$data->get('playerId')));
 
 # base choice
-# si base donnée en argument
-if (CTR::$get->exist('base')) {
-	if (CTRHelper::baseExist(CTR::$get->get('base'))) {
-		$defaultBase = ASM::$obm->getById(CTR::$get->get('base'));
-		CTR::$data->get('playerParams')->add('base', CTR::$get->get('base'));
-	} else {
-		CTR::redirect('404');
-	}
-# si paramètre de base initialisé
-} elseif (CTR::$data->get('playerParams')->exist('base')) {
-	$defaultBase = ASM::$obm->getById(CTR::$data->get('playerParams')->get('base'));
-# sinon base par défaut
-} else {
-	$defaultBase = ASM::$obm->get(0);
-}
+$defaultBase = ASM::$obm->getById(CTR::$data->get('playerParams')->get('base'));
 
 # map default position
 $x = $defaultBase->getXSystem();
@@ -67,7 +53,6 @@ if (CTR::$get->exist('place')) {
 }
 
 # control include
-include 'mapElement/subnav.php';
 include 'mapElement/option.php';
 include 'mapElement/nav.php';
 include 'mapElement/content.php';

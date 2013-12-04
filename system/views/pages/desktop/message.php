@@ -4,7 +4,6 @@ echo '<div id="background-paralax" class="message"></div>';
 
 # inclusion des elements
 include 'profilElement/movers.php';
-include 'profilElement/subnav.php';
 
 # contenu spécifique
 echo '<div id="content">';

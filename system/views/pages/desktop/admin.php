@@ -10,7 +10,6 @@ echo '<div id="background-paralax" class="profil"></div>';
 
 # inclusion des elements
 include 'basesElement/movers.php';
-# include 'basesElement/subnav.php';
 
 # contenu spécifique
 echo '<div id="content">';
