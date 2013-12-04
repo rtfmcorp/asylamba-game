@@ -106,8 +106,20 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 			$tr->commercialShipQuantity = $commercialShipQuantity;
 			$tr->statement = Transaction::ST_PROPOSED;
 			$tr->dPublication = Utils::now();
-
 			ASM::$trm->add($tr);
+
+			// création du convoi
+			$cs = new CommercialShipping();
+			$cs->rPlayer = CTR::$data->get('playerId');
+			$cs->rBase = $rPlace;
+			$cs->rBaseDestination = 0;
+			$cs->rTransaction = $tr->id;
+			$cs->resourceTransported = NULL;
+			$cs->shipQuantity = $commercialShipQuantity;
+			$cs->dDeparture = '';
+			$cs->dArrival = '';
+			$cs->statement = CommercialShipping::ST_WAITING;
+			ASM::$csm->add($cs);
 
 			CTR::$alert->add('Votre proposition a été envoyée sur le marché.', ALERT_STD_SUCCESS);
 		} else {
