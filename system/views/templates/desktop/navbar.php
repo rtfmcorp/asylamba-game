@@ -46,8 +46,8 @@ echo '<div id="nav">';
 		$isActive = (in_array(CTR::getPage(), array('faction'))) ? 'active' : '';
 		echo '<a href="' . APP_ROOT . 'faction" class="square hb rb ' . $isActive . '" title="faction"><img src="' . MEDIA . 'common/nav-faction.png" alt="" /></a>';
 		
-		$isActive = (in_array(CTR::getPage(), array('rank'))) ? 'active' : '';
-		echo '<a href="' . APP_ROOT . 'rank" class="square hb rb ' . $isActive . '" title="classement"><img src="' . MEDIA . 'common/nav-rank.png" alt="" /></a>';
+		# $isActive = (in_array(CTR::getPage(), array('rank'))) ? 'active' : '';
+		# echo '<a href="' . APP_ROOT . 'rank" class="square hb rb ' . $isActive . '" title="classement"><img src="' . MEDIA . 'common/nav-rank.png" alt="" /></a>';
 
 		$isActive = (in_array(CTR::getPage(), array('message'))) ? 'active' : '';
 		echo '<a href="' . APP_ROOT . 'message" class="square hb rb ' . $isActive . '" title="messagerie"><img src="' . MEDIA . 'common/nav-message.png" alt="" /></a>';
@@ -70,7 +70,8 @@ echo '<div id="nav">';
 
 	echo '<div class="overbox" id="change-bases">';
 		for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-			echo '<a href="' . APP_ROOT . 'bases/base-' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') . '">';
+			#echo '<a href="' . APP_ROOT . 'bases/base-' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') . '">';
+			echo '<a href="' . CTR::getUrl() . '/base-' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') . '">';
 				echo '<em>Base orbitale</em>';
 				echo '<strong>' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('name') . '</strong>';
 			echo '</a>';

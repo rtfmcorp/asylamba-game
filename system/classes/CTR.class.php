@@ -6,10 +6,9 @@ abstract class CTR {
 	public static $post;
 	public static $alert;
 
-	public static $applyGalaxy = FALSE;
-
 	private static $page;
 	private static $title;
+	private static $url;
 
 	private static $redirect;
 	private static $xDomain = FALSE;
@@ -17,6 +16,7 @@ abstract class CTR {
 	private static $lastUpdate;
 
 	public static $benchmark;
+	public static $applyGalaxy = FALSE;
 
 	private static $pageResources = array(
 		'profil' => array('profil', 'Profil'),
@@ -53,6 +53,7 @@ abstract class CTR {
 	public static function getPage()		{ return self::$page; }
 	public static function getRedirect()	{ return self::$redirect; }
 	public static function getLastUpdate()	{ return self::$lastUpdate; }
+	public static function getUrl()			{ return self::$url; }
 
 	public static function setLastUpdate()	{ self::$lastUpdate = Utils::now(); }
 	public static function redirect($v = 0, $externalDomain = FALSE) {
@@ -105,6 +106,8 @@ abstract class CTR {
 	}
 
 	private static function parseRoute() {
+		self::$url = $_SERVER['REQUEST_URI'];
+
 		$requestURI = array_diff(
 			explode('/', $_SERVER['REQUEST_URI']),
 			explode('/', $_SERVER['SCRIPT_NAME'])
