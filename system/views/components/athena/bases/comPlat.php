@@ -41,7 +41,7 @@ echo '<div class="component building">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			$active = (!CTR::$get->exist('mode') || CTR::$get->get('mode') == 'market') ? 'active' : '';
+			/*$active = (!CTR::$get->exist('mode') || CTR::$get->get('mode') == 'market') ? 'active' : '';
 			echo '<a href="' . APP_ROOT . 'bases/base-' . $ob_compPlat->getId() . '/view-commercialplateforme/mode-market" class="nav-element ' . $active . '">';
 				echo '<img src="' . MEDIA . 'orbitalbase/generator.png" alt="" />';
 				echo '<strong>Place du commerce</strong>';
@@ -57,7 +57,7 @@ echo '<div class="component building">';
 			echo '<hr />';
 
 			if (!CTR::$get->exist('mode') || CTR::$get->get('mode') == 'market') {
-				$maxShip = OrbitalBaseResource::getBuildingInfo(6, 'level', $ob_compPlat->getLevelCommercialPlateforme(),  'nbCommercialShip');
+				maxShip = OrbitalBaseResource::getBuildingInfo(6, 'level', $ob_compPlat->getLevelCommercialPlateforme(),  'nbCommercialShip');
 				$availableShip = 2353;
 
 				echo '<div class="number-box">';
@@ -68,7 +68,7 @@ echo '<div class="component building">';
 					echo '<span style="width:' . Format::percent($availableShip, $maxShip) . '%;" class="content"></span>';
 				echo '</div>';
 			} else {
-				echo '<div class="number-box">';
+			*/	echo '<div class="number-box">';
 					echo '<span class="label">routes commerciales</span>';
 					echo '<span class="value">' . $nCRInDock . ' / ' . $nMaxCR . '</span>';
 
@@ -110,16 +110,16 @@ echo '<div class="component building">';
 						echo ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" />';
 					echo '</span>';
 				echo '</div>';
-			}
+			#}
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
 
-if (!CTR::$get->exist('mode') || CTR::$get->get('mode') == 'market') {
-	include COMPONENT . 'athena/bases/complat/market.php';
-} else {
+#if (!CTR::$get->exist('mode') || CTR::$get->get('mode') == 'market') {
+#	include COMPONENT . 'athena/bases/complat/market.php';
+#} else {
 	include COMPONENT . 'athena/bases/complat/route.php';
-}
+#}
 
 ASM::$crm->changeSession($S_CRM1);
 
