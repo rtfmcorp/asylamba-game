@@ -151,6 +151,8 @@ abstract class CTR {
 				if (!self::$get->exist('bindkey')) {
 					header('Location: ' . GETOUT_ROOT . 'accueil/speak-wrongargument');
 					exit();
+				} else {
+					# do nothing
 				}
 			} else {
 				header('Location: ' . APP_ROOT);
@@ -177,7 +179,6 @@ abstract class CTR {
 			include SCRIPT . 'main.php';
 		} elseif (self::$page == 'connection') {
 			include CONNECTION . 'main.php';
-			include EVENT . 'main.php';
 		} elseif (self::$page == '404') {
 			# inclure 404
 			header('HTTP/1.0 404 Not Found');
@@ -222,7 +223,6 @@ abstract class CTR {
 			$ctn .= "# time : " . self::$benchmark->getTime('mls', 0) . "ms\r";
 
 			Bug::writeLog($path, $ctn);
-			#echo ;
 		}
 	}
 
