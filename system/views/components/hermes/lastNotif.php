@@ -41,9 +41,6 @@ echo '<div class="component notif">';
 			} else {
 				echo '<p>Il n\'y a aucune notification dans votre boîte de réception.</p>';
 			}
-
-			# Bug::pre(CTR::$data->get('playerEvent'));
-			# Bug::pre(CTR::$data->get('playerBonus'));
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

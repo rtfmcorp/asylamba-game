@@ -4,6 +4,8 @@ define('NTM_NOTIFLIMIT',				25);
 define('NTM_NOTIFARCHIVELIMIT',			5);
 define('NTM_NOTIFARCHIVELIMITPREMIUM',	50);
 
+define('NTM_TOOLDISPLAY',				5);
+
 define('NTM_TIMEOUT_READED',			24 * 3);
 define('NTM_TIMEOUT_UNREADED',			24 * 10);
 

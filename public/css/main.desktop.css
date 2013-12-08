@@ -366,6 +366,50 @@ body {
 	left: 2px;
 }
 
+#tools .overbox {
+	display: none;
+	position: absolute;
+	background: #0A0A0A;
+	box-shadow: inset 0 0 2px #4F4F4F;
+	border-radius: 3px;
+	width: 300px;
+	bottom: 45px; right: 15px;
+}
+
+#tools .overbox .overflow {
+	padding: 0;
+	max-height: 350px;
+	overflow: auto;
+}
+
+#tools .overbox:before {
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 9px;
+	border-color: #202020 transparent transparent transparent;
+	bottom: -18px; right: 30px;
+}
+
+#tools .overbox a.more-link {
+	display: block;
+	padding: 8px;
+	font-size: 12px;
+	color: white;
+	border-top: solid 1px #202020;
+	text-align: center;
+	text-decoration: none;
+	color: #4F4F4F;
+}
+
+#tools .overbox a.more-link:focus,
+#tools .overbox a.more-link:hover {
+	color: #CCC;
+}
+
+#tools .overbox#new-notifications { right: 15px; }
+#tools .overbox#new-messages { right: 137px; }
+
 /* COMPOSANT DE LA PAGE PROFIL */
 
 #background-paralax {
@@ -1273,7 +1317,7 @@ body {
 }
 
 /* last-notif */
-.component.notif .notif {
+.notif {
 	position: relative;
 	margin: 10px;
 	background: black;
@@ -1282,7 +1326,7 @@ body {
 	border-left: solid 1px #202020;
 }
 
-.component.notif .notif h4 {
+.notif h4 {
 	position: relative;
 	overflow: hidden;
 	margin: 0;
@@ -1293,9 +1337,10 @@ body {
 	background: #0A0A0A;
 	font-weight: normal;
 	cursor: pointer;
+	color: white;
 }
 
-.component.notif .notif.unreaded h4:before {
+.notif.unreaded h4:before {
 	position: absolute;
 	content: '';
 	width: 40px; height: 40px;
@@ -1309,15 +1354,15 @@ body {
 	transform: rotate(100deg);
 }
 
-.color1 .component.notif .notif.unreaded h4:before { background: #b01e2d; }
-.color2 .component.notif .notif.unreaded h4:before { background: #2f23c0; }
-.color3 .component.notif .notif.unreaded h4:before { background: #ffdb0f; }
-.color4 .component.notif .notif.unreaded h4:before { background: #a935c7; }
-.color5 .component.notif .notif.unreaded h4:before { background: #57c632; }
-.color6 .component.notif .notif.unreaded h4:before { background: #05bed7; }
-.color7 .component.notif .notif.unreaded h4:before { background: #ac5832; }
+.color1 .notif.unreaded h4:before { background: #b01e2d; }
+.color2 .notif.unreaded h4:before { background: #2f23c0; }
+.color3 .notif.unreaded h4:before { background: #ffdb0f; }
+.color4 .notif.unreaded h4:before { background: #a935c7; }
+.color5 .notif.unreaded h4:before { background: #57c632; }
+.color6 .notif.unreaded h4:before { background: #05bed7; }
+.color7 .notif.unreaded h4:before { background: #ac5832; }
 
-.component.notif .notif .content {
+.notif .content {
 	display: none;
 	padding: 6px 8px;
 	line-height: 140%;
@@ -1325,18 +1370,18 @@ body {
 	color: #efefef;
 }
 
-.component.notif .notif .content p { margin: 0; }
-.component.notif .notif .content hr {
+.notif .content p { margin: 0; }
+.notif .content hr {
 	border: none; background: none;
 	border-bottom: dashed 1px #202020;
 	margin: 5px 0;
 }
 
-.component.notif .notif .content a {
+.notif .content a {
 	color: white;
 }
 
-.component.notif .notif .footer {
+.notif .footer {
 	display: none;
 	margin: 0;
 	padding: 0 10px;
@@ -1348,9 +1393,9 @@ body {
 	color: #CCC;
 }
 
-.component.notif .notif .footer a { color: #CCC; }
-.component.notif .notif.open .content { display: block; }
-.component.notif .notif.open .footer  { display: block; }
+.notif .footer a { color: #CCC; }
+.notif.open .content { display: block; }
+.notif.open .footer  { display: block; }
 
 /* finance */
 .component.financial table {

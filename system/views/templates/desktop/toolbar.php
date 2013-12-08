@@ -1,4 +1,10 @@
 <?php
+# load notif
+include_once HERMES;
+$S_NTM1 = ASM::$ntm->getCurrentSession();
+ASM::$ntm->newSession();
+ASM::$ntm->load(array('rPlayer' => CTR::$data->get('playerId'), 'readed' => 0));
+
 echo '</div>';
 
 echo '<div id="tools">';
@@ -34,20 +40,15 @@ echo '<div id="tools">';
 		$qr->execute(array(CTR::$data->get('playerId')));
 		$aw = $qr->fetch();
 		$message = (count($aw['n']) > 0) ? $aw['n'] : 0;
-		echo '<a href="' . APP_ROOT . 'message" class="couple ' . (($message > 0) ? 'active' : '') . ' hb lt" title="' . (($message > 0) ? 'vous avez ' . $message . ' nouveau' . Format::addPlural($message, 'x') . ' message' . Format::addPlural($message) : 'vous n\'avez pas de nouveau message') . '">';
+
+		echo '<a href="' . APP_ROOT . 'message" class="couple ' . (($message > 0) ? 'active' : '') . ' sh" data-target="new-messages">';
 			echo 'message' . Format::addPlural($message);
 			echo '<strong>' . $message . '</strong>';
 		echo '</a>';
 
-		include_once HERMES;
-		$S_NTM1 = ASM::$ntm->getCurrentSession();
-		ASM::$ntm->newSession();
-		ASM::$ntm->load(array('rPlayer' => CTR::$data->get('playerId'), 'readed' => 0));
-		$notifs = ASM::$ntm->size();
-		ASM::$ntm->changeSession($S_NTM1);
-		echo '<a href="' . APP_ROOT . 'message" id="general-notif-container" class="couple ' . (($notifs > 0) ? 'active' : '') . ' hb lt" title="' . (($notifs > 0) ? 'vous avez ' . $notifs . ' nouvelle' . Format::addPlural($notifs) . ' notification' . Format::addPlural($notifs) : 'vous n\'avez pas de nouvelle notification') . '">';
-			echo 'notification' . Format::addPlural($notifs);
-			echo '<strong>' . $notifs . '</strong>';
+		echo '<a href="' . APP_ROOT . 'message" id="general-notif-container" class="couple ' . ((ASM::$ntm->size() > 0) ? 'active' : '') . ' sh" data-target="new-notifications">';
+			echo 'notification' . Format::addPlural(ASM::$ntm->size());
+			echo '<strong>' . ASM::$ntm->size() . '</strong>';
 		echo '</a>';
 
 		$incomingAttack = 0;
@@ -66,5 +67,41 @@ echo '<div id="tools">';
 			echo '</a>';
 		}
 	echo '</div>';
+
+	# overboxes
+	echo '<div class="overbox" id="new-notifications">';
+		echo '<div class="overflow">';
+			if (ASM::$ntm->size() > 0) {
+				for ($i = 0; $i < ASM::$ntm->size(); $i++) {
+					$n = ASM::$ntm->get($i);
+					echo '<div class="notif unreaded" data-notif-id="' . $n->getId() . '">';
+						echo '<h4 class="read-notif switch-class-parent" data-class="open">' . $n->getTitle() . '</h4>';
+						echo '<div class="content">' . $n->getContent() . '</div>';
+						echo '<div class="footer">';
+							echo '<a href="' . APP_ROOT . 'action/a-archivenotif/id-' . $n->getId() . '">archiver</a> ou ';
+							echo '<a href="' . APP_ROOT . 'action/a-deletenotif/id-' . $n->getId() . '">supprimer</a><br />';
+							echo '— ' . Chronos::transform($n->getDSending());
+						echo '</div>';
+					echo '</div>';
+
+					if ($i == NTM_TOOLDISPLAY - 1) {
+						break;
+					}
+				}
+				echo '<a href="' . APP_ROOT . 'message" class="more-link">voir toutes vos notifications</a>';
+			} else {
+				echo '<a href="' . APP_ROOT . 'message" class="more-link">aucune nouvelle notification</a>';
+			}
+		echo '</div>';
+	echo '</div>';
+
+	echo '<div class="overbox" id="new-messages">';
+		echo '<div class="overflow">';
+			
+				echo '<a href="' . APP_ROOT . 'message" class="more-link">aucun nouveau message</a>';
+		echo '</div>';
+	echo '</div>';
 echo '</div>';
+
+ASM::$ntm->changeSession($S_NTM1);
 ?>

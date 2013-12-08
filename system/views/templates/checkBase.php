@@ -8,8 +8,5 @@ if (CTR::$get->exist('base')) {
 		header('Location: ' . APP_ROOT);
 		exit();
 	}
-# si paramètre de base initialisé
-} elseif (!CTR::$data->get('playerParams')->exist('base')) {
-	CTR::$data->get('playerParams')->add('base', CTR::$data->get('playerBase')->get('ob')->get(0)->get('id'));
 }
 ?>

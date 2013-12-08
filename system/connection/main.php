@@ -59,9 +59,8 @@ if (ASM::$pam->size() == 1) {
 	# création des paramètres utilisateur
 	CTR::$data->add('playerParams', new ArrayList());
 
-	# mise de dLastConnection + dLastActivity
-	$player->setDLastConnection(Utils::now());
-	$player->setDLastActivity(Utils::now());
+	# remplissage des paramètres utilisateur
+	CTR::$data->get('playerParams')->add('base', CTR::$data->get('playerBase')->get('ob')->get(0)->get('id'));
 
 	# création des tableaux de données dans le contrôleur
 	CTRHelper::initializePlayerEvent();
@@ -182,6 +181,10 @@ if (ASM::$pam->size() == 1) {
 	}
 	ASM::$plm->changeSession($S_PLM1);
 	ASM::$com->changeSession($S_COM2);
+
+	# mise de dLastConnection + dLastActivity
+	$player->setDLastConnection(Utils::now());
+	$player->setDLastActivity(Utils::now());
 
 	# confirmation au portail
 	$api = new API(GETOUT_ROOT);
