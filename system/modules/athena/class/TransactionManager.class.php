@@ -115,7 +115,7 @@ class TransactionManager extends Manager {
 		}
 	}
 
-	public static function deleteById($id) {
+	public function deleteById($id) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('DELETE FROM transaction WHERE id = ?');
 		$qr->execute(array($id));

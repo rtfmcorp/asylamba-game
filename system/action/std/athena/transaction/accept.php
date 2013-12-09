@@ -4,15 +4,15 @@ include_once ZEUS;
 include_once GAIA;
 # accept a transaction action
 
-# int rPlace 		id de la base orbitale
-# int rTransaction 	id de la transaction
+# int rplace 		id de la base orbitale
+# int rtransaction 	id de la transaction
 
 for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-$rPlace = Utils::getHTTPData('rPlace');
-$rTransaction = Utils::getHTTPData('rTransaction');
+$rPlace = Utils::getHTTPData('rplace');
+$rTransaction = Utils::getHTTPData('rtransaction');
 
 if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif)) {
 

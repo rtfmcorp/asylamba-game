@@ -540,5 +540,25 @@ class OrbitalBase {
 			CTR::$alert->add('dans decreaseResources de OrbitalBase', ALERT_BUG_ERROR);
 		}
 	}
+
+	public function addShipToDock($shipId, $quantity) {
+		if (OrbitalBaseResource::isAShipFromDock1($shipId) OR OrbitalBaseResource::isAShipFromDock2($shipId)) {
+			self::setShipStorage($shipId, self::getShipStorage($shipId) + $quantity);
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+
+	public function removeShipFromDock($shipId, $quantity) {
+		if (OrbitalBaseResource::isAShipFromDock1($shipId) OR OrbitalBaseResource::isAShipFromDock2($shipId)) {
+			if (self::getShipStorage($shipId) >= $quantity) {
+				self::setShipStorage($shipId, self::getShipStorage($shipId) - $quantity);
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		}
+	}
 }
 ?>

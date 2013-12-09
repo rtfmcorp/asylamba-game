@@ -2,7 +2,7 @@
 include_once ATHENA;
 # propose a transaction action
 
-# int rPlace 		id de la base orbitale
+# int rplace 		id de la base orbitale
 # int type 			type of transaction
 # [int quantity] 	quantitiy of ships or resources
 # [int identifier]	rCommander or shipId
@@ -12,7 +12,7 @@ for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-$rPlace = Utils::getHTTPData('rPlace');
+$rPlace = Utils::getHTTPData('rplace');
 $type = Utils::getHTTPData('type');
 $quantity = Utils::getHTTPData('quantity');
 $identifier = Utils::getHTTPData('identifier');
@@ -82,7 +82,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 				}
 				break;
 			case Transaction::TYP_COMMANDER :
-				$valie = FALSE; // provisoirement
+				$valid = FALSE; // provisoirement
 				/*$S_COM1 = ASM::$com->getCurrentSession();
 				ASM::$com->newSession(ASM_UMODE);
 				ASM::$com->load(array('id' => $identifier));

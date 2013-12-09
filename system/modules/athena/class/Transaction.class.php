@@ -14,10 +14,14 @@ class Transaction {
 	// statement
 	const ST_PROPOSED = 0;		// transaction proposée
 	const ST_COMPLETED = 1;		// transaction terminée
+	const ST_CANCELED = 2;		// transaction annulée
 	// type
 	const TYP_RESOURCE = 0;
 	const TYP_SHIP = 1;
 	const TYP_COMMANDER = 2;
+
+	// percentage to cancel an offer
+	const PERCENTAGE_TO_CANCEL = 5;
 
 	// attributes
 	public $id = 0; 
@@ -33,4 +37,9 @@ class Transaction {
 	public $dPublication = '';
 
 	public function getId() { return $this->id; }
+
+	public function getPriceToCancelOffer() {
+		// 5% of the price
+		return floor($this->price * self::PERCENTAGE_TO_CANCEL / 100);
+	}
 }

@@ -11,7 +11,7 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `transaction` (
   `identifier` int(11) NOT NULL,
   `price` int(11) NOT NULL,
   `commercialShipQuantity` int(11) NOT NULL,
-  `statement` tinyint(4) NOT NULL COMMENT '0 = proposed, 1 = completed',
+  `statement` tinyint(4) NOT NULL COMMENT '0 = proposed, 1 = completed, 2 = canceled',
   `dPublication` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;");

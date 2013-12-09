@@ -32,6 +32,7 @@ switch (CTR::$get->get('a')) {
 
 	case 'proposetransaction': 		include ACTION . 'athena/transaction/propose.php'; break;
 	case 'accepttransaction':		include ACTION . 'athena/transaction/accept.php'; break;
+	case 'canceltransaction':		include ACTION . 'athena/transaction/cancel.php'; break;
 
 	# HERMES
 	case 'writemessage': 			include ACTION . 'hermes/message/write.php'; break;
