@@ -41,7 +41,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 		ASM::$crm->load(array('rOrbitalBaseLinked' => $acceptorBase->getId(), 'statement' => CRM_ACTIVE));
 		ASM::$crm->load(array('rOrbitalBaseLinked' => $acceptorBase->getId(), 'statement' => CRM_STANDBY));
 		$nbrCommercialRoute = ASM::$crm->size() - 1;
-		$nbrMaxCommercialRoute = OrbitalBaseResource::getBuildingInfo(6, 'level', $acceptorBase->getLevelCommercialPlateforme/mode-route(), 'nbRoutesMax'); 
+		$nbrMaxCommercialRoute = OrbitalBaseResource::getBuildingInfo(6, 'level', $acceptorBase->getLevelCommercialPlateforme(), 'nbRoutesMax'); 
 		
 		if ($nbrCommercialRoute < $nbrMaxCommercialRoute) {
 			if (CTR::$data->get('playerInfo')->get('credit') >= $cr->getPrice()) {
