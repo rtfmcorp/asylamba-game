@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Message Forum Manager
+ * Candidate Manager
  *
  * @author Noé Zufferey
  * @copyright Expansion - le jeu
@@ -14,18 +14,13 @@ class CandidateManager extends Manager {
 	protected $managerType ='_Candidate';
 
 	public function load($where = array(), $order = array(), $limit = array()) {
-		$formatWhere = Utils::arrayToWhere($where, 'm.');
+		$formatWhere = Utils::arrayToWhere($where, 'c.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
 		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT m.*,
-				p.name AS playerName,
-				p.rColor AS playerColor,
-				p.avatar AS playerAvatar
-			FROM forumMessage AS m
-			LEFT JOIN player AS p
-				ON m.rPlayer = p.id
+		$qr = $db->prepare('SELECT c.*
+			FROM candidate AS c
 			' . $formatWhere .'
 			' . $formatOrder .'
 			' . $formatLimit
@@ -50,84 +45,67 @@ class CandidateManager extends Manager {
 		$aw = $qr->fetchAll();
 		$qr->closeCursor();
 
-		foreach($aw AS $awMessage) {
-			$message = new ForumMessage();
-			$message->id = $awMessage['id'];
-			$message->rPlayer = $awMessage['rPlayer'];
-			$message->rTopic = $awMessage['rTopic'];
-			$message->oContent = $awMessage['oContent'];
-			$message->pContent = $awMessage['pContent'];
-			$message->statement = $awMessage['statement'];
-			$message->dCreation = $awMessage['dCreation'];
-			$message->dLastModification = $awMessage['dLastModification'];
+		foreach($aw AS $awCandidate) {
+			$candidate = new Candidate();
 
-			$message->playerName = $awMessage['playerName'];
-			$message->playerColor = $awMessage['playerColor'];
-			$message->playerAvatar = $awMessage['playerAvatar'];
+			$candidate->id = $awCandidate['id'];
+			$candidate->rElection = $awCandidate['rElection'];
+			$candidate->rPlayer = $awCandidate['rPlayer'];
+			$candidate->dPresentation = $awCandidate['dPresentation'];
 
-			$this->_Add($message);
+			$this->_Add($candidate);
 		}
 	}
 
 	public function save() {
 		$db = DataBase::getInstance();
 
-		$messages = $this->_Save();
+		$candidates = $this->_Save();
 
-	foreach ($messages AS $message) {
+	foreach ($candidates AS $candidate) {
 
 
-		$qr = $db->prepare('UPDATE forumMessage
+		$qr = $db->prepare('UPDATE candidate
 			SET
+				rElection = ?,
 				rPlayer = ?,
-				rTopic = ?,
-				oContent = ?,
-				pContent = ?,
-				statement = ?,
-				dCreation = ?,
-				dLastModification = ?
+				dPresentation = ?
 			WHERE id = ?');
 		$aw = $qr->execute(array(
-				$message->rPlayer,
-				$message->rTopic,
-				$message->oContent,
-				$message->pContent,
-				$message->statement,
-				$message->dCreation,
-				Utils::now(),
-				$message->id
+				$candidate->rElection,
+				$candidate->rPlayer,
+				$candidate->dPresentation,
+				$candidate->id
+
 			));
 		}
 	}
 
-	public function add($newMessage) {
+	public function add($newCandidate) {
 		$db = DataBase::getInstance();
 
-		$qr = $db->prepare('INSERT INTO forumMessage
+		$qr = $db->prepare('INSERT INTO candidate
 			SET
+				rElection = ?,
 				rPlayer = ?,
-				rTopic = ?,
-				oContent = ?,
-				pContent = ?,
-				dCreation = ?');
-		$aw = $qr->execute(array(
-				$newMessage->rPlayer,
-				$newMessage->rTopic,
-				$newMessage->oContent,
-				$newMessage->pContent,
-				Utils::now()
+				dPresentation = ?');
+
+			$aw = $qr->execute(array(
+				$newCandidate->rElection,
+				$newCandidate->rPlayer,
+				utils::now()
 				));
 
-		$newMessage->id = $db->lastInsertId();
+		$newCandidate->id = $db->lastInsertId();
 
-		$this->_Add($newMessage);
+		$this->_Add($newCandidate);
 
-		return $newMessage->id;
+		return $newCandidate->id;
 	}
 
 	public function deleteById($id) {
 		$db = DataBase::getInstance();
-		$qr = $db->prepare('DELETE FROM forumMessage WHERE id = ?');
+		$qr = $db->prepare('DELETE FROM candidate WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);

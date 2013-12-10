@@ -40,6 +40,9 @@ abstract class ASM {
 	public static $tom;
 	public static $fmm;
 	public static $clm;
+	public static $cam;
+	public static $elm;
+	public static $vom;
 
 	public static function runAres() {
 		if (!self::$runningAres) {
@@ -114,6 +117,10 @@ abstract class ASM {
 			self::$tom = new ForumTopicManager();
 			self::$fmm = new ForumMessageManager();
 			self::$clm = new ColorManager();
+			self::$cam = new CandidateManager();
+			self::$elm = new ElectionManager();
+			self::$vom = new VoteManager();
+
 		}
 		self::$runningDemeter = TRUE;
 	}
@@ -157,6 +164,10 @@ abstract class ASM {
 			self::$tom->save();
 			self::$fmm->save();
 			self::$clm->save();
+			self::$cam->save();
+			self::$elm->save();
+			self::$vom->save();
+
 		}
 	}
 }

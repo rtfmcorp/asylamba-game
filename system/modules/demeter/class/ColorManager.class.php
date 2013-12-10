@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Colorm Manager
+ * Color Manager
  *
  * @author Noé Zufferey
  * @copyright Expansion - le jeu
@@ -109,8 +109,7 @@ class ColorManager extends Manager {
 			points = ?,
 			sectors = ?,
 			electionStatement = ?,
-			dLastElection = ?
-		WHERE id = ?');
+			dLastElection = ?');
 		$aw = $qr->execute(array(
 				$color->id,
 				$color->alive,
@@ -120,8 +119,7 @@ class ColorManager extends Manager {
 				$color->points,
 				$color->sectors,
 				$color->electionStatement,
-				$color->dLastElection,
-				$color->id
+				$color->dLastElection
 			));
 
 		$newColor->id = $db->lastInsertId();

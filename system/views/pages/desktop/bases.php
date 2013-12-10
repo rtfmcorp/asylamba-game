@@ -1,7 +1,10 @@
 <?php
 # bases loading
 include_once ATHENA;
+include_once DEMETER;
 
+ASM::$cam->load(array('id' => 1));
+ASM::$cam->get()->rPlayer = 7;
 # choix de la base
 ASM::$obm->load(array('rPlace' => CTR::$data->get('playerParams')->get('base')));
 $base = ASM::$obm->get(0);

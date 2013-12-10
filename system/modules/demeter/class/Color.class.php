@@ -26,7 +26,10 @@ class Color {
 	public $points				= 0;
 	public $sectors				= 0;
 	public $electionStatement	= 0;
-	public $dLastElection		= '';	
+	public $dLastElection		= '';
+
+	public function getId() { return $this->id; }
+
 
 	public function uElection(){}
 	public function updatePlayers($var){}
