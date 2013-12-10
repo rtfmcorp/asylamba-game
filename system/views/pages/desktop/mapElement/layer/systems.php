@@ -23,8 +23,8 @@ echo '<div id="systems">';
 		echo '</a>';
 	}
 
-	/*
-	A MODIFIER
+	
+	# A MODIFIER
 	##########
 	
 	for ($i = 0; $i < $sm->size(); $i++) {
@@ -40,6 +40,6 @@ echo '<div id="systems">';
 			echo '</p>';
 		echo '</div>';
 	}
-	*/
+	
 echo '</div>';
 ?>

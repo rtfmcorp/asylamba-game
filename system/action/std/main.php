@@ -7,6 +7,9 @@ if (CTR::$get->exist('sftr')) {
 }
 
 switch (CTR::$get->get('a')) {
+	# GENERAL
+	case 'switchbase':				include ACTION . 'common/switchBase.php'; break;
+
 	# ATHENA
 	case 'updateinvest': 			include ACTION . 'athena/general/updateInvest.php'; break;
 	case 'switchrefinerymode':		include ACTION . 'athena/general/switchRefineryMode.php'; break;

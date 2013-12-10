@@ -95,6 +95,7 @@ body {
 #nav .box.left-3 { top: 0; left: 600px; }
 #nav .box.right  { top: 0; right: 25px; }
 
+#tools .box a,
 #nav .box a {
 	position: relative;
 	display: inline-block;
@@ -107,6 +108,7 @@ body {
 	font-variant: small-caps;
 	background: url('src/desktop/button/bButtonMiddle.png') repeat-x;
 }
+#tools .box a:before,
 #nav .box a:before {
 	content: '';
 	position: absolute;
@@ -114,6 +116,7 @@ body {
 	width: 20px; height: 32px;
 	background: url('src/desktop/button/bButtonLeft.png') no-repeat;
 }
+#tools .box a:after,
 #nav .box a:after {
 	content: '';
 	position: absolute;
@@ -133,8 +136,12 @@ body {
 	width: 60px;
 }
 
+#tools .box a:hover:before, 
+#tools .box a:focus:before, 
 #nav .box a:hover:before, 
 #nav .box a:focus.before  { background: url('src/desktop/button/bButtonLeftHover.png') repeat; }
+#tools .box a:hover:after, 
+#tools .box a:focus:after, 
 #nav .box a:hover:after, 
 #nav .box a:focus.after  { background: url('src/desktop/button/bButtonRightHover.png') repeat; }
 
@@ -142,6 +149,7 @@ body {
 #nav .box a.active:before { background: url('src/desktop/button/bButtonLeftActive.png') repeat; }
 #nav .box a.active:after  { background: url('src/desktop/button/bButtonRightActive.png') repeat; }
 
+#tools .box a.square,
 #nav .box a.square {
 	position: relative;
 	padding: 0 5px; margin: 5px 2px;
@@ -149,9 +157,11 @@ body {
 	background: url('src/desktop/button/bLittleButton.png') no-repeat;
 	vertical-align: top;
 }
-#nav .box a.square:before { display: none; }
-#nav .box a.square:after  { display: none; }
+#nav .box a.square:before, #tools .box a.square:before { display: none; }
+#nav .box a.square:after, #tools .box a.square:after  { display: none; }
 
+#tools .box a.square:hover, 
+#tools .box a.square:focus, 
 #nav .box a.square:hover, 
 #nav .box a.square:focus  { background: url('src/desktop/button/bLittleButtonHover.png') no-repeat; }
 #nav .box a.square.active { background: url('src/desktop/button/bLittleButtonActive.png') no-repeat; }
@@ -164,14 +174,34 @@ body {
 .color6 #nav .box a.square.active { background: url('src/desktop/button/bLittleButtonActive-c6.png') no-repeat; }
 .color7 #nav .box a.square.active { background: url('src/desktop/button/bLittleButtonActive-c7.png') no-repeat; }
 
+#tools .box a.square img,
 #nav .box a.square img {
 	position: absolute;
 	width: 24px;
 	top: 3px; left: 8px;
 }
+#tools .box a.square img {
+	top: 4px;
+}
+#tools .box a.square span.number {
+	position: absolute;
+	top: -5px; right: -5px;
+	width: 18px; line-height: 18px;
+	text-align: center;
+	font-size: 11px;
+	border-radius: 100%;
+	background: #202020;
+}
+
+.color1 #tools .box a.square span.number { background: #510816; }
+.color2 #tools .box a.square span.number { background: #0c0d44; }
+.color3 #tools .box a.square span.number { background: #b17a00; }
+.color4 #tools .box a.square span.number { background: #310948; }
+.color5 #tools .box a.square span.number { background: #24500a; }
+.color6 #tools .box a.square span.number { background: #004948; }
+.color7 #tools .box a.square span.number { background: #401b13; }
 
 /* overbox */
-
 #nav .overbox {
 	display: none;
 	position: absolute;
@@ -300,16 +330,20 @@ body {
 
 /* TOOLS */
 
-#tools .box {
+#tools .box.left  { bottom: 0; left: 25px; }
+
+#tools .box,
+#tools .temp-box {
 	position: absolute;
 	display: inline-block;
 	height: 40px;
-	padding: 0 3px;
+	padding: 1px 3px 0 3px;
 	background: url('src/desktop/tools/bToolBox.png') repeat-x;
 	font-size: 13px;
 }
 
-#tools .box:before {
+#tools .box:before,
+#tools .temp-box:before {
 	content: '';
 	position: absolute;
 	top: 0; left: -15px;
@@ -317,7 +351,8 @@ body {
 	background: url('src/desktop/tools/bToolBoxRight.png') no-repeat;
 }
 
-#tools .box:after {
+#tools .box:after,
+#tools .temp-box:after {
 	content: '';
 	position: absolute;
 	top: 0; right: -15px;
@@ -325,9 +360,9 @@ body {
 	background: url('src/desktop/tools/bToolBoxLeft.png') no-repeat;
 }
 
-#tools .box.right { bottom: 0; right: 25px; }
+#tools .temp-box.right { bottom: 0; right: 25px; }
 
-#tools .box .couple {
+#tools .temp-box .couple {
 	display: inline-block;
 	padding: 0 6px; margin: 4px 0 0 0;
 	line-height: 33px;
@@ -337,19 +372,19 @@ body {
 	text-decoration: none;
 }
 
-.color1 #tools .box .couple.active { border-bottom: solid 3px #b01e2d; }
-.color2 #tools .box .couple.active { border-bottom: solid 3px #2f23c0; }
-.color3 #tools .box .couple.active { border-bottom: solid 3px #ffdb0f; }
-.color4 #tools .box .couple.active { border-bottom: solid 3px #a935c7; }
-.color5 #tools .box .couple.active { border-bottom: solid 3px #57c632; }
-.color6 #tools .box .couple.active { border-bottom: solid 3px #05bed7; }
-.color7 #tools .box .couple.active { border-bottom: solid 3px #ac5832; }
+.color1 #tools .temp-box .couple.active { border-bottom: solid 3px #b01e2d; }
+.color2 #tools .temp-box .couple.active { border-bottom: solid 3px #2f23c0; }
+.color3 #tools .temp-box .couple.active { border-bottom: solid 3px #ffdb0f; }
+.color4 #tools .temp-box .couple.active { border-bottom: solid 3px #a935c7; }
+.color5 #tools .temp-box .couple.active { border-bottom: solid 3px #57c632; }
+.color6 #tools .temp-box .couple.active { border-bottom: solid 3px #05bed7; }
+.color7 #tools .temp-box .couple.active { border-bottom: solid 3px #ac5832; }
 
-#tools .box .couple:last-child {
+#tools .temp-box .couple:last-child {
 	border-right: none;
 }
 
-#tools .box .couple strong {
+#tools .temp-box .couple strong {
 	display: inline-block;
 	line-height: 22px;
 	padding: 0 8px;
@@ -360,7 +395,7 @@ body {
 	background: #202020;
 }
 
-#tools .box .couple .icon-color {
+#tools .temp-box .couple .icon-color {
 	height: 18px;
 	position: relative;
 	left: 2px;

@@ -683,7 +683,6 @@ jQuery(document).ready(function($) {
 
 		setInterval(function() {
 			if (i > 20 && i < 40) {
-				console.log(i);
 				t.css('box-shadow', '0 0 0 ' + (i - 20) + 'px rgba(255, 255, 255, ' + (0.5 - ((i - 20) * 5 / 100)) + ')');
 			} else if (i > 40) {
 				i = 0;

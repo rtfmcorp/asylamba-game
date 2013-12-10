@@ -8,7 +8,17 @@ ASM::$ntm->load(array('rPlayer' => CTR::$data->get('playerId'), 'readed' => 0));
 echo '</div>';
 
 echo '<div id="tools">';
-	echo '<div class="box right">';
+	# left
+	echo '<div class="box left">';
+		echo '<a href="#">543 237 r</a>';
+		echo '<a href="#" class="square"><img src="' . MEDIA . 'orbitalbase/generator.png" alt="" /></a>';
+		echo '<a href="#" class="square"><img src="' . MEDIA . 'orbitalbase/dock1.png" alt="" /><span class="number">3</span></a>';
+		echo '<a href="#" class="square"><img src="' . MEDIA . 'orbitalbase/dock2.png" alt="" /><span class="number">1</span></a>';
+		echo '<a href="#" class="square"><img src="' . MEDIA . 'orbitalbase/technosphere.png" alt="" /></a>';
+	echo '</div>';
+
+	# right
+	echo '<div class="temp-box right">';
 		echo '<a href="#" class="couple hb lt" title="temps avant prochaine relève">';
 				echo 'il reste <span class="releve-timer">' . Chronos::getTimer('i') . ':' . Chronos::getTimer('s') . '</span>';
 		echo '</a>';
@@ -41,7 +51,7 @@ echo '<div id="tools">';
 		$aw = $qr->fetch();
 		$message = (count($aw['n']) > 0) ? $aw['n'] : 0;
 
-		echo '<a href="' . APP_ROOT . 'message" class="couple ' . (($message > 0) ? 'active' : '') . ' sh" data-target="new-messages">';
+		echo '<a href="' . APP_ROOT . 'message" class="couple ' . (($message > 0) ? 'active' : '') . '">';
 			echo 'message' . Format::addPlural($message);
 			echo '<strong>' . $message . '</strong>';
 		echo '</a>';
@@ -92,13 +102,6 @@ echo '<div id="tools">';
 			} else {
 				echo '<a href="' . APP_ROOT . 'message" class="more-link">aucune nouvelle notification</a>';
 			}
-		echo '</div>';
-	echo '</div>';
-
-	echo '<div class="overbox" id="new-messages">';
-		echo '<div class="overflow">';
-			
-				echo '<a href="' . APP_ROOT . 'message" class="more-link">aucun nouveau message</a>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
