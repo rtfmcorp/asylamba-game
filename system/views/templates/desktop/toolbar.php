@@ -5,16 +5,47 @@ $S_NTM1 = ASM::$ntm->getCurrentSession();
 ASM::$ntm->newSession();
 ASM::$ntm->load(array('rPlayer' => CTR::$data->get('playerId'), 'readed' => 0));
 
+# load base
+include_once ATHENA;
+$S_OBM1 = ASM::$obm->getCurrentSession();
+ASM::$obm->newSession();
+ASM::$obm->load(array('rPlace' => CTR::$data->get('playerParams')->get('base')));
+$currentBase = ASM::$obm->get();
+
 echo '</div>';
 
 echo '<div id="tools">';
 	# left
 	echo '<div class="box left">';
-		echo '<a href="#">543 237 r</a>';
-		echo '<a href="#" class="square"><img src="' . MEDIA . 'orbitalbase/generator.png" alt="" /></a>';
-		echo '<a href="#" class="square"><img src="' . MEDIA . 'orbitalbase/dock1.png" alt="" /><span class="number">3</span></a>';
-		echo '<a href="#" class="square"><img src="' . MEDIA . 'orbitalbase/dock2.png" alt="" /><span class="number">1</span></a>';
-		echo '<a href="#" class="square"><img src="' . MEDIA . 'orbitalbase/technosphere.png" alt="" /></a>';
+		echo '<a href="#" class="resource-link sh" data-target="tools-refinery">' . Format::numberFormat($currentBase->getResourcesStorage()) . ' <img class="icon-color" src="' . MEDIA . 'resources/resource.png" alt="ressources" /></a>';
+		
+		$S_BQM1 = ASM::$bqm->getCurrentSession();
+		ASM::$bqm->changeSession($currentBase->buildingManager);
+		echo '<a href="#" class="square sh" data-target="tools-generator"><img src="' . MEDIA . 'orbitalbase/generator.png" alt="" />';
+			echo '<span class="number">' . ASM::$bqm->size() . '</span>';
+		echo '</a>';
+		ASM::$bqm->changeSession($S_BQM1);
+
+		$S_TQM1 = ASM::$tqm->getCurrentSession();
+		ASM::$tqm->changeSession($currentBase->technoQueueManager);
+		echo '<a href="#" class="square"><img src="' . MEDIA . 'orbitalbase/technosphere.png" alt="" />';
+			echo '<span class="number">' . ASM::$tqm->size() . '</span>';
+		echo '</a>';
+		ASM::$tqm->changeSession($S_TQM1);
+
+		$S_SQM1 = ASM::$sqm->getCurrentSession();
+		ASM::$sqm->changeSession($currentBase->dock1Manager);
+		echo '<a href="#" class="square"><img src="' . MEDIA . 'orbitalbase/dock1.png" alt="" />';
+			echo '<span class="number">' . ASM::$sqm->size() . '</span>';
+		echo '</a>';
+		ASM::$sqm->changeSession($S_SQM1);
+
+		$S_SQM2 = ASM::$sqm->getCurrentSession();
+		ASM::$sqm->changeSession($currentBase->dock2Manager);
+		echo '<a href="#" class="square"><img src="' . MEDIA . 'orbitalbase/dock2.png" alt="" />';
+			echo '<span class="number">' . ASM::$sqm->size() . '</span>';
+		echo '</a>';
+		ASM::$sqm->changeSession($S_SQM2);
 	echo '</div>';
 
 	# right
@@ -22,15 +53,6 @@ echo '<div id="tools">';
 		echo '<a href="#" class="couple hb lt" title="temps avant prochaine relève">';
 				echo 'il reste <span class="releve-timer">' . Chronos::getTimer('i') . ':' . Chronos::getTimer('s') . '</span>';
 		echo '</a>';
-
-		if (isset($base) && CTR::getPage() == 'bases') {
-			echo '<a href="' . APP_ROOT . 'bases/base-' . $base->getId() . '/view-refinery" class="couple hb lt" title="ressources dans vos dépots sur ' . $base->getName() . '">';
-				echo '<strong>';
-					echo Format::numberFormat($base->getResourcesStorage());
-					echo ' <img class="icon-color" src="' . MEDIA . 'resources/resource.png" alt="ressources" />';
-				echo '</strong>';
-			echo '</a>';
-		}
 
 		echo '<a href="' . APP_ROOT . 'financial" class="couple hb lt" title="crédits à votre disposition">';
 			echo '<strong>';
@@ -79,6 +101,49 @@ echo '<div id="tools">';
 	echo '</div>';
 
 	# overboxes
+	echo '<div class="overbox left-pic" id="tools-refinery">';
+		echo '<div class="overflow">';
+			echo '<p>prod</p>';
+			echo '<p>stockage</p>';
+			echo '<p>quand plein</p>';
+			echo '<a href="' . APP_ROOT . 'bases/view-refinery" class="more-link">vers la raffinerie</a>';
+		echo '</div>';
+	echo '</div>';
+
+	echo '<div class="overbox left-pic" id="tools-generator">';
+		echo '<div class="overflow">';
+			$S_BQM1 = ASM::$bqm->getCurrentSession();
+			ASM::$bqm->changeSession($currentBase->buildingManager);
+			
+			if (ASM::$bqm->size() > 0) {
+				$qe = ASM::$bqm->get(0);
+				echo '<div class="queue">';
+					echo '<div class="item active progress" data-progress-current-time="' . $qe->getRemainingTime() . '" data-progress-total-time="' . OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'level', $qe->getTargetLevel(), 'time') . '">';
+						echo '<a href="' . APP_ROOT . 'action/a-dequeuebuilding/baseid-' . $currentBase->getId() . '/building-' . $qe->getBuildingNumber() . '"' . 
+								'class="button hb lt" title="annuler la construction">×</a>';
+						echo '<img class="picto" src="' . MEDIA . 'orbitalbase/' . OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'imageLink') . '.png" alt="" />';
+						echo '<strong>';
+							echo OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'frenchName');
+							echo ' <span class="level">niv. ' . $qe->getTargetLevel() . '</span>';
+						echo '</strong>';
+						
+						echo '<em><span class="progress-text">' . Chronos::secondToFormat($qe->getRemainingTime()) . '</span></em>';
+
+						echo '<span class="progress-container">';
+							echo '<span style="width: ' . Format::percent(OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'level', $qe->getTargetLevel(), 'time') - $qe->getRemainingTime(), OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'level', $qe->getTargetLevel(), 'time')) . '%;" class="progress-bar">';
+							echo'</span>';
+						echo '</span>';
+					echo '</div>';
+				echo '</div>';
+			} else {
+				echo '<p class="info">Aucun bâtiment en construction pour le moment.</p>';
+			}
+
+			echo '<a href="' . APP_ROOT . 'bases/view-generator" class="more-link">vers le générateur</a>';
+			ASM::$bqm->changeSession($S_BQM1);
+		echo '</div>';
+	echo '</div>';
+
 	echo '<div class="overbox" id="new-notifications">';
 		echo '<div class="overflow">';
 			if (ASM::$ntm->size() > 0) {
@@ -98,13 +163,14 @@ echo '<div id="tools">';
 						break;
 					}
 				}
-				echo '<a href="' . APP_ROOT . 'message" class="more-link">voir toutes vos notifications</a>';
 			} else {
-				echo '<a href="' . APP_ROOT . 'message" class="more-link">aucune nouvelle notification</a>';
+				echo '<p class="info">Aucune nouvelle notification.</p>';
 			}
+			echo '<a href="' . APP_ROOT . 'message" class="more-link">toutes vos notifications</a>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
 
 ASM::$ntm->changeSession($S_NTM1);
+ASM::$obm->changeSession($S_OBM1);
 ?>

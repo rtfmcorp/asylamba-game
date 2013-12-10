@@ -70,7 +70,7 @@ echo '<div id="nav">';
 
 	echo '<div class="overbox" id="change-bases">';
 		for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-			echo '<a href="action/a-switchbase/base-' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') . '" ' . (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == CTR::$data->get('playerParams')->get('base') ? 'class="active"' : '') . '>';
+			echo '<a href="' . APP_ROOT . 'action/a-switchbase/base-' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') . '" ' . (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == CTR::$data->get('playerParams')->get('base') ? 'class="active"' : '') . '>';
 				echo '<em>Base orbitale</em>';
 				echo '<strong>' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('name') . '</strong>';
 			echo '</a>';

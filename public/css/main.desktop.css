@@ -201,6 +201,20 @@ body {
 .color6 #tools .box a.square span.number { background: #004948; }
 .color7 #tools .box a.square span.number { background: #401b13; }
 
+#tools .box a.resource-link {
+	width: 110px;
+	font-size: 18px;
+}
+
+#tools .box a.resource-link img.icon-color {
+	position: relative;
+	display: inline-block;
+	width: 18px;
+	vertical-align: middle;
+	margin-left: 5px;
+	top: -2px; padding: 1px;
+}
+
 /* overbox */
 #nav .overbox {
 	display: none;
@@ -330,7 +344,10 @@ body {
 
 /* TOOLS */
 
-#tools .box.left  { bottom: 0; left: 25px; }
+#tools .box.left  {
+	bottom: 10px; left: 25px;
+	border-bottom: solid 3px #202020;
+}
 
 #tools .box,
 #tools .temp-box {
@@ -425,16 +442,25 @@ body {
 	border-color: #202020 transparent transparent transparent;
 	bottom: -18px; right: 30px;
 }
+#tools .overbox.left-pic:before {
+	left: 30px; right: auto;
+}
 
 #tools .overbox a.more-link {
 	display: block;
 	padding: 8px;
 	font-size: 12px;
-	color: white;
 	border-top: solid 1px #202020;
 	text-align: center;
 	text-decoration: none;
 	color: #4F4F4F;
+}
+
+#tools .overbox p.info {
+	padding: 5px 15px;
+	font-size: 12px;
+	text-align: center;
+	color: #CCC;
 }
 
 #tools .overbox a.more-link:focus,
@@ -443,7 +469,8 @@ body {
 }
 
 #tools .overbox#new-notifications { right: 15px; }
-#tools .overbox#new-messages { right: 137px; }
+#tools .overbox#tools-refinery { left: 10px; bottom: 60px; }
+#tools .overbox#tools-generator { left: 175px; bottom: 60px; }
 
 /* COMPOSANT DE LA PAGE PROFIL */
 
@@ -1947,11 +1974,12 @@ body {
 	box-shadow: inset 0 0 0 3px #CCC;
 }
 
-.component .queue {
+.queue {
 	margin: 10px;
+	color: white;
 }
 
-.component .queue .item {
+.queue .item {
 	position: relative;
 	background: black;
 	border: solid 1px #0A0A0A;
@@ -1959,7 +1987,7 @@ body {
 	min-height: 60px;
 }
 
-.component .queue .item a.button {
+.queue .item a.button {
 	position: absolute;
 	display: block;
 	top: 2px; right: 5px;
@@ -1967,7 +1995,7 @@ body {
 	text-decoration: none;
 }
 
-.component .queue .item .picto {
+.queue .item .picto {
 	float: left;
 	width: 40px;
 	margin: 5px; padding: 5px;
@@ -1976,20 +2004,20 @@ body {
 	border: solid 1px #202020;
 }
 
-.component .queue .item strong {
+.queue .item strong {
 	display: block;
 	margin: 6px 0 2px 0;
 }
 
-.component .queue .item strong .level {
+.queue .item strong .level {
 	font-size: 11px;
 	color: #CCC;
 }
-.component .queue .item .big {
+.queue .item .big {
 	font-size: 24px;
 }
-.component .queue .item em { display: block; }
-.component .queue .item .progress-container {
+.queue .item em { display: block; }
+.queue .item .progress-container {
 	position: relative;
 	display: block;
 	clear: both;
@@ -1997,19 +2025,19 @@ body {
 	background: #4F4F4F;
 }
 
-.component .queue .item .progress-bar {
+.queue .item .progress-bar {
 	position: absolute;
 	display: block;
 	height: 100%;
 	background: #202020;
 }
-.color1 .component .queue .item .progress-bar { background: #b01e2d; }
-.color2 .component .queue .item .progress-bar { background: #2f23c0; }
-.color3 .component .queue .item .progress-bar { background: #ffdb0f; }
-.color4 .component .queue .item .progress-bar { background: #a935c7; }
-.color5 .component .queue .item .progress-bar { background: #57c632; }
-.color6 .component .queue .item .progress-bar { background: #05bed7; }
-.color7 .component .queue .item .progress-bar { background: #ac5832; }
+.color1 .queue .item .progress-bar { background: #b01e2d; }
+.color2 .queue .item .progress-bar { background: #2f23c0; }
+.color3 .queue .item .progress-bar { background: #ffdb0f; }
+.color4 .queue .item .progress-bar { background: #a935c7; }
+.color5 .queue .item .progress-bar { background: #57c632; }
+.color6 .queue .item .progress-bar { background: #05bed7; }
+.color7 .queue .item .progress-bar { background: #ac5832; }
 
 /* situation */
 
