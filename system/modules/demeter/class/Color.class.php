@@ -32,8 +32,4 @@ class Color {
 
 
 	public function uElection(){}
-	public function updatePlayers($var){}
-	public function updateActivePlayers(){}
-	public function updatePoints(){}
-	public function updatesectors(){}
 }

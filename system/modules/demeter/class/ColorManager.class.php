@@ -137,4 +137,11 @@ class ColorManager extends Manager {
 		$this->_Remove($id);
 		return TRUE;
 	}
+
+	//public function updateRank(){}
+
+	// public function updatePlayers($var){}ces 4 en static dans le manager
+	// public function updateActivePlayers(){}
+	// public function updatePoints(){}
+	// public function updatesectors(){}
 }
