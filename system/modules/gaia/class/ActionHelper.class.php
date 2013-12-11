@@ -404,14 +404,14 @@ abstract class ActionHelper {
 							$box .= '</a>';
 						}
 					} else {
-						$box .= 'Vous ne disposez pas d\'assez de points d\'attaque pour déplacer une flotte sur cette base.';
+						$box .= '<p class="info">Vous ne disposez pas d\'assez de points d\'attaque pour déplacer une flotte sur cette base.</p>';
 					}
 				} else {
-					$box .= 'Vous n\'avez aucun commandant susceptible d\'être envoyé au combat.';
+					$box .= '<p class="info">Vous n\'avez aucun commandant susceptible d\'être transféré sur cette base.</p>';
 				}
 				ASM::$com->changeSession($S_COM2);
 			} else {
-				$box .= 'Cette base n\'a pas la capacité d\'accueillir une flotte supplémentaire.';
+				$box .= '<p class="info">Cette base n\'a pas la capacité d\'accueillir une flotte supplémentaire.</p>';
 			}
 		$box .= '</div>';
 	}
