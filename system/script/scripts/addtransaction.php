@@ -13,8 +13,10 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `transaction` (
   `commercialShipQuantity` int(11) NOT NULL,
   `statement` tinyint(4) NOT NULL COMMENT '0 = proposed, 1 = completed, 2 = canceled',
   `dPublication` datetime NOT NULL,
+  `dValidation` datetime NOT NULL,
+  `currentRate` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;");
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 
 $qr->execute();
 ?>
