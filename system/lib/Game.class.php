@@ -102,7 +102,6 @@ class Game {
 			// en position du jeu (250x250)
 			return sqrt($investment / 3.14);
 		}
-		
 	}
 
 	public static function antiSpyArea($startPlace, $destinationPlace, $arrivalDate) {
@@ -211,5 +210,48 @@ class Game {
 				break;
 		}
 		return $needed;
+	}
+
+	public static function getExchangeRate($transactionType) {
+		$db = DataBase::getInstance();
+		$qr = $db->prepare('SELECT currentRate
+			FROM transaction 
+			WHERE type = ? AND statement = ?
+			ORDER BY dValidation DESC 
+			LIMIT 1');
+
+		$qr->execute(array($transactionType, Transaction::ST_COMPLETED));
+		$aw = $qr->fetch();
+		return $aw['currentRate'];
+	}
+
+	public static function calculateCurrentRate($transactionType, $quantity, $identifier, $price) {
+		$currentRate = self::getExchangeRate($transactionType);
+		switch ($transactionType) {
+			case Transaction::TYP_RESOURCE :
+				# 1000 resources = x credits
+				$thisRate = 1000 * $price / $quantity;
+				# dilution of 1%
+				return ($thisRate + (99 * $currentRate)) / 100;
+				break;
+			case Transaction::TYP_SHIP :
+				# 100 PEV = x credits
+				include_once ATHENA;
+				if (ShipResource::isAShip($identifier)) {
+					$pevQuantity = ShipResource::getInfo($identifier, 'pev') * $quantity;
+					$thisRate = 100 * $price / $pevQuantity;
+					# dilution of 1%
+					return ($thisRate + (99 * $currentRate)) / 100;
+				} else {
+					return FALSE;
+				}
+				break;
+			case Transaction::TYP_COMMANDER :
+				return 0;
+				break;
+			default :
+				return 0;
+				break;
+		}
 	}
 }

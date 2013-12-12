@@ -63,7 +63,10 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				$commercialShipping->statement = CommercialShipping::ST_GOING;
 
 				// update transaction statement
-				$transacton->statement = Transaction::ST_COMPLETED;
+				$transaction->statement = Transaction::ST_COMPLETED;
+				$transaction->dValidation = Utils::now();
+				// update exchange rate
+				$transaction->currentRate = Game::calculateCurrentRate($transaction->type, $transaction->quantity, $transaction->identifier, $transaction->price);
 
 				// notif pour le proposeur
 				$n = new Notification();

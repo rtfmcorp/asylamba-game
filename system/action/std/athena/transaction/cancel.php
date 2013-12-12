@@ -75,7 +75,8 @@ if ($rTransaction !== FALSE) {
 					ASM::$csm->deleteById($commercialShipping->id);
 
 					// update transaction statement
-					$transacton->statement = Transaction::ST_CANCELED;
+					$transaction->statement = Transaction::ST_CANCELED;
+					$transaction->dValidation = Utils::now();
 
 					switch ($transaction->type) {
 						case Transaction::TYP_RESOURCE :

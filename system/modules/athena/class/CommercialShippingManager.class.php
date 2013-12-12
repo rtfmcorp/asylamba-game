@@ -109,7 +109,7 @@ class CommercialShippingManager extends Manager {
 				$cs->shipQuantity,
 				$cs->dDeparture,
 				$cs->dArrival,
-				$cs->state,
+				$cs->statement,
 				$cs->id
 			));
 		}

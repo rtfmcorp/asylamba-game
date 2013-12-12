@@ -55,6 +55,8 @@ class TransactionManager extends Manager {
 			$t->shipQuantity = $aw['commercialShipQuantity'];
 			$t->statement = $aw['statement'];
 			$t->dPublication = $aw['dPublication'];
+			$t->dValidation = $aw['dValidation'];
+			$t->currentRate = $aw['currentRate'];
 
 			$currentT = $this->_Add($t);
 		}
@@ -63,8 +65,8 @@ class TransactionManager extends Manager {
 	public function add(Transaction $t) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			transaction(rPlayer, rPlace, type, quantity, identifier, price, commercialShipQuantity, statement, dPublication)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)');
+			transaction(rPlayer, rPlace, type, quantity, identifier, price, commercialShipQuantity, statement, dPublication, dValidation, currentRate)
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$t->rPlayer,
 			$t->rPlace,
@@ -74,7 +76,9 @@ class TransactionManager extends Manager {
 			$t->price,
 			$t->commercialShipQuantity,
 			$t->statement,
-			$t->dPublication
+			$t->dPublication,
+			$t->dValidation,
+			$t->currentRate
 		));
 
 		$t->id = $db->lastInsertId();
@@ -97,7 +101,9 @@ class TransactionManager extends Manager {
 					price = ?,
 					commercialShipQuantity = ?,
 					statement = ?,
-					dPublication = ?
+					dPublication = ?,
+					dValidation = ?,
+					currentRate = ?
 				WHERE id = ?');
 			$qr->execute(array(
 				$t->id,
@@ -110,6 +116,8 @@ class TransactionManager extends Manager {
 				$t->commercialShipQuantity,
 				$t->statement,
 				$t->dPublication,
+				$t->dValidation,
+				$t->currentRate,
 				$t->id
 			));
 		}

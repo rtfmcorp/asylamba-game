@@ -27,14 +27,18 @@ class Transaction {
 	public $id = 0; 
 	public $rPlayer = 0;
 	public $rPlace = 0;
-	public $type;		// 0 = resource, 1 = ship, 2 = commander
+	public $type;			// 0 = resource, 1 = ship, 2 = commander
 	public $quantity;
 	public $identifier;		// if ($type == TYP_COMMANDER) --> rCommander
-							// if ($type==TYP_SHIP) --> shipId
+							// if ($type == TYP_SHIP) --> shipId
 	public $price = 0;
 	public $commercialShipQuantity = 0;	// ship needed for the transport
 	public $statement = 0;
 	public $dPublication = '';
+	public $dValidation = ''; 	// date of acceptance or cancellation
+	public $currentRate;		// 1000 resources = x credits
+								// OR 100 PEV = x credits
+								// OR (for commanders it doesn't work with a rate !)
 
 	public function getId() { return $this->id; }
 
