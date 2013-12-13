@@ -103,9 +103,22 @@ echo '<div id="tools">';
 	# overboxes
 	echo '<div class="overbox left-pic" id="tools-refinery">';
 		echo '<div class="overflow">';
-			echo '<p>prod</p>';
-			echo '<p>stockage</p>';
-			echo '<p>quand plein</p>';
+			echo '<div class="number-box">';
+				echo '<span class="label">production par relève</span>';
+				echo '<span class="value">';
+					$production = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(1, 'level', $currentBase->getLevelRefinery(), 'refiningCoefficient'), $currentBase->getPlanetResources());
+					echo Format::numberFormat($production);
+					$refiningBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::REFINERY_REFINING);
+					if ($currentBase->getIsProductionRefinery() == 1 && $refiningBonus > 0) {
+						echo '<span class="bonus">+' . Format::numberFormat(($production * OBM_COEFPRODUCTION) + ($production * $refiningBonus / 100)) . '</span>';
+					} elseif ($currentBase->getIsProductionRefinery() == 1) {
+						echo '<span class="bonus">+' . Format::numberFormat(($production * OBM_COEFPRODUCTION)) . '</span>';
+					} elseif ($refiningBonus > 0) {
+						echo '<span class="bonus">+' . Format::numberFormat(($production * $refiningBonus / 100)) . '</span>';
+					}
+					echo ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color">';
+				echo '</span>';
+			echo '</div>';
 			echo '<a href="' . APP_ROOT . 'bases/view-refinery" class="more-link">vers la raffinerie</a>';
 		echo '</div>';
 	echo '</div>';
@@ -119,8 +132,6 @@ echo '<div id="tools">';
 				$qe = ASM::$bqm->get(0);
 				echo '<div class="queue">';
 					echo '<div class="item active progress" data-progress-current-time="' . $qe->getRemainingTime() . '" data-progress-total-time="' . OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'level', $qe->getTargetLevel(), 'time') . '">';
-						echo '<a href="' . APP_ROOT . 'action/a-dequeuebuilding/baseid-' . $currentBase->getId() . '/building-' . $qe->getBuildingNumber() . '"' . 
-								'class="button hb lt" title="annuler la construction">×</a>';
 						echo '<img class="picto" src="' . MEDIA . 'orbitalbase/' . OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'imageLink') . '.png" alt="" />';
 						echo '<strong>';
 							echo OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'frenchName');

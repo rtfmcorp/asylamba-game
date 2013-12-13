@@ -1047,42 +1047,43 @@ body {
 .component .sub-list-type-1 form input[type='submit']	{ width: 40px; }
 
 /* NUMBER BOX */
-.component .number-box {
+.number-box {
 	position: relative;
 	margin: 10px; padding: 5px 10px;
 	border: solid 1px #0A0A0A;
 	border-top: solid 1px #202020;
 	background: black;
+	color: white;
 }
-.component .number-box.grey {
+.number-box.grey {
 	border-left: solid 10px #4F4F4F !important;
 }
-.color1 .component .number-box { border-left: solid 10px #6e161b; }
-.color2 .component .number-box { border-left: solid 10px #1f1471; }
-.color3 .component .number-box { border-left: solid 10px #dbb200; }
-.color4 .component .number-box { border-left: solid 10px #5a1072; }
-.color5 .component .number-box { border-left: solid 10px #2c7915; }
-.color6 .component .number-box { border-left: solid 10px #076b87; }
-.color7 .component .number-box { border-left: solid 10px #67331d; }
+.color1 .number-box { border-left: solid 10px #6e161b; }
+.color2 .number-box { border-left: solid 10px #1f1471; }
+.color3 .number-box { border-left: solid 10px #dbb200; }
+.color4 .number-box { border-left: solid 10px #5a1072; }
+.color5 .number-box { border-left: solid 10px #2c7915; }
+.color6 .number-box { border-left: solid 10px #076b87; }
+.color7 .number-box { border-left: solid 10px #67331d; }
 
-.component .number-box .label { display: block; }
-.component .number-box .value {
+.number-box .label { display: block; }
+.number-box .value {
 	display: block;
 	font-size: 26px;
 	font-weight: bold;
 	margin: 4px 0 0 0;
 }
 
-.component .number-box .progress-bar {
+.number-box .progress-bar {
 	margin: 5px 0;
 }
 
-.component .number-box .group-link {
+.number-box .group-link {
 	position: absolute;
 	top: 5px; right: 5px;
 }
 
-.component .number-box .group-link a {
+.number-box .group-link a {
 	display: inline-block;
 	line-height: 18px; width: 18px;
 	text-align: center;
@@ -1091,16 +1092,16 @@ body {
 	margin-left: 5px;
 	background: black;
 }
-.color1 .component .number-box .group-link a { background: #6e161b; }
-.color2 .component .number-box .group-link a { background: #1f1471; }
-.color3 .component .number-box .group-link a { background: #dbb200; }
-.color4 .component .number-box .group-link a { background: #5a1072; }
-.color5 .component .number-box .group-link a { background: #2c7915; }
-.color6 .component .number-box .group-link a { background: #076b87; }
-.color7 .component .number-box .group-link a { background: #67331d; }
+.color1 .number-box .group-link a { background: #6e161b; }
+.color2 .number-box .group-link a { background: #1f1471; }
+.color3 .number-box .group-link a { background: #dbb200; }
+.color4 .number-box .group-link a { background: #5a1072; }
+.color5 .number-box .group-link a { background: #2c7915; }
+.color6 .number-box .group-link a { background: #076b87; }
+.color7 .number-box .group-link a { background: #67331d; }
 
 /* PROGRESS BAR */
-.component .progress-bar {
+.progress-bar {
 	position: relative;
 	display: block;
 	width: 100%; height: 3px;
@@ -1108,29 +1109,29 @@ body {
 	overflow: hidden;
 }
 
-.component .progress-bar .content {
+.progress-bar .content {
 	position: relative;
 	top: -9px;
 	display: inline-block;
 	height: 5px;
 }
-.color1 .component .progress-bar .content:nth-child(n)  { background: #b01e2d; }
-.color2 .component .progress-bar .content:nth-child(n)  { background: #2f23c0; }
-.color3 .component .progress-bar .content:nth-child(n)  { background: #ffdb0f; }
-.color4 .component .progress-bar .content:nth-child(n)  { background: #a935c7; }
-.color5 .component .progress-bar .content:nth-child(n)  { background: #57c632; }
-.color6 .component .progress-bar .content:nth-child(n)  { background: #05bed7; }
-.color7 .component .progress-bar .content:nth-child(n)  { background: #ac5832; }
-.color1 .component .progress-bar .content:nth-child(2n) { background: #510816; }
-.color2 .component .progress-bar .content:nth-child(2n) { background: #0c0d44; }
-.color3 .component .progress-bar .content:nth-child(2n) { background: #b17a00; }
-.color4 .component .progress-bar .content:nth-child(2n) { background: #310948; }
-.color5 .component .progress-bar .content:nth-child(2n) { background: #24500a; }
-.color6 .component .progress-bar .content:nth-child(2n) { background: #004948; }
-.color7 .component .progress-bar .content:nth-child(2n) { background: #401b13; }
+.color1 .progress-bar .content:nth-child(n)  { background: #b01e2d; }
+.color2 .progress-bar .content:nth-child(n)  { background: #2f23c0; }
+.color3 .progress-bar .content:nth-child(n)  { background: #ffdb0f; }
+.color4 .progress-bar .content:nth-child(n)  { background: #a935c7; }
+.color5 .progress-bar .content:nth-child(n)  { background: #57c632; }
+.color6 .progress-bar .content:nth-child(n)  { background: #05bed7; }
+.color7 .progress-bar .content:nth-child(n)  { background: #ac5832; }
+.color1 .progress-bar .content:nth-child(2n) { background: #510816; }
+.color2 .progress-bar .content:nth-child(2n) { background: #0c0d44; }
+.color3 .progress-bar .content:nth-child(2n) { background: #b17a00; }
+.color4 .progress-bar .content:nth-child(2n) { background: #310948; }
+.color5 .progress-bar .content:nth-child(2n) { background: #24500a; }
+.color6 .progress-bar .content:nth-child(2n) { background: #004948; }
+.color7 .progress-bar .content:nth-child(2n) { background: #401b13; }
 
 /* BONUS */
-.component .bonus {
+.bonus {
 	vertical-align: top;
 	display: inline-block;
 	font-size: 55%;
@@ -1141,13 +1142,13 @@ body {
 	font-weight: normal;
 	background: black;
 }
-.color1 .component .bonus { background: #510816; }
-.color2 .component .bonus { background: #0c0d44; }
-.color3 .component .bonus { background: #b17a00; }
-.color4 .component .bonus { background: #310948; }
-.color5 .component .bonus { background: #24500a; }
-.color6 .component .bonus { background: #004948; }
-.color7 .component .bonus { background: #401b13; }
+.color1 .bonus { background: #510816; }
+.color2 .bonus { background: #0c0d44; }
+.color3 .bonus { background: #b17a00; }
+.color4 .bonus { background: #310948; }
+.color5 .bonus { background: #24500a; }
+.color6 .bonus { background: #004948; }
+.color7 .bonus { background: #401b13; }
 
 /* RULES FOR COMPONENTS */
 
