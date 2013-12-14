@@ -106,7 +106,6 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 			$tr->commercialShipQuantity = $commercialShipQuantity;
 			$tr->statement = Transaction::ST_PROPOSED;
 			$tr->dPublication = Utils::now();
-			$tr->currentRate = Game::getExchangeRate($type);
 			ASM::$trm->add($tr);
 
 			// création du convoi

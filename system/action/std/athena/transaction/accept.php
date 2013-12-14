@@ -35,7 +35,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 
 		if (CTR::$data->get('playerInfo')->get('credit') >= $transaction->price) {
 
-			// chargement des joueurs
+			# chargement des joueurs
 			$S_PAM1 = ASM::$pam->getCurrentSession();
 			ASM::$pam->newSession(ASM_UMODE);
 			ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
@@ -43,11 +43,15 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 
 			if (ASM::$pam->size() == 2) {
 
-				// transfert des crédits entre joueurs
+				# transfert des crédits entre joueurs
 				ASM::$pam->get(0)->decreaseCredit($transaction->price);
 				ASM::$pam->get(1)->increaseCredit($transaction->price);
 
-				// load places to compute travel time
+				# gain d'expérience
+				$experience = $transaction->getExperienceEarned();
+				ASM::$pam->get(1)->increaseExperience($experience);
+
+				# load places to compute travel time
 				$S_PLM1 = ASM::$plm->getCurrentSession();
 				ASM::$plm->newSession(ASM_UMODE);
 				ASM::$plm->load(array('id' => $commercialShipping->rBase));
@@ -56,19 +60,19 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				$departure = Utils::now();
 				$arrival = Utils::addSecondsToDate($departure, $timeToTravel);
 
-				// update commercialShipping
+				# update commercialShipping
 				$commercialShipping->rBaseDestination = $rPlace;
 				$commercialShipping->dDeparture = $departure;
 				$commercialShipping->dArrival = $arrival;
 				$commercialShipping->statement = CommercialShipping::ST_GOING;
 
-				// update transaction statement
+				# update transaction statement
 				$transaction->statement = Transaction::ST_COMPLETED;
 				$transaction->dValidation = Utils::now();
-				// update exchange rate
-				$transaction->currentRate = Game::calculateCurrentRate($transaction->type, $transaction->quantity, $transaction->identifier, $transaction->price);
+				# update exchange rate
+				$transaction->currentRate = Game::calculateCurrentRate($transaction->type, $transaction->quantity, $transaction->identifier, $transaction->price, ASM::$trm->getExchangeRate($transaction->type));
 
-				// notif pour le proposeur
+				# notif pour le proposeur
 				$n = new Notification();
 				$n->setRPlayer($transaction->rPlayer);
 				$n->setTitle('Transaction validée');
@@ -76,7 +80,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				$n->addTxt(' a accepté une de vos propositions dans le marché. Des vaisseaux commerciaux viennent de partir de votre ');
 				$n->addLnk('map/base-' . $commercialShipping->rBase, 'base')->addTxt(' et se dirigent vers ');
 				$n->addLnk('map/place-' . $base->getRPlace(), $base->getName())->addTxt(' pour acheminer la marchandise. ');
-				$n->addSep()->addTxt('Vous gagnez ' . Format::numberFormat($transaction->price) . ' crédits.');
+				$n->addSep()->addTxt('Vous gagnez ' . Format::numberFormat($transaction->price) . ' crédits et ' . Format::numberFormat($experience) . ' points d\'expérience.');
 				$n->addSep()->addLnk('bases/base-' . $commercialShipping->rBase . '/view-commercialplateforme/mode-market', 'En savoir plus ?');
 				$n->addEnd();
 				ASM::$ntm->add($n);

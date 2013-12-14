@@ -62,6 +62,19 @@ class TransactionManager extends Manager {
 		}
 	}
 
+	public function getExchangeRate($transactionType) {
+		$db = DataBase::getInstance();
+		$qr = $db->prepare('SELECT currentRate
+			FROM transaction 
+			WHERE type = ? AND statement = ?
+			ORDER BY dValidation DESC 
+			LIMIT 1');
+
+		$qr->execute(array($transactionType, Transaction::ST_COMPLETED));
+		$aw = $qr->fetch();
+		return $aw['currentRate'];
+	}
+
 	public function add(Transaction $t) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO

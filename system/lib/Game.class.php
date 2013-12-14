@@ -212,21 +212,7 @@ class Game {
 		return $needed;
 	}
 
-	public static function getExchangeRate($transactionType) {
-		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT currentRate
-			FROM transaction 
-			WHERE type = ? AND statement = ?
-			ORDER BY dValidation DESC 
-			LIMIT 1');
-
-		$qr->execute(array($transactionType, Transaction::ST_COMPLETED));
-		$aw = $qr->fetch();
-		return $aw['currentRate'];
-	}
-
-	public static function calculateCurrentRate($transactionType, $quantity, $identifier, $price) {
-		$currentRate = self::getExchangeRate($transactionType);
+	public static function calculateCurrentRate($transactionType, $quantity, $identifier, $price, $currentRate) {
 		switch ($transactionType) {
 			case Transaction::TYP_RESOURCE :
 				# 1000 resources = x credits

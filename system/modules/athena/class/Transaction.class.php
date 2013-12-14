@@ -22,6 +22,8 @@ class Transaction {
 
 	# percentage to cancel an offer
 	const PERCENTAGE_TO_CANCEL = 5;
+	# divide price by this constant to find the experience
+	const EXPERIENCE_DIVIDER = 15000;
 
 	# attributes
 	# x system
@@ -47,6 +49,10 @@ class Transaction {
 	public function getPriceToCancelOffer() {
 		# 5% of the price
 		return floor($this->price * self::PERCENTAGE_TO_CANCEL / 100);
+	}
+
+	public function getExperienceEarned() {
+		return 1 + round($this->price / self::EXPERIENCE_DIVIDER);
 	}
 }
 
