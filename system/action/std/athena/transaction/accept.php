@@ -70,7 +70,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				$transaction->statement = Transaction::ST_COMPLETED;
 				$transaction->dValidation = Utils::now();
 				# update exchange rate
-				$transaction->currentRate = Game::calculateCurrentRate($transaction->type, $transaction->quantity, $transaction->identifier, $transaction->price, ASM::$trm->getExchangeRate($transaction->type));
+				$transaction->currentRate = Game::calculateCurrentRate(ASM::$trm->getExchangeRate($transaction->type), $transaction->type, $transaction->quantity, $transaction->identifier, $transaction->price);
 
 				# notif pour le proposeur
 				$n = new Notification();

@@ -14,7 +14,7 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `transaction` (
   `statement` tinyint(4) NOT NULL COMMENT '0 = proposed, 1 = completed, 2 = canceled',
   `dPublication` datetime NOT NULL,
   `dValidation` datetime NOT NULL,
-  `currentRate` int(11) NOT NULL,
+  `currentRate` float NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 

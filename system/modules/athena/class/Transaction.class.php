@@ -20,6 +20,8 @@ class Transaction {
 	const TYP_SHIP = 1;
 	const TYP_COMMANDER = 2;
 
+	# percentage of variation in rate (+ or - 30%)
+	const PERCENTAGE_VARIATION = 30;
 	# percentage to cancel an offer
 	const PERCENTAGE_TO_CANCEL = 5;
 	# divide price by this constant to find the experience
@@ -40,9 +42,9 @@ class Transaction {
 	public $statement = 0;
 	public $dPublication = '';
 	public $dValidation = ''; 	# date of acceptance or cancellation
-	public $currentRate;		# 1000 resources = x credits
-								# OR 100 PEV = x credits
-								# OR (for commanders it doesn't work with a rate !)
+	public $currentRate;	# 1 credit = 	x resources
+							#				x pev
+							#				x experience
 
 	public function getId() { return $this->id; }
 

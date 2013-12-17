@@ -199,11 +199,7 @@ class Game {
 				break;
 			case Transaction::TYP_COMMANDER :
 				# 1 commander => 1 commercialShip
-				if ($quantity > 0) {
-					$needed = $quantity;
-				} else {
-					$needed = FALSE;
-				}
+				$needed = 1;
 				break;
 			default :
 				$needed = FALSE;
@@ -212,20 +208,20 @@ class Game {
 		return $needed;
 	}
 
-	public static function calculateCurrentRate($transactionType, $quantity, $identifier, $price, $currentRate) {
+	public static function calculateCurrentRate($currentRate, $transactionType, $quantity, $identifier, $price) {
 		switch ($transactionType) {
 			case Transaction::TYP_RESOURCE :
-				# 1000 resources = x credits
-				$thisRate = 1000 * $price / $quantity;
+				# 1 credit = x resources
+				$thisRate = $quantity / $price;
 				# dilution of 1%
 				return ($thisRate + (99 * $currentRate)) / 100;
 				break;
 			case Transaction::TYP_SHIP :
-				# 100 PEV = x credits
+				# 1 credit = x PEV
 				include_once ATHENA;
 				if (ShipResource::isAShip($identifier)) {
 					$pevQuantity = ShipResource::getInfo($identifier, 'pev') * $quantity;
-					$thisRate = 100 * $price / $pevQuantity;
+					$thisRate = $pevQuantity / $price;
 					# dilution of 1%
 					return ($thisRate + (99 * $currentRate)) / 100;
 				} else {
@@ -233,11 +229,36 @@ class Game {
 				}
 				break;
 			case Transaction::TYP_COMMANDER :
-				return 0;
+				# 1 credit = x experience
+				$thisRate = $quantity / $price;
+				# dilution of 1%
+				return ($thisRate + (99 * $currentRate)) / 100;
 				break;
 			default :
 				return 0;
 				break;
+		}
+	}
+
+	public static function getMaxPriceRelativeToRate($currentRate, $transactionType, $quantity) {
+		$types = array(Transaction::TYP_RESOURCE, Transaction::TYP_SHIP, Transaction::TYP_COMMANDER);
+		if (in_array($transactionType, $types)) {
+			$price = $quantity / $currentRate;
+			$price += Transaction::PERCENTAGE_VARIATION * $price / 100;
+			return round($price);
+		} else {
+			return FALSE;
+		}
+	}
+
+	public static function getMinPriceRelativeToRate($currentRate, $transactionType, $quantity) {
+		$types = array(Transaction::TYP_RESOURCE, Transaction::TYP_SHIP, Transaction::TYP_COMMANDER);
+		if (in_array($transactionType, $types)) {
+			$price = $quantity / $currentRate;
+			$price -= Transaction::PERCENTAGE_VARIATION * $price / 100;
+			return round($price);
+		} else {
+			return FALSE;
 		}
 	}
 }
