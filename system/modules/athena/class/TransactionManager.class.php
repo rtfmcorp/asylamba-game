@@ -13,7 +13,24 @@
 class TransactionManager extends Manager {
 	protected $managerType = '_Transaction';
 
-	public function load($where = array(), $order = array(), $limit = array()) {
+	public function load($where = array(), $order = array(), $limit = array(), $typeToLoad = 0) {
+		switch ($typeToLoad) {
+			case Transaction::TYP_RESOURCE :
+				loadTransactions($where, $order, $limit);
+				break;
+			case Transaction::TYP_SHIP :
+				loadTransactions($where, $order, $limit);
+				break;
+			case Transaction::TYP_COMMANDER :
+				loadCommanderTransactions($where, $order, $limit);
+				break;
+			default :
+				loadTransactions($where, $ordre, $limit);
+				break;
+		}
+	}
+
+	private function loadTransactions($where, $order, $limit) {
 		$formatWhere = Utils::arrayToWhere($where, 't.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
@@ -57,6 +74,61 @@ class TransactionManager extends Manager {
 			$t->dPublication = $aw['dPublication'];
 			$t->dValidation = $aw['dValidation'];
 			$t->currentRate = $aw['currentRate'];
+
+			$currentT = $this->_Add($t);
+		}
+	}
+
+	private function loadCommanderTransactions($where, $order, $limit) {
+		$formatWhere = Utils::arrayToWhere($where, 't.');
+		$formatOrder = Utils::arrayToOrder($order);
+		$formatLimit = Utils::arrayToLimit($limit);
+
+		$db = DataBase::getInstance();
+		$qr = $db->prepare('SELECT t.*, c.name, c.level, c.palmares
+			FROM transaction AS t
+			INNER JOIN commander AS c 
+				ON t.identifier = c.id
+			' . $formatWhere . '
+			' . $formatOrder . '
+			' . $formatLimit
+		);
+
+		foreach($where AS $v) {
+			if (is_array($v)) {
+				foreach ($v as $p) {
+					$valuesArray[] = $p;
+				}
+			} else {
+				$valuesArray[] = $v;
+			}
+		}
+
+		if(empty($valuesArray)) {
+			$qr->execute();
+		} else {
+			$qr->execute($valuesArray);
+		}
+
+		while($aw = $qr->fetch()) {
+			$t = new CommanderTransaction();
+
+			$t->id = $aw['id'];
+			$t->rPlayer = $aw['rPlayer'];
+			$t->rPlace = $aw['rPlace'];
+			$t->type = $aw['type'];
+			$t->quantity = $aw['quantity'];
+			$t->identifier = $aw['identifier'];
+			$t->price = $aw['price'];
+			$t->shipQuantity = $aw['commercialShipQuantity'];
+			$t->statement = $aw['statement'];
+			$t->dPublication = $aw['dPublication'];
+			$t->dValidation = $aw['dValidation'];
+			$t->currentRate = $aw['currentRate'];
+
+			$t->name = $aw['name'];
+			$t->level = $aw['level'];
+			$t->palmares = $aw['palmares'];
 
 			$currentT = $this->_Add($t);
 		}

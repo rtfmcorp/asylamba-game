@@ -16,9 +16,9 @@ class Transaction {
 	const ST_COMPLETED = 1;		# transaction terminée
 	const ST_CANCELED = 2;		# transaction annulée
 	# type
-	const TYP_RESOURCE = 0;
-	const TYP_SHIP = 1;
-	const TYP_COMMANDER = 2;
+	const TYP_RESOURCE = 1;
+	const TYP_SHIP = 2;
+	const TYP_COMMANDER = 3;
 
 	# percentage of variation in rate (+ or - 30%)
 	const PERCENTAGE_VARIATION = 30;
@@ -34,9 +34,11 @@ class Transaction {
 	public $rPlayer = 0;
 	public $rPlace = 0;
 	public $type;			# 0 = resource, 1 = ship, 2 = commander
-	public $quantity;
-	public $identifier;		# if ($type == TYP_COMMANDER) --> rCommander
-							# if ($type == TYP_SHIP) --> shipId
+	public $quantity;		# if ($type == TYP_RESOURCE) --> resource
+							# if ($type == TYP_SHIP) --> PEV
+							# if ($type == TYP_COMMANDER) --> experience
+	public $identifier;		# if ($type == TYP_SHIP) --> shipId
+							# if ($type == TYP_COMMANDER) --> rCommander
 	public $price = 0;
 	public $commercialShipQuantity = 0;	# ship needed for the transport
 	public $statement = 0;
