@@ -33,7 +33,7 @@ class Transaction {
 	public $id = 0; 
 	public $rPlayer = 0;
 	public $rPlace = 0;
-	public $type;			# 0 = resource, 1 = ship, 2 = commander
+	public $type;			# see const TYP_*
 	public $quantity;		# if ($type == TYP_RESOURCE) --> resource
 							# if ($type == TYP_SHIP) --> PEV
 							# if ($type == TYP_COMMANDER) --> experience

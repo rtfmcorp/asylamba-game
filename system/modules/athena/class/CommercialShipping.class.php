@@ -28,12 +28,15 @@ class CommercialShipping {
 	public $dArrival = '';
 	public $statement = 0;
 
-	# xSystem rBase
-	# ySystem rBase
-	# position rBase
-	# rSystem rBase
-	
-	# idem rBaseD
+	public $baseRSystem;
+	public $basePosition;
+	public $baseXSystem;
+	public $baseYSystem;
+
+	public $destinationRSystem;
+	public $destinationPosition;
+	public $destinationXSystem;
+	public $destinationYSystem;
 
 	public function getId() { return $this->id; }
 }

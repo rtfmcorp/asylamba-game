@@ -19,8 +19,18 @@ class CommercialShippingManager extends Manager {
 		$formatLimit = Utils::arrayToLimit($limit);
 
 		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT cs.*
+		$qr = $db->prepare('SELECT cs.*, 
+			p1.rSystem AS rSystem1, p1.position AS position1, s1.xPosition AS xSystem1, s1.yPosition AS ySystem1,
+			p2.rSystem AS rSystem2, p2.position AS position2, s2.xPosition AS xSystem2, s2.yPosition AS ySystem2
 			FROM commercialShipping AS cs
+			INNER JOIN place AS p1 
+				ON cs.rBase = p1.id
+			INNER JOIN system AS s1 
+				ON p1.rSystem = s1.id
+			INNER JOIN place AS p2 
+				ON cs.rBaseDestination = p2.id 
+			INNER JOIN system AS s2 
+				ON p2.rSystem = s2.id 
 			' . $formatWhere . '
 			' . $formatOrder . '
 			' . $formatLimit
@@ -55,6 +65,16 @@ class CommercialShippingManager extends Manager {
 			$cs->dDeparture = $aw['dDeparture'];
 			$cs->dArrival = $aw['dArrival'];
 			$cs->statement = $aw['statement'];
+
+			$cs->baseRSystem = $aw['rSystem1'];
+			$cs->basePosition = $aw['position1'];
+			$cs->baseXSystem = $aw['xSystem1'];
+			$cs->baseYSystem = $aw['ySystem1'];
+
+			$cs->destinationRSystem = $aw['rSystem2'];
+			$cs->destinationPosition = $aw['position2'];
+			$cs->destinationXSystem = $aw['xSystem2'];
+			$cs->destinationYSystem = $aw['ySystem2'];
 
 			$currentCS = $this->_Add($cs);
 		}
