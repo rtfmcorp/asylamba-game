@@ -58,7 +58,7 @@ Class ForumResources {
 			'id' => 7,
 			'devName' => 'rc',
 			'name' => 'Maison du Commerce',
-			'shortDescription' => 'Routes commerciale, échanges, prospection ou pari',
+			'shortDescription' => 'Routes commerciales, échanges, prospection ou paris',
 			'longDescription' =>'',
 			'image' => ''),
 	);
