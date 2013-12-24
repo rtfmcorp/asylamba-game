@@ -221,7 +221,7 @@ echo '<div class="component techno">';
 					$totalTimeTechno += TechnologyResource::getInfo($queue->technology, 'time', $queue->targetLevel);
 					$remainingTotalTime += $queue->remainingTime;
 
-					echo '<div class="item active progress" data-progress-current-time="' . $remainingTotalTime . '" data-progress-total-time="' . $totalTimeTechno . '">';
+					echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTotalTime . '" data-progress-total-time="' . $totalTimeTechno . '">';
 						echo '<a href="' . APP_ROOT . 'action/a-dequeuetechno/baseid-' . $ob_tech->getId() . '/techno-' . $queue->technology . '"' . 
 							'class="button hb lt" title="annuler la recherche">×</a>';
 						echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($queue->technology, 'imageLink') . '.png" alt="" />';
@@ -233,10 +233,10 @@ echo '<div class="component techno">';
 						
 						if ($realSizeQueue > 1) {
 							echo '<em>en attente</em>';
-							echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTotalTime) . '</span></em>';
+							echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTotalTime, 'lite') . '</span></em>';
 							echo '<span class="progress-container"></span>';
 						} else {
-							echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTotalTime) . '</span></em>';
+							echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTotalTime, 'lite') . '</span></em>';
 							echo '<span class="progress-container">';
 								echo '<span style="width: ' . Format::percent($totalTimeTechno - $remainingTotalTime, $totalTimeTechno) . '%;" class="progress-bar">';
 								echo '</span>';

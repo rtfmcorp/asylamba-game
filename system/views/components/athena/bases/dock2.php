@@ -155,7 +155,7 @@ echo '<div class="component">';
 					if ($realSizeQueue > 1) {
 						echo '<div class="item">';
 					} else { 
-						echo '<div class="item active progress" data-progress-current-time="' . $queue->getRemainingTime() . '" data-progress-total-time="' . $totalTimeShips . '">';
+						echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $queue->getRemainingTime() . '" data-progress-total-time="' . $totalTimeShips . '">';
 					}
 					echo '<a href="' . APP_ROOT . 'action/a-dequeueship/baseid-' . $ob_dock2->getId() . '/dock-2/queue-' . $queue->getId() . '"' . 
 						'class="button hb lt" title="annuler la commande">×</a>';
@@ -167,7 +167,7 @@ echo '<div class="component">';
 
 						echo '<span class="progress-container"></span>';
 					} else {
-						echo '<em><span class="progress-text">' . Chronos::secondToFormat($queue->getRemainingTime()) . '</span></em>';
+						echo '<em><span class="progress-text">' . Chronos::secondToFormat($queue->getRemainingTime(), 'lite') . '</span></em>';
 
 						echo '<span class="progress-container">';
 							echo '<span style="width: ' . Format::percent($totalTimeShips - $queue->getRemainingTime(), $totalTimeShips) . '%;" class="progress-bar">';

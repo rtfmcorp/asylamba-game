@@ -33,7 +33,7 @@ if (ASM::$bqm->size() != 0) {
 		$nextTime += $qe->getRemainingTime();
 		$nextTotalTime += OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'level', $qe->getTargetLevel(), 'time');
 
-		$q .= '<div class="item ' . (($realSizeQueue > 1) ? 'active' : '') . ' progress" data-progress-current-time="' . $nextTime . '" data-progress-total-time="' . $nextTotalTime . '">';
+		$q .= '<div class="item ' . (($realSizeQueue > 1) ? 'active' : '') . ' progress" data-progress-output="lite" data-progress-current-time="' . $nextTime . '" data-progress-total-time="' . $nextTotalTime . '">';
 		$q .= '<a href="' . APP_ROOT . 'action/a-dequeuebuilding/baseid-' . $ob_generator->getId() . '/building-' . $qe->getBuildingNumber() . '"' . 
 				'class="button hb lt" title="annuler la construction">×</a>';
 		$q .= '<img class="picto" src="' . MEDIA . 'orbitalbase/' . OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'imageLink') . '.png" alt="" />';
@@ -43,10 +43,10 @@ if (ASM::$bqm->size() != 0) {
 		$q .= '</strong>';
 		if ($realSizeQueue > 1) {
 			$q .= '<em>en attente</em>';
-			$q .= '<em><span class="progress-text">' . Chronos::secondToFormat($nextTime) . '</span></em>';
+			$q .= '<em><span class="progress-text">' . Chronos::secondToFormat($nextTime, 'lite') . '</span></em>';
 			$q .= '<span class="progress-container"></span>';
 		} else {
-			$q .= '<em><span class="progress-text">' . Chronos::secondToFormat($nextTime) . '</span></em>';
+			$q .= '<em><span class="progress-text">' . Chronos::secondToFormat($nextTime, 'lite') . '</span></em>';
 
 			$q .= '<span class="progress-container">';
 				$q .= '<span style="width: ' . Format::percent($nextTotalTime - $nextTime, $nextTotalTime) . '%;" class="progress-bar">';

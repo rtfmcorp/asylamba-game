@@ -28,7 +28,7 @@ echo '<div id="tools">';
 
 		$S_TQM1 = ASM::$tqm->getCurrentSession();
 		ASM::$tqm->changeSession($currentBase->technoQueueManager);
-		echo '<a href="#" class="square"><img src="' . MEDIA . 'orbitalbase/technosphere.png" alt="" />';
+		echo '<a href="#" class="square sh" data-target="tools-technosphere"><img src="' . MEDIA . 'orbitalbase/technosphere.png" alt="" />';
 			echo '<span class="number">' . ASM::$tqm->size() . '</span>';
 		echo '</a>';
 		ASM::$tqm->changeSession($S_TQM1);
@@ -131,14 +131,14 @@ echo '<div id="tools">';
 			if (ASM::$bqm->size() > 0) {
 				$qe = ASM::$bqm->get(0);
 				echo '<div class="queue">';
-					echo '<div class="item active progress" data-progress-current-time="' . $qe->getRemainingTime() . '" data-progress-total-time="' . OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'level', $qe->getTargetLevel(), 'time') . '">';
+					echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $qe->getRemainingTime() . '" data-progress-total-time="' . OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'level', $qe->getTargetLevel(), 'time') . '">';
 						echo '<img class="picto" src="' . MEDIA . 'orbitalbase/' . OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'imageLink') . '.png" alt="" />';
 						echo '<strong>';
 							echo OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'frenchName');
 							echo ' <span class="level">niv. ' . $qe->getTargetLevel() . '</span>';
 						echo '</strong>';
 						
-						echo '<em><span class="progress-text">' . Chronos::secondToFormat($qe->getRemainingTime()) . '</span></em>';
+						echo '<em><span class="progress-text">' . Chronos::secondToFormat($qe->getRemainingTime(), 'lite') . '</span></em>';
 
 						echo '<span class="progress-container">';
 							echo '<span style="width: ' . Format::percent(OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'level', $qe->getTargetLevel(), 'time') - $qe->getRemainingTime(), OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'level', $qe->getTargetLevel(), 'time')) . '%;" class="progress-bar">';
@@ -152,6 +152,38 @@ echo '<div id="tools">';
 
 			echo '<a href="' . APP_ROOT . 'bases/view-generator" class="more-link">vers le générateur</a>';
 			ASM::$bqm->changeSession($S_BQM1);
+		echo '</div>';
+	echo '</div>';
+
+	echo '<div class="overbox left-pic" id="tools-technosphere">';
+		echo '<div class="overflow">';
+			$S_TQM1 = ASM::$tqm->getCurrentSession();
+			ASM::$tqm->changeSession($currentBase->technoQueueManager);
+			
+			if (ASM::$tqm->size() > 0) {
+				$qe = ASM::$tqm->get(0);
+				echo '<div class="queue">';
+					echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $qe->remainingTime . '" data-progress-total-time="' . TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel) . '">';
+						echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($qe->technology, 'imageLink') . '.png" alt="" />';
+						echo '<strong>' . TechnologyResource::getInfo($qe->technology, 'name');
+						if (!TechnologyResource::isAnUnblockingTechnology($qe->technology)) {
+							echo ' <span class="level">niv. ' . $qe->targetLevel . '</span>';
+						}
+						echo '</strong>';
+						
+						echo '<em><span class="progress-text">' . Chronos::secondToFormat($qe->remainingTime, 'lite') . '</span></em>';
+						echo '<span class="progress-container">';
+							echo '<span style="width: ' . Format::percent(TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel) - $qe->remainingTime, TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel)) . '%;" class="progress-bar">';
+							echo '</span>';
+						echo '</span>';
+					echo '</div>';
+				echo '</div>';
+			} else {
+				echo '<p class="info">Aucune recherche en cours pour le moment.</p>';
+			}
+
+			echo '<a href="' . APP_ROOT . 'bases/view-technosphere" class="more-link">vers la technosphère</a>';
+			ASM::$tqm->changeSession($S_TQM1);
 		echo '</div>';
 	echo '</div>';
 
