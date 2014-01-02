@@ -522,10 +522,10 @@ jQuery(document).ready(function($) {
 	$('.notif.unreaded .read-notif').live('click', function(e) {
 		var notif  = $(this).parent();
 		var notifs = $('#general-notif-container');
-		var count  = parseInt(notifs.find('strong').text()) - 1;
+		var count  = parseInt(notifs.find('span.number').text()) - 1;
 
 		notif.removeClass('unreaded');
-		notifs.find('strong').text(count);
+		notifs.find('span.number').text(count);
 		if (count == 0) {
 			notifs.removeClass('active');
 		}

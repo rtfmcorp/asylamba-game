@@ -1,4 +1,18 @@
 <?php
+# load notif
+include_once HERMES;
+$S_NTM1 = ASM::$ntm->getCurrentSession();
+ASM::$ntm->newSession();
+ASM::$ntm->load(array('rPlayer' => CTR::$data->get('playerId'), 'readed' => 0));
+
+# load message
+$db = DataBase::getInstance();
+$qr = $db->prepare('SELECT COUNT(id) AS n FROM message WHERE readed = 0 AND rPlayerReader = ? GROUP BY rPlayerReader');
+$qr->execute(array(CTR::$data->get('playerId')));
+$aw = $qr->fetch();
+$message = (count($aw['n']) > 0) ? $aw['n'] : 0;
+
+# work
 echo '<div id="nav">';
 	echo '<div class="box left">';
 		echo '<a href="#" class="square sh" data-target="change-bases"><img src="' . MEDIA . 'common/nav-base.png" alt="" /></a>';
@@ -50,7 +64,13 @@ echo '<div id="nav">';
 		# echo '<a href="' . APP_ROOT . 'rank" class="square hb rb ' . $isActive . '" title="classement"><img src="' . MEDIA . 'common/nav-rank.png" alt="" /></a>';
 
 		$isActive = (in_array(CTR::getPage(), array('message'))) ? 'active' : '';
-		echo '<a href="' . APP_ROOT . 'message" class="square hb rb ' . $isActive . '" title="messagerie"><img src="' . MEDIA . 'common/nav-message.png" alt="" /></a>';
+		echo '<a href="' . APP_ROOT . 'message" class="square hb rb ' . $isActive . '" title="messagerie"><img src="' . MEDIA . 'common/nav-message.png" alt="" />';
+			echo ($message > 0) ? '<span class="number">' . $message . '</span>' : '';
+		echo '</a>';
+
+		echo '<a href="' . APP_ROOT . 'message" id="general-notif-container" class="square sh" data-target="new-notifications"><img src="' . MEDIA . 'common/nav-notif.png" alt="" />';
+			echo (ASM::$ntm->size() > 0) ? '<span class="number">' . ASM::$ntm->size() . '</span>' : '';
+		echo '</a>';
 	echo '</div>';
 
 	echo '<div class="box right">';
@@ -75,6 +95,32 @@ echo '<div id="nav">';
 				echo '<strong>' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('name') . '</strong>';
 			echo '</a>';
 		}
+	echo '</div>';
+
+	echo '<div class="overbox" id="new-notifications">';
+		echo '<div class="overflow">';
+			if (ASM::$ntm->size() > 0) {
+				for ($i = 0; $i < ASM::$ntm->size(); $i++) {
+					$n = ASM::$ntm->get($i);
+					echo '<div class="notif unreaded" data-notif-id="' . $n->getId() . '">';
+						echo '<h4 class="read-notif switch-class-parent" data-class="open">' . $n->getTitle() . '</h4>';
+						echo '<div class="content">' . $n->getContent() . '</div>';
+						echo '<div class="footer">';
+							echo '<a href="' . APP_ROOT . 'action/a-archivenotif/id-' . $n->getId() . '">archiver</a> ou ';
+							echo '<a href="' . APP_ROOT . 'action/a-deletenotif/id-' . $n->getId() . '">supprimer</a><br />';
+							echo '— ' . Chronos::transform($n->getDSending());
+						echo '</div>';
+					echo '</div>';
+
+					if ($i == NTM_TOOLDISPLAY - 1) {
+						break;
+					}
+				}
+			} else {
+				echo '<p class="info">Aucune nouvelle notification.</p>';
+			}
+			echo '<a href="' . APP_ROOT . 'message" class="more-link">toutes vos notifications</a>';
+		echo '</div>';
 	echo '</div>';
 
 	$S_RMM_1 = ASM::$rmm->getCurrentSession();
@@ -130,4 +176,6 @@ echo '<div id="nav">';
 echo '</div>';
 
 echo '<div id="container">';
+
+ASM::$ntm->changeSession($S_NTM1);
 ?>	
