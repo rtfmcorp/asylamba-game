@@ -209,15 +209,17 @@ class PlayerManager extends Manager {
 
 	//LOAD SPECIAUX
 
-	public function loadByPopulation($where = array(), $limit = array()) {
+public function loadByPopulation($where = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'p.');
 		$formatLimit = Utils::arrayToLimit($limit);
 
 		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT *
+		$qr = $db->prepare('SELECT p.*
 			FROM player AS p
-			WHERE rColor = 1'
+			' . $formatWhere . '
+			' . $formatLimit
 		);
+
 		foreach($where AS $v) {
 			if (is_array($v)) {
 				foreach ($v as $p) {
@@ -233,8 +235,6 @@ class PlayerManager extends Manager {
 		} else {
 			$qr->execute($valuesArray);
 		}
-
-		bug::pre();
 
 		while($aw = $qr->fetch()) {
 			$p = new Player();

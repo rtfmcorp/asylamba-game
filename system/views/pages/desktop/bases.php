@@ -1,8 +1,6 @@
 <?php
 # bases loading
 include_once ATHENA;
-include_once DEMETER;
-include_once ZEUS;
 
 # choix de la base
 ASM::$obm->load(array('rPlace' => CTR::$data->get('playerParams')->get('base')));
