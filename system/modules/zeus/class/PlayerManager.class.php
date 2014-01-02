@@ -206,5 +206,70 @@ class PlayerManager extends Manager {
 		
 		return TRUE;
 	}
+
+	//LOAD SPECIAUX
+
+	public function loadByPopulation($where = array(), $limit = array()) {
+		$formatWhere = Utils::arrayToWhere($where, 'p.');
+		$formatLimit = Utils::arrayToLimit($limit);
+
+		$db = DataBase::getInstance();
+		$qr = $db->prepare('SELECT p.*, SUM(pl.population) AS pop
+			FROM player AS p
+			LEFT JOIN place AS pl
+				ON p.id = pl.rPlayer
+			' . $formatWhere . '
+			ORDER BY pop
+			' . $formatLimit
+		);
+
+		foreach($where AS $v) {
+			if (is_array($v)) {
+				foreach ($v as $p) {
+					$valuesArray[] = $p;
+				}
+			} else {
+				$valuesArray[] = $v;
+			}
+		}
+
+		if(empty($valuesArray)) {
+			$qr->execute();
+		} else {
+			$qr->execute($valuesArray);
+		}
+
+		while($aw = $qr->fetch()) {
+			$p = new Player();
+
+			$p->setId($aw['id']);
+			$p->setBind($aw['bind']);
+			$p->setRColor($aw['rColor']);
+			$p->setName($aw['name']);
+			$p->setAvatar($aw['avatar']);
+			$p->setStatus($aw['status']);
+			$p->setDescription($aw['description']);
+			$p->setCredit($aw['credit']);
+			$p->setUCredit($aw['uCredit']);
+			$p->setActionPoint($aw['actionPoint']);
+			$p->setUActionPoint($aw['uActionPoint']);
+			$p->setExperience($aw['experience']);
+			$p->setLevel($aw['level']);
+			$p->setVictory($aw['victory']);
+			$p->setDefeat($aw['defeat']);
+			$p->setStepTutorial($aw['stepTutorial']);
+			$p->setDInscription($aw['dInscription']);
+			$p->setDLastConnection($aw['dLastConnection']);
+			$p->setDLastActivity($aw['dLastActivity']);
+			$p->setPremium($aw['premium']);
+			$p->setStatement($aw['statement']);
+
+			$currentP = $this->_Add($p);
+			if ($this->currentSession->getUMode()) {
+				$currentP->uActionPoint();
+				$currentP->uCredit();
+			}
+		}
+	}
 }
 ?>

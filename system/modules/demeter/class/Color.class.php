@@ -30,6 +30,43 @@ class Color {
 
 	public function getId() { return $this->id; }
 
+	public function updateRank() {
+		/*
+		empire nbrplanet
+		cardan nbr pop
+		Aphéra tech ?
+		Négor nbr credits
+		Kovak puissance de l'armée
+		Synelle experience
+		Nerve Niveau de raffinerie
+		*/
+		$limit = $this->player / 4;
+		if ($limit < 20) { $lmit = 20; }
+		if ($limit > 40) { $lmit = 40; }
+
+		$_PAM1 = ASM::$pam->getCurrentSession();
+		ASM::$pam->newSession();
+
+		switch ($this->id) {
+			case 1: ASM::$pam->load(array('rColor' => $this->id), array(), array($limit));
+			break;
+			case 2: ASM::$pam->load(array('rColor' => $this->id), array(), array($limit));
+			break;
+			case 3: ASM::$pam->load(array('rColor' => $this->id), array(), array($limit));
+			break;
+			case 4: ASM::$pam->load(array('rColor' => $this->id), array(), array($limit));
+			break;
+			case 5: ASM::$pam->load(array('rColor' => $this->id), array(), array($limit));
+			break;
+			case 6: ASM::$pam->load(array('rColor' => $this->id), array(), array($limit));
+			break;
+			case 7: ASM::$pam->load(array('rColor' => $this->id), array(), array($limit));
+			break;
+		}
+
+		ASM::$pam->changeSession($_PAM1);
+	}
+
 
 	public function uElection(){}
 }

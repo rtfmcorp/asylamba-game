@@ -138,10 +138,63 @@ class ColorManager extends Manager {
 		return TRUE;
 	}
 
-	//public function updateRank(){}
+	// FONCTIONS STATICS
 
-	// public function updatePlayers($var){}ces 4 en static dans le manager
-	// public function updateActivePlayers(){}
-	// public function updatePoints(){}
-	// public function updatesectors(){}
+	public static function updatePlayers ($id) {
+		include_once ZEUS;
+
+		$_CLM1 = ASM::$clm->getCurrentSession();
+		ASM::$clm->newSession();
+		ASM::$clm->load(array('id' => $id));
+
+		$_PAM = ASM::$pam->getCurrentSession();
+		ASM::$pam->newSession(FALSE);
+		ASM::$pam->load(array('statement' => array(1, 2)));
+
+		ASM::$clm->get()->players = ASM::$pam->size();
+
+		ASM::$clm->save();
+		
+		ASM::$sem->changeSession($_PAM);
+		ASM::$clm->changeSession($_CLM1);
+	}
+
+	public static function updateActivePlayers($id) {
+		include_once ZEUS;
+
+		$_CLM1 = ASM::$clm->getCurrentSession();
+		ASM::$clm->newSession();
+		ASM::$clm->load(array('id' => $id));
+
+		$_PAM = ASM::$pam->getCurrentSession();
+		ASM::$pam->newSession(FALSE);
+		ASM::$pam->load(array('statement' => PAM_ACTIVE));
+		
+		ASM::$clm->get()->activePlayers = ASM::$pam->size();
+
+		ASM::$clm->save();
+
+		ASM::$pam->changeSession($_PAM);
+		ASM::$clm->changeSession($_CLM1);
+	}
+
+	public static function updateSectors($id) {
+		include_once GAIA;
+
+		$_CLM1 = ASM::$clm->getCurrentSession();
+		ASM::$clm->newSession();
+		ASM::$clm->load(array('id' => $id));
+
+		$sem = new SectorManager();
+		$sem->load(array('rColor' => $id));
+		
+		ASM::$clm->get()->sectors = $sem->size();
+
+		ASM::$clm->save();
+
+		ASM::$clm->changeSession($_CLM1);
+	}
+
+	// public static function updatePoints() {}
+
 }
