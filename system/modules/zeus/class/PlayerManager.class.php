@@ -218,7 +218,6 @@ class PlayerManager extends Manager {
 			FROM player AS p
 			WHERE rColor = 1'
 		);
-		bug::pre($qr);
 		foreach($where AS $v) {
 			if (is_array($v)) {
 				foreach ($v as $p) {
