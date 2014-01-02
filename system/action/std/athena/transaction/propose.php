@@ -55,6 +55,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 				ASM::$com->load(array('id' => $identifier));
 				if (ASM::$com->size() == 1 AND ASM::$com->get()->getRPlayer() == CTR::$data->get('playerId')) {
 					$quantity = ASM::$com->get()->getExperience();
+					ASM::$com->get()->emptySquadrons();
 				} else {
 					$valid = FALSE;
 				}
