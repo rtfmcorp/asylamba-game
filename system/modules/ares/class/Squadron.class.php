@@ -130,5 +130,11 @@ class Squadron {
 		$this->arrayOfShips[$shipNbrName] += $nbr;
 		ASM::$com->getById($this->rCommander)->hasToSave = TRUE;
 	}
+
+	public function emptySquadron() {
+		for ($i = 0; $i < 12; $i++) {
+			$this->arrayOfShips[$i] = 0;
+		}
+	}
 }
 ?>

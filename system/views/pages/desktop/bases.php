@@ -2,6 +2,10 @@
 # bases loading
 include_once ATHENA;
 include_once DEMETER;
+include_once ZEUS;
+// ASM::$pam->loadByPopulation(array('rColor' => 1), array(20, 20));
+// echo '<br /><br />' . ASM::$pam->size();
+// exit();
 
 # choix de la base
 ASM::$obm->load(array('rPlace' => CTR::$data->get('playerParams')->get('base')));

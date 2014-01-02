@@ -214,15 +214,11 @@ class PlayerManager extends Manager {
 		$formatLimit = Utils::arrayToLimit($limit);
 
 		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT p.*, SUM(pl.population) AS pop
+		$qr = $db->prepare('SELECT *
 			FROM player AS p
-			LEFT JOIN place AS pl
-				ON p.id = pl.rPlayer
-			' . $formatWhere . '
-			ORDER BY pop
-			' . $formatLimit
+			WHERE rColor = 1'
 		);
-
+		bug::pre($qr);
 		foreach($where AS $v) {
 			if (is_array($v)) {
 				foreach ($v as $p) {
@@ -238,6 +234,8 @@ class PlayerManager extends Manager {
 		} else {
 			$qr->execute($valuesArray);
 		}
+
+		bug::pre();
 
 		while($aw = $qr->fetch()) {
 			$p = new Player();

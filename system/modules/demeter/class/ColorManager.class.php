@@ -139,6 +139,7 @@ class ColorManager extends Manager {
 	}
 
 	// FONCTIONS STATICS
+	
 	public static function updateInfos($id) {
 		self::updatePlayers($id);
 		self::updateActivePlayers($id);

@@ -74,6 +74,8 @@ switch (CTR::$get->get('a')) {
 
 	case 'affectcommander':			include ACTION . 'ares/commander/affect.php'; break;
 	case 'updatenamecommander':		include ACTION . 'ares/commander/updateName.php'; break;
+	case 'emptycommander':			include ACTION . 'ares/commander/empty.php'; break;
+	case 'firedcommander':			include ACTION . 'ares/commander/fired.php'; break;
 
 	# APOLLON
 	case 'writebugreport':			include ACTION . 'apollon/bugReport/write.php'; break;
