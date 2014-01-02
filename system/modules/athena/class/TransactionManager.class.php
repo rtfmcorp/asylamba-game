@@ -16,16 +16,16 @@ class TransactionManager extends Manager {
 	public function load($where = array(), $order = array(), $limit = array(), $typeToLoad = 0) {
 		switch ($typeToLoad) {
 			case Transaction::TYP_RESOURCE :
-				loadTransactions($where, $order, $limit);
+				self::loadTransactions($where, $order, $limit);
 				break;
 			case Transaction::TYP_SHIP :
-				loadTransactions($where, $order, $limit);
+				self::loadTransactions($where, $order, $limit);
 				break;
 			case Transaction::TYP_COMMANDER :
-				loadCommanderTransactions($where, $order, $limit);
+				self::loadCommanderTransactions($where, $order, $limit);
 				break;
 			default :
-				loadTransactions($where, $ordre, $limit);
+				self::loadTransactions($where, $order, $limit);
 				break;
 		}
 	}
