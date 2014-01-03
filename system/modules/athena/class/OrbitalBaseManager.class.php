@@ -9,7 +9,7 @@ include_once ZEUS;
  * @copyright Expansion - le jeu
  *
  * @package Athena
- * @update 21.06.13
+ * @update 02.01.14
 */
 
 class OrbitalBaseManager extends Manager {
@@ -141,7 +141,6 @@ class OrbitalBaseManager extends Manager {
 			$b->setRemainingTimeDock3(round($aw['remainingTimeDock3'], 1));
 			$b->setRoutesNumber($aw['routesNumber']);
 
-			
 			// BuildingQueueManager
 			$oldBQMSess = ASM::$bqm->getCurrentSession();
 			ASM::$bqm->newSession(ASM_UMODE);
@@ -227,6 +226,13 @@ class OrbitalBaseManager extends Manager {
 			$b->technoQueueManager = ASM::$tqm->getCurrentSession();
 			ASM::$tqm->changeSession($S_TQM1);
 
+			// CommercialShippingManager
+			$S_CSM1 = ASM::$csm->getCurrentSession();
+			ASM::$csm->newSession(ASM_UMODE);
+			ASM::$csm->load(array('rBase' => $aw['rPlace']));
+			$b->shippingManager = ASM::$csm->getCurrentSession();
+			ASM::$csm->changeSession($S_CSM1);
+
 			$currentB = $this->_Add($b);
 
 			// U mechanism
@@ -244,6 +250,7 @@ class OrbitalBaseManager extends Manager {
 				$currentB->uShipQueue2($now, $p);
 				$currentB->uTechnologyQueue($now, $p);
 				$currentB->uAntiSpy($now);
+				$currentB->uCommercialShipping($now);
 
 				$currentB->uResources($now);
 			}
@@ -256,7 +263,7 @@ class OrbitalBaseManager extends Manager {
 			orbitalBase(rPlace, rPlayer, name, levelGenerator, levelRefinery, levelDock1, levelDock2, levelDock3, levelTechnosphere, levelCommercialPlateforme, levelGravitationalModule, points,
 				iSchool, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, iAntiSpy, antiSpyAverage, 
 				pegaseStorage, satyreStorage, sireneStorage, dryadeStorage, chimereStorage, meduseStorage, griffonStorage, cyclopeStorage, minotaureStorage, hydreStorage, cerbereStorage, phenixStorage,
-				motherShip, isCommercialBase, isProductionRefinery, isProductionDock1, isProductionDock2, resourcesStorage, uResources, uBuildingQueue, uShipQueue1, uShipQueue2, uShipQueue3, uTechnoQueue, uAntiSpy, dCreation)
+				motherShip, isCommercialBase, isProductionRefinery, isProductionDock1, isProductionDock2, resourcesStorage, uResources, uBuildingQueue, uShipQueue1, uShipQueue2, uShipQueue3, uTechnoQueue, uAntiSpy, uCommercialShipping, dCreation)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,  
 				?, ?, ?, ?, ?, ?, ?, ?, 
 				?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 

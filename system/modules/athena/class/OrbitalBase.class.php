@@ -7,7 +7,7 @@
  * @copyright Expansion - le jeu
  *
  * @package Athena
- * @update 04.06.13
+ * @update 02.01.14
 */
 
 class OrbitalBase {
@@ -79,6 +79,7 @@ class OrbitalBase {
 	public $dock3Manager;
 	public $routeManager;
 	public $technoQueueManager;
+	public $shippingManager;
 
 	//GETTERS
 	public function getId() { return $this->rPlace; }
@@ -509,6 +510,60 @@ class OrbitalBase {
 			} else {
 				$this->antiSpyAverage = round((($this->antiSpyAverage * (24-$hInterval)) + ($this->iAntiSpy * $hInterval)) / 24);
 			}
+		}
+	}
+
+	public function uCommercialShipping($dUpdate) {
+		$S_CSM1 = ASM::$csm->getCurrentSession();
+		ASM::$csm->changeSession($this->shippingManager);
+		$size = ASM::$csm->size();
+		if ($size >= 1) {
+			$index = 0;
+
+			while ($index < $size) {
+				$cs = ASM::$csm->get($index);
+				$index++;
+				switch ($cs->statement) {
+					case CommercialShipping::ST_GOING :
+						if (Utils::hasAlreadyHappened($cs->dArrival, $dUpdate)) {
+							# shipping arrived, delivery of items to rBaseDestination
+							$cs->deliver();
+							# prepare commercialShipping for moving back
+							$cs->statement = CommercialShipping::ST_MOVING_BACK;
+							$timeToTravel = strtotime($cs->dArrival) - strtotime($cs->dDeparture);
+							$cs->dDeparture = $cd->$dArrival;
+							$cs->dArrival = Utils::addSecondsToDate($cs->dArrival, $timeToTravel);
+						} 
+						break;
+					case CommercialShipping::ST_MOVING_BACK :
+						if (Utils::hasAlreadyHappened($cs->dArrival, $dUpdate)) {
+							# shipping arrived, release of the commercial ships
+							# send notification
+							$n = new Notification();
+							$n->setRPlayer($cs->rPlayer);
+							$n->setTitle('Retour de livraison');
+							$n->addBeg()->addTxt('Vos vaisseaux commerciaux sont de retour sur votre ');
+							$n->addLnk('map/base-' . $cs->rBase, 'base orbitale')->addTxt(' après avoir livré du matériel sur une autre ');
+							$n->addLnk('map/place-' . $cs->rBaseDestination, 'base')->addTxt(' . ');
+							$n->addSep()->addTxt('Vos ' . $cs->shipQuantity . ' vaisseaux de commerces sont à nouveau disponibles pour faire d\'autres transactions ou routes commerciales.'));
+							$n->addEnd();
+							ASM::$ntm->add($n);
+							# delete commercialShipping
+							ASM::$csm->deleteById($cs->id);
+							$index--;
+							$size--;
+						} 
+						break;
+					default :
+						break;
+				}
+			}
+			ASM::$csm->changeSession($S_CSM1);
+			return TRUE;
+		} else {
+			//pas d'envoi en cours
+			ASM::$csm->changeSession($S_CSM1);
+			return TRUE;
 		}
 	}
 

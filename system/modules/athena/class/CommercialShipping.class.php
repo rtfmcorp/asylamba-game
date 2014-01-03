@@ -39,4 +39,10 @@ class CommercialShipping {
 	public $destinationYSystem;
 
 	public function getId() { return $this->id; }
+
+	public function deliver() {
+		# load : $this->rTransaction
+		# give it to rBaseDestination
+		# send notification to both players
+	}
 }
