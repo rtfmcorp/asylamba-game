@@ -49,6 +49,18 @@ class Utils {
 		}
 	}
 
+	public static function hasAlreadyHappened($date, $now = FALSE) {
+		if ($now === FALSE) {
+			$now = self::now();
+		}
+
+		if (strtotime($date) <= strtotime($now)) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+
 	public static function addSecondsToDate($date, $seconds) {
 		return date('Y-m-d H:i:s', strtotime($date) + $seconds);
 	}
