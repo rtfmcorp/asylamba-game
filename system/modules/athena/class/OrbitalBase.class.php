@@ -545,7 +545,7 @@ class OrbitalBase {
 							$n->addBeg()->addTxt('Vos vaisseaux commerciaux sont de retour sur votre ');
 							$n->addLnk('map/base-' . $cs->rBase, 'base orbitale')->addTxt(' après avoir livré du matériel sur une autre ');
 							$n->addLnk('map/place-' . $cs->rBaseDestination, 'base')->addTxt(' . ');
-							$n->addSep()->addTxt('Vos ' . $cs->shipQuantity . ' vaisseaux de commerces sont à nouveau disponibles pour faire d\'autres transactions ou routes commerciales.'));
+							$n->addSep()->addTxt('Vos ' . $cs->shipQuantity . ' vaisseaux de commerces sont à nouveau disponibles pour faire d\'autres transactions ou routes commerciales.');
 							$n->addEnd();
 							ASM::$ntm->add($n);
 							# delete commercialShipping
