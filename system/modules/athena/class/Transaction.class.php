@@ -59,20 +59,3 @@ class Transaction {
 		return 1 + round($this->price / self::EXPERIENCE_DIVIDER);
 	}
 }
-
-# commander
-	# grade
-	# xp
-	# name
-	# victory
-
-# ressource
-	# ---
-
-# espion
-	# name
-	# grade
-	# xp
-
-# vaisseau
-	# ---
