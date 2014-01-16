@@ -511,6 +511,10 @@ jQuery(document).ready(function($) {
 		}
 	});
 
+	$('#container').live('click' ,function(e) {
+		$('.overbox').css('display', 'none');
+	});
+
 	$('.switch-class').live('click', function(e) {
 		$(this).toggleClass($(this).data('class'));
 	});
@@ -530,6 +534,25 @@ jQuery(document).ready(function($) {
 			notifs.removeClass('active');
 		}
 		$.get(game.path + 'ajax/a-readnotif/notif-' + notif.data('notif-id'));
+	});
+
+	// STD AJAX ACTION LINK
+	$('.notif a.ajax-action').live('click', function(e) {
+		e.preventDefault();
+
+		var notif = $(this).parent().parent();
+		var ajaxTarget = $(this).data('ajax-target');
+
+		if (ajaxTarget !== undefined) {
+			$.get(ajaxTarget)
+			 .done(function(data) {
+			 	notif.css('display', 'none');
+			}).fail(function() {
+				alertController.add(101, 'Une erreur réseaux est survenue');
+			});
+		} else {
+			alertController.add(101, 'Une erreur réseaux est survenue');
+		}
 	});
 
 	// GENERAL INFOBULL CORE

@@ -6,6 +6,8 @@ switch (CTR::$get->get('a')) {
 
 	# HERMES
 	case 'readnotif': 				include AJAX . 'hermes/notification/read.php'; break;
+	case 'archivenotif': 			include AJAX . 'hermes/notification/archive.php'; break;
+	case 'deletenotif': 			include AJAX . 'hermes/notification/delete.php'; break;
 
 	# ARES
 	case 'assignship':				include AJAX . 'ares/ship/assign.php'; break;

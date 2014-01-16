@@ -1,4 +1,8 @@
 <?php
+/*echo '<a href="#" class="resource-link sh">';
+	echo 'il reste <span class="releve-timer">' . Chronos::getTimer('i') . ':' . Chronos::getTimer('s') . '</span>';
+echo '</a>';*/
+
 # load base
 include_once ATHENA;
 $S_OBM1 = ASM::$obm->getCurrentSession();
@@ -16,28 +20,28 @@ echo '<div id="tools">';
 		$S_BQM1 = ASM::$bqm->getCurrentSession();
 		ASM::$bqm->changeSession($currentBase->buildingManager);
 		echo '<a href="#" class="square sh" data-target="tools-generator"><img src="' . MEDIA . 'orbitalbase/generator.png" alt="" />';
-			echo '<span class="number">' . ASM::$bqm->size() . '</span>';
+			echo (ASM::$bqm->size()) ? '<span class="number">' . ASM::$bqm->size() . '</span>' : NULL;
 		echo '</a>';
 		ASM::$bqm->changeSession($S_BQM1);
 
 		$S_TQM1 = ASM::$tqm->getCurrentSession();
 		ASM::$tqm->changeSession($currentBase->technoQueueManager);
 		echo '<a href="#" class="square sh" data-target="tools-technosphere"><img src="' . MEDIA . 'orbitalbase/technosphere.png" alt="" />';
-			echo '<span class="number">' . ASM::$tqm->size() . '</span>';
+			echo (ASM::$tqm->size()) ? '<span class="number">' . ASM::$tqm->size() . '</span>' : NULL;
 		echo '</a>';
 		ASM::$tqm->changeSession($S_TQM1);
 
 		$S_SQM1 = ASM::$sqm->getCurrentSession();
 		ASM::$sqm->changeSession($currentBase->dock1Manager);
 		echo '<a href="#" class="square"><img src="' . MEDIA . 'orbitalbase/dock1.png" alt="" />';
-			echo '<span class="number">' . ASM::$sqm->size() . '</span>';
+			echo (ASM::$sqm->size()) ? '<span class="number">' . ASM::$sqm->size() . '</span>' : NULL;
 		echo '</a>';
 		ASM::$sqm->changeSession($S_SQM1);
 
 		$S_SQM2 = ASM::$sqm->getCurrentSession();
 		ASM::$sqm->changeSession($currentBase->dock2Manager);
 		echo '<a href="#" class="square"><img src="' . MEDIA . 'orbitalbase/dock2.png" alt="" />';
-			echo '<span class="number">' . ASM::$sqm->size() . '</span>';
+			echo (ASM::$sqm->size()) ? '<span class="number">' . ASM::$sqm->size() . '</span>' : NULL;
 		echo '</a>';
 		ASM::$sqm->changeSession($S_SQM2);
 	echo '</div>';
@@ -51,13 +55,13 @@ echo '<div id="tools">';
 				if ($info[0] === TRUE) { $incomingAttack++; }
 			}
 		}
-		echo '<a href="#" class="square"><img src="' . MEDIA . 'common/nav-fleet.png" alt="" />';
-			echo ($incomingAttack > 0) ? '<span class="number">' . $incomingAttack . '</span>' : '';
+		echo '<a href="#" class="square ' . (($incomingAttack > 0) ? 'active' : NULL) . '"><img src="' . MEDIA . 'common/nav-fleet-defense.png" alt="" />';
+			echo ($incomingAttack > 0) ? '<span class="number">' . $incomingAttack . '</span>' : NULL;
 		echo '</a>';
 
-		/*echo '<a href="#" class="resource-link sh">';
-				echo 'il reste <span class="releve-timer">' . Chronos::getTimer('i') . ':' . Chronos::getTimer('s') . '</span>';
-		echo '</a>';*/
+		echo '<a href="#" class="square"><img src="' . MEDIA . 'common/nav-fleet-attack.png" alt="" />';
+			echo ($incomingAttack > 0) ? '<span class="number">' . $incomingAttack . '</span>' : NULL;
+		echo '</a>';
 
 		echo '<a href="' . APP_ROOT . 'financial" class="resource-link" style="width: 120px;">';
 				echo Format::numberFormat(CTR::$data->get('playerInfo')->get('credit'));

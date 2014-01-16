@@ -166,13 +166,13 @@ body {
 #nav .box a.square:focus  { background: url('src/desktop/button/bLittleButtonHover.png') no-repeat; }
 #nav .box a.square.active { background: url('src/desktop/button/bLittleButtonActive.png') no-repeat; }
 
-.color1 #nav .box a.square.active { background: url('src/desktop/button/bLittleButtonActive-c1.png') no-repeat; }
-.color2 #nav .box a.square.active { background: url('src/desktop/button/bLittleButtonActive-c2.png') no-repeat; }
-.color3 #nav .box a.square.active { background: url('src/desktop/button/bLittleButtonActive-c3.png') no-repeat; }
-.color4 #nav .box a.square.active { background: url('src/desktop/button/bLittleButtonActive-c4.png') no-repeat; }
-.color5 #nav .box a.square.active { background: url('src/desktop/button/bLittleButtonActive-c5.png') no-repeat; }
-.color6 #nav .box a.square.active { background: url('src/desktop/button/bLittleButtonActive-c6.png') no-repeat; }
-.color7 #nav .box a.square.active { background: url('src/desktop/button/bLittleButtonActive-c7.png') no-repeat; }
+.color1 #nav .box a.square.active, .color1 #tools .box a.square.active { background: url('src/desktop/button/bLittleButtonActive-c1.png') no-repeat; }
+.color2 #nav .box a.square.active, .color2 #tools .box a.square.active { background: url('src/desktop/button/bLittleButtonActive-c2.png') no-repeat; }
+.color3 #nav .box a.square.active, .color3 #tools .box a.square.active { background: url('src/desktop/button/bLittleButtonActive-c3.png') no-repeat; }
+.color4 #nav .box a.square.active, .color4 #tools .box a.square.active { background: url('src/desktop/button/bLittleButtonActive-c4.png') no-repeat; }
+.color5 #nav .box a.square.active, .color5 #tools .box a.square.active { background: url('src/desktop/button/bLittleButtonActive-c5.png') no-repeat; }
+.color6 #nav .box a.square.active, .color6 #tools .box a.square.active { background: url('src/desktop/button/bLittleButtonActive-c6.png') no-repeat; }
+.color7 #nav .box a.square.active, .color7 #tools .box a.square.active { background: url('src/desktop/button/bLittleButtonActive-c7.png') no-repeat; }
 
 #tools .box a.square img,
 #nav .box a.square img {
@@ -228,6 +228,14 @@ body {
 	border-radius: 3px;
 }
 
+#nav .overbox h2 {
+	color: white;
+	padding: 10px 15px; margin: 0;
+	font-size: 14px;
+	font-weight: normal;
+	border-bottom: solid 1px #202020;
+}
+
 #nav .overbox:before {
 	content: '';
 	position: absolute;
@@ -240,7 +248,7 @@ body {
 #nav .overbox#change-bases {
 	top: 50px; left: 10px;
 	width: 205px;
-	padding: 8px 0;
+	padding: 0 0 8px 0;
 }
 #nav .overbox#change-bases:before { left: 30px; right: auto; }
 #nav .overbox#change-bases a {
@@ -290,12 +298,12 @@ body {
 #nav .overbox#bug-tracker {
 	width: 350px;
 	top: 50px; right: 98px;
-	padding: 8px 0;
+	padding: 0 0 8px 0;
 }
 #nav .overbox#bug-tracker p {
 	color: #CCC;
 	font-size: 12px;
-	margin: 0 10px 10px 10px;
+	margin: 10px;
 }
 
 #nav .overbox#bug-tracker .option {
@@ -339,6 +347,8 @@ body {
 }
 #nav .overbox#roadmap p em {
 	display: block;
+	font-size: 11px;
+	color: #4F4F4F;
 }
 #nav .overbox#roadmap hr {
 	margin: 5px 0;
@@ -355,7 +365,7 @@ body {
 /* TOOLS */
 
 #tools .box.left  {
-	bottom: 0; right: 405px;
+	bottom: 0; right: 455px;
 }
 #tools .box.right {
 	bottom: 0; right: 25px;
@@ -434,9 +444,9 @@ body {
 	color: #CCC;
 }
 
-#tools .overbox#tools-refinery { right: 466px; bottom: 45px; }
-#tools .overbox#tools-generator { right: 302px; bottom: 45px; }
-#tools .overbox#tools-technosphere { right: 258px; bottom: 45px; }
+#tools .overbox#tools-refinery { right: 516px; bottom: 45px; }
+#tools .overbox#tools-generator { right: 352px; bottom: 45px; }
+#tools .overbox#tools-technosphere { right: 308px; bottom: 45px; }
 
 #tools .overbox#tools-credit { right: 140px; bottom: 45px; }
 #tools .overbox#tools-pa { right: 10px; bottom: 45px; }

@@ -89,7 +89,8 @@ echo '<div id="nav">';
 	echo '</div>';
 
 	echo '<div class="overbox" id="change-bases">';
-		for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
+		echo '<h2>Changer de bases</h2>';
+		for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
 			echo '<a href="' . APP_ROOT . 'action/a-switchbase/base-' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') . '" ' . (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == CTR::$data->get('playerParams')->get('base') ? 'class="active"' : '') . '>';
 				echo '<em>Base orbitale</em>';
 				echo '<strong>' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('name') . '</strong>';
@@ -98,6 +99,7 @@ echo '<div id="nav">';
 	echo '</div>';
 
 	echo '<div class="overbox" id="new-notifications">';
+		echo '<h2>Notifications</h2>';
 		echo '<div class="overflow">';
 			if (ASM::$ntm->size() > 0) {
 				for ($i = 0; $i < ASM::$ntm->size(); $i++) {
@@ -106,8 +108,8 @@ echo '<div id="nav">';
 						echo '<h4 class="read-notif switch-class-parent" data-class="open">' . $n->getTitle() . '</h4>';
 						echo '<div class="content">' . $n->getContent() . '</div>';
 						echo '<div class="footer">';
-							echo '<a href="' . APP_ROOT . 'action/a-archivenotif/id-' . $n->getId() . '">archiver</a> ou ';
-							echo '<a href="' . APP_ROOT . 'action/a-deletenotif/id-' . $n->getId() . '">supprimer</a><br />';
+							echo '<a class="ajax-action" data-ajax-target="' . APP_ROOT . 'ajax/a-archivenotif/id-' . $n->getId() . '" href="' . APP_ROOT . 'action/a-archivenotif/id-' . $n->getId() . '">archiver</a> ou ';
+							echo '<a class="ajax-action" data-ajax-target="' . APP_ROOT . 'ajax/a-deletenotif/id-' . $n->getId() . '" href="' . APP_ROOT . 'action/a-deletenotif/id-' . $n->getId() . '">supprimer</a><br />';
 							echo '— ' . Chronos::transform($n->getDSending());
 						echo '</div>';
 					echo '</div>';
@@ -128,10 +130,10 @@ echo '<div id="nav">';
 	ASM::$rmm->load(array('statement' => RoadMap::DISPLAYED), array('dCreation', 'DESC'), array(0, 10));
 
 	echo '<div class="overbox" id="roadmap">';
+		echo '<h2>Dernières mises à jour effectuées</h2>';
 		echo '<div class="overflow">';
-			echo '<p>Dernières mises à jour effectuées.</p>';
 			for ($i = 0; $i < ASM::$rmm->size(); $i++) { 
-				echo '<hr />';
+				echo ($i > 0) ? '<hr />' : NULL;
 				echo '<p>';
 					echo '<em>' . Chronos::transform(ASM::$rmm->get($i)->dCreation). '</em>';
 					echo ASM::$rmm->get($i)->pContent;
@@ -144,6 +146,7 @@ echo '<div id="nav">';
 
 	include_once APOLLON;
 	echo '<div class="overbox" id="bug-tracker">';
+		echo '<h2>Bug tracker</h2>';
 		echo '<form action="' . APP_ROOT . 'action/a-writebugreport" method="post">';
 			echo '<p>Rapportez-nous vos bugs ! Il vous suffit de décrire l\'erreur rencontrée directement sur la page qui a provoquée cette dernière. ';
 			echo 'Cela nous permettra de disposer du maximum d\'information.</p>';
