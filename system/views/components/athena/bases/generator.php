@@ -78,7 +78,7 @@ for ($i = 0; $i < 8; $i++) {
 			if ($level != 0) {
 				$b[$i] .= '<span class="level hb lt" title="niveau actuel">' . $level . '</span>';
 			}
-			$b[$i] .= '<a href="#" class="addInfoPanel info hb lt" title="plus d\'info" data-building-id="' . $i . '" data-info-type="building">+</a>';
+			$b[$i] .= '<a href="#" class="addInfoPanel info hb lt" title="plus d\'info" data-building-id="' . $i . '" data-info-type="building" data-building-current-level="' . $level . '">+</a>';
 		$b[$i] .= '</div>';
 
 		$price = Format::numberFormat(OrbitalBaseResource::getBuildingInfo($i, 'level', ($nextLevel), 'resourcePrice'), -1) . ' <img src="' .  MEDIA. 'resources/resource.png" alt="ressources" class="icon-color" />';

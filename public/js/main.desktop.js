@@ -148,7 +148,7 @@ jQuery(document).ready(function($) {
 		var query = game.path + 'ajax/a-';
 
 		switch (that.data('info-type')) {
-			case 'building': query += 'buildingpanel/building-' + that.data('building-id'); break;
+			case 'building': query += 'buildingpanel/building-' + that.data('building-id') + '/lvl-' + that.data('building-current-level'); break;
 			case 'ship': query += 'shippanel/ship-' + that.data('ship-id'); break;
 			case 'techno': query += 'technopanel/techno-' + that.data('techno-id'); break;
 		}

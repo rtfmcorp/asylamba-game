@@ -1,7 +1,9 @@
 <?php
 include_once ATHENA;
 
-$building = CTR::$get->get('building');
+
+$building 		= Utils::getHTTPData('building');
+$currentLevel 	= Utils::getHTTPData('lvl');
 
 echo '<div class="component panel-info size2">';
 	echo '<div class="head"></div>';
@@ -26,17 +28,32 @@ echo '<div class="component panel-info size2">';
 					echo '<td class="hb lt" title="points gagné par le joueur lors de la construction du niveau de bâtiment">points</td>';
 				echo '</tr>';
 
-				if (in_array($building, array(3, 6))) {
-					$max = 15;
-				} elseif (in_array($building, array(4, 7))) {
-					$max = 5;
-				} else {
-					$max = 20;
+				switch ($building) {
+					case 0: $max = 20; break;
+					case 1: $max = 20; break;
+					case 2: $max = 20; break;
+					case 3: $max = 15; break;
+					case 4: $max = 5;  break;
+					case 5: $max = 20; break;
+					case 6: $max = 15; break;
+					case 7: $max = 5;  break;
+					default:$max = 0;  break;
 				}
 				
 				for ($i = 0; $i < $max; $i++) {
 					$level = $i + 1;
-					echo '<tr>';
+
+					$state = NULL;
+					if ($currentLevel !== FALSE) {
+						if ($currentLevel > $level) {
+							$state = 'class="small-grey"';
+						} elseif ($currentLevel == $level) {
+							$state = 'class="active"';
+						} else {
+							$state = NULL;
+						}
+					}
+					echo '<tr ' . $state . '>';
 						echo '<td>' . ((in_array($building, array(3, 6)) && $i >= 10) ? '* ' : '') . $level . '</td>';
 						echo '<td>' . Format::numberFormat(OrbitalBaseResource::getBuildingInfo($building, 'level', $level, 'resourcePrice')) . ' <img src="' .  MEDIA. 'resources/resource.png" alt="ressources" class="icon-color" /></td>';
 						echo '<td>' . Chronos::secondToFormat(OrbitalBaseResource::getBuildingInfo($building, 'level', $level, 'time'), 'lite') . ' <img src="' .  MEDIA. 'resources/time.png" alt="relève" class="icon-color" /></td>';

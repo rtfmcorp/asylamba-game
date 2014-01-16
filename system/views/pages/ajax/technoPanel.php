@@ -14,7 +14,7 @@ if (TechnologyResource::isATechnology($tech) AND !TechnologyResource::isATechnol
 	# toutes les infos sur la technologie :
 	$name  = TechnologyResource::getInfo($tech, 'name');
 	$level = $technos->getTechnology($tech);
-	$image = TechnologyResource::getInfo($tech, 'imageLink'); //valable pour le picto + l'image
+	$image = TechnologyResource::getInfo($tech, 'imageLink'); 
 
 	$time = TechnologyResource::getInfo($tech, 'time', $level + 1);
 	$resource = TechnologyResource::getInfo($tech, 'resource', $level + 1);

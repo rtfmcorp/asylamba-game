@@ -2538,8 +2538,12 @@ body {
 	border: solid 1px #202020;
 	padding: 6px 8px;
 }
-.component.panel-info .table tr.active {
+.component.panel-info .table tr.small-grey {
 	background: #0A0A0A;
+}
+.component.panel-info .table tr.active td {
+	background: #0A0A0A;
+	border-bottom: solid 1px #4F4F4F;
 }
 
 .component.panel-info .table .icon-color {

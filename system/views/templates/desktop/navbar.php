@@ -1,4 +1,7 @@
 <?php
+# WORK PART
+###########
+
 # load notif
 include_once HERMES;
 $S_NTM1 = ASM::$ntm->getCurrentSession();
@@ -12,14 +15,16 @@ $qr->execute(array(CTR::$data->get('playerId')));
 $aw = $qr->fetch();
 $message = (count($aw['n']) > 0) ? $aw['n'] : 0;
 
-# work
+
+# DISPLAY NAV BAR
+#################
 echo '<div id="nav">';
 	echo '<div class="box left">';
 		echo '<a href="#" class="square sh" data-target="change-bases"><img src="' . MEDIA . 'common/nav-base.png" alt="" /></a>';
 
 		# select current base name
-		$currentBaseName = '';
-		$currentBaseImg  = '';
+		$currentBaseName = NULL;
+		$currentBaseImg  = NULL;
 		for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 			if (CTR::$data->get('playerParams')->get('base') == CTR::$data->get('playerBase')->get('ob')->get($i)->get('id')) {
 				$currentBaseName = CTR::$data->get('playerBase')->get('ob')->get($i)->get('name');
@@ -35,7 +40,7 @@ echo '<div id="nav">';
 			}
 		}
 
-		$isActive = (in_array(CTR::getPage(), array('bases'))) ? 'active' : '';
+		$isActive = (in_array(CTR::getPage(), array('bases'))) ? 'active' : NULL;
 		echo '<a href="' . APP_ROOT . 'bases" class="current-base ' . $isActive . '">';
 			echo '<img src="' . MEDIA . 'map/place/place' . $currentBaseImg . '.png" alt="' . $currentBaseName . '" /> ';
 			echo $currentBaseName;
@@ -43,55 +48,58 @@ echo '<div id="nav">';
 	echo '</div>';
 
 	echo '<div class="box left-2">';
-		$isActive = (in_array(CTR::getPage(), array('profil'))) ? 'active' : '';
+		$isActive = (in_array(CTR::getPage(), array('profil'))) ? 'active' : NULL;
 		echo '<a href="' . APP_ROOT . 'profil" class="square hb rb ' . $isActive . '" title="profil"><img src="' . MEDIA . 'common/nav-profil.png" alt="" /></a>';
 
-		$isActive = (in_array(CTR::getPage(), array('fleet'))) ? 'active' : '';
+		$isActive = (in_array(CTR::getPage(), array('fleet'))) ? 'active' : NULL;
 		echo '<a href="' . APP_ROOT . 'fleet" class="square hb rb ' . $isActive . '" title="amirauté"><img src="' . MEDIA . 'common/nav-fleet.png" alt="" /></a>';
 
-		$isActive = (in_array(CTR::getPage(), array('map'))) ? 'active' : '';
+		$isActive = (in_array(CTR::getPage(), array('map'))) ? 'active' : NULL;
 		echo '<a href="' . APP_ROOT . 'map" class="square hb rb ' . $isActive . '" title="carte"><img src="' . MEDIA . 'common/nav-map.png" alt="" /></a>';
 		
-		$isActive = (in_array(CTR::getPage(), array('financial'))) ? 'active' : '';
+		$isActive = (in_array(CTR::getPage(), array('financial'))) ? 'active' : NULL;
 		echo '<a href="' . APP_ROOT . 'financial" class="square hb rb ' . $isActive . '" title="finance"><img src="' . MEDIA . 'common/nav-financial.png" alt="" /></a>';
 	echo '</div>';
 
 	echo '<div class="box left-3">';
-		$isActive = (in_array(CTR::getPage(), array('faction'))) ? 'active' : '';
+		$isActive = (in_array(CTR::getPage(), array('faction'))) ? 'active' : NULL;
 		echo '<a href="' . APP_ROOT . 'faction" class="square hb rb ' . $isActive . '" title="faction"><img src="' . MEDIA . 'common/nav-faction.png" alt="" /></a>';
 		
-		# $isActive = (in_array(CTR::getPage(), array('rank'))) ? 'active' : '';
+		# $isActive = (in_array(CTR::getPage(), array('rank'))) ? 'active' : NULL;
 		# echo '<a href="' . APP_ROOT . 'rank" class="square hb rb ' . $isActive . '" title="classement"><img src="' . MEDIA . 'common/nav-rank.png" alt="" /></a>';
 
-		$isActive = (in_array(CTR::getPage(), array('message'))) ? 'active' : '';
+		$isActive = (in_array(CTR::getPage(), array('message'))) ? 'active' : NULL;
 		echo '<a href="' . APP_ROOT . 'message" class="square hb rb ' . $isActive . '" title="messagerie"><img src="' . MEDIA . 'common/nav-message.png" alt="" />';
-			echo ($message > 0) ? '<span class="number">' . $message . '</span>' : '';
+			echo ($message > 0) ? '<span class="number">' . $message . '</span>' : NULL;
 		echo '</a>';
 
 		echo '<a href="' . APP_ROOT . 'message" id="general-notif-container" class="square sh" data-target="new-notifications"><img src="' . MEDIA . 'common/nav-notif.png" alt="" />';
-			echo (ASM::$ntm->size() > 0) ? '<span class="number">' . ASM::$ntm->size() . '</span>' : '';
+			echo (ASM::$ntm->size() > 0) ? '<span class="number">' . ASM::$ntm->size() . '</span>' : NULL;
 		echo '</a>';
 	echo '</div>';
 
 	echo '<div class="box right">';
 		if (CTR::$data->get('playerInfo')->get('admin') == TRUE) {
-			$isActive = (in_array(CTR::getPage(), array('admin'))) ? 'active' : '';
+			$isActive = (in_array(CTR::getPage(), array('admin'))) ? 'active' : NULL;
 			echo '<a href="' . APP_ROOT . 'admin" class="square ' . $isActive . '"><img src="' . MEDIA . 'common/tool-admin.png" alt="" /></a>';
 		}
 
 		echo '<a href="#" class="square sh" data-target="roadmap"><img src="' . MEDIA . 'common/tool-roadmap.png" alt="" /></a>';
 		echo '<a href="#" class="square sh" data-target="bug-tracker"><img src="' . MEDIA . 'common/tool-bugtracker.png" alt="" /></a>';
 
-		//$isActive = (in_array(CTR::getPage(), array('params'))) ? 'class="active"' : '';
-		//echo '<a href="' . APP_ROOT . 'params" ' . $isActive . '>Paramètres</a>';
-		echo '<a href="#" class="square hb lb" title="en construction"><img src="' . MEDIA . 'common/tool-param.png" alt="" /></a>';
+		$isActive = (in_array(CTR::getPage(), array('params'))) ? 'active' : NULL;
+		echo '<a class="square hb lb ' . $isActive . '" title="paramètres" href="' . APP_ROOT . 'params"><img src="' . MEDIA . 'common/tool-param.png" alt="" /></a>';
+
 		echo '<a href="#" class="square sh" data-target="disconnect-box"><img src="' . MEDIA . 'common/tool-exit.png" alt="" /></a>';
 	echo '</div>';
+
+	# DISPLAY OVERBOX NAV
+	#####################
 
 	echo '<div class="overbox" id="change-bases">';
 		echo '<h2>Changer de bases</h2>';
 		for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
-			echo '<a href="' . APP_ROOT . 'action/a-switchbase/base-' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') . '" ' . (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == CTR::$data->get('playerParams')->get('base') ? 'class="active"' : '') . '>';
+			echo '<a href="' . APP_ROOT . 'action/a-switchbase/base-' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') . '" ' . (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == CTR::$data->get('playerParams')->get('base') ? 'class="active"' : NULL) . '>';
 				echo '<em>Base orbitale</em>';
 				echo '<strong>' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('name') . '</strong>';
 			echo '</a>';
@@ -178,7 +186,9 @@ echo '<div id="nav">';
 	echo '</div>';
 echo '</div>';
 
-echo '<div id="container">';
-
+# close session
 ASM::$ntm->changeSession($S_NTM1);
+
+# open general container
+echo '<div id="container">';
 ?>	
