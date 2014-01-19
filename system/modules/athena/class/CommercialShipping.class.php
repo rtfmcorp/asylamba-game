@@ -73,17 +73,6 @@ class CommercialShipping {
 					$n->addEnd();
 					ASM::$ntm->add($n);
 
-					$n = new Notification();
-					$n->setRPlayer($orbitalBase->getRPlayer());
-					$n->setTitle('Ressources reçues');
-					$n->addBeg()->addLnk('diary/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'));
-					$n->addTxt(' a accepté une de vos propositions dans le marché. Des vaisseaux commerciaux viennent de partir de votre ');
-					$n->addLnk('map/base-' . $commercialShipping->rBase, 'base')->addTxt(' et se dirigent vers ');
-					$n->addLnk('map/place-' . $base->getRPlace(), $base->getName())->addTxt(' pour acheminer la marchandise. ');
-					$n->addSep()->addTxt('Vous gagnez ' . Format::numberFormat($transaction->price) . ' crédits et ' . Format::numberFormat($experience) . ' points d\'expérience.');
-					$n->addSep()->addLnk('bases/base-' . $commercialShipping->rBase . '/view-commercialplateforme/mode-market', 'En savoir plus ?');
-					$n->addEnd();
-					ASM::$ntm->add($n);
 					break;
 				case Transaction::TYP_SHIP:
 					ASM::$obm->addShipToDock($transaction->identifier, $transaction->quantity);
@@ -112,7 +101,7 @@ class CommercialShipping {
 						$n->addBeg()->addTxt('Vous avez reçu le vaisseau de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' que vous avez acheté au marché.');
 						$n->addSep()->addTxt('Il a été ajouté à votre hangar.');
 					} else {
-						$n->setTitle('Vaisseaux reçus')
+						$n->setTitle('Vaisseaux reçus');
 						$n->addBeg()->addTxt('Vous avez reçu les ' . $transaction->quantity . ' vaisseaux de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' que vous avez achetés au marché.');
 						$n->addSep()->addTxt('Ils ont été ajoutés à votre hanger.');
 					}
