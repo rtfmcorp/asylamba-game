@@ -220,6 +220,13 @@ body {
 }
 
 /* overbox */
+#nav .overbox .overflow,
+#tools .overbox .overflow {
+	max-height: 400px;
+	overflow: auto;
+	position: relative;
+}
+
 #nav .overbox {
 	display: none;
 	position: absolute;
@@ -334,9 +341,7 @@ body {
 	top: 50px; right: 143px;
 }
 #nav .overbox#roadmap .overflow {
-	max-height: 400px;
 	width: 350px;
-	overflow: auto;
 	padding: 8px 0;
 }
 
@@ -402,12 +407,6 @@ body {
 	border-radius: 3px;
 	width: 300px;
 	bottom: 45px; right: 15px;
-}
-
-#tools .overbox .overflow {
-	padding: 0;
-	max-height: 350px;
-	overflow: auto;
 }
 
 #tools .overbox:before {
@@ -859,6 +858,30 @@ body {
 }
 .component .head.skin-3 img.left { left: 40px;}
 .component .head.skin-3 img.right { right: 40px;}
+
+.component .head.skin-4 img.main {
+	position: absolute;
+	width: 30px; height: 30px; padding: 8px;
+	background: black;
+	border: solid 1px #202020;
+	border-radius: 100%;
+	top: 37px;
+}
+
+.component .head.skin-4 h2 {
+	position: absolute;
+	top: 35px; left: 60px;
+	font-size: 18px;
+	line-height: 22px;
+	margin: 0; padding: 0;
+}
+
+.component .head.skin-4 em {
+	position: absolute;
+	top: 65px; left: 60px;
+	font-size: 13px;
+	line-height: 16px;
+}
 
 .color1 .component .border-bottom { border-bottom: solid 3px #b01e2d; }
 .color2 .component .border-bottom { border-bottom: solid 3px #2f23c0; }
@@ -2633,6 +2656,158 @@ body {
 	background: #4F4F4F;
 }
 
+/* TRANSACTION */
+
+.component.transaction .transaction {
+	background: #0A0A0A;
+	border: solid 1px #202020;
+	margin: 10px;
+}
+
+.component.transaction .transaction .product {
+	position: relative;
+	height: 70px;
+	padding: 5px 10px 5px 55px;
+	cursor: pointer;
+}
+
+.component.transaction .transaction .product .picto {
+	position: absolute;
+	top: 5px; left: -20px;
+	width: 60px; height: 60px;
+	padding: 4px;
+	background: black;
+	border: solid 1px #202020;
+	border-radius: 100%;
+}
+
+.component.transaction .transaction .product .rate {
+	position: absolute;
+	bottom: 5px; right: 8px;
+}
+
+.component.transaction .transaction .product .offer {
+	overflow: hidden;
+	height: 32px;
+}
+
+.component.transaction .transaction.resources .product .offer {
+	font-size: 28px;
+	font-weight: bold;
+	line-height: 30px;
+}
+.component.transaction .transaction.resources .product .offer .icon-color {
+	width: 20px;
+	position: relative; top: -5px;
+}
+.component.transaction .transaction.commander .product .offer strong,
+.component.transaction .transaction.ship .product .offer strong {
+	display: block;
+	font-size: 14px;
+}
+.component.transaction .transaction.commander .product .offer em,
+.component.transaction .transaction.ship .product .offer em {
+	display: block;
+	font-size: 11px;
+}
+
+.component.transaction .transaction .product .for {
+	position: relative;
+	border-top: solid 1px #202020;
+	margin: 10px 0 8px 0;
+	color: #4F4F4F;
+}
+
+.component.transaction .transaction .product .for span {
+	display: block;
+	position: absolute;
+	top: -10px; left: 10px;
+	background: #0A0A0A;
+	padding: 0 10px;
+}
+
+.component.transaction .transaction .product .price {
+	font-size: 16px;
+	font-weight: bold;
+}
+.component.transaction .transaction .product .price .icon-color {
+	width: 14px;
+	position: relative; top: -2px;
+	padding: 1px;
+}
+
+.component.transaction .transaction .hidden {
+	display: none;
+}
+
+.component.transaction .transaction .info {
+	position: relative;
+	border-top: solid 1px #202020;
+	height: 72px;
+}
+
+.component.transaction .transaction .info p {
+	font-size: 11px;
+	margin: 5px 8px;
+}
+
+.component.transaction .transaction .info .seller {
+	position: absolute;
+	top: 0; width: 50%; bottom: 0;
+}
+
+.component.transaction .transaction .info .price-detail {
+	position: absolute;
+	top: 0; width: 50%; bottom: 0; right: 0;
+}
+
+.component.transaction .transaction .info .price-detail p {
+	text-align: right;
+}
+
+.component.transaction .transaction .button {
+	border-top: solid 1px #202020;
+	padding: 5px;
+}
+
+.component.transaction .transaction .button a,
+.component.transaction .transaction .button span {
+	display: block;
+	padding: 5px 10px;
+	text-align: right;
+	color: white;
+	text-decoration: none;
+	border-radius: 3px;
+	line-height: 20px;
+	background: #202020;
+	box-shadow: inset 0 0 2px black;
+}
+.component.transaction .transaction .button a:hover { box-shadow: inset 0 0 6px black; }
+.color1 .component.transaction .transaction .button a { background: #6e161b; }
+.color2 .component.transaction .transaction .button a { background: #1f1471; }
+.color3 .component.transaction .transaction .button a { background: #dbb200; }
+.color4 .component.transaction .transaction .button a { background: #5a1072; }
+.color5 .component.transaction .transaction .button a { background: #2c7915; }
+.color6 .component.transaction .transaction .button a { background: #076b87; }
+.color7 .component.transaction .transaction .button a { background: #67331d; }
+.color1 .component.transaction .transaction .button a:hover { background: #b01e2d; }
+.color2 .component.transaction .transaction .button a:hover { background: #2f23c0; }
+.color3 .component.transaction .transaction .button a:hover { background: #ffdb0f; }
+.color4 .component.transaction .transaction .button a:hover { background: #a935c7; }
+.color5 .component.transaction .transaction .button a:hover { background: #57c632; }
+.color6 .component.transaction .transaction .button a:hover { background: #05bed7; }
+.color7 .component.transaction .transaction .button a:hover { background: #ac5832; }
+.component.transaction .transaction .button span {
+	background: #202020;
+	cursor: default;
+}
+.component .build-item.disable .button span {
+	color: #696969;
+}
+.component.transaction .transaction .button .icon-color {
+	width: 14px;
+}
+
 /***********************************/
 /*********** BASES STYLE ***********/
 /***********************************/
@@ -3412,11 +3587,47 @@ body {
 
 #map #systems a img.own { background: white; }
 
-#map #systems .info {
+#map #systems .sector-number {
+	position: absolute;
+	display: block;
+	font-size: 22px;
+	line-height: 40px;
+	width: 40px;
+	text-align: center;
+	border-radius: 100%;
+	box-shadow: 0 0 0 5px #0A0A0A, 0 0 0 6px #4F4F4F;
+	background: #202020;
+	color: white;
+	font-weight: bold;
+	cursor: pointer;
+}
+#map #systems .sector-number.color1 { background: #6e161b; }
+#map #systems .sector-number.color2 { background: #1f1471; }
+#map #systems .sector-number.color3 { background: #dbb200; }
+#map #systems .sector-number.color4 { background: #5a1072; }
+#map #systems .sector-number.color5 { background: #2c7915; }
+#map #systems .sector-number.color6 { background: #076b87; }
+#map #systems .sector-number.color7 { background: #67331d; }
+
+#map #systems .sector-info {
+	display: none;
 	position: absolute;
 	color: white;
+	background: black;
+	background: rgba(0, 0, 0, .9);
+	padding: 8px 16px;
+	border-radius: 3px;
 }
-#map #systems .info h2 {
+#map #systems .sector-info:before {
+	content: '';
+	position: absolute;
+	left: -20px; top: 20px;
+	border-style: solid;
+	border-width: 10px;
+	border-color: transparent black transparent transparent;
+	border-color: transparent rgba(0, 0, 0, .9) transparent transparent;
+}
+#map #systems .sector-info h2 {
 	position: relative;
 	font-size: 40px;
 	font-weight: bold;
@@ -3424,33 +3635,14 @@ body {
 	text-shadow: 0 0 5px black;
 	margin: 0; padding: 0;
 }
-#map #systems .info h2 span {
-	position: absolute;
-	top: 0px; left: -55px;
-	display: block;
-	font-size: 20px;
-	line-height: 40px;
-	width: 40px;
-	text-align: center;
-	border-radius: 100%;
-	box-shadow: 0 0 0 5px #0A0A0A, 0 0 0 6px #4F4F4F;
-	background: #202020;
-}
-#map #systems .info.color1 h2 span { background: #6e161b; }
-#map #systems .info.color2 h2 span { background: #1f1471; }
-#map #systems .info.color3 h2 span { background: #dbb200; }
-#map #systems .info.color4 h2 span { background: #5a1072; }
-#map #systems .info.color5 h2 span { background: #2c7915; }
-#map #systems .info.color6 h2 span { background: #076b87; }
-#map #systems .info.color7 h2 span { background: #67331d; }
-#map #systems .info p {
+#map #systems .sector-info p {
 	font-size: 13px;
 	margin: 6px 0 0 0; padding: 0;
 	font-weight: bold;
 	font-variant: small-caps;
 }
 
-#map #systems .info p a {
+#map #systems .sector-info p a {
 	position: static;
 	display: inline-block;
 	color: white;
@@ -3462,13 +3654,13 @@ body {
 	border: solid 1px rgba(255, 255, 255, .5);
 	margin: 0 5px 0 0;
 }
-#map #systems .info.color1 p a { background: #6e161b; }
-#map #systems .info.color2 p a { background: #1f1471; }
-#map #systems .info.color3 p a { background: #dbb200; }
-#map #systems .info.color4 p a { background: #5a1072; }
-#map #systems .info.color5 p a { background: #2c7915; }
-#map #systems .info.color6 p a { background: #076b87; }
-#map #systems .info.color7 p a { background: #67331d; }
+#map #systems .sector-info.color1 p a { background: #6e161b; }
+#map #systems .sector-info.color2 p a { background: #1f1471; }
+#map #systems .sector-info.color3 p a { background: #dbb200; }
+#map #systems .sector-info.color4 p a { background: #5a1072; }
+#map #systems .sector-info.color5 p a { background: #2c7915; }
+#map #systems .sector-info.color6 p a { background: #076b87; }
+#map #systems .sector-info.color7 p a { background: #67331d; }
 
 /* ADMIN */
 
