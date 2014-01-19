@@ -41,8 +41,129 @@ class CommercialShipping {
 	public function getId() { return $this->id; }
 
 	public function deliver() {
-		# load : $this->rTransaction
-		# give it to rBaseDestination
-		# send notification to both players
+		$S_TRM1 = ASM::$trm->getCurrentSession();
+		ASM::$trm->newSession(ASM_UMODE);
+		ASM::$trm->load(array('id' => $this->rTransaction));
+		$transaction = ASM::$trm->get();
+
+		if (ASM::$trm->size() == 1 AND $transaction->statement == Transaction::ST_PROPOSED) {
+			$S_OBM1 = ASM::$obm->getCurrentSession();
+			ASM::$obm->newSession(ASM_UMODE);
+			ASM::$obm->load(array('rPlace' => $this->rBaseDestination));
+			$orbitalBase = ASM::$obm->get();
+			switch ($transaction->type) {
+				case Transaction::TYP_RESOURCE:
+					ASM::$obm->increaseResources($transaction->quantity);
+					# notif pour le vendeur
+					$n = new Notification();
+					$n->setRPlayer($this->rPlayer);
+					$n->setTitle('Ressources livrées');
+					$n->addBeg()->addTxt('Les ' . $transaction->quantity . ' ressources ont bien été livrées à ');
+					$n->addLnk('diary/player-' . $orbitalBase->getRPlayer(), 'votre acheteur')->addTxt(' sur sa base ');
+					$n->addLnk('map/base-' . $orbitalBase->getRPlace(), $orbitalBase->getName());
+					$n->addSep()->addTxt('Vos vaisseaux de transport sont sur le chemin du retour.');
+					$n->addEnd();
+					ASM::$ntm->add($n);
+
+					# notif pour l'acheteur
+					$n = new Notification();
+					$n->setRPlayer($orbitalBase->getRPlayer());
+					$n->setTitle('Ressources reçues');
+					$n->addBeg()->addTxt('Vous avez reçu les ' . $transaction->quantity . ' ressources que vous avez achetées au marché.');
+					$n->addEnd();
+					ASM::$ntm->add($n);
+
+					$n = new Notification();
+					$n->setRPlayer($orbitalBase->getRPlayer());
+					$n->setTitle('Ressources reçues');
+					$n->addBeg()->addLnk('diary/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'));
+					$n->addTxt(' a accepté une de vos propositions dans le marché. Des vaisseaux commerciaux viennent de partir de votre ');
+					$n->addLnk('map/base-' . $commercialShipping->rBase, 'base')->addTxt(' et se dirigent vers ');
+					$n->addLnk('map/place-' . $base->getRPlace(), $base->getName())->addTxt(' pour acheminer la marchandise. ');
+					$n->addSep()->addTxt('Vous gagnez ' . Format::numberFormat($transaction->price) . ' crédits et ' . Format::numberFormat($experience) . ' points d\'expérience.');
+					$n->addSep()->addLnk('bases/base-' . $commercialShipping->rBase . '/view-commercialplateforme/mode-market', 'En savoir plus ?');
+					$n->addEnd();
+					ASM::$ntm->add($n);
+					break;
+				case Transaction::TYP_SHIP:
+					ASM::$obm->addShipToDock($transaction->identifier, $transaction->quantity);
+
+					# notif pour le vendeur
+					$n = new Notification();
+					$n->setRPlayer($this->rPlayer);
+					if ($transaction->quantity == 1) {
+						$n->setTitle('Vaisseau livré');
+						$n->addBeg()->addTxt('Le vaisseau de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' a bien été livré à ');
+					} else {
+						$n->setTitle('Vaisseaux livrés')
+						$n->addBeg()->addTxt('Les ' . $transaction->quantity . ' vaisseaux de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' ont bien été livrés à ');
+					}
+					$n->addLnk('diary/player-' . $orbitalBase->getRPlayer(), 'votre acheteur')->addTxt(' sur sa base ');
+					$n->addLnk('map/base-' . $orbitalBase->getRPlace(), $orbitalBase->getName());
+					$n->addSep()->addTxt('Vos vaisseaux de transport sont sur le chemin du retour.');
+					$n->addEnd();
+					ASM::$ntm->add($n);
+
+					# notif pour l'acheteur
+					$n = new Notification();
+					$n->setRPlayer($orbitalBase->getRPlayer());
+					if ($transaction->quantity == 1) {
+						$n->setTitle('Vaisseau reçu');
+						$n->addBeg()->addTxt('Vous avez reçu le vaisseau de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' que vous avez acheté au marché.');
+						$n->addSep()->addTxt('Il a été ajouté à votre hangar.');
+					} else {
+						$n->setTitle('Vaisseaux reçus')
+						$n->addBeg()->addTxt('Vous avez reçu les ' . $transaction->quantity . ' vaisseaux de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' que vous avez achetés au marché.');
+						$n->addSep()->addTxt('Ils ont été ajoutés à votre hanger.');
+					}
+					$n->addEnd();
+					ASM::$ntm->add($n);
+					break;
+				case Transaction::TYP_COMMANDER:
+					include_once ARES;
+					$S_COM1 = ASM::$com->getCurrentSession();
+					ASM::$com->newSession(ASM_UMODE);
+					ASM::$com->load(array('id' => $transaction->identifier));
+
+					$commander = ASM::$com->get();
+					$commander->setStatement(Commander::ST_IN_SCHOOL);
+					$commander->setRPlayer($orbitalBase->getRPlayer());
+					$commander->setRBase($this->rBaseDestination);
+
+					# notif pour le vendeur
+					$n = new Notification();
+					$n->setRPlayer($this->rPlayer);
+					$n->setTitle('Commandant livré');
+					$n->addBeg()->addTxt('Le commandant ' . $commander->getName() . ' a bien été livré à ');
+					$n->addLnk('diary/player-' . $orbitalBase->getRPlayer(), 'votre acheteur')->addTxt(' sur sa base ');
+					$n->addLnk('map/base-' . $orbitalBase->getRPlace(), $orbitalBase->getName());
+					$n->addSep()->addTxt('Vos vaisseaux de transport sont sur le chemin du retour.');
+					$n->addEnd();
+					ASM::$ntm->add($n);
+
+					# notif pour l'acheteur
+					$n = new Notification();
+					$n->setRPlayer($orbitalBase->getRPlayer());
+					$n->setTitle('Commandant reçu');
+					$n->addBeg()->addTxt('Le commandant ' . $commander->getName() . ' que vous avez acheté au marché est bien arrivé.');
+					$n->addSep()->addTxt('Il se trouve pour le moment dans votre école de commandement');
+					$n->addEnd();
+					ASM::$ntm->add($n);
+
+					ASM::$com->changeSession($S_COM1);
+					break;
+				default:
+					CTR::$alert->add('type de transaction inconnue dans deliver()', ALERT_STD_ERROR);
+					break;
+			}
+
+			$this->statement = self::ST_MOVING_BACK;
+
+			ASM::$obm->changeSession($S_OBM1);
+		} else {
+			CTR::$alert->add('impossible de délivrer ce chargement', ALERT_STD_ERROR);
+		}
+
+		ASM::$trm->changeSession($S_TRM1);
 	}
 }
