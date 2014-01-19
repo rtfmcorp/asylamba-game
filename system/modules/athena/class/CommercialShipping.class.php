@@ -95,7 +95,7 @@ class CommercialShipping {
 						$n->setTitle('Vaisseau livré');
 						$n->addBeg()->addTxt('Le vaisseau de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' a bien été livré à ');
 					} else {
-						$n->setTitle('Vaisseaux livrés')
+						$n->setTitle('Vaisseaux livrés');
 						$n->addBeg()->addTxt('Les ' . $transaction->quantity . ' vaisseaux de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' ont bien été livrés à ');
 					}
 					$n->addLnk('diary/player-' . $orbitalBase->getRPlayer(), 'votre acheteur')->addTxt(' sur sa base ');
@@ -112,7 +112,7 @@ class CommercialShipping {
 						$n->addBeg()->addTxt('Vous avez reçu le vaisseau de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' que vous avez acheté au marché.');
 						$n->addSep()->addTxt('Il a été ajouté à votre hangar.');
 					} else {
-						$n->setTitle('Vaisseaux reçus')
+						$n->setTitle('Vaisseaux reçus');
 						$n->addBeg()->addTxt('Vous avez reçu les ' . $transaction->quantity . ' vaisseaux de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' que vous avez achetés au marché.');
 						$n->addSep()->addTxt('Ils ont été ajoutés à votre hanger.');
 					}
