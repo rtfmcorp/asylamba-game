@@ -21,39 +21,21 @@ echo '<div class="component building">';
 				echo '<strong>Place du commerce</strong>';
 				echo '<em>Achetez sur le marché</em>';
 			echo '</a>';
-			$active = (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'offer') ? 'active' : '';
-			echo '<a href="' . APP_ROOT . 'bases/base-' . $ob_compPlat->getId() . '/view-commercialplateforme/mode-offer" class="nav-element ' . $active . '">';
-				echo '<img src="' . MEDIA . 'orbitalbase/generator.png" alt="" />';
-				echo '<strong>Proposition d\'offre</strong>';
-				echo '<em>Vendez sur le marché</em>';
-			echo '</a>';
+
+			echo '<hr />';
+
 			$active = (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'route') ? 'active' : '';
 			echo '<a href="' . APP_ROOT . 'bases/base-' . $ob_compPlat->getId() . '/view-commercialplateforme/mode-route" class="nav-element ' . $active . '">';
 				echo '<img src="' . MEDIA . 'orbitalbase/refinery.png" alt="" />';
 				echo '<strong>Quais commerciaux</strong>';
 				echo '<em>Gérez vos routes commerciales</em>';
 			echo '</a>';
-
-			echo '<hr />';
-
-			$maxShip = OrbitalBaseResource::getBuildingInfo(6, 'level', $ob_compPlat->getLevelCommercialPlateforme(),  'nbCommercialShip');
-			$availableShip = 14;
-
-			echo '<div class="number-box">';
-				echo '<span class="label">vaisseaux de commerce</span>';
-				echo '<span class="value">' . Format::numberFormat($availableShip) . ' / ' . Format::numberFormat($maxShip) . '</span>';
-
-				echo '<span class="progress-bar">';
-				echo '<span style="width:' . Format::percent($availableShip, $maxShip) . '%;" class="content"></span>';
-			echo '</div>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
 
 if (!CTR::$get->exist('mode') || CTR::$get->get('mode') == 'market') {
 	include COMPONENT . 'athena/bases/complat/market.php';
-} elseif (CTR::$get->get('mode') == 'offer') {
-	include COMPONENT . 'athena/bases/complat/offer.php';
 } else {
 	include COMPONENT . 'athena/bases/complat/route.php';
 }

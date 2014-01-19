@@ -16,9 +16,9 @@ class Transaction {
 	const ST_COMPLETED = 1;		# transaction terminée
 	const ST_CANCELED = 2;		# transaction annulée
 	# type
-	const TYP_RESOURCE = 1;
-	const TYP_SHIP = 2;
-	const TYP_COMMANDER = 3;
+	const TYP_RESOURCE = 0;
+	const TYP_SHIP = 1;
+	const TYP_COMMANDER = 2;
 
 	# percentage of variation in rate (+ or - 30%)
 	const PERCENTAGE_VARIATION = 30;

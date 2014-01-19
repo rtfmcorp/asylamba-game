@@ -25,18 +25,27 @@ echo '<div id="systems">';
 
 	
 	# A MODIFIER
-	##########
+	############
+
+	# chargement dynamique
+	$sec = array('Antalès', 'de la Cuillère', 'Del Coran', 'Estah', 'Asylamba');
 	
 	for ($i = 0; $i < $sm->size(); $i++) {
-		echo '<div class="info color' . $sm->get($i)->getRColor() . '" style="left: ' . $sm->get($i)->getXBarycentric() * 20 . 'px; top: ' . $sm->get($i)->getYBarycentric() * 20 . 'px">';
-			$sec = array('Antalès', 'Dermaton', 'Ecaliope', 'Gahal Talmek');
-			echo '<h2><span>' . ($i + 1) . '</span> Secteur ' . $sec[rand(0, count($sec) - 1)] . '</h2>';
+		echo '<span ';
+			echo 'class="sector-number color' . $sm->get($i)->getRColor() . ' sh" ';
+			echo 'data-target="sector-info-' . ($i + 1) . '" ';
+			echo 'style="left: ' . $sm->get($i)->getXBarycentric() * 20 . 'px; top: ' . $sm->get($i)->getYBarycentric() * 20 . 'px">';
+			echo ($i + 1);
+		echo '</span>';
+
+		echo '<div id="sector-info-' . ($i + 1) . '" class="sector-info color' . $sm->get($i)->getRColor() . '" style="left: ' . ($sm->get($i)->getXBarycentric() * 20 + 55) . 'px; top: ' . ($sm->get($i)->getYBarycentric() * 20 - 10) . 'px">';
+			echo '<h2>Secteur ' . $sec[rand(0, count($sec) - 1)] . '</h2>';
 			echo '<p><a href="#">+</a> ';
-			if ($sm->get($i)->getRColor() != 0) {
-				echo 'Revendiqué par ' . ColorResource::getInfo($sm->get($i)->getRColor(), 'popularName') . ' | ' . $sm->get($i)->getTax() . '% de taxe';
-			} else {
-				echo 'Non revendiqué | Aucune taxe</p> ';
-			}
+				if ($sm->get($i)->getRColor() != 0) {
+					echo 'Revendiqué par ' . ColorResource::getInfo($sm->get($i)->getRColor(), 'popularName') . ' | ' . $sm->get($i)->getTax() . '% de taxe';
+				} else {
+					echo 'Non revendiqué | Aucune taxe</p> ';
+				}
 			echo '</p>';
 		echo '</div>';
 	}

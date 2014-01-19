@@ -121,16 +121,12 @@ echo '<div id="nav">';
 							echo '— ' . Chronos::transform($n->getDSending());
 						echo '</div>';
 					echo '</div>';
-
-					if ($i == NTM_TOOLDISPLAY - 1) {
-						break;
-					}
 				}
 			} else {
 				echo '<p class="info">Aucune nouvelle notification.</p>';
 			}
-			echo '<a href="' . APP_ROOT . 'message" class="more-link">toutes vos notifications</a>';
 		echo '</div>';
+		echo '<a href="' . APP_ROOT . 'message" class="more-link">toutes vos notifications</a>';
 	echo '</div>';
 
 	$S_RMM_1 = ASM::$rmm->getCurrentSession();
