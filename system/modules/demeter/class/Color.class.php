@@ -9,6 +9,7 @@
  * @package Demeter
  * @update 06.10.13
 */
+include_once ZEUS;
 
 class Color {
 	const ALIVE 			= 1;
@@ -67,6 +68,28 @@ class Color {
 		ASM::$pam->changeSession($_PAM1);
 	}
 
+	public function ballot() {
 
-	public function uElection(){}
+	}
+
+
+	public function uElection() {
+		// 604800s = 7j
+		if ($this->electionStatement == MANDATE) {
+			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResources::getInfos($this->id, 'mandateDuration')) {
+				$this->updateRank();
+				$this->electionStatement = CAMPAIGN;
+			}
+		} else if ($this->electionStatement == CAMPAIGN) {
+			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResources::getInfos($this->id, 'mandateDuration') + 604800) {
+				$this->electionStatement = ELECTION;
+			}
+		} else if ($this->electionStatement == ELECTION) {
+			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResources::getInfos($this->id, 'mandateDuration') + 604800 * 2) {
+				$this->ballot;
+				$this->electionStatement = MANDATE;
+				$this->dLastElection = Utils::now();
+			}
+		}
+	}
 }
