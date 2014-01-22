@@ -31,7 +31,7 @@ class Color {
 
 	public function getId() { return $this->id; }
 
-	public function updateRank() {
+	public function updateStatus() {
 		/*
 		empire nbrplanet
 		cardan nbr pop
@@ -41,7 +41,7 @@ class Color {
 		Synelle experience
 		Nerve Niveau de raffinerie
 		*/
-		$limit = $this->player / 4;
+		$limit = $this->players / 4;
 		if ($limit < 20) { $lmit = 20; }
 		if ($limit > 40) { $lmit = 40; }
 
@@ -49,45 +49,111 @@ class Color {
 		ASM::$pam->newSession();
 
 		switch ($this->id) {
-			case 1: ASM::$pam->load(array('rColor' => $this->id), array(), array($limit));
+			case 1: 
+				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
+				for ($i = 0; $i < ASM::$pam->size(); $i++) {
+					if ($i < $limit) {
+						ASM::$pam->get($i)->setStatus(2);	
+					} else {
+						ASM::$pam->get($i)->setStatus(1);
+					}
+				}
 			break;
-			case 2: ASM::$pam->load(array('rColor' => $this->id), array(), array($limit));
+			case 2: 
+				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
+				for ($i = 0; $i < ASM::$pam->size(); $i++) {
+					if ($i < $limit) {
+						ASM::$pam->get($i)->setStatus(2);	
+					} else {
+						ASM::$pam->get($i)->setStatus(1);
+					}
+				}
 			break;
-			case 3: ASM::$pam->load(array('rColor' => $this->id), array(), array($limit));
+			case 3: 
+				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
+				for ($i = 0; $i < ASM::$pam->size(); $i++) {
+					if ($i < $limit) {
+						ASM::$pam->get($i)->setStatus(2);	
+					} else {
+						ASM::$pam->get($i)->setStatus(1);
+					}
+				}
 			break;
-			case 4: ASM::$pam->load(array('rColor' => $this->id), array(), array($limit));
+			case 4: 
+				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
+				for ($i = 0; $i < ASM::$pam->size(); $i++) {
+					if ($i < $limit) {
+						ASM::$pam->get($i)->setStatus(2);	
+					} else {
+						ASM::$pam->get($i)->setStatus(1);
+					}
+				}
 			break;
-			case 5: ASM::$pam->load(array('rColor' => $this->id), array(), array($limit));
+			case 5: 
+				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
+				for ($i = 0; $i < ASM::$pam->size(); $i++) {
+					if ($i < $limit) {
+						ASM::$pam->get($i)->setStatus(2);	
+					} else {
+						ASM::$pam->get($i)->setStatus(1);
+					}
+				}
 			break;
-			case 6: ASM::$pam->load(array('rColor' => $this->id), array(), array($limit));
+			case 6: 
+				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
+				for ($i = 0; $i < ASM::$pam->size(); $i++) {
+					if ($i < $limit) {
+						ASM::$pam->get($i)->setStatus(2);	
+					} else {
+						ASM::$pam->get($i)->setStatus(1);
+					}
+				}
 			break;
-			case 7: ASM::$pam->load(array('rColor' => $this->id), array(), array($limit));
+			case 7: 
+				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
+				for ($i = 0; $i < ASM::$pam->size(); $i++) {
+					if ($i < $limit) {
+						ASM::$pam->get($i)->setStatus(2);	
+					} else {
+						ASM::$pam->get($i)->setStatus(1);
+					}
+				}
 			break;
 		}
 
+		ASM::$pam->save();
 		ASM::$pam->changeSession($_PAM1);
 	}
 
 	public function ballot() {
+		$royalisticRegime = array(1, 2, 3);
+		$democraticRegime = array(5, 6, 7);
 
+		if (in_array($this->id, $royalisticRegime)) {
+
+		} elseif (in_array($this->id, $democraticRegime)) {
+
+		} else {
+
+		}
 	}
 
 
 	public function uElection() {
 		// 604800s = 7j
-		if ($this->electionStatement == MANDATE) {
+		if ($this->electionStatement == Color::MANDATE) {
 			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResources::getInfos($this->id, 'mandateDuration')) {
-				$this->updateRank();
-				$this->electionStatement = CAMPAIGN;
+				$this->updateStatus();
+				$this->electionStatement = Color::CAMPAIGN;
 			}
-		} else if ($this->electionStatement == CAMPAIGN) {
+		} elseif ($this->electionStatement == Color::CAMPAIGN) {
 			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResources::getInfos($this->id, 'mandateDuration') + 604800) {
-				$this->electionStatement = ELECTION;
+				$this->electionStatement = Color::ELECTION;
 			}
-		} else if ($this->electionStatement == ELECTION) {
+		} elseif ($this->electionStatement == Color::ELECTION) {
 			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResources::getInfos($this->id, 'mandateDuration') + 604800 * 2) {
-				$this->ballot;
-				$this->electionStatement = MANDATE;
+				$this->ballot();
+				$this->electionStatement = Color::MANDATE;
 				$this->dLastElection = Utils::now();
 			}
 		}
