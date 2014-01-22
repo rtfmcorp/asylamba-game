@@ -2714,7 +2714,7 @@ body {
 .component.transaction .transaction .product .for {
 	position: relative;
 	border-top: solid 1px #202020;
-	margin: 10px 0 8px 0;
+	margin: 8px 0 6px 0;
 	color: #4F4F4F;
 }
 
@@ -2724,10 +2724,11 @@ body {
 	top: -10px; left: 10px;
 	background: #0A0A0A;
 	padding: 0 10px;
+	font-size: 12px;
 }
 
 .component.transaction .transaction .product .price {
-	font-size: 16px;
+	font-size: 19px;
 	font-weight: bold;
 }
 .component.transaction .transaction .product .price .icon-color {

@@ -10,7 +10,7 @@
  * @update 09.07.13
 */
 
-class systemManager extends Manager {
+class SystemManager extends Manager {
 	protected $managerType = '_System';
 
 	//charge depuis la base de donnée avec ce qu'on veut
@@ -59,7 +59,7 @@ class systemManager extends Manager {
 		}
 	}
 
-		public function save() {
+	public function save() {
 		$systems = $this->_Save();
 
 		foreach ($systems AS $s) {

@@ -39,10 +39,10 @@ echo '<div class="component transaction">';
 				echo '<span><a href="#">vendre des ressources</a></span>';
 			echo '</div>';
 
-			for ($i=0; $i < 10; $i++) { 
+			for ($i = 0; $i < 10; $i++) { 
 				echo '<div class="transaction resources">';
 					echo '<div class="product sh" data-target="transaction-resources-' . $i . '">';
-						echo '<img src="' . MEDIA . 'resources/resource.png" alt="" class="picto" />';
+						echo '<img src="' . MEDIA . 'market/resources-pack-' . rand(1, 5) . '.png" alt="" class="picto" />';
 						echo '<span class="rate">+0.23</span>';
 
 						echo '<div class="offer">';
@@ -149,7 +149,7 @@ ASM::$trm->load(array('type' => Transaction::TYP_COMMANDER, 'statement' => Trans
 echo '<div class="component transaction">';
 	echo '<div class="head skin-4">';
 		echo '<img src="' . MEDIA . 'orbitalbase/dock2.png" alt="vaisseaux" class="main" />';
-		echo '<h2>Vaisseaux</h2>';
+		echo '<h2>vaisseaux</h2>';
 		echo '<em>cours actuel | 643,45:1</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
