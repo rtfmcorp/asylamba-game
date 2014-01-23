@@ -87,7 +87,8 @@ switch (CTR::$get->get('a')) {
 	case 'createtopicforum':		include ACTION . 'demeter/topic/createTopic.php'; break;
 
 	case 'postulate':				include ACTION . 'demeter/election/postulate.php'; break;
-	case 'vote':				include ACTION . 'demeter/election/vote.php'; break;
+	case 'vote':					include ACTION . 'demeter/election/vote.php'; break;
+	case 'promote':					include ACTION . 'demeter/election/promote.php'; break;
 
 	default :
 		CTR::$alert->add('action inconnue ou non-référencée', ALERT_STD_ERROR);
