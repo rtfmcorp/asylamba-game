@@ -223,12 +223,11 @@ class Game {
 				return ($thisRate + (99 * $currentRate)) / 100;
 				break;
 			case Transaction::TYP_SHIP :
-				# a modifier
-				# 1 credit = x PEV
+				# 1 resource = x credit
 				include_once ATHENA;
 				if (ShipResource::isAShip($identifier)) {
-					$pevQuantity = ShipResource::getInfo($identifier, 'pev') * $quantity;
-					$thisRate = $pevQuantity / $price;
+					$resourceQuantity = ShipResource::getInfo($identifier, 'resourcePrice') * $quantity;
+					$thisRate = $price / $resourceQuantity;
 					# dilution of 1%
 					return ($thisRate + (99 * $currentRate)) / 100;
 				} else {
@@ -247,25 +246,41 @@ class Game {
 		}
 	}
 
-	public static function getMaxPriceRelativeToRate($currentRate, $transactionType, $quantity) {
-		$types = array(Transaction::TYP_RESOURCE, Transaction::TYP_SHIP, Transaction::TYP_COMMANDER);
-		if (in_array($transactionType, $types)) {
-			$price = $quantity * $currentRate;
-			$price += Transaction::PERCENTAGE_VARIATION * $price / 100;
-			return round($price);
-		} else {
-			return FALSE;
+	public static function getMaxPriceRelativeToRate($currentRate, $transactionType, $quantity, $identifier) {
+		switch ($transactionType) {
+			case Transaction::TYP_RESOURCE:
+				break;
+			case Transaction::TYP_SHIP:
+				include_once ATHENA;
+				$quantity = ShipResource::getInfo($identifier, 'resourcePrice') * $quantity;
+				break;
+			case Transaction::TYP_COMMANDER:
+				break;
+			default:
+				return FALSE;
 		}
+
+		$price = $quantity * $currentRate;
+		$price += Transaction::PERCENTAGE_VARIATION * $price / 100;
+		return round($price);
 	}
 
-	public static function getMinPriceRelativeToRate($currentRate, $transactionType, $quantity) {
-		$types = array(Transaction::TYP_RESOURCE, Transaction::TYP_SHIP, Transaction::TYP_COMMANDER);
-		if (in_array($transactionType, $types)) {
-			$price = $quantity * $currentRate;
-			$price -= Transaction::PERCENTAGE_VARIATION * $price / 100;
-			return round($price);
-		} else {
-			return FALSE;
+	public static function getMinPriceRelativeToRate($currentRate, $transactionType, $quantity, $identifier) {
+		switch ($transactionType) {
+			case Transaction::TYP_RESOURCE:
+				break;
+			case Transaction::TYP_SHIP:
+				include_once ATHENA;
+				$quantity = ShipResource::getInfo($identifier, 'resourcePrice') * $quantity;
+				break;
+			case Transaction::TYP_COMMANDER:
+				break;
+			default:
+				return FALSE;
 		}
+
+		$price = $quantity * $currentRate;
+		$price -= Transaction::PERCENTAGE_VARIATION * $price / 100;
+		return round($price);
 	}
 }

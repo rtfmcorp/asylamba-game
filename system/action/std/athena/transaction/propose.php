@@ -70,8 +70,8 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 	if ($valid) {
 		# verification of the percentage
 		$currentRate = ASM::$trm->getExchangeRate($type);
-		$max = Game::getMaxPriceRelativeToRate($currentRate, $type, $quantity);
-		$min = Game::getMinPriceRelativeToRate($currentRate, $type, $quantity);
+		$max = Game::getMaxPriceRelativeToRate($currentRate, $type, $quantity, $identifier);
+		$min = Game::getMinPriceRelativeToRate($currentRate, $type, $quantity, $identifier);
 
 		if ($price > $max) {
 			CTR::$alert->add('Le prix que vous avez fixé est trop élevé. Le prix ne doit pas être majoré de plus de ' . Transaction::PERCENTAGE_VARIATION . '% par rapport au taux de change actuel.', ALERT_STD_INFO);
