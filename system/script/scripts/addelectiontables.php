@@ -3,8 +3,6 @@
 
 $erase = Utils::getHTTPData('erase');
 
-echo '<h1>Ajout de la table bugTracker</h1>';
-
 if ($erase) {
 $db = DataBaseAdmin::getInstance();
 $qr = $db->prepare("
@@ -14,8 +12,13 @@ DROP TABLE IF EXISTS `vote`;
 DROP TABLE IF EXISTS `color`;
 ");
 
+echo '<h1>suppression des table candidate, election, vote, color si existantes</h1>';
+
 $qr->execute();
 }
+
+echo '<h1>Ajout des table candidate, election, vote, color si non existantes</h1>';
+
 
 $db = DataBaseAdmin::getInstance();
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `candidate` (
