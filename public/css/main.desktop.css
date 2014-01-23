@@ -2757,6 +2757,20 @@ body {
 	top: 0; width: 50%; bottom: 0;
 }
 
+.component.transaction .transaction .info .seller a {
+	font-weight: bold;
+	color: white;
+}
+
+.component.transaction .transaction .info .seller .color1 { color: #b01e2d; }
+.component.transaction .transaction .info .seller .color2 { color: #2f23c0; }
+.component.transaction .transaction .info .seller .color3 { color: #ffdb0f; }
+.component.transaction .transaction .info .seller .color4 { color: #a935c7; }
+.component.transaction .transaction .info .seller .color5 { color: #57c632; }
+.component.transaction .transaction .info .seller .color6 { color: #05bed7; }
+.component.transaction .transaction .info .seller .color7 { color: #ac5832; }
+
+
 .component.transaction .transaction .info .price-detail {
 	position: absolute;
 	top: 0; width: 50%; bottom: 0; right: 0;
@@ -2764,6 +2778,15 @@ body {
 
 .component.transaction .transaction .info .price-detail p {
 	text-align: right;
+}
+
+.component.transaction .transaction .info .price-detail p .icon-color {
+	width: 10px;
+	padding: 1px;
+}
+
+.component.transaction .transaction .info .price-detail p span {
+	color: #4F4F4F;
 }
 
 .component.transaction .transaction .button {

@@ -1,19 +1,53 @@
 <?php
 abstract class GalaxyGenerator {
 	# stats
-	public $nbSystem = 0;
-	public $listSystem = array();
+	public static $nbSystem = 0;
+	public static $listSystem = array();
 
-	public function generate() {
-		# faire des trucs
-		$this->generateSystem();
-		# $gc->generatePlace();
-		# $gc->generateSector();
-		# $gc->associateSystemToSector();
-		# $gc->save();
+	public static $nbPlace = 0;
+	public static $popTotal = 0;
+	public static $listPlace = array();
+
+	public static $nbSector = 0;
+	public static $systemDeleted = 0;
+	public static $listSector = array();
+
+	public static function generate() {
+		# generation
+		self::generateSystem();
+		self::generatePlace();
+		self::generateSector();
+		self::associateSystemToSector();
+		self::getStatisticsSector();
+		
+		# saving
+		# self::clear();
+		self::save();
+
+		echo '- - - nbSystem : ' . Format::numberFormat(self::$nbSystem, 2) . '<br />';
+		echo '- - - nbPlace : ' . Format::numberFormat(self::$nbPlace, 2) . '<br />';
+		echo '- - - popTotal : ' . Format::numberFormat(self::$popTotal, 2) . '<br />';
+		echo '- - - nbSector : ' . Format::numberFormat(self::$nbSector, 2) . '<br />';
+		echo '- - - systemDeleted : ' . Format::numberFormat(self::$systemDeleted, 2) . '<br />';
 	}
 
-	private function generateSystem() {
+	public static function clear() {
+		$db = DataBase::getInstance();
+		$db->query('DELETE FROM place');
+		$db->query('DELETE FROM system');
+		$db->query('DELETE FROM sector');
+	}
+
+	public static function save() {
+		/*$db = DataBase::getInstance();
+		
+		$qr = 'INSERT INTO place(id, rPlayer, rSystem, typeOfPlace, position, population, coefHistory, coefResources) VALUES ';
+		foreach (self::$listPlace as $v) { $qr .= '(' . implode(', ', $v) . '), '; }
+		$qr = substr($qr, 0, -2);
+		$db->query($qr);*/	
+	}
+
+	private static function generateSystem() {
 		# id
 		$k = 1;
 
@@ -29,11 +63,11 @@ abstract class GalaxyGenerator {
 					pow(abs((GalaxyConfiguration::$galaxy['size'] / 2) - $yPosition), 2)
 				);
 				
-				if ($this->isPointInMap($d2o)) {
-					$type = $this->getSystem();
+				if (self::isPointInMap($d2o)) {
+					$type = self::getSystem();
 
-					$this->nbSystem++;
-					$this->listSystem[] = array($k, 0, 0, $xPosition, $yPosition, $type);
+					self::$nbSystem++;
+					self::$listSystem[] = array($k, 0, 0, $xPosition, $yPosition, $type);
 
 					$k++;
 				}
@@ -41,27 +75,91 @@ abstract class GalaxyGenerator {
 		}
 	}
 
-	public function generatePlace() {
+	public static function generatePlace() {
 		$k = 1;
 
-		foreach ($this->listSystem AS $system) {
-			$place = $this->getNbOfPlace($system[5]);
+		foreach (self::$listSystem AS $system) {
+			$place = self::getNbOfPlace($system[5]);
 
 			for ($i = 0; $i < $place; $i++) {
-				$type = $this->randomPlace($system[5]);
+				$type 		= self::getTypeOfPlace($system[5]);
+				$population = self::getPopulation($type);
+				$history 	= self::getHistory($type);
+				$resources 	= self::getResources($type);
 
-				$population = $this->randomPopulation($type);
-				$history    = $this->randomHistory($type);
-				$resources  = $this->randomResources($type);
-
-				$this->nbrOfPlace++;
-				$this->listPlace[] = array($k, 0, $system[0], $type, ($i + 1), $population, $history, $resources);
+				self::$nbPlace++;
+				self::$popTotal += $population;
+				self::$listPlace[] = array($k, 0, $system[0], $type, ($i + 1), $population, $history, $resources);
 				$k++;
 			}
 		}
 	}
 
-	private function isPointInMap($d2o) {
+	public static function generateSector() {
+		$k = 1;
+
+		foreach (GalaxyConfiguration::$sectors as $sector) {
+			self::$nbSector++;
+			self::$listSector[] = array(
+				$k, 
+				$sector['beginColor'], 
+				$sector['display'][0], 
+				$sector['display'][1], 
+				$sector['barycentre'][0], 
+				$sector['barycentre'][1], 
+				5, 
+				0, 0, 0, 0, 0, 0);
+
+			$k++;
+		}
+	}
+
+	public static function associateSystemToSector() {
+		$pl = new PointLocation();
+		$systemToDelete = array();
+		$k = 0;
+
+		foreach (self::$listSystem as $v) {
+			foreach (GalaxyConfiguration::$sectors as $w) {
+				$place = $pl->pointInPolygon($v[3] . ', ' . $v[4], $w['vertices']);
+
+				if ($place == 1 OR $place == 2) {
+					$systemToDelete[] = $v[0];
+					break;
+				} elseif ($place == 3) {
+					self::$listSystem[$k][1] = $w['id'];
+					break;
+				}
+			}
+			$k++;
+		}
+		
+		# suppression des systemes sur des lignes ou des angles
+		for ($i = count(self::$listSystem) - 1; $i >= 0; $i--) { 
+			if (in_array(self::$listSystem[$i][0], $systemToDelete)) {
+				unset(self::$listSystem[$i]);
+			}
+		}
+
+		# suppression des places liée a des systems supprimés
+		for ($i = count(self::$listPlace) - 1; $i >= 0; $i--) { 
+			if (in_array(self::$listPlace[$i][2], $systemToDelete)) {
+				unset(self::$listPlace[$i]);
+			}
+		}
+
+		self::$systemDeleted = count($systemToDelete);
+	}
+
+	private static function getStatisticsSector() {
+		foreach (self::$listSector as $sector) {
+			foreach (self::$listSystem as $system) {
+				/***/
+			}
+		}
+	}
+
+	private static function isPointInMap($d2o) {
 		$mask = rand(1, GalaxyConfiguration::$galaxy['mask']);
 
 		if ($mask < 3) {
@@ -97,12 +195,12 @@ abstract class GalaxyGenerator {
 					if ($random < 50)  { return TRUE; }
 				} elseif ($d2o < 33) {
 					if ($random < 40)  { return TRUE; }
-				} elseif ($d< 36) {
+				} elseif ($d2o < 36) {
 					if ($random < 50)  { return TRUE; }
-				} elseif($d2o < 38) {
-					if ($random < 50)   { return TRUE; }
+				} elseif ($d2o < 38) {
+					if ($random < 50)  { return TRUE; }
 				} else {
-					if ($random < 10)   { return TRUE; }
+					if ($random < 10)  { return TRUE; }
 				}
 			}
 			return FALSE;
@@ -111,10 +209,11 @@ abstract class GalaxyGenerator {
 		}
 	}
 
-	private function getProportion($params, $value) {
-		$cursor = 0;
-		$min = 0;
-		$max = 0;
+	private static function getProportion($params, $value) {
+		$cursor	= 0;
+		$type 	= 0;
+		$min 	= 0;
+		$max 	= 0;
 
 		for ($i = 0; $i < count($params); $i++) {
 			if ($i == 0) {
@@ -127,23 +226,52 @@ abstract class GalaxyGenerator {
 				$max = 100;
 			}
 
-			$cursor += $params[$i];
+			$cursor = $max;
+			$type += 1;
 
-			if ($value <= $min && $value < $max) {
-				return array($i);
+
+			if ($value > $min && $value <= $max) {
+				return $type;
 			}
 		}
 	}
 
-	private function getSystem() {
-		return $this->getProportion(GalaxyConfiguration::$galaxy['systemProportion'], rand(0, 100)) + 1;
+	private static function getSystem() {
+		return self::getProportion(GalaxyConfiguration::$galaxy['systemProportion'], rand(1, 100));
 	}
 
-	private function getNbOfPlace($systemType) {
+	private static function getNbOfPlace($systemType) {
 		return rand(
 			GalaxyConfiguration::$systems[$systemType - 1]['nbrPlaces'][0],
 			GalaxyConfiguration::$systems[$systemType - 1]['nbrPlaces'][1]
 		);
+	}
+
+	private static function getTypeOfPlace($systemType) {
+		return self::getProportion(GalaxyConfiguration::$systems[$systemType - 1]['placesPropotion'], rand(1, 100));
+	}
+
+	private static function getHistory($placeType) {
+		return rand(
+			GalaxyConfiguration::$places[$placeType - 1]['history'][0],
+			GalaxyConfiguration::$places[$placeType - 1]['history'][1]
+		);
+	}
+
+	private static function getResources($placeType) {
+		return rand(
+			GalaxyConfiguration::$places[$placeType - 1]['resources'][0],
+			GalaxyConfiguration::$places[$placeType - 1]['resources'][1]
+		);
+	}
+
+	private static function getPopulation($placeType) {
+		return ($placeType == 1)
+			? (rand(
+				GalaxyConfiguration::$galaxy['population'][0], 
+				GalaxyConfiguration::$galaxy['population'][1]
+			) / 100) 
+			: 0;
 	}
 }
 ?>

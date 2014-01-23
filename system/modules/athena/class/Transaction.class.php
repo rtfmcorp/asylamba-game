@@ -68,4 +68,18 @@ class Transaction {
 	public function getExperienceEarned() {
 		return 1 + round($this->price / self::EXPERIENCE_DIVIDER);
 	}
+
+	public static function getResourcesIcon($quantity) {
+		if (1000000 <= $quantity && $quantity < 5000000) {
+			return 5;
+		} elseif (500000 <= $quantity && $quantity < 1000000) {
+			return 4;
+		} elseif (100000 <= $quantity && $quantity < 500000) {
+			return 3;
+		} elseif (10000 <= $quantity && $quantity < 100000) {
+			return 2;
+		} else {
+			return 1;
+		}	
+	}
 }

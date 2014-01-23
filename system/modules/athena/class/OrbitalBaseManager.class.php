@@ -230,6 +230,7 @@ class OrbitalBaseManager extends Manager {
 			$S_CSM1 = ASM::$csm->getCurrentSession();
 			ASM::$csm->newSession(ASM_UMODE);
 			ASM::$csm->load(array('rBase' => $aw['rPlace']));
+			ASM::$csm->load(array('rBaseDestination' => $aw['rPlace']));
 			$b->shippingManager = ASM::$csm->getCurrentSession();
 			ASM::$csm->changeSession($S_CSM1);
 

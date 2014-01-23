@@ -23,13 +23,13 @@ class CommercialShippingManager extends Manager {
 			p1.rSystem AS rSystem1, p1.position AS position1, s1.xPosition AS xSystem1, s1.yPosition AS ySystem1,
 			p2.rSystem AS rSystem2, p2.position AS position2, s2.xPosition AS xSystem2, s2.yPosition AS ySystem2
 			FROM commercialShipping AS cs
-			INNER JOIN place AS p1 
+			LEFT JOIN place AS p1 
 				ON cs.rBase = p1.id
-			INNER JOIN system AS s1 
+			LEFT JOIN system AS s1 
 				ON p1.rSystem = s1.id
-			INNER JOIN place AS p2 
+			LEFT JOIN place AS p2 
 				ON cs.rBaseDestination = p2.id 
-			INNER JOIN system AS s2 
+			LEFT JOIN system AS s2 
 				ON p2.rSystem = s2.id 
 			' . $formatWhere . '
 			' . $formatOrder . '
@@ -46,13 +46,13 @@ class CommercialShippingManager extends Manager {
 			}
 		}
 
-		if(empty($valuesArray)) {
+		if (empty($valuesArray)) {
 			$qr->execute();
 		} else {
 			$qr->execute($valuesArray);
 		}
 
-		while($aw = $qr->fetch()) {
+		while ($aw = $qr->fetch()) {
 			$cs = new CommercialShipping();
 
 			$cs->id = $aw['id'];

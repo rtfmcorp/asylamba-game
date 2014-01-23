@@ -72,9 +72,9 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 		$min = Game::getMinPriceRelativeToRate($currentRate, $type, $quantity);
 
 		if ($price > $max) {
-			CTR::$alert->add('Le prix que vous avez fixé est trop élevé. Le prix ne doit pas être majoré de plus de ' . Transaction::PERCENTAGE_VARIATION '% par rapport au taux de change actuel.', ALERT_STD_INFO);
+			CTR::$alert->add('Le prix que vous avez fixé est trop élevé. Le prix ne doit pas être majoré de plus de ' . Transaction::PERCENTAGE_VARIATION . '% par rapport au taux de change actuel.', ALERT_STD_INFO);
 		} else if ($price < $min) {
-			CTR::$alert->add('Le prix que vous avez fixé est trop bas. Le prix ne doit pas être minoré de plus de ' . Transaction::PERCENTAGE_VARIATION '% par rapport au taux de change actuel.', ALERT_STD_INFO);
+			CTR::$alert->add('Le prix que vous avez fixé est trop bas. Le prix ne doit pas être minoré de plus de ' . Transaction::PERCENTAGE_VARIATION . '% par rapport au taux de change actuel.', ALERT_STD_INFO);
 		} else {
 			$valid = TRUE;
 

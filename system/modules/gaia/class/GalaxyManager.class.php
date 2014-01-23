@@ -50,6 +50,7 @@ Class GalaxyManager {
 	public function getNbrOfSystem()  { return $this->nbrOfSystem; }
 	public function getNbrOfPlace()   { return $this->nbrOfPlace; }
 	public function getPlaceOfLink($k){ return $this->map[$k][2]; }
+	# ok
 	public function getCoordPolygon($k, $scale, $translation) {
 		$poly = $this->map[$k][3];
 		$poly = implode(', ', $poly);
@@ -61,10 +62,12 @@ Class GalaxyManager {
 		return $poly;
 	}
 
+	# ok
 	private function transform($value, $scale, $translation) {
 		return (($value * $scale) + $translation);
 	}
 
+	# ok
 	public function generateSystem($mask = 10) {
 		Bug::benchTime();
 
@@ -92,6 +95,7 @@ Class GalaxyManager {
 		$this->currentTimeState['system_generation'] = Bug::benchReturn('ms');
 	}
 
+	# ok
 	public function generatePlace() {
 		Bug::benchTime();
 
@@ -117,6 +121,7 @@ Class GalaxyManager {
 		$this->currentTimeState['place_generation'] = Bug::benchReturn('ms');
 	}
 
+	# ok
 	public function generateSector() {
 		Bug::benchTime();
 
@@ -132,6 +137,7 @@ Class GalaxyManager {
 		$this->currentTimeState['sector_generation'] = Bug::benchReturn('ms');
 	}
 
+	# ok
 	public function associateSystemToSector($mask = 'all') {
 		Bug::benchTime();
 
@@ -219,6 +225,7 @@ Class GalaxyManager {
 		$this->currentTimeState['global_insert'] = $benchInsertPlaces + $benchInsertSystems + $benchInsertSectors;
 	}
 
+	# ok
 	public function clear() {
 		$db = DataBase::getInstance();
 
@@ -279,6 +286,7 @@ Class GalaxyManager {
 		$qr->execute(array($nbrPlanet, $population, $ruine, $nebuleuse, $geante, $nJaune, $nRouge, $id));
 	}
 
+	# ok
 	private function howManyPlace($system) {
 		switch($system) {
 			case 1 :
@@ -300,6 +308,7 @@ Class GalaxyManager {
 		}
 	}
 
+	# ok
 	private function havePointInMap($d, $mask) {
 		//estompeur
 		$estomp = rand(1, $mask);
@@ -350,6 +359,7 @@ Class GalaxyManager {
 		}
 	}
 
+	# ok
 	private function randomSystem() {
 		$random = rand(1, 100);
 		
@@ -371,6 +381,7 @@ Class GalaxyManager {
 		}
 	}
 
+	# ok
 	private function randomPlace($system) {
 		$random = rand(0, 100);
 		
@@ -413,10 +424,12 @@ Class GalaxyManager {
 		}
 	}
 
+	# ok
 	private function randomPopulation($place) {
 		return ($place == 1) ? (rand(700, 24999) / 100) : 0;
 	}
 	
+	# ok
 	private function randomHistory($place) {
 		switch ($place) { 
 			case 1: //planete tellurique
@@ -435,6 +448,7 @@ Class GalaxyManager {
 		}
 	}
 	
+	# ok
 	private function randomResources($place) {
 		switch ($place) { 
 			case 1: //planete tellurique

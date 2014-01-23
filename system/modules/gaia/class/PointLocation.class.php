@@ -3,14 +3,14 @@ Class PointLocation {
 	var $pointOnVertex;
 
 	function pointInPolygon($point, $polygon, $pointOnVertex = TRUE) {
-		$polygon[] = $polygon[0];
 		$this->pointOnVertex = $pointOnVertex; 
 
 		# Transform string coordinates into arrays with x and y values
 		$point = $this->pointStringToCoordinates($point);
+
 		$vertices = array(); 
-		foreach ($polygon as $vertex) {
-			$vertices[] = $this->pointStringToCoordinates($vertex);
+		for ($i = 0; $i < count($polygon); $i += 2) {
+			$vertices[] = array('x' => $polygon[$i], 'y' => $polygon[$i + 1]);
 		}
 
 		# Check if the point sits exactly on a vertex
