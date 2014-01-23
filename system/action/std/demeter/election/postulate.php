@@ -27,7 +27,7 @@ if ($rPlayer !== FALSE && $rElection !== FALSE) {
 					ASM::$clm->load(array('id' => ASM::$pam->get()->getRColor()));
 					$_CAM = ASM::$cam->getCurrentSession();
 					ASM::$cam->newSession();
-					ASM::$cam->load(array('rPlayer' => ASM::$pam->get()->getId(), 'rElection' => ));
+					ASM::$cam->load(array('rPlayer' => ASM::$pam->get()->getId(), 'rElection' => $rElection));
 
 					if(ASM::$clm->get()->electionStatement == Color::CAMPAIGN) {
 						if (ASM::$cam->size() == 0) {
