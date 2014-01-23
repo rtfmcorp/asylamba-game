@@ -12,6 +12,8 @@
 include_once ZEUS;
 
 class Color {
+	const NBRGOVERNMENT 	= 6;
+
 	const CAMPAIGNTIME 		= 604800;
 	const ELECTIONTIME		= 604800;
 
@@ -144,10 +146,16 @@ class Color {
 					$ballot[ASM::$vom->get($i)->rCandidate] = 1;
 				}
 			}
-			
-			//monter de rang le gagnant
-			ASM::$plm->getCurrentsession();
+						
+			arsort($ballot);
+			reset($ballot);
+			// bug::pre($ballot);
 
+			$_PAM = ASM::$pam->getCurrentsession();
+			ASM::$pam->newSession();
+			// ASM::$pam->load(array('id' => $ballot[]));
+
+			ASM::$plm->getCurrentsession();
 			ASM::$vom->changeSession($_VOM);
 
 		} elseif (in_array($this->id, $democraticRegime)) {
@@ -170,7 +178,7 @@ class Color {
 				$this->electionStatement = Color::ELECTION;
 			}
 		} else {
-			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + Color::VOTATIONTIME) {
+			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + Color::ELECTIONTIME) {
 				$_ELM = ASM::$elm->getCurrentSession();
 				ASM::$elm->newSession();
 				ASM::$elm->load(array('rColor' => $this->id), array('id ASC'), array('1', '1'));
