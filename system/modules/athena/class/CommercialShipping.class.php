@@ -46,7 +46,7 @@ class CommercialShipping {
 		ASM::$trm->load(array('id' => $this->rTransaction));
 		$transaction = ASM::$trm->get();
 
-		if (ASM::$trm->size() == 1 AND $transaction->statement == Transaction::ST_PROPOSED) {
+		if (ASM::$trm->size() == 1 AND $transaction->statement == Transaction::ST_COMPLETED) {
 			$S_OBM1 = ASM::$obm->getCurrentSession();
 			ASM::$obm->newSession(ASM_UMODE);
 			ASM::$obm->load(array('rPlace' => $this->rBaseDestination));
