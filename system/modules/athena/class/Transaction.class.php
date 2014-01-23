@@ -37,13 +37,14 @@ class Transaction {
 	public $quantity;		# if ($type == TYP_RESOURCE) --> resource
 							# if ($type == TYP_SHIP) --> ship quantity
 							# if ($type == TYP_COMMANDER) --> experience
-	public $identifier;		# if ($type == TYP_SHIP) --> shipId
+	public $identifier;		# if ($type == TYP_RESOURCE) --> NULL
+							# if ($type == TYP_SHIP) --> shipId
 							# if ($type == TYP_COMMANDER) --> rCommander
 	public $price = 0;
 	public $commercialShipQuantity = 0;	# ship needed for the transport
 	public $statement = 0;
 	public $dPublication = '';
-	public $dValidation = ''; 	# date of acceptance or cancellation
+	public $dValidation = NULL; 	# date of acceptance or cancellation
 	public $currentRate;	# 1 credit = 	x resources
 							#				x pev
 							#				x experience
