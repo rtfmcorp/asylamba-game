@@ -16,6 +16,12 @@ define('PAM_BANNED',				4);
 define('PAM_DELETED',				5);
 define('PAM_DEAD',					6);
 
+// player status
+define('PAM_STANDARD',				1);
+define('PAM_PARLIAMENT',			2);
+define('PAM_GOVERNMENT',			3);
+define('PAM_CHIEF',					4);
+
 define('PAM_TIME_ALLY_INACTIVE',	24 * 7);
 define('PAM_TIME_GLOBAL_INACTIVE',	24 * 15);
 define('PAM_TIME_LIMIT_INACTIVE',	24 * 30);

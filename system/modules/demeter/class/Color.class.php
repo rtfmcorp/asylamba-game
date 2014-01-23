@@ -57,70 +57,84 @@ class Color {
 			case 1: 
 				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
-					if ($i < $limit) {
-						ASM::$pam->get($i)->setStatus(2);	
-					} else {
-						ASM::$pam->get($i)->setStatus(1);
+					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
+						if ($i < $limit) {
+							ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);	
+						} else {
+							ASM::$pam->get($i)->setStatus(PAM_STANDARD);
+						}
 					}
 				}
 			break;
 			case 2: 
 				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
-					if ($i < $limit) {
-						ASM::$pam->get($i)->setStatus(2);	
-					} else {
-						ASM::$pam->get($i)->setStatus(1);
+					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
+						if ($i < $limit) {
+							ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);	
+						} else {
+							ASM::$pam->get($i)->setStatus(PAM_STANDARD);
+						}
 					}
 				}
 			break;
 			case 3: 
 				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
-					if ($i < $limit) {
-						ASM::$pam->get($i)->setStatus(2);	
-					} else {
-						ASM::$pam->get($i)->setStatus(1);
+					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
+						if ($i < $limit) {
+							ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);	
+						} else {
+							ASM::$pam->get($i)->setStatus(PAM_STANDARD);
+						}
 					}
 				}
 			break;
 			case 4: 
 				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
-					if ($i < $limit) {
-						ASM::$pam->get($i)->setStatus(2);	
-					} else {
-						ASM::$pam->get($i)->setStatus(1);
+					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
+						if ($i < $limit) {
+							ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);	
+						} else {
+							ASM::$pam->get($i)->setStatus(PAM_STANDARD);
+						}
 					}
 				}
 			break;
 			case 5: 
 				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
-					if ($i < $limit) {
-						ASM::$pam->get($i)->setStatus(2);	
-					} else {
-						ASM::$pam->get($i)->setStatus(1);
+					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
+						if ($i < $limit) {
+							ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);	
+						} else {
+							ASM::$pam->get($i)->setStatus(PAM_STANDARD);
+						}
 					}
 				}
 			break;
 			case 6: 
 				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
-					if ($i < $limit) {
-						ASM::$pam->get($i)->setStatus(2);	
-					} else {
-						ASM::$pam->get($i)->setStatus(1);
+					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
+						if ($i < $limit) {
+							ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);	
+						} else {
+							ASM::$pam->get($i)->setStatus(PAM_STANDARD);
+						}
 					}
 				}
 			break;
 			case 7: 
 				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
-					if ($i < $limit) {
-						ASM::$pam->get($i)->setStatus(2);	
-					} else {
-						ASM::$pam->get($i)->setStatus(1);
+					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
+						if ($i < $limit) {
+							ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);	
+						} else {
+							ASM::$pam->get($i)->setStatus(PAM_STANDARD);
+						}
 					}
 				}
 			break;
@@ -134,6 +148,16 @@ class Color {
 		$royalisticRegime = array(1, 2, 3);
 		$democraticRegime = array(5, 6, 7);
 
+			$_PAM1 = ASM::$pam->getCurrentsession();
+			ASM::$pam->newSession();
+			ASM::$pam->load(array('status' => array(PAM_GOVERNMENT, PAM_CHIEF)));
+			for ($i = 0; $i < ASM::$pam->size(); $i++) {
+				ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
+			}
+			ASM::$pam->save();
+
+			ASM::$pam->changeSession($_PAM1);
+
 		if (in_array($this->id, $royalisticRegime)) {
 			$_VOM = ASM::$vom->getCurrentSession();
 			ASM::$vom->load(array('rElection' => $election->id));
@@ -146,22 +170,76 @@ class Color {
 					$ballot[ASM::$vom->get($i)->rCandidate] = 1;
 				}
 			}
-						
-			arsort($ballot);
-			reset($ballot);
-			// bug::pre($ballot);
+			
+			if (count($ballot) > 0) {	
+				arsort($ballot);
+				reset($ballot);
 
-			$_PAM = ASM::$pam->getCurrentsession();
-			ASM::$pam->newSession();
-			// ASM::$pam->load(array('id' => $ballot[]));
+				$_PAM2 = ASM::$pam->getCurrentsession();
+				ASM::$pam->newSession();
+				ASM::$pam->load(array('id' => key($ballot)));
+				ASM::$pam->get()->setStatus(PAM_CHIEF);
+				ASM::$pam->save();
 
-			ASM::$plm->getCurrentsession();
+				ASM::$pam->changeSession($_PAM2);
+			}
 			ASM::$vom->changeSession($_VOM);
 
 		} elseif (in_array($this->id, $democraticRegime)) {
+			$_VOM = ASM::$vom->getCurrentSession();
+			ASM::$vom->load(array('rElection' => $election->id));
+			$ballot = array();
 
+			for ($i = 0; $i < ASM::$vom->size(); $i++) {
+				if (array_key_exists(ASM::$vom->get($i)->rCandidate, $ballot)) {
+					$ballot[ASM::$vom->get($i)->rCandidate]++;
+				} else {
+					$ballot[ASM::$vom->get($i)->rCandidate] = 1;
+				}
+			}
+
+			if (count($ballot) > 0) {
+						
+				arsort($ballot);
+				reset($ballot);
+				$_PAM2 = ASM::$pam->getCurrentSession();
+				ASM::$pam->newSession();
+				$keys = array();
+
+				$nbr = (count($ballot) > 6) ? 6: count($ballot);
+
+				for ($i = 0; $i < $nbr; $i++) {
+					$keys[$i] = key($ballot);
+					next($ballot);
+				}
+
+				ASM::$pam->load(array('id' => $keys));
+
+				for ($i = 0; $i < ASM::$pam->size(); $i++) {
+					ASM::$pam->get($i)->setStatus(PAM_GOVERNMENT);
+				}
+
+				ASM::$pam->save();
+
+				ASM::$pam->changeSession($_PAM2);
+			}
+
+			ASM::$vom->changeSession($_VOM);
 		} else {
+			$_CAM = ASM::$cam->getCurrentSession();
+			ASM::$cam->newSession();
+			ASM::$cam->load(array('rElection' => $election->getId()));
 
+			$nbr = rand(0, ASM::$cam->size() - 1);
+
+			$_PAM = ASM::$pam->getCurrentSession();
+			ASM::$pam->newSession();
+			ASM::$pam->load(array('id' => ASM::$cam->get($nbr)->rPlayer));
+			ASM::$pam->get()->setStatus(PAM_CHIEF);
+			ASM::$pam->save();
+
+			ASM::$pam->changeSession($_PAM);
+			ASM::$pam->changeSession($_CAM);
 		}
 	}
 
