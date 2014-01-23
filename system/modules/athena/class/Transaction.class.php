@@ -43,9 +43,8 @@ class Transaction {
 	public $statement = 0;
 	public $dPublication = '';
 	public $dValidation = NULL; 	# date of acceptance or cancellation
-	public $currentRate;	# 1 credit = 	x resources
-							#				x pev
-							#				x experience
+	public $currentRate;	# 1 resource = x credits (for resources et ships)
+							# 1 experience = x credits
 
 	# additionnal attributes
 	public $playerName;

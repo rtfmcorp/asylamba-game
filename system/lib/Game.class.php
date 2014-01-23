@@ -217,12 +217,13 @@ class Game {
 	public static function calculateCurrentRate($currentRate, $transactionType, $quantity, $identifier, $price) {
 		switch ($transactionType) {
 			case Transaction::TYP_RESOURCE :
-				# 1 credit = x resources
-				$thisRate = $quantity / $price;
+				# 1 resource = x credit
+				$thisRate = $price / $quantity;
 				# dilution of 1%
 				return ($thisRate + (99 * $currentRate)) / 100;
 				break;
 			case Transaction::TYP_SHIP :
+				# a modifier
 				# 1 credit = x PEV
 				include_once ATHENA;
 				if (ShipResource::isAShip($identifier)) {
@@ -235,8 +236,8 @@ class Game {
 				}
 				break;
 			case Transaction::TYP_COMMANDER :
-				# 1 credit = x experience
-				$thisRate = $quantity / $price;
+				# 1 experience = x credit
+				$thisRate = $price / $quantity;
 				# dilution of 1%
 				return ($thisRate + (99 * $currentRate)) / 100;
 				break;
@@ -249,7 +250,7 @@ class Game {
 	public static function getMaxPriceRelativeToRate($currentRate, $transactionType, $quantity) {
 		$types = array(Transaction::TYP_RESOURCE, Transaction::TYP_SHIP, Transaction::TYP_COMMANDER);
 		if (in_array($transactionType, $types)) {
-			$price = $quantity / $currentRate;
+			$price = $quantity * $currentRate;
 			$price += Transaction::PERCENTAGE_VARIATION * $price / 100;
 			return round($price);
 		} else {
@@ -260,7 +261,7 @@ class Game {
 	public static function getMinPriceRelativeToRate($currentRate, $transactionType, $quantity) {
 		$types = array(Transaction::TYP_RESOURCE, Transaction::TYP_SHIP, Transaction::TYP_COMMANDER);
 		if (in_array($transactionType, $types)) {
-			$price = $quantity / $currentRate;
+			$price = $quantity * $currentRate;
 			$price -= Transaction::PERCENTAGE_VARIATION * $price / 100;
 			return round($price);
 		} else {
