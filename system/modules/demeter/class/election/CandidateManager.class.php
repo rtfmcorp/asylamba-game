@@ -89,11 +89,13 @@ class CandidateManager extends Manager {
 			SET
 				rElection = ?,
 				rPlayer = ?,
+				program = ?,
 				dPresentation = ?');
 
 			$aw = $qr->execute(array(
 				$newCandidate->rElection,
 				$newCandidate->rPlayer,
+				$newCandidate->rProgram,
 				utils::now()
 				));
 
