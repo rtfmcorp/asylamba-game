@@ -74,9 +74,9 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 		$min = Game::getMinPriceRelativeToRate($currentRate, $type, $quantity, $identifier);
 
 		if ($price > $max) {
-			CTR::$alert->add('Le prix que vous avez fixé est trop élevé. Le prix ne doit pas être majoré de plus de ' . Transaction::PERCENTAGE_VARIATION . '% par rapport au taux de change actuel.', ALERT_STD_INFO);
+			CTR::$alert->add('Le prix que vous avez fixé est trop élevé. Le prix ne doit pas être majoré de plus de ' . Transaction::PERCENTAGE_VARIATION . '% par rapport au taux de change actuel.', ALERT_GAM_MARKET);
 		} else if ($price < $min) {
-			CTR::$alert->add('Le prix que vous avez fixé est trop bas. Le prix ne doit pas être minoré de plus de ' . Transaction::PERCENTAGE_VARIATION . '% par rapport au taux de change actuel.', ALERT_STD_INFO);
+			CTR::$alert->add('Le prix que vous avez fixé est trop bas. Le prix ne doit pas être minoré de plus de ' . Transaction::PERCENTAGE_VARIATION . '% par rapport au taux de change actuel.', ALERT_GAM_MARKET);
 		} else {
 			$valid = TRUE;
 
@@ -109,40 +109,59 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 			}
 
 			if ($valid) {
-				// création de la transaction
-				$tr = new Transaction();
-				$tr->rPlayer = CTR::$data->get('playerId');
-				$tr->rPlace = $rPlace;
-				$tr->type = $type; 
-				$tr->quantity = $quantity;
-				$tr->identifier = $identifier;
-				$tr->price = $price;
-				$tr->commercialShipQuantity = $commercialShipQuantity;
-				$tr->statement = Transaction::ST_PROPOSED;
-				$tr->dPublication = Utils::now();
-				ASM::$trm->add($tr);
+				# verif : have we enough commercialShips
+				$totalShips = OrbitalBaseResource::getBuildingInfo(6, 'level', $base->getLevelCommercialPlateforme(), 'nbCommercialShip');
+				$usedShips = 0;
 
-				// création du convoi
-				$cs = new CommercialShipping();
-				$cs->rPlayer = CTR::$data->get('playerId');
-				$cs->rBase = $rPlace;
-				$cs->rBaseDestination = 0;
-				$cs->rTransaction = $tr->id;
-				$cs->resourceTransported = NULL;
-				$cs->shipQuantity = $commercialShipQuantity;
-				$cs->dDeparture = '';
-				$cs->dArrival = '';
-				$cs->statement = CommercialShipping::ST_WAITING;
-				ASM::$csm->add($cs);
+				$S_CSM1 = ASM::$csm->getCurrentSession();
+				ASM::$csm->changeSession($base->shippingManager);
+				for ($i = 0; $i < ASM::$csm->size(); $i++) { 
+					if (ASM::$csm->get($i)->rBase == $rPlace) {
+						$usedShips += ASM::$csm->get($i)->shipQuantity;
+					}
+				}
+				$remainingShips = $totalShips - $usedShips;
 
-				CTR::$alert->add('Votre proposition a été envoyée sur le marché.', ALERT_STD_SUCCESS);
+				if ($remainingShips >= $commercialShipQuantity) {
+
+					# création de la transaction
+					$tr = new Transaction();
+					$tr->rPlayer = CTR::$data->get('playerId');
+					$tr->rPlace = $rPlace;
+					$tr->type = $type; 
+					$tr->quantity = $quantity;
+					$tr->identifier = $identifier;
+					$tr->price = $price;
+					$tr->commercialShipQuantity = $commercialShipQuantity;
+					$tr->statement = Transaction::ST_PROPOSED;
+					$tr->dPublication = Utils::now();
+					ASM::$trm->add($tr);
+
+					# création du convoi
+					$cs = new CommercialShipping();
+					$cs->rPlayer = CTR::$data->get('playerId');
+					$cs->rBase = $rPlace;
+					$cs->rBaseDestination = 0;
+					$cs->rTransaction = $tr->id;
+					$cs->resourceTransported = NULL;
+					$cs->shipQuantity = $commercialShipQuantity;
+					$cs->dDeparture = '';
+					$cs->dArrival = '';
+					$cs->statement = CommercialShipping::ST_WAITING;
+					ASM::$csm->add($cs);
+
+					CTR::$alert->add('Votre proposition a été envoyée sur le marché.', ALERT_STD_SUCCESS);
+				} else {
+					CTR::$alert->add('Vous n\'avez pas assez de vaisseaux de transport disponibles.', ALERT_GAM_MARKET);
+				}
+				ASM::$csm->changeSession($S_CSM1);
 			} else {
-				CTR::$alert->add('impossible de faire une proposition sur le marché !', ALERT_STD_ERROR);
+				CTR::$alert->add('impossible de faire une proposition sur le marché !', ALERT_GAM_MARKET);
 			}
 			ASM::$obm->changeSession($S_OBM1);
 		}
 	} else {
-		CTR::$alert->add('impossible de faire une proposition sur le marché', ALERT_STD_ERROR);
+		CTR::$alert->add('impossible de faire une proposition sur le marché', ALERT_GAM_MARKET);
 	}
 } else {
 	CTR::$alert->add('pas assez d\'informations pour faire une proposition sur le marché', ALERT_STD_FILLFORM);

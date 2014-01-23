@@ -26,14 +26,15 @@ jQuery(document).ready(function($) {
 			'302': ['technologie achevée', 'techno.png'],
 			'303': ['vaisseaux livrés', 'dock1.png'],
 			'304': ['vaisseau livré', 'dock2.png'],
-			'305': ['proposition commerciale', '###.png'],
+			'305': ['---', '###.png'],
+			'306': ['---', '###.png'],
 			'307': ['caisse vide', 'credit.png'],
 			'308': ['avancée technologique', 'research.png'],
 			'309': ['centre de notification', 'message.png'],
 			'310': ['messagerie', 'message.png'],
 			'311': ['contre-espionnage', 'antispy.png'],
 			'312': ['combat', 'fight.png'],
-			'313': ['transaction effectuée', '###.png']
+			'313': ['transaction effectuée', 'market.png']
 		},
 
 		// initialisation : parse et lance le runtime

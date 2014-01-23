@@ -676,6 +676,18 @@ jQuery(document).ready(function($) {
 		);
 	});
 
+	/* DIVERS */
+	$('.new-transaction.resources #resources-quantity').live('keyup', function() {
+		var quantity  = $(this).val();
+		var rate 	  = $(this).data('rate');
+		var price 	  = quantity * rate;
+		var variation = price * $(this).data('variation') / 100;
+
+		$('.new-transaction.resources #resources-price').val(Math.ceil(price));
+		$('.new-transaction.resources .min-price').text(utils.numberFormat(Math.ceil(price - variation)));
+		$('.new-transaction.resources .max-price').text(utils.numberFormat(Math.floor(price + variation)));
+	});
+
 	/* OTHER ANNIMATIONS */
 	(function() {
 		var t = $('#nav .box a.current-base img');
