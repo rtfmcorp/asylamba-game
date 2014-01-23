@@ -54,8 +54,10 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 				ASM::$com->newSession(ASM_UMODE);
 				ASM::$com->load(array('id' => $identifier));
 				if (ASM::$com->size() == 1 AND ASM::$com->get()->getRPlayer() == CTR::$data->get('playerId')) {
-					$quantity = ASM::$com->get()->getExperience();
-					ASM::$com->get()->emptySquadrons();
+					$commander = ASM::$com->get();
+					$quantity = $commander->getExperience();
+					$commander->setStatement(COM_ONSALE);
+					$commander->emptySquadrons();
 				} else {
 					$valid = FALSE;
 				}

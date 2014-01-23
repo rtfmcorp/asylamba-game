@@ -55,13 +55,13 @@ if ($rTransaction !== FALSE) {
 						$base->addShipToDock($transaction->identifier, $transaction->quantity);
 						break;
 					case Transaction::TYP_COMMANDER :
-						$valid = FALSE; // provisoirement
-						/*$S_COM1 = ASM::$com->getCurrentSession();
+						include_once ARES;
+						$S_COM1 = ASM::$com->getCurrentSession();
 						ASM::$com->newSession(ASM_UMODE);
-						ASM::$com->load(array('id' => $identifier));
+						ASM::$com->load(array('id' => $transaction->identifier));
 						$commander = ASM::$com->get();
-
-						ASM::$com->changeSession($S_COM1);*/
+						$commander->setStatement(COM_INSCHOOL);
+						ASM::$com->changeSession($S_COM1);
 						break;
 					default :
 						$valid = FALSE;
@@ -86,7 +86,7 @@ if ($rTransaction !== FALSE) {
 							CTR::$alert->add('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et vous récupérez vos vaisseaux de combat.', ALERT_STD_SUCCESS);
 							break;
 						case Transaction::TYP_COMMANDER :
-							CTR::$alert->add('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et vous récupérez votre commandant.', ALERT_STD_SUCCESS);
+							CTR::$alert->add('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et votre commandant est placé à l\'école de commandement.', ALERT_STD_SUCCESS);
 							break;
 					}
 				}

@@ -11,14 +11,6 @@
 */
 
 class Commander {
-	# statement
-	const ST_IN_SCHOOL = 0;
-	const ST_AFFECTED = 1;
-	const ST_MOVING = 2;
-	const ST_DEAD = 3;
-	const ST_DESERT = 4;
-	const ST_RETIRED = 5;
-
 	# attributes
 	private $id 					= 0;
 	private $name 					= '';
