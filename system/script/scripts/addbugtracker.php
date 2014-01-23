@@ -12,7 +12,7 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `bugtracker` (
   `message` text NOT NULL,
   `statement` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0 = waiting, 1 = archived, 2 = deleted',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
 
 $qr->execute();
 ?>
