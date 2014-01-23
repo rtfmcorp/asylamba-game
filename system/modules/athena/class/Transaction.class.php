@@ -28,8 +28,6 @@ class Transaction {
 	const EXPERIENCE_DIVIDER = 15000;
 
 	# attributes
-	# x system
-	# y system
 	public $id = 0; 
 	public $rPlayer = 0;
 	public $rPlace = 0;
@@ -48,6 +46,17 @@ class Transaction {
 	public $currentRate;	# 1 credit = 	x resources
 							#				x pev
 							#				x experience
+
+	# additionnal attributes
+	public $playerName;
+	public $playerColor;
+	public $placeName;
+	public $sector;
+	public $sectorColor;
+	public $rSystem;
+	public $positionInSystem;
+	public $xSystem;
+	public $ySystem;
 
 	public function getId() { return $this->id; }
 

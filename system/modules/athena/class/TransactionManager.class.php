@@ -36,8 +36,27 @@ class TransactionManager extends Manager {
 		$formatLimit = Utils::arrayToLimit($limit);
 
 		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT t.*
+		$qr = $db->prepare('SELECT t.*,
+			play.name AS playerName,
+			play.rColor AS playerColor,
+			ob.name AS placeName,
+			s.rSector AS sector,
+			se.rColor AS sectorColor,
+			p.rSystem AS rSystem,
+			p.position AS positionInSystem,
+			s.xPosition AS xSystem,
+			s.yPosition AS ySystem
 			FROM transaction AS t
+			LEFT JOIN player AS play
+				ON t.rPlayer = play.id
+			LEFT JOIN orbitalBase AS ob 
+				ON t.rPlace = ob.rPlace
+			LEFT JOIN place AS p 
+				ON t.rPlace = p.id
+			LEFT JOIN system AS s 
+				ON p.rSystem = s.id
+			LEFT JOIN sector AS se 
+				ON s.rSector = se.id
 			' . $formatWhere . '
 			' . $formatOrder . '
 			' . $formatLimit
@@ -74,6 +93,16 @@ class TransactionManager extends Manager {
 			$t->dPublication = $aw['dPublication'];
 			$t->dValidation = $aw['dValidation'];
 			$t->currentRate = $aw['currentRate'];
+
+			$t->playerName = $aw['playerName'];
+			$t->playerColor = $aw['playerColor'];
+			$t->placeName = $aw['placeName'];
+			$t->sector = $aw['sector'];
+			$t->sectorColor = $aw['sectorColor'];
+			$t->rSystem = $aw['rSystem'];
+			$t->positionInSystem = $aw['positionInSystem'];
+			$t->xSystem = $aw['xSystem'];
+			$t->ySystem = $aw['ySystem'];
 
 			$currentT = $this->_Add($t);
 		}
