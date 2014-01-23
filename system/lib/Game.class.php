@@ -32,13 +32,19 @@ class Game {
 	}
 
 	public static function getTimeToTravel($startPlace, $destinationPlace) {
-		if ($startPlace->getRSystem() == $destinationPlace->getRSystem()) {
-			$distance = abs($startPlace->getPosition() - $destinationPlace->getPosition());
+		# $startPlace and $destinationPlace are instance of Place
+		return self::getTimeTravel($startPlace->getRSystem(), $startPlace->getPosition(), $startPlace->getXSystem(), $startPlace->getYSystem(),
+									$destinationPlace->getRSystem(), $destinationPlace->getPosition(), $destinationPlace->getXSystem(), $destinationPlace->getYSystem());
+	}
+
+	public static function getTimeTravel($systemFrom, $positionFrom, $xFrom, $yFrom, $systemTo, $positionTo, $xTo, $yTo) {
+		if ($systemFrom == $systemTo) {
+			$distance = abs($positionFrom - $positionTo);
 			$time = round(COEFFMOVEINSYSTEM * $distance);
 			return $time;
 		} else {
 			$time = COEFFMOVEOUTOFSYSTEM;
-			$distance = self::getDistance($startPlace->getXSystem(), $destinationPlace->getXSystem(), $startPlace->getYSystem(), $destinationPlace->getYSystem());
+			$distance = self::getDistance($xFrom, $xTo, $yFrom, $yTo);
 			$time += round(COEFFMOVEINTERSYSTEM * $distance);
 			return $time;
 		}
