@@ -12,6 +12,9 @@
 include_once ZEUS;
 
 class Color {
+	const CAMPAIGNTIME 		= 604800;
+	const ELECTIONTIME		= 604800;
+
 	const ALIVE 			= 1;
 	const DEAD 				= 0;
 
@@ -125,11 +128,27 @@ class Color {
 		ASM::$pam->changeSession($_PAM1);
 	}
 
-	public function ballot() {
+	public function ballot($election) {
 		$royalisticRegime = array(1, 2, 3);
 		$democraticRegime = array(5, 6, 7);
 
 		if (in_array($this->id, $royalisticRegime)) {
+			$_VOM = ASM::$vom->getCurrentSession();
+			ASM::$vom->load(array('rElection' => $election->id));
+			$ballot = array();
+
+			for ($i = 0; $i < ASM::$vom->size(); $i++) {
+				if (array_key_exists(ASM::$vom->get($i)->rCandidate, $ballot)) {
+					$ballot[ASM::$vom->get($i)->rCandidate]++;
+				} else {
+					$ballot[ASM::$vom->get($i)->rCandidate] = 1;
+				}
+			}
+			
+			//monter de rang le gagnant
+			ASM::$plm->getCurrentsession();
+
+			ASM::$vom->changeSession($_VOM);
 
 		} elseif (in_array($this->id, $democraticRegime)) {
 
@@ -142,19 +161,25 @@ class Color {
 	public function uElection() {
 		// 604800s = 7j
 		if ($this->electionStatement == Color::MANDATE) {
-			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResources::getInfos($this->id, 'mandateDuration')) {
+			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration')) {
 				$this->updateStatus();
 				$this->electionStatement = Color::CAMPAIGN;
 			}
 		} elseif ($this->electionStatement == Color::CAMPAIGN) {
-			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResources::getInfos($this->id, 'mandateDuration') + 604800) {
+			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + Color::CAPAIGNTIME) {
 				$this->electionStatement = Color::ELECTION;
 			}
-		} elseif ($this->electionStatement == Color::ELECTION) {
-			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResources::getInfos($this->id, 'mandateDuration') + 604800 * 2) {
-				$this->ballot();
+		} else {
+			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + Color::VOTATIONTIME) {
+				$_ELM = ASM::$elm->getCurrentSession();
+				ASM::$elm->newSession();
+				ASM::$elm->load(array('rColor' => $this->id), array('id ASC'), array('1', '1'));
+
+				$this->ballot(ASM::$elm->get());
 				$this->electionStatement = Color::MANDATE;
 				$this->dLastElection = Utils::now();
+
+				ASM::$elm->changeSession($_ELM);
 			}
 		}
 	}

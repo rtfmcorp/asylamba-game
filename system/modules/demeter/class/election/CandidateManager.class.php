@@ -51,6 +51,7 @@ class CandidateManager extends Manager {
 			$candidate->id = $awCandidate['id'];
 			$candidate->rElection = $awCandidate['rElection'];
 			$candidate->rPlayer = $awCandidate['rPlayer'];
+			$candidate->program = $awCandidate['program'];
 			$candidate->dPresentation = $awCandidate['dPresentation'];
 
 			$this->_Add($candidate);

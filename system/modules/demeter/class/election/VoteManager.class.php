@@ -11,7 +11,7 @@
 */
 
 class VoteManager extends Manager {
-	protected $managerType ='_Votee';
+	protected $managerType ='_Vote';
 
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'v.');
@@ -51,6 +51,7 @@ class VoteManager extends Manager {
 			$vote->id = $awVote['id'];
 			$vote->rCandidate = $awVote['rCandidate'];
 			$vote->rPlayer = $awVote['rPlayer'];
+			$vote->relection = $awVote['rElection'];
 			$vote->dVotation = $awVote['dVotation'];
 
 			$this->_Add($vote);

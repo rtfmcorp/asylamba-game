@@ -13,7 +13,7 @@
 class Election {
 	public $id 					= 0;
 	public $rColor 				= 0;
-	public $delection			= 0;
+	public $dElection			= 0;
 
 	public function getId() { return $this->id; }
 }
