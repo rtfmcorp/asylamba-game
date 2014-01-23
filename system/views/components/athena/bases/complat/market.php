@@ -69,11 +69,15 @@ echo '<div class="component transaction">';
 				echo '<form action="' . APP_ROOT . 'action/a-proposetransaction/type-' . Transaction::TYP_RESOURCE . '/rplace-' . $ob_compPlat->getId() . '" method="post">';
 					echo '<label for="resources-quantity">';
 						echo 'Quantité de ressources';
-						echo '<input type="number" name="quantity" id="resources-quantity" placeholder="max. disp. ' . Format::numberFormat($ob_compPlat->getResourcesStorage()) . '" />';
+						echo '<input type="number" name="quantity" id="resources-quantity" placeholder="Maximum ' . Format::numberFormat($ob_compPlat->getResourcesStorage()) . '" />';
 					echo '</label>';
 					echo '<label for="resources-price">';
-						echo 'Prix';
+						echo 'Prix en crédit';
 						echo '<input type="number" name="price" id="resources-price" placeholder="entre ' . Format::numberFormat($ob_compPlat->getResourcesStorage() - 10000) . ' et ' . Format::numberFormat($ob_compPlat->getResourcesStorage() - 10000) . '" />';
+						echo '<span class="indicator">';
+							echo '<span class="min-price">5 000</span>';
+							echo '<span class="max-price">10 000</span>';
+						echo '</span>';
 					echo '</label>';
 					echo '<input type="submit" value="proposer cette offre" />';
 				echo '</form>';
@@ -83,7 +87,7 @@ echo '<div class="component transaction">';
 				$p = ASM::$trm->get($i);
 
 				if (CTR::$data->get('playerId') != $p->rPlayer) {
-					$rateVariation = $currentRate - $p->quantity / $p->price;
+					$rateVariation = $currentRate - $p->price / $p->quantity;
 					if ($rateVariation < 0) {
 						$rateVariation = '- ' . Format::numberFormat(abs($rateVariation), 3);
 					} else {

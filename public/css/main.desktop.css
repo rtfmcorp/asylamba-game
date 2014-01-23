@@ -2832,6 +2832,67 @@ body {
 	width: 14px;
 }
 
+.component.transaction .new-transaction {
+	width: 279px;
+	position: absolute;
+	background: black;
+	z-index: 1;
+	padding: 10px;
+}
+.color1 .component.transaction .new-transaction { border-bottom: solid 1px #b01e2d; }
+.color2 .component.transaction .new-transaction { border-bottom: solid 1px #2f23c0; }
+.color3 .component.transaction .new-transaction { border-bottom: solid 1px #ffdb0f; }
+.color4 .component.transaction .new-transaction { border-bottom: solid 1px #a935c7; }
+.color5 .component.transaction .new-transaction { border-bottom: solid 1px #57c632; }
+.color6 .component.transaction .new-transaction { border-bottom: solid 1px #05bed7; }
+.color7 .component.transaction .new-transaction { border-bottom: solid 1px #ac5832; }
+
+.component.transaction .new-transaction label {
+	position: relative;
+	display: block;
+	padding: 5px 0;
+}
+
+.component.transaction .new-transaction label input {
+	display: block;
+	padding: 5px 10px; margin: 5px 0 0 0;
+	width: 259px;
+	border: none;
+}
+
+.component.transaction .new-transaction.resources label input {
+	font-size: 16px;
+	color: #202020;
+	font-weight: bold;
+}
+
+.component.transaction .new-transaction .indicator {
+	position: relative;
+	display: block;
+	width: 100%;
+	text-align: center;
+}
+
+.component.transaction .new-transaction .indicator span {
+	display: inline-block;
+	background: white;
+	padding: 1px 6px;
+	font-size: 12px;
+	color: black;
+}
+
+.component.transaction .new-transaction .indicator span.min-price {
+	position: absolute;
+	bottom: 0; left: 0;
+	border-radius: 0 0 0 5px;
+}
+
+.component.transaction .new-transaction .indicator span.max-price {
+	position: absolute;
+	bottom: 0; right: 0;
+	border-radius: 0 0 5px 0;
+}
+
 /***********************************/
 /*********** BASES STYLE ***********/
 /***********************************/
