@@ -16,6 +16,7 @@ include CLASSES . 'DataBaseAdmin.class.php';
 include CLASSES . 'Parser.class.php';
 
 include CLASSES . 'ASM.class.php';
+include CLASSES . 'CTC.class.php';
 include CLASSES . 'Manager.class.php';
 include CLASSES . 'ManagerSession.class.php';
 

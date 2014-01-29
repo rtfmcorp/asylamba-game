@@ -65,6 +65,13 @@ class Utils {
 		return date('Y-m-d H:i:s', strtotime($date) + $seconds);
 	}
 
+	public static function nextOClock($date, $i = 1) {
+		list($left, $right) = explode(' ', $date);
+		list($h, $m, $s)    = explode(':', $right);
+
+		return $left . ' ' . ($h + $i) . ':00:00';
+	}
+
 	public static function getDateFromTimestamp($timestamp) {
 		return date('Y-m-d H:i:s', $timestamp);
 	}
