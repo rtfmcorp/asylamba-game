@@ -109,15 +109,6 @@ try {
 	ASM::$plm->load(array('id' => $place));
 	ASM::$plm->get(0)->setRPlayer($pl->getId());
 
-	# REGENEATION DE LA GALAXIE
-	$gcm = new GalaxyColorManager();
-	$gcm->loadSystem();
-	$gcm->loadSector();
-	$gcm->changeColorSystem();
-	$gcm->changeColorSector();
-	$gcm->saveSystem();
-	$gcm->saveSector();
-
 	# confirmation au portail
 	$api = new API(GETOUT_ROOT);
 	$api->confirmInscription(CTR::$data->get('inscription')->get('bindkey'), APP_ID);

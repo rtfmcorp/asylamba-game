@@ -12,42 +12,103 @@ abstract class GalaxyGenerator {
 	public static $systemDeleted = 0;
 	public static $listSector = array();
 
+	public static $output;
+
 	public static function generate() {
 		# generation
 		self::generateSystem();
 		self::generatePlace();
 		self::generateSector();
 		self::associateSystemToSector();
-		self::getStatisticsSector();
-		
-		# saving
-		# self::clear();
+
 		self::save();
 
-		echo '- - - nbSystem : ' . Format::numberFormat(self::$nbSystem, 2) . '<br />';
-		echo '- - - nbPlace : ' . Format::numberFormat(self::$nbPlace, 2) . '<br />';
-		echo '- - - popTotal : ' . Format::numberFormat(self::$popTotal, 2) . '<br />';
-		echo '- - - nbSector : ' . Format::numberFormat(self::$nbSector, 2) . '<br />';
-		echo '- - - systemDeleted : ' . Format::numberFormat(self::$systemDeleted, 2) . '<br />';
+		self::getStatisticsSector();
 	}
 
 	public static function clear() {
-		$db = DataBase::getInstance();
-		$db->query('DELETE FROM place');
-		$db->query('DELETE FROM system');
-		$db->query('DELETE FROM sector');
+		$db = DataBaseAdmin::getInstance();
+
+		$db->query('TRUNCATE place');
+		self::log('table `place` vidées');
+
+		$db->query('TRUNCATE system');
+		self::log('table `system` vidées');
+
+		$db->query('TRUNCATE sector');
+		self::log('table `sector` vidées');
+
+		self::log('_ _ _ _');
 	}
 
 	public static function save() {
-		/*$db = DataBase::getInstance();
-		
-		$qr = 'INSERT INTO place(id, rPlayer, rSystem, typeOfPlace, position, population, coefHistory, coefResources) VALUES ';
-		foreach (self::$listPlace as $v) { $qr .= '(' . implode(', ', $v) . '), '; }
-		$qr = substr($qr, 0, -2);
-		$db->query($qr);*/	
+		$db = DataBaseAdmin::getInstance();
+
+		# clean up database
+		self::clear();
+
+		self::log('sauvegarde des places');
+		for ($i = 0; $i < ceil(count(self::$listPlace) / 5000); $i++) { 
+			$qr = 'INSERT INTO place(id, rPlayer, rSystem, typeOfPlace, position, population, coefResources, coefHistory, resources, uResources) VALUES ';
+			
+			for ($j = $i * 5000; $j < (($i + 1) * 5000) - 1; $j++) { 
+				if (isset(self::$listPlace[$j])) {
+					$qr .= '(' . implode(', ', self::$listPlace[$j]) . ', NOW()), ';
+				}
+			}
+
+			$qr = substr($qr, 0, -2);
+			$db->query($qr);
+		}
+		self::log(ceil(count(self::$listPlace) / 5000) . ' requêtes `INSERT`');
+
+		self::log('sauvegarde des systèmes');
+		for ($i = 0; $i < ceil(count(self::$listSystem) / 5000); $i++) { 
+			$qr = 'INSERT INTO system(id, rSector, rColor, xPosition, yPosition, typeOfSystem) VALUES ';
+			
+			for ($j = $i * 5000; $j < (($i + 1) * 5000) - 1; $j++) { 
+				if (isset(self::$listSystem[$j])) {
+					$qr .= '(' . implode(', ', self::$listSystem[$j]) . '), ';
+				}
+			}
+
+			$qr = substr($qr, 0, -2);
+			$db->query($qr);
+		}
+		self::log(ceil(count(self::$listSystem) / 5000) . ' requêtes `INSERT`');
+
+		self::log('sauvegarde des secteurs');
+		for ($i = 0; $i < ceil(count(self::$listSector) / 5000); $i++) { 
+			$qr = 'INSERT INTO sector(id, rColor, xPosition, yPosition, xBarycentric, yBarycentric, tax, population, lifePlanet, name) VALUES ';
+			
+			for ($j = $i * 5000; $j < (($i + 1) * 5000) - 1; $j++) { 
+				if (isset(self::$listSector[$j])) {
+					$qr .= '(\'' . implode('\', \'', self::$listSector[$j]) . '\'), ';
+				}
+			}
+
+			$qr = substr($qr, 0, -2);
+			$db->query($qr);
+		}
+		self::log(ceil(count(self::$listSector) / 5000) . ' requêtes `INSERT`');
+
+		self::log('_ _ _ _');
+	}
+
+	public static function getLog() {
+		$rt  = '<pre style="font-family: consolas;">';
+			$rt .= self::$output;
+		$rt .= '</pre>';
+
+		return $rt;
+	}
+
+	private static function log($text) {
+		self::$output = self::$output . ">_ " . $text . "<br />";
 	}
 
 	private static function generateSystem() {
+		self::log('génération des systèmes');
 		# id
 		$k = 1;
 
@@ -73,9 +134,13 @@ abstract class GalaxyGenerator {
 				}
 			}
 		}
+
+		self::log(self::$nbSystem . ' systèmes générés');
+		self::log('_ _ _ _');
 	}
 
 	public static function generatePlace() {
+		self::log('génération des places');
 		$k = 1;
 
 		foreach (self::$listSystem AS $system) {
@@ -89,13 +154,18 @@ abstract class GalaxyGenerator {
 
 				self::$nbPlace++;
 				self::$popTotal += $population;
-				self::$listPlace[] = array($k, 0, $system[0], $type, ($i + 1), $population, $history, $resources);
+				self::$listPlace[] = array($k, 0, $system[0], $type, ($i + 1), $population, $resources, $history, 0);
 				$k++;
 			}
 		}
+
+		self::log(self::$nbPlace . ' places générées');
+		self::log(Format::numberFormat(self::$popTotal * 1000000) . ' de population');
+		self::log('_ _ _ _');
 	}
 
 	public static function generateSector() {
+		self::log('génération des secteurs');
 		$k = 1;
 
 		foreach (GalaxyConfiguration::$sectors as $sector) {
@@ -108,10 +178,16 @@ abstract class GalaxyGenerator {
 				$sector['barycentre'][0], 
 				$sector['barycentre'][1], 
 				5, 
-				0, 0, 0, 0, 0, 0);
+				0,
+				0,
+				$sector['name']
+			);
 
 			$k++;
 		}
+
+		self::log(self::$nbSector . ' secteurs générés');
+		self::log('_ _ _ _');
 	}
 
 	public static function associateSystemToSector() {
@@ -152,10 +228,33 @@ abstract class GalaxyGenerator {
 	}
 
 	private static function getStatisticsSector() {
+		$db = DataBaseAdmin::getInstance();
+
 		foreach (self::$listSector as $sector) {
-			foreach (self::$listSystem as $system) {
-				/***/
-			}
+			$id = $sector[0];
+
+			$qr = $db->prepare('SELECT
+					COUNT(pl.id) AS planet,
+					SUM(pl.population) AS population
+				FROM sector AS se
+				LEFT JOIN system AS sy
+					ON se.id = sy.rSector
+				LEFT JOIN place AS pl
+					ON sy.id = pl.rSystem
+				WHERE pl.typeOfPlace = 1
+				AND se.id = ?');
+			$qr->execute(array($id));
+			$aw = $qr->fetch();
+
+			$nbrPlanet = $aw['planet'];
+			$population = ceil($aw['population']);
+
+			$qr->closeCursor();
+
+			$qr = $db->prepare('UPDATE sector SET lifePlanet = ?, population = ? WHERE id = ?');
+			$qr->execute(array($nbrPlanet, $population, $id));
+
+			$qr->closeCursor();
 		}
 	}
 
@@ -163,50 +262,21 @@ abstract class GalaxyGenerator {
 		$mask = rand(1, GalaxyConfiguration::$galaxy['mask']);
 
 		if ($mask < 3) {
+			$realPosition = GalaxyConfiguration::$galaxy['diag'] - $d2o;
+			$step 		  = GalaxyConfiguration::$galaxy['diag'] / count(GalaxyConfiguration::$galaxy['systemPosition']);
+			$currentStep  = floor($realPosition /$step);
+
 			$random = rand(0, 100);
-			
-			if ($d2o > 40) {
-				$dToCircle = abs($d2o - 80);
-				if ($d2o < 1) {$dToCircle = 1;}
-				if ($dToCircle < 2) {
-					if ($random < 100) { return TRUE; }
-				} elseif ($dToCircle < 5) {
-					if ($random < 95)  { return TRUE; }
-				} elseif ($dToCircle < 10) {
-					if ($random < 80)  { return TRUE; }
-				} elseif ($dToCircle < 20) {
-					if ($random < 40)  { return TRUE; }
-				} elseif ($dToCircle < 35) {
-					if ($random < 20)  { return TRUE; }
-				} elseif ($dToCircle < 50) {
-					if ($random < 7)   { return TRUE; }
-				} else {
-					if ($random < 1)   { return TRUE; }
-				}
+
+			if (GalaxyConfiguration::$galaxy['systemPosition'][$currentStep] > $random) {
+				return TRUE;
 			} else {
-				if ($d2o < 1) { $d2o = 1; }
-				if ($d2o < 15) {
-					if ($random < 100) { return TRUE; }
-				} elseif ($d2o < 20) {
-					if ($random < 95)  { return TRUE; }
-				} elseif ($d2o < 27) {
-					if ($random < 80)  { return TRUE; }
-				} elseif ($d2o < 30) {
-					if ($random < 50)  { return TRUE; }
-				} elseif ($d2o < 33) {
-					if ($random < 40)  { return TRUE; }
-				} elseif ($d2o < 36) {
-					if ($random < 50)  { return TRUE; }
-				} elseif ($d2o < 38) {
-					if ($random < 50)  { return TRUE; }
-				} else {
-					if ($random < 10)  { return TRUE; }
-				}
+				return FALSE;
 			}
-			return FALSE;
 		} else {
 			return FALSE;
 		}
+
 	}
 
 	private static function getProportion($params, $value) {

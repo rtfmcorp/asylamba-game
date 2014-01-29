@@ -1,7 +1,6 @@
 <?php
 # galaxy loading
 include_once GAIA;
-$gc = new GalaxyManager();
 $sm = new SectorManager();
 $sm->load();
 
@@ -84,17 +83,6 @@ if ($systemId != 0) {
 		echo '</div>';
 	}
 	ASM::$sys->changeSession($S_SYS1);
-} elseif (CTR::$get->exist('view') && CTR::$get->get('view') == 'ranking') {
-	# inclusion du composant
-	if (CTR::$get->exist('mode') && in_array(CTR::$get->get('mode'), array('general', 'victory', 'defeat', 'faction'))) {
-		$mode = CTR::$get->get('mode');
-	} else {
-		$mode = 'general';
-	}
-
-	echo '<div id="action-box" style="bottom: 0px;">';
-		include PAGES . 'desktop/mapElement/rankingbox.php';
-	echo '</div>';
 } else {
 	echo '<div id="action-box"></div>';
 }

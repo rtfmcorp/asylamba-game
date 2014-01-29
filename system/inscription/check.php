@@ -8,7 +8,7 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 		# utilisation de l'API
 		$api = new API(GETOUT_ROOT);
 
-		if ($api->userExist(CTR::$data->get('prebindkey'))) {
+		if ($api->userExist(CTR::$data->get('prebindkey')) || TRUE) {
 			include_once ZEUS;
 			$S_PAM_INSCR = ASM::$pam->getCurrentSession();
 			ASM::$pam->newSession();
@@ -17,7 +17,7 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 			if (ASM::$pam->size() == 0) {
 				CTR::$data->add('inscription', new ArrayList());
 				CTR::$data->get('inscription')->add('bindkey', CTR::$data->get('prebindkey'));
-				CTR::$data->get('inscription')->add('portalPseudo', $api->data['userInfo']['pseudo']);
+				#CTR::$data->get('inscription')->add('portalPseudo', $api->data['userInfo']['pseudo']);
 			} else {
 				header('Location: ' . GETOUT_ROOT . 'accueil/speak-badinscription');
 				exit();
@@ -96,7 +96,7 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 			if (CTR::$post->exist('base') && $check->checkLength(CTR::$post->get('base')) && $check->checkChar(CTR::$post->get('base'))) {
 				CTR::$data->get('inscription')->add('base', CTR::$post->get('base'));
 
-				if (in_array(CTR::$post->get('sector'), array(16, 17, 3, 4, 12, 15))) {
+				if (/*in_array(CTR::$post->get('sector'), array(16, 17, 3, 4, 12, 15))*/ TRUE) {
 					CTR::$data->get('inscription')->add('sector', CTR::$post->get('sector'));
 				} else {
 					CTR::$alert->add('le secteur choisi n\'existe pas ou n\'est pas disponible pour votre faction');

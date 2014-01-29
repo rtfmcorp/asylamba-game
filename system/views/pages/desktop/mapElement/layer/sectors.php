@@ -1,10 +1,10 @@
 <?php
 echo '<div id="sectors">';
-	echo '<svg viewBox="0, 0, 5000, 5000" xmlns="http://www.w3.org/2000/svg">';
+	echo '<svg viewBox="0, 0, ' . (GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size']) . ', ' . (GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';
 		for ($i = 0; $i < $sm->size(); $i++) {
 			echo '<polygon ';
 				echo 'class="ally' . $sm->get($i)->getRColor() . '" ';
-				echo 'points="' . $gc->getCoordPolygon($i, 20, 0) . '" ';
+				echo 'points="' .GalaxyConfiguration::getSectorCoord($sm->get($i)->getId(), GalaxyConfiguration::$scale, 0) . '" ';
 				echo 'data-x-brc="' . $sm->get($i)->getXBarycentric() . '" ';
 				echo 'data-y-brc="' . $sm->get($i)->getYBarycentric() . '" ';
 			echo '/>';
