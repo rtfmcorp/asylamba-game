@@ -55,7 +55,7 @@ class CommercialShipping {
 				case Transaction::TYP_RESOURCE:
 					$orbitalBase->increaseResources($transaction->quantity);
 					# notif pour le vendeur
-					$n = new Notification();
+					/*$n = new Notification();
 					$n->setRPlayer($this->rPlayer);
 					$n->setTitle('Ressources livrées');
 					$n->addBeg()->addTxt('Les ' . $transaction->quantity . ' ressources ont bien été livrées à ');
@@ -63,7 +63,7 @@ class CommercialShipping {
 					$n->addLnk('map/base-' . $orbitalBase->getRPlace(), $orbitalBase->getName());
 					$n->addSep()->addTxt('Vos vaisseaux de transport sont sur le chemin du retour.');
 					$n->addEnd();
-					ASM::$ntm->add($n);
+					ASM::$ntm->add($n);*/
 
 					# notif pour l'acheteur
 					$n = new Notification();
@@ -78,7 +78,7 @@ class CommercialShipping {
 					$orbitalBase->addShipToDock($transaction->identifier, $transaction->quantity);
 
 					# notif pour le vendeur
-					$n = new Notification();
+					/*$n = new Notification();
 					$n->setRPlayer($this->rPlayer);
 					if ($transaction->quantity == 1) {
 						$n->setTitle('Vaisseau livré');
@@ -91,7 +91,7 @@ class CommercialShipping {
 					$n->addLnk('map/base-' . $orbitalBase->getRPlace(), $orbitalBase->getName());
 					$n->addSep()->addTxt('Vos vaisseaux de transport sont sur le chemin du retour.');
 					$n->addEnd();
-					ASM::$ntm->add($n);
+					ASM::$ntm->add($n);*/
 
 					# notif pour l'acheteur
 					$n = new Notification();
@@ -120,7 +120,7 @@ class CommercialShipping {
 					$commander->setRBase($this->rBaseDestination);
 
 					# notif pour le vendeur
-					$n = new Notification();
+					/*$n = new Notification();
 					$n->setRPlayer($this->rPlayer);
 					$n->setTitle('Commandant livré');
 					$n->addBeg()->addTxt('Le commandant ' . $commander->getName() . ' a bien été livré à ');
@@ -128,7 +128,7 @@ class CommercialShipping {
 					$n->addLnk('map/base-' . $orbitalBase->getRPlace(), $orbitalBase->getName());
 					$n->addSep()->addTxt('Vos vaisseaux de transport sont sur le chemin du retour.');
 					$n->addEnd();
-					ASM::$ntm->add($n);
+					ASM::$ntm->add($n);*/
 
 					# notif pour l'acheteur
 					$n = new Notification();
