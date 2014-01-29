@@ -18,31 +18,26 @@ echo '<div id="systems">';
 			echo 'class="loadSystem" ';
 			echo 'data-system-id="' . $system['id'] . '" ';
 			echo 'data-x-position="' . $system['xPosition'] . '" data-y-position="' . $system['yPosition'] . '" ';
-			echo 'style="top: ' . ($system['yPosition'] * 20 - 10) . 'px; left: ' . ($system['xPosition'] * 20 - 10) . 'px">';
+			echo 'style="top: ' . ($system['yPosition'] * GalaxyConfiguration::$scale - 10) . 'px; left: ' . ($system['xPosition'] * GalaxyConfiguration::$scale - 10) . 'px">';
 			echo '<img src="' . MEDIA . 'map/systems/t' . $system['typeOfSystem'] . 'c' . $system['rColor'] . '.png" ' . $owner . ' />';
 		echo '</a>';
 	}
 
-	
-	# A MODIFIER
-	############
-
-	# chargement dynamique
-	$sec = array('Antalès', 'de la Cuillère', 'Del Coran', 'Estah', 'Asylamba');
-	
 	for ($i = 0; $i < $sm->size(); $i++) {
+		$sector = $sm->get($i);
+
 		echo '<span ';
-			echo 'class="sector-number color' . $sm->get($i)->getRColor() . ' sh" ';
-			echo 'data-target="sector-info-' . ($i + 1) . '" ';
-			echo 'style="left: ' . $sm->get($i)->getXBarycentric() * 20 . 'px; top: ' . $sm->get($i)->getYBarycentric() * 20 . 'px">';
+			echo 'class="sector-number color' . $sector->getRColor() . ' sh" ';
+			echo 'data-target="sector-info-' . $sector->getId() . '" ';
+			echo 'style="left: ' . $sector->getXBarycentric() * GalaxyConfiguration::$scale . 'px; top: ' . $sector->getYBarycentric() * GalaxyConfiguration::$scale . 'px">';
 			echo ($i + 1);
 		echo '</span>';
 
-		echo '<div id="sector-info-' . ($i + 1) . '" class="sector-info color' . $sm->get($i)->getRColor() . '" style="left: ' . ($sm->get($i)->getXBarycentric() * 20 + 55) . 'px; top: ' . ($sm->get($i)->getYBarycentric() * 20 - 10) . 'px">';
-			echo '<h2>Secteur ' . $sec[rand(0, count($sec) - 1)] . '</h2>';
+		echo '<div id="sector-info-' . ($i + 1) . '" class="sector-info color' . $sector->getRColor() . '" style="left: ' . ($sector->getXBarycentric() * GalaxyConfiguration::$scale + 55) . 'px; top: ' . ($sector->getYBarycentric() * GalaxyConfiguration::$scale - 10) . 'px">';
+			echo '<h2>Secteur ' . $sector->getName() . '</h2>';
 			echo '<p><a href="#">+</a> ';
-				if ($sm->get($i)->getRColor() != 0) {
-					echo 'Revendiqué par ' . ColorResource::getInfo($sm->get($i)->getRColor(), 'popularName') . ' | ' . $sm->get($i)->getTax() . '% de taxe';
+				if ($sector->getRColor() != 0) {
+					echo 'Revendiqué par ' . ColorResource::getInfo($sector->getRColor(), 'popularName') . ' | ' . $sector->getTax() . '% de taxe';
 				} else {
 					echo 'Non revendiqué | Aucune taxe</p> ';
 				}

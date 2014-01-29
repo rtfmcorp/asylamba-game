@@ -42,18 +42,18 @@ class CommercialShipping {
 
 	public function deliver() {
 		$S_TRM1 = ASM::$trm->getCurrentSession();
-		ASM::$trm->newSession(ASM_UMODE);
+		ASM::$trm->newSession(FALSE);
 		ASM::$trm->load(array('id' => $this->rTransaction));
 		$transaction = ASM::$trm->get();
 
 		if (ASM::$trm->size() == 1 AND $transaction->statement == Transaction::ST_COMPLETED) {
 			$S_OBM1 = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession(ASM_UMODE);
+			ASM::$obm->newSession(FALSE);
 			ASM::$obm->load(array('rPlace' => $this->rBaseDestination));
 			$orbitalBase = ASM::$obm->get();
 			switch ($transaction->type) {
 				case Transaction::TYP_RESOURCE:
-					ASM::$obm->increaseResources($transaction->quantity);
+					$orbitalBase->increaseResources($transaction->quantity);
 					# notif pour le vendeur
 					/*$n = new Notification();
 					$n->setRPlayer($this->rPlayer);
@@ -75,7 +75,7 @@ class CommercialShipping {
 
 					break;
 				case Transaction::TYP_SHIP:
-					ASM::$obm->addShipToDock($transaction->identifier, $transaction->quantity);
+					$orbitalBase->addShipToDock($transaction->identifier, $transaction->quantity);
 
 					# notif pour le vendeur
 					/*$n = new Notification();

@@ -8,6 +8,8 @@ ini_set('display_errors', TRUE);
 
 if (DEVMODE || CTR::$get->exist('password')) {
 	switch (CTR::$get->get('a')) {
+		case 'dbinstall': 				include SCRIPT . 'scripts/dbinstall.php'; break;
+
 		case 'newgalaxy': 				include SCRIPT . 'scripts/newgalaxy.php'; break;
 		case 'testgalaxy': 				include SCRIPT . 'scripts/testgalaxy.php'; break;
 		case 'testchangecolor': 		include SCRIPT . 'scripts/changecolor.php'; break;

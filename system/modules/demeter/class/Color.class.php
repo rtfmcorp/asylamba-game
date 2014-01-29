@@ -148,29 +148,29 @@ class Color {
 		$royalisticRegime = array(1, 2, 3);
 		$democraticRegime = array(5, 6, 7);
 
-			$_PAM1 = ASM::$pam->getCurrentsession();
-			ASM::$pam->newSession();
-			ASM::$pam->load(array('status' => array(PAM_GOVERNMENT, PAM_CHIEF)));
-			for ($i = 0; $i < ASM::$pam->size(); $i++) {
-				ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
+		$_PAM1 = ASM::$pam->getCurrentsession();
+		ASM::$pam->newSession();
+		ASM::$pam->load(array('status' => array(PAM_GOVERNMENT, PAM_CHIEF)));
+		for ($i = 0; $i < ASM::$pam->size(); $i++) {
+			ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
+		}
+		ASM::$pam->save();
+
+		ASM::$pam->changeSession($_PAM1);
+
+		$_VOM = ASM::$vom->getCurrentSession();
+		ASM::$vom->load(array('rElection' => $election->id));
+		$ballot = array();
+
+		for ($i = 0; $i < ASM::$vom->size(); $i++) {
+			if (array_key_exists(ASM::$vom->get($i)->rCandidate, $ballot)) {
+				$ballot[ASM::$vom->get($i)->rCandidate]++;
+			} else {
+				$ballot[ASM::$vom->get($i)->rCandidate] = 1;
 			}
-			ASM::$pam->save();
+		}
 
-			ASM::$pam->changeSession($_PAM1);
-
-		if (in_array($this->id, $royalisticRegime)) {
-			$_VOM = ASM::$vom->getCurrentSession();
-			ASM::$vom->load(array('rElection' => $election->id));
-			$ballot = array();
-
-			for ($i = 0; $i < ASM::$vom->size(); $i++) {
-				if (array_key_exists(ASM::$vom->get($i)->rCandidate, $ballot)) {
-					$ballot[ASM::$vom->get($i)->rCandidate]++;
-				} else {
-					$ballot[ASM::$vom->get($i)->rCandidate] = 1;
-				}
-			}
-			
+		if (in_array($this->id, $royalisticRegime)) {		
 			if (count($ballot) > 0) {	
 				arsort($ballot);
 				reset($ballot);
@@ -186,18 +186,6 @@ class Color {
 			ASM::$vom->changeSession($_VOM);
 
 		} elseif (in_array($this->id, $democraticRegime)) {
-			$_VOM = ASM::$vom->getCurrentSession();
-			ASM::$vom->load(array('rElection' => $election->id));
-			$ballot = array();
-
-			for ($i = 0; $i < ASM::$vom->size(); $i++) {
-				if (array_key_exists(ASM::$vom->get($i)->rCandidate, $ballot)) {
-					$ballot[ASM::$vom->get($i)->rCandidate]++;
-				} else {
-					$ballot[ASM::$vom->get($i)->rCandidate] = 1;
-				}
-			}
-
 			if (count($ballot) > 0) {
 						
 				arsort($ballot);
@@ -226,20 +214,25 @@ class Color {
 
 			ASM::$vom->changeSession($_VOM);
 		} else {
-			$_CAM = ASM::$cam->getCurrentSession();
-			ASM::$cam->newSession();
-			ASM::$cam->load(array('rElection' => $election->getId()));
+			if (count($ballot) > 0) {	
+				reset($ballot);
+				$_PAM2 = ASM::$pam->getCurrentSession();
+				ASM::$pam->newSession();
+				$keys = array();
 
-			$nbr = rand(0, ASM::$cam->size() - 1);
+				$nbr = (count($ballot) > 6) ? 6: count($ballot);
 
-			$_PAM = ASM::$pam->getCurrentSession();
-			ASM::$pam->newSession();
-			ASM::$pam->load(array('id' => ASM::$cam->get($nbr)->rPlayer));
-			ASM::$pam->get()->setStatus(PAM_CHIEF);
-			ASM::$pam->save();
+				for ($i = 0; $i < $nbr; $i++) {
+					$keys[$i] = key($ballot);
+					next($ballot);
+				}
+				$aleaNbr = rand(0, $nbr - 1);
 
-			ASM::$pam->changeSession($_PAM);
-			ASM::$pam->changeSession($_CAM);
+				ASM::$pam->load(array('id' => $keys[$aleaNbr]));
+				ASM::$pam->get()->setStatus(PAM_CHIEF);
+				ASM::$pam->save();
+				ASM::$pam->changeSession($_PAM2);
+			}
 		}
 	}
 
@@ -259,8 +252,7 @@ class Color {
 			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + Color::ELECTIONTIME) {
 				$_ELM = ASM::$elm->getCurrentSession();
 				ASM::$elm->newSession();
-				ASM::$elm->load(array('rColor' => $this->id), array('id ASC'), array('1', '1'));
-
+				ASM::$elm->load(array('rColor' => $this->id), array('id DESC'), array('0', '1'));
 				$this->ballot(ASM::$elm->get());
 				$this->electionStatement = Color::MANDATE;
 				$this->dLastElection = Utils::now();

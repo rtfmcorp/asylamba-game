@@ -83,33 +83,18 @@ class SectorManager {
 				$sector->setXBarycentric($aw['xBarycentric']);
 				$sector->setYBarycentric($aw['yBarycentric']);
 				$sector->setTax($aw['tax']);
+				$sector->setName($aw['name']);
 				$sector->setPopulation($aw['population']);
 				$sector->setLifePlanet($aw['lifePlanet']);
-				$sector->setRuine($aw['ruine']);
-				$sector->setNebuleuse($aw['nebuleuse']);
-				$sector->setGeante($aw['geante']);
-				$sector->setNJaune($aw['nJaune']);
-				$sector->setNRouge($aw['nRouge']);
-				$sector->setDescription($aw['description']);
 
 				$this->sectors[] = array($sector, TRUE);
 
 				$this->genStats[0] += $aw['population'];
 				$this->genStats[1] += $aw['lifePlanet'];
-				$this->genStats[2] += $aw['ruine'];
-				$this->genStats[3] += $aw['nebuleuse'];
-				$this->genStats[4] += $aw['geante'];
-				$this->genStats[5] += $aw['nJaune'];
-				$this->genStats[6] += $aw['nRouge'];
 
 				if ($aw['rColor']) {
 					$this->colStats[$aw['rColor'] - 1][0] += $aw['population'];
 					$this->colStats[$aw['rColor'] - 1][1] += $aw['lifePlanet'];
-					$this->colStats[$aw['rColor'] - 1][2] += $aw['ruine'];
-					$this->colStats[$aw['rColor'] - 1][3] += $aw['nebuleuse'];
-					$this->colStats[$aw['rColor'] - 1][4] += $aw['geante'];
-					$this->colStats[$aw['rColor'] - 1][5] += $aw['nJaune'];
-					$this->colStats[$aw['rColor'] - 1][6] += $aw['nRouge'];
 				}
 
 				$k++;
@@ -159,14 +144,9 @@ class SectorManager {
 				$sector->setXBarycentric($aw['xBarycentric']);
 				$sector->setYBarycentric($aw['yBarycentric']);
 				$sector->setTax($s['tax']);
+				$sector->setName($s['name']);
 				$sector->setPopulation($s['population']);
 				$sector->setLifePlanet($s['lifePlanet']);
-				$sector->setRuine($s['ruine']);
-				$sector->setNebuleuse($s['nebuleuse']);
-				$sector->setGeante($s['geante']);
-				$sector->setNJaune($s['nJaune']);
-				$sector->setNRouge($s['nRouge']);
-				$sector->setDescription($s['description']);
 
 				$this->sectors[] = array($sector, TRUE);
 			}

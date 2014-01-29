@@ -5,6 +5,7 @@ class GalaxyColorManager {
 	}
 
 	public static function applyAndSave() {
+
 		$gcm = new GalaxyColorManager();
 		$gcm->loadSystem();
 		$gcm->loadSector();

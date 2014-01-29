@@ -2,15 +2,6 @@
 include_once GAIA;
 include_once ZEUS;
 
-#work part
-$gcm = new GalaxyColorManager();
-$gcm->loadSystem();
-$gcm->loadSector();
-$gcm->changeColorSystem();
-$gcm->changeColorSector();
-$gcm->saveSystem();
-$gcm->saveSector();
-
 # background paralax
 echo '<div id="background-paralax" class="profil"></div>';
 
@@ -46,12 +37,10 @@ echo '<div id="content">';
 					$qr = $db->query('SELECT id FROM sector WHERE rColor = ' . CTR::$data->get('inscription')->get('ally'));
 					$aw = $qr->fetchAll();
 					foreach ($aw as $v) {
-						if (in_array($v['id'], array(16, 17, 3, 4, 12, 15))) {
-							echo '<p><input type="radio" name="sector" value="' . $v['id'] . '" id="sector' . $v['id'] . '" required />';
-							echo '<label for="sector' . $v['id'] . '">';
-								echo 'secteur #' . $v['id'];
-							echo '</label></p>';
-						}
+						echo '<p><input type="radio" name="sector" value="' . $v['id'] . '" id="sector' . $v['id'] . '" required />';
+						echo '<label for="sector' . $v['id'] . '">';
+							echo 'secteur #' . $v['id'];
+						echo '</label></p>';
 					}
 				echo '</div>';
 			echo '</div>';
