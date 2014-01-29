@@ -20,6 +20,7 @@ if (DEVMODE || CTR::$get->exist('password')) {
 		case 'addbugtracker':			include SCRIPT . 'scripts/addbugtracker.php'; break;
 		case 'addtransaction':			include SCRIPT . 'scripts/addtransaction.php'; break;
 		case 'addcommercialshipping': 	include SCRIPT . 'scripts/addcommercialshipping.php'; break;
+		case 'addcommercialtax':		include SCRIPT . 'scripts/addcommercialtax.php'; break;
 
 		case 'dailycron':				include SCRIPT . 'scripts/cron/daily.php'; break;
 
