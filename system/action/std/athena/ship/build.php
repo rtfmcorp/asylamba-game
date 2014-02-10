@@ -81,7 +81,7 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 			if (ASM::$sqm->size() == 0) {
 				$sq->dStart = Utils::now();
 			} else {
-				$sq->dStart = ASM::$bqm->get(ASM::$bqm->size() - 1)->dEnd;
+				$sq->dStart = ASM::$sqm->get(ASM::$sqm->size() - 1)->dEnd;
 			}
 			$sq->dEnd = Utils::addSecondsToDate($sq->dStart, round($time - $bonus));
 			ASM::$sqm->add($sq);

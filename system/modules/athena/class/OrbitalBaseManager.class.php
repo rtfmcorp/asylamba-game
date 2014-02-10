@@ -227,7 +227,7 @@ class OrbitalBaseManager extends Manager {
 			include_once PROMETHEE;
 			$S_TQM1 = ASM::$tqm->getCurrentSession();
 			ASM::$tqm->newSession(ASM_UMODE);
-			ASM::$tqm->load(array('rPlace' => $aw['rPlace']));
+			ASM::$tqm->load(array('rPlace' => $aw['rPlace']), array('dEnd'));
 			$b->technoQueueManager = ASM::$tqm->getCurrentSession();
 			ASM::$tqm->changeSession($S_TQM1);
 

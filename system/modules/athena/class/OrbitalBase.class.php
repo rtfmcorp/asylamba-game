@@ -392,61 +392,40 @@ class OrbitalBase {
 	}
 
 	public function uTechnologyQueue($dUpdate, $player) {
-		$seconds = strtotime($dUpdate) - strtotime($this->uTechnoQueue);
-		if ($seconds > 0) {
 			$S_TQM1 = ASM::$tqm->getCurrentSession();
 			ASM::$tqm->changeSession($this->technoQueueManager);
 			$size = ASM::$tqm->size();
 			if ($size >= 1) {
 				$index = 0;
-				while ($seconds > 0 && $index < $size) {
+				while ($index < $size) {
 					$tq = ASM::$tqm->get($index);
-					if ($tq->remainingTime > $seconds) {
-						$tq->remainingTime -= $seconds;
-						// maj OK
-						$this->uTechnoQueue = $dUpdate;
-						ASM::$tqm->changeSession($S_TQM1);
-						return TRUE;
-					} else {
-						if (TechnologyResource::isATechnology($tq->technology)) {
-							// technologie construite
-							$techno = new Technology($player->getId());
-							$techno->setTechnology($tq->technology, $tq->targetLevel);
-							//increase player experience
-							$experience = TechnologyResource::getInfo($tq->technology, 'points', $tq->targetLevel);
-							$player->increaseExperience($experience);
-							//alert
-							if (CTR::$data->get('playerId') == $this->rPlayer) {
-								$alt = 'Développement de votre technologie ' . TechnologyResource::getInfo($tq->technology, 'name');
-								if ($tq->targetLevel > 1) {
-									$alt .= ' niveau ' . $tq->targetLevel;
-								} 
-								$alt .= ' terminée. Vous gagnez ' . $experience . ' d\'expérience.';
-								CTR::$alert->add($alt, ALERT_GAM_TECHNO);
-							}
-							//delete queue in database
-							ASM::$tqm->deleteById($tq->id);
-							$size--;
-						} else {
-							ASM::$tqm->changeSession($S_TQM1);
-							CTR::$alert->add('erreur dans la contruction d\'une technologie');
-							CTR::$alert->add('dans uTechnologyQueue de OrbitalBase', ALERT_BUG_ERROR);
-							return FALSE;
+
+					if ($tq->dEnd < $dUpdate) {
+						// technologie construite
+						$techno = new Technology($player->getId());
+						$techno->setTechnology($tq->technology, $tq->targetLevel);
+						//increase player experience
+						$experience = TechnologyResource::getInfo($tq->technology, 'points', $tq->targetLevel);
+						$player->increaseExperience($experience);
+						//alert
+						if (CTR::$data->get('playerId') == $this->rPlayer) {
+							$alt = 'Développement de votre technologie ' . TechnologyResource::getInfo($tq->technology, 'name');
+							if ($tq->targetLevel > 1) {
+								$alt .= ' niveau ' . $tq->targetLevel;
+							} 
+							$alt .= ' terminée. Vous gagnez ' . $experience . ' d\'expérience.';
+							CTR::$alert->add($alt, ALERT_GAM_TECHNO);
 						}
+						//delete queue in database
+						ASM::$tqm->deleteById($tq->id);
+						$size--;
+					} else {
+						break;
 					}
 				}
-				$this->uTechnoQueue = $dUpdate;
-				ASM::$tqm->changeSession($S_TQM1);
-				return TRUE;
-			} else {
-				//pas de techno en construction
-				$this->uTechnoQueue = $dUpdate;
-				ASM::$tqm->changeSession($S_TQM1);
-				return TRUE;
 			}
-		} else {
+			ASM::$tqm->changeSession($S_TQM1);
 			return TRUE;
-		}
 	}
 
 	public function uAntiSpy($now) {

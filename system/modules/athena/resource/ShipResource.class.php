@@ -99,7 +99,7 @@ class ShipResource {
 						ASM::$sqm->changeSession($sup->dock1Manager);
 						if (ASM::$sqm->size() > 0) {
 							for ($i = 0; $i < ASM::$sqm->size(); $i++) {
-								$inQueue += ShipResource::getInfo(ASM::$sqm->get($i)->getShipNumber(), 'pev') * ASM::$sqm->get($i)->getQuantity();
+								$inQueue += ShipResource::getInfo(ASM::$sqm->get($i)->shipNumber, 'pev') * ASM::$sqm->get($i)->quantity;
 							}
 						}
 						ASM::$sqm->changeSession($S_SQM1);
@@ -122,7 +122,7 @@ class ShipResource {
 						ASM::$sqm->changeSession($sup->dock2Manager);
 						if (ASM::$sqm->size() > 0) {
 							for ($i = 0; $i < ASM::$sqm->size(); $i++) {
-								$inQueue += self::getInfo(ASM::$sqm->get($i)->getShipNumber(), 'pev') * 1;
+								$inQueue += self::getInfo(ASM::$sqm->get($i)->shipNumber, 'pev') * 1;
 							}
 						}
 						ASM::$sqm->changeSession($S_SQM2);

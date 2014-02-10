@@ -125,7 +125,7 @@ if (ASM::$pam->size() == 1) {
 		# check the technology queues
 		$S_TQM1 = ASM::$tqm->getCurrentSession();
 		ASM::$tqm->newSession();
-		ASM::$tqm->load(array('rPlace' => $baseId), array('position'));
+		ASM::$tqm->load(array('rPlace' => $baseId), array('dEnd'));
 		$remainingTime = 0;
 		for ($j = 0; $j < ASM::$tqm->size(); $j++) { 
 			$remainingTime += ASM::$tqm->get($j)->remainingTime;

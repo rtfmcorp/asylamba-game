@@ -7,7 +7,9 @@ include_once PROMETHEE;
 # int baseid 		id de la base orbitale
 # int techno 	 	id de la technologie
 
-for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
+CTR::$alert->add('L\'action doit être mise à jour !', ALERT_STD_ERROR);
+
+/*for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
@@ -71,5 +73,5 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 	}
 } else {
 	CTR::$alert->add('pas assez d\'informations pour annuler le développement d\'une technologie', ALERT_STD_FILLFORM);
-}
+}*/
 ?>
