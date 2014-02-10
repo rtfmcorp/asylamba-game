@@ -40,11 +40,6 @@ class OrbitalBase {
 	private $isProductionDock2 = 0;
 	private $resourcesStorage = 5000;
 	private $uResources = '';
-	private $uBuildingQueue = '';
-	private $uShipQueue1 = '';
-	private $uShipQueue2 = '';
-	private $uShipQueue3 = '';
-	private $uTechnoQueue = '';
 	private $uAntiSpy = '';
 	private $dCreation = '';
 	//ATTRIBUTES : PLACE
@@ -111,11 +106,6 @@ class OrbitalBase {
 	public function getIsProductionDock2() { return $this->isProductionDock2; }
 	public function getResourcesStorage() { return $this->resourcesStorage; }
 	public function getUResources() { return $this->uResources; }
-	public function getUBuildingQueue() { return $this->uBuildingQueue; }
-	public function getUShipQueue1() { return $this->uShipQueue1; }
-	public function getUShipQueue2() { return $this->uShipQueue2; }
-	public function getUShipQueue3() { return $this->uShipQueue3; }
-	public function getUTechnoQueue() { return $this->uTechnoQueue; }
 	public function getUAntiSpy() { return $this->uAntiSpy; }
 	public function getDCreation() { return $this->dCreation; }
 
@@ -198,11 +188,6 @@ class OrbitalBase {
 	public function setIsProductionDock2($var) { $this->isProductionDock2 = $var; }
 	public function setResourcesStorage($var) { $this->resourcesStorage = $var; }
 	public function setUResources($var) { $this->uResources = $var; }
-	public function setUBuildingQueue($var) { $this->uBuildingQueue = $var; }
-	public function setUShipQueue1($var) { $this->uShipQueue1 = $var; }
-	public function setUShipQueue2($var) { $this->uShipQueue2 = $var; }
-	public function setUShipQueue3($var) { $this->uShipQueue3 = $var; }
-	public function setUTechnoQueue($var) { $this->uTechnoQueue = $var; }
 	public function setUAntiSpy($var) { $this->uAntiSpy = $var; }
 	public function setDCreation($var) { $this->dCreation = $var; }
 
