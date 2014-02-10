@@ -33,7 +33,7 @@ class OrbitalBaseManager extends Manager {
 			p.coefResources AS planetResources,
 			p.coefHistory AS planetHistory,
 			(SELECT
-				SUM(bq.remainingTime) 
+				MAX(bq.dEnd) 
 				FROM orbitalBaseBuildingQueue AS bq 
 				WHERE bq.rOrbitalBase = ob.rPlace)
 				AS remainingTimeGenerator,
@@ -135,8 +135,8 @@ class OrbitalBaseManager extends Manager {
 			$b->setPlanetResources($aw['planetResources']);
 			$b->setPlanetHistory($aw['planetHistory']);
 
-			$b->setRemainingTimeGenerator(round($aw['remainingTimeGenerator'], 1));
-			$b->setRemainingTimeDock1(round($aw['remainingTimeDock1'], 1));
+			$generatorTime = strtotime($aw['remainingTimeGenerator']) - strtotime(Utils::now());
+			$b->setRemainingTimeDock1(round($generatorTime, 1));
 			$b->setRemainingTimeDock2(round($aw['remainingTimeDock2'], 1));
 			$b->setRemainingTimeDock3(round($aw['remainingTimeDock3'], 1));
 			$b->setRoutesNumber($aw['routesNumber']);
@@ -144,7 +144,7 @@ class OrbitalBaseManager extends Manager {
 			// BuildingQueueManager
 			$oldBQMSess = ASM::$bqm->getCurrentSession();
 			ASM::$bqm->newSession(ASM_UMODE);
-			ASM::$bqm->load(array('rOrbitalBase' => $aw['rPlace']), array('position', 'ASC'));
+			ASM::$bqm->load(array('rOrbitalBase' => $aw['rPlace']), array('dEnd', 'ASC'));
 			$b->buildingManager = ASM::$bqm->getCurrentSession();
 			$size = ASM::$bqm->size();
 
@@ -157,7 +157,7 @@ class OrbitalBaseManager extends Manager {
 			$realCommercialPlateformeLevel = $aw['levelCommercialPlateforme'];
 			$realGravitationalModuleLevel = $aw['levelGravitationalModule'];
 			for ($i = 0; $i < $size; $i++) {
-				switch (ASM::$bqm->get($i)->getBuildingNumber()) {
+				switch (ASM::$bqm->get($i)->buildingNumber) {
 					case 0 :
 						$realGeneratorLevel++;
 						break;

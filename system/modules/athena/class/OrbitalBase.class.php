@@ -287,9 +287,6 @@ class OrbitalBase {
 	}
 
 	public function uBuildingQueue($now, $player) {
-		$seconds = Utils::interval($now, $this->uBuildingQueue, 's');
-		$this->uBuildingQueue = $now;
-
 		# charger la queue
 		$S_BQM2 = ASM::$bqm->getCurrentSession();
 		ASM::$bqm->changeSession($this->buildingManager);
@@ -299,14 +296,8 @@ class OrbitalBase {
 		for ($i = 0; $i < ASM::$bqm->size(); $i++) { 
 			$queue = ASM::$bqm->get($i);
 
-			if (($queue->getRemainingTime() - $seconds) > 0) {
-				# building pas fini
-				$queue->setRemainingTime($queue->getRemainingTime() - $seconds);
-				break;
-			} else {
-				# building fini
-				$queueToRemove[] = $queue->getId();
-				$seconds -= $queue->getRemainingTime();
+			if ($queue->dEnd < $now) {
+				$queueToRemove[] = $queue->id;
 			}
 		}
 		
@@ -314,15 +305,15 @@ class OrbitalBase {
 		foreach ($queueToRemove as $i) {
 			$queue = ASM::$bqm->getById($i);
 			# update builded building
-			$this->setBuildingLevel($queue->getBuildingNumber(), ($this->getBuildingLevel($queue->getBuildingNumber()) + 1));
+			$this->setBuildingLevel($queue->buildingNumber, ($this->getBuildingLevel($queue->buildingNumber) + 1));
 			# update the points of the orbitalBase
 			$this->updatePoints();
 			# increase player experience
-			$experience = OrbitalBaseResource::getBuildingInfo($queue->getBuildingNumber(), 'level', $queue->getTargetLevel(), 'points');
+			$experience = OrbitalBaseResource::getBuildingInfo($queue->buildingNumber, 'level', $queue->targetLevel, 'points');
 			$player->increaseExperience($experience);
 			# alert
 			if (CTR::$data->get('playerId') == $this->rPlayer) {
-				CTR::$alert->add('Construction de votre ' . OrbitalBaseResource::getBuildingInfo($queue->getBuildingNumber(), 'frenchName') . ' niveau ' . $queue->getTargetLevel() . ' sur ' . $this->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.', ALERT_GAM_GENERATOR);
+				CTR::$alert->add('Construction de votre ' . OrbitalBaseResource::getBuildingInfo($queue->buildingNumber, 'frenchName') . ' niveau ' . $queue->targetLevel . ' sur ' . $this->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.', ALERT_GAM_GENERATOR);
 			}
 			# delete queue in database
 			ASM::$bqm->deleteById($i);

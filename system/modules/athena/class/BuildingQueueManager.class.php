@@ -7,7 +7,7 @@
  * @copyright Expansion - le jeu
  *
  * @package Athena
- * @update 20.05.13
+ * @update 10.02.14
 */
 
 class BuildingQueueManager extends Manager {
@@ -43,56 +43,56 @@ class BuildingQueueManager extends Manager {
 		}
 
 		while($aw = $qr->fetch()) {
-			$n = new BuildingQueue();
+			$bq = new BuildingQueue();
 
-			$n->setId($aw['id']);
-			$n->setROrbitalBase($aw['rOrbitalBase']);
-			$n->setBuildingNumber($aw['buildingNumber']);
-			$n->setTargetLevel($aw['targetLevel']);
-			$n->setRemainingTime($aw['remainingTime']);
-			$n->setPosition($aw['position']);
+			$bq->id = $aw['id'];
+			$bq->rOrbitalBase = $aw['rOrbitalBase'];
+			$bq->buildingNumber = $aw['buildingNumber'];
+			$bq->targetLevel = $aw['targetLevel'];
+			$bq->dStart = $aw['dStart'];
+			$bq->dEnd = $aw['dEnd'];
 
-			$this->_Add($n);
+			$this->_Add($bq);
 	}
 	}
 
-	public function add(BuildingQueue $n) {
+	public function add(BuildingQueue $bq) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			orbitalBaseBuildingQueue(rOrbitalBase, buildingNumber, targetLevel, remainingTime, position)
+			orbitalBaseBuildingQueue(rOrbitalBase, buildingNumber, targetLevel, dStart, dEnd)
 			VALUES(?, ?, ?, ?, ?)');
 		$qr->execute(array(
-			$n->getROrbitalBase(),
-			$n->getBuildingNumber(),
-			$n->getTargetLevel(),
-			$n->getRemainingTime(),
-			$n->getPosition()
+			$bq->rOrbitalBase,
+			$bq->buildingNumber,
+			$bq->targetLevel,
+			$bq->dStart,
+			$bq->dEnd
 		));
 
-		$n->setId($db->lastInsertId());
-		$this->_Add($n);
+		$bq->id = $db->lastInsertId();
+		$this->_Add($bq);
 	}
 
 	public function save() {
 		$buildingQueues = $this->_Save();
-		foreach ($buildingQueues AS $n) {
+		foreach ($buildingQueues AS $bq) {
 			$db = DataBase::getInstance();
 			$qr = $db->prepare('UPDATE orbitalBaseBuildingQueue
 				SET	id = ?,
 					rOrbitalBase = ?,
 					buildingNumber = ?,
 					targetlevel = ?,
-					remainingTime = ?,
-					position = ?
+					dStart = ?,
+					dEnd = ?
 				WHERE id = ?');
 			$qr->execute(array(
-				$n->getId(),
-				$n->getROrbitalBase(),
-				$n->getBuildingNumber(),
-				$n->getTargetLevel(),
-				$n->getRemainingTime(),
-				$n->getPosition(),
-				$n->getId()
+				$bq->id,
+				$bq->rOrbitalBase,
+				$bq->buildingNumber,
+				$bq->targetLevel,
+				$bq->dStart,
+				$bq->dEnd,
+				$bq->id
 			));
 		}
 	}
@@ -107,11 +107,5 @@ class BuildingQueueManager extends Manager {
 
 		return TRUE;
 	}
-
-	/**
-	 *	ToDo
-	 *
-	 *	public function invertPosition($id1, $id2) {}
-	 */
 }
 ?>
