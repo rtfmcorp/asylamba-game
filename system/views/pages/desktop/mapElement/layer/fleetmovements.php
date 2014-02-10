@@ -16,11 +16,11 @@ ASM::$plm->newSession();
 ASM::$plm->load(array('id' => $placesId));
 
 echo '<div id="fleet-movements">';
-	echo '<svg viewBox="0, 0, 5000, 5000" xmlns="http://www.w3.org/2000/svg">';
+	echo '<svg viewBox="0, 0, ' . (GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size']) . ', ' . (GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';
 			for ($i = 0; $i < ASM::$com->size(); $i++) {
 				$commander = ASM::$com->get($i);
 				if ($commander->getTypeOfMove() !== COM_BACK) {
-					echo '<line x1="' . (ASM::$plm->getById($commander->getRBase())->getXSystem() * 20) . '" x2="' . (ASM::$plm->getById($commander->getRPlaceDestination())->getXSystem() * 20) . '" y1="' . (ASM::$plm->getById($commander->getRBase())->getYSystem() * 20) . '" y2="' . (ASM::$plm->getById($commander->getRPlaceDestination())->getYSystem() * 20) . '" />';
+					echo '<line x1="' . (ASM::$plm->getById($commander->getRBase())->getXSystem() * GalaxyConfiguration::$scale) . '" x2="' . (ASM::$plm->getById($commander->getRPlaceDestination())->getXSystem() * GalaxyConfiguration::$scale) . '" y1="' . (ASM::$plm->getById($commander->getRBase())->getYSystem() * GalaxyConfiguration::$scale) . '" y2="' . (ASM::$plm->getById($commander->getRPlaceDestination())->getYSystem() * GalaxyConfiguration::$scale) . '" />';
 				}
 			}
 	echo '</svg>';

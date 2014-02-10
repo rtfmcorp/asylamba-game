@@ -25,10 +25,10 @@ $qr = $db->query('SELECT
 $aw = $qr->fetchAll();
 
 echo '<div id="commercial-routes" style="display: none;">';
-	echo '<svg viewBox="0, 0, 5000, 5000" xmlns="http://www.w3.org/2000/svg">';
+	echo '<svg viewBox="0, 0, ' . (GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size']) . ', ' . (GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';
 			foreach ($aw as $route) {
 				$class = ($route['statement'] == CRM_ACTIVE) ? 'active' : 'standBy';
-				echo '<line class="commercialRoute ' . $class . '" x1="' . ($route['sy1x'] * 20) . '" x2="' . ($route['sy2x'] * 20) . '" y1="' . ($route['sy1y'] * 20) . '" y2="' . ($route['sy2y'] * 20) . '" />';
+				echo '<line class="commercialRoute ' . $class . '" x1="' . ($route['sy1x'] * GalaxyConfiguration::$scale) . '" x2="' . ($route['sy2x'] * GalaxyConfiguration::$scale) . '" y1="' . ($route['sy1y'] * GalaxyConfiguration::$scale) . '" y2="' . ($route['sy2y'] * GalaxyConfiguration::$scale) . '" />';
 			}
 	echo '</svg>';
 echo '</div>';

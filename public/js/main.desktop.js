@@ -366,9 +366,9 @@ jQuery(document).ready(function($) {
 	var mapController = {
 		map: {
 			obj: $('#map'),
-			size: 5000,
-			overflow: 300,
-			ratio: 20
+			ratio: $('#map').data('map-ratio'),
+			size: $('#map').data('map-size'),
+			overflow: 400
 		},
 
 		minimap: {
@@ -500,7 +500,7 @@ jQuery(document).ready(function($) {
 	});
 
 	// évènement sur les secteurs, centre la map sur le barycentre du secteur
-	$('#mini-map .moveTo').on('click', function(e) {
+	$('.mini-map .moveTo').on('click', function(e) {
 		mapController.moveTo(
 			$(this).data('x-position'),
 			$(this).data('y-position')

@@ -4,8 +4,11 @@ abstract class CTC {
 	private static $events  = array();
 
 	public static function createContext() {
+		self::$create++;
+
 		if (!self::$running) {
 			self::$running = TRUE;
+			self::$context++;
 			return TRUE;
 		} else {
 			return FALSE;
@@ -13,9 +16,17 @@ abstract class CTC {
 	}
 
 	public static function applyContext($token) {
+		self::$apply++;
+		$path = 'public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
+
 		if ($token) {
+			Bug::writeLog($path, "> " . date('H:i:s') . ", start to apply context\r");
+			Bug::writeLog($path, ">\r");
+			
 			foreach (self::$events as $k => $event) {
 				call_user_func(array($event['object'], $event['method']), $event['args']);
+
+				Bug::writeLog($path, "> " . $event['object'] . "->" . $event['method'] . "(" . implode(', ', $event['args']) . ")\r");
 			}
 
 			self::$running = FALSE;
@@ -27,6 +38,8 @@ abstract class CTC {
 		if (!self::$running) {
 			throw new Exception('CTC isn\'t running actually', 1);
 		} else {
+			self::$add++;
+
 			$event = array(
 				'date' 	 => $date,
 				'object' => $object,
@@ -64,10 +77,9 @@ abstract class CTC {
 		return count(self::$events);
 	}
 
-	public static function log() {
-		var_dump(self::$running);
-		var_dump(self::$events);
-		echo '----------------------------------';
-	}
+	private static $add     = 0;
+	private static $create  = 0;
+	private static $apply   = 0;
+	private static $context = 0;
 }
 ?>
