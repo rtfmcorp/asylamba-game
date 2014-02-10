@@ -50,26 +50,20 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 		}
 		$S_SQM1 = ASM::$sqm->getCurrentSession();
 		ASM::$sqm->newSession(ASM_UMODE);
-		ASM::$sqm->load(array('rOrbitalBase' => $baseId, 'dockType' => $dockType), array('position'));
+		ASM::$sqm->load(array('rOrbitalBase' => $baseId, 'dockType' => $dockType), array('dEnd'));
 		$technos = new Technology(CTR::$data->get('playerId'));
 		if (ShipResource::haveRights($ship, 'resource', $ob->getResourcesStorage(), $quantity)
 			AND ShipResource::haveRights($ship, 'queue', ASM::$sqm->size())
 			AND ShipResource::haveRights($ship, 'shipTree', $ob)
 			AND ShipResource::haveRights($ship, 'pev', $ob, $quantity)
 			AND ShipResource::haveRights($ship, 'techno', $technos)) {
-			// remet à jour les positions des queues
-			if (ASM::$sqm->size() > 0) {
-				for ($i = 0; $i < ASM::$sqm->size(); $i++) {
-					$sq = ASM::$sqm->get($i);
-					$sq->setPosition($i + 1);
-				}
-			}
+
 			// construit le(s) nouveau(x) vaisseau(x)
 			$sq = new ShipQueue();
-			$sq->setROrbitalBase($baseId);
-			$sq->setDockType($dockType);
-			$sq->setShipNumber($ship);
-			$sq->setQuantity($quantity);
+			$sq->rOrbitalBase = $baseId;
+			$sq->dockType = $dockType;
+			$sq->shipNumber = $ship;
+			$sq->quantity = $quantity;
 
 			$time = ShipResource::getInfo($ship, 'time') * $quantity;
 			switch ($dockType) {
@@ -84,18 +78,18 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 					break;
 			}
 			$bonus = $time * CTR::$data->get('playerBonus')->get($playerBonus) / 100;
-			$sq->setRemainingTime(round($time - $bonus));
-			$sq->setPosition(ASM::$sqm->size() + 1);
+			if (ASM::$sqm->size() == 0) {
+				$sq->dStart = Utils::now();
+			} else {
+				$sq->dStart = ASM::$bqm->get(ASM::$bqm->size() - 1)->dEnd;
+			}
+			$sq->dEnd = Utils::addSecondsToDate($sq->dStart, round($time - $bonus));
 			ASM::$sqm->add($sq);
 			// débit des ressources au joueur
 			$ob->decreaseResources(ShipResource::getInfo($ship, 'resourcePrice') * $quantity);
 
 			// ajout de l'event dans le contrôleur
-			$date = Utils::now();
-			for ($i = 0; $i < ASM::$sqm->size(); $i++) { 
-				$date = Utils::addSecondsToDate($date, ASM::$sqm->get($i)->getRemainingTime());
-			}
-			CTR::$data->get('playerEvent')->add($date, EVENT_BASE, $baseId);
+			CTR::$data->get('playerEvent')->add($sq->dEnd, EVENT_BASE, $baseId);
 
 			// alerte
 			if ($quantity == 1) {

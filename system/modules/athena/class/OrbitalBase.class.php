@@ -286,7 +286,7 @@ class OrbitalBase {
 		}
 	}
 
-	public function uBuildingQueue($now, $player) {
+	public function uBuildingQueue($dUpdate, $player) {
 		# charger la queue
 		$S_BQM2 = ASM::$bqm->getCurrentSession();
 		ASM::$bqm->changeSession($this->buildingManager);
@@ -296,7 +296,7 @@ class OrbitalBase {
 		for ($i = 0; $i < ASM::$bqm->size(); $i++) { 
 			$queue = ASM::$bqm->get($i);
 
-			if ($queue->dEnd < $now) {
+			if ($queue->dEnd < $dUpdate) {
 				$queueToRemove[] = $queue->id;
 			}
 		}
@@ -323,114 +323,72 @@ class OrbitalBase {
 	}
 
 	public function uShipQueue1($dUpdate, $player) {
-		$seconds = strtotime($dUpdate) - strtotime($this->uShipQueue1);
-		if ($seconds > 0) {
-			$S_SQM1 = ASM::$sqm->getCurrentSession();
-			ASM::$sqm->changeSession($this->dock1Manager);
-			$size = ASM::$sqm->size();
-			if ($size >= 1) {
-				$index = 0;
-				while ($seconds > 0 && $index < $size) {
-					$sq = ASM::$sqm->get($index);
-					if ($sq->getRemainingTime() > $seconds) {
-						$sq->setRemainingTime($sq->getRemainingTime() - $seconds);
-						// maj OK
-						$this->uShipQueue1 = $dUpdate;
-						ASM::$sqm->changeSession($S_SQM1);
-						return TRUE;
-					} else {
-						if (ShipResource::isAShipFromDock1($sq->getShipNumber())) {
-							// vaisseau construit
-							$this->setShipStorage($sq->getShipNumber(), $this->getShipStorage($sq->getShipNumber()) + $sq->getQuantity());
-							//increase player experience
-							$experience = $sq->getQuantity() * ShipResource::getInfo($sq->getShipNumber(), 'points');
-							$player->increaseExperience($experience);
-							//alert
-							if (CTR::$data->get('playerId') == $this->rPlayer) {
-								$alt = 'Construction de ';
-								if ($sq->getQuantity() > 1) {
-									$alt .= 'vos ' . $sq->getQuantity() . ' ' . ShipResource::getInfo($sq->getShipNumber(), 'codeName') . 's';
-								} else {
-									$alt .= 'votre ' . ShipResource::getInfo($sq->getShipNumber(), 'codeName');
-								}
-								$alt .= ' sur ' . $this->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.';
-								CTR::$alert->add($alt, ALERT_GAM_DOCK1);
-							}
-							//delete queue in database
-							ASM::$sqm->deleteById($sq->getId());
-							$size--;
+		$S_SQM1 = ASM::$sqm->getCurrentSession();
+		ASM::$sqm->changeSession($this->dock1Manager);
+		$size = ASM::$sqm->size();
+		if ($size >= 1) {
+			$index = 0;
+			while ($index < $size) {
+				$sq = ASM::$sqm->get($index);
+
+				if ($sq->dEnd < $dUpdate) {
+					// vaisseau construit
+					$this->setShipStorage($sq->shipNumber, $this->getShipStorage($sq->shipNumber) + $sq->quantity);
+					//increase player experience
+					$experience = $sq->quantity * ShipResource::getInfo($sq->shipNumber, 'points');
+					$player->increaseExperience($experience);
+					//alert
+					if (CTR::$data->get('playerId') == $this->rPlayer) {
+						$alt = 'Construction de ';
+						if ($sq->quantity > 1) {
+							$alt .= 'vos ' . $sq->quantity . ' ' . ShipResource::getInfo($sq->shipNumber, 'codeName') . 's';
 						} else {
-							ASM::$sqm->changeSession($S_SQM1);
-							CTR::$alert->add('erreur dans la contruction d\'un vaisseau');
-							CTR::$alert->add('dans uShipQueue1 de OrbitalBase', ALERT_BUG_ERROR);
-							return FALSE;
+							$alt .= 'votre ' . ShipResource::getInfo($sq->shipNumber, 'codeName');
 						}
+						$alt .= ' sur ' . $this->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.';
+						CTR::$alert->add($alt, ALERT_GAM_DOCK1);
 					}
+					//delete queue in database
+					ASM::$sqm->deleteById($sq->id);
+					$size--;
+				} else {
+					break;
 				}
-				$this->uShipQueue1 = $dUpdate;
-				ASM::$sqm->changeSession($S_SQM1);
-				return TRUE;
-			} else {
-				//pas de ship en coustruction, maj OK
-				$this->uShipQueue1 = $dUpdate;
-				ASM::$sqm->changeSession($S_SQM1);
-				return TRUE;
 			}
-		} else {
-			return TRUE;
-		}
+		} 
+		ASM::$sqm->changeSession($S_SQM1);
+		return TRUE;
 	}
 
 	public function uShipQueue2($dUpdate, $player) {
-		$seconds = strtotime($dUpdate) - strtotime($this->uShipQueue2);
-		if ($seconds > 0) {
-			$S_SQM1 = ASM::$sqm->getCurrentSession();
-			ASM::$sqm->changeSession($this->dock2Manager);
-			$size = ASM::$sqm->size();
-			if ($size >= 1) {
-				$index = 0;
-				while ($seconds > 0 && $index < $size) {
-					$sq = ASM::$sqm->get($index);
-					if ($sq->getRemainingTime() > $seconds) {
-						$sq->setRemainingTime($sq->getRemainingTime() - $seconds);
-						// maj OK
-						$this->uShipQueue2 = $dUpdate;
-						ASM::$sqm->changeSession($S_SQM1);
-						return TRUE;
-					} else {
-						if (ShipResource::isAShipFromDock2($sq->getShipNumber())) {
-							// vaisseau construit
-							$this->setShipStorage($sq->getShipNumber(), $this->getShipStorage($sq->getShipNumber()) + 1);
-							//increase player experience
-							$experience = ShipResource::getInfo($sq->getShipNumber(), 'points');
-							$player->increaseExperience($experience);
-							//alert
-							if (CTR::$data->get('playerId') == $this->rPlayer) {
-								CTR::$alert->add('Construction de votre ' . ShipResource::getInfo($sq->getShipNumber(), 'codeName') . ' sur ' . $this->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.', ALERT_GAM_DOCK2);
-							}
-							//delete queue in database
-							ASM::$sqm->deleteById($sq->getId());
-							$size--;
-						} else {
-							ASM::$sqm->changeSession($S_SQM1);
-							CTR::$alert->add('erreur dans la contruction d\'un vaisseau');
-							CTR::$alert->add('dans uShipQueue2 de OrbitalBase', ALERT_BUG_ERROR);
-							return FALSE;
-						}
+		$S_SQM1 = ASM::$sqm->getCurrentSession();
+		ASM::$sqm->changeSession($this->dock2Manager);
+		$size = ASM::$sqm->size();
+		if ($size >= 1) {
+			$index = 0;
+			while ($index < $size) {
+				$sq = ASM::$sqm->get($index);
+
+				if ($sq->dEnd < $dUpdate) {
+					// vaisseau construit
+					$this->setShipStorage($sq->shipNumber, $this->getShipStorage($sq->shipNumber) + 1);
+					//increase player experience
+					$experience = ShipResource::getInfo($sq->shipNumber, 'points');
+					$player->increaseExperience($experience);
+					//alert
+					if (CTR::$data->get('playerId') == $this->rPlayer) {
+						CTR::$alert->add('Construction de votre ' . ShipResource::getInfo($sq->shipNumber, 'codeName') . ' sur ' . $this->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.', ALERT_GAM_DOCK2);
 					}
+					//delete queue in database
+					ASM::$sqm->deleteById($sq->id);
+					$size--;
+				} else {
+					break;
 				}
-				$this->uShipQueue2 = $dUpdate;
-				ASM::$sqm->changeSession($S_SQM1);
-				return TRUE;
-			} else {
-				//pas de ship en coustruction, maj OK
-				$this->uShipQueue2 = $dUpdate;
-				ASM::$sqm->changeSession($S_SQM1);
-				return TRUE;
 			}
-		} else {
-			return TRUE;
-		}
+		} 
+		ASM::$sqm->changeSession($S_SQM1);
+		return TRUE;
 	}
 
 	public function uTechnologyQueue($dUpdate, $player) {

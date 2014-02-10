@@ -77,7 +77,7 @@ if (ASM::$pam->size() == 1) {
 		# check the building queues
 		$S_BQM1 = ASM::$bqm->getCurrentSession();
 		ASM::$bqm->newSession();
-		ASM::$bqm->load(array('rOrbitalBase' => $baseId), array('position'));
+		ASM::$bqm->load(array('rOrbitalBase' => $baseId), array('dEnd'));
 		$remainingTime = 0;
 		for ($j = 0; $j < ASM::$bqm->size(); $j++) { 
 			$remainingTime += ASM::$bqm->get($j)->getRemainingTime();
@@ -89,7 +89,7 @@ if (ASM::$pam->size() == 1) {
 		# check the ship queues of dock 1
 		$S_SQM1 = ASM::$sqm->getCurrentSession();
 		ASM::$sqm->newSession();
-		ASM::$sqm->load(array('rOrbitalBase' => $baseId, 'dockType' => 1), array('position'));
+		ASM::$sqm->load(array('rOrbitalBase' => $baseId, 'dockType' => 1), array('dEnd'));
 		$remainingTime = 0;
 		for ($j = 0; $j < ASM::$sqm->size(); $j++) { 
 			$remainingTime += ASM::$sqm->get($j)->getRemainingTime();
@@ -101,7 +101,7 @@ if (ASM::$pam->size() == 1) {
 		# check the ship queues of dock 2
 		$S_SQM2 = ASM::$sqm->getCurrentSession();
 		ASM::$sqm->newSession();
-		ASM::$sqm->load(array('rOrbitalBase' => $baseId, 'dockType' => 2), array('position'));
+		ASM::$sqm->load(array('rOrbitalBase' => $baseId, 'dockType' => 2), array('dEnd'));
 		$remainingTime = 0;
 		for ($j = 0; $j < ASM::$sqm->size(); $j++) { 
 			$remainingTime += ASM::$sqm->get($j)->getRemainingTime();
@@ -113,7 +113,7 @@ if (ASM::$pam->size() == 1) {
 		# check the ship queues of dock 3
 		$S_SQM3 = ASM::$sqm->getCurrentSession();
 		ASM::$sqm->newSession();
-		ASM::$sqm->load(array('rOrbitalBase' => $baseId, 'dockType' => 3), array('position'));
+		ASM::$sqm->load(array('rOrbitalBase' => $baseId, 'dockType' => 3), array('dEnd'));
 		$remainingTime = 0;
 		for ($j = 0; $j < ASM::$sqm->size(); $j++) { 
 			$remainingTime += ASM::$sqm->get($j)->getRemainingTime();

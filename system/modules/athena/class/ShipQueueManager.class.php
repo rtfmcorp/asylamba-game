@@ -7,7 +7,7 @@
  * @copyright Expansion - le jeu
  *
  * @package Athena
- * @update 20.05.13
+ * @update 10.02.14
 */
 
 class ShipQueueManager extends Manager {
@@ -43,41 +43,41 @@ class ShipQueueManager extends Manager {
 		}
 
 		while($aw = $qr->fetch()) {
-			$n = new ShipQueue();
+			$sq = new ShipQueue();
 
-			$n->setId($aw['id']);
-			$n->setROrbitalBase($aw['rOrbitalBase']);
-			$n->setDockType($aw['dockType']);
-			$n->setShipNumber($aw['shipNumber']);
-			$n->setQuantity($aw['quantity']);
-			$n->setRemainingTime($aw['remainingTime']);
-			$n->setPosition($aw['position']);
+			$sq->id = $aw['id'];
+			$sq->rOrbitalBase = $aw['rOrbitalBase'];
+			$sq->dockType = $aw['dockType'];
+			$sq->shipNumber = $aw['shipNumber'];
+			$sq->quantity = $aw['quantity'];
+			$sq->dStart = $aw['dStart'];
+			$sq->dEnd = $aw['dEnd'];
 
-			$this->_Add($n);
+			$this->_Add($sq);
 		}
 	}
 
-	public function add(ShipQueue $n) {
+	public function add(ShipQueue $sq) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			orbitalBaseShipQueue(rOrbitalBase, dockType, shipNumber, quantity, remainingTime, position)
+			orbitalBaseShipQueue(rOrbitalBase, dockType, shipNumber, quantity, dStart, dEnd)
 			VALUES(?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
-			$n->getROrbitalBase(),
-			$n->getDockType(),
-			$n->getShipNumber(),
-			$n->getQuantity(),
-			$n->getRemainingTime(),
-			$n->getPosition()
+			$sq->rOrbitalBase,
+			$sq->dockType,
+			$sq->shipNumber,
+			$sq->quantity,
+			$sq->dStart,
+			$sq->dEnd
 		));
 
-		$n->setId($db->lastInsertId());
-		$this->_Add($n);
+		$sq->id = $db->lastInsertId();
+		$this->_Add($sq);
 	}
 
 	public function save() {
 		$shipQueues = $this->_Save();
-		foreach ($shipQueues AS $k => $n) {
+		foreach ($shipQueues AS $k => $sq) {
 			$db = DataBase::getInstance();
 			$qr = $db->prepare('UPDATE orbitalBaseShipQueue
 				SET	id = ?,
@@ -85,18 +85,18 @@ class ShipQueueManager extends Manager {
 					dockType = ?,
 					shipNumber = ?,
 					quantity = ?,
-					remainingTime = ?,
-					position = ?
+					dStart = ?,
+					dEnd = ?
 				WHERE id = ?');
 			$qr->execute(array(
-				$n->getId(),
-				$n->getROrbitalBase(),
-				$n->getDockType(),
-				$n->getShipNumber(),
-				$n->getQuantity(),
-				$n->getRemainingTime(),
-				$n->getPosition(),
-				$n->getId()
+				$sq->id,
+				$sq->rOrbitalBase,
+				$sq->dockType,
+				$sq->shipNumber,
+				$sq->quantity,
+				$sq->dStart,
+				$sq->dEnd,
+				$sq->id
 			));
 		}
 	}

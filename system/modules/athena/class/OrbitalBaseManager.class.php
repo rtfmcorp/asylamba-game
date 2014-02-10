@@ -36,22 +36,22 @@ class OrbitalBaseManager extends Manager {
 				MAX(bq.dEnd) 
 				FROM orbitalBaseBuildingQueue AS bq 
 				WHERE bq.rOrbitalBase = ob.rPlace)
-				AS remainingTimeGenerator,
+				AS termDateGenerator,
 			(SELECT 
-				SUM(sq1.remainingTime) 
+				MAX(sq1.dEnd) 
 				FROM orbitalBaseShipQueue AS sq1 
 				WHERE sq1.rOrbitalBase = ob.rPlace AND sq1.dockType = 1) 
-				AS remainingTimeDock1,
+				AS termDateDock1,
 			(SELECT 
-				SUM(sq2.remainingTime) 
+				MAX(sq2.dEnd) 
 				FROM orbitalBaseShipQueue AS sq2 
 				WHERE sq2.rOrbitalBase = ob.rPlace AND sq2.dockType = 2) 
-				AS remainingTimeDock2,
+				AS termDateDock2,
 			(SELECT 
-				SUM(sq3.remainingTime) 
+				MAX(sq3.dEnd) 
 				FROM orbitalBaseShipQueue AS sq3
 				WHERE sq3.rOrbitalBase = ob.rPlace AND sq3.dockType = 3) 
-				AS remainingTimeDock3,
+				AS termDateDock3,
 			(SELECT
 				COUNT(cr.id)
 				FROM commercialRoute AS cr
@@ -135,10 +135,15 @@ class OrbitalBaseManager extends Manager {
 			$b->setPlanetResources($aw['planetResources']);
 			$b->setPlanetHistory($aw['planetHistory']);
 
-			$generatorTime = strtotime($aw['remainingTimeGenerator']) - strtotime(Utils::now());
-			$b->setRemainingTimeDock1(round($generatorTime, 1));
-			$b->setRemainingTimeDock2(round($aw['remainingTimeDock2'], 1));
-			$b->setRemainingTimeDock3(round($aw['remainingTimeDock3'], 1));
+			$generatorTime = strtotime($aw['termDateGenerator']) - strtotime(Utils::now());
+			$b->setRemainingTimeGenerator(round($generatorTime, 1));
+			$dock1Time = strtotime($aw['termDateDock1']) - strtotime(Utils::now());
+			$b->setRemainingTimeDock1(round($dock1Time, 1));
+			$dock2Time = strtotime($aw['termDateDock2']) - strtotime(Utils::now());
+			$b->setRemainingTimeDock2(round($dock2Time, 1));
+			$dock3Time = strtotime($aw['termDateDock3']) - strtotime(Utils::now());
+			$b->setRemainingTimeDock3(round($dock3Time, 1));
+
 			$b->setRoutesNumber($aw['routesNumber']);
 
 			// BuildingQueueManager
@@ -200,13 +205,13 @@ class OrbitalBaseManager extends Manager {
 			// ShipQueueManager
 			$S_SQM1 = ASM::$sqm->getCurrentSession();
 			ASM::$sqm->newSession(ASM_UMODE);
-			ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 1), array('position'));
+			ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 1), array('dEnd'));
 			$b->dock1Manager = ASM::$sqm->getCurrentSession();
 			ASM::$sqm->newSession(ASM_UMODE);
-			ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 2), array('position'));
+			ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 2), array('dEnd'));
 			$b->dock2Manager = ASM::$sqm->getCurrentSession();
 			ASM::$sqm->newSession(ASM_UMODE);
-			ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 3), array('position'));
+			ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 3), array('dEnd'));
 			$b->dock3Manager = ASM::$sqm->getCurrentSession();
 			ASM::$sqm->changeSession($S_SQM1);
 
