@@ -78,10 +78,8 @@ if (ASM::$pam->size() == 1) {
 		$S_BQM1 = ASM::$bqm->getCurrentSession();
 		ASM::$bqm->newSession();
 		ASM::$bqm->load(array('rOrbitalBase' => $baseId), array('dEnd'));
-		$remainingTime = 0;
 		for ($j = 0; $j < ASM::$bqm->size(); $j++) { 
-			$remainingTime += ASM::$bqm->get($j)->getRemainingTime();
-			$date = Utils::addSecondsToDate($now, $remainingTime);
+			$date = ASM::$bqm->get($j)->dEnd;
 			CTR::$data->get('playerEvent')->add($date, EVENT_BASE, $baseId);
 		}
 		ASM::$bqm->changeSession($S_BQM1);
@@ -90,10 +88,8 @@ if (ASM::$pam->size() == 1) {
 		$S_SQM1 = ASM::$sqm->getCurrentSession();
 		ASM::$sqm->newSession();
 		ASM::$sqm->load(array('rOrbitalBase' => $baseId, 'dockType' => 1), array('dEnd'));
-		$remainingTime = 0;
 		for ($j = 0; $j < ASM::$sqm->size(); $j++) { 
-			$remainingTime += ASM::$sqm->get($j)->getRemainingTime();
-			$date = Utils::addSecondsToDate($now, $remainingTime);
+			$date = ASM::$sqm->get($j)->dEnd;
 			CTR::$data->get('playerEvent')->add($date, EVENT_BASE, $baseId);
 		}
 		ASM::$sqm->changeSession($S_SQM1);
@@ -102,10 +98,8 @@ if (ASM::$pam->size() == 1) {
 		$S_SQM2 = ASM::$sqm->getCurrentSession();
 		ASM::$sqm->newSession();
 		ASM::$sqm->load(array('rOrbitalBase' => $baseId, 'dockType' => 2), array('dEnd'));
-		$remainingTime = 0;
 		for ($j = 0; $j < ASM::$sqm->size(); $j++) { 
-			$remainingTime += ASM::$sqm->get($j)->getRemainingTime();
-			$date = Utils::addSecondsToDate($now, $remainingTime);
+			$date = ASM::$sqm->get($j)->dEnd;
 			CTR::$data->get('playerEvent')->add($date, EVENT_BASE, $baseId);
 		}
 		ASM::$sqm->changeSession($S_SQM2);
@@ -114,10 +108,8 @@ if (ASM::$pam->size() == 1) {
 		$S_SQM3 = ASM::$sqm->getCurrentSession();
 		ASM::$sqm->newSession();
 		ASM::$sqm->load(array('rOrbitalBase' => $baseId, 'dockType' => 3), array('dEnd'));
-		$remainingTime = 0;
 		for ($j = 0; $j < ASM::$sqm->size(); $j++) { 
-			$remainingTime += ASM::$sqm->get($j)->getRemainingTime();
-			$date = Utils::addSecondsToDate($now, $remainingTime);
+			$date = ASM::$sqm->get($j)->dEnd;
 			CTR::$data->get('playerEvent')->add($date, EVENT_BASE, $baseId);
 		}
 		ASM::$sqm->changeSession($S_SQM3);
@@ -126,10 +118,8 @@ if (ASM::$pam->size() == 1) {
 		$S_TQM1 = ASM::$tqm->getCurrentSession();
 		ASM::$tqm->newSession();
 		ASM::$tqm->load(array('rPlace' => $baseId), array('dEnd'));
-		$remainingTime = 0;
 		for ($j = 0; $j < ASM::$tqm->size(); $j++) { 
-			$remainingTime += ASM::$tqm->get($j)->remainingTime;
-			$date = Utils::addSecondsToDate($now, $remainingTime);
+			$date = ASM::$tqm->get($j)->dEnd;
 			CTR::$data->get('playerEvent')->add($date, EVENT_BASE, $baseId);
 		}
 		ASM::$tqm->changeSession($S_TQM1);
