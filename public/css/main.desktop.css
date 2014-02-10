@@ -2906,7 +2906,6 @@ body {
 
 /****** NAV & OPTION *****/
 
-#map-nav,
 #map-option {
 	z-index: 1000;
 	position: absolute;
@@ -2914,11 +2913,9 @@ body {
 	height: 32px;
 	padding: 3px 0;
 	background: url('src/desktop/map/bOption.png') repeat-x;
+	top: 30px; right: 20px;
 }
-#map-option { top: 30px; right: 80px; }
-#map-nav { top: 30px; right: 260px; }
 
-#map-nav:before,
 #map-option:before {
 	content: '';
 	position: absolute;
@@ -2927,7 +2924,6 @@ body {
 	height: 38px; width: 10px;
 	background: url('src/desktop/map/bLeftOption.png');
 }
-#map-nav:after,
 #map-option:after {
 	content: '';
 	position: absolute;
@@ -2936,7 +2932,6 @@ body {
 	height: 38px; width: 10px;
 	background: url('src/desktop/map/bRightOption.png');
 }
-#map-nav a,
 #map-option a {
 	position: relative;
 	display: inline-block;
@@ -2944,20 +2939,19 @@ body {
 	margin: 0 1px;
 	background: rgba(0, 0, 0, .25);
 }
-#map-nav a img,
 #map-option a img {
 	position: absolute;
 	top: 5px; left: 5px;
 	width: 22px;
 }
-#map-option a:hover, #map-nav a:hover { background: black }
-#map-option a.active, #map-nav a.active { background: rgba(255, 255, 255, .1); }
+#map-option a:hover { background: black }
+#map-option a.active { background: rgba(255, 255, 255, .1); }
 
 /****** CONTENT *****/
 #map-content {
 	z-index: 1000;
 	position: absolute;
-	top: 80px; right: 70px;
+	top: 80px; right: 20px;
 	display: block;
 }
 
@@ -3061,7 +3055,7 @@ body {
 #coord-box {
 	z-index: 1000;
 	position: absolute;
-	bottom: 20px; right: 70px;
+	bottom: 20px; right: 20px;
 	width: 80px;
 	padding: 5px 10px;
 	background: rgba(0, 0, 0, .8);
@@ -3557,14 +3551,67 @@ body {
 	color: white;
 }
 
+/* map-commanders */
+
+#map-commanders {
+	z-index: 1000;
+	position: absolute;
+	display: block;
+	top: 30px; left: 20px;
+}
+
+#map-commanders .commander {
+	position: relative;
+	height: 80px; width: 40px;
+	margin: 0 0 5px 0; padding: 0 0 0 40px;
+	overflow: hidden;
+	color: white;
+
+	-moz-transition: width linear 250ms;
+}
+#map-commanders .commander:hover {
+	width: 250px;
+}
+
+#map-commanders .commander .avatar {
+	position: absolute;
+	height: 80px; width: 80px;
+	top: 0; left: 0;
+}
+#map-commanders .commander .avatar img {
+	height: 66px; width: 66px;
+	border: solid 1px #4F4F4F;
+	background: #0A0A0A;
+	padding: 6px;
+	border-radius: 100%;
+}
+#map-commanders .commander.active .avatar img {
+	box-shadow: inset 0 0 0 3px #324;
+	border-color: #324;
+}
+#map-commanders .commander .avatar .level {
+	position: absolute;
+	display: block;
+	width: 28px; height: 28px; line-height: 28px;
+	text-align: center;
+	background: #324;
+	border-radius: 100%;
+	bottom: 0; right: 0;
+}
+
+#map-commanders .commander .army {
+	text-align: right;
+	background: rgba(0, 0, 0, .9);
+	margin: 10px 0;
+	height: 60px;
+}
+
 /****** MAP *****/
 #map {
 	position: absolute;
 	z-index: 100;
-	width: 5000px; height: 5000px;
 	background: url('src/desktop/map/common/map.jpg') repeat black;
-	padding: 0;
-	top: 0; left: 0;
+	padding: 0; top: 0; left: 0;
 }
 #map #sectors { z-index: 300; }
 #map #spying { z-index: 400; }
@@ -3573,11 +3620,12 @@ body {
 #map #fleet-movements { z-index: 700; }
 #map #attacks { z-index: 800; }
 #map #systems { z-index: 900; }
+#map #map-info { z-index: 910; }
 
 #map > div {
 	position: absolute;
 	top: 0; left: 0;
-	width: 5000px; height: 5000px;
+	width: 100%; height: 100%;
 	overflow: hidden;
 }
 
@@ -3745,6 +3793,48 @@ body {
 #map #systems .sector-info.color5 p a { background: #2c7915; }
 #map #systems .sector-info.color6 p a { background: #076b87; }
 #map #systems .sector-info.color7 p a { background: #67331d; }
+
+#map #map-info {
+	display: none;
+	position: absolute;
+	top: 0px; right: 0px; left: auto; bottom: auto;
+	height: auto; width: auto;
+	margin: 40px 60px 0 0;
+	color: white;
+	text-align: right;
+}
+
+#map #map-info h2 {
+	margin: 0; padding: 0 20px;
+	font-size: 38px;
+	line-height: 60px;
+}
+
+#map #map-info h3 {
+	margin: 0; padding: 0 20px;
+	font-size: 16px;
+	font-weight: normal;
+	line-height: 40px;
+}
+
+#map #map-info ul {
+	margin: 10px 0; padding: 0;
+	list-style: none;
+}
+
+#map #map-info ul li {
+	position: relative;
+	margin: 0; padding: 0 40px 0 0;
+	line-height: 20px; height: 20px;
+	font-style: italic;
+	color: #CCC;
+	font-size: 13px;
+}
+
+#map #map-info ul li img {
+	position: absolute;
+	right: 10px; top: 0px;
+}
 
 /* ADMIN */
 

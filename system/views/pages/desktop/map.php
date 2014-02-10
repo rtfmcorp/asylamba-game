@@ -53,8 +53,8 @@ if (CTR::$get->exist('place')) {
 
 # control include
 include 'mapElement/option.php';
-include 'mapElement/nav.php';
 include 'mapElement/content.php';
+include 'mapElement/commanders.php';
 include 'mapElement/movers.php';
 include 'mapElement/coordbox.php';
 
@@ -92,6 +92,9 @@ echo '<div id="map" ';
 	echo 'data-begin-x-position="' . $x . '" ';
 	echo 'data-begin-y-position="' . $y . '" ';
 	echo 'data-related-place="' . $defaultBase->getId() . '"';
+	echo 'data-map-size="' . (GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size']) . '"';
+	echo 'data-map-ratio="' . GalaxyConfiguration::$scale . '"';
+	echo 'style="width: ' . ((GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size'])) . 'px; height: ' . ((GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size'])) . 'px;"';
 echo '>';
 	include 'mapElement/layer/background.php';
 
@@ -104,6 +107,7 @@ echo '>';
 	include 'mapElement/layer/attacks.php';
 
 	include 'mapElement/layer/systems.php';
+	include 'mapElement/layer/map-info.php';
 echo '</div>';
 
 ASM::$obm->changeSession($S_OBM_MAP);
