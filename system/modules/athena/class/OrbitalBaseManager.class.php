@@ -238,18 +238,10 @@ class OrbitalBaseManager extends Manager {
 
 			// U mechanism
 			if ($this->currentSession->getUMode()) {
-				// nouvelle session de PlayerManager puis restauration
-				$S_PAM1 = ASM::$pam->getCurrentSession();
-				ASM::$pam->newSession();
-				ASM::$pam->load(array('id' => $currentB->getRPlayer()));
-				$p = ASM::$pam->get();
-				ASM::$pam->changeSession($S_PAM1);
 
 				$now = Utils::now();
-				$currentB->uBuildingQueue($now, $p);
-				$currentB->uShipQueue1($now, $p);
-				$currentB->uShipQueue2($now, $p);
-				$currentB->uTechnologyQueue($now, $p);
+				$currentB->uMethod($now);
+
 				$currentB->uAntiSpy($now);
 				$currentB->uCommercialShipping($now);
 
