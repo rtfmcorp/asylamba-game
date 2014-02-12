@@ -6,6 +6,7 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `orbitalBase` (
   `rPlace` int(10) unsigned NOT NULL,
   `rPlayer` int(10) unsigned NOT NULL,
   `name` varchar(45) COLLATE utf8_bin NOT NULL,
+  `typeOfBase` tinyint(3) unsigned DEFAULT '0',
   `levelGenerator` tinyint(3) unsigned DEFAULT '0',
   `levelRefinery` tinyint(3) unsigned DEFAULT '0',
   `levelDock1` tinyint(3) unsigned DEFAULT '0',

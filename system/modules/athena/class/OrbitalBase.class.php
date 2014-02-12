@@ -11,10 +11,17 @@
 */
 
 class OrbitalBase {
+	# type of base
+	const TYP_NEUTRAL = 0;
+	const TYP_COMMERCIAL = 1;
+	const TYP_MILITARY = 2;
+	const TYP_CAPITAL = 3;
+
 	//ATTRIBUTES : ORBITALBASE
 	private $rPlace;
 	private $rPlayer;
 	private $name;
+	public $typeOfBase = 0;
 	private $levelGenerator = 2;
 	private $levelRefinery = 1;
 	private $levelDock1 = 1;

@@ -81,6 +81,7 @@ class OrbitalBaseManager extends Manager {
 			$b->setRPlace($aw['rPlace']);
 			$b->setRPlayer($aw['rPlayer']);
 			$b->setName($aw['name']);
+			$b->typeOfBase = $aw['typeOfBase'];
 			$b->setLevelGenerator($aw['levelGenerator']);
 			$b->setLevelRefinery($aw['levelRefinery']);
 			$b->setLevelDock1($aw['levelDock1']);
@@ -249,11 +250,11 @@ class OrbitalBaseManager extends Manager {
 	public function add(OrbitalBase $b) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			orbitalBase(rPlace, rPlayer, name, levelGenerator, levelRefinery, levelDock1, levelDock2, levelDock3, levelTechnosphere, levelCommercialPlateforme, levelGravitationalModule, points,
+			orbitalBase(rPlace, rPlayer, name, typeOfBase, levelGenerator, levelRefinery, levelDock1, levelDock2, levelDock3, levelTechnosphere, levelCommercialPlateforme, levelGravitationalModule, points,
 				iSchool, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, iAntiSpy, antiSpyAverage, 
 				pegaseStorage, satyreStorage, sireneStorage, dryadeStorage, chimereStorage, meduseStorage, griffonStorage, cyclopeStorage, minotaureStorage, hydreStorage, cerbereStorage, phenixStorage,
 				motherShip, isCommercialBase, isProductionRefinery, isProductionDock1, isProductionDock2, resourcesStorage, uOrbitalBase, dCreation)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,  
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,  
 				?, ?, ?, ?, ?, ?, ?, ?, 
 				?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
 				?, ?, ?, ?, ?, ?, ?, ?)');
@@ -261,6 +262,7 @@ class OrbitalBaseManager extends Manager {
 			$b->getRPlace(),
 			$b->getRPlayer(),
 			$b->getName(),
+			$b->typeOfBase,
 			$b->getLevelGenerator(),
 			$b->getLevelRefinery(),
 			$b->getLevelDock1(),
@@ -311,7 +313,7 @@ class OrbitalBaseManager extends Manager {
 		foreach ($bases AS $k => $b) {
 			$db = DataBase::getInstance();
 			$qr = $db->prepare('UPDATE orbitalBase
-				SET	rPlace = ?, rPlayer = ?, name = ?, levelGenerator = ?, levelRefinery = ?, levelDock1 = ?, levelDock2 = ?, levelDock3 = ?, levelTechnosphere = ?, levelCommercialPlateforme = ?, levelGravitationalModule = ?, points = ?,
+				SET	rPlace = ?, rPlayer = ?, name = ?, typeOfBase = ?, levelGenerator = ?, levelRefinery = ?, levelDock1 = ?, levelDock2 = ?, levelDock3 = ?, levelTechnosphere = ?, levelCommercialPlateforme = ?, levelGravitationalModule = ?, points = ?,
 			iSchool = ?, iUniversity = ?, partNaturalSciences = ?, partLifeSciences = ?, partSocialPoliticalSciences = ?, partInformaticEngineering = ?, iAntiSpy = ?, antiSpyAverage = ?,
 			pegaseStorage = ?, satyreStorage = ?, sireneStorage = ?, dryadeStorage = ?, chimereStorage = ?, meduseStorage = ?, griffonStorage = ?, cyclopeStorage = ?, minotaureStorage = ?, hydreStorage = ?, cerbereStorage = ?, phenixStorage = ?,
 			motherShip = ?, isCommercialBase = ?, isProductionRefinery = ?, isProductionDock1 = ?, isProductionDock2 = ?, resourcesStorage = ?, uOrbitalBase = ?, dCreation = ?
@@ -320,6 +322,7 @@ class OrbitalBaseManager extends Manager {
 				$b->getRPlace(),
 				$b->getRPlayer(),
 				$b->getName(),
+				$b->typeOfBase,
 				$b->getLevelGenerator(),
 				$b->getLevelRefinery(),
 				$b->getLevelDock1(),

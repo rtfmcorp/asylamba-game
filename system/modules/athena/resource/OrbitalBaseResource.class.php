@@ -43,6 +43,21 @@ class OrbitalBaseResource {
 		return (in_array($ship, self::$dock3Ships)) ? TRUE : FALSE;
 	}
 
+	public static function fleetQuantity($typeOfBase) {
+		switch ($typeOfBase) {
+			case OrbitalBase::TYP_NEUTRAL:
+				return 2; break;
+			case OrbitalBase::TYP_COMMERCIAL:
+				return 2; break;
+			case OrbitalBase::TYP_MILITARY:
+				return 5; break;
+			case OrbitalBase::TYP_CAPITAL:
+				return 5; break;
+			default:
+				return 0; break;
+		}
+	}
+
 	public static function getBuildingInfo($buildingNumber, $info, $level = 0, $sup = 'default') {
 		if(self::isABuilding($buildingNumber)) {
 			if ($info == 'name' OR $info == 'frenchName' OR $info == 'imageLink' OR $info == 'description') {
