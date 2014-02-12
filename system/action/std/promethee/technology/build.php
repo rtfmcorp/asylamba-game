@@ -32,7 +32,7 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 		$targetLevel = $technos->getTechnology($techno) + 1;
 		$S_TQM1 = ASM::$tqm->getCurrentSession();
 		ASM::$tqm->newSession(ASM_UMODE);
-		ASM::$tqm->load(array('rPlace' => $baseId), array('position'));
+		ASM::$tqm->load(array('rPlace' => $baseId), array('dEnd'));
 		for ($i = 0; $i < ASM::$tqm->size(); $i++) { 
 			if (ASM::$tqm->get($i)->technology == $techno) {
 				$targetLevel++;
@@ -59,13 +59,6 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 			ASM::$pam->newSession(ASM_UMODE);
 			ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
 
-			// remise en ordre des positions
-			if (ASM::$tqm->size() > 0) {
-				for ($i = 0; $i < ASM::$tqm->size(); $i++) {
-					$tq = ASM::$tqm->get($i);
-					$tq->position = $i + 1;
-				}
-			}
 			// construit la nouvelle techno
 			$tq = new TechnologyQueue();
 			$tq->rPlayer = CTR::$data->get('playerId');
@@ -74,8 +67,12 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 			$tq->targetLevel = $targetLevel;
 			$time = TechnologyResource::getInfo($techno, 'time', $targetLevel);
 			$bonus = $time * CTR::$data->get('playerBonus')->get(PlayerBonus::TECHNOSPHERE_SPEED) / 100;
-			$tq->remainingTime = round($time - $bonus);
-			$tq->position = ASM::$tqm->size() + 1;
+			if (ASM::$tqm->size() == 0) {
+				$tq->dStart = Utils::now();
+			} else {
+				$tq->dStart = ASM::$tqm->get(ASM::$tqm->size() - 1)->dEnd;
+			}
+			$tq->dEnd = Utils::addSecondsToDate($tq->dStart, round($time - $bonus));
 			ASM::$tqm->add($tq);
 
 			// débit resources
@@ -84,11 +81,7 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 			ASM::$pam->get()->decreaseCredit(TechnologyResource::getInfo($techno, 'credit', $targetLevel));
 			
 			// ajout de l'event dans le contrôleur
-			$date = Utils::now();
-			for ($i = 0; $i < ASM::$tqm->size(); $i++) { 
-				$date = Utils::addSecondsToDate($date, ASM::$tqm->get($i)->remainingTime);
-			}
-			CTR::$data->get('playerEvent')->add($date, EVENT_BASE, $baseId);
+			CTR::$data->get('playerEvent')->add($tq->dEnd, EVENT_BASE, $baseId);
 
 			// alerte
 			CTR::$alert->add('Développement de la technologie programmée', ALERT_STD_SUCCESS);

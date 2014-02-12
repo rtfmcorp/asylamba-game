@@ -23,7 +23,7 @@ for ($m = 6; $m < 12; $m++) {
 $inQueue = 0;
 if (ASM::$sqm->size() > 0) {
 	for ($j = 0; $j < ASM::$sqm->size(); $j++) {
-		$inQueue += ShipResource::getInfo(ASM::$sqm->get($j)->getShipNumber(), 'pev') * ASM::$sqm->get($j)->getQuantity();
+		$inQueue += ShipResource::getInfo(ASM::$sqm->get($j)->shipNumber, 'pev') * ASM::$sqm->get($j)->quantity;
 	}
 }
 
@@ -150,27 +150,28 @@ echo '<div class="component">';
 				for ($i = 0; $i < ASM::$sqm->size(); $i++) {
 					$queue = ASM::$sqm->get($i);
 					$realSizeQueue++;
-					$totalTimeShips = ShipResource::getInfo($queue->getShipNumber(), 'time');
+					$totalTimeShips = ShipResource::getInfo($queue->shipNumber, 'time');
+					$remainingTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
 
 					if ($realSizeQueue > 1) {
 						echo '<div class="item">';
 					} else { 
-						echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $queue->getRemainingTime() . '" data-progress-total-time="' . $totalTimeShips . '">';
+						echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTime . '" data-progress-total-time="' . $totalTimeShips . '">';
 					}
-					echo '<a href="' . APP_ROOT . 'action/a-dequeueship/baseid-' . $ob_dock2->getId() . '/dock-2/queue-' . $queue->getId() . '"' . 
+					echo '<a href="' . APP_ROOT . 'action/a-dequeueship/baseid-' . $ob_dock2->getId() . '/dock-2/queue-' . $queue->id . '"' . 
 						'class="button hb lt" title="annuler la commande">×</a>';
-					echo  '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($queue->getShipNumber(), 'imageLink') . '.png" alt="" />';
-					echo '<strong>' . ShipResource::getInfo($queue->getShipNumber(), 'codeName') . '</strong>';
+					echo  '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($queue->shipNumber, 'imageLink') . '.png" alt="" />';
+					echo '<strong>' . ShipResource::getInfo($queue->shipNumber, 'codeName') . '</strong>';
 					
 					if ($realSizeQueue > 1) {
 						echo '<em>en attente</em>';
 
 						echo '<span class="progress-container"></span>';
 					} else {
-						echo '<em><span class="progress-text">' . Chronos::secondToFormat($queue->getRemainingTime(), 'lite') . '</span></em>';
+						echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTime, 'lite') . '</span></em>';
 
 						echo '<span class="progress-container">';
-							echo '<span style="width: ' . Format::percent($totalTimeShips - $queue->getRemainingTime(), $totalTimeShips) . '%;" class="progress-bar">';
+							echo '<span style="width: ' . Format::percent($totalTimeShips - $remainingTime, $totalTimeShips) . '%;" class="progress-bar">';
 							echo '</span>';
 						echo '</span>';
 					}

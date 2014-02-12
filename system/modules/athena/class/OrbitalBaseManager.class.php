@@ -33,25 +33,25 @@ class OrbitalBaseManager extends Manager {
 			p.coefResources AS planetResources,
 			p.coefHistory AS planetHistory,
 			(SELECT
-				SUM(bq.remainingTime) 
+				MAX(bq.dEnd) 
 				FROM orbitalBaseBuildingQueue AS bq 
 				WHERE bq.rOrbitalBase = ob.rPlace)
-				AS remainingTimeGenerator,
+				AS termDateGenerator,
 			(SELECT 
-				SUM(sq1.remainingTime) 
+				MAX(sq1.dEnd) 
 				FROM orbitalBaseShipQueue AS sq1 
 				WHERE sq1.rOrbitalBase = ob.rPlace AND sq1.dockType = 1) 
-				AS remainingTimeDock1,
+				AS termDateDock1,
 			(SELECT 
-				SUM(sq2.remainingTime) 
+				MAX(sq2.dEnd) 
 				FROM orbitalBaseShipQueue AS sq2 
 				WHERE sq2.rOrbitalBase = ob.rPlace AND sq2.dockType = 2) 
-				AS remainingTimeDock2,
+				AS termDateDock2,
 			(SELECT 
-				SUM(sq3.remainingTime) 
+				MAX(sq3.dEnd) 
 				FROM orbitalBaseShipQueue AS sq3
 				WHERE sq3.rOrbitalBase = ob.rPlace AND sq3.dockType = 3) 
-				AS remainingTimeDock3,
+				AS termDateDock3,
 			(SELECT
 				COUNT(cr.id)
 				FROM commercialRoute AS cr
@@ -117,11 +117,6 @@ class OrbitalBaseManager extends Manager {
 			$b->setIsProductionDock2($aw['isProductionDock2']);
 			$b->setResourcesStorage($aw['resourcesStorage']);
 			$b->setUResources($aw['uResources']);
-			$b->setUBuildingQueue($aw['uBuildingQueue']);
-			$b->setUShipQueue1($aw['uShipQueue1']);
-			$b->setUShipQueue2($aw['uShipQueue2']);
-			$b->setUShipQueue3($aw['uShipQueue3']);
-			$b->setUTechnoQueue($aw['uTechnoQueue']);
 			$b->setUAntiSpy($aw['uAntiSpy']);
 			$b->setDCreation($aw['dCreation']);
 
@@ -135,16 +130,21 @@ class OrbitalBaseManager extends Manager {
 			$b->setPlanetResources($aw['planetResources']);
 			$b->setPlanetHistory($aw['planetHistory']);
 
-			$b->setRemainingTimeGenerator(round($aw['remainingTimeGenerator'], 1));
-			$b->setRemainingTimeDock1(round($aw['remainingTimeDock1'], 1));
-			$b->setRemainingTimeDock2(round($aw['remainingTimeDock2'], 1));
-			$b->setRemainingTimeDock3(round($aw['remainingTimeDock3'], 1));
+			$generatorTime = strtotime($aw['termDateGenerator']) - strtotime(Utils::now());
+			$b->setRemainingTimeGenerator(round($generatorTime, 1));
+			$dock1Time = strtotime($aw['termDateDock1']) - strtotime(Utils::now());
+			$b->setRemainingTimeDock1(round($dock1Time, 1));
+			$dock2Time = strtotime($aw['termDateDock2']) - strtotime(Utils::now());
+			$b->setRemainingTimeDock2(round($dock2Time, 1));
+			$dock3Time = strtotime($aw['termDateDock3']) - strtotime(Utils::now());
+			$b->setRemainingTimeDock3(round($dock3Time, 1));
+
 			$b->setRoutesNumber($aw['routesNumber']);
 
 			// BuildingQueueManager
 			$oldBQMSess = ASM::$bqm->getCurrentSession();
 			ASM::$bqm->newSession(ASM_UMODE);
-			ASM::$bqm->load(array('rOrbitalBase' => $aw['rPlace']), array('position', 'ASC'));
+			ASM::$bqm->load(array('rOrbitalBase' => $aw['rPlace']), array('dEnd', 'ASC'));
 			$b->buildingManager = ASM::$bqm->getCurrentSession();
 			$size = ASM::$bqm->size();
 
@@ -157,7 +157,7 @@ class OrbitalBaseManager extends Manager {
 			$realCommercialPlateformeLevel = $aw['levelCommercialPlateforme'];
 			$realGravitationalModuleLevel = $aw['levelGravitationalModule'];
 			for ($i = 0; $i < $size; $i++) {
-				switch (ASM::$bqm->get($i)->getBuildingNumber()) {
+				switch (ASM::$bqm->get($i)->buildingNumber) {
 					case 0 :
 						$realGeneratorLevel++;
 						break;
@@ -200,13 +200,13 @@ class OrbitalBaseManager extends Manager {
 			// ShipQueueManager
 			$S_SQM1 = ASM::$sqm->getCurrentSession();
 			ASM::$sqm->newSession(ASM_UMODE);
-			ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 1), array('position'));
+			ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 1), array('dEnd'));
 			$b->dock1Manager = ASM::$sqm->getCurrentSession();
 			ASM::$sqm->newSession(ASM_UMODE);
-			ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 2), array('position'));
+			ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 2), array('dEnd'));
 			$b->dock2Manager = ASM::$sqm->getCurrentSession();
 			ASM::$sqm->newSession(ASM_UMODE);
-			ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 3), array('position'));
+			ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 3), array('dEnd'));
 			$b->dock3Manager = ASM::$sqm->getCurrentSession();
 			ASM::$sqm->changeSession($S_SQM1);
 
@@ -222,7 +222,7 @@ class OrbitalBaseManager extends Manager {
 			include_once PROMETHEE;
 			$S_TQM1 = ASM::$tqm->getCurrentSession();
 			ASM::$tqm->newSession(ASM_UMODE);
-			ASM::$tqm->load(array('rPlace' => $aw['rPlace']));
+			ASM::$tqm->load(array('rPlace' => $aw['rPlace']), array('dEnd'));
 			$b->technoQueueManager = ASM::$tqm->getCurrentSession();
 			ASM::$tqm->changeSession($S_TQM1);
 
@@ -238,18 +238,10 @@ class OrbitalBaseManager extends Manager {
 
 			// U mechanism
 			if ($this->currentSession->getUMode()) {
-				// nouvelle session de PlayerManager puis restauration
-				$S_PAM1 = ASM::$pam->getCurrentSession();
-				ASM::$pam->newSession();
-				ASM::$pam->load(array('id' => $currentB->getRPlayer()));
-				$p = ASM::$pam->get();
-				ASM::$pam->changeSession($S_PAM1);
 
 				$now = Utils::now();
-				$currentB->uBuildingQueue($now, $p);
-				$currentB->uShipQueue1($now, $p);
-				$currentB->uShipQueue2($now, $p);
-				$currentB->uTechnologyQueue($now, $p);
+				$currentB->uMethod($now);
+
 				$currentB->uAntiSpy($now);
 				$currentB->uCommercialShipping($now);
 
@@ -264,11 +256,11 @@ class OrbitalBaseManager extends Manager {
 			orbitalBase(rPlace, rPlayer, name, levelGenerator, levelRefinery, levelDock1, levelDock2, levelDock3, levelTechnosphere, levelCommercialPlateforme, levelGravitationalModule, points,
 				iSchool, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, iAntiSpy, antiSpyAverage, 
 				pegaseStorage, satyreStorage, sireneStorage, dryadeStorage, chimereStorage, meduseStorage, griffonStorage, cyclopeStorage, minotaureStorage, hydreStorage, cerbereStorage, phenixStorage,
-				motherShip, isCommercialBase, isProductionRefinery, isProductionDock1, isProductionDock2, resourcesStorage, uResources, uBuildingQueue, uShipQueue1, uShipQueue2, uShipQueue3, uTechnoQueue, uAntiSpy, dCreation)
+				motherShip, isCommercialBase, isProductionRefinery, isProductionDock1, isProductionDock2, resourcesStorage, uResources, uAntiSpy, dCreation)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,  
 				?, ?, ?, ?, ?, ?, ?, ?, 
 				?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
-				?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+				?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$b->getRPlace(),
 			$b->getRPlayer(),
@@ -312,11 +304,6 @@ class OrbitalBaseManager extends Manager {
 			$b->getIsProductionDock2(),
 			$b->getResourcesStorage(),
 			$b->getUResources(),
-			$b->getUBuildingQueue(),
-			$b->getUShipQueue1(),
-			$b->getUShipQueue2(),
-			$b->getUShipQueue3(),
-			$b->getUTechnoQueue(),
 			$b->getUAntiSpy(),
 			$b->getDCreation()
 		));
@@ -332,7 +319,7 @@ class OrbitalBaseManager extends Manager {
 				SET	rPlace = ?, rPlayer = ?, name = ?, levelGenerator = ?, levelRefinery = ?, levelDock1 = ?, levelDock2 = ?, levelDock3 = ?, levelTechnosphere = ?, levelCommercialPlateforme = ?, levelGravitationalModule = ?, points = ?,
 			iSchool = ?, iUniversity = ?, partNaturalSciences = ?, partLifeSciences = ?, partSocialPoliticalSciences = ?, partInformaticEngineering = ?, iAntiSpy = ?, antiSpyAverage = ?,
 			pegaseStorage = ?, satyreStorage = ?, sireneStorage = ?, dryadeStorage = ?, chimereStorage = ?, meduseStorage = ?, griffonStorage = ?, cyclopeStorage = ?, minotaureStorage = ?, hydreStorage = ?, cerbereStorage = ?, phenixStorage = ?,
-			motherShip = ?, isCommercialBase = ?, isProductionRefinery = ?, isProductionDock1 = ?, isProductionDock2 = ?, resourcesStorage = ?, uResources = ?, uBuildingQueue = ?, uShipQueue1 = ?, uShipQueue2 = ?, uShipQueue3 = ?, uTechnoQueue = ?, uAntiSpy = ?, dCreation = ?
+			motherShip = ?, isCommercialBase = ?, isProductionRefinery = ?, isProductionDock1 = ?, isProductionDock2 = ?, resourcesStorage = ?, uResources = ?, uAntiSpy = ?, dCreation = ?
 				WHERE rPlace = ?');
 			$qr->execute(array(
 				$b->getRPlace(),
@@ -374,11 +361,6 @@ class OrbitalBaseManager extends Manager {
 				$b->getIsProductionDock2(),
 				$b->getResourcesStorage(),
 				$b->getUResources(),
-				$b->getUBuildingQueue(),
-				$b->getUShipQueue1(),
-				$b->getUShipQueue2(),
-				$b->getUShipQueue3(),
-				$b->getUTechnoQueue(),
 				$b->getUAntiSpy(),
 				$b->getDCreation(),
 				$b->getRPlace()

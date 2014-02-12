@@ -104,17 +104,17 @@ echo '<div id="tools">';
 			if (ASM::$bqm->size() > 0) {
 				$qe = ASM::$bqm->get(0);
 				echo '<div class="queue">';
-					echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $qe->getRemainingTime() . '" data-progress-total-time="' . OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'level', $qe->getTargetLevel(), 'time') . '">';
-						echo '<img class="picto" src="' . MEDIA . 'orbitalbase/' . OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'imageLink') . '.png" alt="" />';
+					echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time') . '">';
+						echo '<img class="picto" src="' . MEDIA . 'orbitalbase/' . OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
 						echo '<strong>';
-							echo OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'frenchName');
-							echo ' <span class="level">niv. ' . $qe->getTargetLevel() . '</span>';
+							echo OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'frenchName');
+							echo ' <span class="level">niv. ' . $qe->targetLevel . '</span>';
 						echo '</strong>';
 						
-						echo '<em><span class="progress-text">' . Chronos::secondToFormat($qe->getRemainingTime(), 'lite') . '</span></em>';
+						echo '<em><span class="progress-text">' . Chronos::secondToFormat(Utils::interval(Utils::now(), $qe->dEnd, 's'), 'lite') . '</span></em>';
 
 						echo '<span class="progress-container">';
-							echo '<span style="width: ' . Format::percent(OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'level', $qe->getTargetLevel(), 'time') - $qe->getRemainingTime(), OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'level', $qe->getTargetLevel(), 'time')) . '%;" class="progress-bar">';
+							echo '<span style="width: ' . Format::percent(OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time') - Utils::interval(Utils::now(), $qe->dEnd, 's'), OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time')) . '%;" class="progress-bar">';
 							echo'</span>';
 						echo '</span>';
 					echo '</div>';

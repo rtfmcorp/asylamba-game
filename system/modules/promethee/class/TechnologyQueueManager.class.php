@@ -6,7 +6,7 @@
  * @copyright Expansion - le jeu
  *
  * @package Prométhée
- * @update 20.05.13
+ * @update 10.02.14
 */
 
 class TechnologyQueueManager extends Manager {
@@ -49,8 +49,8 @@ class TechnologyQueueManager extends Manager {
 			$t->rPlace = $aw['rPlace'];
 			$t->technology = $aw['technology'];
 			$t->targetLevel = $aw['targetLevel'];
-			$t->remainingTime = $aw['remainingTime'];
-			$t->position = $aw['position'];
+			$t->dStart = $aw['dStart'];
+			$t->dEnd = $aw['dEnd'];
 
 			$this->_Add($t);
 		}
@@ -59,15 +59,15 @@ class TechnologyQueueManager extends Manager {
 	public function add(TechnologyQueue $t) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			technologyQueue(rPlayer, rPlace, technology, targetLevel, remainingTime, position)
+			technologyQueue(rPlayer, rPlace, technology, targetLevel, dStart, dEnd)
 			VALUES(?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$t->rPlayer,
 			$t->rPlace,
 			$t->technology,
 			$t->targetLevel,
-			$t->remainingTime,
-			$t->position
+			$t->dStart,
+			$t->dEnd
 		));
 		$t->id = $db->lastInsertId();
 		$this->_Add($t);
@@ -83,8 +83,8 @@ class TechnologyQueueManager extends Manager {
 					rPlace = ?,
 					technology = ?,
 					targetlevel = ?,
-					remainingTime = ?,
-					position = ?
+					dStart = ?,
+					dEnd = ?
 				WHERE id = ?');
 			$qr->execute(array(
 				$t->id,
@@ -92,8 +92,8 @@ class TechnologyQueueManager extends Manager {
 				$t->rPlace,
 				$t->technology,
 				$t->targetLevel,
-				$t->remainingTime,
-				$t->position,
+				$t->dStart,
+				$t->dEnd,
 				$t->id
 			));
 		}
@@ -108,11 +108,5 @@ class TechnologyQueueManager extends Manager {
 
 		return TRUE;
 	}
-
-	/**
-	 *	ToDo
-	 *
-	 *	public function invertPosition($id1, $id2) {}
-	 */
 }
 ?>

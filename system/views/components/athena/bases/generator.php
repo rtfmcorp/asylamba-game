@@ -30,16 +30,16 @@ if (ASM::$bqm->size() != 0) {
 		$qe = ASM::$bqm->get($i);
 
 		$realSizeQueue++;
-		$nextTime += $qe->getRemainingTime();
-		$nextTotalTime += OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'level', $qe->getTargetLevel(), 'time');
+		$nextTime = Utils::interval(Utils::now(), $qe->dEnd, 's');
+		$nextTotalTime += OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time');
 
 		$q .= '<div class="item ' . (($realSizeQueue > 1) ? 'active' : '') . ' progress" data-progress-output="lite" data-progress-current-time="' . $nextTime . '" data-progress-total-time="' . $nextTotalTime . '">';
-		$q .= '<a href="' . APP_ROOT . 'action/a-dequeuebuilding/baseid-' . $ob_generator->getId() . '/building-' . $qe->getBuildingNumber() . '"' . 
+		$q .= '<a href="' . APP_ROOT . 'action/a-dequeuebuilding/baseid-' . $ob_generator->getId() . '/building-' . $qe->buildingNumber . '"' . 
 				'class="button hb lt" title="annuler la construction">×</a>';
-		$q .= '<img class="picto" src="' . MEDIA . 'orbitalbase/' . OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'imageLink') . '.png" alt="" />';
+		$q .= '<img class="picto" src="' . MEDIA . 'orbitalbase/' . OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
 		$q .= '<strong>';
-			$q .= OrbitalBaseResource::getBuildingInfo($qe->getBuildingNumber(), 'frenchName');
-			$q .= ' <span class="level">niv. ' . $qe->getTargetLevel() . '</span>';
+			$q .= OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'frenchName');
+			$q .= ' <span class="level">niv. ' . $qe->targetLevel . '</span>';
 		$q .= '</strong>';
 		if ($realSizeQueue > 1) {
 			$q .= '<em>en attente</em>';

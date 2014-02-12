@@ -6,7 +6,10 @@ include_once ATHENA;
 # int queue 		id de la file de construction
 # int dock 			numéro du dock (1, 2, ou 3)
 
-for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
+CTR::$alert->add('L\'action doit être mise à jour !', ALERT_STD_ERROR);
+
+
+/*for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
@@ -68,5 +71,5 @@ if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($bas
 	}
 } else {
 	CTR::$alert->add('pas assez d\'informations pour enlever un vaisseau de la file d\'attente', ALERT_STD_FILLFORM);
-}
+}*/
 ?>

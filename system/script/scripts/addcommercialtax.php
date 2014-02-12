@@ -8,9 +8,8 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `commercialtax` (
   `importTo` smallint(6) NOT NULL,
   `tax` float NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;");
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=50 ;");
 $qr->execute();
-
 
 # add content
 $qr = $db->prepare("INSERT INTO `commercialtax` (`exportFrom`, `importTo`, `tax`) VALUES

@@ -34,7 +34,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 
 		$S_BQM1 = ASM::$bqm->getCurrentSession();
 		ASM::$bqm->newSession(ASM_UMODE);
-		ASM::$bqm->load(array('rOrbitalBase' => $baseId), array('position'));
+		ASM::$bqm->load(array('rOrbitalBase' => $baseId), array('dEnd'));
 
 		$currentLevel = call_user_func(array($ob, 'getReal' . ucfirst(OrbitalBaseResource::getBuildingInfo($building, 'name')) . 'Level'));
 		$technos = new Technology(CTR::$data->get('playerId'));
@@ -42,21 +42,20 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 			AND OrbitalBaseResource::haveRights($building, $currentLevel + 1, 'queue', ASM::$bqm->size()) 
 			AND (OrbitalBaseResource::haveRights($building, $currentLevel + 1, 'buildingTree', $ob) === TRUE)
 			AND OrbitalBaseResource::haveRights($building, $currentLevel + 1, 'techno', $technos)) {
-			if (ASM::$bqm->size() > 0) {
-				for ($i = 0; $i < ASM::$bqm->size(); $i++) {
-					$bq = ASM::$bqm->get($i);
-					$bq->setPosition($i + 1);
-				}
-			}
+
 			// construit le nouveau batiment
 			$bq = new BuildingQueue();
-			$bq->setROrbitalBase($baseId);
-			$bq->setBuildingNumber($building);
-			$bq->setTargetLevel($currentLevel+1);
+			$bq->rOrbitalBase = $baseId;
+			$bq->buildingNumber = $building;
+			$bq->targetLevel = $currentLevel+1;
 			$time = OrbitalBaseResource::getBuildingInfo($building, 'level', $currentLevel + 1, 'time');
 			$bonus = $time * CTR::$data->get('playerBonus')->get(PlayerBonus::GENERATOR_SPEED) / 100;
-			$bq->setRemainingTime(round($time - $bonus));
-			$bq->setPosition(ASM::$bqm->size()+1);
+			if (ASM::$bqm->size() == 0) {
+				$bq->dStart = Utils::now();
+			} else {
+				$bq->dStart = ASM::$bqm->get(ASM::$bqm->size() - 1)->dEnd;
+			}
+			$bq->dEnd = Utils::addSecondsToDate($bq->dStart, round($time - $bonus));
 			ASM::$bqm->add($bq);
 
 			// debit resources
@@ -71,11 +70,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 			}
 
 			// ajout de l'event dans le contrôleur
-			$date = Utils::now();
-			for ($i = 0; $i < ASM::$bqm->size(); $i++) { 
-				$date = Utils::addSecondsToDate($date, ASM::$bqm->get($i)->getRemainingTime());
-			}
-			CTR::$data->get('playerEvent')->add($date, EVENT_BASE, $baseId);
+			CTR::$data->get('playerEvent')->add($bq->dEnd, EVENT_BASE, $baseId);
 
 			CTR::$alert->add('Construction programmée', ALERT_STD_SUCCESS);
 		} else {

@@ -219,7 +219,7 @@ echo '<div class="component techno">';
 					$queue = ASM::$tqm->get($i);
 					$realSizeQueue++;
 					$totalTimeTechno += TechnologyResource::getInfo($queue->technology, 'time', $queue->targetLevel);
-					$remainingTotalTime += $queue->remainingTime;
+					$remainingTotalTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
 
 					echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTotalTime . '" data-progress-total-time="' . $totalTimeTechno . '">';
 						echo '<a href="' . APP_ROOT . 'action/a-dequeuetechno/baseid-' . $ob_tech->getId() . '/techno-' . $queue->technology . '"' . 
