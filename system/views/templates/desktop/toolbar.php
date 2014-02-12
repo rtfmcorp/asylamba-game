@@ -136,7 +136,7 @@ echo '<div id="tools">';
 			if (ASM::$tqm->size() > 0) {
 				$qe = ASM::$tqm->get(0);
 				echo '<div class="queue">';
-					echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $qe->remainingTime . '" data-progress-total-time="' . TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel) . '">';
+					echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel) . '">';
 						echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($qe->technology, 'imageLink') . '.png" alt="" />';
 						echo '<strong>' . TechnologyResource::getInfo($qe->technology, 'name');
 						if (!TechnologyResource::isAnUnblockingTechnology($qe->technology)) {
@@ -144,9 +144,9 @@ echo '<div id="tools">';
 						}
 						echo '</strong>';
 						
-						echo '<em><span class="progress-text">' . Chronos::secondToFormat($qe->remainingTime, 'lite') . '</span></em>';
+						echo '<em><span class="progress-text">' . Chronos::secondToFormat(Utils::interval(Utils::now(), $qe->dEnd, 's'), 'lite') . '</span></em>';
 						echo '<span class="progress-container">';
-							echo '<span style="width: ' . Format::percent(TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel) - $qe->remainingTime, TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel)) . '%;" class="progress-bar">';
+							echo '<span style="width: ' . Format::percent(TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel) - Utils::interval(Utils::now(), $qe->dEnd, 's'), TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel)) . '%;" class="progress-bar">';
 							echo '</span>';
 						echo '</span>';
 					echo '</div>';
