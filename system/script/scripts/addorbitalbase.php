@@ -42,7 +42,7 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `orbitalBase` (
   `isProductionDock2` tinyint(1) DEFAULT '0',
   `isGravityDefense` tinyint(1) DEFAULT '1',
   `resourcesStorage` bigint(20) unsigned DEFAULT '0',
-  `uResources` datetime DEFAULT NULL,
+  `uOrbitalBase` datetime DEFAULT NULL,
   `uAntiSpy` datetime DEFAULT NULL,
   `dCreation` datetime DEFAULT NULL,
   PRIMARY KEY (`rPlace`),

@@ -39,6 +39,7 @@ class OrbitalBase {
 	private $isProductionDock1 = 0;
 	private $isProductionDock2 = 0;
 	private $resourcesStorage = 5000;
+	public $uOrbitalBase = '';
 	private $uResources = '';
 	private $uAntiSpy = '';
 	private $dCreation = '';
@@ -105,7 +106,6 @@ class OrbitalBase {
 	public function getIsProductionDock1() { return $this->isProductionDock1; }
 	public function getIsProductionDock2() { return $this->isProductionDock2; }
 	public function getResourcesStorage() { return $this->resourcesStorage; }
-	public function getUResources() { return $this->uResources; }
 	public function getUAntiSpy() { return $this->uAntiSpy; }
 	public function getDCreation() { return $this->dCreation; }
 
@@ -187,7 +187,6 @@ class OrbitalBase {
 	public function setIsProductionDock1($var) { $this->isProductionDock1 = $var; }
 	public function setIsProductionDock2($var) { $this->isProductionDock2 = $var; }
 	public function setResourcesStorage($var) { $this->resourcesStorage = $var; }
-	public function setUResources($var) { $this->uResources = $var; }
 	public function setUAntiSpy($var) { $this->uAntiSpy = $var; }
 	public function setDCreation($var) { $this->dCreation = $var; }
 
@@ -243,8 +242,9 @@ class OrbitalBase {
 	}
 
 	// UPDATE METHODS
-	public function uMethod($dUpdate) {
+	public function uMethod() {
 		$token = CTC::createContext();
+		$now = Utils::now();
 		// how to add an element : add($date, $object, $method, $args = array());
 
 		# load the player
@@ -254,98 +254,93 @@ class OrbitalBase {
 		$player = ASM::$pam->get();
 		ASM::$pam->changeSession($S_PAM1);
 
-		# BUILDING QUEUE
-		$S_BQM2 = ASM::$bqm->getCurrentSession();
-		ASM::$bqm->changeSession($this->buildingManager);
-		for ($i = 0; $i < ASM::$bqm->size(); $i++) { 
-			$queue = ASM::$bqm->get($i);
-
-			if ($queue->dEnd < $dUpdate) {
-				CTC::add($queue->dEnd, $this, 'uBuildingQueue', array($queue, $player));
-			} else {
-				break;
+		if (Utils::interval($this->uOrbitalBase, $now, 's') > 0) {
+			# RESOURCES
+			$hours = Utils::intervalDates($now, $this->uOrbitalBase);
+			foreach ($hours as $key => $hour) {
+				CTC::add($hour, $this, 'uResources', array());
 			}
-		}
-		ASM::$bqm->changeSession($S_BQM2);
 
-		# SHIP QUEUE DOCK 1
-		$S_SQM1 = ASM::$sqm->getCurrentSession();
-		ASM::$sqm->changeSession($this->dock1Manager);
-		for ($i = 0; $i < ASM::$sqm->size(); $i++) { 
-			$sq = ASM::$sqm->get($i);
+			# BUILDING QUEUE
+			$S_BQM2 = ASM::$bqm->getCurrentSession();
+			ASM::$bqm->changeSession($this->buildingManager);
+			for ($i = 0; $i < ASM::$bqm->size(); $i++) { 
+				$queue = ASM::$bqm->get($i);
 
-			if ($sq->dEnd < $dUpdate) {
-				CTC::add($sq->dEnd, $this, 'uShipQueue1', array($sq, $player));
-			} else {
-				break;
+				if ($queue->dEnd < $now) {
+					CTC::add($queue->dEnd, $this, 'uBuildingQueue', array($queue, $player));
+				} else {
+					break;
+				}
 			}
-		} 
-		ASM::$sqm->changeSession($S_SQM1);
+			ASM::$bqm->changeSession($S_BQM2);
 
-		# SHIP QUEUE DOCK 2
-		$S_SQM1 = ASM::$sqm->getCurrentSession();
-		ASM::$sqm->changeSession($this->dock2Manager);
-		for ($i = 0; $i < ASM::$sqm->size(); $i++) { 
-			$sq = ASM::$sqm->get($i);
+			# SHIP QUEUE DOCK 1
+			$S_SQM1 = ASM::$sqm->getCurrentSession();
+			ASM::$sqm->changeSession($this->dock1Manager);
+			for ($i = 0; $i < ASM::$sqm->size(); $i++) { 
+				$sq = ASM::$sqm->get($i);
 
-			if ($sq->dEnd < $dUpdate) {
-				CTC::add($sq->dEnd, $this, 'uShipQueue2', array($sq, $player));
-			} else {
-				break;
+				if ($sq->dEnd < $now) {
+					CTC::add($sq->dEnd, $this, 'uShipQueue1', array($sq, $player));
+				} else {
+					break;
+				}
+			} 
+			ASM::$sqm->changeSession($S_SQM1);
+
+			# SHIP QUEUE DOCK 2
+			$S_SQM1 = ASM::$sqm->getCurrentSession();
+			ASM::$sqm->changeSession($this->dock2Manager);
+			for ($i = 0; $i < ASM::$sqm->size(); $i++) { 
+				$sq = ASM::$sqm->get($i);
+
+				if ($sq->dEnd < $now) {
+					CTC::add($sq->dEnd, $this, 'uShipQueue2', array($sq, $player));
+				} else {
+					break;
+				}
+			} 
+			ASM::$sqm->changeSession($S_SQM1);
+
+			# TECHNOLOGY QUEUE
+			$S_TQM1 = ASM::$tqm->getCurrentSession();
+			ASM::$tqm->changeSession($this->technoQueueManager);
+			for ($i = 0; $i < ASM::$tqm->size(); $i++) { 
+				$tq = ASM::$tqm->get($i);
+
+				if ($tq->dEnd < $now) {
+					CTC::add($tq->dEnd, $this, 'uTechnologyQueue', array($tq, $player));
+				} else {
+					break;
+				}	
 			}
-		} 
-		ASM::$sqm->changeSession($S_SQM1);
-
-		# TECHNOLOGY QUEUE
-		$S_TQM1 = ASM::$tqm->getCurrentSession();
-		ASM::$tqm->changeSession($this->technoQueueManager);
-		for ($i = 0; $i < ASM::$tqm->size(); $i++) { 
-			$tq = ASM::$tqm->get($i);
-
-			if ($tq->dEnd < $dUpdate) {
-				CTC::add($tq->dEnd, $this, 'uTechnologyQueue', array($tq, $player));
-			} else {
-				break;
-			}
+			ASM::$tqm->changeSession($S_TQM1);
 			
+			$this->uOrbitalBase = $now;
 		}
-		ASM::$tqm->changeSession($S_TQM1);
 
 		CTC::applyContext($token);
 	}
 
-	public function uResources($dUpdate) {
-		if ($this->uResources != NULL AND $this->uResources != '0000-00-00 00:00:00') {
-			$factor = Utils::interval($this->uResources, $dUpdate, 'h');
-			if ($factor > 0) {
-				$addResources = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(1, 'level', $this->levelRefinery, 'refiningCoefficient'), $this->planetResources);
-				if ($this->isProductionRefinery == 1) {
-					$addResources += $addResources * OBM_COEFPRODUCTION;
-				}
-				$newResources = $this->resourcesStorage + (int)($factor * $addResources);
-				$maxStorage = OrbitalBaseResource::getBuildingInfo(1, 'level', $this->levelRefinery, 'storageSpace');
-				if ($this->isProductionRefinery == 0) {
-					$maxStorage += $maxStorage * OBM_COEFPRODUCTION;
-				}
-				if ($newResources > $maxStorage) {
-					$this->resourcesStorage = $maxStorage;
-				} else {
-					$this->resourcesStorage = $newResources;
-				}
-				$this->uResources = $dUpdate;
-				return TRUE;
-			} 
-			return TRUE;
+	public function uResources() {
+		$addResources = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(1, 'level', $this->levelRefinery, 'refiningCoefficient'), $this->planetResources);
+		if ($this->isProductionRefinery == 1) {
+			$addResources += $addResources * OBM_COEFPRODUCTION;
+		}
+		$newResources = $this->resourcesStorage + (int) $addResources;
+		$maxStorage = OrbitalBaseResource::getBuildingInfo(1, 'level', $this->levelRefinery, 'storageSpace');
+		if ($this->isProductionRefinery == 0) {
+			$maxStorage += $maxStorage * OBM_COEFPRODUCTION;
+		}
+		if ($newResources > $maxStorage) {
+			$this->resourcesStorage = $maxStorage;
 		} else {
-			$this->uResources = Utils::now();
-			return TRUE;
+			$this->resourcesStorage = $newResources;
 		}
 	}
 
-	public function uBuildingQueue($arg) {
-		$queue = $arg[0];
-		$player = $arg[1];	
-
+	public function uBuildingQueue($queue, $player) {
 		# update builded building
 		$this->setBuildingLevel($queue->buildingNumber, ($this->getBuildingLevel($queue->buildingNumber) + 1));
 		# update the points of the orbitalBase
@@ -361,10 +356,7 @@ class OrbitalBase {
 		ASM::$bqm->deleteById($queue->id);
 	}
 
-	public function uShipQueue1($arg) {
-		$sq = $arg[0];
-		$player = $arg[1];
-		
+	public function uShipQueue1($sq, $player) {
 		# vaisseau construit
 		$this->setShipStorage($sq->shipNumber, $this->getShipStorage($sq->shipNumber) + $sq->quantity);
 		# increase player experience
@@ -385,10 +377,7 @@ class OrbitalBase {
 		ASM::$sqm->deleteById($sq->id);
 	}
 
-	public function uShipQueue2($arg) {
-		$sq = $arg[0];
-		$player = $arg[1];
-
+	public function uShipQueue2($sq, $player) {
 		# vaisseau construit
 		$this->setShipStorage($sq->shipNumber, $this->getShipStorage($sq->shipNumber) + 1);
 		# increase player experience
@@ -402,10 +391,7 @@ class OrbitalBase {
 		ASM::$sqm->deleteById($sq->id);
 	}
 
-	public function uTechnologyQueue($arg) {
-		$tq = $arg[0];
-		$player = $arg[1];
-
+	public function uTechnologyQueue($tq, $player) {
 		# technologie construite
 		$techno = new Technology($player->getId());
 		$techno->setTechnology($tq->technology, $tq->targetLevel);
@@ -542,6 +528,34 @@ class OrbitalBase {
 	}
 
 	# OLD METHODS :
+	/*public function uResources($dUpdate) {
+		if ($this->uResources != NULL AND $this->uResources != '0000-00-00 00:00:00') {
+			$factor = Utils::interval($this->uResources, $dUpdate, 'h');
+			if ($factor > 0) {
+				$addResources = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(1, 'level', $this->levelRefinery, 'refiningCoefficient'), $this->planetResources);
+				if ($this->isProductionRefinery == 1) {
+					$addResources += $addResources * OBM_COEFPRODUCTION;
+				}
+				$newResources = $this->resourcesStorage + (int)($factor * $addResources);
+				$maxStorage = OrbitalBaseResource::getBuildingInfo(1, 'level', $this->levelRefinery, 'storageSpace');
+				if ($this->isProductionRefinery == 0) {
+					$maxStorage += $maxStorage * OBM_COEFPRODUCTION;
+				}
+				if ($newResources > $maxStorage) {
+					$this->resourcesStorage = $maxStorage;
+				} else {
+					$this->resourcesStorage = $newResources;
+				}
+				$this->uResources = $dUpdate;
+				return TRUE;
+			} 
+			return TRUE;
+		} else {
+			$this->uResources = Utils::now();
+			return TRUE;
+		}
+	}*/
+
 	/*public function uBuildingQueue($dUpdate, $player) {
 		# charger la queue
 		$S_BQM2 = ASM::$bqm->getCurrentSession();

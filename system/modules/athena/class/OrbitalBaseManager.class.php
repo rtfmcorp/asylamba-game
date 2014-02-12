@@ -116,7 +116,7 @@ class OrbitalBaseManager extends Manager {
 			$b->setIsProductionDock1($aw['isProductionDock1']);
 			$b->setIsProductionDock2($aw['isProductionDock2']);
 			$b->setResourcesStorage($aw['resourcesStorage']);
-			$b->setUResources($aw['uResources']);
+			$b->uOrbitalBase = $aw['uOrbitalBase'];
 			$b->setUAntiSpy($aw['uAntiSpy']);
 			$b->setDCreation($aw['dCreation']);
 
@@ -240,12 +240,10 @@ class OrbitalBaseManager extends Manager {
 			if ($this->currentSession->getUMode()) {
 
 				$now = Utils::now();
-				$currentB->uMethod($now);
+				$currentB->uMethod();
 
 				$currentB->uAntiSpy($now);
 				$currentB->uCommercialShipping($now);
-
-				$currentB->uResources($now);
 			}
 		}
 	}
@@ -256,7 +254,7 @@ class OrbitalBaseManager extends Manager {
 			orbitalBase(rPlace, rPlayer, name, levelGenerator, levelRefinery, levelDock1, levelDock2, levelDock3, levelTechnosphere, levelCommercialPlateforme, levelGravitationalModule, points,
 				iSchool, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, iAntiSpy, antiSpyAverage, 
 				pegaseStorage, satyreStorage, sireneStorage, dryadeStorage, chimereStorage, meduseStorage, griffonStorage, cyclopeStorage, minotaureStorage, hydreStorage, cerbereStorage, phenixStorage,
-				motherShip, isCommercialBase, isProductionRefinery, isProductionDock1, isProductionDock2, resourcesStorage, uResources, uAntiSpy, dCreation)
+				motherShip, isCommercialBase, isProductionRefinery, isProductionDock1, isProductionDock2, resourcesStorage, uOrbitalBase, uAntiSpy, dCreation)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,  
 				?, ?, ?, ?, ?, ?, ?, ?, 
 				?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
@@ -303,7 +301,7 @@ class OrbitalBaseManager extends Manager {
 			$b->getIsProductionDock1(),
 			$b->getIsProductionDock2(),
 			$b->getResourcesStorage(),
-			$b->getUResources(),
+			$b->uOrbitalBase,
 			$b->getUAntiSpy(),
 			$b->getDCreation()
 		));
@@ -319,7 +317,7 @@ class OrbitalBaseManager extends Manager {
 				SET	rPlace = ?, rPlayer = ?, name = ?, levelGenerator = ?, levelRefinery = ?, levelDock1 = ?, levelDock2 = ?, levelDock3 = ?, levelTechnosphere = ?, levelCommercialPlateforme = ?, levelGravitationalModule = ?, points = ?,
 			iSchool = ?, iUniversity = ?, partNaturalSciences = ?, partLifeSciences = ?, partSocialPoliticalSciences = ?, partInformaticEngineering = ?, iAntiSpy = ?, antiSpyAverage = ?,
 			pegaseStorage = ?, satyreStorage = ?, sireneStorage = ?, dryadeStorage = ?, chimereStorage = ?, meduseStorage = ?, griffonStorage = ?, cyclopeStorage = ?, minotaureStorage = ?, hydreStorage = ?, cerbereStorage = ?, phenixStorage = ?,
-			motherShip = ?, isCommercialBase = ?, isProductionRefinery = ?, isProductionDock1 = ?, isProductionDock2 = ?, resourcesStorage = ?, uResources = ?, uAntiSpy = ?, dCreation = ?
+			motherShip = ?, isCommercialBase = ?, isProductionRefinery = ?, isProductionDock1 = ?, isProductionDock2 = ?, resourcesStorage = ?, uOrbitalBase = ?, uAntiSpy = ?, dCreation = ?
 				WHERE rPlace = ?');
 			$qr->execute(array(
 				$b->getRPlace(),
@@ -360,7 +358,7 @@ class OrbitalBaseManager extends Manager {
 				$b->getIsProductionDock1(),
 				$b->getIsProductionDock2(),
 				$b->getResourcesStorage(),
-				$b->getUResources(),
+				$b->uOrbitalBase,
 				$b->getUAntiSpy(),
 				$b->getDCreation(),
 				$b->getRPlace()

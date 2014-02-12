@@ -24,7 +24,7 @@ abstract class CTC {
 			Bug::writeLog($path, ">\r");
 			
 			foreach (self::$events as $k => $event) {
-				call_user_func(array($event['object'], $event['method']), $event['args']);
+				call_user_func_array(array($event['object'], $event['method']), $event['args']);
 
 				Bug::writeLog($path, "> " . get_class($event['object']) . "->" . $event['method'] . "(" . implode(', ', get_class($event['args'])) . ")\r");
 			}
