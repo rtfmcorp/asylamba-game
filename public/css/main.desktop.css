@@ -2935,17 +2935,18 @@ body {
 #map-option a {
 	position: relative;
 	display: inline-block;
-	height: 32px; width: 32px;
-	margin: 0 1px;
-	background: rgba(0, 0, 0, .25);
+	height: 30px; width: 30px;
+	margin: 1px 0 1px 1px;
+	background: #0A0A0A;
 }
 #map-option a img {
 	position: absolute;
 	top: 5px; left: 5px;
 	width: 22px;
 }
-#map-option a:hover { background: black }
-#map-option a.active { background: rgba(255, 255, 255, .1); }
+#map-option a.active {
+	background: #004948;
+}
 
 /****** CONTENT *****/
 #map-content {
@@ -3562,27 +3563,32 @@ body {
 
 #map-commanders .commander {
 	position: relative;
-	height: 80px; width: 40px;
-	margin: 0 0 5px 0; padding: 0 0 0 40px;
+	height: 80px; width: 0px;
+	margin: 0 0 5px 0; padding: 0 40px;
 	overflow: hidden;
 	color: white;
 
 	-moz-transition: width linear 250ms;
 }
 #map-commanders .commander:hover {
-	width: 250px;
+	width: 400px;
+}
+#map-commanders .commander:hover > .army {
+	background: rgba(0, 0, 0, .9);
+	color: white;
 }
 
 #map-commanders .commander .avatar {
 	position: absolute;
 	height: 80px; width: 80px;
 	top: 0; left: 0;
+	z-index: 1;
 }
 #map-commanders .commander .avatar img {
-	height: 66px; width: 66px;
+	height: 62px; width: 62px;
 	border: solid 1px #4F4F4F;
 	background: #0A0A0A;
-	padding: 6px;
+	padding: 8px;
 	border-radius: 100%;
 }
 #map-commanders .commander.active .avatar img {
@@ -3601,9 +3607,40 @@ body {
 
 #map-commanders .commander .army {
 	text-align: right;
-	background: rgba(0, 0, 0, .9);
-	margin: 10px 0;
-	height: 60px;
+	margin: 8px 0; padding: 5px 10px;
+	height: 54px;
+	background: transparent;
+	color: transparent;
+
+	-moz-transition: all linear 250ms;
+}
+
+#map-commanders .commander .army .label {
+	line-height: 20px; height: 20px;
+	font-size: 13px; padding: 0 0 4px 0;
+	overflow: hidden;
+}
+
+#map-commanders .commander .army .label .bonus {
+	font-size: 10px;
+}
+
+#map-commanders .commander .army .value {
+	height: 32px; font-size: 12px;
+}
+
+#map-commanders .commander .army .value .picto { position: relative; }
+#map-commanders .commander .army .value .picto.zero { opacity: .5; }
+#map-commanders .commander .army .value .picto img {
+	width: 28px; height: 28px;
+}
+#map-commanders .commander .army .value .picto .number {
+	position: absolute;
+	bottom: -2px; right: -2px;
+	width: 18px; height: 18px; line-height: 18px;
+	border-radius: 100%;
+	text-align: center;
+	background: red;
 }
 
 /****** MAP *****/
