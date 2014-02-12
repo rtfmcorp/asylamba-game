@@ -1480,7 +1480,6 @@ body {
 
 /* techno */
 .component.techno .build-item .name strong { font-size: 16px; }
-.component.techno .build-item.closed { height: 60px; }
 .component.techno .build-item.closed .name img {
 	width: 36px;
 	top: 4px; left: 18px;
@@ -1855,6 +1854,10 @@ body {
 	width: 278px;
 }
 
+.component .build-item.large {
+	width: 578px;
+}
+
 .component .build-item .name {
 	position: relative;
 	height: 40px;
@@ -1913,6 +1916,9 @@ body {
 	background: black;
 	color: white;
 }
+.component .build-item.large .info {
+	top: 75px; right: 25px;
+}
 .color1 .component .build-item .info { background: #6e161b; }
 .color2 .component .build-item .info { background: #1f1471; }
 .color3 .component .build-item .info { background: #dbb200; }
@@ -1931,6 +1937,12 @@ body {
 	line-height: 20px;
 	background: #202020;
 	box-shadow: inset 0 0 2px black;
+}
+.component .build-item.large .button {
+	position: absolute;
+	top: -3px; right: 0;
+	width: 310px;
+	line-height: 18px;
 }
 .component .build-item .button:hover { box-shadow: inset 0 0 6px black; }
 .color1 .component .build-item .button { background: #6e161b; }
@@ -1975,6 +1987,20 @@ body {
 	font-weight: bold;
 	border-radius: 3px;
 	box-shadow: inset 0 0 0 3px #CCC;
+}
+
+.component .build-item .ship-illu {
+	width: 260px;
+	margin: 5px 10px;
+	overflow: hidden;
+}
+.component .build-item.large .ship-illu {
+	width: 560px;
+	margin-top: 10px;
+}
+
+.component .build-item .ship-illu img {
+	width: 100%;
 }
 
 .queue {
