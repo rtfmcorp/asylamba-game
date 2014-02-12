@@ -238,11 +238,7 @@ class OrbitalBaseManager extends Manager {
 
 			// U mechanism
 			if ($this->currentSession->getUMode()) {
-
 				$currentB->uMethod();
-				
-				$now = Utils::now();
-				$currentB->uCommercialShipping($now);
 			}
 		}
 	}
