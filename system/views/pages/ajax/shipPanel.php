@@ -3,33 +3,27 @@ include_once ATHENA;
 
 $ship = CTR::$get->get('ship');
 
-echo '<div class="component panel-info ' . ($ship > 5 ? 'size2' : '') . '">';
+echo '<div class="component panel-info">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<h4>' . ShipResource::getInfo($ship, 'name') . '</h4>';
 			echo '<a href="#" class="removeInfoPanel remove-info hb lt" title="fermer le panneau">x</a>';
 
-			echo '<img class="illu" src="' . MEDIA . 'ship/img/' . (($ship + 1 < 10) ? '0' : '') . ($ship + 1) . '-0' . CTR::$data->get('playerInfo')->get('color') . '.png" />';
-
 			echo '<div class="table"><table>';
 				echo '<tr>';
 					echo '<td class="hb lt" title="coût de construction en ressource">coût</td>';
 					echo '<td>' . Format::numberFormat(ShipResource::getInfo($ship, 'resourcePrice')) . ' <img src="' .  MEDIA. 'resources/resource.png" alt="ressource" class="icon-color" /></td>';
-				if ($ship <= 5 ) {
-					echo '</tr>';
-					echo '<tr>';
-				}
+				echo '</tr>';
+				echo '<tr>';
 					echo '<td class="hb lt" title="temps de construction (heures:minutes:secondes)">temps</td>';
 					echo '<td>' . Chronos::secondToFormat(ShipResource::getInfo($ship, 'time'), 'lite') . ' <img src="' .  MEDIA. 'resources/time.png" alt="relève" class="icon-color" /></td>';
 				echo '</tr>';
 				echo '<tr>';
 					echo '<td class="hb lt" title="points-équivalent-vaisseau, définit la taille qu\'occupe ce vaisseau dans une esquadrille">pev</td>';
 					echo '<td>' . ShipResource::getInfo($ship, 'pev') . ' <img src="' .  MEDIA. 'resources/pev.png" alt="pev" class="icon-color" /></td>';
-				if ($ship <= 5 ) {
-					echo '</tr>';
-					echo '<tr>';
-				}
+				echo '</tr>';
+				echo '<tr>';
 					echo '<td class="hb lt" title="nombre de ressources que le vaisseau peut transporter">soute</td>';
 					echo '<td>' . (ShipResource::getInfo($ship, 'pev') * 250) . ' <img src="' .  MEDIA. 'resources/resource.png" alt="ressource" class="icon-color" /></td>';
 				echo '</tr>';

@@ -83,13 +83,14 @@ for ($i = 6; $i < 12; $i++) {
 		}
 	}
 
-	$s[$i - 6] .= '<div class="build-item ' . $disability . '">';
+	$s[$i - 6] .= '<div class="build-item large ' . $disability . '">';
 		$s[$i - 6] .= '<div class="name">';
 			$s[$i - 6] .= '<img src="' . $picto . '" alt="" />';
 			$s[$i - 6] .= '<strong>' . $name . '</strong>';
 			$s[$i - 6] .= '<em>' . ShipResource::getInfo($i, 'name') . '</em>'; 
 			$s[$i - 6] .= '<a href="#" class="addInfoPanel info hb lt" title="plus d\'info" data-ship-id="' . $i . '" data-info-type="ship">+</a>';
 		$s[$i - 6] .= '</div>';
+		$s[$i - 6] .= '<div class="ship-illu"><img src="' . MEDIA . 'ship/img/' . (($i + 1 < 10) ? '0' : '') . ($i + 1) . '-0' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="" /></div>';
 		$s[$i - 6] .= $but;
 	$s[$i - 6] .= '</div>';
 }
@@ -103,30 +104,26 @@ echo '<div class="component size2 dock1">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<table>';
-				echo '<tr><td colspan="2">';
-					echo '<div class="info-building">';
-						echo '<h4>Classe Frégate</h4>';
-					echo '</div>';
-				echo '</td></tr>';
-				echo '<tr>';
-					echo '<td>' . $s[0] . '</td>';
-					echo '<td>' . $s[1] . '</td>';
-				echo '</tr>';
-				echo '<tr><td colspan="2">';
-					echo '<div class="info-building">';
-						echo '<h4>Classe Destroyer / Croiseur</h4>';
-					echo '</div>';
-				echo '</td></tr>';
-				echo '<tr>';
-					echo '<td>' . $s[2] . '</td>';
-					echo '<td>' . $s[3] . '</td>';
-				echo '</tr>';
-				echo '<tr>';
-					echo '<td>' . $s[4] . '</td>';
-					echo '<td>' . $s[5] . '</td>';
-				echo '</tr>';
-			echo '</table>';
+			echo '<div class="info-building">';
+				echo '<h4>Classe Frégate</h4>';
+			echo '</div>';
+			echo $s[0];
+			echo $s[1];
+		echo '</div>';
+	echo '</div>';
+echo '</div>';
+
+echo '<div class="component size2 dock1">';
+	echo '<div class="head skin-1"></div>';
+	echo '<div class="fix-body">';
+		echo '<div class="body">';
+			echo '<div class="info-building">';
+				echo '<h4>Classe Destroyer</h4>';
+			echo '</div>';
+			echo $s[2];
+			echo $s[3];
+			echo $s[4];
+			echo $s[5];
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
