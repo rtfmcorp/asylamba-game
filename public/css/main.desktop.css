@@ -1480,10 +1480,6 @@ body {
 
 /* techno */
 .component.techno .build-item .name strong { font-size: 16px; }
-.component.techno .build-item.closed .name img {
-	width: 36px;
-	top: 4px; left: 18px;
-}
 
 /* school */
 .component.school .build-item .name strong { font-size: 18px; }
