@@ -13,7 +13,7 @@ echo '<div id="map-content">';
 		echo '</svg>';
 		echo '<div class="number">';
 			for ($i = 0; $i < $sm->size(); $i++) {
-				echo '<span style="top: ' . (GalaxyConfiguration::$sectors[$i]['display'][0] * $rate) . 'px; left: ' . (GalaxyConfiguration::$sectors[$i]['display'][1] * $rate) . 'px;">';
+				echo '<span style="top: ' . (GalaxyConfiguration::$sectors[$i]['display'][1] * $rate / 1.35) . 'px; left: ' . (GalaxyConfiguration::$sectors[$i]['display'][0] * $rate / 1.35) . 'px;">';
 					echo $sm->get($i)->getId();
 				echo '</span>';
 			}
