@@ -40,8 +40,6 @@ class OrbitalBase {
 	private $isProductionDock2 = 0;
 	private $resourcesStorage = 5000;
 	public $uOrbitalBase = '';
-	private $uResources = '';
-	private $uAntiSpy = '';
 	private $dCreation = '';
 	//ATTRIBUTES : PLACE
 	private $position = 0;
@@ -106,7 +104,6 @@ class OrbitalBase {
 	public function getIsProductionDock1() { return $this->isProductionDock1; }
 	public function getIsProductionDock2() { return $this->isProductionDock2; }
 	public function getResourcesStorage() { return $this->resourcesStorage; }
-	public function getUAntiSpy() { return $this->uAntiSpy; }
 	public function getDCreation() { return $this->dCreation; }
 
 	public function getPosition() { return $this->position; }
@@ -187,7 +184,6 @@ class OrbitalBase {
 	public function setIsProductionDock1($var) { $this->isProductionDock1 = $var; }
 	public function setIsProductionDock2($var) { $this->isProductionDock2 = $var; }
 	public function setResourcesStorage($var) { $this->resourcesStorage = $var; }
-	public function setUAntiSpy($var) { $this->uAntiSpy = $var; }
 	public function setDCreation($var) { $this->dCreation = $var; }
 
 	public function setPosition($var) { $this->position = $var; }
@@ -259,6 +255,12 @@ class OrbitalBase {
 			$hours = Utils::intervalDates($now, $this->uOrbitalBase);
 			foreach ($hours as $key => $hour) {
 				CTC::add($hour, $this, 'uResources', array());
+			}
+
+			# ANTI-SPY
+			$hours = Utils::intervalDates($now, $this->uOrbitalBase);
+			foreach ($hours as $key => $hour) {
+				CTC::add($hour, $this, 'uAntiSpy', array());
 			}
 
 			# BUILDING QUEUE
@@ -340,6 +342,10 @@ class OrbitalBase {
 		}
 	}
 
+	public function uAntiSpy() {
+		$this->antiSpyAverage = round((($this->antiSpyAverage * (24 - 1)) + ($this->iAntiSpy)) / 24);
+	}
+
 	public function uBuildingQueue($queue, $player) {
 		# update builded building
 		$this->setBuildingLevel($queue->buildingNumber, ($this->getBuildingLevel($queue->buildingNumber) + 1));
@@ -409,19 +415,6 @@ class OrbitalBase {
 		}
 		# delete queue in database
 		ASM::$tqm->deleteById($tq->id);
-	}
-
-	public function uAntiSpy($now) {
-		$hInterval = Utils::interval($now, $this->uAntiSpy, 'h');
-		$this->uAntiSpy = $now;
-
-		if ($hInterval > 0) {
-			if ($hInterval >= 24) {
-				$this->antiSpyAverage = $this->iAntiSpy;
-			} else {
-				$this->antiSpyAverage = round((($this->antiSpyAverage * (24-$hInterval)) + ($this->iAntiSpy * $hInterval)) / 24);
-			}
-		}
 	}
 
 	public function uCommercialShipping($dUpdate) {
@@ -553,6 +546,19 @@ class OrbitalBase {
 		} else {
 			$this->uResources = Utils::now();
 			return TRUE;
+		}
+	}*/
+
+	/*public function uAntiSpy($now) {
+		$hInterval = Utils::interval($now, $this->uAntiSpy, 'h');
+		$this->uAntiSpy = $now;
+
+		if ($hInterval > 0) {
+			if ($hInterval >= 24) {
+				$this->antiSpyAverage = $this->iAntiSpy;
+			} else {
+				$this->antiSpyAverage = round((($this->antiSpyAverage * (24-$hInterval)) + ($this->iAntiSpy * $hInterval)) / 24);
+			}
 		}
 	}*/
 
