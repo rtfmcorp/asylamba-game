@@ -25,6 +25,11 @@ class Player {
 	protected $victory = 0;
 	protected $defeat = 0;
 	protected $stepTutorial = 0;
+	public $iUniversity = 5000;
+	public $partNaturalSciences = 25;
+	public $partLifeSciences = 25;
+	public $partSocialPoliticalSciences = 25;
+	public $partInformaticEngineering = 25;
 	protected $dInscription = '';
 	protected $dLastConnection = '';
 	protected $dLastActivity = '';

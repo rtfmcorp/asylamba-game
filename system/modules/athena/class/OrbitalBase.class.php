@@ -32,11 +32,6 @@ class OrbitalBase {
 	private $levelGravitationalModule = 0;
 	private $points = 0;
 	private $iSchool = 1000;
-	private $iUniversity = 5000;
-	private $partNaturalSciences = 25;
-	private $partLifeSciences = 25;
-	private $partSocialPoliticalSciences = 25;
-	private $partInformaticEngineering = 25;
 	private $iAntiSpy = 0;
 	private $antiSpyAverage = 0;
 	private $shipStorage = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -97,11 +92,6 @@ class OrbitalBase {
 	public function getLevelGravitationalModule() { return $this->levelGravitationalModule; }
 	public function getPoints() { return $this->points; }
 	public function getISchool() { return $this->iSchool; }
-	public function getIUniversity() { return $this->iUniversity; }
-	public function getPartNaturalSciences() { return $this->partNaturalSciences; }
-	public function getPartLifeSciences() { return $this->partLifeSciences; }
-	public function getPartSocialPoliticalSciences() { return $this->partSocialPoliticalSciences; }
-	public function getPartInformaticEngineering() { return $this->partInformaticEngineering; }
 	public function getIAntiSpy() { return $this->iAntiSpy; }
 	public function getAntiSpyAverage() { return $this->antiSpyAverage; }
 	public function getShipStorage($k = -1) {return ($k == -1) ? $this->shipStorage : $this->shipStorage[$k]; }
@@ -170,11 +160,6 @@ class OrbitalBase {
 	public function setLevelGravitationalModule($var) { $this->levelGravitationalModule = $var; }
 	public function setPoints($var) { $this->points = $var; }
 	public function setISchool($var) { $this->iSchool = $var; }
-	public function setIUniversity($var) { $this->iUniversity = $var; }
-	public function setPartNaturalSciences($var) { $this->partNaturalSciences = $var; }
-	public function setPartLifeSciences($var) { $this->partLifeSciences = $var; }
-	public function setPartSocialPoliticalSciences($var) { $this->partSocialPoliticalSciences = $var; }
-	public function setPartInformaticEngineering($var) { $this->partInformaticEngineering = $var; }
 	public function setIAntiSpy($var) { $this->iAntiSpy = $var; }
 	public function setAntiSpyAverage($var) { $this->antiSpyAverage = $var; }
 	public function setShipStorage($k, $v) { $this->shipStorage[$k] = $v; }

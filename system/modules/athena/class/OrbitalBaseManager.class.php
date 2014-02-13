@@ -92,11 +92,6 @@ class OrbitalBaseManager extends Manager {
 			$b->setLevelGravitationalModule($aw['levelGravitationalModule']);
 			$b->setPoints($aw['points']);
 			$b->setISchool($aw['iSchool']);
-			$b->setIUniversity($aw['iUniversity']);
-			$b->setPartNaturalSciences($aw['partNaturalSciences']);
-			$b->setPartLifeSciences($aw['partLifeSciences']);
-			$b->setPartSocialPoliticalSciences($aw['partSocialPoliticalSciences']);
-			$b->setPartInformaticEngineering($aw['partInformaticEngineering']);
 			$b->setIAntiSpy($aw['iAntiSpy']);
 			$b->setAntiSpyAverage($aw['antiSpyAverage']);
 			$b->setShipStorage(0 ,$aw['pegaseStorage']);
@@ -247,11 +242,11 @@ class OrbitalBaseManager extends Manager {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			orbitalBase(rPlace, rPlayer, name, typeOfBase, levelGenerator, levelRefinery, levelDock1, levelDock2, levelDock3, levelTechnosphere, levelCommercialPlateforme, levelGravitationalModule, points,
-				iSchool, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, iAntiSpy, antiSpyAverage, 
+				iSchool, iAntiSpy, antiSpyAverage, 
 				pegaseStorage, satyreStorage, sireneStorage, dryadeStorage, chimereStorage, meduseStorage, griffonStorage, cyclopeStorage, minotaureStorage, hydreStorage, cerbereStorage, phenixStorage,
 				motherShip, isCommercialBase, isProductionRefinery, isProductionDock1, isProductionDock2, resourcesStorage, uOrbitalBase, dCreation)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,  
-				?, ?, ?, ?, ?, ?, ?, ?, 
+				?, ?, ?, 
 				?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
 				?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
@@ -270,11 +265,6 @@ class OrbitalBaseManager extends Manager {
 			$b->getPoints(),
 
 			$b->getISchool(),
-			$b->getIUniversity(),
-			$b->getPartNaturalSciences(),
-			$b->getPartLifeSciences(),
-			$b->getPartSocialPoliticalSciences(),
-			$b->getPartInformaticEngineering(),
 			$b->getIAntiSpy(),
 			$b->getAntiSpyAverage(),
 
@@ -310,7 +300,7 @@ class OrbitalBaseManager extends Manager {
 			$db = DataBase::getInstance();
 			$qr = $db->prepare('UPDATE orbitalBase
 				SET	rPlace = ?, rPlayer = ?, name = ?, typeOfBase = ?, levelGenerator = ?, levelRefinery = ?, levelDock1 = ?, levelDock2 = ?, levelDock3 = ?, levelTechnosphere = ?, levelCommercialPlateforme = ?, levelGravitationalModule = ?, points = ?,
-			iSchool = ?, iUniversity = ?, partNaturalSciences = ?, partLifeSciences = ?, partSocialPoliticalSciences = ?, partInformaticEngineering = ?, iAntiSpy = ?, antiSpyAverage = ?,
+			iSchool = ?, iAntiSpy = ?, antiSpyAverage = ?,
 			pegaseStorage = ?, satyreStorage = ?, sireneStorage = ?, dryadeStorage = ?, chimereStorage = ?, meduseStorage = ?, griffonStorage = ?, cyclopeStorage = ?, minotaureStorage = ?, hydreStorage = ?, cerbereStorage = ?, phenixStorage = ?,
 			motherShip = ?, isCommercialBase = ?, isProductionRefinery = ?, isProductionDock1 = ?, isProductionDock2 = ?, resourcesStorage = ?, uOrbitalBase = ?, dCreation = ?
 				WHERE rPlace = ?');
@@ -329,11 +319,6 @@ class OrbitalBaseManager extends Manager {
 				$b->getLevelGravitationalModule(),
 				$b->getPoints(),
 				$b->getISchool(),
-				$b->getIUniversity(),
-				$b->getPartNaturalSciences(),
-				$b->getPartLifeSciences(),
-				$b->getPartSocialPoliticalSciences(),
-				$b->getPartInformaticEngineering(),
 				$b->getIAntiSpy(),
 				$b->getAntiSpyAverage(),
 				$b->getShipStorage(0),

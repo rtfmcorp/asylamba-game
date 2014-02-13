@@ -59,6 +59,11 @@ class PlayerManager extends Manager {
 			$p->setVictory($aw['victory']);
 			$p->setDefeat($aw['defeat']);
 			$p->setStepTutorial($aw['stepTutorial']);
+			$p->iUniversity = $aw['iUniversity'];
+			$p->partNaturalSciences = $aw['partNaturalSciences'];
+			$p->partLifeSciences = $aw['partLifeSciences'];
+			$p->partSocialPoliticalSciences = $aw['partSocialPoliticalSciences'];
+			$p->partInformaticEngineering = $aw['partInformaticEngineering'];
 			$p->setDInscription($aw['dInscription']);
 			$p->setDLastConnection($aw['dLastConnection']);
 			$p->setDLastActivity($aw['dLastActivity']);
@@ -94,6 +99,11 @@ class PlayerManager extends Manager {
 			$p->setVictory($aw['victory']);
 			$p->setDefeat($aw['defeat']);
 			$p->setStepTutorial($aw['stepTutorial']);
+			$p->iUniversity = $aw['iUniversity'];
+			$p->partNaturalSciences = $aw['partNaturalSciences'];
+			$p->partLifeSciences = $aw['partLifeSciences'];
+			$p->partSocialPoliticalSciences = $aw['partSocialPoliticalSciences'];
+			$p->partInformaticEngineering = $aw['partInformaticEngineering'];
 			$p->setDInscription($aw['dInscription']);
 			$p->setDLastConnection($aw['dLastConnection']);
 			$p->setDLastActivity($aw['dLastActivity']);
@@ -107,8 +117,8 @@ class PlayerManager extends Manager {
 	public function add(Player $p) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			player(bind, rColor, name, avatar, status, description, credit, uCredit, experience, level, victory, defeat, stepTutorial, dInscription, dLastConnection, dLastActivity, premium, statement)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+			player(bind, rColor, name, avatar, status, description, credit, uCredit, experience, level, victory, defeat, stepTutorial, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, dInscription, dLastConnection, dLastActivity, premium, statement)
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$p->getBind(),
 			$p->getRColor(),
@@ -123,6 +133,11 @@ class PlayerManager extends Manager {
 			$p->getVictory(),
 			$p->getDefeat(),
 			$p->getStepTutorial(),
+			$p->iUniversity,
+			$p->partNaturalSciences,
+			$p->partLifeSciences,
+			$p->partSocialPoliticalSciences,
+			$p->partInformaticEngineering,
 			$p->getDInscription(),
 			$p->getDLastConnection(),
 			$p->getDLastActivity(),
@@ -155,6 +170,11 @@ class PlayerManager extends Manager {
 					victory = ?,
 					defeat = ?,
 					stepTutorial = ?,
+					iUniversity = ?,
+					partNaturalSciences = ?,
+					partLifeSciences = ?,
+					partSocialPoliticalSciences = ?,
+					partInformaticEngineering = ?,
 					dInscription = ?,
 					dLastConnection = ?,
 					dLastActivity = ?,
@@ -176,6 +196,11 @@ class PlayerManager extends Manager {
 				$p->getVictory(),
 				$p->getDefeat(),
 				$p->getStepTutorial(),
+				$p->iUniversity,
+				$p->partNaturalSciences,
+				$p->partLifeSciences,
+				$p->partSocialPoliticalSciences,
+				$p->partInformaticEngineering,
 				$p->getDInscription(),
 				$p->getDLastConnection(),
 				$p->getDLastActivity(),
@@ -242,6 +267,11 @@ public function loadByPopulation($where = array(), $limit = array()) {
 			$p->setVictory($aw['victory']);
 			$p->setDefeat($aw['defeat']);
 			$p->setStepTutorial($aw['stepTutorial']);
+			$p->iUniversity = $aw['iUniversity'];
+			$p->partNaturalSciences = $aw['partNaturalSciences'];
+			$p->partLifeSciences = $aw['partLifeSciences'];
+			$p->partSocialPoliticalSciences = $aw['partSocialPoliticalSciences'];
+			$p->partInformaticEngineering = $aw['partInformaticEngineering'];
 			$p->setDInscription($aw['dInscription']);
 			$p->setDLastConnection($aw['dLastConnection']);
 			$p->setDLastActivity($aw['dLastActivity']);
