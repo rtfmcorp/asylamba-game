@@ -18,56 +18,56 @@ class OrbitalBase {
 	const TYP_CAPITAL = 3;
 
 	//ATTRIBUTES : ORBITALBASE
-	private $rPlace;
-	private $rPlayer;
-	private $name;
+	public $rPlace;
+	public $rPlayer;
+	public $name;
 	public $typeOfBase = 0;
-	private $levelGenerator = 2;
-	private $levelRefinery = 1;
-	private $levelDock1 = 1;
-	private $levelDock2 = 0;
-	private $levelDock3 = 0;
-	private $levelTechnosphere = 1;
-	private $levelCommercialPlateforme = 0;
-	private $levelGravitationalModule = 0;
-	private $points = 0;
-	private $iSchool = 1000;
-	private $iAntiSpy = 0;
-	private $antiSpyAverage = 0;
-	private $shipStorage = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-	private $motherShip = 0; // 1 = a motherShip level 1 is stocked, 2 = level 2, 3 = level 3
-	private $isCommercialBase = -1;
-	private $isProductionRefinery = 1;
-	private $isProductionDock1 = 0;
-	private $isProductionDock2 = 0;
-	private $resourcesStorage = 5000;
+	public $levelGenerator = 2;
+	public $levelRefinery = 1;
+	public $levelDock1 = 1;
+	public $levelDock2 = 0;
+	public $levelDock3 = 0;
+	public $levelTechnosphere = 1;
+	public $levelCommercialPlateforme = 0;
+	public $levelGravitationalModule = 0;
+	public $points = 0;
+	public $iSchool = 1000;
+	public $iAntiSpy = 0;
+	public $antiSpyAverage = 0;
+	public $shipStorage = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+	public $motherShip = 0; // 1 = a motherShip level 1 is stocked, 2 = level 2, 3 = level 3
+	public $isCommercialBase = -1;
+	public $isProductionRefinery = 1;
+	public $isProductionDock1 = 0;
+	public $isProductionDock2 = 0;
+	public $resourcesStorage = 5000;
 	public $uOrbitalBase = '';
-	private $dCreation = '';
+	public $dCreation = '';
 	//ATTRIBUTES : PLACE
-	private $position = 0;
-	private $system = 0;
-	private $xSystem = 0;
-	private $ySystem = 0;
-	private $sector = 0;
-	private $tax = 0;
-	private $planetPopulation = 0;
-	private $planetResources = 0;
-	private $planetHistory = 0;
+	public $position = 0;
+	public $system = 0;
+	public $xSystem = 0;
+	public $ySystem = 0;
+	public $sector = 0;
+	public $tax = 0;
+	public $planetPopulation = 0;
+	public $planetResources = 0;
+	public $planetHistory = 0;
 	//ATTRIBUTES : OTHERS
-	private $remainingTimeGenerator;
-	private $remainingTimeDock1;
-	private $remainingTimeDock2;
-	private $remainingTimeDock3;
-	private $routesNumber;
+	public $remainingTimeGenerator;
+	public $remainingTimeDock1;
+	public $remainingTimeDock2;
+	public $remainingTimeDock3;
+	public $routesNumber;
 	//ATTRIBUTES : FUTURE LEVELS
-	private $realGeneratorLevel;
-	private $realRefineryLevel;
-	private $realDock1Level;
-	private $realDock2Level;
-	private $realDock3Level;
-	private $realTechnosphereLevel;
-	private $realCommercialPlateformeLevel;
-	private $realGravitationalModuleLevel;
+	public $realGeneratorLevel;
+	public $realRefineryLevel;
+	public $realDock1Level;
+	public $realDock2Level;
+	public $realDock3Level;
+	public $realTechnosphereLevel;
+	public $realCommercialPlateformeLevel;
+	public $realGravitationalModuleLevel;
 	// PUBLIC ATTRIBUTES
 	public $buildingManager;
 	public $dock1Manager;
@@ -309,7 +309,7 @@ class OrbitalBase {
 					CTC::add($tq->dEnd, $this, 'uTechnologyQueue', array($tq, $player));
 				} else {
 					break;
-				}	
+				}
 			}
 			ASM::$tqm->changeSession($S_TQM1);
 

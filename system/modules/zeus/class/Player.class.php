@@ -11,30 +11,30 @@
  */
 
 class Player {
-	protected $id = 0; 
-	protected $bind = 0;
-	protected $rColor = 0;
-	protected $name = '';
-	protected $avatar = '';
-	protected $status = 1;
-	protected $description = '';
-	protected $credit = 0;
+	public $id = 0; 
+	public $bind = 0;
+	public $rColor = 0;
+	public $name = '';
+	public $avatar = '';
+	public $status = 1;
+	public $description = '';
+	public $credit = 0;
 	public $uPlayer = '';
-	protected $experience = 0;
-	protected $level = 0;
-	protected $victory = 0;
-	protected $defeat = 0;
-	protected $stepTutorial = 0;
+	public $experience = 0;
+	public $level = 0;
+	public $victory = 0;
+	public $defeat = 0;
+	public $stepTutorial = 0;
 	public $iUniversity = 5000;
 	public $partNaturalSciences = 25;
 	public $partLifeSciences = 25;
 	public $partSocialPoliticalSciences = 25;
 	public $partInformaticEngineering = 25;
-	protected $dInscription = '';
-	protected $dLastConnection = '';
-	protected $dLastActivity = '';
-	protected $premium = 0;
-	protected $statement = 0;
+	public $dInscription = '';
+	public $dLastConnection = '';
+	public $dLastActivity = '';
+	public $premium = 0;
+	public $statement = 0;
 
 	protected $synchronized = FALSE;
 
