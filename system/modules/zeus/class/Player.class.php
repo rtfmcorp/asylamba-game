@@ -20,8 +20,6 @@ class Player {
 	protected $description = '';
 	protected $credit = 0;
 	protected $uCredit = '';
-	protected $actionPoint = 0;
-	protected $uActionPoint = '';
 	protected $experience = 0;
 	protected $level = 0;
 	protected $victory = 0;
@@ -44,8 +42,6 @@ class Player {
 	public function getDescription()		{ return $this->description; }
 	public function getCredit()				{ return $this->credit; }
 	public function getUCredit()			{ return $this->uCredit; }
-	public function getActionPoint()		{ return $this->actionPoint; }
-	public function getUActionPoint()		{ return $this->uActionPoint; }
 	public function getExperience()			{ return $this->experience; }
 	public function getLevel()				{ return $this->level; }
 	public function getVictory()			{ return $this->victory; }
@@ -93,13 +89,6 @@ class Player {
 		}
 	}
 	public function setUCredit($v) 			{ $this->uCredit = $v; }
-	public function setActionPoint($v) { 
-		$this->actionPoint = $v; 
-		if ($this->synchronized) {
-			CTR::$data->get('playerInfo')->add('actionPoint', $v);
-		}
-	}
-	public function setUActionPoint($v)		{ $this->uActionPoint = $v; }
 	public function setExperience($v) { 
 		$this->experience = $v; 
 		if ($this->synchronized) {
@@ -126,25 +115,40 @@ class Player {
 
 
 	// UPDATE METHOD
-	public function uActionPoint($date = FALSE) {
-		if ($this->uActionPoint !== NULL) {
-			$oldDate = $this->uActionPoint;
-			$newDate = ($date === FALSE) ? Utils::now() : $date;
-			$interval = Utils::interval($oldDate, $newDate);
-		} else {
-			$newDate = Utils::now();
-			$interval = 1;
-		}
-		$this->uActionPoint = $newDate;
-		for ($i = 0; $i < $interval; $i++) {
-			$newActionPoint = PAM_BASEAP + ($this->level * PAM_COEFFAP) + ceil($this->actionPoint / 2);
+	/*public function uMethod() {
+		$token = CTC::createContext();
+		$now = Utils::now();
+		// how to add an element : add($date, $object, $method, $args = array());
 
-			$this->actionPoint = $newActionPoint;
-			if ($this->synchronized) {
-				CTR::$data->get('playerInfo')->add('actionPoint', $newActionPoint);
+		if (Utils::interval($this->uOrbitalBase, $now, 's') > 0) {
+			# ACTION POINT
+			if ($this->uActionPoint !== NULL) {
+				$oldDate = $this->uActionPoint;
+				$newDate = ($date === FALSE) ? Utils::now() : $date;
+				$interval = Utils::interval($oldDate, $newDate);
+			} else {
+				$newDate = Utils::now();
+				$interval = 1;
 			}
+			$this->uActionPoint = $newDate;
+			for ($i = 0; $i < $interval; $i++) {
+				$newActionPoint = PAM_BASEAP + ($this->level * PAM_COEFFAP) + ceil($this->actionPoint / 2);
+
+				$this->actionPoint = $newActionPoint;
+				if ($this->synchronized) {
+					CTR::$data->get('playerInfo')->add('actionPoint', $newActionPoint);
+				}
+			}
+			
+			# update time
+			$this->uPlayer = $now;
+			//
+			// add uPlayer in player
+			//
 		}
-	}
+
+		CTC::applyContext($token);
+	}*/
 
 	public function uCredit($date = FALSE) {
 		if ($this->uCredit !== NULL) {
