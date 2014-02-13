@@ -11,7 +11,7 @@ echo '<div id="background-paralax" class="bases"></div>';
 
 # inclusion des elements
 include 'basesElement/subnav.php';
-include 'basesElement/movers.php';
+include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';

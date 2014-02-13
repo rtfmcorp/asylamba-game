@@ -4,7 +4,7 @@ echo '<div id="background-paralax" class="fleet"></div>';
 
 # inclusion des elements
 include 'fleetElement/subnav.php';
-include 'profilElement/movers.php';
+include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';

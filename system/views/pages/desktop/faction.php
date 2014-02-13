@@ -3,8 +3,8 @@
 echo '<div id="background-paralax" class="profil"></div>';
 
 # inclusion des elements
-include 'defaultElement/subnav.php';
-include 'factionElement/movers.php';
+include 'factionElement/subnav.php';
+include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
@@ -13,7 +13,7 @@ echo '<div id="content">';
 
 	# factionNav component
 	$color_factionNav = CTR::$data->get('playerInfo')->get('color');
-	include COMPONENT . 'demeter/factionNav.php';
+	#include COMPONENT . 'demeter/factionNav.php';
 
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'forum') {
 		# forum component

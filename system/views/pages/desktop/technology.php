@@ -3,14 +3,12 @@
 echo '<div id="background-paralax" class="technology"></div>';
 
 # inclusion des elements
-include 'defaultElement/subnav.php';
-include 'profilElement/movers.php';
+include 'technologyElement/subnav.php';
+include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
 	# player
-	include COMPONENT . 'promethee/nav.php';
-
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'university') {
 		include COMPONENT . 'promethee/university.php';
 	} elseif (CTR::$get->get('view') == 'overview') {

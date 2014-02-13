@@ -9,17 +9,15 @@ if (CTR::$data->get('playerInfo')->get('admin') == FALSE) {
 echo '<div id="background-paralax" class="profil"></div>';
 
 # inclusion des elements
-include 'defaultElement/subnav.php';
-include 'basesElement/movers.php';
+include 'adminElement/subnav.php';
+include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
 	# admin component
-	include COMPONENT . 'apollon/admin/adminNav.php';
+	#include COMPONENT . 'apollon/admin/adminNav.php';
 
-	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'main') {
-		# main admin
-	} elseif (CTR::$get->get('view') == 'message') {
+	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'message') {
 		# main message
 		include COMPONENT . 'apollon/message/newOfficialMessage.php';
 	} elseif (CTR::$get->get('view') == 'bugtracker') {
