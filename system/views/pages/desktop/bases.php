@@ -51,9 +51,6 @@ echo '<div id="content">';
 	} elseif (CTR::$get->get('view') == 'commercialplateforme') {
 		$ob_compPlat = $base;
 		include COMPONENT . 'athena/bases/comPlat.php';
-	} elseif (CTR::$get->get('view') == 'university') {
-		$ob_university = $base;
-		include COMPONENT . 'athena/bases/university.php';
 	} elseif (CTR::$get->get('view') == 'school') {
 		$ob_school = $base;
 		include COMPONENT . 'athena/bases/school.php';
