@@ -53,7 +53,7 @@ class PlayerManager extends Manager {
 			$p->setStatus($aw['status']);
 			$p->setDescription($aw['description']);
 			$p->setCredit($aw['credit']);
-			$p->setUCredit($aw['uCredit']);
+			$p->uPlayer = $aw['uPlayer'];
 			$p->setExperience($aw['experience']);
 			$p->setLevel($aw['level']);
 			$p->setVictory($aw['victory']);
@@ -72,7 +72,7 @@ class PlayerManager extends Manager {
 
 			$currentP = $this->_Add($p);
 			if ($this->currentSession->getUMode()) {
-				$currentP->uCredit();
+				$currentP->uMethod();
 			}
 		}
 	}
@@ -93,7 +93,7 @@ class PlayerManager extends Manager {
 			$p->setStatus($aw['status']);
 			$p->setDescription($aw['description']);
 			$p->setCredit($aw['credit']);
-			$p->setUCredit($aw['uCredit']);
+			$p->uPlayer = $aw['uPlayer'];
 			$p->setExperience($aw['experience']);
 			$p->setLevel($aw['level']);
 			$p->setVictory($aw['victory']);
@@ -117,7 +117,7 @@ class PlayerManager extends Manager {
 	public function add(Player $p) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			player(bind, rColor, name, avatar, status, description, credit, uCredit, experience, level, victory, defeat, stepTutorial, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, dInscription, dLastConnection, dLastActivity, premium, statement)
+			player(bind, rColor, name, avatar, status, description, credit, uPlayer, experience, level, victory, defeat, stepTutorial, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, dInscription, dLastConnection, dLastActivity, premium, statement)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$p->getBind(),
@@ -127,7 +127,7 @@ class PlayerManager extends Manager {
 			$p->getStatus(),
 			$p->getDescription(),
 			$p->getCredit(),
-			$p->getUCredit(),
+			$p->uPlayer,
 			$p->getExperience(),
 			$p->getLevel(),
 			$p->getVictory(),
@@ -164,7 +164,7 @@ class PlayerManager extends Manager {
 					status = ?,
 					description = ?,
 					credit = ?,
-					uCredit = ?,
+					uPlayer = ?,
 					experience = ?,
 					level = ?,
 					victory = ?,
@@ -190,7 +190,7 @@ class PlayerManager extends Manager {
 				$p->getStatus(),
 				$p->getDescription(),
 				$p->getCredit(),
-				$p->getUCredit(),
+				$p->uPlayer,
 				$p->getExperience(),
 				$p->getLevel(),
 				$p->getVictory(),
@@ -261,7 +261,7 @@ public function loadByPopulation($where = array(), $limit = array()) {
 			$p->setStatus($aw['status']);
 			$p->setDescription($aw['description']);
 			$p->setCredit($aw['credit']);
-			$p->setUCredit($aw['uCredit']);
+			$p->uPlayer = $aw['uPlayer'];
 			$p->setExperience($aw['experience']);
 			$p->setLevel($aw['level']);
 			$p->setVictory($aw['victory']);
@@ -280,7 +280,7 @@ public function loadByPopulation($where = array(), $limit = array()) {
 
 			$currentP = $this->_Add($p);
 			if ($this->currentSession->getUMode()) {
-				$currentP->uCredit();
+				$currentP->uMethod();
 			}
 		}
 	}
