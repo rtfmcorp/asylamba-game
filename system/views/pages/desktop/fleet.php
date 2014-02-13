@@ -33,10 +33,7 @@ echo '<div id="content">';
 			$commander_listFleetIncoming[$i] = ASM::$com->get($i);
 		}
 		include COMPONENT . 'ares/listFleetIncoming.php';
-
-		# inclusion de paInfo
-		include COMPONENT . 'ares/paInfo.php';
-
+		
 		ASM::$com->changeSession($S_COM1);
 	} elseif (CTR::$get->get('view') == 'movement') {
 		# inclusion des modules

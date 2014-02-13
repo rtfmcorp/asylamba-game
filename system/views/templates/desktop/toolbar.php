@@ -67,10 +67,6 @@ echo '<div id="tools">';
 				echo Format::numberFormat(CTR::$data->get('playerInfo')->get('credit'));
 				echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
 		echo '</a>';
-		echo '<a href="#" class="resource-link sh" data-target="tools-pa" style="width: 60px;">';
-				echo CTR::$data->get('playerInfo')->get('actionPoint');
-				echo ' <img class="icon-color" src="' . MEDIA . 'resources/pa.png" alt="points d\'attaque" />';
-		echo '</a>';
 	echo '</div>';
 
 	# overboxes
@@ -157,19 +153,6 @@ echo '<div id="tools">';
 
 			echo '<a href="' . APP_ROOT . 'bases/view-technosphere" class="more-link">vers la technosphère</a>';
 			ASM::$tqm->changeSession($S_TQM1);
-		echo '</div>';
-	echo '</div>';
-
-	echo '<div class="overbox" id="tools-pa">';
-		echo '<div class="overflow">';
-			echo '<div class="number-box">';
-				echo '<span class="label">PA à la prochaine relève</span>';
-				echo '<span class="value">';
-					echo (((CTR::$data->get('playerInfo')->get('level') * PAM_COEFFAP) + PAM_BASEAP) + ceil(CTR::$data->get('playerInfo')->get('actionPoint') / 2));
-					echo ' <img src="' . MEDIA . 'resources/pa.png" alt="pa" class="icon-color" />';
-				echo '</span>';
-			echo '</div>';
-			echo '<a href="' . APP_ROOT . 'fleet" class="more-link">vers la gestion des flottes</a>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
