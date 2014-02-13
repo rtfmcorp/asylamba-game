@@ -232,25 +232,27 @@ class OrbitalBase {
 	// UPDATE METHODS
 	public function uMethod() {
 		$token = CTC::createContext();
-		$now = Utils::now();
+		$now   = Utils::now();
 		// how to add an element : add($date, $object, $method, $args = array());
 
-		# load the player
-		$S_PAM1 = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession();
-		ASM::$pam->load(array('id' => $this->rPlayer));
-		$player = ASM::$pam->get();
-		ASM::$pam->changeSession($S_PAM1);
-
 		if (Utils::interval($this->uOrbitalBase, $now, 's') > 0) {
-			# RESOURCES
+			# update time
+			$this->uOrbitalBase = $now;
 			$hours = Utils::intervalDates($now, $this->uOrbitalBase);
+
+			# load the player
+			$S_PAM1 = ASM::$pam->getCurrentSession();
+			ASM::$pam->newSession();
+			ASM::$pam->load(array('id' => $this->rPlayer));
+			$player = ASM::$pam->get();
+			ASM::$pam->changeSession($S_PAM1);
+
+			# RESOURCES
 			foreach ($hours as $key => $hour) {
 				CTC::add($hour, $this, 'uResources', array());
 			}
 
 			# ANTI-SPY
-			$hours = Utils::intervalDates($now, $this->uOrbitalBase);
 			foreach ($hours as $key => $hour) {
 				CTC::add($hour, $this, 'uAntiSpy', array());
 			}
@@ -324,9 +326,6 @@ class OrbitalBase {
 				}	
 			}
 			ASM::$csm->changeSession($S_CSM1);
-			
-			# update time
-			$this->uOrbitalBase = $now;
 		}
 
 		CTC::applyContext($token);

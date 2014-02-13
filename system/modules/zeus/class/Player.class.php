@@ -120,17 +120,18 @@ class Player {
 	// UPDATE METHOD
 	public function uMethod() {
 		$token = CTC::createContext();
-		$now = Utils::now();
-		// how to add an element : add($date, $object, $method, $args = array());
+		$now   = Utils::now();
 
-		if (Utils::interval($this->uOrbitalBase, $now, 's') > 0) {
-			# CREDIT
+		if (Utils::interval($this->uPlayer, $now, 's') > 0) {
+			# update time
 			$hours = Utils::intervalDates($now, $this->uPlayer);
+			$this->uPlayer = $now;
 
 			include_once ATHENA;
 			include_once HERMES;
 			include_once PROMETHEE;
 			include_once ARES;
+
 			# load orbital bases
 			$S_OBM1 = ASM::$obm->getCurrentSession();
 			ASM::$obm->newSession();
@@ -148,15 +149,12 @@ class Player {
 			ASM::$rsm->load(array('rPlayer' => $this->id));
 
 			foreach ($hours as $key => $hour) {
-				CTC::add($hour, $this, 'uCredit', array(ASM::$obm->getCurrentSession(), $playerBonus), ASM::$com->getCurrentSession(), ASM::$rsm->getCurrentSession());
+				CTC::add($hour, $this, 'uCredit', array(ASM::$obm->getCurrentSession(), $playerBonus, ASM::$com->getCurrentSession(), ASM::$rsm->getCurrentSession()));
 			}
 
 			ASM::$rsm->changeSession($S_RSM1);
 			ASM::$com->changeSession($S_COM1);
 			ASM::$obm->changeSession($S_OBM1);
-			
-			# update time
-			$this->uPlayer = $now;
 		}
 
 		CTC::applyContext($token);
@@ -192,11 +190,11 @@ class Player {
 			$credits += ($popTax - $nationTax + $routesIncome);
 
 			// investissements
-			$uniInvests += $base->getIUniversity();
-			$naturalTech += ($base->getIUniversity() * $base->getPartNaturalSciences() / 100);
-			$lifeTech += ($base->getIUniversity() * $base->getPartLifeSciences() / 100);
-			$socialTech += ($base->getIUniversity() * $base->getPartSocialPoliticalSciences() / 100);
-			$informaticTech += ($base->getIUniversity() * $base->getPartInformaticEngineering() / 100);
+			$uniInvests += $this->iUniversity;
+			$naturalTech += ($this->iUniversity * $this->partNaturalSciences / 100);
+			$lifeTech += ($this->iUniversity * $this->partLifeSciences / 100);
+			$socialTech += ($this->iUniversity * $this->partSocialPoliticalSciences / 100);
+			$informaticTech += ($this->iUniversity * $this->partInformaticEngineering / 100);
 			$schoolInvests += $base->getISchool();
 			$antiSpyInvests += $base->getIAntiSpy();
 
@@ -215,7 +213,7 @@ class Player {
 			for ($i = 0; $i < ASM::$obm->size(); $i++) {
 				$orbitalBase = ASM::$obm->get($i);
 
-				$newIUniversity = ceil($orbitalBase->getIUniversity() * $ratioDifference / 100);
+				$newIUniversity = ceil($this->iUniversity * $ratioDifference / 100);
 				$newISchool = ceil($orbitalBase->getISchool() * $ratioDifference / 100);
 				$newIAntiSpy = ceil($orbitalBase->getIAntiSpy() * $ratioDifference / 100);
 				$orbitalBase->setIUniversity($newIUniversity);
@@ -224,10 +222,10 @@ class Player {
 				$credits -= ($newIUniversity + $newISchool + $newIAntiSpy);
 
 				$uniInvests += $newISchool;
-				$naturalTech += ($newISchool * $base->getPartNaturalSciences() / 100);
-				$lifeTech += ($newISchool * $base->getPartLifeSciences() / 100);
-				$socialTech += ($newISchool * $base->getPartSocialPoliticalSciences() / 100);
-				$informaticTech += ($newISchool * $base->getPartInformaticEngineering() / 100);
+				$naturalTech += ($newISchool * $this->partNaturalSciences / 100);
+				$lifeTech += ($newISchool * $this->partLifeSciences / 100);
+				$socialTech += ($newISchool * $this->partSocialPoliticalSciences / 100);
+				$informaticTech += ($newISchool * $this->partInformaticEngineering / 100);
 				$schoolInvests += $newIUniversity;
 				$antiSpyInvests += $newIAntiSpy;
 			}
