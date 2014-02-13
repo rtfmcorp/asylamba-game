@@ -3,12 +3,13 @@
 echo '<div id="background-paralax" class="fleet"></div>';
 
 # inclusion des elements
+include 'fleetElement/subnav.php';
 include 'profilElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
 	# fleetNav component
-	include COMPONENT . 'ares/fleetNav.php';
+	# include COMPONENT . 'ares/fleetNav.php';
 	
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'main') {
 		# inclusion des modules

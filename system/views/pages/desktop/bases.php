@@ -10,13 +10,14 @@ $base = ASM::$obm->get(0);
 echo '<div id="background-paralax" class="bases"></div>';
 
 # inclusion des elements
+include 'basesElement/subnav.php';
 include 'basesElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
 	# obNav component
 	$ob_obNav = $base;
-	include COMPONENT . 'athena/bases/obNav.php';
+	# include COMPONENT . 'athena/bases/obNav.php';
 
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'main') {
 		include_once ARES;

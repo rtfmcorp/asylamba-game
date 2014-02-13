@@ -9,6 +9,7 @@ if (CTR::$data->get('playerInfo')->get('admin') == FALSE) {
 echo '<div id="background-paralax" class="profil"></div>';
 
 # inclusion des elements
+include 'defaultElement/subnav.php';
 include 'basesElement/movers.php';
 
 # contenu spécifique

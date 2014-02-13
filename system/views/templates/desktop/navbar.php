@@ -59,14 +59,17 @@ echo '<div id="nav">';
 		
 		$isActive = (in_array(CTR::getPage(), array('financial'))) ? 'active' : NULL;
 		echo '<a href="' . APP_ROOT . 'financial" class="square hb rb ' . $isActive . '" title="finance"><img src="' . MEDIA . 'common/nav-financial.png" alt="" /></a>';
+	
+		$isActive = (in_array(CTR::getPage(), array('technology'))) ? 'active' : NULL;
+		echo '<a href="' . APP_ROOT . 'technology" class="square hb rb ' . $isActive . '" title="technologies"><img src="' . MEDIA . 'common/nav-tech.png" alt="" /></a>';
 	echo '</div>';
 
 	echo '<div class="box left-3">';
 		$isActive = (in_array(CTR::getPage(), array('faction'))) ? 'active' : NULL;
 		echo '<a href="' . APP_ROOT . 'faction" class="square hb rb ' . $isActive . '" title="faction"><img src="' . MEDIA . 'common/nav-faction.png" alt="" /></a>';
 		
-		# $isActive = (in_array(CTR::getPage(), array('rank'))) ? 'active' : NULL;
-		# echo '<a href="' . APP_ROOT . 'rank" class="square hb rb ' . $isActive . '" title="classement"><img src="' . MEDIA . 'common/nav-rank.png" alt="" /></a>';
+		$isActive = (in_array(CTR::getPage(), array('rank'))) ? 'active' : NULL;
+		echo '<a href="' . APP_ROOT . 'rank" class="square hb rb ' . $isActive . '" title="classement"><img src="' . MEDIA . 'common/nav-rank.png" alt="" /></a>';
 
 		$isActive = (in_array(CTR::getPage(), array('message'))) ? 'active' : NULL;
 		echo '<a href="' . APP_ROOT . 'message" class="square hb rb ' . $isActive . '" title="messagerie"><img src="' . MEDIA . 'common/nav-message.png" alt="" />';

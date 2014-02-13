@@ -3,6 +3,7 @@
 echo '<div id="background-paralax" class="financial"></div>';
 
 # inclusion des elements
+include 'defaultElement/subnav.php';
 include 'profilElement/movers.php';
 
 # contenu spécifique

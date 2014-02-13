@@ -54,7 +54,8 @@ if (CTR::$get->exist('place')) {
 # control include
 include 'mapElement/option.php';
 include 'mapElement/content.php';
-include 'mapElement/commanders.php';
+# include 'mapElement/commanders.php';
+include 'defaultElement/subnav.php';
 include 'mapElement/movers.php';
 include 'mapElement/coordbox.php';
 
