@@ -42,21 +42,16 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					$home = ASM::$plm->getById($commander->getRBase());
 
 					$duration = Game::getTimeToTravel($home, $place);
-					$PAToTravel = Game::getPAToTravel($duration);
 
-					if (CTR::$data->get('playerInfo')->get('actionPoint') >= $PAToTravel) {
-						if ($commander->move($place->getId(), COM_MOVE, $duration)) {
-							$S_PAM1 = ASM::$pam->getCurrentSession();
-							ASM::$pam->newSession(ASM_UMODE);
-							ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-							$player = ASM::$pam->get();
-							$player->setActionPoint($player->getActionPoint() - $PAToTravel);
-							ASM::$pam->changeSession($S_PAM1);
-							CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
-						}
-					} else {
-						CTR::$alert->add('Vous n\'avez pas assez de points d\'attaque.', ALERT_STD_ERROR);
-					}			
+					if ($commander->move($place->getId(), COM_MOVE, $duration)) {
+						$S_PAM1 = ASM::$pam->getCurrentSession();
+						ASM::$pam->newSession(ASM_UMODE);
+						ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+						$player = ASM::$pam->get();
+						$player->setActionPoint($player->getActionPoint() - $PAToTravel);
+						ASM::$pam->changeSession($S_PAM1);
+						CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
+					}
 				} else {
 					CTR::$alert->add('Vous ne pouvez pas envoyer une flotte sur une planète qui ne vous appartient pas.', ALERT_STD_ERROR);
 				}

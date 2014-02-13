@@ -19,31 +19,24 @@ abstract class ActionHelper {
 				# check si assez de PA
 				if ($place->getRSystem() == $ob->getSystem()) {
 					$time = Game::getTimeTravelInSystem($ob->getPosition(), $place->getPosition());
-					$pa = Game::getPAToTravel($time);
 				} else {
 					$time = Game::getTimeTravelOutOfSystem($ob->getXSystem(), $ob->getYSystem(), $place->getXSystem(), $place->getYSystem());
-					$pa = Game::getPAToTravel($time);
 				}
 
-				if (CTR::$data->get('playerInfo')->get('actionPoint') >= $pa) {
-					for ($i = 0; $i < ASM::$com->size(); $i++) {
-						if (ASM::$com->get($i)->getStatement() == COM_AFFECTED) {
-							$box .= '<a href="' . APP_ROOT . 'action/a-loot/commanderid-' . ASM::$com->get($i)->getId() . '/placeid-' . $place->getId() . '/redirect-' . $place->getId() . '" class="commander">';
-								$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . ASM::$com->get($i)->getName() . '" />';
-								$box .= '<span class="label">';
-									$box .= '<strong>' . ASM::$com->get($i)->getName() . '</strong><br />';
-									$box .= ASM::$com->get($i)->getPev() . ' pev<br />';
-									$box .= Format::numberFormat(ASM::$com->get($i)->getPev() * COEFFLOOT) . ' de soute';
-								$box .= '</span>';
-								$box .= '<span class="value">';
-									$box .= $pa . ' <img alt="points d\'attaque" src="' . MEDIA . 'resources/pa.png" class="icon-color"><br />';
-									$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . MEDIA . 'resources/time.png" class="icon-color">';
-								$box .= '</span>';
-							$box .= '</a>';
-						}
+				for ($i = 0; $i < ASM::$com->size(); $i++) {
+					if (ASM::$com->get($i)->getStatement() == COM_AFFECTED) {
+						$box .= '<a href="' . APP_ROOT . 'action/a-loot/commanderid-' . ASM::$com->get($i)->getId() . '/placeid-' . $place->getId() . '/redirect-' . $place->getId() . '" class="commander">';
+							$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . ASM::$com->get($i)->getName() . '" />';
+							$box .= '<span class="label">';
+								$box .= '<strong>' . ASM::$com->get($i)->getName() . '</strong><br />';
+								$box .= ASM::$com->get($i)->getPev() . ' pev<br />';
+								$box .= Format::numberFormat(ASM::$com->get($i)->getPev() * COEFFLOOT) . ' de soute';
+							$box .= '</span>';
+							$box .= '<span class="value">';
+								$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . MEDIA . 'resources/time.png" class="icon-color">';
+							$box .= '</span>';
+						$box .= '</a>';
 					}
-				} else {
-					$box .= '<p class="info">Vous ne disposez pas d\'assez de points d\'attaque pour piller cette planète. Cette attaque nécessite ' . $pa . ' points d\'attaque. Essayez de lancer une attaque plus près de votre base.</p>';
 				}
 			} else {
 				$box .= '<p class="info">Vous n\'avez aucun commandant en fonction sur ' . $ob->getName() . '. <a href="' . APP_ROOT . 'bases/base-' . $ob->getId() . '/view-school">Affectez un commandant</a> et envoyez un pillage depuis ' . $ob->getName() . '.</p>';
@@ -90,31 +83,24 @@ abstract class ActionHelper {
 							# check si assez de points d'attaque
 							if ($place->getRSystem() == $ob->getSystem()) {
 								$time = Game::getTimeTravelInSystem($ob->getPosition(), $place->getPosition());
-								$pa = Game::getPAToTravel($time);
 							} else {
 								$time = Game::getTimeTravelOutOfSystem($ob->getXSystem(), $ob->getYSystem(), $place->getXSystem(), $place->getYSystem());
-								$pa = Game::getPAToTravel($time);
 							}
 
-							if (CTR::$data->get('playerInfo')->get('actionPoint') >= $pa) {
-								for ($i = 0; $i < ASM::$com->size(); $i++) {
-									if (ASM::$com->get($i)->getStatement() == COM_AFFECTED) {
-										$box .= '<a href="' . APP_ROOT . 'action/a-conquer/commanderid-' . ASM::$com->get($i)->getId() . '/placeid-' . $place->getId() . '/redirect-' . $place->getId() . '" class="commander">';
-											$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . ASM::$com->get($i)->getName() . '" />';
-											$box .= '<span class="label">';
-												$box .= '<strong>' . ASM::$com->get($i)->getName() . '</strong><br />';
-												$box .= ASM::$com->get($i)->getPev() . ' pev';
-											$box .= '</span>';
-											$box .= '<span class="value">';
-												$box .= $pa . ' <img alt="points d\'attaque" src="' . MEDIA . 'resources/pa.png" class="icon-color"><br />';
-												$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . MEDIA . 'resources/time.png" class="icon-color"><br />';
-												$box .= Format::numberFormat($creditPrice) . ' <img alt="credit" src="' . MEDIA . 'resources/credit.png" class="icon-color">';
-											$box .= '</span>';
-										$box .= '</a>';
-									}
+							for ($i = 0; $i < ASM::$com->size(); $i++) {
+								if (ASM::$com->get($i)->getStatement() == COM_AFFECTED) {
+									$box .= '<a href="' . APP_ROOT . 'action/a-conquer/commanderid-' . ASM::$com->get($i)->getId() . '/placeid-' . $place->getId() . '/redirect-' . $place->getId() . '" class="commander">';
+										$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . ASM::$com->get($i)->getName() . '" />';
+										$box .= '<span class="label">';
+											$box .= '<strong>' . ASM::$com->get($i)->getName() . '</strong><br />';
+											$box .= ASM::$com->get($i)->getPev() . ' pev';
+										$box .= '</span>';
+										$box .= '<span class="value">';
+											$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . MEDIA . 'resources/time.png" class="icon-color"><br />';
+											$box .= Format::numberFormat($creditPrice) . ' <img alt="credit" src="' . MEDIA . 'resources/credit.png" class="icon-color">';
+										$box .= '</span>';
+									$box .= '</a>';
 								}
-							} else {
-								$box .= '<p class="info">Vous ne disposez pas d\'assez de points d\'attaque pour conquérir cette planète.</p>';
 							}
 						} else {
 							$box .= '<p class="info">Vous n\'avez pas assez de crédits pour lancer la conquête. Il faut ' . $creditPrice . ' crédits.</p>';
@@ -170,31 +156,24 @@ abstract class ActionHelper {
 							# check si assez de points d'attaque
 							if ($place->getRSystem() == $ob->getSystem()) {
 								$time = Game::getTimeTravelInSystem($ob->getPosition(), $place->getPosition());
-								$pa = Game::getPAToTravel($time);
 							} else {
 								$time = Game::getTimeTravelOutOfSystem($ob->getXSystem(), $ob->getYSystem(), $place->getXSystem(), $place->getYSystem());
-								$pa = Game::getPAToTravel($time);
 							}
 
-							if (CTR::$data->get('playerInfo')->get('actionPoint') >= $pa) {
-								for ($i = 0; $i < ASM::$com->size(); $i++) { 
-									if (ASM::$com->get($i)->getStatement() == COM_AFFECTED) {
-										$box .= '<a href="' . APP_ROOT . 'action/a-colonize/commanderid-' . ASM::$com->get($i)->getId() . '/placeid-' . $place->getId() . '/redirect-' . $place->getId() . '" class="commander">';
-											$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . ASM::$com->get($i)->getName() . '" />';
-											$box .= '<span class="label">';
-												$box .= '<strong>' . ASM::$com->get($i)->getName() . '</strong><br />';
-												$box .= ASM::$com->get($i)->getPev() . ' pev';
-											$box .= '</span>';
-											$box .= '<span class="value">';
-												$box .= $pa . ' <img alt="points d\'attaque" src="' . MEDIA . 'resources/pa.png" class="icon-color"><br />';
-												$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . MEDIA . 'resources/time.png" class="icon-color"><br />';
-												$box .= Format::numberFormat($creditPrice) . ' <img alt="credit" src="' . MEDIA . 'resources/credit.png" class="icon-color">';
-											$box .= '</span>';
-										$box .= '</a>';
-									}
+							for ($i = 0; $i < ASM::$com->size(); $i++) { 
+								if (ASM::$com->get($i)->getStatement() == COM_AFFECTED) {
+									$box .= '<a href="' . APP_ROOT . 'action/a-colonize/commanderid-' . ASM::$com->get($i)->getId() . '/placeid-' . $place->getId() . '/redirect-' . $place->getId() . '" class="commander">';
+										$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . ASM::$com->get($i)->getName() . '" />';
+										$box .= '<span class="label">';
+											$box .= '<strong>' . ASM::$com->get($i)->getName() . '</strong><br />';
+											$box .= ASM::$com->get($i)->getPev() . ' pev';
+										$box .= '</span>';
+										$box .= '<span class="value">';
+											$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . MEDIA . 'resources/time.png" class="icon-color"><br />';
+											$box .= Format::numberFormat($creditPrice) . ' <img alt="credit" src="' . MEDIA . 'resources/credit.png" class="icon-color">';
+										$box .= '</span>';
+									$box .= '</a>';
 								}
-							} else {
-								$box .= '<p class="info">Vous ne disposez pas d\'assez de points d\'attaque pour piller cette planète.</p>';
 							}
 						} else {
 							$box .= '<p class="info">Vous n\'avez pas assez de crédits pour envoyer la colonisation. Il faut ' . $creditPrice . ' crédits.</p>';
@@ -383,28 +362,21 @@ abstract class ActionHelper {
 					# check si assez de PA
 					if ($place->getRSystem() == $ob->getSystem()) {
 						$time = Game::getTimeTravelInSystem($ob->getPosition(), $place->getPosition());
-						$pa = Game::getPAToTravel($time);
 					} else {
 						$time = Game::getTimeTravelOutOfSystem($ob->getXSystem(), $ob->getYSystem(), $place->getXSystem(), $place->getYSystem());
-						$pa = Game::getPAToTravel($time);
 					}
 
-					if (CTR::$data->get('playerInfo')->get('actionPoint') >= $pa) {
-						for ($i = 0; $i < ASM::$com->size(); $i++) {
-							$box .= '<a href="' . APP_ROOT . 'action/a-movefleet/commanderid-' . ASM::$com->get($i)->getId() . '/placeid-' . $place->getId() . '/redirect-' . $place->getId() . '" class="commander">';
-								$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . ASM::$com->get($i)->getName() . '" />';
-								$box .= '<span class="label">';
-									$box .= '<strong>' . ASM::$com->get($i)->getName() . '</strong><br />';
-									$box .= ASM::$com->get($i)->getPev() . ' pev';
-								$box .= '</span>';
-								$box .= '<span class="value">';
-									$box .= $pa . ' <img alt="points d\'attaque" src="' . MEDIA . 'resources/pa.png" class="icon-color"><br />';
-									$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . MEDIA . 'resources/time.png" class="icon-color"><br />';
-								$box .= '</span>';
-							$box .= '</a>';
-						}
-					} else {
-						$box .= '<p class="info">Vous ne disposez pas d\'assez de points d\'attaque pour déplacer une flotte sur cette base.</p>';
+					for ($i = 0; $i < ASM::$com->size(); $i++) {
+						$box .= '<a href="' . APP_ROOT . 'action/a-movefleet/commanderid-' . ASM::$com->get($i)->getId() . '/placeid-' . $place->getId() . '/redirect-' . $place->getId() . '" class="commander">';
+							$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . ASM::$com->get($i)->getName() . '" />';
+							$box .= '<span class="label">';
+								$box .= '<strong>' . ASM::$com->get($i)->getName() . '</strong><br />';
+								$box .= ASM::$com->get($i)->getPev() . ' pev';
+							$box .= '</span>';
+							$box .= '<span class="value">';
+								$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . MEDIA . 'resources/time.png" class="icon-color"><br />';
+							$box .= '</span>';
+						$box .= '</a>';
 					}
 				} else {
 					$box .= '<p class="info">Vous n\'avez aucun commandant susceptible d\'être transféré sur cette base.</p>';
