@@ -34,8 +34,8 @@ abstract class CTR {
 		'map' => array('map', 'Carte'),
 
 		'faction' => array('faction', 'Votre Faction'),
-
 		'params' => array('params', 'Paramètres'),
+		'rank' => array('rank', 'Classements'),
 
 		'admin' => array('admin', 'Administration'),
 
@@ -47,7 +47,7 @@ abstract class CTR {
 		'connection' => array('connection', 'Connexion'),
 		'api' => array('api', 'API'),
 		'script' => array('script', 'Script')
-	);	
+	);
 
 	public static function getTitle()		{ return self::$title; }
 	public static function getPage()		{ return self::$page; }

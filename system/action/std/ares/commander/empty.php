@@ -26,7 +26,7 @@ if ($commanderId !== FALSE) {
 		// vider le commandant
 		$commander->emptySquadrons();
 
-		CTR::$alert->add('Vous avez renvoyé votre commandant ' . $commander->getName() . '.', ALERT_STD_SUCCESS);
+		CTR::$alert->add('Vous avez vier l\'armée menée par votre commandant ' . $commander->getName() . '.', ALERT_STD_SUCCESS);
 
 	} else {
 		CTR::$alert->add('Ce commandant n\'existe pas ou ne vous appartient pas.', ALERT_STD_ERROR);

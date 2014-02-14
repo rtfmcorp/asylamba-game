@@ -15,7 +15,7 @@ class CommanderManager extends Manager {
 
 	//charge depuis la base de donnée avec ce qu'on veut
 	public function load($where = array(), $order = array(), $limit = array()) {
-		$formatWhere = Utils::arrayToWhere($where, 'c.');
+		$formatWhere = Utils::arrayToWhere($where);
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
@@ -24,14 +24,20 @@ class CommanderManager extends Manager {
 				o.iSchool, o.name AS oName,
 				p.name AS pName,
 				p.rColor AS pColor,
-				do.name AS doName
+				t.rStartPlace, t.rDestinationPlace, t.dStart, t.dArrival, t.ressources, t.type, t.length, t.statement,
+				dp.name AS dpName,
+				sp.name AS spName
 			FROM commander AS c
 			LEFT JOIN orbitalBase AS o
 				ON o.rPlace = c.rBase
 			LEFT JOIN player AS p
 				ON p.id = c.rPlayer
-			LEFT JOIN orbitalBase AS do
-				ON do.rPlace = c.rPlaceDestination
+			LEFT JOIN travel AS t
+				ON t.rCommander = c.id
+			LEFT JOIN orbitalBase AS dp
+				ON dp.rPlace = t.rDestinationPlace
+			LEFT JOIN orbitalBase AS sp
+				ON sp.rPlace = t.rStartPlace
 
 			' . $formatWhere .'
 			' . $formatOrder .'
@@ -92,6 +98,9 @@ class CommanderManager extends Manager {
 				$squadronsIds[''.$rCommander.''][] = $id;
 			}
 
+			// bug::pre($awCommanders);
+			// exit();
+
 			foreach ($awCommanders AS $awCommander) {
 				$commander = new Commander();
 
@@ -109,29 +118,34 @@ class CommanderManager extends Manager {
 				$commander->setExperience($awCommander['experience']);
 				$commander->setUExperience($awCommander['uExperience']);
 				$commander->setPalmares($awCommander['palmares']);
-				$commander->setTypeOfMove($awCommander['typeOfMove']);
-				$commander->setrPlaceDestination($awCommander['rPlaceDestination']);
-				$commander->setArrivalDate($awCommander['arrivalDate']);
-				$commander->setResourcesTransported($awCommander['resourcesTransported']);
 				$commander->setStatement($awCommander['statement']);
 				$commander->setDCreation($awCommander['dCreation']);
 				$commander->setDAffectation($awCommander['dAffectation']);
 				$commander->setDDeath($awCommander['dDeath']);
 				$commander->setOBName($awCommander['oName']);
-				$commander->setDestinationPlaceName($awCommander['doName']);
+
+				$commander->dStart = $awCommander['dStart'];
+				$commander->dArrival = $awCommander['dArrival'];
+				$commander->resourcesTransported = $awCommander['ressources'];
+				$commander->typeOfMove = $awCommander['type'];
+				$commander->travelLength = $awCommander['length'];
+				$commander->rStartPlace = $awCommander['rStartPlace'];
+				$commander->rDestinationPlace = $awCommander['rDestinationPlace'];
+				$commander->startPlaceName = $awCommander['spName'];
+				$commander->destinationPlaceName	= $awCommander['dpName'];
 
 				$commander->setSquadronsIds($squadronsIds[$commander->getId()]);
 
-				$currentCommander = $this->_Add($commander);
-
 				$commander->setArmyInBegin($arrayOfArmies[$commander->getId()]);
 				$commander->setArmy();
+
+				$currentCommander = $this->_Add($commander);
 				
 				if ($this->currentSession->getUMode() == TRUE) {
-					$currentCommander->uTravel();
+					// $currentCommander->uTravel();
 
 					if ($currentCommander->getStatement() == 0) {
-						$currentCommander->uExperienceInSchool($awCommander['iSchool']);
+						// $currentCommander->uExperienceInSchool($awCommander['iSchool']);
 					}
 				}
 			}
@@ -209,10 +223,6 @@ class CommanderManager extends Manager {
 					experience = ?,
 					uExperience = ?,
 					palmares = ?,
-					typeOfMove = ?,
-					rPlaceDestination = ?,
-					arrivalDate = ?,
-					resourcesTransported = ?,
 					statement = ?,
 					dCreation = ?,
 					dAffectation = ?,
@@ -233,10 +243,6 @@ class CommanderManager extends Manager {
 				$commander->getExperience(),
 				$commander->getUExperience(),
 				$commander->getPalmares(),
-				$commander->getTypeOfMove(),
-				$commander->getrPlaceDestination(),
-				$commander->getArrivalDate(),
-				$commander->getResourcesTransported(),
 				$commander->getStatement(),
 				$commander->getDCreation(),
 				$commander->getDAffectation(),
@@ -245,18 +251,18 @@ class CommanderManager extends Manager {
 
 			$qr = 'UPDATE squadron SET
 				rCommander = ?,
-				pegase = ?,
-				satyre = ?,
-				chimere = ?,
-				sirene = ?,
-				dryade = ?,
-				meduse = ?,
-				griffon = ?,
-				cyclope = ?,
-				minotaure = ?,
-				hydre = ?,
-				cerbere = ?,
-				phenix = ?,
+				ship0 = ?,
+				ship1 = ?,
+				ship2 = ?,
+				ship3 = ?,
+				ship4 = ?,
+				ship5 = ?,
+				ship6 = ?,
+				ship7 = ?,
+				ship8 = ?,
+				ship9 = ?,
+				ship10 = ?,
+				ship11 = ?,
 				DLAstModification = NOW()
 			WHERE id = ?';
 
