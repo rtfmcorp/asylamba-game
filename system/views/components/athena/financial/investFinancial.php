@@ -6,6 +6,7 @@
 
 # require
 	# [{orbitalBase}]			ob_investFinancial
+	# {player}					ob_investFinancial
 
 $totalInvest = 0;
 
@@ -20,7 +21,7 @@ echo '<div class="component financial">';
 		echo '<div class="body">';
 			echo '<ul class="list-type-1">';
 				foreach ($ob_investFinancial as $base) {
-					$baseInvest   = $base->getIUniversity() + $base->getISchool() + $base->getIAntiSpy();
+					$baseInvest   = $base->getISchool() + $base->getIAntiSpy();
 					$totalInvest += $baseInvest;
 
 					echo '<li>';
@@ -36,21 +37,6 @@ echo '<div class="component financial">';
 						echo '</span>';
 
 						echo '<ul class="sub-list-type-1" id="invest-base-' . $base->getId() . '">';
-							echo '<li>';
-								echo '<span class="label">université</span>';
-
-								echo '<span class="value">';
-									echo Format::numberFormat($base->getIUniversity());
-									echo ' <a href="#" class="button sh" data-target="univesity-form-base-' . $base->getId() . '">‹</a>';
-								echo '</span>';
-
-								echo '<form action="' . APP_ROOT . 'action/a-updateinvest/baseid-' . $base->getId() . '/category-university" method="POST" id="univesity-form-base-' . $base->getId() . '">';
-									echo '<p>';
-										echo '<input type="text" name="credit" placeholder="' . $base->getIUniversity() . '" />';
-										echo '<input type="submit" value="ok" />';
-									echo '</p>';
-								echo '</form>';
-							echo '</li>';
 							echo '<li>';
 								echo '<span class="label">école de cmd.</span>';
 
@@ -100,3 +86,22 @@ echo '<div class="component financial">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
+
+/*
+echo '<li>';
+								echo '<span class="label">université</span>';
+
+								echo '<span class="value">';
+									echo Format::numberFormat($base->getIUniversity());
+									echo ' <a href="#" class="button sh" data-target="univesity-form-base-' . $base->getId() . '">‹</a>';
+								echo '</span>';
+
+								echo '<form action="' . APP_ROOT . 'action/a-updateinvest/baseid-' . $base->getId() . '/category-university" method="POST" id="univesity-form-base-' . $base->getId() . '">';
+									echo '<p>';
+										echo '<input type="text" name="credit" placeholder="' . $base->getIUniversity() . '" />';
+										echo '<input type="submit" value="ok" />';
+									echo '</p>';
+								echo '</form>';
+							echo '</li>';
+							*/
+?>

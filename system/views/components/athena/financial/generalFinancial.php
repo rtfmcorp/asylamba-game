@@ -7,6 +7,7 @@
 # require
 	# [{orbitalBase}]			ob_generalFinancial
 	# [{commander}]				commander_generalFinancial
+	# {player}					player_generalFinancial
 
 # work part
 $credit = CTR::$data->get('playerInfo')->get('credit');
@@ -22,12 +23,13 @@ $totalFleetFees = 0;
 # bonus
 $taxBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::POPULATION_TAX);
 
+$totalInvest += $player_generalFinancial->iUniversity;
+
 foreach ($ob_generalFinancial as $base) {
 	$totalTaxIn  += Game::getTaxFromPopulation($base->getPlanetPopulation());
 	$totalTaxOut += (Game::getTaxFromPopulation($base->getPlanetPopulation()) + (Game::getTaxFromPopulation($base->getPlanetPopulation()) * $taxBonus / 100)) * $base->getTax() / 100;
-																	/* le bonus est ajouté à la somme pour déduire à l'alliance					*/
+	/* le bonus est ajouté à la somme pour déduire à l'alliance */
 	$totalInvest += $base->getISchool();
-	$totalInvest += $base->getIUniversity();
 	$totalInvest += $base->getIAntiSpy();
 
 	$S_CRM1 = ASM::$crm->getCurrentSession();
@@ -48,7 +50,6 @@ $totalIncome = $totalTaxIn + $totalRouteIncome + ($totalTaxIn * $taxBonus / 100)
 $totalFess = $totalInvest + $totalTaxOut + $totalMSFees + $totalFleetFees;
 $benefice =  $totalIncome - $totalFess;
 $remains  = $credit + $benefice;
-
 
 # view part
 echo '<div class="component size2 financial">';
@@ -77,7 +78,6 @@ echo '<div class="component size2 financial">';
 							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
 						echo '</span>';
 					echo '</li>';
-					//echo '<li class="empty"></li>';
 					echo '<li class="empty"></li>';
 					echo '<li class="strong">';
 						echo '<span class="label">total des recettes</span>';
