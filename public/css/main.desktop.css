@@ -517,7 +517,7 @@ body {
 	display: none;
 	position: absolute;
 	top: 0; left: 60px;
-	width: 250px;
+	width: 230px;
 }
 #subnav .item:hover > .content {
 	display: block;

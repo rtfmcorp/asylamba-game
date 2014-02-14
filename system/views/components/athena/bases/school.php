@@ -17,7 +17,7 @@ $comQuantity = ASM::$com->size();
 echo '<div class="component school">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'orbitalbase/school.png" alt="" />';
-		echo '<h2>Ecole de Commandement</h2>';
+		echo '<h2>Ecole de Cmd.</h2>';
 		echo '<em>formation des officiers</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
@@ -43,42 +43,35 @@ echo '<div class="component school">';
 
 			echo '<hr />';
 
-			$desc = array(
-				array('Ouvrir une petite classe préparatoire', 'Ouvrir une grande classe préparatoire'),
-				array('Ouvrir une petite classe supérieur', 'Ouvrir une grande classe supérieur')
-			);
-
-			for ($i = 0; $i < 2; $i++) {
-				for ($j = 0; $j < 2; $j++) {
-					echo '<div class="build-item">';
-						echo '<div class="name">';
-							echo '<img src="' . MEDIA . 'school/size' . $j . '-level' . $i . '.png" alt="" />';
-							echo '<strong>' . $desc[$i][$j] . '</strong>';
-						echo '</div>';
-						if ($comQuantity >= MAXCOMMANDERINSCHOOL) {
-							echo '<span class="button disable">';
-								echo '<span class="text">';
-									echo 'trop de commandant dans l\'école<br/>';
-									echo Format::numberFormat(SchoolClassResource::getInfo($j, $i, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
-								echo '</span>';
-							echo '</span>';
-						} elseif (SchoolClassResource::getInfo($j, $i, 'credit') >= CTR::$data->get('playerInfo')->get('credit')) {
-							echo '<span class="button disable">';
-								echo '<span class="text">';
-									echo 'vous ne disposez pas d\'assez de crédit<br/>';
-									echo Format::numberFormat(SchoolClassResource::getInfo($j, $i, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
-								echo '</span>';
-							echo '</span>';
-						} else {
-							echo '<a class="button" href="' . APP_ROOT . 'action/a-createschoolclass/baseid-' . $ob_school->getId() . '/size-' . $j . '/level-' . $i . '">';
-								echo '<span class="text">';
-									echo 'ouvrir une classe pour<br/>';
-									echo Format::numberFormat(SchoolClassResource::getInfo($j, $i, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
-								echo '</span>';
-							echo '</a>';
-						}
+			for ($i = 0; $i < SchoolClassResource::size(); $i++) { 
+				echo '<div class="build-item">';
+					echo '<div class="name">';
+						echo '<img src="' . MEDIA . 'school/school-' . $i . '.png" alt="" />';
+						echo '<strong>' . SchoolClassResource::getInfo($i, 'title') . '</strong>';
 					echo '</div>';
-				}
+					if ($comQuantity >= MAXCOMMANDERINSCHOOL) {
+						echo '<span class="button disable">';
+							echo '<span class="text">';
+								echo 'trop de commandant dans l\'école<br/>';
+								echo Format::numberFormat(SchoolClassResource::getInfo($i, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
+							echo '</span>';
+						echo '</span>';
+					} elseif (SchoolClassResource::getInfo($i, 'credit') >= CTR::$data->get('playerInfo')->get('credit')) {
+						echo '<span class="button disable">';
+							echo '<span class="text">';
+								echo 'vous ne disposez pas d\'assez de crédit<br/>';
+								echo Format::numberFormat(SchoolClassResource::getInfo($i, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
+							echo '</span>';
+						echo '</span>';
+					} else {
+						echo '<a class="button" href="' . APP_ROOT . 'action/a-createschoolclass/baseid-' . $ob_school->getId() . '/school-' . $i . '">';
+							echo '<span class="text">';
+								echo 'ouvrir une classe pour<br/>';
+								echo Format::numberFormat(SchoolClassResource::getInfo($i, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
+							echo '</span>';
+						echo '</a>';
+					}
+				echo '</div>';
 			}
 		echo '</div>';
 	echo '</div>';

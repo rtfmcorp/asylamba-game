@@ -3,10 +3,9 @@ include_once ATHENA;
 # create school class action
 
 # int baseid 		id de la base orbitale
-# int level 		niveau
-# int size 			taille
+# int id 			type de base
 
-for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
+for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
@@ -17,36 +16,28 @@ if (CTR::$get->exist('baseid')) {
 } else {
 	$baseId = FALSE;
 }
-if (CTR::$get->exist('level')) {
-	$level = CTR::$get->get('level');
-} elseif (CTR::$post->exist('level')) {
-	$level = CTR::$post->get('level');
+if (CTR::$get->exist('school')) {
+	$school = CTR::$get->get('school');
+} elseif (CTR::$post->exist('school')) {
+	$school = CTR::$post->get('school');
 } else {
-	$level = FALSE;
-}
-if (CTR::$get->exist('size')) {
-	$size = CTR::$get->get('size');
-} elseif (CTR::$post->exist('size')) {
-	$size = CTR::$post->get('size');
-} else {
-	$size = FALSE;
+	$school = FALSE;
 }
 
-if ($baseId !== FALSE AND $level !== FALSE AND $size !== FALSE AND in_array($baseId, $verif)) {
+if ($baseId !== FALSE AND $school !== FALSE AND in_array($baseId, $verif)) {
 	include_once ARES;
 
-	$level = intval($level);
-	$size  = intval($size);
+	$school = intval($school);
 
 	$name = array('Ametah', 'Anla', 'Aumshi', 'Bastier', 'Enigma', 'Eirukis', 'Erah', 'Ehdis', 'Fransa', 'Greider', 'Grerid', 'Haema', 'Hemhild', 'Renga', 'Hidar', 'Horski', 'Hreirek', 'Hroa', 'Hordis', 'Hydring', 'Imsin', 'Asmin', 'Ansami', 'Kar', 'Kili', 'Kolver', 'Kolfinna', 'Lisa', 'Marta', 'Meto', 'Leto', 'Ragni', 'Ranela', 'Runa', 'Siri', 'Mastro', 'Svenh', 'Thalestris', 'Thannd', 'Arsine', 'Val', 'Vori', 'Yi', 'Agata', 'Agneta', 'Nolgi', 'Edla', 'Else', 'Eyja', 'Jensine', 'Kirsten', 'Maeva', 'Malena', 'Magarte', 'Olava', 'Petrine', 'Rigmor', 'Signy', 'Sigrid', 'Skjorta');
 
-	$nbrCommandersToCreate = rand(SchoolClassResource::getInfo($size, $level, 'minSize'), SchoolClassResource::getInfo($size, $level, 'maxSize'));
+	$nbrCommandersToCreate = rand(SchoolClassResource::getInfo($school, 'minSize'), SchoolClassResource::getInfo($school, 'maxSize'));
 	
 	// débit des crédits au joueur
 	$S_PAM1 = ASM::$pam->getCurrentSession();
 	ASM::$pam->newSession(ASM_UMODE);
 	ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-	ASM::$pam->get()->decreaseCredit(SchoolClassResource::getInfo($size, $level, 'credit'));
+	ASM::$pam->get()->decreaseCredit(SchoolClassResource::getInfo($school, 'credit'));
 	ASM::$pam->changeSession($S_PAM1);
 
 	$S_COM1 = ASM::$com->getCurrentSession();
@@ -54,7 +45,7 @@ if ($baseId !== FALSE AND $level !== FALSE AND $size !== FALSE AND in_array($bas
 
 	for ($i = 0; $i < $nbrCommandersToCreate; $i++) {
 		$newCommander = new Commander();
-		$newCommander->upExperience(rand(SchoolClassResource::getInfo($size, $level, 'minExp'), SchoolClassResource::getInfo($size, $level, 'maxExp')));
+		$newCommander->upExperience(rand(SchoolClassResource::getInfo($school, 'minExp'), SchoolClassResource::getInfo($school, 'maxExp')));
 		$newCommander->setRPlayer(CTR::$data->get('playerId'));
 		$newCommander->setRBase($baseId);
 		$newCommander->setPalmares(0);
@@ -71,7 +62,7 @@ if ($baseId !== FALSE AND $level !== FALSE AND $size !== FALSE AND in_array($bas
 		$newCommander->setAge(rand(40, 70));
 		ASM::$com->add($newCommander);
 	}
-	CTR::$alert->add($nbrCommandersToCreate . ' commandant' . Format::addPlural($nbrCommandersToCreate) . ' inscrit' . Format::addPlural($nbrCommandersToCreate) . '.', ALERT_STD_SUCCESS);
+	CTR::$alert->add($nbrCommandersToCreate . ' commandant' . Format::addPlural($nbrCommandersToCreate) . ' inscrit' . Format::addPlural($nbrCommandersToCreate) . ' au programme d\'entraînement.', ALERT_STD_SUCCESS);
 	ASM::$com->changeSession($S_COM1);
 } else {
 	CTR::$alert->add('pas assez d\'arguments', ALERT_STD_ERROR);
