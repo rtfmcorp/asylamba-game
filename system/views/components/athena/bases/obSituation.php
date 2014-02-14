@@ -8,6 +8,18 @@
 	# {orbitalBase}		ob_obSituation
 	# [{commander}]		commanders_obSituation
 
+echo '<div class="component">';
+	echo '<div class="head skin-1">';
+		echo '<img src="' . MEDIA . 'orbitalbase/situation.png" alt="" />';
+	echo '</div>';
+	echo '<div class="fix-body">';
+		echo '<div class="body">';
+			echo 'test';
+		echo '</div>';
+	echo '</div>';
+echo '</div>';
+
+
 echo '<div class="component size3">';
 	echo '<div class="head">';
 		echo '<h1>Vue de situation</h1>';
