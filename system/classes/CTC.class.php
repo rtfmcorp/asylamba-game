@@ -45,7 +45,7 @@ abstract class CTC {
 			throw new Exception('CTC isn\'t running actually', 1);
 		} else {
 			self::$add++;
-
+			
 			$event = array(
 				'date' 	 => $date,
 				'object' => $object,
@@ -53,28 +53,22 @@ abstract class CTC {
 				'args'   => $args
 			);
 
-			$index = 0;
+			$timestamp = strtotime($date);
+			$events = array();
 
 			if (self::size() == 0) {
-				self::$events[$index] = $event;
+				self::$events[] = $event;
 			} else {
-				$found = FALSE;
-
 				foreach(self::$events AS $e) {
-					if (strtotime($e['date']) > strtotime($date)) {
-						$found = TRUE;
-						break;
+					if (strtotime($e['date']) > $timestamp) {
+						$events[] = $event;
+						$events[] = $e;
+					} else {
+						$events[] = $e;
 					}
-					$index++;
 				}
-				if ($found) {
-					$begin			= array_slice(self::$events, 0, $index);
-					$begin[]		= $event;
-					$end			= array_slice(self::$events, $index);
-					self::$events 	= array_merge($begin, $end);
-				} else {
-					self::$events[self::size()] = $event;
-				}
+
+				self::$events = $events;
 			}
 		}
 	}
