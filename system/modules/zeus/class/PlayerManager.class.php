@@ -222,8 +222,7 @@ class PlayerManager extends Manager {
 	}
 
 	//LOAD SPECIAUX
-
-public function loadByPopulation($where = array(), $limit = array()) {
+	public function loadByPopulation($where = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'p.');
 		$formatLimit = Utils::arrayToLimit($limit);
 

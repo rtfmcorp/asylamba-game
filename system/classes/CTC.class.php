@@ -19,15 +19,21 @@ abstract class CTC {
 		self::$apply++;
 		$path = 'public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
 
-		if ($token) {
+		if ($token AND count(self::$events) > 0) {
 			Bug::writeLog($path, '> ' . date('H:i:s') . ', start to apply context');
-			Bug::writeLog($path, '>');
+			Bug::writeLog($path, '');
 			
 			foreach (self::$events as $k => $event) {
 				call_user_func_array(array($event['object'], $event['method']), $event['args']);
 
-				Bug::writeLog($path, '> [' . $event['date'] . '] ' . get_class($event['object']) . '->' . $event['method']);
+				Bug::writeLog($path, '> [' . $event['date'] . '] ' . get_class($event['object']) . '(' . $event['object']->getId() . ')::' . $event['method']);
 			}
+
+			Bug::writeLog($path, '');
+			Bug::writeLog($path, '> ' . date('H:i:s') . ', end of apply context');
+			Bug::writeLog($path, '');
+			Bug::writeLog($path, '');
+			Bug::writeLog($path, '');
 
 			self::$running = FALSE;
 			self::$events  = array();

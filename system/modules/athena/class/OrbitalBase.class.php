@@ -233,12 +233,11 @@ class OrbitalBase {
 	public function uMethod() {
 		$token = CTC::createContext();
 		$now   = Utils::now();
-		// how to add an element : add($date, $object, $method, $args = array());
 
 		if (Utils::interval($this->uOrbitalBase, $now, 's') > 0) {
 			# update time
-			$this->uOrbitalBase = $now;
 			$hours = Utils::intervalDates($now, $this->uOrbitalBase);
+			$this->uOrbitalBase = $now;
 
 			# load the player
 			$S_PAM1 = ASM::$pam->getCurrentSession();

@@ -53,31 +53,53 @@ class Utils {
 		}
 	}
 
-	public static function intervalDates($date1, $date2) {
+	public static function intervalDates($date1, $date2, $precision = 'h') {
 		# give each full hours between two dates
 		$dates = array();
 
 		$baseDate = ($date1 < $date2) ? $date1 : $date2;
 		$endDate = ($date1 < $date2) ? $date2 : $date1;
-		
-		$hoursInterval = round((abs(strtotime($date1) - strtotime($date2))) / (60 * 60));
 
-		$seconds = strtotime($baseDate) + 3600;
-		$nextHour = floor($seconds / 3600) * 3600;
-		$fullHour = date('Y-m-d H:i:s', $nextHour);
+		if ($precision == 'h') {
+			$hoursInterval = round((abs(strtotime($date1) - strtotime($date2))) / (60 * 60));
 
-		for ($i = 0; $i < $hoursInterval; $i++) { 
-			# add date to array
-			$dates[] = $fullHour;
-			# compute next date
-			$newTime = strtotime($fullHour) + 3600;
-			$fullHour = date('Y-m-d H:i:s', $newTime);
+			$seconds = strtotime($baseDate) + 3600;
+			$nextHour = floor($seconds / 3600) * 3600;
+			$fullHour = date('Y-m-d H:i:s', $nextHour);
+
+			for ($i = 0; $i < $hoursInterval; $i++) { 
+				# add date to array
+				$dates[] = $fullHour;
+				# compute next date
+				$newTime = strtotime($fullHour) + 3600;
+				$fullHour = date('Y-m-d H:i:s', $newTime);
+			}
+			# if there is an hour change at the end
+			if ($fullHour < $endDate) {
+				$dates[] = $fullHour;
+			}
+			return $dates;
+		} elseif ($precision == 'd') {
+			# the changement is at 01:00:00
+			$daysInterval = round((abs(strtotime($date1) - strtotime($date2))) / (60 * 60 * 24));
+
+			$seconds = strtotime($baseDate) + 86400;
+			$nextDay = floor($seconds / 86400) * 86400;
+			$fullDay = date('Y-m-d H:i:s', $nextDay);
+
+			for ($i = 0; $i < $daysInterval; $i++) { 
+				# add date to array
+				$dates[] = $fullDay;
+				# compute next date
+				$newTime = strtotime($fullDay) + 86400;
+				$fullDay = date('Y-m-d H:i:s', $newTime);
+			}
+			# if there is an hour change at the end
+			if ($fullDay < $endDate) {
+				$dates[] = $fullDay;
+			}
+			return $dates;
 		}
-		# if there is an hour change at the end
-		if ($fullHour < $endDate) {
-			$dates[] = $fullHour;
-		}
-		return $dates;
 	}
 
 	public static function hasAlreadyHappened($date, $now = FALSE) {
