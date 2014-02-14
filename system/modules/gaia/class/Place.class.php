@@ -119,8 +119,26 @@ class Place {
 					CTC::add($day, $this, 'uResources', array());
 				}
 			}
-		}
 
+			# TRAVEL
+			include_once ATHENA;
+			$S_OBM_GEN = ASM::$obm->getCurrentSession();
+			ASM::$obm->newSession();
+
+			$S_COM_PLACE1 = ASM::$com->getCurrentSession();
+			ASM::$com->newSession();
+
+			ASM::$com->load(array('rPlaceDestination' => $this->id, 'statement' => 2), array('arrivalDate', 'ASC'));
+			for ($i = 0; $i < ASM::$com->size(); $i++) {
+				$commander = ASM::$com->get($i);
+				if ($commander->getArrivalDate() <= $now AND $commander->getRPlaceDestination() != NULL) { 
+					CTC::add($commander->getArrivalDate(), $this, 'uTravel', array($commander));
+				}
+			}
+			ASM::$obm->changeSession($S_OBM_GEN);
+			ASM::$com->changeSession($S_COM_PLACE1);
+			
+		}
 		CTC::applyContext($token);
 	}
 
@@ -132,27 +150,7 @@ class Place {
 		}
 	}
 
-	public function uTravel() {
-		include_once ATHENA;
-		$S_OBM_GEN = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession();
-
-		$S_COM_PLACE1 = ASM::$com->getCurrentSession();
-		ASM::$com->newSession(FALSE);
-
-		ASM::$com->load(array('rPlaceDestination' => $this->id, 'statement' => 2), array('arrivalDate', 'ASC'));
-		for ($i = 0; $i < ASM::$com->size(); $i++) {
-			$commander = ASM::$com->get($i);
-			if ($commander->getArrivalDate() <= Utils::now() AND $commander->getRPlaceDestination() != NULL) { 
-				$this->executeAction($commander);
-			}
-		}
-		ASM::$com->save();
-		ASM::$obm->changeSession($S_OBM_GEN);
-		ASM::$com->changeSession($S_COM_PLACE1);
-	}
-
-	private function executeAction($commander) {
+	private function uTravel($commander) {
 		switch ($commander->getTypeOfMove()) {
 				case COM_MOVE: $commander = $this->tryToChangeBase($commander); break;
 				case COM_LOOT: $commander = $this->tryToLoot($commander); break;

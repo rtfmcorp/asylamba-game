@@ -128,7 +128,6 @@ class PlaceManager extends Manager {
 				$currentP->uMode = FALSE;
 
 				$currentP->uMethod();
-				$currentP->uTravel();
 			}
 		}
 	}
