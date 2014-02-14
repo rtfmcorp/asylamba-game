@@ -24,8 +24,6 @@ echo '<div id="content">';
 		$player_university = ASM::$pam->get(0);
 		$research_university = ASM::$rsm->get(0);
 		include COMPONENT . 'promethee/university.php';
-	} elseif (CTR::$get->get('view') == 'overview') {
-		include COMPONENT . 'promethee/overview.php';
 	} elseif (CTR::$get->get('view') == 'technos') {
 		include COMPONENT . 'promethee/infoTech.php';
 	} else {

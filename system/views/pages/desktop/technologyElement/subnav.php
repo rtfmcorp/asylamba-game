@@ -11,23 +11,13 @@ echo '<div id="subnav">';
 			echo '</span>';
 		echo '</a>';
 
-		$active = (CTR::$get->get('view') == 'overview') ? 'active' : '';
-		echo '<a href="' . APP_ROOT . 'technology/view-overview" class="item ' . $active . '">';
+		$active = (CTR::$get->get('view') == 'technos') ? 'active' : '';
+		echo '<a href="' . APP_ROOT . 'technology/view-technos" class="item ' . $active . '">';
 			echo '<span class="picto">';
 				echo '<img src="' . MEDIA . 'orbitalbase/technosphere.png" alt="" />';
 			echo '</span>';
 			echo '<span class="content skin-1">';
-				echo '<span>Roadmap';
-			echo '</span>';
-		echo '</a>';
-
-		$active = (CTR::$get->get('view') == 'technos') ? 'active' : '';
-		echo '<a href="' . APP_ROOT . 'technology/view-technos" class="item ' . $active . '">';
-			echo '<span class="picto">';
-				echo '<img src="' . MEDIA . 'orbitalbase/situation.png" alt="" />';
-			echo '</span>';
-			echo '<span class="content skin-1">';
-				echo '<span>Bugtracker';
+				echo '<span>Arbre technologique';
 			echo '</span>';
 		echo '</a>';
 	echo '</div>';
