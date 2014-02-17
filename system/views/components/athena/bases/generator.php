@@ -133,48 +133,11 @@ for ($i = 0; $i < 8; $i++) {
 }
 
 # display
-echo '<div class="component size2 generator">';
+echo '<div class="component">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'orbitalbase/generator.png" alt="" />';
 		echo '<h2>' . OrbitalBaseResource::getBuildingInfo(0, 'frenchName') . '</h2>';
 		echo '<em>niveau ' . $ob_generator->getLevelGenerator() . '</em>';
-	echo '</div>';
-	echo '<div class="fix-body">';
-		echo '<div class="body">';
-			echo '<table>';
-				echo '<tr>';
-					echo '<td>' . $b[0] . '</td>';
-					echo '<td>' . $b[1] . '</td>';
-				echo '</tr>';
-				echo '<tr>';
-					echo '<td>' . $b[5] . '</td>';
-					echo '<td>' . $b[2] . '</td>';
-				echo '</tr>';
-				if (!$ob_generator->getRealDock2Level() AND !$ob_generator->getRealCommercialPlateformeLevel() AND (
-					OrbitalBaseResource::haveRights(6, 1, 'buildingTree', $ob_generator) === TRUE OR
-					OrbitalBaseResource::haveRights(3, 1, 'buildingTree', $ob_generator) === TRUE)) {
-					echo '<tr>';
-						echo '<td colspan="2">';
-							echo '<div class="info-building">';
-								echo '<h4>Vous devez maintenant choisir quel bâtiment parmi les deux suivants vous voulez construire en premier. Ce choix influera sur l\'orientation future — économique ou militaire —  de votre base.</h4>';
-								echo '<p class="plainText">Choisir la Plateforme Commerciale vous permettra d\'atteindre le niveau 15; vous pourrez ainsi proposer un grand nombre de routes commerciales à vos partenaires et ainsi de générer d\'importants revenus.<br/>
-								A l\'inverse, en choisissant le Chantier de ligne en premier, vous aurez accès à deux croiseurs supplémentaires, atouts non-négligeables dans vos guerres expansionistes.</p>';
-							echo '</div>';
-						echo '</td>';
-					echo '</tr>';
-				}
-				echo '<tr>';
-					echo '<td>' . $b[6] . '</td>';
-					echo '<td>' . $b[3] . '</td>';
-				echo '</tr>';
-			echo '</table>';
-		echo '</div>';
-	echo '</div>';
-echo '</div>';
-
-echo '<div class="component">';
-	echo '<div class="head skin-2">';
-		echo '<h2>Centre de construction</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
@@ -186,6 +149,32 @@ echo '<div class="component">';
 			echo '</div>';
 			
 			echo $q;
+		echo '</div>';
+	echo '</div>';
+echo '</div>';
+
+echo '<div class="component size2 generator">';
+	echo '<div class="head"></div>';
+	echo '<div class="fix-body">';
+		echo '<div class="body">';
+			echo '<table>';
+				echo '<tr>';
+					echo '<td>' . $b[0] . '</td>';
+					echo '<td>' . $b[5] . '</td>';
+				echo '</tr>';
+				echo '<tr>';
+					echo '<td>' . $b[1] . '</td>';
+					echo '<td>' . $b[2] . '</td>';
+				echo '</tr>';
+				echo '<tr>';
+					echo '<td>' . $b[6] . '</td>';
+					echo '<td>' . $b[3] . '</td>';
+				echo '</tr>';
+				echo '<tr>';
+					echo '<td>' . $b[4] . '</td>';
+					echo '<td>' . $b[7] . '</td>';
+				echo '</tr>';
+			echo '</table>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

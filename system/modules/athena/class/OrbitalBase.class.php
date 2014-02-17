@@ -36,10 +36,7 @@ class OrbitalBase {
 	public $antiSpyAverage = 0;
 	public $shipStorage = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 	public $motherShip = 0; // 1 = a motherShip level 1 is stocked, 2 = level 2, 3 = level 3
-	public $isCommercialBase = -1;
 	public $isProductionRefinery = 1;
-	public $isProductionDock1 = 0;
-	public $isProductionDock2 = 0;
 	public $resourcesStorage = 5000;
 	public $uOrbitalBase = '';
 	public $dCreation = '';
@@ -96,10 +93,7 @@ class OrbitalBase {
 	public function getAntiSpyAverage() { return $this->antiSpyAverage; }
 	public function getShipStorage($k = -1) {return ($k == -1) ? $this->shipStorage : $this->shipStorage[$k]; }
 	public function getMotherShip() { return $this->motherShip; }
-	public function getIsCommercialBase() { return $this->isCommercialBase; }
 	public function getIsProductionRefinery() { return $this->isProductionRefinery; }
-	public function getIsProductionDock1() { return $this->isProductionDock1; }
-	public function getIsProductionDock2() { return $this->isProductionDock2; }
 	public function getResourcesStorage() { return $this->resourcesStorage; }
 	public function getDCreation() { return $this->dCreation; }
 
@@ -164,17 +158,7 @@ class OrbitalBase {
 	public function setAntiSpyAverage($var) { $this->antiSpyAverage = $var; }
 	public function setShipStorage($k, $v) { $this->shipStorage[$k] = $v; }
 	public function setMotherShip($var) { $this->motherShip = $var; }
-	public function setIsCommercialBase($var) {
-		if ($var == -1 || $var == 0 || $var == 1) {
-			$this->isCommercialBase = $var;
-		} else {
-			CTR::$alert->add('une base doit être commerciale ou non');
-			CTR::$alert->add('dans setIsCommercialBase de OrbitalBase', ALERT_BUG_ERROR);
-		}
-	}
 	public function setIsProductionRefinery($var) { $this->isProductionRefinery = $var; }
-	public function setIsProductionDock1($var) { $this->isProductionDock1 = $var; }
-	public function setIsProductionDock2($var) { $this->isProductionDock2 = $var; }
 	public function setResourcesStorage($var) { $this->resourcesStorage = $var; }
 	public function setDCreation($var) { $this->dCreation = $var; }
 

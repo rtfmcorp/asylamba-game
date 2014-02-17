@@ -17,23 +17,24 @@ abstract class CTC {
 
 	public static function applyContext($token) {
 		self::$apply++;
-		$path = 'public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
 
 		if ($token AND count(self::$events) > 0) {
-			Bug::writeLog($path, '> ' . date('H:i:s') . ', start to apply context');
-			Bug::writeLog($path, '');
+			usort(self::$events, function($a, $b) {
+				return $a['timest'] < $b['timest'] ? -1 : 1;
+			});
+
+			$path = 'public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
+			$logt = '> ' . date('H:i:s') . ', start to apply context' . "\n";
 			
 			foreach (self::$events as $k => $event) {
 				call_user_func_array(array($event['object'], $event['method']), $event['args']);
 
-				Bug::writeLog($path, '> [' . $event['date'] . '] ' . get_class($event['object']) . '(' . $event['object']->getId() . ')::' . $event['method']);
+				$logt .= '> [' . $event['date'] . '] ' . get_class($event['object']) . '(' . $event['object']->getId() . ')::' . $event['method'] . "\n";
 			}
 
-			Bug::writeLog($path, '');
-			Bug::writeLog($path, '> ' . date('H:i:s') . ', end of apply context');
-			Bug::writeLog($path, '');
-			Bug::writeLog($path, '');
-			Bug::writeLog($path, '');
+			$logt .= '> ' . date('H:i:s') . ', end of apply context' . "\n";
+			$logt .= "\n";
+			Bug::writeLog($path, $logt);
 
 			self::$running = FALSE;
 			self::$events  = array();
@@ -47,36 +48,15 @@ abstract class CTC {
 			self::$add++;
 
 			$event = array(
+				'timest' => strtotime($date), 
 				'date' 	 => $date,
 				'object' => $object,
 				'method' => $method,
 				'args'   => $args
 			);
 
-			$index = 0;
-
-			if (self::size() == 0) {
-				self::$events[$index] = $event;
-			} else {
-				$found = FALSE;
-
-				foreach(self::$events AS $e) {
-					if (strtotime($e['date']) > strtotime($date)) {
-						$found = TRUE;
-						break;
-					}
-					$index++;
-				}
-				if ($found) {
-					$begin			= array_slice(self::$events, 0, $index);
-					$begin[]		= $event;
-					$end			= array_slice(self::$events, $index);
-					self::$events 	= array_merge($begin, $end);
-				} else {
-					self::$events[self::size()] = $event;
-				}
-			}
-		}
+			self::$events[] = $event;
+		}	
 	}
 
 	public static function size() {
@@ -87,5 +67,9 @@ abstract class CTC {
 	private static $create  = 0;
 	private static $apply   = 0;
 	private static $context = 0;
+
+	public static function get() {
+		return self::$events;
+	}
 }
 ?>

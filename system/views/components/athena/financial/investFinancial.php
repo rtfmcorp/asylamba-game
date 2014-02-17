@@ -6,9 +6,10 @@
 
 # require
 	# [{orbitalBase}]			ob_investFinancial
-	# {player}					ob_investFinancial
+	# {player}					player_investFinancial
 
 $totalInvest = 0;
+$totalInvest += $player_investFinancial->iUniversity;
 
 # view part
 echo '<div class="component financial">';
@@ -19,6 +20,19 @@ echo '<div class="component financial">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
+			echo '<ul class="list-type-1">';
+				echo '<li>';
+					echo '<span class="label">Investissements université</span>';
+					echo '<span class="value">';
+						echo Format::numberFormat($player_investFinancial->iUniversity);
+						echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+						echo ' <a href="#" class="button sh" data-target="school-form-base-1">‹</a> ';
+					echo '</span>';
+				echo '</li>';
+			echo '</ul>';
+
+			echo '<hr />';
+
 			echo '<ul class="list-type-1">';
 				foreach ($ob_investFinancial as $base) {
 					$baseInvest   = $base->getISchool() + $base->getIAntiSpy();

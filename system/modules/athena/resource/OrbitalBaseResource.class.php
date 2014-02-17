@@ -68,6 +68,10 @@ class OrbitalBaseResource {
 				} else {
 					return -1;
 				}
+			} elseif ($info == 'maxLevel') {
+				# $level is the type of the base
+				return self::$building[$buildingNumber][$info][$level];
+
 			} elseif ($info == 'level') {
 				if ($level <= 0 OR $level > count(self::$building[$buildingNumber]['level'])) {
 					return FALSE;
@@ -126,100 +130,52 @@ class OrbitalBaseResource {
 				// droit de construire le batiment ?
 				// $sup est un objet de type OrbitalBase
 				case 'buildingTree' :
+					$diminution = NULL;
 					switch ($buildingId) {
 						case 0 : // Générateur
-							if ($level <= count(self::$building[0]['level'])) {
-								return TRUE;
-							} else { return 'niveau maximum atteint'; }
+							$diminution = 0;
 							break;
 						case 1 : // Raffinerie
-							if ($level > count(self::$building[1]['level'])) {
-								return 'niveau maximum atteint';
-							} elseif ($level > $sup->getRealGeneratorLevel()) {
-								return 'le niveau du générateur n\'est pas assez élevé';
-							} else { return TRUE; }
+							$diminution = 0;
 							break;
 						case 2 : // Dock 1
-							if ($level > count(self::$building[2]['level'])) {
-								return 'niveau maximum atteint';
-							} elseif ($level > $sup->getRealGeneratorLevel()) {
-								return 'le niveau du générateur n\'est pas assez élevé';
-							} else { return TRUE; }
+							$diminution = 0;
 							break;
 						case 3 : // Dock 2
-							if ($sup->getIsCommercialBase() == -1) {
-								if ($level == 1 AND $sup->getRealGeneratorLevel() > 5) {
-									return TRUE;
-								} else {
-									return 'le niveau du générateur n\'est pas assez élevé';
-								}
-							} elseif ($sup->getIsCommercialBase() == 0) {
-								if ($level > count(self::$building[3]['level'])) {
-									return 'niveau maximum atteint';
-								} elseif ($level > ($sup->getRealGeneratorLevel() - 5)) {
-									return 'le niveau du générateur n\'est pas assez élevé';
-								} else { return TRUE; }
-							} else {
-								if ($level > (count(self::$building[3]['level']) - 5)) {
-									return 'niveau maximum atteint';
-								} elseif ($level > ($sup->getRealGeneratorLevel() - 10)) {
-									return 'le niveau du générateur n\'est pas assez élevé';
-								} else { return TRUE; }
-							}
+							$diminution = 5;
 							break;
 						case 4 : // Dock 3
-							if ($sup->getRealGravitationalModuleLevel() > 0) {
-									return 'bâtiment inconstructible';
-							} else {
-								if ($level > count(self::$building[4]['level'])) {
-									return 'niveau maximum atteint';
-								} elseif ($level > ($sup->getRealGeneratorLevel() - 15)) {
-									return 'le niveau du générateur n\'est pas assez élevé';
-								} else { return TRUE; }
-							}
+							$diminution = 10;
 							break;
 						case 5 : // Technosphère
-							if ($level > count(self::$building[5]['level'])) {
-								return 'niveau maximum atteint';
-							} elseif ($level > $sup->getRealGeneratorLevel()) {
-								return 'le niveau du générateur n\'est pas assez élevé';
-							} else { return TRUE; }
+							$diminution = 0;
 							break;
 						case 6 : // Plateforme Commerciale
-							if ($sup->getIsCommercialBase() == -1) {
-								if ($level == 1 AND $sup->getRealGeneratorLevel() > 5) {
-									return TRUE;
-								} else {
-									return 'le niveau du générateur n\'est pas assez élevé';
-								}
-							} elseif ($sup->getIsCommercialBase() == 1) {
-								if ($level > count(self::$building[3]['level'])) {
-									return 'niveau maximum atteint';
-								} elseif ($level > ($sup->getRealGeneratorLevel() - 5)) {
-									return 'le niveau du générateur n\'est pas assez élevé';
-								} else { return TRUE; }
-							} else {
-								if ($level > (count(self::$building[3]['level']) - 5)) {
-									return 'niveau maximum atteint';
-								} elseif ($level > ($sup->getRealGeneratorLevel() - 10)) {
-									return 'le niveau du générateur n\'est pas assez élevé';
-								} else { return TRUE; }
-							}
+							$diminution = 5;
 							break;
 						case 7 : // Module Gravitationnel
-							if ($sup->getRealDock3Level() > 0) {
-									return 'bâtiment inconstructible';
-							} else {
-								if ($level > count(self::$building[7]['level'])) {
-									return 'niveau maximum atteint';
-								} elseif ($level > ($sup->getRealGeneratorLevel() - 15)) {
-									return 'le niveau du générateur n\'est pas assez élevé';
-								} else { return TRUE; }
-							}
+							$diminution = 10;
 							break;
 						default :
 							CTR::$alert->add('buildingId invalide (entre 0 et 7) dans haveRights de OrbitalBaseResource', ALT_BUG_ERROR);
 							break;
+					}
+					if ($diminution !== NULL) {
+						if ($buildingId == 0) {
+							if ($level > self::$building[$buildingId]['maxLevel'][$sup->typeOfBase]) {
+								return 'niveau maximum atteint';
+							} else {
+								return TRUE;
+							}
+						} else {
+							if ($level > self::$building[$buildingId]['maxLevel'][$sup->typeOfBase]) {
+								return 'niveau maximum atteint';
+							} elseif ($level > ($sup->realGeneratorLevel - $diminution)) {
+								return 'le niveau du générateur n\'es pas assez élevé';
+							} else {
+								return TRUE;
+							}
+						}
 					}
 					break;
 				// a la technologie pour construire ce bâtiment ?
@@ -270,6 +226,7 @@ class OrbitalBaseResource {
 				array(120000, 680000, 15, 	88),
 				array(150000, 800000, 15, 	100)
 			),
+			'maxLevel' => array(13, 20, 20, 20),
 			'description' => 'Vous donnant la possibilité de construire et de faire évoluer vos bâtiments, le <strong>Générateur</strong> vous permet également de savoir à quel niveau sont vos édifices. Cette passerelle est l’institution principale de votre base orbitale. En effet, s’il n’est pas suffisamment évolué, vous remarquerez très vite qu’il devient impossible d’ériger d’autres types de bâtiment.<br /><br />Chaque fois que le Générateur aura passé <strong>cinq niveaux</strong>, une case construction supplémentaire sera à votre disposition. Cependant, dans certains cas, plusieurs bâtiments pourront être construits pour une seule case. Il vous faudra donc faire un choix entre lesdits bâtiments. Attention, la construction de certain type de bâtiment peuvent changer votre manière de jouer.'
 		),
 		array(
@@ -299,6 +256,7 @@ class OrbitalBaseResource {
 				array(57600, 260000, 	15, 88,  	4200000,  	257),
 				array(64800, 350000, 	15, 100, 	5000000, 	271)
 			),
+			'maxLevel' => array(13, 20, 13, 20),
 			'description' => 'La <strong>Raffinerie</strong> est le bâtiment où l’on traite vos ressources pour en extraire les fractions utilisables. Ce bâtiment est également le lieu de stockage des ressources amassées durant les relèves. La capacité de stockage ainsi que la capacité d’extraction de votre raffinerie dépend du niveau dans lequel elle se situe.<br /><br />Aucune action directe ne peut être effectuée dans la raffinerie, cependant vous pouvez y voir toutes les informations concernant votre production actuelle et pour tous les niveaux suivants.<br /><br /> Il y a deux modes d’utilisation dans votre raffinerie. Le mode Production améliore le nombre de ressources produites par relève et le mode Stockage augmente la quantité de ressources que vous pouvez stocker.'
 		),
 		array(
@@ -329,6 +287,7 @@ class OrbitalBaseResource {
 				array(79000,  390000,  	15, 145,	192, 	5),
 				array(90000,  430000,  	15,	170,	200, 	6)
 			),
+			'maxLevel' => array(13, 13, 20, 20),
 			'description' => 'Le <strong>Chantier Alpha</strong>, zone de construction et de stockage des vaisseaux, est votre premier chantier d’assemblage de chasseurs et corvettes. Ces vaisseaux sont les plus petits que vous pourrez construire durant le jeu, mais pas forcément les moins puissants. Chaque type d’appareil dispose de qualités comme de défauts, pensez à bien prendre en compte les aptitudes de chacun.<br /><br />Le nombre de vaisseaus en stock dans votre chantier est limité, tout comme votre file de construction. Seule l’augmentation du niveau de votre chantier vous donnera la possibilité de stocker et de construire d’avantage.<br /><br />Le niveau de votre chantier Alpha et votre avancée technologique vous permettront de <strong>débloquer et de découvrir les vaisseaux</strong>.'
 		),
 		array(
@@ -354,6 +313,7 @@ class OrbitalBaseResource {
 				array(115000, 750000, 	18, 480, 	500, 5),
 				array(125000, 1000000,	20, 600, 	500, 6)
 			),
+			'maxLevel' => array(8, 8, 15, 15),
 			'description' => 'Le <strong>Chantier de Ligne</strong> est le deuxième atelier de construction de vaisseaus à votre disposition. Plus grand et plus performant que son cadet le Chantier Alpha, il vous permettra de construire les navettes de type croiseur et destroyer. Ces vaisseaux, plus grands et plus lents que les corvettes et les chasseurs, servent à un autre type de stratégie. Comme pour les petits vaisseaux, les croiseurs et les destroyers disposent d’aptitude propre à certains types de combat, analysez correctement celles-ci pour peaufiner votre stratégie d’attaque ou de défense.<br /><br />Le nombre de vaisseaus que vous pouvez stocker dans votre Chantier de Ligne est limité comme votre fil de construction. Pensez à former des commandants pour vider vos hangars et renforcer vos escadrilles.',
 			'techno' => 1
 		),
@@ -369,6 +329,7 @@ class OrbitalBaseResource {
 				array(168000, 800000, 92,  600,  2),
 				array(336000, 1000000,100, 1000, 3)
 			),
+			'maxLevel' => array(0, 5, 0, 5),
 			'description' => 'La <strong>Colonne d’Assemblage</strong> est le troisième atelier de construction d’appareils. Spécifique aux vaisseaux-mères, ce chantier spatial est indispensable à toute tentative de colonisation. Ce chantier titanesque conçu pour fabriquer des vaisseaux de taille quasi-planétaire, vous donnera la possibilité de construire trois types de vaisseaux-mères. Chacun de ces bâtiments spatiaux dispose de quasiment le même nombre d’aptitudes, excepté sa taille. En effet, lorsque vous créez un vaisseau mère de catégorie trois, il disposera de plus de place de construction que ses deux cadets.<br /><br />La Colonne d’Assemblage est la plus grosse plateforme que vous pouvez construire sur votre base. Elle est également la plus couteuse.',
 			'techno' => 2
 		),
@@ -402,6 +363,7 @@ class OrbitalBaseResource {
 				array(61200,  250000, 	15, 102),
 				array(68400,  300000, 	15, 115)
 			),
+			'maxLevel' => array(13, 20, 20, 20),
 			'description' => 'La <strong>Technosphère</strong>, véritable forge de votre base orbitale, vous permettra de donner des bonus à vos bâtiments, vaisseaux et autre.<br /><br />Cette bâtisse de forme arrondie obtiendra au fil du temps et en fonction du nombre de crédits investis dans votre université, un nombre de technologies à développer. Chaque technologie développée vous permettra d’une part de donner des <strong>bonus</strong> a certaines de vos constructions et d’autre part de débloquer vos vaisseaux et bâtiments.<br /><br />Comme dans le chantier Alpha, le Générateur, etc… une liste de développement est en place. Cette liste de développement est, bien évidemment, limitée.'
 		),
 		array(
@@ -427,6 +389,7 @@ class OrbitalBaseResource {
 				array(90000, 1350000, 	18, 320, 	8, 4000),
 				array(105000,1800000, 	20, 380, 	9, 5000)
 			),
+			'maxLevel' => array(8, 15, 8, 15),
 			'description' => 'La <strong>Plateforme Commerciale</strong>, véritable plaque tournante du commerce dans votre domaine, permet, en fonction de sa taille, de créer et de gérer des <strong>routes commerciales</strong> sur le long terme avec vos partenaires. Pour valider une route commerciale vous devez la proposer et l’autre joueur doit l’accepter. <br /><br />Une route commerciale génère des revenus chez les deux parties. Plus la route est longue et plus les planètes sont peuplées, meilleurs sera son rendement. De plus, les routes commerciales entre deux secteurs différents ainsi qu\'avec des joueurs non-alliés ont tendance à générer plus de revenus.',
 			'techno' => 0
 		),
@@ -443,6 +406,7 @@ class OrbitalBaseResource {
 				array(168000, 940000, 	92, 	800,  18),
 				array(336000, 1000000, 	100, 	1200, 20)
 			),
+			'maxLevel' => array(0, 0, 5, 5),
 			'description' => 'Le <strong>Module Gravitationnel</strong>, seule structure défensive de la base orbitale, rend les attaques contre votre planète plus difficiles pour tous vos ennemis. Créant un champ gravitationnel de <strong>protection</strong> autour de votre planète et de votre base orbitale, cette défense rend tout type de chasseur quasiment inoffensif.<br /><br />Cette défense vous permettra d’attaquer vos ennemis en laissant à votre population une protection contre les petites attaques. Cependant, il est très conseillé de laisser systématiquement quelques vaisseaux de défense dans les places prévues à cet effet.',
 			'techno' => 3
 		)
