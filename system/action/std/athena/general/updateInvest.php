@@ -47,10 +47,6 @@ if ($baseId !== FALSE AND $credit !== FALSE AND $category !== FALSE AND in_array
 			$base->setISchool($credit);
 			CTR::$alert->add('L\'investissement dans l\'école de commandements de votre base ' . $base->getName() . ' a été modifié', ALERT_STD_SUCCESS);
 			break;
-		case 'university':
-			$base->setIUniversity($credit);
-			CTR::$alert->add('L\'investissement dans l\'université de votre base ' . $base->getName() . ' a été modifié', ALERT_STD_SUCCESS);
-			break;
 		case 'antispy':
 			$base->setIAntiSpy($credit);
 			CTR::$alert->add('L\'investissement dans l\'anti-espionnage sur votre base ' . $base->getName() . ' a été modifié', ALERT_STD_SUCCESS);

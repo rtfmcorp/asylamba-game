@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 abstract class CTR {
 	public static $data;

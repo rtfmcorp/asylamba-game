@@ -53,14 +53,17 @@ class PlayerManager extends Manager {
 			$p->setStatus($aw['status']);
 			$p->setDescription($aw['description']);
 			$p->setCredit($aw['credit']);
-			$p->setUCredit($aw['uCredit']);
-			$p->setActionPoint($aw['actionPoint']);
-			$p->setUActionPoint($aw['uActionPoint']);
+			$p->uPlayer = $aw['uPlayer'];
 			$p->setExperience($aw['experience']);
 			$p->setLevel($aw['level']);
 			$p->setVictory($aw['victory']);
 			$p->setDefeat($aw['defeat']);
 			$p->setStepTutorial($aw['stepTutorial']);
+			$p->iUniversity = $aw['iUniversity'];
+			$p->partNaturalSciences = $aw['partNaturalSciences'];
+			$p->partLifeSciences = $aw['partLifeSciences'];
+			$p->partSocialPoliticalSciences = $aw['partSocialPoliticalSciences'];
+			$p->partInformaticEngineering = $aw['partInformaticEngineering'];
 			$p->setDInscription($aw['dInscription']);
 			$p->setDLastConnection($aw['dLastConnection']);
 			$p->setDLastActivity($aw['dLastActivity']);
@@ -69,8 +72,7 @@ class PlayerManager extends Manager {
 
 			$currentP = $this->_Add($p);
 			if ($this->currentSession->getUMode()) {
-				$currentP->uActionPoint();
-				$currentP->uCredit();
+				$currentP->uMethod();
 			}
 		}
 	}
@@ -91,14 +93,17 @@ class PlayerManager extends Manager {
 			$p->setStatus($aw['status']);
 			$p->setDescription($aw['description']);
 			$p->setCredit($aw['credit']);
-			$p->setUCredit($aw['uCredit']);
-			$p->setActionPoint($aw['actionPoint']);
-			$p->setUActionPoint($aw['uActionPoint']);
+			$p->uPlayer = $aw['uPlayer'];
 			$p->setExperience($aw['experience']);
 			$p->setLevel($aw['level']);
 			$p->setVictory($aw['victory']);
 			$p->setDefeat($aw['defeat']);
 			$p->setStepTutorial($aw['stepTutorial']);
+			$p->iUniversity = $aw['iUniversity'];
+			$p->partNaturalSciences = $aw['partNaturalSciences'];
+			$p->partLifeSciences = $aw['partLifeSciences'];
+			$p->partSocialPoliticalSciences = $aw['partSocialPoliticalSciences'];
+			$p->partInformaticEngineering = $aw['partInformaticEngineering'];
 			$p->setDInscription($aw['dInscription']);
 			$p->setDLastConnection($aw['dLastConnection']);
 			$p->setDLastActivity($aw['dLastActivity']);
@@ -112,8 +117,8 @@ class PlayerManager extends Manager {
 	public function add(Player $p) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			player(bind, rColor, name, avatar, status, description, credit, uCredit, actionPoint, uActionPoint, experience, level, victory, defeat, stepTutorial, dInscription, dLastConnection, dLastActivity, premium, statement)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+			player(bind, rColor, name, avatar, status, description, credit, uPlayer, experience, level, victory, defeat, stepTutorial, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, dInscription, dLastConnection, dLastActivity, premium, statement)
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$p->getBind(),
 			$p->getRColor(),
@@ -122,14 +127,17 @@ class PlayerManager extends Manager {
 			$p->getStatus(),
 			$p->getDescription(),
 			$p->getCredit(),
-			$p->getUCredit(),
-			$p->getActionPoint(),
-			$p->getUActionPoint(),
+			$p->uPlayer,
 			$p->getExperience(),
 			$p->getLevel(),
 			$p->getVictory(),
 			$p->getDefeat(),
 			$p->getStepTutorial(),
+			$p->iUniversity,
+			$p->partNaturalSciences,
+			$p->partLifeSciences,
+			$p->partSocialPoliticalSciences,
+			$p->partInformaticEngineering,
 			$p->getDInscription(),
 			$p->getDLastConnection(),
 			$p->getDLastActivity(),
@@ -156,14 +164,17 @@ class PlayerManager extends Manager {
 					status = ?,
 					description = ?,
 					credit = ?,
-					uCredit = ?,
-					actionPoint = ?,
-					uActionPoint = ?,
+					uPlayer = ?,
 					experience = ?,
 					level = ?,
 					victory = ?,
 					defeat = ?,
 					stepTutorial = ?,
+					iUniversity = ?,
+					partNaturalSciences = ?,
+					partLifeSciences = ?,
+					partSocialPoliticalSciences = ?,
+					partInformaticEngineering = ?,
 					dInscription = ?,
 					dLastConnection = ?,
 					dLastActivity = ?,
@@ -179,14 +190,17 @@ class PlayerManager extends Manager {
 				$p->getStatus(),
 				$p->getDescription(),
 				$p->getCredit(),
-				$p->getUCredit(),
-				$p->getActionPoint(),
-				$p->getUActionPoint(),
+				$p->uPlayer,
 				$p->getExperience(),
 				$p->getLevel(),
 				$p->getVictory(),
 				$p->getDefeat(),
 				$p->getStepTutorial(),
+				$p->iUniversity,
+				$p->partNaturalSciences,
+				$p->partLifeSciences,
+				$p->partSocialPoliticalSciences,
+				$p->partInformaticEngineering,
 				$p->getDInscription(),
 				$p->getDLastConnection(),
 				$p->getDLastActivity(),
@@ -208,8 +222,7 @@ class PlayerManager extends Manager {
 	}
 
 	//LOAD SPECIAUX
-
-public function loadByPopulation($where = array(), $limit = array()) {
+	public function loadByPopulation($where = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'p.');
 		$formatLimit = Utils::arrayToLimit($limit);
 
@@ -247,14 +260,17 @@ public function loadByPopulation($where = array(), $limit = array()) {
 			$p->setStatus($aw['status']);
 			$p->setDescription($aw['description']);
 			$p->setCredit($aw['credit']);
-			$p->setUCredit($aw['uCredit']);
-			$p->setActionPoint($aw['actionPoint']);
-			$p->setUActionPoint($aw['uActionPoint']);
+			$p->uPlayer = $aw['uPlayer'];
 			$p->setExperience($aw['experience']);
 			$p->setLevel($aw['level']);
 			$p->setVictory($aw['victory']);
 			$p->setDefeat($aw['defeat']);
 			$p->setStepTutorial($aw['stepTutorial']);
+			$p->iUniversity = $aw['iUniversity'];
+			$p->partNaturalSciences = $aw['partNaturalSciences'];
+			$p->partLifeSciences = $aw['partLifeSciences'];
+			$p->partSocialPoliticalSciences = $aw['partSocialPoliticalSciences'];
+			$p->partInformaticEngineering = $aw['partInformaticEngineering'];
 			$p->setDInscription($aw['dInscription']);
 			$p->setDLastConnection($aw['dLastConnection']);
 			$p->setDLastActivity($aw['dLastActivity']);
@@ -263,8 +279,7 @@ public function loadByPopulation($where = array(), $limit = array()) {
 
 			$currentP = $this->_Add($p);
 			if ($this->currentSession->getUMode()) {
-				$currentP->uActionPoint();
-				$currentP->uCredit();
+				$currentP->uMethod();
 			}
 		}
 	}

@@ -84,7 +84,7 @@ class PlaceManager extends Manager {
 			$p->setCoefResources($aw['coefResources']);
 			$p->setCoefHistory($aw['coefHistory']);
 			$p->setResources($aw['resources']);
-			$p->setUResources($aw['uResources']);
+			$p->uPlace = $aw['uPlace'];
 			$p->setRSector($aw['rSector']);
 			$p->setXSystem($aw['xPosition']);
 			$p->setYSystem($aw['yPosition']);
@@ -127,7 +127,7 @@ class PlaceManager extends Manager {
 			if ($this->currentSession->getUMode() AND $currentP->uMode) {
 				$currentP->uMode = FALSE;
 
-				$currentP->uResources();
+				$currentP->uMethod();
 				$currentP->uTravel();
 			}
 		}
@@ -136,7 +136,7 @@ class PlaceManager extends Manager {
 	public static function add(Place $p) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			place(rPlayer, rSystem, typeOfPlace, position, population, coefResources, coefHistory, resources, uResources)
+			place(rPlayer, rSystem, typeOfPlace, position, population, coefResources, coefHistory, resources, uPlace)
 			VALUES(?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$p->getRPlayer(),
@@ -147,7 +147,7 @@ class PlaceManager extends Manager {
 			$p->getCoefResources(),
 			$p->getCoefHistory(),
 			$p->getResources(),
-			$p->getUResources()
+			$p->uPlace
 		));
 
 		$p->setId($db->lastInsertId());
@@ -170,7 +170,7 @@ class PlaceManager extends Manager {
 					coefResources = ?,
 					coefHistory = ?,
 					resources = ?,
-					uResources = ?
+					uPlace = ?
 				WHERE id = ?');
 			$qr->execute(array(
 				$p->getId(),
@@ -182,7 +182,7 @@ class PlaceManager extends Manager {
 				$p->getCoefResources(),
 				$p->getCoefHistory(),
 				$p->getResources(),
-				$p->getUResources(),
+				$p->uPlace,
 				$p->getId()
 			));
 		}

@@ -11,41 +11,41 @@
 
 class Place { 
 	// PLACE
-	private $id = 0;
-	private $rPlayer = 0;
-	private $rSystem = 0;
-	private $typeOfPlace = 0;
-	private $position = 0;
-	private $population = 0;
-	private $coefResources = 0;
-	private $coefHistory = 0;
-	private $resources = 0; // de la place si $typeOfBase = 0, sinon de la base
-	private $uResources = '';
+	public $id = 0;
+	public $rPlayer = 0;
+	public $rSystem = 0;
+	public $typeOfPlace = 0;
+	public $position = 0;
+	public $population = 0;
+	public $coefResources = 0;
+	public $coefHistory = 0;
+	public $resources = 0; // de la place si $typeOfBase = 0, sinon de la base
+	public $uPlace = '';
 
 	// SYSTEM
-	private $rSector = 0;
-	private $xSystem = 0;
-	private $ySystem = 0;
-	private $typeOfSystem = 0;
+	public $rSector = 0;
+	public $xSystem = 0;
+	public $ySystem = 0;
+	public $typeOfSystem = 0;
 
 	// SECTOR
-	private $tax = 0;
+	public $tax = 0;
 
 	// PLAYER
-	private $playerColor = 0;
-	private $playerName = '';
-	private $playerAvatar = '';
-	private $playerStatus = 0;
+	public $playerColor = 0;
+	public $playerName = '';
+	public $playerAvatar = '';
+	public $playerStatus = 0;
 
 	// BASE
-	private $typeOfBase = 0; // 0=empty, 1=ms1, 2=ms2, 3=ms3, 4=ob
-	private $baseName = '';
-	private $points = '';
+	public $typeOfBase = 0; // 0=empty, 1=ms1, 2=ms2, 3=ms3, 4=ob
+	public $baseName = '';
+	public $points = '';
 
 	// OB
-	private $levelCommercialPlateforme = 0;
-	private $levelGravitationalModule = 0;
-	private $antiSpyInvest = 0;
+	public $levelCommercialPlateforme = 0;
+	public $levelGravitationalModule = 0;
+	public $antiSpyInvest = 0;
 
 	// COMMANDER 
 	public  $commanders = array();
@@ -63,7 +63,6 @@ class Place {
 	public function getCoefResources() 					{ return $this->coefResources; }
 	public function getCoefHistory() 					{ return $this->coefHistory; }
 	public function getResources() 						{ return $this->resources; }
-	public function getUResources() 					{ return $this->uResources; }
 	public function getRSector() 						{ return $this->rSector; }
 	public function getXSystem() 						{ return $this->xSystem; }
 	public function getYSystem() 						{ return $this->ySystem; }
@@ -89,7 +88,6 @@ class Place {
 	public function setCoefResources($v) 				{ $this->coefResources = $v; }
 	public function setCoefHistory($v) 					{ $this->coefHistory = $v; }
 	public function setResources($v) 					{ $this->resources = $v; }
-	public function setUResources($v) 					{ $this->uResources = $v; }
 	public function setRSector($v) 						{ $this->rSector = $v; }
 	public function setXSystem($v) 						{ $this->xSystem = $v; }
 	public function setYSystem($v) 						{ $this->ySystem = $v; }
@@ -106,25 +104,31 @@ class Place {
 	public function setLevelGravitationalModule($v) 	{ $this->levelGravitationalModule = $v; }
 	public function setAntiSpyInvest($v)				{ $this->antiSpyInvest = $v; }
 
-	public function uResources() {
-		if ($this->typeOfBase == 0) {
-			if ($this->uResources != NULL AND $this->uResources != '0000-00-00 00:00:00') {
-				$newDate  = Utils::now();
-				$interval = Utils::interval($this->uResources, $newDate);
-				if ($interval > 0) {
-					$maxResources = $this->population * 600;
-					for ($i = 0; $i < $interval; $i++) {
-						$this->resources += floor(PLM_RESSOURCECOEFF * $this->population);
-						if ($this->resources > $maxResources) {
-							$this->resources = $maxResources;
-							break;
-						}
-					}
-					$this->uResources = Utils::now();
+	public function uMethod() {
+		$token = CTC::createContext();
+		$now   = Utils::now();
+
+		if (Utils::interval($this->uPlace, $now, 's') > 0) {
+			# update time
+			$days = Utils::intervalDates($now, $this->uPlace, 'd');
+			$this->uPlace = $now;
+
+			# RESOURCE
+			if ($this->typeOfBase == 0) {
+				foreach ($days as $key => $day) {
+					CTC::add($day, $this, 'uResources', array());
 				}
-			} else {
-				$this->uResources = Utils::now();
 			}
+		}
+
+		CTC::applyContext($token);
+	}
+
+	public function uResources() {
+		$maxResources = $this->population * 600;
+		$this->resources += floor(PLM_RESSOURCECOEFF * $this->population * 24);
+		if ($this->resources > $maxResources) {
+			$this->resources = $maxResources;
 		}
 	}
 

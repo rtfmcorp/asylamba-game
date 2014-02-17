@@ -140,7 +140,6 @@ jQuery(document).ready(function($) {
 		// propriétés du module
 		run: false,
 		total: 0,
-		baseid: 0,
 
 		percent: {
 			natural: 0,
@@ -153,7 +152,6 @@ jQuery(document).ready(function($) {
 		// initialisation
 		init: function() {
 			uniInvest.total = $('#uni-total-invest').data('invest');
-			uniInvest.baseid = $('#uni-total-invest').data('baseid');
 
 			uniInvest.percent.natural = $('#uni-percent-natural').data('percent');
 			uniInvest.percent.social = $('#uni-percent-social').data('percent');
@@ -177,13 +175,13 @@ jQuery(document).ready(function($) {
 				if (uniInvest.percent[type]  - quantity >= 0) {
 					uniInvest.percent[type] -= quantity;
 					uniInvest.percent.rest  += quantity;
-					$.get(game.path + 'ajax/a-decreaseinvestuni/baseid-' + uniInvest.baseid + '/category-' + type);
+					$.get(game.path + 'ajax/a-decreaseinvestuni/category-' + type);
 				}
 			} else {
 				if (uniInvest.percent.rest > 0 && uniInvest.percent[type] < 100) {
 					uniInvest.percent[type] += quantity;
 					uniInvest.percent.rest  -= quantity;
-					$.get(game.path + 'ajax/a-increaseinvestuni/baseid-' + uniInvest.baseid + '/category-' + type);
+					$.get(game.path + 'ajax/a-increaseinvestuni/category-' + type);
 				} else {
 					alertController.add(101, 'Pas assez de points libres');
 				}

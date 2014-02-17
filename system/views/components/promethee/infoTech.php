@@ -6,7 +6,6 @@ echo '<div class="component panel-info">';
 			echo '<h4>' . $name . '</h4>';
 			echo '<a href="#" class="removeInfoPanel remove-info hb lt" title="fermer le panneau">x</a>';
 
-			echo '<img class="illu" src="' . MEDIA . 'technology/img/' . $image . '.png" />';
 			echo '<p class="info">' . $shortDescription . '</p>';
 
 			echo '<div class="table"><table>';

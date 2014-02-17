@@ -1,6 +1,6 @@
 <?php
 # background paralax
-echo '<div id="background-paralax" class="params"></div>';
+echo '<div id="background-paralax" class="rank"></div>';
 
 # inclusion des elements
 include 'defaultElement/subnav.php';

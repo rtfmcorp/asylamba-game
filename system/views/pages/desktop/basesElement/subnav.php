@@ -1,92 +1,113 @@
 <?php
-echo '<div id="bases-subnav">';
-	echo '<div class="bind"></div>';
-	echo '<div class="head">';
-		echo '<h2>' . CTR::$data->get('playerInfo')->get('name') . '</h2>';
-	echo '</div>';
-	echo '<div class="body">';
-		echo '<div class="black-box">';
-			echo '<h2>' . $base->getName() . '</h2>';
+echo '<div id="subnav">';
+	echo '<div class="overflow">';
+		$active = (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'main') ? 'active' : '';
+		echo '<a href="' . APP_ROOT . 'bases/view-main" class="item ' . $active . '">';
+			echo '<span class="picto">';
+				echo '<img src="' . MEDIA . 'orbitalbase/situation.png" alt="" />';
+			echo '</span>';
+			echo '<span class="content skin-1">';
+				echo '<span>Vue de situation</span>';
+			echo '</span>';
+		echo '</a>';
 
-			echo '<p>base orbitale</p>';
-
-			echo '<div class="resources">';
-				$storageSpace = OrbitalBaseResource::getBuildingInfo(1, 'level', $base->getLevelRefinery(), 'storageSpace');
-				$storageBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::REFINERY_STORAGE);
-				if ($base->getIsProductionRefinery() == 0 && $storageBonus > 0) {
-					$storageSpace += ($storageSpace * OBM_COEFPRODUCTION) + ($storageSpace * $storageBonus / 100);
-				} elseif ($base->getIsProductionRefinery() == 0) {
-					$storageSpace += ($storageSpace * OBM_COEFPRODUCTION);
-				} elseif ($storageBonus > 0) {
-					$storageSpace += ($storageSpace * $storageBonus / 100);
-				}
-				$percent = Format::numberFormat($base->getResourcesStorage() / $storageSpace * 100);
-
-				echo '<strong>' . Format::numberFormat($base->getResourcesStorage()) . ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color"></strong>';
-				echo '<span title="remplissage : ' . $percent . '%" class="progress-bar hb bl"><span class="content" style="width:' . $percent . '%;"></span></span>';
-			echo '</div>';
-
-			echo '<ul class="icon">';
-				echo '<li>';
-					echo '<img src="' . MEDIA . 'orbitalbase/generator.png" alt="générateur" />';
-					$S_BQM1 = ASM::$bqm->getCurrentSession();
-					ASM::$bqm->changeSession($base->buildingManager);
-					echo '<span class="nbr">' . ASM::$bqm->size() . '</span>';
-					ASM::$bqm->changeSession($S_BQM1);
-				echo '</li>';
-				echo '<li>';
-					echo '<img src="' . MEDIA . 'orbitalbase/technosphere.png" alt="technosphère" />';
-					$S_TQM1 = ASM::$tqm->getCurrentSession();
-					ASM::$tqm->changeSession($base->technoQueueManager);
-					echo '<span class="nbr">' . ASM::$tqm->size() . '</span>';
-					ASM::$tqm->changeSession($S_TQM1);
-				echo '</li>';
-				echo '<li>';
-					echo '<img src="' . MEDIA . 'orbitalbase/dock1.png" alt="chantier alpha" />';
-					$S_SQM1 = ASM::$sqm->getCurrentSession();
-					ASM::$sqm->changeSession($base->dock1Manager);
-					echo '<span class="nbr">' . ASM::$sqm->size() . '</span>';
-					ASM::$sqm->changeSession($S_SQM1);
-				echo '</li>';
-				echo '<li>';
-					echo '<img src="' . MEDIA . 'orbitalbase/dock2.png" alt="chantier de ligne" />';
-					$S_SQM2 = ASM::$sqm->getCurrentSession();
-					ASM::$sqm->changeSession($base->dock2Manager);
-					echo '<span class="nbr">' . ASM::$sqm->size() . '</span>';
-					ASM::$sqm->changeSession($S_SQM2);
-				echo '</li>';
-			echo '</ul>';
-
-			# affichage du nombre d'attaques entrantes
-			$incomingAttack = 0;
-			for ($i=0; $i < CTR::$data->get('playerEvent')->size(); $i++) { 
-				if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
-					$dateList = CTR::$data->get('playerEvent')->get($i)->get('eventInfo');
-					if ($dateList[0] === TRUE) {
-						$incomingAttack++;
-					}
-				}
-			}
-			if ($incomingAttack == 1) {
-				echo 'une attaque entrante';
-			} else if ($incomingAttack > 1) {
-				echo $incomingAttack . ' attaques entrantes';
-			}
-			
-		echo '</div>';
-		
-		if (CTR::$data->get('playerBase')->get('ob')->size() >= 2) {
-			echo '<a class="toggle-bases sh" data-target="base-bull" href="#">Changer de base</a>';
-			echo '<div class="toogle-bases-content" id="base-bull">';
-				for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-					echo '<a href="' . APP_ROOT . 'bases/base-' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') . '">';
-						echo '<em>Base orbitale</em>';
-						echo '<strong>' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('name') . '</strong>';
-					echo '</a>';
-				}
-			echo '</div>';
+		if ($base->getLevelGenerator() > 0) {
+			$active = (CTR::$get->get('view') == 'generator') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'bases/view-generator" class="item ' . $active . '">';
+				echo '<span class="picto">';
+					echo '<img src="' . MEDIA . 'orbitalbase/generator.png" alt="" />';
+					echo '<span class="number">' . $base->getLevelGenerator() . '</span>';
+				echo '</span>';
+				echo '<span class="content skin-1">';
+					echo '<span>' . OrbitalBaseResource::getBuildingInfo(0, 'frenchName') . '</span>';
+				echo '</span>';
+			echo '</a>';
 		}
+
+		if ($base->getLevelRefinery() > 0) {
+			$active = (CTR::$get->get('view') == 'refinery') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'bases/view-refinery" class="item ' . $active . '">';
+				echo '<span class="picto">';
+					echo '<img src="' . MEDIA . 'orbitalbase/refinery.png" alt="" />';
+					echo '<span class="number">' . $base->getLevelRefinery() . '</span>';
+				echo '</span>';
+				echo '<span class="content skin-1">';
+					echo '<span>' . OrbitalBaseResource::getBuildingInfo(1, 'frenchName') . '</span>';
+				echo '</span>';
+			echo '</a>';
+		}
+
+		if ($base->getLevelTechnosphere() > 0) {
+			$active = (CTR::$get->get('view') == 'technosphere') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'bases/view-technosphere" class="item ' . $active . '">';
+				echo '<span class="picto">';
+					echo '<img src="' . MEDIA . 'orbitalbase/technosphere.png" alt="" />';
+					echo '<span class="number">' . $base->getLevelTechnosphere() . '</span>';
+				echo '</span>';
+				echo '<span class="content skin-1">';
+					echo '<span>' . OrbitalBaseResource::getBuildingInfo(5, 'frenchName') . '</span>';
+				echo '</span>';
+			echo '</a>';
+		}
+
+		if ($base->getLevelDock1() > 0) {
+			$active = (CTR::$get->get('view') == 'dock1') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'bases/view-dock1" class="item ' . $active . '">';
+				echo '<span class="picto">';
+					echo '<img src="' . MEDIA . 'orbitalbase/dock1.png" alt="" />';
+					echo '<span class="number">' . $base->getLevelDock1() . '</span>';
+				echo '</span>';
+				echo '<span class="content skin-1">';
+					echo '<span>' . OrbitalBaseResource::getBuildingInfo(2, 'frenchName') . '</span>';
+				echo '</span>';
+			echo '</a>';
+		}
+
+		if ($base->getLevelDock2() > 0) {
+			$active = (CTR::$get->get('view') == 'dock2') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'bases/view-dock2" class="item ' . $active . '">';
+				echo '<span class="picto">';
+					echo '<img src="' . MEDIA . 'orbitalbase/dock2.png" alt="" />';
+					echo '<span class="number">' . $base->getLevelDock2() . '</span>';
+				echo '</span>';
+				echo '<span class="content skin-1">';
+					echo '<span>' . OrbitalBaseResource::getBuildingInfo(3, 'frenchName') . '</span>';
+				echo '</span>';
+			echo '</a>';
+		}
+
+		if ($base->getLevelCommercialPlateforme() > 0) {
+			$active = (CTR::$get->get('view') == 'commercialplateforme') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'bases/view-commercialplateforme" class="item ' . $active . '">';
+				echo '<span class="picto">';
+					echo '<img src="' . MEDIA . 'orbitalbase/commercialplateforme.png" alt="" />';
+					echo '<span class="number">' . $base->getLevelCommercialPlateforme() . '</span>';
+				echo '</span>';
+				echo '<span class="content skin-1">';
+					echo '<span>' . OrbitalBaseResource::getBuildingInfo(6, 'frenchName') . '</span>';
+				echo '</span>';
+			echo '</a>';
+		}
+
+		$active = (CTR::$get->get('view') == 'school') ? 'active' : '';
+		echo '<a href="' . APP_ROOT . 'bases/view-school" class="item ' . $active . '">';
+			echo '<span class="picto">';
+				echo '<img src="' . MEDIA . 'orbitalbase/school.png" alt="" />';
+			echo '</span>';
+			echo '<span class="content skin-1">';
+				echo '<span>Ecole de Commandement</span>';
+			echo '</span>';
+		echo '</a>';
+
+		$active = (CTR::$get->get('view') == 'antispy') ? 'active' : '';
+		echo '<a href="' . APP_ROOT . 'bases/view-antispy" class="item ' . $active . '">';
+			echo '<span class="picto">';
+				echo '<img src="' . MEDIA . 'orbitalbase/antispy.png" alt="" />';
+			echo '</span>';
+			echo '<span class="content skin-1">';
+				echo '<span>Renseignement</span>';
+			echo '</span>';
+		echo '</a>';
 	echo '</div>';
-	echo '<div class="foot"></div>';
 echo '</div>';
 ?>

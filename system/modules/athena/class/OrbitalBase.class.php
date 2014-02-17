@@ -18,61 +18,56 @@ class OrbitalBase {
 	const TYP_CAPITAL = 3;
 
 	//ATTRIBUTES : ORBITALBASE
-	private $rPlace;
-	private $rPlayer;
-	private $name;
+	public $rPlace;
+	public $rPlayer;
+	public $name;
 	public $typeOfBase = 0;
-	private $levelGenerator = 2;
-	private $levelRefinery = 1;
-	private $levelDock1 = 1;
-	private $levelDock2 = 0;
-	private $levelDock3 = 0;
-	private $levelTechnosphere = 1;
-	private $levelCommercialPlateforme = 0;
-	private $levelGravitationalModule = 0;
-	private $points = 0;
-	private $iSchool = 1000;
-	private $iUniversity = 5000;
-	private $partNaturalSciences = 25;
-	private $partLifeSciences = 25;
-	private $partSocialPoliticalSciences = 25;
-	private $partInformaticEngineering = 25;
-	private $iAntiSpy = 0;
-	private $antiSpyAverage = 0;
-	private $shipStorage = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-	private $motherShip = 0; // 1 = a motherShip level 1 is stocked, 2 = level 2, 3 = level 3
-	private $isCommercialBase = -1;
-	private $isProductionRefinery = 1;
-	private $isProductionDock1 = 0;
-	private $isProductionDock2 = 0;
-	private $resourcesStorage = 5000;
+	public $levelGenerator = 2;
+	public $levelRefinery = 1;
+	public $levelDock1 = 1;
+	public $levelDock2 = 0;
+	public $levelDock3 = 0;
+	public $levelTechnosphere = 1;
+	public $levelCommercialPlateforme = 0;
+	public $levelGravitationalModule = 0;
+	public $points = 0;
+	public $iSchool = 1000;
+	public $iAntiSpy = 0;
+	public $antiSpyAverage = 0;
+	public $shipStorage = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+	public $motherShip = 0; // 1 = a motherShip level 1 is stocked, 2 = level 2, 3 = level 3
+	public $isCommercialBase = -1;
+	public $isProductionRefinery = 1;
+	public $isProductionDock1 = 0;
+	public $isProductionDock2 = 0;
+	public $resourcesStorage = 5000;
 	public $uOrbitalBase = '';
-	private $dCreation = '';
+	public $dCreation = '';
 	//ATTRIBUTES : PLACE
-	private $position = 0;
-	private $system = 0;
-	private $xSystem = 0;
-	private $ySystem = 0;
-	private $sector = 0;
-	private $tax = 0;
-	private $planetPopulation = 0;
-	private $planetResources = 0;
-	private $planetHistory = 0;
+	public $position = 0;
+	public $system = 0;
+	public $xSystem = 0;
+	public $ySystem = 0;
+	public $sector = 0;
+	public $tax = 0;
+	public $planetPopulation = 0;
+	public $planetResources = 0;
+	public $planetHistory = 0;
 	//ATTRIBUTES : OTHERS
-	private $remainingTimeGenerator;
-	private $remainingTimeDock1;
-	private $remainingTimeDock2;
-	private $remainingTimeDock3;
-	private $routesNumber;
+	public $remainingTimeGenerator;
+	public $remainingTimeDock1;
+	public $remainingTimeDock2;
+	public $remainingTimeDock3;
+	public $routesNumber;
 	//ATTRIBUTES : FUTURE LEVELS
-	private $realGeneratorLevel;
-	private $realRefineryLevel;
-	private $realDock1Level;
-	private $realDock2Level;
-	private $realDock3Level;
-	private $realTechnosphereLevel;
-	private $realCommercialPlateformeLevel;
-	private $realGravitationalModuleLevel;
+	public $realGeneratorLevel;
+	public $realRefineryLevel;
+	public $realDock1Level;
+	public $realDock2Level;
+	public $realDock3Level;
+	public $realTechnosphereLevel;
+	public $realCommercialPlateformeLevel;
+	public $realGravitationalModuleLevel;
 	// PUBLIC ATTRIBUTES
 	public $buildingManager;
 	public $dock1Manager;
@@ -97,11 +92,6 @@ class OrbitalBase {
 	public function getLevelGravitationalModule() { return $this->levelGravitationalModule; }
 	public function getPoints() { return $this->points; }
 	public function getISchool() { return $this->iSchool; }
-	public function getIUniversity() { return $this->iUniversity; }
-	public function getPartNaturalSciences() { return $this->partNaturalSciences; }
-	public function getPartLifeSciences() { return $this->partLifeSciences; }
-	public function getPartSocialPoliticalSciences() { return $this->partSocialPoliticalSciences; }
-	public function getPartInformaticEngineering() { return $this->partInformaticEngineering; }
 	public function getIAntiSpy() { return $this->iAntiSpy; }
 	public function getAntiSpyAverage() { return $this->antiSpyAverage; }
 	public function getShipStorage($k = -1) {return ($k == -1) ? $this->shipStorage : $this->shipStorage[$k]; }
@@ -170,11 +160,6 @@ class OrbitalBase {
 	public function setLevelGravitationalModule($var) { $this->levelGravitationalModule = $var; }
 	public function setPoints($var) { $this->points = $var; }
 	public function setISchool($var) { $this->iSchool = $var; }
-	public function setIUniversity($var) { $this->iUniversity = $var; }
-	public function setPartNaturalSciences($var) { $this->partNaturalSciences = $var; }
-	public function setPartLifeSciences($var) { $this->partLifeSciences = $var; }
-	public function setPartSocialPoliticalSciences($var) { $this->partSocialPoliticalSciences = $var; }
-	public function setPartInformaticEngineering($var) { $this->partInformaticEngineering = $var; }
 	public function setIAntiSpy($var) { $this->iAntiSpy = $var; }
 	public function setAntiSpyAverage($var) { $this->antiSpyAverage = $var; }
 	public function setShipStorage($k, $v) { $this->shipStorage[$k] = $v; }
@@ -247,25 +232,26 @@ class OrbitalBase {
 	// UPDATE METHODS
 	public function uMethod() {
 		$token = CTC::createContext();
-		$now = Utils::now();
-		// how to add an element : add($date, $object, $method, $args = array());
-
-		# load the player
-		$S_PAM1 = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession();
-		ASM::$pam->load(array('id' => $this->rPlayer));
-		$player = ASM::$pam->get();
-		ASM::$pam->changeSession($S_PAM1);
+		$now   = Utils::now();
 
 		if (Utils::interval($this->uOrbitalBase, $now, 's') > 0) {
-			# RESOURCES
+			# update time
 			$hours = Utils::intervalDates($now, $this->uOrbitalBase);
+			$this->uOrbitalBase = $now;
+
+			# load the player
+			$S_PAM1 = ASM::$pam->getCurrentSession();
+			ASM::$pam->newSession();
+			ASM::$pam->load(array('id' => $this->rPlayer));
+			$player = ASM::$pam->get();
+			ASM::$pam->changeSession($S_PAM1);
+
+			# RESOURCES
 			foreach ($hours as $key => $hour) {
 				CTC::add($hour, $this, 'uResources', array());
 			}
 
 			# ANTI-SPY
-			$hours = Utils::intervalDates($now, $this->uOrbitalBase);
 			foreach ($hours as $key => $hour) {
 				CTC::add($hour, $this, 'uAntiSpy', array());
 			}
@@ -322,11 +308,23 @@ class OrbitalBase {
 					CTC::add($tq->dEnd, $this, 'uTechnologyQueue', array($tq, $player));
 				} else {
 					break;
-				}	
+				}
 			}
 			ASM::$tqm->changeSession($S_TQM1);
-			
-			$this->uOrbitalBase = $now;
+
+			# COMMERCIAL SHIPPING
+			$S_CSM1 = ASM::$csm->getCurrentSession();
+			ASM::$csm->changeSession($this->shippingManager);
+			for ($i = 0; $i < ASM::$csm->size(); $i++) { 
+				$cs = ASM::$csm->get($i);
+
+				if ($cs->dArrival < $now) {
+					CTC::add($cs->dArrival, $this, 'uCommercialShipping', array($cs));
+				} else {
+					break;
+				}	
+			}
+			ASM::$csm->changeSession($S_CSM1);
 		}
 
 		CTC::applyContext($token);
@@ -424,57 +422,38 @@ class OrbitalBase {
 		ASM::$tqm->deleteById($tq->id);
 	}
 
-	public function uCommercialShipping($dUpdate) {
-		$S_CSM1 = ASM::$csm->getCurrentSession();
-		ASM::$csm->changeSession($this->shippingManager);
-		$size = ASM::$csm->size();
-		if ($size >= 1) {
-			$index = 0;
-
-			while ($index < $size) {
-				$cs = ASM::$csm->get($index);
-				$index++;
-				switch ($cs->statement) {
-					case CommercialShipping::ST_GOING :
-						if (Utils::hasAlreadyHappened($cs->dArrival, $dUpdate)) {
-							# shipping arrived, delivery of items to rBaseDestination
-							$cs->deliver();
-							# prepare commercialShipping for moving back
-							$cs->statement = CommercialShipping::ST_MOVING_BACK;
-							$timeToTravel = strtotime($cs->dArrival) - strtotime($cs->dDeparture);
-							$cs->dDeparture = $cd->$dArrival;
-							$cs->dArrival = Utils::addSecondsToDate($cs->dArrival, $timeToTravel);
-						} 
-						break;
-					case CommercialShipping::ST_MOVING_BACK :
-						if (Utils::hasAlreadyHappened($cs->dArrival, $dUpdate)) {
-							# shipping arrived, release of the commercial ships
-							# send notification
-							$n = new Notification();
-							$n->setRPlayer($cs->rPlayer);
-							$n->setTitle('Retour de livraison');
-							$n->addBeg()->addTxt('Vos vaisseaux commerciaux sont de retour sur votre ');
-							$n->addLnk('map/base-' . $cs->rBase, 'base orbitale')->addTxt(' après avoir livré du matériel sur une autre ');
-							$n->addLnk('map/place-' . $cs->rBaseDestination, 'base')->addTxt(' . ');
-							$n->addSep()->addTxt('Vos ' . $cs->shipQuantity . ' vaisseaux de commerces sont à nouveau disponibles pour faire d\'autres transactions ou routes commerciales.');
-							$n->addEnd();
-							ASM::$ntm->add($n);
-							# delete commercialShipping
-							ASM::$csm->deleteById($cs->id);
-							$index--;
-							$size--;
-						} 
-						break;
-					default :
-						break;
-				}
-			}
-			ASM::$csm->changeSession($S_CSM1);
-			return TRUE;
-		} else {
-			//pas d'envoi en cours
-			ASM::$csm->changeSession($S_CSM1);
-			return TRUE;
+	public function uCommercialShipping($cs) {
+		switch ($cs->statement) {
+			case CommercialShipping::ST_GOING :
+				if (Utils::hasAlreadyHappened($cs->dArrival, Utils::now())) {
+					# shipping arrived, delivery of items to rBaseDestination
+					$cs->deliver();
+					# prepare commercialShipping for moving back
+					$cs->statement = CommercialShipping::ST_MOVING_BACK;
+					$timeToTravel = strtotime($cs->dArrival) - strtotime($cs->dDeparture);
+					$cs->dDeparture = $cd->$dArrival;
+					$cs->dArrival = Utils::addSecondsToDate($cs->dArrival, $timeToTravel);
+				} 
+				break;
+			case CommercialShipping::ST_MOVING_BACK :
+				if (Utils::hasAlreadyHappened($cs->dArrival, Utils::now())) {
+					# shipping arrived, release of the commercial ships
+					# send notification
+					$n = new Notification();
+					$n->setRPlayer($cs->rPlayer);
+					$n->setTitle('Retour de livraison');
+					$n->addBeg()->addTxt('Vos vaisseaux commerciaux sont de retour sur votre ');
+					$n->addLnk('map/base-' . $cs->rBase, 'base orbitale')->addTxt(' après avoir livré du matériel sur une autre ');
+					$n->addLnk('map/place-' . $cs->rBaseDestination, 'base')->addTxt(' . ');
+					$n->addSep()->addTxt('Vos ' . $cs->shipQuantity . ' vaisseaux de commerces sont à nouveau disponibles pour faire d\'autres transactions ou routes commerciales.');
+					$n->addEnd();
+					ASM::$ntm->add($n);
+					# delete commercialShipping
+					ASM::$csm->deleteById($cs->id);
+				} 
+				break;
+			default :
+				break;
 		}
 	}
 
@@ -709,6 +688,60 @@ class OrbitalBase {
 		}
 		ASM::$tqm->changeSession($S_TQM1);
 		return TRUE;
+	}*/
+
+	/*public function uCommercialShipping($dUpdate) {
+		$S_CSM1 = ASM::$csm->getCurrentSession();
+		ASM::$csm->changeSession($this->shippingManager);
+		$size = ASM::$csm->size();
+		if ($size >= 1) {
+			$index = 0;
+
+			while ($index < $size) {
+				$cs = ASM::$csm->get($index);
+				$index++;
+				switch ($cs->statement) {
+					case CommercialShipping::ST_GOING :
+						if (Utils::hasAlreadyHappened($cs->dArrival, $dUpdate)) {
+							# shipping arrived, delivery of items to rBaseDestination
+							$cs->deliver();
+							# prepare commercialShipping for moving back
+							$cs->statement = CommercialShipping::ST_MOVING_BACK;
+							$timeToTravel = strtotime($cs->dArrival) - strtotime($cs->dDeparture);
+							$cs->dDeparture = $cd->$dArrival;
+							$cs->dArrival = Utils::addSecondsToDate($cs->dArrival, $timeToTravel);
+						} 
+						break;
+					case CommercialShipping::ST_MOVING_BACK :
+						if (Utils::hasAlreadyHappened($cs->dArrival, $dUpdate)) {
+							# shipping arrived, release of the commercial ships
+							# send notification
+							$n = new Notification();
+							$n->setRPlayer($cs->rPlayer);
+							$n->setTitle('Retour de livraison');
+							$n->addBeg()->addTxt('Vos vaisseaux commerciaux sont de retour sur votre ');
+							$n->addLnk('map/base-' . $cs->rBase, 'base orbitale')->addTxt(' après avoir livré du matériel sur une autre ');
+							$n->addLnk('map/place-' . $cs->rBaseDestination, 'base')->addTxt(' . ');
+							$n->addSep()->addTxt('Vos ' . $cs->shipQuantity . ' vaisseaux de commerces sont à nouveau disponibles pour faire d\'autres transactions ou routes commerciales.');
+							$n->addEnd();
+							ASM::$ntm->add($n);
+							# delete commercialShipping
+							ASM::$csm->deleteById($cs->id);
+							$index--;
+							$size--;
+						} 
+						break;
+					default :
+						break;
+				}
+			}
+			ASM::$csm->changeSession($S_CSM1);
+			return TRUE;
+		} else {
+			//pas d'envoi en cours
+			ASM::$csm->changeSession($S_CSM1);
+			return TRUE;
+		}
 	}*/
 }
 ?>

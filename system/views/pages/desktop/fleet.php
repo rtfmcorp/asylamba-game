@@ -3,12 +3,13 @@
 echo '<div id="background-paralax" class="fleet"></div>';
 
 # inclusion des elements
-include 'profilElement/movers.php';
+include 'fleetElement/subnav.php';
+include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
 	# fleetNav component
-	include COMPONENT . 'ares/fleetNav.php';
+	# include COMPONENT . 'ares/fleetNav.php';
 	
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'main') {
 		# inclusion des modules
@@ -32,10 +33,7 @@ echo '<div id="content">';
 			$commander_listFleetIncoming[$i] = ASM::$com->get($i);
 		}
 		include COMPONENT . 'ares/listFleetIncoming.php';
-
-		# inclusion de paInfo
-		include COMPONENT . 'ares/paInfo.php';
-
+		
 		ASM::$com->changeSession($S_COM1);
 	} elseif (CTR::$get->get('view') == 'movement') {
 		# inclusion des modules

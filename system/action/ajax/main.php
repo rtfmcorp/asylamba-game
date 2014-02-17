@@ -1,8 +1,5 @@
 <?php
 switch (CTR::$get->get('a')) {
-	# ATHENA
-	case 'increaseinvestuni':		include AJAX . 'athena/university/increaseInvest.php'; break;
-	case 'decreaseinvestuni':		include AJAX . 'athena/university/decreaseInvest.php'; break;
 
 	# HERMES
 	case 'readnotif': 				include AJAX . 'hermes/notification/read.php'; break;
@@ -11,6 +8,10 @@ switch (CTR::$get->get('a')) {
 
 	# ARES
 	case 'assignship':				include AJAX . 'ares/ship/assign.php'; break;
+
+	# ATHENA
+	case 'increaseinvestuni':		include AJAX . 'zeus/university/increaseInvest.php'; break;
+	case 'decreaseinvestuni':		include AJAX . 'zeus/university/decreaseInvest.php'; break;
 
 	# AUTOCOMPLETE
 	case 'autocompleteplayer':		include AJAX . 'autocomplete/player.php'; break;

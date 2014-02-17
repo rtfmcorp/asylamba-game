@@ -10,13 +10,14 @@ $base = ASM::$obm->get(0);
 echo '<div id="background-paralax" class="bases"></div>';
 
 # inclusion des elements
-include 'basesElement/movers.php';
+include 'basesElement/subnav.php';
+include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
 	# obNav component
 	$ob_obNav = $base;
-	include COMPONENT . 'athena/bases/obNav.php';
+	# include COMPONENT . 'athena/bases/obNav.php';
 
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'main') {
 		include_once ARES;
@@ -50,9 +51,6 @@ echo '<div id="content">';
 	} elseif (CTR::$get->get('view') == 'commercialplateforme') {
 		$ob_compPlat = $base;
 		include COMPONENT . 'athena/bases/comPlat.php';
-	} elseif (CTR::$get->get('view') == 'university') {
-		$ob_university = $base;
-		include COMPONENT . 'athena/bases/university.php';
 	} elseif (CTR::$get->get('view') == 'school') {
 		$ob_school = $base;
 		include COMPONENT . 'athena/bases/school.php';

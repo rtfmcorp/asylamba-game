@@ -26,7 +26,6 @@ if (ASM::$pam->size() == 1) {
 	CTR::$data->get('playerInfo')->add('name', $player->getName());
 	CTR::$data->get('playerInfo')->add('avatar', $player->getAvatar());
 	CTR::$data->get('playerInfo')->add('credit', $player->getCredit());
-	CTR::$data->get('playerInfo')->add('actionPoint', $player->getActionPoint());
 	CTR::$data->get('playerInfo')->add('experience', $player->getExperience());
 	CTR::$data->get('playerInfo')->add('level', $player->getLevel());
 

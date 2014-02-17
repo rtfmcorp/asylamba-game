@@ -61,31 +61,25 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					$place = ASM::$plm->get();
 					if (CTR::$data->get('playerInfo')->get('color') != $place->getPlayerColor()) {
 						ASM::$plm->load(array('id' => $commander->getRBase()));
+						
 						$home = ASM::$plm->getById($commander->getRBase());
-
 						$duration = Game::getTimeToTravel($home, $place);
-						$PAToTravel = Game::getPAToTravel($duration);
+						$creditsToTravel = ($obQuantity + $coloQuantity) * CREDITCOEFFTOCONQUER;
+						
+						if (CTR::$data->get('playerInfo')->get('credit') >= $creditsToTravel) {
 
-						if (CTR::$data->get('playerInfo')->get('actionPoint') >= $PAToTravel) {
-							$creditsToTravel = ($obQuantity + $coloQuantity) * CREDITCOEFFTOCONQUER;
-							
-							if (CTR::$data->get('playerInfo')->get('credit') >= $creditsToTravel) {
-
-								if ($commander->move($place->getId(), COM_COLO, $duration)) {
-									$S_PAM1 = ASM::$pam->getCurrentSession();
-									ASM::$pam->newSession(ASM_UMODE);
-									ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-									$player = ASM::$pam->get();
-									$player->decreaseCredit($creditsToTravel);
-									$player->setActionPoint($player->getActionPoint() - $PAToTravel);
-									ASM::$pam->changeSession($S_PAM1);
-									CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
-								}
-							} else {
-								CTR::$alert->add('Vous n\'avez pas assez de crédits.', ALERT_STD_ERROR);
+							if ($commander->move($place->getId(), COM_COLO, $duration)) {
+								$S_PAM1 = ASM::$pam->getCurrentSession();
+								ASM::$pam->newSession(ASM_UMODE);
+								ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+								$player = ASM::$pam->get();
+								$player->decreaseCredit($creditsToTravel);
+								$player->setActionPoint($player->getActionPoint() - $PAToTravel);
+								ASM::$pam->changeSession($S_PAM1);
+								CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
 							}
 						} else {
-							CTR::$alert->add('Vous n\'avez pas assez de points d\'attaque.', ALERT_STD_ERROR);
+							CTR::$alert->add('Vous n\'avez pas assez de crédits.', ALERT_STD_ERROR);
 						}
 					} else {
 						CTR::$alert->add('Vous ne pouvez pas attaquer un joueur de votre faction.', ALERT_STD_ERROR);

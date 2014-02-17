@@ -56,6 +56,7 @@ switch (CTR::$get->get('a')) {
 
 	# ZEUS
 	case 'setdescription':			include ACTION . 'zeus/player/setDescription.php'; break;
+	case 'updateuniinvest':			include ACTION . 'zeus/player/updateUniInvest.php'; break;
 	
 	case 'disconnect': 				include ACTION . 'zeus/player/disconnect.php'; break;
 

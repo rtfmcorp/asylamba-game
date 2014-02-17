@@ -42,27 +42,22 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 				$home = ASM::$plm->getById($commander->getRBase());
 
 				$duration = Game::getTimeToTravel($home, $place);
-				$PAToTravel = Game::getPAToTravel($duration);
 
-				if (CTR::$data->get('playerInfo')->get('actionPoint') >= $PAToTravel) {
-					if ($commander->move($place->getId(), COM_LOOT, $duration)) {
-						$S_PAM1 = ASM::$pam->getCurrentSession();
+				if ($commander->move($place->getId(), COM_LOOT, $duration)) {
+					$S_PAM1 = ASM::$pam->getCurrentSession();
 
-						ASM::$pam->newSession(ASM_UMODE);
-						ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-						$player = ASM::$pam->get();
-						$player->setActionPoint($player->getActionPoint() - $PAToTravel);
+					ASM::$pam->newSession(ASM_UMODE);
+					ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+					$player = ASM::$pam->get();
+					$player->setActionPoint($player->getActionPoint() - $PAToTravel);
 
-						if (CTR::$get->exist('redirect')) {
-							CTR::redirect('map/place-' . CTR::$get->get('redirect'));
-						}
-
-						CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
-
-						ASM::$pam->changeSession($S_PAM1);
+					if (CTR::$get->exist('redirect')) {
+						CTR::redirect('map/place-' . CTR::$get->get('redirect'));
 					}
-				} else {
-					CTR::$alert->add('Vous n\'avez pas assez de points d\'attaque.', ALERT_STD_ERROR);
+
+					CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
+
+					ASM::$pam->changeSession($S_PAM1);
 				}			
 			} else {
 				CTR::$alert->add('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction.', ALERT_STD_ERROR);

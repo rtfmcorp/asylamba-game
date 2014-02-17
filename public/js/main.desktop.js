@@ -50,7 +50,7 @@ jQuery(document).ready(function($) {
 				var initSftr = parseInt($('body').data('init-sftr'));
 				if (initSftr > 0) {
 					$('#content').css('left', (600 - (initSftr * render.column.defaultSize)));
-					panelController.position += initSftr;		
+					panelController.position += initSftr;
 				}
 				panelController.move(0, 'left', 0);
 			}
@@ -318,6 +318,12 @@ jQuery(document).ready(function($) {
 				$('#background-paralax').stop().animate({
 					'left': -((panelController.position + 2) * 25)
 				}, time);
+			}
+
+			if (panelController.position < 0) {
+				$('#movers .toLeft').hide();
+			} else {
+				$('#movers .toLeft').show();
 			}
 
 			$('#content a').each(function() {

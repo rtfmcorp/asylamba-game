@@ -2,21 +2,9 @@
 include_once ATHENA;
 # decrease university investment action
 
-# int baseid 		id de la base orbitale
 # int category 	 	catégorie ('natural', 'life', 'social' ou 'informatic')
 # int quantity		percentage of increasment
 
-for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
-}
-
-if (CTR::$get->exist('baseid')) {
-	$baseId = CTR::$get->get('baseid');
-} elseif (CTR::$post->exist('baseid')) {
-	$baseId = CTR::$post->get('baseid');
-} else {
-	$baseId = FALSE;
-}
 if (CTR::$get->exist('category')) {
 	$category = CTR::$get->get('category');
 } elseif (CTR::$post->exist('category')) {
@@ -36,28 +24,28 @@ if (CTR::$get->exist('quantity')) {
 $p = new Parser();
 $category = $p->protect($category);
 
-if ($baseId !== FALSE AND $category !== FALSE AND $category !== '' AND in_array($baseId, $verif)) {
+if ($category !== FALSE AND $category !== '') {
 	if (in_array($category, array('natural', 'life', 'social', 'informatic'))) {
-		$S_OBM1 = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession();
-		ASM::$obm->load(array('rPlace' => $baseId, 'rPlayer' => CTR::$data->get('playerId')));
-		$ob = ASM::$obm->get();
+		$S_PAM1 = ASM::$pam->getCurrentSession();
+		ASM::$pam->newSession();
+		ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+		$player = ASM::$pam->get();
 
 		if ($quantity === FALSE) {
 			$quantity = 1;
 		}
 		switch ($category) {
 			case 'natural' :
-				$oldInvest = $ob->getPartNaturalSciences();
+				$oldInvest = $player->partNaturalSciences;
 				break;
 			case 'life' : 
-				$oldInvest = $ob->getPartLifeSciences();
+				$oldInvest = $player->partLifeSciences;
 				break;
 			case 'social' :
-				$oldInvest = $ob->getPartSocialPoliticalSciences();
+				$oldInvest = $player->partSocialPoliticalSciences;
 				break;
 			case 'informatic' : 
-				$oldInvest = $ob->getPartInformaticEngineering();
+				$oldInvest = $player->partInformaticEngineering;
 				break;
 		}
 		if ($oldInvest != 0) {
@@ -66,24 +54,20 @@ if ($baseId !== FALSE AND $category !== FALSE AND $category !== '' AND in_array(
 			}
 			switch ($category) {
 				case 'natural' :
-					$faculty = 'Sciences Naturelles'; 
-					$ob->setPartNaturalSciences($ob->getPartNaturalSciences() - $quantity);
+					$player->partNaturalSciences = $player->partNaturalSciences - $quantity;
 					break;
 				case 'life' : 
-					$faculty = 'Sciences de la Vie';
-					$ob->setPartLifeSciences($ob->getPartLifeSciences() - $quantity);
+					$player->partLifeSciences = $player->partLifeSciences - $quantity;
 					break;
-				case 'social' :
-					$faculty = 'Sciences Sociales et Politiques'; 
-					$ob->setPartSocialPoliticalSciences($ob->getPartSocialPoliticalSciences() - $quantity);
+				case 'social' : 
+					$player->partSocialPoliticalSciences = $player->partSocialPoliticalSciences - $quantity;
 					break;
 				case 'informatic' : 
-					$faculty = 'Ingénierie Informatique';
-					$ob->setPartInformaticEngineering($ob->getPartInformaticEngineering() - $quantity);
+					$player->partInformaticEngineering = $player->partInformaticEngineering - $quantity;
 					break;
 			}
 
-			ASM::$obm->changeSession($S_OBM1);
+			ASM::$pam->changeSession($S_PAM1);
 		} else {
 			CTR::$alert->add('Vous n\'avez plus de pourcentages à libérer dans cette faculté', ALERT_STD_INFO);
 		}
