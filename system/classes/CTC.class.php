@@ -18,15 +18,13 @@ abstract class CTC {
 	public static function applyContext($token) {
 		self::$apply++;
 
-		$path = 'public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
-		$logt = '';
-
 		if ($token AND count(self::$events) > 0) {
 			usort(self::$events, function($a, $b) {
 				return $a['timest'] < $b['timest'] ? -1 : 1;
 			});
 
-			$logt .= '> ' . date('H:i:s') . ', start to apply context' . "\n";
+			$path = 'public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
+			$logt = '> ' . date('H:i:s') . ', start to apply context' . "\n";
 			
 			foreach (self::$events as $k => $event) {
 				call_user_func_array(array($event['object'], $event['method']), $event['args']);
