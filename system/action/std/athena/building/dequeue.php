@@ -5,9 +5,6 @@ include_once ATHENA;
 # int baseId 		id de la base orbitale
 # int building 	 	id du bâtiment
 
-CTR::$alert->add('Cette action doit être mise à jour !', ALERT_STD_ERROR);
-
-/*
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
@@ -36,22 +33,36 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 
 		$S_BQM1 = ASM::$bqm->getCurrentSession();
 		ASM::$bqm->newSession(ASM_UMODE);
-		ASM::$bqm->load(array('rOrbitalBase' => $baseId, 'buildingNumber' => $building));
+		ASM::$bqm->load(array('rOrbitalBase' => $baseId), array('dEnd'));
 
-		$queue = ASM::$bqm->get();
-		$id = $queue->getId();
-		$targetLevel = $queue->getTargetLevel();
-
-		for ($i = 1; $i < ASM::$bqm->size(); $i++) {
-			$queue = ASM::$bqm->get($i);
-			if ($queue->getTargetLevel() > $targetLevel) {
-				$id = $queue->getId();
-				$targetLevel = $queue->getTargetLevel();
+		for ($i = 0; $i < ASM::$bqm->size(); $i++) {
+			$queue = ASM::$bqm->get($i); 
+			# get the last element from the correct building
+			if ($queue->buildingNumber == $building) {
+				$index = $i;
+				$targetLevel = $queue->targetLevel;
+				$dStart = $queue->dStart;
+				$dEnd = $queue->dEnd;
+				$idToRemove = $queue->id;
 			}
 		}
-		ASM::$bqm->deleteById($id);
 
-		// rends les ressources au joueur
+		# shift
+		for ($i = $index + 1; $i < ASM::$bqm->size(); $i++) {
+			$queue = ASM::$bqm->get($i);
+			$nextStart = $queue->dStart;
+			$nextEnd = $queue->dEnd;
+
+			$queue->dStart = $dStart;
+			$queue->dEnd = $dEnd;
+
+			$dStart = $nextStart;
+			$dEnd = $nextEnd;
+		}
+
+		ASM::$bqm->deleteById($idToRemove);
+
+		// give the resources back
 		$resourcePrice = OrbitalBaseResource::getBuildingInfo($building, 'level', $targetLevel, 'resourcePrice');
 		$resourcePrice *= BQM_RESOURCERETURN;
 		$ob->increaseResources($resourcePrice);
@@ -64,5 +75,5 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 	}
 } else {
 	CTR::$alert->add('pas assez d\'informations pour annuler la construction d\'un bâtiment', ALERT_STD_FILLFORM);
-}*/
+}
 ?>
