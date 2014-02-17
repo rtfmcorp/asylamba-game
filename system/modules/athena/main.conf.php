@@ -32,3 +32,10 @@ define('OBM_COEFPRODUCTION', 		0.1);
 
 // limite du stock de ressources pour pouvoir en envoyer
 define('OBM_STOCKLIMIT', 			0);	// 40%
+
+// type of base constants
+define('OBM_LEVEL_MIN_TO_CHANGE_TYPE', 10); // minimal generator level
+define('OBM_PRICE_FOR_COMMERCIAL', 	10000);
+define('OBM_PRICE_FOR_MILITARY', 	10000);
+define('OBM_PRICE_FOR_CAPITAL',		100000);
+define('OBM_PRICE_FOR_DESTRUCTION', 50000);
