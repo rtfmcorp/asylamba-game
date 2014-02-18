@@ -8,7 +8,7 @@
 	# [{orbitalBase}]			ob_investFinancial
 	# {player}					player_investFinancial
 
-$totalInvest = 0;
+$totalInvest  = 0;
 $totalInvest += $player_investFinancial->iUniversity;
 
 # view part
