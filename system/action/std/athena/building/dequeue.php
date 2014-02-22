@@ -27,14 +27,15 @@ if (CTR::$get->exist('building')) {
 if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 	if (OrbitalBaseResource::isABuilding($building)) {
 		$S_OBM1 = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession(ASM_UMODE);
+		ASM::$obm->newSession();
 		ASM::$obm->load(array('rPlace' => $baseId, 'rPlayer' => CTR::$data->get('playerId')));
 		$ob = ASM::$obm->get();
 
 		$S_BQM1 = ASM::$bqm->getCurrentSession();
-		ASM::$bqm->newSession(ASM_UMODE);
+		ASM::$bqm->newSession();
 		ASM::$bqm->load(array('rOrbitalBase' => $baseId), array('dEnd'));
 
+		$index = NULL;
 		for ($i = 0; $i < ASM::$bqm->size(); $i++) {
 			$queue = ASM::$bqm->get($i); 
 			# get the last element from the correct building
@@ -47,27 +48,30 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 			}
 		}
 
-		# shift
-		for ($i = $index + 1; $i < ASM::$bqm->size(); $i++) {
-			$queue = ASM::$bqm->get($i);
-			$nextStart = $queue->dStart;
-			$nextEnd = $queue->dEnd;
+		if ($index !== NULL) {
+			# shift
+			for ($i = $index + 1; $i < ASM::$bqm->size(); $i++) {
+				$queue = ASM::$bqm->get($i);
+				$nextStart = $queue->dStart;
+				$nextEnd = $queue->dEnd;
 
-			$queue->dStart = $dStart;
-			$queue->dEnd = $dEnd;
+				$queue->dStart = $dStart;
+				$queue->dEnd = $dEnd;
 
-			$dStart = $nextStart;
-			$dEnd = $nextEnd;
+				$dStart = $nextStart;
+				$dEnd = $nextEnd;
+			}
+
+			ASM::$bqm->deleteById($idToRemove);
+
+			// give the resources back
+			$resourcePrice = OrbitalBaseResource::getBuildingInfo($building, 'level', $targetLevel, 'resourcePrice');
+			$resourcePrice *= BQM_RESOURCERETURN;
+			$ob->increaseResources($resourcePrice);
+			CTR::$alert->add('Construction annulée, vous récupérez le ' . BQM_RESOURCERETURN * 100 . '% du montant investi pour la construction', ALERT_STD_SUCCESS);
+		} else {
+			CTR::$alert->add('suppression de bâtiment impossible', ALERT_STD_ERROR);
 		}
-
-		ASM::$bqm->deleteById($idToRemove);
-
-		// give the resources back
-		$resourcePrice = OrbitalBaseResource::getBuildingInfo($building, 'level', $targetLevel, 'resourcePrice');
-		$resourcePrice *= BQM_RESOURCERETURN;
-		$ob->increaseResources($resourcePrice);
-		CTR::$alert->add('Construction annulée, vous récupérez le ' . BQM_RESOURCERETURN * 100 . '% du montant investi pour la construction', ALERT_STD_SUCCESS);
-
 		ASM::$obm->changeSession($S_OBM1);
 		ASM::$bqm->changeSession($S_BQM1);
 	} else {
