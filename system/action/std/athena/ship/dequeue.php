@@ -51,6 +51,7 @@ if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($bas
 				$index = $i;
 				$dStart = $shipQueue->dStart;
 				$dEnd = $shipQueue->dEnd;
+				break;
 			}
 		}
 
