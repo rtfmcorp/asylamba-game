@@ -98,41 +98,11 @@ for ($i = 0; $i < 6; $i++) {
 	$s[$i] .= '</div>';
 }
 
-echo '<div class="component dock1">';
+echo '<div class="component">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'orbitalbase/dock1.png" alt="" />';
 		echo '<h2>' . OrbitalBaseResource::getBuildingInfo(2, 'frenchName') . '</h2>';
 		echo '<em>niveau ' . $ob_dock1->getLevelDock1() . '</em>';
-	echo '</div>';
-	echo '<div class="fix-body">';
-		echo '<div class="body">';
-			echo '<div class="info-building">';
-				echo '<h4>Classe Chasseur</h4>';
-			echo '</div>';
-			echo $s[0];
-			echo $s[1];
-			echo $s[4];
-		echo '</div>';
-	echo '</div>';
-echo '</div>';
-
-echo '<div class="component dock1">';
-	echo '<div class="head skin-1"></div>';
-	echo '<div class="fix-body">';
-		echo '<div class="body">';
-			echo '<div class="info-building">';
-				echo '<h4>Classe Corvette</h4>';
-			echo '</div>';
-			echo $s[2];
-			echo $s[3];
-			echo $s[5];
-		echo '</div>';
-	echo '</div>';
-echo '</div>';
-
-echo '<div class="component">';
-	echo '<div class="head skin-2">';
-		echo '<h2>Gestion des commandes</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
@@ -145,18 +115,16 @@ echo '<div class="component">';
 
 			if (ASM::$sqm->size() > 0) {
 				echo '<div class="queue">';
-				$n = 1; $realSizeQueue = 0;
+				$realSizeQueue = 0;
 				for ($i = 0; $i < ASM::$sqm->size(); $i++) {
 					$queue = ASM::$sqm->get($i);
 					$realSizeQueue++;
 					$totalTimeShips = $queue->quantity * ShipResource::getInfo($queue->shipNumber, 'time');
 					$remainingTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
 
-					if ($realSizeQueue > 1) {
-						echo '<div class="item">';
-					} else { 
-						echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTime . '" data-progress-total-time="' . $totalTimeShips . '">';
-					}
+					echo $realSizeQueue > 1
+						? '<div class="item">'
+						: '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTime . '" data-progress-total-time="' . $totalTimeShips . '">';
 					echo '<a href="' . APP_ROOT . 'action/a-dequeueship/baseid-' . $ob_dock1->getId() . '/dock-1/queue-' . $queue->id . '"' . 
 						'class="button hb lt" title="annuler la commande">×</a>';
 					echo  '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($queue->shipNumber, 'imageLink') . '.png" alt="" />';
@@ -164,11 +132,9 @@ echo '<div class="component">';
 					
 					if ($realSizeQueue > 1) {
 						echo '<em>en attente</em>';
-
 						echo '<span class="progress-container"></span>';
 					} else {
 						echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTime, 'lite') . '</span></em>';
-
 						echo '<span class="progress-container">';
 							echo '<span style="width: ' . Format::percent($totalTimeShips - $remainingTime, $totalTimeShips) . '%;" class="progress-bar">';
 							echo '</span>';
@@ -176,7 +142,6 @@ echo '<div class="component">';
 					}
 
 					echo '</div>';
-					$n++;
 				}
 
 				if ($realSizeQueue > SQM_SHIPMAXQUEUE) {
@@ -189,6 +154,33 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
+
+echo '<div class="component dock1">';
+	echo '<div class="head skin-5">';
+		echo '<h2>Vaisseaux de classe chasseur</h2>';
+	echo '</div>';
+	echo '<div class="fix-body">';
+		echo '<div class="body">';
+			echo $s[0];
+			echo $s[1];
+			echo $s[4];
+		echo '</div>';
+	echo '</div>';
+echo '</div>';
+
+echo '<div class="component dock1">';
+	echo '<div class="head skin-5">';
+		echo '<h2>Vaisseaux de classe corvette</h2>';
+	echo '</div>';
+	echo '<div class="fix-body">';
+		echo '<div class="body">';
+			echo $s[2];
+			echo $s[3];
+			echo $s[5];
+		echo '</div>';
+	echo '</div>';
+echo '</div>';
+
 
 echo '<div class="component">';
 	echo '<div class="head skin-2">';
