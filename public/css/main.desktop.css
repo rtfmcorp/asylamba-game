@@ -1017,6 +1017,15 @@ body {
 	line-height: 16px;
 }
 
+.component .head.skin-5 h2 {
+	position: absolute;
+	bottom: 52px; left: 10px;
+	font-size: 13px;
+	font-weight: normal;
+	margin: 0; padding: 0 10px;
+	background: black;
+}
+
 .color1 .component .border-bottom { border-bottom: solid 3px #b01e2d; }
 .color2 .component .border-bottom { border-bottom: solid 3px #2f23c0; }
 .color3 .component .border-bottom { border-bottom: solid 3px #ffdb0f; }

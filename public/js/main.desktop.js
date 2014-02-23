@@ -319,11 +319,13 @@ jQuery(document).ready(function($) {
 				}, time);
 			}
 
-			if (panelController.position < 0) {
-				$('#movers .toLeft').hide();
-			} else {
-				$('#movers .toLeft').show();
-			}
+			panelController.position < 0
+				? $('#movers .toLeft').hide()
+				: $('#movers .toLeft').show();
+
+			panelController.position >= panelController.maxPosition - 1
+				? $('#movers .toRight').hide()
+				: $('#movers .toRight').show();
 
 			$('#content a').each(function() {
 				$(this).attr('href', panelController.rewriteLink($(this).attr('href')));

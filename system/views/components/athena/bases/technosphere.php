@@ -25,7 +25,7 @@ ASM::$rsm->newSession();
 ASM::$rsm->load(array('rPlayer' => CTR::$data->get('playerId')));
 
 # déblocage
-$c1 = ''; $c2 = ''; $c3 = '';
+$c1 = ''; $c2 = ''; $c3 = ''; $c4 = ''; $c5 = '';
 for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
 	if (!TechnologyResource::isATechnologyNotDisplayed($i)) {
 		$but = ''; $sup = ''; $ctn = '';
@@ -157,6 +157,8 @@ for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
 			case 1 : $c1 .= $ctn; break;
 			case 2 : $c2 .= $ctn; break;
 			case 3 : $c3 .= $ctn; break;
+			case 4 : $c4 .= $ctn; break;
+			case 5 : $c5 .= $ctn; break;
 		}
 	}
 }
@@ -224,38 +226,56 @@ echo '<div class="component techno">';
 echo '</div>';
 
 echo '<div class="component techno">';
-	echo '<div class="head"></div>';
+	echo '<div class="head skin-5">';
+		echo '<h2>Nouvelles technologies</h2>';
+	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<div class="info-building">';
-				echo '<h4>Nouvelles technologies</h4>';
-			echo '</div>';
 			echo $c1;
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
 
 echo '<div class="component techno">';
-	echo '<div class="head">';
+	echo '<div class="head skin-5">';
+		echo '<h2>Châssis chasseurs &amp; corvettes</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<div class="info-building">';
-				echo '<h4>Améliorations des vaisseaux</h4>';
-			echo '</div>';
 			echo $c2;
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
 
 echo '<div class="component techno">';
-	echo '<div class="head"></div>';
+	echo '<div class="head skin-5">';
+		echo '<h2>Châssis frégates, destroyers &amp; croiseurs</h2>';
+	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<div class="info-building">';
-				echo '<h4>Améliorations diverses</h4>';
-			echo '</div>';
 			echo $c3;
+		echo '</div>';
+	echo '</div>';
+echo '</div>';
+
+echo '<div class="component techno">';
+	echo '<div class="head skin-5">';
+		echo '<h2>Améliorations industrielles</h2>';
+	echo '</div>';
+	echo '<div class="fix-body">';
+		echo '<div class="body">';
+			echo $c4;
+		echo '</div>';
+	echo '</div>';
+echo '</div>';
+
+echo '<div class="component techno">';
+	echo '<div class="head skin-5">';
+		echo '<h2>Améliorations militaires</h2>';
+	echo '</div>';
+	echo '<div class="fix-body">';
+		echo '<div class="body">';
+			echo $c5;
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
