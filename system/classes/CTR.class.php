@@ -5,6 +5,7 @@ abstract class CTR {
 	public static $get;
 	public static $post;
 	public static $alert;
+	public static $cookie;
 
 	private static $page;
 	private static $title;
@@ -81,6 +82,9 @@ abstract class CTR {
 		} else {
 			self::$history = new History();
 		}
+
+		# initialise les données de cookie
+		self::$cookie = new Cookie();
 
 		# création des conteneurs à get / POST data
 		self::$get  = new ArrayList();

@@ -15,7 +15,7 @@ class Utils {
 			'KD6wb29ElI6sxVVtVoLJY0BbO',
 			'xQTjMBnqbk6rO4ysglCJxLL63'
 		);
-		if(in_array($bindkey, $bindkeys)) {
+		if (in_array($bindkey, $bindkeys)) {
 			return TRUE;
 		} else {
 			return FALSE;
