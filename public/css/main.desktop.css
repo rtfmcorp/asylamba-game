@@ -3068,6 +3068,23 @@ body {
 .component .info-building h4 { margin: 10px; }
 .component .info-building p { font-size: 13px; }
 
+/***********************************/
+/*********** PARAM STYLE ***********/
+/***********************************/
+
+.component.params .checkbox {
+	display: block;
+	position: relative;
+	padding: 10px 10px 10px 40px;
+	margin: 10px;
+	background: rgba(0, 0, 0, .8);
+}
+
+.component.params .checkbox input {
+	position: absolute;
+	top: 8px; left: 10px;
+}
+
 /****** NAV & OPTION *****/
 
 #map-option {
