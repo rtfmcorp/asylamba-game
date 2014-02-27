@@ -49,7 +49,6 @@ jQuery(document).ready(function($) {
 			if (render.calling == 1) {
 				var initSftr = parseInt($('body').data('init-sftr'));
 				if (initSftr > 0) {
-					$('#content').css('left', (600 - (initSftr * render.column.defaultSize)));
 					panelController.position += initSftr;
 				}
 				panelController.move(0, 'left', 0);
@@ -313,18 +312,20 @@ jQuery(document).ready(function($) {
 
 			if (hasToAnimate) {
 				$('#content').stop().animate({
-					'left': -(panelController.position * 300)
+					'left': -(panelController.position * 300) + 60
 				}, time);
 				$('#background-paralax').stop().animate({
 					'left': -((panelController.position + 2) * 25)
 				}, time);
 			}
 
-			if (panelController.position < 0) {
-				$('#movers .toLeft').hide();
-			} else {
-				$('#movers .toLeft').show();
-			}
+			panelController.position < 0
+				? $('#movers .toLeft').hide()
+				: $('#movers .toLeft').show();
+
+			panelController.position >= panelController.maxPosition - 1
+				? $('#movers .toRight').hide()
+				: $('#movers .toRight').show();
 
 			$('#content a').each(function() {
 				$(this).attr('href', panelController.rewriteLink($(this).attr('href')));

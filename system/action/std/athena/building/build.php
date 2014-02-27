@@ -60,14 +60,6 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 
 			// debit resources
 			$ob->decreaseResources(OrbitalBaseResource::getBuildingInfo($building, 'level', $currentLevel + 1, 'resourcePrice'));
-			
-			// definir si la base est commerciale ou non (si besoin)
-			if ($building == 3 || $building == 6) {
-				if ($ob->getRealDock2Level() == 0 && $ob->getRealCommercialPlateformeLevel() == 0) {
-					$commercial = ($building == 3) ? 0 : 1;
-					$ob->setIsCommercialBase($commercial);
-				}
-			}
 
 			// ajout de l'event dans le contrôleur
 			CTR::$data->get('playerEvent')->add($bq->dEnd, EVENT_BASE, $baseId);

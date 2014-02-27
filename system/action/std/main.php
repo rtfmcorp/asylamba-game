@@ -17,6 +17,7 @@ switch (CTR::$get->get('a')) {
 	case 'createschoolclass':		include ACTION . 'athena/general/createSchoolClass.php'; break;
 	case 'giveresource':			include ACTION . 'athena/general/giveResource.php'; break;
 	case 'renamebase':				include ACTION . 'athena/general/renameBase.php'; break;
+	case 'changebasetype':			include ACTION . 'athena/general/changeBaseType.php'; break;
 
 	case 'buildbuilding':			include ACTION . 'athena/building/build.php'; break;
 	case 'dequeuebuilding':			include ACTION . 'athena/building/dequeue.php'; break;

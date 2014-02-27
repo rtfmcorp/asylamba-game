@@ -1,6 +1,6 @@
 <?php
 if (CTR::getPage() == 'inscription' && (CTR::$get->get('step') == 1 || !CTR::$get->exist('step'))) {
-	$color ='color0';
+	$color = 'color0';
 } elseif (CTR::getPage() == 'inscription') {
 	$color = 'color' . CTR::$data->get('inscription')->get('ally');
 } else {

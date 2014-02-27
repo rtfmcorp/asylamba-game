@@ -527,7 +527,6 @@ body {
 	display: inline-block;
 	margin: 15px 0 15px 16px;
 	padding: 0 15px;
-	background: red;
 	line-height: 30px;
 
 	color: white;
@@ -545,41 +544,44 @@ body {
 	border-color: transparent #4F4F4F transparent transparent;
 	left: 0; top: 22px;
 }
-/*
 
-#map-commanders .commander .army {
-	text-align: right;
-	margin: 8px 0; padding: 5px 10px;
-	height: 54px;
-	background: transparent;
-	color: transparent;
-
-	-moz-transition: all linear 250ms;
+#subnav .item .content.skin-2 .sub-content {
+	display: inline-block;
+	margin: 0 0 0 16px;
+	padding: 10px;
+	color: white; background: #202020;
+	border-radius: 3px;
+	border: solid 1px #4F4F4F;
+	box-shadow: inset 0 0 3px black;
 }
-#map-commanders .commander .army .label {
-	line-height: 20px; height: 20px;
-	font-size: 13px; padding: 0 0 4px 0;
-	overflow: hidden;
+#subnav .item .content.skin-2 .sub-content:before {
+	content: '';
+	display: block;
+	position: absolute;
+	border-style: solid;
+	border-width: 8px;
+	border-color: transparent #4F4F4F transparent transparent;
+	left: 0; top: 22px;
 }
-#map-commanders .commander .army .label .bonus {
-	font-size: 10px;
+#subnav .item .content.skin-2 .sub-content hr {
+	border: none;
+	border-top: solid 1px #4F4F4F;
 }
-#map-commanders .commander .army .value {
-	height: 32px; font-size: 12px;
+#subnav .item .content.skin-2 .sub-content .ship {
+	position: relative;
 }
-#map-commanders .commander .army .value .picto { position: relative; }
-#map-commanders .commander .army .value .picto.zero { opacity: .5; }
-#map-commanders .commander .army .value .picto img {
-	width: 28px; height: 28px;
+#subnav .item .content.skin-2 .sub-content .ship img {
+	width: 32px; height: 32px;
 }
-#map-commanders .commander .army .value .picto .number {
+#subnav .item .content.skin-2 .sub-content .ship img.zero { opacity: .5; }
+#subnav .item .content.skin-2 .sub-content .ship .number {
 	position: absolute;
 	bottom: -2px; right: -2px;
 	width: 18px; height: 18px; line-height: 18px;
 	border-radius: 100%;
 	text-align: center;
 	background: red;
-}*/
+}
 
 /* COMPOSANT DE LA PAGE PROFIL */
 #background-paralax {
@@ -1013,6 +1015,15 @@ body {
 	top: 65px; left: 60px;
 	font-size: 13px;
 	line-height: 16px;
+}
+
+.component .head.skin-5 h2 {
+	position: absolute;
+	bottom: 52px; left: 10px;
+	font-size: 13px;
+	font-weight: normal;
+	margin: 0; padding: 0 10px;
+	background: black;
 }
 
 .color1 .component .border-bottom { border-bottom: solid 3px #b01e2d; }
