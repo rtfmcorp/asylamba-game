@@ -3,7 +3,7 @@ include_once ARES;
 
 $S_COM_MAP_COM = ASM::$com->getCurrentSession();
 ASM::$com->newSession();
-ASM::$com->load(array('rBase' => CTR::$data->get('playerParams')->get('base'), 'statement' => array(COM_AFFECTED, COM_MOVING)));
+ASM::$com->load(array('c.rBase' => CTR::$data->get('playerParams')->get('base'), 'c.statement' => array(Commander::AFFECTED, Commander::MOVING)));
 
 echo '<div id="subnav">';
 	echo '<div class="overflow">';

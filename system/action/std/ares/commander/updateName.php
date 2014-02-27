@@ -26,7 +26,7 @@ if ($id !== FALSE) {
 	if ($name !== FALSE) {
 		$S_COM1 = ASM::$com->getCurrentSession();
 		ASM::$com->newSession();
-		ASM::$com->load(array('id' => $id, 'rPlayer' => CTR::$data->get('playerId')));
+		ASM::$com->load(array('c.id' => $id, 'c.rPlayer' => CTR::$data->get('playerId')));
 		if (ASM::$com->size() == 1) {
 			$commander = ASM::$com->get();
 			$p = new Parser();

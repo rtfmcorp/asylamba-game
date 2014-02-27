@@ -18,14 +18,14 @@ if (CTR::$get->exist('id')) {
 if ($commanderId !== FALSE) {
 	$S_COM1 = ASM::$com->getCurrentSession();
 	ASM::$com->newSession();
-	ASM::$com->load(array('id' => $commanderId, 'rPlayer' => CTR::$data->get('playerId')));
+	ASM::$com->load(array('c.id' => $commanderId, 'c.rPlayer' => CTR::$data->get('playerId')));
 
 	if (ASM::$com->size() == 1) {
 		$commander = ASM::$com->get();
 		
 		# checker si on a assez de place !!!!!
 		$S_COM2 = ASM::$com->newSession();
-		ASM::$com->load(array('rBase' => $commander->getRBase(), 'statement' => COM_AFFECTED));
+		ASM::$com->load(array('c.rBase' => $commander->getRBase(), 'c.statement' => Commander::AFFECTED));
 		$nbr = ASM::$com->size();
 
 		ASM::$com->changeSession($S_COM2);

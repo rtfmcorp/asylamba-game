@@ -107,7 +107,7 @@ echo '<div class="component">';
 
 			$S_COM1 = ASM::$com->getCurrentSession();
 			ASM::$com->newSession();
-			ASM::$com->load(array('rPlayer' => $ob_obFastView->getRPlayer(), 'rBase' => $ob_obFastView->getRPlace(), 'statement' => array(COM_AFFECTED, COM_MOVING)));
+			ASM::$com->load(array('c.rPlayer' => $ob_obFastView->getRPlayer(), 'c.rBase' => $ob_obFastView->getRPlace(), 'c.statement' => array(COM_AFFECTED, COM_MOVING)));
 			
 			$movingFleets = 0;
 			$defenseFleets = 0;

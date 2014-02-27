@@ -12,7 +12,7 @@
 
 include_once ATHENA;
 
-abstract class Ship {
+class Ship {
 	
 	public $id = 0;
 	public $nbrName = 0;
@@ -30,19 +30,19 @@ abstract class Ship {
 		$this->nbrName = $nbrName;
 		$this->isAttacker = $isAttacker;
 
-		$this->name = ShipRessource::getInfo($nbrName, 'name');
-		$this->codeName = ShipRessource::getInfo($nbrName, 'codeName');
-		$this->life = ShipRessource::getInfo($nbrName, 'life');
-		$this->speed = ShipRessource::getInfo($nbrName, 'speed');
-		$this->attack = ShipRessource::getInfo($nbrName, 'attack');
-		$this->defense = ShipRessource::getInfo($nbrName, 'defense');
-		$this->pev = ShipRessource::getInfo($nbrName, 'pev');
+		$this->name = ShipResource::getInfo($nbrName, 'name');
+		$this->codeName = ShipResource::getInfo($nbrName, 'codeName');
+		$this->life = ShipResource::getInfo($nbrName, 'life');
+		$this->speed = ShipResource::getInfo($nbrName, 'speed');
+		$this->attack = ShipResource::getInfo($nbrName, 'attack');
+		$this->defense = ShipResource::getInfo($nbrName, 'defense');
+		$this->pev = ShipResource::getInfo($nbrName, 'pev');
 
 		$this->nbrAttack = count($this->attack);
 	}
 
 	public function setBonus($bonus) {
-		Switch(ShipRessource::getInfo($nbrName, 'class')) {
+		Switch(ShipResource::getInfo($nbrName, 'class')) {
 			case 0:
 				if ($isAttacker == TRUE) {
 					$this->speed += $this->speed * $bonus->get(PlayerBonus::FIGHTER_SPEED) / 100;					for ($i = 0; $i < $this->nbrAttack; $i++) {

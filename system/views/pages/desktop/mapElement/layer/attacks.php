@@ -14,7 +14,7 @@ for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
 # chargement des commandants attaquants
 $S_COM_ATT = ASM::$com->getCurrentSession();
 ASM::$com->newSession();
-ASM::$com->load(array('id' => $commandersId));
+ASM::$com->load(array('c.id' => $commandersId));
 
 # chargement des places relatives aux commandants attaquants
 $placesId = array(0);

@@ -24,7 +24,7 @@ echo '<div id="content">';
 
 	$S_COM_FIN = ASM::$com->getCurrentSession();
 	ASM::$com->newSession();
-	ASM::$com->load(array('rPlayer' => CTR::$data->get('playerId'), 'statement' => array(COM_AFFECTED, COM_MOVING)));
+	ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => array(Commander::AFFECTED, Commander::MOVING)));
 
 	# generalFinancial component
 	$ob_generalFinancial = array();

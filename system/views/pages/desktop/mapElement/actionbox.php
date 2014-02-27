@@ -18,12 +18,12 @@ if (CTR::$get->exist('relatedplace')) {
 # load the commanders of the default base in a session
 $S_COM1 = ASM::$com->getCurrentSession();
 ASM::$com->newSession();
-ASM::$com->load(array('rBase' => $defaultBase->getRPlace(), 'statement' => array(COM_AFFECTED, COM_MOVING)));
+ASM::$com->load(array('c.rBase' => $defaultBase->getRPlace(), 'c.statement' => array(Commander::AFFECTED, Commander::MOVING)));
 $localCommandersSession = ASM::$com->getCurrentSession();
 
 # load all the commanders moving in a session
 ASM::$com->newSession();
-ASM::$com->load(array('rPlayer' => CTR::$data->get('playerId'), 'statement' => COM_MOVING));
+ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => Commander::MOVING));
 $movingCommandersSession = ASM::$com->getCurrentSession();
 ASM::$com->changeSession($S_COM1);
 

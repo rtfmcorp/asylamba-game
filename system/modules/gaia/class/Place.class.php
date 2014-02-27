@@ -128,7 +128,7 @@ class Place {
 			$S_COM_PLACE1 = ASM::$com->getCurrentSession();
 			ASM::$com->newSession();
 
-			ASM::$com->load(array('rPlaceDestination' => $this->id, 'statement' => 2), array('arrivalDate', 'ASC'));
+			ASM::$com->load(array('t.rDestinationPlace' => $this->id, 'c.statement' => 2), array('t.dArrival', 'ASC'));
 			for ($i = 0; $i < ASM::$com->size(); $i++) {
 				$commander = ASM::$com->get($i);
 				if ($commander->getArrivalDate() <= $now AND $commander->getRPlaceDestination() != NULL) { 
