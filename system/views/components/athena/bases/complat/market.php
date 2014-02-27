@@ -73,7 +73,7 @@ echo '<div class="component transaction">';
 				echo '<form action="' . APP_ROOT . 'action/a-proposetransaction/type-' . Transaction::TYP_RESOURCE . '/rplace-' . $ob_compPlat->getId() . '" method="post">';
 					echo '<label for="resources-quantity">';
 						echo 'Quantité de ressources';
-						echo '<input type="number" name="quantity" data-variation="' . Transaction::PERCENTAGE_VARIATION . '" data-rate="' . $currentRate . '" id="resources-quantity" placeholder="Maximum ' . Format::numberFormat($ob_compPlat->getResourcesStorage()) . '" />';
+						echo '<input type="number" name="quantity" data-variation="30" data-rate="' . $currentRate . '" id="resources-quantity" placeholder="Maximum ' . Format::numberFormat($ob_compPlat->getResourcesStorage()) . '" />';
 					echo '</label>';
 					echo '<label for="resources-price">';
 						echo 'Prix en crédit';
