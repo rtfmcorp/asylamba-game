@@ -1019,11 +1019,21 @@ body {
 
 .component .head.skin-5 h2 {
 	position: absolute;
-	bottom: 52px; left: 10px;
-	font-size: 13px;
+	top: 50px; left: 10px;
+	font-size: 16px;
 	font-weight: normal;
-	margin: 0; padding: 0 10px;
+	margin: 0; padding: 0 20px;
 	background: black;
+}
+
+.component .head.skin-5 h2:before {
+	content: '';
+	position: absolute; display: block;
+	top: 5px; left: 0;
+	width: 8px; height: 8px;
+	border: solid 1px #202020;
+	background: black;
+	border-radius: 100%;
 }
 
 .color1 .component .border-bottom { border-bottom: solid 3px #b01e2d; }

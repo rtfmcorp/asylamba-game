@@ -157,7 +157,7 @@ echo '</div>';
 
 echo '<div class="component dock1">';
 	echo '<div class="head skin-5">';
-		echo '<h2>Vaisseaux de classe chasseur</h2>';
+		echo '<h2>Chasseurs</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
@@ -170,7 +170,7 @@ echo '</div>';
 
 echo '<div class="component dock1">';
 	echo '<div class="head skin-5">';
-		echo '<h2>Vaisseaux de classe corvette</h2>';
+		echo '<h2>Corvettes</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';

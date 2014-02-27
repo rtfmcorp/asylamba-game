@@ -25,7 +25,9 @@ ASM::$rsm->newSession();
 ASM::$rsm->load(array('rPlayer' => CTR::$data->get('playerId')));
 
 # déblocage
-$c1 = ''; $c2 = ''; $c3 = ''; $c4 = ''; $c5 = '';
+$c1 = ''; $c2 = ''; $c3 = '';
+$c4 = ''; $c5 = '';
+$c6 = ''; $c7 = '';
 for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
 	if (!TechnologyResource::isATechnologyNotDisplayed($i)) {
 		$but = ''; $sup = ''; $ctn = '';
@@ -159,6 +161,9 @@ for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
 			case 3 : $c3 .= $ctn; break;
 			case 4 : $c4 .= $ctn; break;
 			case 5 : $c5 .= $ctn; break;
+			case 6 : $c6 .= $ctn; break;
+			case 7 : $c7 .= $ctn; break;
+			default: $c1 .= $ctn; break;
 		}
 	}
 }
@@ -225,6 +230,53 @@ echo '<div class="component techno">';
 	echo '</div>';
 echo '</div>';
 
+# financial
+echo '<div class="component techno">';
+	echo '<div class="head skin-5">';
+		echo '<h2>Améliorations industrielles I</h2>';
+	echo '</div>';
+	echo '<div class="fix-body">';
+		echo '<div class="body">';
+			echo $c4;
+		echo '</div>';
+	echo '</div>';
+echo '</div>';
+
+echo '<div class="component techno">';
+	echo '<div class="head skin-5">';
+		echo '<h2>Améliorations industrielles II</h2>';
+	echo '</div>';
+	echo '<div class="fix-body">';
+		echo '<div class="body">';
+			echo $c5;
+		echo '</div>';
+	echo '</div>';
+echo '</div>';
+
+# military
+echo '<div class="component techno">';
+	echo '<div class="head skin-5">';
+		echo '<h2>Améliorations militaires I</h2>';
+	echo '</div>';
+	echo '<div class="fix-body">';
+		echo '<div class="body">';
+			echo $c6;
+		echo '</div>';
+	echo '</div>';
+echo '</div>';
+
+echo '<div class="component techno">';
+	echo '<div class="head skin-5">';
+		echo '<h2>Améliorations militaires II</h2>';
+	echo '</div>';
+	echo '<div class="fix-body">';
+		echo '<div class="body">';
+			echo $c7;
+		echo '</div>';
+	echo '</div>';
+echo '</div>';
+
+# unblock
 echo '<div class="component techno">';
 	echo '<div class="head skin-5">';
 		echo '<h2>Nouvelles technologies</h2>';
@@ -238,7 +290,7 @@ echo '</div>';
 
 echo '<div class="component techno">';
 	echo '<div class="head skin-5">';
-		echo '<h2>Châssis chasseurs &amp; corvettes</h2>';
+		echo '<h2>Châssis I</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
@@ -249,33 +301,11 @@ echo '</div>';
 
 echo '<div class="component techno">';
 	echo '<div class="head skin-5">';
-		echo '<h2>Châssis frégates, destroyers &amp; croiseurs</h2>';
+		echo '<h2>Châssis II</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo $c3;
-		echo '</div>';
-	echo '</div>';
-echo '</div>';
-
-echo '<div class="component techno">';
-	echo '<div class="head skin-5">';
-		echo '<h2>Améliorations industrielles</h2>';
-	echo '</div>';
-	echo '<div class="fix-body">';
-		echo '<div class="body">';
-			echo $c4;
-		echo '</div>';
-	echo '</div>';
-echo '</div>';
-
-echo '<div class="component techno">';
-	echo '<div class="head skin-5">';
-		echo '<h2>Améliorations militaires</h2>';
-	echo '</div>';
-	echo '<div class="fix-body">';
-		echo '<div class="body">';
-			echo $c5;
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
