@@ -114,6 +114,7 @@ echo '<div id="content">';
 
 	# fleetFeesFinancial component
 	$commander_fleetFeesFinancial = $commander_generalFinancial;
+	$ob_fleetFeesFinancial = $ob_generalFinancial;
 	include COMPONENT . 'athena/financial/fleetFeesFinancial.php';
 
 	# close

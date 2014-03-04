@@ -38,7 +38,12 @@ echo '<div class="component financial">';
 						echo '<a href="#" class="sh" data-target="commander-base-' . $base . '">↓</a>';
 					echo '</span>';
 
-					echo '<span class="label">' . $base . '</span>';
+					foreach ($ob_fleetFeesFinancial as $ob) {
+						if ($base == $ob->getId()) {
+							echo '<span class="label">' . $ob->getName() . ' [' . count($commanders) . ' officier' . Format::addPlural($commanders) . ']</span>';
+							break;				
+						}
+					}
 
 					echo '<span class="value">';
 						echo Format::numberFormat($commanderFees);
