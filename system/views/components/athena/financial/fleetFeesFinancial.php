@@ -48,7 +48,7 @@ echo '<div class="component financial">';
 					echo '<ul class="sub-list-type-1" id="commander-base-' . $base . '">';
 						foreach ($commanders as $commander) {
 							echo '<li>';
-								echo '<span class="label">' . $commander->getLevel() . ' ' . $commander->getName() . '</span>';
+								echo '<span class="label">' . CommanderResources::getInfo($commander->getLevel(), 'grade') . ' ' . $commander->getName() . '</span>';
 								echo '<span class="value">';
 									echo Format::numberFormat($commander->getLevel() * COM_LVLINCOMECOMMANDER);
 									echo ' <a href="#" class="button">v</a> ';

@@ -34,5 +34,8 @@ include_once 'class/ships/Hydre.class.php';
 include_once 'class/ships/Cerbere.class.php';
 include_once 'class/ships/Phoenix.class.php';
 
+# ressources
+include_once 'resource/CommanderResources.php';
+
 ASM::runAres();
 ?>
