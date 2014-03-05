@@ -27,7 +27,7 @@ echo '<div id="content">';
 
 		$S_COM1 = ASM::$com->getCurrentSession();
 		ASM::$com->newSession();
-		ASM::$com->load(array('rBase' => $base->getId(), 'statement' => array(COM_AFFECTED, COM_MOVING)));
+		ASM::$com->load(array('c.rBase' => $base->getId(), 'c.statement' => array(Commander::AFFECTED, Commander::MOVING)));
 		for ($i = 0; $i < ASM::$com->size(); $i++) { 
 			$commanders_obSituation[] = ASM::$com->get($i);
 		}

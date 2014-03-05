@@ -10,8 +10,8 @@
 include_once ARES;
 
 $S_COM1 = ASM::$com->getCurrentSession();
-ASM::$com->newSession(ASM_UMODE);
-ASM::$com->load(array('statement' => COM_INSCHOOL, 'rBase' => $ob_school->getId()), array('experience', 'DESC'));
+ASM::$com->newSession();
+ASM::$com->load(array('c.statement' => Commander::INSCHOOL, 'c.rBase' => $ob_school->getId()), array('c.experience', 'DESC'));
 $comQuantity = ASM::$com->size();
 
 echo '<div class="component school">';

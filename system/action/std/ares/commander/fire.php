@@ -18,7 +18,7 @@ if (CTR::$get->exist('id')) {
 if ($commanderId !== FALSE) {
 	$S_COM1 = ASM::$com->getCurrentSession();
 	ASM::$com->newSession();
-	ASM::$com->load(array('id' => $commanderId, 'rPlayer' => CTR::$data->get('playerId')));
+	ASM::$com->load(array('c.id' => $commanderId, 'c.rPlayer' => CTR::$data->get('playerId')));
 
 	if (ASM::$com->size() == 1) {
 		$commander = ASM::$com->get();

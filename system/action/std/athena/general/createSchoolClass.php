@@ -46,15 +46,16 @@ if ($baseId !== FALSE AND $school !== FALSE AND in_array($baseId, $verif)) {
 	for ($i = 0; $i < $nbrCommandersToCreate; $i++) {
 		$newCommander = new Commander();
 		$newCommander->upExperience(rand(SchoolClassResource::getInfo($school, 'minExp'), SchoolClassResource::getInfo($school, 'maxExp')));
-		$newCommander->setRPlayer(CTR::$data->get('playerId'));
-		$newCommander->setRBase($baseId);
-		$newCommander->setPalmares(0);
-		$newCommander->setStatement(0);
-		$newCommander->setName($name[rand(0, (count($name) - 1))]);
-		$newCommander->setAvatar('1');
-		$newCommander->setDCreation(Utils::now());
-		$newCommander->setUExperience(Utils::now());
-		if (rand(0,9) < 8) {
+		$newCommander->rPlayer = CTR::$data->get('playerId');
+		$newCommander->rBase = $baseId;
+		$newCommander->palmares = 0;
+		$newCommander->statement = 0;
+		$newCommander->name = $name[rand(0, (count($name) - 1))];
+		$newCommander->avatar = '1';
+		$newCommander->dCreation = Utils::now();
+		$newCommander->uCommander = Utils::now();
+
+		if (rand(0, 9) < 8) {
 			$newCommander->setSexe(1);
 		} else {
 			$newCommander->setSexe(2);

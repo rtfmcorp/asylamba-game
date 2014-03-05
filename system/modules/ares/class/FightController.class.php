@@ -7,13 +7,13 @@
  * @copyright Expansion - le jeu
  *
  * @package Arès
- * @update 20.05.13
+ * @update 14.02.14
 */
 
 class FightController {
 	private $isAFight = FALSE;
 
-	// ATTRIBUT STATIC DE LIGNE COURANTE
+	# ATTRIBUT STATIC DE LIGNE COURANTE
 	
 	private static $currentLine = 0;
 	
@@ -27,7 +27,7 @@ class FightController {
 	private static $DFrigateBonus = array(1, 1, 1, 1);
 	private static $DDestroyerBonus = array(1, 1, 1, 1);
 	
-	// REPLACAGE DE LA LIGNE A 3 A CHAQUE INSTANCE DE FIGHTMANAGER
+	# REPLACAGE DE LA LIGNE A 3 A CHAQUE INSTANCE DE FIGHTMANAGER
 	
 	public function __construct($bool = FALSE) {
 		if ($bool == NULL){}
@@ -35,7 +35,7 @@ class FightController {
 		self::$currentLine = 3;
 	}
 	
-	// GETTER
+	# GETTER
 	
 	public static function getCurrentLine() {
 		return self::$currentLine;
@@ -208,15 +208,17 @@ class FightController {
 		}
 	}
 	
-	// DEMARE LE COMBAT ENTRE DEUX COMMANDANT
-	//		COMPTE L'ARMEE D
-	//		si 0 vaisseaux
-	//			A gagne
-	//		SINON COMBAT
-	//		COMPTE L'ARMEE A
-	//		si 0 vaisseaux
-	//			D gagne
-	//		SINON COMBAT
+	/**
+	 * DEMARE LE COMBAT ENTRE DEUX COMMANDANT
+	 *		COMPTE L'ARMEE D
+	 *		si 0 vaisseaux
+	 *			A gagne
+	 *		SINON COMBAT
+	 *		COMPTE L'ARMEE A
+	 *		si 0 vaisseaux
+	 *			D gagne
+	 *		SINON COMBAT
+	*/
 
 	public function startFight($commanderA, $commanderD, $place) {
 		$commanderA->setIsAttacker(TRUE);

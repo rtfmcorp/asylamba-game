@@ -1,8 +1,7 @@
 <?php
 abstract class ASM {
-	protected static $runningAres = FALSE;
+	public static $runningAres = FALSE;
 	public static $com;
-	public static $cfm;
 	public static $rpm;
 
 	protected static $runningAthena = FALSE;
@@ -48,7 +47,6 @@ abstract class ASM {
 	public static function runAres() {
 		if (!self::$runningAres) {
 			self::$com = new CommanderManager();
-			self::$cfm = new CommanderInFightManager();
 			self::$rpm = new ReportManager();
 		}
 		self::$runningAres = TRUE;

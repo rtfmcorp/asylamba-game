@@ -25,7 +25,7 @@ echo '<div id="content">';
 		}
 		$S_COM1 = ASM::$com->getCurrentSession();
 		ASM::$com->newSession();
-		ASM::$com->load(array('id' => $commandersId));
+		ASM::$com->load(array('c.id' => $commandersId));
 
 		# listFleetIncoming component
 		$commander_listFleetIncoming = array();
@@ -42,7 +42,7 @@ echo '<div id="content">';
 		# loading des objets
 		$S_COM1 = ASM::$com->getCurrentSession();
 		ASM::$com->newSession();
-		ASM::$com->load(array('rPlayer' => CTR::$data->get('playerId'), 'statement' => array(COM_AFFECTED, COM_MOVING)), array('rBase', 'DESC'));
+		ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => array(COM_AFFECTED, COM_MOVING)), array('c.rBase', 'DESC'));
 
 		# listFleet component
 		$commander_listFleet = array();
@@ -55,9 +55,9 @@ echo '<div id="content">';
 			$S_COM2 = ASM::$com->getCurrentSession();
 			ASM::$com->newSession();
 			ASM::$com->load(array(
-				'rPlayer' => CTR::$data->get('playerId'),
-				'id' => CTR::$get->get('commander'),
-				'statement' => array(COM_AFFECTED, COM_MOVING)
+				'c.rPlayer' => CTR::$data->get('playerId'),
+				'c.id' => CTR::$get->get('commander'),
+				'c.statement' => array(COM_AFFECTED, COM_MOVING)
 			));
 
 			if (ASM::$com->size() == 1) {
@@ -144,7 +144,7 @@ echo '<div id="content">';
 		# loading des objets
 		$S_COM1 = ASM::$com->getCurrentSession();
 		ASM::$com->newSession();
-		ASM::$com->load(array('rPlayer' => CTR::$data->get('playerId'), 'statement' => COM_DEAD), array('palmares', 'DESC'));
+		ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => COM_DEAD), array('c.palmares', 'DESC'));
 
 		# memorialTxt component
 		include COMPONENT . 'ares/memorialTxt.php';

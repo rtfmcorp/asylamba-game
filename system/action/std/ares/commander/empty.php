@@ -18,7 +18,7 @@ if (CTR::$get->exist('id')) {
 if ($commanderId !== FALSE) {
 	$S_COM1 = ASM::$com->getCurrentSession();
 	ASM::$com->newSession();
-	ASM::$com->load(array('id' => $commanderId, 'rPlayer' => CTR::$data->get('playerId')));
+	ASM::$com->load(array('c.id' => $commanderId, 'c.rPlayer' => CTR::$data->get('playerId')));
 
 	if (ASM::$com->size() == 1) {
 		$commander = ASM::$com->get();
@@ -26,7 +26,7 @@ if ($commanderId !== FALSE) {
 		// vider le commandant
 		$commander->emptySquadrons();
 
-		CTR::$alert->add('Vous avez renvoyé votre commandant ' . $commander->getName() . '.', ALERT_STD_SUCCESS);
+		CTR::$alert->add('Vous avez vier l\'armée menée par votre commandant ' . $commander->getName() . '.', ALERT_STD_SUCCESS);
 
 	} else {
 		CTR::$alert->add('Ce commandant n\'existe pas ou ne vous appartient pas.', ALERT_STD_ERROR);

@@ -71,7 +71,7 @@ if ($direction !== FALSE AND $baseId !== FALSE AND $shipId !== FALSE AND $comman
 
 			$S_COM1 = ASM::$com->getCurrentSession();
 			ASM::$com->newSession();
-			ASM::$com->load(array('id' => $commanderId, 'rBase' => $baseId));
+			ASM::$com->load(array('c.id' => $commanderId, 'c.rBase' => $baseId));
 			
 			if (ASM::$obm->size() == 1 AND ASM::$com->size() == 1) {
 				$base = ASM::$obm->get();

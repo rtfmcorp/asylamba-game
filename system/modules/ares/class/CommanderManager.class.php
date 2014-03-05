@@ -15,7 +15,7 @@ class CommanderManager extends Manager {
 
 	//charge depuis la base de donnée avec ce qu'on veut
 	public function load($where = array(), $order = array(), $limit = array()) {
-		$formatWhere = Utils::arrayToWhere($where, 'c.');
+		$formatWhere = Utils::arrayToWhere($where);
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
@@ -24,14 +24,20 @@ class CommanderManager extends Manager {
 				o.iSchool, o.name AS oName,
 				p.name AS pName,
 				p.rColor AS pColor,
-				do.name AS doName
+				t.rStartPlace, t.rDestinationPlace, t.dStart, t.dArrival, t.ressources, t.type, t.length, t.statement AS tstatement,
+				dp.name AS dpName,
+				sp.name AS spName
 			FROM commander AS c
 			LEFT JOIN orbitalBase AS o
 				ON o.rPlace = c.rBase
 			LEFT JOIN player AS p
 				ON p.id = c.rPlayer
-			LEFT JOIN orbitalBase AS do
-				ON do.rPlace = c.rPlaceDestination
+			LEFT JOIN travel AS t
+				ON t.rCommander = c.id
+			LEFT JOIN orbitalBase AS dp
+				ON dp.rPlace = t.rDestinationPlace
+			LEFT JOIN orbitalBase AS sp
+				ON sp.rPlace = t.rStartPlace
 
 			' . $formatWhere .'
 			' . $formatOrder .'
@@ -95,44 +101,47 @@ class CommanderManager extends Manager {
 			foreach ($awCommanders AS $awCommander) {
 				$commander = new Commander();
 
-				$commander->setId($awCommander['id']);
-				$commander->setName($awCommander['name']);
-				$commander->setAvatar($awCommander['avatar']);
-				$commander->setRPlayer($awCommander['rPlayer']);
-				$commander->setPlayerName($awCommander['pName']);
-				$commander->setPlayerColor($awCommander['pColor']);
-				$commander->setRBase($awCommander['rBase']);
-				$commander->setComment($awCommander['comment']);
-				$commander->setSexe($awCommander['sexe']);
-				$commander->setAge($awCommander['age']);
-				$commander->setLevel($awCommander['level']);
-				$commander->setExperience($awCommander['experience']);
-				$commander->setUExperience($awCommander['uExperience']);
-				$commander->setPalmares($awCommander['palmares']);
-				$commander->setTypeOfMove($awCommander['typeOfMove']);
-				$commander->setrPlaceDestination($awCommander['rPlaceDestination']);
-				$commander->setArrivalDate($awCommander['arrivalDate']);
-				$commander->setResourcesTransported($awCommander['resourcesTransported']);
-				$commander->setStatement($awCommander['statement']);
-				$commander->setDCreation($awCommander['dCreation']);
-				$commander->setDAffectation($awCommander['dAffectation']);
-				$commander->setDDeath($awCommander['dDeath']);
-				$commander->setOBName($awCommander['oName']);
-				$commander->setDestinationPlaceName($awCommander['doName']);
+				$commander->id = $awCommander['id'];
+				$commander->name = $awCommander['name'];
+				$commander->avatar = $awCommander['avatar'];
+				$commander->rPlayer = $awCommander['rPlayer'];
+				$commander->playerName = $awCommander['pName'];
+				$commander->playerColor = $awCommander['pColor'];
+				$commander->rBase = $awCommander['rBase'];
+				$commander->comment = $awCommander['comment'];
+				$commander->sexe = $awCommander['sexe'];
+				$commander->age = $awCommander['age'];
+				$commander->level = $awCommander['level'];
+				$commander->experience = $awCommander['experience'];
+				$commander->uCommander = $awCommander['uCommander'];
+				$commander->palmares = $awCommander['palmares'];
+				$commander->statement = $awCommander['statement'];
+				$commander->dCreation = $awCommander['dCreation'];
+				$commander->dAffectation = $awCommander['dAffectation'];
+				$commander->dDeath = $awCommander['dDeath'];
+				$commander->oBName = $awCommander['oName'];
+
+				$commander->dStart = $awCommander['dStart'];
+				$commander->dArrival = $awCommander['dArrival'];
+				$commander->resourcesTransported = $awCommander['ressources'];
+				$commander->typeOfMove = $awCommander['type'];
+				$commander->travelLength = $awCommander['length'];
+				$commander->rStartPlace = $awCommander['rStartPlace'];
+				$commander->rDestinationPlace = $awCommander['rDestinationPlace'];
+				$commander->tStatement = $awCommander['tstatement'];
+
+				$commander->startPlaceName = $awCommander['spName'];
+				$commander->destinationPlaceName	= $awCommander['dpName'];
 
 				$commander->setSquadronsIds($squadronsIds[$commander->getId()]);
 
-				$currentCommander = $this->_Add($commander);
-
 				$commander->setArmyInBegin($arrayOfArmies[$commander->getId()]);
 				$commander->setArmy();
-				
-				if ($this->currentSession->getUMode() == TRUE) {
-					$currentCommander->uTravel();
 
-					if ($currentCommander->getStatement() == 0) {
-						$currentCommander->uExperienceInSchool($awCommander['iSchool']);
-					}
+				$currentCommander = $this->_Add($commander);
+				
+				if ($this->currentSession->getUMode()) {
+					$currentCommander->uMethod();
 				}
 			}
 		}
@@ -151,22 +160,22 @@ class CommanderManager extends Manager {
 			age = ?,
 			level = ?,
 			experience = ?,
-			uExperience = ?,
+			uCommander = ?,
 			statement = ?,
 			dCreation = ?';
 		$qr = $db->prepare($qr);
 		$aw = $qr->execute(array(
-			$newCommander->getName(),
-			$newCommander->getAvatar(),
-			$newCommander->getRPlayer(),
-			$newCommander->getRBase(),
-			$newCommander->getSexe(),
-			$newCommander->getAge(),
-			$newCommander->getLevel(),
-			$newCommander->getExperience(),
-			$newCommander->getUExperience(),
-			$newCommander->getStatement(),
-			$newCommander->getDCreation(),
+			$newCommander->name,
+			$newCommander->avatar,
+			$newCommander->rPlayer,
+			$newCommander->rBase,
+			$newCommander->sexe,
+			$newCommander->age,
+			$newCommander->level,
+			$newCommander->experience,
+			Utils::now(),
+			$newCommander->statement,
+			$newCommander->dCreation,
 			));
 		$newCommander->setId($db->lastInsertId());
 
@@ -207,12 +216,8 @@ class CommanderManager extends Manager {
 					age = ?,
 					level = ?,
 					experience = ?,
-					uExperience = ?,
+					uCommander = ?,
 					palmares = ?,
-					typeOfMove = ?,
-					rPlaceDestination = ?,
-					arrivalDate = ?,
-					resourcesTransported = ?,
 					statement = ?,
 					dCreation = ?,
 					dAffectation = ?,
@@ -222,41 +227,37 @@ class CommanderManager extends Manager {
 			$qr = $db->prepare($qr);
 			//uper les commandants
 			$qr->execute(array( 				
-				$commander->getName(),
-				$commander->getAvatar(),
-				$commander->getRPlayer(),
-				$commander->getRBase(),
-				$commander->getComment(),
-				$commander->getSexe(),
-				$commander->getAge(),
-				$commander->getLevel(),
-				$commander->getExperience(),
-				$commander->getUExperience(),
-				$commander->getPalmares(),
-				$commander->getTypeOfMove(),
-				$commander->getrPlaceDestination(),
-				$commander->getArrivalDate(),
-				$commander->getResourcesTransported(),
-				$commander->getStatement(),
-				$commander->getDCreation(),
-				$commander->getDAffectation(),
-				$commander->getDDeath(),
-				$commander->getId()));
+				$commander->name,
+				$commander->avatar,
+				$commander->rPlayer,
+				$commander->rBase,
+				$commander->comment,
+				$commander->sexe,
+				$commander->age,
+				$commander->level,
+				$commander->experience,
+				$commander->uCommander,
+				$commander->palmares,
+				$commander->statement,
+				$commander->dCreation,
+				$commander->dAffectation,
+				$commander->dDeath,
+				$commander->id));
 
 			$qr = 'UPDATE squadron SET
 				rCommander = ?,
-				pegase = ?,
-				satyre = ?,
-				chimere = ?,
-				sirene = ?,
-				dryade = ?,
-				meduse = ?,
-				griffon = ?,
-				cyclope = ?,
-				minotaure = ?,
-				hydre = ?,
-				cerbere = ?,
-				phenix = ?,
+				ship0 = ?,
+				ship1 = ?,
+				ship2 = ?,
+				ship3 = ?,
+				ship4 = ?,
+				ship5 = ?,
+				ship6 = ?,
+				ship7 = ?,
+				ship8 = ?,
+				ship9 = ?,
+				ship10 = ?,
+				ship11 = ?,
 				DLAstModification = NOW()
 			WHERE id = ?';
 

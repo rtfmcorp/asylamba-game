@@ -46,7 +46,8 @@ if (ASM::$pam->size() == 1) {
 			$base->getName(), 
 			$base->getSector(), 
 			$base->getSystem(), 
-			'1-' . Game::getSizeOfPlanet($base->getPlanetPopulation())
+			'1-' . Game::getSizeOfPlanet($base->getPlanetPopulation()),
+			$base->typeOfBase
 		);
 	}
 	ASM::$obm->changeSession($S_OBM1);
@@ -128,7 +129,7 @@ if (ASM::$pam->size() == 1) {
 	# check the commanders (outgoing attacks)
 	$S_COM1 = ASM::$com->getCurrentSession();
 	ASM::$com->newSession();
-	ASM::$com->load(array('rPlayer' => CTR::$data->get('playerId'), 'statement' => COM_MOVING, 'typeOfMove' => array(COM_LOOT, COM_COLO)));
+	ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => COM_MOVING, 't.type' => array(COM_LOOT, COM_COLO)));
 
 	for ($i = 0; $i < ASM::$com->size(); $i++) { 
 		CTR::$data->get('playerEvent')->add(ASM::$com->get($i)->getArrivalDate(), EVENT_OUTGOING_ATTACK, ASM::$com->get($i)->getId());
@@ -145,7 +146,7 @@ if (ASM::$pam->size() == 1) {
 	for ($i = 0; $i < CTR::$data->get('playerBase')->get('ms')->size(); $i++) {
 		$places[] = CTR::$data->get('playerBase')->get('ms')->get($i)->get('id');
 	}
-	ASM::$com->load(array('rPlaceDestination' => $places, 'statement' => COM_MOVING, 'typeOfMove' => array(COM_LOOT, COM_COLO)));
+	ASM::$com->load(array('t.rDestinationPlace' => $places, 'c.statement' => COM_MOVING, 't.type' => array(COM_LOOT, COM_COLO)));
 
 	# ajout des bases des ennemis dans le tableau
 	for ($i = 0; $i < ASM::$com->size(); $i++) {

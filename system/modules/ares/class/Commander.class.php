@@ -6,50 +6,103 @@
  * @author Noé Zufferey
  * @copyright Expansion - le jeu
  *
- * @package Arès
- * @update 20.05.13
+ * @package Ares
+ * @update 13.02.14
 */
 
 class Commander {
+	const COEFFEARNEDEXP 			= 50;
+	const COEFFEXPPLAYER			= 100;
+	const CMDBASELVL 				= 100;
+
+	const COEFFMOVEINSYSTEM 		= 584;
+	const COEFFMOVEOUTOFSYSTEM 		= 600;
+	const COEFFMOVEINTERSYSTEM 		= 1000;
+
+	const LVLINCOMECOMMANDER 		= 100;
+
+	const CREDITCOEFFTOCOLONIZE		= 100000;
+	const CREDITCOEFFTOCONQUER		= 250000;
+
+	# loot const
+	const LIMITTOLOOT 				= 5000;
+	const COEFFLOOT 				= 250;
+
+	# Commander statements
+	const INSCHOOL 					= 0; # dans l'école
+	const AFFECTED 					= 1; # autour de la base
+	const MOVING 					= 2; # en déplacement
+	const DEAD 						= 3; # mort
+	const DESERT 					= 4; # déserté
+	const RETIRED 					= 5; # à la retraite
+	const ONSALE 					= 6; # dans le marché
+
+	# travel statements
+	const DONE 						= 0; # déplacement fini dans le passé
+	const INPROGRESS 				= 1; # déplacement en cours
+	const COMPLETED					= 2; # déplacement prévu dans l'avenir (ne sera peut-être jamais implémenté)
+
+	# types of travel
+	const MOVE						= 0; # déplacement
+	const LOOT						= 1; # pillage
+	const COLO						= 2; # colo ou conquete
+	const BACK						= 3; # retour après une action
+
 	# attributes
-	private $id 					= 0;
-	private $name 					= '';
-	private $avatar 				= '';
-	private $rPlayer 				= 0;
-	private $playerName				='';
-	private $playerColor			='';
-	private $rBase 					= 0;
-	private $comment 				= '';
-	private $sexe 					= 0;
-	private $age 					= 0;
-	private $level 					= 0;
-	private $experience 			= 0;
-	private $uExperience 			= 0;
-	private $palmares 				= 0;
-	private $typeOfMove 			= 0;
-	private $rPlaceDestination 		= 0;
-	private $arrivalDate 			= '';
-	private $resourcesTransported 	= 0;
-	private $statement 				= COM_INSCHOOL;
-	private $dCreation 				= '';
-	private $dAffectation 			= '';
-	private $dDeath 				= '';
-	private $oBName					= '';
-	private $destinationPlaceName	= '';
-	private $squadronsIds			= array();
-	private $armyInBegin			= array();
+	public $id 						= 0;
+	public $name 					= '';
+	public $experience 				= 0;
+	public $avatar 					= '';
+	public $rPlayer 				= 0;
+	public $rBase 					= 0;
+	public $comment 				= '';
+	public $sexe 					= 0;
+	public $age 					= 0;
+	public $level 					= 0;
+	public $uExperience 			= 0;
+	public $palmares 				= 0;
+	public $statement 				= COM_INSCHOOL;
+	public $dCreation 				= '';
+	public $dAffectation 			= '';
+	public $dDeath 					= '';
 
-	private $hasToU					= TRUE;
-	// public $hasToSave			= FALSE;
+	# variable de jointure quelconque
+	public $oBName					= '';
+	public $playerName				='';
+	public $playerColor				='';
+
+	# variables de trajet
+	public $dStart					= '';
+	public $dArrival	 			= '';
+	public $resourcesTransported 	= 0;
+	public $typeOfMove 				= 0;
+	public $travelLength			= 0;
+	public $rStartPlace 			= 0;
+	public $rDestinationPlace		= 0;
+	public $startPlaceName			= '';
+	public $destinationPlaceName	= '';
+	public $tStatement				= '';
+
+	#variables de combat
+	public $squadronsIds			= array();
+	public $armyInBegin 			= array();
+	public $armyAtEnd 				= array();
+	public $pevInBegin 				= 0;
+	public $earnedExperience 		= 0;
+	public $winner					= FALSE;
+	public $isAttacker 				= NULL;
+
+	public $uCommander				= '';
+	public $hasToU					= TRUE;
 
 
-	// TABLEAU D'OBJETS SQ        
-	private $army = array();
+	# Tableau d'objets squadron       
+	public $army = array();
 
-	//const de lineCoord
+	# Const de lineCoord
 	private static $LINECOORD = array(1, 1, 1, 2, 2, 1, 2, 3, 3, 1, 2, 3, 4, 4, 2, 3, 4, 5, 5, 3, 4, 5, 6, 6, 4, 5, 6, 7, 7, 5, 6, 7);
 
-	// GETTER
+	# GETTER
 	public function getId() 					{ return $this->id; }
 	public function getName() 					{ return $this->name; }
 	public function getAvatar() 				{ return $this->avatar; }
@@ -63,11 +116,12 @@ class Commander {
 	public function getAge() 					{ return $this->age; }
 	public function getLevel() 					{ return $this->level; }
 	public function getExperience() 			{ return $this->experience; }
-	public function getUExperience() 			{ return $this->uExperience; }
+	public function getUMethod() 				{ return $this->uMethod; }
 	public function getPalmares() 				{ return $this->palmares; }
 	public function getTypeOfMove() 			{ return $this->typeOfMove; }
 	public function getRPlaceDestination() 		{ return $this->rPlaceDestination; }
-	public function getArrivalDate() 			{ return $this->arrivalDate; }
+	public function getArrivalDate() 			{ return $this->dArrival; }
+	public function getDArrival()	 			{ return $this->dArrival; }
 	public function getResourcesTransported() 	{ return $this->resourcesTransported; }
 	public function getUTravel() 				{ return $this->uTravel; }
 	public function getStatement() 				{ return $this->statement; }
@@ -77,6 +131,7 @@ class Commander {
 	public function getLengthTravel()			{ return $this->lengthTravel; }
 	public function getOBName()					{ return $this->oBName; }
 	public function getArmyInBegin()			{ return $this->armyInBegin; }
+	public function setIsAttacker($isAttacker)	{ $this->isAttacker = $isAttacker; } 			  
 
 	public function getDestinationPlaceName()	{
 		return ($this->destinationPlaceName == NULL) ? 'planète rebelle' : $this->destinationPlaceName;
@@ -124,7 +179,7 @@ class Commander {
 	public function setAge($age) 									{ $this->age = $age; } 					  
 	public function setLevel($level) 								{ $this->level = $level; } 				      
 	public function setExperience($experience) 						{ $this->experience = $experience; } 	      
-	public function setUExperience($uExperience) 					{ $this->uExperience = $uExperience; } 	      
+	public function setUCommander($uCommander) 						{ $this->uMethod = $uCommander; } 	      
 	public function setPalmares($palmares) 							{ $this->palmares = $palmares; } 		      
 	public function setTypeOfMove($typeOfMove) 						{ $this->typeOfMove = $typeOfMove; } 	      
 	public function setrPlaceDestination($rPlaceDestination) 		{ $this->rPlaceDestination = $rPlaceDestination; } 	
@@ -143,10 +198,63 @@ class Commander {
 
 	public function setArmy() {
 		for($i = 0; $i < count($this->squadronsIds) AND $i < 25; $i++) {
-			$this->army[$i] = 
-			new Squadron($this->armyInBegin[$i], 
+			$this->army[$i] = new Squadron(
+				$this->armyInBegin[$i], 
 				$this->squadronsIds[$i], 
-				self::$LINECOORD[$i], $i, $this->id);
+				self::$LINECOORD[$i], 
+				$i, 
+				$this->id);
+		}
+	}
+
+	public function setPevInBegin() {
+		foreach ($this->army AS $squadron) {
+			foreach ($squadron->getSquadron() AS $ship) {
+				$this->pevInBegin += $ship->getPev();
+			}
+		}
+	}
+
+	private function setArmyAtEnd() {
+		$i = 0;
+		foreach ($this->army AS $squadron) {
+			$this->armyAtEnd[$i] = $squadron->getArrayOfShips();
+			$i++;
+		}
+	}
+
+	private function setEarnedExperience($enemyCommander) {
+		include_once ZEUS;
+		$finalOwnPev = 0;
+
+		foreach ($this->army AS $squadron) {
+			foreach ($squadron->getSquadron() AS $ship) {
+				$finalOwnPev += $ship->getPev();
+			}
+		}
+		$importance = ($finalOwnPev + 1) * ($enemyCommander->getPevInBegin() / ($this->pevInBegin + 1)) * ($enemyCommander->getLevel() / $this->level);
+		$this->earnedExperience = $importance * COM_COEFFEARNEDEXP;
+		if($this->winner) {
+			LiveReport::$importance = $importance;
+		}
+		
+		if ($this->rPlayer > 0) {
+			$S_PLM1 = ASM::$pam->getCurrentSession();
+			ASM::$pam->newSession(TRUE, FALSE);
+			ASM::$pam->load(array('id' => $this->rPlayer));
+			ASM::$pam->get(0)->increaseExperience(round($this->earnedExperience / COEFFEXPPLAYER));
+			ASM::$pam->changeSession($S_PLM1);
+		}
+	}
+
+	public function setBonus() {
+		$playerBonus = new PlayerBonus($this->rPlayer);
+		$playerBonus->load();
+
+		foreach ($this->army AS $squadron) {
+			foreach ($squadron->squadron AS $ship) {
+				$ship->setBonus($playerBonus->bonus);
+			}
 		}
 	}
 
@@ -200,33 +308,24 @@ class Commander {
 		ASM::$obm->changeSession($S_OBM);
 	}
 
-	public function uExperienceInSchool($invest) {
-		if ($this->statement == COM_INSCHOOL) {
-			$oldDate = ($this->uExperience === NULL) ? Utils::now() : $this->uExperience;
-			$newDate = Utils::now();
-			$interval = Utils::interval($oldDate, $newDate);
-			if ($interval >= 1) {
-				$this->uExperience = $newDate;
-				
-				// load bonus
-				$playerBonus = new PlayerBonus($this->rPlayer);
-				$playerBonus->load();
+	public function uExperienceInSchool($ob, $playerBonus) {
+		if ($this->statement == self::INSCHOOL) {
 
-				for ($i = 0; $i < $interval; $i++) {
-					$invest += $invest * $playerBonus->bonus->get(PlayerBonus::COMMANDER_INVEST) / 100;
-					$coeff = $invest / 100;
-					$earnedExperience  = round(log($coeff + 1) / log(2) * 20);
-					$earnedExperience += rand(-23, 23);
-					$earnedExperience = round($earnedExperience / 15);
-					$earnedExperience  = ($earnedExperience < 0) ? 0 : $earnedExperience;
-					
-					$this->upExperience($earnedExperience);
-				}
-			}
+			$invest = $ob->iSchool;
+			
+			// load bonus
+			$invest += $invest * $playerBonus->bonus->get(PlayerBonus::COMMANDER_INVEST) / 100;
+			$coeff = $invest / 100;
+			$earnedExperience  = round(log($coeff + 1) / log(2) * 20);
+			$earnedExperience += rand(-23, 23);
+			$earnedExperience = round($earnedExperience / 15);
+			$earnedExperience  = ($earnedExperience < 0) ? 0 : $earnedExperience;
+			
+			$this->upExperience($earnedExperience);
 		}
 	}
 
-	public function uTravel() {
+	/*public function uTravel() {
 		include_once GAIA;
 
 		if ($this->hasToU == TRUE) {
@@ -250,17 +349,7 @@ class Commander {
 					}
 			}
 		}
-	}
-
-	public function resultOfFight($cif) {
-		$this->army = array();
-		$this->armyInBegin = $cif->getArmyAtEnd();
-		$this->setArmy();
-		$this->statement = $cif->getStatement();
-		$this->experience = $cif->getExperience();
-		$this->level = $cif->getLevel();
-		$this->palmares = $cif->getPalmares();
-	}
+	}*/
 
 	public function move($destination, $typeOfMove, $duration) {
 		if ($typeOfMove == 3) {
@@ -301,6 +390,64 @@ class Commander {
 				return FALSE;
 			}
 		}
+	}
+	
+	public function resultOfFight($isWinner, $enemyCommander = NULL) {
+		if ($isWinner == TRUE) {
+			$this->setEarnedExperience($enemyCommander);
+
+			$this->winner = TRUE;
+			$this->palmares++;
+			$this->setArmyAtEnd();
+			$this->upExperience($this->earnedExperience);
+			$this->hasChanged = TRUE;
+		} else {
+			$this->winner = FALSE;
+			$this->setArmyAtEnd();
+			$this->upExperience($this->earnedExperience);
+			$this->hasChanged = TRUE;
+		}
+	}
+
+	# ENGAGE UN COMBAT ENTRE CHAQUE SQUADRON CONTRE UN COMMANDANT
+	public function engage($enemyCommander, $thisCommander) {
+		$idSquadron = 0;
+		foreach ($this->army as $squadron) {
+			if ($squadron->getNbrOfShips() != 0 AND $squadron->getLineCoord() * 3 <= FightController::getCurrentLine()) {
+				$enemyCommander = $squadron->engage($enemyCommander, $idSquadron, $this->id, $this->name, $thisCommander);
+			}
+			$idSquadron++;
+		}
+		return $enemyCommander;
+	}
+
+	public function uMethod() {
+		$token = CTC::createContext();
+		$now = Utils::now();
+
+		# check s'il gagne de l'exp à l'école
+		if (Utils::interval($this->uCommander, $now, 's') > 0 AND $this->statement == self::INSCHOOL) {
+			$nbrHours = Utils::intervalDates($now, $this->uCommander);
+			$this->uCommander = $now;
+
+			$S_OBM = ASM::$obm->getCurrentSession();
+			ASM::$obm->newSession();
+			ASM::$obm->load(array('rPlace' => $this->rBase));
+			$ob = ASM::$obm->get();
+			ASM::$obm->changeSession($S_OBM);
+
+			include_once ZEUS;
+			$playerBonus = new PlayerBonus($this->rPlayer);
+			$playerBonus->load();
+
+			foreach ($nbrHours as $hour) {
+				CTC::add($hour, $this, 'uExperienceInSchool', array($ob, $playerBonus));
+			}
+		}
+
+		# test si ya des combats
+
+		CTC::applyContext($token);
 	}
 }
 ?>

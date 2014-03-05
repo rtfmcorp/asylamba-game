@@ -7,7 +7,8 @@
 * @package Ares
 */
 class CommanderReport_v1 {
-	// INFOS COMMANDANT	
+	// INFOS COMMANDANT
+	
 	public $id 						= 0;
 	public $name 					= '';
 	public $avatar					= '';

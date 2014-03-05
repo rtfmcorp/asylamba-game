@@ -27,7 +27,7 @@ if (CTR::$get->exist('placeid')) {
 if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	$S_COM1 = ASM::$com->getCurrentSession();
 	ASM::$com->newSession(ASM_UMODE);
-	ASM::$com->load(array('id' => $commanderId, 'rPlayer' => CTR::$data->get('playerId')));
+	ASM::$com->load(array('c.id' => $commanderId, 'c.rPlayer' => CTR::$data->get('playerId')));
 	
 	$S_PLM1 = ASM::$plm->getCurrentSession();
 	ASM::$plm->newSession(ASM_UMODE);
@@ -45,7 +45,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 		$coloQuantity = 0;
 		$S_COM2 = ASM::$com->getCurrentSession();
 		ASM::$com->newSession();
-		ASM::$com->load(array('rPlayer' => CTR::$data->get('playerId'), 'statement' => COM_MOVING));
+		ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => COM_MOVING));
 		for ($i = 0; $i < ASM::$com->size(); $i++) { 
 			if (ASM::$com->get($i)->getTypeOfMove() == COM_COLO) {
 				$coloQuantity++;

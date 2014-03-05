@@ -4,7 +4,7 @@ include_once GAIA;
 
 $S_COM_MAPLAYER = ASM::$com->getCurrentSession();
 ASM::$com->newSession();
-ASM::$com->load(array('statement' => COM_MOVING, 'rPlayer' => CTR::$data->get('playerId')));
+ASM::$com->load(array('c.statement' => Commander::MOVING, 'c.rPlayer' => CTR::$data->get('playerId')));
 $placesId = array(0);
 for ($i = 0; $i < ASM::$com->size(); $i++) {
 	$placesId[] = ASM::$com->get($i)->getRBase();

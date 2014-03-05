@@ -1,7 +1,7 @@
 <?php
 abstract class CTC {
 	private static $running = FALSE;
-	private static $events  = array();
+	public static $events  = array();
 
 	public static function createContext() {
 		self::$create++;
@@ -60,7 +60,7 @@ abstract class CTC {
 			);
 
 			self::$events[] = $event;
-		}	
+		}
 	}
 
 	public static function size() {

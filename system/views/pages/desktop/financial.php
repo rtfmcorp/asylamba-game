@@ -29,10 +29,10 @@ echo '<div id="content">';
 	ASM::$com->newSession();
 	ASM::$com->load(
 		array(
-			'rPlayer' => CTR::$data->get('playerId'),
-			'statement' => array(COM_AFFECTED, COM_MOVING)
+			'c.rPlayer' => CTR::$data->get('playerId'),
+			'c.statement' => array(COM_AFFECTED, COM_MOVING)
 		), 
-		array('rBase', 'ASC')
+		array('c.rBase', 'ASC')
 	);
 
 	# global variable

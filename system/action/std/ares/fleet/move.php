@@ -26,7 +26,7 @@ if (CTR::$get->exist('placeid')) {
 if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	$S_COM1 = ASM::$com->getCurrentSession();
 	ASM::$com->newSession(ASM_UMODE);
-	ASM::$com->load(array('id' => $commanderId, 'rPlayer' => CTR::$data->get('playerId')));
+	ASM::$com->load(array('c.id' => $commanderId, 'c.rPlayer' => CTR::$data->get('playerId')));
 	$commander = ASM::$com->get();
 	
 	$S_PLM1 = ASM::$plm->getCurrentSession();
