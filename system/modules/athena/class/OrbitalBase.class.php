@@ -216,6 +216,13 @@ class OrbitalBase {
 	// UPDATE METHODS
 	public function uMethod() {
 		$token = CTC::createContext();
+		if ($token === TRUE) {
+			CTR::$alert->add('Start uMethod, OrbitalBase, token TRUE', ALERT_STD_SUCCESS);
+		} elseif ($token === FALSE) {
+			CTR::$alert->add('Start uMethod, OrbitalBase, token FALSE', ALERT_STD_ERROR);
+		} else {
+			CTR::$alert->add('Error start uMethod OrbitalBase', ALERT_STD_ERROR);
+		}
 		$now   = Utils::now();
 
 		if (Utils::interval($this->uOrbitalBase, $now, 's') > 0) {
@@ -308,7 +315,13 @@ class OrbitalBase {
 			}
 			ASM::$csm->changeSession($S_CSM1);
 		}
-
+		if ($token === TRUE) {
+			CTR::$alert->add('End uMethod, OrbitalBase, token TRUE', ALERT_STD_SUCCESS);
+		} elseif ($token === FALSE) {
+			CTR::$alert->add('End uMethod, OrbitalBase, token False', ALERT_STD_ERROR);
+		} else {
+			CTR::$alert->add('Error end uMethod OrbitalBase!', ALERT_STD_ERROR);
+		}
 		CTC::applyContext($token);
 	}
 
