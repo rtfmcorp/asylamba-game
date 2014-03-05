@@ -79,7 +79,7 @@ echo '<div class="component size2 financial">';
 							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
 						echo '</span>';
 
-						echo '<form action="' . APP_ROOT . 'action/a-updateinvest/category-antispy" method="POST" id="invest-uni">';
+						echo '<form action="' . APP_ROOT . 'action/a-updateuniinvest" method="POST" id="invest-uni">';
 							echo '<p>';
 								echo '<input type="text" name="credit" value="' . $financial_totalInvestUni . '" />';
 								echo '<input type="submit" value="ok" />';

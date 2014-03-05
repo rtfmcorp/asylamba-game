@@ -31,9 +31,6 @@ switch (CTR::$get->get('a')) {
 	case 'cancelroute':				include ACTION . 'athena/route/cancel.php'; break;
 	case 'deleteroute':				include ACTION . 'athena/route/delete.php'; break;
 
-	case 'increaseinvestuni':		include ACTION . 'athena/university/increaseInvest.php'; break;
-	case 'decreaseinvestuni':		include ACTION . 'athena/university/decreaseInvest.php'; break;
-
 	case 'proposetransaction': 		include ACTION . 'athena/transaction/propose.php'; break;
 	case 'accepttransaction':		include ACTION . 'athena/transaction/accept.php'; break;
 	case 'canceltransaction':		include ACTION . 'athena/transaction/cancel.php'; break;
