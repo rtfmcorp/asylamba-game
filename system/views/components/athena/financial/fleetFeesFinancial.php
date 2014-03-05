@@ -41,7 +41,7 @@ echo '<div class="component financial">';
 					foreach ($ob_fleetFeesFinancial as $ob) {
 						if ($base == $ob->getId()) {
 							echo '<span class="label">' . $ob->getName() . ' [' . count($commanders) . ' officier' . Format::addPlural($commanders) . ']</span>';
-							break;				
+							break;
 						}
 					}
 
