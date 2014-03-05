@@ -231,50 +231,54 @@ echo '<div class="component techno">';
 echo '</div>';
 
 # financial
-echo '<div class="component techno">';
-	echo '<div class="head skin-5">';
-		echo '<h2>Améliorations industrielles I</h2>';
-	echo '</div>';
-	echo '<div class="fix-body">';
-		echo '<div class="body">';
-			echo $c4;
+if (in_array($ob_tech->typeOfBase, array(OrbitalBase::TYP_COMMERCIAL, OrbitalBase::TYP_CAPITAL))) {
+	echo '<div class="component techno">';
+		echo '<div class="head skin-5">';
+			echo '<h2>Améliorations industrielles I</h2>';
+		echo '</div>';
+		echo '<div class="fix-body">';
+			echo '<div class="body">';
+				echo $c4;
+			echo '</div>';
 		echo '</div>';
 	echo '</div>';
-echo '</div>';
 
-echo '<div class="component techno">';
-	echo '<div class="head skin-5">';
-		echo '<h2>Améliorations industrielles II</h2>';
-	echo '</div>';
-	echo '<div class="fix-body">';
-		echo '<div class="body">';
-			echo $c5;
+	echo '<div class="component techno">';
+		echo '<div class="head skin-5">';
+			echo '<h2>Améliorations industrielles II</h2>';
+		echo '</div>';
+		echo '<div class="fix-body">';
+			echo '<div class="body">';
+				echo $c5;
+			echo '</div>';
 		echo '</div>';
 	echo '</div>';
-echo '</div>';
+}
 
 # military
-echo '<div class="component techno">';
-	echo '<div class="head skin-5">';
-		echo '<h2>Améliorations militaires I</h2>';
-	echo '</div>';
-	echo '<div class="fix-body">';
-		echo '<div class="body">';
-			echo $c6;
+if (in_array($ob_tech->typeOfBase, array(OrbitalBase::TYP_MILITARY, OrbitalBase::TYP_CAPITAL))) {
+	echo '<div class="component techno">';
+		echo '<div class="head skin-5">';
+			echo '<h2>Améliorations militaires I</h2>';
+		echo '</div>';
+		echo '<div class="fix-body">';
+			echo '<div class="body">';
+				echo $c6;
+			echo '</div>';
 		echo '</div>';
 	echo '</div>';
-echo '</div>';
 
-echo '<div class="component techno">';
-	echo '<div class="head skin-5">';
-		echo '<h2>Améliorations militaires II</h2>';
-	echo '</div>';
-	echo '<div class="fix-body">';
-		echo '<div class="body">';
-			echo $c7;
+	echo '<div class="component techno">';
+		echo '<div class="head skin-5">';
+			echo '<h2>Améliorations militaires II</h2>';
+		echo '</div>';
+		echo '<div class="fix-body">';
+			echo '<div class="body">';
+				echo $c7;
+			echo '</div>';
 		echo '</div>';
 	echo '</div>';
-echo '</div>';
+}
 
 # unblock
 echo '<div class="component techno">';
