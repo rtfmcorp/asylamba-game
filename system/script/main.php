@@ -27,6 +27,7 @@ if (DEVMODE || CTR::$get->exist('password')) {
 		case 'addorbitalbaseshipqueue':		include SCRIPT . 'scripts/addorbitalbaseshipqueue.php'; break;
 		case 'addtechnologyqueue':			include SCRIPT . 'scripts/addtechnologyqueue.php'; break;
 		case 'addplayer':					include SCRIPT . 'scripts/addplayer.php'; break;
+		case 'updatecommander':				include SCRIPT . 'scripts/updatecommander.php'; break;
 
 		case 'dailycron':					include SCRIPT . 'scripts/cron/daily.php'; break;
 

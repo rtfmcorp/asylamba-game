@@ -310,11 +310,12 @@ class Commander {
 
 	public function uExperienceInSchool($ob, $playerBonus) {
 		if ($this->statement == self::INSCHOOL) {
+
+			$invest = $ob->iSchool;
 			
 			// load bonus
-
-			$ob->iSchool += $ob->iSchool * $playerBonus->bonus->get(PlayerBonus::COMMANDER_INVEST) / 100;
-			$coeff = $ob->iSchool / 100;
+			$invest += $invest * $playerBonus->bonus->get(PlayerBonus::COMMANDER_INVEST) / 100;
+			$coeff = $invest / 100;
 			$earnedExperience  = round(log($coeff + 1) / log(2) * 20);
 			$earnedExperience += rand(-23, 23);
 			$earnedExperience = round($earnedExperience / 15);
