@@ -46,6 +46,7 @@ class OrbitalBase {
 	public $xSystem = 0;
 	public $ySystem = 0;
 	public $sector = 0;
+	public $sectorColor;
 	public $tax = 0;
 	public $planetPopulation = 0;
 	public $planetResources = 0;
@@ -412,7 +413,7 @@ class OrbitalBase {
 				# prepare commercialShipping for moving back
 				$cs->statement = CommercialShipping::ST_MOVING_BACK;
 				$timeToTravel = strtotime($cs->dArrival) - strtotime($cs->dDeparture);
-				$cs->dDeparture = $cd->$dArrival;
+				$cs->dDeparture = $cs->$dArrival;
 				$cs->dArrival = Utils::addSecondsToDate($cs->dArrival, $timeToTravel);
 				break;
 			case CommercialShipping::ST_MOVING_BACK :

@@ -18,7 +18,7 @@ echo '<div class="component notif">';
 				echo '<span><a href="' . APP_ROOT . 'action/a-deleteallnotif" class="hb lt" title="tout supprimer">×</a></span>';
 				echo '<span><a href="#" class="hb lt sh" data-target="info-notif" title="des infos">?</a></span>';
 			echo '</div>';
-
+			
 			echo '<p class="info" id="info-notif" style="display:none;">';
 				echo 'Les notifications sont les messages que vous recevez du gouvernement de votre ou vos planètes. Ces messages vous avertissent de 
 				toutes les actions qui prennent fin dans le jeu, comme les constructions, les attaques et les développements technologiques par exemple. 

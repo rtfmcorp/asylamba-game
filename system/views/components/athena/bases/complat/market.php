@@ -1,6 +1,7 @@
 <?php
 $S_TRM1 = ASM::$trm->getCurrentSession();
 $S_CSM1 = ASM::$csm->getCurrentSession();
+$S_CTM1 = ASM::$ctm->getCurrentSession();
 
 ASM::$csm->changeSession($ob_compPlat->shippingManager);
 $usedShips = 0;
@@ -9,6 +10,9 @@ for ($i = 0; $i < ASM::$csm->size(); $i++) {
 		$usedShips += ASM::$csm->get($i)->shipQuantity;
 	}
 }
+
+ASM::$ctm->newSession();
+ASM::$ctm->load(array());
 
 echo '<div class="component rc">';
 	echo '<div class="head skin-2">';
@@ -88,10 +92,10 @@ echo '<div class="component transaction">';
 			echo '</div>';
 
 			for ($i = 0; $i < ASM::$trm->size(); $i++) {
-				$p = ASM::$trm->get($i);
+				$tr = ASM::$trm->get($i);
 
-				if (CTR::$data->get('playerId') != $p->rPlayer) {
-					$rateVariation = $currentRate - $p->price / $p->quantity;
+				if (CTR::$data->get('playerId') != $tr->rPlayer) {
+					$rateVariation = $currentRate - $tr->price / $tr->quantity;
 					if ($rateVariation < 0) {
 						$rateVariation = '+ ' . Format::numberFormat(abs($rateVariation), 3);
 					} else {
@@ -99,43 +103,56 @@ echo '<div class="component transaction">';
 					}
 
 					echo '<div class="transaction resources">';
-						echo '<div class="product sh" data-target="transaction-' . $p->id . '">';
-							echo '<img src="' . MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($p->quantity) . '.png" alt="" class="picto" />';
+						echo '<div class="product sh" data-target="transaction-' . $tr->id . '">';
+							echo '<img src="' . MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($tr->quantity) . '.png" alt="" class="picto" />';
 							echo '<span class="rate">' . $rateVariation . '</span>';
 
 							echo '<div class="offer">';
-								echo Format::numberFormat($p->quantity) . ' <img src="' . MEDIA . 'resources/resource.png" alt="" class="icon-color" />';
+								echo Format::numberFormat($tr->quantity) . ' <img src="' . MEDIA . 'resources/resource.png" alt="" class="icon-color" />';
 							echo '</div>';
 							echo '<div class="for">';
 								echo '<span>pour</span>';
 							echo '</div>';
 							echo '<div class="price">';
-								echo Format::numberFormat($p->price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
+								echo Format::numberFormat($tr->price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
 							echo '</div>';
 						echo '</div>';
 
-						echo '<div class="hidden" id="transaction-' . $p->id . '">';
+						echo '<div class="hidden" id="transaction-' . $tr->id . '">';
 							echo '<div class="info">';
 								echo '<div class="seller">';
-									echo '<p>vendu par<br /> <a href="' . APP_ROOT . 'diary/player-' . $p->rPlayer . '" class="color' . $p->playerColor . '">' . $p->playerName . '</a></p>';
-									echo '<p>depuis<br /> <a href="' . APP_ROOT . 'map/place-' . $p->rPlace . '">' . $p->placeName . '</a> <span class="color' . $p->sectorColor . '">[' . $p->sector . ']</span></p>';
+									echo '<p>vendu par<br /> <a href="' . APP_ROOT . 'diary/player-' . $tr->rPlayer . '" class="color' . $tr->playerColor . '">' . $tr->playerName . '</a></p>';
+									echo '<p>depuis<br /> <a href="' . APP_ROOT . 'map/place-' . $tr->rPlace . '">' . $tr->placeName . '</a> <span class="color' . $tr->sectorColor . '">[' . $tr->sector . ']</span></p>';
 								echo '</div>';
 								echo '<div class="price-detail">';
-									echo '<p>--- <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
-									echo '<p><span>+ taxe</span> --- <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
+									echo '<p>' . Format::numberFormat($tr->price) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
+									for ($i = 0; $i < ASM::$ctm->size(); $i++) { 
+										$comTax = ASM::$ctm->get($i);
+										if ($comTax->faction == $tr->sectorColor AND $comTax->relatedFaction == $ob_compPlat->sectorColor) {
+											$exportTax = $comTax->exportTax;
+										}
+										if ($comTax->faction == $ob_compPlat->sectorColor AND $comTax->relatedFaction == $tr->sectorColor) {
+											$importTax = $comTax->importTax;
+										}
+									}
+									$exportTax = round($tr->price * $exportTax / 100);
+									$importTax = round($tr->price * $importTax / 100);
+
+									echo '<p><span>+ taxe </span>' . Format::numberFormat($exportTax) . ' <span>+ taxe </span>' . Format::numberFormat($exportTax) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
 									echo '<hr />';
-									echo '<p><span>=</span> --- <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
+									$totalPrice = $tr->price + $exportTax + $importTax;
+									echo '<p><span>=</span> ' . Format::numberFormat($totalPrice) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
 								echo '</div>';
 							echo '</div>';
 
 							echo '<div class="button">';
-								echo '<a href="' . APP_ROOT . 'action/a-accepttransaction/rplace-' . $ob_compPlat->getId() . '/rtransaction-' . $p->id . '">';
-									echo 'acheter pour ' . Format::numberFormat($p->price) . ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"><br /> ';
+								echo '<a href="' . APP_ROOT . 'action/a-accepttransaction/rplace-' . $ob_compPlat->getId() . '/rtransaction-' . $tr->id . '">';
+									echo 'acheter pour ' . Format::numberFormat($tr->price) . ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"><br /> ';
 									echo 'durée du transit ' . Chronos::secondToFormat(Game::getTimeTravel(
-										$p->rSystem, 
-										$p->positionInSystem, 
-										$p->xSystem, 
-										$p->ySystem, 
+										$tr->rSystem, 
+										$tr->positionInSystem, 
+										$tr->xSystem, 
+										$tr->ySystem, 
 										$ob_compPlat->getSystem(), 
 										$ob_compPlat->getPosition(), 
 										$ob_compPlat->getXSystem(), 
@@ -272,4 +289,5 @@ echo '</div>';
 
 ASM::$trm->changeSession($S_TRM1);
 ASM::$csm->changeSession($S_CSM1);
+ASM::$ctm->changeSession($S_CTM1);
 ?>

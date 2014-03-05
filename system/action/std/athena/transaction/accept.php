@@ -33,7 +33,25 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 		ASM::$obm->load(array('rPlace' => $rPlace));
 		$base = ASM::$obm->get();
 
-		if (CTR::$data->get('playerInfo')->get('credit') >= $transaction->price) {
+		#compute total price
+		$S_CTM1 = ASM::$ctm->getCurrentSession();
+		ASM::$ctm->newSession();
+		ASM::$ctm->load(array());
+		for ($i = 0; $i < ASM::$ctm->size(); $i++) { 
+			$comTax = ASM::$ctm->get($i);
+			if ($comTax->faction == $transaction->sectorColor AND $comTax->relatedFaction == $ob_compPlat->sectorColor) {
+				$exportTax = $comTax->exportTax;
+			}
+			if ($comTax->faction == $ob_compPlat->sectorColor AND $comTax->relatedFaction == $transaction->sectorColor) {
+				$importTax = $comTax->importTax;
+			}
+		}
+		$exportTax = round($transaction->price * $exportTax / 100);
+		$importTax = round($transaction->price * $importTax / 100);
+
+		$totalPrice = $transaction->price + $exportTax + $importTax;
+
+		if (CTR::$data->get('playerInfo')->get('credit') >= $totalPrice) {
 
 			# chargement des joueurs
 			$S_PAM1 = ASM::$pam->getCurrentSession();
@@ -44,8 +62,10 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 			if (ASM::$pam->size() == 2) {
 
 				# transfert des crédits entre joueurs
-				ASM::$pam->get(0)->decreaseCredit($transaction->price);
+				ASM::$pam->get(0)->decreaseCredit($totalPrice);
 				ASM::$pam->get(1)->increaseCredit($transaction->price);
+//TODO			// verser $exportTax à la faction exportatrice
+				// verser $importTax à la faction importatrice
 
 				# gain d'expérience
 				$experience = $transaction->getExperienceEarned();
@@ -93,6 +113,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 		} else {
 			CTR::$alert->add('vous n\'avez pas assez de crédits pour accepter cette proposition', ALERT_STD_ERROR);
 		}
+		ASM::$ctm->changeSession($S_CTM1);
 		ASM::$obm->changeSession($S_OBM1);
 	} else {
 		CTR::$alert->add('erreur dans les propositions sur le marché', ALERT_STD_ERROR);

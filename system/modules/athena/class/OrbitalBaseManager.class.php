@@ -28,6 +28,7 @@ class OrbitalBaseManager extends Manager {
 			s.xPosition AS xSystem,
 			s.yPosition AS ySystem,
 			s.rSector AS sector,
+			se.rColor AS sectorColor,
 			se.tax AS tax,
 			p.population AS planetPopulation,
 			p.coefResources AS planetResources,
@@ -117,6 +118,7 @@ class OrbitalBaseManager extends Manager {
 			$b->setXSystem($aw['xSystem']);
 			$b->setYSystem($aw['ySystem']);
 			$b->setSector($aw['sector']);
+			$b->sectorColor = $aw['sectorColor'];
 			$b->setTax($aw['tax']);
 			$b->setPlanetPopulation($aw['planetPopulation']);
 			$b->setPlanetResources($aw['planetResources']);
