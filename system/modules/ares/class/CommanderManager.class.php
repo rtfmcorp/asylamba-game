@@ -24,7 +24,7 @@ class CommanderManager extends Manager {
 				o.iSchool, o.name AS oName,
 				p.name AS pName,
 				p.rColor AS pColor,
-				t.rStartPlace, t.rDestinationPlace, t.dStart, t.dArrival, t.ressources, t.type, t.length, t.statement,
+				t.rStartPlace, t.rDestinationPlace, t.dStart, t.dArrival, t.ressources, t.type, t.length, t.statement AS tstatement,
 				dp.name AS dpName,
 				sp.name AS spName
 			FROM commander AS c
@@ -98,9 +98,6 @@ class CommanderManager extends Manager {
 				$squadronsIds[''.$rCommander.''][] = $id;
 			}
 
-			// bug::pre($awCommanders);
-			// exit();
-
 			foreach ($awCommanders AS $awCommander) {
 				$commander = new Commander();
 
@@ -116,7 +113,7 @@ class CommanderManager extends Manager {
 				$commander->setAge($awCommander['age']);
 				$commander->setLevel($awCommander['level']);
 				$commander->setExperience($awCommander['experience']);
-				$commander->setUExperience($awCommander['uExperience']);
+				$commander->setUMethod($awCommander['uMethod']);
 				$commander->setPalmares($awCommander['palmares']);
 				$commander->setStatement($awCommander['statement']);
 				$commander->setDCreation($awCommander['dCreation']);
@@ -141,12 +138,8 @@ class CommanderManager extends Manager {
 
 				$currentCommander = $this->_Add($commander);
 				
-				if ($this->currentSession->getUMode() == TRUE) {
-					// $currentCommander->uTravel();
-
-					if ($currentCommander->getStatement() == 0) {
-						// $currentCommander->uExperienceInSchool($awCommander['iSchool']);
-					}
+				if ($this->currentSession->getUMode()) {
+					$currentCommander->uMethod();
 				}
 			}
 		}
@@ -165,7 +158,7 @@ class CommanderManager extends Manager {
 			age = ?,
 			level = ?,
 			experience = ?,
-			uExperience = ?,
+			uMethod = ?,
 			statement = ?,
 			dCreation = ?';
 		$qr = $db->prepare($qr);
@@ -178,7 +171,7 @@ class CommanderManager extends Manager {
 			$newCommander->getAge(),
 			$newCommander->getLevel(),
 			$newCommander->getExperience(),
-			$newCommander->getUExperience(),
+			Utils::now(),
 			$newCommander->getStatement(),
 			$newCommander->getDCreation(),
 			));
@@ -221,7 +214,7 @@ class CommanderManager extends Manager {
 					age = ?,
 					level = ?,
 					experience = ?,
-					uExperience = ?,
+					uMethod = ?,
 					palmares = ?,
 					statement = ?,
 					dCreation = ?,
@@ -241,7 +234,7 @@ class CommanderManager extends Manager {
 				$commander->getAge(),
 				$commander->getLevel(),
 				$commander->getExperience(),
-				$commander->getUExperience(),
+				$commander->getUMethod(),
 				$commander->getPalmares(),
 				$commander->getStatement(),
 				$commander->getDCreation(),

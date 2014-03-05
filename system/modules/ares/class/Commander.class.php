@@ -91,6 +91,7 @@ class Commander {
 	public $winner					= FALSE;
 	public $isAttacker 				= NULL;
 
+	public $uMethod					= '';
 	public $hasToU					= TRUE;
 
 
@@ -114,7 +115,7 @@ class Commander {
 	public function getAge() 					{ return $this->age; }
 	public function getLevel() 					{ return $this->level; }
 	public function getExperience() 			{ return $this->experience; }
-	public function getUExperience() 			{ return $this->uExperience; }
+	public function getUMethod() 				{ return $this->uMethod; }
 	public function getPalmares() 				{ return $this->palmares; }
 	public function getTypeOfMove() 			{ return $this->typeOfMove; }
 	public function getRPlaceDestination() 		{ return $this->rPlaceDestination; }
@@ -176,7 +177,7 @@ class Commander {
 	public function setAge($age) 									{ $this->age = $age; } 					  
 	public function setLevel($level) 								{ $this->level = $level; } 				      
 	public function setExperience($experience) 						{ $this->experience = $experience; } 	      
-	public function setUExperience($uExperience) 					{ $this->uExperience = $uExperience; } 	      
+	public function setUMethod($uMethod) 							{ $this->uMethod = $uMethod; } 	      
 	public function setPalmares($palmares) 							{ $this->palmares = $palmares; } 		      
 	public function setTypeOfMove($typeOfMove) 						{ $this->typeOfMove = $typeOfMove; } 	      
 	public function setrPlaceDestination($rPlaceDestination) 		{ $this->rPlaceDestination = $rPlaceDestination; } 	
@@ -305,24 +306,23 @@ class Commander {
 		ASM::$obm->changeSession($S_OBM);
 	}
 
-	public function uExperienceInSchool($invest) {
+	public function uExperienceInSchool($ob) {
 		include_once ZEUS;
 
-		if ($this->statement == COM_INSCHOOL) {
-				$this->uExperience = $newDate;
-				
-				// load bonus
-				$playerBonus = new PlayerBonus($this->rPlayer);
-				$playerBonus->load();
+		if ($this->statement == self::INSCHOOL) {
+			
+			// load bonus
+			$playerBonus = new PlayerBonus($this->rPlayer);
+			$playerBonus->load();
 
-				$invest += $invest * $playerBonus->bonus->get(PlayerBonus::COMMANDER_INVEST) / 100;
-				$coeff = $invest / 100;
-				$earnedExperience  = round(log($coeff + 1) / log(2) * 20);
-				$earnedExperience += rand(-23, 23);
-				$earnedExperience = round($earnedExperience / 15);
-				$earnedExperience  = ($earnedExperience < 0) ? 0 : $earnedExperience;
-				
-				$this->upExperience($earnedExperience);
+			$ob->iSchool += $ob->iSchool * $playerBonus->bonus->get(PlayerBonus::COMMANDER_INVEST) / 100;
+			$coeff = $ob->iSchool / 100;
+			$earnedExperience  = round(log($coeff + 1) / log(2) * 20);
+			$earnedExperience += rand(-23, 23);
+			$earnedExperience = round($earnedExperience / 15);
+			$earnedExperience  = ($earnedExperience < 0) ? 0 : $earnedExperience;
+			
+			$this->upExperience($earnedExperience);
 		}
 	}
 
@@ -420,6 +420,31 @@ class Commander {
 			$idSquadron++;
 		}
 		return $enemyCommander;
+	}
+
+	public function uMethod() {
+		$token = CTC::createContext();
+		$token = TRUE;
+		
+		# check s'il gagne de l'exp à l'école
+		if (Utils::interval($this->uMethod, $now, 's') > 0 AND $this->statement == self::INSCHOOL) {
+			$nbrHours = Utils::intervalDates($now, $this->uMethod);
+			$this->uMethod = $now;
+
+			$S_OBM = ASM::$obm->getCurrentSession();
+			ASM::$obm->newSession();
+			ASM::$obm->load(array('rPlace' => $this->rBase));
+			$ob = ASM::$obm->get();
+			ASM::$obm->changeSession($S_OBM);
+
+			foreach ($nbrHours as $hour) {
+				CTC::add($hour, $this, 'uExperienceInSchool', array($ob));
+			}
+		}
+
+		# test si ya des combats
+
+		CTC::applyContext($token);
 	}
 }
 ?>

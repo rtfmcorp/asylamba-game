@@ -1,7 +1,7 @@
 <?php
 abstract class CTC {
 	private static $running = FALSE;
-	private static $events  = array();
+	public static $events  = array();
 
 	public static function createContext() {
 		self::$create++;
@@ -34,6 +34,7 @@ abstract class CTC {
 
 			$logt .= '> ' . date('H:i:s') . ', end of apply context' . "\n";
 			$logt .= "\n";
+
 			Bug::writeLog($path, $logt);
 
 			self::$running = FALSE;
@@ -56,7 +57,7 @@ abstract class CTC {
 			);
 
 			self::$events[] = $event;
-		}	
+		}
 	}
 
 	public static function size() {

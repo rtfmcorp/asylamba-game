@@ -10,7 +10,7 @@
 include_once ARES;
 
 $S_COM1 = ASM::$com->getCurrentSession();
-ASM::$com->newSession(ASM_UMODE);
+ASM::$com->newSession();
 ASM::$com->load(array('c.statement' => Commander::INSCHOOL, 'c.rBase' => $ob_school->getId()), array('c.experience', 'DESC'));
 $comQuantity = ASM::$com->size();
 
