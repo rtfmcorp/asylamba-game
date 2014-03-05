@@ -120,13 +120,6 @@ class Player {
 	// UPDATE METHOD
 	public function uMethod() {
 		$token = CTC::createContext();
-		if ($token === TRUE) {
-			CTR::$alert->add('Start Player, token TRUE', ALERT_STD_SUCCESS);
-		} elseif ($token === FALSE) {
-			CTR::$alert->add('Start Player, token FALSE', ALERT_STD_ERROR);
-		} else {
-			CTR::$alert->add('Error umethod player', ALERT_STD_ERROR);
-		}
 		$now   = Utils::now();
 
 		if (Utils::interval($this->uPlayer, $now, 'h') > 0) {
@@ -163,13 +156,7 @@ class Player {
 			ASM::$com->changeSession($S_COM1);
 			ASM::$obm->changeSession($S_OBM1);
 		}
-		if ($token === TRUE) {
-			CTR::$alert->add('End Player TRUE', ALERT_STD_SUCCESS);
-		} elseif ($token === FALSE) {
-			CTR::$alert->add('End Player FALSE', ALERT_STD_ERROR);
-		} else {
-			CTR::$alert->add('Error umethod player', ALERT_STD_ERROR);
-		}
+
 		CTC::applyContext($token);
 	}
 
