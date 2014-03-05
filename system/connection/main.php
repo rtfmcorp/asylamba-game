@@ -46,7 +46,8 @@ if (ASM::$pam->size() == 1) {
 			$base->getName(), 
 			$base->getSector(), 
 			$base->getSystem(), 
-			'1-' . Game::getSizeOfPlanet($base->getPlanetPopulation())
+			'1-' . Game::getSizeOfPlanet($base->getPlanetPopulation()),
+			$base->typeOfBase
 		);
 	}
 	ASM::$obm->changeSession($S_OBM1);
