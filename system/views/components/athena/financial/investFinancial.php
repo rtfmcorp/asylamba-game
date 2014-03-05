@@ -6,10 +6,6 @@
 
 # require
 	# [{orbitalBase}]			ob_investFinancial
-	# {player}					player_investFinancial
-
-$totalInvest  = 0;
-$totalInvest += $player_investFinancial->iUniversity;
 
 # view part
 echo '<div class="component financial">';
@@ -21,22 +17,8 @@ echo '<div class="component financial">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<ul class="list-type-1">';
-				echo '<li>';
-					echo '<span class="label">Investissements université</span>';
-					echo '<span class="value">';
-						echo Format::numberFormat($player_investFinancial->iUniversity);
-						echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
-						echo ' <a href="#" class="button sh" data-target="school-form-base-1">‹</a> ';
-					echo '</span>';
-				echo '</li>';
-			echo '</ul>';
-
-			echo '<hr />';
-
-			echo '<ul class="list-type-1">';
 				foreach ($ob_investFinancial as $base) {
-					$baseInvest   = $base->getISchool() + $base->getIAntiSpy();
-					$totalInvest += $baseInvest;
+					$baseInvest = $base->getISchool() + $base->getIAntiSpy();
 
 					echo '<li>';
 						echo '<span class="buttons">';
@@ -61,7 +43,7 @@ echo '<div class="component financial">';
 
 								echo '<form action="' . APP_ROOT . 'action/a-updateinvest/baseid-' . $base->getId() . '/category-school" method="POST" id="school-form-base-' . $base->getId() . '">';
 									echo '<p>';
-										echo '<input type="text" name="credit" placeholder="' . $base->getISchool() . '" />';
+										echo '<input type="text" name="credit" value="' . $base->getISchool() . '" />';
 										echo '<input type="submit" value="ok" />';
 									echo '</p>';
 								echo '</form>';
@@ -76,7 +58,7 @@ echo '<div class="component financial">';
 
 								echo '<form action="' . APP_ROOT . 'action/a-updateinvest/baseid-' . $base->getId() . '/category-antispy" method="POST" id="spying-form-base-' . $base->getId() . '">';
 									echo '<p>';
-										echo '<input type="text" name="credit" placeholder="' . $base->getIAntiSpy() . '" />';
+										echo '<input type="text" name="credit" value="' . $base->getIAntiSpy() . '" />';
 										echo '<input type="submit" value="ok" />';
 									echo '</p>';
 								echo '</form>';
@@ -88,7 +70,7 @@ echo '<div class="component financial">';
 				echo '<li class="strong">';
 					echo '<span class="label">total des investissements</span>';
 					echo '<span class="value">';
-						echo Format::numberFormat($totalInvest);
+						echo Format::numberFormat($financial_totalInvest);
 						echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
 					echo '</span>';
 				echo '</li>';
@@ -100,22 +82,3 @@ echo '<div class="component financial">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-/*
-echo '<li>';
-								echo '<span class="label">université</span>';
-
-								echo '<span class="value">';
-									echo Format::numberFormat($base->getIUniversity());
-									echo ' <a href="#" class="button sh" data-target="univesity-form-base-' . $base->getId() . '">‹</a>';
-								echo '</span>';
-
-								echo '<form action="' . APP_ROOT . 'action/a-updateinvest/baseid-' . $base->getId() . '/category-university" method="POST" id="univesity-form-base-' . $base->getId() . '">';
-									echo '<p>';
-										echo '<input type="text" name="credit" placeholder="' . $base->getIUniversity() . '" />';
-										echo '<input type="submit" value="ok" />';
-									echo '</p>';
-								echo '</form>';
-							echo '</li>';
-							*/
-?>

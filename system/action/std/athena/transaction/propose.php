@@ -68,15 +68,10 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 			$valid = FALSE;
 	}
 	if ($valid) {
-		# verification of the percentage
-		$currentRate = ASM::$trm->getExchangeRate($type);
-		$max = Game::getMaxPriceRelativeToRate($currentRate, $type, $quantity, $identifier);
-		$min = Game::getMinPriceRelativeToRate($currentRate, $type, $quantity, $identifier);
+		$minPrice = Game::getMinPriceRelativeToRate($type, $quantity, $identifier);
 
-		if ($price > $max) {
-			CTR::$alert->add('Le prix que vous avez fixé est trop élevé. Le prix ne doit pas être majoré de plus de ' . Transaction::PERCENTAGE_VARIATION . '% par rapport au taux de change actuel.', ALERT_GAM_MARKET);
-		} else if ($price < $min) {
-			CTR::$alert->add('Le prix que vous avez fixé est trop bas. Le prix ne doit pas être minoré de plus de ' . Transaction::PERCENTAGE_VARIATION . '% par rapport au taux de change actuel.', ALERT_GAM_MARKET);
+		if ($price < $minPrice) {
+			CTR::$alert->add('Le prix que vous avez fixé est trop bas. Une limite inférieure est fixée selon la catégorie de la vente.', ALERT_GAM_MARKET);
 		} else {
 			$valid = TRUE;
 

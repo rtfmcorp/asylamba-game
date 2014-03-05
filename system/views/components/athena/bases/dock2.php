@@ -155,7 +155,7 @@ echo '</div>';
 
 echo '<div class="component size2 dock1">';
 	echo '<div class="head skin-5">';
-		echo '<h2>Vaisseaux de classe frégates</h2>';
+		echo '<h2>Frégates</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
@@ -167,7 +167,7 @@ echo '</div>';
 
 echo '<div class="component size2 dock1">';
 	echo '<div class="head skin-5">';
-		echo '<h2>Vaisseaux de classe destroyer</h2>';
+		echo '<h2>Destroyers / Croiseurs</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';

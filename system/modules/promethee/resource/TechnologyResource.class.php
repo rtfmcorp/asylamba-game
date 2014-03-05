@@ -1,10 +1,11 @@
 <?php
 class TechnologyResource {
+	# JACKY si tu peux regarder si tout est ok dans les lignes au-dessous !!!
 	private static $technologies = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 
 		20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45);
 	private static $technologiesForUnblocking = array(0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17);
 #	private static $technologiesForUnblocking = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17);
-	private static $technologiesNotDisplayed = array(25, 26);
+	private static $technologiesNotDisplayed = array();
 	
 	public static function isATechnology($techno) {
 		return (in_array($techno, self::$technologies)) ? TRUE : FALSE;
@@ -474,7 +475,7 @@ class TechnologyResource {
 			'resource' => 1740,
 			'credit' => 16000,
 			'points' => 45,
-			'column' => 4,
+			'column' => 5,
 			'shortDescription' => 'Augmente la vitesse de développement de technologies dans la Technosphère de 3% par niveau.',
 			'description' => 'La technologie « Intelligence artificielle » vous permet d’augmenter la vitesse de recherche de vos technologies. En effet, après que vos scientifiques aient pu mettre en place un réseau de robotique pour gérer la totalité de votre Technosphère, le complexe a gagné en efficacité.',
 			'bonus' => 3
@@ -489,7 +490,7 @@ class TechnologyResource {
 			'resource' => 1600,
 			'credit' => 15500,
 			'points' => 44,
-			'column' => 4,
+			'column' => 5,
 			'shortDescription' => 'Augmente la production de vos routes commerciales de 2% par niveau.',
 			'description' => 'Cette nouvelle technologie, basée sur une optimisation des informations et des transferts monétaires entre les différentes planètes, améliore considérablement le revenu de vos routes commerciales.',
 			'bonus' => 2
@@ -534,7 +535,7 @@ class TechnologyResource {
 			'resource' => 1000,
 			'credit' => 11500,
 			'points' => 33,
-			'column' => 4,
+			'column' => 5,
 			'shortDescription' => 'Augmente les impôts que vous percevez à votre population de 2% par niveau.',
 			'description' => 'L’économie sociale de marché est un procédé simple de gestion des taxes de votre planète. Cette amélioration vous donne la possibilité de gérer de façon plus précise vos entrés de crédit en terme d’imposition de la population.',
 			'bonus' => 2
@@ -549,7 +550,7 @@ class TechnologyResource {
 			'resource' => 1680,
 			'credit' => 16000,
 			'points' => 42,
-			'column' => 4,
+			'column' => 5,
 			'shortDescription' => 'Accélère la formation de vos commandants dans l\'école de 2% par niveau.',
 			'description' => 'La formation continue est une technologie appliquée à votre école de commandement. Elle vous permet de former plus précisément les commandants en place dans votre école et ainsi augmenter leurs aptitudes au combat et à la stratégie.',
 			'bonus' => 2
@@ -564,7 +565,7 @@ class TechnologyResource {
 			'resource' => 1100,
 			'credit' => 11500,
 			'points' => 30,
-			'column' => 4,
+			'column' => 5,
 			'shortDescription' => 'Rend plus efficace votre investissement dans l\'Université de 2% par niveau.',
 			'description' => 'Le lobbying universitaire est une technologie mise en place dans le but d’augmenter les échanges entre les différentes facultés de votre université et votre gouvernement. Cette technologie permet à votre université de disposer de plus de fonds pour financer les facultés.',
 			'bonus' => 2
@@ -579,7 +580,7 @@ class TechnologyResource {
 			'resource' => 1630,
 			'credit' => 15900,
 			'points' => 41,
-			'column' => 4,
+			'column' => 5,
 			'shortDescription' => 'Rend plus efficace votre investissement dans l\'Anti-Espionnage de 2% par niveau.',
 			'description' => 'La surveillance réseau est une technologie qui vous permet d’augmenter votre champ de contre-espionnage. Vos services secrets, grâce à d’importantes avancées en matière d’observation et d’espionnage, augmente considérablement leur champ de vision sans aucune augmentation des coûts.',
 			'bonus' => 2
@@ -594,7 +595,7 @@ class TechnologyResource {
 			'resource' => 1900,
 			'credit' => 17800,
 			'points' => 48,
-			'column' => 4,
+			'column' => 5,
 			'shortDescription' => 'Augmente la vitesse de vos vaisseaux de 3% par niveau.',
 			'description' => 'La propulsion hyper-spatiale est une innovation importante pour la bonne marche de vos conquêtes. En effet, cette technologie augmente la vitesse de vos flottes, vous permettant donc de conquérir des planètes plus éloignées de votre base principale.',
 			'bonus' => 3
@@ -609,7 +610,7 @@ class TechnologyResource {
 			'resource' => 1650,
 			'credit' => 16000,
 			'points' => 43,
-			'column' => 4,
+			'column' => 5,
 			'shortDescription' => 'Augmente la capactité à transporter des ressources de vos vaisseaux de 2% par niveau.',
 			'description' => 'En mariant différents domaines scientifiques et en se basant sur les résultats du silo-compresseur, vos chercheurs ont réussi à adapter ce système à vos vaisseaux. Cette technique permet à vos flottes de ramener plus de ressource dans leur soute de transport.',
 			'bonus' => 2
@@ -639,7 +640,7 @@ class TechnologyResource {
 			'resource' => 680,
 			'credit' => 5500,
 			'points' => 19,
-			'column' => 5,
+			'column' => 6,
 			'shortDescription' => 'Améliore la vitesse de vos chasseurs de 3% par niveau.',
 			'description' => 'Cette technologie améliore la vitesse de vos chasseurs en augmentant le nombre de réacteurs. Vous pourrez donc attaquer plus rapidement vos ennemis lors des combats.',
 			'bonus' => 3
@@ -654,7 +655,7 @@ class TechnologyResource {
 			'resource' => 880,
 			'credit' => 9200,
 			'points' => 25,
-			'column' => 5,
+			'column' => 6,
 			'shortDescription' => 'Améliore l\'attaque de vos chasseurs de 3% par niveau.',
 			'description' => 'La technologie du calibre 5 améliore directement l’armement de vos chasseurs. Vos Pégases et vos Satyres auront, de ce fait, une plus grande puissance de feu face à vos ennemis.',
 			'bonus' => 3
@@ -669,7 +670,7 @@ class TechnologyResource {
 			'resource' => 1000,
 			'credit' => 8400,
 			'points' => 29,
-			'column' => 5,
+			'column' => 6,
 			'shortDescription' => 'Améliore la défense de vos chasseurs de 3% par niveau.',
 			'description' => 'Le petit bouclier est un système de défense qui enveloppe vos chasseurs d’un film laser, leur permettant de mieux résister aux impacts de vos ennemis.',
 			'bonus' => 3
@@ -684,7 +685,7 @@ class TechnologyResource {
 			'resource' => 750,
 			'credit' => 6800,
 			'points' => 23,
-			'column' => 5,
+			'column' => 6,
 			'shortDescription' => 'Améliore la vitesse de vos corvettes de 2% par niveau.',
 			'description' => 'La propulsion améliorée est une technologie qui booste les réacteurs de vos corvettes, améliorant ainsi leur vitesse et leur chance d’éviter les impacts.',
 			'bonus' => 2
@@ -699,7 +700,7 @@ class TechnologyResource {
 			'resource' => 920,
 			'credit' => 9800,
 			'points' => 26,
-			'column' => 5,
+			'column' => 6,
 			'shortDescription' => 'Améliore l\'attaque de vos corvettes de 2% par niveau.',
 			'description' => 'Cette nouvelle technologie augmente le faisceau des canons laser de vos corvettes. Celles-ci seront donc plus puissantes aux combats spatiaux ou attaques de planètes.',
 			'bonus' => 2
@@ -714,7 +715,7 @@ class TechnologyResource {
 			'resource' => 1580,
 			'credit' => 16500,
 			'points' => 38,
-			'column' => 5,
+			'column' => 6,
 			'shortDescription' => 'Améliore la défense de vos corvettes de 2% par niveau.',
 			'description' => 'Le bouclier, plus résistant que le petit bouclier, a été élaboré pour augmenter le système de défense de vos corvettes.',
 			'bonus' => 2
@@ -729,7 +730,7 @@ class TechnologyResource {
 			'resource' => 980,
 			'credit' => 10500,
 			'points' => 24,
-			'column' => 5,
+			'column' => 7,
 			'shortDescription' => 'Améliore la vitesse de vos frégates de 2% par niveau.',
 			'description' => 'La super propulsion est un système de propulsion héliothermique. Ce système permet à tous vos vaisseaux de type frégate de gagner en vitesse.',
 			'bonus' => 2
@@ -744,7 +745,7 @@ class TechnologyResource {
 			'resource' => 1220,
 			'credit' => 11500,
 			'points' => 34,
-			'column' => 5,
+			'column' => 7,
 			'shortDescription' => 'Améliore l\'attaque de vos frégates de 2% par niveau.',
 			'description' => 'La technologie tête chercheuse augmente la capacité des missiles de vos frégates à toucher leurs cibles. Cette technique vous permettra d’imposer plus de dégâts aux navettes ennemies.',
 			'bonus' => 2
@@ -759,7 +760,7 @@ class TechnologyResource {
 			'resource' => 1780,
 			'credit' => 17200,
 			'points' => 45,
-			'column' => 5,
+			'column' => 7,
 			'shortDescription' => 'Améliore la défense de vos frégates de 2% par niveau.',
 			'description' => 'Le bouclier renforcé dispose de deux protections laser enveloppent complètement la coque de vos frégates tout en procurant une protection idéal face aux attaques de type missile.',
 			'bonus' => 2
@@ -774,7 +775,7 @@ class TechnologyResource {
 			'resource' => 900,
 			'credit' => 8800,
 			'points' => 24,
-			'column' => 5,
+			'column' => 7,
 			'shortDescription' => 'Améliore la vitesse de vos destroyers de 2% par niveau.',
 			'description' => 'La turbo-propulsion est basée sur un système photonique, lui permettant d’augmenter sa rapidité à proximité d’une étoile. Cette amélioration augmentera la vitesse de tous vos destroyers.',
 			'bonus' => 2
@@ -789,7 +790,7 @@ class TechnologyResource {
 			'resource' => 1620,
 			'credit' => 15500,
 			'points' => 38,
-			'column' => 5,
+			'column' => 7,
 			'shortDescription' => 'Améliore l\'attaque de vos destroyers de 2% par niveau.',
 			'description' => 'L’armement lourd est une technologie améliorant la capacité d’attaque de vos destroyers. Ce système transformera quelque peu les canons de vos destroyers, leur offrant la possibilité d’augmenter leur puissance de feu dans les combats spatiaux.',
 			'bonus' => 2
@@ -804,7 +805,7 @@ class TechnologyResource {
 			'resource' => 1980,
 			'credit' => 20000,
 			'points' => 49,
-			'column' => 5,
+			'column' => 7,
 			'shortDescription' => 'Améliore la défense de vos destroyers de 2% par niveau.',
 			'description' => 'Le bouclier amélioré n’est autre qu’une amélioration du bouclier renforcé. En effet, cette technologie n’apporte pas de modification majeur par rapport au système précédent, elle est simplement adapté aux vaisseaux de type destroyer.',
 			'bonus' => 2

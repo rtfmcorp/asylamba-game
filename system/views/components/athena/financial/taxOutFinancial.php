@@ -7,11 +7,6 @@
 # require
 	# [{orbitalBase}]			ob_taxOutFinancial
 
-$totalTaxOut = 0;
-
-# bonus
-$taxBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::POPULATION_TAX);
-
 # view part
 echo '<div class="component financial">';
 	echo '<div class="head skin-1">';
@@ -24,7 +19,6 @@ echo '<div class="component financial">';
 			echo '<ul class="list-type-1">';
 				foreach ($ob_taxOutFinancial as $base) {
 					$baseTaxOut = (Game::getTaxFromPopulation($base->getPlanetPopulation()) + (Game::getTaxFromPopulation($base->getPlanetPopulation()) * $taxBonus / 100)) * $base->getTax() / 100;
-					$totalTaxOut += $baseTaxOut;
 
 					echo '<li>';
 						echo '<span class="label">' . $base->getName() . ' [' . $base->getTax() . '% de taxe]</span>';
@@ -38,7 +32,7 @@ echo '<div class="component financial">';
 				echo '<li class="strong">';
 					echo '<span class="label">total de la redevance</span>';
 					echo '<span class="value">';
-						echo Format::numberFormat($totalTaxOut);
+						echo Format::numberFormat($financial_totalTaxOut);
 						echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
 					echo '</span>';
 				echo '</li>';

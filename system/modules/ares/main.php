@@ -14,5 +14,8 @@ include_once 'class/ReportManager.class.php';
 include_once 'class/Ship.class.php';
 
 
+# ressources
+include_once 'resource/CommanderResources.php';
+
 ASM::runAres();
 ?>

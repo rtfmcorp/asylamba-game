@@ -1,6 +1,6 @@
 <?php
 class ArrayList {
-	private $elements = array();
+	protected $elements = array();
 
 	public function size() {
 		return count($this->elements);
@@ -16,6 +16,14 @@ class ArrayList {
 
 	public function exist($key) {
 		if (isset($this->elements[$key])) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+
+	public function equal($key, $value) {
+		if ($this->exist($key) && $this->get($key) == $value) {
 			return TRUE;
 		} else {
 			return FALSE;

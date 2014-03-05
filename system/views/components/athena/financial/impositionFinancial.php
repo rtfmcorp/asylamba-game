@@ -7,11 +7,6 @@
 # require
 	# [{orbitalBase}]			ob_impositionFinancial
 
-$totalImpot = 0;
-
-# bonus
-$taxBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::POPULATION_TAX);
-
 # view part
 echo '<div class="component financial">';
 	echo '<div class="head skin-1">';
@@ -24,7 +19,6 @@ echo '<div class="component financial">';
 			echo '<ul class="list-type-1">';
 				foreach ($ob_impositionFinancial as $base) {
 					$baseImpot = Game::getTaxFromPopulation($base->getPlanetPopulation());
-					$totalImpot += $baseImpot;
 
 					echo '<li>';
 						echo '<span class="label">' . $base->getName() . ' [' . Format::numberFormat($base->getPlanetPopulation()) . ' Mio hab.]</span>';
@@ -41,9 +35,9 @@ echo '<div class="component financial">';
 				echo '<li class="strong">';
 					echo '<span class="label">total de l\'imposition</span>';
 					echo '<span class="value">';
-						echo Format::numberFormat($totalImpot);
+						echo Format::numberFormat($financial_totalTaxIn);
 						if ($taxBonus > 0) {
-							echo '<span class="bonus">+' . Format::numberFormat($totalImpot * $taxBonus / 100) . '</span>';
+							echo '<span class="bonus">+' . Format::numberFormat($financial_totalTaxInBonus) . '</span>';
 						}
 						echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
 					echo '</span>';

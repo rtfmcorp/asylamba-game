@@ -61,6 +61,8 @@ switch (CTR::$get->get('a')) {
 	
 	case 'disconnect': 				include ACTION . 'zeus/player/disconnect.php'; break;
 
+	case 'updatedisplayparams': 	include ACTION . 'zeus/params/display.php'; break;
+
 	# ARTEMIS
 	case 'movespy':					include ACTION . 'artemis/move.php'; break;
 

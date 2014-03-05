@@ -215,6 +215,7 @@ class Game {
 	}
 
 	public static function calculateCurrentRate($currentRate, $transactionType, $quantity, $identifier, $price) {
+		# calculate the new rate (when a transaction is accepted)
 		switch ($transactionType) {
 			case Transaction::TYP_RESOURCE :
 				# 1 resource = x credit
@@ -246,41 +247,50 @@ class Game {
 		}
 	}
 
-	public static function getMaxPriceRelativeToRate($currentRate, $transactionType, $quantity, $identifier) {
+	public static function calculateRate($transactionType, $quantity, $identifier, $price) {
 		switch ($transactionType) {
-			case Transaction::TYP_RESOURCE:
+			case Transaction::TYP_RESOURCE :
+				# 1 resource = x credit
+				return $price / $quantity;
 				break;
-			case Transaction::TYP_SHIP:
+			case Transaction::TYP_SHIP :
+				# 1 resource = x credit
 				include_once ATHENA;
-				$quantity = ShipResource::getInfo($identifier, 'resourcePrice') * $quantity;
+				if (ShipResource::isAShip($identifier)) {
+					$resourceQuantity = ShipResource::getInfo($identifier, 'resourcePrice') * $quantity;
+					return $price / $resourceQuantity;
+				} else {
+					return FALSE;
+				}
 				break;
-			case Transaction::TYP_COMMANDER:
+			case Transaction::TYP_COMMANDER :
+				# 1 experience = x credit
+				return $price / $quantity;
 				break;
-			default:
+			default :
 				return FALSE;
+				break;
 		}
-
-		$price = $quantity * $currentRate;
-		$price += Transaction::PERCENTAGE_VARIATION * $price / 100;
-		return round($price);
 	}
 
-	public static function getMinPriceRelativeToRate($currentRate, $transactionType, $quantity, $identifier) {
+	public static function getMinPriceRelativeToRate($transactionType, $quantity, $identifier) {
 		switch ($transactionType) {
 			case Transaction::TYP_RESOURCE:
+				$minRate = Transaction::MIN_RATE_RESOURCE;
 				break;
 			case Transaction::TYP_SHIP:
 				include_once ATHENA;
+				$minRate = Transaction::MIN_RATE_SHIP;
 				$quantity = ShipResource::getInfo($identifier, 'resourcePrice') * $quantity;
 				break;
 			case Transaction::TYP_COMMANDER:
+				$minRate = Transaction::MIN_RATE_COMMANDER;
 				break;
 			default:
 				return FALSE;
 		}
 
-		$price = $quantity * $currentRate;
-		$price -= Transaction::PERCENTAGE_VARIATION * $price / 100;
+		$price = $quantity * $minRate;
 		return round($price);
 	}
 }

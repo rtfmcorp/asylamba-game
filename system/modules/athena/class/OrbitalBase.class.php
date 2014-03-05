@@ -304,9 +304,7 @@ class OrbitalBase {
 
 				if ($cs->dArrival < $now) {
 					CTC::add($cs->dArrival, $this, 'uCommercialShipping', array($cs));
-				} else {
-					break;
-				}	
+				} 
 			}
 			ASM::$csm->changeSession($S_CSM1);
 		}
@@ -409,32 +407,28 @@ class OrbitalBase {
 	public function uCommercialShipping($cs) {
 		switch ($cs->statement) {
 			case CommercialShipping::ST_GOING :
-				if (Utils::hasAlreadyHappened($cs->dArrival, Utils::now())) {
-					# shipping arrived, delivery of items to rBaseDestination
-					$cs->deliver();
-					# prepare commercialShipping for moving back
-					$cs->statement = CommercialShipping::ST_MOVING_BACK;
-					$timeToTravel = strtotime($cs->dArrival) - strtotime($cs->dDeparture);
-					$cs->dDeparture = $cd->$dArrival;
-					$cs->dArrival = Utils::addSecondsToDate($cs->dArrival, $timeToTravel);
-				} 
+				# shipping arrived, delivery of items to rBaseDestination
+				$cs->deliver();
+				# prepare commercialShipping for moving back
+				$cs->statement = CommercialShipping::ST_MOVING_BACK;
+				$timeToTravel = strtotime($cs->dArrival) - strtotime($cs->dDeparture);
+				$cs->dDeparture = $cd->$dArrival;
+				$cs->dArrival = Utils::addSecondsToDate($cs->dArrival, $timeToTravel);
 				break;
 			case CommercialShipping::ST_MOVING_BACK :
-				if (Utils::hasAlreadyHappened($cs->dArrival, Utils::now())) {
-					# shipping arrived, release of the commercial ships
-					# send notification
-					$n = new Notification();
-					$n->setRPlayer($cs->rPlayer);
-					$n->setTitle('Retour de livraison');
-					$n->addBeg()->addTxt('Vos vaisseaux commerciaux sont de retour sur votre ');
-					$n->addLnk('map/base-' . $cs->rBase, 'base orbitale')->addTxt(' après avoir livré du matériel sur une autre ');
-					$n->addLnk('map/place-' . $cs->rBaseDestination, 'base')->addTxt(' . ');
-					$n->addSep()->addTxt('Vos ' . $cs->shipQuantity . ' vaisseaux de commerces sont à nouveau disponibles pour faire d\'autres transactions ou routes commerciales.');
-					$n->addEnd();
-					ASM::$ntm->add($n);
-					# delete commercialShipping
-					ASM::$csm->deleteById($cs->id);
-				} 
+				# shipping arrived, release of the commercial ships
+				# send notification
+				$n = new Notification();
+				$n->setRPlayer($cs->rPlayer);
+				$n->setTitle('Retour de livraison');
+				$n->addBeg()->addTxt('Vos vaisseaux commerciaux sont de retour sur votre ');
+				$n->addLnk('map/base-' . $cs->rBase, 'base orbitale')->addTxt(' après avoir livré du matériel sur une autre ');
+				$n->addLnk('map/place-' . $cs->rBaseDestination, 'base')->addTxt(' . ');
+				$n->addSep()->addTxt('Vos ' . $cs->shipQuantity . ' vaisseaux de commerces sont à nouveau disponibles pour faire d\'autres transactions ou routes commerciales.');
+				$n->addEnd();
+				ASM::$ntm->add($n);
+				# delete commercialShipping
+				ASM::$csm->deleteById($cs->id);
 				break;
 			default :
 				break;

@@ -1,4 +1,4 @@
-	<?php
+<?php
 # obFastView componant
 # in athena package
 

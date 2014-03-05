@@ -18,27 +18,37 @@ abstract class CTC {
 	public static function applyContext($token) {
 		self::$apply++;
 
-		if ($token AND count(self::$events) > 0) {
-			usort(self::$events, function($a, $b) {
-				return $a['timest'] < $b['timest'] ? -1 : 1;
-			});
+		if ($token) {
+			if (count(self::$events) > 0) {
+				usort(self::$events, function($a, $b) {
+					return $a['timest'] < $b['timest'] ? -1 : 1;
+				});
 
-			$path = 'public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
-			$logt = '> ' . date('H:i:s') . ', start to apply context' . "\n";
-			
-			foreach (self::$events as $k => $event) {
-				call_user_func_array(array($event['object'], $event['method']), $event['args']);
+				$path = 'public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
+				$logt = '> ' . date('H:i:s') . ', start to apply context' . "\n";
+				
+				foreach (self::$events as $k => $event) {
+					call_user_func_array(array($event['object'], $event['method']), $event['args']);
 
-				$logt .= '> [' . $event['date'] . '] ' . get_class($event['object']) . '(' . $event['object']->getId() . ')::' . $event['method'] . "\n";
-			}
+					$logt .= '> [' . $event['date'] . '] ' . get_class($event['object']) . '(' . $event['object']->getId() . ')::' . $event['method'] . "\n";
+				}
 
+<<<<<<< HEAD
 			$logt .= '> ' . date('H:i:s') . ', end of apply context' . "\n";
 			$logt .= "\n";
 
 			Bug::writeLog($path, $logt);
+=======
+				self::$running = FALSE;
+				self::$events  = array();
+>>>>>>> de96de6162a9934f1c539930503efa12f3c991c6
 
-			self::$running = FALSE;
-			self::$events  = array();
+				$logt .= '> ' . date('H:i:s') . ', end of apply context' . "\n";
+				$logt .= "\n";
+				Bug::writeLog($path, $logt);
+			} else {
+				self::$running = FALSE;
+			}
 		}
 	}
 

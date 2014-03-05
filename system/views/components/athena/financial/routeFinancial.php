@@ -7,11 +7,6 @@
 # require
 	# [{orbitalBase}]			ob_routeFinancial
 
-$totalIncome = 0;
-
-# bonus
-$incomeBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::COMMERCIAL_INCOME);
-
 # view part
 echo '<div class="component financial">';
 	echo '<div class="head skin-1">';
@@ -25,6 +20,7 @@ echo '<div class="component financial">';
 			foreach ($ob_routeFinancial as $base) {
 				$S_CRM1 = ASM::$crm->getCurrentSession();
 				ASM::$crm->changeSession($base->routeManager);
+
 				$nbRoute = 0;
 				for ($k = 0; $k < ASM::$crm->size(); $k++) {
 					if (ASM::$crm->get($k)->getStatement() == CRM_ACTIVE) {
@@ -37,7 +33,6 @@ echo '<div class="component financial">';
 						$routeIncome += ASM::$crm->get($k)->getIncome();
 					}
 				}
-				$totalIncome += $routeIncome;
 
 				echo '<li>';
 					if ($nbRoute > 0) {
@@ -48,8 +43,8 @@ echo '<div class="component financial">';
 					echo '<span class="label">' . $base->getName() . ' [' . $nbRoute . ' route' . Format::addPlural($nbRoute) . ']</span>';
 					echo '<span class="value">';
 						echo Format::numberFormat($routeIncome);
-						if ($incomeBonus > 0) {
-							echo '<span class="bonus">+' . Format::numberFormat($routeIncome * $incomeBonus / 100) . '</span>';
+						if ($rcBonus > 0) {
+							echo '<span class="bonus">+' . Format::numberFormat($routeIncome * $rcBonus / 100) . '</span>';
 						}
 						echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
 					echo '</span>';
@@ -76,9 +71,9 @@ echo '<div class="component financial">';
 			echo '<li class="strong">';
 				echo '<span class="label">total des routes commerciales</span>';
 				echo '<span class="value">';
-					echo Format::numberFormat($totalIncome);
-					if ($incomeBonus > 0) {
-						echo '<span class="bonus">+' . Format::numberFormat($totalIncome * $incomeBonus / 100) . '</span>';
+					echo Format::numberFormat($financial_totalRouteIncome);
+					if ($rcBonus > 0) {
+						echo '<span class="bonus">+' . Format::numberFormat($financial_totalRouteIncomeBonus) . '</span>';
 					}
 					echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
 				echo '</span>';

@@ -1019,11 +1019,21 @@ body {
 
 .component .head.skin-5 h2 {
 	position: absolute;
-	bottom: 52px; left: 10px;
-	font-size: 13px;
+	top: 50px; left: 10px;
+	font-size: 16px;
 	font-weight: normal;
-	margin: 0; padding: 0 10px;
+	margin: 0; padding: 0 20px;
 	background: black;
+}
+
+.component .head.skin-5 h2:before {
+	content: '';
+	position: absolute; display: block;
+	top: 5px; left: 0;
+	width: 8px; height: 8px;
+	border: solid 1px #202020;
+	background: black;
+	border-radius: 100%;
 }
 
 .color1 .component .border-bottom { border-bottom: solid 3px #b01e2d; }
@@ -1159,14 +1169,18 @@ body {
 .color6 .component .sub-list-type-1 .button { background: #05bed7; }
 .color7 .component .sub-list-type-1 .button { background: #ac5832; }
 
-.component .sub-list-type-1 form {
+.component .list-type-1 form {
 	z-index: 1;
 	position: absolute;
 	display: none;
-	bottom: -40px; right: -6px;
+	bottom: -40px; right: 3px;
 }
 
-.component .sub-list-type-1 form p {
+.component .sub-list-type-1 form {
+	right: -6px;
+}
+
+.component .list-type-1 form p {
 	position: relative;
 	background: white;
 	border-radius: 3px;
@@ -1174,7 +1188,7 @@ body {
 	width: 200px; height: 35px;
 }
 
-.component .sub-list-type-1 form p:before {
+.component .list-type-1 form p:before {
 	content: '';
 	position: absolute;
 	top: -12px; right: 12px;
@@ -1183,13 +1197,13 @@ body {
 	border-color: transparent transparent white transparent;
 }
 
-.component .sub-list-type-1 form input {
+.component .list-type-1 form input {
 	border: none; background: none;
 	line-height: 35px; height: 35px;
 	padding: 0 10px;
 }
-.component .sub-list-type-1 form input[type='text']		{ width: 140px; }
-.component .sub-list-type-1 form input[type='submit']	{ width: 40px; }
+.component .list-type-1 form input[type='text']		{ width: 140px; }
+.component .list-type-1 form input[type='submit']	{ width: 40px; }
 
 /* NUMBER BOX */
 .number-box {
@@ -3067,6 +3081,23 @@ body {
 }
 .component .info-building h4 { margin: 10px; }
 .component .info-building p { font-size: 13px; }
+
+/***********************************/
+/*********** PARAM STYLE ***********/
+/***********************************/
+
+.component.params .checkbox {
+	display: block;
+	position: relative;
+	padding: 10px 10px 10px 40px;
+	margin: 10px;
+	background: rgba(0, 0, 0, .8);
+}
+
+.component.params .checkbox input {
+	position: absolute;
+	top: 8px; left: 10px;
+}
 
 /****** NAV & OPTION *****/
 

@@ -20,12 +20,15 @@ class Transaction {
 	const TYP_SHIP = 1;
 	const TYP_COMMANDER = 2;
 
-	# percentage of variation in rate (+ or - 30%)
-	const PERCENTAGE_VARIATION = 30;
 	# percentage to cancel an offer
 	const PERCENTAGE_TO_CANCEL = 5;
 	# divide price by this constant to find the experience
 	const EXPERIENCE_DIVIDER = 15000;
+
+	# minimum rates for each type
+	const MIN_RATE_RESOURCE = 1;
+	const MIN_RATE_SHIP = 1;
+	const MIN_RATE_COMMANDER = 1;
 
 	# attributes
 	public $id = 0; 
