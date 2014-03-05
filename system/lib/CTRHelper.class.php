@@ -31,10 +31,17 @@ class CTRHelper {
 		CTR::$data->add('playerBonus', $b);
 	}
 
-	public static function addBase($key, $id, $name, $sector, $system, $img) {
+	public static function addBase($key, $id, $name, $sector, $system, $img, $type) {
 		if ($key == 'ob' || $key == 'ms') {
 			$a = new ArrayList();
-			$a->add('id', $id); $a->add('name', $name); $a->add('sector', $sector); $a->add('system', $system); $a->add('img', $img);
+			
+			$a->add('id', $id);
+			$a->add('name', $name);
+			$a->add('sector', $sector);
+			$a->add('system', $system);
+			$a->add('img', $img);
+			$a->add('type', $type);
+
 			CTR::$data->get('playerBase')->get($key)->append($a);
 		} else {
 			return FALSE;
