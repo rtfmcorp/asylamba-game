@@ -12,6 +12,7 @@ abstract class ASM {
 	public static $sqm;
 	public static $trm;
 	public static $csm;
+	public static $ctm;
 
 	protected static $runningGaia = FALSE;
 	public static $plm;
@@ -61,6 +62,7 @@ abstract class ASM {
 			self::$sqm = new ShipQueueManager();
 			self::$trm = new TransactionManager();
 			self::$csm = new CommercialShippingManager();
+			self::$ctm = new CommercialTaxManager();
 		}
 		self::$runningAthena = TRUE;
 	}
@@ -137,6 +139,7 @@ abstract class ASM {
 			self::$sqm->save();
 			self::$trm->save();
 			self::$csm->save();
+			self::$ctm->save();
 		}
 		if (self::$runningGaia) {
 			self::$plm->save();

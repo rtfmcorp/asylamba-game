@@ -22,6 +22,9 @@ include_once 'class/TransactionManager.class.php';
 include_once 'class/CommercialShipping.class.php';
 include_once 'class/CommercialShippingManager.class.php';
 
+include_once 'class/CommercialTax.class.php';
+include_once 'class/CommercialTaxManager.class.php';
+
 // ressources
 include_once 'resource/MotherShipResource.class.php';
 include_once 'resource/OrbitalBaseResource.class.php';
