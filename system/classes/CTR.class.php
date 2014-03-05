@@ -208,7 +208,7 @@ abstract class CTR {
 			include TEMPLATE . self::$data->get('screenmode') . '/open.php';
 			include TEMPLATE . self::$data->get('screenmode') . '/navbar.php';
 			
-			include 	PAGES . self::$data->get('screenmode') . '/' . self::$page . '.php';
+			include    PAGES . self::$data->get('screenmode') . '/' . self::$page . '.php';
 			
 			include TEMPLATE . self::$data->get('screenmode') . '/toolbar.php';
 			include TEMPLATE . self::$data->get('screenmode') . '/alert.php';

@@ -33,15 +33,8 @@ abstract class CTC {
 					$logt .= '> [' . $event['date'] . '] ' . get_class($event['object']) . '(' . $event['object']->getId() . ')::' . $event['method'] . "\n";
 				}
 
-<<<<<<< HEAD
-			$logt .= '> ' . date('H:i:s') . ', end of apply context' . "\n";
-			$logt .= "\n";
-
-			Bug::writeLog($path, $logt);
-=======
 				self::$running = FALSE;
 				self::$events  = array();
->>>>>>> de96de6162a9934f1c539930503efa12f3c991c6
 
 				$logt .= '> ' . date('H:i:s') . ', end of apply context' . "\n";
 				$logt .= "\n";

@@ -101,25 +101,25 @@ class CommanderManager extends Manager {
 			foreach ($awCommanders AS $awCommander) {
 				$commander = new Commander();
 
-				$commander->setId($awCommander['id']);
-				$commander->setName($awCommander['name']);
-				$commander->setAvatar($awCommander['avatar']);
-				$commander->setRPlayer($awCommander['rPlayer']);
-				$commander->setPlayerName($awCommander['pName']);
-				$commander->setPlayerColor($awCommander['pColor']);
-				$commander->setRBase($awCommander['rBase']);
-				$commander->setComment($awCommander['comment']);
-				$commander->setSexe($awCommander['sexe']);
-				$commander->setAge($awCommander['age']);
-				$commander->setLevel($awCommander['level']);
-				$commander->setExperience($awCommander['experience']);
-				$commander->setUMethod($awCommander['uMethod']);
-				$commander->setPalmares($awCommander['palmares']);
-				$commander->setStatement($awCommander['statement']);
-				$commander->setDCreation($awCommander['dCreation']);
-				$commander->setDAffectation($awCommander['dAffectation']);
-				$commander->setDDeath($awCommander['dDeath']);
-				$commander->setOBName($awCommander['oName']);
+				$commander->id = $awCommander['id'];
+				$commander->name = $awCommander['name'];
+				$commander->avatar = $awCommander['avatar'];
+				$commander->rPlayer = $awCommander['rPlayer'];
+				$commander->playerName = $awCommander['pName'];
+				$commander->playerColor = $awCommander['pColor'];
+				$commander->rBase = $awCommander['rBase'];
+				$commander->comment = $awCommander['comment'];
+				$commander->sexe = $awCommander['sexe'];
+				$commander->age = $awCommander['age'];
+				$commander->level = $awCommander['level'];
+				$commander->experience = $awCommander['experience'];
+				$commander->uCommander = $awCommander['uCommander'];
+				$commander->palmares = $awCommander['palmares'];
+				$commander->statement = $awCommander['statement'];
+				$commander->dCreation = $awCommander['dCreation'];
+				$commander->dAffectation = $awCommander['dAffectation'];
+				$commander->dDeath = $awCommander['dDeath'];
+				$commander->oBName = $awCommander['oName'];
 
 				$commander->dStart = $awCommander['dStart'];
 				$commander->dArrival = $awCommander['dArrival'];
@@ -128,6 +128,8 @@ class CommanderManager extends Manager {
 				$commander->travelLength = $awCommander['length'];
 				$commander->rStartPlace = $awCommander['rStartPlace'];
 				$commander->rDestinationPlace = $awCommander['rDestinationPlace'];
+				$commander->tStatement = $awCommander['tstatement'];
+
 				$commander->startPlaceName = $awCommander['spName'];
 				$commander->destinationPlaceName	= $awCommander['dpName'];
 
@@ -158,22 +160,22 @@ class CommanderManager extends Manager {
 			age = ?,
 			level = ?,
 			experience = ?,
-			uMethod = ?,
+			uCommander = ?,
 			statement = ?,
 			dCreation = ?';
 		$qr = $db->prepare($qr);
 		$aw = $qr->execute(array(
-			$newCommander->getName(),
-			$newCommander->getAvatar(),
-			$newCommander->getRPlayer(),
-			$newCommander->getRBase(),
-			$newCommander->getSexe(),
-			$newCommander->getAge(),
-			$newCommander->getLevel(),
-			$newCommander->getExperience(),
+			$newCommander->name,
+			$newCommander->avatar,
+			$newCommander->rPlayer,
+			$newCommander->rBase,
+			$newCommander->sexe,
+			$newCommander->age,
+			$newCommander->level,
+			$newCommander->experience,
 			Utils::now(),
-			$newCommander->getStatement(),
-			$newCommander->getDCreation(),
+			$newCommander->statement,
+			$newCommander->dCreation,
 			));
 		$newCommander->setId($db->lastInsertId());
 
@@ -214,7 +216,7 @@ class CommanderManager extends Manager {
 					age = ?,
 					level = ?,
 					experience = ?,
-					uMethod = ?,
+					uCommander = ?,
 					palmares = ?,
 					statement = ?,
 					dCreation = ?,
@@ -225,22 +227,22 @@ class CommanderManager extends Manager {
 			$qr = $db->prepare($qr);
 			//uper les commandants
 			$qr->execute(array( 				
-				$commander->getName(),
-				$commander->getAvatar(),
-				$commander->getRPlayer(),
-				$commander->getRBase(),
-				$commander->getComment(),
-				$commander->getSexe(),
-				$commander->getAge(),
-				$commander->getLevel(),
-				$commander->getExperience(),
-				$commander->getUMethod(),
-				$commander->getPalmares(),
-				$commander->getStatement(),
-				$commander->getDCreation(),
-				$commander->getDAffectation(),
-				$commander->getDDeath(),
-				$commander->getId()));
+				$commander->name,
+				$commander->avatar,
+				$commander->rPlayer,
+				$commander->rBase,
+				$commander->comment,
+				$commander->sexe,
+				$commander->age,
+				$commander->level,
+				$commander->experience,
+				$commander->uCommander,
+				$commander->palmares,
+				$commander->statement,
+				$commander->dCreation,
+				$commander->dAffectation,
+				$commander->dDeath,
+				$commander->id));
 
 			$qr = 'UPDATE squadron SET
 				rCommander = ?,
