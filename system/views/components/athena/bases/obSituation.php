@@ -19,7 +19,6 @@ echo '<div class="component">';
 	echo '</div>';
 echo '</div>';
 
-
 echo '<div class="component size3">';
 	echo '<div class="head">';
 		echo '<h1>Vue de situation</h1>';
@@ -36,16 +35,19 @@ echo '<div class="component size3">';
 					echo '</form>';
 				echo '</div>';
 
-				echo '<div class="coordbar">' . Game::formatCoord($ob_obSituation->getXSystem(), $ob_obSituation->getYSystem(), $ob_obSituation->getPosition(), $ob_obSituation->getSector()) . '</div>';
+				echo '<div class="coordbar">';
+					echo 'coordonnées<br />';
+					echo '<strong>' . Game::formatCoord($ob_obSituation->getXSystem(), $ob_obSituation->getYSystem(), $ob_obSituation->getPosition(), $ob_obSituation->getSector()) . '</strong>';
+				echo '</div>';
 				
 				for ($i = 0; $i < 3; $i++) { 
 					if (isset($commanders_obSituation[$i])) {
 						$commander = $commanders_obSituation[$i];
-						echo '<a href="' . APP_ROOT . 'fleet/view-movement/commander-' . $commander->getId() . '/sftr-3" class="commander full position-' . ($i + 1) . '">';
+						echo '<a href="' . APP_ROOT . 'fleet/view-movement/commander-' . $commander->getId() . '/sftr-3" class="commander full position-1-' . ($i + 1) . '">';
 							echo '<img src="' . MEDIA . 'map/fleet/' . (($commander->getStatement() == COM_AFFECTED) ? 'full' : 'away') . '.jpg" alt="plein" />';
 							echo '<span class="info">';
-								echo 'Commandant <strong>' . $commander->getName() . '</strong><br />';
-								echo 'Grade ' . $commander->getLevel() . ', ' . $commander->getPev() . ' Pev';
+								echo CommanderResources::getInfo($commander->getLevel(), 'grade') . ' <strong>' . $commander->getName() . '</strong><br />';
+								echo $commander->getPev() . ' Pev';
 								if ($commander->getStatement() == COM_MOVING) {
 									echo '<br />&#8594;	';
 									switch ($commander->getTypeOfMove()) {
@@ -62,25 +64,34 @@ echo '<div class="component size3">';
 						echo '<a href="' . APP_ROOT . 'bases/base-' . $ob_obSituation->getId() . '/view-school" class="commander empty position-' . ($i + 1) . '">';
 							echo '<img src="' . MEDIA . 'map/fleet/empty.jpg" alt="vide" />';
 							echo '<span class="info">';
-								echo 'Emplacement de flotte vide<br />';
-								echo 'Affecter un commandant';
+								echo 'Affecter<br />';
+								echo 'un officier';
 							echo '</span>';
 						echo '</a>';
 					}
 				}
 
-				echo '<div class="base">';
+				#echo '<a class="commander full position-2-1" href="/expansion/dev12/fleet/view-movement/commander-1/sftr-3"><img alt="plein" src="http://localhost/expansion/dev12/public/media/map/fleet/full.jpg"><span class="info">Lieutenant <strong>Kolver</strong><br>0 Pev</span></a>';
+				echo '<a class="commander full position-2-2" href="/expansion/dev12/fleet/view-movement/commander-1/sftr-3"><img alt="plein" src="http://localhost/expansion/dev12/public/media/map/fleet/full.jpg"><span class="info">Lieutenant <strong>Kolver</strong><br>0 Pev</span></a>';
+				#echo '<a class="commander full position-2-3" href="/expansion/dev12/fleet/view-movement/commander-1/sftr-3"><img alt="plein" src="http://localhost/expansion/dev12/public/media/map/fleet/full.jpg"><span class="info">Lieutenant <strong>Kolver</strong><br>0 Pev</span></a>';
+
+				/*echo '<div class="base">';
 					echo '<img src="' . MEDIA . 'orbitalbase/orbitalbase.png" alt="base orbitale" />';
 					echo '<div class="info">';
 						echo 'Base orbitale<br />';
 						echo '<strong>' . $ob_obSituation->getName() . '</strong><br />';
 						echo $ob_obSituation->getPoints() . ' points';
 					echo '</div>';
-				echo '</div>';
+				echo '</div>';*/
 
 				echo '<div class="stellar">';
+					echo '<div class="info top">';
+						echo 'Base militaire<br />';
+						echo '<strong>' . $ob_obSituation->getName() . '</strong><br />';
+						echo Format::numberFormat($ob_obSituation->getPoints()) . ' points';
+					echo '</div>';
 					echo '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($ob_obSituation->getPlanetPopulation()) . '.png" alt="planète" />';
-					echo '<div class="info">';
+					echo '<div class="info bottom">';
 						echo '<strong>' . Format::numberFormat($ob_obSituation->getPlanetPopulation() * 1000000) . '</strong> habitants<br />';
 						echo $ob_obSituation->getPlanetResources() . ' % coeff. ressource<br />';
 						echo $ob_obSituation->getPlanetHistory() . ' % coeff. historique';
