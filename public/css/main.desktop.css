@@ -2230,15 +2230,24 @@ body {
 	background: url('src/desktop/base/situation.png') no-repeat top left;
 }
 
-.component .situation-content .coordbar {
+.component .situation-content .line-help {
 	position: absolute;
-	top: 114px; right: 260px;
-	font-size: 12px;
-	text-align: right;
+	display: block;
+	width: 25px; height: 25px; line-height: 25px;
+	text-align: center;
+	background: black;
+	border-radius: 100%;
 }
-.component .situation-content .coordbar strong {
-	font-size: 20px;
-}
+.color1 .component .situation-content .line-help { background: #510816; }
+.color2 .component .situation-content .line-help { background: #0c0d44; }
+.color3 .component .situation-content .line-help { background: #b17a00; }
+.color4 .component .situation-content .line-help { background: #310948; }
+.color5 .component .situation-content .line-help { background: #24500a; }
+.color6 .component .situation-content .line-help { background: #004948; }
+.color7 .component .situation-content .line-help { background: #401b13; }
+
+.component .situation-content .line-help.line-1 { top: 55px; left: 190px; }
+.component .situation-content .line-help.line-2 { top: 145px; left: 406px; }
 
 .component .situation-content .toolbar {
 	position: absolute;
@@ -2311,13 +2320,13 @@ body {
 .component .situation-content .commander.empty {
 	color: #CCC;
 }
-.component .situation-content .commander.position-1-1 { top: 140px; left: 65px; }
-.component .situation-content .commander.position-1-2 { top: 272px; left: 40px; }
-.component .situation-content .commander.position-1-3 { top: 404px; left: 65px; }
+.component .situation-content .commander.position-1-1 { top: 135px; left: 127px; }
+.component .situation-content .commander.position-1-2 { top: 272px; left: 100px; }
+.component .situation-content .commander.position-1-3 { top: 415px; left: 127px; }
 
-.component .situation-content .commander.position-2-1 { top: 206px; left: 355px; }
+.component .situation-content .commander.position-2-1 { top: 215px; left: 352px; }
 .component .situation-content .commander.position-2-2 { top: 272px; left: 345px; }
-.component .situation-content .commander.position-2-3 { top: 338px; left: 355px; }
+.component .situation-content .commander.position-2-3 { top: 330px; left: 352px; }
 
 .component .situation-content .commander img {
 	width: 40px; padding: 6px;
@@ -2350,7 +2359,7 @@ body {
 .component .situation-content .stellar {
 	position: absolute;
 	display: block;
-	top: 180px; left: 600px;
+	top: 180px; left: 560px;
 }
 .component .situation-content .stellar img {
 	width: 220px; padding: 6px;
@@ -2361,11 +2370,10 @@ body {
 .component .situation-content .stellar .info {
 	font-size: 12px;
 	border-left: solid 1px #202020;
-	left: 50px;
 }
 
 .component .situation-content .stellar .info.top {
-	bottom: 215px;
+	bottom: 215px; left: 50px;
 	padding: 0 0 30px 10px;
 }
 .component .situation-content .stellar .info.top strong {
@@ -2373,8 +2381,15 @@ body {
 }
 
 .component .situation-content .stellar .info.bottom {
-	top: 213px; 
-	padding: 30px 0 0 10px;
+	top: 225px; left: 160px;
+	padding: 10px 0 0 10px;
+}
+
+.component .situation-content .stellar .info.middle {
+	top: 20px; left: 182px;
+	padding: 10px 0 0 50px;
+	border: none;
+	border-top: solid 1px #202020;
 }
 
 .component .situation-info {

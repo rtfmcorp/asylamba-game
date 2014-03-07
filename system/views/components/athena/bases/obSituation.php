@@ -35,16 +35,14 @@ echo '<div class="component size3">';
 					echo '</form>';
 				echo '</div>';
 
-				echo '<div class="coordbar">';
-					echo 'coordonnées<br />';
-					echo '<strong>' . Game::formatCoord($ob_obSituation->getXSystem(), $ob_obSituation->getYSystem(), $ob_obSituation->getPosition(), $ob_obSituation->getSector()) . '</strong>';
-				echo '</div>';
+				echo '<span class="hb line-help line-1" title="première ligne, défend les pillages et les conquêtes, vraie ligne de défense">?</span>';
+				echo '<span class="hb line-help line-2" title="force de réserve, défend uniquement les conquêtes, utile pour les troupes d\'attaque">?</span>';
 				
 				for ($i = 0; $i < 3; $i++) { 
 					if (isset($commanders_obSituation[$i])) {
 						$commander = $commanders_obSituation[$i];
 						echo '<a href="' . APP_ROOT . 'fleet/view-movement/commander-' . $commander->getId() . '/sftr-3" class="commander full position-1-' . ($i + 1) . '">';
-							echo '<img src="' . MEDIA . 'map/fleet/' . (($commander->getStatement() == COM_AFFECTED) ? 'full' : 'away') . '.jpg" alt="plein" />';
+							echo '<img src="' . MEDIA . 'map/fleet/' . (($commander->getStatement() == COM_AFFECTED) ? 'army' : 'army-away') . '.png" alt="plein" />';
 							echo '<span class="info">';
 								echo CommanderResources::getInfo($commander->getLevel(), 'grade') . ' <strong>' . $commander->getName() . '</strong><br />';
 								echo $commander->getPev() . ' Pev';
@@ -61,8 +59,8 @@ echo '<div class="component size3">';
 							echo '</span>';
 						echo '</a>';
 					} else {
-						echo '<a href="' . APP_ROOT . 'bases/base-' . $ob_obSituation->getId() . '/view-school" class="commander empty position-' . ($i + 1) . '">';
-							echo '<img src="' . MEDIA . 'map/fleet/empty.jpg" alt="vide" />';
+						echo '<a href="' . APP_ROOT . 'bases/base-' . $ob_obSituation->getId() . '/view-school" class="commander empty position-1-' . ($i + 1) . '">';
+							echo '<img src="' . MEDIA . 'map/fleet/army-empty.png" alt="vide" />';
 							echo '<span class="info">';
 								echo 'Affecter<br />';
 								echo 'un officier';
@@ -71,24 +69,19 @@ echo '<div class="component size3">';
 					}
 				}
 
-				#echo '<a class="commander full position-2-1" href="/expansion/dev12/fleet/view-movement/commander-1/sftr-3"><img alt="plein" src="http://localhost/expansion/dev12/public/media/map/fleet/full.jpg"><span class="info">Lieutenant <strong>Kolver</strong><br>0 Pev</span></a>';
-				echo '<a class="commander full position-2-2" href="/expansion/dev12/fleet/view-movement/commander-1/sftr-3"><img alt="plein" src="http://localhost/expansion/dev12/public/media/map/fleet/full.jpg"><span class="info">Lieutenant <strong>Kolver</strong><br>0 Pev</span></a>';
-				#echo '<a class="commander full position-2-3" href="/expansion/dev12/fleet/view-movement/commander-1/sftr-3"><img alt="plein" src="http://localhost/expansion/dev12/public/media/map/fleet/full.jpg"><span class="info">Lieutenant <strong>Kolver</strong><br>0 Pev</span></a>';
-
-				/*echo '<div class="base">';
-					echo '<img src="' . MEDIA . 'orbitalbase/orbitalbase.png" alt="base orbitale" />';
-					echo '<div class="info">';
-						echo 'Base orbitale<br />';
-						echo '<strong>' . $ob_obSituation->getName() . '</strong><br />';
-						echo $ob_obSituation->getPoints() . ' points';
-					echo '</div>';
-				echo '</div>';*/
+				echo '<a class="commander full position-2-1" href="/expansion/dev12/fleet/view-movement/commander-1/sftr-3"><img alt="plein" src="http://localhost/expansion/dev12/public/media/map/fleet/army.png"><span class="info">Lieutenant <strong>Kolver</strong><br>0 Pev</span></a>';
+				#echo '<a class="commander full position-2-2" href="/expansion/dev12/fleet/view-movement/commander-1/sftr-3"><img alt="plein" src="http://localhost/expansion/dev12/public/media/map/fleet/army.png"><span class="info">Lieutenant <strong>Kolver</strong><br>0 Pev</span></a>';
+				echo '<a class="commander full position-2-3" href="/expansion/dev12/fleet/view-movement/commander-1/sftr-3"><img alt="plein" src="http://localhost/expansion/dev12/public/media/map/fleet/army.png"><span class="info">Lieutenant <strong>Kolver</strong><br>0 Pev</span></a>';
 
 				echo '<div class="stellar">';
 					echo '<div class="info top">';
 						echo 'Base militaire<br />';
 						echo '<strong>' . $ob_obSituation->getName() . '</strong><br />';
 						echo Format::numberFormat($ob_obSituation->getPoints()) . ' points';
+					echo '</div>';
+					echo '<div class="info middle">';
+						echo 'coordonnées<br />';
+						echo '<strong>' . Game::formatCoord($ob_obSituation->getXSystem(), $ob_obSituation->getYSystem(), $ob_obSituation->getPosition(), $ob_obSituation->getSector()) . '</strong>';
 					echo '</div>';
 					echo '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($ob_obSituation->getPlanetPopulation()) . '.png" alt="planète" />';
 					echo '<div class="info bottom">';
