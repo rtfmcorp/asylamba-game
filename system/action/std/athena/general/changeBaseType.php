@@ -26,9 +26,8 @@ if (CTR::$get->exist('type')) {
 	$type = FALSE;
 }
 
-if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) { 
-
-	$S_OBM1 = ASM::$obm->getCurrentSession();
+if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
+ 	$S_OBM1 = ASM::$obm->getCurrentSession();
 	ASM::$obm->newSession();
 	ASM::$obm->load(array('rPlace' => $baseId));
 	$orbitalBase = ASM::$obm->get();
@@ -45,26 +44,26 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 					if ($player->credit >= OBM_PRICE_FOR_COMMERCIAL) {
 						$orbitalBase->typeOfBase = $type;
 						$player->decreaseCredit(OBM_PRICE_FOR_COMMERCIAL);
-						CTR::$alert->add('Votre base orbitale devient commerciale.', ALERT_STD_SUCCESS);
+						CTR::$alert->add($orbitalBase->name . ' est désormais un Centre Industriel', ALERT_STD_SUCCESS);
 					} else {
-						CTR::$alert->add('modification du type de la base orbitale impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
+						CTR::$alert->add('Evolution de votre colonie impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
 					}
 					break;
 				case OrbitalBase::TYP_MILITARY:
 					if ($player->credit >= OBM_PRICE_FOR_MILITARY) {
 						$orbitalBase->typeOfBase = $type;
 						$player->decreaseCredit(OBM_PRICE_FOR_MILITARY);
-						CTR::$alert->add('Votre base orbitale devient militaire.', ALERT_STD_SUCCESS);
+						CTR::$alert->add($orbitalBase->name . ' est désormais une Base Militaire', ALERT_STD_SUCCESS);
 					} else {
-						CTR::$alert->add('modification du type de la base orbitale impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
+						CTR::$alert->add('Evolution de votre colonie impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
 					}
 					break;
 				default :
-					CTR::$alert->add('modification du type de la base orbitale impossible (seulement commercial ou militaire)', ALERT_STD_ERROR);
+					CTR::$alert->add('Modification du type de la base orbitale impossible (seulement commercial ou militaire)', ALERT_STD_ERROR);
 					break;
 			}
 		} else {
-			CTR::$alert->add('modification du type de la base orbitale impossible - niveau du générateur pas assez élevé', ALERT_STD_ERROR);
+			CTR::$alert->add('Evolution de votre colonie impossible - niveau du générateur pas assez élevé', ALERT_STD_ERROR);
 		}
 	} elseif ($orbitalBase->typeOfBase == OrbitalBase::TYP_COMMERCIAL OR $orbitalBase->typeOfBase == OrbitalBase::TYP_MILITARY) {
 		if ($type == OrbitalBase::TYP_CAPITAL) {
@@ -81,14 +80,14 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 			ASM::$obm->changeSession($S_OBM2);
 
 			if ($alreadyACapital) {
-				CTR::$alert->add('modification du type de la base orbitale impossible - vous avez déjà une capitale !', ALERT_STD_ERROR);
+				CTR::$alert->add('Evolution de votre planète impossible - vous avez déjà une capitale !', ALERT_STD_ERROR);
 			} else {
 				if ($player->credit >= OBM_PRICE_FOR_CAPITAL) {
 					$orbitalBase->typeOfBase = $type;
 					$player->decreaseCredit(OBM_PRICE_FOR_CAPITAL);
-					CTR::$alert->add('Votre base orbitale devient une capitale.', ALERT_STD_SUCCESS);
+					CTR::$alert->add($orbitalBase->name . ' est désormais une capitale.', ALERT_STD_SUCCESS);
 				} else {
-					CTR::$alert->add('modification du type de la base orbitale impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
+					CTR::$alert->add('Modification du type de la base orbitale impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
 				}
 			}
 		} elseif (($orbitalBase->typeOfBase == OrbitalBase::TYP_COMMERCIAL AND $type == OrbitalBase::TYP_MILITARY)

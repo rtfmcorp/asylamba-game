@@ -10,19 +10,27 @@
 
 echo '<div class="component">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'orbitalbase/situation.png" alt="" />';
+		echo '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($ob_obSituation->getPlanetPopulation()) . '.png" alt="' . $ob_obSituation->getName() . '" />';
+		echo '<h2>' . $ob_obSituation->getName() . '</h2>';
+		echo '<em>';
+			echo PlaceResource::get($ob_obSituation->typeOfBase, 'name') . ' — ' . $ob_obSituation->getPoints() . ' points';
+		echo '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo 'test';
+			if ($ob_obSituation->typeOfBase == OrbitalBase::TYP_NEUTRAL && $ob_obSituation->levelGenerator >= OBM_LEVEL_MIN_TO_CHANGE_TYPE) {
+				echo '<button>transformer en Centre Industriel</button>';
+				echo '<hr />';
+				echo '<button>transformer en Base Militaire</button>';
+			} elseif ($ob_obSituation->typeOfBase == OrbitalBase::TYP_COMMERCIAL || $ob_obSituation->typeOfBase == OrbitalBase::TYP_MILITARY) {
+				echo '<button>transformer en Capital</button>';
+			}
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
 
-echo '<div class="component size3">';
-	echo '<div class="head">';
-		echo '<h1>Vue de situation</h1>';
-	echo '</div>';
+echo '<div class="component space size3">';
+	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="situation-content place1">';
@@ -35,10 +43,17 @@ echo '<div class="component size3">';
 					echo '</form>';
 				echo '</div>';
 
-				echo '<span class="hb line-help line-1" title="première ligne, défend les pillages et les conquêtes, vraie ligne de défense">?</span>';
-				echo '<span class="hb line-help line-2" title="force de réserve, défend uniquement les conquêtes, utile pour les troupes d\'attaque">?</span>';
+				echo '<span class="hb line-help line-1" title="première ligne, défend les pillages et les conquêtes, vraie ligne de défense">I</span>';
+				echo '<span class="hb line-help line-2" title="force de réserve, défend uniquement les conquêtes, utile pour les troupes d\'attaque">II</span>';
 				
-				for ($i = 0; $i < 3; $i++) { 
+				/* a supprimer */
+				if (in_array($ob_obSituation->typeOfBase, array(OrbitalBase::TYP_NEUTRAL, OrbitalBase::TYP_COMMERCIAL))) {
+					$min = 1; $max = 2;
+				} else {
+					$min = 0; $max = 3;
+				}
+
+				for ($i = $min; $i < $max; $i++) { 
 					if (isset($commanders_obSituation[$i])) {
 						$commander = $commanders_obSituation[$i];
 						echo '<a href="' . APP_ROOT . 'fleet/view-movement/commander-' . $commander->getId() . '/sftr-3" class="commander full position-1-' . ($i + 1) . '">';
@@ -69,13 +84,16 @@ echo '<div class="component size3">';
 					}
 				}
 
-				echo '<a class="commander full position-2-1" href="/expansion/dev12/fleet/view-movement/commander-1/sftr-3"><img alt="plein" src="http://localhost/expansion/dev12/public/media/map/fleet/army.png"><span class="info">Lieutenant <strong>Kolver</strong><br>0 Pev</span></a>';
-				#echo '<a class="commander full position-2-2" href="/expansion/dev12/fleet/view-movement/commander-1/sftr-3"><img alt="plein" src="http://localhost/expansion/dev12/public/media/map/fleet/army.png"><span class="info">Lieutenant <strong>Kolver</strong><br>0 Pev</span></a>';
-				echo '<a class="commander full position-2-3" href="/expansion/dev12/fleet/view-movement/commander-1/sftr-3"><img alt="plein" src="http://localhost/expansion/dev12/public/media/map/fleet/army.png"><span class="info">Lieutenant <strong>Kolver</strong><br>0 Pev</span></a>';
+				if (in_array($ob_obSituation->typeOfBase, array(OrbitalBase::TYP_NEUTRAL, OrbitalBase::TYP_COMMERCIAL))) {
+					echo '<a class="commander full position-2-2" href="/expansion/dev12/fleet/view-movement/commander-1/sftr-3"><img alt="plein" src="http://localhost/expansion/dev12/public/media/map/fleet/army.png"><span class="info">Lieutenant <strong>Kolver</strong><br>0 Pev</span></a>';
+				} else {
+					echo '<a class="commander full position-2-1" href="/expansion/dev12/fleet/view-movement/commander-1/sftr-3"><img alt="plein" src="http://localhost/expansion/dev12/public/media/map/fleet/army.png"><span class="info">Lieutenant <strong>Kolver</strong><br>0 Pev</span></a>';
+					echo '<a class="commander full position-2-3" href="/expansion/dev12/fleet/view-movement/commander-1/sftr-3"><img alt="plein" src="http://localhost/expansion/dev12/public/media/map/fleet/army.png"><span class="info">Lieutenant <strong>Kolver</strong><br>0 Pev</span></a>';
+				}
 
 				echo '<div class="stellar">';
 					echo '<div class="info top">';
-						echo 'Base militaire<br />';
+						echo PlaceResource::get($ob_obSituation->typeOfBase, 'name') . '<br />';
 						echo '<strong>' . $ob_obSituation->getName() . '</strong><br />';
 						echo Format::numberFormat($ob_obSituation->getPoints()) . ' points';
 					echo '</div>';
@@ -90,14 +108,8 @@ echo '<div class="component size3">';
 						echo $ob_obSituation->getPlanetHistory() . ' % coeff. historique';
 					echo '</div>';
 				echo '</div>';
-
 			echo '</div>';
-			echo '<div class="situation-info">';
-				echo '<div class="item">';
-					echo '<span class="label">ressources en stock</span>';
-					echo '<span class="value">' . Format::numberFormat($ob_obSituation->getResourcesStorage()) . '</span>';
-				echo '</div>';
-			echo '</div>';
+			
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

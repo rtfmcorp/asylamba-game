@@ -2223,11 +2223,14 @@ body {
 
 /* situation */
 
+.component.space .fix-body {
+	background: url('src/desktop/base/situation.jpg') no-repeat top left black;
+}
+
 .component .situation-content {
 	display: block;
 	width: 100%; height: 500px;
-	background: #0A0A0A;
-	background: url('src/desktop/base/situation.png') no-repeat top left;
+	border-bottom: solid 1px #0A0A0A;
 }
 
 .component .situation-content .line-help {
@@ -2354,7 +2357,10 @@ body {
 .color6 .component .situation-content .commander.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px #076b87; }
 .color7 .component .situation-content .commander.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px #67331d; }
 
-.component .situation-content .commander .info { top: 8px; left: 65px; }
+.component .situation-content .commander .info {
+	top: 8px; left: 65px;
+	width: 160px;
+}
 
 .component .situation-content .stellar {
 	position: absolute;
