@@ -2821,6 +2821,28 @@ body {
 	background: black;
 }
 
+.component.player.rank .player {
+	border-left: solid 10px red;
+	width: 190px;
+}
+.component.player.rank .player.color1 { border-left-color: #b01e2d; }
+.component.player.rank .player.color2 { border-left-color: #2f23c0; }
+.component.player.rank .player.color3 { border-left-color: #ffdb0f; }
+.component.player.rank .player.color4 { border-left-color: #a935c7; }
+.component.player.rank .player.color5 { border-left-color: #57c632; }
+.component.player.rank .player.color6 { border-left-color: #05bed7; }
+.component.player.rank .player.color7 { border-left-color: #ac5832; }
+.component.player.rank .player .position {
+	display: block;
+	position: absolute;
+	top: -10px; right: -10px;
+	border: solid 1px #202020;
+	background: black;
+	width: 30px; height: 30px; line-height: 30px;
+	text-align: center;
+	border-radius: 100%;
+}
+
 .component.player .player img {
 	position: absolute;
 	top: 5px; left: 5px;
@@ -3442,13 +3464,13 @@ body {
 
 #action-box .body .system ul li.star {
 	width: 300px; height: 263px;
-	border-left: solid 1px #0f0f0f;
-	background: url('src/desktop/map/systems/sun.png') no-repeat center left;
+	border-left: solid 1px #0F0F0F;
+	background: url('src/desktop/map/systems/default.png') no-repeat center center;
 }
 
 #action-box .body .system ul li.place a {
 	display: block;
-	border-left: solid 1px #0f0f0f;
+	border-left: solid 1px #0F0F0F;
 	text-align: center;
 }
 #action-box .body .system ul li.place a strong {
@@ -3474,7 +3496,7 @@ body {
 	z-index: 1101;
 	top: 10px; left: 20px;
 	padding: 7px;
-	border: solid 1px #0f0f0f;
+	border: solid 1px #0F0F0F;
 	background: black;
 	width: 47px;
 	border-radius: 100%;

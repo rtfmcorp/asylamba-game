@@ -83,7 +83,7 @@ class Commander {
 	public $destinationPlaceName	= '';
 	public $tStatement				= '';
 
-	#variables de combat
+	# variables de combat
 	public $squadronsIds			= array();
 	public $armyInBegin 			= array();
 	public $armyAtEnd 				= array();

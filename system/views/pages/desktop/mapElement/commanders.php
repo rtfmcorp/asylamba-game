@@ -7,23 +7,26 @@ ASM::$com->load(array('c.rBase' => CTR::$data->get('playerParams')->get('base'),
 
 echo '<div id="subnav">';
 	echo '<div class="overflow">';
-		for ($i = 0; $i < ASM::$com->size(); $i++) { 
+		for ($i = 0; $i < ASM::$com->size(); $i++) {
+			$commander = ASM::$com->get($i);
+
 			echo '<a href="/" class="item">';
 				echo '<span class="picto">';
 					echo '<img src="' . MEDIA . 'commander/medium/c1-l1-c6.png" alt="" />';
-					echo '<span class="number">' . ASM::$com->get($i)->getLevel() . '</span>';
+					echo '<span class="number">' . $commander->getLevel() . '</span>';
 				echo '</span>';
 				echo '<span class="content skin-2">';
 					echo '<span class="sub-content">';
-						echo 'Commandant ' . ASM::$com->get($i)->getName() . ' | ' . ASM::$com->get($i)->getPev() . ' pev';
+						echo CommanderResources::getInfo($commander->getLevel(), 'grade') . ' ' . $commander->getName() . '<br />';
+						echo Format::numberFormat($commander->getPev()) . ' pev';
 						echo '<hr />';
 						echo 'A quai sur Frudulu';
 						echo '<hr />';
 
 						for ($j = 0; $j < 12; $j++) { 
 							echo '<span class="ship">';
-								echo '<img src="' . MEDIA . 'ship/picto/lightFighter.png" />';
-								echo '<span class="number">10</span>';
+								echo '<img src="' . MEDIA . 'ship/picto/ship' . $i . '.png" ' . (rand(0, 1) == 0 ? 'class="zero"' : NULL) . '/>';
+								echo '<span class="number">' . rand(0, 3) . '</span>';
 							echo '</span>';
 						}
 					echo '</span>';
