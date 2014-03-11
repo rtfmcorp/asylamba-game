@@ -22,7 +22,7 @@ echo '<head>';
 
 	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.css" />';
 	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'module.css" />';
-	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.css" />';
+	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.php?color=' . CTR::$data->get('playerInfo')->get('color') . '" />';
 	if (CTR::getPage() == 'inscription') {
 		echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'inscription.desktop.css" />';
 	}
@@ -30,7 +30,7 @@ echo '<head>';
 echo '</head>';
 ?>
 
-<script>
+<!-- <script>
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -38,7 +38,7 @@ echo '</head>';
 
 	ga('create', 'UA-42636532-2', 'expansion-lejeu.ch');
 	ga('send', 'pageview');
-</script>
+</script> -->
 
 <?php
 echo '<body ';
