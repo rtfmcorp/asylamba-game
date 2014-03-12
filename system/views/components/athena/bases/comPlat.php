@@ -22,6 +22,13 @@ echo '<div class="component building">';
 				echo '<em>Achetez sur le marché</em>';
 			echo '</a>';
 
+			$active = (CTR::$get->get('mode') == 'sell') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'bases/base-' . $ob_compPlat->getId() . '/view-commercialplateforme/mode-sell" class="nav-element ' . $active . '">';
+				echo '<img src="' . MEDIA . 'orbitalbase/generator.png" alt="" />';
+				echo '<strong>Vente</strong>';
+				echo '<em>Vendez sur le marché</em>';
+			echo '</a>';
+
 			echo '<hr />';
 
 			$active = (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'route') ? 'active' : '';
@@ -36,6 +43,8 @@ echo '</div>';
 
 if (!CTR::$get->exist('mode') || CTR::$get->get('mode') == 'market') {
 	include COMPONENT . 'athena/bases/complat/market.php';
+} elseif (CTR::$get->get('mode') == 'sell') {
+	include COMPONENT . 'athena/bases/complat/sell.php';
 } else {
 	include COMPONENT . 'athena/bases/complat/route.php';
 }

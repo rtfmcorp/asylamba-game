@@ -22,7 +22,7 @@ echo '<div class="component size2 financial">';
 						echo '<span class="value">';
 							echo Format::numberFormat($financial_totalTaxIn);
 							if ($taxBonus > 0) {
-								echo '<span class="bonus">+' . Format::numberFormat($financial_totalTaxIn * $taxBonus / 100) . '</span>';
+								echo '<span class="bonus">+' . Format::numberFormat($financial_totalTaxInBonus) . '</span>';
 							}
 							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
 						'</span>';
@@ -32,7 +32,7 @@ echo '<div class="component size2 financial">';
 						echo '<span class="value">';
 							echo Format::numberFormat($financial_totalRouteIncome);
 							if ($rcBonus > 0) {
-								echo '<span class="bonus">+' . Format::numberFormat($financial_totalRouteIncomeBonus * $taxBonus / 100) . '</span>';
+								echo '<span class="bonus">+' . Format::numberFormat($financial_totalRouteIncomeBonus) . '</span>';
 							}
 							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
 						echo '</span>';

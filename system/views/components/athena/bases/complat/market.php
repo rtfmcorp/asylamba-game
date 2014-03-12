@@ -39,16 +39,6 @@ echo '<div class="component rc">';
 					var_dump(ASM::$csm->get($i));
 				}
 			}
-
-			echo '<hr />';
-
-			echo '<p>vos offres en attentes</p>';
-
-			for ($i = 0; $i < ASM::$csm->size(); $i++) { 
-				if (ASM::$csm->get($i)->statement == CommercialShipping::ST_WAITING) {
-					var_dump(ASM::$csm->get($i));
-				}
-			}
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
@@ -69,26 +59,11 @@ echo '<div class="component transaction">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="tool">';
-				echo '<span><a href="#" class="sh" data-target="sell-resources">vendre des ressources</a></span>';
-				echo '<span><a href="#">?</a></span>';
-			echo '</div>';
-
-			echo '<div class="new-transaction resources" id="sell-resources" style="display: none">';
-				echo '<form action="' . APP_ROOT . 'action/a-proposetransaction/type-' . Transaction::TYP_RESOURCE . '/rplace-' . $ob_compPlat->getId() . '" method="post">';
-					echo '<label for="resources-quantity">';
-						echo 'Quantité de ressources';
-						echo '<input type="number" name="quantity" data-variation="30" data-rate="' . $currentRate . '" id="resources-quantity" placeholder="Maximum ' . Format::numberFormat($ob_compPlat->getResourcesStorage()) . '" />';
-					echo '</label>';
-					echo '<label for="resources-price">';
-						echo 'Prix en crédit';
-						echo '<input type="number" name="price" id="resources-price" />';
-						echo '<span class="indicator">';
-							echo '<span class="min-price">---</span>';
-							echo '<span class="max-price">---</span>';
-						echo '</span>';
-					echo '</label>';
-					echo '<input type="submit" value="proposer cette offre" />';
-				echo '</form>';
+				echo '<span>sorting</span>';
+				echo '<span><a href="#">P</a></span>';
+				echo '<span><a href="#">P</a></span>';
+				echo '<span><a href="#">R</a></span>';
+				echo '<span><a href="#">S</a></span>';
 			echo '</div>';
 
 			for ($i = 0; $i < ASM::$trm->size(); $i++) {
@@ -167,19 +142,27 @@ echo '<div class="component transaction">';
 	echo '</div>';
 echo '</div>';
 
-ASM::$trm->newSession(ASM_UMODE);
-ASM::$trm->load(array('type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_PROPOSED));
+ASM::$trm->newSession();
+ASM::$trm->load(array('type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
+$currentRate = ASM::$trm->get()->currentRate;
+
+ASM::$trm->newSession();
+ASM::$trm->load(array('type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_PROPOSED), array('dPublication', 'DESC'), array(0, 20));
 
 echo '<div class="component transaction">';
 	echo '<div class="head skin-4">';
-		echo '<img src="' . MEDIA . 'school/size0-level0.png" alt="commandants" class="main" />';
+		echo '<img src="' . MEDIA . 'orbitalbase/school.png" alt="commandants" class="main" />';
 		echo '<h2>Commandants</h2>';
-		echo '<em>cours actuel | 0,33:1</em>';
+		echo '<em>cours actuel | 1:' . Format::numberFormat($currentRate, 3) . '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="tool">';
-				echo '<span><a href="#">vendre un commandants</a></span>';
+				echo '<span>sorting</span>';
+				echo '<span><a href="#">P</a></span>';
+				echo '<span><a href="#">P</a></span>';
+				echo '<span><a href="#">R</a></span>';
+				echo '<span><a href="#">S</a></span>';
 			echo '</div>';
 
 			for ($i=0; $i < 10; $i++) { 
@@ -227,25 +210,33 @@ echo '<div class="component transaction">';
 	echo '</div>';
 echo '</div>';
 
-ASM::$trm->newSession(ASM_UMODE);
-ASM::$trm->load(array('type' => Transaction::TYP_COMMANDER, 'statement' => Transaction::ST_PROPOSED));
+ASM::$trm->newSession();
+ASM::$trm->load(array('type' => Transaction::TYP_COMMANDER, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
+$currentRate = ASM::$trm->get()->currentRate;
+
+ASM::$trm->newSession();
+ASM::$trm->load(array('type' => Transaction::TYP_COMMANDER, 'statement' => Transaction::ST_PROPOSED), array('dPublication', 'DESC'), array(0, 20));
 
 echo '<div class="component transaction">';
 	echo '<div class="head skin-4">';
 		echo '<img src="' . MEDIA . 'orbitalbase/dock2.png" alt="vaisseaux" class="main" />';
-		echo '<h2>vaisseaux</h2>';
-		echo '<em>cours actuel | 643,45:1</em>';
+		echo '<h2>Vaisseaux</h2>';
+		echo '<em>cours actuel | 1:' . Format::numberFormat($currentRate, 3) . '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="tool">';
-				echo '<span><a href="#">vendre des vaisseaux</a></span>';
+				echo '<span>sorting</span>';
+				echo '<span><a href="#">P</a></span>';
+				echo '<span><a href="#">P</a></span>';
+				echo '<span><a href="#">R</a></span>';
+				echo '<span><a href="#">S</a></span>';
 			echo '</div>';
 
 			for ($i=0; $i < 10; $i++) { 
 				echo '<div class="transaction ship">';
 					echo '<div class="product sh" data-target="transaction-ship-' . $i . '">';
-						echo '<img src="' . MEDIA . 'ship/picto/lightFighter.png" alt="" class="picto" />';
+						echo '<img src="' . MEDIA . 'ship/picto/ship' . rand(0, 11) . '.png" alt="" class="picto" />';
 						echo '<span class="rate">-24.4</span>';
 
 						echo '<div class="offer">';

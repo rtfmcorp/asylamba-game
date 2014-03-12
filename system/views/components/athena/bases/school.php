@@ -89,15 +89,14 @@ echo '<div class="component">';
 					$expToLvlUp = $commander->experienceToLevelUp();
 					echo '<div class="item">';
 						echo '<img class="picto" src="' . MEDIA . 'commander/small/c1-l' . rand(1, 3) . '-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="" />';
-						echo '<strong>' . $commander->getName() . '</strong>';
-						echo '<em>niveau ' . $commander->getLevel() . '</em>';
-						echo '<em>' . $commander->getExperience() . ' points d\'expérience</em>';
+						echo '<strong>' . CommanderResources::getInfo($commander->getLevel(), 'grade') . ' ' . $commander->getName() . '</strong>';
+						echo '<em>' . Format::numberFormat($commander->getExperience()) . ' points d\'expérience</em>';
+						echo '<a href="' . APP_ROOT . 'action/a-affectcommander/id-' . $commander->getId() . '">';
+							echo 'affecter';
+						echo '</a>';
 						echo '<span class="progress-container">';
 							echo '<span style="width: ' . Format::percent($commander->getExperience() - ($expToLvlUp / 2), $expToLvlUp - ($expToLvlUp / 2)) . '%;" class="progress-bar"></span>';
 						echo '</span>';
-						echo '<a href="' . APP_ROOT . 'action/a-affectcommander/id-' . $commander->getId() . '" class="button">';
-							echo 'affecter';
-						echo '</a>';
 					echo '</div>';
 				}
 
