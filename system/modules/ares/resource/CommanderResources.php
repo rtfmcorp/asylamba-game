@@ -35,52 +35,52 @@ Class CommanderResources {
 			'grade' => 'Aspirant'
 		),
 		array(
-			'grade' => 'Aspirant'
+			'grade' => 'Quartier-Maître'
+		),
+		array(
+			'grade' => 'Sergeant'
+		),
+		array(
+			'grade' => 'Enseigne'
 		),
 		array(
 			'grade' => 'Lieutenant'
-		),
-		array(
-			'grade' => 'Lieutenant'
-		),
-		array(
-			'grade' => 'Lieutenant'
-		),
-		array(
-			'grade' => 'Lieutenant'
-		),
-		array(
-			'grade' => 'Commandant'
-		),
-		array(
-			'grade' => 'Commandant'
 		),
 		array(
 			'grade' => 'Capitaine'
 		),
 		array(
-			'grade' => 'Capitaine'
+			'grade' => 'Major'
 		),
 		array(
-			'grade' => 'Commodore'
+			'grade' => 'Colonel'
+		),
+		array(
+			'grade' => 'Commandant'
 		),
 		array(
 			'grade' => 'Commodore'
 		),
 		array(
 			'grade' => 'Contre-Amiral'
-		),
-		array(
-			'grade' => 'Contre-Amiral'
-		),
-		array(
-			'grade' => 'Vice-Amiral'
 		),
 		array(
 			'grade' => 'Vice-Amiral'
 		),
 		array(
 			'grade' => 'Amiral'
+		),
+		array(
+			'grade' => 'Grand Amiral'
+		),
+		array(
+			'grade' => 'Grand Amiral'
+		),
+		array(
+			'grade' => 'Grand Amiral'
+		),
+		array(
+			'grade' => 'Grand Amiral'
 		),
 		array(
 			'grade' => 'Grand Amiral'
