@@ -131,6 +131,7 @@ class Player {
 			include_once HERMES;
 			include_once PROMETHEE;
 			include_once ARES;
+			include_once DEMETER;
 
 			# load orbital bases
 			$S_OBM1 = ASM::$obm->getCurrentSession();
@@ -147,11 +148,16 @@ class Player {
 			$S_RSM1 = ASM::$rsm->getCurrentSession();
 			ASM::$rsm->newSession();
 			ASM::$rsm->load(array('rPlayer' => $this->id));
+			# load the colors (faction)
+			$S_CLM1 = ASM::$clm->getCurrentSession();
+			ASM::$clm->newSession();
+			ASM::$clm->load(array());
 
 			foreach ($hours as $key => $hour) {
-				CTC::add($hour, $this, 'uCredit', array(ASM::$obm->getCurrentSession(), $playerBonus, ASM::$com->getCurrentSession(), ASM::$rsm->getCurrentSession()));
+				CTC::add($hour, $this, 'uCredit', array(ASM::$obm->getCurrentSession(), $playerBonus, ASM::$com->getCurrentSession(), ASM::$rsm->getCurrentSession(), ASM::$clm->getCurrentSession()));
 			}
 
+			ASM::$clm->changeSession($S_CLM1);
 			ASM::$rsm->changeSession($S_RSM1);
 			ASM::$com->changeSession($S_COM1);
 			ASM::$obm->changeSession($S_OBM1);
@@ -160,7 +166,7 @@ class Player {
 		CTC::applyContext($token);
 	}
 
-	public function uCredit($obmSession, $playerBonus, $comSession, $rsmSession) {
+	public function uCredit($obmSession, $playerBonus, $comSession, $rsmSession, $clmSession) {
 		$S_OBM1 = ASM::$obm->getCurrentSession();
 		ASM::$obm->changeSession($obmSession);
 
@@ -173,7 +179,7 @@ class Player {
 			$base = ASM::$obm->get($i);
 			$popTax = Game::getTaxFromPopulation($base->getPlanetPopulation());
 			$popTax += $popTax * $playerBonus->bonus->get(PlayerBonus::POPULATION_TAX) / 100;
-			$nationTax = $base->getTax() * $popTax / 100;
+			$nationTax = $base->tax * $popTax / 100;
 
 			// revenu des routes commerciales
 			$routesIncome = 0;
@@ -199,7 +205,15 @@ class Player {
 			$antiSpyInvests += $base->getIAntiSpy();
 
 			// paiement à l'alliance
-			//--> faire paiement à l'alliance !!!!
+			$S_CLM1 = ASM::$clm->getCurrentSession();
+			ASM::$clm->changeSession($clmSession);
+			for ($i = 0; $i < ASM::$clm->size(); $i++) { 
+				if (ASM::$clm->get($i)->id == $base->sectorColor) {
+					ASM::$clm->get($i)->increaseCredit($nationTax);
+					break;
+				}
+			}
+			ASM::$clm->changeSession($S_CLM1);
 		}
 
 		// si la balance de crédit est positive
