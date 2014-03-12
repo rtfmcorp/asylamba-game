@@ -231,9 +231,13 @@ class OrbitalBase {
 			$player = ASM::$pam->get();
 			ASM::$pam->changeSession($S_PAM1);
 
+			# load the bonus
+			$playerBonus = new PlayerBonus($this->rPlayer);
+			$playerBonus->load();
+
 			# RESOURCES
 			foreach ($hours as $key => $hour) {
-				CTC::add($hour, $this, 'uResources', array());
+				CTC::add($hour, $this, 'uResources', array($playerBonus));
 			}
 
 			# ANTI-SPY
@@ -313,15 +317,19 @@ class OrbitalBase {
 		CTC::applyContext($token);
 	}
 
-	public function uResources() {
+	public function uResources($playerBonus) {
 		$addResources = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(1, 'level', $this->levelRefinery, 'refiningCoefficient'), $this->planetResources);
 		if ($this->isProductionRefinery == 1) {
-			$addResources += $addResources * OBM_COEFPRODUCTION;
+			$modeBonus = $addResources * OBM_COEFPRODUCTION;
+			$technoBonus = $addResources * $playerBonus->bonus->get(PlayerBonus::REFINERY_REFINING) / 100;
+			$addResources += $modeBonus + $technoBonus;
 		}
 		$newResources = $this->resourcesStorage + (int) $addResources;
 		$maxStorage = OrbitalBaseResource::getBuildingInfo(1, 'level', $this->levelRefinery, 'storageSpace');
 		if ($this->isProductionRefinery == 0) {
-			$maxStorage += $maxStorage * OBM_COEFPRODUCTION;
+			$modeBonus = $maxStorage * OBM_COEFPRODUCTION;
+			$technoBonus = $maxStorage * $playerBonus->bonus->get(PlayerBonus::REFINERY_STORAGE) / 100;
+			$maxStorage += $modeBonus + $technoBonus;
 		}
 		if ($newResources > $maxStorage) {
 			$this->resourcesStorage = $maxStorage;
