@@ -2,6 +2,7 @@
 include_once ATHENA;
 include_once ZEUS;
 include_once GAIA;
+include_once DEMETER;
 # accept a transaction action
 
 # int rplace 		id de la base orbitale
@@ -39,10 +40,10 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 		ASM::$ctm->load(array());
 		for ($i = 0; $i < ASM::$ctm->size(); $i++) { 
 			$comTax = ASM::$ctm->get($i);
-			if ($comTax->faction == $transaction->sectorColor AND $comTax->relatedFaction == $ob_compPlat->sectorColor) {
+			if ($comTax->faction == $transaction->sectorColor AND $comTax->relatedFaction == $base->sectorColor) {
 				$exportTax = $comTax->exportTax;
 			}
-			if ($comTax->faction == $ob_compPlat->sectorColor AND $comTax->relatedFaction == $transaction->sectorColor) {
+			if ($comTax->faction == $base->sectorColor AND $comTax->relatedFaction == $transaction->sectorColor) {
 				$importTax = $comTax->importTax;
 			}
 		}
@@ -64,8 +65,21 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				# transfert des crédits entre joueurs
 				ASM::$pam->get(0)->decreaseCredit($totalPrice);
 				ASM::$pam->get(1)->increaseCredit($transaction->price);
-//TODO			// verser $exportTax à la faction exportatrice
-				// verser $importTax à la faction importatrice
+
+				# transfert des crédits aux alliances
+				$S_CLM1 = ASM::$clm->getCurrentSession();
+				ASM::$clm->newSession();
+				ASM::$clm->load(array('id' => $transaction->sectorColor));
+				$exportFaction = ASM::$clm->get(0);
+				$exportFaction->increaseCredit($exportTax);
+				if ($transaction->sectorColor == $base->sectorColor) {
+					$importFaction = $exportFaction;
+				} else {
+					ASM::$clm->load(array('id' => $base->sectorColor));
+					$importFaction = ASM::$clm->get(1);
+				}
+				$importFaction->increaseCredit($importTax);
+				ASM::$clm->changeSession($S_CLM1);
 
 				# gain d'expérience
 				$experience = $transaction->getExperienceEarned();
