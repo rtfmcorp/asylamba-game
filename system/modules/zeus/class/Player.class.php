@@ -132,6 +132,7 @@ class Player {
 			include_once PROMETHEE;
 			include_once ARES;
 			include_once DEMETER;
+			include_once GAIA;
 
 			# load orbital bases
 			$S_OBM1 = ASM::$obm->getCurrentSession();
@@ -178,6 +179,7 @@ class Player {
 		for ($i = 0; $i < ASM::$obm->size(); $i++) {
 			$base = ASM::$obm->get($i);
 			$popTax = Game::getTaxFromPopulation($base->getPlanetPopulation());
+			$popTax *= PlaceResource::get($base->typeOfBase, 'tax');
 			$popTax += $popTax * $playerBonus->bonus->get(PlayerBonus::POPULATION_TAX) / 100;
 			$nationTax = $base->tax * $popTax / 100;
 
