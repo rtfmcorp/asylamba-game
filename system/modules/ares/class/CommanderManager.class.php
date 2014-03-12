@@ -220,6 +220,7 @@ class CommanderManager extends Manager {
 					uCommander = ?,
 					palmares = ?,
 					statement = ?,
+					`line` = ?,
 					dCreation = ?,
 					dAffectation = ?,
 					dDeath = ? 
@@ -240,6 +241,7 @@ class CommanderManager extends Manager {
 				$commander->uCommander,
 				$commander->palmares,
 				$commander->statement,
+				$commander->line,
 				$commander->dCreation,
 				$commander->dAffectation,
 				$commander->dDeath,

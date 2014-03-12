@@ -72,18 +72,6 @@ class Commander {
 	public $playerName				='';
 	public $playerColor				='';
 
-	# variables de trajet
-	public $dStart					= '';
-	public $dArrival	 			= '';
-	public $resourcesTransported 	= 0;
-	public $typeOfMove 				= 0;
-	public $travelLength			= 0;
-	public $rStartPlace 			= 0;
-	public $rDestinationPlace		= 0;
-	public $startPlaceName			= '';
-	public $destinationPlaceName	= '';
-	public $tStatement				= '';
-
 	# variables de combat
 	public $squadronsIds			= array();
 	public $armyInBegin 			= array();
@@ -132,7 +120,6 @@ class Commander {
 	public function getLengthTravel()			{ return $this->lengthTravel; }
 	public function getOBName()					{ return $this->oBName; }
 	public function getArmyInBegin()			{ return $this->armyInBegin; }
-	public function setIsAttacker($isAttacker)	{ $this->isAttacker = $isAttacker; } 			  
 
 	public function getDestinationPlaceName()	{
 		return ($this->destinationPlaceName == NULL) ? 'planète rebelle' : $this->destinationPlaceName;
@@ -153,7 +140,7 @@ class Commander {
 
 	public function getPev() {
 		$pev = 0;
-		foreach ($this->army AS $squadron) {
+		foreach ($this->army as $squadron) {
 			$pev += $squadron->getPev();
 		}
 		return $pev;
@@ -165,6 +152,18 @@ class Commander {
 		} else {
 			return FALSE;
 		}
+	}
+
+	# renvoie un tableua de nombre de vaisseaux
+	public function getNbrShipByType() {
+		$array = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+		foreach ($this->army as $squadron) {
+			for ($i = 0; $i < 12; $i++) {
+				$array[$i] += $squadron->getNbrShipByType($i);
+			}
+		}
+
+		return $array;
 	}
 	
 	//-----------------SETTER---------------
@@ -196,6 +195,7 @@ class Commander {
 	public function setDestinationPlaceName($doName)				{ $this->destinationPlaceName = $doName; }
 	public function setSquadronsIds($squadronsIds)					{ $this->squadronsIds = $squadronsIds; }
 	public function setArmyInBegin($armyInBegin)					{ $this->armyInBegin = $armyInBegin; }
+	public function setIsAttacker($isAttacker)						{ $this->isAttacker = $isAttacker; }		  
 
 	public function setArmy() {
 		for($i = 0; $i < count($this->squadronsIds) AND $i < 25; $i++) {

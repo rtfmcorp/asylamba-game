@@ -1,5 +1,6 @@
 <?php
 include_once ATHENA;
+include_once GAIA;
 include_once ARES;
 
 # affect a commander
@@ -23,23 +24,42 @@ if ($commanderId !== FALSE) {
 	if (ASM::$com->size() == 1) {
 		$commander = ASM::$com->get();
 		
+		$S_OBM = ASM::$obm->getCurrentSession();
+		ASM::$obm->newSession();
+		ASM::$obm->load(array('rPlace' => $commander->rBase));
+
 		# checker si on a assez de place !!!!!
-		$S_COM2 = ASM::$com->newSession();
-		ASM::$com->load(array('c.rBase' => $commander->getRBase(), 'c.statement' => Commander::AFFECTED));
-		$nbr = ASM::$com->size();
+		$S_COM2 = ASM::$com->getCurrentSession();
+		ASM::$com->newSession();
+		ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => Commander::AFFECTED, 'c.line' => 2));
+		$nbrLine2 = ASM::$com->size();
 
-		ASM::$com->changeSession($S_COM2);
+		ASM::$com->newSession();
+		ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => Commander::AFFECTED, 'c.line' => 1));
+		$nbrLine1 = ASM::$com->size();
 
-		if ($nbr < 3) {
-			$commander->setDAffectation(Utils::now());
-			$commander->setStatement(COM_AFFECTED);
+		if ($nbrLine2 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'r-line')) {
+			$commander->dAffectation =Utils::now();
+			$commander->statement = Commander::AFFECTED;
+			$commander->line = 2;
 
-			CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté', ALERT_STD_SUCCESS);
+			CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté en ligne défensive', ALERT_STD_SUCCESS);
 			CTR::redirect('fleet/view-movement');
 			
+		} elseif ($nbrLine1 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'l-line')) {
+			$commander->dAffectation =Utils::now();
+			$commander->statement = Commander::AFFECTED;
+			$commander->line = 1;
+
+			CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté en ligne offensive', ALERT_STD_SUCCESS);
+			CTR::redirect('fleet/view-movement');
+
 		} else {
-			CTR::$alert->add('Votre base a dépassé la capacité limit de commandant en activité', ALERT_STD_ERROR);			
+			CTR::$alert->add('Votre base a dépassé la capacité limite de commandants en activité' . PlaceResource::get(ASM::$obm->get()->typeOfBase, 'l-line'), ALERT_STD_ERROR);			
 		}
+
+		ASM::$com->changeSession($S_COM2);
+		ASM::$obm->changeSession($S_OBM);
 	} else {
 		CTR::$alert->add('Ce commandant n\'existe pas ou ne vous appartient pas', ALERT_STD_ERROR);
 	}

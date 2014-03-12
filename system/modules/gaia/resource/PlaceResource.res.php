@@ -1,7 +1,7 @@
 <?php
 class PlaceResource {
 	public static function get($type, $info) {
-		if (in_array($info, array('name', 'tax', 'left-line', 'right-line'))) {
+		if (in_array($info, array('name', 'tax', 'l-line', 'r-line'))) {
 			return self::$place[$type][$info];
 		} else {
 			return FALSE;
