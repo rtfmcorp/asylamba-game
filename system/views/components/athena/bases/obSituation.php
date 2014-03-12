@@ -45,50 +45,54 @@ echo '<div class="component space size3">';
 
 				echo '<span class="hb line-help line-1" title="première ligne, défend les pillages et les conquêtes, vraie ligne de défense">I</span>';
 				echo '<span class="hb line-help line-2" title="force de réserve, défend uniquement les conquêtes, utile pour les troupes d\'attaque">II</span>';
-				
-				/* a supprimer */
-				if (in_array($ob_obSituation->typeOfBase, array(OrbitalBase::TYP_NEUTRAL, OrbitalBase::TYP_COMMERCIAL))) {
-					$min = 1; $max = 2;
-				} else {
-					$min = 0; $max = 3;
-				}
 
-				for ($i = $min; $i < $max; $i++) { 
-					if (isset($commanders_obSituation[$i])) {
-						$commander = $commanders_obSituation[$i];
-						echo '<a href="' . APP_ROOT . 'fleet/view-movement/commander-' . $commander->getId() . '/sftr-3" class="commander full position-1-' . ($i + 1) . '">';
-							echo '<img src="' . MEDIA . 'map/fleet/' . (($commander->getStatement() == COM_AFFECTED) ? 'army' : 'army-away') . '.png" alt="plein" />';
-							echo '<span class="info">';
-								echo CommanderResources::getInfo($commander->getLevel(), 'grade') . ' <strong>' . $commander->getName() . '</strong><br />';
-								echo $commander->getPev() . ' Pev';
-								if ($commander->getStatement() == COM_MOVING) {
-									echo '<br />&#8594;	';
-									switch ($commander->getTypeOfMove()) {
-										case COM_MOVE: echo 'déplacement'; break;
-										case COM_LOOT: echo 'pillage'; break;
-										case COM_COLO: echo 'colonisation'; break;
-										case COM_BACK: echo 'retour'; break;
-										default: break;
-									}
+				$lLine = 0; $rLine = 0;
+				$llp = PlaceResource::get($ob_obSituation->typeOfBase, 'l-line-position');
+				$rlp = PlaceResource::get($ob_obSituation->typeOfBase, 'r-line-position');
+				foreach ($commanders_obSituation as $commander) {
+					echo '<a href="' . APP_ROOT . 'fleet/view-movement/commander-' . $commander->getId() . '/sftr-3" class="commander full position-' . $commander->line . '-' . ($commander->line == 1 ? $llp[$lLine] : $rlp[$rLine]) . '">';
+						echo '<img src="' . MEDIA . 'map/fleet/' . (($commander->getStatement() == COM_AFFECTED) ? 'army' : 'army-away') . '.png" alt="plein" />';
+						echo '<span class="info">';
+							echo CommanderResources::getInfo($commander->getLevel(), 'grade') . ' <strong>' . $commander->getName() . '</strong><br />';
+							echo $commander->getPev() . ' Pev';
+							if ($commander->getStatement() == COM_MOVING) {
+								echo '<br />&#8594;	';
+								switch ($commander->getTypeOfMove()) {
+									case COM_MOVE: echo 'déplacement'; break;
+									case COM_LOOT: echo 'pillage'; break;
+									case COM_COLO: echo 'colonisation'; break;
+									case COM_BACK: echo 'retour'; break;
+									default: break;
 								}
-							echo '</span>';
-						echo '</a>';
+							}
+						echo '</span>';
+					echo '</a>';
+
+					if ($commander->line == 1) {
+						$lLine++;
 					} else {
-						echo '<a href="' . APP_ROOT . 'bases/base-' . $ob_obSituation->getId() . '/view-school" class="commander empty position-1-' . ($i + 1) . '">';
-							echo '<img src="' . MEDIA . 'map/fleet/army-empty.png" alt="vide" />';
-							echo '<span class="info">';
-								echo 'Affecter<br />';
-								echo 'un officier';
-							echo '</span>';
-						echo '</a>';
+						$rLine++;
 					}
 				}
 
-				if (in_array($ob_obSituation->typeOfBase, array(OrbitalBase::TYP_NEUTRAL, OrbitalBase::TYP_COMMERCIAL))) {
-					echo '<a class="commander full position-2-2" href="/expansion/dev12/fleet/view-movement/commander-1/sftr-3"><img alt="plein" src="http://localhost/expansion/dev12/public/media/map/fleet/army.png"><span class="info">Lieutenant <strong>Kolver</strong><br>0 Pev</span></a>';
-				} else {
-					echo '<a class="commander full position-2-1" href="/expansion/dev12/fleet/view-movement/commander-1/sftr-3"><img alt="plein" src="http://localhost/expansion/dev12/public/media/map/fleet/army.png"><span class="info">Lieutenant <strong>Kolver</strong><br>0 Pev</span></a>';
-					echo '<a class="commander full position-2-3" href="/expansion/dev12/fleet/view-movement/commander-1/sftr-3"><img alt="plein" src="http://localhost/expansion/dev12/public/media/map/fleet/army.png"><span class="info">Lieutenant <strong>Kolver</strong><br>0 Pev</span></a>';
+				for ($lLine; $lLine < PlaceResource::get($ob_obSituation->typeOfBase, 'l-line'); $lLine++) { 
+					echo '<a href="' . APP_ROOT . 'bases/base-' . $ob_obSituation->getId() . '/view-school" class="commander empty position-1-' . $llp[$lLine] . '">';
+						echo '<img src="' . MEDIA . 'map/fleet/army-empty.png" alt="vide" />';
+						echo '<span class="info">';
+							echo 'Affecter<br />';
+							echo 'un officier';
+						echo '</span>';
+					echo '</a>';
+				}
+
+				for ($rLine; $rLine < PlaceResource::get($ob_obSituation->typeOfBase, 'r-line'); $rLine++) { 
+					echo '<a href="' . APP_ROOT . 'bases/base-' . $ob_obSituation->getId() . '/view-school" class="commander empty position-2-' . $rlp[$rLine] . '">';
+						echo '<img src="' . MEDIA . 'map/fleet/army-empty.png" alt="vide" />';
+						echo '<span class="info">';
+							echo 'Affecter<br />';
+							echo 'un officier';
+						echo '</span>';
+					echo '</a>';
 				}
 
 				echo '<div class="stellar">';
