@@ -36,6 +36,10 @@ class Color {
 
 	public function getId() { return $this->id; }
 
+	public function increaseCredit($credit) {
+		$this->credits = $this->credits + $credit;
+	}
+
 	public function updateStatus() {
 		/*
 		empire nbrplanet

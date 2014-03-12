@@ -413,7 +413,7 @@ class OrbitalBase {
 				# prepare commercialShipping for moving back
 				$cs->statement = CommercialShipping::ST_MOVING_BACK;
 				$timeToTravel = strtotime($cs->dArrival) - strtotime($cs->dDeparture);
-				$cs->dDeparture = $cs->$dArrival;
+				$cs->dDeparture = $cs->dArrival;
 				$cs->dArrival = Utils::addSecondsToDate($cs->dArrival, $timeToTravel);
 				break;
 			case CommercialShipping::ST_MOVING_BACK :
