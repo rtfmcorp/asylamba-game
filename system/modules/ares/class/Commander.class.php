@@ -62,6 +62,7 @@ class Commander {
 	public $uExperience 			= 0;
 	public $palmares 				= 0;
 	public $statement 				= COM_INSCHOOL;
+	public $line 					= 1;
 	public $dCreation 				= '';
 	public $dAffectation 			= '';
 	public $dDeath 					= '';

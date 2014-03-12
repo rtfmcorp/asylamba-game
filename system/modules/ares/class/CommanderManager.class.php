@@ -116,6 +116,7 @@ class CommanderManager extends Manager {
 				$commander->uCommander = $awCommander['uCommander'];
 				$commander->palmares = $awCommander['palmares'];
 				$commander->statement = $awCommander['statement'];
+				$commander->line = $awCommander['line'];
 				$commander->dCreation = $awCommander['dCreation'];
 				$commander->dAffectation = $awCommander['dAffectation'];
 				$commander->dDeath = $awCommander['dDeath'];

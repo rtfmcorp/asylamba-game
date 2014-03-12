@@ -27,13 +27,14 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `commander` (
   `uCommander` datetime DEFAULT NULL,
   `palmares` int(10) unsigned NOT NULL DEFAULT '0',
   `statement` tinyint(1) DEFAULT '0',
+  `line` int(11) DEFAULT NULL,
   `dCreation` datetime DEFAULT NULL,
   `dAffectation` datetime DEFAULT NULL,
   `dDeath` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_commander_player1` (`rPlayer`),
   KEY `rBase` (`rBase`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;");
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=21 ;");
 $qr->execute();
 
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `squadron` (
