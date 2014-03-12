@@ -62,8 +62,10 @@ echo '<div id="content">';
 	for ($i = 0; $i < ASM::$obm->size(); $i++) {
 		$ob_generalFinancial[] = ASM::$obm->get($i);
 		
-		$financial_totalTaxIn += Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation());
-		$financial_totalTaxInBonus += $financial_totalTaxIn * $taxBonus / 100;
+		$thisTaxIn = Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation());
+		$thisTaxIn *= PlaceResource::get(ASM::$obm->get($i)->typeOfBase, 'tax');
+		$financial_totalTaxIn += $thisTaxIn;
+		$financial_totalTaxInBonus += $thisTaxIn * $taxBonus / 100;
 
 		$financial_totalTaxOut += (Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation()) + (Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation()) * $taxBonus / 100)) * ASM::$obm->get($i)->getTax() / 100;
 
