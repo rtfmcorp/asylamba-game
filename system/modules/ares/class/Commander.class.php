@@ -7,7 +7,7 @@
  * @copyright Expansion - le jeu
  *
  * @package Ares
- * @update 13.02.14
+ * @update 13.02.14_
 */
 
 class Commander {
@@ -37,11 +37,6 @@ class Commander {
 	const RETIRED 					= 5; # à la retraite
 	const ONSALE 					= 6; # dans le marché
 
-	# travel statements
-	const DONE 						= 0; # déplacement fini dans le passé
-	const INPROGRESS 				= 1; # déplacement en cours
-	const COMPLETED					= 2; # déplacement prévu dans l'avenir (ne sera peut-être jamais implémenté)
-
 	# types of travel
 	const MOVE						= 0; # déplacement
 	const LOOT						= 1; # pillage
@@ -67,7 +62,7 @@ class Commander {
 	public $dAffectation 			= '';
 	public $dDeath 					= '';
 
-	# variable de jointure quelconque
+	# variables de jointure quelconque
 	public $oBName					= '';
 	public $playerName				='';
 	public $playerColor				='';
@@ -80,6 +75,18 @@ class Commander {
 	public $earnedExperience 		= 0;
 	public $winner					= FALSE;
 	public $isAttacker 				= NULL;
+
+	# variables de déplacement
+	public $dStart					= '';
+	public $dArrival				= '';
+	public $resources 				= 0;
+	public $travelType				= 0;
+	public $travelLength			= 0;
+	public $rStartPlace				= 0;
+	public $rDestinationPlace		= 0;
+	public $startPlaceName			= 0;
+	public $destinationPlaceName	= '';
+
 
 	public $uCommander				= '';
 	public $hasToU					= TRUE;

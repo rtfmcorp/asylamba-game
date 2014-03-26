@@ -1,11 +1,14 @@
 <?php
+echo '<h1>suppression de la table travel</h1>';
 echo '<h1>suppression de la table commander</h1>';
 echo '<h1>suppression de la table squadron</h1>';
 echo '<h1>création de la nouvelle table commander</h1>';
 echo '<h1>création de la nouvelle table squadron</h1>';
-echo '<h1>ajout de la table travel</h1>';
 
 $db = DataBaseAdmin::getInstance();
+
+$qr = $db->prepare("DROP TABLE travel");
+$qr->execute();
 
 $qr = $db->prepare("DROP TABLE commander");
 $qr->execute();
@@ -28,13 +31,20 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `commander` (
   `palmares` int(10) unsigned NOT NULL DEFAULT '0',
   `statement` tinyint(1) DEFAULT '0',
   `line` int(11) DEFAULT NULL,
+  `rStartPlace` int(11) DEFAULT NULL,
+  `rDestinationPlace` int(11) DEFAULT NULL,
+  `dStart` datetime DEFAULT NULL,
+  `dArrival` datetime DEFAULT NULL,
+  `ressources` int(11) DEFAULT NULL,
+  `travelType` tinyint(4) DEFAULT NULL,
+  `travelLength` tinyint(4) DEFAULT NULL,
   `dCreation` datetime DEFAULT NULL,
   `dAffectation` datetime DEFAULT NULL,
   `dDeath` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_commander_player1` (`rPlayer`),
   KEY `rBase` (`rBase`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=21 ;");
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;");
 $qr->execute();
 
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `squadron` (
@@ -57,20 +67,5 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `squadron` (
   PRIMARY KEY (`id`),
   KEY `fk_squadron_commander1` (`rCommander`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;");
-$qr->execute();
-
-$qr = $db->prepare("CREATE TABLE IF NOT EXISTS `travel` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rCommander` int(11) NOT NULL,
-  `rStartPlace` int(11) NOT NULL,
-  `rDestinationPlace` int(11) NOT NULL,
-  `dStart` datetime NOT NULL,
-  `dArrival` datetime NOT NULL,
-  `ressources` int(11) NOT NULL,
-  `type` int(11) NOT NULL,
-  `length` int(11) NOT NULL,
-  `statement` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;");
 $qr->execute();
 ?>

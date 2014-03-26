@@ -18,7 +18,7 @@ if (Utils::interval(CTR::$data->get('lastUpdate')->get('event'), Utils::now(), '
 	for ($i = 0; $i < CTR::$data->get('playerBase')->get('ms')->size(); $i++) {
 		$places[] = CTR::$data->get('playerBase')->get('ms')->get($i)->get('id');
 	}
-	ASM::$com->load(array('t.rDestinationPlace' => $places, 'c.statement' => COM_MOVING, 't.type' => array(COM_LOOT, COM_COLO)));
+	ASM::$com->load(array('c.rDestinationPlace' => $places, 'c.statement' => COM_MOVING, 'c.travelType' => array(COM_LOOT, COM_COLO)));
 
 	// ajout des bases des ennemis dans le tableau
 	for ($i = 0; $i < ASM::$com->size(); $i++) {

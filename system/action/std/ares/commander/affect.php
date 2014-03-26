@@ -43,7 +43,7 @@ if ($commanderId !== FALSE) {
 			$commander->statement = Commander::AFFECTED;
 			$commander->line = 2;
 
-			CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté en ligne défensive', ALERT_STD_SUCCESS);
+			CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté en force de réserve', ALERT_STD_SUCCESS);
 			CTR::redirect('fleet/view-movement');
 			
 		} elseif ($nbrLine1 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'l-line')) {
@@ -51,11 +51,11 @@ if ($commanderId !== FALSE) {
 			$commander->statement = Commander::AFFECTED;
 			$commander->line = 1;
 
-			CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté en ligne offensive', ALERT_STD_SUCCESS);
+			CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté en force active', ALERT_STD_SUCCESS);
 			CTR::redirect('fleet/view-movement');
 
 		} else {
-			CTR::$alert->add('Votre base a dépassé la capacité limite de commandants en activité' . PlaceResource::get(ASM::$obm->get()->typeOfBase, 'l-line'), ALERT_STD_ERROR);			
+			CTR::$alert->add('Votre base a dépassé la capacité limite de commandants en activité', ALERT_STD_ERROR);			
 		}
 
 		ASM::$com->changeSession($S_COM2);

@@ -24,7 +24,6 @@ class CommanderManager extends Manager {
 				o.iSchool, o.name AS oName,
 				p.name AS pName,
 				p.rColor AS pColor,
-				t.rStartPlace, t.rDestinationPlace, t.dStart, t.dArrival, t.ressources, t.type, t.length, t.statement AS tstatement,
 				dp.name AS dpName,
 				sp.name AS spName
 			FROM commander AS c
@@ -32,12 +31,10 @@ class CommanderManager extends Manager {
 				ON o.rPlace = c.rBase
 			LEFT JOIN player AS p
 				ON p.id = c.rPlayer
-			LEFT JOIN travel AS t
-				ON t.rCommander = c.id
 			LEFT JOIN orbitalBase AS dp
-				ON dp.rPlace = t.rDestinationPlace
+				ON dp.rPlace = c.rDestinationPlace
 			LEFT JOIN orbitalBase AS sp
-				ON sp.rPlace = t.rStartPlace
+				ON sp.rPlace = c.rStartPlace
 
 			' . $formatWhere .'
 			' . $formatOrder .'
@@ -124,12 +121,11 @@ class CommanderManager extends Manager {
 
 				$commander->dStart = $awCommander['dStart'];
 				$commander->dArrival = $awCommander['dArrival'];
-				$commander->resourcesTransported = $awCommander['ressources'];
-				$commander->typeOfMove = $awCommander['type'];
-				$commander->travelLength = $awCommander['length'];
+				$commander->resources = $awCommander['resources'];
+				$commander->travelType = $awCommander['travelType'];
+				$commander->travelLength = $awCommander['travelLength'];
 				$commander->rStartPlace = $awCommander['rStartPlace'];
 				$commander->rDestinationPlace = $awCommander['rDestinationPlace'];
-				$commander->tStatement = $awCommander['tstatement'];
 
 				$commander->startPlaceName = $awCommander['spName'];
 				$commander->destinationPlaceName	= $awCommander['dpName'];
@@ -221,9 +217,17 @@ class CommanderManager extends Manager {
 					palmares = ?,
 					statement = ?,
 					`line` = ?,
+					dStart = ?,
+					dArrival = ?,
+					resources = ?,
+					travelType = ?,
+					travelLength = ?,
+					rStartPlace	= ?,
+					rDestinationPlace = ?,
 					dCreation = ?,
 					dAffectation = ?,
-					dDeath = ? 
+					dDeath = ?
+
 				WHERE id = ?';
 
 			$qr = $db->prepare($qr);
@@ -242,6 +246,13 @@ class CommanderManager extends Manager {
 				$commander->palmares,
 				$commander->statement,
 				$commander->line,
+				$commander->dStart,
+				$commander->dArrival,
+				$commander->resources,
+				$commander->travelType,
+				$commander->travelLength,
+				$commander->rStartPlace,
+				$commander->rDestinationPlace,
 				$commander->dCreation,
 				$commander->dAffectation,
 				$commander->dDeath,
