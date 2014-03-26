@@ -35,7 +35,7 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `commander` (
   `rDestinationPlace` int(11) DEFAULT NULL,
   `dStart` datetime DEFAULT NULL,
   `dArrival` datetime DEFAULT NULL,
-  `ressources` int(11) DEFAULT NULL,
+  `resources` int(11) DEFAULT NULL,
   `travelType` tinyint(4) DEFAULT NULL,
   `travelLength` tinyint(4) DEFAULT NULL,
   `dCreation` datetime DEFAULT NULL,
