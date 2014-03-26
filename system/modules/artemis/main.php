@@ -1,9 +1,8 @@
 <?php
-// inclusion de main.conf
-include_once 'main.conf.php';
 
-// inclusion des classes d'ares
-include_once 'class/Spy.class.php';
-include_once 'class/SpyManager.class.php';
+// inclusion des classes d'artemis
+include_once 'class/SpyReport.php';
+include_once 'class/SpyReportManager.php';
+
 
 ASM::runArtemis();

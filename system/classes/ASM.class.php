@@ -31,7 +31,7 @@ abstract class ASM {
 	public static $pam;
 
 	protected static $runningArtemis = FALSE;
-	public static $spy;
+	public static $srm;
 
 	protected static $runningApollon = FALSE;
 	public static $btm;
@@ -100,7 +100,7 @@ abstract class ASM {
 
 	public static function runArtemis() {
 		if (!self::$runningArtemis) {
-			self::$spy = new SpyManager();
+			self::$srm = new SpyReportManager();
 		}
 		self::$runningArtemis = TRUE;
 	}
@@ -120,7 +120,6 @@ abstract class ASM {
 			self::$cam = new CandidateManager();
 			self::$elm = new ElectionManager();
 			self::$vom = new VoteManager();
-
 		}
 		self::$runningDemeter = TRUE;
 	}
@@ -156,7 +155,7 @@ abstract class ASM {
 			self::$pam->save();
 		}
 		if (self::$runningArtemis) {
-			self::$spy->save();
+			self::$srm->save();
 		}
 		if (self::$runningApollon) {
 			self::$btm->save();
@@ -168,7 +167,6 @@ abstract class ASM {
 			self::$cam->save();
 			self::$elm->save();
 			self::$vom->save();
-
 		}
 	}
 }

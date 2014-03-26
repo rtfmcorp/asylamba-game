@@ -61,7 +61,7 @@ switch (CTR::$get->get('a')) {
 	case 'updatedisplayparams': 	include ACTION . 'zeus/params/display.php'; break;
 
 	# ARTEMIS
-	case 'movespy':					include ACTION . 'artemis/move.php'; break;
+	case 'spy':						include ACTION . 'artemis/spy.php'; break;
 
 	# ARES
 	case 'archivereport':			include ACTION . 'ares/report/archive.php'; break;

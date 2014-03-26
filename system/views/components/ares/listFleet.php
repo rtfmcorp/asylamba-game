@@ -83,7 +83,7 @@ echo '<div class="component size2 list-fleet">';
 				}
 			}
 			if (count($commander_listFleet) == 0) {
-				echo '<p class="info">Vous n\'avez aucun commandant en fonction. <a href="' . APP_ROOT . 'bases/view-school">Vers l\'école de commanandement</a></p>';
+				echo '<p class="info">Vous n\'avez aucun commandant en fonction. <a href="' . APP_ROOT . 'bases/view-school">Vers l\'école de commandement</a></p>';
 			}
 		echo '</div>';
 	echo '</div>';

@@ -82,6 +82,22 @@ echo '<div id="content">';
 		ASM::$com->changeSession($S_COM1);
 	# } elseif (CTR::$get->get('view') == 'commanders') {
 		# code
+	} elseif (CTR::$get->get('view') == 'spyreport') {
+		# inclusion des modules
+		include_once ARTEMIS;
+
+		# loading des objets
+# TODO
+
+		# listReport component
+		$report_listReport = array();
+# TODO
+		include COMPONENT . 'artemis/listReport.php';
+
+		# report component
+# TODO
+		include COMPONENT . 'artemis/report.php';
+
 	} elseif (CTR::$get->get('view') == 'archive') {
 		# inclusion des modules
 		include_once ARES;
