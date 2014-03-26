@@ -25,12 +25,12 @@ if (CTR::$get->exist('placeid')) {
 
 if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	$S_COM1 = ASM::$com->getCurrentSession();
-	ASM::$com->newSession(ASM_UMODE);
+	ASM::$com->newSession();
 	ASM::$com->load(array('c.id' => $commanderId, 'c.rPlayer' => CTR::$data->get('playerId')));
 	$commander = ASM::$com->get();
 	
 	$S_PLM1 = ASM::$plm->getCurrentSession();
-	ASM::$plm->newSession(ASM_UMODE);
+	ASM::$plm->newSession();
 	ASM::$plm->load(array('id' => $placeId));
 	$place = ASM::$plm->get();
 
@@ -41,14 +41,14 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					ASM::$plm->load(array('id' => $commander->getRBase()));
 					$home = ASM::$plm->getById($commander->getRBase());
 
+					$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
 					$duration = Game::getTimeToTravel($home, $place);
 
-					if ($commander->move($place->getId(), COM_MOVE, $duration)) {
+					if ($commander->move($place->getId(), $commander->rBase, Commander::MOVE, $length, $duration)) {
 						$S_PAM1 = ASM::$pam->getCurrentSession();
-						ASM::$pam->newSession(ASM_UMODE);
+						ASM::$pam->newSession();
 						ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
 						$player = ASM::$pam->get();
-						$player->setActionPoint($player->getActionPoint() - $PAToTravel);
 						ASM::$pam->changeSession($S_PAM1);
 						CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
 					}
