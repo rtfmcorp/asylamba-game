@@ -131,8 +131,8 @@ class Place {
 			ASM::$com->load(array('c.rDestinationPlace' => $this->id, 'c.statement' => 2), array('c.dArrival', 'ASC'));
 			for ($i = 0; $i < ASM::$com->size(); $i++) {
 				$commander = ASM::$com->get($i);
-				if ($commander->getArrivalDate() <= $now AND $commander->getRPlaceDestination() != NULL) { 
-					CTC::add($commander->getArrivalDate(), $this, 'uTravel', array($commander));
+				if ($commander->dArrival <= $now AND $commander->rDestinationPlace != NULL) {
+					CTC::add($commander->dArrival, $this, 'uTravel', array($commander));
 				}
 			}
 			ASM::$obm->changeSession($S_OBM_GEN);
@@ -150,15 +150,19 @@ class Place {
 		}
 	}
 
-	private function uTravel($commander) {
-		switch ($commander->getTypeOfMove()) {
-				case COM_MOVE: $commander = $this->tryToChangeBase($commander); break;
-				case COM_LOOT: $commander = $this->tryToLoot($commander); break;
-				case COM_COLO: $commander = $this->tryToConquer($commander); break;
-				case COM_BACK: $commander = $this->comeBackToHome($commander); break;
+	public function uTravel($commander) {
+		include_once ARES;
+
+		switch ($commander->travelType) {
+				case Commander::MOVE: $this->tryToChangeBase($commander); break;
+				case Commander::LOOT: $this->tryToLoot($commander); break;
+				case Commander::COLO: $this->tryToConquer($commander); break;
+				case Commander::BACK: $this->comeBackToHome($commander); break;
 				default: 
 					CTR::$alert->add('Cette action n\'existe pas.', ALT_BUG_INFO);
 		}
+
+		$commander->hasToU = TRUE;
 		return $commander;
 	}
 

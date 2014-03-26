@@ -114,7 +114,8 @@ class Commander {
 	public function getExperience() 			{ return $this->experience; }
 	public function getUMethod() 				{ return $this->uMethod; }
 	public function getPalmares() 				{ return $this->palmares; }
-	public function getTypeOfMove() 			{ return $this->typeOfMove; }
+	public function getTypeOfMove() 			{ return $this->travelType; }
+	public function getTravelType() 			{ return $this->travelType; }
 	public function getRPlaceDestination() 		{ return $this->rPlaceDestination; }
 	public function getArrivalDate() 			{ return $this->dArrival; }
 	public function getDArrival()	 			{ return $this->dArrival; }
@@ -359,44 +360,28 @@ class Commander {
 		}
 	}*/
 
-	public function move($destination, $typeOfMove, $duration) {
-		if ($typeOfMove == 3) {
-			$startPoint = $this->rPlaceDestination;
-			$this->rPlaceDestination = $destination;
-			$this->typeOfMove = $typeOfMove;
+	public function move($rDestinationPlace, $rStartPlace, $travelType, $travelLength, $duration) {
+		if ($this->statement == 1) {
+			$this->rDestinationPlace = $rDestinationPlace;
+			$this->rStartPlace = $rStartPlace;
+			$this->travelType = $travelType;
+			$this->travelLength = $travelLength;
 			$this->statement = 2;
-			$date = new DateTime($this->arrivalDate);
-			$date->modify('+' . $duration . 'second');
-			$arrivalDate = $date->format('Y-m-d H:i:s');
-			$this->arrivalDate = $arrivalDate;
 
-			// ajout de l'event dans le contrôleur
+			$date = new DateTime(Utils::now());
+			$date->modify('+' . $duration . 'second');
+			$this->dArrival = $date->format('Y-m-d H:i:s');
+
+			// ajout de l'event dans le contrôleur // voir avec Jacky s'il faut modifier
 			if (CTR::$data->exist('playerEvent')) {
-				CTR::$data->get('playerEvent')->add($this->arrivalDate, EVENT_OUTGOING_ATTACK, $this->id);
+				CTR::$data->get('playerEvent')->add($this->dArrival, EVENT_OUTGOING_ATTACK, $this->id);
 			}
 
 			return TRUE;
 		} else {
-			if ($this->statement == 1) {
-				$this->rPlaceDestination = $destination;
-				$this->typeOfMove = $typeOfMove;
-				$this->statement = 2;
-
-				$date = new DateTime(Utils::now());
-				$date->modify('+' . $duration . 'second');
-				$this->arrivalDate = $date->format('Y-m-d H:i:s');
-
-				// ajout de l'event dans le contrôleur
-				if (CTR::$data->exist('playerEvent')) {
-					CTR::$data->get('playerEvent')->add($this->arrivalDate, EVENT_OUTGOING_ATTACK, $this->id);
-				}
-
-				return TRUE;
-			} else {
-				CTR::$alert->add('Ce commandant est déjà en déplacement.', ALERT_STD_ERROR);
-				CTR::$alert->add('dans move de Commander', ALERT_BUG_ERROR);
-				return FALSE;
-			}
+			CTR::$alert->add('Ce commandant est déjà en déplacement ou ne peut pas se déplacer.', ALERT_STD_ERROR);
+			CTR::$alert->add('dans move de Commander', ALERT_BUG_ERROR);
+			return FALSE;
 		}
 	}
 	
@@ -429,7 +414,7 @@ class Commander {
 		return $enemyCommander;
 	}
 
-	public function uMethod() {
+	public function uCommander() {
 		$token = CTC::createContext();
 		$now = Utils::now();
 
@@ -438,11 +423,14 @@ class Commander {
 			$nbrHours = Utils::intervalDates($now, $this->uCommander);
 			$this->uCommander = $now;
 
+			include_once ATHENA;
+
 			$S_OBM = ASM::$obm->getCurrentSession();
 			ASM::$obm->newSession();
 			ASM::$obm->load(array('rPlace' => $this->rBase));
 			$ob = ASM::$obm->get();
 			ASM::$obm->changeSession($S_OBM);
+				
 
 			include_once ZEUS;
 			$playerBonus = new PlayerBonus($this->rPlayer);
@@ -454,6 +442,17 @@ class Commander {
 		}
 
 		# test si ya des combats
+		if ($this->dArrival <= Utils::now() AND $this->statement == Commander::MOVING AND $this->hasToU) {
+			include_once GAIA;
+
+			$this->hasToU = FALSE;
+
+			$S_PLM = ASM::$plm->getCurrentSession();
+			ASM::$plm->newSession();
+			ASM::$plm->load(array('id' => $this->rDestinationPlace));
+			$pl = ASM::$plm->get();
+			ASM::$plm->changeSession($S_PLM);
+		}
 
 		CTC::applyContext($token);
 	}

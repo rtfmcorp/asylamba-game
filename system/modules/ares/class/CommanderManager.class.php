@@ -136,9 +136,9 @@ class CommanderManager extends Manager {
 				$commander->setArmy();
 
 				$currentCommander = $this->_Add($commander);
-				
+
 				if ($this->currentSession->getUMode()) {
-					$currentCommander->uMethod();
+					$currentCommander->uCommander();
 				}
 			}
 		}
