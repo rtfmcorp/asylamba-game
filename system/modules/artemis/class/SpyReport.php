@@ -15,7 +15,7 @@ class SpyReport {
 	public $id = 0; 
 	public $rPlayer = NULL; 
 	public $price;
-	public $rPlace;		# deduct many information
+	public $rPlace;
 	public $placeColor = NULL;
 
 	public $typeOfBase; # 0=empty, 1=ms1, 2=ms2, 3=ms3, 4=ob
@@ -23,7 +23,7 @@ class SpyReport {
 	public $placeName;
 	public $points;
 
-	public $rEnemy
+	public $rEnemy;
 	public $enemyName;
 	public $enemyAvatar;
 	public $enemyLevel;

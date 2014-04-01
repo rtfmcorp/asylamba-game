@@ -92,7 +92,7 @@ class SpyReportManager extends Manager {
 	public function add(SpyReport $sr) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			transaction(rPlayer, price, rPlace, placeColor, typeOfBase, typeOfOrbitalBase, placeName, points, rEnemy, enemyName, enemyAvatar, enemyLevel, resources, commanders, dSpying)
+			spyReport(rPlayer, price, rPlace, placeColor, typeOfBase, typeOfOrbitalBase, placeName, points, rEnemy, enemyName, enemyAvatar, enemyLevel, resources, commanders, dSpying)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$sr->rPlayer,

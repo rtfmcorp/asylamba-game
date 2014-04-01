@@ -10,6 +10,13 @@
 */
 
 class Place { 
+	# CONSTANTS
+	const TYP_EMPTY = 0;
+	const TYP_MS1 = 1;
+	const TYP_MS2 = 2;
+	const TYP_MS3 = 3;
+	const TYP_ORBITALBASE = 4;
+
 	// PLACE
 	public $id = 0;
 	public $rPlayer = 0;
