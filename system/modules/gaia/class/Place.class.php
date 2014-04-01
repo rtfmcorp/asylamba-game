@@ -39,6 +39,7 @@ class Place {
 
 	// BASE
 	public $typeOfBase = 0; // 0=empty, 1=ms1, 2=ms2, 3=ms3, 4=ob
+	public $typeOfOrbitalBase;
 	public $baseName = '';
 	public $points = '';
 
@@ -168,86 +169,63 @@ class Place {
 
 	# se poser
 	private function tryToChangeBase($commander) {
-		# si rPlayer == commander->rPlayer
-		if ($this->rPlayer == $commander->getRPlayer()) {
-			# OUI : si place a assez de case libre :
-			if (count($this->commanders) < 3) {
-				# OUI:instance de la place d'envoie + suppr commandant de ses flottes
+		# si la place et le commander ont le même joueur
+		if ($this->rPlayer == $commander->getRPlayer() and $this->typeOfBase == 4) {
+			$maxCom = ($this->typeOfOrbitalBase == 0) ? 2 : 5;
+			# si place a assez de case libre :
+			if (count($this->commanders) < $maxCom) {
 				# changer rBase commander
-				$commander->setRBase($this->id);
-				$commander->setRPlaceDestination(NULL);
-				$commander->setTypeOfMove(-1);
-				$commander->setStatement(COM_AFFECTED);
+				$commander->rBase = $this->id;
+				$commander->rPlaceDestination = NULL;
+				$commander->travelType = NULL;
+				$commander->rStartPlace = NULL;
+				$commander->dArrival = NULL;
+				$commander->length = NULL;
+				$commander->statement = Commander::AFFECTED;
 
 				# ajouter à $this le commandant
 				$this->commanders[] = $commander;
+
+				# instance de la place d'envoie + suppr commandant de ses flottes
 				# enlever à rBase le commandant
 				$S_PLM10 = ASM::$plm->getCurrentSession();
 				ASM::$plm->newSession();
 				ASM::$plm->load(array('id' => $commander->getRBase()));
 				for ($i = 0; $i < count(ASM::$plm->get()->commanders); $i++) {
-					unset(ASM::$plm->get()->commanders[$i]);
-					ASM::$plm->get()->commanders = array_merge(ASM::$plm->get()->commanders);
+					if (ASM::$plm->get()->commanders[$i]->id == $commander->id) {
+						unset(ASM::$plm->get()->commanders[$i]);
+						ASM::$plm->get()->commanders = array_merge(ASM::$plm->get()->commanders);
+					}
 				}
 				ASM::$plm->changeSession($S_PLM10);
 
 				# envoie de notif
-				include_once HERMES;
-				$notif = new Notification();
-				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Rapport de déplacement');
-				$notif->addBeg()
-					->addTxt('Votre commandant ')
-					->addStg($commander->getName())
-					->addTxt(' est arrivé sur ')
-					->addLnk('map/base-' . $this->id, $this->baseName)
-					->addTxt('.')
-					->addEnd();
-				ASM::$ntm->add($notif);
+				$this->sendNotif(0, 1, $commander);
+
 			} else {
 				# NON : comeBackToHome
 				$S_PLM10 = ASM::$plm->getCurrentSession();
 				ASM::$plm->newSession();
 				ASM::$plm->load(array('id' => $commander->getRBase()));
 				$home = ASM::$plm->get();
+				$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
 				$duration = Game::getTimeToTravel($home, $this);
-				$commander->move($commander->getRBase(), 3, $duration);
+				$commander->move($commander->rBase, $tis->id, Commander::BACK, $length, $durationn);
 				ASM::$plm->changeSession($S_PLM10);
 
-				include_once HERMES;
-				$notif = new Notification();
-				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Rapport de déplacement');
-				$notif->addBeg()
-					->addTxt('Votre commandant ')
-					->addStg($commander->getName())
-					->addTxt(' n\'est pas arrivé sur ')
-					->addLnk('map/base-' . $this->id, $this->baseName)
-					->addTxt('. Les trois cases flottes étaient occupées à son arrivée. Il repart donc vers sa planète d\'origine.')
-					->addEnd();
-				ASM::$ntm->add($notif);
+				$this->sendNotif(0, 2, $commander);
 			}
 		} else {
 			$S_PLM10 = ASM::$plm->getCurrentSession();
 			ASM::$plm->newSession();
 			ASM::$plm->load(array('id' => $commander->getRBase()));
 			$home = ASM::$plm->get();
+			$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
 			$duration = Game::getTimeToTravel($home, $this);
-			$commander->move($commander->getRBase(), 3, $duration);
+			$commander->move($commander->rBase, $tis->id, Commander::BACK, $length, $durationn);
 			ASM::$plm->changeSession($S_PLM10);
 
-			include_once HERMES;
-			$notif = new Notification();
-			$notif->setRPlayer($commander->getRPlayer());
-			$notif->setTitle('Rapport de déplacement');
-			$notif->addBeg()
-				->addTxt('Votre commandant ')
-				->addStg($commander->getName())
-				->addTxt(' n\'est pas arrivé sur ')
-				->addLnk('map/base-' . $this->id, $this->baseName)
-				->addTxt('. Cette base ne vous appartient pas.')
-				->addEnd();
-			ASM::$ntm->add($notif);
+			$this->sendNotif(0, 3, $commander);
 		}
 	}
 
@@ -256,44 +234,29 @@ class Place {
 		include_once ARES;
 		if ($this->rPlayer == 0) {
 			# planète vide -> faire un combat
-			$report = $this->startFight($commander);
-			$commander->resultOfFight($report->getFinalCommander(0));
-			$commander->setRPlaceDestination(NULL);
-			$commander->setTypeOfMove(-1);
+			$this->startFight($commander);
+			$commander->rPlaceDestination = NULL;
+			$commander->travelType = NULL;
+			$commander->rStartPlace = NULL;
+			$commander->dArrival = NULL;
+			$commander->length = NULL;
 
-			# si gagner
-			if ($commander->getStatement() != COM_DEAD) {
+			# si gagné
+			if ($commander->getStatement() != Commander::DEAD) {
 				# piller la planète
-				$this->lootAnEmptyPlace($commander, $report);
+				$this->lootAnEmptyPlace($commander);
 				# comeBackToHome
-				$S_PLM10 = ASM::$plm->getCurrentSession();
+				S_PLM10 = ASM::$plm->getCurrentSession();
 				ASM::$plm->newSession();
 				ASM::$plm->load(array('id' => $commander->getRBase()));
 				$home = ASM::$plm->get();
+				$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
 				$duration = Game::getTimeToTravel($home, $this);
-				$commander->move($commander->getRBase(), COM_BACK, $duration);
+				$commander->move($commander->rBase, $tis->id, Commander::BACK, $length, $durationn);
 				ASM::$plm->changeSession($S_PLM10);
 
-				ASM::$rpm->add($report);
+				$this->sendMail(1, 1, $commander);
 
-				include_once HERMES;
-				$notif = new Notification();
-				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Rapport de pillage');
-				$notif->addBeg()
-					->addTxt('Votre commandant ')
-					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
-					->addTxt(' a pillé la planète rebelle située aux coordonnées ')
-					->addLnk('map/place-' . $this->id, Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector))
-					->addTxt('.')
-					->addSep()
-					->addTxt('La flotte victorieuse à volé ')
-					->addStg(Format::numberFormat($commander->getResourcesTransported()))
-					->addTxt(' ressources à l\'ennemi.')
-					->addSep()
-					->addLnk('fleet/view-archive/report-' . $report->id, 'voir le rapport de combat &#8594;')
-					->addEnd();
-				ASM::$ntm->add($notif);
 			} else {
 				ASM::$rpm->add($report);
 
@@ -854,6 +817,78 @@ class Place {
 			$report = $fc->startFight($commanderA, $computerCommander, $this);
 
 			return $report;
+		}
+	}
+
+	private function sendNotif($type, $case, $commander) {
+		include_once HERMES;
+
+		if ($type == 0) {
+			if ($case == 1) {
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Rapport de déplacement');
+				$notif->addBeg()
+					->addTxt('Votre commandant ')
+					->addStg($commander->getName())
+					->addTxt(' est arrivé sur ')
+					->addLnk('map/base-' . $this->id, $this->baseName)
+					->addTxt('.')
+					->addEnd();
+				ASM::$ntm->add($notif);
+			} else if ($case == 2) {
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Rapport de déplacement');
+				$notif->addBeg()
+					->addTxt('Votre commandant ')
+					->addStg($commander->getName())
+					->addTxt(' n\'est pas arrivé sur ')
+					->addLnk('map/base-' . $this->id, $this->baseName)
+					->addTxt('. Les trois cases flottes étaient occupées à son arrivée. Il repart donc vers sa planète d\'origine.')
+					->addEnd();
+				ASM::$ntm->add($notif);
+
+			} elseif ($case == 3) {
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Rapport de déplacement');
+				$notif->addBeg()
+					->addTxt('Votre commandant ')
+					->addStg($commander->getName())
+					->addTxt(' n\'est pas arrivé sur ')
+					->addLnk('map/base-' . $this->id, $this->baseName)
+					->addTxt('. Cette base ne vous appartient pas.')
+					->addEnd();
+				ASM::$ntm->add($notif);
+			}
+
+		} elseif ($type == 1) {
+			if ($case == 1) {
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Rapport de pillage');
+				$notif->addBeg()
+					->addTxt('Votre commandant ')
+					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addTxt(' a pillé la planète rebelle située aux coordonnées ')
+					->addLnk('map/place-' . $this->id, Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector))
+					->addTxt('.')
+					->addSep()
+					->addTxt('La flotte victorieuse à volé ')
+					->addStg(Format::numberFormat($commander->getResourcesTransported()))
+					->addTxt(' ressources à l\'ennemi.')
+					->addEnd();
+				ASM::$ntm->add($notif);
+
+			} elseif ($case == 2) {
+
+			}
+
+		} elseif ($type == 2) {
+
+		} elseif ($type == 3) {
+
 		}
 	}
 

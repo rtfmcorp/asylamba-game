@@ -41,7 +41,8 @@ class PlaceManager extends Manager {
 			ob.levelCommercialPlateforme AS levelCommercialPlateforme,
 			ob.levelGravitationalModule AS levelGravitationalModule,
 			ob.resourcesStorage AS obResources,
-			ob.antiSpyAverage AS antiSpyAverage
+			ob.antiSpyAverage AS antiSpyAverage,
+			ob.typeOfBase AS obTypeOfBase
 			FROM place AS p
 			LEFT JOIN system AS s
 				ON p.rSystem = s.id
@@ -103,6 +104,7 @@ class PlaceManager extends Manager {
 					$p->setResources($aw['msResources']);
 				} elseif (isset($aw['obId'])) {
 					$p->setTypeOfBase(4);
+					$p->typeOfOrbitalBase = $aw['obTypeOfBase'];
 					$p->setBaseName($aw['obName']);
 					$p->setLevelCommercialPlateforme($aw['levelCommercialPlateforme']);
 					$p->setLevelGravitationalModule($aw['levelGravitationalModule']);

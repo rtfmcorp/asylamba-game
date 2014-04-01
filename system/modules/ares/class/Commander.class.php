@@ -116,7 +116,7 @@ class Commander {
 	public function getPalmares() 				{ return $this->palmares; }
 	public function getTypeOfMove() 			{ return $this->travelType; }
 	public function getTravelType() 			{ return $this->travelType; }
-	public function getRPlaceDestination() 		{ return $this->rPlaceDestination; }
+	public function getRPlaceDestination() 		{ return $this->rDestinationPlace; }
 	public function getArrivalDate() 			{ return $this->dArrival; }
 	public function getDArrival()	 			{ return $this->dArrival; }
 	public function getResourcesTransported() 	{ return $this->resourcesTransported; }
@@ -333,32 +333,6 @@ class Commander {
 			$this->upExperience($earnedExperience);
 		}
 	}
-
-	/*public function uTravel() {
-		include_once GAIA;
-
-		if ($this->hasToU == TRUE) {
-			if ($this->statement == 2 AND $this->typeOfMove != 3) {
-				if (Utils::now() >= $this->arrivalDate AND $this->rPlaceDestination != NULL) {
-					$this->hasToU = FALSE;
-
-					$S_PLM10 = ASM::$plm->getCurrentSession();
-					ASM::$plm->newSession(ASM_UMODE);
-					ASM::$plm->load(array('id' => $this->rPlaceDestination));
-					ASM::$plm->changeSession($S_PLM10);	
-					}
-			} else if ($this->statement == 2 AND $this->typeOfMove == 3) {
-				if (Utils::now() >= $this->arrivalDate AND $this->rPlaceDestination != NULL) {
-					$this->hasToU = FALSE;
-
-					$S_PLM11 = ASM::$plm->getCurrentSession();
-					ASM::$plm->newSession(ASM_UMODE);
-					ASM::$plm->load(array('id' => $this->rPlaceDestination));
-					ASM::$plm->changeSession($S_PLM11);
-					}
-			}
-		}
-	}*/
 
 	public function move($rDestinationPlace, $rStartPlace, $travelType, $travelLength, $duration) {
 		if ($this->statement == 1) {
