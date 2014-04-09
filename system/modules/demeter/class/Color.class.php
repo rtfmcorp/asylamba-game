@@ -63,7 +63,7 @@ class Color {
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
 					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
 						if ($i < $limit) {
-							ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);	
+							ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
 						} else {
 							ASM::$pam->get($i)->setStatus(PAM_STANDARD);
 						}

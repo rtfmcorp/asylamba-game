@@ -22,7 +22,7 @@ echo '<head>';
 
 	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.css" />';
 	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'module.css" />';
-	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.php?color=' . CTR::$data->get('playerInfo')->get('color') . '" />';
+	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.css" />';
 	if (CTR::getPage() == 'inscription') {
 		echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'inscription.desktop.css" />';
 	}

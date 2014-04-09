@@ -452,16 +452,69 @@ body {
 /* SUBNAV */
 #subnav {
 	position: fixed;
-	top: 30px; left: 0; bottom: 20px;
+	top: 130px; left: 8px; bottom: 60px;
 	width: 60px;
-	background: url('src/desktop/nav/subnav.png') repeat-y #0A0A0A;
+	background: url('src/desktop/subnav/middle.png') repeat-y;
 	z-index: 1000;
+}
+#subnav:before {
+	content: '';
+	position: absolute;
+	top: -100px; left: -40px; width: 140px; bottom: 0;
+	background: url('src/desktop/subnav/top.png') no-repeat;
+}
+#subnav:after {
+	content: '';
+	position: absolute;
+	bottom: -40px; left: -40px; width: 140px; height: 40px;
+	background: url('src/desktop/subnav/bottom.png') no-repeat;
 }
 
 #subnav .overflow {
-	margin: 30px 0 20px 10px;
+	margin: 0 0 20px 0;
 }
 
+#subnav .item {
+	position: relative;
+	left: -5px; top: -10px;
+	display: block;
+	height: 60px; width: 60px;
+	margin: 0 0 10px 0; padding: 8px 5px;
+	color: white;
+	text-decoration: none;
+	background: url('src/desktop/subnav/button.png') no-repeat;
+}
+#subnav .item:before {
+	content: ''; position: absolute;
+	right: -6px; bottom: 0;
+	width: 12px; height: 47px;
+	background: url('src/desktop/subnav/til.png') no-repeat;
+}
+#subnav .item:hover:before {
+	background: url('src/desktop/subnav/til-hover.png') no-repeat;
+}
+
+
+#subnav .item .picto {
+	display: block;
+	height: 40px; width: 40px;
+	padding: 10px;
+}
+#subnav .item .picto img {
+	display: block;
+	height: 40px; width: 40px;
+}
+
+#subnav .item .picto .number {
+	position: absolute;
+	bottom: -5px; right: -18px;
+	display: block;
+	width: 28px; height: 28px; line-height: 28px;
+	text-align: center;
+	font-size: 12px;
+	background: url('src/desktop/subnav/number.png') no-repeat;
+}
+/*
 #subnav .item {
 	position: relative;
 	display: block;
@@ -469,8 +522,8 @@ body {
 	margin: 0 0 5px 0; padding: 0;
 	color: white;
 	text-decoration: none;
+	background: red;
 }
-
 #subnav .item .picto {
 	height: 60px; width: 60px;
 	top: 0; left: 0;
@@ -511,12 +564,12 @@ body {
 .color4 #subnav .item .picto .number { background: #310948; }
 .color5 #subnav .item .picto .number { background: #24500a; }
 .color6 #subnav .item .picto .number { background: #004948; }
-.color7 #subnav .item .picto .number { background: #401b13; }
+.color7 #subnav .item .picto .number { background: #401b13; }*/
 
 #subnav .item .content {
 	display: none;
 	position: absolute;
-	top: 0; left: 60px;
+	top: 0; left: 75px;
 	width: 230px;
 }
 #subnav .item:hover > .content {
