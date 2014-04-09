@@ -44,7 +44,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 
 				$sr->typeOfOrbitalBase = OrbitalBase::TYP_NEUTRAL;
 				$sr->rEnemy = 0;
-				$sr->enemyName = 'Bertrand';
+				$sr->enemyName = 'Rebel';
 				$sr->enemyAvatar = '...';
 				$sr->enemyLevel = 1;
 #TODO
@@ -71,9 +71,17 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 				$sr->enemyName = $enemy->name;
 				$sr->enemyAvatar = $enemy->avatar;
 				$sr->enemyLevel = $enemy->level;
-#TODO
-				$sr->commanders = array();
+
+				$commandersArray = array();
+				$S_COM1 = ASM::$com->getCurrentSession();
+				ASM::$com->newSession();
+				ASM::$com->load(array('rBase' => $rPlace, 'c.statement' => Commander::AFFECTED));
+				for ($i = 0; $i < ASM::$com->size(); $i++) { 
+					$commandersArray[] = ASM::$com->get($i)->getNbrShipByType();
+				}
+				$sr->commanders = serialize($commandersArray);
 				
+				ASM::$com->changeSession($S_COM1);
 				ASM::$pam->changeSession($S_PAM1);
 				ASM::$obm->changeSession($S_OBM1);
 

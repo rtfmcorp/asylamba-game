@@ -13,7 +13,7 @@
 class SpyReportManager extends Manager {
 	protected $managerType = '_SpyReport';
 
-	private function load($where = array(), $order = array(), $limit = array()) {
+	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'sr.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);

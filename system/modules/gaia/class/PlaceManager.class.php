@@ -114,6 +114,8 @@ class PlaceManager extends Manager {
 				} else {
 					CTR::$alert->add('Problèmes d\'appartenance du lieu !');
 				}
+			} else {
+				$p->setBaseName('Planète rebelle');
 			}
 
 			$S_COM3 = ASM::$com->getCurrentSession();

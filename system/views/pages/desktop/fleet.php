@@ -87,17 +87,34 @@ echo '<div id="content">';
 		include_once ARTEMIS;
 
 		# loading des objets
-# TODO
+		$S_SRM1 = ASM::$srm->getCurrentSession();
+		ASM::$srm->newSession();
+		ASM::$srm->load(array('rPlayer' => CTR::$data->get('playerId')), array('dSpying', 'DESC'));
 
 		# listReport component
 		$report_listReport = array();
-# TODO
+		for ($i = 0; $i < ASM::$srm->size(); $i++) { 
+			$report_listReport[$i] = ASM::$srm->get($i);
+		}
 		include COMPONENT . 'artemis/listReport.php';
 
 		# report component
-# TODO
-		include COMPONENT . 'artemis/report.php';
+		if (CTR::$get->exist('report')) {
+			$S_SRM2 = ASM::$srm->getCurrentSession();
+			ASM::$srm->newSession();
+			ASM::$srm->load(array('id' => CTR::$get->get('report')));
+			if (ASM::$srm->size() == 1) {
+				$S_PLM = ASM::$plm->getCurrentSession();
+				ASM::$plm->newSession();
+				ASM::$plm->load(array('id' => ASM::$srm->get()->rPlace));
 
+				$place_report = ASM::$plm->get();
+				$report_report = ASM::$srm->get();
+				include COMPONENT . 'artemis/report.php';
+			}
+			ASM::$srm->changeSession($S_SRM2);
+		}
+		ASM::$srm->changeSession($S_SRM1);
 	} elseif (CTR::$get->get('view') == 'archive') {
 		# inclusion des modules
 		include_once ARES;
