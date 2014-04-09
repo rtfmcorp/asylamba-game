@@ -1,7 +1,7 @@
 <?php
 # send a spy
 
-# int rPlace 		id of the place to spy
+# int rplace 		id of the place to spy
 # int price			credit price for spying
 
 include_once GAIA;
@@ -20,28 +20,71 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 		ASM::$pam->get()->decreaseCredit($price);
 		ASM::$pam->changeSession($S_PAM1);
 
-		# espionnage
+		# place
 		$S_PLM1 = ASM::$plm->getCurrentSession();
 		ASM::$plm->newSession();
 		ASM::$plm->load(array('id' => $rPlace));
+		$place = ASM::$plm->get();
 
+		# espionnage
 		$sr = new SpyReport();
 		$sr->rPlayer = CTR::$data->get('playerId');
 		$sr->price = $price;
 		$sr->rPlace = $rPlace;
-		$sr->placeColor = ASM::$plm->get()->playerColor;
-
-		$sr->typeOfBase = ASM::$plm->get()->typeOfBase;
-		$sr->typeOfOrbitalBase = ;
-
-		$sr->placeName = ASM::$plm->get()->baseName;
-		$sr->points = ASM::$plm->get()->points;
-
-		$sr->resources = ASM::$plm->get()->resources;
-		$sr->commanders = "tableau sérialisé de malade";
+		$sr->placeColor = $place->playerColor;
+		$sr->typeOfBase = $place->typeOfBase;
+		$sr->placeName = $place->baseName;
+		$sr->points = $place->points;
 		$sr->dSpying = Utils::now();
 
-		//ASM::$srm->add($sr);
+		switch ($place->typeOfBase) {
+			case Place::TYP_EMPTY:
+
+				$sr->resources = $place->resources;
+
+				$sr->typeOfOrbitalBase = OrbitalBase::TYP_NEUTRAL;
+				$sr->rEnemy = 0;
+				$sr->enemyName = 'Bertrand';
+				$sr->enemyAvatar = '...';
+				$sr->enemyLevel = 1;
+#TODO
+				$sr->commanders = array();
+
+				break;
+			case Place::TYP_ORBITALBASE:
+
+				# orbitalBase
+				$S_OBM1 = ASM::$obm->getCurrentSession();
+				ASM::$obm->newSession();
+				ASM::$obm->load(array('rPlace' => $rPlace));
+				$orbitalBase = ASM::$obm->get();
+				# enemy
+				$S_PAM1 = ASM::$pam->getCurrentSession();
+				ASM::$pam->newSession();
+				ASM::$pam->load(array('id' => $orbitalBase->rPlayer));
+				$enemy = ASM::$pam->get();
+				
+				$sr->resources = $orbitalBase->resourcesStorage;
+
+				$sr->typeOfOrbitalBase = $orbitalBase->typeOfBase;
+				$sr->rEnemy = $orbitalBase->rPlayer;
+				$sr->enemyName = $enemy->name;
+				$sr->enemyAvatar = $enemy->avatar;
+				$sr->enemyLevel = $enemy->level;
+#TODO
+				$sr->commanders = array();
+				
+				ASM::$pam->changeSession($S_PAM1);
+				ASM::$obm->changeSession($S_OBM1);
+
+				break;
+			default:
+				CTR::$alert->add('espionnage pour vaisseau-mère pas encore implémenté', ALERT_STD_ERROR);
+		}
+
+		ASM::$srm->add($sr);
+
+		CTR::$alert->add('Espionnage effectué. Vous trouverez le rapport dans l\'amirauté', ALERT_STD_SUCCESS);
 
 		ASM::$plm->changeSession($S_PLM1);
 	} else {
