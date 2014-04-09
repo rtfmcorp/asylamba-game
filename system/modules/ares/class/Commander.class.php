@@ -119,7 +119,8 @@ class Commander {
 	public function getRPlaceDestination() 		{ return $this->rDestinationPlace; }
 	public function getArrivalDate() 			{ return $this->dArrival; }
 	public function getDArrival()	 			{ return $this->dArrival; }
-	public function getResourcesTransported() 	{ return $this->resourcesTransported; }
+	public function getResourcesTransported() 	{ return $this->resources; }
+	public function getResources()			 	{ return $this->resources; }
 	public function getUTravel() 				{ return $this->uTravel; }
 	public function getStatement() 				{ return $this->statement; }
 	public function getDCreation() 				{ return $this->dCreation; }
@@ -129,8 +130,9 @@ class Commander {
 	public function getOBName()					{ return $this->oBName; }
 	public function getArmyInBegin()			{ return $this->armyInBegin; }
 	public function getArmyAtEnd()				{ return $this->armyAtEnd; }
-	public function getearnedexperience()		{ return $this->earnedExperience; }
+	public function getEarnedExperience()		{ return $this->earnedExperience; }
 	public function getPevInBegin()				{ return $this->pevInBegin; }
+	public function getIsAttacker()				{ return $this->isAttacker; }
 
 	public function getDestinationPlaceName()	{
 		return ($this->destinationPlaceName == NULL) ? 'planète rebelle' : $this->destinationPlaceName;
@@ -196,7 +198,7 @@ class Commander {
 	public function setrPlaceDestination($rPlaceDestination) 		{ $this->rPlaceDestination = $rPlaceDestination; } 	
 	public function setArrivalDate($arrivalDate) 					{ $this->arrivalDate = $arrivalDate; } 	        
 	public function setResourcesTransported($resourcesTransported)	{ $this->resourcesTransported = $resourcesTransported; }
-	public function setUTravel($uTravel) 							{ $this->uTravel = $uTravel; } 		   
+	public function setUTravel($uTravel) 							{ $this->uTravel = $uTravel; }
 	public function setStatement($statement) 						{ $this->statement = $statement; } 	       
 	public function setDCreation($dCreation) 						{ $this->dCreation = $dCreation; } 	       
 	public function setDAffectation($dAffectation) 					{ $this->dAffectation = $dAffectation; }	    
@@ -338,7 +340,7 @@ class Commander {
 	}
 
 	public function move($rDestinationPlace, $rStartPlace, $travelType, $travelLength, $duration) {
-		if ($this->statement == 1) {
+		// if ($this->statement == 1) {
 			$this->rDestinationPlace = $rDestinationPlace;
 			$this->rStartPlace = $rStartPlace;
 			$this->travelType = $travelType;
@@ -355,11 +357,11 @@ class Commander {
 			}
 
 			return TRUE;
-		} else {
-			CTR::$alert->add('Ce commandant est déjà en déplacement ou ne peut pas se déplacer.', ALERT_STD_ERROR);
-			CTR::$alert->add('dans move de Commander', ALERT_BUG_ERROR);
-			return FALSE;
-		}
+		// } else {
+		// 	CTR::$alert->add('Ce commandant est déjà en déplacement ou ne peut pas se déplacer.', ALERT_STD_ERROR);
+		// 	CTR::$alert->add('dans move de Commander', ALERT_BUG_ERROR);
+		// 	return FALSE;
+		// }
 	}
 	
 	public function resultOfFight($isWinner, $enemyCommander = NULL) {
@@ -383,7 +385,7 @@ class Commander {
 	public function engage($enemyCommander, $thisCommander) {
 		$idSquadron = 0;
 		foreach ($this->army as $squadron) {
-			if ($squadron->getNbrOfShips() != 0 AND $squadron->getLineCoord() * 3 <= FightController::getCurrentLine()) {
+			if ($squadron->getNbrShips() != 0 AND $squadron->getLineCoord() * 3 <= FightController::getCurrentLine()) {
 				$enemyCommander = $squadron->engage($enemyCommander, $idSquadron, $this->id, $this->name, $thisCommander);
 			}
 			$idSquadron++;

@@ -85,7 +85,7 @@ class Ship {
 	
 	public function engage ($enemySquadron) {
 		for ($i = 0; $i < $this->nbrAttack; $i++) {
-			if ($enemySquadron->getNbrOfShips() == 0) {
+			if ($enemySquadron->getNbrShips() == 0) {
 				break;
 			}
 			$keyOfEnemyShip = $this->chooseEnemy($enemySquadron);
@@ -97,7 +97,7 @@ class Ship {
 	}
 	
 	protected function chooseEnemy($enemySquadron) {
-		$aleaNbr = rand(0, $enemySquadron->getNbrOfShips() - 1);
+		$aleaNbr = rand(0, $enemySquadron->getNbrShips() - 1);
 		return $aleaNbr;
 	}
 		

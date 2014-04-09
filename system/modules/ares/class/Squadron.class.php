@@ -14,12 +14,11 @@ class Squadron {
 	public $id = 0;
 	
 	public $lineCoord 			= 0;
-	public $nbrships 			= 0;
+	public $nbrShips 			= 0;
 	public $rCommander 			= 0;
 	public $position				= 0; //position dans le tableau de l'armée
 	public $arrayOfShips 		= array();
 	public $relId 				= 0;
-	public $nbrOfShips 			= 0;
 	
 	public $squadron 			= array();
 
@@ -27,7 +26,7 @@ class Squadron {
 
 	public function getId()					{ return $this->id; }
 	public function getLineCoord()			{ return $this->lineCoord; }
-	public function getNbrships()			{ return $this->nbrships; }
+	public function getNbrShips()			{ return $this->nbrShips; }
 	public function getRCommander()			{ return $this->rCommander; }
 	public function getPosition()			{ return $this->position; }
 	public function getSquadron()			{ return $this->squadron; }
@@ -84,8 +83,8 @@ class Squadron {
 		for($i = 0; $i < 12; $i++) {
 			for ($j = 0; $j < $vector[$i]; $j++) {
 				$this->squadron[] = new Ship($i, $isAttacker);
-				$this->squadron[$this->nbrships]->affectId($this->nbrships);
-				$this->nbrships++;
+				$this->squadron[$this->nbrShips]->affectId($this->nbrShips);
+				$this->nbrShips++;
 			}
 		}
 	}
@@ -134,17 +133,17 @@ class Squadron {
 		$nbrShipsInLine = 0;
 		foreach ($enemyCommander->getArmy() as $enemySquadron) {
 			if ($enemySquadron->getLineCoord() * 3 <= FightController::getCurrentLine()) {
-				$nbrShipsInLine += $enemySquadron->getNbrOfShips();
+				$nbrShipsInLine += $enemySquadron->getNbrShips();
 			}
 		}
 		if ($nbrShipsInLine == 0) {
 			return NULL;
-		} elseif ($this->relId != NULL AND $enemyCommander->getSquadron($this->relId)->getNbrOfShips() > 0) {
+		} elseif ($this->relId != NULL AND $enemyCommander->getSquadron($this->relId)->getNbrShips() > 0) {
 			return $this->relId;
 		} else {
 			$aleaNbr = rand(0, $enemyCommander->getLevel() - 1);
 			for($i = 0; $i < $enemyCommander->getLevel(); $i++) {
-				if ($enemyCommander->getSquadron($aleaNbr)->getLineCoord() * 3 <= FightController::getCurrentLine() AND $enemyCommander->getSquadron($aleaNbr)->getNbrOfShips() > 0) {
+				if ($enemyCommander->getSquadron($aleaNbr)->getLineCoord() * 3 <= FightController::getCurrentLine() AND $enemyCommander->getSquadron($aleaNbr)->getNbrShips() > 0) {
 					break;
 				} else {
 					if ($aleaNbr == $enemyCommander->getLevel() - 1) {
@@ -160,7 +159,7 @@ class Squadron {
 	
 	public function fight($enemySquadron) {
 		foreach ($this->squadron as $ship) {
-			if ($enemySquadron->getNbrOfShips() == 0) {
+			if ($enemySquadron->getNbrShips() == 0) {
 				break;
 			}
 			$enemySquadron = $ship->engage($enemySquadron);
@@ -182,7 +181,8 @@ class Squadron {
 	}
 	
 	private function deleteOffset($i) {
-		$this->arrayOfShips[0]--;	
+		$this->arrayOfShips[$i]--;	
+		$this->nbrShips--;
 	}
 }
 ?>

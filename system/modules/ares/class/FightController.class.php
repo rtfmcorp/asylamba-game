@@ -248,7 +248,7 @@ class FightController {
 			$nbrShipsA = 0;
 			
 			foreach ($commanderD->getArmy() as $squadronD) {
-				$nbrShipsD += $squadronD->getNbrOfships();
+				$nbrShipsD += $squadronD->getNbrShips();
 			}
 			if($nbrShipsD == 0) {
 				$commanderA->resultOfFight(TRUE, $commanderD);
@@ -281,7 +281,7 @@ class FightController {
 			}
 			
 			foreach ($commanderA->getArmy() as $squadronA) {
-				$nbrShipsA += $squadronA->getNbrOfships();
+				$nbrShipsA += $squadronA->getNbrShips();
 			}
 			if ($nbrShipsA == 0) {
 				$commanderD->resultOfFight(TRUE, $commanderA);
@@ -318,8 +318,7 @@ class FightController {
 		LiveReport::setFinalCommanders(array($commanderA, $commanderD));
 		LiveReport::setFinalArmies($commanderA->getArmyAtEnd(), $commanderD->getArmyAtEnd());
 
-		$report = LiveReport::createReport();
-		return $report;
+		return array($commanderA, $commanderD);
 	}
 }
 ?>

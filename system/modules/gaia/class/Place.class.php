@@ -233,7 +233,7 @@ class Place {
 				$home = ASM::$plm->get();
 				$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
 				$duration = Game::getTimeToTravel($home, $this);
-				$commander->move($commander->rBase, $tis->id, Commander::BACK, $length, $durationn);
+				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $durationn);
 				ASM::$plm->changeSession($S_PLM10);
 
 				$this->sendNotif(0, 2, $commander);
@@ -256,14 +256,14 @@ class Place {
 	private function tryToLoot($commander) {
 		include_once ARES;
 		if ($this->rPlayer == 0) {
-			# planète vide -> faire un combat
-			$this->startFight($commander);
-			// $commander->statement = -1;
 			$commander->rPlaceDestination = NULL;
 			$commander->travelType = NULL;
 			$commander->rStartPlace = NULL;
 			$commander->dArrival = NULL;
 			$commander->length = NULL;
+
+			# planète vide -> faire un combat
+			$this->startFight($commander);
 
 			# si gagné
 			if ($commander->getStatement() != Commander::DEAD) {
@@ -276,7 +276,7 @@ class Place {
 				$home = ASM::$plm->get();
 				$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
 				$duration = Game::getTimeToTravel($home, $this);
-				$commander->move($commander->rBase, $tis->id, Commander::BACK, $length, $durationn);
+				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
 				ASM::$plm->changeSession($S_PLM10);
 
 				$this->sendNotif(1, 1, $commander);
@@ -285,7 +285,7 @@ class Place {
 
 				# si il est mort
 				# enlever le commandant de la session
-				$S_PLM101= ASM::$plm->getCurrentSession();
+				$S_PLM11= ASM::$plm->getCurrentSession();
 				ASM::$plm->newSession();
 				ASM::$plm->load(array('id' => $commander->getRBase()));
 				for ($i = 0; $i < count(ASM::$plm->get()->commanders); $i++) {
@@ -757,7 +757,7 @@ class Place {
 	}
 
 	private function lootAnEmptyPlace($commander) {
-		$storage = $commander->getPev() * COEFFLOOT;
+		$storage = $commander->getPev() * Commander::COEFFLOOT;
 		$resourcesLooted = 0;
 
 		if ($storage > $this->resources) {
@@ -908,29 +908,38 @@ class Place {
 			$vCommander->setLevel(1);
 			$vCommander->setSquadronsIds(array(1));
 			$vCommander->setArmyInBegin(array(array(5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL)));
+			$vCommander->setArmy();
+			$vCommander->setPevInBegin();
 		} elseif ($population >= 50 AND $population < 80) {
 			$vCommander->setName('Petite Flotte de Défense');
 			$vCommander->setLevel(2);
 			$vCommander->setSquadronsIds(array(1, 2));
 			$vCommander->setArmyInBegin(array(array(5, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(5, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL)));
+			$vCommander->setArmy();
+			$vCommander->setPevInBegin();
 		} elseif ($population >= 80 AND $population < 150) {
 			$vCommander->setName('Moyenne Flotte de Défense');
 			$vCommander->setLevel(3);
 			$vCommander->setSquadronsIds(array(1, 2, 3));
 			$vCommander->setArmyInBegin(array(array(20, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, NULL), array(20, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL)));
+			$vCommander->setPevInBegin();
+			$vCommander->setArmy();
 		} elseif ($population >= 150 AND $population < 200) {
 			$vCommander->setName('Grande Flotte de Défense');
 			$vCommander->setLevel(6);
 			$vCommander->setSquadronsIds(array(1, 2, 3, 4, 5, 6));
 			$vCommander->setArmyInBegin(array(array(34, 5, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, NULL), array(31, 5, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, NULL), array(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, NULL), array(1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(1, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, NULL)));
+			$vCommander->setPevInBegin();
+			$vCommander->setArmy();
 		} else {
 			$vCommander->setName('Enorme Flotte de Défense');
 			$vCommander->setLevel(12);
 			$vCommander->setSquadronsIds(array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
 			$vCommander->setArmyInBegin(array(array(32, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, NULL), array(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL), array(12, 0, 0, 15, 0, 0, 0, 0, 1, 0, 0, 0, NULL), array(1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, NULL), array(50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(12, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, NULL), array(17, 20, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, NULL), array(12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(1, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, NULL), array(50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL)));
+			$vCommander->setPevInBegin();
+			$vCommander->setArmy();
 		}
 
-		$vCommander = new Commander($vCommander);
 		return $vCommander;
 	}
 }

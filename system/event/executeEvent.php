@@ -31,7 +31,7 @@ if ($pastEvents->size() > 0) {
 			# mise à jour du commandant qui fait l'attaque 
 			$S_COM1 = ASM::$com->getCurrentSession();
 			ASM::$com->newSession(ASM_UMODE);
-			ASM::$com->load(array('id' => $event->get('eventId')));
+			ASM::$com->load(array('c.id' => $event->get('eventId')));
 			ASM::$com->changeSession($S_COM1);
 		}
 
