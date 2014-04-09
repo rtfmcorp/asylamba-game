@@ -253,7 +253,7 @@ class Place {
 				# piller la planète
 				$this->lootAnEmptyPlace($commander);
 				# comeBackToHome
-				S_PLM10 = ASM::$plm->getCurrentSession();
+				$S_PLM10 = ASM::$plm->getCurrentSession();
 				ASM::$plm->newSession();
 				ASM::$plm->load(array('id' => $commander->getRBase()));
 				$home = ASM::$plm->get();

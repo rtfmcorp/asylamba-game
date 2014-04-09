@@ -16,7 +16,7 @@ class ForumMessage {
 	const FORBIDDEN_FLOOD 	= 3;
 	const FORBIDDEN_INSULT 	= 4;
 	const FORBIDDEN_PR0N 	= 5;
-	const FORBIDDEN_RACISM 	= 6;	
+	const FORBIDDEN_RACISM 	= 6;
 
 	public $id 					= 0;
 	public $rPlayer 			= 0;
