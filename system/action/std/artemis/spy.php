@@ -35,6 +35,9 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 		$sr->typeOfBase = $place->typeOfBase;
 		$sr->placeName = $place->baseName;
 		$sr->points = $place->points;
+
+		$sr->success = 50; # 0 to 100
+		$sr->type = SpyReport::TYP_NOT_CAUGHT; # or TYP_ANONYMOUSLY_CAUGHT or TYP_CAUGHT
 		$sr->dSpying = Utils::now();
 
 		switch ($place->typeOfBase) {
@@ -48,7 +51,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 				$sr->enemyAvatar = '...';
 				$sr->enemyLevel = 1;
 #TODO
-				$sr->commanders = array();
+				$sr->commanders = serialize(array());
 
 				break;
 			case Place::TYP_ORBITALBASE:
@@ -75,9 +78,15 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 				$commandersArray = array();
 				$S_COM1 = ASM::$com->getCurrentSession();
 				ASM::$com->newSession();
-				ASM::$com->load(array('rBase' => $rPlace, 'c.statement' => Commander::AFFECTED));
+				ASM::$com->load(array('rBase' => $rPlace, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING)));
 				for ($i = 0; $i < ASM::$com->size(); $i++) { 
-					$commandersArray[] = ASM::$com->get($i)->getNbrShipByType();
+					$commandersArray[$i]['name'] = ASM::$com->get($i)->name;
+					$commandersArray[$i]['avatar'] = ASM::$com->get($i)->avatar;
+					$commandersArray[$i]['level'] = ASM::$com->get($i)->level;
+					$commandersArray[$i]['line'] = ASM::$com->get($i)->line;
+					$commandersArray[$i]['statement'] = ASM::$com->get($i)->statement;
+					$commandersArray[$i]['pev'] = ASM::$com->get($i)->getPev();
+					$commandersArray[$i]['army'] = ASM::$com->get($i)->getNbrShipByType();
 				}
 				$sr->commanders = serialize($commandersArray);
 				
