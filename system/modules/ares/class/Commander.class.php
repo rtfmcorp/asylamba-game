@@ -128,6 +128,9 @@ class Commander {
 	public function getLengthTravel()			{ return $this->lengthTravel; }
 	public function getOBName()					{ return $this->oBName; }
 	public function getArmyInBegin()			{ return $this->armyInBegin; }
+	public function getArmyAtEnd()				{ return $this->armyAtEnd; }
+	public function getearnedexperience()		{ return $this->earnedExperience; }
+	public function getPevInBegin()				{ return $this->pevInBegin; }
 
 	public function getDestinationPlaceName()	{
 		return ($this->destinationPlaceName == NULL) ? 'planète rebelle' : $this->destinationPlaceName;

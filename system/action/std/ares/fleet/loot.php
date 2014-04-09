@@ -41,24 +41,17 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 				ASM::$plm->load(array('id' => $commander->getRBase()));
 				$home = ASM::$plm->getById($commander->getRBase());
 
+				$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
 				$duration = Game::getTimeToTravel($home, $place);
 
-				if ($commander->move($place->getId(), COM_LOOT, $duration)) {
-					$S_PAM1 = ASM::$pam->getCurrentSession();
-
-					ASM::$pam->newSession(ASM_UMODE);
-					ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-					$player = ASM::$pam->get();
-					$player->setActionPoint($player->getActionPoint() - $PAToTravel);
+				if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
+					$commander->dStart = lib::now();
+					CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
 
 					if (CTR::$get->exist('redirect')) {
 						CTR::redirect('map/place-' . CTR::$get->get('redirect'));
 					}
-
-					CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
-
-					ASM::$pam->changeSession($S_PAM1);
-				}			
+				}		
 			} else {
 				CTR::$alert->add('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction.', ALERT_STD_ERROR);
 			}

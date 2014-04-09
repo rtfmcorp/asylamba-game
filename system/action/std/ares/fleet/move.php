@@ -45,11 +45,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					$duration = Game::getTimeToTravel($home, $place);
 
 					if ($commander->move($place->getId(), $commander->rBase, Commander::MOVE, $length, $duration)) {
-						$S_PAM1 = ASM::$pam->getCurrentSession();
-						ASM::$pam->newSession();
-						ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-						$player = ASM::$pam->get();
-						ASM::$pam->changeSession($S_PAM1);
+						$commander->dStart = lib::now();
 						CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
 					}
 				} else {

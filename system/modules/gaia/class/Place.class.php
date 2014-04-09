@@ -174,6 +174,22 @@ class Place {
 			$maxCom = ($this->typeOfOrbitalBase == 0) ? 2 : 5;
 			# si place a assez de case libre :
 			if (count($this->commanders) < $maxCom) {
+				$comLine1 = 0;
+				$comLine2 = 0;
+
+				foreach ($this->commanders as $com) {
+					if ($com->line == 1) {
+						$comLine1++;
+					} else {
+						$comLine2++;
+					}
+				}
+
+				if ($comLine2 <= $comLine1) {
+					$commander->line = 2;
+				} else {
+					$commander->line = 1;
+				}
 				# changer rBase commander
 				$commander->rBase = $this->id;
 				$commander->rPlaceDestination = NULL;
@@ -222,7 +238,7 @@ class Place {
 			$home = ASM::$plm->get();
 			$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
 			$duration = Game::getTimeToTravel($home, $this);
-			$commander->move($commander->rBase, $tis->id, Commander::BACK, $length, $durationn);
+			$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
 			ASM::$plm->changeSession($S_PLM10);
 
 			$this->sendNotif(0, 3, $commander);
@@ -235,6 +251,7 @@ class Place {
 		if ($this->rPlayer == 0) {
 			# planète vide -> faire un combat
 			$this->startFight($commander);
+			// $commander->statement = -1;
 			$commander->rPlaceDestination = NULL;
 			$commander->travelType = NULL;
 			$commander->rStartPlace = NULL;
@@ -246,7 +263,7 @@ class Place {
 				# piller la planète
 				$this->lootAnEmptyPlace($commander);
 				# comeBackToHome
-				S_PLM10 = ASM::$plm->getCurrentSession();
+				$S_PLM10 = ASM::$plm->getCurrentSession();
 				ASM::$plm->newSession();
 				ASM::$plm->load(array('id' => $commander->getRBase()));
 				$home = ASM::$plm->get();
@@ -255,30 +272,13 @@ class Place {
 				$commander->move($commander->rBase, $tis->id, Commander::BACK, $length, $durationn);
 				ASM::$plm->changeSession($S_PLM10);
 
-				$this->sendMail(1, 1, $commander);
+				$this->sendNotif(1, 1, $commander);
 
 			} else {
-				ASM::$rpm->add($report);
 
 				# si il est mort
-				include_once HERMES;
-				$notif = new Notification();
-				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Rapport de pillage');
-				$notif->addBeg()
-					->addTxt('Votre commandant ')
-					->addLnk('fleet/view-memorial', $commander->getName())
-					->addTxt(' est tombé lors de l\'attaque de la planète rebelle située aux coordonnées ')
-					->addLnk('map/place-' . $this->id, Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector))
-					->addTxt('.')
-					->addSep()
-					->addTxt('Il a désormais rejoint le Mémorial. Que son âme traverse l\'Univers dans la paix.')
-					->addSep()
-					->addLnk('fleet/view-archive/report-' . $report->id, 'voir le rapport de combat &#8594;')
-					->addEnd();
-				ASM::$ntm->add($notif);
 				# enlever le commandant de la session
-				$S_PLM10 = ASM::$plm->getCurrentSession();
+				$S_PLM101= ASM::$plm->getCurrentSession();
 				ASM::$plm->newSession();
 				ASM::$plm->load(array('id' => $commander->getRBase()));
 				for ($i = 0; $i < count(ASM::$plm->get()->commanders); $i++) {
@@ -287,7 +287,9 @@ class Place {
 						ASM::$plm->get()->commanders = array_merge(ASM::$plm->get()->commanders);
 					}
 				}
-				ASM::$plm->changeSession($S_PLM10);
+				ASM::$plm->changeSession($S_PLM11);
+
+				$this->sendNotif(1, 2, $commander);
 			}
 		# si il y a une base
 		} else {
@@ -303,17 +305,14 @@ class Place {
 				if (count($dCommanders)) {
 				# il y a des commandants en défense : faire un combat avec un des commandants
 					$aleaNbr = rand(0, count($dCommanders) - 1);
-					$report = $this->startFight($commander, $dCommanders[$aleaNbr], TRUE);
-					$commander->resultOfFight($report->getFinalCommander(0));
+					$this->startFight($commander, $dCommanders[$aleaNbr], TRUE);
 					$commander->setRPlaceDestination(NULL);
 					$commander->setTypeOfMove(-1);
-
-					$dCommanders[$aleaNbr]->resultOfFight($report->getFinalCommander(1));
 
 					# si il gagne
 					if ($commander->getStatement() != COM_DEAD) {
 						// piller la planète
-						$this->lootAPlayerPlace($commander, $report);
+						$this->lootAPlayerPlace($commander);
 						// comeBackToHome
 						$S_PLM10 = ASM::$plm->getCurrentSession();
 						ASM::$plm->newSession();
@@ -325,8 +324,6 @@ class Place {
 
 						unset($this->commanders[$aleaNbr]);
 						$this->commanders = array_merge($this->commanders);
-
-						ASM::$rpm->add($report);
 
 						include_once HERMES;
 						$notif = new Notification();
@@ -364,8 +361,6 @@ class Place {
 							->addTxt('Il repart avec ')
 							->addStg(Format::numberFormat($commander->getResourcesTransported()))
 							->addTxt(' ressources.')
-							->addSep()
-							->addLnk('fleet/view-archive/report-' . $report->id, 'voir le rapport de combat &#8594;')
 							->addEnd();
 						ASM::$ntm->add($notif);
 					} else {
@@ -382,8 +377,6 @@ class Place {
 						}
 						ASM::$plm->changeSession($S_PLM10);
 
-						ASM::$rpm->add($report);
-
 						include_once HERMES;
 						$notif = new Notification();
 						$notif->setRPlayer($commander->getRPlayer());
@@ -398,8 +391,6 @@ class Place {
 							->addTxt('.')
 							->addSep()
 							->addTxt('Il a désormais rejoint le Mémorial.')
-							->addSep()
-							->addLnk('fleet/view-archive/report-' . $report->id, 'voir le rapport de combat &#8594;')
 							->addEnd();
 						ASM::$ntm->add($notif);
 
@@ -416,8 +407,6 @@ class Place {
 							->addTxt('.')
 							->addSep()
 							->addTxt('Vous avez repoussé l\'ennemi avec succès.')
-							->addSep()
-							->addLnk('fleet/view-archive/report-' . $report->id, 'voir le rapport de combat &#8594;')
 							->addEnd();
 						ASM::$ntm->add($notif);
 					}
@@ -760,7 +749,7 @@ class Place {
 		}
 	}
 
-	private function lootAnEmptyPlace($commander, $report) {
+	private function lootAnEmptyPlace($commander) {
 		$storage = $commander->getPev() * COEFFLOOT;
 		$resourcesLooted = 0;
 
@@ -772,10 +761,9 @@ class Place {
 
 		$this->resources -= $ressouresLooted;
 		$commander->setResourcesTransported($ressouresLooted);
-		$report->resources = $commander->getResourcesTransported();
 	}
 
-	private function lootAPlayerPlace($commander, $report = NULL) {
+	private function lootAPlayerPlace($commander) {
 		include_once ATHENA;
 		$S_OBM1 = ASM::$obm->getCurrentSession();
 		ASM::$obm->newSession();
@@ -796,9 +784,6 @@ class Place {
 		if ($resourcesLooted > 0) {
 			$base->decreaseResources($resourcesLooted);
 			$commander->setResourcesTransported($resourcesLooted);
-			if ($report !== NULL) {
-				$report->resources = $commander->getResourcesTransported();
-			}
 		}
 		ASM::$obm->changeSession($S_OBM1);
 	}
@@ -808,15 +793,11 @@ class Place {
 			$commanderA = new CommanderInFight($commander);
 			$commanderD = new CommanderInFight($enemyCommander);
 			$fc = new FightController();
-			$report = $fc->startFight($commanderA, $commanderD, $this);
-			return $report;
+			$fc->startFight($commanderA, $commanderD, $this);
 		} else {
-			$commanderA = new CommanderInFight($commander);
 			$computerCommander = $this->createVirtualCommander();
 			$fc = new FightController();
-			$report = $fc->startFight($commanderA, $computerCommander, $this);
-
-			return $report;
+			$fc->startFight($commander, $computerCommander, $this);
 		}
 	}
 
@@ -875,14 +856,28 @@ class Place {
 					->addLnk('map/place-' . $this->id, Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector))
 					->addTxt('.')
 					->addSep()
-					->addTxt('La flotte victorieuse à volé ')
+					->addTxt('La flotte victorieuse a volé ')
 					->addStg(Format::numberFormat($commander->getResourcesTransported()))
 					->addTxt(' ressources à l\'ennemi.')
 					->addEnd();
 				ASM::$ntm->add($notif);
 
 			} elseif ($case == 2) {
-
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Rapport de pillage');
+				$notif->addBeg()
+					->addTxt('Votre commandant ')
+					->addLnk('fleet/view-memorial', $commander->getName())
+					->addTxt(' est tombé lors de l\'attaque de la planète rebelle située aux coordonnées ')
+					->addLnk('map/place-' . $this->id, Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector))
+					->addTxt('.')
+					->addSep()
+					->addTxt('Il a désormais rejoint le Mémorial. Que son âme traverse l\'Univers dans la paix.')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report->id, 'voir le rapport de combat &#8594;')
+					->addEnd();
+				ASM::$ntm->add($notif);
 			}
 
 		} elseif ($type == 2) {
@@ -928,7 +923,7 @@ class Place {
 			$vCommander->setArmyInBegin(array(array(32, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, NULL), array(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL), array(12, 0, 0, 15, 0, 0, 0, 0, 1, 0, 0, 0, NULL), array(1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, NULL), array(50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(12, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, NULL), array(17, 20, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, NULL), array(12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(1, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, NULL), array(50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL)));
 		}
 
-		$vCommander = new CommanderInFight($vCommander);
+		$vCommander = new Commander($vCommander);
 		return $vCommander;
 	}
 }

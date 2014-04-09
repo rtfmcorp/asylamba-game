@@ -134,6 +134,7 @@ class CommanderManager extends Manager {
 
 				$commander->setArmyInBegin($arrayOfArmies[$commander->getId()]);
 				$commander->setArmy();
+				$commander->setPevInBegin();
 
 				$currentCommander = $this->_Add($commander);
 

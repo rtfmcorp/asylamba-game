@@ -39,7 +39,7 @@ if ($commanderId !== FALSE) {
 		$nbrLine1 = ASM::$com->size();
 
 		if ($nbrLine2 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'r-line')) {
-			$commander->dAffectation =Utils::now();
+			$commander->dAffectation = Utils::now();
 			$commander->statement = Commander::AFFECTED;
 			$commander->line = 2;
 

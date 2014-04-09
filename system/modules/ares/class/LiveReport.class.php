@@ -36,7 +36,7 @@ class LiveReport {
 
 	public static function setCommanders($commanders) {
 		foreach($commanders AS $commander) {
-			self::$commanders[] = new CommanderReport_v1($commander);
+			self::$commanders[] = new Commander($commander);
 		}
 	}
 		
