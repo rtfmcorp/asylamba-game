@@ -520,7 +520,7 @@ class Place {
 				if ($commander->getStatement() != COM_DEAD) {
 					include_once ATHENA;
 
-					$this->sendNotif(2, 3);
+					$this->sendNotif(2, 3, $commander);
 
 					#attribuer le jooeur à la place
 					$this->commanders = array();
@@ -877,8 +877,6 @@ class Place {
 						->addTxt('Elle est désormais votre, vous pouvez l\'administrer ')
 						->addLnk('bases/base-' . $this->id, 'ici')
 						->addTxt('.')
-						->addSep()
-						->addLnk('fleet/view-archive/report-' . $report->id, 'voir le(s) rapport de combat &#8594;')
 						->addEnd();
 					ASM::$ntm->add($notif);
 
@@ -895,8 +893,6 @@ class Place {
 						->addTxt('.')
 						->addSep()
 						->addTxt('Impliquez votre faction dans une action punitive envers votre assaillant.')
-						->addSep()
-						->addLnk('fleet/view-archive/report-' . $report->id, 'voir le(s) rapport de combat &#8594;')
 						->addEnd();
 					ASM::$ntm->add($notif);
 			}
