@@ -532,7 +532,7 @@ class Place {
 					$this->commanders[] = $commander;
 
 					$commander->rBase = $this->id;
-					$commander->statement = Commander::AFFECTED);
+					$commander->statement = Commander::AFFECTED;
 					$commander->line = 1;
 
 				# s'il est mort
@@ -637,13 +637,15 @@ class Place {
 				$this->rPlayer = $commander->getRPlayer();
 				$this->commanders[] = $commander;
 
-				// if (CTR::$data->get('playerId') == $commander->getRPlayer()) { 
-				// 	CTRHelper::addBase('ob', 
-				// 		$ob->getId(), 
-				// 		$ob->getName(), 
-				// 		$this->rSector, 
-				// 		$this->rSystem);
-				// }
+				if (CTR::$data->get('playerId') == $commander->getRPlayer()) { 
+					CTRHelper::addBase('ob', 
+						$ob->getId(), 
+						$ob->getName(), 
+						$this->rSector, 
+						$this->rSystem,
+						'1-' . Game::getSizeOfPlanet($this->population),
+						OrbitalBase::TYP_NEUTRAL);
+				}
 
 				$this->sendNotif(2, 1, $commander);
 

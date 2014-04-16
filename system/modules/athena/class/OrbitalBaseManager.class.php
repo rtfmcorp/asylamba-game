@@ -367,22 +367,25 @@ class OrbitalBaseManager extends Manager {
 				CTRHelper::removeBase('ob', $base->getId());
 			}
 
-			# changer l'allégeance des commandants dans l'école
-			$S_COM1 = ASM::$com->getCurrentSession();
-			ASM::$com->newSession();
-			ASM::$com->load(array('rBase' => $id, 'statement' => COM_INSCHOOL));
-			for ($i = 0; $i < ASM::$com->size(); $i++) { 
-				ASM::$com->get($i)->setRPlayer($newOwner);
-				bug::pre(ASM::$com->get($i));
-			}
-			ASM::$com->changeSession($S_COM1);
-
 			# rendre déserteuses les flottes en voyage
 			$S_COM2 = ASM::$com->getCurrentSession();
 			ASM::$com->newSession();
-			ASM::$com->load(array('rBase' => $id, 'statement' => COM_MOVING));
-			for ($i = 0; $i < ASM::$com->size(); $i++) { 
-				ASM::$com->get($i)->setStatement(COM_DESERT);
+			ASM::$com->load(array('c.rBase' => $id));
+			for ($i = 0; $i < ASM::$com->size(); $i++) {
+				if ($com->statement != Commander::DEAD) {
+					$com->rPlayer = $newOwner;
+				}
+				if ($com->statement == Commander::MOVING) {
+					$com->statement = Commander::DESERT;
+				}
+				$com->rDestinationPlace = NULL;
+				$com->travelType = NULL;
+				$com->travelLength = NULL;
+				$com->rStartPlace = NULL;
+				$com->dArrival = NULL;
+				$com->dstart = NULL;
+				$com->length = NULL;
+				$com->rBase = NULL;
 			}
 			ASM::$com->changeSession($S_COM2);
 
