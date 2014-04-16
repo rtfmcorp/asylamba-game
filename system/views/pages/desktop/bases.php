@@ -54,9 +54,6 @@ echo '<div id="content">';
 	} elseif (CTR::$get->get('view') == 'school') {
 		$ob_school = $base;
 		include COMPONENT . 'athena/bases/school.php';
-	} elseif (CTR::$get->get('view') == 'antispy') {
-		$ob_antispy = $base;
-		include COMPONENT . 'athena/bases/antiSpy.php';
 	} else {
 		CTR::redirect('404');
 	}

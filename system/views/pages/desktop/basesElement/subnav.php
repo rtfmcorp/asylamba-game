@@ -98,16 +98,6 @@ echo '<div id="subnav">';
 				echo '<span>Ecole de Commandement</span>';
 			echo '</span>';
 		echo '</a>';
-
-		$active = (CTR::$get->get('view') == 'antispy') ? 'active' : '';
-		echo '<a href="' . APP_ROOT . 'bases/view-antispy" class="item ' . $active . '">';
-			echo '<span class="picto">';
-				echo '<img src="' . MEDIA . 'orbitalbase/antispy.png" alt="" />';
-			echo '</span>';
-			echo '<span class="content skin-1">';
-				echo '<span>Renseignement</span>';
-			echo '</span>';
-		echo '</a>';
 	echo '</div>';
 echo '</div>';
 ?>
