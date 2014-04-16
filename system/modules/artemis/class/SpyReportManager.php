@@ -6,7 +6,7 @@
  * @author Jacky Casas
  * @copyright Expansion - le jeu
  *
- * @package Athena
+ * @package Artemis
  * @version 26.03.14
  **/
 
@@ -73,6 +73,8 @@ class SpyReportManager extends Manager {
 			$sr->enemyLevel = $aw['enemyLevel'];
 			$sr->resources = $aw['resources'];
 			$sr->commanders = $aw['commanders'];
+			$sr->success = $aw['success'];
+			$sr->type = $aw['type'];
 			$sr->dSpying = $aw['dSpying'];
 
 			$sr->typeOfPlace = $aw['typeOfPlace'];
@@ -92,8 +94,8 @@ class SpyReportManager extends Manager {
 	public function add(SpyReport $sr) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			spyReport(rPlayer, price, rPlace, placeColor, typeOfBase, typeOfOrbitalBase, placeName, points, rEnemy, enemyName, enemyAvatar, enemyLevel, resources, commanders, dSpying)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+			spyReport(rPlayer, price, rPlace, placeColor, typeOfBase, typeOfOrbitalBase, placeName, points, rEnemy, enemyName, enemyAvatar, enemyLevel, resources, commanders, success, type, dSpying)
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$sr->rPlayer,
 			$sr->price,
@@ -109,6 +111,8 @@ class SpyReportManager extends Manager {
 			$sr->enemyLevel,
 			$sr->resources,
 			$sr->commanders,
+			$sr->success,
+			$sr->type,
 			$sr->dSpying
 		));
 
@@ -138,6 +142,8 @@ class SpyReportManager extends Manager {
 					enemyLevel = ?,
 					resources = ?,
 					commanders = ?,
+					success = ?,
+					type = ?,
 					dSpying = ?
 				WHERE id = ?');
 			$qr->execute(array(
@@ -156,6 +162,8 @@ class SpyReportManager extends Manager {
 				$sr->enemyLevel,
 				$sr->resources,
 				$sr->commanders,
+				$sr->success,
+				$sr->type,
 				$sr->dSpying,
 				$sr->id
 			));

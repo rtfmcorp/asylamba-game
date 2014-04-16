@@ -35,6 +35,9 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 		$sr->typeOfBase = $place->typeOfBase;
 		$sr->placeName = $place->baseName;
 		$sr->points = $place->points;
+
+		//$sr->success = 50; # 0 to 100
+		//$sr->type = SpyReport::TYP_NOT_CAUGHT; # or TYP_ANONYMOUSLY_CAUGHT or TYP_CAUGHT
 		$sr->dSpying = Utils::now();
 
 		switch ($place->typeOfBase) {
@@ -50,6 +53,10 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 #TODO
 				$sr->commanders = serialize(array());
 
+				$antiSpy = $place->population * 20; // population : entre 0 et 250
+				$sr->sucess = Game::getSpySuccess($antiSpy, $price);
+				$sr->type = SpyReport::TYP_NOT_CAUGHT;
+
 				break;
 			case Place::TYP_ORBITALBASE:
 
@@ -58,6 +65,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 				ASM::$obm->newSession();
 				ASM::$obm->load(array('rPlace' => $rPlace));
 				$orbitalBase = ASM::$obm->get();
+
 				# enemy
 				$S_PAM1 = ASM::$pam->getCurrentSession();
 				ASM::$pam->newSession();
@@ -75,12 +83,48 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 				$commandersArray = array();
 				$S_COM1 = ASM::$com->getCurrentSession();
 				ASM::$com->newSession();
-				ASM::$com->load(array('rBase' => $rPlace, 'c.statement' => Commander::AFFECTED));
+				ASM::$com->load(array('rBase' => $rPlace, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING)));
 				for ($i = 0; $i < ASM::$com->size(); $i++) { 
-					$commandersArray[] = ASM::$com->get($i)->getNbrShipByType();
+					$commandersArray[$i]['name'] = ASM::$com->get($i)->name;
+					$commandersArray[$i]['avatar'] = ASM::$com->get($i)->avatar;
+					$commandersArray[$i]['level'] = ASM::$com->get($i)->level;
+					$commandersArray[$i]['line'] = ASM::$com->get($i)->line;
+					$commandersArray[$i]['statement'] = ASM::$com->get($i)->statement;
+					$commandersArray[$i]['pev'] = ASM::$com->get($i)->getPev();
+					$commandersArray[$i]['army'] = ASM::$com->get($i)->getNbrShipByType();
 				}
 				$sr->commanders = serialize($commandersArray);
 				
+				$antiSpy = $orbitalBase->antiSpyAverage; // entre 100 et 4000
+				$sr->success = Game::getSpySuccess($antiSpy, $price);
+				$sr->type = Game::getTypeOfSpy($sr->success);
+				switch ($sr->type) {
+					case SpyReport::TYP_ANONYMOUSLY_CAUGHT:
+						$n = new Notification();
+						$n->setRPlayer($orbitalBase->rPlayer);
+						$n->setTitle('Espionnage détecté');
+						$n->addBeg();
+						$n->addTxt('Un joueur a espionné votre base ');
+						$n->addLnk('map/base-' . $orbitalBase->rPlace, $orbitalBase->name)->addTxt('.');
+						$n->addBrk()->addTxt('Malheureusement, nous n\'avons pas pu connaître l\'identité de l\'espion.');
+						$n->addEnd();
+						ASM::$ntm->add($n);
+						break;
+					case SpyReport::TYP_CAUGHT:
+						$n = new Notification();
+						$n->setRPlayer($orbitalBase->rPlayer);
+						$n->setTitle('Espionnage intercepté');
+						$n->addBeg();
+						$n->addLnk('diary/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'))->addTxt(' a espionné votre base ');
+						$n->addLnk('map/base-' . $orbitalBase->rPlace, $orbitalBase->name)->addTxt('.');
+						$n->addBrk()->addTxt('L\'espion s\'est fait attrapé en train de fouiller dans vos affaires.');
+						$n->addEnd();
+						ASM::$ntm->add($n);
+						break;
+					default:
+						break;
+				}
+
 				ASM::$com->changeSession($S_COM1);
 				ASM::$pam->changeSession($S_PAM1);
 				ASM::$obm->changeSession($S_OBM1);
@@ -92,8 +136,8 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 
 		ASM::$srm->add($sr);
 
-		CTR::$alert->add('Espionnage effectué. Vous trouverez le rapport dans l\'amirauté', ALERT_STD_SUCCESS);
-
+		CTR::$alert->add('Espionnage effectué. Vous trouverez le rapport dans l\'amirauté.', ALERT_STD_SUCCESS);
+		
 		ASM::$plm->changeSession($S_PLM1);
 	} else {
 		CTR::$alert->add('impossible de lancer un espionnage', ALERT_STD_ERROR);

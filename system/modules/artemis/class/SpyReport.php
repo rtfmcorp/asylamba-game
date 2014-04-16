@@ -6,11 +6,16 @@
  * @author Jacky Casas
  * @copyright Expansion - le jeu
  *
- * @package Athena
+ * @package Artemis
  * @update 26.03.14
  */
 
 class SpyReport {
+	# constants
+	const TYP_NOT_CAUGHT = 0;
+	const TYP_ANONYMOUSLY_CAUGHT = 1;
+	const TYP_CAUGHT = 2;
+	
 	# attributes
 	public $id = 0; 
 	public $rPlayer = NULL; 
@@ -31,6 +36,8 @@ class SpyReport {
 	public $resources; # from place OR base
 	public $commanders;
 
+	public $success; # from 0 to 100
+	public $type; # see constants
 	public $dSpying;
 
 	# additional attributes

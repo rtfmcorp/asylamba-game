@@ -18,6 +18,8 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `spyReport` (
   `enemyLevel` int(11) NOT NULL,
   `resources` int(11) NOT NULL,
   `commanders` text NOT NULL,
+  `success` smallint(6) NOT NULL,
+  `type` tinyint(4) NOT NULL,
   `dSpying` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
