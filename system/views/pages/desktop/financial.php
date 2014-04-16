@@ -62,12 +62,12 @@ echo '<div id="content">';
 	for ($i = 0; $i < ASM::$obm->size(); $i++) {
 		$ob_generalFinancial[] = ASM::$obm->get($i);
 		
-		$thisTaxIn = Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation());
+		$thisTaxIn = Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation(), ASM::$obm->get($i)->typeOfBase);
 		$thisTaxIn *= PlaceResource::get(ASM::$obm->get($i)->typeOfBase, 'tax');
 		$financial_totalTaxIn += $thisTaxIn;
 		$financial_totalTaxInBonus += $thisTaxIn * $taxBonus / 100;
 
-		$financial_totalTaxOut += (Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation()) + (Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation()) * $taxBonus / 100)) * ASM::$obm->get($i)->getTax() / 100;
+		$financial_totalTaxOut += (Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation(), ASM::$obm->get($i)->typeOfBase) + (Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation(), ASM::$obm->get($i)->typeOfBase) * $taxBonus / 100)) * ASM::$obm->get($i)->getTax() / 100;
 
 		$financial_totalInvest += ASM::$obm->get($i)->getISchool();
 		$financial_totalInvest += ASM::$obm->get($i)->getIAntiSpy();
