@@ -3060,6 +3060,10 @@ body {
 	color: #696969;
 }
 
+.component .build-item.base-type {
+	border-bottom: solid 5px #202020;
+}
+
 .component .build-item.base-type .desc {
 	margin: 10px 0 0 0; padding: 15px;
 	font-size: 13px;
@@ -3101,6 +3105,10 @@ body {
 .color5 .component .build-item.base-type .list-choice button.done img { box-shadow: 0 0 4px white, 0 0 0 2px #2c7915; }
 .color6 .component .build-item.base-type .list-choice button.done img { box-shadow: 0 0 4px white, 0 0 0 2px #076b87; }
 .color7 .component .build-item.base-type .list-choice button.done img { box-shadow: 0 0 4px white, 0 0 0 2px #67331d; }
+
+.component .build-item.base-type .desc-choice {
+	display: none;
+}
 
 .component .build-item.base-type .desc-choice h4 {
 	border-bottom: solid 1px #202020;
