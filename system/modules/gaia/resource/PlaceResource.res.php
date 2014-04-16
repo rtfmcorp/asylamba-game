@@ -11,7 +11,7 @@ class PlaceResource {
 	private static $place = array(
 		array(
 			'name' => 'Colonie',
-			'desc' => 'Peu évoluée, la colonie vous donne accès aux bâtiments de base mais jusqu\'à un niveau peu élevé. Elle se trouvera généralement aux extrémités de votre empire et servira de relais pour l\'expansion ce dernier.',
+			'desc' => 'Peu évoluée, la colonie vous donne accès aux bâtiments de base mais jusqu\'à un niveau peu élevé. Elle se trouvera généralement aux extrémités de votre empire et servira de relai pour l\'expansion de ce dernier.',
 
 			'price' => 0,
 
@@ -35,7 +35,7 @@ class PlaceResource {
 		),
 		array(
 			'name' => 'Base Militaire',
-			'desc' => 'Place forte militaire, cette planète dispose d\'un nombre important de flottes en orbite, prettent à défendre ou à attaquer.',
+			'desc' => 'Place forte militaire, cette planète dispose d\'un nombre important de flottes en orbite, prêtes à défendre ou à attaquer.',
 
 			'price' => 250000,
 
@@ -46,7 +46,7 @@ class PlaceResource {
 			'r-line-position' => array(1, 3)
 		),
 		array(
-			'name' => 'Overplanet',
+			'name' => 'Capitale',
 			'desc' => '',
 
 			'price' => 5000000,
