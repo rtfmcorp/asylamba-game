@@ -48,7 +48,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 				$sr->enemyAvatar = '...';
 				$sr->enemyLevel = 1;
 #TODO
-				$sr->commanders = array();
+				$sr->commanders = serialize(array());
 
 				break;
 			case Place::TYP_ORBITALBASE:

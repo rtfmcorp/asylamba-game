@@ -70,6 +70,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 			$S_OBM2 = ASM::$obm->getCurrentSession();
 			ASM::$obm->newSession();
 			ASM::$obm->load(array('rPlayer' => CTR::$data->get('playerId')));
+			
 			$alreadyACapital = FALSE;
 			for ($i = 0; $i < ASM::$obm->size(); $i++) { 
 				if (ASM::$obm->get($i)->typeOfBase == OrbitalBase::TYP_CAPITAL) {
