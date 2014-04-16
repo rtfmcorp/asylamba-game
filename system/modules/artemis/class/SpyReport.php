@@ -6,7 +6,7 @@
  * @author Jacky Casas
  * @copyright Expansion - le jeu
  *
- * @package Athena
+ * @package Artemis
  * @update 26.03.14
  */
 

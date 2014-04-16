@@ -293,4 +293,36 @@ class Game {
 		$price = $quantity * $minRate;
 		return round($price);
 	}
+
+	public static function getSpySuccess($antiSpy, $priceInvested) {
+		# spy success must be between 0 and 100
+		$ratio = $priceInvested / $antiSpy;
+		if ($ratio > 2) {
+			return 100;
+		} else {
+			return round($ratio * 50);
+		}
+	}
+
+	public static function getTypeOfSpy($success) {
+		include_once ARTEMIS;
+		$percent = rand(0, 100);
+		if ($success < 50) {
+			if ($percent < 50) {
+				return SpyReport::TYP_NOT_CAUGHT;			# 50%
+			} else if ($percent < 75) {
+				return SpyReport::TYP_ANONYMOUSLY_CAUGHT;	# 25%
+			} else {
+				return SpyReport::TYP_CAUGHT;				# 25%
+			}
+		} else {
+			if ($percent < 40) {
+				return SpyReport::TYP_NOT_CAUGHT;			# 40%
+			} else if ($percent < 70) {
+				return SpyReport::TYP_ANONYMOUSLY_CAUGHT;	# 30%
+			} else {
+				return SpyReport::TYP_CAUGHT;				# 30%
+			}
+		}
+	}
 }
