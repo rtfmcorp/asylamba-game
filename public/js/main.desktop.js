@@ -695,6 +695,13 @@ jQuery(document).ready(function($) {
 		$('.new-transaction.resources .max-price').text(utils.numberFormat(Math.floor(price + variation)));
 	});
 
+	$('.base-type .list-choice button').live('click', function() {
+		var index = $('.base-type .list-choice button').index(this);
+
+		$('.base-type .desc-choice').hide();
+		$('.base-type .list-desc .desc-choice:nth-child(' + (index + 1) + ')').show();
+	});
+
 	/* OTHER ANNIMATIONS */
 	(function() {
 		var t = $('#nav .box a.current-base img');
