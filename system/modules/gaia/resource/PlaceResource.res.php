@@ -23,7 +23,7 @@ class PlaceResource {
 		),
 		array(
 			'name' => 'Centre Industriel',
-			'desc' => 'Caca prout',
+			'desc' => 'Le centre industriel vous permet de produire beaucoup plus de ressouces en permettant d\'agrandir la raffinerie. Plus d\'impôts sont perçus à la population, vous avez donc plus de crédits à disposition à chaque relève. Les usines peuvent tourner nuit et jour et sont plus efficientes. Un plus grand impact commercial est possible.',
 
 			'price' => 250000,
 
@@ -35,7 +35,7 @@ class PlaceResource {
 		),
 		array(
 			'name' => 'Base Militaire',
-			'desc' => 'Place forte militaire, cette planète dispose d\'un nombre important de flottes en orbite, prettent à défendre ou à attaquer. Elle dispose en outre de très bon chantiers de construction de vaisseaux.',
+			'desc' => 'Place forte militaire, cette planète dispose d\'un nombre important de flottes en orbite, prêtes à défendre ou à attaquer. Elle dispose en outre de très bons chantiers de construction de vaisseaux.',
 
 			'price' => 250000,
 
@@ -47,9 +47,9 @@ class PlaceResource {
 		),
 		array(
 			'name' => 'Capitale',
-			'desc' => 'Prouti prouta',
+			'desc' => 'Une capitale est chère, mais son efficacité, tant commerciale que militaire, vous fera vous développer considérablement plus vite. Plus vous avez de capitales dans votre empire, plus sa construction sera coûteuse.',
 
-			'price' => 5000000,
+			'price' => 1000000,
 
 			'tax' => 1.5,
 			'l-line' => 3,
