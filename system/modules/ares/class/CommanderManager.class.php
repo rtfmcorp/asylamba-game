@@ -61,7 +61,6 @@ class CommanderManager extends Manager {
 		$qr->closeCursor();
 
 		if (count($awCommanders) > 0) {
-
 			$idCommandersArray = array();
 			foreach ($awCommanders AS $commander) {
 				$idCommandersArray[] = $commander['id'];

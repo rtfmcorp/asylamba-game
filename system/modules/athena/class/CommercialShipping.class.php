@@ -28,6 +28,8 @@ class CommercialShipping {
 	public $dArrival = '';
 	public $statement = 0;
 
+	public $price = 0;
+
 	public $baseRSystem;
 	public $basePosition;
 	public $baseXSystem;
@@ -161,5 +163,47 @@ class CommercialShipping {
 		}
 
 		ASM::$trm->changeSession($S_TRM1);
+	}
+
+	public function render() {
+		echo '<div class="transaction resources">';
+			if ($this->statement != CommercialShipping::ST_MOVING_BACK) {
+				if ($this->typeOfTransaction == Transaction::TYP_RESOURCE) {
+					echo '<div class="product">';
+						echo '<img src="' . MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($this->quantity) . '.png" alt="" class="picto" />';
+
+						echo '<div class="offer">';
+							echo Format::numberFormat($this->quantity) . ' <img src="' . MEDIA . 'resources/resource.png" alt="" class="icon-color" />';
+						echo '</div>';
+						echo '<div class="for">';
+							echo '<span>pour</span>';
+						echo '</div>';
+						echo '<div class="price">';
+							echo Format::numberFormat($this->price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
+						echo '</div>';
+					echo '</div>';
+				}
+			}
+
+			$totalTime   = Utils::interval($this->dDeparture, $this->dArrival, 's');
+			$currentTime = Utils::interval(Utils::now(), $this->dDeparture, 's');
+
+			echo '<div class="shipping progress" data-progress-total-time="' . $totalTime . '" data-progress-current-time="' . ($totalTime - $currentTime) . '" data-progress-output="lite">';
+				echo '<span class="progress-container">';
+					echo '<span style="width: ' . Format::percent($currentTime, $totalTime) . '%;" class="progress-bar"></span>';
+				echo '</span>';
+
+				echo '<div class="ships">';
+					echo $this->shipQuantity;
+					echo '<img src="' . MEDIA . 'resources/resource.png" alt="" class="icon-color" />';
+				echo '</div>';
+
+				if ($this->statement == CommercialShipping::ST_WAITING) {
+					echo '<div class="time">à quai</div>';
+				} else {
+					echo '<div class="time progress-text"></div>';
+				}
+			echo '</div>';
+		echo '</div>';
 	}
 }

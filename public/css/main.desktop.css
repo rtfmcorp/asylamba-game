@@ -3100,6 +3100,51 @@ body {
 	color: #696969;
 }
 
+.component.transaction .transaction .shipping {
+	position: relative;
+	background: black;
+	height: 30px;
+}
+.component.transaction .transaction .shipping .ships {
+	position: absolute;
+	top: 0; left: 0; bottom: 0; width: 50px;
+	padding: 0 5px; line-height: 30px;
+	text-align: center;
+}
+.component.transaction .transaction .shipping .ships .icon-color {
+	position: relative;
+	width: 16px; margin-left: 5px;
+	top: -5px;
+}
+.component.transaction .transaction .shipping .time {
+	position: absolute;
+	top: 0; right: 0; bottom: 0; width: 50px;
+	padding: 0 5px; line-height: 30px;
+	text-align: center;
+}
+
+.component.transaction .transaction .shipping .progress-container {
+	position: relative;
+	display: block;	clear: both;
+	margin: 0 60px; height: 3px;
+	top: 13px;
+	background: #4F4F4F;
+}
+
+.component.transaction .transaction .shipping .progress-bar {
+	position: absolute;
+	display: block;
+	height: 100%;
+	background: #202020;
+}
+.color1 .component.transaction .transaction .shipping .progress-bar { background: #b01e2d; }
+.color2 .component.transaction .transaction .shipping .progress-bar { background: #2f23c0; }
+.color3 .component.transaction .transaction .shipping .progress-bar { background: #ffdb0f; }
+.color4 .component.transaction .transaction .shipping .progress-bar { background: #a935c7; }
+.color5 .component.transaction .transaction .shipping .progress-bar { background: #57c632; }
+.color6 .component.transaction .transaction .shipping .progress-bar { background: #05bed7; }
+.color7 .component.transaction .transaction .shipping .progress-bar { background: #ac5832; }
+
 /* BASE TYPE COMPONENT */
 .component .build-item.base-type .desc {
 	margin: 10px 0 0 0; padding: 15px;
@@ -3259,7 +3304,7 @@ body {
 }
 .component.market-sell .label-box .icon-color {
 	position: absolute;
-	top: 4px; right: 15px;
+	top: 4px; right: 16px;
 	width: 18px;
 }
 
