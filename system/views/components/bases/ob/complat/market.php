@@ -7,17 +7,17 @@ $S_CTM1 = ASM::$ctm->getCurrentSession();
 ASM::$ctm->newSession();
 ASM::$ctm->load(array());
 
-echo '<div class="component rc">';
+echo '<div class="component transaction">';
 	echo '<div class="head skin-2">';
-		echo '<h2>Truc qui viennent (cond)</h2>';
+		echo '<h2>Aperçu des achats</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<p>transaction en cours</p>';
+			echo '<h4>Convoi tier en approche</h4>';
 
 			for ($i = 0; $i < ASM::$csm->size(); $i++) { 
 				if (ASM::$csm->get($i)->statement == CommercialShipping::ST_GOING && ASM::$csm->get($i)->rBaseDestination == $ob_compPlat->getId()) {
-					var_dump(ASM::$csm->get($i));
+					ASM::$csm->get($i)->render();
 				}
 			}
 		echo '</div>';
@@ -94,7 +94,8 @@ echo '<div class="component transaction">';
 									$exportTax = round($tr->price * $exportTax / 100);
 									$importTax = round($tr->price * $importTax / 100);
 
-									echo '<p><span>+ taxe </span>' . Format::numberFormat($exportTax) . ' <span>+ taxe </span>' . Format::numberFormat($exportTax) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
+									echo '<p><span>+ taxe </span>' . Format::numberFormat($exportTax) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
+									echo '<p><span>+ taxe </span>' . Format::numberFormat($exportTax) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
 									echo '<hr />';
 									$totalPrice = $tr->price + $exportTax + $importTax;
 									echo '<p><span>=</span> ' . Format::numberFormat($totalPrice) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
@@ -103,7 +104,7 @@ echo '<div class="component transaction">';
 
 							echo '<div class="button">';
 								echo '<a href="' . APP_ROOT . 'action/a-accepttransaction/rplace-' . $ob_compPlat->getId() . '/rtransaction-' . $tr->id . '">';
-									echo 'acheter pour ' . Format::numberFormat($tr->price) . ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"><br /> ';
+									echo 'acheter pour ' . Format::numberFormat($totalPrice) . ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"><br /> ';
 									echo 'durée du transit ' . Chronos::secondToFormat(Game::getTimeTravel(
 										$tr->rSystem, 
 										$tr->positionInSystem, 

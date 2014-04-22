@@ -158,7 +158,7 @@ echo '<div class="component market-sell">';
 			}
 
 			if (ASM::$com->size() == 0) {
-				echo '<em>Classes vides, aucun commandant en formation.</em>';
+				echo '<p><em>Vous n\'avez aucun commandant dans l\'école.</em></p>';
 			}
 		echo '</div>';
 	echo '</div>';

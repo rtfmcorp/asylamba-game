@@ -166,7 +166,14 @@ class CommercialShipping {
 	}
 
 	public function render() {
-		echo '<div class="transaction resources">';
+		switch ($this->typeOfTransaction) {
+			case Transaction::TYP_RESOURCE: $class = 'resources'; break;
+			case Transaction::TYP_COMMANDER: $class = 'commander'; break;
+			case Transaction::TYP_SHIP: $class = 'ships'; break;
+			default: break;
+		}
+
+		echo '<div class="transaction ' . $class . '">';
 			if ($this->statement != CommercialShipping::ST_MOVING_BACK) {
 				if ($this->typeOfTransaction == Transaction::TYP_RESOURCE) {
 					echo '<div class="product">';
@@ -174,6 +181,21 @@ class CommercialShipping {
 
 						echo '<div class="offer">';
 							echo Format::numberFormat($this->quantity) . ' <img src="' . MEDIA . 'resources/resource.png" alt="" class="icon-color" />';
+						echo '</div>';
+						echo '<div class="for">';
+							echo '<span>pour</span>';
+						echo '</div>';
+						echo '<div class="price">';
+							echo Format::numberFormat($this->price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
+						echo '</div>';
+					echo '</div>';
+				} elseif ($this->typeOfTransaction == Transaction::TYP_COMMANDER) {
+					echo '<div class="product">';
+						echo '<img src="' . MEDIA . 'commander/small/c1-l3-c1.png" alt="" class="picto" />';
+
+						echo '<div class="offer">';
+							echo '<strong>' . CommanderResources::getInfo($this->commanderLevel, 'grade') . ' ' . $commander->getName . '</strong>';
+							echo '<em>??? xp | ? victoires</em>';
 						echo '</div>';
 						echo '<div class="for">';
 							echo '<span>pour</span>';
