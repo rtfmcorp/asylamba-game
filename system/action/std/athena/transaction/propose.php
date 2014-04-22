@@ -71,7 +71,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 		$minPrice = Game::getMinPriceRelativeToRate($type, $quantity, $identifier);
 
 		if ($price < $minPrice) {
-			CTR::$alert->add('Le prix que vous avez fixé est trop bas. Une limite inférieure est fixée selon la catégorie de la vente.', ALERT_GAM_MARKET);
+			CTR::$alert->add('Le prix que vous avez fixé est trop bas. Une limite inférieure est fixée selon la catégorie de la vente.', ALERT_STD_ERROR);
 		} else {
 			$valid = TRUE;
 
@@ -145,18 +145,18 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 					$cs->statement = CommercialShipping::ST_WAITING;
 					ASM::$csm->add($cs);
 
-					CTR::$alert->add('Votre proposition a été envoyée sur le marché.', ALERT_STD_SUCCESS);
+					CTR::$alert->add('Votre proposition a été envoyée sur le marché.', ALERT_GAM_MARKET);
 				} else {
-					CTR::$alert->add('Vous n\'avez pas assez de vaisseaux de transport disponibles.', ALERT_GAM_MARKET);
+					CTR::$alert->add('Vous n\'avez pas assez de vaisseaux de transport disponibles.', ALERT_STD_ERROR);
 				}
 				ASM::$csm->changeSession($S_CSM1);
 			} else {
-				CTR::$alert->add('impossible de faire une proposition sur le marché !', ALERT_GAM_MARKET);
+				CTR::$alert->add('impossible de faire une proposition sur le marché !', ALERT_STD_ERROR);
 			}
 			ASM::$obm->changeSession($S_OBM1);
 		}
 	} else {
-		CTR::$alert->add('impossible de faire une proposition sur le marché', ALERT_GAM_MARKET);
+		CTR::$alert->add('impossible de faire une proposition sur le marché', ALERT_STD_ERROR);
 	}
 } else {
 	CTR::$alert->add('pas assez d\'informations pour faire une proposition sur le marché', ALERT_STD_FILLFORM);
