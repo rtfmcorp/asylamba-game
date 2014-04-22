@@ -178,7 +178,7 @@ class Player {
 
 		for ($i = 0; $i < ASM::$obm->size(); $i++) {
 			$base = ASM::$obm->get($i);
-			$popTax = Game::getTaxFromPopulation($base->getPlanetPopulation());
+			$popTax = Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase);
 			$popTax *= PlaceResource::get($base->typeOfBase, 'tax');
 			$popTax += $popTax * $playerBonus->bonus->get(PlayerBonus::POPULATION_TAX) / 100;
 			$nationTax = $base->tax * $popTax / 100;

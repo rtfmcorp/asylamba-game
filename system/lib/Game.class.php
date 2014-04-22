@@ -96,8 +96,10 @@ class Game {
 		}
 	}
 
-	public static function getTaxFromPopulation($population) {
-		return ((40 * $population) + 5000) * PAM_COEFTAX;
+	public static function getTaxFromPopulation($population, $typeOfBase) {
+		$tax = ((40 * $population) + 5000) * PAM_COEFTAX;
+		$tax *= PlaceResource::get($typeOfBase, 'tax');
+		return $tax;
 	}
 
 	public static function getAntiSpyRadius($investment, $mode = ANTISPY_DISPLAY_MODE) {

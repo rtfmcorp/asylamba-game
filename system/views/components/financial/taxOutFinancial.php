@@ -18,7 +18,7 @@ echo '<div class="component financial">';
 		echo '<div class="body">';
 			echo '<ul class="list-type-1">';
 				foreach ($ob_taxOutFinancial as $base) {
-					$baseTaxOut = (Game::getTaxFromPopulation($base->getPlanetPopulation()) + (Game::getTaxFromPopulation($base->getPlanetPopulation()) * $taxBonus / 100)) * $base->getTax() / 100;
+					$baseTaxOut = (Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase) + (Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase) * $taxBonus / 100)) * $base->getTax() / 100;
 
 					echo '<li>';
 						echo '<span class="label">' . $base->getName() . ' [' . $base->getTax() . '% de taxe]</span>';

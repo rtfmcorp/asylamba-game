@@ -41,18 +41,20 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 		if ($orbitalBase->levelGenerator >= OBM_LEVEL_MIN_TO_CHANGE_TYPE) {
 			switch ($type) {
 				case OrbitalBase::TYP_COMMERCIAL:
-					if ($player->credit >= OBM_PRICE_FOR_COMMERCIAL) {
+					$totalPrice = PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price');
+					if ($player->credit >= $totalPrice) {
 						$orbitalBase->typeOfBase = $type;
-						$player->decreaseCredit(OBM_PRICE_FOR_COMMERCIAL);
+						$player->decreaseCredit($totalPrice);
 						CTR::$alert->add($orbitalBase->name . ' est désormais un Centre Industriel', ALERT_STD_SUCCESS);
 					} else {
 						CTR::$alert->add('Evolution de votre colonie impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
 					}
 					break;
 				case OrbitalBase::TYP_MILITARY:
-					if ($player->credit >= OBM_PRICE_FOR_MILITARY) {
+					$totalPrice = PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price');
+					if ($player->credit >= $totalPrice) {
 						$orbitalBase->typeOfBase = $type;
-						$player->decreaseCredit(OBM_PRICE_FOR_MILITARY);
+						$player->decreaseCredit($totalPrice);
 						CTR::$alert->add($orbitalBase->name . ' est désormais une Base Militaire', ALERT_STD_SUCCESS);
 					} else {
 						CTR::$alert->add('Evolution de votre colonie impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
@@ -67,35 +69,40 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 		}
 	} elseif ($orbitalBase->typeOfBase == OrbitalBase::TYP_COMMERCIAL OR $orbitalBase->typeOfBase == OrbitalBase::TYP_MILITARY) {
 		if ($type == OrbitalBase::TYP_CAPITAL) {
-			$S_OBM2 = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession();
-			ASM::$obm->load(array('rPlayer' => CTR::$data->get('playerId')));
-			
-			$alreadyACapital = FALSE;
-			for ($i = 0; $i < ASM::$obm->size(); $i++) { 
-				if (ASM::$obm->get($i)->typeOfBase == OrbitalBase::TYP_CAPITAL) {
-					$alreadyACapital = TRUE;
-					break;
+			if ($orbitalBase->levelGenerator >= OBM_LEVEL_MIN_FOR_CAPITAL) {
+				$S_OBM2 = ASM::$obm->getCurrentSession();
+				ASM::$obm->newSession();
+				ASM::$obm->load(array('rPlayer' => CTR::$data->get('playerId')));
+				
+				$capitalQuantity = 0;
+				for ($i = 0; $i < ASM::$obm->size(); $i++) { 
+					if (ASM::$obm->get($i)->typeOfBase == OrbitalBase::TYP_CAPITAL) {
+						$capitalQuantity++;
+					}
 				}
-			}
-			ASM::$obm->changeSession($S_OBM2);
+				ASM::$obm->changeSession($S_OBM2);
 
-			if ($alreadyACapital) {
-				CTR::$alert->add('Evolution de votre planète impossible - vous avez déjà une capitale !', ALERT_STD_ERROR);
-			} else {
-				if ($player->credit >= OBM_PRICE_FOR_CAPITAL) {
+				$totalPrice = ($capitalQuantity+1) * PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'price');
+				if ($player->credit >= $totalPrice) {
 					$orbitalBase->typeOfBase = $type;
-					$player->decreaseCredit(OBM_PRICE_FOR_CAPITAL);
+					$player->decreaseCredit($totalPrice);
 					CTR::$alert->add($orbitalBase->name . ' est désormais une capitale.', ALERT_STD_SUCCESS);
 				} else {
 					CTR::$alert->add('Modification du type de la base orbitale impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
 				}
+			} else {
+				CTR::$alert->add('Pour transformer votre base en capitale, vous devez augmenter votre générateur jusqu\'au niveau ' . OBM_LEVEL_MIN_FOR_CAPITAL . '.', ALERT_STD_ERROR);
 			}
 		} elseif (($orbitalBase->typeOfBase == OrbitalBase::TYP_COMMERCIAL AND $type == OrbitalBase::TYP_MILITARY)
 			OR ($orbitalBase->typeOfBase == OrbitalBase::TYP_MILITARY AND $type == OrbitalBase::TYP_COMMERCIAL)) {
 			# commercial --> military OR military --> commercial
-			if ($player->credit >= OBM_PRICE_FOR_DESTRUCTION) {
-				$player->decreaseCredit(OBM_PRICE_FOR_DESTRUCTION);
+			if ($type == OrbitalBase::TYP_COMMERCIAL) {
+				$totalPrice = PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price');
+			} else {
+				$totalPrice = PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price');
+			}
+			if ($player->credit >= $totalPrice) {
+				$player->decreaseCredit($totalPrice);
 				# delete commercial buildings
 				for ($i = 0; $i < 8; $i++) { 
 					$maxLevel = OrbitalBaseResource::getBuildingInfo($i, 'maxLevel', $type);

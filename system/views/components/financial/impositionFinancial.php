@@ -18,7 +18,7 @@ echo '<div class="component financial">';
 		echo '<div class="body">';
 			echo '<ul class="list-type-1">';
 				foreach ($ob_impositionFinancial as $base) {
-					$baseImpot = Game::getTaxFromPopulation($base->getPlanetPopulation());
+					$baseImpot = Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase);
 					$baseImpot *= PlaceResource::get($base->typeOfBase, 'tax');
 
 					echo '<li>';
