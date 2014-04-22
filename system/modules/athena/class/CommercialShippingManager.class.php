@@ -35,7 +35,7 @@ class CommercialShippingManager extends Manager {
 				ON p2.rSystem = s2.id 
 			LEFT JOIN transaction AS t 
 				ON cs.rTransaction = t.id
-			INNER JOIN commander AS c 
+			LEFT JOIN commander AS c 
 				ON t.identifier = c.id
 			' . $formatWhere . '
 			' . $formatOrder . '
