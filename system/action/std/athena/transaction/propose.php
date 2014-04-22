@@ -49,20 +49,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 			include_once ARES;
 			if ($identifier === FALSE OR $identifier < 1) {
 				$valid = FALSE;
-			} else {
-				$S_COM1 = ASM::$com->getCurrentSession();
-				ASM::$com->newSession(ASM_UMODE);
-				ASM::$com->load(array('id' => $identifier));
-				if (ASM::$com->size() == 1 AND ASM::$com->get()->getRPlayer() == CTR::$data->get('playerId')) {
-					$commander = ASM::$com->get();
-					$quantity = $commander->getExperience();
-					$commander->setStatement(COM_ONSALE);
-					$commander->emptySquadrons();
-				} else {
-					$valid = FALSE;
-				}
-				ASM::$com->changeSession($S_COM1);
-			}
+			} 
 			break;
 		default :
 			$valid = FALSE;
@@ -80,29 +67,6 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 			ASM::$obm->load(array('rPlace' => $rPlace));
 			$base = ASM::$obm->get();
 
-			switch ($type) {
-				case Transaction::TYP_RESOURCE :
-					if ($base->getResourcesStorage() >= $quantity) {
-						$commercialShipQuantity = Game::getCommercialShipQuantityNeeded($type, $quantity);
-						$base->decreaseResources($quantity);
-					} else {
-						$valid = FALSE;
-					}
-					break;
-				case Transaction::TYP_SHIP :
-					$inStorage = $base->getShipStorage($identifier);
-					if ($inStorage >= $quantity) {
-						$commercialShipQuantity = Game::getCommercialShipQuantityNeeded($type, $quantity, $identifier);
-						$base->setShipStorage($identifier, $inStorage - $quantity);
-					} else {
-						$valid = FALSE;
-					}
-					break;
-				case Transaction::TYP_COMMANDER :
-					$commercialShipQuantity = Game::getCommercialShipQuantityNeeded($type, $quantity);
-					break;
-			}
-
 			if ($valid) {
 				# verif : have we enough commercialShips
 				$totalShips = OrbitalBaseResource::getBuildingInfo(6, 'level', $base->getLevelCommercialPlateforme(), 'nbCommercialShip');
@@ -115,39 +79,99 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 						$usedShips += ASM::$csm->get($i)->shipQuantity;
 					}
 				}
+				# determine commercialShipQuantity needed
+				switch ($type) {
+					case Transaction::TYP_RESOURCE :
+						if ($base->getResourcesStorage() >= $quantity) {
+							$commercialShipQuantity = Game::getCommercialShipQuantityNeeded($type, $quantity);
+						} else {
+							$valid = FALSE;
+						}
+						break;
+					case Transaction::TYP_SHIP :
+						$inStorage = $base->getShipStorage($identifier);
+						if ($inStorage >= $quantity) {
+							$commercialShipQuantity = Game::getCommercialShipQuantityNeeded($type, $quantity, $identifier);
+						} else {
+							$valid = FALSE;
+						}
+						break;
+					case Transaction::TYP_COMMANDER :
+						$commercialShipQuantity = Game::getCommercialShipQuantityNeeded($type, $quantity);
+						break;
+				}
 				$remainingShips = $totalShips - $usedShips;
+				if ($valid) {
+					if ($remainingShips >= $commercialShipQuantity) {
+						switch ($type) {
+							case Transaction::TYP_RESOURCE :
+								$base->decreaseResources($quantity);
+								break;
+							case Transaction::TYP_SHIP :
+								$inStorage = $base->getShipStorage($identifier);
+								$base->setShipStorage($identifier, $inStorage - $quantity);
+								break;
+							case Transaction::TYP_COMMANDER :
+								$S_COM1 = ASM::$com->getCurrentSession();
+								ASM::$com->newSession(ASM_UMODE);
+								ASM::$com->load(array('c.id' => $identifier));
+								if (ASM::$com->size() == 1 AND ASM::$com->get()->getRPlayer() == CTR::$data->get('playerId')) {
+									$commander = ASM::$com->get();
+									$quantity = $commander->getExperience();
+									$commander->setStatement(COM_ONSALE);
+									$commander->emptySquadrons();
+								} else {
+									$valid = FALSE;
+								}
+								ASM::$com->changeSession($S_COM1);
+								break;
+						}
 
-				if ($remainingShips >= $commercialShipQuantity) {
+						if ($valid) {
+							# création de la transaction
+							$tr = new Transaction();
+							$tr->rPlayer = CTR::$data->get('playerId');
+							$tr->rPlace = $rPlace;
+							$tr->type = $type; 
+							$tr->quantity = $quantity;
+							$tr->identifier = $identifier;
+							$tr->price = $price;
+							$tr->commercialShipQuantity = $commercialShipQuantity;
+							$tr->statement = Transaction::ST_PROPOSED;
+							$tr->dPublication = Utils::now();
+							ASM::$trm->add($tr);
 
-					# création de la transaction
-					$tr = new Transaction();
-					$tr->rPlayer = CTR::$data->get('playerId');
-					$tr->rPlace = $rPlace;
-					$tr->type = $type; 
-					$tr->quantity = $quantity;
-					$tr->identifier = $identifier;
-					$tr->price = $price;
-					$tr->commercialShipQuantity = $commercialShipQuantity;
-					$tr->statement = Transaction::ST_PROPOSED;
-					$tr->dPublication = Utils::now();
-					ASM::$trm->add($tr);
+							# création du convoi
+							$cs = new CommercialShipping();
+							$cs->rPlayer = CTR::$data->get('playerId');
+							$cs->rBase = $rPlace;
+							$cs->rBaseDestination = 0;
+							$cs->rTransaction = $tr->id;
+							$cs->resourceTransported = NULL;
+							$cs->shipQuantity = $commercialShipQuantity;
+							$cs->dDeparture = '';
+							$cs->dArrival = '';
+							$cs->statement = CommercialShipping::ST_WAITING;
+							ASM::$csm->add($cs);
 
-					# création du convoi
-					$cs = new CommercialShipping();
-					$cs->rPlayer = CTR::$data->get('playerId');
-					$cs->rBase = $rPlace;
-					$cs->rBaseDestination = 0;
-					$cs->rTransaction = $tr->id;
-					$cs->resourceTransported = NULL;
-					$cs->shipQuantity = $commercialShipQuantity;
-					$cs->dDeparture = '';
-					$cs->dArrival = '';
-					$cs->statement = CommercialShipping::ST_WAITING;
-					ASM::$csm->add($cs);
-
-					CTR::$alert->add('Votre proposition a été envoyée sur le marché.', ALERT_GAM_MARKET);
+							CTR::$alert->add('Votre proposition a été envoyée sur le marché.', ALERT_GAM_MARKET);
+						} else {
+							CTR::$alert->add('Il y a un problème avec votre commandant.', ALERT_STD_ERROR);
+						}
+					} else {
+						CTR::$alert->add('Vous n\'avez pas assez de vaisseaux de transport disponibles.', ALERT_STD_ERROR);
+					}
 				} else {
-					CTR::$alert->add('Vous n\'avez pas assez de vaisseaux de transport disponibles.', ALERT_STD_ERROR);
+					switch ($type) {
+						case Transaction::TYP_RESOURCE :
+							CTR::$alert->add('Vous n\'avez pas assez de ressources en stock.', ALERT_STD_ERROR);
+							break;
+						case Transaction::TYP_SHIP :
+							CTR::$alert->add('Vous n\'avez pas assez de vaisseaux.', ALERT_STD_ERROR);
+							break;
+						default:
+							CTR::$alert->add('Erreur pour une raison étrange, contactez un administrateur.', ALERT_STD_ERROR);
+					}
 				}
 				ASM::$csm->changeSession($S_CSM1);
 			} else {
