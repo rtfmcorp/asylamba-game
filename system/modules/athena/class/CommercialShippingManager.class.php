@@ -21,7 +21,9 @@ class CommercialShippingManager extends Manager {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('SELECT cs.*, 
 			p1.rSystem AS rSystem1, p1.position AS position1, s1.xPosition AS xSystem1, s1.yPosition AS ySystem1,
-			p2.rSystem AS rSystem2, p2.position AS position2, s2.xPosition AS xSystem2, s2.yPosition AS ySystem2
+			p2.rSystem AS rSystem2, p2.position AS position2, s2.xPosition AS xSystem2, s2.yPosition AS ySystem2,
+			t.type AS typeOfTransaction, t.quantity AS quantity, t.identifier AS identifier,
+			c.avatar AS commanderAvatar, c.name AS commanderName, c.level AS commanderLevel
 			FROM commercialShipping AS cs
 			LEFT JOIN place AS p1 
 				ON cs.rBase = p1.id
@@ -31,6 +33,10 @@ class CommercialShippingManager extends Manager {
 				ON cs.rBaseDestination = p2.id 
 			LEFT JOIN system AS s2 
 				ON p2.rSystem = s2.id 
+			LEFT JOIN transaction AS t 
+				ON cs.rTransaction = t.id
+			INNER JOIN commander AS c 
+				ON t.identifier = c.id
 			' . $formatWhere . '
 			' . $formatOrder . '
 			' . $formatLimit
@@ -75,6 +81,13 @@ class CommercialShippingManager extends Manager {
 			$cs->destinationPosition = $aw['position2'];
 			$cs->destinationXSystem = $aw['xSystem2'];
 			$cs->destinationYSystem = $aw['ySystem2'];
+
+			$cs->typeOfTransaction = $aw['typeOfTransaction'];
+			$cs->quantity = $aw['quantity'];
+			$cs->identifier = $aw['identifier'];
+			$cs->commanderAvatar = $aw['commanderAvatar'];
+			$cs->commanderName = $aw['commanderName'];
+			$cs->commanderLevel = $aw['commanderLevel'];
 
 			$currentCS = $this->_Add($cs);
 		}

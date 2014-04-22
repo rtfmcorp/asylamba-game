@@ -38,6 +38,13 @@ class CommercialShipping {
 	public $destinationXSystem;
 	public $destinationYSystem;
 
+	public $typeOfTransaction;
+	public $quantity;
+	public $identifier;
+	public $commanderAvatar;
+	public $commanderName;
+	public $commanderLevel;
+
 	public function getId() { return $this->id; }
 
 	public function deliver() {
