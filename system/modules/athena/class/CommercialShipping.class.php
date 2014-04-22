@@ -194,7 +194,7 @@ class CommercialShipping {
 						echo '<img src="' . MEDIA . 'commander/small/c1-l3-c1.png" alt="" class="picto" />';
 
 						echo '<div class="offer">';
-							echo '<strong>' . CommanderResources::getInfo($this->commanderLevel, 'grade') . ' ' . $commander->getName . '</strong>';
+							echo '<strong>' . CommanderResources::getInfo($this->commanderLevel, 'grade') . ' ' . $this->commanderName . '</strong>';
 							echo '<em>??? xp | ? victoires</em>';
 						echo '</div>';
 						echo '<div class="for">';
