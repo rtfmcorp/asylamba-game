@@ -10,7 +10,7 @@
 # view part
 echo '<div class="component size2 financial">';
 	echo '<div class="head">';
-		echo '<h1>Aperçu</h1>';
+		echo '<h1>Finance</h1>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';

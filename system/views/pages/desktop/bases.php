@@ -17,7 +17,6 @@ include 'defaultElement/movers.php';
 echo '<div id="content">';
 	# obNav component
 	$ob_obNav = $base;
-	# include COMPONENT . 'athena/bases/obNav.php';
 
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'main') {
 		include_once ARES;
@@ -32,28 +31,28 @@ echo '<div id="content">';
 			$commanders_obSituation[] = ASM::$com->get($i);
 		}
 		ASM::$com->changeSession($S_COM1);
-		include COMPONENT . 'athena/bases/obSituation.php';
+		include COMPONENT . 'bases/ob/situation.php';
 	} elseif (CTR::$get->get('view') == 'generator') {
 		$ob_generator = $base;
-		include COMPONENT . 'athena/bases/generator.php';
+		include COMPONENT . 'bases/ob/generator.php';
 	} elseif (CTR::$get->get('view') == 'refinery') {
 		$ob_refinery = $base;
-		include COMPONENT . 'athena/bases/refinery.php';
+		include COMPONENT . 'bases/ob/refinery.php';
 	} elseif (CTR::$get->get('view') == 'dock1') {
 		$ob_dock1 = $base;
-		include COMPONENT . 'athena/bases/dock1.php';
+		include COMPONENT . 'bases/ob/dock1.php';
 	} elseif (CTR::$get->get('view') == 'dock2') {
 		$ob_dock2 = $base;
-		include COMPONENT . 'athena/bases/dock2.php';
+		include COMPONENT . 'bases/ob/dock2.php';
 	} elseif (CTR::$get->get('view') == 'technosphere') {
 		$ob_tech = $base;
-		include COMPONENT . 'athena/bases/technosphere.php';
+		include COMPONENT . 'bases/ob/technosphere.php';
 	} elseif (CTR::$get->get('view') == 'commercialplateforme') {
 		$ob_compPlat = $base;
-		include COMPONENT . 'athena/bases/comPlat.php';
+		include COMPONENT . 'bases/ob/comPlat.php';
 	} elseif (CTR::$get->get('view') == 'school') {
 		$ob_school = $base;
-		include COMPONENT . 'athena/bases/school.php';
+		include COMPONENT . 'bases/ob/school.php';
 	} else {
 		CTR::redirect('404');
 	}

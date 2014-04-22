@@ -3,7 +3,7 @@
 echo '<div id="background-paralax" class="profil"></div>';
 
 # inclusion des elements
-include 'defaultElement/subnav.php';
+include 'profilElement/subnav.php';
 include 'defaultElement/movers.php';
 
 # contenu spécifique
@@ -19,17 +19,17 @@ echo '<div id="content">';
 
 	# playerRoleplayProfil component
 	$player_playerRoleplayProfil = ASM::$pam->get(0);
-	include COMPONENT . 'zeus/playerRoleplayProfil.php';
+	include COMPONENT . 'player/playerRoleplayProfil.php';
 
 	# playerTechnicalProfil component
 	$player_playerTechnicalProfil = ASM::$pam->get(0);
-	include COMPONENT . 'zeus/playerTechnicalProfil.php';
+	include COMPONENT . 'player/playerTechnicalProfil.php';
 
 	# obFastView component
 	for ($i = 0; $i < ASM::$obm->size(); $i++) {
 		$ob_index = ($i + 1);
 		$ob_obFastView = ASM::$obm->get($i);
-		include COMPONENT . 'athena/obFastView.php';
+		include COMPONENT . 'bases/obFastView.php';
 	}
 
 	# msFastView component

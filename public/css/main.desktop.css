@@ -452,7 +452,6 @@ body {
 /* SUBNAV */
 #subnav {
 	position: fixed;
-	/*top: 69px; left: 5px; bottom: 69px;*/
 	top: 29px; left: 2px; bottom: 29px;
 	padding: 40px 0;
 	width: 60px;
@@ -463,22 +462,6 @@ body {
 	position: relative;
 	height: 100%;
 }
-/*
-#subnav:before {
-	content: '';
-	position: absolute;
-	top: -40px; left: -40px; 
-	width: 140px; height: 40px;
-	background: url('src/desktop/subnav/top.png') no-repeat;
-}
-#subnav:after {
-	content: '';
-	position: absolute;
-	bottom: -40px; left: -40px;
-	width: 140px; height: 40px;
-	background: url('src/desktop/subnav/bottom.png') no-repeat;
-}
-*/
 #subnav .item {
 	position: relative;
 	display: block;
@@ -633,7 +616,6 @@ body {
 }
 
 /* GENERAL RULES FOR ALERT */
-
 #alert-content {
 	display: none;
 }
@@ -691,14 +673,12 @@ body {
 }
 
 /* GENERAL RULES FOR COMPONENTS */
-
 #content {
 	position: absolute;
 	width: 6000px; /* a modifier */
 	height: 100%;
 	top: 0; left: 300px;
 	z-index: 200;
-	border-left: solid 1px #202020;
 }
 
 #content .component {
@@ -777,60 +757,6 @@ body {
 }
 
 /* GENERAL ELEMENTS FOR COMPONENTS */
-
-/*
-.component .tool > span {
-	display: table-cell;
-	width: 28px;
-	border: solid 6px transparent;
-	border-left: none;
-}
-.component .tool > span a {
-	position: relative;
-	display: block;
-	padding: 0;
-	width: 40px;
-	line-height: 32px;
-	font-size: 14px;
-	color: white;
-	text-decoration: none;
-	font-variant: small-caps;
-	text-align: center;
-	background: url('src/desktop/button/bLittleButton.png') no-repeat;
-}
-
-.component .tool > span:first-child {
-	border: solid 5px transparent;
-	width: auto;
-}
-.component .tool > span:first-child a {
-	background: url('src/desktop/button/bButtonMiddle.png') repeat-x;
-	width: auto;
-}
-.component .tool > span:first-child a:before {
-	content: '';
-	position: absolute;
-	top: 0; left: 0;
-	width: 20px; height: 32px;
-	background: url('src/desktop/button/bButtonLeft.png') no-repeat;
-}
-.component .tool > span:first-child a:after {
-	content: '';
-	position: absolute;
-	top: 0; right: 0;
-	width: 20px; height: 32px;
-	background: url('src/desktop/button/bButtonRight.png') no-repeat;
-}
-.component .tool > span:first-child a:focus,
-.component .tool > span:first-child a:hover {
-	background: url('src/desktop/button/bButtonMiddle.png') repeat-x;
-}
-.component .tool > span a:focus,
-.component .tool > span a:hover {
-	background: url('src/desktop/button/bLittleButtonHover.png') no-repeat;
-}
-*/
-
 .component .tool {
 	display: table;
 	width: 100%;
@@ -1335,14 +1261,6 @@ body {
 .color6 .component.profil .main-avatar { box-shadow: 0 0 0 4px #076b87, 0 0 20px black; }
 .color7 .component.profil .main-avatar { box-shadow: 0 0 0 4px #67331d, 0 0 20px black; }
 
-.component.profil .diary-avatar.color1 { box-shadow: 0 0 0 4px #6e161b, 0 0 20px black; }
-.component.profil .diary-avatar.color2 { box-shadow: 0 0 0 4px #1f1471, 0 0 20px black; }
-.component.profil .diary-avatar.color3 { box-shadow: 0 0 0 4px #dbb200, 0 0 20px black; }
-.component.profil .diary-avatar.color4 { box-shadow: 0 0 0 4px #5a1072, 0 0 20px black; }
-.component.profil .diary-avatar.color5 { box-shadow: 0 0 0 4px #2c7915, 0 0 20px black; }
-.component.profil .diary-avatar.color6 { box-shadow: 0 0 0 4px #076b87, 0 0 20px black; }
-.component.profil .diary-avatar.color7 { box-shadow: 0 0 0 4px #67331d, 0 0 20px black; }
-
 .component.profil form {
 	display: block !important;
 }
@@ -1385,6 +1303,132 @@ body {
 	border: none; padding: 5px 0;
 	width: 258px;
 	max-width: 500px;
+}
+
+/* diary */
+.component.search-player {
+	position: relative;
+	background: transparent !important;
+}
+
+.component.search-player .box {
+	position: absolute;
+	top: 60px; left: 50px;
+	width: 440px;
+	color: white;
+}
+.component.search-player .top {
+	background: rgba(0, 0, 0, .4);
+	padding: 10px;
+	border-radius: 3px 3px 0 0;
+}
+.component.search-player .center {
+	background: rgba(0, 0, 0, .8);
+	padding: 10px 25px 10px 10px;
+	min-height: 140px;
+}
+.component.search-player .bottom {
+	background: rgba(0, 0, 0, .4);
+	border-radius: 0 0 3px 3px;
+}
+
+.component.search-player .top label {
+	display: block;
+	font-size: 16px;
+}
+.component.search-player .top input {
+	display: block;
+	border: none;
+	height: 40px; width: 400px;
+	padding: 0 10px; margin: 10px 0 0 0;
+	font-size: 20px;
+	color: #202020;
+	border-radius: 3px;
+}
+
+.component.search-player .center .avatar {
+	float: left; position: relative;
+	left: -20px;
+	width: 120px;
+	padding: 8px;
+	border: solid 1px #202020;
+	border-radius: 100%;
+	background: #0A0A0A;
+}
+.component.search-player .center .right {
+	margin-left: 140px;
+}
+
+.component.search-player.color1 .center .avatar { box-shadow: 0 0 4px white, 0 0 0 2px #6e161b; }
+.component.search-player.color2 .center .avatar { box-shadow: 0 0 4px white, 0 0 0 2px #1f1471; }
+.component.search-player.color3 .center .avatar { box-shadow: 0 0 4px white, 0 0 0 2px #dbb200; }
+.component.search-player.color4 .center .avatar { box-shadow: 0 0 4px white, 0 0 0 2px #5a1072; }
+.component.search-player.color5 .center .avatar { box-shadow: 0 0 4px white, 0 0 0 2px #2c7915; }
+.component.search-player.color6 .center .avatar { box-shadow: 0 0 4px white, 0 0 0 2px #076b87; }
+.component.search-player.color7 .center .avatar { box-shadow: 0 0 4px white, 0 0 0 2px #67331d; }
+
+.component.search-player .center h1 { margin: 10px 0 0 0; padding: 0; }
+.component.search-player .center hr { margin: 10px 0; border-color: #4F4F4F; }
+.component.search-player .center p { margin: 5px 0; padding: 0; }
+
+.component.search-player .center p span {
+	display: inline-block;
+	background: red;
+	line-height: 28px; padding: 0 10px;
+	border: solid 1px rgba(255, 255, 255, .5);
+	border-right: none;
+}
+.component.search-player .center p span:first-child {
+	border-radius: 3px 0 0 3px;
+}
+.component.search-player .center p span:last-child {
+	border-radius: 0 3px 3px 0;
+	border: solid 1px rgba(255, 255, 255, .5);
+}
+.component.search-player.color1 .center p span { background: #6e161b; }
+.component.search-player.color2 .center p span { background: #1f1471; }
+.component.search-player.color3 .center p span { background: #dbb200; }
+.component.search-player.color4 .center p span { background: #5a1072; }
+.component.search-player.color5 .center p span { background: #2c7915; }
+.component.search-player.color6 .center p span { background: #076b87; }
+.component.search-player.color7 .center p span { background: #67331d; }
+
+.component.search-player .bottom .overflow {
+	overflow: hidden;
+	padding: 10px; height: 70px;
+}
+.component.search-player .bottom .overflow .container {
+	position: relative; left: 0;
+	width: 10000px;
+}
+.component.search-player .bottom .base {
+	display: inline-block;
+	vertical-align: top;
+	margin: 0 10px 0 0;
+	height: 70px;
+}
+.component.search-player .bottom .base img {
+	width: 70px;
+	float: left;
+	background: #0A0A0A;
+	border-radius: 100%;
+}
+.component.search-player .bottom .base .right {
+	display: none;
+	width: 185px; height: 100%;
+	border-radius: 80px;
+	padding: 0 0 0 75px;
+	background: rgba(0, 0, 0 ,.5);
+}
+.component.search-player .bottom .base .right * {
+	display: block;
+	line-height: 18px;
+}
+.component.search-player .bottom .base .right strong {
+	padding: 8px 0 0 0;
+}
+.component.search-player .bottom .base .right a {
+	color: white;
 }
 
 /* thread */
@@ -1990,7 +2034,6 @@ body {
 	border: dashed 1px white;
 }
 
-
 /* generator */
 .component.generator table {
 	width: 100%;
@@ -2227,7 +2270,6 @@ body {
 .color7 .queue .item .progress-bar { background: #ac5832; }
 
 /* situation */
-
 .component.space .fix-body {
 	background: url('src/desktop/base/situation.jpg') no-repeat top left black;
 }
@@ -2732,7 +2774,6 @@ body {
 }
 
 /* panel-info */
-
 .component.panel-info h4 {
 	font-size: 20px;
 }
@@ -2814,7 +2855,6 @@ body {
 }
 
 /* player */
-
 .component.player .player {
 	position: relative;
 	display: inline-block;
@@ -3060,10 +3100,7 @@ body {
 	color: #696969;
 }
 
-.component .build-item.base-type {
-	border-bottom: solid 5px #202020;
-}
-
+/* BASE TYPE COMPONENT */
 .component .build-item.base-type .desc {
 	margin: 10px 0 0 0; padding: 15px;
 	font-size: 13px;
@@ -3077,6 +3114,7 @@ body {
 	height: 140px;
 	background: url('src/desktop/base/type-base.png') no-repeat center;
 	margin: 0;
+	border-bottom: solid 1px #202020;
 }
 
 .component .build-item.base-type .list-choice button {

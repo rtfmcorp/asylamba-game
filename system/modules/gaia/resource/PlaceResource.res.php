@@ -23,7 +23,7 @@ class PlaceResource {
 		),
 		array(
 			'name' => 'Centre Industriel',
-			'desc' => '',
+			'desc' => 'Caca prout',
 
 			'price' => 250000,
 
@@ -35,7 +35,7 @@ class PlaceResource {
 		),
 		array(
 			'name' => 'Base Militaire',
-			'desc' => 'Place forte militaire, cette planète dispose d\'un nombre important de flottes en orbite, prettent à défendre ou à attaquer.',
+			'desc' => 'Place forte militaire, cette planète dispose d\'un nombre important de flottes en orbite, prettent à défendre ou à attaquer. Elle dispose en outre de très bon chantiers de construction de vaisseaux.',
 
 			'price' => 250000,
 
@@ -47,7 +47,7 @@ class PlaceResource {
 		),
 		array(
 			'name' => 'Overplanet',
-			'desc' => '',
+			'desc' => 'Prouti prouta',
 
 			'price' => 5000000,
 

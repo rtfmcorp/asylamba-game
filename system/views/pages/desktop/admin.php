@@ -15,11 +15,9 @@ include 'defaultElement/movers.php';
 # contenu spécifique
 echo '<div id="content">';
 	# admin component
-	#include COMPONENT . 'apollon/admin/adminNav.php';
-
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'message') {
 		# main message
-		include COMPONENT . 'apollon/message/newOfficialMessage.php';
+		include COMPONENT . 'admin/message/newOfficialMessage.php';
 	} elseif (CTR::$get->get('view') == 'bugtracker') {
 		$S_BTM1 = ASM::$btm->getCurrentSession();
 		ASM::$btm->newSession();
@@ -114,46 +112,11 @@ echo '<div id="content">';
 		}
 		ASM::$btm->changeSession($S_BTM1);
 
-
-
-/*
-		# bug tracker
-		$bugtracker_bug  = array();
-		$bugtracker_orthograph  = array();
-		$bugtracker_display     = array();
-		$bugtracker_calibration = array();
-		$bugtracker_improvement = array();
-
-		$waitingBug_mainBugtracker  = 0;
-		$archivedBug_mainBugtracker = 0;
-
-		$S_BTM1 = ASM::$btm->getCurrentSession();
-		ASM::$btm->newSession();
-		ASM::$btm->load(array('statement' => array(BugTracker::ST_WAITING, BugTracker::ST_ARCHIVED)));
-		for ($i = 0; $i < ASM::$btm->size(); $i++) {
-			switch (ASM::$btm->get($i)->type) {
-				case BugTracker::TYPE_ORTHOGRAPH: $bugtracker_orthograph[]   = ASM::$btm->get($i); break; 
-				case BugTracker::TYPE_BUG: $bugtracker_bug[]                 = ASM::$btm->get($i); break; 
-				case BugTracker::TYPE_ERROR: $bugtracker_error[]             = ASM::$btm->get($i); break; 
-				case BugTracker::TYPE_DISPLAY: $bugtracker_display[]         = ASM::$btm->get($i); break; 
-				case BugTracker::TYPE_IMPROVEMENT: $bugtracker_improvement[] = ASM::$btm->get($i); break; 
-
-
-				default:  $bugtracker_bug[]                      = ASM::$btm->get($i); break;
-			}
-			if (ASM::$btm->get($i)->statement == BugTracker::ST_WAITING) {
-				$waitingBug_mainBugtracker++;
-			} else {
-				$archivedBug_mainBugtracker++;
-			}
-		}
-		ASM::$btm->changeSession($S_BTM1);*/
-
 		# component
-		include COMPONENT . 'apollon/bugtracker/mainBugtracker.php';
+		include COMPONENT . 'admin/bugtracker/mainBugtracker.php';
 	} elseif (CTR::$get->get('view') == 'roadmap') {
 		# main roadmap
-		include COMPONENT . 'apollon/roadmap/addEntry.php';
+		include COMPONENT . 'admin/roadmap/addEntry.php';
 	} else {
 		CTR::redirect('404');
 	}

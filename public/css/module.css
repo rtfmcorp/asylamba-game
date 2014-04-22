@@ -1,6 +1,7 @@
 /* AUTOCOMPLETE MODULE */
 
 .ac_results {
+	width: 20000px;
 	padding: 0px;
 	border: 1px solid #4F4F4F;
 	background-color: white;

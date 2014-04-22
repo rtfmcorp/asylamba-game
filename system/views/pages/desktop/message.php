@@ -28,14 +28,14 @@ echo '<div id="content">';
 			$notification_archivedNotif[$i] = ASM::$ntm->get($i);
 		}
 	}
-	include COMPONENT . 'hermes/lastNotif.php';
+	include COMPONENT . 'notif/lastNotif.php';
 
 	if (count($notification_archivedNotif) > 0) {
-		include COMPONENT . 'hermes/archivedNotif.php';
+		include COMPONENT . 'notif/archivedNotif.php';
 	}
 
 	# newMessage component
-	include COMPONENT . 'hermes/newMessage.php';
+	include COMPONENT . 'message/newMessage.php';
 
 	# affichage des messages
 	if (ASM::$msm->size() > 0) {
@@ -70,16 +70,16 @@ echo '<div id="content">';
 					$messages_thread[] = ASM::$msm->get($i);
 				}
 			}
-			include COMPONENT . 'hermes/thread.php';
+			include COMPONENT . 'message/thread.php';
 
 			if ($j > MSM_STEPTHREAD - 1) {
-				include COMPONENT . 'hermes/moreThread.php';
+				include COMPONENT . 'message/moreThread.php';
 				break;
 			}
 		}
 	} else {
 		# noThread component
-		include COMPONENT . 'hermes/noThread.php';
+		include COMPONENT . 'message/noThread.php';
 	}
 echo '</div>';
 ?>

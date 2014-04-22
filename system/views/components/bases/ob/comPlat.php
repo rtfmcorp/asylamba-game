@@ -16,14 +16,14 @@ echo '<div class="component building">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			$active = (!CTR::$get->exist('mode') || CTR::$get->get('mode') == 'market') ? 'active' : '';
-			echo '<a href="' . APP_ROOT . 'bases/base-' . $ob_compPlat->getId() . '/view-commercialplateforme/mode-market" class="nav-element ' . $active . '">';
+			echo '<a href="' . APP_ROOT . 'bases/view-commercialplateforme/mode-market" class="nav-element ' . $active . '">';
 				echo '<img src="' . MEDIA . 'orbitalbase/generator.png" alt="" />';
 				echo '<strong>Place du commerce</strong>';
 				echo '<em>Achetez sur le marché</em>';
 			echo '</a>';
 
 			$active = (CTR::$get->get('mode') == 'sell') ? 'active' : '';
-			echo '<a href="' . APP_ROOT . 'bases/base-' . $ob_compPlat->getId() . '/view-commercialplateforme/mode-sell" class="nav-element ' . $active . '">';
+			echo '<a href="' . APP_ROOT . 'bases/view-commercialplateforme/mode-sell" class="nav-element ' . $active . '">';
 				echo '<img src="' . MEDIA . 'orbitalbase/generator.png" alt="" />';
 				echo '<strong>Vente</strong>';
 				echo '<em>Vendez sur le marché</em>';
@@ -32,7 +32,7 @@ echo '<div class="component building">';
 			echo '<hr />';
 
 			$active = (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'route') ? 'active' : '';
-			echo '<a href="' . APP_ROOT . 'bases/base-' . $ob_compPlat->getId() . '/view-commercialplateforme/mode-route" class="nav-element ' . $active . '">';
+			echo '<a href="' . APP_ROOT . 'bases/view-commercialplateforme/mode-route" class="nav-element ' . $active . '">';
 				echo '<img src="' . MEDIA . 'orbitalbase/refinery.png" alt="" />';
 				echo '<strong>Quais commerciaux</strong>';
 				echo '<em>Gérez vos routes commerciales</em>';
@@ -42,11 +42,11 @@ echo '<div class="component building">';
 echo '</div>';
 
 if (!CTR::$get->exist('mode') || CTR::$get->get('mode') == 'market') {
-	include COMPONENT . 'athena/bases/complat/market.php';
+	include COMPONENT . 'bases/ob/complat/market.php';
 } elseif (CTR::$get->get('mode') == 'sell') {
-	include COMPONENT . 'athena/bases/complat/sell.php';
+	include COMPONENT . 'bases/ob/complat/sell.php';
 } else {
-	include COMPONENT . 'athena/bases/complat/route.php';
+	include COMPONENT . 'bases/ob/complat/route.php';
 }
 
 echo '<div class="component">';

@@ -95,29 +95,29 @@ echo '<div id="content">';
 	$financial_remains  = $financial_credit + $financial_benefice;
 
 	# generalFinancial component
-	include COMPONENT . 'athena/financial/generalFinancial.php';
+	include COMPONENT . 'financial/generalFinancial.php';
 
 	# impositionFinancial component
 	$ob_impositionFinancial = $ob_generalFinancial;
-	include COMPONENT . 'athena/financial/impositionFinancial.php';
+	include COMPONENT . 'financial/impositionFinancial.php';
 
 	# routeFinancial component
 	$ob_routeFinancial = $ob_generalFinancial;
-	include COMPONENT . 'athena/financial/routeFinancial.php';
+	include COMPONENT . 'financial/routeFinancial.php';
 
 	# investFinancial component
 	$ob_investFinancial = $ob_generalFinancial;
 	$player_investFinancial = ASM::$pam->get(0);
-	include COMPONENT . 'athena/financial/investFinancial.php';
+	include COMPONENT . 'financial/investFinancial.php';
 
 	# taxOutFinancial component
 	$ob_taxOutFinancial = $ob_generalFinancial;
-	include COMPONENT . 'athena/financial/taxOutFinancial.php';
+	include COMPONENT . 'financial/taxOutFinancial.php';
 
 	# fleetFeesFinancial component
 	$commander_fleetFeesFinancial = $commander_generalFinancial;
 	$ob_fleetFeesFinancial = $ob_generalFinancial;
-	include COMPONENT . 'athena/financial/fleetFeesFinancial.php';
+	include COMPONENT . 'financial/fleetFeesFinancial.php';
 
 	# close
 	ASM::$pam->changeSession($S_PAM_FIN);

@@ -4,7 +4,7 @@
 echo '<div id="background-paralax" class="profil"></div>';
 
 # inclusion des elements
-include 'defaultElement/subnav.php';
+include 'profilElement/subnav.php';
 include 'defaultElement/movers.php';
 
 # contenu spécifique
@@ -14,11 +14,18 @@ echo '<div id="content">';
 	include_once ATHENA;
 	include_once HERMES;
 
+	$player = CTR::$get->exist('player')
+		? CTR::$get->get('player')
+		: CTR::$data->get('playerId');
+	$ishim = CTR::$get->exist('player') || CTR::$get->get('player') !== CTR::$data->get('playerId')
+		? FALSE
+		: TRUE;
+
 	# loading des objets
 	$S_PAM1 = ASM::$pam->getCurrentSession();
 	ASM::$pam->newSession();
 	ASM::$pam->load(array(
-		'id' => CTR::$get->get('player'),
+		'id' => $player,
 		'statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY, PAM_BANNED)
 	));
 
@@ -26,30 +33,35 @@ echo '<div id="content">';
 	ASM::$msm->newSession();
 	ASM::$msm->loadByRequest(
 		'WHERE ((rPlayerWriter = ? AND rPlayerReader = ?) OR (rPlayerWriter = ? AND rPlayerReader = ?)) ORDER BY dSending DESC',
-		array(CTR::$get->get('player'), CTR::$data->get('playerId'), CTR::$data->get('playerId'), CTR::$get->get('player'))
+		array($player, CTR::$data->get('playerId'), CTR::$data->get('playerId'), $player)
 	);
 
 	$S_OBM1 = ASM::$obm->getCurrentSession();
 	ASM::$obm->newSession();
-	ASM::$obm->load(array('rPlayer' => CTR::$get->get('player')), array('dCreation', 'ASC'));
+	ASM::$obm->load(array('rPlayer' => $player), array('dCreation', 'ASC'));
 
 	if (ASM::$pam->size() == 1) {
-		# diaryRoplay component
-		$player_diaryRoplay = ASM::$pam->get(0);
-		include COMPONENT . 'zeus/diaryRoplay.php';
+		$player_selected = ASM::$pam->get(0);
+		$player_ishim = $ishim;
+		$ob_selected = ASM::$obm->getAll();
+		include COMPONENT . 'player/diary/search.php';
 
-		# diaryBases component
-		$ob_diaryBases = ASM::$obm->getAll();
-		include COMPONENT . 'zeus/diaryBases.php';
+		// # diaryRoplay component
+		// $player_diaryRoplay = ASM::$pam->get(0);
+		// include COMPONENT . 'player/diary/rolplay.php';
 
-		if (ASM::$msm->size() > 0) {
-			$threadId_thread = ASM::$msm->get()->getThread();
-			$messages_thread = array();
-			for ($i = 0; $i < ASM::$msm->size(); $i++) {
-				$messages_thread[] = ASM::$msm->get($i);
-			}
-			include COMPONENT . 'hermes/thread.php';
-		}
+		// # diaryBases component
+		// $ob_diaryBases = ASM::$obm->getAll();
+		// include COMPONENT . 'player/diary/bases.php';
+
+		// if (ASM::$msm->size() > 0) {
+		// 	$threadId_thread = ASM::$msm->get()->getThread();
+		// 	$messages_thread = array();
+		// 	for ($i = 0; $i < ASM::$msm->size(); $i++) {
+		// 		$messages_thread[] = ASM::$msm->get($i);
+		// 	}
+		// 	include COMPONENT . 'message/thread.php';
+		// }
 	} else {
 		CTR::$alert->add('Le joueur a supprimé son compte ou a été défait.');
 		CTR::redirect('profil');

@@ -117,56 +117,6 @@ echo '<div class="component generator">';
 						echo '</a>';
 					echo '</div>';
 				echo '</div>';
-
-				/*if ($ob_obSituation->typeOfBase == OrbitalBase::TYP_NEUTRAL) {
-					echo '<a href="#" class="button lt">';
-						echo '<span class="text">Evoluer en Base Militaire<br />';
-						echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price'));
-						echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
-					echo '</a>';
-
-					echo '<a href="#" class="button lt">';
-						echo '<span class="text">Evoluer en Centre Industriel<br />';
-						echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price'));
-						echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
-					echo '</a>';
-				} elseif ($ob_obSituation->typeOfBase == OrbitalBase::TYP_COMMERCIAL) {
-					echo '<a href="#" class="button lt">';
-						echo '<span class="text">Evoluer en Overbase<br />';
-						echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'price'));
-						echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
-					echo '</a>';
-
-					echo '<a href="#" class="button lt">';
-						echo '<span class="text">Retransformer en Base Militaire<br />';
-						echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price'));
-						echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
-					echo '</a>';
-				} elseif ($ob_obSituation->typeOfBase == OrbitalBase::TYP_MILITARY) {
-					echo '<a href="#" class="button lt">';
-						echo '<span class="text">Evoluer en Overbase<br />';
-						echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'price'));
-						echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
-					echo '</a>';
-
-					echo '<a href="#" class="button lt">';
-						echo '<span class="text">Retransformer en Centre Industriel<br />';
-						echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price'));
-						echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
-					echo '</a>';
-				} else {
-					echo '<a href="#" class="button lt">';
-						echo '<span class="text">Retransformer en Base Militaire<br />';
-						echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price'));
-						echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
-					echo '</a>';
-
-					echo '<a href="#" class="button lt">';
-						echo '<span class="text">Retransformer en Centre Industriel<br />';
-						echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price'));
-						echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
-					echo '</a>';
-				}*/
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';

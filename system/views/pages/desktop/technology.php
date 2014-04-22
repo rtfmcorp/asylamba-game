@@ -23,9 +23,9 @@ echo '<div id="content">';
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'university') {
 		$player_university = ASM::$pam->get(0);
 		$research_university = ASM::$rsm->get(0);
-		include COMPONENT . 'promethee/university.php';
+		include COMPONENT . 'tech/university.php';
 	} elseif (CTR::$get->get('view') == 'technos') {
-		include COMPONENT . 'promethee/infoTech.php';
+		include COMPONENT . 'tech/infoTech.php';
 	} else {
 		CTR::redirect('404');
 	}
