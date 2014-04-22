@@ -119,7 +119,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				$n->addEnd();
 				ASM::$ntm->add($n);
 
-				CTR::$alert->add('Proposition acceptée. Les vaisseaux commerciaux sont en route vers votre base orbitale.', ALERT_STD_SUCCESS);
+				CTR::$alert->add('Proposition acceptée. Les vaisseaux commerciaux sont en route vers votre base orbitale.', ALERT_GAM_MARKET);
 			} else {
 				CTR::$alert->add('erreur dans les propositions sur le marché, joueur inexistant', ALERT_STD_ERROR);
 			}
