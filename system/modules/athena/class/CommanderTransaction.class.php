@@ -10,7 +10,7 @@
  * @update 18.12.13
  */
 
-class CommanderTransaction extends Transformation {
+class CommanderTransaction extends Transaction {
 	public $name;
 	public $level;
 	public $palmares;
