@@ -23,7 +23,7 @@ class CommercialShippingManager extends Manager {
 			p1.rSystem AS rSystem1, p1.position AS position1, s1.xPosition AS xSystem1, s1.yPosition AS ySystem1,
 			p2.rSystem AS rSystem2, p2.position AS position2, s2.xPosition AS xSystem2, s2.yPosition AS ySystem2,
 			t.type AS typeOfTransaction, t.quantity AS quantity, t.identifier AS identifier, t.price AS price,
-			c.avatar AS commanderAvatar, c.name AS commanderName, c.level AS commanderLevel
+			c.avatar AS commanderAvatar, c.name AS commanderName, c.level AS commanderLevel, c.palmares AS commanderVictory, c.experience AS commanderExperience
 			FROM commercialShipping AS cs
 			LEFT JOIN place AS p1 
 				ON cs.rBase = p1.id
@@ -90,6 +90,8 @@ class CommercialShippingManager extends Manager {
 			$cs->commanderAvatar = $aw['commanderAvatar'];
 			$cs->commanderName = $aw['commanderName'];
 			$cs->commanderLevel = $aw['commanderLevel'];
+			$cs->commanderVictory = $aw['commanderVictory'];
+			$cs->commanderExperience = $aw['commanderExperience'];
 
 			$currentCS = $this->_Add($cs);
 		}

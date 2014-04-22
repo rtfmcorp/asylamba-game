@@ -28,8 +28,6 @@ class CommercialShipping {
 	public $dArrival = '';
 	public $statement = 0;
 
-	public $price = 0;
-
 	public $baseRSystem;
 	public $basePosition;
 	public $baseXSystem;
@@ -43,9 +41,12 @@ class CommercialShipping {
 	public $typeOfTransaction;
 	public $quantity;
 	public $identifier;
+	public $price = 0;
 	public $commanderAvatar;
 	public $commanderName;
 	public $commanderLevel;
+	public $commanderVictory;
+	public $commanderExperience;
 
 	public function getId() { return $this->id; }
 
