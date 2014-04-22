@@ -275,7 +275,7 @@ class Game {
 		}
 	}
 
-	public static function getMinPriceRelativeToRate($transactionType, $quantity, $identifier) {
+	public static function getMinPriceRelativeToRate($transactionType, $quantity, $identifier = FALSE) {
 		switch ($transactionType) {
 			case Transaction::TYP_RESOURCE:
 				$minRate = Transaction::MIN_RATE_RESOURCE;

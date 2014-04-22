@@ -22,7 +22,7 @@ class CommercialShippingManager extends Manager {
 		$qr = $db->prepare('SELECT cs.*, 
 			p1.rSystem AS rSystem1, p1.position AS position1, s1.xPosition AS xSystem1, s1.yPosition AS ySystem1,
 			p2.rSystem AS rSystem2, p2.position AS position2, s2.xPosition AS xSystem2, s2.yPosition AS ySystem2,
-			t.type AS typeOfTransaction, t.quantity AS quantity, t.identifier AS identifier,
+			t.type AS typeOfTransaction, t.quantity AS quantity, t.identifier AS identifier, t.price AS price,
 			c.avatar AS commanderAvatar, c.name AS commanderName, c.level AS commanderLevel
 			FROM commercialShipping AS cs
 			LEFT JOIN place AS p1 
@@ -71,6 +71,8 @@ class CommercialShippingManager extends Manager {
 			$cs->dDeparture = $aw['dDeparture'];
 			$cs->dArrival = $aw['dArrival'];
 			$cs->statement = $aw['statement'];
+
+			$cs->price = $aw['price'];
 
 			$cs->baseRSystem = $aw['rSystem1'];
 			$cs->basePosition = $aw['position1'];
