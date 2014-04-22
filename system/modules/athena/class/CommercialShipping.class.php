@@ -196,7 +196,7 @@ class CommercialShipping {
 
 						echo '<div class="offer">';
 							echo '<strong>' . CommanderResources::getInfo($this->commanderLevel, 'grade') . ' ' . $this->commanderName . '</strong>';
-							echo '<em>??? xp | ? victoires</em>';
+							echo '<em>' . Format::numberFormat($this->commanderExperience) . ' xp | ' . $this->commanderVictory . ' victoire' . Format::addPlural($this->commanderVictory) . '</em>';
 						echo '</div>';
 						echo '<div class="for">';
 							echo '<span>pour</span>';
