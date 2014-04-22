@@ -104,6 +104,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 			}
 			if ($player->credit >= $totalPrice) {
 				$player->decreaseCredit($totalPrice);
+				$orbitalBase->typeOfBase = $type;
 				# delete commercial buildings
 				for ($i = 0; $i < 8; $i++) { 
 					$maxLevel = OrbitalBaseResource::getBuildingInfo($i, 'maxLevel', $type);
