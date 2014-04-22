@@ -1,6 +1,7 @@
 <?php
 $S_TRM1 = ASM::$trm->getCurrentSession();
 $S_CSM1 = ASM::$csm->getCurrentSession();
+ASM::$csm->changeSession($ob_compPlat->shippingManager);
 
 $S_CTM1 = ASM::$ctm->getCurrentSession();
 ASM::$ctm->newSession();

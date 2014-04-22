@@ -46,6 +46,14 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 					if ($player->credit >= $totalPrice) {
 						$orbitalBase->typeOfBase = $type;
 						$player->decreaseCredit($totalPrice);
+
+						# change base type in session
+						for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
+							if (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == $baseId) {
+								CTR::$data->get('playerBase')->get('ob')->get($i)->add('type', OrbitalBase::TYP_COMMERCIAL);
+								break;
+							}
+						}
 						CTR::$alert->add($orbitalBase->name . ' est désormais un Centre Industriel', ALERT_STD_SUCCESS);
 					} else {
 						CTR::$alert->add('Evolution de votre colonie impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
@@ -56,6 +64,14 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 					if ($player->credit >= $totalPrice) {
 						$orbitalBase->typeOfBase = $type;
 						$player->decreaseCredit($totalPrice);
+
+						# change base type in session
+						for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
+							if (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == $baseId) {
+								CTR::$data->get('playerBase')->get('ob')->get($i)->add('type', OrbitalBase::TYP_MILITARY);
+								break;
+							}
+						}
 						CTR::$alert->add($orbitalBase->name . ' est désormais une Base Militaire', ALERT_STD_SUCCESS);
 					} else {
 						CTR::$alert->add('Evolution de votre colonie impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
@@ -87,6 +103,14 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 				if ($player->credit >= $totalPrice) {
 					$orbitalBase->typeOfBase = $type;
 					$player->decreaseCredit($totalPrice);
+
+					# change base type in session
+					for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
+						if (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == $baseId) {
+							CTR::$data->get('playerBase')->get('ob')->get($i)->add('type', OrbitalBase::TYP_CAPITAL);
+							break;
+						}
+					}
 					CTR::$alert->add($orbitalBase->name . ' est désormais une capitale.', ALERT_STD_SUCCESS);
 				} else {
 					CTR::$alert->add('Modification du type de la base orbitale impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
@@ -122,8 +146,22 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 				ASM::$bqm->changeSession($S_BQM1);
 				# send the right alert
 				if ($type == OrbitalBase::TYP_COMMERCIAL) {
+					# change base type in session
+					for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
+						if (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == $baseId) {
+							CTR::$data->get('playerBase')->get('ob')->get($i)->add('type', OrbitalBase::TYP_COMMERCIAL);
+							break;
+						}
+					}
 					CTR::$alert->add('Votre base orbitale devient commerciale. Vos bâtiments militaires sont détruits.', ALERT_STD_SUCCESS);
 				} else {
+					# change base type in session
+					for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
+						if (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == $baseId) {
+							CTR::$data->get('playerBase')->get('ob')->get($i)->add('type', OrbitalBase::TYP_MILITARY);
+							break;
+						}
+					}
 					CTR::$alert->add('Votre base orbitale devient militaire. Vos bâtiments commerciaux sont détruits.', ALERT_STD_SUCCESS);
 				}
 			} else {
