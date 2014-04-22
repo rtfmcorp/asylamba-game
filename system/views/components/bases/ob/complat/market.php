@@ -123,11 +123,16 @@ echo '<div class="component transaction">';
 echo '</div>';
 
 ASM::$trm->newSession();
-ASM::$trm->load(array('type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
+ASM::$trm->load(array('type' => Transaction::TYP_COMMANDER, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
 $currentRate = ASM::$trm->get()->currentRate;
 
 ASM::$trm->newSession();
-ASM::$trm->load(array('type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_PROPOSED), array('dPublication', 'DESC'), array(0, 20));
+ASM::$trm->load(
+	array('type' => Transaction::TYP_COMMANDER, 'statement' => Transaction::ST_PROPOSED),
+	array('dPublication', 'DESC'),
+	array(0, 20),
+	Transaction::TYP_COMMANDER
+);
 
 echo '<div class="component transaction">';
 	echo '<div class="head skin-4">';
@@ -191,11 +196,11 @@ echo '<div class="component transaction">';
 echo '</div>';
 
 ASM::$trm->newSession();
-ASM::$trm->load(array('type' => Transaction::TYP_COMMANDER, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
+ASM::$trm->load(array('type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
 $currentRate = ASM::$trm->get()->currentRate;
 
 ASM::$trm->newSession();
-ASM::$trm->load(array('type' => Transaction::TYP_COMMANDER, 'statement' => Transaction::ST_PROPOSED), array('dPublication', 'DESC'), array(0, 20));
+ASM::$trm->load(array('type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_PROPOSED), array('dPublication', 'DESC'), array(0, 20));
 
 echo '<div class="component transaction">';
 	echo '<div class="head skin-4">';

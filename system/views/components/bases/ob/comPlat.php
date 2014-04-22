@@ -25,7 +25,7 @@ echo '<div class="component building">';
 			$active = (CTR::$get->get('mode') == 'sell') ? 'active' : '';
 			echo '<a href="' . APP_ROOT . 'bases/view-commercialplateforme/mode-sell" class="nav-element ' . $active . '">';
 				echo '<img src="' . MEDIA . 'orbitalbase/generator.png" alt="" />';
-				echo '<strong>Vente</strong>';
+				echo '<strong>Salle des ventes</strong>';
 				echo '<em>Vendez sur le marché</em>';
 			echo '</a>';
 
@@ -33,7 +33,7 @@ echo '<div class="component building">';
 
 			$active = (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'route') ? 'active' : '';
 			echo '<a href="' . APP_ROOT . 'bases/view-commercialplateforme/mode-route" class="nav-element ' . $active . '">';
-				echo '<img src="' . MEDIA . 'orbitalbase/refinery.png" alt="" />';
+				echo '<img src="' . MEDIA . 'orbitalbase/commercialplateforme.png" alt="" />';
 				echo '<strong>Quais commerciaux</strong>';
 				echo '<em>Gérez vos routes commerciales</em>';
 			echo '</a>';

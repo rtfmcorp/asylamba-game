@@ -3233,6 +3233,36 @@ body {
 .component.transaction .new-transaction .indicator span.min-price { left: 5px; }
 .component.transaction .new-transaction .indicator span.max-price { right: 5px;}
 
+/* MARKET-SELL */
+.component.market-sell .label-box {
+	position: relative;
+	padding: 0 10px; margin: 10px 0;
+}
+
+.component.market-sell .label-box .label {
+	display: inline-block;
+	width: 100px;
+	line-height: 30px;
+}
+
+.component.market-sell .label-box .value {
+	display: inline-block;
+	width: 169px; padding: 0 5px;
+	border: none;
+	line-height: 30px;
+	border-radius: 3px;
+	font-size: 16px;
+}
+.component.market-sell .label-box input.value {
+	height: 30px;
+	background: white;
+}
+.component.market-sell .label-box .icon-color {
+	position: absolute;
+	top: 4px; right: 15px;
+	width: 18px;
+}
+
 /***********************************/
 /*********** BASES STYLE ***********/
 /***********************************/
