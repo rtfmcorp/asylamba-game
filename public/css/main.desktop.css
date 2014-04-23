@@ -3015,7 +3015,8 @@ body {
 .component.transaction .transaction .info {
 	position: relative;
 	border-top: solid 1px #202020;
-	height: 72px;
+	height: 88px;
+	background: black;
 }
 
 .component.transaction .transaction .info p {
@@ -3121,6 +3122,7 @@ body {
 	top: 0; right: 0; bottom: 0; width: 50px;
 	padding: 0 5px; line-height: 30px;
 	text-align: center;
+	font-size: 12px;
 }
 
 .component.transaction .transaction .shipping .progress-container {

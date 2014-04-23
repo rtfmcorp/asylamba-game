@@ -84,4 +84,101 @@ class Transaction {
 			return 1;
 		}	
 	}
+
+	public function render($currentRate, $token, $ob) {
+		$rv = $currentRate - $this->price / $this->quantity;
+		$rv = ($rv < 0)
+			? ($rv = '+ ' . Format::numberFormat(abs($rv), 3))
+			: ($rv = '- ' . Format::numberFormat(abs($rv), 3));
+
+		# $S_CTM_T = ASM::$ctm->getCurrentSession();
+		# ASM::$ctm->changeSession($token);
+		$exportTax = 0;
+		$importTax = 0;
+
+		for ($i = 0; $i < ASM::$ctm->size(); $i++) { 
+			$comTax = ASM::$ctm->get($i);
+
+			if ($comTax->faction == $this->sectorColor AND $comTax->relatedFaction == $ob->sectorColor) {
+				$exportTax = $comTax->exportTax;
+			}
+			if ($comTax->faction == $ob->sectorColor AND $comTax->relatedFaction == $this->sectorColor) {
+				$importTax = $comTax->importTax;
+			}
+		}
+
+
+		$exportTax = round($this->price * $exportTax / 100);
+		$importTax = round($this->price * $importTax / 100);
+		$totalPrice = $this->price + $exportTax + $importTax;
+
+		# ASM::$ctm->changeSession($S_CTM_T);
+
+		switch ($this->type) {
+			case Transaction::TYP_RESOURCE: $type = 'resources'; break;
+			case Transaction::TYP_COMMANDER: $type = 'commander'; break;
+			case Transaction::TYP_SHIP: $type = 'ship'; break;
+			default: break;
+		}
+
+		echo '<div class="transaction ' . $type . '">';
+			if ($this->type == Transaction::TYP_RESOURCE) {
+				echo '<div class="product sh" data-target="transaction-' . $type . '-' . $this->id . '">';
+					echo '<img src="' . MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($this->quantity) . '.png" alt="" class="picto" />';
+					echo '<span class="rate">' . $rv . '</span>';
+
+					echo '<div class="offer">';
+						echo Format::numberFormat($this->quantity) . ' <img src="' . MEDIA . 'resources/resource.png" alt="" class="icon-color" />';
+					echo '</div>';
+					echo '<div class="for">';
+						echo '<span>pour</span>';
+					echo '</div>';
+					echo '<div class="price">';
+						echo Format::numberFormat($totalPrice) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
+					echo '</div>';
+				echo '</div>';
+			} elseif ($this->type == Transaction::TYP_COMMANDER) {
+				echo '<div class="product sh" data-target="transaction-' . $type . '-' . $this->id . '">';
+					echo '<img src="' . MEDIA . 'commander/small/c1-l3-c1.png" alt="" class="picto" />';
+					echo '<span class="rate">-1.23</span>';
+
+					echo '<div class="offer">';
+						echo '<strong>Nom</strong>';
+						echo '<em>??? xp | ? victoires</em>';
+					echo '</div>';
+					echo '<div class="for">';
+						echo '<span>pour</span>';
+					echo '</div>';
+					echo '<div class="price">';
+						echo Format::numberFormat($totalPrice) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
+					echo '</div>';
+				echo '</div>';
+			} elseif ($this->type == Transaction::TYP_SHIP) {
+
+			}
+
+			echo '<div class="hidden" id="transaction-' . $type . '-' . $this->id . '">';
+				echo '<div class="info">';
+					echo '<div class="seller">';
+						echo '<p>vendu par<br /> <a href="' . APP_ROOT . 'diary/player-' . $this->rPlayer . '" class="color' . $this->playerColor . '">' . $this->playerName . '</a></p>';
+						echo '<p>depuis<br /> <a href="' . APP_ROOT . 'map/place-' . $this->rPlace . '">' . $this->placeName . '</a> <span class="color' . $this->sectorColor . '">[' . $this->sector . ']</span></p>';
+					echo '</div>';
+					echo '<div class="price-detail">';
+						echo '<p>' . Format::numberFormat($this->price) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
+						echo '<p><span>+ taxe </span>' . Format::numberFormat($exportTax) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
+						echo '<p><span>+ taxe </span>' . Format::numberFormat($exportTax) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
+						echo '<hr />';
+						echo '<p><span>=</span> ' . Format::numberFormat($totalPrice) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
+					echo '</div>';
+				echo '</div>';
+
+				echo '<div class="button">';
+					echo '<a href="' . APP_ROOT . 'action/a-accepttransaction/rplace-' . $ob->getId() . '/rtransaction-' . $this->id . '">';
+						echo 'acheter pour ' . Format::numberFormat($totalPrice) . ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"><br /> ';
+						echo 'durée du transit ' . Chronos::secondToFormat(Game::getTimeTravel($this->rSystem, $this->positionInSystem, $this->xSystem, $this->ySystem, $ob->getSystem(), $ob->getPosition(), $ob->getXSystem(), $ob->getYSystem()), 'lite') . ' <img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
+					echo '</a>';
+				echo '</div>';
+			echo '</div>';
+		echo '</div>';
+	}
 }

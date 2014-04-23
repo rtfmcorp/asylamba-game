@@ -38,10 +38,10 @@ class CommercialShipping {
 	public $destinationXSystem;
 	public $destinationYSystem;
 
+	public $price;
 	public $typeOfTransaction;
 	public $quantity;
 	public $identifier;
-	public $price = 0;
 	public $commanderAvatar;
 	public $commanderName;
 	public $commanderLevel;
@@ -170,7 +170,7 @@ class CommercialShipping {
 		switch ($this->typeOfTransaction) {
 			case Transaction::TYP_RESOURCE: $class = 'resources'; break;
 			case Transaction::TYP_COMMANDER: $class = 'commander'; break;
-			case Transaction::TYP_SHIP: $class = 'ships'; break;
+			case Transaction::TYP_SHIP: $class = 'ship'; break;
 			default: break;
 		}
 
@@ -203,6 +203,21 @@ class CommercialShipping {
 						echo '</div>';
 						echo '<div class="price">';
 							echo Format::numberFormat($this->price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
+						echo '</div>';
+					echo '</div>';
+				} elseif ($this->typeOfTransaction == Transaction::TYP_SHIP) {
+					echo '<div class="product">';
+						echo '<img src="' . MEDIA . 'ship/picto/ship' . $this->identifier . '.png" alt="" class="picto" />';
+
+						echo '<div class="offer">';
+							echo '<strong>' . $this->quantity . ' Pégases</strong>';
+							echo '<em>? pev</em>';
+						echo '</div>';
+						echo '<div class="for">';
+							echo '<span>pour</span>';
+						echo '</div>';
+						echo '<div class="price">';
+							echo $this->price . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
 						echo '</div>';
 					echo '</div>';
 				}
