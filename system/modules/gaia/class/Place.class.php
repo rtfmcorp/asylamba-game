@@ -338,7 +338,7 @@ class Place {
 
 				$dCommanders = array();
 				foreach ($this->commanders AS $dCommander) {
-					if ($dCommander->statement == Commander::AFFECTED && $dCommanders->line == 1) {
+					if ($dCommander->statement == Commander::AFFECTED && $dCommander->line == 1) {
 						$dCommanders[] = $dCommander;
 					}
 				}
