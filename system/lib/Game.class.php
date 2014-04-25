@@ -200,7 +200,7 @@ class Game {
 			case Transaction::TYP_SHIP :
 				# 1 PEV => 1 commercialShip
 				if (ShipResource::isAShip($identifier) AND $quantity > 0) {
-					$needed = $quantity * ShipResource::getInfo($identifier, 'resourcePrice');
+					$needed = $quantity * ShipResource::getInfo($identifier, 'pev');
 				} else {
 					$needed = FALSE;
 				}

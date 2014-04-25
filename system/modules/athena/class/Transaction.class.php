@@ -122,40 +122,38 @@ class Transaction {
 		}
 
 		echo '<div class="transaction ' . $type . '">';
-			if ($this->type == Transaction::TYP_RESOURCE) {
-				echo '<div class="product sh" data-target="transaction-' . $type . '-' . $this->id . '">';
+			echo '<div class="product sh" data-target="transaction-' . $type . '-' . $this->id . '">';
+				if ($this->type == Transaction::TYP_RESOURCE) {
 					echo '<img src="' . MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($this->quantity) . '.png" alt="" class="picto" />';
 					echo '<span class="rate">' . $rv . '</span>';
 
 					echo '<div class="offer">';
 						echo Format::numberFormat($this->quantity) . ' <img src="' . MEDIA . 'resources/resource.png" alt="" class="icon-color" />';
 					echo '</div>';
-					echo '<div class="for">';
-						echo '<span>pour</span>';
-					echo '</div>';
-					echo '<div class="price">';
-						echo Format::numberFormat($totalPrice) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
-					echo '</div>';
-				echo '</div>';
-			} elseif ($this->type == Transaction::TYP_COMMANDER) {
-				echo '<div class="product sh" data-target="transaction-' . $type . '-' . $this->id . '">';
+				} elseif ($this->type == Transaction::TYP_COMMANDER) {
 					echo '<img src="' . MEDIA . 'commander/small/c1-l3-c1.png" alt="" class="picto" />';
-					echo '<span class="rate">-1.23</span>';
+					echo '<span class="rate">' . $rv . '</span>';
 
 					echo '<div class="offer">';
 						echo '<strong>Nom</strong>';
 						echo '<em>??? xp | ? victoires</em>';
 					echo '</div>';
-					echo '<div class="for">';
-						echo '<span>pour</span>';
-					echo '</div>';
-					echo '<div class="price">';
-						echo Format::numberFormat($totalPrice) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
-					echo '</div>';
-				echo '</div>';
-			} elseif ($this->type == Transaction::TYP_SHIP) {
+				} elseif ($this->type == Transaction::TYP_SHIP) {
+					echo '<img src="' . MEDIA . 'ship/picto/ship' . $this->identifier . '.png" alt="" class="picto" />';
+					echo '<span class="rate">' . $rv . '</span>';
 
-			}
+					echo '<div class="offer">';
+						echo '<strong>' . $this->quantity . ' ' . ShipResource::getInfo($this->identifier, 'codeName') . '</strong>';
+						echo '<em>' . ShipResource::getInfo($this->identifier, 'name') . ' / ' . ShipResource::getInfo($this->identifier, 'pev') . ' pev</em>';
+					echo '</div>';
+				}
+				echo '<div class="for">';
+					echo '<span>pour</span>';
+				echo '</div>';
+				echo '<div class="price">';
+					echo Format::numberFormat($totalPrice) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
+				echo '</div>';
+			echo '</div>';
 
 			echo '<div class="hidden" id="transaction-' . $type . '-' . $this->id . '">';
 				echo '<div class="info">';

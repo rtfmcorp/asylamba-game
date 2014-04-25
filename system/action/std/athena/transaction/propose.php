@@ -79,6 +79,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 						$usedShips += ASM::$csm->get($i)->shipQuantity;
 					}
 				}
+
 				# determine commercialShipQuantity needed
 				switch ($type) {
 					case Transaction::TYP_RESOURCE :
@@ -100,6 +101,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 						$commercialShipQuantity = Game::getCommercialShipQuantityNeeded($type, $quantity);
 						break;
 				}
+
 				$remainingShips = $totalShips - $usedShips;
 				if ($valid) {
 					if ($remainingShips >= $commercialShipQuantity) {
