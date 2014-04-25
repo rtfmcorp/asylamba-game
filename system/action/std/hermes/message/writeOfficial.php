@@ -10,27 +10,9 @@ include_once ZEUS;
 if (CTR::$data->get('playerInfo')->get('admin') == FALSE) {
 	CTR::redirect('profil');
 } else {
-	if (CTR::$get->exist('player')) {
-		$playerId = CTR::$get->get('player');
-	} elseif (CTR::$post->exist('player')) {
-		$playerId = CTR::$post->get('player');
-	} else {
-		$playerId = FALSE;
-	}
-	if (CTR::$get->exist('ally')) {
-		$ally = CTR::$get->get('ally');
-	} elseif (CTR::$post->exist('ally')) {
-		$ally = CTR::$post->get('ally');
-	} else {
-		$ally = FALSE;
-	}
-	if (CTR::$get->exist('message')) {
-		$message = CTR::$get->get('message');
-	} elseif (CTR::$post->exist('message')) {
-		$message = CTR::$post->get('message');
-	} else {
-		$message = FALSE;
-	}
+	$playerId = Utils::getHTTPData('player');
+	$ally = Utils::getHTTPData('ally');
+	$message = Utils::getHTTPData('message');
 
 	// protection des inputs
 	$p = new Parser();

@@ -4,13 +4,8 @@ include_once ATHENA;
 
 # int credit 		nouveau montant à investir
 
-if (CTR::$get->exist('credit')) {
-	$credit = CTR::$get->get('credit');
-} elseif (CTR::$post->exist('credit')) {
-	$credit = CTR::$post->get('credit');
-} else {
-	$credit = FALSE;
-}
+$credit = Utils::getHTTPData('credit');
+
 
 if ($credit !== FALSE) { 
 	$S_PAM1 = ASM::$pam->getCurrentSession();

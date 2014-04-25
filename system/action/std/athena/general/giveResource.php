@@ -10,27 +10,10 @@ for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-if (CTR::$get->exist('baseid')) {
-	$baseId = CTR::$get->get('baseid');
-} elseif (CTR::$post->exist('baseid')) {
-	$baseId = CTR::$post->get('baseid');
-} else {
-	$baseId = FALSE;
-}
-if (CTR::$get->exist('otherbaseid')) {
-	$otherBaseId = CTR::$get->get('otherbaseid');
-} elseif (CTR::$post->exist('otherbaseid')) {
-	$otherBaseId = CTR::$post->get('otherbaseid');
-} else {
-	$otherBaseId = FALSE;
-}
-if (CTR::$get->exist('quantity')) {
-	$quantity = CTR::$get->get('quantity');
-} elseif (CTR::$post->exist('quantity')) {
-	$quantity = CTR::$post->get('quantity');
-} else {
-	$quantity = FALSE;
-}
+$baseId = Utils::getHTTPData('baseid');
+$otherBaseIdype = Utils::getHTTPData('totherbaseidype');
+$quantity = Utils::getHTTPData('quantity');
+
 
 if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_array($baseId, $verif)) {
 	$resource = intval($quantity);

@@ -9,20 +9,8 @@ for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-if (CTR::$get->exist('basefrom')) {
-	$baseFrom = CTR::$get->get('basefrom');
-} elseif (CTR::$post->exist('basefrom')) {
-	$baseFrom = CTR::$post->get('basefrom');
-} else {
-	$baseFrom = FALSE;
-}
-if (CTR::$get->exist('baseto')) {
-	$baseTo = CTR::$get->get('baseto');
-} elseif (CTR::$post->exist('baseto')) {
-	$baseTo = CTR::$post->get('baseto');
-} else {
-	$baseTo = FALSE;
-}
+$baseFrom = Utils::getHTTPData('basefrom');
+$baseTo = Utils::getHTTPData('baseto');
 
 if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 	$S_OBM1 = ASM::$obm->getCurrentSession();

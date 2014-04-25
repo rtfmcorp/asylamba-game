@@ -9,21 +9,9 @@ for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-if (CTR::$get->exist('baseid')) {
-	$baseId = CTR::$get->get('baseid');
-} elseif (CTR::$post->exist('baseid')) {
-	$baseId = CTR::$post->get('baseid');
-} else {
-	$baseId = FALSE;
-}
+$baseId = Utils::getHTTPData('baseid');
+$name = Utils::getHTTPData('name');
 
-if (CTR::$get->exist('name')) {
-	$name = CTR::$get->get('name');
-} elseif (CTR::$post->exist('name')) {
-	$name = CTR::$post->get('name');
-} else {
-	$name = FALSE;
-}
 
 // protection du nouveau nom de la base
 $p = new Parser();
