@@ -13,24 +13,7 @@
 class TransactionManager extends Manager {
 	protected $managerType = '_Transaction';
 
-	public function load($where = array(), $order = array(), $limit = array(), $typeToLoad = 0) {
-		switch ($typeToLoad) {
-			case Transaction::TYP_RESOURCE :
-				self::loadTransactions($where, $order, $limit);
-				break;
-			case Transaction::TYP_SHIP :
-				self::loadTransactions($where, $order, $limit);
-				break;
-			case Transaction::TYP_COMMANDER :
-				self::loadCommanderTransactions($where, $order, $limit);
-				break;
-			default :
-				self::loadTransactions($where, $order, $limit);
-				break;
-		}
-	}
-
-	private function loadTransactions($where, $order, $limit) {
+	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 't.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
@@ -45,7 +28,11 @@ class TransactionManager extends Manager {
 			p.rSystem AS rSystem,
 			p.position AS positionInSystem,
 			s.xPosition AS xSystem,
-			s.yPosition AS ySystem
+			s.yPosition AS ySystem,
+			c.name AS commanderName,
+			c.level AS commanderLevel, 
+			c.palmares AS commanderVictory,
+			c.experience AS commanderExperience
 			FROM transaction AS t
 			LEFT JOIN player AS play
 				ON t.rPlayer = play.id
@@ -57,6 +44,8 @@ class TransactionManager extends Manager {
 				ON p.rSystem = s.id
 			LEFT JOIN sector AS se 
 				ON s.rSector = se.id
+			LEFT JOIN commander AS c 
+				ON t.identifier = c.id
 			' . $formatWhere . '
 			' . $formatOrder . '
 			' . $formatLimit
@@ -104,60 +93,10 @@ class TransactionManager extends Manager {
 			$t->xSystem = $aw['xSystem'];
 			$t->ySystem = $aw['ySystem'];
 
-			$currentT = $this->_Add($t);
-		}
-	}
-
-	private function loadCommanderTransactions($where, $order, $limit) {
-		$formatWhere = Utils::arrayToWhere($where, 't.');
-		$formatOrder = Utils::arrayToOrder($order);
-		$formatLimit = Utils::arrayToLimit($limit);
-
-		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT t.*, c.name, c.level, c.palmares
-			FROM transaction AS t
-			INNER JOIN commander AS c 
-				ON t.identifier = c.id
-			' . $formatWhere . '
-			' . $formatOrder . '
-			' . $formatLimit
-		);
-
-		foreach($where AS $v) {
-			if (is_array($v)) {
-				foreach ($v as $p) {
-					$valuesArray[] = $p;
-				}
-			} else {
-				$valuesArray[] = $v;
-			}
-		}
-
-		if(empty($valuesArray)) {
-			$qr->execute();
-		} else {
-			$qr->execute($valuesArray);
-		}
-
-		while($aw = $qr->fetch()) {
-			$t = new CommanderTransaction();
-
-			$t->id = $aw['id'];
-			$t->rPlayer = $aw['rPlayer'];
-			$t->rPlace = $aw['rPlace'];
-			$t->type = $aw['type'];
-			$t->quantity = $aw['quantity'];
-			$t->identifier = $aw['identifier'];
-			$t->price = $aw['price'];
-			$t->shipQuantity = $aw['commercialShipQuantity'];
-			$t->statement = $aw['statement'];
-			$t->dPublication = $aw['dPublication'];
-			$t->dValidation = $aw['dValidation'];
-			$t->currentRate = $aw['currentRate'];
-
-			$t->name = $aw['name'];
-			$t->level = $aw['level'];
-			$t->palmares = $aw['palmares'];
+			$t->commanderName = $aw['commanderName'];
+			$t->commanderLevel = $aw['commanderLevel'];
+			$t->commanderVictory = $aw['commanderVictory'];
+			$t->commanderExperience = $aw['commanderExperience'];
 
 			$currentT = $this->_Add($t);
 		}

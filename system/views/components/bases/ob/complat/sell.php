@@ -143,7 +143,7 @@ echo '<div class="component market-sell">';
 
 					echo '<div class="label-box">';
 						echo '<label for="sell-market-price-commander" class="label">Prix</label>';
-						echo '<input id="sell-market-price-commander" class="value" type="text" name="price" value="' . round($commander->experience * $commanderCurrentRate) . '" />';
+						echo '<input id="sell-market-price-commander" class="value" type="text" name="price" value="' . ceil($commander->experience * $commanderCurrentRate) . '" />';
 						echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
 					echo '</div>';
 

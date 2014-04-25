@@ -17,7 +17,6 @@ include_once 'class/ShipQueue.class.php';
 include_once 'class/ShipQueueManager.class.php';
 
 include_once 'class/Transaction.class.php';
-include_once 'class/CommanderTransaction.class.php';
 include_once 'class/TransactionManager.class.php';
 
 include_once 'class/CommercialShipping.class.php';

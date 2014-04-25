@@ -4,7 +4,7 @@ $S_CSM1 = ASM::$csm->getCurrentSession();
 ASM::$csm->changeSession($ob_compPlat->shippingManager);
 
 $S_CTM1 = ASM::$ctm->getCurrentSession();
-ASM::$ctm->newSession();
+$S_CTM2 = ASM::$ctm->newSession();
 ASM::$ctm->load(array());
 
 echo '<div class="component transaction">';
@@ -48,7 +48,7 @@ echo '<div class="component transaction">';
 
 			for ($i = 0; $i < ASM::$trm->size(); $i++) {
 				if (CTR::$data->get('playerId') != ASM::$trm->get($i)->rPlayer) {
-					ASM::$trm->get($i)->render($ressourceCurrentRate, $S_CTM1, $ob_compPlat);
+					ASM::$trm->get($i)->render($ressourceCurrentRate, $S_CTM2, $ob_compPlat);
 				}
 			}
 		echo '</div>';
@@ -57,7 +57,7 @@ echo '</div>';
 
 ASM::$trm->newSession();
 ASM::$trm->load(array('type' => Transaction::TYP_COMMANDER, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
-$currentRate = ASM::$trm->get()->currentRate;
+$commanderCurrentRate = ASM::$trm->get()->currentRate;
 
 ASM::$trm->newSession();
 ASM::$trm->load(
@@ -70,7 +70,7 @@ echo '<div class="component transaction">';
 	echo '<div class="head skin-4">';
 		echo '<img src="' . MEDIA . 'orbitalbase/school.png" alt="commandants" class="main" />';
 		echo '<h2>Commandants</h2>';
-		echo '<em>cours actuel | 1:' . Format::numberFormat($currentRate, 3) . '</em>';
+		echo '<em>cours actuel | 1:' . Format::numberFormat($commanderCurrentRate, 3) . '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
@@ -84,7 +84,7 @@ echo '<div class="component transaction">';
 
 			for ($i = 0; $i < ASM::$trm->size(); $i++) {
 				if (CTR::$data->get('playerId') != ASM::$trm->get($i)->rPlayer) {
-					ASM::$trm->get($i)->render($ressourceCurrentRate, $S_CTM1, $ob_compPlat);
+					ASM::$trm->get($i)->render($commanderCurrentRate, $S_CTM2, $ob_compPlat);
 				}
 			}
 		echo '</div>';
@@ -93,7 +93,7 @@ echo '</div>';
 
 ASM::$trm->newSession();
 ASM::$trm->load(array('type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
-$currentRate = ASM::$trm->get()->currentRate;
+$shipCurrentRate = ASM::$trm->get()->currentRate;
 
 ASM::$trm->newSession();
 ASM::$trm->load(array('type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_PROPOSED), array('dPublication', 'DESC'), array(0, 20));
@@ -102,7 +102,7 @@ echo '<div class="component transaction">';
 	echo '<div class="head skin-4">';
 		echo '<img src="' . MEDIA . 'orbitalbase/dock2.png" alt="vaisseaux" class="main" />';
 		echo '<h2>Vaisseaux</h2>';
-		echo '<em>cours actuel | 1:' . Format::numberFormat($currentRate, 3) . '</em>';
+		echo '<em>cours actuel | 1:' . Format::numberFormat($shipCurrentRate, 3) . '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
@@ -116,7 +116,7 @@ echo '<div class="component transaction">';
 
 			for ($i = 0; $i < ASM::$trm->size(); $i++) {
 				if (CTR::$data->get('playerId') != ASM::$trm->get($i)->rPlayer) {
-					ASM::$trm->get($i)->render($ressourceCurrentRate, $S_CTM1, $ob_compPlat);
+					ASM::$trm->get($i)->render($shipCurrentRate, $S_CTM2, $ob_compPlat);
 				}
 			}
 		echo '</div>';

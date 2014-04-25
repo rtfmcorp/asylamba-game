@@ -8,6 +8,7 @@
 	# {orbitalBase}		ob_school
 
 include_once ARES;
+include_once ZEUS;
 
 $S_COM1 = ASM::$com->getCurrentSession();
 ASM::$com->newSession();
@@ -43,36 +44,35 @@ echo '<div class="component school">';
 
 			echo '<hr />';
 
-			for ($i = 0; $i < SchoolClassResource::size(); $i++) { 
-				echo '<div class="build-item">';
-					echo '<div class="name">';
-						echo '<img src="' . MEDIA . 'school/school-' . $i . '.png" alt="" />';
-						echo '<strong>' . SchoolClassResource::getInfo($i, 'title') . '</strong>';
-					echo '</div>';
-					if ($comQuantity >= MAXCOMMANDERINSCHOOL) {
-						echo '<span class="button disable">';
-							echo '<span class="text">';
-								echo 'trop de commandant dans l\'école<br/>';
-								echo Format::numberFormat(SchoolClassResource::getInfo($i, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
-							echo '</span>';
-						echo '</span>';
-					} elseif (SchoolClassResource::getInfo($i, 'credit') >= CTR::$data->get('playerInfo')->get('credit')) {
-						echo '<span class="button disable">';
-							echo '<span class="text">';
-								echo 'vous ne disposez pas d\'assez de crédit<br/>';
-								echo Format::numberFormat(SchoolClassResource::getInfo($i, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
-							echo '</span>';
-						echo '</span>';
-					} else {
-						echo '<a class="button" href="' . APP_ROOT . 'action/a-createschoolclass/baseid-' . $ob_school->getId() . '/school-' . $i . '">';
-							echo '<span class="text">';
-								echo 'ouvrir une classe pour<br/>';
-								echo Format::numberFormat(SchoolClassResource::getInfo($i, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
-							echo '</span>';
-						echo '</a>';
-					}
+			echo '<form action="' . APP_ROOT . 'action/a-createschoolclass/baseid-' . $ob_school->getId() . '/school-0" method="post" class="build-item">';
+				echo '<div class="name">';
+					echo '<img src="' . MEDIA . 'school/school-1.png" alt="" />';
+					echo '<strong>Nouveau commandant</strong>';
 				echo '</div>';
-			}
+					echo '<input type="text" class="name-commander" name="name" value="' . CheckName::randomize() . '" />';
+				if ($comQuantity >= MAXCOMMANDERINSCHOOL) {
+					echo '<span class="button disable">';
+						echo '<span class="text">';
+							echo 'trop de commandant dans l\'école<br/>';
+							echo Format::numberFormat(SchoolClassResource::getInfo(0, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
+						echo '</span>';
+					echo '</span>';
+				} elseif (SchoolClassResource::getInfo($i, 'credit') >= CTR::$data->get('playerInfo')->get('credit')) {
+					echo '<span class="button disable">';
+						echo '<span class="text">';
+							echo 'vous ne disposez pas d\'assez de crédit<br/>';
+							echo Format::numberFormat(SchoolClassResource::getInfo(0, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
+						echo '</span>';
+					echo '</span>';
+				} else {
+					echo '<button type="submit" class="button">';
+						echo '<span class="text">';
+							echo 'créer le commandant pour<br/>';
+							echo Format::numberFormat(SchoolClassResource::getInfo(0, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
+						echo '</span>';
+					echo '</button>';
+				}
+			echo '</form>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
@@ -88,7 +88,7 @@ echo '<div class="component">';
 					$commander = ASM::$com->get($i);
 					$expToLvlUp = $commander->experienceToLevelUp();
 					echo '<div class="item">';
-						echo '<img class="picto" src="' . MEDIA . 'commander/small/c1-l' . rand(1, 3) . '-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="" />';
+						echo '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
 						echo '<strong>' . CommanderResources::getInfo($commander->getLevel(), 'grade') . ' ' . $commander->getName() . '</strong>';
 						echo '<em>' . Format::numberFormat($commander->getExperience()) . ' points d\'expérience</em>';
 						echo '<a href="' . APP_ROOT . 'action/a-affectcommander/id-' . $commander->getId() . '">';

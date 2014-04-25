@@ -1,7 +1,13 @@
 <?php
 include_once ZEUS;
 $S_PAM1 = ASM::$pam->newSession();
-ASM::$pam->search($_GET['q']);
+
+$name = $_GET['q'];
+$name = htmlspecialchars($name);
+$p = new Parser();
+$name = $p->protect($name);
+$name = strtr($name, "'", "\'");
+ASM::$pam->search($name);
 
 if (ASM::$pam->size() != 0) {
 	for ($i = 0; $i < ASM::$pam->size(); $i++) {

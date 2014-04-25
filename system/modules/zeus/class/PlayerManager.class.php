@@ -51,7 +51,6 @@ class PlayerManager extends Manager {
 			$p->setName($aw['name']);
 			$p->setAvatar($aw['avatar']);
 			$p->setStatus($aw['status']);
-			$p->setDescription($aw['description']);
 			$p->setCredit($aw['credit']);
 			$p->uPlayer = $aw['uPlayer'];
 			$p->setExperience($aw['experience']);
@@ -91,7 +90,6 @@ class PlayerManager extends Manager {
 			$p->setName($aw['name']);
 			$p->setAvatar($aw['avatar']);
 			$p->setStatus($aw['status']);
-			$p->setDescription($aw['description']);
 			$p->setCredit($aw['credit']);
 			$p->uPlayer = $aw['uPlayer'];
 			$p->setExperience($aw['experience']);
@@ -117,15 +115,14 @@ class PlayerManager extends Manager {
 	public function add(Player $p) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			player(bind, rColor, name, avatar, status, description, credit, uPlayer, experience, level, victory, defeat, stepTutorial, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, dInscription, dLastConnection, dLastActivity, premium, statement)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+			player(bind, rColor, name, avatar, status, credit, uPlayer, experience, level, victory, defeat, stepTutorial, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, dInscription, dLastConnection, dLastActivity, premium, statement)
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$p->getBind(),
 			$p->getRColor(),
 			$p->getName(),
 			$p->getAvatar(),
 			$p->getStatus(),
-			$p->getDescription(),
 			$p->getCredit(),
 			$p->uPlayer,
 			$p->getExperience(),
@@ -162,7 +159,6 @@ class PlayerManager extends Manager {
 					name = ?,
 					avatar = ?,
 					status = ?,
-					description = ?,
 					credit = ?,
 					uPlayer = ?,
 					experience = ?,
@@ -188,7 +184,6 @@ class PlayerManager extends Manager {
 				$p->getName(),
 				$p->getAvatar(),
 				$p->getStatus(),
-				$p->getDescription(),
 				$p->getCredit(),
 				$p->uPlayer,
 				$p->getExperience(),
@@ -258,7 +253,6 @@ class PlayerManager extends Manager {
 			$p->setName($aw['name']);
 			$p->setAvatar($aw['avatar']);
 			$p->setStatus($aw['status']);
-			$p->setDescription($aw['description']);
 			$p->setCredit($aw['credit']);
 			$p->uPlayer = $aw['uPlayer'];
 			$p->setExperience($aw['experience']);
