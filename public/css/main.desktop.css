@@ -800,10 +800,17 @@ body {
 	border: solid 5px transparent;
 	width: auto;
 }
+.component .tool.sort-button > span:first-child {
+	text-align: center;
+}
 .component .tool > span:first-child a { width: auto; }
 .component .tool > span a:focus,
 .component .tool > span a:hover {
 	background: #4F4F4F;
+}
+.component .tool > span a img {
+	width: 18px; position: relative;
+	top: -4px;
 }
 
 .component h3 {
