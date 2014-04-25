@@ -717,4 +717,38 @@ jQuery(document).ready(function($) {
 			i++;
 		}, 100);
 	})();
+
+
+
+	/* test */
+	$('.sort-button a').live('click', function(e) {
+		e.preventDefault();
+
+		var parent = $(this).closest('.body');
+		var type = $(this).data('sort-type');
+		var direction = $(this).data('sort-direction');
+
+		parent.find('.sort-button a')
+			.removeClass('active')
+			.removeClass('up')
+			.removeClass('down');
+
+		$(this).addClass('active');
+		$(this).addClass(direction);
+
+		if (direction == 'up') {
+			$(this).data('sort-direction', 'down');
+		} else {
+			$(this).data('sort-direction', 'up');
+		}
+
+		parent.find('.transaction').sort(function(a, b) {
+			if (direction == 'up') {
+				return $(a).data('sort-' + type) < $(b).data('sort-' + type) ? 1 : -1;
+			} else {
+				return $(a).data('sort-' + type) > $(b).data('sort-' + type) ? 1 : -1;
+			}
+		}).remove().appendTo(parent);
+	});
+
 });

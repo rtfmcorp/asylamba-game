@@ -92,8 +92,9 @@ class Transaction {
 	}
 
 	public function render($currentRate, $token, $ob) {
-		#$rv = '1:' . Format::numberFormat(Game::calculateRate($this->type, $this->quantity, $this->identifier, $this->price), 3);
-		$rv = Format::numberFormat(Game::calculateRate($this->type, $this->quantity, $this->identifier, $this->price) / $currentRate * 100) . ' %';
+	#	$rv = '1:' . Format::numberFormat(Game::calculateRate($this->type, $this->quantity, $this->identifier, $this->price), 3);
+		$rv = Format::numberFormat(Game::calculateRate($this->type, $this->quantity, $this->identifier, $this->price) / $currentRate * 100);
+		$time = Game::getTimeTravel($this->rSystem, $this->positionInSystem, $this->xSystem, $this->ySystem, $ob->getSystem(), $ob->getPosition(), $ob->getXSystem(), $ob->getYSystem());
 
 		$S_CTM_T = ASM::$ctm->getCurrentSession();
 		ASM::$ctm->changeSession($token);
@@ -122,18 +123,18 @@ class Transaction {
 			default: break;
 		}
 
-		echo '<div class="transaction ' . $type . '">';
+		echo '<div class="transaction ' . $type . '"  data-sort-quantity="' . $this->quantity . '" data-sort-price="' . $totalPrice . '" data-sort-xp="' . $this->commanderExperience . '" data-sort-far="' . $time . '" data-sort-cr="' . $rv . '">';
 			echo '<div class="product sh" data-target="transaction-' . $type . '-' . $this->id . '">';
 				if ($this->type == Transaction::TYP_RESOURCE) {
 					echo '<img src="' . MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($this->quantity) . '.png" alt="" class="picto" />';
-					echo '<span class="rate">' . $rv . '</span>';
+					echo '<span class="rate">' . $rv . ' %</span>';
 
 					echo '<div class="offer">';
 						echo Format::numberFormat($this->quantity) . ' <img src="' . MEDIA . 'resources/resource.png" alt="" class="icon-color" />';
 					echo '</div>';
 				} elseif ($this->type == Transaction::TYP_COMMANDER) {
 					echo '<img src="' . MEDIA . 'commander/small/c1-l3-c1.png" alt="" class="picto" />';
-					echo '<span class="rate">' . $rv . '</span>';
+					echo '<span class="rate">' . $rv . ' %</span>';
 
 					echo '<div class="offer">';
 						echo '<strong>' . CommanderResources::getInfo($this->commanderLevel, 'grade') . ' ' . $this->commanderName . '</strong>';
@@ -141,7 +142,7 @@ class Transaction {
 					echo '</div>';
 				} elseif ($this->type == Transaction::TYP_SHIP) {
 					echo '<img src="' . MEDIA . 'ship/picto/ship' . $this->identifier . '.png" alt="" class="picto" />';
-					echo '<span class="rate">' . $rv . '</span>';
+					echo '<span class="rate">' . $rv . ' %</span>';
 
 					echo '<div class="offer">';
 						echo '<strong>' . $this->quantity . ' ' . ShipResource::getInfo($this->identifier, 'codeName') . '</strong>';
@@ -174,7 +175,7 @@ class Transaction {
 				echo '<div class="button">';
 					echo '<a href="' . APP_ROOT . 'action/a-accepttransaction/rplace-' . $ob->getId() . '/rtransaction-' . $this->id . '">';
 						echo 'acheter pour ' . Format::numberFormat($totalPrice) . ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"><br /> ';
-						echo 'durée du transit ' . Chronos::secondToFormat(Game::getTimeTravel($this->rSystem, $this->positionInSystem, $this->xSystem, $this->ySystem, $ob->getSystem(), $ob->getPosition(), $ob->getXSystem(), $ob->getYSystem()), 'lite') . ' <img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
+						echo 'durée du transit ' . Chronos::secondToFormat($time, 'lite') . ' <img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
 					echo '</a>';
 				echo '</div>';
 			echo '</div>';

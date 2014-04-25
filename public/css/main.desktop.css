@@ -786,6 +786,15 @@ body {
 	background: #202020;
 	border: solid 1px #4F4F4F;
 }
+.color1 .component .tool > span a.active { background: #b01e2d; }
+.color2 .component .tool > span a.active { background: #2f23c0; }
+.color3 .component .tool > span a.active { background: #ffdb0f; }
+.color4 .component .tool > span a.active { background: #a935c7; }
+.color5 .component .tool > span a.active { background: #57c632; }
+.color6 .component .tool > span a.active { background: #05bed7; }
+.color7 .component .tool > span a.active { background: #ac5832; }
+.component .tool > span a.active.down { box-shadow: 0 2px 0 0 #CCC; }
+.component .tool > span a.active.up { box-shadow: 0 -2px 0 0 #CCC; }
 
 .component .tool > span:first-child {
 	border: solid 5px transparent;
