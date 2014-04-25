@@ -3,7 +3,8 @@
 echo '<div id="background-paralax" class="technology"></div>';
 
 # inclusion des elements
-include 'technologyElement/subnav.php';
+# include 'technologyElement/subnav.php';
+include 'defaultElement/subnav.php';
 include 'defaultElement/movers.php';
 
 # contenu spécifique

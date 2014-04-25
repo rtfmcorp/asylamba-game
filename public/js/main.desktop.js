@@ -718,7 +718,7 @@ jQuery(document).ready(function($) {
 		}, 100);
 	})();
 
-	/* sorting */
+	/* SORTING STUFF */
 	$('.sort-button a').live('click', function(e) {
 		e.preventDefault();
 

@@ -371,11 +371,11 @@ class OrbitalBaseManager extends Manager {
 			ASM::$com->newSession();
 			ASM::$com->load(array('c.rBase' => $id));
 			for ($i = 0; $i < ASM::$com->size(); $i++) {
-				if ($com->statement != Commander::DEAD) {
-					$com->rPlayer = $newOwner;
+				if (ASM::$com->get($i)->statement != Commander::DEAD) {
+					ASM::$com->get($i)->rPlayer = $newOwner;
 				}
-				if ($com->statement == Commander::MOVING) {
-					$com->statement = Commander::DESERT;
+				if (ASM::$com->get($i)->statement == Commander::MOVING) {
+					ASM::$com->get($i)->statement = Commander::DESERT;
 				}
 				$com->rDestinationPlace = NULL;
 				$com->travelType = NULL;

@@ -393,6 +393,18 @@ class Commander {
 		return $enemyCommander;
 	}
 
+	public function getPosition ($x1, $y1, $x2, $y2) {
+		if ($this->statement == self::MOVING) {
+			$parcouredTime = Utils::interval($this->dStart, Utils::now(), 's');
+			$totalTime = Utils::interval($this->dStart, $this->dArrival, 's');
+			$progression = $parcouredTime / $totalTime;
+
+			$x = $x1 + $progression * ($x2-$x1);
+			$y = $y1 + $progression * ($y2-$y1);
+		}
+		return array($x, $y);
+	}
+
 	public function uCommander() {
 		$token = CTC::createContext();
 		$now = Utils::now();
