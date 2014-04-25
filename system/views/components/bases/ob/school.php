@@ -47,13 +47,13 @@ echo '<div class="component school">';
 			echo '<form action="' . APP_ROOT . 'action/a-createschoolclass/baseid-' . $ob_school->getId() . '/school-0" method="post" class="build-item">';
 				echo '<div class="name">';
 					echo '<img src="' . MEDIA . 'school/school-1.png" alt="" />';
-					echo '<strong>Nouveau commandant</strong>';
+					echo '<strong>Nouvel officier</strong>';
 				echo '</div>';
 					echo '<input type="text" class="name-commander" name="name" value="' . CheckName::randomize() . '" />';
 				if ($comQuantity >= MAXCOMMANDERINSCHOOL) {
 					echo '<span class="button disable">';
 						echo '<span class="text">';
-							echo 'trop de commandant dans l\'école<br/>';
+							echo 'trop d\'officier dans l\'école<br/>';
 							echo Format::numberFormat(SchoolClassResource::getInfo(0, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
 						echo '</span>';
 					echo '</span>';
@@ -67,7 +67,7 @@ echo '<div class="component school">';
 				} else {
 					echo '<button type="submit" class="button">';
 						echo '<span class="text">';
-							echo 'créer le commandant pour<br/>';
+							echo 'créer l\'officier pour<br/>';
 							echo Format::numberFormat(SchoolClassResource::getInfo(0, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
 						echo '</span>';
 					echo '</button>';
