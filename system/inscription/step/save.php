@@ -15,10 +15,6 @@ try {
 	
 	# modifier si negore
 	$pl->setCredit(12500);
-	$pl->setUCredit(Utils::now());
-
-	$pl->setActionPoint(10);
-	$pl->setUActionPoint(Utils::now());
 
 	# modifier l'expérience de base
 	$pl->setExperience(630);
@@ -27,6 +23,7 @@ try {
 	$pl->setDInscription(Utils::now());
 	$pl->setDLastConnection(Utils::now());
 	$pl->setDLastActivity(Utils::now());
+	$pl->uPlayer = Utils::now();
 
 	$pl->setPremium(1);
 	$pl->setStatement(1);
@@ -70,24 +67,19 @@ try {
 		# + ajout des bonus de factions
 	$ob->setLevelGenerator(1);
 	$ob->setLevelRefinery(1);
-	$ob->setLevelDock1(1);
+	$ob->setLevelDock1(0);
 	$ob->setLevelDock2(0);
 	$ob->setLevelDock3(0);
-	$ob->setLevelTechnosphere(1);
+	$ob->setLevelTechnosphere(0);
 	$ob->setLevelCommercialPlateforme(0);
 	$ob->setLevelGravitationalModule(0);
+	$ob->isProductionRefinery = 0;
 	$ob->updatePoints();
 
 	# initialisation des investissement
 		# + ajout des bonus de factions
 	$ob->setISchool(500);
 	$ob->setIAntiSpy(500);
-	$ob->setIUniversity(4000);
-
-	$ob->setPartNaturalSciences(30);
-	$ob->setPartInformaticEngineering(30);
-	$ob->setPartLifeSciences(20);
-	$ob->setPartSocialPoliticalSciences(20);
 
 	# ajout de vaisseau en fonction de la faction
 	#$ob->setShipStorage();
@@ -96,12 +88,7 @@ try {
 		# + ajout des bonus de factions
 	$ob->setResourcesStorage(3000);
 
-	$ob->setUResources(Utils::now());
-	$ob->setUBuildingQueue(Utils::now());
-	$ob->setUShipQueue1(Utils::now());
-	$ob->setUShipQueue2(Utils::now());
-	$ob->setUShipQueue3(Utils::now());
-	$ob->setUTechnoQueue(Utils::now());
+	$ob->uOrbitalBase = Utils::now();
 	$ob->setDCreation(Utils::now());
 	ASM::$obm->add($ob);
 
