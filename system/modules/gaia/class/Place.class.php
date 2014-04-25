@@ -828,7 +828,7 @@ class Place {
 					->addStg($commander->getName())
 					->addTxt(' n\'a pas attaqué la planète ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
-					->addTxt('car elle est dans votre Faction.')
+					->addTxt(' car elle est dans votre Faction.')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
