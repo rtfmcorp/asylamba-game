@@ -509,12 +509,14 @@ class Place {
 			$this->startFight($commander);
 
 			if ($commander->getStatement() !== COM_DEAD) {
-				# attribuer le rPlayer à la Base
+				# créer une Base
 				include_once ATHENA;
 				$ob = new OrbitalBase();
 				$ob->setName('Base de ' . $commander->getPlayerName());
 				$ob->setRPlace($this->id);
 				$ob->setRPlayer($commander->getRPlayer());
+				$ob->rPlace = $this->id;
+				$ob->id = $this->id;
 				$ob->setDCreation(Utils::now());
 				$ob->uOrbitalBase = Utils::now();
 				ASM::$obm->add($ob);
@@ -828,7 +830,7 @@ class Place {
 					->addStg($commander->getName())
 					->addTxt(' n\'a pas attaqué la planète ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
-					->addTxt('car elle est dans votre Faction.')
+					->addTxt(' car elle est dans votre Faction.')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;

@@ -286,7 +286,6 @@ class OrbitalBaseManager extends Manager {
 			$b->uOrbitalBase,
 			$b->getDCreation()
 		));
-		$b->setId($db->lastInsertId());
 		$this->_Add($b);
 	}
 

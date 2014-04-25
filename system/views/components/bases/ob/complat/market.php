@@ -39,11 +39,11 @@ echo '<div class="component transaction">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="tool sort-button">';
-				echo '<span>sorting</span>';
-				echo '<span><a href="#" data-sort-type="quantity" data-sort-direction="up">Qq</a></span>';
-				echo '<span><a href="#" data-sort-type="price" data-sort-direction="down">Pr</a></span>';
-				echo '<span><a href="#" data-sort-type="far" data-sort-direction="down">Lt</a></span>';
-				echo '<span><a href="#" data-sort-type="cr" data-sort-direction="down">Cr</a></span>';
+				echo '<span>trier par</span>';
+				echo '<span><a href="#" data-sort-type="quantity" data-sort-direction="up" class="hb lt" title="quantité de ressources"><img src="' . MEDIA . 'resources/resource.png" class="icon-color" alt="ressources" /></a></span>';
+				echo '<span><a href="#" data-sort-type="price" data-sort-direction="down" class="hb lt" title="prix"><img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></a></span>';
+				echo '<span><a href="#" data-sort-type="far" data-sort-direction="down" class="hb lt" title="temps de trajet"><img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="temps" /></a></span>';
+				echo '<span><a href="#" data-sort-type="cr" data-sort-direction="down" class="hb lt" title="cours de la marchandise"><img src="' . MEDIA . 'resources/rate.png" class="icon-color" alt="cours" /></a></span>';
 			echo '</div>';
 
 			echo '<div class="sort-content">';
@@ -78,10 +78,10 @@ echo '<div class="component transaction">';
 		echo '<div class="body">';
 			echo '<div class="tool sort-button">';
 				echo '<span>trier par</span>';
-				echo '<span><a href="#" data-sort-type="xp" data-sort-direction="up">Ex</a></span>';
-				echo '<span><a href="#" data-sort-type="price" data-sort-direction="down">Pr</a></span>';
-				echo '<span><a href="#" data-sort-type="far" data-sort-direction="down">Lt</a></span>';
-				echo '<span><a href="#" data-sort-type="cr" data-sort-direction="down">Cr</a></span>';
+				echo '<span><a href="#" data-sort-type="xp" data-sort-direction="up" class="hb lt" title="expérience du commandant"><img src="' . MEDIA . 'resources/xp.png" class="icon-color" alt="experience" /></a></span>';
+				echo '<span><a href="#" data-sort-type="price" data-sort-direction="down" class="hb lt" title="prix"><img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></a></span>';
+				echo '<span><a href="#" data-sort-type="far" data-sort-direction="down" class="hb lt" title="temps de trajet"><img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="temps" /></a></span>';
+				echo '<span><a href="#" data-sort-type="cr" data-sort-direction="down" class="hb lt" title="cours de la marchandise"><img src="' . MEDIA . 'resources/rate.png" class="icon-color" alt="cours" /></a></span>';
 			echo '</div>';
 
 			echo '<div class="sort-content">';
@@ -110,19 +110,21 @@ echo '<div class="component transaction">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<div class="tool">';
-				echo '<span>sorting</span>';
-				echo '<span><a href="#">P</a></span>';
-				echo '<span><a href="#">P</a></span>';
-				echo '<span><a href="#">R</a></span>';
-				echo '<span><a href="#">S</a></span>';
+			echo '<div class="tool sort-button">';
+				echo '<span>trier par</span>';
+				echo '<span><a href="#" data-sort-type="quantity" data-sort-direction="up" class="hb lt" title="nombre de vaisseaux"><img src="' . MEDIA . 'resources/pev.png" class="icon-color" alt="pev" /></a></span>';
+				echo '<span><a href="#" data-sort-type="price" data-sort-direction="down" class="hb lt" title="prix"><img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></a></span>';
+				echo '<span><a href="#" data-sort-type="far" data-sort-direction="down" class="hb lt" title="temps de trajet"><img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="temps" /></a></span>';
+				echo '<span><a href="#" data-sort-type="cr" data-sort-direction="down" class="hb lt" title="cours de la marchandise"><img src="' . MEDIA . 'resources/rate.png" class="icon-color" alt="cours" /></a></span>';
 			echo '</div>';
 
+			echo '<div class="sort-content">';
 			for ($i = 0; $i < ASM::$trm->size(); $i++) {
 				if (CTR::$data->get('playerId') != ASM::$trm->get($i)->rPlayer) {
 					ASM::$trm->get($i)->render($shipCurrentRate, $S_CTM2, $ob_compPlat);
 				}
 			}
+			echo '</div>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
