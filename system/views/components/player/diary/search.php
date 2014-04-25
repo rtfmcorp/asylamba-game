@@ -14,7 +14,7 @@ $status = ColorResource::getInfo($player_selected->rColor, 'status');
 echo '<div class="component search-player size2 color' . $player_selected->rColor . '">';
 	echo '<div class="box">';
 		echo '<div class="top">';
-			echo '<form action="#" method="post">';
+			echo '<form action="' . APP_ROOT . 'action/a-searchplayer" method="post">';
 				echo '<label>';
 					echo 'Recherchez un joueur';
 					echo '<input type="text" name="name" class="autocomplete-player ac_input" autocomplete="off" />';
