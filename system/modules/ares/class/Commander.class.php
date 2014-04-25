@@ -397,7 +397,7 @@ class Commander {
 		if ($this->statement == self::MOVING) {
 			$parcouredTime = Utils::interval($this->dStart, Utils::now(), 's');
 			$totalTime = Utils::interval($this->dStart, $this->dArrival, 's');
-			$progression = $totalTime / $parcouredTime;
+			$progression = $parcouredTime / $totalTime;
 
 			$x = $x1 + $progression * ($x2-$x1);
 			$y = $y1 + $progression * ($y2-$y1);
