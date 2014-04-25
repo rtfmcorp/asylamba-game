@@ -58,6 +58,7 @@ class PlayerManager extends Manager {
 			$p->setVictory($aw['victory']);
 			$p->setDefeat($aw['defeat']);
 			$p->setStepTutorial($aw['stepTutorial']);
+			$p->stepDone = $aw['stepDone'];
 			$p->iUniversity = $aw['iUniversity'];
 			$p->partNaturalSciences = $aw['partNaturalSciences'];
 			$p->partLifeSciences = $aw['partLifeSciences'];
@@ -97,6 +98,7 @@ class PlayerManager extends Manager {
 			$p->setVictory($aw['victory']);
 			$p->setDefeat($aw['defeat']);
 			$p->setStepTutorial($aw['stepTutorial']);
+			$p->stepDone = $aw['stepDone'];
 			$p->iUniversity = $aw['iUniversity'];
 			$p->partNaturalSciences = $aw['partNaturalSciences'];
 			$p->partLifeSciences = $aw['partLifeSciences'];
@@ -115,8 +117,8 @@ class PlayerManager extends Manager {
 	public function add(Player $p) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			player(bind, rColor, name, avatar, status, credit, uPlayer, experience, level, victory, defeat, stepTutorial, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, dInscription, dLastConnection, dLastActivity, premium, statement)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+			player(bind, rColor, name, avatar, status, credit, uPlayer, experience, level, victory, defeat, stepTutorial, stepDone, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, dInscription, dLastConnection, dLastActivity, premium, statement)
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$p->getBind(),
 			$p->getRColor(),
@@ -130,6 +132,7 @@ class PlayerManager extends Manager {
 			$p->getVictory(),
 			$p->getDefeat(),
 			$p->getStepTutorial(),
+			$p->stepDone,
 			$p->iUniversity,
 			$p->partNaturalSciences,
 			$p->partLifeSciences,
@@ -166,6 +169,7 @@ class PlayerManager extends Manager {
 					victory = ?,
 					defeat = ?,
 					stepTutorial = ?,
+					stepDone = ?,
 					iUniversity = ?,
 					partNaturalSciences = ?,
 					partLifeSciences = ?,
@@ -191,6 +195,7 @@ class PlayerManager extends Manager {
 				$p->getVictory(),
 				$p->getDefeat(),
 				$p->getStepTutorial(),
+				$p->stepDone,
 				$p->iUniversity,
 				$p->partNaturalSciences,
 				$p->partLifeSciences,
@@ -260,6 +265,7 @@ class PlayerManager extends Manager {
 			$p->setVictory($aw['victory']);
 			$p->setDefeat($aw['defeat']);
 			$p->setStepTutorial($aw['stepTutorial']);
+			$p->stepDone = $aw['stepDone'];
 			$p->iUniversity = $aw['iUniversity'];
 			$p->partNaturalSciences = $aw['partNaturalSciences'];
 			$p->partLifeSciences = $aw['partLifeSciences'];
