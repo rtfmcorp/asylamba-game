@@ -9,20 +9,9 @@ for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-if (CTR::$get->exist('base')) {
-	$base = CTR::$get->get('base');
-} elseif (CTR::$post->exist('base')) {
-	$base = CTR::$post->get('base');
-} else {
-	$base = FALSE;
-}
-if (CTR::$get->exist('route')) {
-	$route = CTR::$get->get('route');
-} elseif (CTR::$post->exist('route')) {
-	$route = CTR::$post->get('route');
-} else {
-	$route = FALSE;
-}
+$base = Utils::getHTTPData('base');
+$route = Utils::getHTTPData('route');
+
 
 if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 	$S_CRM1 = ASM::$crm->getCurrentSession();

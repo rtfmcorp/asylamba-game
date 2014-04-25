@@ -9,20 +9,9 @@ for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-if (CTR::$get->exist('baseid')) {
-	$baseId = CTR::$get->get('baseid');
-} elseif (CTR::$post->exist('baseid')) {
-	$baseId = CTR::$post->get('baseid');
-} else {
-	$baseId = FALSE;
-}
-if (CTR::$get->exist('dock')) {
-	$dock = CTR::$get->get('dock');
-} elseif (CTR::$post->exist('dock')) {
-	$dock = CTR::$post->get('dock');
-} else {
-	$dock = FALSE;
-}
+$baseId = Utils::getHTTPData('baseid');
+$dock = Utils::getHTTPData('dock');
+
 
 if ($baseId !== FALSE AND $dock !== FALSE AND in_array($baseId, $verif)) { 
 	$S_OBM1 = ASM::$obm->getCurrentSession();

@@ -4,13 +4,8 @@ include_once APOLLON;
 
 # int id 		id du rapport de bug
 
-if (CTR::$get->exist('id')) {
-	$id = CTR::$get->get('id');
-} elseif (CTR::$post->exist('id')) {
-	$id = CTR::$post->get('id');
-} else {
-	$id = FALSE;
-}
+$id = Utils::getHTTPData('id');
+
 
 if ($id !== FALSE) {
 	$S_BTM1 = ASM::$btm->getCurrentSession();

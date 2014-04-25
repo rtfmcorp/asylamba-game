@@ -9,20 +9,9 @@ for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-if (CTR::$get->exist('baseid')) {
-	$baseId = CTR::$get->get('baseid');
-} elseif (CTR::$post->exist('baseid')) {
-	$baseId = CTR::$post->get('baseid');
-} else {
-	$baseId = FALSE;
-}
-if (CTR::$get->exist('building')) {
-	$building = CTR::$get->get('building');
-} elseif (CTR::$post->exist('building')) {
-	$building = CTR::$post->get('building');
-} else {
-	$building = FALSE;
-}
+$baseId = Utils::getHTTPData('baseid');
+$building = Utils::getHTTPData('building');
+
 
 if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 	if (OrbitalBaseResource::isABuilding($building)) {

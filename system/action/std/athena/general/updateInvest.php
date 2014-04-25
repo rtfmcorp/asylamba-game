@@ -10,27 +10,10 @@ for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-if (CTR::$get->exist('baseid')) {
-	$baseId = CTR::$get->get('baseid');
-} elseif (CTR::$post->exist('baseid')) {
-	$baseId = CTR::$post->get('baseid');
-} else {
-	$baseId = FALSE;
-}
-if (CTR::$get->exist('credit')) {
-	$credit = CTR::$get->get('credit');
-} elseif (CTR::$post->exist('credit')) {
-	$credit = CTR::$post->get('credit');
-} else {
-	$credit = FALSE;
-}
-if (CTR::$get->exist('category')) {
-	$category = CTR::$get->get('category');
-} elseif (CTR::$post->exist('category')) {
-	$category = CTR::$post->get('category');
-} else {
-	$category = FALSE;
-}
+$baseId = Utils::getHTTPData('baseid');
+$credit = Utils::getHTTPData('bacreditseid');
+$category = Utils::getHTTPData('category');
+
 
 if ($baseId !== FALSE AND $credit !== FALSE AND $category !== FALSE AND in_array($baseId, $verif)) { 
 	$S_OBM1 = ASM::$obm->getCurrentSession();

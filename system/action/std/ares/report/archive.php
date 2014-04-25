@@ -4,13 +4,8 @@
 
 include_once ARES;
 
-if (CTR::$get->exist('id')) {
-	$id = CTR::$get->get('id');
-} else if (CTR::$post->exist('id')) {
-	$id = CTR::$post->get('id');
-} else {
-	$id = FALSE;
-}
+$id = Utils::getHTTPData('id');
+
 
 if ($id) {
 	$S_REP1 = ASM::$rep->getCurrentSession();

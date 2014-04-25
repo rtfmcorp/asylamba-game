@@ -8,20 +8,8 @@ include_once HERMES;
 if (CTR::$data->get('playerInfo')->get('admin') == FALSE) {
 	CTR::redirect('profil');
 } else {
-	if (CTR::$get->exist('content')) {
-		$content = CTR::$get->get('content');
-	} elseif (CTR::$post->exist('content')) {
-		$content = CTR::$post->get('content');
-	} else {
-		$content = FALSE;
-	}
-	if (CTR::$get->exist('statement')) {
-		$statement = CTR::$get->get('statement');
-	} elseif (CTR::$post->exist('statement')) {
-		$statement = CTR::$post->get('statement');
-	} else {
-		$statement = FALSE;
-	}
+	$content = Utils::getHTTPData('content');
+	$statement = Utils::getHTTPData('statement');
 
 	if ($content !== FALSE AND $content !== '') { 
 

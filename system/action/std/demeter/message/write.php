@@ -5,21 +5,9 @@
 
 include_once DEMETER;
 
-if (CTR::$get->exist('content')) {
-	$content = CTR::$get->get('content');
-} else if (CTR::$post->exist('content')) {
-	$content = CTR::$post->get('content');
-} else {
-	$content = FALSE;
-}
+$content = Utils::getHTTPData('content');
+$rTopic = Utils::getHTTPData('rtopic');
 
-if (CTR::$get->exist('rtopic')) {
-	$rTopic = CTR::$get->get('rtopic');
-} else if (CTR::$post->exist('rtopic')) {
-	$rTopic = CTR::$post->get('rtopic');
-} else {
-	$rTopic = FALSE;
-}
 
 if ($rTopic AND $content) {
 	$S_TOM_1 = ASM::$tom->getCurrentSession();

@@ -6,21 +6,9 @@ include_once ARES;
 # int id 	 		id du commandant
 # string name 		nom du commandant
 
-if (CTR::$get->exist('id')) {
-	$id = CTR::$get->get('id');
-} elseif (CTR::$post->exist('id')) {
-	$id = CTR::$post->get('id');
-} else {
-	$id = FALSE;
-}
+$id = Utils::getHTTPData('id');
+$name = Utils::getHTTPData('name');
 
-if (CTR::$get->exist('name')) {
-	$name = CTR::$get->get('name');
-} elseif (CTR::$post->exist('name')) {
-	$name = CTR::$post->get('name');
-} else {
-	$name = FALSE;
-}
 
 if ($id !== FALSE) {
 	if ($name !== FALSE) {

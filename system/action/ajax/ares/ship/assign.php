@@ -16,48 +16,13 @@ for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-if (CTR::$get->exist('direction')) {
-	$direction = CTR::$get->get('direction');
-} elseif (CTR::$post->exist('direction')) {
-	$direction = CTR::$post->get('direction');
-} else {
-	$direction = FALSE;
-}
-if (CTR::$get->exist('base')) {
-	$baseId = CTR::$get->get('base');
-} elseif (CTR::$post->exist('base')) {
-	$baseId = CTR::$post->get('base');
-} else {
-	$baseId = FALSE;
-}
-if (CTR::$get->exist('ship')) {
-	$shipId = CTR::$get->get('ship');
-} elseif (CTR::$post->exist('ship')) {
-	$shipId = CTR::$post->get('ship');
-} else {
-	$shipId = FALSE;
-}
-if (CTR::$get->exist('quantity')) {
-	$quantity = CTR::$get->get('quantity');
-} elseif (CTR::$post->exist('quantity')) {
-	$quantity = CTR::$post->get('quantity');
-} else {
-	$quantity = FALSE;
-}
-if (CTR::$get->exist('commander')) {
-	$commanderId = CTR::$get->get('commander');
-} elseif (CTR::$post->exist('commander')) {
-	$commanderId = CTR::$post->get('commander');
-} else {
-	$commanderId = FALSE;
-}
-if (CTR::$get->exist('squadron')) {
-	$squadron = CTR::$get->get('squadron');
-} elseif (CTR::$post->exist('squadron')) {
-	$squadron = CTR::$post->get('squadron');
-} else {
-	$squadron = FALSE;
-}
+$direction = Utils::getHTTPData('direction');
+$baseId = Utils::getHTTPData('base');
+$shipId = Utils::getHTTPData('ship');
+$quantity = Utils::getHTTPData('quantity');
+$commanderId = Utils::getHTTPData('commander');
+$squadron = Utils::getHTTPData('squadron');
+
 
 if ($direction !== FALSE AND $baseId !== FALSE AND $shipId !== FALSE AND $commanderId !== FALSE AND $squadron !== FALSE AND in_array($baseId, $verif)) {
 	if ($direction == 'ctb' OR $direction == 'btc') {
