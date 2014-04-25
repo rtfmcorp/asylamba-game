@@ -26,16 +26,6 @@ echo '<div class="component profil thread">';
 				echo 'class="main-avatar" ';
 			echo '/>';
 
-			echo '<form method="POST" action="' . APP_ROOT . 'action/a-setdescription">';
-				echo '<p class="input input-area">';
-					echo '<textarea name="description" id="description" placeholder="Racontez au monde vos ambitions de domination !">';
-						echo $player_playerRoleplayProfil->getDescription();
-					echo '</textarea>';
-				echo '</p>';
-				echo '<p class="button">';
-					echo '<input type="submit" value="modifier">';
-				echo '</p>';
-			echo '</form>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

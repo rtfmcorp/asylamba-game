@@ -17,7 +17,6 @@ class Player {
 	public $name = '';
 	public $avatar = '';
 	public $status = 1;
-	public $description = '';
 	public $credit = 0;
 	public $uPlayer = '';
 	public $experience = 0;
@@ -44,7 +43,6 @@ class Player {
 	public function getName()				{ return $this->name; }
 	public function getAvatar()				{ return $this->avatar; }
 	public function getStatus()				{ return $this->status; }
-	public function getDescription()		{ return $this->description; }
 	public function getCredit()				{ return $this->credit; }
 	public function getExperience()			{ return $this->experience; }
 	public function getLevel()				{ return $this->level; }
@@ -85,7 +83,6 @@ class Player {
 		}
 	}
 	public function setStatus($v) 			{ $this->status = $v; }
-	public function setDescription($v) 		{ $this->description = $v; }
 	public function setCredit($v) { 
 		$this->credit = $v; 
 		if ($this->synchronized) {
