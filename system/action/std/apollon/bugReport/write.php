@@ -7,27 +7,10 @@ include_once ZEUS;
 # string message 	message
 # string url 		url de la page
 
-if (CTR::$get->exist('type')) {
-	$type = CTR::$get->get('type');
-} elseif (CTR::$post->exist('type')) {
-	$type = CTR::$post->get('type');
-} else {
-	$type = FALSE;
-}
-if (CTR::$get->exist('message')) {
-	$message = CTR::$get->get('message');
-} elseif (CTR::$post->exist('message')) {
-	$message = CTR::$post->get('message');
-} else {
-	$message = FALSE;
-}
-if (CTR::$get->exist('url')) {
-	$url = CTR::$get->get('url');
-} elseif (CTR::$post->exist('url')) {
-	$url = CTR::$post->get('url');
-} else {
-	$url = FALSE;
-}
+$type = Utils::getHTTPData('type');
+$message = Utils::getHTTPData('message');
+$url = Utils::getHTTPData('url');
+
 
 // protection des inputs
 $p = new Parser();

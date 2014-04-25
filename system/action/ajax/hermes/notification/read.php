@@ -4,13 +4,8 @@ include_once HERMES;
 
 # int notif 		notif id
 
-if (CTR::$get->exist('notif')) {
-	$notif = CTR::$get->get('notif');
-} elseif (CTR::$post->exist('notif')) {
-	$notif = CTR::$post->get('notif');
-} else {
-	$notif = FALSE;
-}
+$notif = Utils::getHTTPData('notif');
+
 
 if ($notif !== FALSE) {
 	$S_NTM1 = ASM::$ntm->getCurrentSession();

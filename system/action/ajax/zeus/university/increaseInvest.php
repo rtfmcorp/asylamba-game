@@ -5,20 +5,9 @@ include_once ATHENA;
 # int category 	 	catégorie ('natural', 'life', 'social' ou 'informatic')
 # int quantity		percentage of increasment (facultatif, si non-défini, $quantity = 1)
 
-if (CTR::$get->exist('category')) {
-	$category = CTR::$get->get('category');
-} elseif (CTR::$post->exist('category')) {
-	$category = CTR::$post->get('category');
-} else {
-	$category = FALSE;
-}
-if (CTR::$get->exist('quantity')) {
-	$quantity = CTR::$get->get('quantity');
-} elseif (CTR::$post->exist('quantity')) {
-	$quantity = CTR::$post->get('quantity');
-} else {
-	$quantity = FALSE;
-}
+$category = Utils::getHTTPData('category');
+$quantity = Utils::getHTTPData('quantity');
+
 
 // protection des inputs
 $p = new Parser();

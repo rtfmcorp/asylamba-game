@@ -13,20 +13,9 @@ for ($i = 0; $i < CTR::$data->get('playerBase')->get('ms')->size(); $i++) {
 }
 $verif = array_unique($verif);
 
-if (CTR::$get->exist('sector')) {
-	$sector = CTR::$get->get('sector');
-} elseif (CTR::$post->exist('sector')) {
-	$sector = CTR::$post->get('sector');
-} else {
-	$sector = FALSE;
-}
-if (CTR::$get->exist('content')) {
-	$content = CTR::$get->get('content');
-} elseif (CTR::$post->exist('content')) {
-	$content = CTR::$post->get('content');
-} else {
-	$content = FALSE;
-}
+$sector = Utils::getHTTPData('sector');
+$content = Utils::getHTTPData('content');
+
 
 // protection des inputs
 $p = new Parser();

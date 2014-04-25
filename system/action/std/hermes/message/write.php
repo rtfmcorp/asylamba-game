@@ -7,34 +7,11 @@ include_once HERMES;
 # int name 			nom du destinataire
 # string message 	message à envoyer
 
-if (CTR::$get->exist('id')) {
-	$id = CTR::$get->get('id');
-} elseif (CTR::$post->exist('id')) {
-	$id = CTR::$post->get('id');
-} else {
-	$id = FALSE;
-}
-if (CTR::$get->exist('thread')) {
-	$thread = CTR::$get->get('thread');
-} elseif (CTR::$post->exist('thread')) {
-	$thread = CTR::$post->get('thread');
-} else {
-	$thread = FALSE;
-}
-if (CTR::$get->exist('name')) {
-	$name = CTR::$get->get('name');
-} elseif (CTR::$post->exist('name')) {
-	$name = CTR::$post->get('name');
-} else {
-	$name = FALSE;
-}
-if (CTR::$get->exist('message')) {
-	$message = CTR::$get->get('message');
-} elseif (CTR::$post->exist('message')) {
-	$message = CTR::$post->get('message');
-} else {
-	$message = FALSE;
-}
+$id = Utils::getHTTPData('id');
+$thread = Utils::getHTTPData('thread');
+$name = Utils::getHTTPData('name');
+$message = Utils::getHTTPData('message');
+
 
 // protection des inputs
 $p = new Parser();

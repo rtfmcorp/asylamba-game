@@ -49,7 +49,9 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 			include_once ARES;
 			if ($identifier === FALSE OR $identifier < 1) {
 				$valid = FALSE;
-			} 
+			} else {
+				$quantity = $commander->getExperience();
+			}
 			break;
 		default :
 			$valid = FALSE;
@@ -119,7 +121,6 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 								ASM::$com->load(array('c.id' => $identifier));
 								if (ASM::$com->size() == 1 AND ASM::$com->get()->getRPlayer() == CTR::$data->get('playerId')) {
 									$commander = ASM::$com->get();
-									$quantity = $commander->getExperience();
 									$commander->setStatement(COM_ONSALE);
 									$commander->emptySquadrons();
 								} else {

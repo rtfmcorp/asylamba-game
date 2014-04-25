@@ -8,21 +8,9 @@ include_once ZEUS;
 # int commanderid 			id du commandant à envoyer
 # int placeid				id de la place attaquée
 
-if (CTR::$get->exist('commanderid')) {
-	$commanderId = CTR::$get->get('commanderid');
-} else if (CTR::$post->exist('commanderid')) {
-	$commanderId = CTR::$post->get('commanderid');
-} else {
-	$commanderId = FALSE;
-}
+$commanderId = Utils::getHTTPData('commanderid');
+$placeId = Utils::getHTTPData('placeid');
 
-if (CTR::$get->exist('placeid')) {
-	$placeId = CTR::$get->get('placeid');
-} else if (CTR::$post->exist('placeid')) {
-	$placeId = CTR::$post->get('placeid');
-} else {
-	$placeId = FALSE;
-}
 
 if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	$S_COM1 = ASM::$com->getCurrentSession();

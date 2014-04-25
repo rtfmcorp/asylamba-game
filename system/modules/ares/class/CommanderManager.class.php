@@ -9,6 +9,7 @@
  * @package Arès
  * @update 20.05.13
 */
+// !! lors d'un load, mettre c. avant les attribut where
 
 class CommanderManager extends Manager {
 	protected $managerType = '_Commander';

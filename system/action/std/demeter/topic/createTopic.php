@@ -6,29 +6,10 @@
 
 include_once DEMETER;
 
-if (CTR::$get->exist('title')) {
-	$title = CTR::$get->get('title');
-} else if (CTR::$post->exist('title')) {
-	$title = CTR::$post->get('title');
-} else {
-	$title = FALSE;
-}
+$title = Utils::getHTTPData('title');
+$content = Utils::getHTTPData('content');
+$rForum = Utils::getHTTPData('rforum');
 
-if (CTR::$get->exist('content')) {
-	$content = CTR::$get->get('content');
-} else if (CTR::$post->exist('content')) {
-	$content = CTR::$post->get('content');
-} else {
-	$content = FALSE;
-}
-
-if (CTR::$get->exist('rforum')) {
-	$rForum = CTR::$get->get('rforum');
-} else if (CTR::$post->exist('rforum')) {
-	$rForum = CTR::$post->get('rforum');
-} else {
-	$rForum = FALSE;
-}
 
 if ($title AND $content AND $rForum) {
 	$topic = new ForumTopic();
