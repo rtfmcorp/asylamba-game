@@ -1,7 +1,7 @@
 <?php
 class CheckName {
-	protected $minLenght = 2;
-	protected $maxLenght = 15;
+	public $minLenght = 2;
+	public $maxLenght = 15;
 
 	public function getMinLenght()	{ return $this->minLenght; }
 	public function getMaxLenght()	{ return $this->maxLenght; }
@@ -86,6 +86,11 @@ class CheckName {
 
 	public static function getPackOfNames($size = 5, $used = FALSE, $tag = array()) {
 		
+	}
+
+	public static function randomize($color = FALSE) {
+		$name = array('Ametah', 'Anla', 'Aumshi', 'Bastier', 'Enigma', 'Eirukis', 'Erah', 'Ehdis', 'Fransa', 'Greider', 'Grerid', 'Haema', 'Hemhild', 'Renga', 'Hidar', 'Horski', 'Hreirek', 'Hroa', 'Hordis', 'Hydring', 'Imsin', 'Asmin', 'Ansami', 'Kar', 'Kili', 'Kolver', 'Kolfinna', 'Lisa', 'Marta', 'Meto', 'Leto', 'Ragni', 'Ranela', 'Runa', 'Siri', 'Mastro', 'Svenh', 'Thalestris', 'Thannd', 'Arsine', 'Val', 'Vori', 'Yi', 'Agata', 'Agneta', 'Nolgi', 'Edla', 'Else', 'Eyja', 'Jensine', 'Kirsten', 'Maeva', 'Malena', 'Magarte', 'Olava', 'Petrine', 'Rigmor', 'Signy', 'Sigrid', 'Skjorta');
+		return $name[rand(0, (count($name) - 1))];
 	}
 }
 ?>

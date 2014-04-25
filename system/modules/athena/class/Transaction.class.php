@@ -35,12 +35,12 @@ class Transaction {
 	public $rPlayer = 0;
 	public $rPlace = 0;
 	public $type;			# see const TYP_*
-	public $quantity;		# if ($type == TYP_RESOURCE) --> resource
-							# if ($type == TYP_SHIP) --> ship quantity
-							# if ($type == TYP_COMMANDER) --> experience
-	public $identifier;		# if ($type == TYP_RESOURCE) --> NULL
-							# if ($type == TYP_SHIP) --> shipId
-							# if ($type == TYP_COMMANDER) --> rCommander
+	public $quantity;		# if ($type == TYP_RESOURCE) 	--> resource
+							# if ($type == TYP_SHIP) 		--> ship quantity
+							# if ($type == TYP_COMMANDER) 	--> experience
+	public $identifier;		# if ($type == TYP_RESOURCE) 	--> NULL
+							# if ($type == TYP_SHIP) 		--> shipId
+							# if ($type == TYP_COMMANDER) 	--> rCommander
 	public $price = 0;
 	public $commercialShipQuantity = 0;	# ship needed for the transport
 	public $statement = 0;
