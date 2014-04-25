@@ -40,6 +40,6 @@ if (TechnologyResource::isATechnology($tech) AND !TechnologyResource::isATechnol
 	}
 
 	# component
-	include COMPONENT . 'promethee/infoTech.php';
+	include COMPONENT . 'tech/infoTech.php';
 }
 ?>

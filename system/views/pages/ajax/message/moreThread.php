@@ -41,7 +41,7 @@ if (ASM::$msm->size() > 0) {
 		if ($j > $begin) {
 			if ($j > $ending) {
 				$moreThread_page = ++$page;
-				include COMPONENT . 'hermes/moreThread.php';
+				include COMPONENT . 'message/moreThread.php';
 				break;
 			}
 
@@ -53,7 +53,7 @@ if (ASM::$msm->size() > 0) {
 					$messages_thread[] = ASM::$msm->get($i);
 				}
 			}
-			include COMPONENT . 'hermes/thread.php';
+			include COMPONENT . 'message/thread.php';
 
 		}
 	}

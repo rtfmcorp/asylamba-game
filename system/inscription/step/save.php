@@ -7,6 +7,7 @@ include_once PROMETHEE;
 try {
 	# AJOUT DU JOUEUR EN BASE DE DONNEE
 	$pl = new Player();
+
 	$pl->setBind(CTR::$data->get('inscription')->get('bindkey'));
 	$pl->setRColor(CTR::$data->get('inscription')->get('ally'));
 	$pl->setName(CTR::$data->get('inscription')->get('pseudo'));
@@ -14,16 +15,25 @@ try {
 	$pl->setStatus(1);
 	
 	# modifier si negore
-	$pl->setCredit(12500);
+	$pl->credit = 12500;
+	$pl->uPlayer = Utils::now();
 
 	# modifier l'expérience de base
 	$pl->setExperience(630);
 	$pl->setLevel(1);
 
+	$pl->victory = 0;
+	$pl->defeat = 0;
+
+	$pl->iUniversity = 1000;
+	$pl->partNaturalSciences = 25;
+	$pl->partLifeSciences = 25;
+	$pl->partSocialPoliticalSciences = 25;
+	$pl->partInformaticEngineering = 25;
+
 	$pl->setDInscription(Utils::now());
 	$pl->setDLastConnection(Utils::now());
 	$pl->setDLastActivity(Utils::now());
-	$pl->uPlayer = Utils::now();
 
 	$pl->setPremium(1);
 	$pl->setStatement(1);
@@ -35,10 +45,12 @@ try {
 		# modifier les bonus
 	$rs = new Research();
 	$rs->rPlayer = $pl->getId();
+
 	$rs->naturalTech = 0;
 	$rs->lifeTech = 3;
 	$rs->socialTech = 5;
 	$rs->informaticTech = 7;
+
 	$rs->naturalToPay = ResearchResource::getInfo($rs->naturalTech, 'level', 1, 'price');
 	$rs->lifeToPay = ResearchResource::getInfo($rs->lifeTech, 'level', 1, 'price');
 	$rs->socialToPay = ResearchResource::getInfo($rs->socialTech, 'level', 1, 'price');
@@ -86,7 +98,7 @@ try {
 
 	# initialisation des ressources
 		# + ajout des bonus de factions
-	$ob->setResourcesStorage(3000);
+	$ob->setResourcesStorage(3300);
 
 	$ob->uOrbitalBase = Utils::now();
 	$ob->setDCreation(Utils::now());

@@ -32,7 +32,17 @@ echo '<div id="attacks">';
 			for ($i = 0; $i < ASM::$com->size(); $i++) {
 				$commander = ASM::$com->get($i);
 				if ($commander->getTypeOfMove() != 3) {
-					echo '<line class="color' . $commander->getPlayerColor() . '" x1="' . (ASM::$plm->getById($commander->getRBase())->getXSystem() * GalaxyConfiguration::$scale) . '" x2="' . (ASM::$plm->getById($commander->getRPlaceDestination())->getXSystem() * GalaxyConfiguration::$scale) . '" y1="' . (ASM::$plm->getById($commander->getRBase())->getYSystem() * GalaxyConfiguration::$scale) . '" y2="' . (ASM::$plm->getById($commander->getRPlaceDestination())->getYSystem() * GalaxyConfiguration::$scale) . '" />';
+					echo '<line ';
+						echo 'class="color' . $commander->getPlayerColor() . '"';
+						echo 'x1="' . (ASM::$plm->getById($commander->getRBase())->getXSystem() * GalaxyConfiguration::$scale) . '"';
+						echo 'x2="' . (ASM::$plm->getById($commander->getRPlaceDestination())->getXSystem() * GalaxyConfiguration::$scale) . '"';
+						echo 'y1="' . (ASM::$plm->getById($commander->getRBase())->getYSystem() * GalaxyConfiguration::$scale) . '"';
+						echo 'y2="' . (ASM::$plm->getById($commander->getRPlaceDestination())->getYSystem() * GalaxyConfiguration::$scale) . '"';
+					echo '>';
+						echo '<circle cx="2" cy="2" r="16">';
+							//echo '<animate attributeName="width" attributeType="XML" fill="freeze" from="0" to="300" begin="0s" dur="3s"/>';
+						echo '</circle>';
+					echo '</line>';
 				}
 			}
 	echo '</svg>';

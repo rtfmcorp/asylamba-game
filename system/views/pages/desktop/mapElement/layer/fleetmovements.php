@@ -20,7 +20,16 @@ echo '<div id="fleet-movements">';
 			for ($i = 0; $i < ASM::$com->size(); $i++) {
 				$commander = ASM::$com->get($i);
 				if ($commander->getTypeOfMove() !== COM_BACK) {
-					echo '<line x1="' . (ASM::$plm->getById($commander->getRBase())->getXSystem() * GalaxyConfiguration::$scale) . '" x2="' . (ASM::$plm->getById($commander->getRPlaceDestination())->getXSystem() * GalaxyConfiguration::$scale) . '" y1="' . (ASM::$plm->getById($commander->getRBase())->getYSystem() * GalaxyConfiguration::$scale) . '" y2="' . (ASM::$plm->getById($commander->getRPlaceDestination())->getYSystem() * GalaxyConfiguration::$scale) . '" />';
+					$x1 = ASM::$plm->getById($commander->getRBase())->getXSystem() * GalaxyConfiguration::$scale;
+					$x2 = ASM::$plm->getById($commander->getRPlaceDestination())->getXSystem() * GalaxyConfiguration::$scale;
+					$y1 = ASM::$plm->getById($commander->getRBase())->getYSystem() * GalaxyConfiguration::$scale;
+					$y2 = ASM::$plm->getById($commander->getRPlaceDestination())->getYSystem() * GalaxyConfiguration::$scale;
+
+					echo '<line x1="' . $x1 . '" x2="' . $x2 . '" y1="' . $y1 . '" y2="' . $y2 . '" />';
+					echo '<circle cx="' . $x1 . '" cy="' . $x2 . '" r="4">';
+						echo '<animate attributeName="cx" attributeType="XML" fill="freeze" from="' . $x1 . '" to="' . $x2 . '" begin="0s" dur="3s"/>';
+						echo '<animate attributeName="cy" attributeType="XML" fill="freeze" from="' . $y1 . '" to="' . $y2 . '" begin="0s" dur="3s"/>';
+					echo '</circle>';
 				}
 			}
 	echo '</svg>';
