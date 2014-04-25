@@ -38,6 +38,16 @@ class CommercialShipping {
 	public $destinationXSystem;
 	public $destinationYSystem;
 
+	public $price;
+	public $typeOfTransaction;
+	public $quantity;
+	public $identifier;
+	public $commanderAvatar;
+	public $commanderName;
+	public $commanderLevel;
+	public $commanderVictory;
+	public $commanderExperience;
+
 	public function getId() { return $this->id; }
 
 	public function deliver() {
@@ -154,5 +164,84 @@ class CommercialShipping {
 		}
 
 		ASM::$trm->changeSession($S_TRM1);
+	}
+
+	public function render() {
+		switch ($this->typeOfTransaction) {
+			case Transaction::TYP_RESOURCE: $class = 'resources'; break;
+			case Transaction::TYP_COMMANDER: $class = 'commander'; break;
+			case Transaction::TYP_SHIP: $class = 'ship'; break;
+			default: break;
+		}
+
+		echo '<div class="transaction ' . $class . '">';
+			if ($this->statement != CommercialShipping::ST_MOVING_BACK) {
+				if ($this->typeOfTransaction == Transaction::TYP_RESOURCE) {
+					echo '<div class="product">';
+						echo '<img src="' . MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($this->quantity) . '.png" alt="" class="picto" />';
+
+						echo '<div class="offer">';
+							echo Format::numberFormat($this->quantity) . ' <img src="' . MEDIA . 'resources/resource.png" alt="" class="icon-color" />';
+						echo '</div>';
+						echo '<div class="for">';
+							echo '<span>pour</span>';
+						echo '</div>';
+						echo '<div class="price">';
+							echo Format::numberFormat($this->price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
+						echo '</div>';
+					echo '</div>';
+				} elseif ($this->typeOfTransaction == Transaction::TYP_COMMANDER) {
+					echo '<div class="product">';
+						echo '<img src="' . MEDIA . 'commander/small/c1-l3-c1.png" alt="" class="picto" />';
+
+						echo '<div class="offer">';
+							echo '<strong>' . CommanderResources::getInfo($this->commanderLevel, 'grade') . ' ' . $this->commanderName . '</strong>';
+							echo '<em>' . Format::numberFormat($this->commanderExperience) . ' xp | ' . $this->commanderVictory . ' victoire' . Format::addPlural($this->commanderVictory) . '</em>';
+						echo '</div>';
+						echo '<div class="for">';
+							echo '<span>pour</span>';
+						echo '</div>';
+						echo '<div class="price">';
+							echo Format::numberFormat($this->price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
+						echo '</div>';
+					echo '</div>';
+				} elseif ($this->typeOfTransaction == Transaction::TYP_SHIP) {
+					echo '<div class="product">';
+						echo '<img src="' . MEDIA . 'ship/picto/ship' . $this->identifier . '.png" alt="" class="picto" />';
+
+						echo '<div class="offer">';
+							echo '<strong>' . $this->quantity . ' Pégases</strong>';
+							echo '<em>? pev</em>';
+						echo '</div>';
+						echo '<div class="for">';
+							echo '<span>pour</span>';
+						echo '</div>';
+						echo '<div class="price">';
+							echo $this->price . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
+						echo '</div>';
+					echo '</div>';
+				}
+			}
+
+			$totalTime   = Utils::interval($this->dDeparture, $this->dArrival, 's');
+			$currentTime = Utils::interval(Utils::now(), $this->dDeparture, 's');
+
+			echo '<div class="shipping progress" data-progress-total-time="' . $totalTime . '" data-progress-current-time="' . ($totalTime - $currentTime) . '" data-progress-output="lite">';
+				echo '<span class="progress-container">';
+					echo '<span style="width: ' . Format::percent($currentTime, $totalTime) . '%;" class="progress-bar"></span>';
+				echo '</span>';
+
+				echo '<div class="ships">';
+					echo $this->shipQuantity;
+					echo '<img src="' . MEDIA . 'resources/resource.png" alt="" class="icon-color" />';
+				echo '</div>';
+
+				if ($this->statement == CommercialShipping::ST_WAITING) {
+					echo '<div class="time">à quai</div>';
+				} else {
+					echo '<div class="time progress-text"></div>';
+				}
+			echo '</div>';
+		echo '</div>';
 	}
 }

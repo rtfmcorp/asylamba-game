@@ -19,16 +19,16 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 				CTR::$data->get('inscription')->add('bindkey', CTR::$data->get('prebindkey'));
 				#CTR::$data->get('inscription')->add('portalPseudo', $api->data['userInfo']['pseudo']);
 			} else {
-				header('Location: ' . GETOUT_ROOT . 'accueil/speak-badinscription');
+				header('Location: ' . GETOUT_ROOT . '/profil/message-useralreadysigned');
 				exit();
 			}
 			ASM::$pam->changeSession($S_PAM_INSCR);
 		} else {
-			header('Location: ' . GETOUT_ROOT . 'accueil/speak-badinscription');
+			header('Location: ' . GETOUT_ROOT . '/profil/message-unknowuser');
 			exit();
 		}
 	} else {
-		header('Location: ' . GETOUT_ROOT . 'accueil/speak-badinscription');
+		header('Location: ' . GETOUT_ROOT . '/profil/message-nobindkey');
 		exit();
 	}
 } elseif (CTR::$get->get('step') == 2) {
@@ -45,7 +45,7 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 			CTR::redirect('inscription/bindkey-' . CTR::$data->get('inscription')->get('bindkey'));
 		}
 	} else {
-		header('Location: ' . GETOUT_ROOT . 'accueil/speak-badinscription');
+		header('Location: ' . GETOUT_ROOT . '/profil/message-forbiddenaccess');
 		exit();
 	}
 } elseif (CTR::$get->get('step') == 3) {
@@ -55,6 +55,7 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 		$S_PAM_INSCR2 = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession();
 		ASM::$pam->load(array('name' => CTR::$post->get('pseudo')));
+
 		if (ASM::$pam->size() == 0) {
 			include_once ZEUS;
 			$check = new CheckName();
@@ -66,20 +67,20 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 				if (TRUE) {
 					CTR::$data->get('inscription')->add('avatar', CTR::$post->get('avatar'));
 				} elseif (!CTR::$data->get('inscription')->exist('avatar')) {
-					CTR::$alert->add('cet avatar n\'existe pas ou est invalide');
+					CTR::$alert->add('Cet avatar n\'existe pas ou est invalide');
 					CTR::redirect('inscription/step-2');
 				}
 			} elseif (!CTR::$data->get('inscription')->exist('pseudo')) {
-				CTR::$alert->add('votre pseudo est trop long, trop court ou contient des caractères non-autorisés');
+				CTR::$alert->add('Votre pseudo est trop long, trop court ou contient des caractères non-autorisés');
 				CTR::redirect('inscription/step-2');
 			}
 		} elseif (!CTR::$data->get('inscription')->exist('pseudo')) {
-			CTR::$alert->add('ce pseudo est déjà utilisé par un autre joueur');
+			CTR::$alert->add('Ce pseudo est déjà utilisé par un autre joueur');
 			CTR::redirect('inscription/step-2');
 		}
 		ASM::$pam->changeSession($S_PAM_INSCR2);
 	} else {
-		header('Location: ' . GETOUT_ROOT . 'accueil/speak-badinscription');
+		header('Location: ' . GETOUT_ROOT . '/profil/message-forbiddenaccess');
 		exit();
 	}
 } elseif (CTR::$get->get('step') == 4) {
@@ -107,11 +108,11 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 				CTR::redirect('inscription/step-3');
 			}
 		} else {
-			header('Location: ' . GETOUT_ROOT . 'accueil/speak-badinscription');
+			header('Location: ' . GETOUT_ROOT . '/profil/message-forbiddenaccess');
 			exit();
 		}
 	} else {
-		header('Location: ' . GETOUT_ROOT . 'accueil/speak-badinscription');
+		header('Location: ' . GETOUT_ROOT . '/profil/message-forbiddenaccess');
 		exit();
 	}
 

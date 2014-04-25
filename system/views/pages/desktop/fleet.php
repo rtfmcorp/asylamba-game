@@ -9,7 +9,6 @@ include 'defaultElement/movers.php';
 # contenu spécifique
 echo '<div id="content">';
 	# fleetNav component
-	# include COMPONENT . 'ares/fleetNav.php';
 	
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'main') {
 		# inclusion des modules
@@ -32,7 +31,7 @@ echo '<div id="content">';
 		for ($i = 0; $i < ASM::$com->size(); $i++) {
 			$commander_listFleetIncoming[$i] = ASM::$com->get($i);
 		}
-		include COMPONENT . 'ares/listFleetIncoming.php';
+		include COMPONENT . 'fleet/listFleetIncoming.php';
 		
 		ASM::$com->changeSession($S_COM1);
 	} elseif (CTR::$get->get('view') == 'movement') {
@@ -49,7 +48,7 @@ echo '<div id="content">';
 		for ($i = 0; $i < ASM::$com->size(); $i++) {
 			$commander_listFleet[$i] = ASM::$com->get($i);
 		}
-		include COMPONENT . 'ares/listFleet.php';
+		include COMPONENT . 'fleet/listFleet.php';
 
 		if (CTR::$get->exist('commander')) {
 			$S_COM2 = ASM::$com->getCurrentSession();
@@ -68,11 +67,11 @@ echo '<div id="content">';
 
 				# commanderDetail component
 				$commander_commanderDetail = ASM::$com->get();
-				include COMPONENT . 'ares/commanderDetail.php';
+				include COMPONENT . 'fleet/commanderDetail.php';
 				# commanderFleet component
 				$commander_commanderFleet = ASM::$com->get();
 				$ob_commanderFleet = ASM::$obm->get();
-				include COMPONENT . 'ares/commanderFleet.php';
+				include COMPONENT . 'fleet/commanderFleet.php';
 
 				ASM::$com->changeSession($S_COM2);
 				ASM::$obm->changeSession($S_OBM_1);
@@ -96,7 +95,7 @@ echo '<div id="content">';
 		for ($i = 0; $i < ASM::$srm->size(); $i++) { 
 			$report_listReport[$i] = ASM::$srm->get($i);
 		}
-		include COMPONENT . 'artemis/listReport.php';
+		include COMPONENT . 'report/listReport.php';
 
 		# report component
 		if (CTR::$get->exist('report')) {
@@ -110,7 +109,7 @@ echo '<div id="content">';
 
 				$place_report = ASM::$plm->get();
 				$report_report = ASM::$srm->get();
-				include COMPONENT . 'artemis/report.php';
+				include COMPONENT . 'report/report.php';
 			}
 			ASM::$srm->changeSession($S_SRM2);
 		}
@@ -137,7 +136,7 @@ echo '<div id="content">';
 			if ($ta == $tb) { return 0; }
 		    return (strtotime($ta) > strtotime($tb)) ? -1 : 1;
 		});
-		include COMPONENT . 'ares/listReport.php';
+		include COMPONENT . 'fleet/listReport.php';
 
 		# report component
 		if (CTR::$get->exist('report')) {
@@ -162,7 +161,7 @@ echo '<div id="content">';
 				$commanders_report = unserialize($aw['commanders']);
 				$fight_report = unserialize($aw['fight']);
 
-				include COMPONENT . 'ares/report.php';
+				include COMPONENT . 'fleet/report.php';
 
 				ASM::$pam->changeSession($S_PAM1);
 			}
@@ -180,15 +179,15 @@ echo '<div id="content">';
 		ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => COM_DEAD), array('c.palmares', 'DESC'));
 
 		# memorialTxt component
-		include COMPONENT . 'ares/memorialTxt.php';
+		include COMPONENT . 'fleet/memorialTxt.php';
 
 		for ($i = 0; $i < ASM::$com->size(); $i++) {
 			if ($i < 6) {
 				$commander_commanderDetail = ASM::$com->get($i);
-				include COMPONENT . 'ares/commanderDetail.php';
+				include COMPONENT . 'fleet/commanderDetail.php';
 			} else {
 				$commander_shortMemorial = ASM::$com->get($i);
-				include COMPONENT . 'ares/shortMemorial.php';
+				include COMPONENT . 'fleet/shortMemorial.php';
 			}
 		}
 

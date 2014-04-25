@@ -62,12 +62,12 @@ echo '<div id="content">';
 	for ($i = 0; $i < ASM::$obm->size(); $i++) {
 		$ob_generalFinancial[] = ASM::$obm->get($i);
 		
-		$thisTaxIn = Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation());
+		$thisTaxIn = Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation(), ASM::$obm->get($i)->typeOfBase);
 		$thisTaxIn *= PlaceResource::get(ASM::$obm->get($i)->typeOfBase, 'tax');
 		$financial_totalTaxIn += $thisTaxIn;
 		$financial_totalTaxInBonus += $thisTaxIn * $taxBonus / 100;
 
-		$financial_totalTaxOut += (Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation()) + (Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation()) * $taxBonus / 100)) * ASM::$obm->get($i)->getTax() / 100;
+		$financial_totalTaxOut += (Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation(), ASM::$obm->get($i)->typeOfBase) + (Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation(), ASM::$obm->get($i)->typeOfBase) * $taxBonus / 100)) * ASM::$obm->get($i)->getTax() / 100;
 
 		$financial_totalInvest += ASM::$obm->get($i)->getISchool();
 		$financial_totalInvest += ASM::$obm->get($i)->getIAntiSpy();
@@ -95,29 +95,29 @@ echo '<div id="content">';
 	$financial_remains  = $financial_credit + $financial_benefice;
 
 	# generalFinancial component
-	include COMPONENT . 'athena/financial/generalFinancial.php';
+	include COMPONENT . 'financial/generalFinancial.php';
 
 	# impositionFinancial component
 	$ob_impositionFinancial = $ob_generalFinancial;
-	include COMPONENT . 'athena/financial/impositionFinancial.php';
+	include COMPONENT . 'financial/impositionFinancial.php';
 
 	# routeFinancial component
 	$ob_routeFinancial = $ob_generalFinancial;
-	include COMPONENT . 'athena/financial/routeFinancial.php';
+	include COMPONENT . 'financial/routeFinancial.php';
 
 	# investFinancial component
 	$ob_investFinancial = $ob_generalFinancial;
 	$player_investFinancial = ASM::$pam->get(0);
-	include COMPONENT . 'athena/financial/investFinancial.php';
+	include COMPONENT . 'financial/investFinancial.php';
 
 	# taxOutFinancial component
 	$ob_taxOutFinancial = $ob_generalFinancial;
-	include COMPONENT . 'athena/financial/taxOutFinancial.php';
+	include COMPONENT . 'financial/taxOutFinancial.php';
 
 	# fleetFeesFinancial component
 	$commander_fleetFeesFinancial = $commander_generalFinancial;
 	$ob_fleetFeesFinancial = $ob_generalFinancial;
-	include COMPONENT . 'athena/financial/fleetFeesFinancial.php';
+	include COMPONENT . 'financial/fleetFeesFinancial.php';
 
 	# close
 	ASM::$pam->changeSession($S_PAM_FIN);

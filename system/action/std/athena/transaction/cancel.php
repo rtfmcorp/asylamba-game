@@ -80,13 +80,13 @@ if ($rTransaction !== FALSE) {
 
 					switch ($transaction->type) {
 						case Transaction::TYP_RESOURCE :
-							CTR::$alert->add('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et vous récupérez vos ressources.', ALERT_STD_SUCCESS);
+							CTR::$alert->add('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et vous récupérez vos ressources.', ALERT_GAM_MARKET);
 							break;
 						case Transaction::TYP_SHIP :
-							CTR::$alert->add('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et vous récupérez vos vaisseaux de combat.', ALERT_STD_SUCCESS);
+							CTR::$alert->add('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et vous récupérez vos vaisseaux de combat.', ALERT_GAM_MARKET);
 							break;
 						case Transaction::TYP_COMMANDER :
-							CTR::$alert->add('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et votre commandant est placé à l\'école de commandement.', ALERT_STD_SUCCESS);
+							CTR::$alert->add('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et votre commandant est placé à l\'école de commandement.', ALERT_GAM_MARKET);
 							break;
 					}
 				}

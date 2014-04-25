@@ -23,10 +23,10 @@ echo '<div id="subnav">';
 						echo 'A quai sur Frudulu';
 						echo '<hr />';
 
-						for ($j = 0; $j < 12; $j++) { 
+						foreach ($commander->getNbrShipByType() as $k => $nbr) {
 							echo '<span class="ship">';
-								echo '<img src="' . MEDIA . 'ship/picto/ship' . $i . '.png" ' . (rand(0, 1) == 0 ? 'class="zero"' : NULL) . '/>';
-								echo '<span class="number">' . rand(0, 3) . '</span>';
+								echo '<img src="' . MEDIA . 'ship/picto/ship' . $k . '.png" ' . ($nbr == 0 ? 'class="zero"' : NULL) . '/>';
+								echo '<span class="number">' . $nbr . '</span>';
 							echo '</span>';
 						}
 					echo '</span>';

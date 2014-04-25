@@ -38,7 +38,7 @@ Class CommanderResources {
 			'grade' => 'Quartier-Maître'
 		),
 		array(
-			'grade' => 'Sergeant'
+			'grade' => 'Sergent'
 		),
 		array(
 			'grade' => 'Enseigne'
