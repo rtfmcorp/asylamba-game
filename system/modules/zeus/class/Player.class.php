@@ -24,6 +24,7 @@ class Player {
 	public $victory = 0;
 	public $defeat = 0;
 	public $stepTutorial = 0;
+	public $stepDone = FALSE;
 	public $iUniversity = 5000;
 	public $partNaturalSciences = 25;
 	public $partLifeSciences = 25;
