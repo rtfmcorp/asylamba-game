@@ -199,7 +199,7 @@ class Place {
 				}
 				# changer rBase commander
 				$commander->rBase = $this->id;
-				$commander->rPlaceDestination = NULL;
+				$commander->rDestinationPlace = NULL;
 				$commander->travelType = NULL;
 				$commander->rStartPlace = NULL;
 				$commander->dArrival = NULL;
@@ -256,10 +256,12 @@ class Place {
 	private function tryToLoot($commander) {
 		include_once ARES;
 		if ($this->rPlayer == 0) {
-			$commander->rPlaceDestination = NULL;
+			$commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
+			$commander->travelLength = NULL;
 			$commander->rStartPlace = NULL;
 			$commander->dArrival = NULL;
+			$commander->dstart = NULL;
 			$commander->length = NULL;
 
 			# planète vide -> faire un combat
@@ -313,7 +315,7 @@ class Place {
 				# il y a des commandants en défense : faire un combat avec un des commandants
 					$aleaNbr = rand(0, count($dCommanders) - 1);
 					$this->startFight($commander, $dCommanders[$aleaNbr], TRUE);
-					$commander->setRPlaceDestination(NULL);
+					$commander->setrDestinationPlace(NULL);
 					$commander->setTypeOfMove(-1);
 
 					# si il gagne
@@ -493,20 +495,21 @@ class Place {
 	# conquest
 	private function tryToConquer($commander) {
 		if ($this->rPlayer != 0) {
+			$commander->rDestinationPlace = NULL;
+			$commander->travelType = NULL;
+			$commander->travelLength = NULL;
+			$commander->rStartPlace = NULL;
+			$commander->dArrival = NULL;
+			$commander->dstart = NULL;
+			$commander->length = NULL;
+
 			if ($this->playerColor != $commander->getPlayerColor()) {
 				# combat contre les 3 commandants,
 				for ($i = 0; $i < count($this->commanders); $i++) {
-					if ($this->commanders[$i]->getStatement() == COM_AFFECTED) {
+					if ($this->commanders[$i]->getStatement() == Commander::AFFECTED) {
 
-						$report = $this->startFight($commander, $this->commanders[$i], TRUE);
-						$commander->resultOfFight($report->getFinalCommander(0));
-						$commander->setRPlaceDestination(NULL);
-						$commander->setTypeOfMove(-1);
+						$this->startFight($commander, $this->commanders[$i], TRUE);
 
-						$this->commanders[$i]->resultOfFight($report->getFinalCommander(1));
-
-						ASM::$rpm->add($report);
-						
 						# mort du commandant
 						if ($commander->getStatement() == COM_DEAD) {
 							break;
@@ -515,59 +518,22 @@ class Place {
 				}
 				# victoire
 				if ($commander->getStatement() != COM_DEAD) {
-					include_once HERMES;
-					$notif = new Notification();
-					$notif->setRPlayer($commander->getRPlayer());
-					$notif->setTitle('Planète conquise');
-					$notif->addBeg()
-						->addTxt('Votre commandant ')
-						->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
-						->addTxt(' a conquis la planète ')
-						->addLnk('map/place-' . $this->id, $this->baseName)
-						->addTxt(' appartenant au joueur ')
-						->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
-						->addTxt('.')
-						->addSep()
-						->addTxt('Elle est désormais votre, vous pouvez l\'administrer ')
-						->addLnk('bases/base-' . $this->id, 'ici')
-						->addTxt('.')
-						->addSep()
-						->addLnk('fleet/view-archive/report-' . $report->id, 'voir le(s) rapport de combat &#8594;')
-						->addEnd();
-					ASM::$ntm->add($notif);
-
-					$notif = new Notification();
-					$notif->setRPlayer($this->rPlayer);
-					$notif->setTitle('Rapport de conquête');
-					$notif->addBeg()
-						->addTxt('Le commandant ')
-						->addStg($commander->getName())
-						->addTxt(' appartenant au joueur ')
-						->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
-						->addTxt(' a conquis votre planète ')
-						->addLnk('map/place-' . $this->id, $this->baseName)
-						->addTxt('.')
-						->addSep()
-						->addTxt('Impliquez votre faction dans une action punitive envers votre assaillant.')
-						->addSep()
-						->addLnk('fleet/view-archive/report-' . $report->id, 'voir le(s) rapport de combat &#8594;')
-						->addEnd();
-					ASM::$ntm->add($notif);
-
 					include_once ATHENA;
-					$commander->setRBase($this->id);
-					$commander->setStatement(COM_AFFECTED);
-					$commander->setTypeOfMove(-1);
-					$commander->setRPlaceDestination(NULL);
 
+					$this->sendNotif(2, 3, $commander);
+
+					#attribuer le jooeur à la place
+					$this->commanders = array();
+					$this->rColor = $commander->playerColor;
+					$this->rPlayer = $commander->rPlayer;
 					# changer l'appartenance de la base (et de la place)
 					ASM::$obm->changeOwnerById($this->id, $commander->getRPlayer());
-					
-					# poser le commandant sur la Place
-					$commander->setStatement(COM_AFFECTED);
 
-					$this->commanders = array();
 					$this->commanders[] = $commander;
+
+					$commander->rBase = $this->id;
+					$commander->statement = Commander::AFFECTED;
+					$commander->line = 1;
 
 				# s'il est mort
 				} else {
@@ -578,42 +544,7 @@ class Place {
 						}
 					}
 
-					include_once HERMES;
-					$notif = new Notification();
-					$notif->setRPlayer($commander->getRPlayer());
-					$notif->setTitle('Echec de conquête');
-					$notif->addBeg()
-						->addTxt('Votre commandant ')
-						->addLnk('fleet/view-memorial/', $commander->getName())
-						->addTxt(' est tombé lors de la tentive de conquête de la planète ')
-						->addLnk('map/place-' . $this->id, $this->baseName)
-						->addTxt(' appartenant au joueur ')
-						->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
-						->addTxt('.')
-						->addSep()
-						->addTxt('Il a désormais rejoint de Mémorial.')
-						->addSep()
-						->addLnk('fleet/view-archive/report-' . $report->id, 'voir le rapport de combat &#8594;')
-						->addEnd();
-					ASM::$ntm->add($notif);
-
-					$notif = new Notification();
-					$notif->setRPlayer($this->rPlayer);
-					$notif->setTitle('Rapport de combat');
-					$notif->addBeg()
-						->addTxt('Le commandant ')
-						->addStg($commander->getName())
-						->addTxt(' appartenant au joueur ')
-						->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
-						->addTxt(' a tenté de conquérir votre planète ')
-						->addLnk('map/place-' . $this->id, $this->baseName)
-						->addTxt('.')
-						->addSep()
-						->addTxt('Vous avez repoussé l\'ennemi avec succès.')
-						->addSep()
-						->addLnk('fleet/view-archive/report-' . $report->id, 'voir le rapport de combat &#8594;')
-						->addEnd();
-					ASM::$ntm->add($notif);
+					$this->sendNotif(2, 4, $commander);
 				}
 			} else {
 				$S_PLM10 = ASM::$plm->getCurrentSession();
@@ -639,23 +570,19 @@ class Place {
 			}
 		# planète rebelle
 		} else {
+
+			$commander->rDestinationPlace = NULL;
+			$commander->travelType = NULL;
+			$commander->travelLength = NULL;
+			$commander->rStartPlace = NULL;
+			$commander->dArrival = NULL;
+			$commander->dstart = NULL;
+			$commander->length = NULL;
+
 			# faire un combat
-			$report = $this->startFight($commander);
-			ASM::$rpm->add($report);
-			$commander->resultOfFight($report->getFinalCommander(0));
-			$commander->setRPlaceDestination(NULL);
-			$commander->setTypeOfMove(-1);
+			$this->startFight($commander);
 
 			if ($commander->getStatement() !== COM_DEAD) {
-				$commander->setRBase($this->id);
-				$commander->setStatement(COM_AFFECTED);
-				$commander->setTypeOfMove(-1);
-				$commander->setRPlaceDestination(NULL);
-
-				# attribuer le rPlayer à la Place !
-				$this->rPlayer = $commander->getRPlayer();
-				$this->commanders[] = $commander;
-
 				# attribuer le rPlayer à la Base
 				include_once ATHENA;
 				$ob = new OrbitalBase();
@@ -663,49 +590,34 @@ class Place {
 				$ob->setRPlace($this->id);
 				$ob->setRPlayer($commander->getRPlayer());
 				$ob->setDCreation(Utils::now());
+				$ob->uOrbitalBase = Utils::now();
 				ASM::$obm->add($ob);
 
+				#attibuer le commander à la place
+				$commander->setRBase($this->id);
+				$commander->setStatement(COM_AFFECTED);
+				$commander->line = 1;
+
+				# attribuer le rPlayer à la Place !
+				$this->rPlayer = $commander->getRPlayer();
+				$this->commanders[] = $commander;
+
 				if (CTR::$data->get('playerId') == $commander->getRPlayer()) { 
-					CTRHelper::addBase('ob', $ob->getId(), $ob->getName(), $this->rSector, $this->rSystem);
+					CTRHelper::addBase('ob', 
+						$ob->getId(), 
+						$ob->getName(), 
+						$this->rSector, 
+						$this->rSystem,
+						'1-' . Game::getSizeOfPlanet($this->population),
+						OrbitalBase::TYP_NEUTRAL);
 				}
 
-				include_once HERMES;
-				$notif = new Notification();
-				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Planète colonisée');
-				$notif->addBeg()
-					->addTxt('Votre commandant ')
-					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
-					->addTxt(' a colonisé la planète rebelle située aux coordonnées ')  
-					->addLnk('map/place-' . $this->id , Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector))
-					->addTxt('. Votre empire s\'étend, administrez votre nouvelle planète ')
-					->addLnk('bases/base-' . $this->id, 'ici')
-					->addTxt('.')
-					->addSep()
-					->addLnk('fleet/view-archive/report-' . $report->id, 'voir le rapport de combat &#8594;')
-					->addEnd();
-				ASM::$ntm->add($notif);
+				$this->sendNotif(2, 1, $commander);
 
 				GalaxyColorManager::apply();
 			# s'il est mort
 			} else {
-				include_once HERMES;
-				$notif = new Notification();
-				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Rapport de colonisation');
-				$notif->addBeg()
-					->addTxt('Votre commandant ')
-					->addLnk('fleet/view-memorial/', $commander->getName())
-					->addTxt(' est tombé lors de la colonisation de la planète rebelle située aux coordonnées ')
-					->addLnk('map/place-' . $this->id, Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector))
-					->addTxt('.')
-					->addSep()
-					->addTxt('Il a désormais rejoint le Mémorial.')
-					->addSep()
-					->addLnk('fleet/view-archive/report-' . $report->id, 'voir le rapport de combat &#8594;')
-					->addEnd();
-				ASM::$ntm->add($notif);
-				
+				$this->sendNotif(2, 2, $commander);
 				# enlever le commandant de la session
 				$S_PLM10 = ASM::$plm->getCurrentSession();
 				ASM::$plm->newSession();
@@ -725,7 +637,7 @@ class Place {
 	# retour à la maison
 	private function comeBackToHome($commander) {
 		include_once ATHENA;
-		$commander->setRPlaceDestination(NULL);
+		$commander->setrDestinationPlace(NULL);
 		$commander->setTypeOfMove(-1);
 		$commander->setStatement(COM_AFFECTED);
 
@@ -881,13 +793,106 @@ class Place {
 					->addTxt('.')
 					->addSep()
 					->addTxt('Il a désormais rejoint le Mémorial. Que son âme traverse l\'Univers dans la paix.')
-					->addSep()
-					->addLnk('fleet/view-archive/report-' . $report->id, 'voir le rapport de combat &#8594;')
 					->addEnd();
 				ASM::$ntm->add($notif);
 			}
 
 		} elseif ($type == 2) {
+			if ($case == 1) {
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Planète colonisée');
+				$notif->addBeg()
+					->addTxt('Votre commandant ')
+					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addTxt(' a colonisé la planète rebelle située aux coordonnées ')  
+					->addLnk('map/place-' . $this->id , Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector))
+					->addTxt('. Votre empire s\'étend, administrez votre nouvelle planète ')
+					->addLnk('bases/base-' . $this->id, 'ici')
+					->addTxt('.')
+					->addEnd();
+				ASM::$ntm->add($notif);
+			} elseif ($case == 2) {
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Défaite lors d\'une colonisationge');
+				$notif->addBeg()
+					->addTxt('Votre commandant ')
+					->addLnk('fleet/view-memorial', $commander->getName())
+					->addTxt(' est tombé lors de l\'attaque de la planète rebelle située aux coordonnées ')
+					->addLnk('map/place-' . $this->id, Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector))
+					->addTxt('.')
+					->addSep()
+					->addTxt('Il a désormais rejoint le Mémorial. Que son âme traverse l\'Univers dans la paix.')
+					->addEnd();
+				ASM::$ntm->add($notif);
+			} elseif ($case == 3) {
+					$notif = new Notification();
+					$notif->setRPlayer($commander->getRPlayer());
+					$notif->setTitle('Planète conquise');
+					$notif->addBeg()
+						->addTxt('Votre commandant ')
+						->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+						->addTxt(' a conquis la planète ')
+						->addLnk('map/place-' . $this->id, $this->baseName)
+						->addTxt(' appartenant au joueur ')
+						->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
+						->addTxt('.')
+						->addSep()
+						->addTxt('Elle est désormais votre, vous pouvez l\'administrer ')
+						->addLnk('bases/base-' . $this->id, 'ici')
+						->addTxt('.')
+						->addEnd();
+					ASM::$ntm->add($notif);
+
+					$notif = new Notification();
+					$notif->setRPlayer($this->rPlayer);
+					$notif->setTitle('Rapport de conquête');
+					$notif->addBeg()
+						->addTxt('Le commandant ')
+						->addStg($commander->getName())
+						->addTxt(' appartenant au joueur ')
+						->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
+						->addTxt(' a conquis votre planète ')
+						->addLnk('map/place-' . $this->id, $this->baseName)
+						->addTxt('.')
+						->addSep()
+						->addTxt('Impliquez votre faction dans une action punitive envers votre assaillant.')
+						->addEnd();
+					ASM::$ntm->add($notif);
+			} elseif ($case == 4) {
+					$notif = new Notification();
+					$notif->setRPlayer($commander->getRPlayer());
+					$notif->setTitle('Echec de conquête');
+					$notif->addBeg()
+						->addTxt('Votre commandant ')
+						->addLnk('fleet/view-memorial/', $commander->getName())
+						->addTxt(' est tombé lors de la tentive de conquête de la planète ')
+						->addLnk('map/place-' . $this->id, $this->baseName)
+						->addTxt(' appartenant au joueur ')
+						->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
+						->addTxt('.')
+						->addSep()
+						->addTxt('Il a désormais rejoint de Mémorial.')
+						->addEnd();
+					ASM::$ntm->add($notif);
+
+					$notif = new Notification();
+					$notif->setRPlayer($this->rPlayer);
+					$notif->setTitle('Rapport de combat');
+					$notif->addBeg()
+						->addTxt('Le commandant ')
+						->addStg($commander->getName())
+						->addTxt(' appartenant au joueur ')
+						->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
+						->addTxt(' a tenté de conquérir votre planète ')
+						->addLnk('map/place-' . $this->id, $this->baseName)
+						->addTxt('.')
+						->addSep()
+						->addTxt('Vous avez repoussé l\'ennemi avec succès.')
+						->addEnd();
+					ASM::$ntm->add($notif);
+			}
 
 		} elseif ($type == 3) {
 
