@@ -28,6 +28,8 @@ if (ASM::$pam->size() == 1) {
 	CTR::$data->get('playerInfo')->add('credit', $player->getCredit());
 	CTR::$data->get('playerInfo')->add('experience', $player->getExperience());
 	CTR::$data->get('playerInfo')->add('level', $player->getLevel());
+	CTR::$data->get('playerInfo')->add('stepTutorial', $player->stepTutoriel);
+	CTR::$data->get('playerInfo')->add('stepDone', $player->stepDone);	
 
 	if (Utils::isAdmin($player->getBind())) {
 		CTR::$data->get('playerInfo')->add('admin', TRUE);

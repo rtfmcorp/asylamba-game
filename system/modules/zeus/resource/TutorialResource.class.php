@@ -1,5 +1,21 @@
 <?php
+
+/**
+ * TutorialResource
+ *
+ * @author Jacky Casas
+ * @copyright Asylamba
+ *
+ * @package Zeus
+ * @update 25.04.14
+ */
+
 class TutorialResource {
+	
+	const GENERATOR_LEVEL_2 = 1;
+	const REFINERY_LEVEL_3 = 2;
+	const REFINERY_MODE_PRODUCTION = 3;
+
 	public static function getInfo($id, $info) {
 		if ($id <= count(self::$colors)) {
 			if (in_array($info, array('id', 'title', 'description', 'experienceReward'))) {
