@@ -341,24 +341,17 @@ class OrbitalBaseManager extends Manager {
 
 	public function changeOwnerById($id, $newOwner) {
 		$S_OBM1 = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession(ASM_UMODE);
+		ASM::$obm->newSession();
 		ASM::$obm->load(array('rPlace' => $id));
 		$base = ASM::$obm->get();
 
-		if (isset($base)) {
-			# attribuer le rPlayer à la Place
-			$S_PLM1 = ASM::$plm->getCurrentSession();
-			ASM::$plm->newSession(ASM_UMODE);
-			ASM::$plm->load(array('id' => $id));
-			ASM::$plm->get()->setRPlayer($newOwner);
-			ASM::$plm->changeSession($S_PLM1);
-
+		if (ASM::$obm->size() > 0) {
 			# attribuer le rPlayer à la Base
 			$base->setRPlayer($newOwner);
 
 			# suppression des routes commerciales
 			$S_CRM1 = ASM::$crm->getCurrentSession();
-			ASM::$crm->newSession(ASM_UMODE);
+			ASM::$crm->newSession();
 			ASM::$crm->load(array('rOrbitalBase' => $base->getRPlace()));
 			ASM::$crm->load(array('rOrbitalBaseLinked' => $base->getRPlace()));
 			for ($i = 0; $i < ASM::$crm->size(); $i++) { 
@@ -369,27 +362,30 @@ class OrbitalBaseManager extends Manager {
 
 			# ajoutet/enlever la base dans le controller
 			if (CTR::$data->get('playerId') == $newOwner) {
-				CTRHelper::addBase('ob', $base->getId(), $base->getName(), $base->getSector(), $base->getSystem());
+				CTRHelper::addBase('ob', $base->getId(), $base->getName(), $base->getSector(), $base->getSystem(), '1-' . Game::getSizeOfPlanet($base->getPlanetPopulation()), $base->typeOfBase);
 			} else {
 				CTRHelper::removeBase('ob', $base->getId());
 			}
 
-			# changer l'allégeance des commandants dans l'école
-			$S_COM1 = ASM::$com->getCurrentSession();
-			ASM::$com->newSession(ASM_UMODE);
-			ASM::$com->load(array('rBase' => $id, 'statement' => COM_INSCHOOL));
-			for ($i = 0; $i < ASM::$com->size(); $i++) { 
-				ASM::$com->get($i)->setRPlayer($newOwner);
-				bug::pre(ASM::$com->get($i));
-			}
-			ASM::$com->changeSession($S_COM1);
-
 			# rendre déserteuses les flottes en voyage
 			$S_COM2 = ASM::$com->getCurrentSession();
-			ASM::$com->newSession(ASM_UMODE);
-			ASM::$com->load(array('rBase' => $id, 'statement' => COM_MOVING));
-			for ($i = 0; $i < ASM::$com->size(); $i++) { 
-				ASM::$com->get($i)->setStatement(COM_DESERT);
+			ASM::$com->newSession();
+			ASM::$com->load(array('c.rBase' => $id));
+			for ($i = 0; $i < ASM::$com->size(); $i++) {
+				if ($com->statement != Commander::DEAD) {
+					$com->rPlayer = $newOwner;
+				}
+				if ($com->statement == Commander::MOVING) {
+					$com->statement = Commander::DESERT;
+				}
+				$com->rDestinationPlace = NULL;
+				$com->travelType = NULL;
+				$com->travelLength = NULL;
+				$com->rStartPlace = NULL;
+				$com->dArrival = NULL;
+				$com->dstart = NULL;
+				$com->length = NULL;
+				$com->rBase = NULL;
 			}
 			ASM::$com->changeSession($S_COM2);
 
