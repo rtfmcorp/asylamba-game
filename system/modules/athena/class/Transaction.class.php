@@ -60,6 +60,12 @@ class Transaction {
 	public $xSystem;
 	public $ySystem;
 
+	# attributes only for commanders
+	public $commanderName;
+	public $commanderLevel;
+	public $commanderVictory;
+	public $commanderExperience;
+
 	public function getId() { return $this->id; }
 
 	public function getPriceToCancelOffer() {
@@ -135,8 +141,8 @@ class Transaction {
 					echo '<span class="rate">' . $rv . '</span>';
 
 					echo '<div class="offer">';
-						echo '<strong>Nom</strong>';
-						echo '<em>??? xp | ? victoires</em>';
+						echo '<strong>' . CommanderResources::getInfo($this->commanderLevel, 'grade') . ' ' . $this->commanderName . '</strong>';
+						echo '<em>' . $this->commanderExperience . ' xp | ' . $this->commanderVictory . ' victoire' . Format::addPlural($this->commanderVictory) . '</em>';
 					echo '</div>';
 				} elseif ($this->type == Transaction::TYP_SHIP) {
 					echo '<img src="' . MEDIA . 'ship/picto/ship' . $this->identifier . '.png" alt="" class="picto" />';
