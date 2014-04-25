@@ -63,8 +63,7 @@ ASM::$trm->newSession();
 ASM::$trm->load(
 	array('type' => Transaction::TYP_COMMANDER, 'statement' => Transaction::ST_PROPOSED),
 	array('dPublication', 'DESC'),
-	array(0, 20),
-	Transaction::TYP_COMMANDER
+	array(0, 20)
 );
 
 echo '<div class="component transaction">';
@@ -115,47 +114,11 @@ echo '<div class="component transaction">';
 				echo '<span><a href="#">S</a></span>';
 			echo '</div>';
 
-			for ($i=0; $i < 10; $i++) { 
-				echo '<div class="transaction ship">';
-					echo '<div class="product sh" data-target="transaction-ship-' . $i . '">';
-						echo '<img src="' . MEDIA . 'ship/picto/ship' . rand(0, 11) . '.png" alt="" class="picto" />';
-						echo '<span class="rate">-24.4</span>';
-
-						echo '<div class="offer">';
-							echo '<strong>4 Pégases</strong>';
-							echo '<em>8 pev</em>';
-						echo '</div>';
-						echo '<div class="for">';
-							echo '<span>pour</span>';
-						echo '</div>';
-						echo '<div class="price">';
-							echo Format::numberFormat(rand(100, 100000)) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
-						echo '</div>';
-					echo '</div>';
-
-					echo '<div class="hidden" id="transaction-ship-' . $i . '">';
-						echo '<div class="info">';
-							echo '<div class="seller">';
-								echo '<p>vendu par<br /><a href="#" class="color1">Geaorge IV</a></p>';
-								echo '<p>depuis<br /><a href="#">Chinatown <span class="color6">[17]</span></a></p>';
-							echo '</div>';
-							echo '<div class="price-detail">';
-								echo '<p>prix : 1 000 c</p>';
-								echo '<p>taxe : 100 c</p>';
-								echo '<hr />';
-								echo '<p>total : 1 100 c</p>';
-							echo '</div>';
-						echo '</div>';
-
-						echo '<div class="button">';
-							echo '<a href="#">';
-								echo 'acheter pour 1 000 <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"><br />durée du transit 33:20:00 <img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
-							echo '</a>';
-						echo '</div>';
-					echo '</div>';
-				echo '</div>';
+			for ($i = 0; $i < ASM::$trm->size(); $i++) {
+				if (CTR::$data->get('playerId') != ASM::$trm->get($i)->rPlayer) {
+					ASM::$trm->get($i)->render($ressourceCurrentRate, $S_CTM1, $ob_compPlat);
+				}
 			}
-
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

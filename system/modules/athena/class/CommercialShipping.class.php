@@ -122,7 +122,7 @@ class CommercialShipping {
 					include_once ARES;
 					$S_COM1 = ASM::$com->getCurrentSession();
 					ASM::$com->newSession(ASM_UMODE);
-					ASM::$com->load(array('id' => $transaction->identifier));
+					ASM::$com->load(array('c.id' => $transaction->identifier));
 
 					$commander = ASM::$com->get();
 					$commander->setStatement(COM_INSCHOOL);
@@ -170,7 +170,10 @@ class CommercialShipping {
 		switch ($this->typeOfTransaction) {
 			case Transaction::TYP_RESOURCE: $class = 'resources'; break;
 			case Transaction::TYP_COMMANDER: $class = 'commander'; break;
-			case Transaction::TYP_SHIP: $class = 'ship'; break;
+			case Transaction::TYP_SHIP:
+				include_once ARES;
+				$class = 'ship';
+				break;
 			default: break;
 		}
 
@@ -210,8 +213,8 @@ class CommercialShipping {
 						echo '<img src="' . MEDIA . 'ship/picto/ship' . $this->identifier . '.png" alt="" class="picto" />';
 
 						echo '<div class="offer">';
-							echo '<strong>' . $this->quantity . ' Pégases</strong>';
-							echo '<em>? pev</em>';
+							echo '<strong>' . $this->quantity . ' ' . ShipResource::getInfo($this->identifier, 'codeName') . '</strong>';
+							echo '<em>' . ShipResource::getInfo($this->identifier, 'name') . ' / ' . ShipResource::getInfo($this->identifier, 'pev') . ' pev</em>';
 						echo '</div>';
 						echo '<div class="for">';
 							echo '<span>pour</span>';
