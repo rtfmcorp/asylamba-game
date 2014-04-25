@@ -17,7 +17,7 @@ if ($name !== FALSE AND $name !== '') {
 	if (ASM::$pam->size() == 1) {
 		CTR::redirect('diary/player-' . ASM::$pam->get()->getId());
 	} else {
-		CTR::$alert->add('Aucun joueur ne correspond à votre recherche.', ALERT_STD_SUCCESS);
+		CTR::$alert->add('Aucun joueur ne correspond à votre recherche.', ALERT_STD_ERROR);
 	}
 
 	ASM::$pam->changeSession($S_PAM1);
