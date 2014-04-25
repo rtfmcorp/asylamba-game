@@ -544,42 +544,7 @@ class Place {
 						}
 					}
 
-					include_once HERMES;
-					$notif = new Notification();
-					$notif->setRPlayer($commander->getRPlayer());
-					$notif->setTitle('Echec de conquête');
-					$notif->addBeg()
-						->addTxt('Votre commandant ')
-						->addLnk('fleet/view-memorial/', $commander->getName())
-						->addTxt(' est tombé lors de la tentive de conquête de la planète ')
-						->addLnk('map/place-' . $this->id, $this->baseName)
-						->addTxt(' appartenant au joueur ')
-						->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
-						->addTxt('.')
-						->addSep()
-						->addTxt('Il a désormais rejoint de Mémorial.')
-						->addSep()
-						->addLnk('fleet/view-archive/report-' . $report->id, 'voir le rapport de combat &#8594;')
-						->addEnd();
-					ASM::$ntm->add($notif);
-
-					$notif = new Notification();
-					$notif->setRPlayer($this->rPlayer);
-					$notif->setTitle('Rapport de combat');
-					$notif->addBeg()
-						->addTxt('Le commandant ')
-						->addStg($commander->getName())
-						->addTxt(' appartenant au joueur ')
-						->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
-						->addTxt(' a tenté de conquérir votre planète ')
-						->addLnk('map/place-' . $this->id, $this->baseName)
-						->addTxt('.')
-						->addSep()
-						->addTxt('Vous avez repoussé l\'ennemi avec succès.')
-						->addSep()
-						->addLnk('fleet/view-archive/report-' . $report->id, 'voir le rapport de combat &#8594;')
-						->addEnd();
-					ASM::$ntm->add($notif);
+					$this->sendNotif(2, 4, $commander);
 				}
 			} else {
 				$S_PLM10 = ASM::$plm->getCurrentSession();
@@ -861,7 +826,7 @@ class Place {
 					->addTxt('Il a désormais rejoint le Mémorial. Que son âme traverse l\'Univers dans la paix.')
 					->addEnd();
 				ASM::$ntm->add($notif);
-			} elseif($case == 3) {
+			} elseif ($case == 3) {
 					$notif = new Notification();
 					$notif->setRPlayer($commander->getRPlayer());
 					$notif->setTitle('Planète conquise');
@@ -893,6 +858,38 @@ class Place {
 						->addTxt('.')
 						->addSep()
 						->addTxt('Impliquez votre faction dans une action punitive envers votre assaillant.')
+						->addEnd();
+					ASM::$ntm->add($notif);
+			} elseif ($case == 4) {
+					$notif = new Notification();
+					$notif->setRPlayer($commander->getRPlayer());
+					$notif->setTitle('Echec de conquête');
+					$notif->addBeg()
+						->addTxt('Votre commandant ')
+						->addLnk('fleet/view-memorial/', $commander->getName())
+						->addTxt(' est tombé lors de la tentive de conquête de la planète ')
+						->addLnk('map/place-' . $this->id, $this->baseName)
+						->addTxt(' appartenant au joueur ')
+						->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
+						->addTxt('.')
+						->addSep()
+						->addTxt('Il a désormais rejoint de Mémorial.')
+						->addEnd();
+					ASM::$ntm->add($notif);
+
+					$notif = new Notification();
+					$notif->setRPlayer($this->rPlayer);
+					$notif->setTitle('Rapport de combat');
+					$notif->addBeg()
+						->addTxt('Le commandant ')
+						->addStg($commander->getName())
+						->addTxt(' appartenant au joueur ')
+						->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
+						->addTxt(' a tenté de conquérir votre planète ')
+						->addLnk('map/place-' . $this->id, $this->baseName)
+						->addTxt('.')
+						->addSep()
+						->addTxt('Vous avez repoussé l\'ennemi avec succès.')
 						->addEnd();
 					ASM::$ntm->add($notif);
 			}
