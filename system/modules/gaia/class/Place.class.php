@@ -509,12 +509,14 @@ class Place {
 			$this->startFight($commander);
 
 			if ($commander->getStatement() !== COM_DEAD) {
-				# attribuer le rPlayer à la Base
+				# créer une Base
 				include_once ATHENA;
 				$ob = new OrbitalBase();
 				$ob->setName('Base de ' . $commander->getPlayerName());
 				$ob->setRPlace($this->id);
 				$ob->setRPlayer($commander->getRPlayer());
+				$ob->rPlace = $this->id;
+				$ob->id = $this->id;
 				$ob->setDCreation(Utils::now());
 				$ob->uOrbitalBase = Utils::now();
 				ASM::$obm->add($ob);
