@@ -35,12 +35,12 @@ class Transaction {
 	public $rPlayer = 0;
 	public $rPlace = 0;
 	public $type;			# see const TYP_*
-	public $quantity;		# if ($type == TYP_RESOURCE) --> resource
-							# if ($type == TYP_SHIP) --> ship quantity
-							# if ($type == TYP_COMMANDER) --> experience
-	public $identifier;		# if ($type == TYP_RESOURCE) --> NULL
-							# if ($type == TYP_SHIP) --> shipId
-							# if ($type == TYP_COMMANDER) --> rCommander
+	public $quantity;		# if ($type == TYP_RESOURCE) 	--> resource
+							# if ($type == TYP_SHIP) 		--> ship quantity
+							# if ($type == TYP_COMMANDER) 	--> experience
+	public $identifier;		# if ($type == TYP_RESOURCE) 	--> NULL
+							# if ($type == TYP_SHIP) 		--> shipId
+							# if ($type == TYP_COMMANDER) 	--> rCommander
 	public $price = 0;
 	public $commercialShipQuantity = 0;	# ship needed for the transport
 	public $statement = 0;
@@ -92,15 +92,11 @@ class Transaction {
 	}
 
 	public function render($currentRate, $token, $ob) {
-		$rv = $currentRate - $this->price / $this->quantity;
-		$rv = ($rv < 0)
-			? ($rv = '+ ' . Format::numberFormat(abs($rv), 3))
-			: ($rv = '- ' . Format::numberFormat(abs($rv), 3));
+		#$rv = '1:' . Format::numberFormat(Game::calculateRate($this->type, $this->quantity, $this->identifier, $this->price), 3);
+		$rv = Format::numberFormat(Game::calculateRate($this->type, $this->quantity, $this->identifier, $this->price) / $currentRate * 100) . ' %';
 
-		# $S_CTM_T = ASM::$ctm->getCurrentSession();
-		# ASM::$ctm->changeSession($token);
-		$exportTax = 0;
-		$importTax = 0;
+		$S_CTM_T = ASM::$ctm->getCurrentSession();
+		ASM::$ctm->changeSession($token);
 
 		for ($i = 0; $i < ASM::$ctm->size(); $i++) { 
 			$comTax = ASM::$ctm->get($i);
@@ -113,12 +109,11 @@ class Transaction {
 			}
 		}
 
-
 		$exportTax = round($this->price * $exportTax / 100);
 		$importTax = round($this->price * $importTax / 100);
 		$totalPrice = $this->price + $exportTax + $importTax;
 
-		# ASM::$ctm->changeSession($S_CTM_T);
+		ASM::$ctm->changeSession($S_CTM_T);
 
 		switch ($this->type) {
 			case Transaction::TYP_RESOURCE: $type = 'resources'; break;
