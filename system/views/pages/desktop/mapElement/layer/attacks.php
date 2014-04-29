@@ -19,8 +19,8 @@ ASM::$com->load(array('c.id' => $commandersId));
 # chargement des places relatives aux commandants attaquants
 $placesId = array(0);
 for ($i = 0; $i < ASM::$com->size(); $i++) {
-	$placesId[] = ASM::$com->get($i)->getRBase();
-	$placesId[] = ASM::$com->get($i)->getRPlaceDestination();
+	$placesId[] = ASM::$com->get($i)->rStartPlace;
+	$placesId[] = ASM::$com->get($i)->rDestinationPlace;
 }
 
 $S_PLM_MAPLAYER = ASM::$plm->getCurrentSession();
@@ -33,10 +33,10 @@ echo '<div id="attacks">';
 				$commander = ASM::$com->get($i);
 
 				if ($commander->travelType != Commander::BACK) {
-					$x1 = ASM::$plm->getById($commander->getRBase())->getXSystem() * GalaxyConfiguration::$scale;
-					$x2 = ASM::$plm->getById($commander->getRPlaceDestination())->getXSystem() * GalaxyConfiguration::$scale;
-					$y1 = ASM::$plm->getById($commander->getRBase())->getYSystem() * GalaxyConfiguration::$scale;
-					$y2 = ASM::$plm->getById($commander->getRPlaceDestination())->getYSystem() * GalaxyConfiguration::$scale;
+					$x1 = ASM::$plm->getById($commander->rStartPlace)->getXSystem() * GalaxyConfiguration::$scale;
+					$x2 = ASM::$plm->getById($commander->rDestinationPlace)->getXSystem() * GalaxyConfiguration::$scale;
+					$y1 = ASM::$plm->getById($commander->rStartPlace)->getYSystem() * GalaxyConfiguration::$scale;
+					$y2 = ASM::$plm->getById($commander->rDestinationPlace)->getYSystem() * GalaxyConfiguration::$scale;
 					list($x3, $y3) = $commander->getPosition($x1, $y1, $x2, $y2);
 					$rt = Utils::interval($commander->dArrival, Utils::now(), 's');
 
