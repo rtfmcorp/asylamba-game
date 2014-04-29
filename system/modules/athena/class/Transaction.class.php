@@ -99,6 +99,9 @@ class Transaction {
 		$S_CTM_T = ASM::$ctm->getCurrentSession();
 		ASM::$ctm->changeSession($token);
 
+		$exportTax = 0;
+		$importTax = 0;
+
 		for ($i = 0; $i < ASM::$ctm->size(); $i++) { 
 			$comTax = ASM::$ctm->get($i);
 
