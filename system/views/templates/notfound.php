@@ -21,9 +21,6 @@ echo '<body>';
 		echo '<a href="' . APP_ROOT . 'profil">revenir vers la page principale</a>';
 		echo '<a href="' . GETOUT_ROOT . '">où allez jeter un oeil au site</a>';
 		echo '<a href="' . GETOUT_ROOT . 'blog">où peut-être au blog</a>';
-
-		echo '<a href="' . FACEBOOK_LINK . '">sinon vous pouvez "liker" notre page facebook</a>';
-		echo '<a href="' . TWEETER_LINK . '">ou nous suivre vers tweeter</a>';
 	echo '</div>';
 echo '</body>';
 ?>
