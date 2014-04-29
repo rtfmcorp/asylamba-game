@@ -394,6 +394,8 @@ class Commander {
 	}
 
 	public function getPosition ($x1, $y1, $x2, $y2) {
+		$x = $x1;
+		$y = $y1;
 		if ($this->statement == self::MOVING) {
 			$parcouredTime = Utils::interval($this->dStart, Utils::now(), 's');
 			$totalTime = Utils::interval($this->dStart, $this->dArrival, 's');

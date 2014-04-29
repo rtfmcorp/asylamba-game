@@ -136,10 +136,21 @@ class GalaxyColorManager {
 					}
 				}
 			}
-			if (array_sum($colorRepartition) != 0) {
-				$nbrColor = max($colorRepartition);
+
+			$nbrColor = max($colorRepartition);
+			if ($v['color'] == 0) {
+				$nbrColorSector = NULL;
+			} else {
+				$nbrColorSector = $colorRepartition[$v['color'] - 1];
+			}
+
+			if ($nbrColor >= LIMIT_CONQUEST_SECTOR) {
 				$maxColor = array_keys($colorRepartition, max($colorRepartition));
-				if ($nbrColor > $colorRepartition[$v['color'] - 1] AND ($maxColor[0] + 1) != $v['color']) {
+
+				if ($nbrColorSector == NULL) {
+					$this->sector[$k]['color'] = $maxColor[0] + 1;
+					$this->sector[$k]['hasChanged'] = TRUE;
+				} elseif ($nbrColor > $nbrColorSector AND ($maxColor[0] + 1) != $v['color']) {
 					$this->sector[$k]['color'] = $maxColor[0] + 1;
 					$this->sector[$k]['hasChanged'] = TRUE;
 				}

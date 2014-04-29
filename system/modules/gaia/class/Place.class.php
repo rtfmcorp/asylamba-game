@@ -223,9 +223,9 @@ class Place {
 				}
 				# changer rBase commander
 				$commander->rBase = $this->id;
-				$commander->rDestinationPlace = NULL;
+				// $commander->rDestinationPlace = NULL;
 				$commander->travelType = NULL;
-				$commander->rStartPlace = NULL;
+				// $commander->rStartPlace = NULL;
 				$commander->dArrival = NULL;
 				$commander->length = NULL;
 				$commander->statement = Commander::AFFECTED;
@@ -280,10 +280,10 @@ class Place {
 	private function tryToLoot($commander) {
 		include_once ARES;
 		if ($this->rPlayer == 0) {
-			$commander->rDestinationPlace = NULL;
+			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
 			$commander->travelLength = NULL;
-			$commander->rStartPlace = NULL;
+			// $commander->rStartPlace = NULL;
 			$commander->dArrival = NULL;
 			$commander->dstart = NULL;
 			$commander->length = NULL;
@@ -328,10 +328,10 @@ class Place {
 		} else {
 			# planète à joueur: si $this->rColor != commandant->rColor
 			if ($this->playerColor != $commander->getPlayerColor()) {
-				$commander->rDestinationPlace = NULL;
+				// $commander->rDestinationPlace = NULL;
 				$commander->travelType = NULL;
 				$commander->travelLength = NULL;
-				$commander->rStartPlace = NULL;
+				// $commander->rStartPlace = NULL;
 				$commander->dArrival = NULL;
 				$commander->dstart = NULL;
 				$commander->length = NULL;
@@ -400,10 +400,10 @@ class Place {
 				}
 			# si c'est a même couleur
 			} else {
-				$commander->rDestinationPlace = NULL;
+				// $commander->rDestinationPlace = NULL;
 				$commander->travelType = NULL;
 				$commander->travelLength = NULL;
-				$commander->rStartPlace = NULL;
+				// $commander->rStartPlace = NULL;
 				$commander->dArrival = NULL;
 				$commander->dstart = NULL;
 				$commander->length = NULL;
@@ -425,10 +425,10 @@ class Place {
 	# conquest
 	private function tryToConquer($commander) {
 		if ($this->rPlayer != 0) {
-			$commander->rDestinationPlace = NULL;
+			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
 			$commander->travelLength = NULL;
-			$commander->rStartPlace = NULL;
+			// $commander->rStartPlace = NULL;
 			$commander->dArrival = NULL;
 			$commander->dstart = NULL;
 			$commander->length = NULL;
@@ -497,10 +497,10 @@ class Place {
 		# planète rebelle
 		} else {
 
-			$commander->rDestinationPlace = NULL;
+			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
 			$commander->travelLength = NULL;
-			$commander->rStartPlace = NULL;
+			// $commander->rStartPlace = NULL;
 			$commander->dArrival = NULL;
 			$commander->dstart = NULL;
 			$commander->length = NULL;
@@ -518,7 +518,7 @@ class Place {
 				$ob->setName('Base de ' . $commander->getPlayerName());
 				$ob->iSchool = 500;
 				$ob->iAntiSpy = 500;
-				$ob->$resourcesStorage = 2000;
+				$ob->resourcesStorage = 2000;
 				$ob->uOrbitalBase = Utils::now();
 				$ob->dCreation = Utils::now();
 				$ob->updatePoints();
@@ -630,10 +630,8 @@ class Place {
 
 	private function startFight($commander, $enemyCommander = NULL, $pvp = FALSE) {
 		if ($pvp == TRUE) {
-			$commanderA = new CommanderInFight($commander);
-			$commanderD = new CommanderInFight($enemyCommander);
 			$fc = new FightController();
-			$fc->startFight($commanderA, $commanderD, $this);
+			$fc->startFight($commander, $enemyCommander, $this);
 		} else {
 			$computerCommander = $this->createVirtualCommander();
 			$fc = new FightController();

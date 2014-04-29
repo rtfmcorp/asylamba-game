@@ -377,14 +377,12 @@ class OrbitalBaseManager extends Manager {
 				if (ASM::$com->get($i)->statement == Commander::MOVING) {
 					ASM::$com->get($i)->statement = Commander::DESERT;
 				}
-				$com->rDestinationPlace = NULL;
-				$com->travelType = NULL;
-				$com->travelLength = NULL;
-				$com->rStartPlace = NULL;
-				$com->dArrival = NULL;
-				$com->dstart = NULL;
-				$com->length = NULL;
-				$com->rBase = NULL;
+				$com->get($i)->travelType = NULL;
+				$com->get($i)->travelLength = NULL;
+				$com->get($i)->dArrival = NULL;
+				$com->get($i)->dstart = NULL;
+				$com->get($i)->length = NULL;
+				$com->get($i)->rBase = NULL;
 			}
 			ASM::$com->changeSession($S_COM2);
 
