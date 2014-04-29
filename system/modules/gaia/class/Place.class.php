@@ -565,10 +565,10 @@ class Place {
 	# retour à la maison
 	private function comeBackToHome($commander) {
 		include_once ATHENA;
-		$commander->rDestinationPlace = NULL;
+		// $commander->rDestinationPlace = NULL;
 		$commander->travelType = NULL;
 		$commander->travelLength = NULL;
-		$commander->rStartPlace = NULL;
+		// $commander->rStartPlace = NULL;
 		$commander->dArrival = NULL;
 		$commander->dstart = NULL;
 		$commander->length = NULL;
