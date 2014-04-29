@@ -25,11 +25,11 @@ if ($commanderId !== FALSE) {
 		# checker si on a assez de place !!!!!
 		$S_COM2 = ASM::$com->getCurrentSession();
 		ASM::$com->newSession();
-		ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => Commander::AFFECTED, 'c.line' => 2));
+		ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 2));
 		$nbrLine2 = ASM::$com->size();
 
 		ASM::$com->newSession();
-		ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => Commander::AFFECTED, 'c.line' => 1));
+		ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 1));
 		$nbrLine1 = ASM::$com->size();
 
 		if ($nbrLine2 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'r-line')) {
