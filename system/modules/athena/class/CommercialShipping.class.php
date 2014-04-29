@@ -178,8 +178,8 @@ class CommercialShipping {
 		}
 
 		echo '<div class="transaction ' . $class . '">';
-			echo '<div class="product">';
-				if ($this->statement != CommercialShipping::ST_MOVING_BACK) {
+			if ($this->statement != CommercialShipping::ST_MOVING_BACK) {
+				echo '<div class="product">';
 					if ($this->typeOfTransaction == Transaction::TYP_RESOURCE) {
 						echo '<img src="' . MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($this->quantity) . '.png" alt="" class="picto" />';
 						echo '<div class="offer">';
@@ -198,14 +198,14 @@ class CommercialShipping {
 							echo '<em>' . ShipResource::getInfo($this->identifier, 'name') . ' / ' . ShipResource::getInfo($this->identifier, 'pev') . ' pev</em>';
 						echo '</div>';
 					}
-				}
-				echo '<div class="for">';
-					echo '<span>pour</span>';
+					echo '<div class="for">';
+						echo '<span>pour</span>';
+					echo '</div>';
+					echo '<div class="price">';
+						echo Format::numberFormat($this->price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
+					echo '</div>';
 				echo '</div>';
-				echo '<div class="price">';
-					echo Format::numberFormat($this->price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
-				echo '</div>';
-			echo '</div>';
+			}
 
 			$totalTime   = Utils::interval($this->dDeparture, $this->dArrival, 's');
 			$currentTime = Utils::interval(Utils::now(), $this->dDeparture, 's');

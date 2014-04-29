@@ -31,18 +31,20 @@ echo '<div id="attacks">';
 	echo '<svg viewBox="0, 0, ' . (GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size']) . ', ' . (GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';
 			for ($i = 0; $i < ASM::$com->size(); $i++) {
 				$commander = ASM::$com->get($i);
-				if ($commander->getTypeOfMove() != 3) {
-					echo '<line ';
-						echo 'class="color' . $commander->getPlayerColor() . '"';
-						echo 'x1="' . (ASM::$plm->getById($commander->getRBase())->getXSystem() * GalaxyConfiguration::$scale) . '"';
-						echo 'x2="' . (ASM::$plm->getById($commander->getRPlaceDestination())->getXSystem() * GalaxyConfiguration::$scale) . '"';
-						echo 'y1="' . (ASM::$plm->getById($commander->getRBase())->getYSystem() * GalaxyConfiguration::$scale) . '"';
-						echo 'y2="' . (ASM::$plm->getById($commander->getRPlaceDestination())->getYSystem() * GalaxyConfiguration::$scale) . '"';
-					echo '>';
-						echo '<circle cx="2" cy="2" r="16">';
-							//echo '<animate attributeName="width" attributeType="XML" fill="freeze" from="0" to="300" begin="0s" dur="3s"/>';
-						echo '</circle>';
-					echo '</line>';
+
+				if ($commander->travelType != Commander::BACK) {
+					$x1 = ASM::$plm->getById($commander->getRBase())->getXSystem() * GalaxyConfiguration::$scale;
+					$x2 = ASM::$plm->getById($commander->getRPlaceDestination())->getXSystem() * GalaxyConfiguration::$scale;
+					$y1 = ASM::$plm->getById($commander->getRBase())->getYSystem() * GalaxyConfiguration::$scale;
+					$y2 = ASM::$plm->getById($commander->getRPlaceDestination())->getYSystem() * GalaxyConfiguration::$scale;
+					list($x3, $y3) = $commander->getPosition($x1, $y1, $x2, $y2);
+					$rt = Utils::interval($commander->dArrival, Utils::now(), 's');
+
+					echo '<line x1="' . $x1 . '" x2="' . $x2 . '" y1="' . $y1 . '" y2="' . $y2 . '" />';
+					echo '<circle cx="0" cy="0" r="3">';
+						echo '<animate attributeName="cx" attributeType="XML" fill="freeze" from="' . $x3 . '" to="' . $x2 . '" begin="0s" dur="' . $rt . 's"/>';
+						echo '<animate attributeName="cy" attributeType="XML" fill="freeze" from="' . $y3 . '" to="' . $y2 . '" begin="0s" dur="' . $rt . 's"/>';
+					echo '</circle>';
 				}
 			}
 	echo '</svg>';
