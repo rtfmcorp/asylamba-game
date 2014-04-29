@@ -49,18 +49,21 @@ echo '<div id="tools">';
 	# right
 	echo '<div class="box right">';
 		$incomingAttack = 0;
+		$outgoingAttack = 0;
 		for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
 			if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
-				$info = CTR::$data->get('playerEvent')->get($i)->get('eventInfo');
-				if ($info[0] === TRUE) { $incomingAttack++; }
+				$incomingAttack++;
+			}
+			if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_OUTGOING_ATTACK) {
+				$outgoingAttack++;
 			}
 		}
 		echo '<a href="#" class="square ' . (($incomingAttack > 0) ? 'active' : NULL) . '"><img src="' . MEDIA . 'common/nav-fleet-defense.png" alt="" />';
 			echo ($incomingAttack > 0) ? '<span class="number">' . $incomingAttack . '</span>' : NULL;
 		echo '</a>';
 
-		echo '<a href="#" class="square"><img src="' . MEDIA . 'common/nav-fleet-attack.png" alt="" />';
-			echo ($incomingAttack > 0) ? '<span class="number">' . $incomingAttack . '</span>' : NULL;
+		echo '<a href="#" class="square ' . (($outgoingAttack > 0) ? 'active' : NULL) . '"><img src="' . MEDIA . 'common/nav-fleet-attack.png" alt="" />';
+			echo ($outgoingAttack > 0) ? '<span class="number">' . $outgoingAttack . '</span>' : NULL;
 		echo '</a>';
 
 		echo '<a href="' . APP_ROOT . 'financial" class="resource-link" style="width: 120px;">';

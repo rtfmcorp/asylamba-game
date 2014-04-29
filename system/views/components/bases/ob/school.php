@@ -73,6 +73,10 @@ echo '<div class="component school">';
 					echo '</button>';
 				}
 			echo '</form>';
+
+			for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
+				var_dump(CTR::$data->get('playerEvent')->get($i));
+			}
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
@@ -89,7 +93,7 @@ echo '<div class="component">';
 					$expToLvlUp = $commander->experienceToLevelUp();
 					echo '<div class="item">';
 						echo '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
-						echo '<strong>' . CommanderResources::getInfo($commander->getLevel(), 'grade') . ' ' . $commander->getName() . '</strong>';
+						echo '<strong>' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->getName() . '</strong>';
 						echo '<em>' . Format::numberFormat($commander->getExperience()) . ' points d\'expérience</em>';
 						echo '<a href="' . APP_ROOT . 'action/a-affectcommander/id-' . $commander->getId() . '">';
 							echo 'affecter';

@@ -367,6 +367,43 @@ body {
 	color: white;
 }
 
+#nav .overbox#tutorial form {
+	padding: 10px 15px; margin: 0;
+	border-top: solid 1px #202020;
+}
+
+#nav .overbox#tutorial .overflow {
+	padding: 15px;
+}
+
+#nav .overbox#tutorial .overflow h3 {
+	position: relative;
+	margin: 0; padding: 0 0 0 36px;
+}
+
+#nav .overbox#tutorial .overflow h3 .number {
+	position: absolute;
+	top: -4px; left: 0;
+	display: block;
+	width: 26px; line-height: 26px;
+	text-align: center;
+	background: #202020;
+	border-radius: 100%;
+	margin-right: 10px;
+}
+.color1 #nav .overbox#tutorial .overflow h3 .number { background: #510816; }
+.color2 #nav .overbox#tutorial .overflow h3 .number { background: #0c0d44; }
+.color3 #nav .overbox#tutorial .overflow h3 .number { background: #b17a00; }
+.color4 #nav .overbox#tutorial .overflow h3 .number { background: #310948; }
+.color5 #nav .overbox#tutorial .overflow h3 .number { background: #24500a; }
+.color6 #nav .overbox#tutorial .overflow h3 .number { background: #004948; }
+.color7 #nav .overbox#tutorial .overflow h3 .number { background: #401b13; }
+
+#nav .overbox#tutorial .overflow p {
+	font-size: 12px;
+	color: #CCC;
+}
+
 #nav .overbox#new-notifications {
 	top: 50px;
 	left: 540px;
