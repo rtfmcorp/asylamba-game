@@ -1,6 +1,8 @@
 <?php
 abstract class CTC {
 	private static $running = FALSE;
+	private static $currentDate = NULL;
+
 	public static $events  = array();
 
 	public static function createContext() {
@@ -28,8 +30,9 @@ abstract class CTC {
 				$logt = '> ' . date('H:i:s') . ', start to apply context' . "\n";
 				
 				foreach (self::$events as $k => $event) {
+					self::$currentDate = $event['date'];
 					call_user_func_array(array($event['object'], $event['method']), $event['args']);
-
+					
 					$logt .= '> [' . $event['date'] . '] ' . get_class($event['object']) . '(' . $event['object']->getId() . ')::' . $event['method'] . "\n";
 				}
 
@@ -60,6 +63,14 @@ abstract class CTC {
 			);
 
 			self::$events[] = $event;
+		}
+	}
+
+	public static function now() {
+		if (self::$running) {
+			return self::$currentDate;
+		} else {
+			return Utils::now();
 		}
 	}
 

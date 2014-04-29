@@ -22,7 +22,7 @@ class Notification {
 	
 	// CONSTRUCTOR
 	public function __construct() {
-		$this->dSending = Utils::now();
+		$this->dSending = CTC::now();
 	}
 
 	// GETTERS AND SETTERS
