@@ -361,6 +361,12 @@ body {
 	border-top: solid 1px #202020;
 }
 
+#nav .overbox#tutorial {
+	width: 350px;
+	top: 50px; right: 188px;
+	color: white;
+}
+
 #nav .overbox#new-notifications {
 	top: 50px;
 	left: 540px;

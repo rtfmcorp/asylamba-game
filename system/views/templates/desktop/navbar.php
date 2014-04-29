@@ -152,9 +152,10 @@ echo '<div id="nav">';
 	ASM::$rmm->changeSession($S_RMM_1);
 
 	include_once APOLLON;
+	$step = CTR::$data->get('playerInfo')->get('stepTutorial');
+	
 	echo '<div class="overbox" id="tutorial">';
 		echo '<h2>Tutoriel</h2>';
-		$step = CTR::$data->get('playerInfo')->get('stepTutorial');
 		
 		echo '<form action="' . APP_ROOT . 'action/a-validatestep" method="post">';
 		if (CTR::$data->get('playerInfo')->get('stepDone') == TRUE) {
