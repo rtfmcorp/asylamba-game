@@ -154,7 +154,6 @@ if (ASM::$pam->size() == 1) {
 	for ($i = 0; $i < ASM::$com->size(); $i++) {
 		$places[] = ASM::$com->get($i)->getRBase();
 	}
-
 	
 	$S_PLM1 = ASM::$plm->getCurrentSession();
 	ASM::$plm->newSession();

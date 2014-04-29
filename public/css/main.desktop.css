@@ -3923,105 +3923,6 @@ body {
 	border-radius: 3px;
 }
 
-/* ranking part */
-
-#action-box .body .rank {
-	position: absolute;
-	top: 0; left: 0;
-	height: 263px;
-	width: 10000px;
-	background: #0A0A0A;
-}
-
-#action-box .body .rank ul {
-	display: inline-block;
-	list-style: none inset;
-	margin: 0 60px; padding: 0;
-}
-
-#action-box .body .rank li {
-	position: relative;
-	display: inline-block;
-	vertical-align: top;
-	border-right: solid 1px #202020;
-	color: white;
-	overflow: hidden;
-}
-
-#action-box .body .rank li.title {
-	width: 260px; height: 223px;
-	padding: 20px;
-	text-align: right;
-}
-
-#action-box .body .rank li.title h2 {
-	font-size: 34px;
-	padding: 0; margin: 0 0 20px 0;
-	font-weight: bold;
-}
-
-#action-box .body .rank li.title p {
-	margin: 5px 0; padding: 0;
-}
-
-#action-box .body .rank li.item {
-	width: 129px; height: 260px;
-	border-top-style: solid;
-	border-top-width: 3px;
-	border-top-color: transparent;
-}
-#action-box .body .rank li.item.active {
-	background: #202020;
-	box-shadow: inset 0 0 5px black
-}
-#action-box .body .rank li.item.color1 { border-top-color: #b01e2d; }
-#action-box .body .rank li.item.color2 { border-top-color: #2f23c0; }
-#action-box .body .rank li.item.color3 { border-top-color: #ffdb0f; }
-#action-box .body .rank li.item.color4 { border-top-color: #a935c7; }
-#action-box .body .rank li.item.color5 { border-top-color: #57c632; }
-#action-box .body .rank li.item.color6 { border-top-color: #05bed7; }
-#action-box .body .rank li.item.color7 { border-top-color: #ac5832; }
-
-#action-box .body .rank li.item .avatar {
-	margin: 5px 0;
-	text-align: center;
-}
-
-#action-box .body .rank li.item .avatar img {
-	padding: 6px;
-	width: 70px; border: solid 1px #202020;
-	background: black;
-	border-radius: 100%;
-}
-#action-box .body .rank li.item.color1 .avatar.faction img { background: #510816; }
-#action-box .body .rank li.item.color2 .avatar.faction img { background: #0c0d44; }
-#action-box .body .rank li.item.color3 .avatar.faction img { background: #b17a00; }
-#action-box .body .rank li.item.color4 .avatar.faction img { background: #310948; }
-#action-box .body .rank li.item.color5 .avatar.faction img { background: #24500a; }
-#action-box .body .rank li.item.color6 .avatar.faction img { background: #004948; }
-#action-box .body .rank li.item.color7 .avatar.faction img { background: #401b13; }
-
-#action-box .body .rank li.item .text {
-	margin: 5px 10px 10px 10px;
-}
-
-#action-box .body .rank li.item .text span,
-#action-box .body .rank li.item .text strong {
-	display: block;
-}
-
-#action-box .body .rank li.item .text strong {
-	font-size: 18px;
-}
-
-#action-box .body .rank .number {
-	position: absolute;
-	bottom: 8px; left: 10px;
-	font-size: 18px;
-	font-weight: bold;
-	color: white;
-}
-
 /* map-commanders */
 
 /****** MAP *****/
@@ -4093,6 +3994,9 @@ body {
 #map #fleet-movements line {
 	stroke-width: 1px;
 }
+#map #fleet-movements line.back {
+	stroke-dasharray: 15 5;
+}
 .color1 #map #fleet-movements line { stroke: #b01e2d; }
 .color2 #map #fleet-movements line { stroke: #2f23c0; }
 .color3 #map #fleet-movements line { stroke: #ffdb0f; }
@@ -4100,6 +4004,14 @@ body {
 .color5 #map #fleet-movements line { stroke: #57c632; }
 .color6 #map #fleet-movements line { stroke: #05bed7; }
 .color7 #map #fleet-movements line { stroke: #ac5832; }
+
+.color1 #map #fleet-movements circle { fill: #b01e2d; }
+.color2 #map #fleet-movements circle { fill: #2f23c0; }
+.color3 #map #fleet-movements circle { fill: #ffdb0f; }
+.color4 #map #fleet-movements circle { fill: #a935c7; }
+.color5 #map #fleet-movements circle { fill: #57c632; }
+.color6 #map #fleet-movements circle { fill: #05bed7; }
+.color7 #map #fleet-movements circle { fill: #ac5832; }
 
 #map #attacks line {
 	stroke-width: 1px;
@@ -4111,6 +4023,14 @@ body {
 #map #attacks line.color5 { stroke: #57c632; }
 #map #attacks line.color6 { stroke: #05bed7; }
 #map #attacks line.color7 { stroke: #ac5832; }
+
+#map #attacks circle.color1 { fill: #b01e2d; }
+#map #attacks circle.color2 { fill: #2f23c0; }
+#map #attacks circle.color3 { fill: #ffdb0f; }
+#map #attacks circle.color4 { fill: #a935c7; }
+#map #attacks circle.color5 { fill: #57c632; }
+#map #attacks circle.color6 { fill: #05bed7; }
+#map #attacks circle.color7 { fill: #ac5832; }
 
 #map #systems a {
 	display: block;
