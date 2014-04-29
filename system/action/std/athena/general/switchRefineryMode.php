@@ -25,6 +25,15 @@ if ($baseId !== FALSE AND in_array($baseId, $verif)) {
 		$base->setIsProductionRefinery(0);
 	} else {
 		$base->setIsProductionRefinery(1);
+		# tutorial
+		if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
+			include_once ZEUS;
+			switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+				case TutorialResource::REFINERY_MODE_PRODUCTION:
+					TutorialHelper::setStepDone();
+					break;
+			}
+		}
 		$storageSpace = OrbitalBaseResource::getBuildingInfo(1, 'level', $base->getLevelRefinery(), 'storageSpace');
 		if (CTR::$data->get('playerBonus')->get(PlayerBonus::REFINERY_STORAGE) > 0) {
 			$storageSpace += ($storageSpace * CTR::$data->get('playerBonus')->get(PlayerBonus::REFINERY_STORAGE) / 100);

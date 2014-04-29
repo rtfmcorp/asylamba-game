@@ -1,5 +1,14 @@
 <?php
 class OrbitalBaseResource {
+
+	const GENERATOR = 0;
+	const REFINERY = 1;
+	const DOCK1 = 2;
+	const DOCK2 = 3;
+	const TECHNOSPHERE = 5;
+	const COMMERCIAL_PLATEFORME = 6;
+	const GRAVITATIONAL_MODULE = 7;
+	
 	/**
 	 * 0 - generator
 	 * 1 - refinery

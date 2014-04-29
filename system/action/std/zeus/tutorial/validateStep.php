@@ -19,7 +19,7 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 	
 	$nextStep = $stepTutorial;
 	if (TutorialResource::isLastStep($stepTutorial)) {
-		$nextStep = -1;
+		$nextStep = 0;
 		CTR::$alert->add('Bravo, vous avez terminé le tutoriel. Bonne continuation et bon amusement sur Asylamba, vous pouvez maintenant voler de vos propres ailes !', ALERT_STD_SUCCESS);
 	} else {
 		$nextStep += 1;

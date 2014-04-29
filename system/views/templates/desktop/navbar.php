@@ -157,15 +157,19 @@ echo '<div id="nav">';
 	echo '<div class="overbox" id="tutorial">';
 		echo '<h2>Tutoriel</h2>';
 		
-		echo '<form action="' . APP_ROOT . 'action/a-validatestep" method="post">';
-		if (CTR::$data->get('playerInfo')->get('stepDone') == TRUE) {
-			echo '<input type="submit" value="valider l\'étape ' . $step . '" class="button" />';
+		if (CTR::$data->get('playerInfo')->get('stepTutorial') == 0) {
+			echo '<h3>Vous avez terminé le tutoriel. Bravo !</h3>';
 		} else {
-			echo '<h3>étape ' . $step . ' : ' . TutorialResource::getInfo($step, 'title') . '</h3>';
-			echo '<p>' . TutorialResource::getInfo($step, 'description') . '</p>';
-			echo '<input type="submit" value="étape en cours" class="button" disabled/>';
+			echo '<form action="' . APP_ROOT . 'action/a-validatestep" method="post">';
+			if (CTR::$data->get('playerInfo')->get('stepDone') == TRUE) {
+				echo '<input type="submit" value="valider l\'étape ' . $step . '" class="button" />';
+			} else {
+				echo '<h3>étape ' . $step . ' : ' . TutorialResource::getInfo($step, 'title') . '</h3>';
+				echo '<p>' . TutorialResource::getInfo($step, 'description') . '</p>';
+				echo '<input type="submit" value="étape en cours" class="button" disabled/>';
+			}
+			echo '</form>';
 		}
-		echo '</form>';
 	echo '</div>';
 
 	echo '<div class="overbox" id="bug-tracker">';

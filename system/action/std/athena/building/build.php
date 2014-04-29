@@ -32,7 +32,24 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 			AND (OrbitalBaseResource::haveRights($building, $currentLevel + 1, 'buildingTree', $ob) === TRUE)
 			AND OrbitalBaseResource::haveRights($building, $currentLevel + 1, 'techno', $technos)) {
 
-			// construit le nouveau batiment
+			# tutorial
+			if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
+				include_once ZEUS;
+				switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+					case TutorialResource::GENERATOR_LEVEL_2:
+						if ($building == OrbitalBaseResource::GENERATOR AND $currentLevel + 1 >= 2) {
+							TutorialHelper::setStepDone();
+						}
+						break;
+					case TutorialResource::REFINERY_LEVEL_3:
+						if ($building == OrbitalBaseResource::REFINERY AND $currentLevel + 1 >= 3) {
+							TutorialHelper::setStepDone();
+						}
+						break;
+				}
+			}
+
+			# build the new building
 			$bq = new BuildingQueue();
 			$bq->rOrbitalBase = $baseId;
 			$bq->buildingNumber = $building;
@@ -47,10 +64,10 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 			$bq->dEnd = Utils::addSecondsToDate($bq->dStart, round($time - $bonus));
 			ASM::$bqm->add($bq);
 
-			// debit resources
+			# debit resources
 			$ob->decreaseResources(OrbitalBaseResource::getBuildingInfo($building, 'level', $currentLevel + 1, 'resourcePrice'));
 
-			// ajout de l'event dans le contrôleur
+			# add the event in controller
 			CTR::$data->get('playerEvent')->add($bq->dEnd, EVENT_BASE, $baseId);
 
 			CTR::$alert->add('Construction programmée', ALERT_STD_SUCCESS);

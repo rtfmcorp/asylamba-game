@@ -24,6 +24,9 @@ try {
 
 	$pl->victory = 0;
 	$pl->defeat = 0;
+	
+	$pl->stepTutorial = 1;
+	$pl->stepDone = FALSE;
 
 	$pl->iUniversity = 1000;
 	$pl->partNaturalSciences = 25;
