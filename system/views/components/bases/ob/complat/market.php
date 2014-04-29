@@ -7,21 +7,31 @@ $S_CTM1 = ASM::$ctm->getCurrentSession();
 $S_CTM2 = ASM::$ctm->newSession();
 ASM::$ctm->load(array());
 
-echo '<div class="component transaction">';
-	echo '<div class="head skin-2">';
-		echo '<h2>Aperçu des achats</h2>';
-	echo '</div>';
-	echo '<div class="fix-body">';
-		echo '<div class="body">';
-			echo '<h4>Convoi en approche</h4>';
-			for ($i = 0; $i < ASM::$csm->size(); $i++) { 
-				if (ASM::$csm->get($i)->statement == CommercialShipping::ST_GOING && ASM::$csm->get($i)->rBaseDestination == $ob_compPlat->getId()) {
-					ASM::$csm->get($i)->render();
+# work
+$comingCommercialShipping = 0;
+for ($i = 0; $i < ASM::$csm->size(); $i++) { 
+	if (ASM::$csm->get($i)->statement == CommercialShipping::ST_GOING && ASM::$csm->get($i)->rBaseDestination == $ob_compPlat->getId()) {
+		$comingCommercialShipping++;
+	}
+}
+
+if ($comingCommercialShipping > 0) {
+	echo '<div class="component transaction">';
+		echo '<div class="head skin-2">';
+			echo '<h2>Aperçu des achats</h2>';
+		echo '</div>';
+		echo '<div class="fix-body">';
+			echo '<div class="body">';
+				echo '<h4>Convoi en approche</h4>';
+				for ($i = 0; $i < ASM::$csm->size(); $i++) { 
+					if (ASM::$csm->get($i)->statement == CommercialShipping::ST_GOING && ASM::$csm->get($i)->rBaseDestination == $ob_compPlat->getId()) {
+						ASM::$csm->get($i)->render();
+					}
 				}
-			}
+			echo '</div>';
 		echo '</div>';
 	echo '</div>';
-echo '</div>';
+}
 
 ASM::$trm->newSession();
 ASM::$trm->load(array('type' => Transaction::TYP_RESOURCE, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));

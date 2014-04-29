@@ -28,7 +28,7 @@ if ($rTransaction !== FALSE) {
 
 		if (CTR::$data->get('playerInfo')->get('credit') >= $transaction->getPriceToCancelOffer()) {
 
-			// chargement du joueur
+			# chargement du joueur
 			$S_PAM1 = ASM::$pam->getCurrentSession();
 			ASM::$pam->newSession(ASM_UMODE);
 			ASM::$pam->load(array('id' => CTR::$data->get('playerId')));

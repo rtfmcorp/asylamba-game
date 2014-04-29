@@ -34,12 +34,17 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 		ASM::$obm->load(array('rPlace' => $rPlace));
 		$base = ASM::$obm->get();
 
+		$exportTax = 0;
+		$importTax = 0;
+
 		#compute total price
 		$S_CTM1 = ASM::$ctm->getCurrentSession();
 		ASM::$ctm->newSession();
 		ASM::$ctm->load(array());
+
 		for ($i = 0; $i < ASM::$ctm->size(); $i++) { 
 			$comTax = ASM::$ctm->get($i);
+
 			if ($comTax->faction == $transaction->sectorColor AND $comTax->relatedFaction == $base->sectorColor) {
 				$exportTax = $comTax->exportTax;
 			}
@@ -47,6 +52,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				$importTax = $comTax->importTax;
 			}
 		}
+
 		$exportTax = round($transaction->price * $exportTax / 100);
 		$importTax = round($transaction->price * $importTax / 100);
 
@@ -68,17 +74,23 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 
 				# transfert des crédits aux alliances
 				$S_CLM1 = ASM::$clm->getCurrentSession();
-				ASM::$clm->newSession();
-				ASM::$clm->load(array('id' => $transaction->sectorColor));
-				$exportFaction = ASM::$clm->get(0);
-				$exportFaction->increaseCredit($exportTax);
-				if ($transaction->sectorColor == $base->sectorColor) {
-					$importFaction = $exportFaction;
-				} else {
-					ASM::$clm->load(array('id' => $base->sectorColor));
-					$importFaction = ASM::$clm->get(1);
+
+				if ($transaction->sectorColor != 0) {
+					ASM::$clm->newSession();
+					ASM::$clm->load(array('id' => $transaction->sectorColor));
+
+					$exportFaction = ASM::$clm->get();
+					$exportFaction->increaseCredit($exportTax);
 				}
-				$importFaction->increaseCredit($importTax);
+
+				if ($base->sectorColor != 0) {
+					ASM::$clm->newSession();
+					ASM::$clm->load(array('id' => $base->sectorColor));
+
+					$importFaction = ASM::$clm->get();
+					$importFaction->increaseCredit($importTax);
+				}
+
 				ASM::$clm->changeSession($S_CLM1);
 
 				# gain d'expérience
