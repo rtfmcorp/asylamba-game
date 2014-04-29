@@ -328,7 +328,8 @@ class OrbitalBase {
 		$maxStorage = OrbitalBaseResource::getBuildingInfo(1, 'level', $this->levelRefinery, 'storageSpace');
 		if ($this->isProductionRefinery == 0) {
 			$modeBonus = $maxStorage * OBM_COEFPRODUCTION;
-			$technoBonus = $maxStorage * $playerBonus->bonus->get(PlayerBonus::REFINERY_STORAGE) / 100;
+			$technoBonus = $maxStorage * 
+			$playerBonus->bonus->get(PlayerBonus::REFINERY_STORAGE) / 100;
 			$maxStorage += $modeBonus + $technoBonus;
 		}
 		if ($newResources > $maxStorage) {

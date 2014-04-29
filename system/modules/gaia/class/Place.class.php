@@ -30,12 +30,12 @@ class Place {
 	const LOOTPLAYERWHITOUTBATTLESUCCESS		= 24;
 	const LOOTLOST								= 27;
 
-	const QUONQUEREMPTYSSUCCESS 				= 30;
-	const QUONQUEREMPTYFAIL						= 31;
-	const QUONQUERPLAYERWHITBATTLESUCCESS		= 32;
-	const QUONQUERPLAYERWHITBATTLEFAIL			= 33;
-	const QUONQUERPLAYERWHITOUTBATTLESUCCESS	= 34;
-	const QUONQUERLOST							= 37;
+	const CONQUEREMPTYSSUCCESS 				= 30;
+	const CONQUEREMPTYFAIL						= 31;
+	const CONQUERPLAYERWHITBATTLESUCCESS		= 32;
+	const CONQUERPLAYERWHITBATTLEFAIL			= 33;
+	const CONQUERPLAYERWHITOUTBATTLESUCCESS	= 34;
+	const CONQUERLOST							= 37;
 
 	const COMEBACK 								= 40;
 
@@ -453,9 +453,9 @@ class Place {
 					include_once ATHENA;
 
 					if ($nbrBattle == 0) {
-						$this->sendNotif(self::QUONQUERPLAYERWHITOUTBATTLESUCCESS, $commander);
+						$this->sendNotif(self::CONQUERPLAYERWHITOUTBATTLESUCCESS, $commander);
 					} else {
-						$this->sendNotif(self::QUONQUERPLAYERWHITBATTLESUCCESS, $commander);
+						$this->sendNotif(self::CONQUERPLAYERWHITBATTLESUCCESS, $commander);
 					}
 
 					#attribuer le jooeur à la place
@@ -480,7 +480,7 @@ class Place {
 						}
 					}
 
-					$this->sendNotif(self::QUONQUERPLAYERWHITBATTLEFAIL, $commander);
+					$this->sendNotif(self::CONQUERPLAYERWHITBATTLEFAIL, $commander);
 				}
 			} else {
 				$S_PLM10 = ASM::$plm->getCurrentSession();
@@ -492,7 +492,7 @@ class Place {
 				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
 				ASM::$plm->changeSession($S_PLM10);
 
-				$this->sendNotif(self::QUONQUERLOST, $commander);
+				$this->sendNotif(self::CONQUERLOST, $commander);
 			}
 		# planète rebelle
 		} else {
@@ -512,13 +512,17 @@ class Place {
 				# créer une Base
 				include_once ATHENA;
 				$ob = new OrbitalBase();
-				$ob->setName('Base de ' . $commander->getPlayerName());
-				$ob->setRPlace($this->id);
-				$ob->setRPlayer($commander->getRPlayer());
+
 				$ob->rPlace = $this->id;
-				$ob->id = $this->id;
-				$ob->setDCreation(Utils::now());
+				$ob->setRPlayer($commander->getRPlayer());
+				$ob->setName('Base de ' . $commander->getPlayerName());
+				$ob->iSchool = 500;
+				$ob->iAntiSpy = 500;
+				$ob->$resourcesStorage = 2000;
 				$ob->uOrbitalBase = Utils::now();
+				$ob->dCreation = Utils::now();
+				$ob->updatePoints();
+
 				ASM::$obm->add($ob);
 
 				#attibuer le commander à la place
@@ -540,12 +544,12 @@ class Place {
 						OrbitalBase::TYP_NEUTRAL);
 				}
 
-				$this->sendNotif(self::QUONQUEREMPTYSSUCCESS, $commander);
+				$this->sendNotif(self::CONQUEREMPTYSSUCCESS, $commander);
 
 				GalaxyColorManager::apply();
 			# s'il est mort
 			} else {
-				$this->sendNotif(self::QUONQUEREMPTYFAIL, $commander);
+				$this->sendNotif(self::CONQUEREMPTYFAIL, $commander);
 				# enlever le commandant de la session
 				$S_PLM10 = ASM::$plm->getCurrentSession();
 				ASM::$plm->newSession();
@@ -608,7 +612,6 @@ class Place {
 		$S_OBM1 = ASM::$obm->getCurrentSession();
 		ASM::$obm->newSession();
 		ASM::$obm->load(array('rPlace' => $this->id));
-		ASM::$obm->get()->uResources(Utils::now());
 		$base = ASM::$obm->get();
 
 		$resourcesToLoot = $base->getResourcesStorage() - Commander::LIMITTOLOOT;
@@ -834,7 +837,7 @@ class Place {
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
-			case self::QUONQUEREMPTYSSUCCESS:
+			case self::CONQUEREMPTYSSUCCESS:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->setTitle('Planète colonisée');
@@ -849,7 +852,7 @@ class Place {
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
-			case self::QUONQUEREMPTYFAIL:
+			case self::CONQUEREMPTYFAIL:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->setTitle('Défaite lors d\'une colonisationge');
@@ -864,7 +867,7 @@ class Place {
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
-			case self::QUONQUERPLAYERWHITBATTLESUCCESS:
+			case self::CONQUERPLAYERWHITBATTLESUCCESS:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->setTitle('Planète conquise');
@@ -899,7 +902,7 @@ class Place {
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
-			case self::QUONQUERPLAYERWHITBATTLEFAIL:
+			case self::CONQUERPLAYERWHITBATTLEFAIL:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->setTitle('Echec de conquête');
@@ -932,7 +935,7 @@ class Place {
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
-			case self::QUONQUERPLAYERWHITOUTBATTLESUCCESS:
+			case self::CONQUERPLAYERWHITOUTBATTLESUCCESS:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->setTitle('Planète conquise');
@@ -967,7 +970,7 @@ class Place {
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
-			case self::QUONQUERLOST:
+			case self::CONQUERLOST:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->addBeg()
