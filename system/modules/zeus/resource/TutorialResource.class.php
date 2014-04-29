@@ -11,13 +11,29 @@
  */
 
 class TutorialResource {
-	
+
 	const GENERATOR_LEVEL_2 = 1;
 	const REFINERY_LEVEL_3 = 2;
 	const REFINERY_MODE_PRODUCTION = 3;
 
+	public static function stepExists($step) {
+		if ($step > 0 AND $step <= count(self::$steps)) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+
+	public static function isLastStep($step) {
+		if ($step == count(self::$steps)) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+
 	public static function getInfo($id, $info) {
-		if ($id <= count(self::$colors)) {
+		if ($id <= count(self::$steps)) {
 			if (in_array($info, array('id', 'title', 'description', 'experienceReward'))) {
 				return self::$steps[$id - 1][$info];
 			} else {

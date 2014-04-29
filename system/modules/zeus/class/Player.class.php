@@ -23,7 +23,7 @@ class Player {
 	public $level = 0;
 	public $victory = 0;
 	public $defeat = 0;
-	public $stepTutorial = 0;
+	public $stepTutorial = 1;
 	public $stepDone = FALSE;
 	public $iUniversity = 5000;
 	public $partNaturalSciences = 25;

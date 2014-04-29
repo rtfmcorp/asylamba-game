@@ -86,7 +86,7 @@ echo '<div id="nav">';
 			$isActive = (in_array(CTR::getPage(), array('admin'))) ? 'active' : NULL;
 			echo '<a href="' . APP_ROOT . 'admin" class="square ' . $isActive . '"><img src="' . MEDIA . 'common/tool-admin.png" alt="" /></a>';
 		}
-
+		echo '<a href="#" class="square sh ' . (CTR::$data->get('playerInfo')->get('stepDone') ? 'active' : '') . '" data-target="tutorial"><img src="' . MEDIA . 'common/tool-tutorial.png" alt="" /></a>';
 		echo '<a href="#" class="square sh" data-target="roadmap"><img src="' . MEDIA . 'common/tool-roadmap.png" alt="" /></a>';
 		echo '<a href="#" class="square sh" data-target="bug-tracker"><img src="' . MEDIA . 'common/tool-bugtracker.png" alt="" /></a>';
 
@@ -152,6 +152,21 @@ echo '<div id="nav">';
 	ASM::$rmm->changeSession($S_RMM_1);
 
 	include_once APOLLON;
+	echo '<div class="overbox" id="tutorial">';
+		echo '<h2>Tutoriel</h2>';
+		$step = CTR::$data->get('playerInfo')->get('stepTutorial');
+		
+		echo '<form action="' . APP_ROOT . 'action/a-validatestep" method="post">';
+		if (CTR::$data->get('playerInfo')->get('stepDone') == TRUE) {
+			echo '<input type="submit" value="valider l\'étape ' . $step . '" class="button" />';
+		} else {
+			echo '<h3>étape ' . $step . ' : ' . TutorialResource::getInfo($step, 'title') . '</h3>';
+			echo '<p>' . TutorialResource::getInfo($step, 'description') . '</p>';
+			echo '<input type="submit" value="étape en cours" class="button" disabled/>';
+		}
+		echo '</form>';
+	echo '</div>';
+
 	echo '<div class="overbox" id="bug-tracker">';
 		echo '<h2>Bug tracker</h2>';
 		echo '<form action="' . APP_ROOT . 'action/a-writebugreport" method="post">';
@@ -180,8 +195,8 @@ echo '<div id="nav">';
 		echo '<a target="_blank" href="' . GETOUT_ROOT . 'wiki">Consulter le wiki</a>';
 		echo '<hr />';
 		echo '<a target="_blank" href="' . FACEBOOK_LINK . '">Rejoindre la page Facebook</a>';
-		echo '<a target="_blank" href="' . TWEETER_LINK . '">Nous suivre sur Twitter</a>';
-		echo '<a target="_blank" href="' . TWEETER_LINK . '">Nous suivre sur Google+</a>';
+		echo '<a target="_blank" href="' . TWITTER_LINK . '">Nous suivre sur Twitter</a>';
+		echo '<a target="_blank" href="' . GOOGLE_PLUS_LINK . '">Nous suivre sur Google+</a>';
 	echo '</div>';
 echo '</div>';
 
