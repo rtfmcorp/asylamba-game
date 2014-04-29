@@ -59,7 +59,7 @@ switch (CTR::$get->get('a')) {
 
 	case 'updatedisplayparams': 	include ACTION . 'zeus/params/display.php'; break;
 
-	case 'validatestep':			include ACITON . 'zeus/tutorial/validateStep.php'; break;
+	case 'validatestep':			include ACTION . 'zeus/tutorial/validateStep.php'; break;
 
 	# ARTEMIS
 	case 'spy':						include ACTION . 'artemis/spy.php'; break;

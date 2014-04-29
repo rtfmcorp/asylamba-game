@@ -19,6 +19,8 @@ class TutorialHelper {
 		if ($stepTutorial != -1) {
 			if ($stepDone == FALSE) {
 				# check if current step is done
+
+				# hint : checker seulement les actions passives
 				switch ($stepTutorial) {
 					case 1:
 						$asdf = 'asdf';
