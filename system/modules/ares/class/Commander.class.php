@@ -353,7 +353,12 @@ class Commander {
 
 			// ajout de l'event dans le contrôleur // voir avec Jacky s'il faut modifier
 			if (CTR::$data->exist('playerEvent')) {
-				CTR::$data->get('playerEvent')->add($this->dArrival, EVENT_OUTGOING_ATTACK, $this->id);
+				CTR::$data->get('playerEvent')->add(
+					$this->dArrival,
+					EVENT_OUTGOING_ATTACK,
+					$this->id,
+					$this->getEventInfo()
+				);
 			}
 
 			return TRUE;
@@ -405,6 +410,25 @@ class Commander {
 			$y = $y1 + $progression * ($y2-$y1);
 		}
 		return array($x, $y);
+	}
+
+	public function getEventInfo() {
+		$info = new ArrayList();
+		$info->add('name', $this->name);
+		$info->add('avatar', $this->avatar);
+		$info->add('level', $this->level);
+
+		$info->add('dStart', $this->dStart);
+		$info->add('rStart', $this->rStartPlace);
+		$info->add('nStart', $this->startPlaceName);
+		$info->add('dArrival', $this->dArrival);
+		$info->add('rArrival', $this->rDestinationPlace);
+		$info->add('nArrival', $this->destinationPlaceName);
+
+		$info->add('travelType', $this->travelType);
+		$info->add('resources', $this->resources);
+
+		return $info;
 	}
 
 	public function uCommander() {

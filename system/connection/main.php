@@ -134,7 +134,12 @@ if (ASM::$pam->size() == 1) {
 	ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => COM_MOVING, 'c.travelType' => array(COM_LOOT, COM_COLO)));
 
 	for ($i = 0; $i < ASM::$com->size(); $i++) { 
-		CTR::$data->get('playerEvent')->add(ASM::$com->get($i)->getArrivalDate(), EVENT_OUTGOING_ATTACK, ASM::$com->get($i)->getId());
+		CTR::$data->get('playerEvent')->add(
+			ASM::$com->get($i)->getArrivalDate(),
+			EVENT_OUTGOING_ATTACK,
+			ASM::$com->get($i)->getId(),
+			ASM::$com->get($i)->getEventInfo()
+		);
 	}
 	ASM::$com->changeSession($S_COM1);
 
@@ -164,10 +169,15 @@ if (ASM::$pam->size() == 1) {
 			# va chercher les heures auxquelles il rentre dans les cercles d'espionnage
 			$startPlace = ASM::$plm->getById(ASM::$com->get($i)->getRBase());
 			$destinationPlace = ASM::$plm->getById(ASM::$com->get($i)->getRPlaceDestination());
-
 			$times = Game::getAntiSpyEntryTime($startPlace, $destinationPlace, ASM::$com->get($i)->getArrivalDate());
 
-			CTR::$data->get('playerEvent')->add(ASM::$com->get($i)->getArrivalDate(), EVENT_INCOMING_ATTACK, ASM::$com->get($i)->getId(), $times);
+			# ajout de l'événement
+			CTR::$data->get('playerEvent')->add(
+				ASM::$com->get($i)->getArrivalDate(), 
+				EVENT_INCOMING_ATTACK, 
+				ASM::$com->get($i)->getId(),
+				ASM::$com->get($i)->getEventInfo()->add('inCircle', $times)
+			);
 		}
 	}
 	ASM::$plm->changeSession($S_PLM1);

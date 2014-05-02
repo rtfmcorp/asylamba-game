@@ -60,7 +60,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 						if (CTR::$get->exist('redirect')) {
 							CTR::redirect('map/place-' . CTR::$get->get('redirect'));
 						}
-					}		
+					}
 				} else {
 					CTR::$alert->add('Ce lieu n\'existe pas.', ALERT_STD_ERROR);
 				}

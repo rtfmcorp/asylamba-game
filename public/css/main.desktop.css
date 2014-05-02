@@ -235,7 +235,8 @@ body {
 	border-radius: 3px;
 }
 
-#nav .overbox h2 {
+#nav .overbox h2,
+#tools .overbox h2 {
 	color: white;
 	padding: 10px 15px; margin: 0;
 	font-size: 14px;
@@ -490,7 +491,9 @@ body {
 #tools .overbox#tools-technosphere { right: 193px; bottom: 45px; }
 
 #tools .overbox#tools-credit { right: 140px; bottom: 45px; }
-#tools .overbox#tools-pa { right: 10px; bottom: 45px; }
+
+#tools .overbox#tools-incoming-attack { right: 10px; bottom: 45px; }
+#tools .overbox#tools-outgoing-attack { right: 185px; bottom: 45px; }
 
 /* SUBNAV */
 #subnav {

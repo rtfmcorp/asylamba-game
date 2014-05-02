@@ -36,14 +36,12 @@ class EventList {
 		}
 	}
 
-	public function add($date, $eventType, $eventId, $eventInfo = 0) {
+	public function add($date, $eventType, $eventId, $eventInfo = NULL) {
 		$event = new ArrayList();
 		$event->add('date', $date);
 		$event->add('eventType', $eventType);
 		$event->add('eventId', $eventId);
-		if ($eventType == EVENT_INCOMING_ATTACK) {
-			$event->add('eventInfo', $eventInfo);
-		}
+		$event->add('eventInfo', $eventInfo);
 
 		$index = 0;
 		if (self::size() == 0) {

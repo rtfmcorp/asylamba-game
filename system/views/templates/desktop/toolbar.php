@@ -5,6 +5,8 @@ echo '</a>';*/
 
 # load base
 include_once ATHENA;
+include_once ARES;
+
 $S_OBM1 = ASM::$obm->getCurrentSession();
 ASM::$obm->newSession();
 ASM::$obm->load(array('rPlace' => CTR::$data->get('playerParams')->get('base')));
@@ -52,17 +54,18 @@ echo '<div id="tools">';
 		$outgoingAttack = 0;
 		for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
 			if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
+				# check time to get in the circle
 				$incomingAttack++;
 			}
 			if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_OUTGOING_ATTACK) {
 				$outgoingAttack++;
 			}
 		}
-		echo '<a href="#" class="square ' . (($incomingAttack > 0) ? 'active' : NULL) . '"><img src="' . MEDIA . 'common/nav-fleet-defense.png" alt="" />';
+		echo '<a href="#" class="square sh" data-target="tools-incoming-attack"><img src="' . MEDIA . 'common/nav-fleet-defense.png" alt="" />';
 			echo ($incomingAttack > 0) ? '<span class="number">' . $incomingAttack . '</span>' : NULL;
 		echo '</a>';
 
-		echo '<a href="#" class="square ' . (($outgoingAttack > 0) ? 'active' : NULL) . '"><img src="' . MEDIA . 'common/nav-fleet-attack.png" alt="" />';
+		echo '<a href="#" class="square sh" data-target="tools-outgoing-attack"><img src="' . MEDIA . 'common/nav-fleet-attack.png" alt="" />';
 			echo ($outgoingAttack > 0) ? '<span class="number">' . $outgoingAttack . '</span>' : NULL;
 		echo '</a>';
 
@@ -157,6 +160,45 @@ echo '<div id="tools">';
 			echo '<a href="' . APP_ROOT . 'bases/view-technosphere" class="more-link">vers la technosphère</a>';
 			ASM::$tqm->changeSession($S_TQM1);
 		echo '</div>';
+	echo '</div>';
+
+	echo '<div class="overbox right-pic" id="tools-outgoing-attack">';
+		echo '<h2>Déplacement de vos flottes</h2>';
+		echo '<div class="overflow">';
+			if ($outgoingAttack > 0) {
+				echo '<div class="queue">';
+
+				for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
+					if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_OUTGOING_ATTACK) {
+						$commander = CTR::$data->get('playerEvent')->get($i);
+
+						echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $commander->get('eventInfo')->get('dArrival'), 's') . '" data-progress-total-time="' . Utils::interval($commander->get('eventInfo')->get('dStart'), $commander->get('eventInfo')->get('dArrival'), 's') . '">';
+							echo  '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->get('eventInfo')->get('avatar') . '.png" alt="" />';
+							echo '<strong>' . CommanderResources::getInfo($commander->get('eventInfo')->get('level'), 'grade') . ' ' . $commander->get('eventInfo')->get('name') . '</strong>';
+							echo '<em>→ ';
+								switch ($commander->get('eventInfo')->get('travelType')) {
+									case Commander::MOVE: echo 'déplacement vers ' . $commander->get('eventInfo')->get('nDestination'); break;
+									case Commander::LOOT: echo 'pillage de ' . $commander->get('eventInfo')->get('nDestination'); break;
+									case Commander::COLO: echo 'colonisation de ' . $commander->get('eventInfo')->get('nDestination'); break;
+									case Commander::BACK: echo 'retour vers ' . $commander->get('eventInfo')->get('nStart'); break;
+									default: echo 'autre'; break;
+								}
+							echo '</em>';
+							echo '<em><span class="progress-text"></span></em>';
+							echo '<span class="progress-container">';
+								echo '<span class="progress-bar">';
+								echo '</span>';
+							echo '</span>';
+						echo '</div>';
+					}
+				}
+
+				echo '</div>';
+			} else {
+				echo '<p class="info">Aucune flotte en route.</p>';
+			}
+		echo '</div>';
+		echo '<a href="' . APP_ROOT . 'fleet" class="more-link">vers l\'amirauté</a>';
 	echo '</div>';
 echo '</div>';
 

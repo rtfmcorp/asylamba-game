@@ -73,10 +73,6 @@ echo '<div class="component school">';
 					echo '</button>';
 				}
 			echo '</form>';
-
-			for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
-				var_dump(CTR::$data->get('playerEvent')->get($i));
-			}
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
