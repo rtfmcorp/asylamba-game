@@ -162,6 +162,45 @@ echo '<div id="tools">';
 		echo '</div>';
 	echo '</div>';
 
+	echo '<div class="overbox right-pic" id="tools-incoming-attack">';
+		echo '<h2>Attaques entrantes</h2>';
+		echo '<div class="overflow">';
+			if ($incomingAttack > 0) {
+				echo '<div class="queue">';
+
+				for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
+					if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
+						$commander = CTR::$data->get('playerEvent')->get($i);
+						
+						echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $commander->get('eventInfo')->get('dArrival'), 's') . '" data-progress-total-time="' . Utils::interval($commander->get('eventInfo')->get('dStart'), $commander->get('eventInfo')->get('dArrival'), 's') . '">';
+							echo  '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->get('eventInfo')->get('avatar') . '.png" alt="" />';
+							echo '<strong>' . CommanderResources::getInfo($commander->get('eventInfo')->get('level'), 'grade') . ' ' . $commander->get('eventInfo')->get('name') . '</strong>';
+							echo '<em>→ ';
+								switch ($commander->get('eventInfo')->get('travelType')) {
+									case Commander::MOVE: echo 'déplacement vers ' . $commander->get('eventInfo')->get('nDestination'); break;
+									case Commander::LOOT: echo 'pillage de ' . $commander->get('eventInfo')->get('nDestination'); break;
+									case Commander::COLO: echo 'colonisation de ' . $commander->get('eventInfo')->get('nDestination'); break;
+									case Commander::BACK: echo 'retour vers ' . $commander->get('eventInfo')->get('nStart'); break;
+									default: echo 'autre'; break;
+								}
+							echo '</em>';
+							echo '<em><span class="progress-text"></span></em>';
+							echo '<span class="progress-container">';
+								echo '<span class="progress-bar">';
+								echo '</span>';
+							echo '</span>';
+						echo '</div>';
+					}
+				}
+
+				echo '</div>';
+			} else {
+				echo '<p class="info">Aucune attaques entrantes.</p>';
+			}
+		echo '</div>';
+		echo '<a href="' . APP_ROOT . 'fleet" class="more-link">vers l\'amirauté</a>';
+	echo '</div>';
+
 	echo '<div class="overbox right-pic" id="tools-outgoing-attack">';
 		echo '<h2>Déplacement de vos flottes</h2>';
 		echo '<div class="overflow">';

@@ -45,12 +45,15 @@ if (Utils::interval(CTR::$data->get('lastUpdate')->get('event'), Utils::now(), '
 		$destinationPlace = ASM::$plm->getById(ASM::$com->get($i)->getRPlaceDestination());
 		$times = Game::getAntiSpyEntryTime($startPlace, $destinationPlace, ASM::$com->get($i)->getArrivalDate());
 
+		$info = ASM::$com->get($i)->getEventInfo();
+		$info->add('inCircle', $times);
+
 		# ajout de l'événement
 		CTR::$data->get('playerEvent')->add(
 			ASM::$com->get($i)->getArrivalDate(), 
 			EVENT_INCOMING_ATTACK, 
 			ASM::$com->get($i)->getId(),
-			ASM::$com->get($i)->getEventInfo()->add('inCircle', $times)
+			$info
 		);
 	}
 	ASM::$plm->changeSession($S_PLM1);
