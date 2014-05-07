@@ -40,6 +40,18 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 			AND ShipResource::haveRights($ship, 'pev', $ob, $quantity)
 			AND ShipResource::haveRights($ship, 'techno', $technos)) {
 
+			# tutorial
+			if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
+				include_once ZEUS;
+				switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+					case TutorialResource::BUILD_SHIP0:
+						if ($ship == ShipResource::PEGASE) {
+							TutorialHelper::setStepDone();
+						}
+						break;
+				}
+			}
+
 			// construit le(s) nouveau(x) vaisseau(x)
 			$sq = new ShipQueue();
 			$sq->rOrbitalBase = $baseId;

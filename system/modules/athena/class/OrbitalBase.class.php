@@ -431,10 +431,18 @@ class OrbitalBase {
 				$n = new Notification();
 				$n->setRPlayer($cs->rPlayer);
 				$n->setTitle('Retour de livraison');
-				$n->addBeg()->addTxt('Vos vaisseaux commerciaux sont de retour sur votre ');
+				if ($cs->shipQuantity == 1) {
+					$n->addBeg()->addTxt('Votre vaisseau commercial est de retour sur votre ');
+				} else {
+					$n->addBeg()->addTxt('Vos vaisseaux commerciaux sont de retour sur votre ');
+				}
 				$n->addLnk('map/base-' . $cs->rBase, 'base orbitale')->addTxt(' après avoir livré du matériel sur une autre ');
 				$n->addLnk('map/place-' . $cs->rBaseDestination, 'base')->addTxt(' . ');
-				$n->addSep()->addTxt('Vos ' . $cs->shipQuantity . ' vaisseaux de commerces sont à nouveau disponibles pour faire d\'autres transactions ou routes commerciales.');
+				if ($cs->shipQuantity == 1) {
+					$n->addSep()->addTxt('Votre vaisseau de commerce est à nouveau disponible pour faire d\'autres transactions ou routes commerciales.');
+				} else {
+					$n->addSep()->addTxt('Vos ' . $cs->shipQuantity . ' vaisseaux de commerce sont à nouveau disponibles pour faire d\'autres transactions ou routes commerciales.');
+				}
 				$n->addEnd();
 				ASM::$ntm->add($n);
 				# delete commercialShipping

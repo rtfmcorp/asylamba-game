@@ -43,6 +43,18 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 			AND TechnologyResource::haveRights($techno, 'technosphereLevel', $ob->getLevelTechnosphere())
 			AND (TechnologyResource::haveRights($techno, 'research', $targetLevel, ASM::$rsm->get()->getResearchList()) === TRUE)) {
 
+			# tutorial
+			if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
+				include_once ZEUS;
+				switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+					case TutorialResource::SHIP0_UNBLOCK:
+						if ($techno == 4) {
+							TutorialHelper::setStepDone();
+						}
+						break;
+				}
+			}
+
 			// load du joueur
 			$S_PAM1 = ASM::$pam->getCurrentSession();
 			ASM::$pam->newSession(ASM_UMODE);

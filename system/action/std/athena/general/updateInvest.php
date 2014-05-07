@@ -27,6 +27,15 @@ if ($baseId !== FALSE AND $credit !== FALSE AND $category !== FALSE AND in_array
 	}
 	switch ($category) {
 		case 'school':
+			# tutorial
+			if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
+				include_once ZEUS;
+				switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+					case TutorialResource::MODIFY_SCHOOL_INVEST:
+						TutorialHelper::setStepDone();
+						break;
+				}
+			}
 			$base->setISchool($credit);
 			CTR::$alert->add('L\'investissement dans l\'école de commandements de votre base ' . $base->getName() . ' a été modifié', ALERT_STD_SUCCESS);
 			break;

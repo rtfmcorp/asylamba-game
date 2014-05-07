@@ -46,6 +46,16 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 							TutorialHelper::setStepDone();
 						}
 						break;
+					case TutorialResource::DOCK1_LEVEL_1:
+						if ($building == OrbitalBaseResource::DOCK1 AND $currentLevel + 1 >= 1) {
+							TutorialHelper::setStepDone();
+						}
+						break;
+					case TutorialResource::TECHNOSPHERE_LEVEL_1:
+						if ($building == OrbitalBaseResource::TECHNOSPHERE AND $currentLevel + 1 >= 1) {
+							TutorialHelper::setStepDone();
+						}
+						break;
 				}
 			}
 
