@@ -20,7 +20,7 @@ echo '<div class="component panel-info">';
 					echo '<td>' . Chronos::secondToFormat(ShipResource::getInfo($ship, 'time'), 'lite') . ' <img src="' .  MEDIA. 'resources/time.png" alt="relève" class="icon-color" /></td>';
 				echo '</tr>';
 				echo '<tr>';
-					echo '<td class="hb lt" title="points-équivalent-vaisseau, définit la taille qu\'occupe ce vaisseau dans une esquadrille">pev</td>';
+					echo '<td class="hb lt" title="points-équivalent-vaisseau, définit la taille qu\'occupe ce vaisseau dans une escadrille">pev</td>';
 					echo '<td>' . ShipResource::getInfo($ship, 'pev') . ' <img src="' .  MEDIA. 'resources/pev.png" alt="pev" class="icon-color" /></td>';
 				echo '</tr>';
 				echo '<tr>';

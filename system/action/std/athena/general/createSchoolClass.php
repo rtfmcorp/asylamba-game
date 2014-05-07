@@ -24,6 +24,17 @@ if ($baseId !== FALSE AND $school !== FALSE AND $name !== FALSE AND in_array($ba
 	$nbrCommandersToCreate = rand(SchoolClassResource::getInfo($school, 'minSize'), SchoolClassResource::getInfo($school, 'maxSize'));
 
 	if ($cn->checkLength($name) && $cn->checkChar($name)) {
+
+		# tutorial
+		if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
+			include_once ZEUS;
+			switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+				case TutorialResource::CREATE_COMMANDER:
+					TutorialHelper::setStepDone();
+					break;
+			}
+		}
+
 		# débit des crédits au joueur
 		$S_PAM1 = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession(ASM_UMODE);

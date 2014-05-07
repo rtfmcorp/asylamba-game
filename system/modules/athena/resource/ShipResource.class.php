@@ -1,5 +1,19 @@
 <?php
 class ShipResource {
+
+	const PEGASE = 0;
+	const SATYRE = 1;
+	const CHIMERE = 2;
+	const SIRENE = 3;
+	const DRYADE = 4;
+	const MEDUSE = 5;
+	const GRIFFON = 6;
+	const CYCLOPE = 7;
+	const MINOTAURE = 8;
+	const HYDRE = 9;
+	const CERBERE = 10;
+	const PHENIX = 11;
+
 	private static $ships = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14);
 
 	/**
