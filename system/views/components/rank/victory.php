@@ -25,7 +25,7 @@ echo '<div class="component player rank">';
 					echo '</a>';
 					echo '<span class="title">' . $status[$p->getStatus() - 1] . '</span>';
 					echo '<strong class="name">' . $p->getName() . '</strong>';
-					echo '<span class="experience">' . Format::numberFormat($p->getVictory()) . ' victoires</span>';
+					echo '<span class="experience">' . Format::numberFormat($p->getVictory()) . ' victoire' . Format::addPlural($p->getVictory()) . '</span>';
 				echo '</div>';
 
 				$position++;
