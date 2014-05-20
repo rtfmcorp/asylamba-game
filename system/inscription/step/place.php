@@ -28,7 +28,7 @@ echo '<div id="content">';
 
 		echo '<div class="component inscription size2 color' . CTR::$data->get('inscription')->get('ally') . '">';
 			echo '<div class="head skin-2">';
-				echo '<h2>Choisissez dans quel secteur nous souhaitez être</h2>';
+				echo '<h2>Choisissez dans quel secteur vous souhaitez être</h2>';
 			echo '</div>';
 			echo '<div class="fix-body">';
 				echo '<div class="body">';

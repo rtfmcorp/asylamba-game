@@ -42,7 +42,7 @@ class ColorResource {
 			'officialName' => 'Province de Négora',
 			'popularName' => 'Négore',
 			'government' => 'Maison Négienne',
-			'status' => array('Commercant', 'Négociant', 'Gestionnaire', 'Vizir'),
+			'status' => array('Commerçant', 'Négociant', 'Gestionnaire', 'Vizir'),
 			'devise' => 'Toutes les richesses,<br />Passent par Négore',
 			'desc1' => 'La maison Négienne, la plus riches de la Galaxie de l’Œil, est composée essentiellement de grands marchands et de financiers expérimentés. Considérée comme la banque de la galaxie depuis très longtemps, son économie est basée sur les échanges et le commerce.',
 			'desc2' => 'Parfois peu regardant sur la provenance des marchandises, les Négiens sont d’adroits négociateurs n’hésitant pas à profiter des opportunités qu’offrent la contre-bande, le trafic d’armes ainsi que la vente d’esclaves au détriment des accords et traités commerciaux.',
