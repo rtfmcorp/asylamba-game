@@ -16,6 +16,11 @@ class Place {
 	const TYP_MS2 = 2;
 	const TYP_MS3 = 3;
 	const TYP_ORBITALBASE = 4;
+	const COEFFMAXRESOURCE = 600;
+
+	# CONST PNJ COMMANDER
+	const LEVELMAXVCOMMANDER = 15;
+	const POPMAX 			 = 250;
 
 	# CONST RESULT BATTLE
 
@@ -175,7 +180,7 @@ class Place {
 	}
 
 	public function uResources() {
-		$maxResources = $this->population * 600;
+		$maxResources = $this->population * self::COEFFMAXRESOURCE;
 		$this->resources += floor(PLM_RESSOURCECOEFF * $this->population * 24);
 		if ($this->resources > $maxResources) {
 			$this->resources = $maxResources;
@@ -1003,52 +1008,41 @@ class Place {
 		}
 	}
 
-	private function createVirtualCommander() {
+	public function createVirtualCommander() {
+		$this->uResources();
 		$population = $this->population;
 		$vCommander = new Commander();
-		$vCommander->setId(0);
-		$vCommander->setRPlayer(0);
-		$vCommander->setSexe(1);
-		$vCommander->setAge(42);
-		$vCommander->setStatement(1);
+		$vCommander->id = 0;
+		$vCommander->rPlayer = 0;
+		$vCommander->sexe = 1;
+		$vCommander->age = 42;
+		$vCommander->statement = 1;
+		$vCommander->level = round($this->population / (self::POPMAX / self::LEVELMAXVCOMMANDER));
 
-		if ($population < 50) {
-			$vCommander->setName('Petite Flotte de Défense');
-			$vCommander->setLevel(1);
-			$vCommander->setSquadronsIds(array(1));
-			$vCommander->setArmyInBegin(array(array(5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL)));
-			$vCommander->setArmy();
-			$vCommander->setPevInBegin();
-		} elseif ($population >= 50 AND $population < 80) {
-			$vCommander->setName('Petite Flotte de Défense');
-			$vCommander->setLevel(2);
-			$vCommander->setSquadronsIds(array(1, 2));
-			$vCommander->setArmyInBegin(array(array(5, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(5, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL)));
-			$vCommander->setArmy();
-			$vCommander->setPevInBegin();
-		} elseif ($population >= 80 AND $population < 150) {
-			$vCommander->setName('Moyenne Flotte de Défense');
-			$vCommander->setLevel(3);
-			$vCommander->setSquadronsIds(array(1, 2, 3));
-			$vCommander->setArmyInBegin(array(array(20, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, NULL), array(20, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL)));
-			$vCommander->setPevInBegin();
-			$vCommander->setArmy();
-		} elseif ($population >= 150 AND $population < 200) {
-			$vCommander->setName('Grande Flotte de Défense');
-			$vCommander->setLevel(6);
-			$vCommander->setSquadronsIds(array(1, 2, 3, 4, 5, 6));
-			$vCommander->setArmyInBegin(array(array(34, 5, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, NULL), array(31, 5, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, NULL), array(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, NULL), array(1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(1, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, NULL)));
-			$vCommander->setPevInBegin();
-			$vCommander->setArmy();
-		} else {
-			$vCommander->setName('Enorme Flotte de Défense');
-			$vCommander->setLevel(12);
-			$vCommander->setSquadronsIds(array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
-			$vCommander->setArmyInBegin(array(array(32, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, NULL), array(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL), array(12, 0, 0, 15, 0, 0, 0, 0, 1, 0, 0, 0, NULL), array(1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, NULL), array(50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(12, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, NULL), array(17, 20, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, NULL), array(12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(1, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL), array(1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, NULL), array(50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL)));
-			$vCommander->setPevInBegin();
-			$vCommander->setArmy();
+		$nbrsquadron = $vCommander->level;//round($vCommander->level * ($this->resources / ($this->population * self::COEFFMAXRESOURCE)));
+		if ($nbrsquadron == 0) {
+			$nbrsquadron = 1;
 		}
 
+		$army = array();
+		$squadronsIds = array();
+
+		for ($i = 0; $i < $nbrsquadron; $i++) {
+			$aleaNbr = ($this->coefHistory * $this->coefResources * $this->position * $i) % SquadronResource::size();
+			$army[] = SquadronResource::get($vCommander->level, $aleaNbr);
+			$squadronsIds[] = 0;
+		}
+
+		for ($i = $vCommander->level - 1; $i >= $nbrsquadron; $i--) {
+			$army[$i] = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, Utils::now());
+			$squadronsIds[] = 0;
+		}
+
+
+		$vCommander->setSquadronsIds($squadronsIds);
+		$vCommander->setArmyInBegin($army);
+		$vCommander->setArmy();
+		$vCommander->setPevInBegin();
 		return $vCommander;
 	}
 }

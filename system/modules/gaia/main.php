@@ -5,6 +5,7 @@ include_once 'main.conf.php';
 // resource
 include_once 'resource/SystemResource.res.php';
 include_once 'resource/PlaceResource.res.php';
+include_once 'resource/SquadronResource.res.php';
 
 // classes
 include_once 'class/GalaxyColorManager.class.php';
