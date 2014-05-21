@@ -7,7 +7,6 @@ class OrbitalBaseResource {
 	const DOCK2 = 3;
 	const TECHNOSPHERE = 5;
 	const COMMERCIAL_PLATEFORME = 6;
-	const GRAVITATIONAL_MODULE = 7;
 	
 	/**
 	 * 0 - generator
@@ -342,8 +341,6 @@ class OrbitalBaseResource {
 			'description' => 'La <strong>Colonne d’Assemblage</strong> est le troisième atelier de construction d’appareils. Spécifique aux vaisseaux-mères, ce chantier spatial est indispensable à toute tentative de colonisation. Ce chantier titanesque conçu pour fabriquer des vaisseaux de taille quasi-planétaire, vous donnera la possibilité de construire trois types de vaisseaux-mères. Chacun de ces bâtiments spatiaux dispose de quasiment le même nombre d’aptitudes, excepté sa taille. En effet, lorsque vous créez un vaisseau mère de catégorie trois, il disposera de plus de place de construction que ses deux cadets.<br /><br />La Colonne d’Assemblage est la plus grosse plateforme que vous pouvez construire sur votre base. Elle est également la plus couteuse.',
 			'techno' => 2
 		),
-		// technosphere : NE PAS ENCORE UTILISER, PAS DEFINITIF !!!	
-		// bonus : acclère temps de rechercher ?
 		array(
 			'name' => 'technosphere',
 			'frenchName' => 'Technosphère',

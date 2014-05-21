@@ -170,10 +170,10 @@ echo '<div class="component size2 generator">';
 					echo '<td>' . $b[6] . '</td>';
 					echo '<td>' . $b[3] . '</td>';
 				echo '</tr>';
-				echo '<tr>';
+				/*echo '<tr>';
 					echo '<td>' . $b[4] . '</td>';
 					echo '<td>' . $b[7] . '</td>';
-				echo '</tr>';
+				echo '</tr>';*/
 			echo '</table>';
 		echo '</div>';
 	echo '</div>';
