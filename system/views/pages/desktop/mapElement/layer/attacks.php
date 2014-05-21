@@ -6,8 +6,9 @@ include_once GAIA;
 $commandersId = array(0);
 for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
 	if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
-		$info = CTR::$data->get('playerEvent')->get($i)->get('eventInfo');
-		if ($info[0] === TRUE) { $commandersId[] = CTR::$data->get('playerEvent')->get($i)->get('eventId'); }
+		if (CTR::$data->get('playerEvent')->get($i)->get('eventInfo')->size() > 0) {
+			$commandersId[] = CTR::$data->get('playerEvent')->get($i)->get('eventId');
+		}
 	}
 }
 

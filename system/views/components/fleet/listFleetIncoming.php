@@ -14,8 +14,8 @@ echo '<div class="component size2 list-fleet">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			foreach ($commander_listFleetIncoming as $commander) {
-				$step = 0;
-				for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
+				$step = 1;
+				/*for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
 					$event = CTR::$data->get('playerEvent')->get($i);
 					if ($event->get('eventType') == EVENT_INCOMING_ATTACK && $event->get('eventId') == $commander->getId()) {
 						$info = $event->get('eventInfo');
@@ -23,7 +23,7 @@ echo '<div class="component size2 list-fleet">';
 							if ($info[$j] === TRUE) { $step++; } else { break; }
 						}
 					}
-				}
+				}*/
 
 				echo '<div class="fleet-element progress color' . $commander->getPlayerColor() . '" data-progress-output="lite" data-progress-total-time="0" data-progress-current-time="' . (strtotime($commander->getArrivalDate()) - time()) . '">';
 					echo '<img src="' . MEDIA . 'fleet/anchor.png" alt="à quai" class="status" />';
