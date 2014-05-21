@@ -11,7 +11,7 @@ for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
 }
 
 $baseId = Utils::getHTTPData('baseid');
-$credit = Utils::getHTTPData('bacreditseid');
+$credit = Utils::getHTTPData('credit');
 $category = Utils::getHTTPData('category');
 
 
