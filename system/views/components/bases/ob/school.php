@@ -73,6 +73,7 @@ echo '<div class="component school">';
 					echo '</button>';
 				}
 			echo '</form>';
+			ASM::$ntm->add($n);
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
