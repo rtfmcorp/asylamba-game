@@ -47,7 +47,8 @@ abstract class CTR {
 		'inscription' => array('inscription', 'Inscription'),
 		'connection' => array('connection', 'Connexion'),
 		'api' => array('api', 'API'),
-		'script' => array('script', 'Script')
+		'script' => array('script', 'Script'),
+		'buffer' => array('buffer', 'Bienvenue')
 	);
 
 	public static function getTitle()		{ return self::$title; }
@@ -162,7 +163,7 @@ abstract class CTR {
 				header('Location: ' . APP_ROOT);
 				exit();
 			}
-		} elseif (in_array(self::$page, array('api', 'script'))) {
+		} elseif (in_array(self::$page, array('api', 'script', 'buffer'))) {
 			# doing nothing
 		} else {
 			if (!self::$data->exist('playerId')) {
@@ -179,6 +180,8 @@ abstract class CTR {
 			include AJAX . 'main.php';
 		} elseif (self::$page == 'api') {
 			include API . 'main.php';
+		} elseif (self::$page == 'buffer') {
+			include BUFFER . 'main.php';
 		} elseif (self::$page == 'script') {
 			include SCRIPT . 'main.php';
 		} elseif (self::$page == 'connection') {
