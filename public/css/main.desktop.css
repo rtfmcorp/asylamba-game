@@ -174,6 +174,17 @@ body {
 .color6 #nav .box a.square.active, .color6 #tools .box a.square.active { background: url('src/desktop/button/bLittleButtonActive-c6.png') no-repeat; }
 .color7 #nav .box a.square.active, .color7 #tools .box a.square.active { background: url('src/desktop/button/bLittleButtonActive-c7.png') no-repeat; }
 
+#nav .box a.square.active.flashy {
+	border-radius: 3px;
+}
+.color1 #nav .box a.square.active.flashy, .color1 #tools .box a.square.active.flashy { box-shadow: inset 0 0 12px #b01e2d; }
+.color2 #nav .box a.square.active.flashy, .color2 #tools .box a.square.active.flashy { box-shadow: inset 0 0 12px #2f23c0; }
+.color3 #nav .box a.square.active.flashy, .color3 #tools .box a.square.active.flashy { box-shadow: inset 0 0 12px #ffdb0f; }
+.color4 #nav .box a.square.active.flashy, .color4 #tools .box a.square.active.flashy { box-shadow: inset 0 0 12px #a935c7; }
+.color5 #nav .box a.square.active.flashy, .color5 #tools .box a.square.active.flashy { box-shadow: inset 0 0 12px #57c632; }
+.color6 #nav .box a.square.active.flashy, .color6 #tools .box a.square.active.flashy { box-shadow: inset 0 0 12px #05bed7; }
+.color7 #nav .box a.square.active.flashy, .color7 #tools .box a.square.active.flashy { box-shadow: inset 0 0 12px #ac5832; }
+
 #tools .box a.square img,
 #nav .box a.square img {
 	position: absolute;

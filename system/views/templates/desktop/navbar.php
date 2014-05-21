@@ -89,7 +89,7 @@ echo '<div id="nav">';
 		}
 
 		if (CTR::$data->get('playerInfo')->get('stepTutorial') > 0) {
-			echo '<a href="#" class="square sh ' . (CTR::$data->get('playerInfo')->get('stepDone') ? 'active' : '') . '" data-target="tutorial"><img src="' . MEDIA . 'common/tool-star.png" alt="" /></a>';
+			echo '<a href="#" class="square sh ' . (CTR::$data->get('playerInfo')->get('stepDone') ? 'active flashy' : '') . '" data-target="tutorial"><img src="' . MEDIA . 'common/tool-star.png" alt="" /></a>';
 		}
 		echo '<a href="#" class="square sh" data-target="roadmap"><img src="' . MEDIA . 'common/tool-roadmap.png" alt="" /></a>';
 		echo '<a href="#" class="square sh" data-target="bug-tracker"><img src="' . MEDIA . 'common/tool-bugtracker.png" alt="" /></a>';
