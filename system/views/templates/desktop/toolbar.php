@@ -69,7 +69,7 @@ echo '<div id="tools">';
 			echo ($outgoingAttack > 0) ? '<span class="number">' . $outgoingAttack . '</span>' : NULL;
 		echo '</a>';
 
-		echo '<a href="' . APP_ROOT . 'financial" class="resource-link" style="width: 120px;">';
+		echo '<a href="#" class="resource-link" style="width: 120px;">';
 				echo Format::numberFormat(CTR::$data->get('playerInfo')->get('credit'));
 				echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
 		echo '</a>';
