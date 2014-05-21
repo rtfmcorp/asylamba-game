@@ -148,7 +148,6 @@ echo '<div class="component space size3">';
 		echo '<div class="body">';
 			echo '<div class="situation-content place1">';
 				echo '<div class="toolbar">';
-					echo '<a href="#" class="hb lb" title="pas encore implémenté">Abandonner la planète</a>';
 					echo '<a href="' . APP_ROOT . '/map/base-' . $ob_obSituation->getId() . '">Centrer sur la carte</a>';
 					echo '<form action="' . APP_ROOT . 'action/a-renamebase/baseid-' . $ob_obSituation->getId() . '" method="POST">';
 						echo '<input type="text" name="name" value="' . $ob_obSituation->getName() . '" />';
