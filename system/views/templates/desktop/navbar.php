@@ -62,7 +62,7 @@ echo '<div id="nav">';
 		echo '<a href="' . APP_ROOT . 'financial" class="square hb rb ' . $isActive . '" title="finance"><img src="' . MEDIA . 'common/nav-financial.png" alt="" /></a>';
 	
 		$isActive = (in_array(CTR::getPage(), array('technology'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'technology" class="square hb rb ' . $isActive . '" title="technologies"><img src="' . MEDIA . 'common/nav-techno.png" alt="" /></a>';
+		echo '<a href="' . APP_ROOT . 'technology" class="square hb rb ' . $isActive . '" title="université"><img src="' . MEDIA . 'common/nav-techno.png" alt="" /></a>';
 	echo '</div>';
 
 	echo '<div class="box left-3">';
