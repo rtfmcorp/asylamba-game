@@ -1009,7 +1009,6 @@ class Place {
 	}
 
 	public function createVirtualCommander() {
-		$this->uResources();
 		$population = $this->population;
 		$vCommander = new Commander();
 		$vCommander->id = 0;
@@ -1019,7 +1018,7 @@ class Place {
 		$vCommander->statement = 1;
 		$vCommander->level = round($this->population / (self::POPMAX / self::LEVELMAXVCOMMANDER));
 
-		$nbrsquadron = $vCommander->level;//round($vCommander->level * ($this->resources / ($this->population * self::COEFFMAXRESOURCE)));
+		$nbrsquadron = round($vCommander->level * ($this->resources / ($this->population * self::COEFFMAXRESOURCE)));
 		if ($nbrsquadron == 0) {
 			$nbrsquadron = 1;
 		}
