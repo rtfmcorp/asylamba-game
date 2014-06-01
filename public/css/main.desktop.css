@@ -255,6 +255,18 @@ body {
 	border-bottom: solid 1px #202020;
 }
 
+#nav .overbox .link-title,
+#tools .overbox .link-title {
+	position: absolute;
+	top: 10px; right: 10px;
+	line-height: 20px;
+	font-size: 11px; padding: 0 5px;
+	background: #202020;
+	border-radius: 3px;
+	text-decoration: none;
+	color: white;
+}
+
 #nav .overbox:before {
 	content: '';
 	position: absolute;
