@@ -710,10 +710,17 @@ jQuery(document).ready(function($) {
 			maxQ = box.data('max-quantity'),
 			minP = box.data('min-price'),
 			rate = box.data('rate');
-		var quantity = $(this).val();
+		var quantity = $(this).val(),
+			rMinP = Math.ceil(quantity * minP),
+			price = Math.ceil(quantity * rate);
 
-		box.find('.sf-min-price .value').html(utils.numberFormat(Math.ceil(quantity * minP)));
-		box.find('.sf-price input').val(Math.ceil(quantity * rate));
+		if (quantity > maxQ || price < rMinP) {
+			box.find('input[type="submit"]').attr('disabled', 'disabled');
+		} else {
+			box.find('input[type="submit"]').removeAttr('disabled');
+			box.find('.sf-min-price .value').html(utils.numberFormat(Math.ceil(rMinP)));
+			box.find('.sf-price input').val(price);	
+		}
 	});
 
 	/* OTHER ANNIMATIONS */
