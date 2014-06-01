@@ -65,7 +65,7 @@ echo '<div class="component rc">';
 			echo '<hr />';
 
 			echo '<div class="number-box">';
-				echo '<span class="label">Revenu total de cette base</span>';
+				echo '<span class="label">revenu total de cette base</span>';
 				echo '<span class="value">';
 					echo Format::numberFormat($totalIncome);
 					if (CTR::$data->get('playerBonus')->get(PlayerBonus::COMMERCIAL_INCOME) != 0) {

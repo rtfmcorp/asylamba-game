@@ -1,5 +1,5 @@
 <?php
-include_once ARES;
+include_once ATHENA;
 
 $S_TRM1 = ASM::$trm->getCurrentSession();
 $S_CSM1 = ASM::$csm->getCurrentSession();
