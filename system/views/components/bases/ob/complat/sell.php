@@ -65,38 +65,35 @@ echo '<div class="component market-sell">';
 	echo '<div class="head skin-4">';
 		echo '<img src="' . MEDIA . 'resources/resource.png" alt="ressource" class="main" />';
 		echo '<h2>Ressources</h2>';
-		echo '<em>bra !</em>';
+		echo '<em>mettre en vente</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<form action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_RESOURCE . '" method="post">';
-				
-				echo '<div class="sell-form" data-max-quantity="' . $ob_compPlat->resourcesStorage . '" data-rate="' . $resourcesCurrentRate . '" data-min-price="' . Game::getMinPriceRelativeToRate(Transaction::TYP_RESOURCE, 1) . '">';
-					echo '<div class="label-box">';
-						echo '<span class="label">Ressources</span>';
-						echo '<span class="value">' . Format::numberFormat($ob_compPlat->resourcesStorage) . '</span>';
-						echo '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">';
-					echo '</div>';
+			echo '<form class="sell-form" data-max-quantity="' . $ob_compPlat->resourcesStorage . '" data-rate="' . $resourcesCurrentRate . '" data-min-price="' . Game::getMinPriceRelativeToRate(Transaction::TYP_RESOURCE, 1) . '" action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_RESOURCE . '" method="post">';
+				echo '<div class="label-box">';
+					echo '<span class="label">Ressources</span>';
+					echo '<span class="value">' . Format::numberFormat($ob_compPlat->resourcesStorage) . '</span>';
+					echo '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">';
+				echo '</div>';
 
-					echo '<div class="label-box sf-quantity">';
-						echo '<label for="sell-market-quantity-resources" class="label">Quantité</label>';
-						echo '<input id="sell-market-quantity-resources" class="value" type="text" name="quantity"/>';
-						echo '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">';
-					echo '</div>';
+				echo '<div class="label-box sf-quantity">';
+					echo '<label for="sell-market-quantity-resources" class="label">Quantité</label>';
+					echo '<input id="sell-market-quantity-resources" class="value" type="text" name="quantity" autocomplete="off" />';
+					echo '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">';
+				echo '</div>';
 
-					echo '<hr />';
+				echo '<hr />';
 
-					echo '<div class="label-box sf-min-price">';
-						echo '<span class="label">Prix minimum</span>';
-						echo '<span class="value"></span>';
-						echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
-					echo '</div>';
+				echo '<div class="label-box sf-min-price">';
+					echo '<span class="label">Prix minimum</span>';
+					echo '<span class="value"></span>';
+					echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
+				echo '</div>';
 
-					echo '<div class="label-box sf-price">';
-						echo '<label for="sell-market-price-resources" class="label">Prix</label>';
-						echo '<input id="sell-market-price-resources" class="value" type="text" name="price" value=""/>';
-						echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
-					echo '</div>';
+				echo '<div class="label-box sf-price">';
+					echo '<label for="sell-market-price-resources" class="label">Prix</label>';
+					echo '<input id="sell-market-price-resources" class="value" type="text" name="price" autocomplete="off"/>';
+					echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
 				echo '</div>';
 
 				echo '<hr />';
@@ -120,7 +117,7 @@ echo '<div class="component market-sell">';
 	echo '<div class="head skin-4">';
 		echo '<img src="' . MEDIA . 'orbitalbase/school.png" alt="commandants" class="main" />';
 		echo '<h2>Commandants</h2>';
-		echo '<em>bra !</em>';
+		echo '<em>mettre en vente</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
@@ -135,7 +132,7 @@ echo '<div class="component market-sell">';
 					echo '</div>';
 				echo '</div>';
 
-				echo '<form action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_COMMANDER . '/identifier-' . $commander->getId() . '" method="post">';
+				echo '<form action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_COMMANDER . '/identifier-' . $commander->getId() . '" method="post" style="display:none;">';
 
 					echo '<div class="label-box">';
 						echo '<span class="label">Prix minimum</span>';
@@ -145,7 +142,7 @@ echo '<div class="component market-sell">';
 
 					echo '<div class="label-box">';
 						echo '<label for="sell-market-price-commander" class="label">Prix</label>';
-						echo '<input id="sell-market-price-commander" class="value" type="text" name="price" value="' . ceil($commander->experience * $commanderCurrentRate) . '" />';
+						echo '<input id="sell-market-price-commander" class="value" type="text" name="price" value="' . ceil($commander->experience * $commanderCurrentRate) . '" autocomplete="off" />';
 						echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
 					echo '</div>';
 
@@ -173,7 +170,7 @@ echo '<div class="component market-sell">';
 	echo '<div class="head skin-4">';
 		echo '<img src="' . MEDIA . 'orbitalbase/dock2.png" alt="vaisseaux" class="main" />';
 		echo '<h2>Vaisseaux</h2>';
-		echo '<em>bra !</em>';
+		echo '<em>mettre en vente</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
@@ -188,32 +185,29 @@ echo '<div class="component market-sell">';
 						echo '</div>';
 					echo '</div>';
 
-					echo '<form action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_SHIP . '/identifier-' . $key . '" method="post">';
+					echo '<form class="sell-form" data-max-quantity="' . $ship . '" data-rate="' . ($shipCurrentRate * ShipResource::getInfo($key, 'resourcePrice')) . '" data-min-price="' . Game::getMinPriceRelativeToRate(Transaction::TYP_SHIP, 1, $key) . '" action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_SHIP . '/identifier-' . $key . '" method="post" style="display:none;">';
+						echo '<div class="label-box">';
+							echo '<span class="label">Quantité max.</span>';
+							echo '<span class="value">' . $ship . '</span>';
+						echo '</div>';
 
-						echo '<div class="sell-form" data-max-quantity="' . $ship . '" data-rate="' . ($shipCurrentRate * ShipResource::getInfo($key, 'resourcePrice')) . '" data-min-price="' . Game::getMinPriceRelativeToRate(Transaction::TYP_SHIP, 1, $key) . '">';
-							echo '<div class="label-box">';
-								echo '<span class="label">Quantité max.</span>';
-								echo '<span class="value">' . $ship . '</span>';
-							echo '</div>';
+						echo '<div class="label-box sf-quantity">';
+							echo '<label for="sell-market-quantity-ship" class="label">Quantité</label>';
+							echo '<input id="sell-market-quantity-ship" class="value" type="text" name="quantity" autocomplete="off" />';
+						echo '</div>';
 
-							echo '<div class="label-box sf-quantity">';
-								echo '<label for="sell-market-quantity-ship" class="label">Quantité</label>';
-								echo '<input id="sell-market-quantity-ship" class="value" type="text" name="quantity" />';
-							echo '</div>';
+						echo '<hr />';
 
-							echo '<hr />';
+						echo '<div class="label-box sf-min-price">';
+							echo '<span class="label">Prix minimum</span>';
+							echo '<span class="value"></span>';
+							echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
+						echo '</div>';
 
-							echo '<div class="label-box sf-min-price">';
-								echo '<span class="label">Prix minimum</span>';
-								echo '<span class="value"></span>';
-								echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
-							echo '</div>';
-
-							echo '<div class="label-box sf-price">';
-								echo '<label for="sell-market-price-ship" class="label">Prix</label>';
-								echo '<input id="sell-market-price-ship" class="value" type="text" name="price" />';
-								echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
-							echo '</div>';
+						echo '<div class="label-box sf-price">';
+							echo '<label for="sell-market-price-ship" class="label">Prix</label>';
+							echo '<input id="sell-market-price-ship" class="value" type="text" name="price" autocomplete="off" />';
+							echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
 						echo '</div>';
 
 						echo '<hr />';
