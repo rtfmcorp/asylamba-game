@@ -25,12 +25,12 @@ ASM::$rsm->newSession();
 ASM::$rsm->load(array('rPlayer' => CTR::$data->get('playerId')));
 
 # déblocage
-$c1 = ''; $c2 = ''; $c3 = '';
-$c4 = ''; $c5 = '';
-$c6 = ''; $c7 = '';
+$c1 = array(); $c2 = array(); $c3 = array();
+$c4 = array(); $c5 = array();
+$c6 = array(); $c7 = array();
 for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
 	if (!TechnologyResource::isATechnologyNotDisplayed($i)) {
-		$but = ''; $sup = ''; $ctn = '';
+		$but = ''; $sup = ''; $ctn = array(); $ctn[0] = ''; $ctn[1] = TRUE;
 		$disability = 'disable'; $closed = '';
 		$inQueue = FALSE;
 		$inALocalQueue = FALSE;
@@ -92,6 +92,7 @@ for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
 				$but .= '</span>';
 
 			} elseif (TechnologyResource::isAnUnblockingTechnology($i) && $technology->getTechnology($i)) {
+				$ctn[1] = FALSE;
 				$sup .= '<em>développement terminé</em>';
 				$closed = 'closed';
 			} elseif (!TechnologyResource::haveRights($i, 'queue', ASM::$tqm->size())) {
@@ -144,26 +145,26 @@ for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
 			}
 		}
 
-		$ctn .= '<div class="build-item ' . $disability . ' ' . $closed . '">';
-			$ctn .= '<div class="name">';
-				$ctn .= '<a href="#" class="addInfoPanel hb lt info" title="plus d\'informations" data-techno-id="' . $i . '" data-info-type="techno">+</a>';
-				$ctn .= '<img src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($i, 'imageLink') . '.png" alt="" />';
-				$ctn .= '<strong>' . $title . '</strong>';
-				$ctn .= $sup;
-			$ctn .= '</div>';
-			$ctn .= '<div class="ship-illu"><img class="illu" src="' . MEDIA . 'technology/img/' . TechnologyResource::getInfo($i, 'imageLink') . '.png" /></div>';
-			$ctn .= $but;
-		$ctn .= '</div>';
+		$ctn[0] .= '<div class="build-item ' . $disability . ' ' . $closed . '">';
+			$ctn[0] .= '<div class="name">';
+				$ctn[0] .= '<a href="#" class="addInfoPanel hb lt info" title="plus d\'informations" data-techno-id="' . $i . '" data-info-type="techno">+</a>';
+				$ctn[0] .= '<img src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($i, 'imageLink') . '.png" alt="" />';
+				$ctn[0] .= '<strong>' . $title . '</strong>';
+				$ctn[0] .= $sup;
+			$ctn[0] .= '</div>';
+			$ctn[0] .= '<div class="ship-illu"><img class="illu" src="' . MEDIA . 'technology/img/' . TechnologyResource::getInfo($i, 'imageLink') . '.png" /></div>';
+			$ctn[0] .= $but;
+		$ctn[0] .= '</div>';
 
 		switch (TechnologyResource::getInfo($i, 'column')) {
-			case 1 : $c1 .= $ctn; break;
-			case 2 : $c2 .= $ctn; break;
-			case 3 : $c3 .= $ctn; break;
-			case 4 : $c4 .= $ctn; break;
-			case 5 : $c5 .= $ctn; break;
-			case 6 : $c6 .= $ctn; break;
-			case 7 : $c7 .= $ctn; break;
-			default: $c1 .= $ctn; break;
+			case 1 : $c1[] = $ctn; break;
+			case 2 : $c2[] = $ctn; break;
+			case 3 : $c3[] = $ctn; break;
+			case 4 : $c4[] = $ctn; break;
+			case 5 : $c5[] = $ctn; break;
+			case 6 : $c6[] = $ctn; break;
+			case 7 : $c7[] = $ctn; break;
+			default: $c1[] = $ctn; break;
 		}
 	}
 }
@@ -238,7 +239,9 @@ if (in_array($ob_tech->typeOfBase, array(OrbitalBase::TYP_COMMERCIAL, OrbitalBas
 		echo '</div>';
 		echo '<div class="fix-body">';
 			echo '<div class="body">';
-				echo $c4;
+				foreach ($c4 as $key => $value) {
+					echo $value[0];
+				}
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';
@@ -249,7 +252,9 @@ if (in_array($ob_tech->typeOfBase, array(OrbitalBase::TYP_COMMERCIAL, OrbitalBas
 		echo '</div>';
 		echo '<div class="fix-body">';
 			echo '<div class="body">';
-				echo $c5;
+				foreach ($c5 as $key => $value) {
+					echo $value[0];
+				}
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';
@@ -263,7 +268,9 @@ if (in_array($ob_tech->typeOfBase, array(OrbitalBase::TYP_MILITARY, OrbitalBase:
 		echo '</div>';
 		echo '<div class="fix-body">';
 			echo '<div class="body">';
-				echo $c6;
+				foreach ($c6 as $key => $value) {
+					echo $value[0];
+				}
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';
@@ -274,7 +281,9 @@ if (in_array($ob_tech->typeOfBase, array(OrbitalBase::TYP_MILITARY, OrbitalBase:
 		echo '</div>';
 		echo '<div class="fix-body">';
 			echo '<div class="body">';
-				echo $c7;
+				foreach ($c7 as $key => $value) {
+					echo $value[0];
+				}
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';
@@ -287,7 +296,16 @@ echo '<div class="component techno">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo $c1;
+			foreach ($c1 as $key => $value) {
+				if ($value[1] == TRUE) {
+					echo $value[0];
+				}
+			}
+			foreach ($c1 as $key => $value) {
+				if ($value[1] == FALSE) {
+					echo $value[0];
+				}
+			}
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
@@ -298,7 +316,16 @@ echo '<div class="component techno">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo $c2;
+			foreach ($c2 as $key => $value) {
+				if ($value[1] == TRUE) {
+					echo $value[0];
+				}
+			}
+			foreach ($c2 as $key => $value) {
+				if ($value[1] == FALSE) {
+					echo $value[0];
+				}
+			}
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
@@ -309,7 +336,16 @@ echo '<div class="component techno">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo $c3;
+			foreach ($c3 as $key => $value) {
+				if ($value[1] == TRUE) {
+					echo $value[0];
+				}
+			}
+			foreach ($c3 as $key => $value) {
+				if ($value[1] == FALSE) {
+					echo $value[0];
+				}
+			}
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
