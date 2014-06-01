@@ -183,8 +183,8 @@ jQuery(document).ready(function($) {
 		$(this).find('.info').css('display', 'none');
 	});
 
-	// MOVING COMPONANT MODULE
-	// #######################
+// MOVING COMPONANT MODULE
+// #######################
 	columnController = {
 		smallStep: 50,
 
@@ -700,6 +700,20 @@ jQuery(document).ready(function($) {
 
 		$('.base-type .desc-choice').hide();
 		$('.base-type .list-desc .desc-choice:nth-child(' + (index + 1) + ')').show();
+	});
+
+// ###########################
+// #### MARKET MECHANISME ####
+// ###########################
+	$('.sell-form input[name="quantity"]').live('keyup', function() {
+		var box  = $(this).parents('.sell-form'),
+			maxQ = box.data('max-quantity'),
+			minP = box.data('min-price'),
+			rate = box.data('rate');
+		var quantity = $(this).val();
+
+		box.find('.sf-min-price .value').html(utils.numberFormat(Math.ceil(quantity * minP)));
+		box.find('.sf-price input').val(Math.ceil(quantity * rate));
 	});
 
 	/* OTHER ANNIMATIONS */
