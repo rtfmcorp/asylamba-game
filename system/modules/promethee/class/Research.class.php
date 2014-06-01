@@ -91,7 +91,7 @@ class Research {
 				}
 				$n = new Notification();
 				$n->setRPlayer($player);
-				$n->setTitle('Avancée dans les recherches');
+				$n->setTitle(ResearchResource::getInfo($this->naturalTech, 'name') . ' niveau ' . $levelReached);
 				$n->setContent('Vos investissements dans l\'Université ont payé !<br />
 					Vos chercheurs du département des <strong>Sciences Naturelles</strong> ont fait des avancées en <strong>' 
 					. ResearchResource::getInfo($this->naturalTech, 'name') . '</strong>. Vous êtes actuellement au <strong>niveau ' 
@@ -136,7 +136,7 @@ class Research {
 				}
 				$n = new Notification();
 				$n->setRPlayer($player);
-				$n->setTitle('Avancée dans les recherches');
+				$n->setTitle(ResearchResource::getInfo($this->lifeTech, 'name') . ' niveau ' . $levelReached);
 				$n->setContent('Vos investissements dans l\'Université ont payé !<br />
 					Vos chercheurs du département des <strong>Sciences de la Vie</strong> ont fait des avancées en <strong>' 
 					. ResearchResource::getInfo($this->lifeTech, 'name') . '</strong>. Vous êtes actuellement au <strong>niveau ' 
@@ -179,7 +179,7 @@ class Research {
 				}
 				$n = new Notification();
 				$n->setRPlayer($player);
-				$n->setTitle('Avancée dans les recherches');
+				$n->setTitle(ResearchResource::getInfo($this->socialTech, 'name') . ' niveau ' . $levelReached);
 				$n->setContent('Vos investissements dans l\'Université ont payé !<br />
 					Vos chercheurs du département des <strong>Sciences Sociales et Politiques</strong> ont fait des avancées en <strong>' 
 					. ResearchResource::getInfo($this->socialTech, 'name') . '</strong>. Vous êtes actuellement au <strong>niveau ' 
@@ -225,7 +225,7 @@ class Research {
 				}
 				$n = new Notification();
 				$n->setRPlayer($player);
-				$n->setTitle('Avancée dans les recherches');
+				$n->setTitle(ResearchResource::getInfo($this->informaticTech, 'name') . ' niveau ' . $levelReached);
 				$n->setContent('Vos investissements dans l\'Université ont payé !<br />
 					Vos chercheurs du département de l\'<strong>Ingénierie Informatique</strong> ont fait des avancées en <strong>' 
 					. ResearchResource::getInfo($this->informaticTech, 'name') . '</strong>. Vous êtes actuellement au <strong>niveau ' 
