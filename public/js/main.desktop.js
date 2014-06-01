@@ -718,9 +718,9 @@ jQuery(document).ready(function($) {
 			box.find('input[type="submit"]').attr('disabled', 'disabled');
 		} else {
 			box.find('input[type="submit"]').removeAttr('disabled');
-			box.find('.sf-min-price .value').html(utils.numberFormat(Math.ceil(rMinP)));
-			box.find('.sf-price input').val(price);	
 		}
+		box.find('.sf-min-price .value').html(utils.numberFormat(Math.ceil(rMinP)));
+		box.find('.sf-price input').val(price);	
 	});
 
 	/* OTHER ANNIMATIONS */

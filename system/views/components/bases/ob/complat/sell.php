@@ -62,7 +62,7 @@ ASM::$trm->load(array('type' => Transaction::TYP_RESOURCE, 'statement' => Transa
 $resourcesCurrentRate = ASM::$trm->get()->currentRate;
 
 echo '<div class="component market-sell">';
-	echo '<div class="head skin-4">';
+	echo '<div class="head skin-4 sh">';
 		echo '<img src="' . MEDIA . 'resources/resource.png" alt="ressource" class="main" />';
 		echo '<h2>Ressources</h2>';
 		echo '<em>mettre en vente</em>';
@@ -125,14 +125,14 @@ echo '<div class="component market-sell">';
 				$commander = ASM::$com->get($i);
 
 				echo '<div class="queue">';
-					echo '<div class="item">';
+					echo '<div class="item sh" data-target="sell-commander-' . $i . '">';
 						echo '<img class="picto" src="' . MEDIA . 'commander/small/c1-l' . rand(1, 3) . '-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="" />';
 						echo '<strong>' . CommanderResources::getInfo($commander->getLevel(), 'grade') . ' ' . $commander->getName() . '</strong>';
 						echo '<em>' . Format::numberFormat($commander->getExperience()) . ' points d\'expérience</em>';
 					echo '</div>';
 				echo '</div>';
 
-				echo '<form action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_COMMANDER . '/identifier-' . $commander->getId() . '" method="post" style="display:none;">';
+				echo '<form id="sell-commander-' . $i . '" action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_COMMANDER . '/identifier-' . $commander->getId() . '" method="post" style="display:none;">';
 
 					echo '<div class="label-box">';
 						echo '<span class="label">Prix minimum</span>';
@@ -176,7 +176,7 @@ echo '<div class="component market-sell">';
 		echo '<div class="body">';
 			foreach ($ob_compPlat->shipStorage as $key => $ship) {
 				if ($ship > 0) {
-					echo '<div class="queue">';
+					echo '<div class="queue sh" data-target="sell-ships-' . $key . '">';
 						echo '<div class="item">';
 							echo '<img class="picto" src="' . MEDIA . 'ship/picto/ship' . $key . '.png" alt="" />';
 							echo '<strong>' . ShipResource::getInfo($key, 'codeName') . '</strong>';
@@ -185,7 +185,7 @@ echo '<div class="component market-sell">';
 						echo '</div>';
 					echo '</div>';
 
-					echo '<form class="sell-form" data-max-quantity="' . $ship . '" data-rate="' . ($shipCurrentRate * ShipResource::getInfo($key, 'resourcePrice')) . '" data-min-price="' . Game::getMinPriceRelativeToRate(Transaction::TYP_SHIP, 1, $key) . '" action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_SHIP . '/identifier-' . $key . '" method="post" style="display:none;">';
+					echo '<form id="sell-ships-' . $key . '" class="sell-form" data-max-quantity="' . $ship . '" data-rate="' . ($shipCurrentRate * ShipResource::getInfo($key, 'resourcePrice')) . '" data-min-price="' . Game::getMinPriceRelativeToRate(Transaction::TYP_SHIP, 1, $key) . '" action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_SHIP . '/identifier-' . $key . '" method="post" style="display:none;">';
 						echo '<div class="label-box">';
 							echo '<span class="label">Quantité max.</span>';
 							echo '<span class="value">' . $ship . '</span>';

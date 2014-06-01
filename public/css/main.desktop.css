@@ -3448,6 +3448,14 @@ body {
 	width: 18px;
 }
 
+.component.market-sell .queue {
+	margin: 0 10px;
+	cursor: pointer;
+}
+.component.market-sell .queue:first-child {
+	margin: 10px 10px 0 10px;
+}
+
 /***********************************/
 /*********** BASES STYLE ***********/
 /***********************************/
