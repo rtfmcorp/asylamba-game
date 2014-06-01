@@ -3456,6 +3456,28 @@ body {
 	margin: 10px 10px 0 10px;
 }
 
+.component.market-sell .sell-form input[type='submit'] {
+	display: block;
+	width: 180px; margin: 0 0 0 auto;
+	border: solid 1px #0A0A0A;
+	padding: 6px 10px;
+	color: white;
+	border-radius: 3px;
+	background: #202020;
+	cursor: pointer;
+}
+.color1 .component.market-sell .sell-form input[type='submit'] { background: #b01e2d; }
+.color2 .component.market-sell .sell-form input[type='submit'] { background: #2f23c0; }
+.color3 .component.market-sell .sell-form input[type='submit'] { background: #ffdb0f; }
+.color4 .component.market-sell .sell-form input[type='submit'] { background: #a935c7; }
+.color5 .component.market-sell .sell-form input[type='submit'] { background: #57c632; }
+.color6 .component.market-sell .sell-form input[type='submit'] { background: #05bed7; }
+.color7 .component.market-sell .sell-form input[type='submit'] { background: #ac5832; }
+
+.component.market-sell .sell-form input[disabled='disabled'] {
+	background: #202020 !important;
+}
+
 /***********************************/
 /*********** BASES STYLE ***********/
 /***********************************/

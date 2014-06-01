@@ -98,7 +98,7 @@ echo '<div class="component market-sell">';
 
 				echo '<hr />';
 
-				echo '<p><input type="submit" value="vendre" /></p>';
+				echo '<p><input type="submit" value="Vendre" /></p>';
 			echo '</form>';
 		echo '</div>';
 	echo '</div>';
@@ -148,7 +148,7 @@ echo '<div class="component market-sell">';
 
 					echo '<hr />';
 
-					echo '<p><input type="submit" value="vendre" /></p>';
+					echo '<p><input type="submit" value="Vendre" /></p>';
 				echo '</form>';
 			}
 
@@ -212,7 +212,7 @@ echo '<div class="component market-sell">';
 
 						echo '<hr />';
 
-						echo '<p><input type="submit" value="vendre" /></p>';
+						echo '<p><input type="submit" value="Vendre" /></p>';
 					echo '</form>';
 				}
 			}

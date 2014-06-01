@@ -705,7 +705,7 @@ jQuery(document).ready(function($) {
 // ###########################
 // #### MARKET MECHANISME ####
 // ###########################
-	$('.sell-form input[name="quantity"]').live('keyup', function() {
+	$('.sell-form input').live('keyup', function() {
 		var box  = $(this).parents('.sell-form'),
 			maxQ = box.data('max-quantity'),
 			minP = box.data('min-price'),
