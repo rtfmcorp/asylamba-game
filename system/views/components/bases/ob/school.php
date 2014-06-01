@@ -29,6 +29,9 @@ echo '<div class="component school">';
 					echo Format::numberFormat($ob_school->getISchool());
 					echo ' <img alt="crédits" src="' . MEDIA . 'resources/credit.png" class="icon-color">';
 				echo '</span>';
+				echo '<span class="group-link">';
+					echo '<a title="modifier" class="hb lt" href="' . APP_ROOT . 'financial/sftr-4">→</a>';
+				echo '</span>';
 			echo '</div>';
 
 			if (CTR::$data->get('playerBonus')->get(PlayerBonus::COMMANDER_INVEST) == 0) {

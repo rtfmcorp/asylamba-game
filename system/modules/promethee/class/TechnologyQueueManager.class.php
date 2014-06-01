@@ -1,4 +1,4 @@
- <?php
+<?php
 /**
  * Technology Queue Manager
  *
