@@ -14,7 +14,7 @@ echo '<div class="component report">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="tool">';
-				echo '<span><a href="#" class="hb lt" title="cette action n\'a pas encore été développée">tout supprimer</a></span>';
+				echo '<span><a href="' . APP_ROOT . 'action/a-deleteallspyreport" class="hb lt" title="suppression définitive de tous les rapports">tout supprimer</a></span>';
 				echo '<span><a href="#" class="hb lt sh" data-target="info-report" title="plus d\'infos">?</a></span>';
 			echo '</div>';
 
@@ -35,8 +35,7 @@ echo '<div class="component report">';
 						echo '<h4 class="switch-class-parent" data-class="open">' . $title . '</h4>';
 						echo '<div class="content">l\'espionnage a eu lieu ' . Chronos::transform($r->dSpying) . '</div>';
 						echo '<div class="footer">';
-							# echo '<a href="' . APP_ROOT . 'action/a-archivereport/id-' . $r->id . '">archiver</a> ou ';
-							echo '<a href="#" class="hb lt" title="non implémenté">supprimer</a><br />';
+							echo '<a href="' . APP_ROOT . 'action/a-deletespyreport/id-' . $r->id . '">supprimer</a>';
 						echo '</div>';
 					echo '</div>';
 				}

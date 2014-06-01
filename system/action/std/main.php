@@ -63,6 +63,8 @@ switch (CTR::$get->get('a')) {
 
 	# ARTEMIS
 	case 'spy':						include ACTION . 'artemis/spy.php'; break;
+	case 'deletespyreport':			include ACTION . 'artemis/delete.php'; break;
+	case 'deleteallspyreport':		include ACTION . 'artemis/deleteAll.php'; break;
 
 	# ARES
 	case 'archivereport':			include ACTION . 'ares/report/archive.php'; break;

@@ -458,7 +458,7 @@ class Commander {
 			}
 		}
 
-		# test si ya des combats
+		# test si il y a des combats
 		if ($this->dArrival <= Utils::now() AND $this->statement == Commander::MOVING AND $this->hasToU) {
 			include_once GAIA;
 
