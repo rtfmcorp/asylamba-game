@@ -118,10 +118,12 @@ class NotificationManager extends Manager {
 		$qr->execute(array($rPlayer));
 
 		$nbrDeleted = 0;
-		for ($i=0; $i < $this->size(); $i++) { 
+		for ($i = 0; $i < $this->size(); $i++) { 
 			if ($this->get($i)->getRPlayer() == $rPlayer) {
 				$nbrDeleted++;
 			}
+
+			$this->_Remove($this->get($i)->getId());
 		}
 
 		return $nbrDeleted;

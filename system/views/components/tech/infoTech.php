@@ -34,7 +34,7 @@ echo '<div class="component panel-info">';
 				foreach ($researchList as $research) {
 					echo $research[0] . ', niv. ' . $research[1];
 					if ($research[2] == TRUE) {
-						echo '  --> OK';
+						echo '<img class="icon-color" src="' . MEDIA . 'resources/check.png" alt="" />';
 					}
 					echo '<br />';
 				}

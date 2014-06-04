@@ -115,15 +115,18 @@ abstract class Manager {
 	}
 
 	protected function _Remove($id) {
-		foreach ($this->objects[$this->currentSession->getId()] AS $k => $o) {
-			if ($o->getId() == $id) {
-				unset($this->objects[$this->currentSession->getId()][$k]);
-				unset($this->origin[$this->currentSession->getId()][$k]);
+		foreach ($this->sessions as $session) {
+			foreach ($this->objects[$session->getId()] AS $k => $o) {
+				if ($o->getId() == $id) {
+					unset($this->objects[$session->getId()][$k]);
+					unset($this->origin[$session->getId()][$k]);
+				}
 			}
-		}
 
-		$this->objects[$this->currentSession->getId()] = array_values($this->objects[$this->currentSession->getId()]);
-		$this->origin[$this->currentSession->getId()] = array_values($this->origin[$this->currentSession->getId()]);
+			$this->objects[$session->getId()] = array_values($this->objects[$session->getId()]);
+			$this->origin[$session->getId()]  = array_values($this->origin[$session->getId()]);
+
+		}
 
 		return NULL;
 	}

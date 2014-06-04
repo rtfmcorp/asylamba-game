@@ -132,7 +132,7 @@ echo '<div class="component market-sell">';
 					echo '</div>';
 				echo '</div>';
 
-				echo '<form id="sell-commander-' . $i . '" action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_COMMANDER . '/identifier-' . $commander->getId() . '" method="post" style="display:none;">';
+				echo '<form class="sell-form" id="sell-commander-' . $i . '" action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_COMMANDER . '/identifier-' . $commander->getId() . '" method="post" style="display:none;">';
 
 					echo '<div class="label-box">';
 						echo '<span class="label">Prix minimum</span>';

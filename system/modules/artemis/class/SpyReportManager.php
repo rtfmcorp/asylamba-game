@@ -176,7 +176,6 @@ class SpyReportManager extends Manager {
 		$qr->execute(array($id));
 
 		$this->_Remove($id);
-		
 		return TRUE;
 	}
 
@@ -186,10 +185,12 @@ class SpyReportManager extends Manager {
 		$qr->execute(array($rPlayer));
 
 		$nbrDeleted = 0;
-		for ($i=0; $i < $this->size(); $i++) { 
+		for ($i = 0; $i < $this->size(); $i++) { 
 			if ($this->get($i)->rPlayer == $rPlayer) {
 				$nbrDeleted++;
 			}
+
+			$this->_Remove($this->get($i)->getId());
 		}
 
 		return $nbrDeleted;

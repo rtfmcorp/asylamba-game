@@ -1,5 +1,6 @@
 <?php
 include_once ATHENA;
+include_once ARES;
 # propose a transaction action
 
 # int rplace 		id de la base orbitale
@@ -20,6 +21,17 @@ $price = Utils::getHTTPData('price');
 
 if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPlace, $verif)) {
 	$valid = TRUE;
+
+	$S_COM1 = ASM::$com->getCurrentSession();
+	ASM::$com->newSession(ASM_UMODE);
+	ASM::$com->load(array('c.id' => $identifier));
+	if (ASM::$com->size() == 1 AND ASM::$com->get()->getRPlayer() == CTR::$data->get('playerId')) {
+		$commander = ASM::$com->get();
+	} else {
+		$valid = FALSE;
+	}
+	ASM::$com->changeSession($S_COM1);
+
 	switch ($type) {
 		case Transaction::TYP_RESOURCE :
 			if ($quantity !== FALSE AND $quantity > 0) {
@@ -116,17 +128,8 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 								$base->setShipStorage($identifier, $inStorage - $quantity);
 								break;
 							case Transaction::TYP_COMMANDER :
-								$S_COM1 = ASM::$com->getCurrentSession();
-								ASM::$com->newSession(ASM_UMODE);
-								ASM::$com->load(array('c.id' => $identifier));
-								if (ASM::$com->size() == 1 AND ASM::$com->get()->getRPlayer() == CTR::$data->get('playerId')) {
-									$commander = ASM::$com->get();
-									$commander->setStatement(COM_ONSALE);
-									$commander->emptySquadrons();
-								} else {
-									$valid = FALSE;
-								}
-								ASM::$com->changeSession($S_COM1);
+								$commander->setStatement(COM_ONSALE);
+								$commander->emptySquadrons();
 								break;
 						}
 

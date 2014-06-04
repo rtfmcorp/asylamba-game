@@ -3419,6 +3419,10 @@ body {
 .component.transaction .new-transaction .indicator span.max-price { right: 5px;}
 
 /* MARKET-SELL */
+.component.market-sell .body {
+	padding: 10px 0;
+}
+
 .component.market-sell .label-box {
 	position: relative;
 	padding: 0 10px; margin: 10px 0;
@@ -3432,7 +3436,7 @@ body {
 
 .component.market-sell .label-box .value {
 	display: inline-block;
-	width: 169px; padding: 0 5px;
+	width: 147px; padding: 0 5px;
 	border: none;
 	line-height: 30px;
 	border-radius: 3px;
@@ -3452,19 +3456,22 @@ body {
 	margin: 0 10px;
 	cursor: pointer;
 }
-.component.market-sell .queue:first-child {
-	margin: 10px 10px 0 10px;
+
+.component.market-sell .sell-form {
+	background: #0A0A0A;
+	border: solid 1px #202020;
+	margin: 0 10px 10px 10px;
 }
 
 .component.market-sell .sell-form input[type='submit'] {
 	display: block;
-	width: 180px; margin: 0 0 0 auto;
+	width: 100%; margin: 0 0 0 auto;
 	border: solid 1px #0A0A0A;
 	padding: 6px 10px;
 	color: white;
-	border-radius: 3px;
 	background: #202020;
 	cursor: pointer;
+	overflow: hidden;
 }
 .color1 .component.market-sell .sell-form input[type='submit'] { background: #b01e2d; }
 .color2 .component.market-sell .sell-form input[type='submit'] { background: #2f23c0; }
@@ -3473,6 +3480,13 @@ body {
 .color5 .component.market-sell .sell-form input[type='submit'] { background: #57c632; }
 .color6 .component.market-sell .sell-form input[type='submit'] { background: #05bed7; }
 .color7 .component.market-sell .sell-form input[type='submit'] { background: #ac5832; }
+.color1 .component.market-sell .sell-form input[type='submit']:hover { background: #510816; }
+.color2 .component.market-sell .sell-form input[type='submit']:hover { background: #0c0d44; }
+.color3 .component.market-sell .sell-form input[type='submit']:hover { background: #b17a00; }
+.color4 .component.market-sell .sell-form input[type='submit']:hover { background: #310948; }
+.color5 .component.market-sell .sell-form input[type='submit']:hover { background: #24500a; }
+.color6 .component.market-sell .sell-form input[type='submit']:hover { background: #004948; }
+.color7 .component.market-sell .sell-form input[type='submit']:hover { background: #401b13; }
 
 .component.market-sell .sell-form input[disabled='disabled'] {
 	background: #202020 !important;
