@@ -51,7 +51,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 			if ($identifier === FALSE OR $identifier < 1) {
 				$valid = FALSE;
 			} else {
-				$quantity = $commander->getExperience();
+				$quantity = 1;
 			}
 			break;
 		default :
