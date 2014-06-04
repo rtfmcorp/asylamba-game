@@ -32,7 +32,11 @@ echo '<div class="component panel-info">';
 			echo '<p class="info">';
 				echo 'Technosphère, niv. ' . $technosphere . '<br />';
 				foreach ($researchList as $research) {
-					echo ucfirst($research[0]) . ', niv. ' . $research[1] . '<br />';
+					echo $research[0] . ', niv. ' . $research[1];
+					if ($research[2] == TRUE) {
+						echo '<img class="icon-color" src="' . MEDIA . 'resources/check.png" alt="" />';
+					}
+					echo '<br />';
 				}
 			echo '</p>';
 

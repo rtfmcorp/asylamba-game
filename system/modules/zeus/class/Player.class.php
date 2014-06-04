@@ -230,16 +230,21 @@ class Player {
 				$newIUniversity = ceil($this->iUniversity * $ratioDifference / 100);
 				$newISchool = ceil($orbitalBase->getISchool() * $ratioDifference / 100);
 				$newIAntiSpy = ceil($orbitalBase->getIAntiSpy() * $ratioDifference / 100);
-				$orbitalBase->setIUniversity($newIUniversity);
+
 				$orbitalBase->setISchool($newISchool);
 				$orbitalBase->setIAntiSpy($newIAntiSpy);
+
+				$this->iUniversity = $newIUniversity;
+
 				$credits -= ($newIUniversity + $newISchool + $newIAntiSpy);
 
 				$uniInvests += $newISchool;
+
 				$naturalTech += ($newISchool * $this->partNaturalSciences / 100);
 				$lifeTech += ($newISchool * $this->partLifeSciences / 100);
 				$socialTech += ($newISchool * $this->partSocialPoliticalSciences / 100);
 				$informaticTech += ($newISchool * $this->partInformaticEngineering / 100);
+				
 				$schoolInvests += $newIUniversity;
 				$antiSpyInvests += $newIAntiSpy;
 			}

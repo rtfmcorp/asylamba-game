@@ -1,5 +1,5 @@
 <?php
-include_once ARES;
+include_once ATHENA;
 
 $S_TRM1 = ASM::$trm->getCurrentSession();
 $S_CSM1 = ASM::$csm->getCurrentSession();
@@ -62,44 +62,43 @@ ASM::$trm->load(array('type' => Transaction::TYP_RESOURCE, 'statement' => Transa
 $resourcesCurrentRate = ASM::$trm->get()->currentRate;
 
 echo '<div class="component market-sell">';
-	echo '<div class="head skin-4">';
+	echo '<div class="head skin-4 sh">';
 		echo '<img src="' . MEDIA . 'resources/resource.png" alt="ressource" class="main" />';
 		echo '<h2>Ressources</h2>';
-		echo '<em>bra !</em>';
+		echo '<em>mettre en vente</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<form action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_RESOURCE . '" method="post">';
-				
+			echo '<form class="sell-form" data-max-quantity="' . $ob_compPlat->resourcesStorage . '" data-rate="' . $resourcesCurrentRate . '" data-min-price="' . Game::getMinPriceRelativeToRate(Transaction::TYP_RESOURCE, 1) . '" action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_RESOURCE . '" method="post">';
 				echo '<div class="label-box">';
 					echo '<span class="label">Ressources</span>';
 					echo '<span class="value">' . Format::numberFormat($ob_compPlat->resourcesStorage) . '</span>';
 					echo '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">';
 				echo '</div>';
 
-				echo '<div class="label-box">';
+				echo '<div class="label-box sf-quantity">';
 					echo '<label for="sell-market-quantity-resources" class="label">Quantité</label>';
-					echo '<input id="sell-market-quantity-resources" class="value" type="text" name="quantity"/>';
+					echo '<input id="sell-market-quantity-resources" class="value" type="text" name="quantity" autocomplete="off" />';
 					echo '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">';
 				echo '</div>';
 
 				echo '<hr />';
 
-				echo '<div class="label-box">';
+				echo '<div class="label-box sf-min-price">';
 					echo '<span class="label">Prix minimum</span>';
 					echo '<span class="value"></span>';
 					echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
 				echo '</div>';
 
-				echo '<div class="label-box">';
+				echo '<div class="label-box sf-price">';
 					echo '<label for="sell-market-price-resources" class="label">Prix</label>';
-					echo '<input id="sell-market-price-resources" class="value" type="text" name="price" value=""/>';
+					echo '<input id="sell-market-price-resources" class="value" type="text" name="price" autocomplete="off"/>';
 					echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
 				echo '</div>';
 
 				echo '<hr />';
 
-				echo '<p><input type="submit" value="vendre" /></p>';
+				echo '<p><input type="submit" value="Vendre" /></p>';
 			echo '</form>';
 		echo '</div>';
 	echo '</div>';
@@ -109,7 +108,7 @@ $S_COM1 = ASM::$com->getCurrentSession();
 ASM::$com->newSession();
 ASM::$com->load(array('c.statement' => Commander::INSCHOOL, 'c.rBase' => $ob_compPlat->getId()), array('c.experience', 'DESC'));
 
-# resources current rate
+# commander current rate
 ASM::$trm->newSession();
 ASM::$trm->load(array('type' => Transaction::TYP_COMMANDER, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
 $commanderCurrentRate = ASM::$trm->get()->currentRate;
@@ -118,7 +117,7 @@ echo '<div class="component market-sell">';
 	echo '<div class="head skin-4">';
 		echo '<img src="' . MEDIA . 'orbitalbase/school.png" alt="commandants" class="main" />';
 		echo '<h2>Commandants</h2>';
-		echo '<em>bra !</em>';
+		echo '<em>mettre en vente</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
@@ -126,14 +125,14 @@ echo '<div class="component market-sell">';
 				$commander = ASM::$com->get($i);
 
 				echo '<div class="queue">';
-					echo '<div class="item">';
+					echo '<div class="item sh" data-target="sell-commander-' . $i . '">';
 						echo '<img class="picto" src="' . MEDIA . 'commander/small/c1-l' . rand(1, 3) . '-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="" />';
 						echo '<strong>' . CommanderResources::getInfo($commander->getLevel(), 'grade') . ' ' . $commander->getName() . '</strong>';
 						echo '<em>' . Format::numberFormat($commander->getExperience()) . ' points d\'expérience</em>';
 					echo '</div>';
 				echo '</div>';
 
-				echo '<form action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_COMMANDER . '/identifier-' . $commander->getId() . '" method="post">';
+				echo '<form class="sell-form" id="sell-commander-' . $i . '" action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_COMMANDER . '/identifier-' . $commander->getId() . '" method="post" style="display:none;">';
 
 					echo '<div class="label-box">';
 						echo '<span class="label">Prix minimum</span>';
@@ -143,13 +142,13 @@ echo '<div class="component market-sell">';
 
 					echo '<div class="label-box">';
 						echo '<label for="sell-market-price-commander" class="label">Prix</label>';
-						echo '<input id="sell-market-price-commander" class="value" type="text" name="price" value="' . ceil($commander->experience * $commanderCurrentRate) . '" />';
+						echo '<input id="sell-market-price-commander" class="value" type="text" name="price" value="' . ceil($commander->experience * $commanderCurrentRate) . '" autocomplete="off" />';
 						echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
 					echo '</div>';
 
 					echo '<hr />';
 
-					echo '<p><input type="submit" value="vendre" /></p>';
+					echo '<p><input type="submit" value="Vendre" /></p>';
 				echo '</form>';
 			}
 
@@ -162,7 +161,7 @@ echo '</div>';
 
 ASM::$com->changeSession($S_COM1);
 
-# resources current rate
+# ship current rate
 ASM::$trm->newSession();
 ASM::$trm->load(array('type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
 $shipCurrentRate = ASM::$trm->get()->currentRate;
@@ -171,13 +170,13 @@ echo '<div class="component market-sell">';
 	echo '<div class="head skin-4">';
 		echo '<img src="' . MEDIA . 'orbitalbase/dock2.png" alt="vaisseaux" class="main" />';
 		echo '<h2>Vaisseaux</h2>';
-		echo '<em>bra !</em>';
+		echo '<em>mettre en vente</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			foreach ($ob_compPlat->shipStorage as $key => $ship) {
 				if ($ship > 0) {
-					echo '<div class="queue">';
+					echo '<div class="queue sh" data-target="sell-ships-' . $key . '">';
 						echo '<div class="item">';
 							echo '<img class="picto" src="' . MEDIA . 'ship/picto/ship' . $key . '.png" alt="" />';
 							echo '<strong>' . ShipResource::getInfo($key, 'codeName') . '</strong>';
@@ -186,35 +185,34 @@ echo '<div class="component market-sell">';
 						echo '</div>';
 					echo '</div>';
 
-					echo '<form action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_SHIP . '/identifier-' . $key . '" method="post">';
-
+					echo '<form id="sell-ships-' . $key . '" class="sell-form" data-max-quantity="' . $ship . '" data-rate="' . ($shipCurrentRate * ShipResource::getInfo($key, 'resourcePrice')) . '" data-min-price="' . Game::getMinPriceRelativeToRate(Transaction::TYP_SHIP, 1, $key) . '" action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_SHIP . '/identifier-' . $key . '" method="post" style="display:none;">';
 						echo '<div class="label-box">';
 							echo '<span class="label">Quantité max.</span>';
 							echo '<span class="value">' . $ship . '</span>';
 						echo '</div>';
 
-						echo '<div class="label-box">';
+						echo '<div class="label-box sf-quantity">';
 							echo '<label for="sell-market-quantity-ship" class="label">Quantité</label>';
-							echo '<input id="sell-market-quantity-ship" class="value" type="text" name="quantity" />';
+							echo '<input id="sell-market-quantity-ship" class="value" type="text" name="quantity" autocomplete="off" />';
 						echo '</div>';
 
 						echo '<hr />';
 
-						echo '<div class="label-box">';
+						echo '<div class="label-box sf-min-price">';
 							echo '<span class="label">Prix minimum</span>';
 							echo '<span class="value"></span>';
 							echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
 						echo '</div>';
 
-						echo '<div class="label-box">';
+						echo '<div class="label-box sf-price">';
 							echo '<label for="sell-market-price-ship" class="label">Prix</label>';
-							echo '<input id="sell-market-price-ship" class="value" type="text" name="price" />';
+							echo '<input id="sell-market-price-ship" class="value" type="text" name="price" autocomplete="off" />';
 							echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
 						echo '</div>';
 
 						echo '<hr />';
 
-						echo '<p><input type="submit" value="vendre" /></p>';
+						echo '<p><input type="submit" value="Vendre" /></p>';
 					echo '</form>';
 				}
 			}

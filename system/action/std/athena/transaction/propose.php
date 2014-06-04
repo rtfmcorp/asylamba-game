@@ -20,6 +20,7 @@ $price = Utils::getHTTPData('price');
 
 if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPlace, $verif)) {
 	$valid = TRUE;
+
 	switch ($type) {
 		case Transaction::TYP_RESOURCE :
 			if ($quantity !== FALSE AND $quantity > 0) {
@@ -50,7 +51,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 			if ($identifier === FALSE OR $identifier < 1) {
 				$valid = FALSE;
 			} else {
-				$quantity = $commander->getExperience();
+				$quantity = 1;
 			}
 			break;
 		default :
@@ -127,6 +128,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 									$valid = FALSE;
 								}
 								ASM::$com->changeSession($S_COM1);
+								
 								break;
 						}
 

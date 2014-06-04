@@ -37,6 +37,13 @@ echo '<div class="component building">';
 				echo '<strong>Quais commerciaux</strong>';
 				echo '<em>Gérez vos routes commerciales</em>';
 			echo '</a>';
+
+			$active = (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'resource') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'bases/view-commercialplateforme/mode-resource" class="nav-element ' . $active . '">';
+				echo '<img src="' . MEDIA . 'orbitalbase/commercialplateforme.png" alt="" />';
+				echo '<strong>Halle de transfert</strong>';
+				echo '<em>Envoyez des ressources</em>';
+			echo '</a>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
@@ -45,8 +52,10 @@ if (!CTR::$get->exist('mode') || CTR::$get->get('mode') == 'market') {
 	include COMPONENT . 'bases/ob/complat/market.php';
 } elseif (CTR::$get->get('mode') == 'sell') {
 	include COMPONENT . 'bases/ob/complat/sell.php';
-} else {
+} elseif (CTR::$get->get('mode') == 'route') {
 	include COMPONENT . 'bases/ob/complat/route.php';
+} else {
+	include COMPONENT . 'bases/ob/complat/resource.php';
 }
 
 echo '<div class="component">';

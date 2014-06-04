@@ -444,7 +444,7 @@ jQuery(document).ready(function($) {
 				var outputS = timerS - 1;
 				if (outputS < 10) { outputS = '0' + outputS; }
 				$(target).html(timerM + '\'' + outputS);
-			} else if(timerM > 0) {
+			} else if (timerM > 0) {
 				var outputS = 59;
 				var outputM = timerM - 1;
 				if (outputM < 10) { outputM = '0' + outputM; }

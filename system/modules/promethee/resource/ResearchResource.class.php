@@ -132,43 +132,43 @@ class ResearchResource {
 	
 	private static $research = array(
 		array(
-			'name' => 'mathématiques',
+			'name' => 'Mathématiques',
 			'codeName' => 'mathematics'
 			),
 		array(
-			'name' => 'physique',
+			'name' => 'Physique',
 			'codeName' => 'physics'
 			),
 		array(
-			'name' => 'chimie',
+			'name' => 'Chimie',
 			'codeName' => 'chemistry'
 			),
 		array(
-			'name' => 'biologie',
+			'name' => 'Biologie',
 			'codeName' => 'biology'
 			),
 		array(
-			'name' => 'médecine',
+			'name' => 'Médecine',
 			'codeName' => 'medicine'
 			),
 		array(
-			'name' => 'économie',
+			'name' => 'Economie',
 			'codeName' => 'economy'
 			),
 		array(
-			'name' => 'psychologie',
+			'name' => 'Psychologie',
 			'codeName' => 'psychology'
 			),
 		array(
-			'name' => 'réseaux',
+			'name' => 'Réseaux',
 			'codeName' => 'networks'
 			),
 		array(
-			'name' => 'algorithmique',
+			'name' => 'Algorithmique',
 			'codeName' => 'algorithmic'
 			),
 		array(
-			'name' => 'statistiques',
+			'name' => 'Statistiques',
 			'codeName' => 'statistics'
 		)
 	);
