@@ -32,6 +32,7 @@ if (DEVMODE || CTR::$get->exist('password')) {
 		case 'addspyreport':				include SCRIPT . 'scripts/addspyreport.php'; break;
 		case 'removedescriptionfromplayer':	include SCRIPT . 'scripts/removeDescriptionFromPlayer.php'; break;
 		case 'addstepdoneinplayer':			include SCRIPT . 'scripts/addStepDoneInPlayer.php'; break;
+		case 'addrankings':					include SCRIPT . 'scripts/addRankings.php'; break;
 
 		case 'dailycron':					include SCRIPT . 'scripts/cron/daily.php'; break;
 
