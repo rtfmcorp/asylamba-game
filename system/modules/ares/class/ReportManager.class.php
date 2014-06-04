@@ -19,7 +19,7 @@ class ReportManager extends Manager {
 		$formatLimit = Utils::arrayToLimit($limit);
 
 		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT r.* FROM report r
+		$qr = $db->prepare('SELECT r.* FROM report AS r
 			' . $formatWhere .'
 			' . $formatOrder .'
 			' . $formatLimit
@@ -44,69 +44,32 @@ class ReportManager extends Manager {
 		$aw = $qr->fetchAll();
 		$qr->closeCursor();
 
-		foreach($aw AS $awReport) {
-			$report = new Report();
-
-			$report->id = $awReport['id'];
-			$report->resources = $awReport['resources'];
-			$report->expCom = $awReport['expCom'];
-			$report->expPlayerA = $awReport['expPlayerA'];
-			$report->expPlayerD = $awReport['expPlayerD'];
-			$report->rPlayerWinner = $awReport['rPlayerWinner'];
-			$report->round = $awReport['round'];
-			$report->rPlayerAttacker = $awReport['rPlayerAttacker'];
-			$report->rPlayerDefender = $awReport['rPlayerDefender'];
-			$report->rBigReport = $awReport['rBigReport'];
-			$report->rPlace = $awReport['rPlace']; 			
-			$report->type = $awReport['type'];
-			$report->importance = $awReport['importance'];
-			$report->dFight = $awReport['dFight'];
-			$report->statementAttacker = $awReport['statementAttacker'];
-			$report->statementDefender = $awReport['statementDefender'];
-			$report->placeName = $awReport['placeName'];
-
-			$this->_Add($report);
-		}		
-	}
-
-	public function loadWithBig($where = array(), $order = array(), $limit = array()) {
-		$formatWhere = Utils::arrayToWhere($where, 'r.');
-		$formatOrder = Utils::arrayToOrder($order);
-		$formatLimit = Utils::arrayToLimit($limit);
-
-		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT r.*,
-				br.id AS brId,
-				br.commanders AS brCommanders,
-				br.fight AS brFight,
-				br.deletedOnce AS brDeletedOnce
-			FROM report AS r
-			LEFT JOIN bigReport AS br
-				ON br.id = r.rBigReport
-			' . $formatWhere .'
-			' . $formatOrder .'
-			' . $formatLimit
-		);
-
-		foreach($where AS $v) {
-			if (is_array($v)) {
-				foreach ($v as $p) {
-					$valuesArray[] = $p;
-				}
-			} else {
-				$valuesArray[] = $v;
-			}
+		$idReports = array();
+		foreach ($aw AS $report) {
+			$idReports[] = $report['id'];
 		}
 
-		if (empty($valuesArray)) {
+		$qr = 'SELECT * FROM squadronReport ';
+		$i = 0;
+		foreach ($idReports AS $id) {
+			$qr .= ($i == 0) ? 'WHERE rCommander = ? ' : 'OR rCommander = ? ';
+			$i++;
+		}
+
+		$qr = $db->prepare($qr);
+
+		if (empty($idReports)) {
 			$qr->execute();
 		} else {
-			$qr->execute($valuesArray);
+			$qr->execute($idReports);
 		}
 
-		$aw = $qr->fetchAll();
-		$qr->closeCursor();
+		$awSquadronReport = $qr->fetchAll();
 
+		$armies = array(array());
+		foreach($awSquadronReport AS $squadron) {
+			$armies['' . $squadron->rReport . ''][] = $squadron;
+		}
 
 		foreach($aw AS $awReport) {
 			$report = new Report();
@@ -129,13 +92,8 @@ class ReportManager extends Manager {
 			$report->statementDefender = $awReport['statementDefender'];
 			$report->placeName = $awReport['placeName'];
 
-			if ($awReport['brId'] !== NULL) {
-				$report->rBigReport = $awReport['brId'];
-				$report->fight = unserialize($awReport['brFight']);
-				$report->commanders = unserialize($awReport['brCommanders']);
-				$report->deletedOnce = $awReport['brDeletedOnce'];
-			}
-			
+			$report->setArmies($armies[$report->id]);
+
 			$this->_Add($report);
 		}
 	}
@@ -199,21 +157,11 @@ class ReportManager extends Manager {
 
 	public function add($newReport) {
 		$db = DataBase::getInstance();
-		$qr = $db->prepare('INSERT INTO bigReport(fight, commanders) VALUES (?, ?)');
-		$aw = $qr->execute(array(
-			serialize($newReport->fight),
-			serialize($newReport->commanders),
-			)
-		);
 
-		$bigReportId = $db->lastInsertId();
-		$db2 = DataBase::getInstance();
-
-		$qr2 = $db2->prepare('INSERT INTO report SET
+		$qr = $db->prepare('INSERT INTO report SET
 			rPlayerAttacker = ?,
 			rPlayerDefender = ?,
 			rPlayerWinner = ?,
-			rBigReport = ?,
 			resources = ?,
 			expCom = ?,
 			expPlayerA = ?,
@@ -226,11 +174,10 @@ class ReportManager extends Manager {
 			statementAttacker = ?,
 			statementDefender = ?,
 			dFight = ?');
-		$aw = $qr2->execute(array(
+		$aw = $qr->execute(array(
 			$newReport->rPlayerAttacker,
 			$newReport->rPlayerDefender,
 			$newReport->rPlayerWinner,
-			$bigReportId,
 			$newReport->resources,
 			$newReport->expCom,
 			$newReport->expPlayerA,
@@ -249,6 +196,20 @@ class ReportManager extends Manager {
 		$this->_Add($newReport);
 
 		return $newReport->id;
+
+		$qr = 'INSERT INTO squadronReport (position = ?, rReport = ?, rCommander = ?, ship0 = ?, ship1 = ?, ship2 = ?, ship3 = ?, ship4 = ?, ship5 = ?, ship6 = ?, ship7 = ?, ship8 = ?, ship9 = ?, ship10 = ?, ship11 = ?)
+			VALUES';
+
+		for ($j = 0; $j < count($newReport->squadrons); $i++) {
+			$qr .= '(' . $newReport->squadrons[$j][0];
+				for ($i = 1; $i < 16; $i++) {
+					$qr .= ' ,' . $newReport->squadrons[$j][$i];
+				}
+			$qr .= ($i == count($newReport->squadrons - 1)) ? ');' : '), ';
+		}
+
+		$qr = $db->prepare($qr);
+		$aw = $qr->execute();
 	}
 
 	public function deleteById($id) {

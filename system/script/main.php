@@ -28,7 +28,8 @@ if (DEVMODE || CTR::$get->exist('password')) {
 		case 'addtechnologyqueue':			include SCRIPT . 'scripts/addtechnologyqueue.php'; break;
 		case 'addplayer':					include SCRIPT . 'scripts/addplayer.php'; break;
 		case 'addcolor':					include SCRIPT . 'scripts/addcolor.php'; break;
-		case 'updatecommander':				include SCRIPT . 'scripts/updatecommander.php'; break;
+		case 'updatecommander':				include SCRIPT . 'scripts/updateCommander.php'; break;
+		case 'updatereport':				include SCRIPT . 'scripts/updateReport.php'; break;
 		case 'addspyreport':				include SCRIPT . 'scripts/addspyreport.php'; break;
 		case 'removedescriptionfromplayer':	include SCRIPT . 'scripts/removeDescriptionFromPlayer.php'; break;
 		case 'addstepdoneinplayer':			include SCRIPT . 'scripts/addStepDoneInPlayer.php'; break;

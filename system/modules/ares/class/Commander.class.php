@@ -372,6 +372,7 @@ class Commander {
 	public function resultOfFight($isWinner, $enemyCommander = NULL) {
 		if ($isWinner == TRUE) {
 			$this->setEarnedExperience($enemyCommander);
+			$this->earnedExperience = round($this->earnedExperience);
 
 			$this->winner = TRUE;
 			$this->palmares++;
@@ -379,6 +380,8 @@ class Commander {
 			$this->upExperience($this->earnedExperience);
 			$this->hasChanged = TRUE;
 		} else {
+			$this->earnedExperience = round($this->earnedExperience);
+
 			$this->winner = FALSE;
 			$this->setArmyAtEnd();
 			$this->upExperience($this->earnedExperience);
