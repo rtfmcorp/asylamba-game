@@ -86,7 +86,7 @@ echo '<div class="component market-sell">';
 
 				echo '<div class="label-box sf-min-price">';
 					echo '<span class="label">Prix minimum</span>';
-					echo '<span class="value"></span>';
+					echo '<span class="value" data-price-raw="0"></span>';
 					echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
 				echo '</div>';
 

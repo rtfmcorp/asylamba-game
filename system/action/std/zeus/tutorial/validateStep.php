@@ -7,7 +7,6 @@ $stepTutorial = CTR::$data->get('playerInfo')->get('stepTutorial');
 $stepDone = CTR::$data->get('playerInfo')->get('stepDone');
 
 if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
-
 	$S_PAM1 = ASM::$pam->getCurrentSession();
 	ASM::$pam->newSession();
 	ASM::$pam->load(array('id' => $playerId));

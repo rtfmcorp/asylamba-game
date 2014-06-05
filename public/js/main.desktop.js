@@ -705,7 +705,7 @@ jQuery(document).ready(function($) {
 // ###########################
 // #### MARKET MECHANISME ####
 // ###########################
-	$('.sell-form input').live('keyup', function() {
+	$('.sell-form input[name="quantity"]').live('keyup', function() {
 		var box  = $(this).parents('.sell-form'),
 			maxQ = box.data('max-quantity'),
 			minP = box.data('min-price'),
@@ -719,10 +719,11 @@ jQuery(document).ready(function($) {
 		} else {
 			box.find('input[type="submit"]').removeAttr('disabled');
 		}
+
 		box.find('.sf-min-price .value').html(utils.numberFormat(Math.ceil(rMinP)));
 		box.find('.sf-price input').val(price);	
 	});
-
+	
 	/* OTHER ANNIMATIONS */
 	(function() {
 		var t = $('#nav .box a.current-base img');
