@@ -44,6 +44,10 @@ abstract class ASM {
 	public static $elm;
 	public static $vom;
 
+	protected static $runningAtlas = FALSE;
+	public static $urm;
+	public static $frm;
+
 	public static function runAres() {
 		if (!self::$runningAres) {
 			self::$com = new CommanderManager();
@@ -124,6 +128,14 @@ abstract class ASM {
 		self::$runningDemeter = TRUE;
 	}
 
+	public static function runAtlas() {
+		if (!self::$runningAtlas) {
+			self::$urm = new UserRankingManager();
+			self::$frm = new FactionRankingManager();
+		}
+		self::$runningAtlas = TRUE;
+	}
+
 	public static function save() {
 		if (self::$runningAres) {
 			self::$com->save();
@@ -167,6 +179,10 @@ abstract class ASM {
 			self::$cam->save();
 			self::$elm->save();
 			self::$vom->save();
+		}
+		if (self::$runningAtlas) {
+			self::$urm->save();
+			self::$frm->save();
 		}
 	}
 }

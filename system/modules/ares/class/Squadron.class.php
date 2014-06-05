@@ -16,9 +16,10 @@ class Squadron {
 	public $lineCoord 			= 0;
 	public $nbrShips 			= 0;
 	public $rCommander 			= 0;
-	public $position				= 0; //position dans le tableau de l'armée
+	public $position			= 0; //position dans le tableau de l'armée
 	public $arrayOfShips 		= array();
 	public $relId 				= 0;
+	public $dLastModification 	= '';
 	
 	public $squadron 			= array();
 
@@ -74,7 +75,7 @@ class Squadron {
 			$this->arrayOfShips[] = $vector[$i];
 		}
 
-		$this->dLAstModification = $vector[12];
+		$this->dLastModification = $vector[12];
 		$this->lineCoord = $lineCoord;
 		$this->id = $id;
 		$this->rCommander = $rCommander;
@@ -111,20 +112,6 @@ class Squadron {
 			$this->fight($enemyCommander->getSquadron($this->relId));
 			$enemyCommander->getSquadron($this->relId)->setRelId($this->position);
 			$enemyCommander->getSquadron($this->relId)->fight($thisCommander->getSquadron($this->position));
-
-			if ($thisCommander->getIsAttacker() == TRUE) {
-				LiveReport::$fight[LiveReport::$halfround][] = array(
-					array($thisSquadronBefore->getArrayOfShips(), $enemySquadronBefore->getArrayOfShips()), 
-					array($this->arrayOfShips, $enemyCommander->getSquadron($this->relId)->getArrayOfShips()),
-					array($this->howManyLostPv($thisSquadronBefore, $this), $this->howManyLostPv($enemySquadronBefore, $enemyCommander->getSquadron($this->relId)))
-				);
-			} else {
-				LiveReport::$fight[LiveReport::$halfround][] = array(
-					array($enemySquadronBefore->getArrayOfShips(), $thisSquadronBefore->getArrayOfShips()), 
-					array($enemyCommander->getSquadron($this->relId)->getArrayOfShips(), $this->arrayOfShips),
-					array($this->howManyLostPv($enemySquadronBefore, $enemyCommander->getSquadron($this->relId), $this->howManyLostPv($thisSquadronBefore, $this)))
-				);
-			}
 		}
 		return $enemyCommander;
 	}

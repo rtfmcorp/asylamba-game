@@ -191,10 +191,14 @@ class Place {
 		include_once ARES;
 
 		switch ($commander->travelType) {
-				case Commander::MOVE: $this->tryToChangeBase($commander); break;
-				case Commander::LOOT: $this->tryToLoot($commander); break;
-				case Commander::COLO: $this->tryToConquer($commander); break;
-				case Commander::BACK: $this->comeBackToHome($commander); break;
+				case Commander::MOVE: $this->tryToChangeBase($commander); 
+					LiveReport::$type = 0; break;
+				case Commander::LOOT: $this->tryToLoot($commander);
+					LiveReport::$type = 1; break;
+				case Commander::COLO: $this->tryToConquer($commander);
+					LiveReport::$type = 2; break;
+				case Commander::BACK: $this->comeBackToHome($commander);
+					LiveReport::$type = 3; break;
 				default: 
 					CTR::$alert->add('Cette action n\'existe pas.', ALT_BUG_INFO);
 		}
@@ -644,6 +648,25 @@ class Place {
 		}
 	}
 
+	private function createReport($c1, $c2) {
+		include_once ARES;
+		$report = new Report();
+
+		$report->rPlayerAttacker = LiveReport::$rPlayerAttacker;
+		$report->rPlayerDefender =  LiveReport::$rPlayerDefender;
+		$report->rPlayerWinner = LiveReport::$rPlayerWinner;
+		$report->resources = LiveReport::$resources;
+		$report->expCom = LiveReport::$expCom;
+		$report->expPlayerA = LiveReport::$expPlayerA;
+		$report->expPlayerD = LiveReport::$expPlayerD;
+		$report->rPlace = $this->id;
+		$report->type = LiveReport::$type;
+		$report->round = LiveReport::$round;
+		$report->importance = LiveReport::$importance;
+		$report->dFight = lib::now(); //à modifier
+		$report->placeName = ($this->baseName == '') ? 'planète rebelle' : $this->baseName;
+	}
+
 	private function sendNotif($case, $commander) {
 		include_once HERMES;
 
@@ -680,7 +703,7 @@ class Place {
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->setTitle('Rapport de déplacement');
 				$notif->addBeg()
-					->addTxt('Votre commandant ')
+					->addTxt('Votre officier ')
 					->addStg($commander->getName())
 					->addTxt(' n\'est pas arrivé sur ')
 					->addLnk('map/base-' . $this->id, $this->baseName)
@@ -693,15 +716,14 @@ class Place {
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->setTitle('Rapport de pillage');
 				$notif->addBeg()
-					->addTxt('Votre commandant ')
+					->addTxt('Votre officier ')
 					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' a pillé la planète rebelle située aux coordonnées ')
 					->addLnk('map/place-' . $this->id, Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector))
 					->addTxt('.')
 					->addSep()
-					->addTxt('La flotte victorieuse a volé ')
-					->addStg(Format::numberFormat($commander->getResourcesTransported()))
-					->addTxt(' ressources à l\'ennemi.')
+					->addBoxResource('resource', $commander->getResourcesTransported(), 'ressources pillées')
+					->addBoxResource('xp', $commander->earnedExperience, 'experience gagnée')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -710,7 +732,7 @@ class Place {
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->setTitle('Rapport de pillage');
 				$notif->addBeg()
-					->addTxt('Votre commandant ')
+					->addTxt('Votre officier ')
 					->addLnk('fleet/view-memorial', $commander->getName())
 					->addTxt(' est tombé lors de l\'attaque de la planète rebelle située aux coordonnées ')
 					->addLnk('map/place-' . $this->id, Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector))
@@ -725,7 +747,7 @@ class Place {
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->setTitle('Victoire lors d\'un pillage');
 				$notif->addBeg()
-					->addTxt('Votre commandant ')
+					->addTxt('Votre officier ')
 					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' a pillé la planète ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
@@ -733,9 +755,8 @@ class Place {
 					->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
 					->addTxt('.')
 					->addSep()
-					->addTxt('Votre pillage vous rapporte ')
-					->addStg(Format::numberFormat($commander->getResourcesTransported()))
-					->addTxt(' ressources.')
+					->addBoxResource('resource', $commander->getResourcesTransported(), 'ressources pillées')
+					->addBoxResource('xp', $commander->earnedExperience, 'experience gagnée')
 					->addEnd();
 				ASM::$ntm->add($notif);
 
@@ -743,7 +764,7 @@ class Place {
 				$notif->setRPlayer($this->rPlayer);
 				$notif->setTitle('Rapport de pillage');
 				$notif->addBeg()
-					->addTxt('Le commandant ')
+					->addTxt('L\' officier ')
 					->addStg($commander->getName())
 					->addTxt(' appartenant au joueur ')
 					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
@@ -751,9 +772,7 @@ class Place {
 					->addLnk('map/place-' . $this->id, $this->baseName)
 					->addTxt('.')
 					->addSep()
-					->addTxt('Il repart avec ')
-					->addStg(Format::numberFormat($commander->getResourcesTransported()))
-					->addTxt(' ressources.')
+					->addBoxResource('resource', $commander->getResourcesTransported(), 'ressources pillées')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -762,7 +781,7 @@ class Place {
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->setTitle('Défaite lors d\'un pillage');
 				$notif->addBeg()
-					->addTxt('Votre commandant ')
+					->addTxt('Votre officier ')
 					->addLnk('fleet/view-memorial', $commander->getName())
 					->addTxt(' est tombé lors du pillage de la planète ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
@@ -778,7 +797,7 @@ class Place {
 				$notif->setRPlayer($this->rPlayer);
 				$notif->setTitle('Rapport de combat');
 				$notif->addBeg()
-					->addTxt('Le commandant ')
+					->addTxt('L\' officier ')
 					->addStg($commander->getName())
 					->addTxt(' appartenant au joueur ')
 					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
@@ -795,7 +814,7 @@ class Place {
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->setTitle('Mise à sac');
 				$notif->addBeg()
-					->addTxt('Votre commandant ')
+					->addTxt('Votre officier ')
 					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' a pillé la planète non défendue ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
@@ -803,9 +822,8 @@ class Place {
 					->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
 					->addTxt('.')
 					->addSep()
-					->addTxt('Votre pillage vous rapporte ')
-					->addStg(Format::numberFormat($commander->getResourcesTransported()))
-					->addTxt(' ressources.')
+					->addBoxResource('resource', $commander->getResourcesTransported(), 'ressources pillées')
+					->addBoxResource('xp', $commander->earnedExperience, 'experience gagnée')
 					->addEnd();
 				ASM::$ntm->add($notif);
 
@@ -813,17 +831,15 @@ class Place {
 				$notif->setRPlayer($this->rPlayer);
 				$notif->setTitle('Rapport de pillage');
 				$notif->addBeg()
-					->addTxt('Le commandant ')
+					->addTxt('L\' officier ')
 					->addStg($commander->getName())
 					->addTxt(' appartenant au joueur ')
 					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
 					->addTxt(' a pillé votre planète ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
-					->addTxt('. Aucun commandant n\'était en position pour la défendre. ')
+					->addTxt('. Aucun officier n\'était en position pour la défendre. ')
 					->addSep()
-					->addTxt('Il repart avec ')
-					->addStg(Format::numberFormat($commander->getResourcesTransported()))
-					->addTxt(' ressources.')
+					->addBoxResource('resource', $commander->getResourcesTransported(), 'ressources pillées')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -832,7 +848,7 @@ class Place {
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->setTitle('Erreur de coordonnées');
 				$notif->addBeg()
-					->addTxt('Votre commandant ')
+					->addTxt('Votre officier ')
 					->addStg($commander->getName())
 					->addTxt(' n\'a pas attaqué la planète ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
@@ -845,11 +861,12 @@ class Place {
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->setTitle('Planète colonisée');
 				$notif->addBeg()
-					->addTxt('Votre commandant ')
+					->addTxt('Votre officier ')
 					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' a colonisé la planète rebelle située aux coordonnées ')  
-					->addLnk('map/place-' . $this->id , Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector))
-					->addTxt('. Votre empire s\'étend, administrez votre nouvelle planète ')
+					->addLnk('map/place-' . $this->id , Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector) . '.')
+					->addBoxResource('xp', $commander->earnedExperience, 'experience gagnée')
+					->addTxt('Votre empire s\'étend, administrez votre nouvelle planète ')
 					->addLnk('bases/base-' . $this->id, 'ici')
 					->addTxt('.')
 					->addEnd();
@@ -858,9 +875,9 @@ class Place {
 			case self::CONQUEREMPTYFAIL:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Défaite lors d\'une colonisationge');
+				$notif->setTitle('Défaite lors d\'une colonisation');
 				$notif->addBeg()
-					->addTxt('Votre commandant ')
+					->addTxt('Votre officier ')
 					->addLnk('fleet/view-memorial', $commander->getName())
 					->addTxt(' est tombé lors de l\'attaque de la planète rebelle située aux coordonnées ')
 					->addLnk('map/place-' . $this->id, Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector))
@@ -875,7 +892,7 @@ class Place {
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->setTitle('Planète conquise');
 				$notif->addBeg()
-					->addTxt('Votre commandant ')
+					->addTxt('Votre officier ')
 					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' a conquis la planète ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
@@ -883,6 +900,7 @@ class Place {
 					->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
 					->addTxt('.')
 					->addSep()
+					->addBoxResource('xp', $commander->earnedExperience, 'experience gagnée')
 					->addTxt('Elle est désormais votre, vous pouvez l\'administrer ')
 					->addLnk('bases/base-' . $this->id, 'ici')
 					->addTxt('.')
@@ -893,7 +911,7 @@ class Place {
 				$notif->setRPlayer($this->rPlayer);
 				$notif->setTitle('Rapport de conquête');
 				$notif->addBeg()
-					->addTxt('Le commandant ')
+					->addTxt('L\' officier ')
 					->addStg($commander->getName())
 					->addTxt(' appartenant au joueur ')
 					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
@@ -910,7 +928,7 @@ class Place {
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->setTitle('Echec de conquête');
 				$notif->addBeg()
-					->addTxt('Votre commandant ')
+					->addTxt('Votre officier ')
 					->addLnk('fleet/view-memorial/', $commander->getName())
 					->addTxt(' est tombé lors de la tentive de conquête de la planète ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
@@ -926,7 +944,7 @@ class Place {
 				$notif->setRPlayer($this->rPlayer);
 				$notif->setTitle('Rapport de combat');
 				$notif->addBeg()
-					->addTxt('Le commandant ')
+					->addTxt('L\' officier ')
 					->addStg($commander->getName())
 					->addTxt(' appartenant au joueur ')
 					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
@@ -943,7 +961,7 @@ class Place {
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->setTitle('Planète conquise');
 				$notif->addBeg()
-					->addTxt('Votre commandant ')
+					->addTxt('Votre officier ')
 					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' a conquis la planète non défendue ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
@@ -951,6 +969,7 @@ class Place {
 					->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
 					->addTxt('.')
 					->addSep()
+					->addBoxResource('xp', $commander->earnedExperience, 'experience gagnée')
 					->addTxt('Elle est désormais votre, vous pouvez l\'administrer ')
 					->addLnk('bases/base-' . $this->id, 'ici')
 					->addTxt('.')
@@ -961,7 +980,7 @@ class Place {
 				$notif->setRPlayer($this->rPlayer);
 				$notif->setTitle('Rapport de conquête');
 				$notif->addBeg()
-					->addTxt('Le commandant ')
+					->addTxt('Le officier ')
 					->addStg($commander->getName())
 					->addTxt(' appartenant au joueur ')
 					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
@@ -978,7 +997,7 @@ class Place {
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->addBeg()
 					->setTitle('Erreur de coordonnées')
-					->addTxt('Votre commandant ')
+					->addTxt('Votre officier ')
 					->addStg($commander->getName())
 					->addTxt(' n\'a pas attaqué la planète ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
@@ -991,7 +1010,7 @@ class Place {
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->setTitle('Rapport de retour');
 				$notif->addBeg()
-					->addTxt('Votre commandant ')
+					->addTxt('Votre officier ')
 					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' est de retour sur votre base ')
 					->addLnk('map/place-' . $commander->getRBase(), $commander->getBaseName())

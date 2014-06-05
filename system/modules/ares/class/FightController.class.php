@@ -224,21 +224,11 @@ class FightController {
 		$commanderA->setIsAttacker(TRUE);
 		$commanderD->setIsAttacker(FALSE);
 		
-		if ($place->getTypeOfBase() == 4) {
-			LiveReport::$placeName = $place->getBaseName();
-		} else if ($place->getTypeOfBase() == 0 ) {
-			LiveReport::$placeName = 'planète rebelle';
-		} else {
-			LiveReport::$placeName = 'vaisseau mère';
-		}
-		LiveReport::$type = $commanderA->getTypeOfMove();
-		LiveReport::setCommanders(array($commanderA, $commanderD));
-		LiveReport::setDefender($commanderD);
-		LiveReport::setDFight($commanderA->getArrivalDate());
-		LiveReport::setType($commanderA->getTypeOfMove());
-		LiveReport::setRPlace($commanderA->getRPlaceDestination());
 		$commanderA->setPevInBegin();
 		$commanderD->setPevInBegin();
+
+		LiveReport::$rPlayerAttacker = $commanderA->rPlayer;
+		LiveReport::$rPlayerDefender = $commanderD->rPlayer;
 	
 		while(1) {
 			if (LiveReport::$round == 1000) {
@@ -255,7 +245,7 @@ class FightController {
 				$commanderD->resultOfFight(FALSE);
 				$commanderD->setStatement(3);
 				$commanderD->setDDeath(Utils::now());
-				LiveReport::setWinner($commanderA->getRPlayer());
+				LiveReport::$rPlayerWinner = $commanderA->rPlayer;
 
 				if ($commanderD->getRPlayer() != 0) {
 					include_once ZEUS;
@@ -288,7 +278,7 @@ class FightController {
 				$commanderA->resultOfFight(FALSE);
 				$commanderA->setStatement(3);
 				$commanderD->setDDeath(Utils::now());
-				LiveReport::setWinner($commanderD->getRPlayer());
+				LiveReport::$rPlayerWinner = $commanderD->rPlayer;
 
 				if ($commanderD->getRPlayer() != 0) {
 					include_once ZEUS;
@@ -315,9 +305,6 @@ class FightController {
 			LiveReport::$round++;
 			self::$currentLine++;
 		}
-		LiveReport::setFinalCommanders(array($commanderA, $commanderD));
-		LiveReport::setFinalArmies($commanderA->getArmyAtEnd(), $commanderD->getArmyAtEnd());
-
 		return array($commanderA, $commanderD);
 	}
 }
