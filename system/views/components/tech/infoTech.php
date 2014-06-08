@@ -33,9 +33,7 @@ echo '<div class="component panel-info">';
 				echo 'Technosphère, niv. ' . $technosphere . '<br />';
 				foreach ($researchList as $research) {
 					echo $research[0] . ', niv. ' . $research[1];
-					if ($research[2] == TRUE) {
-						echo '<img class="icon-color" src="' . MEDIA . 'resources/check.png" alt="" />';
-					}
+					echo $research[2] ? '<img class="requierement" src="' . MEDIA . 'resources/check.png" alt="" />' : NULL;
 					echo '<br />';
 				}
 			echo '</p>';

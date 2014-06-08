@@ -926,6 +926,13 @@ body {
 	color: white;
 }
 
+.component .body p.info .requierement {
+	display: inline-block;
+	margin: 0 0 0 8px;
+	vertical-align: bottom;
+	height: 16px;
+}
+
 .component .body p.long-info {
 	padding: 10px;
 	line-height: 150%;
