@@ -50,15 +50,6 @@ echo '<div class="component generator">';
 					echo '</div>';
 
 					echo '<div class="desc-choice">';
-						echo '<h4>' . PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'name') . '</h4>';
-						$fleetQuantity = PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'l-line') + PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'r-line');
-						echo '<p><strong class="short">Flottes</strong>' . $fleetQuantity . '</p>';
-						echo '<p><strong class="short">Impôt</strong>' . (PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'tax') * 100) . '%</p>';
-						echo '<p><strong>Technologies</strong>Orientée commerce et production</p>';
-						echo '<p><strong>Bâtiments</strong>Raffinerie, Plateforme commerciale et générateur de gravité au niveau maximum</p>';
-						echo '<hr />';
-						echo '<p><strong>Nécessite</strong>Générateur niveau ' . OBM_LEVEL_MIN_TO_CHANGE_TYPE . '</p>';
-
 						if (($ob_obSituation->typeOfBase == OrbitalBase::TYP_NEUTRAL && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price') && $ob_obSituation->levelGenerator >= OBM_LEVEL_MIN_TO_CHANGE_TYPE) || (($ob_obSituation->typeOfBase == OrbitalBase::TYP_MILITARY || $ob_obSituation->typeOfBase == OrbitalBase::TYP_CAPITAL) && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price'))) {
 							echo '<a href="' . APP_ROOT . 'action/a-changebasetype/baseid-' . $ob_obSituation->getId() . '/type-' . OrbitalBase::TYP_COMMERCIAL . '" class="button">';
 								echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'name') . '<br />';
@@ -74,18 +65,17 @@ echo '<div class="component generator">';
 								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
 							echo '</span>';
 						}
+						echo '<h4>Avantages &amp; Inconvénients</h4>';
+						$fleetQuantity = PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'l-line') + PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'r-line');
+						echo '<p><strong class="short">Flottes</strong>' . $fleetQuantity . '</p>';
+						echo '<p><strong class="short">Impôt</strong>' . (PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'tax') * 100) . '%</p>';
+						echo '<p><strong>Technologies</strong>Orientée commerce et production</p>';
+						echo '<p><strong>Bâtiments</strong>Raffinerie, Plateforme commerciale et générateur de gravité au niveau maximum</p>';
+						echo '<hr />';
+						echo '<p><strong>Nécessite</strong>Générateur niveau ' . OBM_LEVEL_MIN_TO_CHANGE_TYPE . '</p>';
 					echo '</div>';
 
 					echo '<div class="desc-choice">';
-						echo '<h4>' . PlaceResource::get(OrbitalBase::TYP_MILITARY, 'name') . '</h4>';
-						$fleetQuantity = PlaceResource::get(OrbitalBase::TYP_MILITARY, 'l-line') + PlaceResource::get(OrbitalBase::TYP_MILITARY, 'r-line');
-						echo '<p><strong class="short">Flottes</strong>' . $fleetQuantity . '</p>';
-						echo '<p><strong class="short">Impôt</strong>' . (PlaceResource::get(OrbitalBase::TYP_MILITARY, 'tax') * 100) . '%</p>';
-						echo '<p><strong>Technologies</strong>Orientée militaire</p>';
-						echo '<p><strong>Bâtiments</strong>Chantier alpha, chantier de ligne et colonne d\'assemblage au niveau maximum</p>';
-						echo '<hr />';
-						echo '<p><strong>Nécessite</strong>Générateur niveau ' . OBM_LEVEL_MIN_TO_CHANGE_TYPE . '</p>';
-
 						if (($ob_obSituation->typeOfBase == OrbitalBase::TYP_NEUTRAL && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price') && $ob_obSituation->levelGenerator >= OBM_LEVEL_MIN_TO_CHANGE_TYPE) || (($ob_obSituation->typeOfBase == OrbitalBase::TYP_COMMERCIAL || $ob_obSituation->typeOfBase == OrbitalBase::TYP_CAPITAL) && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price'))) {
 							echo '<a href="' . APP_ROOT . 'action/a-changebasetype/baseid-' . $ob_obSituation->getId() . '/type-' . OrbitalBase::TYP_MILITARY . '" class="button">';
 								echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_MILITARY, 'name') . '<br />';
@@ -101,18 +91,17 @@ echo '<div class="component generator">';
 								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
 							echo '</span>';
 						}
+						echo '<h4>Avantages &amp; Inconvénients</h4>';
+						$fleetQuantity = PlaceResource::get(OrbitalBase::TYP_MILITARY, 'l-line') + PlaceResource::get(OrbitalBase::TYP_MILITARY, 'r-line');
+						echo '<p><strong class="short">Flottes</strong>' . $fleetQuantity . '</p>';
+						echo '<p><strong class="short">Impôt</strong>' . (PlaceResource::get(OrbitalBase::TYP_MILITARY, 'tax') * 100) . '%</p>';
+						echo '<p><strong>Technologies</strong>Orientée militaire</p>';
+						echo '<p><strong>Bâtiments</strong>Chantier alpha, chantier de ligne et colonne d\'assemblage au niveau maximum</p>';
+						echo '<hr />';
+						echo '<p><strong>Nécessite</strong>Générateur niveau ' . OBM_LEVEL_MIN_TO_CHANGE_TYPE . '</p>';
 					echo '</div>';
 
 					echo '<div class="desc-choice">';
-						echo '<h4>' . PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'name') . '</h4>';
-						$fleetQuantity = PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'l-line') + PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'r-line');
-						echo '<p><strong class="short">Flottes</strong>' . $fleetQuantity . '</p>';
-						echo '<p><strong class="short">Impôt</strong>' . (PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'tax') * 100) . '%</p>';
-						echo '<p><strong>Technologies</strong>Toutes disponibles</p>';
-						echo '<p><strong>Bâtiments</strong>Tous au niveau maximum</p>';
-						echo '<hr />';
-						echo '<p><strong>Nécessite</strong>Générateur niveau ' . OBM_LEVEL_MIN_FOR_CAPITAL . '</p>';
-
 						$capitalQuantity = 0;
 						for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
 							if (CTR::$data->get('playerBase')->get('ob')->get($i)->get('type') == OrbitalBase::TYP_CAPITAL) {
@@ -135,6 +124,14 @@ echo '<div class="component generator">';
 								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
 							echo '</span>';
 						}
+						echo '<h4>Avantages &amp; Inconvénients</h4>';
+						$fleetQuantity = PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'l-line') + PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'r-line');
+						echo '<p><strong class="short">Flottes</strong>' . $fleetQuantity . '</p>';
+						echo '<p><strong class="short">Impôt</strong>' . (PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'tax') * 100) . '%</p>';
+						echo '<p><strong>Technologies</strong>Toutes disponibles</p>';
+						echo '<p><strong>Bâtiments</strong>Tous au niveau maximum</p>';
+						echo '<hr />';
+						echo '<p><strong>Nécessite</strong>Générateur niveau ' . OBM_LEVEL_MIN_FOR_CAPITAL . '</p>';
 					echo '</div>';
 				echo '</div>';
 			echo '</div>';
