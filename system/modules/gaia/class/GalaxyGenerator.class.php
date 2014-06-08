@@ -49,7 +49,7 @@ abstract class GalaxyGenerator {
 
 		self::log('sauvegarde des places');
 		for ($i = 0; $i < ceil(count(self::$listPlace) / 5000); $i++) { 
-			$qr = 'INSERT INTO place(id, rPlayer, rSystem, typeOfPlace, position, population, coefResources, coefHistory, resources, uResources) VALUES ';
+			$qr = 'INSERT INTO place(id, rPlayer, rSystem, typeOfPlace, position, population, coefResources, coefHistory, resources, uPlace) VALUES ';
 			
 			for ($j = $i * 5000; $j < (($i + 1) * 5000) - 1; $j++) { 
 				if (isset(self::$listPlace[$j])) {

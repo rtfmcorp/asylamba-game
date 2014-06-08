@@ -1,45 +1,76 @@
 <?php
-# réglage de l'encodage
-header('Content-type: text/html; charset=utf-8');
-
 # unlimited time
 set_time_limit(0);
 ini_set('display_errors', TRUE);
 
-if (DEVMODE || CTR::$get->exist('password')) {
-	switch (CTR::$get->get('a')) {
-		case 'dbinstall': 					include SCRIPT . 'scripts/dbinstall.php'; break;
+include SCRIPT . 'template/open.php';
 
-		case 'newgalaxy': 					include SCRIPT . 'scripts/newgalaxy.php'; break;
-		case 'testgalaxy': 					include SCRIPT . 'scripts/testgalaxy.php'; break;
-		case 'testchangecolor': 			include SCRIPT . 'scripts/changecolor.php'; break;
+if (DEVMODE || CTR::$get->equal('password', PWD_SCRIPT)) {
+	if (!CTR::$get->exist('a')) {
+		echo '<div class="list-script">';
+			echo '<h1>Liste des scripts</h1>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-deploy.dbinstall">/deploy/dbinstall.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-deploy.newgalaxy">/deploy/newgalaxy.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-deploy.changecolor">/deploy/changecolor.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-test.dump">/test/dump.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-test.api">/test/api.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-test.ctc">/test/ctc.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-test.galaxy">/test/galaxy.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addbugtracker">/database/addbugtracker.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addtransaction">/database/addtransaction.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addcommercialshipping">/database/addcommercialshipping.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addcommercialtax">/database/addcommercialtax.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addorbitalbase">/database/addorbitalbase.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addorbitalbasebuildingqueue">/database/addorbitalbasebuildingqueue.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addorbitalbaseshipqueue">/database/addorbitalbaseshipqueue.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addtechnologyqueue">/database/addtechnologyqueue.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addplayer">/database/addplayer.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addcolor">/database/addcolor.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.updatecommander">/database/updateCommander.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.updatereport">/database/updateReport.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addspyreport">/database/addspyreport.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.removedescriptionfromplayer">/database/removeDescriptionFromPlayer.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addstepdoneinplayer">/database/addStepDoneInPlayer.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addrankings">/database/addRankings.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-cron.daily">/cron/daily.php</a>';
+		echo '</div>';
+	} else {
+		echo '<div class="content-script">';
+			echo '<div class="return"><a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/">revenir vers les scripts</a></div>';
+			switch (CTR::$get->get('a')) {
+				case 'deploy.dbinstall': 					include SCRIPT . 'scripts/deploy/dbinstall.php'; break;
+				case 'deploy.newgalaxy': 					include SCRIPT . 'scripts/deploy/newgalaxy.php'; break;
+				case 'deploy.changecolor': 					include SCRIPT . 'scripts/deploy/changecolor.php'; break;
 
-		case 'dump':						include SCRIPT . 'scripts/dump.php'; break;
-		case 'apitest':						include SCRIPT . 'scripts/apitest.php'; break;
-		case 'testctc':						include SCRIPT . 'scripts/testctc.php'; break;
+				case 'test.dump':							include SCRIPT . 'scripts/test/dump.php'; break;
+				case 'test.api':							include SCRIPT . 'scripts/test/api.php'; break;
+				case 'test.ctc':							include SCRIPT . 'scripts/test/ctc.php'; break;
+				case 'test.galaxy': 						include SCRIPT . 'scripts/test/galaxy.php'; break;
 
-		case 'addbugtracker':				include SCRIPT . 'scripts/addbugtracker.php'; break;
-		case 'addtransaction':				include SCRIPT . 'scripts/addtransaction.php'; break;
-		case 'addcommercialshipping': 		include SCRIPT . 'scripts/addcommercialshipping.php'; break;
-		case 'addcommercialtax':			include SCRIPT . 'scripts/addcommercialtax.php'; break;
-		case 'addorbitalbase':				include SCRIPT . 'scripts/addorbitalbase.php'; break;
-		case 'addorbitalbasebuildingqueue':	include SCRIPT . 'scripts/addorbitalbasebuildingqueue.php'; break;
-		case 'addorbitalbaseshipqueue':		include SCRIPT . 'scripts/addorbitalbaseshipqueue.php'; break;
-		case 'addtechnologyqueue':			include SCRIPT . 'scripts/addtechnologyqueue.php'; break;
-		case 'addplayer':					include SCRIPT . 'scripts/addplayer.php'; break;
-		case 'addcolor':					include SCRIPT . 'scripts/addcolor.php'; break;
-		case 'updatecommander':				include SCRIPT . 'scripts/updateCommander.php'; break;
-		case 'updatereport':				include SCRIPT . 'scripts/updateReport.php'; break;
-		case 'addspyreport':				include SCRIPT . 'scripts/addspyreport.php'; break;
-		case 'removedescriptionfromplayer':	include SCRIPT . 'scripts/removeDescriptionFromPlayer.php'; break;
-		case 'addstepdoneinplayer':			include SCRIPT . 'scripts/addStepDoneInPlayer.php'; break;
-		case 'addrankings':					include SCRIPT . 'scripts/addRankings.php'; break;
+				case 'database.addbugtracker':				include SCRIPT . 'scripts/database/addbugtracker.php'; break;
+				case 'database.addtransaction':				include SCRIPT . 'scripts/database/addtransaction.php'; break;
+				case 'database.addcommercialshipping': 		include SCRIPT . 'scripts/database/addcommercialshipping.php'; break;
+				case 'database.addcommercialtax':			include SCRIPT . 'scripts/database/addcommercialtax.php'; break;
+				case 'database.addorbitalbase':				include SCRIPT . 'scripts/database/addorbitalbase.php'; break;
+				case 'database.addorbitalbasebuildingqueue':include SCRIPT . 'scripts/database/addorbitalbasebuildingqueue.php'; break;
+				case 'database.addorbitalbaseshipqueue':	include SCRIPT . 'scripts/database/addorbitalbaseshipqueue.php'; break;
+				case 'database.addtechnologyqueue':			include SCRIPT . 'scripts/database/addtechnologyqueue.php'; break;
+				case 'database.addplayer':					include SCRIPT . 'scripts/database/addplayer.php'; break;
+				case 'database.addcolor':					include SCRIPT . 'scripts/database/addcolor.php'; break;
+				case 'database.updatecommander':			include SCRIPT . 'scripts/database/updateCommander.php'; break;
+				case 'database.updatereport':				include SCRIPT . 'scripts/database/updateReport.php'; break;
+				case 'database.addspyreport':				include SCRIPT . 'scripts/database/addspyreport.php'; break;
+				case 'database.removedescriptionfromplayer':include SCRIPT . 'scripts/database/removeDescriptionFromPlayer.php'; break;
+				case 'database.addstepdoneinplayer':		include SCRIPT . 'scripts/database/addStepDoneInPlayer.php'; break;
+				case 'database.addrankings':				include SCRIPT . 'scripts/database/addRankings.php'; break;
 
-		case 'dailycron':					include SCRIPT . 'scripts/cron/daily.php'; break;
+				case 'cron.daily':							include SCRIPT . 'scripts/cron/daily.php'; break;
 
-		default: echo 'Script inconnu ou non-référencé'; break;
+				default: echo 'Script inconnu ou non-référencé'; break;
+			}
+		echo '</div>';
 	}
-} else {
-	echo 'Accès refusé';
 }
+
+include SCRIPT . 'template/close.php';
 ?>
