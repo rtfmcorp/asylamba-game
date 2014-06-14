@@ -13,12 +13,21 @@
 class FactionRankingManager extends Manager {
 	protected $managerType = '_FactionRanking';
 
-	public function load($where = array(), $order = array(), $limit = array()) {
+	public function loadLastContext($where = array(), $order = array(), $limit = array()) {
+		
+		$db = DataBase::getInstance();
+		$qr = $db->prepare('SELECT * FROM ranking WHERE faction = 1 ORDER BY dRanking DESC LIMIT 1');
+		$qr->execute();
+		$aw = $qr->fetch();
+		$rRanking = $aw['id'];
+
+		# add the rRanking to the WHERE clause
+		$where['rRanking'] = $rRanking;
+
 		$formatWhere = Utils::arrayToWhere($where);
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
 		$qr = $db->prepare('SELECT *
 			FROM factionRanking AS fr
 			' . $formatWhere . '
@@ -57,6 +66,35 @@ class FactionRankingManager extends Manager {
 			$fr->domination = $aw['domination'];
 			$fr->dominationPosition = $aw['dominationPosition'];
 			$fr->dominationVariation = $aw['dominationVariation'];
+
+			$currentT = $this->_Add($fr);
+		}
+	}
+
+	public function loadByRequest($request) {
+		$formatWhere = Utils::arrayToWhere($where);
+		$formatOrder = Utils::arrayToOrder($order);
+		$formatLimit = Utils::arrayToLimit($limit);
+
+		$db = DataBase::getInstance();
+		$qr = $db->prepare($request);
+
+		$qr->execute();
+
+		while($aw = $qr->fetch()) {
+			$fr = new FactionRanking();
+			if (isset($aw['id'])) { $fr->id = $aw['id']; }
+			if (isset($aw['rRanking'])) { $fr->rRanking = $aw['rRanking']; }
+			if (isset($aw['rFaction'])) { $fr->rFaction = $aw['rFaction']; } 
+			if (isset($aw['general'])) { $fr->general = $aw['general']; }
+			if (isset($aw['generalPosition'])) { $fr->generalPosition = $aw['generalPosition']; }
+			if (isset($aw['generalVariation'])) { $fr->generalVariation = $aw['generalVariation']; }
+			if (isset($aw['power'])) { $fr->power = $aw['power']; }
+			if (isset($aw['powerPosition'])) { $fr->powerPosition = $aw['powerPosition']; }
+			if (isset($aw['powerVariation'])) { $fr->powerVariation = $aw['powerVariation']; }
+			if (isset($aw['domination'])) { $fr->domination = $aw['domination']; }
+			if (isset($aw['dominationPosition'])) { $fr->dominationPosition = $aw['dominationPosition']; }
+			if (isset($aw['dominationVariation'])) { $fr->dominationVariation = $aw['dominationVariation']; }
 
 			$currentT = $this->_Add($fr);
 		}

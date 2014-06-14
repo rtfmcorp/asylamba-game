@@ -50,7 +50,7 @@ echo '<h1>Ajout de la table ranking</h1>';
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `ranking` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `dRanking` datetime NOT NULL,
-  `user` tinyint(1) NOT NULL DEFAULT '0',
+  `player` tinyint(1) NOT NULL DEFAULT '0',
   `faction` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
