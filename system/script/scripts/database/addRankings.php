@@ -2,7 +2,7 @@
 echo '<h1>Ajout de la table userRanking</h1>';
 
 $db = DataBaseAdmin::getInstance();
-$qr = $db->prepare("CREATE TABLE IF NOT EXISTS `userRanking` (
+$qr = $db->prepare("CREATE TABLE IF NOT EXISTS `playerRanking` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `rRanking` int(11) NOT NULL,
   `rPlayer` int(11) NOT NULL,

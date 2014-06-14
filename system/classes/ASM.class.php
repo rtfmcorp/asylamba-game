@@ -45,7 +45,7 @@ abstract class ASM {
 	public static $vom;
 
 	protected static $runningAtlas = FALSE;
-	public static $urm;
+	public static $prm;
 	public static $frm;
 
 	public static function runAres() {
@@ -130,7 +130,7 @@ abstract class ASM {
 
 	public static function runAtlas() {
 		if (!self::$runningAtlas) {
-			self::$urm = new UserRankingManager();
+			self::$prm = new PlayerRankingManager();
 			self::$frm = new FactionRankingManager();
 		}
 		self::$runningAtlas = TRUE;
@@ -181,7 +181,7 @@ abstract class ASM {
 			self::$vom->save();
 		}
 		if (self::$runningAtlas) {
-			self::$urm->save();
+			self::$prm->save();
 			self::$frm->save();
 		}
 	}

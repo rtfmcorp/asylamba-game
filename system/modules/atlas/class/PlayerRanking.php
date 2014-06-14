@@ -1,7 +1,7 @@
 <?php
 
 /**
- * UserRanking
+ * PlayerRanking
  *
  * @author Jacky Casas
  * @copyright Asylamba
@@ -10,7 +10,7 @@
  * @update 04.06.14
  */
 
-class UserRanking {
+class PlayerRanking {
 	
 	# attributes
 	public $id; 
