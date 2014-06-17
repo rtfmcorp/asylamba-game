@@ -33,6 +33,8 @@ if (DEVMODE || CTR::$get->equal('password', PWD_SCRIPT)) {
 			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addstepdoneinplayer">/database/addStepDoneInPlayer.php</a>';
 			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addrankings">/database/addRankings.php</a>';
 			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-cron.daily">/cron/daily.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-cron.playerranking">/cron/playerRanking.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-cron.factionranking">/cron/factionRanking.php</a>';
 		echo '</div>';
 	} else {
 		echo '<div class="content-script">';
@@ -65,6 +67,8 @@ if (DEVMODE || CTR::$get->equal('password', PWD_SCRIPT)) {
 				case 'database.addrankings':				include SCRIPT . 'scripts/database/addRankings.php'; break;
 
 				case 'cron.daily':							include SCRIPT . 'scripts/cron/daily.php'; break;
+				case 'cron.playerranking':					include SCRIPT . 'scripts/cron/playerRanking.php'; break;
+				case 'cron.factionranking':					include SCRIPT . 'scripts/cron/factionRanking.php'; break;
 
 				default: echo 'Script inconnu ou non-référencé'; break;
 			}
