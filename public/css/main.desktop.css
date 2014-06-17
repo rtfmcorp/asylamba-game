@@ -637,8 +637,14 @@ body {
 	width: 18px; height: 18px; line-height: 18px;
 	border-radius: 100%;
 	text-align: center;
-	background: red;
 }
+.color1 #subnav .item .content.skin-2 .sub-content .ship .number { background: #b01e2d; }
+.color2 #subnav .item .content.skin-2 .sub-content .ship .number { background: #2f23c0; }
+.color3 #subnav .item .content.skin-2 .sub-content .ship .number { background: #ffdb0f; }
+.color4 #subnav .item .content.skin-2 .sub-content .ship .number { background: #a935c7; }
+.color5 #subnav .item .content.skin-2 .sub-content .ship .number { background: #57c632; }
+.color6 #subnav .item .content.skin-2 .sub-content .ship .number { background: #05bed7; }
+.color7 #subnav .item .content.skin-2 .sub-content .ship .number { background: #ac5832; }
 
 /* COMPOSANT DE LA PAGE PROFIL */
 #background-paralax {
@@ -3571,6 +3577,13 @@ body {
 #map-option a.active {
 	background: #004948;
 }
+.color1 #map-option a.active { background: #510816; }
+.color2 #map-option a.active { background: #0c0d44; }
+.color3 #map-option a.active { background: #b17a00; }
+.color4 #map-option a.active { background: #310948; }
+.color5 #map-option a.active { background: #24500a; }
+.color6 #map-option a.active { background: #004948; }
+.color7 #map-option a.active { background: #401b13; }
 
 /****** CONTENT *****/
 #map-content {
@@ -3905,6 +3918,7 @@ body {
 }
 
 #action-box .body .system ul li.action .content .column {
+	position: relative;
 	display: inline-block; 
 	vertical-align: top;
 	height: 240px;
@@ -3913,12 +3927,8 @@ body {
 }
 
 #action-box .body .system ul li.action .content .column.info  { width: 199px; }
-#action-box .body .system ul li.action .content .column.fleet  {
-	width:  84px;
-	text-align: center;
-}
 #action-box .body .system ul li.action .content .column.act {
-	width: 299px;
+	width: 400px;
 	border-right: none;
 }
 
@@ -3946,41 +3956,39 @@ body {
 	display: inline-block;
 	width: 59px; text-align: right;
 }
-#action-box .body .system ul li.action .content .column.act img,
-#action-box .body .system ul li.action .content .column.fleet img {
+#action-box .body .system ul li.action .content .column.act .top .grey {
+	opacity: .4;
+}
+#action-box .body .system ul li.action .content .column.act img {
 	width: 45px;
 	padding: 8px;
-	margin: 0 0 2px 0;
+	margin: 0 4px 2px 0;
 	border: solid 1px #202020;
 	background: #0A0A0A;
 	border-radius: 100%;
 }
-#action-box .body .system ul li.action .content .column .left {
-	float: left; width: 63px;
-	margin: 2px 10px;
+#action-box .body .system ul li.action .content .column .top,
+#action-box .body .system ul li.action .content .column .bottom {
+	padding: 5px;
 }
-#action-box .body .system ul li.action .content .column .right {
-	margin: 2px 0 2px 80px;
-}
-#action-box .body .system ul li.action .content .column.act img { position: relative; top: -2px; }
 
-#action-box .body .system ul li.action .content .column .act-bull {
-	position: relative;
-	height: 200px;
+#action-box .body .system ul li.action .content .column .box {
+	position: absolute;
+	left: 10px; right: 10px; bottom: 10px; top: 80px;
 	background: black;
 	border-radius: 3px;
 }
-#action-box .body .system ul li.action .content .column .act-bull:before {
+#action-box .body .system ul li.action .content .column .box:before {
 	content: '';
 	position: absolute;
-	left: -22px;
+	top: -20px;
 	border-style: solid;
-	border-width: 12px;
-	border-color: transparent black transparent transparent;
+	border-width: 10px;
+	border-color: transparent transparent black transparent;
 }
-#action-box .body .system ul li.action .content .column .act-bull:nth-child(1):before { top: 20px; }
-#action-box .body .system ul li.action .content .column .act-bull:nth-child(2):before { top: 88px; }
-#action-box .body .system ul li.action .content .column .act-bull:nth-child(3):before { top: 156px; }
+#action-box .body .system ul li.action .content .column .box:nth-child(1):before { left: 15px; }
+#action-box .body .system ul li.action .content .column .box:nth-child(2):before { left: 88px; }
+#action-box .body .system ul li.action .content .column .box:nth-child(3):before { left: 156px; }
 
 #action-box .body .system ul li.action .act-bull h5 {
 	margin: 0 10px 6px 10px; padding: 6px 0 6px 0;
@@ -4329,7 +4337,6 @@ body {
 }
 
 /* ADMIN */
-
 .component.admin table {
 	margin: 10px;
 	border-collapse: collapse;

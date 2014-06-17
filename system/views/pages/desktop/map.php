@@ -55,7 +55,7 @@ if (CTR::$get->exist('place')) {
 include 'mapElement/option.php';
 include 'mapElement/content.php';
 include 'mapElement/commanders.php';
-include 'mapElement/movers.php';
+# include 'mapElement/movers.php';
 include 'mapElement/coordbox.php';
 
 if ($systemId != 0) {

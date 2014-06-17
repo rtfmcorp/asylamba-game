@@ -91,7 +91,7 @@ echo '<div class="body">';
 								}
 							echo '</p>';
 						} elseif (1 == 2) {
-							# réger les vaisseaux mères
+							# gérer les vaisseaux mères
 						} else {
 							switch ($place->getTypeOfPlace()) {
 								case 1: echo '<p><strong>Planète rebelle</strong></p>'; break;
@@ -126,35 +126,9 @@ echo '<div class="body">';
 							echo '</p>';
 						}
 					echo '</div>';
-					echo '<div class="column fleet">';
-						echo '<p><strong>Défense</strong></p>';
-						echo '<p>';
-							if ($place->getTypeOfBase() != 0) {
-								for ($j = 0; $j < 3; $j++) { 
-									if (isset($place->commanders[$j])) {
-										echo '<img src="' . MEDIA . 'map/fleet/away.jpg" alt="flotte" class="hb lt" title="commandant en fonction, taille de la flotte inconnue" />';	
-									}
-								}
-							} elseif ($place->getTypeOfPlace() == 1) {
-								if ($place->getPopulation() < 80) {
-									$title = 'petite flotte de défense';
-									$img = 'fleet1';
-								} elseif ($place->getPopulation() >= 80 AND $place->getPopulation() < 150) {
-									$title = 'moyenne flotte de défense';
-									$img = 'fleet2';
-								} else {
-									$title = 'grande flotte de défense';
-									$img = 'fleet3';
-								}
-								echo '<img src="' . MEDIA . 'map/fleet/' . $img . '.png" alt="flotte" class="hb lt" title="Commandant rebelle à la tête d\'une ' . $title . '" />';
-							} else {
-								echo '<p>---</p>';
-							}
-						echo '</p>';
-					echo '</div>';
 
 					# work part
-					$link = ''; $box = '';
+					/*$link = ''; $box = '';
 					if ($place->getTypeOfPlace() == 1) {
 						# planète habitable
 						if ($place->getTypeOfBase() == 0) {
@@ -189,20 +163,32 @@ echo '<div class="body">';
 							# place vide
 							ActionHelper::motherShip($defaultBase, $link, $box, 1);
 						}
-					}
+					}*/
 
 					# display part
-					if ($place->getId() != $defaultBase->getId()) {	
-						echo '<div class="column act">';
-							echo '<p><strong>Action<span class="subcontext"></span></strong></p>';
-							echo '<div class="left">';
-								echo $link;
-							echo '</div>';
-							echo '<div class="right">';
-								echo $box;
+					echo '<div class="column act">';
+						echo '<div class="top">';
+							$available = (($place->rPlayer != 0 && $place->playerColor != CTR::$data->get('playerInfo')->get('color')) || ($place->rPlayer == 0 && $place->typeOfPlace == 1)) ? NULL : 'grey';
+							echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="1"><img src="' . MEDIA . 'map/action/loot.png" alt="" /></a>';
+							echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="2"><img src="' . MEDIA . 'map/action/colo.png" alt="" /></a>';
+
+							$available = ($place->rPlayer == CTR::$data->get('playerId') && $place->getId() != $defaultBase->getId()) ? NULL : 'grey';
+							echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="3"><img src="' . MEDIA . 'map/action/move.png" alt="" /></a>';
+
+							$available = ($place->rPlayer != 0 && $place->getId() != $defaultBase->getId()) ? NULL : 'grey';
+							echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="4"><img src="' . MEDIA . 'map/action/rc.png" alt="" /></a>';
+
+							$available = (($place->rPlayer != 0 && $place->playerColor != CTR::$data->get('playerInfo')->get('color')) || ($place->rPlayer == 0 && $place->typeOfPlace == 1)) ? NULL : 'grey';
+							echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="5"><img src="' . MEDIA . 'map/action/spy.png" alt="" /></a>';
+						echo '</div>';
+						echo '<div class="bottom">';
+							echo '<div class="box">';
+								echo '<div class="box-content info">';
+									echo 'test';
+								echo '</div>';
 							echo '</div>';
 						echo '</div>';
-					}
+					echo '</div>';
 				echo '</div>';
 			echo '</li>';
 			}

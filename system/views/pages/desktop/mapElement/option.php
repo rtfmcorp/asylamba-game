@@ -5,7 +5,7 @@ echo '<div id="map-option">';
 		echo 'class="sh switch-class active hb lb" ';
 		echo 'data-class="active" ';
 		echo 'title="afficher/cacher la petite carte" ';
-		echo 'data-target="mini-map" ';
+		echo 'data-target="map-content" ';
 		echo 'class="active"';
 	echo '>';
 		echo '<img src="' . MEDIA . 'map/option/minimap.png" alt="minimap" />';
@@ -13,7 +13,8 @@ echo '<div id="map-option">';
 
 	echo '<a ';
 		echo 'href="#" ';
-		echo 'class="sh hb lb moveTo" ';
+		echo 'class="sh hb lb moveTo switch-class" ';
+		echo 'data-class="active" ';
 		echo 'data-x-position="240" ';
 		echo 'data-y-position="19" ';
 		echo 'data-target="map-info" ';
