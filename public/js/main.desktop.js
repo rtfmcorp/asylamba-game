@@ -554,6 +554,7 @@ jQuery(document).ready(function($) {
 			actionbox.obj.animate({
 				bottom: 0
 			}, 300);
+
 		},
 
 		// masque la box
@@ -572,6 +573,8 @@ jQuery(document).ready(function($) {
 			 .done(function(data) {
 				actionbox.obj.html(data);
 				actionbox.open();
+
+				// TODO: lancer le render commandant
 
 				$('.loadSystem[data-system-id="' + systemid + '"]').addClass('active');
 			}).fail(function() {
@@ -624,7 +627,7 @@ jQuery(document).ready(function($) {
 			var id = elem.data('target');
 
 			//elem.parent().parent().find('p .subcontext').text(' / ' + elem.find('img').attr('alt'));
-			elem.parent().parent().find('.right > div').each(function() {
+			elem.parent().parent().find('.bottom > div').each(function() {
 				if ($(this).data('id') == id) {
 					$(this).css('display', 'block');
 				} else {
