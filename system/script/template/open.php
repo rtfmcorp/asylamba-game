@@ -8,7 +8,7 @@ echo '<head>';
 	echo '<meta charset="utf-8" />';
 	echo '<meta name="description" content="' . APP_DESCRIPTION . '" />';
 
-	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'script.css" />';
+	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'script/script.css" />';
 	echo '<link rel="icon" type="image/png" href="' . MEDIA . '/favicon/default.png" />';
 echo '</head>';
 
