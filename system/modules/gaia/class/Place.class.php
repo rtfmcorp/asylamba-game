@@ -645,6 +645,7 @@ class Place {
 			$computerCommander = $this->createVirtualCommander();
 			$fc = new FightController();
 			$fc->startFight($commander, $computerCommander, $this);
+			$this->createReport($commander, $computerCommander);
 		}
 	}
 
@@ -663,8 +664,10 @@ class Place {
 		$report->type = LiveReport::$type;
 		$report->round = LiveReport::$round;
 		$report->importance = LiveReport::$importance;
-		$report->dFight = lib::now(); //à modifier
+		$report->dFight = Utils::now(); //à modifier
 		$report->placeName = ($this->baseName == '') ? 'planète rebelle' : $this->baseName;
+
+		ASM::$rpm->add($report);
 	}
 
 	private function sendNotif($case, $commander) {

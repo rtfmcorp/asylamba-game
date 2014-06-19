@@ -13,6 +13,7 @@
 class LiveReport {
 	public static $squadrons = array();
 	public static $halfround = 0;
+	public static $littleRound = 0;
 
 	public static $rPlayerAttacker		= 0;
 	public static $rPlayerDefender		= 0;

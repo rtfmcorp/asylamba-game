@@ -193,23 +193,29 @@ class ReportManager extends Manager {
 			));
 
 		$newReport->id = $db->lastInsertId();
-		$this->_Add($newReport);
 
-		return $newReport->id;
+		if (count($newReport->squadrons) > 0) {
 
-		$qr = 'INSERT INTO squadronReport (position = ?, rReport = ?, rCommander = ?, ship0 = ?, ship1 = ?, ship2 = ?, ship3 = ?, ship4 = ?, ship5 = ?, ship6 = ?, ship7 = ?, ship8 = ?, ship9 = ?, ship10 = ?, ship11 = ?)
-			VALUES';
+			foreach ($newReport->squadrons AS $s) {
+				$s[2] = $newReport->id;
+			}
 
-		for ($j = 0; $j < count($newReport->squadrons); $i++) {
-			$qr .= '(' . $newReport->squadrons[$j][0];
-				for ($i = 1; $i < 16; $i++) {
-					$qr .= ' ,' . $newReport->squadrons[$j][$i];
-				}
-			$qr .= ($i == count($newReport->squadrons - 1)) ? ');' : '), ';
+			$qr = 'INSERT INTO squadronReport (position = ?, rReport = ?, rCommander = ?, ship0 = ?, ship1 = ?, ship2 = ?, ship3 = ?, ship4 = ?, ship5 = ?, ship6 = ?, ship7 = ?, ship8 = ?, ship9 = ?, ship10 = ?, ship11 = ?)
+				VALUES';
+			for ($j = 0; $j < count($newReport->squadrons); $j++) {
+				$qr .= '(' . $newReport->squadrons[$j][1];
+					for ($i = 2; $i < 16; $i++) {
+						$qr .= ' ,' . $newReport->squadrons[$j][$i];
+					}
+				$qr .= ($i == count($newReport->squadrons - 1)) ? ');' : '), ';
+			}
+			bug::pre($qr);
+
+			$qr = $db->prepare($qr);
+			$aw = $qr->execute();
 		}
 
-		$qr = $db->prepare($qr);
-		$aw = $qr->execute();
+		$this->_Add($newReport);
 	}
 
 	public function deleteById($id) {
