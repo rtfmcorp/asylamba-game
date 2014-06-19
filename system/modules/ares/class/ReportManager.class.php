@@ -218,15 +218,6 @@ class ReportManager extends Manager {
 		$this->_Add($newReport);
 	}
 
-	public function deleteById($id) {
-		$db = DataBase::getInstance();
-		$qr = $db->prepare('DELETE FROM bigReport WHERE id = ?');
-		$qr->execute(array($id));
-
-		$this->_Remove($id);
-		return TRUE;
-	}
-
 	# assez chiant mais à faire
 	public function deleteByRPlayer($playerId) {
 		$this->load(array('rPlayerAttacker' => $playerId));

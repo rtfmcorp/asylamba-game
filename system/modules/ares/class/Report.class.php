@@ -37,7 +37,7 @@ class Report {
 
 	public $fight = array();
 
-	public function getId() {return $this->id;}
+	public function getId() { return $this->id; }
 
 	public function setArmies($squadrons) {
 		$this->squadrons = $squadrons;

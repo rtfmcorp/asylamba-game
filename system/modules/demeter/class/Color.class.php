@@ -42,14 +42,15 @@ class Color {
 
 	public function updateStatus() {
 		/*
-		empire nbrplanet
+		empire points des planètes
 		cardan nbr pop
 		Aphéra tech ?
-		Négor nbr credits
+		Négor nbr credits par heure (E(income de rc) + E(population * coeffImpots))
 		Kovak puissance de l'armée
 		Synelle experience
 		Nerve Niveau de raffinerie
 		*/
+
 		$limit = $this->players / 4;
 		if ($limit < 20) { $lmit = 20; }
 		if ($limit > 40) { $lmit = 40; }

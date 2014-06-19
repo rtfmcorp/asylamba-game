@@ -26,12 +26,14 @@ if (DEVMODE || CTR::$get->equal('password', PWD_SCRIPT)) {
 			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addtechnologyqueue">/database/addtechnologyqueue.php</a>';
 			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addplayer">/database/addplayer.php</a>';
 			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addcolor">/database/addcolor.php</a>';
-			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.updatecommander">/database/updateCommander.php</a>';
-			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.updatereport">/database/updateReport.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addcommander">/database/addCommander.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addreport">/database/addReport.php</a>';
 			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addspyreport">/database/addspyreport.php</a>';
 			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.removedescriptionfromplayer">/database/removeDescriptionFromPlayer.php</a>';
 			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addstepdoneinplayer">/database/addStepDoneInPlayer.php</a>';
 			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addrankings">/database/addRankings.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.addfaction">/database/addFaction.php</a>';
+			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-database.updateplayer">/database/updatePlayer.php</a>';
 			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-cron.daily">/cron/daily.php</a>';
 			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-cron.playerranking">/cron/playerRanking.php</a>';
 			echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-cron.factionranking">/cron/factionRanking.php</a>';
@@ -59,12 +61,14 @@ if (DEVMODE || CTR::$get->equal('password', PWD_SCRIPT)) {
 				case 'database.addtechnologyqueue':			include SCRIPT . 'scripts/database/addtechnologyqueue.php'; break;
 				case 'database.addplayer':					include SCRIPT . 'scripts/database/addplayer.php'; break;
 				case 'database.addcolor':					include SCRIPT . 'scripts/database/addcolor.php'; break;
-				case 'database.updatecommander':			include SCRIPT . 'scripts/database/updateCommander.php'; break;
-				case 'database.updatereport':				include SCRIPT . 'scripts/database/updateReport.php'; break;
+				case 'database.addcommander':				include SCRIPT . 'scripts/database/addCommander.php'; break;
+				case 'database.addreport':					include SCRIPT . 'scripts/database/addReport.php'; break;
 				case 'database.addspyreport':				include SCRIPT . 'scripts/database/addspyreport.php'; break;
 				case 'database.removedescriptionfromplayer':include SCRIPT . 'scripts/database/removeDescriptionFromPlayer.php'; break;
 				case 'database.addstepdoneinplayer':		include SCRIPT . 'scripts/database/addStepDoneInPlayer.php'; break;
 				case 'database.addrankings':				include SCRIPT . 'scripts/database/addRankings.php'; break;
+				case 'database.addfaction':					include SCRIPT . 'scripts/database/addFaction.php'; break;
+				case 'database.updateplayer':				include SCRIPT . 'scripts/database/updatePlayer.php'; break;
 
 				case 'cron.daily':							include SCRIPT . 'scripts/cron/daily.php'; break;
 				case 'cron.playerranking':					include SCRIPT . 'scripts/cron/playerRanking.php'; break;
