@@ -32,6 +32,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 				case OrbitalBase::TYP_COMMERCIAL:
 					$totalPrice = PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price');
 					if ($player->credit >= $totalPrice) {
+
 						$orbitalBase->typeOfBase = $type;
 						$player->decreaseCredit($totalPrice);
 
@@ -42,6 +43,9 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 								break;
 							}
 						}
+						if ($player->rColor == 5) {
+							$player->factionPoint += Color::POINTCHANGETYPE;
+						}
 						CTR::$alert->add($orbitalBase->name . ' est désormais un Centre Industriel', ALERT_STD_SUCCESS);
 					} else {
 						CTR::$alert->add('Evolution de votre colonie impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
@@ -50,6 +54,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 				case OrbitalBase::TYP_MILITARY:
 					$totalPrice = PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price');
 					if ($player->credit >= $totalPrice) {
+
 						$orbitalBase->typeOfBase = $type;
 						$player->decreaseCredit($totalPrice);
 
@@ -59,6 +64,9 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 								CTR::$data->get('playerBase')->get('ob')->get($i)->add('type', OrbitalBase::TYP_MILITARY);
 								break;
 							}
+						}
+						if ($player->rColor == 2) {
+							$player->factionPoint += Color::POINTCHANGETYPE;
 						}
 						CTR::$alert->add($orbitalBase->name . ' est désormais une Base Militaire', ALERT_STD_SUCCESS);
 					} else {
@@ -141,6 +149,11 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 							break;
 						}
 					}
+					if ($player->rColor == 2) {
+						$player->factionPoint -= Color::POINTCHANGETYPE;
+					} elseif ($player->rColor == 5) {
+						$player->factionPoint += Color::POINTCHANGETYPE;
+					}
 					CTR::$alert->add('Votre base orbitale devient commerciale. Vos bâtiments militaires sont détruits.', ALERT_STD_SUCCESS);
 				} else {
 					# change base type in session
@@ -149,6 +162,11 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 							CTR::$data->get('playerBase')->get('ob')->get($i)->add('type', OrbitalBase::TYP_MILITARY);
 							break;
 						}
+					}
+					if ($player->rColor == 5) {
+						$player->factionPoint -= Color::POINTCHANGETYPE;
+					} elseif ($player->rColor == 2) {
+						$player->factionPoint += Color::POINTCHANGETYPE;
 					}
 					CTR::$alert->add('Votre base orbitale devient militaire. Vos bâtiments commerciaux sont détruits.', ALERT_STD_SUCCESS);
 				}

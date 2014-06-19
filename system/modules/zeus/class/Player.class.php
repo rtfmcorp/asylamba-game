@@ -20,6 +20,7 @@ class Player {
 	public $credit = 0;
 	public $uPlayer = '';
 	public $experience = 0;
+	public $factionPoint = 0;
 	public $level = 0;
 	public $victory = 0;
 	public $defeat = 0;

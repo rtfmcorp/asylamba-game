@@ -12,6 +12,22 @@
 include_once ZEUS;
 
 class Color {
+	#constantes de prestiges
+	#empire
+	const POINTCONQUER				= 100;
+	const POINTBUILDBIGSHIP			= 10;
+	#negore
+	const POINTSALE					= 20;
+	#cardan
+	const BONUSOUTOFSECTOR			= 50;
+	#kovakh
+	const POINTBUILDLITTLESHIP 		= 1;
+	const POINTCHANGETYPE 			= 20;
+	#Synelle
+	const POINTATTACKPLAYER 		= -10;
+	const POINTDENFEND 				= 20;
+
+	#const
 	const NBRGOVERNMENT 	= 6;
 
 	const CAMPAIGNTIME 		= 604800;
@@ -41,15 +57,6 @@ class Color {
 	}
 
 	public function updateStatus() {
-		/*
-		empire points des planètes
-		cardan nbr pop
-		Aphéra tech ?
-		Négor nbr credits par heure (E(income de rc) + E(population * coeffImpots))
-		Kovak puissance de l'armée
-		Synelle experience
-		Nerve Niveau de raffinerie
-		*/
 
 		$limit = $this->players / 4;
 		if ($limit < 20) { $lmit = 20; }
@@ -58,9 +65,68 @@ class Color {
 		$_PAM1 = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession();
 
+		/*
+		empire :
+			+
+				DONE construire un batiment
+				DONE construire un gros vaisseaux
+				conquête
+			-
+				détruire un bâtiment
+				perdre une panète
+
+		Négore
+			+
+				DONE avoir une nouvelle route
+				faire une vente/achat intéressant
+			-
+				perdre une route
+				faire un vente/achat pas intéressant
+
+		Cardan
+			+
+				prendre une planète, bonus si elle et hors secteur
+				faire un don à la faction
+			-
+				perdre une planète
+
+		Kovakh
+			+
+				DONE contruire 1 petit vaisseau
+				DONE construire 1 gros vaisseau
+				gagner un combat
+				DONE nomer une planète militaire
+			-
+				perdre un combat
+				DONE dénommer une planète militaire
+		
+		Synelle
+			+
+				défense victorieuse
+			-
+				attaquer un autre joueur
+
+		Nerve
+			+
+				DONE nommer une planète indus
+				up un batiment indus (raf, doc 1 et 2)
+				prendre une planète (points selon coeff resources)
+
+			-
+				DONE dénommer une plan indus
+				déup un batiment indus
+				perdre une planète (points selon coeffresources)
+
+		Aphéra
+			+
+				trouver une recherche
+				trouver une techno
+
+		*/
+
 		switch ($this->id) {
 			case 1: 
-				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
+				ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
 					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
 						if ($i < $limit) {
@@ -72,7 +138,7 @@ class Color {
 				}
 			break;
 			case 2: 
-				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
+				ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
 					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
 						if ($i < $limit) {
@@ -84,7 +150,7 @@ class Color {
 				}
 			break;
 			case 3: 
-				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
+				ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
 					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
 						if ($i < $limit) {
@@ -96,7 +162,7 @@ class Color {
 				}
 			break;
 			case 4: 
-				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
+				ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
 					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
 						if ($i < $limit) {
@@ -108,7 +174,7 @@ class Color {
 				}
 			break;
 			case 5: 
-				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
+				ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
 					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
 						if ($i < $limit) {
@@ -120,7 +186,7 @@ class Color {
 				}
 			break;
 			case 6: 
-				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
+				ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
 					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
 						if ($i < $limit) {
@@ -132,7 +198,7 @@ class Color {
 				}
 			break;
 			case 7: 
-				ASM::$pam->load(array('rColor' => $this->id), array('experience DESC'));
+				ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
 					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
 						if ($i < $limit) {
