@@ -433,6 +433,7 @@ class Place {
 
 	# conquest
 	private function tryToConquer($commander) {
+		include_once DEMETER;
 		if ($this->rPlayer != 0) {
 			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
@@ -467,7 +468,54 @@ class Place {
 						$this->sendNotif(self::CONQUERPLAYERWHITBATTLESUCCESS, $commander);
 					}
 
-					#attribuer le jooeur à la place
+					# attribuer le prestige au joueur
+					if ($commander->playerColor == 1 || $commander->playerColor == 4 || $commander->playerColor == 5) {
+						$S_PAM = ASM::$pam->getCurrentSession();
+						ASM::$pam->newSession();
+						ASM::$pam->load(array('id' => $commander->rPlayer));
+						$points = 0;
+						switch ($commander->playerColor) {
+							case 1:
+								$points = Color::POINTCONQUER;
+								break;
+							case 4:
+								$points = round($this->population);
+								break;
+							case 5:
+								$points = ($this->coefResources - 45) * Color::COEFFPOINTCONQUER;
+								break;
+							default:
+								$points = 0;
+								break;
+						}
+						ASM::$pam->get()->factionPoint += $points;
+						ASM::$pam->changeSession($S_PAM);
+					}
+
+					if ($this->playerColor == 1 || $this->playerColor == 4 || $this->playerColor == 5) {
+						$S_PAM = ASM::$pam->getCurrentSession();
+						ASM::$pam->newSession();
+						ASM::$pam->load(array('id' => $this->rPlayer));
+						$points = 0;
+						switch ($commander->playerColor) {
+							case 1:
+								$points = Color::POINTCONQUER;
+								break;
+							case 4:
+								$points = round($this->population);
+								break;
+							case 5:
+								$points = ($this->coefResources - 44) * Color::COEFFPOINTCONQUER;
+								break;
+							default:
+								$points = 0;
+								break;
+						}
+						ASM::$pam->get()->factionPoint -= $points;
+						ASM::$pam->changeSession($S_PAM);
+					}
+
+					#attribuer le joueur à la place
 					$this->commanders = array();
 					$this->rColor = $commander->playerColor;
 					$this->rPlayer = $commander->rPlayer;
@@ -538,6 +586,26 @@ class Place {
 				$commander->setRBase($this->id);
 				$commander->setStatement(COM_AFFECTED);
 				$commander->line = 1;
+
+				if ($commander->playerColor == 4 || $commander->playerColor == 5) {
+					$S_PAM = ASM::$pam->getCurrentSession();
+					ASM::$pam->newSession();
+					ASM::$pam->load(array('id' => $commander->rPlayer));
+					$points = 0;
+					switch ($commander->playerColor) {
+						case 4:
+							$points = round($this->population);
+							break;
+						case 5:
+							$points = ($this->coefResources - 44) * Color::COEFFPOINTCONQUER;
+							break;
+						default:
+							$points = 0;
+							break;
+					}
+					ASM::$pam->get()->factionPoint += $points;
+					ASM::$pam->changeSession($S_PAM);
+				}
 
 				# attribuer le rPlayer à la Place !
 				$this->rPlayer = $commander->getRPlayer();

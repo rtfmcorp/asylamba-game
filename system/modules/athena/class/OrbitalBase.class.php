@@ -353,7 +353,13 @@ class OrbitalBase {
 		$player->increaseExperience($experience);
 
 		if ($player->rColor == 1) {
-			$player->factionPoint += $experience;	
+			$player->factionPoint += $experience;
+		} elseif ($player->rColor == 5) {
+			$name = OrbitalBaseResource::getBuildingInfo($queue->buildingNumber, 'name');
+
+			if ($name == 'rafinery' || $name == 'dock1' || $name == 'dock2') {
+				$player->factionPoint += $experience;
+			}
 		}
 		# alert
 		if (CTR::$data->get('playerId') == $this->rPlayer) {
@@ -416,6 +422,10 @@ class OrbitalBase {
 		# increase player experience
 		$experience = TechnologyResource::getInfo($tq->technology, 'points', $tq->targetLevel);
 		$player->increaseExperience($experience);
+
+		if ($player->rColor == 6) {
+			$player->factionPoint += $experience;
+		}
 		# alert
 		if (CTR::$data->get('playerId') == $this->rPlayer) {
 			$alt = 'Développement de votre technologie ' . TechnologyResource::getInfo($tq->technology, 'name');

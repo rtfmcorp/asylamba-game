@@ -15,17 +15,21 @@ class Color {
 	#constantes de prestiges
 	#empire
 	const POINTCONQUER				= 100;
-	const POINTBUILDBIGSHIP			= 10;
+	const POINTBUILDBIGSHIP			= 25;
 	#negore
 	const POINTSALE					= 20;
 	#cardan
 	const BONUSOUTOFSECTOR			= 50;
 	#kovakh
 	const POINTBUILDLITTLESHIP 		= 1;
-	const POINTCHANGETYPE 			= 20;
+	const POINTCHANGETYPE 			= 50;
 	#Synelle
 	const POINTATTACKPLAYER 		= -10;
 	const POINTDENFEND 				= 20;
+	#Nerve
+	const COEFFPOINTCONQUERDONE		= 10;
+	#Aphéra
+	const POINTSPY					= 10;
 
 	#const
 	const NBRGOVERNMENT 	= 6;
@@ -70,10 +74,10 @@ class Color {
 			+
 				DONE construire un batiment
 				DONE construire un gros vaisseaux
-				conquête
+				DONE conquête
 			-
 				détruire un bâtiment
-				perdre une panète
+				DONE perdre une panète
 
 		Négore
 			+
@@ -85,10 +89,10 @@ class Color {
 
 		Cardan
 			+
-				prendre une planète, bonus si elle et hors secteur
+				DONE prendre une planète, bonus si elle et hors secteur
 				faire un don à la faction
 			-
-				perdre une planète
+				DONE perdre une planète
 
 		Kovakh
 			+
@@ -109,18 +113,19 @@ class Color {
 		Nerve
 			+
 				DONE nommer une planète indus
-				up un batiment indus (raf, doc 1 et 2)
-				prendre une planète (points selon coeff resources)
+				DONE up un batiment indus (raf, doc 1 et 2)
+				DONE prendre une planète (points selon coeff resources)
 
 			-
 				DONE dénommer une plan indus
 				déup un batiment indus
-				perdre une planète (points selon coeffresources)
+				DONE perdre une planète (points selon coeffresources)
 
 		Aphéra
 			+
 				trouver une recherche
-				trouver une techno
+				DONE trouver une techno
+				espionnage réussi
 
 		*/
 
