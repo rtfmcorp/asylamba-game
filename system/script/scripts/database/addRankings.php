@@ -18,9 +18,9 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `playerRanking` (
   `defeat` smallint(6) NOT NULL,
   `defeatPosition` smallint(6) NOT NULL,
   `defeatVariation` smallint(6) NOT NULL,
-  `ration` smallint(6) NOT NULL,
-  `rationPosition` smallint(6) NOT NULL,
-  `rationVariation` smallint(6) NOT NULL,
+  `ratio` smallint(6) NOT NULL,
+  `ratioPosition` smallint(6) NOT NULL,
+  `ratioVariation` smallint(6) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 $qr->execute();
