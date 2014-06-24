@@ -10,7 +10,7 @@ echo '<div id="subnav">';
 		for ($i = 0; $i < ASM::$com->size(); $i++) {
 			$commander = ASM::$com->get($i);
 
-			echo '<a href="/" class="item">';
+			echo '<a href="#" class="item">';
 				echo '<span class="picto">';
 					echo '<img src="' . MEDIA . 'commander/medium/c1-l1-c6.png" alt="" />';
 					echo '<span class="number">' . $commander->getLevel() . '</span>';
@@ -20,7 +20,17 @@ echo '<div id="subnav">';
 						echo CommanderResources::getInfo($commander->getLevel(), 'grade') . ' ' . $commander->getName() . '<br />';
 						echo Format::numberFormat($commander->getPev()) . ' pev';
 						echo '<hr />';
-						echo 'A quai sur Frudulu';
+						if ($commander->getStatement() == COM_MOVING) {
+							switch ($commander->getTypeOfMove()) {
+								case COM_MOVE: echo 'Déplacement'; break;
+								case COM_LOOT: echo 'Pillage'; break;
+								case COM_COLO: echo 'Colonisation'; break;
+								case COM_BACK: echo 'Retour'; break;
+								default: break;
+							}
+						} else {
+							echo 'A quai';
+						}
 						echo '<hr />';
 
 						foreach ($commander->getNbrShipByType() as $k => $nbr) {

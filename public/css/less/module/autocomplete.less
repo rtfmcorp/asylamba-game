@@ -9,43 +9,43 @@
 	z-index: 99999;
 	box-shadow: 0 0 6px black;
 	border-radius: 3px;
-}
 
-.ac_results ul {
-	width: 100%;
-	padding: 0; margin: 0;
-	list-style-position: outside;
-	list-style: none;
-}
+	ul {
+		width: 100%;
+		padding: 0; margin: 0;
+		list-style-position: outside;
+		list-style: none;
 
-.ac_results li {
-	padding: 4px 8px;
-	margin: 0px;
-	cursor: default;
-	display: block;
-	border-bottom: solid 1px #CCC;
-	overflow: hidden;
-}
-.ac_results li:last-child {
-	border: none;
-}
+		li {
+			padding: 4px 8px;
+			margin: 0px;
+			cursor: default;
+			display: block;
+			border-bottom: solid 1px #CCC;
+			overflow: hidden;
 
-.ac_results .img {
-	float: left;
-	width: 36px;
-	background: #202020;
-	border-radius: 3px;
-	margin: 0 8px 0 0;
-}
+			&:last-child {
+				border: none;
+			}
+		}
+	}
 
-.ac_results .value-1,
-.ac_results .value-2 {
-	display: block;
-	line-height: 18px;
-}
+	.img {
+		float: left;
+		width: 36px;
+		background: #202020;
+		border-radius: 3px;
+		margin: 0 8px 0 0;
+	}
 
-.ac_results .value-1 {
-	font-weight: bold;
+	.value-1, .value-2 {
+		display: block;
+		line-height: 18px;
+	}
+
+	.value-1 {
+		font-weight: bold;
+	}
 }
 
 .ac_loading { background: white url('src/desktop/module/indicator.gif') right center no-repeat; }

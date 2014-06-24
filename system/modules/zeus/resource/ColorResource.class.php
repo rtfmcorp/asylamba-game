@@ -2,7 +2,7 @@
 class ColorResource {
 	public static function getInfo($id, $info) {
 		if ($id <= count(self::$colors)) {
-			if (in_array($info, array('id', 'officialName', 'popularName', 'government', 'status', 'devise', 'desc1', 'desc2', 'desc3', 'desc4'))) {
+			if (in_array($info, array('id', 'officialName', 'popularName', 'government', 'factionPoint', 'status', 'devise', 'desc1', 'desc2', 'desc3', 'desc4'))) {
 				return self::$colors[$id - 1][$info];
 			} else {
 				return FALSE;
@@ -18,6 +18,7 @@ class ColorResource {
 			'officialName' => 'Ordre Impérial',
 			'popularName' => 'l’Empire',
 			'government' => 'Maison Akhénienne',
+			'factionPoint' => 'Points de Prestige',
 			'status' => array('Noble', 'Dynaste', 'Dynastaire', 'Empereur'),
 			'devise' => 'Des nefs d’acier,<br />Naquit l’équilibre',
 			'desc1' => 'Faction centrale de la Galaxie de l’Œil, l’Ordre Impérial cherche a bâtir un empire puissant, dont les ramifications mèneraient jusqu’aux confins de la Galaxie. Un empire sous l’égide de la Maison Akhénienne, totalitaire et immuable.',
@@ -30,6 +31,7 @@ class ColorResource {
 			'officialName' => 'Province de Kovahkarh',
 			'popularName' => 'l’Esseim',
 			'government' => 'Maison des Kovahkarh',
+			'factionPoint' => 'Points de Bataille',
 			'status' => array('Capitaine', 'Dynaste', 'Dynastaire', 'Hérault'),
 			'devise' => 'Eclats de métal dans le ciel',
 			'desc1' => 'Fiers sont les soldats Kovahkarh, sans pareil est leur honneur dans la Galaxie de l’Oeil. Kovahk est une faction guerrière aux moeurs parfois brutals et au caractère bien trempé tel l’acier qu’ils vénèrent et adulent.',
@@ -42,6 +44,7 @@ class ColorResource {
 			'officialName' => 'Province de Négora',
 			'popularName' => 'Négore',
 			'government' => 'Maison Négienne',
+			'factionPoint' => 'Points de Marchandage',
 			'status' => array('Commerçant', 'Négociant', 'Gestionnaire', 'Vizir'),
 			'devise' => 'Toutes les richesses,<br />Passent par Négore',
 			'desc1' => 'La maison Négienne, la plus riches de la Galaxie de l’Œil, est composée essentiellement de grands marchands et de financiers expérimentés. Considérée comme la banque de la galaxie depuis très longtemps, son économie est basée sur les échanges et le commerce.',
@@ -54,6 +57,7 @@ class ColorResource {
 			'officialName' => 'Marche de Cardan',
 			'popularName' => 'la Marche',
 			'government' => 'Eglise Cardanienne',
+			'factionPoint' => 'Points de Foi',
 			'status' => array('Fidèle', 'Prêtre', 'Archiprêtre', 'Guide'),
 			'devise' => 'La lumière vous balaiera',
 			'desc1' => 'L’Eglise Cardanienne est la seule faction théocratique de la Galaxie. Elle fût, pendant de longues années, un mouvement disciminé, peuplée uniquement par des moines et des hommes pieux. Mais des dérives fanatiques ont poussées la Marche de Cardan à devenir une faction belliqueuse et extrémiste, éblouie par un pouvoir suprême et divin qui les mènera à la victoire.',
@@ -66,6 +70,7 @@ class ColorResource {
 			'officialName' => 'Province de Nerve',
 			'popularName' => 'la Nerve',
 			'government' => 'République Nervéenne',
+			'factionPoint' => 'Points d\'industrie',
 			'status' => array('Citoyen', 'Député', 'Ministre', 'Président'),
 			'devise' => 'Jamais ne tombera,<br />La ville aux Milles Sous-sols',
 			'desc1' => 'La république Nervéenne est composée d’une grande communautés préférant vivre à l’écart, cachée dans d’incroyables labyrinthes sous-terrain. Elle est connue principalement pour sa capacité à camoufler la quasi-totalité de ces infrastructures à ses ennemis ainsi que pour ses qualités de bâtisseurs hors-normes.',
@@ -77,7 +82,8 @@ class ColorResource {
 			'id' => 6,
 			'officialName' => 'Province d’Aphéra',
 			'popularName' => 'Aphéra',
-			'government' => 'République d’Aphéra',
+			'government' => 'République Aphérane',
+			'factionPoint' => 'Points de Technologie',
 			'status' => array('Citoyen', 'Député', 'Conseiller', 'Chancelier'),
 			'devise' => 'Au travers du vide,<br />Nos oiseaux perçents,<br/>Levez les yeux',
 			'desc1' => 'La république d’Aphéra, réputée pour son potentiel scientifique, est une faction composée des plus grands chercheurs. Avide de technologie et de progrès, les citées d’Aphéra s’étendent au dessus des nuages, créant de fantastiques villes volantes.',
@@ -90,6 +96,7 @@ class ColorResource {
 			'officialName' => 'Marche de Synelle',
 			'popularName' => 'Synelle',
 			'government' => 'Fédération Synélectique',
+			'factionPoint' => 'Points de Sagesse',
 			'status' => array('Fédéré', 'Conseiller', 'Consul', 'Fédérant'),
 			'devise' => 'Au plus loin des Guerres,<br />La vie prends racine',
 			'desc1' => 'La fédération Synélectique, basée sur la connaissance et le savoir, est une faction composée de libres penseurs, de diplomates, d’érudits et de philosophes. Préférant une stratégie plus réfléchie à des attaques éclaires, le système militaire de Synelle est puissant et méthodique.',

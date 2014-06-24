@@ -6,16 +6,20 @@ echo '<h1>création de la nouvelle table squadronReport</h1>';
 
 $db = DataBaseAdmin::getInstance();
 
-$qr = $db->prepare("DROP TABLE bigreport");
+$qr = $db->prepare("DROP TABLE IF EXISTS bigreport");
 $qr->execute();
 
-$qr = $db->prepare("DROP TABLE report");
+$qr = $db->prepare("DROP TABLE IF EXISTS squadronReport");
+$qr->execute();
+
+$qr = $db->prepare("DROP TABLE IF EXISTS report");
 $qr->execute();
 
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `squadronReport` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `position` tinyint(11) NOT NULL,
   `rReport` int(11) NOT NULL,
+  `round` int(11) NOT NULL,
   `rCommander` int(11) NOT NULL,
   `ship0` tinyint(11) NOT NULL,
   `ship1` tinyint(11) NOT NULL,

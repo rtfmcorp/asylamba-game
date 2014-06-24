@@ -1,0 +1,170 @@
+#tools .box, #nav .box {
+	a {
+		position: relative;
+		display: inline-block;
+		line-height: 32px;
+		padding: 0 25px; margin: 5px 2px;
+		font-size: 14px;
+		width: 150px;
+		color: white;
+		text-decoration: none;
+		font-variant: small-caps;
+		background: url('src/desktop/button/bButtonMiddle.png') repeat-x;
+	}
+
+	a:before {
+		content: '';
+		position: absolute;
+		top: 0; left: 0;
+		width: 20px; height: 32px;
+		background: url('src/desktop/button/bButtonLeft.png') no-repeat;
+	}
+
+	a:after {
+		content: '';
+		position: absolute;
+		top: 0; right: 0;
+		width: 20px; height: 32px;
+		background: url('src/desktop/button/bButtonRight.png') no-repeat;
+	}
+
+	a.current-base {
+		margin-left: 56px;
+
+		img {
+			position: absolute;
+			top: -16px; left: -54px;
+			background: black;
+			.border-radius(100%);
+			border: solid 2px #4F4F4F;
+			width: 60px;
+		}
+	}
+
+	a:hover:before, a:focus:before {
+		background: url('src/desktop/button/bButtonLeftHover.png') repeat;
+	}
+
+	a:hover:after, a:focus:after {
+		background: url('src/desktop/button/bButtonRightHover.png') repeat;
+	}
+
+	a.active 		{ background: url('src/desktop/button/bButtonMiddleActive.png') repeat; }
+	a.active:before { background: url('src/desktop/button/bButtonLeftActive.png') repeat; }
+	a.active:after  { background: url('src/desktop/button/bButtonRightActive.png') repeat; }
+
+	a.square {
+		position: relative;
+		padding: 0 5px; margin: 5px 2px;
+		height: 32px; width: 30px;
+		background: url('src/desktop/button/bLittleButton.png') no-repeat;
+		vertical-align: top;
+
+		&:before, &:after { display: none; }
+		&:hover, &:focus	{ background: url('src/desktop/button/bLittleButtonHover.png') no-repeat; }
+		&.active { background: url('src/desktop/button/bLittleButtonActive-c@{color-type}.png') no-repeat; }
+
+		&.active.flashy {
+			.border-radius(3px);
+			box-shadow: inset 0 0 12px @light;
+		}
+
+		img {
+			position: absolute;
+			width: 24px;
+			top: 3px; left: 8px;
+		}
+
+		span.number {
+			position: absolute;
+			top: -5px; right: -5px;
+			width: 18px; line-height: 18px;
+			text-align: center;
+			font-size: 11px;
+			.border-radius(100%);
+			background: @dark;
+		}
+	}
+}
+
+#nav .box {
+	position: absolute;
+	display: inline-block;
+	height: 46px;
+	padding: 0 3px;
+	background: url('src/desktop/nav/bNavBox.png') repeat-x;
+
+	&:before {
+		content: '';
+		position: absolute;
+		top: 0; left: -15px;
+		width: 15px; height: 46px;
+		background: url('src/desktop/nav/bNavBoxLeft.png') no-repeat;
+	}
+
+	&:after {
+		content: '';
+		position: absolute;
+		top: 0; right: -15px;
+		width: 15px; height: 46px;
+		background: url('src/desktop/nav/bNavBoxRight.png') no-repeat;
+	}
+
+	&.left 	 { top: 0; left: 25px; }
+	&.left-2 { top: 0; left: 375px; }
+	&.left-3 { top: 0; left: 645px; }
+	&.right  { top: 0; right: 25px; }
+
+	a.square span.number {
+		bottom: -5px; top: auto;
+	}
+}
+
+#tools .box {
+	position: absolute;
+	display: inline-block;
+	height: 40px;
+	padding: 1px 3px 0 3px;
+	background: url('src/desktop/tools/bToolBox.png') repeat-x;
+	font-size: 13px;
+
+	&:before {
+		content: '';
+		position: absolute;
+		top: 0; left: -15px;
+		width: 15px; height: 40px;
+		background: url('src/desktop/tools/bToolBoxRight.png') no-repeat;
+	}
+
+	&:after {
+		content: '';
+		position: absolute;
+		top: 0; right: -15px;
+		width: 15px; height: 40px;
+		background: url('src/desktop/tools/bToolBoxLeft.png') no-repeat;
+	}
+
+	&.left  {
+		bottom: 0; right: 340px;
+	}
+	&.right {
+		bottom: 0; right: 25px;
+	}
+
+	a.square img {
+		top: 4px;
+	}
+	a.resource-link {
+		width: 110px;
+		font-size: 18px;
+
+		img.icon-color {
+			position: relative;
+			display: inline-block;
+			width: 18px;
+			vertical-align: middle;
+			margin-left: 5px;
+			top: -2px; padding: 1px;
+		}
+	}
+}

@@ -72,6 +72,7 @@ class Place {
 	public $playerName = '';
 	public $playerAvatar = '';
 	public $playerStatus = 0;
+	public $playerLevel = 0;
 
 	// BASE
 	public $typeOfBase = 0; // 0=empty, 1=ms1, 2=ms2, 3=ms3, 4=ob
@@ -389,6 +390,16 @@ class Place {
 								ASM::$plm->get()->commanders = array_merge(ASM::$plm->get()->commanders);
 							}
 						}
+
+						#ajouter du prestige au défenseur synelectique
+						if ($this->playerColor == 7) {
+							$S_PAM = ASM::$pam->getCurrentSession();
+							ASM::$pam->newSession();
+							ASM::$pam->load(array('id' => $this->rPlayer));
+							ASM::$pam->get()->factionPoint += Color::POINTDENFEND;
+							ASM::$pam->changeSession($S_PAM);
+						}
+
 						ASM::$plm->changeSession($S_PLM10);
 
 						$this->sendNotif(self::LOOTPLAYERWHITBATTLEFAIL, $commander);
@@ -433,6 +444,7 @@ class Place {
 
 	# conquest
 	private function tryToConquer($commander) {
+		include_once DEMETER;
 		if ($this->rPlayer != 0) {
 			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
@@ -467,7 +479,54 @@ class Place {
 						$this->sendNotif(self::CONQUERPLAYERWHITBATTLESUCCESS, $commander);
 					}
 
-					#attribuer le jooeur à la place
+					# attribuer le prestige au joueur
+					if ($commander->playerColor == 1 || $commander->playerColor == 4 || $commander->playerColor == 5) {
+						$S_PAM = ASM::$pam->getCurrentSession();
+						ASM::$pam->newSession();
+						ASM::$pam->load(array('id' => $commander->rPlayer));
+						$points = 0;
+						switch ($commander->playerColor) {
+							case 1:
+								$points = Color::POINTCONQUER;
+								break;
+							case 4:
+								$points = round($this->population);
+								break;
+							case 5:
+								$points = ($this->coefResources - 45) * Color::COEFFPOINTCONQUER;
+								break;
+							default:
+								$points = 0;
+								break;
+						}
+						ASM::$pam->get()->factionPoint += $points;
+						ASM::$pam->changeSession($S_PAM);
+					}
+
+					if ($this->playerColor == 1 || $this->playerColor == 4 || $this->playerColor == 5) {
+						$S_PAM = ASM::$pam->getCurrentSession();
+						ASM::$pam->newSession();
+						ASM::$pam->load(array('id' => $this->rPlayer));
+						$points = 0;
+						switch ($commander->playerColor) {
+							case 1:
+								$points = Color::POINTCONQUER;
+								break;
+							case 4:
+								$points = round($this->population);
+								break;
+							case 5:
+								$points = ($this->coefResources - 44) * Color::COEFFPOINTCONQUER;
+								break;
+							default:
+								$points = 0;
+								break;
+						}
+						ASM::$pam->get()->factionPoint -= $points;
+						ASM::$pam->changeSession($S_PAM);
+					}
+
+					#attribuer le joueur à la place
 					$this->commanders = array();
 					$this->rColor = $commander->playerColor;
 					$this->rPlayer = $commander->rPlayer;
@@ -487,6 +546,15 @@ class Place {
 							unset($this->commanders[$i]);
 							$this->commanders = array_merge($this->commanders);
 						}
+					}
+					
+					#ajouter du prestige au défenseur synelectique
+					if ($this->playerColor == 7) {
+						$S_PAM = ASM::$pam->getCurrentSession();
+						ASM::$pam->newSession();
+						ASM::$pam->load(array('id' => $this->rPlayer));
+						ASM::$pam->get()->factionPoint += Color::POINTDENFEND;
+						ASM::$pam->changeSession($S_PAM);
 					}
 
 					$this->sendNotif(self::CONQUERPLAYERWHITBATTLEFAIL, $commander);
@@ -538,6 +606,26 @@ class Place {
 				$commander->setRBase($this->id);
 				$commander->setStatement(COM_AFFECTED);
 				$commander->line = 1;
+
+				if ($commander->playerColor == 4 || $commander->playerColor == 5) {
+					$S_PAM = ASM::$pam->getCurrentSession();
+					ASM::$pam->newSession();
+					ASM::$pam->load(array('id' => $commander->rPlayer));
+					$points = 0;
+					switch ($commander->playerColor) {
+						case 4:
+							$points = round($this->population);
+							break;
+						case 5:
+							$points = ($this->coefResources - 44) * Color::COEFFPOINTCONQUER;
+							break;
+						default:
+							$points = 0;
+							break;
+					}
+					ASM::$pam->get()->factionPoint += $points;
+					ASM::$pam->changeSession($S_PAM);
+				}
 
 				# attribuer le rPlayer à la Place !
 				$this->rPlayer = $commander->getRPlayer();
@@ -645,6 +733,7 @@ class Place {
 			$computerCommander = $this->createVirtualCommander();
 			$fc = new FightController();
 			$fc->startFight($commander, $computerCommander, $this);
+			$this->createReport($commander, $computerCommander);
 		}
 	}
 
@@ -663,8 +752,10 @@ class Place {
 		$report->type = LiveReport::$type;
 		$report->round = LiveReport::$round;
 		$report->importance = LiveReport::$importance;
-		$report->dFight = lib::now(); //à modifier
+		$report->dFight = Utils::now(); //à modifier
 		$report->placeName = ($this->baseName == '') ? 'planète rebelle' : $this->baseName;
+
+		ASM::$rpm->add($report);
 	}
 
 	private function sendNotif($case, $commander) {

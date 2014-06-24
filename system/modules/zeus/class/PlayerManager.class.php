@@ -54,6 +54,7 @@ class PlayerManager extends Manager {
 			$p->setCredit($aw['credit']);
 			$p->uPlayer = $aw['uPlayer'];
 			$p->setExperience($aw['experience']);
+			$p->factionPoint = $aw['factionPoint'];
 			$p->setLevel($aw['level']);
 			$p->setVictory($aw['victory']);
 			$p->setDefeat($aw['defeat']);
@@ -94,6 +95,7 @@ class PlayerManager extends Manager {
 			$p->setCredit($aw['credit']);
 			$p->uPlayer = $aw['uPlayer'];
 			$p->setExperience($aw['experience']);
+			$p->factionPoint = $aw['factionPoint'];
 			$p->setLevel($aw['level']);
 			$p->setVictory($aw['victory']);
 			$p->setDefeat($aw['defeat']);
@@ -117,8 +119,8 @@ class PlayerManager extends Manager {
 	public function add(Player $p) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			player(bind, rColor, name, avatar, status, credit, uPlayer, experience, level, victory, defeat, stepTutorial, stepDone, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, dInscription, dLastConnection, dLastActivity, premium, statement)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+			player(bind, rColor, name, avatar, status, credit, uPlayer, experience, factionPoint, level, victory, defeat, stepTutorial, stepDone, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, dInscription, dLastConnection, dLastActivity, premium, statement)
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$p->getBind(),
 			$p->getRColor(),
@@ -128,6 +130,7 @@ class PlayerManager extends Manager {
 			$p->getCredit(),
 			$p->uPlayer,
 			$p->getExperience(),
+			$p->factionPoint,
 			$p->getLevel(),
 			$p->getVictory(),
 			$p->getDefeat(),
@@ -165,6 +168,7 @@ class PlayerManager extends Manager {
 					credit = ?,
 					uPlayer = ?,
 					experience = ?,
+					factionPoint = ?,
 					level = ?,
 					victory = ?,
 					defeat = ?,
@@ -191,6 +195,7 @@ class PlayerManager extends Manager {
 				$p->getCredit(),
 				$p->uPlayer,
 				$p->getExperience(),
+				$p->factionPoint,
 				$p->getLevel(),
 				$p->getVictory(),
 				$p->getDefeat(),
@@ -219,69 +224,6 @@ class PlayerManager extends Manager {
 		$this->_Remove($id);
 		
 		return TRUE;
-	}
-
-	//LOAD SPECIAUX
-	public function loadByPopulation($where = array(), $limit = array()) {
-		$formatWhere = Utils::arrayToWhere($where, 'p.');
-		$formatLimit = Utils::arrayToLimit($limit);
-
-		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT p.*
-			FROM player AS p
-			' . $formatWhere . '
-			' . $formatLimit
-		);
-
-		foreach($where AS $v) {
-			if (is_array($v)) {
-				foreach ($v as $p) {
-					$valuesArray[] = $p;
-				}
-			} else {
-				$valuesArray[] = $v;
-			}
-		}
-
-		if(empty($valuesArray)) {
-			$qr->execute();
-		} else {
-			$qr->execute($valuesArray);
-		}
-
-		while($aw = $qr->fetch()) {
-			$p = new Player();
-
-			$p->setId($aw['id']);
-			$p->setBind($aw['bind']);
-			$p->setRColor($aw['rColor']);
-			$p->setName($aw['name']);
-			$p->setAvatar($aw['avatar']);
-			$p->setStatus($aw['status']);
-			$p->setCredit($aw['credit']);
-			$p->uPlayer = $aw['uPlayer'];
-			$p->setExperience($aw['experience']);
-			$p->setLevel($aw['level']);
-			$p->setVictory($aw['victory']);
-			$p->setDefeat($aw['defeat']);
-			$p->setStepTutorial($aw['stepTutorial']);
-			$p->stepDone = $aw['stepDone'];
-			$p->iUniversity = $aw['iUniversity'];
-			$p->partNaturalSciences = $aw['partNaturalSciences'];
-			$p->partLifeSciences = $aw['partLifeSciences'];
-			$p->partSocialPoliticalSciences = $aw['partSocialPoliticalSciences'];
-			$p->partInformaticEngineering = $aw['partInformaticEngineering'];
-			$p->setDInscription($aw['dInscription']);
-			$p->setDLastConnection($aw['dLastConnection']);
-			$p->setDLastActivity($aw['dLastActivity']);
-			$p->setPremium($aw['premium']);
-			$p->setStatement($aw['statement']);
-
-			$currentP = $this->_Add($p);
-			if ($this->currentSession->getUMode()) {
-				$currentP->uMethod();
-			}
-		}
 	}
 }
 ?>

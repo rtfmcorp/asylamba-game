@@ -91,7 +91,7 @@ echo '<div class="body">';
 								}
 							echo '</p>';
 						} elseif (1 == 2) {
-							# réger les vaisseaux mères
+							# gérer les vaisseaux mères
 						} else {
 							switch ($place->getTypeOfPlace()) {
 								case 1: echo '<p><strong>Planète rebelle</strong></p>'; break;
@@ -126,35 +126,9 @@ echo '<div class="body">';
 							echo '</p>';
 						}
 					echo '</div>';
-					echo '<div class="column fleet">';
-						echo '<p><strong>Défense</strong></p>';
-						echo '<p>';
-							if ($place->getTypeOfBase() != 0) {
-								for ($j = 0; $j < 3; $j++) { 
-									if (isset($place->commanders[$j])) {
-										echo '<img src="' . MEDIA . 'map/fleet/away.jpg" alt="flotte" class="hb lt" title="commandant en fonction, taille de la flotte inconnue" />';	
-									}
-								}
-							} elseif ($place->getTypeOfPlace() == 1) {
-								if ($place->getPopulation() < 80) {
-									$title = 'petite flotte de défense';
-									$img = 'fleet1';
-								} elseif ($place->getPopulation() >= 80 AND $place->getPopulation() < 150) {
-									$title = 'moyenne flotte de défense';
-									$img = 'fleet2';
-								} else {
-									$title = 'grande flotte de défense';
-									$img = 'fleet3';
-								}
-								echo '<img src="' . MEDIA . 'map/fleet/' . $img . '.png" alt="flotte" class="hb lt" title="Commandant rebelle à la tête d\'une ' . $title . '" />';
-							} else {
-								echo '<p>---</p>';
-							}
-						echo '</p>';
-					echo '</div>';
 
 					# work part
-					$link = ''; $box = '';
+					/*$link = ''; $box = '';
 					if ($place->getTypeOfPlace() == 1) {
 						# planète habitable
 						if ($place->getTypeOfBase() == 0) {
@@ -189,20 +163,157 @@ echo '<div class="body">';
 							# place vide
 							ActionHelper::motherShip($defaultBase, $link, $box, 1);
 						}
-					}
+					}*/
 
 					# display part
-					if ($place->getId() != $defaultBase->getId()) {	
-						echo '<div class="column act">';
-							echo '<p><strong>Action<span class="subcontext"></span></strong></p>';
-							echo '<div class="left">';
-								echo $link;
+					echo '<div class="column act">';
+						echo '<div class="top">';
+							$available = (($place->rPlayer != 0 && $place->playerColor != CTR::$data->get('playerInfo')->get('color')) || ($place->rPlayer == 0 && $place->typeOfPlace == 1)) ? NULL : 'grey';
+							echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="1"><img src="' . MEDIA . 'map/action/loot.png" alt="" /></a>';
+							echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="2"><img src="' . MEDIA . 'map/action/colo.png" alt="" /></a>';
+
+							$available = ($place->rPlayer == CTR::$data->get('playerId') && $place->getId() != $defaultBase->getId()) ? NULL : 'grey';
+							echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="3"><img src="' . MEDIA . 'map/action/move.png" alt="" /></a>';
+
+							$available = ($place->rPlayer != 0 && $place->getId() != $defaultBase->getId()) ? NULL : 'grey';
+							echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="4"><img src="' . MEDIA . 'map/action/rc.png" alt="" /></a>';
+
+							$available = (($place->rPlayer != 0 && $place->playerColor != CTR::$data->get('playerInfo')->get('color')) || ($place->rPlayer == 0 && $place->typeOfPlace == 1)) ? NULL : 'grey';
+							echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="5"><img src="' . MEDIA . 'map/action/spy.png" alt="" /></a>';
+						echo '</div>';
+						echo '<div class="bottom">';
+							echo '<div class="box" data-id="1">';
+								echo '<h2>Lancer un pillage</h2>';
+								echo '<div class="box-content">';
+									echo '- on peut pas attaquer (protection joueur) <br />';
+									echo '-- pas de commandant sélectionné <br />';
+									echo '-- commandant trop loin <br />';
+									echo '-- on peut attaquer';
+								echo '</div>';
 							echo '</div>';
-							echo '<div class="right">';
-								echo $box;
+
+							echo '<div class="box" data-id="2">';
+								echo '<h2>Lancer une colonisation</h2>';
+								echo '<div class="box-content">';
+									echo '- on peut pas attaquer (protection joueur)<br />';
+									echo '-- pas de commandant sélectionné <br />';
+									echo '-- commandant trop loin <br />';
+									echo '-- on peut attaquer';
+								echo '</div>';
+							echo '</div>';
+
+							echo '<div class="box" data-id="3">';
+								echo '<h2>Déplacer une flotte</h2>';
+								echo '<div class="box-content">';
+									echo '- on peut pas déplacer <br />';
+									echo '-- pas de commandant sélectionné <br />';
+									echo '-- commandant trop loin <br />';
+									echo '-- on peut déplacer';
+								echo '</div>';
+							echo '</div>';
+
+							echo '<div class="box" data-id="4">';
+								echo '<h2>Proposer une route commerciale</h2>';
+								echo '<div class="box-content">';
+									if ($place->rPlayer == 0) {
+										echo 'Vous ne pouvez proposer une route commerciale qu\'a des joueurs';
+									} elseif ($place->getId() == $defaultBase->getId()) {
+										echo 'Vous ne pouvez pas proposer une route commerciale sur votre propre base';
+									} elseif ($defaultBase->levelCommercialPlateforme == 0) {
+										echo 'Il vous faut une plateforme commerciale pour proposer une route commericale';
+									} elseif ($place->levelCommercialPlateforme == 0) {
+										echo 'Le joueur ne dispose pas d\'une plateforme commerciale';
+									} else {
+										$proposed 	 = FALSE;
+										$notAccepted = FALSE;
+										$standby 	 = FALSE;
+
+										$S_CRM3 = ASM::$crm->getCurrentSession();
+										ASM::$crm->changeSession($defaultBase->routeManager);
+										for ($j = 0; $j < ASM::$crm->size(); $j++) { 
+											if (ASM::$crm->get($j)->getROrbitalBaseLinked() == $defaultBase->getRPlace()) {
+												if (ASM::$crm->get($j)->getROrbitalBase() == $place->getId()) {
+													switch(ASM::$crm->get($j)->getStatement()) {
+														case CRM_PROPOSED: $notAccepted = TRUE; break;
+														case CRM_ACTIVE: $sendResources = TRUE; break;
+														case CRM_STANDBY: $standby = TRUE; break;
+													}
+												}
+											}
+											if (ASM::$crm->get($j)->getROrbitalBase() == $defaultBase->getRPlace()) {
+												if (ASM::$crm->get($j)->getROrbitalBaseLinked() == $place->getId()) {
+													switch(ASM::$crm->get($j)->getStatement()) {
+														case CRM_PROPOSED: $proposed = TRUE; break;
+														case CRM_ACTIVE: $sendResources = TRUE; break;
+														case CRM_STANDBY: $standby = TRUE; break;
+													}
+												}
+											}
+										}
+										ASM::$crm->changeSession($S_CRM3);
+
+										echo '<div class="rc">';
+											echo '<img src="' . MEDIA . 'map/place/place' . $place->getTypeOfPlace() . '-' . Game::getSizeOfPlanet($place->getPopulation()) . '.png" alt="" class="planet" />';
+											echo 'Revenu par relève : 1 000 <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" /><br />';
+											echo 'Bassin de population : 435 342';
+											echo 'Coûts de construction : 1 000 000 <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" /><br />';
+
+											if ($proposed) {
+												echo '<a href="#" class="button">en attente d\'acceptation<br />Annuler la proposition</a>';
+											} elseif ($notAccepted) {
+												echo '<a href="#" class="button">en attente d\'acceptation<br />Accepter la proposition</a>';
+											} elseif ($standby) {
+												echo '<span class="button">C\'est la guerre</span>';
+											} else {
+												$S_CRM2 = ASM::$crm->getCurrentSession();
+												ASM::$crm->changeSession($defaultBase->routeManager);
+												$ur = ASM::$crm->size();
+												for ($j = 0; $j < ASM::$crm->size(); $j++) {
+													if (ASM::$crm->get($j)->getROrbitalBaseLinked() == $defaultBase->rPlace && ASM::$crm->get($j)->statement == CRM_PROPOSED) {
+														$ur--;
+													}
+												}
+
+												if ($ur < OrbitalBaseResource::getBuildingInfo(6, 'level', $defaultBase->levelCommercialPlateforme, 'nbRoutesMax')) {
+													echo '<a href="#" class="button">Proposer une route</a>';
+												} else {
+													echo '<span class="button">pas assez de slot</span>';
+												}
+
+												ASM::$crm->changeSession($S_CRM2);
+											}
+										echo '</div>';
+									}
+								echo '</div>';
+							echo '</div>';
+
+							echo '<div class="box" data-id="5">';
+								echo '<h2>Lancer un espionnage</h2>';
+								echo '<div class="box-content">';
+									if ($place->rPlayer != 0 && $place->playerColor == CTR::$data->get('playerInfo')->get('color')) {
+										echo 'Vous ne pouvez pas espionner un joueur de votre alliance';
+									} elseif ($place->rPlayer == 0 && $place->typeOfPlace != 1) {
+										echo 'Vous ne pouvez pas espionner une planète non-habitable';
+									} else {
+										$prices = array(
+											'petit' => 1000,
+											'moyen' => 2500,
+											'grand' => 5000,
+											'très grande' => 10000
+										);
+
+										foreach ($prices as $label => $price) { 
+											echo '<a href="' . APP_ROOT . 'action/a-spy/rplace-' . $place->getId() . '/price-' . $price . '" class="spy-button">';
+												echo '<img src="' . MEDIA . 'resources/credit.png" alt="" class="picto" />';
+												echo '<span class="label">' . $label . '</span>';
+												echo '<span class="price">' . Format::numberFormat($price) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /></span>';
+											echo '</a>';
+										}
+									}
+								echo '</div>';
 							echo '</div>';
 						echo '</div>';
-					}
+					echo '</div>';
 				echo '</div>';
 			echo '</li>';
 			}

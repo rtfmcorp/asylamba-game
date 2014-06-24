@@ -89,6 +89,15 @@ class Research {
 						$levelReached = 0;
 						CTR::$alert->add('une erreur est survenue lors de la mise à jour des technologies');
 				}
+
+				$S_PAM = ASM::$pam->getCurrentSession();
+				ASM::$pam->newSession();
+				ASM::$pam->load(array('id' => $player));
+				if (ASM::$pam->get()->rColor == 6) {
+					ASM::$pam->get()->factionPoint += Color::POINTRESEARCH;
+				}
+				ASM::$pam->changeSession($S_PAM);
+
 				$n = new Notification();
 				$n->setRPlayer($player);
 				$n->setTitle(ResearchResource::getInfo($this->naturalTech, 'name') . ' niveau ' . $levelReached);

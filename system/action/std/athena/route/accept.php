@@ -44,6 +44,14 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 				ASM::$pam->load(array('id' => $proposerBase->getRPlayer()));
 				ASM::$pam->get()->increaseExperience($exp);
 				ASM::$pam->get(1)->increaseExperience($exp);
+
+				if (ASM::$pam->get()->rolor == 3) {
+					ASM::$pam->get()->factionPoint += $exp;
+				}
+				if (SM::$pam->get(1)->rolor == 3) {
+					ASM::$pam->get(1)->factionPoint += $exp;
+				}
+				
 				ASM::$pam->changeSession($S_PAM1);
 				// activation de la route
 				$cr->setStatement(CRM_ACTIVE);

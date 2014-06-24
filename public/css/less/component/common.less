@@ -1,0 +1,362 @@
+.component .tool {
+	display: table;
+	width: 100%;
+	height: 44px;
+	margin: 0;
+	overflow: hidden;
+	background: black;
+	border-bottom: solid 1px @light;
+
+	& > span {
+		display: table-cell;
+		width: 28px;
+		border: solid 6px transparent;
+		border-left: none;
+
+		&:first-child {
+			border: solid 5px transparent;
+			width: auto;
+
+			a { width: auto; }
+		}
+
+		a {
+			position: relative;
+			display: block;
+			padding: 0;
+			width: 30px;
+			line-height: 30px;
+			font-size: 14px;
+			color: white;
+			text-decoration: none;
+			font-variant: small-caps;
+			text-align: center;
+			background: #202020;
+			border: solid 1px #4F4F4F;
+
+			img {
+				width: 18px; position: relative;
+				top: -4px;
+			}
+
+			&.active {
+				background: @light;
+
+				&.down { box-shadow: 0 2px 0 0 #CCC; }
+				&.up { box-shadow: 0 -2px 0 0 #CCC; }
+			}
+
+			&:focus, &:hover {
+				background: #4F4F4F;
+			}
+		}
+	}
+
+	&.sort-button > span:first-child {
+		text-align: center;
+	}
+}
+
+.component h3 {
+	width: 100%;
+	margin: 0;
+	background: black;
+	text-align: center;
+	padding: 0 2px;
+	line-height: 44px;
+	font-size: 14px;
+	color: white;
+	text-decoration: none;
+	font-variant: small-caps;
+	border-bottom: solid 1px @light;
+}
+
+.component h4 {
+	margin: 10px;
+}
+
+.component .body p {
+	margin: 10px;
+	font-size: 13px;
+	text-align: justify;
+
+	&.info {
+		position: relative;
+		border-top: solid 1px #202020;
+		padding: 10px;
+		margin: 10px;
+		line-height: 140%;
+		background: rgba(0, 0, 0, .8);
+
+		a {
+			color: white;
+		}
+
+		.requierement {
+			display: inline-block;
+			margin: 0 0 0 8px;
+			vertical-align: bottom;
+			height: 16px;
+		}
+	}
+
+	&.long-info {
+		padding: 10px;
+		line-height: 150%;
+		background: black;
+	}
+
+	.alone-button {
+		display: block;
+		text-align: center;
+		color: white;
+		line-height: 40px;
+		border-radius: 3px;
+		text-decoration: none;
+		background: #4F4F4F;
+		box-shadow: inset 0 0 2px black;
+		padding: 0 10px;
+		background: @dark;
+
+		&:hover, &:focus {
+			background: @medium;
+		}
+	}
+}
+
+.component .border-bottom {
+	border-bottom: solid 3px @light;
+}
+
+.component .list-type-1 {
+	margin: 10px; padding: 0;
+	list-style: none;
+
+	li {
+		position: relative;
+		padding: 5px 10px;
+		text-align: right;
+		border: solid 1px #0A0A0A;
+		border-top: solid 1px #202020;
+		background: rgba(0, 0, 0, .8);
+		color: #989898;
+
+		&.strong {
+			border-top: double 3px #4F4F4F;
+			background: #111111;
+			color: white;
+		}
+
+		&.empty {
+			background: none;
+			border: none;
+			height: 48px;
+		}
+		ul li {
+			height: auto;
+		}
+	}
+
+	.label {
+		display: block;
+		font-size: 13px;
+	}
+
+	.value {
+		display: inline-block;
+		font-size: 22px; line-height: 30px;
+		font-weight: bold;
+
+		.icon, .icon-color {
+			height: 18px;
+			margin-left: 8px;
+			position: relative;
+			top: -3px;
+		}
+	}
+
+	.hide {
+		color: #4F4F4F;
+	}
+
+	.buttons {
+		position: absolute;
+		top: 28px; left: 5px;
+
+		a {
+			display: inline-block;
+			margin: 0 4px;
+			width: 18px; line-height: 18px;
+			text-align: center;
+			text-decoration: none;
+			font-style: 14px;
+			color: white;
+			border-radius: 3px;
+			background: @medium;
+		}
+	}
+}
+
+.component .sub-list-type-1 {
+	display: none;
+	margin: 0; padding: 0;
+	list-style: none;
+
+	li {
+		position: relative;
+		padding: 2px 0;
+		text-align: left;
+		border: none;
+		border-top: solid 1px #0A0A0A;
+	}
+
+	.label {
+		display: inline-block;
+		width: 60%;
+
+		.button {
+			position: relative; left: -4px;
+			margin: 0 0 0 3px;
+		}
+	}
+
+	.value {
+		text-align: right;
+		line-height: 25px;
+		font-size: 18px;
+		width: 40%;
+
+		.button {
+			margin: 0 2px 0 6px;
+		}
+	}
+
+	.button {
+		display: inline-block;
+		width: 18px; line-height: 18px;
+		text-align: center;
+		text-decoration: none;
+		font-size: 14px; font-weight: normal;
+		color: white;
+		border-radius: 3px;
+		background: @light;
+	}
+}
+
+.component .list-type-1 form {
+	z-index: 1;
+	position: absolute;
+	display: none;
+	bottom: -40px; right: 3px;
+
+	p {
+		position: relative;
+		background: white;
+		border-radius: 3px;
+		padding: 0; margin: 0;
+		width: 200px; height: 35px;
+
+		&:before {
+			content: '';
+			position: absolute;
+			top: -12px; right: 12px;
+			border-style: solid;
+			border-width: 6px;
+			border-color: transparent transparent white transparent;
+		}
+	}
+
+	input {
+		border: none; background: none;
+		line-height: 35px; height: 35px;
+		padding: 0 10px;
+
+		&[type='text'] {
+			width: 140px;
+		}
+		&[type='submit'] {
+			width: 40px;
+		}
+	}
+}
+
+.component .sub-list-type-1 form {
+	right: -6px;
+}
+
+/* NUMBER BOX */
+.number-box {
+	position: relative;
+	margin: 10px; padding: 5px 10px;
+	background: black;
+	color: white;
+	border: solid 1px #0A0A0A;
+	border-top: solid 1px #202020;
+	border-left: solid 10px @medium;
+
+	&.grey {
+		border-left: solid 10px #4F4F4F !important;
+	}
+
+	.label {
+		display: block;
+	}
+
+	.value {
+		display: block;
+		font-size: 26px;
+		font-weight: bold;
+		margin: 4px 0 0 0;
+	}
+
+	.progress-bar {
+		margin: 5px 0;
+	}
+
+	.group-link {
+		position: absolute;
+		top: 5px; right: 5px;
+
+		a {
+			display: inline-block;
+			line-height: 18px; width: 18px;
+			text-align: center;
+			color: white; text-decoration: none;
+			border-radius: 3px;
+			margin-left: 5px;
+			background: @medium;
+		}
+	}
+}
+
+/* PROGRESS BAR */
+.progress-bar {
+	position: relative;
+	display: block;
+	width: 100%; height: 3px;
+	background: #4F4F4F;
+	overflow: hidden;
+
+	.content {
+		position: relative;
+		top: -9px;
+		display: inline-block;
+		height: 5px;
+
+		&:nth-child(n)  { background: @light; }
+		&:nth-child(2n) { background: @dark; }
+	}
+}
+
+/* BONUS */
+.bonus {
+	vertical-align: top;
+	display: inline-block;
+	font-size: 55%;
+	line-height: 100%;
+	padding: 3px;
+	margin: 2px 0 0 8px;
+	border-radius: 3px;
+	font-weight: normal;
+	background: @dark;
+}

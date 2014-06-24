@@ -11,21 +11,18 @@ echo '<!DOCTYPE html>';
 echo '<html lang="fr">';
 
 echo '<head>';
-	if (CTR::getPage() == 'inscription') {
-		echo '<title>' . CTR::getTitle() . ' — ' . APP_SUBNAME . ' — Expansion</title>';
-	} else {
-		echo '<title>' . CTR::getTitle() . ' — ' . CTR::$data->get('playerInfo')->get('name') . ' — ' . APP_SUBNAME . ' — Expansion</title>';
-	}
+	echo (CTR::getPage() == 'inscription') 
+		? '<title>' . CTR::getTitle() . ' — ' . APP_SUBNAME . ' — Expansion</title>'
+		: '<title>' . CTR::getTitle() . ' — ' . CTR::$data->get('playerInfo')->get('name') . ' — ' . APP_SUBNAME . ' — Expansion</title>';
 
 	echo '<meta charset="utf-8" />';
 	echo '<meta name="description" content="' . APP_DESCRIPTION . '" />';
 
-	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.css" />';
-	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'module.css" />';
 	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.css" />';
-	if (CTR::getPage() == 'inscription') {
-		echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'inscription.desktop.css" />';
-	}
+	echo (CTR::getPage() == 'inscription')
+		? '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'inscription.desktop.css" />'
+		: NULL;
+
 	echo '<link rel="icon" type="image/png" href="' . MEDIA . '/favicon/' . $color . '.png" />';
 echo '</head>';
 ?>

@@ -1,0 +1,258 @@
+#nav .overbox, #tools .overbox {
+	.overflow {
+		max-height: 400px;
+		overflow: auto;
+		position: relative;
+	}
+
+	h2 {
+		color: white;
+		padding: 10px 15px; margin: 0;
+		font-size: 14px;
+		font-weight: normal;
+		border-bottom: solid 1px #202020;
+	}
+
+	.link-title {
+		position: absolute;
+		top: 10px; right: 10px;
+		line-height: 20px;
+		font-size: 11px; padding: 0 5px;
+		background: #202020;
+		.border-radius(3px);
+		text-decoration: none;
+		color: white;
+	}
+
+	a.more-link {
+		display: block;
+		padding: 8px;
+		font-size: 12px;
+		border-top: solid 1px #202020;
+		text-align: center;
+		text-decoration: none;
+		color: #4F4F4F;
+
+		&:focus, &:hover {
+			color: #CCC;
+		}
+	}
+
+	p.info {
+		padding: 5px 15px;
+		font-size: 12px;
+		text-align: center;
+		color: #CCC;
+	}
+}
+
+
+#nav .overbox {
+	display: none;
+	position: absolute;
+	background: #0A0A0A;
+	box-shadow: inset 0 0 2px #4F4F4F;
+	.border-radius(3px);
+
+	&:before {
+		content: '';
+		position: absolute;
+		border-style: solid;
+		border-width: 9px;
+		border-color: transparent transparent #202020 transparent;
+		top: -18px; right: 30px;
+	}
+
+	&#change-bases {
+		top: 50px; left: 10px;
+		width: 205px;
+		padding: 0 0 8px 0;
+
+		&:before { left: 30px; right: auto; }
+
+		a {
+			display: block;
+			padding: 3px 15px;
+			color: #CCC; text-decoration: none;
+			font-size: 12px;
+			border-bottom: solid 1px #101010;
+
+			&:focus, &:hover {
+				background: #101010;
+			}
+
+			&.active {
+				background: #202020;
+			}
+		}
+
+		strong {
+			display: block;
+			color: #CCC;
+			font-size: 13px;
+		}
+	}
+
+	&#disconnect-box {
+		top: 50px; right: 10px;
+		width: 205px;
+		padding: 8px 0;
+
+		hr {
+			margin: 8px 0; border: none;
+			background: none;
+			border-top: solid 1px #202020;
+		}
+
+		a {
+			display: block;
+			padding: 0 15px;
+			line-height: 25px;
+			font-size: 13px;
+			color: #CCC;
+			text-decoration: none;
+
+			&:hover, &:focus {
+				color: white;
+				background: #202020;
+			}
+		}
+	}
+
+	&#bug-tracker {
+		width: 350px;
+		top: 50px; right: 98px;
+		padding: 0 0 8px 0;
+
+		p {
+			color: #CCC;
+			font-size: 12px;
+			margin: 10px;
+		}
+
+		.option {
+			margin: 3px 10px 10px 10px;
+			display: block;
+			width: 330px;
+			padding: 5px;
+		}
+
+		textarea {
+			display: block;
+			margin: 0 10px 10px 10px;
+			padding: 5px;
+			width: 318px; height: 200px;
+			min-width: 318px; max-width: 318px;
+			border: solid 1px #202020;
+			font-family: 'Trebuchet MS', sans-serif;
+			font-size: 13px;
+		}
+
+		.button {
+			display: block;
+			margin: 0 10px 2px 10px;
+		}
+	}
+
+	&#roadmap {
+		width: 350px;
+		top: 50px; right: 143px;
+
+		.overflow {
+			width: 350px;
+			padding: 8px 0;
+		}
+
+		p {
+			color: #CCC;
+			font-size: 12px;
+			margin: 0 10px 10px 10px;
+
+			em {
+				display: block;
+				font-size: 11px;
+				color: #4F4F4F;
+			}
+		}
+
+		hr {
+			margin: 5px 0;
+			border: none;
+			border-top: solid 1px #202020;
+		}
+	}
+
+	&#tutorial {
+		width: 350px;
+		top: 50px; right: 188px;
+		color: white;
+
+		form {
+			padding: 10px 15px; margin: 0;
+			border-top: solid 1px #202020;
+		}
+
+		.overflow {
+			padding: 15px;
+
+			h3 {
+				position: relative;
+				margin: 0; padding: 0 0 0 36px;
+
+				.number {
+					position: absolute;
+					top: -4px; left: 0;
+					display: block;
+					width: 26px; line-height: 26px;
+					text-align: center;
+					background: @dark;
+					.border-radius(100%);
+					margin-right: 10px;
+				}
+			}
+
+			p {
+				font-size: 12px;
+				color: #CCC;
+			}
+		}
+	}
+
+	&#new-notifications {
+		top: 50px;
+		left: 540px;
+		width: 300px;
+	}	
+}
+
+#tools .overbox {
+	display: none;
+	position: absolute;
+	background: #0A0A0A;
+	box-shadow: inset 0 0 2px #4F4F4F;
+	.border-radius(3px);
+	width: 300px;
+	bottom: 45px; right: 15px;
+
+	&:before {
+		content: '';
+		position: absolute;
+		border-style: solid;
+		border-width: 9px;
+		border-color: #202020 transparent transparent transparent;
+		bottom: -18px; right: 30px;
+	}
+
+	&.left-pic:before {
+		left: 30px; right: auto;
+	}
+
+	&#tools-refinery { right: 401px; bottom: 45px; }
+	&#tools-generator { right: 237px; bottom: 45px; }
+	&#tools-technosphere { right: 193px; bottom: 45px; }
+
+	&#tools-credit { right: 140px; bottom: 45px; }
+
+	&#tools-incoming-attack { right: 230px; bottom: 45px; }
+	&#tools-outgoing-attack { right: 185px; bottom: 45px; }
+}

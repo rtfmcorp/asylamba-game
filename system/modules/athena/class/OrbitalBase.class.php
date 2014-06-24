@@ -351,6 +351,16 @@ class OrbitalBase {
 		# increase player experience
 		$experience = OrbitalBaseResource::getBuildingInfo($queue->buildingNumber, 'level', $queue->targetLevel, 'points');
 		$player->increaseExperience($experience);
+
+		if ($player->rColor == 1) {
+			$player->factionPoint += $experience;
+		} elseif ($player->rColor == 5) {
+			$name = OrbitalBaseResource::getBuildingInfo($queue->buildingNumber, 'name');
+
+			if ($name == 'rafinery' || $name == 'dock1' || $name == 'dock2') {
+				$player->factionPoint += $experience;
+			}
+		}
 		# alert
 		if (CTR::$data->get('playerId') == $this->rPlayer) {
 			CTR::$alert->add('Construction de votre ' . OrbitalBaseResource::getBuildingInfo($queue->buildingNumber, 'frenchName') . ' niveau ' . $queue->targetLevel . ' sur ' . $this->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.', ALERT_GAM_GENERATOR);
@@ -360,11 +370,17 @@ class OrbitalBase {
 	}
 
 	public function uShipQueue1($sq, $player) {
+		include_once DEMETER;
 		# vaisseau construit
 		$this->setShipStorage($sq->shipNumber, $this->getShipStorage($sq->shipNumber) + $sq->quantity);
 		# increase player experience
 		$experience = $sq->quantity * ShipResource::getInfo($sq->shipNumber, 'points');
 		$player->increaseExperience($experience);
+
+		if ($player->rColor == 2) {
+			$player->factionPoint += Color::POINTBUILDLITTLESHIP * $sq->quantity;	
+		}
+
 		# alert
 		if (CTR::$data->get('playerId') == $this->rPlayer) {
 			$alt = 'Construction de ';
@@ -381,11 +397,16 @@ class OrbitalBase {
 	}
 
 	public function uShipQueue2($sq, $player) {
+		include_once DEMETER;
 		# vaisseau construit
 		$this->setShipStorage($sq->shipNumber, $this->getShipStorage($sq->shipNumber) + 1);
 		# increase player experience
 		$experience = ShipResource::getInfo($sq->shipNumber, 'points');
 		$player->increaseExperience($experience);
+
+		if ($player->rColor == 1 || $player->rColor == 2) {
+			$player->factionPoint += Color::POINTBUILDBIGSHIP;	
+		}
 		# alert
 		if (CTR::$data->get('playerId') == $this->rPlayer) {
 			CTR::$alert->add('Construction de votre ' . ShipResource::getInfo($sq->shipNumber, 'codeName') . ' sur ' . $this->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.', ALERT_GAM_DOCK2);
@@ -401,6 +422,10 @@ class OrbitalBase {
 		# increase player experience
 		$experience = TechnologyResource::getInfo($tq->technology, 'points', $tq->targetLevel);
 		$player->increaseExperience($experience);
+
+		if ($player->rColor == 6) {
+			$player->factionPoint += $experience;
+		}
 		# alert
 		if (CTR::$data->get('playerId') == $this->rPlayer) {
 			$alt = 'Développement de votre technologie ' . TechnologyResource::getInfo($tq->technology, 'name');

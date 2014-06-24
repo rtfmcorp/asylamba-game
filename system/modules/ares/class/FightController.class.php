@@ -221,6 +221,8 @@ class FightController {
 	*/
 
 	public function startFight($commanderA, $commanderD, $place) {
+		include_once DEMETER;
+
 		$commanderA->setIsAttacker(TRUE);
 		$commanderD->setIsAttacker(FALSE);
 		
@@ -229,6 +231,48 @@ class FightController {
 
 		LiveReport::$rPlayerAttacker = $commanderA->rPlayer;
 		LiveReport::$rPlayerDefender = $commanderD->rPlayer;
+
+		$i = 0;
+		foreach ($commanderA->armyInBegin AS $s) {
+			LiveReport::$squadrons[] = array(0, $i, 0, $commanderA->id, $s[0], $s[1], $s[2], $s[3], $s[4], $s[5], $s[6], $s[7], $s[8], $s[9], $s[10], $s[11]);
+			$i++;
+		}
+		$i = 0;
+		foreach ($commanderD->armyInBegin AS $s) {
+			LiveReport::$squadrons[] = array(0, $i, 0, $commanderD->id, $s[0], $s[1], $s[2], $s[3], $s[4], $s[5], $s[6], $s[7], $s[8], $s[9], $s[10], $s[11]);
+			$i++;
+		}
+		/* array (
+		    'id' => 38,
+		    'rCommander' => 31,
+		    'ship0' => 0,
+		    0 => 0,
+		    'ship1' => 0,
+		    1 => 0,
+		    'ship2' => 0,
+		    2 => 0,
+		    'ship3' => 0,
+		    3 => 0,
+		    'ship4' => 0,
+		    4 => 0,
+		    'ship5' => 0,
+		    5 => 0,
+		    'ship6' => 0,
+		    6 => 0,
+		    'ship7' => 0,
+		    7 => 0,
+		    'ship8' => 0,
+		    8 => 0,
+		    'ship9' => 0,
+		    9 => 0,
+		    'ship10' => 0,
+		    10 => 0,
+		    'ship11' => 0,
+		    11 => 0,
+		    'dCreation' => '2014-05-10 10:29:35',
+		    12 => '2014-05-10 10:29:35',
+		    'dLastModification' => '2014-06-05 14:10:49',
+		    13 => '2014-06-05 14:10:49'*/
 	
 		while(1) {
 			if (LiveReport::$round == 1000) {
@@ -255,6 +299,8 @@ class FightController {
 					ASM::$pam->load(array('id' => $commanderD->getRPlayer()));
 					ASM::$pam->get(0)->increaseVictory(1);
 					ASM::$pam->get(1)->increaseDefeat(1);
+					ASM::$pam->get(0)->factionPoint += Color::POINTBATTLE;
+					ASM::$pam->get(1)->factionPoint -= Color::POINTBATTLE;
 					ASM::$pam->changeSession($oldPlayerSess);
 				} else {
 					include_once ZEUS;
@@ -288,6 +334,8 @@ class FightController {
 					ASM::$pam->load(array('id' => $commanderD->getRPlayer()));
 					ASM::$pam->get(1)->increaseVictory(1);
 					ASM::$pam->get(0)->increaseDefeat(1);
+					ASM::$pam->get(1)->factionPoint += Color::POINTBATTLE;
+					ASM::$pam->get(0)->factionPoint -= Color::POINTBATTLE;
 					ASM::$pam->changeSession($oldPlayerSess);
 				} else{
 					include_once ZEUS;
@@ -304,6 +352,17 @@ class FightController {
 			}
 			LiveReport::$round++;
 			self::$currentLine++;
+		}
+
+		$i = 0;
+		foreach ($commanderA->armyAtEnd AS $s) {
+			LiveReport::$squadrons[] = array(0, $i, 0, $commanderA->id, $s[0], $s[1], $s[2], $s[3], $s[4], $s[5], $s[6], $s[7], $s[8], $s[9], $s[10], $s[11]);
+			$i++;
+		}
+		$i = 0;
+		foreach ($commanderD->armyAtEnd AS $s) {
+			LiveReport::$squadrons[] = array(0, $i, 0, $commanderD->id, $s[0], $s[1], $s[2], $s[3], $s[4], $s[5], $s[6], $s[7], $s[8], $s[9], $s[10], $s[11]);
+			$i++;
 		}
 		return array($commanderA, $commanderD);
 	}
