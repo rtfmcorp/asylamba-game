@@ -389,6 +389,16 @@ class Place {
 								ASM::$plm->get()->commanders = array_merge(ASM::$plm->get()->commanders);
 							}
 						}
+
+						#ajouter du prestige au défenseur synelectique
+						if ($this->playerColor == 7) {
+							$S_PAM = ASM::$pam->getCurrentSession();
+							ASM::$pam->newSession();
+							ASM::$pam->load(array('id' => $this->rPlayer));
+							ASM::$pam->get()->factionPoint += Color::POINTDENFEND;
+							ASM::$pam->changeSession($S_PAM);
+						}
+
 						ASM::$plm->changeSession($S_PLM10);
 
 						$this->sendNotif(self::LOOTPLAYERWHITBATTLEFAIL, $commander);
@@ -535,6 +545,15 @@ class Place {
 							unset($this->commanders[$i]);
 							$this->commanders = array_merge($this->commanders);
 						}
+					}
+					
+					#ajouter du prestige au défenseur synelectique
+					if ($this->playerColor == 7) {
+						$S_PAM = ASM::$pam->getCurrentSession();
+						ASM::$pam->newSession();
+						ASM::$pam->load(array('id' => $this->rPlayer));
+						ASM::$pam->get()->factionPoint += Color::POINTDENFEND;
+						ASM::$pam->changeSession($S_PAM);
 					}
 
 					$this->sendNotif(self::CONQUERPLAYERWHITBATTLEFAIL, $commander);

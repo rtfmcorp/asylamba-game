@@ -306,10 +306,10 @@ class Player {
 			} else {
 				$n->addTxt('Vous n\'avez pas assez de crédits pour payer certains de vos commandants. Ils ont donc déserté ! ')->addBrk();
 				$n->addTxt('Voici la liste de ces commandants : ');
-				for ($i=0; $i < $comList->size() - 2; $i++) { 
+				for ($i = 0; $i < $comList->size() - 2; $i++) { 
 					$n->addTxt($comList->get($i) . ', ');
 				}
-				$n->addTxt($comList->get($comList->size()-2) . ' et ' . $comList->get($comList->size()-1) . '.');
+				$n->addTxt($comList->get($comList->size() - 2) . ' et ' . $comList->get($comList->size() - 1) . '.');
 				$n->addBrk()->addTxt('Ils sont tous allé proposer leurs services sur le marché. Si vous voulez les récupérer, vous pouvez vous y rendre et les racheter.');
 			}
 			$n->addEnd();

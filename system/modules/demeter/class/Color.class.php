@@ -23,13 +23,15 @@ class Color {
 	#kovakh
 	const POINTBUILDLITTLESHIP 		= 1;
 	const POINTCHANGETYPE 			= 50;
+	const POINTBATTLE				= 2;
 	#Synelle
 	const POINTATTACKPLAYER 		= -10;
-	const POINTDENFEND 				= 20;
+	const POINTDENFENDTODO  				= 20;
 	#Nerve
 	const COEFFPOINTCONQUERDONE		= 10;
 	#Aphéra
 	const POINTSPY					= 10;
+	const POINTRESEARCH				= 5;
 
 	#const
 	const NBRGOVERNMENT 	= 6;
@@ -76,21 +78,21 @@ class Color {
 				DONE construire un gros vaisseaux
 				DONE conquête
 			-
-				détruire un bâtiment
+				TODO détruire un bâtiment
 				DONE perdre une panète
 
 		Négore
 			+
 				DONE avoir une nouvelle route
-				faire une vente/achat intéressant
+				TODO faire une vente/achat intéressant
 			-
-				perdre une route
-				faire un vente/achat pas intéressant
+				TODO perdre une route
+				TODO faire un vente/achat pas intéressant
 
 		Cardan
 			+
 				DONE prendre une planète, bonus si elle et hors secteur
-				faire un don à la faction
+				TODO faire un don à la faction
 			-
 				DONE perdre une planète
 
@@ -98,17 +100,17 @@ class Color {
 			+
 				DONE contruire 1 petit vaisseau
 				DONE construire 1 gros vaisseau
-				gagner un combat
+				DONE gagner un combat
 				DONE nomer une planète militaire
 			-
-				perdre un combat
+				DONE perdre un combat
 				DONE dénommer une planète militaire
 		
 		Synelle
 			+
-				défense victorieuse
+				DONE défense victorieuse
 			-
-				attaquer un autre joueur
+				MAYBE TODO attaquer un autre joueur
 
 		Nerve
 			+
@@ -118,14 +120,14 @@ class Color {
 
 			-
 				DONE dénommer une plan indus
-				déup un batiment indus
+				TODO déup un batiment indus
 				DONE perdre une planète (points selon coeffresources)
 
 		Aphéra
 			+
-				trouver une recherche
+				DONE trouver une recherche
 				DONE trouver une techno
-				espionnage réussi
+				TODO espionnage réussi
 
 		*/
 

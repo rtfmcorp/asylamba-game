@@ -221,6 +221,8 @@ class FightController {
 	*/
 
 	public function startFight($commanderA, $commanderD, $place) {
+		include_once DEMETER;
+
 		$commanderA->setIsAttacker(TRUE);
 		$commanderD->setIsAttacker(FALSE);
 		
@@ -270,7 +272,7 @@ class FightController {
 		    'dCreation' => '2014-05-10 10:29:35',
 		    12 => '2014-05-10 10:29:35',
 		    'dLastModification' => '2014-06-05 14:10:49',
-		    13 => '2014-06-05 14:10:49',*/
+		    13 => '2014-06-05 14:10:49'*/
 	
 		while(1) {
 			if (LiveReport::$round == 1000) {
@@ -297,6 +299,8 @@ class FightController {
 					ASM::$pam->load(array('id' => $commanderD->getRPlayer()));
 					ASM::$pam->get(0)->increaseVictory(1);
 					ASM::$pam->get(1)->increaseDefeat(1);
+					ASM::$pam->get(0)->factionPoint += Color::POINTBATTLE;
+					ASM::$pam->get(1)->factionPoint -= Color::POINTBATTLE;
 					ASM::$pam->changeSession($oldPlayerSess);
 				} else {
 					include_once ZEUS;
@@ -330,6 +334,8 @@ class FightController {
 					ASM::$pam->load(array('id' => $commanderD->getRPlayer()));
 					ASM::$pam->get(1)->increaseVictory(1);
 					ASM::$pam->get(0)->increaseDefeat(1);
+					ASM::$pam->get(1)->factionPoint += Color::POINTBATTLE;
+					ASM::$pam->get(0)->factionPoint -= Color::POINTBATTLE;
 					ASM::$pam->changeSession($oldPlayerSess);
 				} else{
 					include_once ZEUS;
