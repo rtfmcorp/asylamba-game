@@ -228,21 +228,21 @@ echo '<div class="body">';
 										$notAccepted = FALSE;
 										$standby 	 = FALSE;
 
-										$S_CRM1 = ASM::$crm->getCurrentSession();
+										$S_CRM3 = ASM::$crm->getCurrentSession();
 										ASM::$crm->changeSession($defaultBase->routeManager);
-										for ($i = 0; $i < ASM::$crm->size(); $i++) { 
-											if (ASM::$crm->get($i)->getROrbitalBaseLinked() == $defaultBase->getRPlace()) {
-												if (ASM::$crm->get($i)->getROrbitalBase() == $place->getId()) {
-													switch(ASM::$crm->get($i)->getStatement()) {
+										for ($j = 0; $j < ASM::$crm->size(); $j++) { 
+											if (ASM::$crm->get($j)->getROrbitalBaseLinked() == $defaultBase->getRPlace()) {
+												if (ASM::$crm->get($j)->getROrbitalBase() == $place->getId()) {
+													switch(ASM::$crm->get($j)->getStatement()) {
 														case CRM_PROPOSED: $notAccepted = TRUE; break;
 														case CRM_ACTIVE: $sendResources = TRUE; break;
 														case CRM_STANDBY: $standby = TRUE; break;
 													}
 												}
 											}
-											if (ASM::$crm->get($i)->getROrbitalBase() == $defaultBase->getRPlace()) {
-												if (ASM::$crm->get($i)->getROrbitalBaseLinked() == $place->getId()) {
-													switch(ASM::$crm->get($i)->getStatement()) {
+											if (ASM::$crm->get($j)->getROrbitalBase() == $defaultBase->getRPlace()) {
+												if (ASM::$crm->get($j)->getROrbitalBaseLinked() == $place->getId()) {
+													switch(ASM::$crm->get($j)->getStatement()) {
 														case CRM_PROPOSED: $proposed = TRUE; break;
 														case CRM_ACTIVE: $sendResources = TRUE; break;
 														case CRM_STANDBY: $standby = TRUE; break;
@@ -250,30 +250,39 @@ echo '<div class="body">';
 												}
 											}
 										}
-										ASM::$crm->changeSession($S_CRM1);
+										ASM::$crm->changeSession($S_CRM3);
 
-										if ($proposed) {
-											echo 'en attente d\'acceptation';
-										} elseif ($notAccepted) {
-											echo 'deja une route : accepter';
-										} elseif ($standby) {
-											echo 'guerre';
-										} else {
-											$S_CRM1 = ASM::$crm->getCurrentSession();
-											ASM::$crm->changeSession($defaultBase->routeManager);
-											$ur = ASM::$crm->size();
-											for ($i = 0; $i < ASM::$crm->size(); $i++) {
-												if (ASM::$crm->get($i)->getROrbitalBaseLinked() == $defaultBase->rPlace && ASM::$crm->get($i)->statement == CRM_PROPOSED) {
-													$ur--;
+										echo '<div class="rc">';
+											echo '<img src="' . MEDIA . 'map/place/place' . $place->getTypeOfPlace() . '-' . Game::getSizeOfPlanet($place->getPopulation()) . '.png" alt="" class="planet" />';
+											echo 'Revenu par relève : 1 000 <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" /><br />';
+											echo 'Bassin de population : 435 342';
+											echo 'Coûts de construction : 1 000 000 <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" /><br />';
+
+											if ($proposed) {
+												echo '<a href="#" class="button">en attente d\'acceptation<br />Annuler la proposition</a>';
+											} elseif ($notAccepted) {
+												echo '<a href="#" class="button">en attente d\'acceptation<br />Accepter la proposition</a>';
+											} elseif ($standby) {
+												echo '<span class="button">C\'est la guerre</span>';
+											} else {
+												$S_CRM2 = ASM::$crm->getCurrentSession();
+												ASM::$crm->changeSession($defaultBase->routeManager);
+												$ur = ASM::$crm->size();
+												for ($j = 0; $j < ASM::$crm->size(); $j++) {
+													if (ASM::$crm->get($j)->getROrbitalBaseLinked() == $defaultBase->rPlace && ASM::$crm->get($j)->statement == CRM_PROPOSED) {
+														$ur--;
+													}
 												}
-											}
 
-											if ($ur < OrbitalBaseResource::getBuildingInfo(6, 'level', $defaultBase->levelCommercialPlateforme, 'nbRoutesMax')) {
-												echo 'on peut proposer';
-											}
+												if ($ur < OrbitalBaseResource::getBuildingInfo(6, 'level', $defaultBase->levelCommercialPlateforme, 'nbRoutesMax')) {
+													echo '<a href="#" class="button">Proposer une route</a>';
+												} else {
+													echo '<span class="button">pas assez de slot</span>';
+												}
 
-											ASM::$crm->changeSession($S_CRM1);
-										}
+												ASM::$crm->changeSession($S_CRM2);
+											}
+										echo '</div>';
 									}
 								echo '</div>';
 							echo '</div>';
@@ -286,11 +295,18 @@ echo '<div class="body">';
 									} elseif ($place->rPlayer == 0 && $place->typeOfPlace != 1) {
 										echo 'Vous ne pouvez pas espionner une planète non-habitable';
 									} else {
-										for ($j = 0; $j < 4; $j++) { 
-											echo '<a href="' . APP_ROOT . 'action/a-spy/rplace-' . $place->getId() . '/price-1000" class="spy-button">';
+										$prices = array(
+											'petit' => 1000,
+											'moyen' => 2500,
+											'grand' => 5000,
+											'très grande' => 10000
+										);
+
+										foreach ($prices as $label => $price) { 
+											echo '<a href="' . APP_ROOT . 'action/a-spy/rplace-' . $place->getId() . '/price-' . $price . '" class="spy-button">';
 												echo '<img src="' . MEDIA . 'resources/credit.png" alt="" class="picto" />';
-												echo '<span class="label">Petite attaque</span>';
-												echo '<span class="price">1 000 <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /></span>';
+												echo '<span class="label">' . $label . '</span>';
+												echo '<span class="price">' . Format::numberFormat($price) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /></span>';
 											echo '</a>';
 										}
 									}

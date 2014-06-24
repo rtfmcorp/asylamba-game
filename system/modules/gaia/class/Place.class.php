@@ -72,6 +72,7 @@ class Place {
 	public $playerName = '';
 	public $playerAvatar = '';
 	public $playerStatus = 0;
+	public $playerLevel = 0;
 
 	// BASE
 	public $typeOfBase = 0; // 0=empty, 1=ms1, 2=ms2, 3=ms3, 4=ob

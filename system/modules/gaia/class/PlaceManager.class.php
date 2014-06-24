@@ -31,6 +31,7 @@ class PlaceManager extends Manager {
 			pl.name AS playerName,
 			pl.avatar AS playerAvatar,
 			pl.status AS playerStatus,
+			pl.level AS playerLevel,
 			ms.rPlace AS msId,
 			ms.name AS msName,
 			ms.type AS msType,
@@ -98,6 +99,7 @@ class PlaceManager extends Manager {
 				$p->setPlayerName($aw['playerName']);
 				$p->setPlayerAvatar($aw['playerAvatar']);
 				$p->setPlayerStatus($aw['playerStatus']);
+				$p->playerLevel = $aw['playerLevel'];
 				if (isset($aw['msId'])) {
 					$p->setTypeOfBase($aw['msType']);
 					$p->setBaseName($aw['msName']);

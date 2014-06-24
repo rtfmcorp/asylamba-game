@@ -2810,6 +2810,7 @@
 	padding: 8px 10px;
 	background: #080808;
 	border: solid 1px black;
+	overflow: hidden;
 }
 
 #action-box .body .system ul li.action .box .box-content .spy-button {
@@ -2832,96 +2833,39 @@
 	padding: 1px;
 }
 
-
-/*#action-box .body .system ul li.action .content .column .act-bull  strong {
-	line-height: 16px;
-	font-size: 12px;
+#action-box .body .system ul li.action .box .box-content .rc {
+	margin: 5px 0 0 0; padding: 10px 10px 0 50px;
+	border-top: solid 1px #202020;
 }
-#action-box .body .system ul li.action .content .column .act-bull .icon-color,
-#action-box .body .system ul li.action .content .column .act-bull .icon-color {
+
+#action-box .body .system ul li.action .box .box-content .rc .planet {
+	position: absolute;
+	top: -25px; left: -25px;
+	width: 76px; height: 76px;
+	border: solid 1px #202020;
+	border-radius: 100%;
+	background: black;
+}
+
+#action-box .body .system ul li.action .box .box-content .rc .icon-color {
+	width: 14px; height: 14px;
+	padding: 1px;
+}
+
+#action-box .body .system ul li.action .box .box-content .rc .button {
 	display: inline-block;
-	position: relative;
-	top: 0;
-	padding: 1px; margin: 0;
-	border: none;
-	width: 13px; height: 13px;
-}
-
-#action-box .body .system ul li.action .content .column .act-bull .commander {
-	display: block;
-	position: relative;
-	padding: 0; margin: 0 6px;
-	height: 54px;
-	text-decoration: none;
-	line-height: 16px;
-	font-size: 12px;
-}
-#action-box .body .system ul li.action .content .column .act-bull .commander:focus,
-#action-box .body .system ul li.action .content .column .act-bull .commander:hover {
-	background: #0A0A0A;
-}
-
-#action-box .body .system ul li.action .content .column .act-bull .commander .label {
-	position: absolute;
-	top: 0px; left: 55px;
-	display: block;
-	padding: 2px 0;
-	width: 150px;
-}
-#action-box .body .system ul li.action .content .column .act-bull .commander .value {
-	position: absolute;
-	top: 0px; right: 5px;
-	display: block;
-	padding: 2px 0;
-	text-align: right;
-	width: 150px;
-}
-
-#action-box .body .system ul li.action .content .column .act-bull .commander .avatar {
-	position: absolute;
-	top: 3px; left: 3px;
-	padding: 3px;
-	border-radius: 3px;
-	width: 40px; height: 40px;
-}
-
-#action-box .body .system ul li.action .content .column .act-bull .rc strong {
-	display: block;
-	font-size: 18px;
-	line-height: 22px;
-}
-
-#action-box .body .system ul li.action .content .column .act-bull .rc .icon-color {
-	width: 20px; height: 20px;
-}
-
-#action-box .body .system ul li.action .content .column .act-bull .rc .button {
-	display: block;
-	margin: 10px;
-	line-height: 32px;
-	text-align: center;
-	background: #0A0A0A;
-	text-decoration: none;
-}
-#action-box .body .system ul li.action .content .column .act-bull .rc a.button:hover,
-#action-box .body .system ul li.action .content .column .act-bull .rc a.button:active {
 	background: #202020;
-}
-#action-box .body .system ul li.action .content .column .act-bull .rc span.button {
-	color: #CCC;
+	border: solid 1px #4F4F4F;
+	line-height: 26px;
+	margin: 5px 0 0 0; padding: 0 8px;
+	text-align: center;
+	text-decoration: none;
+	border-radius: 3px;
 }
 
-#action-box .body .system ul li.action .content .column .act-bull .rc form {
-	margin: 10px 0 0 0;
-	width: 100%;
+#action-box .body .system ul li.action .box .box-content .rc a.button {
+	background: @medium;
 }
-#action-box .body .system ul li.action .content .column .act-bull .rc input[type="text"] {
-	width: 175px;
-	border: none;
-	padding: 6px 10px;
-	background: white;
-	border-radius: 3px;
-}*/
 
 /* map-commanders */
 
