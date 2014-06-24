@@ -206,9 +206,9 @@ class OrbitalBase {
 
 	public function updatePoints() {
 		$points = 0;
-		for ($i=0; $i < 8; $i++) { 
-			for ($j=0; $j < $this->getBuildingLevel($i); $j++) { 
-				$points += OrbitalBaseResource::getBuildingInfo($i, 'level', $j + 1, 'points');
+		for ($i = 0; $i < 8; $i++) { 
+			for ($j = 0; $j < $this->getBuildingLevel($i); $j++) { 
+				$points += ceil(OrbitalBaseResource::getBuildingInfo($i, 'level', $j + 1, 'resourcePrice') / 1000);
 			}
 		}
 		$this->setPoints($points);
