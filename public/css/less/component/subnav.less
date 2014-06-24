@@ -1,0 +1,134 @@
+#subnav {
+	position: fixed;
+	top: 29px; left: 2px; bottom: 29px;
+	padding: 40px 0;
+	width: 60px;
+	background: url('src/desktop/subnav/middle.png') repeat-y;
+	z-index: 1000;
+
+	.overflow {
+		position: relative;
+		height: 100%;
+	}
+
+	.item {
+		position: relative;
+		display: block;
+		height: 50px; width: 50px;
+		margin: 0 0 10px 0; padding: 8px 5px;
+		color: white;
+		text-decoration: none;
+		background: url('src/desktop/subnav/button.png') no-repeat;
+
+		&:before {
+			content: ''; position: absolute;
+			right: -6px; bottom: 0;
+			width: 12px; height: 47px;
+			background: url('src/desktop/subnav/til.png') no-repeat;
+		}
+		&:hover:before {
+			background: url('src/desktop/subnav/til-hover.png') no-repeat;
+		}
+		&:hover > .content {
+			display: block;
+		}
+
+		.picto {
+			display: block;
+			height: 30px; width: 30px;
+			padding: 10px;
+
+			img {
+				display: block;
+				height: 30px; width: 30px;
+			}
+
+			.number {
+				position: absolute;
+				bottom: -5px; right: -18px;
+				display: block;
+				width: 28px; height: 28px; line-height: 28px;
+				text-align: center;
+				font-size: 12px;
+				background: url('src/desktop/subnav/number.png') no-repeat;
+			}
+		}
+
+		.content {
+			display: none;
+			position: absolute;
+			top: 0; left: 75px;
+			width: 230px;
+		}
+
+		.content.skin-1 {
+			span {
+				display: inline-block;
+				margin: 15px 0 15px 16px;
+				padding: 0 15px;
+				line-height: 30px;
+
+				color: white;
+				background: #202020;
+				.border-radius(3px);
+				border: solid 1px #4F4F4F;
+				box-shadow: inset 0 0 3px black;
+			}
+
+			span:before {
+				content: '';
+				display: block;
+				position: absolute;
+				border-style: solid;
+				border-width: 8px;
+				border-color: transparent #4F4F4F transparent transparent;
+				left: 0; top: 22px;
+			}
+		}
+
+		.content.skin-2 {
+			.sub-content {
+				display: inline-block;
+				margin: 0 0 0 16px;
+				padding: 10px;
+				color: white; background: #202020;
+				.border-radius(3px);
+				border: solid 1px #4F4F4F;
+				box-shadow: inset 0 0 3px black;
+			}
+
+			.sub-content:before {
+				content: '';
+				display: block;
+				position: absolute;
+				border-style: solid;
+				border-width: 8px;
+				border-color: transparent #4F4F4F transparent transparent;
+				left: 0; top: 22px;
+			}
+
+			.sub-content hr {
+				border: none;
+				border-top: solid 1px #4F4F4F;
+			}
+
+			.sub-content .ship {
+				position: relative;
+			}
+
+			.sub-content .ship img {
+				width: 32px; height: 32px;
+			}
+
+			.sub-content .ship img.zero { opacity: .5; }
+			.sub-content .ship .number {
+				position: absolute;
+				bottom: -2px; right: -2px;
+				width: 18px; height: 18px; line-height: 18px;
+				.border-radius(100%);
+				text-align: center;
+				background: @light;
+			}
+		}
+	}
+}

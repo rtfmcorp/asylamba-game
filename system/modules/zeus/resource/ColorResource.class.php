@@ -82,7 +82,7 @@ class ColorResource {
 			'id' => 6,
 			'officialName' => 'Province d’Aphéra',
 			'popularName' => 'Aphéra',
-			'government' => 'République d’Aphéra',
+			'government' => 'République Aphérane',
 			'factionPoint' => 'Points de Technologie',
 			'status' => array('Citoyen', 'Député', 'Conseiller', 'Chancelier'),
 			'devise' => 'Au travers du vide,<br />Nos oiseaux perçents,<br/>Levez les yeux',

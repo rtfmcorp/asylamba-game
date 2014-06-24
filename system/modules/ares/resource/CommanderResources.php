@@ -10,19 +10,6 @@
  * @update 04.03.2014
 */
 
-/*
-Grand Amiral
-Amiral
-Vice-Amiral
-Contre-Amiral
-Commodore
-Capitaine
-Commandant
-Lieutenant Commandant
-Lieutenant
-Sous-Lieutenant
-Aspirant
-*/
 Class CommanderResources {
 	private static $commanders = array(
 		array(

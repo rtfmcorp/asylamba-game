@@ -215,20 +215,85 @@ echo '<div class="body">';
 							echo '<div class="box" data-id="4">';
 								echo '<h2>Proposer une route commerciale</h2>';
 								echo '<div class="box-content">';
-									echo '- on peut pas proposer <br />';
-									echo '- on a pas de plateforme commerciale <br />';
-									echo '- on a pas de slot libre <br />';
-									echo '- on a deja une prop. <br />';
-									echo '- on a deja une route <br />';
-									echo '- on peut proposer';
+									if ($place->rPlayer == 0) {
+										echo 'Vous ne pouvez proposer une route commerciale qu\'a des joueurs';
+									} elseif ($place->getId() == $defaultBase->getId()) {
+										echo 'Vous ne pouvez pas proposer une route commerciale sur votre propre base';
+									} elseif ($defaultBase->levelCommercialPlateforme == 0) {
+										echo 'Il vous faut une plateforme commerciale pour proposer une route commericale';
+									} elseif ($place->levelCommercialPlateforme == 0) {
+										echo 'Le joueur ne dispose pas d\'une plateforme commerciale';
+									} else {
+										$proposed 	 = FALSE;
+										$notAccepted = FALSE;
+										$standby 	 = FALSE;
+
+										$S_CRM1 = ASM::$crm->getCurrentSession();
+										ASM::$crm->changeSession($defaultBase->routeManager);
+										for ($i = 0; $i < ASM::$crm->size(); $i++) { 
+											if (ASM::$crm->get($i)->getROrbitalBaseLinked() == $defaultBase->getRPlace()) {
+												if (ASM::$crm->get($i)->getROrbitalBase() == $place->getId()) {
+													switch(ASM::$crm->get($i)->getStatement()) {
+														case CRM_PROPOSED: $notAccepted = TRUE; break;
+														case CRM_ACTIVE: $sendResources = TRUE; break;
+														case CRM_STANDBY: $standby = TRUE; break;
+													}
+												}
+											}
+											if (ASM::$crm->get($i)->getROrbitalBase() == $defaultBase->getRPlace()) {
+												if (ASM::$crm->get($i)->getROrbitalBaseLinked() == $place->getId()) {
+													switch(ASM::$crm->get($i)->getStatement()) {
+														case CRM_PROPOSED: $proposed = TRUE; break;
+														case CRM_ACTIVE: $sendResources = TRUE; break;
+														case CRM_STANDBY: $standby = TRUE; break;
+													}
+												}
+											}
+										}
+										ASM::$crm->changeSession($S_CRM1);
+
+										if ($proposed) {
+											echo 'en attente d\'acceptation';
+										} elseif ($notAccepted) {
+											echo 'deja une route : accepter';
+										} elseif ($standby) {
+											echo 'guerre';
+										} else {
+											$S_CRM1 = ASM::$crm->getCurrentSession();
+											ASM::$crm->changeSession($defaultBase->routeManager);
+											$ur = ASM::$crm->size();
+											for ($i = 0; $i < ASM::$crm->size(); $i++) {
+												if (ASM::$crm->get($i)->getROrbitalBaseLinked() == $defaultBase->rPlace && ASM::$crm->get($i)->statement == CRM_PROPOSED) {
+													$ur--;
+												}
+											}
+
+											if ($ur < OrbitalBaseResource::getBuildingInfo(6, 'level', $defaultBase->levelCommercialPlateforme, 'nbRoutesMax')) {
+												echo 'on peut proposer';
+											}
+
+											ASM::$crm->changeSession($S_CRM1);
+										}
+									}
 								echo '</div>';
 							echo '</div>';
 
 							echo '<div class="box" data-id="5">';
 								echo '<h2>Lancer un espionnage</h2>';
 								echo '<div class="box-content">';
-									echo '- on peut pas espionner <br />';
-									echo '- panneau d\'espionnage';
+									if ($place->rPlayer != 0 && $place->playerColor == CTR::$data->get('playerInfo')->get('color')) {
+										echo 'Vous ne pouvez pas espionner un joueur de votre alliance';
+									} elseif ($place->rPlayer == 0 && $place->typeOfPlace != 1) {
+										echo 'Vous ne pouvez pas espionner une planète non-habitable';
+									} else {
+										for ($j = 0; $j < 4; $j++) { 
+											echo '<a href="' . APP_ROOT . 'action/a-spy/rplace-' . $place->getId() . '/price-1000" class="spy-button">';
+												echo '<img src="' . MEDIA . 'resources/credit.png" alt="" class="picto" />';
+												echo '<span class="label">Petite attaque</span>';
+												echo '<span class="price">1 000 <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /></span>';
+											echo '</a>';
+										}
+									}
 								echo '</div>';
 							echo '</div>';
 						echo '</div>';
