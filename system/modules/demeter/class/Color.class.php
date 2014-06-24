@@ -17,7 +17,7 @@ class Color {
 	const POINTCONQUER				= 100;
 	const POINTBUILDBIGSHIP			= 25;
 	#negore
-	const POINTSALE					= 20;
+	const COEFFPOINTTRANSACTION		= 10;
 	#cardan
 	const BONUSOUTOFSECTOR			= 50;
 	#kovakh
@@ -26,7 +26,7 @@ class Color {
 	const POINTBATTLE				= 2;
 	#Synelle
 	const POINTATTACKPLAYER 		= -10;
-	const POINTDENFENDTODO  				= 20;
+	const POINTDENFENDTODO  		= 20;
 	#Nerve
 	const COEFFPOINTCONQUERDONE		= 10;
 	#Aphéra

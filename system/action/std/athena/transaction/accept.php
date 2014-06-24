@@ -103,7 +103,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				$currentRate = ASM::$trm->get()->currentRate;
 				ASM::$trm->changeSession($S_TRM);
 				$rate = round(Game::calculateRate($transaction->type, $transaction->quantity, $transaction->identifier, $transaction->price) / $currentRate * 100);
-				$points = -(($rate - 100) / 10);
+				$points = -(($rate - 100) / Color::COEFFPOINTTRANSACTION);
 
 				if (ASM::$pam->get(0)->rColor == 3) {
 					ASM::$pam->get(0)->factionPoint += $points;

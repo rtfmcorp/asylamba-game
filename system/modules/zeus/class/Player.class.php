@@ -347,26 +347,17 @@ class Player {
 
 	// OBJECT METHOD
 	public function increaseCredit($credit) {
-		if (intval($credit)) {
-			$this->credit += abs($credit);
-			if ($this->synchronized) {
-				CTR::$data->get('playerInfo')->add('credit', $this->credit);
-			}
-		} else {
-			CTR::$alert->add('Un nombre est requis');
-			CTR::$alert->add(' dans increaseCredit() de Player', ALERT_STD_ERROR);
+		$this->credit += abs($credit);
+
+		if ($this->synchronized) {
+			CTR::$data->get('playerInfo')->add('credit', $this->credit);
 		}
 	}
 
 	public function decreaseCredit($credit) {
-		if (intval($credit)) {
-			$this->credit -= abs($credit);
-			if ($this->synchronized) {
-				CTR::$data->get('playerInfo')->add('credit', $this->credit);
-			}
-		} else {
-			CTR::$alert->add('Un nombre est requis');
-			CTR::$alert->add(' dans decreaseCredit() de Player', ALERT_STD_ERROR);
+		$this->credit -= abs($credit);
+		if ($this->synchronized) {
+			CTR::$data->get('playerInfo')->add('credit', $this->credit);
 		}
 	}
 

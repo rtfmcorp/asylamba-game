@@ -94,6 +94,8 @@ switch (CTR::$get->get('a')) {
 	case 'vote':					include ACTION . 'demeter/election/vote.php'; break;
 	case 'promote':					include ACTION . 'demeter/election/promote.php'; break;
 
+	case 'donate':					include ACTION . 'demeter/donate.php'; break;
+
 	default :
 		CTR::$alert->add('action inconnue ou non-référencée', ALERT_STD_ERROR);
 		break;
