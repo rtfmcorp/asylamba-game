@@ -86,7 +86,7 @@ class Color {
 				DONE avoir une nouvelle route
 				TODO faire une vente/achat intéressant
 			-
-				TODO perdre une route
+				DONE perdre une route
 				TODO faire un vente/achat pas intéressant
 
 		Cardan

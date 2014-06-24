@@ -167,7 +167,7 @@ class Commander {
 		}
 	}
 
-	# renvoie un tableua de nombre de vaisseaux
+	# renvoie un tableau de nombre de vaisseaux
 	public function getNbrShipByType() {
 		$array = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 		foreach ($this->army as $squadron) {
