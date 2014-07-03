@@ -776,6 +776,7 @@ class Place {
 		$report->type = LiveReport::$type;
 		$report->round = LiveReport::$round;
 		$report->importance = LiveReport::$importance;
+		$report->squadrons = LiveReport::$squadrons;
 		$report->dFight = Utils::now(); //à modifier
 		$report->placeName = ($this->baseName == '') ? 'planète rebelle' : $this->baseName;
 
