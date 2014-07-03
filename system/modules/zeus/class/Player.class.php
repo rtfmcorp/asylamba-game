@@ -362,32 +362,28 @@ class Player {
 	}
 
 	public function increaseExperience($exp) {
-		if (intval($exp)) {
-			$this->experience += $exp;
+		$exp = round($exp);
+		$this->experience += $exp;
+		if ($this->synchronized) {
+			CTR::$data->get('playerInfo')->add('experience', $this->experience);
+		}
+		$nextLevel =  PAM_BASELVLPLAYER * pow(2, ($this->level - 1));
+		if ($this->experience >= $nextLevel) {
+			$this->level++;
 			if ($this->synchronized) {
-				CTR::$data->get('playerInfo')->add('experience', $this->experience);
+				CTR::$data->get('playerInfo')->add('level', $this->level);
 			}
-			$nextLevel =  PAM_BASELVLPLAYER * pow(2, ($this->level - 1));
-			if ($this->experience >= $nextLevel) {
-				$this->level++;
-				if ($this->synchronized) {
-					CTR::$data->get('playerInfo')->add('level', $this->level);
-				}
-				$n = new Notification();
-				$n->setTitle('Niveau supérieur');
-				$n->setRPlayer($this->id);
-				$n->addBeg()->addTxt('Félicitations, vous gagnez un niveau, vous êtes ')->addStg('niveau ' . $this->level)->addTxt('.');
-				$n->addSep()->addTxt('Vous pouvez dès lors disposer d\'un espion supplémentaire, pensez à en acheter.');
-				$n->addEnd();
+			$n = new Notification();
+			$n->setTitle('Niveau supérieur');
+			$n->setRPlayer($this->id);
+			$n->addBeg()->addTxt('Félicitations, vous gagnez un niveau, vous êtes ')->addStg('niveau ' . $this->level)->addTxt('.');
+			$n->addSep()->addTxt('Vous pouvez dès lors disposer d\'un espion supplémentaire, pensez à en acheter.');
+			$n->addEnd();
 
-				$S_NTM1 = ASM::$ntm->getCurrentSession();
-				ASM::$ntm->newSession();
-				ASM::$ntm->add($n);
-				ASM::$ntm->changeSession($S_NTM1);
-			}
-		} else {
-			CTR::$alert->add('Un nombre est requis', ALERT_BUG_ERROR);
-			CTR::$alert->add(' dans increaseExperience() de Player', ALERT_BUG_ERROR);
+			$S_NTM1 = ASM::$ntm->getCurrentSession();
+			ASM::$ntm->newSession();
+			ASM::$ntm->add($n);
+			ASM::$ntm->changeSession($S_NTM1);
 		}
 	}
 }
