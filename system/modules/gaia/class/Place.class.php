@@ -315,6 +315,9 @@ class Place {
 				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
 				ASM::$plm->changeSession($S_PLM10);
 
+				#création du rapport
+				$this->createReport();
+				
 				$this->sendNotif(self::LOOTEMPTYSSUCCESS, $commander);
 
 			} else {
@@ -331,6 +334,9 @@ class Place {
 					}
 				}
 				ASM::$plm->changeSession($S_PLM11);
+				
+				#création du rapport
+				$this->createReport();
 
 				$this->sendNotif(self::LOOTEMPTYFAIL, $commander);
 			}
@@ -375,6 +381,9 @@ class Place {
 						unset($this->commanders[$aleaNbr]);
 						$this->commanders = array_merge($this->commanders);
 
+						#création du rapport
+						$this->createReport();
+
 						$this->sendNotif(self::LOOTPLAYERWHITBATTLESUCCESS, $commander);
 
 
@@ -401,6 +410,9 @@ class Place {
 						}
 
 						ASM::$plm->changeSession($S_PLM10);
+
+						#création du rapport
+						$this->createReport();
 
 						$this->sendNotif(self::LOOTPLAYERWHITBATTLEFAIL, $commander);
 					}
@@ -467,6 +479,9 @@ class Place {
 							break;
 						}
 					}
+					#création du rapport
+					$this->createReport();
+					
 					$nbrBattle++;
 				}
 				# victoire
@@ -641,11 +656,19 @@ class Place {
 						OrbitalBase::TYP_NEUTRAL);
 				}
 
+				
+				#création du rapport
+				$this->createReport();
+
 				$this->sendNotif(self::CONQUEREMPTYSSUCCESS, $commander);
 
 				GalaxyColorManager::apply();
 			# s'il est mort
 			} else {
+				
+				#création du rapport
+				$this->createReport();
+
 				$this->sendNotif(self::CONQUEREMPTYFAIL, $commander);
 				# enlever le commandant de la session
 				$S_PLM10 = ASM::$plm->getCurrentSession();
@@ -702,6 +725,7 @@ class Place {
 
 		$this->resources -= $ressouresLooted;
 		$commander->resources = $ressouresLooted;
+		LiveReport::$resources = $ressouresLooted;
 	}
 
 	private function lootAPlayerPlace($commander) {
@@ -721,6 +745,7 @@ class Place {
 		if ($resourcesLooted > 0) {
 			$base->decreaseResources($resourcesLooted);
 			$commander->resources = $resourcesLooted;
+			LiveReport::$resources = $ressouresLooted;
 		}
 		ASM::$obm->changeSession($S_OBM1);
 	}
@@ -733,11 +758,10 @@ class Place {
 			$computerCommander = $this->createVirtualCommander();
 			$fc = new FightController();
 			$fc->startFight($commander, $computerCommander, $this);
-			$this->createReport($commander, $computerCommander);
 		}
 	}
 
-	private function createReport($c1, $c2) {
+	private function createReport() {
 		include_once ARES;
 		$report = new Report();
 

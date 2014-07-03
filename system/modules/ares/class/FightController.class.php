@@ -286,7 +286,7 @@ class FightController {
 			}
 			if($nbrShipsD == 0) {
 				$commanderA->resultOfFight(TRUE, $commanderD);
-				$commanderD->resultOfFight(FALSE);
+				$commanderD->resultOfFight(FALSE, $commanderA);
 				$commanderD->setStatement(3);
 				$commanderD->setDDeath(Utils::now());
 				LiveReport::$rPlayerWinner = $commanderA->rPlayer;
@@ -321,7 +321,7 @@ class FightController {
 			}
 			if ($nbrShipsA == 0) {
 				$commanderD->resultOfFight(TRUE, $commanderA);
-				$commanderA->resultOfFight(FALSE);
+				$commanderA->resultOfFight(FALSE, $commanderD);
 				$commanderA->setStatement(3);
 				$commanderD->setDDeath(Utils::now());
 				LiveReport::$rPlayerWinner = $commanderD->rPlayer;

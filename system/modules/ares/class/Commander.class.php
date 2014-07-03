@@ -256,7 +256,15 @@ class Commander {
 			$S_PLM1 = ASM::$pam->getCurrentSession();
 			ASM::$pam->newSession(TRUE, FALSE);
 			ASM::$pam->load(array('id' => $this->rPlayer));
-			ASM::$pam->get(0)->increaseExperience(round($this->earnedExperience / COEFFEXPPLAYER));
+			$exp = round($this->earnedExperience / COEFFEXPPLAYER);
+			ASM::$pam->get(0)->increaseExperience($exp);
+
+			if ($enemyCommander->isAttacker == TRUE) {
+				LiveReport::$expPlayerD = $exp;
+			} else {
+				LiveReport::$expPlayerA = $exp;
+			}
+			
 			ASM::$pam->changeSession($S_PLM1);
 		}
 	}
@@ -369,10 +377,11 @@ class Commander {
 		// }
 	}
 	
-	public function resultOfFight($isWinner, $enemyCommander = NULL) {
+	public function resultOfFight($isWinner, $enemyCommander) {
 		if ($isWinner == TRUE) {
 			$this->setEarnedExperience($enemyCommander);
 			$this->earnedExperience = round($this->earnedExperience);
+			LiveReport::$expCom = $this->earnedExperience;
 
 			$this->winner = TRUE;
 			$this->palmares++;
@@ -380,6 +389,7 @@ class Commander {
 			$this->upExperience($this->earnedExperience);
 			$this->hasChanged = TRUE;
 		} else {
+			$this->setEarnedExperience($enemyCommander);
 			$this->earnedExperience = round($this->earnedExperience);
 
 			$this->winner = FALSE;
