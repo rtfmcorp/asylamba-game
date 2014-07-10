@@ -57,43 +57,43 @@ echo '<div class="body">';
 		echo '<li class="star"></li>';
 		for ($i = 0; $i < count($places); $i++) {
 			$place = $places[$i];
-			echo '<li class="place color' . $place->getPlayerColor() . '">';
+			echo '<li class="place color' . $place->playerColor . '">';
 				echo '<a href="#" class="openplace" data-target="' . $i . '">';
-					echo '<strong>' . $place->getPosition() . '</strong>';
-					if ($place->getTypeOfPlace() == 1) {
-						echo '<img class="land" src="' . MEDIA . 'map/place/place' . $place->getTypeOfPlace() . '-' . Game::getSizeOfPlanet($place->getPopulation()) . '.png" />';
+					echo '<strong>' . $place->position . '</strong>';
+					if ($place->typeOfPlace == 1) {
+						echo '<img class="land" src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '-' . Game::getSizeOfPlanet($place->population) . '.png" />';
 					} else {
-						echo '<img class="land" src="' . MEDIA . 'map/place/place' . $place->getTypeOfPlace() . '.png" />';
+						echo '<img class="land" src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '.png" />';
 					}
-					if ($place->getRPlayer() != 0) {
-						echo '<img class="avatar" src="' . MEDIA . '/avatar/small/' . $place->getPlayerAvatar() . '.png" />';
+					if ($place->rPlayer != 0) {
+						echo '<img class="avatar" src="' . MEDIA . '/avatar/small/' . $place->playerAvatar . '.png" />';
 					}
 				echo '</a>';
 			echo '</li>';
 
-			echo '<li class="action color' . $place->getPlayerColor() . '" id="place-' . $i . '">';
+			echo '<li class="action color' . $place->playerColor . '" id="place-' . $i . '">';
 				echo '<div class="content">';
 					echo '<div class="column info">';
-						if ($place->getTypeOfBase() != 0) {
-							echo '<p><strong>' . $place->getBaseName() . '</strong></p>';
-							echo '<p>' . Format::numberFormat($place->getPoints()) . ' points</p>';
+						if ($place->typeOfBase != 0) {
+							echo '<p><strong>' . $place->baseName . '</strong></p>';
+							echo '<p>' . Format::numberFormat($place->points) . ' points</p>';
 							echo '<hr />';
 							echo '<p>propriété du</p>';
 							echo '<p>';
-								if ($place->getPlayerColor() != 0) {
-									$status = ColorResource::getInfo($place->getPlayerColor(), 'status');
-									echo $status[$place->getPlayerStatus() - 1] . ' ';
+								if ($place->playerColor != 0) {
+									$status = ColorResource::getInfo($place->playerColor, 'status');
+									echo $status[$place->playerStatus - 1] . ' ';
 									echo '<span class="player-name">';
-										echo '<a href="' . APP_ROOT . 'diary/player-' . $place->getRPlayer() . '" class="color' . $place->getPlayerColor() . '">' . $place->getPlayerName() . '</a>';
+										echo '<a href="' . APP_ROOT . 'diary/player-' . $place->rPlayer . '" class="color' . $place->playerColor . '">' . $place->playerName . '</a>';
 									echo '</span>';
 								} else {
-									echo 'rebelle <span class="player-name">' . $place->getPlayerName() . '</span>';
+									echo 'rebelle <span class="player-name">' . $place->playerName . '</span>';
 								}
 							echo '</p>';
 						} elseif (1 == 2) {
 							# gérer les vaisseaux mères
 						} else {
-							switch ($place->getTypeOfPlace()) {
+							switch ($place->typeOfPlace) {
 								case 1: echo '<p><strong>Planète rebelle</strong></p>'; break;
 								case 2: echo '<p><strong>Géante gazeuse</strong></p>'; break;
 								case 3: echo '<p><strong>Ruines anciennes</strong></p>'; break;
@@ -109,211 +109,25 @@ echo '<div class="body">';
 						echo '<hr />';
 						echo '<p>';
 							echo '<span class="label">Coeff. histoire</span>';
-							echo '<span class="value">' . $place->getCoefHistory() . ' %</span>';
+							echo '<span class="value">' . $place->coefHistory . ' %</span>';
 						echo '</p>';
 						echo '<p>';
 							echo '<span class="label">Coeff. ressource</span>';
-							echo '<span class="value">' . $place->getCoefResources() . ' %</span>';
+							echo '<span class="value">' . $place->coefResources . ' %</span>';
 						echo '</p>';
 						echo '<p>';
-							echo '<span class="label">Distance [parsec]</span>';
-							echo '<span class="value">---</span>';
+							echo '<span class="label">Distance</span>';
+							echo '<span class="value">' . Format::numberFormat(Game::getDistance($defaultBase->xSystem, $place->xSystem, $defaultBase->ySystem, $place->ySystem)) . ' Al.</span>';
 						echo '</p>';
-						if ($place->getTypeOfPlace() == 1) {		
+						if ($place->typeOfPlace == 1) {
 							echo '<p>';
 								echo '<span class="label">Population [million]</span>';
-								echo '<span class="value">' . Format::numberFormat($place->getPopulation()) . '</span>';
+								echo '<span class="value">' . Format::numberFormat($place->population) . '</span>';
 							echo '</p>';
 						}
 					echo '</div>';
 
-					# work part
-					/*$link = ''; $box = '';
-					if ($place->getTypeOfPlace() == 1) {
-						# planète habitable
-						if ($place->getTypeOfBase() == 0) {
-							# planète rebelle
-							ActionHelper::loot($defaultBase, $link, $box, 1, $place, $localCommandersSession);
-							ActionHelper::colonize($defaultBase, $link, $box, 2, $place, $localCommandersSession, $movingCommandersSession, $technologies);
-							ActionHelper::motherShip($defaultBase, $link, $box, 3);
-						} else {
-							# planète avec joueur
-							if ($place->getId() == $defaultBase->getId()) {
-								# planète courante
-							} elseif ($place->getRPlayer() == CTR::$data->get('playerId')) {
-								# une de mes planètes
-								ActionHelper::move($defaultBase, $link, $box, 1, $place, $localCommandersSession);
-								ActionHelper::proposeRC($defaultBase, $link, $box, 2, $place);
-							} elseif ($place->getPlayerColor() == CTR::$data->get('playerInfo')->get('color')) {
-								# planète alliée
-								ActionHelper::proposeRC($defaultBase, $link, $box, 1, $place);
-							} else {
-								# planète ennemie
-								ActionHelper::loot($defaultBase, $link, $box, 1, $place, $localCommandersSession);
-								ActionHelper::conquest($defaultBase, $link, $box, 2, $place, $localCommandersSession, $movingCommandersSession, $technologies);
-								ActionHelper::proposeRC($defaultBase, $link, $box, 3, $place);
-							}
-						}
-					} else {
-						# autre type de place
-						if ($place->getTypeOfBase() != 0) {
-							# vaisseau mère -> piller / détruire
-							# [TODO|loot, break]
-						} else {
-							# place vide
-							ActionHelper::motherShip($defaultBase, $link, $box, 1);
-						}
-					}*/
-
-					# display part
-					echo '<div class="column act">';
-						echo '<div class="top">';
-							$available = (($place->rPlayer != 0 && $place->playerColor != CTR::$data->get('playerInfo')->get('color')) || ($place->rPlayer == 0 && $place->typeOfPlace == 1)) ? NULL : 'grey';
-							echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="1"><img src="' . MEDIA . 'map/action/loot.png" alt="" /></a>';
-							echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="2"><img src="' . MEDIA . 'map/action/colo.png" alt="" /></a>';
-
-							$available = ($place->rPlayer == CTR::$data->get('playerId') && $place->getId() != $defaultBase->getId()) ? NULL : 'grey';
-							echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="3"><img src="' . MEDIA . 'map/action/move.png" alt="" /></a>';
-
-							$available = ($place->rPlayer != 0 && $place->getId() != $defaultBase->getId()) ? NULL : 'grey';
-							echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="4"><img src="' . MEDIA . 'map/action/rc.png" alt="" /></a>';
-
-							$available = (($place->rPlayer != 0 && $place->playerColor != CTR::$data->get('playerInfo')->get('color')) || ($place->rPlayer == 0 && $place->typeOfPlace == 1)) ? NULL : 'grey';
-							echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="5"><img src="' . MEDIA . 'map/action/spy.png" alt="" /></a>';
-						echo '</div>';
-						echo '<div class="bottom">';
-							echo '<div class="box" data-id="1">';
-								echo '<h2>Lancer un pillage</h2>';
-								echo '<div class="box-content">';
-									echo '- on peut pas attaquer (protection joueur) <br />';
-									echo '-- pas de commandant sélectionné <br />';
-									echo '-- commandant trop loin <br />';
-									echo '-- on peut attaquer';
-								echo '</div>';
-							echo '</div>';
-
-							echo '<div class="box" data-id="2">';
-								echo '<h2>Lancer une colonisation</h2>';
-								echo '<div class="box-content">';
-									echo '- on peut pas attaquer (protection joueur)<br />';
-									echo '-- pas de commandant sélectionné <br />';
-									echo '-- commandant trop loin <br />';
-									echo '-- on peut attaquer';
-								echo '</div>';
-							echo '</div>';
-
-							echo '<div class="box" data-id="3">';
-								echo '<h2>Déplacer une flotte</h2>';
-								echo '<div class="box-content">';
-									echo '- on peut pas déplacer <br />';
-									echo '-- pas de commandant sélectionné <br />';
-									echo '-- commandant trop loin <br />';
-									echo '-- on peut déplacer';
-								echo '</div>';
-							echo '</div>';
-
-							echo '<div class="box" data-id="4">';
-								echo '<h2>Proposer une route commerciale</h2>';
-								echo '<div class="box-content">';
-									if ($place->rPlayer == 0) {
-										echo 'Vous ne pouvez proposer une route commerciale qu\'a des joueurs';
-									} elseif ($place->getId() == $defaultBase->getId()) {
-										echo 'Vous ne pouvez pas proposer une route commerciale sur votre propre base';
-									} elseif ($defaultBase->levelCommercialPlateforme == 0) {
-										echo 'Il vous faut une plateforme commerciale pour proposer une route commericale';
-									} elseif ($place->levelCommercialPlateforme == 0) {
-										echo 'Le joueur ne dispose pas d\'une plateforme commerciale';
-									} else {
-										$proposed 	 = FALSE;
-										$notAccepted = FALSE;
-										$standby 	 = FALSE;
-
-										$S_CRM3 = ASM::$crm->getCurrentSession();
-										ASM::$crm->changeSession($defaultBase->routeManager);
-										for ($j = 0; $j < ASM::$crm->size(); $j++) { 
-											if (ASM::$crm->get($j)->getROrbitalBaseLinked() == $defaultBase->getRPlace()) {
-												if (ASM::$crm->get($j)->getROrbitalBase() == $place->getId()) {
-													switch(ASM::$crm->get($j)->getStatement()) {
-														case CRM_PROPOSED: $notAccepted = TRUE; break;
-														case CRM_ACTIVE: $sendResources = TRUE; break;
-														case CRM_STANDBY: $standby = TRUE; break;
-													}
-												}
-											}
-											if (ASM::$crm->get($j)->getROrbitalBase() == $defaultBase->getRPlace()) {
-												if (ASM::$crm->get($j)->getROrbitalBaseLinked() == $place->getId()) {
-													switch(ASM::$crm->get($j)->getStatement()) {
-														case CRM_PROPOSED: $proposed = TRUE; break;
-														case CRM_ACTIVE: $sendResources = TRUE; break;
-														case CRM_STANDBY: $standby = TRUE; break;
-													}
-												}
-											}
-										}
-										ASM::$crm->changeSession($S_CRM3);
-
-										echo '<div class="rc">';
-											echo '<img src="' . MEDIA . 'map/place/place' . $place->getTypeOfPlace() . '-' . Game::getSizeOfPlanet($place->getPopulation()) . '.png" alt="" class="planet" />';
-											echo 'Revenu par relève : 1 000 <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" /><br />';
-											echo 'Bassin de population : 435 342';
-											echo 'Coûts de construction : 1 000 000 <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" /><br />';
-
-											if ($proposed) {
-												echo '<a href="#" class="button">en attente d\'acceptation<br />Annuler la proposition</a>';
-											} elseif ($notAccepted) {
-												echo '<a href="#" class="button">en attente d\'acceptation<br />Accepter la proposition</a>';
-											} elseif ($standby) {
-												echo '<span class="button">C\'est la guerre</span>';
-											} else {
-												$S_CRM2 = ASM::$crm->getCurrentSession();
-												ASM::$crm->changeSession($defaultBase->routeManager);
-												$ur = ASM::$crm->size();
-												for ($j = 0; $j < ASM::$crm->size(); $j++) {
-													if (ASM::$crm->get($j)->getROrbitalBaseLinked() == $defaultBase->rPlace && ASM::$crm->get($j)->statement == CRM_PROPOSED) {
-														$ur--;
-													}
-												}
-
-												if ($ur < OrbitalBaseResource::getBuildingInfo(6, 'level', $defaultBase->levelCommercialPlateforme, 'nbRoutesMax')) {
-													echo '<a href="#" class="button">Proposer une route</a>';
-												} else {
-													echo '<span class="button">pas assez de slot</span>';
-												}
-
-												ASM::$crm->changeSession($S_CRM2);
-											}
-										echo '</div>';
-									}
-								echo '</div>';
-							echo '</div>';
-
-							echo '<div class="box" data-id="5">';
-								echo '<h2>Lancer un espionnage</h2>';
-								echo '<div class="box-content">';
-									if ($place->rPlayer != 0 && $place->playerColor == CTR::$data->get('playerInfo')->get('color')) {
-										echo 'Vous ne pouvez pas espionner un joueur de votre alliance';
-									} elseif ($place->rPlayer == 0 && $place->typeOfPlace != 1) {
-										echo 'Vous ne pouvez pas espionner une planète non-habitable';
-									} else {
-										$prices = array(
-											'petit' => 1000,
-											'moyen' => 2500,
-											'grand' => 5000,
-											'très grande' => 10000
-										);
-
-										foreach ($prices as $label => $price) { 
-											echo '<a href="' . APP_ROOT . 'action/a-spy/rplace-' . $place->getId() . '/price-' . $price . '" class="spy-button">';
-												echo '<img src="' . MEDIA . 'resources/credit.png" alt="" class="picto" />';
-												echo '<span class="label">' . $label . '</span>';
-												echo '<span class="price">' . Format::numberFormat($price) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /></span>';
-											echo '</a>';
-										}
-									}
-								echo '</div>';
-							echo '</div>';
-						echo '</div>';
-					echo '</div>';
+					include PAGES . 'desktop/mapElement/component/actBull.php';
 				echo '</div>';
 			echo '</li>';
 			}

@@ -383,6 +383,14 @@ jQuery(document).ready(function($) {
 			size: parseInt($('.mini-map').css('width'))
 		},
 
+		commanders: {
+			active: false,
+			id: undefined,
+			maxJump: undefined,
+			xCoord: undefined,
+			yCoord: undefined
+		},
+
 		params: {
 			cMovingSpeed: 250,
 			kMovingSpeed: 20,
@@ -412,6 +420,11 @@ jQuery(document).ready(function($) {
 					mapController.params.first = false;
 				}
 			}
+		},
+
+		selectCommander: function() {
+			// selectionne ou deselection un commandant
+			// ajoute ses infos
 		},
 
 		// déplace la map si possbile
@@ -548,6 +561,12 @@ jQuery(document).ready(function($) {
 	actionbox = {
 		obj: $('#action-box'),
 		relatedPlace: $('#map').data('related-place'),
+		opened: false,
+
+		applyCommander: function() {
+			// si ouvert parcours tout les "trucs commandant"
+			// switch vers le bon
+		},
 
 		// affiche la box
 		open: function() {
