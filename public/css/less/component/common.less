@@ -359,4 +359,113 @@
 	border-radius: 3px;
 	font-weight: normal;
 	background: @dark;
+} 
+
+
+/* HEAD */
+.component .head {
+	&.skin-1 {
+		img {
+			position: absolute;
+			top: 22px; left: 20px;
+			padding: 8px;
+			width: 60px;
+			border: solid 1px #202020;
+			border-radius: 100%;
+			background: black;
+
+			&:before {
+				content: '';
+				width: 100px; height: 100px;
+			}
+		}
+
+		h2 {
+			position: absolute;
+			bottom: 66px; left: 105px;
+			font-size: 22px;
+			line-height: 22px;
+			margin: 0; padding: 0;
+		}
+
+		em {
+			position: absolute;
+			top: 62px; left: 105px;
+			font-size: 13px;
+			line-height: 16px;
+		}
+	}
+
+	&.skin-2 {
+		h2 {
+			position: absolute;
+			display: inline-block;
+			top: 45px; left: 10px;
+			font-size: 22px;
+			line-height: 30px;
+			margin: 0; padding: 0 10px;
+			background: black;
+		}
+	}
+
+	&.skin-3 {
+		img {
+			position: absolute;
+			width: 50px; padding: 8px;
+			background: black;
+			border: solid 1px #202020;
+			border-radius: 100%;
+			top: 27px;
+
+			&.left { left: 40px; }
+			&.right { right: 40px; }
+		}
+	}
+
+	&.skin-4 {
+		img.main {
+			position: absolute;
+			width: 30px; height: 30px; padding: 8px;
+			background: black;
+			border: solid 1px #202020;
+			border-radius: 100%;
+			top: 37px;
+		}
+
+		h2 {
+			position: absolute;
+			top: 35px; left: 60px;
+			font-size: 18px;
+			line-height: 22px;
+			margin: 0; padding: 0;
+		}
+
+		em {
+			position: absolute;
+			top: 65px; left: 60px;
+			font-size: 13px;
+			line-height: 16px;
+		}
+	}
+
+	&.skin-5 {
+		h2 {
+			position: absolute;
+			top: 50px; left: 10px;
+			font-size: 16px;
+			font-weight: normal;
+			margin: 0; padding: 0 20px;
+			background: black;
+		}
+
+		&:before {
+			content: '';
+			position: absolute; display: block;
+			top: 5px; left: 0;
+			width: 8px; height: 8px;
+			border: solid 1px #202020;
+			background: black;
+			border-radius: 100%;
+		}
+	}
 }

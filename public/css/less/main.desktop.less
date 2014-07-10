@@ -48,99 +48,7 @@
 /* GENERAL ELEMENTS FOR COMPONENTS */
 
 
-.component .head.skin-1 img {
-	position: absolute;
-	top: 22px; left: 20px;
-	padding: 8px;
-	width: 60px;
-	border: solid 1px #202020;
-	border-radius: 100%;
-	background: black;
-}
 
-.component .head.skin-1 img:before {
-	content: '';
-	width: 100px; height: 100px;
-}
-
-.component .head.skin-1 h2 {
-	position: absolute;
-	bottom: 66px; left: 105px;
-	font-size: 22px;
-	line-height: 22px;
-	margin: 0; padding: 0;
-}
-
-.component .head.skin-1 em {
-	position: absolute;
-	top: 62px; left: 105px;
-	font-size: 13px;
-	line-height: 16px;
-}
-
-.component .head.skin-2 h2 {
-	position: absolute;
-	display: inline-block;
-	top: 45px; left: 10px;
-	font-size: 22px;
-	line-height: 30px;
-	margin: 0; padding: 0 10px;
-	background: black;
-}
-
-.component .head.skin-3 img {
-	position: absolute;
-	width: 50px; padding: 8px;
-	background: black;
-	border: solid 1px #202020;
-	border-radius: 100%;
-	top: 27px;
-}
-.component .head.skin-3 img.left { left: 40px;}
-.component .head.skin-3 img.right { right: 40px;}
-
-.component .head.skin-4 img.main {
-	position: absolute;
-	width: 30px; height: 30px; padding: 8px;
-	background: black;
-	border: solid 1px #202020;
-	border-radius: 100%;
-	top: 37px;
-}
-
-.component .head.skin-4 h2 {
-	position: absolute;
-	top: 35px; left: 60px;
-	font-size: 18px;
-	line-height: 22px;
-	margin: 0; padding: 0;
-}
-
-.component .head.skin-4 em {
-	position: absolute;
-	top: 65px; left: 60px;
-	font-size: 13px;
-	line-height: 16px;
-}
-
-.component .head.skin-5 h2 {
-	position: absolute;
-	top: 50px; left: 10px;
-	font-size: 16px;
-	font-weight: normal;
-	margin: 0; padding: 0 20px;
-	background: black;
-}
-
-.component .head.skin-5 h2:before {
-	content: '';
-	position: absolute; display: block;
-	top: 5px; left: 0;
-	width: 8px; height: 8px;
-	border: solid 1px #202020;
-	background: black;
-	border-radius: 100%;
-}
 
 /* RULES FOR COMPONENTS */
 
@@ -1822,7 +1730,7 @@
 }
 
 .component.player.rank .player {
-	border-left: solid 10px red;
+	border-left: solid 10px #4F4F4F;
 	width: 190px;
 }
 .component.player.rank .player.color1 { border-left-color: #b01e2d; }
@@ -1832,15 +1740,17 @@
 .component.player.rank .player.color5 { border-left-color: #57c632; }
 .component.player.rank .player.color6 { border-left-color: #05bed7; }
 .component.player.rank .player.color7 { border-left-color: #ac5832; }
+
 .component.player.rank .player .position {
 	display: block;
 	position: absolute;
-	top: -10px; right: -10px;
-	border: solid 1px #202020;
-	background: black;
-	width: 30px; height: 30px; line-height: 30px;
-	text-align: center;
-	border-radius: 100%;
+	top: 4px; right: 8px;
+}
+
+.component.player.rank .player .variation {
+	display: block;
+	position: absolute;
+	bottom: 2px; right: 8px;
 }
 
 .component.player .player img {
