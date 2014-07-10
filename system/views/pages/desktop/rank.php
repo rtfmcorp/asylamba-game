@@ -8,46 +8,31 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
-	# limit
-	$stepRank = 75;
+	include_once ATLAS;
 
-	$S_PAM1 = ASM::$pam->getCurrentSession();
+	$S_PRM1 = ASM::$prm->getCurrentSession();
 
-	ASM::$pam->newSession(FALSE);
-	ASM::$pam->load(array('statement' => array(PAM_ACTIVE)), array('experience', 'DESC'), array(0, $stepRank));
-	for ($i = 0; $i < ASM::$pam->size(); $i++) { 
-		$player_rankXP[] = ASM::$pam->get($i);
-	}
-	include COMPONENT . 'rank/xp.php';
+	$PLAYER_RANKING_GENERAL = ASM::$prm->newSession();
+	ASM::$prm->loadLastContext(array(), array('generalPosition', 'ASC'), array(0, 50));
 
-	ASM::$pam->newSession(FALSE);
-	ASM::$pam->load(array('statement' => array(PAM_ACTIVE)), array('victory', 'DESC'), array(0, $stepRank));
-	for ($i = 0; $i < ASM::$pam->size(); $i++) { 
-		$player_rankVictory[] = ASM::$pam->get($i);
-	}
-	include COMPONENT . 'rank/victory.php';
+	$PLAYER_RANKING_XP = ASM::$prm->newSession();
+	ASM::$prm->loadLastContext(array(), array('experiencePosition', 'ASC'), array(0, 50));
 
-	ASM::$pam->newSession(FALSE);
-	ASM::$pam->load(array('statement' => array(PAM_ACTIVE)), array('defeat', 'DESC'), array(0, $stepRank));
-	for ($i = 0; $i < ASM::$pam->size(); $i++) { 
-		$player_rankDefeat[] = ASM::$pam->get($i);
-	}
-	include COMPONENT . 'rank/defeat.php';
+	$PLAYER_RANKING_VICTORY = ASM::$prm->newSession();
+	ASM::$prm->loadLastContext(array(), array('victoryPosition', 'ASC'), array(0, 50));
 
-	ASM::$pam->changeSession($S_PAM1);
+	$PLAYER_RANKING_DEFEAT = ASM::$prm->newSession();
+	ASM::$prm->loadLastContext(array(), array('defeatPosition', 'ASC'), array(0, 50));
 
-	/*$db = DataBase::getInstance();
-	$qr = $db->query('SELECT
-			COUNT(s.id) AS nbSector,
-			(SELECT COUNT(p.id) FROM player AS p WHERE p.rColor = c.id GROUP BY p.rColor) AS nbPlayer,
-			c.id
-		FROM sector AS s
-		LEFT JOIN color AS c
-			ON s.rColor = c.id
-		GROUP BY s.rColor
-		ORDER BY nbSector DESC, 
-		nbPlayer DESC'
-	);
-	$factions = $qr->fetchAll();*/
+	$PLAYER_RANKING_RATIO = ASM::$prm->newSession();
+	ASM::$prm->loadLastContext(array(), array('ratioPosition', 'ASC'), array(0, 50));
+
+	include COMPONENT . 'rank/player/general.php';
+	include COMPONENT . 'rank/player/xp.php';
+	include COMPONENT . 'rank/player/victory.php';
+	include COMPONENT . 'rank/player/defeat.php';
+	include COMPONENT . 'rank/player/ratio.php';
+
+	ASM::$prm->changeSession($S_PRM1);
 echo '</div>';
 ?>
