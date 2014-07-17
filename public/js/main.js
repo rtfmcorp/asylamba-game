@@ -677,7 +677,7 @@ jQuery(document).ready(function($) {
 	});
 
 	/* MORE-MESSAGE */
-	$('.more-message').live('click', function(e) {
+	$('.more-item').live('click', function(e) {
 		e.preventDefault();
 		var link = $(this);
 

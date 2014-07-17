@@ -12,35 +12,27 @@ ASM::$prm->changeSession($PLAYER_RANKING_GENERAL);
 echo '<div class="component player rank">';
 	echo '<div class="head skin-4">';
 		echo '<img class="main" alt="ressource" src="' . MEDIA . 'resources/resource.png">';
-		echo '<h2>Classment général</h2>';
-		echo '<em>possession</em>';
+		echo '<h2>Classement général</h2>';
+		echo '<em>total de vos possession</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			for ($i = 0; $i < ASM::$prm->size(); $i++) { 
+			for ($i = 0; $i < ASM::$prm->size(); $i++) {
 				$p = ASM::$prm->get($i);
-				$status = ColorResource::getInfo($p->color, 'status');
 
-				echo '<div class="player color' . $p->color . '">';
-					echo '<a href="' . APP_ROOT . 'diary/player-' . $p->rPlayer . '">';
-						echo '<img src="' . MEDIA . 'avatar/small/019-5.png" alt="' . $p->name . '" />';
+				if ($i == 0 && $p->generalPosition != 1) {
+					echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-prevrank/type-general/current-' . $p->generalPosition . '">';
+						echo 'afficher les joueurs précédents';
 					echo '</a>';
+				}
 
-				#	echo '<span class="title">' . $status[$p->getStatus() - 1] . '</span>';
-					echo '<span class="title">pas les infos</span>';
-					echo '<strong class="name">' . $p->name . '</strong>';
-					echo '<span class="points">' . Format::numberFormat($p->general) . ' points</span>';
+				echo $p->commonRender('general');
 
-					echo '<span class="position">#' . $p->generalPosition . '</span>';
-					echo '<span class="variation">';
-						echo intval($p->generalVariation) == 0
-							? NULL
-							: ($p->generalVariation > 0
-								? '+ ' . $p->generalVariation
-								: '&mdash; ' . abs($p->generalVariation))
-						;
-					echo '</span>';
-				echo '</div>';
+				if ($i == ASM::$prm->size() - 1) {
+					echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-nextrank/type-general/current-' . $p->generalPosition . '">';
+						echo 'afficher les joueurs suivants';
+					echo '</a>';
+				}
 			}
 		echo '</div>';
 	echo '</div>';
