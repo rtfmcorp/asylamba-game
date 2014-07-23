@@ -23,7 +23,7 @@ echo '<div id="content">';
 		echo '</div>';
 	echo '</div>';
 
-	$allies = array(1, 5, 6);
+	$allies = array(1, 2, 3, 4, 5, 6, 7);
 	shuffle($allies);
 
 	foreach ($allies as $ally) {
