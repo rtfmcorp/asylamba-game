@@ -680,13 +680,18 @@ jQuery(document).ready(function($) {
 	$('.more-item').live('click', function(e) {
 		e.preventDefault();
 		var link = $(this);
+		var dir  = link.data('dir');
 
 		$.get(link.attr('href'))
 		 .done(function(data) {
 		 	link.after(data);
 		 	link.remove();
 
-		 	columnController.move($('.no-scrolling .component .fix-body.hover'), 'bottom');
+		 	if (dir == 'top') {
+		 		columnController.move($('.no-scrolling .component .fix-body.hover'), 'top');
+		 	} else {
+		 		columnController.move($('.no-scrolling .component .fix-body.hover'), 'bottom');
+		 	}
 		}).fail(function() {
 			alertController.add(101, 'chargement des données interrompu');
 		});

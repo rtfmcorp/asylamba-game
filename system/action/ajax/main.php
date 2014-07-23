@@ -23,6 +23,7 @@ switch (CTR::$get->get('a')) {
 	case 'technopanel': 			include PAGES . 'ajax/technoPanel.php'; break;
 	case 'moremessage': 			include PAGES . 'ajax/message/moreMessage.php'; break;
 	case 'morethread': 				include PAGES . 'ajax/message/moreThread.php'; break;
+	case 'morerank': 				include PAGES . 'ajax/morerank.php'; break;
 
 	default:
 		CTR::$alert->add('action inconnue ou non-référencée', ALERT_STD_ERROR);

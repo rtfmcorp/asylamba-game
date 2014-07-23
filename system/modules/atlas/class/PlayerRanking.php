@@ -12,9 +12,13 @@
 
 class PlayerRanking {
 	# set number of player before you (remove 1) in rank view
-	const PREV = 5;
+	const PREV = 3;
 	# set number of player after you in rank view
-	const NEXT = 10;
+	const NEXT = 2;
+	# PREV + NEXT
+	const STEP = 5;
+	# set number of player on ajax load page
+	const PAGE = 10;
 	
 	# attributes
 	public $id; 
@@ -72,13 +76,13 @@ class PlayerRanking {
 			default: $var = ''; $pos = ''; break;
 		}
 
-		$r .= '<div class="player color' . $this->color . '">';
+		$r .= '<div class="player color' . $this->color . ' ' . (CTR::$data->get('playerId') == $this->rPlayer ? 'active' : NULL) . '">';
 			$r .= '<a href="' . APP_ROOT . 'diary/player-' . $this->rPlayer . '">';
 				$r .= '<img src="' . MEDIA . 'avatar/small/0' . rand(10, 50) . '-' . $this->color . '.png" alt="' . $this->name . '" />';
 			$r .= '</a>';
 
 		#	$r .= '<span class="title">' . $status[$this->getStatus() - 1] . '</span>';
-			$r .= '<span class="title">' . $status[0] . '</span>';
+			$r .= '<span class="title">' . $status[rand(0, 3)] . '</span>';
 			$r .= '<strong class="name">' . $this->name . '</strong>';
 
 			$r .= '<span class="experience">';
