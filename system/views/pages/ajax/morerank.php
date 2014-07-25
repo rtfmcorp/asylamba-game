@@ -10,10 +10,9 @@ if ($direction !== FALSE && $current !== FALSE && $type !== FALSE) {
 	if (in_array($direction, array('next', 'prev'))) {
 		if (in_array($type, array('general', 'xp', 'victory', 'defeat', 'ratio'))) {
 			# var
-			/*switch ($type) {
-				case 'general': break;
-				default: break;
-			}*/
+			$fty = ($type == 'xp')
+				? 'experience'
+				: $type;
 
 			$bot = ($direction == 'next')
 				? (($current - PlayerRanking::PAGE > 1) ? $current - PlayerRanking::PAGE : 1)
@@ -25,7 +24,7 @@ if ($direction !== FALSE && $current !== FALSE && $type !== FALSE) {
 
 			$S_PRM1 = ASM::$prm->getCurrentSession();
 			ASM::$prm->newSession();
-			ASM::$prm->loadLastContext(array(), array('generalPosition', 'ASC'), array($bot - 1, $size));
+			ASM::$prm->loadLastContext(array(), array($fty . 'Position', 'ASC'), array($bot - 1, $size));
 
 			if ($direction == 'next' && $bot > 1) {
 				echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-morerank/dir-next/type-' . $type . '/current-' . $bot . '" data-dir="top">';
@@ -34,7 +33,7 @@ if ($direction !== FALSE && $current !== FALSE && $type !== FALSE) {
 			}
 
 			for ($i = 0; $i < ASM::$prm->size(); $i++) {
-				echo ASM::$prm->get($i)->commonRender('general');
+				echo ASM::$prm->get($i)->commonRender($type);
 			}
 
 			if ($direction == 'prev' && ASM::$prm->size() == PlayerRanking::PAGE) {
