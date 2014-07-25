@@ -21,6 +21,10 @@ echo '<div class="component profil">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="center-box">';
+				echo '<span class="value">Meilleur joueur</span>';
+			echo '</div>';
+
+			echo '<div class="center-box">';
 				echo '<span class="label">' . $status[$p->status - 1] . ' de ' . ColorResource::getInfo($p->color, 'popularName') . '</span>';
 				echo '<span class="value">' . $p->name . '</span>';
 			echo '</div>';

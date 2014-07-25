@@ -32,6 +32,14 @@
 			z-index: 1;
 		}
 
+		&.color-1 img { box-shadow: 0 0 0 4px @medium-1, 0 0 20px black; }
+		&.color-2 img { box-shadow: 0 0 0 4px @medium-2, 0 0 20px black; }
+		&.color-3 img { box-shadow: 0 0 0 4px @medium-3, 0 0 20px black; }
+		&.color-4 img { box-shadow: 0 0 0 4px @medium-4, 0 0 20px black; }
+		&.color-5 img { box-shadow: 0 0 0 4px @medium-5, 0 0 20px black; }
+		&.color-6 img { box-shadow: 0 0 0 4px @medium-6, 0 0 20px black; }
+		&.color-7 img { box-shadow: 0 0 0 4px @medium-7, 0 0 20px black; }
+
 		&:before {
 			display: block;
 			position: absolute;
@@ -41,11 +49,19 @@
 			background: url('src/desktop/faction/flag/flag-@{color-type}.png') no-repeat;
 		}
 
+		&.color-1:before { background: url('src/desktop/faction/flag/flag-1.png') no-repeat; }
+		&.color-2:before { background: url('src/desktop/faction/flag/flag-2.png') no-repeat; }
+		&.color-3:before { background: url('src/desktop/faction/flag/flag-3.png') no-repeat; }
+		&.color-4:before { background: url('src/desktop/faction/flag/flag-4.png') no-repeat; }
+		&.color-5:before { background: url('src/desktop/faction/flag/flag-5.png') no-repeat; }
+		&.color-6:before { background: url('src/desktop/faction/flag/flag-6.png') no-repeat; }
+		&.color-7:before { background: url('src/desktop/faction/flag/flag-7.png') no-repeat; }
+
 		.level {
 			z-index: 2;
 			display: block;
 			position: absolute;
-			bottom: 5px; right: 5px;
+			bottom: 2px; right: 2px;
 			width: 36px; height: 36px;
 			text-align: center;
 			line-height: 36px;
@@ -54,11 +70,16 @@
 			border: 3px solid @medium;
 			border-radius: 100%;
 		}
+
+		&.color-1 .level { border-color: @medium-1; }
+		&.color-2 .level { border-color: @medium-2; }
+		&.color-3 .level { border-color: @medium-3; }
+		&.color-4 .level { border-color: @medium-4; }
+		&.color-5 .level { border-color: @medium-5; }
+		&.color-6 .level { border-color: @medium-6; }
+		&.color-7 .level { border-color: @medium-7; }
 	}
 }
-
-
-
 
 /*
 .component.profil form {
