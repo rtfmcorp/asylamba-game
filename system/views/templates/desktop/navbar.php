@@ -91,7 +91,6 @@ echo '<div id="nav">';
 		if (CTR::$data->get('playerInfo')->get('stepTutorial') > 0) {
 			echo '<a href="#" class="square sh ' . (CTR::$data->get('playerInfo')->get('stepDone') ? 'active flashy' : '') . '" data-target="tutorial"><img src="' . MEDIA . 'common/tool-star.png" alt="" /></a>';
 		}
-		echo '<a href="#" class="square sh" data-target="roadmap"><img src="' . MEDIA . 'common/tool-roadmap.png" alt="" /></a>';
 		echo '<a href="#" class="square sh" data-target="bug-tracker"><img src="' . MEDIA . 'common/tool-bugtracker.png" alt="" /></a>';
 
 		$isActive = (in_array(CTR::getPage(), array('params'))) ? 'active' : NULL;
@@ -201,7 +200,9 @@ echo '<div id="nav">';
 	echo '<div class="overbox" id="disconnect-box">';
 		echo '<a href="' . APP_ROOT . 'action/a-disconnect">Se déconnecter</a>';
 		echo '<hr />';
-		echo '<a href="' . GETOUT_ROOT . 'serveurs">Changer de serveur</a>';
+		echo '<a href="' . GETOUT_ROOT . 'profil">Changer de serveur</a>';
+		echo '<hr />';
+		echo '<a href="#" class="sh" data-target="roadmap">Dernières mises à jour</a>';
 		echo '<hr />';
 		echo '<a target="_blank" href="' . GETOUT_ROOT . '">Aller à l\'accueil</a>';
 		echo '<a target="_blank" href="' . GETOUT_ROOT . 'blog">Voir le blog</a>';
