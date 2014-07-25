@@ -14,7 +14,6 @@ class PlayerRankingManager extends Manager {
 	protected $managerType = '_PlayerRanking';
 
 	public function loadLastContext($where = array(), $order = array(), $limit = array()) {
-
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('SELECT * FROM ranking WHERE player = 1 ORDER BY dRanking DESC LIMIT 1');
 		$qr->execute();
@@ -30,8 +29,10 @@ class PlayerRankingManager extends Manager {
 
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('SELECT pl.*,
-			p.rColor AS color,
-			p.name AS name
+				p.rColor AS color,
+				p.name AS name,
+				p.avatar AS avatar,
+				p.status AS status
 			FROM playerRanking AS pl
 			LEFT JOIN player AS p 
 				ON pl.rPlayer = p.id
@@ -80,6 +81,8 @@ class PlayerRankingManager extends Manager {
 
 			$pl->color = $aw['color'];
 			$pl->name = $aw['name'];
+			$pl->avatar = $aw['avatar'];
+			$pl->status = $aw['status'];
 
 			$currentT = $this->_Add($pl);
 		}
@@ -117,6 +120,8 @@ class PlayerRankingManager extends Manager {
 
 			if (isset($aw['color'])) { $pl->color = $aw['color']; }
 			if (isset($aw['name'])) { $pl->name = $aw['name']; }
+			if (isset($aw['avatar'])) { $pl->avatar = $aw['avatar']; }
+			if (isset($aw['status'])) { $pl->status = $aw['status']; }
 
 			$currentT = $this->_Add($pl);
 		}

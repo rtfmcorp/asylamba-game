@@ -48,7 +48,8 @@ class PlayerRanking {
 	# additional attributes
 	public $color;
 	public $name;
-	# public $...
+	public $avatar;
+	public $status;
 	
 
 	public function getId() { return $this->id; }
@@ -78,11 +79,10 @@ class PlayerRanking {
 
 		$r .= '<div class="player color' . $this->color . ' ' . (CTR::$data->get('playerId') == $this->rPlayer ? 'active' : NULL) . '">';
 			$r .= '<a href="' . APP_ROOT . 'diary/player-' . $this->rPlayer . '">';
-				$r .= '<img src="' . MEDIA . 'avatar/small/0' . rand(10, 50) . '-' . $this->color . '.png" alt="' . $this->name . '" />';
+				$r .= '<img src="' . MEDIA . 'avatar/small/' . $this->avatar . '.png" alt="' . $this->name . '" />';
 			$r .= '</a>';
 
-		#	$r .= '<span class="title">' . $status[$this->getStatus() - 1] . '</span>';
-			$r .= '<span class="title">' . $status[rand(0, 3)] . '</span>';
+			$r .= '<span class="title">' . $status[$this->status - 1] . '</span>';
 			$r .= '<strong class="name">' . $this->name . '</strong>';
 
 			$r .= '<span class="experience">';
