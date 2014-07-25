@@ -24,7 +24,8 @@ echo '<div id="content">';
 	$ratioPosition 		= ($p === FALSE || $p->ratioPosition - PlayerRanking::PREV < 0) ? 0 : $p->ratioPosition - PlayerRanking::PREV;
 
 	# include part
-	$PLAYER_RANKING_FRONT = ASM::$prm->getCurrentSession();
+	$PLAYER_RANKING_FRONT = ASM::$prm->newSession();
+	ASM::$prm->loadLastContext(array(), array('generalPosition', 'ASC'), array(0, 1));
 	include COMPONENT . 'rank/player/front.php';
 
 	$PLAYER_RANKING_GENERAL = ASM::$prm->newSession();
