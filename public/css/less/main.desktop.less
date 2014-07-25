@@ -26,7 +26,7 @@
 	background-image: url(@image),          linear-gradient(@color1, @color2, @background);
 }
 
-@color-type:3;
+@color-type: 6;
 .color-init(@color-type);
 
 // global rules
@@ -41,6 +41,8 @@
 @import 'component/content.less';
 @import 'component/common.less';
 
+@import 'component/profil.less';
+
 // module rules
 @import 'module/autocomplete.less';
 
@@ -51,69 +53,6 @@
 
 
 /* RULES FOR COMPONENTS */
-
-/* profil */
-.component.profil .main-avatar,
-.component.profil .diary-avatar {
-	display: block;
-	background: black;
-	border: solid 1px #202020;
-	padding: 10px;
-	border-radius: 100%;
-	margin: 20px auto;
-}
-
-.color1 .component.profil .main-avatar { box-shadow: 0 0 0 4px #6e161b, 0 0 20px black; }
-.color2 .component.profil .main-avatar { box-shadow: 0 0 0 4px #1f1471, 0 0 20px black; }
-.color3 .component.profil .main-avatar { box-shadow: 0 0 0 4px #dbb200, 0 0 20px black; }
-.color4 .component.profil .main-avatar { box-shadow: 0 0 0 4px #5a1072, 0 0 20px black; }
-.color5 .component.profil .main-avatar { box-shadow: 0 0 0 4px #2c7915, 0 0 20px black; }
-.color6 .component.profil .main-avatar { box-shadow: 0 0 0 4px #076b87, 0 0 20px black; }
-.color7 .component.profil .main-avatar { box-shadow: 0 0 0 4px #67331d, 0 0 20px black; }
-
-.component.profil form {
-	display: block !important;
-}
-
-.component.profil p.input:before {
-	left: 130px !important;
-	top:  -20px !important;
-	border-width: 10px !important;
-}
-
-.component.profil textarea {
-	height: 100px !important;
-}
-
-.component.profil .diary-content {
-	margin: 10px; padding: 0;
-	background: #0A0A0A;
-	border-radius: 3px;
-	border-top: solid 10px white;
-}
-.component.profil .diary-content h4 {
-	border-bottom: solid 1px #4F4F4F;
-	padding: 10px 0; margin: 0 10px;
-}
-.component.profil .diary-content h4 strong {
-	display: block;
-	font-size: 22px;
-	line-height: 28px;
-}
-.component.profil .diary-content p {
-	font-size: #CCC;
-}
-.component.profil .diary-content form {
-	background: white;
-	border-radius: 0 0 3px 3px;
-	padding: 0 0 1px 0;
-}
-.component.profil .diary-content form textarea {
-	display: block;
-	border: none; padding: 5px 0;
-	width: 258px;
-	max-width: 500px;
-}
 
 /* diary */
 .component.search-player {

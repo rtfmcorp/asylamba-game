@@ -22,8 +22,8 @@ echo '<div id="content">';
 	include COMPONENT . 'player/playerRoleplayProfil.php';
 
 	# playerTechnicalProfil component
-	$player_playerTechnicalProfil = ASM::$pam->get(0);
-	include COMPONENT . 'player/playerTechnicalProfil.php';
+	# $player_playerTechnicalProfil = ASM::$pam->get(0);
+	# include COMPONENT . 'player/playerTechnicalProfil.php';
 
 	# obFastView component
 	for ($i = 0; $i < ASM::$obm->size(); $i++) {
@@ -32,7 +32,10 @@ echo '<div id="content">';
 		include COMPONENT . 'bases/obFastView.php';
 	}
 
-	include COMPONENT . 'default.php';
+	if (ASM::$obm->size() == 1) {
+		include COMPONENT . 'default.php';
+	}
+
 	# msFastView component
 	/* for ($i = 0; $i < ASM::$obm->size(); $i++) {
 		$ob_index = ($i + 1);

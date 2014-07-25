@@ -1,0 +1,106 @@
+.component.profil {
+	.center-box {
+		margin: 20px 10px 0;
+		color: white;
+		text-align: center;
+
+		.label {
+			display: block;
+		}
+
+		.value {
+			display: block;
+			font-size: 26px;
+			font-weight: bold;
+			margin: 4px 0 0 0;
+		}
+	}
+
+	.profil-flag {
+		position: relative;
+		width: 222px; height: 222px;
+		margin: 0 auto;
+
+		img {
+			position: relative;
+			background: #0A0A0A;
+			border: solid 1px #202020;
+			padding: 10px;
+			border-radius: 100%;
+			margin: 20px auto;
+			box-shadow: 0 0 0 4px @medium, 0 0 20px black;
+			z-index: 1;
+		}
+
+		&:before {
+			display: block;
+			position: absolute;
+			content: '';
+			top: 218px; left: 33px;
+			width: 154px; height: 241px;
+			background: url('src/desktop/faction/flag/flag-@{color-type}.png') no-repeat;
+		}
+
+		.level {
+			z-index: 2;
+			display: block;
+			position: absolute;
+			bottom: 5px; right: 5px;
+			width: 36px; height: 36px;
+			text-align: center;
+			line-height: 36px;
+
+			background: #0A0A0A;
+			border: 3px solid @medium;
+			border-radius: 100%;
+		}
+	}
+}
+
+
+
+
+/*
+.component.profil form {
+	display: block !important;
+}
+
+.component.profil p.input:before {
+	left: 130px !important;
+	top:  -20px !important;
+	border-width: 10px !important;
+}
+
+.component.profil textarea {
+	height: 100px !important;
+}
+
+.component.profil .diary-content {
+	margin: 10px; padding: 0;
+	background: #0A0A0A;
+	border-radius: 3px;
+	border-top: solid 10px white;
+}
+.component.profil .diary-content h4 {
+	border-bottom: solid 1px #4F4F4F;
+	padding: 10px 0; margin: 0 10px;
+}
+.component.profil .diary-content h4 strong {
+	display: block;
+	font-size: 22px;
+	line-height: 28px;
+}
+.component.profil .diary-content p {
+	font-size: #CCC;
+}
+.component.profil .diary-content form {
+	background: white;
+	border-radius: 0 0 3px 3px;
+	padding: 0 0 1px 0;
+}
+.component.profil .diary-content form textarea {
+	display: block;
+	border: none; padding: 5px 0;
+	width: 258px;
+	max-width: 500px;
+}*/
