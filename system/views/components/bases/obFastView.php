@@ -20,7 +20,7 @@ echo '<div class="component">';
 		echo '<div class="body">';
 			echo '<div class="tool">';
 				echo '<span><a href="' . APP_ROOT . 'bases/base-' . $ob_obFastView->getId() . '">vers la gestion de la base</a></span>';
-				echo '<span><a href="' . APP_ROOT . 'map/base-' . $ob_obFastView->getId() . '">O</a></span>';
+				echo '<span><a href="' . APP_ROOT . 'map/place-' . $ob_obFastView->getId() . '">O</a></span>';
 			echo '</div>';
 
 			echo '<div class="number-box">';

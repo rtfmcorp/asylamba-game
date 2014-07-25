@@ -67,6 +67,8 @@ echo '<div id="content">';
 		CTR::redirect('profil');
 	}
 
+	include COMPONENT . 'default.php';
+
 	ASM::$obm->changeSession($S_OBM1);
 	ASM::$msm->changeSession($S_MSM1);
 	ASM::$pam->changeSession($S_PAM1);
