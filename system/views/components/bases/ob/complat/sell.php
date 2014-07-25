@@ -126,7 +126,7 @@ echo '<div class="component market-sell">';
 
 				echo '<div class="queue">';
 					echo '<div class="item sh" data-target="sell-commander-' . $i . '">';
-						echo '<img class="picto" src="' . MEDIA . 'commander/small/c1-l' . rand(1, 3) . '-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="" />';
+						echo '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
 						echo '<strong>' . CommanderResources::getInfo($commander->getLevel(), 'grade') . ' ' . $commander->getName() . '</strong>';
 						echo '<em>' . Format::numberFormat($commander->getExperience()) . ' points d\'expérience</em>';
 					echo '</div>';

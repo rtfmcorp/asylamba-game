@@ -53,7 +53,7 @@ if ($baseId !== FALSE AND $school !== FALSE AND $name !== FALSE AND in_array($ba
 			$newCommander->palmares = 0;
 			$newCommander->statement = 0;
 			$newCommander->name = $name;
-			$newCommander->avatar = 'c1-l1-c5';
+			$newCommander->avatar = 't' . rand(1, 21) . '-c' . CTR::$data->get('playerInfo')->get('color');
 			$newCommander->dCreation = Utils::now();
 			$newCommander->uCommander = Utils::now();
 			$newCommander->setSexe(1);

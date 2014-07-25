@@ -483,23 +483,15 @@ jQuery(document).ready(function($) {
 			var totalTime = queue.data('progress-total-time');
 			var currentTime = queue.data('progress-current-time');
 			var format = queue.data('progress-output');
-			var reload = queue.data('progress-reload');
-
 
 			var position;
 
 			setInterval(function() {
 				currentTime--;
 
-				if (currentTime <= 0 && reload != 'false') {
-					console.log(currentTime);
-					console.log(reload);
-					if (reload !== 'false') {
-						window.location.reload();
-			console.log('A');
-					}
+				if (currentTime == 0) {
+					window.location.reload();
 				} else {
-			console.log('C');
 					position = (((totalTime - currentTime) / totalTime) * 100);
 
 					queue.find('.progress-text').html(time.secondToFormat(currentTime, format));
