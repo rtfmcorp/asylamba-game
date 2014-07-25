@@ -32,6 +32,7 @@ echo '<div id="content">';
 		include COMPONENT . 'bases/obFastView.php';
 	}
 
+	include COMPONENT . 'default.php';
 	# msFastView component
 	/* for ($i = 0; $i < ASM::$obm->size(); $i++) {
 		$ob_index = ($i + 1);
