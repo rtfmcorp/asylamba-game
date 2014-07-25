@@ -17,13 +17,13 @@ echo '<div id="content">';
 	ASM::$prm->loadLastContext(array('rPlayer' => CTR::$data->get('playerId')));
 	$p = ASM::$prm->get();
 	
-	$generalPosition 	= ($p->generalPosition - PlayerRanking::PREV < 0) ? 0 : $p->generalPosition - PlayerRanking::PREV;
-	$experiencePosition = ($p->experiencePosition - PlayerRanking::PREV < 0) ? 0 : $p->experiencePosition - PlayerRanking::PREV;
-	$victoryPosition 	= ($p->victoryPosition - PlayerRanking::PREV < 0) ? 0 : $p->victoryPosition - PlayerRanking::PREV;
-	$defeatPosition 	= ($p->defeatPosition - PlayerRanking::PREV < 0) ? 0 : $p->defeatPosition - PlayerRanking::PREV;
-	$ratioPosition 		= ($p->ratioPosition - PlayerRanking::PREV < 0) ? 0 : $p->ratioPosition - PlayerRanking::PREV;
+	$generalPosition 	= ($p === FALSE || $p->generalPosition - PlayerRanking::PREV < 0) ? 0 : $p->generalPosition - PlayerRanking::PREV;
+	$experiencePosition = ($p === FALSE || $p->experiencePosition - PlayerRanking::PREV < 0) ? 0 : $p->experiencePosition - PlayerRanking::PREV;
+	$victoryPosition 	= ($p === FALSE || $p->victoryPosition - PlayerRanking::PREV < 0) ? 0 : $p->victoryPosition - PlayerRanking::PREV;
+	$defeatPosition 	= ($p === FALSE || $p->defeatPosition - PlayerRanking::PREV < 0) ? 0 : $p->defeatPosition - PlayerRanking::PREV;
+	$ratioPosition 		= ($p === FALSE || $p->ratioPosition - PlayerRanking::PREV < 0) ? 0 : $p->ratioPosition - PlayerRanking::PREV;
 
-	# 
+	# include part
 	$PLAYER_RANKING_FRONT = ASM::$prm->getCurrentSession();
 	include COMPONENT . 'rank/player/front.php';
 

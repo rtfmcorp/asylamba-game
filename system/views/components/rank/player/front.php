@@ -15,7 +15,7 @@ echo '<div class="component player rank">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<p class="info">Numéro de classement : #' . ASM::$prm->get()->rRanking . '</p>';
+			#echo '<p class="info">Numéro de classement : #' . ASM::$prm->get()->rRanking . '</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
