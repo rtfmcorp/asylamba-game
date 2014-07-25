@@ -35,14 +35,14 @@ echo '<div id="tools">';
 
 		$S_SQM1 = ASM::$sqm->getCurrentSession();
 		ASM::$sqm->changeSession($currentBase->dock1Manager);
-		echo '<a href="#" class="square"><img src="' . MEDIA . 'orbitalbase/dock1.png" alt="" />';
+		echo '<a href="#" class="square sh" data-target="tools-dock1"><img src="' . MEDIA . 'orbitalbase/dock1.png" alt="" />';
 			echo (ASM::$sqm->size()) ? '<span class="number">' . ASM::$sqm->size() . '</span>' : NULL;
 		echo '</a>';
 		ASM::$sqm->changeSession($S_SQM1);
 
 		$S_SQM2 = ASM::$sqm->getCurrentSession();
 		ASM::$sqm->changeSession($currentBase->dock2Manager);
-		echo '<a href="#" class="square"><img src="' . MEDIA . 'orbitalbase/dock2.png" alt="" />';
+		echo '<a href="#" class="square sh" data-target="tools-dock2"><img src="' . MEDIA . 'orbitalbase/dock2.png" alt="" />';
 			echo (ASM::$sqm->size()) ? '<span class="number">' . ASM::$sqm->size() . '</span>' : NULL;
 		echo '</a>';
 		ASM::$sqm->changeSession($S_SQM2);
@@ -106,7 +106,7 @@ echo '<div id="tools">';
 			if (ASM::$bqm->size() > 0) {
 				$qe = ASM::$bqm->get(0);
 				echo '<div class="queue">';
-					echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time') . '">';
+					echo '<div class="item active progress" data-progress-reload="false" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time') . '">';
 						echo '<img class="picto" src="' . MEDIA . 'orbitalbase/' . OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
 						echo '<strong>';
 							echo OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'frenchName');
@@ -130,6 +130,68 @@ echo '<div id="tools">';
 		echo '</div>';
 	echo '</div>';
 
+	echo '<div class="overbox left-pic" id="tools-dock1">';
+		echo '<div class="overflow">';
+			$S_SQM1 = ASM::$sqm->getCurrentSession();
+			ASM::$sqm->changeSession($currentBase->dock1Manager);
+			
+			if (ASM::$sqm->size() > 0) {
+				$qe = ASM::$sqm->get(0);
+				echo '<div class="queue">';
+					echo '<div class="item active progress" data-progress-reload="false" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $qe->quantity * ShipResource::getInfo($qe->shipNumber, 'time') . '">';
+						echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($qe->shipNumber, 'imageLink') . '.png" alt="" />';
+						echo '<strong>';
+							echo $qe->quantity . ' ' . ShipResource::getInfo($qe->shipNumber, 'codeName') . Format::addPlural($qe->quantity);
+						echo '</strong>';
+						
+						echo '<em><span class="progress-text">' . Chronos::secondToFormat(Utils::interval(Utils::now(), $qe->dEnd, 's'), 'lite') . '</span></em>';
+
+						echo '<span class="progress-container">';
+							echo '<span style="width: ' . Format::percent($qe->quantity * ShipResource::getInfo($qe->shipNumber, 'time') - Utils::interval(Utils::now(), $qe->dEnd, 's'), $qe->quantity * ShipResource::getInfo($qe->shipNumber, 'time')) . '%;" class="progress-bar">';
+							echo'</span>';
+						echo '</span>';
+					echo '</div>';
+				echo '</div>';
+			} else {
+				echo '<p class="info">Aucun vaisseau en construction pour le moment.</p>';
+			}
+
+			echo '<a href="' . APP_ROOT . 'bases/view-dock1" class="more-link">vers le chantier alpha</a>';
+			ASM::$sqm->changeSession($S_SQM1);
+		echo '</div>';
+	echo '</div>';
+
+	echo '<div class="overbox left-pic" id="tools-dock2">';
+		echo '<div class="overflow">';
+			$S_SQM1 = ASM::$sqm->getCurrentSession();
+			ASM::$sqm->changeSession($currentBase->dock2Manager);
+			
+			if (ASM::$sqm->size() > 0) {
+				$qe = ASM::$sqm->get(0);
+				echo '<div class="queue">';
+					echo '<div class="item active progress" data-progress-reload="false" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $qe->quantity * ShipResource::getInfo($qe->shipNumber, 'time') . '">';
+						echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($qe->shipNumber, 'imageLink') . '.png" alt="" />';
+						echo '<strong>';
+							echo $qe->quantity . ' ' . ShipResource::getInfo($qe->shipNumber, 'codeName') . Format::addPlural($qe->quantity);
+						echo '</strong>';
+						
+						echo '<em><span class="progress-text">' . Chronos::secondToFormat(Utils::interval(Utils::now(), $qe->dEnd, 's'), 'lite') . '</span></em>';
+
+						echo '<span class="progress-container">';
+							echo '<span style="width: ' . Format::percent($qe->quantity * ShipResource::getInfo($qe->shipNumber, 'time') - Utils::interval(Utils::now(), $qe->dEnd, 's'), $qe->quantity * ShipResource::getInfo($qe->shipNumber, 'time')) . '%;" class="progress-bar">';
+							echo'</span>';
+						echo '</span>';
+					echo '</div>';
+				echo '</div>';
+			} else {
+				echo '<p class="info">Aucun vaisseau en construction pour le moment.</p>';
+			}
+
+			echo '<a href="' . APP_ROOT . 'bases/view-dock2" class="more-link">vers le chantier de ligne</a>';
+			ASM::$sqm->changeSession($S_SQM1);
+		echo '</div>';
+	echo '</div>';
+
 	echo '<div class="overbox left-pic" id="tools-technosphere">';
 		echo '<div class="overflow">';
 			$S_TQM1 = ASM::$tqm->getCurrentSession();
@@ -138,7 +200,7 @@ echo '<div id="tools">';
 			if (ASM::$tqm->size() > 0) {
 				$qe = ASM::$tqm->get(0);
 				echo '<div class="queue">';
-					echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel) . '">';
+					echo '<div class="item active progress" data-progress-reload="false" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel) . '">';
 						echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($qe->technology, 'imageLink') . '.png" alt="" />';
 						echo '<strong>' . TechnologyResource::getInfo($qe->technology, 'name');
 						if (!TechnologyResource::isAnUnblockingTechnology($qe->technology)) {
@@ -172,7 +234,7 @@ echo '<div id="tools">';
 					if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
 						$commander = CTR::$data->get('playerEvent')->get($i);
 						
-						echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $commander->get('eventInfo')->get('dArrival'), 's') . '" data-progress-total-time="' . Utils::interval($commander->get('eventInfo')->get('dStart'), $commander->get('eventInfo')->get('dArrival'), 's') . '">';
+						echo '<div class="item active progress" data-progress-reload="false" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $commander->get('eventInfo')->get('dArrival'), 's') . '" data-progress-total-time="' . Utils::interval($commander->get('eventInfo')->get('dStart'), $commander->get('eventInfo')->get('dArrival'), 's') . '">';
 							echo  '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->get('eventInfo')->get('avatar') . '.png" alt="" />';
 							echo '<strong>' . CommanderResources::getInfo($commander->get('eventInfo')->get('level'), 'grade') . ' ' . $commander->get('eventInfo')->get('name') . '</strong>';
 							echo '<em>→ ';
@@ -211,7 +273,7 @@ echo '<div id="tools">';
 					if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_OUTGOING_ATTACK) {
 						$commander = CTR::$data->get('playerEvent')->get($i);
 
-						echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $commander->get('eventInfo')->get('dArrival'), 's') . '" data-progress-total-time="' . Utils::interval($commander->get('eventInfo')->get('dStart'), $commander->get('eventInfo')->get('dArrival'), 's') . '">';
+						echo '<div class="item active progress" data-progress-reload="false" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $commander->get('eventInfo')->get('dArrival'), 's') . '" data-progress-total-time="' . Utils::interval($commander->get('eventInfo')->get('dStart'), $commander->get('eventInfo')->get('dArrival'), 's') . '">';
 							echo  '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->get('eventInfo')->get('avatar') . '.png" alt="" />';
 							echo '<strong>' . CommanderResources::getInfo($commander->get('eventInfo')->get('level'), 'grade') . ' ' . $commander->get('eventInfo')->get('name') . '</strong>';
 							echo '<em>→ ';
