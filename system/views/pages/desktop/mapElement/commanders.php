@@ -10,18 +10,18 @@ echo '<div id="subnav">';
 		for ($i = 0; $i < ASM::$com->size(); $i++) {
 			$commander = ASM::$com->get($i);
 
-			echo '<a href="#" class="item">';
+			echo '<a href="#" class="item map-commander" data-id="' . $commander->id . '" data-max-jump="' . Game::getMaxTravelDistance() . '" data-available="' . ($commander->statement == COM_MOVING ? 'false' : 'true') . '" data-x-coord="' . $defaultBase->getXSystem() . '" data-y-coord="' . $defaultBase->getYSystem() . '">';
 				echo '<span class="picto">';
-					echo '<img src="' . MEDIA . 'commander/medium/c1-l1-c6.png" alt="" />';
-					echo '<span class="number">' . $commander->getLevel() . '</span>';
+					echo '<img src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
+					echo '<span class="number">' . $commander->level . '</span>';
 				echo '</span>';
 				echo '<span class="content skin-2">';
 					echo '<span class="sub-content">';
 						echo CommanderResources::getInfo($commander->getLevel(), 'grade') . ' ' . $commander->getName() . '<br />';
 						echo Format::numberFormat($commander->getPev()) . ' pev';
 						echo '<hr />';
-						if ($commander->getStatement() == COM_MOVING) {
-							switch ($commander->getTypeOfMove()) {
+						if ($commander->statement == COM_MOVING) {
+							switch ($commander->travelType) {
 								case COM_MOVE: echo 'Déplacement'; break;
 								case COM_LOOT: echo 'Pillage'; break;
 								case COM_COLO: echo 'Colonisation'; break;

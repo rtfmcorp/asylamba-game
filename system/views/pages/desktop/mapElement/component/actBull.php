@@ -27,10 +27,18 @@ echo '<div class="column act">';
 				} elseif ($place->typeOfPlace == 1 && $place->playerLevel == 1) {
 					echo 'Ce joueur est sous protection débutant';
 				} else {
-					echo 'Aucun commandant selectionné';
-
-					echo '-- commandant trop loin <br />';
-					echo '-- on peut attaquer';
+					echo '<div class="commander-tile">';
+						echo '<div class="item no-commander">';
+							echo 'Aucun commandant selectionné';
+						echo '</div>';
+						echo '<div class="item too-far">';
+							echo 'Ce commandant est trop éloigné';
+						echo '</div>';
+						echo '<div class="item move">';
+							echo 'On peut attaquer<br />';
+							echo '<a href="' . APP_ROOT . 'action/a-loot/commanderid-{id}/placeid-' . $place->id . '">Par ici</a>';
+						echo '</div>';
+					echo '</div>';
 				}
 			echo '</div>';
 		echo '</div>';
