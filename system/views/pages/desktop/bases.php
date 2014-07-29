@@ -1,7 +1,6 @@
 <?php
 # bases loading
 include_once ATHENA;
-
 # choix de la base
 ASM::$obm->load(array('rPlace' => CTR::$data->get('playerParams')->get('base')));
 $base = ASM::$obm->get(0);

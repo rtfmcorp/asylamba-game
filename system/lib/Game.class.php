@@ -31,9 +31,9 @@ class Game {
 		return ($distance < 1) ? 1 : $distance;
 	}
 
-	public static function getMaxTravelTime() {
+	public static function getMaxTravelDistance() {
 		include_once ARES;
-		return Commander::MAXTRAVELTIME;
+		return round(Commander::MAXTRAVELTIME / COEFFMOVEINTERSYSTEM);
 	}
 
 	public static function getTimeToTravel($startPlace, $destinationPlace) {
