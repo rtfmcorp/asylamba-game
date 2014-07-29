@@ -43,6 +43,8 @@ class Commander {
 	const COLO						= 2; # colo ou conquete
 	const BACK						= 3; # retour après une action
 
+	const MAXTRAVELTIME				= 3600 * 24;
+
 	# attributes
 	public $id 						= 0;
 	public $name 					= '';
