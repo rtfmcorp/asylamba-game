@@ -2,7 +2,6 @@
 # daily cron
 # call at x am. every day
 
-
 include_once ATLAS;
 $S_PRM1 = ASM::$prm->getCurrentSession();
 ASM::$prm->newSession();
@@ -162,17 +161,16 @@ foreach ($listD as $key => $value) { $listD[$key]['position'] = $position++;}
 $position = 1;
 foreach ($listR as $key => $value) { $listR[$key]['position'] = $position++;}
 
-#Bug::pre($listR);
-
-
 foreach ($list as $player => $value) {
 	$pr = new PlayerRanking();
 	$pr->rRanking = $rRanking;
 	$pr->rPlayer = $player; 
 
 	# voir s'il faut améliorer (p.ex. : stocker le tableau des objets et supprimer chaque objet utilisé pour que la liste se rapetisse)
+	$firstRanking = true;
 	for ($i = 0; $i < ASM::$prm->size(); $i++) {
 		if (ASM::$prm->get($i)->rPlayer == $player) {
+			$firstRanking = false;
 			$oldRanking = ASM::$prm->get($i);
 			break;
 		}
@@ -180,23 +178,23 @@ foreach ($list as $player => $value) {
 
 	$pr->general = $listG[$player]['general'];
 	$pr->generalPosition = $listG[$player]['position'];
-	$pr->generalVariation = $oldRanking->generalPosition - $pr->generalPosition;
+	$pr->generalVariation = $firstRanking ? 0 : $oldRanking->generalPosition - $pr->generalPosition;
 
 	$pr->experience = $listE[$player]['experience'];
 	$pr->experiencePosition = $listE[$player]['position'];
-	$pr->experienceVariation = $oldRanking->experiencePosition - $pr->experiencePosition;
+	$pr->experienceVariation = $firstRanking ? 0 : $oldRanking->experiencePosition - $pr->experiencePosition;
 
 	$pr->victory = $listV[$player]['victory'];
 	$pr->victoryPosition = $listV[$player]['position'];
-	$pr->victoryVariation = $oldRanking->victoryPosition - $pr->victoryPosition;
+	$pr->victoryVariation = $firstRanking ? 0 : $oldRanking->victoryPosition - $pr->victoryPosition;
 
 	$pr->defeat = $listD[$player]['defeat'];
 	$pr->defeatPosition = $listD[$player]['position'];
-	$pr->defeatVariation = $oldRanking->defeatPosition - $pr->defeatPosition;
+	$pr->defeatVariation = $firstRanking ? 0 : $oldRanking->defeatPosition - $pr->defeatPosition;
 
 	$pr->ratio = $listR[$player]['ratio'];
 	$pr->ratioPosition = $listR[$player]['position'];
-	$pr->ratioVariation = $oldRanking->ratioPosition - $pr->ratioPosition;
+	$pr->ratioVariation = $firstRanking ? 0 : $oldRanking->ratioPosition - $pr->ratioPosition;
 
 	ASM::$prm->add($pr);
 }
