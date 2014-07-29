@@ -386,9 +386,7 @@ jQuery(document).ready(function($) {
 		commanders: {
 			active: false,
 			id: undefined,
-			maxJump: undefined,
-			xCoord: undefined,
-			yCoord: undefined
+			maxJump: undefined
 		},
 
 		params: {
@@ -428,8 +426,6 @@ jQuery(document).ready(function($) {
 			mapController.commanders.active = false;
 			mapController.commanders.id = undefined;
 			mapController.commanders.maxJump = undefined;
-			mapController.commanders.xCoord = undefined;
-			mapController.commanders.yCoord = undefined;
 
 			if (commander.data('available')) {
 				commander.addClass('active');
@@ -437,9 +433,6 @@ jQuery(document).ready(function($) {
 				mapController.commanders.active = true;
 				mapController.commanders.id = commander.data('id');
 				mapController.commanders.maxJump = commander.data('max-jump');
-				mapController.commanders.xCoord = commander.data('x-coord');
-				mapController.commanders.yCoord = commander.data('y-coord');
-
 				actionbox.applyCommander();
 			} else {
 				alertController.add(101, 'Ce commandant est déjà en mission');
@@ -591,14 +584,15 @@ jQuery(document).ready(function($) {
 			if (actionbox.opened && mapController.commanders.active) {
 				actionbox.obj.find('.commander-tile .item').hide();
 
-				// si trop loin
-
-				// sinon
-				actionbox.obj.find('.commander-tile .item.move').each(function() {
-					$(this).show();
-					var path = $(this).find('a').attr('href');
-					$(this).find('a').attr('href', path.replace('{id}', mapController.commanders.id));
-				});
+				if (actionbox.obj.find('.header').data('distance') > mapController.commanders.maxJump) {
+					actionbox.obj.find('.commander-tile .item.too-far').show();
+				} else {
+					actionbox.obj.find('.commander-tile .item.move').each(function() {
+						$(this).show();
+						var path = $(this).find('a').attr('href');
+						$(this).find('a').attr('href', path.replace('{id}', mapController.commanders.id));
+					});
+				}
 			}
 		},
 
