@@ -56,7 +56,7 @@ class Game {
 		} else {
 			$time = Commander::COEFFMOVEOUTOFSYSTEM;
 			$distance = self::getDistance($xFrom, $xTo, $yFrom, $yTo);
-			$time += round(Commander::COEFFMOVEINTERSYSTEM * $distance) / self::getFleetSpeed;
+			$time += round(Commander::COEFFMOVEINTERSYSTEM * $distance) / self::getFleetSpeed();
 			return $time;
 		}
 	}

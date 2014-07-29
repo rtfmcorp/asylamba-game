@@ -19,7 +19,8 @@ echo '<div id="nav">';
 		echo '<a target="_blank" href="' . GETOUT_ROOT . '">aller à l\'accueil</a>';
 		echo '<a target="_blank" href="' . GETOUT_ROOT . 'blog">voir le blog</a>';
 		echo '<a target="_blank" href="' . FACEBOOK_LINK . '">rejoindre la page facebook</a>';
-		echo '<a target="_blank" href="' . TWEETER_LINK . '">nous suivre sur tweeter</a>';
+		echo '<a target="_blank" href="' . GOOGLE_PLUS_LINK . '">nous suivre sur Google+</a>';
+		#echo '<a target="_blank" href="' . TWITTER_LINK . '">nous suivre sur twitter</a>';
 	echo '</div>';
 echo '</div>';
 
