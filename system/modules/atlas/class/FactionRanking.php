@@ -21,11 +21,11 @@ class FactionRanking {
 	public $generalPosition;
 	public $generalVariation;
 
-	public $power; 					# sum of player rankings
+	public $power; 					# sum of general ranking of the players
 	public $powerPosition;
 	public $powerVariation;
 
-	public $domination; 			# sectors/population
+	public $domination; 			# population dominated
 	public $dominationPosition;
 	public $dominationVariation;
 

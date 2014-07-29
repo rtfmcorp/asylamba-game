@@ -2,28 +2,24 @@
 # daily cron
 # call at x am. every day
 
-
 include_once ATLAS;
 $S_FRM1 = ASM::$frm->getCurrentSession();
 ASM::$frm->newSession();
 ASM::$frm->loadLastContext();
 
+$S_PRM1 = ASM::$prm->getCurrentSession();
+ASM::$prm->newSession();
+ASM::$prm->loadLastContext();
+
+include_once ZEUS;
+$S_PAM1 = ASM::$pam->getCurrentSession();
+ASM::$pam->newSession(FALSE);
+
 include_once DEMETER;
 $S_CLM1 = ASM::$clm->getCurrentSession();
 ASM::$clm->newSession(FALSE);
 
-
-/*include_once ZEUS;
-$S_PAM1 = ASM::$pam->getCurrentSession();
-ASM::$pam->newSession(FALSE);
-
-include_once ATHENA;
-$S_OBM1 = ASM::$obm->getCurrentSession();
-ASM::$obm->newSession(FALSE);
-
-include_once ARES;
-$S_COM1 = ASM::$com->getCurrentSession();
-ASM::$com->newSession(FALSE);*/
+include_once GAIA; # for Sector and SectorManager
 
 # create a new ranking
 $db = DataBase::getInstance();
@@ -56,21 +52,13 @@ function cmpDomination($a, $b) {
     return ($a['domination'] > $b['domination']) ? -1 : 1;
 }
 
-
-#ASM::$pam->load(array('statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY)));
+# load the factions (colors)
 ASM::$clm->load();
 
-for ($i=0; $i < ASM::$clm->size(); $i++) { 
-	//echo '<br/> id : ' . ASM::$clm->get($i)->id;
-	//echo ', points : ' . ASM::$clm->get($i)->points;
-	Bug::pre(ASM::$clm->get($i));
-	echo '------------------------------------------------------------------------------------------';
-}
-
-# create an array with all the players
+# create an array with all the factions
 $list = array();
-for ($i = 0; $i < ASM::$pam->size(); $i++) {
-	$list[ASM::$pam->get($i)->id] = array(
+for ($i = 0; $i < ASM::$clm->size(); $i++) {
+	$list[ASM::$clm->get($i)->id] = array(
 		'general' => 0, 
 		'power' => 0, 
 		'domination' => 0);
@@ -79,54 +67,33 @@ for ($i = 0; $i < ASM::$pam->size(); $i++) {
 const COEF_RESOURCE = 0.001;
 
 #-------------------------------- GENERAL RANKING --------------------------------#
-# load all the bases
-/*ASM::$obm->load();
-for ($i = 0; $i < ASM::$obm->size(); $i++) {
-	$orbitalBase = ASM::$obm->get($i);
-	if (isset($list[$orbitalBase->rPlayer])) {
-		# count the points of a base
-		$points = 0;
-		$points += $orbitalBase->points;
-
-		$points += round($orbitalBase->resourcesStorage * COEF_RESOURCE);
-
-		$shipPrice = 0;
-		for ($j = 0; $j < 12; $j++) {
-			$shipPrice += ShipResource::getInfo($j, 'resourcePrice') * $orbitalBase->getShipStorage($j);
-		}
-		$points += round($shipPrice * COEF_RESOURCE);
-		# add the points to the list
-		$list[$orbitalBase->rPlayer]['general'] += $points;
-	}
+for ($i = 0; $i < ASM::$clm->size(); $i++) { 
+	$faction = ASM::$clm->get($i);
+	$list[$faction->id]['general'] = $faction->credits;
 }
 
-# load the commanders
-ASM::$com->load(array('c.statement' => array(Commander::INSCHOOL, Commander::AFFECTED, Commander::MOVING, Commander::ONSALE)));
-for ($i = 0; $i < ASM::$com->size(); $i++) {
-	$commander = ASM::$com->get($i);
-	if (isset($list[$commander->rPlayer])) {
-		# count the points of a commander
-		$points = 0;
-		$shipList = $commander->getNbrShipByType();
-		$shipPrice = 0;
-		for ($j = 0; $j < 12; $j++) {
-			$shipPrice += ShipResource::getInfo($j, 'resourcePrice') * $shipList[$j];
-		}
-		$points += round($shipPrice * COEF_RESOURCE);
+#-------------------------------- POWER RANKING ----------------------------------#
+# sum of general player ranking
+# load all the players
+ASM::$pam->load(array('statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY)));
 
-		$list[$commander->rPlayer]['general'] += $points;
-	}
-}*/
+for ($i = 0; $i < ASM::$prm->size(); $i++) {
+	$playerRank = ASM::$prm->get($i);
 
-#-------------------------------- OTHER RANKINGs --------------------------------#
-/*for ($i = 0; $i < ASM::$pam->size(); $i++) {
-	$pl = ASM::$pam->get($i);
-	if (isset($list[$pl->id])) {
-		# add the points to the list
-		$list[$pl->id]['power'] += $pl->power;
-		$list[$pl->id]['domination'] += $pl->domination;
+	$player = ASM::$pam->getById($playerRank->rPlayer);
+
+	$list[$player->rColor]['power'] += $playerRank->general;
+}
+
+#-------------------------------- DOMINATION RANKING -----------------------------#
+$sectorManager = new SectorManager();
+$sectorManager->load();
+for ($i = 0; $i < $sectorManager->size(); $i++) {
+	$sector = $sectorManager->get($i);
+	if ($sector->rColor != 0) {
+		$list[$sector->rColor]['domination'] += $sector->population;
 	}
-}*/
+}
 
 # copy the arrays
 $listG = $list;
@@ -150,41 +117,38 @@ foreach ($listP as $key => $value) { $listP[$key]['position'] = $position++;}
 $position = 1;
 foreach ($listD as $key => $value) { $listD[$key]['position'] = $position++;}
 
-#Bug::pre($listR);
-
-
-foreach ($list as $player => $value) {
+foreach ($list as $faction => $value) {
 	$fr = new FactionRanking();
 	$fr->rRanking = $rRanking;
-	$fr->rPlayer = $player; 
+	$fr->rFaction = $faction; 
 
+	$firstRanking = true;
 	for ($i = 0; $i < ASM::$frm->size(); $i++) {
-		if (ASM::$frm->get($i)->rPlayer == $player) {
+		if (ASM::$frm->get($i)->rFaction == $faction) {
 			$oldRanking = ASM::$frm->get($i);
+			$firstRanking = false;
 			break;
 		}
 	}
 
-	$fr->general = $listG[$player]['general'];
-	$fr->generalPosition = $listG[$player]['position'];
-	$fr->generalVariation = $oldRanking->generalPosition - $fr->generalPosition;
+	$fr->general = $listG[$faction]['general'];
+	$fr->generalPosition = $listG[$faction]['position'];
+	$fr->generalVariation = $firstRanking ? 0 : $oldRanking->generalPosition - $fr->generalPosition;
 
-	$fr->power = $listP[$player]['power'];
-	$fr->powerPosition = $listP[$player]['position'];
-	$fr->powerVariation = $oldRanking->powerPosition - $fr->powerPosition;
+	$fr->power = $listP[$faction]['power'];
+	$fr->powerPosition = $listP[$faction]['position'];
+	$fr->powerVariation = $firstRanking ? 0 : $oldRanking->powerPosition - $fr->powerPosition;
 
-	$fr->domination = $listD[$player]['domination'];
-	$fr->dominationPosition = $listD[$player]['position'];
-	$fr->dominationVariation = $oldRanking->dominationPosition - $fr->dominationPosition;
+	$fr->domination = $listD[$faction]['domination'];
+	$fr->dominationPosition = $listD[$faction]['position'];
+	$fr->dominationVariation = $firstRanking ? 0 : $oldRanking->dominationPosition - $fr->dominationPosition;
 
-
-	//ASM::$frm->add($fr);
+	ASM::$frm->add($fr);
 }
 
-//ASM::$pam->changeSession($S_COM1);
-//ASM::$pam->changeSession($S_OBM1);
-//ASM::$pam->changeSession($S_PAM1);
 ASM::$clm->changeSession($S_CLM1);
+ASM::$pam->changeSession($S_PAM1);
+ASM::$prm->changeSession($S_PRM1);
 ASM::$frm->changeSession($S_FRM1);
 
 ?>

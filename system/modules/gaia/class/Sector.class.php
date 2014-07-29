@@ -11,20 +11,20 @@
 */
 
 class Sector {
-	protected $id = 0;
+	public $id = 0;
 
-	protected $rColor;
-	protected $xPosition;
-	protected $yPosition;
-	protected $xBarycentric;
-	protected $yBarycentric;
-	protected $tax;
-	protected $name;
+	public $rColor;
+	public $xPosition;
+	public $yPosition;
+	public $xBarycentric;
+	public $yBarycentric;
+	public $tax;
+	public $name;
 
-	protected $population;
-	protected $lifePlanet;
+	public $population;
+	public $lifePlanet;
 
-	protected $systems = array();
+	public $systems = array();
 
 	public function __construct() {}
 

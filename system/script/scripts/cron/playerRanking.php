@@ -199,8 +199,8 @@ foreach ($list as $player => $value) {
 	ASM::$prm->add($pr);
 }
 
-ASM::$pam->changeSession($S_COM1);
-ASM::$pam->changeSession($S_OBM1);
+ASM::$com->changeSession($S_COM1);
+ASM::$obm->changeSession($S_OBM1);
 ASM::$pam->changeSession($S_PAM1);
 ASM::$prm->changeSession($S_PRM1);
 
