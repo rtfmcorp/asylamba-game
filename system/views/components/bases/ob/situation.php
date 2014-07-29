@@ -153,7 +153,7 @@ echo '<div class="component space size3">';
 				echo '</div>';
 
 				echo '<span class="hb line-help line-1" title="La première ligne de défense est là pour défendre votre planète en cas d\'attaque. Dès qu\'un ennemi vous attaque, il va engager le combat avec une flotte de cette ligne.">I</span>';
-				echo '<span class="hb line-help line-2" title="La deuxième ligne de défense est la ligne de réserve, elle ne défendra en aucun cas contre une attaque dont le but est le pillage. Par contre, elle prendra le relais en se qui concerne la défense face à des envahisseurs si la première ligne est tombée.">II</span>';
+				echo '<span class="hb line-help line-2" title="La deuxième ligne de défense est la ligne de réserve, elle ne défendra en aucun cas contre une attaque dont le but est le pillage. Par contre, elle prendra le relais en ce qui concerne la défense face à des envahisseurs si la première ligne est tombée.">II</span>';
 
 				$lLine = 0; $rLine = 0;
 				$llp = PlaceResource::get($ob_obSituation->typeOfBase, 'l-line-position');
