@@ -23,7 +23,6 @@ class Place {
 	const POPMAX 			 = 250;
 
 	# CONST RESULT BATTLE
-
 	const CHANGESUCCESS 						= 10;
 	const CHANGEFAIL							= 11;
 	const CHANGELOST							= 12;
@@ -43,8 +42,6 @@ class Place {
 	const CONQUERLOST							= 37;
 
 	const COMEBACK 								= 40;
-
-
 
 	// PLACE
 	public $id = 0;
@@ -90,7 +87,6 @@ class Place {
 
 	//uMode
 	public $uMode = TRUE;
-
 
 	public function getId() 							{ return $this->id; }
 	public function getRPlayer() 						{ return $this->rPlayer; }
