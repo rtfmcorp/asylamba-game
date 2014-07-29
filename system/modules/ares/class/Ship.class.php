@@ -45,7 +45,8 @@ class Ship {
 		Switch(ShipResource::getInfo($nbrName, 'class')) {
 			case 0:
 				if ($isAttacker == TRUE) {
-					$this->speed += $this->speed * $bonus->get(PlayerBonus::FIGHTER_SPEED) / 100;					for ($i = 0; $i < $this->nbrAttack; $i++) {
+					$this->speed += $this->speed * $bonus->get(PlayerBonus::FIGHTER_SPEED) / 100;					
+					for ($i = 0; $i < $this->nbrAttack; $i++) {
 						$this->attack[$i] += $this->attack[$i] * $bonus->get(PlayerBonus::FIGHTER_ATTACK) / 100;
 					}
 					$this->defense += $this->defense * $bonus->get(PlayerBonus::FIGHTER_DEFENSE) / 100;
@@ -64,7 +65,8 @@ class Ship {
 
 			case 2:
 				if ($isAttacker == TRUE) {
-					$this->speed += $this->speed * $bonus->get(PlayerBonus::FRIGATE_SPEED) / 100;					for ($i = 0; $i < $this->nbrAttack; $i++) {
+					$this->speed += $this->speed * $bonus->get(PlayerBonus::FRIGATE_SPEED) / 100;					
+					for ($i = 0; $i < $this->nbrAttack; $i++) {
 						$this->attack[$i] += $this->attack[$i] * $bonus->get(PlayerBonus::FRIGATE_ATTACK) / 100;
 					}
 					$this->defense += $this->defense * $bonus->get(PlayerBonus::FRIGATE_DEFENSE) / 100;
