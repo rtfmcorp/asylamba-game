@@ -31,6 +31,11 @@ class Game {
 		return ($distance < 1) ? 1 : $distance;
 	}
 
+	public static function getMaxTravelTime() {
+		include_once ARES;
+		return Commander::MAXTRAVELTIME;
+	}
+
 	public static function getTimeToTravel($startPlace, $destinationPlace) {
 		# $startPlace and $destinationPlace are instance of Place
 		return self::getTimeTravel($startPlace->getRSystem(), $startPlace->getPosition(), $startPlace->getXSystem(), $startPlace->getYSystem(),
@@ -61,21 +66,6 @@ class Game {
 		$distance = self::getDistance($startX, $destinationX, $startY, $destinationY);
 		$time += round(COEFFMOVEINTERSYSTEM * $distance);
 		return $time;
-	}
-
-	# for spy
-	public static function getTimeToTravelToSystem($startSystem, $destinationSystem) {
-		$distance = self::getDistance($startSystem->xPosition, $destinationSystem->xPosition, $startSystem->yPosition, $destinationSystem->yPosition);
-		$time = round(SPY_COEFFTIMEMOVE * $distance);
-		return $time;
-	}
-
-	public static function getPAToTravel($duration) {
-		if ($duration < 3600) {
-			return 4;
-		} else {
-			return Format::numberFormat($duration / 1000);
-		}
 	}
 
 	public static function getRCPrice($distance, $populationA, $populationB, $coef) {
