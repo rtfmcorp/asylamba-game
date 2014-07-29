@@ -31,9 +31,14 @@ class Game {
 		return ($distance < 1) ? 1 : $distance;
 	}
 
+	public static function getFleetSpeed() {
+		include_once ARES;
+		return Commander::FLEETSPEED + CTR::$data->get('playerBonus')->get(PlayerBonus::SHIP_SPEED);
+	}
+
 	public static function getMaxTravelDistance() {
 		include_once ARES;
-		return round(Commander::MAXTRAVELTIME / COEFFMOVEINTERSYSTEM);
+		return round((Commander::MAXTRAVELTIME * self::getFleetSpeed()) / COEFFMOVEINTERSYSTEM);
 	}
 
 	public static function getTimeToTravel($startPlace, $destinationPlace) {
@@ -43,28 +48,31 @@ class Game {
 	}
 
 	public static function getTimeTravel($systemFrom, $positionFrom, $xFrom, $yFrom, $systemTo, $positionTo, $xTo, $yTo) {
+		include_once ARES;
 		if ($systemFrom == $systemTo) {
 			$distance = abs($positionFrom - $positionTo);
-			$time = round(COEFFMOVEINSYSTEM * $distance);
+			$time = round(Commander::COEFFMOVEINSYSTEM * $distance);
 			return $time;
 		} else {
-			$time = COEFFMOVEOUTOFSYSTEM;
+			$time = Commander::COEFFMOVEOUTOFSYSTEM;
 			$distance = self::getDistance($xFrom, $xTo, $yFrom, $yTo);
-			$time += round(COEFFMOVEINTERSYSTEM * $distance);
+			$time += round(Commander::COEFFMOVEINTERSYSTEM * $distance) / self::getFleetSpeed;
 			return $time;
 		}
 	}
 
 	public static function getTimeTravelInSystem($startPosition, $destinationPosition) {
+		include_once ARES;
 		$distance = abs($startPosition - $destinationPosition);
-		$time = round(COEFFMOVEINSYSTEM * $distance);
+		$time = round(Commander::COEFFMOVEINSYSTEM * $distance);
 		return $time;
 	}
 
 	public static function getTimeTravelOutOfSystem($startX, $startY, $destinationX, $destinationY) {
-		$time = COEFFMOVEOUTOFSYSTEM;
+		include_once ARES;
+		$time = Commander::COEFFMOVEOUTOFSYSTEM;
 		$distance = self::getDistance($startX, $destinationX, $startY, $destinationY);
-		$time += round(COEFFMOVEINTERSYSTEM * $distance);
+		$time += round(Commander::COEFFMOVEINTERSYSTEM * $distance) / self::getFleetSpeed;
 		return $time;
 	}
 
