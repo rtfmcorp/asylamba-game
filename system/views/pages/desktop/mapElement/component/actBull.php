@@ -65,7 +65,7 @@ echo '<div class="column act">';
 				if ($place->getId() == $defaultBase->getId()) {
 					echo 'Vous ne pouvez pas déplacer une flotte sur votre planète de départ';
 				} elseif ($place->rPlayer != CTR::$data->get('playerId')) {
-					echo 'Vous ne pouvez déplacer une flotte que vers vos base';
+					echo 'Vous ne pouvez déplacer une flotte que vers une de vos bases';
 				} else {
 					echo 'Aucun commandant selectionné';
 
@@ -79,7 +79,7 @@ echo '<div class="column act">';
 			echo '<h2>Proposer une route commerciale</h2>';
 			echo '<div class="box-content">';
 				if ($place->rPlayer == 0) {
-					echo 'Vous ne pouvez proposer une route commerciale qu\'a des joueurs';
+					echo 'Vous ne pouvez proposer une route commerciale qu\'à des joueurs';
 				} elseif ($place->getId() == $defaultBase->getId()) {
 					echo 'Vous ne pouvez pas proposer une route commerciale sur votre propre base';
 				} elseif ($defaultBase->levelCommercialPlateforme == 0) {

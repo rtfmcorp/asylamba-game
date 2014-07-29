@@ -13,7 +13,7 @@ echo '<div class="component player rank">';
 	echo '<div class="head skin-4">';
 		echo '<img class="main" alt="ressource" src="' . MEDIA . 'resources/resource.png">';
 		echo '<h2>Général</h2>';
-		echo '<em>Total de vos possession</em>';
+		echo '<em>Total de vos possessions</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
