@@ -377,7 +377,14 @@ class Player {
 			$n->setTitle('Niveau supérieur');
 			$n->setRPlayer($this->id);
 			$n->addBeg()->addTxt('Félicitations, vous gagnez un niveau, vous êtes ')->addStg('niveau ' . $this->level)->addTxt('.');
-			$n->addSep()->addTxt('Vous pouvez dès lors disposer d\'un espion supplémentaire, pensez à en acheter.');
+			if ($this->level == 2) {
+				$n->addSep()->addTxt('Attention, à partir de maintenant vous ne bénéficiez plus de la protection des nouveaux arrivants, n\'importe quel joueur pour désormais piller votre planète. ');
+				$n->addTxt('Pensez donc à développer vos flottes pour vous défendre.');
+			}
+			if ($this->level == 4) {
+				$n->addSep()->addTxt('Attention, à partir de maintenant un joueur adverse peut conquérir votre planète ! Si vous n\'en avez plus, le jeu est terminé pour vous. ');
+				$n->addTxt('Pensez donc à étendre votre royaume en colonisant d\'autres planètes.');
+			}
 			$n->addEnd();
 
 			$S_NTM1 = ASM::$ntm->getCurrentSession();

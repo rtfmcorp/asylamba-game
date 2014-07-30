@@ -65,6 +65,7 @@ class Transaction {
 	public $commanderLevel;
 	public $commanderVictory;
 	public $commanderExperience;
+	public $commanderAvatar;
 
 	public function getId() { return $this->id; }
 
