@@ -148,7 +148,8 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 
 		ASM::$srm->add($sr);
 
-		CTR::$alert->add('Espionnage effectué. Vous trouverez le rapport dans l\'amirauté.', ALERT_STD_SUCCESS);
+		CTR::$alert->add('Espionnage effectué.', ALERT_STD_SUCCESS);
+		CTR::redirect(APP_ROOT . 'fleet/view-spyreport/report-' . $sr->id);
 		
 		ASM::$plm->changeSession($S_PLM1);
 	} else {
