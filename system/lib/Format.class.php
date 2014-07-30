@@ -11,14 +11,18 @@ class Format {
 	 */
 	public static function addPlural($number, $return = '', $expression = '') {
 		if ($number > 1) {
-			return ($expression == '' AND $return == '') ? 's' : $return;
+			return ($expression == '' AND $return == '')
+				? 's'
+				: $return;
 		} else {
-			if ($expression == '') {
-				return '';
-			} else {
-				return $expression;
-			}
+			return ($expression == '')
+				? NULL
+				: $expression;
 		}
+	}
+
+	public static function plural($number, $return = '', $expression = '') {
+		return self::addPlural($number, $return, $expression);
 	}
 
 	/*
@@ -31,14 +35,18 @@ class Format {
 	 *     : int => nombre de chiffre après la virgule
 	 */
 	public static function numberFormat($number, $decimals = 0) {
-		if ($decimals == -1 AND $number > 9999) {
-			return ceil($number / 1000) . ' k';
-		} else {
-			return number_format($number, $decimals, ',', ' ');
-		}
+		return ($decimals == -1 AND $number > 9999)
+			? number_format(ceil($number / 1000), $decimals, ',', ' ') . ' k'
+			: number_format($number, $decimals, ',', ' ');
+	}
+
+	public static function number($number, $decimals = 0) {
+		return self::numberFormat($number, $decimals);
 	}
 
 	public static function percent($number, $base) {
-		return ($base == 0) ? 0 : ceil(($number / $base) * 100);
+		return ($base == 0)
+			? 0
+			: ceil(($number / $base) * 100);
 	}
 }

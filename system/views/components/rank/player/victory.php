@@ -11,7 +11,7 @@ ASM::$prm->changeSession($PLAYER_RANKING_VICTORY);
 
 echo '<div class="component player rank">';
 	echo '<div class="head skin-4">';
-		echo '<img class="main" alt="ressource" src="' . MEDIA . 'resources/resource.png">';
+		echo '<img class="main" alt="ressource" src="' . MEDIA . 'rank/cup.png">';
 		echo '<h2>Victoire</h2>';
 		echo '<em>Total des victoires de vos officiers</em>';
 	echo '</div>';

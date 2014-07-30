@@ -12,11 +12,11 @@
 
 class PlayerRanking {
 	# set number of player before you (remove 1) in rank view
-	const PREV = 3;
+	const PREV = 4;
 	# set number of player after you in rank view
-	const NEXT = 2;
+	const NEXT = 8;
 	# PREV + NEXT
-	const STEP = 5;
+	const STEP = 12;
 	# set number of player on ajax load page
 	const PAGE = 10;
 	
