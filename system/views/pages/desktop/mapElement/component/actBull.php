@@ -32,11 +32,13 @@ echo '<div class="column act">';
 							echo 'Aucun commandant selectionné';
 						echo '</div>';
 						echo '<div class="item too-far">';
-							echo 'Ce commandant est trop éloigné';
+							echo 'Ce commandant est trop éloigné pour coloniser cette planète';
 						echo '</div>';
 						echo '<div class="item move">';
-							echo 'On peut attaquer<br />';
-							echo '<a href="' . APP_ROOT . 'action/a-loot/commanderid-{id}/placeid-' . $place->id . '">Par ici</a>';
+							echo '<strong class="name"></strong><br />';
+							echo 'Temps de l\'attaque : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->sector, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSector, $place->position, $place->xSystem, $place->ySystem), 'lite') . ' <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
+							echo 'Capacité de la soute : <span class="wedge"></span> <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /><br />';
+							echo '<a class="button" href="#" data-url="' . APP_ROOT . 'action/a-loot/commanderid-{id}/placeid-' . $place->id . '">Lancer l\'attaque</a>';
 						echo '</div>';
 					echo '</div>';
 				}
@@ -59,10 +61,21 @@ echo '<div class="column act">';
 				} elseif (FALSE) {
 					#### niveau d'administration
 				} else {
-					echo 'Aucun commandant selectionné';
-					
-					echo '-- commandant trop loin <br />';
-					echo '-- on peut attaquer';
+					# prix
+					echo '<div class="commander-tile">';
+						echo '<div class="item no-commander">';
+							echo 'Aucun commandant selectionné';
+						echo '</div>';
+						echo '<div class="item too-far">';
+							echo 'Ce commandant est trop éloigné pour coloniser cette planète';
+						echo '</div>';
+						echo '<div class="item move">';
+							echo '<strong class="name">{name}</strong><br />';
+							echo 'Temps de l\'attaque : <span class="time"></span> <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
+							echo 'Capacité de la soute : <span class="wedge"></span> <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /><br />';
+							echo '<a class="button" href="' . APP_ROOT . 'action/a-loot/commanderid-{id}/placeid-' . $place->id . '">Lancer l\'attaque</a>';
+						echo '</div>';
+					echo '</div>';
 				}
 			echo '</div>';
 		echo '</div>';
@@ -148,7 +161,7 @@ echo '<div class="column act">';
 							if ($ur < OrbitalBaseResource::getBuildingInfo(6, 'level', $defaultBase->levelCommercialPlateforme, 'nbRoutesMax')) {
 								echo '<a href="#" class="button">Proposer une route</a>';
 							} else {
-								echo '<span class="button">pas assez de slot</span>';
+								echo '<span class="button">Pas assez de slot</span>';
 							}
 
 							ASM::$crm->changeSession($S_CRM2);
