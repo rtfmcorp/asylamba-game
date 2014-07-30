@@ -37,10 +37,65 @@ class Report {
 
 	public $fight = array();
 
+	public $totalInBeginA = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+	public $totalInBeginD = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+	public $totalAtEndA = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+	public $totalAtEndD = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);	
+	public $diferenceA = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+	public $diferenceD = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
 	public function getId() { return $this->id; }
 
 	public function setArmies($squadrons) {
 		$this->squadrons = $squadrons;
-		//remplir les escadrilles dans les bons tableaux
+		
+		# squadron(id, pos, rReport, round, rCommander, ship0, ..., ship11)
+		$rCommanderA = $this->squadrons[0][4];
+
+		foreach ($this->squadrons AS $sq) {
+			if ($sq[3] == 0) {
+				if ($sq[4] == $rCommanderA) {
+					$this->armyInBeginA[] = $sq;
+				} else {
+					$this->armyInBeginD[] = $sq;
+				}
+			} elseif ($sq[3] > 0) {
+				$this->fight[] = $sq;
+			} else {
+				if ($sq[4] == $rCommanderA) {
+					$this->armyAtEndA[] = $sq;
+				} else {
+					$this->armyatEndD[] = $sq;
+				}
+			}
+		}
+
+		foreach ($armyInBeginA AS $sq) {
+			for ($i = 0; $i < 12; $i++) {
+				$totalInBeginA[$i] += $sq[$i];
+			}
+		}
+		foreach ($armyInBeginD AS $sq) {
+			for ($i = 0; $i < 12; $i++) {
+				$totalInBeginD[$i] += $sq[$i];
+			}
+		}
+		foreach ($armyAtEndA AS $sq) {
+			for ($i = 0; $i < 12; $i++) {
+				$totalAtEndA[$i] += $sq[$i];
+			}
+		}
+		foreach ($armyAtEndD AS $sq) {
+			for ($i = 0; $i < 12; $i++) {
+				$totalAtEndD[$i] += $sq[$i];
+			}
+		}
+
+		for ($i = 0; $i < 12; $i++) {
+			$diferenceA = $totalInBeginA[$i] - $totalAtEndA[$i];
+		}
+		for ($i = 0; $i < 12; $i++) {
+			$diferenceD = $totalInBeginD[$i] - $totalAtEndD[$i];
+		}
 	}
 }

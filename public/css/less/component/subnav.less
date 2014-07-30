@@ -26,8 +26,11 @@
 		background: url('src/desktop/subnav/button.png') no-repeat;
 
 		&.active {
-			box-shadow: inset 0 0 5px 2px @medium;
-			border-radius: 5px;
+			background: url('src/desktop/subnav/button-active-c@{color-type}.png') no-repeat;
+		}
+
+		&.striped {
+			background: url('src/desktop/subnav/button-striped.png') no-repeat;
 		}
 
 		&:before {

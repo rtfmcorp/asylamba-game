@@ -13,28 +13,30 @@
 class CommercialRoute {
 
 	//ATTRIBUTES
-	protected $id = 0;
-	protected $rOrbitalBase = 0;
-	protected $rOrbitalBaseLinked = 0;
-	protected $imageLink = '';
-	protected $distance = 0;
-	protected $price = 0;
-	protected $income = 0;
-	protected $dProposition = '';
-	protected $dCreation = '';
-	protected $statement = CRM_PROPOSED;
+	public $id = 0;
+	public $rOrbitalBase = 0;
+	public $rOrbitalBaseLinked = 0;
+	public $imageLink = '';
+	public $distance = 0;
+	public $price = 0;
+	public $income = 0;
+	public $dProposition = '';
+	public $dCreation = '';
+	public $statement = CRM_PROPOSED;
 
-	private $baseName1;
-	private $playerId1;
-	private $playerName1;
-	private $avatar1;
-	private $population1;
+	public $baseName1;
+	public $baseType1;
+	public $playerId1;
+	public $playerName1;
+	public $avatar1;
+	public $population1;
 
-	private $baseName2;
-	private $playerId2;
-	private $playerName2;
-	private $avatar2;
-	private $population2;
+	public $baseName2;
+	public $baseType2;
+	public $playerId2;
+	public $playerName2;
+	public $avatar2;
+	public $population2;
 
 	//GETTERS
 	public function getId() { return $this->id; }

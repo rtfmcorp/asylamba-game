@@ -25,7 +25,7 @@ class ReportManager extends Manager {
 			' . $formatLimit
 		);
 
-		foreach($where AS $v) {
+		foreach ($where AS $v) {
 			if (is_array($v)) {
 				foreach ($v as $p) {
 					$valuesArray[] = $p;
@@ -67,11 +67,11 @@ class ReportManager extends Manager {
 		$awSquadronReport = $qr->fetchAll();
 
 		$armies = array(array());
-		foreach($awSquadronReport AS $squadron) {
+		foreach ($awSquadronReport AS $squadron) {
 			$armies['' . $squadron['rReport'] . ''][] = $squadron;
 		}
 
-		foreach($aw AS $awReport) {
+		foreach ($aw AS $awReport) {
 			$report = new Report();
 
 			$report->id = $awReport['id'];
@@ -91,10 +91,7 @@ class ReportManager extends Manager {
 			$report->statementDefender = $awReport['statementDefender'];
 			$report->placeName = $awReport['placeName'];
 
-			$report->fight = $armies['' . $report->id . ''];
-
-			bug::pre($report->fight);
-			exit();
+			$report->setArmies($armies['' . $report->id . '']);
 
 			$this->_Add($report);
 		}

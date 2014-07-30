@@ -137,7 +137,7 @@ class Transaction {
 						echo Format::numberFormat($this->quantity) . ' <img src="' . MEDIA . 'resources/resource.png" alt="" class="icon-color" />';
 					echo '</div>';
 				} elseif ($this->type == Transaction::TYP_COMMANDER) {
-					echo '<img src="' . MEDIA . 'commander/small/c1-l3-c1.png" alt="" class="picto" />';
+					echo '<img src="' . MEDIA . 'commander/small/' . $this->commanderAvatar . '.png" alt="" class="picto" />';
 					echo '<span class="rate">' . $rv . ' %</span>';
 
 					echo '<div class="offer">';
