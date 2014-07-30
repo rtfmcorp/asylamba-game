@@ -50,11 +50,23 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 				$sr->enemyName = 'Rebel';
 				$sr->enemyAvatar = '...';
 				$sr->enemyLevel = 1;
-#TODO
-				$sr->commanders = serialize(array());
+
+				# generate a commander for the place
+				$commander = $place->createVirtualCommander();
+
+				$commandersArray = array();
+				$commandersArray[0]['name'] = $commander->name;
+				$commandersArray[0]['avatar'] = $commander->avatar;
+				$commandersArray[0]['level'] = $commander->level;
+				$commandersArray[0]['line'] = $commander->line;
+				$commandersArray[0]['statement'] = $commander->statement;
+				$commandersArray[0]['pev'] = $commander->getPev();
+				$commandersArray[0]['army'] = $commander->getNbrShipByType();
+				
+				$sr->commanders = serialize($commandersArray);
 
 				$antiSpy = $place->population * 20; // population : entre 0 et 250
-				$sr->sucess = Game::getSpySuccess($antiSpy, $price);
+				$sr->success = Game::getSpySuccess($antiSpy, $price);
 				$sr->type = SpyReport::TYP_NOT_CAUGHT;
 
 				break;
