@@ -52,7 +52,7 @@ class ReportManager extends Manager {
 		$qr = 'SELECT * FROM squadronReport ';
 		$i = 0;
 		foreach ($idReports AS $id) {
-			$qr .= ($i == 0) ? 'WHERE rCommander = ? ' : 'OR rCommander = ? ';
+			$qr .= ($i == 0) ? 'WHERE rReport = ? ' : 'OR rReport = ? ';
 			$i++;
 		}
 
@@ -68,7 +68,7 @@ class ReportManager extends Manager {
 
 		$armies = array(array());
 		foreach($awSquadronReport AS $squadron) {
-			$armies['' . $squadron->rReport . ''][] = $squadron;
+			$armies['' . $squadron['rReport'] . ''][] = $squadron;
 		}
 
 		foreach($aw AS $awReport) {
@@ -92,7 +92,7 @@ class ReportManager extends Manager {
 			$report->statementDefender = $awReport['statementDefender'];
 			$report->placeName = $awReport['placeName'];
 
-			$report->setArmies($armies[$report->id]);
+			$report->fight = $armies['' . $report->id . ''];
 
 			$this->_Add($report);
 		}
