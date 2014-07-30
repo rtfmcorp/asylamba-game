@@ -65,7 +65,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 				$n->addLnk('map/place-' . $acceptorBase->getRPlace(), $acceptorBase->getName())->addTxt(' et ');
 				$n->addLnk('map/base-' . $proposerBase->getRPlace(), $proposerBase->getName());
 				$n->addSep()->addTxt('Cette route vous rapporte ' . Format::numberFormat($cr->getIncome()) . ' crédits par relève.');
-				$n->addBrk()->addTxt('Vous avez gagné ' . $exp . ' points d\'expérience.');
+				$n->addBrk()->addBoxResource('xp', $exp, 'expérience gagnée');
 				$n->addSep()->addLnk('bases/base-' . $proposerBase->getRPlace() . '/view-commercialplateforme/mode-route', 'En savoir plus ?');
 				$n->addEnd();
 				ASM::$ntm->add($n);
