@@ -188,13 +188,14 @@ echo '<div id="content">';
 				include COMPONENT . 'fleet/commanderDetail.php';
 			} else {
 				$commander_shortMemorial = ASM::$com->get($i);
-				include COMPONENT . 'fleet/shortMemorial.php';
+				include COMPONENT . 'default.php';
 			}
 		}
 
 		if (isset($commander_commanderDetail) && count($commander_commanderDetail) > 0) {
 		} else {
-			# aucun commandant mort
+			include COMPONENT . 'default.php';
+			include COMPONENT . 'default.php';
 		}
 
 		if (isset($commander_shortMemorial) && count($commander_shortMemorial) > 0) {

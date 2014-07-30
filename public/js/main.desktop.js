@@ -386,9 +386,7 @@ jQuery(document).ready(function($) {
 		commanders: {
 			active: false,
 			id: undefined,
-			maxJump: undefined,
-			xCoord: undefined,
-			yCoord: undefined
+			maxJump: undefined
 		},
 
 		params: {
@@ -396,7 +394,7 @@ jQuery(document).ready(function($) {
 			kMovingSpeed: 20,
 			animationSpeed: 250,
 			first: true,
-			locked: false,
+			locked: false
 		},
 
 		mouseMoving: {
@@ -422,9 +420,23 @@ jQuery(document).ready(function($) {
 			}
 		},
 
-		selectCommander: function() {
-			// selectionne ou deselection un commandant
-			// ajoute ses infos
+		selectCommander: function(commander) {
+			$('.map-commander').removeClass('active');
+
+			mapController.commanders.active = false;
+			mapController.commanders.id = undefined;
+			mapController.commanders.maxJump = undefined;
+
+			if (commander.data('available')) {
+				commander.addClass('active');
+
+				mapController.commanders.active = true;
+				mapController.commanders.id = commander.data('id');
+				mapController.commanders.maxJump = commander.data('max-jump');
+				actionbox.applyCommander();
+			} else {
+				alertController.add(101, 'Ce commandant est déjà en mission');
+			}
 		},
 
 		// déplace la map si possbile
@@ -554,6 +566,11 @@ jQuery(document).ready(function($) {
 			mapController.mouseMoving.lastY = e.pageY;
 		}
 	});
+	$('.map-commander').on('click', function(e) {
+		e.preventDefault();
+
+		mapController.selectCommander($(this));
+	})
 
 // ################################# //
 // ####### ACTION BOX MODULE ####### //
@@ -564,20 +581,32 @@ jQuery(document).ready(function($) {
 		opened: false,
 
 		applyCommander: function() {
-			// si ouvert parcours tout les "trucs commandant"
-			// switch vers le bon
+			if (actionbox.opened && mapController.commanders.active) {
+				actionbox.obj.find('.commander-tile .item').hide();
+
+				if (actionbox.obj.find('.header').data('distance') > mapController.commanders.maxJump) {
+					actionbox.obj.find('.commander-tile .item.too-far').show();
+				} else {
+					actionbox.obj.find('.commander-tile .item.move').each(function() {
+						$(this).show();
+						var path = $(this).find('a').attr('href');
+						$(this).find('a').attr('href', path.replace('{id}', mapController.commanders.id));
+					});
+				}
+			}
 		},
 
 		// affiche la box
 		open: function() {
+			actionbox.opened = true;
 			actionbox.obj.animate({
 				bottom: 0
 			}, 300);
-
 		},
 
 		// masque la box
 		close: function() {
+			actionbox.opened = false;
 			actionbox.obj.animate({
 				bottom: -300
 			}, 300);
@@ -592,8 +621,7 @@ jQuery(document).ready(function($) {
 			 .done(function(data) {
 				actionbox.obj.html(data);
 				actionbox.open();
-
-				// TODO: lancer le render commandant
+				actionbox.applyCommander();
 
 				$('.loadSystem[data-system-id="' + systemid + '"]').addClass('active');
 			}).fail(function() {

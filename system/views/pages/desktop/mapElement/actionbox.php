@@ -31,7 +31,7 @@ ASM::$com->changeSession($S_COM1);
 $technologies = new Technology(CTR::$data->get('playerId'));
 
 # header part
-echo '<div class="header">';
+echo '<div class="header" data-distance="' . Format::numberFormat(Game::getDistance($defaultBase->xSystem, $places[0]->xSystem, $defaultBase->ySystem, $places[0]->ySystem)) . '">';
 	echo '<ul>';
 		echo '<li>Système #' . $system->id . '</li>';
 		echo '<li>Cordonnées ' . Game::formatCoord($system->xPosition, $system->yPosition) . '</li>';

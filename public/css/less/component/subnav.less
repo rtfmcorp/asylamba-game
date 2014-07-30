@@ -20,6 +20,11 @@
 		text-decoration: none;
 		background: url('src/desktop/subnav/button.png') no-repeat;
 
+		&.active {
+			box-shadow: 0 0 5px 2px @medium;
+			border-radius: 5px;
+		}
+
 		&:before {
 			content: ''; position: absolute;
 			right: -6px; bottom: 0;
