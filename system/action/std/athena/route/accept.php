@@ -45,10 +45,10 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 				ASM::$pam->get()->increaseExperience($exp);
 				ASM::$pam->get(1)->increaseExperience($exp);
 
-				if (ASM::$pam->get()->rolor == 3) {
+				if (ASM::$pam->get()->color == 3) {
 					ASM::$pam->get()->factionPoint += $exp;
 				}
-				if (SM::$pam->get(1)->rolor == 3) {
+				if (ASM::$pam->get(1)->color == 3) {
 					ASM::$pam->get(1)->factionPoint += $exp;
 				}
 				
