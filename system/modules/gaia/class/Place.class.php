@@ -775,7 +775,6 @@ class Place {
 		$report->squadrons = LiveReport::$squadrons;
 		$report->dFight = Utils::now(); //à modifier
 		$report->placeName = ($this->baseName == '') ? 'planète rebelle' : $this->baseName;
-
 		ASM::$rpm->add($report);
 	}
 
@@ -834,7 +833,7 @@ class Place {
 					->addLnk('map/place-' . $this->id, Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector))
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('resource', $commander->getResourcesTransported(), 'ressources pillées')
+					->addBoxResource('resource', Format::nukberFormat($commander->getResourcesTransported()), 'ressources pillées')
 					->addBoxResource('xp', $commander->earnedExperience, 'experience gagnée')
 					->addEnd();
 				ASM::$ntm->add($notif);
@@ -867,7 +866,7 @@ class Place {
 					->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('resource', $commander->getResourcesTransported(), 'ressources pillées')
+					->addBoxResource('resource', Format::nukberFormat($commander->getResourcesTransported()), 'ressources pillées')
 					->addBoxResource('xp', $commander->earnedExperience, 'experience gagnée')
 					->addEnd();
 				ASM::$ntm->add($notif);
@@ -884,7 +883,7 @@ class Place {
 					->addLnk('map/place-' . $this->id, $this->baseName)
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('resource', $commander->getResourcesTransported(), 'ressources pillées')
+					->addBoxResource('resource', Format::nukberFormat($commander->getResourcesTransported()), 'ressources pillées')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -934,7 +933,7 @@ class Place {
 					->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('resource', $commander->getResourcesTransported(), 'ressources pillées')
+					->addBoxResource('resource', Format::nukberFormat($commander->getResourcesTransported()), 'ressources pillées')
 					->addBoxResource('xp', $commander->earnedExperience, 'experience gagnée')
 					->addEnd();
 				ASM::$ntm->add($notif);
@@ -951,7 +950,7 @@ class Place {
 					->addLnk('map/place-' . $this->id, $this->baseName)
 					->addTxt('. Aucun officier n\'était en position pour la défendre. ')
 					->addSep()
-					->addBoxResource('resource', $commander->getResourcesTransported(), 'ressources pillées')
+					->addBoxResource('resource', Format::nukberFormat($commander->getResourcesTransported()), 'ressources pillées')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -1127,7 +1126,7 @@ class Place {
 					->addTxt(' est de retour sur votre base ')
 					->addLnk('map/place-' . $commander->getRBase(), $commander->getBaseName())
 					->addTxt(' et rapporte ')
-					->addStg(Format::numberFormat($commander->getResourcesTransported()))
+					->addStg(Format::numberFormat(Format::nukberFormat($commander->getResourcesTransported())))
 					->addTxt(' ressources à vos entrepôts.')
 					->addEnd();
 				ASM::$ntm->add($notif);
