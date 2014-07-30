@@ -32,7 +32,8 @@ class TransactionManager extends Manager {
 			c.name AS commanderName,
 			c.level AS commanderLevel, 
 			c.palmares AS commanderVictory,
-			c.experience AS commanderExperience
+			c.experience AS commanderExperience,
+			c.avatar as commanderAvatar
 			FROM transaction AS t
 			LEFT JOIN player AS play
 				ON t.rPlayer = play.id
@@ -97,6 +98,7 @@ class TransactionManager extends Manager {
 			$t->commanderLevel = $aw['commanderLevel'];
 			$t->commanderVictory = $aw['commanderVictory'];
 			$t->commanderExperience = $aw['commanderExperience'];
+			$t->commanderAvatar = $aw['commanderAvatar'];
 
 			$currentT = $this->_Add($t);
 		}
