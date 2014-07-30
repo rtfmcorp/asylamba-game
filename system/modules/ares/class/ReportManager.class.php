@@ -83,7 +83,6 @@ class ReportManager extends Manager {
 			$report->round = $awReport['round'];
 			$report->rPlayerAttacker = $awReport['rPlayerAttacker'];
 			$report->rPlayerDefender = $awReport['rPlayerDefender'];
-			$report->rBigReport = $awReport['rBigReport'];
 			$report->rPlace = $awReport['rPlace']; 			
 			$report->type = $awReport['type'];
 			$report->importance = $awReport['importance'];
@@ -93,6 +92,9 @@ class ReportManager extends Manager {
 			$report->placeName = $awReport['placeName'];
 
 			$report->fight = $armies['' . $report->id . ''];
+
+			bug::pre($report->fight);
+			exit();
 
 			$this->_Add($report);
 		}
@@ -197,13 +199,13 @@ class ReportManager extends Manager {
 		if (count($newReport->squadrons) > 0) {
 
 			for ($i = 0; $i < count($newReport->squadrons); $i++) {
-				$newReport->squadrons[$i][2] = $newReport->id;
+				$newReport->squadrons[$i][1] = $newReport->id;
 			}
-			$qr = 'INSERT INTO squadronReport (position, rReport, rCommander, ship0, ship1, ship2, ship3, ship4, ship5, ship6, ship7, ship8, ship9, ship10, ship11) 
+			$qr = 'INSERT INTO squadronReport (position, rReport, round, rCommander, ship0, ship1, ship2, ship3, ship4, ship5, ship6, ship7, ship8, ship9, ship10, ship11) 
 			VALUES';
 			for ($j = 0; $j < count($newReport->squadrons); $j++) {
-				$qr .= ' (' . $newReport->squadrons[$j][1];
-					for ($i = 2; $i < 16; $i++) {
+				$qr .= ' (' . $newReport->squadrons[$j][0];
+					for ($i = 1; $i < 16; $i++) {
 						$qr .= ' ,' . $newReport->squadrons[$j][$i];
 					}
 				$qr .= ($j == count($newReport->squadrons) - 1) ? ');' : '),';
