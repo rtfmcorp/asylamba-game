@@ -463,6 +463,14 @@ class Place {
 			$commander->length = NULL;
 
 			if ($this->playerColor != $commander->getPlayerColor()) {
+				for ($i = 0; $i < count($this->commanders); $i++) {
+					if ($this->commanders[$i + 1]->line < $this->commanders[$i]->line) {
+						$tempCom = $this->commanders[$i];
+						$this->commanders[$i] = $this->commanders[$i + 1];
+						$this->commanders[$i] = $tempCom;
+					}
+				}
+
 				$nbrBattle = 0;
 				while ($nbrBattle < count($this->commanders)) {
 					if ($this->commanders[$nbrBattle]->statement == Commander::AFFECTED) {
