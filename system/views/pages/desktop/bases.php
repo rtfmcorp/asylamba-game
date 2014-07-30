@@ -2,6 +2,8 @@
 # bases loading
 include_once ATHENA;
 # choix de la base
+ASM::$rpm->load(array('id' => 1));
+bug::pre(ASM::$rpm->get());
 ASM::$obm->load(array('rPlace' => CTR::$data->get('playerParams')->get('base')));
 $base = ASM::$obm->get(0);
 

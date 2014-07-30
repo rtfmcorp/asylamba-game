@@ -111,8 +111,8 @@ class Squadron {
 			
 			LiveReport::$littleRound++;
 			$this->fight($enemyCommander->getSquadron($this->relId));
-			LiveReport::$squadrons[] = array(0, $this->position, 0, $this->rCommander, $this->arrayOfShips[0], $this->arrayOfShips[1], $this->arrayOfShips[2], $this->arrayOfShips[3], $this->arrayOfShips[4], $this->arrayOfShips[5], $this->arrayOfShips[6], $this->arrayOfShips[7], $this->arrayOfShips[8], $this->arrayOfShips[9], $this->arrayOfShips[10], $this->arrayOfShips[11]);
-			LiveReport::$squadrons[] = array(0, $enemySquadron->position, 0, $enemySquadron->rCommander, $enemySquadron->arrayOfShips[0], $enemySquadron->arrayOfShips[1], $enemySquadron->arrayOfShips[2], $enemySquadron->arrayOfShips[3], $enemySquadron->arrayOfShips[4], $enemySquadron->arrayOfShips[5], $enemySquadron->arrayOfShips[6], $enemySquadron->arrayOfShips[7], $enemySquadron->arrayOfShips[8], $enemySquadron->arrayOfShips[9], $enemySquadron->arrayOfShips[10], $enemySquadron->arrayOfShips[11]);
+			LiveReport::$squadrons[] = array(0, $this->position, 2, $this->rCommander, $this->arrayOfShips[0], $this->arrayOfShips[1], $this->arrayOfShips[2], $this->arrayOfShips[3], $this->arrayOfShips[4], $this->arrayOfShips[5], $this->arrayOfShips[6], $this->arrayOfShips[7], $this->arrayOfShips[8], $this->arrayOfShips[9], $this->arrayOfShips[10], $this->arrayOfShips[11]);
+			LiveReport::$squadrons[] = array(0, $enemySquadron->position, 2, $enemySquadron->rCommander, $enemySquadron->arrayOfShips[0], $enemySquadron->arrayOfShips[1], $enemySquadron->arrayOfShips[2], $enemySquadron->arrayOfShips[3], $enemySquadron->arrayOfShips[4], $enemySquadron->arrayOfShips[5], $enemySquadron->arrayOfShips[6], $enemySquadron->arrayOfShips[7], $enemySquadron->arrayOfShips[8], $enemySquadron->arrayOfShips[9], $enemySquadron->arrayOfShips[10], $enemySquadron->arrayOfShips[11]);
 
 			$enemyCommander->getSquadron($this->relId)->setRelId($this->position);
 			$enemyCommander->getSquadron($this->relId)->fight($thisCommander->getSquadron($this->position));
