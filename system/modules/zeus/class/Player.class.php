@@ -172,8 +172,16 @@ class Player {
 
 		$popTax = 0; $nationTax = 0;
 		$credits = $this->credit;
-		$uniInvests = 0; $schoolInvests = 0; $antiSpyInvests = 0;
-		$naturalTech = 0; $lifeTech = 0; $socialTech = 0; $informaticTech = 0;
+		$schoolInvests = 0; $antiSpyInvests = 0;
+
+		$totalGain = 0;
+
+		# university investments
+		$uniInvests = $this->iUniversity;
+		$naturalTech = ($this->iUniversity * $this->partNaturalSciences / 100);
+		$lifeTech = ($this->iUniversity * $this->partLifeSciences / 100);
+		$socialTech = ($this->iUniversity * $this->partSocialPoliticalSciences / 100);
+		$informaticTech = ($this->iUniversity * $this->partInformaticEngineering / 100);
 
 		for ($i = 0; $i < ASM::$obm->size(); $i++) {
 			$base = ASM::$obm->get($i);
@@ -195,13 +203,9 @@ class Player {
 			ASM::$crm->changeSession($S_CRM1);
 
 			$credits += ($popTax - $nationTax + $routesIncome);
+			$totalGain += $popTax - $nationTax + $routesIncome;
 
-			// investissements
-			$uniInvests += $this->iUniversity;
-			$naturalTech += ($this->iUniversity * $this->partNaturalSciences / 100);
-			$lifeTech += ($this->iUniversity * $this->partLifeSciences / 100);
-			$socialTech += ($this->iUniversity * $this->partSocialPoliticalSciences / 100);
-			$informaticTech += ($this->iUniversity * $this->partInformaticEngineering / 100);
+			// investments
 			$schoolInvests += $base->getISchool();
 			$antiSpyInvests += $base->getIAntiSpy();
 
@@ -218,45 +222,55 @@ class Player {
 		}
 
 		// si la balance de crédit est positive
-		if ($credits >= ($uniInvests + $schoolInvests + $antiSpyInvests)) {
-			$credits -= ($uniInvests + $schoolInvests + $antiSpyInvests);
+		$totalInvests = $uniInvests + $schoolInvests + $antiSpyInvests;
+		if ($credits >= $totalInvests) {
+			$credits -= $totalInvests;
 			$newCredit = $credits;
 		} else { // si elle est négative
-			$ratioDifference = (($uniInvests + $schoolInvests + $antiSpyInvests) == 0) ? 100 : floor($credits / ($uniInvests + $schoolInvests + $antiSpyInvests) * 100);
-			$uniInvests = 0; $schoolInvests = 0; $antiSpyInvests = 0;
-
-			for ($i = 0; $i < ASM::$obm->size(); $i++) {
-				$orbitalBase = ASM::$obm->get($i);
-
-				$newIUniversity = ceil($this->iUniversity * $ratioDifference / 100);
-				$newISchool = ceil($orbitalBase->getISchool() * $ratioDifference / 100);
-				$newIAntiSpy = ceil($orbitalBase->getIAntiSpy() * $ratioDifference / 100);
-
-				$orbitalBase->setISchool($newISchool);
-				$orbitalBase->setIAntiSpy($newIAntiSpy);
-
-				$this->iUniversity = $newIUniversity;
-
-				$credits -= ($newIUniversity + $newISchool + $newIAntiSpy);
-
-				$uniInvests += $newISchool;
-
-				$naturalTech += ($newISchool * $this->partNaturalSciences / 100);
-				$lifeTech += ($newISchool * $this->partLifeSciences / 100);
-				$socialTech += ($newISchool * $this->partSocialPoliticalSciences / 100);
-				$informaticTech += ($newISchool * $this->partInformaticEngineering / 100);
-				
-				$schoolInvests += $newIUniversity;
-				$antiSpyInvests += $newIAntiSpy;
-			}
-
 			$n = new Notification();
 			$n->setRPlayer($this->id);
 			$n->setTitle('Caisses vides');
 			$n->addBeg()->addTxt('Domaine')->addSep();
 			$n->addTxt('Vous ne disposez pas d\'assez de crédits.')->addBrk()->addTxt('Les impôts que vous percevez ne suffisent plus à payer vos investissements.');
-			$n->addTxt(' Seuls ')->addStg($ratioDifference . '%')->addTxt(' des crédits d\'investissements peuvent être honorés.')->addBrk();
-			$n->addTxt(' Vos investissements ont été modifiés afin qu\'aux prochaines relèves vous puissiez payer. Attention, cette situation ne vous apporte pas de crédits.');
+
+			if ($totalInvests - $uniInvests <= $totalGain) {
+				# we can decrease only the uni investments
+				$newIUniversity = $totalGain - $schoolInvests - $antiSpyInvests;
+
+				$this->iUniversity = $newIUniversity;
+				$credits -= ($newIUniversity + $schoolInvests + $antiSpyInvests);
+
+				$n->addBrk()->addTxt(' Vos investissements dans l\'université ont été modifiés afin qu\'aux prochaines relèves vous puissiez payer. Attention, cette situation ne vous apporte pas de crédits.');
+			} else {
+				# we have to decrease the other investments too
+				# investments in university to 0
+				$this->iUniversity = 0;
+				# then we decrease the other investments with a ratio
+				$ratioDifference = floor($totalGain / ($schoolInvests + $antiSpyInvests) * 100);
+
+				$naturalTech = 0; $lifeTech = 0; $socialTech = 0; $informaticTech = 0;
+
+				for ($i = 0; $i < ASM::$obm->size(); $i++) {
+					$orbitalBase = ASM::$obm->get($i);
+
+					$newISchool = ceil($orbitalBase->getISchool() * $ratioDifference / 100);
+					$newIAntiSpy = ceil($orbitalBase->getIAntiSpy() * $ratioDifference / 100);
+
+					$orbitalBase->setISchool($newISchool);
+					$orbitalBase->setIAntiSpy($newIAntiSpy);
+
+					$credits -= ($newISchool + $newIAntiSpy);
+
+					$naturalTech += ($newISchool * $this->partNaturalSciences / 100);
+					$lifeTech += ($newISchool * $this->partLifeSciences / 100);
+					$socialTech += ($newISchool * $this->partSocialPoliticalSciences / 100);
+					$informaticTech += ($newISchool * $this->partInformaticEngineering / 100);
+					
+				}
+				$n->addTxt(' Seuls ')->addStg($ratioDifference . '%')->addTxt(' des crédits d\'investissements peuvent être honorés.')->addBrk();
+				$n->addTxt(' Vos investissements dans l\'université ont été mis à zéro et les autres diminués de façon pondérée afin qu\'aux prochaines relèves vous puissiez payer. Attention, cette situation ne vous apporte pas de crédits.');
+			}
+
 			$n->addSep()->addLnk('financial', 'vers les finances →');
 			$n->addEnd();
 			
