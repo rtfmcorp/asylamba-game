@@ -597,10 +597,13 @@ jQuery(document).ready(function($) {
 						actionbox.obj.find('.commander-tile .item.too-far').show();
 					} else {
 						var items = actionbox.obj.find('.commander-tile .item.move');
-						var url = items.find('a').data('url');
+
+						items.find('a').each(function() {
+							var url = $(this).data('url');
+							$(this).attr('href', url.replace('{id}', mapController.commanders.id));
+						});
 
 						items.show();
-						items.find('a').attr('href', url.replace('{id}', mapController.commanders.id));
 						items.find('.name').text(mapController.commanders.name);
 						items.find('.wedge').text(mapController.commanders.wedge);
 					}
