@@ -2,6 +2,8 @@
 echo '<h1>Ajout de la table spyReport</h1>';
 
 $db = DataBaseAdmin::getInstance();
+$qr = $db->prepare("DROP TABLE IF EXISTS `spyReport`");
+$qr->execute();
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `spyReport` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `rPlayer` int(11) NOT NULL,
