@@ -1149,7 +1149,7 @@ class Place {
 		$vCommander->statement = 1;
 		$vCommander->level = round($this->population / (self::POPMAX / self::LEVELMAXVCOMMANDER));
 
-		$nbrsquadron = round($vCommander->level * ($this->resources / ($this->population * self::COEFFMAXRESOURCE)));
+		$nbrsquadron = round($vCommander->level * ($this->resources / (($this->population + 1) * self::COEFFMAXRESOURCE)));
 		if ($nbrsquadron == 0) {
 			$nbrsquadron = 1;
 		}

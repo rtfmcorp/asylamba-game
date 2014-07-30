@@ -10,14 +10,14 @@ echo '<div id="subnav">';
 		for ($i = 0; $i < ASM::$com->size(); $i++) {
 			$commander = ASM::$com->get($i);
 
-			echo '<a href="#" class="item map-commander" data-id="' . $commander->id . '" data-max-jump="' . Game::getMaxTravelDistance() . '" data-available="' . ($commander->statement == COM_MOVING ? 'false' : 'true') . '" data-x-coord="' . $defaultBase->getXSystem() . '" data-y-coord="' . $defaultBase->getYSystem() . '">';
+			echo '<a href="#" class="item map-commander" data-id="' . $commander->id . '" data-max-jump="' . Game::getMaxTravelDistance() . '" data-available="' . ($commander->statement == COM_MOVING ? 'false' : 'true') . '" data-name="' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->name . '" data-wedge="' . Format::numberFormat(Commander::COEFFLOOT * $commander->getPev()) . '">';
 				echo '<span class="picto">';
 					echo '<img src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
 					echo '<span class="number">' . $commander->level . '</span>';
 				echo '</span>';
 				echo '<span class="content skin-2">';
 					echo '<span class="sub-content">';
-						echo CommanderResources::getInfo($commander->getLevel(), 'grade') . ' ' . $commander->getName() . '<br />';
+						echo CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->name . '<br />';
 						echo Format::numberFormat($commander->getPev()) . ' pev';
 						echo '<hr />';
 						if ($commander->statement == COM_MOVING) {
