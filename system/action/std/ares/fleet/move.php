@@ -22,7 +22,9 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	ASM::$plm->load(array('id' => $placeId));
 	$place = ASM::$plm->get();
 
-	if (count($place->commanders) < 3) {
+	$maxCom = ($place->typeOfOrbitalBase == 0) ? 2 : 5;
+
+	if (count($place->commanders) < $maxCom) {
 		if (ASM::$com->size() > 0) {
 			if (ASM::$plm->size() > 0) {
 				if (CTR::$data->get('playerId') == $place->getRPlayer()) {
