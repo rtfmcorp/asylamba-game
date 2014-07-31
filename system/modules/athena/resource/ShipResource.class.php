@@ -193,8 +193,8 @@ class ShipResource {
 		),
 		array(
 			'codeName' => 'Satyre',
-			'class' => 0,
 			'name' => 'Chasseur lourd',
+			'class' => 0,
 			'pev' => 3,
 			'life' => 32,
 			'speed' => 195,

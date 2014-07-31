@@ -3,8 +3,10 @@ include_once GAIA;
 include_once ATHENA;
 include_once ZEUS;
 include_once PROMETHEE;
+include_once ARES;
 
 try {
+	$faction = CTR::$data->get('inscription')->get('ally');
 	# AJOUT DU JOUEUR EN BASE DE DONNEE
 	$pl = new Player();
 
@@ -14,8 +16,12 @@ try {
 	$pl->setAvatar(CTR::$data->get('inscription')->get('avatar'));
 	$pl->setStatus(1);
 	
-	# modifier si negore
-	$pl->credit = 12500;
+	if ($faction == 3) {
+		# Négore, 12500 crédits de plus
+		$pl->credit = 25000;
+	} else {
+		$pl->credit = 12500;
+	}
 	$pl->uPlayer = Utils::now();
 
 	# modifier l'expérience de base
@@ -38,14 +44,13 @@ try {
 	$pl->setDLastConnection(Utils::now());
 	$pl->setDLastActivity(Utils::now());
 
-	$pl->setPremium(1);
+	$pl->setPremium(0);
 	$pl->setStatement(1);
 
 	ASM::$pam->add($pl);
 
 	# INITIALISATION DES RECHERCHES
 		# rendre aléatoire
-		# modifier les bonus
 	$rs = new Research();
 	$rs->rPlayer = $pl->getId();
 
@@ -54,10 +59,18 @@ try {
 	$rs->socialTech = 5;
 	$rs->informaticTech = 7;
 
-	$rs->naturalToPay = ResearchResource::getInfo($rs->naturalTech, 'level', 1, 'price');
-	$rs->lifeToPay = ResearchResource::getInfo($rs->lifeTech, 'level', 1, 'price');
-	$rs->socialToPay = ResearchResource::getInfo($rs->socialTech, 'level', 1, 'price');
-	$rs->informaticToPay = ResearchResource::getInfo($rs->informaticTech, 'level', 1, 'price');
+	if ($faction == 6) {
+		# Aphéra, 3 recherches niveau 2
+		$rs->naturalToPay = ResearchResource::getInfo($rs->naturalTech, 'level', 2, 'price');
+		$rs->lifeToPay = ResearchResource::getInfo($rs->lifeTech, 'level', 2, 'price');
+		$rs->socialToPay = ResearchResource::getInfo($rs->socialTech, 'level', 2, 'price');
+		$rs->informaticToPay = ResearchResource::getInfo($rs->informaticTech, 'level', 1, 'price');
+	} else {
+		$rs->naturalToPay = ResearchResource::getInfo($rs->naturalTech, 'level', 1, 'price');
+		$rs->lifeToPay = ResearchResource::getInfo($rs->lifeTech, 'level', 1, 'price');
+		$rs->socialToPay = ResearchResource::getInfo($rs->socialTech, 'level', 1, 'price');
+		$rs->informaticToPay = ResearchResource::getInfo($rs->informaticTech, 'level', 1, 'price');
+	}
 	ASM::$rsm->add($rs);
 
 	# CREATION DE LA BASE ORBITALE
@@ -80,8 +93,18 @@ try {
 
 	# création des premiers bâtiments
 		# + ajout des bonus de factions
-	$ob->setLevelGenerator(1);
-	$ob->setLevelRefinery(1);
+	if ($faction == 1) {
+		# Empire, générateur niveau 5
+		$ob->setLevelGenerator(5);
+	} else {
+		$ob->setLevelGenerator(1);
+	}
+	if ($faction == 5) {
+		# Nerve, raffinerie niveau 5
+		$ob->setLevelRefinery(5);
+	} else {
+		$ob->setLevelRefinery(1);	
+	}
 	$ob->setLevelDock1(0);
 	$ob->setLevelDock2(0);
 	$ob->setLevelDock3(0);
@@ -92,20 +115,47 @@ try {
 	$ob->updatePoints();
 
 	# initialisation des investissement
-		# + ajout des bonus de factions
 	$ob->setISchool(500);
 	$ob->setIAntiSpy(500);
 
 	# ajout de vaisseau en fonction de la faction
-	#$ob->setShipStorage();
+	if ($faction == 2) {
+		# Kovakh, 3 Méduses
+		$ob->setShipStorage(5, 3);
+	}
 
 	# initialisation des ressources
-		# + ajout des bonus de factions
 	$ob->setResourcesStorage(3300);
+
 
 	$ob->uOrbitalBase = Utils::now();
 	$ob->setDCreation(Utils::now());
 	ASM::$obm->add($ob);
+
+	# ajout d'un commandant
+	if ($faction == 4 || $faction == 7) {
+		$newCommander = new Commander();
+		if ($faction == 4) {
+			# Cardan, un commandant niveau 6
+			$newCommander->upExperience(rand(3000, 5000));
+		}
+		if ($faction == 7) {
+			# Synelle, un commandant niveau 7
+			$newCommander->upExperience(rand(6000, 9000));
+		}
+		$newCommander->rPlayer = $pl->getId();
+		$newCommander->rBase = $ob->getId();
+		$newCommander->palmares = 0;
+		$newCommander->statement = 0;
+		$newCommander->name = CheckName::randomize();
+		$newCommander->avatar = 't' . rand(1, 21) . '-c' . $faction;
+		$newCommander->dCreation = Utils::now();
+		$newCommander->uCommander = Utils::now();
+		$newCommander->setSexe(1);
+		$newCommander->setAge(rand(40, 70));
+
+		ASM::$com->add($newCommander);
+	}
 
 	# modification de la place
 	ASM::$plm->load(array('id' => $place));
