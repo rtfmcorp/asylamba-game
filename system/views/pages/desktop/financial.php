@@ -67,7 +67,7 @@ echo '<div id="content">';
 		$financial_totalTaxIn += $thisTaxIn;
 		$financial_totalTaxInBonus += $thisTaxIn * $taxBonus / 100;
 
-		$financial_totalTaxOut += (Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation(), ASM::$obm->get($i)->typeOfBase) + (Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation(), ASM::$obm->get($i)->typeOfBase) * $taxBonus / 100)) * ASM::$obm->get($i)->getTax() / 100;
+		$financial_totalTaxOut += ($financial_totalTaxIn + $financial_totalTaxInBonus) * ASM::$obm->get($i)->getTax() / 100;
 
 		$financial_totalInvest += ASM::$obm->get($i)->getISchool();
 		$financial_totalInvest += ASM::$obm->get($i)->getIAntiSpy();
@@ -92,7 +92,7 @@ echo '<div id="content">';
 	$financial_totalFess = $financial_totalInvest + $financial_totalInvestUni + $financial_totalTaxOut + $financial_totalMSFees + $financial_totalFleetFees;
 
 	$financial_benefice =  $financial_totalIncome - $financial_totalFess;
-	$financial_remains  = $financial_credit + $financial_benefice;
+	$financial_remains  = round($financial_credit) + round($financial_benefice);
 
 	# generalFinancial component
 	include COMPONENT . 'financial/generalFinancial.php';
