@@ -39,7 +39,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					if (CTR::$get->exist('redirect')) {
 						CTR::redirect('map/place-' . CTR::$get->get('redirect'));
 					}
-				}		
+				}
 			} else {
 				CTR::$alert->add('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction.', ALERT_STD_ERROR);
 			}
