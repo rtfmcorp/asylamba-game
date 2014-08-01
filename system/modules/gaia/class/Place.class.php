@@ -748,7 +748,7 @@ class Place {
 		if ($resourcesLooted > 0) {
 			$base->decreaseResources($resourcesLooted);
 			$commander->resources = $resourcesLooted;
-			LiveReport::$resources = $ressouresLooted;
+			LiveReport::$resources = $resourcesLooted;
 		}
 		ASM::$obm->changeSession($S_OBM1);
 	}
