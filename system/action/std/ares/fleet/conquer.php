@@ -32,7 +32,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 		$coloQuantity = 0;
 		$S_COM2 = ASM::$com->getCurrentSession();
 		ASM::$com->newSession();
-		ASM::$com->load(array('rPlayer' => CTR::$data->get('playerId'), 'statement' => Commander::MOVING));
+		ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => Commander::MOVING));
 		for ($i = 0; $i < ASM::$com->size(); $i++) { 
 			if (ASM::$com->get($i)->travelType == Commander::COLO) {
 				$coloQuantity++;
@@ -41,42 +41,51 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 		ASM::$com->changeSession($S_COM2);
 		if ($obQuantity + $msQuantity + $coloQuantity < $maxBasesQuantity) {
 
-			if (ASM::$com->size() > 0) {
-				if (ASM::$plm->size() > 0) {
-					$commander = ASM::$com->get();
-					$place = ASM::$plm->get();
+		$S_PAM1 = ASM::$pam->getCurrentSession();
+		ASM::$pam->newSession(ASM_UMODE);
+		ASM::$pam->load(array('id' => ASM::$plm->get()->rPlayer));
 
-					if (CTR::$data->get('playerInfo')->get('color') != $place->getPlayerColor()) {
-						ASM::$plm->load(array('id' => $commander->getRBase()));
-						$home = ASM::$plm->getById($commander->getRBase());
+			if (ASM::$pam->get()->level > 3) {
+				if (ASM::$com->size() > 0) {
+					if (ASM::$plm->size() > 0) {
+						$commander = ASM::$com->get();
+						$place = ASM::$plm->get();
 
-						$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
-						$duration = Game::getTimeToTravel($home, $place);
+						if (CTR::$data->get('playerInfo')->get('color') != $place->getPlayerColor()) {
+							ASM::$plm->load(array('id' => $commander->getRBase()));
+							$home = ASM::$plm->getById($commander->getRBase());
 
-						if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
-							$commander->dStart = Utils::now();
-							CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
+							$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
+							$duration = Game::getTimeToTravel($home, $place);
 
-							if (CTR::$get->exist('redirect')) {
-								CTR::redirect('map/place-' . CTR::$get->get('redirect'));
-							}
-						}		
+							if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
+								$commander->dStart = Utils::now();
+								CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
+
+								if (CTR::$get->exist('redirect')) {
+									CTR::redirect('map/place-' . CTR::$get->get('redirect'));
+								}
+							}		
+						} else {
+							CTR::$alert->add('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction.', ALERT_STD_ERROR);
+						}
 					} else {
-						CTR::$alert->add('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction.', ALERT_STD_ERROR);
+						CTR::$alert->add('Ce lieu n\'existe pas.', ALERT_STD_ERROR);
 					}
 				} else {
-					CTR::$alert->add('Ce lieu n\'existe pas.', ALERT_STD_ERROR);
+					CTR::$alert->add('Ce commandant ne vous appartient pas ou n\'existe pas.', ALERT_STD_ERROR);
 				}
 			} else {
-				CTR::$alert->add('Ce commandant ne vous appartient pas ou n\'existe pas.', ALERT_STD_ERROR);
+				CTR::$alert->add('Vous ne pouvez pas conquérir un joueur de niveau 3 ou moins.', ALERT_STD_ERROR);
 			}
 			ASM::$com->changeSession($S_COM1);
 			ASM::$plm->changeSession($S_PLM1);
-		}else {
-			CTR::$alert->add('Vous avez assez de conquête en cours.', ALERT_STD_ERROR);
+			ASM::$plm->changeSession($S_PAM1);
+		} else {
+			CTR::$alert->add('Vous avez assez de conquête en cours ou un niveau d\'administration étendue trop faible.', ALERT_STD_ERROR);
 		}
 	} else {
-		CTR::$alert->add('Vous devez augmenter votre technologie administration étendue.', ALERT_STD_ERROR);
+		CTR::$alert->add('Vous devez débloquer la technologie de conquête.', ALERT_STD_ERROR);
 	}
 } else {
 	CTR::$alert->add('Manque de précision sur le commandant ou la position.', ALERT_STD_ERROR);
