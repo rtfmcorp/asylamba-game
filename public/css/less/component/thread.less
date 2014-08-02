@@ -1,0 +1,107 @@
+.component.thread {
+	.message {
+		position: relative;
+		margin: 20px 10px 10px 10px; padding: 6px 8px;
+		background: black;
+		line-height: 140%;
+		text-align: justify;
+		color: #efefef;
+		border-top: solid 1px #4F4F4F;
+		border-right: solid 1px #202020;
+		border-left: solid 1px #202020;
+		border-bottom: solid 3px #4F4F4F;
+
+		&:before {
+			content: '';
+			position: absolute;
+			width: 0; height: 0; top: -12px;
+			border-style: solid;
+			border-width: 6px;
+			border-color: transparent transparent #4F4F4F transparent;
+		}
+		&.left:before { left: 20px; }
+		&.right:before { right: 20px; }
+		&.color1 { border-bottom: solid 3px @light-1; }
+		&.color2 { border-bottom: solid 3px @light-2; }
+		&.color3 { border-bottom: solid 3px @light-3; }
+		&.color4 { border-bottom: solid 3px @light-4; }
+		&.color5 { border-bottom: solid 3px @light-5; }
+		&.color6 { border-bottom: solid 3px @light-6; }
+		&.color7 { border-bottom: solid 3px @light-7; }
+
+		em.name   {
+			padding: 0 0 5px 0;
+			display: block;
+			color: #CCC;
+		}
+
+		em.option {
+			padding: 5px 0 0 0;
+			text-align: right;
+			display: block;
+			color: #CCC;
+		}
+
+		.icon-color {
+			width: 15px;
+		}
+
+		a {
+			color: #EFEFEF;
+
+			&.color1 { color: @light-1; }
+			&.color2 { color: @light-2; }
+			&.color3 { color: @light-3; }
+			&.color4 { color: @light-4; }
+			&.color5 { color: @light-5; }
+			&.color6 { color: @light-6; }
+			&.color7 { color: @light-7; }
+		}
+	}
+
+	form {
+		display: none;
+	}
+
+	p.input {
+		position: relative;
+		background: white;
+		padding: 10px;
+		border-radius: 3px;
+
+		&:before {
+			content: '';
+			position: absolute;
+			width: 0; height: 0; top: -12px;
+			border-style: solid;
+			border-width: 6px;
+			border-color: transparent transparent white transparent;
+			left: 20px;
+		}
+	}
+
+	textarea {
+		display: block;
+		width: 100%;
+		padding: 0; margin: 0;
+		border-radius: 0;
+		border: none;
+		font-family: inherit;
+		font-size: 13px;
+		max-width: 100%; min-width: 100%;
+		height: 120px;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

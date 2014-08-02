@@ -1,0 +1,253 @@
+.component .situation-content {
+	display: block;
+	width: 100%; height: 500px;
+	border-bottom: solid 1px #0A0A0A;
+
+	.line-help {
+		position: absolute;
+		display: block;
+		width: 25px; height: 25px; line-height: 25px;
+		text-align: center;
+		border-radius: 100%;
+		background: @dark;
+
+		&.line-1 { top: 55px; left: 190px; }
+		&.line-2 { top: 145px; left: 406px; }
+	}
+
+	.toolbar {
+		position: absolute;
+		top: 30px; right: 30px;
+		box-shadow: 0 0 0 4px rgba(255, 255, 255, .1);
+		border-radius: 3px;
+		background: @medium;
+
+		a {
+			display: inline-block;
+			line-height: 32px;
+			padding: 0 15px;
+			border-right: solid 1px black;
+			text-decoration: none;
+			color: white;
+
+			&:hover, &:focus {
+				background: rgba(0, 0, 0, .25);
+			}
+		}
+
+		form {
+			display: inline-block;
+		}
+
+		input {
+			height: 32px;
+			border: none;
+			background: none;
+			color: white;
+			padding: 0 15px;
+			font-size: inherit;
+
+			&:focus {
+				background: rgba(0, 0, 0, .25);
+			}
+
+			&.button {
+				background: url('src/desktop/common/edit.png') no-repeat center;
+			}
+
+			&.button:focus {
+				background: url('src/desktop/common/edit.png') no-repeat center rgba(0, 0, 0, .25);
+			}
+		}
+	}
+
+	.info {
+		position: absolute;
+		display: block;
+		width: 200px;
+		font-size: 12px;
+		color: #efefef;
+		line-height: 18px;
+
+		strong {
+			color: white;
+			font-size: 14px;
+		}
+	}
+
+	.commander {
+		position: absolute;
+		display: block;
+		text-decoration: none;
+
+		&.empty {
+			color: #CCC;
+		}
+
+		&.position-1-1 { top: 135px; left: 127px; }
+		&.position-1-2 { top: 272px; left: 100px; }
+		&.position-1-3 { top: 415px; left: 127px; }
+
+		&.position-2-1 { top: 215px; left: 352px; }
+		&.position-2-2 { top: 272px; left: 345px; }
+		&.position-2-3 { top: 330px; left: 352px; }
+
+		img {
+			width: 40px; padding: 6px;
+			border: solid 1px #202020;
+			background: black;
+			border-radius: 100%;
+
+			.transition(all linear 250ms);
+		}
+
+		&.full img { box-shadow: 0 0 4px white, 0 0 0 2px @medium; }
+		&.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px @medium; }
+
+		.info {
+			top: 8px; left: 65px;
+			width: 160px;
+		}
+	}
+
+	.stellar {
+		position: absolute;
+		display: block;
+		top: 180px; left: 560px;
+
+		img {
+			width: 220px; padding: 6px;
+			border: solid 1px #202020;
+			background: black;
+			border-radius: 100%;
+		}
+
+		.info {
+			font-size: 12px;
+			border-left: solid 1px #202020;
+
+			&.top {
+				bottom: 215px; left: 50px;
+				padding: 0 0 30px 10px;
+
+				strong {
+					font-size: 20px;
+				}
+			}
+
+			&.bottom {
+				top: 225px; left: 160px;
+				padding: 10px 0 0 10px;
+			}
+
+			&.middle {
+				top: 20px; left: 182px;
+				padding: 10px 0 0 50px;
+				border: none;
+				border-top: solid 1px #202020;
+			}
+		}
+	}
+}
+
+.component .situation-info {
+	display: table;
+	width: 100%;
+	border-top: solid 1px #202020;
+	border-bottom: solid 1px #202020;
+	background: black;
+
+	.item {
+		display: table-cell;
+		padding: 10px;
+		border-top: solid 8px #202020;
+		border-left: solid 1px #202020;
+
+		.value {
+			font-size: 26px;
+			font-weight: bold;
+			display: block;
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.component .build-item.base-type .desc {
+	margin: 10px 0 0 0; padding: 15px;
+	font-size: 13px;
+	border-top: solid 1px #202020;
+	border-bottom: solid 1px #202020;
+	background: #0A0A0A;
+}
+
+.component .build-item.base-type .list-choice {
+	position: relative;
+	height: 140px;
+	background: url('src/desktop/base/type-base.png') no-repeat center;
+	margin: 0;
+	border-bottom: solid 1px #202020;
+}
+
+.component .build-item.base-type .list-choice button {
+	position: absolute;
+	padding: 0; border: none;
+	background: transparent;
+	cursor: pointer;
+}
+.component .build-item.base-type .list-choice button.item-1 { top: 35px; left: 5px; }
+.component .build-item.base-type .list-choice button.item-2 { top: 5px; left: 107px; }
+.component .build-item.base-type .list-choice button.item-3 { bottom: 5px; left: 107px; }
+.component .build-item.base-type .list-choice button.item-4 { top: 35px; right: 5px; }
+
+.component .build-item.base-type .list-choice button img {
+	display: block;
+	padding: 8px;
+	width: 40px;
+	border: solid 1px #202020;
+	border-radius: 100%;
+	background: black;
+}
+.color1 .component .build-item.base-type .list-choice button.done img { box-shadow: 0 0 4px white, 0 0 0 2px #6e161b; }
+.color2 .component .build-item.base-type .list-choice button.done img { box-shadow: 0 0 4px white, 0 0 0 2px #1f1471; }
+.color3 .component .build-item.base-type .list-choice button.done img { box-shadow: 0 0 4px white, 0 0 0 2px #dbb200; }
+.color4 .component .build-item.base-type .list-choice button.done img { box-shadow: 0 0 4px white, 0 0 0 2px #5a1072; }
+.color5 .component .build-item.base-type .list-choice button.done img { box-shadow: 0 0 4px white, 0 0 0 2px #2c7915; }
+.color6 .component .build-item.base-type .list-choice button.done img { box-shadow: 0 0 4px white, 0 0 0 2px #076b87; }
+.color7 .component .build-item.base-type .list-choice button.done img { box-shadow: 0 0 4px white, 0 0 0 2px #67331d; }
+
+.component .build-item.base-type .desc-choice {
+	display: none;
+}
+
+.component .build-item.base-type .desc-choice h4 {
+	border-bottom: solid 1px #202020;
+	padding: 0 0 5px 0;
+}
+
+.component .build-item.base-type .desc-choice p {
+	text-align: left;
+	color: #CCC !important;
+}
+
+.component .build-item.base-type .desc-choice p strong {
+	display: block;
+	color: white;
+}
+
+.component .build-item.base-type .desc-choice p strong.short {
+	display: inline-block;
+	width: 100px;
+}

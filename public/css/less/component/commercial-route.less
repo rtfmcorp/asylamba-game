@@ -1,0 +1,58 @@
+.component.rc .rc {
+	position: relative;
+	margin: 20px 10px 20px 30px;
+	border-left: solid 1px #CCC;
+	padding: 0 10px;
+	height: 380px;
+	color: #CCC;
+
+	&.no-tax {
+		margin: 20px 10px 20px 30px;
+		border-left: dashed 1px #4F4F4F;
+		padding: 0 10px;
+		color: #CCC;
+	}
+
+	a, strong {
+		color: white;
+	}
+
+	.icon-color {
+		width: 20px;
+	}
+	.base {
+		position: relative;
+		padding: 15px 0 15px 40px;
+		height: 50px;
+		
+		&:last-child {
+			position: absolute;
+			bottom: 0px;
+		}
+	}
+
+	.place {
+		position: absolute;
+		top: 0px; left: -50px;
+		width: 78px; height: 78px;
+		border: solid 1px #202020;
+		background: black;
+		border-radius: 100%;
+	}
+
+	.general {
+		list-style: none inset;
+		margin: 10px 0; padding: 0;
+
+		li {
+			margin: 10px 0;
+			list-style-type: none;
+
+			strong {
+				display: block;
+				font-size: 20px;
+				font-weight: bold;
+			}
+		}
+	}
+}

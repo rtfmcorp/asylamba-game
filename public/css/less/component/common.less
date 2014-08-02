@@ -470,22 +470,353 @@
 	}
 }
 
-.component {
-	.more-item {
-		display: block;
-		margin: 10px 10px 5px;
-		line-height: 34px;
-		padding: 0 12px;
-		background: #0A0A0A;
-		color: #4F4F4F;
-		text-decoration: none;
+.component .more-item {
+	display: block;
+	margin: 10px 10px 5px;
+	line-height: 34px;
+	padding: 0 12px;
+	background: #0A0A0A;
+	color: #4F4F4F;
+	text-decoration: none;
+	border: solid 1px #202020;
+	border-radius: 3px;
+	
+	&:hover, &:focus, &:active {
+		color: #CCC;
+		box-shadow: inset 0 0 5px black;
+	}
+}
+
+.component .nav-element {
+	position: relative;
+	display: block;
+	margin: 10px; height: 70px;
+	border: solid 1px #0A0A0A;
+	border-top: solid 1px #202020;
+	background: black;
+	color: white;
+
+	img {
+		position: absolute;
+		top: 5px; left: 5px;
+		padding: 8px;
+		height: 40px;
 		border: solid 1px #202020;
-		border-radius: 3px;
-		
-		&:hover, &:focus, &:active {
-			color: #CCC;
-			box-shadow: inset 0 0 5px black;
-		}
+		background: #0A0A0A;
+		border-radius: 100%;
 	}
 
+	&.active {
+		background: @medium;
+	}
+
+	.active img {
+		background: black;
+	}
+
+	strong {
+		position: absolute;
+		top: 8px; left: 70px;
+		color: white;
+		font-weight: bold;
+		font-size: 17px;
+	}
+
+	em {
+		position: absolute;
+		top: 32px; left: 70px;
+		color: white;
+		font-weight: bold;
+		font-size: 12px;
+		font-style: normal;
+		color: #efefef;
+	}
+}
+
+.component hr {
+	border: none;
+	border-bottom: dashed 1px #202020;
+	margin: 0 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.component .build-item {
+	position: relative;
+	margin: 10px;
+	background: black;
+	border: solid 1px #0A0A0A;
+	border-top: solid 1px #202020;
+	width: 278px;
+}
+
+.component .build-item.large {
+	width: 578px;
+}
+
+.component .build-item .name {
+	position: relative;
+	height: 40px;
+	padding: 5px 5px 5px 90px;
+}
+.component .build-item .name img {
+	z-index: 20;
+	position: absolute;
+	top: -10px; left: 5px;
+	width: 60px; padding: 8px;
+	border: solid 1px #202020;
+	border-radius: 100%;
+	background: black;
+}
+.component .build-item.disable .name img { opacity: .50; }
+
+.component .build-item .name strong {
+	display: block;
+	font-size: 20px;
+}
+
+.component .build-item.disable .name strong {
+	color: #4F4F4F;
+}
+
+.component .build-item .level {
+	display: block;
+	position: absolute;
+	width: 22px; line-height: 22px;
+	text-align: center;
+	font-size: 12px;
+	border-radius: 100%;
+	top: 38px; left: 58px;
+	border: solid 1px white;
+	z-index: 22;
+	background: black;
+}
+
+.color1 .component .build-item .level { background: #6e161b; }
+.color2 .component .build-item .level { background: #1f1471; }
+.color3 .component .build-item .level { background: #dbb200; }
+.color4 .component .build-item .level { background: #5a1072; }
+.color5 .component .build-item .level { background: #2c7915; }
+.color6 .component .build-item .level { background: #076b87; }
+.color7 .component .build-item .level { background: #67331d; }
+
+.component .build-item .info {
+	display: none;
+	position: absolute;
+	width: 20px; line-height: 20px;
+	text-align: center;
+	font-size: 16px;
+	text-decoration: none;
+	border-radius: 3px;
+	top: 5px; right: 5px;
+	background: black;
+	color: white;
+}
+.component .build-item.large .info {
+	top: 75px; right: 25px;
+}
+.color1 .component .build-item .info { background: #6e161b; }
+.color2 .component .build-item .info { background: #1f1471; }
+.color3 .component .build-item .info { background: #dbb200; }
+.color4 .component .build-item .info { background: #5a1072; }
+.color5 .component .build-item .info { background: #2c7915; }
+.color6 .component .build-item .info { background: #076b87; }
+.color7 .component .build-item .info { background: #67331d; }
+
+.component .build-item .name-commander {
+	margin: 10px 10px 0 10px;
+	height: 40px; padding: 0 10px;
+	border: none;
+	background: white;
+	border-radius: 3px;
+	width: 240px;
+	text-align: center;
+	font-size: 16px;
+}
+
+.component .build-item .button {
+	display: block;
+	margin: 10px; padding: 5px 10px;
+	width: 240px; line-height: 20px;
+	text-align: right;
+	color: white;
+	text-decoration: none;
+	border-radius: 3px;
+	background: #202020;
+	box-shadow: inset 0 0 2px black;
+	border: none;
+	cursor: pointer;
+	min-height: 36px;
+}
+.component .build-item button.button {
+	width: 260px;
+}
+.component .build-item.large .button {
+	display: block;
+	top: -3px; right: 0;
+	line-height: 18px;
+	width: 540px;
+	min-height: 36px;
+}
+.component .build-item .button:hover { box-shadow: inset 0 0 6px black; }
+.color1 .component .build-item .button { background: #6e161b; }
+.color2 .component .build-item .button { background: #1f1471; }
+.color3 .component .build-item .button { background: #dbb200; }
+.color4 .component .build-item .button { background: #5a1072; }
+.color5 .component .build-item .button { background: #2c7915; }
+.color6 .component .build-item .button { background: #076b87; }
+.color7 .component .build-item .button { background: #67331d; }
+.color1 .component .build-item .button:hover { background: #b01e2d; }
+.color2 .component .build-item .button:hover { background: #2f23c0; }
+.color3 .component .build-item .button:hover { background: #ffdb0f; }
+.color4 .component .build-item .button:hover { background: #a935c7; }
+.color5 .component .build-item .button:hover { background: #57c632; }
+.color6 .component .build-item .button:hover { background: #05bed7; }
+.color7 .component .build-item .button:hover { background: #ac5832; }
+.component .build-item .button.disable {
+	background: #202020;
+	cursor: default;
+}
+.component .build-item.disable .button.disable {
+	color: #696969;
+}
+.component .build-item .button.disable:hover {
+	background: #202020;
+	box-shadow: inset 0 0 2px black;
+}
+.component .build-item .button .icon-color {
+	width: 14px;
+}
+
+.component .build-item .ship-pack {
+	z-index: 10;
+	position: absolute;
+	bottom: 15px; left: 15px;
+	width: 60px; height: 40px;
+	padding: 0; margin: 0;
+	border: none;
+	background: white;
+	text-align: center;
+	font-size: 24px;
+	font-weight: bold;
+	border-radius: 3px;
+	box-shadow: inset 0 0 0 3px #CCC;
+}
+
+.component .build-item .ship-illu {
+	width: 260px;
+	margin: 5px 10px;
+	overflow: hidden;
+}
+.component .build-item.large .ship-illu {
+	width: 560px;
+	margin-top: 10px;
+}
+
+.component .build-item .ship-illu img {
+	width: 100%;
+}
+
+.component.panel-info h4 {
+	font-size: 20px;
+}
+
+.component.panel-info .remove-info {
+	display: block;
+	position: absolute;
+	top: 2px; right: 10px;
+	line-height: 20px; width: 20px;
+	text-align: center;
+	text-decoration: none;
+	color: white;
+	border-radius: 3px;
+}
+.color1 .component.panel-info .remove-info { background: #510816; }
+.color2 .component.panel-info .remove-info { background: #0c0d44; }
+.color3 .component.panel-info .remove-info { background: #b17a00; }
+.color4 .component.panel-info .remove-info { background: #310948; }
+.color5 .component.panel-info .remove-info { background: #24500a; }
+.color6 .component.panel-info .remove-info { background: #004948; }
+.color7 .component.panel-info .remove-info { background: #401b13; }
+
+.component.panel-info .table {
+	margin: 10px;
+}
+
+.component.panel-info .table table {
+	width: 100%;
+	text-align: right;
+	border-collapse: collapse;
+	background: black;
+}
+
+.component.panel-info .table td {
+	border: solid 1px #202020;
+	padding: 6px 8px;
+}
+.component.panel-info .table tr.small-grey {
+	background: #0A0A0A;
+}
+.component.panel-info .table tr.active td {
+	background: #0A0A0A;
+	border-bottom: solid 1px #4F4F4F;
+}
+
+.component.panel-info .table .icon-color {
+	width: 12px;
+}
+
+.component.panel-info .illu {
+	margin: 0 10px;
+	box-shadow: inset 0 0 5px black;
+}
+
+.component.panel-info .skill-box {
+	position: relative;
+	margin: 0 10px; padding: 5px 10px;
+	border: solid 1px #0A0A0A;
+	border-top: solid 1px #202020;
+	background: black;
+}
+.component.panel-info .skill-box.grey {
+	border-left: solid 10px #4F4F4F !important;
+}
+
+.component.panel-info .skill-box .label { display: block; }
+.component.panel-info .skill-box .value {
+	display: block;
+	font-size: 18px;
+	font-weight: bold;
+	margin: 4px 0 0 0;
+}
+.component.panel-info .skill-box .value .icon-color {
+	width: 18px;
+}
+
+.component.panel-info .skill-box .progress-bar {
+	margin: 6px 0 2px 0;
 }

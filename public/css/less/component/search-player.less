@@ -1,0 +1,141 @@
+.component.search-player {
+	position: relative;
+	background: transparent !important;
+
+	.box {
+		position: absolute;
+		top: 60px; left: 50px;
+		width: 440px;
+		color: white;
+	}
+
+	.top {
+		background: rgba(0, 0, 0, .4);
+		padding: 10px;
+		border-radius: 3px 3px 0 0;
+
+		label {
+			display: block;
+			font-size: 16px;
+		}
+
+		input {
+			display: block;
+			border: none;
+			height: 40px; width: 400px;
+			padding: 0 10px; margin: 10px 0 0 0;
+			font-size: 20px;
+			color: #202020;
+			border-radius: 3px;
+		}
+	}
+
+	.center {
+		background: rgba(0, 0, 0, .8);
+		padding: 10px 25px 10px 10px;
+		min-height: 140px;
+
+		.avatar {
+			float: left; position: relative;
+			left: -20px;
+			width: 120px;
+			padding: 8px;
+			border: solid 1px #202020;
+			border-radius: 100%;
+			background: #0A0A0A;
+		}
+
+		.right {
+			margin-left: 140px;
+		}
+
+		h1 { margin: 10px 0 0 0; padding: 0; }
+		hr { margin: 10px 0; border-color: #4F4F4F; }
+		p {
+			margin: 5px 0;
+			padding: 0;
+
+			span {
+				display: inline-block;
+				background: red;
+				line-height: 28px; padding: 0 10px;
+				border: solid 1px rgba(255, 255, 255, .5);
+				border-right: none;
+
+				&:first-child {
+					border-radius: 3px 0 0 3px;
+				}
+				&:last-child {
+					border-radius: 0 3px 3px 0;
+					border: solid 1px rgba(255, 255, 255, .5);
+				}
+			}
+		}
+	}
+
+	&.color1 .center .avatar { box-shadow: 0 0 4px white, 0 0 0 2px @medium-1; }
+	&.color2 .center .avatar { box-shadow: 0 0 4px white, 0 0 0 2px @medium-2; }
+	&.color3 .center .avatar { box-shadow: 0 0 4px white, 0 0 0 2px @medium-3; }
+	&.color4 .center .avatar { box-shadow: 0 0 4px white, 0 0 0 2px @medium-4; }
+	&.color5 .center .avatar { box-shadow: 0 0 4px white, 0 0 0 2px @medium-5; }
+	&.color6 .center .avatar { box-shadow: 0 0 4px white, 0 0 0 2px @medium-6; }
+	&.color7 .center .avatar { box-shadow: 0 0 4px white, 0 0 0 2px @medium-7; }
+	
+	&.color1 .center p span  { background: @medium-1; }
+	&.color2 .center p span  { background: @medium-2; }
+	&.color3 .center p span  { background: @medium-3; }
+	&.color4 .center p span  { background: @medium-4; }
+	&.color5 .center p span  { background: @medium-5; }
+	&.color6 .center p span  { background: @medium-6; }
+	&.color7 .center p span  { background: @medium-7; }
+
+	.bottom {
+		background: rgba(0, 0, 0, .4);
+		border-radius: 0 0 3px 3px;
+
+		.overflow {
+			overflow: hidden;
+			padding: 10px; height: 70px;
+
+			.container {
+				position: relative; left: 0;
+				width: 10000px;
+			}
+		}
+
+		.base {
+			display: inline-block;
+			vertical-align: top;
+			margin: 0 10px 0 0;
+			height: 70px;
+
+			img {
+				width: 70px;
+				float: left;
+				background: #0A0A0A;
+				border-radius: 100%;
+			}
+			
+			.right {
+				display: none;
+				width: 185px; height: 100%;
+				border-radius: 80px;
+				padding: 0 0 0 75px;
+				background: rgba(0, 0, 0 ,.5);
+
+				* {
+					display: block;
+					line-height: 18px;
+				}
+
+				strong {
+					padding: 8px 0 0 0;
+				}
+
+				a {
+					color: white;
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,100 @@
+.notif {
+	position: relative;
+	margin: 10px;
+	background: black;
+	border-top: solid 1px #4F4F4F;
+	border-right: solid 1px #202020;
+	border-left: solid 1px #202020;
+
+	h4 {
+		position: relative;
+		overflow: hidden;
+		margin: 0;
+		padding: 0 10px;
+		font-size: 14px;
+		line-height: 30px;
+		border-bottom: solid 1px #202020;
+		background: #0A0A0A;
+		font-weight: normal;
+		cursor: pointer;
+		color: white;
+	}
+
+	&.unreaded h4:before {
+		position: absolute;
+		content: '';
+		width: 40px; height: 40px;
+		background: white;
+		top: -5px; right: -15px;
+		background: @light;
+
+		.tranform(100deg);
+	}
+
+	.content {
+		display: none;
+		padding: 6px 8px;
+		line-height: 140%;
+		text-align: justify;
+		color: #efefef;
+
+		p {
+			margin: 0;
+		}
+
+		hr {
+			border: none; background: none;
+			border-bottom: dashed 1px #202020;
+			margin: 5px 0;
+		}
+
+		a {
+			color: white;
+		}
+
+		.box-resource {
+			position: relative;
+			display: block;
+			margin: 5px 0; padding: 5px 5px 5px 40px;
+
+			img {
+				position: absolute;
+				top: 6px; left: 0;
+				border: solid 4px #4f4f4f;
+				border-radius: 100%;
+
+				border-color: @medium;
+			}
+
+			.label {
+				display: block;
+				font-size: 12px;
+			}
+
+			.value {
+				display: block;
+				font-size: 18px;
+				font-weight: bold;
+			}
+		}
+	}
+
+	.footer {
+		display: none;
+		margin: 0;
+		padding: 0 10px;
+		line-height: 18px;
+		padding: 5px 5px;
+		border-top: solid 1px #202020;
+		font-style: italic;
+		text-align: right;
+		color: #CCC;
+		
+		a {
+			color: #CCC;
+		}
+	}
+}
+
+.notif.open .content { display: block; }
+.notif.open .footer  { display: block; }
