@@ -185,7 +185,7 @@ class OrbitalBase {
 	public function setRealDock2Level($var) { $this->realDock2Level = $var; }
 	public function setRealDock3Level($var) { $this->realDock3Level = $var; }
 	public function setRealTechnosphereLevel($var) { $this->realTechnosphereLevel = $var; }
-	public function setrealCommercialPlateformeLevel($var) { $this->realCommercialPlateformeLevel = $var; }
+	public function setRealCommercialPlateformeLevel($var) { $this->realCommercialPlateformeLevel = $var; }
 	public function setRealGravitationalModuleLevel($var) { $this->realGravitationalModuleLevel = $var; }
 
 	public function setBuildingLevel($buildingNumber, $level) {
