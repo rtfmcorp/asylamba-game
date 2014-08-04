@@ -239,7 +239,11 @@ echo '<div id="tools">';
 					if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
 						$commander = CTR::$data->get('playerEvent')->get($i);
 						
-						echo '<div class="item active progress" data-progress-reload="false" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $commander->get('eventInfo')->get('dArrival'), 's') . '" data-progress-total-time="' . Utils::interval($commander->get('eventInfo')->get('dStart'), $commander->get('eventInfo')->get('dArrival'), 's') . '">';
+						echo '<div class="item active progress" ';
+							echo 'data-progress-reload="false" ';
+							echo 'data-progress-output="lite" ';
+							echo 'data-progress-current-time="' . Utils::interval(Utils::now(), $commander->get('eventInfo')->get('dArrival'), 's') . '" ';
+							echo 'data-progress-total-time="' . Utils::interval($commander->get('eventInfo')->get('dStart'), $commander->get('eventInfo')->get('dArrival'), 's') . '">';
 							echo  '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->get('eventInfo')->get('avatar') . '.png" alt="" />';
 							echo '<strong>' . CommanderResources::getInfo($commander->get('eventInfo')->get('level'), 'grade') . ' ' . $commander->get('eventInfo')->get('name') . '</strong>';
 							echo '<em>→ ';
@@ -278,22 +282,25 @@ echo '<div id="tools">';
 					if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_OUTGOING_ATTACK) {
 						$commander = CTR::$data->get('playerEvent')->get($i);
 
-						echo '<div class="item active progress" data-progress-reload="false" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $commander->get('eventInfo')->get('dArrival'), 's') . '" data-progress-total-time="' . Utils::interval($commander->get('eventInfo')->get('dStart'), $commander->get('eventInfo')->get('dArrival'), 's') . '">';
+						echo '<div class="item active progress" ';
+							echo 'data-progress-reload="false" ';
+							echo 'data-progress-output="lite" ';
+							echo 'data-progress-current-time="' . Utils::interval(Utils::now(), $commander->get('eventInfo')->get('dArrival'), 's') . '" ';
+							echo 'data-progress-total-time="' . Utils::interval($commander->get('eventInfo')->get('dStart'), $commander->get('eventInfo')->get('dArrival'), 's') . '">';
 							echo  '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->get('eventInfo')->get('avatar') . '.png" alt="" />';
 							echo '<strong>' . CommanderResources::getInfo($commander->get('eventInfo')->get('level'), 'grade') . ' ' . $commander->get('eventInfo')->get('name') . '</strong>';
-							echo '<em>→ ';
+							echo '<em>';
 								switch ($commander->get('eventInfo')->get('travelType')) {
-									case Commander::MOVE: echo 'déplacement vers ' . $commander->get('eventInfo')->get('nDestination'); break;
-									case Commander::LOOT: echo 'pillage de ' . $commander->get('eventInfo')->get('nDestination'); break;
-									case Commander::COLO: echo 'colonisation de ' . $commander->get('eventInfo')->get('nDestination'); break;
+									case Commander::MOVE: echo 'déplacement vers ' . $commander->get('eventInfo')->get('nArrival'); break;
+									case Commander::LOOT: echo 'pillage de ' . $commander->get('eventInfo')->get('nArrival'); break;
+									case Commander::COLO: echo 'colonisation de ' . $commander->get('eventInfo')->get('nArrival'); break;
 									case Commander::BACK: echo 'retour vers ' . $commander->get('eventInfo')->get('nStart'); break;
 									default: echo 'autre'; break;
 								}
 							echo '</em>';
 							echo '<em><span class="progress-text"></span></em>';
 							echo '<span class="progress-container">';
-								echo '<span class="progress-bar">';
-								echo '</span>';
+								echo '<span class="progress-bar"></span>';
 							echo '</span>';
 						echo '</div>';
 					}
