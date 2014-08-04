@@ -77,6 +77,7 @@ echo '<div id="tools">';
 
 	# overboxes
 	echo '<div class="overbox left-pic" id="tools-refinery">';
+		echo '<h2>Raffinerie</h2>';
 		echo '<div class="overflow">';
 			echo '<div class="number-box">';
 				echo '<span class="label">production par relève</span>';
@@ -99,6 +100,7 @@ echo '<div id="tools">';
 	echo '</div>';
 
 	echo '<div class="overbox left-pic" id="tools-generator">';
+		echo '<h2>Générateur</h2>';
 		echo '<div class="overflow">';
 			$S_BQM1 = ASM::$bqm->getCurrentSession();
 			ASM::$bqm->changeSession($currentBase->buildingManager);
@@ -131,6 +133,7 @@ echo '<div id="tools">';
 	echo '</div>';
 
 	echo '<div class="overbox left-pic" id="tools-dock1">';
+		echo '<h2>Chantier Alpha</h2>';
 		echo '<div class="overflow">';
 			$S_SQM1 = ASM::$sqm->getCurrentSession();
 			ASM::$sqm->changeSession($currentBase->dock1Manager);
@@ -162,6 +165,7 @@ echo '<div id="tools">';
 	echo '</div>';
 
 	echo '<div class="overbox left-pic" id="tools-dock2">';
+		echo '<h2>Chantier de ligne</h2>';
 		echo '<div class="overflow">';
 			$S_SQM1 = ASM::$sqm->getCurrentSession();
 			ASM::$sqm->changeSession($currentBase->dock2Manager);
@@ -193,6 +197,7 @@ echo '<div id="tools">';
 	echo '</div>';
 
 	echo '<div class="overbox left-pic" id="tools-technosphere">';
+		echo '<h2>Technosphère</h2>';
 		echo '<div class="overflow">';
 			$S_TQM1 = ASM::$tqm->getCurrentSession();
 			ASM::$tqm->changeSession($currentBase->technoQueueManager);
