@@ -30,7 +30,6 @@ abstract class CTR {
 		'diary' => array('diary', 'Journal'),
 
 		'bases' => array('bases', 'Vos Bases'),
-			'base' => array('base', 'Base'),
 
 		'map' => array('map', 'Carte'),
 
@@ -174,6 +173,8 @@ abstract class CTR {
 	}
 
 	public static function getInclude() {
+		ob_start();
+
 		if (self::$page == 'action') {
 			include ACTION . 'main.php';
 		} elseif (self::$page == 'ajax') {
@@ -257,6 +258,8 @@ abstract class CTR {
 				header('Location: ' . APP_ROOT . self::$redirect);
 			}
 			exit();
+		} else {
+			ob_end_flush();
 		}
 	}
 }
