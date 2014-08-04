@@ -44,7 +44,7 @@ echo '<div id="content">';
 	} elseif (CTR::$get->get('view') == 'technosphere' && $base->levelTechnosphere > 0) {
 		$ob_tech = $base;
 		include COMPONENT . 'bases/ob/technosphere.php';
-	} elseif (CTR::$get->get('view') == 'commercialplateforme' && $base->levelCommercialPlateform > 0) {
+	} elseif (CTR::$get->get('view') == 'commercialplateforme' && $base->levelCommercialPlateforme > 0) {
 		$ob_compPlat = $base;
 		include COMPONENT . 'bases/ob/comPlat.php';
 	} elseif (CTR::$get->get('view') == 'school') {
