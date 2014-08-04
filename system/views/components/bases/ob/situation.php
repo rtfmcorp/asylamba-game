@@ -214,7 +214,7 @@ echo '<div class="component space size3">';
 						echo 'coordonnées<br />';
 						echo '<strong>' . Game::formatCoord($ob_obSituation->getXSystem(), $ob_obSituation->getYSystem(), $ob_obSituation->getPosition(), $ob_obSituation->getSector()) . '</strong>';
 					echo '</div>';
-					echo '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($ob_obSituation->getPlanetPopulation()) . '.png" alt="planète" />';
+					echo '<img src="' . MEDIA . 'orbitalbase/place1-' . Game::getSizeOfPlanet($ob_obSituation->getPlanetPopulation()) . '.png" alt="planète" />';
 					echo '<div class="info bottom">';
 						echo '<strong>' . Format::numberFormat($ob_obSituation->getPlanetPopulation() * 1000000) . '</strong> habitants<br />';
 						echo $ob_obSituation->getPlanetResources() . ' % coeff. ressource<br />';
