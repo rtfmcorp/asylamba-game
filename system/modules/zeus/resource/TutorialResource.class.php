@@ -40,7 +40,7 @@ class TutorialResource {
 
 	public static function getInfo($id, $info) {
 		if ($id <= count(self::$steps)) {
-			if (in_array($info, array('id', 'title', 'description', 'experienceReward'))) {
+			if (in_array($info, array('id', 'title', 'description', 'experienceReward', 'creditReward', 'resourceReward', 'shipReward'))) {
 				return self::$steps[$id - 1][$info];
 			} else {
 				return FALSE;

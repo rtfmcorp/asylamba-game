@@ -1,5 +1,6 @@
 <?php
 include_once ZEUS;
+include_once ATHENA;
 # validate tutorial step action
 
 $playerId = CTR::$data->get('playerId');
@@ -13,8 +14,88 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 	$player = ASM::$pam->get();
 
 	$experience = TutorialResource::getInfo($stepTutorial, 'experienceReward');
-	$player->increaseExperience($experience);
-	CTR::$alert->add('Etape validée, vous gagnez ' . $experience . ' points d\'expérience. La prochaine étape vous attend.', ALERT_STD_SUCCESS);
+	$credit = TutorialResource::getInfo($stepTutorial, 'creditReward');
+	$resource = TutorialResource::getInfo($stepTutorial, 'resourceReward');
+	$ship = TutorialResource::getInfo($stepTutorial, 'shipReward');
+
+	$alert = 'Etape validée. ';
+
+	$firstReward = true;
+	if ($experience > 0) {
+		$firstReward = false;
+		$alert .= 'Vous gagnez ' . $experience . ' point d\'expérience';
+		$player->increaseExperience($experience);
+	}
+
+	if ($credit > 0) {
+		if ($firstReward) {
+			$firstReward = false;
+			$alert .= 'Vous gagnez ' . $credit . 'crédits';
+		} else {
+			$alert .= ', ainsi que ' . $credit . ' crédits';
+		}
+		$player->increaseCredit($credit);
+	}
+
+	if ($resource > 0 || $ship != array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)) {
+		# load an orbital base of the player
+		$S_OBM1 = ASM::$obm->getCurrentSession();
+		ASM::$obm->newSession();
+		ASM::$obm->load(array('rPlayer' => $player->id));
+		$ob = ASM::$obm->get();
+
+		if ($resource > 0) {
+			if ($firstReward) {
+				$firstReward = false;
+				$alert .= 'Vous gagnez ' . $resource . ' ressources';
+			} else {
+				$alert .= ' et ' . $resource . ' ressources';
+			}
+			$alert .= ' sur votre base orbitale ' . $ob->name;
+			$ob->increaseResources($resource);
+		}
+
+		if ($ship != array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)) {
+			$qty = 0;
+			$ships = array();
+			foreach ($ship as $key => $value) {
+				if ($value != 0) {
+					$ships[$qty] = array();
+					$ships[$qty]['quantity'] = $value;
+					$ships[$qty]['name'] = ShipResource::getInfo($key, 'codeName');
+					$qty++;
+
+					# add ship to dock
+					$ob->addShipToDock($key, $value);
+				}
+			}
+			if ($firstReward) {
+				$firstReward = false;
+				$alert .= 'Vous gagnez ';
+				$endOfAlert = ' sur votre base orbitale ' . $ob->name . '. ';
+			} else {
+				$alert .= '. Vous gagnez également ';
+				$endOfAlert = '. ';
+			}
+
+			# complete alert
+			foreach ($ships as $key => $value) {
+				if ($key == 0) {
+					$alert .= $value['quantity'] . ' ' . $value['name'] . Format::plural($value['quantity']);
+				} else if ($qty - 1 == $key) {
+					$alert .= ' et ' . $value['quantity'] . ' ' . $value['name'] . Format::plural($value['quantity']);
+				} else {
+					$alert .= ', ' . $value['quantity'] . ' ' . $value['name'] . Format::plural($value['quantity']);
+				}
+			}
+			$alert .= $endOfAlert;
+		}
+
+		ASM::$obm->changeSession($S_OBM1);
+	}
+
+	$alert .= 'La prochaine étape vous attend.';
+	CTR::$alert->add($alert, ALERT_STD_SUCCESS);
 	
 	$nextStep = $stepTutorial;
 	if (TutorialResource::isLastStep($stepTutorial)) {
