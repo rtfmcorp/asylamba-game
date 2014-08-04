@@ -77,7 +77,7 @@ class TutorialResource {
 				Les ressources sont produites chaque relève. Une relève correspond à une heure.
 				<br />
 				Dans chaque bâtiment, il y a un panneau nommé "à propos". Si vous voulez en savoir plus, lisez ce panneau, des informations importantes et intéressantes peuvent s\'y trouver.',
-			'experienceReward' => 10
+			'experienceReward' => 10,
 			'creditReward' => 0,
 			'resourceReward' => 0,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
@@ -88,7 +88,7 @@ class TutorialResource {
 				Dans ce bâtiment, vous pouvez voir à tout instant combien vous produisez et ou en est votre stock.
 				La Raffinerie possède 2 modes : le mode "Stockage" et le mode "Production". Le premier augmente la capacité de stockage et le second augmente la production horaire. 
 				Essayer donc de passer en mode "Production" en cliquant sur le bouton prévu à cet effet.',
-			'experienceReward' => 15
+			'experienceReward' => 15,
 			'creditReward' => 0,
 			'resourceReward' => 0,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
@@ -103,7 +103,7 @@ class TutorialResource {
 				Pour pouvoir construire un vaisseau, il faut des prérequis. 
 				Ces prérequis sont précisés dans le bouton de construction. 
 				Dans le panneau d\'information de chaque vaisseau qui apparaît lors d\'un clic sur le "+" se trouvent les caractéristiques du vaisseau ainsi que divers autres informations.',
-			'experienceReward' => 20
+			'experienceReward' => 20,
 			'creditReward' => 0,
 			'resourceReward' => 0,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
@@ -113,7 +113,7 @@ class TutorialResource {
 			'description' => 'La technosphère est un bâtiment qui permet de développer des technologies qui nous permettrons d\'améliorer certains aspects de votre empire et surtout de débloquer des bâtiments ou des vaisseaux.
 				<br />
 				Rendez-vous dans le générateur pour construire la Technosphère.',
-			'experienceReward' => 22
+			'experienceReward' => 22,
 			'creditReward' => 0,
 			'resourceReward' => 0,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
@@ -134,7 +134,7 @@ class TutorialResource {
 				Vos niveaux actuels de recherche sont visibles en cliquant sur l\'onglet "technologie" qui se trouve parmi les icônes tout au sommet de votre écran.
 				<br />
 				Vous avez tous les prérequis pour développer "Chassis simple léger", faites-le donc.',
-			'experienceReward' => 25
+			'experienceReward' => 25,
 			'creditReward' => 0,
 			'resourceReward' => 0,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
@@ -151,7 +151,7 @@ class TutorialResource {
 				Si vous avez assez de ressources, vous pouvez lancer la construction de plusieurs vaisseaux de même type à la fois. 
 				Cela vous facilitera la vie et vous permet de mettre beaucoup de vaisseaux en construction. 
 				Attention, la file de construction est limitée en place.',
-			'experienceReward' => 28
+			'experienceReward' => 28,
 			'creditReward' => 0,
 			'resourceReward' => 0,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
@@ -166,7 +166,7 @@ class TutorialResource {
 				<br />
 				Pour créer un commandant, il suffit de lui donner un nom (ou laisser le nom qu\'on a choisit pour vous) et de cliquer sur le bouton "créer l\'officier".
 				200 crédits vous seront débités, mais c\'est pour la bonne cause.',
-			'experienceReward' => 32
+			'experienceReward' => 32,
 			'creditReward' => 0,
 			'resourceReward' => 0,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
@@ -187,7 +187,7 @@ class TutorialResource {
 				En cliquant sur la flèche à droite du montant, vous pourrez modifier celui-ci.
 				<br />
 				Changez le montant investi dans l\'école de commandement pour passer à l\'étape suivante.',
-			'experienceReward' => 37
+			'experienceReward' => 37,
 			'creditReward' => 0,
 			'resourceReward' => 0,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
