@@ -26,7 +26,10 @@ echo '<div class="component transaction">';
 
 			echo '<div class="number-box">';
 				echo '<span class="label">vaisseaux de commerce disponibles</span>';
-				echo '<span class="value">' . Format::numberFormat($maxShip - $usedShips) . ' / ' . Format::numberFormat($maxShip) . '</span>';
+				echo '<span class="value">';
+					echo Format::numberFormat($maxShip - $usedShips) . ' / ' . Format::numberFormat($maxShip);
+					echo ' <img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/transport.png">';
+				echo '</span>';
 
 				echo '<span class="progress-bar">';
 				echo '<span style="width:' . Format::percent($maxShip - $usedShips, $maxShip) . '%;" class="content"></span>';
