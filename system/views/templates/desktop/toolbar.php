@@ -246,7 +246,7 @@ echo '<div id="tools">';
 							echo 'data-progress-total-time="' . Utils::interval($commander->get('eventInfo')->get('dStart'), $commander->get('eventInfo')->get('dArrival'), 's') . '">';
 							echo  '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->get('eventInfo')->get('avatar') . '.png" alt="" />';
 							echo '<strong>' . CommanderResources::getInfo($commander->get('eventInfo')->get('level'), 'grade') . ' ' . $commander->get('eventInfo')->get('name') . '</strong>';
-							echo '<em>→ ';
+							echo '<em>';
 								switch ($commander->get('eventInfo')->get('travelType')) {
 									case Commander::MOVE: echo 'déplacement vers ' . $commander->get('eventInfo')->get('nDestination'); break;
 									case Commander::LOOT: echo 'pillage de ' . $commander->get('eventInfo')->get('nDestination'); break;

@@ -8,10 +8,64 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
-	# fleetNav component
-	
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'main') {
 		# inclusion des modules
+		include_once ARES;
+		$S_COM_UKN = ASM::$com->getCurrentSession();
+
+		# set d'orbitale base
+		$obsets = array();
+		for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
+			$obsets[$i] = array();
+
+			$obsets[$i]['info'] = array();
+			$obsets[$i]['fleets'] = array();
+
+			$obsets[$i]['info']['id'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
+			$obsets[$i]['info']['name'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('name');
+			$obsets[$i]['info']['type'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('type');
+			$obsets[$i]['info']['img'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('img');
+		}
+
+
+		# commander manager : incoming attack
+		$commandersId = array();
+		for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
+			if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
+				if (CTR::$data->get('playerEvent')->get($i)->get('eventInfo')->size() > 0) {
+					$commandersId[] = CTR::$data->get('playerEvent')->get($i)->get('eventId');
+				}
+			}
+		}
+
+		$S_COM_ATK = ASM::$com->newSession();
+		ASM::$com->load(array('c.id' => $commandersId));
+
+		for ($i = 0; $i < count($obsets); $i++) {
+			for ($j = 0; $j < ASM::$com->size(); $j++) {
+				if (ASM::$com->get($j)->rDestinationPlace == $obsets[$i]['info']['id']) {
+					$obsets[$i]['fleets'][] = ASM::$com->get($j);
+				}
+			}
+		}
+		
+		# commander manager : yours
+		$S_COM_BSE = ASM::$com->newSession();
+		ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => array(COM_AFFECTED, COM_MOVING)), array('c.rBase', 'DESC'));
+
+		for ($i = 0; $i < count($obsets); $i++) {
+			for ($j = 0; $j < ASM::$com->size(); $j++) {
+				if (ASM::$com->get($j)->rBase == $obsets[$i]['info']['id']) {
+					$obsets[$i]['fleets'][] = ASM::$com->get($j);
+				}
+			}
+		}
+
+		include COMPONENT . 'fleet/main.php';
+
+		ASM::$com->changeSession($S_COM_UKN);
+
+/*		# inclusion des modules
 		include_once ARES;
 		
 		# loading des objets
@@ -34,7 +88,7 @@ echo '<div id="content">';
 		}
 		include COMPONENT . 'fleet/listFleetIncoming.php';
 		
-		ASM::$com->changeSession($S_COM1);
+		ASM::$com->changeSession($S_COM1);*/
 	} elseif (CTR::$get->get('view') == 'movement') {
 		# inclusion des modules
 		include_once ARES;

@@ -1,3 +1,139 @@
+.component.list-fleet .set-fleet {
+	position: relative;
+	margin: 10px;
+	padding: 0 0 0 70px;
+	min-height: 80px;
+
+	img.place {
+		position: absolute;
+		top: -5px; left: -20px;
+		width: 80px;
+		background: #0A0A0A;
+		border-radius: 100%;
+		border: solid 1px #202020;
+	}
+
+	h2 {
+		padding: 10px 0; margin: 0;
+	}
+
+	.item {
+		position: relative;
+		height: 60px;
+		background: #0A0A0A;
+		border: solid 1px #202020;
+		border-bottom: none;
+
+		&:last-child {
+			border-bottom: solid 1px #202020;
+		}
+
+		.left {
+			position: absolute;
+			top: 0; left: 0;
+			width: 60px; height: 60px;
+			z-index: 1;
+
+			.top {
+				position: absolute;
+				left: 60px;
+				display: block;
+				width: 400px;
+				top: 10px;
+			}
+
+			.status {
+				width: 30px;
+				margin: 10px; padding: 5px;
+				border-radius: 100%;
+
+				&.color1 { background: @medium-1; }
+				&.color2 { background: @medium-2; }
+				&.color3 { background: @medium-3; }
+				&.color4 { background: @medium-4; }
+				&.color5 { background: @medium-5; }
+				&.color6 { background: @medium-6; }
+				&.color7 { background: @medium-7; }
+			}
+		}
+
+		.right {
+			position: absolute;
+			top: 0; right: 0;
+			width: 60px; height: 60px;
+			z-index: 1;
+
+			.top {
+				position: absolute;
+				right: 60px;
+				display: block;
+				width: 200px;
+				text-align: right;
+				top: 10px;
+			}
+
+			.cover {
+				width: 50px;
+				margin: 5px; padding: 0;
+				border-radius: 100%;
+			}
+		}
+
+		.center {
+			position: absolute;
+			top: 41px; left: 70px; right: 70px;
+
+			.ship {
+				position: absolute;
+				top: -11px; left: -11px; right: auto;
+			}
+
+			.progress-ship {
+				display: block;
+				width: 100%;
+				background: #4F4F4F;
+				height: 3px;
+
+				&.color1 .bar { background: @light-1; }
+				&.color2 .bar { background: @light-2; }
+				&.color3 .bar { background: @light-3; }
+				&.color4 .bar { background: @light-4; }
+				&.color5 .bar { background: @light-5; }
+				&.color6 .bar { background: @light-6; }
+				&.color7 .bar { background: @light-7; }
+
+				.bar {
+					position: relative;
+					display: block;
+					height: 3px;
+
+					.ship { right: -11px; left: auto; }
+
+					span {
+						position: absolute;
+						top: 4px; right: 15px;
+						font-size: 10px;
+					}
+				}
+			}
+
+			&.reversed .progress-ship {
+				&.color1 { background: @light-1; }
+				&.color2 { background: @light-2; }
+				&.color3 { background: @light-3; }
+				&.color4 { background: @light-4; }
+				&.color5 { background: @light-5; }
+				&.color6 { background: @light-6; }
+				&.color7 { background: @light-7; }
+
+				.bar { background: #4F4F4F; }
+			}
+		}
+	}
+}
+
+
+
 .component.list-fleet hr {
 	margin: 10px 0;
 	border: none;
