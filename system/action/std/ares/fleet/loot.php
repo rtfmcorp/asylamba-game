@@ -10,7 +10,6 @@ include_once ZEUS;
 $commanderId = Utils::getHTTPData('commanderid');
 $placeId = Utils::getHTTPData('placeid');
 
-
 if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	$S_COM1 = ASM::$com->getCurrentSession();
 	ASM::$com->newSession(ASM_UMODE);
@@ -35,7 +34,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 
 					$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
 					$duration = Game::getTimeToTravel($home, $place, CTR::$data->get('playerBonus'));
-					
+
 					if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
 						CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
 
@@ -63,7 +62,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					$home = ASM::$plm->getById($commander->getRBase());
 
 					$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
-					$duration = Game::getTimeToTravel($home, $place);
+					$duration = Game::getTimeToTravel($home, $place, CTR::$data->get('playerBonus'));
 
 					if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
 						$commander->dStart = Utils::now();
