@@ -29,7 +29,7 @@ echo '<div id="content">';
 
 
 		# commander manager : incoming attack
-		$commandersId = array();
+		$commandersId = array(0);
 		for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
 			if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
 				if (CTR::$data->get('playerEvent')->get($i)->get('eventInfo')->size() > 0) {
