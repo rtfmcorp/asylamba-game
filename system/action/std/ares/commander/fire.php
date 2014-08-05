@@ -2,7 +2,7 @@
 include_once ATHENA;
 include_once ARES;
 
-# affect a commander
+# fire a commander
 
 # int id 	 		id du commandant
 

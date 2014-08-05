@@ -1,4 +1,4 @@
-<?php
++=<?php
 /**
  * Place
  *
@@ -232,7 +232,7 @@ class Place {
 				// $commander->rDestinationPlace = NULL;
 				$commander->travelType = NULL;
 				// $commander->rStartPlace = NULL;
-				$commander->dArrival = NULL;
+				// $commander->dArrival = NULL;
 				$commander->length = NULL;
 				$commander->statement = Commander::AFFECTED;
 
@@ -266,7 +266,7 @@ class Place {
 				$playerBonus = new PlayerBonus($commander->rPlayer);
 				$playerBonus->load();
 				$duration = Game::getTimeToTravel($home, $this, $playerBonus->bonus);
-				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $durationn);
+				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
 				ASM::$plm->changeSession($S_PLM10);
 
 				$this->sendNotif(self::CHANGEFAIL, $commander);
@@ -296,7 +296,7 @@ class Place {
 			$commander->travelType = NULL;
 			$commander->travelLength = NULL;
 			// $commander->rStartPlace = NULL;
-			$commander->dArrival = NULL;
+			// $commander->dArrival = NULL;
 			$commander->length = NULL;
 
 			# planète vide -> faire un combat
@@ -352,7 +352,7 @@ class Place {
 				$commander->travelType = NULL;
 				$commander->travelLength = NULL;
 				// $commander->rStartPlace = NULL;
-				$commander->dArrival = NULL;
+				// $commander->dArrival = NULL;
 				$commander->length = NULL;
 
 				$dCommanders = array();
@@ -445,7 +445,7 @@ class Place {
 				$commander->travelType = NULL;
 				$commander->travelLength = NULL;
 				// $commander->rStartPlace = NULL;
-				$commander->dArrival = NULL;
+				// $commander->dArrival = NULL;
 				$commander->length = NULL;
 
 				$S_PLM10 = ASM::$plm->getCurrentSession();
@@ -473,7 +473,7 @@ class Place {
 			$commander->travelType = NULL;
 			$commander->travelLength = NULL;
 			// $commander->rStartPlace = NULL;
-			$commander->dArrival = NULL;
+			// $commander->dArrival = NULL;
 			$commander->length = NULL;
 
 			if ($this->playerColor != $commander->getPlayerColor()) {
@@ -613,7 +613,7 @@ class Place {
 			$commander->travelType = NULL;
 			$commander->travelLength = NULL;
 			// $commander->rStartPlace = NULL;
-			$commander->dArrival = NULL;
+			// $commander->dArrival = NULL;
 			$commander->length = NULL;
 
 			# faire un combat
