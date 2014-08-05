@@ -36,7 +36,7 @@ echo '<div class="column act">';
 						echo '</div>';
 						echo '<div class="item move">';
 							echo '<strong class="name"></strong><br />';
-							echo 'Temps de l\'attaque : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->sector, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSector, $place->position, $place->xSystem, $place->ySystem), 'lite') . ' <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
+							echo 'Temps de l\'attaque : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem), 'lite') . ' <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
 							echo 'Capacité de la soute : <span class="wedge"></span> <img src="' . MEDIA . 'resources/resource.png" class="icon-color" alt="" /><br />';
 							echo '<a class="button" href="#" data-url="' . APP_ROOT . 'action/a-loot/commanderid-{id}/placeid-' . $place->id . '">Lancer l\'attaque</a>';
 						echo '</div>';
