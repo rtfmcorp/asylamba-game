@@ -18,7 +18,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 	ASM::$crm->load(array('id'=>$route, 'statement' => CRM_ACTIVE));
 	if (ASM::$crm->get() && ASM::$crm->size() == 1) {
 		$cr = ASM::$crm->get();
-		if ($cr->rPlayerId1 == CTR::$data['playerId'] || $cr->rPlayerId2 == CTR::$data['playerId']) {
+		if ($cr->playerId1 == CTR::$data->get('playerId') || $cr->playerId2 == CTR::$data->get('playerId')) {
 			if ($cr->getROrbitalBase() == $base OR $cr->getROrbitalBaseLinked() == $base) {
 				$S_OBM1 = ASM::$obm->getCurrentSession();
 				ASM::$obm->newSession(ASM_UMODE);
@@ -43,13 +43,13 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 				# perte du prestige pour les joueurs Négoriens
 				$S_PAM1 = ASM::$pam->getCurrentSession();
 				ASM::$pam->newSession();
-				ASM::$pam->load(array('id' => array($cr->rPlayerId1, $cr->rPlayerId2)));
+				ASM::$pam->load(array('id' => array($cr->playerId1, $cr->playerId2)));
 				$exp = round($cr->getIncome() * CRM_COEFEXPERIENCE);
 
-				if (ASM::$pam->get()->rolor == 3) {
+				if (ASM::$pam->get()->color == 3) {
 					ASM::$pam->get()->factionPoint -= $exp;
 				}
-				if (SM::$pam->get(1)->rolor == 3) {
+				if (ASM::$pam->get(1)->color == 3) {
 					ASM::$pam->get(1)->factionPoint -= $exp;
 				}
 				

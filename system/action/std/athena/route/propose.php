@@ -63,7 +63,13 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 				$imageLink = '4-' . rand(1, 3);
 			}
 
-			if (CTR::$data->get('playerInfo')->get('credit') >= $price) {
+			# compute bonus if the proposer is from Negore
+			if (CTR::$data->get('playerInfo')->get('color') == ColorResource::NEGORA) {
+				$priceWithBonus = round($price - ($price * ColorResource::BONUS_NEGORA_ROUTE / 100));
+			} else {
+				$priceWithBonus = $price;
+			}
+			if (CTR::$data->get('playerInfo')->get('credit') >= $priceWithBonus) {
 				// création de la route
 				$cr = new CommercialRoute();
 				$cr->setROrbitalBase($proposerBase->getId());
@@ -79,7 +85,7 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 				$S_PAM1 = ASM::$pam->getCurrentSession();
 				ASM::$pam->newSession(ASM_UMODE);
 				ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-				ASM::$pam->get()->decreaseCredit($price);
+				ASM::$pam->get()->decreaseCredit($priceWithBonus);
 				ASM::$pam->changeSession($S_PAM1);
 
 				$n = new Notification();
@@ -89,21 +95,21 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 				$n->addTxt(' vous propose une route commerciale liant ');
 				$n->addLnk('map/place-' . $proposerBase->getRPlace(), $proposerBase->getName())->addTxt(' et ');
 				$n->addLnk('map/base-' . $otherBase->getRPlace(), $otherBase->getName())->addTxt('.');
-				$n->addSep()->addTxt('Les frais de l\'opération vous coûteraient ' . Format::numberFormat($price) . ' crédits; Les gains estimés pour cette route sont de ' . Format::numberFormat($income) . ' crédits par relève.');
+				$n->addSep()->addTxt('Les frais de l\'opération vous coûteraient ' . Format::numberFormat($priceWithBonus) . ' crédits; Les gains estimés pour cette route sont de ' . Format::numberFormat($income) . ' crédits par relève.');
 				$n->addSep()->addLnk('bases/base-' . $otherBase->getRPlace() . '/view-commercialplateforme/mode-route', 'En savoir plus ?');
 				$n->addEnd();
 				ASM::$ntm->add($n);
 
 				CTR::$alert->add('Route commerciale proposée', ALERT_STD_SUCCESS);
 			} else {
-				CTR::$alert->add('impossible de proposer une route commerciale', ALERT_STD_ERROR);
+				CTR::$alert->add('impossible de proposer une route commerciale (1)', ALERT_STD_ERROR);
 			}
 		} else {
-			CTR::$alert->add('impossible de proposer une route commerciale', ALERT_STD_ERROR);
+			CTR::$alert->add('impossible de proposer une route commerciale (2)', ALERT_STD_ERROR);
 		}
 		ASM::$pam->changeSession($S_PAM1);
 	} else {
-		CTR::$alert->add('impossible de proposer une route commerciale', ALERT_STD_ERROR);
+		CTR::$alert->add('impossible de proposer une route commerciale (3)', ALERT_STD_ERROR);
 	}
 	ASM::$obm->changeSession($S_OBM1);
 	ASM::$crm->changeSession($S_CRM1);

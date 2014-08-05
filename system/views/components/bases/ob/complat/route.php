@@ -84,14 +84,14 @@ for ($i = 0; $i < ASM::$crm->size(); $i++) {
 
 	if ($rc->getStatement() == CRM_PROPOSED && $rc->getPlayerId2() == CTR::$data->get('playerId')) {
 		$base1  = '<div class="base">';
-			$base1 .= '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation1()) . '.png" alt="' . $ob_obNav->getName() . '" class="place" />';
+			$base1 .= '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation1()) . '.png" alt="' . $ob_compPlat->getName() . '" class="place" />';
 			$base1 .= '' . PlaceResource::get($rc->baseType1, 'name') . ' <a href="' . APP_ROOT . 'map/place-' . $rc->getROrbitalBase() . '">' . $rc->getBaseName1() . '</a><br />';
 			$base1 .= 'de <a href="' . APP_ROOT . 'diary/player-' . $rc->getPlayerId1() . '">' . $rc->getPlayerName1() . '</a><br />';
 			$base1 .= Format::numberFormat($rc->getPopulation1()) . ' millions de population';
 		$base1 .= '</div>';
 
 		$base2  = '<div class="base">';
-			$base2 .= '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation2()) . '.png" alt="' . $ob_obNav->getName() . '" class="place" />';
+			$base2 .= '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation2()) . '.png" alt="' . $ob_compPlat->getName() . '" class="place" />';
 			$base2 .= '' . PlaceResource::get($rc->baseType2, 'name') . ' <a href="' . APP_ROOT . 'map/place-' . $rc->getROrbitalBaseLinked() . '">' . $rc->getBaseName2() . '</a><br />';
 			$base2 .= 'de <a href="' . APP_ROOT . 'diary/player-' . $rc->getPlayerId2() . '">' . $rc->getPlayerName2() . '</a><br />';
 			$base2 .= Format::numberFormat($rc->getPopulation2()) . ' millions de population';
@@ -109,7 +109,12 @@ for ($i = 0; $i < ASM::$crm->size(); $i++) {
 						} elseif ($nCRInDock >= $nMaxCR) {
 							echo '<span><a href="#">pas d\'emplacement libre pour accepter</a></span>';
 						} else {
-							echo '<span><a href="' . APP_ROOT . 'action/a-acceptroute/base-' . $rc->getROrbitalBaseLinked() . '/route-' . $rc->getId() . '">accepter pour ' . Format::numberFormat($rc->getPrice()) . ' crédits</a></span>';
+							$price = $rc->getPrice();
+							if (CTR::$data->get('playerInfo')->get('color') == ColorResource::NEGORA) {
+								# bonus if the player is from Negore
+								$price -= round($price * ColorResource::BONUS_NEGORA_ROUTE / 100);
+							}
+							echo '<span><a href="' . APP_ROOT . 'action/a-acceptroute/base-' . $rc->getROrbitalBaseLinked() . '/route-' . $rc->getId() . '">accepter pour ' . Format::numberFormat($price) . ' crédits</a></span>';
 						}
 						echo '<span><a href="' . APP_ROOT . 'action/a-refuseroute/base-' . $rc->getROrbitalBaseLinked() . '/route-' . $rc->getId() . '" class="hb lt" title="refuser l\'offre">x</a></span>';
 					echo '</div>';
