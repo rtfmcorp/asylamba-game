@@ -89,10 +89,20 @@ echo '<div class="column act">';
 							echo 'Temps de l\'attaque : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, CTR::$data->get('playerBonus')), 'lite') . ' <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
 
 							if ($place->rPlayer == 0) {
-								echo 'Coût : <span class="price">' . Format::numberFormat($totalBases * CREDITCOEFFTOCOLONIZE) . '</span> <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /><br />';
+								$price = $totalBases * CREDITCOEFFTOCOLONIZE;
+								if (CTR::$data->get('playerInfo')->get('color') == ColorResource::CARDAN) {
+									# bonus if the player is from Cardan
+									$price -= round($price * ColorResource::BONUS_CARDAN_COLO / 100);
+								}
+								echo 'Coût : <span class="price">' . Format::numberFormat($price) . '</span> <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /><br />';
 								echo '<a class="button" href="#" data-url="' . APP_ROOT . 'action/a-colonize/commanderid-{id}/placeid-' . $place->id . '">Lancer la colonisation</a>';
 							} else {
-								echo 'Coût : <span class="price">' . Format::numberFormat($totalBases * CREDITCOEFFTOCONQUER) . '</span> <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /><br />';
+								$price = $totalBases * CREDITCOEFFTOCONQUER;
+								if (CTR::$data->get('playerInfo')->get('color') == ColorResource::CARDAN) {
+									# bonus if the player is from Cardan
+									$price -= round($price * ColorResource::BONUS_CARDAN_COLO / 100);
+								}
+								echo 'Coût : <span class="price">' . Format::numberFormat($price) . '</span> <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /><br />';
 								echo '<a class="button" href="#" data-url="' . APP_ROOT . 'action/a-conquer/commanderid-{id}/placeid-' . $place->id . '">Lancer la conquête</a>';
 							}
 						echo '</div>';

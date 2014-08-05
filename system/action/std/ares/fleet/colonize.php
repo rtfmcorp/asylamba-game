@@ -21,7 +21,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	ASM::$plm->newSession(ASM_UMODE);
 	ASM::$plm->load(array('id' => $placeId));
 
-		// load the technologies
+	# load the technologies
 	$technologies = new Technology(CTR::$data->get('playerId'));
 
 	# check si technologie CONQUEST débloquée
@@ -40,8 +40,8 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 			}
 		}
 		ASM::$com->changeSession($S_COM2);
-		if ($obQuantity + $msQuantity + $coloQuantity < $maxBasesQuantity) {
-
+		$totalBases = $obQuantity + $msQuantity + $coloQuantity;
+		if ($totalBases < $maxBasesQuantity) {
 			if (ASM::$com->size() > 0) {
 				if (ASM::$plm->size() > 0) {
 					$commander = ASM::$com->get();
@@ -53,12 +53,29 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
 					$duration = Game::getTimeToTravel($home, $place, CTR::$data->get('playerBonus'));
 
-					if ($commander->move($place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
-						CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
+					# compute price
+					$price = $totalBases * CREDITCOEFFTOCOLONIZE;
+					if (CTR::$data->get('playerInfo')->get('color') == ColorResource::CARDAN) {
+						# bonus if the player is from Cardan
+						$price -= round($price * ColorResource::BONUS_CARDAN_COLO / 100);
+					}
+					if (CTR::$data->get('playerInfo')->get('credit') >= $price) {
+						if ($commander->move($place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
+							# debit credit
+							$S_PAM2 = ASM::$pam->getCurrentSession();
+							ASM::$pam->newSession(ASM_UMODE);
+							ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+							ASM::$pam->get()->decreaseCredit($price);
+							ASM::$pam->changeSession($S_PAM2);
 
-						if (CTR::$get->exist('redirect')) {
-							CTR::redirect('map/place-' . CTR::$get->get('redirect'));
+							CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
+
+							if (CTR::$get->exist('redirect')) {
+								CTR::redirect('map/place-' . CTR::$get->get('redirect'));
+							}
 						}
+					} else {
+						CTR::$alert->add('Vous n\'avez pas assez de crédits pour coloniser cette planète.', ALERT_STD_ERROR);
 					}
 				} else {
 					CTR::$alert->add('Ce lieu n\'existe pas.', ALERT_STD_ERROR);
