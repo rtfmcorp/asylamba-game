@@ -36,7 +36,7 @@ echo '<div class="column act">';
 						echo '</div>';
 						echo '<div class="item move">';
 							echo '<strong class="name"></strong><br />';
-							echo 'Temps de l\'attaque : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem), 'lite') . ' <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
+							echo 'Temps de l\'attaque : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, CTR::$data->get('playerBonus')), 'lite') . ' <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
 							echo 'Capacité de la soute : <span class="wedge"></span> <img src="' . MEDIA . 'resources/resource.png" class="icon-color" alt="" /><br />';
 							echo '<a class="button" href="#" data-url="' . APP_ROOT . 'action/a-loot/commanderid-{id}/placeid-' . $place->id . '">Lancer l\'attaque</a>';
 						echo '</div>';
@@ -86,7 +86,7 @@ echo '<div class="column act">';
 						echo '</div>';
 						echo '<div class="item move">';
 							echo '<strong class="name"></strong><br />';
-							echo 'Temps de l\'attaque : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->sector, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSector, $place->position, $place->xSystem, $place->ySystem), 'lite') . ' <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
+							echo 'Temps de l\'attaque : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, CTR::$data->get('playerBonus')), 'lite') . ' <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
 
 							if ($place->rPlayer == 0) {
 								echo 'Coût : <span class="price">' . Format::numberFormat($totalBases * CREDITCOEFFTOCOLONIZE) . '</span> <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /><br />';
@@ -109,10 +109,19 @@ echo '<div class="column act">';
 				} elseif ($place->rPlayer != CTR::$data->get('playerId')) {
 					echo 'Vous ne pouvez déplacer une flotte que vers une de vos bases';
 				} else {
-					echo 'Aucun commandant selectionné';
-
-					echo '-- commandant trop loin <br />';
-					echo '-- on peut déplacer';
+					echo '<div class="commander-tile">';
+						echo '<div class="item no-commander">';
+							echo 'Aucun commandant selectionné';
+						echo '</div>';
+						echo '<div class="item too-far">';
+							echo 'Ce commandant est trop éloigné pour se déplacer jusqu\'ici';
+						echo '</div>';
+						echo '<div class="item move">';
+							echo '<strong class="name"></strong><br />';
+							echo 'Temps du déplacement : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, CTR::$data->get('playerBonus')), 'lite') . ' <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
+							echo '<a class="button" href="#" data-url="' . APP_ROOT . 'action/a-loot/commanderid-{id}/placeid-' . $place->id . '">Lancer la mission</a>';
+						echo '</div>';
+					echo '</div>';
 				}
 			echo '</div>';
 		echo '</div>';
