@@ -29,14 +29,13 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 			if (ASM::$plm->size() > 0) {
 				$commander = ASM::$com->get();
 				$place = ASM::$plm->get();
-
 				if (CTR::$data->get('playerInfo')->get('color') != $place->getPlayerColor()) {
 					ASM::$plm->load(array('id' => $commander->getRBase()));
 					$home = ASM::$plm->getById($commander->getRBase());
 
 					$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
-					$duration = Game::getTimeToTravel($commander->rPlayer, $home, $place);
-
+					$duration = Game::getTimeToTravel($home, $place, CTR::$data->get('playerBonus'));
+					
 					if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
 						CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
 

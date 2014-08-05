@@ -25,7 +25,7 @@ echo '<div id="subnav">';
 				$break = TRUE;
 			}
 
-			echo '<a href="#" class="item ' . ($commander->statement == COM_MOVING ? 'striped' : NULL) . ' map-commander" data-id="' . $commander->id . '" data-max-jump="' . Game::getMaxTravelDistance() . '" data-available="' . ($commander->statement == COM_MOVING ? 'false' : 'true') . '" data-name="' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->name . '" data-wedge="' . Format::numberFormat(Commander::COEFFLOOT * $commander->getPev()) . '">';
+			echo '<a href="#" class="item ' . ($commander->statement == COM_MOVING ? 'striped' : NULL) . ' map-commander" data-id="' . $commander->id . '" data-max-jump="' . Game::getMaxTravelDistance(CTR::$data->get('playerBonus')) . '" data-available="' . ($commander->statement == COM_MOVING ? 'false' : 'true') . '" data-name="' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->name . '" data-wedge="' . Format::numberFormat(Commander::COEFFLOOT * $commander->getPev()) . '">';
 				echo '<span class="picto">';
 					echo '<img src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
 					echo '<span class="number">' . $commander->level . '</span>';

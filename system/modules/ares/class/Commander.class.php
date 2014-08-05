@@ -364,8 +364,8 @@ class Commander {
 			$this->travelLength = $travelLength;
 			$this->statement = 2;
 
-			$this->dStart = Utils::now();
-			$date = new DateTime(Utils::now());
+			$this->dStart = ($travelType != 3) ? Utils::now() : $this->dArrival;
+			$date = new DateTime($this->dStart);
 			$date->modify('+' . $duration . 'second');
 			$this->dArrival = $date->format('Y-m-d H:i:s');
 

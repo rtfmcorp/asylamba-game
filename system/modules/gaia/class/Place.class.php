@@ -262,7 +262,10 @@ class Place {
 				ASM::$plm->load(array('id' => $commander->getRBase()));
 				$home = ASM::$plm->get();
 				$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
-				$duration = Game::getTimeToTravel($home, $this);
+
+				$playerBonus = new PlayerBonus($commander->rPlayer);
+				$playerBonus->load();
+				$duration = Game::getTimeToTravel($home, $this, $playerBonus->bonus);
 				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $durationn);
 				ASM::$plm->changeSession($S_PLM10);
 
@@ -274,7 +277,10 @@ class Place {
 			ASM::$plm->load(array('id' => $commander->getRBase()));
 			$home = ASM::$plm->get();
 			$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
-			$duration = Game::getTimeToTravel($home, $this);
+
+			$playerBonus = new PlayerBonus($commander->rPlayer);
+			$playerBonus->load();
+			$duration = Game::getTimeToTravel($home, $this, $playerBonus->bonus);
 			$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
 			ASM::$plm->changeSession($S_PLM10);
 
@@ -291,7 +297,6 @@ class Place {
 			$commander->travelLength = NULL;
 			// $commander->rStartPlace = NULL;
 			$commander->dArrival = NULL;
-			$commander->dstart = NULL;
 			$commander->length = NULL;
 
 			# planète vide -> faire un combat
@@ -307,7 +312,10 @@ class Place {
 				ASM::$plm->load(array('id' => $commander->getRBase()));
 				$home = ASM::$plm->get();
 				$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
-				$duration = Game::getTimeToTravel($home, $this);
+
+				$playerBonus = new PlayerBonus($commander->rPlayer);
+				$playerBonus->load();
+				$duration = Game::getTimeToTravel($home, $this, $playerBonus->bonus);
 				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
 				ASM::$plm->changeSession($S_PLM10);
 
@@ -345,7 +353,6 @@ class Place {
 				$commander->travelLength = NULL;
 				// $commander->rStartPlace = NULL;
 				$commander->dArrival = NULL;
-				$commander->dstart = NULL;
 				$commander->length = NULL;
 
 				$dCommanders = array();
@@ -370,7 +377,10 @@ class Place {
 						ASM::$plm->load(array('id' => $commander->getRBase()));
 						$home = ASM::$plm->get();
 						$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
-						$duration = Game::getTimeToTravel($home, $this);
+
+						$playerBonus = new PlayerBonus($commander->rPlayer);
+						$playerBonus->load();
+						$duration = Game::getTimeToTravel($home, $this, $playerBonus->bonus);
 						$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
 						ASM::$plm->changeSession($S_PLM10);
 
@@ -420,7 +430,10 @@ class Place {
 					ASM::$plm->load(array('id' => $commander->getRBase()));
 					$home = ASM::$plm->get();
 					$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
-					$duration = Game::getTimeToTravel($home, $this);
+
+					$playerBonus = new PlayerBonus($commander->rPlayer);
+					$playerBonus->load();
+					$duration = Game::getTimeToTravel($home, $this, $playerBonus->bonus);
 					$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
 					ASM::$plm->changeSession($S_PLM10);
 
@@ -433,7 +446,6 @@ class Place {
 				$commander->travelLength = NULL;
 				// $commander->rStartPlace = NULL;
 				$commander->dArrival = NULL;
-				$commander->dstart = NULL;
 				$commander->length = NULL;
 
 				$S_PLM10 = ASM::$plm->getCurrentSession();
@@ -441,7 +453,10 @@ class Place {
 				ASM::$plm->load(array('id' => $commander->getRBase()));
 				$home = ASM::$plm->get();
 				$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
-				$duration = Game::getTimeToTravel($home, $this);
+
+				$playerBonus = new PlayerBonus($commander->rPlayer);
+				$playerBonus->load();
+				$duration = Game::getTimeToTravel($home, $this, $playerBonus->bonus);
 				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
 				ASM::$plm->changeSession($S_PLM10);
 
@@ -459,7 +474,6 @@ class Place {
 			$commander->travelLength = NULL;
 			// $commander->rStartPlace = NULL;
 			$commander->dArrival = NULL;
-			$commander->dstart = NULL;
 			$commander->length = NULL;
 
 			if ($this->playerColor != $commander->getPlayerColor()) {
@@ -583,7 +597,10 @@ class Place {
 				ASM::$plm->load(array('id' => $commander->getRBase()));
 				$home = ASM::$plm->get();
 				$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
-				$duration = Game::getTimeToTravel($home, $this);
+				
+				$playerBonus = new PlayerBonus($commander->rPlayer);
+				$playerBonus->load();
+				$duration = Game::getTimeToTravel($home, $this, $playerBonus->bonnus);
 				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
 				ASM::$plm->changeSession($S_PLM10);
 
@@ -597,7 +614,6 @@ class Place {
 			$commander->travelLength = NULL;
 			// $commander->rStartPlace = NULL;
 			$commander->dArrival = NULL;
-			$commander->dstart = NULL;
 			$commander->length = NULL;
 
 			# faire un combat
@@ -696,8 +712,7 @@ class Place {
 		$commander->travelType = NULL;
 		$commander->travelLength = NULL;
 		// $commander->rStartPlace = NULL;
-		$commander->dArrival = NULL;
-		$commander->dstart = NULL;
+		$commander->dArrival = NUL;
 		$commander->length = NULL;
 
 		$commander->statement = Commander::AFFECTED;
@@ -840,8 +855,8 @@ class Place {
 					->addLnk('map/place-' . $this->id, Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector))
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('resource', Format::numberFormat($commander->getResourcesTransported()), 'ressources pillées')
-					->addBoxResource('xp', $commander->earnedExperience, 'experience gagnée')
+					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
+					->addBoxResource('xp', '+' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -873,8 +888,8 @@ class Place {
 					->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('resource', Format::numberFormat($commander->getResourcesTransported()), 'ressources pillées')
-					->addBoxResource('xp', $commander->earnedExperience, 'experience gagnée')
+					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
+					->addBoxResource('xp', '+' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
 					->addEnd();
 				ASM::$ntm->add($notif);
 
@@ -890,7 +905,7 @@ class Place {
 					->addLnk('map/place-' . $this->id, $this->baseName)
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('resource', Format::numberFormat($commander->getResourcesTransported()), 'ressources pillées')
+					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -940,8 +955,8 @@ class Place {
 					->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('resource', Format::numberFormat($commander->getResourcesTransported()), 'ressources pillées')
-					->addBoxResource('xp', $commander->earnedExperience, 'experience gagnée')
+					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
+					->addBoxResource('xp', '+' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
 					->addEnd();
 				ASM::$ntm->add($notif);
 
@@ -957,7 +972,7 @@ class Place {
 					->addLnk('map/place-' . $this->id, $this->baseName)
 					->addTxt('. Aucun officier n\'était en position pour la défendre. ')
 					->addSep()
-					->addBoxResource('resource', Format::numberFormat($commander->getResourcesTransported()), 'ressources pillées')
+					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -983,7 +998,7 @@ class Place {
 					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' a colonisé la planète rebelle située aux coordonnées ')  
 					->addLnk('map/place-' . $this->id , Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector) . '.')
-					->addBoxResource('xp', $commander->earnedExperience, 'experience gagnée')
+					->addBoxResource('xp', '+' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
 					->addTxt('Votre empire s\'étend, administrez votre nouvelle planète ')
 					->addLnk('bases/base-' . $this->id, 'ici')
 					->addTxt('.')
@@ -1018,7 +1033,7 @@ class Place {
 					->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('xp', $commander->earnedExperience, 'experience gagnée')
+					->addBoxResource('xp', '+' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
 					->addTxt('Elle est désormais votre, vous pouvez l\'administrer ')
 					->addLnk('bases/base-' . $this->id, 'ici')
 					->addTxt('.')
@@ -1087,7 +1102,7 @@ class Place {
 					->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('xp', $commander->earnedExperience, 'experience gagnée')
+					->addBoxResource('xp', '+' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
 					->addTxt('Elle est désormais votre, vous pouvez l\'administrer ')
 					->addLnk('bases/base-' . $this->id, 'ici')
 					->addTxt('.')
@@ -1133,7 +1148,7 @@ class Place {
 					->addTxt(' est de retour sur votre base ')
 					->addLnk('map/place-' . $commander->getRBase(), $commander->getBaseName())
 					->addTxt(' et rapporte ')
-					->addStg(Format::numberFormat(Format::numberFormat($commander->getResourcesTransported())))
+					->addStg(Format::number($commander->getResourcesTransported()))
 					->addTxt(' ressources à vos entrepôts.')
 					->addEnd();
 				ASM::$ntm->add($notif);
