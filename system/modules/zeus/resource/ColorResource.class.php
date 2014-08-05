@@ -1,5 +1,17 @@
 <?php
 class ColorResource {
+	# constants for factions
+	const EMPIRE = 1;
+	const KOVAHK = 2;
+	const NEGORA = 3;
+	const CARDAN = 4;
+	const NERVE = 5;
+	const APHERA = 6;
+	const SYNELLE = 7;
+	
+	# constants for the actions bonuses of the factions
+	const BONUS_NEGORA_ROUTE = 3; # 3% less for the price of a commercial route
+
 	public static function getInfo($id, $info) {
 		if ($id <= count(self::$colors)) {
 			if (in_array($info, array('id', 'officialName', 'popularName', 'government', 'factionPoint', 'status', 'devise', 'desc1', 'desc2', 'desc3', 'desc4'))) {

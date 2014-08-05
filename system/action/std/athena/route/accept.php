@@ -33,12 +33,19 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 		$nbrMaxCommercialRoute = OrbitalBaseResource::getBuildingInfo(6, 'level', $acceptorBase->getLevelCommercialPlateforme(), 'nbRoutesMax'); 
 		
 		if ($nbrCommercialRoute < $nbrMaxCommercialRoute) {
-			if (CTR::$data->get('playerInfo')->get('credit') >= $cr->getPrice()) {
+
+			# compute bonus if the player is from Negore
+			if (CTR::$data->get('playerInfo')->get('color') == ColorResource::NEGORA) {
+				$price = round($cr->getPrice() - ($cr->getPrice() * ColorResource::BONUS_NEGORA_ROUTE / 100));
+			} else {
+				$price = $cr->getPrice();
+			}
+			if (CTR::$data->get('playerInfo')->get('credit') >= $price) {
 				// débit des crédits au joueur
 				$S_PAM1 = ASM::$pam->getCurrentSession();
 				ASM::$pam->newSession(ASM_UMODE);
 				ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-				ASM::$pam->get()->decreaseCredit($cr->getPrice());
+				ASM::$pam->get()->decreaseCredit($price);
 				// augmentation de l'expérience des deux joueurs
 				$exp = round($cr->getIncome() * CRM_COEFEXPERIENCE);
 				ASM::$pam->load(array('id' => $proposerBase->getRPlayer()));

@@ -176,8 +176,11 @@ echo '<div class="column act">';
 						echo '<img src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '-' . Game::getSizeOfPlanet($place->population) . '.png" alt="" class="planet" />';
 						echo 'Revenu par relève : ' . Format::numberFormat($income) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" /><br />';
 						echo 'Bassin de population : ' . Format::numberFormat($place->population + $defaultBase->planetPopulation) . ' millions<br />';
+						if (CTR::$data->get('playerInfo')->get('color') == ColorResource::NEGORA) {
+							# bonus if the player is from Negore
+							$price -= round($price * ColorResource::BONUS_NEGORA_ROUTE / 100);
+						}
 						echo 'Coûts de construction : ' . Format::numberFormat($price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" /><br />';
-
 						if ($proposed) {
 							echo '<a href="' . APP_ROOT . 'bases/view-commercialplateforme/mode-route" class="button">Annuler la proposition</a>';
 						} elseif ($notAccepted) {
