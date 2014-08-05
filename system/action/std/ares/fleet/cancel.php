@@ -26,7 +26,7 @@ if ($commanderId !== FALSE) {
 			$dArrival = new DateTime($dStart->format('Y-m-d H:i:s'));
 			$dArrival->modify('+' . $duration . 'second');
 
-			$idDestination = $commander->rDestinationPlace;
+			$rDestinationPlace = $commander->rDestinationPlace;
 			$commander->rDestinationPlace = $commander->rStartPlace;
 			$commander->rStartPlace = $commander->rDestinationPlace;
 			$commander->dStart = $dStart->format('Y-m-d H:i:s');

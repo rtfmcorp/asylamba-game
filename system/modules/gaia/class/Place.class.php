@@ -732,7 +732,17 @@ class Place {
 	}
 
 	private function lootAnEmptyPlace($commander) {
+		$bonus = 0;
+		if ($commander->rPlayer != CTR::$data->get('playerId')) {
+			$playerBonus = new PlayerBonus($this->rPlayer);
+			$playerBonus->load();
+			$bonus = $playerBonus->bonus->get(SHIP_CONTAINER);
+		} else {
+			$bonus = CTR::$data->get('playerBonus')->get(SHIP_CONTAINER);
+		}
+
 		$storage = $commander->getPev() * Commander::COEFFLOOT;
+		$storage += round($storage * ((2 * $bonus) / 100));
 		$resourcesLooted = 0;
 
 		if ($storage > $this->resources) {
@@ -748,6 +758,16 @@ class Place {
 
 	private function lootAPlayerPlace($commander) {
 		include_once ATHENA;
+
+		$bonus = 0;
+		if ($commander->rPlayer != CTR::$data->get('playerId')) {
+			$playerBonus = new PlayerBonus($this->rPlayer);
+			$playerBonus->load();
+			$bonus = $playerBonus->bonus->get(SHIP_CONTAINER);
+		} else {
+			$bonus = CTR::$data->get('playerBonus')->get(SHIP_CONTAINER);
+		}
+
 		$S_OBM1 = ASM::$obm->getCurrentSession();
 		ASM::$obm->newSession();
 		ASM::$obm->load(array('rPlace' => $this->id));
@@ -756,6 +776,7 @@ class Place {
 		$resourcesToLoot = $base->getResourcesStorage() - Commander::LIMITTOLOOT;
 
 		$storage = $commander->getPev() * Commander::COEFFLOOT;
+		$storage += round($storage * ((2 * $bonus) / 100));
 		$resourcesLooted = 0;
 
 		$resourcesLooted = ($storage > $resourcesToLoot) ? $resourcesToLoot : $storage;

@@ -287,6 +287,12 @@ class Commander {
 					$ship->setBonus($playerBonus->bonus);
 				}
 			}
+		} else {
+			foreach ($this->army AS $squadron) {
+				foreach ($squadron->squadron AS $ship) {
+					$ship->setBonus(CTR::$data->get('playerBonus'));
+				}
+			}
 		}
 	}
 
