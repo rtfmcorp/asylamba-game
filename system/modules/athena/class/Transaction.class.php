@@ -149,7 +149,7 @@ class Transaction {
 					echo '<span class="rate">' . $rv . ' %</span>';
 
 					echo '<div class="offer">';
-						echo '<strong>' . $this->quantity . ' ' . ShipResource::getInfo($this->identifier, 'codeName') . '</strong>';
+						echo '<strong>' . $this->quantity . ' ' . ShipResource::getInfo($this->identifier, 'codeName') . Format::plural($this->quantity) . '</strong>';
 						echo '<em>' . ShipResource::getInfo($this->identifier, 'name') . ' / ' . ShipResource::getInfo($this->identifier, 'pev') . ' pev</em>';
 					echo '</div>';
 				}

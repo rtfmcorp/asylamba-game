@@ -194,7 +194,7 @@ class CommercialShipping {
 					} elseif ($this->typeOfTransaction == Transaction::TYP_SHIP) {
 						echo '<img src="' . MEDIA . 'ship/picto/ship' . $this->identifier . '.png" alt="" class="picto" />';
 						echo '<div class="offer">';
-							echo '<strong>' . $this->quantity . ' ' . ShipResource::getInfo($this->identifier, 'codeName') . '</strong>';
+							echo '<strong>' . $this->quantity . ' ' . ShipResource::getInfo($this->identifier, 'codeName') . Format::plural($this->quantity) . '</strong>';
 							echo '<em>' . ShipResource::getInfo($this->identifier, 'name') . ' / ' . ShipResource::getInfo($this->identifier, 'pev') . ' pev</em>';
 						echo '</div>';
 					}
@@ -217,7 +217,7 @@ class CommercialShipping {
 
 				echo '<div class="ships">';
 					echo $this->shipQuantity;
-					echo '<img src="' . MEDIA . 'resources/resource.png" alt="" class="icon-color" />';
+					echo '<img src="' . MEDIA . 'resources/transport.png" alt="" class="icon-color" />';
 				echo '</div>';
 
 				if ($this->statement == CommercialShipping::ST_WAITING) {

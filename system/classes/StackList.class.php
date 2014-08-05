@@ -26,6 +26,14 @@ class StackList {
 		$this->elements[$key] = $value;
 	}
 
+	public function increase($key, $value) {
+		if (isset($this->elements[$key])) {
+			$this->elements[$key] = $this->elements[$key] + $value;
+		} else {
+			$this->elements[$key] = $value;
+		}
+	}
+
 	public function insert($key, $value) {
 		if (count($this->elements) < $key) {
 			$this->elements[$key] = $value;

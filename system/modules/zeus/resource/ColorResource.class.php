@@ -28,7 +28,7 @@ class ColorResource {
 			'mandateDuration' => 604800),
 		array(
 			'id' => 2,
-			'officialName' => 'Province de Kovahkarh',
+			'officialName' => 'Province de Kovahk',
 			'popularName' => 'l’Esseim',
 			'government' => 'Maison des Kovahkarh',
 			'factionPoint' => 'Points de Bataille',
