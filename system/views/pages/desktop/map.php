@@ -2,7 +2,6 @@
 # galaxy loading
 include_once GAIA;
 
-
 $sm = new SectorManager();
 $sm->load();
 

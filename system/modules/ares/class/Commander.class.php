@@ -277,12 +277,14 @@ class Commander {
 	}
 
 	public function setBonus() {
-		$playerBonus = new PlayerBonus($this->rPlayer);
-		$playerBonus->load();
-
-		foreach ($this->army AS $squadron) {
-			foreach ($squadron->squadron AS $ship) {
-				$ship->setBonus($playerBonus->bonus);
+		if ($this->rPlayer != CTR::$data->get('playerId')) {
+			$playerBonus = new PlayerBonus($this->rPlayer);
+			$playerBonus->load();
+			
+			foreach ($this->army AS $squadron) {
+				foreach ($squadron->squadron AS $ship) {
+					$ship->setBonus($playerBonus->bonus);
+				}
 			}
 		}
 	}
