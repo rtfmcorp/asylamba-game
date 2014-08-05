@@ -75,6 +75,7 @@ switch (CTR::$get->get('a')) {
 	case 'loot':					include ACTION . 'ares/fleet/loot.php'; break;
 	case 'colonize':				include ACTION . 'ares/fleet/colonize.php'; break;
 	case 'conquer':					include ACTION . 'ares/fleet/conquer.php'; break;
+	case 'cancelmove':				include ACTION . 'ares/fleet/cancel.php'; break;
 
 	case 'affectcommander':			include ACTION . 'ares/commander/affect.php'; break;
 	case 'updatenamecommander':		include ACTION . 'ares/commander/updateName.php'; break;
