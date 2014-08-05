@@ -33,7 +33,8 @@ class Game {
 
 	public static function getFleetSpeed($bonus) {
 		include_once ARES;
-		return Commander::FLEETSPEED + $bonus->get(PlayerBonus::SHIP_SPEED) / 100;
+		$b = ($bonus != NULL) ? $bonus->get(PlayerBonus::SHIP_SPEED) / 100 : 0;
+		return Commander::FLEETSPEED + $b;
 	}
 
 	public static function getMaxTravelDistance($bonus) {
@@ -43,7 +44,7 @@ class Game {
 
 	public static function getTimeToTravel($startPlace, $destinationPlace, $bonus = NULL) {
 		# $startPlace and $destinationPlace are instance of Place
-		return self::getTimeTravel($playerId, $startPlace->getRSystem(), $startPlace->getPosition(), $startPlace->getXSystem(), $startPlace->getYSystem(),
+		return self::getTimeTravel($startPlace->getRSystem(), $startPlace->getPosition(), $startPlace->getXSystem(), $startPlace->getYSystem(),
 									$destinationPlace->getRSystem(), $destinationPlace->getPosition(), $destinationPlace->getXSystem(), $destinationPlace->getYSystem(), $bonus);
 	}
 
