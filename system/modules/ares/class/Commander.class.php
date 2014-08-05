@@ -14,12 +14,13 @@ class Commander {
 	const COEFFEARNEDEXP 			= 50;
 	const COEFFEXPPLAYER			= 100;
 	const CMDBASELVL 				= 100;
+	
+	const FLEETSPEED 				= 35;
 
 	const COEFFMOVEINSYSTEM 		= 584;
 	const COEFFMOVEOUTOFSYSTEM 		= 600;
-	const COEFFMOVEINTERSYSTEM 		= 10000;
+	const COEFFMOVEINTERSYSTEM 		= 50000;
 
-	const FLEETSPEED 				= 10;
 
 	const LVLINCOMECOMMANDER 		= 100;
 
@@ -45,7 +46,7 @@ class Commander {
 	const COLO						= 2; # colo ou conquete
 	const BACK						= 3; # retour après une action
 
-	const MAXTRAVELTIME				= 3600;
+	const MAXTRAVELTIME				= 57600;
 
 	# attributes
 	public $id 						= 0;
