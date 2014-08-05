@@ -11,6 +11,7 @@
 */
 
 include_once PROMETHEE;
+include_once ZEUS;
 
 class PlayerBonus {
 	// ATTRIBUTES
@@ -35,7 +36,7 @@ class PlayerBonus {
 	const COMMANDER_INVEST = 10;
 	const UNI_INVEST = 11;
 	const ANTISPY_INVEST = 12;
-	const SHIP_SPEED = 13;
+	const SHIP_SPEED = 13; # vitesse de déplacement
 	const SHIP_CONTAINER = 14;
 	const BASE_QUANTITY = 15;
 	const FIGHTER_SPEED = 16;
@@ -56,6 +57,14 @@ class PlayerBonus {
 		if ($rPlayer == CTR::$data->get('playerId')) {
 			$this->synchronized = TRUE;
 		}
+
+		# load the color (faction id) of the player
+		$S_PAM1 = ASM::$pam->getCurrentSession();
+		ASM::$pam->newSession();
+		ASM::$pam->load(array('id' => $rPlayer));
+		$this->playerColor = ASM::$pam->get()->rColor;
+		ASM::$pam->changeSession($S_PAM1);
+
 		$this->bonus = new StackList();
 	}
 
@@ -63,6 +72,9 @@ class PlayerBonus {
 		# remplissage des bonus avec les technologies
 		$this->technology = new Technology($this->rPlayer);
 		$this->fillFromTechnology();
+
+		# ajout des bonus de faction
+		$this->addFactionBonus();
 
 		# remplissage des bonus avec les cartes
 		// ...
@@ -83,6 +95,9 @@ class PlayerBonus {
 		} else {						// remplissage de l'objet normalement
 			# remplissage avec les technologies
 			$this->fillFromTechnology();
+
+			# ajout des bonus de faction
+			$this->addFactionBonus();
 
 			# remplissage avec les cartes
 			// ...
@@ -122,6 +137,55 @@ class PlayerBonus {
 
 	private function addTechnoToBonus($techno, $bonus) {
 		$this->bonus->add($bonus, $this->technology->getTechnology($techno) * TechnologyResource::getInfo($techno, 'bonus'));
+	}
+
+	private function addFactionBonus() {
+		switch ($this->playerColor) {
+			case 1:
+				# Empire
+				$this->bonus->increase(self::FIGHTER_DEFENSE, 5);
+				$this->bonus->increase(self::CORVETTE_DEFENSE, 5);
+				$this->bonus->increase(self::FRIGATE_DEFENSE, 5);
+				$this->bonus->increase(self::DESTROYER_DEFENSE, 5);
+				break;
+			case 2:
+				# Kovahk
+				$this->bonus->increase(self::FIGHTER_SPEED, 10);
+				$this->bonus->increase(self::FIGHTER_DEFENSE, -2);
+				$this->bonus->increase(self::CORVETTE_SPEED, 10);
+				$this->bonus->increase(self::CORVETTE_DEFENSE, -2);
+				$this->bonus->increase(self::FRIGATE_SPEED, 10);
+				$this->bonus->increase(self::FRIGATE_DEFENSE, -2);
+				$this->bonus->increase(self::DESTROYER_SPEED, 10);
+				$this->bonus->increase(self::DESTROYER_DEFENSE, -2);
+				break;
+			case 3:
+				# Négore
+				$this->bonus->increase(self::COMMERCIAL_INCOME, 5);
+				break;
+			case 4:
+				# Cardan
+				$this->bonus->increase(self::POPULATION_TAX, 3);
+				$this->bonus->increase(self::SHIP_CONTAINER, -5);
+				break;
+			case 5:
+				# Nerve
+				$this->bonus->increase(self::REFINERY_REFINING, 4);
+				$this->bonus->increase(self::REFINERY_STORAGE, 4);
+				break;
+			case 6:
+				# Aphéra
+				$this->bonus->increase(self::UNI_INVEST, 4);
+				break;
+			case 7:
+				# Synelle
+				$this->bonus->increase(self::COMMANDER_INVEST, 6);
+				$this->bonus->increase(self::UNI_INVEST, 2);
+				break;
+			default:
+				CTR::$alert->add('Attention, ce joueur n\'est dans aucune faction !', ALERT_STD_ERROR);
+				break;
+		}
 	}
 
 	public function increment($bonusId, $increment) {
@@ -197,7 +261,6 @@ class PlayerBonus {
 		if ($this->synchronized) {
 			CTR::$data->get('playerBonus')->add($bonusId, $this->technology->getTechnology($techno) * TechnologyResource::getInfo($techno, 'bonus'));
 		}
-		CTR::$alert->add('Mise à jour des technos OK', ALERT_BUG_SUCCESS);
 	}
 }
 ?>

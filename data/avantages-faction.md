@@ -10,7 +10,7 @@
 ## Kovahk
 
 - 3 méduses
-- +10% vitesse vaisseaux
+- +10% vitesse vaisseaux (pas des flottes)
 - -2% défense
 
 ## Négore
@@ -21,7 +21,7 @@
 
 ## Cardan
 
-- 1 bon commandant (lvl 5)
+- 1 bon commandant (lvl 6)
 - +3% impots de la population (crédits)
 - -10% prix des colos/conquetes
 - -5% stockage soute
