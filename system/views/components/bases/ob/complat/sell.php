@@ -153,6 +153,8 @@ echo '<div class="component market-sell">';
 
 					echo '<hr />';
 
+					echo '<input type="hidden" value="' . $commander->experience . '" name="quantity" />';
+
 					echo '<p><input type="submit" value="Vendre" /></p>';
 				echo '</form>';
 			}

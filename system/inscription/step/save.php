@@ -18,9 +18,9 @@ try {
 	
 	if ($faction == 3) {
 		# Négore, 12500 crédits de plus
-		$pl->credit = 25000;
+		$pl->credit = 17500;
 	} else {
-		$pl->credit = 12500;
+		$pl->credit = 5000;
 	}
 	$pl->uPlayer = Utils::now();
 
@@ -125,7 +125,7 @@ try {
 	}
 
 	# initialisation des ressources
-	$ob->setResourcesStorage(3300);
+	$ob->setResourcesStorage(1000);
 
 
 	$ob->uOrbitalBase = Utils::now();

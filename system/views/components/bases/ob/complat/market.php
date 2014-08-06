@@ -129,11 +129,11 @@ echo '<div class="component transaction">';
 			echo '</div>';
 
 			echo '<div class="sort-content">';
-			for ($i = 0; $i < ASM::$trm->size(); $i++) {
-				if (CTR::$data->get('playerId') != ASM::$trm->get($i)->rPlayer) {
-					ASM::$trm->get($i)->render($shipCurrentRate, $S_CTM2, $ob_compPlat);
+				for ($i = 0; $i < ASM::$trm->size(); $i++) {
+					if (CTR::$data->get('playerId') != ASM::$trm->get($i)->rPlayer) {
+						ASM::$trm->get($i)->render($shipCurrentRate, $S_CTM2, $ob_compPlat);
+					}
 				}
-			}
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';
