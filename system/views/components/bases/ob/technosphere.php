@@ -80,6 +80,15 @@ for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
 			# usable techno
 			$disability = '';
 
+			# compute time to build with the bonuses
+			$timeToBuild = TechnologyResource::getInfo($i, 'time', $technology->getTechnology($i) + 1);
+			$bonusPercent = CTR::$data->get('playerBonus')->get(PlayerBonus::TECHNOSPHERE_SPEED);
+			if (CTR::$data->get('playerInfo')->get('color') == ColorResource::APHERA) {
+				# bonus if the player is from Aphera
+				$bonusPercent += ColorResource::BONUS_APHERA_TECHNO;
+			}
+			$timeToBuild -= round($timeToBuild * $bonusPercent / 100);
+
 			if ($inQueue) {
 				$but .= '<span class="button disable">';
 					$but .= 'technologie en cours<br />de recherche';
@@ -103,7 +112,7 @@ for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
 					$but .= '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">, ';
 						$but .= '<span class="final-cost">' . Format::numberFormat(TechnologyResource::getInfo($i, 'credit', $technology->getTechnology($i) + 1)) . '</span> ';
 					$but .= '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"> et ';
-					$but .= '<span class="final-time">' . Chronos::secondToFormat(TechnologyResource::getInfo($i, 'time', $technology->getTechnology($i) + 1), 'lite') . '</span> ';
+					$but .= '<span class="final-time">' . Chronos::secondToFormat($timeToBuild, 'lite') . '</span> ';
 					$but .= '<img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
 				$but .= '</span>';
 			} elseif (!TechnologyResource::haveRights($i, 'credit', $technology->getTechnology($i) + 1, CTR::$data->get('playerInfo')->get('credit'))) {
@@ -114,7 +123,7 @@ for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
 					$but .= '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">, ';
 						$but .= '<span class="final-cost">' . Format::numberFormat(TechnologyResource::getInfo($i, 'credit', $technology->getTechnology($i) + 1)) . '</span> ';
 					$but .= '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"> et ';
-					$but .= '<span class="final-time">' . Chronos::secondToFormat(TechnologyResource::getInfo($i, 'time', $technology->getTechnology($i) + 1), 'lite') . '</span> ';
+					$but .= '<span class="final-time">' . Chronos::secondToFormat($timeToBuild, 'lite') . '</span> ';
 					$but .= '<img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
 				$but .= '</span>';
 			} elseif (!TechnologyResource::haveRights($i, 'resource', $technology->getTechnology($i) + 1, $ob_tech->getResourcesStorage())) {
@@ -125,7 +134,7 @@ for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
 					$but .= '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">, ';
 						$but .= '<span class="final-cost">' . Format::numberFormat(TechnologyResource::getInfo($i, 'credit', $technology->getTechnology($i) + 1)) . '</span> ';
 					$but .= '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"> et ';
-					$but .= '<span class="final-time">' . Chronos::secondToFormat(TechnologyResource::getInfo($i, 'time', $technology->getTechnology($i) + 1), 'lite') . '</span> ';
+					$but .= '<span class="final-time">' . Chronos::secondToFormat($timeToBuild, 'lite') . '</span> ';
 					$but .= '<img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
 				$but .= '</span>';
 			} else {
@@ -139,7 +148,7 @@ for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
 					$but .= '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png"> | ';
 						$but .= '<span class="final-cost">' . Format::numberFormat(TechnologyResource::getInfo($i, 'credit', $technology->getTechnology($i) + 1)) . '</span> ';
 					$but .= '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"> | ';
-					$but .= '<span class="final-time">' . Chronos::secondToFormat(TechnologyResource::getInfo($i, 'time', $technology->getTechnology($i) + 1), 'lite') . '</span> ';
+					$but .= '<span class="final-time">' . Chronos::secondToFormat($timeToBuild, 'lite') . '</span> ';
 					$but .= '<img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
 				$but .= '</a>';
 			}
@@ -177,10 +186,15 @@ echo '<div class="component techno">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<div class="number-box ' . ((CTR::$data->get('playerBonus')->get(PlayerBonus::TECHNOSPHERE_SPEED) == 0) ? 'grey' : '') . '">';
+			$bonus = CTR::$data->get('playerBonus')->get(PlayerBonus::TECHNOSPHERE_SPEED);
+			if (CTR::$data->get('playerInfo')->get('color') == ColorResource::APHERA) {
+				# bonus if the player is from Aphera
+				$bonus += ColorResource::BONUS_APHERA_TECHNO;
+			}
+			echo '<div class="number-box ' . (($bonus == 0) ? 'grey' : '') . '">';
 				echo '<span class="label">bonus de vitesse de recherche</span>';
 				echo '<span class="value">';
-					echo CTR::$data->get('playerBonus')->get(PlayerBonus::TECHNOSPHERE_SPEED) . ' %';
+					echo $bonus . ' %';
 				echo '</span>';
 			echo '</div>';
 			ASM::$tqm->changeSession($S_TQM2);

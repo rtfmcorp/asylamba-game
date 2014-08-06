@@ -67,7 +67,12 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 			$tq->technology = $techno;
 			$tq->targetLevel = $targetLevel;
 			$time = TechnologyResource::getInfo($techno, 'time', $targetLevel);
-			$bonus = $time * CTR::$data->get('playerBonus')->get(PlayerBonus::TECHNOSPHERE_SPEED) / 100;
+			$bonusPercent = CTR::$data->get('playerBonus')->get(PlayerBonus::TECHNOSPHERE_SPEED);
+			if (CTR::$data->get('playerInfo')->get('color') == ColorResource::APHERA) {
+				# bonus if the player is from Aphera
+				$bonusPercent += ColorResource::BONUS_APHERA_TECHNO;
+			}
+			$bonus = round($time * $bonusPercent / 100);
 			if (ASM::$tqm->size() == 0) {
 				$tq->dStart = Utils::now();
 			} else {
