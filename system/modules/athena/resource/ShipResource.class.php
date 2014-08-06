@@ -62,7 +62,15 @@ class ShipResource {
 		if (self::isAShip($shipId)) {
 			switch ($type) {
 				// assez de ressources pour construire ?
-				case 'resource' : return ($sup < (self::getInfo($shipId, 'resourcePrice')) * $quantity) ? FALSE : TRUE;
+				case 'resource' : 
+					$price = self::getInfo($shipId, 'resourcePrice') * $quantity;
+					if ($ship == ShipResource::CERBERE || $ship == ShipResource::PHENIX) {
+						if (CTR::$data->get('playerInfo')->get('color') == ColorResource::EMPIRE) {
+							# bonus if the player is from the Empire
+							$price -= round($price * ColorResource::BONUS_EMPIRE_CRUISER / 100);
+						}
+					}
+					return ($sup < $price) ? FALSE : TRUE;
 					break;
 				// assez de points d'action pour construire ?
 				case 'pa' : return ($sup < self::getInfo($shipId, 'pa')) ? FALSE : TRUE;

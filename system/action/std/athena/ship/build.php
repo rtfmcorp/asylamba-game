@@ -26,6 +26,10 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 		} elseif (OrbitalBaseResource::isAShipFromDock2($ship)) {
 			$dockType = 2;
 			$quantity = 1;
+			if (CTR::$data->get('playerInfo')->get('color') == ColorResource::EMPIRE) {
+				# bonus if the player is from the Empire
+				$price -= round($price * ColorResource::BONUS_CARDAN_COLO / 100);
+			}
 		} else {
 			$dockType = 3;
 			$quantity = 1;
@@ -80,7 +84,14 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 			$sq->dEnd = Utils::addSecondsToDate($sq->dStart, round($time - $bonus));
 			ASM::$sqm->add($sq);
 			// débit des ressources au joueur
-			$ob->decreaseResources(ShipResource::getInfo($ship, 'resourcePrice') * $quantity);
+			$resourcePrice = ShipResource::getInfo($ship, 'resourcePrice') * $quantity;
+			if ($ship == ShipResource::CERBERE || $ship == ShipResource::PHENIX) {
+				if (CTR::$data->get('playerInfo')->get('color') == ColorResource::EMPIRE) {
+					# bonus if the player is from the Empire
+					$resourcePrice -= round($resourcePrice * ColorResource::BONUS_EMPIRE_CRUISER / 100);
+				}
+			}
+			$ob->decreaseResources($resourcePrice);
 
 			// ajout de l'event dans le contrôleur
 			CTR::$data->get('playerEvent')->add($sq->dEnd, EVENT_BASE, $baseId);

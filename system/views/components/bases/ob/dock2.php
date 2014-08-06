@@ -55,11 +55,18 @@ for ($i = 6; $i < 12; $i++) {
 		# usable ship
 		$disability = '';
 
+		$resourcePrice = ShipResource::getInfo($i, 'resourcePrice');
+		if ($i == ShipResource::CERBERE || $i == ShipResource::PHENIX) {
+			if (CTR::$data->get('playerInfo')->get('color') == ColorResource::EMPIRE) {
+				# bonus if the player is from the Empire
+				$resourcePrice -= round($resourcePrice * ColorResource::BONUS_EMPIRE_CRUISER / 100);
+			}
+		}
 		if (!ShipResource::haveRights($i, 'queue', ASM::$sqm->size())) {
 			# queue size
 			$but = '<span class="button disable">';
 				$but .= 'file de construction pleine<br />';
-				$but .= '<span class="final-cost">' . Format::numberFormat(ShipResource::getInfo($i, 'resourcePrice')) . '</span> ';
+				$but .= '<span class="final-cost">' . Format::numberFormat($resourcePrice) . '</span> ';
 				$but .= '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png"> et ';
 				$but .= '<span class="final-time">' . Chronos::secondToFormat(ShipResource::getInfo($i, 'time'), 'lite') . '</span> ';
 				$but .= '<img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
@@ -67,7 +74,7 @@ for ($i = 6; $i < 12; $i++) {
 		} elseif ($maxShip < 1) {
 			$but = '<span class="button disable">';
 				$but .= 'pas assez de ressource / hangar plein<br />';
-				$but .= '<span class="final-cost">' . Format::numberFormat(ShipResource::getInfo($i, 'resourcePrice')) . '</span> ';
+				$but .= '<span class="final-cost">' . Format::numberFormat($resourcePrice) . '</span> ';
 				$but .= '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png"> et ';
 				$but .= '<span class="final-time">' . Chronos::secondToFormat(ShipResource::getInfo($i, 'time'), 'lite') . '</span> ';
 				$but .= '<img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
@@ -75,7 +82,7 @@ for ($i = 6; $i < 12; $i++) {
 		} else {
 			$but  = '<a href="' . APP_ROOT . 'action/a-buildship/baseid-' . $ob_dock2->getId() . '/ship-' . $i . '/quantity-1" class="button">';
 				$but .= 'construire 1 ' . ShipResource::getInfo($i, 'codeName') . ' pour<br />';
-				$but .= '<span class="final-cost">' . Format::numberFormat(ShipResource::getInfo($i, 'resourcePrice')) . '</span> ';
+				$but .= '<span class="final-cost">' . Format::numberFormat($resourcePrice) . '</span> ';
 				$but .= '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png"> et ';
 				$but .= '<span class="final-time">' . Chronos::secondToFormat(ShipResource::getInfo($i, 'time'), 'lite') . '</span> ';
 				$but .= '<img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
