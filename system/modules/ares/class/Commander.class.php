@@ -138,10 +138,7 @@ class Commander {
 	public function getEarnedExperience()		{ return $this->earnedExperience; }
 	public function getPevInBegin()				{ return $this->pevInBegin; }
 	public function getIsAttacker()				{ return $this->isAttacker; }
-
-	public function getDestinationPlaceName()	{
-		return ($this->destinationPlaceName == NULL) ? 'planète rebelle' : $this->destinationPlaceName;
-	}
+	public function getDestinationPlaceName()	{ return $this->destinationPlaceName; }
 	public function getSquadronsIds()			{ return $this->squadronsIds; }
 	public function getArmy()					{ return $this->army; }
 

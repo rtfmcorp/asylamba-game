@@ -136,7 +136,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 				$S_BQM1 = ASM::$bqm->getCurrentSession();
 				ASM::$bqm->newSession(ASM_UMODE);
 				ASM::$bqm->load(array('rOrbitalBase' => $baseId), array('dEnd'));
-				for ($i = ASM::$bqm->size() - 1; $i >= 0; $i++) { 
+				for ($i = ASM::$bqm->size() - 1; $i >= 0; $i--) {
 					ASM::$bqm->deleteById(ASM::$bqm->get($i)->id);
 				}
 				ASM::$bqm->changeSession($S_BQM1);

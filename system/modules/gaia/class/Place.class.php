@@ -712,7 +712,7 @@ class Place {
 		$commander->travelType = NULL;
 		$commander->travelLength = NULL;
 		// $commander->rStartPlace = NULL;
-		$commander->dArrival = NUL;
+		$commander->dArrival = NULL;
 		$commander->length = NULL;
 
 		$commander->statement = Commander::AFFECTED;
@@ -732,6 +732,9 @@ class Place {
 	}
 
 	private function lootAnEmptyPlace($commander) {
+		include_once ATHENA;
+		include_once ZEUS;
+
 		$bonus = 0;
 		if ($commander->rPlayer != CTR::$data->get('playerId')) {
 			$playerBonus = new PlayerBonus($this->rPlayer);
@@ -758,6 +761,7 @@ class Place {
 
 	private function lootAPlayerPlace($commander) {
 		include_once ATHENA;
+		include_once ZEUS;
 
 		$bonus = 0;
 		if ($commander->rPlayer != CTR::$data->get('playerId')) {
