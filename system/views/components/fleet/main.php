@@ -124,6 +124,10 @@ echo '<div class="component size3 list-fleet">';
 									echo '</span>';
 								echo '</div>';
 							}
+
+							if ($commander->rPlayer == CTR::$data->get('playerId')) {
+								echo '<a href="#" class="show-commander"></a>';
+							}
 						echo '</div>';
 					}
 
