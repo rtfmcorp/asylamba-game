@@ -58,6 +58,8 @@ class ColorManager extends Manager {
 			$color->electionStatement = $awColor['electionStatement'];
 			$color->dLastElection = $awColor['dLastElection'];
 
+			$color->uElection();
+
 			$this->_Add($color);
 		}
 	}
