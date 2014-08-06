@@ -181,9 +181,21 @@ class Color {
 
 	public function uElection() {
 		// 604800s = 7j
+		$token = CTC::createContext();
+		$now = Utils::now();
 		if ($this->electionStatement == self::MANDATE) {
 			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration')) {
 				$this->updateStatus();
+				$S_ELM = ASM::$elm->getCurrentsession();
+				ASM::$elm->newSession();
+				$election = new Election();	
+				$election->rColor = $this->id;
+				$date = new DateTime($this->dLastElection);
+				$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') . 'second');
+				$election->dElection = $date;
+				$this->dLastElection = $date;
+				ASM::$elm->add($election);
+				ASM::$elm->changeSession($S_ELM);
 				$this->electionStatement = self::CAMPAIGN;
 			}
 		} elseif ($this->electionStatement == self::CAMPAIGN) {			
@@ -191,7 +203,7 @@ class Color {
 				$this->electionStatement = self::ELECTION;
 			}
 		} else {
-			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + CAMPAIGNTIME) {
+			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + self::CAMPAIGNTIME) {
 				$_ELM = ASM::$elm->getCurrentSession();
 				ASM::$elm->newSession();
 				ASM::$elm->load(array('rColor' => $this->id), array('id DESC'), array('0', '1'));
@@ -202,5 +214,6 @@ class Color {
 				ASM::$elm->changeSession($_ELM);
 			}
 		}
+	CTC::applyContext($token);
 	}
 }
