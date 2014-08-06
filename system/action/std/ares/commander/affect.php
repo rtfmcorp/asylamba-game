@@ -38,16 +38,14 @@ if ($commanderId !== FALSE) {
 			$commander->line = 2;
 
 			CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté en force de réserve', ALERT_STD_SUCCESS);
-			CTR::redirect('fleet/view-movement');
-			
+			CTR::redirect('fleet/commander-' . $commander->id . '/sftr-2');
 		} elseif ($nbrLine1 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'l-line')) {
 			$commander->dAffectation =Utils::now();
 			$commander->statement = Commander::AFFECTED;
 			$commander->line = 1;
 
 			CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté en force active', ALERT_STD_SUCCESS);
-			CTR::redirect('fleet/view-movement');
-
+			CTR::redirect('fleet/commander-' . $commander->id . '/sftr-2');
 		} else {
 			CTR::$alert->add('Votre base a dépassé la capacité limite de commandants en activité', ALERT_STD_ERROR);			
 		}

@@ -108,6 +108,27 @@
 			top: 8px; left: 65px;
 			width: 160px;
 		}
+
+		.link {
+			display: none;
+			position: absolute;
+			top: 14px; left: -16px;
+			width: 24px; height: 24px;
+			font-size: 20px;
+			font-weight: bold;
+			text-decoration: none;
+			border-radius: 100%;
+			text-align: center;
+			z-index: 1;
+			border: solid 1px white;
+
+			&.to-left { background: url('src/desktop/mover/to-left.png') no-repeat center black; }
+			&.to-right { background: url('src/desktop/mover/to-right.png') no-repeat center black; }
+		}
+
+		&:hover > .link {
+			display: block;
+		}
 	}
 
 	.stellar {

@@ -12,21 +12,17 @@ $dockStorage = $ob_commanderFleet->getShipStorage();
 $lineCoord   = $commander_commanderFleet->getFormatLineCoord();
 
 echo '<div class="component size2 commander-fleet">';
-	echo '<div class="head">';
+	echo '<div class="head skin-2">';
+		echo '<h2>Représentation des escadrilles</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="fleet">';
-				echo '<h3>Représentation des escadrilles dans la flotte</h3>';
 				echo '<table class="army commanderTransfer"><tr>';
-					echo '<td>Lignes d\'attaque</td>';
 					for ($i = 5; $i > 0; $i--) { 
 						echo '<td>#' . $i . '</td>';
 					}
 				echo '</tr><tr>';
-					echo '<td>';
-						echo 'expl';
-					echo '</td>';
 					for ($i = 5; $i > 0; $i--) { 
 						echo '<td>';
 						if (max($lineCoord) >= $i) {

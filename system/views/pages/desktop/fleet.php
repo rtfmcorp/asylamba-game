@@ -8,7 +8,7 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
-	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'main') {
+	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'movement' OR CTR::$get->get('view') == 'main') {
 		# inclusion des modules
 		include_once ARES;
 		$S_COM_UKN = ASM::$com->getCurrentSession();
@@ -63,50 +63,9 @@ echo '<div id="content">';
 
 		include COMPONENT . 'fleet/main.php';
 
-		ASM::$com->changeSession($S_COM_UKN);
-
-/*		# inclusion des modules
-		include_once ARES;
-		
-		# loading des objets
-		$commandersId = array(0);
-		for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
-			if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
-				if (CTR::$data->get('playerEvent')->get($i)->get('eventInfo')->size() > 0) {
-					$commandersId[] = CTR::$data->get('playerEvent')->get($i)->get('eventId');
-				}
-			}
-		}
-		$S_COM1 = ASM::$com->getCurrentSession();
-		ASM::$com->newSession();
-		ASM::$com->load(array('c.id' => $commandersId));
-
-		# listFleetIncoming component
-		$commander_listFleetIncoming = array();
-		for ($i = 0; $i < ASM::$com->size(); $i++) {
-			$commander_listFleetIncoming[$i] = ASM::$com->get($i);
-		}
-		include COMPONENT . 'fleet/listFleetIncoming.php';
-		
-		ASM::$com->changeSession($S_COM1);*/
-	} elseif (CTR::$get->get('view') == 'movement') {
-		# inclusion des modules
-		include_once ARES;
-
-		# loading des objets
-		$S_COM1 = ASM::$com->getCurrentSession();
-		ASM::$com->newSession();
-		ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => array(COM_AFFECTED, COM_MOVING)), array('c.rBase', 'DESC'));
-
-		# listFleet component
-		$commander_listFleet = array();
-		for ($i = 0; $i < ASM::$com->size(); $i++) {
-			$commander_listFleet[$i] = ASM::$com->get($i);
-		}
-		include COMPONENT . 'fleet/listFleet.php';
-
+		# commander id
 		if (CTR::$get->exist('commander')) {
-			$S_COM2 = ASM::$com->getCurrentSession();
+			$S_COM_ID = ASM::$com->getCurrentSession();
 			ASM::$com->newSession();
 			ASM::$com->load(array(
 				'c.rPlayer' => CTR::$data->get('playerId'),
@@ -116,7 +75,7 @@ echo '<div id="content">';
 
 			if (ASM::$com->size() == 1) {
 				include_once ATHENA;
-				$S_OBM_1 = ASM::$obm->getCurrentSession();
+				$S_OBM_DOCK = ASM::$obm->getCurrentSession();
 				ASM::$obm->newSession();
 				ASM::$obm->load(array('rPlace' => ASM::$com->get()->getRBase()));
 
@@ -128,14 +87,12 @@ echo '<div id="content">';
 				$ob_commanderFleet = ASM::$obm->get();
 				include COMPONENT . 'fleet/commanderFleet.php';
 
-				ASM::$com->changeSession($S_COM2);
-				ASM::$obm->changeSession($S_OBM_1);
+				ASM::$com->changeSession($S_COM_ID);
+				ASM::$obm->changeSession($S_OBM_DOCK);
 			}
 		}
 
-		ASM::$com->changeSession($S_COM1);
-	# } elseif (CTR::$get->get('view') == 'commanders') {
-		# code
+		ASM::$com->changeSession($S_COM_UKN);
 	} elseif (CTR::$get->get('view') == 'spyreport') {
 		# inclusion des modules
 		include_once ARTEMIS;

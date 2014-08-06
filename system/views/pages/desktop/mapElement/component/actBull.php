@@ -129,7 +129,7 @@ echo '<div class="column act">';
 						echo '<div class="item move">';
 							echo '<strong class="name"></strong><br />';
 							echo 'Temps du déplacement : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, CTR::$data->get('playerBonus')), 'lite') . ' <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
-							echo '<a class="button" href="#" data-url="' . APP_ROOT . 'action/a-loot/commanderid-{id}/placeid-' . $place->id . '">Lancer la mission</a>';
+							echo '<a class="button" href="#" data-url="' . APP_ROOT . 'action/a-movefleet/commanderid-{id}/placeid-' . $place->id . '">Lancer la mission</a>';
 						echo '</div>';
 					echo '</div>';
 				}
