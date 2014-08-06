@@ -23,10 +23,23 @@ echo '<div class="component size3 list-fleet">';
 					echo '</h2>';
 
 					foreach ($base['fleets'] as $commander) {
-						echo '<div class="item">';
+						$step = 0;
+
+						if ($commander->rPlayer != CTR::$data->get('playerId')) {
+							for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
+								$event = CTR::$data->get('playerEvent')->get($i);
+								if ($event->get('eventId') == $commander->getId()) {
+									foreach ($event->get('eventInfo')->get('inCircle') as $date) {
+										if (strtotime(Utils::now()) >= strtotime($date)) { $step++; } else { break; }
+									}
+								}
+							}
+						}
+
+						echo '<div class="item ' . ($commander->rPlayer != CTR::$data->get('playerId') ? 'color' . $commander->playerColor : NULL) . '">';
 							echo '<div class="left">';
 								if ($commander->rPlayer != CTR::$data->get('playerId')) {
-									echo '<img src="' . MEDIA . 'map/action/shield.png" alt="" class="status color' . $commander->playerColor . '" />';
+									echo '<img src="' . MEDIA . 'map/action/shield.png" alt="" class="status" />';
 								} elseif ($commander->statement == Commander::AFFECTED) {
 									echo '<img src="' . MEDIA . 'map/action/anchor.png" alt="" class="status" />';
 								} elseif ($commander->statement == Commander::MOVING) {
@@ -39,9 +52,20 @@ echo '<div class="component size3 list-fleet">';
 									}
 								}
 								echo '<span class="top">';
-									echo CommanderResources::getInfo($commander->level, 'grade') . ' <strong>' . $commander->name . '</strong>, ';
+									echo (($commander->rPlayer == CTR::$data->get('playerId')) || ($commander->rPlayer != CTR::$data->get('playerId') && $step >= 2))
+										? CommanderResources::getInfo($commander->level, 'grade') . ' <strong>' . $commander->name . '</strong>, '
+										: 'Officier inconnu, ';
+
 									if ($commander->rPlayer != CTR::$data->get('playerId')) {
-										echo 'vous attaque';
+										if ($step >= 2) {
+											switch ($commander->getTypeOfMove()) {
+												case COM_LOOT: $type = 'tente de vous piller'; break;
+												case COM_COLO: $type = 'tente de vous conquérir'; break;
+												default: $type = 'erreur'; break;
+											}
+										} else {
+											echo 's\'approche de vous';
+										}
 									} elseif ($commander->statement == Commander::AFFECTED) {
 										echo 'à quai';
 									} elseif ($commander->statement == Commander::MOVING) {
@@ -53,38 +77,51 @@ echo '<div class="component size3 list-fleet">';
 											default: break;
 										}
 									}
-									echo '&#8194;|&#8194;' . Format::number($commander->getPev()) . ' pev';
+
+									echo (($commander->rPlayer == CTR::$data->get('playerId')) || ($commander->rPlayer != CTR::$data->get('playerId') && $step >= 3))
+										? '&#8194;|&#8194;' . Format::number($commander->getPev()) . ' pev'
+										: '&#8194;|&#8194;??? pev';
 
 									if ($commander->rPlayer == CTR::$data->get('playerId') && $commander->statement == Commander::MOVING && $commander->travelType != Commander::BACK) {
-										echo '&#8194;&#8194;<a href="' . APP_ROOT . 'action/a-cancelmove/commanderid-' . $commander->id . '">annuler</a>';
+										echo '&#8195;<a href="' . APP_ROOT . 'action/a-cancelmove/commanderid-' . $commander->id . '">annuler la mission</a>';
 									}
 								echo '</span>';
 							echo '</div>';
 
 							echo '<div class="center ' . (($commander->rPlayer != CTR::$data->get('playerId') || $commander->travelType == Commander::BACK) ? 'reversed' : NULL) . '">';
 								if ($commander->statement == Commander::MOVING) {
-									echo '<div class="progress-ship color' . $commander->playerColor . '">';
-										if ($commander->rPlayer != CTR::$data->get('playerId') || $commander->travelType == Commander::BACK) {
-											echo '<div class="bar" style="width: ' . Format::percent(Utils::interval($commander->dArrival, Utils::now(), 's'), Utils::interval($commander->dArrival, $commander->dStart, 's')) . '%;">';
-										} else {
-											echo '<div class="bar" style="width: ' . Format::percent(Utils::interval($commander->dStart, Utils::now(), 's'), Utils::interval($commander->dStart, $commander->dArrival, 's')) . '%;">';
-										}
+									$validTime = ($commander->rPlayer != CTR::$data->get('playerId') || $commander->travelType == Commander::BACK)
+										? Utils::interval($commander->dArrival, Utils::now(), 's')
+										: Utils::interval($commander->dStart, Utils::now(), 's');
+									$restTime  = Utils::interval($commander->dArrival, Utils::now(), 's');
+									$totalTime = Utils::interval($commander->dStart, $commander->dArrival, 's');
+
+									echo '<div class="progress-ship" data-progress-current-time="' . $validTime . '" data-progress-total-time="' . $totalTime . '">';
+											echo '<div class="bar" style="width: ' . Format::percent($validTime, $totalTime) . '%;">';
 											echo ($commander->rPlayer != CTR::$data->get('playerId') || $commander->travelType == Commander::BACK)
 												? '<img src="' . MEDIA . 'map/fleet/ship-reversed.png" alt="" class="ship" />'
 												: '<img src="' . MEDIA . 'map/fleet/ship.png" alt="" class="ship" />';
-											echo '<span>' . Chronos::secondToFormat(Utils::interval(Utils::now(), $commander->dArrival, 's'), 'lite') . '</span>';
+											echo '<span>' . Chronos::secondToFormat($restTime, 'lite') . '</span>';
 										echo '</div>';
 									echo '</div>';
 								} else {
 									echo '<img src="' . MEDIA . 'map/fleet/ship.png" alt="" class="ship" />';
-
 								}
 							echo '</div>';
 
 							if ($commander->statement == Commander::MOVING) {
 								echo '<div class="right">';
 									echo '<img src="' . MEDIA . 'map/place/place1-2.png" alt="" class="cover" />';
-									echo '<span class="top"><a href="' . APP_ROOT . 'map/place-' . $commander->rDestinationPlace . '">' . ($commander->destinationPlaceName == NULL ? 'Planète Rebelle' : $commander->destinationPlaceName) . '</a></span>';
+									echo '<span class="top">';
+										if (($commander->rPlayer != CTR::$data->get('playerId') || $commander->travelType == Commander::BACK)) {
+											echo '<a href="' . APP_ROOT . 'map/place-' . $commander->rStartPlace . '">' . $commander->startPlaceName . '</a>';
+										} else {
+											echo '<a href="' . APP_ROOT . 'map/place-' . $commander->rDestinationPlace . '">' . $commander->destinationPlaceName . '</a>';
+										}
+										if ($commander->rPlayer != CTR::$data->get('playerId')) {
+											echo ' (<a href="' . APP_ROOT . 'diary/player-' . $commander->rBase . '">' . $commander->playerName . '</a>)';
+										}
+									echo '</span>';
 								echo '</div>';
 							}
 						echo '</div>';
@@ -97,4 +134,4 @@ echo '<div class="component size3 list-fleet">';
 			}
 		echo '</div>';
 	echo '</div>';
-echo '</div>';;
+echo '</div>';

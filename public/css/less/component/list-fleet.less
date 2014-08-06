@@ -28,6 +28,13 @@
 			border-bottom: solid 1px #202020;
 		}
 
+		a {
+			display: inline-block;
+			text-decoration: none;
+			color: #CCC;
+			border-bottom: solid 1px #202020;
+		}
+
 		.left {
 			position: absolute;
 			top: 0; left: 0;
@@ -46,14 +53,6 @@
 				width: 30px;
 				margin: 10px; padding: 5px;
 				border-radius: 100%;
-
-				&.color1 { background: @medium-1; }
-				&.color2 { background: @medium-2; }
-				&.color3 { background: @medium-3; }
-				&.color4 { background: @medium-4; }
-				&.color5 { background: @medium-5; }
-				&.color6 { background: @medium-6; }
-				&.color7 { background: @medium-7; }
 			}
 		}
 
@@ -85,7 +84,7 @@
 
 			.ship {
 				position: absolute;
-				top: -11px; left: -11px; right: auto;
+				top: -10px; left: -11px; right: auto;
 			}
 
 			.progress-ship {
@@ -94,20 +93,12 @@
 				background: #4F4F4F;
 				height: 3px;
 
-				&.color1 .bar { background: @light-1; }
-				&.color2 .bar { background: @light-2; }
-				&.color3 .bar { background: @light-3; }
-				&.color4 .bar { background: @light-4; }
-				&.color5 .bar { background: @light-5; }
-				&.color6 .bar { background: @light-6; }
-				&.color7 .bar { background: @light-7; }
-
 				.bar {
 					position: relative;
 					display: block;
 					height: 3px;
 
-					.ship { right: -11px; left: auto; }
+					.ship { top: -11px; right: -11px; left: auto; }
 
 					span {
 						position: absolute;
@@ -116,18 +107,37 @@
 					}
 				}
 			}
+		}
 
-			&.reversed .progress-ship {
-				&.color1 { background: @light-1; }
-				&.color2 { background: @light-2; }
-				&.color3 { background: @light-3; }
-				&.color4 { background: @light-4; }
-				&.color5 { background: @light-5; }
-				&.color6 { background: @light-6; }
-				&.color7 { background: @light-7; }
+		&.color1 .status { background: @medium-1; }
+		&.color2 .status { background: @medium-2; }
+		&.color3 .status { background: @medium-3; }
+		&.color4 .status { background: @medium-4; }
+		&.color5 .status { background: @medium-5; }
+		&.color6 .status { background: @medium-6; }
+		&.color7 .status { background: @medium-7; }
 
-				.bar { background: #4F4F4F; }
-			}
+		&.color1 .center .progress-ship .bar { background: @light-1; }
+		&.color2 .center .progress-ship .bar { background: @light-2; }
+		&.color3 .center .progress-ship .bar { background: @light-3; }
+		&.color4 .center .progress-ship .bar { background: @light-4; }
+		&.color5 .center .progress-ship .bar { background: @light-5; }
+		&.color6 .center .progress-ship .bar { background: @light-6; }
+		&.color7 .center .progress-ship .bar { background: @light-7; }
+
+		&.color1 .center.reversed .progress-ship .bar { background: @light-1; }
+		&.color2 .center.reversed .progress-ship .bar { background: @light-2; }
+		&.color3 .center.reversed .progress-ship .bar { background: @light-3; }
+		&.color4 .center.reversed .progress-ship .bar { background: @light-4; }
+		&.color5 .center.reversed .progress-ship .bar { background: @light-5; }
+		&.color6 .center.reversed .progress-ship .bar { background: @light-6; }
+		&.color7 .center.reversed .progress-ship .bar { background: @light-7; }
+
+		.center .progress-ship .bar {
+			background: @light;
+		}
+		.center.reversed .progress-ship .bar {
+			background: #4F4F4F; 
 		}
 	}
 }
