@@ -70,7 +70,7 @@ class Color {
 		if ($limit > 40) { $limit = 40; }
 
 		$_PAM1 = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession();
+		ASM::$pam->newSession(FALSE);
 
 
 		ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
@@ -181,8 +181,6 @@ class Color {
 
 	public function uElection() {
 		// 604800s = 7j
-		$token = CTC::createContext();
-		$now = Utils::now();
 		if ($this->electionStatement == self::MANDATE) {
 			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration')) {
 				$this->updateStatus();
@@ -191,9 +189,10 @@ class Color {
 				$election = new Election();	
 				$election->rColor = $this->id;
 				$date = new DateTime($this->dLastElection);
-				$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') . 'second');
-				$election->dElection = $date;
-				$this->dLastElection = $date;
+				$mandateDuration = ColorResource::getInfo($this->id, 'mandateDuration');
+				$date->modify('+' . $mandateDuration . 'second');
+				$election->dElection = $date->format('Y-m-d H:i:s');
+				$this->dLastElection = $date->format('Y-m-d H:i:s');
 				ASM::$elm->add($election);
 				ASM::$elm->changeSession($S_ELM);
 				$this->electionStatement = self::CAMPAIGN;
@@ -214,6 +213,5 @@ class Color {
 				ASM::$elm->changeSession($_ELM);
 			}
 		}
-	CTC::applyContext($token);
 	}
 }
