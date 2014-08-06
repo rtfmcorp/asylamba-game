@@ -131,94 +131,18 @@ class Color {
 
 		*/
 
-		switch ($this->id) {
-			case 1: 
-				ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
-				for ($i = 0; $i < ASM::$pam->size(); $i++) {
-					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
-						if ($i < $limit) {
-							ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
-						} else {
-							ASM::$pam->get($i)->setStatus(PAM_STANDARD);
-						}
+			ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
+			for ($i = 0; $i < ASM::$pam->size(); $i++) {
+				if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
+					if ($i < $limit) {
+						ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
+					} else {
+						ASM::$pam->get($i)->setStatus(PAM_STANDARD);
 					}
 				}
-			break;
-			case 2: 
-				ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
-				for ($i = 0; $i < ASM::$pam->size(); $i++) {
-					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
-						if ($i < $limit) {
-							ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);	
-						} else {
-							ASM::$pam->get($i)->setStatus(PAM_STANDARD);
-						}
-					}
-				}
-			break;
-			case 3: 
-				ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
-				for ($i = 0; $i < ASM::$pam->size(); $i++) {
-					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
-						if ($i < $limit) {
-							ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);	
-						} else {
-							ASM::$pam->get($i)->setStatus(PAM_STANDARD);
-						}
-					}
-				}
-			break;
-			case 4: 
-				ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
-				for ($i = 0; $i < ASM::$pam->size(); $i++) {
-					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
-						if ($i < $limit) {
-							ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);	
-						} else {
-							ASM::$pam->get($i)->setStatus(PAM_STANDARD);
-						}
-					}
-				}
-			break;
-			case 5: 
-				ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
-				for ($i = 0; $i < ASM::$pam->size(); $i++) {
-					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
-						if ($i < $limit) {
-							ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);	
-						} else {
-							ASM::$pam->get($i)->setStatus(PAM_STANDARD);
-						}
-					}
-				}
-			break;
-			case 6: 
-				ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
-				for ($i = 0; $i < ASM::$pam->size(); $i++) {
-					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
-						if ($i < $limit) {
-							ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);	
-						} else {
-							ASM::$pam->get($i)->setStatus(PAM_STANDARD);
-						}
-					}
-				}
-			break;
-			case 7: 
-				ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
-				for ($i = 0; $i < ASM::$pam->size(); $i++) {
-					if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
-						if ($i < $limit) {
-							ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);	
-						} else {
-							ASM::$pam->get($i)->setStatus(PAM_STANDARD);
-						}
-					}
-				}
-			break;
-		}
+			}
 
-		ASM::$pam->save();
+		// ASM::$pam->save();
 		ASM::$pam->changeSession($_PAM1);
 	}
 
@@ -317,22 +241,22 @@ class Color {
 
 	public function uElection() {
 		// 604800s = 7j
-		if ($this->electionStatement == Color::MANDATE) {
+		if ($this->electionStatement == self::MANDATE) {
 			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration')) {
 				$this->updateStatus();
-				$this->electionStatement = Color::CAMPAIGN;
+				$this->electionStatement = self::CAMPAIGN;
 			}
-		} elseif ($this->electionStatement == Color::CAMPAIGN) {
-			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + Color::CAPAIGNTIME) {
-				$this->electionStatement = Color::ELECTION;
+		} elseif ($this->electionStatement == self::CAMPAIGN) {
+			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::CAMPAIGNTIME) {
+				$this->electionStatement = self::ELECTION;
 			}
 		} else {
-			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + Color::ELECTIONTIME) {
+			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + CAMPAIGNTIME) {
 				$_ELM = ASM::$elm->getCurrentSession();
 				ASM::$elm->newSession();
 				ASM::$elm->load(array('rColor' => $this->id), array('id DESC'), array('0', '1'));
 				$this->ballot(ASM::$elm->get());
-				$this->electionStatement = Color::MANDATE;
+				$this->electionStatement = self::MANDATE;
 				$this->dLastElection = Utils::now();
 
 				ASM::$elm->changeSession($_ELM);

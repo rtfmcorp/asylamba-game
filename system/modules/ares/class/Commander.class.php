@@ -349,7 +349,7 @@ class Commander {
 			$invest = $ob->iSchool;
 			
 			// load bonus
-			$invest += $invest * $playerBonus->bonus->get(PlayerBonus::COMMANDER_INVEST) / 100;
+			$invest += $invest * $playerBonus->get(PlayerBonus::COMMANDER_INVEST) / 100;
 			$coeff = $invest / 100;
 			$earnedExperience  = round(log($coeff + 1) / log(2) * 20);
 			$earnedExperience += rand(-23, 23);
@@ -477,8 +477,14 @@ class Commander {
 				
 
 			include_once ZEUS;
-			$playerBonus = new PlayerBonus($this->rPlayer);
-			$playerBonus->load();
+			$playerBonus = 0;
+			if ($this->rPlayer != CTR::$data->get('playerId')) {
+				$playerBonus = new PlayerBonus($this->rPlayer);
+				$playerBonus->load();
+				$playerBonus = $playerBonus->bonus;
+			} else {
+				$playerBonus = CTR::$data->get('playerBonus');
+			}
 
 			foreach ($nbrHours as $hour) {
 				CTC::add($hour, $this, 'uExperienceInSchool', array($ob, $playerBonus));
