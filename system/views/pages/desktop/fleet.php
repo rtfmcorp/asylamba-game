@@ -63,13 +63,9 @@ echo '<div id="content">';
 
 		include COMPONENT . 'fleet/main.php';
 
-		ASM::$com->changeSession($S_COM_UKN);
-
-
-
-		/*
+		# commander id
 		if (CTR::$get->exist('commander')) {
-			$S_COM2 = ASM::$com->getCurrentSession();
+			$S_COM_ID = ASM::$com->getCurrentSession();
 			ASM::$com->newSession();
 			ASM::$com->load(array(
 				'c.rPlayer' => CTR::$data->get('playerId'),
@@ -79,7 +75,7 @@ echo '<div id="content">';
 
 			if (ASM::$com->size() == 1) {
 				include_once ATHENA;
-				$S_OBM_1 = ASM::$obm->getCurrentSession();
+				$S_OBM_DOCK = ASM::$obm->getCurrentSession();
 				ASM::$obm->newSession();
 				ASM::$obm->load(array('rPlace' => ASM::$com->get()->getRBase()));
 
@@ -91,11 +87,12 @@ echo '<div id="content">';
 				$ob_commanderFleet = ASM::$obm->get();
 				include COMPONENT . 'fleet/commanderFleet.php';
 
-				ASM::$com->changeSession($S_COM2);
-				ASM::$obm->changeSession($S_OBM_1);
+				ASM::$com->changeSession($S_COM_ID);
+				ASM::$obm->changeSession($S_OBM_DOCK);
 			}
 		}
-		*/
+
+		ASM::$com->changeSession($S_COM_UKN);
 	} elseif (CTR::$get->get('view') == 'spyreport') {
 		# inclusion des modules
 		include_once ARTEMIS;

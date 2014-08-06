@@ -145,9 +145,14 @@
 
 		.show-commander {
 			position: absolute;
-			top: 0; right: -30px;
-			width: 30px; height: 60px;
-			background: url('src/desktop/mover/right.png') no-repeat center;
+			top: -1px; right: -30px;
+			width: 28px; height: 60px;
+			background: url('src/desktop/mover/small-right.png') no-repeat center #0A0A0A;
+			border: solid 1px #202020;
+
+			&:hover, &:focus, &.active {
+				background-color: #202020;
+			}
 		}
 	}
 }
