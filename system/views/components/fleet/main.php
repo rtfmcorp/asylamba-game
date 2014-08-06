@@ -54,6 +54,7 @@ echo '<div class="component size3 list-fleet">';
 										}
 									}
 									echo '&#8194;|&#8194;' . Format::number($commander->getPev()) . ' pev';
+
 									if ($commander->rPlayer == CTR::$data->get('playerId') && $commander->statement == Commander::MOVING && $commander->travelType != Commander::BACK) {
 										echo '&#8194;&#8194;<a href="' . APP_ROOT . 'action/a-cancelmove/commanderid-' . $commander->id . '">annuler</a>';
 									}
@@ -63,7 +64,11 @@ echo '<div class="component size3 list-fleet">';
 							echo '<div class="center ' . (($commander->rPlayer != CTR::$data->get('playerId') || $commander->travelType == Commander::BACK) ? 'reversed' : NULL) . '">';
 								if ($commander->statement == Commander::MOVING) {
 									echo '<div class="progress-ship color' . $commander->playerColor . '">';
-										echo '<div class="bar" style="width: ' . Format::percent(Utils::interval($commander->dStart, Utils::now(), 's'), Utils::interval($commander->dStart, $commander->dArrival, 's')) . '%;">';
+										if ($commander->rPlayer != CTR::$data->get('playerId') || $commander->travelType == Commander::BACK) {
+											echo '<div class="bar" style="width: ' . Format::percent(Utils::interval($commander->dArrival, Utils::now(), 's'), Utils::interval($commander->dArrival, $commander->dStart, 's')) . '%;">';
+										} else {
+											echo '<div class="bar" style="width: ' . Format::percent(Utils::interval($commander->dStart, Utils::now(), 's'), Utils::interval($commander->dStart, $commander->dArrival, 's')) . '%;">';
+										}
 											echo ($commander->rPlayer != CTR::$data->get('playerId') || $commander->travelType == Commander::BACK)
 												? '<img src="' . MEDIA . 'map/fleet/ship-reversed.png" alt="" class="ship" />'
 												: '<img src="' . MEDIA . 'map/fleet/ship.png" alt="" class="ship" />';

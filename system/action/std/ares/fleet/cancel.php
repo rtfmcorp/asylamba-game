@@ -17,7 +17,7 @@ if ($commanderId !== FALSE) {
 		if (ASM::$com->size() > 0) {
 			$commander = ASM::$com->get();
 
-			$interval = Utils::interval($commander->dArrival, Utils::now(), 's');
+			$interval = Utils::interval($commander->dStart, Utils::now(), 's');
 			$dStart = new DateTime(Utils::now());
 			$dStart->modify('-' . $interval . 'second');
 
