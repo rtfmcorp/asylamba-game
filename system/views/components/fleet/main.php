@@ -126,7 +126,7 @@ echo '<div class="component size3 list-fleet">';
 							}
 
 							if ($commander->rPlayer == CTR::$data->get('playerId')) {
-								echo '<a href="#" class="show-commander"></a>';
+								echo '<a href="' . APP_ROOT . 'fleet/commander-' . $commander->id . '/sftr-2" class="show-commander ' . (CTR::$get->exist('commander') && CTR::$get->get('commander') == $commander->id ? 'active' : NULL) . '"></a>';
 							}
 						echo '</div>';
 					}

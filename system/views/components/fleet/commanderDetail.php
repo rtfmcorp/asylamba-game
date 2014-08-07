@@ -9,32 +9,25 @@
 
 echo '<div class="component">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'commander/medium/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . $commander_commanderDetail->getName() . '" />';
-		echo '<h2>' . $commander_commanderDetail->getName() . '</h2>';
-		echo '<em>grade ' . $commander_commanderDetail->getLevel() . '</em>';
+		echo '<img src="' . MEDIA . 'commander/medium/' . $commander_commanderDetail->avatar . '.png" alt="' . $commander_commanderDetail->getName() . '" />';
+		echo '<h2>' . $commander_commanderDetail->name . '</h2>';
+		echo '<em>' . CommanderResources::getInfo($commander_commanderDetail->level, 'grade') . '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			if (in_array($commander_commanderDetail->getStatement(), array(COM_AFFECTED, COM_MOVING))) {
-				echo '<div class="tool">';
-					echo '<span><a href="#" class="hb lt" title="la fonctionnalité n\'est pas encore implémentée">vendre au marché</a></span>';
-					echo '<span><a href="#" class="hb lt" title="licencier le commandant">×</a></span>';
-				echo '</div>';
-			}
-
 			if ($commander_commanderDetail->getStatement() == COM_INSCHOOL) {
 				echo '<div class="number-box">';
-					echo '<span class="label">état du commandant</span>';
+					echo '<span class="label">état de l\'officier</span>';
 					echo '<span class="value">A l\'école</span>';
 				echo '</div>';
 			} elseif ($commander_commanderDetail->getStatement() == COM_AFFECTED) {
 				echo '<div class="number-box">';
-					echo '<span class="label">état du commandant</span>';
+					echo '<span class="label">état de l\'officier</span>';
 					echo '<span class="value">A quai</span>';
 				echo '</div>';
 			} elseif ($commander_commanderDetail->getStatement() == COM_MOVING) {
 				echo '<div class="number-box">';
-					echo '<span class="label">état du commandant</span>';
+					echo '<span class="label">état de l\'officier</span>';
 					echo '<span class="value">En mission</span>';
 				echo '</div>';
 				# affichage conditionnel d'info
@@ -46,7 +39,7 @@ echo '<div class="component">';
 						echo '</div>';
 						echo '<div class="number-box">';
 							echo '<span class="label">vers</span>';
-							echo '<span class="value">' . $commander_commanderDetail->getRPlaceDestination() . '</span>';
+							echo '<span class="value">' . $commander_commanderDetail->rPlaceDestination . '</span>';
 						echo '</div>'; break;
 					case COM_LOOT: 
 						echo '<div class="number-box">';
@@ -55,7 +48,7 @@ echo '<div class="component">';
 						echo '</div>';
 						echo '<div class="number-box">';
 							echo '<span class="label">cible</span>';
-							echo '<span class="value">' . $commander_commanderDetail->getDestinationPlaceName() . '</span>';
+							echo '<span class="value">' . $commander_commanderDetail->destinationPlaceName . '</span>';
 						echo '</div>'; break;
 					case COM_COLO: 
 						echo '<div class="number-box">';
@@ -64,7 +57,7 @@ echo '<div class="component">';
 						echo '</div>';
 						echo '<div class="number-box">';
 							echo '<span class="label">cible</span>';
-							echo '<span class="value">' . $commander_commanderDetail->getDestinationPlaceName() . '</span>';
+							echo '<span class="value">' . $commander_commanderDetail->destinationPlaceName . '</span>';
 						echo '</div>'; break;
 					case COM_BACK: 
 						echo '<div class="number-box">';
@@ -79,7 +72,7 @@ echo '<div class="component">';
 				}
 			} elseif ($commander_commanderDetail->getStatement() == COM_DEAD) {
 				echo '<div class="number-box">';
-					echo '<span class="label">état du commandant</span>';
+					echo '<span class="label">état de l\'officier</span>';
 					echo '<span class="value">Tombé au combat</span>';
 				echo '</div>';
 			}
@@ -108,7 +101,6 @@ echo '<div class="component">';
 						echo '<span class="content" style="width: ' . $percent . '%;"></span>';
 					echo '</span>';
 				echo '</div>';
-				echo '<hr />';
 			}
 
 		echo '</div>';
