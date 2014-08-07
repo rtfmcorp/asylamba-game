@@ -739,9 +739,9 @@ class Place {
 		if ($commander->rPlayer != CTR::$data->get('playerId')) {
 			$playerBonus = new PlayerBonus($commander->rPlayer);
 			$playerBonus->load();
-			$bonus = $playerBonus->bonus->get(SHIP_CONTAINER);
+			$bonus = $playerBonus->bonus->get(PlayerBonus::SHIP_CONTAINER);
 		} else {
-			$bonus = CTR::$data->get('playerBonus')->get(SHIP_CONTAINER);
+			$bonus = CTR::$data->get('playerBonus')->get(PlayerBonus::SHIP_CONTAINER);
 		}
 
 		$storage = $commander->getPev() * Commander::COEFFLOOT;
@@ -767,9 +767,9 @@ class Place {
 		if ($commander->rPlayer != CTR::$data->get('playerId')) {
 			$playerBonus = new PlayerBonus($commander->rPlayer);
 			$playerBonus->load();
-			$bonus = $playerBonus->bonus->get(SHIP_CONTAINER);
+			$bonus = $playerBonus->bonus->get(PlayerBonus::SHIP_CONTAINER);
 		} else {
-			$bonus = CTR::$data->get('playerBonus')->get(SHIP_CONTAINER);
+			$bonus = CTR::$data->get('playerBonus')->get(PlayerBonus::SHIP_CONTAINER);
 		}
 
 		$S_OBM1 = ASM::$obm->getCurrentSession();
