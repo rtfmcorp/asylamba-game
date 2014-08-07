@@ -60,7 +60,7 @@ echo '<div class="component market-sell">';
 				
 				echo '<div class="label-box sf-quantity">';
 					echo '<label for="sell-market-quantity-resources" class="label">Base</label>';
-					echo '<input id="sell-market-quantity-resources" class="value" type="text" name="otherbaseid" autocomplete="off" />';
+					echo '<input id="sell-market-quantity-resources" class="value autocomplete-orbitalbase ac_input" type="text" name="name" autocomplete="off" />';
 				echo '</div>';
 
 				echo '<div class="label-box sf-quantity">';
