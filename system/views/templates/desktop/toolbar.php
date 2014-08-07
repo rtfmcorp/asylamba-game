@@ -108,7 +108,7 @@ echo '<div id="tools">';
 			if (ASM::$bqm->size() > 0) {
 				$qe = ASM::$bqm->get(0);
 				echo '<div class="queue">';
-					echo '<div class="item active progress" data-progress-reload="false" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time') . '">';
+					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time') . '">';
 						echo '<img class="picto" src="' . MEDIA . 'orbitalbase/' . OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
 						echo '<strong>';
 							echo OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'frenchName');
@@ -141,7 +141,7 @@ echo '<div id="tools">';
 			if (ASM::$sqm->size() > 0) {
 				$qe = ASM::$sqm->get(0);
 				echo '<div class="queue">';
-					echo '<div class="item active progress" data-progress-reload="false" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $qe->quantity * ShipResource::getInfo($qe->shipNumber, 'time') . '">';
+					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $qe->quantity * ShipResource::getInfo($qe->shipNumber, 'time') . '">';
 						echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($qe->shipNumber, 'imageLink') . '.png" alt="" />';
 						echo '<strong>';
 							echo $qe->quantity . ' ' . ShipResource::getInfo($qe->shipNumber, 'codeName') . Format::addPlural($qe->quantity);
@@ -173,7 +173,7 @@ echo '<div id="tools">';
 			if (ASM::$sqm->size() > 0) {
 				$qe = ASM::$sqm->get(0);
 				echo '<div class="queue">';
-					echo '<div class="item active progress" data-progress-reload="false" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $qe->quantity * ShipResource::getInfo($qe->shipNumber, 'time') . '">';
+					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $qe->quantity * ShipResource::getInfo($qe->shipNumber, 'time') . '">';
 						echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($qe->shipNumber, 'imageLink') . '.png" alt="" />';
 						echo '<strong>';
 							echo $qe->quantity . ' ' . ShipResource::getInfo($qe->shipNumber, 'codeName') . Format::addPlural($qe->quantity);
@@ -205,7 +205,7 @@ echo '<div id="tools">';
 			if (ASM::$tqm->size() > 0) {
 				$qe = ASM::$tqm->get(0);
 				echo '<div class="queue">';
-					echo '<div class="item active progress" data-progress-reload="false" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel) . '">';
+					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel) . '">';
 						echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($qe->technology, 'imageLink') . '.png" alt="" />';
 						echo '<strong>' . TechnologyResource::getInfo($qe->technology, 'name');
 						if (!TechnologyResource::isAnUnblockingTechnology($qe->technology)) {
@@ -240,7 +240,7 @@ echo '<div id="tools">';
 						$commander = CTR::$data->get('playerEvent')->get($i);
 						
 						echo '<div class="item active progress" ';
-							echo 'data-progress-reload="false" ';
+							echo 'data-progress-no-reload="true" ';
 							echo 'data-progress-output="lite" ';
 							echo 'data-progress-current-time="' . Utils::interval(Utils::now(), $commander->get('eventInfo')->get('dArrival'), 's') . '" ';
 							echo 'data-progress-total-time="' . Utils::interval($commander->get('eventInfo')->get('dStart'), $commander->get('eventInfo')->get('dArrival'), 's') . '">';
@@ -283,7 +283,7 @@ echo '<div id="tools">';
 						$commander = CTR::$data->get('playerEvent')->get($i);
 
 						echo '<div class="item active progress" ';
-							echo 'data-progress-reload="false" ';
+							echo 'data-progress-no-reload="true" ';
 							echo 'data-progress-output="lite" ';
 							echo 'data-progress-current-time="' . Utils::interval(Utils::now(), $commander->get('eventInfo')->get('dArrival'), 's') . '" ';
 							echo 'data-progress-total-time="' . Utils::interval($commander->get('eventInfo')->get('dStart'), $commander->get('eventInfo')->get('dArrival'), 's') . '">';

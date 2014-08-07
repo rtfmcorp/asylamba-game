@@ -480,22 +480,28 @@ jQuery(document).ready(function($) {
 	$(function() {
 		$('.progress').each(function(i) {
 			var queue = $(this);
-			var totalTime = queue.data('progress-total-time');
-			var currentTime = queue.data('progress-current-time');
+			var bar = queue.find('.progress-bar');
+			var text = queue.find('.progress-text');
+
+			var totalTime = parseInt(queue.data('progress-total-time'));
+			var currentTime = parseInt(queue.data('progress-current-time'));
 			var format = queue.data('progress-output');
+			var reload = !Boolean(queue.data('progress-no-reload'));
 
 			var position;
 
 			setInterval(function() {
 				currentTime--;
 
-				if (currentTime == 0) {
+				if (currentTime <= 0 && reload) {
 					window.location.reload();
+				} else if (currentTime <= 0 && !reload) {
+					// no
 				} else {
 					position = (((totalTime - currentTime) / totalTime) * 100);
 
-					queue.find('.progress-text').html(time.secondToFormat(currentTime, format));
-					queue.find('.progress-bar').css('width', position + '%');
+					text.html(time.secondToFormat(currentTime, format));
+					bar.css('width', position + '%');
 				}
 			}, 1000);
 		});
