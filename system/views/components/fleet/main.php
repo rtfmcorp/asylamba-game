@@ -24,6 +24,7 @@ echo '<div class="component size3 list-fleet">';
 
 					foreach ($base['fleets'] as $commander) {
 						$step = 0;
+						$reversed = $commander->rPlayer != CTR::$data->get('playerId') || $commander->travelType == Commander::BACK;
 
 						if ($commander->rPlayer != CTR::$data->get('playerId')) {
 							for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
@@ -88,20 +89,20 @@ echo '<div class="component size3 list-fleet">';
 								echo '</span>';
 							echo '</div>';
 
-							echo '<div class="center ' . (($commander->rPlayer != CTR::$data->get('playerId') || $commander->travelType == Commander::BACK) ? 'reversed' : NULL) . '">';
+							echo '<div class="center ' . ($reversed ? 'reversed' : NULL) . '">';
 								if ($commander->statement == Commander::MOVING) {
-									$validTime = ($commander->rPlayer != CTR::$data->get('playerId') || $commander->travelType == Commander::BACK)
+									$passeTime = $reversed
 										? Utils::interval($commander->dArrival, Utils::now(), 's')
 										: Utils::interval($commander->dStart, Utils::now(), 's');
 									$restTime  = Utils::interval($commander->dArrival, Utils::now(), 's');
 									$totalTime = Utils::interval($commander->dStart, $commander->dArrival, 's');
 
-									echo '<div class="progress-ship" data-progress-current-time="' . $validTime . '" data-progress-total-time="' . $totalTime . '">';
-											echo '<div class="bar" style="width: ' . Format::percent($validTime, $totalTime) . '%;">';
-											echo ($commander->rPlayer != CTR::$data->get('playerId') || $commander->travelType == Commander::BACK)
+									echo '<div class="progress-ship" data-progress-current-time="' . $passeTime . '" data-progress-total-time="' . $totalTime . '" data-progress-reverse="' . ($reversed ? 'true' : 'false') . '">';
+											echo '<div class="bar" style="width: ' . Format::percent($passeTime, $totalTime) . '%;">';
+											echo $reversed
 												? '<img src="' . MEDIA . 'map/fleet/ship-reversed.png" alt="" class="ship" />'
 												: '<img src="' . MEDIA . 'map/fleet/ship.png" alt="" class="ship" />';
-											echo '<span>' . Chronos::secondToFormat($restTime, 'lite') . '</span>';
+											echo '<span class="time">' . Chronos::secondToFormat($restTime, 'lite') . '</span>';
 										echo '</div>';
 									echo '</div>';
 								} else {
@@ -113,11 +114,10 @@ echo '<div class="component size3 list-fleet">';
 								echo '<div class="right">';
 									echo '<img src="' . MEDIA . 'map/place/place1-2.png" alt="" class="cover" />';
 									echo '<span class="top">';
-										if (($commander->rPlayer != CTR::$data->get('playerId') || $commander->travelType == Commander::BACK)) {
-											echo '<a href="' . APP_ROOT . 'map/place-' . $commander->rStartPlace . '">' . $commander->startPlaceName . '</a>';
-										} else {
-											echo '<a href="' . APP_ROOT . 'map/place-' . $commander->rDestinationPlace . '">' . $commander->destinationPlaceName . '</a>';
-										}
+										echo $reversed
+											? '<a href="' . APP_ROOT . 'map/place-' . $commander->rStartPlace . '">' . $commander->startPlaceName . '</a>'
+											: '<a href="' . APP_ROOT . 'map/place-' . $commander->rDestinationPlace . '">' . $commander->destinationPlaceName . '</a>';
+
 										if ($commander->rPlayer != CTR::$data->get('playerId')) {
 											echo ' (<a href="' . APP_ROOT . 'diary/player-' . $commander->rBase . '">' . $commander->playerName . '</a>)';
 										}
