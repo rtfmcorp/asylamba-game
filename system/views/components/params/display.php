@@ -9,7 +9,7 @@ echo '<div class="component params">';
 			echo '<form action="' . APP_ROOT . 'action/a-updatedisplayparams" method="post">';
 				echo '<div class="info-building"><h4>Paramètres généraux</h4></div>';
 
-				echo '<label class="checkbox hb rt" title="Affiche les ascenseur par défaut de votre système. Ces derniers sont moins beaux mais peuvent résoudrent certains problèmes">';
+				echo '<label class="checkbox hb rt" title="Affiche les ascenseurs par défaut de votre système. Ces derniers sont moins beaux mais peuvent résoudrent certains problèmes.">';
 					if (CTR::$cookie->equal('movers', TRUE)) {
 						$check = 'checked';
 					} elseif (CTR::$cookie->equal('movers', FALSE)) {
@@ -21,7 +21,7 @@ echo '<div class="component params">';
 					echo 'Ascenseur système';
 				echo '</label>';
 
-				echo '<label class="checkbox hb rt" title="Améliorent les performances d\'affichage lorsqu\'elles sont désactivées">';
+				echo '<label class="checkbox hb rt" title="Améliore les performances d\'affichage lorsqu\'elles sont désactivées">';
 					if (CTR::$cookie->equal('anims', TRUE)) {
 						$check = 'checked';
 					} elseif (CTR::$cookie->equal('anims', FALSE)) {
@@ -85,7 +85,7 @@ echo '<div class="component params">';
 						$check = 'checked';
 					}
 					echo '<input type="checkbox" name="movements" value="1" ' . $check . ' />';
-					echo 'Afficher vos mouvement de flotte';
+					echo 'Afficher vos mouvements de flotte';
 				echo '</label>';
 
 				echo '<label class="checkbox">';

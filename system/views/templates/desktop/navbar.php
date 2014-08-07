@@ -182,7 +182,7 @@ echo '<div id="nav">';
 	echo '<div class="overbox" id="bug-tracker">';
 		echo '<h2>Bug tracker</h2>';
 		echo '<form action="' . APP_ROOT . 'action/a-writebugreport" method="post">';
-			echo '<p>Rapportez-nous vos bugs ! Il vous suffit de décrire l\'erreur rencontrée directement sur la page qui a provoquée cette dernière. ';
+			echo '<p>Rapportez-nous vos bugs ! Il vous suffit de décrire l\'erreur rencontrée directement sur la page qui a provoqué cette dernière. ';
 			echo 'Cela nous permettra de disposer du maximum d\'information.</p>';
 			echo '<input type="hidden" name="url" value="' . $_SERVER['REQUEST_URI'] . '" />';
 			echo '<select name="type" class="option">';
