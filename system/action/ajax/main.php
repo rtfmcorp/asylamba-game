@@ -15,6 +15,7 @@ switch (CTR::$get->get('a')) {
 
 	# AUTOCOMPLETE
 	case 'autocompleteplayer':		include AJAX . 'autocomplete/player.php'; break;
+	case 'autocompleteorbitalbase': include AJAX . 'autocomplete/orbitalBase.php'; break;
 
 	# XHR RETURN MAPPING
 	case 'loadsystem': 				include PAGES . 'ajax/loadSystem.php'; break;
