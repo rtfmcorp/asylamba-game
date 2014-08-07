@@ -737,7 +737,7 @@ class Place {
 
 		$bonus = 0;
 		if ($commander->rPlayer != CTR::$data->get('playerId')) {
-			$playerBonus = new PlayerBonus($this->rPlayer);
+			$playerBonus = new PlayerBonus($commander->rPlayer);
 			$playerBonus->load();
 			$bonus = $playerBonus->bonus->get(SHIP_CONTAINER);
 		} else {
@@ -765,7 +765,7 @@ class Place {
 
 		$bonus = 0;
 		if ($commander->rPlayer != CTR::$data->get('playerId')) {
-			$playerBonus = new PlayerBonus($this->rPlayer);
+			$playerBonus = new PlayerBonus($commander->rPlayer);
 			$playerBonus->load();
 			$bonus = $playerBonus->bonus->get(SHIP_CONTAINER);
 		} else {

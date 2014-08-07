@@ -16,12 +16,15 @@ if ($commanderId !== FALSE) {
 
 	if (ASM::$com->size() == 1) {
 		$commander = ASM::$com->get();
-		
-		// vider le commandant
-		$commander->emptySquadrons();
+		if ($commander->statement == 1) {
+			
+			// vider le commandant
+			$commander->emptySquadrons();
 
-		CTR::$alert->add('Vous avez vier l\'armée menée par votre commandant ' . $commander->getName() . '.', ALERT_STD_SUCCESS);
-
+			CTR::$alert->add('Vous avez vider l\'armée menée par votre commandant ' . $commander->getName() . '.', ALERT_STD_SUCCESS);
+		} else {
+			CTR::$alert->add('Vous ne pouvez pas retirer les vaisseaux à un officier en déplacement.', ALERT_STD_ERROR);
+		}
 	} else {
 		CTR::$alert->add('Ce commandant n\'existe pas ou ne vous appartient pas.', ALERT_STD_ERROR);
 	}
