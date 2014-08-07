@@ -499,6 +499,41 @@ jQuery(document).ready(function($) {
 				}
 			}, 1000);
 		});
+
+		$('.progress-ship').each(function(i) {
+			var container = $(this);
+			var bar = container.find('.bar');
+			var timer = container.find('.time');
+
+			var total = parseInt(container.data('progress-total-time'));
+			var reversed = Boolean(container.data('progress-reverse'));
+
+			var current = reversed
+				? parseInt(container.data('progress-current-time'))
+				: total - parseInt(container.data('progress-current-time'));
+
+			var position;
+
+			setInterval(function() {
+				current--;
+
+				if (current > 0) {
+					timer.html(time.secondToFormat(current, 'lite'));
+
+					if (reversed) {
+						position = (((total - current) / total) * 100);
+					} else {
+						position = (((total - current) / total) * 100);
+					}
+
+					if (reversed) {
+						bar.css('width', (100 - position) + '%');
+					} else {
+						bar.css('width', position + '%');
+					}
+				}
+			}, 1000);
+		});
 	});
 
 	// GENERAL SHOW/HIDE FUNCTION

@@ -15,10 +15,12 @@ echo '<div class="component">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<div class="tool">';
-				echo '<span><a href="' . APP_ROOT . 'action/a-emptycommander/id-' . $commander_commanderDetail->id . '">retirer tous les vaisseaux</a></span>';
-				echo '<span><a href="' . APP_ROOT . 'action/a-firecommander/id-' . $commander_commanderDetail->id . '" class="hb lt" title="licencier l\'officier">&#215;</a></span>';
-			echo '</div>';
+			if ($commander_commanderDetail->getStatement() == COM_AFFECTED) {
+				echo '<div class="tool">';
+					echo '<span><a href="' . APP_ROOT . 'action/a-emptycommander/id-' . $commander_commanderDetail->id . '">retirer tous les vaisseaux</a></span>';
+					echo '<span><a href="' . APP_ROOT . 'action/a-firecommander/id-' . $commander_commanderDetail->id . '" class="hb lt" title="licencier l\'officier">&#215;</a></span>';
+				echo '</div>';
+			}
 
 			if ($commander_commanderDetail->getStatement() == COM_INSCHOOL) {
 				echo '<div class="number-box">';
