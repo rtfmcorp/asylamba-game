@@ -216,5 +216,6 @@ echo '<div id="content">';
 	} else {
 		CTR::redirect('404');
 	}
+
 echo '</div>';
 ?>

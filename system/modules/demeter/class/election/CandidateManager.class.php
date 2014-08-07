@@ -51,6 +51,10 @@ class CandidateManager extends Manager {
 			$candidate->id = $awCandidate['id'];
 			$candidate->rElection = $awCandidate['rElection'];
 			$candidate->rPlayer = $awCandidate['rPlayer'];
+			$$candidate->chiefChoice = $awCandidate['chiefChoice'];;
+			$$candidate->treasurerChoice = $awCandidate['treasurerChoice'];0;
+			$$candidate->warlordChoice = $awCandidate['warlordChoice'];;
+			$$candidate->ministerChoice = $awCandidate['ministerChoice'];;
 			$candidate->program = $awCandidate['program'];
 			$candidate->dPresentation = $awCandidate['dPresentation'];
 
@@ -70,14 +74,21 @@ class CandidateManager extends Manager {
 			SET
 				rElection = ?,
 				rPlayer = ?,
+				chiefChoice = ?,
+				treasurerChoice = ?,
+				warlordChoice = ?,
+				ministerChoice = ?,
 				dPresentation = ?
 			WHERE id = ?');
 		$aw = $qr->execute(array(
 				$candidate->rElection,
 				$candidate->rPlayer,
-				$candidate->dPresentation,
+				$candidate->chiefChoice,
+				$candidate->treasurerChoice,
+				$candidate->warlordChoice,
+				$candidate->ministerChoice,
+				Utils::$now(),
 				$candidate->id
-
 			));
 		}
 	}
@@ -89,12 +100,20 @@ class CandidateManager extends Manager {
 			SET
 				rElection = ?,
 				rPlayer = ?,
+				chiefChoice = ?,
+				treasurerChoice = ?,
+				warlordChoice = ?,
+				ministerChoice = ?,
 				program = ?,
 				dPresentation = ?');
 
 			$aw = $qr->execute(array(
 				$newCandidate->rElection,
 				$newCandidate->rPlayer,
+				$newCandidate->chiefChoice,
+				$newCandidate->treasurerChoice,
+				$newCandidate->warlordChoice,
+				$newCandidate->ministerChoice,
 				$newCandidate->rProgram,
 				utils::now()
 				));
