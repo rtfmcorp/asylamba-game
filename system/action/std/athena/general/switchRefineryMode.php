@@ -40,7 +40,7 @@ if ($baseId !== FALSE AND in_array($baseId, $verif)) {
 		}
 		if ($base->getResourcesStorage() > $storageSpace) {
 			$base->setResourcesStorage($storageSpace);
-			CTR::$alert->add('en passant en mode production, vous avez diminué votre capacité de stockage, ce qui vous a fait perdre quelques ressources', ALERT_STD_INFO);
+			CTR::$alert->add('En passant en mode production, vous avez diminué votre capacité de stockage, ce qui vous a fait perdre quelques ressources', ALERT_STD_INFO);
 		}
 	}
 	ASM::$obm->changeSession($S_OBM1);
