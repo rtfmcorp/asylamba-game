@@ -89,7 +89,7 @@ class Commander {
 	public $travelLength			= 0;
 	public $rStartPlace				= 0;
 	public $rDestinationPlace		= 0;
-	public $startPlaceName			= 0;
+	public $startPlaceName			= '';
 	public $destinationPlaceName	= '';
 
 

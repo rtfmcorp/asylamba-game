@@ -28,7 +28,7 @@ class Color {
 	const POINTATTACKPLAYER 		= -10;
 	const POINTDENFENDTODO  		= 20;
 	#Nerve
-	const COEFFPOINTCONQUERDONE		= 10;
+	const COEFFPOINTCONQUER			= 10;
 	#Aphéra
 	const POINTSPY					= 10;
 	const POINTRESEARCH				= 5;
@@ -63,86 +63,26 @@ class Color {
 	}
 
 	public function updateStatus() {
+		include_once ZEUS;
 
-		$limit = $this->players / 4;
-		if ($limit < 20) { $lmit = 20; }
-		if ($limit > 40) { $lmit = 40; }
+		$limit = round($this->players / 4);
+		if ($limit < 20) { $limit = 20; }
+		if ($limit > 40) { $limit = 40; }
 
 		$_PAM1 = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession();
+		ASM::$pam->newSession(FALSE);
 
-		/*
-		empire :
-			+
-				DONE construire un batiment
-				DONE construire un gros vaisseaux
-				DONE conquête
-			-
-				TODO détruire un bâtiment
-				DONE perdre une panète
 
-		Négore
-			+
-				DONE avoir une nouvelle route
-				TODO faire une vente/achat intéressant
-			-
-				DONE perdre une route
-				TODO faire un vente/achat pas intéressant
-
-		Cardan
-			+
-				DONE prendre une planète, bonus si elle et hors secteur
-				TODO faire un don à la faction
-			-
-				DONE perdre une planète
-
-		Kovakh
-			+
-				DONE contruire 1 petit vaisseau
-				DONE construire 1 gros vaisseau
-				DONE gagner un combat
-				DONE nomer une planète militaire
-			-
-				DONE perdre un combat
-				DONE dénommer une planète militaire
-		
-		Synelle
-			+
-				DONE défense victorieuse
-			-
-				MAYBE TODO attaquer un autre joueur
-
-		Nerve
-			+
-				DONE nommer une planète indus
-				DONE up un batiment indus (raf, doc 1 et 2)
-				DONE prendre une planète (points selon coeff resources)
-
-			-
-				DONE dénommer une plan indus
-				TODO déup un batiment indus
-				DONE perdre une planète (points selon coeffresources)
-
-		Aphéra
-			+
-				DONE trouver une recherche
-				DONE trouver une techno
-				TODO espionnage réussi
-
-		*/
-
-			ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
-			for ($i = 0; $i < ASM::$pam->size(); $i++) {
-				if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
-					if ($i < $limit) {
-						ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
-					} else {
-						ASM::$pam->get($i)->setStatus(PAM_STANDARD);
-					}
+		ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
+		for ($i = 0; $i < ASM::$pam->size(); $i++) {
+			if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
+				if ($i < $limit) {
+					ASM::$pam->get($i)->status = PAM_PARLIAMENT;
+				} else {
+					ASM::$pam->get($i)->status = PAM_STANDARD;
 				}
 			}
-
-		// ASM::$pam->save();
+		}
 		ASM::$pam->changeSession($_PAM1);
 	}
 
@@ -244,14 +184,25 @@ class Color {
 		if ($this->electionStatement == self::MANDATE) {
 			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration')) {
 				$this->updateStatus();
+				$S_ELM = ASM::$elm->getCurrentsession();
+				ASM::$elm->newSession();
+				$election = new Election();	
+				$election->rColor = $this->id;
+				$date = new DateTime($this->dLastElection);
+				$mandateDuration = ColorResource::getInfo($this->id, 'mandateDuration');
+				$date->modify('+' . $mandateDuration . 'second');
+				$election->dElection = $date->format('Y-m-d H:i:s');
+				$this->dLastElection = $date->format('Y-m-d H:i:s');
+				ASM::$elm->add($election);
+				ASM::$elm->changeSession($S_ELM);
 				$this->electionStatement = self::CAMPAIGN;
 			}
-		} elseif ($this->electionStatement == self::CAMPAIGN) {
+		} elseif ($this->electionStatement == self::CAMPAIGN) {			
 			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::CAMPAIGNTIME) {
 				$this->electionStatement = self::ELECTION;
 			}
 		} else {
-			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + CAMPAIGNTIME) {
+			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + self::CAMPAIGNTIME) {
 				$_ELM = ASM::$elm->getCurrentSession();
 				ASM::$elm->newSession();
 				ASM::$elm->load(array('rColor' => $this->id), array('id DESC'), array('0', '1'));

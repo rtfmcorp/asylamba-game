@@ -22,36 +22,45 @@ if ($commanderId !== FALSE) {
 		ASM::$obm->load(array('rPlace' => $commander->rBase));
 
 		# checker si on a assez de place !!!!!
-		$S_COM2 = ASM::$com->getCurrentSession();
-		ASM::$com->newSession();
-		ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 2));
-		$nbrLine2 = ASM::$com->size();
 
-		ASM::$com->newSession();
-		ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 1));
-		$nbrLine1 = ASM::$com->size();
+
 
 		if ($commander->line == 1) {
+			$S_COM2 = ASM::$com->getCurrentSession();
+			ASM::$com->newSession();
+			ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 2));
+			$nbrLine2 = ASM::$com->size();
+
 			if ($nbrLine2 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'r-line')) {
 				$commander->line = 2;
 
-				CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté en force de réserve', ALERT_STD_SUCCESS);
 				CTR::redirect();
 				
 			} else {
-				CTR::$alert->add('La deuxième ligne a atteint sa capacité maximale', ALERT_STD_ERROR);
+				$commander->line = 2;
+				ASM::$com->get()->line = 1;
+				CTR::redirect();
+				CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a échangé sa place avec ' . ASM::$com->get()->name . '.', ALERT_STD_SUCCESS);
 			}
-
+			ASM::$com->changeSession($S_COM2);
 		} else {
+			$S_COM2 = ASM::$com->getCurrentSession();
+			ASM::$com->newSession();
+			ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 1));
+			$nbrLine1 = ASM::$com->size();
+
 			if ($nbrLine1 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'l-line')) {
 				$commander->line = 1;
 
-				CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté en force active', ALERT_STD_SUCCESS);
 				CTR::redirect();
 
 			} else {
-				CTR::$alert->add('La première ligne a atteint sa capacité maximale', ALERT_STD_ERROR);
+				$commander->line = 1;
+				ASM::$com->get()->line = 2;
+				CTR::redirect();
+				CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a échangé sa place avec ' . ASM::$com->get()->name . '.', ALERT_STD_SUCCESS);
 			}
+			ASM::$com->changeSession($S_COM2);
 		}
 
 		ASM::$com->changeSession($S_COM2);

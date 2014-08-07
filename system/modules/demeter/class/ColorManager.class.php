@@ -58,17 +58,17 @@ class ColorManager extends Manager {
 			$color->electionStatement = $awColor['electionStatement'];
 			$color->dLastElection = $awColor['dLastElection'];
 
+			$color->uElection();
+
 			$this->_Add($color);
 		}
 	}
 
 	public function save() {
-		$db = DataBase::getInstance();
-
 		$colors = $this->_Save();
 
 	foreach ($colors AS $color) {
-
+		$db = DataBase::getInstance();
 		$qr = $db->prepare('UPDATE color
 			SET
 				id = ?,
