@@ -63,10 +63,11 @@ class Color {
 	}
 
 	public function updateStatus() {
+		include_once ZEUS;
 
-		$limit = $this->players / 4;
-		if ($limit < 20) { $lmit = 20; }
-		if ($limit > 40) { $lmit = 40; }
+		$limit = round($this->players / 4);
+		if ($limit < 20) { $limit = 20; }
+		if ($limit > 40) { $limit = 40; }
 
 		$_PAM1 = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession();
@@ -76,14 +77,12 @@ class Color {
 		for ($i = 0; $i < ASM::$pam->size(); $i++) {
 			if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
 				if ($i < $limit) {
-					ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
+					ASM::$pam->get($i)->status = PAM_PARLIAMENT;
 				} else {
-					ASM::$pam->get($i)->setStatus(PAM_STANDARD);
+					ASM::$pam->get($i)->status = PAM_STANDARD;
 				}
 			}
 		}
-
-		// ASM::$pam->save();
 		ASM::$pam->changeSession($_PAM1);
 	}
 
@@ -187,7 +186,7 @@ class Color {
 				$this->updateStatus();
 				$this->electionStatement = self::CAMPAIGN;
 			}
-		} elseif ($this->electionStatement == self::CAMPAIGN) {
+		} elseif ($this->electionStatement == self::CAMPAIGN) {			
 			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::CAMPAIGNTIME) {
 				$this->electionStatement = self::ELECTION;
 			}

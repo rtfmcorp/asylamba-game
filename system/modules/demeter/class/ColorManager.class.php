@@ -65,12 +65,10 @@ class ColorManager extends Manager {
 	}
 
 	public function save() {
-		$db = DataBase::getInstance();
-
 		$colors = $this->_Save();
 
 	foreach ($colors AS $color) {
-
+		$db = DataBase::getInstance();
 		$qr = $db->prepare('UPDATE color
 			SET
 				id = ?,

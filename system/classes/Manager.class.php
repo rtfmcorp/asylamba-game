@@ -131,12 +131,12 @@ abstract class Manager {
 		return NULL;
 	}
 
-	protected function _Save() {
+	public function _Save() {
 		$savingList = array();
 		if (!empty($this->objects)) {
 			foreach ($this->sessions AS $s) {
 				foreach ($this->objects[$s->getId()] AS $k => $o) {
-					if ($this->objects[$s->getId()][$k] != $this->origin[$s->getId()][$k]) {
+					if ($this->objects[$s->getId()][$k] !== $this->origin[$s->getId()][$k]) {
 						$savingList[] = $o;
 					}
 				}
