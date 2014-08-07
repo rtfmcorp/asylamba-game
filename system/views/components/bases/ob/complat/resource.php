@@ -21,7 +21,12 @@ echo '<div class="component transaction">';
 
 			echo '<div class="number-box">';
 				echo '<span class="label">vaisseaux de commerce disponibles</span>';
-				echo '<span class="value">' . Format::numberFormat($maxShip - $usedShips) . ' / ' . Format::numberFormat($maxShip) . '</span>';
+				echo '<span class="value">';
+					echo Format::numberFormat($maxShip - $usedShips);
+					echo ' <img class="icon-color" alt="vaisseaux" src="' . MEDIA . 'resources/transport.png"> / ';
+					echo Format::numberFormat($maxShip);
+					echo ' <img class="icon-color" alt="vaisseaux" src="' . MEDIA . 'resources/transport.png">';
+				echo '</span>';
 
 				echo '<span class="progress-bar">';
 				echo '<span style="width:' . Format::percent($maxShip - $usedShips, $maxShip) . '%;" class="content"></span>';
@@ -67,7 +72,7 @@ echo '<div class="component market-sell">';
 				echo '<div class="label-box">';
 					echo '<span class="label">Vaisseaux requis</span>';
 					echo '<span class="value">x</span>';
-					#echo '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">';
+					echo '<img class="icon-color" alt="vaisseaux" src="' . MEDIA . 'resources/transport.png">';
 				echo '</div>';
 
 				echo '<hr />';
@@ -77,7 +82,6 @@ echo '<div class="component market-sell">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
 
 ASM::$csm->changeSession($S_CSM1);
 ?>
