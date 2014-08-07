@@ -159,23 +159,26 @@ echo '<div class="component space size3">';
 				$llp = PlaceResource::get($ob_obSituation->typeOfBase, 'l-line-position');
 				$rlp = PlaceResource::get($ob_obSituation->typeOfBase, 'r-line-position');
 				foreach ($commanders_obSituation as $commander) {
-					echo '<a href="' . APP_ROOT . 'fleet/view-movement/commander-' . $commander->getId() . '/sftr-3" class="commander full position-' . $commander->line . '-' . ($commander->line == 1 ? $llp[$lLine] : $rlp[$rLine]) . '">';
-						echo '<img src="' . MEDIA . 'map/fleet/' . (($commander->getStatement() == COM_AFFECTED) ? 'army' : 'army-away') . '.png" alt="plein" />';
-						echo '<span class="info">';
-							echo CommanderResources::getInfo($commander->getLevel(), 'grade') . ' <strong>' . $commander->getName() . '</strong><br />';
-							echo $commander->getPev() . ' Pev';
-							if ($commander->getStatement() == COM_MOVING) {
-								echo '<br />&#8594;	';
-								switch ($commander->getTypeOfMove()) {
-									case COM_MOVE: echo 'déplacement'; break;
-									case COM_LOOT: echo 'pillage'; break;
-									case COM_COLO: echo 'colonisation'; break;
-									case COM_BACK: echo 'retour'; break;
-									default: break;
+					echo '<div class="commander position-' . $commander->line . '-' . ($commander->line == 1 ? $llp[$lLine] : $rlp[$rLine]) . '">';
+						echo '<a href="' . APP_ROOT . 'fleet/view-movement/commander-' . $commander->getId() . '/sftr-3" class="commander full">';
+							echo '<img src="' . MEDIA . 'map/fleet/' . (($commander->getStatement() == COM_AFFECTED) ? 'army' : 'army-away') . '.png" alt="plein" />';
+							echo '<span class="info">';
+								echo CommanderResources::getInfo($commander->getLevel(), 'grade') . ' <strong>' . $commander->getName() . '</strong><br />';
+								echo $commander->getPev() . ' Pev';
+								if ($commander->getStatement() == COM_MOVING) {
+									echo '<br />&#8594;	';
+									switch ($commander->getTypeOfMove()) {
+										case COM_MOVE: echo 'déplacement'; break;
+										case COM_LOOT: echo 'pillage'; break;
+										case COM_COLO: echo 'colonisation'; break;
+										case COM_BACK: echo 'retour'; break;
+										default: break;
+									}
 								}
-							}
-						echo '</span>';
-					echo '</a>';
+							echo '</span>';
+						echo '</a>';
+						echo '<a class="link hb ' . ($commander->line == 1 ? 'to-right' : 'to-left') . '" title="changer de ligne" href="' . APP_ROOT . 'action/a-changeline/id-' . $commander->id . '"></a>';
+					echo '</div>';
 
 					if ($commander->line == 1) {
 						$lLine++;
