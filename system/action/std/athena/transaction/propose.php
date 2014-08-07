@@ -50,8 +50,6 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 			include_once ARES;
 			if ($identifier === FALSE OR $identifier < 1) {
 				$valid = FALSE;
-			} else {
-				$quantity = 1;
 			}
 			break;
 		default :
@@ -62,6 +60,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 
 		if ($price < $minPrice) {
 			CTR::$alert->add('Le prix que vous avez fixé est trop bas. Une limite inférieure est fixée selon la catégorie de la vente.', ALERT_STD_ERROR);
+			CTR::$alert->add('prix min : ' . $minPrice . ', mon prix : ' . $price, ALERT_STD_ERROR);
 		} else {
 			$valid = TRUE;
 

@@ -65,7 +65,7 @@ class TutorialResource {
 				Dans Asylamba, la navigation est horizontale, pour faire glisser le panneau central, utilisez les flèches directionnelles ou alors cliquez sur les flèches qui s\'affichent aux deux extrémités de l\'écran.',
 			'experienceReward' => 3,
 			'creditReward' => 0,
-			'resourceReward' => 0,
+			'resourceReward' => 200,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 2,
@@ -79,7 +79,7 @@ class TutorialResource {
 				Dans chaque bâtiment, il y a un panneau nommé "à propos". Si vous voulez en savoir plus, lisez ce panneau, des informations importantes et intéressantes peuvent s\'y trouver.',
 			'experienceReward' => 10,
 			'creditReward' => 0,
-			'resourceReward' => 0,
+			'resourceReward' => 300,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 3,
@@ -90,7 +90,7 @@ class TutorialResource {
 				Essayer donc de passer en mode "Production" en cliquant sur le bouton prévu à cet effet.',
 			'experienceReward' => 15,
 			'creditReward' => 0,
-			'resourceReward' => 0,
+			'resourceReward' => 400,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 4,
@@ -106,7 +106,7 @@ class TutorialResource {
 			'experienceReward' => 20,
 			'creditReward' => 0,
 			'resourceReward' => 0,
-			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+			'shipReward' => array(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 5,
 			'title' => 'Construire la Technosphère',
@@ -115,7 +115,7 @@ class TutorialResource {
 				Rendez-vous dans le générateur pour construire la Technosphère.',
 			'experienceReward' => 22,
 			'creditReward' => 0,
-			'resourceReward' => 0,
+			'resourceReward' => 500,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 6,
@@ -136,8 +136,8 @@ class TutorialResource {
 				Vous avez tous les prérequis pour développer "Chassis simple léger", faites-le donc.',
 			'experienceReward' => 25,
 			'creditReward' => 0,
-			'resourceReward' => 0,
-			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+			'resourceReward' => 3000,
+			'shipReward' => array(2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 7,
 			'title' => 'Construire un Chasseur Léger',
@@ -154,7 +154,7 @@ class TutorialResource {
 			'experienceReward' => 28,
 			'creditReward' => 0,
 			'resourceReward' => 0,
-			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+			'shipReward' => array(8, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 8,
 			'title' => 'Commencer à former un commandant',
@@ -167,7 +167,7 @@ class TutorialResource {
 				Pour créer un commandant, il suffit de lui donner un nom (ou laisser le nom qu\'on a choisit pour vous) et de cliquer sur le bouton "créer l\'officier".
 				200 crédits vous seront débités, mais c\'est pour la bonne cause.',
 			'experienceReward' => 32,
-			'creditReward' => 0,
+			'creditReward' => 6000,
 			'resourceReward' => 0,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
@@ -188,7 +188,7 @@ class TutorialResource {
 				<br />
 				Changez le montant investi dans l\'école de commandement pour passer à l\'étape suivante.',
 			'experienceReward' => 37,
-			'creditReward' => 0,
+			'creditReward' => 10000,
 			'resourceReward' => 0,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
 	);
