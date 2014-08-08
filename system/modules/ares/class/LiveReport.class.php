@@ -31,7 +31,7 @@ class LiveReport {
 	public static $dFight				= '';
 	public static $placeName			= '';
 
-	public static function emptyLiveReport() {
+	public static function clear() {
 		self::$squadrons = array();
 		self::$halfround = 0;
 

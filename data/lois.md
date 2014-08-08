@@ -4,21 +4,20 @@
 
 Hiérarchie :
 
-N4 - 1 joueur : chef de l'alliance, 'empereur'
+N6 - 1 joueur : chef de l'alliance, 'empereur', diplomate
 	Il peut proposer des lois sans en référer aux autres
 	2 ou 3 lois qui coûtent pire cher
-N3 - 4 joueurs : ambassadeur
-	--> trésorier : impots des secteurs, routes commerciales
-	--> défense : force d'attaque, subvention militaire, armée
-	--> intérieur : modérer le forum, tout ce qui a rapport aux planète (techno, contre-espionnage)
-	--> propagande : radios et marchés, voix du peuple
+Ministres - 4 joueurs :
+N5	--> trésorier : impots des secteurs, routes commerciales
+N4	--> défense : force d'attaque, subvention militaire, armée
+N3	--> intérieur : modérer le forum, tout ce qui a rapport aux planète (techno, contre-espionnage)
 
-N2 - % de l'alliance : parlementaires
+N2 (status = 2) - % de l'alliance : parlementaires
 	les N2 qui veulent se présenter en N3 mettent leur préférence (je veux être trésorier, sinon progagande, sinon...)
 	Ensuite entre les 4 élus, ils prennent le poste qu'il ont préféré, sinon le 2e, sinon le 3e etc. (algorithme de sélection)
 	ils n'ont pas de lois. Mais ils doivent voter pour élire les N3 et voter pour accepter les lois des N3
 
-N1 - tout le peuple de l'alliance
+N1 (status = 1) - tout le peuple de l'alliance
 	selon certaines conditions (différentes pour chaque alliance), ils peuvent se présenter au parlement
 
 
@@ -44,6 +43,9 @@ Trésorier :
 		options : 	- durée
 					- avec quelle alliance
 					- niveau (pourcentage de bonus)
+	- loi sur le commerce : ajustement de la taxe d'un marché
+		options : 	- secteur
+					- taux (nouveau pourcentage de taxe)
 	- placement financier : (prêt virtuel : ex: placement de 10M pendant 2 semaines, au bout de 2 semaines, l'alliance récupère gagne 12M)
 		options :	- montant
 					- durée
@@ -80,14 +82,6 @@ Intérieur :
 					- niveau
 	- [il doit gérer et modérer le forum d'alliance]
 
-Propagande :
-	- loi sur le commerce : ajustement de la taxe d'un marché
-		options : 	- secteur
-					- taux (nouveau pourcentage de taxe)
-	- [il peut gérer les offres qui sont faites automatiquement (taux de commandants, taux de cartes, etc.)]
-	- [voix du peuple : récupère les requetes des gens (ceux qui ralent, etc.) et peut en faire part au conseil]
-	- [il gère et modère les radios]
-
 
 --- N4 ------------
 Empereur :
@@ -100,17 +94,6 @@ Empereur :
 		options : 	- durée
 					- 
 	- protectionnisme : toutes routes commerciales break; augmentation des ressources / impot.
-
---- N3 ------------
-intérieur :
-- gérer et modérer le forum
-- décret sur l'éducation : augmente l'expérience des commandants a l'école
-
-propagande :
-- gérer les stations
-- loi-anti collabo : coupe les canaux de communication entre 2 alliances
-
-
 
 
 
@@ -174,77 +157,3 @@ L'interaction avec sa Faction pourra se dérouler comme suit :
 		-les n2, n3 et n4 ont la lecture sur l'ambassade
 		-seul le n3 'ambassadeur' à les droit d'écriture sur l'ambassade
 		-tous (n1, 2, 3, 4) peuvent lire le journal de la Faction et voire les lois en éxecution concernant directement leur propre Faction
-
-
-
-
-nomenclature des grades
------------------------
-
-1. générale
-
-chaque nation a quatre niveau de joueur :
-n1 = simple joueur, pas impliqué politiquement
-n2 = joueur élu par les n1, à la possibilité d'élir à son tour les n3 et les n4 parmis les n2, doit aussi avaliser les lois des n3
-n3 = 5 joueurs élu a des postes importants, peuvent faire voter des lois
-    n3.a = trésorier :
-     	- gère les taxe de chaque secteur sous controle de la nation
-     	- débloque des fonds à usage des lois
-    n3.b = dep. de la défense : propose des lois influant sur les batailles
-    n3.d = dep. de l'intérieur : gère et modère le forum d'alliance
-    n3.c = propagande : gère les station radios sous contrôle
-n4 = "empereur", joueur au dessus de tous les autres. Peut déclarer la guerre et dispose de quelques lois qu'il n'a pas besoin de faire voter
-
-2. idée en vrac
-
-empire, kovakh	: dynaste, dynastaire, grand dynaste
-négore		: vizir, vistear, viziDuc, vistaer
-synelle		: consul
-marche		: épistan, épistar, épitaphe, viquaire, diacre
-aphéra, nerve	: chancelier, sénateur, sénati, héliocrate, patricien
-
-dynaste, prince, roi, baron, calife, vizir, héritier, viziDuc
-
-3. nom pour chaque nation
-
-empire
-	n4 : empereur
-	n3 : dynastaire
-	n2 : dynaste
-	n1 : 
-
-kovakh
-	n4 : hérault
-	n3 : dynastaire
-	n2 : dynaste
-	n1 : 
-
-négore
-	n4 : vizir
-	n3 : gestionnaire
-	n2 : négociant
-	n1 : 
-
-synelle
-	n4 : fédérant
-	n3 : consul
-	n2 : conseiller
-	n1 : 
-
-marche
-	n4 : 
-	n3 : 
-	n2 : 
-	n1 : 
-
-aphéra
-	n4 :
-	n3 : 
-	n2 : 
-	n1 : 
-
-nerve
-	n4 :
-	n3 :
-	n2 : 
-	n1 : 
