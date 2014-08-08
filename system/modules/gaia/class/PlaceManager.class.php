@@ -138,6 +138,91 @@ class PlaceManager extends Manager {
 		}
 	}
 
+	public function search($string, $quantity = 20, $offset = 0) {
+		$db = Database::getInstance();
+		$qr = $db->query('SELECT p.*,
+			s.rSector AS rSector,
+			s.xPosition AS xPosition,
+			s.yPosition AS yPosition,
+			s.typeOfSystem AS typeOfSystem,
+			se.tax AS tax,
+			pl.rColor AS playerColor,
+			pl.name AS playerName,
+			pl.avatar AS playerAvatar,
+			pl.status AS playerStatus,
+			pl.level AS playerLevel,
+			ms.rPlace AS msId,
+			ms.name AS msName,
+			ms.type AS msType,
+			ms.resourcesStorage AS msResources,
+			ob.rPlace AS obId,
+			ob.name AS obName,
+			ob.points AS points,
+			ob.levelCommercialPlateforme AS levelCommercialPlateforme,
+			ob.levelGravitationalModule AS levelGravitationalModule,
+			ob.resourcesStorage AS obResources,
+			ob.antiSpyAverage AS antiSpyAverage,
+			ob.typeOfBase AS obTypeOfBase
+			FROM place AS p
+			LEFT JOIN system AS s
+				ON p.rSystem = s.id
+			LEFT JOIN sector AS se
+				ON s.rSector = se.id
+			LEFT JOIN player AS pl
+				ON p.rPlayer = pl.id
+			LEFT JOIN motherShip AS ms
+				ON p.id = ms.rPlace
+			LEFT JOIN orbitalBase AS ob
+				ON p.id = ob.rPlace
+			WHERE LOWER(ob.name) LIKE LOWER(\'%' . $string . '%\') LIMIT ' . intval($offset) . ', ' . intval($quantity));
+
+		while($aw = $qr->fetch()) {
+			$p = new Place();
+
+			$p->setId($aw['id']);
+			$p->setRSystem($aw['rSystem']);
+			$p->setTypeOfPlace($aw['typeOfPlace']);
+			$p->setPosition($aw['position']);
+			$p->setPopulation($aw['population']);
+			$p->setCoefResources($aw['coefResources']);
+			$p->setCoefHistory($aw['coefHistory']);
+			$p->setResources($aw['resources']);
+			$p->uPlace = $aw['uPlace'];
+			$p->setRSector($aw['rSector']);
+			$p->setXSystem($aw['xPosition']);
+			$p->setYSystem($aw['yPosition']);
+			$p->setTypeOfSystem($aw['typeOfSystem']);
+			$p->setTax($aw['tax']);
+
+			if ($aw['rPlayer'] != 0) {
+				$p->setRPlayer($aw['rPlayer']);
+				$p->setPlayerColor($aw['playerColor']);
+				$p->setPlayerName($aw['playerName']);
+				$p->setPlayerAvatar($aw['playerAvatar']);
+				$p->setPlayerStatus($aw['playerStatus']);
+				$p->playerLevel = $aw['playerLevel'];
+				if (isset($aw['msId'])) {
+					$p->setTypeOfBase($aw['msType']);
+					$p->setBaseName($aw['msName']);
+					$p->setResources($aw['msResources']);
+				} elseif (isset($aw['obId'])) {
+					$p->setTypeOfBase(4);
+					$p->typeOfOrbitalBase = $aw['obTypeOfBase'];
+					$p->setBaseName($aw['obName']);
+					$p->setLevelCommercialPlateforme($aw['levelCommercialPlateforme']);
+					$p->setLevelGravitationalModule($aw['levelGravitationalModule']);
+					$p->setResources($aw['obResources']);
+					$p->setAntiSpyInvest($aw['antiSpyAverage']);
+					$p->setPoints($aw['points']);
+				} else {
+					CTR::$alert->add('Problèmes d\'appartenance du lieu !');
+				}
+				$this->_Add($p);
+			}
+			# If it is an empty place, we don't add it.
+		}
+	}
+
 	public static function add(Place $p) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO

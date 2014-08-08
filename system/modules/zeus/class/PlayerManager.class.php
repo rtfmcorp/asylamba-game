@@ -79,7 +79,6 @@ class PlayerManager extends Manager {
 	}
 
 	public function search($string, $quantity = 20, $offset = 0) {
-		$this->writeMode = FALSE;
 		$db = Database::getInstance();
 		$qr = $db->query('SELECT * FROM player WHERE LOWER(name) LIKE LOWER(\'%' . $string . '%\') LIMIT ' . intval($offset) . ', ' . intval($quantity));
 		

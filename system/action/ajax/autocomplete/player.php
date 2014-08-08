@@ -1,6 +1,6 @@
 <?php
 include_once ZEUS;
-$S_PAM1 = ASM::$pam->newSession();
+$S_PAM1 = ASM::$pam->newSession(false);
 
 $name = $_GET['q'];
 $name = htmlspecialchars($name);
@@ -28,4 +28,5 @@ if (ASM::$pam->size() != 0) {
 		}
 	}
 }
+ASM::$pam->changeSession($S_PAM1);
 ?>

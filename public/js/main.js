@@ -773,4 +773,5 @@ jQuery(document).ready(function($) {
 
 	// using module
 	$('.autocomplete-player').autocomplete(game.path + 'ajax/a-autocompleteplayer/');
+	$('.autocomplete-orbitalbase').autocomplete(game.path + 'ajax/a-autocompleteorbitalbase/');
 });
