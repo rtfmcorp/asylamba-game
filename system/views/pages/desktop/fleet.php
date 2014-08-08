@@ -148,6 +148,7 @@ echo '<div id="content">';
 			if ($ta == $tb) { return 0; }
 		    return (strtotime($ta) > strtotime($tb)) ? -1 : 1;
 		});
+
 		include COMPONENT . 'fleet/listReport.php';
 
 		# report component
@@ -158,26 +159,24 @@ echo '<div id="content">';
 
 			if (ASM::$rpm->size() == 1) {
 				include_once ZEUS;
+
 				$S_PAM1 = ASM::$pam->getCurrentSession();
 				ASM::$pam->newSession();
 				ASM::$pam->load(array('id' => array(ASM::$rpm->get()->rPlayerAttacker, ASM::$rpm->get()->rPlayerDefender)));
 
 				$report_report = ASM::$rpm->get();
 
-				$db = DataBase::getInstance();
-				$qr = $db->query('SELECT * FROM bigReport WHERE id = ' . $report_report->rBigReport);
-				$aw = $qr->fetch();
-
 				$attacker_report = ASM::$pam->getById($report_report->rPlayerAttacker);
 				$defender_report = ASM::$pam->getById($report_report->rPlayerDefender);
-				$commanders_report = unserialize($aw['commanders']);
-				$fight_report = unserialize($aw['fight']);
 
 				include COMPONENT . 'fleet/report.php';
 
 				ASM::$pam->changeSession($S_PAM1);
 			}
 			ASM::$rpm->changeSession($S_RPM2);
+		} else {
+			include COMPONENT . 'default.php';
+			include COMPONENT . 'default.php';
 		}
 
 		ASM::$rpm->changeSession($S_RPM1);
