@@ -49,9 +49,9 @@ define('DEMETER', 		MODULES . 'demeter/main.php');
 define('ATLAS',			MODULES . 'atlas/main.php');
 
 # inclusion des fichiers de configurations
-include CONFIG . 'app_config.php';
-include CONFIG . 'app_constant.php';
-include CONFIG . 'app_loader.php';
+include CONFIG . 'app.config.local.php';
+include CONFIG . 'app.config.global.php';
+include CONFIG . 'app.loader.php';
 
 # Action du controller
 CTR::initialize();

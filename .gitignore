@@ -1,5 +1,10 @@
-public/log/*
 index.php
-system/classes/DataBase.class.php
-system/classes/DataBaseAdmin.class.php
-system/config/app_config.php
+system/config/app.config.local.php
+
+public/log/call/*
+public/log/cron/*
+public/log/ctc/*
+public/log/php/*
+public/log/stats/*
+
+*.psd

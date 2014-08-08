@@ -225,8 +225,9 @@ abstract class CTR {
 			$path = 'public/log/stats/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
 
 			$ctn  = "### " . date('H:i:s') . " ###\r";
-			$ctn .= "# path : " . $_SERVER['REQUEST_URI'] . "\r";
-			$ctn .= "# time : " . self::$benchmark->getTime('mls', 0) . "ms\r";
+			$ctn .= "# path  : " . $_SERVER['REQUEST_URI'] . "\r";
+			$ctn .= "# time  : " . self::$benchmark->getTime('mls', 0) . "ms\r";
+			$ctn .= "# query : " . DataBase::getNbrOfQuery() . "\r";
 
 			Bug::writeLog($path, $ctn);
 		}
