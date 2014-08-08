@@ -27,7 +27,6 @@ echo '<div id="content">';
 			$obsets[$i]['info']['img'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('img');
 		}
 
-
 		# commander manager : incoming attack
 		$commandersId = array(0);
 		for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
@@ -61,7 +60,7 @@ echo '<div id="content">';
 			}
 		}
 
-		include COMPONENT . 'fleet/main.php';
+		include COMPONENT . 'fleet/listFleet.php';
 
 		# commander id
 		if (CTR::$get->exist('commander')) {
@@ -103,28 +102,21 @@ echo '<div id="content">';
 		ASM::$srm->load(array('rPlayer' => CTR::$data->get('playerId')), array('dSpying', 'DESC'));
 
 		# listReport component
-		$report_listReport = array();
+		$spyreport_listSpy = array();
 		for ($i = 0; $i < ASM::$srm->size(); $i++) { 
-			$report_listReport[$i] = ASM::$srm->get($i);
+			$spyreport_listSpy[$i] = ASM::$srm->get($i);
 		}
-		include COMPONENT . 'report/listReport.php';
+		include COMPONENT . 'fleet/listSpy.php';
 
 		# report component
 		if (CTR::$get->exist('report')) {
-			$S_SRM2 = ASM::$srm->getCurrentSession();
-			ASM::$srm->newSession();
-			ASM::$srm->load(array('id' => CTR::$get->get('report')));
-			if (ASM::$srm->size() == 1) {
-				$S_PLM = ASM::$plm->getCurrentSession();
-				ASM::$plm->newSession();
-				ASM::$plm->load(array('id' => ASM::$srm->get()->rPlace));
-
-				$place_report = ASM::$plm->get();
-				$report_report = ASM::$srm->get();
-				include COMPONENT . 'report/report.php';
-			}
-			ASM::$srm->changeSession($S_SRM2);
+			include COMPONENT . 'default.php';
+			include COMPONENT . 'default.php';
+		}  else {
+			include COMPONENT . 'default.php';
+			include COMPONENT . 'default.php';
 		}
+
 		ASM::$srm->changeSession($S_SRM1);
 	} elseif (CTR::$get->get('view') == 'archive') {
 		# inclusion des modules

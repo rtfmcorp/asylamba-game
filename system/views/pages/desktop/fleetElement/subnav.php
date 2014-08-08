@@ -11,7 +11,7 @@ echo '<div id="subnav">';
 			echo '</span>';
 		echo '</a>';
 
-		$active = (CTR::$get->get('view') == 'spyreport') ? 'spyreport' : '';
+		$active = (CTR::$get->get('view') == 'spyreport') ? 'active' : '';
 		echo '<a href="' . APP_ROOT . 'fleet/view-spyreport" class="item ' . $active . '">';
 			echo '<span class="picto">';
 				echo '<img src="' . MEDIA . 'fleet/spy.png" alt="" />';
