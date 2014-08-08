@@ -11,9 +11,9 @@
 
 echo '<div class="component report">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'avatar/medium/' . $attacker_report->getAvatar() . '.png" alt="' . $attacker_report->getName() . '" />';
+		echo '<img src="' . MEDIA . 'avatar/medium/' . $attacker_report->avatar . '.png" alt="' . $attacker_report->name . '" />';
 		echo '<h2>Attaquant</h2>';
-		echo '<em>' . $attacker_report->getName() . '</em>';
+		echo '<em>' . $attacker_report->name . '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
@@ -24,24 +24,24 @@ echo '<div class="component report">';
 				echo '<hr />';
 				if ($report_report->rPlayerAttacker == CTR::$data->get('playerId')) {
 					echo '<div class="commander">';
-						echo '<img src="' . MEDIA . 'commander/medium/c1-l1-c' . $attacker_report->getRColor() . '.png" alt="' . $commanders_report[0]->name . '" />';
-						echo '<strong>Commandant ' . $commanders_report[0]->name . '</strong>';
-						echo '<em>grade : ' . $commanders_report[0]->level;
-							$level = Commander::nbLevelUp($commanders_report[0]->level, $commanders_report[0]->experience + $report_report->expCom);
+						echo '<img src="' . MEDIA . 'commander/medium/' . $report_report->rPlayerAttacker . '.png" alt="' . $report_report->rPlayerAttacker . '" />';
+						echo '<strong>Commandant ' . $report_report->rPlayerAttacker . '</strong>';
+						echo '<em>grade : ' . $report_report->rPlayerAttacker;
+							/*$level = Commander::nbLevelUp($report_report->level, $report_report->experience + $report_report->expCom);
 							if ($level > 0) {
 								echo ' <span class="bonus">+ ' . $level . '</span>';
-							}
+							}*/
 						echo '</em>';
-						echo '<em>expérience : ' . Format::numberFormat($commanders_report[0]->experience);
-							echo ' <span class="bonus">+ ' . Format::numberFormat($report_report->expCom) . '</span>';
+						echo '<em>expérience : ' . Format::numberFormat($report_report->expPlayerA);
+							echo ' <span class="bonus">+ ' . Format::numberFormat($report_report->expPlayerA) . '</span>';
 						echo '</em>';
-						echo '<em>victoire : ' . $commanders_report[0]->palmares . ' <span class="bonus">+ 1</span></em>';
+						echo '<em>victoire : ' . $report_report->rPlayerAttacker . ' <span class="bonus">+ 1</span></em>';
 					echo '</div>';
 				} else {
 					echo '<div class="commander">';
-						echo '<img src="' . MEDIA . 'commander/medium/c1-l1-c' . $attacker_report->getRColor() . '.png" alt="' . $commanders_report[0]->name . '" />';
-						echo '<strong>Commandant ' . $commanders_report[0]->name . '</strong>';
-						echo '<em>grade : ' . $commanders_report[0]->level . '</em>';
+						echo '<img src="' . MEDIA . 'commander/medium/' . $report_report->rPlayerDefender . '.png" alt="' . $report_report->rPlayerDefender . '" />';
+						echo '<strong>Commandant ' . $report_report->rPlayerDefender . '</strong>';
+						echo '<em>grade : ' . $report_report->rPlayerDefender . '</em>';
 						echo '<em>expérience : ---</em>';
 						echo '<em>victoire : ---</em>';
 					echo '</div>';
@@ -52,12 +52,12 @@ echo '<div class="component report">';
 				echo '</div>';
 				echo '<hr />';
 				echo '<div class="commander">';
-					echo '<img src="' . MEDIA . 'fleet/memorial.png" alt="' . $commanders_report[0]->name . '" />';
-					echo '<strong>Commandant ' . $commanders_report[0]->name . '</strong>';
-					echo '<em>grade : ' . $commanders_report[0]->level . '</em>';
+					echo '<img src="' . MEDIA . 'fleet/memorial.png" alt="' . $report_report->rPlayerDefender . '" />';
+					echo '<strong>Commandant ' . $report_report->rPlayerDefender . '</strong>';
+					echo '<em>grade : ' . $report_report->rPlayerDefender . '</em>';
 					if ($report_report->rPlayerAttacker == CTR::$data->get('playerId')) {
-						echo '<em>expérience : ' . Format::numberFormat($commanders_report[0]->experience) . '</em>';
-						echo '<em>victoire : ' . $commanders_report[0]->palmares . '</em>';
+						echo '<em>expérience : ' . Format::numberFormat($report_report->rPlayerDefender) . '</em>';
+						echo '<em>victoire : ' . $report_report->rPlayerDefender . '</em>';
 					} else {
 						echo '<em>expérience : ---</em>';
 						echo '<em>victoire : ---</em>';
@@ -65,16 +65,14 @@ echo '<div class="component report">';
 				echo '</div>';
 			}
 
-			$stateAttacker = $report_report->getShipsStateAttacker($commanders_report);
-
 			echo '<div class="dammage">';
 				echo '<table>';
 					for ($i = 0; $i < 12; $i++) { 
 						echo '<tr>';
 							echo '<td>' . ShipResource::getInfo($i, 'name') . '</td>';
-							echo '<td>' . (($stateAttacker[0][$i] == 0) ? '—' : '<span>' . $stateAttacker[0][$i] . '</span>') . '</td>';
-							echo '<td>' . (($stateAttacker[2][$i] == 0) ? '—' : '<span>-' . $stateAttacker[2][$i] . '</span>') . '</td>';
-							echo '<td>' . (($stateAttacker[1][$i] == 0) ? '—' : '<span>' . $stateAttacker[1][$i] . '</span>') . '</td>';
+							echo '<td>' . (($report_report->totalInBeginA[$i] == 0) ? '—' : '<span>' . $report_report->totalInBeginA[$i] . '</span>') . '</td>';
+							echo '<td>' . (($report_report->diferenceA[$i] == 0) ? '—' : '<span>-' . $report_report->diferenceA[$i] . '</span>') . '</td>';
+							echo '<td>' . (($report_report->totalAtEndA[$i] == 0) ? '—' : '<span>' . $report_report->totalAtEndA[$i] . '</span>') . '</td>';
 						echo '</tr>';
 					}
 				echo '</table>';
@@ -90,9 +88,9 @@ echo '<div class="component report">';
 			echo '<h2>Défenseur</h2>';
 			echo '<em>Commandant rebelle</em>';
 		} else {
-			echo '<img src="' . MEDIA . 'avatar/medium/' . $defender_report->getAvatar() . '.png" alt="' . $defender_report->getName() . '" />';
+			echo '<img src="' . MEDIA . 'avatar/medium/' . $defender_report->avatar . '.png" alt="' . $defender_report->name . '" />';
 			echo '<h2>Défenseur</h2>';
-			echo '<em>' . $defender_report->getName() . '</em>';
+			echo '<em>' . $defender_report->name . '</em>';
 		}
 	echo '</div>';
 	echo '<div class="fix-body">';
@@ -104,24 +102,24 @@ echo '<div class="component report">';
 				echo '<hr />';
 				if ($report_report->rPlayerDefender == CTR::$data->get('playerId')) {
 					echo '<div class="commander">';
-						echo '<img src="' . MEDIA . 'commander/medium/c1-l1-c' . $attacker_report->getRColor() . '.png" alt="' . $commanders_report[1]->name . '" />';
-						echo '<strong>Commandant ' . $commanders_report[1]->name . '</strong>';
-						echo '<em>grade : ' . $commanders_report[1]->level . ' <span class="bonus">+ </span></em>';
-						echo '<em>expérience : ' . Format::numberFormat($commanders_report[1]->experience);
+						echo '<img src="' . MEDIA . 'commander/medium/' . $defender_report->rColor . '.png" alt="' . $report_report->rPlayerDefender . '" />';
+						echo '<strong>Commandant ' . $report_report->rPlayerDefender . '</strong>';
+						echo '<em>grade : ' . $report_report->rPlayerDefender . ' <span class="bonus">+ </span></em>';
+						echo '<em>expérience : ' . Format::numberFormat($report_report->rPlayerDefender);
 							echo ' <span class="bonus">+ ' . Format::numberFormat($report_report->expCom) . '</span>';
 						echo '</em>';
-						echo '<em>victoire : ' . $commanders_report[1]->palmares . ' <span class="bonus">+ 1</span></em>';
+						echo '<em>victoire : ' . $report_report->rPlayerDefender . ' <span class="bonus">+ 1</span></em>';
 					echo '</div>';
 				} else {
 					echo '<div class="commander">';
 						if ($report_report->rPlayerDefender == 0) {
-							echo '<img src="' . MEDIA . 'commander/medium/c1-l1-c0.png" alt="' . $commanders_report[1]->name . '" />';
+							echo '<img src="' . MEDIA . 'commander/medium/c1-l1-c0.png" alt="' . $report_report->rPlayerDefender . '" />';
 							echo '<strong>Commandant rebelle</strong>';
 						} else {
-							echo '<img src="' . MEDIA . 'commander/medium/c1-l1-c' . $attacker_report->getRColor() . '.png" alt="' . $commanders_report[1]->name . '" />';
-							echo '<strong>Commandant ' . $commanders_report[1]->name . '</strong>';
+							echo '<img src="' . MEDIA . 'commander/medium/c1-l1-c' . $attacker_report->getRColor() . '.png" alt="' . $report_report->rPlayerDefender . '" />';
+							echo '<strong>Commandant ' . $report_report->rPlayerDefender . '</strong>';
 						}
-						echo '<em>grade : ' . $commanders_report[1]->level . '</em>';
+						echo '<em>grade : ' . $report_report->rPlayerDefender . '</em>';
 						echo '<em>expérience : ---</em>';
 						echo '<em>victoire : ---</em>';
 					echo '</div>';
@@ -133,37 +131,35 @@ echo '<div class="component report">';
 				echo '<hr />';
 				if ($report_report->rPlayerDefender == CTR::$data->get('playerId')) {
 					echo '<div class="commander">';
-						echo '<img src="' . MEDIA . 'fleet/memorial.png" alt="' . $commanders_report[1]->name . '" />';
-						echo '<strong>Commandant ' . $commanders_report[1]->name . '</strong>';
-						echo '<em>grade : ' . $commanders_report[1]->level . '</em>';
-						echo '<em>expérience : ' . Format::numberFormat($commanders_report[1]->experience) . '</em>';
-						echo '<em>victoire : ' . $commanders_report[1]->palmares . '</em>';
+						echo '<img src="' . MEDIA . 'fleet/memorial.png" alt="' . $report_report->rPlayerDefender . '" />';
+						echo '<strong>Commandant ' . $report_report->rPlayerDefender . '</strong>';
+						echo '<em>grade : ' . $report_report->rPlayerDefender . '</em>';
+						echo '<em>expérience : ' . Format::numberFormat($report_report->rPlayerDefender) . '</em>';
+						echo '<em>victoire : ' . $report_report->rPlayerDefender . '</em>';
 					echo '</div>';
 				} else {
 					echo '<div class="commander">';
-						echo '<img src="' . MEDIA . 'fleet/memorial.png" alt="' . $commanders_report[1]->name . '" />';
+						echo '<img src="' . MEDIA . 'fleet/memorial.png" alt="' . $report_report->rPlayerDefender . '" />';
 						if ($report_report->rPlayerDefender == 0) {
 							echo '<strong>Commandant rebelle</strong>';
 						} else {
-							echo '<strong>Commandant ' . $commanders_report[1]->name . '</strong>';
+							echo '<strong>Commandant ' . $report_report->rPlayerDefender . '</strong>';
 						}
-						echo '<em>grade : ' . $commanders_report[1]->level . '</em>';
+						echo '<em>grade : ' . $report_report->rPlayerDefender . '</em>';
 						echo '<em>expérience : ---</em>';
 						echo '<em>victoire : ---</em>';
 					echo '</div>';
 				}
 			}
 
-			$stateDefender = $report_report->getShipsStateDefender($commanders_report);
-
 			echo '<div class="dammage">';
 				echo '<table>';
 					for ($i = 0; $i < 12; $i++) { 
 						echo '<tr>';
 							echo '<td>' . ShipResource::getInfo($i, 'name') . '</td>';
-							echo '<td>' . (($stateDefender[0][$i] == 0) ? '—' : '<span>' . $stateDefender[0][$i] . '</span>') . '</td>';
-							echo '<td>' . (($stateDefender[2][$i] == 0) ? '—' : '<span>-' . $stateDefender[2][$i] . '</span>') . '</td>';
-							echo '<td>' . (($stateDefender[1][$i] == 0) ? '—' : '<span>' . $stateDefender[1][$i] . '</span>') . '</td>';
+							echo '<td>' . (($report_report->totalInBeginD[$i] == 0) ? '—' : '<span>' . $report_report->totalInBeginD[$i] . '</span>') . '</td>';
+							echo '<td>' . (($report_report->diferenceD[$i] == 0) ? '—' : '<span>-' . $report_report->diferenceD[$i] . '</span>') . '</td>';
+							echo '<td>' . (($report_report->totalAtEndD[$i] == 0) ? '—' : '<span>' . $report_report->totalAtEndD[$i] . '</span>') . '</td>';
 						echo '</tr>';
 					}
 				echo '</table>';
@@ -171,4 +167,3 @@ echo '<div class="component report">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

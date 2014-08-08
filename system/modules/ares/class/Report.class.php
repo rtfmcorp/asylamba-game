@@ -40,7 +40,7 @@ class Report {
 	public $totalInBeginA = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 	public $totalInBeginD = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 	public $totalAtEndA = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-	public $totalAtEndD = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);	
+	public $totalAtEndD = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 	public $diferenceA = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 	public $diferenceD = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
@@ -70,32 +70,32 @@ class Report {
 			}
 		}
 
-		foreach ($armyInBeginA AS $sq) {
+		foreach ($this->armyInBeginA AS $sq) {
 			for ($i = 0; $i < 12; $i++) {
-				$totalInBeginA[$i] += $sq[$i];
+				$this->totalInBeginA[$i] += $sq[$i];
 			}
 		}
-		foreach ($armyInBeginD AS $sq) {
+		foreach ($this->armyInBeginD AS $sq) {
 			for ($i = 0; $i < 12; $i++) {
-				$totalInBeginD[$i] += $sq[$i];
+				$this->totalInBeginD[$i] += $sq[$i];
 			}
 		}
-		foreach ($armyAtEndA AS $sq) {
+		foreach ($this->armyAtEndA AS $sq) {
 			for ($i = 0; $i < 12; $i++) {
-				$totalAtEndA[$i] += $sq[$i];
+				$this->totalAtEndA[$i] += $sq[$i];
 			}
 		}
-		foreach ($armyAtEndD AS $sq) {
+		foreach ($this->armyAtEndD AS $sq) {
 			for ($i = 0; $i < 12; $i++) {
-				$totalAtEndD[$i] += $sq[$i];
+				$this->totalAtEndD[$i] += $sq[$i];
 			}
 		}
 
 		for ($i = 0; $i < 12; $i++) {
-			$diferenceA = $totalInBeginA[$i] - $totalAtEndA[$i];
+			$this->diferenceA = $this->totalInBeginA[$i] - $this->totalAtEndA[$i];
 		}
 		for ($i = 0; $i < 12; $i++) {
-			$diferenceD = $totalInBeginD[$i] - $totalAtEndD[$i];
+			$this->diferenceD = $this->totalInBeginD[$i] - $this->totalAtEndD[$i];
 		}
 	}
 }
