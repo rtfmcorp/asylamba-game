@@ -1,3 +1,60 @@
+.component.report .set-report {
+	margin: 10px;
+
+	.item {
+		position: relative;
+
+		height: 60px;
+		border: solid 1px #202020;
+		border-bottom: none;
+		background: #0A0A0A;
+
+		.left {
+			position: absolute;
+			top: 0; left: 0; bottom: 0;
+			width: 60px;
+
+			img {
+				width: 30px;
+				margin: 10px; padding: 5px;
+				border-radius: 100%;
+				background: @medium;
+			}
+		}
+
+		.center {
+			position: absolute;
+			top: 0; left: 60px; right: 30px; bottom: 0;
+			padding: 9px 0;
+
+			strong {
+				display: block;
+				line-height: 22px;
+			}
+		}
+
+		.right {
+			position: absolute;
+			top: 0; right: 0; bottom: 0;
+			width: 29px;
+			border-left: solid 1px #202020;
+
+			a {
+				position: absolute;
+				top: 0; left: 0;
+				width: 29px; height: 60px;
+				background: url('src/desktop/mover/small-right.png') no-repeat center #0A0A0A;
+
+				&:hover, &:focus, &.active {
+					background-color: #202020;
+				}
+			}
+		}
+	}
+}
+
+
+
 .component.report .small-report {
 	position: relative;
 	margin: 10px;
@@ -75,6 +132,44 @@
 .component.report .small-report .footer a { color: #CCC; }
 .component.report .small-report.open .content { display: block; }
 .component.report .small-report.open .footer  { display: block; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .component.report .commander {
 	position: relative;

@@ -13,69 +13,70 @@ echo '<div class="component report">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<div class="tool">';
+			/*echo '<div class="tool">';
 				echo '<span><a href="#" class="hb lt" title="cette action n\'a pas encore été développée">tout supprimer</a></span>';
 				echo '<span><a href="#" class="hb lt sh" data-target="info-report" title="plus d\'infos">?</a></span>';
 			echo '</div>';
 
 			echo '<p class="info" id="info-report" style="display:none;">';
 				echo 'Tmp.';
-			echo '</p>'; 
+			echo '</p>';*/
 			
 			if (count($report_listReport) > 0) {
-				foreach ($report_listReport as $r) {
-					if ($r->rPlayerAttacker == CTR::$data->get('playerId')) {
-						if ($r->rPlayerWinner == $r->rPlayerAttacker) {
-							if ($r->type == 1) {
-								$title = 'Pillage de ' . $r->placeName;
-							} else {
-								if ($r->rPlayerDefender == 0) {
-									$title = 'Colonisation réussie';
+				echo '<div class="set-report">';
+					foreach ($report_listReport as $r) {
+						if ($r->rPlayerAttacker == CTR::$data->get('playerId')) {
+							if ($r->rPlayerWinner == $r->rPlayerAttacker) {
+								if ($r->type == Commander::LOOT) {
+									$title = 'Pillage de ' . $r->placeName;
+									$img = 'loot.png';
 								} else {
-									$title = 'Conquête de ' . $r->placeName;
+									$title = $r->rPlayerDefender == 0
+										? 'Colonisation réussie'
+										: 'Conquête de ' . $r->placeName;
+									$img = 'colo.png';
+								}
+							} else {
+								if ($r->type == Commander::LOOT) {
+									$title = 'Pillage raté de ' . $r->placeName;
+									$img = 'loot.png';
+								} else {
+									$title = $r->rPlayerDefender == 0
+										? 'Colonisation ratée'
+										: 'Conquête ratée de ' . $r->placeName;
+									$img = 'colo.png';
 								}
 							}
 						} else {
-							if ($r->type == 1) {
-								$title = 'Pillage raté de ' . $r->placeName;
+							if ($r->rPlayerWinner == $r->rPlayerDefender) {
+								$title = $r->type == Commander::LOOT
+									? 'Pillage repoussé'
+									: 'Conquête repoussée';
+								$img = 'shield.png';
 							} else {
-								if ($r->rPlayerDefender == 0) {
-									$title = 'Colonisation ratée';
-								} else {
-									$title = 'Conquête ratée de ' . $r->placeName;
-								}
+								$title = $r->type == Commander::LOOT
+									? 'Défense ratée lors d\'un pillage'
+									: 'Défense ratée lors d\'un conquête';
+								$img = 'shield.png';
 							}
 						}
-					} else {
-						if ($r->rPlayerWinner == $r->rPlayerDefender) {
-							if ($r->type == 1) {
-								$title = 'Pillage repoussé';
-							} else {
-								$title = 'Conquête repoussée';
-							}
-						} else {
-							if ($r->type == 1) {
-								$title = 'Défense ratée lors d\'un pillage';
-							} else {
-								$title = 'Défense ratée lors d\'un conquête';
-							}
-						}
-					}
 
-					echo '<div class="small-report">';
-						if (CTR::$get->get('report') != $r->id) {
-							echo '<a class="open-button" href="' . APP_ROOT . 'fleet/view-archive/report-' . $r->id . '">&#8594;</a>';
-						} else {
-							echo '<a class="open-button" href="' . APP_ROOT . 'fleet/view-archive">&#215;</a>';
-						}
-						echo '<h4 class="switch-class-parent" data-class="open">' . $title . '</h4>';
-						echo '<div class="content">le combat a eu lieu ' . Chronos::transform($r->dFight) . '</div>';
-						echo '<div class="footer">';
-							# echo '<a href="' . APP_ROOT . 'action/a-archivereport/id-' . $r->id . '">archiver</a> ou ';
-							echo '<a href="#" class="hb lt" title="non implémenté">supprimer</a><br />';
+						echo '<div class="item">';
+							echo '<div class="left">';
+								echo '<img src="' . MEDIA . 'map/action/' . $img . '" alt="" />';
+							echo '</div>';
+
+							echo '<div class="center">';
+								echo '<strong>' . $title . '</strong>';
+								echo Chronos::transform($r->dFight);
+							echo '</div>';
+
+							echo '<div class="right">';
+								echo '<a class="' . (CTR::$get->equal('report', $r->id)  ? 'active' : NULL) . '" href="' . APP_ROOT . 'fleet/view-archive/report-' . $r->id . '"></a>';
+							echo '</div>';
 						echo '</div>';
-					echo '</div>';
-				}
+					}
+				echo '</div>';
 			} else {
 				echo '<p>Il n\'y a aucun rapport de combat dans vos archives militaires.</p>';
 			}
