@@ -71,31 +71,31 @@ class Report {
 		}
 
 		foreach ($this->armyInBeginA AS $sq) {
-			for ($i = 0; $i < 12; $i++) {
-				$this->totalInBeginA[$i] += $sq[$i];
+			for ($i = 5; $i < 16; $i++) {
+				$this->totalInBeginA[$i - 5] += $sq[$i];
 			}
 		}
 		foreach ($this->armyInBeginD AS $sq) {
-			for ($i = 0; $i < 12; $i++) {
-				$this->totalInBeginD[$i] += $sq[$i];
+			for ($i = 5; $i < 16; $i++) {
+				$this->totalInBeginD[$i - 5] += $sq[$i];
 			}
 		}
 		foreach ($this->armyAtEndA AS $sq) {
-			for ($i = 0; $i < 12; $i++) {
-				$this->totalAtEndA[$i] += $sq[$i];
+			for ($i = 5; $i < 16; $i++) {
+				$this->totalAtEndA[$i - 5] += $sq[$i];
 			}
 		}
 		foreach ($this->armyAtEndD AS $sq) {
-			for ($i = 0; $i < 12; $i++) {
-				$this->totalAtEndD[$i] += $sq[$i];
+			for ($i = 5; $i < 16; $i++) {
+				$this->totalAtEndD[$i - 5] += $sq[$i];
 			}
 		}
 
 		for ($i = 0; $i < 12; $i++) {
-			$this->diferenceA = $this->totalInBeginA[$i] - $this->totalAtEndA[$i];
+			$this->diferenceA[$i] = $this->totalInBeginA[$i] - $this->totalAtEndA[$i];
 		}
 		for ($i = 0; $i < 12; $i++) {
-			$this->diferenceD = $this->totalInBeginD[$i] - $this->totalAtEndD[$i];
+			$this->diferenceD[$i] = $this->totalInBeginD[$i] - $this->totalAtEndD[$i];
 		}
 	}
 }
