@@ -17,6 +17,9 @@ class OrbitalBase {
 	const TYP_MILITARY = 2;
 	const TYP_CAPITAL = 3;
 
+	const MAXCOMMANDERSTANDARD = 2;
+	const MAXCOMMANDERMILITARY = 5;
+
 	//ATTRIBUTES : ORBITALBASE
 	public $rPlace;
 	public $rPlayer;

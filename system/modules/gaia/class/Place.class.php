@@ -34,11 +34,11 @@ class Place {
 	const LOOTPLAYERWHITOUTBATTLESUCCESS		= 24;
 	const LOOTLOST								= 27;
 
-	const CONQUEREMPTYSSUCCESS 				= 30;
+	const CONQUEREMPTYSSUCCESS 					= 30;
 	const CONQUEREMPTYFAIL						= 31;
 	const CONQUERPLAYERWHITBATTLESUCCESS		= 32;
 	const CONQUERPLAYERWHITBATTLEFAIL			= 33;
-	const CONQUERPLAYERWHITOUTBATTLESUCCESS	= 34;
+	const CONQUERPLAYERWHITOUTBATTLESUCCESS		= 34;
 	const CONQUERLOST							= 37;
 
 	const COMEBACK 								= 40;
@@ -188,28 +188,43 @@ class Place {
 		include_once ARES;
 
 		switch ($commander->travelType) {
-			case Commander::MOVE: $this->tryToChangeBase($commander); 
-				LiveReport::$type = 0; break;
-			case Commander::LOOT: $this->tryToLoot($commander);
-				LiveReport::$type = 1; break;
-			case Commander::COLO: $this->tryToConquer($commander);
-				LiveReport::$type = 2; break;
-			case Commander::BACK: $this->comeBackToHome($commander);
-				LiveReport::$type = 3; break;
+
+			case Commander::MOVE: 
+				$this->tryToChangeBase($commander);
+				break;
+
+			case Commander::LOOT: 
+				LiveReport::$type = Commander::LOOT;
+				LiveReport::$dFight = $commander->dArrival;
+				$this->tryToLoot($commander);
+				break;
+
+			case Commander::COLO: 
+				LiveReport::$type = Commander::COLO;
+				LiveReport::$dFight = $commander->dArrival;
+				$this->tryToConquer($commander);
+				break;
+
+			case Commander::BACK: 
+				$this->comeBackToHome($commander);
+				break;
 			default: 
 				CTR::$alert->add('Cette action n\'existe pas.', ALT_BUG_INFO);
-		}
 
-		$commander->hasToU = TRUE;
-		return $commander;
+			$commander->hasToU = TRUE;
+			return $commander;
+		}
 	}
 
 	# se poser
 	private function tryToChangeBase($commander) {
+		include_once ATHENA;
 		# si la place et le commander ont le même joueur
 		if ($this->rPlayer == $commander->getRPlayer() AND $this->typeOfBase == 4) {
-			/* TODO: utiliser des constantes (deja existante) pour le type de base */
-			$maxCom = ($this->typeOfOrbitalBase == 0) ? 2 : 5;
+			$maxCom = OrbitalBase::MAXCOMMANDERSTANDARD;
+			if ($this->typeOfOrbitalBase == OrbitalBase::TYP_MILITARY || $this->typeOfOrbitalBase == OrbitalBase::TYP_CAPITAL) {
+				$maxCom = OrbitalBase::MAXCOMMANDERMILITARY;
+			}
 			# si place a assez de case libre :
 			if (count($this->commanders) < $maxCom) {
 				$comLine1 = 0;
@@ -229,21 +244,6 @@ class Place {
 					$commander->line = 1;
 				}
 
-				# changer rBase commander
-				$commander->rBase = $this->id;
-				// $commander->rDestinationPlace = NULL;
-				$commander->travelType = NULL;
-				// $commander->rStartPlace = NULL;
-				// $commander->dArrival = NULL;
-
-				/* TODO: cette variable n'existe pas */
-				$commander->length = NULL;
-				$commander->statement = Commander::AFFECTED;
-
-				# ajouter à $this le commandant
-				$this->commanders[] = $commander;
-
-				/* TODO: en fait la, ça charge la place courante */
 				# instance de la place d'envoie + suppr commandant de ses flottes
 				# enlever à rBase le commandant
 				$S_PLM10 = ASM::$plm->getCurrentSession();
@@ -256,6 +256,17 @@ class Place {
 					}
 				}
 				ASM::$plm->changeSession($S_PLM10);
+				# changer rBase commander
+				$commander->rBase = $this->id;
+				// $commander->rDestinationPlace = NULL;
+				$commander->travelType = NULL;
+				// $commander->rStartPlace = NULL;
+				// $commander->dArrival = NULL;
+
+				$commander->statement = Commander::AFFECTED;
+
+				# ajouter à $this le commandant
+				$this->commanders[] = $commander;
 
 				# envoie de notif
 				$this->sendNotif(self::CHANGESUCCESS, $commander);
@@ -302,8 +313,6 @@ class Place {
 			// $commander->rStartPlace = NULL;
 			// $commander->dArrival = NULL;
 
-			/* TODO: cette var n'existe pas */
-			$commander->length = NULL;
 
 			# planète vide -> faire un combat
 			$this->startFight($commander);
@@ -359,8 +368,6 @@ class Place {
 				// $commander->rStartPlace = NULL;
 				// $commander->dArrival = NULL;
 
-				/* TODO: cette var n'existe pas */
-				$commander->length = NULL;
 
 				$dCommanders = array();
 				foreach ($this->commanders AS $dCommander) {
@@ -452,8 +459,6 @@ class Place {
 				$commander->travelType = NULL;
 				$commander->travelLength = NULL;
 				// $commander->rStartPlace = NULL;
-				// $commander->dArrival = NULL;
-				$commander->length = NULL;
 
 				$S_PLM10 = ASM::$plm->getCurrentSession();
 				ASM::$plm->newSession();
@@ -482,16 +487,13 @@ class Place {
 			// $commander->rStartPlace = NULL;
 			// $commander->dArrival = NULL;
 
-			/* TODO: cette propriete n'existe pas */
-			$commander->length = NULL;
 
 			if ($this->playerColor != $commander->getPlayerColor()) {
-				/* TODO: je ne comprend pas ce que fais cette boucle */
 				for ($i = 0; $i < count($this->commanders) - 1; $i++) {
 					if ($this->commanders[$i + 1]->line < $this->commanders[$i]->line) {
 						$tempCom = $this->commanders[$i];
 						$this->commanders[$i] = $this->commanders[$i + 1];
-						$this->commanders[$i] = $tempCom;
+						$this->commanders[$i + 1] = $tempCom;
 					}
 				}
 
@@ -501,10 +503,9 @@ class Place {
 
 						$this->startFight($commander, $this->commanders[$nbrBattle], TRUE);
 
-						/* TODO: pas de rapport lors de la mort du commandant */
-
 						# mort du commandant
 						if ($commander->getStatement() == COM_DEAD) {
+							$this->createReport();
 							break;
 						}
 					}
@@ -548,7 +549,6 @@ class Place {
 						ASM::$pam->changeSession($S_PAM);
 					}
 
-					/* TODO: pourquoi le défenseur perdant (?) devrait gagner qqch ?  */
 					if ($this->playerColor == 1 || $this->playerColor == 4 || $this->playerColor == 5) {
 						$S_PAM = ASM::$pam->getCurrentSession();
 						ASM::$pam->newSession();
@@ -629,8 +629,6 @@ class Place {
 			// $commander->rStartPlace = NULL;
 			// $commander->dArrival = NULL;
 
-			/* TODO: cette propriete n'existe pas */
-			$commander->length = NULL;
 
 			# faire un combat
 			$this->startFight($commander);
@@ -727,8 +725,6 @@ class Place {
 		// $commander->rStartPlace = NULL;
 		$commander->dArrival = NULL;
 
-		/* TODO: cette var n'existe pas */
-		$commander->length = NULL;
 
 		$commander->statement = Commander::AFFECTED;
 
@@ -835,9 +831,10 @@ class Place {
 		$report->round = LiveReport::$round;
 		$report->importance = LiveReport::$importance;
 		$report->squadrons = LiveReport::$squadrons;
-		$report->dFight = Utils::now(); //à modifier
+		$report->dFight = LiveReport::$dFight;
 		$report->placeName = ($this->baseName == '') ? 'planète rebelle' : $this->baseName;
 		ASM::$rpm->add($report);
+		LiveReport::clear();
 	}
 
 	private function sendNotif($case, $commander) {
