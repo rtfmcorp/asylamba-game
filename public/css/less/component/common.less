@@ -820,3 +820,66 @@
 .component.panel-info .skill-box .progress-bar {
 	margin: 6px 0 2px 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.splash-screen {
+	position: absolute;
+	top: 0; left: 0; right: 0; bottom: 0;
+	z-index: 10000;
+
+	background: rgba(0, 0, 0, 0.8);
+
+	.modal {
+		width: 500px; height: 140px;
+		position: absolute;
+		top: 80px; right: 120px;
+		background: #0A0A0A;
+		padding: 25px 175px 25px 75px;
+
+		color: white;
+		border-radius: 140px;
+		border: solid 1px #202020;
+
+		h1 {
+			font-size: 36px;
+			margin: 0; padding: 0 0 10px 0;
+		}
+
+		h2 {
+			font-size: 20px;
+			margin: 0; padding: 0;
+		}
+
+		img {
+			position: absolute;
+			top: -15px; right: -50px;
+			width: 200px;
+			padding: 10px;
+			background: #202020;
+			border-radius: 100%;
+			border: solid 1px #4F4F4F;
+		}
+
+		&:before {
+			content: '';
+			position: absolute;
+			top: -80px; right: 20px;
+			border-color: transparent transparent #202020 transparent;
+			border-width: 40px;
+			border-style: solid;
+		}
+	}
+}

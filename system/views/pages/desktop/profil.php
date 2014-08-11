@@ -1,4 +1,11 @@
 <?php
+echo '<div class="splash-screen">';
+	echo '<div class="modal">';
+		echo '<img src="' . MEDIA . 'avatar/big/059-' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="" />';
+		echo '<h1>Bienvenue dans Asylamba</h1>';
+		echo '<h2>Afin de bien commencer le jeu, cliquez sur l\'icône du tutoriel. Celui-ci vous guidera dans les premières étapes du jeu.</h2>';
+	echo '</div>';
+echo '</div>';
 # background paralax
 echo '<div id="background-paralax" class="profil"></div>';
 
