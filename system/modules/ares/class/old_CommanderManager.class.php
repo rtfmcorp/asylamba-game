@@ -26,22 +26,7 @@ class CommanderManager extends Manager {
 				p.name AS pName,
 				p.rColor AS pColor,
 				dp.name AS dpName,
-				sp.name AS spName,
-				sq.id AS sqId,
-				sq.ship0 AS sqShip0,
-				sq.ship1 AS sqShip1,
-				sq.ship2 AS sqShip2,
-				sq.ship3 AS sqShip3,
-				sq.ship4 AS sqShip4,
-				sq.ship5 AS sqShip5,
-				sq.ship6 AS sqShip6,
-				sq.ship7 AS sqShip7,
-				sq.ship8 AS sqShip8,
-				sq.ship9 AS sqShip9,
-				sq.ship10 AS sqShip10,
-				sq.ship11 AS sqShip11,
-				sq.dCreation AS sqDCreation,
-				sq.DLastModification AS sqDLastModification
+				sp.name AS spName
 			FROM commander AS c
 			LEFT JOIN orbitalBase AS o
 				ON o.rPlace = c.rBase
@@ -51,8 +36,7 @@ class CommanderManager extends Manager {
 				ON dp.rPlace = c.rDestinationPlace
 			LEFT JOIN orbitalBase AS sp
 				ON sp.rPlace = c.rStartPlace
-			LEFT JOIN squadron AS sq
-				ON sq.rCommander = c.id
+
 			' . $formatWhere .'
 			' . $formatOrder .'
 			' . $formatLimit
@@ -78,55 +62,81 @@ class CommanderManager extends Manager {
 		$qr->closeCursor();
 
 		if (count($awCommanders) > 0) {
-			for ($i = 0; $i < count($awCommanders); $i++) {
-				if ($i == 0 || $awCommanders[$i]['id'] != $awCommanders[$i - 1]['id']) {
-					$commander = new Commander();
+			$idCommandersArray = array();
+			foreach ($awCommanders AS $commander) {
+				$idCommandersArray[] = $commander['id'];
+			}
 
-					$commander->id = $awCommanders[$i]['id'];
-					$commander->name = $awCommanders[$i]['name'];
-					$commander->avatar = $awCommanders[$i]['avatar'];
-					$commander->rPlayer = $awCommanders[$i]['rPlayer'];
-					$commander->playerName = $awCommanders[$i]['pName'];
-					$commander->playerColor = $awCommanders[$i]['pColor'];
-					$commander->rBase = $awCommanders[$i]['rBase'];
-					$commander->comment = $awCommanders[$i]['comment'];
-					$commander->sexe = $awCommanders[$i]['sexe'];
-					$commander->age = $awCommanders[$i]['age'];
-					$commander->level = $awCommanders[$i]['level'];
-					$commander->experience = $awCommanders[$i]['experience'];
-					$commander->uCommander = $awCommanders[$i]['uCommander'];
-					$commander->palmares = $awCommanders[$i]['palmares'];
-					$commander->statement = $awCommanders[$i]['statement'];
-					$commander->line = $awCommanders[$i]['line'];
-					$commander->dCreation = $awCommanders[$i]['dCreation'];
-					$commander->dAffectation = $awCommanders[$i]['dAffectation'];
-					$commander->dDeath = $awCommanders[$i]['dDeath'];
-					$commander->oBName = $awCommanders[$i]['oName'];
+			$qr = 'SELECT * FROM squadron ';
+			$i = 0;
+			foreach ($idCommandersArray AS $id) {
+				$qr .= ($i == 0) ? 'WHERE rCommander = ? ' : 'OR rCommander = ? ';
+				$i++;
+			}
 
-					$commander->dStart = $awCommanders[$i]['dStart'];
-					$commander->dArrival = $awCommanders[$i]['dArrival'];
-					$commander->resources = $awCommanders[$i]['resources'];
-					$commander->travelType = $awCommanders[$i]['travelType'];
-					$commander->travelLength = $awCommanders[$i]['travelLength'];
-					$commander->rStartPlace = $awCommanders[$i]['rStartPlace'];
-					$commander->rDestinationPlace = $awCommanders[$i]['rDestinationPlace'];
+			$qr = $db->prepare($qr);
 
-					$commander->startPlaceName = $awCommanders[$i]['spName'];
-					$commander->destinationPlaceName = ($awCommanders[$i]['dpName'] == '') ? 'planète rebelle' : $awCommanders[$i]['dpName'];
+			if (empty($idCommandersArray)) {
+				$qr->execute();
+			} else {
+				$qr->execute($idCommandersArray);
+			}
 
-				}
-				$commander->squadronsIds[] = $awCommanders[$i]['sqId'];
+			$awSquadrons = $qr->fetchAll();
+			$arrayOfArmies = array();
+			$squadronsIds = array();
 
-				$commander->armyInBegin[] = array($awCommanders[$i]['sqShip0'], $awCommanders[$i]['sqShip1'], $awCommanders[$i]['sqShip2'], $awCommanders[$i]['sqShip3'], $awCommanders[$i]['sqShip4'], $awCommanders[$i]['sqShip5'], $awCommanders[$i]['sqShip6'], $awCommanders[$i]['sqShip7'], $awCommanders[$i]['sqShip8'], $awCommanders[$i]['sqShip9'], $awCommanders[$i]['sqShip10'], $awCommanders[$i]['sqShip11'], $awCommanders[$i]['sqDCreation'], $awCommanders[$i]['sqDLastModification']);
-					
-				if ($i == count($awCommanders) - 1 || $awCommanders[$i]['id'] != $awCommanders[$i + 1]['id']) {
-					$commander->setPevInBegin();
+			foreach ($awSquadrons AS $squadron) {
+				$id =  $squadron[0];
+				$rCommander = $squadron[1];
+				$arrayOfArmies[''. $squadron[1] .''][] = array($squadron[2], $squadron[3], $squadron[4], $squadron[5], $squadron[6], $squadron[7], $squadron[8], $squadron[9], $squadron[10], $squadron[11], $squadron[12], $squadron[13], $squadron[14], $squadron[15]);
+				$squadronsIds[''.$rCommander.''][] = $id;
+			}
+			foreach ($awCommanders AS $awCommander) {
+				$commander = new Commander();
 
-					$currentCommander = $this->_Add($commander);
+				$commander->id = $awCommander['id'];
+				$commander->name = $awCommander['name'];
+				$commander->avatar = $awCommander['avatar'];
+				$commander->rPlayer = $awCommander['rPlayer'];
+				$commander->playerName = $awCommander['pName'];
+				$commander->playerColor = $awCommander['pColor'];
+				$commander->rBase = $awCommander['rBase'];
+				$commander->comment = $awCommander['comment'];
+				$commander->sexe = $awCommander['sexe'];
+				$commander->age = $awCommander['age'];
+				$commander->level = $awCommander['level'];
+				$commander->experience = $awCommander['experience'];
+				$commander->uCommander = $awCommander['uCommander'];
+				$commander->palmares = $awCommander['palmares'];
+				$commander->statement = $awCommander['statement'];
+				$commander->line = $awCommander['line'];
+				$commander->dCreation = $awCommander['dCreation'];
+				$commander->dAffectation = $awCommander['dAffectation'];
+				$commander->dDeath = $awCommander['dDeath'];
+				$commander->oBName = $awCommander['oName'];
 
-					if ($this->currentSession->getUMode()) {
-						$currentCommander->uCommander();
-					}
+				$commander->dStart = $awCommander['dStart'];
+				$commander->dArrival = $awCommander['dArrival'];
+				$commander->resources = $awCommander['resources'];
+				$commander->travelType = $awCommander['travelType'];
+				$commander->travelLength = $awCommander['travelLength'];
+				$commander->rStartPlace = $awCommander['rStartPlace'];
+				$commander->rDestinationPlace = $awCommander['rDestinationPlace'];
+
+				$commander->startPlaceName = $awCommander['spName'];
+				$commander->destinationPlaceName = ($awCommander['dpName'] == '') ? 'planète rebelle' : $awCommander['dpName'];
+
+				$commander->setSquadronsIds($squadronsIds[$commander->getId()]);
+
+				$commander->setArmyInBegin($arrayOfArmies[$commander->getId()]);
+				$commander->setArmy();
+				$commander->setPevInBegin();
+
+				$currentCommander = $this->_Add($commander);
+
+				if ($this->currentSession->getUMode()) {
+					$currentCommander->uCommander();
 				}
 			}
 		}

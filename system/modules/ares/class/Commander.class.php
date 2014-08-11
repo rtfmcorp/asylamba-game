@@ -95,6 +95,7 @@ class Commander {
 
 	public $uCommander				= '';
 	public $hasToU					= TRUE;
+	public $hasArmySetted			= FALSE;
 
 
 	# Tableau d'objets squadron       
@@ -140,7 +141,7 @@ class Commander {
 	public function getIsAttacker()				{ return $this->isAttacker; }
 	public function getDestinationPlaceName()	{ return $this->destinationPlaceName; }
 	public function getSquadronsIds()			{ return $this->squadronsIds; }
-	public function getArmy()					{ return $this->army; }
+	public function getArmy()					{ $this->setArmy(); return $this->army; }
 
 	public function getFormatLineCoord() {
 		$return = array();
@@ -151,17 +152,21 @@ class Commander {
 
 		return $return;
 	}
-	public function getSizeArmy() { return count($this->army); }
+	public function getSizeArmy() { return count($this->squadronsIds); }
+
 
 	public function getPev() {
 		$pev = 0;
-		foreach ($this->army as $squadron) {
-			$pev += $squadron->getPev();
+		foreach ($this->armyInBegin as $squadron) {
+			for ($i = 0; $i < 12; $i++) {
+				$pev += $squadron[$i] * ShipResource::getInfo($i, 'pev');
+			}
 		}
 		return $pev;
 	}
 	
 	public function getSquadron($i)	{
+		$this->setArmy();
 		if (!empty($this->army[$i])) {
 			return $this->army[$i]; 
 		} else {
@@ -172,9 +177,9 @@ class Commander {
 	# renvoie un tableau de nombre de vaisseaux
 	public function getNbrShipByType() {
 		$array = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-		foreach ($this->army as $squadron) {
+		foreach ($this->armyInBegin as $squadron) {
 			for ($i = 0; $i < 12; $i++) {
-				$array[$i] += $squadron->getNbrShipByType($i);
+				$array[$i] += $squadron[$i];
 			}
 		}
 
@@ -213,25 +218,32 @@ class Commander {
 	public function setIsAttacker($isAttacker)						{ $this->isAttacker = $isAttacker; }		  
 
 	public function setArmy() {
-		for($i = 0; $i < count($this->squadronsIds) AND $i < 25; $i++) {
-			$this->army[$i] = new Squadron(
-				$this->armyInBegin[$i], 
-				$this->squadronsIds[$i], 
-				self::$LINECOORD[$i], 
-				$i, 
-				$this->id);
-		}
-	}
-
-	public function setPevInBegin() {
-		foreach ($this->army AS $squadron) {
-			foreach ($squadron->getSquadron() AS $ship) {
-				$this->pevInBegin += $ship->getPev();
+		if (!$this->hasArmySetted) {
+			for($i = 0; $i < count($this->squadronsIds) AND $i < 25; $i++) {
+				$this->army[$i] = new Squadron(
+					$this->armyInBegin[$i], 
+					$this->squadronsIds[$i], 
+					self::$LINECOORD[$i], 
+					$i, 
+					$this->id);
 			}
 		}
 	}
 
+#YOLO
+	public function setPevInBegin() {
+		$pev = 0;
+		foreach ($this->armyInBegin as $squadron) {
+			for ($i = 0; $i < 12; $i++) {
+				$pev += $squadron[$i] * ShipResource::getInfo($i, 'pev');
+			}
+		}
+		$this->pevInBegin = $pev;
+	}
+
+#mettre le setArmy
 	private function setArmyAtEnd() {
+		$this->setArmy();
 		$i = 0;
 		foreach ($this->army AS $squadron) {
 			$this->armyAtEnd[$i] = $squadron->getArrayOfShips();
@@ -240,6 +252,7 @@ class Commander {
 	}
 
 	private function setEarnedExperience($enemyCommander) {
+		$this->setArmy();
 		include_once ZEUS;
 		$finalOwnPev = 0;
 
@@ -275,6 +288,7 @@ class Commander {
 	}
 
 	public function setBonus() {
+		$this->setArmy();
 		if ($this->rPlayer != CTR::$data->get('playerId')) {
 			$playerBonus = new PlayerBonus($this->rPlayer);
 			$playerBonus->load();
@@ -415,6 +429,7 @@ class Commander {
 
 	# ENGAGE UN COMBAT ENTRE CHAQUE SQUADRON CONTRE UN COMMANDANT
 	public function engage($enemyCommander, $thisCommander) {
+		$this->setArmy();
 		$idSquadron = 0;
 		foreach ($this->army as $squadron) {
 			if ($squadron->getNbrShips() != 0 AND $squadron->getLineCoord() * 3 <= FightController::getCurrentLine()) {
