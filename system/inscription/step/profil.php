@@ -38,9 +38,11 @@ echo '<div id="content">';
 			echo '<div class="fix-body">';
 				echo '<div class="body">';
 					echo '<div class="avatars">';
-						for ($i = 1; $i < 50; $i++) { 
+						for ($i = 1; $i <= 68; $i++) { 
 							if ($i < 10) {
 								$avatars[] = '00' . $i . '-' . CTR::$data->get('inscription')->get('ally');
+							} elseif ($i == 59) {
+								// do nothing
 							} else {
 								$avatars[] =  '0' . $i . '-' . CTR::$data->get('inscription')->get('ally');
 							}
