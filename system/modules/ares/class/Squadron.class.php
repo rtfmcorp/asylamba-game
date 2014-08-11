@@ -92,7 +92,6 @@ class Squadron {
 
 	public function updateShip($shipNbrName, $nbr) {
 		$this->arrayOfShips[$shipNbrName] += $nbr;
-		ASM::$com->getById($this->rCommander)->hasToSave = TRUE;
 	}
 
 	public function emptySquadron() {

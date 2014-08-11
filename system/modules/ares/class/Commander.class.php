@@ -227,6 +227,7 @@ class Commander {
 					$i, 
 					$this->id);
 			}
+			$this->hasArmySetted = TRUE;
 		}
 	}
 
