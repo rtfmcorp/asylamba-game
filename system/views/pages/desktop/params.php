@@ -8,7 +8,10 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
-	include COMPONENT . 'params/general.php';
-	include COMPONENT . 'params/display.php';
+#	include COMPONENT . 'params/general.php';
+#	include COMPONENT . 'params/display.php';
+	include COMPONENT . 'default.php';
+	include COMPONENT . 'default.php';
+	include COMPONENT . 'default.php';
 echo '</div>';
 ?>
