@@ -11,15 +11,20 @@ echo '<!DOCTYPE html>';
 echo '<html lang="fr">';
 
 echo '<head>';
-	echo (CTR::getPage() == 'inscription') 
-		? '<title>' . CTR::getTitle() . ' — ' . APP_SUBNAME . ' — Expansion</title>'
-		: '<title>' . CTR::getTitle() . ' — ' . CTR::$data->get('playerInfo')->get('name') . ' — ' . APP_SUBNAME . ' — Expansion</title>';
+	echo '<title>';
+		echo (CTR::getPage() == 'inscription') 
+			? CTR::getTitle()
+			: CTR::getTitle() . ' — ' . CTR::$data->get('playerInfo')->get('name');
+		echo ' — ' . APP_SUBNAME;
+		echo ' — ' . APP_NAME;
+	echo '</title>';
 
 	echo '<meta charset="utf-8" />';
 	echo '<meta name="description" content="' . APP_DESCRIPTION . '" />';
 
 	echo '<link href="http://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic" rel="stylesheet" type="text/css">';
-	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.css" />';
+#	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.css" />';
+	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.' . $color . '.css" />';
 	echo (CTR::getPage() == 'inscription')
 		? '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'inscription.desktop.css" />'
 		: NULL;

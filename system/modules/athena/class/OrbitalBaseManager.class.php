@@ -199,9 +199,9 @@ class OrbitalBaseManager extends Manager {
 			ASM::$sqm->newSession(ASM_UMODE);
 			ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 2), array('dEnd'));
 			$b->dock2Manager = ASM::$sqm->getCurrentSession();
-			ASM::$sqm->newSession(ASM_UMODE);
-			ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 3), array('dEnd'));
-			$b->dock3Manager = ASM::$sqm->getCurrentSession();
+			#ASM::$sqm->newSession(ASM_UMODE);
+			#ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 3), array('dEnd'));
+			#$b->dock3Manager = ASM::$sqm->getCurrentSession();
 			ASM::$sqm->changeSession($S_SQM1);
 
 			// CommercialRouteManager
@@ -238,6 +238,10 @@ class OrbitalBaseManager extends Manager {
 	}
 
 	public function add(OrbitalBase $b) {
+		# prépare le rechargement de la map
+		include_once GAIA;
+		GalaxyColorManager::apply();
+
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			orbitalBase(rPlace, rPlayer, name, typeOfBase, levelGenerator, levelRefinery, levelDock1, levelDock2, levelDock3, levelTechnosphere, levelCommercialPlateforme, levelGravitationalModule, points,
@@ -339,6 +343,7 @@ class OrbitalBaseManager extends Manager {
 	}
 
 	public function changeOwnerById($id, $newOwner) {
+
 		$S_OBM1 = ASM::$obm->getCurrentSession();
 		ASM::$obm->newSession();
 		ASM::$obm->load(array('rPlace' => $id));
@@ -387,6 +392,7 @@ class OrbitalBaseManager extends Manager {
 			ASM::$com->changeSession($S_COM2);
 
 			# applique en cascade le changement de couleur des sytèmes
+			include_once GAIA;
 			GalaxyColorManager::apply();
 
 		} else {
