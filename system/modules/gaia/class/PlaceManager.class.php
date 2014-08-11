@@ -132,7 +132,6 @@ class PlaceManager extends Manager {
 
 			if ($this->currentSession->getUMode() AND $currentP->uMode) {
 				$currentP->uMode = FALSE;
-
 				$currentP->uMethod();
 			}
 		}

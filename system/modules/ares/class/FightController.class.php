@@ -232,6 +232,17 @@ class FightController {
 		LiveReport::$rPlayerAttacker = $commanderA->rPlayer;
 		LiveReport::$rPlayerDefender = $commanderD->rPlayer;
 
+		LiveReport::$avatarA = $commanderA->avatar;
+		LiveReport::$avatarD = $commanderD->avatar;
+		LiveReport::$nameA = $commanderA->name;
+		LiveReport::$nameD = $commanderD->name;
+		LiveReport::$levelA = $commanderA->level;
+		LiveReport::$levelD = $commanderD->level;
+		LiveReport::$experienceA = $commanderA->experience;
+		LiveReport::$experienceD = $commanderD->experience;
+		LiveReport::$palmaresA = $commanderA->palmares;
+		LiveReport::$palmaresD = $commanderD->palmares;
+
 		$i = 0;
 		foreach ($commanderA->armyInBegin AS $s) {
 			LiveReport::$squadrons[] = array($i, 0, 0, $commanderA->id, $s[0], $s[1], $s[2], $s[3], $s[4], $s[5], $s[6], $s[7], $s[8], $s[9], $s[10], $s[11]);

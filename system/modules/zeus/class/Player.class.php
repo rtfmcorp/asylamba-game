@@ -210,15 +210,15 @@ class Player {
 			$antiSpyInvests += $base->getIAntiSpy();
 
 			// paiement à l'alliance
-			$S_CLM1 = ASM::$clm->getCurrentSession();
-			ASM::$clm->changeSession($clmSession);
-			for ($i = 0; $i < ASM::$clm->size(); $i++) { 
-				if (ASM::$clm->get($i)->id == $base->sectorColor) {
-					ASM::$clm->get($i)->increaseCredit($nationTax);
-					break;
-				}
-			}
-			ASM::$clm->changeSession($S_CLM1);
+			// $S_CLM1 = ASM::$clm->getCurrentSession();
+			// ASM::$clm->changeSession($clmSession);
+			// for ($i = 0; $i < ASM::$clm->size(); $i++) { 
+			// 	if (ASM::$clm->get($i)->id == $base->sectorColor) {
+			// 		ASM::$clm->get($i)->increaseCredit($nationTax);
+			// 		break;
+			// 	}
+			// }
+			// ASM::$clm->changeSession($S_CLM1);
 		}
 
 		// si la balance de crédit est positive

@@ -21,6 +21,43 @@ class Format {
 		}
 	}
 
+	public static function ordinalNumber($nbr) {
+		switch ($nbr) {
+			case 1:
+				return 'premier';
+			break;
+
+			case 2:
+				return 'deuxième';
+			break;
+
+			case 3:
+				return 'troisième';
+			break;
+
+			case 4:
+				return 'quatrième';
+			break;
+
+			case 5:
+				return 'cinquième';
+			break;
+
+			case 6:
+				return 'sixième';
+			break;
+
+			case 7:
+				return 'septième';
+			break;
+
+			default:
+				return $nbr . 'ème';
+			break;
+
+		}
+	}
+
 	public static function plural($number, $return = '', $expression = '') {
 		return self::addPlural($number, $return, $expression);
 	}

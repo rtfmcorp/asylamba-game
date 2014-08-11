@@ -91,7 +91,7 @@ class Color {
 		$democraticRegime = array(5, 6, 7);
 
 		$_PAM1 = ASM::$pam->getCurrentsession();
-		ASM::$pam->newSession();
+		ASM::$pam->newSession(FALSE);
 		ASM::$pam->load(array('status' => array(PAM_GOVERNMENT, PAM_CHIEF)));
 		for ($i = 0; $i < ASM::$pam->size(); $i++) {
 			ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
@@ -118,7 +118,7 @@ class Color {
 				reset($ballot);
 
 				$_PAM2 = ASM::$pam->getCurrentsession();
-				ASM::$pam->newSession();
+				ASM::$pam->newSession(FALSE);
 				ASM::$pam->load(array('id' => key($ballot)));
 				ASM::$pam->get()->setStatus(PAM_CHIEF);
 				ASM::$pam->save();
@@ -133,7 +133,7 @@ class Color {
 				arsort($ballot);
 				reset($ballot);
 				$_PAM2 = ASM::$pam->getCurrentSession();
-				ASM::$pam->newSession();
+				ASM::$pam->newSession(FALSE);
 				$keys = array();
 
 				$nbr = (count($ballot) > 6) ? 6: count($ballot);
@@ -159,7 +159,7 @@ class Color {
 			if (count($ballot) > 0) {	
 				reset($ballot);
 				$_PAM2 = ASM::$pam->getCurrentSession();
-				ASM::$pam->newSession();
+				ASM::$pam->newSession(FALSE);
 				$keys = array();
 
 				$nbr = (count($ballot) > 6) ? 6: count($ballot);
@@ -189,8 +189,9 @@ class Color {
 				$election = new Election();	
 				$election->rColor = $this->id;
 				$date = new DateTime($this->dLastElection);
+				$mandateDuration = 0;
 				$mandateDuration = ColorResource::getInfo($this->id, 'mandateDuration');
-				$date->modify('+' . $mandateDuration . 'second');
+				$date->modify('+' . $mandateDuration . ' second');
 				$election->dElection = $date->format('Y-m-d H:i:s');
 				$this->dLastElection = $date->format('Y-m-d H:i:s');
 				ASM::$elm->add($election);
