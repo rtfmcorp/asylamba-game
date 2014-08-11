@@ -15,7 +15,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `commander` (
   `comment` text,
   `sexe` tinyint(1) NOT NULL DEFAULT '1',
   `age` int(10) unsigned NOT NULL DEFAULT '20',
-  `avatar` tinyint(3) unsigned NOT NULL DEFAULT '1',
+  `avatar` varchar(40) NOT NULL,
   `level` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `experience` int(10) unsigned NOT NULL DEFAULT '1',
   `uCommander` datetime DEFAULT NULL,
