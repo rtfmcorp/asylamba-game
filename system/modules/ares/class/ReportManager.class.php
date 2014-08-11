@@ -80,6 +80,16 @@ class ReportManager extends Manager {
 			$report->expPlayerA = $awReport['expPlayerA'];
 			$report->expPlayerD = $awReport['expPlayerD'];
 			$report->rPlayerWinner = $awReport['rPlayerWinner'];
+			$report->avatarA = $awReport['avatarA'];
+			$report->avatarD = $awReport['avatarD'];
+			$report->nameA = $awReport['nameA'];
+			$report->nameD = $awReport['nameD'];
+			$report->levelA = $awReport['levelA'];
+			$report->levelD = $awReport['levelD'];
+			$report->experienceA = $awReport['experienceA'];
+			$report->experienceD = $awReport['experienceD'];
+			$report->palmaresA = $awReport['palmaresA'];
+			$report->palmaresD = $awReport['palmaresD'];
 			$report->round = $awReport['round'];
 			$report->rPlayerAttacker = $awReport['rPlayerAttacker'];
 			$report->rPlayerDefender = $awReport['rPlayerDefender'];
@@ -122,6 +132,16 @@ class ReportManager extends Manager {
 					rPlayerDefender = ?,
 					rPlayerWinner = ?,
 					rBigReport = ?,
+					avatarA = ?,
+					avatarD = ?,
+					nameA = ?,
+					nameD = ?,
+					levelA = ?,
+					levelD = ?,
+					experienceA = ?,
+					experienceD = ?,
+					palmaresA = ?,
+					palmaresD = ?,
 					resources = ?,
 					expCom = ?,
 					expPlayerA = ?,
@@ -138,6 +158,16 @@ class ReportManager extends Manager {
 				$report->rPlayerDefender,
 				$report->rPlayerWinner,
 				$report->rBigReport,
+				$report->avatarA,
+				$report->avatarD,	
+				$report->nameA,
+				$report->nameD,
+				$report->levelA,
+				$report->levelD,
+				$report->experienceA,
+				$report->experienceD,
+				$report->palmaresA,
+				$report->palmaresD,
 				$report->resources,
 				$report->expCom,
 				$report->expPlayerA,
@@ -161,6 +191,16 @@ class ReportManager extends Manager {
 			rPlayerAttacker = ?,
 			rPlayerDefender = ?,
 			rPlayerWinner = ?,
+			avatarA = ?,
+			avatarD = ?,
+			nameA = ?,
+			nameD = ?,
+			levelA = ?,
+			levelD = ?,
+			experienceA = ?,
+			experienceD = ?,
+			palmaresA = ?,
+			palmaresD = ?,
 			resources = ?,
 			expCom = ?,
 			expPlayerA = ?,
@@ -177,6 +217,16 @@ class ReportManager extends Manager {
 			$newReport->rPlayerAttacker,
 			$newReport->rPlayerDefender,
 			$newReport->rPlayerWinner,
+			$newReport->avatarA,
+			$newReport->avatarD,
+			$newReport->nameA,
+			$newReport->nameD,
+			$newReport->levelA,
+			$newReport->levelD,
+			$newReport->experienceA,
+			$newReport->experienceD,
+			$newReport->palmaresA,
+			$newReport->palmaresD,
 			$newReport->resources,
 			$newReport->expCom,
 			$newReport->expPlayerA,
@@ -213,6 +263,8 @@ class ReportManager extends Manager {
 		}
 
 		$this->_Add($newReport);
+
+		return $newReport->id;
 	}
 
 	# assez chiant mais à faire
