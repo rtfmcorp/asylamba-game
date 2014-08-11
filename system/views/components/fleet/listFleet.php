@@ -37,7 +37,7 @@ echo '<div class="component size3 list-fleet">';
 							}
 						}
 
-						echo '<div class="item ' . ($commander->rPlayer != CTR::$data->get('playerId') ? 'color' . $commander->playerColor : 'color1') . '">';
+						echo '<div class="item color' . $commander->playerColor . '">';
 							echo '<div class="left">';
 								if ($commander->rPlayer != CTR::$data->get('playerId')) {
 									echo '<img src="' . MEDIA . 'map/action/shield.png" alt="" class="status" />';

@@ -18,7 +18,7 @@ echo '<div class="component report">';
 					foreach ($spyreport_listSpy as $r) {
 						echo '<div class="item">';
 							echo '<div class="left">';
-								echo '<img src="' . MEDIA . 'map/action/spy.png" alt="" />';
+								echo '<img src="' . MEDIA . 'map/action/spy.png" alt="" class="color' . $r->placeColor . '" />';
 							echo '</div>';
 
 							echo '<div class="center">';
