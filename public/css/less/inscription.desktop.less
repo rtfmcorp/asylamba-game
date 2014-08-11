@@ -11,20 +11,28 @@ color7		ac5832		401b13		67331d
 
 /* NAV */
 
-#nav .box span {
-	display: inline-block;
-	line-height: 32px;
-	padding: 0 10px; margin: 5px 2px;
-	font-size: 14px;
-	width: 80px;
-	text-align: center;
-	color: white;
-	text-decoration: none;
-	font-variant: small-caps;
-	background: url('src/desktop/nav/bButton.png') no-repeat;
-}
+#nav .box {
+	&.left span {
+		display: inline-block;
+		line-height: 32px;
+		padding: 0 10px; margin: 5px 2px;
+		font-size: 14px;
+		width: 80px;
+		text-align: center;
+		color: white;
+		text-decoration: none;
+		font-variant: small-caps;
+		background: url('src/desktop/button/bButton.png') no-repeat;
 
-#nav .box span.active { background: url('src/desktop/nav/bButtonActive.png') no-repeat; }
+		&.active {
+			background: url('src/desktop/button/bButtonActive.png') no-repeat;
+		}
+	}
+
+	&.right {
+		display: none;
+	}
+}
 
 /* SUBNAV */
 
@@ -34,61 +42,61 @@ color7		ac5832		401b13		67331d
 	width: 210px;
 	margin: 0 20px 0 60px;
 	z-index: 500;
-}
 
-#inscription-subnav .bind {
-	height: 15px;
-	background: url('src/desktop/inscriptionSubnav/bBind.png') no-repeat center;
-}
+	.bind {
+		height: 15px;
+		background: url('src/desktop/inscriptionSubnav/bBind.png') no-repeat center;
+	}
 
-#inscription-subnav .head {
-	position: relative;
-	height: 214px;
-	background: url('src/desktop/inscriptionSubnav/bHead.png') no-repeat center;
-}
+	.head {
+		position: relative;
+		height: 214px;
+		background: url('src/desktop/inscriptionSubnav/bHead.png') no-repeat center;
 
-#inscription-subnav .head h2 {
-	position: absolute;
-	margin: 0; padding: 0;
-	top: 5px;
-	font-weight: bold;
-	font-size: 16px; line-height: 24px;
-	width: 210px; overflow: hidden;
-	text-align: center;
-	color: white;
-}
+		h2 {
+			position: absolute;
+			margin: 0; padding: 0;
+			top: 5px;
+			font-weight: bold;
+			font-size: 16px; line-height: 24px;
+			width: 210px; overflow: hidden;
+			text-align: center;
+			color: white;
+		}
 
-#inscription-subnav .head img {
-	position: absolute;
-	top: 43px; left: 28px;
-	width: 125px; height: 125px;
-	background: #0A0A0A;
-}
+		img {
+			position: absolute;
+			top: 43px; left: 28px;
+			width: 125px; height: 125px;
+			background: #0A0A0A;
+		}
 
-#inscription-subnav .head .level {
-	position: absolute;
-	display: block;
-	bottom: 15px; left: 0;
-	width: 100%;
-	font-size: 20px;
-	line-height: 41px;
-	color: white;
-	text-align: center;
-	background: url('src/desktop/inscriptionSubnav/bLevel.png') no-repeat center;
-}
+		.level {
+			position: absolute;
+			display: block;
+			bottom: 15px; left: 0;
+			width: 100%;
+			font-size: 20px;
+			line-height: 41px;
+			color: white;
+			text-align: center;
+			background: url('src/desktop/inscriptionSubnav/bLevel.png') no-repeat center;
+		}
 
-#inscription-subnav .head .experience {
-	position: absolute;
-	display: inline-block;
-	top: 50px; right: 32px;
-	width: 21px; height: 112px;
-}
+		.experience {
+			position: absolute;
+			display: inline-block;
+			top: 50px; right: 32px;
+			width: 21px; height: 112px;
 
-#inscription-subnav .head .experience .value {
-	position: absolute;
-	display: block;
-	width: 100%; bottom: 0;
-	border-radius: 3px;
+			.value {
+				position: absolute;
+				display: block;
+				width: 100%; bottom: 0;
+				border-radius: 3px;
+			}
+		}
+	}
 }
 
 #inscription-subnav .foot { height: 290px; }
@@ -102,7 +110,6 @@ color7		ac5832		401b13		67331d
 .color7 #inscription-subnav .foot { background: url('src/desktop/inscriptionSubnav/bFootColor7.png') no-repeat top left; }
 
 /* ALLY */
-
 .component.inscription img.color1 { background: #6e161b !important; }
 .component.inscription img.color2 { background: #1f1471 !important; }
 .component.inscription img.color3 { background: #dbb200 !important; }
@@ -143,6 +150,10 @@ color7		ac5832		401b13		67331d
 .component.inscription .text-box p {
 	line-height: 140%;
 	color: #efefef;
+}
+
+.color0 .component.inscription .text-box h3 {
+	border-bottom-color: #202020 !important;
 }
 
 .component.inscription .chooseLink {
@@ -215,14 +226,16 @@ color7		ac5832		401b13		67331d
 
 .component.inscription .avatars {
 	padding: 5px;
+	text-align: center;
 }
 
 .component.inscription .avatar {
 	position: relative;
 	display: inline-block;
-	margin: 5px;
+	margin: 0 5px; padding: 5px;
 	background: #202020;
 	border: solid 5px #0A0A0A;
+	border-radius: 100%;
 }
 
 .component.inscription .avatar input {
@@ -232,8 +245,9 @@ color7		ac5832		401b13		67331d
 
 .component.inscription .avatar img {
 	display: block;
-	width: 127px;
+	width: 117px;
 	cursor: pointer;
+	border-radius: 100%;
 }
 .component.inscription.color1 .avatar:hover { border-color: #510816; }
 .component.inscription.color2 .avatar:hover { border-color: #0c0d44; }
@@ -285,3 +299,8 @@ color7		ac5832		401b13		67331d
 .component.inscription.color5 #nextStep:hover, .component.inscription.color5 #nextStep:focus { background-color: #24500a; }
 .component.inscription.color6 #nextStep:hover, .component.inscription.color6 #nextStep:focus { background-color: #004948; }
 .component.inscription.color7 #nextStep:hover, .component.inscription.color7 #nextStep:focus { background-color: #401b13; }
+
+#alert {
+	bottom: -12px;
+	z-index: 10000;
+}

@@ -45,7 +45,11 @@ echo '<div id="content">';
 								$avatars[] =  '0' . $i . '-' . CTR::$data->get('inscription')->get('ally');
 							}
 						}
+
 						shuffle($avatars);
+
+						$break = 3;
+						$j = 1;
 						for ($i = 0; $i < 24; $i++) { 
 							echo '<div class="avatar">';
 								echo '<input type="radio" name="avatar" value="' . $avatars[$i] . '" id="avatar' . $i . '" required />';
@@ -53,6 +57,19 @@ echo '<div id="content">';
 									echo '<img src="' . MEDIA . 'avatar/big/' . $avatars[$i] . '.png" alt="" />';
 								echo '</label>';
 							echo '</div>';
+
+							if ($j == $break) {
+								echo '<br />';
+
+								$break = $break == 3
+									? 4
+									: 3;
+
+
+								$j = 0;
+							}
+
+							$j++;
 						}
 					echo '</div>';
 				echo '</div>';

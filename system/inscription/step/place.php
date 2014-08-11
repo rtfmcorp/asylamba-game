@@ -34,8 +34,8 @@ echo '<div id="content">';
 				echo '<div class="body">';
 					echo '<p class="info">Ceci sera par la suite une carte interactive, mais pour l\'instant faites au pif.</p>';
 					$db = Database::getInstance();
-					$qr = $db->query('SELECT id FROM sector'); // pour pouvoir choisir n'importe quel secteur
-					# $qr = $db->query('SELECT id FROM sector WHERE rColor = ' . CTR::$data->get('inscription')->get('ally'));
+				#	$qr = $db->query('SELECT id FROM sector'); // pour pouvoir choisir n'importe quel secteur
+					$qr = $db->query('SELECT id FROM sector WHERE rColor = ' . CTR::$data->get('inscription')->get('ally'));
 					$aw = $qr->fetchAll();
 					foreach ($aw as $v) {
 						echo '<p><input type="radio" name="sector" value="' . $v['id'] . '" id="sector' . $v['id'] . '" required />';
