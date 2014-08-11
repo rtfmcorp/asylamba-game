@@ -169,6 +169,9 @@ try {
 	CTR::$data->remove('inscription');
 	CTR::$data->remove('prebindkey');
 
+	include_once GAIA;
+	GalaxyColorManager::apply();
+
 	# redirection vers connection
 	CTR::redirect('connection/bindkey-' . $pl->getBind());
 } catch (Exception $e) {

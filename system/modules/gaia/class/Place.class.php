@@ -188,16 +188,16 @@ class Place {
 		include_once ARES;
 
 		switch ($commander->travelType) {
-				case Commander::MOVE: $this->tryToChangeBase($commander); 
-					LiveReport::$type = 0; break;
-				case Commander::LOOT: $this->tryToLoot($commander);
-					LiveReport::$type = 1; break;
-				case Commander::COLO: $this->tryToConquer($commander);
-					LiveReport::$type = 2; break;
-				case Commander::BACK: $this->comeBackToHome($commander);
-					LiveReport::$type = 3; break;
-				default: 
-					CTR::$alert->add('Cette action n\'existe pas.', ALT_BUG_INFO);
+			case Commander::MOVE: $this->tryToChangeBase($commander); 
+				LiveReport::$type = 0; break;
+			case Commander::LOOT: $this->tryToLoot($commander);
+				LiveReport::$type = 1; break;
+			case Commander::COLO: $this->tryToConquer($commander);
+				LiveReport::$type = 2; break;
+			case Commander::BACK: $this->comeBackToHome($commander);
+				LiveReport::$type = 3; break;
+			default: 
+				CTR::$alert->add('Cette action n\'existe pas.', ALT_BUG_INFO);
 		}
 
 		$commander->hasToU = TRUE;
@@ -207,7 +207,8 @@ class Place {
 	# se poser
 	private function tryToChangeBase($commander) {
 		# si la place et le commander ont le même joueur
-		if ($this->rPlayer == $commander->getRPlayer() and $this->typeOfBase == 4) {
+		if ($this->rPlayer == $commander->getRPlayer() AND $this->typeOfBase == 4) {
+			/* TODO: utiliser des constantes (deja existante) pour le type de base */
 			$maxCom = ($this->typeOfOrbitalBase == 0) ? 2 : 5;
 			# si place a assez de case libre :
 			if (count($this->commanders) < $maxCom) {
@@ -227,18 +228,22 @@ class Place {
 				} else {
 					$commander->line = 1;
 				}
+
 				# changer rBase commander
 				$commander->rBase = $this->id;
 				// $commander->rDestinationPlace = NULL;
 				$commander->travelType = NULL;
 				// $commander->rStartPlace = NULL;
 				// $commander->dArrival = NULL;
+
+				/* TODO: cette variable n'existe pas */
 				$commander->length = NULL;
 				$commander->statement = Commander::AFFECTED;
 
 				# ajouter à $this le commandant
 				$this->commanders[] = $commander;
 
+				/* TODO: en fait la, ça charge la place courante */
 				# instance de la place d'envoie + suppr commandant de ses flottes
 				# enlever à rBase le commandant
 				$S_PLM10 = ASM::$plm->getCurrentSession();
@@ -254,7 +259,6 @@ class Place {
 
 				# envoie de notif
 				$this->sendNotif(self::CHANGESUCCESS, $commander);
-
 			} else {
 				# NON : comeBackToHome
 				$S_PLM10 = ASM::$plm->getCurrentSession();
@@ -297,6 +301,8 @@ class Place {
 			$commander->travelLength = NULL;
 			// $commander->rStartPlace = NULL;
 			// $commander->dArrival = NULL;
+
+			/* TODO: cette var n'existe pas */
 			$commander->length = NULL;
 
 			# planète vide -> faire un combat
@@ -323,7 +329,6 @@ class Place {
 				$this->createReport();
 				
 				$this->sendNotif(self::LOOTEMPTYSSUCCESS, $commander);
-
 			} else {
 
 				# si il est mort
@@ -353,6 +358,8 @@ class Place {
 				$commander->travelLength = NULL;
 				// $commander->rStartPlace = NULL;
 				// $commander->dArrival = NULL;
+
+				/* TODO: cette var n'existe pas */
 				$commander->length = NULL;
 
 				$dCommanders = array();
@@ -474,9 +481,12 @@ class Place {
 			$commander->travelLength = NULL;
 			// $commander->rStartPlace = NULL;
 			// $commander->dArrival = NULL;
+
+			/* TODO: cette propriete n'existe pas */
 			$commander->length = NULL;
 
 			if ($this->playerColor != $commander->getPlayerColor()) {
+				/* TODO: je ne comprend pas ce que fais cette boucle */
 				for ($i = 0; $i < count($this->commanders) - 1; $i++) {
 					if ($this->commanders[$i + 1]->line < $this->commanders[$i]->line) {
 						$tempCom = $this->commanders[$i];
@@ -491,6 +501,8 @@ class Place {
 
 						$this->startFight($commander, $this->commanders[$nbrBattle], TRUE);
 
+						/* TODO: pas de rapport lors de la mort du commandant */
+
 						# mort du commandant
 						if ($commander->getStatement() == COM_DEAD) {
 							break;
@@ -501,6 +513,7 @@ class Place {
 					
 					$nbrBattle++;
 				}
+
 				# victoire
 				if ($commander->getStatement() != COM_DEAD) {
 					include_once ATHENA;
@@ -535,6 +548,7 @@ class Place {
 						ASM::$pam->changeSession($S_PAM);
 					}
 
+					/* TODO: pourquoi le défenseur perdant (?) devrait gagner qqch ?  */
 					if ($this->playerColor == 1 || $this->playerColor == 4 || $this->playerColor == 5) {
 						$S_PAM = ASM::$pam->getCurrentSession();
 						ASM::$pam->newSession();
@@ -614,6 +628,8 @@ class Place {
 			$commander->travelLength = NULL;
 			// $commander->rStartPlace = NULL;
 			// $commander->dArrival = NULL;
+
+			/* TODO: cette propriete n'existe pas */
 			$commander->length = NULL;
 
 			# faire un combat
@@ -674,14 +690,11 @@ class Place {
 						'1-' . Game::getSizeOfPlanet($this->population),
 						OrbitalBase::TYP_NEUTRAL);
 				}
-
 				
 				#création du rapport
 				$this->createReport();
 
 				$this->sendNotif(self::CONQUEREMPTYSSUCCESS, $commander);
-
-				GalaxyColorManager::apply();
 			# s'il est mort
 			} else {
 				
@@ -702,8 +715,8 @@ class Place {
 				ASM::$plm->changeSession($S_PLM10);
 			}
 		}
-
 	}
+
 
 	# retour à la maison
 	private function comeBackToHome($commander) {
@@ -713,6 +726,8 @@ class Place {
 		$commander->travelLength = NULL;
 		// $commander->rStartPlace = NULL;
 		$commander->dArrival = NULL;
+
+		/* TODO: cette var n'existe pas */
 		$commander->length = NULL;
 
 		$commander->statement = Commander::AFFECTED;
@@ -832,10 +847,10 @@ class Place {
 			case self::CHANGESUCCESS:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Rapport de déplacement');
+				$notif->setTitle('Déplacement réussi');
 				$notif->addBeg()
 					->addTxt('Votre offier ')
-					->addStg($commander->getName())
+					->addLnk('fleet/commander-' . $commander->getId(), $commander->getName())
 					->addTxt(' est arrivé sur ')
 					->addLnk('map/base-' . $this->id, $this->baseName)
 					->addTxt('.')
@@ -846,49 +861,49 @@ class Place {
 			case self::CHANGEFAIL:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Rapport de déplacement');
+				$notif->setTitle('Déplacement raté');
 				$notif->addBeg()
 					->addTxt('Votre officier ')
-					->addStg($commander->getName())
+					->addLnk('fleet/commander-' . $commander->getId(), $commander->getName())
 					->addTxt(' n\'a pas pu se poser sur ')
 					->addLnk('map/base-' . $this->id, $this->baseName)
-					->addTxt(' car il y a déjà trop d\'officier autour de la planète .')
+					->addTxt(' car il y a déjà trop d\'officiers autour de la planète.')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
 			case self::CHANGELOST:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Rapport de déplacement');
+				$notif->setTitle('Déplacement raté');
 				$notif->addBeg()
 					->addTxt('Votre officier ')
-					->addStg($commander->getName())
+					->addLnk('fleet/commander-' . $commander->getId(), $commander->getName())
 					->addTxt(' n\'est pas arrivé sur ')
 					->addLnk('map/base-' . $this->id, $this->baseName)
-					->addTxt('. Cette base ne vous appartient pas.')
+					->addTxt('. Cette base ne vous appartient pas. Elle a pu être conquise entre temps.')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
 			case self::LOOTEMPTYSSUCCESS:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Rapport de pillage');
+				$notif->setTitle('Pillage réussi');
 				$notif->addBeg()
 					->addTxt('Votre officier ')
-					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' a pillé la planète rebelle située aux coordonnées ')
 					->addLnk('map/place-' . $this->id, Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector))
 					->addTxt('.')
 					->addSep()
 					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
-					->addBoxResource('xp', '+' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
 			case self::LOOTEMPTYFAIL:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Rapport de pillage');
+				$notif->setTitle('Pillage raté');
 				$notif->addBeg()
 					->addTxt('Votre officier ')
 					->addLnk('fleet/view-memorial', $commander->getName())
@@ -903,10 +918,10 @@ class Place {
 			case self::LOOTPLAYERWHITBATTLESUCCESS:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Victoire lors d\'un pillage');
+				$notif->setTitle('Pillage réussi');
 				$notif->addBeg()
 					->addTxt('Votre officier ')
-					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' a pillé la planète ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
 					->addTxt(' appartenant au joueur ')
@@ -914,7 +929,7 @@ class Place {
 					->addTxt('.')
 					->addSep()
 					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
-					->addBoxResource('xp', '+' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
 					->addEnd();
 				ASM::$ntm->add($notif);
 
@@ -922,7 +937,7 @@ class Place {
 				$notif->setRPlayer($this->rPlayer);
 				$notif->setTitle('Rapport de pillage');
 				$notif->addBeg()
-					->addTxt('L\' officier ')
+					->addTxt('L\'officier ')
 					->addStg($commander->getName())
 					->addTxt(' appartenant au joueur ')
 					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
@@ -937,7 +952,7 @@ class Place {
 			case self::LOOTPLAYERWHITBATTLEFAIL:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Défaite lors d\'un pillage');
+				$notif->setTitle('Pillage raté');
 				$notif->addBeg()
 					->addTxt('Votre officier ')
 					->addLnk('fleet/view-memorial', $commander->getName())
@@ -947,7 +962,7 @@ class Place {
 					->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
 					->addTxt('.')
 					->addSep()
-					->addTxt('Il a désormais rejoint le Mémorial.')
+					->addTxt('Il a désormais rejoint le Mémorial. Que son âme traverse l\'Univers dans la paix.')
 					->addEnd();
 				ASM::$ntm->add($notif);
 
@@ -955,7 +970,7 @@ class Place {
 				$notif->setRPlayer($this->rPlayer);
 				$notif->setTitle('Rapport de combat');
 				$notif->addBeg()
-					->addTxt('L\' officier ')
+					->addTxt('L\'officier ')
 					->addStg($commander->getName())
 					->addTxt(' appartenant au joueur ')
 					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
@@ -970,10 +985,10 @@ class Place {
 			case self::LOOTPLAYERWHITOUTBATTLESUCCESS:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Mise à sac');
+				$notif->setTitle('Pillage réussi');
 				$notif->addBeg()
 					->addTxt('Votre officier ')
-					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' a pillé la planète non défendue ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
 					->addTxt(' appartenant au joueur ')
@@ -981,7 +996,7 @@ class Place {
 					->addTxt('.')
 					->addSep()
 					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
-					->addBoxResource('xp', '+' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
 					->addEnd();
 				ASM::$ntm->add($notif);
 
@@ -989,13 +1004,13 @@ class Place {
 				$notif->setRPlayer($this->rPlayer);
 				$notif->setTitle('Rapport de pillage');
 				$notif->addBeg()
-					->addTxt('L\' officier ')
+					->addTxt('L\'officier ')
 					->addStg($commander->getName())
 					->addTxt(' appartenant au joueur ')
 					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
 					->addTxt(' a pillé votre planète ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
-					->addTxt('. Aucun officier n\'était en position pour la défendre. ')
+					->addTxt('. Aucune flotte n\'était en position pour la défendre. ')
 					->addSep()
 					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
 					->addEnd();
@@ -1007,7 +1022,7 @@ class Place {
 				$notif->setTitle('Erreur de coordonnées');
 				$notif->addBeg()
 					->addTxt('Votre officier ')
-					->addStg($commander->getName())
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' n\'a pas attaqué la planète ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
 					->addTxt(' car elle est dans votre Faction.')
@@ -1017,15 +1032,15 @@ class Place {
 			case self::CONQUEREMPTYSSUCCESS:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Planète colonisée');
+				$notif->setTitle('Colonisation réussie');
 				$notif->addBeg()
 					->addTxt('Votre officier ')
-					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' a colonisé la planète rebelle située aux coordonnées ')  
 					->addLnk('map/place-' . $this->id , Game::formatCoord($this->xSystem, $this->ySystem, $this->position, $this->rSector) . '.')
-					->addBoxResource('xp', '+' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
-					->addTxt('Votre empire s\'étend, administrez votre nouvelle planète ')
-					->addLnk('bases/base-' . $this->id, 'ici')
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addTxt('Votre empire s\'étend, administrez votre ')
+					->addLnk('bases/base-' . $this->id, 'nouvelle planète')
 					->addTxt('.')
 					->addEnd();
 				ASM::$ntm->add($notif);
@@ -1033,7 +1048,7 @@ class Place {
 			case self::CONQUEREMPTYFAIL:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Défaite lors d\'une colonisation');
+				$notif->setTitle('Colonisation ratée');
 				$notif->addBeg()
 					->addTxt('Votre officier ')
 					->addLnk('fleet/view-memorial', $commander->getName())
@@ -1048,18 +1063,18 @@ class Place {
 			case self::CONQUERPLAYERWHITBATTLESUCCESS:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Planète conquise');
+				$notif->setTitle('Conquête réussie');
 				$notif->addBeg()
 					->addTxt('Votre officier ')
-					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' a conquis la planète ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
 					->addTxt(' appartenant au joueur ')
 					->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('xp', '+' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
-					->addTxt('Elle est désormais votre, vous pouvez l\'administrer ')
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addTxt('Elle est désormais vôtre, vous pouvez l\'administrer ')
 					->addLnk('bases/base-' . $this->id, 'ici')
 					->addTxt('.')
 					->addEnd();
@@ -1067,9 +1082,9 @@ class Place {
 
 				$notif = new Notification();
 				$notif->setRPlayer($this->rPlayer);
-				$notif->setTitle('Rapport de conquête');
+				$notif->setTitle('Planète conquise');
 				$notif->addBeg()
-					->addTxt('L\' officier ')
+					->addTxt('L\'officier ')
 					->addStg($commander->getName())
 					->addTxt(' appartenant au joueur ')
 					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
@@ -1084,7 +1099,7 @@ class Place {
 			case self::CONQUERPLAYERWHITBATTLEFAIL:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Echec de conquête');
+				$notif->setTitle('Conquête ratée');
 				$notif->addBeg()
 					->addTxt('Votre officier ')
 					->addLnk('fleet/view-memorial/', $commander->getName())
@@ -1094,7 +1109,7 @@ class Place {
 					->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
 					->addTxt('.')
 					->addSep()
-					->addTxt('Il a désormais rejoint de Mémorial.')
+					->addTxt('Il a désormais rejoint de Mémorial. Que son âme traverse l\'Univers dans la paix.')
 					->addEnd();
 				ASM::$ntm->add($notif);
 
@@ -1102,7 +1117,7 @@ class Place {
 				$notif->setRPlayer($this->rPlayer);
 				$notif->setTitle('Rapport de combat');
 				$notif->addBeg()
-					->addTxt('L\' officier ')
+					->addTxt('L\'officier ')
 					->addStg($commander->getName())
 					->addTxt(' appartenant au joueur ')
 					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
@@ -1117,17 +1132,17 @@ class Place {
 			case self::CONQUERPLAYERWHITOUTBATTLESUCCESS:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Planète conquise');
+				$notif->setTitle('Conquête réussie');
 				$notif->addBeg()
 					->addTxt('Votre officier ')
-					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' a conquis la planète non défendue ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
 					->addTxt(' appartenant au joueur ')
 					->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('xp', '+' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
 					->addTxt('Elle est désormais votre, vous pouvez l\'administrer ')
 					->addLnk('bases/base-' . $this->id, 'ici')
 					->addTxt('.')
@@ -1136,9 +1151,9 @@ class Place {
 
 				$notif = new Notification();
 				$notif->setRPlayer($this->rPlayer);
-				$notif->setTitle('Rapport de conquête');
+				$notif->setTitle('Planète conquise');
 				$notif->addBeg()
-					->addTxt('Le officier ')
+					->addTxt('L\'officier ')
 					->addStg($commander->getName())
 					->addTxt(' appartenant au joueur ')
 					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
@@ -1156,7 +1171,7 @@ class Place {
 				$notif->addBeg()
 					->setTitle('Erreur de coordonnées')
 					->addTxt('Votre officier ')
-					->addStg($commander->getName())
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' n\'a pas attaqué la planète ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
 					->addTxt(' car elle est de votre faction.')
@@ -1169,7 +1184,7 @@ class Place {
 				$notif->setTitle('Rapport de retour');
 				$notif->addBeg()
 					->addTxt('Votre officier ')
-					->addLnk('fleet/view-movement/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' est de retour sur votre base ')
 					->addLnk('map/place-' . $commander->getRBase(), $commander->getBaseName())
 					->addTxt(' et rapporte ')
@@ -1179,9 +1194,7 @@ class Place {
 				ASM::$ntm->add($notif);
 				break;
 			
-			default:
-				//do nothing
-				break;
+			default: break;
 		}
 	}
 
@@ -1213,7 +1226,6 @@ class Place {
 			$army[$i] = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, Utils::now());
 			$squadronsIds[] = 0;
 		}
-
 
 		$vCommander->setSquadronsIds($squadronsIds);
 		$vCommander->setArmyInBegin($army);
