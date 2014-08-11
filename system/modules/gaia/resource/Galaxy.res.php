@@ -7,7 +7,7 @@ $mapGalaxyResource = array(
 		'Centre névralgique de la galaxie depuis la prise de pouvoir de l’Empire, ce secteur est l’iris politique des mondes connus. Sa situation géo-galactique en fait un lieu de passage et d’échange des plus importants.
 Considéré par les régions environnantes comme le cœur du système politique et économique de toute la galaxie, il fut souvent la cible de coups d’état pour la prise de contrôle du gouvernement par une multitude de factions anti-impérialistes durant les périodes de trouble.
 Depuis la prise de pouvoir de l’Empire, ce secteur abandonna complètement ses activités industrielles pour se concentrer uniquement sur le commerce et l’échange monétaire.
-C’est actuellement la capitale galactique ainsi que la région économique la plus puissante et la plus riche de l’Œil.'), // DESCRIPTION
+C’est actuellement la capitale galactique ainsi que la région économique la plus puissante et la plus riche de l’Œil.'),
 	array(1, //SECTEUR 2
 		array(113, 80),
 		array(470, 590),

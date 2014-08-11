@@ -1,10 +1,13 @@
 <?php
-echo '<h1>Ajout de la table spyReport</h1>';
+echo '<h1>Module Artémis</h1>';
 
 $db = DataBaseAdmin::getInstance();
-$qr = $db->prepare("DROP TABLE IF EXISTS `spyReport`");
-$qr->execute();
-$qr = $db->prepare("CREATE TABLE IF NOT EXISTS `spyReport` (
+
+#--------------------------------------------------------------------------------------------
+echo '<h2>Ajout de la table spyReport</h2>';
+
+$db->query("DROP TABLE IF EXISTS `spyReport`");
+$db->query("CREATE TABLE IF NOT EXISTS `spyReport` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `rPlayer` int(11) NOT NULL,
   `price` int(11) NOT NULL,
@@ -27,5 +30,5 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `spyReport` (
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 
-$qr->execute();
+echo '<br /><hr />';
 ?>

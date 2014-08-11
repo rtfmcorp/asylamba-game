@@ -1,8 +1,13 @@
 <?php
-echo '<h1>Ajout de la table bugTracker</h1>';
+echo '<h1>Module Apollon</h1>';
 
 $db = DataBaseAdmin::getInstance();
-$qr = $db->prepare("CREATE TABLE IF NOT EXISTS `bugtracker` (
+
+#--------------------------------------------------------------------------------------------
+echo '<h2>Ajout de la table bugTracker</h2>';
+
+$db->query("DROP TABLE IF EXISTS `bugTracker`");
+$db->query("CREATE TABLE IF NOT EXISTS `bugTracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `url` varchar(150) NOT NULL,
   `rPlayer` int(11) NOT NULL,
@@ -14,5 +19,7 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `bugtracker` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
 
-$qr->execute();
+#--------------------------------------------------------------------------------------------
+
+echo '<br /><hr />';
 ?>

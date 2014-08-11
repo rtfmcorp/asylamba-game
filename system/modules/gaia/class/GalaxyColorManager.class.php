@@ -65,10 +65,11 @@ class GalaxyColorManager {
 
 	public function loadSector() {
 		$db = DataBase::getInstance();
-		$qr = $db->query('SELECT id, rColor FROM sector	ORDER BY id');
+		$qr = $db->query('SELECT id, rColor, prime FROM sector ORDER BY id');
 		while ($aw = $qr->fetch()) {
 			$this->sector[$aw['id']] = array(
 				'color' => $aw['rColor'],
+				'prime' => $aw['prime'],
 				'hasChanged' => FALSE
 			);
 		}
@@ -78,8 +79,8 @@ class GalaxyColorManager {
 		$db = DataBase::getInstance();
 		foreach ($this->sector as $k => $v) {
 			if ($v['hasChanged'] == TRUE) {
-				$qr = $db->prepare('UPDATE sector SET rColor = ? WHERE id = ?');
-				$qr->execute(array($v['color'], $k));
+				$qr = $db->prepare('UPDATE sector SET rColor = ?, prime = ? WHERE id = ?');
+				$qr->execute(array($v['color'], $v['prime'], $k));
 			}
 		}
 	}
@@ -129,6 +130,7 @@ class GalaxyColorManager {
 	public function changeColorSector() {
 		foreach ($this->sector as $k => $v) {
 			$colorRepartition = array(0, 0, 0, 0, 0, 0, 0);
+
 			foreach ($this->system as $m => $n) {
 				if ($n['sector'] == $k) {
 					if ($n['systemColor'] != 0) {
@@ -138,6 +140,7 @@ class GalaxyColorManager {
 			}
 
 			$nbrColor = max($colorRepartition);
+
 			if ($v['color'] == 0) {
 				$nbrColorSector = NULL;
 			} else {
@@ -146,7 +149,7 @@ class GalaxyColorManager {
 
 			if ($nbrColor >= LIMIT_CONQUEST_SECTOR) {
 				$maxColor = array_keys($colorRepartition, max($colorRepartition));
-
+				$this->sector[$k]['prime'] = FALSE;
 				if ($nbrColorSector == NULL) {
 					$this->sector[$k]['color'] = $maxColor[0] + 1;
 					$this->sector[$k]['hasChanged'] = TRUE;
@@ -155,8 +158,11 @@ class GalaxyColorManager {
 					$this->sector[$k]['hasChanged'] = TRUE;
 				}
 			} else {
-				$this->sector[$k]['color'] = 0;
-				$this->sector[$k]['hasChanged'] = TRUE;
+				# ne modifie pas un secteur prime s'il n'y a pas assez de joueur dedans
+				if ($this->sector[$k]['prime'] == 0) {
+					$this->sector[$k]['color'] = 0;
+					$this->sector[$k]['hasChanged'] = TRUE;
+				}
 			}
 		}
 	}

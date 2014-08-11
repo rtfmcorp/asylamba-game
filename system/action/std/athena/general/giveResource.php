@@ -14,7 +14,6 @@ $baseId = Utils::getHTTPData('baseid');
 $otherBaseIdype = Utils::getHTTPData('totherbaseidype');
 $quantity = Utils::getHTTPData('quantity');
 
-
 if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_array($baseId, $verif)) {
 	$resource = intval($quantity);
 
@@ -27,6 +26,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_
 		$storageSpace = OrbitalBaseResource::getBuildingInfo(1, 'level', $orbitalBase->getLevelRefinery(), 'storageSpace');
 		$currentStorage = $orbitalBase->getResourcesStorage();
 		$maxResourcesToSend = $currentStorage - ($storageSpace * OBM_STOCKLIMIT);
+		/* supprimer la limitation d'envoi de ressources */
 		if ($maxResourcesToSend > 0) {
 			if ($resource > $maxResourcesToSend) {
 				CTR::$alert->add('Vous ne pouvez pas envoyer autant de ressources, l\'envoi a été limité a ' . Format::numberFormat($maxResourcesToSend) . ' ressources.', ALERT_STD_INFO);

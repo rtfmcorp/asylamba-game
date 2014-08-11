@@ -79,7 +79,7 @@ abstract class GalaxyGenerator {
 
 		self::log('sauvegarde des secteurs');
 		for ($i = 0; $i < ceil(count(self::$listSector) / 5000); $i++) { 
-			$qr = 'INSERT INTO sector(id, rColor, xPosition, yPosition, xBarycentric, yBarycentric, tax, population, lifePlanet, name) VALUES ';
+			$qr = 'INSERT INTO sector(id, rColor, xPosition, yPosition, xBarycentric, yBarycentric, tax, population, lifePlanet, name, prime) VALUES ';
 			
 			for ($j = $i * 5000; $j < (($i + 1) * 5000) - 1; $j++) { 
 				if (isset(self::$listSector[$j])) {
@@ -170,6 +170,11 @@ abstract class GalaxyGenerator {
 
 		foreach (GalaxyConfiguration::$sectors as $sector) {
 			self::$nbSector++;
+
+			$prime = ($sector['beginColor'] != 0)
+				? 1
+				: 0;
+
 			self::$listSector[] = array(
 				$k, 
 				$sector['beginColor'], 
@@ -180,7 +185,8 @@ abstract class GalaxyGenerator {
 				5, 
 				0,
 				0,
-				$sector['name']
+				$sector['name'],
+				$prime
 			);
 
 			$k++;
@@ -264,7 +270,7 @@ abstract class GalaxyGenerator {
 		if ($mask < 3) {
 			$realPosition = GalaxyConfiguration::$galaxy['diag'] - $d2o;
 			$step 		  = GalaxyConfiguration::$galaxy['diag'] / count(GalaxyConfiguration::$galaxy['systemPosition']);
-			$currentStep  = floor($realPosition /$step);
+			$currentStep  = floor($realPosition / $step);
 
 			$random = rand(0, 100);
 

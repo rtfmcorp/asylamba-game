@@ -21,7 +21,7 @@ class PlayerHelper {
 	}
 
 	public static function listMotherShips($playerId) {
-		$db = DataBase::getInstance();
+		/*$db = DataBase::getInstance();
 		$qr = $db->prepare('SELECT 
 				ms.rPlace, ms.name, sy.rSector
 			FROM motherShip AS ms
@@ -37,6 +37,7 @@ class PlayerHelper {
 		} else {
 			foreach ($aw as $k => $v) { $return[] = array('id' => $v['rPlace'], 'name' => $v['name'], 'sector' => $v['rSector']); }
 			return $return;
-		}
+		}*/
+		return FALSE;
 	}
 }

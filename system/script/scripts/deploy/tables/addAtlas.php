@@ -1,7 +1,11 @@
 <?php
-echo '<h1>Ajout de la table userRanking</h1>';
+echo '<h1>Module Atlas</h1>';
 
 $db = DataBaseAdmin::getInstance();
+
+#--------------------------------------------------------------------------------------------
+echo '<h2>Ajout de la table playerRanking</h2>';
+
 $qr = $db->prepare("DROP TABLE IF EXISTS `playerRanking`");
 $qr->execute();
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `playerRanking` (
@@ -27,8 +31,8 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `playerRanking` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 $qr->execute();
 
-
-echo '<h1>Ajout de la table factionRanking</h1>';
+#--------------------------------------------------------------------------------------------
+echo '<h2>Ajout de la table factionRanking</h2>';
 
 $qr = $db->prepare("DROP TABLE IF EXISTS `factionRanking`");
 $qr->execute();
@@ -49,8 +53,10 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `factionRanking` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 $qr->execute();
 
-echo '<h1>Ajout de la table ranking</h1>';
+#--------------------------------------------------------------------------------------------
+echo '<h2>Ajout de la table ranking</h2>';
 
+$qr = $db->prepare("DROP TABLE IF EXISTS `ranking`");
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `ranking` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `dRanking` datetime NOT NULL,
@@ -59,4 +65,6 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `ranking` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 $qr->execute();
+
+echo '<br /><hr />';
 ?>
