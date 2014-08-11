@@ -34,11 +34,11 @@ class Place {
 	const LOOTPLAYERWHITOUTBATTLESUCCESS		= 24;
 	const LOOTLOST								= 27;
 
-	const CONQUEREMPTYSSUCCESS 				= 30;
+	const CONQUEREMPTYSSUCCESS 					= 30;
 	const CONQUEREMPTYFAIL						= 31;
 	const CONQUERPLAYERWHITBATTLESUCCESS		= 32;
 	const CONQUERPLAYERWHITBATTLEFAIL			= 33;
-	const CONQUERPLAYERWHITOUTBATTLESUCCESS	= 34;
+	const CONQUERPLAYERWHITOUTBATTLESUCCESS		= 34;
 	const CONQUERLOST							= 37;
 
 	const COMEBACK 								= 40;
@@ -188,14 +188,25 @@ class Place {
 		include_once ARES;
 
 		switch ($commander->travelType) {
-				case Commander::MOVE: $this->tryToChangeBase($commander); 
-					LiveReport::$type = 0; break;
-				case Commander::LOOT: $this->tryToLoot($commander);
-					LiveReport::$type = 1; break;
-				case Commander::COLO: $this->tryToConquer($commander);
-					LiveReport::$type = 2; break;
-				case Commander::BACK: $this->comeBackToHome($commander);
-					LiveReport::$type = 3; break;
+				case Commander::MOVE: 
+					$this->tryToChangeBase($commander);
+					break;
+
+				case Commander::LOOT: 
+					LiveReport::$type = Commander::LOOT;
+					LiveReport::$dFight = $commander->dArrival;
+					$this->tryToLoot($commander);
+					break;
+
+				case Commander::COLO: 
+					LiveReport::$type = Commander::COLO; break;
+					LiveReport::$dFight = $commander->dArrival;
+					$this->tryToConquer($commander);
+					break;
+
+				case Commander::BACK: 
+					$this->comeBackToHome($commander);
+					break;
 				default: 
 					CTR::$alert->add('Cette action n\'existe pas.', ALT_BUG_INFO);
 		}
@@ -820,9 +831,10 @@ class Place {
 		$report->round = LiveReport::$round;
 		$report->importance = LiveReport::$importance;
 		$report->squadrons = LiveReport::$squadrons;
-		$report->dFight = Utils::now(); //à modifier
+		$report->dFight = LiveReport::$dFight;
 		$report->placeName = ($this->baseName == '') ? 'planète rebelle' : $this->baseName;
 		ASM::$rpm->add($report);
+		LiveReport::clear();
 	}
 
 	private function sendNotif($case, $commander) {
