@@ -809,12 +809,9 @@ class Place {
 
 	private function startFight($commander, $enemyCommander = NULL, $pvp = FALSE) {
 		if ($pvp == TRUE) {
-			$commander->setArmy();
 			$fc = new FightController();
 			$fc->startFight($commander, $enemyCommander, $this);
 		} else {
-			$commander->setArmy();
-			$enemyCommander->setArmy();
 			$computerCommander = $this->createVirtualCommander();
 			$fc = new FightController();
 			$fc->startFight($commander, $computerCommander, $this);
