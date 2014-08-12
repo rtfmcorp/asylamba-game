@@ -47,8 +47,8 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 
 				$sr->typeOfOrbitalBase = OrbitalBase::TYP_NEUTRAL;
 				$sr->rEnemy = 0;
-				$sr->enemyName = 'Rebel';
-				$sr->enemyAvatar = '...';
+				$sr->enemyName = 'Rebelle';
+				$sr->enemyAvatar = '';
 				$sr->enemyLevel = 1;
 
 				# generate a commander for the place

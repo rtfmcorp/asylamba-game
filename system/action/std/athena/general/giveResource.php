@@ -1,5 +1,6 @@
 <?php
 include_once ATHENA;
+include_once GAIA;
 # give resources action
 
 # int baseid 		id (rPlace) de la base orbitale
@@ -11,57 +12,97 @@ for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
 }
 
 $baseId = Utils::getHTTPData('baseid');
-$otherBaseIdype = Utils::getHTTPData('totherbaseidype');
+$otherBaseId = Utils::getHTTPData('otherbaseid');
 $quantity = Utils::getHTTPData('quantity');
 
 if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_array($baseId, $verif)) {
-	$resource = intval($quantity);
+	if ($baseId != $otherBaseId) {
 
-	$S_OBM1 = ASM::$obm->getCurrentSession();
-	ASM::$obm->newSession(ASM_UMODE);
-	ASM::$obm->load(array('rPlace' => $baseId));
-	$orbitalBase = ASM::$obm->get();
+		$resource = intval($quantity);
 
-	if ($resource > 0) {
-		$storageSpace = OrbitalBaseResource::getBuildingInfo(1, 'level', $orbitalBase->getLevelRefinery(), 'storageSpace');
-		$currentStorage = $orbitalBase->getResourcesStorage();
-		$maxResourcesToSend = $currentStorage - ($storageSpace * OBM_STOCKLIMIT);
-		/* supprimer la limitation d'envoi de ressources */
-		if ($maxResourcesToSend > 0) {
-			if ($resource > $maxResourcesToSend) {
-				CTR::$alert->add('Vous ne pouvez pas envoyer autant de ressources, l\'envoi a été limité a ' . Format::numberFormat($maxResourcesToSend) . ' ressources.', ALERT_STD_INFO);
-				$resource = $maxResourcesToSend;
-			}
-			ASM::$obm->load(array('rPlace' => $otherBaseId));
-			if (ASM::$obm->size() == 2) {
-				$otherBase = ASM::$obm->get(1);
+		$S_OBM1 = ASM::$obm->getCurrentSession();
+		ASM::$obm->newSession(ASM_UMODE);
+		ASM::$obm->load(array('rPlace' => $baseId));
+		$orbitalBase = ASM::$obm->get();
 
-				$orbitalBase->decreaseResources($resource);
-				$otherBase->increaseResources($resource);
+		if ($resource > 0) {
+			if ($orbitalBase->getResourcesStorage() >= $resource) {
+				//---------------------------
+				# controler le nombre de vaisseaux
+				# verif : have we enough commercialShips
+				$totalShips = OrbitalBaseResource::getBuildingInfo(6, 'level', $orbitalBase->getLevelCommercialPlateforme(), 'nbCommercialShip');
+				$usedShips = 0;
 
-				if ($orbitalBase->getRPlayer() != $otherBase->getRPlayer()) {
-					$n = new Notification();
-					$n->setRPlayer($otherBase->getRPlayer());
-					$n->setTitle('Envoi de ressources');
-					$n->addBeg()->addTxt($otherBase->getName())->addSep();
-					$n->addLnk('diary/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'));
-					$n->addTxt(' vous a envoyé ')->addStg(Format::numberFormat($resource))->addTxt(' ressources depuis sa base ');
-					$n->addLnk('map/place' . $orbitalBase->getRPlace(), $orbitalBase->getName())->addTxt('.');
-					$n->addSep()->addLnk('bases/base-' . $otherBase->getId()  . '/view-refinery', 'vers la raffinerie →');
-					$n->addEnd();
-					ASM::$ntm->add($n);
+				$S_CSM1 = ASM::$csm->getCurrentSession();
+				ASM::$csm->changeSession($orbitalBase->shippingManager);
+				for ($i = 0; $i < ASM::$csm->size(); $i++) { 
+					if (ASM::$csm->get($i)->rBase == $orbitalBase->rPlace) {
+						$usedShips += ASM::$csm->get($i)->shipQuantity;
+					}
 				}
-				CTR::$alert->add('Ressources transférées', ALERT_STD_SUCCESS);
+				ASM::$csm->changeSession($S_CSM1);
+
+				$remainingShips = $totalShips - $usedShips;
+				$commercialShipQuantity = Game::getCommercialShipQuantityNeeded(Transaction::TYP_RESOURCE, $resource);
+
+				if ($remainingShips >= $commercialShipQuantity) {
+					
+					ASM::$obm->load(array('rPlace' => $otherBaseId));
+					if (ASM::$obm->size() == 2) {
+						$otherBase = ASM::$obm->get(1);
+
+						# load places to compute travel time
+						$S_PLM1 = ASM::$plm->getCurrentSession();
+						ASM::$plm->newSession(ASM_UMODE);
+						ASM::$plm->load(array('id' => $orbitalBase->rPlace));
+						ASM::$plm->load(array('id' => $otherBase->rPlace));
+						$timeToTravel = Game::getTimeToTravel(ASM::$plm->get(0), ASM::$plm->get(1));
+						$departure = Utils::now();
+						$arrival = Utils::addSecondsToDate($departure, $timeToTravel);
+
+						# création du convoi
+						$cs = new CommercialShipping();
+						$cs->rPlayer = CTR::$data->get('playerId');
+						$cs->rBase = $orbitalBase->rPlace;
+						$cs->rBaseDestination = $otherBase->rPlace;
+						$cs->resourceTransported = $resource;
+						$cs->shipQuantity = $commercialShipQuantity;
+						$cs->dDeparture = $departure;
+						$cs->dArrival = $arrival;
+						$cs->statement = CommercialShipping::ST_GOING;
+						ASM::$csm->add($cs);
+
+						$orbitalBase->decreaseResources($resource);
+
+						if ($orbitalBase->getRPlayer() != $otherBase->getRPlayer()) {
+							$n = new Notification();
+							$n->setRPlayer($otherBase->getRPlayer());
+							$n->setTitle('Envoi de ressources');
+							$n->addBeg()->addTxt($otherBase->getName())->addSep();
+							$n->addLnk('diary/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'));
+							$n->addTxt(' vous a envoyé ')->addStg(Format::numberFormat($resource))->addTxt(' ressources depuis sa base ');
+							$n->addLnk('map/place' . $orbitalBase->getRPlace(), $orbitalBase->getName())->addTxt('.');
+							$n->addSep()->addLnk('bases/base-' . $otherBase->getId()  . '/view-refinery', 'vers la raffinerie →');
+							$n->addEnd();
+							ASM::$ntm->add($n);
+						}
+						CTR::$alert->add('Ressources envoyées', ALERT_STD_SUCCESS);
+					} else {
+						CTR::$alert->add('envoi de ressources impossible - erreur dans les bases orbitales', ALERT_STD_ERROR);
+					}
+				} else {
+					CTR::$alert->add('envoi de ressources impossible - vous n\'avez pas assez de vaisseaux de transport', ALERT_STD_ERROR);
+				}
 			} else {
-				CTR::$alert->add('envoi de ressources impossible - erreur dans les bases orbitales', ALERT_STD_ERROR);
+				CTR::$alert->add('envoi de ressources impossible - vous ne pouvez pas envoyer plus que ce que vous possédez', ALERT_STD_ERROR);
 			}
 		} else {
-			CTR::$alert->add('envoi de ressources impossible - pas assez de ressources', ALERT_STD_ERROR);
+			CTR::$alert->add('envoi de ressources impossible - il faut envoyer un nombre positif', ALERT_STD_ERROR);
 		}
+		ASM::$obm->changeSession($S_OBM1);
 	} else {
-		CTR::$alert->add('envoi de ressources impossible', ALERT_STD_ERROR);
+		CTR::$alert->add('envoi de ressources impossible - action inutile, vous ressources sont déjà sur cette base orbitale', ALERT_STD_ERROR);
 	}
-	ASM::$obm->changeSession($S_OBM1);
 } else {
 	CTR::$alert->add('pas assez d\'informations pour envoyer des ressources', ALERT_STD_FILLFORM);
 }

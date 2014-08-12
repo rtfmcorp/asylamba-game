@@ -23,7 +23,7 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 	$firstReward = true;
 	if ($experience > 0) {
 		$firstReward = false;
-		$alert .= 'Vous gagnez ' . $experience . ' point d\'expérience';
+		$alert .= 'Vous gagnez ' . $experience . ' points d\'expérience';
 		$player->increaseExperience($experience);
 	}
 
@@ -51,7 +51,7 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 			} else {
 				$alert .= ' et ' . $resource . ' ressources';
 			}
-			$alert .= ' sur votre base orbitale ' . $ob->name;
+			$alert .= ' sur votre base orbitale ' . $ob->name . '. ';
 			$ob->increaseResources($resource);
 		}
 
