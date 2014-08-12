@@ -65,7 +65,7 @@ class TutorialResource {
 				Dans Asylamba, la navigation est horizontale, pour faire glisser le panneau central, utilisez les flèches directionnelles ou alors cliquez sur les flèches qui s\'affichent aux deux extrémités de l\'écran.',
 			'experienceReward' => 3,
 			'creditReward' => 0,
-			'resourceReward' => 200,
+			'resourceReward' => 250,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 2,

@@ -31,7 +31,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 			break;
 		case Transaction::TYP_SHIP :
 			if ($identifier !== FALSE AND ShipResource::isAShip($identifier)) {
-				if (ShipResource::isAShipFromDock1($identifier)) {
+				if (ShipResource::isAShipFromDock1($identifier) OR ShipResource::isAShipFromDock2($identifier)) {
 					if ($quantity === FALSE) {
 						$quantity = 1;
 					} else {
@@ -40,7 +40,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 						}
 					}
 				} else {
-					$quantity = 1;
+					$valid = FALSE;
 				}
 			} else {
 				$valid = FALSE;

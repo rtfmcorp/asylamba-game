@@ -12,9 +12,11 @@ include SCRIPT . 'scripts/deploy/tables/addHermes.php';
 include SCRIPT . 'scripts/deploy/tables/addPromethee.php';
 include SCRIPT . 'scripts/deploy/tables/addGaia.php';
 
+
 echo '<h1>Génération de la galaxie</h1>';
 
 include_once GAIA;
 GalaxyGenerator::generate();
 echo GalaxyGenerator::getLog();
+
 ?>
