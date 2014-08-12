@@ -809,9 +809,12 @@ class Place {
 
 	private function startFight($commander, $enemyCommander = NULL, $pvp = FALSE) {
 		if ($pvp == TRUE) {
+			$commander->setArmy();
 			$fc = new FightController();
 			$fc->startFight($commander, $enemyCommander, $this);
 		} else {
+			$commander->setArmy();
+			$enemyCommander->setArmy();
 			$computerCommander = $this->createVirtualCommander();
 			$fc = new FightController();
 			$fc->startFight($commander, $computerCommander, $this);
@@ -1259,7 +1262,7 @@ class Place {
 		$vCommander = new Commander();
 		$vCommander->id = 0;
 		$vCommander->rPlayer = 0;
-		$vCommander->name = 'commandant rebelle';
+		$vCommander->name = 'officier rebelle';
 		$vCommander->avatar = 't3-c4';
 		$vCommander->sexe = 1;
 		$vCommander->age = 42;

@@ -84,7 +84,7 @@ class Report {
 				if ($sq[4] == $rCommanderA) {
 					$this->armyAtEndA[] = $sq;
 				} else {
-					$this->armyatEndD[] = $sq;
+					$this->armyAtEndD[] = $sq;
 				}
 			}
 		}
