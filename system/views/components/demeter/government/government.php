@@ -15,11 +15,11 @@ echo '<div class="component profil">';
 
 			if ($n6->status == PAM_CHIEF) {
 				echo '<div class="center-box">';
-					echo '<span class="label">' . $status[$n6->status - 1] . ' de ' . ColorResource::getInfo($n6->color, 'popularName') . '</span>';
+					echo '<span class="label">' . $status[$n6->status - 1] . ' de ' . ColorResource::getInfo($n6->rColor, 'popularName') . '</span>';
 					echo '<span class="value">' . $n6->name . '</span>';
 				echo '</div>';
 
-				echo '<div class="profil-flag color-' . $n6->color . '">';
+				echo '<div class="profil-flag color-' . $n6->rColor . '">';
 					echo '<img ';
 						echo 'src="' . MEDIA . '/avatar/big/' . $n6->avatar . '.png" ';
 						echo 'alt="avatar de ' . $n6->name . '" ';
