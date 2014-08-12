@@ -19,8 +19,10 @@ define('PAM_DEAD',					6);
 # player status
 define('PAM_STANDARD',				1);
 define('PAM_PARLIAMENT',			2);
-define('PAM_GOVERNMENT',			3);
-define('PAM_CHIEF',					4);
+define('PAM_TREASURER',				3);
+define('PAM_WARLORD',				4);
+define('PAM_MINISTER',				5);
+define('PAM_CHIEF',					6);
 
 define('PAM_TIME_ALLY_INACTIVE',	24 * 7);
 define('PAM_TIME_GLOBAL_INACTIVE',	24 * 15);

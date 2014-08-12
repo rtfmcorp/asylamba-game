@@ -120,7 +120,7 @@ class Player {
 	public function uMethod() {
 		$token = CTC::createContext();
 		$now   = Utils::now();
-
+		#YOLO
 		if (Utils::interval($this->uPlayer, $now, 'h') > 0) {
 			# update time
 			$hours = Utils::intervalDates($now, $this->uPlayer);

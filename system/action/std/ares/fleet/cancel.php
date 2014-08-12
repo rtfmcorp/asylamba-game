@@ -19,12 +19,12 @@ if ($commanderId !== FALSE) {
 
 			$interval = Utils::interval($commander->dArrival, Utils::now(), 's');
 			$dStart = new DateTime(Utils::now());
-			$dStart->modify('-' . $interval . 'second');
+			$dStart->modify('-' . $interval . ' second');
 
 			$duration = Utils::interval($commander->dStart, $commander->dArrival, 's');
 
 			$dArrival = new DateTime($dStart->format('Y-m-d H:i:s'));
-			$dArrival->modify('+' . $duration . 'second');
+			$dArrival->modify('+' . $duration . ' second');
 
 			$rDestinationPlace = $commander->rDestinationPlace;
 			$commander->rDestinationPlace = $commander->rStartPlace;
