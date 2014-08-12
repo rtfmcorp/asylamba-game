@@ -136,7 +136,7 @@ class Color {
 				ASM::$pam->newSession(FALSE);
 				$keys = array();
 
-				$nbr = (count($ballot) > 6) ? 6: count($ballot);
+				$nbr = (count($ballot) > 4) ? 4 : count($ballot);
 
 				for ($i = 0; $i < $nbr; $i++) {
 					$keys[$i] = key($ballot);
@@ -144,22 +144,22 @@ class Color {
 				}
 
 				ASM::$pam->load(array('id' => $keys));
+				$preferences = array(array(6, TRUE), array(5, TRUE), array(4, TRUE), array(3, TRUE));
+
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
 					$_CAM = ASM::$cam->getCurrentSession();
 					ASM::$cam->newSession();
 					ASM::$cam->load(array('rPlayer' => ASM::$pam->get($i)->id));
-					$arrayChoice = array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF);
 
-					$preferences = array(array(2, FALSE), array(2, FALSE), array(2, FALSE), array(2, FALSE));
 					$preferences[ASM::$cam->get()->treasurerChoice - 1][0] = PAM_TREASURER;
 					$preferences[ASM::$cam->get()->warlordChoice - 1][0] = PAM_WARLORD; 
 					$preferences[ASM::$cam->get()->ministerChoice - 1][0] = PAM_MINISTER; 
 					$preferences[ASM::$cam->get()->chiefChoice - 1][0] = PAM_CHIEF;
 
-					foreach ($preferences as $p) {
-						if (!$p[1]) {
-							ASM::$pam->get($i)->status = $p[0];
-							$p[1] = TRUE;
+					for ($i = 0; $i < $nbr; $i++) {
+						if ($preferences[$i][1]) {
+							ASM::$pam->get($i)->status = $preferences[$i][0];
+							$preferences[$i][1] = FALSE;
 							break;
 						}
 					}
