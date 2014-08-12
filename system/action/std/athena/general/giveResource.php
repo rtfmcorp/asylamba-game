@@ -80,9 +80,10 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_
 							$n->setTitle('Envoi de ressources');
 							$n->addBeg()->addTxt($otherBase->getName())->addSep();
 							$n->addLnk('diary/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'));
-							$n->addTxt(' vous a envoyé ')->addStg(Format::numberFormat($resource))->addTxt(' ressources depuis sa base ');
-							$n->addLnk('map/place' . $orbitalBase->getRPlace(), $orbitalBase->getName())->addTxt('.');
-							$n->addSep()->addLnk('bases/base-' . $otherBase->getId()  . '/view-refinery', 'vers la raffinerie →');
+							$n->addTxt(' a lancé un convoi de ')->addStg(Format::numberFormat($resource))->addTxt(' ressources depuis sa base ');
+							$n->addLnk('map/place' . $orbitalBase->getRPlace(), $orbitalBase->getName())->addTxt('. ');
+							$n->addBrk()->addTxt('Quand le convoi arrivera, les ressources seront à vous.');
+							$n->addSep()->addLnk('bases/base-' . $otherBase->getId()  . '/view-commercialplateforme/mode-market', 'vers la place du commerce →');
 							$n->addEnd();
 							ASM::$ntm->add($n);
 						}
