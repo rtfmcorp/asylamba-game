@@ -108,58 +108,42 @@ class ReportManager extends Manager {
 	}
 
 	public function save() {
-		/*$db = DataBase::getInstance();
+		$db = DataBase::getInstance();
 		$reports = $this->_Save();
 
-		foreach ($reports AS $report) {
-			if ($report->commanders != NULL) {
-				$qr = $db->prepare('UPDATE bigReport 
-					SET 
-						commanders = ?,
-						fight = ?,
-						dletedOnce = ?,
-						WHERE id = ?');
-				$qr->execute(array(
-					$report->commanders,
-					$report->fight,
-					$report->deletedOnce,
-					$report->rBigReport));
-			}
-
-			$qr2 = $db2->prepare('UPDATE report
-				SET
-					rPlayerAttacker = ?,
-					rPlayerDefender = ?,
-					rPlayerWinner = ?,
-					rBigReport = ?,
-					avatarA = ?,
-					avatarD = ?,
-					nameA = ?,
-					nameD = ?,
-					levelA = ?,
-					levelD = ?,
-					experienceA = ?,
-					experienceD = ?,
-					palmaresA = ?,
-					palmaresD = ?,
-					resources = ?,
-					expCom = ?,
-					expPlayerA = ?,
-					expPlayerD = ?,
-					rPlace = ?,
-					type = ?,
-					round = ?,
-					importance = ?,
-					statementAttacker = ?,
-					statementDefender = ?,
-					dFight = ?');
-			$aw = $qr2->execute(array(
+		foreach ($reports as $report) {
+			$qr = $db->prepare('UPDATE report SET
+				rPlayerAttacker = ?,
+				rPlayerDefender = ?,
+				rPlayerWinner = ?,
+				avatarA = ?,
+				avatarD = ?,
+				nameA = ?,
+				nameD = ?,
+				levelA = ?,
+				levelD = ?,
+				experienceA = ?,
+				experienceD = ?,
+				palmaresA = ?,
+				palmaresD = ?,
+				resources = ?,
+				expCom = ?,
+				expPlayerA = ?,
+				expPlayerD = ?,
+				rPlace = ?,
+				placeName = ?,
+				type = ?,
+				round = ?,
+				importance = ?,
+				statementAttacker = ?,
+				statementDefender = ?,
+				dFight = ?');
+			$aw = $qr->execute(array(
 				$report->rPlayerAttacker,
 				$report->rPlayerDefender,
 				$report->rPlayerWinner,
-				$report->rBigReport,
 				$report->avatarA,
-				$report->avatarD,	
+				$report->avatarD,
 				$report->nameA,
 				$report->nameD,
 				$report->levelA,
@@ -173,6 +157,7 @@ class ReportManager extends Manager {
 				$report->expPlayerA,
 				$report->expPlayerD,
 				$report->rPlace,
+				$report->placeName,
 				$report->type,
 				$report->round,
 				$report->importance,
@@ -181,7 +166,7 @@ class ReportManager extends Manager {
 				$report->dFight
 				)
 			);
-		}*/
+		}
 	}
 
 	public function add($newReport) {
