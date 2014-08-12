@@ -264,7 +264,7 @@ class Commander {
 		}
 		$importance = (($finalOwnPev + 1) * ($enemyCommander->getPevInBegin())) / 
 			((($this->pevInBegin + 1) * ($enemyCommander->getLevel() / 
-				$this->level)) + 1);
+				($this->level + 1))));
 
 		$this->earnedExperience = $importance * COM_COEFFEARNEDEXP;
 		if($this->winner) {
