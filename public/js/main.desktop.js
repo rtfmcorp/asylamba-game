@@ -808,6 +808,33 @@ jQuery(document).ready(function($) {
 		}, 100);
 	})();
 
+	/* HIDE SPLASH-SCREEN */
+	$('.hide-slpash').live('click', function(e) {
+		var dom = $('.splash-screen');
+		var mod = dom.find('.modal');
+
+		mod.animate({
+			'right': 2000
+		}, 500);
+		dom.animate({
+			'opacity': 0
+		}, 500, function() {
+			dom.remove();
+		});
+	});
+
+	(function() {
+		var dom = $('.splash-screen');
+		var mod = dom.find('.modal');
+
+		mod.animate({
+			'right': 120
+		}, 500);
+		dom.animate({
+			'opacity': 1
+		}, 500);
+	})();
+
 	/* SORTING STUFF */
 	$('.sort-button a').live('click', function(e) {
 		e.preventDefault();

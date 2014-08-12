@@ -165,7 +165,7 @@ class Place {
 			ASM::$com->load(array('c.rDestinationPlace' => $this->id, 'c.statement' => 2), array('c.dArrival', 'ASC'));
 			for ($i = 0; $i < ASM::$com->size(); $i++) {
 				$commander = ASM::$com->get($i);
-				if ($commander->dArrival <= $now AND $commander->rDestinationPlace != NULL) {
+				if ($commander->dArrival <= $now AND $commander->rDestinationPlace != NULL) {					
 					CTC::add($commander->dArrival, $this, 'uTravel', array($commander));
 				}
 			}
@@ -335,9 +335,9 @@ class Place {
 				ASM::$plm->changeSession($S_PLM10);
 
 				#création du rapport
-				$this->createReport();
-				
-				$this->sendNotif(self::LOOTEMPTYSSUCCESS, $commander);
+				$report = $this->createReport();
+
+				$this->sendNotif(self::LOOTEMPTYSSUCCESS, $commander, $report);
 			} else {
 
 				# si il est mort
@@ -354,9 +354,9 @@ class Place {
 				ASM::$plm->changeSession($S_PLM11);
 				
 				#création du rapport
-				$this->createReport();
+				$report = $this->createReport();
 
-				$this->sendNotif(self::LOOTEMPTYFAIL, $commander);
+				$this->sendNotif(self::LOOTEMPTYFAIL, $commander, $report);
 			}
 		# si il y a une base
 		} else {
@@ -402,9 +402,9 @@ class Place {
 						$this->commanders = array_merge($this->commanders);
 
 						#création du rapport
-						$this->createReport();
+						$report = $this->createReport();
 
-						$this->sendNotif(self::LOOTPLAYERWHITBATTLESUCCESS, $commander);
+						$this->sendNotif(self::LOOTPLAYERWHITBATTLESUCCESS, $commander, $report);
 
 
 					} else {
@@ -432,9 +432,9 @@ class Place {
 						ASM::$plm->changeSession($S_PLM10);
 
 						#création du rapport
-						$this->createReport();
+						$report = $this->createReport();
 
-						$this->sendNotif(self::LOOTPLAYERWHITBATTLEFAIL, $commander);
+						$this->sendNotif(self::LOOTPLAYERWHITBATTLEFAIL, $commander, $report);
 					}
 				} else {
 					$this->lootAPlayerPlace($commander);
@@ -498,6 +498,7 @@ class Place {
 				}
 
 				$nbrBattle = 0;
+				$reportIds = array();
 				while ($nbrBattle < count($this->commanders)) {
 					if ($this->commanders[$nbrBattle]->statement == Commander::AFFECTED) {
 
@@ -505,12 +506,14 @@ class Place {
 
 						# mort du commandant
 						if ($commander->getStatement() == COM_DEAD) {
-							$this->createReport();
+							$report = $this->createReport();
+							$reportIds[] = $report;
 							break;
 						}
 					}
 					#création du rapport
-					$this->createReport();
+					$report = $this->createReport();
+					$reportIds[] = $report;
 					
 					$nbrBattle++;
 				}
@@ -522,7 +525,7 @@ class Place {
 					if ($nbrBattle == 0) {
 						$this->sendNotif(self::CONQUERPLAYERWHITOUTBATTLESUCCESS, $commander);
 					} else {
-						$this->sendNotif(self::CONQUERPLAYERWHITBATTLESUCCESS, $commander);
+						$this->sendNotifForConquest(self::CONQUERPLAYERWHITBATTLESUCCESS, $commander, $reportIds);
 					}
 
 					# attribuer le prestige au joueur
@@ -603,7 +606,7 @@ class Place {
 						ASM::$pam->changeSession($S_PAM);
 					}
 
-					$this->sendNotif(self::CONQUERPLAYERWHITBATTLEFAIL, $commander);
+					$this->sendNotifForConquest(self::CONQUERPLAYERWHITBATTLEFAIL, $commander, $reportIds);
 				}
 			} else {
 				$S_PLM10 = ASM::$plm->getCurrentSession();
@@ -690,14 +693,14 @@ class Place {
 				}
 				
 				#création du rapport
-				$this->createReport();
+				$report = $this->createReport();
 
-				$this->sendNotif(self::CONQUEREMPTYSSUCCESS, $commander);
+				$this->sendNotif(self::CONQUEREMPTYSSUCCESS, $commander, $report);
 			# s'il est mort
 			} else {
 				
 				#création du rapport
-				$this->createReport();
+				$report = $this->createReport();
 
 				$this->sendNotif(self::CONQUEREMPTYFAIL, $commander);
 				# enlever le commandant de la session
@@ -822,6 +825,16 @@ class Place {
 		$report->rPlayerAttacker = LiveReport::$rPlayerAttacker;
 		$report->rPlayerDefender =  LiveReport::$rPlayerDefender;
 		$report->rPlayerWinner = LiveReport::$rPlayerWinner;
+		$report->avatarA = LiveReport::$avatarA;
+		$report->avatarD = LiveReport::$avatarD;
+		$report->nameA = LiveReport::$nameA;
+		$report->nameD = LiveReport::$nameD;
+		$report->levelA = LiveReport::$levelA;
+		$report->levelD = LiveReport::$levelD;
+		$report->experienceA = LiveReport::$experienceA;
+		$report->experienceD = LiveReport::$experienceD;
+		$report->palmaresA = LiveReport::$palmaresA;
+		$report->palmaresD = LiveReport::$palmaresD;
 		$report->resources = LiveReport::$resources;
 		$report->expCom = LiveReport::$expCom;
 		$report->expPlayerA = LiveReport::$expPlayerA;
@@ -833,11 +846,13 @@ class Place {
 		$report->squadrons = LiveReport::$squadrons;
 		$report->dFight = LiveReport::$dFight;
 		$report->placeName = ($this->baseName == '') ? 'planète rebelle' : $this->baseName;
-		ASM::$rpm->add($report);
+		$id = ASM::$rpm->add($report);
 		LiveReport::clear();
+
+		return $id;
 	}
 
-	private function sendNotif($case, $commander) {
+	private function sendNotif($case, $commander, $report = NULL) {
 		include_once HERMES;
 
 		switch ($case) {
@@ -894,6 +909,8 @@ class Place {
 					->addSep()
 					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
 					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -909,6 +926,8 @@ class Place {
 					->addTxt('.')
 					->addSep()
 					->addTxt('Il a désormais rejoint le Mémorial. Que son âme traverse l\'Univers dans la paix.')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -927,6 +946,8 @@ class Place {
 					->addSep()
 					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
 					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
 					->addEnd();
 				ASM::$ntm->add($notif);
 
@@ -943,6 +964,8 @@ class Place {
 					->addTxt('.')
 					->addSep()
 					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -960,6 +983,8 @@ class Place {
 					->addTxt('.')
 					->addSep()
 					->addTxt('Il a désormais rejoint le Mémorial. Que son âme traverse l\'Univers dans la paix.')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
 					->addEnd();
 				ASM::$ntm->add($notif);
 
@@ -976,6 +1001,8 @@ class Place {
 					->addTxt('.')
 					->addSep()
 					->addTxt('Vous avez repoussé l\'ennemi avec succès.')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -1057,75 +1084,6 @@ class Place {
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
-			case self::CONQUERPLAYERWHITBATTLESUCCESS:
-				$notif = new Notification();
-				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Conquête réussie');
-				$notif->addBeg()
-					->addTxt('Votre officier ')
-					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
-					->addTxt(' a conquis la planète ')
-					->addLnk('map/place-' . $this->id, $this->baseName)
-					->addTxt(' appartenant au joueur ')
-					->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
-					->addTxt('.')
-					->addSep()
-					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
-					->addTxt('Elle est désormais vôtre, vous pouvez l\'administrer ')
-					->addLnk('bases/base-' . $this->id, 'ici')
-					->addTxt('.')
-					->addEnd();
-				ASM::$ntm->add($notif);
-
-				$notif = new Notification();
-				$notif->setRPlayer($this->rPlayer);
-				$notif->setTitle('Planète conquise');
-				$notif->addBeg()
-					->addTxt('L\'officier ')
-					->addStg($commander->getName())
-					->addTxt(' appartenant au joueur ')
-					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
-					->addTxt(' a conquis votre planète ')
-					->addLnk('map/place-' . $this->id, $this->baseName)
-					->addTxt('.')
-					->addSep()
-					->addTxt('Impliquez votre faction dans une action punitive envers votre assaillant.')
-					->addEnd();
-				ASM::$ntm->add($notif);
-				break;
-			case self::CONQUERPLAYERWHITBATTLEFAIL:
-				$notif = new Notification();
-				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Conquête ratée');
-				$notif->addBeg()
-					->addTxt('Votre officier ')
-					->addLnk('fleet/view-memorial/', $commander->getName())
-					->addTxt(' est tombé lors de la tentive de conquête de la planète ')
-					->addLnk('map/place-' . $this->id, $this->baseName)
-					->addTxt(' appartenant au joueur ')
-					->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
-					->addTxt('.')
-					->addSep()
-					->addTxt('Il a désormais rejoint de Mémorial. Que son âme traverse l\'Univers dans la paix.')
-					->addEnd();
-				ASM::$ntm->add($notif);
-
-				$notif = new Notification();
-				$notif->setRPlayer($this->rPlayer);
-				$notif->setTitle('Rapport de combat');
-				$notif->addBeg()
-					->addTxt('L\'officier ')
-					->addStg($commander->getName())
-					->addTxt(' appartenant au joueur ')
-					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
-					->addTxt(' a tenté de conquérir votre planète ')
-					->addLnk('map/place-' . $this->id, $this->baseName)
-					->addTxt('.')
-					->addSep()
-					->addTxt('Vous avez repoussé l\'ennemi avec succès.')
-					->addEnd();
-				ASM::$ntm->add($notif);
-				break;
 			case self::CONQUERPLAYERWHITOUTBATTLESUCCESS:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
@@ -1195,11 +1153,114 @@ class Place {
 		}
 	}
 
+	private function sendNotifForConquest($case, $commander, $reports = array()) {
+		$nbrBattle = count($reports);
+		switch($case) {
+			case self::CONQUERPLAYERWHITBATTLESUCCESS:
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Conquête réussie');
+				$notif->addBeg()
+					->addTxt('Votre officier ')
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addTxt(' a conquis la planète ')
+					->addLnk('map/place-' . $this->id, $this->baseName)
+					->addTxt(' appartenant au joueur ')
+					->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
+					->addTxt('.')
+					->addSep()
+					->addTxt($nbrBattle . Format::addPlural($nbrBattle, ' combats ont eu lieu.', ' seul combat a eu lieu'))
+					->addSep()
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addTxt('Elle est désormais vôtre, vous pouvez l\'administrer ')
+					->addLnk('bases/base-' . $this->id, 'ici')
+					->addTxt('.');
+				for ($i = 0; $i < $nbrBattle; $i++) {
+					$notif->addSep();
+					$notif->addLnk('fleet/view-archive/report-' . $reports[$i], 'voir le ' . Format::ordinalNumber($i + 1) . ' rapport');
+				}
+				$notif->addEnd();
+				ASM::$ntm->add($notif);
+
+				$notif = new Notification();
+				$notif->setRPlayer($this->rPlayer);
+				$notif->setTitle('Planète conquise');
+				$notif->addBeg()
+					->addTxt('L\'officier ')
+					->addStg($commander->getName())
+					->addTxt(' appartenant au joueur ')
+					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
+					->addTxt(' a conquis votre planète ')
+					->addLnk('map/place-' . $this->id, $this->baseName)
+					->addTxt('.')
+					->addSep()
+					->addTxt($nbrBattle . Format::addPlural($nbrBattle, ' combats ont eu lieu.', ' seul combat a eu lieu'))
+					->addSep()
+					->addTxt('Impliquez votre faction dans une action punitive envers votre assaillant.');
+				for ($i = 0; $i < $nbrBattle; $i++) {
+					$notif->addSep();
+					$notif->addLnk('fleet/view-archive/report-' . $reports[$i], 'voir le ' . Format::ordinalNumber($i + 1) . ' rapport');
+				}
+				$notif->addEnd();
+				ASM::$ntm->add($notif);
+				break;
+			case self::CONQUERPLAYERWHITBATTLEFAIL:
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Conquête ratée');
+				$notif->addBeg()
+					->addTxt('Votre officier ')
+					->addLnk('fleet/view-memorial/', $commander->getName())
+					->addTxt(' est tombé lors de la tentive de conquête de la planète ')
+					->addLnk('map/place-' . $this->id, $this->baseName)
+					->addTxt(' appartenant au joueur ')
+					->addLnk('diary/player-' . $this->rPlayer, $this->playerName)
+					->addTxt('.')
+					->addSep()
+					->addTxt($nbrBattle . Format::addPlural($nbrBattle, ' combats ont eu lieu.', ' seul combat a eu lieu'))
+					->addSep()
+					->addTxt('Il a désormais rejoint de Mémorial. Que son âme traverse l\'Univers dans la paix.');
+				for ($i = 0; $i < $nbrBattle; $i++) {
+					$notif->addSep();
+					$notif->addLnk('fleet/view-archive/report-' . $reports[$i], 'voir le ' . Format::ordinalNumber($i + 1) . ' rapport');
+				}
+				$notif->addEnd();
+				ASM::$ntm->add($notif);
+
+				$notif = new Notification();
+				$notif->setRPlayer($this->rPlayer);
+				$notif->setTitle('Rapport de combat');
+				$notif->addBeg()
+					->addTxt('L\'officier ')
+					->addStg($commander->getName())
+					->addTxt(' appartenant au joueur ')
+					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
+					->addTxt(' a tenté de conquérir votre planète ')
+					->addLnk('map/place-' . $this->id, $this->baseName)
+					->addTxt('.')
+					->addSep()
+					->addTxt($nbrBattle . Format::addPlural($nbrBattle, ' combats ont eu lieu.', ' seul combat a eu lieu'))
+					->addSep()
+					->addTxt('Vous avez repoussé l\'ennemi avec succès.');
+				for ($i = 0; $i < $nbrBattle; $i++) {
+					$notif->addSep();
+					$notif->addLnk('fleet/view-archive/report-' . $reports[$i], 'voir le ' . Format::ordinalNumber($i + 1) . ' rapport');
+				}
+				$notif->addEnd();
+				ASM::$ntm->add($notif);
+				break;
+
+			default: break;
+		}
+	}
+
 	public function createVirtualCommander() {
 		$population = $this->population;
 		$vCommander = new Commander();
 		$vCommander->id = 0;
 		$vCommander->rPlayer = 0;
+		$vCommander->name = 'commandant rebelle';
+		$vCommander->avatar = 't3-c4';
 		$vCommander->sexe = 1;
 		$vCommander->age = 42;
 		$vCommander->statement = 1;

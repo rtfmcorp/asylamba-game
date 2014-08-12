@@ -13,6 +13,7 @@ class Utils {
 			'E6GatZvhO1W9seBHU7mgQe49c',
 			'FaDcTV3lWokXHZO8tXH4divWZ',
 			'KD6wb29ElI6sxVVtVoLJY0BbO',
+			'nEYzsAcZYv',
 			'xQTjMBnqbk6rO4ysglCJxLL63'
 		);
 		if (in_array($bindkey, $bindkeys)) {

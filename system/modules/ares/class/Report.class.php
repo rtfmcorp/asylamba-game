@@ -10,11 +10,30 @@
  * @update 01.06.14
 */
 
+#TODO 
+/*
+avatar
+name
+level
+exp avant le combat
+nbr victoires
+*/
+
 class Report {
 	public $id					= 0;
 	public $rPlayerAttacker		= 0;
 	public $rPlayerDefender		= 0;
 	public $rPlayerWinner		= 0;
+	public $avatarA				= '';
+	public $avatarD				= '';
+	public $nameA				= '';
+	public $nameD				= '';
+	public $levelA				= 0;
+	public $levelD				= 0;
+	public $experienceA			= 0;
+	public $experienceD			= 0;
+	public $palmaresA			= 0;
+	public $palmaresD			= 0;
 	public $resources			= 0;
 	public $expCom				= 0;
 	public $expPlayerA			= 0;

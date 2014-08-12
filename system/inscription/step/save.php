@@ -173,7 +173,7 @@ try {
 	GalaxyColorManager::apply();
 
 	# redirection vers connection
-	CTR::redirect('connection/bindkey-' . $pl->getBind());
+	CTR::redirect('connection/bindkey-' . $pl->getBind() . '/mode-splash');
 } catch (Exception $e) {
 	# tentative de réparation de l'erreur
 

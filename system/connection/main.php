@@ -198,7 +198,11 @@ if (ASM::$pam->size() == 1) {
 	$api->confirmConnection(CTR::$get->get('bindkey'), APP_ID);
 
 	# redirection vers page de départ
-	CTR::redirect('profil');
+	if (CTR::$get->equal('mode', 'splash')) {
+		CTR::redirect('profil/mode-splash');
+	} else {
+		CTR::redirect('profil');
+	}
 } else { 
 	header('Location: ' . GETOUT_ROOT . 'accueil/speak-noplayerfound');
 	exit();
