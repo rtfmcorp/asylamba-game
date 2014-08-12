@@ -27,6 +27,7 @@ include LIB . 'Format.class.php';
 include LIB . 'Game.class.php';
 include LIB . 'Bug.class.php';
 include LIB . 'CTRHelper.class.php';
+include LIB . 'Benchtime.class.php';
 
 include_once HERMES;
 ?>

@@ -5,7 +5,6 @@ class GalaxyColorManager {
 	}
 
 	public static function applyAndSave() {
-
 		$gcm = new GalaxyColorManager();
 		$gcm->loadSystem();
 		$gcm->loadSector();
@@ -34,7 +33,7 @@ class GalaxyColorManager {
 			(SELECT COUNT(pa.rColor) FROM place AS pl LEFT JOIN player AS pa ON pl.rPlayer = pa.id WHERE pl.rSystem = se.id AND pa.rColor = 7) AS color7
 		FROM system AS se
 		ORDER BY se.id');
-
+		
 		while ($aw = $qr->fetch()) {
 			$this->system[$aw['id']] = array(
 				'sector' => $aw['sector'],
