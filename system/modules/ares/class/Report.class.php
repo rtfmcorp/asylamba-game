@@ -20,6 +20,10 @@ nbr victoires
 */
 
 class Report {
+	const STANDARD = 0;
+	const ARCHIVED = 1;
+	const DELETED = 2;
+	
 	public $id					= 0;
 	public $rPlayerAttacker		= 0;
 	public $rPlayerDefender		= 0;

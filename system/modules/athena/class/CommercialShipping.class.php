@@ -159,6 +159,25 @@ class CommercialShipping {
 			$this->statement = self::ST_MOVING_BACK;
 
 			ASM::$obm->changeSession($S_OBM1);
+		} elseif ($this->rTransaction == NULL AND $this->resourceTransported != NULL) {
+			# resource sending
+
+			$S_OBM1 = ASM::$obm->getCurrentSession();
+			ASM::$obm->newSession(FALSE);
+			ASM::$obm->load(array('rPlace' => $this->rBaseDestination));
+			$orbitalBase = ASM::$obm->get();
+
+			$orbitalBase->increaseResources($this->resourceTransported);
+
+			# notif for the player who receive the resources
+			$n = new Notification();
+			$n->setRPlayer($orbitalBase->getRPlayer());
+			$n->setTitle('Ressources reçues');
+			$n->addBeg()->addTxt('Vous avez bien reçu les ' . $this->resourceTransported . ' ressources sur votre base orbitale ' . $orbitalBase->name . '.');
+			$n->addEnd();
+			ASM::$ntm->add($n);
+
+			$this->statement = self::ST_MOVING_BACK;
 		} else {
 			CTR::$alert->add('impossible de délivrer ce chargement', ALERT_STD_ERROR);
 		}
@@ -183,7 +202,13 @@ class CommercialShipping {
 					if ($this->typeOfTransaction == Transaction::TYP_RESOURCE) {
 						echo '<img src="' . MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($this->quantity) . '.png" alt="" class="picto" />';
 						echo '<div class="offer">';
-							echo Format::numberFormat($this->quantity) . ' <img src="' . MEDIA . 'resources/resource.png" alt="" class="icon-color" />';
+							if ($this->resourceTransported == NULL) {
+								# transaction
+								echo Format::numberFormat($this->quantity) . ' <img src="' . MEDIA . 'resources/resource.png" alt="" class="icon-color" />';
+							} else {
+								# resources sending
+								echo Format::numberFormat($this->resourceTransported) . ' <img src="' . MEDIA . 'resources/resource.png" alt="" class="icon-color" />';
+							}
 						echo '</div>';
 					} elseif ($this->typeOfTransaction == Transaction::TYP_COMMANDER) {
 						echo '<img src="' . MEDIA . 'commander/small/' . $this->commanderAvatar . '.png" alt="" class="picto" />';
@@ -198,12 +223,21 @@ class CommercialShipping {
 							echo '<em>' . ShipResource::getInfo($this->identifier, 'name') . ' / ' . ShipResource::getInfo($this->identifier, 'pev') . ' pev</em>';
 						echo '</div>';
 					}
-					echo '<div class="for">';
-						echo '<span>pour</span>';
-					echo '</div>';
-					echo '<div class="price">';
-						echo Format::numberFormat($this->price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
-					echo '</div>';
+					if ($this->resourceTransported == NULL) {
+						# transaction
+						echo '<div class="for">';
+							echo '<span>pour</span>';
+						echo '</div>';
+						echo '<div class="price">';
+							echo Format::numberFormat($this->price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
+						echo '</div>';
+					} else {
+						# resources sending
+						echo '<div class="for"><span></span></div>';
+						echo '<div class="price">';
+							echo 'envoi de ressources';
+						echo '</div>';
+					}
 				echo '</div>';
 			}
 
