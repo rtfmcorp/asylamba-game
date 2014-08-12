@@ -87,11 +87,11 @@ class PlayerRanking {
 
 			$r .= '<span class="experience">';
 				switch ($type) {
-					case 'general': $r .= Format::numberFormat($this->general) . ' points'; break;
+					case 'general': $r .= Format::numberFormat($this->general) . ' point' . Format::addPlural($this->general); break;
 					case 'xp': $r .= Format::numberFormat($this->experience) . ' xp'; break;
 					case 'victory': $r .= Format::numberFormat($this->victory) . ' victoire' . Format::addPlural($this->victory); break;
 					case 'defeat': $r .= Format::numberFormat($this->defeat) . ' défaite' . Format::addPlural($this->defeat); break;
-					case 'ratio': $r .= Format::numberFormat($this->ratio) . ' V/D'; break;
+					case 'ratio': $r .= Format::numberFormat($this->ratio) . ' point' . Format::addPlural($this->ratio) . ' de combat'; break;
 					default: break;
 				}
 			$r .= '</span>';

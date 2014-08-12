@@ -58,13 +58,13 @@ echo '<div id="content">';
 		ASM::$frm->loadLastContext(array(), array('generalPosition', 'ASC'), array(0, 1));
 		include COMPONENT . 'rank/faction/front.php';
 
-		$FACTION_RANKING_GENERAL = ASM::$frm->newSession();
-		ASM::$frm->loadLastContext(array(), array('generalPosition', 'ASC'));
-		include COMPONENT . 'rank/faction/general.php';
-
 		$FACTION_RANKING_POWER = ASM::$frm->newSession();
 		ASM::$frm->loadLastContext(array(), array('powerPosition', 'ASC'));
 		include COMPONENT . 'rank/faction/power.php';
+
+		$FACTION_RANKING_GENERAL = ASM::$frm->newSession();
+		ASM::$frm->loadLastContext(array(), array('generalPosition', 'ASC'));
+		include COMPONENT . 'rank/faction/general.php';
 
 		$FACTION_RANKING_DOMINATION = ASM::$frm->newSession();
 		ASM::$frm->loadLastContext(array(), array('dominationPosition', 'ASC'));
