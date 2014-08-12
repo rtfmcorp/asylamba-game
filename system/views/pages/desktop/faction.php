@@ -104,8 +104,11 @@ echo '<div id="content">';
 
 		ASM::$pam->changeSession($S_PAM_1);
 	} elseif (CTR::$get->get('view') == 'election' && in_array($faction->electionStatement, array(Color::CAMPAIGN, Color::ELECTION))) {
-		include COMPONENT . 'default.php';
-		#
+		if ($faction->electionStatement == Color::CAMPAIGN) {
+			include COMPONENT . 'demeter/election/campaign.php';
+		} elseif ($faction->electionStatement == Color::ELECTION) {
+			include COMPONENT . 'demeter/election/election.php';
+		}
 	} elseif (CTR::$get->get('view') == 'player') {
 		# vue des joueurs, a supprimer
 
