@@ -210,7 +210,9 @@ class CommercialShipping {
 			$totalTime   = Utils::interval($this->dDeparture, $this->dArrival, 's');
 			$currentTime = Utils::interval(Utils::now(), $this->dDeparture, 's');
 
-			echo '<div class="shipping progress" data-progress-total-time="' . $totalTime . '" data-progress-current-time="' . ($totalTime - $currentTime) . '" data-progress-output="lite">';
+			echo ($this->statement != self::ST_WAITING)
+				?'<div class="shipping progress" data-progress-total-time="' . $totalTime . '" data-progress-current-time="' . ($totalTime - $currentTime) . '" data-progress-output="lite">'
+				: '<div class="shipping">';
 				echo '<span class="progress-container">';
 					echo '<span style="width: ' . Format::percent($currentTime, $totalTime) . '%;" class="progress-bar"></span>';
 				echo '</span>';
