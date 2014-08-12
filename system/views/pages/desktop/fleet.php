@@ -110,8 +110,25 @@ echo '<div id="content">';
 
 		# report component
 		if (CTR::$get->exist('report')) {
-			include COMPONENT . 'default.php';
-			include COMPONENT . 'default.php';
+			ASM::$srm->newSession();
+			ASM::$srm->load(array('id' => CTR::$get->get('report'), 'rPlayer' => CTR::$data->get('playerId')));
+
+			if (ASM::$srm->size() == 1) {
+				include_once GAIA;
+
+				$spyreport = ASM::$srm->get(0);
+
+				$S_PLM_SPY = ASM::$plm->getCurrentSession();
+				ASM::$plm->newSession();
+				ASM::$plm->load(array('id' => $spyreport->rPlace));
+				$place_spy = ASM::$plm->get(0);
+
+				include COMPONENT . 'fleet/spyReport.php';
+
+				ASM::$plm->changeSession($S_PLM_SPY);
+			} else {
+				CTR::redirect('fleet/view-spyreport');
+			}
 		}  else {
 			include COMPONENT . 'default.php';
 			include COMPONENT . 'default.php';
