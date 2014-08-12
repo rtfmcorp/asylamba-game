@@ -75,7 +75,7 @@ class Color {
 
 		ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
 		for ($i = 0; $i < ASM::$pam->size(); $i++) {
-			if (ASM::$pam->get($i)->status < PAM_GOVERNMENT) {
+			if (ASM::$pam->get($i)->status < PAM_TREASURER) {
 				if ($i < $limit) {
 					ASM::$pam->get($i)->status = PAM_PARLIAMENT;
 				} else {
@@ -92,7 +92,7 @@ class Color {
 
 		$_PAM1 = ASM::$pam->getCurrentsession();
 		ASM::$pam->newSession(FALSE);
-		ASM::$pam->load(array('status' => array(PAM_GOVERNMENT, PAM_CHIEF)));
+		ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF)));
 		for ($i = 0; $i < ASM::$pam->size(); $i++) {
 			ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
 		}
@@ -144,9 +144,27 @@ class Color {
 				}
 
 				ASM::$pam->load(array('id' => $keys));
-
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
-					ASM::$pam->get($i)->setStatus(PAM_GOVERNMENT);
+					$_CAM = ASM::$cam->getCurrentSession();
+					ASM::$cam->newSession();
+					ASM::$cam->load(array('rPlayer' => ASM::$pam->get($i)->id));
+					$arrayChoice = array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF);
+
+					$preferences = array(array(2, FALSE), array(2, FALSE), array(2, FALSE), array(2, FALSE));
+					$preferences[ASM::$cam->get()->treasurerChoice - 1][0] = PAM_TREASURER;
+					$preferences[ASM::$cam->get()->warlordChoice - 1][0] = PAM_WARLORD; 
+					$preferences[ASM::$cam->get()->ministerChoice - 1][0] = PAM_MINISTER; 
+					$preferences[ASM::$cam->get()->chiefChoice - 1][0] = PAM_CHIEF;
+
+					foreach ($preferences as $p) {
+						if (!$p[1]) {
+							ASM::$pam->get($i)->status = $p[0];
+							$p[1] = TRUE;
+							break;
+						}
+					}
+
+					ASM::$cam->changeSession($_CAM);
 				}
 
 				ASM::$pam->save();
@@ -188,12 +206,11 @@ class Color {
 				ASM::$elm->newSession();
 				$election = new Election();	
 				$election->rColor = $this->id;
-				$date = new DateTime($this->dLastElection);
-				$mandateDuration = 0;
-				$mandateDuration = ColorResource::getInfo($this->id, 'mandateDuration');
-				$date->modify('+' . $mandateDuration . ' second');
+
+				$date = new DateTime(Utils::now());
+				$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
 				$election->dElection = $date->format('Y-m-d H:i:s');
-				$this->dLastElection = $date->format('Y-m-d H:i:s');
+
 				ASM::$elm->add($election);
 				ASM::$elm->changeSession($S_ELM);
 				$this->electionStatement = self::CAMPAIGN;
@@ -206,10 +223,10 @@ class Color {
 			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + self::CAMPAIGNTIME) {
 				$_ELM = ASM::$elm->getCurrentSession();
 				ASM::$elm->newSession();
-				ASM::$elm->load(array('rColor' => $this->id), array('id DESC'), array('0', '1'));
+				ASM::$elm->load(array('rColor' => $this->id), array('id', 'DESC'), array('0', '1'));
 				$this->ballot(ASM::$elm->get());
 				$this->electionStatement = self::MANDATE;
-				$this->dLastElection = Utils::now();
+				$this->dLastElection = ASM::$elm->get()->dElection;
 
 				ASM::$elm->changeSession($_ELM);
 			}

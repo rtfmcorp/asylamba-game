@@ -89,12 +89,14 @@ class VoteManager extends Manager {
 			SET
 				rCandidate = ?,
 				rPlayer = ?,
+				rElection = ?,
 				dVotation = ?');
 
 			$aw = $qr->execute(array(
 				$newVote->rCandidate,
 				$newVote->rPlayer,
-				utils::now()
+				$newVote->rElection,
+				$newVote->dVotation
 				));
 
 		$newVote->id = $db->lastInsertId();

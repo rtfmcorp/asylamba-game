@@ -88,7 +88,7 @@ class ElectionManager extends Manager {
 
 			$aw = $qr->execute(array(
 				$newElection->rColor,
-				utils::now()
+				$newElection->dElection
 				));
 
 		$newElection->id = $db->lastInsertId();

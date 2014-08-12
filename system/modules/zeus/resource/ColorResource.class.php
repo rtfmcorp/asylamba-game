@@ -17,7 +17,7 @@ class ColorResource {
 
 	public static function getInfo($id, $info) {
 		if ($id <= count(self::$colors)) {
-			if (in_array($info, array('id', 'officialName', 'popularName', 'government', 'factionPoint', 'status', 'devise', 'desc1', 'desc2', 'desc3', 'desc4'))) {
+			if (in_array($info, array('id', 'officialName', 'popularName', 'government', 'factionPoint', 'status', 'devise', 'desc1', 'desc2', 'desc3', 'desc4', 'mandateDuration'))) {
 				return self::$colors[$id - 1][$info];
 			} else {
 				return FALSE;

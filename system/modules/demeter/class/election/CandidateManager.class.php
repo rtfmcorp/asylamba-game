@@ -51,10 +51,10 @@ class CandidateManager extends Manager {
 			$candidate->id = $awCandidate['id'];
 			$candidate->rElection = $awCandidate['rElection'];
 			$candidate->rPlayer = $awCandidate['rPlayer'];
-			$$candidate->chiefChoice = $awCandidate['chiefChoice'];;
-			$$candidate->treasurerChoice = $awCandidate['treasurerChoice'];0;
-			$$candidate->warlordChoice = $awCandidate['warlordChoice'];;
-			$$candidate->ministerChoice = $awCandidate['ministerChoice'];;
+			$candidate->chiefChoice = $awCandidate['chiefChoice'];
+			$candidate->treasurerChoice = $awCandidate['treasurerChoice'];
+			$candidate->warlordChoice = $awCandidate['warlordChoice'];
+			$candidate->ministerChoice = $awCandidate['ministerChoice'];
 			$candidate->program = $awCandidate['program'];
 			$candidate->dPresentation = $awCandidate['dPresentation'];
 
@@ -87,7 +87,7 @@ class CandidateManager extends Manager {
 				$candidate->treasurerChoice,
 				$candidate->warlordChoice,
 				$candidate->ministerChoice,
-				Utils::$now(),
+				$candidate->dPresentation,
 				$candidate->id
 			));
 		}
@@ -114,8 +114,8 @@ class CandidateManager extends Manager {
 				$newCandidate->treasurerChoice,
 				$newCandidate->warlordChoice,
 				$newCandidate->ministerChoice,
-				$newCandidate->rProgram,
-				utils::now()
+				$newCandidate->program,
+				$newCandidate->dPresentation
 				));
 
 		$newCandidate->id = $db->lastInsertId();
