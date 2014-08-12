@@ -1,4 +1,20 @@
 <?php
+# inclusion des modules
+include_once DEMETER;
+
+# factionNav component
+$color_factionNav = CTR::$data->get('playerInfo')->get('color');
+
+$S_COL1 = ASM::$clm->getCurrentSession();
+ASM::$clm->newSession();
+ASM::$clm->load(array('id' => $color_factionNav));
+
+if (ASM::$clm->size() == 1) {
+	$faction = ASM::$clm->get(0);
+} else {
+	CTR::redirect('profil');
+}
+
 # background paralax
 echo '<div id="background-paralax" class="profil"></div>';
 
@@ -8,13 +24,6 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
-	# inclusion des modules
-	include_once DEMETER;
-
-	# factionNav component
-	$color_factionNav = CTR::$data->get('playerInfo')->get('color');
-	#include COMPONENT . 'demeter/factionNav.php';
-
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'forum') {
 		# forum component
 		include COMPONENT . 'demeter/forum/forum.php';
@@ -66,9 +75,37 @@ echo '<div id="content">';
 		} elseif (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'create') {
 			# créer un topic
 			include COMPONENT . 'demeter/forum/createTopic.php';
+		} else {
+			include COMPONENT . 'default.php';
 		}
 
 		ASM::$tom->changeSession($S_TOM1);
+	} elseif (CTR::$get->get('view') == 'government') {
+		include_once ZEUS;
+
+		$S_PAM_1 = ASM::$pam->getCurrentSession();
+		$S_PAM_N3 = ASM::$pam->newSession(FALSE);
+		ASM::$pam->load(
+			array('rColor' => CTR::$data->get('playerInfo')->get('color')),
+			array('status', 'DESC'),
+			array(0, 3)
+		);
+
+		$S_PAM_N2 = ASM::$pam->newSession(FALSE);
+		ASM::$pam->load(
+			array('rColor' => CTR::$data->get('playerInfo')->get('color'), 'status' => PAM_PARLIAMENT),
+			array('factionPoint', 'DESC')
+		);
+
+		$PLAYER_GOV_TOKEN = $S_PAM_N3;
+		include COMPONENT . 'demeter/government/government.php';
+		$PLAYER_SENATE_TOKEN = $S_PAM_N2 ;
+		include COMPONENT . 'demeter/government/senate.php';
+
+		ASM::$pam->changeSession($S_PAM_1);
+	} elseif (CTR::$get->get('view') == 'election' && in_array($faction->electionStatement, array(Color::CAMPAIGN, Color::ELECTION))) {
+		include COMPONENT . 'default.php';
+		#
 	} elseif (CTR::$get->get('view') == 'player') {
 		# vue des joueurs, a supprimer
 
@@ -121,4 +158,6 @@ echo '<div id="content">';
 		CTR::redirect('404');
 	}
 echo '</div>';
+
+ASM::$clm->changeSession($S_COL1);
 ?>

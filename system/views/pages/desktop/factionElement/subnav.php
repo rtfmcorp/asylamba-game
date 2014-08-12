@@ -11,6 +11,28 @@ echo '<div id="subnav">';
 			echo '</span>';
 		echo '</a>';
 
+		$active = (CTR::$get->get('view') == 'government') ? 'active' : '';
+		echo '<a href="' . APP_ROOT . 'faction/view-government" class="item ' . $active . '">';
+			echo '<span class="picto">';
+				echo '<img src="' . MEDIA . 'faction/nav/forum.png" alt="" />';
+			echo '</span>';
+			echo '<span class="content skin-1">';
+				echo '<span>Gouvernement';
+			echo '</span>';
+		echo '</a>';
+
+		if (in_array($faction->electionStatement, array(Color::CAMPAIGN, Color::ELECTION))) {
+			$active = (CTR::$get->get('view') == 'election') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'faction/view-election" class="item ' . $active . '">';
+				echo '<span class="picto">';
+					echo '<img src="' . MEDIA . 'faction/nav/forum.png" alt="" />';
+				echo '</span>';
+				echo '<span class="content skin-1">';
+					echo '<span>Election';
+				echo '</span>';
+			echo '</a>';
+		}
+
 		$active = (CTR::$get->get('view') == 'player') ? 'active' : '';
 		echo '<a href="' . APP_ROOT . 'faction/view-player" class="item ' . $active . '">';
 			echo '<span class="picto">';
