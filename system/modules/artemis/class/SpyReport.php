@@ -15,6 +15,13 @@ class SpyReport {
 	const TYP_NOT_CAUGHT = 0;
 	const TYP_ANONYMOUSLY_CAUGHT = 1;
 	const TYP_CAUGHT = 2;
+
+	const STEP_RESOURCES = 10;
+	const STEP_FLEET = 20;
+	const STEP_COMMANDER = 40;
+	const STEP_PEV = 60;
+	const STEP_MOVEMENT = 80;
+	const STEP_ARMY = 95;
 	
 	# attributes
 	public $id = 0; 

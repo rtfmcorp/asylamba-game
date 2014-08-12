@@ -22,7 +22,7 @@
 		border-radius: 3px;
 		background: @medium;
 
-		a {
+		a, span {
 			display: inline-block;
 			line-height: 32px;
 			padding: 0 15px;
@@ -30,9 +30,16 @@
 			text-decoration: none;
 			color: white;
 
-			&:hover, &:focus {
-				background: rgba(0, 0, 0, .25);
+			img {
+				position: relative;
+				top: -2px;
+				vertical-align: middle;
+				height: 18px; width: 18px;
 			}
+		}
+
+		a:hover, a:focus {
+			background: rgba(0, 0, 0, .25);
 		}
 
 		form {
@@ -167,6 +174,82 @@
 				border: none;
 				border-top: solid 1px #202020;
 			}
+		}
+	}
+
+	.resources {
+		position: absolute;
+		bottom: 32px; right: 190px;
+		text-align: right;
+
+		strong {
+			display: block;
+			font-size: 22px;
+		}
+	}
+
+	&.color0 {
+		.line-help { background: #202020; }
+		.toolbar { background: #0A0A0A; }
+		.commander {
+			&.full img { box-shadow: 0 0 4px white, 0 0 0 2px #202020; }
+			&.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px #202020; }
+		}
+	}
+	&.color1 {
+		.line-help { background: @dark-1; }
+		.toolbar { background: @medium-1; }
+		.commander {
+			&.full img { box-shadow: 0 0 4px white, 0 0 0 2px @medium-1; }
+			&.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px @medium-1; }
+		}
+	}
+	&.color2 {
+		.line-help { background: @dark-2; }
+		.toolbar { background: @medium-2; }
+		.commander {
+			&.full img { box-shadow: 0 0 4px white, 0 0 0 2px @medium-2; }
+			&.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px @medium-2; }
+		}
+	}
+	&.color3 {
+		.line-help { background: @dark-3; }
+		.toolbar { background: @medium-3; }
+		.commander {
+			&.full img { box-shadow: 0 0 4px white, 0 0 0 2px @medium-3; }
+			&.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px @medium-3; }
+		}
+	}
+	&.color4 {
+		.line-help { background: @dark-4; }
+		.toolbar { background: @medium-4; }
+		.commander {
+			&.full img { box-shadow: 0 0 4px white, 0 0 0 2px @medium-4; }
+			&.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px @medium-4; }
+		}
+	}
+	&.color5 {
+		.line-help { background: @dark-5; }
+		.toolbar { background: @medium-5; }
+		.commander {
+			&.full img { box-shadow: 0 0 4px white, 0 0 0 2px @medium-5; }
+			&.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px @medium-5; }
+		}
+	}
+	&.color6 {
+		.line-help { background: @dark-6; }
+		.toolbar { background: @medium-6; }
+		.commander {
+			&.full img { box-shadow: 0 0 4px white, 0 0 0 2px @medium-6; }
+			&.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px @medium-6; }
+		}
+	}
+	&.color7 {
+		.line-help { background: @dark-7; }
+		.toolbar { background: @medium-7; }
+		.commander {
+			&.full img { box-shadow: 0 0 4px white, 0 0 0 2px @medium-7; }
+			&.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px @medium-7; }
 		}
 	}
 }

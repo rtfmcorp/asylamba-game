@@ -1259,7 +1259,7 @@ class Place {
 		$vCommander = new Commander();
 		$vCommander->id = 0;
 		$vCommander->rPlayer = 0;
-		$vCommander->name = 'commandant rebelle';
+		$vCommander->name = 'officier rebelle';
 		$vCommander->avatar = 't3-c4';
 		$vCommander->sexe = 1;
 		$vCommander->age = 42;
