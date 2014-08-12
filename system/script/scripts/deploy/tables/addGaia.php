@@ -66,7 +66,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `place` (
   `coefHistory` float unsigned NOT NULL,
   `resources` int(10) unsigned DEFAULT '0',
   `uPlace` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_place_system1` (`rSystem`),
+  KEY `fk_place_player1` (`rPlayer`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
 
 echo '<h3>Ajout du trigger place</h3>';
@@ -102,10 +104,11 @@ $db->query("CREATE TABLE IF NOT EXISTS `sector` (
   `tax` smallint(5) unsigned NOT NULL DEFAULT '5',
   `population` int(11) NOT NULL,
   `lifePlanet` int(10) unsigned DEFAULT NULL,
-  `name` varchar(255) NOT NULL,
-  `prime` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
+  `name` varchar(255) DEFAULT NULL,
+  `prime` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `fk_sector_color1` (`rColor`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 
 echo '<h3>Ajout du trigger sector</h3>';
 
@@ -137,7 +140,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `system` (
   `xPosition` smallint(5) unsigned DEFAULT NULL,
   `yPosition` smallint(5) unsigned DEFAULT NULL,
   `typeOfSystem` smallint(5) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_system_sector1` (`rSector`),
+  KEY `fk_system_color1` (`rColor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
 
 echo '<h3>Ajout du trigger system</h3>';
