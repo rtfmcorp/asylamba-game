@@ -53,7 +53,7 @@ abstract class GalaxyGenerator {
 			
 			for ($j = $i * 5000; $j < (($i + 1) * 5000) - 1; $j++) { 
 				if (isset(self::$listPlace[$j])) {
-					$qr .= '(' . implode(', ', self::$listPlace[$j]) . ', NOW()), ';
+					$qr .= '(' . implode(', ', self::$listPlace[$j]) . ', "' . Utils::addSecondsToDate(Utils::now(), -259200) . '"), ';
 				}
 			}
 
