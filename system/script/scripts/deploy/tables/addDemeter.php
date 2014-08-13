@@ -111,14 +111,15 @@ $db->query("CREATE TABLE IF NOT EXISTS `color` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
 
 echo '<h3>Remplissage de la table color</h3>';
-$db->query("INSERT INTO `color` (`id`, `alive`, `credits`, `players`, `activePlayers`, `points`, `sectors`, `electionStatement`, `dLastElection`) VALUES
-(1, 1, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00'),
-(2, 1, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00'),
-(3, 1, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00'),
-(4, 1, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00'),
-(5, 1, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00'),
-(6, 1, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00'),
-(7, 1, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00');");
+$qr = $db->prepare("INSERT INTO `color` (`id`, `alive`, `credits`, `players`, `activePlayers`, `points`, `sectors`, `electionStatement`, `dLastElection`) VALUES
+(1, 1, 0, 0, 0, 0, 0, 0, ?),
+(2, 1, 0, 0, 0, 0, 0, 0, ?),
+(3, 1, 0, 0, 0, 0, 0, 0, ?),
+(4, 1, 0, 0, 0, 0, 0, 0, ?),
+(5, 1, 0, 0, 0, 0, 0, 0, ?),
+(6, 1, 0, 0, 0, 0, 0, 0, ?),
+(7, 1, 0, 0, 0, 0, 0, 0, ?);");
+$qr->execute(array(Utils::now(), Utils::now(), Utils::now(), Utils::now(), Utils::now(), Utils::now(), Utils::now()));
 
 echo '<br /><hr />';
 ?>

@@ -12,6 +12,8 @@ Class PointLocation {
 		for ($i = 0; $i < count($polygon); $i += 2) {
 			$vertices[] = array('x' => $polygon[$i], 'y' => $polygon[$i + 1]);
 		}
+		# Add the first at the end to close the polygon
+		$vertices[] = array('x' => $polygon[0], 'y' => $polygon[1]);
 
 		# Check if the point sits exactly on a vertex
 		if ($this->pointOnVertex == TRUE and $this->pointOnVertex($point, $vertices) == TRUE) {
@@ -23,7 +25,7 @@ Class PointLocation {
 		$intersections = 0; 
 		$verticesCount = count($vertices);
 
-		for ($i=1; $i < $verticesCount; $i++) {
+		for ($i = 1; $i < $verticesCount; $i++) {
 			$vertex1 = $vertices[$i - 1]; 
 			$vertex2 = $vertices[$i];
 
