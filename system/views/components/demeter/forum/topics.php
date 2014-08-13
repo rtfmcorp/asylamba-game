@@ -9,8 +9,8 @@
 	# [{topic}] 	topic_topics
 
 echo '<div class="component topic">';
-	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'orbitalbase/situation.png" alt="">';
+	echo '<div class="head skin-4">';
+		echo '<img src="' . MEDIA . 'orbitalbase/situation.png" alt="test">';
 		echo '<h2>' . ForumResources::getInfo($forum_topics, 'name') . '</h2>';
 		echo '<em>' . ForumResources::getInfo($forum_topics, 'shortDescription') . '</em>';
 	echo '</div>';

@@ -34,7 +34,7 @@ echo '<div class="component profil">';
 	echo '</div>';
 echo '</div>';
 
-echo '<div class="component profil">';
+echo '<div class="component profil player size1">';
 	echo '<div class="head skin-2"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
@@ -42,39 +42,60 @@ echo '<div class="component profil">';
 				echo '<span class="value">' . $status[4] . '</span>';
 			echo '</div>';
 
-			if (ASM::$pam->size() - 1 >= 1) {
+			if ((ASM::$pam->size() - 1) >= 1 && ASM::$pam->get(1)->status == PAM_MINISTER) {
 				$n5 = ASM::$pam->get(1);
-				if ($n5->status == PAM_MINISTER) {
-					echo 'un ministre : ' . $n5->name;
-				} else {
-					echo 'pas de ministre';
-				}
+				echo '<div class="player">';
+					echo '<a href="' . APP_ROOT . 'diary/player-' . $n5->id . '">';
+						echo '<img src="' . MEDIA . 'avatar/small/' . $n5->avatar . '.png" alt="' . $n5->name . '" />';
+					echo '</a>';
+					echo '<span class="title">' . $status[$n5->status - 1] . '</span>';
+					echo '<strong class="name">' . $n5->name . '</strong>';
+					echo '<span class="experience">' . Format::number($n5->factionPoint) . ' de prestige</span>';
+				echo '</div>';
+			} else {
+				echo '<div class="center-box">';
+					echo '<span class="label">Aucun joueur à ce poste</span>';
+				echo '</div>';
 			}
 
 			echo '<div class="center-box">';
 				echo '<span class="value">' . $status[3] . '</span>';
 			echo '</div>';
 
-			if (ASM::$pam->size() - 1 >= 2) {
+			if ((ASM::$pam->size() - 1 >= 2) && ASM::$pam->get(2)->status == PAM_WARLORD) {
 				$n4 = ASM::$pam->get(2);
-				if ($n4->status == PAM_WARLORD) {
-					echo 'un chef de guerre : ' . $n4->name;
-				} else {
-					echo 'pas de chef de guerre';
-				}
+				echo '<div class="player">';
+					echo '<a href="' . APP_ROOT . 'diary/player-' . $n4->id . '">';
+						echo '<img src="' . MEDIA . 'avatar/small/' . $n4->avatar . '.png" alt="' . $n4->name . '" />';
+					echo '</a>';
+					echo '<span class="title">' . $status[$n4->status - 1] . '</span>';
+					echo '<strong class="name">' . $n4->name . '</strong>';
+					echo '<span class="experience">' . Format::number($n4->factionPoint) . ' de prestige</span>';
+				echo '</div>';
+			} else {
+				echo '<div class="center-box">';
+					echo '<span class="label">Aucun joueur à ce poste</span>';
+				echo '</div>';
 			}
 
 			echo '<div class="center-box">';
 				echo '<span class="value">' . $status[2] . '</span>';
 			echo '</div>';
 
-			if (ASM::$pam->size() - 1 >= 3) {
+			if ((ASM::$pam->size() - 1 >= 3) && ASM::$pam->get(3)->status == PAM_TREASURER) {
 				$n3 = ASM::$pam->get(3);
-				if ($n3->status == PAM_TREASURER) {
-					echo 'un trésorier : ' . $n3->name;
-				} else {
-					echo 'pas de trésorier';
-				}
+				echo '<div class="player">';
+					echo '<a href="' . APP_ROOT . 'diary/player-' . $n3->id . '">';
+						echo '<img src="' . MEDIA . 'avatar/small/' . $n3->avatar . '.png" alt="' . $n3->name . '" />';
+					echo '</a>';
+					echo '<span class="title">' . $status[$n3->status - 1] . '</span>';
+					echo '<strong class="name">' . $n3->name . '</strong>';
+					echo '<span class="experience">' . Format::number($n3->factionPoint) . ' de prestige</span>';
+				echo '</div>';
+			} else {
+				echo '<div class="center-box">';
+					echo '<span class="label">Aucun joueur à ce poste</span>';
+				echo '</div>';
 			}
 		echo '</div>';
 	echo '</div>';

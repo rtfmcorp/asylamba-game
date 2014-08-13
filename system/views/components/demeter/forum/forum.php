@@ -7,8 +7,8 @@
 # require
 
 echo '<div class="component nav">';
-	echo '<div class="head skin-2">';
-		echo '<h2>Forum</h2>';
+	echo '<div class="head skin-1">';
+		echo '<h1>Forum</h1>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';

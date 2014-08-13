@@ -105,7 +105,23 @@ echo '<div id="content">';
 		ASM::$pam->changeSession($S_PAM_1);
 	} elseif (CTR::$get->get('view') == 'election' && in_array($faction->electionStatement, array(Color::CAMPAIGN, Color::ELECTION))) {
 		if ($faction->electionStatement == Color::CAMPAIGN) {
+			$S_ELM_1 = ASM::$elm->getCurrentSession();
+			$ELM_CAMPAIGN_TOKEN = ASM::$elm->newSession();
+			ASM::$elm->load(array('rColor' => $faction->id), array('id', 'DESC'), array(0, 1));
+
+			$S_CAM_1 = ASM::$cam->getCurrentSession();
+			$S_CAM_CAN = ASM::$cam->newSession();
+			ASM::$cam->load(array('rElection' => ASM::$elm->get(0)->id));
+
+			$nbCandidate = ASM::$cam->size();
 			include COMPONENT . 'demeter/election/campaign.php';
+
+			for ($i = 0; $i < ASM::$cam->size(); $i++) { 
+				include COMPONENT . 'demeter/election/candidate.php';
+			}
+
+			ASM::$cam->changeSession($S_CAM_1);
+			ASM::$elm->changeSession($S_ELM_1);
 		} elseif ($faction->electionStatement == Color::ELECTION) {
 			include COMPONENT . 'demeter/election/election.php';
 		}
