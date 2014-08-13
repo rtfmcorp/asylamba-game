@@ -62,11 +62,11 @@ class Color {
 		$this->credits = $this->credits + $credit;
 	}
 
-	public function updateStatus() {
+	private function updateStatus() {
 		include_once ZEUS;
 
 		$limit = round($this->players / 4);
-		if ($limit < 20) { $limit = 20; }
+		if ($limit < 10) { $limit = 10; }
 		if ($limit > 40) { $limit = 40; }
 
 		$_PAM1 = ASM::$pam->getCurrentSession();
@@ -86,7 +86,7 @@ class Color {
 		ASM::$pam->changeSession($_PAM1);
 	}
 
-	public function ballot($election) {
+	private function ballot($election) {
 		$royalisticRegime = array(1, 2, 3);
 		$democraticRegime = array(5, 6, 7);
 
@@ -196,6 +196,46 @@ class Color {
 				ASM::$pam->save();
 				ASM::$pam->changeSession($_PAM2);
 			}
+		}
+	}
+
+	private function sendNotif($rPlayer, $department, $hasWin = TRUE) {
+		if ($haswin) {
+			$notif = new Notification();
+				$notif->setRPlayer($this->rPlayer);
+				$notif->setTitle('Vous avez était élu');
+				$notif->addBeg()
+					->addTxt('Le peule a voté pour vous lors des dernières elections. Vous êtes désormais le nouveau')
+					->addStg($commander->getName())
+					->addTxt(' appartenant au joueur ')
+					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
+					->addTxt(' a attaqué votre planète ')
+					->addLnk('map/place-' . $this->id, $this->baseName)
+					->addTxt('.')
+					->addSep()
+					->addTxt('Vous avez repoussé l\'ennemi avec succès.')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
+					->addEnd();
+				ASM::$ntm->add($notif);
+		} else {
+			$notif = new Notification();
+				$notif->setRPlayer($this->rPlayer);
+				$notif->setTitle('Vous n\'avez pas été élu');
+				$notif->addBeg()
+					->addTxt('L\'officier ')
+					->addStg($commander->getName())
+					->addTxt(' appartenant au joueur ')
+					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
+					->addTxt(' a attaqué votre planète ')
+					->addLnk('map/place-' . $this->id, $this->baseName)
+					->addTxt('.')
+					->addSep()
+					->addTxt('Vous avez repoussé l\'ennemi avec succès.')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
+					->addEnd();
+				ASM::$ntm->add($notif);
 		}
 	}
 

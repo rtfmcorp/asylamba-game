@@ -13,10 +13,10 @@
 #Négore
 ##bonus
 - DONE avoir une nouvelle route
-- TODO faire une vente/achat intéressant
+- DONE faire une vente/achat intéressant
 ##malus
 - DONE perdre une route
-- TODO faire un vente/achat pas intéressant
+- DONE faire un vente/achat pas intéressant
 
 #Cardan
 ##bonus

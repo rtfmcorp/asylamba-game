@@ -112,14 +112,15 @@ $db->query("CREATE TABLE IF NOT EXISTS `color` (
 
 echo '<h3>Remplissage de la table color</h3>';
 $qr = $db->prepare("INSERT INTO `color` (`id`, `alive`, `credits`, `players`, `activePlayers`, `points`, `sectors`, `electionStatement`, `dLastElection`) VALUES
-(1, 1, 0, 0, 0, 0, 0, 0, ?),
-(2, 1, 0, 0, 0, 0, 0, 0, ?),
-(3, 1, 0, 0, 0, 0, 0, 0, ?),
-(4, 1, 0, 0, 0, 0, 0, 0, ?),
-(5, 1, 0, 0, 0, 0, 0, 0, ?),
-(6, 1, 0, 0, 0, 0, 0, 0, ?),
-(7, 1, 0, 0, 0, 0, 0, 0, ?);");
-$qr->execute(array(Utils::now(), Utils::now(), Utils::now(), Utils::now(), Utils::now(), Utils::now(), Utils::now()));
+(1, 1, 0, 0, 0, 0, 0, 1, ?),
+(2, 1, 0, 0, 0, 0, 0, 1, ?),
+(3, 1, 0, 0, 0, 0, 0, 1, ?),
+(4, 1, 0, 0, 0, 0, 0, 1, ?),
+(5, 1, 0, 0, 0, 0, 0, 1, ?),
+(6, 1, 0, 0, 0, 0, 0, 1, ?),
+(7, 1, 0, 0, 0, 0, 0, 1, ?);");
+$date = Utils::addSecondsToDate(Utils::now(), - 500000);
+$qr->execute(array($date, $date, $date, $date, $date, $date, $date));
 
 echo '<br /><hr />';
 ?>
