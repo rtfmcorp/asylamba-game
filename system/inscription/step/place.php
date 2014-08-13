@@ -33,6 +33,12 @@ echo '<div id="content">';
 			echo '<div class="fix-body">';
 				echo '<div class="body">';
 					echo '<p class="info">Ceci sera par la suite une carte interactive, mais pour l\'instant faites au pif.</p>';
+					if (CTR::$data->get('inscription')->get('ally') == ColorResource::KOVAHK) {
+						echo '<p class="info">Pour être au centre de la guerre durant cette Alpha, nous vous conseillons de choisir le <b>secteur 8</b>. Les attaques prendront moins de temps et il sera plus facile d\'atteindre l\'ennemi.</p>';
+					}
+					if (CTR::$data->get('inscription')->get('ally') == ColorResource::NEGORA) {
+						echo '<p class="info">Pour être au centre de la guerre durant cette Alpha, nous vous conseillons de choisir le <b>secteur 9</b>. Les attaques prendront moins de temps et il sera plus facile d\'atteindre l\'ennemi.</p>';
+					}
 					$db = Database::getInstance();
 				#	$qr = $db->query('SELECT id FROM sector'); // pour pouvoir choisir n'importe quel secteur
 					$qr = $db->query('SELECT id FROM sector WHERE rColor = ' . CTR::$data->get('inscription')->get('ally'));
