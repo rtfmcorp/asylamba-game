@@ -155,9 +155,9 @@ class Place {
 			}
 
 			# TRAVEL
-			include_once ATHENA;
-			$S_OBM_GEN = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession();
+			// include_once ATHENA;
+			// $S_OBM_GEN = ASM::$obm->getCurrentSession();
+			// ASM::$obm->newSession();
 
 			$S_COM_PLACE1 = ASM::$com->getCurrentSession();
 			ASM::$com->newSession();
@@ -169,7 +169,7 @@ class Place {
 					CTC::add($commander->dArrival, $this, 'uTravel', array($commander));
 				}
 			}
-			ASM::$obm->changeSession($S_OBM_GEN);
+			// ASM::$obm->changeSession($S_OBM_GEN);
 			ASM::$com->changeSession($S_COM_PLACE1);
 			
 		}
@@ -637,8 +637,19 @@ class Place {
 			$this->startFight($commander);
 
 			if ($commander->getStatement() !== COM_DEAD) {
+				
+				# attribuer le rPlayer à la Place !
+				$this->rPlayer = $commander->getRPlayer();
+				$this->commanders[] = $commander;
+
+				#attibuer le commander à la place
+				$commander->setRBase($this->id);
+				$commander->setStatement(COM_AFFECTED);
+				$commander->line = 1;
+
 				# créer une Base
 				include_once ATHENA;
+
 				$ob = new OrbitalBase();
 
 				$ob->rPlace = $this->id;
@@ -651,12 +662,10 @@ class Place {
 				$ob->dCreation = Utils::now();
 				$ob->updatePoints();
 
+				$_OBM = ASM::$obm->getCurrentSession();
+				ASM::$obm->newSession();
 				ASM::$obm->add($ob);
-
-				#attibuer le commander à la place
-				$commander->setRBase($this->id);
-				$commander->setStatement(COM_AFFECTED);
-				$commander->line = 1;
+				ASM::$obm->changeSession();
 
 				if ($commander->playerColor == 4 || $commander->playerColor == 5) {
 					$S_PAM = ASM::$pam->getCurrentSession();
@@ -678,9 +687,6 @@ class Place {
 					ASM::$pam->changeSession($S_PAM);
 				}
 
-				# attribuer le rPlayer à la Place !
-				$this->rPlayer = $commander->getRPlayer();
-				$this->commanders[] = $commander;
 
 				if (CTR::$data->get('playerId') == $commander->getRPlayer()) { 
 					CTRHelper::addBase('ob', 
