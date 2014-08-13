@@ -119,17 +119,13 @@ echo '<div id="content">';
 
 				$nbCandidate = ASM::$cam->size();
 				include COMPONENT . 'demeter/election/campaign.php';
-
-				for ($i = 0; $i < ASM::$cam->size(); $i++) { 
-					include COMPONENT . 'demeter/election/candidate.php';
-				}
+				include COMPONENT . 'demeter/election/candidate.php';
 
 				ASM::$cam->changeSession($S_CAM_1);
 				ASM::$elm->changeSession($S_ELM_1);
 			} else {
 				CTR::redirect('404');
 			}
-
 			ASM::$vom->changeSession($S_VOM_1);
 		} elseif ($faction->electionStatement == Color::ELECTION) {
 			$S_ELM_1 = ASM::$elm->getCurrentSession();
@@ -148,9 +144,7 @@ echo '<div id="content">';
 			include COMPONENT . 'demeter/election/election.php';
 
 			$rElection = ASM::$elm->get(0)->id;
-			for ($i = 0; $i < ASM::$cam->size(); $i++) { 
-				include COMPONENT . 'demeter/election/candidate.php';
-			}
+			include COMPONENT . 'demeter/election/candidate.php';
 
 			ASM::$cam->changeSession($S_CAM_1);
 			ASM::$elm->changeSession($S_ELM_1);
