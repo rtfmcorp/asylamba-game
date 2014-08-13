@@ -17,16 +17,21 @@ echo '<div class="component profil">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<div class="faction-flag color-' . $f->rFaction . '"></div>';
 			echo '<div class="center-box">';
-				echo '<span class="label">Meilleure faction</span>';
-				echo '<span class="value">' . ColorResource::getInfo($f->rFaction, 'popularName') . '</span>';
+				echo '<span class="value">Meilleure faction</span>';
+				echo '<span class="label">' . ColorResource::getInfo($f->rFaction, 'popularName') . '</span>';
+			echo '</div>';
+
+			echo '<div class="profil-flag color-' . $f->rFaction . '">';
+				echo '<img ';
+					echo 'src="' . MEDIA . 'ally/big/color' . $f->rFaction . '.png" ';
+					echo 'alt="" ';
+				echo '/>';
 			echo '</div>';
 
 			echo '<div class="center-box">';
 				echo '<span class="label">' . ColorResource::getInfo($f->rFaction, 'devise') . '</span>';
 			echo '</div>';
-
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
