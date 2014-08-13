@@ -1,6 +1,9 @@
 <?php
-$S_CAM_1 = ASM::$cam->getCurrentSession();
+$S_CAM_CAN = ASM::$cam->getCurrentSession();
 ASM::$cam->changeSession($S_CAM_CAN);
+
+$S_VOM_CAN = ASM::$vom->getCurrentSession();
+ASM::$vom->changeSession($VOM_ELC_TOKEN);
 
 $hasIPresented = TRUE;
 for ($i = 0; $i < ASM::$cam->size(); $i++) { 
@@ -10,7 +13,12 @@ for ($i = 0; $i < ASM::$cam->size(); $i++) {
 	}
 }
 
-if (ASM::$cam->size() == 0 || $hasIPresented) {
+$hasVoted = FALSE;
+if (ASM::$vom->size() == 1) {
+	$hasVoted = TRUE;
+}
+
+if ($faction->electionStatement == Color::CAMPAIGN && (ASM::$cam->size() == 0 || $hasIPresented)) {
 	echo '<div class="component new-message">';
 		echo '<div class="head skin-2">';
 			echo '<h2>Présentez-vous</h2>';
@@ -40,17 +48,37 @@ for ($i = 0; $i < ASM::$cam->size(); $i++) {
 		echo '</div>';
 		echo '<div class="fix-body">';
 			echo '<div class="body">';
-				echo '<div class="center-box">';
-					echo '<span class="label">Se présente</span>';
-				echo '</div>';
+				if ($faction->electionStatement == Color::ELECTION) {
+					echo '<div class="build-item">';
+						if ($hasVoted) {
+							if (ASM::$vom->get()->rCandidate == $candidat->id) {
+								echo '<span class="button disable" style="text-align: center;">';
+									echo '<span class="text" style="line-height: 35px;">Vote donné</span>';
+								echo '</span>';
+							} else {
+								echo '<span class="button disable" style="text-align: center;">';
+									echo '<span class="text" style="line-height: 35px;">---</span>';
+								echo '</span>';
+							}
+						} else {
+							echo '<a class="button" href="' . APP_ROOT . 'action/a-vote/relection-' . $rElection . '/rcandidate-' . $candidat->id . '" style="text-align: center;">';
+								echo '<span class="text" style="line-height: 35px;">Voter</span>';
+							echo '</a>';
+						}
+					echo '</div>';
+				} else {
+					echo '<div class="center-box">';
+						echo '<span class="label">Se présente</span>';
+					echo '</div>';
+				}
 
 				echo '<div class="player">';
 					echo '<a href="' . APP_ROOT . 'diary/player-' . $candidat->id . '">';
-						echo '<img src="' . MEDIA . 'avatar/small/' . $candidat->id . '.png" alt="' . $candidat->id . '" />';
+						echo '<img src="' . MEDIA . 'avatar/small/' . $candidat->avatar . '.png" alt="' . $candidat->name . '" />';
 					echo '</a>';
-					echo '<span class="title">Titre ' . $status[3 - 1] . '</span>';
-					echo '<strong class="name">Nom ' . $candidat->id . '</strong>';
-					echo '<span class="experience">' . Format::number($candidat->id) . ' de prestige</span>';
+					echo '<span class="title">' . $status[$candidat->status - 1] . '</span>';
+					echo '<strong class="name"> ' . $candidat->name . '</strong>';
+					echo '<span class="experience">' . Format::number($candidat->factionPoint) . ' de prestige</span>';
 				echo '</div>';
 
 				echo '<div class="center-box">';
@@ -64,4 +92,5 @@ for ($i = 0; $i < ASM::$cam->size(); $i++) {
 }
 
 ASM::$cam->changeSession($S_CAM_1);
+ASM::$vom->changeSession($S_VOM_CAN);
 ?>
