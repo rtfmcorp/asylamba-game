@@ -19,8 +19,14 @@ class CandidateManager extends Manager {
 		$formatLimit = Utils::arrayToLimit($limit);
 
 		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT c.*
+		$qr = $db->prepare('SELECT c.*,
+			p.name AS pName,
+			p.avatar AS pAvatar,
+			p.factionPoint AS pFactionPoint,
+			p.status AS pStatus
 			FROM candidate AS c
+			LEFT JOIN player AS p
+				ON p.id = c.rPlayer
 			' . $formatWhere .'
 			' . $formatOrder .'
 			' . $formatLimit
@@ -58,6 +64,12 @@ class CandidateManager extends Manager {
 			$candidate->program = $awCandidate['program'];
 			$candidate->dPresentation = $awCandidate['dPresentation'];
 
+			# Jointure
+			$candidate->name = $awCandidate['pName'];
+			$candidate->avatar = $awCandidate['pAvatar'];
+			$candidate->factionPoint = $awCandidate['pFactionPoint'];
+			$candidate->status = $awCandidate['pStatus'];
+			
 			$this->_Add($candidate);
 		}
 	}

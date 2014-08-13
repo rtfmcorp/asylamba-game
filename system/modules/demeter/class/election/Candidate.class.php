@@ -14,6 +14,10 @@ class Candidate {
 	public $id					= 0;
 	public $rElection 			= 0;
 	public $rPlayer				= 0;
+	public $name 				= '';
+	public $avatar 				= '';
+	public $factionPoint 		= 0;
+	public $status 				= 0;
 	public $chiefChoice			= 0;
 	public $treasurerChoice		= 0;
 	public $warlordChoice		= 0;

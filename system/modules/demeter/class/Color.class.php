@@ -101,6 +101,7 @@ class Color {
 		ASM::$pam->changeSession($_PAM1);
 
 		$_VOM = ASM::$vom->getCurrentSession();
+		ASM::$vom->newSession();
 		ASM::$vom->load(array('rElection' => $election->id));
 		$ballot = array();
 
@@ -204,10 +205,10 @@ class Color {
 				$this->updateStatus();
 				$S_ELM = ASM::$elm->getCurrentsession();
 				ASM::$elm->newSession();
-				$election = new Election();	
+				$election = new Election();
 				$election->rColor = $this->id;
 
-				$date = new DateTime(Utils::now());
+				$date = new DateTime($this->dLastElection);
 				$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
 				$election->dElection = $date->format('Y-m-d H:i:s');
 
