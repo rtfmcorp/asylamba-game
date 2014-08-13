@@ -71,7 +71,7 @@ class ColorResource {
 			'desc4' => 'Basé sur système politique très martial et militaire dirigé par un Duc, la société Kovahkarh fait preuve d’une grande discipline et d’une rigueur sans égale. Uni dans un même idéal de victoire et d’expansion, cette faction est une des plus solide de la Galaxie.',
 			'mandateDuration' => 604800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Kovahkarh gagne du prestige en construisant des vaisseaux, en gagnant des combats et en créant des bases militaires. Il en perd lorsqu\'il se fait tuer au combat ou qu\'il perd une de ces bases militaires.',
-			'campaignDesc' => 'Les membres ayant assez de prestige font partie du Sénat. Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction'),
+			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction.<br />Une fois que toutes les candidatures ont été déposées, tous les membres de Kovahk peuvent voter pour le candidat de leur choix'),
 		array(
 			'id' => 3,
 			'officialName' => 'Province de Négora',
