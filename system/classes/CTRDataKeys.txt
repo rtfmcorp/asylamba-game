@@ -10,6 +10,7 @@ LISTE des clés valides dans l'arrayList $data :
 	actionPoint
 	experience
 	level
+	status
 
 - playerBase (arrayList)
 	stackList 'ob' : 'id', 'name', 'sector', 'img'

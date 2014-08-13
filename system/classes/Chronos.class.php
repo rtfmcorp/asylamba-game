@@ -2,10 +2,10 @@
 class Chronos {
 	private static $strateShortName  = 'strate';
 	private static $strateLongName   = 'strate';
-	private static $strateCoeff		 = 4200;
+	private static $strateCoeff		 = 161;
 	private static $segmentShortName = 'segment';
 	private static $segmentLongName  = 'segment';
-	private static $segmentCoeff 	 = 42;
+	private static $segmentCoeff 	 = 24;
 	private static $releveShortName  = 'relève';
 	private static $releveLongName   = 'relève';
 	private static $minuteShortName  = '\'';
@@ -13,7 +13,7 @@ class Chronos {
 	private static $secondShortName  = '\'\'';
 	private static $secondLongName   = 'seconde';
 
-	const REALTIME = '2012-01-10 18:00:00';
+	const REALTIME = '2014-01-10 18:00:00';
 	const PLAYTIME = '16604';
 	
 	/*

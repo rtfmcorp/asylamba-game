@@ -90,16 +90,6 @@ class Color {
 		$royalisticRegime = array(1, 2, 3);
 		$democraticRegime = array(5, 6, 7);
 
-		$_PAM1 = ASM::$pam->getCurrentsession();
-		ASM::$pam->newSession(FALSE);
-		ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF)));
-		for ($i = 0; $i < ASM::$pam->size(); $i++) {
-			ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
-		}
-		ASM::$pam->save();
-
-		ASM::$pam->changeSession($_PAM1);
-
 		$_VOM = ASM::$vom->getCurrentSession();
 		ASM::$vom->newSession();
 		ASM::$vom->load(array('rElection' => $election->id));
@@ -111,6 +101,18 @@ class Color {
 			} else {
 				$ballot[ASM::$vom->get($i)->rCandidate] = 1;
 			}
+		}
+
+		if (count($ballot) > 0) {
+			$_PAM1 = ASM::$pam->getCurrentsession();
+			ASM::$pam->newSession(FALSE);
+			ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF)));
+			for ($i = 0; $i < ASM::$pam->size(); $i++) {
+				ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
+			}
+			ASM::$pam->save();
+
+			ASM::$pam->changeSession($_PAM1);
 		}
 
 		if (in_array($this->id, $royalisticRegime)) {		

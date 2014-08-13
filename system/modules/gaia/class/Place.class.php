@@ -508,6 +508,7 @@ class Place {
 						if ($commander->getStatement() == COM_DEAD) {
 							$report = $this->createReport();
 							$reportIds[] = $report;
+							$nbrBattle++;
 							break;
 						}
 					}
