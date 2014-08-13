@@ -105,10 +105,159 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 		$nextStep += 1;
 	}
 
+	# verify if the next step is already done
+	$nextStepAlreadyDone = FALSE;
+	switch ($nextStep) {
+		case TutorialResource::REFINERY_LEVEL_3 :
+			$S_OBM2 = ASM::$obm->getCurrentSession();
+			ASM::$obm->newSession();
+			ASM::$obm->load(array('rPlayer' => $playerId));
+			for ($i = 0; $i < ASM::$obm->size() ; $i++) { 
+				$ob = ASM::$obm->get($i);
+				if ($ob->levelRefinery >= 3) {
+					$nextStepAlreadyDone = TRUE;
+					break;
+				} else {
+					# verify in the queue
+					$S_BQM2 = ASM::$bqm->getCurrentSession();
+					ASM::$bqm->newSession();
+					ASM::$bqm->load(array('rOrbitalBase' => $ob->rPlace));
+					for ($i = 0; $i < ASM::$bqm->size() ; $i++) { 
+						$bq = ASM::$bqm->get($i);
+						if ($bq->buildingNumber == OrbitalBaseResource::REFINERY AND $bq->targetLevel >= 3) {
+							$nextStepAlreadyDone = TRUE;
+							break;
+						} 
+					}
+					ASM::$bqm->changeSession($S_BQM2);
+				}
+			}
+			ASM::$obm->changeSession($S_OBM2);
+			break;
+		case TutorialResource::REFINERY_MODE_PRODUCTION :
+			$S_OBM2 = ASM::$obm->getCurrentSession();
+			ASM::$obm->newSession();
+			ASM::$obm->load(array('rPlayer' => $playerId));
+			for ($i = 0; $i < ASM::$obm->size() ; $i++) { 
+				$ob = ASM::$obm->get($i);
+				if ($ob->isProductionRefinery == TRUE) {
+					$nextStepAlreadyDone = TRUE;
+					break;
+				}
+			}
+			ASM::$obm->changeSession($S_OBM2);
+			break;
+		case TutorialResource::DOCK1_LEVEL_1 :
+			$S_OBM2 = ASM::$obm->getCurrentSession();
+			ASM::$obm->newSession();
+			ASM::$obm->load(array('rPlayer' => $playerId));
+			for ($i = 0; $i < ASM::$obm->size() ; $i++) { 
+				$ob = ASM::$obm->get($i);
+				if ($ob->levelDock1 >= 1) {
+					$nextStepAlreadyDone = TRUE;
+					break;
+				} else {
+					# verify in the queue
+					$S_BQM2 = ASM::$bqm->getCurrentSession();
+					ASM::$bqm->newSession();
+					ASM::$bqm->load(array('rOrbitalBase' => $ob->rPlace));
+					for ($i = 0; $i < ASM::$bqm->size() ; $i++) { 
+						$bq = ASM::$bqm->get($i);
+						if ($bq->buildingNumber == OrbitalBaseResource::DOCK1 AND $bq->targetLevel >= 1) {
+							$nextStepAlreadyDone = TRUE;
+							break;
+						} 
+					}
+					ASM::$bqm->changeSession($S_BQM2);
+				}
+			}
+			ASM::$obm->changeSession($S_OBM2);
+			break;
+		case TutorialResource::TECHNOSPHERE_LEVEL_1 :
+			$S_OBM2 = ASM::$obm->getCurrentSession();
+			ASM::$obm->newSession();
+			ASM::$obm->load(array('rPlayer' => $playerId));
+			for ($i = 0; $i < ASM::$obm->size() ; $i++) { 
+				$ob = ASM::$obm->get($i);
+				if ($ob->levelTechnosphere >= 1) {
+					$nextStepAlreadyDone = TRUE;
+					break;
+				} else {
+					# verify in the queue
+					$S_BQM2 = ASM::$bqm->getCurrentSession();
+					ASM::$bqm->newSession();
+					ASM::$bqm->load(array('rOrbitalBase' => $ob->rPlace));
+					for ($i = 0; $i < ASM::$bqm->size() ; $i++) { 
+						$bq = ASM::$bqm->get($i);
+						if ($bq->buildingNumber == OrbitalBaseResource::TECHNOSPHERE AND $bq->targetLevel >= 1) {
+							$nextStepAlreadyDone = TRUE;
+							break;
+						} 
+					}
+					ASM::$bqm->changeSession($S_BQM2);
+				}
+			}
+			ASM::$obm->changeSession($S_OBM2);
+			break;
+		case TutorialResource::SHIP0_UNBLOCK :
+			include_once PROMETHEE;
+			$tech = new Technology($playerId);
+			if ($tech->getTechnology(Technology::SHIP0_UNBLOCK) == 1) {
+				$nextStepAlreadyDone = TRUE;
+			} else {
+				# verify in the queue
+				$S_TQM2 = ASM::$tqm->getCurrentSession();
+				ASM::$tqm->newSession();
+				ASM::$tqm->load(array('rPlayer' => $playerId));
+				for ($i = 0; $i < ASM::$tqm->size() ; $i++) { 
+					$tq = ASM::$tqm->get($i);
+					if ($tq->technology == Technology::SHIP0_UNBLOCK) {
+						$nextStepAlreadyDone = TRUE;
+						break;
+					} 
+				}
+				ASM::$tqm->changeSession($S_TQM2);
+			}
+			break;
+		case TutorialResource::BUILD_SHIP0 :
+			# verify in the queue
+			$S_SQM2 = ASM::$sqm->getCurrentSession();
+			ASM::$sqm->newSession();
+
+			$S_OBM2 = ASM::$obm->getCurrentSession();
+			ASM::$obm->newSession();
+			ASM::$obm->load(array('rPlayer' => $playerId));
+
+			# load the queues
+			for ($i = 0; $i < ASM::$obm->size() ; $i++) { 
+				$ob = ASM::$obm->get($i);
+				ASM::$sqm->load(array('rOrbitalBase' => $ob->id));
+			}
+			ASM::$obm->changeSession($S_OBM2);
+
+			for ($i = 0; $i < ASM::$sqm->size() ; $i++) { 
+				$sq = ASM::$sqm->get($i);
+				if ($sq->shipNumber == ShipResource::PEGASE) {
+					$nextStepAlreadyDone = TRUE;
+					break;
+				} 
+			}
+			ASM::$sqm->changeSession($S_SQM2);
+			break;
+		case TutorialResource::CREATE_COMMANDER :
+			# no need to verify, it's easy to create an other commander
+			break;
+		case TutorialResource::MODIFY_SCHOOL_INVEST :
+			# no need to verify because this action doesn't cost anything
+			break;
+	}
+
+	if (!$nextStepAlreadyDone) {
+		$player->stepDone = FALSE;
+		CTR::$data->get('playerInfo')->add('stepDone', FALSE);
+	}
 	$player->stepTutorial = $nextStep;
 	CTR::$data->get('playerInfo')->add('stepTutorial', $nextStep);
-	$player->stepDone = FALSE;
-	CTR::$data->get('playerInfo')->add('stepDone', FALSE);
 
 	ASM::$pam->changeSession($S_PAM1);
 } else {
