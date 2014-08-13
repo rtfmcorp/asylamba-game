@@ -17,7 +17,7 @@ $ministerChoice = Utils::getHTTPData('ministerchoice');
 include_once DEMETER;
 include_once ZEUS;
 
-if ($rElection !== FALSE) {
+if ($rElection !== FALSE && $program !== FALSE) {
 	$_ELM = ASM::$elm->getCurrentSession();
 	ASM::$elm->newSession();
 	ASM::$elm->load(array('id' => $rElection));
@@ -49,7 +49,7 @@ if ($rElection !== FALSE) {
 							$candidate->warlordChoice = $warlordChoice;
 							$candidate->ministerChoice = $ministerChoice;
 							$candidate->dPresentation = Utils::now();
-							$candidate->program = ($program != FALSE) ? $program : ''; 
+							$candidate->program = $program; 
 							ASM::$cam->add($candidate);
 
 							CTR::$alert->add('Candidature déposée.', ALERT_STD_SUCCESS);

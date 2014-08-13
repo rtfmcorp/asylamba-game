@@ -101,7 +101,7 @@ class ReportManager extends Manager {
 			$report->statementDefender = $awReport['statementDefender'];
 			$report->placeName = $awReport['placeName'];
 
-			$report->setArmies($armies['' . $report->id . '']);
+			$report->setArmies($armies['' . $report->id . '']);//
 
 			$this->_Add($report);
 		}
