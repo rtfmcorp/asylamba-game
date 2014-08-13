@@ -96,6 +96,7 @@ try {
 	if ($faction == 1) {
 		# Empire, générateur niveau 5
 		$ob->setLevelGenerator(5);
+		$pl->stepDone = TRUE;
 	} else {
 		$ob->setLevelGenerator(1);
 	}
