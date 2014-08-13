@@ -71,10 +71,12 @@ class ColorResource {
 			'desc4' => 'Basé sur système politique très martial et militaire dirigé par un Duc, la société Kovahkarh fait preuve d’une grande discipline et d’une rigueur sans égale. Uni dans un même idéal de victoire et d’expansion, cette faction est une des plus solide de la Galaxie.',
 			'mandateDuration' => 604800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Kovahkarh gagne du prestige en construisant des vaisseaux, en gagnant des combats et en créant des bases militaires. Il en perd lorsqu\'il se fait tuer au combat ou qu\'il perd une de ces bases militaires.',
-			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction.<br />Une fois que toutes les candidatures ont été déposées, tous les membres de Kovahk peuvent voter pour le candidat de leur choix'),
+			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
+				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de Kovahk peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Baron de Kovahk. 
+				<br /><br />Le Baron va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la gestion de la Province de Kovahk. Il va devoir déterminer le Financier, le Chef de Guerre et le Ministre de la faction. '),
 		array(
 			'id' => 3,
-			'officialName' => 'Province de Négora',
+			'officialName' => 'Province de Négore',
 			'popularName' => 'Négore',
 			'government' => 'Maison Négienne',
 			'factionPoint' => 'Points de Marchandage',
@@ -86,7 +88,9 @@ class ColorResource {
 			'desc4' => 'Doté de moyens militaires fastueux, la flotte Négienne est rutilante et persuasive, disposant d’une prodigieuse armada de vaisseaux destinée à assurer sa prospérité et son avenir économique dans la Galaxie.',
 			'mandateDuration' => 604800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Négien gagne du prestige en créant des routes commerciales et en faisant des ventes/achats intéressants sur le marché. Par contre il en perd lorsqu\'une de ses routes commerciales est détruite ou qu\'il fait une vente ou un achat pas rentable.',
-			'campaignDesc' => 'explicatif d\'une campagne'),
+			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
+				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de Négore peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Viziduc de Négore. 
+				<br /><br />Le Viziduc va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la gestion de la Province de Négore. Il va devoir déterminer le Financier, le Chef de Guerre et le Ministre de la faction. '),
 		array(
 			'id' => 4,
 			'officialName' => 'Marche de Cardan',
