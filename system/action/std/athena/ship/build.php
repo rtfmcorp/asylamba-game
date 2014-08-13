@@ -26,10 +26,6 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 		} elseif (OrbitalBaseResource::isAShipFromDock2($ship)) {
 			$dockType = 2;
 			$quantity = 1;
-			if (CTR::$data->get('playerInfo')->get('color') == ColorResource::EMPIRE) {
-				# bonus if the player is from the Empire
-				$price -= round($price * ColorResource::BONUS_CARDAN_COLO / 100);
-			}
 		} else {
 			$dockType = 3;
 			$quantity = 1;

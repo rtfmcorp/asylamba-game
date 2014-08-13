@@ -9,7 +9,7 @@ echo '<div class="component player size2">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<p class="info">Bla</p>';
+			echo '<p class="info">' . ColorResource::getInfo(CTR::$data->get('playerInfo')->get('color'), 'senateDesc') . '</p>';
 			for ($i = 0; $i < ASM::$pam->size(); $i++) {
 				$p =  ASM::$pam->get($i);
 
