@@ -86,9 +86,8 @@ echo '<div id="content">';
 		$S_PAM_1 = ASM::$pam->getCurrentSession();
 		$S_PAM_N3 = ASM::$pam->newSession(FALSE);
 		ASM::$pam->load(
-			array('rColor' => CTR::$data->get('playerInfo')->get('color')),
-			array('status', 'DESC'),
-			array(0, 3)
+			array('rColor' => CTR::$data->get('playerInfo')->get('color'), 'status' => array(6, 5, 4, 3)),
+			array('status', 'DESC')
 		);
 
 		$S_PAM_N2 = ASM::$pam->newSession(FALSE);

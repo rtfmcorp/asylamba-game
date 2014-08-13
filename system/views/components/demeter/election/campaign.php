@@ -20,6 +20,8 @@ echo '<div class="component profil">';
 		echo '<div class="body">';
 			echo '<div class="center-box">';
 				echo '<span class="label">Fin de la campagne le</span>';
+				echo '<span class="value">' . Chronos::secondToFormat(Utils::interval(Utils::now(), date('Y-m-d H:i:s', (strtotime($faction->dLastElection) + ColorResource::getInfo($faction->id, 'mandateDuration') + Color::CAMPAIGNTIME)), 's'), 'lite') . '</span>';
+				echo '<span class="value">' . Chronos::transform(Utils::addSecondsToDate($faction->dLastElection, (ColorResource::getInfo($faction->id, 'mandateDuration') + Color::CAMPAIGNTIME)), FALSE, TRUE) . '</span>';
 				echo '<span class="value">' . Utils::addSecondsToDate($faction->dLastElection, (ColorResource::getInfo($faction->id, 'mandateDuration') + Color::CAMPAIGNTIME)) . '</span>';
 			echo '</div>';
 
