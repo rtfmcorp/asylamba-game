@@ -62,7 +62,7 @@ echo '<div id="content">';
 						echo '<blockquote>' . ColorResource::getInfo($ally, 'devise') . '</blockquote>';
 						echo '<div class="text-box">';
 							echo '<h3>Bonus & Malus de faction</h3>';
-							echo '<p>pas encore implémenté</p>';
+							echo '<p>' . ColorResource::getInfo($ally, 'bonus') . '</p>';
 						echo '</div>';
 						/*echo '<div class="build-item">';
 							echo '<div class="name">';
