@@ -9,7 +9,7 @@ echo '<div class="component">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<p class="info">text de présentation des elections</p>';
+			echo '<p class="info">' . ColorResource::getInfo(CTR::$data->get('playerInfo')->get('color'), 'campaignDesc') . '</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
