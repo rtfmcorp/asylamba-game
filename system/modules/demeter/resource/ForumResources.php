@@ -14,9 +14,9 @@ Class ForumResources {
 	private static $forums = array(
 		array(
 			'id' => 1,
-			'devName' => 'main',
-			'name' => 'Général',
-			'shortDescription' => 'Discutez de tout et de rien',
+			'devName' => 'war',
+			'name' => 'Plans de bataille',
+			'shortDescription' => 'Planifiez vos batailles, écrasez vos ennemis',
 			'longDescription' =>'',
 			'image' => ''),
 		array(
@@ -28,26 +28,19 @@ Class ForumResources {
 			'image' => ''),
 		array(
 			'id' => 3,
-			'devName' => 'war',
-			'name' => 'Plans de bataille',
-			'shortDescription' => 'Planifiez vos batailles, écrasez vos ennemis',
-			'longDescription' =>'',
-			'image' => ''),
-		array(
-			'id' => 4,
 			'devName' => 'politic',
 			'name' => 'Politique',
 			'shortDescription' => 'Présentez votre programme, votre vision de l\'avenir',
 			'longDescription' =>'',
 			'image' => ''),
 		array(
-			'id' => 5,
+			'id' => 4,
 			'devName' => 'flood',
 			'name' => 'Biastro',
 			'shortDescription' => 'Buvez de la bière et racontez n\'importe quoi',
 			'longDescription' =>'',
 			'image' => ''),
-		array(
+/*		array(
 			'id' => 6,
 			'devName' => 'rp',
 			'name' => 'Maison close',
@@ -60,7 +53,7 @@ Class ForumResources {
 			'name' => 'Maison du Commerce',
 			'shortDescription' => 'Routes commerciales, échanges, prospection ou paris',
 			'longDescription' =>'',
-			'image' => ''),
+			'image' => ''),*/
 	);
 
 	public static function getInfo($id, $info) {

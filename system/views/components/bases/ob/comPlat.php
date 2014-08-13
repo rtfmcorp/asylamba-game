@@ -17,14 +17,14 @@ echo '<div class="component building">';
 		echo '<div class="body">';
 			$active = (!CTR::$get->exist('mode') || CTR::$get->get('mode') == 'market') ? 'active' : '';
 			echo '<a href="' . APP_ROOT . 'bases/view-commercialplateforme/mode-market" class="nav-element ' . $active . '">';
-				echo '<img src="' . MEDIA . 'orbitalbase/generator.png" alt="" />';
+				echo '<img src="' . MEDIA . 'orbitalbase/commercialplateforme.png" alt="" />';
 				echo '<strong>Place du commerce</strong>';
 				echo '<em>Achetez sur le marché</em>';
 			echo '</a>';
 
 			$active = (CTR::$get->get('mode') == 'sell') ? 'active' : '';
 			echo '<a href="' . APP_ROOT . 'bases/view-commercialplateforme/mode-sell" class="nav-element ' . $active . '">';
-				echo '<img src="' . MEDIA . 'orbitalbase/generator.png" alt="" />';
+				echo '<img src="' . MEDIA . 'orbitalbase/commercialplateforme.png" alt="" />';
 				echo '<strong>Salle des ventes</strong>';
 				echo '<em>Vendez sur le marché</em>';
 			echo '</a>';
@@ -38,11 +38,11 @@ echo '<div class="component building">';
 				echo '<em>Gérez vos routes commerciales</em>';
 			echo '</a>';
 
-			$active = (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'resource') ? 'active' : '';
+		/*	$active = (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'resource') ? 'active' : '';
 			echo '<a href="' . APP_ROOT . 'bases/view-commercialplateforme/mode-resource" class="nav-element ' . $active . '">';
 				echo '<img src="' . MEDIA . 'orbitalbase/commercialplateforme.png" alt="" />';
 				echo '<strong>Halle de transfert</strong>';
-				echo '<em>Envoyez des ressources</em>';
+				echo '<em>Envoyez des ressources</em>'; */
 			echo '</a>';
 		echo '</div>';
 	echo '</div>';

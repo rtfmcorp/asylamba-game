@@ -10,7 +10,7 @@
 
 echo '<div class="component topic">';
 	echo '<div class="head skin-4">';
-		echo '<img src="' . MEDIA . 'orbitalbase/situation.png" alt="test">';
+		echo '<img class="main" alt="ressource" src="' . MEDIA . 'orbitalbase/situation.png">';
 		echo '<h2>' . ForumResources::getInfo($forum_topics, 'name') . '</h2>';
 		echo '<em>' . ForumResources::getInfo($forum_topics, 'shortDescription') . '</em>';
 	echo '</div>';
