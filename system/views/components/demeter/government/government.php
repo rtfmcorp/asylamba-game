@@ -35,7 +35,6 @@ echo '<div class="component profil">';
 					echo '<span class="value">Aucun ' . $status[5] . '</span>';
 				echo '</div>';
 			}
-
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
