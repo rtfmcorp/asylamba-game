@@ -137,7 +137,8 @@ class ReportManager extends Manager {
 				importance = ?,
 				statementAttacker = ?,
 				statementDefender = ?,
-				dFight = ?');
+				dFight = ?
+				WHERE id = ?');
 			$aw = $qr->execute(array(
 				$report->rPlayerAttacker,
 				$report->rPlayerDefender,
@@ -163,7 +164,8 @@ class ReportManager extends Manager {
 				$report->importance,
 				$report->statementAttacker,
 				$report->statementDefender,
-				$report->dFight
+				$report->dFight,
+				$report->id
 				)
 			);
 		}

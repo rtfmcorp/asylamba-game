@@ -186,7 +186,6 @@ class CommanderManager extends Manager {
 	//réécrit la base de donnée (à l'issue d'un combat par exemple)
 	public function save() {
 		$commanders = $this->_Save();
-		
 		foreach ($commanders AS $k => $commander) {
 			$db = DataBase::getInstance();
 			$qr = 'UPDATE commander
