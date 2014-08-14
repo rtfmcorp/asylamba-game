@@ -17,7 +17,7 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 			if (ASM::$pam->size() == 0) {
 				CTR::$data->add('inscription', new ArrayList());
 				CTR::$data->get('inscription')->add('bindkey', CTR::$data->get('prebindkey'));
-				#CTR::$data->get('inscription')->add('portalPseudo', $api->data['userInfo']['pseudo']);
+				CTR::$data->get('inscription')->add('portalPseudo', $api->data['userInfo']['pseudo']);
 			} else {
 				header('Location: ' . GETOUT_ROOT . '/profil/message-useralreadysigned');
 				exit();
@@ -37,7 +37,8 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 			# entre 1 et 7
 			# alliance pas défaites
 			# algorythme de fermeture automatique des alliances (auto-balancing)
-		$ally = array(1, 2, 3, 4, 5, 6, 7);
+		$ally = array(2, 3);
+	#	$ally = array(1, 2, 3, 4, 5, 6, 7);
 		if (CTR::$get->exist('ally') && in_array(CTR::$get->get('ally'), $ally)) {
 			CTR::$data->get('inscription')->add('ally', CTR::$get->get('ally'));
 		} elseif (!CTR::$data->get('inscription')->exist('ally')) {
