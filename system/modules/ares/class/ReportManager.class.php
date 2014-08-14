@@ -108,7 +108,7 @@ class ReportManager extends Manager {
 	}
 
 	public function save() {
-		$db = DataBase::getInstance();
+		/*$db = DataBase::getInstance();
 		$reports = $this->_Save();
 
 		foreach ($reports as $report) {
@@ -166,7 +166,7 @@ class ReportManager extends Manager {
 				$report->dFight
 				)
 			);
-		}
+		}*/
 	}
 
 	public function add($newReport) {
