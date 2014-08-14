@@ -35,7 +35,6 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					$duration = Game::getTimeToTravel($home, $place);
 
 					if ($commander->move($place->getId(), $commander->rBase, Commander::MOVE, $length, $duration)) {
-						$commander->dStart = Utils::now();
 						CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
 					}
 				} else {

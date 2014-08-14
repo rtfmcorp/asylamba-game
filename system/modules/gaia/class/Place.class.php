@@ -463,7 +463,7 @@ class Place {
 			$commander->length = NULL;
 
 			if ($this->playerColor != $commander->getPlayerColor()) {
-				for ($i = 0; $i < count($this->commanders); $i++) {
+				for ($i = 0; $i < count($this->commanders) - 1; $i++) {
 					if ($this->commanders[$i + 1]->line < $this->commanders[$i]->line) {
 						$tempCom = $this->commanders[$i];
 						$this->commanders[$i] = $this->commanders[$i + 1];
@@ -560,7 +560,7 @@ class Place {
 				# s'il est mort
 				} else {
 					for ($i = 0; $i < count($this->commanders); $i++) {
-						if ($this->commanders[$i]->getStatement == COM_DEAD) {
+						if ($this->commanders[$i]->statement == COM_DEAD) {
 							unset($this->commanders[$i]);
 							$this->commanders = array_merge($this->commanders);
 						}

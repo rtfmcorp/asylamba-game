@@ -168,7 +168,6 @@ class Squadron {
 			}
 		}
 		$this->squadron = $newSquadron;
-		$this->nbrOfShips--;
 	}
 	
 	private function deleteOffset($i) {

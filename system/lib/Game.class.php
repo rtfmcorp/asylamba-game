@@ -33,7 +33,7 @@ class Game {
 
 	public static function getFleetSpeed() {
 		include_once ARES;
-		return Commander::FLEETSPEED + CTR::$data->get('playerBonus')->get(PlayerBonus::SHIP_SPEED);
+		return Commander::FLEETSPEED;
 	}
 
 	public static function getMaxTravelDistance() {
