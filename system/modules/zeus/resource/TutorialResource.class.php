@@ -183,7 +183,7 @@ class TutorialResource {
 				Si vous êtes en perte faites attention, vous allez épuiser votre réserve de crédits assez rapidement.
 				<br />
 				Déplacez-vous vers la droite pour voir tous les panneaux. Un d\'entre eux s\'appelle "Investissements". 
-				En cliquant sur la patite flèche qui pointe vers le bas, vous verrez les investissements votre planète.
+				En cliquant sur la petite flèche qui pointe vers le bas, vous verrez les investissements votre planète.
 				En cliquant sur la flèche à droite du montant, vous pourrez modifier celui-ci.
 				<br />
 				Changez le montant investi dans l\'école de commandement pour passer à l\'étape suivante.',
