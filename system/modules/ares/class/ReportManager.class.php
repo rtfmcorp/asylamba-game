@@ -108,7 +108,7 @@ class ReportManager extends Manager {
 	}
 
 	public function save() {
-		/*$db = DataBase::getInstance();
+		$db = DataBase::getInstance();
 		$reports = $this->_Save();
 
 		foreach ($reports as $report) {
@@ -137,7 +137,8 @@ class ReportManager extends Manager {
 				importance = ?,
 				statementAttacker = ?,
 				statementDefender = ?,
-				dFight = ?');
+				dFight = ?
+				WHERE id = ?');
 			$aw = $qr->execute(array(
 				$report->rPlayerAttacker,
 				$report->rPlayerDefender,
@@ -163,10 +164,11 @@ class ReportManager extends Manager {
 				$report->importance,
 				$report->statementAttacker,
 				$report->statementDefender,
-				$report->dFight
+				$report->dFight,
+				$report->id
 				)
 			);
-		}*/
+		}
 	}
 
 	public function add($newReport) {
