@@ -650,9 +650,7 @@ class Place {
 
 				# créer une Base
 				include_once ATHENA;
-
 				$ob = new OrbitalBase();
-
 				$ob->rPlace = $this->id;
 				$ob->setRPlayer($commander->getRPlayer());
 				$ob->setName('Base de ' . $commander->getPlayerName());
@@ -666,7 +664,7 @@ class Place {
 				$_OBM = ASM::$obm->getCurrentSession();
 				ASM::$obm->newSession();
 				ASM::$obm->add($ob);
-				ASM::$obm->changeSession();
+				ASM::$obm->changeSession($_OBM);
 
 				if ($commander->playerColor == 4 || $commander->playerColor == 5) {
 					$S_PAM = ASM::$pam->getCurrentSession();
