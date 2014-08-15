@@ -31,9 +31,11 @@ class Game {
 		return ($distance < 1) ? 1 : $distance;
 	}
 
-	public static function getFleetSpeed() {
+	public static function getFleetSpeed($playerId) {
 		include_once ARES;
-		return Commander::FLEETSPEED;
+		$playerBonus = new PlayerBonus($playerId);
+		$playerBonus->load();
+		return Commander::FLEETSPEED + $playerBonus->bonus->get(PlayerBonus::FRIGATE_SPEED) / 100;
 	}
 
 	public static function getMaxTravelDistance() {
@@ -41,13 +43,13 @@ class Game {
 		return round((Commander::MAXTRAVELTIME * self::getFleetSpeed()) / COEFFMOVEINTERSYSTEM);
 	}
 
-	public static function getTimeToTravel($startPlace, $destinationPlace) {
+	public static function getTimeToTravel($playerId, $startPlace, $destinationPlace) {
 		# $startPlace and $destinationPlace are instance of Place
-		return self::getTimeTravel($startPlace->getRSystem(), $startPlace->getPosition(), $startPlace->getXSystem(), $startPlace->getYSystem(),
+		return self::getTimeTravel($playerId, $startPlace->getRSystem(), $startPlace->getPosition(), $startPlace->getXSystem(), $startPlace->getYSystem(),
 									$destinationPlace->getRSystem(), $destinationPlace->getPosition(), $destinationPlace->getXSystem(), $destinationPlace->getYSystem());
 	}
 
-	public static function getTimeTravel($systemFrom, $positionFrom, $xFrom, $yFrom, $systemTo, $positionTo, $xTo, $yTo) {
+	public static function getTimeTravel($playerId, $systemFrom, $positionFrom, $xFrom, $yFrom, $systemTo, $positionTo, $xTo, $yTo) {
 		include_once ARES;
 		if ($systemFrom == $systemTo) {
 			$distance = abs($positionFrom - $positionTo);

@@ -32,7 +32,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					$home = ASM::$plm->getById($commander->getRBase());
 
 					$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
-					$duration = Game::getTimeToTravel($home, $place);
+					$duration = Game::getTimeToTravel($commander->rPlayer, $home, $place);
 
 					if ($commander->move($place->getId(), $commander->rBase, Commander::MOVE, $length, $duration)) {
 						CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
