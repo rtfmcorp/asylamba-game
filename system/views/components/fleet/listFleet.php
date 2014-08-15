@@ -98,7 +98,7 @@ echo '<div class="component size3 list-fleet">';
 									$totalTime = Utils::interval($commander->dStart, $commander->dArrival, 's');
 
 									echo '<div class="progress-ship" data-progress-current-time="' . $passeTime . '" data-progress-total-time="' . $totalTime . '" data-progress-reverse="' . ($reversed ? 'true' : 'false') . '">';
-											echo '<div class="bar" style="width: ' . Format::percent($passeTime, $totalTime) . '%;">';
+											echo '<div class="bar" style="width: ' . Format::percent($passeTime, $totalTime, FALSE) . '%;">';
 											echo $reversed
 												? '<img src="' . MEDIA . 'map/fleet/ship-reversed.png" alt="" class="ship" />'
 												: '<img src="' . MEDIA . 'map/fleet/ship.png" alt="" class="ship" />';

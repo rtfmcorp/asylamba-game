@@ -88,6 +88,9 @@ echo '<div id="content">';
 
 				ASM::$com->changeSession($S_COM_ID);
 				ASM::$obm->changeSession($S_OBM_DOCK);
+			} else {
+				CTR::$alert->add('Cet officier ne vous appartient pas ou n\'existe pas');
+				CTR::redirect('fleet');
 			}
 		}
 
@@ -127,6 +130,7 @@ echo '<div id="content">';
 
 				ASM::$plm->changeSession($S_PLM_SPY);
 			} else {
+				CTR::$alert->add('Ce rapport ne vous appartient pas ou n\'existe pas');
 				CTR::redirect('fleet/view-spyreport');
 			}
 		}  else {
@@ -166,7 +170,7 @@ echo '<div id="content">';
 			ASM::$rpm->newSession();
 			ASM::$rpm->load(array('id' => CTR::$get->get('report')));
 
-			if (ASM::$rpm->size() == 1) {
+			if (ASM::$rpm->size() == 1 && (ASM::$rpm->get()->rPlayerAttacker == CTR::$data->get('playerId') || ASM::$rpm->get()->rPlayerDefender == CTR::$data->get('playerId'))) {
 				include_once ZEUS;
 
 				$S_PAM1 = ASM::$pam->getCurrentSession();
@@ -181,7 +185,11 @@ echo '<div id="content">';
 				include COMPONENT . 'fleet/report.php';
 
 				ASM::$pam->changeSession($S_PAM1);
+			} else {
+				CTR::$alert->add('Ce rapport ne vous appartient pas ou n\'existe pas');
+				CTR::redirect('fleet/view-archive');
 			}
+
 			ASM::$rpm->changeSession($S_RPM2);
 		} else {
 			include COMPONENT . 'default.php';

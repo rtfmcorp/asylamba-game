@@ -81,9 +81,12 @@ class Format {
 		return self::numberFormat($number, $decimals);
 	}
 
-	public static function percent($number, $base) {
+	public static function percent($number, $base, $ceil = TRUE) {
 		return ($base == 0)
 			? 0
-			: ceil(($number / $base) * 100);
+			: ($ceil
+				? ceil(($number / $base) * 100)
+				: ($number / $base) * 100
+			);
 	}
 }

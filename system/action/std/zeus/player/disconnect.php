@@ -5,5 +5,5 @@ CTR::$data->remove('playerBase');
 CTR::$data->remove('playerBonus');
 CTR::$data->remove('playerEvent');
 
-CTR::redirect(GETOUT_ROOT, TRUE);
+CTR::redirect(GETOUT_ROOT . 'profil', TRUE);
 ?>
