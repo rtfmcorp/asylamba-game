@@ -18,7 +18,7 @@ echo '<div class="component topic size2">';
 					echo '<form action="' . APP_ROOT . 'action/a-createtopicforum/rforum-' . CTR::$get->get('forum') . '" method="POST">';
 						echo '<input class="title" type="text" name="title" placeholder="sujet" />';
 						echo '<textarea name="content" placeholder="message"></textarea>';
-						echo '<input type="submit" value="créer le sujet" />';
+						echo '<button>créer le sujet</button>';
 					echo '</form>';
 				echo '</div>';
 			echo '</div>';

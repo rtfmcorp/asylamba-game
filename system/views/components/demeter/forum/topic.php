@@ -14,6 +14,16 @@ echo '<div class="component topic size2">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
+			echo '<div class="message write">';
+				echo '<img src="' . MEDIA . 'avatar/medium/' . CTR::$data->get('playerInfo')->get('avatar') . '.png" alt="' . CTR::$data->get('playerInfo')->get('pseudo') . '" class="avatar" />';
+				echo '<div class="content">';
+					echo '<form action="' . APP_ROOT . 'action/a-writemessageforum/rtopic-' . $topic_topic->id . '" method="POST">';
+						echo '<textarea name="content" placeholder="répondez"></textarea>';
+						echo '<button>envoyer le message</button>';
+					echo '</form>';
+				echo '</div>';
+			echo '</div>';
+			
 			foreach ($message_topic as $m) {
 				if ($m->playerColor > 0) {
 					$status = ColorResource::getInfo($m->playerColor, 'status');
@@ -34,16 +44,6 @@ echo '<div class="component topic size2">';
 					echo '</div>';
 				echo '</div>';
 			}
-
-			echo '<div class="message write">';
-				echo '<img src="' . MEDIA . 'avatar/medium/' . CTR::$data->get('playerInfo')->get('avatar') . '.png" alt="' . CTR::$data->get('playerInfo')->get('pseudo') . '" class="avatar" />';
-				echo '<div class="content">';
-					echo '<form action="' . APP_ROOT . 'action/a-writemessageforum/rtopic-' . $topic_topic->id . '" method="POST">';
-						echo '<textarea name="content" placeholder="répondez"></textarea>';
-						echo '<input type="submit" value="envoyer le message" />';
-					echo '</form>';
-				echo '</div>';
-			echo '</div>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

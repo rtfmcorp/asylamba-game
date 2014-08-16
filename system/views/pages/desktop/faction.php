@@ -29,11 +29,9 @@ echo '<div id="content">';
 		include COMPONENT . 'demeter/forum/forum.php';
 
 		# topics component
-		if (!CTR::$get->exist('forum')) {
-			$forumId = 1;
-		} else {
-			$forumId = CTR::$get->get('forum');
-		}
+		$forumId = !CTR::$get->exist('forum')
+			? 1
+			: CTR::$get->get('forum');
 
 		$S_TOM1 = ASM::$tom->getCurrentSession();
 		ASM::$tom->newSession();
@@ -62,7 +60,7 @@ echo '<div id="content">';
 
 			$S_FMM1 = ASM::$fmm->getCurrentSession();
 			ASM::$fmm->newSession();
-			ASM::$fmm->load(array('rTopic' => $topic_topic->id));
+			ASM::$fmm->load(array('rTopic' => $topic_topic->id), array('dCreation', 'DESC'));
 
 			$message_topic = array();
 			for ($i = 0; $i < ASM::$fmm->size(); $i++) { 

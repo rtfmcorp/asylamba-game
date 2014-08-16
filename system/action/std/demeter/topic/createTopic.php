@@ -17,6 +17,8 @@ if ($title AND $content AND $rForum) {
 	$topic->rForum = $rForum;
 	$topic->rPlayer = CTR::$data->get('playerId');
 	$topic->rColor = CTR::$data->get('playerInfo')->get('color');
+	$topic->dCreation = Utils::now();
+	$topic->dLastMessage = Utils::now();
 
 	$rTopic = ASM::$tom->add($topic);
 
@@ -24,6 +26,8 @@ if ($title AND $content AND $rForum) {
 	$message->rPlayer = CTR::$data->get('playerId');
 	$message->rTopic = $rTopic;
 	$message->edit($content);
+	$message->dCreation = Utils::now();
+	$message->dLastMessage = Utils::now();
 
 	ASM::$fmm->add($message);
 

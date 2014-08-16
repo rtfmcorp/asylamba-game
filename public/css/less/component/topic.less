@@ -1,132 +1,127 @@
-.component.topic .topic {
-	display: block;
-	position: relative;
-	margin: 10px;
-	background: black;
-	border: solid 1px #202020;
-	border-left: solid 5px #4F4F4F;
-	color: white;
-	text-decoration: none;
+.component.topic.report {
+	.set-report .item {
+		.left span {
+			display: block;
+			width: 30px; line-height: 30px;
+			text-align: center;
+			font-size: 15px;
+			margin: 10px; padding: 5px;
+			border-radius: 100%;
+			background: #202020;
+		}
+
+		&.new .left span {
+			background: @medium;
+		}
+	}
 }
-
-.color1 .component.topic .topic.new { border-left: solid 5px #b01e2d; }
-.color2 .component.topic .topic.new { border-left: solid 5px #2f23c0; }
-.color3 .component.topic .topic.new { border-left: solid 5px #ffdb0f; }
-.color4 .component.topic .topic.new { border-left: solid 5px #a935c7; }
-.color5 .component.topic .topic.new { border-left: solid 5px #57c632; }
-.color6 .component.topic .topic.new { border-left: solid 5px #05bed7; }
-.color7 .component.topic .topic.new { border-left: solid 5px #ac5832; }
-
-.component.topic .topic strong {
-	display: inline-block;
-	padding: 7px 10px;
-}
-
-.component.topic .topic .button {
-	position: absolute;
-	display: block;
-	top: 5px; right: 5px;
-	line-height: 20px;
-	padding: 0 5px;
-	text-align: center;
-	border-radius: 3px;
-}
-
-.color1 .component.topic .topic .button { background: #510816; }
-.color2 .component.topic .topic .button { background: #0c0d44; }
-.color3 .component.topic .topic .button { background: #b17a00; }
-.color4 .component.topic .topic .button { background: #310948; }
-.color5 .component.topic .topic .button { background: #24500a; }
-.color6 .component.topic .topic .button { background: #004948; }
-.color7 .component.topic .topic .button { background: #401b13; }
 
 .component.topic .message {
 	position: relative;
 	padding: 0 0 0 80px; margin: 10px;
 	min-height: 70px;
+
+	.avatar {
+		position: absolute;
+		top: 0; left: 0;
+		width: 56px;
+		padding: 6px;
+		border: solid 1px #202020;
+		border-radius: 100%;
+		background: black;
+	}
+
+	.content {
+		position: relative;
+		background: black;
+		border: solid 1px #202020;
+		border-bottom: solid 1px #0A0A0A;
+
+		&:before {
+			position: absolute;
+			content: '';
+			top: 25px; left: -18px;
+			border-style: solid;
+			border-width: 9px;
+			border-color: transparent #202020 transparent transparent;
+		}
+
+		.text {
+			margin: 0; padding: 10px 10px 12px 10px;
+			border-bottom: solid 1px #0A0A0A;
+			color: #efefef;
+
+			a, strong {
+				color: white;
+			}
+
+			a.color1 { color: @light-1; }
+			a.color2 { color: @light-2; }
+			a.color3 { color: @light-3; }
+			a.color4 { color: @light-4; }
+			a.color5 { color: @light-5; }
+			a.color6 { color: @light-6; }
+			a.color7 { color: @light-7; }
+
+			.icon-color {
+				width: 15px;
+			}
+		}
+
+		.footer {
+			margin: 0; padding: 6px 10px;
+			text-align: right;
+			font-size: 12px;
+			color: #CCC;
+
+			a {
+				color: #CCC;
+			}
+		}
+	}
 }
 
-.component.topic .message .avatar {
-	position: absolute;
-	top: 0; left: 0;
-	width: 56px;
-	padding: 6px;
-	border: solid 1px #202020;
-	border-radius: 100%;
-	background: black;
+.component.topic .message.write .content {
+	&:before {
+		left: -17px;
+		border-color: transparent white transparent transparent;
+	}
+
+	textarea {
+		border: none; padding: 5px;
+		width: 487px; height: 120px;
+		max-width: 487px; min-width: 487px;
+		min-height: 50px;
+		font-family: inherit;
+		font-size: 13px;
+	}
+
+	input {
+		margin: 6px;
+		font-family: inherit;
+	}
+
+	.title {
+		border: none;
+		margin: 12px 0 12px 0; padding: 5px;
+		width: 487px; height: 30px;
+		font-family: inherit;
+		font-size: 13px;
+	}
+
+	button {
+		margin: 6px;
+		font-family: inherit;
+		background: @medium;
+		border: none;
+		padding: 4px 8px;
+		color: white;
+		cursor: pointer;
+
+		&:hover, &:focus {
+			background: @dark;
+		}
+	}
 }
 
-.component.topic .message .content {
-	position: relative;
-	background: black;
-	border: solid 1px #202020;
-	border-bottom: solid 1px #0A0A0A;
-}
 
-.component.topic .message .content:before {
-	position: absolute;
-	content: '';
-	top: 25px; left: -18px;
-	border-style: solid;
-	border-width: 9px;
-	border-color: transparent #202020 transparent transparent;
-}
-.component.topic .message.write .content:before {
-	left: -17px;
-	border-color: transparent white transparent transparent;
-}
-
-.component.topic .message .content .text {
-	margin: 0; padding: 10px 10px 12px 10px;
-	border-bottom: solid 1px #0A0A0A;
-	color: #efefef;
-}
-
-.component.topic .message .content .text a,
-.component.topic .message .content .text strong {
-	color: white;
-}
-
-.component.topic .message .content .text a.color1 { color: #b01e2d; }
-.component.topic .message .content .text a.color2 { color: #2f23c0; }
-.component.topic .message .content .text a.color3 { color: #ffdb0f; }
-.component.topic .message .content .text a.color4 { color: #a935c7; }
-.component.topic .message .content .text a.color5 { color: #57c632; }
-.component.topic .message .content .text a.color6 { color: #05bed7; }
-.component.topic .message .content .text a.color7 { color: #ac5832; }
-
-.component.topic .message .content .text .icon-color {
-	width: 15px;
-}
-
-.component.topic .message .content .footer {
-	margin: 0; padding: 6px 10px;
-	text-align: right;
-	font-size: 12px;
-	color: #CCC;
-}
-
-.component.topic .message .content .footer a {
-	color: #CCC;
-}
-
-.component.topic .message.write .content textarea {
-	border: none; padding: 5px;
-	width: 487px; height: 150px;
-	max-width: 487px; min-width: 487px;
-	min-height: 50px;
-	font-family: 'Trebuchet MS', sans-serif;
-	font-size: 13px;
-}
-
-.component.topic .message.write .content input {
-	margin: 6px;
-}
-
-.component.topic .message.write .content .title {
-	border: none;
-	margin: 12px 0 12px 0; padding: 5px;
-	width: 487px; height: 30px;
-	font-family: 'Trebuchet MS', sans-serif;
-	font-size: 13px;
-}

@@ -6,7 +6,7 @@
 include_once DEMETER;
 
 $content = Utils::getHTTPData('content');
-$rTopic = Utils::getHTTPData('rtopic');
+$rTopic  = Utils::getHTTPData('rtopic');
 
 
 if ($rTopic AND $content) {
@@ -17,8 +17,11 @@ if ($rTopic AND $content) {
 		$message = new ForumMessage();
 		$message->rPlayer = CTR::$data->get('playerId');
 		$message->rTopic = $rTopic;
-		$message->edit($content);
+		$message->dCreation = Utils::now();
+		$message->dLastMessage = Utils::now();
 
+		$message->edit($content);
+		
 		ASM::$fmm->add($message);
 
 		ASM::$tom->get()->dLastMessage = Utils::now();
