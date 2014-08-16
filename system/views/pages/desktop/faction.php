@@ -154,7 +154,7 @@ echo '<div id="content">';
 		include_once ZEUS;
 		$S_PAM1 = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession(FALSE);
-		ASM::$pam->load(array('rColor' => CTR::$data->get('playerInfo')->get('color')), array('experience', 'DESC'));
+		ASM::$pam->load(array('rColor' => CTR::$data->get('playerInfo')->get('color')), array('factionPoint', 'DESC'));
 
 		# statPlayer component
 		$nbPlayer_statPlayer = 0;

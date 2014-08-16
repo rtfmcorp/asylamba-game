@@ -22,7 +22,7 @@ echo '<div class="component player size3">';
 					echo '</a>';
 					echo '<span class="title">' . $status[$p->getStatus() - 1] . '</span>';
 					echo '<strong class="name">' . $p->getName() . '</strong>';
-					echo '<span class="experience">niveau ' . $p->getLevel() . ' | ' . Format::numberFormat($p->getExperience()) . ' points</span>';
+					echo '<span class="experience">' . Format::numberFormat($p->factionPoint) . ' points de prestige</span>';
 					if (Utils::interval(Utils::now(), $p->getDLastActivity(), 's') < 600) {
 						echo '<span class="online hb lt" title="est en ligne actuellement"></span>';
 					} elseif (Utils::interval(Utils::now(), $p->getDLastActivity()) > PAM_TIME_ALLY_INACTIVE) {

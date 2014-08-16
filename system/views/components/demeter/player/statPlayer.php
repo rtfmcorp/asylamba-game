@@ -33,7 +33,7 @@ echo '<div class="component">';
 			echo '<hr />';
 
 			echo '<div class="number-box grey">';
-				echo '<span class="label">Moyenne des points des joueurs</span>';
+				echo '<span class="label">Moyenne de l\'expérience des joueurs</span>';
 				echo '<span class="value">' . $avgPointsPlayer_statPlayer . '</span>';
 			echo '</div>';
 			echo '<div class="number-box grey">';
