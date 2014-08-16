@@ -60,7 +60,7 @@ echo '<div id="content">';
 
 			$S_FMM1 = ASM::$fmm->getCurrentSession();
 			ASM::$fmm->newSession();
-			ASM::$fmm->load(array('rTopic' => $topic_topic->id), array('dCreation', 'DESC'));
+			ASM::$fmm->load(array('rTopic' => $topic_topic->id), array('dCreation', 'DESC', 'id', 'DESC'));
 
 			$message_topic = array();
 			for ($i = 0; $i < ASM::$fmm->size(); $i++) { 
