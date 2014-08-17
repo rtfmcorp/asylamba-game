@@ -21,7 +21,7 @@ if ($commanderId !== FALSE) {
 			// vider le commandant
 			$commander->emptySquadrons();
 
-			CTR::$alert->add('Vous avez vider l\'armée menée par votre commandant ' . $commander->getName() . '.', ALERT_STD_SUCCESS);
+			CTR::$alert->add('Vous avez vidé l\'armée menée par votre commandant ' . $commander->getName() . '.', ALERT_STD_SUCCESS);
 		} else {
 			CTR::$alert->add('Vous ne pouvez pas retirer les vaisseaux à un officier en déplacement.', ALERT_STD_ERROR);
 		}

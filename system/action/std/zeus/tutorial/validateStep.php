@@ -92,6 +92,8 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 		}
 
 		ASM::$obm->changeSession($S_OBM1);
+	} else {
+		$alert .= '. ';
 	}
 
 	$alert .= 'La prochaine étape vous attend.';

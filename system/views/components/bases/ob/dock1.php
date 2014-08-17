@@ -194,7 +194,7 @@ echo '<div class="component">';
 			echo '</div>';
 
 			echo '<p class="info" id="info-dock1" style="display:none;">Le hangar de votre chantier vous sert à stocker des vaisseaux. Les vaisseaux 
-			sont stockés directement après leur construction. Si vous ne disposez pas suffisamment de place, vous ne pourrez plus en construire. Faite 
+			sont stockés directement après leur construction. Si vous ne disposez pas suffisamment de place, vous ne pourrez plus en construire. Faites 
 			donc bien attention de vider votre hangar régulièrement.<br />
 			Chaque vaisseau prend une place différente dans votre hangar. Cette place correspond au point équivalent vaisseau (PEV). Le hangar dispose 
 			d’un certain nombre de PEV qui augmente en fonction du niveau de votre chantier.<br />

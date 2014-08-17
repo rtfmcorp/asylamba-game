@@ -65,7 +65,7 @@ class ColorResource {
 		array(
 			'id' => 2,
 			'officialName' => 'Province de Kovahk',
-			'popularName' => 'l’Esseim',
+			'popularName' => 'l’Essaim',
 			'government' => 'Maison des Kovahkarh',
 			'factionPoint' => 'Points de Bataille',
 			'status' => array('Guerrier', 'Dynaste', 'Financier', 'Chef de guerre', 'Ministre', 'Baron'),

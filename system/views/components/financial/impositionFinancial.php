@@ -46,7 +46,7 @@ echo '<div class="component financial">';
 			echo '</ul>';
 
 			echo '<p class="info">Les impôts sont les crédits que vous récoltez auprès de la population de vos planètes. Plus vos planètes sont 
-			grosses en terme de population, plus vous collecterez d’impôt. Ils peuvent être augmentés grâce à la technologie « Economie Sociale de 
+			grosses en terme de population, plus vous collecterez d’impôts. Ils peuvent être augmentés grâce à la technologie « Economie Sociale de 
 			Marché », ce qui vous permettra d’améliorer vos recettes.</p>';
 		echo '</div>';
 	echo '</div>';
