@@ -1,5 +1,5 @@
 #tools .box, #nav .box {
-	a {
+	a, & > span {
 		position: relative;
 		display: inline-block;
 		line-height: 32px;
@@ -10,22 +10,22 @@
 		text-decoration: none;
 		font-variant: small-caps;
 		background: url('src/desktop/button/bButtonMiddle.png') repeat-x;
-	}
 
-	a:before {
-		content: '';
-		position: absolute;
-		top: 0; left: 0;
-		width: 20px; height: 32px;
-		background: url('src/desktop/button/bButtonLeft.png') no-repeat;
-	}
+		&:before {
+			content: '';
+			position: absolute;
+			top: 0; left: 0;
+			width: 20px; height: 32px;
+			background: url('src/desktop/button/bButtonLeft.png') no-repeat;
+		}
 
-	a:after {
-		content: '';
-		position: absolute;
-		top: 0; right: 0;
-		width: 20px; height: 32px;
-		background: url('src/desktop/button/bButtonRight.png') no-repeat;
+		&:after {
+			content: '';
+			position: absolute;
+			top: 0; right: 0;
+			width: 20px; height: 32px;
+			background: url('src/desktop/button/bButtonRight.png') no-repeat;
+		}
 	}
 
 	a.current-base {
@@ -154,9 +154,9 @@
 	a.square img {
 		top: 4px;
 	}
-	a.resource-link {
+	a.resource-link, span.resource-link {
 		width: 110px;
-		font-size: 18px;
+		font-size: 16px;
 
 		img.icon-color {
 			position: relative;

@@ -16,6 +16,12 @@ echo '</div>';
 
 echo '<div id="tools">';
 	# left
+	echo '<div class="box left" style="left: 25px; right: auto;">';
+		echo '<span class="sh releve-timer" data-target="tools-calendar" style="width: 35px; text-align: center;">';
+			echo Chronos::getTimer('i') . ':' . Chronos::getTimer('s');
+		echo '</span>';
+	echo '</div>';
+
 	echo '<div class="box left">';
 		echo '<a href="#" class="resource-link sh" data-target="tools-refinery">' . Format::numberFormat($currentBase->getResourcesStorage()) . ' <img class="icon-color" src="' . MEDIA . 'resources/resource.png" alt="ressources" /></a>';
 		
@@ -69,13 +75,20 @@ echo '<div id="tools">';
 			echo ($outgoingAttack > 0) ? '<span class="number">' . $outgoingAttack . '</span>' : NULL;
 		echo '</a>';
 
-		echo '<a href="#" class="resource-link" style="width: 120px;">';
+		echo '<span class="resource-link" style="width: 120px;">';
 				echo Format::numberFormat(CTR::$data->get('playerInfo')->get('credit'));
 				echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
-		echo '</a>';
+		echo '</span>';
 	echo '</div>';
 
 	# overboxes
+	echo '<div class="overbox left-pic" id="tools-calendar">';
+		echo '<h2>Calendrier</h2>';
+		echo '<div class="overflow">';
+			echo '<p class="info">Nous sommes le ' . Format::ordinalNumber(Chronos::getDate('seg')) . ' segment de la ' . Format::ordinalNumber(Chronos::getDate('str')) . ' strate.</p>';
+		echo '</div>';
+	echo '</div>';
+
 	echo '<div class="overbox left-pic" id="tools-refinery">';
 		echo '<h2>Raffinerie</h2>';
 		echo '<div class="overflow">';
