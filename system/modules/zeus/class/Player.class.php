@@ -392,7 +392,7 @@ class Player {
 			$n->setRPlayer($this->id);
 			$n->addBeg()->addTxt('Félicitations, vous gagnez un niveau, vous êtes ')->addStg('niveau ' . $this->level)->addTxt('.');
 			if ($this->level == 2) {
-				$n->addSep()->addTxt('Attention, à partir de maintenant vous ne bénéficiez plus de la protection des nouveaux arrivants, n\'importe quel joueur pour désormais piller votre planète. ');
+				$n->addSep()->addTxt('Attention, à partir de maintenant vous ne bénéficiez plus de la protection des nouveaux arrivants, n\'importe quel joueur peut désormais piller votre planète. ');
 				$n->addTxt('Pensez donc à développer vos flottes pour vous défendre.');
 			}
 			if ($this->level == 4) {
