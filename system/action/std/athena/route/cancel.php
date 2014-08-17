@@ -46,7 +46,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 
 		//destruction de la route
 		ASM::$crm->deleteById($route);
-		CTR::$alert->add('Route commerciale annulée', ALERT_STD_SUCCESS);
+		CTR::$alert->add('Route commerciale annulée. Vous récupérez les ' . CRM_CANCELROUTE * 100 . '% du montant investi.', ALERT_STD_SUCCESS);
 		ASM::$obm->changeSession($S_OBM1);
 	} else {
 		CTR::$alert->add('impossible d\'annuler une route commerciale', ALERT_STD_ERROR);
