@@ -96,22 +96,6 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				$experience = $transaction->getExperienceEarned();
 				ASM::$pam->get(1)->increaseExperience($experience);
 
-				# gain de prestige
-				$S_TRM = ASM::$trm->getCurrentSession();
-				ASM::$trm->newSession();
-				ASM::$trm->load(array('type' => $transaction->type, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
-				$currentRate = ASM::$trm->get()->currentRate;
-				ASM::$trm->changeSession($S_TRM);
-				$rate = round(Game::calculateRate($transaction->type, $transaction->quantity, $transaction->identifier, $transaction->price) / $currentRate * 100);
-				$points = -(($rate - 100) / Color::COEFFPOINTTRANSACTION);
-
-				if (ASM::$pam->get(0)->rColor == 3) {
-					ASM::$pam->get(0)->factionPoint += $points;
-				}
-				if (ASM::$pam->get(1)->rColor == 3) {
-					ASM::$pam->get(1)->factionPoint -= $points;
-				}
-
 				# load places to compute travel time
 				$S_PLM1 = ASM::$plm->getCurrentSession();
 				ASM::$plm->newSession(ASM_UMODE);
@@ -132,7 +116,16 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				$transaction->dValidation = Utils::now();
 				# update exchange rate
 				$transaction->currentRate = Game::calculateCurrentRate(ASM::$trm->getExchangeRate($transaction->type), $transaction->type, $transaction->quantity, $transaction->identifier, $transaction->price);
+				
+				# gain de prestige
+				$points = -(($transaction->currentRate - 100) / Color::COEFFPOINTTRANSACTION);
 
+				if (ASM::$pam->get(0)->rColor == 3) {
+					ASM::$pam->get(0)->factionPoint += $points;
+				}
+				if (ASM::$pam->get(1)->rColor == 3) {
+					ASM::$pam->get(1)->factionPoint -= $points;
+				}
 				# notif pour le proposeur
 				$n = new Notification();
 				$n->setRPlayer($transaction->rPlayer);
