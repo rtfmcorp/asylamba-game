@@ -95,8 +95,8 @@ echo '<div id="content">';
 		);
 
 		$PLAYER_GOV_TOKEN = $S_PAM_N3;
-		include COMPONENT . 'demeter/government/government.php';
 		$PLAYER_SENATE_TOKEN = $S_PAM_N2 ;
+		include COMPONENT . 'demeter/government/government.php';
 		include COMPONENT . 'demeter/government/senate.php';
 
 		ASM::$pam->changeSession($S_PAM_1);
