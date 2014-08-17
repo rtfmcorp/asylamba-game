@@ -222,7 +222,7 @@ class Game {
 				# 1 resource = x credit
 				$thisRate = $price / $quantity;
 				# dilution of 1%
-				return ($thisRate + (99 * $currentRate)) / 100;
+				return (($quantity * $thisRate) + (50000 * (99 * $currentRate)) / 100) / (50000 + $quantity);
 				break;
 			case Transaction::TYP_SHIP :
 				# 1 resource = x credit
@@ -231,7 +231,7 @@ class Game {
 					$resourceQuantity = ShipResource::getInfo($identifier, 'resourcePrice') * $quantity;
 					$thisRate = $price / $resourceQuantity;
 					# dilution of 1%
-					return ($thisRate + (99 * $currentRate)) / 100;
+					return (($quantity * $thisRate) + (50000 * (99 * $currentRate)) / 100) / (50000 + $quantity);
 				} else {
 					return FALSE;
 				}
@@ -240,7 +240,7 @@ class Game {
 				# 1 experience = x credit
 				$thisRate = $price / $quantity;
 				# dilution of 1%
-				return ($thisRate + (99 * $currentRate)) / 100;
+				return (($quantity * $thisRate) + (50000 * (99 * $currentRate)) / 100) / (50000 + $quantity);
 				break;
 			default :
 				return 0;
