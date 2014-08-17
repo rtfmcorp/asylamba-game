@@ -155,7 +155,7 @@ echo '<div class="component size2 financial">';
 				echo '</td><td>';
 
 				echo '<p class="info">Ces deux colonnes sont un résumé de vos recettes et de vos dépenses pendant la durée d’une relève. Dans la 
-				colonne des recettes vous pouvez voir tous les éléments qui vous rapportent des crédits dans Expansion. Dans la colonne des dépenses,
+				colonne des recettes vous pouvez voir tous les éléments qui vous rapportent des crédits dans Asylamba. Dans la colonne des dépenses,
 				 c’est l’inverse, vous voyez les éléments qui vous coûtent sur vos bases. La différence entre ces deux colonnes vous donne soit une 
 				 perte (sous la colonne des recettes) soit un bénéfice (sous la colonne des dépenses).</p>';
 
