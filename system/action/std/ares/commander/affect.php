@@ -53,6 +53,8 @@ if ($commanderId !== FALSE) {
 		} elseif ($commander->statement == Commander::AFFECTED) {
 			$commander->statement = Commander::INSCHOOL;
 			CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été remis à l\'école', ALERT_STD_SUCCESS);
+			$commander->emptySquadrons();
+			CTR::redirect('bases/view-school');
 		} else {
 			CTR::$alert->add('Le status de votre commandant ne peut pas être modifié bien été remis à l\'école', ALERT_STD_ERROR);
 		}
