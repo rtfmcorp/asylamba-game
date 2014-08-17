@@ -12,7 +12,7 @@ try {
 
 	$pl->setBind(CTR::$data->get('inscription')->get('bindkey'));
 	$pl->setRColor(CTR::$data->get('inscription')->get('ally'));
-	$pl->setName(CTR::$data->get('inscription')->get('pseudo'));
+	$pl->setName(trim(CTR::$data->get('inscription')->get('pseudo')));
 	$pl->setAvatar(CTR::$data->get('inscription')->get('avatar'));
 	$pl->setStatus(1);
 	
