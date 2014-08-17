@@ -32,22 +32,29 @@ if ($commanderId !== FALSE) {
 		ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 1));
 		$nbrLine1 = ASM::$com->size();
 
-		if ($nbrLine2 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'r-line')) {
-			$commander->dAffectation = Utils::now();
-			$commander->statement = Commander::AFFECTED;
-			$commander->line = 2;
+		if ($commander->statement == Commander::INSCHOOL) {
+			if ($nbrLine2 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'r-line')) {
+				$commander->dAffectation = Utils::now();
+				$commander->statement = Commander::AFFECTED;
+				$commander->line = 2;
 
-			CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté en force de réserve', ALERT_STD_SUCCESS);
-			CTR::redirect('fleet/commander-' . $commander->id . '/sftr-2');
-		} elseif ($nbrLine1 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'l-line')) {
-			$commander->dAffectation =Utils::now();
-			$commander->statement = Commander::AFFECTED;
-			$commander->line = 1;
+				CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté en force de réserve', ALERT_STD_SUCCESS);
+				CTR::redirect('fleet/commander-' . $commander->id . '/sftr-2');
+			} elseif ($nbrLine1 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'l-line')) {
+				$commander->dAffectation =Utils::now();
+				$commander->statement = Commander::AFFECTED;
+				$commander->line = 1;
 
-			CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté en force active', ALERT_STD_SUCCESS);
-			CTR::redirect('fleet/commander-' . $commander->id . '/sftr-2');
+				CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté en force active', ALERT_STD_SUCCESS);
+				CTR::redirect('fleet/commander-' . $commander->id . '/sftr-2');
+			} else {
+				CTR::$alert->add('Votre base a dépassé la capacité limite de commandants en activité', ALERT_STD_ERROR);			
+			}
+		} elseif ($commander->statement == Commander::AFFECTED) {
+			$commander->statement = Commander::INSCHOOL;
+			CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été remis à l\'école', ALERT_STD_SUCCESS);
 		} else {
-			CTR::$alert->add('Votre base a dépassé la capacité limite de commandants en activité', ALERT_STD_ERROR);			
+			CTR::$alert->add('Le status de votre commandant ne peut pas être modifié bien été remis à l\'école', ALERT_STD_ERROR);
 		}
 
 		ASM::$com->changeSession($S_COM2);
