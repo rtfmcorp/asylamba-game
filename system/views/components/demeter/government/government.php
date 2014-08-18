@@ -67,9 +67,26 @@ echo '<div class="component profil player size1">';
 					}
 				}
 				if (!$have) {
-					echo '<div class="center-box">';
-						echo '<span class="label">Aucun joueur à ce poste</span>';
-					echo '</div>';
+					if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
+						$S_PAM_DGG2 = ASM::$pam->getCurrentSession();
+						ASM::$pam->changeSession($PLAYER_SENATE_TOKEN);
+
+						echo '<form action="' . APP_ROOT . 'action/a-choosegovernment/department-' . $type . '" method="post" class="choose-government">';
+							echo '<select name="rplayer">';
+								echo '<option value="-1">Choisissez un joueur</option>';
+								for ($j = 0; $j < ASM::$pam->size(); $j++) {
+									echo '<option value="' . ASM::$pam->get($j)->id . '">' . $status[ ASM::$pam->get($i)->status - 1] . ' ' . ASM::$pam->get($j)->name . '</option>';
+								}
+							echo '</select>';
+							echo '<button type="submit">Nommer au poste</button>';
+						echo '</form>';
+
+						ASM::$pam->changeSession($S_PAM_DGG2);
+					} else {
+						echo '<div class="center-box">';
+							echo '<span class="label">Aucun joueur à ce poste</span>';
+						echo '</div>';
+					}
 				}
 			}
 		echo '</div>';
