@@ -19,7 +19,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 		$S_OBM1 = ASM::$obm->getCurrentSession();
 		ASM::$obm->newSession(ASM_UMODE);
 		ASM::$obm->load(array('rPlace' => $baseId, 'rPlayer' => CTR::$data->get('playerId')));
-		$ob  = ASM::$obm->get();
+		$ob = ASM::$obm->get();
 
 		$S_BQM1 = ASM::$bqm->getCurrentSession();
 		ASM::$bqm->newSession(ASM_UMODE);

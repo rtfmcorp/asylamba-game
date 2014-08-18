@@ -115,9 +115,24 @@ class CommanderManager extends Manager {
 					$commander->destinationPlaceName = ($awCommanders[$i]['dpName'] == '') ? 'planète rebelle' : $awCommanders[$i]['dpName'];
 
 				}
+
 				$commander->squadronsIds[] = $awCommanders[$i]['sqId'];
 
-				$commander->armyInBegin[] = array($awCommanders[$i]['sqShip0'], $awCommanders[$i]['sqShip1'], $awCommanders[$i]['sqShip2'], $awCommanders[$i]['sqShip3'], $awCommanders[$i]['sqShip4'], $awCommanders[$i]['sqShip5'], $awCommanders[$i]['sqShip6'], $awCommanders[$i]['sqShip7'], $awCommanders[$i]['sqShip8'], $awCommanders[$i]['sqShip9'], $awCommanders[$i]['sqShip10'], $awCommanders[$i]['sqShip11'], $awCommanders[$i]['sqDCreation'], $awCommanders[$i]['sqDLastModification']);
+				$commander->armyInBegin[] = array(
+					$awCommanders[$i]['sqShip0'], 
+					$awCommanders[$i]['sqShip1'], 
+					$awCommanders[$i]['sqShip2'], 
+					$awCommanders[$i]['sqShip3'], 
+					$awCommanders[$i]['sqShip4'], 
+					$awCommanders[$i]['sqShip5'], 
+					$awCommanders[$i]['sqShip6'], 
+					$awCommanders[$i]['sqShip7'], 
+					$awCommanders[$i]['sqShip8'], 
+					$awCommanders[$i]['sqShip9'], 
+					$awCommanders[$i]['sqShip10'], 
+					$awCommanders[$i]['sqShip11'], 
+					$awCommanders[$i]['sqDCreation'], 
+					$awCommanders[$i]['sqDLastModification']);
 					
 				if ($i == count($awCommanders) - 1 || $awCommanders[$i]['id'] != $awCommanders[$i + 1]['id']) {
 					$commander->setPevInBegin();

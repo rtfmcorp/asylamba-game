@@ -140,10 +140,10 @@ class Player {
 			# load the bonus
 			$playerBonus = new PlayerBonus($this->id);
 			$playerBonus->load();
-			# load the commercial routes
+			# load the commanders
 			$S_COM1 = ASM::$com->getCurrentSession();
 			ASM::$com->newSession();
-			ASM::$com->load(array('c.rPlayer' => $this->id, 'c.statement' => array(COM_AFFECTED, COM_MOVING)), array('c.experience', 'DESC', 'c.statement', 'ASC'));
+			ASM::$com->load(array('c.rPlayer' => $this->id, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING)), array('c.experience', 'DESC', 'c.statement', 'ASC'));
 			# load the researches
 			$S_RSM1 = ASM::$rsm->getCurrentSession();
 			ASM::$rsm->newSession();

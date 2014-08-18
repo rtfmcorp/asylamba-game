@@ -76,7 +76,7 @@ echo '<div class="component financial">';
 				echo '</li>';
 			echo '</ul>';
 
-			echo '<p class="info">Dans la rubrique « Investissements » sont répertoriés tous les investissements relatifs à l’université, à l’école 
+			echo '<p class="info">Dans la rubrique « Investissements » sont répertoriés tous les investissements relatifs à l’école 
 			de commandement et au contre-espionnage. Chacun de ces investissements peuvent être gérés dans leur bâtiment respectif. Faites attention 
 			à ne pas avoir plus d’investissements que de recettes.</p>';
 		echo '</div>';

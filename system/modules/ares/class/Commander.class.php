@@ -376,34 +376,28 @@ class Commander {
 	}
 
 	public function move($rDestinationPlace, $rStartPlace, $travelType, $travelLength, $duration) {
-		// if ($this->statement == 1) {
-			$this->rDestinationPlace = $rDestinationPlace;
-			$this->rStartPlace = $rStartPlace;
-			$this->travelType = $travelType;
-			$this->travelLength = $travelLength;
-			$this->statement = 2;
+		$this->rDestinationPlace = $rDestinationPlace;
+		$this->rStartPlace = $rStartPlace;
+		$this->travelType = $travelType;
+		$this->travelLength = $travelLength;
+		$this->statement = 2;
 
-			$this->dStart = ($travelType != 3) ? Utils::now() : $this->dArrival;
-			$date = new DateTime($this->dStart);
-			$date->modify('+' . $duration . 'second');
-			$this->dArrival = $date->format('Y-m-d H:i:s');
+		$this->dStart = ($travelType != 3) ? Utils::now() : $this->dArrival;
+		$date = new DateTime($this->dStart);
+		$date->modify('+' . $duration . 'second');
+		$this->dArrival = $date->format('Y-m-d H:i:s');
 
-			// ajout de l'event dans le contrôleur // voir avec Jacky s'il faut modifier
-			if (CTR::$data->exist('playerEvent')) {
-				CTR::$data->get('playerEvent')->add(
-					$this->dArrival,
-					EVENT_OUTGOING_ATTACK,
-					$this->id,
-					$this->getEventInfo()
-				);
-			}
+		// ajout de l'event dans le contrôleur // voir avec Jacky s'il faut modifier
+		if (CTR::$data->exist('playerEvent')) {
+			CTR::$data->get('playerEvent')->add(
+				$this->dArrival,
+				EVENT_OUTGOING_ATTACK,
+				$this->id,
+				$this->getEventInfo()
+			);
+		}
 
-			return TRUE;
-		// } else {
-		// 	CTR::$alert->add('Ce commandant est déjà en déplacement ou ne peut pas se déplacer.', ALERT_STD_ERROR);
-		// 	CTR::$alert->add('dans move de Commander', ALERT_BUG_ERROR);
-		// 	return FALSE;
-		// }
+		return TRUE;
 	}
 	
 	public function resultOfFight($isWinner, $enemyCommander) {
@@ -491,7 +485,6 @@ class Commander {
 			$ob = ASM::$obm->get();
 			ASM::$obm->changeSession($S_OBM);
 				
-
 			include_once ZEUS;
 			$playerBonus = 0;
 			if ($this->rPlayer != CTR::$data->get('playerId')) {
@@ -508,14 +501,14 @@ class Commander {
 		}
 
 		# test si il y a des combats
-		if ($this->dArrival <= Utils::now() AND $this->statement == Commander::MOVING AND $this->hasToU) {
+		if ($this->dArrival <= Utils::now() AND $this->statement == self::MOVING AND $this->hasToU) {
 			include_once GAIA;
 
 			$this->hasToU = FALSE;
 
 			$S_PLM = ASM::$plm->getCurrentSession();
 			ASM::$plm->newSession();
-			ASM::$plm->load(array('id' => $this->rDestinationPlace));
+			ASM::$plm->load(array('id' => $this->rDestinationPlace));		
 			$pl = ASM::$plm->get();
 			ASM::$plm->changeSession($S_PLM);
 		}
