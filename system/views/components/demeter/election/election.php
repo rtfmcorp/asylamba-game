@@ -11,7 +11,7 @@ echo '<div class="component profil">';
 		echo '<div class="body">';
 			echo '<div class="center-box">';
 				echo '<span class="label">Fin des élections le</span>';
-				echo '<span class="value">' . Utils::addSecondsToDate($faction->dLastElection, (ColorResource::getInfo($faction->id, 'mandateDuration') + Color::CAMPAIGNTIME)) . '</span>';
+				echo '<span class="value">' . Utils::addSecondsToDate($faction->dLastElection, (ColorResource::getInfo($faction->id, 'mandateDuration') + Color::CAMPAIGNTIME + Color::ELECTIONTIME)) . '</span>';
 			echo '</div>';
 
 			echo '<hr / style="margin-top: 25px;">';
