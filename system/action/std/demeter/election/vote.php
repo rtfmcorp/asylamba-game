@@ -15,7 +15,7 @@ if ($rElection !== FALSE && $rCandidate !== FALSE) {
 	ASM::$elm->load(array('id' => $rElection));
 	$_CAM = ASM::$cam->getCurrentSession();
 	ASM::$cam->newSession();
-	ASM::$cam->load(array('rPlayer' => $rCandidate, 'rElection' => $rElection));
+	ASM::$cam->load(array('id' => $rCandidate, 'rElection' => $rElection));
 
 	if (ASM::$elm->size() > 0) {
 		if (ASM::$cam->size() > 0) {
