@@ -35,23 +35,42 @@ echo '<div id="content">';
 
 		$S_TOM1 = ASM::$tom->getCurrentSession();
 		ASM::$tom->newSession();
-		ASM::$tom->load(
-			array(
-				'rForum' => $forumId, 
-				'rColor' => CTR::$data->get('playerInfo')->get('color'), 
-				'statement' => array(ForumTopic::PUBLISHED, ForumTopic::RESOLVED)
-			),
-			array('dLastMessage', 'DESC'),
-			array(),
-			CTR::$data->get('playerId')
-		);
+		if ($forumId < 20) {
+			ASM::$tom->load(
+				array(
+					'rForum' => $forumId, 
+					'rColor' => CTR::$data->get('playerInfo')->get('color'), 
+					'statement' => array(ForumTopic::PUBLISHED, ForumTopic::RESOLVED)
+				),
+				array('dLastMessage', 'DESC'),
+				array(),
+				CTR::$data->get('playerId')
+			);
+		} else {
+			ASM::$tom->load(
+				array(
+					'rForum' => $forumId,
+					'statement' => array(ForumTopic::PUBLISHED, ForumTopic::RESOLVED)
+				),
+				array('dLastMessage', 'DESC'),
+				array(),
+				CTR::$data->get('playerId')
+			);
+		}
 
 		$topic_topics = array();
 		for ($i = 0; $i < ASM::$tom->size(); $i++) { 
 			$topic_topics[$i] = ASM::$tom->get($i);
 		}
 		$forum_topics = $forumId;
-		include COMPONENT . 'demeter/forum/topics.php';
+
+		if ($forumId < 10) {
+			include COMPONENT . 'demeter/forum/topics.php';
+		} elseif ($forumId >= 10 && $forumId < 20 && CTR::$data->get('playerInfo')->get('status') > 2) {
+			include COMPONENT . 'demeter/forum/topics.php';
+		} elseif ($forumId >= 20 && CTR::$data->get('playerInfo')->get('status') == 6) {
+			include COMPONENT . 'demeter/forum/topics.php';
+		}
 
 		if (CTR::$get->exist('topic')) {
 			# topic component
