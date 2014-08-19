@@ -86,7 +86,7 @@ for ($i = 0; $i < ASM::$cam->size(); $i++) {
 				}
 
 				echo '<div class="player">';
-					echo '<a href="' . APP_ROOT . 'diary/player-' . $candidat->id . '">';
+					echo '<a href="' . APP_ROOT . 'diary/player-' . $candidat->rPlayer . '">';
 						echo '<img src="' . MEDIA . 'avatar/small/' . $candidat->avatar . '.png" alt="' . $candidat->name . '" />';
 					echo '</a>';
 					echo '<span class="title">' . $status[$candidat->status - 1] . '</span>';
@@ -101,7 +101,7 @@ for ($i = 0; $i < ASM::$cam->size(); $i++) {
 				echo '<p class="info">' . $parser->parse($candidat->program) .'</p>';
 			echo '</div>';
 		echo '</div>';
-	echo '</div>';	
+	echo '</div>';
 }
 
 ASM::$cam->changeSession($S_CAM_1);
