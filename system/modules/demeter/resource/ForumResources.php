@@ -10,6 +10,7 @@
  * @update 06.10.13
 */
 
+#id des forums : < 10 = pour tous les gens d'une faction, >= 10 < 20 = pour le gouvernement d'une fac, >= 20 pour les chefs de toutes les factions
 Class ForumResources {
 	private static $forums = array(
 		array(
@@ -40,20 +41,20 @@ Class ForumResources {
 			'shortDescription' => 'Buvez de la bière et racontez n\'importe quoi',
 			'longDescription' =>'',
 			'image' => ''),
-/*		array(
-			'id' => 6,
-			'devName' => 'rp',
-			'name' => 'Maison close',
-			'shortDescription' => 'Ici, le roleplay est de rigueur',
+		array(
+			'id' => 10,
+			'devName' => 'government',
+			'name' => 'Salle du Conseil',
+			'shortDescription' => 'Ici, se déroulent les débats du conseil restreint de la faction',
 			'longDescription' =>'',
 			'image' => ''),
 		array(
-			'id' => 7,
-			'devName' => 'rc',
-			'name' => 'Maison du Commerce',
-			'shortDescription' => 'Routes commerciales, échanges, prospection ou paris',
+			'id' => 20,
+			'devName' => 'chiefes',
+			'name' => 'Ambassade',
+			'shortDescription' => 'Seuls les chefs de chaque faction on accès à l\'ambassade',
 			'longDescription' =>'',
-			'image' => ''),*/
+			'image' => ''),
 	);
 
 	public static function getInfo($id, $info) {
