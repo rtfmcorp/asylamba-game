@@ -233,7 +233,7 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 			# load the queues
 			for ($i = 0; $i < ASM::$obm->size() ; $i++) { 
 				$ob = ASM::$obm->get($i);
-				ASM::$sqm->load(array('rOrbitalBase' => $ob->id));
+				ASM::$sqm->load(array('rOrbitalBase' => $ob->rPlace));
 			}
 			ASM::$obm->changeSession($S_OBM2);
 
