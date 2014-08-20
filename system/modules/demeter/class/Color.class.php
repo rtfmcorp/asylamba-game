@@ -37,7 +37,7 @@ class Color {
 	const NBRGOVERNMENT 	= 6;
 
 	const CAMPAIGNTIME 		= 345600;
-	const ELECTIONTIME		= 345600;
+	const ELECTIONTIME		= 172800;
 
 	const ALIVE 			= 1;
 	const DEAD 				= 0;

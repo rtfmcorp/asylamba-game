@@ -35,23 +35,42 @@ echo '<div id="content">';
 
 		$S_TOM1 = ASM::$tom->getCurrentSession();
 		ASM::$tom->newSession();
-		ASM::$tom->load(
-			array(
-				'rForum' => $forumId, 
-				'rColor' => CTR::$data->get('playerInfo')->get('color'), 
-				'statement' => array(ForumTopic::PUBLISHED, ForumTopic::RESOLVED)
-			),
-			array('dLastMessage', 'DESC'),
-			array(),
-			CTR::$data->get('playerId')
-		);
+		if ($forumId < 20) {
+			ASM::$tom->load(
+				array(
+					'rForum' => $forumId, 
+					'rColor' => CTR::$data->get('playerInfo')->get('color'), 
+					'statement' => array(ForumTopic::PUBLISHED, ForumTopic::RESOLVED)
+				),
+				array('dLastMessage', 'DESC'),
+				array(),
+				CTR::$data->get('playerId')
+			);
+		} else {
+			ASM::$tom->load(
+				array(
+					'rForum' => $forumId,
+					'statement' => array(ForumTopic::PUBLISHED, ForumTopic::RESOLVED)
+				),
+				array('dLastMessage', 'DESC'),
+				array(),
+				CTR::$data->get('playerId')
+			);
+		}
 
 		$topic_topics = array();
 		for ($i = 0; $i < ASM::$tom->size(); $i++) { 
 			$topic_topics[$i] = ASM::$tom->get($i);
 		}
 		$forum_topics = $forumId;
-		include COMPONENT . 'demeter/forum/topics.php';
+
+		if ($forumId < 10) {
+			include COMPONENT . 'demeter/forum/topics.php';
+		} elseif ($forumId >= 10 && $forumId < 20 && CTR::$data->get('playerInfo')->get('status') > 2) {
+			include COMPONENT . 'demeter/forum/topics.php';
+		} elseif ($forumId >= 20 && CTR::$data->get('playerInfo')->get('status') == 6) {
+			include COMPONENT . 'demeter/forum/topics.php';
+		}
 
 		if (CTR::$get->exist('topic')) {
 			# topic component
@@ -127,16 +146,24 @@ echo '<div id="content">';
 			ASM::$vom->changeSession($S_VOM_1);
 		} elseif ($faction->electionStatement == Color::ELECTION) {
 			$S_ELM_1 = ASM::$elm->getCurrentSession();
+			$S_CAM_1 = ASM::$cam->getCurrentSession();
+			$S_VOM_1 = ASM::$vom->getCurrentSession();
+			$S_PAM_1 = ASM::$pam->getCurrentSession();
+
 			$ELM_ELECTION_TOKEN = ASM::$elm->newSession();
 			ASM::$elm->load(array('rColor' => $faction->id), array('id', 'DESC'), array(0, 1));
 
-			$S_CAM_1 = ASM::$cam->getCurrentSession();
 			$S_CAM_CAN = ASM::$cam->newSession();
 			ASM::$cam->load(array('rElection' => ASM::$elm->get(0)->id));
 
-			$S_VOM_1 = ASM::$vom->getCurrentSession();
 			$VOM_ELC_TOKEN = ASM::$vom->newSession();
 			ASM::$vom->load(array('rPlayer' => CTR::$data->get('playerId'), 'rElection' => ASM::$elm->get(0)->id));
+
+			$VOM_ELC_TOTAL_TOKEN = ASM::$vom->newSession();
+			ASM::$vom->load(array('rElection' => ASM::$elm->get(0)->id));
+
+			$PAM_ELC_TOKEN = ASM::$pam->newSession(FALSE);
+			ASM::$pam->load(array('rColor' => CTR::$data->get('playerInfo')->get('color')));
 
 			$nbCandidate = ASM::$cam->size();
 			include COMPONENT . 'demeter/election/election.php';
@@ -147,6 +174,7 @@ echo '<div id="content">';
 			ASM::$cam->changeSession($S_CAM_1);
 			ASM::$elm->changeSession($S_ELM_1);
 			ASM::$vom->changeSession($S_VOM_1);
+			ASM::$pam->changeSession($S_PAM_1);
 		}
 	} elseif (CTR::$get->get('view') == 'player') {
 		# vue des joueurs, a supprimer
