@@ -240,6 +240,12 @@ class Player {
 				$this->iUniversity = $newIUniversity;
 				$credits -= ($newIUniversity + $schoolInvests + $antiSpyInvests);
 
+				# recompute the real amount for each research
+				$naturalTech = ($this->iUniversity * $this->partNaturalSciences / 100);
+				$lifeTech = ($this->iUniversity * $this->partLifeSciences / 100);
+				$socialTech = ($this->iUniversity * $this->partSocialPoliticalSciences / 100);
+				$informaticTech = ($this->iUniversity * $this->partInformaticEngineering / 100);
+
 				$n->addBrk()->addTxt(' Vos investissements dans l\'université ont été modifiés afin qu\'aux prochaines relèves vous puissiez payer. Attention, cette situation ne vous apporte pas de crédits.');
 			} else {
 				# we have to decrease the other investments too
