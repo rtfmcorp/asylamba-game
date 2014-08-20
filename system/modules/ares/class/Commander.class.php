@@ -508,7 +508,7 @@ class Commander {
 
 			$S_PLM = ASM::$plm->getCurrentSession();
 			ASM::$plm->newSession();
-			ASM::$plm->load(array('id' => $this->rDestinationPlace));		
+			ASM::$plm->load(array('id' => $this->rDestinationPlace));
 			$pl = ASM::$plm->get();
 			ASM::$plm->changeSession($S_PLM);
 		}

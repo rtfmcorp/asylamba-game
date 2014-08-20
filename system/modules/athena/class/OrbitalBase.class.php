@@ -310,7 +310,7 @@ class OrbitalBase {
 			for ($i = 0; $i < ASM::$csm->size(); $i++) { 
 				$cs = ASM::$csm->get($i);
 
-				if ($cs->dArrival < $now) {
+				if ($cs->dArrival < $now AND $cs->dArrival !== '0000-00-00 00:00:00') {
 					CTC::add($cs->dArrival, $this, 'uCommercialShipping', array($cs));
 				} 
 			}
