@@ -47,7 +47,7 @@ echo '<div class="component">';
 						echo '</div>';
 						echo '<div class="number-box">';
 							echo '<span class="label">vers</span>';
-							echo '<span class="value">' . $commander_commanderDetail->rPlaceDestination . '</span>';
+							echo '<span class="value">' . $commander_commanderDetail->destinationPlaceName . '</span>';
 						echo '</div>'; break;
 					case COM_LOOT: 
 						echo '<div class="number-box">';
