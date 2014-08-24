@@ -19,7 +19,6 @@ echo '<div class="component financial">';
 			echo '<ul class="list-type-1">';
 				foreach ($ob_impositionFinancial as $base) {
 					$baseImpot = Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase);
-					$baseImpot *= PlaceResource::get($base->typeOfBase, 'tax');
 
 					echo '<li>';
 						echo '<span class="label">' . $base->getName() . ' [' . Format::numberFormat($base->getPlanetPopulation()) . ' Mio hab.]</span>';
