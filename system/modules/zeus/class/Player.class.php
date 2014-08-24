@@ -184,6 +184,11 @@ class Player {
 		$informaticTech = ($this->iUniversity * $this->partInformaticEngineering / 100);
 
 		for ($i = 0; $i < ASM::$obm->size(); $i++) {
+			/* TEST */
+			$path = 'public/log/php/test.txt';
+			$logt = '> ' . date('H:i:s') . ' : base ' . $i . ' ' . ASM::$obm->get($i)->name . "\n";
+			Bug::writeLog($path, $logt);
+
 			$base = ASM::$obm->get($i);
 			$popTax = Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase);
 			$popTax *= PlaceResource::get($base->typeOfBase, 'tax');
@@ -212,9 +217,9 @@ class Player {
 			// paiement à l'alliance
 			$S_CLM1 = ASM::$clm->getCurrentSession();
 			ASM::$clm->changeSession($clmSession);
-			for ($i = 0; $i < ASM::$clm->size(); $i++) { 
-				if (ASM::$clm->get($i)->id == $base->sectorColor) {
-					ASM::$clm->get($i)->increaseCredit($nationTax);
+			for ($j = 0; $j < ASM::$clm->size(); $j++) { 
+				if (ASM::$clm->get($j)->id == $base->sectorColor) {
+					ASM::$clm->get($j)->increaseCredit($nationTax);
 					break;
 				}
 			}

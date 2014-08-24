@@ -164,7 +164,7 @@ abstract class Manager {
 		$ret .= 'sessions : ' . $this->statSessions . '<br />';
 		$ret .= 'change sessions : ' . $this->statChangeSessions . '<br />';
 		$ret .= '-----------------------------------------------------<br />';
-		Lib::writeLog($path, $ret);
+		Bug::writeLog($path, $ret);
 	}
 
 	public function showStat() {
