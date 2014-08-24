@@ -63,7 +63,6 @@ echo '<div id="content">';
 		$ob_generalFinancial[] = ASM::$obm->get($i);
 		
 		$thisTaxIn = Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation(), ASM::$obm->get($i)->typeOfBase);
-		$thisTaxIn *= PlaceResource::get(ASM::$obm->get($i)->typeOfBase, 'tax');
 		$financial_totalTaxIn += $thisTaxIn;
 		$financial_totalTaxInBonus += $thisTaxIn * $taxBonus / 100;
 
