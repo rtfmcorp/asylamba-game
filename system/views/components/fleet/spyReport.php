@@ -8,8 +8,6 @@
 	# {report}		spyreport
 	# {place}		place_spy
 
-$spyreport->success = 85;
-
 echo '<div class="component size3 space">';
 	echo '<div class="head skin-1">';
 		echo ($spyreport->rEnemy == 0)
