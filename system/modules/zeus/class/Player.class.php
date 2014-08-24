@@ -184,11 +184,6 @@ class Player {
 		$informaticTech = ($this->iUniversity * $this->partInformaticEngineering / 100);
 
 		for ($i = 0; $i < ASM::$obm->size(); $i++) {
-			/* TEST */
-			$path = 'public/log/php/test.txt';
-			$logt = '> ' . date('H:i:s') . ' : base ' . $i . ' ' . ASM::$obm->get($i)->name . "\n";
-			Bug::writeLog($path, $logt);
-
 			$base = ASM::$obm->get($i);
 			$popTax = Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase);
 			$popTax *= PlaceResource::get($base->typeOfBase, 'tax');
