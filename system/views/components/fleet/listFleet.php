@@ -132,7 +132,7 @@ echo '<div class="component size3 list-fleet">';
 					}
 
 					if (count($base['fleets']) == 0) {
-						echo '<em>Aucun commandant affecté autours de cette planète</em>';
+						echo '<em>Aucun commandant affecté autour de cette planète</em>';
 					}
 				echo '</div>';
 			}
