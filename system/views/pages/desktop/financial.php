@@ -63,10 +63,11 @@ echo '<div id="content">';
 		$ob_generalFinancial[] = ASM::$obm->get($i);
 		
 		$thisTaxIn = Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation(), ASM::$obm->get($i)->typeOfBase);
+		$thisTaxInBonus = $thisTaxIn * $taxBonus / 100;
 		$financial_totalTaxIn += $thisTaxIn;
-		$financial_totalTaxInBonus += $thisTaxIn * $taxBonus / 100;
+		$financial_totalTaxInBonus += $thisTaxInBonus;
 
-		$financial_totalTaxOut += ($financial_totalTaxIn + $financial_totalTaxInBonus) * ASM::$obm->get($i)->getTax() / 100;
+		$financial_totalTaxOut += ($thisTaxIn + $thisTaxInBonus) * ASM::$obm->get($i)->getTax() / 100;
 
 		$financial_totalInvest += ASM::$obm->get($i)->getISchool();
 		$financial_totalInvest += ASM::$obm->get($i)->getIAntiSpy();

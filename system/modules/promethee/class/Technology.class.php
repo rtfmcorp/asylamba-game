@@ -77,9 +77,9 @@ class Technology {
 	const GRAVIT_MODULE_UNBLOCK = 3;	# inactif
 	const SHIP0_UNBLOCK = 4;	// pegase
 	const SHIP1_UNBLOCK = 5;	// satyre
-	const SHIP2_UNBLOCK = 6;	// sirene
-	const SHIP3_UNBLOCK = 7;	// dryade
-	const SHIP4_UNBLOCK = 8;	// chimere
+	const SHIP2_UNBLOCK = 6;	// chimere
+	const SHIP3_UNBLOCK = 7;	// sirene
+	const SHIP4_UNBLOCK = 8;	// dryade
 	const SHIP5_UNBLOCK = 9;	// meduse
 	const SHIP6_UNBLOCK = 10;	// griffon
 	const SHIP7_UNBLOCK = 11;	// cyclope

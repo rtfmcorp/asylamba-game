@@ -7,7 +7,8 @@ include_once GAIA;
 include_once HERMES;
 $S_NTM1 = ASM::$ntm->getCurrentSession();
 ASM::$ntm->newSession();
-ASM::$ntm->load(array('rPlayer' => CTR::$data->get('playerId'), 'readed' => 0));
+ASM::$ntm->load(array('rPlayer' => CTR::$data->get('playerId'), 'readed' => 0), array('dSending', 'DESC'));
+
 
 # load message
 $db = DataBase::getInstance();

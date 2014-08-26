@@ -228,7 +228,7 @@ class ShipResource {
 			'resourcePrice' => 4220, 
 			'points' => 4,
 			'imageLink' => 'ship4',
-			'techno' => 8,
+			'techno' => 6,
 			'description' => 'La Chimère est un vaisseau rapide disposant de trois types d’attaques. La première est un canon mitrailleur double disposé de chaque côté de l’appareil. La deuxième est un canon laser léger placé sur le sommet du cockpit. Le dernier est une pièce lance missile à tête chercheuse fixée sous la navette. Cet armement, pour le moins impressionnant, a été conçu pour lutter contre les vaisseaux de type frégate. Malheureusement, sa maniabilité très précaire n’en fait pas un appareil très efficace contre les vaisseaux du chantier de ligne.'
 		),
 		array(
@@ -244,7 +244,7 @@ class ShipResource {
 			'resourcePrice' => 7120, 
 			'points' => 6,
 			'imageLink' => 'ship2',
-			'techno' => 6,
+			'techno' => 7,
 			'description' => 'Disposant d’un canon lance missile, la Sirène est très utile pour les attaques rapides. Sa coque de protection avant, composée d’un alliage carbonique, lui offre une forte résistance contre toutes les armes de type canon mitrailleur. En revanche, cet appareil est très vulnérable contre les attaques de type missile.<br /><br />Cette corvette légère, composé d’un superstrato-réacteur disposé au-dessous de l’appareil, est la plus économique en termes de carburant.'
 		),
 		array(
@@ -260,7 +260,7 @@ class ShipResource {
 			'resourcePrice' => 8350,
 			'points' => 8,
 			'imageLink' => 'ship3',
-			'techno' => 7,
+			'techno' => 8,
 			'description' => 'La Dryade est un vaisseau de type corvette lourde, armé d’un canon lance missile. Cette appareil puissant et résistant, est particulièrement efficace contre les petits vaisseaux. Composé d’un équipage de trois personnes, la Dryade est également capable de transporter un commando pour toutes missions spéciales ou tentative de colonisations. <br /><br />Cette navette de débarquement fut utilisée par les forces rebelles Kovhakarh durant la bataille pour la prise de la planète Guaména.'
 		),
 		array(
