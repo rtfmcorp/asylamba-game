@@ -102,7 +102,7 @@ echo '<div id="content">';
 		# loading des objets
 		$S_SRM1 = ASM::$srm->getCurrentSession();
 		ASM::$srm->newSession();
-		ASM::$srm->load(array('rPlayer' => CTR::$data->get('playerId')), array('dSpying', 'DESC'));
+		ASM::$srm->load(array('rPlayer' => CTR::$data->get('playerId')), array('dSpying', 'DESC'), array(0, 40));
 
 		# listReport component
 		$spyreport_listSpy = array();
@@ -134,8 +134,13 @@ echo '<div id="content">';
 
 			ASM::$plm->changeSession($S_PLM_SPY);
 		} else {
-			CTR::$alert->add('Ce rapport ne vous appartient pas ou n\'existe pas');
-			CTR::redirect('fleet/view-spyreport');
+			if (CTR::$get->exist('report')) {
+				CTR::$alert->add('Ce rapport ne vous appartient pas ou n\'existe pas');
+				CTR::redirect('fleet/view-spyreport');
+			} else {
+				include COMPONENT . 'default.php';
+				include COMPONENT . 'default.php';
+			}
 		}
 
 		ASM::$srm->changeSession($S_SRM1);
