@@ -76,7 +76,7 @@ echo '<div class="body">';
 					echo '<div class="column info">';
 						if ($place->typeOfBase != 0) {
 							echo '<p><strong>' . $place->baseName . '</strong></p>';
-							echo '<p>' . Format::numberFormat($place->points) . ' points</p>';
+							echo '<p>' . PlaceResource::get($place->typeOfOrbitalBase, 'name') . '</p>';
 							echo '<hr />';
 							echo '<p>propriété du</p>';
 							echo '<p>';
@@ -125,6 +125,8 @@ echo '<div class="body">';
 								echo '<span class="value">' . Format::numberFormat($place->population) . '</span>';
 							echo '</p>';
 						}
+							echo '<hr />';
+							echo '<p><span class="hb lt" title="test">pillage</span> | <span class="hb" title="test">espionnage</span></p>';
 					echo '</div>';
 
 					include PAGES . 'desktop/mapElement/component/actBull.php';

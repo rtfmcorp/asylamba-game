@@ -7,6 +7,8 @@
 # require
 	# [{spyreport}]	spyreport_listSpy
 
+$i = 0;
+
 echo '<div class="component report">';
 	echo '<div class="head skin-2">';
 		echo '<h2>Archives d\'espionnage</h2>';
@@ -30,9 +32,11 @@ echo '<div class="component report">';
 							echo '</div>';
 
 							echo '<div class="right">';
-								echo '<a class="' . (CTR::$get->equal('report', $r->id)  ? 'active' : NULL) . '" href="' . APP_ROOT . 'fleet/view-spyreport/report-' . $r->id . '"></a>';
+								echo '<a class="' . ((CTR::$get->equal('report', $r->id) OR (!CTR::$get->exist('report') AND $i == 0))  ? 'active' : NULL) . '" href="' . APP_ROOT . 'fleet/view-spyreport/report-' . $r->id . '"></a>';
 							echo '</div>';
 						echo '</div>';
+
+						$i++;
 					}
 				echo '</div>';
 			} else {

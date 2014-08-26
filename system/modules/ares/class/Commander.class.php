@@ -21,7 +21,6 @@ class Commander {
 	const COEFFMOVEOUTOFSYSTEM 		= 600;
 	const COEFFMOVEINTERSYSTEM 		= 50000;
 
-
 	const LVLINCOMECOMMANDER 		= 100;
 
 	const CREDITCOEFFTOCOLONIZE		= 100000;
@@ -46,7 +45,8 @@ class Commander {
 	const COLO						= 2; # colo ou conquete
 	const BACK						= 3; # retour après une action
 
-	const MAXTRAVELTIME				= 57600;
+#	const MAXTRAVELTIME				= 57600;
+	const MAXTRAVELTIME				= 120000;
 
 	# attributes
 	public $id 						= 0;

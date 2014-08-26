@@ -18,6 +18,7 @@ if ($id) {
 		if ($report->rPlayer == CTR::$data->get('playerId')) {
 			ASM::$srm->deleteById($report->id);
 			CTR::$alert->add('Rapport d\'espionnage supprimé', ALERT_STD_SUCCESS);
+			CTR::redirect('fleet/view-spyreport');
 		} else {
 			CTR::$alert->add('Ce rapport ne vous appartient pas', ALERT_STD_ERROR);
 		}

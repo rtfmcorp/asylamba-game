@@ -112,30 +112,30 @@ echo '<div id="content">';
 		include COMPONENT . 'fleet/listSpy.php';
 
 		# report component
+		ASM::$srm->newSession();
+
 		if (CTR::$get->exist('report')) {
-			ASM::$srm->newSession();
 			ASM::$srm->load(array('id' => CTR::$get->get('report'), 'rPlayer' => CTR::$data->get('playerId')));
+		} else {
+			ASM::$srm->load(array('rPlayer' => CTR::$data->get('playerId')), array('dSpying', 'DESC'), array(0, 1));
+		}
 
-			if (ASM::$srm->size() == 1) {
-				include_once GAIA;
+		if (ASM::$srm->size() == 1) {
+			include_once GAIA;
 
-				$spyreport = ASM::$srm->get(0);
+			$spyreport = ASM::$srm->get(0);
 
-				$S_PLM_SPY = ASM::$plm->getCurrentSession();
-				ASM::$plm->newSession();
-				ASM::$plm->load(array('id' => $spyreport->rPlace));
-				$place_spy = ASM::$plm->get(0);
+			$S_PLM_SPY = ASM::$plm->getCurrentSession();
+			ASM::$plm->newSession();
+			ASM::$plm->load(array('id' => $spyreport->rPlace));
+			$place_spy = ASM::$plm->get(0);
 
-				include COMPONENT . 'fleet/spyReport.php';
+			include COMPONENT . 'fleet/spyReport.php';
 
-				ASM::$plm->changeSession($S_PLM_SPY);
-			} else {
-				CTR::$alert->add('Ce rapport ne vous appartient pas ou n\'existe pas');
-				CTR::redirect('fleet/view-spyreport');
-			}
-		}  else {
-			include COMPONENT . 'default.php';
-			include COMPONENT . 'default.php';
+			ASM::$plm->changeSession($S_PLM_SPY);
+		} else {
+			CTR::$alert->add('Ce rapport ne vous appartient pas ou n\'existe pas');
+			CTR::redirect('fleet/view-spyreport');
 		}
 
 		ASM::$srm->changeSession($S_SRM1);

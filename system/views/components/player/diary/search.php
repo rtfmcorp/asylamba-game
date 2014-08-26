@@ -38,7 +38,7 @@ echo '<div class="component search-player size2 color' . $player_selected->rColo
 		echo '<div class="bottom">';
 			echo '<div class="overflow">';
 				echo '<div class="container">';
-					for ($i = 0; $i < 6; $i++) { 
+					for ($i = 0; $i < count($ob_selected); $i++) { 
 						$ob = $ob_selected[0];
 
 						echo '<div class="base">';

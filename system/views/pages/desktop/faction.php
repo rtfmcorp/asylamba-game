@@ -70,6 +70,8 @@ echo '<div id="content">';
 			include COMPONENT . 'demeter/forum/topics.php';
 		} elseif ($forumId >= 20 && CTR::$data->get('playerInfo')->get('status') == 6) {
 			include COMPONENT . 'demeter/forum/topics.php';
+		} else {
+			CTR::redirect('faction/view-forum');
 		}
 
 		if (CTR::$get->exist('topic')) {
