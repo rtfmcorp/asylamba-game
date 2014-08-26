@@ -300,6 +300,10 @@ class Player {
 				if ($newCredit >= (COM_LVLINCOMECOMMANDER * $commander->getLevel())) {
 					$newCredit -= (COM_LVLINCOMECOMMANDER * $commander->getLevel());
 				} else {
+					# on remet les vaisseaux dans les hangars
+					$commander->emptySquadrons();
+					
+					# on vend le commandant
 					$commander->setStatement(COM_ONSALE);
 					$commander->setRPlayer(0);
 
