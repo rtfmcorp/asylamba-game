@@ -19,7 +19,7 @@ echo '<div class="component">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="tool">';
-				echo '<span><a href="' . APP_ROOT . 'bases/base-' . $ob_obFastView->getId() . '">vers la gestion de la base</a></span>';
+				echo '<span><a href="' . APP_ROOT . 'action/a-switchbase/base-' . $ob_obFastView->getId() . '/page-bases">vers la gestion de la base</a></span>';
 			echo '</div>';
 
 			echo '<div class="number-box">';
