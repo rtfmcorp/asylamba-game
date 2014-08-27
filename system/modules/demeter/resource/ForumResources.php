@@ -12,6 +12,9 @@
 
 #id des forums : < 10 = pour tous les gens d'une faction, >= 10 < 20 = pour le gouvernement d'une fac, >= 20 pour les chefs de toutes les factions
 Class ForumResources {
+
+	private static $idLink = array(1, 2, 3, 4, 10, 20);
+
 	private static $forums = array(
 		array(
 			'id' => 1,
@@ -64,6 +67,14 @@ Class ForumResources {
 			} else {
 				return FALSE;
 			}
+		} else {
+			return FALSE;
+		}
+	}
+
+	public static function getInfoForId($id, $info) {
+		if (in_array($info, array('id', 'devName', 'name', 'shortDescription', 'longDescription', 'image'))) {
+			return self::$forums[array_keys(self::$idLink, $id)[0]][$info];
 		} else {
 			return FALSE;
 		}

@@ -11,8 +11,8 @@
 echo '<div class="component report topic">';
 	echo '<div class="head skin-4">';
 		echo '<img class="main" alt="ressource" src="' . MEDIA . 'orbitalbase/situation.png">';
-		echo '<h2>' . ForumResources::getInfo($forum_topics, 'name') . '</h2>';
-		echo '<em>' . ForumResources::getInfo($forum_topics, 'shortDescription') . '</em>';
+		echo '<h2>' . ForumResources::getInfoForId($forum_topics, 'name') . '</h2>';
+		echo '<em>' . ForumResources::getInfoForId($forum_topics, 'shortDescription') . '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
