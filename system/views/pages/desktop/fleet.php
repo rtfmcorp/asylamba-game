@@ -50,7 +50,7 @@ echo '<div id="content">';
 		
 		# commander manager : yours
 		$S_COM_BSE = ASM::$com->newSession();
-		ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => array(COM_AFFECTED, COM_MOVING)), array('c.rBase', 'DESC'));
+		ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => array(COM_AFFECTED, COM_MOVING)), array('c.rBase', 'DESC'), array(0, 20));
 
 		for ($i = 0; $i < count($obsets); $i++) {
 			for ($j = 0; $j < ASM::$com->size(); $j++) {
