@@ -50,7 +50,7 @@ echo '<div id="content">';
 		
 		# commander manager : yours
 		$S_COM_BSE = ASM::$com->newSession();
-		ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => array(COM_AFFECTED, COM_MOVING)), array('c.rBase', 'DESC'), array(0, 20));
+		ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => array(COM_AFFECTED, COM_MOVING)), array('c.rBase', 'DESC'));
 
 		for ($i = 0; $i < count($obsets); $i++) {
 			for ($j = 0; $j < ASM::$com->size(); $j++) {
@@ -151,7 +151,7 @@ echo '<div id="content">';
 		# loading des objets
 		$S_RPM1 = ASM::$rpm->getCurrentSession();
 		ASM::$rpm->newSession();
-		ASM::$rpm->load(array('rPlayerAttacker' => CTR::$data->get('playerId')));
+		ASM::$rpm->load(array('rPlayerAttacker' => CTR::$data->get('playerId')), array(), array(0, 20));
 		ASM::$rpm->load(array('rPlayerDefender' => CTR::$data->get('playerId')));
 
 		# listReport component
