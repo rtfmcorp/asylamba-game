@@ -145,7 +145,7 @@ for ($i = 0; $i < ASM::$crm->size(); $i++) {
 							echo '<li>Population touchée <strong>' . Format::numberFormat($rc->getPopulation1() + $rc->getPopulation2()) . ' millions</strong></li>';
 
 							if (in_array($rc->getStatement(), array(CRM_ACTIVE, CRM_STANDBY))) {
-								echo '<li>En service depuis <br />' . Chronos::transform($rc->getDistance()) . '</li>';
+								echo '<li>En service depuis <br />' . Chronos::transform($rc->dCreation) . '</li>';
 							}
 						echo '</ul>';
 
@@ -218,7 +218,7 @@ for ($i = 0; $i < ASM::$crm->size(); $i++) {
 							echo '<li>Population touchée <strong>' . Format::numberFormat($rc->getPopulation1() + $rc->getPopulation2()) . ' millions</strong></li>';
 
 							if (in_array($rc->getStatement(), array(CRM_ACTIVE, CRM_STANDBY))) {
-								echo '<li>En service depuis <br />' . Chronos::transform($rc->getDistance()) . '</li>';
+								echo '<li>En service depuis <br />' . Chronos::transform($rc->dCreation) . '</li>';
 							}
 						echo '</ul>';
 
