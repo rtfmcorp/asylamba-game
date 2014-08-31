@@ -1131,8 +1131,8 @@ class Place {
 			case self::CONQUERLOST:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Erreur de coordonnées');
 				$notif->addBeg()
-					->setTitle('Erreur de coordonnées')
 					->addTxt('Votre officier ')
 					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' n\'a pas attaqué la planète ')
