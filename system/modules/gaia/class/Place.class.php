@@ -618,7 +618,7 @@ class Place {
 				
 				$playerBonus = new PlayerBonus($commander->rPlayer);
 				$playerBonus->load();
-				$duration = Game::getTimeToTravel($home, $this, $playerBonus->bonnus);
+				$duration = Game::getTimeToTravel($home, $this, $playerBonus->bonus);
 				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
 				ASM::$plm->changeSession($S_PLM10);
 
