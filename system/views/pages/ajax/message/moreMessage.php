@@ -48,7 +48,7 @@ if ($page !== FALSE && $thread !== FALSE) {
 		}
 
 		if ($i < ASM::$msm->size() - 1) {
-			echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-moremessage/thread-' . $thread . '/page-' . ($page + 1) . '">afficher plus de message</a>';
+			echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-moremessage/thread-' . $thread . '/page-' . ($page + 1) . '">afficher plus de messages</a>';
 		}
 	}
 
