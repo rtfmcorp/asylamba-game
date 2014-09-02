@@ -66,6 +66,10 @@ class OrbitalBaseResource {
 		}
 	}
 
+	public static function getInfo($buildingNumber, $info, $level = 0, $sup = 'default') {
+		return self::getBuildingInfo($buildingNumber, $info, $level, $sup);
+	}
+	
 	public static function getBuildingInfo($buildingNumber, $info, $level = 0, $sup = 'default') {
 		if(self::isABuilding($buildingNumber)) {
 			if ($info == 'name' OR $info == 'frenchName' OR $info == 'imageLink' OR $info == 'description') {

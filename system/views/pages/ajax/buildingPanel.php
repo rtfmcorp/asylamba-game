@@ -40,6 +40,8 @@ echo '<div class="component panel-info size2">';
 					default:$max = 0;  break;
 				}
 				
+				$noteQuantity = 0;
+				$footnoteArray = array();
 				for ($i = 0; $i < $max; $i++) {
 					$level = $i + 1;
 
@@ -54,7 +56,20 @@ echo '<div class="component panel-info size2">';
 						}
 					}
 					echo '<tr ' . $state . '>';
-						echo '<td>' . ((in_array($building, array(3, 6)) && $i >= 10) ? '* ' : '') . $level . '</td>';
+						# generate the exponents for the footnotes
+						$alreadyANote = FALSE;
+						$note = '';
+						for ($j = 0; $j < 4; $j++) { 
+							if ($i == OrbitalBaseResource::getInfo($building, 'maxLevel', $j) - 1) {
+								if (!$alreadyANote) {
+									$alreadyANote = TRUE;
+									$noteQuantity++;
+									$note .= '<sup>' . $noteQuantity . '</sup>';
+								}
+								$footnoteArray[$j] = $noteQuantity;
+							}
+						}
+						echo '<td>' . $level . $note . '</td>';
 						echo '<td>' . Format::numberFormat(OrbitalBaseResource::getBuildingInfo($building, 'level', $level, 'resourcePrice')) . ' <img src="' .  MEDIA. 'resources/resource.png" alt="ressources" class="icon-color" /></td>';
 						echo '<td>' . Chronos::secondToFormat(OrbitalBaseResource::getBuildingInfo($building, 'level', $level, 'time'), 'lite') . ' <img src="' .  MEDIA. 'resources/time.png" alt="relève" class="icon-color" /></td>';
 						if ($building == 1) {
@@ -70,10 +85,25 @@ echo '<div class="component panel-info size2">';
 				}
 			echo '</table></div>';
 
-			if (in_array($building, array(3, 6))) {
-				echo '<p class="info">* ces niveaux ne sont pas disponible si vous avez fait le choix de constuire en ';
-				echo 'premier ' . (($building == 3) ? 'la plateforme commerciale' : 'le chantier de ligne') . '</p>';
+			# generate the footnotes
+			include_once GAIA;
+			$quantityArray = array_count_values($footnoteArray);
+			echo '<p class="info">';
+			foreach ($quantityArray as $footnote => $quantity) {
+				echo '<sup>' . $footnote . '</sup> Niveau maximal pour une base orbitale de type ';
+				$qty = 0;
+				foreach ($footnoteArray as $type => $footnoteId) {
+					if ($footnoteId == $footnote) {
+						$qty++;
+						if ($qty > 1) {
+							echo ($qty == $quantity) ? ' et ' : ', ';
+						}
+						echo PlaceResource::get($type, 'name');
+					}
+				}
+				echo '.<br />';
 			}
+			echo '</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
