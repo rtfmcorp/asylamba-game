@@ -29,7 +29,7 @@ echo '<div class="component size3 list-fleet">';
 						if ($commander->rPlayer != CTR::$data->get('playerId')) {
 							for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
 								$event = CTR::$data->get('playerEvent')->get($i);
-								if ($event->get('eventId') == $commander->getId()) {
+								if ($event->get('eventId') == $commander->getId() && $event->exist('eventInfo')) {
 									foreach ($event->get('eventInfo')->get('inCircle') as $date) {
 										if (strtotime(Utils::now()) >= strtotime($date)) { $step++; } else { break; }
 									}
