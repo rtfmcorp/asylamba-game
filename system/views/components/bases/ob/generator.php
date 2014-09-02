@@ -115,7 +115,8 @@ for ($i = 0; $i < 8; $i++) {
 				$b[$i] .= '</span>';
 			$b[$i] .= '</span>';
 		} elseif (!OrbitalBaseResource::haveRights($i, $nextLevel, 'resource', $ob_generator->getResourcesStorage())) {
-			$b[$i] .= '<span class="button disable hb lt" title="pas assez de ressources, il manque ' . Format::numberFormat(OrbitalBaseResource::getBuildingInfo($i, 'level', ($nextLevel), 'resourcePrice') - $ob_generator->getResourcesStorage()) . ' ressources">';
+			$missingResource = OrbitalBaseResource::getBuildingInfo($i, 'level', ($nextLevel), 'resourcePrice') - $ob_generator->getResourcesStorage();
+			$b[$i] .= '<span class="button disable hb lt" title="pas assez de ressources, il manque ' . Format::numberFormat($missingResource) . ' ressource' . Format::plural($missingResource) . '">';
 				$b[$i] .= '<span class="text">';
 					$b[$i] .= 'construction impossible<br/>';
 					$b[$i] .= $price . ' | ' . $time;

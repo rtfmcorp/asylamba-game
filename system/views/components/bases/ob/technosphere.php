@@ -118,7 +118,7 @@ for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
 			} elseif (!TechnologyResource::haveRights($i, 'credit', $technology->getTechnology($i) + 1, CTR::$data->get('playerInfo')->get('credit'))) {
 				# crédit
 				$but .= '<span class="button disable">';
-					$but .= 'pas assez de crédit<br />';
+					$but .= 'pas assez de crédits<br />';
 					$but .= '<span class="final-cost">' . Format::numberFormat(TechnologyResource::getInfo($i, 'resource', $technology->getTechnology($i) + 1)) . '</span> ';
 					$but .= '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">, ';
 						$but .= '<span class="final-cost">' . Format::numberFormat(TechnologyResource::getInfo($i, 'credit', $technology->getTechnology($i) + 1)) . '</span> ';

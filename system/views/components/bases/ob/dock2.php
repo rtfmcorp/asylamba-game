@@ -73,7 +73,7 @@ for ($i = 6; $i < 12; $i++) {
 			$but .= '</span>';
 		} elseif ($maxShip < 1) {
 			$but = '<span class="button disable">';
-				$but .= 'pas assez de ressource / hangar plein<br />';
+				$but .= 'pas assez de ressources / hangar plein<br />';
 				$but .= '<span class="final-cost">' . Format::numberFormat($resourcePrice) . '</span> ';
 				$but .= '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png"> et ';
 				$but .= '<span class="final-time">' . Chronos::secondToFormat(ShipResource::getInfo($i, 'time'), 'lite') . '</span> ';
