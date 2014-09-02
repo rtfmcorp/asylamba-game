@@ -15,10 +15,7 @@ include 'defaultElement/movers.php';
 # contenu spécifique
 echo '<div id="content">';
 	# admin component
-	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'message') {
-		# main message
-		include COMPONENT . 'admin/message/newOfficialMessage.php';
-	} elseif (CTR::$get->get('view') == 'bugtracker') {
+	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'bugtracker') {
 		$S_BTM1 = ASM::$btm->getCurrentSession();
 		ASM::$btm->newSession();
 		ASM::$btm->load(array('statement' => array(BugTracker::ST_WAITING, BugTracker::ST_ARCHIVED)), array('dSending', 'DESC'));
@@ -114,6 +111,9 @@ echo '<div id="content">';
 
 		# component
 		include COMPONENT . 'admin/bugtracker/mainBugtracker.php';
+	} elseif (CTR::$get->get('view') == 'message') {
+		# main message
+		include COMPONENT . 'admin/message/newOfficialMessage.php';
 	} elseif (CTR::$get->get('view') == 'roadmap') {
 		# main roadmap
 		include COMPONENT . 'admin/roadmap/addEntry.php';
