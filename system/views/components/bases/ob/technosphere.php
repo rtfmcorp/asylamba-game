@@ -235,7 +235,7 @@ echo '<div class="component techno">';
 				}
 
 				if ($realSizeQueue >= TQM_TECHNOMAXQUEUE) {
-					echo '<p><em>file de construction pleine, revenez dans un moment.</em></p>';
+					echo '<p><em>file de recherche pleine, revenez dans un moment.</em></p>';
 				}
 				echo '</div>';
 			} else {
