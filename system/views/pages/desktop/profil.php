@@ -23,9 +23,14 @@ echo '<div id="content">';
 	include_once ATHENA;
 
 	# loading des objets
+	$S_PAM1 = ASM::$pam->getCurrentSession();
+	ASM::$pam->newSession();
 	ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+
+	$S_OBM1 = ASM::$obm->getCurrentSession();
+	ASM::$obm->newSession();
 	ASM::$obm->load(array('rPlayer' => CTR::$data->get('playerId')), array('dCreation', 'ASC'));
-	// ASM::$msm->load(array('rPlayer' => CTR::$data->get('playerId')));
+#	ASM::$msm->load(array('rPlayer' => CTR::$data->get('playerId')));
 
 	# playerRoleplayProfil component
 	$player_playerRoleplayProfil = ASM::$pam->get(0);
@@ -52,5 +57,7 @@ echo '<div id="content">';
 		$ob_obFastView = ASM::$obm->get($i);
 		include COMPONENT . 'athena/obFastView.php';
 	} */
+	ASM::$pam->changeSession($S_PAM1);
+	ASM::$obm->changeSession($S_OBM1);
 echo '</div>';
 ?>

@@ -2,6 +2,8 @@
 # bases loading
 include_once ATHENA;
 # choix de la base
+$S_OBM1 = ASM::$obm->getCurrentSession();
+ASM::$obm->newSession();
 ASM::$obm->load(array('rPlace' => CTR::$data->get('playerParams')->get('base')));
 $base = ASM::$obm->get(0);
 
@@ -54,5 +56,6 @@ echo '<div id="content">';
 		CTR::redirect('bases');
 	}
 echo '</div>';
+ASM::$com->changeSession($S_OBM1);
 
 ?>

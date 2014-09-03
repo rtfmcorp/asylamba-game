@@ -31,7 +31,7 @@ echo '<div id="content">';
 		CTR::redirect('404');
 	}
 
-	ASM::$pam->changeSession($S_PAM_TECH);
 	ASM::$rsm->changeSession($S_RSM_TECH);
+	ASM::$pam->changeSession($S_PAM_TECH);
 echo '</div>';
 ?>
