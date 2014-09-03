@@ -105,7 +105,7 @@ class PlaceManager extends Manager {
 					$p->setBaseName($aw['msName']);
 					$p->setResources($aw['msResources']);
 				} elseif (isset($aw['obId'])) {
-					$p->setTypeOfBase(4);
+					$p->setTypeOfBase(Place::TYP_ORBITALBASE);
 					$p->typeOfOrbitalBase = $aw['obTypeOfBase'];
 					$p->setBaseName($aw['obName']);
 					$p->setLevelCommercialPlateforme($aw['levelCommercialPlateforme']);
@@ -117,6 +117,7 @@ class PlaceManager extends Manager {
 					CTR::$alert->add('Problèmes d\'appartenance du lieu !');
 				}
 			} else {
+				$p->setTypeOfBase(Place::TYP_EMPTY);
 				$p->setBaseName('Planète rebelle');
 			}
 

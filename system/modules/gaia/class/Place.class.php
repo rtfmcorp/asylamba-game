@@ -148,7 +148,7 @@ class Place {
 			$this->uPlace = $now;
 
 			# RESOURCE
-			if ($this->typeOfBase == 0) {
+			if ($this->typeOfBase == self::TYP_EMPTY) {
 				foreach ($days as $key => $day) {
 					CTC::add($day, $this, 'uResources', array());
 				}
