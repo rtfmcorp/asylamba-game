@@ -162,6 +162,10 @@ try {
 	# modification de la place
 	ASM::$plm->load(array('id' => $place));
 	ASM::$plm->get(0)->setRPlayer($pl->getId());
+	// ressource : 45% ou 46% ou 47%
+	ASM::$plm->get(0)->coefResources = rand(45, 47);
+	// population : entre 35M et 38M
+	ASM::$plm->get(0)->population = rand(3500, 3800) / 100;
 
 	# confirmation au portail
 	$api = new API(GETOUT_ROOT);
