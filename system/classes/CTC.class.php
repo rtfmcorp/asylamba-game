@@ -26,8 +26,10 @@ abstract class CTC {
 					return $a['timest'] < $b['timest'] ? -1 : 1;
 				});
 
-				$path = 'public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
-				$logt = '> ' . date('H:i:s') . ', start to apply context' . "\n";
+				$path  = 'public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
+				$logt  = '> ' . date('H:i:s') . ', start to apply context';
+				$logt .= (CTR::$data->exist('playerId')) ? ' [Player ' . CTR::$data->exist('playerId') . ']' : NULL;
+				$logt .= "\n";
 				
 				foreach (self::$events as $k => $event) {
 					self::$currentDate = $event['date'];
