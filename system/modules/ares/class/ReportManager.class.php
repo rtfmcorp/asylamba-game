@@ -14,18 +14,38 @@ class ReportManager extends Manager {
 	protected $managerType ='_Report';
 
 	public function load($where = array(), $order = array(), $limit = array()) {
-		$formatWhere = Utils::arrayToWhere($where, 'r.');
+		$formatWhere = Utils::arrayToWhere($where);
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
 		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT r.* FROM report AS r
+		$qr = $db->prepare('SELECT r.*,
+				sq.id AS sqId,
+				sq.position AS sqPosition,
+				sq.rReport AS sqRReport,
+				sq.round AS sqRound,
+				sq.rCommander AS sqRCommander,
+				sq.ship0 AS sqShip0,
+				sq.ship1 AS sqShip1,
+				sq.ship2 AS sqShip2,
+				sq.ship3 AS sqShip3,
+				sq.ship4 AS sqShip4,
+				sq.ship5 AS sqShip5,
+				sq.ship6 AS sqShip6,
+				sq.ship7 AS sqShip7,
+				sq.ship8 AS sqShip8,
+				sq.ship9 AS sqShip9,
+				sq.ship10 AS sqShip10,
+				sq.ship11 AS sqShip11
+			FROM report AS r
+			LEFT JOIN squadronReport AS sq
+				ON sq.rReport = r.id
 			' . $formatWhere .'
 			' . $formatOrder .'
 			' . $formatLimit
 		);
 
-		foreach ($where AS $v) {
+		foreach($where AS $v) {
 			if (is_array($v)) {
 				foreach ($v as $p) {
 					$valuesArray[] = $p;
@@ -34,51 +54,115 @@ class ReportManager extends Manager {
 				$valuesArray[] = $v;
 			}
 		}
-
+		
 		if (empty($valuesArray)) {
 			$qr->execute();
 		} else {
 			$qr->execute($valuesArray);
 		}
 
-		$aw = $qr->fetchAll();
+		$awReports = $qr->fetchAll();
 		$qr->closeCursor();
 
-		$idReports = array();
-		foreach ($aw AS $report) {
-			$idReports[] = $report['id'];
+		if (count($awReports) > 0) {
+			for ($i = 0; $i < count($awReports); $i++) {
+				if ($i == 0 || $awReports[$i]['id'] != $awReports[$i - 1]['id']) {
+					$report = new Report();
+
+					$report->id = $awReports[$i]['id'];
+					$report->rPlayerAttacker = $awReports[$i]['rPlayerAttacker'];
+					$report->rPlayerDefender = $awReports[$i]['rPlayerDefender'];
+					$report->rPlayerWinner = $awReports[$i]['rPlayerWinner'];
+					$report->avatarA = $awReports[$i]['avatarA'];
+					$report->avatarD = $awReports[$i]['avatarD'];
+					$report->nameA = $awReports[$i]['nameA'];
+					$report->nameD = $awReports[$i]['nameD'];
+					$report->levelA = $awReports[$i]['levelA'];
+					$report->levelD = $awReports[$i]['levelD'];
+					$report->experienceA = $awReports[$i]['experienceA'];
+					$report->experienceD = $awReports[$i]['experienceD'];
+					$report->palmaresA = $awReports[$i]['palmaresA'];
+					$report->palmaresD = $awReports[$i]['palmaresD'];
+					$report->resources = $awReports[$i]['resources'];
+					$report->expCom = $awReports[$i]['expCom'];
+					$report->expPlayerA = $awReports[$i]['expPlayerA'];
+					$report->expPlayerD = $awReports[$i]['expPlayerD'];
+					$report->rPlace = $awReports[$i]['rPlace'];
+					$report->placeName = $awReports[$i]['placeName'];
+					$report->type = $awReports[$i]['type'];
+					$report->round = $awReports[$i]['round'];
+					$report->importance = $awReports[$i]['importance'];
+					$report->statementAttacker = $awReports[$i]['statementAttacker'];
+					$report->statementDefender = $awReports[$i]['statementDefender'];
+					$report->dFight = $awReports[$i]['dFight'];
+
+				}
+
+				$report->squadrons[] = array(
+					$awReports[$i]['sqId'], 
+					$awReports[$i]['sqPosition'], 
+					$awReports[$i]['sqRReport'], 
+					$awReports[$i]['sqRound'],
+					$awReports[$i]['sqRCommander'],
+					$awReports[$i]['sqShip0'],
+					$awReports[$i]['sqShip1'], 
+					$awReports[$i]['sqShip2'], 
+					$awReports[$i]['sqShip3'], 
+					$awReports[$i]['sqShip4'], 
+					$awReports[$i]['sqShip5'], 
+					$awReports[$i]['sqShip6'], 
+					$awReports[$i]['sqShip7'], 
+					$awReports[$i]['sqShip8'], 
+					$awReports[$i]['sqShip9'], 
+					$awReports[$i]['sqShip10'], 
+					$awReports[$i]['sqShip11']);
+					
+				if ($i == count($awReports) - 1 || $awReports[$i]['id'] != $awReports[$i + 1]['id']) {
+					$report->setArmies();
+					$this->_Add($report);
+				}
+			}
+		}
+	}
+
+	public function loadOnlyReport($where = array(), $order = array(), $limit = array()) {
+		$formatWhere = Utils::arrayToWhere($where);
+		$formatOrder = Utils::arrayToOrder($order);
+		$formatLimit = Utils::arrayToLimit($limit);
+
+		$db = DataBase::getInstance();
+		$qr = $db->prepare('SELECT r.*,
+			FROM report AS r
+			' . $formatWhere .'
+			' . $formatOrder .'
+			' . $formatLimit
+		);
+
+		foreach($where AS $v) {
+			if (is_array($v)) {
+				foreach ($v as $p) {
+					$valuesArray[] = $p;
+				}
+			} else {
+				$valuesArray[] = $v;
+			}
+		}
+		
+		if (empty($valuesArray)) {
+			$qr->execute();
+		} else {
+			$qr->execute($valuesArray);
 		}
 
-		// $qr = 'SELECT * FROM squadronReport ';
-		// $i = 0;
-		// foreach ($idReports AS $id) {
-		// 	$qr .= ($i == 0) ? 'WHERE rReport = ? ' : 'OR rReport = ? ';
-		// 	$i++;
-		// }
+		$awReports = $qr->fetchAll();
+		$qr->closeCursor();
 
-		// $qr = $db->prepare($qr);
-
-		// if (empty($idReports)) {
-		// 	$qr->execute();
-		// } else {
-		// 	$qr->execute($idReports);
-		// }
-
-		// $awSquadronReport = $qr->fetchAll();
-
-		// $armies = array(array());
-		// foreach ($awSquadronReport AS $squadron) {
-		// 	$armies['' . $squadron['rReport'] . ''][] = $squadron;
-		// }
-
-		foreach ($aw AS $awReport) {
+		foreach ($awReports AS $awReport) {
 			$report = new Report();
 
 			$report->id = $awReport['id'];
-			$report->resources = $awReport['resources'];
-			$report->expCom = $awReport['expCom'];
-			$report->expPlayerA = $awReport['expPlayerA'];
-			$report->expPlayerD = $awReport['expPlayerD'];
+			$report->rPlayerAttacker = $awReport['rPlayerAttacker'];
+			$report->rPlayerDefender = $awReport['rPlayerDefender'];
 			$report->rPlayerWinner = $awReport['rPlayerWinner'];
 			$report->avatarA = $awReport['avatarA'];
 			$report->avatarD = $awReport['avatarD'];
@@ -90,18 +174,18 @@ class ReportManager extends Manager {
 			$report->experienceD = $awReport['experienceD'];
 			$report->palmaresA = $awReport['palmaresA'];
 			$report->palmaresD = $awReport['palmaresD'];
-			$report->round = $awReport['round'];
-			$report->rPlayerAttacker = $awReport['rPlayerAttacker'];
-			$report->rPlayerDefender = $awReport['rPlayerDefender'];
-			$report->rPlace = $awReport['rPlace']; 			
+			$report->resources = $awReport['resources'];
+			$report->expCom = $awReport['expCom'];
+			$report->expPlayerA = $awReport['expPlayerA'];
+			$report->expPlayerD = $awReport['expPlayerD'];
+			$report->rPlace = $awReport['rPlace'];
+			$report->placeName = $awReport['placeName'];
 			$report->type = $awReport['type'];
+			$report->round = $awReport['round'];
 			$report->importance = $awReport['importance'];
-			$report->dFight = $awReport['dFight'];
 			$report->statementAttacker = $awReport['statementAttacker'];
 			$report->statementDefender = $awReport['statementDefender'];
-			$report->placeName = $awReport['placeName'];
-
-			//$report->setArmies($armies['' . $report->id . '']);
+			$report->dFight = $awReport['dFight'];
 
 			$this->_Add($report);
 		}
