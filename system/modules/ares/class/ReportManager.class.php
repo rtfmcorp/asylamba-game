@@ -49,27 +49,27 @@ class ReportManager extends Manager {
 			$idReports[] = $report['id'];
 		}
 
-		$qr = 'SELECT * FROM squadronReport ';
-		$i = 0;
-		foreach ($idReports AS $id) {
-			$qr .= ($i == 0) ? 'WHERE rReport = ? ' : 'OR rReport = ? ';
-			$i++;
-		}
+		// $qr = 'SELECT * FROM squadronReport ';
+		// $i = 0;
+		// foreach ($idReports AS $id) {
+		// 	$qr .= ($i == 0) ? 'WHERE rReport = ? ' : 'OR rReport = ? ';
+		// 	$i++;
+		// }
 
-		$qr = $db->prepare($qr);
+		// $qr = $db->prepare($qr);
 
-		if (empty($idReports)) {
-			$qr->execute();
-		} else {
-			$qr->execute($idReports);
-		}
+		// if (empty($idReports)) {
+		// 	$qr->execute();
+		// } else {
+		// 	$qr->execute($idReports);
+		// }
 
-		$awSquadronReport = $qr->fetchAll();
+		// $awSquadronReport = $qr->fetchAll();
 
-		$armies = array(array());
-		foreach ($awSquadronReport AS $squadron) {
-			$armies['' . $squadron['rReport'] . ''][] = $squadron;
-		}
+		// $armies = array(array());
+		// foreach ($awSquadronReport AS $squadron) {
+		// 	$armies['' . $squadron['rReport'] . ''][] = $squadron;
+		// }
 
 		foreach ($aw AS $awReport) {
 			$report = new Report();
@@ -101,7 +101,7 @@ class ReportManager extends Manager {
 			$report->statementDefender = $awReport['statementDefender'];
 			$report->placeName = $awReport['placeName'];
 
-			$report->setArmies($armies['' . $report->id . '']);//
+			//$report->setArmies($armies['' . $report->id . '']);
 
 			$this->_Add($report);
 		}

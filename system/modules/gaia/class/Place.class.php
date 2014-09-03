@@ -640,12 +640,12 @@ class Place {
 			if ($commander->getStatement() !== COM_DEAD) {
 				
 				# attribuer le rPlayer à la Place !
-				$this->rPlayer = $commander->getRPlayer();
+				$this->rPlayer = $commander->rPlayer;
 				$this->commanders[] = $commander;
 
 				#attibuer le commander à la place
-				$commander->setRBase($this->id);
-				$commander->setStatement(COM_AFFECTED);
+				$commander->rBase = $this->id;
+				$commander->statement = COM_AFFECTED;
 				$commander->line = 1;
 
 				# créer une Base
