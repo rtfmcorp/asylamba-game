@@ -69,9 +69,7 @@ class Report {
 
 	public function getId() { return $this->id; }
 
-	public function setArmies($squadrons) {
-		$this->squadrons = $squadrons;
-		
+	public function setArmies() {		
 		# squadron(id, pos, rReport, round, rCommander, ship0, ..., ship11)
 		$rCommanderA = $this->squadrons[0][4];
 

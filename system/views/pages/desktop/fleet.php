@@ -151,8 +151,8 @@ echo '<div id="content">';
 		# loading des objets
 		$S_RPM1 = ASM::$rpm->getCurrentSession();
 		ASM::$rpm->newSession();
-		ASM::$rpm->load(array('rPlayerAttacker' => CTR::$data->get('playerId')), array(), array(0, 20));
-		ASM::$rpm->load(array('rPlayerDefender' => CTR::$data->get('playerId')));
+		ASM::$rpm->load(array('r.rPlayerAttacker' => CTR::$data->get('playerId')));
+		ASM::$rpm->load(array('r.rPlayerDefender' => CTR::$data->get('playerId')));
 
 		# listReport component
 		$report_listReport = array();
@@ -173,7 +173,7 @@ echo '<div id="content">';
 		if (CTR::$get->exist('report')) {
 			$S_RPM2 = ASM::$rpm->getCurrentSession();
 			ASM::$rpm->newSession();
-			ASM::$rpm->load(array('id' => CTR::$get->get('report')));
+			ASM::$rpm->load(array('r.id' => CTR::$get->get('report')));
 
 			if (ASM::$rpm->size() == 1 && (ASM::$rpm->get()->rPlayerAttacker == CTR::$data->get('playerId') || ASM::$rpm->get()->rPlayerDefender == CTR::$data->get('playerId'))) {
 				include_once ZEUS;
