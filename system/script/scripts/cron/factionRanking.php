@@ -32,21 +32,21 @@ echo 'Numéro du ranking : ' . $rRanking . '<br /><br />';
 
 
 function cmpGeneral($a, $b) {
-    if($a['general'] == $b['general']) {
+    if ($a['general'] == $b['general']) {
         return 0;
     }
     return ($a['general'] > $b['general']) ? -1 : 1;
 }
 
 function cmpPower($a, $b) {
-    if($a['power'] == $b['power']) {
+    if ($a['power'] == $b['power']) {
         return 0;
     }
     return ($a['power'] > $b['power']) ? -1 : 1;
 }
 
 function cmpDomination($a, $b) {
-    if($a['domination'] == $b['domination']) {
+    if ($a['domination'] == $b['domination']) {
         return 0;
     }
     return ($a['domination'] > $b['domination']) ? -1 : 1;

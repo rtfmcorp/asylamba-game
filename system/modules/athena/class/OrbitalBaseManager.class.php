@@ -290,6 +290,14 @@ class OrbitalBaseManager extends Manager {
 			$b->uOrbitalBase,
 			$b->getDCreation()
 		));
+		$b->buildingManager = ASM::$bqm->getFirstSession();
+		$b->dock1Manager = ASM::$sqm->getFirstSession();
+		$b->dock2Manager = ASM::$sqm->getFirstSession();
+		$b->dock3Manager = ASM::$sqm->getFirstSession();
+		$b->routeManager = ASM::$crm->getFirstSession();
+		$b->technoQueueManager = ASM::$tqm->getFirstSession();
+		$b->shippingManager = ASM::$csm->getFirstSession();
+
 		$this->_Add($b);
 	}
 

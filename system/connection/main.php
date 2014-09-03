@@ -8,7 +8,7 @@ include_once GAIA;
 include_once DEMETER;
 
 $S_PAM1 = ASM::$pam->getCurrentSession();
-ASM::$pam->newSession(ASM_UMODE);
+ASM::$pam->newSession();
 ASM::$pam->load(array('bind' => CTR::$get->get('bindkey'), 'statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY)));
 
 if (ASM::$pam->size() == 1) {
@@ -146,8 +146,6 @@ if (ASM::$pam->size() == 1) {
 	ASM::$com->changeSession($S_COM1);
 
 	# check the incoming attacks
-	$S_COM2 = ASM::$com->getCurrentSession();
-	ASM::$com->newSession();
 	$places = array();
 	for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
 		$places[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -155,6 +153,9 @@ if (ASM::$pam->size() == 1) {
 	for ($i = 0; $i < CTR::$data->get('playerBase')->get('ms')->size(); $i++) {
 		$places[] = CTR::$data->get('playerBase')->get('ms')->get($i)->get('id');
 	}
+
+	$S_COM2 = ASM::$com->getCurrentSession();
+	ASM::$com->newSession();
 	ASM::$com->load(array('c.rDestinationPlace' => $places, 'c.statement' => COM_MOVING, 'c.TravelType' => array(COM_LOOT, COM_COLO)));
 
 	# ajout des bases des ennemis dans le tableau
@@ -205,7 +206,7 @@ if (ASM::$pam->size() == 1) {
 		CTR::redirect('profil');
 	}
 } else { 
-	header('Location: ' . GETOUT_ROOT . 'accueil/speak-noplayerfound');
+	header('Location: ' . GETOUT_ROOT . 'profil');
 	exit();
 }
 

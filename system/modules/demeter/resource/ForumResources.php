@@ -74,7 +74,8 @@ Class ForumResources {
 
 	public static function getInfoForId($id, $info) {
 		if (in_array($info, array('id', 'devName', 'name', 'shortDescription', 'longDescription', 'image'))) {
-			return self::$forums[array_keys(self::$idLink, $id)[0]][$info];
+			$tmp = array_keys(self::$idLink, $id);
+			return self::$forums[$tmp[0]][$info];
 		} else {
 			return FALSE;
 		}
