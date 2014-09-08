@@ -2,19 +2,20 @@
 include_once ZEUS;
 # give credit action
 
-# int player 		destination player id
+# int name 			destination player name
 # int quantity 		quantity of credit to send
 # [string text] 	facultative text
 
-$player = Utils::getHTTPData('player');
+$name = Utils::getHTTPData('name');
 $quantity = Utils::getHTTPData('quantity');
 $text = Utils::getHTTPData('text');
 
 // input protection
 $p = new Parser();
+$name = $p->protect($name);
 $text = $p->parse($text);
 
-if ($player !== FALSE AND $quantity !== FALSE) {
+if ($name !== FALSE AND $quantity !== FALSE) {
 
 	$credit = intval($quantity);
 
@@ -22,7 +23,7 @@ if ($player !== FALSE AND $quantity !== FALSE) {
 
 		$S_PAM1 = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession(ASM_UMODE);
-		ASM::$pam->load(array('id' => $player));
+		ASM::$pam->load(array('name' => $name));
 		ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
 
 		if (ASM::$pam->size() == 2) {
@@ -52,7 +53,7 @@ if ($player !== FALSE AND $quantity !== FALSE) {
 				CTR::$alert->add('envoi de crédits impossible - vous ne pouvez pas envoyer plus que ce que vous possédez', ALERT_STD_ERROR);
 			}
 		} else {
-			if ($player == CTR::$data->get('playerId')) {
+			if (ASM::$pam->size() == 1) {
 				CTR::$alert->add('envoi de crédits impossible - aucun intérêt d\'envoyer des crédits à vous-même !?', ALERT_STD_ERROR);
 			} else {
 				CTR::$alert->add('envoi de crédits impossible - erreur dans les joueurs', ALERT_STD_ERROR);
