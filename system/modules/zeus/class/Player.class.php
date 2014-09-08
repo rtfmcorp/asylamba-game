@@ -183,6 +183,9 @@ class Player {
 		$socialTech = ($this->iUniversity * $this->partSocialPoliticalSciences / 100);
 		$informaticTech = ($this->iUniversity * $this->partInformaticEngineering / 100);
 
+		$S_CLM1 = ASM::$clm->getCurrentSession();
+		ASM::$clm->changeSession($clmSession);
+		
 		for ($i = 0; $i < ASM::$obm->size(); $i++) {
 			$base = ASM::$obm->get($i);
 			$popTax = Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase);
@@ -209,16 +212,14 @@ class Player {
 			$antiSpyInvests += $base->getIAntiSpy();
 
 			// paiement à l'alliance
-			$S_CLM1 = ASM::$clm->getCurrentSession();
-			ASM::$clm->changeSession($clmSession);
 			for ($j = 0; $j < ASM::$clm->size(); $j++) { 
 				if (ASM::$clm->get($j)->id == $base->sectorColor) {
 					ASM::$clm->get($j)->increaseCredit($nationTax);
 					break;
 				}
 			}
-			ASM::$clm->changeSession($S_CLM1);
 		}
+		ASM::$clm->changeSession($S_CLM1);
 
 		// si la balance de crédit est positive
 		$totalInvests = $uniInvests + $schoolInvests + $antiSpyInvests;
