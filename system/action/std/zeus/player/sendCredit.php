@@ -1,6 +1,5 @@
 <?php
-include_once ATHENA;
-include_once GAIA;
+include_once ZEUS;
 # give credit action
 
 # int player 		destination player id
