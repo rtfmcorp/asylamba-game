@@ -28,7 +28,7 @@ abstract class CTC {
 
 				$path  = 'public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
 				$logt  = '> ' . date('H:i:s') . ', start to apply context';
-				$logt .= (CTR::$data->exist('playerId')) ? ' [Player ' . CTR::$data->exist('playerId') . ']' : NULL;
+				$logt .= (CTR::$data->exist('playerId')) ? ' [Player ' . CTR::$data->get('playerId') . ']' : NULL;
 				$logt .= "\n";
 				
 				foreach (self::$events as $k => $event) {

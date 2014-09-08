@@ -123,7 +123,7 @@ try {
 	# ajout de vaisseau en fonction de la faction
 	if ($faction == 2) {
 		# Kovakh, 3 Méduses
-		$ob->setShipStorage(5, 3);
+		$ob->setShipStorage(4, 3);
 	}
 
 	# initialisation des ressources

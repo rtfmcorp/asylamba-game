@@ -9,6 +9,7 @@ include_once 'class/FightController.class.php';
 include_once 'class/LiveReport.class.php';
 include_once 'class/Report.class.php';
 include_once 'class/ReportManager.class.php';
+include_once 'class/LittleReportManager.class.php';
 include_once 'class/Squadron.class.php';
 include_once 'class/Ship.class.php';
 
