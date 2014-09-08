@@ -3,6 +3,7 @@ abstract class ASM {
 	public static $runningAres = FALSE;
 	public static $com;
 	public static $rpm;
+	public static $lrm;
 
 	protected static $runningAthena = FALSE;
 	public static $bqm;
@@ -52,6 +53,7 @@ abstract class ASM {
 		if (!self::$runningAres) {
 			self::$com = new CommanderManager();
 			self::$rpm = new ReportManager();
+			self::$lrm = new LittleReportManager();
 		}
 		self::$runningAres = TRUE;
 	}
@@ -140,6 +142,7 @@ abstract class ASM {
 		if (self::$runningAres) {
 			self::$com->save();
 			self::$rpm->save();
+			self::$lrm->save();
 		}
 		if (self::$runningAthena) {
 			self::$obm->save();

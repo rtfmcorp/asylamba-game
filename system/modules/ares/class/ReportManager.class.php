@@ -131,7 +131,7 @@ class ReportManager extends Manager {
 		$formatLimit = Utils::arrayToLimit($limit);
 
 		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT r.*,
+		$qr = $db->prepare('SELECT r.*
 			FROM report AS r
 			' . $formatWhere .'
 			' . $formatOrder .'
