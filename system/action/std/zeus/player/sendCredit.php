@@ -39,11 +39,13 @@ if ($name !== FALSE AND $quantity !== FALSE) {
 				$n->setTitle('Réception de crédits');
 				$n->addBeg();
 				$n->addLnk('diary/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'));
-				$n->addTxt(' vous a envoyé des crédits.');
-				$n->addBoxResource('credit', Format::numberFormat($credit), 'crédits reçus');
+				$n->addTxt(' vous a envoyé des crédits');
 				if ($text !== '') {
-					$n->addSep()->addTxt(CTR::$data->get('playerInfo')->get('name') . ' dit : "' . $text . '"');
+					$n->addTxt(' avec le message suivant : ')->addBrk()->addTxt('"' . $text . '"');
+				} else {
+					$n->addTxt('.');
 				}
+				$n->addBoxResource('credit', Format::numberFormat($credit), 'crédits reçus');
 				$n->addEnd();
 				ASM::$ntm->add($n);
 
