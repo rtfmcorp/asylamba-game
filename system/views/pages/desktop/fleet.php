@@ -149,24 +149,26 @@ echo '<div id="content">';
 		include_once ARES;
 
 		# loading des objets
-		$S_RPM1 = ASM::$rpm->getCurrentSession();
-		ASM::$rpm->newSession();
-		ASM::$rpm->loadOnlyReport(array('r.rPlayerAttacker' => CTR::$data->get('playerId')), array('r.dFight', 'DESC'));
-		ASM::$rpm->loadOnlyReport(array('r.rPlayerDefender' => CTR::$data->get('playerId')), array('r.dFight', 'DESC'));
+		$S_LRM1 = ASM::$lrm->getCurrentSession();
+		ASM::$lrm->newSession();
+		ASM::$lrm->load(array('r.rPlayerAttacker' => CTR::$data->get('playerId')), array('r.dFight', 'DESC'));
 
 		# listReport component
 		$report_listReport = array();
-		for ($i = 0; $i < ASM::$rpm->size(); $i++) { 
-			$report_listReport[$i] = ASM::$rpm->get($i);
+		for ($i = 0; $i < ASM::$lrm->size(); $i++) { 
+			$report_listReport[$i] = ASM::$lrm->get($i);
 		}
-		usort($report_listReport, function($a, $b) {
-			$ta = $a->dFight;
-			$tb = $b->dFight;
+		$type_listReport = 1;
+		include COMPONENT . 'fleet/listReport.php';
 
-			if ($ta == $tb) { return 0; }
-			return (strtotime($ta) > strtotime($tb)) ? -1 : 1;
-		});
+		ASM::$lrm->newSession();
+		ASM::$lrm->load(array('r.rPlayerDefender' => CTR::$data->get('playerId')), array('r.dFight', 'DESC'));
 
+		$report_listReport = array();
+		for ($i = 0; $i < ASM::$lrm->size(); $i++) { 
+			$report_listReport[$i] = ASM::$lrm->get($i);
+		}
+		$type_listReport = 2;
 		include COMPONENT . 'fleet/listReport.php';
 
 		# report component
@@ -201,7 +203,7 @@ echo '<div id="content">';
 			include COMPONENT . 'default.php';
 		}
 
-		ASM::$rpm->changeSession($S_RPM1);
+		ASM::$lrm->changeSession($S_LRM1);
 	} elseif (CTR::$get->get('view') == 'memorial') {
 		# inclusion des modules
 		include_once ARES;

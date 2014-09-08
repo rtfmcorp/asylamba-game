@@ -6,21 +6,23 @@
 
 # require
 	# [{report}]	report_listReport
+	# (INT)			type_listReport
 
 echo '<div class="component report">';
 	echo '<div class="head skin-2">';
-		echo '<h2>Archives Militaires</h2>';
+		if ($type_listReport == 1) {
+			echo '<h2>Archives Militaires</h2>';
+		}
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			/*echo '<div class="tool">';
 				echo '<span><a href="#" class="hb lt" title="cette action n\'a pas encore été développée">tout supprimer</a></span>';
 				echo '<span><a href="#" class="hb lt sh" data-target="info-report" title="plus d\'infos">?</a></span>';
-			echo '</div>';
-
-			echo '<p class="info" id="info-report" style="display:none;">';
-				echo 'Tmp.';
-			echo '</p>';*/
+			echo '</div>';*/
+			echo $type_listReport == 1
+				? '<h3>Rapports d\'attaque</h3>'
+				: '<h3>Rapports de défense</h3>';
 			
 			if (count($report_listReport) > 0) {
 				echo '<div class="set-report">';
