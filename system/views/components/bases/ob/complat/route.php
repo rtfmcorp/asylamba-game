@@ -133,6 +133,10 @@ for ($i = 0; $i < ASM::$crm->size(); $i++) {
 							echo '<li>Distance <strong>' . $rc->getDistance() . ' al.</strong></li>';
 							echo '<li>Prix <strong>';
 								echo Format::numberFormat($rc->getPrice());
+								if (CTR::$data->get('playerInfo')->get('color') == ColorResource::NEGORA) {
+									# bonus if the player is from Negore
+									echo '<span class="bonus">- ' .  Format::numberFormat(round(ColorResource::BONUS_NEGORA_ROUTE * $rc->getPrice() / 100))  . '</span>';
+								}
 								echo ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" />';
 							echo '</strong></li>';
 							echo '<li>Estimation du revenu par relève<strong>';
