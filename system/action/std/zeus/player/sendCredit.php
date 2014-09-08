@@ -5,10 +5,15 @@ include_once GAIA;
 
 # int player 		destination player id
 # int quantity 		quantity of credit to send
-
+# [string text] 	facultative text
 
 $player = Utils::getHTTPData('player');
 $quantity = Utils::getHTTPData('quantity');
+$text = Utils::getHTTPData('text');
+
+// input protection
+$p = new Parser();
+$text = $p->parse($text);
 
 if ($player !== FALSE AND $quantity !== FALSE) {
 
@@ -36,6 +41,9 @@ if ($player !== FALSE AND $quantity !== FALSE) {
 				$n->addLnk('diary/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'));
 				$n->addTxt(' vous a envoyé des crédits.');
 				$n->addBoxResource('credit', Format::numberFormat($credit), 'crédits reçus');
+				if ($text !== '') {
+					$n->addSep()->addTxt(CTR::$data->get('playerInfo')->get('name') . ' dit : "' . $text . '"');
+				}
 				$n->addEnd();
 				ASM::$ntm->add($n);
 
