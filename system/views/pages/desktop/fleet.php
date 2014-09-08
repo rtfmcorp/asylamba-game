@@ -151,8 +151,8 @@ echo '<div id="content">';
 		# loading des objets
 		$S_RPM1 = ASM::$rpm->getCurrentSession();
 		ASM::$rpm->newSession();
-		ASM::$rpm->load(array('r.rPlayerAttacker' => CTR::$data->get('playerId')));
-		ASM::$rpm->load(array('r.rPlayerDefender' => CTR::$data->get('playerId')));
+		ASM::$rpm->loadOnlyReport(array('r.rPlayerAttacker' => CTR::$data->get('playerId')), array('r.dFight', 'DESC'));
+		ASM::$rpm->loadOnlyReport(array('r.rPlayerDefender' => CTR::$data->get('playerId')), array('r.dFight', 'DESC'));
 
 		# listReport component
 		$report_listReport = array();
@@ -164,7 +164,7 @@ echo '<div id="content">';
 			$tb = $b->dFight;
 
 			if ($ta == $tb) { return 0; }
-		    return (strtotime($ta) > strtotime($tb)) ? -1 : 1;
+			return (strtotime($ta) > strtotime($tb)) ? -1 : 1;
 		});
 
 		include COMPONENT . 'fleet/listReport.php';
