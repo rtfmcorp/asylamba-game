@@ -27,30 +27,7 @@ echo '<div class="component search-player size2 color' . $player_selected->rColo
 			echo '<div class="right">';
 				echo '<h1>' . $player_selected->name . '</h1>';
 				echo '<p>' . $status[$player_selected->status - 1] . ' de ' . ColorResource::getInfo($player_selected->rColor, 'popularName') . '</p>';
-				echo '<hr />';
-				echo '<p>';
-					echo '<span>niveau ' . $player_selected->level . '</span>';
-					echo '<span>' . Format::numberFormat($player_selected->experience) . ' xp</span>';
-				echo '</p>';
-
-			echo '</div>';
-		echo '</div>';
-		echo '<div class="bottom">';
-			echo '<div class="overflow">';
-				echo '<div class="container">';
-					for ($i = 0; $i < count($ob_selected); $i++) { 
-						$ob = $ob_selected[0];
-
-						echo '<div class="base">';
-							echo '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($ob->planetPopulation) . '.png" alt="Ma planète" />';
-							echo '<div class="right" ' . ($i == 0 ? 'style="display:block;"' : NULL) . '>';
-								echo '<strong>' . PlaceResource::get($ob->typeOfBase, 'name') . ' ' . $ob->name . '</strong>';
-								echo '<em>' . Format::numberFormat($ob->points) . ' points</em>';
-								echo '<a href="' . APP_ROOT . 'map/place-' . $ob->getId() . '">' . Game::formatCoord($ob->xSystem, $ob->ySystem, $ob->position, $ob->sector) . '</a>';
-							echo '</div>';
-						echo '</div>';
-					}
-				echo '</div>';
+				echo '<p>niveau ' . $player_selected->level . '</p>';
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';

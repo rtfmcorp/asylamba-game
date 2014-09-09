@@ -1,0 +1,31 @@
+<?php
+# routeFinancial component
+# in athena package
+
+# détail les routes commerciales par base
+
+# require
+	# [{orbitalBase}]			ob_routeFinancial
+
+# view part
+echo '<div class="component new-message">';
+	echo '<div class="head skin-2">';
+		echo '<h2>Envoi de crédit</h2>';
+	echo '</div>';
+	echo '<div class="fix-body">';
+		echo '<div class="body">';
+			echo '<form action="' . APP_ROOT . 'action/a-sendcredit" method="post" />';
+				echo '<p><label for="send-credit-target">Destinataire</label></p>';
+				echo '<p class="input input-text"><input type="text" id="send-credit-target" class="autocomplete-player" name="name" /></p>';
+
+				echo '<p><label for="send-credit-credit">Nombre de crédit</label></p>';
+				echo '<p class="input input-text"><input type="text" id="send-credit-credit" name="quantity" /></p>';
+
+				echo '<p><label for="send-credit-message">Votre message (* facultatif)</label></p>';
+				echo '<p class="input input-area"><textarea id="send-credit-message" name="text"></textarea></p>';
+
+				echo '<p class="button"><button type="submit">Envoyer</button></p>';
+			echo '</form>';
+		echo '</div>';
+	echo '</div>';
+echo '</div>';

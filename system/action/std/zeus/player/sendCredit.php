@@ -15,8 +15,7 @@ $p = new Parser();
 $name = $p->protect($name);
 $text = $p->parse($text);
 
-if ($name !== FALSE AND $quantity !== FALSE) {
-
+if ($name !== FALSE AND $quantity !== FALSE AND strlen($text) < 500) {
 	$credit = intval($quantity);
 
 	if ($credit > 0) {
