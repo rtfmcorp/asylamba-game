@@ -66,6 +66,30 @@ class API {
 		}
 	}
 
+	public function playerIsDead($bindkey, $serverId) {
+		if ($this->query('playerisdead', array('bindkey' => $bindkey, 'serverid' => $serverId))) {
+			if ($this->data['statement'] == 'success') {
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		} else {
+			return FALSE;
+		}
+	}
+
+	public function sendMail($bindkey, $serverId, $template) {
+		if ($this->query('sendmail', array('bindkey' => $bindkey, 'serverid' => $serverId, 'template' => $template))) {
+			if ($this->data['statement'] == 'success') {
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		} else {
+			return FALSE;
+		}
+	}
+
 	public function getPlayerStatement($bindkey) {
 		# a faire
 		return FALSE;
