@@ -64,7 +64,7 @@ if ($rElection !== FALSE && $program !== FALSE) {
 					CTR::$alert->add('Vous ne pouvez présenter ou retirer votre candidature qu\'en période de campagne.', ALERT_STD_ERROR);
 				}
 
-				ASM::$clm->changeSession($_CAM);
+				ASM::$cam->changeSession($_CAM);
 				ASM::$clm->changeSession($_CLM);
 			} else {
 				CTR::$alert->add('Vous ne pouvez pas vous présenter, vous ne faite pas partie de l\'élite.', ALERT_STD_ERROR);

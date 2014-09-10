@@ -104,6 +104,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				$timeToTravel = Game::getTimeToTravel(ASM::$plm->get(0), ASM::$plm->get(1));
 				$departure = Utils::now();
 				$arrival = Utils::addSecondsToDate($departure, $timeToTravel);
+				ASM::$plm->changeSession($S_PLM1);
 
 				# update commercialShipping
 				$commercialShipping->rBaseDestination = $rPlace;

@@ -83,14 +83,14 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 			} else {
 				CTR::$alert->add('Ce commandant ne vous appartient pas ou n\'existe pas.', ALERT_STD_ERROR);
 			}
-			ASM::$com->changeSession($S_COM1);
-			ASM::$plm->changeSession($S_PLM1);
 		} else {
 			CTR::$alert->add('Vous avez assez de conquête en cours ou un niveau administration étendue trop bas.', ALERT_STD_ERROR);
 		}
 	} else {
 		CTR::$alert->add('Vous devez développer votre technologie colonisation.', ALERT_STD_ERROR);
 	}
+	ASM::$com->changeSession($S_COM1);
+	ASM::$plm->changeSession($S_PLM1);
 } else {
 	CTR::$alert->add('Manque de précision sur le commandant ou la position.', ALERT_STD_ERROR);
 }

@@ -22,10 +22,10 @@ if ($id) {
 		} else {
 			CTR::$alert->add('Ce rapport ne vous appartient pas', ALERT_STD_ERROR);
 		}
-		ASM::$srm->changeSession($S_SRM1);
 	} else {
 		CTR::$alert->add('Ce rapport n\'existe pas', ALERT_STD_ERROR);
 	}
+	ASM::$srm->changeSession($S_SRM1);
 } else {
 	CTR::$alert->add('veuillez indiquer le numéro du rapport', ALERT_STD_ERROR);
 }
