@@ -62,7 +62,7 @@ class Utils {
 		$endDate = ($date1 < $date2) ? $date2 : $date1;
 
 		if ($precision == 'h') {
-			$hoursInterval = round((abs(strtotime($date1) - strtotime($date2))) / (60 * 60));
+			$hoursInterval = floor((abs(strtotime($date1) - strtotime($date2))) / (60 * 60));
 
 			$seconds = strtotime($baseDate) + 3600;
 			$nextHour = floor($seconds / 3600) * 3600;
@@ -82,7 +82,7 @@ class Utils {
 			return $dates;
 		} elseif ($precision == 'd') {
 			# the changement is at 01:00:00
-			$daysInterval = round((abs(strtotime($date1) - strtotime($date2))) / (60 * 60 * 24));
+			$daysInterval = floor((abs(strtotime($date1) - strtotime($date2))) / (60 * 60 * 24));
 
 			$seconds = strtotime($baseDate) + 86400;
 			$nextDay = floor($seconds / 86400) * 86400;
