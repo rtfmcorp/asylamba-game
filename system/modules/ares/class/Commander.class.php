@@ -219,7 +219,7 @@ class Commander {
 
 	public function setArmy() {
 		if (!$this->hasArmySetted) {
-			for($i = 0; $i < count($this->squadronsIds) AND $i < 25; $i++) {
+			for( $i = 0; $i < count($this->squadronsIds) AND $i < 25; $i++) {
 				$this->army[$i] = new Squadron(
 					$this->armyInBegin[$i], 
 					$this->squadronsIds[$i], 
@@ -228,6 +228,10 @@ class Commander {
 					$this->id);
 			}
 			$this->hasArmySetted = TRUE;
+		} else {
+			for ($i = 0; $i < count($this->squadronsIds); $i++) {
+				$this->getSquadron($i)->relId = 0;
+			}
 		}
 	}
 
