@@ -115,8 +115,8 @@ class Color {
 			ASM::$pam->changeSession($_PAM1);
 		}
 
-		if (in_array($this->id, $royalisticRegime)) {		
-			if (count($ballot) > 0) {	
+		if (in_array($this->id, $royalisticRegime)) {
+			if (count($ballot) > 0) {
 				arsort($ballot);
 				reset($ballot);
 

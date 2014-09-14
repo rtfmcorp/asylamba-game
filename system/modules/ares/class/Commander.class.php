@@ -273,8 +273,9 @@ class Commander {
 		
 		if ($this->rPlayer > 0) {
 			$S_PLM1 = ASM::$pam->getCurrentSession();
-			ASM::$pam->newSession(TRUE, FALSE);
+			ASM::$pam->newSession();
 			ASM::$pam->load(array('id' => $this->rPlayer));
+			
 			$exp = round($this->earnedExperience / COEFFEXPPLAYER);
 			ASM::$pam->get(0)->increaseExperience($exp);
 

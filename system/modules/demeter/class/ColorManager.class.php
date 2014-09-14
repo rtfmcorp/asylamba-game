@@ -67,32 +67,32 @@ class ColorManager extends Manager {
 	public function save() {
 		$colors = $this->_Save();
 
-	foreach ($colors AS $color) {
-		$db = DataBase::getInstance();
-		$qr = $db->prepare('UPDATE color
-			SET
-				id = ?,
-				alive = ?,
-				credits = ?,
-				players = ?,	
-				activePlayers = ?,
-				points = ?,
-				sectors = ?,
-				electionStatement = ?,
-				dLastElection = ?
-			WHERE id = ?');
-		$aw = $qr->execute(array(
-				$color->id,
-				$color->alive,
-				$color->credits,
-				$color->players,
-				$color->activePlayers,
-				$color->points,
-				$color->sectors,
-				$color->electionStatement,
-				$color->dLastElection,
-				$color->id
-			));
+		foreach ($colors AS $color) {
+			$db = DataBase::getInstance();
+			$qr = $db->prepare('UPDATE color
+				SET
+					id = ?,
+					alive = ?,
+					credits = ?,
+					players = ?,	
+					activePlayers = ?,
+					points = ?,
+					sectors = ?,
+					electionStatement = ?,
+					dLastElection = ?
+				WHERE id = ?');
+			$aw = $qr->execute(array(
+					$color->id,
+					$color->alive,
+					$color->credits,
+					$color->players,
+					$color->activePlayers,
+					$color->points,
+					$color->sectors,
+					$color->electionStatement,
+					$color->dLastElection,
+					$color->id
+				));
 		}
 	}
 
@@ -139,14 +139,13 @@ class ColorManager extends Manager {
 	}
 
 	// FONCTIONS STATICS
-	
 	public static function updateInfos($id) {
 		self::updatePlayers($id);
 		self::updateActivePlayers($id);
 		self::updateSectors($id);
 	}
 
-	public static function updatePlayers ($id) {
+	public static function updatePlayers($id) {
 		include_once ZEUS;
 
 		$_CLM1 = ASM::$clm->getCurrentSession();
