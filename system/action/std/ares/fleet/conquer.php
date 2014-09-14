@@ -95,15 +95,15 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 			} else {
 				CTR::$alert->add('Vous ne pouvez pas conquérir un joueur de niveau 3 ou moins.', ALERT_STD_ERROR);
 			}
-			ASM::$com->changeSession($S_COM1);
-			ASM::$plm->changeSession($S_PLM1);
-			ASM::$plm->changeSession($S_PAM1);
+			ASM::$pam->changeSession($S_PAM1);
 		} else {
 			CTR::$alert->add('Vous avez assez de conquête en cours ou un niveau d\'administration étendue trop faible.', ALERT_STD_ERROR);
 		}
 	} else {
 		CTR::$alert->add('Vous devez débloquer la technologie de conquête.', ALERT_STD_ERROR);
 	}
+	ASM::$plm->changeSession($S_PLM1);
+	ASM::$com->changeSession($S_COM1);
 } else {
 	CTR::$alert->add('Manque de précision sur le commandant ou la position.', ALERT_STD_ERROR);
 }

@@ -84,9 +84,9 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	} else {
 		CTR::$alert->add('Vous ne pouvez pas piller un joueur de niveau 1.', ALERT_STD_ERROR);
 	}
-	ASM::$com->changeSession($S_COM1);
+	ASM::$pam->changeSession($S_PAM1);
 	ASM::$plm->changeSession($S_PLM1);
-	ASM::$plm->changeSession($S_PAM1);
+	ASM::$com->changeSession($S_COM1);
 } else {
 	CTR::$alert->add('Manque de précision sur le commandant ou la position.', ALERT_STD_ERROR);
 }

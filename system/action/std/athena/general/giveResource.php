@@ -59,6 +59,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_
 						$timeToTravel = Game::getTimeToTravel(ASM::$plm->get(0), ASM::$plm->get(1));
 						$departure = Utils::now();
 						$arrival = Utils::addSecondsToDate($departure, $timeToTravel);
+						ASM::$plm->changeSession($S_PLM1);
 
 						# création du convoi
 						$cs = new CommercialShipping();

@@ -32,26 +32,30 @@ class CTRHelper {
 	}
 
 	public static function addBase($key, $id, $name, $sector, $system, $img, $type) {
-		if ($key == 'ob' || $key == 'ms') {
-			$a = new ArrayList();
-			
-			$a->add('id', $id);
-			$a->add('name', $name);
-			$a->add('sector', $sector);
-			$a->add('system', $system);
-			$a->add('img', $img);
-			$a->add('type', $type);
+		if (CTR::$data->exist('playerBase')) {
+			if ($key == 'ob' || $key == 'ms') {
+				$a = new ArrayList();
+				
+				$a->add('id', $id);
+				$a->add('name', $name);
+				$a->add('sector', $sector);
+				$a->add('system', $system);
+				$a->add('img', $img);
+				$a->add('type', $type);
 
-			CTR::$data->get('playerBase')->get($key)->append($a);
-		} else {
-			return FALSE;
+				CTR::$data->get('playerBase')->get($key)->append($a);
+			} else {
+				return FALSE;
+			}
 		}
 	}
 
 	public static function removeBase($key, $id) {
-		for ($i = 0; $i < CTR::$data->get('playerBase')->get($key)->size(); $i++) {
-			if (CTR::$data->get('playerBase')->get($key)->get($i)->get('id') == $id) {
-				CTR::$data->get('playerBase')->get($key)->remove($i);
+		if (CTR::$data->exist('playerBase')) {
+			for ($i = 0; $i < CTR::$data->get('playerBase')->get($key)->size(); $i++) {
+				if (CTR::$data->get('playerBase')->get($key)->get($i)->get('id') == $id) {
+					CTR::$data->get('playerBase')->get($key)->remove($i);
+				}
 			}
 		}
 	}

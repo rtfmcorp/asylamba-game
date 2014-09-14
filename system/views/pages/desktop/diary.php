@@ -46,13 +46,13 @@ echo '<div id="content">';
 		$ob_selected = ASM::$obm->getAll();
 		include COMPONENT . 'player/diary/search.php';
 
-		// # diaryRoplay component
-		// $player_diaryRoplay = ASM::$pam->get(0);
-		// include COMPONENT . 'player/diary/rolplay.php';
+#		# diaryRoplay component
+#		$player_diaryRoplay = ASM::$pam->get(0);
+#		include COMPONENT . 'player/diary/rolplay.php';
 
-		// # diaryBases component
-		// $ob_diaryBases = ASM::$obm->getAll();
-		// include COMPONENT . 'player/diary/bases.php';
+		# diaryBases component
+		$ob_diaryBases = ASM::$obm->getAll();
+		include COMPONENT . 'player/diary/bases.php';
 
 		// if (ASM::$msm->size() > 0) {
 		// 	$threadId_thread = ASM::$msm->get()->getThread();

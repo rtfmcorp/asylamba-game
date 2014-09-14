@@ -2,7 +2,7 @@
 class SchoolClassResource {
 	private static $classes = array(
 		array(
-			'credit'  => 200,
+			'credit'  => 2500,
 			'minSize' => 1,
 			'maxSize' => 1,
 			'minExp'  => 100,

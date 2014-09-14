@@ -82,11 +82,11 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 				$cr->setStatement(0);
 				ASM::$crm->add($cr);
 				// débit des crédits au joueur
-				$S_PAM1 = ASM::$pam->getCurrentSession();
+				$S_PAM2 = ASM::$pam->getCurrentSession();
 				ASM::$pam->newSession(ASM_UMODE);
 				ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
 				ASM::$pam->get()->decreaseCredit($priceWithBonus);
-				ASM::$pam->changeSession($S_PAM1);
+				ASM::$pam->changeSession($S_PAM2);
 
 				$n = new Notification();
 				$n->setRPlayer($otherBase->getRPlayer());
@@ -111,8 +111,8 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 	} else {
 		CTR::$alert->add('impossible de proposer une route commerciale (3)', ALERT_STD_ERROR);
 	}
-	ASM::$obm->changeSession($S_OBM1);
 	ASM::$crm->changeSession($S_CRM1);
+	ASM::$obm->changeSession($S_OBM1);
 } else {
 	CTR::$alert->add('pas assez d\'informations pour proposer une route commerciale', ALERT_STD_FILLFORM);
 }

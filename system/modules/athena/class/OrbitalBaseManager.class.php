@@ -366,11 +366,19 @@ class OrbitalBaseManager extends Manager {
 			ASM::$crm->newSession();
 			ASM::$crm->load(array('rOrbitalBase' => $base->getRPlace()));
 			ASM::$crm->load(array('rOrbitalBaseLinked' => $base->getRPlace()));
-			for ($i = 0; $i < ASM::$crm->size(); $i++) { 
+			for ($i = ASM::$crm->size()-1; $i >= 0; $i--) { 
 				ASM::$crm->deleteById(ASM::$crm->get($i)->getId());
 				# envoyer une notif
 			}
 			ASM::$crm->changeSession($S_CRM1);
+
+			# suppression des technologies en cours de développement
+			$S_TQM1 = ASM::$tqm->getCurrentSession();
+			ASM::$tqm->changeSession($base->technoQueueManager);
+			for ($i = ASM::$tqm->size()-1; $i >= 0; $i--) { 
+				ASM::$tqm->deleteById(ASM::$tqm->get($i)->getId());
+			}
+			ASM::$tqm->changeSession($S_TQM1);
 
 			# ajouter/enlever la base dans le controller
 			if (CTR::$data->get('playerId') == $newOwner) {
