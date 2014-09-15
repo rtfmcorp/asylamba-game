@@ -74,19 +74,16 @@ $unactivatedPlayers = 0;
 $deletedPlayers 	= 0;
 for ($i = ASM::$pam->size() - 1; $i >= 0; $i--) { 
 	if (Utils::interval(Utils::now(), ASM::$pam->get($i)->getDLastConnection()) >= PAM_TIME_LIMIT_INACTIVE) {
-		ASM::$pam->get($i)->setStatement(PAM_DEAD);
-		ASM::$pam->get($i)->setRColor(0);
-		ASM::$pam->get($i)->setBind(NULL);
-		ASM::$pam->get($i)->setName('&#8987; ' . ASM::$pam->get($i)->getName());
 
-		# détruire les rc
-		# message inbox
-		# api server
+		ASM::$pam->kill(ASM::$pam->get($i)->id);
 
 		$deletedPlayers++;
 	} elseif (Utils::interval(Utils::now(), ASM::$pam->get($i)->getDLastConnection()) >= PAM_TIME_GLOBAL_INACTIVE) {
-		ASM::$pam->get($i)->setStatement(PAM_INACTIVE);
-		# ev. envoie de mail
+		ASM::$pam->get($i)->statement = PAM_INACTIVE;
+
+		# sending email API call
+		$api = new API(GETOUT_ROOT);
+		$api->sendMail(ASM::$pam->get($i)->bind, APP_ID, API::TEMPLATE_INACTIVE_PLAYER);
 
 		$unactivatedPlayers++;
 	}

@@ -6,6 +6,8 @@ class API {
 	public $query;
 	public $data;
 
+	const TEMPLATE_INACTIVE_PLAYER = 51;
+
 	public function __construct($path) {
 		$this->path = $path;
 	}
