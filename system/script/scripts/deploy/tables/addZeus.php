@@ -9,7 +9,7 @@ echo '<h2>Ajout de la table player</h2>';
 $db->query("DROP TABLE IF EXISTS `player`");
 $db->query("CREATE TABLE IF NOT EXISTS `player` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `bind` varchar(50) NOT NULL,
+  `bind` varchar(50) default NULL,
   `rColor` int(10) unsigned NOT NULL,
   `name` varchar(25) NOT NULL,
   `avatar` varchar(25) NOT NULL,
