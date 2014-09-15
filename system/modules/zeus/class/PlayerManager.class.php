@@ -78,6 +78,26 @@ class PlayerManager extends Manager {
 		}
 	}
 
+	public function kill($player) {
+
+		$S_PAM1 = ASM::$pam->getCurrentSession();
+		ASM::$pam->newSession();
+		ASM::$pam->load(array('id' => $player));
+		$p = ASM::$pam->get();
+
+		# API call
+		$api = new API(GETOUT_ROOT);
+		$api->playerIsDead($p->bind, APP_ID);
+
+		# deadify the player
+		$p->name = '&#8224; ' . $p->name;
+		$p->statement = PAM_DEAD;
+		$p->bind = NULL;
+		$p->rColor = 0;
+
+		ASM::$pam->changeSession($S_PAM1);
+	}
+
 	public function search($string, $quantity = 20, $offset = 0) {
 		$db = Database::getInstance();
 		$qr = $db->query('SELECT * FROM player WHERE LOWER(name) LIKE LOWER(\'%' . $string . '%\') LIMIT ' . intval($offset) . ', ' . intval($quantity));
