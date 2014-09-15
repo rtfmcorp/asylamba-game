@@ -198,21 +198,21 @@ class Color {
 		}
 	}
 
-	private function sendNotif($rPlayer, $department, $hasWin = TRUE) {
-		if ($haswin) {
-			$notif = new Notification();
-				$notif->setRPlayer($rPlayer);
-				$notif->setTitle('Vous avez était élu');
-				$notif->addBeg()
-					->addTxt('Le peule a voté pour vous lors des dernières élections. Vous êtes désormais le ' . ColorResource::getInfo($this->id, 'status')[$department]);
-				ASM::$ntm->add($notif);
-		} else {
-			$notif = new Notification();
-				$notif->setRPlayer($rPlayer);
-				$notif->setTitle('Vous n\'avez pas été élu');
-				ASM::$ntm->add($notif);
-		}
-	}
+	// private function sendNotif($rPlayer, $department, $hasWin = TRUE) {
+	// 	if ($haswin) {
+	// 		$notif = new Notification();
+	// 			$notif->setRPlayer($rPlayer);
+	// 			$notif->setTitle('Vous avez était élu');
+	// 			$notif->addBeg()
+	// 				->addTxt('Le peule a voté pour vous lors des dernières élections. Vous êtes désormais le ' . ColorResource::getInfo($this->id, 'status')[$department]);
+	// 			ASM::$ntm->add($notif);
+	// 	} else {
+	// 		$notif = new Notification();
+	// 			$notif->setRPlayer($rPlayer);
+	// 			$notif->setTitle('Vous n\'avez pas été élu');
+	// 			ASM::$ntm->add($notif);
+	// 	}
+	// }
 
 
 	public function uElection() {
