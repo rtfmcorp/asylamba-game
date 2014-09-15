@@ -228,10 +228,6 @@ class Commander {
 					$this->id);
 			}
 			$this->hasArmySetted = TRUE;
-		} else {
-			for ($i = 0; $i < count($this->squadronsIds); $i++) {
-				$this->getSquadron($i)->relId = 0;
-			}
 		}
 	}
 
@@ -429,6 +425,10 @@ class Commander {
 	# ENGAGE UN COMBAT ENTRE CHAQUE SQUADRON CONTRE UN COMMANDANT
 	public function engage($enemyCommander, $thisCommander) {
 		$this->setArmy();
+
+		for ($i = 0; $i < count($this->squadronsIds); $i++) {
+			$this->getSquadron($i)->relId = 0;
+		}
 		$idSquadron = 0;
 		foreach ($this->army as $squadron) {
 			if ($squadron->getNbrShips() != 0 AND $squadron->getLineCoord() * 3 <= FightController::getCurrentLine()) {
