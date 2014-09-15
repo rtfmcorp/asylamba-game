@@ -58,7 +58,7 @@ echo '<div class="component report">';
 							} else {
 								$title = $r->type == Commander::LOOT
 									? 'Défense ratée lors d\'un pillage'
-									: 'Défense ratée lors d\'un conquête';
+									: 'Défense ratée lors d\'une conquête';
 								$img = 'shield.png';
 							}
 						}
