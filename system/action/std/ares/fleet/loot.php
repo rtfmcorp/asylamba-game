@@ -55,7 +55,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 		} else {
 			CTR::$alert->add('Ce commandant ne vous appartient pas ou n\'existe pas.', ALERT_STD_ERROR);
 		}
-	} elseif (ASM::$pam->get()->level > 1) {
+	} elseif (ASM::$pam->get()->level > 1 || ASM::$pam->get()->statement >= PAM_DELETED) {
 		if (ASM::$com->size() > 0) {
 			if (ASM::$plm->size() > 0) {
 				$commander = ASM::$com->get();
