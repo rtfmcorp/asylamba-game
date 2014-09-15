@@ -27,6 +27,21 @@ ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' 
 $movingCommandersSession = ASM::$com->getCurrentSession();
 ASM::$com->changeSession($S_COM1);
 
+# load last report
+$placesId = array();
+foreach ($places as $place) {
+	$placesId[] = $place->id;
+}
+
+$S_RPM_MAP = ASM::$rpm->getCurrentSession();
+ASM::$rpm->newSession();
+ASM::$rpm->load(array('rPlayerAttacker' => CTR::$data->get('playerId'), 'r.rPlace' => $placesId), array('r.dFight', 'DESC'), array(0, 30));
+
+include_once ARTEMIS;
+$S_SRM_MAP = ASM::$srm->getCurrentSession();
+ASM::$srm->newSession();
+ASM::$srm->load(array('rPlayer' => CTR::$data->get('playerId'), 'rPlace' => $placesId), array('dSpying', 'DESC'), array(0, 30));
+
 # load the technologies
 $technologies = new Technology(CTR::$data->get('playerId'));
 
@@ -71,12 +86,19 @@ echo '<div class="body">';
 				echo '</a>';
 			echo '</li>';
 
-			echo '<li class="action color' . $place->playerColor . '" id="place-' . $i . '">';
+			// noAJAX
+			echo '<li class="action color' . $place->playerColor . '" id="place-' . $i . '" ' . (isset($noAJAX) && $noAJAX && CTR::$get->equal('place', $place->id) ? 'style="width: 565px;"' : NULL) . '>';
 				echo '<div class="content">';
 					echo '<div class="column info">';
+						for ($j = 0; $j < ASM::$srm->size(); $j++) { 
+							if (ASM::$srm->get($j)->rPlace == $place->id) {
+								echo '<a href="' . APP_ROOT . 'fleet/view-spyreport/report-' . ASM::$srm->get($j)->id . '" class="last-spy-link hb" title="voir le rapport d\'espionnage le plus récent"><img src="' . MEDIA . 'map/spy/last-spy.png" alt="" /></a>';
+								break;
+							}
+						}
+
 						if ($place->typeOfBase != 0) {
 							echo '<p><strong>' . $place->baseName . '</strong></p>';
-							echo '<p>' . PlaceResource::get($place->typeOfOrbitalBase, 'name') . '</p>';
 							echo '<hr />';
 							echo '<p>propriété du</p>';
 							echo '<p>';
@@ -125,8 +147,14 @@ echo '<div class="body">';
 								echo '<span class="value">' . Format::numberFormat($place->population) . '</span>';
 							echo '</p>';
 						}
-							echo '<hr />';
-							echo '<p><span class="hb lt" title="test">pillage</span> | <span class="hb" title="test">espionnage</span></p>';
+
+						for ($j = 0; $j < ASM::$rpm->size(); $j++) { 
+							if (ASM::$rpm->get($j)->rPlace == $place->id) {
+								echo '<hr />';
+								echo '<p><em>Dernier pillage ' . Chronos::transform(ASM::$rpm->get($j)->dFight) . '.</em></p>';
+								break;
+							}
+						}
 					echo '</div>';
 
 					include PAGES . 'desktop/mapElement/component/actBull.php';
@@ -136,4 +164,7 @@ echo '<div class="body">';
 		echo '</ul>';
 	echo '</div>';
 echo '</div>';
+
+ASM::$srm->changeSession($S_SRM_MAP);
+ASM::$rpm->changeSession($S_RPM_MAP);
 ?>

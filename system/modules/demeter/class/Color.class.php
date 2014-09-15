@@ -200,11 +200,12 @@ class Color {
 
 	private function sendNotif($rPlayer, $department, $hasWin = TRUE) {
 		if ($haswin) {
+			$resources = ColorResource::getInfo($this->id, 'status');
 			$notif = new Notification();
 				$notif->setRPlayer($rPlayer);
 				$notif->setTitle('Vous avez était élu');
 				$notif->addBeg()
-					->addTxt('Le peule a voté pour vous lors des dernières élections. Vous êtes désormais le ' . ColorResource::getInfo($this->id, 'status')[$department]);
+					->addTxt('Le peule a voté pour vous lors des dernières élections. Vous êtes désormais le ' . $resources[$department]);
 				ASM::$ntm->add($notif);
 		} else {
 			$notif = new Notification();

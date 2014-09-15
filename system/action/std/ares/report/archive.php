@@ -8,26 +8,22 @@ $id = Utils::getHTTPData('id');
 
 
 if ($id) {
-	$S_REP1 = ASM::$rep->getCurrentSession();
-	ASM::$rep->newSession(ASM_UMODE);
-	ASM::$rep->load(array('id' => $id));
-	if (ASM::$rep->size() > 0) {
-		$report = ASM::$rep->get();
+	$S_LRM = ASM::$lrm->getCurrentSession();
+	ASM::$lrm->newSession();
+	ASM::$lrm->load(array('id' => $id));
+	if (ASM::$lrm->size() > 0) {
+		$report = ASM::$lrm->get();
 		if (CTR::$data->get('playerId') == $report->rPlayerAttacker) {
-			if ($report->archivedAttacker == 0) {
-				$report->archivedAttacker = 1;
-				CTR::$alert->add('rapport archivé.', ALERT_STD_SUCCESS);
+			if ($report->archivedAttacker == Report::STANDARD) {
+				$report->archivedAttacker = Report::ARCHIVE;
 			} else {
-				$report->archivedAttacker = 0;
-				CTR::$alert->add('rapport désarchivé.', ALERT_STD_SUCCESS);
+				$report->archivedAttacker = Report::STANDARD;
 			}
 		} else if (CTR::$data->get('playerId') == $report->rPlayerDefender) {
-			if ($report->archivedDefender == 0) {
-				$report->archivedDefender = 1;
-				CTR::$alert->add('rapport archivé.', ALERT_STD_SUCCESS);
+			if ($report->archivedDefender == Report::STANDARD) {
+				$report->archivedDefender = Report::ARCHIVE;
 			} else {
-				$report->archivedDefender = 0;
-				CTR::$alert->add('rapport désarchivé.', ALERT_STD_SUCCESS);
+				$report->archivedDefender = Report::STANDARD;
 			}
 		} else {
 		CTR::$alert->add('Ce rapport ne vous appartient pas.', ALERT_STD_ERROR);
@@ -36,7 +32,7 @@ if ($id) {
 	} else {
 		CTR::$alert->add('Ce rapport n\'existe pas.', ALERT_STD_ERROR);
 	}
-	ASM::$rep->changeSession($S_REP1);
+	ASM::$lrm->changeSession($S_LRM);
 } else {
 	CTR::$alert->add('Manque de précision sur le rapport.', ALERT_STD_ERROR);
 }

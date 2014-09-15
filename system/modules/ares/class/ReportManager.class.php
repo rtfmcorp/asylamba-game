@@ -337,29 +337,5 @@ class ReportManager extends Manager {
 
 		return $newReport->id;
 	}
-
-	# assez chiant mais à faire
-	// public function deleteByRPlayer($playerId) {
-	// 	$this->load(array('rPlayerAttacker' => $playerId));
-	// 	$this->load(array('rPlayerDefender' => $playerId));
-
-	// 	$nbrDeleted = 0;
-
-	// 	if ($this->size() > 0) {
-	// 		foreach ($this->objects[$this->currentSession->getId()] AS $report) {
-	// 			if ($report->rPlayerAttacker == $playerId AND $report->archivedAttacker == 0 AND $report->rBigReportAttacker != 0) {
-	// 				$this->deleteById($report->rBigReportAttacker);
-	// 				$report->rBigReportAttacker = 0;
-	// 				$nbrDeleted++;
-	// 			} else if ($report->rPlayerDefender == $playerId AND $report->archivedDefender == 0 AND $report->rBigReportDefender != 0) {
-	// 				$this->deleteById($report->rBigReportDefender);
-	// 				$report->rBigReportDefender = 0;
-	// 				$nbrDeleted++;
-	// 			}
-	// 		}
-	// 	}
-
-	// 	return $nbrDeleted;
-	// }
 }
 ?>

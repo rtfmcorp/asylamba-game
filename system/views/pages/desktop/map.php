@@ -78,6 +78,8 @@ if ($systemId != 0) {
 		}
 		ASM::$plm->changeSession($S_PLM1);
 
+		$noAJAX = TRUE;
+
 		# inclusion du "composant"
 		echo '<div id="action-box" style="bottom: 0px;">';
 			include PAGES . 'desktop/mapElement/actionbox.php';
