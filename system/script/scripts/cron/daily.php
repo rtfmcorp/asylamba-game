@@ -89,6 +89,10 @@ for ($i = ASM::$pam->size() - 1; $i >= 0; $i--) {
 	}
 }
 
+# applique en cascade le changement de couleur des sytèmes
+include_once GAIA;
+GalaxyColorManager::apply();
+
 Bug::writeLog($path, '# [OK] Status');
 Bug::writeLog($path, '# [' . $bench->getTime('s', 3) . '] Execution time');
 Bug::writeLog($path, '# [' . $unactivatedPlayers . '] Players unactivated');
