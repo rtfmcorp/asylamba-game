@@ -388,8 +388,8 @@ class Commander {
 		$date->modify('+' . $duration . 'second');
 		$this->dArrival = $date->format('Y-m-d H:i:s');
 
-		// ajout de l'event dans le contrôleur // voir avec Jacky s'il faut modifier
-		if (CTR::$data->exist('playerEvent')) {
+		// ajout de l'event dans le contrôleur
+		if (CTR::$data->exist('playerEvent') && $this->rPlayer == CTR::$data->get('playerId')) {
 			CTR::$data->get('playerEvent')->add(
 				$this->dArrival,
 				EVENT_OUTGOING_ATTACK,

@@ -110,7 +110,6 @@ class Color {
 			for ($i = 0; $i < ASM::$pam->size(); $i++) {
 				ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
 			}
-			ASM::$pam->save();
 
 			ASM::$pam->changeSession($_PAM1);
 		}
@@ -124,7 +123,7 @@ class Color {
 				ASM::$pam->newSession(FALSE);
 				ASM::$pam->load(array('id' => key($ballot)));
 				ASM::$pam->get()->setStatus(PAM_CHIEF);
-				ASM::$pam->save();
+
 
 				ASM::$pam->changeSession($_PAM2);
 			}
@@ -170,7 +169,7 @@ class Color {
 					ASM::$cam->changeSession($_CAM);
 				}
 
-				ASM::$pam->save();
+
 
 				ASM::$pam->changeSession($_PAM2);
 			}
@@ -193,7 +192,7 @@ class Color {
 
 				ASM::$pam->load(array('id' => $keys[$aleaNbr]));
 				ASM::$pam->get()->setStatus(PAM_CHIEF);
-				ASM::$pam->save();
+
 				ASM::$pam->changeSession($_PAM2);
 			}
 		}
@@ -202,39 +201,15 @@ class Color {
 	private function sendNotif($rPlayer, $department, $hasWin = TRUE) {
 		if ($haswin) {
 			$notif = new Notification();
-				$notif->setRPlayer($this->rPlayer);
+				$notif->setRPlayer($rPlayer);
 				$notif->setTitle('Vous avez était élu');
 				$notif->addBeg()
-					->addTxt('Le peule a voté pour vous lors des dernières elections. Vous êtes désormais le nouveau')
-					->addStg($commander->getName())
-					->addTxt(' appartenant au joueur ')
-					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
-					->addTxt(' a attaqué votre planète ')
-					->addLnk('map/place-' . $this->id, $this->baseName)
-					->addTxt('.')
-					->addSep()
-					->addTxt('Vous avez repoussé l\'ennemi avec succès.')
-					->addSep()
-					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
-					->addEnd();
+					->addTxt('Le peule a voté pour vous lors des dernières élections. Vous êtes désormais le ' . ColorResource::getInfo($this->id, 'status')[$department]);
 				ASM::$ntm->add($notif);
 		} else {
 			$notif = new Notification();
-				$notif->setRPlayer($this->rPlayer);
+				$notif->setRPlayer($rPlayer);
 				$notif->setTitle('Vous n\'avez pas été élu');
-				$notif->addBeg()
-					->addTxt('L\'officier ')
-					->addStg($commander->getName())
-					->addTxt(' appartenant au joueur ')
-					->addLnk('diary/player-' . $commander->getRPlayer(), $commander->getPlayerName())
-					->addTxt(' a attaqué votre planète ')
-					->addLnk('map/place-' . $this->id, $this->baseName)
-					->addTxt('.')
-					->addSep()
-					->addTxt('Vous avez repoussé l\'ennemi avec succès.')
-					->addSep()
-					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
-					->addEnd();
 				ASM::$ntm->add($notif);
 		}
 	}
