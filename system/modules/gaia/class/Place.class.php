@@ -361,7 +361,7 @@ class Place {
 		# si il y a une base
 		} else {
 			# planète à joueur: si $this->rColor != commandant->rColor
-			if ($this->playerColor != $commander->getPlayerColor()) {
+			if ($this->playerColor != $commander->getPlayerColor() && $this->playerLevel > 1) {
 				// $commander->rDestinationPlace = NULL;
 				$commander->travelType = NULL;
 				$commander->travelLength = NULL;
@@ -488,7 +488,7 @@ class Place {
 			// $commander->dArrival = NULL;
 
 
-			if ($this->playerColor != $commander->getPlayerColor()) {
+			if ($this->playerColor != $commander->getPlayerColor() && $this->playerLevel > 3) {
 				for ($i = 0; $i < count($this->commanders) - 1; $i++) {
 					if ($this->commanders[$i + 1]->line < $this->commanders[$i]->line) {
 						$tempCom = $this->commanders[$i];
@@ -1057,7 +1057,7 @@ class Place {
 					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' n\'a pas attaqué la planète ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
-					->addTxt(' car elle est dans votre Faction.')
+					->addTxt(' car son joueur est de votre faction ou sous la protection débutant.')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -1137,7 +1137,7 @@ class Place {
 					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' n\'a pas attaqué la planète ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
-					->addTxt(' car elle est de votre faction.')
+					->addTxt(' car le joueur est dans votre faction ou sous la protection débutant.')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;

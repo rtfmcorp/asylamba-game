@@ -35,12 +35,16 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
 					$duration = Game::getTimeToTravel($home, $place, CTR::$data->get('playerBonus'));
 
-					if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
-						CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
+					if ($commander->getPev() > 0) {
+						if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
+							CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
 
-						if (CTR::$get->exist('redirect')) {
-							CTR::redirect('map/place-' . CTR::$get->get('redirect'));
+							if (CTR::$get->exist('redirect')) {
+								CTR::redirect('map/place-' . CTR::$get->get('redirect'));
+							}
 						}
+					} else {
+						CTR::$alert->add('Vous devez affecter au moins un vaisseau à votre officier.', ALERT_STD_ERROR);	
 					}		
 				} else {
 					CTR::$alert->add('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction.', ALERT_STD_ERROR);
@@ -64,14 +68,18 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
 					$duration = Game::getTimeToTravel($home, $place, CTR::$data->get('playerBonus'));
 
-					if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
-						$commander->dStart = Utils::now();
-						CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
+					if ($commander->getPev() > 0) {
+						if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
+							$commander->dStart = Utils::now();
+							CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
 
-						if (CTR::$get->exist('redirect')) {
-							CTR::redirect('map/place-' . CTR::$get->get('redirect'));
+							if (CTR::$get->exist('redirect')) {
+								CTR::redirect('map/place-' . CTR::$get->get('redirect'));
+							}
 						}
-					}		
+					} else {
+						CTR::$alert->add('Vous devez affecter au moins un vaisseau à votre officier.', ALERT_STD_ERROR);	
+					}	
 				} else {
 					CTR::$alert->add('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction.', ALERT_STD_ERROR);
 				}

@@ -66,19 +66,23 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 								$price -= round($price * ColorResource::BONUS_CARDAN_COLO / 100);
 							}
 							if (CTR::$data->get('playerInfo')->get('credit') >= $price) {
-								if ($commander->move($place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
-									# debit credit
-									$S_PAM2 = ASM::$pam->getCurrentSession();
-									ASM::$pam->newSession(ASM_UMODE);
-									ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-									ASM::$pam->get()->decreaseCredit($price);
-									ASM::$pam->changeSession($S_PAM2);
+								if ($commander->getPev() > 0) {
+									if ($commander->move($place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
+										# debit credit
+										$S_PAM2 = ASM::$pam->getCurrentSession();
+										ASM::$pam->newSession(ASM_UMODE);
+										ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+										ASM::$pam->get()->decreaseCredit($price);
+										ASM::$pam->changeSession($S_PAM2);
 
-									CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
+										CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
 
-									if (CTR::$get->exist('redirect')) {
-										CTR::redirect('map/place-' . CTR::$get->get('redirect'));
+										if (CTR::$get->exist('redirect')) {
+											CTR::redirect('map/place-' . CTR::$get->get('redirect'));
+										}
 									}
+								} else {
+									CTR::$alert->add('Vous devez affecter au moins un vaisseau à votre officier.', ALERT_STD_ERROR);	
 								}
 							} else {
 								CTR::$alert->add('Vous n\'avez pas assez de crédits pour conquérir cette base.', ALERT_STD_ERROR);
