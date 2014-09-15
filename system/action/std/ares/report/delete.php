@@ -15,10 +15,8 @@ if ($id) {
 
 		if ($report->rPlayerAttacker == CTR::$data->get('playerId')) {
 			ASM::$lrm->get()->statementAttacker = Report::DELETED;
-			CTR::$alert->add('Rapport supprimé', ALERT_STD_SUCCESS);
 		} elseif ($report->rPlayerDefender == CTR::$data->get('playerId')) {
 			ASM::$lrm->get()->statementDefender = Report::DELETED;
-			CTR::$alert->add('Rapport supprimé', ALERT_STD_SUCCESS);
 		} else {
 			CTR::$alert->add('Ce rapport ne vous appartient pas', ALERT_STD_ERROR);
 		}

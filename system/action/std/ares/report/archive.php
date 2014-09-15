@@ -16,18 +16,14 @@ if ($id) {
 		if (CTR::$data->get('playerId') == $report->rPlayerAttacker) {
 			if ($report->archivedAttacker == Report::STANDARD) {
 				$report->archivedAttacker = Report::ARCHIVE;
-				CTR::$alert->add('rapport archivé.', ALERT_STD_SUCCESS);
 			} else {
 				$report->archivedAttacker = Report::STANDARD;
-				CTR::$alert->add('rapport désarchivé.', ALERT_STD_SUCCESS);
 			}
 		} else if (CTR::$data->get('playerId') == $report->rPlayerDefender) {
 			if ($report->archivedDefender == Report::STANDARD) {
 				$report->archivedDefender = Report::ARCHIVE;
-				CTR::$alert->add('rapport archivé.', ALERT_STD_SUCCESS);
 			} else {
 				$report->archivedDefender = Report::STANDARD;
-				CTR::$alert->add('rapport désarchivé.', ALERT_STD_SUCCESS);
 			}
 		} else {
 		CTR::$alert->add('Ce rapport ne vous appartient pas.', ALERT_STD_ERROR);
