@@ -586,7 +586,7 @@ jQuery(document).ready(function($) {
 	actionbox = {
 		obj: $('#action-box'),
 		relatedPlace: $('#map').data('related-place'),
-		opened: false,
+		opened: true,
 
 		applyCommander: function() {
 			if (actionbox.opened) {

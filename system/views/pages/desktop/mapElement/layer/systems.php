@@ -15,7 +15,7 @@ echo '<div id="systems">';
 		$owner = (in_array($system['id'], $basesId)) ? 'class="own"' : '';
 		echo '<a ';
 			echo 'href="#" ';
-			echo 'class="loadSystem" ';
+			echo 'class="loadSystem ' . $systemId . ' ' . ($system['id'] == $systemId ? 'active' : NULL) . '" ';
 			echo 'data-system-id="' . $system['id'] . '" ';
 			echo 'data-x-position="' . $system['xPosition'] . '" data-y-position="' . $system['yPosition'] . '" ';
 			echo 'style="top: ' . ($system['yPosition'] * GalaxyConfiguration::$scale - 10) . 'px; left: ' . ($system['xPosition'] * GalaxyConfiguration::$scale - 10) . 'px">';

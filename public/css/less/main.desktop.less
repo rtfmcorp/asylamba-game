@@ -34,7 +34,7 @@
 	background-image: url(@image),          linear-gradient(@color1, @color2, @background);
 }
 
-@color-type: 7;
+@color-type: 1;
 .color-init(@color-type);
 @import 'colors/colors.less';
 
@@ -59,6 +59,8 @@
 @import 'component/notif.less';
 @import 'component/commercial-route.less';
 @import 'component/situation.less';
+
+@import 'component/map.less';
 
 // pas fait
 @import 'component/list-fleet.less';
@@ -543,6 +545,17 @@
 	color: white;
 }
 
+#action-box .body .system ul li.action .content .column .last-spy-link {
+	position: absolute;
+	top: 6px; right: 8px;
+	opacity: .5;
+	.transition(all linear 250ms);
+
+	&:hover, &:focus {
+		opacity: 1;
+	}
+}
+
 #action-box .body .system ul li.action .content .column.info  { width: 199px; }
 #action-box .body .system ul li.action .content .column.act {
 	width: 345px;
@@ -686,253 +699,7 @@
 /* map-commanders */
 
 /****** MAP *****/
-#map {
-	position: absolute;
-	z-index: 100;
-	background: url('src/desktop/map/common/map.jpg') repeat black;
-	padding: 0; top: 0; left: 0;
-}
-#map #sectors { z-index: 300; }
-#map #spying { z-index: 400; }
-#map #own-base { z-index: 500; }
-#map #commercial-routes { z-index: 600; }
-#map #fleet-movements { z-index: 700; }
-#map #attacks { z-index: 800; }
-#map #systems { z-index: 900; }
-#map #map-info { z-index: 910; }
 
-#map > div {
-	position: absolute;
-	top: 0; left: 0;
-	width: 100%; height: 100%;
-	overflow: hidden;
-}
-
-#map #sectors polygon {
-	stroke: white;
-	stroke-width: 1px;
-	stroke-dasharray: 4 4;
-	opacity: 0.15;
-}
-
-#map #sectors .ally1 { fill: #6e161b; }
-#map #sectors .ally2 { fill: #1f1471; }
-#map #sectors .ally3 { fill: #dbb200; }
-#map #sectors .ally4 { fill: #5a1072; }
-#map #sectors .ally5 { fill: #2c7915; }
-#map #sectors .ally6 { fill: #076b87; }
-#map #sectors .ally7 { fill: #67331d; }
-
-#map #spying circle { 
-	opacity: 0.08;
-	stroke: white;
-}
-
-.color1 #map #spying circle { fill: #6e161b; }
-.color2 #map #spying circle { fill: #1f1471; }
-.color3 #map #spying circle { fill: #dbb200; }
-.color4 #map #spying circle { fill: #5a1072; }
-.color5 #map #spying circle { fill: #2c7915; }
-.color6 #map #spying circle { fill: #076b87; }
-.color7 #map #spying circle { fill: #67331d; }
-
-#map #own-base circle {
-	opacity: 0.1;
-	fill: white;
-}
-
-#map #commercial-routes line {
-	stroke: white;
-	stroke-width: 1px;
-	stroke-dasharray: 20 5 5 5 5 10;
-}
-
-#map #commercial-routes line.standBy {
-	stroke: rgba(255, 255, 255, .3);
-}
-
-#map #fleet-movements line {
-	stroke-width: 1px;
-}
-#map #fleet-movements line.back {
-	stroke-dasharray: 15 5;
-}
-.color1 #map #fleet-movements line { stroke: #b01e2d; }
-.color2 #map #fleet-movements line { stroke: #2f23c0; }
-.color3 #map #fleet-movements line { stroke: #ffdb0f; }
-.color4 #map #fleet-movements line { stroke: #a935c7; }
-.color5 #map #fleet-movements line { stroke: #57c632; }
-.color6 #map #fleet-movements line { stroke: #05bed7; }
-.color7 #map #fleet-movements line { stroke: #ac5832; }
-
-.color1 #map #fleet-movements circle { fill: #b01e2d; }
-.color2 #map #fleet-movements circle { fill: #2f23c0; }
-.color3 #map #fleet-movements circle { fill: #ffdb0f; }
-.color4 #map #fleet-movements circle { fill: #a935c7; }
-.color5 #map #fleet-movements circle { fill: #57c632; }
-.color6 #map #fleet-movements circle { fill: #05bed7; }
-.color7 #map #fleet-movements circle { fill: #ac5832; }
-
-#map #attacks line {
-	stroke-width: 1px;
-}
-#map #attacks line.color1 { stroke: #b01e2d; }
-#map #attacks line.color2 { stroke: #2f23c0; }
-#map #attacks line.color3 { stroke: #ffdb0f; }
-#map #attacks line.color4 { stroke: #a935c7; }
-#map #attacks line.color5 { stroke: #57c632; }
-#map #attacks line.color6 { stroke: #05bed7; }
-#map #attacks line.color7 { stroke: #ac5832; }
-
-#map #attacks circle.color1 { fill: #b01e2d; }
-#map #attacks circle.color2 { fill: #2f23c0; }
-#map #attacks circle.color3 { fill: #ffdb0f; }
-#map #attacks circle.color4 { fill: #a935c7; }
-#map #attacks circle.color5 { fill: #57c632; }
-#map #attacks circle.color6 { fill: #05bed7; }
-#map #attacks circle.color7 { fill: #ac5832; }
-
-#map #systems a {
-	display: block;
-	position: absolute;
-	border-radius: 100%;
-}
-
-#map #systems a.active {
-	background: black;
-	box-shadow: 0 0 25px 12px black;
-}
-
-#map #systems a img {
-	display: block;
-	width: 20px; height: 20px;
-	border: none;
-
-	border-radius: 100%;
-	-moz-border-radius: 100%;
-	-webkit-border-radius: 100%;
-	-ms-border-radius: 100%;
-	-o-border-radius: 100%;
-}
-
-#map #systems a img.own { background: white; }
-
-#map #systems .sector-number {
-	position: absolute;
-	display: block;
-	font-size: 22px;
-	line-height: 40px;
-	width: 40px;
-	text-align: center;
-	border-radius: 100%;
-	box-shadow: 0 0 0 5px #0A0A0A, 0 0 0 6px #4F4F4F;
-	background: #202020;
-	color: white;
-	font-weight: bold;
-	cursor: pointer;
-}
-#map #systems .sector-number.color1 { background: #6e161b; }
-#map #systems .sector-number.color2 { background: #1f1471; }
-#map #systems .sector-number.color3 { background: #dbb200; }
-#map #systems .sector-number.color4 { background: #5a1072; }
-#map #systems .sector-number.color5 { background: #2c7915; }
-#map #systems .sector-number.color6 { background: #076b87; }
-#map #systems .sector-number.color7 { background: #67331d; }
-
-#map #systems .sector-info {
-	display: none;
-	position: absolute;
-	color: white;
-	background: black;
-	background: rgba(0, 0, 0, .9);
-	padding: 8px 16px;
-	border-radius: 3px;
-}
-#map #systems .sector-info:before {
-	content: '';
-	position: absolute;
-	left: -20px; top: 20px;
-	border-style: solid;
-	border-width: 10px;
-	border-color: transparent black transparent transparent;
-	border-color: transparent rgba(0, 0, 0, .9) transparent transparent;
-}
-#map #systems .sector-info h2 {
-	position: relative;
-	font-size: 40px;
-	font-weight: bold;
-	line-height: 40px;
-	text-shadow: 0 0 5px black;
-	margin: 0; padding: 0;
-}
-#map #systems .sector-info p {
-	font-size: 13px;
-	margin: 6px 0 0 0; padding: 0;
-	font-weight: bold;
-	font-variant: small-caps;
-}
-
-#map #systems .sector-info p a {
-	position: static;
-	display: inline-block;
-	color: white;
-	background: #202020;
-	border-radius: 3px;
-	line-height: 20px; width: 20px;
-	text-align: center;
-	text-decoration: none;
-	border: solid 1px rgba(255, 255, 255, .5);
-	margin: 0 5px 0 0;
-}
-#map #systems .sector-info.color1 p a { background: #6e161b; }
-#map #systems .sector-info.color2 p a { background: #1f1471; }
-#map #systems .sector-info.color3 p a { background: #dbb200; }
-#map #systems .sector-info.color4 p a { background: #5a1072; }
-#map #systems .sector-info.color5 p a { background: #2c7915; }
-#map #systems .sector-info.color6 p a { background: #076b87; }
-#map #systems .sector-info.color7 p a { background: #67331d; }
-
-#map #map-info {
-	display: none;
-	position: absolute;
-	top: 0px; right: 0px; left: auto; bottom: auto;
-	height: auto; width: auto;
-	margin: 40px 60px 0 0;
-	color: white;
-	text-align: right;
-}
-
-#map #map-info h2 {
-	margin: 0; padding: 0 20px;
-	font-size: 38px;
-	line-height: 60px;
-}
-
-#map #map-info h3 {
-	margin: 0; padding: 0 20px;
-	font-size: 16px;
-	font-weight: normal;
-	line-height: 40px;
-}
-
-#map #map-info ul {
-	margin: 10px 0; padding: 0;
-	list-style: none;
-}
-
-#map #map-info ul li {
-	position: relative;
-	margin: 0; padding: 0 40px 0 0;
-	line-height: 20px; height: 20px;
-	font-style: italic;
-	color: #CCC;
-	font-size: 13px;
-}
-
-#map #map-info ul li img {
-	position: absolute;
-	right: 10px; top: 0px;
-}
 
 /* ADMIN */
 .component.admin table {

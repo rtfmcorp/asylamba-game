@@ -1,0 +1,251 @@
+#map {
+	position: absolute;
+	z-index: 100;
+	background: url('src/desktop/map/common/map.jpg') repeat black;
+	padding: 0; top: 0; left: 0;
+
+	#sectors 			{ z-index: 300; }
+	#spying 			{ z-index: 400; }
+	#own-base 			{ z-index: 500; }
+	#commercial-routes 	{ z-index: 600; }
+	#fleet-movements 	{ z-index: 700; }
+	#attacks 			{ z-index: 800; }
+	#systems 			{ z-index: 900; }
+	#map-info 			{ z-index: 910; }
+
+	& > div {
+		position: absolute;
+		top: 0; left: 0;
+		width: 100%; height: 100%;
+		overflow: hidden;
+	}
+
+	#sectors polygon {
+		stroke: white;
+		stroke-width: 1px;
+		stroke-dasharray: 4 4;
+		opacity: 0.15;
+	}
+
+	#sectors .ally1 { fill: @medium-1; }
+	#sectors .ally2 { fill: @medium-2; }
+	#sectors .ally3 { fill: @medium-3; }
+	#sectors .ally4 { fill: @medium-4; }
+	#sectors .ally5 { fill: @medium-5; }
+	#sectors .ally6 { fill: @medium-6; }
+	#sectors .ally7 { fill: @medium-7; }
+
+	#spying circle { 
+		opacity: 0.08;
+		stroke: white;
+	}
+
+	#own-base circle {
+		opacity: 0.1;
+		fill: white;
+	}
+
+	#commercial-routes line {
+		stroke: white;
+		stroke-width: 1px;
+		stroke-dasharray: 20 5 5 5 5 10;
+	}
+
+	#commercial-routes line.standBy {
+		stroke: rgba(255, 255, 255, .3);
+	}
+
+	#fleet-movements line {
+		stroke-width: 1px;
+	}
+	#fleet-movements line.back {
+		stroke-dasharray: 15 5;
+	}
+	
+	#attacks line {
+		stroke-width: 1px;
+	}
+	#attacks line.color1 { stroke: #b01e2d; }
+	#attacks line.color2 { stroke: #2f23c0; }
+	#attacks line.color3 { stroke: #ffdb0f; }
+	#attacks line.color4 { stroke: #a935c7; }
+	#attacks line.color5 { stroke: #57c632; }
+	#attacks line.color6 { stroke: #05bed7; }
+	#attacks line.color7 { stroke: #ac5832; }
+
+	#attacks circle.color1 { fill: #b01e2d; }
+	#attacks circle.color2 { fill: #2f23c0; }
+	#attacks circle.color3 { fill: #ffdb0f; }
+	#attacks circle.color4 { fill: #a935c7; }
+	#attacks circle.color5 { fill: #57c632; }
+	#attacks circle.color6 { fill: #05bed7; }
+	#attacks circle.color7 { fill: #ac5832; }
+
+	#systems a {
+		display: block;
+		position: absolute;
+		border-radius: 100%;
+	}
+
+	#systems a.active {
+		background: black;
+		box-shadow: 0 0 0 1px black,
+			0 0 0 3px white,
+			0 0 10px 8px black;
+	}
+
+	#systems a img {
+		display: block;
+		width: 20px; height: 20px;
+		border: none;
+
+		border-radius: 100%;
+		-moz-border-radius: 100%;
+		-webkit-border-radius: 100%;
+		-ms-border-radius: 100%;
+		-o-border-radius: 100%;
+	}
+
+	#systems a img.own { background: white; }
+
+	#systems .sector-number {
+		position: absolute;
+		display: block;
+		font-size: 22px;
+		line-height: 40px;
+		width: 40px;
+		text-align: center;
+		border-radius: 100%;
+		box-shadow: 0 0 0 5px #0A0A0A, 0 0 0 6px #4F4F4F;
+		background: #202020;
+		color: white;
+		font-weight: bold;
+		cursor: pointer;
+	}
+	#systems .sector-number.color1 { background: #6e161b; }
+	#systems .sector-number.color2 { background: #1f1471; }
+	#systems .sector-number.color3 { background: #dbb200; }
+	#systems .sector-number.color4 { background: #5a1072; }
+	#systems .sector-number.color5 { background: #2c7915; }
+	#systems .sector-number.color6 { background: #076b87; }
+	#systems .sector-number.color7 { background: #67331d; }
+
+	#systems .sector-info {
+		display: none;
+		position: absolute;
+		color: white;
+		background: black;
+		background: rgba(0, 0, 0, .9);
+		padding: 8px 16px;
+		border-radius: 3px;
+	}
+	#systems .sector-info:before {
+		content: '';
+		position: absolute;
+		left: -20px; top: 20px;
+		border-style: solid;
+		border-width: 10px;
+		border-color: transparent black transparent transparent;
+		border-color: transparent rgba(0, 0, 0, .9) transparent transparent;
+	}
+	#systems .sector-info h2 {
+		position: relative;
+		font-size: 40px;
+		font-weight: bold;
+		line-height: 40px;
+		text-shadow: 0 0 5px black;
+		margin: 0; padding: 0;
+	}
+	#systems .sector-info p {
+		font-size: 13px;
+		margin: 6px 0 0 0; padding: 0;
+		font-weight: bold;
+		font-variant: small-caps;
+	}
+
+	#systems .sector-info p a {
+		position: static;
+		display: inline-block;
+		color: white;
+		background: #202020;
+		border-radius: 3px;
+		line-height: 20px; width: 20px;
+		text-align: center;
+		text-decoration: none;
+		border: solid 1px rgba(255, 255, 255, .5);
+		margin: 0 5px 0 0;
+	}
+	#systems .sector-info.color1 p a { background: #6e161b; }
+	#systems .sector-info.color2 p a { background: #1f1471; }
+	#systems .sector-info.color3 p a { background: #dbb200; }
+	#systems .sector-info.color4 p a { background: #5a1072; }
+	#systems .sector-info.color5 p a { background: #2c7915; }
+	#systems .sector-info.color6 p a { background: #076b87; }
+	#systems .sector-info.color7 p a { background: #67331d; }
+
+	#map-info {
+		display: none;
+		position: absolute;
+		top: 0px; right: 0px; left: auto; bottom: auto;
+		height: auto; width: auto;
+		margin: 40px 60px 0 0;
+		color: white;
+		text-align: right;
+	}
+
+	#map-info h2 {
+		margin: 0; padding: 0 20px;
+		font-size: 38px;
+		line-height: 60px;
+	}
+
+	#map-info h3 {
+		margin: 0; padding: 0 20px;
+		font-size: 16px;
+		font-weight: normal;
+		line-height: 40px;
+	}
+
+	#map-info ul {
+		margin: 10px 0; padding: 0;
+		list-style: none;
+	}
+
+	#map-info ul li {
+		position: relative;
+		margin: 0; padding: 0 40px 0 0;
+		line-height: 20px; height: 20px;
+		font-style: italic;
+		color: #CCC;
+		font-size: 13px;
+	}
+
+	#map-info ul li img {
+		position: absolute;
+		right: 10px; top: 0px;
+	}
+}
+
+.color1 #map #spying circle { fill: @medium-1; }
+.color2 #map #spying circle { fill: @medium-2; }
+.color3 #map #spying circle { fill: @medium-3; }
+.color4 #map #spying circle { fill: @medium-4; }
+.color5 #map #spying circle { fill: @medium-5; }
+.color6 #map #spying circle { fill: @medium-6; }
+.color7 #map #spying circle { fill: @medium-7; }
+
+.color1 #map #fleet-movements line { stroke: @light-1; }
+.color2 #map #fleet-movements line { stroke: @light-2; }
+.color3 #map #fleet-movements line { stroke: @light-3; }
+.color4 #map #fleet-movements line { stroke: @light-4; }
+.color5 #map #fleet-movements line { stroke: @light-5; }
+.color6 #map #fleet-movements line { stroke: @light-6; }
+.color7 #map #fleet-movements line { stroke: @light-7; }
+
+.color1 #map #fleet-movements circle { fill: @light-1; }
+.color2 #map #fleet-movements circle { fill: @light-2; }
+.color3 #map #fleet-movements circle { fill: @light-3; }
+.color4 #map #fleet-movements circle { fill: @light-4; }
+.color5 #map #fleet-movements circle { fill: @light-5; }
+.color6 #map #fleet-movements circle { fill: @light-6; }
+.color7 #map #fleet-movements circle { fill: @light-7; }
