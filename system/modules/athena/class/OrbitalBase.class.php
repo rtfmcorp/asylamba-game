@@ -312,7 +312,7 @@ class OrbitalBase {
 
 				if ($cs->dArrival < $now AND $cs->dArrival !== '0000-00-00 00:00:00') {
 					CTC::add($cs->dArrival, $this, 'uCommercialShipping', array($cs));
-				} 
+				}
 			}
 			ASM::$csm->changeSession($S_CSM1);
 		}
