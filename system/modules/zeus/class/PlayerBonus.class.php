@@ -183,7 +183,6 @@ class PlayerBonus {
 				$this->bonus->increase(self::UNI_INVEST, 2);
 				break;
 			default:
-				CTR::$alert->add('Attention, ce joueur n\'est dans aucune faction !', ALERT_STD_ERROR);
 				break;
 		}
 	}
