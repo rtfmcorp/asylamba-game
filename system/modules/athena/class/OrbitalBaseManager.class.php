@@ -359,6 +359,7 @@ class OrbitalBaseManager extends Manager {
 
 		if (ASM::$obm->size() > 0) {
 			# attribuer le rPlayer à la Base
+			$oldOwner = $base->rPlayer;
 			$base->setRPlayer($newOwner);
 
 			# suppression des routes commerciales
@@ -411,6 +412,16 @@ class OrbitalBaseManager extends Manager {
 			include_once GAIA;
 			GalaxyColorManager::apply();
 
+			# vérifie si le joueur n'a plus de planète, si c'est le cas, il est mort
+			$S_OBM2 = ASM::$obm->getCurrentSession();
+			ASM::$obm->newSession();
+			ASM::$obm->load(array('rPlace' => $player));
+
+			if (ASM::$obm->size() == 0 OR (ASM::$obm->size() == 1 AND ASM::$obm->get()->id == $id)) {
+				ASM::$pam->kill($oldOwner);
+			}
+
+			ASM::$obm->changeSession($S_OBM1);
 		} else {
 			CTR::$alert->add('Cette base orbitale n\'exite pas !', ALERT_BUG_INFO);
 			CTR::$alert->add('dans changeOwnerById de OrbitalBaseManager', ALERT_BUG_ERROR);
