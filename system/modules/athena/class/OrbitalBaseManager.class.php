@@ -421,7 +421,7 @@ class OrbitalBaseManager extends Manager {
 			include_once GAIA;
 			GalaxyColorManager::apply();
 
-			ASM::$obm->changeSession($S_OBM1);
+			ASM::$obm->changeSession($S_OBM2);
 		} else {
 			CTR::$alert->add('Cette base orbitale n\'exite pas !', ALERT_BUG_INFO);
 			CTR::$alert->add('dans changeOwnerById de OrbitalBaseManager', ALERT_BUG_ERROR);
