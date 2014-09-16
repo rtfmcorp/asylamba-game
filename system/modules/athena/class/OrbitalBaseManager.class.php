@@ -413,7 +413,7 @@ class OrbitalBaseManager extends Manager {
 			ASM::$obm->newSession();
 			ASM::$obm->load(array('rPlace' => $player));
 
-			if (ASM::$obm->size() == 0 OR (ASM::$obm->size() == 1 AND ASM::$obm->get()->id == $id)) {
+			if (ASM::$obm->size() == 0 OR (ASM::$obm->size() == 1 AND ASM::$obm->get()->rPlace == $id)) {
 				ASM::$pam->kill($oldOwner);
 			}
 
