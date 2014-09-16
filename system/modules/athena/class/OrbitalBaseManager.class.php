@@ -408,20 +408,20 @@ class OrbitalBaseManager extends Manager {
 			}
 			ASM::$com->changeSession($S_COM2);
 
-			# applique en cascade le changement de couleur des sytèmes
-			include_once GAIA;
-			GalaxyColorManager::apply();
-
 			# vérifie si le joueur n'a plus de planète, si c'est le cas, il est mort
 			$S_OBM2 = ASM::$obm->getCurrentSession();
 			ASM::$obm->newSession();
 			ASM::$obm->load(array('rPlace' => $player));
 
-			if (ASM::$obm->size() == 0 OR (ASM::$obm->size() == 1 AND ASM::$obm->get()->id == $id)) {
+			if (ASM::$obm->size() == 0 OR (ASM::$obm->size() == 1 AND ASM::$obm->get()->rPlace == $id)) {
 				ASM::$pam->kill($oldOwner);
 			}
 
-			ASM::$obm->changeSession($S_OBM1);
+			# applique en cascade le changement de couleur des sytèmes
+			include_once GAIA;
+			GalaxyColorManager::apply();
+
+			ASM::$obm->changeSession($S_OBM2);
 		} else {
 			CTR::$alert->add('Cette base orbitale n\'exite pas !', ALERT_BUG_INFO);
 			CTR::$alert->add('dans changeOwnerById de OrbitalBaseManager', ALERT_BUG_ERROR);

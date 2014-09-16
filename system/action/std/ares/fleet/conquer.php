@@ -46,7 +46,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 			ASM::$pam->newSession(ASM_UMODE);
 			ASM::$pam->load(array('id' => ASM::$plm->get()->rPlayer));
 
-			if (ASM::$pam->get()->level > 3) {
+			if (ASM::$pam->get()->level > 3 || ASM::$pam->get()->statement >= PAM_DELETED) {
 				if (ASM::$com->size() > 0) {
 					if (ASM::$plm->size() > 0) {
 						$commander = ASM::$com->get();
