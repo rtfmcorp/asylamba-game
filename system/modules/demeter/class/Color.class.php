@@ -106,7 +106,7 @@ class Color {
 		if (count($ballot) > 0) {
 			$_PAM1 = ASM::$pam->getCurrentsession();
 			ASM::$pam->newSession(FALSE);
-			ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF)));
+			ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF), 'rColor' => $this->id));
 			for ($i = 0; $i < ASM::$pam->size(); $i++) {
 				ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
 			}
