@@ -239,7 +239,7 @@ class OrbitalBaseResource {
 				array(150000, 800000, 15, 	100)
 			),
 			'maxLevel' => array(13, 20, 20, 20),
-			'description' => 'Vous donnant la possibilité de construire et de faire évoluer vos bâtiments, le <strong>Générateur</strong> vous permet également de savoir à quel niveau sont vos édifices. Cette passerelle est l’institution principale de votre base orbitale. En effet, s’il n’est pas suffisamment évolué, vous remarquerez très vite qu’il devient impossible d’ériger d’autres types de bâtiment.<br /><br />Chaque fois que le Générateur aura passé <strong>cinq niveaux</strong>, une case construction supplémentaire sera à votre disposition. Cependant, dans certains cas, plusieurs bâtiments pourront être construits pour une seule case. Il vous faudra donc faire un choix entre lesdits bâtiments. Attention, la construction de certain type de bâtiment peuvent changer votre manière de jouer.'
+			'description' => 'Vous donnant la possibilité de construire et de faire évoluer vos bâtiments, le <strong>Générateur</strong> vous permet également de savoir à quel niveau sont vos édifices. Cette passerelle est l’institution principale de votre base orbitale. En effet, s’il n’est pas suffisamment évolué, vous remarquerez très vite qu’il devient impossible d’ériger d’autres types de bâtiments.<br /><br />Un niveau supplémentaire du Générateur permet de développer un niveau supplémentaire de chacun des autres bâtiments, à l\'exception de la Plateforme Commerciale et du Chantier de Ligne. Ces deux bâtiments ne peuvent être débloqué qu\'une fois le niveau 5 du Générateur atteint.'
 		),
 		array(
 			'name' => 'refinery',

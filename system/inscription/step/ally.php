@@ -10,7 +10,7 @@ include 'inscriptionElement/subnav.php';
 
 # contenu spécifique
 echo '<div id="content">';
-	echo '<div class="component">';
+	echo '<div class="component uni">';
 		echo '<div class="head">';
 			echo '<h1>Faction</h1>';
 		echo '</div>';
@@ -59,11 +59,18 @@ echo '<div id="content">';
 							echo '<strong>choisir cette faction</strong>';
 							echo '<em>et passer à l\'étape suivante</em>';
 						echo '</a>';
-						echo '<blockquote>' . ColorResource::getInfo($ally, 'devise') . '</blockquote>';
-						echo '<div class="text-box">';
-							echo '<h3>Bonus & Malus de faction</h3>';
-							echo '<p>' . ColorResource::getInfo($ally, 'bonus') . '</p>';
-						echo '</div>';
+						echo '<blockquote>"' . ColorResource::getInfo($ally, 'devise') . '"</blockquote>';
+						echo '<h2>Bonus & Malus de faction</h2>';
+						$bonuses = ColorResource::getInfo($ally, 'bonus');
+						foreach ($bonuses as $bonus) {
+							echo '<div class="build-item" style="margin: 25px 0;">';
+								echo '<div class="name">';
+									echo '<img src="' . MEDIA . $bonus['path'] . '" alt="" />';
+									echo '<strong>' . $bonus['title'] . '</strong>';
+									echo '<em>' . $bonus['desc'] . '</em>';
+								echo '</div>';
+							echo '</div>';
+						}
 						/*echo '<div class="build-item">';
 							echo '<div class="name">';
 								echo '<img src="' . MEDIA . 'orbitalbase/generator.png" alt="" />';
