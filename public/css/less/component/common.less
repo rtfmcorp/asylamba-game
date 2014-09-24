@@ -6,6 +6,7 @@
 	overflow: hidden;
 	background: black;
 	border-bottom: solid 1px @light;
+	color: #4F4F4F;
 
 	& > span {
 		display: table-cell;
@@ -23,16 +24,14 @@
 		a {
 			position: relative;
 			display: block;
-			padding: 0;
-			width: 30px;
+			margin: 0; padding: 0 5px;
 			line-height: 30px;
-			font-size: 14px;
-			color: white;
+			background: #0A0A0A;
+			color: #4F4F4F;
 			text-decoration: none;
-			font-variant: small-caps;
+			border: solid 1px #202020;
+			border-radius: 3px;
 			text-align: center;
-			background: #202020;
-			border: solid 1px #4F4F4F;
 
 			img {
 				width: 18px; position: relative;
@@ -46,8 +45,9 @@
 				&.up { box-shadow: 0 -2px 0 0 #CCC; }
 			}
 
-			&:focus, &:hover {
-				background: #4F4F4F;
+			&:hover, &:focus, &:active {
+				color: #CCC;
+				box-shadow: inset 0 0 5px black;
 			}
 		}
 	}
@@ -64,15 +64,17 @@
 	text-align: center;
 	padding: 0 2px;
 	line-height: 44px;
+	font-weight: normal;
 	font-size: 14px;
-	color: white;
+	color: #4F4F4F;
 	text-decoration: none;
-	font-variant: small-caps;
 	border-bottom: solid 1px @light;
 }
 
 .component h4 {
-	margin: 10px;
+	margin: 10px 10px 0 10px;
+	font-weight: normal;
+	font-size: 15px;
 }
 
 .component .body p {
@@ -294,6 +296,12 @@
 	border-top: solid 1px #202020;
 	border-left: solid 10px @medium;
 
+	&.half {
+		display: inline-block;
+		width: 254px;
+		margin-right: 0;
+	}
+
 	&.grey {
 		border-left: solid 10px #4F4F4F !important;
 	}
@@ -307,6 +315,11 @@
 		font-size: 26px;
 		font-weight: bold;
 		margin: 4px 0 0 0;
+
+		.icon-color {
+			width: 20px; height: 20px;
+			vertical-align: middle;
+		}
 	}
 
 	.progress-bar {
@@ -335,16 +348,46 @@
 	display: block;
 	width: 100%; height: 3px;
 	background: #4F4F4F;
-	overflow: hidden;
 
 	.content {
 		position: relative;
-		top: -9px;
 		display: inline-block;
-		height: 5px;
+		height: 3px;
+		vertical-align: top;
+		overflow: hidden;
 
 		&:nth-child(n)  { background: @light; }
 		&:nth-child(2n) { background: @dark; }
+	}
+
+	.step {
+		position: absolute;	
+
+		.label {
+			position: absolute;
+			display: block;
+			width: 150px;
+			left: 0; top: -28px;
+
+			&.bottom {
+				top: auto;
+				bottom: -28px;
+			}
+			&.right {
+				right: 0; left: auto;
+				text-align: right;
+			}
+		}
+
+		&:before {
+			content: '';
+			position: absolute;
+			width: 12px; height: 12px;
+			background: @medium;
+			box-shadow: 0 0 0 3px @dark;
+			border-radius: 100%;
+			top: -5px; left: -5px;
+		}
 	}
 }
 
@@ -470,20 +513,22 @@
 	}
 }
 
-.component .more-item {
-	display: block;
-	margin: 10px 10px 5px;
-	line-height: 34px;
-	padding: 0 12px;
-	background: #0A0A0A;
-	color: #4F4F4F;
-	text-decoration: none;
-	border: solid 1px #202020;
-	border-radius: 3px;
-	
-	&:hover, &:focus, &:active {
-		color: #CCC;
-		box-shadow: inset 0 0 5px black;
+.component {
+	.more-item, .more-button {
+		display: block;
+		margin: 10px 10px 5px;
+		line-height: 34px;
+		padding: 0 12px;
+		background: #0A0A0A;
+		color: #4F4F4F;
+		text-decoration: none;
+		border: solid 1px #202020;
+		border-radius: 3px;
+		
+		&:hover, &:focus, &:active {
+			color: #CCC;
+			box-shadow: inset 0 0 5px black;
+		}
 	}
 }
 
@@ -526,7 +571,7 @@
 		position: absolute;
 		top: 32px; left: 70px;
 		color: white;
-		font-weight: bold;
+		font-weight: normal;
 		font-size: 12px;
 		font-style: normal;
 		color: #efefef;
@@ -538,8 +583,6 @@
 	border-bottom: dashed 1px #202020;
 	margin: 0 10px;
 }
-
-
 
 
 

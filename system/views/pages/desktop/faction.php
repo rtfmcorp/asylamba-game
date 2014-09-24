@@ -24,9 +24,24 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
-	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'forum') {
+	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'overview') {
+		include_once ZEUS;
+
+		$S_PAM_1 = ASM::$pam->getCurrentSession();
+		$PLAYER_GOV_TOKEN = ASM::$pam->newSession(FALSE);
+		ASM::$pam->load(
+			array('rColor' => CTR::$data->get('playerInfo')->get('color'), 'status' => array(6, 5, 4, 3)),
+			array('status', 'DESC')
+		);
+
+		include COMPONENT . 'faction/overview/news.php';
+		include COMPONENT . 'faction/overview/stat.php';
+		include COMPONENT . 'faction/overview/laws.php';
+
+		ASM::$pam->changeSession($S_PAM_1);
+	} elseif (CTR::$get->get('view') == 'forum') {
 		# forum component
-		include COMPONENT . 'demeter/forum/forum.php';
+		include COMPONENT . 'faction/forum/forum.php';
 
 		# topics component
 		$forumId = !CTR::$get->exist('forum')
@@ -65,11 +80,11 @@ echo '<div id="content">';
 		$forum_topics = $forumId;
 
 		if ($forumId < 10) {
-			include COMPONENT . 'demeter/forum/topics.php';
+			include COMPONENT . 'faction/forum/topics.php';
 		} elseif ($forumId >= 10 && $forumId < 20 && CTR::$data->get('playerInfo')->get('status') > 2) {
-			include COMPONENT . 'demeter/forum/topics.php';
+			include COMPONENT . 'faction/forum/topics.php';
 		} elseif ($forumId >= 20 && CTR::$data->get('playerInfo')->get('status') == 6) {
-			include COMPONENT . 'demeter/forum/topics.php';
+			include COMPONENT . 'faction/forum/topics.php';
 		} else {
 			CTR::redirect('faction/view-forum');
 		}
@@ -88,12 +103,12 @@ echo '<div id="content">';
 				$message_topic[$i] = ASM::$fmm->get($i);
 			}
 
-			include COMPONENT . 'demeter/forum/topic.php';
+			include COMPONENT . 'faction/forum/topic.php';
 
 			ASM::$fmm->changeSession($S_FMM1);
 		} elseif (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'create') {
 			# créer un topic
-			include COMPONENT . 'demeter/forum/createTopic.php';
+			include COMPONENT . 'faction/forum/createTopic.php';
 		} else {
 			include COMPONENT . 'default.php';
 		}
@@ -117,8 +132,8 @@ echo '<div id="content">';
 
 		$PLAYER_GOV_TOKEN = $S_PAM_N3;
 		$PLAYER_SENATE_TOKEN = $S_PAM_N2 ;
-		include COMPONENT . 'demeter/government/government.php';
-		include COMPONENT . 'demeter/government/senate.php';
+		include COMPONENT . 'faction/government/government.php';
+		include COMPONENT . 'faction/government/senate.php';
 
 		ASM::$pam->changeSession($S_PAM_1);
 	} elseif (CTR::$get->get('view') == 'election' && in_array($faction->electionStatement, array(Color::CAMPAIGN, Color::ELECTION))) {
@@ -137,8 +152,8 @@ echo '<div id="content">';
 				ASM::$vom->load(array('rPlayer' => CTR::$data->get('playerId'), 'rElection' => ASM::$elm->get(0)->id));
 
 				$nbCandidate = ASM::$cam->size();
-				include COMPONENT . 'demeter/election/campaign.php';
-				include COMPONENT . 'demeter/election/candidate.php';
+				include COMPONENT . 'faction/election/campaign.php';
+				include COMPONENT . 'faction/election/candidate.php';
 
 				ASM::$cam->changeSession($S_CAM_1);
 				ASM::$elm->changeSession($S_ELM_1);
@@ -168,10 +183,10 @@ echo '<div id="content">';
 			ASM::$pam->load(array('rColor' => CTR::$data->get('playerInfo')->get('color')));
 
 			$nbCandidate = ASM::$cam->size();
-			include COMPONENT . 'demeter/election/election.php';
+			include COMPONENT . 'faction/election/election.php';
 
 			$rElection = ASM::$elm->get(0)->id;
-			include COMPONENT . 'demeter/election/candidate.php';
+			include COMPONENT . 'faction/election/candidate.php';
 
 			ASM::$cam->changeSession($S_CAM_1);
 			ASM::$elm->changeSession($S_ELM_1);
@@ -222,8 +237,8 @@ echo '<div id="content">';
 		$avgDefeatPlayer_statPlayer = Format::numberFormat($avgDefeatPlayer_statPlayer / $nbPlayer_statPlayer, 2);
 		$avgPointsPlayer_statPlayer = Format::numberFormat($avgPointsPlayer_statPlayer / $nbPlayer_statPlayer, 2);
 
-		include COMPONENT . 'demeter/player/statPlayer.php';
-		include COMPONENT . 'demeter/player/listPlayer.php';
+		include COMPONENT . 'faction/player/statPlayer.php';
+		include COMPONENT . 'faction/player/listPlayer.php';
 
 		ASM::$pam->changeSession($S_PAM1);
 	} else {
