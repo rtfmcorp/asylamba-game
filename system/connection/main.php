@@ -196,8 +196,10 @@ if (ASM::$pam->size() == 1) {
 	$player->setDLastActivity(Utils::now());
 
 	# confirmation au portail
-	$api = new API(GETOUT_ROOT);
-	$api->confirmConnection(CTR::$get->get('bindkey'), APP_ID);
+	if (PORTALMODE) {
+		$api = new API(GETOUT_ROOT);
+		$api->confirmConnection(CTR::$get->get('bindkey'), APP_ID);
+	}
 
 	# redirection vers page de départ
 	if (CTR::$get->equal('mode', 'splash')) {
