@@ -135,7 +135,6 @@ class CommanderManager extends Manager {
 					$awCommanders[$i]['sqDLastModification']);
 					
 				if ($i == count($awCommanders) - 1 || $awCommanders[$i]['id'] != $awCommanders[$i + 1]['id']) {
-					$commander->setPevInBegin();
 					$currentCommander = $this->_Add($commander);
 
 					if ($this->currentSession->getUMode()) {
