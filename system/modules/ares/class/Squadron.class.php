@@ -131,12 +131,12 @@ class Squadron {
 		} elseif ($this->relId != NULL AND $enemyCommander->getSquadron($this->relId)->getNbrShips() > 0) {
 			return $this->relId;
 		} else {
-			$aleaNbr = rand(0, $enemyCommander->getLevel() - 1);
+			$aleaNbr = rand(0, count($enemyCommander->squadronsIds) - 1);
 			for($i = 0; $i < $enemyCommander->getLevel(); $i++) {
 				if ($enemyCommander->getSquadron($aleaNbr)->getLineCoord() * 3 <= FightController::getCurrentLine() AND $enemyCommander->getSquadron($aleaNbr)->getNbrShips() > 0) {
 					break;
 				} else {
-					if ($aleaNbr == $enemyCommander->getLevel() - 1) {
+					if ($aleaNbr == count($enemyCommander->squadronsIds) - 1) {
 						$aleaNbr = 0;
 					} else {
 						$aleaNbr++;

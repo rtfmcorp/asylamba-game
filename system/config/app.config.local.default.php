@@ -1,6 +1,7 @@
 <?php
 	# mode de développement
 	define('DEVMODE', 				TRUE);
+	define('PORTALMODE', 			TRUE);
 		ini_set('display_errors', 	DEVMODE);
 
 	# constante de l'application

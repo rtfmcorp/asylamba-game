@@ -168,8 +168,10 @@ try {
 	ASM::$plm->get(0)->population = rand(3500, 3800) / 100;
 
 	# confirmation au portail
-	$api = new API(GETOUT_ROOT);
-	$api->confirmInscription(CTR::$data->get('inscription')->get('bindkey'), APP_ID);
+	if (PORTALMODE) {
+		$api = new API(GETOUT_ROOT);
+		$api->confirmInscription(CTR::$data->get('inscription')->get('bindkey'), APP_ID);
+	}
 
 	# clear les sessions
 	CTR::$data->remove('inscription');

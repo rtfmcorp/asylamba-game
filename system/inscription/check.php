@@ -5,27 +5,33 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 		CTR::$data->add('prebindkey', CTR::$get->get('bindkey'));
 		CTR::redirect('inscription');
 	} elseif (CTR::$data->exist('prebindkey')) {
-		# utilisation de l'API
-		$api = new API(GETOUT_ROOT);
+		if (PORTALMODE) {
+			# utilisation de l'API
+			$api = new API(GETOUT_ROOT);
 
-		if ($api->userExist(CTR::$data->get('prebindkey')) || TRUE) {
-			include_once ZEUS;
-			$S_PAM_INSCR = ASM::$pam->getCurrentSession();
-			ASM::$pam->newSession();
-			ASM::$pam->load(array('bind' => CTR::$data->get('prebindkey')));
+			if ($api->userExist(CTR::$data->get('prebindkey')) || TRUE) {
+				include_once ZEUS;
+				$S_PAM_INSCR = ASM::$pam->getCurrentSession();
+				ASM::$pam->newSession();
+				ASM::$pam->load(array('bind' => CTR::$data->get('prebindkey')));
 
-			if (ASM::$pam->size() == 0) {
-				CTR::$data->add('inscription', new ArrayList());
-				CTR::$data->get('inscription')->add('bindkey', CTR::$data->get('prebindkey'));
-				CTR::$data->get('inscription')->add('portalPseudo', $api->data['userInfo']['pseudo']);
+				if (ASM::$pam->size() == 0) {
+					CTR::$data->add('inscription', new ArrayList());
+					CTR::$data->get('inscription')->add('bindkey', CTR::$data->get('prebindkey'));
+					CTR::$data->get('inscription')->add('portalPseudo', $api->data['userInfo']['pseudo']);
+				} else {
+					header('Location: ' . GETOUT_ROOT . '/profil/message-useralreadysigned');
+					exit();
+				}
+				ASM::$pam->changeSession($S_PAM_INSCR);
 			} else {
-				header('Location: ' . GETOUT_ROOT . '/profil/message-useralreadysigned');
+				header('Location: ' . GETOUT_ROOT . '/profil/message-unknowuser');
 				exit();
 			}
-			ASM::$pam->changeSession($S_PAM_INSCR);
 		} else {
-			header('Location: ' . GETOUT_ROOT . '/profil/message-unknowuser');
-			exit();
+			CTR::$data->add('inscription', new ArrayList());
+			CTR::$data->get('inscription')->add('bindkey', CTR::$data->get('prebindkey'));
+			CTR::$data->get('inscription')->add('portalPseudo', NULL);
 		}
 	} else {
 		header('Location: ' . GETOUT_ROOT . '/profil/message-nobindkey');

@@ -23,11 +23,14 @@ echo '<head>';
 	echo '<meta name="description" content="' . APP_DESCRIPTION . '" />';
 
 	echo '<link href="http://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic" rel="stylesheet" type="text/css">';
-#	echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.css" />';
 
-	echo (CTR::getPage() == 'inscription' && (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')))
-		? '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.color1.css" />'
-		: '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.' . $color . '.css" />';
+	if (PORTALMODE) {
+		echo (CTR::getPage() == 'inscription' && (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')))
+			? '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.color1.css" />'
+			: '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.' . $color . '.css" />';
+	} else {
+		echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.css" />';
+	}
 
 	echo CTR::getPage() == 'inscription'
 		? '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'inscription.desktop.css" />'

@@ -1,7 +1,17 @@
 <?php
 echo '<div id="subnav">';
 	echo '<div class="overflow">';
-		$active = (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'forum') ? 'active' : '';
+		$active = (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'overview') ? 'active' : '';
+		echo '<a href="' . APP_ROOT . 'faction/view-overview" class="item ' . $active . '">';
+			echo '<span class="picto">';
+				echo '<img src="' . MEDIA . 'faction/nav/overview.png" alt="" />';
+			echo '</span>';
+			echo '<span class="content skin-1">';
+				echo '<span>Vue générale';
+			echo '</span>';
+		echo '</a>';
+
+		$active = (CTR::$get->get('view') == 'forum') ? 'active' : '';
 		echo '<a href="' . APP_ROOT . 'faction/view-forum" class="item ' . $active . '">';
 			echo '<span class="picto">';
 				echo '<img src="' . MEDIA . 'faction/nav/forum.png" alt="" />';

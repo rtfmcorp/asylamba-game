@@ -33,9 +33,9 @@ foreach ($places as $place) {
 	$placesId[] = $place->id;
 }
 
-$S_RPM_MAP = ASM::$rpm->getCurrentSession();
-ASM::$rpm->newSession();
-ASM::$rpm->load(array('rPlayerAttacker' => CTR::$data->get('playerId'), 'r.rPlace' => $placesId), array('r.dFight', 'DESC'), array(0, 30));
+$S_LRM_MAP = ASM::$lrm->getCurrentSession();
+ASM::$lrm->newSession();
+ASM::$lrm->load(array('rPlayerAttacker' => CTR::$data->get('playerId'), 'r.rPlace' => $placesId), array('r.dFight', 'DESC'), array(0, 30));
 
 include_once ARTEMIS;
 $S_SRM_MAP = ASM::$srm->getCurrentSession();
@@ -148,10 +148,10 @@ echo '<div class="body">';
 							echo '</p>';
 						}
 
-						for ($j = 0; $j < ASM::$rpm->size(); $j++) { 
-							if (ASM::$rpm->get($j)->rPlace == $place->id) {
+						for ($j = 0; $j < ASM::$lrm->size(); $j++) { 
+							if (ASM::$lrm->get($j)->rPlace == $place->id) {
 								echo '<hr />';
-								echo '<p><em>Dernier pillage ' . Chronos::transform(ASM::$rpm->get($j)->dFight) . '.</em></p>';
+								echo '<p><em>Dernier pillage ' . Chronos::transform(ASM::$lrm->get($j)->dFight) . '.</em></p>';
 								break;
 							}
 						}
@@ -166,5 +166,5 @@ echo '<div class="body">';
 echo '</div>';
 
 ASM::$srm->changeSession($S_SRM_MAP);
-ASM::$rpm->changeSession($S_RPM_MAP);
+ASM::$lrm->changeSession($S_LRM_MAP);
 ?>
