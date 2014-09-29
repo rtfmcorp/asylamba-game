@@ -32,7 +32,6 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 				$index = $i;
 				$targetLevel = $queue->targetLevel;
 				$dStart = $queue->dStart;
-				$dEnd = $queue->dEnd;
 				$idToRemove = $queue->id;
 			}
 		}
@@ -41,14 +40,11 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 			# shift
 			for ($i = $index + 1; $i < ASM::$bqm->size(); $i++) {
 				$queue = ASM::$bqm->get($i);
-				$nextStart = $queue->dStart;
-				$nextEnd = $queue->dEnd;
 
+				$queue->dEnd = Utils::addSecondsToDate($dStart, Utils::interval($queue->dStart, $queue->dEnd, 's'));
 				$queue->dStart = $dStart;
-				$queue->dEnd = $dEnd;
 
-				$dStart = $nextStart;
-				$dEnd = $nextEnd;
+				$dStart = $queue->dEnd;
 			}
 
 			ASM::$bqm->deleteById($idToRemove);

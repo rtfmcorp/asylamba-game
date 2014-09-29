@@ -32,7 +32,6 @@ if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($bas
 			if ($shipQueue->id == $queue) {
 				$index = $i;
 				$dStart = $shipQueue->dStart;
-				$dEnd = $shipQueue->dEnd;
 				$shipNumber = $shipQueue->shipNumber;
 				$dockType = $shipQueue->dockType;
 				$quantity = $shipQueue->quantity;
@@ -44,14 +43,11 @@ if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($bas
 			# shift
 			for ($i = $index + 1; $i < ASM::$sqm->size(); $i++) {
 				$shipQueue = ASM::$sqm->get($i);
-				$nextStart = $shipQueue->dStart;
-				$nextEnd = $shipQueue->dEnd;
 
+				$shipQueue->dEnd = Utils::addSecondsToDate($dStart, Utils::interval($shipQueue->dStart, $shipQueue->dEnd, 's'));
 				$shipQueue->dStart = $dStart;
-				$shipQueue->dEnd = $dEnd;
 
-				$dStart = $nextStart;
-				$dEnd = $nextEnd;
+				$dStart = $shipQueue->dEnd;
 			}
 
 			ASM::$sqm->deleteById($queue);
