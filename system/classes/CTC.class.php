@@ -5,12 +5,14 @@ abstract class CTC {
 
 	public static $events  = array();
 
-	public static function createContext() {
+	public static function createContext($creator = NULL) {
 		self::$create++;
 
 		if (!self::$running) {
 			self::$running = TRUE;
 			self::$context++;
+			self::$creator = $creator;
+
 			return TRUE;
 		} else {
 			return FALSE;
@@ -26,7 +28,6 @@ abstract class CTC {
 					return $a['timest'] < $b['timest'] ? -1 : 1;
 				});
 
-				$path  = 'public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
 				$logt  = '> ' . date('H:i:s') . ', start to apply context';
 				$logt .= (CTR::$data->exist('playerId')) ? ' [Player ' . CTR::$data->get('playerId') . ']' : NULL;
 				$logt .= "\n";
@@ -42,7 +43,12 @@ abstract class CTC {
 				self::$events  = array();
 
 				$logt .= '> ' . date('H:i:s') . ', end of apply context' . "\n";
+				$logt .= '> Stat | ';
+				$logt .= 'create/apply : ' . self::$create . '/' . self::$apply . ' | context : ' . self::$context . ' | add ' . self::$add;
+				$logt .= ' | creator : ' . self::$creator . "\n";
 				$logt .= "\n";
+				
+				$path  = 'public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
 				Bug::writeLog($path, $logt);
 			} else {
 				self::$running = FALSE;
@@ -84,6 +90,7 @@ abstract class CTC {
 	private static $create  = 0;
 	private static $apply   = 0;
 	private static $context = 0;
+	private static $creator = NULL;
 
 	public static function get() {
 		return self::$events;

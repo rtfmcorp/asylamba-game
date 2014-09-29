@@ -218,7 +218,7 @@ class Color {
 
 	public function uElection() {
 		// 604800s = 7j
-		if ($this->electionStatement == self::MANDATE) {
+	/*	if ($this->electionStatement == self::MANDATE) {
 			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration')) {
 				$this->updateStatus();
 				$S_ELM = ASM::$elm->getCurrentsession();
@@ -234,7 +234,7 @@ class Color {
 				ASM::$elm->changeSession($S_ELM);
 				$this->electionStatement = self::CAMPAIGN;
 			}
-		} elseif ($this->electionStatement == self::CAMPAIGN) {			
+		} elseif ($this->electionStatement == self::CAMPAIGN) {
 			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::CAMPAIGNTIME) {
 				$this->electionStatement = self::ELECTION;
 			}
@@ -249,6 +249,6 @@ class Color {
 
 				ASM::$elm->changeSession($_ELM);
 			}
-		}
+		} */
 	}
 }

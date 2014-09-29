@@ -219,7 +219,7 @@ class OrbitalBase {
 
 	// UPDATE METHODS
 	public function uMethod() {
-		$token = CTC::createContext();
+		$token = CTC::createContext('orbitalbase');
 		$now   = Utils::now();
 
 		if (Utils::interval($this->uOrbitalBase, $now, 's') > 0) {

@@ -2,7 +2,8 @@
 # réglage temporel et niveau d'erreur
 error_reporting(E_ALL | E_STRICT);
 date_default_timezone_set('Europe/Zurich');
-	ini_set('memory_limit', '512M');
+#	ini_set('memory_limit', '512M');
+	ini_set('memory_limit', '-1');
 	ini_set('error_prepend_string', 'System Error #');
 	ini_set('error_log', 'public/log/php/' . date('Y-m-d') . '.log');
 
