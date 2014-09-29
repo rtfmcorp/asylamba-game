@@ -33,6 +33,9 @@ if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($bas
 				$index = $i;
 				$dStart = $shipQueue->dStart;
 				$dEnd = $shipQueue->dEnd;
+				$shipNumber = $shipQueue->shipNumber;
+				$dockType = $shipQueue->dockType;
+				$quantity = $shipQueue->quantity;
 				break;
 			}
 		}
@@ -54,9 +57,9 @@ if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($bas
 			ASM::$sqm->deleteById($queue);
 
 			// give a part of the resources back
-			$resourcePrice = ShipResource::getInfo($shipQueue->shipNumber, 'resourcePrice');
-			if ($shipQueue->dockType == 1) {
-				$resourcePrice *= $shipQueue->quantity;
+			$resourcePrice = ShipResource::getInfo($shipNumber, 'resourcePrice');
+			if ($dockType == 1) {
+				$resourcePrice *= $quantity;
 			}
 			$resourcePrice *= SQM_RESOURCERETURN;
 			$ob->increaseResources($resourcePrice);
