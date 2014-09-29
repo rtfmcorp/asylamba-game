@@ -121,8 +121,8 @@ class Player {
 		$token = CTC::createContext();
 		$now   = Utils::now();
 
-		#if (Utils::interval($this->uPlayer, $now, 'h') > 0) { TEST
-		if (Utils::interval($this->uPlayer, $now, 's') > 0) {
+		if (Utils::interval($this->uPlayer, $now, 'h') > 0) {
+		#if (Utils::interval($this->uPlayer, $now, 's') > 0) {
 			# update time
 			$hours = Utils::intervalDates($now, $this->uPlayer);
 			$this->uPlayer = $now;
