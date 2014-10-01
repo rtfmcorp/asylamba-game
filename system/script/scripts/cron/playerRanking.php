@@ -102,22 +102,34 @@ for ($i = 0; $i < ASM::$obm->size(); $i++) {
 }
 
 # load the commanders
-ASM::$com->load(array('c.statement' => array(Commander::INSCHOOL, Commander::AFFECTED, Commander::MOVING, Commander::ONSALE)));
-for ($i = 0; $i < ASM::$com->size(); $i++) {
-	$commander = ASM::$com->get($i);
-	if (isset($list[$commander->rPlayer])) {
-		# count the points of a commander
-		$points = 0;
-		$shipList = $commander->getNbrShipByType();
-		$shipPrice = 0;
-		for ($j = 0; $j < 12; $j++) {
-			$shipPrice += ShipResource::getInfo($j, 'resourcePrice') * $shipList[$j];
-		}
-		$points += round($shipPrice * COEF_RESOURCE);
+$start = 0;
+$qty = 250;
 
-		$list[$commander->rPlayer]['general'] += $points;
+while (true) {
+	ASM::$com->load(array('c.statement' => array(Commander::AFFECTED, Commander::MOVING)), array(), array($start, $qty));
+	#ASM::$com->load(array('c.statement' => array(Commander::INSCHOOL, Commander::AFFECTED, Commander::MOVING, Commander::ONSALE)));
+	
+	# exit when all the commanders are loaded
+	if (ASM::$com->size() == 0) { break; }
+	for ($i = 0; $i < ASM::$com->size(); $i++) {
+		$commander = ASM::$com->get($i);
+		if (isset($list[$commander->rPlayer])) {
+			# count the points of a commander
+			$points = 0;
+			$shipList = $commander->getNbrShipByType();
+			$shipPrice = 0;
+			for ($j = 0; $j < 12; $j++) {
+				$shipPrice += ShipResource::getInfo($j, 'resourcePrice') * $shipList[$j];
+			}
+			$points += round($shipPrice * COEF_RESOURCE);
+
+			$list[$commander->rPlayer]['general'] += $points;
+		}
 	}
-}
+	$start += $qty;
+	
+	ASM::$com->emptySession();
+};
 
 #-------------------------------- OTHER RANKINGs --------------------------------#
 for ($i = 0; $i < ASM::$pam->size(); $i++) {

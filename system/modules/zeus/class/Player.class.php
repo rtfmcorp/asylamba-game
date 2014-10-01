@@ -118,11 +118,10 @@ class Player {
 
 	// UPDATE METHOD
 	public function uMethod() {
-		$token = CTC::createContext();
+		$token = CTC::createContext('player');
 		$now   = Utils::now();
 
-		#if (Utils::interval($this->uPlayer, $now, 'h') > 0) { TEST
-		if (Utils::interval($this->uPlayer, $now, 's') > 0) {
+		if (Utils::interval($this->uPlayer, $now, 'h') > 0) {
 			# update time
 			$hours = Utils::intervalDates($now, $this->uPlayer);
 			$this->uPlayer = $now;
@@ -138,17 +137,28 @@ class Player {
 			$S_OBM1 = ASM::$obm->getCurrentSession();
 			ASM::$obm->newSession();
 			ASM::$obm->load(array('rPlayer' => $this->id));
+
 			# load the bonus
 			$playerBonus = new PlayerBonus($this->id);
 			$playerBonus->load();
+
 			# load the commanders
 			$S_COM1 = ASM::$com->getCurrentSession();
 			ASM::$com->newSession();
-			ASM::$com->load(array('c.rPlayer' => $this->id, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING)), array('c.experience', 'DESC', 'c.statement', 'ASC'));
+			ASM::$com->load(
+				array(
+					'c.rPlayer' => $this->id,
+					'c.statement' => array(Commander::AFFECTED, Commander::MOVING)), 
+				array(
+					'c.experience', 'DESC',
+					'c.statement', 'ASC')
+			);
+
 			# load the researches
 			$S_RSM1 = ASM::$rsm->getCurrentSession();
 			ASM::$rsm->newSession();
 			ASM::$rsm->load(array('rPlayer' => $this->id));
+
 			# load the colors (faction)
 			$S_CLM1 = ASM::$clm->getCurrentSession();
 			ASM::$clm->newSession();

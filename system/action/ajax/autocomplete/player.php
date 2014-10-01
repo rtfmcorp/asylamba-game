@@ -1,13 +1,8 @@
 <?php
 include_once ZEUS;
-$S_PAM1 = ASM::$pam->newSession(false);
+$S_PAM1 = ASM::$pam->newSession(FALSE);
 
-$name = $_GET['q'];
-$name = htmlspecialchars($name);
-$p = new Parser();
-$name = $p->protect($name);
-$name = strtr($name, "'", "\'");
-ASM::$pam->search($name);
+ASM::$pam->search($_GET['q'], array('experience', 'DESC'), array(0, 20));
 
 if (ASM::$pam->size() != 0) {
 	for ($i = 0; $i < ASM::$pam->size(); $i++) {
@@ -23,7 +18,7 @@ if (ASM::$pam->size() != 0) {
 
 			echo '<img class="img" src="' . MEDIA . 'avatar/small/' . $player->getAvatar() . '.png" alt="' . $player->getName() . '" /> ';
 			echo '<span class="value-2">' . $status . '</span>';
-			echo '<span class="value-1"><span class="ac_value">' . $player->getName() . '</span></span>';
+			echo '<span class="value-1"><span class="ac_value" data-id="' . $player->getId() . '">' . $player->getName() . '</span></span>';
 			echo "\n";
 		}
 	}

@@ -42,7 +42,30 @@ class PlayerManager extends Manager {
 			$qr->execute($valuesArray);
 		}
 
-		while($aw = $qr->fetch()) {
+		$this->fill($qr);
+	}
+
+	public function search($search, $order = array(), $limit = array()) {
+		$search = '%' . $search . '%';
+		
+		$formatOrder = Utils::arrayToOrder($order);
+		$formatLimit = Utils::arrayToLimit($limit);
+
+		$db = DataBase::getInstance();
+		$qr = $db->prepare('SELECT *
+			FROM player
+			WHERE LOWER(name) LIKE LOWER(?)
+			' . $formatOrder . ' 
+			' . $formatLimit
+		);
+
+		$qr->execute(array($search));
+
+		$this->fill($qr);
+	}
+
+	protected function fill($qr) {
+		while ($aw = $qr->fetch()) {
 			$p = new Player();
 
 			$p->setId($aw['id']);
@@ -72,66 +95,10 @@ class PlayerManager extends Manager {
 			$p->setStatement($aw['statement']);
 
 			$currentP = $this->_Add($p);
+
 			if ($this->currentSession->getUMode()) {
 				$currentP->uMethod();
 			}
-		}
-	}
-
-	public function kill($player) {
-
-		$S_PAM1 = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession();
-		ASM::$pam->load(array('id' => $player));
-		$p = ASM::$pam->get();
-
-		# API call
-		$api = new API(GETOUT_ROOT);
-		$api->playerIsDead($p->bind, APP_ID);
-
-		# deadify the player
-		$p->name = '&#8224; ' . $p->name;
-		$p->statement = PAM_DEAD;
-		$p->bind = NULL;
-		$p->rColor = 0;
-
-		ASM::$pam->changeSession($S_PAM1);
-	}
-
-	public function search($string, $quantity = 20, $offset = 0) {
-		$db = Database::getInstance();
-		$qr = $db->query('SELECT * FROM player WHERE LOWER(name) LIKE LOWER(\'%' . $string . '%\') LIMIT ' . intval($offset) . ', ' . intval($quantity));
-		
-		while($aw = $qr->fetch()) {
-			$p = new Player();
-
-			$p->setId($aw['id']);
-			$p->setBind($aw['bind']);
-			$p->setRColor($aw['rColor']);
-			$p->setName($aw['name']);
-			$p->setAvatar($aw['avatar']);
-			$p->setStatus($aw['status']);
-			$p->setCredit($aw['credit']);
-			$p->uPlayer = $aw['uPlayer'];
-			$p->setExperience($aw['experience']);
-			$p->factionPoint = $aw['factionPoint'];
-			$p->setLevel($aw['level']);
-			$p->setVictory($aw['victory']);
-			$p->setDefeat($aw['defeat']);
-			$p->setStepTutorial($aw['stepTutorial']);
-			$p->stepDone = $aw['stepDone'];
-			$p->iUniversity = $aw['iUniversity'];
-			$p->partNaturalSciences = $aw['partNaturalSciences'];
-			$p->partLifeSciences = $aw['partLifeSciences'];
-			$p->partSocialPoliticalSciences = $aw['partSocialPoliticalSciences'];
-			$p->partInformaticEngineering = $aw['partInformaticEngineering'];
-			$p->setDInscription($aw['dInscription']);
-			$p->setDLastConnection($aw['dLastConnection']);
-			$p->setDLastActivity($aw['dLastActivity']);
-			$p->setPremium($aw['premium']);
-			$p->setStatement($aw['statement']);
-
-			$this->_Add($p);
 		}
 	}
 
@@ -243,6 +210,25 @@ class PlayerManager extends Manager {
 		$this->_Remove($id);
 		
 		return TRUE;
+	}
+
+	public function kill($player) {
+		$S_PAM1 = ASM::$pam->getCurrentSession();
+		ASM::$pam->newSession();
+		ASM::$pam->load(array('id' => $player));
+		$p = ASM::$pam->get();
+
+		# API call
+		$api = new API(GETOUT_ROOT);
+		$api->playerIsDead($p->bind, APP_ID);
+
+		# deadify the player
+		$p->name = '&#8224; ' . $p->name;
+		$p->statement = PAM_DEAD;
+		$p->bind = NULL;
+		$p->rColor = 0;
+
+		ASM::$pam->changeSession($S_PAM1);
 	}
 }
 ?>

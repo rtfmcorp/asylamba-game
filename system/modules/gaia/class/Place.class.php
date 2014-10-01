@@ -139,7 +139,7 @@ class Place {
 	public function setAntiSpyInvest($v)				{ $this->antiSpyInvest = $v; }
 
 	public function uMethod() {
-		$token = CTC::createContext();
+		$token = CTC::createContext('place');
 		$now   = Utils::now();
 
 		if (Utils::interval($this->uPlace, $now, 's') > 0) {
@@ -154,31 +154,35 @@ class Place {
 				}
 			}
 
-			# TRAVEL
-			// include_once ATHENA;
-			// $S_OBM_GEN = ASM::$obm->getCurrentSession();
-			// ASM::$obm->newSession();
-
 			$S_COM_PLACE1 = ASM::$com->getCurrentSession();
 			ASM::$com->newSession();
+			ASM::$com->load(
+				array(
+					'c.rDestinationPlace' => $this->id,
+					'c.statement' => 2
+				),
+				array('c.dArrival', 'ASC')
+			);
 
-			ASM::$com->load(array('c.rDestinationPlace' => $this->id, 'c.statement' => 2), array('c.dArrival', 'ASC'));
 			for ($i = 0; $i < ASM::$com->size(); $i++) {
 				$commander = ASM::$com->get($i);
+
 				if ($commander->dArrival <= $now AND $commander->rDestinationPlace != NULL) {					
 					CTC::add($commander->dArrival, $this, 'uTravel', array($commander));
 				}
 			}
-			// ASM::$obm->changeSession($S_OBM_GEN);
+
 			ASM::$com->changeSession($S_COM_PLACE1);
 			
 		}
+
 		CTC::applyContext($token);
 	}
 
 	public function uResources() {
 		$maxResources = $this->population * self::COEFFMAXRESOURCE;
 		$this->resources += floor(PLM_RESSOURCECOEFF * $this->population * 24);
+
 		if ($this->resources > $maxResources) {
 			$this->resources = $maxResources;
 		}
@@ -188,7 +192,6 @@ class Place {
 		include_once ARES;
 
 		switch ($commander->travelType) {
-
 			case Commander::MOVE: 
 				$this->tryToChangeBase($commander);
 				break;
@@ -210,7 +213,7 @@ class Place {
 				break;
 			default: 
 				CTR::$alert->add('Cette action n\'existe pas.', ALT_BUG_INFO);
-
+			// FIX
 			$commander->hasToU = TRUE;
 			return $commander;
 		}
