@@ -72,8 +72,7 @@ class Color {
 		$_PAM1 = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession(FALSE);
 
-
-		ASM::$pam->load(array('rColor' => $this->id), array('factionPoint DESC'));
+		ASM::$pam->load(array('rColor' => $this->id), array('factionPoint', 'DESC'));
 		for ($i = 0; $i < ASM::$pam->size(); $i++) {
 			if (ASM::$pam->get($i)->status < PAM_TREASURER) {
 				if ($i < $limit) {
@@ -218,7 +217,7 @@ class Color {
 
 	public function uElection() {
 		// 604800s = 7j
-	/*	if ($this->electionStatement == self::MANDATE) {
+		if ($this->electionStatement == self::MANDATE) {
 			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration')) {
 				$this->updateStatus();
 				$S_ELM = ASM::$elm->getCurrentsession();
@@ -249,6 +248,6 @@ class Color {
 
 				ASM::$elm->changeSession($_ELM);
 			}
-		} */
+		}
 	}
 }

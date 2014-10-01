@@ -69,16 +69,85 @@ class OrbitalBaseManager extends Manager {
 			' . $formatOrder . '
 			' . $formatLimit
 		);
+
 		foreach($where AS $v) {
 			$valuesArray[] = $v;
 		}
+
 		if(empty($valuesArray)) {
 			$qr->execute();
 		} else {
 			$qr->execute($valuesArray);
 		}
-		while($aw = $qr->fetch()) {
+
+		$this->fill($qr);
+	}
+
+	public function search($search, $order = array(), $limit = array()) {
+		$search = '%' . $search . '%';
+		
+		$formatOrder = Utils::arrayToOrder($order);
+		$formatLimit = Utils::arrayToLimit($limit);
+
+		$db = DataBase::getInstance();
+		$qr = $db->prepare('SELECT 
+			ob.*,
+			p.position AS position,
+			p.rSystem AS system,
+			s.xPosition AS xSystem,
+			s.yPosition AS ySystem,
+			s.rSector AS sector,
+			se.rColor AS sectorColor,
+			se.tax AS tax,
+			p.population AS planetPopulation,
+			p.coefResources AS planetResources,
+			p.coefHistory AS planetHistory,
+			(SELECT
+				MAX(bq.dEnd) 
+				FROM orbitalBaseBuildingQueue AS bq 
+				WHERE bq.rOrbitalBase = ob.rPlace)
+				AS termDateGenerator,
+			(SELECT 
+				MAX(sq1.dEnd) 
+				FROM orbitalBaseShipQueue AS sq1 
+				WHERE sq1.rOrbitalBase = ob.rPlace AND sq1.dockType = 1) 
+				AS termDateDock1,
+			(SELECT 
+				MAX(sq2.dEnd) 
+				FROM orbitalBaseShipQueue AS sq2 
+				WHERE sq2.rOrbitalBase = ob.rPlace AND sq2.dockType = 2) 
+				AS termDateDock2,
+			(SELECT 
+				MAX(sq3.dEnd) 
+				FROM orbitalBaseShipQueue AS sq3
+				WHERE sq3.rOrbitalBase = ob.rPlace AND sq3.dockType = 3) 
+				AS termDateDock3,
+			(SELECT
+				COUNT(cr.id)
+				FROM commercialRoute AS cr
+				WHERE (cr.rOrbitalBase = ob.rPlace OR cr.rOrbitalBaseLinked = ob.rPlace) AND cr.statement = 1)
+				AS routesNumber
+			FROM orbitalBase AS ob
+			LEFT JOIN place AS p
+				ON ob.rPlace = p.id
+				LEFT JOIN system AS s
+					ON p.rSystem = s.id
+					LEFT JOIN sector AS se
+						ON s.rSector = se.id
+			WHERE LOWER(name) LIKE LOWER(?)
+			' . $formatOrder . '
+			' . $formatLimit
+		);
+
+		$qr->execute(array($search));
+
+		$this->fill($qr);
+	}
+
+	protected function fill($qr) {
+		while ($aw = $qr->fetch()) {
 			$b = new OrbitalBase();
+
 			$b->setRPlace($aw['rPlace']);
 			$b->setRPlayer($aw['rPlayer']);
 			$b->setName($aw['name']);
@@ -135,7 +204,7 @@ class OrbitalBaseManager extends Manager {
 
 			$b->setRoutesNumber($aw['routesNumber']);
 
-			// BuildingQueueManager
+			# BuildingQueueManager
 			$oldBQMSess = ASM::$bqm->getCurrentSession();
 			ASM::$bqm->newSession(ASM_UMODE);
 			ASM::$bqm->load(array('rOrbitalBase' => $aw['rPlace']), array('dEnd', 'ASC'));
@@ -150,6 +219,7 @@ class OrbitalBaseManager extends Manager {
 			$realTechnosphereLevel = $aw['levelTechnosphere'];
 			$realCommercialPlateformeLevel = $aw['levelCommercialPlateforme'];
 			$realGravitationalModuleLevel = $aw['levelGravitationalModule'];
+
 			for ($i = 0; $i < $size; $i++) {
 				switch (ASM::$bqm->get($i)->buildingNumber) {
 					case 0 :
@@ -181,6 +251,7 @@ class OrbitalBaseManager extends Manager {
 						CTR::$alert->add('dans load() de OrbitalBaseManager', ALT_BUG_ERROR);
 				}
 			}
+
 			$b->setRealGeneratorLevel($realGeneratorLevel);
 			$b->setRealRefineryLevel($realRefineryLevel);
 			$b->setRealDock1Level($realDock1Level);
@@ -191,7 +262,7 @@ class OrbitalBaseManager extends Manager {
 			$b->setRealGravitationalModuleLevel($realGravitationalModuleLevel);
 			ASM::$bqm->changeSession($oldBQMSess);
 
-			// ShipQueueManager
+			# ShipQueueManager
 			$S_SQM1 = ASM::$sqm->getCurrentSession();
 			ASM::$sqm->newSession(ASM_UMODE);
 			ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 1), array('dEnd'));
@@ -199,12 +270,9 @@ class OrbitalBaseManager extends Manager {
 			ASM::$sqm->newSession(ASM_UMODE);
 			ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 2), array('dEnd'));
 			$b->dock2Manager = ASM::$sqm->getCurrentSession();
-			#ASM::$sqm->newSession(ASM_UMODE);
-			#ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 3), array('dEnd'));
-			#$b->dock3Manager = ASM::$sqm->getCurrentSession();
 			ASM::$sqm->changeSession($S_SQM1);
 
-			// CommercialRouteManager
+			# CommercialRouteManager
 			$S_CRM1 = ASM::$crm->getCurrentSession();
 			ASM::$crm->newSession(ASM_UMODE);
 			ASM::$crm->load(array('rOrbitalBase' => $aw['rPlace']));
@@ -212,7 +280,7 @@ class OrbitalBaseManager extends Manager {
 			$b->routeManager = ASM::$crm->getCurrentSession();
 			ASM::$crm->changeSession($S_CRM1);
 
-			// TechnologyQueueManager
+			# TechnologyQueueManager
 			include_once PROMETHEE;
 			$S_TQM1 = ASM::$tqm->getCurrentSession();
 			ASM::$tqm->newSession(ASM_UMODE);
@@ -220,7 +288,7 @@ class OrbitalBaseManager extends Manager {
 			$b->technoQueueManager = ASM::$tqm->getCurrentSession();
 			ASM::$tqm->changeSession($S_TQM1);
 
-			// CommercialShippingManager
+			# CommercialShippingManager
 			$S_CSM1 = ASM::$csm->getCurrentSession();
 			ASM::$csm->newSession(ASM_UMODE);
 			ASM::$csm->load(array('rBase' => $aw['rPlace']));
@@ -230,7 +298,6 @@ class OrbitalBaseManager extends Manager {
 
 			$currentB = $this->_Add($b);
 
-			// U mechanism
 			if ($this->currentSession->getUMode()) {
 				$currentB->uMethod();
 			}

@@ -156,10 +156,7 @@ class ColorManager extends Manager {
 		ASM::$pam->newSession(FALSE);
 		ASM::$pam->load(array('statement' => array(1, 2)));
 
-		ASM::$clm->get()->players = ASM::$pam->size();
-
-		ASM::$clm->save();
-		
+		ASM::$clm->get()->players = ASM::$pam->size();		
 		ASM::$sem->changeSession($_PAM);
 		ASM::$clm->changeSession($_CLM1);
 	}
@@ -176,9 +173,6 @@ class ColorManager extends Manager {
 		ASM::$pam->load(array('statement' => PAM_ACTIVE));
 		
 		ASM::$clm->get()->activePlayers = ASM::$pam->size();
-
-		ASM::$clm->save();
-
 		ASM::$pam->changeSession($_PAM);
 		ASM::$clm->changeSession($_CLM1);
 	}
@@ -194,9 +188,6 @@ class ColorManager extends Manager {
 		$sem->load(array('rColor' => $id));
 		
 		ASM::$clm->get()->sectors = $sem->size();
-
-		ASM::$clm->save();
-
 		ASM::$clm->changeSession($_CLM1);
 	}
 
