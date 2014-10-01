@@ -92,9 +92,9 @@ class Format {
 
 	public static function rankingFormat($number) {
 		if ($number == 1) {
-			return '1<sup>er</sup>';
+			return '1er';
 		} else {
-			return $number . '<sup>ème</sup>';
+			return $number . 'ème';
 		}
 	}
 }
