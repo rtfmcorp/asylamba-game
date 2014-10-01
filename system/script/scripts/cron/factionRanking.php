@@ -86,12 +86,20 @@ for ($i = 0; $i < ASM::$prm->size(); $i++) {
 }
 
 #-------------------------------- DOMINATION RANKING -----------------------------#
+$sectorsOwnership = array();
+for ($i = 0; $i < ASM::$clm->size(); $i++) { 
+	$sectorsOwnership[$i] = 0;
+}
+
 $sectorManager = new SectorManager();
 $sectorManager->load();
 for ($i = 0; $i < $sectorManager->size(); $i++) {
 	$sector = $sectorManager->get($i);
 	if ($sector->rColor != 0) {
 		$list[$sector->rColor]['domination'] += $sector->population;
+
+		# update sectore ownership in colors
+		$sectorsOwnership[$sector->rColor-1]++;
 	}
 }
 
@@ -142,6 +150,11 @@ foreach ($list as $faction => $value) {
 	$fr->domination = $listD[$faction]['domination'];
 	$fr->dominationPosition = $listD[$faction]['position'];
 	$fr->dominationVariation = $firstRanking ? 0 : $oldRanking->dominationPosition - $fr->dominationPosition;
+
+	# update faction infos
+	ASM::$clm->getById($faction)->points = $listP[$faction]['power'];
+	ASM::$clm->getById($faction)->sectors = $sectorsOwnership[$faction-1];
+	ASM::$clm->updateInfos($faction);
 
 	ASM::$frm->add($fr);
 }

@@ -142,7 +142,6 @@ class ColorManager extends Manager {
 	public static function updateInfos($id) {
 		self::updatePlayers($id);
 		self::updateActivePlayers($id);
-		self::updateSectors($id);
 	}
 
 	public static function updatePlayers($id) {
@@ -154,10 +153,11 @@ class ColorManager extends Manager {
 
 		$_PAM = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession(FALSE);
-		ASM::$pam->load(array('statement' => array(1, 2)));
+		ASM::$pam->load(array('statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY), 'rColor' => $id));
 
-		ASM::$clm->get()->players = ASM::$pam->size();		
-		ASM::$sem->changeSession($_PAM);
+		ASM::$clm->getById($id)->players = ASM::$pam->size();	
+
+		ASM::$pam->changeSession($_PAM);
 		ASM::$clm->changeSession($_CLM1);
 	}
 
@@ -170,27 +170,11 @@ class ColorManager extends Manager {
 
 		$_PAM = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession(FALSE);
-		ASM::$pam->load(array('statement' => PAM_ACTIVE));
+		ASM::$pam->load(array('statement' => PAM_ACTIVE, 'rColor' => $id));
 		
-		ASM::$clm->get()->activePlayers = ASM::$pam->size();
+		ASM::$clm->getById($id)->activePlayers = ASM::$pam->size();
+
 		ASM::$pam->changeSession($_PAM);
 		ASM::$clm->changeSession($_CLM1);
 	}
-
-	public static function updateSectors($id) {
-		include_once GAIA;
-
-		$_CLM1 = ASM::$clm->getCurrentSession();
-		ASM::$clm->newSession();
-		ASM::$clm->load(array('id' => $id));
-
-		$sem = new SectorManager();
-		$sem->load(array('rColor' => $id));
-		
-		ASM::$clm->get()->sectors = $sem->size();
-		ASM::$clm->changeSession($_CLM1);
-	}
-
-	// public static function updatePoints() {}
-
 }
