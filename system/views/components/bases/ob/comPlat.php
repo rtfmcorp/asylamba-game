@@ -38,11 +38,11 @@ echo '<div class="component building">';
 				echo '<em>Gérez vos routes commerciales</em>';
 			echo '</a>';
 
-		/*	$active = (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'resource') ? 'active' : '';
+			$active = (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'resource') ? 'active' : '';
 			echo '<a href="' . APP_ROOT . 'bases/view-commercialplateforme/mode-resource" class="nav-element ' . $active . '">';
 				echo '<img src="' . MEDIA . 'orbitalbase/commercialplateforme.png" alt="" />';
 				echo '<strong>Halle de transfert</strong>';
-				echo '<em>Envoyez des ressources</em>'; */
+				echo '<em>Envoyez des ressources</em>'; 
 			echo '</a>';
 		echo '</div>';
 	echo '</div>';

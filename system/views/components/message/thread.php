@@ -23,7 +23,7 @@ if ($messages_thread[0]->getRPlayerWriter() == CTR::$data->get('playerId')) {
 
 $totalMessage = count($messages_thread);
 
-echo '<div class="component thread">';
+echo '<div class="component new-message thread">';
 	echo '<div class="head skin-1">';
 		if ($coId == 0) {
 			echo '<img src="' . MEDIA . 'avatar/medium/059-1.png" alt="salut" />';
@@ -44,7 +44,7 @@ echo '<div class="component thread">';
 
 				echo '<form action="' . APP_ROOT . 'action/a-writemessage/thread-' . $messages_thread[0]->getThread() . '" method="post" id="textarea-' . $threadId_thread . '">';
 					echo '<p class="input"><textarea name="message"></textarea></p>';
-					echo '<p class="button"><input type="submit" value="envoyer" /></p>';
+					echo '<p class="button"><button type="submit">Envoyer</button></p>';
 				echo '</form>';
 			}
 
