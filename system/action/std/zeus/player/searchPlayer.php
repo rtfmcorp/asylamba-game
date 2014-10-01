@@ -3,16 +3,12 @@ include_once ZEUS;
 # search player profile
 
 # string name 	nom du joueur
-$name = Utils::getHTTPData('name');
+$playerid = Utils::getHTTPData('playerid');
 
-# input protection
-$p = new Parser();
-$name = $p->protect($name);
-
-if ($name !== FALSE AND $name !== '') {
+if ($playerid !== FALSE) {
 	$S_PAM1 = ASM::$pam->getCurrentSession();
 	ASM::$pam->newSession();
-	ASM::$pam->load(array('name' => $name));
+	ASM::$pam->load(array('id' => $playerid));
 	
 	if (ASM::$pam->size() == 1) {
 		CTR::redirect('diary/player-' . ASM::$pam->get()->getId());

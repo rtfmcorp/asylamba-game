@@ -198,8 +198,7 @@ $.Autocompleter = function(input, options) {
 		$input.unbind();
 		$(input.form).unbind(".autocomplete");
 	});
-	
-	
+
 	function selectCurrent() {
 		var selected = select.selected();
 		if( !selected )
@@ -230,14 +229,18 @@ $.Autocompleter = function(input, options) {
 			v += options.multipleSeparator;
 		}
 
-  		var return_value = /<span class="ac_value">(.*?)<\/span>/.exec(v)
-		
-		$input.val(return_value[1]);
+		var return_value = /<span class="ac_value" data-id="(.*?)">(.*?)<\/span>/.exec(v);
+		$input.val(return_value[2]);
+
+		// custom
+		$input.closest('form').find('.autocomplete-hidden').val(return_value[1]);
+
 		hideResultsNow();
 		$input.trigger("result", [selected.data, selected.value]);
+
 		return true;
 	}
-	
+
 	function onChange(crap, skipPrevCheck) {
 		if( lastKeyPressCode == KEY.DEL ) {
 			select.hide();
@@ -262,7 +265,7 @@ $.Autocompleter = function(input, options) {
 			select.hide();
 		}
 	};
-	
+
 	function trimWords(value) {
 		if (!value)
 			return [""];

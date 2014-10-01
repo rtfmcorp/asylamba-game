@@ -17,6 +17,7 @@ echo '<div class="component search-player size2 color' . $player_selected->rColo
 			echo '<form action="' . APP_ROOT . 'action/a-searchplayer" method="post">';
 				echo '<label>';
 					echo 'Recherchez un joueur';
+					echo '<input type="hidden" name="playerid" class="autocomplete-hidden" />';
 					echo '<input type="text" name="name" class="autocomplete-player ac_input" autocomplete="off" />';
 				echo '</label>';
 			echo '</form>';

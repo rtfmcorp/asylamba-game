@@ -7,15 +7,14 @@ include_once HERMES;
 # int name 			nom du destinataire
 # string message 	message à envoyer
 
-$id = Utils::getHTTPData('id');
+$id = Utils::getHTTPData('playerid');
 $thread = Utils::getHTTPData('thread');
-$name = Utils::getHTTPData('name');
+$name = FALSE;
 $message = Utils::getHTTPData('message');
 
 
 // protection des inputs
 $p = new Parser();
-$name = $p->protect($name);
 $message = $p->parse($message);
 
 if (($id OR $thread OR $name) AND $message !== '') {
