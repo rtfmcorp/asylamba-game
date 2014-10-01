@@ -145,6 +145,15 @@ abstract class Manager {
 		return $savingList;
 	}
 
+	public function _EmptyCurrentSession() {
+		$currentSessionId = $this->currentSession->getId();
+		foreach ($this->objects[$currentSessionId] as $k => $o) {
+			# code...
+			unset($this->objects[$currentSessionId][$k]);
+			unset($this->origin[$currentSessionId][$k]);
+		}
+	}
+
 	// DEBUG & STATISTIC MANAGER CORE
 	protected $statObject = 0;
 	protected $statRealObject = 0;

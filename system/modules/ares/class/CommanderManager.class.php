@@ -58,6 +58,13 @@ class CommanderManager extends Manager {
 			' . $formatLimit
 		);
 
+		/*var_dump('SELECT c.*
+			FROM commander AS c
+			' . $formatWhere .'
+			' . $formatOrder .'
+			' . $formatLimit
+		);*/
+
 		foreach($where AS $v) {
 			if (is_array($v)) {
 				foreach ($v as $p) {
@@ -143,6 +150,12 @@ class CommanderManager extends Manager {
 				}
 			}
 		}
+	}
+
+	public function emptySession() {
+		# empty the session, for player rankings
+		$this->_EmptyCurrentSession();
+		$this->newSession(FALSE);
 	}
 
 	//inscrit un nouveau commandant en bdd
