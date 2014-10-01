@@ -11,6 +11,19 @@ ASM::$pam->changeSession($PLAYER_GOV_TOKEN);
 # status list
 $status = ColorResource::getInfo($faction->id, 'status');
 
+# ranking
+include_once ATLAS;
+$S_FRM1 = ASM::$frm->getCurrentSession();
+ASM::$frm->newSession();
+ASM::$frm->loadLastContext();
+for ($i = 0; $i < ASM::$frm->size(); $i++) { 
+	if (ASM::$frm->get($i)->rFaction == $faction->id) {
+		$factionRanking = ASM::$frm->get($i)->generalPosition;
+		break;
+	}
+}
+ASM::$frm->changeSession($S_FRM1);
+
 # time variables
 $startCampaign = Utils::addSecondsToDate($faction->dLastElection, ColorResource::getInfo($faction->id, 'mandateDuration'));
 $endCampaign   = Utils::addSecondsToDate($faction->dLastElection, ColorResource::getInfo($faction->id, 'mandateDuration') + Color::CAMPAIGNTIME);
@@ -83,7 +96,7 @@ echo '<div class="component size2 player">';
 
 			echo '<div class="number-box half">';
 				echo '<span class="label">Classement général de la faction</span>';
-				echo '<span class="value">1er</span>';
+				echo '<span class="value">' . Format::rankingFormat($factionRanking) . '</span>';
 			echo '</div>';
 			echo '<div class="number-box half grey">';
 				echo '<span class="label">Nombre de points de la faction</span>';

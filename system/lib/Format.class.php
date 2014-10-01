@@ -89,4 +89,12 @@ class Format {
 				: ($number / $base) * 100
 			);
 	}
+
+	public static function rankingFormat($number) {
+		if ($number == 1) {
+			return '1<sup>er</sup>';
+		} else {
+			return $number . '<sup>ème</sup>';
+		}
+	}
 }
