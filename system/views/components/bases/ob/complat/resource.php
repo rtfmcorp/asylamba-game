@@ -55,30 +55,6 @@ echo '<div class="component new-message">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			/*echo '<form class="sell-form" action="' . APP_ROOT . 'action/a-giveresource/baseid-' . $ob_compPlat->rPlace . '" method="post">';
-				echo '<div class="label-box">';
-					echo '<label for="send-otherbase" class="label">Base</label>';
-					echo '<input class="autocomplete-hidden" type="hidden" name="otherbaseid" />';
-					echo '<input id="send-otherbase" class="value autocomplete-orbitalbase ac_input" type="text" name="name" autocomplete="off" />';
-				echo '</div>';
-
-				echo '<div class="label-box sf-quantity">';
-					echo '<label for="send-quantity-resources" class="label">Quantité</label>';
-					echo '<input id="send-quantity-resources" class="value" type="text" name="quantity" autocomplete="off" />';
-					echo '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">';
-				echo '</div>';
-
-				echo '<div class="label-box">';
-					echo '<span class="label">Vaisseaux requis</span>';
-					echo '<span class="value">x</span>';
-					echo '<img class="icon-color" alt="vaisseaux" src="' . MEDIA . 'resources/transport.png">';
-				echo '</div>';
-
-				echo '<hr />';
-
-				echo '<p><input type="submit" value="envoyer" /></p>';
-			echo '</form>';*/
-
 			echo '<form action="' . APP_ROOT . 'action/a-giveresource/baseid-' . $ob_compPlat->rPlace . '" method="post">';
 				echo '<p><label for="send-resources-target">Base destinataire</label></p>';
 				echo '<input class="autocomplete-hidden" type="hidden" name="otherbaseid" />';

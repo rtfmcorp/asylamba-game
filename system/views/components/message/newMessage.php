@@ -23,7 +23,7 @@ echo '<div class="component new-message">';
 				echo '<p><label for="new-message-message">Votre message</label></p>';
 				echo '<p class="input input-area"><textarea id="new-message-message" name="message"></textarea></p>';
 
-				echo '<p class="button"><input type="submit" value="envoyer" /></p>';
+				echo '<p class="button"><button type="submit">Envoyer</button></p>';
 			echo '</form>';
 		echo '</div>';
 	echo '</div>';
