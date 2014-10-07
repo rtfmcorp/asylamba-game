@@ -24,15 +24,32 @@ abstract class CTC {
 
 		if ($token) {
 			if (count(self::$events) > 0) {
-				usort(self::$events, function($a, $b) {
-					return $a['timest'] < $b['timest'] ? -1 : 1;
-				});
+				$beforeUsort = count(self::$events);
+				
+				/*usort(self::$events, function($a, $b) {
+					if ($a['timest'] == $b['timest']) {
+						return 0;
+					} else {
+						return ($a['timest'] < $b['timest'])
+							? -1
+							: 1;
+					}
+				});*/
+				
+				self::$events = CTC::insertion(self::$events);
+
+				$afterUsort = count(self::$events);
 
 				$logt  = '> ' . date('H:i:s') . ', start to apply context';
 				$logt .= (CTR::$data->exist('playerId')) ? ' [Player ' . CTR::$data->get('playerId') . ']' : NULL;
 				$logt .= "\n";
-				
+
+				$logt .= '> Page : ' . $_SERVER['REQUEST_URI'] . "\n";
+
+
+				$j = 0;
 				foreach (self::$events as $k => $event) {
+					$j++;
 					self::$currentDate = $event['date'];
 					call_user_func_array(array($event['object'], $event['method']), $event['args']);
 					
@@ -42,10 +59,15 @@ abstract class CTC {
 				self::$running = FALSE;
 				self::$events  = array();
 
-				$logt .= '> ' . date('H:i:s') . ', end of apply context' . "\n";
-				$logt .= '> Stat | ';
-				$logt .= 'create/apply : ' . self::$create . '/' . self::$apply . ' | context : ' . self::$context . ' | add ' . self::$add;
-				$logt .= ' | creator : ' . self::$creator . "\n";
+				$logt .= '> ';
+				$logt .= 'create/apply : ' . self::$create . '/' . self::$apply . ' | ';
+				$logt .= 'add/iter : ' . $beforeUsort . '/' . $afterUsort . ' | ';
+				$logt .= 'before/after-usort : ' . self::$add . '/' . $j . ' | ';
+				$logt .= 'context : ' . self::$context . ' | ';
+				$logt .= 'creator : ' . self::$creator . "\n";
+
+				$logt .= "> \n";
+
 				$logt .= "\n";
 				
 				$path  = 'public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
@@ -85,6 +107,24 @@ abstract class CTC {
 	public static function size() {
 		return count(self::$events);
 	}
+
+	public static function insertion(array $array) {
+        $length = count($array);
+
+        for ($i = 1; $i < $length; $i++) {
+            $element = $array[$i];
+            $j = $i;
+
+            while($j > 0 && $array[$j - 1]['timest'] > $element['timest']) {
+                $array[$j] = $array[$j - 1];
+                $j = $j - 1;
+            }
+
+            $array[$j] = $element;
+        }
+
+        return $array;
+    }
 
 	private static $add     = 0;
 	private static $create  = 0;
