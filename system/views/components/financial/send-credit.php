@@ -16,7 +16,10 @@ echo '<div class="component new-message">';
 		echo '<div class="body">';
 			echo '<form action="' . APP_ROOT . 'action/a-sendcredit" method="post" />';
 				echo '<p><label for="send-credit-target">Destinataire</label></p>';
-				echo '<p class="input input-text"><input type="text" id="send-credit-target" class="autocomplete-player" name="name" /></p>';
+				echo '<p class="input input-text">';
+					echo '<input type="hidden" class="autocomplete-hidden" name="playerid" />';
+					echo '<input type="text" id="send-credit-target" class="autocomplete-player" name="name" />';
+				echo '</p>';
 
 				echo '<p><label for="send-credit-credit">Nombre de crédit</label></p>';
 				echo '<p class="input input-text"><input type="text" id="send-credit-credit" name="quantity" /></p>';

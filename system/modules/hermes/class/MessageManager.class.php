@@ -47,13 +47,13 @@ class MessageManager extends Manager {
 			}
 		}
 
-		if(empty($valuesArray)) {
+		if (empty($valuesArray)) {
 			$qr->execute();
 		} else {
 			$qr->execute($valuesArray);
 		}
 
-		while($aw = $qr->fetch()) {
+		while ($aw = $qr->fetch()) {
 			$m = new Message();
 
 			$m->setId($aw['id']);
