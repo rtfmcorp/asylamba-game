@@ -107,7 +107,6 @@ $qty = 250;
 
 while (true) {
 	ASM::$com->load(array('c.statement' => array(Commander::AFFECTED, Commander::MOVING)), array(), array($start, $qty));
-	#ASM::$com->load(array('c.statement' => array(Commander::INSCHOOL, Commander::AFFECTED, Commander::MOVING, Commander::ONSALE)));
 	
 	# exit when all the commanders are loaded
 	if (ASM::$com->size() == 0) { break; }

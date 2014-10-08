@@ -7,16 +7,19 @@
 # require
 	# [{notification}]	notification_lastNotif
 
-echo '<div class="component notif">';
-	echo '<div class="head">';
-		echo '<h1>Notification</h1>';
+$S_NTM_SCOPE = ASM::$ntm->getCurrentSession();
+ASM::$ntm->changeSession($C_NTM1);
+
+echo '<div class="component">';
+	echo '<div class="head skin-2">';
+		echo '<h2>Notifications</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="tool">';
 				echo '<span><a href="' . APP_ROOT . 'action/a-readallnotif">tout marquer comme lu</a></span>';
 				echo '<span><a href="' . APP_ROOT . 'action/a-deleteallnotif" class="hb lt" title="tout supprimer">×</a></span>';
-				echo '<span><a href="#" class="hb lt sh" data-target="info-notif" title="des infos">?</a></span>';
+				echo '<span><a href="#" class="hb lt sh" data-target="info-notif" title="plus d\'information">?</a></span>';
 			echo '</div>';
 			
 			echo '<p class="info" id="info-notif" style="display:none;">';
@@ -25,8 +28,10 @@ echo '<div class="component notif">';
 				Elles vous permettent d’avoir un compte rendu de toutes vos activités sur Asylamba.<br/>Au bout d\'un certain temps, elles seront automatiquement supprimées, sauf si vous les archivez.';
 			echo '</p>'; 
 			
-			if (count($notification_lastNotif) > 0) {
-				foreach ($notification_lastNotif as $n) {
+			if (ASM::$ntm->size() > 0) {
+				for ($i = 0; $i < ASM::$ntm->size(); $i++) {
+					$n = ASM::$ntm->get($i);
+
 					$readed = ($n->getReaded()) ? '' : 'unreaded';
 					echo '<div class="notif ' . $readed . '" data-notif-id="' . $n->getId() . '">';
 						echo '<h4 class="read-notif switch-class-parent" data-class="open">' . $n->getTitle() . '</h4>';
@@ -44,4 +49,6 @@ echo '<div class="component notif">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
+
+ASM::$ntm->changeSession($S_NTM_SCOPE);
 ?>

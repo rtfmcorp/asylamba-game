@@ -584,6 +584,97 @@
 	margin: 0 10px;
 }
 
+.component .set-item {
+	margin: 10px;
+	border-bottom: solid 1px #202020;
+
+	a.item {
+		&:hover, &:focus {
+			background-color: #0c0c0c;
+		}
+	}
+
+	.item {
+		position: relative;
+		display: block;
+
+		color: white;
+		height: 60px;
+		border: solid 1px #202020;
+		border-bottom: none;
+		background: #0A0A0A;
+
+		.left {
+			position: absolute;
+			top: 0; left: 0; bottom: 0;
+			width: 60px;
+
+			img {
+				width: 30px;
+				margin: 10px; padding: 5px;
+				border-radius: 100%;
+				background: #202020;
+
+				&.color1 { background: @medium-1; }
+				&.color2 { background: @medium-2; }
+				&.color3 { background: @medium-3; }
+				&.color4 { background: @medium-4; }
+				&.color5 { background: @medium-5; }
+				&.color6 { background: @medium-6; }
+				&.color7 { background: @medium-7; }
+
+				&.round-color0 { box-shadow: 0 0 0 2px #CCC; }
+				&.round-color1 { box-shadow: 0 0 0 2px @light-1; }
+				&.round-color2 { box-shadow: 0 0 0 2px @light-2; }
+				&.round-color3 { box-shadow: 0 0 0 2px @light-3; }
+				&.round-color4 { box-shadow: 0 0 0 2px @light-4; }
+				&.round-color5 { box-shadow: 0 0 0 2px @light-5; }
+				&.round-color6 { box-shadow: 0 0 0 2px @light-6; }
+				&.round-color7 { box-shadow: 0 0 0 2px @light-7; }
+			}
+
+			span {
+				display: block;
+				width: 30px; line-height: 30px;
+				text-align: center;
+				font-size: 15px;
+				margin: 10px; padding: 5px;
+				border-radius: 100%;
+				background: #202020;
+			}
+		}
+
+		.center {
+			position: absolute;
+			top: 0; left: 60px; right: 30px; bottom: 0;
+			padding: 9px 0;
+
+			strong {
+				display: block;
+				line-height: 22px;
+			}
+		}
+
+		.right {
+			position: absolute;
+			top: 0; right: 0; bottom: 0;
+			width: 29px;
+			border-left: solid 1px #202020;
+
+			a {
+				position: absolute;
+				top: 0; left: 0;
+				width: 29px; height: 60px;
+				background: url('src/desktop/mover/small-right.png') no-repeat center #0A0A0A;
+
+				&:hover, &:focus, &.active {
+					background-color: #202020;
+				}
+			}
+		}
+	}
+}
+
 
 
 

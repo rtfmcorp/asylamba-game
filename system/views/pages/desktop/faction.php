@@ -202,7 +202,7 @@ echo '<div id="content">';
 		ASM::$pam->load(array('rColor' => CTR::$data->get('playerInfo')->get('color')), array('factionPoint', 'DESC'));
 
 		# statPlayer component
-		$nbPlayer_statPlayer = 0;
+		$nbPlayer_statPlayer = ASM::$clm->getById(CTR::$data->get('playerInfo')->get('color'))->activePlayers;
 
 		$nbOnlinePlayer_statPlayer = 0;
 		$nbOfflinePlayer_statPlayer = 0;
@@ -217,8 +217,6 @@ echo '<div id="content">';
 		# worker
 		for ($i = 0; $i < ASM::$pam->size(); $i++) { 
 			$player = ASM::$pam->get($i);
-
-			$nbPlayer_statPlayer++;
 
 			if (Utils::interval(Utils::now(), $player->getDLastActivity(), 's') < 600) {
 				$nbOnlinePlayer_statPlayer++;

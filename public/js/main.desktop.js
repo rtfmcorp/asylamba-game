@@ -205,6 +205,7 @@ jQuery(document).ready(function($) {
 			
 			var position = 0;
 			var nextPosition  = (content.css('top') == 'auto') ? 0 : parseInt(content.css('top'));
+			
 			if (hasToAnimate) {
 				nextPosition += (direction == 'top') ? columnController.largeStep : -columnController.largeStep;
 			} else {
