@@ -79,6 +79,7 @@ abstract class CTC {
 				Bug::writeLog($path, $logt);
 			}
 
+			//self::$add = 0;
 			self::$running = FALSE;
 			self::$events  = array();
 		}
@@ -89,7 +90,6 @@ abstract class CTC {
 			throw new Exception('CTC isn\'t running actually', 1);
 		} else {
 			self::$add++;
-			self::$logme .= '(' . count(self::$events);
 			$event = array(
 				'timest' => strtotime($date), 
 				'date' 	 => $date,
@@ -97,9 +97,9 @@ abstract class CTC {
 				'method' => $method,
 				'args'   => $args
 			);
-			self::$logme .= '|' . count(self::$events);
 			self::$events[] = $event;
-			self::$logme .= '|' . count(self::$events) . ') ';
+			self::$logme .= '(date:' . strtotime($date) . ',method:' . $method . ',argsQty:' . count($args) . ') ';
+			#self::$logme .= 'asdfasdf) ';
 		}
 	}
 
