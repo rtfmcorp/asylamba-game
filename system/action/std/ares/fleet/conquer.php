@@ -75,7 +75,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 										ASM::$pam->get()->decreaseCredit($price);
 										ASM::$pam->changeSession($S_PAM2);
 
-										CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
+#										CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
 
 										if (CTR::$get->exist('redirect')) {
 											CTR::redirect('map/place-' . CTR::$get->get('redirect'));

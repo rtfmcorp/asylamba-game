@@ -1,0 +1,65 @@
+body { 
+	margin: 0; padding: 0;
+	font-family: 'Roboto', 'Trebuchet MS', 'Arial', sans-serif;
+	font-size: 13px;
+	background: url('http://asylamba.com/public/css/src/global/black.jpg');
+}
+
+h1 {
+	margin: 0; padding: 50px 0;
+	text-align: center;
+}
+
+.content {
+	width: 1000px;
+	padding: 25px; margin: auto;
+	background: #efefef;
+	border-radius: 5px;
+}
+
+.content a {
+	position: relative;
+	text-decoration: none;
+	display: inline-block;
+	width: 192px;
+	color: black;
+	margin: 0 0 20px 0;
+}
+.content a em {
+	display: block;
+	padding: 0 0 0 25px;
+}
+.content a strong {
+	display: block;
+	padding: 0 0 10px 25px;
+	font-size: 20px;
+	line-height: 22px;
+	font-weight: bold;
+}
+.content a img {
+	display: block;
+	padding: 8px;
+	width: 200px; height: 200px;
+	background: #0a0a0a;
+	border-radius: 100%;
+	border: solid 6px black;
+	box-shadow: 0 0 5px 4px black;
+}
+.content a.color1 img { border-color: #b01e2d; }
+.content a.color2 img { border-color: #2f23c0; }
+.content a.color3 img { border-color: #ffdb0f; }
+.content a.color4 img { border-color: #a935c7; }
+.content a.color5 img { border-color: #57c632; }
+.content a.color6 img { border-color: #05bed7; }
+.content a.color7 img { border-color: #ac5832; }
+
+.content a .number {
+	position: absolute;
+	width: 45px; height: 45px; line-height: 45px;
+	font-size: 20px; color: white;
+	border-radius: 100%;
+	background: #0a0a0a;
+	text-align: center;
+	bottom: 5px; right: -10px;
+	border: solid 1px #202020;
+}

@@ -61,8 +61,8 @@ abstract class CTC {
 
 				$logt .= '> ';
 				$logt .= 'create/apply : ' . self::$create . '/' . self::$apply . ' | ';
-				$logt .= 'add/iter : ' . $beforeUsort . '/' . $afterUsort . ' | ';
-				$logt .= 'before/after-usort : ' . self::$add . '/' . $j . ' | ';
+				$logt .= 'add/iter : ' . self::$add . '/' . $j . ' | ';
+				$logt .= 'before/after-usort : ' . $beforeUsort . '/' . $afterUsort . ' | ';
 				$logt .= 'context : ' . self::$context . ' | ';
 				$logt .= 'creator : ' . self::$creator . "\n";
 

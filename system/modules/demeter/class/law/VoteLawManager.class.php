@@ -51,6 +51,7 @@ class VoteLawManager extends Manager {
 			$voteLaw->id = $awVoteLaw['id'];
 			$voteLaw->rCandidate = $awVoteLaw['rLaw'];
 			$voteLaw->rPlayer = $awVoteLaw['rPlayer'];
+			$voteLaw->vote = $awVoteLaw['vote'];
 			$voteLaw->relection = $awVoteLaw['dVotation'];
 
 			$this->_Add($voteLaw);
@@ -69,11 +70,13 @@ class VoteLawManager extends Manager {
 			SET
 				rLaw = ?,
 				rPlayer = ?,
+				vote = ?,
 				dVotation = ?
 			WHERE id = ?');
 		$aw = $qr->execute(array(
 				$voteLaw->rLaw,
 				$voteLaw->rPlayer,
+				$voteLaw->vote,
 				$voteLaw->dVotation,
 				$voteLaw->id
 
@@ -88,11 +91,13 @@ class VoteLawManager extends Manager {
 			SET
 				rLaw = ?,
 				rPlayer = ?,
+				vote = ?,
 				dVotation = ?');
 
 			$aw = $qr->execute(array(
 				$newVoteLaw->rLaw,
 				$newVoteLaw->rPlayer,
+				$newVoteLaw->vote,
 				$newVoteLaw->dVotation
 				));
 

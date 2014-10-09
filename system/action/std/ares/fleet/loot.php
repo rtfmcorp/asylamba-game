@@ -37,6 +37,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 
 					if ($commander->getPev() > 0) {
 						if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
+
 							if (CTR::$get->exist('redirect')) {
 								CTR::redirect('map/place-' . CTR::$get->get('redirect'));
 							}

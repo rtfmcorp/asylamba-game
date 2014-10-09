@@ -20,17 +20,38 @@ class Law {
 
 	public $id					= 0;
 	public $rColorCreator 		= 0;
-	public $rColorTarget		= 0;
 	public $type 				= '';
+	public $options 			= array();
 	public $statement 			= 0;
-	public $duration 			= 0;
+	public $dEndVotation		= '';
+	public $dEnd 	 			= '';
 	public $dCreation 			= '';
 
 	public function getId() { return $this->id; }
 
+	public function ballot() {
+		$_VLM = ASM::$vlm->getCurrentsession();
+		ASM::$vlm->load(array('rLaw' => $this->id));
+		$ballot = 0;
+		for ($i = 0; $i < ASM::$vlm->size(); $i++) {
+			if (ASM::$vlm->vote) {
+				$ballot++;
+			} else {
+				$ballot--;
+			}
+		}
+		ASM::$vlm->changeSession($_VLM);
+
+		if ($ballot > 0) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+
 	public function uLaw() {
 		if ($this->satement == Law::VOTATION) {
-			if (Utils::interval($this->dCreation, Utils::now(), 's') > Law::VOTEDURATION) {
+			if ($this->dEndVotation >= Utils::now()) {
 				$ballot = $this->ballot();
 				if ($ballot) {
 					//accepter la loi
@@ -43,12 +64,9 @@ class Law {
 				}
 			}
 		} elseif ($this->statement == Law::EFFECTIVE) {
-			if (Utils::interval($this->dCreation, Utils::now(), 's') > Law::VOTEDURATION + $this->duration) {
-				$ballot = $this->ballot();
-				if ($ballot) {
+			if ($this->dEnd >= Utils::now()) {
 					//finir la loi
 					$this->statement = OBSOLETE;
-				}
 			}
 		}
 	}

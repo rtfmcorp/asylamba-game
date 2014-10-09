@@ -50,10 +50,11 @@ class LawManager extends Manager {
 
 			$law->id = $awLaw['id'];
 			$law->rColorCreator = $awLaw['rColorCreator'];
-			$law->rColorTarget = $awLaw['rColorTarget'];
 			$law->type = $awLaw['type'];
+			$law->options = unserialize($awLaw['options']);
 			$law->statement = $awLaw['statement'];
-			$law->duration = $awLaw['duration'];
+			$law->dEndVotation = $awLaw['dEndVotation'];
+			$law->dEnd = $awLaw['dEnd'];
 			$law->dCreation = $awLaw['dCreation'];
 
 			$law->uLaw();
@@ -73,7 +74,6 @@ class LawManager extends Manager {
 		$qr = $db->prepare('UPDATE law
 			SET
 				rColorCreator = ?,
-				rColorTarget = ?,
 				type = ?,
 				statement = ?,
 				duration = ?,
@@ -96,17 +96,18 @@ class LawManager extends Manager {
 
 		$qr = $db->prepare('INSERT INTO election
 			SET
-				rColorCreator = ?
-				rColorTarget = ?
-				type = ?
-				statement = ?
-				duration = ?
+				rColorCreator = ?,
+				type = ?,
+				options = ?,
+				statement = ?,
+				duration = ?,
 				dCreation = ?');
 
 			$aw = $qr->execute(array(
 				$law->rColorCreator,
 				$law->rColorTarget,
 				$law->type,
+				$law->options,
 				$law->statement,
 				$law->duration,
 				$law->dCreation
