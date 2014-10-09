@@ -46,7 +46,7 @@ class ElectionManager extends Manager {
 		$qr->closeCursor();
 
 		foreach($aw AS $awelecion) {
-			$election = new election();
+			$election = new Election();
 
 			$election->id = $awelecion['id'];
 			$election->rColor = $awelecion['rColor'];

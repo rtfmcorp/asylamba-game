@@ -13,6 +13,12 @@ include_once 'class/election/CandidateManager.class.php';
 include_once 'class/election/Vote.class.php';
 include_once 'class/election/VoteManager.class.php';
 
+include_once 'class/law/VoteLaw.class.php';
+include_once 'class/law/VoteLawManager.class.php';
+include_once 'class/law/Law.class.php';
+include_once 'class/law/LawManager.class.php';
+
+
 include_once 'class/Color.class.php';
 include_once 'class/ColorManager.class.php';
 

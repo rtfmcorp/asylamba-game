@@ -34,9 +34,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
 					$duration = Game::getTimeToTravel($home, $place, CTR::$data->get('playerBonus'));
 
-					if ($commander->move($place->getId(), $commander->rBase, Commander::MOVE, $length, $duration)) {
-#						CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
-					}
+					$commander->move($place->getId(), $commander->rBase, Commander::MOVE, $length, $duration);
 				} else {
 					CTR::$alert->add('Vous ne pouvez pas envoyer une flotte sur une planète qui ne vous appartient pas.', ALERT_STD_ERROR);
 				}

@@ -4,6 +4,36 @@ echo '<h1>Module Demeter</h1>';
 $db = DataBaseAdmin::getInstance();
 
 #--------------------------------------------------------------------------------------------
+echo '<h2>Ajout de la table law</h2>';
+
+$db->query("DROP TABLE IF EXISTS `law`");
+$db->query("CREATE TABLE IF NOT EXISTS `law` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `rColorCreator` int(11) NOT NULL,
+  `type` int(11) NOT NULL,
+  `option` text NOT NULL,
+  `statement` int(11) NOT NULL,
+  `dEnd` datetime DEFAULT NULL,
+  `dEndVotation` datetime NOT NULL,
+  `dCreation` datetime NOT NULL,
+  PRIMARY KEY (`rColorCreator`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
+
+#--------------------------------------------------------------------------------------------
+echo '<h2>Ajout de la table voteLaw</h2>';
+
+$db->query("DROP TABLE IF EXISTS `voteLaw`");
+$db->query("CREATE TABLE IF NOT EXISTS `voteLaw` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `rLaw` int(11) NOT NULL,
+  `rPlayer` int(11) NOT NULL,
+  `vote` tinyint(1) NOT NULL,
+  `dVotation` date NOT NULL,
+  PRIMARY KEY (`rLaw`,`rPlayer`,`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
+#--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table forumTopic</h2>';
 
 $db->query("DROP TABLE IF EXISTS `forumTopic`");
