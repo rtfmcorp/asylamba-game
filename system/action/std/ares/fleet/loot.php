@@ -37,7 +37,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 
 					if ($commander->getPev() > 0) {
 						if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
-							CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
+#							CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
 
 							if (CTR::$get->exist('redirect')) {
 								CTR::redirect('map/place-' . CTR::$get->get('redirect'));
