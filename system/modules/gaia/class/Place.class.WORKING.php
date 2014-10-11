@@ -164,13 +164,91 @@ class Place {
 				array('c.dArrival', 'ASC')
 			);
 
-			for ($i = 0; $i < ASM::$com->size(); $i++) {
+#-------------------------------------------------------------------------------
+			include_once ARES;
+
+			$places = array();
+			$playerBonuses = array();
+			for ($i = 0; $i < ASM::$com->size(); $i++) { 
+				$c = ASM::$com->get($i);
+				# fill the places
+				$places[] = $c->getRBase();
+				# fill&load the bonuses if needed
+/* TODO */		if ($playerBonuses not contains key $c->rPlayer) {
+					$bonus = new PlayerBonus($c->rPlayer);
+					$bonus->load();
+					$playerBonuses[$c->rPlayer] = $bonus;
+				}
+			}
+
+			# load all the places at the same time
+			$S_PLM1 = ASM::$plm->getCurrentSession();
+			ASM::$plm->newSession();
+			ASM::$plm->load(array('id' => $places));
+			
+
+			for ($i = 0; $i < ASM::$com->size(); $i++) { 
+				$commander = ASM::$com->get($i);
+
+				switch ($commander->travelType) {
+					case Commander::MOVE: 
+						//$this->tryToChangeBase($commander);
+						if ($commander->dArrival <= $now AND $commander->rDestinationPlace != NULL) {					
+							$place = ASM::$plm->getById($commander->rBase);
+							$bonus = $playerBonuses[$commander->rPlayer];
+							CTC::add($commander->dArrival, $this, 'uChangeBase', array($commander, $place, $bonus));
+						}
+						break;
+
+					case Commander::LOOT: 
+						//$this->tryToLoot($commander);
+						if ($commander->dArrival <= $now AND $commander->rDestinationPlace != NULL) {					
+							$place = ASM::$plm->getById($commander->rBase);
+							$bonus = $playerBonuses[$commander->rPlayer];
+							CTC::add($commander->dArrival, $this, 'uLoot', array($commander, $place, $bonus));
+						}
+						break;
+
+					case Commander::COLO: 
+						//$this->tryToConquer($commander);
+						if ($commander->dArrival <= $now AND $commander->rDestinationPlace != NULL) {					
+							$place = ASM::$plm->getById($commander->rBase);
+							$bonus = $playerBonuses[$commander->rPlayer];
+							CTC::add($commander->dArrival, $this, 'uConquer', array($commander, $place, $bonus));
+						}
+						break;
+
+					case Commander::BACK: 
+						//$this->comeBackToHome($commander);
+						if ($commander->dArrival <= $now AND $commander->rDestinationPlace != NULL) {					
+							include_once ATHENA;
+							$S_OBM1 = ASM::$obm->getCurrentSession();
+
+							ASM::$obm->newSession(FALSE);
+							ASM::$obm->load(array('rPlace' => $commander->getRBase()));
+							$base = ASM::$obm->get();
+							ASM::$obm->changeSession($S_OBM1);
+
+							CTC::add($commander->dArrival, $this, 'uComeBackHome', array($commander, $base));
+						}
+						break;
+					default: 
+						CTR::$alert->add('Cette action n\'existe pas.', ALT_BUG_INFO);
+/* TODO */			#$commander->hasToU = TRUE;	#where to put it ?!
+				}
+				
+			}
+
+			ASM::$plm->changeSession($S_PLM1);
+#-------------------------------------------------------------------------------
+
+			/*for ($i = 0; $i < ASM::$com->size(); $i++) {
 				$commander = ASM::$com->get($i);
 
 				if ($commander->dArrival <= $now AND $commander->rDestinationPlace != NULL) {					
 					CTC::add($commander->dArrival, $this, 'uTravel', array($commander));
 				}
-			}
+			}*/
 
 			ASM::$com->changeSession($S_COM_PLACE1);
 			
@@ -188,7 +266,7 @@ class Place {
 		}
 	}
 
-	public function uTravel($commander) {
+	/*public function uTravel($commander) {
 		include_once ARES;
 
 		switch ($commander->travelType) {
@@ -217,10 +295,10 @@ class Place {
 			$commander->hasToU = TRUE;
 			return $commander;
 		}
-	}
+	}*/
 
 	# se poser
-	private function tryToChangeBase($commander) {
+	private function uChangeBase($commander) {
 		include_once ATHENA;
 		# si la place et le commander ont le même joueur
 		if ($this->rPlayer == $commander->getRPlayer() AND $this->typeOfBase == 4) {
@@ -307,8 +385,13 @@ class Place {
 	}
 
 	# piller
-	private function tryToLoot($commander) {
+	private function uLoot($commander) {
 		include_once ARES;
+#-----------------------------------------------------------
+		LiveReport::$type = Commander::LOOT;
+		LiveReport::$dFight = $commander->dArrival;
+#-----------------------------------------------------------
+
 		if ($this->rPlayer == 0) {
 			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
@@ -481,8 +564,14 @@ class Place {
 	}
 
 	# conquest
-	private function tryToConquer($commander) {
+	private function uConquer($commander) {
 		include_once DEMETER;
+
+#-------------------------------------------------------
+		LiveReport::$type = Commander::COLO;
+		LiveReport::$dFight = $commander->dArrival;
+#-------------------------------------------------------
+
 		if ($this->rPlayer != 0) {
 			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
@@ -728,7 +817,7 @@ class Place {
 
 
 	# retour à la maison
-	private function comeBackToHome($commander) {
+	private function uComeBackHome($commander) {
 		include_once ATHENA;
 		// $commander->rDestinationPlace = NULL;
 		$commander->travelType = NULL;
