@@ -52,7 +52,7 @@ class VoteLawManager extends Manager {
 			$voteLaw->rCandidate = $awVoteLaw['rLaw'];
 			$voteLaw->rPlayer = $awVoteLaw['rPlayer'];
 			$voteLaw->vote = $awVoteLaw['vote'];
-			$voteLaw->relection = $awVoteLaw['dVotation'];
+			$voteLaw->dVotation = $awVoteLaw['dVotation'];
 
 			$this->_Add($voteLaw);
 		}
@@ -86,7 +86,6 @@ class VoteLawManager extends Manager {
 
 	public function add($newVoteLaw) {
 		$db = DataBase::getInstance();
-
 		$qr = $db->prepare('INSERT INTO voteLaw
 			SET
 				rLaw = ?,

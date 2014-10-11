@@ -19,7 +19,7 @@ class Law {
 	const VOTEDURATION 				= 172800;
 
 	public $id					= 0;
-	public $rColorCreator 		= 0;
+	public $rColor				= 0;
 	public $type 				= '';
 	public $options 			= array();
 	public $statement 			= 0;
@@ -46,28 +46,6 @@ class Law {
 			return TRUE;
 		} else {
 			return FALSE;
-		}
-	}
-
-	public function uLaw() {
-		if ($this->satement == Law::VOTATION) {
-			if ($this->dEndVotation >= Utils::now()) {
-				$ballot = $this->ballot();
-				if ($ballot) {
-					//accepter la loi
-					$this->statement = EFFECTIVE;
-					//envoyer un message
-				} else {
-					//refuser la loi
-					$this->statement = REFUSED;
-					//envoyer un message
-				}
-			}
-		} elseif ($this->statement == Law::EFFECTIVE) {
-			if ($this->dEnd >= Utils::now()) {
-					//finir la loi
-					$this->statement = OBSOLETE;
-			}
 		}
 	}
 }

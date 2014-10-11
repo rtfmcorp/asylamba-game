@@ -9,16 +9,15 @@ echo '<h2>Ajout de la table law</h2>';
 $db->query("DROP TABLE IF EXISTS `law`");
 $db->query("CREATE TABLE IF NOT EXISTS `law` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `rColorCreator` int(11) NOT NULL,
+  `rColor` int(10) unsigned NOT NULL,
   `type` int(11) NOT NULL,
-  `option` text NOT NULL,
   `statement` int(11) NOT NULL,
+  `options` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `dEnd` datetime DEFAULT NULL,
   `dEndVotation` datetime NOT NULL,
   `dCreation` datetime NOT NULL,
-  PRIMARY KEY (`rColorCreator`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
 
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table voteLaw</h2>';
@@ -30,9 +29,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `voteLaw` (
   `rPlayer` int(11) NOT NULL,
   `vote` tinyint(1) NOT NULL,
   `dVotation` date NOT NULL,
-  PRIMARY KEY (`rLaw`,`rPlayer`,`id`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table forumTopic</h2>';
 

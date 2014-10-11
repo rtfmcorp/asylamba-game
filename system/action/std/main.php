@@ -98,6 +98,10 @@ switch (CTR::$get->get('a')) {
 	case 'vote':					include ACTION . 'demeter/election/vote.php'; break;
 	case 'choosegovernment':		include ACTION . 'demeter/election/chooseGovernment.php'; break;
 
+	case 'votelaw':					include ACTION . 'demeter/law/vote.php'; break;
+	case 'createlaw':				include ACTION . 'demeter/law/createLaw.php'; break;
+
+
 	case 'donate':					include ACTION . 'demeter/donate.php'; break;
 
 	default :

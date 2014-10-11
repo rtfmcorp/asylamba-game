@@ -214,9 +214,27 @@ class Color {
 		}
 	}
 
+	public function uVoteLaw($law, $ballot) {
+		if ($ballot) {
+			//accepter la loi
+			$law->statement = Law::EFFECTIVE;
+			//envoyer un message
+		} else {
+			//refuser la loi
+			$law->statement = Law::REFUSED;
+			//envoyer un message
+		}
+	}
 
-	public function uElection() {
+	public function uFinishLaw($law) {
+		$law->statement = Law::OBSOLETE;
+	}
+
+
+	public function uMethod() {
 		// 604800s = 7j
+		$token = CTC::createContext();
+
 		if ($this->electionStatement == self::MANDATE) {
 			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration')) {
 				$this->updateStatus();
@@ -249,5 +267,20 @@ class Color {
 				ASM::$elm->changeSession($_ELM);
 			}
 		}
+
+		$_LAM = ASM::$lam->getCurrentSession();
+		ASM::$lam->load(array('rColor' => $this->id, 'statement' => array(Law::VOTATION, Law::EFFECTIVE)));
+
+		for ($i = 0; $i < ASM::$lam->size(); $i++) {
+			if (ASM::$lam->get($i)->statement == Law::VOTATION && ASM::$lam->get($i)->dEndVotation < Utils::now()) {
+				CTC::add(ASM::$lam->get($i)->dEndVotation, $this, 'uVoteLaw', array(ASM::$lam->get($i), ASM::$lam->get($i)->ballot()));
+			} elseif (ASM::$lam->get($i)->statement == Law::EFFECTIVE && ASM::$lam->get($i)->dEnd < Utils::now()) {
+				CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishLaw', array(ASM::$lam->get($i)));
+			}
+		}
+
+		ASM::$lam->changeSession($_LAM);
+
+		CTC::applyContext($token);
 	}
 }
