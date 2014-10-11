@@ -11,7 +11,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `law` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `rColorCreator` int(11) NOT NULL,
   `type` int(11) NOT NULL,
-  `option` text NOT NULL,
+  `options` text NOT NULL,
   `statement` int(11) NOT NULL,
   `dEnd` datetime DEFAULT NULL,
   `dEndVotation` datetime NOT NULL,
