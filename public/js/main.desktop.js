@@ -752,6 +752,130 @@ jQuery(document).ready(function($) {
 		);
 	});
 
+// ###########################
+// ######### WYSIWYG #########
+// ###########################
+	$('.wysiwyg button').on('click', function(e) {
+		e.preventDefault();
+
+		var type 		= $(this).data('tag');
+		var container 	= $(this).parent().parent();
+		var target 		= container.data('id');
+
+		switch (type) {
+			case 'it': insertTag('[i]', '[/i]', target); break;
+			case 'bl': insertTag('[b]', '[/b]', target); break;
+			case 'bl': insertTag('[t]', '[/t]', target); break;
+			case 'py': wswBox.open(container, target, type); break;
+		}
+	});
+
+	function insertTag(startTag, endTag, input) {
+		var field  = document.getElementById(input); 
+		var scroll = field.scrollTop;
+
+		field.focus();
+			
+		if (window.ActiveXObject) {
+			var textRange = document.selection.createRange();
+			var currentSelection = textRange.text;
+					
+			textRange.text = startTag + currentSelection + endTag;
+			textRange.moveStart('character', -endTag.length - currentSelection.length);
+			textRange.moveEnd('character', -endTag.length);
+			textRange.select();
+		} else {
+			var startSelection   = field.value.substring(0, field.selectionStart);
+			var currentSelection = field.value.substring(field.selectionStart, field.selectionEnd);
+			var endSelection     = field.value.substring(field.selectionEnd);
+					
+			field.value = startSelection + startTag + currentSelection + endTag + endSelection;
+			field.focus();
+			field.setSelectionRange(startSelection.length + startTag.length, startSelection.length + startTag.length + currentSelection.length);
+		} 
+
+		field.scrollTop = scroll;
+	}
+
+	var wswBox = {
+		run: false,
+		target: null,
+		container: null,
+		box: null,
+		type: null,
+
+		open: function(container, target, type) {
+			if (!wswBox.run) {
+				wswBox.run = true;
+				wswBox.target = target;
+				wswBox.container = container;
+				wswBox.type = type;
+
+				$.get(game.path + '/ajax/a-wsw' + wswBox.type + '/')
+				 .done(function(data) {
+					wswBox.container.append(data);
+					wswBox.box = container.find('.modal');
+				}).fail(function() {
+					alertController.add(101, 'chargement des données interrompu');
+				});
+			}
+		},
+
+		write: function() {
+			switch (wswBox.type) {
+				case 'py':
+					wswBox.box.find('.autocomplete-player').autocomplete(game.path + 'ajax/a-autocompleteplayer/');
+					var pseudo = wswBox.box.find('#wsw-py-pseudo').val();
+					insertTag('[@' + pseudo + ']', '', wswBox.target);
+				break;
+			}
+
+			wswBox.close();
+		},
+
+		close: function() {
+			wswBox.run = false;
+
+			wswBox.box.remove();
+
+			wswBox.target = null;
+			wswBox.container = null;
+			wswBox.box = null;
+			wswBox.type = null;
+		}
+	}
+
+	$(document).on('click', '.wsw-box-submit', function(e) {
+		e.preventDefault();
+		wswBox.write();
+	});
+	$(document).on('click', '.wsw-box-cancel', function(e) {
+		e.preventDefault();
+		wswBox.close();
+	});
+	$(document).keyup(function(e) {
+		if (wswBox.run) {
+			switch(e.keyCode) {
+				case 13: wswBox.write(); break;
+				case 27: wswBox.close(); break;
+				default: break;
+			}
+		}
+	});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	/* DIVERS */
 	$('.new-transaction.resources #resources-quantity').live('keyup', function() {
 		var quantity  = $(this).val();
