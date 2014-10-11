@@ -13,8 +13,8 @@ class Message {
 	//ATTRIBUTES
 	private $id = 0;
 	private $thread = 0;
-	private $rPlayerWriter = NULL;
-	private $rPlayerReader = NULL;
+	private $rPlayerWriter = 0;
+	private $rPlayerReader = 0;
 	private $dSending = '';
 	private $content = '';
 	private $readed = 0;
@@ -41,7 +41,7 @@ class Message {
 	
 	// GETTER DE JOINTURES
 	public function getWriterName()					{
-		if ($this->getRPlayerWriter() == NULL) {
+		if ($this->getRPlayerWriter() == 0) {
 			return 'Jean-Mi, administrateur système';
 		} else {
 			return $this->writerName;
@@ -50,7 +50,7 @@ class Message {
 
 	public function getWriterColor()				{ return $this->writerColor; }
 	public function getWriterAvatar()				{
-		if ($this->getRPlayerWriter() == NULL) {
+		if ($this->getRPlayerWriter() == 0) {
 			return '059-1';
 		} else {
 			return $this->writerAvatar;
@@ -81,7 +81,7 @@ class Message {
 	public function setReaderAvatar($var = '')		{ $this->readerAvatar = $var; }
 
 	public function getRealId($ctrid) {
-		if ($this->getRPlayerWriter() == NULL OR $this->getRPlayerReader() == NULL) {
+		if ($this->getRPlayerWriter() == 0 OR $this->getRPlayerReader() == 0) {
 			return 0;
 		} elseif ($this->getRPlayerWriter() == $ctrid) {
 			return $this->getRPlayerReader();
@@ -91,7 +91,7 @@ class Message {
 	}
 
 	public function getRealColor($ctrid) {
-		if ($this->getRPlayerWriter() == NULL OR $this->getRPlayerReader() == NULL) {
+		if ($this->getRPlayerWriter() == 0 OR $this->getRPlayerReader() == 0) {
 			return 0;
 		} elseif ($this->getRPlayerWriter() == $ctrid) {
 			return $this->getReaderColor();
@@ -101,7 +101,7 @@ class Message {
 	}
 
 	public function getRealName($ctrid) {
-		if ($this->getRPlayerWriter() == NULL OR $this->getRPlayerReader() == NULL) {
+		if ($this->getRPlayerWriter() == 0 OR $this->getRPlayerReader() == 0) {
 			return 'Jean-Mi';
 		} elseif ($this->getRPlayerWriter() == $ctrid) {
 			return $this->getReaderName();
@@ -111,7 +111,7 @@ class Message {
 	}
 
 	public function getRealAvatar($ctrid) {
-		if ($this->getRPlayerWriter() == NULL OR $this->getRPlayerReader() == NULL) {
+		if ($this->getRPlayerWriter() == 0 OR $this->getRPlayerReader() == 0) {
 			return '059-1';
 		} elseif ($this->getRPlayerWriter() == $ctrid) {
 			return $this->getReaderAvatar();
