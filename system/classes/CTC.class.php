@@ -95,10 +95,11 @@ abstract class CTC {
 				'date' 	 => $date,
 				'object' => $object,
 				'method' => $method,
-				'args'   => $args
+				'args'   => $args,
+				'random' => rand()
 			);
 			self::$events[] = $event;
-			self::$logme .= '(date:' . strtotime($date) . ',method:' . $method . ',argsQty:' . count($args) . ') ';
+			self::$logme .= '(date:' . strtotime($date) . ',objectid:' . $object->id . ',method:' . $method . ',argsQty:' . count($args) . ') ';
 			#self::$logme .= 'asdfasdf) ';
 		}
 	}

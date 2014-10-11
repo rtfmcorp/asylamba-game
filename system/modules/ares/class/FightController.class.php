@@ -220,7 +220,7 @@ class FightController {
 	 *		SINON COMBAT
 	*/
 
-	public function startFight($commanderA, $commanderD, $place) {
+	public function startFight($commanderA, $commanderD) {
 		include_once DEMETER;
 
 		$commanderA->setIsAttacker(TRUE);
