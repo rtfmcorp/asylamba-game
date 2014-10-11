@@ -13,8 +13,8 @@ class Message {
 	//ATTRIBUTES
 	private $id = 0;
 	private $thread = 0;
-	private $rPlayerWriter = 0;
-	private $rPlayerReader = 0;
+	private $rPlayerWriter = NULL;
+	private $rPlayerReader = NULL;
 	private $dSending = '';
 	private $content = '';
 	private $readed = 0;
