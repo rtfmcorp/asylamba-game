@@ -23,7 +23,7 @@ echo '<div class="component report topic">';
 			if (count($topic_topics) == 0) {
 				echo '<p class="info">Aucun sujet n\'a encore été créé dans cette partie de forum.</p>';
 			} else {
-				echo '<div class="set-report">';
+				echo '<div class="set-item">';
 					foreach ($topic_topics as $t) {
 						if ($t->id == CTR::$get->get('topic')) {
 							$isNew = '';

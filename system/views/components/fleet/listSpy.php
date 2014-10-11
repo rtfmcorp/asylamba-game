@@ -19,7 +19,7 @@ echo '<div class="component report">';
 				echo '<span><a href="' . APP_ROOT . 'action/a-deleteallspyreport">tout supprimer</a></span>';
 			echo '</div>';
 			if (count($spyreport_listSpy) > 0) {
-				echo '<div class="set-report">';
+				echo '<div class="set-item">';
 					foreach ($spyreport_listSpy as $r) {
 						echo '<div class="item">';
 							echo '<div class="left">';
