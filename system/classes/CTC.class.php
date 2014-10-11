@@ -61,8 +61,6 @@ abstract class CTC {
 					$logt .= '> [' . $event['date'] . '] ' . get_class($event['object']) . '(' . $event['object']->getId() . ')::' . $event['method'] . "\n";
 				}
 
-				self::$running = FALSE;
-				self::$events  = array();
 
 				$logt .= '> ';
 				$logt .= 'create/apply : ' . self::$create . '/' . self::$apply . ' | ';
@@ -79,9 +77,10 @@ abstract class CTC {
 				
 				$path  = 'public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
 				Bug::writeLog($path, $logt);
-			} else {
-				self::$running = FALSE;
 			}
+
+			self::$running = FALSE;
+			self::$events  = array();
 		}
 	}
 
