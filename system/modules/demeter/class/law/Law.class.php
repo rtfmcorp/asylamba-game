@@ -48,26 +48,4 @@ class Law {
 			return FALSE;
 		}
 	}
-
-	public function uLaw() {
-		if ($this->satement == Law::VOTATION) {
-			if ($this->dEndVotation >= Utils::now()) {
-				$ballot = $this->ballot();
-				if ($ballot) {
-					//accepter la loi
-					$this->statement = EFFECTIVE;
-					//envoyer un message
-				} else {
-					//refuser la loi
-					$this->statement = REFUSED;
-					//envoyer un message
-				}
-			}
-		} elseif ($this->statement == Law::EFFECTIVE) {
-			if ($this->dEnd >= Utils::now()) {
-					//finir la loi
-					$this->statement = OBSOLETE;
-			}
-		}
-	}
 }

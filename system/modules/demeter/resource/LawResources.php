@@ -19,8 +19,9 @@ Class LawResources {
 			'devName' => 'taxes',
 			'name' => 'modification des taux d\'imposition',
 			'department' => 4,
+			'price' => 1000,
 			'shortDescription' => 'modifier le taux d\'imposition de votre faction',
-			'longDescription' =>'',
+			'longDescription' => '',
 			'image' => ''),
 	);
 
