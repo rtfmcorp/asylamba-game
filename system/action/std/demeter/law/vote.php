@@ -1,15 +1,15 @@
 <?php
 #rlaw	id de la loi
-#vote le vote du joueur
+#choice le vote du joueur
 
 $rLaw = Utils::getHTTPData('rlaw');
-$vote = Utils::getHTTPData('vote');
+$choice = Utils::getHTTPData('choice');
 
 include_once DEMETER;
 include_once ZEUS;
 
-if ($rLaw !== FALSE && $vote != FALSE) {
-	if (CTR::$data->get('playerInfo')->get('status') > PAM_STANDARD) {
+if ($rLaw !== FALSE && $choice != FALSE) {
+	if (CTR::$data->get('playerInfo')->get('status') == PAM_PARLIAMENT) {
 		$_LAM = ASM::$lam->getCurrentSession();
 		ASM::$lam->newSession();
 		ASM::$lam->load(array('id' => $rLaw));
@@ -20,12 +20,12 @@ if ($rLaw !== FALSE && $vote != FALSE) {
 				ASM::$vlm->newSession();
 				ASM::$vlm->load(array('rPlayer' => CTR::$data->get('playerId'), 'rLaw' => $rLaw));
 
-				if (ASM::$vlm->get() == 0) {
+				if (ASM::$vlm->size() == 0) {
 					$vote = new VoteLaw();
 					$vote->rPlayer = CTR::$data->get('playerId');
 					$vote->rLaw = $rLaw;
-					$vote->vote = $vote;
-					$vote->dCreation = Utils::now();
+					$vote->vote = $choice;
+					$vote->dVotation = Utils::now();
 					ASM::$vlm->add($vote);
 				} else {
 					CTR::$alert->add('Vous avez déjà voté.', ALERT_STD_ERROR);

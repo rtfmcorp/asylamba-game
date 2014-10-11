@@ -18,7 +18,7 @@ Class LawResources {
 			'id' => 1,
 			'devName' => 'taxes',
 			'name' => 'modification des taux d\'imposition',
-			'department' => 4,
+			'department' => 3,
 			'price' => 1000,
 			'shortDescription' => 'modifier le taux d\'imposition de votre faction',
 			'longDescription' => '',
@@ -27,20 +27,11 @@ Class LawResources {
 
 	public static function getInfo($id, $info) {
 		if ($id <= self::size()) {
-			if (in_array($info, array('id', 'devName', 'name', 'shortDescription', 'longDescription', 'image'))) {
-				return self::$forums[$id - 1][$info];
+			if (in_array($info, array('id', 'devName', 'name', 'department', 'price', 'shortDescription', 'longDescription', 'image'))) {
+				return self::$laws[$id - 1][$info];
 			} else {
 				return FALSE;
 			}
-		} else {
-			return FALSE;
-		}
-	}
-
-	public static function getInfoForId($id, $info) {
-		if (in_array($info, array('id', 'devName', 'name', 'shortDescription', 'longDescription', 'image'))) {
-			$tmp = array_keys(self::$idLink, $id);
-			return self::$forums[$tmp[0]][$info];
 		} else {
 			return FALSE;
 		}

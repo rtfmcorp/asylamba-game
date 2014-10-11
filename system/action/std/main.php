@@ -99,7 +99,7 @@ switch (CTR::$get->get('a')) {
 	case 'choosegovernment':		include ACTION . 'demeter/election/chooseGovernment.php'; break;
 
 	case 'votelaw':					include ACTION . 'demeter/law/vote.php'; break;
-	case 'createlaqw':				include ACTION . 'demeter/law/creaLaw.php'; break;
+	case 'createlaw':				include ACTION . 'demeter/law/createLaw.php'; break;
 
 
 	case 'donate':					include ACTION . 'demeter/donate.php'; break;

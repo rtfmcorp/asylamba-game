@@ -14,7 +14,7 @@ class VoteLaw {
 	public $id 					= 0;
 	public $rLaw 				= 0;
 	public $rPlayer				= 0;
-	public $Vote 	 			= 0;
+	public $vote 	 			= 0;
 	public $dVotation			= '';
 
 	public function getId() { return $this->id; }

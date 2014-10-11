@@ -49,15 +49,13 @@ class LawManager extends Manager {
 			$law = new Law();
 
 			$law->id = $awLaw['id'];
-			$law->rColorCreator = $awLaw['rColorCreator'];
+			$law->rColor = $awLaw['rColor'];
 			$law->type = $awLaw['type'];
 			$law->options = unserialize($awLaw['options']);
 			$law->statement = $awLaw['statement'];
 			$law->dEndVotation = $awLaw['dEndVotation'];
 			$law->dEnd = $awLaw['dEnd'];
 			$law->dCreation = $awLaw['dCreation'];
-
-			$law->uLaw();
 			
 			$this->_Add($law);
 		}
@@ -73,18 +71,19 @@ class LawManager extends Manager {
 
 		$qr = $db->prepare('UPDATE law
 			SET
-				rColorCreator = ?,
+				rColor = ?,
 				type = ?,
 				statement = ?,
-				duration = ?,
+				dEnd = ?,
+				dEndVotation = ?,
 				dCreation = ?
 			WHERE id = ?');
 		$aw = $qr->execute(array(
-			$law->rColorCreator,
-			$law->rColorTarget,
+			$law->rColor,
 			$law->type,
 			$law->statement,
-			$law->duration,
+			$law->dEnd,
+			$law->dEndVotation,
 			$law->dCreation,
 			$law->id
 			));
@@ -94,23 +93,22 @@ class LawManager extends Manager {
 	public function add($newLaw) {
 		$db = DataBase::getInstance();
 
-		$qr = $db->prepare('INSERT INTO election
+		$qr = $db->prepare('INSERT INTO law
 			SET
-				rColorCreator = ?,
+				rColor = ?,
 				type = ?,
-				options = ?,
 				statement = ?,
-				duration = ?,
+				dEnd = ?,
+				dEndVotation = ?,
 				dCreation = ?');
 
 			$aw = $qr->execute(array(
-				$law->rColorCreator,
-				$law->rColorTarget,
-				$law->type,
-				$law->options,
-				$law->statement,
-				$law->duration,
-				$law->dCreation
+				$newLaw->rColor,
+				$newLaw->type,
+				$newLaw->statement,
+				$newLaw->dEnd,
+				$newLaw->dEndVotation,
+				$newLaw->dCreation
 				));
 
 		$newLaw->id = $db->lastInsertId();

@@ -217,11 +217,11 @@ class Color {
 	public function uVoteLaw($law, $ballot) {
 		if ($ballot) {
 			//accepter la loi
-			$law->statement = EFFECTIVE;
+			$law->statement = Law::EFFECTIVE;
 			//envoyer un message
 		} else {
 			//refuser la loi
-			$law->statement = REFUSED;
+			$law->statement = Law::REFUSED;
 			//envoyer un message
 		}
 	}
@@ -269,12 +269,12 @@ class Color {
 		}
 
 		$_LAM = ASM::$lam->getCurrentSession();
-		ASM::$lam->load(array('rColorCreator' => $this->id, 'statement' => array(Law::VOTATION, Law::EFFECTIVE)));
+		ASM::$lam->load(array('rColor' => $this->id, 'statement' => array(Law::VOTATION, Law::EFFECTIVE)));
 
 		for ($i = 0; $i < ASM::$lam->size(); $i++) {
-			if (ASM::$lam->get($i)->statement == Law::VOTATION && ASM::$lam->get($i)->dEndVotation >= Utils::$now) {
+			if (ASM::$lam->get($i)->statement == Law::VOTATION && ASM::$lam->get($i)->dEndVotation < Utils::now()) {
 				CTC::add(ASM::$lam->get($i)->dEndVotation, $this, 'uVoteLaw', array(ASM::$lam->get($i), ASM::$lam->get($i)->ballot()));
-			} elseif (ASM::$lam->get($i)->statement == Law::EFFECTIVE && ASM::$lam->get($i)->dEnd >= Utils::$now) {
+			} elseif (ASM::$lam->get($i)->statement == Law::EFFECTIVE && ASM::$lam->get($i)->dEnd < Utils::now()) {
 				CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishLaw', array(ASM::$lam->get($i)));
 			}
 		}
