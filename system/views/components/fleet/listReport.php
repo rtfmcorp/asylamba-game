@@ -25,7 +25,7 @@ echo '<div class="component report">';
 				: '<h3>Rapports de défense</h3>';
 			
 			if (count($report_listReport) > 0) {
-				echo '<div class="set-report">';
+				echo '<div class="set-item">';
 					foreach ($report_listReport as $r) {
 						if ($r->rPlayerAttacker == CTR::$data->get('playerId')) {
 							if ($r->rPlayerWinner == $r->rPlayerAttacker) {
