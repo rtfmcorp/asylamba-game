@@ -16,18 +16,29 @@ Class LawResources {
 	private static $laws = array(
 		array(
 			'id' => 1,
-			'devName' => 'taxes',
+			'devName' => 'faction taxes',
 			'name' => 'modification des taux d\'imposition',
 			'department' => 3,
 			'price' => 1000,
-			'shortDescription' => 'modifier le taux d\'imposition de votre faction',
+			'duration' => 0,
+			'shortDescription' => 'modifier le taux d\'imposition de la population des planètes de votre faction',
+			'longDescription' => '',
+			'image' => ''),
+		array(
+			'id' => 2,
+			'devName' => 'taxes',
+			'name' => 'modification des taxes comerciales',
+			'department' => 3,
+			'price' => 1000,
+			'duration' => 0,
+			'shortDescription' => 'modifier les taxes commerciale dans un secteur.',
 			'longDescription' => '',
 			'image' => ''),
 	);
 
 	public static function getInfo($id, $info) {
 		if ($id <= self::size()) {
-			if (in_array($info, array('id', 'devName', 'name', 'department', 'price', 'shortDescription', 'longDescription', 'image'))) {
+			if (in_array($info, array('id', 'devName', 'name', 'department', 'price', 'duration', 'shortDescription', 'longDescription', 'image'))) {
 				return self::$laws[$id - 1][$info];
 			} else {
 				return FALSE;

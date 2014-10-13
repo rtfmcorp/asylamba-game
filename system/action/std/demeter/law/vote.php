@@ -1,12 +1,12 @@
 <?php
+include_once DEMETER;
+include_once ZEUS;
 #rlaw	id de la loi
 #choice le vote du joueur
 
 $rLaw = Utils::getHTTPData('rlaw');
 $choice = Utils::getHTTPData('choice');
 
-include_once DEMETER;
-include_once ZEUS;
 
 if ($rLaw !== FALSE && $choice != FALSE) {
 	if (CTR::$data->get('playerInfo')->get('status') == PAM_PARLIAMENT) {

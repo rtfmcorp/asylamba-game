@@ -98,6 +98,7 @@ class LawManager extends Manager {
 				rColor = ?,
 				type = ?,
 				statement = ?,
+				options = ?,
 				dEnd = ?,
 				dEndVotation = ?,
 				dCreation = ?');
@@ -106,6 +107,7 @@ class LawManager extends Manager {
 				$newLaw->rColor,
 				$newLaw->type,
 				$newLaw->statement,
+				$newLaw->options,
 				$newLaw->dEnd,
 				$newLaw->dEndVotation,
 				$newLaw->dCreation
