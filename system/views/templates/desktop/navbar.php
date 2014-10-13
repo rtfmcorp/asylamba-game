@@ -105,12 +105,14 @@ echo '<div id="nav">';
 
 	echo '<div class="overbox" id="change-bases">';
 		echo '<h2>Changer de bases</h2>';
-		for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
-			echo '<a href="' . APP_ROOT . 'action/a-switchbase/base-' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') . '" ' . (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == CTR::$data->get('playerParams')->get('base') ? 'class="active"' : NULL) . '>';
-				echo '<em>' . PlaceResource::get(CTR::$data->get('playerBase')->get('ob')->get($i)->get('type'), 'name') . '</em>';
-				echo '<strong>' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('name') . '</strong>';
-			echo '</a>';
-		}
+		echo '<div class="overflow">';
+			for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
+				echo '<a href="' . APP_ROOT . 'action/a-switchbase/base-' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') . '" ' . (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == CTR::$data->get('playerParams')->get('base') ? 'class="active"' : NULL) . '>';
+					echo '<em>' . PlaceResource::get(CTR::$data->get('playerBase')->get('ob')->get($i)->get('type'), 'name') . '</em>';
+					echo '<strong>' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('name') . '</strong>';
+				echo '</a>';
+			}
+		echo '</div>';
 	echo '</div>';
 
 	echo '<div class="overbox" id="new-notifications">';
