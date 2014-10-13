@@ -12,7 +12,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `law` (
   `rColor` int(10) unsigned NOT NULL,
   `type` int(11) NOT NULL,
   `statement` int(11) NOT NULL,
-  `options` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `options` text CHARACTER SET utf8 COLLATE utf8_bin NULL,
   `dEnd` datetime DEFAULT NULL,
   `dEndVotation` datetime NOT NULL,
   `dCreation` datetime NOT NULL,
