@@ -220,7 +220,7 @@ class FightController {
 	 *		SINON COMBAT
 	*/
 
-	public function startFight($commanderA, $commanderD) {
+	public function startFight($commanderA, $playerA, $commanderD, $playerD = NULL) {
 		include_once DEMETER;
 
 		$commanderA->setIsAttacker(TRUE);
@@ -303,25 +303,12 @@ class FightController {
 				LiveReport::$rPlayerWinner = $commanderA->rPlayer;
 
 				if ($commanderD->rPlayer != 0) {
-					include_once ZEUS;
-					$oldPlayerSess = ASM::$pam->getCurrentSession();
-					ASM::$pam->newSession();
-					ASM::$pam->load(array('id' => $commanderA->rPlayer));
-					ASM::$pam->load(array('id' => $commanderD->rPlayer));
-					ASM::$pam->get(0)->increaseVictory(1);
-					ASM::$pam->get(1)->increaseDefeat(1);
-					ASM::$pam->get(0)->factionPoint += Color::POINTBATTLE;
-					ASM::$pam->get(1)->factionPoint -= Color::POINTBATTLE;
-					ASM::$pam->changeSession($oldPlayerSess);
+					$playerA->increaseVictory(1);
+					$playerD->increaseDefeat(1);
+					$playerA->factionPoint += Color::POINTBATTLE;
+					$playerD->factionPoint -= Color::POINTBATTLE;
 				} else {
-					include_once ZEUS;
-					$oldPlayerSess = ASM::$pam->getCurrentSession();
-					ASM::$pam->newSession();
-					ASM::$pam->load(array('id' => $commanderA->rPlayer));
-					if (ASM::$pam->size() > 0) {
-						ASM::$pam->get()->increaseVictory(1);
-					}
-					ASM::$pam->changeSession($oldPlayerSess);
+					$playerA->increaseVictory(1);
 				}
 
 				break;
@@ -341,25 +328,12 @@ class FightController {
 				LiveReport::$rPlayerWinner = $commanderD->rPlayer;
 
 				if ($commanderD->rPlayer != 0) {
-					include_once ZEUS;
-					$oldPlayerSess = ASM::$pam->getCurrentSession();
-					ASM::$pam->newSession();
-					ASM::$pam->load(array('id' => $commanderA->rPlayer));
-					ASM::$pam->load(array('id' => $commanderD->rPlayer));
-					ASM::$pam->get(1)->increaseVictory(1);
-					ASM::$pam->get(0)->increaseDefeat(1);
-					ASM::$pam->get(1)->factionPoint += Color::POINTBATTLE;
-					ASM::$pam->get(0)->factionPoint -= Color::POINTBATTLE;
-					ASM::$pam->changeSession($oldPlayerSess);
+					$playerD->increaseVictory(1);
+					$playerA->increaseDefeat(1);
+					$playerD->factionPoint += Color::POINTBATTLE;
+					$playerA->factionPoint -= Color::POINTBATTLE;
 				} else{
-					include_once ZEUS;
-					$oldPlayerSess = ASM::$pam->getCurrentSession();
-					ASM::$pam->newSession();
-					ASM::$pam->load(array('id' => $commanderA->rPlayer));
-					if (ASM::$pam->size() > 0) {
-						ASM::$pam->get()->increaseDefeat(1);
-					}
-					ASM::$pam->changeSession($oldPlayerSess);
+					$playerA->increaseDefeat(1);
 				}
 
 				break;

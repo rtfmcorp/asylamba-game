@@ -154,6 +154,8 @@ class Place {
 				}
 			}
 
+			include_once ARES;
+
 			$S_COM_PLACE1 = ASM::$com->getCurrentSession();
 			ASM::$com->newSession();
 			ASM::$com->load(
@@ -164,18 +166,126 @@ class Place {
 				array('c.dArrival', 'ASC')
 			);
 
-			for ($i = 0; $i < ASM::$com->size(); $i++) {
-				$commander = ASM::$com->get($i);
+			if (ASM::$com->size() > 0) {
+				include_once ATHENA;
+				include_once ZEUS;
+				include_once DEMETER;
 
-				if ($commander->dArrival <= $now AND $commander->rDestinationPlace != NULL) {					
-					CTC::add($commander->dArrival, $this, 'uTravel', array($commander));
+				$places = array();
+				$playerBonuses = array();
+				for ($i = 0; $i < ASM::$com->size(); $i++) { 
+					$c = ASM::$com->get($i);
+					# fill the places
+					$places[] = $c->getRBase();
+					# fill&load the bonuses if needed
+					if (!array_key_exists($c->rPlayer, $playerBonuses)) {
+						$bonus = new PlayerBonus($c->rPlayer);
+						$bonus->load();
+						$playerBonuses[$c->rPlayer] = $bonus;
+					}
 				}
+
+				# load all the places at the same time
+				$S_PLM1 = ASM::$plm->getCurrentSession();
+				ASM::$plm->newSession();
+				ASM::$plm->load(array('id' => $places));
+
+				for ($i = 0; $i < ASM::$com->size(); $i++) { 
+					$commander = ASM::$com->get($i);
+
+					switch ($commander->travelType) {
+						case Commander::MOVE: 
+							if ($commander->dArrival <= $now AND $commander->rDestinationPlace != NULL) {					
+								$place = ASM::$plm->getById($commander->rBase);
+								$bonus = $playerBonuses[$commander->rPlayer];
+								CTC::add($commander->dArrival, $this, 'uChangeBase', array($commander, $place, $bonus));
+							}
+							break;
+
+						case Commander::LOOT: 
+							if ($commander->dArrival <= $now AND $commander->rDestinationPlace != NULL) {	
+								$place = ASM::$plm->getById($commander->rBase);
+								$bonus = $playerBonuses[$commander->rPlayer];
+
+								$S_PAM1 = ASM::$pam->getCurrentSession();
+								ASM::$pam->newSession();
+								ASM::$pam->load(array('id' => $commander->rPlayer));
+								$commanderPlayer = ASM::$pam->get();
+								ASM::$pam->changeSession($S_PAM1);
+
+								if ($this->rPlayer != 0) {
+									$S_PAM1 = ASM::$pam->getCurrentSession();
+									ASM::$pam->newSession();
+									ASM::$pam->load(array('id' => $this->rPlayer));
+									$placePlayer = ASM::$pam->get();
+									ASM::$pam->changeSession($S_PAM1);
+
+									$S_OBM1 = ASM::$obm->getCurrentSession();
+									ASM::$obm->newSession();
+									ASM::$obm->load(array('rPlace' => $this->id));
+									$placeBase = ASM::$obm->get();
+									ASM::$obm->changeSession($S_OBM1);
+								} else {
+									$placePlayer = NULL;
+									$placeBase = NULL;
+								}
+
+								CTC::add($commander->dArrival, $this, 'uLoot', array($commander, $place, $bonus, $commanderPlayer, $placePlayer, $placeBase));
+							}
+							break;
+
+						case Commander::COLO: 
+							if ($commander->dArrival <= $now AND $commander->rDestinationPlace != NULL) {					
+								$place = ASM::$plm->getById($commander->rBase);
+								$bonus = $playerBonuses[$commander->rPlayer];
+
+								$S_PAM1 = ASM::$pam->getCurrentSession();
+								ASM::$pam->newSession();
+								ASM::$pam->load(array('id' => $commander->rPlayer));
+								$commanderPlayer = ASM::$pam->get();
+								ASM::$pam->changeSession($S_PAM1);
+
+								if ($this->rPlayer != 0) {
+									$S_PAM2 = ASM::$pam->getCurrentSession();
+									ASM::$pam->newSession();
+									ASM::$pam->load(array('id' => $this->rPlayer));
+									$placePlayer = ASM::$pam->get();
+									ASM::$pam->changeSession($S_PAM2);
+
+									$S_OBM1 = ASM::$obm->getCurrentSession();
+									ASM::$obm->newSession();
+									ASM::$obm->load(array('rPlace' => $this->id));
+									$placeBase = ASM::$obm->get();
+									ASM::$obm->changeSession($S_OBM1);
+								} else {
+									$placePlayer = NULL;
+									$placeBase = NULL;
+								}
+
+								CTC::add($commander->dArrival, $this, 'uConquer', array($commander, $place, $bonus, $commanderPlayer, $placePlayer, $placeBase));
+							}
+							break;
+
+						case Commander::BACK: 
+							if ($commander->dArrival <= $now AND $commander->rDestinationPlace != NULL) {					
+								$S_OBM1 = ASM::$obm->getCurrentSession();
+
+								ASM::$obm->newSession(FALSE);
+								ASM::$obm->load(array('rPlace' => $commander->getRBase()));
+								$base = ASM::$obm->get();
+								ASM::$obm->changeSession($S_OBM1);
+
+								CTC::add($commander->dArrival, $this, 'uComeBackHome', array($commander, $base));
+							}
+							break;
+						default: 
+							CTR::$alert->add('Cette action n\'existe pas.', ALT_BUG_INFO);
+					}
+				}
+				ASM::$plm->changeSession($S_PLM1);
 			}
-
 			ASM::$com->changeSession($S_COM_PLACE1);
-			
 		}
-
 		CTC::applyContext($token);
 	}
 
@@ -188,40 +298,8 @@ class Place {
 		}
 	}
 
-	public function uTravel($commander) {
-		include_once ARES;
-
-		switch ($commander->travelType) {
-			case Commander::MOVE: 
-				$this->tryToChangeBase($commander);
-				break;
-
-			case Commander::LOOT: 
-				LiveReport::$type = Commander::LOOT;
-				LiveReport::$dFight = $commander->dArrival;
-				$this->tryToLoot($commander);
-				break;
-
-			case Commander::COLO: 
-				LiveReport::$type = Commander::COLO;
-				LiveReport::$dFight = $commander->dArrival;
-				$this->tryToConquer($commander);
-				break;
-
-			case Commander::BACK: 
-				$this->comeBackToHome($commander);
-				break;
-			default: 
-				CTR::$alert->add('Cette action n\'existe pas.', ALT_BUG_INFO);
-			// FIX
-			$commander->hasToU = TRUE;
-			return $commander;
-		}
-	}
-
 	# se poser
-	private function tryToChangeBase($commander) {
-		include_once ATHENA;
+	public function uChangeBase($commander, $commanderPlace, $playerBonus) {
 		# si la place et le commander ont le même joueur
 		if ($this->rPlayer == $commander->getRPlayer() AND $this->typeOfBase == 4) {
 			$maxCom = OrbitalBase::MAXCOMMANDERSTANDARD;
@@ -249,16 +327,13 @@ class Place {
 
 				# instance de la place d'envoie + suppr commandant de ses flottes
 				# enlever à rBase le commandant
-				$S_PLM10 = ASM::$plm->getCurrentSession();
-				ASM::$plm->newSession();
-				ASM::$plm->load(array('id' => $commander->getRBase()));
-				for ($i = 0; $i < count(ASM::$plm->get()->commanders); $i++) {
-					if (ASM::$plm->get()->commanders[$i]->id == $commander->id) {
-						unset(ASM::$plm->get()->commanders[$i]);
-						ASM::$plm->get()->commanders = array_merge(ASM::$plm->get()->commanders);
+				for ($i = 0; $i < count($commanderPlace->commanders); $i++) {
+					if ($commanderPlace->commanders[$i]->id == $commander->id) {
+						unset($commanderPlace->commanders[$i]);
+						$commanderPlace->commanders = array_merge($commanderPlace->commanders);
 					}
 				}
-				ASM::$plm->changeSession($S_PLM10);
+				
 				# changer rBase commander
 				$commander->rBase = $this->id;
 				// $commander->rDestinationPlace = NULL;
@@ -275,40 +350,29 @@ class Place {
 				$this->sendNotif(self::CHANGESUCCESS, $commander);
 			} else {
 				# NON : comeBackToHome
-				$S_PLM10 = ASM::$plm->getCurrentSession();
-				ASM::$plm->newSession();
-				ASM::$plm->load(array('id' => $commander->getRBase()));
-				$home = ASM::$plm->get();
-				$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
+				$length = Game::getDistance($this->getXSystem(), $commanderPlace->getXSystem(), $this->getYSystem(), $commanderPlace->getYSystem());
 
-				$playerBonus = new PlayerBonus($commander->rPlayer);
-				$playerBonus->load();
-				$duration = Game::getTimeToTravel($home, $this, $playerBonus->bonus);
+				$duration = Game::getTimeToTravel($commanderPlace, $this, $playerBonus->bonus);
 				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
-				ASM::$plm->changeSession($S_PLM10);
-
+				
 				$this->sendNotif(self::CHANGEFAIL, $commander);
 			}
 		} else {
-			$S_PLM10 = ASM::$plm->getCurrentSession();
-			ASM::$plm->newSession();
-			ASM::$plm->load(array('id' => $commander->getRBase()));
-			$home = ASM::$plm->get();
-			$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
+			$length = Game::getDistance($this->getXSystem(), $commanderPlace->getXSystem(), $this->getYSystem(), $commanderPlace->getYSystem());
 
-			$playerBonus = new PlayerBonus($commander->rPlayer);
-			$playerBonus->load();
-			$duration = Game::getTimeToTravel($home, $this, $playerBonus->bonus);
+			$duration = Game::getTimeToTravel($commanderPlace, $this, $playerBonus->bonus);
 			$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
-			ASM::$plm->changeSession($S_PLM10);
+			
 
 			$this->sendNotif(self::CHANGELOST, $commander);
 		}
 	}
 
 	# piller
-	private function tryToLoot($commander) {
-		include_once ARES;
+	public function uLoot($commander, $commanderPlace, $playerBonus, $commanderPlayer, $placePlayer, $placeBase) {
+		LiveReport::$type = Commander::LOOT;
+		LiveReport::$dFight = $commander->dArrival;
+
 		if ($this->rPlayer == 0) {
 			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
@@ -316,45 +380,33 @@ class Place {
 			// $commander->rStartPlace = NULL;
 			// $commander->dArrival = NULL;
 
-
 			# planète vide -> faire un combat
-			$this->startFight($commander);
+			$this->startFight($commander, $commanderPlayer);
 
 			# si gagné
 			if ($commander->getStatement() != Commander::DEAD) {
 				# piller la planète
-				$this->lootAnEmptyPlace($commander);
+				$this->lootAnEmptyPlace($commander, $playerBonus);
 				# comeBackToHome
-				$S_PLM10 = ASM::$plm->getCurrentSession();
-				ASM::$plm->newSession();
-				ASM::$plm->load(array('id' => $commander->getRBase()));
-				$home = ASM::$plm->get();
-				$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
+				
+				$length = Game::getDistance($this->getXSystem(), $commanderPlace->getXSystem(), $this->getYSystem(), $commanderPlace->getYSystem());
 
-				$playerBonus = new PlayerBonus($commander->rPlayer);
-				$playerBonus->load();
-				$duration = Game::getTimeToTravel($home, $this, $playerBonus->bonus);
+				$duration = Game::getTimeToTravel($commanderPlace, $this, $playerBonus->bonus);
 				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
-				ASM::$plm->changeSession($S_PLM10);
-
+				
 				#création du rapport
 				$report = $this->createReport();
 
 				$this->sendNotif(self::LOOTEMPTYSSUCCESS, $commander, $report);
 			} else {
-
 				# si il est mort
 				# enlever le commandant de la session
-				$S_PLM11= ASM::$plm->getCurrentSession();
-				ASM::$plm->newSession();
-				ASM::$plm->load(array('id' => $commander->getRBase()));
-				for ($i = 0; $i < count(ASM::$plm->get()->commanders); $i++) {
-					if (ASM::$plm->get()->commanders[$i]->getId() == $commander->getId()) {
-						unset(ASM::$plm->get()->commanders[$i]);
-						ASM::$plm->get()->commanders = array_merge(ASM::$plm->get()->commanders);
+				for ($i = 0; $i < count($commanderPlace->commanders); $i++) {
+					if ($commanderPlace->commanders[$i]->getId() == $commander->getId()) {
+						unset($commanderPlace->commanders[$i]);
+						$commanderPlace->commanders = array_merge($commanderPlace->commanders);
 					}
 				}
-				ASM::$plm->changeSession($S_PLM11);
 				
 				#création du rapport
 				$report = $this->createReport();
@@ -371,7 +423,6 @@ class Place {
 				// $commander->rStartPlace = NULL;
 				// $commander->dArrival = NULL;
 
-
 				$dCommanders = array();
 				foreach ($this->commanders AS $dCommander) {
 					if ($dCommander->statement == Commander::AFFECTED && $dCommander->line == 1) {
@@ -382,25 +433,19 @@ class Place {
 				if (count($dCommanders) != 0) {
 				# il y a des commandants en défense : faire un combat avec un des commandants
 					$aleaNbr = rand(0, count($dCommanders) - 1);
-					$this->startFight($commander, $dCommanders[$aleaNbr], TRUE);
+					$this->startFight($commander, $commanderPlayer, $dCommanders[$aleaNbr], $placePlayer, TRUE);
 
 					# si il gagne
 					if ($commander->getStatement() != COM_DEAD) {
 						// piller la planète
-						$this->lootAPlayerPlace($commander);
+						$this->lootAPlayerPlace($commander, $playerBonus, $placeBase);
 						// comeBackToHome
-						$S_PLM10 = ASM::$plm->getCurrentSession();
-						ASM::$plm->newSession();
-						ASM::$plm->load(array('id' => $commander->getRBase()));
-						$home = ASM::$plm->get();
-						$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
+						
+						$length = Game::getDistance($this->getXSystem(), $commanderPlace->getXSystem(), $this->getYSystem(), $commanderPlace->getYSystem());
 
-						$playerBonus = new PlayerBonus($commander->rPlayer);
-						$playerBonus->load();
-						$duration = Game::getTimeToTravel($home, $this, $playerBonus->bonus);
+						$duration = Game::getTimeToTravel($commanderPlace, $this, $playerBonus->bonus);
 						$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
-						ASM::$plm->changeSession($S_PLM10);
-
+						
 						unset($this->commanders[$aleaNbr]);
 						$this->commanders = array_merge($this->commanders);
 
@@ -409,30 +454,20 @@ class Place {
 
 						$this->sendNotif(self::LOOTPLAYERWHITBATTLESUCCESS, $commander, $report);
 
-
 					} else {
 					# s'il est mort
 						#  enlever le commandant de la session
-						$S_PLM10 = ASM::$plm->getCurrentSession();
-						ASM::$plm->newSession();
-						ASM::$plm->load(array('id' => $commander->getRBase()));
-						for ($i = 0; $i < count(ASM::$plm->get()->commanders); $i++) {
-							if (ASM::$plm->get()->commanders[$i]->getId() == $commander->getId()) {
-								unset(ASM::$plm->get()->commanders[$i]);
-								ASM::$plm->get()->commanders = array_merge(ASM::$plm->get()->commanders);
+						for ($i = 0; $i < count($commanderPlace->commanders); $i++) {
+							if ($commanderPlace->commanders[$i]->getId() == $commander->getId()) {
+								unset($commanderPlace->commanders[$i]);
+								$commanderPlace->commanders = array_merge($commanderPlace->commanders);
 							}
 						}
 
 						#ajouter du prestige au défenseur synelectique
 						if ($this->playerColor == 7) {
-							$S_PAM = ASM::$pam->getCurrentSession();
-							ASM::$pam->newSession();
-							ASM::$pam->load(array('id' => $this->rPlayer));
-							ASM::$pam->get()->factionPoint += Color::POINTDENFEND;
-							ASM::$pam->changeSession($S_PAM);
+							$placePlayer->factionPoint += Color::POINTDENFEND;
 						}
-
-						ASM::$plm->changeSession($S_PLM10);
 
 						#création du rapport
 						$report = $this->createReport();
@@ -440,19 +475,12 @@ class Place {
 						$this->sendNotif(self::LOOTPLAYERWHITBATTLEFAIL, $commander, $report);
 					}
 				} else {
-					$this->lootAPlayerPlace($commander);
+					$this->lootAPlayerPlace($commander, $playerBonus, $placeBase);
 
-					$S_PLM10 = ASM::$plm->getCurrentSession();
-					ASM::$plm->newSession();
-					ASM::$plm->load(array('id' => $commander->getRBase()));
-					$home = ASM::$plm->get();
-					$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
+					$length = Game::getDistance($this->getXSystem(), $commanderPlace->getXSystem(), $this->getYSystem(), $commanderPlace->getYSystem());
 
-					$playerBonus = new PlayerBonus($commander->rPlayer);
-					$playerBonus->load();
-					$duration = Game::getTimeToTravel($home, $this, $playerBonus->bonus);
+					$duration = Game::getTimeToTravel($commanderPlace, $this, $playerBonus->bonus);
 					$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
-					ASM::$plm->changeSession($S_PLM10);
 
 					$this->sendNotif(self::LOOTPLAYERWHITOUTBATTLESUCCESS, $commander);
 				}
@@ -462,34 +490,28 @@ class Place {
 				$commander->travelType = NULL;
 				$commander->travelLength = NULL;
 				// $commander->rStartPlace = NULL;
+				
+				$length = Game::getDistance($this->getXSystem(), $commanderPlace->getXSystem(), $this->getYSystem(), $commanderPlace->getYSystem());
 
-				$S_PLM10 = ASM::$plm->getCurrentSession();
-				ASM::$plm->newSession();
-				ASM::$plm->load(array('id' => $commander->getRBase()));
-				$home = ASM::$plm->get();
-				$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
-
-				$playerBonus = new PlayerBonus($commander->rPlayer);
-				$playerBonus->load();
-				$duration = Game::getTimeToTravel($home, $this, $playerBonus->bonus);
+				$duration = Game::getTimeToTravel($commanderPlace, $this, $playerBonus->bonus);
 				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
-				ASM::$plm->changeSession($S_PLM10);
-
+				
 				$this->sendNotif(self::LOOTLOST, $commander);
 			}
 		}
 	}
 
 	# conquest
-	private function tryToConquer($commander) {
-		include_once DEMETER;
+	public function uConquer($commander, $commanderPlace, $playerBonus, $commanderPlayer, $placePlayer, $placeBase) {
+		LiveReport::$type = Commander::COLO;
+		LiveReport::$dFight = $commander->dArrival;
+
 		if ($this->rPlayer != 0) {
 			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
 			$commander->travelLength = NULL;
 			// $commander->rStartPlace = NULL;
 			// $commander->dArrival = NULL;
-
 
 			if ($this->playerColor != $commander->getPlayerColor() && $this->playerLevel > 3) {
 				for ($i = 0; $i < count($this->commanders) - 1; $i++) {
@@ -505,7 +527,7 @@ class Place {
 				while ($nbrBattle < count($this->commanders)) {
 					if ($this->commanders[$nbrBattle]->statement == Commander::AFFECTED) {
 
-						$this->startFight($commander, $this->commanders[$nbrBattle], TRUE);
+						$this->startFight($commander, $commanderPlayer, $this->commanders[$nbrBattle], $placePlayer, TRUE);
 
 						# mort du commandant
 						if ($commander->getStatement() == COM_DEAD) {
@@ -534,9 +556,6 @@ class Place {
 
 					# attribuer le prestige au joueur
 					if ($commander->playerColor == 1 || $commander->playerColor == 4 || $commander->playerColor == 5) {
-						$S_PAM = ASM::$pam->getCurrentSession();
-						ASM::$pam->newSession();
-						ASM::$pam->load(array('id' => $commander->rPlayer));
 						$points = 0;
 						switch ($commander->playerColor) {
 							case 1:
@@ -552,14 +571,10 @@ class Place {
 								$points = 0;
 								break;
 						}
-						ASM::$pam->get()->factionPoint += $points;
-						ASM::$pam->changeSession($S_PAM);
+						$commanderPlayer->factionPoint += $points;
 					}
 
 					if ($this->playerColor == 1 || $this->playerColor == 4 || $this->playerColor == 5) {
-						$S_PAM = ASM::$pam->getCurrentSession();
-						ASM::$pam->newSession();
-						ASM::$pam->load(array('id' => $this->rPlayer));
 						$points = 0;
 						switch ($commander->playerColor) {
 							case 1:
@@ -575,8 +590,7 @@ class Place {
 								$points = 0;
 								break;
 						}
-						ASM::$pam->get()->factionPoint -= $points;
-						ASM::$pam->changeSession($S_PAM);
+						$placePlayer->factionPoint -= $points;
 					}
 
 					#attribuer le joueur à la place
@@ -584,7 +598,7 @@ class Place {
 					$this->rColor = $commander->playerColor;
 					$this->rPlayer = $commander->rPlayer;
 					# changer l'appartenance de la base (et de la place)
-					ASM::$obm->changeOwnerById($this->id, $commander->getRPlayer());
+					ASM::$obm->changeOwnerById($this->id, $placeBase, $commander->getRPlayer());
 
 					$this->commanders[] = $commander;
 
@@ -603,42 +617,29 @@ class Place {
 					
 					#ajouter du prestige au défenseur synelectique
 					if ($this->playerColor == 7) {
-						$S_PAM = ASM::$pam->getCurrentSession();
-						ASM::$pam->newSession();
-						ASM::$pam->load(array('id' => $this->rPlayer));
-						ASM::$pam->get()->factionPoint += Color::POINTDENFEND;
-						ASM::$pam->changeSession($S_PAM);
+						$placePlayer->factionPoint += Color::POINTDENFEND;
 					}
 
 					$this->sendNotifForConquest(self::CONQUERPLAYERWHITBATTLEFAIL, $commander, $reportIds);
 				}
 			} else {
-				$S_PLM10 = ASM::$plm->getCurrentSession();
-				ASM::$plm->newSession();
-				ASM::$plm->load(array('id' => $commander->getRBase()));
-				$home = ASM::$plm->get();
-				$length = Game::getDistance($this->getXSystem(), $home->getXSystem(), $this->getYSystem(), $home->getYSystem());
+				$length = Game::getDistance($this->getXSystem(), $commanderPlace->getXSystem(), $this->getYSystem(), $commanderPlace->getYSystem());
 				
-				$playerBonus = new PlayerBonus($commander->rPlayer);
-				$playerBonus->load();
-				$duration = Game::getTimeToTravel($home, $this, $playerBonus->bonus);
+				$duration = Game::getTimeToTravel($commanderPlace, $this, $playerBonus->bonus);
 				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
-				ASM::$plm->changeSession($S_PLM10);
 
 				$this->sendNotif(self::CONQUERLOST, $commander);
 			}
 		# planète rebelle
 		} else {
-
 			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
 			$commander->travelLength = NULL;
 			// $commander->rStartPlace = NULL;
 			// $commander->dArrival = NULL;
 
-
 			# faire un combat
-			$this->startFight($commander);
+			$this->startFight($commander, $commanderPlayer);
 
 			if ($commander->getStatement() !== COM_DEAD) {
 				
@@ -670,9 +671,6 @@ class Place {
 				ASM::$obm->changeSession($_OBM);
 
 				if ($commander->playerColor == 4 || $commander->playerColor == 5) {
-					$S_PAM = ASM::$pam->getCurrentSession();
-					ASM::$pam->newSession();
-					ASM::$pam->load(array('id' => $commander->rPlayer));
 					$points = 0;
 					switch ($commander->playerColor) {
 						case 4:
@@ -685,10 +683,8 @@ class Place {
 							$points = 0;
 							break;
 					}
-					ASM::$pam->get()->factionPoint += $points;
-					ASM::$pam->changeSession($S_PAM);
+					$commanderPlayer->factionPoint += $points;
 				}
-
 
 				if (CTR::$data->get('playerId') == $commander->getRPlayer()) { 
 					CTRHelper::addBase('ob', 
@@ -706,61 +702,43 @@ class Place {
 				$this->sendNotif(self::CONQUEREMPTYSSUCCESS, $commander, $report);
 			# s'il est mort
 			} else {
-				
 				#création du rapport
 				$report = $this->createReport();
 
 				$this->sendNotif(self::CONQUEREMPTYFAIL, $commander);
 				# enlever le commandant de la session
-				$S_PLM10 = ASM::$plm->getCurrentSession();
-				ASM::$plm->newSession();
-				ASM::$plm->load(array('id' => $commander->getRBase()));
-				for ($i = 0; $i < count(ASM::$plm->get()->commanders); $i++) {
-					if (ASM::$plm->get()->commanders[$i]->getId() == $commander->getId()) {
-						unset(ASM::$plm->get()->commanders[$i]);
-						ASM::$plm->get()->commanders = array_merge(ASM::$plm->get()->commanders);
+				for ($i = 0; $i < count($commanderPlace->commanders); $i++) {
+					if ($commanderPlace->commanders[$i]->getId() == $commander->getId()) {
+						unset($commanderPlace->commanders[$i]);
+						$commanderPlace->commanders = array_merge($commanderPlace->commanders);
 					}
 				}
-				ASM::$plm->changeSession($S_PLM10);
 			}
 		}
 	}
 
-
 	# retour à la maison
-	private function comeBackToHome($commander) {
-		include_once ATHENA;
+	public function uComeBackHome($commander, $commanderBase) {
 		// $commander->rDestinationPlace = NULL;
 		$commander->travelType = NULL;
 		$commander->travelLength = NULL;
 		// $commander->rStartPlace = NULL;
 		$commander->dArrival = NULL;
 
-
 		$commander->statement = Commander::AFFECTED;
 
 		$this->sendNotif(self::COMEBACK, $commander);
 
 		if ($commander->getResourcesTransported() > 0) {
-			$S_OBM10 = ASM::$obm->getCurrentSession();
-
-			ASM::$obm->newSession(FALSE);
-			ASM::$obm->load(array('rPlace' => $commander->getRBase()));
-			ASM::$obm->get()->increaseResources($commander->resources);
+			$commanderBase->increaseResources($commander->resources);
 			$commander->resources = 0;
-
-			ASM::$obm->changeSession($S_OBM10);
 		}
 	}
 
-	private function lootAnEmptyPlace($commander) {
-		include_once ATHENA;
-		include_once ZEUS;
+	private function lootAnEmptyPlace($commander, $playerBonus) {
 
 		$bonus = 0;
 		if ($commander->rPlayer != CTR::$data->get('playerId')) {
-			$playerBonus = new PlayerBonus($commander->rPlayer);
-			$playerBonus->load();
 			$bonus = $playerBonus->bonus->get(PlayerBonus::SHIP_CONTAINER);
 		} else {
 			$bonus = CTR::$data->get('playerBonus')->get(PlayerBonus::SHIP_CONTAINER);
@@ -781,25 +759,16 @@ class Place {
 		LiveReport::$resources = $ressouresLooted;
 	}
 
-	private function lootAPlayerPlace($commander) {
-		include_once ATHENA;
-		include_once ZEUS;
+	private function lootAPlayerPlace($commander, $playerBonus, $placeBase) {
 
 		$bonus = 0;
 		if ($commander->rPlayer != CTR::$data->get('playerId')) {
-			$playerBonus = new PlayerBonus($commander->rPlayer);
-			$playerBonus->load();
 			$bonus = $playerBonus->bonus->get(PlayerBonus::SHIP_CONTAINER);
 		} else {
 			$bonus = CTR::$data->get('playerBonus')->get(PlayerBonus::SHIP_CONTAINER);
 		}
 
-		$S_OBM1 = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession();
-		ASM::$obm->load(array('rPlace' => $this->id));
-		$base = ASM::$obm->get();
-
-		$resourcesToLoot = $base->getResourcesStorage() - Commander::LIMITTOLOOT;
+		$resourcesToLoot = $placeBase->getResourcesStorage() - Commander::LIMITTOLOOT;
 
 		$storage = $commander->getPev() * Commander::COEFFLOOT;
 		$storage += round($storage * ((2 * $bonus) / 100));
@@ -808,29 +777,27 @@ class Place {
 		$resourcesLooted = ($storage > $resourcesToLoot) ? $resourcesToLoot : $storage;
 
 		if ($resourcesLooted > 0) {
-			$base->decreaseResources($resourcesLooted);
+			$placeBase->decreaseResources($resourcesLooted);
 			$commander->resources = $resourcesLooted;
 			LiveReport::$resources = $resourcesLooted;
 		}
-		ASM::$obm->changeSession($S_OBM1);
 	}
 
-	private function startFight($commander, $enemyCommander = NULL, $pvp = FALSE) {
+	private function startFight($commander, $player, $enemyCommander = NULL, $enemyPlayer = NULL, $pvp = FALSE) {
 		if ($pvp == TRUE) {
 			$commander->setArmy();
 			$enemyCommander->setArmy();
 			$fc = new FightController();
-			$fc->startFight($commander, $enemyCommander);
+			$fc->startFight($commander, $player, $enemyCommander, $enemyPlayer);
 		} else {
 			$commander->setArmy();
 			$computerCommander = $this->createVirtualCommander();
 			$fc = new FightController();
-			$fc->startFight($commander, $computerCommander);
+			$fc->startFight($commander, $player, $computerCommander);
 		}
 	}
 
 	private function createReport() {
-		include_once ARES;
 		$report = new Report();
 
 		$report->rPlayerAttacker = LiveReport::$rPlayerAttacker;

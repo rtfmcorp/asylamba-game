@@ -5,9 +5,6 @@ abstract class CTC {
 
 	public static $events  = array();
 
-	# debug variable
-	public static $logme = '';
-
 	public static function createContext($creator = NULL) {
 		self::$create++;
 
@@ -15,8 +12,6 @@ abstract class CTC {
 			self::$running = TRUE;
 			self::$context++;
 			self::$creator = $creator;
-
-			self::$logme = '';
 
 			return TRUE;
 		} else {
@@ -68,8 +63,6 @@ abstract class CTC {
 				$logt .= 'before/after-usort : ' . $beforeUsort . '/' . $afterUsort . ' | ';
 				$logt .= 'context : ' . self::$context . ' | ';
 				$logt .= 'creator : ' . self::$creator . "\n";
-				
-				$logt .= '> logme : ' . self::$logme . "\n";
 
 				$logt .= "> \n";
 
@@ -99,8 +92,6 @@ abstract class CTC {
 				'random' => rand()
 			);
 			self::$events[] = $event;
-			self::$logme .= '(date:' . strtotime($date) . ',objectid:' . $object->id . ',method:' . $method . ',argsQty:' . count($args) . ') ';
-			#self::$logme .= 'asdfasdf) ';
 		}
 	}
 

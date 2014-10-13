@@ -214,7 +214,7 @@ class PlayerManager extends Manager {
 
 	public function kill($player) {
 		$S_PAM1 = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession();
+		ASM::$pam->newSession(FALSE);
 		ASM::$pam->load(array('id' => $player));
 		$p = ASM::$pam->get();
 

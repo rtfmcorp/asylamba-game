@@ -417,14 +417,9 @@ class OrbitalBaseManager extends Manager {
 		}
 	}
 
-	public function changeOwnerById($id, $newOwner) {
+	public function changeOwnerById($id, $base, $newOwner) {
 
-		$S_OBM1 = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession();
-		ASM::$obm->load(array('rPlace' => $id));
-		$base = ASM::$obm->get();
-
-		if (ASM::$obm->size() > 0) {
+		if ($base->getId() != 0) {
 			# attribuer le rPlayer à la Base
 			$oldOwner = $base->rPlayer;
 			$base->setRPlayer($newOwner);
@@ -457,7 +452,7 @@ class OrbitalBaseManager extends Manager {
 
 			# rendre déserteuses les flottes en voyage
 			$S_COM2 = ASM::$com->getCurrentSession();
-			ASM::$com->newSession();
+			ASM::$com->newSession(FALSE); # FALSE obligatory, else the umethod make shit
 			ASM::$com->load(array('c.rBase' => $id));
 			for ($i = 0; $i < ASM::$com->size(); $i++) {
 				if (ASM::$com->get($i)->statement != Commander::DEAD) {
@@ -477,7 +472,7 @@ class OrbitalBaseManager extends Manager {
 
 			# vérifie si le joueur n'a plus de planète, si c'est le cas, il est mort
 			$S_OBM2 = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession();
+			ASM::$obm->newSession(FALSE); # FALSE obligatory
 			ASM::$obm->load(array('rPlayer' => $oldOwner));
 
 			if (ASM::$obm->size() == 0 OR (ASM::$obm->size() == 1 AND ASM::$obm->get()->rPlace == $id)) {
@@ -494,7 +489,6 @@ class OrbitalBaseManager extends Manager {
 			CTR::$alert->add('dans changeOwnerById de OrbitalBaseManager', ALERT_BUG_ERROR);
 
 		}
-		ASM::$obm->changeSession($S_OBM1);
 	}
 }
 ?>
