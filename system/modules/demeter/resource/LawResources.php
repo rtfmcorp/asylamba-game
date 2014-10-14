@@ -34,6 +34,16 @@ Class LawResources {
 			'shortDescription' => 'modifier les taxes commerciale dans un secteur.',
 			'longDescription' => '',
 			'image' => ''),
+		array(
+			'id' => 3,
+			'devName' => 'secteurName',
+			'name' => 'modification du nom d\'un secteur',
+			'department' => 6,
+			'price' => 1000,
+			'duration' => 0,
+			'shortDescription' => 'modifier le nom d\'un secteur.',
+			'longDescription' => '',
+			'image' => ''),
 	);
 
 	public static function getInfo($id, $info) {

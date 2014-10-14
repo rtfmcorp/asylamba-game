@@ -6,6 +6,7 @@ include_once GAIA;
 #taxes taux de taxe
 #rColor autre faction concernée
 #rSector secteur concernée
+#name pour nommer des trucs
 
 $type = Utils::getHTTPData('type');
 
@@ -62,7 +63,30 @@ if ($type !== FALSE) {
 									CTR::$alert->add('Ce secteur n\'existe pas.', ALERT_STD_ERROR);
 								}
 								ASM::$sem->changeSession($_SEM);
+							} else {
+								CTR::$alert->add('La taxe doit être entre 2 et 20 %.', ALERT_STD_ERROR);
 							}
+						} else {
+							CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
+						}
+						break;
+					case 3:
+						$rSector = Utils::getHTTPData('rsector');
+						$name = Utils::getHTTPData('name');
+						if ($rSector !== FALSE) {
+							$_SEM = ASM::$sem->getCurrentsession();
+							ASM::$sem->load(array('id' => $rSector)); 
+							if (ASM::$sem->size() > 0) {
+								if (ASM::$sem->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
+									$law->options = serialize(array('name' => $name, 'rSector' => $rSector));
+									ASM::$lam->add($law);
+								} else {
+									CTR::$alert->add('Ce secteur n\'est pas sous votre contrôle.', ALERT_STD_ERROR);
+								}
+							} else {
+								CTR::$alert->add('Ce secteur n\'existe pas.', ALERT_STD_ERROR);
+							}
+							ASM::$sem->changeSession($_SEM);
 						} else {
 							CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 						}
