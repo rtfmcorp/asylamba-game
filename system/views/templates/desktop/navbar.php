@@ -34,11 +34,24 @@ echo '<div id="nav">';
 				break;
 			}
 		}
-		for ($i = 0; $i < CTR::$data->get('playerBase')->get('ms')->size(); $i++) { 
-			if (CTR::$data->get('playerParams')->get('base') == CTR::$data->get('playerBase')->get('ms')->get($i)->get('id')) {
-				$currentBaseName = CTR::$data->get('playerBase')->get('ms')->get($i)->get('name');
-				$currentBaseImg  = CTR::$data->get('playerBase')->get('ms')->get($i)->get('img');
+#		for ($i = 0; $i < CTR::$data->get('playerBase')->get('ms')->size(); $i++) { 
+#			if (CTR::$data->get('playerParams')->get('base') == CTR::$data->get('playerBase')->get('ms')->get($i)->get('id')) {
+#				$currentBaseName = CTR::$data->get('playerBase')->get('ms')->get($i)->get('name');
+#				$currentBaseImg  = CTR::$data->get('playerBase')->get('ms')->get($i)->get('img');
+#				$currentBaseId   = CTR::$data->get('playerBase')->get('ms')->get($i)->get('id');
+#				break;
+#			}
+#		}
+
+		$nextBaseId = CTR::$data->get('playerBase')->get('ob')->get(0)->get('id');
+		$finded = FALSE;
+		for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
+			if ($finded) {
+				$nextBaseId = CTR::$data->get('playerBase')->get('ob')->get(0)->get('id');
 				break;
+			}
+			if (CTR::$data->get('playerParams')->get('base') == CTR::$data->get('playerBase')->get('ob')->get($i)->get('id')) {
+				$finded = TRUE;
 			}
 		}
 
@@ -46,6 +59,9 @@ echo '<div id="nav">';
 		echo '<a href="' . APP_ROOT . 'bases" class="current-base ' . $isActive . '">';
 			echo '<img src="' . MEDIA . 'map/place/place' . $currentBaseImg . '.png" alt="' . $currentBaseName . '" /> ';
 			echo $currentBaseName;
+		echo '</a>';
+		echo '<a href="' . APP_ROOT . 'action/a-switchbase/base-' . $nextBaseId . '" class="square">';
+			echo '<img src="' . MEDIA . 'common/next-base.png" alt="base suivante" />';
 		echo '</a>';
 	echo '</div>';
 
