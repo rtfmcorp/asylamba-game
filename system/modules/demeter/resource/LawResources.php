@@ -37,7 +37,7 @@ Class LawResources {
 		array(
 			'id' => 3,
 			'devName' => 'commercial taxes export',
-			'name' => 'modification des taux de taxes commercialen',
+			'name' => 'modification des taux de taxes commerciale en importation',
 			'department' => 3,
 			'price' => 1000,
 			'duration' => 0,
@@ -47,7 +47,7 @@ Class LawResources {
 		array(
 			'id' => 4,
 			'devName' => 'commercial taxes import',
-			'name' => 'modification des taux de taxes commercialen',
+			'name' => 'modification des taux de taxes commerciale en exportation',
 			'department' => 3,
 			'price' => 1000,
 			'duration' => 0,

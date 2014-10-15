@@ -37,21 +37,21 @@ N4 :
 ----- N3 ---------------
 Trésorier :
 	- ajustement de l'imposition sectoriel :
-		options : 	- secteur
+X		options : 	- secteur
 					- nouvelle taxe
 	- accords commerciaux :
 		options : 	- durée
 					- avec quelle alliance
 					- niveau (pourcentage de bonus)
 	- loi sur le commerce : ajustement de la taxe d'un marché
-		options : 	- secteur
+X		options : 	- secteur
 					- taux (nouveau pourcentage de taxe)
 	- placement financier : (prêt virtuel : ex: placement de 10M pendant 2 semaines, au bout de 2 semaines, l'alliance récupère gagne 12M)
 		options :	- montant
 					- durée
 
 Défense :
-	- subvention militaire (longue période, faible coût, baisse les coûts des vaisseaux pour les gens de l'alliance)
+T	- subvention militaire (longue période, faible coût, baisse les coûts des vaisseaux pour les gens de l'alliance)
 		options : 	- durée
 					- niveau (pourcentage de la baisse du cout des vaisseaux)
 	- force de frappe : augmente l'attaque des vaisseaux
@@ -74,7 +74,7 @@ Intérieur :
 	- subvention universitaire : accélère les recherches (investi plus que le montant déterminé par le joueur)
 		options : 	- durée
 					- niveau
-	- transfert technologique : accélère la vitesse de développement des technologies
+T	- transfert technologique : accélère la vitesse de développement des technologies
 		options :	- durée
 					- niveau
 	- e : étend le rayon de contre-espionnage : augmente l'investissement dans le contre-espionnage (plus que le montant déterminé par le joueur)
@@ -95,7 +95,7 @@ Empereur :
 					- 
 	- protectionnisme : toutes routes commerciales break; augmentation des ressources / impot.
 
-
+X	- changer le nom d'un secteur
 
 
 
