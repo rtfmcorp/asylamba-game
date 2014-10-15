@@ -56,7 +56,6 @@ abstract class CTC {
 					$logt .= '> [' . $event['date'] . '] ' . get_class($event['object']) . '(' . $event['object']->getId() . ')::' . $event['method'] . "\n";
 				}
 
-
 				$logt .= '> ';
 				$logt .= 'create/apply : ' . self::$create . '/' . self::$apply . ' | ';
 				$logt .= 'add/iter : ' . self::$add . '/' . $j . ' | ';
