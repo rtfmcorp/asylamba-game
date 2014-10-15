@@ -45,7 +45,7 @@ class Parser {
 				$tl .= '<button data-tag="py" class="hb lt" title="joueur">P</button>';
 			}
 			if ($this->parsePlace) {
-				$tl .= '<button data-tag="pc" class="hb lt" title="planète">L</button>';
+				$tl .= '<button data-tag="pl" class="hb lt" title="planète">L</button>';
 			}
 		$tl .= '</div>';
 
