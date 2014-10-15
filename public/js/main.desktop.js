@@ -762,11 +762,14 @@ jQuery(document).ready(function($) {
 		var container 	= $(this).parent().parent();
 		var target 		= container.data('id');
 
+		wswBox.close();
+
 		switch (type) {
 			case 'it': insertTag('[i]', '[/i]', target); break;
 			case 'bl': insertTag('[b]', '[/b]', target); break;
 			case 'bl': insertTag('[t]', '[/t]', target); break;
 			case 'py': wswBox.open(container, target, type); break;
+			case 'pl': wswBox.open(container, target, type); break;
 		}
 	});
 
@@ -815,6 +818,9 @@ jQuery(document).ready(function($) {
 				 .done(function(data) {
 					wswBox.container.append(data);
 					wswBox.box = container.find('.modal');
+
+					$('.autocomplete-player').autocomplete(game.path + 'ajax/a-autocompleteplayer/');
+					$('.autocomplete-orbitalbase').autocomplete(game.path + 'ajax/a-autocompleteorbitalbase/');
 				}).fail(function() {
 					alertController.add(101, 'chargement des données interrompu');
 				});
@@ -824,9 +830,10 @@ jQuery(document).ready(function($) {
 		write: function() {
 			switch (wswBox.type) {
 				case 'py':
-					wswBox.box.find('.autocomplete-player').autocomplete(game.path + 'ajax/a-autocompleteplayer/');
-					var pseudo = wswBox.box.find('#wsw-py-pseudo').val();
-					insertTag('[@' + pseudo + ']', '', wswBox.target);
+					insertTag('[@' + wswBox.box.find('#wsw-py-pseudo').val() + ']', '', wswBox.target);
+				break;
+				case 'pl':
+					insertTag('[#' + wswBox.box.find('#wsw-pl-id').val() + ']', '', wswBox.target);
 				break;
 			}
 
@@ -834,14 +841,16 @@ jQuery(document).ready(function($) {
 		},
 
 		close: function() {
-			wswBox.run = false;
+			if (wswBox.run) {
+				wswBox.run = false;
 
-			wswBox.box.remove();
+				wswBox.box.remove();
 
-			wswBox.target = null;
-			wswBox.container = null;
-			wswBox.box = null;
-			wswBox.type = null;
+				wswBox.target = null;
+				wswBox.container = null;
+				wswBox.box = null;
+				wswBox.type = null;
+			}
 		}
 	}
 
@@ -853,11 +862,11 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		wswBox.close();
 	});
-	$(document).keyup(function(e) {
+	$(document).live('keydown', function(e) {
 		if (wswBox.run) {
 			switch(e.keyCode) {
-				case 13: wswBox.write(); break;
-				case 27: wswBox.close(); break;
+				case 13: e.preventDefault(); wswBox.write(); break;
+				case 27: e.preventDefault(); wswBox.close(); break;
 				default: break;
 			}
 		}
