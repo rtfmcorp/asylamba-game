@@ -226,8 +226,45 @@ class Color {
 		}
 	}
 
-	public function uFinishLaw($law) {
-		$law->statement = Law::OBSOLETE;
+	
+	public function uFinishSectorTaxes($law, $sector) {
+		if ($sector->rColor == $this->id) {
+			$sector->tax = $law->options['taxes'];
+			$law->statement = Law::OBSOLETE;
+		} else {
+			$law->statement = Law::OBSOLETE;
+		}
+	}
+
+	public function uFinishSectorName($law, $sector) {
+		if ($sector->rColor == $this->id) {
+			$sector->name = $law->options['name'];
+			$law->statement = Law::OBSOLETE;
+		} else {
+			$law->statement = Law::OBSOLETE;
+		}
+	}
+	
+	public function uFinishExportComercialTaxes($law, $tax) {
+		if ($law->options['rColor'] == $this->id) {
+			$tax->exportTax = $law->options['taxes'] / 2;
+			$tax->importTax = $law->options['taxes'] / 2;
+			$law->statement = Law::OBSOLETE;
+		} else {
+			$tax->exportTax = $law->options['taxes'];
+			$law->statement = Law::OBSOLETE;
+		}
+	}
+
+	public function uFinishImportComercialTaxes($law, $tax) {
+		if ($law->options['rColor'] == $this->id) {
+			$tax->exportTax = $law->options['taxes'] / 2;
+			$tax->importTax = $law->options['taxes'] / 2;
+
+		} else {
+			$tax->importTax = $law->options['taxes'];
+			$law->statement = Law::OBSOLETE;
+		}
 	}
 
 
@@ -275,7 +312,35 @@ class Color {
 			if (ASM::$lam->get($i)->statement == Law::VOTATION && ASM::$lam->get($i)->dEndVotation < Utils::now()) {
 				CTC::add(ASM::$lam->get($i)->dEndVotation, $this, 'uVoteLaw', array(ASM::$lam->get($i), ASM::$lam->get($i)->ballot()));
 			} elseif (ASM::$lam->get($i)->statement == Law::EFFECTIVE && ASM::$lam->get($i)->dEnd < Utils::now()) {
-				CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishLaw', array(ASM::$lam->get($i)));
+				switch (ASM::$lam->get($i)->type) {
+					case 1:
+						$_SEM = ASM::$sem->getCurrentsession();
+						ASM::$sem->load(array('id' => ASM::$lam->get($i)->options['rSector']));
+						CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishSectorTaxes', array(ASM::$lam->get($i), ASM::$sem->get()));
+						ASM::$sem->changeSession($_SEM);
+						break;
+					case 2:
+						$_SEM = ASM::$sem->getCurrentsession();
+						ASM::$sem->load(array('id' => ASM::$lam->get($i)->options['rSector']));
+						CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishSectorName', array(ASM::$lam->get($i), ASM::$sem->get()));
+						ASM::$sem->changeSession($_SEM);
+						break;
+					case 3:
+						$_CTM = ASM::$ctm->getCurrentsession();
+						ASM::$ctm->load(array('faction' => $this->id, 'relatedFaction' => ASM::$lam->get($i)->options['rColor']));
+						CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishExportComercialTaxes', array(ASM::$lam->get($i), ASM::$ctm->get()));
+						ASM::$ctm->changeSession($_CTM);
+						break;
+					case 4:
+						$_CTM = ASM::$ctm->getCurrentsession();
+						ASM::$ctm->load(array('faction' => $this->id, 'relatedFaction' => ASM::$lam->get($i)->options['rColor']));
+						CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishImportComercialTaxes', array(ASM::$lam->get($i), ASM::$ctm->get()));
+						ASM::$ctm->changeSession($_CTM);
+						break;
+					
+					default:
+						break;
+				}
 			}
 		}
 

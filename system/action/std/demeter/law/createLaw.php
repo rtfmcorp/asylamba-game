@@ -33,22 +33,9 @@ if ($type !== FALSE) {
 				switch ($type) {
 					case 1:
 						$taxes = Utils::getHTTPData('taxes');
-						if ($taxes !== FALSE) {
-							if ($taxes > 2 && $taxes < 20) {
-								
-								$law->options = serialize(array('taxes' => $taxes));
-								ASM::$lam->add($law);
-								ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
-							}
-						} else {
-							CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
-						}
-						break;
-					case 2:
-						$taxes = Utils::getHTTPData('taxes');
 						$rSector = Utils::getHTTPData('rsector');
 						if ($taxes !== FALSE && $rSector !== FALSE) {
-							if ($taxes > 2 && $taxes < 20) {
+							if ($taxes > 2 && $taxes < 15) {
 								$_SEM = ASM::$sem->getCurrentsession();
 								ASM::$sem->load(array('id' => $rSector)); 
 								if (ASM::$sem->size() > 0) {
@@ -64,16 +51,16 @@ if ($type !== FALSE) {
 								}
 								ASM::$sem->changeSession($_SEM);
 							} else {
-								CTR::$alert->add('La taxe doit être entre 2 et 20 %.', ALERT_STD_ERROR);
+								CTR::$alert->add('La taxe doit être entre 2 et 15 %.', ALERT_STD_ERROR);
 							}
 						} else {
 							CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 						}
 						break;
-					case 3:
+					case 2:
 						$rSector = Utils::getHTTPData('rsector');
 						$name = Utils::getHTTPData('name');
-						if ($rSector !== FALSE) {
+						if ($rSector !== FALSE && $name !== FALSE) {
 							$_SEM = ASM::$sem->getCurrentsession();
 							ASM::$sem->load(array('id' => $rSector)); 
 							if (ASM::$sem->size() > 0) {
@@ -87,6 +74,66 @@ if ($type !== FALSE) {
 								CTR::$alert->add('Ce secteur n\'existe pas.', ALERT_STD_ERROR);
 							}
 							ASM::$sem->changeSession($_SEM);
+						} else {
+							CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
+						}
+						break;
+					case 3:
+						$taxes = Utils::getHTTPData('taxes');
+						$rColor = Utils::getHTTPData('rcolor');
+						if ($taxes !== FALSE && $rColor !== FALSE) {
+							$_CTM = ASM::$ctm->getCurrentsession();
+							ASM::$ctm->load(array('faction' => CTR::$data->get('playerInfo')->get('color'), 'relatedFaction' => $rColor)); 
+							if (ASM::$ctm->size() > 0) {
+								if (ASM::$ctm->get()->relatedFaction == CTR::$data->get('playerInfo')->get('color')) {
+									if ($taxes <= 15) {
+										$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor));
+										ASM::$lam->add($law);
+									} else {
+										CTR::$alert->add('Pas plus que 15.', ALERT_STD_ERROR);
+									}
+								} else {
+									if ($taxes <= 15 && $taxes >=2) {
+										$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor));
+										ASM::$lam->add($law);
+									} else {
+										CTR::$alert->add('Entre 2 et 15.', ALERT_STD_ERROR);
+									}
+								}
+							} else {
+								CTR::$alert->add('Cette faction n\'existe pas.', ALERT_STD_ERROR);
+							}
+							ASM::$sem->changeSession($_CTM);
+						} else {
+							CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
+						}
+						break;
+					case 4:
+						$taxes = Utils::getHTTPData('taxes');
+						$rColor = Utils::getHTTPData('rcolor');
+						if ($taxes !== FALSE && $rColor !== FALSE) {
+							$_CTM = ASM::$ctm->getCurrentsession();
+							ASM::$ctm->load(array('faction' => CTR::$data->get('playerInfo')->get('color'), 'relatedFaction' => $rColor)); 
+							if (ASM::$ctm->size() > 0) {
+								if (ASM::$ctm->get()->relatedFaction == CTR::$data->get('playerInfo')->get('color')) {
+									if ($taxes <= 15) {
+										$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor));
+										ASM::$lam->add($law);
+									} else {
+										CTR::$alert->add('Pas plus que 15.', ALERT_STD_ERROR);
+									}
+								} else {
+									if ($taxes <= 15 && $taxes >=2) {
+										$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor));
+										ASM::$lam->add($law);
+									} else {
+										CTR::$alert->add('Entre 2 et 15.', ALERT_STD_ERROR);
+									}
+								}
+							} else {
+								CTR::$alert->add('Cette faction n\'existe pas.', ALERT_STD_ERROR);
+							}
+							ASM::$sem->changeSession($_CTM);
 						} else {
 							CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 						}
