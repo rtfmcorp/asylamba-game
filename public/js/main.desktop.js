@@ -762,6 +762,8 @@ jQuery(document).ready(function($) {
 		var container 	= $(this).parent().parent();
 		var target 		= container.data('id');
 
+		wswBox.close();
+
 		switch (type) {
 			case 'it': insertTag('[i]', '[/i]', target); break;
 			case 'bl': insertTag('[b]', '[/b]', target); break;
@@ -839,14 +841,16 @@ jQuery(document).ready(function($) {
 		},
 
 		close: function() {
-			wswBox.run = false;
+			if (wswBox.run) {
+				wswBox.run = false;
 
-			wswBox.box.remove();
+				wswBox.box.remove();
 
-			wswBox.target = null;
-			wswBox.container = null;
-			wswBox.box = null;
-			wswBox.type = null;
+				wswBox.target = null;
+				wswBox.container = null;
+				wswBox.box = null;
+				wswBox.type = null;
+			}
 		}
 	}
 
@@ -858,11 +862,11 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		wswBox.close();
 	});
-	$(document).keyup(function(e) {
+	$(document).live('keydown', function(e) {
 		if (wswBox.run) {
 			switch(e.keyCode) {
-				case 13: wswBox.write(); break;
-				case 27: wswBox.close(); break;
+				case 13: e.preventDefault(); wswBox.write(); break;
+				case 27: e.preventDefault(); wswBox.close(); break;
 				default: break;
 			}
 		}

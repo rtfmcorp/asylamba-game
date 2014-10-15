@@ -35,17 +35,17 @@ class Parser {
 	public function getToolbar() {
 		$tl  = '<div class="toolbar">';
 			if ($this->parseTag) {
-				$tl .= '<button data-tag="bl" class="hb lt" title="gras">g</button>';
-				$tl .= '<button data-tag="it" class="hb lt" title="italique">i</button>';
+				$tl .= '<button data-tag="bl">Gras</button>';
+				$tl .= '<button data-tag="it">Italique</button>';
 			}
 			if ($this->parseIcon) {
-				$tl .= '<button data-tag="ic" class="hb lt" title="icones">C</button>';
+		#		$tl .= '<button data-tag="ic">Icône</button>';
 			}
 			if ($this->parsePlayer) {
-				$tl .= '<button data-tag="py" class="hb lt" title="joueur">P</button>';
+				$tl .= '<button data-tag="py">Joueur</button>';
 			}
 			if ($this->parsePlace) {
-				$tl .= '<button data-tag="pl" class="hb lt" title="planète">L</button>';
+				$tl .= '<button data-tag="pl">Planète</button>';
 			}
 		$tl .= '</div>';
 
