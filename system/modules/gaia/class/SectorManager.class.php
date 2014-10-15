@@ -10,7 +10,7 @@
  * @update 20.05.13
 */
 
-class SectorManager {
+class SectorManager extends Manager {
 	private $sectors = array();
 
 	private $genStats = array(0, 0, 0, 0, 0, 0, 0);
@@ -156,7 +156,23 @@ class SectorManager {
 		}
 	}
 
-	# TODO: function save
+	public function save() {
+		$sectors = $this->_Save();
+
+		foreach ($sectors AS $s) {
+			$db = DataBase::getInstance();
+			$qr = $db->prepare('UPDATE sector
+				SET
+					tax = ?,
+					name = ?
+				WHERE id = ?');
+			$qr->execute(array(
+				$s->tax,
+				$s->name,
+				$s->id
+			));
+		}
+	}
 
 	public function size() {
 		return count($this->sectors);

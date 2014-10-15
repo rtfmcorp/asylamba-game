@@ -17,6 +17,7 @@ abstract class ASM {
 	protected static $runningGaia = FALSE;
 	public static $plm;
 	public static $sys;
+	public static $sem;
 
 	protected static $runningHermes = FALSE;
 	public static $ntm;
@@ -77,6 +78,7 @@ abstract class ASM {
 		if (!self::$runningGaia) {
 			self::$plm = new PlaceManager();
 			self::$sys = new SystemManager();
+			self::$sem = new SectorManager();
 		}
 		self::$runningGaia = TRUE;
 	}
@@ -160,6 +162,7 @@ abstract class ASM {
 		if (self::$runningGaia) {
 			self::$plm->save();
 			self::$sys->save();
+			self::$sem->save();
 		}
 		if (self::$runningHermes) {
 			self::$ntm->save();
