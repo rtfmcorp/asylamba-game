@@ -24,13 +24,12 @@ echo '<div class="component">';
 					echo Format::numberFormat($player_university->iUniversity);
 					echo ' <img alt="crédit" src="' . MEDIA . 'resources/credit.png" class="icon-color">';
 				echo '</span>';
+				echo '<span class="group-link"><a title="modifier" class="hb lt" href="' . APP_ROOT . 'financial/">→</a></span>';
 			echo '</div>';
 
-			if (CTR::$data->get('playerBonus')->get(PlayerBonus::UNI_INVEST) == 0) {
-				echo '<div class="number-box grey">';
-			} else {
-				echo '<div class="number-box">';
-			}
+			echo CTR::$data->get('playerBonus')->get(PlayerBonus::UNI_INVEST) == 0
+				? '<div class="number-box grey">'
+				: '<div class="number-box">';
 				echo '<span class="label">bonus d\'efficacité d\'investissement</span>';
 				echo '<span class="value">';
 					echo CTR::$data->get('playerBonus')->get(PlayerBonus::UNI_INVEST) . ' %';
