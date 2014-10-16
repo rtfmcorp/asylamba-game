@@ -40,7 +40,6 @@ Trésorier :
 X		options : 	- secteur
 					- nouvelle taxe
 	- accords commerciaux :
-		options : 	- durée
 					- avec quelle alliance
 					- niveau (pourcentage de bonus)
 	- loi sur le commerce : ajustement de la taxe d'un marché
@@ -48,12 +47,9 @@ X		options : 	- secteur
 					- taux (nouveau pourcentage de taxe)
 	- placement financier : (prêt virtuel : ex: placement de 10M pendant 2 semaines, au bout de 2 semaines, l'alliance récupère gagne 12M)
 		options :	- montant
-					- durée
 
 Défense :
-T	- subvention militaire (longue période, faible coût, baisse les coûts des vaisseaux pour les gens de l'alliance)
-		options : 	- durée
-					- niveau (pourcentage de la baisse du cout des vaisseaux)
+T	- subvention militaire diminue de 10% le cout de construction des vaisseaux
 	- force de frappe : augmente l'attaque des vaisseaux
 		options :	- temps
 					- niveau
@@ -69,29 +65,21 @@ T	- subvention militaire (longue période, faible coût, baisse les coûts des v
 
 Intérieur :
 	- décret sur l'éducation : augmente l'expérience des commandants à l'école
-		options : 	- durée
 					- niveau
 	- subvention universitaire : accélère les recherches (investi plus que le montant déterminé par le joueur)
-		options : 	- durée
 					- niveau
-T	- transfert technologique : accélère la vitesse de développement des technologies
-		options :	- durée
-					- niveau
+T	- transfert technologique : accélère la vitesse de développement des technologies de 10%
 	- e : étend le rayon de contre-espionnage : augmente l'investissement dans le contre-espionnage (plus que le montant déterminé par le joueur)
-		options : 	- durée
 					- niveau
 	- [il doit gérer et modérer le forum d'alliance]
 
 
 --- N4 ------------
 Empereur :
-	- déclaration de guerre : une alliance est en guerre contre une autre, les barrrières qui empechaient un joueur d'attaqué un joueur plus faible que lui est annulée pendant cette durée; route commerciale entre les deux sont cassées. Tous les joueurs de la galaxie reçoivent un communiqué comme quoi telle alliance a déclaré la guerre à une autre. Si une des deux alliance meurt durant la guerre, tous les joueurs de l'alliance morte vont dans l'alliance gagnante.
 		options : 	- alliance cible
-					- durée
 	- traité de paix : [visible seulement en temps de guerre ]une alliance qui s'est faite déclarée la guerre peut payer ce traité pour annuler la guerre. L'autre alliance doit accepter pour que ça soit validé.	
 [à partir d'ici demander le fichier à Gil]		
 	- effort de guerre : réduction du prix des vaiseaux et du temps de construction
-		options : 	- durée
 					- 
 	- protectionnisme : toutes routes commerciales break; augmentation des ressources / impot.
 
