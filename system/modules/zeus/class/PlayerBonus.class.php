@@ -76,6 +76,9 @@ class PlayerBonus {
 		# ajout des bonus de faction
 		$this->addFactionBonus();
 
+		#ajout des lois
+		$this->addLawBonus();
+
 		# remplissage des bonus avec les cartes
 		// ...
 
@@ -139,6 +142,26 @@ class PlayerBonus {
 		$this->bonus->add($bonus, $this->technology->getTechnology($techno) * TechnologyResource::getInfo($techno, 'bonus'));
 	}
 
+	private function addLawBonus() {
+		include_once DEMETER;
+		$_LAM = ASM::$lam->getCurrentSession();
+		ASM::$lam->load(array('rColor' => $this->playerColor, 'statement' => Law::EFFECTIVE));
+		if (ASM::$lam->size() > 0) {
+			for ($i = 0; $i < ASM::$lam->size(); $i++) {
+				switch (ASM::$lam->get($i)->type) {
+					case 5:
+						# code...
+						break;
+					case 6:
+						$this->bonus->increase(self::TECHNOSPHERE_SPEED, LawResources::getInfo(ASM::$lam->get($i)->type, 'bonus'));
+						break;	
+					default:
+						break;
+				}
+			}
+		}
+		ASM::$lam->changeSession($_LAM);
+	}
 	private function addFactionBonus() {
 		switch ($this->playerColor) {
 			case 1:
