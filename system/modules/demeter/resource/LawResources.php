@@ -67,7 +67,7 @@ Class LawResources {
 			'bonusLaw' => TRUE,
 			'devName' => 'military subvention',
 			'name' => 'diminue le cout des vaisseaux',
-			'department' => 6,
+			'department' => 4,
 			'price' => 1000,
 			'duration' => 604800, //une semaine entière
 			'bonus' => 10,
@@ -79,7 +79,7 @@ Class LawResources {
 			'bonusLaw' => TRUE,
 			'devName' => 'technology',
 			'name' => 'augmente la vitesse de développement d\'une technology',
-			'department' => 3,
+			'department' => 5,
 			'price' => 1000,
 			'duration' => 604800, //une semaine entière
 			'bonus' => 10,

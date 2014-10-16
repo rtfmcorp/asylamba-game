@@ -102,6 +102,9 @@ class PlayerBonus {
 			# ajout des bonus de faction
 			$this->addFactionBonus();
 
+			#ajout des lois
+			$this->addLawBonus();
+
 			# remplissage avec les cartes
 			// ...
 		}
@@ -153,6 +156,7 @@ class PlayerBonus {
 						# code...
 						break;
 					case 6:
+						#subvention technologique
 						$this->bonus->increase(self::TECHNOSPHERE_SPEED, LawResources::getInfo(ASM::$lam->get($i)->type, 'bonus'));
 						break;	
 					default:

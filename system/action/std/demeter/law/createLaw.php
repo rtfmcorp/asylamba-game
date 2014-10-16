@@ -30,6 +30,7 @@ if ($type !== FALSE) {
 				$law->type = $type;
 				$law->statement = 0;
 				if (LawResources::getInfo($type, 'bonusLaw')) {
+					$law->options = serialize(array());
 					ASM::$lam->add($law);
 					ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
 				} else {
