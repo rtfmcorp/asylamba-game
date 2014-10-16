@@ -8,26 +8,25 @@ include_once ATHENA;
 $category = Utils::getHTTPData('category');
 $quantity = Utils::getHTTPData('quantity');
 
-
-// protection des inputs
-$p = new Parser();
-$category = $p->protect($category);
-
-if ($category !== FALSE AND $category !== '') {
+if ($category !== FALSE AND $quantity !== FALSE) {
 	if (in_array($category, array('natural', 'life', 'social', 'informatic'))) {
 		$S_PAM1 = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession();
 		ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+
 		$player = ASM::$pam->get();
 
-		$totalInvest = $player->partNaturalSciences + $player->partLifeSciences + $player->partSocialPoliticalSciences + $player->partInformaticEngineering;
+		$totalInvest =
+			$player->partNaturalSciences + 
+			$player->partLifeSciences + 
+			$player->partSocialPoliticalSciences + 
+			$player->partInformaticEngineering;
+
 		if ($totalInvest < 100) {
-			if ($quantity === FALSE) {
-				$quantity = 1;
-			}
 			if ($totalInvest + $quantity > 100) {
 				$quantity = 100 - $totalInvest;
 			}
+
 			switch ($category) {
 				case 'natural' : 
 					$player->partNaturalSciences = $player->partNaturalSciences + $quantity;
@@ -42,12 +41,11 @@ if ($category !== FALSE AND $category !== '') {
 					$player->partInformaticEngineering = $player->partInformaticEngineering + $quantity;
 					break;
 			}
-		} else {
-			CTR::$alert->add('Vous devez d\'abord libérer des pourcentages avant de les attribuer ailleurs', ALERT_STD_INFO);
 		}
+
 		ASM::$pam->changeSession($S_PAM1);
 	} else {
-	CTR::$alert->add('Changement d\'investissement impossible - faculté inconnue', ALERT_STD_ERROR);
+		CTR::$alert->add('Changement d\'investissement impossible - faculté inconnue', ALERT_STD_ERROR);
 	}
 } else {
 	CTR::$alert->add('Pas assez d\'informations pour augmenter l\'investissement', ALERT_STD_FILLFORM);

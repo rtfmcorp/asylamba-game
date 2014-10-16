@@ -100,6 +100,8 @@ echo '<div class="component">';
 					echo '<span class="uni-value">' . $rest . '</span> %';
 				echo '</span>';
 			echo '</div>';
+
+			echo '<p>Augmente ou baisse tes investissements par 10% avec CTRL + click.</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

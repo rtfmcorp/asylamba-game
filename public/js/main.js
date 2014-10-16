@@ -172,18 +172,29 @@ jQuery(document).ready(function($) {
 			if (quantity < 0) {
 				quantity = Math.abs(quantity);
 
-				if (uniInvest.percent[type]  - quantity >= 0) {
-					uniInvest.percent[type] -= quantity;
-					uniInvest.percent.rest  += quantity;
-					$.get(game.path + 'ajax/a-decreaseinvestuni/category-' + type);
+				if (uniInvest.percent[type] - quantity < 0) {
+					quantity = uniInvest.percent[type];
+				}
+				
+				uniInvest.percent[type] -= quantity;
+				uniInvest.percent.rest  += quantity;
+
+				if (quantity != 0) {
+					$.get(game.path + 'ajax/a-decreaseinvestuni/category-' + type + '/quantity-' + quantity);
 				}
 			} else {
-				if (uniInvest.percent.rest > 0 && uniInvest.percent[type] < 100) {
-					uniInvest.percent[type] += quantity;
-					uniInvest.percent.rest  -= quantity;
-					$.get(game.path + 'ajax/a-increaseinvestuni/category-' + type);
-				} else {
-					alertController.add(101, 'Pas assez de points libres');
+				if (uniInvest.percent[type] + quantity > 100) {
+					quantity = 100 - uniInvest.percent[type];
+				}
+				if (uniInvest.percent.rest - quantity < 0) {
+					quantity = uniInvest.percent.rest;
+				}
+
+				uniInvest.percent[type] += quantity;
+				uniInvest.percent.rest  -= quantity;
+				
+				if (quantity != 0) {
+					$.get(game.path + 'ajax/a-increaseinvestuni/category-' + type + '/quantity-' + quantity);
 				}
 			}
 
@@ -204,11 +215,13 @@ jQuery(document).ready(function($) {
 
 	$('.uni-invest-button.increase').live('click', function(e) {
 		e.preventDefault();
-		uniInvest.update($(this).data('type'), 1);
+		var step = e.ctrlKey ? 10 : 1;
+		uniInvest.update($(this).data('type'), step);
 	});
 	$('.uni-invest-button.decrease').live('click', function(e) {
 		e.preventDefault();
-		uniInvest.update($(this).data('type'), -1);
+		var step = e.ctrlKey ? -10 : -1;
+		uniInvest.update($(this).data('type'), step);
 	});
 
 // ########################################## //
