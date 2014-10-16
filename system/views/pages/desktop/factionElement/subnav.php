@@ -21,13 +21,13 @@ echo '<div id="subnav">';
 			echo '</span>';
 		echo '</a>';
 
-		$active = (CTR::$get->get('view') == 'government') ? 'active' : '';
-		echo '<a href="' . APP_ROOT . 'faction/view-government" class="item ' . $active . '">';
+		$active = (CTR::$get->get('view') == 'data') ? 'active' : '';
+		echo '<a href="' . APP_ROOT . 'faction/view-data" class="item ' . $active . '">';
 			echo '<span class="picto">';
-				echo '<img src="' . MEDIA . 'faction/nav/government.png" alt="" />';
+				echo '<img src="' . MEDIA . 'faction/nav/data.png" alt="" />';
 			echo '</span>';
 			echo '<span class="content skin-1">';
-				echo '<span>Gouvernement';
+				echo '<span>Gestion';
 			echo '</span>';
 		echo '</a>';
 

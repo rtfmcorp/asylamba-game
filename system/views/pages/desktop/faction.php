@@ -114,7 +114,29 @@ echo '<div id="content">';
 		}
 
 		ASM::$tom->changeSession($S_TOM1);
-	} elseif (CTR::$get->get('view') == 'government') {
+	} elseif (CTR::$get->get('view') == 'data') {
+		include COMPONENT . 'faction/data/nav.php';
+
+		if (!CTR::$get->exist('mode') OR CTR::$get->get('mode') == 'financial') {
+			include COMPONENT . 'faction/data/financial/stats.php';
+			include COMPONENT . 'faction/data/financial/graph.php';
+			include COMPONENT . 'faction/data/financial/sectors-tax.php';
+			include COMPONENT . 'faction/data/financial/donations.php';
+		} elseif (CTR::$get->get('mode') == 'trade') {
+			include COMPONENT . 'faction/data/trade/rc-stats.php';
+			include COMPONENT . 'faction/data/trade/tax-out.php';
+			include COMPONENT . 'faction/data/trade/tax-in.php';
+		} elseif (CTR::$get->get('mode') == 'war') {
+			include COMPONENT . 'faction/data/war/stats.php';
+			include COMPONENT . 'faction/data/war/sectors.php';
+			include COMPONENT . 'faction/data/war/incoming.php';
+		} elseif (CTR::$get->get('mode') == 'law') {
+			include COMPONENT . 'default.php';
+			include COMPONENT . 'default.php';
+			include COMPONENT . 'default.php';
+			include COMPONENT . 'default.php';
+		}
+/*	} elseif (CTR::$get->get('view') == 'government') {
 		include_once ZEUS;
 
 		$S_PAM_1 = ASM::$pam->getCurrentSession();
@@ -135,7 +157,7 @@ echo '<div id="content">';
 		include COMPONENT . 'faction/government/government.php';
 		include COMPONENT . 'faction/government/senate.php';
 
-		ASM::$pam->changeSession($S_PAM_1);
+		ASM::$pam->changeSession($S_PAM_1);*/
 	} elseif (CTR::$get->get('view') == 'election' && in_array($faction->electionStatement, array(Color::CAMPAIGN, Color::ELECTION))) {
 		if ($faction->electionStatement == Color::CAMPAIGN) {
 			$S_ELM_1 = ASM::$elm->getCurrentSession();
@@ -194,8 +216,6 @@ echo '<div id="content">';
 			ASM::$pam->changeSession($S_PAM_1);
 		}
 	} elseif (CTR::$get->get('view') == 'player') {
-		# vue des joueurs, a supprimer
-
 		include_once ZEUS;
 		$S_PAM1 = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession(FALSE);
