@@ -119,7 +119,7 @@ echo '<div id="content">';
 
 		if (!CTR::$get->exist('mode') OR CTR::$get->get('mode') == 'financial') {
 			include COMPONENT . 'faction/data/financial/stats.php';
-			include COMPONENT . 'faction/data/financial/graph.php';
+		#	include COMPONENT . 'faction/data/financial/graph.php';
 			include COMPONENT . 'faction/data/financial/sectors-tax.php';
 			include COMPONENT . 'faction/data/financial/donations.php';
 		} elseif (CTR::$get->get('mode') == 'trade') {

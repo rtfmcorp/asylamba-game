@@ -168,34 +168,11 @@ class CommercialRouteManager extends Manager {
 		}
 	}
 
-	/*public function updatePlayerCredits($player, $times = 1) {
-		if ($this->routes != NULL) {
-			if (isset($player)) {
-				if ($times > 0) {
-					try {
-						$earnedCredits = 0;
-						foreach ($this->routes AS $r) {
-							if ($r->getPlayerId1() == $player->getId() || $r->getPlayerId2() == $player->getId()) {
-								$earnedCredits += ($r->getIncome() * $times);
-							}
-						}
-						$player->increaseCredit($earnedCredits);
-					} catch(Exception $e) {
-						$_SESSION[SERVERSESS]['alert'][] = array($e->getMessage(), $e->getCode());
-					}
-				} else {
-					throw new Exception('Un nombre de tours positif est requis', 2);
-				}
-			} else {
-				throw new Exception('Un objet de type Player est requis', 2);
-			}
-		}
-	}*/
-
 	public function deleteById($id) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('DELETE FROM commercialRoute WHERE id = ?');
 		$qr->execute(array($id));
+		
 		// suppression de l'objet du manager
 		$this->_Remove($id);
 		return TRUE;

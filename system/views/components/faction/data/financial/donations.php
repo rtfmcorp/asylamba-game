@@ -5,7 +5,7 @@ echo '<div class="component profil">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo 'liste des donations de joueurs à la faction';
+			echo '<p>Cette fonctionnalité n\'est pas encore implémentée.</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

@@ -22,6 +22,7 @@ class ColorResource {
 				'officialName', 
 				'popularName', 
 				'government', 
+				'demonym', 
 				'factionPoint', 
 				'status', 
 				'devise', 
@@ -42,12 +43,17 @@ class ColorResource {
 		}
 	}
 
+	public static function size() {
+		return count(self::$colors);
+	}
+
 	private static $colors = array(
 		array(
 			'id' => 1,
 			'officialName' => 'Ordre Impérial',
 			'popularName' => 'l’Empire',
 			'government' => 'Maison Akhénienne',
+			'demonym' => 'impériaux',
 			'factionPoint' => 'Points de Prestige',
 			'status' => array('Noble', 'Dynaste', 'Dynastaire-trésorier', 'Dynastaire-chef de guerre', 'Dynastaire-ministre', 'Empereur'),
 			'devise' => 'Des nefs d’acier,<br />Naquit l’équilibre',
@@ -66,6 +72,7 @@ class ColorResource {
 			'officialName' => 'Province de Kovahk',
 			'popularName' => 'l’Essaim',
 			'government' => 'Maison des Kovahkarh',
+			'demonym' => 'kovahkarh',
 			'factionPoint' => 'Points de Bataille',
 			'status' => array('Guerrier', 'Dynaste', 'Financier', 'Chef de guerre', 'Ministre', 'Baron'),
 			'devise' => 'Eclats de métal dans le ciel',
@@ -86,6 +93,7 @@ class ColorResource {
 			'officialName' => 'Province de Négore',
 			'popularName' => 'Négore',
 			'government' => 'Maison Négienne',
+			'demonym' => 'négien',
 			'factionPoint' => 'Points de Marchandage',
 			'status' => array('Commerçant', 'Négociant', 'Financier', 'Chef de guerre', 'Ministre', 'Viziduc'),
 			'devise' => 'Toutes les richesses,<br />Passent par Négore',
@@ -106,6 +114,7 @@ class ColorResource {
 			'officialName' => 'Marche de Cardan',
 			'popularName' => 'la Marche',
 			'government' => 'Eglise Cardanienne',
+			'demonym' => 'cardanien',
 			'factionPoint' => 'Points de Foi',
 			'status' => array('Fidèle', 'Prêtre', 'Archiprêtre-trésorier', 'Archiprêtre-chef de guerre', 'Archiprêtre-ministre', 'Guide'),
 			'devise' => 'La lumière vous balaiera',
@@ -125,6 +134,7 @@ class ColorResource {
 			'officialName' => 'Province de Nerve',
 			'popularName' => 'la Nerve',
 			'government' => 'République Nervéenne',
+			'demonym' => 'nervéen',
 			'factionPoint' => 'Points d\'industrie',
 			'status' => array('Citoyen', 'Député', 'Ministre-trésorier', 'Ministre-chef de guerre', 'Ministre-ministre', 'Président'),
 			'devise' => 'Jamais ne tombera,<br />La ville aux Milles Sous-sols',
@@ -143,6 +153,7 @@ class ColorResource {
 			'officialName' => 'Province d’Aphéra',
 			'popularName' => 'Aphéra',
 			'government' => 'République Aphérane',
+			'demonym' => 'aphéran',
 			'factionPoint' => 'Points de Technologie',
 			'status' => array('Citoyen', 'Député', 'Conseiller-trésorier', 'Conseiller-chef de guerre', 'Conseiller-ministre', 'Chancelier'),
 			'devise' => 'Au travers du vide,<br />Nos oiseaux perçents,<br/>Levez les yeux',
@@ -161,6 +172,7 @@ class ColorResource {
 			'officialName' => 'Marche de Synelle',
 			'popularName' => 'Synelle',
 			'government' => 'Fédération Synélectique',
+			'demonym' => 'syn',
 			'factionPoint' => 'Points de Sagesse',
 			'status' => array('Fédéré', 'Conseiller', 'Consul-trésorier', 'Consul-chef de guerre', 'Consul-ministre', 'Fédérant'),
 			'devise' => 'Au plus loin des Guerres,<br />La vie prends racine',
