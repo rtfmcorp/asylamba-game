@@ -159,7 +159,9 @@ class OrbitalBaseManager extends Manager {
 			$b->setLevelDock3($aw['levelDock3']);
 			$b->setLevelTechnosphere($aw['levelTechnosphere']);
 			$b->setLevelCommercialPlateforme($aw['levelCommercialPlateforme']);
-			$b->setLevelGravitationalModule($aw['levelGravitationalModule']);
+			$b->setLevelStorage($aw['levelStorage']);
+			$b->setLevelRecycling($aw['levelRecycling']);
+			$b->setLevelSpatioport($aw['levelSpatioport']);
 			$b->setPoints($aw['points']);
 			$b->setISchool($aw['iSchool']);
 			$b->setIAntiSpy($aw['iAntiSpy']);
@@ -218,7 +220,9 @@ class OrbitalBaseManager extends Manager {
 			$realDock3Level = $aw['levelDock3'];
 			$realTechnosphereLevel = $aw['levelTechnosphere'];
 			$realCommercialPlateformeLevel = $aw['levelCommercialPlateforme'];
-			$realGravitationalModuleLevel = $aw['levelGravitationalModule'];
+			$realStorageLevel = $aw['levelStorage'];
+			$realRecyclingLevel = $aw['levelRecycling'];
+			$realSpatioportLevel = $aw['levelSpatioport'];
 
 			for ($i = 0; $i < $size; $i++) {
 				switch (ASM::$bqm->get($i)->buildingNumber) {
@@ -244,7 +248,13 @@ class OrbitalBaseManager extends Manager {
 						$realCommercialPlateformeLevel++;
 						break;
 					case 7 :
-						$realGravitationalModuleLevel++;
+						$realStorageLevel++;
+						break;
+					case 8 :
+						$realRecyclingLevel++;
+						break;
+					case 9 :
+						$realSpatioportLevel++;
 						break;
 					default :
 						CTR::$alert->add('Erreur dans la base de données');
@@ -259,7 +269,9 @@ class OrbitalBaseManager extends Manager {
 			$b->setRealDock3Level($realDock3Level);
 			$b->setRealTechnosphereLevel($realTechnosphereLevel);
 			$b->setRealCommercialPlateformeLevel($realCommercialPlateformeLevel);
-			$b->setRealGravitationalModuleLevel($realGravitationalModuleLevel);
+			$b->setRealStorageLevel($realStorageLevel);
+			$b->setRealRecyclingLevel($realRecyclingLevel);
+			$b->setRealSpatioportLevel($realSpatioportLevel);
 			ASM::$bqm->changeSession($oldBQMSess);
 
 			# ShipQueueManager
@@ -311,11 +323,11 @@ class OrbitalBaseManager extends Manager {
 
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			orbitalBase(rPlace, rPlayer, name, typeOfBase, levelGenerator, levelRefinery, levelDock1, levelDock2, levelDock3, levelTechnosphere, levelCommercialPlateforme, levelGravitationalModule, points,
+			orbitalBase(rPlace, rPlayer, name, typeOfBase, levelGenerator, levelRefinery, levelDock1, levelDock2, levelDock3, levelTechnosphere, levelCommercialPlateforme, levelStorage, levelRecycling, levelSpatioport, points,
 				iSchool, iAntiSpy, antiSpyAverage, 
 				pegaseStorage, satyreStorage, sireneStorage, dryadeStorage, chimereStorage, meduseStorage, griffonStorage, cyclopeStorage, minotaureStorage, hydreStorage, cerbereStorage, phenixStorage,
 				motherShip, isProductionRefinery, resourcesStorage, uOrbitalBase, dCreation)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,  
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,  
 				?, ?, ?, 
 				?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
 				?, ?, ?, ?, ?)');
@@ -331,7 +343,9 @@ class OrbitalBaseManager extends Manager {
 			$b->getLevelDock3(),
 			$b->getLevelTechnosphere(),
 			$b->getLevelCommercialPlateforme(),
-			$b->getLevelGravitationalModule(),
+			$b->getLevelStorage(),
+			$b->getLevelRecycling(),
+			$b->getLevelSpatioport(),
 			$b->getPoints(),
 
 			$b->getISchool(),
@@ -373,7 +387,7 @@ class OrbitalBaseManager extends Manager {
 		foreach ($bases AS $k => $b) {
 			$db = DataBase::getInstance();
 			$qr = $db->prepare('UPDATE orbitalBase
-				SET	rPlace = ?, rPlayer = ?, name = ?, typeOfBase = ?, levelGenerator = ?, levelRefinery = ?, levelDock1 = ?, levelDock2 = ?, levelDock3 = ?, levelTechnosphere = ?, levelCommercialPlateforme = ?, levelGravitationalModule = ?, points = ?,
+				SET	rPlace = ?, rPlayer = ?, name = ?, typeOfBase = ?, levelGenerator = ?, levelRefinery = ?, levelDock1 = ?, levelDock2 = ?, levelDock3 = ?, levelTechnosphere = ?, levelCommercialPlateforme = ?, levelStorage = ?, levelRecycling = ?, levelSpatioport = ?, points = ?,
 			iSchool = ?, iAntiSpy = ?, antiSpyAverage = ?,
 			pegaseStorage = ?, satyreStorage = ?, sireneStorage = ?, dryadeStorage = ?, chimereStorage = ?, meduseStorage = ?, griffonStorage = ?, cyclopeStorage = ?, minotaureStorage = ?, hydreStorage = ?, cerbereStorage = ?, phenixStorage = ?,
 			motherShip = ?, isProductionRefinery = ?, resourcesStorage = ?, uOrbitalBase = ?, dCreation = ?
@@ -390,7 +404,9 @@ class OrbitalBaseManager extends Manager {
 				$b->getLevelDock3(),
 				$b->getLevelTechnosphere(),
 				$b->getLevelCommercialPlateforme(),
-				$b->getLevelGravitationalModule(),
+				$b->getLevelStorage(),
+				$b->getLevelRecycling(),
+				$b->getLevelSpatioport(),
 				$b->getPoints(),
 				$b->getISchool(),
 				$b->getIAntiSpy(),
