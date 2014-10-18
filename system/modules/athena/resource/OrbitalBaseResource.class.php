@@ -7,9 +7,9 @@ class OrbitalBaseResource {
 	const DOCK2 = 3;
 	const TECHNOSPHERE = 5;
 	const COMMERCIAL_PLATEFORME = 6;
-	const STORAGE = 8;
-	const RECYCLING = 9;
-	const SPATIOPORT = 10;
+	const STORAGE = 7;
+	const RECYCLING = 8;
+	const SPATIOPORT = 9;
 
 	/**
 	 * 0 - generator
@@ -19,9 +19,11 @@ class OrbitalBaseResource {
 	 * 4 - dock3
 	 * 5 - technosphere
 	 * 6 - commercialPlateforme
-	 * 7 - gravitationalModule
+	 * 7 - storage
+	 * 8 - recycling
+	 * 9 - spatioport
 	 **/
-	private static $orbitalBaseBuildings = array(0, 1, 2, 3, 4, 5, 6, 7);
+	private static $orbitalBaseBuildings = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 
 	/**
 	 * pegase = 0, satyre = 1, chimere = 2, sirene = 3, dryade = 4 and meduse = 5
@@ -78,7 +80,7 @@ class OrbitalBaseResource {
 			if ($info == 'name' OR $info == 'frenchName' OR $info == 'imageLink' OR $info == 'description') {
 				return self::$building[$buildingNumber][$info];
 			} elseif ($info == 'techno') {
-				if (in_array($buildingNumber, array(3,4,6,7))) {
+				if (in_array($buildingNumber, array(3,4,6,7,8,9))) {
 					return self::$building[$buildingNumber][$info];
 				} else {
 					return -1;
@@ -95,25 +97,33 @@ class OrbitalBaseResource {
 					return self::$building[$buildingNumber][$info][$level-1][0];
 				} elseif($sup == 'resourcePrice') {
 					return self::$building[$buildingNumber][$info][$level-1][1];
-				} elseif($sup == 'pa') {
-					return self::$building[$buildingNumber][$info][$level-1][2];
 				} elseif($sup == 'points') {
-					return self::$building[$buildingNumber][$info][$level-1][3];
+					return self::$building[$buildingNumber][$info][$level-1][2];
 				} else {
-					if($sup == 'storageSpace' AND ($buildingNumber == 1 OR $buildingNumber == 2 OR $buildingNumber == 3)) {
-						return self::$building[$buildingNumber][$info][$level-1][4];
-					} elseif($sup == 'refiningCoefficient' AND $buildingNumber == 1) {
+					if ($sup == 'nbQueues') {
+						if ($buildingNumber == 0 OR $buildingNumber == 2 OR $buildingNumber == 3 OR $buildingNumber == 5) {
+							return self::$building[$buildingNumber][$info][$level-1][3];
+						} 
+					} elseif ($sup == 'storageSpace') {
+						if ($buildingNumber == 7) {
+							return self::$building[$buildingNumber][$info][$level-1][3];
+						} elseif ($buildingNumber == 2 OR $buildingNumber == 3) {
+							return self::$building[$buildingNumber][$info][$level-1][4];
+						}
+					} elseif ($sup == 'refiningCoefficient' AND $buildingNumber == 1) {
+						return self::$building[$buildingNumber][$info][$level-1][3];
+					} elseif ($sup == 'releasedShip' AND ($buildingNumber == 2 OR $buildingNumber == 3)) {
 						return self::$building[$buildingNumber][$info][$level-1][5];
-					} elseif($sup == 'releasedShip' AND ($buildingNumber == 2 OR $buildingNumber == 3)) {
-						return self::$building[$buildingNumber][$info][$level-1][5];
-					} elseif($sup == 'releasedShip' AND $buildingNumber == 4) {
+					} elseif ($sup == 'releasedShip' AND $buildingNumber == 4) {
 						return self::$building[$buildingNumber][$info][$level-1][4];
-					} elseif($sup == 'nbRoutesMax' AND $buildingNumber == 6) {
+					} elseif ($sup == 'nbCommercialShip' AND $buildingNumber == 6) {
+						return self::$building[$buildingNumber][$info][$level-1][3];
+					} elseif ($sup == 'recyclingEfficiency' AND $buildingNumber == 8) {
+						return self::$building[$buildingNumber][$info][$level-1][3];
+					} elseif ($sup == 'nbRecyclers' AND $buildingNumber == 8) {
 						return self::$building[$buildingNumber][$info][$level-1][4];
-					} elseif($sup == 'nbCommercialShip' AND $buildingNumber == 6) {
-						return self::$building[$buildingNumber][$info][$level-1][5];
-					} elseif($sup == 'protectionRate' AND $buildingNumber == 7) {
-						return self::$building[$buildingNumber][$info][$level-1][4];
+					} elseif ($sup == 'nbRoutesMax' AND $buildingNumber == 9) {
+						return self::$building[$buildingNumber][$info][$level-1][3];
 					} else {
 						CTR::$alert->add('4e argument invalide dans getBuildingInfo de OrbitalBaseResource', ALT_BUG_ERROR);
 					}
@@ -397,7 +407,7 @@ class OrbitalBaseResource {
 			'frenchName' => 'Colonne d\'Assemblage',
 			'imageLink' => 'dock3',
 			'level' => array(
-				// (time, resourcePrice, pa, points, releasedShip)
+				// (time, resourcePrice, points, releasedShip)
 				array(60000,	200000,	100,	1),
 				array(78000,	240000,	120,	1),
 				array(101000,	288000,	140,	1),
@@ -505,22 +515,6 @@ class OrbitalBaseResource {
 			'techno' => 0
 		),
 		array(
-			'name' => 'gravitationalModule',
-			'frenchName' => 'Module Gravitationnel',
-			'imageLink' => 'gravitationalModule',
-			'level' => array(
-				// (time, resourcePrice, pa, points, protectionRate)
-				array(21000,  400000,  	70, 	100,  5),
-				array(42000,  500000,  	78, 	200,  10),
-				array(84000,  720000, 	86, 	400,  15),
-				array(168000, 940000, 	92, 	800,  18),
-				array(336000, 1000000, 	100, 	1200, 20)
-			),
-			'maxLevel' => array(0, 0, 0, 0),
-			'description' => 'Le <strong>Module Gravitationnel</strong>, seule structure défensive de la base orbitale, rend les attaques contre votre planète plus difficiles pour tous vos ennemis. Créant un champ gravitationnel de <strong>protection</strong> autour de votre planète et de votre base orbitale, cette défense rend tout type de chasseur quasiment inoffensif.<br /><br />Cette défense vous permettra d’attaquer vos ennemis en laissant à votre population une protection contre les petites attaques. Cependant, il est très conseillé de laisser systématiquement quelques vaisseaux de défense dans les places prévues à cet effet.',
-			'techno' => 3
-		),
-		array(
 			'name' => 'storage',
 			'frenchName' => 'Stockage',
 			'imageLink' => 'storage',
@@ -576,7 +570,7 @@ class OrbitalBaseResource {
 			'frenchName' => 'Centre de Recyclage',
 			'imageLink' => 'recycling',
 			'level' => array(
-				// (time, resourcePrice, points, recyclingEfficiency(%), recyclerQuantity)
+				// (time, resourcePrice, points, recyclingEfficiency(%), nbRecyclers)
 				array(55,		1600,	10,	2,	1),
 				array(77,		1968,	11,	4,	1),
 				array(108,		2421,	12,	6,	1),
