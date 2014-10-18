@@ -141,13 +141,13 @@ class OrbitalBaseResource {
 		if (self::isABuilding($buildingId)) {
 			switch($type) {
 				// assez de ressources pour contruire ?
-				case 'resource' : return ($sup < self::getBuildingInfo($buildingId, 'level', $level, 'resourcePrice')) ? FALSE : TRUE;
+				case 'resource' : 
+					return ($sup < self::getBuildingInfo($buildingId, 'level', $level, 'resourcePrice')) ? FALSE : TRUE;
 					break;
-
 				// encore de la place dans la queue ?
 				// $sup est le nombre de batiments dans la queue
 				case 'queue' :
-					return ($sup < BQM_MAXQUEUE) ? TRUE : FALSE;
+					return ($sup < self::getBuildingInfo($buildingId, 'level', $level, 'nbQueues')) ? TRUE : FALSE;
 					break;
 				// droit de construire le batiment ?
 				// $sup est un objet de type OrbitalBase
@@ -215,7 +215,7 @@ class OrbitalBaseResource {
 					return FALSE;
 			}
 		} else {
-			CTR::$alert->add('buildingId invalide (entre 0 et 7) dans haveRights de OrbitalBaseResource', ALT_BUG_ERROR);
+			CTR::$alert->add('buildingId invalide (entre 0 et 9) dans haveRights de OrbitalBaseResource', ALT_BUG_ERROR);
 			return FALSE;
 		}
 	}
