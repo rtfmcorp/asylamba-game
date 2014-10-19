@@ -64,7 +64,7 @@ for ($i = 0; $i < ASM::$cam->size(); $i++) {
 				if ($faction->electionStatement == Color::ELECTION) {
 					echo '<div class="build-item">';
 						if ($hasVoted) {
-							if (ASM::$vom->get()->rCandidate == $candidat->id) {
+							if (ASM::$vom->get()->rCandidate == $candidat->rPlayer) {
 								echo '<span class="button disable" style="text-align: center;">';
 									echo '<span class="text" style="line-height: 35px;">Vous avez voté pour lui</span>';
 								echo '</span>';
@@ -74,7 +74,7 @@ for ($i = 0; $i < ASM::$cam->size(); $i++) {
 								echo '</span>';
 							}
 						} else {
-							echo '<a class="button" href="' . APP_ROOT . 'action/a-vote/relection-' . $rElection . '/rcandidate-' . $candidat->id . '" style="text-align: center;">';
+							echo '<a class="button" href="' . APP_ROOT . 'action/a-vote/relection-' . $rElection . '/rcandidate-' . $candidat->rPlayer . '" style="text-align: center;">';
 								echo '<span class="text" style="line-height: 35px;">Voter</span>';
 							echo '</a>';
 						}
