@@ -10,6 +10,7 @@ ON cr.rOrbitalBaseLinked = ob2.rPlace
 	ON ob2.rPlayer = pl2.id';
 
 $db = DataBase::getInstance();
+
 $qr = $db->prepare('SELECT
 		COUNT(cr.id) AS nb,
 		SUM(cr.income) AS income
@@ -30,6 +31,8 @@ echo '<div class="component profil">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
+			echo '<h4>Routes commerciales</h4>';
+
 			echo '<div class="number-box">';
 				echo '<span class="label">Routes commerciales actives</span>';
 				echo '<span class="value">' . Format::number($aw1['nb']) . '</span>';
@@ -37,7 +40,10 @@ echo '<div class="component profil">';
 
 			echo '<div class="number-box">';
 				echo '<span class="label">Revenu total par relève</span>';
-				echo '<span class="value">' . Format::number($aw1['income']) . '</span>';
+				echo '<span class="value">';
+					echo Format::number($aw1['income']);
+					echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits">';
+				echo '</span>';
 				echo '<span class="group-link"><a href="#" title="revenu total encaissé par les joueurs de la faction" class="hb lt">?</a></span>';
 			echo '</div>';
 
@@ -50,6 +56,7 @@ echo '<div class="component profil">';
 			echo '</div>';
 
 			echo '<hr />';
+			echo '<h4>Part du commerce extérieur</h4>';
 
 			for ($i = 1; $i < ColorResource::size() + 1; $i++) {
 				if (ColorResource::getInfo($i, 'id') != $faction->id) {

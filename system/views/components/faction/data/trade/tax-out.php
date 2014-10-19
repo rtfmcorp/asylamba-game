@@ -1,5 +1,5 @@
 <?php
-include ATHENA;
+include_once ATHENA;
 
 $S_CTM_T = ASM::$ctm->getCurrentSession();
 ASM::$ctm->newSession();

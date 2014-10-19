@@ -18,7 +18,7 @@ Class LawResources {
 			'id' => 1,
 			'bonusLaw' => FALSE,
 			'devName' => 'sector taxes',
-			'name' => 'modification des taux d\'imposition',
+			'name' => 'Ajustement de l\'imposition sectoriel',
 			'department' => 3,
 			'price' => 1000,
 			'duration' => 0,

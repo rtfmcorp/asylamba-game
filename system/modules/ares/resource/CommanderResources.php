@@ -13,13 +13,13 @@
 Class CommanderResources {
 	private static $commanders = array(
 		array(
-			'grade' => 'Aspirant'
+			'grade' => 'Aspirant I'
 		),
 		array(
-			'grade' => 'Aspirant'
+			'grade' => 'Aspirant II'
 		),
 		array(
-			'grade' => 'Aspirant'
+			'grade' => 'Aspirant III'
 		),
 		array(
 			'grade' => 'Quartier-Maître'

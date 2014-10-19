@@ -31,6 +31,12 @@ echo '<div class="component">';
 
 				for ($i = 0; $i < count($aw); $i++) {
 					$sector = $aw[$i];
+					$percents = array();
+					
+					for ($j = 1; $j < 8; $j++) {
+						$percents['color' . $j] = Format::percent($sector['nbc' . $j], $sector['nbc0']);
+					}
+					arsort($percents);
 
 					if ($i != 0 && !$hasH4 && $aw[$i - 1]['color'] != $sector['color']) {
 						echo '</ul>';
@@ -46,8 +52,8 @@ echo '<div class="component">';
 							echo '<span class="label">secteur ' . $sector['name'] . '</span>';
 							echo '<span class="value">' . Format::percent($sector['nbc' . $faction->id], $sector['nbc0']) . ' %</span>';
 							echo '<span class="progress-bar hb bl" title="partage des systèmes entres les factions">';
-							for ($j = 1; $j < 8; $j++) { 
-								echo '<span style="width:' . Format::percent($sector['nbc' . $j], $sector['nbc0']) . '%;" class="content color' . $j . '"></span>';
+							foreach ($percents as $color => $percent) {
+								echo '<span style="width:' . $percent . '%;" class="content ' . $color . '"></span>';
 							}
 							echo '</span>';
 						echo '</li>';

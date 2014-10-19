@@ -5,6 +5,8 @@ echo '<div class="component profil">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
+			echo '<h4>Richesse</h4>';
+
 			echo '<div class="number-box half grey">';
 				echo '<span class="label">Richesse de la faction</span>';
 				echo '<span class="value">' . Format::number($faction->credits) . ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" /></span>';

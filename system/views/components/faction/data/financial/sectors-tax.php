@@ -1,5 +1,5 @@
 <?php
-include GAIA;
+include_once GAIA;
 
 $S_SEM_T = ASM::$sem->getCurrentSession();
 ASM::$sem->newSession();
@@ -11,6 +11,8 @@ echo '<div class="component profil">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
+			echo '<h4>Taux courants</h4>';
+
 			echo '<ul class="list-type-1">';
 				for ($i = 0; $i < ASM::$sem->size(); $i++) {
 					$sector = ASM::$sem->get($i);
