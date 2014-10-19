@@ -76,9 +76,17 @@ class ShipResource {
 				case 'pa' : return ($sup < self::getInfo($shipId, 'pa')) ? FALSE : TRUE;
 					break;
 				// encore de la place dans la queue ?
-				// $sup est le nombre de batiments dans la queue
+				// $sup est un objet de type OrbitalBase
+				// $quantity est le nombre de batiments dans la queue
 				case 'queue' :
-					return ($sup < SQM_SHIPMAXQUEUE) ? TRUE : FALSE; 
+					if (OrbitalBaseResource::isAShipFromDock1($shipId)) {
+						$maxQueue = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::DOCK1, 'level', $sup->levelDock1, 'nbQueues');
+					} elseif (OrbitalBaseResource::isAShipFromDock2($shipId)) {
+						$maxQueue = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::DOCK2, 'level', $sup->levelDock1, 'nbQueues');
+					} else {
+						$maxQueue = 0;
+					}
+					return ($quantity < $maxQueue) ? TRUE : FALSE; 
 					break;
 				// droit de construire le vaisseau ?
 				// $sup est un objet de type OrbitalBase

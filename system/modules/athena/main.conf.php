@@ -7,15 +7,10 @@ define('CRM_ROUTEBONUSSECTOR', 		1.1);
 define('CRM_ROUTEBONUSCOLOR', 		1.4);
 define('CRM_COEFEXPERIENCE', 		0.1);
 
-# queue de construction de bâtiments
-define('BQM_MAXQUEUE', 				4);
-
 # pourcentage de ressources rendues lors
 # de l'annulation d'une construciton de batiment
 define('BQM_RESOURCERETURN', 		0.5); 	# 50%
 
-# queue de construction de vaisseaux
-define('SQM_SHIPMAXQUEUE', 			5);
 define('SQM_RESOURCERETURN',		0.5);	# 50%
 
 # commandant

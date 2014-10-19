@@ -67,8 +67,11 @@ class TechnologyResource {
 				case 'credit' : return ($arg2 >= self::getInfo($techno, 'credit', $arg1)) ? TRUE : FALSE;
 					break;
 				// encore de la place dans la queue ?
-				// $arg1 est le nombre de technologies dans la queue
-				case 'queue' : return ($arg1 < TQM_TECHNOMAXQUEUE) ? TRUE : FALSE;
+				// $arg1 est un objet de type OrbitalBase
+				// $arg2 est le nombre de technologies dans la queue
+				case 'queue' : 
+					$maxQueue = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::TECHNOSPHERE, 'level', $arg1->levelTechnosphere, 'nbQueues');
+					return ($arg1 < $maxQueue) ? TRUE : FALSE;
 					break;
 				// a-t-on le droit de construire ce niveau ?
 				// $arg1 est le niveau cible

@@ -55,7 +55,7 @@ for ($i = 0; $i < 6; $i++) {
 		# usable ship
 		$disability = '';
 
-		if (!ShipResource::haveRights($i, 'queue', ASM::$sqm->size())) {
+		if (!ShipResource::haveRights($i, 'queue', $ob_dock1, ASM::$sqm->size())) {
 			# queue size
 			$but = '<span class="button disable">';
 				$but .= 'file de construction pleine<br />';
@@ -144,7 +144,7 @@ echo '<div class="component">';
 					echo '</div>';
 				}
 
-				if ($realSizeQueue > SQM_SHIPMAXQUEUE) {
+				if ($realSizeQueue > OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::DOCK1, 'level', $ob_dock1->levelDock1, 'nbQueues')) {
 					echo '<p><em>file de construction pleine, revenez dans un moment.</em></p>';
 				}
 				echo '</div>';

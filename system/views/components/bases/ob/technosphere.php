@@ -104,7 +104,7 @@ for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
 				$ctn[1] = FALSE;
 				$sup .= '<em>développement terminé</em>';
 				$closed = 'closed';
-			} elseif (!TechnologyResource::haveRights($i, 'queue', ASM::$tqm->size())) {
+			} elseif (!TechnologyResource::haveRights($i, 'queue', $ob, ASM::$tqm->size())) {
 				# queue size
 				$but .= '<span class="button disable">';
 					$but .= 'file de recherche pleine<br />';
@@ -234,7 +234,7 @@ echo '<div class="component techno">';
 					echo '</div>';
 				}
 
-				if ($realSizeQueue >= TQM_TECHNOMAXQUEUE) {
+				if ($realSizeQueue >= OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::TECHNOSPHERE, 'level', $ob_tech->levelTechnosphere, 'nbQueues')) {
 					echo '<p><em>file de recherche pleine, revenez dans un moment.</em></p>';
 				}
 				echo '</div>';

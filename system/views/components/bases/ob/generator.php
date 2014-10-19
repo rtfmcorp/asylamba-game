@@ -55,7 +55,7 @@ if (ASM::$bqm->size() != 0) {
 		}
 		$q .= '</div>';		
 	}
-	if ($realSizeQueue >= BQM_MAXQUEUE) {
+	if ($realSizeQueue >= OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::GENERATOR, 'level', $ob_generator->levelGenerator, 'nbQueues')) {
 		$q .= '<p><em>file de construction pleine...</em></p>';
 	}
 	$q .= '</div>';
