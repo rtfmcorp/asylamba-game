@@ -1,11 +1,11 @@
 <?php
 class TechnologyResource {
 	# JACKY si tu peux regarder si tout est ok dans les lignes au-dessous !!!
-	private static $technologies = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 
-		20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45);
-	private static $technologiesForUnblocking = array(0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17);
-#	private static $technologiesForUnblocking = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17);
-	private static $technologiesNotDisplayed = array(2, 3, 25, 26);
+	private static $technologies = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
+		19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46);
+	private static $technologiesForUnblocking = array(0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18);
+#	private static $technologiesForUnblocking = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18);
+	private static $technologiesNotDisplayed = array(2, 26, 27);
 	
 	public static function isATechnology($techno) {
 		return (in_array($techno, self::$technologies)) ? TRUE : FALSE;
@@ -141,7 +141,7 @@ class TechnologyResource {
 			'name' => 'Grue magnétique',
 			'progName' => 'dock2Unblock',
 			'imageLink' => 'dock2unblock',
-			'requiredTechnosphere' => 4,
+			'requiredTechnosphere' => 8,
 			'requiredResearch' => array(3,2,0,0,0,0,0,0,0,0),
 			'time' => 15000,
 			'resource' => 600,
@@ -166,9 +166,23 @@ class TechnologyResource {
 			'description' => 'Formant un champ magnétique puissant autour de votre base orbitale et de votre planète, le champ magnétique est un système de défense qui ralentit les vaisseaux attaquants, donnant de ce fait plus de chance à vos flottes de défenses de faire mouche.'
 		),
 		array(
-			'name' => 'Grue magnétique double',
-			'progName' => 'gravitModuleUnblock',
-			'imageLink' => 'gravitmoduleunblock',
+			'name' => 'Recycleur autonome',
+			'progName' => 'recyclingUnblock',
+			'imageLink' => 'recyclingunblock',
+			'requiredTechnosphere' => 4,
+			'requiredResearch' => array(7,8,8,0,0,0,0,0,0,0),
+			'time' => 25800,
+			'resource' => 950,
+			'credit' => 9800,
+			'points' => 44,
+			'column' => 1,
+			'shortDescription' => 'Débloque le Centre de Recyclage.',
+			'description' => 'NOT DEFINED'
+		),
+		array(
+			'name' => 'Vaisseaux de transport',
+			'progName' => 'spatioportUnblock',
+			'imageLink' => 'spatioportunblock',
 			'requiredTechnosphere' => 8,
 			'requiredResearch' => array(7,8,8,0,0,0,0,0,0,0),
 			'time' => 25800,
@@ -176,8 +190,8 @@ class TechnologyResource {
 			'credit' => 9800,
 			'points' => 44,
 			'column' => 1,
-			'shortDescription' => 'Débloque le Module Gravitationnel.',
-			'description' => 'La grue magnétique double, plus puissante que sa petite sœur la grue magnétique, est utilisée dans la Colonne d’Assemblage. Ce chantier spatial vous permet, grâce à ladite grue, de construire des vaisseaux-mères pour partir à la conquête de la galaxie.'
+			'shortDescription' => 'Débloque le Spatioport.',
+			'description' => 'NOT DEFINED'
 		),
 		// unblock ships
 		array(

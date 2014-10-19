@@ -9,9 +9,9 @@
 
 # work
 $q = '';
-$b = array('', '', '', '', '', '', '', '');
+$b = array('', '', '', '', '', '', '', '', '', '');
 $realSizeQueue = 0;
-for ($i = 0; $i < 8; $i++) {
+for ($i = 0; $i < 10; $i++) {
 	$name 		= ucfirst(OrbitalBaseResource::getBuildingInfo($i, 'name'));
 	$aLevel[$i] = intval(call_user_func(array($ob_generator, 'getLevel' . $name)));
 	$rLevel[$i] = intval(call_user_func(array($ob_generator, 'getReal' . $name . 'Level')));
@@ -67,7 +67,7 @@ ASM::$bqm->changeSession($S_BQM1);
 
 # building
 $technology = new Technology(CTR::$data->get('playerId'));
-for ($i = 0; $i < 8; $i++) {
+for ($i = 0; $i < 10; $i++) {
 	$level = $aLevel[$i];
 	$nextLevel =  $rLevel[$i] + 1;
 
@@ -154,28 +154,38 @@ echo '<div class="component">';
 	echo '</div>';
 echo '</div>';
 
-echo '<div class="component size2 generator">';
+echo '<div class="component generator">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<table>';
-				echo '<tr>';
-					echo '<td>' . $b[0] . '</td>';
-					echo '<td>' . $b[5] . '</td>';
-				echo '</tr>';
-				echo '<tr>';
-					echo '<td>' . $b[1] . '</td>';
-					echo '<td>' . $b[2] . '</td>';
-				echo '</tr>';
-				echo '<tr>';
-					echo '<td>' . $b[6] . '</td>';
-					echo '<td>' . $b[3] . '</td>';
-				echo '</tr>';
-				/*echo '<tr>';
-					echo '<td>' . $b[4] . '</td>';
-					echo '<td>' . $b[7] . '</td>';
-				echo '</tr>';*/
-			echo '</table>';
+			echo '<h4>Bâtiments neutres</h4>';
+			echo $b[0];
+			echo $b[5];
+			echo $b[7];
+		echo '</div>';
+	echo '</div>';
+echo '</div>';
+
+echo '<div class="component generator">';
+	echo '<div class="head"></div>';
+	echo '<div class="fix-body">';
+		echo '<div class="body">';
+			echo '<h4>Bâtiments commerciaux</h4>';
+			echo $b[1];
+			echo $b[6];
+			echo $b[9];
+		echo '</div>';
+	echo '</div>';
+echo '</div>';
+
+echo '<div class="component generator">';
+	echo '<div class="head"></div>';
+	echo '<div class="fix-body">';
+		echo '<div class="body">';
+			echo '<h4>Bâtiments militaires</h4>';
+			echo $b[2];
+			echo $b[8];
+			echo $b[3];
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

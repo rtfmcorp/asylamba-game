@@ -80,7 +80,7 @@ class OrbitalBaseResource {
 			if ($info == 'name' OR $info == 'frenchName' OR $info == 'imageLink' OR $info == 'description') {
 				return self::$building[$buildingNumber][$info];
 			} elseif ($info == 'techno') {
-				if (in_array($buildingNumber, array(3,4,6,7,8,9))) {
+				if (in_array($buildingNumber, array(3,4,6,8,9))) {
 					return self::$building[$buildingNumber][$info];
 				} else {
 					return -1;
@@ -164,22 +164,28 @@ class OrbitalBaseResource {
 							$diminution = 0;
 							break;
 						case 3 : // Dock 2
-							$diminution = 5;
+							$diminution = 20;
 							break;
 						case 4 : // Dock 3
-							$diminution = 10;
+							$diminution = 30;
 							break;
 						case 5 : // Technosphère
 							$diminution = 0;
 							break;
 						case 6 : // Plateforme Commerciale
-							$diminution = 5;
-							break;
-						case 7 : // Module Gravitationnel
 							$diminution = 10;
 							break;
+						case 7 : // Stockage
+							$diminution = 0;
+							break;
+						case 8 : // Centre de Recyclage
+							$diminution = 10;
+							break;
+						case 9 : // Spatioport
+							$diminution = 20;
+							break;
 						default :
-							CTR::$alert->add('buildingId invalide (entre 0 et 7) dans haveRights de OrbitalBaseResource', ALT_BUG_ERROR);
+							CTR::$alert->add('buildingId invalide (entre 0 et 9) dans haveRights de OrbitalBaseResource', ALT_BUG_ERROR);
 							break;
 					}
 					if ($diminution !== NULL) {
@@ -562,8 +568,7 @@ class OrbitalBaseResource {
 				array(77680,	257000,	83,	5317600)
 			),
 			'maxLevel' => array(30, 40, 40, 40),
-			'description' => 'not defined',
-			'techno' => 999 /* TO DEFINE */
+			'description' => 'not defined'
 		),
 		array(
 			'name' => 'recycling',
@@ -604,7 +609,7 @@ class OrbitalBaseResource {
 			),
 			'maxLevel' => array(20, 20, 30, 30),
 			'description' => 'not defined',
-			'techno' => 999 /* TO DEFINE */
+			'techno' => 3
 		),
 		array(
 			'name' => 'spatioport',
@@ -635,7 +640,7 @@ class OrbitalBaseResource {
 			),
 			'maxLevel' => array(0, 20, 10, 20),
 			'description' => 'not defined',
-			'techno' => 999 /* TO DEFINE */
+			'techno' => 4
 		)
 	);
 }
