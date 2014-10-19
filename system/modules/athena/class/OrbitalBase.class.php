@@ -41,7 +41,6 @@ class OrbitalBase {
 	public $antiSpyAverage = 0;
 	public $shipStorage = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 	public $motherShip = 0; // 1 = a motherShip level 1 is stocked, 2 = level 2, 3 = level 3
-	public $isProductionRefinery = 1;
 	public $resourcesStorage = 5000;
 	public $uOrbitalBase = '';
 	public $dCreation = '';
@@ -103,7 +102,6 @@ class OrbitalBase {
 	public function getAntiSpyAverage() { return $this->antiSpyAverage; }
 	public function getShipStorage($k = -1) {return ($k == -1) ? $this->shipStorage : $this->shipStorage[$k]; }
 	public function getMotherShip() { return $this->motherShip; }
-	public function getIsProductionRefinery() { return $this->isProductionRefinery; }
 	public function getResourcesStorage() { return $this->resourcesStorage; }
 	public function getDCreation() { return $this->dCreation; }
 
@@ -174,7 +172,6 @@ class OrbitalBase {
 	public function setAntiSpyAverage($var) { $this->antiSpyAverage = $var; }
 	public function setShipStorage($k, $v) { $this->shipStorage[$k] = $v; }
 	public function setMotherShip($var) { $this->motherShip = $var; }
-	public function setIsProductionRefinery($var) { $this->isProductionRefinery = $var; }
 	public function setResourcesStorage($var) { $this->resourcesStorage = $var; }
 	public function setDCreation($var) { $this->dCreation = $var; }
 
@@ -337,20 +334,11 @@ class OrbitalBase {
 	}
 
 	public function uResources($playerBonus) {
-		$addResources = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(1, 'level', $this->levelRefinery, 'refiningCoefficient'), $this->planetResources);
-		if ($this->isProductionRefinery == 1) {
-			$modeBonus = $addResources * OBM_COEFPRODUCTION;
-			$technoBonus = $addResources * $playerBonus->bonus->get(PlayerBonus::REFINERY_REFINING) / 100;
-			$addResources += $modeBonus + $technoBonus;
-		}
+		$addResources = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $this->levelRefinery, 'refiningCoefficient'), $this->planetResources);
+		$addResources += $addResources * $playerBonus->bonus->get(PlayerBonus::REFINERY_REFINING) / 100;
 		$newResources = $this->resourcesStorage + (int) $addResources;
-		$maxStorage = OrbitalBaseResource::getBuildingInfo(1, 'level', $this->levelStorage, 'storageSpace');
-		if ($this->isProductionRefinery == 0) {
-			$modeBonus = $maxStorage * OBM_COEFPRODUCTION;
-			$technoBonus = $maxStorage * 
-			$playerBonus->bonus->get(PlayerBonus::REFINERY_STORAGE) / 100;
-			$maxStorage += $modeBonus + $technoBonus;
-		}
+		$maxStorage = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $this->levelStorage, 'storageSpace');
+
 		if ($newResources > $maxStorage) {
 			$this->resourcesStorage = $maxStorage;
 		} else {
@@ -500,12 +488,8 @@ class OrbitalBase {
 	// OBJECT METHODS
 	public function increaseResources($resources) {
 		if (intval($resources)) {
-			$maxStorage = OrbitalBaseResource::getBuildingInfo(1, 'level', $this->levelStorage, 'storageSpace');
-			if ($this->isProductionRefinery == 0) {
-				$maxStorage += $maxStorage * OBM_COEFPRODUCTION;
-			}
+			$maxStorage = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $this->levelStorage, 'storageSpace');
 			$newResources = $this->resourcesStorage + abs($resources);
-
 			if ($newResources > $maxStorage) {
 				$this->resourcesStorage = $maxStorage;
 			} else {

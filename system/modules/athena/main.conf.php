@@ -26,9 +26,6 @@ define('CRM_PROPOSED',				0);
 define('CRM_ACTIVE',				1);
 define('CRM_STANDBY',				2);
 
-# production/storage mode de la raffinerie
-define('OBM_COEFPRODUCTION', 		0.1);
-
 # type of base constants
 define('OBM_LEVEL_MIN_TO_CHANGE_TYPE', 10); # minimal generator level
 define('OBM_LEVEL_MIN_FOR_CAPITAL', 20); # minimal generator level to build a capital base

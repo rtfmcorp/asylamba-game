@@ -29,13 +29,9 @@ echo '<div class="component">';
 					echo ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color">';
 				echo '</span>';
 
-				$storageSpace = OrbitalBaseResource::getBuildingInfo(1, 'level', $ob_obFastView->getLevelRefinery(), 'storageSpace');
+				$storageSpace = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $ob_obFastView->getLevelStorage(), 'storageSpace');
 				$storageBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::REFINERY_STORAGE);
-				if ($ob_obFastView->getIsProductionRefinery() == 0 && $storageBonus > 0) {
-					$storageSpace += ($storageSpace * OBM_COEFPRODUCTION) + ($storageSpace * $storageBonus / 100);
-				} elseif ($ob_obFastView->getIsProductionRefinery() == 0) {
-					$storageSpace += ($storageSpace * OBM_COEFPRODUCTION);
-				} elseif ($storageBonus > 0) {
+				if ($storageBonus > 0) {
 					$storageSpace += ($storageSpace * $storageBonus / 100);
 				}
 				$percent = Format::numberFormat($ob_obFastView->getResourcesStorage() / $storageSpace * 100);
@@ -53,11 +49,7 @@ echo '<div class="component">';
 					$production = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(1, 'level', $ob_obFastView->getLevelRefinery(), 'refiningCoefficient'), $ob_obFastView->getPlanetResources());
 					echo Format::numberFormat($production);
 					$refiningBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::REFINERY_REFINING);
-					if ($ob_obFastView->getIsProductionRefinery() == 1 && $refiningBonus > 0) {
-						echo '<span class="bonus">+' . Format::numberFormat(($production * OBM_COEFPRODUCTION) + ($production * $refiningBonus / 100)) . '</span>';
-					} elseif ($ob_obFastView->getIsProductionRefinery() == 1) {
-						echo '<span class="bonus">+' . Format::numberFormat(($production * OBM_COEFPRODUCTION)) . '</span>';
-					} elseif ($refiningBonus > 0) {
+					if ($refiningBonus > 0) {
 						echo '<span class="bonus">+' . Format::numberFormat(($production * $refiningBonus / 100)) . '</span>';
 					}
 					echo ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color">';

@@ -136,19 +136,6 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 			}
 			ASM::$obm->changeSession($S_OBM2);
 			break;
-		case TutorialResource::REFINERY_MODE_PRODUCTION :
-			$S_OBM2 = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession();
-			ASM::$obm->load(array('rPlayer' => $playerId));
-			for ($i = 0; $i < ASM::$obm->size() ; $i++) { 
-				$ob = ASM::$obm->get($i);
-				if ($ob->isProductionRefinery == TRUE) {
-					$nextStepAlreadyDone = TRUE;
-					break;
-				}
-			}
-			ASM::$obm->changeSession($S_OBM2);
-			break;
 		case TutorialResource::DOCK1_LEVEL_1 :
 			$S_OBM2 = ASM::$obm->getCurrentSession();
 			ASM::$obm->newSession();

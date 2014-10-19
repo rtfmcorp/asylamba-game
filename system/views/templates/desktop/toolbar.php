@@ -98,11 +98,7 @@ echo '<div id="tools">';
 					$production = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(1, 'level', $currentBase->getLevelRefinery(), 'refiningCoefficient'), $currentBase->getPlanetResources());
 					echo Format::numberFormat($production);
 					$refiningBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::REFINERY_REFINING);
-					if ($currentBase->getIsProductionRefinery() == 1 && $refiningBonus > 0) {
-						echo '<span class="bonus">+' . Format::numberFormat(($production * OBM_COEFPRODUCTION) + ($production * $refiningBonus / 100)) . '</span>';
-					} elseif ($currentBase->getIsProductionRefinery() == 1) {
-						echo '<span class="bonus">+' . Format::numberFormat(($production * OBM_COEFPRODUCTION)) . '</span>';
-					} elseif ($refiningBonus > 0) {
+					if ($refiningBonus > 0) {
 						echo '<span class="bonus">+' . Format::numberFormat(($production * $refiningBonus / 100)) . '</span>';
 					}
 					echo ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color">';

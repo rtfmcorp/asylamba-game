@@ -39,7 +39,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `orbitalBase` (
   `cerbereStorage` smallint(5) unsigned DEFAULT '0',
   `phenixStorage` smallint(5) unsigned DEFAULT '0',
   `motherShip` tinyint(1) DEFAULT '0',
-  `isProductionRefinery` tinyint(1) DEFAULT '1',
   `resourcesStorage` bigint(20) unsigned DEFAULT '0',
   `uOrbitalBase` datetime DEFAULT NULL,
   `dCreation` datetime DEFAULT NULL,

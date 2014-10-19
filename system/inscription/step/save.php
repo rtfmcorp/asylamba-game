@@ -113,7 +113,6 @@ try {
 	$ob->setLevelTechnosphere(0);
 	$ob->setLevelCommercialPlateforme(0);
 	$ob->setLevelGravitationalModule(0);
-	$ob->isProductionRefinery = 0;
 	$ob->updatePoints();
 
 	# initialisation des investissement

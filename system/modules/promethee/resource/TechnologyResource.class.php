@@ -445,7 +445,7 @@ class TechnologyResource {
 			'credit' => 12500,
 			'points' => 39,
 			'column' => 4,
-			'shortDescription' => 'Augmente le stockage de votre Raffinerie de 2% par niveau.',
+			'shortDescription' => 'Augmente la taille de votre Stockage de ressources de 2% par niveau.',
 			'description' => 'Grâce à l’association de plusieurs domaines de recherche, une de vos équipes vous donne la possibilité d’augmenter vos capacités de stockage. Cette nouvelle amélioration développe une technique de compression de vos ressources augmentant la capacité de stockage de vos silos, sans devoir augmenter leur taille.',
 			'bonus' => 2
 		),
