@@ -71,7 +71,7 @@ class TechnologyResource {
 				// $arg2 est le nombre de technologies dans la queue
 				case 'queue' : 
 					$maxQueue = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::TECHNOSPHERE, 'level', $arg1->levelTechnosphere, 'nbQueues');
-					return ($arg1 < $maxQueue) ? TRUE : FALSE;
+					return ($arg2 < $maxQueue) ? TRUE : FALSE;
 					break;
 				// a-t-on le droit de construire ce niveau ?
 				// $arg1 est le niveau cible

@@ -104,7 +104,7 @@ for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
 				$ctn[1] = FALSE;
 				$sup .= '<em>développement terminé</em>';
 				$closed = 'closed';
-			} elseif (!TechnologyResource::haveRights($i, 'queue', $ob, ASM::$tqm->size())) {
+			} elseif (!TechnologyResource::haveRights($i, 'queue', $ob_tech, ASM::$tqm->size())) {
 				# queue size
 				$but .= '<span class="button disable">';
 					$but .= 'file de recherche pleine<br />';
