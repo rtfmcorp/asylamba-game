@@ -9,7 +9,10 @@ echo '<div class="component profil">';
 
 			echo '<div class="number-box half grey">';
 				echo '<span class="label">Richesse de la faction</span>';
-				echo '<span class="value">' . Format::number($faction->credits) . ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" /></span>';
+				echo '<span class="value">';
+					echo Format::number($faction->credits);
+					echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+				echo '</span>';
 			echo '</div>';
 
 			echo '<p>évolution des crédits (20 derniers jours)</p>';

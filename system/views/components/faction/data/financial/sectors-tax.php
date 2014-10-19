@@ -11,7 +11,7 @@ echo '<div class="component profil">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<h4>Taux courants</h4>';
+			echo '<h4>Impôts courants</h4>';
 
 			echo '<ul class="list-type-1">';
 				for ($i = 0; $i < ASM::$sem->size(); $i++) {

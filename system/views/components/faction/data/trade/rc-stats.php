@@ -71,7 +71,7 @@ echo '<div class="component profil">';
 						echo '<span class="label">Routes commerciales avec ' . ColorResource::getInfo($i, 'popularName') . '</span>';
 						echo '<span class="value">' . Format::number($aw3['nb']) . '</span>';
 						echo '<span class="progress-bar">';
-							echo '<span style="width:' . Format::percent($aw2['nb'], $aw1['nb']) . '%;" class="content"></span>';
+							echo '<span style="width:' . Format::percent($aw3['nb'], $aw1['nb']) . '%;" class="content"></span>';
 						echo '</span>';
 					echo '</div>';
 				}
