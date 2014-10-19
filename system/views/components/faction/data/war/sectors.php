@@ -18,7 +18,6 @@ $qr = $db->prepare('SELECT
 $qr->execute();
 $aw = $qr->fetchAll(); $qr->closeCursor();
 
-
 echo '<div class="component">';
 	echo '<div class="head skin-2">';
 		echo '<h2>Territoires</h2>';

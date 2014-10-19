@@ -132,10 +132,14 @@ echo '<div id="content">';
 			include COMPONENT . 'faction/data/war/incoming.php';
 			include COMPONENT . 'faction/data/war/levels.php';
 		} elseif (CTR::$get->get('mode') == 'law') {
-			include COMPONENT . 'faction/data/law/department6.php';
-			include COMPONENT . 'faction/data/law/department3.php';
-			include COMPONENT . 'faction/data/law/department4.php';
-			include COMPONENT . 'faction/data/law/department5.php';
+			$listlaw_status = 6;
+			include COMPONENT . 'faction/data/law/list.php';
+			$listlaw_status = 3;
+			include COMPONENT . 'faction/data/law/list.php';
+			$listlaw_status = 4;
+			include COMPONENT . 'faction/data/law/list.php';
+			$listlaw_status = 5;
+			include COMPONENT . 'faction/data/law/list.php';
 		}
 /*	} elseif (CTR::$get->get('view') == 'government') {
 		include_once ZEUS;

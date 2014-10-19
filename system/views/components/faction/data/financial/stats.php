@@ -8,7 +8,12 @@ ASM::$frm->loadByRequest(
 	array($faction->id)
 );
 
-$creditBase  = ASM::$frm->get(0)->general;
+$creditBase = 0;
+for ($i = 0; $i < ASM::$frm->size(); $i++) {
+	if ($creditBase < ASM::$frm->get($i)->general) {
+		$creditBase = ASM::$frm->get($i)->general;
+	}
+}
 $creditBase += $creditBase * 12 / 100;
 
 echo '<div class="component profil">';
