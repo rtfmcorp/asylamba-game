@@ -107,7 +107,7 @@ try {
 	} else {
 		$ob->setLevelRefinery(1);	
 	}
-	$ob->setLevelDock1(1);
+	$ob->setLevelDock1(0);
 	$ob->setLevelDock2(0);
 	$ob->setLevelDock3(0);
 	$ob->setLevelTechnosphere(0);
