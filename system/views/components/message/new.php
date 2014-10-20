@@ -19,7 +19,14 @@ echo '<div class="component topic size2">';
 					echo '<form action="' . APP_ROOT . 'action/a-writemessage" method="POST">';
 						echo '<input type="hidden" class="autocomplete-hidden" name="playerid" />';
 						echo '<input type="text" class="title autocomplete-player" name="name" placeholder="Destinataire" />';
-						echo '<textarea name="message" placeholder="Votre message"></textarea>';
+
+						echo '<div class="wysiwyg" data-id="new-message-wysiwyg">';
+							$parser = new Parser();
+							echo $parser->getToolbar();
+							
+							echo '<textarea name="message" id="new-message-wysiwyg" placeholder="Votre message"></textarea>';
+						echo '</div>';
+
 						echo '<button>Démarrer la conversation</button>';
 					echo '</form>';
 				echo '</div>';

@@ -17,8 +17,15 @@ echo '<div class="component topic size2">';
 				echo '<div class="content">';
 					echo '<form action="' . APP_ROOT . 'action/a-createtopicforum/rforum-' . CTR::$get->get('forum') . '" method="POST">';
 						echo '<input class="title" type="text" name="title" placeholder="sujet" />';
-						echo '<textarea name="content" placeholder="message"></textarea>';
-						echo '<button>créer le sujet</button>';
+
+						echo '<div class="wysiwyg" data-id="new-topic-wysiwyg">';
+							$parser = new Parser();
+							echo $parser->getToolbar();
+							
+							echo '<textarea name="content" id="new-topic-wysiwyg" placeholder="Votre message"></textarea>';
+						echo '</div>';
+						
+						echo '<button>Créer le sujet</button>';
 					echo '</form>';
 				echo '</div>';
 			echo '</div>';

@@ -19,7 +19,12 @@ echo '<div class="component topic size2">';
 					echo '<img src="' . MEDIA . 'avatar/medium/' . CTR::$data->get('playerInfo')->get('avatar') . '.png" alt="' . CTR::$data->get('playerInfo')->get('pseudo') . '" class="avatar" />';
 					echo '<div class="content">';
 						echo '<form action="' . APP_ROOT . 'action/a-writemessage/thread-' . ASM::$msm->get(0)->getThread() . '" method="POST">';
-							echo '<textarea name="message" placeholder="Votre message"></textarea>';
+							echo '<div class="wysiwyg" data-id="new-message-wysiwyg">';
+								$parser = new Parser();
+								echo $parser->getToolbar();
+								
+								echo '<textarea name="message" id="new-message-wysiwyg" placeholder="Votre message"></textarea>';
+							echo '</div>';
 							echo '<button>Répondre</button>';
 						echo '</form>';
 					echo '</div>';

@@ -14,6 +14,8 @@ if ($page !== FALSE) {
 		case 'refinery' : $page = 'bases/view-refinery'; break;
 		case 'dock1' : $page = 'bases/view-dock1'; break;
 		case 'technosphere' : $page = 'bases/view-technosphere'; break;
+		case 'commercialroute' : $page = 'bases/view-commercialplateforme/mode-route'; break;
+		case 'sell' : $page = 'bases/view-commercialplateforme/mode-sell'; break;
 	}
 	CTR::redirect($page);
 }

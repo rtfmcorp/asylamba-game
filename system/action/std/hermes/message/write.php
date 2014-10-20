@@ -41,10 +41,9 @@ if (($id OR $thread OR $name) AND $message !== '') {
 				}
 				$m->setThread($thread);
 				ASM::$msm->add($m);
-				CTR::$alert->add('message envoyé', ALERT_STD_SUCCESS);
 			} else {
-				CTR::$alert->add('création de message impossible', ALERT_STD_ERROR);
-				CTR::$alert->add('thread inexistant', ALERT_BUG_ERROR);
+				CTR::$alert->add('Création de message impossible', ALERT_STD_ERROR);
+				CTR::$alert->add('Unknow thread', ALERT_BUG_ERROR);
 			}
 		} else {
 			$cancel = FALSE;
@@ -57,11 +56,11 @@ if (($id OR $thread OR $name) AND $message !== '') {
 					$id = ASM::$pam->get()->getId();
 					if ($id == CTR::$data->get('playerId')) {
 						$cancel = TRUE;
-						CTR::$alert->add('vous ne pouvez pas envoyer un message à vous-même', ALERT_STD_ERROR);
+						CTR::$alert->add('Vous ne pouvez pas envoyer un message à vous-même', ALERT_STD_ERROR);
 					}
 				} else {
 					$cancel = TRUE;
-					CTR::$alert->add('création de message impossible - joueur inconnu', ALERT_STD_ERROR);
+					CTR::$alert->add('Création de message impossible, destinataire inconnu', ALERT_STD_ERROR);
 				}
 				ASM::$pam->changeSession($S_PAM1);
 			}
@@ -71,14 +70,14 @@ if (($id OR $thread OR $name) AND $message !== '') {
 					$m->setThread(ASM::$msm->get()->getThread());
 					$m->setRPlayerReader($id);
 					ASM::$msm->add($m);
-					CTR::$alert->add('message envoyé', ALERT_STD_SUCCESS);
+					CTR::$alert->add('Message envoyé', ALERT_STD_SUCCESS);
 				} else {
 					ASM::$msm->load(array('rPlayerWriter' => $id, 'rPlayerReader' => CTR::$data->get('playerId')));
 					if (ASM::$msm->get()) {
 						$m->setThread(ASM::$msm->get()->getThread());
 						$m->setRPlayerReader($id);
 						ASM::$msm->add($m);
-						CTR::$alert->add('message envoyé', ALERT_STD_SUCCESS);
+						CTR::$alert->add('Message envoyé', ALERT_STD_SUCCESS);
 					} else {
 						//création d'n nouveau thread
 						$db = DataBase::getInstance();
@@ -88,10 +87,11 @@ if (($id OR $thread OR $name) AND $message !== '') {
 							$m->setThread($aw['maxThread'] + 1);
 							$m->setRPlayerReader($id);
 							ASM::$msm->add($m);
-							CTR::$alert->add('message envoyé', ALERT_STD_SUCCESS);
+
+							CTR::redirect('message/thread-' . $m->getThread());
 						} else {
-							CTR::$alert->add('création de message impossible', ALERT_STD_ERROR);
-							CTR::$alert->add('problème avec MAX(thread)', ALERT_BUG_ERROR);
+							CTR::$alert->add('Création de message impossible', ALERT_STD_ERROR);
+							CTR::$alert->add('MAX(thread) error', ALERT_BUG_ERROR);
 						}
 					}
 				}
@@ -99,9 +99,9 @@ if (($id OR $thread OR $name) AND $message !== '') {
 		}
 		ASM::$msm->changeSession($S_MSM1);
 	} else {
-		CTR::$alert->add('le message est trop long pour être envoyé', ALERT_STD_FILLFORM);
+		CTR::$alert->add('Le message est trop long pour être envoyé', ALERT_STD_FILLFORM);
 	}
 } else {
-	CTR::$alert->add('pas assez d\'informations pour écrire un message', ALERT_STD_FILLFORM);
+	CTR::$alert->add('Pas assez d\'informations pour écrire un message', ALERT_STD_FILLFORM);
 }
 ?>

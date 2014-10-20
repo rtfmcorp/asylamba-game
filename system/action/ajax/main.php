@@ -26,6 +26,10 @@ switch (CTR::$get->get('a')) {
 	case 'morethread': 				include PAGES . 'ajax/message/moreThread.php'; break;
 	case 'morerank': 				include PAGES . 'ajax/morerank.php'; break;
 
+	# XHR RETURN WYSIWYG
+	case 'wswpy':					include PAGES . 'ajax/wsw/player.php'; break;
+	case 'wswpl':					include PAGES . 'ajax/wsw/place.php'; break;
+
 	default:
 		CTR::$alert->add('action inconnue ou non-référencée', ALERT_STD_ERROR);
 		break;

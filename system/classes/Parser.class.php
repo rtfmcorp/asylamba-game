@@ -32,6 +32,26 @@ class Parser {
 		return $string;
 	}
 
+	public function getToolbar() {
+		$tl  = '<div class="toolbar">';
+			if ($this->parseTag) {
+				$tl .= '<button data-tag="bl">Gras</button>';
+				$tl .= '<button data-tag="it">Italique</button>';
+			}
+			if ($this->parseIcon) {
+		#		$tl .= '<button data-tag="ic">Icône</button>';
+			}
+			if ($this->parsePlayer) {
+				$tl .= '<button data-tag="py">Joueur</button>';
+			}
+			if ($this->parsePlace) {
+				$tl .= '<button data-tag="pl">Planète</button>';
+			}
+		$tl .= '</div>';
+
+		return $tl;
+	}
+
 	protected function parseIcon($string) {
 		$string = preg_replace('#\[pa\]#', '<img src="' . MEDIA . 'resources/pa.png" alt="pa" class="hb lt icon-color" title="point d\'action" />', $string);
 		$string = preg_replace('#\[pev\]#', '<img src="' . MEDIA . 'resources/pev.png" alt="pev" class="hb lt icon-color" title="point équivalent vaisseaux" />', $string);
@@ -64,14 +84,17 @@ class Parser {
 			function($m) {
 				include_once ZEUS;
 				$S_PAM1 = ASM::$pam->getCurrentSession();
-				ASM::$pam->newSession();
+				ASM::$pam->newSession(FALSE);
+
 				ASM::$pam->load(array('name' => $m[1]));
+
 				if (ASM::$pam->size() > 0) {
 					$player = ASM::$pam->get();
 					return '<a href="' . APP_ROOT . 'diary/player-' . $player->getId() . '" class="color' . $player->getRColor() . ' hb lt" title="voir le profil">' . $player->getName() . '</a>';
 				} else {
 					return $m[0];
 				}
+
 				ASM::$pam->changeSession($S_PAM1);
 			}, 
 			$string);
@@ -85,8 +108,10 @@ class Parser {
 			function($m) {
 				include_once GAIA;
 				$S_PLM1 = ASM::$plm->getCurrentSession();
-				ASM::$plm->newSession();
+				ASM::$plm->newSession(FALSE);
+
 				ASM::$plm->load(array('id' => $m[1]));
+
 				if (ASM::$plm->size() > 0) {
 					$place = ASM::$plm->get();
 					if ($place->getTypeOfBase() > 0) {
@@ -97,6 +122,7 @@ class Parser {
 				} else {
 					return $m[0];
 				}
+
 				ASM::$plm->changeSession($S_PLM1);
 			}, 
 			$string);
