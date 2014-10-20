@@ -39,7 +39,7 @@ echo '<div class="component profil">';
 				for ($i = 0; $i < ASM::$frm->size(); $i++) {
 					echo '<span class="progress-bar">';
 						echo '<span style="width:' . Format::percent(ASM::$frm->get($i)->general, $creditBase) . '%;" class="content">';
-							echo Format::number(ASM::$frm->get($i)->general);
+							echo Format::number(ASM::$frm->get($i)->general, -2);
 						echo '</span>';
 					echo '</span>';
 				}
