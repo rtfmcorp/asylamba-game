@@ -25,7 +25,8 @@ Class LawResources {
 			'bonus' => 0,
 			'shortDescription' => 'Cette loi modifie le taux d\'imposition appliquée au planètes d\'un secteur en votre possession. La redevance perçue provient autant des bases de votre faction que celles de factions ennemies. (entre 2 et 15)',
 			'longDescription' => '',
-			'image' => ''),
+			'image' => '',
+			'isImplemented' => TRUE),
 		array(
 			'id' => 2,
 			'bonusLaw' => FALSE,
@@ -37,7 +38,8 @@ Class LawResources {
 			'bonus' => 0,
 			'shortDescription' => 'Afin de montrer à tous la puissance de votre faction et d\'asseoire la conquête d\'un nouveau territoire, ce décret permet de modifier le nom d\'un secteur.',
 			'longDescription' => '',
-			'image' => ''),
+			'image' => '',
+			'isImplemented' => TRUE),
 		array(
 			'id' => 3,
 			'bonusLaw' => FALSE,
@@ -49,7 +51,8 @@ Class LawResources {
 			'bonus' => 0,
 			'shortDescription' => 'modifier le taux de taxes commerciale d\'importation avec une autre faction entre 2 et 15 (peut-être plus basse pour les taxes internes)',
 			'longDescription' => '',
-			'image' => ''),
+			'image' => '',
+			'isImplemented' => TRUE),
 		array(
 			'id' => 4,
 			'bonusLaw' => FALSE,
@@ -61,7 +64,8 @@ Class LawResources {
 			'bonus' => 0,
 			'shortDescription' => 'modifier le taux de taxes commerciale d\'exportation avec une autre faction entre 2 et 15 (peut-être plus basse pour les taxes internes)',
 			'longDescription' => '',
-			'image' => ''),
+			'image' => '',
+			'isImplemented' => TRUE),
 		array(
 			'id' => 5,
 			'bonusLaw' => TRUE,
@@ -73,7 +77,8 @@ Class LawResources {
 			'bonus' => 10,
 			'shortDescription' => 'diminue le cout des vaisseaux de 10% pendant 1 semaine',
 			'longDescription' => '',
-			'image' => ''),
+			'image' => '',
+			'isImplemented' => FALSE),
 		array(
 			'id' => 6,
 			'bonusLaw' => TRUE,
@@ -85,12 +90,91 @@ Class LawResources {
 			'bonus' => 10,
 			'shortDescription' => 'augmente la vitesse de développement d\'une technology de 10% pendant 1 semaine)',
 			'longDescription' => '',
-			'image' => ''),
+			'image' => '',
+			'isImplemented' => TRUE),
+		array(
+			'id' => 7,
+			'bonusLaw' => TRUE,
+			'devName' => 'comiercial accord',
+			'name' => 'Accords commerciaux',
+			'department' => 3,
+			'price' => 1000,
+			'duration' => 604800, //une semaine entière
+			'bonus' => 10,
+			'shortDescription' => 'augmente la production des routes comerciales avec une autre faction',
+			'longDescription' => '',
+			'image' => '',
+			'isImplemented' => FALSE),
+		array(
+			'id' => 7,
+			'bonusLaw' => TRUE,
+			'devName' => 'placement',
+			'name' => 'placement financier',
+			'department' => 3,
+			'price' => 1000,
+			'duration' => 604800, //une semaine entière
+			'bonus' => 10,
+			'shortDescription' => 'Investir de l\'argent de la faction.',
+			'longDescription' => '',
+			'image' => '',
+			'isImplemented' => FALSE),
+		array(
+			'id' => 8,
+			'bonusLaw' => TRUE,
+			'devName' => 'startege',
+			'name' => 'Stratège',
+			'department' => 4,
+			'price' => 1000,
+			'duration' => 604800, //une semaine entière
+			'bonus' => 10,
+			'shortDescription' => 'augmente la défense des gros vaisseaux.',
+			'longDescription' => '',
+			'image' => '',
+			'isImplemented' => FALSE),
+		array(
+			'id' => 9,
+			'bonusLaw' => TRUE,
+			'devName' => 'navigation',
+			'name' => 'Navigation',
+			'department' => 4,
+			'price' => 1000,
+			'duration' => 604800, //une semaine entière
+			'bonus' => 10,
+			'shortDescription' => 'Augmente la vitesse des petits vaisseaux',
+			'longDescription' => '',
+			'image' => '',
+			'isImplemented' => FALSE),
+		array(
+			'id' => 10,
+			'bonusLaw' => TRUE,
+			'devName' => 'education',
+			'name' => 'Décret sur l\'éducation',
+			'department' => 5,
+			'price' => 1000,
+			'duration' => 604800, //une semaine entière
+			'bonus' => 10,
+			'shortDescription' => 'augmente l\'expérience gagnée par les officiers dans l\'école',
+			'longDescription' => '',
+			'image' => '',
+			'isImplemented' => FALSE),
+		array(
+			'id' => 10,
+			'bonusLaw' => TRUE,
+			'devName' => 'Subventions',
+			'name' => 'Subventions universitaires.',
+			'department' => 5,
+			'price' => 1000,
+			'duration' => 604800, //une semaine entière
+			'bonus' => 10,
+			'shortDescription' => 'Augmente l\'investissement des joueurs dans l\'université',
+			'longDescription' => '',
+			'image' => '',
+			'isImplemented' => FALSE),
 	);
 
 	public static function getInfo($id, $info) {
 		if ($id <= self::size()) {
-			if (in_array($info, array('id', 'bonusLaw', 'devName', 'name', 'department', 'price', 'duration', 'bonus', 'shortDescription', 'longDescription', 'image'))) {
+			if (in_array($info, array('id', 'bonusLaw', 'devName', 'name', 'department', 'price', 'duration', 'bonus', 'shortDescription', 'longDescription', 'image', 'isImplemented'))) {
 				return self::$laws[$id - 1][$info];
 			} else {
 				return FALSE;
