@@ -61,3 +61,21 @@
 		}
 	}
 }
+
+.centred-link {
+	display: block;
+	width: 300px;
+	text-align: center;
+	margin: 0 auto;
+	text-decoration: none;
+	padding: 6px 10px;
+	color: #EFEFEF;
+	background: @medium;
+	border: solid 1px @dark;
+
+	&:hover, &:focus {
+		background: @dark;
+		border-color: @medium;
+		color: white;
+	}
+}

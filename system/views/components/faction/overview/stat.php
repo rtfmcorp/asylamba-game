@@ -79,6 +79,12 @@ echo '<div class="component size2 player">';
 				echo '</div>';
 			echo '</div>';
 
+			if ($faction->electionStatement == Color::CAMPAIGN) {
+				echo '<a class="centred-link" href="' . APP_ROOT . 'faction/view-election">Présentez vous aux élections</a>';
+			} elseif ($faction->electionStatement == Color::ELECTION) {
+				echo '<a class="centred-link" href="' . APP_ROOT . 'faction/view-election">Votez dès maintenant pour votre candidat favoris</a>';
+			}
+
 			echo '<h4>Gouvernement actuel</h4>';
 
 			for ($i = 0; $i < ASM::$pam->size(); $i++) { 

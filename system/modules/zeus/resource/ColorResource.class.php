@@ -64,7 +64,7 @@ class ColorResource {
 			'bonus' => array(array('path' => 'faction/bonus/bonus1-1.png', 'title' => 'Générateur niv. 5', 'desc' => 'Vous débutez avec un générateur de bon niveau'),
 							array('path' => 'faction/bonus/bonus1-2.png', 'title' => '+ 5% de défense', 'desc' => 'Vos vaisseaux gagnent en défense'),
 							array('path' => 'faction/bonus/bonus1-3.png', 'title' => '- 2% prix', 'desc' => 'Les croiseurs et croiseurs-lourds sont moins chers')),
-			'mandateDuration' => 604800,
+			'mandateDuration' => 484800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Akhénien gagne du prestige en construisant des bâtiments et des vaisseaux du chantier de ligne, mais également en conquérant les bases orbitales d\'autres joueurs. Il en perd par contre lorsqu\'il détruit un de ses bâtiments ou qu\'il perd une planète.',
 			'campaignDesc' => 'explicatif d\'une campagne'),
 		array(
@@ -83,7 +83,7 @@ class ColorResource {
 			'bonus' => array(array('path' => 'faction/bonus/bonus2-1.png', 'title' => '3 Méduses', 'desc' => 'Vous débutez avec des vaisseaux'),
 							array('path' => 'faction/bonus/bonus2-2.png', 'title' => '+ 10% de vitesse', 'desc' => 'Vos vaisseaux gagnent en vitesse'),
 							array('path' => 'faction/bonus/bonus2-3.png', 'title' => '- 2% de défense', 'desc' => 'Vos vaisseaux perdent en défense')),
-			'mandateDuration' => 604800,
+			'mandateDuration' => 484800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Kovahkarh gagne du prestige en construisant des vaisseaux, en gagnant des combats et en créant des bases militaires. Il en perd lorsqu\'il se fait tuer au combat ou qu\'il perd une de ces bases militaires.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
 				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de Kovahk peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Baron de Kovahk. 
@@ -104,7 +104,7 @@ class ColorResource {
 			'bonus' => array(array('path' => 'faction/bonus/bonus3-1.png', 'title' => '+ 12 500 crédits', 'desc' => 'Vous débutez avec plus de crédits'),
 							array('path' => 'faction/bonus/bonus3-2.png', 'title' => '+ 5% production', 'desc' => 'Vos routes commerciales produisent plus de crédits'),
 							array('path' => 'faction/bonus/bonus3-3.png', 'title' => '- 3% prix', 'desc' => 'Vos routes commerciales coûtent moins de crédits')),
-			'mandateDuration' => 604800,
+			'mandateDuration' => 484800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Négien gagne du prestige en créant des routes commerciales et en faisant des ventes/achats intéressants sur le marché. Par contre il en perd lorsqu\'une de ses routes commerciales est détruite ou qu\'il fait une vente ou un achat pas rentable.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
 				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de Négore peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Viziduc de Négore. 
@@ -126,7 +126,7 @@ class ColorResource {
 							array('path' => 'faction/bonus/bonus4-2.png', 'title' => '+ 3% de crédits', 'desc' => 'Vos impôts vous amènent plus de crédits'),
 							array('path' => 'faction/bonus/bonus4-3.png', 'title' => '- 10% prix', 'desc' => 'Vos colonisations et conquêtes sont moins chères'),
 							array('path' => 'faction/bonus/bonus4-4.png', 'title' => '- 5% de ressources', 'desc' => 'Un parties des ressources pillées sont offertes aux Dieux')),
-			'mandateDuration' => 604800,
+			'mandateDuration' => 484800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un membre de Cardan gagne du prestige en colonisant/conquérant une planète se situant en-dehors des territoires de Cardan et en faisant un don à sa faction. Il en perd par contre lorsqu\'il perd une planète.',
 			'campaignDesc' => 'explicatif d\'une campagne'),
 		array(
@@ -145,7 +145,7 @@ class ColorResource {
 			'bonus' => array(array('path' => 'faction/bonus/bonus5-1.png', 'title' => 'Raffinerie niveau 5', 'desc' => 'Vous débutez avec une Raffinerie de bon niveau'),
 							array('path' => 'faction/bonus/bonus5-2.png', 'title' => '+ 4% production', 'desc' => 'Votre Raffinerie produit plus de ressources'),
 							array('path' => 'faction/bonus/bonus5-3.png', 'title' => '+ 4% stockage', 'desc' => 'Votre Raffinerie stocke plus de ressources')),
-			'mandateDuration' => 604800,
+			'mandateDuration' => 484800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Nervéen gagne du prestige en créant des Centres Industriels, en construisant la raffinerie et les chantiers de construction de vaisseaux et en prenant des planètes (proportionnel au coefficient ressource de la planète). Il en perd en détruisant un Centre Industriel, en détruisant la raffinerie et les chantiers et en perdant le contrôle d\'une planète.',
 			'campaignDesc' => 'explicatif d\'une campagne'),
 		array(
@@ -164,7 +164,7 @@ class ColorResource {
 			'bonus' => array(array('path' => 'faction/bonus/bonus6-1.png', 'title' => '3 recherches niv. 2', 'desc' => 'Vous débutez avec trois recherches déjà trouvées'),
 							array('path' => 'faction/bonus/bonus6-2.png', 'title' => '+ 4% efficacité', 'desc' => 'Votre Université est plus efficace'),
 							array('path' => 'faction/bonus/bonus6-3.png', 'title' => '- 4% temps', 'desc' => 'Vos technologies se développent plus rapidement')),
-			'mandateDuration' => 604800,
+			'mandateDuration' => 484800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Aphéran gagne du prestige en menant à terme une Recherche, en développant une Technologie et en réusissant un espionnage.',
 			'campaignDesc' => 'explicatif d\'une campagne'),
 		array(
@@ -183,7 +183,7 @@ class ColorResource {
 			'bonus' => array(array('path' => 'faction/bonus/bonus7-1.png', 'title' => 'Commandant niv. 7', 'desc' => 'Vous débutez avec un commandant expérimenté'),
 							array('path' => 'faction/bonus/bonus7-2.png', 'title' => '+ 6% efficacité', 'desc' => 'Votre Ecole de Commandement est plus efficace'),
 							array('path' => 'faction/bonus/bonus7-3.png', 'title' => '+ 2% efficacité', 'desc' => 'Votre Université est plus efficace')),
-			'mandateDuration' => 604800,
+			'mandateDuration' => 484800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un membre de Synelle gagne du prestige en étant victorieux lors de la défense d\'une de ses planètes',
 			'campaignDesc' => 'explicatif d\'une campagne')
 	);
