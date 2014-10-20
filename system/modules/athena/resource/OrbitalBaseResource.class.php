@@ -325,7 +325,7 @@ class OrbitalBaseResource {
 				array(81200,	370000,	83,	314)
 			),
 			'maxLevel' => array(30, 40, 30, 40),
-			'description' => 'La <strong>Raffinerie</strong> est le bâtiment où l’on traite vos ressources pour en extraire les fractions utilisables. Chaque relève les ressources sont transférées dans le Stockage et sont utilisables. La capacité d’extraction de votre raffinerie dépend du niveau dans lequel elle se situe.<br /><br />Aucune action directe ne peut être effectuée dans la raffinerie, cependant vous pouvez y voir toutes les informations concernant votre production actuelle et pour tous les niveaux suivants.'
+			'description' => 'La <strong>Raffinerie</strong> est le bâtiment où l’on traite vos ressources pour en extraire les fractions utilisables. Chaque relève les ressources sont transférées dans le Stockage et sont utilisables. La capacité d’extraction de votre raffinerie dépend du niveau dans lequel elle se situe.<br /><br />Aucune action directe ne peut être effectuée dans la raffinerie, cependant vous pouvez y voir toutes les informations concernant votre production actuelle et pour les niveaux suivants.'
 		),
 		array(
 			'name' => 'dock1',

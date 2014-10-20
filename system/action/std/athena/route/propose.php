@@ -96,7 +96,7 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 				$n->addLnk('map/place-' . $proposerBase->getRPlace(), $proposerBase->getName())->addTxt(' et ');
 				$n->addLnk('map/base-' . $otherBase->getRPlace(), $otherBase->getName())->addTxt('.');
 				$n->addSep()->addTxt('Les frais de l\'opération vous coûteraient ' . Format::numberFormat($priceWithBonus) . ' crédits; Les gains estimés pour cette route sont de ' . Format::numberFormat($income) . ' crédits par relève.');
-				$n->addSep()->addLnk('bases/base-' . $otherBase->getRPlace() . '/view-commercialplateforme/mode-route', 'En savoir plus ?');
+				$n->addSep()->addLnk('bases/base-' . $otherBase->getRPlace() . '/view-spatioport', 'En savoir plus ?');
 				$n->addEnd();
 				ASM::$ntm->add($n);
 
