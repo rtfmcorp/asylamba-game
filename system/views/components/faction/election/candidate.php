@@ -29,35 +29,28 @@ echo '<div class="component player profil size1">';
 						echo '</a>';
 					}
 				echo '</div>';
-			} else {
-				echo '<div class="center-box">';
-					echo '<span class="label">Se présente</span>';
-				echo '</div>';
 			}
 
-			echo '<div class="player">';
-				echo '<a href="' . APP_ROOT . 'diary/player-' . $candidat->rPlayer . '">';
-					echo '<img src="' . MEDIA . 'avatar/small/' . $candidat->avatar . '.png" alt="' . $candidat->name . '" />';
-				echo '</a>';
-				echo '<span class="title">' . $status[$candidat->status - 1] . '</span>';
-				echo '<strong class="name"> ' . $candidat->name . '</strong>';
-				echo '<span class="experience">' . Format::number($candidat->factionPoint) . ' de prestige</span>';
-			echo '</div>';
-
 			echo '<div class="center-box">';
-				echo '<span class="label">Par son programme politique</span>';
+				echo '<span class="label">';
+					echo $status[$candidat->status - 1];
+				echo '</span>';
+				echo '<span class="value">' . $candidat->name . '</span>';
 			echo '</div>';
 
-			echo '<p class="info">' . $parser->parse($candidat->program) .'</p>';
+			echo '<div class="profil-flag">';
+				echo '<img src="' . MEDIA . 'avatar/big/' . $candidat->avatar . '.png" alt="' . $candidat->name . '">';
+			echo '</div>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
 
-echo '<div class="component size2">';
+echo '<div class="component">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<p>File de discussion pour la campagne</p>';
+			echo '<h4>Son programme</h4>';
+			echo '<p>' . $parser->parse($candidat->program) .'</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

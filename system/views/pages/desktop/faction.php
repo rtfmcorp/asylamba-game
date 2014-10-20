@@ -119,7 +119,6 @@ echo '<div id="content">';
 
 		if (!CTR::$get->exist('mode') OR CTR::$get->get('mode') == 'financial') {
 			include COMPONENT . 'faction/data/financial/stats.php';
-		#	include COMPONENT . 'faction/data/financial/graph.php';
 			include COMPONENT . 'faction/data/financial/sectors-tax.php';
 			include COMPONENT . 'faction/data/financial/donations.php';
 		} elseif (CTR::$get->get('mode') == 'trade') {
@@ -160,10 +159,39 @@ echo '<div id="content">';
 
 				if (CTR::$get->equal('candidate', 'create')) {
 					include COMPONENT . 'faction/election/postulate.php';
-				} elseif (CTR::$get->exist('candidate') AND ASM::$cam->getById(CTR::$get->get('candidate'))) {
-					$candidate = ASM::$cam->getById(CTR::$get->get('candidate'));
+				} elseif (CTR::$get->exist('candidate') AND ASM::$cam->getById(CTR::$get->get('candidate')) !== FALSE) {
+					$candidat = ASM::$cam->getById(CTR::$get->get('candidate'));
 
 					include COMPONENT . 'faction/election/candidate.php';
+
+					ASM::$tom->load(
+						array(
+							'rForum' => 30, 
+							'rPlayer' => $candidat->rPlayer
+						),
+						array('id', 'DESC'),
+						array(0, 1),
+						CTR::$data->get('playerId')
+					);
+
+					if (ASM::$tom->size() == 1) {
+						# topic component
+						$topic_topic = ASM::$tom->get(0);
+						$topic_topic->updateLastView(CTR::$data->get('playerId'));
+
+						$S_FMM1 = ASM::$fmm->getCurrentSession();
+						ASM::$fmm->newSession();
+						ASM::$fmm->load(array('rTopic' => $topic_topic->id), array('dCreation', 'DESC', 'id', 'DESC'));
+
+						$message_topic = array();
+						for ($i = 0; $i < ASM::$fmm->size(); $i++) { 
+							$message_topic[$i] = ASM::$fmm->get($i);
+						}
+
+						include COMPONENT . 'faction/forum/topic.php';
+
+						ASM::$fmm->changeSession($S_FMM1);
+					}
 				} else {
 					include COMPONENT . 'default.php';
 				}

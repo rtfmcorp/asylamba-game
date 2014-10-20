@@ -18,7 +18,7 @@ echo '<div class="component profil">';
 					echo '<div class="build-item base-type ' . (!LawResources::getInfo($i, 'isImplemented') ? 'disabled' : NULL) .'">';
 						echo '<div class="name">';
 							echo '<img src="' . MEDIA . 'faction/law/common.png" alt="">';
-							echo '<strong>' . LawResources::getInfo($i, 'name') . '</strong>';
+							echo '<strong>' . LawResources::getInfo($i, 'name') . (!LawResources::getInfo($i, 'isImplemented') ? ' <span class="hb" title="cette loi n\'est pas encore fonctionnelle">[?]</span>' : NULL) . '</strong>';
 						echo '</div>';
 
 						echo '<p class="desc">' . LawResources::getInfo($i, 'shortDescription') . '</p>';
