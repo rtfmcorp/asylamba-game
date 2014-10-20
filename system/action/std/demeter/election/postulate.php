@@ -52,6 +52,15 @@ if ($rElection !== FALSE && $program !== FALSE) {
 							$candidate->program = $program; 
 							ASM::$cam->add($candidate);
 
+							$topic = new ForumTopic();
+							$topic->title = 'Candidat ' . CTR::$data->get('playerInfo')->get('name');
+							$topic->rForum = 30;
+							$topic->rPlayer = $candidate->rPlayer;
+							$topic->rColor = CTR::$data->get('playerInfo')->get('color');
+							$topic->dCreation = Utils::now();
+							$topic->dLastMessage = Utils::now();
+							ASM::$tom->add($topic);
+
 							CTR::$alert->add('Candidature déposée.', ALERT_STD_SUCCESS);
 						} else {
 							ASM::$cam->deleteById(ASM::$cam->get()->getId());

@@ -58,6 +58,13 @@ Class ForumResources {
 			'shortDescription' => 'Seuls les chefs de chaque faction on accès à l\'ambassade',
 			'longDescription' =>'',
 			'image' => ''),
+		array(
+			'id' => 30,
+			'devName' => 'campaign',
+			'name' => 'campaign',
+			'shortDescription' => '',
+			'longDescription' =>'',
+			'image' => '')
 	);
 
 	public static function getInfo($id, $info) {
