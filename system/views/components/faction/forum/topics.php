@@ -7,13 +7,18 @@
 # require
 	# int 			forum_topics
 	# [{topic}] 	topic_topics
+	# bool 		 	isStandard_topics
 
 echo '<div class="component report topic">';
-	echo '<div class="head skin-4">';
-		echo '<img class="main" alt="ressource" src="' . MEDIA . 'orbitalbase/situation.png">';
-		echo '<h2>' . ForumResources::getInfoForId($forum_topics, 'name') . '</h2>';
-		echo '<em>' . ForumResources::getInfoForId($forum_topics, 'shortDescription') . '</em>';
-	echo '</div>';
+	if ($isStandard_topics) {
+		echo '<div class="head skin-4">';
+			echo '<img class="main" alt="ressource" src="' . MEDIA . 'orbitalbase/situation.png">';
+			echo '<h2>' . ForumResources::getInfoForId($forum_topics, 'name') . '</h2>';
+			echo '<em>' . ForumResources::getInfoForId($forum_topics, 'shortDescription') . '</em>';
+		echo '</div>';
+	} else {
+		echo '<div class="head"></div>';
+	}
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="tool">';
@@ -32,11 +37,6 @@ echo '<div class="component report topic">';
 						} else {
 							$isNew = '';
 						}
-
-						/*echo '<a href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '/topic-' . $t->id . '/sftr-2" class="topic ' . $isNew . '">';
-							echo '<strong>' . $t->title . '</strong>';
-							echo '<span class="button hb lt" title="message">' . $t->nbMessage . '</span>';
-						echo '</a>';*/
 
 						echo '<div class="item ' . $isNew . '">';
 							echo '<div class="left">';

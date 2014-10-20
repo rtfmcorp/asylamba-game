@@ -40,6 +40,51 @@ echo '<div id="content">';
 
 		ASM::$pam->changeSession($S_PAM_1);
 	} elseif (CTR::$get->get('view') == 'forum') {
+		if (!CTR::$get->exist('forum')) {
+			# page d'accueil des forums
+			# charge les x premiers sujets de chaque forum
+
+			$S_TOM1 = ASM::$tom->getCurrentSession();
+
+			for ($i = 1; $i <= ForumResources::size(); $i++) { 
+				ASM::$tom->newSession();
+				ASM::$tom->load(
+					array(
+						'rForum' => ForumResources::getInfo($i, 'id'), 
+						'rColor' => CTR::$data->get('playerInfo')->get('color'), 
+						'statement' => array(ForumTopic::PUBLISHED, ForumTopic::RESOLVED)
+					),
+					array('dLastMessage', 'DESC'),
+					array(0, 10),
+					CTR::$data->get('playerId')
+				);
+
+				$topic_topics = array();
+				for ($j = 0; $j < ASM::$tom->size(); $j++) { 
+					$topic_topics[$j] = ASM::$tom->get($j);
+				}
+				$forum_topics = ForumResources::getInfo($i, 'id');
+				$isStandard_topics = FALSE;
+				if (ForumResources::getInfo($i, 'id') < 10) {
+					include COMPONENT . 'faction/forum/topics.php';
+				}
+			}
+
+			ASM::$tom->changeSession($S_TOM1);
+		} else {
+
+
+
+
+
+
+
+
+
+
+
+
+
 		# forum component
 		include COMPONENT . 'faction/forum/forum.php';
 
@@ -77,6 +122,7 @@ echo '<div id="content">';
 		for ($i = 0; $i < ASM::$tom->size(); $i++) { 
 			$topic_topics[$i] = ASM::$tom->get($i);
 		}
+		$isStandard_topics = TRUE;
 		$forum_topics = $forumId;
 
 		if ($forumId < 10) {
@@ -114,6 +160,7 @@ echo '<div id="content">';
 		}
 
 		ASM::$tom->changeSession($S_TOM1);
+	}
 	} elseif (CTR::$get->get('view') == 'data') {
 		include COMPONENT . 'faction/data/nav.php';
 
@@ -175,7 +222,6 @@ echo '<div id="content">';
 					);
 
 					if (ASM::$tom->size() == 1) {
-						# topic component
 						$topic_topic = ASM::$tom->get(0);
 						$topic_topic->updateLastView(CTR::$data->get('playerId'));
 
@@ -228,6 +274,42 @@ echo '<div id="content">';
 			$rElection = ASM::$elm->get(0)->id;
 			include COMPONENT . 'faction/election/list.php';
 
+			if (CTR::$get->exist('candidate') AND ASM::$cam->getById(CTR::$get->get('candidate')) !== FALSE) {
+				$candidat = ASM::$cam->getById(CTR::$get->get('candidate'));
+
+				include COMPONENT . 'faction/election/candidate.php';
+
+				ASM::$tom->load(
+					array(
+						'rForum' => 30, 
+						'rPlayer' => $candidat->rPlayer
+					),
+					array('id', 'DESC'),
+					array(0, 1),
+					CTR::$data->get('playerId')
+				);
+
+				if (ASM::$tom->size() == 1) {
+					$topic_topic = ASM::$tom->get(0);
+					$topic_topic->updateLastView(CTR::$data->get('playerId'));
+
+					$S_FMM1 = ASM::$fmm->getCurrentSession();
+					ASM::$fmm->newSession();
+					ASM::$fmm->load(array('rTopic' => $topic_topic->id), array('dCreation', 'DESC', 'id', 'DESC'));
+
+					$message_topic = array();
+					for ($i = 0; $i < ASM::$fmm->size(); $i++) { 
+						$message_topic[$i] = ASM::$fmm->get($i);
+					}
+
+					include COMPONENT . 'faction/forum/topic.php';
+
+					ASM::$fmm->changeSession($S_FMM1);
+				}
+			} else {
+				include COMPONENT . 'default.php';
+			}
+
 			ASM::$cam->changeSession($S_CAM_1);
 			ASM::$elm->changeSession($S_ELM_1);
 			ASM::$vom->changeSession($S_VOM_1);
@@ -237,7 +319,10 @@ echo '<div id="content">';
 		include_once ZEUS;
 		$S_PAM1 = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession(FALSE);
-		ASM::$pam->load(array('rColor' => CTR::$data->get('playerInfo')->get('color')), array('factionPoint', 'DESC'));
+		ASM::$pam->load(
+			array('rColor' => CTR::$data->get('playerInfo')->get('color')), 
+			array('status', 'DESC', 'factionPoint', 'DESC')
+		);
 
 		# statPlayer component
 		$nbPlayer_statPlayer = ASM::$clm->getById(CTR::$data->get('playerInfo')->get('color'))->activePlayers;

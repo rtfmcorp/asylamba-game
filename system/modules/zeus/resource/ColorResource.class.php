@@ -10,10 +10,10 @@ class ColorResource {
 	const SYNELLE = 7;
 
 	# constants for the actions bonuses of the factions
-	const BONUS_EMPIRE_CRUISER = 5; # price 5% less for cruiser and heavy cruiser
-	const BONUS_NEGORA_ROUTE = 3; # price 3% less for the price of a commercial route
-	const BONUS_CARDAN_COLO = 10; # price 10% less for colo or conquest
-	const BONUS_APHERA_TECHNO = 4; # 4% less time to build technologies
+	const BONUS_EMPIRE_CRUISER = 5;		# price 5% less for cruiser and heavy cruiser
+	const BONUS_NEGORA_ROUTE = 3;		# price 3% less for the price of a commercial route
+	const BONUS_CARDAN_COLO = 10;		# price 10% less for colo or conquest
+	const BONUS_APHERA_TECHNO = 4;		# 4% less time to build technologies
 
 	public static function getInfo($id, $info) {
 		if ($id <= count(self::$colors)) {

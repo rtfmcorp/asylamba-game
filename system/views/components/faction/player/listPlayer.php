@@ -7,14 +7,22 @@
 # require
 	# [{player}]	players_listPlayer
 
+$status = ColorResource::getInfo($faction->id, 'status');
+
 echo '<div class="component player size3">';
-	echo '<div class="head skin-2">';
-		echo '<h2>Joueurs</h2>';
-	echo '</div>';
+	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			foreach ($players_listPlayer as $p) {
-				$status = ColorResource::getInfo($p->getRColor(), 'status');
+			echo '<h4>Gouvernement</h4>';
+
+			for ($i = 0; $i < count($players_listPlayer); $i++) {
+				$p = $players_listPlayer[$i];
+
+				if ($p->status == 2 AND $players_listPlayer[$i - 1]->status != 2) {
+					echo '<h4>Sénat</h4>';
+				} elseif ($p->status == 1 AND $players_listPlayer[$i - 1]->status != 1) {
+					echo '<h4>--</h4>';
+				}
 
 				echo '<div class="player">';
 					echo '<a href="' . APP_ROOT . 'diary/player-' . $p->getId() . '">';
