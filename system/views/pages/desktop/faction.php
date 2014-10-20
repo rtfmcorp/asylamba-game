@@ -174,20 +174,25 @@ echo '<div id="content">';
 				$S_CAM_CAN = ASM::$cam->newSession();
 				ASM::$cam->load(array('rElection' => ASM::$elm->get(0)->id));
 
-				$S_VOM_1 = ASM::$vom->getCurrentSession();
-				$VOM_ELC_TOKEN = ASM::$vom->newSession();
-				ASM::$vom->load(array('rPlayer' => CTR::$data->get('playerId'), 'rElection' => ASM::$elm->get(0)->id));
-
 				$nbCandidate = ASM::$cam->size();
 				include COMPONENT . 'faction/election/campaign.php';
-				include COMPONENT . 'faction/election/candidate.php';
+				include COMPONENT . 'faction/election/list.php';
+
+				if (CTR::$get->equal('candidate', 'create')) {
+					include COMPONENT . 'faction/election/postulate.php';
+				} elseif (CTR::$get->exist('candidate') AND ASM::$cam->getById(CTR::$get->get('candidate'))) {
+					$candidate = ASM::$cam->getById(CTR::$get->get('candidate'));
+
+					include COMPONENT . 'faction/election/candidate.php';
+				} else {
+					include COMPONENT . 'default.php';
+				}
 
 				ASM::$cam->changeSession($S_CAM_1);
-				ASM::$elm->changeSession($S_ELM_1);
 			} else {
 				CTR::redirect('404');
 			}
-			ASM::$vom->changeSession($S_VOM_1);
+			ASM::$elm->changeSession($S_ELM_1);
 		} elseif ($faction->electionStatement == Color::ELECTION) {
 			$S_ELM_1 = ASM::$elm->getCurrentSession();
 			$S_CAM_1 = ASM::$cam->getCurrentSession();
@@ -213,7 +218,7 @@ echo '<div id="content">';
 			include COMPONENT . 'faction/election/election.php';
 
 			$rElection = ASM::$elm->get(0)->id;
-			include COMPONENT . 'faction/election/candidate.php';
+			include COMPONENT . 'faction/election/list.php';
 
 			ASM::$cam->changeSession($S_CAM_1);
 			ASM::$elm->changeSession($S_ELM_1);
