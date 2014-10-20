@@ -114,7 +114,34 @@ echo '<div id="content">';
 		}
 
 		ASM::$tom->changeSession($S_TOM1);
-	} elseif (CTR::$get->get('view') == 'government') {
+	} elseif (CTR::$get->get('view') == 'data') {
+		include COMPONENT . 'faction/data/nav.php';
+
+		if (!CTR::$get->exist('mode') OR CTR::$get->get('mode') == 'financial') {
+			include COMPONENT . 'faction/data/financial/stats.php';
+		#	include COMPONENT . 'faction/data/financial/graph.php';
+			include COMPONENT . 'faction/data/financial/sectors-tax.php';
+			include COMPONENT . 'faction/data/financial/donations.php';
+		} elseif (CTR::$get->get('mode') == 'trade') {
+			include COMPONENT . 'faction/data/trade/rc-stats.php';
+			include COMPONENT . 'faction/data/trade/tax-out.php';
+			include COMPONENT . 'faction/data/trade/tax-in.php';
+		} elseif (CTR::$get->get('mode') == 'war') {
+			include COMPONENT . 'faction/data/war/stats.php';
+			include COMPONENT . 'faction/data/war/sectors.php';
+			include COMPONENT . 'faction/data/war/incoming.php';
+			include COMPONENT . 'faction/data/war/levels.php';
+		} elseif (CTR::$get->get('mode') == 'law') {
+			$listlaw_status = 6;
+			include COMPONENT . 'faction/data/law/list.php';
+			$listlaw_status = 3;
+			include COMPONENT . 'faction/data/law/list.php';
+			$listlaw_status = 4;
+			include COMPONENT . 'faction/data/law/list.php';
+			$listlaw_status = 5;
+			include COMPONENT . 'faction/data/law/list.php';
+		}
+/*	} elseif (CTR::$get->get('view') == 'government') {
 		include_once ZEUS;
 
 		$S_PAM_1 = ASM::$pam->getCurrentSession();
@@ -135,7 +162,7 @@ echo '<div id="content">';
 		include COMPONENT . 'faction/government/government.php';
 		include COMPONENT . 'faction/government/senate.php';
 
-		ASM::$pam->changeSession($S_PAM_1);
+		ASM::$pam->changeSession($S_PAM_1);*/
 	} elseif (CTR::$get->get('view') == 'election' && in_array($faction->electionStatement, array(Color::CAMPAIGN, Color::ELECTION))) {
 		if ($faction->electionStatement == Color::CAMPAIGN) {
 			$S_ELM_1 = ASM::$elm->getCurrentSession();
@@ -147,20 +174,25 @@ echo '<div id="content">';
 				$S_CAM_CAN = ASM::$cam->newSession();
 				ASM::$cam->load(array('rElection' => ASM::$elm->get(0)->id));
 
-				$S_VOM_1 = ASM::$vom->getCurrentSession();
-				$VOM_ELC_TOKEN = ASM::$vom->newSession();
-				ASM::$vom->load(array('rPlayer' => CTR::$data->get('playerId'), 'rElection' => ASM::$elm->get(0)->id));
-
 				$nbCandidate = ASM::$cam->size();
 				include COMPONENT . 'faction/election/campaign.php';
-				include COMPONENT . 'faction/election/candidate.php';
+				include COMPONENT . 'faction/election/list.php';
+
+				if (CTR::$get->equal('candidate', 'create')) {
+					include COMPONENT . 'faction/election/postulate.php';
+				} elseif (CTR::$get->exist('candidate') AND ASM::$cam->getById(CTR::$get->get('candidate'))) {
+					$candidate = ASM::$cam->getById(CTR::$get->get('candidate'));
+
+					include COMPONENT . 'faction/election/candidate.php';
+				} else {
+					include COMPONENT . 'default.php';
+				}
 
 				ASM::$cam->changeSession($S_CAM_1);
-				ASM::$elm->changeSession($S_ELM_1);
 			} else {
 				CTR::redirect('404');
 			}
-			ASM::$vom->changeSession($S_VOM_1);
+			ASM::$elm->changeSession($S_ELM_1);
 		} elseif ($faction->electionStatement == Color::ELECTION) {
 			$S_ELM_1 = ASM::$elm->getCurrentSession();
 			$S_CAM_1 = ASM::$cam->getCurrentSession();
@@ -186,7 +218,7 @@ echo '<div id="content">';
 			include COMPONENT . 'faction/election/election.php';
 
 			$rElection = ASM::$elm->get(0)->id;
-			include COMPONENT . 'faction/election/candidate.php';
+			include COMPONENT . 'faction/election/list.php';
 
 			ASM::$cam->changeSession($S_CAM_1);
 			ASM::$elm->changeSession($S_ELM_1);
@@ -194,8 +226,6 @@ echo '<div id="content">';
 			ASM::$pam->changeSession($S_PAM_1);
 		}
 	} elseif (CTR::$get->get('view') == 'player') {
-		# vue des joueurs, a supprimer
-
 		include_once ZEUS;
 		$S_PAM1 = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession(FALSE);
