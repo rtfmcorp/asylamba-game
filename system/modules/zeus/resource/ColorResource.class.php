@@ -22,6 +22,7 @@ class ColorResource {
 				'officialName', 
 				'popularName', 
 				'government', 
+				'demonym', 
 				'factionPoint', 
 				'status', 
 				'devise', 
@@ -42,12 +43,17 @@ class ColorResource {
 		}
 	}
 
+	public static function size() {
+		return count(self::$colors);
+	}
+
 	private static $colors = array(
 		array(
 			'id' => 1,
 			'officialName' => 'Ordre Impérial',
 			'popularName' => 'l’Empire',
 			'government' => 'Maison Akhénienne',
+			'demonym' => 'impériaux',
 			'factionPoint' => 'Points de Prestige',
 			'status' => array('Noble', 'Dynaste', 'Dynastaire-trésorier', 'Dynastaire-chef de guerre', 'Dynastaire-ministre', 'Empereur'),
 			'devise' => 'Des nefs d’acier,<br />Naquit l’équilibre',
@@ -58,7 +64,7 @@ class ColorResource {
 			'bonus' => array(array('path' => 'faction/bonus/bonus1-1.png', 'title' => 'Générateur niv. 5', 'desc' => 'Vous débutez avec un générateur de bon niveau'),
 							array('path' => 'faction/bonus/bonus1-2.png', 'title' => '+ 5% de défense', 'desc' => 'Vos vaisseaux gagnent en défense'),
 							array('path' => 'faction/bonus/bonus1-3.png', 'title' => '- 2% prix', 'desc' => 'Les croiseurs et croiseurs-lourds sont moins chers')),
-			'mandateDuration' => 604800,
+			'mandateDuration' => 484800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Akhénien gagne du prestige en construisant des bâtiments et des vaisseaux du chantier de ligne, mais également en conquérant les bases orbitales d\'autres joueurs. Il en perd par contre lorsqu\'il détruit un de ses bâtiments ou qu\'il perd une planète.',
 			'campaignDesc' => 'explicatif d\'une campagne'),
 		array(
@@ -66,6 +72,7 @@ class ColorResource {
 			'officialName' => 'Province de Kovahk',
 			'popularName' => 'l’Essaim',
 			'government' => 'Maison des Kovahkarh',
+			'demonym' => 'kovahkarh',
 			'factionPoint' => 'Points de Bataille',
 			'status' => array('Guerrier', 'Dynaste', 'Financier', 'Chef de guerre', 'Ministre', 'Baron'),
 			'devise' => 'Eclats de métal dans le ciel',
@@ -76,7 +83,7 @@ class ColorResource {
 			'bonus' => array(array('path' => 'faction/bonus/bonus2-1.png', 'title' => '3 Méduses', 'desc' => 'Vous débutez avec des vaisseaux'),
 							array('path' => 'faction/bonus/bonus2-2.png', 'title' => '+ 10% de vitesse', 'desc' => 'Vos vaisseaux gagnent en vitesse'),
 							array('path' => 'faction/bonus/bonus2-3.png', 'title' => '- 2% de défense', 'desc' => 'Vos vaisseaux perdent en défense')),
-			'mandateDuration' => 604800,
+			'mandateDuration' => 484800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Kovahkarh gagne du prestige en construisant des vaisseaux, en gagnant des combats et en créant des bases militaires. Il en perd lorsqu\'il se fait tuer au combat ou qu\'il perd une de ces bases militaires.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
 				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de Kovahk peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Baron de Kovahk. 
@@ -86,6 +93,7 @@ class ColorResource {
 			'officialName' => 'Province de Négore',
 			'popularName' => 'Négore',
 			'government' => 'Maison Négienne',
+			'demonym' => 'négien',
 			'factionPoint' => 'Points de Marchandage',
 			'status' => array('Commerçant', 'Négociant', 'Financier', 'Chef de guerre', 'Ministre', 'Viziduc'),
 			'devise' => 'Toutes les richesses,<br />Passent par Négore',
@@ -96,7 +104,7 @@ class ColorResource {
 			'bonus' => array(array('path' => 'faction/bonus/bonus3-1.png', 'title' => '+ 12 500 crédits', 'desc' => 'Vous débutez avec plus de crédits'),
 							array('path' => 'faction/bonus/bonus3-2.png', 'title' => '+ 5% production', 'desc' => 'Vos routes commerciales produisent plus de crédits'),
 							array('path' => 'faction/bonus/bonus3-3.png', 'title' => '- 3% prix', 'desc' => 'Vos routes commerciales coûtent moins de crédits')),
-			'mandateDuration' => 604800,
+			'mandateDuration' => 484800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Négien gagne du prestige en créant des routes commerciales et en faisant des ventes/achats intéressants sur le marché. Par contre il en perd lorsqu\'une de ses routes commerciales est détruite ou qu\'il fait une vente ou un achat pas rentable.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
 				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de Négore peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Viziduc de Négore. 
@@ -106,8 +114,9 @@ class ColorResource {
 			'officialName' => 'Marche de Cardan',
 			'popularName' => 'la Marche',
 			'government' => 'Eglise Cardanienne',
+			'demonym' => 'cardanien',
 			'factionPoint' => 'Points de Foi',
-			'status' => array('Fidèle', 'Prêtre', 'Archiprêtre-trésorier', 'Archiprêtre-chef de guerre', 'Archiprêtre-ministre', 'Guide'),
+			'status' => array('Fidèle', 'Prêtre', 'Questeur', 'Archiprêtre-chef de guerre', 'Archiprêtre-ministre', 'Guide'),
 			'devise' => 'La lumière vous balaiera',
 			'desc1' => 'L’Eglise Cardanienne est la seule faction théocratique de la Galaxie. Elle fût, pendant de longues années, un mouvement disciminé, peuplée uniquement par des moines et des hommes pieux. Mais des dérives fanatiques ont poussées la Marche de Cardan à devenir une faction belliqueuse et extrémiste, éblouie par un pouvoir suprême et divin qui les mènera à la victoire.',
 			'desc2' => 'Les rites prennent une place très importants dans le mode de vie des Cardamines. Nombreux sacrifices et rituels sont fait à chaque Segment en l’honneur des Dieux. Les fidèles se doivent de se plier à la loi Cardamine et respecter les ordre du Guide Suprême.',
@@ -117,7 +126,7 @@ class ColorResource {
 							array('path' => 'faction/bonus/bonus4-2.png', 'title' => '+ 3% de crédits', 'desc' => 'Vos impôts vous amènent plus de crédits'),
 							array('path' => 'faction/bonus/bonus4-3.png', 'title' => '- 10% prix', 'desc' => 'Vos colonisations et conquêtes sont moins chères'),
 							array('path' => 'faction/bonus/bonus4-4.png', 'title' => '- 5% de ressources', 'desc' => 'Un parties des ressources pillées sont offertes aux Dieux')),
-			'mandateDuration' => 604800,
+			'mandateDuration' => 484800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un membre de Cardan gagne du prestige en colonisant/conquérant une planète se situant en-dehors des territoires de Cardan et en faisant un don à sa faction. Il en perd par contre lorsqu\'il perd une planète.',
 			'campaignDesc' => 'explicatif d\'une campagne'),
 		array(
@@ -125,8 +134,9 @@ class ColorResource {
 			'officialName' => 'Province de Nerve',
 			'popularName' => 'la Nerve',
 			'government' => 'République Nervéenne',
+			'demonym' => 'nervéen',
 			'factionPoint' => 'Points d\'industrie',
-			'status' => array('Citoyen', 'Député', 'Ministre-trésorier', 'Ministre-chef de guerre', 'Ministre-ministre', 'Président'),
+			'status' => array('Citoyen', 'Député', 'Ministre du Trésor', 'Ministre de la Défense', 'Premier Ministre', 'Président'),
 			'devise' => 'Jamais ne tombera,<br />La ville aux Milles Sous-sols',
 			'desc1' => 'La république Nervéenne est composée d’une grande communautés préférant vivre à l’écart, cachée dans d’incroyables labyrinthes sous-terrain. Elle est connue principalement pour sa capacité à camoufler la quasi-totalité de ces infrastructures à ses ennemis ainsi que pour ses qualités de bâtisseurs hors-normes.',
 			'desc2' => 'Communauté soudée autour de son Chancelier, la Nerve est une faction de grands travailleurs et de bâtisseurs parmi les plus fameux de toute la Galaxie. Réalisant des édifices enfouis d’une finesse été d’une complexité incroyable.',
@@ -135,7 +145,7 @@ class ColorResource {
 			'bonus' => array(array('path' => 'faction/bonus/bonus5-1.png', 'title' => 'Raffinerie niveau 5', 'desc' => 'Vous débutez avec une Raffinerie de bon niveau'),
 							array('path' => 'faction/bonus/bonus5-2.png', 'title' => '+ 4% production', 'desc' => 'Votre Raffinerie produit plus de ressources'),
 							array('path' => 'faction/bonus/bonus5-3.png', 'title' => '+ 4% stockage', 'desc' => 'Votre Raffinerie stocke plus de ressources')),
-			'mandateDuration' => 604800,
+			'mandateDuration' => 484800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Nervéen gagne du prestige en créant des Centres Industriels, en construisant la raffinerie et les chantiers de construction de vaisseaux et en prenant des planètes (proportionnel au coefficient ressource de la planète). Il en perd en détruisant un Centre Industriel, en détruisant la raffinerie et les chantiers et en perdant le contrôle d\'une planète.',
 			'campaignDesc' => 'explicatif d\'une campagne'),
 		array(
@@ -143,6 +153,7 @@ class ColorResource {
 			'officialName' => 'Province d’Aphéra',
 			'popularName' => 'Aphéra',
 			'government' => 'République Aphérane',
+			'demonym' => 'aphéran',
 			'factionPoint' => 'Points de Technologie',
 			'status' => array('Citoyen', 'Député', 'Conseiller-trésorier', 'Conseiller-chef de guerre', 'Conseiller-ministre', 'Chancelier'),
 			'devise' => 'Au travers du vide,<br />Nos oiseaux perçents,<br/>Levez les yeux',
@@ -153,7 +164,7 @@ class ColorResource {
 			'bonus' => array(array('path' => 'faction/bonus/bonus6-1.png', 'title' => '3 recherches niv. 2', 'desc' => 'Vous débutez avec trois recherches déjà trouvées'),
 							array('path' => 'faction/bonus/bonus6-2.png', 'title' => '+ 4% efficacité', 'desc' => 'Votre Université est plus efficace'),
 							array('path' => 'faction/bonus/bonus6-3.png', 'title' => '- 4% temps', 'desc' => 'Vos technologies se développent plus rapidement')),
-			'mandateDuration' => 604800,
+			'mandateDuration' => 484800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Aphéran gagne du prestige en menant à terme une Recherche, en développant une Technologie et en réusissant un espionnage.',
 			'campaignDesc' => 'explicatif d\'une campagne'),
 		array(
@@ -161,8 +172,9 @@ class ColorResource {
 			'officialName' => 'Marche de Synelle',
 			'popularName' => 'Synelle',
 			'government' => 'Fédération Synélectique',
+			'demonym' => 'syn',
 			'factionPoint' => 'Points de Sagesse',
-			'status' => array('Fédéré', 'Conseiller', 'Consul-trésorier', 'Consul-chef de guerre', 'Consul-ministre', 'Fédérant'),
+			'status' => array('Fédéré', 'Conseiller', 'Consul des Finances', 'Consul de la Guerre', '1er Consul', 'Fédérant'),
 			'devise' => 'Au plus loin des Guerres,<br />La vie prends racine',
 			'desc1' => 'La fédération Synélectique, basée sur la connaissance et le savoir, est une faction composée de libres penseurs, de diplomates, d’érudits et de philosophes. Préférant une stratégie plus réfléchie à des attaques éclaires, le système militaire de Synelle est puissant et méthodique.',
 			'desc2' => 'Le cursus académique et la formation prennent une place extrêmement important dans le mode de vie des Syns. Vivent selon les principes du Premier Consul, cette société calme et autarcique, renferme une très grande partie du patrimoine historique de la Galaxie dans de gigantesques bibliothèques.',
@@ -171,7 +183,7 @@ class ColorResource {
 			'bonus' => array(array('path' => 'faction/bonus/bonus7-1.png', 'title' => 'Commandant niv. 7', 'desc' => 'Vous débutez avec un commandant expérimenté'),
 							array('path' => 'faction/bonus/bonus7-2.png', 'title' => '+ 6% efficacité', 'desc' => 'Votre Ecole de Commandement est plus efficace'),
 							array('path' => 'faction/bonus/bonus7-3.png', 'title' => '+ 2% efficacité', 'desc' => 'Votre Université est plus efficace')),
-			'mandateDuration' => 604800,
+			'mandateDuration' => 484800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un membre de Synelle gagne du prestige en étant victorieux lors de la défense d\'une de ses planètes',
 			'campaignDesc' => 'explicatif d\'une campagne')
 	);
