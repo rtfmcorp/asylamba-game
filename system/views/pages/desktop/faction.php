@@ -83,7 +83,7 @@ echo '<div id="content">';
 			include COMPONENT . 'faction/forum/topics.php';
 		} elseif ($forumId >= 10 && $forumId < 20 && CTR::$data->get('playerInfo')->get('status') > 2) {
 			include COMPONENT . 'faction/forum/topics.php';
-		} elseif ($forumId >= 20 && CTR::$data->get('playerInfo')->get('status') == 6) {
+		} elseif ($forumId >= 20 && CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
 			include COMPONENT . 'faction/forum/topics.php';
 		} else {
 			CTR::redirect('faction/view-forum');
@@ -141,28 +141,8 @@ echo '<div id="content">';
 			$listlaw_status = 5;
 			include COMPONENT . 'faction/data/law/list.php';
 		}
-/*	} elseif (CTR::$get->get('view') == 'government') {
-		include_once ZEUS;
-
-		$S_PAM_1 = ASM::$pam->getCurrentSession();
-		$S_PAM_N3 = ASM::$pam->newSession(FALSE);
-		ASM::$pam->load(
-			array('rColor' => CTR::$data->get('playerInfo')->get('color'), 'status' => array(6, 5, 4, 3)),
-			array('status', 'DESC')
-		);
-
-		$S_PAM_N2 = ASM::$pam->newSession(FALSE);
-		ASM::$pam->load(
-			array('rColor' => CTR::$data->get('playerInfo')->get('color'), 'status' => PAM_PARLIAMENT),
-			array('factionPoint', 'DESC')
-		);
-
-		$PLAYER_GOV_TOKEN = $S_PAM_N3;
-		$PLAYER_SENATE_TOKEN = $S_PAM_N2 ;
-		include COMPONENT . 'faction/government/government.php';
-		include COMPONENT . 'faction/government/senate.php';
-
-		ASM::$pam->changeSession($S_PAM_1);*/
+	} elseif (CTR::$get->get('view') == 'government') {
+	/**/
 	} elseif (CTR::$get->get('view') == 'election' && in_array($faction->electionStatement, array(Color::CAMPAIGN, Color::ELECTION))) {
 		if ($faction->electionStatement == Color::CAMPAIGN) {
 			$S_ELM_1 = ASM::$elm->getCurrentSession();

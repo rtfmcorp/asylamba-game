@@ -15,7 +15,7 @@ echo '<div class="component profil">';
 			echo '<h4>' . $status[$listlaw_status - 1] . '</h4>';
 			for ($i = 1; $i < LawResources::size() + 1; $i++) {
 				if (LawResources::getInfo($i, 'department') == $listlaw_status) {
-					echo '<div class="build-item base-type">';
+					echo '<div class="build-item base-type ' . (!LawResources::getInfo($i, 'isImplemented') ? 'disabled' : NULL) .'">';
 						echo '<div class="name">';
 							echo '<img src="' . MEDIA . 'faction/law/common.png" alt="">';
 							echo '<strong>' . LawResources::getInfo($i, 'name') . '</strong>';
