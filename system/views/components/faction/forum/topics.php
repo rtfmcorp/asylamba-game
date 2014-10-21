@@ -11,11 +11,7 @@
 
 echo '<div class="component report topic nav">';
 	if ($isStandard_topics) {
-		echo '<div class="head skin-4">';
-			echo '<img class="main" alt="ressource" src="' . MEDIA . 'orbitalbase/situation.png">';
-			echo '<h2>' . ForumResources::getInfoForId($forum_topics, 'name') . '</h2>';
-			echo '<em>' . ForumResources::getInfoForId($forum_topics, 'shortDescription') . '</em>';
-		echo '</div>';
+		echo '<div class="head"></div>';
 	} elseif ($idColum_topics == 1) {
 		echo '<div class="head skin-1">';
 			echo '<h1>Forum</h1>';
