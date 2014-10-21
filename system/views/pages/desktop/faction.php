@@ -65,6 +65,8 @@ echo '<div id="content">';
 				}
 				$forum_topics = ForumResources::getInfo($i, 'id');
 				$isStandard_topics = FALSE;
+				$idColum_topics = $i;
+
 				if (ForumResources::getInfo($i, 'id') < 10) {
 					include COMPONENT . 'faction/forum/topics.php';
 				}
@@ -72,95 +74,82 @@ echo '<div id="content">';
 
 			ASM::$tom->changeSession($S_TOM1);
 		} else {
+			# forum component
+			include COMPONENT . 'faction/forum/forum.php';
 
+			# topics component
+			$forumId = !CTR::$get->exist('forum')
+				? 1
+				: CTR::$get->get('forum');
 
-
-
-
-
-
-
-
-
-
-
-
-		# forum component
-		include COMPONENT . 'faction/forum/forum.php';
-
-		# topics component
-		$forumId = !CTR::$get->exist('forum')
-			? 1
-			: CTR::$get->get('forum');
-
-		$S_TOM1 = ASM::$tom->getCurrentSession();
-		ASM::$tom->newSession();
-		if ($forumId < 20) {
-			ASM::$tom->load(
-				array(
-					'rForum' => $forumId, 
-					'rColor' => CTR::$data->get('playerInfo')->get('color'), 
-					'statement' => array(ForumTopic::PUBLISHED, ForumTopic::RESOLVED)
-				),
-				array('dLastMessage', 'DESC'),
-				array(),
-				CTR::$data->get('playerId')
-			);
-		} else {
-			ASM::$tom->load(
-				array(
-					'rForum' => $forumId,
-					'statement' => array(ForumTopic::PUBLISHED, ForumTopic::RESOLVED)
-				),
-				array('dLastMessage', 'DESC'),
-				array(),
-				CTR::$data->get('playerId')
-			);
-		}
-
-		$topic_topics = array();
-		for ($i = 0; $i < ASM::$tom->size(); $i++) { 
-			$topic_topics[$i] = ASM::$tom->get($i);
-		}
-		$isStandard_topics = TRUE;
-		$forum_topics = $forumId;
-
-		if ($forumId < 10) {
-			include COMPONENT . 'faction/forum/topics.php';
-		} elseif ($forumId >= 10 && $forumId < 20 && CTR::$data->get('playerInfo')->get('status') > 2) {
-			include COMPONENT . 'faction/forum/topics.php';
-		} elseif ($forumId >= 20 && CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
-			include COMPONENT . 'faction/forum/topics.php';
-		} else {
-			CTR::redirect('faction/view-forum');
-		}
-
-		if (CTR::$get->exist('topic')) {
-			# topic component
-			$topic_topic = ASM::$tom->getById(CTR::$get->get('topic'));
-			$topic_topic->updateLastView(CTR::$data->get('playerId'));
-
-			$S_FMM1 = ASM::$fmm->getCurrentSession();
-			ASM::$fmm->newSession();
-			ASM::$fmm->load(array('rTopic' => $topic_topic->id), array('dCreation', 'DESC', 'id', 'DESC'));
-
-			$message_topic = array();
-			for ($i = 0; $i < ASM::$fmm->size(); $i++) { 
-				$message_topic[$i] = ASM::$fmm->get($i);
+			$S_TOM1 = ASM::$tom->getCurrentSession();
+			ASM::$tom->newSession();
+			if ($forumId < 20) {
+				ASM::$tom->load(
+					array(
+						'rForum' => $forumId, 
+						'rColor' => CTR::$data->get('playerInfo')->get('color'), 
+						'statement' => array(ForumTopic::PUBLISHED, ForumTopic::RESOLVED)
+					),
+					array('dLastMessage', 'DESC'),
+					array(),
+					CTR::$data->get('playerId')
+				);
+			} else {
+				ASM::$tom->load(
+					array(
+						'rForum' => $forumId,
+						'statement' => array(ForumTopic::PUBLISHED, ForumTopic::RESOLVED)
+					),
+					array('dLastMessage', 'DESC'),
+					array(),
+					CTR::$data->get('playerId')
+				);
 			}
 
-			include COMPONENT . 'faction/forum/topic.php';
+			$topic_topics = array();
+			for ($i = 0; $i < ASM::$tom->size(); $i++) { 
+				$topic_topics[$i] = ASM::$tom->get($i);
+			}
+			$isStandard_topics = TRUE;
+			$forum_topics = $forumId;
 
-			ASM::$fmm->changeSession($S_FMM1);
-		} elseif (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'create') {
-			# créer un topic
-			include COMPONENT . 'faction/forum/createTopic.php';
-		} else {
-			include COMPONENT . 'default.php';
+			if ($forumId < 10) {
+				include COMPONENT . 'faction/forum/topics.php';
+			} elseif ($forumId >= 10 && $forumId < 20 && CTR::$data->get('playerInfo')->get('status') > 2) {
+				include COMPONENT . 'faction/forum/topics.php';
+			} elseif ($forumId >= 20 && CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
+				include COMPONENT . 'faction/forum/topics.php';
+			} else {
+				CTR::redirect('faction/view-forum');
+			}
+
+			if (CTR::$get->exist('topic')) {
+				# topic component
+				$topic_topic = ASM::$tom->getById(CTR::$get->get('topic'));
+				$topic_topic->updateLastView(CTR::$data->get('playerId'));
+
+				$S_FMM1 = ASM::$fmm->getCurrentSession();
+				ASM::$fmm->newSession();
+				ASM::$fmm->load(array('rTopic' => $topic_topic->id), array('dCreation', 'DESC', 'id', 'DESC'));
+
+				$message_topic = array();
+				for ($i = 0; $i < ASM::$fmm->size(); $i++) { 
+					$message_topic[$i] = ASM::$fmm->get($i);
+				}
+
+				include COMPONENT . 'faction/forum/topic.php';
+
+				ASM::$fmm->changeSession($S_FMM1);
+			} elseif (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'create') {
+				# créer un topic
+				include COMPONENT . 'faction/forum/createTopic.php';
+			} else {
+				include COMPONENT . 'default.php';
+			}
+
+			ASM::$tom->changeSession($S_TOM1);
 		}
-
-		ASM::$tom->changeSession($S_TOM1);
-	}
 	} elseif (CTR::$get->get('view') == 'data') {
 		include COMPONENT . 'faction/data/nav.php';
 
@@ -354,9 +343,15 @@ echo '<div id="content">';
 			$players_listPlayer[] = $player;
 		}
 
-		$avgVictoryPlayer_statPlayer = Format::numberFormat($avgVictoryPlayer_statPlayer / $nbPlayer_statPlayer, 2);
-		$avgDefeatPlayer_statPlayer = Format::numberFormat($avgDefeatPlayer_statPlayer / $nbPlayer_statPlayer, 2);
-		$avgPointsPlayer_statPlayer = Format::numberFormat($avgPointsPlayer_statPlayer / $nbPlayer_statPlayer, 2);
+		$avgVictoryPlayer_statPlayer = $nbPlayer_statPlayer != 0
+			? Format::numberFormat($avgVictoryPlayer_statPlayer / $nbPlayer_statPlayer, 2)
+			: 0;
+		$avgDefeatPlayer_statPlayer = $nbPlayer_statPlayer != 0
+			? Format::numberFormat($avgDefeatPlayer_statPlayer / $nbPlayer_statPlayer, 2)
+			: 0;
+		$avgPointsPlayer_statPlayer = $nbPlayer_statPlayer != 0
+			? Format::numberFormat($avgPointsPlayer_statPlayer / $nbPlayer_statPlayer, 2)
+			: 0;
 
 		include COMPONENT . 'faction/player/statPlayer.php';
 		include COMPONENT . 'faction/player/listPlayer.php';

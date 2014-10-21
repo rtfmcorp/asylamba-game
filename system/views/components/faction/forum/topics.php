@@ -9,18 +9,29 @@
 	# [{topic}] 	topic_topics
 	# bool 		 	isStandard_topics
 
-echo '<div class="component report topic">';
+echo '<div class="component report topic nav">';
 	if ($isStandard_topics) {
 		echo '<div class="head skin-4">';
 			echo '<img class="main" alt="ressource" src="' . MEDIA . 'orbitalbase/situation.png">';
 			echo '<h2>' . ForumResources::getInfoForId($forum_topics, 'name') . '</h2>';
 			echo '<em>' . ForumResources::getInfoForId($forum_topics, 'shortDescription') . '</em>';
 		echo '</div>';
+	} elseif ($idColum_topics == 1) {
+		echo '<div class="head skin-1">';
+			echo '<h1>Forum</h1>';
+		echo '</div>';
 	} else {
 		echo '<div class="head"></div>';
 	}
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
+			if (!$isStandard_topics) {
+				echo '<a href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '" class="nav-element">';
+					echo '<img src="' . MEDIA . 'orbitalbase/situation.png" alt="" />';
+					echo '<strong>' . ForumResources::getInfo($forum_topics, 'name') . '</strong>';
+					echo '<em>' . ForumResources::getInfo($forum_topics, 'shortDescription') . '</em>';
+				echo '</a>';
+			}
 			echo '<div class="set-item">';
 				echo '<a class="item" href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '/mode-create/sftr-2">';
 					echo '<div class="left">';
@@ -32,9 +43,7 @@ echo '<div class="component report topic">';
 					echo '</div>';
 				echo '</a>';
 			
-				if (count($topic_topics) == 0) {
-					echo '<p class="info">Aucun sujet n\'a encore été créé dans cette partie de forum.</p>';
-				} else {
+				if (count($topic_topics) > 0) {
 					foreach ($topic_topics as $t) {
 						if ($t->id == CTR::$get->get('topic')) {
 							$isNew = '';
@@ -43,7 +52,7 @@ echo '<div class="component report topic">';
 						} else {
 							$isNew = '';
 						}
-						
+
 						echo '<div class="item ' . $isNew . '">';
 							echo '<div class="left">';
 								echo '<span class="' . $isNew . '">' . $t->nbMessage . '</span>';
@@ -58,8 +67,11 @@ echo '<div class="component report topic">';
 							echo '</div>';
 						echo '</div>';
 					}
+					echo '</div>';
+				} else {
+					echo '</div>';
+					echo '<p>Aucun sujet n\'a encore été créé dans cette partie de forum.</p>';
 				}
-			echo '</div>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

@@ -18,32 +18,37 @@ $qr = $db->prepare('SELECT
 $qr->execute();
 $aw = $qr->fetchAll(); $qr->closeCursor();
 
+$sectort = array(
+	'Secteurs conquis' => array(),
+	'Secteurs en balance' => array()
+);
+
+for ($i = 0; $i < count($aw); $i++) {
+	if ($aw[$i]['color'] == $faction->id) {
+		$sectort['Secteurs conquis'][] = $aw[$i];
+	} else {
+		$sectort['Secteurs en balance'][] = $aw[$i];
+	}
+}
+
 echo '<div class="component">';
 	echo '<div class="head skin-2">';
 		echo '<h2>Territoires</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<h4>Secteurs conquis</h4>';
-			echo '<ul class="list-type-1">';
-				$hasH4 = FALSE;
+			foreach ($sectort as $type => $sectors) {
+				echo '<h4>' . $type . '</h4>';
+				echo '<ul class="list-type-1">';
 
-				for ($i = 0; $i < count($aw); $i++) {
-					$sector = $aw[$i];
+				foreach ($sectors as $sector) {
 					$percents = array();
 					
 					for ($j = 1; $j < 8; $j++) {
 						$percents['color' . $j] = Format::percent($sector['nbc' . $j], $sector['nbc0']);
 					}
+
 					arsort($percents);
-
-					if ($i != 0 && !$hasH4 && $aw[$i - 1]['color'] != $sector['color']) {
-						echo '</ul>';
-						echo '<h4>Secteurs en balance</h4>';
-						echo '<ul class="list-type-1">';
-
-						$hasH4 = TRUE;
-					}
 
 					if ($sector['color'] == $faction->id || ($sector['nbc' . $faction->id] > 0)) {
 						echo '<li>';
@@ -58,7 +63,9 @@ echo '<div class="component">';
 						echo '</li>';
 					}
 				}
-			echo '</ul>';
+
+				echo '</ul>';
+			}
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

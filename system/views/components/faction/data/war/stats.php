@@ -58,7 +58,7 @@ echo '<div class="component profil">';
 
 			echo '<div class="number-box grey">';
 				echo '<span class="label">Grade moyen des officiers actifs</span>';
-				echo '<span class="value">' . CommanderResources::getInfo(Format::number($aw1['avgLevel']), 'grade') . '</span>';
+				echo '<span class="value">' . (isset($aw1['avgLevel']) ? CommanderResources::getInfo(Format::number($aw1['avgLevel']), 'grade') : 'Inconnu') . '</span>';
 
 			echo '</div>';
 
@@ -74,7 +74,9 @@ echo '<div class="component profil">';
 			echo '<div class="number-box grey">';
 				echo '<span class="label">PEV moyen par officiers</span>';
 				echo '<span class="value">';
-					echo Format::number($totalPEV / $aw1['nb']);
+					echo (isset($aw1['nb']) AND $aw1['nb'] != 0)
+						? Format::number($totalPEV / $aw1['nb'])
+						: 0;
 					echo ' <img class="icon-color" src="' . MEDIA . 'resources/pev.png" alt="pev">';
 				echo '</span>';
 			echo '</div>';
