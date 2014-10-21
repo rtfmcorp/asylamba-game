@@ -22,5 +22,5 @@ define('CRM_ACTIVE',				1);
 define('CRM_STANDBY',				2);
 
 # type of base constants
-define('OBM_LEVEL_MIN_TO_CHANGE_TYPE', 10); # minimal generator level
-define('OBM_LEVEL_MIN_FOR_CAPITAL', 20); # minimal generator level to build a capital base
+define('OBM_LEVEL_MIN_TO_CHANGE_TYPE', 20); # minimal generator level
+define('OBM_LEVEL_MIN_FOR_CAPITAL', 40); # minimal generator level to build a capital base

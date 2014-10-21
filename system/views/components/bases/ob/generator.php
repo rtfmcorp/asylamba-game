@@ -107,7 +107,7 @@ for ($i = 0; $i < 10; $i++) {
 					$b[$i] .= $price . ' | ' . $time;
 				$b[$i] .= '</span>';
 			$b[$i] .= '</span>';
-		} elseif (!OrbitalBaseResource::haveRights($i, $nextLevel, 'queue', $realSizeQueue)) {
+		} elseif (!OrbitalBaseResource::haveRights(OrbitalBaseResource::GENERATOR, $nextLevel, 'queue', $realSizeQueue)) {
 			$b[$i] .= '<span class="button disable hb lt" title="file de construction pleine, revenez dans un moment">';
 				$b[$i] .= '<span class="text">';
 					$b[$i] .= 'construction impossible<br/>';

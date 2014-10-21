@@ -5,6 +5,7 @@ class OrbitalBaseResource {
 	const REFINERY = 1;
 	const DOCK1 = 2;
 	const DOCK2 = 3;
+	const DOCK3 = 4;
 	const TECHNOSPHERE = 5;
 	const COMMERCIAL_PLATEFORME = 6;
 	const STORAGE = 7;
@@ -147,6 +148,7 @@ class OrbitalBaseResource {
 				// encore de la place dans la queue ?
 				// $sup est le nombre de batiments dans la queue
 				case 'queue' :
+					// $buildingId n'est pas utilisé
 					return ($sup < self::getBuildingInfo($buildingId, 'level', $level, 'nbQueues')) ? TRUE : FALSE;
 					break;
 				// droit de construire le batiment ?
@@ -154,34 +156,34 @@ class OrbitalBaseResource {
 				case 'buildingTree' :
 					$diminution = NULL;
 					switch ($buildingId) {
-						case 0 : // Générateur
+						case self::GENERATOR : 
 							$diminution = 0;
 							break;
-						case 1 : // Raffinerie
+						case self::REFINERY :
 							$diminution = 0;
 							break;
-						case 2 : // Dock 1
+						case self::DOCK1 :
 							$diminution = 0;
 							break;
-						case 3 : // Dock 2
+						case self::DOCK2 :
 							$diminution = 20;
 							break;
-						case 4 : // Dock 3
+						case self::DOCK3 :
 							$diminution = 30;
 							break;
-						case 5 : // Technosphère
+						case self::TECHNOSPHERE : 
 							$diminution = 0;
 							break;
-						case 6 : // Plateforme Commerciale
+						case self::COMMERCIAL_PLATEFORME :
 							$diminution = 10;
 							break;
-						case 7 : // Stockage
+						case self::STORAGE : 
 							$diminution = 0;
 							break;
-						case 8 : // Centre de Recyclage
+						case self::RECYCLING : 
 							$diminution = 10;
 							break;
-						case 9 : // Spatioport
+						case self::SPATIOPORT : 
 							$diminution = 20;
 							break;
 						default :
@@ -189,13 +191,16 @@ class OrbitalBaseResource {
 							break;
 					}
 					if ($diminution !== NULL) {
-						if ($buildingId == 0) {
+						if ($buildingId == self::GENERATOR) {
 							if ($level > self::$building[$buildingId]['maxLevel'][$sup->typeOfBase]) {
 								return 'niveau maximum atteint';
 							} else {
 								return TRUE;
 							}
 						} else {
+							if ($level == 1 AND $sup->typeOfBase == OrbitalBase::TYP_NEUTRAL AND ($buildingId == self::SPATIOPORT OR $buildingId == self::DOCK2)) {
+								return 'vous devez évoluer votre colonie pour débloquer ce bâtiment';
+							}
 							if ($level > self::$building[$buildingId]['maxLevel'][$sup->typeOfBase]) {
 								return 'niveau maximum atteint';
 							} elseif ($level > ($sup->realGeneratorLevel - $diminution)) {
