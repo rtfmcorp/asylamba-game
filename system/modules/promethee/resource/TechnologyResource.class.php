@@ -138,7 +138,7 @@ class TechnologyResource {
 			'points' => 22,
 			'column' => 1,
 			'shortDescription' => 'Débloque la Plateforme Commerciale.',
-			'description' => 'Cette technologie unique en son genre, vous permet de construire une plateforme commerciale. En effet, elle développe les voyages longues distances sur les vaisseaux de marchandises, ce qui vous donne la possibilité de mettre en place des routes commerciales.'
+			'description' => 'Cette technologie unique en son genre, vous permet de construire une plateforme commerciale. En effet, elle développe les voyages longues distances sur les vaisseaux de marchandises, ce qui vous donne la possibilité de commercer avec tous les marchands de la galaxie.'
 		),
 		array(
 			'name' => 'Grue magnétique',
@@ -180,7 +180,7 @@ class TechnologyResource {
 			'points' => 44,
 			'column' => 1,
 			'shortDescription' => 'Débloque le Centre de Recyclage.',
-			'description' => 'NOT DEFINED'
+			'description' => 'Cette technologie novatrice implémente un système intelligent sur les contrôleurs des vaisseaux de recyclages. Grâce à ce système, les recycleurs peuvent cibler et collecter les déchets gravitant autour d\'une planète de manière autonome.'
 		),
 		array(
 			'name' => 'Vaisseaux de transport',
@@ -194,7 +194,7 @@ class TechnologyResource {
 			'points' => 44,
 			'column' => 1,
 			'shortDescription' => 'Débloque le Spatioport.',
-			'description' => 'NOT DEFINED'
+			'description' => 'Grâce à un nouveau ... '
 		),
 		// unblock ships
 		array(
