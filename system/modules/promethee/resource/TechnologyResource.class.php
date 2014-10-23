@@ -1,11 +1,11 @@
 <?php
 class TechnologyResource {
 	# JACKY si tu peux regarder si tout est ok dans les lignes au-dessous !!!
-	private static $technologies = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 
-		20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45);
-	private static $technologiesForUnblocking = array(0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17);
-#	private static $technologiesForUnblocking = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17);
-	private static $technologiesNotDisplayed = array(2, 3, 25, 26);
+	private static $technologies = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
+		19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46);
+	private static $technologiesForUnblocking = array(0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18);
+#	private static $technologiesForUnblocking = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18);
+	private static $technologiesNotDisplayed = array(2, 26, 27);
 	
 	public static function isATechnology($techno) {
 		return (in_array($techno, self::$technologies)) ? TRUE : FALSE;
@@ -67,8 +67,11 @@ class TechnologyResource {
 				case 'credit' : return ($arg2 >= self::getInfo($techno, 'credit', $arg1)) ? TRUE : FALSE;
 					break;
 				// encore de la place dans la queue ?
-				// $arg1 est le nombre de technologies dans la queue
-				case 'queue' : return ($arg1 < TQM_TECHNOMAXQUEUE) ? TRUE : FALSE;
+				// $arg1 est un objet de type OrbitalBase
+				// $arg2 est le nombre de technologies dans la queue
+				case 'queue' : 
+					$maxQueue = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::TECHNOSPHERE, 'level', $arg1->levelTechnosphere, 'nbQueues');
+					return ($arg2 < $maxQueue) ? TRUE : FALSE;
 					break;
 				// a-t-on le droit de construire ce niveau ?
 				// $arg1 est le niveau cible
@@ -135,13 +138,13 @@ class TechnologyResource {
 			'points' => 22,
 			'column' => 1,
 			'shortDescription' => 'Débloque la Plateforme Commerciale.',
-			'description' => 'Cette technologie unique en son genre, vous permet de construire une plateforme commerciale. En effet, elle développe les voyages longues distances sur les vaisseaux de marchandises, ce qui vous donne la possibilité de mettre en place des routes commerciales.'
+			'description' => 'Cette technologie unique en son genre, vous permet de construire une plateforme commerciale. En effet, elle développe les voyages longues distances sur les vaisseaux de marchandises, ce qui vous donne la possibilité de commercer avec tous les marchands de la galaxie.'
 		),
 		array(
 			'name' => 'Grue magnétique',
 			'progName' => 'dock2Unblock',
 			'imageLink' => 'dock2unblock',
-			'requiredTechnosphere' => 4,
+			'requiredTechnosphere' => 8,
 			'requiredResearch' => array(3,2,0,0,0,0,0,0,0,0),
 			'time' => 15000,
 			'resource' => 600,
@@ -166,9 +169,23 @@ class TechnologyResource {
 			'description' => 'Formant un champ magnétique puissant autour de votre base orbitale et de votre planète, le champ magnétique est un système de défense qui ralentit les vaisseaux attaquants, donnant de ce fait plus de chance à vos flottes de défenses de faire mouche.'
 		),
 		array(
-			'name' => 'Grue magnétique double',
-			'progName' => 'gravitModuleUnblock',
-			'imageLink' => 'gravitmoduleunblock',
+			'name' => 'Recycleur autonome',
+			'progName' => 'recyclingUnblock',
+			'imageLink' => 'recyclingunblock',
+			'requiredTechnosphere' => 4,
+			'requiredResearch' => array(7,8,8,0,0,0,0,0,0,0),
+			'time' => 25800,
+			'resource' => 950,
+			'credit' => 9800,
+			'points' => 44,
+			'column' => 1,
+			'shortDescription' => 'Débloque le Centre de Recyclage.',
+			'description' => 'Cette technologie novatrice implémente un système intelligent sur les contrôleurs des vaisseaux de recyclages. Grâce à ce système, les recycleurs peuvent cibler et collecter les déchets gravitant autour d\'une planète de manière autonome.'
+		),
+		array(
+			'name' => 'Vaisseaux de transport',
+			'progName' => 'spatioportUnblock',
+			'imageLink' => 'spatioportunblock',
 			'requiredTechnosphere' => 8,
 			'requiredResearch' => array(7,8,8,0,0,0,0,0,0,0),
 			'time' => 25800,
@@ -176,8 +193,8 @@ class TechnologyResource {
 			'credit' => 9800,
 			'points' => 44,
 			'column' => 1,
-			'shortDescription' => 'Débloque le Module Gravitationnel.',
-			'description' => 'La grue magnétique double, plus puissante que sa petite sœur la grue magnétique, est utilisée dans la Colonne d’Assemblage. Ce chantier spatial vous permet, grâce à ladite grue, de construire des vaisseaux-mères pour partir à la conquête de la galaxie.'
+			'shortDescription' => 'Débloque le Spatioport.',
+			'description' => 'Grâce à un nouveau système d\'optimisation, des vaisseaux de transports peuvent être développés efficacement. Ces vaisseaux permettent de faire de long trajets et de transporter beaucoup de denrées. Vous pourrez créer des routes commerciales avec différents partenaires commerciaux.'
 		),
 		// unblock ships
 		array(
@@ -431,7 +448,7 @@ class TechnologyResource {
 			'credit' => 12500,
 			'points' => 39,
 			'column' => 4,
-			'shortDescription' => 'Augmente le stockage de votre Raffinerie de 2% par niveau.',
+			'shortDescription' => 'Augmente la taille de votre Stockage de ressources de 2% par niveau.',
 			'description' => 'Grâce à l’association de plusieurs domaines de recherche, une de vos équipes vous donne la possibilité d’augmenter vos capacités de stockage. Cette nouvelle amélioration développe une technique de compression de vos ressources augmentant la capacité de stockage de vos silos, sans devoir augmenter leur taille.',
 			'bonus' => 2
 		),

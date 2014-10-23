@@ -2,7 +2,7 @@
 # compPlat component
 # in athena.bases package
 
-# affichage de plateforme commercial
+# affichage de la plateforme commerciale
 
 # require
 	# {orbitalBase}		ob_compPlat
@@ -10,7 +10,7 @@
 echo '<div class="component building">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'orbitalbase/commercialplateforme.png" alt="" />';
-		echo '<h2>' . OrbitalBaseResource::getBuildingInfo(6, 'frenchName') . '</h2>';
+		echo '<h2>' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::COMMERCIAL_PLATEFORME, 'frenchName') . '</h2>';
 		echo '<em>niveau ' . $ob_compPlat->getLevelCommercialPlateforme() . '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
@@ -31,13 +31,6 @@ echo '<div class="component building">';
 
 			echo '<hr />';
 
-			$active = (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'route') ? 'active' : '';
-			echo '<a href="' . APP_ROOT . 'bases/view-commercialplateforme/mode-route" class="nav-element ' . $active . '">';
-				echo '<img src="' . MEDIA . 'orbitalbase/commercialplateforme.png" alt="" />';
-				echo '<strong>Quais commerciaux</strong>';
-				echo '<em>Gérez vos routes commerciales</em>';
-			echo '</a>';
-
 			$active = (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'resource') ? 'active' : '';
 			echo '<a href="' . APP_ROOT . 'bases/view-commercialplateforme/mode-resource" class="nav-element ' . $active . '">';
 				echo '<img src="' . MEDIA . 'orbitalbase/commercialplateforme.png" alt="" />';
@@ -52,8 +45,6 @@ if (!CTR::$get->exist('mode') || CTR::$get->get('mode') == 'market') {
 	include COMPONENT . 'bases/ob/complat/market.php';
 } elseif (CTR::$get->get('mode') == 'sell') {
 	include COMPONENT . 'bases/ob/complat/sell.php';
-} elseif (CTR::$get->get('mode') == 'route') {
-	include COMPONENT . 'bases/ob/complat/route.php';
 } else {
 	include COMPONENT . 'bases/ob/complat/resource.php';
 }
@@ -64,7 +55,7 @@ echo '<div class="component">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<p class="long-info">' . OrbitalBaseResource::getBuildingInfo(6, 'description') . '</p>';
+			echo '<p class="long-info">' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::COMMERCIAL_PLATEFORME, 'description') . '</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

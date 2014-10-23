@@ -38,7 +38,7 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 
 		if (TechnologyResource::haveRights($techno, 'resource', $targetLevel, $ob->getResourcesStorage())
 			AND TechnologyResource::haveRights($techno, 'credit', $targetLevel, CTR::$data->get('playerInfo')->get('credit'))
-			AND TechnologyResource::haveRights($techno, 'queue', ASM::$tqm->size())
+			AND TechnologyResource::haveRights($techno, 'queue', $ob, ASM::$tqm->size())
 			AND TechnologyResource::haveRights($techno, 'levelPermit', $targetLevel)
 			AND TechnologyResource::haveRights($techno, 'technosphereLevel', $ob->getLevelTechnosphere())
 			AND (TechnologyResource::haveRights($techno, 'research', $targetLevel, ASM::$rsm->get()->getResearchList()) === TRUE)) {

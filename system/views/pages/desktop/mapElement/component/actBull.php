@@ -192,9 +192,9 @@ echo '<div class="column act">';
 						}
 						echo 'Coûts de construction : ' . Format::numberFormat($price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" /><br />';
 						if ($proposed) {
-							echo '<a href="' . APP_ROOT . 'bases/view-commercialplateforme/mode-route" class="button">Annuler la proposition</a>';
+							echo '<a href="' . APP_ROOT . 'bases/view-spatioport" class="button">Annuler la proposition</a>';
 						} elseif ($notAccepted) {
-							echo '<a href="' . APP_ROOT . 'bases/view-commercialplateforme/mode-route" class="button">Accepter la proposition</a>';
+							echo '<a href="' . APP_ROOT . 'bases/view-spatioport" class="button">Accepter la proposition</a>';
 						} elseif ($standby) {
 							echo '<span class="button">C\'est la guerre</span>';
 						} else {

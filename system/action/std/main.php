@@ -12,7 +12,6 @@ switch (CTR::$get->get('a')) {
 
 	# ATHENA
 	case 'updateinvest': 			include ACTION . 'athena/general/updateInvest.php'; break;
-	case 'switchrefinerymode':		include ACTION . 'athena/general/switchRefineryMode.php'; break;
 	case 'switchdockmode':			include ACTION . 'athena/general/switchDockMode.php'; break;
 	case 'createschoolclass':		include ACTION . 'athena/general/createSchoolClass.php'; break;
 	case 'giveresource':			include ACTION . 'athena/general/giveResource.php'; break;
