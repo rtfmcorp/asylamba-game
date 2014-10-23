@@ -194,7 +194,7 @@ class TechnologyResource {
 			'points' => 44,
 			'column' => 1,
 			'shortDescription' => 'Débloque le Spatioport.',
-			'description' => 'Grâce à un nouveau ... '
+			'description' => 'Grâce à un nouveau système d\'optimisation, des vaisseaux de transports peuvent être développés efficacement. Ces vaisseaux permettent de faire de long trajets et de transporter beaucoup de denrées. Vous pourrez créer des routes commerciales avec différents partenaires commerciaux.'
 		),
 		// unblock ships
 		array(
