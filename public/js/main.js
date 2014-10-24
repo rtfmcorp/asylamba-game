@@ -287,17 +287,21 @@ jQuery(document).ready(function($) {
 		// déplace un/des vaisseau/x vers le dock
 		move: function(direction, shipId, quantity) {
 			if (this.squadronSelected == undefined) {
-				alertController.add(101, 'Vous devez d\'abord sélectionner une escadrille pour transférer des vaisseaux');
+				// alertController.add(101, 'Vous devez d\'abord sélectionner une escadrille pour transférer des vaisseaux');
 			} else {
 				var olQuantity = parseInt(this.obj.squadron.find('a:nth-child(' + (shipId + 1) + ') .quantity').text());
 				var orQuantity = parseInt(this.obj.dock.find('a:nth-child(' + (shipId + 1) + ') .quantity').text());
 
 				if (direction == 'ctb') {
-						quantity = (quantity == undefined) ? olQuantity : quantity;
+					quantity = (quantity == undefined)
+						? olQuantity
+						: quantity;
 					var nlQuantity = olQuantity - quantity;
 					var nrQuantity = orQuantity + quantity;
 				} else {
-						quantity = (quantity == undefined) ? orQuantity : quantity;
+					quantity = (quantity == undefined)
+						? orQuantity
+						: quantity;
 					var nlQuantity = olQuantity + quantity;
 					var nrQuantity = orQuantity - quantity;
 				}
@@ -314,7 +318,7 @@ jQuery(document).ready(function($) {
 					}
 
 					if (!this.token) {
-						alertController.add(101, 'Esquadrille pleine');
+						// alertController.add(101, 'Esquadrille pleine');
 					} else {
 						var lShip = this.obj.squadron.find('a:nth-child(' + (shipId + 1) + ')');
 						var rShip = this.obj.dock.find('a:nth-child(' + (shipId + 1) + ')');
@@ -375,6 +379,18 @@ jQuery(document).ready(function($) {
 						$(this).data('squadron-pev', nPev);
 						$(this).data('squadron-ships', ships);
 
+						$(this).removeClass('full0 full1 full2 full3');
+
+						if (nPev == 0) {
+							$(this).addClass('full0');
+						} else if (nPev < 50) {
+							$(this).addClass('full1');
+						} else if (nPev < 100) {
+							$(this).addClass('full2');
+						} else {
+							$(this).addClass('full3');
+						}
+
 						squadronTransfer.token = true;
 					}
 				}
@@ -393,12 +409,17 @@ jQuery(document).ready(function($) {
 	});
 
 	$('.baseTransfer .squadron a').live('click', function(e) {
-		squadronTransfer.move('ctb', $(this).data('ship-id'), 1);
+		e.preventDefault();
+		var step = e.ctrlKey ? undefined : 1;
+		squadronTransfer.move('ctb', $(this).data('ship-id'), step);
 	});
 
 	$('.baseTransfer .dock a').live('click', function(e) {
-		squadronTransfer.move('btc', $(this).data('ship-id'), 1);
+		e.preventDefault();
+		var step = e.ctrlKey ? undefined : 1;
+		squadronTransfer.move('btc', $(this).data('ship-id'), step);
 	});
+
 
 // #################################### //
 // #### CLASSE UTILITAIRE GENERALE #### //
@@ -764,8 +785,6 @@ jQuery(document).ready(function($) {
 		$.get(link.attr('href'))
 		 .done(function(data) {
 		 	data = $.parseHTML(data);
-
-		 	console.log(data.length);
 
 	 		render.removeComponent(-1, 500, function() {
 	 			for (var i = 0; i < data.length; i++) {
