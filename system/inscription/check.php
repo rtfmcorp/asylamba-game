@@ -43,8 +43,7 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 			# entre 1 et 7
 			# alliance pas défaites
 			# algorythme de fermeture automatique des alliances (auto-balancing)
-		$ally = array(2, 3);
-	#	$ally = array(1, 2, 3, 4, 5, 6, 7);
+		$ally = array(1, 2, 3, 4, 5, 6, 7);
 		if (CTR::$get->exist('ally') && in_array(CTR::$get->get('ally'), $ally)) {
 			CTR::$data->get('inscription')->add('ally', CTR::$get->get('ally'));
 		} elseif (!CTR::$data->get('inscription')->exist('ally')) {
@@ -104,7 +103,18 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 			if (CTR::$post->exist('base') && $check->checkLength(CTR::$post->get('base')) && $check->checkChar(CTR::$post->get('base'))) {
 				CTR::$data->get('inscription')->add('base', CTR::$post->get('base'));
 
-				if (/*in_array(CTR::$post->get('sector'), array(16, 17, 3, 4, 12, 15))*/ TRUE) {
+				include_once GAIA;
+				$sm = new SectorManager();
+				$sm->load();
+
+				$factionSectors = array();
+				for ($i = 0; $i < $sm->size(); $i++) { 
+					if ($sm->get($i)->getRColor() == CTR::$data->get('inscription')->get('ally')) {
+						$factionSectors[] = $sm->get($i)->getId();
+					}
+				}
+
+				if (in_array(CTR::$post->get('sector'), $factionSectors)) {
 					CTR::$data->get('inscription')->add('sector', CTR::$post->get('sector'));
 				} else {
 					CTR::$alert->add('le secteur choisi n\'existe pas ou n\'est pas disponible pour votre faction');
