@@ -1,8 +1,16 @@
 <?php
-$S_CRM1 = ASM::$crm->getCurrentSession();
-ASM::$crm->changeSession($ob_compPlat->routeManager);
+# spatioport component
+# in athena.bases package
 
-$nMaxCR = OrbitalBaseResource::getBuildingInfo(6, 'level', $ob_compPlat->getLevelCommercialPlateforme(), 'nbRoutesMax');
+# affichage du spatioport
+
+# require
+	# {orbitalBase}		ob_spatioport
+
+$S_CRM1 = ASM::$crm->getCurrentSession();
+ASM::$crm->changeSession($ob_spatioport->routeManager);
+
+$nMaxCR = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $ob_spatioport->getLevelSpatioport(), 'nbRoutesMax');
 $nCRWaitingForOther = 0; $nCRWaitingForMe = 0;
 $nCROperational = 0; $nCRInStandBy = 0;
 $nCRInDock = 0;
@@ -26,9 +34,11 @@ if (ASM::$crm->size() > 0) {
 }
 
 # view
-echo '<div class="component rc">';
-	echo '<div class="head skin-2">';
-		echo '<h2>Aperçu</h2>';
+echo '<div class="component building rc">';
+	echo '<div class="head skin-1">';
+		echo '<img src="' . MEDIA . 'orbitalbase/commercialplateforme.png" alt="" />';
+		echo '<h2>' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'frenchName') . '</h2>';
+		echo '<em>niveau ' . $ob_spatioport->getLevelSpatioport() . '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
@@ -84,14 +94,14 @@ for ($i = 0; $i < ASM::$crm->size(); $i++) {
 
 	if ($rc->getStatement() == CRM_PROPOSED && $rc->getPlayerId2() == CTR::$data->get('playerId')) {
 		$base1  = '<div class="base">';
-			$base1 .= '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation1()) . '.png" alt="' . $ob_compPlat->getName() . '" class="place" />';
+			$base1 .= '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation1()) . '.png" alt="' . $ob_spatioport->getName() . '" class="place" />';
 			$base1 .= '' . PlaceResource::get($rc->baseType1, 'name') . ' <a href="' . APP_ROOT . 'map/place-' . $rc->getROrbitalBase() . '">' . $rc->getBaseName1() . '</a><br />';
 			$base1 .= 'de <a href="' . APP_ROOT . 'diary/player-' . $rc->getPlayerId1() . '">' . $rc->getPlayerName1() . '</a><br />';
 			$base1 .= Format::numberFormat($rc->getPopulation1()) . ' millions de population';
 		$base1 .= '</div>';
 
 		$base2  = '<div class="base">';
-			$base2 .= '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation2()) . '.png" alt="' . $ob_compPlat->getName() . '" class="place" />';
+			$base2 .= '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation2()) . '.png" alt="' . $ob_spatioport->getName() . '" class="place" />';
 			$base2 .= '' . PlaceResource::get($rc->baseType2, 'name') . ' <a href="' . APP_ROOT . 'map/place-' . $rc->getROrbitalBaseLinked() . '">' . $rc->getBaseName2() . '</a><br />';
 			$base2 .= 'de <a href="' . APP_ROOT . 'diary/player-' . $rc->getPlayerId2() . '">' . $rc->getPlayerName2() . '</a><br />';
 			$base2 .= Format::numberFormat($rc->getPopulation2()) . ' millions de population';
@@ -189,9 +199,9 @@ for ($i = 0; $i < ASM::$crm->size(); $i++) {
 				echo '<div class="body">';
 					echo '<div class="tool">';
 					if ($rc->getStatement() == CRM_PROPOSED) {
-						echo '<span><a href="' . APP_ROOT . 'action/a-cancelroute/base-' . $ob_compPlat->getId() . '/route-' . $rc->getId() . '">annuler la proposition commerciale</a></span>';
+						echo '<span><a href="' . APP_ROOT . 'action/a-cancelroute/base-' . $ob_spatioport->getId() . '/route-' . $rc->getId() . '">annuler la proposition commerciale</a></span>';
 					} else {
-						echo '<span><a href="' . APP_ROOT . 'action/a-deleteroute/base-' . $ob_compPlat->getId() . '/route-' . $rc->getId() . '">démanteler la route commerciale</a></span>';
+						echo '<span><a href="' . APP_ROOT . 'action/a-deleteroute/base-' . $ob_spatioport->getId() . '/route-' . $rc->getId() . '">démanteler la route commerciale</a></span>';
 					}
 					echo '</div>';
 
@@ -233,6 +243,21 @@ for ($i = 0; $i < ASM::$crm->size(); $i++) {
 		echo '</div>';
 		$j++;
 	}
+}
+
+echo '<div class="component">';
+	echo '<div class="head skin-2">';
+		echo '<h2>A propos</h2>';
+	echo '</div>';
+	echo '<div class="fix-body">';
+		echo '<div class="body">';
+			echo '<p class="long-info">' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'description') . '</p>';
+		echo '</div>';
+	echo '</div>';
+echo '</div>';
+
+if (ASM::$crm->size() == 0) {
+	include COMPONENT . 'default.php';
 }
 
 ASM::$crm->changeSession($S_CRM1);

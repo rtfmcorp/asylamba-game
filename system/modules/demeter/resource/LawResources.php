@@ -95,7 +95,7 @@ Class LawResources {
 		array(
 			'id' => 7,
 			'bonusLaw' => TRUE,
-			'devName' => 'comiercial accord',
+			'devName' => 'trade agrements',
 			'name' => 'Accords commerciaux',
 			'department' => 3,
 			'price' => 1000,
@@ -109,7 +109,7 @@ Class LawResources {
 			'id' => 7,
 			'bonusLaw' => TRUE,
 			'devName' => 'placement',
-			'name' => 'placement financier',
+			'name' => 'Placement Financier',
 			'department' => 3,
 			'price' => 1000,
 			'duration' => 604800, //une semaine entière
@@ -122,7 +122,7 @@ Class LawResources {
 			'id' => 8,
 			'bonusLaw' => TRUE,
 			'devName' => 'startege',
-			'name' => 'Stratège',
+			'name' => 'Positions défensives',
 			'department' => 4,
 			'price' => 1000,
 			'duration' => 604800, //une semaine entière
@@ -135,7 +135,7 @@ Class LawResources {
 			'id' => 9,
 			'bonusLaw' => TRUE,
 			'devName' => 'navigation',
-			'name' => 'Navigation',
+			'name' => 'Guerre éclaire',
 			'department' => 4,
 			'price' => 1000,
 			'duration' => 604800, //une semaine entière

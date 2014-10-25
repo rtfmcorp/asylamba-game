@@ -18,7 +18,8 @@ class Technology {
 	public $comPlatUnblock = 0;
 	public $dock2Unblock = 0;
 	public $dock3Unblock = 0;
-	public $gravitModuleUnblock = 0;
+	public $recyclingUnblock = 0;
+	public $spatioportUnblock = 0;
 
 	public $ship0Unblock = 0;
 	public $ship1Unblock = 0;
@@ -74,49 +75,50 @@ class Technology {
 	const COM_PLAT_UNBLOCK = 0;
 	const DOCK2_UNBLOCK = 1;
 	const DOCK3_UNBLOCK = 2;			# inactif
-	const GRAVIT_MODULE_UNBLOCK = 3;	# inactif
-	const SHIP0_UNBLOCK = 4;	// pegase
-	const SHIP1_UNBLOCK = 5;	// satyre
-	const SHIP2_UNBLOCK = 6;	// chimere
-	const SHIP3_UNBLOCK = 7;	// sirene
-	const SHIP4_UNBLOCK = 8;	// dryade
-	const SHIP5_UNBLOCK = 9;	// meduse
-	const SHIP6_UNBLOCK = 10;	// griffon
-	const SHIP7_UNBLOCK = 11;	// cyclope
-	const SHIP8_UNBLOCK = 12;	// minotaure
-	const SHIP9_UNBLOCK = 13;	// hydre
-	const SHIP10_UNBLOCK = 14;	// cerbere
-	const SHIP11_UNBLOCK = 15;	// phenix
-	const COLONIZATION = 16;
-	const CONQUEST = 17;
-	const GENERATOR_SPEED = 18;			# ok
-	const REFINERY_REFINING = 19;		# ok
-	const REFINERY_STORAGE = 20;		# ok
-	const DOCK1_SPEED = 21;				# ok
-	const DOCK2_SPEED = 22;				# ok
-	const TECHNOSPHERE_SPEED = 23;		# ok
-	const COMMERCIAL_INCOME = 24;		# ok
-	const GRAVIT_MODULE = 25;			# inactif
-	const DOCK3_SPEED = 26;				# inactif
-	const POPULATION_TAX = 27;			# ok
-	const COMMANDER_INVEST = 28;		# ok
-	const UNI_INVEST = 29;				# ok
-	const ANTISPY_INVEST = 30;
-	const SPACESHIPS_SPEED = 31;
-	const SPACESHIPS_CONTAINER = 32;
-	const BASE_QUANTITY = 33;
-	const FIGHTER_SPEED = 34;
-	const FIGHTER_ATTACK = 35;
-	const FIGHTER_DEFENSE = 36;
-	const CORVETTE_SPEED = 37;
-	const CORVETTE_ATTACK = 38;
-	const CORVETTE_DEFENSE = 39;
-	const FRIGATE_SPEED = 40;
-	const FRIGATE_ATTACK = 41;
-	const FRIGATE_DEFENSE = 42;
-	const DESTROYER_SPEED = 43;
-	const DESTROYER_ATTACK = 44;
-	const DESTROYER_DEFENSE = 45;
+	const RECYCLING_UNBLOCK = 3;
+	const SPATIOPORT_UNBLOCK = 4;
+	const SHIP0_UNBLOCK = 5;	// pegase
+	const SHIP1_UNBLOCK = 6;	// satyre
+	const SHIP2_UNBLOCK = 7;	// chimere
+	const SHIP3_UNBLOCK = 8;	// sirene
+	const SHIP4_UNBLOCK = 9;	// dryade
+	const SHIP5_UNBLOCK = 10;	// meduse
+	const SHIP6_UNBLOCK = 11;	// griffon
+	const SHIP7_UNBLOCK = 12;	// cyclope
+	const SHIP8_UNBLOCK = 13;	// minotaure
+	const SHIP9_UNBLOCK = 14;	// hydre
+	const SHIP10_UNBLOCK = 15;	// cerbere
+	const SHIP11_UNBLOCK = 16;	// phenix
+	const COLONIZATION = 17;
+	const CONQUEST = 18;
+	const GENERATOR_SPEED = 19;			# ok
+	const REFINERY_REFINING = 20;		# ok
+	const REFINERY_STORAGE = 21;		# ok
+	const DOCK1_SPEED = 22;				# ok
+	const DOCK2_SPEED = 23;				# ok
+	const TECHNOSPHERE_SPEED = 24;		# ok
+	const COMMERCIAL_INCOME = 25;		# ok
+	const GRAVIT_MODULE = 26;			# inactif
+	const DOCK3_SPEED = 27;				# inactif
+	const POPULATION_TAX = 28;			# ok
+	const COMMANDER_INVEST = 29;		# ok
+	const UNI_INVEST = 30;				# ok
+	const ANTISPY_INVEST = 31;
+	const SPACESHIPS_SPEED = 32;
+	const SPACESHIPS_CONTAINER = 33;
+	const BASE_QUANTITY = 34;
+	const FIGHTER_SPEED = 35;
+	const FIGHTER_ATTACK = 36;
+	const FIGHTER_DEFENSE = 37;
+	const CORVETTE_SPEED = 38;
+	const CORVETTE_ATTACK = 39;
+	const CORVETTE_DEFENSE = 40;
+	const FRIGATE_SPEED = 41;
+	const FRIGATE_ATTACK = 42;
+	const FRIGATE_DEFENSE = 43;
+	const DESTROYER_SPEED = 44;
+	const DESTROYER_ATTACK = 45;
+	const DESTROYER_DEFENSE = 46;
 
 	public function __construct($rPlayer) {
 		$this->rPlayer = $rPlayer; 
@@ -137,49 +139,50 @@ class Technology {
 				case 0 : return $this->comPlatUnblock; break;
 				case 1 : return $this->dock2Unblock; break;
 				case 2 : return $this->dock3Unblock; break;
-				case 3 : return $this->gravitModuleUnblock; break;
-				case 4 : return $this->ship0Unblock; break;
-				case 5 : return $this->ship1Unblock; break;
-				case 6 : return $this->ship2Unblock; break;
-				case 7 : return $this->ship3Unblock; break;
-				case 8 : return $this->ship4Unblock; break;
-				case 9 : return $this->ship5Unblock; break;
-				case 10 : return $this->ship6Unblock; break;
-				case 11 : return $this->ship7Unblock; break;
-				case 12 : return $this->ship8Unblock; break;
-				case 13 : return $this->ship9Unblock; break;
-				case 14 : return $this->ship10Unblock; break;
-				case 15 : return $this->ship11Unblock; break;
-				case 16 : return $this->colonization; break;
-				case 17 : return $this->conquest; break;
-				case 18 : return $this->generatorSpeed; break;
-				case 19 : return $this->refineryRefining; break;
-				case 20 : return $this->refineryStorage; break;
-				case 21 : return $this->dock1Speed; break;
-				case 22 : return $this->dock2Speed; break;
-				case 23 : return $this->technosphereSpeed; break;
-				case 24 : return $this->commercialIncomeUp; break;
-				case 25 : return $this->gravitModuleUp; break;
-				case 26 : return $this->dock3Speed; break;
-				case 27 : return $this->populationTaxUp; break;
-				case 28 : return $this->commanderInvestUp; break;
-				case 29 : return $this->uniInvestUp; break;
-				case 30 : return $this->antiSpyInvestUp; break;
-				case 31 : return $this->spaceShipsSpeed; break;
-				case 32 : return $this->spaceShipsContainer; break;
-				case 33 : return $this->baseQuantity; break;
-				case 34 : return $this->fighterSpeed; break;
-				case 35 : return $this->fighterAttack; break;
-				case 36 : return $this->fighterDefense; break;
-				case 37 : return $this->corvetteSpeed; break;
-				case 38 : return $this->corvetteAttack; break;
-				case 39 : return $this->corvetteDefense; break;
-				case 40 : return $this->frigateSpeed; break;
-				case 41 : return $this->frigateAttack; break;
-				case 42 : return $this->frigateDefense; break;
-				case 43 : return $this->destroyerSpeed; break;
-				case 44 : return $this->destroyerAttack; break;
-				case 45 : return $this->destroyerDefense; break;
+				case 3 : return $this->recyclingUnblock; break;
+				case 4 : return $this->spatioportUnblock; break;
+				case 5 : return $this->ship0Unblock; break;
+				case 6 : return $this->ship1Unblock; break;
+				case 7 : return $this->ship2Unblock; break;
+				case 8 : return $this->ship3Unblock; break;
+				case 9 : return $this->ship4Unblock; break;
+				case 10 : return $this->ship5Unblock; break;
+				case 11 : return $this->ship6Unblock; break;
+				case 12 : return $this->ship7Unblock; break;
+				case 13 : return $this->ship8Unblock; break;
+				case 14 : return $this->ship9Unblock; break;
+				case 15 : return $this->ship10Unblock; break;
+				case 16 : return $this->ship11Unblock; break;
+				case 17 : return $this->colonization; break;
+				case 18 : return $this->conquest; break;
+				case 19 : return $this->generatorSpeed; break;
+				case 20 : return $this->refineryRefining; break;
+				case 21 : return $this->refineryStorage; break;
+				case 22 : return $this->dock1Speed; break;
+				case 23 : return $this->dock2Speed; break;
+				case 24 : return $this->technosphereSpeed; break;
+				case 25 : return $this->commercialIncomeUp; break;
+				case 26 : return $this->gravitModuleUp; break;
+				case 27 : return $this->dock3Speed; break;
+				case 28 : return $this->populationTaxUp; break;
+				case 29 : return $this->commanderInvestUp; break;
+				case 30 : return $this->uniInvestUp; break;
+				case 31 : return $this->antiSpyInvestUp; break;
+				case 32 : return $this->spaceShipsSpeed; break;
+				case 33 : return $this->spaceShipsContainer; break;
+				case 34 : return $this->baseQuantity; break;
+				case 35 : return $this->fighterSpeed; break;
+				case 36 : return $this->fighterAttack; break;
+				case 37 : return $this->fighterDefense; break;
+				case 38 : return $this->corvetteSpeed; break;
+				case 39 : return $this->corvetteAttack; break;
+				case 40 : return $this->corvetteDefense; break;
+				case 41 : return $this->frigateSpeed; break;
+				case 42 : return $this->frigateAttack; break;
+				case 43 : return $this->frigateDefense; break;
+				case 44 : return $this->destroyerSpeed; break;
+				case 45 : return $this->destroyerAttack; break;
+				case 46 : return $this->destroyerDefense; break;
 				default : return FALSE;
 			}
 		}
@@ -192,49 +195,50 @@ class Technology {
 				case 0 : $this->comPlatUnblock = $value; break;
 				case 1 : $this->dock2Unblock = $value; break;
 				case 2 : $this->dock3Unblock = $value; break;
-				case 3 : $this->gravitModuleUnblock = $value; break;
-				case 4 : $this->ship0Unblock = $value; break;
-				case 5 : $this->ship1Unblock = $value; break;
-				case 6 : $this->ship2Unblock = $value; break;
-				case 7 : $this->ship3Unblock = $value; break;
-				case 8 : $this->ship4Unblock = $value; break;
-				case 9 : $this->ship5Unblock = $value; break;
-				case 10 : $this->ship6Unblock = $value; break;
-				case 11 : $this->ship7Unblock = $value; break;
-				case 12 : $this->ship8Unblock = $value; break;
-				case 13 : $this->ship9Unblock = $value; break;
-				case 14 : $this->ship10Unblock = $value; break;
-				case 15 : $this->ship11Unblock = $value; break;
-				case 16 : $this->colonization = $value; break;
-				case 17 : $this->conquest = $value; break;
-				case 18 : $this->generatorSpeed = $value; break;
-				case 19 : $this->refineryRefining = $value; break;
-				case 20 : $this->refineryStorage = $value; break;
-				case 21 : $this->dock1Speed = $value; break;
-				case 22 : $this->dock2Speed = $value; break;
-				case 23 : $this->technosphereSpeed = $value; break;
-				case 24 : $this->commercialIncomeUp = $value; break;
-				case 25 : $this->gravitModuleUp = $value; break;
-				case 26 : $this->dock3Speed = $value; break;
-				case 27 : $this->populationTaxUp = $value; break;
-				case 28 : $this->commanderInvestUp = $value; break;
-				case 29 : $this->uniInvestUp = $value; break;
-				case 30 : $this->antiSpyInvestUp = $value; break;
-				case 31 : $this->spaceShipsSpeed = $value; break;
-				case 32 : $this->spaceShipsContainer = $value; break;
-				case 33 : $this->baseQuantity = $value; break;
-				case 34 : $this->fighterSpeed = $value; break;
-				case 35 : $this->fighterAttack = $value; break;
-				case 36 : $this->fighterDefense = $value; break;
-				case 37 : $this->corvetteSpeed = $value; break;
-				case 38 : $this->corvetteAttack = $value; break;
-				case 39 : $this->corvetteDefense = $value; break;
-				case 40 : $this->frigateSpeed = $value; break;
-				case 41 : $this->frigateAttack = $value; break;
-				case 42 : $this->frigateDefense = $value; break;
-				case 43 : $this->destroyerSpeed = $value; break;
-				case 44 : $this->destroyerAttack = $value; break;
-				case 45 : $this->destroyerDefense = $value; break;
+				case 3 : $this->recyclingUnblock = $value; break;
+				case 4 : $this->spatioportUnblock = $value; break;
+				case 5 : $this->ship0Unblock = $value; break;
+				case 6 : $this->ship1Unblock = $value; break;
+				case 7 : $this->ship2Unblock = $value; break;
+				case 8 : $this->ship3Unblock = $value; break;
+				case 9 : $this->ship4Unblock = $value; break;
+				case 10 : $this->ship5Unblock = $value; break;
+				case 11 : $this->ship6Unblock = $value; break;
+				case 12 : $this->ship7Unblock = $value; break;
+				case 13 : $this->ship8Unblock = $value; break;
+				case 14 : $this->ship9Unblock = $value; break;
+				case 15 : $this->ship10Unblock = $value; break;
+				case 16 : $this->ship11Unblock = $value; break;
+				case 17 : $this->colonization = $value; break;
+				case 18 : $this->conquest = $value; break;
+				case 19 : $this->generatorSpeed = $value; break;
+				case 20 : $this->refineryRefining = $value; break;
+				case 21 : $this->refineryStorage = $value; break;
+				case 22 : $this->dock1Speed = $value; break;
+				case 23 : $this->dock2Speed = $value; break;
+				case 24 : $this->technosphereSpeed = $value; break;
+				case 25 : $this->commercialIncomeUp = $value; break;
+				case 26 : $this->gravitModuleUp = $value; break;
+				case 27 : $this->dock3Speed = $value; break;
+				case 28 : $this->populationTaxUp = $value; break;
+				case 29 : $this->commanderInvestUp = $value; break;
+				case 30 : $this->uniInvestUp = $value; break;
+				case 31 : $this->antiSpyInvestUp = $value; break;
+				case 32 : $this->spaceShipsSpeed = $value; break;
+				case 33 : $this->spaceShipsContainer = $value; break;
+				case 34 : $this->baseQuantity = $value; break;
+				case 35 : $this->fighterSpeed = $value; break;
+				case 36 : $this->fighterAttack = $value; break;
+				case 37 : $this->fighterDefense = $value; break;
+				case 38 : $this->corvetteSpeed = $value; break;
+				case 39 : $this->corvetteAttack = $value; break;
+				case 40 : $this->corvetteDefense = $value; break;
+				case 41 : $this->frigateSpeed = $value; break;
+				case 42 : $this->frigateAttack = $value; break;
+				case 43 : $this->frigateDefense = $value; break;
+				case 44 : $this->destroyerSpeed = $value; break;
+				case 45 : $this->destroyerAttack = $value; break;
+				case 46 : $this->destroyerDefense = $value; break;
 				default : return FALSE;
 			}
 			if ($load == TRUE) {

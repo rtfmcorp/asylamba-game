@@ -112,8 +112,9 @@ try {
 	$ob->setLevelDock3(0);
 	$ob->setLevelTechnosphere(0);
 	$ob->setLevelCommercialPlateforme(0);
-	$ob->setLevelGravitationalModule(0);
-	$ob->isProductionRefinery = 0;
+	$ob->setLevelStorage(1);
+	$ob->setLevelRecycling(0);
+	$ob->setLevelSpatioport(0);
 	$ob->updatePoints();
 
 	# initialisation des investissement

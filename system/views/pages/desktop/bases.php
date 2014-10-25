@@ -49,6 +49,16 @@ echo '<div id="content">';
 	} elseif (CTR::$get->get('view') == 'commercialplateforme' && $base->levelCommercialPlateforme > 0) {
 		$ob_compPlat = $base;
 		include COMPONENT . 'bases/ob/comPlat.php';
+	} elseif (CTR::$get->get('view') == 'storage' && $base->levelStorage > 0) {
+		$ob_storage = $base;
+		include COMPONENT . 'bases/ob/storage.php';
+	} elseif (CTR::$get->get('view') == 'recycling' && $base->levelRecycling > 0) {
+		$ob_recycling = $base;
+		include COMPONENT . 'bases/ob/recycling.php';
+		include COMPONENT . 'default.php';
+	} elseif (CTR::$get->get('view') == 'spatioport' && $base->levelSpatioport > 0) {
+		$ob_spatioport = $base;
+		include COMPONENT . 'bases/ob/spatioport.php';
 	} elseif (CTR::$get->get('view') == 'school') {
 		$ob_school = $base;
 		include COMPONENT . 'bases/ob/school.php';

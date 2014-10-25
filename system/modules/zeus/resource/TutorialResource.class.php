@@ -14,13 +14,12 @@ class TutorialResource {
 
 	const GENERATOR_LEVEL_2 = 1;
 	const REFINERY_LEVEL_3 = 2;
-	const REFINERY_MODE_PRODUCTION = 3;
-	const DOCK1_LEVEL_1 = 4;
-	const TECHNOSPHERE_LEVEL_1 = 5;
-	const SHIP0_UNBLOCK = 6;
-	const BUILD_SHIP0 = 7;
-	const CREATE_COMMANDER = 8;
-	const MODIFY_SCHOOL_INVEST = 9;
+	const DOCK1_LEVEL_1 = 3;
+	const TECHNOSPHERE_LEVEL_1 = 4;
+	const SHIP0_UNBLOCK = 5;
+	const BUILD_SHIP0 = 6;
+	const CREATE_COMMANDER = 7;
+	const MODIFY_SCHOOL_INVEST = 8;
 
 	public static function stepExists($step) {
 		if ($step > 0 AND $step <= count(self::$steps)) {
@@ -83,17 +82,6 @@ class TutorialResource {
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 3,
-			'title' => 'Mettre la raffinerie en mode production',
-			'description' => 'Allez dans la raffinerie : sur votre base orbitale, puis cliquez sur l\'icône de la Raffinerie qui se trouve en troisième position de la barre de navigation rapide à gauche de l\'écran.
-				Dans ce bâtiment, vous pouvez voir à tout instant combien vous produisez et ou en est votre stock.
-				La Raffinerie possède 2 modes : le mode "Stockage" et le mode "Production". Le premier augmente la capacité de stockage et le second augmente la production horaire. 
-				Essayer donc de passer en mode "Production" en cliquant sur le bouton prévu à cet effet.',
-			'experienceReward' => 15,
-			'creditReward' => 0,
-			'resourceReward' => 400,
-			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-		array(
-			'id' => 4,
 			'title' => 'Construire le Chantier Alpha',
 			'description' => 'Toujours dans le générateur, construisez le Chantier Alpha. Une fois que la construction sera achevée, vous aurez accès à ce bâtiment par la barre de navigation rapide.
 				<br />
@@ -108,7 +96,7 @@ class TutorialResource {
 			'resourceReward' => 0,
 			'shipReward' => array(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
-			'id' => 5,
+			'id' => 4,
 			'title' => 'Construire la Technosphère',
 			'description' => 'La technosphère est un bâtiment qui permet de développer des technologies qui nous permettrons d\'améliorer certains aspects de votre empire et surtout de débloquer des bâtiments ou des vaisseaux.
 				<br />
@@ -118,7 +106,7 @@ class TutorialResource {
 			'resourceReward' => 500,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
-			'id' => 6,
+			'id' => 5,
 			'title' => 'Développer la technologie "Chassis simple léger"',
 			'description' => 'Nous voulons construire un Pégase, malheureusement il nous manque un prérequis : la technologie "Chassis simple léger". 
 				Rendez-vous donc dans la Technosphère pour développer cette technologie.
@@ -139,7 +127,7 @@ class TutorialResource {
 			'resourceReward' => 3000,
 			'shipReward' => array(2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
-			'id' => 7,
+			'id' => 6,
 			'title' => 'Construire un Chasseur Léger',
 			'description' => 'Vous pouvez maintenant aller dans le Chantier Alpha et construire un Pégase. Il s\'agit du plus petit vaisseau disponible.
 				<br />
@@ -156,7 +144,7 @@ class TutorialResource {
 			'resourceReward' => 0,
 			'shipReward' => array(8, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
-			'id' => 8,
+			'id' => 7,
 			'title' => 'Commencer à former un commandant',
 			'description' => 'Sur chaque base orbitale, vous avez une école de commandement où vous pouvez former des commandants. 
 				Pour y accéder, cliquez sur la dernière icône de la barre de navigation rapide.
@@ -171,7 +159,7 @@ class TutorialResource {
 			'resourceReward' => 0,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
-			'id' => 9,
+			'id' => 8,
 			'title' => 'Modifier l\'investissement dans l\'école de commandement',
 			'description' => 'Allez dans l\'école de commandement à nouveau. Vous voyez une case indiquant l\'investissement alloué à l\'école. 
 				Ce montant vous est débité chaque relève (chaque heure), il sert à financer l\'école qui forme vos commandants.

@@ -16,15 +16,13 @@ echo '<div id="content">';
 		echo '</div>';
 		echo '<div class="fix-body">';
 			echo '<div class="body">';
-				echo '<p class="info">Il vous faut choisir une des deux factions en activités.</p>';
-				echo '<p class="info">Le jeu final disposera de sept factions, cependant pour des raisons de jeu, nous préférons ouvrir deux grosses factions ';
-				echo 'que sept petites.</p>';
+				echo '<h4>Choisissez votre faction</h4>';
+				echo '<p>Il vous faut choisir entre l\'une des septs factions disponibles.</p>';
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';
 
 	$allies = array(1, 2, 3, 4, 5, 6, 7);
-	#$allies = array(2, 3);
 	shuffle($allies);
 
 	foreach ($allies as $ally) {
