@@ -158,11 +158,24 @@ Class LawResources {
 			'image' => '',
 			'isImplemented' => FALSE),
 		array(
-			'id' => 10,
+			'id' => 11,
 			'bonusLaw' => TRUE,
 			'devName' => 'Subventions',
-			'name' => 'Subventions universitaires.',
+			'name' => 'Subventions universitaires',
 			'department' => 5,
+			'price' => 1000,
+			'duration' => 604800, //une semaine entière
+			'bonus' => 10,
+			'shortDescription' => 'Augmente l\'investissement des joueurs dans l\'université',
+			'longDescription' => '',
+			'image' => '',
+			'isImplemented' => FALSE),
+		array(
+			'id' => 12,
+			'bonusLaw' => TRUE,
+			'devName' => 'attaque',
+			'name' => 'Force de frappe',
+			'department' => 4,
 			'price' => 1000,
 			'duration' => 604800, //une semaine entière
 			'bonus' => 10,
