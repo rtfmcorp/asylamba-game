@@ -39,34 +39,34 @@ Trésorier :
 	- ajustement de l'imposition sectoriel :
 X		options : 	- secteur
 					- nouvelle taxe
-	- accords commerciaux :
+T	- accords commerciaux :
 					- avec quelle alliance
 					- niveau (pourcentage de bonus)
 	- loi sur le commerce : ajustement de la taxe d'un marché
 X		options : 	- secteur
 					- taux (nouveau pourcentage de taxe)
-	- placement financier : (prêt virtuel : ex: placement de 10M pendant 2 semaines, au bout de 2 semaines, l'alliance récupère gagne 12M)
+T	- placement financier : (prêt virtuel : ex: placement de 10M pendant 2 semaines, au bout de 2 semaines, l'alliance récupère gagne 12M)
 		options :	- montant
 
 Défense :
 T	- subvention militaire diminue de 10% le cout de construction des vaisseaux
-	- force de frappe : augmente l'attaque des vaisseaux
+T	- force de frappe : augmente l'attaque des vaisseaux
 		options :	- temps
 					- niveau
 					- classe de vaisseaux
-	- stratège : augmente la défense des vaisseaux
+T	- stratège : augmente la défense des vaisseaux
 		options :	- temps
 					- niveau
 					- classe de vaisseaux
-	- navigation : augmente la vitesse des vaisseaux
+T	- navigation : augmente la vitesse des vaisseaux
 		options :	- temps
 					- niveau
 					- classe de vaisseaux
 
 Intérieur :
-	- décret sur l'éducation : augmente l'expérience des commandants à l'école
+T	- décret sur l'éducation : augmente l'expérience des commandants à l'école
 					- niveau
-	- subvention universitaire : accélère les recherches (investi plus que le montant déterminé par le joueur)
+T	- subvention universitaire : accélère les recherches (investi plus que le montant déterminé par le joueur)
 					- niveau
 T	- transfert technologique : accélère la vitesse de développement des technologies de 10%
 	- e : étend le rayon de contre-espionnage : augmente l'investissement dans le contre-espionnage (plus que le montant déterminé par le joueur)
@@ -76,6 +76,7 @@ T	- transfert technologique : accélère la vitesse de développement des techno
 
 --- N4 ------------
 Empereur :
+	- guerre
 		options : 	- alliance cible
 	- traité de paix : [visible seulement en temps de guerre ]une alliance qui s'est faite déclarée la guerre peut payer ce traité pour annuler la guerre. L'autre alliance doit accepter pour que ça soit validé.	
 [à partir d'ici demander le fichier à Gil]		
