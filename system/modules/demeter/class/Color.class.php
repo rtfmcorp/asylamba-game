@@ -66,7 +66,7 @@ class Color {
 	public function getRegime() {
 		if (in_array($this->id, array(1, 2, 3))) {
 			return self::ROYALISTIC;			
-		} elseif(in_array($this->id, array(1, 2, 3))) {
+		} elseif (in_array($this->id, array(5, 6, 7))) {
 			return self::DEMOCRATIC;
 		} else {
 			return self::THEOCRATIC;			
