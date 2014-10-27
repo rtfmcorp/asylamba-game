@@ -10,7 +10,6 @@ include_once GAIA;
 
 $type = Utils::getHTTPData('type');
 
-
 if ($type !== FALSE) {
 	if (LawResources::size() >= $type) {
 		if (CTR::$data->get('playerInfo')->get('status') == LawResources::getInfo($type, 'department')) {
@@ -19,16 +18,24 @@ if ($type !== FALSE) {
 			if (ASM::$clm->get()->credits >= LawResources::getInfo($type, 'price')) {
 				$law = new Law();
 
-				$date = new DateTime(Utils::now());
-				$law->dCreation = $date->format('Y-m-d H:i:s');
-				$date->modify('+' . Law::VOTEDURATION . ' second');
-				$law->dEndVotation = $date->format('Y-m-d H:i:s');
-				$date->modify('+' . LawResources::getInfo($type, 'duration') . ' second');
-				$law->dEnd = $date->format('Y-m-d H:i:s');
-
 				$law->rColor = CTR::$data->get('playerInfo')->get('color');
 				$law->type = $type;
-				$law->statement = 0;
+				if (LawResources::getInfo($type, 'department') == PAM_CHIEF) {
+					$law->statement = Law::EFFECTIVE;
+
+					$law->dCreation = Utils::now();
+					$law->dEndVotation = Utils::now();
+					$law->dEnd = Utils::now();
+				} else {
+					$law->statement = Law::VOTATION;
+
+					$date = new DateTime(Utils::now());
+					$law->dCreation = $date->format('Y-m-d H:i:s');
+					$date->modify('+' . Law::VOTEDURATION . ' second');
+					$law->dEndVotation = $date->format('Y-m-d H:i:s');
+					$date->modify('+' . LawResources::getInfo($type, 'duration') . ' second');
+					$law->dEnd = $date->format('Y-m-d H:i:s');
+				}
 				if (LawResources::getInfo($type, 'bonusLaw')) {
 					$law->options = serialize(array());
 					$_LAM = ASM::$lam->getCurrentsession();
@@ -36,7 +43,8 @@ if ($type !== FALSE) {
 					ASM::$lam->load(array('type' => $type, 'rColor' => CTR::$data->get('playerInfo')->get('color'), 'statement' => array(Law::EFFECTIVE, Law::VOTATION)));
 					if (ASM::$lam-size() == 0) {
 						ASM::$lam->add($law);
-						ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');	
+						ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+						CTR::redirect('faction/view-senate');	
 					} else {
 						CTR::$alert->add('Cette loi est déjà proposée ou en vigueur.', ALERT_STD_ERROR);
 					}
@@ -51,9 +59,10 @@ if ($type !== FALSE) {
 									ASM::$sem->load(array('id' => $rSector)); 
 									if (ASM::$sem->size() > 0) {
 										if (ASM::$sem->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
-											$law->options = serialize(array('taxes' => $taxes, 'rSector' => $rSector));
+											$law->options = serialize(array('taxes' => $taxes, 'rSector' => $rSector, 'display' => array('Secteur' => ASM::$sem->get()->name, 'Taxe actuelle' => ASM::$sem->get()->tax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+											CTR::redirect('faction/view-senate');
 										} else {
 											CTR::$alert->add('Ce secteur n\'est pas sous votre contrôle.', ALERT_STD_ERROR);
 										}
@@ -79,6 +88,7 @@ if ($type !== FALSE) {
 										$law->options = serialize(array('name' => $name, 'rSector' => $rSector));
 										ASM::$lam->add($law);
 										ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+										CTR::redirect('faction/view-senate');
 									} else {
 										CTR::$alert->add('Ce secteur n\'est pas sous votre contrôle.', ALERT_STD_ERROR);
 									}
@@ -99,17 +109,27 @@ if ($type !== FALSE) {
 								if (ASM::$ctm->size() > 0) {
 									if (ASM::$ctm->get()->relatedFaction == CTR::$data->get('playerInfo')->get('color')) {
 										if ($taxes <= 15) {
-											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor));
+											$_CLM = ASM::$clm->getCurrentsession();
+											ASM::$clm->newSession();
+											ASM::$clm->load(array('id' => $rColor));
+											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ASM::$clm->get()->name, 'Taxe actuelle' => ASM::$ctm->get()->exportTax . ' %', 'Taxe proposée' => $taxes . ' %')));
+											ASM::$clm->changeSession($_CLM);
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+											CTR::redirect('faction/view-senate');
 										} else {
 											CTR::$alert->add('Pas plus que 15.', ALERT_STD_ERROR);
 										}
 									} else {
 										if ($taxes <= 15 && $taxes >=2) {
-											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor));
+											$_CLM = ASM::$clm->getCurrentsession();
+											ASM::$clm->newSession();
+											ASM::$clm->load(array('id' => $rColor));
+											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ASM::$clm->get()->name, 'Taxe actuelle' => ASM::$ctm->get()->exportTax . ' %', 'Taxe proposée' => $taxes . ' %')));
+											ASM::$clm->changeSession($_CLM);
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+											CTR::redirect('faction/view-senate');
 										} else {
 											CTR::$alert->add('Entre 2 et 15.', ALERT_STD_ERROR);
 										}
@@ -131,17 +151,27 @@ if ($type !== FALSE) {
 								if (ASM::$ctm->size() > 0) {
 									if (ASM::$ctm->get()->relatedFaction == CTR::$data->get('playerInfo')->get('color')) {
 										if ($taxes <= 15) {
-											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor));
+											$_CLM = ASM::$clm->getCurrentsession();
+											ASM::$clm->newSession();
+											ASM::$clm->load(array('id' => $rColor));
+											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ASM::$clm->get()->name, 'Taxe actuelle' => ASM::$ctm->get()->importTax . ' %', 'Taxe proposée' => $taxes . ' %')));
+											ASM::$clm->changeSession($_CLM);
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+											CTR::redirect('faction/view-senate');
 										} else {
 											CTR::$alert->add('Pas plus que 15.', ALERT_STD_ERROR);
 										}
 									} else {
 										if ($taxes <= 15 && $taxes >= 2) {
-											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor));
+											$_CLM = ASM::$clm->getCurrentsession();
+											ASM::$clm->newSession();
+											ASM::$clm->load(array('id' => $rColor));
+											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ASM::$clm->get()->name, 'Taxe actuelle' => ASM::$ctm->get()->importTax . ' %', 'Taxe proposée' => $taxes . ' %')));
+											ASM::$clm->changeSession($_CLM);
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+											CTR::redirect('faction/view-senate');
 										} else {
 											CTR::$alert->add('Entre 2 et 15.', ALERT_STD_ERROR);
 										}
