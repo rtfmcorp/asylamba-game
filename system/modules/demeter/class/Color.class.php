@@ -95,8 +95,26 @@ class Color {
 		for ($i = 0; $i < ASM::$pam->size(); $i++) {
 			if (ASM::$pam->get($i)->status < PAM_TREASURER) {
 				if ($i < $limit) {
+					if (ASM::$pam->get($i)->status != PAM_PARLIAMENT) {
+						$notif = new Notification();
+						$notif->dSending = Utils::now();
+						$notif->setRPlayer(ASM::$pam->get($i)->status);
+						$notif->setTitle('Vous êtes sénateur');
+						$notif->addBeg()
+							->addTxt('Vos actions vous ont fait gagner assez de prestige pour faire partie du sénat.');
+						ASM::$ntm->add($notif);
+					}
 					ASM::$pam->get($i)->status = PAM_PARLIAMENT;
 				} else {
+					if (ASM::$pam->get($i)->status == PAM_PARLIAMENT) {
+						$notif = new Notification();
+						$notif->dSending = Utils::now();
+						$notif->setRPlayer(ASM::$pam->get($i)->status);
+						$notif->setTitle('Vous n\'êtes plus sénateur');
+						$notif->addBeg()
+							->addTxt('Vous n\'avez plus assez de prestige pour rester dans le sénat.');
+						ASM::$ntm->add($notif);
+					}
 					ASM::$pam->get($i)->status = PAM_STANDARD;
 				}
 			}

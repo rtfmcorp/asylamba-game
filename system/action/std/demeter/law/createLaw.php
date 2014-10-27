@@ -31,8 +31,15 @@ if ($type !== FALSE) {
 				$law->statement = 0;
 				if (LawResources::getInfo($type, 'bonusLaw')) {
 					$law->options = serialize(array());
-					ASM::$lam->add($law);
-					ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+					$_LAM = ASM::$lam->getCurrentsession();
+					ASM::$lam->newSession();
+					ASM::$lam->load(array('type' => $type, 'rColor' => CTR::$data->get('playerInfo')->get('color'), 'statement' => array(Law::EFFECTIVE, Law::VOTATION)));
+					if (ASM::$lam-size() == 0) {
+						ASM::$lam->add($law);
+						ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');	
+					} else {
+						CTR::$alert->add('Cette loi est déjà proposée ou en vigueur.', ALERT_STD_ERROR);
+					}
 				} else {
 					switch ($type) {
 						case 1:
@@ -131,7 +138,7 @@ if ($type !== FALSE) {
 											CTR::$alert->add('Pas plus que 15.', ALERT_STD_ERROR);
 										}
 									} else {
-										if ($taxes <= 15 && $taxes >=2) {
+										if ($taxes <= 15 && $taxes >= 2) {
 											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor));
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
