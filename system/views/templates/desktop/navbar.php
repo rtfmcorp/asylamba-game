@@ -47,7 +47,7 @@ echo '<div id="nav">';
 		$finded = FALSE;
 		for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 			if ($finded) {
-				$nextBaseId = CTR::$data->get('playerBase')->get('ob')->get(0)->get('id');
+				$nextBaseId = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 				break;
 			}
 			if (CTR::$data->get('playerParams')->get('base') == CTR::$data->get('playerBase')->get('ob')->get($i)->get('id')) {
@@ -229,6 +229,7 @@ echo '<div id="nav">';
 		echo '<hr />';
 		echo '<a target="_blank" href="' . FACEBOOK_LINK . '">Rejoindre la page Facebook</a>';
 		echo '<a target="_blank" href="' . GOOGLE_PLUS_LINK . '">Nous suivre sur Google+</a>';
+		echo '<a target="_blank" href="' . TWITTER_LINK . '">Nous suivre sur Twitter</a>';
 	echo '</div>';
 echo '</div>';
 

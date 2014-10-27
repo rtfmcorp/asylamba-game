@@ -1,0 +1,27 @@
+<?php
+include_once DEMETER;
+
+$rForum = Utils::getHTTPData('rforum');
+$id = Utils::getHTTPData('id');
+
+if ($rForum && $id) {
+	$_TOM = ASM::$tom->getCurrentSession();
+	ASM::$tom->newSession();
+	ASM::$tom->load(array('id' => $id));
+
+	if (ASM::$tom->size() > 0) {
+		if (CTR::$data->get('playerInfo')->get('status') > 2) {
+			ASM::$tom->get()->rForum = $rForum;
+			ASM::$tom->get()->dLastModification = Utils::now();
+
+			CTR::redirect('faction/view-forum/forum-' . $rForum . '/topic-' . ASM::$tom->get()->id);
+		} else {
+			CTR::$alert->add('Vous n\'avez pas les droits pour cette opération', ALERT_STD_FILLFORM);
+		}
+	} else {
+		CTR::$alert->add('Ce sujet n\'existe pas', ALERT_STD_FILLFORM);	
+	}
+	ASM::$tom->changeSession($_TOM);
+} else {
+	CTR::$alert->add('Manque d\'information', ALERT_STD_FILLFORM);
+}

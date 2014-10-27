@@ -12,8 +12,9 @@ session_set_cookie_params(0);
 ini_set('session.gc_maxlifetime', 3600 * 24);
 session_start();
 
-define('FACEBOOK_LINK',			'#');
-define('GOOGLE_PLUS_LINK',		'#');
+define('FACEBOOK_LINK',			'https://www.facebook.com/asylamba');
+define('GOOGLE_PLUS_LINK',		'https://plus.google.com/+Asylamba-game');
+define('TWITTER_LINK',			'https://twitter.com/asylamba');
 
 # asm constantes
 define('ASM_UMODE', 			TRUE);

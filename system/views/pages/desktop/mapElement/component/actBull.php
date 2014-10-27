@@ -143,10 +143,10 @@ echo '<div class="column act">';
 					echo 'Vous ne pouvez proposer une route commerciale qu\'à des joueurs';
 				} elseif ($place->getId() == $defaultBase->getId()) {
 					echo 'Vous ne pouvez pas proposer une route commerciale sur votre propre base';
-				} elseif ($defaultBase->levelCommercialPlateforme == 0) {
-					echo 'Il vous faut une plateforme commerciale pour proposer une route commericale';
-				} elseif ($place->levelCommercialPlateforme == 0) {
-					echo 'Le joueur ne dispose pas d\'une plateforme commerciale';
+				} elseif ($defaultBase->levelSpatioport == 0) {
+					echo 'Il vous faut un spatioport pour proposer une route commericale';
+				} elseif ($place->levelSpatioport == 0) {
+					echo 'Le joueur ne dispose pas d\'un spatioport';
 				} else {
 					$proposed 	 = FALSE;
 					$notAccepted = FALSE;
@@ -192,9 +192,9 @@ echo '<div class="column act">';
 						}
 						echo 'Coûts de construction : ' . Format::numberFormat($price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" /><br />';
 						if ($proposed) {
-							echo '<a href="' . APP_ROOT . 'bases/view-commercialplateforme/mode-route" class="button">Annuler la proposition</a>';
+							echo '<a href="' . APP_ROOT . 'bases/view-spatioport" class="button">Annuler la proposition</a>';
 						} elseif ($notAccepted) {
-							echo '<a href="' . APP_ROOT . 'bases/view-commercialplateforme/mode-route" class="button">Accepter la proposition</a>';
+							echo '<a href="' . APP_ROOT . 'bases/view-spatioport" class="button">Accepter la proposition</a>';
 						} elseif ($standby) {
 							echo '<span class="button">C\'est la guerre</span>';
 						} else {
@@ -207,7 +207,7 @@ echo '<div class="column act">';
 								}
 							}
 
-							if ($ur < OrbitalBaseResource::getBuildingInfo(6, 'level', $defaultBase->levelCommercialPlateforme, 'nbRoutesMax')) {
+							if ($ur < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $defaultBase->levelSpatioport, 'nbRoutesMax')) {
 								echo '<a href="' . APP_ROOT . 'action/a-proposeroute/basefrom-' . $defaultBase->getId() . '/baseto-' . $place->getId() . '" class="button">Proposer une route</a>';
 							} else {
 								echo '<span class="button">Pas assez de slot</span>';
@@ -232,7 +232,7 @@ echo '<div class="column act">';
 						'petit' => 1000,
 						'moyen' => 2500,
 						'grand' => 5000,
-						'très grande' => 10000
+						'très grand' => 10000
 					);
 
 					foreach ($prices as $label => $price) { 

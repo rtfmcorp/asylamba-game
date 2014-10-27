@@ -59,6 +59,15 @@ if ($direction !== FALSE AND $baseId !== FALSE AND $shipId !== FALSE AND $comman
 							$base->setShipStorage($shipId, ($base->getShipStorage($shipId) - $quantity));
 							$commander->getSquadron($squadron)->updateShip($shipId, $quantity);
 							# CTR::$alert->add('Vaisseau(x) envoyé(s) dans l\'escadrille.', ALERT_BUG_SUCCESS);
+
+							# tutorial
+							if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
+								switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+									case TutorialResource::FILL_SQUADRON:
+										TutorialHelper::setStepDone();
+										break;
+								}
+							}
 						} else {
 							CTR::$alert->add('Il n\'y a pas assez de place dans l\'escadrille pour ces vaisseaux.', ALERT_STD_ERROR);
 						}

@@ -74,8 +74,8 @@
 .component h4 {
 	margin: 10px 10px 0 10px;
 	font-weight: normal;
-	font-size: 15px;
-}
+	font-size: 18px;
+} 
 
 .component .body p {
 	margin: 10px;
@@ -162,6 +162,11 @@
 	.label {
 		display: block;
 		font-size: 13px;
+
+		.icon-color {
+			width: 15px;
+			padding: 1px;
+		}
 	}
 
 	.value {
@@ -175,6 +180,28 @@
 			position: relative;
 			top: -3px;
 		}
+	}
+
+	.picto {
+		position: absolute;
+		top: 7px; left: 10px;
+		height: 35px; width: 35px;
+		line-height: 35px;
+		padding: 5px;
+		border-radius: 100%;
+		background: #202020;
+		font-size: 16px;
+		text-align: center;
+		color: white;
+		text-decoration: none;
+
+		&.color1 { background: @dark-1; }
+		&.color2 { background: @dark-2; }
+		&.color3 { background: @dark-3; }
+		&.color4 { background: @dark-4; }
+		&.color5 { background: @dark-5; }
+		&.color6 { background: @dark-6; }
+		&.color7 { background: @dark-7; }
 	}
 
 	.hide {
@@ -196,6 +223,11 @@
 			border-radius: 3px;
 			background: @medium;
 		}
+	}
+
+	.progress-bar {
+		text-align: left;
+		margin-top: 5px;
 	}
 }
 
@@ -358,6 +390,14 @@
 
 		&:nth-child(n)  { background: @light; }
 		&:nth-child(2n) { background: @dark; }
+
+		&.color1 { background: @medium-1; }
+		&.color2 { background: @medium-2; }
+		&.color3 { background: @medium-3; }
+		&.color4 { background: @medium-4; }
+		&.color5 { background: @medium-5; }
+		&.color6 { background: @medium-6; }
+		&.color7 { background: @medium-7; }
 	}
 
 	.step {
@@ -561,7 +601,7 @@
 
 	strong {
 		position: absolute;
-		top: 8px; left: 70px;
+		top: 5px; left: 70px;
 		color: white;
 		font-weight: bold;
 		font-size: 17px;
@@ -569,7 +609,7 @@
 
 	em {
 		position: absolute;
-		top: 32px; left: 70px;
+		top: 30px; left: 70px;
 		color: white;
 		font-weight: normal;
 		font-size: 12px;
@@ -641,6 +681,15 @@
 				margin: 10px; padding: 5px;
 				border-radius: 100%;
 				background: #202020;
+
+				&.round-color0 { background: #CCC; }
+				&.round-color1 { background: @light-1; }
+				&.round-color2 { background: @light-2; }
+				&.round-color3 { background: @light-3; }
+				&.round-color4 { background: @light-4; }
+				&.round-color5 { background: @light-5; }
+				&.round-color6 { background: @light-6; }
+				&.round-color7 { background: @light-7; }
 			}
 		}
 
@@ -706,6 +755,10 @@
 	border: solid 1px #0A0A0A;
 	border-top: solid 1px #202020;
 	width: 278px;
+
+	&.disabled {
+		opacity: .3;
+	}
 }
 
 .component .build-item.large {
@@ -730,7 +783,7 @@
 
 .component .build-item .name strong {
 	display: block;
-	font-size: 20px;
+	font-size: 18px;
 }
 
 .component .build-item.disable .name strong {
@@ -873,10 +926,6 @@
 
 .component .build-item .ship-illu img {
 	width: 100%;
-}
-
-.component.panel-info h4 {
-	font-size: 20px;
 }
 
 .component.panel-info .remove-info {

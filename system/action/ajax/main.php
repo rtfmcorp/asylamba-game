@@ -28,6 +28,7 @@ switch (CTR::$get->get('a')) {
 
 	# XHR RETURN WYSIWYG
 	case 'wswpy':					include PAGES . 'ajax/wsw/player.php'; break;
+	case 'wswpl':					include PAGES . 'ajax/wsw/place.php'; break;
 
 	default:
 		CTR::$alert->add('action inconnue ou non-référencée', ALERT_STD_ERROR);

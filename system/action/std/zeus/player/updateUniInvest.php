@@ -13,6 +13,15 @@ if ($credit !== FALSE) {
 	ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
 	ASM::$pam->get()->iUniversity = $credit;
 
+	# tutorial
+	if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
+		switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+			case TutorialResource::MODIFY_UNI_INVEST:
+				TutorialHelper::setStepDone();
+				break;
+		}
+	}
+
 	CTR::$alert->add('L\'investissement dans l\'université a été modifié', ALERT_STD_SUCCESS);
 
 	ASM::$pam->changeSession($S_PAM1);

@@ -25,21 +25,22 @@ class OrbitalBase {
 	public $rPlayer;
 	public $name;
 	public $typeOfBase = 0;
-	public $levelGenerator = 2;
+	public $levelGenerator = 1;
 	public $levelRefinery = 1;
 	public $levelDock1 = 1;
 	public $levelDock2 = 0;
 	public $levelDock3 = 0;
 	public $levelTechnosphere = 1;
 	public $levelCommercialPlateforme = 0;
-	public $levelGravitationalModule = 0;
+	public $levelStorage = 1;
+	public $levelRecycling = 0;
+	public $levelSpatioport = 0;
 	public $points = 0;
 	public $iSchool = 1000;
 	public $iAntiSpy = 0;
 	public $antiSpyAverage = 0;
 	public $shipStorage = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 	public $motherShip = 0; // 1 = a motherShip level 1 is stocked, 2 = level 2, 3 = level 3
-	public $isProductionRefinery = 1;
 	public $resourcesStorage = 5000;
 	public $uOrbitalBase = '';
 	public $dCreation = '';
@@ -68,7 +69,9 @@ class OrbitalBase {
 	public $realDock3Level;
 	public $realTechnosphereLevel;
 	public $realCommercialPlateformeLevel;
-	public $realGravitationalModuleLevel;
+	public $realStorageLevel;
+	public $realRecyclingLevel;
+	public $realSpatioportLevel;
 	// PUBLIC ATTRIBUTES
 	public $buildingManager;
 	public $dock1Manager;
@@ -90,14 +93,15 @@ class OrbitalBase {
 	public function getLevelDock3() { return $this->levelDock3; }
 	public function getLevelTechnosphere() { return $this->levelTechnosphere; }
 	public function getLevelCommercialPlateforme() { return $this->levelCommercialPlateforme; }
-	public function getLevelGravitationalModule() { return $this->levelGravitationalModule; }
+	public function getLevelStorage() { return $this->levelStorage; }
+	public function getLevelRecycling() { return $this->levelRecycling; }
+	public function getLevelSpatioport() { return $this->levelSpatioport; }
 	public function getPoints() { return $this->points; }
 	public function getISchool() { return $this->iSchool; }
 	public function getIAntiSpy() { return $this->iAntiSpy; }
 	public function getAntiSpyAverage() { return $this->antiSpyAverage; }
 	public function getShipStorage($k = -1) {return ($k == -1) ? $this->shipStorage : $this->shipStorage[$k]; }
 	public function getMotherShip() { return $this->motherShip; }
-	public function getIsProductionRefinery() { return $this->isProductionRefinery; }
 	public function getResourcesStorage() { return $this->resourcesStorage; }
 	public function getDCreation() { return $this->dCreation; }
 
@@ -124,7 +128,9 @@ class OrbitalBase {
 	public function getRealDock3Level() { return $this->realDock3Level; }
 	public function getRealTechnosphereLevel() { return $this->realTechnosphereLevel; }
 	public function getRealCommercialPlateformeLevel() { return $this->realCommercialPlateformeLevel; }
-	public function getRealGravitationalModuleLevel() { return $this->realGravitationalModuleLevel; }
+	public function getRealStorageLevel() { return $this->realStorageLevel; }
+	public function getRealRecyclingLevel() { return $this->realRecyclingLevel; }
+	public function getRealSpatioportLevel() { return $this->realSpatioportLevel; }
 
 	public function getBuildingLevel($buildingNumber) {
 		switch ($buildingNumber) {
@@ -135,7 +141,9 @@ class OrbitalBase {
 			case 4 : return $this->levelDock3;
 			case 5 : return $this->levelTechnosphere;
 			case 6 : return $this->levelCommercialPlateforme;
-			case 7 : return $this->levelGravitationalModule;
+			case 7 : return $this->levelStorage;
+			case 8 : return $this->levelRecycling;
+			case 9 : return $this->levelSpatioport;
 			default : 
 				CTR::$alert->add('Bâtiment invalide');
 				CTR::$alert->add('dans getBuildingLevel de OrbitalBase', ALERT_BUG_ERROR);
@@ -155,14 +163,15 @@ class OrbitalBase {
 	public function setLevelDock3($var) { $this->levelDock3 = $var; }
 	public function setLevelTechnosphere($var) { $this->levelTechnosphere = $var; }
 	public function setLevelCommercialPlateforme($var) { $this->levelCommercialPlateforme = $var; }
-	public function setLevelGravitationalModule($var) { $this->levelGravitationalModule = $var; }
+	public function setLevelStorage($var) { $this->levelStorage = $var; }
+	public function setLevelRecycling($var) { $this->levelRecycling = $var; }
+	public function setLevelSpatioport($var) { $this->levelSpatioport = $var; }
 	public function setPoints($var) { $this->points = $var; }
 	public function setISchool($var) { $this->iSchool = $var; }
 	public function setIAntiSpy($var) { $this->iAntiSpy = $var; }
 	public function setAntiSpyAverage($var) { $this->antiSpyAverage = $var; }
 	public function setShipStorage($k, $v) { $this->shipStorage[$k] = $v; }
 	public function setMotherShip($var) { $this->motherShip = $var; }
-	public function setIsProductionRefinery($var) { $this->isProductionRefinery = $var; }
 	public function setResourcesStorage($var) { $this->resourcesStorage = $var; }
 	public function setDCreation($var) { $this->dCreation = $var; }
 
@@ -189,7 +198,9 @@ class OrbitalBase {
 	public function setRealDock3Level($var) { $this->realDock3Level = $var; }
 	public function setRealTechnosphereLevel($var) { $this->realTechnosphereLevel = $var; }
 	public function setRealCommercialPlateformeLevel($var) { $this->realCommercialPlateformeLevel = $var; }
-	public function setRealGravitationalModuleLevel($var) { $this->realGravitationalModuleLevel = $var; }
+	public function setRealStorageLevel($var) { $this->realStorageLevel = $var; }
+	public function setRealRecyclingLevel($var) { $this->realRecyclingLevel = $var; }
+	public function setRealSpatioportLevel($var) { $this->realSpatioportLevel = $var; }
 
 	public function setBuildingLevel($buildingNumber, $level) {
 		switch ($buildingNumber) {
@@ -200,7 +211,9 @@ class OrbitalBase {
 			case 4 : $this->levelDock3 = $level; break;
 			case 5 : $this->levelTechnosphere = $level; break;
 			case 6 : $this->levelCommercialPlateforme = $level; break;
-			case 7 : $this->levelGravitationalModule = $level; break;
+			case 7 : $this->levelStorage = $level; break;
+			case 8 : $this->levelRecycling = $level; break;
+			case 9 : $this->levelSpatioport = $level; break;
 			default : 
 				CTR::$alert->add('bâtiment invalide');
 				CTR::$alert->add('dans setBuildingLevel de OrbitalBase', ALERT_BUG_ERROR);
@@ -321,20 +334,11 @@ class OrbitalBase {
 	}
 
 	public function uResources($playerBonus) {
-		$addResources = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(1, 'level', $this->levelRefinery, 'refiningCoefficient'), $this->planetResources);
-		if ($this->isProductionRefinery == 1) {
-			$modeBonus = $addResources * OBM_COEFPRODUCTION;
-			$technoBonus = $addResources * $playerBonus->bonus->get(PlayerBonus::REFINERY_REFINING) / 100;
-			$addResources += $modeBonus + $technoBonus;
-		}
+		$addResources = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $this->levelRefinery, 'refiningCoefficient'), $this->planetResources);
+		$addResources += $addResources * $playerBonus->bonus->get(PlayerBonus::REFINERY_REFINING) / 100;
 		$newResources = $this->resourcesStorage + (int) $addResources;
-		$maxStorage = OrbitalBaseResource::getBuildingInfo(1, 'level', $this->levelRefinery, 'storageSpace');
-		if ($this->isProductionRefinery == 0) {
-			$modeBonus = $maxStorage * OBM_COEFPRODUCTION;
-			$technoBonus = $maxStorage * 
-			$playerBonus->bonus->get(PlayerBonus::REFINERY_STORAGE) / 100;
-			$maxStorage += $modeBonus + $technoBonus;
-		}
+		$maxStorage = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $this->levelStorage, 'storageSpace');
+
 		if ($newResources > $maxStorage) {
 			$this->resourcesStorage = $maxStorage;
 		} else {
@@ -484,12 +488,8 @@ class OrbitalBase {
 	// OBJECT METHODS
 	public function increaseResources($resources) {
 		if (intval($resources)) {
-			$maxStorage = OrbitalBaseResource::getBuildingInfo(1, 'level', $this->levelRefinery, 'storageSpace');
-			if ($this->isProductionRefinery == 0) {
-				$maxStorage += $maxStorage * OBM_COEFPRODUCTION;
-			}
+			$maxStorage = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $this->levelStorage, 'storageSpace');
 			$newResources = $this->resourcesStorage + abs($resources);
-
 			if ($newResources > $maxStorage) {
 				$this->resourcesStorage = $maxStorage;
 			} else {

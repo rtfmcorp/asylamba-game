@@ -58,7 +58,9 @@ class ForumTopicManager extends Manager {
 			$topic->rPlayer = $awTopic['rPlayer'];
 			$topic->rColor = $awTopic['rColor'];
 			$topic->rForum = $awTopic['rForum'];
-			$topic->statement = $awTopic['statement'];
+			$topic->isArchived = $awTopic['isArchived'];
+			$topic->isUp = $awTopic['isUp'];
+			$topic->isClosed = $awTopic['isClosed'];
 			$topic->dCreation = $awTopic['dCreation'];
 			$topic->dLastMessage = $awTopic['dLastMessage'];
 			
@@ -83,7 +85,9 @@ class ForumTopicManager extends Manager {
 				rPlayer = ?,
 				rColor = ?,
 				rForum = ?,
-				statement = ?,
+				isArchived = ?,
+				isUp = ?,
+				isClosed = ?,
 				dCreation = ?,
 				dLastMessage = ?
 			WHERE id = ?');
@@ -92,7 +96,9 @@ class ForumTopicManager extends Manager {
 				$topic->rPlayer,
 				$topic->rColor,
 				$topic->rForum,
-				$topic->statement,
+				$topic->isArchived,
+				$topic->isUp,
+				$topic->isClosed,
 				$topic->dCreation,
 				$topic->dLastMessage,
 				$topic->id
@@ -108,8 +114,7 @@ class ForumTopicManager extends Manager {
 				title = ?,
 				rPlayer = ?,
 				rColor = ?,
-				rForum = ?,
-				statement = ?,
+				rForum = ?,zz
 				dCreation = ?,
 				dLastMessage = ?');
 		$aw = $qr->execute(array(
@@ -117,7 +122,6 @@ class ForumTopicManager extends Manager {
 				$newTopic->rPlayer,
 				$newTopic->rColor,
 				$newTopic->rForum,
-				$newTopic->statement,
 				Utils::now(),
 				Utils::now()
 				));

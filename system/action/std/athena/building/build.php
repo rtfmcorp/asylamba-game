@@ -28,7 +28,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 		$currentLevel = call_user_func(array($ob, 'getReal' . ucfirst(OrbitalBaseResource::getBuildingInfo($building, 'name')) . 'Level'));
 		$technos = new Technology(CTR::$data->get('playerId'));
 		if (OrbitalBaseResource::haveRights($building, $currentLevel + 1, 'resource', $ob->getResourcesStorage()) 
-			AND OrbitalBaseResource::haveRights($building, $currentLevel + 1, 'queue', ASM::$bqm->size()) 
+			AND OrbitalBaseResource::haveRights(OrbitalBaseResource::GENERATOR, $currentLevel + 1, 'queue', ASM::$bqm->size()) 
 			AND (OrbitalBaseResource::haveRights($building, $currentLevel + 1, 'buildingTree', $ob) === TRUE)
 			AND OrbitalBaseResource::haveRights($building, $currentLevel + 1, 'techno', $technos)) {
 
@@ -43,6 +43,11 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 						break;
 					case TutorialResource::REFINERY_LEVEL_3:
 						if ($building == OrbitalBaseResource::REFINERY AND $currentLevel + 1 >= 3) {
+							TutorialHelper::setStepDone();
+						}
+						break;
+					case TutorialResource::STORAGE_LEVEL_3:
+						if ($building == OrbitalBaseResource::STORAGE AND $currentLevel + 1 >= 3) {
 							TutorialHelper::setStepDone();
 						}
 						break;

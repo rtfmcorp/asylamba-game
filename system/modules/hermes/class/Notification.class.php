@@ -12,13 +12,13 @@
 
 class Notification {
 	// ATTRIBUTES
-	private $id 		= 0;
-	private $rPlayer 	= 0;
-	private $title 		= '';
-	private $content 	= '';
-	private $dSending;
-	private $readed 	= 0;
-	private $archived 	= 0;
+	public $id 			= 0;
+	public $rPlayer 	= 0;
+	public $title 		= '';
+	public $content 	= '';
+	public $dSending;
+	public $readed 		= 0;
+	public $archived 	= 0;
 	
 	// CONSTRUCTOR
 	public function __construct() {

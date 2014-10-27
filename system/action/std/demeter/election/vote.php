@@ -17,8 +17,15 @@ if ($rElection !== FALSE && $rCandidate !== FALSE) {
 	ASM::$cam->newSession();
 	ASM::$cam->load(array('rPlayer' => $rCandidate, 'rElection' => $rElection));
 
+	$_PAM = ASM::$pam->getCurrentSession();
+	ASM::$pam->load(array('rColor' => CTR::$data->get('playerInfo')->get('color'), 'status' => PAM_CHIEF));
+
+	if ($rCandidate == 0) {
+		$rCandidate = ASM::$pam->get()->id;
+	}
+
 	if (ASM::$elm->size() > 0) {
-		if (ASM::$cam->size() > 0) {
+		if (ASM::$cam->size() > 0 || ASM::$pam->get()->id == $rCandidate) {
 			if (ASM::$elm->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
 				$_VOM = ASM::$vom->getCurrentSession();
 				ASM::$vom->newSession();
@@ -58,6 +65,7 @@ if ($rElection !== FALSE && $rCandidate !== FALSE) {
 
 	ASM::$cam->changeSession($_CAM);
 	ASM::$elm->changeSession($_ELM);
+	ASM::$pam->changeSession($_PAM);
 } else {
 	CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 }

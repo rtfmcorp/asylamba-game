@@ -12,6 +12,8 @@ echo '<div class="component nav">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
+			echo '<a href="' . APP_ROOT .'faction/view-forum" class="more-button">Revenir aux forum</a>';
+
 			for ($i = 1; $i <= ForumResources::size(); $i++) { 
 				if (ForumResources::getInfo($i, 'id') < 10) {
 					$active = ((!CTR::$get->exist('forum') AND $i == 1) OR CTR::$get->get('forum') == ForumResources::getInfo($i, 'id')) ? 'active' : '';

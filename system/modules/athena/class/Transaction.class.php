@@ -26,9 +26,14 @@ class Transaction {
 	const EXPERIENCE_DIVIDER = 15000;
 
 	# minimum rates for each type
-	const MIN_RATE_RESOURCE = 1;
+	const MIN_RATE_RESOURCE = 0.2;
 	const MIN_RATE_SHIP = 1;
 	const MIN_RATE_COMMANDER = 1;
+
+	# maximum rates for each type
+	const MAX_RATE_RESOURCE = 1000;
+	const MAX_RATE_SHIP = 10000000;
+	const MAX_RATE_COMMANDER = 500;
 
 	# attributes
 	public $id = 0; 

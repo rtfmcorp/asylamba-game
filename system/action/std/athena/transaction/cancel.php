@@ -40,9 +40,6 @@ if ($rTransaction !== FALSE) {
 				switch ($transaction->type) {
 					case Transaction::TYP_RESOURCE :
 						$maxStorage = OrbitalBaseResource::getBuildingInfo(1, 'level', $base->getLevelRefinery(), 'storageSpace');
-						if ($base->getIsProductionRefinery() == 0) {
-							$maxStorage += $maxStorage * OBM_COEFPRODUCTION;
-						}
 						$storageSpace = $maxStorage - $base->getResourcesStorage();
 						if ($storageSpace >= $transaction->quantity) {
 							$base->increaseResources($transaction->quantity);

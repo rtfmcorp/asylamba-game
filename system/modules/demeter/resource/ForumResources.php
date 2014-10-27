@@ -13,7 +13,7 @@
 #id des forums : < 10 = pour tous les gens d'une faction, >= 10 < 20 = pour le gouvernement d'une fac, >= 20 pour les chefs de toutes les factions
 Class ForumResources {
 
-	private static $idLink = array(1, 2, 3, 4, 10, 20);
+	private static $idLink = array(1, 2, 3, 4, 5, 10, 20);
 
 	private static $forums = array(
 		array(
@@ -26,8 +26,8 @@ Class ForumResources {
 		array(
 			'id' => 2,
 			'devName' => 'noob',
-			'name' => 'Aide',
-			'shortDescription' => 'Nouveau ? Besoin d\'aide ? C\'est ici que ça se passe',
+			'name' => 'Commerce',
+			'shortDescription' => 'Proposition de route commerciale, offre sur le marché',
 			'longDescription' =>'',
 			'image' => ''),
 		array(
@@ -45,6 +45,13 @@ Class ForumResources {
 			'longDescription' =>'',
 			'image' => ''),
 		array(
+			'id' => 5,
+			'devName' => 'op',
+			'name' => 'Opération Spéciale',
+			'shortDescription' => 'Pour les guerre éclaires ou pour une défense efficace',
+			'longDescription' =>'',
+			'image' => ''),
+		array(
 			'id' => 10,
 			'devName' => 'government',
 			'name' => 'Salle du Conseil',
@@ -58,6 +65,13 @@ Class ForumResources {
 			'shortDescription' => 'Seuls les chefs de chaque faction on accès à l\'ambassade',
 			'longDescription' =>'',
 			'image' => ''),
+		array(
+			'id' => 30,
+			'devName' => 'campaign',
+			'name' => 'campaign',
+			'shortDescription' => '',
+			'longDescription' =>'',
+			'image' => '')
 	);
 
 	public static function getInfo($id, $info) {

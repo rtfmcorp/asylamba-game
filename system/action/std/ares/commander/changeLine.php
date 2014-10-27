@@ -22,9 +22,6 @@ if ($commanderId !== FALSE) {
 		ASM::$obm->load(array('rPlace' => $commander->rBase));
 
 		# checker si on a assez de place !!!!!
-
-
-
 		if ($commander->line == 1) {
 			$S_COM2 = ASM::$com->getCurrentSession();
 			ASM::$com->newSession();
@@ -49,11 +46,19 @@ if ($commanderId !== FALSE) {
 			ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 1));
 			$nbrLine1 = ASM::$com->size();
 
+			# tutorial
+			if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
+				switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+					case TutorialResource::MOVE_FLEET_LINE:
+						TutorialHelper::setStepDone();
+						break;
+				}
+			}
+			
 			if ($nbrLine1 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'l-line')) {
 				$commander->line = 1;
 
 				CTR::redirect();
-
 			} else {
 				$commander->line = 1;
 				ASM::$com->get()->line = 2;

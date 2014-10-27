@@ -72,13 +72,17 @@ class Format {
 	 *     : int => nombre de chiffre après la virgule
 	 */
 	public static function numberFormat($number, $decimals = 0) {
-		return ($decimals == -1 AND $number > 9999)
-			? number_format(ceil($number / 1000), $decimals, ',', ' ') . ' k'
-			: number_format($number, $decimals, ',', ' ');
+		return self::number($number, $decimals);
 	}
 
 	public static function number($number, $decimals = 0) {
-		return self::numberFormat($number, $decimals);
+		if ($decimals == -2 AND $number > 999999) {
+			return number_format(ceil($number / 1000000), $decimals, ',', ' ') . ' Mio';
+		} elseif ($decimals <= -1 AND $number > 9999) {
+			return number_format(ceil($number / 1000), $decimals, ',', ' ') . ' k';
+		} else {
+			return number_format($number, $decimals, ',', ' ');
+		}
 	}
 
 	public static function percent($number, $base, $ceil = TRUE) {

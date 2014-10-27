@@ -62,7 +62,7 @@ for ($i = 6; $i < 12; $i++) {
 				$resourcePrice -= round($resourcePrice * ColorResource::BONUS_EMPIRE_CRUISER / 100);
 			}
 		}
-		if (!ShipResource::haveRights($i, 'queue', ASM::$sqm->size())) {
+		if (!ShipResource::haveRights($i, 'queue', $ob_dock2, ASM::$sqm->size())) {
 			# queue size
 			$but = '<span class="button disable">';
 				$but .= 'file de construction pleine<br />';
@@ -149,7 +149,7 @@ echo '<div class="component">';
 					echo '</div>';
 				}
 
-				if ($realSizeQueue > SQM_SHIPMAXQUEUE) {
+				if ($realSizeQueue > OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::DOCK2, 'level', $ob_dock2->levelDock2, 'nbQueues')) {
 					echo '<p><em>file de construction pleine, revenez dans un moment.</em></p>';
 				}
 				echo '</div>';

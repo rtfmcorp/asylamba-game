@@ -35,7 +35,7 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 		ASM::$sqm->load(array('rOrbitalBase' => $baseId, 'dockType' => $dockType), array('dEnd'));
 		$technos = new Technology(CTR::$data->get('playerId'));
 		if (ShipResource::haveRights($ship, 'resource', $ob->getResourcesStorage(), $quantity)
-			AND ShipResource::haveRights($ship, 'queue', ASM::$sqm->size())
+			AND ShipResource::haveRights($ship, 'queue', $ob, ASM::$sqm->size())
 			AND ShipResource::haveRights($ship, 'shipTree', $ob)
 			AND ShipResource::haveRights($ship, 'pev', $ob, $quantity)
 			AND ShipResource::haveRights($ship, 'techno', $technos)) {

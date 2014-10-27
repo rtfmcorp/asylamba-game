@@ -17,8 +17,7 @@ echo '<div id="content">';
 			echo '</div>';
 			echo '<div class="fix-body">';
 				echo '<div class="body">';
-					echo '<p class="info">Remplissez maintenant les informations de votre profil.</p>';
-					echo '<hr />';
+					echo '<h4>Choisissez votre nom dans le jeu</h4>';
 					if (CTR::$data->get('inscription')->exist('pseudo')) {
 						echo '<p><input type="text" name="pseudo" id="pseudo" maxlength="15" required disabled value="' . CTR::$data->get('inscription')->get('pseudo') . '" /></p>';
 					} elseif (CTR::$data->get('inscription')->get('portalPseudo') !== '') {
@@ -26,7 +25,7 @@ echo '<div id="content">';
 					} else {
 						echo '<p><input type="text" name="pseudo" id="pseudo" maxlength="15" required placeholder="pseudo" /></p>';
 					}
-					echo '<p class="info">Nous déconseillons les noms moins roleplay, essayez de coller avec l\'histoire et les moeurs de votre faction.</p>';
+					echo '<p>Nous déconseillons les noms moins roleplay, essayez de coller avec l\'histoire et les moeurs de votre faction.</p>';
 				echo '</div>';
 			echo '</div>';
 		echo '</div>';
