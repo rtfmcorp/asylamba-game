@@ -5,12 +5,17 @@
 # affichage d'un topic
 
 # require
-	# {topic}			topic_topic
-	# [{message}]		message_topic
+	# {topic}				topic_topic
+	# [{message}]			message_topic
+	# *bool					election_topic
 
 echo '<div class="component topic size2">';
 	echo '<div class="head skin-2">';
-		echo '<h2>' . $topic_topic->title . '</h2>';
+		if (isset($election_topic) AND $election_topic) {
+			# pass
+		} else {
+			echo '<h2>' . $topic_topic->title . '</h2>';
+		}
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';

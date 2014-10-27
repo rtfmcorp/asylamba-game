@@ -257,15 +257,55 @@ echo '<div id="content">';
 			$PAM_ELC_TOKEN = ASM::$pam->newSession(FALSE);
 			ASM::$pam->load(array('rColor' => CTR::$data->get('playerInfo')->get('color')));
 
-			$nbCandidate = ASM::$cam->size();
-			include COMPONENT . 'faction/election/election.php';
+			if ($faction->getRegime() == Color::DEMOCRATIC) {
 
-			$rElection = ASM::$elm->get(0)->id;
-			include COMPONENT . 'faction/election/list.php';
+				$nbCandidate = ASM::$cam->size();
+				include COMPONENT . 'faction/election/election.php';
 
-			if (CTR::$get->exist('candidate') AND ASM::$cam->getById(CTR::$get->get('candidate')) !== FALSE) {
-				$candidat = ASM::$cam->getById(CTR::$get->get('candidate'));
+				$rElection = ASM::$elm->get(0)->id;
+				include COMPONENT . 'faction/election/list.php';
 
+				if (CTR::$get->exist('candidate') AND ASM::$cam->getById(CTR::$get->get('candidate')) !== FALSE) {
+					$candidat = ASM::$cam->getById(CTR::$get->get('candidate'));
+
+					include COMPONENT . 'faction/election/candidate.php';
+
+					ASM::$tom->load(
+						array(
+							'rForum' => 30, 
+							'rPlayer' => $candidat->rPlayer
+						),
+						array('id', 'DESC'),
+						array(0, 1),
+						CTR::$data->get('playerId')
+					);
+
+					if (ASM::$tom->size() == 1) {
+						$topic_topic = ASM::$tom->get(0);
+						$topic_topic->updateLastView(CTR::$data->get('playerId'));
+
+						$S_FMM1 = ASM::$fmm->getCurrentSession();
+						ASM::$fmm->newSession();
+						ASM::$fmm->load(array('rTopic' => $topic_topic->id), array('dCreation', 'DESC', 'id', 'DESC'));
+
+						$message_topic = array();
+						for ($i = 0; $i < ASM::$fmm->size(); $i++) { 
+							$message_topic[$i] = ASM::$fmm->get($i);
+						}
+						$election_topic = TRUE;
+						include COMPONENT . 'faction/forum/topic.php';
+
+						ASM::$fmm->changeSession($S_FMM1);
+					}
+				}
+			} elseif ($faction->getRegime() == Color::ROYALISTIC) {
+				# time variables
+				$startPutsch  = $faction->dLastElection;
+				$endPutsch    = Utils::addSecondsToDate($faction->dLastElection, Color::PUTSCHTIME);
+				$remainPutsch = Utils::interval($startPutsch, $endPutsch, 's');
+				include COMPONENT . 'faction/election/putsch.php';
+
+				$candidat = ASM::$cam->get(0);
 				include COMPONENT . 'faction/election/candidate.php';
 
 				ASM::$tom->load(
@@ -290,7 +330,7 @@ echo '<div id="content">';
 					for ($i = 0; $i < ASM::$fmm->size(); $i++) { 
 						$message_topic[$i] = ASM::$fmm->get($i);
 					}
-
+					$election_topic = TRUE;
 					include COMPONENT . 'faction/forum/topic.php';
 
 					ASM::$fmm->changeSession($S_FMM1);
