@@ -3,7 +3,7 @@ $parser = new Parser();
 $status = ColorResource::getInfo($faction->id, 'status');
 
 $S_VOM1 = ASM::$vom->getCurrentSession();
-ASM::$vom->changeSession($S_ELM_ELC);
+ASM::$vom->changeSession($VOM_ELC_TOKEN);
 
 echo '<div class="component player profil size1">';
 	echo '<div class="head"></div>';
