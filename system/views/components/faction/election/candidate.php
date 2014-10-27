@@ -2,6 +2,9 @@
 $parser = new Parser();
 $status = ColorResource::getInfo($faction->id, 'status');
 
+$S_VOM1 = ASM::$vom->getCurrentSession();
+ASM::$vom->changeSession($S_ELM_ELC);
+
 echo '<div class="component player profil size1">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
@@ -78,5 +81,5 @@ echo '<div class="component">';
 	echo '</div>';
 echo '</div>';
 
-ASM::$cam->changeSession($S_CAM_1);
+ASM::$vom->changeSession($S_VOM1);
 ?>
