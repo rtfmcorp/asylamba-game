@@ -12,30 +12,42 @@ echo '<div class="component uni">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<h4>Lois actives</h4>';
-			echo '<p><em>Aucune loi active</em></p>';
 
-			/*for ($i = 0; $i < 2; $i++) { 
+			$S_LAM_TMP = ASM::$lam->getCurrentSession();
+			ASM::$lam->changeSession($S_LAM_ACT);
+
+			for ($i = 0; $i < ASM::$lam->size(); $i++) { 
 				echo '<div class="build-item">';
 					echo '<div class="name">';
-						echo '<img src="' . MEDIA . 'university/mathematics.png" alt="">';
-						echo '<strong>Mathématiques</strong>';
-						echo '<em>niveau 73</em>';
+						echo '<img src="' . MEDIA . 'faction/law/common.png" alt="">';
+						echo '<strong>' . LawResources::getInfo(ASM::$lam->get($i)->type, 'name') . '</strong>';
 					echo '</div>';
 				echo '</div>';
-			}*/
+			}
+
+			if (ASM::$lam->size() == 0) {
+				echo '<p><em>Aucune loi active</em></p>';
+			}
+
+			ASM::$lam->changeSession($S_LAM_TMP);
 
 			echo '<h4>Lois en cours de votation</h4>';
-			echo '<p><em>Aucune loi en cours de votation</em></p>';
 
-			/*for ($i = 0; $i < 3; $i++) { 
+			$S_LAM_TMP = ASM::$lam->getCurrentSession();
+			ASM::$lam->changeSession($S_LAM_VOT);
+
+			for ($i = 0; $i < ASM::$lam->size(); $i++) { 
 				echo '<div class="build-item">';
 					echo '<div class="name">';
-						echo '<img src="' . MEDIA . 'university/mathematics.png" alt="">';
-						echo '<strong>Mathématiques</strong>';
-						echo '<em>niveau 73</em>';
+						echo '<img src="' . MEDIA . 'faction/law/common.png" alt="">';
+						echo '<strong>' . LawResources::getInfo(ASM::$lam->get($i)->type, 'name') . '</strong>';
 					echo '</div>';
 				echo '</div>';
-			}*/
+			}
+
+			if (ASM::$lam->size() == 0) {
+				echo '<p><em>Aucune loi active</em></p>';
+			}
 
 			echo '<h4>Bonus de factions</h4>';
 

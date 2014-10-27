@@ -5,40 +5,6 @@ ASM::$pam->changeSession($PLAYER_GOV_TOKEN);
 
 $status = ColorResource::getInfo($faction->id, 'status');
 
-echo '<div class="component profil">';
-	echo '<div class="head skin-1">';
-		echo '<h1>Gouvernement</h1>';
-	echo '</div>';
-	echo '<div class="fix-body">';
-		echo '<div class="body">';
-			$have = FALSE;
-			for ($i = 0; $i < ASM::$pam->size(); $i++) { 
-				if (ASM::$pam->get($i)->status == PAM_CHIEF) {
-					echo '<div class="center-box">';
-						echo '<span class="label">' . $status[ASM::$pam->get($i)->status - 1] . ' de ' . ColorResource::getInfo(ASM::$pam->get($i)->rColor, 'popularName') . '</span>';
-						echo '<span class="value">' . ASM::$pam->get($i)->name . '</span>';
-					echo '</div>';
-
-					echo '<div class="profil-flag color-' . ASM::$pam->get($i)->rColor . '">';
-						echo '<img ';
-							echo 'src="' . MEDIA . '/avatar/big/' . ASM::$pam->get($i)->avatar . '.png" ';
-							echo 'alt="avatar de ' . ASM::$pam->get($i)->name . '" ';
-						echo '/>';
-					echo '</div>';
-
-					$have = TRUE;
-					break;
-				}
-			}
-			if (!$have) {
-				echo '<div class="center-box">';
-					echo '<span class="value">Aucun ' . $status[5] . '</span>';
-				echo '</div>';
-			}
-		echo '</div>';
-	echo '</div>';
-echo '</div>';
-
 echo '<div class="component profil player size1">';
 	echo '<div class="head skin-2"></div>';
 	echo '<div class="fix-body">';
@@ -61,6 +27,8 @@ echo '<div class="component profil player size1">';
 							echo '<strong class="name">' .  ASM::$pam->get($i)->name . '</strong>';
 							echo '<span class="experience">' . Format::number( ASM::$pam->get($i)->factionPoint) . ' de prestige</span>';
 						echo '</div>';
+
+						echo '<a href="' . APP_ROOT . 'action/a-fireminister/rplayer-' . ASM::$pam->get($i)->id . '" class="more-button">Démettre de ses fonctions</a>';
 
 						$have = TRUE;
 						break;
