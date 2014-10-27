@@ -235,9 +235,25 @@ echo '<div id="content">';
 		}
 	} elseif (CTR::$get->get('view') == 'senate') {
 		if (in_array(CTR::$data->get('playerInfo')->get('status'), array(PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER, PAM_PARLIAMENT))) {
+			$S_VLM_OLD = ASM::$vlm->getCurrentsession();
+			$S_LAM_OLD = ASM::$lam->getCurrentsession();
+
+			$S_LAM_TOT = ASM::$lam->newSession();
+			ASM::$lam->load(array('rColor' => $faction->id, 'statement' => Law::VOTATION));
+
 			include COMPONENT . 'faction/senate/stats.php';
-			include COMPONENT . 'faction/senate/law.php';
-			include COMPONENT . 'faction/senate/law.php';
+
+			for ($i = 0; $i < ASM::$lam->size(); $i++) {
+				$law = ASM::$lam->get($i);
+
+				$S_LAM_LAW = ASM::$vlm->newSession();
+				ASM::$vlm->load(array('rLaw' => $law->id));
+
+				include COMPONENT . 'faction/senate/law.php';
+			}
+
+			ASM::$lam->changeSession($S_LAM_OLD);
+			ASM::$vlm->changeSession($S_VLM_OLD);
 		} else {
 			CTR::redirect('faction');
 		}
