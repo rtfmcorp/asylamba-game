@@ -115,6 +115,32 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 			$redirectWithoutJeanMi = TRUE;
 			$nextStepAlreadyDone = TRUE;
 			break;
+		case TutorialResource::GENERATOR_LEVEL_2 :
+			$S_OBM2 = ASM::$obm->getCurrentSession();
+			ASM::$obm->newSession();
+			ASM::$obm->load(array('rPlayer' => $playerId));
+			for ($i = 0; $i < ASM::$obm->size() ; $i++) { 
+				$ob = ASM::$obm->get($i);
+				if ($ob->levelGenerator >= 2) {
+					$nextStepAlreadyDone = TRUE;
+					break;
+				} else {
+					# verify in the queue
+					$S_BQM2 = ASM::$bqm->getCurrentSession();
+					ASM::$bqm->newSession();
+					ASM::$bqm->load(array('rOrbitalBase' => $ob->rPlace));
+					for ($i = 0; $i < ASM::$bqm->size() ; $i++) { 
+						$bq = ASM::$bqm->get($i);
+						if ($bq->buildingNumber == OrbitalBaseResource::GENERATOR AND $bq->targetLevel >= 2) {
+							$nextStepAlreadyDone = TRUE;
+							break;
+						} 
+					}
+					ASM::$bqm->changeSession($S_BQM2);
+				}
+			}
+			ASM::$obm->changeSession($S_OBM2);
+			break;
 		case TutorialResource::REFINERY_LEVEL_3 :
 			$S_OBM2 = ASM::$obm->getCurrentSession();
 			ASM::$obm->newSession();
@@ -167,32 +193,6 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 			}
 			ASM::$obm->changeSession($S_OBM2);
 			break;
-		case TutorialResource::DOCK1_LEVEL_1 :
-			$S_OBM2 = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession();
-			ASM::$obm->load(array('rPlayer' => $playerId));
-			for ($i = 0; $i < ASM::$obm->size() ; $i++) { 
-				$ob = ASM::$obm->get($i);
-				if ($ob->levelDock1 >= 1) {
-					$nextStepAlreadyDone = TRUE;
-					break;
-				} else {
-					# verify in the queue
-					$S_BQM2 = ASM::$bqm->getCurrentSession();
-					ASM::$bqm->newSession();
-					ASM::$bqm->load(array('rOrbitalBase' => $ob->rPlace));
-					for ($i = 0; $i < ASM::$bqm->size() ; $i++) { 
-						$bq = ASM::$bqm->get($i);
-						if ($bq->buildingNumber == OrbitalBaseResource::DOCK1 AND $bq->targetLevel >= 1) {
-							$nextStepAlreadyDone = TRUE;
-							break;
-						} 
-					}
-					ASM::$bqm->changeSession($S_BQM2);
-				}
-			}
-			ASM::$obm->changeSession($S_OBM2);
-			break;
 		case TutorialResource::TECHNOSPHERE_LEVEL_1 :
 			$S_OBM2 = ASM::$obm->getCurrentSession();
 			ASM::$obm->newSession();
@@ -210,6 +210,38 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 					for ($i = 0; $i < ASM::$bqm->size() ; $i++) { 
 						$bq = ASM::$bqm->get($i);
 						if ($bq->buildingNumber == OrbitalBaseResource::TECHNOSPHERE AND $bq->targetLevel >= 1) {
+							$nextStepAlreadyDone = TRUE;
+							break;
+						} 
+					}
+					ASM::$bqm->changeSession($S_BQM2);
+				}
+			}
+			ASM::$obm->changeSession($S_OBM2);
+			break;
+		case TutorialResource::MODIFY_UNI_INVEST:
+			# asdf
+			break;
+		case TutorialResource::CREATE_COMMANDER:
+			# asdf
+			break;
+		case TutorialResource::DOCK1_LEVEL_1 :
+			$S_OBM2 = ASM::$obm->getCurrentSession();
+			ASM::$obm->newSession();
+			ASM::$obm->load(array('rPlayer' => $playerId));
+			for ($i = 0; $i < ASM::$obm->size() ; $i++) { 
+				$ob = ASM::$obm->get($i);
+				if ($ob->levelDock1 >= 1) {
+					$nextStepAlreadyDone = TRUE;
+					break;
+				} else {
+					# verify in the queue
+					$S_BQM2 = ASM::$bqm->getCurrentSession();
+					ASM::$bqm->newSession();
+					ASM::$bqm->load(array('rOrbitalBase' => $ob->rPlace));
+					for ($i = 0; $i < ASM::$bqm->size() ; $i++) { 
+						$bq = ASM::$bqm->get($i);
+						if ($bq->buildingNumber == OrbitalBaseResource::DOCK1 AND $bq->targetLevel >= 1) {
 							$nextStepAlreadyDone = TRUE;
 							break;
 						} 
@@ -264,8 +296,20 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 			}
 			ASM::$sqm->changeSession($S_SQM2);
 			break;
-		case TutorialResource::CREATE_COMMANDER :
-			# no need to verify, it's easy to create an other commander
+		case TutorialResource::AFFECT_COMMANDER:
+			# asdf
+			break;
+		case TutorialResource::FILL_SQUADRON :
+			# asdf
+			break;
+		case TutorialResource::MOVE_FLEET_LINE :
+			# asdf
+			break;
+		case TutorialResource::SPY_PLANET :
+			# asdf
+			break;
+		case TutorialResource::LOOT_PLANET :
+			# asdf
 			break;
 	}
 

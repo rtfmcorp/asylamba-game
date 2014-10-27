@@ -12,17 +12,6 @@
 
 class TutorialResource {
 
-	/*--- OLD ON ---
-	const GENERATOR_LEVEL_2 = 1;	# a modifier
-	const REFINERY_LEVEL_3 = 2;		# a modifier
-	const DOCK1_LEVEL_1 = 3;		# a modifier
-	const TECHNOSPHERE_LEVEL_1 = 4; # a modifier
-	const SHIP0_UNBLOCK = 5;		# a modifier
-	const BUILD_SHIP0 = 6;			# a modifier
-	const CREATE_COMMANDER = 7;		# a modifier
-	const MODIFY_SCHOOL_INVEST = 8; # a killer
-	--- OLD OFF ---*/
-
 	const WELCOME = 1;
 	const NAVIGATION = 2;
 	const GENERATOR_LEVEL_2 = 3;
@@ -39,7 +28,6 @@ class TutorialResource {
 	const MOVE_FLEET_LINE = 14;
 	const SPY_PLANET = 15;
 	const LOOT_PLANET = 16;
-
 
 	public static function stepExists($step) {
 		if ($step > 0 AND $step <= count(self::$steps)) {
