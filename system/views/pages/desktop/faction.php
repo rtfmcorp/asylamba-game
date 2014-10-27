@@ -258,7 +258,6 @@ echo '<div id="content">';
 			ASM::$pam->load(array('rColor' => CTR::$data->get('playerInfo')->get('color')));
 
 			if ($faction->getRegime() == Color::DEMOCRATIC) {
-
 				$nbCandidate = ASM::$cam->size();
 				include COMPONENT . 'faction/election/election.php';
 
@@ -267,7 +266,6 @@ echo '<div id="content">';
 
 				if (CTR::$get->exist('candidate') AND ASM::$cam->getById(CTR::$get->get('candidate')) !== FALSE) {
 					$candidat = ASM::$cam->getById(CTR::$get->get('candidate'));
-
 					include COMPONENT . 'faction/election/candidate.php';
 
 					ASM::$tom->load(
@@ -292,6 +290,7 @@ echo '<div id="content">';
 						for ($i = 0; $i < ASM::$fmm->size(); $i++) { 
 							$message_topic[$i] = ASM::$fmm->get($i);
 						}
+
 						$election_topic = TRUE;
 						include COMPONENT . 'faction/forum/topic.php';
 
@@ -305,7 +304,8 @@ echo '<div id="content">';
 				$remainPutsch = Utils::interval($startPutsch, $endPutsch, 's');
 				include COMPONENT . 'faction/election/putsch.php';
 
-				$candidat = ASM::$cam->get(0);
+				$candidat  = ASM::$cam->get(0);
+				$rElection = ASM::$elm->get(0)->id;
 				include COMPONENT . 'faction/election/candidate.php';
 
 				ASM::$tom->load(
