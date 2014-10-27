@@ -44,7 +44,7 @@ class Color {
 	const ELECTIONTIME		= 172800;
 	const PUTSCHTIME 		= 25000;
 
-	const PUTSCHPERCENTAGE	= 1;
+	const PUTSCHPERCENTAGE	= 20;
 
 	const ALIVE 			= 1;
 	const DEAD 				= 0;
@@ -62,8 +62,6 @@ class Color {
 	public $sectors				= 0;
 	public $electionStatement	= 0;
 	public $dLastElection		= '';
-
-	public $chiefId				= 0;
 
 	public function getId() { return $this->id; }
 
@@ -106,12 +104,6 @@ class Color {
 
 	private function ballot($election) {
 
-		$_PAM1 = ASM::$pam->getCurrentsession();
-		ASM::$pam->newSession(FALSE);
-		ASM::$pam->load(array('rColor' => $this->id, 'status' => PAM_CHIEF));
-		$chiefId = ASM::$pam->get()->id;
-		ASM::$pam->changeSession($_PAM1);
-
 		$_VOM = ASM::$vom->getCurrentSession();
 		ASM::$vom->newSession();
 		ASM::$vom->load(array('rElection' => $election->id));
@@ -143,17 +135,6 @@ class Color {
 				ASM::$pam->newSession(FALSE);
 				ASM::$pam->load(array('id' => key($ballot)));
 				ASM::$pam->get()->setStatus(PAM_CHIEF);
-
-				$statusArray = ColorResource::getInfo($this->id, 'status');
-
-				$notif = new Notification();
-				$notif->dSending = Utils::now();
-				$notif->setRPlayer(ASM::$pam->get()->id);
-				$notif->setTitle('Votre avez été élu');
-				$notif->addBeg()
-					->addTxt(' Le peuple vous à soutenu, vous avez été élu ' . $statusArray[PAM_CHIEF] . ' de votre faction.');
-				ASM::$ntm->add($notif);
-
 				ASM::$pam->changeSession($_PAM2);
 			}
 			ASM::$vom->changeSession($_VOM);
@@ -163,61 +144,29 @@ class Color {
 				arsort($ballot);
 				reset($ballot);
 
-				if ($chiefId != key($ballot)) {
-					next($ballot);
-				}
-				if (((current($ballot) / $this->activePlayers) * 100) >= self::PUTSCHPERCENTAGE) {
-					$_PAM3 = ASM::$pam->getCurrentsession();
-					ASM::$pam->newSession(FALSE);
-					ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF), 'rColor' => $this->id));
-					for ($i = 0; $i < ASM::$pam->size(); $i++) {
-						ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
+				$_PAM1 = ASM::$pam->getCurrentsession();
+				ASM::$pam->newSession(FALSE);
+				ASM::$pam->load(array('status' => PAM_CHIEF));
+				if (ASM::$pam->get()->id != key($ballot)) {
+					if (((current($ballot) / $this->activePlayers) * 100) >= self::PUTSCHPERCENTAGE) {
+						$_PAM3 = ASM::$pam->getCurrentsession();
+						ASM::$pam->newSession(FALSE);
+						ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF), 'rColor' => $this->id));
+						for ($i = 0; $i < ASM::$pam->size(); $i++) {
+							ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
+						}
+						ASM::$pam->changeSession($_PAM3);
+
+						$_PAM2 = ASM::$pam->getCurrentsession();
+						ASM::$pam->newSession(FALSE);
+						ASM::$pam->load(array('id' => key($ballot)));
+						ASM::$pam->get()->setStatus(PAM_CHIEF);
+						ASM::$pam->changeSession($_PAM2);
+
 					}
-					ASM::$pam->changeSession($_PAM3);
-
-					$_PAM2 = ASM::$pam->getCurrentsession();
-					ASM::$pam->newSession(FALSE);
-					ASM::$pam->load(array('id' => key($ballot)));
-					ASM::$pam->get()->setStatus(PAM_CHIEF);
-
-					$statusArray = ColorResource::getInfo($this->id, 'status');
-
-					$notif = new Notification();
-				$notif->dSending = Utils::now();
-
-					$notif->setRPlayer(ASM::$pam->get()->id);
-					$notif->setTitle('Votre coup d\'état a réussi');
-					$notif->addBeg()
-						->addTxt(' Le peuple vous à soutenu, vous avez renversé le ' . $statusArray[PAM_CHIEF] . ' de votre faction et avez pris sa place.');
-					ASM::$ntm->add($notif);
-					
-					ASM::$pam->changeSession($_PAM2);
-				} else {
-					$_PAM2 = ASM::$pam->getCurrentsession();
-					ASM::$pam->newSession(FALSE);
-					ASM::$pam->load(array('id' => key($ballot)));
-
-					$notif = new Notification();
-					$notif->dSending = Utils::now();
-					$notif->setRPlayer(ASM::$pam->get()->id);
-					$notif->setTitle('Votre coup d\'état a échoué');
-					$notif->addBeg()
-						->addTxt(' Le peuple ne vous a pas soutenu, l\'ancien gouvernement reste en place.');
-					ASM::$ntm->add($notif);
-
-					$notif = new Notification();
-				$notif->dSending = Utils::now();
-
-					$notif->setRPlayer($chiefId);
-					$notif->setTitle('Un coup d\'état a échoué');
-					$notif->addBeg()
-						->addTxt(' Le joueur ')
-						->addLnk('diary/player-' . ASM::$pam->get()->id, ASM::$pam->get()->name)
-						->addTxt(' a tenté un coup d\'état, celui-ci a échoué');
-					ASM::$ntm->add($notif);
-					
-					ASM::$pam->changeSession($_PAM2);
 				}
+
+				ASM::$pam->changeSession($_PAM1);
 			}
 			ASM::$vom->changeSession($_VOM);
 		} else {
@@ -257,7 +206,6 @@ class Color {
 				ASM::$pam->changeSession($_PAM2);
 
 				$notif = new Notification();
-				$notif->dSending = Utils::now();
 				$notif->setRPlayer(ASM::$pam->get()->id);
 				$notif->setTitle('Vous avez été nommé Guide');
 				$notif->addBeg()
@@ -265,13 +213,12 @@ class Color {
 				ASM::$ntm->add($notif);
 
 			} else {
-				$notif = new Notification();
-				$notif->dSending = Utils::now();
-				$notif->setRPlayer($chiefId);
-				$notif->setTitle('Vous avez été nommé Guide');
-				$notif->addBeg()
-					->addTxt(' Les oracles on parlé, vous êtes toujours désigné par la Grande Lumière pour Guider Cardan vers la Gloire.');
-				ASM::$ntm->add($notif);
+				// $notif = new Notification();
+				// $notif->setRPlayer($rPlayer);
+				// $notif->setTitle('Vous avez été nommé Guide');
+				// $notif->addBeg()
+				// 	->addTxt(' Les oracles on parlé, vous êtes toujours désigné par la Grande Lumière pour Guider Cardan vers la Gloire.');
+				// ASM::$ntm->add($notif);
 			}
 		}
 	}

@@ -14,17 +14,7 @@ if ($rPlayer !== FALSE) {
 		if (ASM::$pam->size() > 0) {
 			if (ASM::$pam->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
 				if (ASM::$pam->get()->status > PAM_PARLIAMENT) {
-					$statusArray = ColorResource::getInfo(ASM::$pam->get()->rColor, 'status');
-					$notif = new Notification();
-					$notif->dSending = Utils::now();
-					$notif->setRPlayer($rPlayer);
-					$notif->setTitle('Votre n\'êtes plus membre du gouvernement');
-					$notif->addBeg()
-						->addTxt('Vous avez été renvoyé du poste de ' . $statusArray[ASM::$pam->get()->status] . ' de votre faction.');
-					ASM::$ntm->add($notif);
-
 					ASM::$pam->get()->status = PAM_PARLIAMENT;
-
 				} else {
 					CTR::$alert->add('Vous ne pouvez choisir qu\'un membre du gouvernement.', ALERT_STD_ERROR);
 				}
