@@ -3,10 +3,10 @@ echo '<div class="component profil player">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<div class="build-item base-type ' . (!LawResources::getInfo($governmentLaw_id, 'isImplemented') ? 'disabled' : NULL) .'">';
+			echo '<div class="build-item base-type">';
 				echo '<div class="name">';
 					echo '<img src="' . MEDIA . 'faction/law/common.png" alt="">';
-					echo '<strong>' . LawResources::getInfo($governmentLaw_id, 'name') . (!LawResources::getInfo($governmentLaw_id, 'isImplemented') ? ' <span class="hb" title="cette loi n\'est pas encore fonctionnelle">[?]</span>' : NULL) . '</strong>';
+					echo '<strong>' . LawResources::getInfo($governmentLaw_id, 'name') . '</strong>';
 				echo '</div>';
 
 				echo '<p class="desc">' . LawResources::getInfo($governmentLaw_id, 'shortDescription') . '</p>';
