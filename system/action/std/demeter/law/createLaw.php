@@ -10,7 +10,6 @@ include_once GAIA;
 
 $type = Utils::getHTTPData('type');
 
-
 if ($type !== FALSE) {
 	if (LawResources::size() >= $type) {
 		if (CTR::$data->get('playerInfo')->get('status') == LawResources::getInfo($type, 'department')) {
@@ -59,7 +58,7 @@ if ($type !== FALSE) {
 									ASM::$sem->load(array('id' => $rSector)); 
 									if (ASM::$sem->size() > 0) {
 										if (ASM::$sem->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
-											$law->options = serialize(array('taxes' => $taxes, 'rSector' => $rSector));
+											$law->options = serialize(array('taxes' => $taxes, 'rSector' => $rSector, 'display' => array('Secteur' => ASM::$sem->get()->name, 'Taxe actuelle' => ASM::$sem->get()->tax, 'Taxe proposée' => $taxes)));
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
 										} else {
