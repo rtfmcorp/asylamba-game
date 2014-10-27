@@ -205,32 +205,21 @@ class Color {
 				ASM::$pam->get()->setStatus(PAM_CHIEF);
 				ASM::$pam->changeSession($_PAM2);
 
-			} else {
-				$_PAM3 = ASM::$pam->getCurrentsession();
-				ASM::$pam->newSession(FALSE);
-				ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER), 'rColor' => $this->id));
-				for ($i = 0; $i < ASM::$pam->size(); $i++) {
-					ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
-				}
-				ASM::$pam->changeSession($_PAM3);
-			}
-		}
-	}
-
-	private function sendNotif($rPlayer, $department, $hasWin = TRUE) {
-		if ($haswin) {
-			$resources = ColorResource::getInfo($this->id, 'status');
-			$notif = new Notification();
-				$notif->setRPlayer($rPlayer);
-				$notif->setTitle('Vous avez était élu');
+				$notif = new Notification();
+				$notif->setRPlayer(ASM::$pam->get()->id);
+				$notif->setTitle('Vous avez été nommé Guide');
 				$notif->addBeg()
-					->addTxt('Le peule a voté pour vous lors des dernières élections. Vous êtes désormais le ' . $resources[$department]);
+					->addTxt(' Les oracles on parlé, vous êtes désigné par la Grande Lumière pour Guider Cardan vers la Gloire.');
 				ASM::$ntm->add($notif);
-		} else {
-			$notif = new Notification();
-				$notif->setRPlayer($rPlayer);
-				$notif->setTitle('Vous n\'avez pas été élu');
-				ASM::$ntm->add($notif);
+
+			} else {
+				// $notif = new Notification();
+				// $notif->setRPlayer($rPlayer);
+				// $notif->setTitle('Vous avez été nommé Guide');
+				// $notif->addBeg()
+				// 	->addTxt(' Les oracles on parlé, vous êtes toujours désigné par la Grande Lumière pour Guider Cardan vers la Gloire.');
+				// ASM::$ntm->add($notif);
+			}
 		}
 	}
 

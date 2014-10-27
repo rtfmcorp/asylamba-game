@@ -24,12 +24,10 @@ if ($rElection !== FALSE && $program !== FALSE) {
 
 	if (ASM::$elm->size() > 0) {
 		if (ASM::$elm->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
-			if (in_array(ASM::$elm->get()->rColor, array(1, 2, 3, 4))) {
 				$chiefChoice = 1;
 				$treasurerChoice = 1;
 				$warlordChoice = 1;
 				$ministerChoice = 1;
-			}
 			if (CTR::$data->get('playerInfo')->get('status') > PAM_STANDARD) {
 				$_CLM = ASM::$clm->getCurrentSession();
 				ASM::$clm->newSession();
