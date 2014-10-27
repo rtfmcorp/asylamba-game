@@ -48,7 +48,7 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 				include_once ZEUS;
 				switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
 					case TutorialResource::SHIP0_UNBLOCK:
-						if ($techno == 4) {
+						if ($techno == Technology::SHIP0_UNBLOCK) {
 							TutorialHelper::setStepDone();
 						}
 						break;

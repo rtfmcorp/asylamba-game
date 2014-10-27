@@ -2,7 +2,7 @@
 class Chronos {
 	private static $strateShortName  = 'strate';
 	private static $strateLongName   = 'strate';
-	private static $strateCoeff		 = 161;
+	private static $strateCoeff		 = 720;
 	private static $segmentShortName = 'segment';
 	private static $segmentLongName  = 'segment';
 	private static $segmentCoeff 	 = 24;

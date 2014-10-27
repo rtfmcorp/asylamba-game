@@ -33,7 +33,7 @@ try {
 	$pl->defeat = 0;
 	
 	$pl->stepTutorial = 1;
-	$pl->stepDone = FALSE;
+	$pl->stepDone = TRUE;
 
 	$pl->iUniversity = 1000;
 	$pl->partNaturalSciences = 25;

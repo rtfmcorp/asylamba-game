@@ -109,7 +109,12 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 
 	# verify if the next step is already done
 	$nextStepAlreadyDone = FALSE;
+	$redirectWithoutJeanMi = FALSE;
 	switch ($nextStep) {
+		case TutorialResource::NAVIGATION :
+			$redirectWithoutJeanMi = TRUE;
+			$nextStepAlreadyDone = TRUE;
+			break;
 		case TutorialResource::REFINERY_LEVEL_3 :
 			$S_OBM2 = ASM::$obm->getCurrentSession();
 			ASM::$obm->newSession();
@@ -127,6 +132,32 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 					for ($i = 0; $i < ASM::$bqm->size() ; $i++) { 
 						$bq = ASM::$bqm->get($i);
 						if ($bq->buildingNumber == OrbitalBaseResource::REFINERY AND $bq->targetLevel >= 3) {
+							$nextStepAlreadyDone = TRUE;
+							break;
+						} 
+					}
+					ASM::$bqm->changeSession($S_BQM2);
+				}
+			}
+			ASM::$obm->changeSession($S_OBM2);
+			break;
+		case TutorialResource::STORAGE_LEVEL_3 :
+			$S_OBM2 = ASM::$obm->getCurrentSession();
+			ASM::$obm->newSession();
+			ASM::$obm->load(array('rPlayer' => $playerId));
+			for ($i = 0; $i < ASM::$obm->size() ; $i++) { 
+				$ob = ASM::$obm->get($i);
+				if ($ob->levelStorage >= 3) {
+					$nextStepAlreadyDone = TRUE;
+					break;
+				} else {
+					# verify in the queue
+					$S_BQM2 = ASM::$bqm->getCurrentSession();
+					ASM::$bqm->newSession();
+					ASM::$bqm->load(array('rOrbitalBase' => $ob->rPlace));
+					for ($i = 0; $i < ASM::$bqm->size() ; $i++) { 
+						$bq = ASM::$bqm->get($i);
+						if ($bq->buildingNumber == OrbitalBaseResource::STORAGE AND $bq->targetLevel >= 3) {
 							$nextStepAlreadyDone = TRUE;
 							break;
 						} 
@@ -236,9 +267,6 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 		case TutorialResource::CREATE_COMMANDER :
 			# no need to verify, it's easy to create an other commander
 			break;
-		case TutorialResource::MODIFY_SCHOOL_INVEST :
-			# no need to verify because this action doesn't cost anything
-			break;
 	}
 
 	if (!$nextStepAlreadyDone) {
@@ -249,6 +277,10 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 	CTR::$data->get('playerInfo')->add('stepTutorial', $nextStep);
 
 	ASM::$pam->changeSession($S_PAM1);
+
+	if ($redirectWithoutJeanMi) {
+		CTR::redirect('profil');
+	}
 } else {
 	CTR::$alert->add('Impossible de valider l\'étape avant de l\'avoir effectuée.', ALERT_STD_FILLFORM);
 }

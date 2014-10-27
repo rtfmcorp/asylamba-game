@@ -232,7 +232,7 @@ echo '<div class="column act">';
 						'petit' => 1000,
 						'moyen' => 2500,
 						'grand' => 5000,
-						'très grande' => 10000
+						'très grand' => 10000
 					);
 
 					foreach ($prices as $label => $price) { 

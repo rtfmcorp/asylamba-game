@@ -533,8 +533,8 @@ class OrbitalBaseResource {
 			'level' => array(
 				// (time, resourcePrice, points, storageSpace)
 				array(9,		45,		1,	2000),
-				array(13,		60,		1,	2400),
-				array(18,		80,		1,	2900),
+				array(13,		60,		1,	2500),
+				array(18,		80,		1,	3000),
 				array(25,		110,	1,	3500),
 				array(35,		150,	2,	4200),
 				array(49,		210,	2,	5000),

@@ -203,7 +203,7 @@ class TechnologyResource {
 			'imageLink' => 'ship0unblock',
 			'requiredTechnosphere' => 1,
 			'requiredResearch' => array(0,0,0,0,0,0,0,0,0,0),
-			'time' => 120,
+			'time' => 20,
 			'resource' => 150,
 			'credit' => 1000,
 			'points' => 4,

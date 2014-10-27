@@ -38,6 +38,15 @@ if ($commanderId !== FALSE) {
 				$commander->statement = Commander::AFFECTED;
 				$commander->line = 2;
 
+				# tutorial
+				if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
+					switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+						case TutorialResource::AFFECT_COMMANDER:
+							TutorialHelper::setStepDone();
+							break;
+					}
+				}
+
 				CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté en force de réserve', ALERT_STD_SUCCESS);
 				CTR::redirect('fleet/commander-' . $commander->id . '/sftr-2');
 			} elseif ($nbrLine1 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'l-line')) {
