@@ -17,9 +17,7 @@ class ForumTopic {
 	public $rForum			= 0;
 	public $rColor	 		= 0;
 	public $dCreation		= '';
-	public $isArchived		= 0;
-	public $isClosed		= 0;
-	public $isUp			= 0;
+	public $statement		= 1;
 	public $dLastMessage	= '';
 
 	# si joueur renseigné lors du chargement
