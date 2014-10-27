@@ -38,19 +38,19 @@ echo '<div class="component player profil size1">';
 						if ($hasVoted) {
 							if (ASM::$vom->get()->rCandidate == $candidat->rPlayer) {
 								echo '<span class="button disable" style="text-align: center;">';
-									echo '<span class="text" style="line-height: 35px;">Vous avez voté pour le coup d\'état</span>';
+									echo '<span class="text" style="line-height: 35px;">Vous avez soutenu le coup d\'état</span>';
 								echo '</span>';
 							} else {
 								echo '<span class="button disable" style="text-align: center;">';
-									echo '<span class="text" style="line-height: 35px;">Voux avez voté contre le coup d\'état</span>';
+									echo '<span class="text" style="line-height: 35px;">Voux n\'avez pas soutenu le coup d\'état</span>';
 								echo '</span>';
 							}
 						} else {
 							echo '<a class="button" href="' . APP_ROOT . 'action/a-vote/relection-' . $rElection . '/rcandidate-' . $candidat->rPlayer . '" style="text-align: center;">';
-								echo '<span class="text" style="line-height: 35px;">Voter pour le coup d\'état</span>';
+								echo '<span class="text" style="line-height: 35px;">Soutenir le coup d\'état</span>';
 							echo '</a>';
 							echo '<a class="button" href="' . APP_ROOT . 'action/a-vote/relection-' . $rElection . '/rcandidate-0" style="text-align: center;">';
-								echo '<span class="text" style="line-height: 35px;">Voter contre le coup d\'état</span>';
+								echo '<span class="text" style="line-height: 35px;">Rejeter le coup d\'état</span>';
 							echo '</a>';
 						}
 					echo '</div>';

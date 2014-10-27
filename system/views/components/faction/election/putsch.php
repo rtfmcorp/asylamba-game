@@ -6,7 +6,7 @@ echo '<div class="component profil">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="center-box">';
-				echo '<span class="label">Fin de la tentative de coup d\'état</span>';
+				echo '<span class="label">La tentative de coup d\'état se termine dans</span>';
 				echo '<span class="value">' . Chronos::secondToFormat($remainPutsch, 'lite') . '</span>';
 			echo '</div>';
 

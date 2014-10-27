@@ -24,7 +24,7 @@ for ($i = 0; $i < ASM::$frm->size(); $i++) {
 }
 ASM::$frm->changeSession($S_FRM1);
 
-echo '<div class="component size2 player new-message">';
+echo '<div class="component size2 player new-message profil">';
 	echo '<div class="head">';
 	echo '</div>';
 	echo '<div class="fix-body">';
@@ -104,11 +104,13 @@ echo '<div class="component size2 player new-message">';
 						$endPutsch    = Utils::addSecondsToDate($faction->dLastElection, Color::PUTSCHTIME);
 
 						# usefull variables
-						$remainPutsch = Utils::interval($startPutsch, $endPutsch, 's');
+						$remainPutsch = Utils::interval(Utils::now(), $endPutsch, 's');
 
-						echo '<p>Coup d\'état en cours</p>';
-						echo '<p>' . Chronos::secondToFormat($remainPutsch, 'lite') . '</p>';
-						echo '<a class="centred-link" href="' . APP_ROOT . 'faction/view-election">Soutenir le coup d\'état</a>';
+						echo '<div class="center-box">';
+							echo '<span class="label">La tentative de coup d\'état se termine dans</span>';
+							echo '<span class="value">' . Chronos::secondToFormat($remainPutsch, 'lite') . '</span>';
+						echo '</div>';
+						echo '<a class="centred-link" href="' . APP_ROOT . 'faction/view-election">Prendre position sur le coup d\'état</a>';
 					} else {
 						if (in_array(CTR::$data->get('playerInfo')->get('status'), array(PAM_WARLORD, PAM_TREASURER, PAM_MINISTER, PAM_PARLIAMENT))) {
 							echo '<a class="centred-link sh" href="#" data-target="makeacoup">Tenter un coup d\'état</a>';
