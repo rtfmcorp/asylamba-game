@@ -61,6 +61,15 @@ if ($rElection !== FALSE && $program !== FALSE) {
 							$topic->dLastMessage = Utils::now();
 							ASM::$tom->add($topic);
 
+							if (CTR::$data->get('playerInfo')->get('color') == 4) {
+								$vote = new Vote();
+								$vote->rPlayer = CTR::$data->get('playerId');
+								$vote->rCandidate = CTR::$data->get('playerId');
+								$vote->rElection = ASM::$elm->get()->id;
+								$vote->dVotation = Utils::now();
+								ASM::$vom->add($vote);
+							}
+
 							CTR::$alert->add('Candidature déposée.', ALERT_STD_SUCCESS);
 						} else {
 							ASM::$cam->deleteById(ASM::$cam->get()->getId());

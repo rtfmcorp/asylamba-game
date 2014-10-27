@@ -94,6 +94,7 @@ switch (CTR::$get->get('a')) {
 	case 'createtopicforum':		include ACTION . 'demeter/topic/createTopic.php'; break;
 
 	case 'postulate':				include ACTION . 'demeter/election/postulate.php'; break;
+	case 'makeacoup':				include ACTION . 'demeter/election/makeACoup.php'; break;
 	case 'vote':					include ACTION . 'demeter/election/vote.php'; break;
 	case 'choosegovernment':		include ACTION . 'demeter/election/chooseGovernment.php'; break;
 
