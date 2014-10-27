@@ -24,7 +24,7 @@ echo '<div class="component profil">';
 		echo '<div class="body">';
 			echo '<h4>Richesse</h4>';
 
-			echo '<div class="number-box half grey">';
+			echo '<div class="number-box grey">';
 				echo '<span class="label">Fortune de la faction</span>';
 				echo '<span class="value">';
 					echo Format::number($faction->credits);

@@ -13,17 +13,31 @@ echo '<div class="component">';
 
 				echo '<p class="desc">' . LawResources::getInfo($law->type, 'shortDescription') . '</p>';
 
-				echo '<a class="button" href="' . APP_ROOT . 'action/a-votelaw/rlaw-' . $law->id . '/choice-1">';
-					echo '<span class="text">';
-						echo 'Voter pour';
-					echo '</span>';
-				echo '</a>';
+				$hasVoted = FALSE;
+				for ($j = 0; $j < ASM::$vlm->size(); $j++) { 
+					if (ASM::$vlm->get($j)->rPlayer == CTR::$data->get('playerId')) {
+						$hasVoted = TRUE;
+						break;
+					}
+				}
 
-				echo '<a class="button" href="' . APP_ROOT . 'action/a-votelaw/rlaw-' . $law->id . '/choice-0">';
-					echo '<span class="text">';
-						echo 'Voter contre';
+				if ($hasVoted) {
+					echo '<span class="button disable" style="text-align: center; line-height: 35px;>';
+						echo '<span class="text">Vous avez déjà voté</span>';
 					echo '</span>';
-				echo '</a>';
+				} elseif (CTR::$data->get('playerInfo')->get('status') == PAM_PARLIAMENT) {
+					echo '<a class="button" href="' . APP_ROOT . 'action/a-votelaw/rlaw-' . $law->id . '/choice-1" style="text-align: center; line-height: 35px; display: inline-block; width: 104px; margin-right: 0;">';
+						echo '<span class="text">Pour</span>';
+					echo '</a>';
+
+					echo '<a class="button" href="' . APP_ROOT . 'action/a-votelaw/rlaw-' . $law->id . '/choice-0" style="text-align: center; line-height: 35px; display: inline-block; width: 104px;">';
+						echo '<span class="text">Contre</span>';
+					echo '</a>';
+				} else {
+					echo '<span class="button disable" style="text-align: center; line-height: 35px;>';
+						echo '<span class="text">Seul les sénateurs peuvent voter</span>';
+					echo '</span>';
+				}
 			echo '</div>';
 
 			echo '<h4>Modalités d\'application</h4>';
