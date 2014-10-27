@@ -118,7 +118,7 @@ class TutorialResource {
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 5,
-			'title' => 'Construire le Stockage au niveau 2',
+			'title' => 'Construire le Stockage au niveau 3',
 			'description' => 'Maintenant que ta Raffinerie tourne à plein régime, il faut que tu stockes tes ressources pour les utiliser plus tard. Construis le Stockage depuis le Générateur.
 				<br />
 				A chaque fois que tu construis un nouveau bâtiment, une nouvelle icône s\'ajoute dans la barre de navigation sur la gauche de l\'écran.',
