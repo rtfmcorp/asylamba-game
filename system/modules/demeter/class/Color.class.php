@@ -44,6 +44,8 @@ class Color {
 	const ELECTIONTIME		= 172800;
 	const PUTSCHTIME 		= 25000;
 
+	const PUTSCHPERCENTAGE	= 30;
+
 	const ALIVE 			= 1;
 	const DEAD 				= 0;
 
@@ -115,19 +117,17 @@ class Color {
 			}
 		}
 
-		if (count($ballot) > 0) {
-			$_PAM1 = ASM::$pam->getCurrentsession();
-			ASM::$pam->newSession(FALSE);
-			ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF), 'rColor' => $this->id));
-			for ($i = 0; $i < ASM::$pam->size(); $i++) {
-				ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
-			}
-
-			ASM::$pam->changeSession($_PAM1);
-		}
-
 		if ($this->getRegime() == self::DEMOCRATIC) {
 			if (count($ballot) > 0) {
+				$_PAM1 = ASM::$pam->getCurrentsession();
+				ASM::$pam->newSession(FALSE);
+				ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF), 'rColor' => $this->id));
+				for ($i = 0; $i < ASM::$pam->size(); $i++) {
+					ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
+				}
+
+				ASM::$pam->changeSession($_PAM1);
+
 				arsort($ballot);
 				reset($ballot);
 
@@ -146,34 +146,63 @@ class Color {
 				arsort($ballot);
 				reset($ballot);
 
+				$_PAM1 = ASM::$pam->getCurrentsession();
+				ASM::$pam->newSession(FALSE);
+				ASM::$pam->load(array('status' => PAM_CHIEF));
+				if (ASM::$pam->get()->id != key($ballot)) {
+					if (((count($ballot[0]) / $this->activePlayers) * 100) >= self::PUTSCHPERCENTAGE) {
+						$_PAM3 = ASM::$pam->getCurrentsession();
+						ASM::$pam->newSession(FALSE);
+						ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF), 'rColor' => $this->id));
+						for ($i = 0; $i < ASM::$pam->size(); $i++) {
+							ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
+						}
+						ASM::$pam->changeSession($_PAM3);
+
+						$_PAM2 = ASM::$pam->getCurrentsession();
+						ASM::$pam->newSession(FALSE);
+						ASM::$pam->load(array('id' => key($ballot)));
+						ASM::$pam->get()->setStatus(PAM_CHIEF);
+						ASM::$pam->changeSession($_PAM2);
+
+					}
+				}
+
+				ASM::$pam->changeSession($_PAM1);
+			}
+			ASM::$vom->changeSession($_VOM);
+		} else {
+			if (rand(0, 1) == 0) {
+				$ballot = array();
+			}
+			if (count($ballot) > 0) {
+				$aleaNbr = rand(0, count($ballot) - 1);
+				$_PAM3 = ASM::$pam->getCurrentsession();
+				ASM::$pam->newSession(FALSE);
+				ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF), 'rColor' => $this->id));
+				for ($i = 0; $i < ASM::$pam->size(); $i++) {
+					ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
+				}
+				ASM::$pam->changeSession($_PAM3);
+
+				for ($i = 0; $i < $aleaNbr; $i++) {
+					next($ballot);
+				}
+
 				$_PAM2 = ASM::$pam->getCurrentsession();
 				ASM::$pam->newSession(FALSE);
 				ASM::$pam->load(array('id' => key($ballot)));
 				ASM::$pam->get()->setStatus(PAM_CHIEF);
-
-
 				ASM::$pam->changeSession($_PAM2);
-			}
-			ASM::$vom->changeSession($_VOM);
-		} else {
-			if (count($ballot) > 0) {	
-				reset($ballot);
-				$_PAM2 = ASM::$pam->getCurrentSession();
+
+			} else {
+				$_PAM3 = ASM::$pam->getCurrentsession();
 				ASM::$pam->newSession(FALSE);
-				$keys = array();
-
-				$nbr = (count($ballot) > 6) ? 6: count($ballot);
-
-				for ($i = 0; $i < $nbr; $i++) {
-					$keys[$i] = key($ballot);
-					next($ballot);
+				ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER), 'rColor' => $this->id));
+				for ($i = 0; $i < ASM::$pam->size(); $i++) {
+					ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
 				}
-				$aleaNbr = rand(0, $nbr - 1);
-
-				ASM::$pam->load(array('id' => $keys[$aleaNbr]));
-				ASM::$pam->get()->setStatus(PAM_CHIEF);
-
-				ASM::$pam->changeSession($_PAM2);
+				ASM::$pam->changeSession($_PAM3);
 			}
 		}
 	}
@@ -291,7 +320,11 @@ class Color {
 				}
 			}
 		} elseif ($this->getRegime() == self::ROYALISTIC) {
-			if ($this->electionStatement == self::ELECTION) {
+			if ($this->electionStatement == self::MANDATE) {
+				if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration')) {
+					$this->updateStatus();
+				}
+			} elseif ($this->electionStatement == self::ELECTION) {
 				if (Utils::interval($this->dLastElection, Utils::now(), 's') > self::PUTSCHTIME) {
 					$_ELM = ASM::$elm->getCurrentSession();
 					ASM::$elm->newSession();

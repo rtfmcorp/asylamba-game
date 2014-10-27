@@ -17,61 +17,66 @@ include_once DEMETER;
 include_once ZEUS;
 
 if ($program !== FALSE) {
-	if (in_array(ASM::$elm->get()->rColor, array(1, 2, 3, 4))) {
-		$chiefChoice = 1;
-		$treasurerChoice = 1;
-		$warlordChoice = 1;
-		$ministerChoice = 1;
-	}
-	if (CTR::$data->get('playerInfo')->get('status') > PAM_STANDARD) {
+	if (CTR::$data->get('playerInfo')->get('status') > PAM_STANDARD && CTR::$data->get('playerInfo')->get('status') < PAM_CHIEF) {
 		$_CLM = ASM::$clm->getCurrentSession();
 		ASM::$clm->newSession();
 		ASM::$clm->load(array('id' => CTR::$data->get('playerInfo')->get('color')));
-		$_CAM = ASM::$cam->getCurrentSession();
-		ASM::$cam->newSession();
-		ASM::$cam->load(array('rPlayer' => CTR::$data->get('playerId'), 'rElection' => $rElection));
 
-		if(ASM::$clm->get()->electionStatement == Color::CAMPAIGN) {
-			if ($chiefChoice !== NULL && $treasurerChoice !== FALSE && $warlordChoice !== FALSE && $ministerChoice !== FALSE) {
-				if (ASM::$cam->size() == 0) {
-					$candidate = new candidate();
-					$candidate->rElection = $rElection;
-					$candidate->rPlayer = CTR::$data->get('playerId');
-					$candidate->chiefChoice = $chiefChoice;
-					$candidate->treasurerChoice = $treasurerChoice;
-					$candidate->warlordChoice = $warlordChoice;
-					$candidate->ministerChoice = $ministerChoice;
-					$candidate->dPresentation = Utils::now();
-					$candidate->program = $program; 
-					ASM::$cam->add($candidate);
+		if(ASM::$clm->get()->electionStatement == Color::MANDATE) {
+			if (ASM::$clm->get()->getRegime() == COLOR::ROYALISTIC) {
 
-					$topic = new ForumTopic();
-					$topic->title = 'Candidat ' . CTR::$data->get('playerInfo')->get('name');
-					$topic->rForum = 30;
-					$topic->rPlayer = $candidate->rPlayer;
-					$topic->rColor = CTR::$data->get('playerInfo')->get('color');
-					$topic->dCreation = Utils::now();
-					$topic->dLastMessage = Utils::now();
-					ASM::$tom->add($topic);
+				$election = new Election();
+				$election->rColor = ASM::$clm->get()->id;
 
-					CTR::$alert->add('Candidature déposée.', ALERT_STD_SUCCESS);
-				} else {
-					ASM::$cam->deleteById(ASM::$cam->get()->getId());
-					CTR::$alert->add('Candidature retirée.', ALERT_STD_SUCCESS);
-				}
+				$date = new DateTime(ASM::$clm->get()->dLastElection);
+				$date->modify('+' . ColorResource::getInfo(ASM::$clm->get()->id, 'mandateDuration') + COLOR::PUTSCHTIME . ' second');
+				$election->dElection = $date->format('Y-m-d H:i:s');
+
+				ASM::$elm->add($election);
+
+				$candidate = new candidate();
+				$candidate->rElection = $election->id;
+				$candidate->rPlayer = CTR::$data->get('playerId');
+				$candidate->chiefChoice = $chiefChoice;
+				$candidate->treasurerChoice = $treasurerChoice;
+				$candidate->warlordChoice = $warlordChoice;
+				$candidate->ministerChoice = $ministerChoice;
+				$candidate->dPresentation = Utils::now();
+				$candidate->program = $program; 
+				ASM::$cam->add($candidate);
+
+				$topic = new ForumTopic();
+				$topic->title = 'Candidat ' . CTR::$data->get('playerInfo')->get('name');
+				$topic->rForum = 30;
+				$topic->rPlayer = $candidate->rPlayer;
+				$topic->rColor = CTR::$data->get('playerInfo')->get('color');
+				$topic->dCreation = Utils::now();
+				$topic->dLastMessage = Utils::now();
+				ASM::$tom->add($topic);
+
+				ASM::$clm->get()->electionStatement = COLOR::ELECTION;
+
+				ASM::$clm->get()->dLastElection = Utils::now();
+
+				$vote = new Vote();
+				$vote->rPlayer = CTR::$data->get('playerId');
+				$vote->rCandidate = CTR::$data->get('playerId');
+				$vote->rElection = $election->id;
+				$vote->dVotation = Utils::now();
+				ASM::$vom->add($vote);
+
+				CTR::$alert->add('Coup d\'état lancé.', ALERT_STD_SUCCESS);
 			} else {
-				CTR::$alert->add('Informations manquantes sur les choix.', ALERT_STD_ERROR);	
+				CTR::$alert->add('Vous vivez dans une faction démocratique.', ALERT_STD_ERROR);
 			}
 		} else {
-			CTR::$alert->add('Vous ne pouvez présenter ou retirer votre candidature qu\'en période de campagne.', ALERT_STD_ERROR);
+			CTR::$alert->add('Un coup d\'état est défà en cours.', ALERT_STD_ERROR);
 		}
 
-		ASM::$cam->changeSession($_CAM);
 		ASM::$clm->changeSession($_CLM);
 	} else {
-		CTR::$alert->add('Vous ne pouvez pas vous présenter, vous ne faite pas partie de l\'élite.', ALERT_STD_ERROR);
+		CTR::$alert->add('Vous ne pouvez pas vous présenter, vous ne faite pas partie de l\'élite ou vous êtes déjà le hef de la faction.', ALERT_STD_ERROR);
 	}
-	ASM::$elm->changeSession($_ELM);
 } else {
 	CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 }
