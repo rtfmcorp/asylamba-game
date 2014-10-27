@@ -177,7 +177,48 @@ echo '<div id="content">';
 			include COMPONENT . 'faction/data/law/list.php';
 		}
 	} elseif (CTR::$get->get('view') == 'government') {
-	/**/
+		if (in_array(CTR::$data->get('playerInfo')->get('status'), array(PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER))) {
+			include COMPONENT . 'faction/government/nav.php';
+
+			if (!CTR::$get->exist('mode') OR CTR::$get->get('mode') == 'law') {
+				include COMPONENT . 'default.php';
+				include COMPONENT . 'default.php';
+			} elseif (CTR::$get->get('mode') == 'news') {
+				include COMPONENT . 'default.php';
+				include COMPONENT . 'default.php';
+			} elseif (CTR::$get->get('mode') == 'message') {
+				include COMPONENT . 'default.php';
+				include COMPONENT . 'default.php';
+			} elseif (CTR::$get->get('mode') == 'manage') {
+				$S_PAM_OLD = ASM::$pam->getCurrentSession();
+
+				$PLAYER_GOV_TOKEN = ASM::$pam->newSession();
+				ASM::$pam->load(
+					array('rColor' => $faction->id, 'status' => array(PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER)),
+					array('status', 'DESC')
+				);
+
+				$PLAYER_SENATE_TOKEN = ASM::$pam->newSession();
+				ASM::$pam->load(array('rColor' => $faction->id, 'status' => PAM_PARLIAMENT));
+
+				include COMPONENT . 'faction/government/manage/main.php';
+				include COMPONENT . 'default.php';
+
+				ASM::$pam->changeSession($S_PAM_OLD);
+			} else {
+				CTR::redirect('404');
+			}
+		} else {
+			CTR::redirect('faction');
+		}
+	} elseif (CTR::$get->get('view') == 'senate') {
+		if (in_array(CTR::$data->get('playerInfo')->get('status'), array(PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER, PAM_PARLIAMENT))) {
+			include COMPONENT . 'faction/senate/stats.php';
+			include COMPONENT . 'faction/senate/law.php';
+			include COMPONENT . 'faction/senate/law.php';
+		} else {
+			CTR::redirect('faction');
+		}
 	} elseif (CTR::$get->get('view') == 'election' && in_array($faction->electionStatement, array(Color::CAMPAIGN, Color::ELECTION))) {
 		if ($faction->electionStatement == Color::CAMPAIGN) {
 			$S_ELM_1 = ASM::$elm->getCurrentSession();
@@ -233,8 +274,9 @@ echo '<div id="content">';
 
 				ASM::$cam->changeSession($S_CAM_1);
 			} else {
-				CTR::redirect('404');
+				CTR::redirect('faction');
 			}
+
 			ASM::$elm->changeSession($S_ELM_1);
 		} elseif ($faction->electionStatement == Color::ELECTION) {
 			$S_ELM_1 = ASM::$elm->getCurrentSession();
@@ -298,10 +340,6 @@ echo '<div id="content">';
 					}
 				}
 			} elseif ($faction->getRegime() == Color::ROYALISTIC) {
-				# time variables
-				$startPutsch  = $faction->dLastElection;
-				$endPutsch    = Utils::addSecondsToDate($faction->dLastElection, Color::PUTSCHTIME);
-				$remainPutsch = Utils::interval($startPutsch, $endPutsch, 's');
 				include COMPONENT . 'faction/election/putsch.php';
 
 				$candidat  = ASM::$cam->get(0);
@@ -347,6 +385,7 @@ echo '<div id="content">';
 	} elseif (CTR::$get->get('view') == 'player') {
 		include_once ZEUS;
 		$S_PAM1 = ASM::$pam->getCurrentSession();
+
 		ASM::$pam->newSession(FALSE);
 		ASM::$pam->load(
 			array('rColor' => CTR::$data->get('playerInfo')->get('color')), 
