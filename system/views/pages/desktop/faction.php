@@ -36,8 +36,18 @@ echo '<div id="content">';
 
 		include COMPONENT . 'faction/overview/news.php';
 		include COMPONENT . 'faction/overview/stat.php';
+
+		$S_LAM_OLD = ASM::$lam->getCurrentsession();
+
+		$S_LAM_ACT = ASM::$lam->newSession();
+		ASM::$lam->load(array('rColor' => $faction->id, 'statement' => Law::EFFECTIVE));
+
+		$S_LAM_VOT = ASM::$lam->newSession();
+		ASM::$lam->load(array('rColor' => $faction->id, 'statement' => Law::VOTATION));
+
 		include COMPONENT . 'faction/overview/laws.php';
 
+		ASM::$lam->changeSession($S_LAM_OLD);
 		ASM::$pam->changeSession($S_PAM_1);
 	} elseif (CTR::$get->get('view') == 'forum') {
 		if (!CTR::$get->exist('forum')) {

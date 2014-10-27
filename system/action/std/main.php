@@ -91,6 +91,10 @@ switch (CTR::$get->get('a')) {
 
 	# DEMETER
 	case 'writemessageforum':		include ACTION . 'demeter/message/write.php'; break;
+	case 'movemessageforum':		include ACTION . 'demeter/message/move.php'; break;
+	case 'closemessageforum':		include ACTION . 'demeter/message/close.php'; break;
+	case 'upmessageforum':			include ACTION . 'demeter/message/up.php'; break;
+	case 'editmessageforum':		include ACTION . 'demeter/message/edit.php'; break;
 	case 'createtopicforum':		include ACTION . 'demeter/topic/createTopic.php'; break;
 
 	case 'postulate':				include ACTION . 'demeter/election/postulate.php'; break;
