@@ -13,8 +13,8 @@
 	# int 		avgPointsPlayer_statPlayer
 
 echo '<div class="component">';
-	echo '<div class="head skin-2">';
-		echo '<h2>Statistiques générales</h2>';
+	echo '<div class="head skin-1">';
+		echo '<h1>Membres</h1>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';

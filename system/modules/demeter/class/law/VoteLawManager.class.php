@@ -49,7 +49,7 @@ class VoteLawManager extends Manager {
 			$voteLaw = new VoteLaw();
 
 			$voteLaw->id = $awVoteLaw['id'];
-			$voteLaw->rCandidate = $awVoteLaw['rLaw'];
+			$voteLaw->rLaw = $awVoteLaw['rLaw'];
 			$voteLaw->rPlayer = $awVoteLaw['rPlayer'];
 			$voteLaw->vote = $awVoteLaw['vote'];
 			$voteLaw->dVotation = $awVoteLaw['dVotation'];

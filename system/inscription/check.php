@@ -43,6 +43,7 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 			# entre 1 et 7
 			# alliance pas défaites
 			# algorythme de fermeture automatique des alliances (auto-balancing)
+
 		$ally = array(1, 2, 3, 4, 5, 6, 7);
 		if (CTR::$get->exist('ally') && in_array(CTR::$get->get('ally'), $ally)) {
 			CTR::$data->get('inscription')->add('ally', CTR::$get->get('ally'));

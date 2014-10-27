@@ -24,12 +24,10 @@ if ($rElection !== FALSE && $program !== FALSE) {
 
 	if (ASM::$elm->size() > 0) {
 		if (ASM::$elm->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
-			if (in_array(ASM::$elm->get()->rColor, array(1, 2, 3, 4))) {
 				$chiefChoice = 1;
 				$treasurerChoice = 1;
 				$warlordChoice = 1;
 				$ministerChoice = 1;
-			}
 			if (CTR::$data->get('playerInfo')->get('status') > PAM_STANDARD) {
 				$_CLM = ASM::$clm->getCurrentSession();
 				ASM::$clm->newSession();
@@ -51,6 +49,24 @@ if ($rElection !== FALSE && $program !== FALSE) {
 							$candidate->dPresentation = Utils::now();
 							$candidate->program = $program; 
 							ASM::$cam->add($candidate);
+
+							$topic = new ForumTopic();
+							$topic->title = 'Candidat ' . CTR::$data->get('playerInfo')->get('name');
+							$topic->rForum = 30;
+							$topic->rPlayer = $candidate->rPlayer;
+							$topic->rColor = CTR::$data->get('playerInfo')->get('color');
+							$topic->dCreation = Utils::now();
+							$topic->dLastMessage = Utils::now();
+							ASM::$tom->add($topic);
+
+							if (CTR::$data->get('playerInfo')->get('color') == 4) {
+								$vote = new Vote();
+								$vote->rPlayer = CTR::$data->get('playerId');
+								$vote->rCandidate = CTR::$data->get('playerId');
+								$vote->rElection = ASM::$elm->get()->id;
+								$vote->dVotation = Utils::now();
+								ASM::$vom->add($vote);
+							}
 
 							CTR::$alert->add('Candidature déposée.', ALERT_STD_SUCCESS);
 						} else {

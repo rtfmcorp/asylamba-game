@@ -42,12 +42,14 @@ $db->query("CREATE TABLE IF NOT EXISTS `forumTopic` (
   `rColor` int(10) unsigned NOT NULL,
   `rPlayer` int(11) NOT NULL,
   `rForum` int(11) NOT NULL,
-  `statement` int(11) NOT NULL DEFAULT '1',
+  `isClosed` tinyint(1) NOT NULL DEFAULT '0',
+  `isArchived` tinyint(1) NOT NULL DEFAULT '0',
+  `isUp` tinyint(1) NOT NULL DEFAULT '0',
   `dCreation` datetime NOT NULL,
   `dLastMessage` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table forumMessage</h2>';

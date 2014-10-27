@@ -42,7 +42,7 @@ class Law {
 		}
 		ASM::$vlm->changeSession($_VLM);
 
-		if ($ballot > 0) {
+		if ($ballot >= 0) {
 			return TRUE;
 		} else {
 			return FALSE;
