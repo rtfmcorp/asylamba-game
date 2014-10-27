@@ -61,8 +61,9 @@ echo '<div id="content">';
 				ASM::$tom->load(
 					array(
 						'rForum' => ForumResources::getInfo($i, 'id'), 
-						'rColor' => CTR::$data->get('playerInfo')->get('color'), 
-						'statement' => array(ForumTopic::PUBLISHED, ForumTopic::RESOLVED)
+						'rColor' => CTR::$data->get('playerInfo')->get('color'),
+						'isUp' => 0,
+						'isArchived' => 0
 					),
 					array('dLastMessage', 'DESC'),
 					array(0, 10),
@@ -102,8 +103,8 @@ echo '<div id="content">';
 				ASM::$tom->load(
 					array(
 						'rForum' => $forumId, 
-						'rColor' => CTR::$data->get('playerInfo')->get('color'), 
-						'statement' => array(ForumTopic::PUBLISHED, ForumTopic::RESOLVED)
+						'rColor' => CTR::$data->get('playerInfo')->get('color'),
+						'isArchived' => 0
 					),
 					array('dLastMessage', 'DESC'),
 					array(),
@@ -113,7 +114,7 @@ echo '<div id="content">';
 				ASM::$tom->load(
 					array(
 						'rForum' => $forumId,
-						'statement' => array(ForumTopic::PUBLISHED, ForumTopic::RESOLVED)
+						'isArchived' => 0
 					),
 					array('dLastMessage', 'DESC'),
 					array(),
@@ -153,6 +154,10 @@ echo '<div id="content">';
 				}
 
 				include COMPONENT . 'faction/forum/topic.php';
+
+				if (in_array(CTR::$data->get('playerInfo')->get('status'), array(PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER))) {
+					include COMPONENT . 'faction/forum/manage-topic.php';
+				}
 
 				ASM::$fmm->changeSession($S_FMM1);
 			} elseif (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'create') {

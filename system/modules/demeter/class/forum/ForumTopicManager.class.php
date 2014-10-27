@@ -114,7 +114,7 @@ class ForumTopicManager extends Manager {
 				title = ?,
 				rPlayer = ?,
 				rColor = ?,
-				rForum = ?,
+				rForum = ?,zz
 				dCreation = ?,
 				dLastMessage = ?');
 		$aw = $qr->execute(array(

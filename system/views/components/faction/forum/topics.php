@@ -24,10 +24,11 @@ echo '<div class="component report topic nav">';
 			if (!$isStandard_topics) {
 				echo '<a href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '" class="nav-element">';
 					echo '<img src="' . MEDIA . 'orbitalbase/situation.png" alt="" />';
-					echo '<strong>' . ForumResources::getInfo($forum_topics, 'name') . '</strong>';
-					echo '<em>' . ForumResources::getInfo($forum_topics, 'shortDescription') . '</em>';
+					echo '<strong>' . ForumResources::getInfo($i, 'name') . '</strong>';
+					echo '<em>' . ForumResources::getInfo($i, 'shortDescription') . '</em>';
 				echo '</a>';
 			}
+
 			echo '<div class="set-item">';
 				echo '<a class="item" href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '/mode-create/sftr-2">';
 					echo '<div class="left">';

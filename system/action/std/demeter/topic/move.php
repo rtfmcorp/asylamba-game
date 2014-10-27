@@ -1,7 +1,7 @@
 <?php
 include_once DEMETER;
 
-$rForum = Utils::getHTTPData('rForum');
+$rForum = Utils::getHTTPData('rforum');
 $id = Utils::getHTTPData('id');
 
 if ($rForum && $id) {
@@ -13,13 +13,15 @@ if ($rForum && $id) {
 		if (CTR::$data->get('playerInfo')->get('status') > 2) {
 			ASM::$tom->get()->rForum = $rForum;
 			ASM::$tom->get()->dLastModification = Utils::now();
+
+			CTR::redirect('faction/view-forum/forum-' . $rForum . '/topic-' . ASM::$tom->get()->id);
 		} else {
-			CTR::$alert->add('Pas les droits.', ALERT_STD_FILLFORM);
+			CTR::$alert->add('Vous n\'avez pas les droits pour cette opération', ALERT_STD_FILLFORM);
 		}
 	} else {
-		CTR::$alert->add('truc existe pas.', ALERT_STD_FILLFORM);	
+		CTR::$alert->add('Ce sujet n\'existe pas', ALERT_STD_FILLFORM);	
 	}
 	ASM::$tom->changeSession($_TOM);
 } else {
-	CTR::$alert->add('Manque d\'information.', ALERT_STD_FILLFORM);
+	CTR::$alert->add('Manque d\'information', ALERT_STD_FILLFORM);
 }
