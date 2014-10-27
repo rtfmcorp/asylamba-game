@@ -12,58 +12,58 @@
 include_once ZEUS;
 
 class Color {
-	#Regime
+	# Regime
 	const DEMOCRATIC 				= 1;
 	const ROYALISTIC 				= 2;
 	const THEOCRATIC 				= 3;
-	#constantes de prestiges
-	#empire
+	# constantes de prestiges
+	# empire
 	const POINTCONQUER				= 100;
 	const POINTBUILDBIGSHIP			= 25;
-	#negore
+	# negore
 	const COEFFPOINTTRANSACTION		= 10;
-	#cardan
+	# cardan
 	const BONUSOUTOFSECTOR			= 50;
-	#kovakh
+	# kovakh
 	const POINTBUILDLITTLESHIP 		= 1;
 	const POINTCHANGETYPE 			= 50;
 	const POINTBATTLE				= 2;
-	#Synelle
+	# Synelle
 	const POINTATTACKPLAYER 		= -10;
 	const POINTDENFENDTODO  		= 20;
-	#Nerve
+	# Nerve
 	const COEFFPOINTCONQUER			= 10;
-	#Aphéra
+	# Aphéra
 	const POINTSPY					= 10;
 	const POINTRESEARCH				= 5;
 
-	#const
-	const NBRGOVERNMENT 	= 6;
+	# const
+	const NBRGOVERNMENT 			= 6;
 
-	const CAMPAIGNTIME 		= 345600;
-	const ELECTIONTIME		= 172800;
-	const PUTSCHTIME 		= 25000;
+	const CAMPAIGNTIME 				= 345600;
+	const ELECTIONTIME				= 172800;
+	const PUTSCHTIME 				= 25200;
 
-	const PUTSCHPERCENTAGE	= 1;
+	const PUTSCHPERCENTAGE			= 15;
 
-	const ALIVE 			= 1;
-	const DEAD 				= 0;
+	const ALIVE 					= 1;
+	const DEAD 						= 0;
 
-	const MANDATE		 	= 1;
-	const CAMPAIGN		 	= 2;
-	const ELECTION 			= 3;
+	const MANDATE		 			= 1;
+	const CAMPAIGN		 			= 2;
+	const ELECTION 					= 3;
 
-	public $id 					= 0;
-	public $alive 				= 0;
-	public $credits				= 0;
-	public $players 			= 0;
-	public $activePlayers 		= 0;
-	public $points				= 0;
-	public $sectors				= 0;
-	public $electionStatement	= 0;
-	public $dLastElection		= '';
+	public $id 						= 0;
+	public $alive 					= 0;
+	public $credits					= 0;
+	public $players 				= 0;
+	public $activePlayers 			= 0;
+	public $points					= 0;
+	public $sectors					= 0;
+	public $electionStatement		= 0;
+	public $dLastElection			= '';
 
-	public $chiefId				= 0;
+	public $chiefId					= 0;
 
 	public function getId() { return $this->id; }
 

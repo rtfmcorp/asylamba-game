@@ -16,7 +16,7 @@ class Law {
 	const OBSOLETE					= 2;
 	const REFUSED					= 3;
 
-	const VOTEDURATION 				= 172800;
+	const VOTEDURATION 				= 86400;
 
 	public $id					= 0;
 	public $rColor				= 0;
