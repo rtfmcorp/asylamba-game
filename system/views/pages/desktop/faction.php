@@ -67,7 +67,11 @@ echo '<div id="content">';
 				$isStandard_topics = FALSE;
 				$idColum_topics = $i;
 
-				if (ForumResources::getInfo($i, 'id') < 10) {
+				if ($forum_topics < 10) {
+					include COMPONENT . 'faction/forum/topics.php';
+				} elseif ($forum_topics >= 10 && $forum_topics < 20 && CTR::$data->get('playerInfo')->get('status') > 2) {
+					include COMPONENT . 'faction/forum/topics.php';
+				} elseif ($forum_topics >= 20 && $forum_topics < 30 && CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
 					include COMPONENT . 'faction/forum/topics.php';
 				}
 			}
@@ -118,7 +122,7 @@ echo '<div id="content">';
 				include COMPONENT . 'faction/forum/topics.php';
 			} elseif ($forumId >= 10 && $forumId < 20 && CTR::$data->get('playerInfo')->get('status') > 2) {
 				include COMPONENT . 'faction/forum/topics.php';
-			} elseif ($forumId >= 20 && CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
+			} elseif ($forumId >= 20 && $forumId < 30 && CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
 				include COMPONENT . 'faction/forum/topics.php';
 			} else {
 				CTR::redirect('faction/view-forum');
@@ -181,8 +185,26 @@ echo '<div id="content">';
 			include COMPONENT . 'faction/government/nav.php';
 
 			if (!CTR::$get->exist('mode') OR CTR::$get->get('mode') == 'law') {
-				include COMPONENT . 'default.php';
-				include COMPONENT . 'default.php';
+				$S_SEM_OLD = ASM::$sem->getCurrentsession();
+				$S_SEM_LAW = ASM::$sem->newSession();
+				ASM::$sem->load(array('rColor' => $faction->id));
+
+				$nbLaws = 0;
+				
+				for ($i = 1; $i < LawResources::size() + 1; $i++) {
+					if (LawResources::getInfo($i, 'department') == CTR::$data->get('playerInfo')->get('status') AND LawResources::getInfo($i, 'isImplemented')) {
+						$governmentLaw_id = $i;
+						$nbLaws++;
+						include COMPONENT . 'faction/government/law.php';
+					}
+				}
+
+				if (2 - $nbLaws > 0) {
+					for ($i = 0; $i < 2 - $nbLaws; $i++) { 
+						include COMPONENT . 'default.php';
+					}
+				}
+				ASM::$sem->changeSession($S_SEM_OLD);
 			} elseif (CTR::$get->get('mode') == 'news') {
 				include COMPONENT . 'default.php';
 				include COMPONENT . 'default.php';

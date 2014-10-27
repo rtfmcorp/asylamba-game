@@ -26,8 +26,8 @@ Class ForumResources {
 		array(
 			'id' => 2,
 			'devName' => 'noob',
-			'name' => 'Aide',
-			'shortDescription' => 'Nouveau ? Besoin d\'aide ? C\'est ici que ça se passe',
+			'name' => 'Commerce',
+			'shortDescription' => 'Proposition de route commerciale, offre sur le marché',
 			'longDescription' =>'',
 			'image' => ''),
 		array(
@@ -42,6 +42,13 @@ Class ForumResources {
 			'devName' => 'flood',
 			'name' => 'Biastro',
 			'shortDescription' => 'Buvez de la bière et racontez n\'importe quoi',
+			'longDescription' =>'',
+			'image' => ''),
+		array(
+			'id' => 5,
+			'devName' => 'op',
+			'name' => 'Opération Spéciale',
+			'shortDescription' => 'Pour les guerre éclaires ou pour une défense efficace',
 			'longDescription' =>'',
 			'image' => ''),
 		array(
