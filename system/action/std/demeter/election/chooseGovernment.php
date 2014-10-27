@@ -22,6 +22,15 @@ if ($rPlayer !== FALSE && $department !== FALSE) {
 					if (ASM::$pam->get()->status == PAM_PARLIAMENT) {
 						if ($department > PAM_PARLIAMENT && $department < PAM_CHIEF) {
 							ASM::$pam->get()->status = $department;
+							
+							$statusArray = ColorResource::getInfo(ASM::$pam->get()->rColor, 'status');
+							$notif = new Notification();
+							$notif->setRPlayer($rPlayer);
+							$notif->setTitle('Nomination au gouvernement');
+							$notif->addBeg()
+								->addTxt('Vous avez été choisi pour être le ' . $statusArray[$department - 1] . ' de votre faction.');
+							ASM::$ntm->add($notif);
+
 							CTR::$alert->add(ASM::$pam->get()->name . ' a rejoint votre gouvernement.', ALERT_STD_SUCCESS);	
 						} else {
 						CTR::$alert->add('Ce département est inconnu.', ALERT_STD_ERROR);
