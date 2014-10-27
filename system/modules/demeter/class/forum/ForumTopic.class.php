@@ -16,6 +16,9 @@ class ForumTopic {
 	public $rPlayer 		= 0;
 	public $rForum			= 0;
 	public $rColor	 		= 0;
+	public $isUP	 		= 0;
+	public $isClosed		= 0;
+	public $isArchived	 	= 0;
 	public $dCreation		= '';
 	public $statement		= 1;
 	public $dLastMessage	= '';
