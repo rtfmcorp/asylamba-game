@@ -11,18 +11,15 @@
 */
 
 class ForumTopic {
-	const PUBLISHED = 1;
-	const RESOLVED 	= 2;
-	const HIDDEN 	= 3;
-	const FORBIDDEN = 4;
-
 	public $id 				= 0;
 	public $title			= '';
 	public $rPlayer 		= 0;
 	public $rForum			= 0;
 	public $rColor	 		= 0;
 	public $dCreation		= '';
-	public $statement		= 1;
+	public $isArchived		= 0;
+	public $isClosed		= 0;
+	public $isUp			= 0;
 	public $dLastMessage	= '';
 
 	# si joueur renseigné lors du chargement

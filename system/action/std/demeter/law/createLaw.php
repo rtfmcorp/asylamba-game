@@ -109,11 +109,7 @@ if ($type !== FALSE) {
 								if (ASM::$ctm->size() > 0) {
 									if (ASM::$ctm->get()->relatedFaction == CTR::$data->get('playerInfo')->get('color')) {
 										if ($taxes <= 15) {
-											$_CLM = ASM::$clm->getCurrentsession();
-											ASM::$clm->newSession();
-											ASM::$clm->load(array('id' => $rColor));
-											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ASM::$clm->get()->name, 'Taxe actuelle' => ASM::$ctm->get()->exportTax . ' %', 'Taxe proposée' => $taxes . ' %')));
-											ASM::$clm->changeSession($_CLM);
+											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'), 'Taxe actuelle' => ASM::$ctm->get()->exportTax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
 											CTR::redirect('faction/view-senate');
@@ -121,12 +117,8 @@ if ($type !== FALSE) {
 											CTR::$alert->add('Pas plus que 15.', ALERT_STD_ERROR);
 										}
 									} else {
-										if ($taxes <= 15 && $taxes >=2) {
-											$_CLM = ASM::$clm->getCurrentsession();
-											ASM::$clm->newSession();
-											ASM::$clm->load(array('id' => $rColor));
-											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ASM::$clm->get()->name, 'Taxe actuelle' => ASM::$ctm->get()->exportTax . ' %', 'Taxe proposée' => $taxes . ' %')));
-											ASM::$clm->changeSession($_CLM);
+										if ($taxes <= 15 && $taxes >= 2) {
+											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'), 'Taxe actuelle' => ASM::$ctm->get()->exportTax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
 											CTR::redirect('faction/view-senate');
@@ -151,11 +143,7 @@ if ($type !== FALSE) {
 								if (ASM::$ctm->size() > 0) {
 									if (ASM::$ctm->get()->relatedFaction == CTR::$data->get('playerInfo')->get('color')) {
 										if ($taxes <= 15) {
-											$_CLM = ASM::$clm->getCurrentsession();
-											ASM::$clm->newSession();
-											ASM::$clm->load(array('id' => $rColor));
-											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ASM::$clm->get()->name, 'Taxe actuelle' => ASM::$ctm->get()->importTax . ' %', 'Taxe proposée' => $taxes . ' %')));
-											ASM::$clm->changeSession($_CLM);
+											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'), 'Taxe actuelle' => ASM::$ctm->get()->importTax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
 											CTR::redirect('faction/view-senate');
@@ -164,11 +152,7 @@ if ($type !== FALSE) {
 										}
 									} else {
 										if ($taxes <= 15 && $taxes >= 2) {
-											$_CLM = ASM::$clm->getCurrentsession();
-											ASM::$clm->newSession();
-											ASM::$clm->load(array('id' => $rColor));
-											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ASM::$clm->get()->name, 'Taxe actuelle' => ASM::$ctm->get()->importTax . ' %', 'Taxe proposée' => $taxes . ' %')));
-											ASM::$clm->changeSession($_CLM);
+											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'), 'Taxe actuelle' => ASM::$ctm->get()->importTax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
 											CTR::redirect('faction/view-senate');
