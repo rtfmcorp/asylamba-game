@@ -79,6 +79,7 @@ class Place {
 
 	// OB
 	public $levelCommercialPlateforme = 0;
+	public $levelSpatiport = 0;
 	public $antiSpyInvest = 0;
 
 	// COMMANDER 
@@ -109,6 +110,7 @@ class Place {
 	public function getBaseName() 						{ return $this->baseName; }
 	public function getPoints() 						{ return $this->points; }
 	public function getLevelCommercialPlateforme() 		{ return $this->levelCommercialPlateforme; }
+	public function getLevelSpatioport() 				{ return $this->levelSpatioport; }
 	public function getAntiSpyInvest()					{ return $this->antiSpyInvest; }
 
 	public function setId($v) 							{ $this->id = $v; }
@@ -133,6 +135,7 @@ class Place {
 	public function setBaseName($v) 					{ $this->baseName = $v; }
 	public function setPoints($v) 						{ $this->points = $v; }
 	public function setLevelCommercialPlateforme($v) 	{ $this->levelCommercialPlateforme = $v; }
+	public function setLevelSpatioport($v) 				{ $this->levelSpatioport = $v; }
 	public function setAntiSpyInvest($v)				{ $this->antiSpyInvest = $v; }
 
 	public function uMethod() {

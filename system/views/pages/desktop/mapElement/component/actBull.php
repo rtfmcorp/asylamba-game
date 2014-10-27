@@ -143,10 +143,10 @@ echo '<div class="column act">';
 					echo 'Vous ne pouvez proposer une route commerciale qu\'à des joueurs';
 				} elseif ($place->getId() == $defaultBase->getId()) {
 					echo 'Vous ne pouvez pas proposer une route commerciale sur votre propre base';
-				} elseif ($defaultBase->levelCommercialPlateforme == 0) {
-					echo 'Il vous faut une plateforme commerciale pour proposer une route commericale';
-				} elseif ($place->levelCommercialPlateforme == 0) {
-					echo 'Le joueur ne dispose pas d\'une plateforme commerciale';
+				} elseif ($defaultBase->levelSpatioport == 0) {
+					echo 'Il vous faut un spatioport pour proposer une route commericale';
+				} elseif ($place->levelSpatioport == 0) {
+					echo 'Le joueur ne dispose pas d\'un spatioport';
 				} else {
 					$proposed 	 = FALSE;
 					$notAccepted = FALSE;
@@ -207,7 +207,7 @@ echo '<div class="column act">';
 								}
 							}
 
-							if ($ur < OrbitalBaseResource::getBuildingInfo(6, 'level', $defaultBase->levelCommercialPlateforme, 'nbRoutesMax')) {
+							if ($ur < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $defaultBase->levelSpatioport, 'nbRoutesMax')) {
 								echo '<a href="' . APP_ROOT . 'action/a-proposeroute/basefrom-' . $defaultBase->getId() . '/baseto-' . $place->getId() . '" class="button">Proposer une route</a>';
 							} else {
 								echo '<span class="button">Pas assez de slot</span>';

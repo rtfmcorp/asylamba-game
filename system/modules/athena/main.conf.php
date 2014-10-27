@@ -1,10 +1,10 @@
 <?php
 # routes commerciales
 define('CRM_COEFROUTEPRICE',		28);
-define('CRM_COEFROUTEINCOME',		0.2);
+define('CRM_COEFROUTEINCOME',		0.15);
 define('CRM_CANCELROUTE',			0.8);	# 80% de crédits rendu si on annule la route avant qu'elle soit acceptée
-define('CRM_ROUTEBONUSSECTOR', 		1.1);
-define('CRM_ROUTEBONUSCOLOR', 		1.4);
+define('CRM_ROUTEBONUSSECTOR', 		1.3);
+define('CRM_ROUTEBONUSCOLOR', 		1.6);
 define('CRM_COEFEXPERIENCE', 		0.1);
 
 # pourcentage de ressources rendues lors

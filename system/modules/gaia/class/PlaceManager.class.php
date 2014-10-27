@@ -42,6 +42,7 @@ class PlaceManager extends Manager {
 			ob.name AS obName,
 			ob.points AS points,
 			ob.levelCommercialPlateforme AS levelCommercialPlateforme,
+			ob.levelSpatioport AS levelSpatioport,
 			ob.resourcesStorage AS obResources,
 			ob.antiSpyAverage AS antiSpyAverage,
 			ob.typeOfBase AS obTypeOfBase
@@ -105,6 +106,7 @@ class PlaceManager extends Manager {
 			ob.name AS obName,
 			ob.points AS points,
 			ob.levelCommercialPlateforme AS levelCommercialPlateforme,
+			ob.levelSpatioport AS levelSpatioport,
 			ob.resourcesStorage AS obResources,
 			ob.antiSpyAverage AS antiSpyAverage,
 			ob.typeOfBase AS obTypeOfBase
@@ -165,6 +167,7 @@ class PlaceManager extends Manager {
 					$p->typeOfOrbitalBase = $aw['obTypeOfBase'];
 					$p->setBaseName($aw['obName']);
 					$p->setLevelCommercialPlateforme($aw['levelCommercialPlateforme']);
+					$p->setLevelSpatioport($aw['levelSpatioport']);
 					$p->setResources($aw['obResources']);
 					$p->setAntiSpyInvest($aw['antiSpyAverage']);
 					$p->setPoints($aw['points']);
