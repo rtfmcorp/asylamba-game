@@ -19,16 +19,24 @@ if ($type !== FALSE) {
 			if (ASM::$clm->get()->credits >= LawResources::getInfo($type, 'price')) {
 				$law = new Law();
 
-				$date = new DateTime(Utils::now());
-				$law->dCreation = $date->format('Y-m-d H:i:s');
-				$date->modify('+' . Law::VOTEDURATION . ' second');
-				$law->dEndVotation = $date->format('Y-m-d H:i:s');
-				$date->modify('+' . LawResources::getInfo($type, 'duration') . ' second');
-				$law->dEnd = $date->format('Y-m-d H:i:s');
-
 				$law->rColor = CTR::$data->get('playerInfo')->get('color');
 				$law->type = $type;
-				$law->statement = 0;
+				if (LawResources::getInfo($type, 'department') == PAM_CHIEF) {
+					$law->statement = Law::EFFECTIVE;
+
+					$law->dCreation = Utils::now();
+					$law->dEndVotation = Utils::now();
+					$law->dEnd = Utils::now();
+				} else {
+					$law->statement = Law::VOTATION;
+
+					$date = new DateTime(Utils::now());
+					$law->dCreation = $date->format('Y-m-d H:i:s');
+					$date->modify('+' . Law::VOTEDURATION . ' second');
+					$law->dEndVotation = $date->format('Y-m-d H:i:s');
+					$date->modify('+' . LawResources::getInfo($type, 'duration') . ' second');
+					$law->dEnd = $date->format('Y-m-d H:i:s');
+				}
 				if (LawResources::getInfo($type, 'bonusLaw')) {
 					$law->options = serialize(array());
 					$_LAM = ASM::$lam->getCurrentsession();
