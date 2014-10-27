@@ -26,18 +26,34 @@ echo '<div class="component">';
 				echo '</a>';
 			echo '</div>';
 
-			if (!LawResources::getInfo($law->type, 'bonusLaw')) {
-				echo '<h4>Modalités d\'application</h4>';
-				var_dump($law->options);			
-			}
+			echo '<h4>Modalités d\'application</h4>';
+
+			echo '<ul class="list-type-1">';
+				echo '<li>';
+					echo '<span class="label">Coût</span>';
+					echo '<span class="value">' . Format::number(LawResources::getInfo($law->type, 'price')) . '</span>';
+				echo '</li>';
+
+				if (!LawResources::getInfo($law->type, 'bonusLaw')) {
+					if (isset($law->options['display'])) {
+						foreach ($law->options['display'] as $label => $value) {
+							echo '<li>';
+								echo '<span class="label">' . $label . '</span>';
+								echo '<span class="value">' . $value . '</span>';
+							echo '</li>';
+						}
+					}
+				}
+			echo '</ul>';
 
 			echo '<h4>Date application</h4>';
-			echo '<p>Début dans ' . $law->dEndVotation . '</p>';
-
 			if (LawResources::getInfo($law->type, 'bonusLaw')) {
-				echo '<p>Fin dans ' . $law->dEnd . '</p>';
+				echo '<p>Début ' . Chronos::transform($law->dEndVotation) . '</p>';
+				echo '<p>Fin ' . Chronos::transform($law->dEnd) . '</p>';
+			} else {
+				echo '<p>Mise en application ' . Chronos::transform($law->dEndVotation) . '</p>';
 			}
-
+			echo '</ul>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
