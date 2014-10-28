@@ -56,6 +56,9 @@ echo '<div class="component report topic nav">';
 							echo '</div>';
 
 							echo '<div class="center">';
+								if ($t->isClosed) {
+									echo '[Fermé] ';
+								}
 								echo $t->title;
 							echo '</div>';
 
