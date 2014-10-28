@@ -97,7 +97,7 @@ class Color {
 				if ($i < $limit) {
 					if (ASM::$pam->get($i)->status != PAM_PARLIAMENT) {
 						$notif = new Notification();
-						$notif->setRPlayer(ASM::$pam->get($i)->status);
+						$notif->setRPlayer(ASM::$pam->get($i)->id);
 						$notif->setTitle('Vous êtes sénateur');
 						$notif->addBeg()
 							->addTxt('Vos actions vous ont fait gagner assez de prestige pour faire partie du sénat.');
@@ -107,7 +107,7 @@ class Color {
 				} else {
 					if (ASM::$pam->get($i)->status == PAM_PARLIAMENT) {
 						$notif = new Notification();
-						$notif->setRPlayer(ASM::$pam->get($i)->status);
+						$notif->setRPlayer(ASM::$pam->get($i)->id);
 						$notif->setTitle('Vous n\'êtes plus sénateur');
 						$notif->addBeg()
 							->addTxt('Vous n\'avez plus assez de prestige pour rester dans le sénat.');
