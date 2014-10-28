@@ -243,7 +243,7 @@ echo '<div id="content">';
 
 				ASM::$pam->changeSession($S_PAM_OLD);
 			} else {
-				CTR::redirect('404');
+				CTR::redirect('faction');
 			}
 		} else {
 			CTR::redirect('faction');
@@ -391,12 +391,14 @@ echo '<div id="content">';
 
 						ASM::$fmm->changeSession($S_FMM1);
 					}
+				} else {
+					include COMPONENT . 'default.php';
 				}
 			} elseif ($faction->getRegime() == Color::ROYALISTIC) {
-				include COMPONENT . 'faction/election/putsch.php';
-
 				$candidat  = ASM::$cam->get(0);
 				$rElection = ASM::$elm->get(0)->id;
+
+				include COMPONENT . 'faction/election/putsch.php';
 				include COMPONENT . 'faction/election/candidate.php';
 
 				ASM::$tom->load(
@@ -490,7 +492,7 @@ echo '<div id="content">';
 
 		ASM::$pam->changeSession($S_PAM1);
 	} else {
-		CTR::redirect('404');
+		CTR::redirect('faction');
 	}
 echo '</div>';
 

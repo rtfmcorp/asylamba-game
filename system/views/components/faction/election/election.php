@@ -15,13 +15,6 @@ echo '<div class="component profil">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<div class="center-box">';
-				echo '<span class="label">Fin des élections le</span>';
-				echo '<span class="value">' . Utils::addSecondsToDate($faction->dLastElection, (ColorResource::getInfo($faction->id, 'mandateDuration') + Color::CAMPAIGNTIME + Color::ELECTIONTIME)) . '</span>';
-			echo '</div>';
-
-			echo '<hr / style="margin-top: 25px;">';
-
 			echo '<div class="number-box">';
 				echo '<span class="label">nombre de candidats</span>';
 				echo '<span class="value">' . $nbCandidate . '</span>';
@@ -34,6 +27,10 @@ echo '<div class="component profil">';
 					echo '<span style="width:' . Format::percent(ASM::$vom->size(), ASM::$pam->size()) . '%;" class="content"></span>';
 				echo '</span>';
 			echo '</div>';
+
+			echo '<hr / style="margin-top: 25px;">';
+
+			echo '<p class="info">' . ColorResource::getInfo(CTR::$data->get('playerInfo')->get('color'), 'campaignDesc') . '</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
