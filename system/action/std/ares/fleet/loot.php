@@ -36,20 +36,28 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					$duration = Game::getTimeToTravel($home, $place, CTR::$data->get('playerBonus'));
 
 					if ($commander->getPev() > 0) {
-						if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
+						if ($commander->statement == Commander::AFFECTED) {
+							if ($duration <= Commander::MAXTRAVELTIME) {
+								if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
 
-							# tutorial
-							if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-								switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
-									case TutorialResource::LOOT_PLANET:
-										TutorialHelper::setStepDone();
-										break;
+									# tutorial
+									if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
+										switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+											case TutorialResource::LOOT_PLANET:
+												TutorialHelper::setStepDone();
+												break;
+										}
+									}
+									
+									if (CTR::$get->exist('redirect')) {
+										CTR::redirect('map/place-' . CTR::$get->get('redirect'));
+									}
 								}
+							} else {
+								CTR::$alert->add('Cet emplacement est trop éloigné.', ALERT_STD_ERROR);	
 							}
-							
-							if (CTR::$get->exist('redirect')) {
-								CTR::redirect('map/place-' . CTR::$get->get('redirect'));
-							}
+						} else {
+							CTR::$alert->add('Cet officier est déjà en déplacement.', ALERT_STD_ERROR);	
 						}
 					} else {
 						CTR::$alert->add('Vous devez affecter au moins un vaisseau à votre officier.', ALERT_STD_ERROR);	
