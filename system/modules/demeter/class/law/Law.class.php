@@ -34,7 +34,7 @@ class Law {
 		ASM::$vlm->load(array('rLaw' => $this->id));
 		$ballot = 0;
 		for ($i = 0; $i < ASM::$vlm->size(); $i++) {
-			if (ASM::$vlm->vote) {
+			if (ASM::$vlm->get()->vote) {
 				$ballot++;
 			} else {
 				$ballot--;
