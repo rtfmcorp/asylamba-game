@@ -8,14 +8,14 @@ define('COEFFMOVEINSYSTEM', 	584);
 define('COEFFMOVEOUTOFSYSTEM', 	600);
 define('COEFFMOVEINTERSYSTEM', 	1000);
 
-define('COM_LVLINCOMECOMMANDER', 100);
+define('COM_LVLINCOMECOMMANDER',200);
 
 define('CREDITCOEFFTOCOLONIZE',	100000);
 define('CREDITCOEFFTOCONQUER',	250000);
 
 // dans TaskFleetController
 define('LIMITTOLOOT', 			5000);
-define('COEFFLOOT', 			250);
+define('COEFFLOOT', 			275);
 
 // Commander statement
 define('COM_INSCHOOL', 			0);

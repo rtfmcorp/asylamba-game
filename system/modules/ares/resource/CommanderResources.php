@@ -10,7 +10,7 @@
  * @update 04.03.2014
 */
 
-Class CommanderResources {
+class CommanderResources {
 	private static $commanders = array(
 		array(
 			'grade' => 'Aspirant I'

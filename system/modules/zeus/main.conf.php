@@ -26,4 +26,4 @@ define('PAM_CHIEF',					6);
 
 define('PAM_TIME_ALLY_INACTIVE',	24 * 7);
 define('PAM_TIME_GLOBAL_INACTIVE',	24 * 15);
-define('PAM_TIME_LIMIT_INACTIVE',	24 * 30);
+define('PAM_TIME_LIMIT_INACTIVE',	24 * 25);

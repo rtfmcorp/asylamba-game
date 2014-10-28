@@ -105,7 +105,7 @@ try {
 		# Nerve, raffinerie niveau 5
 		$ob->setLevelRefinery(5);
 	} else {
-		$ob->setLevelRefinery(1);	
+		$ob->setLevelRefinery(1);
 	}
 	$ob->setLevelDock1(0);
 	$ob->setLevelDock2(0);
@@ -123,13 +123,12 @@ try {
 
 	# ajout de vaisseau en fonction de la faction
 	if ($faction == 2) {
-		# Kovakh, 3 Méduses
+		# Kovakh, 3 dryades
 		$ob->setShipStorage(4, 3);
 	}
 
 	# initialisation des ressources
 	$ob->setResourcesStorage(1000);
-
 
 	$ob->uOrbitalBase = Utils::now();
 	$ob->setDCreation(Utils::now());
@@ -163,9 +162,9 @@ try {
 	# modification de la place
 	ASM::$plm->load(array('id' => $place));
 	ASM::$plm->get(0)->setRPlayer($pl->getId());
-	// ressource : 45% ou 46% ou 47%
+	# ressource : 45% ou 46% ou 47%
 	ASM::$plm->get(0)->coefResources = rand(45, 47);
-	// population : entre 35M et 38M
+	# population : entre 35M et 38M
 	ASM::$plm->get(0)->population = rand(3500, 3800) / 100;
 
 	# confirmation au portail
