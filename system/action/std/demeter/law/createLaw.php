@@ -2,6 +2,7 @@
 include_once DEMETER;
 include_once ZEUS;
 include_once GAIA;
+
 #type
 #taxes taux de taxe
 #rColor autre faction concernée
@@ -41,7 +42,8 @@ if ($type !== FALSE) {
 					$_LAM = ASM::$lam->getCurrentsession();
 					ASM::$lam->newSession();
 					ASM::$lam->load(array('type' => $type, 'rColor' => CTR::$data->get('playerInfo')->get('color'), 'statement' => array(Law::EFFECTIVE, Law::VOTATION)));
-					if (ASM::$lam-size() == 0) {
+
+					if (ASM::$lam->size() == 0) {
 						ASM::$lam->add($law);
 						ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
 						CTR::redirect('faction/view-senate');	
