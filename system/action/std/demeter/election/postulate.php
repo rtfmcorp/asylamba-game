@@ -28,19 +28,21 @@ if ($rElection !== FALSE && $program !== FALSE) {
 			$treasurerChoice = 1;
 			$warlordChoice = 1;
 			$ministerChoice = 1;
-			
+
 			if (CTR::$data->get('playerInfo')->get('status') > PAM_STANDARD) {
 				$_CLM = ASM::$clm->getCurrentSession();
 				ASM::$clm->newSession();
 				ASM::$clm->load(array('id' => CTR::$data->get('playerInfo')->get('color')));
+
 				$_CAM = ASM::$cam->getCurrentSession();
 				ASM::$cam->newSession();
 				ASM::$cam->load(array('rPlayer' => CTR::$data->get('playerId'), 'rElection' => $rElection));
 
-				if(ASM::$clm->get()->electionStatement == Color::CAMPAIGN) {
+				if (ASM::$clm->get()->electionStatement == Color::CAMPAIGN) {
 					if ($chiefChoice !== NULL && $treasurerChoice !== FALSE && $warlordChoice !== FALSE && $ministerChoice !== FALSE) {
 						if (ASM::$cam->size() == 0) {
-							$candidate = new candidate();
+							$candidate = new Candidate();
+
 							$candidate->rElection = $rElection;
 							$candidate->rPlayer = CTR::$data->get('playerId');
 							$candidate->chiefChoice = $chiefChoice;
@@ -48,7 +50,8 @@ if ($rElection !== FALSE && $program !== FALSE) {
 							$candidate->warlordChoice = $warlordChoice;
 							$candidate->ministerChoice = $ministerChoice;
 							$candidate->dPresentation = Utils::now();
-							$candidate->program = $program; 
+							$candidate->program = $program;
+
 							ASM::$cam->add($candidate);
 
 							$topic = new ForumTopic();
@@ -58,17 +61,21 @@ if ($rElection !== FALSE && $program !== FALSE) {
 							$topic->rColor = CTR::$data->get('playerInfo')->get('color');
 							$topic->dCreation = Utils::now();
 							$topic->dLastMessage = Utils::now();
+
 							ASM::$tom->add($topic);
 
 							if (CTR::$data->get('playerInfo')->get('color') == 4) {
 								$vote = new Vote();
+
 								$vote->rPlayer = CTR::$data->get('playerId');
 								$vote->rCandidate = CTR::$data->get('playerId');
 								$vote->rElection = ASM::$elm->get()->id;
 								$vote->dVotation = Utils::now();
+
 								ASM::$vom->add($vote);
 							}
 
+							CTR::redirect('faction/view-election/candidate-' . $candidate->id);
 							CTR::$alert->add('Candidature déposée.', ALERT_STD_SUCCESS);
 						} else {
 							ASM::$cam->deleteById(ASM::$cam->get()->getId());
