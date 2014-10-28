@@ -180,6 +180,8 @@ class Color {
 				if ($chiefId != key($ballot)) {
 					next($ballot);
 				}
+				// echo ((current($ballot) / $this->activePlayers) * 100);
+				// exit();
 				if (((current($ballot) / $this->activePlayers) * 100) >= self::PUTSCHPERCENTAGE) {
 					$_PAM3 = ASM::$pam->getCurrentsession();
 					ASM::$pam->newSession(FALSE);
@@ -209,12 +211,12 @@ class Color {
 					ASM::$pam->newSession(FALSE);
 					ASM::$pam->load(array('id' => key($ballot)));
 
-					// $notif = new Notification();
-					// $notif->setRPlayer(ASM::$pam->get()->id);
-					// $notif->setTitle('Votre coup d\'état a échoué');
-					// $notif->addBeg()
-					// 	->addTxt(' Le peuple ne vous a pas soutenu, l\'ancien gouvernement reste en place.');
-					// ASM::$ntm->add($notif);
+					$notif = new Notification();
+					$notif->setRPlayer(ASM::$pam->get()->id);
+					$notif->setTitle('Votre coup d\'état a échoué');
+					$notif->addBeg()
+						->addTxt(' Le peuple ne vous a pas soutenu, l\'ancien gouvernement reste en place.');
+					ASM::$ntm->add($notif);
 
 					$notif = new Notification();
 					$notif->setRPlayer($chiefId);
