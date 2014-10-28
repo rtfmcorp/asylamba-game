@@ -196,12 +196,12 @@ class Color {
 
 					$statusArray = ColorResource::getInfo($this->id, 'status');
 
-					$notif = new Notification();
-					$notif->setRPlayer(ASM::$pam->get()->id);
-					$notif->setTitle('Votre coup d\'état a réussi');
-					$notif->addBeg()
-						->addTxt(' Le peuple vous à soutenu, vous avez renversé le ' . $statusArray[PAM_CHIEF] . ' de votre faction et avez pris sa place.');
-					ASM::$ntm->add($notif);
+					// $notif = new Notification();
+					// $notif->setRPlayer(ASM::$pam->get()->id);
+					// $notif->setTitle('Votre coup d\'état a réussi');
+					// $notif->addBeg()
+					// 	->addTxt(' Le peuple vous à soutenu, vous avez renversé le ' . $statusArray[PAM_CHIEF] . ' de votre faction et avez pris sa place.');
+					// ASM::$ntm->add($notif);
 					
 					ASM::$pam->changeSession($_PAM2);
 				} else {
@@ -209,12 +209,12 @@ class Color {
 					ASM::$pam->newSession(FALSE);
 					ASM::$pam->load(array('id' => key($ballot)));
 
-					$notif = new Notification();
-					$notif->setRPlayer(ASM::$pam->get()->id);
-					$notif->setTitle('Votre coup d\'état a échoué');
-					$notif->addBeg()
-						->addTxt(' Le peuple ne vous a pas soutenu, l\'ancien gouvernement reste en place.');
-					ASM::$ntm->add($notif);
+					// $notif = new Notification();
+					// $notif->setRPlayer(ASM::$pam->get()->id);
+					// $notif->setTitle('Votre coup d\'état a échoué');
+					// $notif->addBeg()
+					// 	->addTxt(' Le peuple ne vous a pas soutenu, l\'ancien gouvernement reste en place.');
+					// ASM::$ntm->add($notif);
 
 					$notif = new Notification();
 					$notif->setRPlayer($chiefId);
