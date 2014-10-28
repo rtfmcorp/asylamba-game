@@ -28,8 +28,8 @@ if ($program !== FALSE) {
 				$election = new Election();
 				$election->rColor = ASM::$clm->get()->id;
 
-				$date = new DateTime(ASM::$clm->get()->dLastElection);
-				$date->modify('+' . ColorResource::getInfo(ASM::$clm->get()->id, 'mandateDuration') + COLOR::PUTSCHTIME . ' second');
+				$date = new DateTime(Utils::now());
+				$date->modify('+' . COLOR::PUTSCHTIME . ' second');
 				$election->dElection = $date->format('Y-m-d H:i:s');
 
 				ASM::$elm->add($election);
