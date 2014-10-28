@@ -54,6 +54,8 @@ jQuery(document).ready(function($) {
 				}
 				panelController.move(0, 'left', 0);
 			}
+
+			sbController.move('up');
 			
 			if ($('#map').length == 1) {
 				mapController.init();
@@ -141,7 +143,7 @@ jQuery(document).ready(function($) {
 
 	// ADD INFOPANEL COMPONENT
 	// ##########################
-	var infoPanel = {
+	infoPanel = {
 		addedColumn: undefined
 	};
 
@@ -375,11 +377,48 @@ jQuery(document).ready(function($) {
 			default: break;
 		}
 	});
+
+// ########################################### //
+// ####### SIDERBAR CONTROLLER MODULE ######## //
+// ########################################### //
+	sbController = {
+		obj: $('#subnav'),
+		sub: $('#subnav .overflow'),
+
+		move: function(dir) {
+			if (dir == 'down') {
+				if (sbController.sub.height() > sbController.obj.height()) {
+					sbController.obj.find('.move-side-bar.top').show(0);
+				} else {
+					sbController.obj.find('.move-side-bar.top').hide(0);
+				}
+				sbController.obj.find('.move-side-bar.bottom').hide(0);
+				sbController.sub.animate({
+					'top': '-' + (sbController.sub.height() - sbController.obj.height()) + 'px'
+				}, 200);
+			} else if (dir == 'up') {
+				if (sbController.sub.height() > sbController.obj.height()) {
+					sbController.obj.find('.move-side-bar.bottom').show(0);
+				} else {
+					sbController.obj.find('.move-side-bar.bottom').hide(0);
+				}
+				sbController.obj.find('.move-side-bar.top').hide(0);
+				sbController.sub.animate({
+					'top': 0
+				}, 200);
+			}
+		}
+	}
+
+	$('.move-side-bar').on('click', function(e) {
+		e.preventDefault();
+		sbController.move($(this).data('dir'));
+	});
 	
 // ################################# //
 // ####### MAP MOVER MODULE ######## //
 // ################################# //
-	var mapController = {
+	mapController = {
 		map: {
 			obj: $('#map'),
 			ratio: $('#map').data('map-ratio'),

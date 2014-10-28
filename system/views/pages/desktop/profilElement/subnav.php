@@ -1,5 +1,6 @@
 <?php
 echo '<div id="subnav">';
+	echo '<button class="move-side-bar top" data-dir="up"> </button>';
 	echo '<div class="overflow">';
 		$active = (in_array(CTR::getPage(), array('profil'))) ? 'active' : NULL;
 		echo '<a href="' . APP_ROOT . 'profil" class="item ' . $active . '">';
@@ -21,5 +22,6 @@ echo '<div id="subnav">';
 			echo '</span>';
 		echo '</a>';
 	echo '</div>';
+	echo '<button class="move-side-bar bottom" data-dir="down"> </button>';
 echo '</div>';
 ?>
