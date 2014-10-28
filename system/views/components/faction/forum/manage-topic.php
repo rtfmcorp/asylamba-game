@@ -10,9 +10,16 @@ echo '<div class="component">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<a href="' . APP_ROOT . 'action/a-closetopicforum/id-' . $topic_topic->id . '">Fermer</a>';
-		#	echo '<a href="' . APP_ROOT . 'action/a-uptopicforum/id-' . $topic_topic->id . '">Epingler</a>';
-			echo '<a href="' . APP_ROOT . 'action/a-archivetopicforum/id-' . $topic_topic->id . '">Archiver</a>';
+			echo '<h4>Option de modération</h4>';
+
+		#	echo '<a class="more-button" href="' . APP_ROOT . 'action/a-uptopicforum/id-' . $topic_topic->id . '">Epingler</a>';
+			echo '<a class="more-button" href="' . APP_ROOT . 'action/a-closetopicforum/id-' . $topic_topic->id . '">';
+				echo $topic_topic->isClosed ? 'Réouvrire' : 'Fermer';
+			echo '</a>';
+
+			echo '<a class="more-button" href="' . APP_ROOT . 'action/a-archivetopicforum/id-' . $topic_topic->id . '">';
+				echo $topic_topic->isArchived ? 'Désarchiver' : 'Archiver';
+			echo '</a>';
 
 			echo '<form action="' . APP_ROOT . 'action/a-movetopicforum/id-' . $topic_topic->id . '" method="post" class="choose-government">';
 				echo '<select name="rforum">';
