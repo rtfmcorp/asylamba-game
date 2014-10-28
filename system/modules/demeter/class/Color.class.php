@@ -44,7 +44,7 @@ class Color {
 	const ELECTIONTIME				= 172800;
 	const PUTSCHTIME 				= 25200;
 
-	const PUTSCHPERCENTAGE			= 1;
+	const PUTSCHPERCENTAGE			= 15;
 
 	const ALIVE 					= 1;
 	const DEAD 						= 0;
@@ -177,12 +177,7 @@ class Color {
 				arsort($ballot);
 				reset($ballot);
 
-				if ($chiefId != key($ballot)) {
-					next($ballot);
-				}
-				// echo ((current($ballot) / $this->activePlayers) * 100);
-				// exit();
-				if (((current($ballot) / $this->activePlayers) * 100) >= self::PUTSCHPERCENTAGE) {
+				if (((current($ballot) / $this->activePlayers) * 100) >= self::PUTSCHPERCENTAGE && key($ballot) != $chiefId) {
 					$_PAM3 = ASM::$pam->getCurrentsession();
 					ASM::$pam->newSession(FALSE);
 					ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF), 'rColor' => $this->id));
@@ -203,6 +198,15 @@ class Color {
 					$notif->setTitle('Votre coup d\'état a réussi');
 					$notif->addBeg()
 						->addTxt(' Le peuple vous à soutenu, vous avez renversé le ' . $statusArray[PAM_CHIEF] . ' de votre faction et avez pris sa place.');
+					ASM::$ntm->add($notif);
+
+					$notif = new Notification();
+					$notif->setRPlayer($chiefId);
+					$notif->setTitle('Un coup d\'état a réussi');
+					$notif->addBeg()
+						->addTxt(' Le joueur ')
+						->addLnk('diary/player-' . ASM::$pam->get()->id, ASM::$pam->get()->name)
+						->addTxt(' a fait un coup d\'état, vous êtes évincé du pouvoir.');
 					ASM::$ntm->add($notif);
 					
 					ASM::$pam->changeSession($_PAM2);
