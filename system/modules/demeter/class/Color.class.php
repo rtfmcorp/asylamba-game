@@ -399,6 +399,7 @@ class Color {
 					$this->ballot(ASM::$elm->get());
 					$this->electionStatement = self::MANDATE;
 					$this->dLastElection = ASM::$elm->get()->dElection;
+					$this->updateStatus();
 
 					ASM::$elm->changeSession($_ELM);
 				}
