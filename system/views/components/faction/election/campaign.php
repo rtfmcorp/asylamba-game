@@ -14,6 +14,8 @@ echo '<div class="component profil">';
 				echo '<span class="value">' . $nbCandidate . '</span>';
 			echo '</div>';
 
+			echo '<hr / style="margin-top: 25px;">';
+
 			echo '<p class="info">' . ColorResource::getInfo(CTR::$data->get('playerInfo')->get('color'), 'campaignDesc') . '</p>';
 		echo '</div>';
 	echo '</div>';
