@@ -81,6 +81,7 @@ if ($type !== FALSE) {
 							$rSector = Utils::getHTTPData('rsector');
 							$name = Utils::getHTTPData('name');
 							if ($rSector !== FALSE && $name !== FALSE) {
+								$name = Parser::protect($name);
 								$_SEM = ASM::$sem->getCurrentsession();
 								ASM::$sem->load(array('id' => $rSector)); 
 								if (ASM::$sem->size() > 0) {

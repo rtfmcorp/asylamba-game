@@ -23,8 +23,8 @@ Class LawResources {
 			'price' => 50000,
 			'duration' => 0,
 			'bonus' => 0,
-			'shortDescription' => 'Cette loi modifie le taux d\'imposition appliqué aux planètes d\'un secteur en votre possession. La redevance perçue provient autant des bases de votre faction que de celles de factions ennemies (entre 2 et 15).',
-			'longDescription' => '',
+			'shortDescription' => 'Les planètes dans les secteurs sous votre contrôle vous paient un impôt et c\'est à la faction de choisir ce dernier.',
+			'longDescription' => 'Cette loi modifie le taux d\'imposition appliqué aux planètes d\'un secteur en votre possession. La redevance perçue provient autant des bases de votre faction que de celles de factions ennemies.<br /><br />Un impôt faible dans vos secteurs faibles renforcera votre faction et un impôt fort dans les secteurs partagés permettra de prendre plus de crédit de joueurs ennemis.<br /><br />L\'impôt peut varier de 2% à 15%.',
 			'image' => '',
 			'isImplemented' => TRUE),
 		array(
@@ -37,7 +37,7 @@ Class LawResources {
 			'duration' => 0,
 			'bonus' => 0,
 			'shortDescription' => 'Afin de montrer à tous la puissance de votre faction et d\'asseoir la conquête d\'un nouveau territoire, ce décret permet de modifier le nom d\'un secteur.',
-			'longDescription' => '',
+			'longDescription' => 'Permet de modifier le nom d\'un secteur que vous possédez.',
 			'image' => '',
 			'isImplemented' => TRUE),
 		array(
@@ -49,8 +49,8 @@ Class LawResources {
 			'price' => 50000,
 			'duration' => 0,
 			'bonus' => 0,
-			'shortDescription' => 'Modifier le taux des taxes commerciales d\'importation avec une autre faction entre 2 et 15 (peut-être plus basse pour les taxes internes).',
-			'longDescription' => '',
+			'shortDescription' => 'Cette loi permet de modifier les taxes sur les achats dans le marché. Elle permet de régler finement la taxes perçu par la faction lors de l\'achat d\'un bien en fonction de sa provenance.',
+			'longDescription' => 'Modifie le taux de la taxes à l\'achat de produit d\'une faction précise.<br /><br />Un taux bas favorisera le commerce entre deux factions.<br /><br />L\'impôt peut varier de 2% à 15%.',
 			'image' => '',
 			'isImplemented' => TRUE),
 		array(
@@ -62,8 +62,8 @@ Class LawResources {
 			'price' => 50000,
 			'duration' => 0,
 			'bonus' => 0,
-			'shortDescription' => 'Modifie le taux des taxes commerciales d\'exportation avec une autre faction entre 2 et 15 (peut-être plus basse pour les taxes internes).',
-			'longDescription' => '',
+			'shortDescription' => 'Cette loi permet de modifier les taxes sur les ventes dans le marché. Elle permet de régler finement la taxes perçu par la faction lors de la vente d\'un bien en fonction de sa destination.',
+			'longDescription' => 'Modifie le taux de la taxes à la vente de produit pour une faction précise.<br /><br />Un taux bas favorisera le commerce entre deux factions.<br /><br />L\'impôt peut varier de 2% à 15%.',
 			'image' => '',
 			'isImplemented' => TRUE),
 		array(
@@ -75,7 +75,7 @@ Class LawResources {
 			'price' => 10000,
 			'duration' => 604800, //une semaine entière
 			'bonus' => 10,
-			'shortDescription' => 'Diminue le coût des vaisseaux de 10% pendant une semaine.',
+			'shortDescription' => 'Pas encore active.',
 			'longDescription' => '',
 			'image' => '',
 			'isImplemented' => FALSE),
@@ -88,8 +88,8 @@ Class LawResources {
 			'price' => 2500000,
 			'duration' => 108000, //une semaine entière
 			'bonus' => 25,
-			'shortDescription' => 'Augmente la vitesse de développement d\'une technologie de 10% pendant une semaine.',
-			'longDescription' => '',
+			'shortDescription' => 'Augmente la vitesse de développement des technologies (dans la technosphère) de 25% pendant 30 relèves.',
+			'longDescription' => 'Cette loi offre à tout les membres de la factions un bonus dans le développement de leur technologies de 25% (cumulé avec les autres bonus). La durée est de 30 relèves.<br /><br />Seules les recherches lancées lorsque le bonus est actif seront impactées.',
 			'image' => '',
 			'isImplemented' => TRUE),
 		array(
@@ -101,7 +101,7 @@ Class LawResources {
 			'price' => 10000,
 			'duration' => 604800, //une semaine entière
 			'bonus' => 10,
-			'shortDescription' => 'Augmente la production des routes commerciales avec une autre faction.',
+			'shortDescription' => 'Pas encore active.',
 			'longDescription' => '',
 			'image' => '',
 			'isImplemented' => FALSE),
@@ -114,7 +114,7 @@ Class LawResources {
 			'price' => 10000,
 			'duration' => 604800, //une semaine entière
 			'bonus' => 10,
-			'shortDescription' => 'Investir de l\'argent de la faction.',
+			'shortDescription' => 'Pas encore active.',
 			'longDescription' => '',
 			'image' => '',
 			'isImplemented' => FALSE),
@@ -127,7 +127,7 @@ Class LawResources {
 			'price' => 10000,
 			'duration' => 604800, //une semaine entière
 			'bonus' => 10,
-			'shortDescription' => 'Augmente la défense des gros vaisseaux.',
+			'shortDescription' => 'Pas encore active.',
 			'longDescription' => '',
 			'image' => '',
 			'isImplemented' => FALSE),
@@ -140,7 +140,7 @@ Class LawResources {
 			'price' => 10000,
 			'duration' => 604800, //une semaine entière
 			'bonus' => 10,
-			'shortDescription' => 'Augmente la vitesse des petits vaisseaux.',
+			'shortDescription' => 'Pas encore active.',
 			'longDescription' => '',
 			'image' => '',
 			'isImplemented' => FALSE),
@@ -153,7 +153,7 @@ Class LawResources {
 			'price' => 10000,
 			'duration' => 604800, //une semaine entière
 			'bonus' => 10,
-			'shortDescription' => 'Augmente l\'expérience gagnée par les officiers dans l\'école.',
+			'shortDescription' => 'Pas encore active.',
 			'longDescription' => '',
 			'image' => '',
 			'isImplemented' => FALSE),
@@ -166,7 +166,7 @@ Class LawResources {
 			'price' => 10000,
 			'duration' => 604800, //une semaine entière
 			'bonus' => 10,
-			'shortDescription' => 'Augmente l\'investissement des joueurs dans l\'Université.',
+			'shortDescription' => 'Pas encore active.',
 			'longDescription' => '',
 			'image' => '',
 			'isImplemented' => FALSE),
@@ -179,7 +179,7 @@ Class LawResources {
 			'price' => 10000,
 			'duration' => 604800, //une semaine entière
 			'bonus' => 10,
-			'shortDescription' => '',
+			'shortDescription' => 'Pas encore active.',
 			'longDescription' => '',
 			'image' => '',
 			'isImplemented' => FALSE),

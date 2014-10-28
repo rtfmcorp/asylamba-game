@@ -338,11 +338,11 @@ class OrbitalBaseResource {
 			'imageLink' => 'dock1',
 			'level' => array(
 				// (time, resourcePrice, points, queues, storageSpace[en PEV], releasedShip)
-				array(12,		45,		1,	1,	10,		1),
-				array(17,		60,		1,	1,	17,		1),
-				array(24,		80,		1,	1,	24,		1),
-				array(34,		110,	1,	1,	31,		1),
-				array(48,		150,	2,	1,	38,		1),
+				array(12,		45,		1,	1,	40,		1),
+				array(17,		60,		1,	1,	40,		1),
+				array(24,		80,		1,	1,	40,		1),
+				array(34,		110,	1,	1,	40,		1),
+				array(48,		150,	2,	1,	40,		1),
 				array(67,		210,	2,	2,	45,		1),
 				array(94,		290,	2,	2,	52,		1),
 				array(130,		410,	2,	2,	59,		1),
