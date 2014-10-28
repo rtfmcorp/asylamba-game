@@ -91,7 +91,7 @@ class Color {
 		$_PAM1 = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession(FALSE);
 
-		ASM::$pam->load(array('rColor' => $this->id), array('factionPoint', 'DESC'));
+		ASM::$pam->load(array('rColor' => $this->id), array('factionPoint', 'DESC', 'experience', 'DESC'));
 		for ($i = 0; $i < ASM::$pam->size(); $i++) {
 			if (ASM::$pam->get($i)->status < PAM_TREASURER) {
 				if ($i < $limit) {
