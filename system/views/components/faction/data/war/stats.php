@@ -44,7 +44,7 @@ for ($i = 0; $i < 12; $i++) {
 
 echo '<div class="component profil">';
 	echo '<div class="head skin-2">';
-		echo '<h2>Etats des armées</h2>';
+		echo '<h2>Etat des armées</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
@@ -72,7 +72,7 @@ echo '<div class="component profil">';
 			echo '</div>';
 
 			echo '<div class="number-box grey">';
-				echo '<span class="label">PEV moyen par officiers</span>';
+				echo '<span class="label">PEV moyens par officier</span>';
 				echo '<span class="value">';
 					echo (isset($aw1['nb']) AND $aw1['nb'] != 0)
 						? Format::number($totalPEV / $aw1['nb'])
@@ -83,7 +83,7 @@ echo '<div class="component profil">';
 
 			echo '<hr />';
 
-			echo '<h4>Nombre d\'appareil par type</h4>';
+			echo '<h4>Nombre d\'appareils par type</h4>';
 			echo '<ul class="list-type-1">';
 			for ($i = 0; $i < 12; $i++) {
 				echo '<li>';

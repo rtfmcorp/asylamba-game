@@ -49,7 +49,7 @@ echo '<div class="component uni">';
 				echo '<p><em>Aucune loi active</em></p>';
 			}
 
-			echo '<h4>Bonus de factions</h4>';
+			echo '<h4>Bonus de faction</h4>';
 
 			$bonus = ColorResource::getInfo($faction->id, 'bonus');
 			foreach ($bonus as $b) {

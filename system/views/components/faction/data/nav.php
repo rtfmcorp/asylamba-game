@@ -9,21 +9,21 @@ echo '<div class="component nav">';
 			echo '<a href="' . APP_ROOT . 'faction/view-data/mode-financial" class="nav-element ' . $active . '">';
 				echo '<img src="' . MEDIA . 'financial/taxout.png" alt="" />';
 				echo '<strong>Finance</strong>';
-				echo '<em>richesse, imposition et donations</em>';
+				echo '<em>Richesse, imposition et donations</em>';
 			echo '</a>';
 
 			$active = (CTR::$get->get('mode') == 'trade') ? 'active' : '';
 			echo '<a href="' . APP_ROOT . 'faction/view-data/mode-trade" class="nav-element ' . $active . '">';
 				echo '<img src="' . MEDIA . 'orbitalbase/commercialplateforme.png" alt="" />';
 				echo '<strong>Commerce</strong>';
-				echo '<em>routes commerciales et taxes sur le commerce</em>';
+				echo '<em>Routes commerciales et taxes sur le commerce</em>';
 			echo '</a>';
 
 			$active = (CTR::$get->get('mode') == 'war') ? 'active' : '';
 			echo '<a href="' . APP_ROOT . 'faction/view-data/mode-war" class="nav-element ' . $active . '">';
 				echo '<img src="' . MEDIA . 'fleet/movement.png" alt="" />';
 				echo '<strong>Guerre</strong>';
-				echo '<em>Territoire, armée et mouvement de flottes</em>';
+				echo '<em>Territoires, armées et mouvements de flottes</em>';
 			echo '</a>';
 
 			$active = (CTR::$get->get('mode') == 'law') ? 'active' : '';

@@ -55,7 +55,7 @@ echo '<div class="component">';
 							echo '<a href="#" class="picto color' . $sector['color'] . '">' . $sector['id'] . '</a>';
 							echo '<span class="label">secteur ' . $sector['name'] . '</span>';
 							echo '<span class="value">' . Format::percent($sector['nbc' . $faction->id], $sector['nbc0']) . ' %</span>';
-							echo '<span class="progress-bar hb bl" title="partage des systèmes entres les factions">';
+							echo '<span class="progress-bar hb bl" title="partage des systèmes entre les factions">';
 							foreach ($percents as $color => $percent) {
 								echo '<span style="width:' . $percent . '%;" class="content ' . $color . '"></span>';
 							}

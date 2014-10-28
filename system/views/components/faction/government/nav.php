@@ -22,8 +22,8 @@ echo '<div class="component nav">';
 			$active = (CTR::$get->get('mode') == 'message') ? 'active' : '';
 			echo '<a href="' . APP_ROOT . 'faction/view-government/mode-message" class="nav-element ' . $active . '">';
 				echo '<img src="' . MEDIA . 'faction/law/common.png" alt="" />';
-				echo '<strong>Message groupé</strong>';
-				echo '<em>Envoi des messages aux membres de la faction</em>';
+				echo '<strong>Messages groupés</strong>';
+				echo '<em>Envoi de messages aux membres de la faction</em>';
 			echo '</a>';
 
 			if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {

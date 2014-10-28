@@ -67,7 +67,7 @@ echo '<div class="component report topic nav">';
 					echo '</div>';
 				} else {
 					echo '</div>';
-					echo '<p>Aucun sujet n\'a encore été créé dans cette partie de forum.</p>';
+					echo '<p>Aucun sujet n\'a encore été créé dans cette section du forum.</p>';
 				}
 		echo '</div>';
 	echo '</div>';

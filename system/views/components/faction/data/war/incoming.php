@@ -21,12 +21,12 @@ echo '<div class="component">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<h4>Opération en cours</h4>';
+			echo '<h4>Opérations en cours</h4>';
 
 			echo '<div class="number-box">';
 				echo '<span class="label">Attaques entrantes</span>';
 				echo '<span class="value">??</span>';
-				echo '<span class="group-link"><a href="#" title="attaques entrantes dans la flotte à déjà pénétré le cercle de contre-espionnage" class="hb lt">?</a></span>';
+				echo '<span class="group-link"><a href="#" title="attaques entrantes dont la flotte a déjà pénétré le cercle de contre-espionnage" class="hb lt">?</a></span>';
 			echo '</div>';
 
 			echo '<div class="number-box grey">';
