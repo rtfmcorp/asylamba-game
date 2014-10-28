@@ -335,7 +335,7 @@ class Color {
 		if ($law->options['rColor'] == $this->id) {
 			$tax->exportTax = $law->options['taxes'] / 2;
 			$tax->importTax = $law->options['taxes'] / 2;
-
+			$law->statement = Law::OBSOLETE;
 		} else {
 			$tax->importTax = $law->options['taxes'];
 			$law->statement = Law::OBSOLETE;
