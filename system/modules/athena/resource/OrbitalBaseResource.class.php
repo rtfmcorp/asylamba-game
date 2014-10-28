@@ -532,11 +532,11 @@ class OrbitalBaseResource {
 			'imageLink' => 'storage',
 			'level' => array(
 				// (time, resourcePrice, points, storageSpace)
-				array(9,		45,		1,	2000),
-				array(13,		60,		1,	2500),
-				array(18,		80,		1,	3000),
-				array(25,		110,	1,	3500),
-				array(35,		150,	2,	4200),
+				array(9,		45,		1,	3700),
+				array(13,		60,		1,	3800),
+				array(18,		80,		1,	4000),
+				array(25,		110,	1,	4400),
+				array(35,		150,	2,	4700),
 				array(49,		210,	2,	5000),
 				array(69,		290,	2,	6000),
 				array(100,		410,	2,	7200),
