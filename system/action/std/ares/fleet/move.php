@@ -33,8 +33,16 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 
 					$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
 					$duration = Game::getTimeToTravel($home, $place, CTR::$data->get('playerBonus'));
-
-					$commander->move($place->getId(), $commander->rBase, Commander::MOVE, $length, $duration);
+				
+					if ($commander->statement == Commander::AFFECTED) {
+						if ($duration <= Commander::MAXTRAVELTIME) {
+							$commander->move($place->getId(), $commander->rBase, Commander::MOVE, $length, $duration);
+						} else {
+							CTR::$alert->add('Cet emplacement est trop éloigné.', ALERT_STD_ERROR);	
+						}
+					} else {
+						CTR::$alert->add('Cet officier est déjà en déplacement.', ALERT_STD_ERROR);	
+					}
 				} else {
 					CTR::$alert->add('Vous ne pouvez pas envoyer une flotte sur une planète qui ne vous appartient pas.', ALERT_STD_ERROR);
 				}
