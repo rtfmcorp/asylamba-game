@@ -73,13 +73,10 @@ class ForumTopicManager extends Manager {
 
 	public function save() {
 		$db = DataBase::getInstance();
-
 		$topics = $this->_Save();
 
-	foreach ($topics AS $topic) {
-
-
-		$qr = $db->prepare('UPDATE forumTopic
+		foreach ($topics AS $topic) {
+			$qr = $db->prepare('UPDATE forumTopic
 			SET
 				title = ?,
 				rPlayer = ?,
@@ -91,7 +88,7 @@ class ForumTopicManager extends Manager {
 				dCreation = ?,
 				dLastMessage = ?
 			WHERE id = ?');
-		$aw = $qr->execute(array(
+			$aw = $qr->execute(array(
 				$topic->title,
 				$topic->rPlayer,
 				$topic->rColor,
@@ -114,7 +111,10 @@ class ForumTopicManager extends Manager {
 				title = ?,
 				rPlayer = ?,
 				rColor = ?,
-				rForum = ?,zz
+				rForum = ?,
+				isArchived = ?,
+				isUp = ?,
+				isClosed = ?,
 				dCreation = ?,
 				dLastMessage = ?');
 		$aw = $qr->execute(array(
@@ -122,9 +122,13 @@ class ForumTopicManager extends Manager {
 				$newTopic->rPlayer,
 				$newTopic->rColor,
 				$newTopic->rForum,
+				$newTopic->isArchived,
+				$newTopic->isUp,
+				$newTopic->isClosed,
 				Utils::now(),
 				Utils::now()
-				));
+				)
+		);
 
 		$newTopic->id = $db->lastInsertId();
 

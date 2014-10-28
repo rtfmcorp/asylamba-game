@@ -7,12 +7,12 @@
 #warlordchoice
 #ministerchoice
 
-$rElection = Utils::getHTTPData('relection');
-$program = Utils::getHTTPData('program');
-$chiefChoice = Utils::getHTTPData('chiefchoice');
-$treasurerChoice = Utils::getHTTPData('treasurerchoice');
-$warlordChoice = Utils::getHTTPData('warlordchoice');
-$ministerChoice = Utils::getHTTPData('ministerchoice');
+$rElection			 = Utils::getHTTPData('relection');
+$program			 = Utils::getHTTPData('program');
+$chiefChoice		 = Utils::getHTTPData('chiefchoice');
+$treasurerChoice	 = Utils::getHTTPData('treasurerchoice');
+$warlordChoice		 = Utils::getHTTPData('warlordchoice');
+$ministerChoice		 = Utils::getHTTPData('ministerchoice');
 
 include_once DEMETER;
 include_once ZEUS;
@@ -24,10 +24,11 @@ if ($rElection !== FALSE && $program !== FALSE) {
 
 	if (ASM::$elm->size() > 0) {
 		if (ASM::$elm->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
-				$chiefChoice = 1;
-				$treasurerChoice = 1;
-				$warlordChoice = 1;
-				$ministerChoice = 1;
+			$chiefChoice = 1;
+			$treasurerChoice = 1;
+			$warlordChoice = 1;
+			$ministerChoice = 1;
+			
 			if (CTR::$data->get('playerInfo')->get('status') > PAM_STANDARD) {
 				$_CLM = ASM::$clm->getCurrentSession();
 				ASM::$clm->newSession();
