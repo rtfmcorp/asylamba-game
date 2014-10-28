@@ -97,7 +97,6 @@ class Color {
 				if ($i < $limit) {
 					if (ASM::$pam->get($i)->status != PAM_PARLIAMENT) {
 						$notif = new Notification();
-						$notif->dSending = Utils::now();
 						$notif->setRPlayer(ASM::$pam->get($i)->status);
 						$notif->setTitle('Vous êtes sénateur');
 						$notif->addBeg()
@@ -108,7 +107,6 @@ class Color {
 				} else {
 					if (ASM::$pam->get($i)->status == PAM_PARLIAMENT) {
 						$notif = new Notification();
-						$notif->dSending = Utils::now();
 						$notif->setRPlayer(ASM::$pam->get($i)->status);
 						$notif->setTitle('Vous n\'êtes plus sénateur');
 						$notif->addBeg()
@@ -123,7 +121,6 @@ class Color {
 	}
 
 	private function ballot($election) {
-
 		$_PAM1 = ASM::$pam->getCurrentsession();
 		ASM::$pam->newSession(FALSE);
 		ASM::$pam->load(array('rColor' => $this->id, 'status' => PAM_CHIEF));
@@ -165,7 +162,6 @@ class Color {
 				$statusArray = ColorResource::getInfo($this->id, 'status');
 
 				$notif = new Notification();
-				$notif->dSending = Utils::now();
 				$notif->setRPlayer(ASM::$pam->get()->id);
 				$notif->setTitle('Votre avez été élu');
 				$notif->addBeg()
@@ -201,8 +197,6 @@ class Color {
 					$statusArray = ColorResource::getInfo($this->id, 'status');
 
 					$notif = new Notification();
-				$notif->dSending = Utils::now();
-
 					$notif->setRPlayer(ASM::$pam->get()->id);
 					$notif->setTitle('Votre coup d\'état a réussi');
 					$notif->addBeg()
@@ -216,7 +210,6 @@ class Color {
 					ASM::$pam->load(array('id' => key($ballot)));
 
 					$notif = new Notification();
-					$notif->dSending = Utils::now();
 					$notif->setRPlayer(ASM::$pam->get()->id);
 					$notif->setTitle('Votre coup d\'état a échoué');
 					$notif->addBeg()
@@ -224,8 +217,6 @@ class Color {
 					ASM::$ntm->add($notif);
 
 					$notif = new Notification();
-				$notif->dSending = Utils::now();
-
 					$notif->setRPlayer($chiefId);
 					$notif->setTitle('Un coup d\'état a échoué');
 					$notif->addBeg()
@@ -256,6 +247,7 @@ class Color {
 			ASM::$pam->changeSession($_PAM4);
 			if (count($ballot) > 0) {
 				$aleaNbr = rand(0, count($ballot) - 1);
+				
 				$_PAM3 = ASM::$pam->getCurrentsession();
 				ASM::$pam->newSession(FALSE);
 				ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF), 'rColor' => $this->id));
@@ -272,23 +264,22 @@ class Color {
 				ASM::$pam->newSession(FALSE);
 				ASM::$pam->load(array('id' => key($ballot)));
 				ASM::$pam->get()->setStatus(PAM_CHIEF);
-				ASM::$pam->changeSession($_PAM2);
 
 				$notif = new Notification();
-				$notif->dSending = Utils::now();
 				$notif->setRPlayer(ASM::$pam->get()->id);
 				$notif->setTitle('Vous avez été nommé Guide');
 				$notif->addBeg()
-					->addTxt(' Les oracles on parlé, vous êtes désigné par la Grande Lumière pour Guider Cardan vers la Gloire.');
+					->addTxt(' Les Oracles ont parlé, vous êtes désigné par la Grande Lumière pour guider Cardan vers la Gloire.');
 				ASM::$ntm->add($notif);
 
+				ASM::$pam->changeSession($_PAM2);
 			} else {
 				$notif = new Notification();
 				$notif->dSending = Utils::now();
 				$notif->setRPlayer($chiefId);
 				$notif->setTitle('Vous avez été nommé Guide');
 				$notif->addBeg()
-					->addTxt(' Les oracles on parlé, vous êtes toujours désigné par la Grande Lumière pour Guider Cardan vers la Gloire.');
+					->addTxt(' Les Oracles on parlé, vous êtes toujours désigné par la Grande Lumière pour guider Cardan vers la Gloire.');
 				ASM::$ntm->add($notif);
 			}
 		}
