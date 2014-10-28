@@ -116,108 +116,16 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 			$nextStepAlreadyDone = TRUE;
 			break;
 		case TutorialResource::GENERATOR_LEVEL_2 :
-			$S_OBM2 = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession();
-			ASM::$obm->load(array('rPlayer' => $playerId));
-			for ($i = 0; $i < ASM::$obm->size() ; $i++) { 
-				$ob = ASM::$obm->get($i);
-				if ($ob->levelGenerator >= 2) {
-					$nextStepAlreadyDone = TRUE;
-					break;
-				} else {
-					# verify in the queue
-					$S_BQM2 = ASM::$bqm->getCurrentSession();
-					ASM::$bqm->newSession();
-					ASM::$bqm->load(array('rOrbitalBase' => $ob->rPlace));
-					for ($i = 0; $i < ASM::$bqm->size() ; $i++) { 
-						$bq = ASM::$bqm->get($i);
-						if ($bq->buildingNumber == OrbitalBaseResource::GENERATOR AND $bq->targetLevel >= 2) {
-							$nextStepAlreadyDone = TRUE;
-							break;
-						} 
-					}
-					ASM::$bqm->changeSession($S_BQM2);
-				}
-			}
-			ASM::$obm->changeSession($S_OBM2);
+			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::GENERATOR, 2);
 			break;
 		case TutorialResource::REFINERY_LEVEL_3 :
-			$S_OBM2 = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession();
-			ASM::$obm->load(array('rPlayer' => $playerId));
-			for ($i = 0; $i < ASM::$obm->size() ; $i++) { 
-				$ob = ASM::$obm->get($i);
-				if ($ob->levelRefinery >= 3) {
-					$nextStepAlreadyDone = TRUE;
-					break;
-				} else {
-					# verify in the queue
-					$S_BQM2 = ASM::$bqm->getCurrentSession();
-					ASM::$bqm->newSession();
-					ASM::$bqm->load(array('rOrbitalBase' => $ob->rPlace));
-					for ($i = 0; $i < ASM::$bqm->size() ; $i++) { 
-						$bq = ASM::$bqm->get($i);
-						if ($bq->buildingNumber == OrbitalBaseResource::REFINERY AND $bq->targetLevel >= 3) {
-							$nextStepAlreadyDone = TRUE;
-							break;
-						} 
-					}
-					ASM::$bqm->changeSession($S_BQM2);
-				}
-			}
-			ASM::$obm->changeSession($S_OBM2);
+			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::REFINERY, 3);
 			break;
 		case TutorialResource::STORAGE_LEVEL_3 :
-			$S_OBM2 = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession();
-			ASM::$obm->load(array('rPlayer' => $playerId));
-			for ($i = 0; $i < ASM::$obm->size() ; $i++) { 
-				$ob = ASM::$obm->get($i);
-				if ($ob->levelStorage >= 3) {
-					$nextStepAlreadyDone = TRUE;
-					break;
-				} else {
-					# verify in the queue
-					$S_BQM2 = ASM::$bqm->getCurrentSession();
-					ASM::$bqm->newSession();
-					ASM::$bqm->load(array('rOrbitalBase' => $ob->rPlace));
-					for ($i = 0; $i < ASM::$bqm->size() ; $i++) { 
-						$bq = ASM::$bqm->get($i);
-						if ($bq->buildingNumber == OrbitalBaseResource::STORAGE AND $bq->targetLevel >= 3) {
-							$nextStepAlreadyDone = TRUE;
-							break;
-						} 
-					}
-					ASM::$bqm->changeSession($S_BQM2);
-				}
-			}
-			ASM::$obm->changeSession($S_OBM2);
+			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::STORAGE, 3);
 			break;
 		case TutorialResource::TECHNOSPHERE_LEVEL_1 :
-			$S_OBM2 = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession();
-			ASM::$obm->load(array('rPlayer' => $playerId));
-			for ($i = 0; $i < ASM::$obm->size() ; $i++) { 
-				$ob = ASM::$obm->get($i);
-				if ($ob->levelTechnosphere >= 1) {
-					$nextStepAlreadyDone = TRUE;
-					break;
-				} else {
-					# verify in the queue
-					$S_BQM2 = ASM::$bqm->getCurrentSession();
-					ASM::$bqm->newSession();
-					ASM::$bqm->load(array('rOrbitalBase' => $ob->rPlace));
-					for ($i = 0; $i < ASM::$bqm->size() ; $i++) { 
-						$bq = ASM::$bqm->get($i);
-						if ($bq->buildingNumber == OrbitalBaseResource::TECHNOSPHERE AND $bq->targetLevel >= 1) {
-							$nextStepAlreadyDone = TRUE;
-							break;
-						} 
-					}
-					ASM::$bqm->changeSession($S_BQM2);
-				}
-			}
-			ASM::$obm->changeSession($S_OBM2);
+			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::TECHNOSPHERE, 1);
 			break;
 		case TutorialResource::MODIFY_UNI_INVEST:
 			# asdf
@@ -226,50 +134,10 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 			# asdf
 			break;
 		case TutorialResource::DOCK1_LEVEL_1 :
-			$S_OBM2 = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession();
-			ASM::$obm->load(array('rPlayer' => $playerId));
-			for ($i = 0; $i < ASM::$obm->size() ; $i++) { 
-				$ob = ASM::$obm->get($i);
-				if ($ob->levelDock1 >= 1) {
-					$nextStepAlreadyDone = TRUE;
-					break;
-				} else {
-					# verify in the queue
-					$S_BQM2 = ASM::$bqm->getCurrentSession();
-					ASM::$bqm->newSession();
-					ASM::$bqm->load(array('rOrbitalBase' => $ob->rPlace));
-					for ($i = 0; $i < ASM::$bqm->size() ; $i++) { 
-						$bq = ASM::$bqm->get($i);
-						if ($bq->buildingNumber == OrbitalBaseResource::DOCK1 AND $bq->targetLevel >= 1) {
-							$nextStepAlreadyDone = TRUE;
-							break;
-						} 
-					}
-					ASM::$bqm->changeSession($S_BQM2);
-				}
-			}
-			ASM::$obm->changeSession($S_OBM2);
+			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::DOCK1, 1);
 			break;
 		case TutorialResource::SHIP0_UNBLOCK :
-			include_once PROMETHEE;
-			$tech = new Technology($playerId);
-			if ($tech->getTechnology(Technology::SHIP0_UNBLOCK) == 1) {
-				$nextStepAlreadyDone = TRUE;
-			} else {
-				# verify in the queue
-				$S_TQM2 = ASM::$tqm->getCurrentSession();
-				ASM::$tqm->newSession();
-				ASM::$tqm->load(array('rPlayer' => $playerId));
-				for ($i = 0; $i < ASM::$tqm->size() ; $i++) { 
-					$tq = ASM::$tqm->get($i);
-					if ($tq->technology == Technology::SHIP0_UNBLOCK) {
-						$nextStepAlreadyDone = TRUE;
-						break;
-					} 
-				}
-				ASM::$tqm->changeSession($S_TQM2);
-			}
+			$nextStepAlreadyDone = TutorialHelper::isNextTechnoStepAlreadyDone($playerId, Technology::SHIP0_UNBLOCK);
 			break;
 		case TutorialResource::BUILD_SHIP0 :
 			# verify in the queue
@@ -310,6 +178,39 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 			break;
 		case TutorialResource::LOOT_PLANET :
 			# asdf
+			break;
+		case TutorialResource::REFINERY_LEVEL_10 :
+			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::REFINERY, 10);
+			break;
+		case TutorialResource::STORAGE_LEVEL_8 :
+			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::STORAGE, 8);
+			break;
+		case TutorialResource::DOCK1_LEVEL_6 :
+			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::DOCK1, 6);
+			break;
+		case TutorialResource::REFINERY_LEVEL_16 :
+			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::REFINERY, 16);
+			break;
+		case TutorialResource::STORAGE_LEVEL_12 :
+			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::STORAGE, 12);
+			break;
+		case TutorialResource::TECHNOSPHERE_LEVEL_6 :
+			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::TECHNOSPHERE, 6);
+			break;
+		case TutorialResource::SHIP1_UNBLOCK :
+			$nextStepAlreadyDone = TutorialHelper::isNextTechnoStepAlreadyDone($playerId, Technology::SHIP1_UNBLOCK);
+			break;
+		case TutorialResource::DOCK1_LEVEL_12 :
+			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::DOCK1, 12);
+			break;
+		case TutorialResource::BUILD_SHIP1 :
+			# asdf
+			break;
+		case TutorialResource::GENERATOR_SPEED :
+			$nextStepAlreadyDone = TutorialHelper::isNextTechnoStepAlreadyDone($playerId, Technology::GENERATOR_SPEED);
+			break;
+		case TutorialResource::REFINERY_LEVEL_22 :
+			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::REFINERY, 22);
 			break;
 	}
 

@@ -49,6 +49,11 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 							TutorialHelper::setStepDone();
 						}
 						break;
+					case TutorialResource::BUILD_SHIP1:
+						if ($ship == ShipResource::SATYRE) {
+							TutorialHelper::setStepDone();
+						}
+						break;
 				}
 			}
 

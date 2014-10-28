@@ -57,5 +57,61 @@ class TutorialHelper {
 
 		ASM::$pam->changeSession($S_PAM1);
 	}
+
+	public static function isNextBuildingStepAlreadyDone($playerId, $buildingId, $level) {
+		$nextStepAlreadyDone = FALSE;
+
+		$S_OBM2 = ASM::$obm->getCurrentSession();
+		ASM::$obm->newSession();
+		ASM::$obm->load(array('rPlayer' => $playerId));
+		for ($i = 0; $i < ASM::$obm->size() ; $i++) { 
+			$ob = ASM::$obm->get($i);
+			if ($ob->getBuildingLevel($buildingId) >= $level) {
+				$nextStepAlreadyDone = TRUE;
+				break;
+			} else {
+				# verify in the queue
+				$S_BQM2 = ASM::$bqm->getCurrentSession();
+				ASM::$bqm->newSession();
+				ASM::$bqm->load(array('rOrbitalBase' => $ob->rPlace));
+				for ($i = 0; $i < ASM::$bqm->size() ; $i++) { 
+					$bq = ASM::$bqm->get($i);
+					if ($bq->buildingNumber == $buildingId AND $bq->targetLevel >= $level) {
+						$nextStepAlreadyDone = TRUE;
+						break;
+					} 
+				}
+				ASM::$bqm->changeSession($S_BQM2);
+			}
+		}
+		ASM::$obm->changeSession($S_OBM2);
+
+		return $nextStepAlreadyDone;
+	}
+
+	public static function isNextTechnoStepAlreadyDone($playerId, $technoId, $level = 1) {
+		$nextStepAlreadyDone = FALSE;
+
+		include_once PROMETHEE;
+		$tech = new Technology($playerId);
+		if ($tech->getTechnology($technoId) >= $level) {
+			$nextStepAlreadyDone = TRUE;
+		} else {
+			# verify in the queue
+			$S_TQM2 = ASM::$tqm->getCurrentSession();
+			ASM::$tqm->newSession();
+			ASM::$tqm->load(array('rPlayer' => $playerId));
+			for ($i = 0; $i < ASM::$tqm->size() ; $i++) { 
+				$tq = ASM::$tqm->get($i);
+				if ($tq->technology == $technoId) {
+					$nextStepAlreadyDone = TRUE;
+					break;
+				} 
+			}
+			ASM::$tqm->changeSession($S_TQM2);
+		}
+
+		return $nextStepAlreadyDone;
+	}
 }
 ?>
