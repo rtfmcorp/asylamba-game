@@ -1,8 +1,4 @@
 <?php
-/*echo '<a href="#" class="resource-link sh">';
-	echo 'il reste <span class="releve-timer">' . Chronos::getTimer('i') . ':' . Chronos::getTimer('s') . '</span>';
-echo '</a>';*/
-
 # load base
 include_once ATHENA;
 include_once ARES;

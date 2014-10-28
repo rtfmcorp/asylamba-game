@@ -9,14 +9,12 @@ $S_NTM1 = ASM::$ntm->getCurrentSession();
 ASM::$ntm->newSession();
 ASM::$ntm->load(array('rPlayer' => CTR::$data->get('playerId'), 'readed' => 0), array('dSending', 'DESC'));
 
-
 # load message
 $db = DataBase::getInstance();
 $qr = $db->prepare('SELECT COUNT(id) AS n FROM message WHERE readed = 0 AND rPlayerReader = ? GROUP BY rPlayerReader');
 $qr->execute(array(CTR::$data->get('playerId')));
 $aw = $qr->fetch();
 $message = (count($aw['n']) > 0) ? $aw['n'] : 0;
-
 
 # DISPLAY NAV BAR
 #################
@@ -106,7 +104,10 @@ echo '<div id="nav">';
 		}
 
 		if (CTR::$data->get('playerInfo')->get('stepTutorial') > 0) {
-			echo '<a href="#" class="hide-slpash square sh ' . (CTR::$data->get('playerInfo')->get('stepDone') ? 'active flashy' : '') . '" data-target="tutorial"><img src="' . MEDIA . 'common/tool-star.png" alt="" /></a>';
+			echo '<a href="#" class="hide-slpash square sh ' . (CTR::$data->get('playerInfo')->get('stepDone') ? 'active flashy' : '') . '" data-target="tutorial">';
+				echo '<img src="' . MEDIA . 'common/tool-star.png" alt="tutoriel" />';
+				echo '<span class="number">' . CTR::$data->get('playerInfo')->get('stepTutorial') . '</span>';
+			echo '</a>';
 		}
 		echo '<a href="#" class="square sh" data-target="bug-tracker"><img src="' . MEDIA . 'common/tool-bugtracker.png" alt="" /></a>';
 
@@ -119,6 +120,7 @@ echo '<div id="nav">';
 	# DISPLAY OVERBOX NAV
 	#####################
 
+	# CHANGEMENT DE BASE
 	echo '<div class="overbox" id="change-bases">';
 		echo '<h2>Changer de bases</h2>';
 		echo '<div class="overflow">';
@@ -131,6 +133,7 @@ echo '<div id="nav">';
 		echo '</div>';
 	echo '</div>';
 
+	# NOTIFICATION
 	echo '<div class="overbox" id="new-notifications">';
 		echo '<h2>Notifications</h2>';
 		if (ASM::$ntm->size() > 1) {
@@ -157,6 +160,7 @@ echo '<div id="nav">';
 		echo '<a href="' . APP_ROOT . 'message" class="more-link">toutes vos notifications</a>';
 	echo '</div>';
 
+	# ROADMAP
 	$S_RMM_1 = ASM::$rmm->getCurrentSession();
 	ASM::$rmm->newSession();
 	ASM::$rmm->load(array('statement' => RoadMap::DISPLAYED), array('dCreation', 'DESC'), array(0, 10));
@@ -176,6 +180,7 @@ echo '<div id="nav">';
 
 	ASM::$rmm->changeSession($S_RMM_1);
 
+	# TUTORIAL
 	include_once APOLLON;
 	$step = CTR::$data->get('playerInfo')->get('stepTutorial');
 	
