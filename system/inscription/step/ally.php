@@ -18,7 +18,7 @@ echo '<div id="content">';
 			echo '<div class="body">';
 				echo '<h4>Choisissez votre faction</h4>';
 				echo '<p>Il vous faut choisir entre l\'une des septs factions disponibles.</p>';
-				echo '<p>Chaque faction a ses forces et ses faiblesses. Certaine sont plus belliqueuse, certaine sont plus sage. De plus, les systèmes politiques changent en fonction des factions.</p>';
+				echo '<p>Chaque faction a ses forces et ses faiblesses. Certaines sont plus belliqueuses, certaines sont plus sages. De plus, le système politique change en fonction de la faction.</p>';
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';

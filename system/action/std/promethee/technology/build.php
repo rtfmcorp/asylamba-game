@@ -52,6 +52,16 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 							TutorialHelper::setStepDone();
 						}
 						break;
+					case TutorialResource::SHIP1_UNBLOCK:
+						if ($techno == Technology::SHIP1_UNBLOCK) {
+							TutorialHelper::setStepDone();
+						}
+						break;
+					case TutorialResource::GENERATOR_SPEED:
+						if ($techno == Technology::GENERATOR_SPEED) {
+							TutorialHelper::setStepDone();
+						}
+						break;
 				}
 			}
 

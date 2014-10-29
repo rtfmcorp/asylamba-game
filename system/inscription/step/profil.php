@@ -28,7 +28,7 @@ echo '<div id="content">';
 					}
 
 					echo '<p>Nous déconseillons les noms moins roleplay, essayez de coller avec l\'histoire et les moeurs de votre faction.</p>';
-					echo '<p>Ne pourras pas être changé plus tard.</p>';
+					echo '<p>Ce nom ne pourra pas être changé plus tard.</p>';
 				echo '</div>';
 			echo '</div>';
 		echo '</div>';

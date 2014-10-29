@@ -1,5 +1,6 @@
 <?php
 echo '<div id="map-subnav">';
+	echo '<button class="move-side-bar top" data-dir="up"> </button>';
 	echo '<div class="bind"></div>';
 	echo '<div class="head">';
 		echo '<h2>' . CTR::$data->get('playerInfo')->get('name') . '</h2>';
@@ -27,12 +28,7 @@ echo '<div id="map-subnav">';
 				}
 			echo '</div>';
 		}
-
-		/*echo '<div class="black-box">';
-			echo '<h2>Secteur <span id="currentSector">0</span></h2>';
-			echo '<p>vous êtes à présent dans ce secteur';
-		echo '</div>';*/
 	echo '</div>';
-	echo '<div class="foot"></div>';
+	echo '<button class="move-side-bar bottom" data-dir="down"> </button>';
 echo '</div>';
 ?>
