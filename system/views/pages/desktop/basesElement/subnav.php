@@ -1,5 +1,6 @@
 <?php
 echo '<div id="subnav">';
+	echo '<button class="move-side-bar top" data-dir="up"> </button>';
 	echo '<div class="overflow">';
 		$active = (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'main') ? 'active' : '';
 		echo '<a href="' . APP_ROOT . 'bases/view-main" class="item ' . $active . '">';
@@ -19,33 +20,7 @@ echo '<div id="subnav">';
 					echo '<span class="number">' . $base->getLevelGenerator() . '</span>';
 				echo '</span>';
 				echo '<span class="content skin-1">';
-					echo '<span>' . OrbitalBaseResource::getBuildingInfo(0, 'frenchName') . '</span>';
-				echo '</span>';
-			echo '</a>';
-		}
-
-		if ($base->getLevelRefinery() > 0) {
-			$active = (CTR::$get->get('view') == 'refinery') ? 'active' : '';
-			echo '<a href="' . APP_ROOT . 'bases/view-refinery" class="item ' . $active . '">';
-				echo '<span class="picto">';
-					echo '<img src="' . MEDIA . 'orbitalbase/refinery.png" alt="" />';
-					echo '<span class="number">' . $base->getLevelRefinery() . '</span>';
-				echo '</span>';
-				echo '<span class="content skin-1">';
-					echo '<span>' . OrbitalBaseResource::getBuildingInfo(1, 'frenchName') . '</span>';
-				echo '</span>';
-			echo '</a>';
-		}
-
-		if ($base->getLevelTechnosphere() > 0) {
-			$active = (CTR::$get->get('view') == 'technosphere') ? 'active' : '';
-			echo '<a href="' . APP_ROOT . 'bases/view-technosphere" class="item ' . $active . '">';
-				echo '<span class="picto">';
-					echo '<img src="' . MEDIA . 'orbitalbase/technosphere.png" alt="" />';
-					echo '<span class="number">' . $base->getLevelTechnosphere() . '</span>';
-				echo '</span>';
-				echo '<span class="content skin-1">';
-					echo '<span>' . OrbitalBaseResource::getBuildingInfo(5, 'frenchName') . '</span>';
+					echo '<span>' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::GENERATOR, 'frenchName') . '</span>';
 				echo '</span>';
 			echo '</a>';
 		}
@@ -58,7 +33,7 @@ echo '<div id="subnav">';
 					echo '<span class="number">' . $base->getLevelDock1() . '</span>';
 				echo '</span>';
 				echo '<span class="content skin-1">';
-					echo '<span>' . OrbitalBaseResource::getBuildingInfo(2, 'frenchName') . '</span>';
+					echo '<span>' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::DOCK1, 'frenchName') . '</span>';
 				echo '</span>';
 			echo '</a>';
 		}
@@ -71,7 +46,20 @@ echo '<div id="subnav">';
 					echo '<span class="number">' . $base->getLevelDock2() . '</span>';
 				echo '</span>';
 				echo '<span class="content skin-1">';
-					echo '<span>' . OrbitalBaseResource::getBuildingInfo(3, 'frenchName') . '</span>';
+					echo '<span>' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::DOCK2, 'frenchName') . '</span>';
+				echo '</span>';
+			echo '</a>';
+		}
+
+		if ($base->getLevelTechnosphere() > 0) {
+			$active = (CTR::$get->get('view') == 'technosphere') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'bases/view-technosphere" class="item ' . $active . '">';
+				echo '<span class="picto">';
+					echo '<img src="' . MEDIA . 'orbitalbase/technosphere.png" alt="" />';
+					echo '<span class="number">' . $base->getLevelTechnosphere() . '</span>';
+				echo '</span>';
+				echo '<span class="content skin-1">';
+					echo '<span>' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::TECHNOSPHERE, 'frenchName') . '</span>';
 				echo '</span>';
 			echo '</a>';
 		}
@@ -84,7 +72,59 @@ echo '<div id="subnav">';
 					echo '<span class="number">' . $base->getLevelCommercialPlateforme() . '</span>';
 				echo '</span>';
 				echo '<span class="content skin-1">';
-					echo '<span>' . OrbitalBaseResource::getBuildingInfo(6, 'frenchName') . '</span>';
+					echo '<span>' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::COMMERCIAL_PLATEFORME, 'frenchName') . '</span>';
+				echo '</span>';
+			echo '</a>';
+		}
+
+		if ($base->getLevelSpatioport() > 0) {
+			$active = (CTR::$get->get('view') == 'spatioport') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'bases/view-spatioport" class="item ' . $active . '">';
+				echo '<span class="picto">';
+					echo '<img src="' . MEDIA . 'orbitalbase/spatioport.png" alt="" />';
+					echo '<span class="number">' . $base->getLevelSpatioport() . '</span>';
+				echo '</span>';
+				echo '<span class="content skin-1">';
+					echo '<span>' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'frenchName') . '</span>';
+				echo '</span>';
+			echo '</a>';
+		}
+
+		if ($base->getLevelRefinery() > 0) {
+			$active = (CTR::$get->get('view') == 'refinery') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'bases/view-refinery" class="item ' . $active . '">';
+				echo '<span class="picto">';
+					echo '<img src="' . MEDIA . 'orbitalbase/refinery.png" alt="" />';
+					echo '<span class="number">' . $base->getLevelRefinery() . '</span>';
+				echo '</span>';
+				echo '<span class="content skin-1">';
+					echo '<span>' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::REFINERY, 'frenchName') . '</span>';
+				echo '</span>';
+			echo '</a>';
+		}
+
+		if ($base->getLevelStorage() > 0) {
+			$active = (CTR::$get->get('view') == 'storage') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'bases/view-storage" class="item ' . $active . '">';
+				echo '<span class="picto">';
+					echo '<img src="' . MEDIA . 'orbitalbase/storage.png" alt="" />';
+					echo '<span class="number">' . $base->getLevelStorage() . '</span>';
+				echo '</span>';
+				echo '<span class="content skin-1">';
+					echo '<span>' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::STORAGE, 'frenchName') . '</span>';
+				echo '</span>';
+			echo '</a>';
+		}
+
+		if ($base->getLevelRecycling() > 0) {
+			$active = (CTR::$get->get('view') == 'recycling') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'bases/view-recycling" class="item ' . $active . '">';
+				echo '<span class="picto">';
+					echo '<img src="' . MEDIA . 'orbitalbase/recycling.png" alt="" />';
+					echo '<span class="number">' . $base->getLevelRecycling() . '</span>';
+				echo '</span>';
+				echo '<span class="content skin-1">';
+					echo '<span>' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::RECYCLING, 'frenchName') . '</span>';
 				echo '</span>';
 			echo '</a>';
 		}
@@ -99,5 +139,6 @@ echo '<div id="subnav">';
 			echo '</span>';
 		echo '</a>';
 	echo '</div>';
+	echo '<button class="move-side-bar bottom" data-dir="down"> </button>';
 echo '</div>';
 ?>

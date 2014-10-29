@@ -13,8 +13,7 @@
 class FactionRankingManager extends Manager {
 	protected $managerType = '_FactionRanking';
 
-	public function loadLastContext($where = array(), $order = array(), $limit = array()) {
-		
+	public function loadLastContext($where = array(), $order = array(), $limit = array()) {	
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('SELECT * FROM ranking WHERE faction = 1 ORDER BY dRanking DESC LIMIT 1');
 		$qr->execute();
@@ -71,30 +70,30 @@ class FactionRankingManager extends Manager {
 		}
 	}
 
-	public function loadByRequest($request) {
-		$formatWhere = Utils::arrayToWhere($where);
-		$formatOrder = Utils::arrayToOrder($order);
-		$formatLimit = Utils::arrayToLimit($limit);
-
+	public function loadByRequest($request, $args = array()) {
 		$db = DataBase::getInstance();
-		$qr = $db->prepare($request);
+		$qr = $db->prepare('SELECT *
+			FROM factionRanking AS fr
+			' . $request
+		);
 
-		$qr->execute();
+		$qr->execute($args);
 
-		while($aw = $qr->fetch()) {
+		while ($aw = $qr->fetch()) {
 			$fr = new FactionRanking();
-			if (isset($aw['id'])) { $fr->id = $aw['id']; }
-			if (isset($aw['rRanking'])) { $fr->rRanking = $aw['rRanking']; }
-			if (isset($aw['rFaction'])) { $fr->rFaction = $aw['rFaction']; } 
-			if (isset($aw['general'])) { $fr->general = $aw['general']; }
-			if (isset($aw['generalPosition'])) { $fr->generalPosition = $aw['generalPosition']; }
-			if (isset($aw['generalVariation'])) { $fr->generalVariation = $aw['generalVariation']; }
-			if (isset($aw['power'])) { $fr->power = $aw['power']; }
-			if (isset($aw['powerPosition'])) { $fr->powerPosition = $aw['powerPosition']; }
-			if (isset($aw['powerVariation'])) { $fr->powerVariation = $aw['powerVariation']; }
-			if (isset($aw['domination'])) { $fr->domination = $aw['domination']; }
-			if (isset($aw['dominationPosition'])) { $fr->dominationPosition = $aw['dominationPosition']; }
-			if (isset($aw['dominationVariation'])) { $fr->dominationVariation = $aw['dominationVariation']; }
+
+			$fr->id = isset($aw['id']) ? $aw['id'] : NULL;
+			$fr->rRanking = isset($aw['rRanking']) ? $aw['rRanking'] : NULL;
+			$fr->rFaction = isset($aw['rFaction']) ? $aw['rFaction'] : NULL;
+			$fr->general = isset($aw['general']) ? $aw['general'] : NULL;
+			$fr->generalPosition = isset($aw['generalPosition']) ? $aw['generalPosition'] : NULL;
+			$fr->generalVariation = isset($aw['generalVariation']) ? $aw['generalVariation'] : NULL;
+			$fr->power = isset($aw['power']) ? $aw['power'] : NULL;
+			$fr->powerPosition = isset($aw['powerPosition']) ? $aw['powerPosition'] : NULL;
+			$fr->powerVariation = isset($aw['powerVariation']) ? $aw['powerVariation'] : NULL;
+			$fr->domination = isset($aw['domination']) ? $aw['domination'] : NULL;
+			$fr->dominationPosition = isset($aw['dominationPosition']) ? $aw['dominationPosition'] : NULL;
+			$fr->dominationVariation = isset($aw['dominationVariation']) ? $aw['dominationVariation'] : NULL;
 
 			$currentT = $this->_Add($fr);
 		}

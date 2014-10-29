@@ -148,6 +148,15 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 
 		ASM::$srm->add($sr);
 
+		# tutorial
+		if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
+			switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+				case TutorialResource::SPY_PLANET:
+					TutorialHelper::setStepDone();
+					break;
+			}
+		}
+
 		CTR::$alert->add('Espionnage effectué.', ALERT_STD_SUCCESS);
 		CTR::redirect('fleet/view-spyreport/report-' . $sr->id);
 		

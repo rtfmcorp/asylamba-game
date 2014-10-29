@@ -57,10 +57,12 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 	}
 	if ($valid) {
 		$minPrice = Game::getMinPriceRelativeToRate($type, $quantity, $identifier);
+		$maxPrice = Game::getMaxPriceRelativeToRate($type, $quantity, $identifier);
 
 		if ($price < $minPrice) {
 			CTR::$alert->add('Le prix que vous avez fixé est trop bas. Une limite inférieure est fixée selon la catégorie de la vente.', ALERT_STD_ERROR);
-			CTR::$alert->add('prix min : ' . $minPrice . ', mon prix : ' . $price, ALERT_STD_ERROR);
+		} elseif ($price > $maxPrice) {
+			CTR::$alert->add('Le prix que vous avez fixé est trop haut. Une limite supérieure est fixée selon la catégorie de la vente.', ALERT_STD_ERROR);
 		} else {
 			$valid = TRUE;
 
@@ -71,7 +73,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 
 			if ($valid) {
 				# verif : have we enough commercialShips
-				$totalShips = OrbitalBaseResource::getBuildingInfo(6, 'level', $base->getLevelCommercialPlateforme(), 'nbCommercialShip');
+				$totalShips = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::COMMERCIAL_PLATEFORME, 'level', $base->getLevelCommercialPlateforme(), 'nbCommercialShip');
 				$usedShips = 0;
 
 				$S_CSM1 = ASM::$csm->getCurrentSession();

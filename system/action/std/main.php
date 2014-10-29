@@ -12,7 +12,6 @@ switch (CTR::$get->get('a')) {
 
 	# ATHENA
 	case 'updateinvest': 			include ACTION . 'athena/general/updateInvest.php'; break;
-	case 'switchrefinerymode':		include ACTION . 'athena/general/switchRefineryMode.php'; break;
 	case 'switchdockmode':			include ACTION . 'athena/general/switchDockMode.php'; break;
 	case 'createschoolclass':		include ACTION . 'athena/general/createSchoolClass.php'; break;
 	case 'giveresource':			include ACTION . 'athena/general/giveResource.php'; break;
@@ -92,11 +91,18 @@ switch (CTR::$get->get('a')) {
 
 	# DEMETER
 	case 'writemessageforum':		include ACTION . 'demeter/message/write.php'; break;
+	case 'movetopicforum':			include ACTION . 'demeter/topic/move.php'; break;
+	case 'closetopicforum':			include ACTION . 'demeter/topic/close.php'; break;
+	case 'uptopicforum':			include ACTION . 'demeter/topic/up.php'; break;
+	case 'archivetopicforum':		include ACTION . 'demeter/topic/archive.php'; break;
+	case 'editmessageforum':		include ACTION . 'demeter/message/edit.php'; break;
 	case 'createtopicforum':		include ACTION . 'demeter/topic/createTopic.php'; break;
 
 	case 'postulate':				include ACTION . 'demeter/election/postulate.php'; break;
+	case 'makeacoup':				include ACTION . 'demeter/election/makeACoup.php'; break;
 	case 'vote':					include ACTION . 'demeter/election/vote.php'; break;
 	case 'choosegovernment':		include ACTION . 'demeter/election/chooseGovernment.php'; break;
+	case 'fireminister':			include ACTION . 'demeter/election/fire.php'; break;
 
 	case 'votelaw':					include ACTION . 'demeter/law/vote.php'; break;
 	case 'createlaw':				include ACTION . 'demeter/law/createLaw.php'; break;

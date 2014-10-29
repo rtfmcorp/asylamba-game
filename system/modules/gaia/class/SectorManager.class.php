@@ -11,6 +11,8 @@
 */
 
 class SectorManager extends Manager {
+	protected $managerType = '_Sector';
+
 	private $sectors = array();
 
 	private $genStats = array(0, 0, 0, 0, 0, 0, 0);
@@ -98,6 +100,8 @@ class SectorManager extends Manager {
 				}
 
 				$k++;
+
+				$this->_Add($sector);
 			}
 
 			$this->avrStats = $this->genStats;
@@ -158,7 +162,6 @@ class SectorManager extends Manager {
 
 	public function save() {
 		$sectors = $this->_Save();
-
 		foreach ($sectors AS $s) {
 			$db = DataBase::getInstance();
 			$qr = $db->prepare('UPDATE sector

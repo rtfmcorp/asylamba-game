@@ -38,7 +38,7 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 
 		if (TechnologyResource::haveRights($techno, 'resource', $targetLevel, $ob->getResourcesStorage())
 			AND TechnologyResource::haveRights($techno, 'credit', $targetLevel, CTR::$data->get('playerInfo')->get('credit'))
-			AND TechnologyResource::haveRights($techno, 'queue', ASM::$tqm->size())
+			AND TechnologyResource::haveRights($techno, 'queue', $ob, ASM::$tqm->size())
 			AND TechnologyResource::haveRights($techno, 'levelPermit', $targetLevel)
 			AND TechnologyResource::haveRights($techno, 'technosphereLevel', $ob->getLevelTechnosphere())
 			AND (TechnologyResource::haveRights($techno, 'research', $targetLevel, ASM::$rsm->get()->getResearchList()) === TRUE)) {
@@ -48,7 +48,17 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 				include_once ZEUS;
 				switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
 					case TutorialResource::SHIP0_UNBLOCK:
-						if ($techno == 4) {
+						if ($techno == Technology::SHIP0_UNBLOCK) {
+							TutorialHelper::setStepDone();
+						}
+						break;
+					case TutorialResource::SHIP1_UNBLOCK:
+						if ($techno == Technology::SHIP1_UNBLOCK) {
+							TutorialHelper::setStepDone();
+						}
+						break;
+					case TutorialResource::GENERATOR_SPEED:
+						if ($techno == Technology::GENERATOR_SPEED) {
 							TutorialHelper::setStepDone();
 						}
 						break;

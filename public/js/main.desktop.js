@@ -3,6 +3,7 @@ jQuery(document).ready(function($) {
 	// ################
 	render = {
 		calling: 0,
+		inInput: false,
 
 		viewport: {
 			w: 0,
@@ -53,6 +54,8 @@ jQuery(document).ready(function($) {
 				}
 				panelController.move(0, 'left', 0);
 			}
+
+			sbController.move('up');
 			
 			if ($('#map').length == 1) {
 				mapController.init();
@@ -135,9 +138,12 @@ jQuery(document).ready(function($) {
 		render.make();
 	});
 
+	$('input, textarea').live('focusin',  function(e) { render.inInput = true; });
+	$('input, textarea').live('focusout', function(e) { render.inInput = false; });
+
 	// ADD INFOPANEL COMPONENT
 	// ##########################
-	var infoPanel = {
+	infoPanel = {
 		addedColumn: undefined
 	};
 
@@ -192,52 +198,54 @@ jQuery(document).ready(function($) {
 		time: 500,
 
 		move: function(fixBody, direction, hasToAnimate) {
-			// mode de mouvement
-			var hasToAnimate = (hasToAnimate == undefined) ? true : false;
+			if (!render.inInput) {
+				// mode de mouvement
+				var hasToAnimate = (hasToAnimate == undefined) ? true : false;
 
-			// objet DOM
-			var content = fixBody.find('.body');
-			var toTop = fixBody.find('a.toTop');
-			var toBottom = fixBody.find('a.toBottom');
-			var hFixBody = parseInt(fixBody.css('height'));
-			var hBody	 = parseInt(content.css('height'));
+				// objet DOM
+				var content = fixBody.find('.body');
+				var toTop = fixBody.find('a.toTop');
+				var toBottom = fixBody.find('a.toBottom');
+				var hFixBody = parseInt(fixBody.css('height'));
+				var hBody	 = parseInt(content.css('height'));
 
-			
-			var position = 0;
-			var nextPosition  = (content.css('top') == 'auto') ? 0 : parseInt(content.css('top'));
-			
-			if (hasToAnimate) {
-				nextPosition += (direction == 'top') ? columnController.largeStep : -columnController.largeStep;
-			} else {
-				nextPosition += (direction == 'top') ? columnController.smallStep : -columnController.smallStep;
-			}
+				
+				var position = 0;
+				var nextPosition  = (content.css('top') == 'auto') ? 0 : parseInt(content.css('top'));
+				
+				if (hasToAnimate) {
+					nextPosition += (direction == 'top') ? columnController.largeStep : -columnController.largeStep;
+				} else {
+					nextPosition += (direction == 'top') ? columnController.smallStep : -columnController.smallStep;
+				}
 
-			if (hFixBody >= hBody) {
-				position = 0;
-				toTop.css('display', 'none');
-				toBottom.css('display', 'none');
-			} else if (nextPosition >= 0) {
-				position = 0;
-				toTop.css('display', 'none');
-				toBottom.css('display', 'block');
-			} else if (-(nextPosition) + hFixBody >= hBody) {
-				position = -(hBody - hFixBody + 30);
-				toTop.css('display', 'block');
-				toBottom.css('display', 'none');
-			} else {
-				position = nextPosition;
-				toTop.css('display', 'block');
-				toBottom.css('display', 'block');
-			}
+				if (hFixBody >= hBody) {
+					position = 0;
+					toTop.css('display', 'none');
+					toBottom.css('display', 'none');
+				} else if (nextPosition >= 0) {
+					position = 0;
+					toTop.css('display', 'none');
+					toBottom.css('display', 'block');
+				} else if (-(nextPosition) + hFixBody >= hBody) {
+					position = -(hBody - hFixBody + 30);
+					toTop.css('display', 'block');
+					toBottom.css('display', 'none');
+				} else {
+					position = nextPosition;
+					toTop.css('display', 'block');
+					toBottom.css('display', 'block');
+				}
 
-			if (hasToAnimate) {
-				content.stop().animate({
-					'top': position
-				}, columnController.time);
-			} else {
-				content.css({
-					'top': position
-				});
+				if (hasToAnimate) {
+					content.stop().animate({
+						'top': position
+					}, columnController.time);
+				} else {
+					content.css({
+						'top': position
+					});
+				}
 			}
 		}
 	};
@@ -295,46 +303,48 @@ jQuery(document).ready(function($) {
 
 		// déplace si possible le panneau
 		move: function(nbr, direction, time) {
-			var hasToAnimate = false;
-			var time = (time == undefined) ? (300 * nbr) : time;
-				panelController.maxPosition = render.column.number + 1 - parseInt(render.viewport.w / render.column.defaultSize);
+			if (!render.inInput) {
+				var hasToAnimate = false;
+				var time = (time == undefined) ? (300 * nbr) : time;
+					panelController.maxPosition = render.column.number + 1 - parseInt(render.viewport.w / render.column.defaultSize);
 
-			if (direction == 'left') {
-				if ((panelController.position - nbr) >= -2) {
-					panelController.position = panelController.position - nbr;
-					hasToAnimate = true;
+				if (direction == 'left') {
+					if ((panelController.position - nbr) >= -2) {
+						panelController.position = panelController.position - nbr;
+						hasToAnimate = true;
+					}
+				} else {
+					if ((panelController.position + nbr) <= panelController.maxPosition - 1) {
+						panelController.position = panelController.position + nbr;
+						hasToAnimate = true;
+					}
 				}
-			} else {
-				if ((panelController.position + nbr) <= panelController.maxPosition - 1) {
-					panelController.position = panelController.position + nbr;
-					hasToAnimate = true;
+
+				if (hasToAnimate) {
+					$('#content').stop().animate({
+						'left': -(panelController.position * 300) + 60
+					}, time);
+					$('#background-paralax').stop().animate({
+						'left': -((panelController.position + 2) * 25)
+					}, time);
 				}
+
+				panelController.position < 0
+					? $('#movers .toLeft').hide()
+					: $('#movers .toLeft').show();
+
+				panelController.position >= panelController.maxPosition - 1
+					? $('#movers .toRight').hide()
+					: $('#movers .toRight').show();
+
+				$('#content a').each(function() {
+					$(this).attr('href', panelController.rewriteLink($(this).attr('href')));
+				});
+
+				$('#content form').each(function() {
+					$(this).attr('action', panelController.rewriteLink($(this).attr('action')));
+				});
 			}
-
-			if (hasToAnimate) {
-				$('#content').stop().animate({
-					'left': -(panelController.position * 300) + 60
-				}, time);
-				$('#background-paralax').stop().animate({
-					'left': -((panelController.position + 2) * 25)
-				}, time);
-			}
-
-			panelController.position < 0
-				? $('#movers .toLeft').hide()
-				: $('#movers .toLeft').show();
-
-			panelController.position >= panelController.maxPosition - 1
-				? $('#movers .toRight').hide()
-				: $('#movers .toRight').show();
-
-			$('#content a').each(function() {
-				$(this).attr('href', panelController.rewriteLink($(this).attr('href')));
-			});
-
-			$('#content form').each(function() {
-				$(this).attr('action', panelController.rewriteLink($(this).attr('action')));
-			});
 		},
 
 		rewriteLink: function(link) {
@@ -367,11 +377,48 @@ jQuery(document).ready(function($) {
 			default: break;
 		}
 	});
+
+// ########################################### //
+// ####### SIDERBAR CONTROLLER MODULE ######## //
+// ########################################### //
+	sbController = {
+		obj: $('#subnav'),
+		sub: $('#subnav .overflow'),
+
+		move: function(dir) {
+			if (dir == 'down') {
+				if (sbController.sub.height() > sbController.obj.height()) {
+					sbController.obj.find('.move-side-bar.top').show(0);
+				} else {
+					sbController.obj.find('.move-side-bar.top').hide(0);
+				}
+				sbController.obj.find('.move-side-bar.bottom').hide(0);
+				sbController.sub.animate({
+					'top': '-' + (sbController.sub.height() - sbController.obj.height()) + 'px'
+				}, 200);
+			} else if (dir == 'up') {
+				if (sbController.sub.height() > sbController.obj.height()) {
+					sbController.obj.find('.move-side-bar.bottom').show(0);
+				} else {
+					sbController.obj.find('.move-side-bar.bottom').hide(0);
+				}
+				sbController.obj.find('.move-side-bar.top').hide(0);
+				sbController.sub.animate({
+					'top': 0
+				}, 200);
+			}
+		}
+	}
+
+	$('.move-side-bar').on('click', function(e) {
+		e.preventDefault();
+		sbController.move($(this).data('dir'));
+	});
 	
 // ################################# //
 // ####### MAP MOVER MODULE ######## //
 // ################################# //
-	var mapController = {
+	mapController = {
 		map: {
 			obj: $('#map'),
 			ratio: $('#map').data('map-ratio'),
@@ -873,18 +920,6 @@ jQuery(document).ready(function($) {
 	});
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 	/* DIVERS */
 	$('.new-transaction.resources #resources-quantity').live('keyup', function() {
 		var quantity  = $(this).val();
@@ -1000,4 +1035,14 @@ jQuery(document).ready(function($) {
 		}).remove().appendTo(parent);
 	});
 
+	// inscription stuff
+	$('.inscription-map .enabled').click(function(e) {
+		e.preventDefault();
+
+		var id = $(this).data('id');
+
+		$('.inscription-map .number span').removeClass('active');
+		$('#sector' + id).addClass('active');
+		$('#input-sector-id').val(id);
+	})
 });

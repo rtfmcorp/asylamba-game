@@ -96,7 +96,11 @@ abstract class CTC {
 
 	public static function now() {
 		if (self::$running) {
-			return self::$currentDate;
+			if (self::$currentDate == NULL) {
+				return Utils::now();
+			} else {
+				return self::$currentDate;
+			}
 		} else {
 			return Utils::now();
 		}

@@ -12,9 +12,6 @@ define('TQM_TECHNOCOEFCREDIT', 		1);
 define('TQM_TECHNOCOEFTIME', 		1);
 define('TQM_TECHNOCOEFPOINTS', 		1);
 
-// queue de technologies
-define('TQM_TECHNOMAXQUEUE',		2);
-
 // pourcentage rendu lors
 // de l'annulation d'un développement de technologie
 define('TQM_RESOURCERETURN', 		0.5); 	// 50%

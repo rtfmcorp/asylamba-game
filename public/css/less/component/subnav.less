@@ -13,7 +13,35 @@
 
 	.overflow {
 		position: relative;
-		height: 100%;
+	}
+
+	.move-side-bar {
+		display: none;
+		position: absolute;
+		z-index: 5000;
+		left: 5px;
+		width: 48px; height: 48px;
+		line-height: 48px;
+		border: none;
+		background-color: rgba(0, 0, 0, 0.75);
+		background-position: center;
+		background-repeat: no-repeat;
+		border-radius: 100%;
+		cursor: pointer;
+
+		&:hover, &:focus {
+			box-shadow: 0 0 3px white;
+		}
+
+		&.top {
+			bottom: auto; top: 20px;
+			background-image: url('src/desktop/component/top.png');
+		}
+
+		&.bottom {
+			bottom: 20px; top: auto;
+			background-image: url('src/desktop/component/bottom.png');
+		}
 	}
 
 	.item {

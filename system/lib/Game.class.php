@@ -295,6 +295,27 @@ class Game {
 		return round($price);
 	}
 
+	public static function getMaxPriceRelativeToRate($transactionType, $quantity, $identifier = FALSE) {
+		switch ($transactionType) {
+			case Transaction::TYP_RESOURCE:
+				$minRate = Transaction::MAX_RATE_RESOURCE;
+				break;
+			case Transaction::TYP_SHIP:
+				include_once ATHENA;
+				$minRate = Transaction::MAX_RATE_SHIP;
+				$quantity = ShipResource::getInfo($identifier, 'resourcePrice') * $quantity;
+				break;
+			case Transaction::TYP_COMMANDER:
+				$minRate = Transaction::MAX_RATE_COMMANDER;
+				break;
+			default:
+				return FALSE;
+		}
+
+		$price = $quantity * $minRate;
+		return round($price);
+	}
+
 	public static function getSpySuccess($antiSpy, $priceInvested) {
 		# spy success must be between 0 and 100
 		$ratio = $priceInvested / $antiSpy;

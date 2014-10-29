@@ -16,7 +16,7 @@ class Law {
 	const OBSOLETE					= 2;
 	const REFUSED					= 3;
 
-	const VOTEDURATION 				= 172800;
+	const VOTEDURATION 				= 86400;
 
 	public $id					= 0;
 	public $rColor				= 0;
@@ -34,7 +34,7 @@ class Law {
 		ASM::$vlm->load(array('rLaw' => $this->id));
 		$ballot = 0;
 		for ($i = 0; $i < ASM::$vlm->size(); $i++) {
-			if (ASM::$vlm->vote) {
+			if (ASM::$vlm->get()->vote) {
 				$ballot++;
 			} else {
 				$ballot--;
@@ -42,7 +42,7 @@ class Law {
 		}
 		ASM::$vlm->changeSession($_VLM);
 
-		if ($ballot > 0) {
+		if ($ballot >= 0) {
 			return TRUE;
 		} else {
 			return FALSE;

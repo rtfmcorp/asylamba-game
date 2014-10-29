@@ -12,51 +12,70 @@
 include_once ZEUS;
 
 class Color {
-	#constantes de prestiges
-	#empire
+	# Regime
+	const DEMOCRATIC 				= 1;
+	const ROYALISTIC 				= 2;
+	const THEOCRATIC 				= 3;
+	# constantes de prestiges
+	# empire
 	const POINTCONQUER				= 100;
 	const POINTBUILDBIGSHIP			= 25;
-	#negore
+	# negore
 	const COEFFPOINTTRANSACTION		= 10;
-	#cardan
+	# cardan
 	const BONUSOUTOFSECTOR			= 50;
-	#kovakh
+	# kovakh
 	const POINTBUILDLITTLESHIP 		= 1;
 	const POINTCHANGETYPE 			= 50;
 	const POINTBATTLE				= 2;
-	#Synelle
+	# Synelle
 	const POINTATTACKPLAYER 		= -10;
 	const POINTDENFENDTODO  		= 20;
-	#Nerve
+	# Nerve
 	const COEFFPOINTCONQUER			= 10;
-	#Aphéra
+	# Aphéra
 	const POINTSPY					= 10;
 	const POINTRESEARCH				= 5;
 
-	#const
-	const NBRGOVERNMENT 	= 6;
+	# const
+	const NBRGOVERNMENT 			= 6;
 
-	const CAMPAIGNTIME 		= 345600;
-	const ELECTIONTIME		= 172800;
+	const CAMPAIGNTIME 				= 345600;
+	const ELECTIONTIME				= 172800;
+	const PUTSCHTIME 				= 25200;
 
-	const ALIVE 			= 1;
-	const DEAD 				= 0;
+	const PUTSCHPERCENTAGE			= 15;
 
-	const MANDATE		 	= 1;
-	const CAMPAIGN		 	= 2;
-	const ELECTION 			= 3;
+	const ALIVE 					= 1;
+	const DEAD 						= 0;
 
-	public $id 					= 0;
-	public $alive 				= 0;
-	public $credits				= 0;
-	public $players 			= 0;
-	public $activePlayers 		= 0;
-	public $points				= 0;
-	public $sectors				= 0;
-	public $electionStatement	= 0;
-	public $dLastElection		= '';
+	const MANDATE		 			= 1;
+	const CAMPAIGN		 			= 2;
+	const ELECTION 					= 3;
+
+	public $id 						= 0;
+	public $alive 					= 0;
+	public $credits					= 0;
+	public $players 				= 0;
+	public $activePlayers 			= 0;
+	public $points					= 0;
+	public $sectors					= 0;
+	public $electionStatement		= 0;
+	public $dLastElection			= '';
+
+	public $chiefId					= 0;
 
 	public function getId() { return $this->id; }
+
+	public function getRegime() {
+		if (in_array($this->id, array(1, 2, 3))) {
+			return self::ROYALISTIC;			
+		} elseif (in_array($this->id, array(5, 6, 7))) {
+			return self::DEMOCRATIC;
+		} else {
+			return self::THEOCRATIC;			
+		}
+	}
 
 	public function increaseCredit($credit) {
 		$this->credits = $this->credits + $credit;
@@ -72,12 +91,28 @@ class Color {
 		$_PAM1 = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession(FALSE);
 
-		ASM::$pam->load(array('rColor' => $this->id), array('factionPoint', 'DESC'));
+		ASM::$pam->load(array('rColor' => $this->id), array('factionPoint', 'DESC', 'experience', 'DESC'));
 		for ($i = 0; $i < ASM::$pam->size(); $i++) {
 			if (ASM::$pam->get($i)->status < PAM_TREASURER) {
 				if ($i < $limit) {
+					if (ASM::$pam->get($i)->status != PAM_PARLIAMENT) {
+						$notif = new Notification();
+						$notif->setRPlayer(ASM::$pam->get($i)->id);
+						$notif->setTitle('Vous êtes sénateur');
+						$notif->addBeg()
+							->addTxt('Vos actions vous ont fait gagner assez de prestige pour faire partie du sénat.');
+						ASM::$ntm->add($notif);
+					}
 					ASM::$pam->get($i)->status = PAM_PARLIAMENT;
 				} else {
+					if (ASM::$pam->get($i)->status == PAM_PARLIAMENT) {
+						$notif = new Notification();
+						$notif->setRPlayer(ASM::$pam->get($i)->id);
+						$notif->setTitle('Vous n\'êtes plus sénateur');
+						$notif->addBeg()
+							->addTxt('Vous n\'avez plus assez de prestige pour rester dans le sénat.');
+						ASM::$ntm->add($notif);
+					}
 					ASM::$pam->get($i)->status = PAM_STANDARD;
 				}
 			}
@@ -86,8 +121,11 @@ class Color {
 	}
 
 	private function ballot($election) {
-		$royalisticRegime = array(1, 2, 3);
-		$democraticRegime = array(5, 6, 7);
+		$_PAM1 = ASM::$pam->getCurrentsession();
+		ASM::$pam->newSession(FALSE);
+		ASM::$pam->load(array('rColor' => $this->id, 'status' => PAM_CHIEF));
+		$chiefId = ASM::$pam->get()->id;
+		ASM::$pam->changeSession($_PAM1);
 
 		$_VOM = ASM::$vom->getCurrentSession();
 		ASM::$vom->newSession();
@@ -102,19 +140,17 @@ class Color {
 			}
 		}
 
-		if (count($ballot) > 0) {
-			$_PAM1 = ASM::$pam->getCurrentsession();
-			ASM::$pam->newSession(FALSE);
-			ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF), 'rColor' => $this->id));
-			for ($i = 0; $i < ASM::$pam->size(); $i++) {
-				ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
-			}
-
-			ASM::$pam->changeSession($_PAM1);
-		}
-
-		if (in_array($this->id, $royalisticRegime)) {
+		if ($this->getRegime() == self::DEMOCRATIC) {
 			if (count($ballot) > 0) {
+				$_PAM1 = ASM::$pam->getCurrentsession();
+				ASM::$pam->newSession(FALSE);
+				ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF), 'rColor' => $this->id));
+				for ($i = 0; $i < ASM::$pam->size(); $i++) {
+					ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
+				}
+
+				ASM::$pam->changeSession($_PAM1);
+
 				arsort($ballot);
 				reset($ballot);
 
@@ -123,94 +159,135 @@ class Color {
 				ASM::$pam->load(array('id' => key($ballot)));
 				ASM::$pam->get()->setStatus(PAM_CHIEF);
 
+				$statusArray = ColorResource::getInfo($this->id, 'status');
+
+				$notif = new Notification();
+				$notif->setRPlayer(ASM::$pam->get()->id);
+				$notif->setTitle('Votre avez été élu');
+				$notif->addBeg()
+					->addTxt(' Le peuple vous à soutenu, vous avez été élu ' . $statusArray[PAM_CHIEF] . ' de votre faction.');
+				ASM::$ntm->add($notif);
 
 				ASM::$pam->changeSession($_PAM2);
 			}
 			ASM::$vom->changeSession($_VOM);
 
-		} elseif (in_array($this->id, $democraticRegime)) {
+		} elseif ($this->getRegime() == self::ROYALISTIC) {
 			if (count($ballot) > 0) {
-						
 				arsort($ballot);
 				reset($ballot);
-				$_PAM2 = ASM::$pam->getCurrentSession();
-				ASM::$pam->newSession(FALSE);
-				$keys = array();
 
-				$nbr = (count($ballot) > 4) ? 4 : count($ballot);
-
-				for ($i = 0; $i < $nbr; $i++) {
-					$keys[$i] = key($ballot);
-					next($ballot);
-				}
-
-				ASM::$pam->load(array('id' => $keys));
-				$preferences = array(array(6, TRUE), array(5, TRUE), array(4, TRUE), array(3, TRUE));
-
-				for ($i = 0; $i < ASM::$pam->size(); $i++) {
-					$_CAM = ASM::$cam->getCurrentSession();
-					ASM::$cam->newSession();
-					ASM::$cam->load(array('rPlayer' => ASM::$pam->get($i)->id));
-
-					$preferences[ASM::$cam->get()->treasurerChoice - 1][0] = PAM_TREASURER;
-					$preferences[ASM::$cam->get()->warlordChoice - 1][0] = PAM_WARLORD; 
-					$preferences[ASM::$cam->get()->ministerChoice - 1][0] = PAM_MINISTER; 
-					$preferences[ASM::$cam->get()->chiefChoice - 1][0] = PAM_CHIEF;
-
-					for ($i = 0; $i < $nbr; $i++) {
-						if ($preferences[$i][1]) {
-							ASM::$pam->get($i)->status = $preferences[$i][0];
-							$preferences[$i][1] = FALSE;
-							break;
-						}
+				if (((current($ballot) / $this->activePlayers) * 100) >= self::PUTSCHPERCENTAGE && key($ballot) != $chiefId) {
+					$_PAM3 = ASM::$pam->getCurrentsession();
+					ASM::$pam->newSession(FALSE);
+					ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF), 'rColor' => $this->id));
+					for ($i = 0; $i < ASM::$pam->size(); $i++) {
+						ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
 					}
+					ASM::$pam->changeSession($_PAM3);
 
-					ASM::$cam->changeSession($_CAM);
+					$_PAM2 = ASM::$pam->getCurrentsession();
+					ASM::$pam->newSession(FALSE);
+					ASM::$pam->load(array('id' => key($ballot)));
+					ASM::$pam->get()->setStatus(PAM_CHIEF);
+
+					$statusArray = ColorResource::getInfo($this->id, 'status');
+
+					$notif = new Notification();
+					$notif->setRPlayer(ASM::$pam->get()->id);
+					$notif->setTitle('Votre coup d\'état a réussi');
+					$notif->addBeg()
+						->addTxt(' Le peuple vous à soutenu, vous avez renversé le ' . $statusArray[PAM_CHIEF] . ' de votre faction et avez pris sa place.');
+					ASM::$ntm->add($notif);
+
+					$notif = new Notification();
+					$notif->setRPlayer($chiefId);
+					$notif->setTitle('Un coup d\'état a réussi');
+					$notif->addBeg()
+						->addTxt(' Le joueur ')
+						->addLnk('diary/player-' . ASM::$pam->get()->id, ASM::$pam->get()->name)
+						->addTxt(' a fait un coup d\'état, vous êtes évincé du pouvoir.');
+					ASM::$ntm->add($notif);
+					
+					ASM::$pam->changeSession($_PAM2);
+				} else {
+					$_PAM2 = ASM::$pam->getCurrentsession();
+					ASM::$pam->newSession(FALSE);
+					ASM::$pam->load(array('id' => key($ballot)));
+
+					$notif = new Notification();
+					$notif->setRPlayer(ASM::$pam->get()->id);
+					$notif->setTitle('Votre coup d\'état a échoué');
+					$notif->addBeg()
+						->addTxt(' Le peuple ne vous a pas soutenu, l\'ancien gouvernement reste en place.');
+					ASM::$ntm->add($notif);
+
+					$notif = new Notification();
+					$notif->setRPlayer($chiefId);
+					$notif->setTitle('Un coup d\'état a échoué');
+					$notif->addBeg()
+						->addTxt(' Le joueur ')
+						->addLnk('diary/player-' . ASM::$pam->get()->id, ASM::$pam->get()->name)
+						->addTxt(' a tenté un coup d\'état, celui-ci a échoué');
+					ASM::$ntm->add($notif);
+					
+					ASM::$pam->changeSession($_PAM2);
 				}
-
-
-
-				ASM::$pam->changeSession($_PAM2);
 			}
-
 			ASM::$vom->changeSession($_VOM);
 		} else {
-			if (count($ballot) > 0) {	
-				reset($ballot);
-				$_PAM2 = ASM::$pam->getCurrentSession();
+			$_PAM4 = ASM::$pam->getCurrentsession();
+			ASM::$pam->newSession(FALSE);
+			ASM::$pam->load(array('rColor' => $this->id, 'status' => PAM_CHIEF));
+			if (ASM::$pam->size() > 0) {
+				$_CAM1 = ASM::$pam->getCurrentsession();
+				ASM::$cam->newSession();
+				ASM::$cam->load(array('rPlayer' => ASM::$pam->get()->id, 'rElection' => $election->id));
+				if (ASM::$cam->size() > 0) {
+					if (rand(0, 1) == 0) {
+						$ballot = array();
+					}
+				}
+				ASM::$cam->changeSession($_CAM1);
+			}
+			ASM::$pam->changeSession($_PAM4);
+			if (count($ballot) > 0) {
+				$aleaNbr = rand(0, count($ballot) - 1);
+				
+				$_PAM3 = ASM::$pam->getCurrentsession();
 				ASM::$pam->newSession(FALSE);
-				$keys = array();
+				ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF), 'rColor' => $this->id));
+				for ($i = 0; $i < ASM::$pam->size(); $i++) {
+					ASM::$pam->get($i)->setStatus(PAM_PARLIAMENT);
+				}
+				ASM::$pam->changeSession($_PAM3);
 
-				$nbr = (count($ballot) > 6) ? 6: count($ballot);
-
-				for ($i = 0; $i < $nbr; $i++) {
-					$keys[$i] = key($ballot);
+				for ($i = 0; $i < $aleaNbr; $i++) {
 					next($ballot);
 				}
-				$aleaNbr = rand(0, $nbr - 1);
 
-				ASM::$pam->load(array('id' => $keys[$aleaNbr]));
+				$_PAM2 = ASM::$pam->getCurrentsession();
+				ASM::$pam->newSession(FALSE);
+				ASM::$pam->load(array('id' => key($ballot)));
 				ASM::$pam->get()->setStatus(PAM_CHIEF);
 
-				ASM::$pam->changeSession($_PAM2);
-			}
-		}
-	}
-
-	private function sendNotif($rPlayer, $department, $hasWin = TRUE) {
-		if ($haswin) {
-			$resources = ColorResource::getInfo($this->id, 'status');
-			$notif = new Notification();
-				$notif->setRPlayer($rPlayer);
-				$notif->setTitle('Vous avez était élu');
+				$notif = new Notification();
+				$notif->setRPlayer(ASM::$pam->get()->id);
+				$notif->setTitle('Vous avez été nommé Guide');
 				$notif->addBeg()
-					->addTxt('Le peule a voté pour vous lors des dernières élections. Vous êtes désormais le ' . $resources[$department]);
+					->addTxt(' Les Oracles ont parlé, vous êtes désigné par la Grande Lumière pour guider Cardan vers la Gloire.');
 				ASM::$ntm->add($notif);
-		} else {
-			$notif = new Notification();
-				$notif->setRPlayer($rPlayer);
-				$notif->setTitle('Vous n\'avez pas été élu');
+
+				ASM::$pam->changeSession($_PAM2);
+			} else {
+				$notif = new Notification();
+				$notif->dSending = Utils::now();
+				$notif->setRPlayer($chiefId);
+				$notif->setTitle('Vous avez été nommé Guide');
+				$notif->addBeg()
+					->addTxt(' Les Oracles on parlé, vous êtes toujours désigné par la Grande Lumière pour guider Cardan vers la Gloire.');
 				ASM::$ntm->add($notif);
+			}
 		}
 	}
 
@@ -222,12 +299,53 @@ class Color {
 		} else {
 			//refuser la loi
 			$law->statement = Law::REFUSED;
+			$this->credits += (LawResources::getInfo($law->type, 'price') + 90) / 100;
 			//envoyer un message
 		}
 	}
 
-	public function uFinishLaw($law) {
+	public function uFinishBonusLaw($law, $sector) {
 		$law->statement = Law::OBSOLETE;
+	}
+
+	public function uFinishSectorTaxes($law, $sector) {
+		if ($sector->rColor == $this->id) {
+			$sector->tax = $law->options['taxes'];
+			$law->statement = Law::OBSOLETE;
+		} else {
+			$law->statement = Law::OBSOLETE;
+		}
+	}
+
+	public function uFinishSectorName($law, $sector) {
+		if ($sector->rColor == $this->id) {
+			$sector->name = $law->options['name'];
+			$law->statement = Law::OBSOLETE;
+		} else {
+			$law->statement = Law::OBSOLETE;
+		}
+	}
+	
+	public function uFinishExportComercialTaxes($law, $tax) {
+		if ($law->options['rColor'] == $this->id) {
+			$tax->exportTax = $law->options['taxes'] / 2;
+			$tax->importTax = $law->options['taxes'] / 2;
+			$law->statement = Law::OBSOLETE;
+		} else {
+			$tax->exportTax = $law->options['taxes'];
+			$law->statement = Law::OBSOLETE;
+		}
+	}
+
+	public function uFinishImportComercialTaxes($law, $tax) {
+		if ($law->options['rColor'] == $this->id) {
+			$tax->exportTax = $law->options['taxes'] / 2;
+			$tax->importTax = $law->options['taxes'] / 2;
+			$law->statement = Law::OBSOLETE;
+		} else {
+			$tax->importTax = $law->options['taxes'];
+			$law->statement = Law::OBSOLETE;
+		}
 	}
 
 
@@ -235,36 +353,85 @@ class Color {
 		// 604800s = 7j
 		$token = CTC::createContext();
 
-		if ($this->electionStatement == self::MANDATE) {
-			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration')) {
-				$this->updateStatus();
-				$S_ELM = ASM::$elm->getCurrentsession();
-				ASM::$elm->newSession();
-				$election = new Election();
-				$election->rColor = $this->id;
+		if ($this->getRegime() == self::DEMOCRATIC) {
+			if ($this->electionStatement == self::MANDATE) {
+				if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration')) {
+					$this->updateStatus();
+					$S_ELM = ASM::$elm->getCurrentsession();
+					ASM::$elm->newSession();
+					$election = new Election();
+					$election->rColor = $this->id;
 
-				$date = new DateTime($this->dLastElection);
-				$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
-				$election->dElection = $date->format('Y-m-d H:i:s');
+					$date = new DateTime($this->dLastElection);
+					$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
+					$election->dElection = $date->format('Y-m-d H:i:s');
 
-				ASM::$elm->add($election);
-				ASM::$elm->changeSession($S_ELM);
-				$this->electionStatement = self::CAMPAIGN;
+					ASM::$elm->add($election);
+					ASM::$elm->changeSession($S_ELM);
+					$this->electionStatement = self::CAMPAIGN;
+				}
+			} elseif ($this->electionStatement == self::CAMPAIGN) {
+				if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::CAMPAIGNTIME) {
+					$this->electionStatement = self::ELECTION;
+				}
+			} else {
+				if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + self::CAMPAIGNTIME) {
+					$_ELM = ASM::$elm->getCurrentSession();
+					ASM::$elm->newSession();
+					ASM::$elm->load(array('rColor' => $this->id), array('id', 'DESC'), array('0', '1'));
+					$this->ballot(ASM::$elm->get());
+					$this->electionStatement = self::MANDATE;
+					$this->dLastElection = ASM::$elm->get()->dElection;
+
+					ASM::$elm->changeSession($_ELM);
+				}
 			}
-		} elseif ($this->electionStatement == self::CAMPAIGN) {
-			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::CAMPAIGNTIME) {
-				$this->electionStatement = self::ELECTION;
+		} elseif ($this->getRegime() == self::ROYALISTIC) {
+			if ($this->electionStatement == self::MANDATE) {
+				if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration')) {
+					$this->updateStatus();
+				}
+			} elseif ($this->electionStatement == self::ELECTION) {
+				if (Utils::interval($this->dLastElection, Utils::now(), 's') > self::PUTSCHTIME) {
+					$_ELM = ASM::$elm->getCurrentSession();
+					ASM::$elm->newSession();
+					ASM::$elm->load(array('rColor' => $this->id), array('id', 'DESC'), array('0', '1'));
+					$this->ballot(ASM::$elm->get());
+					$this->electionStatement = self::MANDATE;
+					$this->dLastElection = ASM::$elm->get()->dElection;
+					$this->updateStatus();
+
+					ASM::$elm->changeSession($_ELM);
+				}
 			}
 		} else {
-			if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + self::CAMPAIGNTIME) {
-				$_ELM = ASM::$elm->getCurrentSession();
-				ASM::$elm->newSession();
-				ASM::$elm->load(array('rColor' => $this->id), array('id', 'DESC'), array('0', '1'));
-				$this->ballot(ASM::$elm->get());
-				$this->electionStatement = self::MANDATE;
-				$this->dLastElection = ASM::$elm->get()->dElection;
+			if ($this->electionStatement == self::MANDATE) {
+				if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration')) {
+					$this->updateStatus();
+					$S_ELM = ASM::$elm->getCurrentsession();
+					ASM::$elm->newSession();
+					$election = new Election();
+					$election->rColor = $this->id;
 
-				ASM::$elm->changeSession($_ELM);
+					$date = new DateTime($this->dLastElection);
+					$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
+					$election->dElection = $date->format('Y-m-d H:i:s');
+
+					ASM::$elm->add($election);
+					ASM::$elm->changeSession($S_ELM);
+					$this->electionStatement = self::CAMPAIGN;
+				}
+			} else {
+				if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::CAMPAIGNTIME) {
+					$_ELM = ASM::$elm->getCurrentSession();
+					ASM::$elm->newSession();
+					ASM::$elm->load(array('rColor' => $this->id), array('id', 'DESC'), array('0', '1'));
+					$this->ballot(ASM::$elm->get());
+					$this->electionStatement = self::MANDATE;
+					$this->dLastElection = ASM::$elm->get()->dElection;
+
+					ASM::$elm->changeSession($_ELM);
+				}
 			}
 		}
 
@@ -275,7 +442,41 @@ class Color {
 			if (ASM::$lam->get($i)->statement == Law::VOTATION && ASM::$lam->get($i)->dEndVotation < Utils::now()) {
 				CTC::add(ASM::$lam->get($i)->dEndVotation, $this, 'uVoteLaw', array(ASM::$lam->get($i), ASM::$lam->get($i)->ballot()));
 			} elseif (ASM::$lam->get($i)->statement == Law::EFFECTIVE && ASM::$lam->get($i)->dEnd < Utils::now()) {
-				CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishLaw', array(ASM::$lam->get($i)));
+				if (LawResources::getInfo(ASM::$lam->get($i)->type, 'bonusLaw')) {
+					#lois à bonus
+					CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishBonusLaw', array(ASM::$lam->get($i), ASM::$sem->get()));
+				} else {
+					#loi à upgrade
+					switch (ASM::$lam->get($i)->type) {
+						case 1:
+							$_SEM = ASM::$sem->getCurrentsession();
+							ASM::$sem->load(array('id' => ASM::$lam->get($i)->options['rSector']));
+							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishSectorTaxes', array(ASM::$lam->get($i), ASM::$sem->get()));
+							ASM::$sem->changeSession($_SEM);
+							break;
+						case 2:
+							$_SEM = ASM::$sem->getCurrentsession();
+							ASM::$sem->load(array('id' => ASM::$lam->get($i)->options['rSector']));
+							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishSectorName', array(ASM::$lam->get($i), ASM::$sem->get()));
+							ASM::$sem->changeSession($_SEM);
+							break;
+						case 3:
+							$_CTM = ASM::$ctm->getCurrentsession();
+							ASM::$ctm->load(array('faction' => $this->id, 'relatedFaction' => ASM::$lam->get($i)->options['rColor']));
+							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishExportComercialTaxes', array(ASM::$lam->get($i), ASM::$ctm->get()));
+							ASM::$ctm->changeSession($_CTM);
+							break;
+						case 4:
+							$_CTM = ASM::$ctm->getCurrentsession();
+							ASM::$ctm->load(array('faction' => $this->id, 'relatedFaction' => ASM::$lam->get($i)->options['rColor']));
+							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishImportComercialTaxes', array(ASM::$lam->get($i), ASM::$ctm->get()));
+							ASM::$ctm->changeSession($_CTM);
+							break;
+						
+						default:
+							break;
+					}
+				}
 			}
 		}
 

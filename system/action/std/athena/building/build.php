@@ -28,7 +28,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 		$currentLevel = call_user_func(array($ob, 'getReal' . ucfirst(OrbitalBaseResource::getBuildingInfo($building, 'name')) . 'Level'));
 		$technos = new Technology(CTR::$data->get('playerId'));
 		if (OrbitalBaseResource::haveRights($building, $currentLevel + 1, 'resource', $ob->getResourcesStorage()) 
-			AND OrbitalBaseResource::haveRights($building, $currentLevel + 1, 'queue', ASM::$bqm->size()) 
+			AND OrbitalBaseResource::haveRights(OrbitalBaseResource::GENERATOR, $currentLevel + 1, 'queue', ASM::$bqm->size()) 
 			AND (OrbitalBaseResource::haveRights($building, $currentLevel + 1, 'buildingTree', $ob) === TRUE)
 			AND OrbitalBaseResource::haveRights($building, $currentLevel + 1, 'techno', $technos)) {
 
@@ -46,6 +46,11 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 							TutorialHelper::setStepDone();
 						}
 						break;
+					case TutorialResource::STORAGE_LEVEL_3:
+						if ($building == OrbitalBaseResource::STORAGE AND $currentLevel + 1 >= 3) {
+							TutorialHelper::setStepDone();
+						}
+						break;
 					case TutorialResource::DOCK1_LEVEL_1:
 						if ($building == OrbitalBaseResource::DOCK1 AND $currentLevel + 1 >= 1) {
 							TutorialHelper::setStepDone();
@@ -53,6 +58,46 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 						break;
 					case TutorialResource::TECHNOSPHERE_LEVEL_1:
 						if ($building == OrbitalBaseResource::TECHNOSPHERE AND $currentLevel + 1 >= 1) {
+							TutorialHelper::setStepDone();
+						}
+						break;
+					case TutorialResource::REFINERY_LEVEL_10:
+						if ($building == OrbitalBaseResource::REFINERY AND $currentLevel + 1 >= 10) {
+							TutorialHelper::setStepDone();
+						}
+						break;
+					case TutorialResource::STORAGE_LEVEL_8:
+						if ($building == OrbitalBaseResource::STORAGE AND $currentLevel + 1 >= 8) {
+							TutorialHelper::setStepDone();
+						}
+						break;
+					case TutorialResource::DOCK1_LEVEL_6:
+						if ($building == OrbitalBaseResource::DOCK1 AND $currentLevel + 1 >= 6) {
+							TutorialHelper::setStepDone();
+						}
+						break;
+					case TutorialResource::REFINERY_LEVEL_16:
+						if ($building == OrbitalBaseResource::REFINERY AND $currentLevel + 1 >= 16) {
+							TutorialHelper::setStepDone();
+						}
+						break;
+					case TutorialResource::STORAGE_LEVEL_12:
+						if ($building == OrbitalBaseResource::STORAGE AND $currentLevel + 1 >= 12) {
+							TutorialHelper::setStepDone();
+						}
+						break;
+					case TutorialResource::TECHNOSPHERE_LEVEL_6:
+						if ($building == OrbitalBaseResource::TECHNOSPHERE AND $currentLevel + 1 >= 6) {
+							TutorialHelper::setStepDone();
+						}
+						break;
+					case TutorialResource::DOCK1_LEVEL_12:
+						if ($building == OrbitalBaseResource::DOCK1 AND $currentLevel + 1 >= 12) {
+							TutorialHelper::setStepDone();
+						}
+						break;
+					case TutorialResource::REFINERY_LEVEL_22:
+						if ($building == OrbitalBaseResource::REFINERY AND $currentLevel + 1 >= 22) {
 							TutorialHelper::setStepDone();
 						}
 						break;

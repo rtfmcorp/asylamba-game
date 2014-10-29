@@ -1,0 +1,93 @@
+.choose-government {
+	display: block;
+	margin: 10px; padding: 10px;
+	background: #0A0A0A;
+	border-radius: 3px;
+
+	select {
+		display: block;
+		width: 100%;
+		padding: 8px;
+	}
+
+	button {
+		display: block;
+		width: 100%;
+		margin: 10px 0 0 0; padding: 0 10px;
+		line-height: 30px;
+		border: none;
+		color: white;
+		cursor: pointer;
+		background: @medium;
+
+		&:hover, &:focus {
+			background: @dark;
+		}
+	}
+}
+
+.evolution {
+	background: black;
+	margin: 10px;
+	border-top: solid 1px #202020;
+	border-bottom: solid 1px #202020;
+
+	.header {
+		padding: 10px;
+		border-bottom: solid 1px #202020;
+		color: #EFEFEF;
+	}
+
+	.body {
+		padding: 10px;
+		background: #0A0A0A;
+
+		.progress-bar {
+			background: #0A0A0A !important;
+			height: 20px;
+			padding-bottom: 1px;
+
+			.content {
+				height: 20px;
+				line-height: 20px;
+				font-size: 12px;
+				color: white;
+				padding-left: 5px;
+			}
+
+			&:nth-child(odd) .content {
+				background: @medium !important;
+			}
+		}
+	}
+}
+
+.centred-link {
+	display: block;
+	width: 300px;
+	text-align: center;
+	margin: 0 auto;
+	text-decoration: none;
+	padding: 6px 10px;
+	color: #EFEFEF;
+	background: @medium;
+	border: solid 1px @dark;
+
+	&:hover, &:focus {
+		background: @dark;
+		border-color: @medium;
+		color: white;
+	}
+}
+
+span.centred-link {
+	background: #202020;
+	border: solid 1px #0A0A0A;
+	color: #4F4F4F;
+
+	&:hover, &:focus {
+		background: #202020;
+		border-color: #0A0A0A;
+		color: #4F4F4F;
+	}
+}

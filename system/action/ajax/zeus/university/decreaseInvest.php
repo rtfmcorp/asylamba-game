@@ -8,21 +8,18 @@ include_once ATHENA;
 $category = Utils::getHTTPData('category');
 $quantity = Utils::getHTTPData('quantity');
 
-
-// protection des inputs
-$p = new Parser();
-$category = $p->protect($category);
-
-if ($category !== FALSE AND $category !== '') {
+if ($category !== FALSE AND $quantity !== FALSE) {
 	if (in_array($category, array('natural', 'life', 'social', 'informatic'))) {
 		$S_PAM1 = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession();
 		ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+
 		$player = ASM::$pam->get();
 
 		if ($quantity === FALSE) {
 			$quantity = 1;
 		}
+
 		switch ($category) {
 			case 'natural' :
 				$oldInvest = $player->partNaturalSciences;
@@ -37,6 +34,7 @@ if ($category !== FALSE AND $category !== '') {
 				$oldInvest = $player->partInformaticEngineering;
 				break;
 		}
+
 		if ($oldInvest != 0) {
 			if ($oldInvest < $quantity) {
 				$quantity = $oldInvest;
@@ -57,8 +55,6 @@ if ($category !== FALSE AND $category !== '') {
 			}
 
 			ASM::$pam->changeSession($S_PAM1);
-		} else {
-			CTR::$alert->add('Vous n\'avez plus de pourcentages à libérer dans cette faculté', ALERT_STD_INFO);
 		}
 	} else {
 	CTR::$alert->add('Changement d\'investissement impossible - faculté inconnue', ALERT_STD_ERROR);

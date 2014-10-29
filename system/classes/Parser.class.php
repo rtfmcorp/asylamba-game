@@ -24,7 +24,7 @@ class Parser {
 		return $string;
 	}
 
-	public function protect($string) {
+	public static function protect($string) {
 		$string = trim($string);
 		$string = htmlspecialchars($string);
 		$string = nl2br($string);

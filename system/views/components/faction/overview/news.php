@@ -13,7 +13,7 @@ echo '<div class="component">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<p class="info">';
-				echo 'Module de news de factions. Encore en construction. Mais ça va arriver bientôt';
+				echo 'Module de news de factions. Encore en construction. Mais ça va arriver bientôt.';
 			echo '</p>';
 			echo '<a class="more-button" href="#">Voir toutes les news</a>';
 		echo '</div>';
