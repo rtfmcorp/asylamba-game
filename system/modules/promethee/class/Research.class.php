@@ -32,6 +32,17 @@ class Research {
 	public $socialToPay;
 	public $informaticToPay;
 
+	const MATH = 0;
+	const PHYS = 1;
+	const CHEM = 2;
+	const BIO = 3;
+	const MEDI = 4;
+	const ECONO = 5;
+	const PSYCHO = 6;
+	const NETWORK = 7;
+	const ALGO = 8;
+	const STAT = 9;
+
 	public function getId() {
 		return $this->rPlayer;
 	}

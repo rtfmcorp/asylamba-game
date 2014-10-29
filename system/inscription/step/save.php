@@ -55,16 +55,19 @@ try {
 	$rs = new Research();
 	$rs->rPlayer = $pl->getId();
 
-	$rs->naturalTech = 0;
-	$rs->lifeTech = 3;
-	$rs->socialTech = 5;
-	$rs->informaticTech = 7;
+	$rs->naturalTech = Research::MATH;
+	$rs->lifeTech = Research::BIO;
+	$rs->socialTech = Research::ECONO;
+	$rs->informaticTech = Research::NETWORK;
 
 	if ($faction == 6) {
 		# Aphéra, 3 recherches niveau 2
-		$rs->naturalToPay = ResearchResource::getInfo($rs->naturalTech, 'level', 2, 'price');
-		$rs->lifeToPay = ResearchResource::getInfo($rs->lifeTech, 'level', 2, 'price');
-		$rs->socialToPay = ResearchResource::getInfo($rs->socialTech, 'level', 2, 'price');
+		$rs->physLevel = 2;
+		$rs->algoLevel = 2;
+		$rs->mediLevel = 2;
+		$rs->naturalToPay = ResearchResource::getInfo($rs->naturalTech, 'level', 1, 'price');
+		$rs->lifeToPay = ResearchResource::getInfo($rs->lifeTech, 'level', 1, 'price');
+		$rs->socialToPay = ResearchResource::getInfo($rs->socialTech, 'level', 1, 'price');
 		$rs->informaticToPay = ResearchResource::getInfo($rs->informaticTech, 'level', 1, 'price');
 	} else {
 		$rs->naturalToPay = ResearchResource::getInfo($rs->naturalTech, 'level', 1, 'price');
