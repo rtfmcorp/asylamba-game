@@ -56,10 +56,13 @@ class ColorManager extends Manager {
 			$color->points = $awColor['points'];
 			$color->sectors = $awColor['sectors'];
 			$color->electionStatement = $awColor['electionStatement'];
+			$color->isClosed = $awColor['isClosed'];
 			$color->dLastElection = $awColor['dLastElection'];
 
 			$this->_Add($color);
-			$color->uMethod();
+			if ($this->currentSession->getUMode()) {
+				$color->uMethod();
+			}
 		}
 	}
 
@@ -78,6 +81,7 @@ class ColorManager extends Manager {
 					points = ?,
 					sectors = ?,
 					electionStatement = ?,
+					isClosed = ?,
 					dLastElection = ?
 				WHERE id = ?');
 			$aw = $qr->execute(array(
@@ -89,6 +93,7 @@ class ColorManager extends Manager {
 					$color->points,
 					$color->sectors,
 					$color->electionStatement,
+					$color->isClosed,
 					$color->dLastElection,
 					$color->id
 				));
@@ -108,6 +113,7 @@ class ColorManager extends Manager {
 			points = ?,
 			sectors = ?,
 			electionStatement = ?,
+			$color->electionStatement,
 			dLastElection = ?');
 		$aw = $qr->execute(array(
 				$color->id,
@@ -118,6 +124,7 @@ class ColorManager extends Manager {
 				$color->points,
 				$color->sectors,
 				$color->electionStatement,
+				$color->isClosed,
 				$color->dLastElection
 			));
 

@@ -1,4 +1,5 @@
 <?php
+include_once DEMETER;
 # choix des étapes
 if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 	if (CTR::$get->exist('bindkey')) {
@@ -43,8 +44,19 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 			# entre 1 et 7
 			# alliance pas défaites
 			# algorythme de fermeture automatique des alliances (auto-balancing)
+		$_CLM = ASM::$clm->getCurrentSession();
+		ASM::$clm->newSession(FALSE);
+		ASM::$clm->load(array());
 
-		$ally = array(1, 2, 3, 4, 5, 6, 7);
+		$ally = array();
+
+		for ($i = 0; $i < ASM::$clm->size(); $i++) {
+			if (!ASM::$clm->get($i)->isClosed) {
+				$ally[] = ASM::$clm->get($i)->id;
+			}
+		}
+
+		ASM::$clm->changeSession($_CLM);
 		if (CTR::$get->exist('ally') && in_array(CTR::$get->get('ally'), $ally)) {
 			CTR::$data->get('inscription')->add('ally', CTR::$get->get('ally'));
 		} elseif (!CTR::$data->get('inscription')->exist('ally')) {
