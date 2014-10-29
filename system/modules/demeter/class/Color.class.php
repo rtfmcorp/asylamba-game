@@ -61,6 +61,7 @@ class Color {
 	public $points					= 0;
 	public $sectors					= 0;
 	public $electionStatement		= 0;
+	public $isClosed				= 0;
 	public $dLastElection			= '';
 
 	public $chiefId					= 0;
@@ -351,6 +352,8 @@ class Color {
 
 	public function uMethod() {
 		// 604800s = 7j
+		include_once GAIA;
+
 		$token = CTC::createContext();
 
 		if ($this->getRegime() == self::DEMOCRATIC) {

@@ -4,6 +4,7 @@ $scripts = array(
 	array('deploy.newgalaxy', '/deploy/newgalaxy.php'),
 	array('deploy.changecolor', '/deploy/changecolor.php'),
 	array('deploy.tables.modifTopic', '/deploy/tables/modifTopic.php'),
+	array('migration.modifColor', '/migration/modifColor.php'),
 	array('test.dump', '/test/dump.php'),
 	array('test.api', '/test/api.php'),
 	array('test.ctc', '/test/ctc.php'),

@@ -107,6 +107,10 @@ color7		ac5832		401b13		67331d
 .color6 #inscription-subnav .foot { background: url('src/desktop/inscriptionSubnav/bFootColor6.png') no-repeat top left; }
 .color7 #inscription-subnav .foot { background: url('src/desktop/inscriptionSubnav/bFootColor7.png') no-repeat top left; }
 
+#movers .toLeft {
+	left: 0 !important;
+}
+
 /* ALLY */
 .component.inscription img.color1 { background: #6e161b !important; }
 .component.inscription img.color2 { background: #1f1471 !important; }
@@ -140,6 +144,7 @@ color7		ac5832		401b13		67331d
 	width: 277px;
 	text-align: left;
 }
+
 .component.inscription.color1 .chooseLink { background-color: #6e161b; }
 .component.inscription.color2 .chooseLink { background-color: #1f1471; }
 .component.inscription.color3 .chooseLink { background-color: #dbb200; }
@@ -164,6 +169,17 @@ color7		ac5832		401b13		67331d
 
 .component.inscription .chooseLink em {
 	font-style: normal;
+}
+
+.component.inscription span.chooseLink {
+	background: #202020 !important;
+	box-shadow: inset 0 0 0 2px rgba(0, 0, 0, .25);
+	cursor: auto;
+	padding: 10px;
+
+	&:focus, &:hover {
+		box-shadow: inset 0 0 0 2px rgba(0, 0, 0, .25);
+	}
 }
 
 .component.inscription blockquote {
