@@ -74,7 +74,7 @@ echo '<div class="component financial">';
 		echo '</ul>';
 
 		echo '<p class="info">La rubrique commandant ne correspond pas à l’investissement fait dans l’école de commandement, mais au salaire de vos 
-		commandants. Plus un commandant a un niveau élevé, plus son salaire sera important. Les salaires des commandants sont payés chaque relève.</p>';
+		commandants. Plus un commandant a un niveau élevé, plus son salaire sera important. Chaque niveau de commandant coûte ' . COM_LVLINCOMECOMMANDER . ' crédits par relève.</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
