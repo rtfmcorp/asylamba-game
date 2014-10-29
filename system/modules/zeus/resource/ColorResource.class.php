@@ -101,8 +101,9 @@ class ColorResource {
 			'devise' 		=> 'Toutes les richesses,<br />Passent par Négore',
 			'desc1' => 'La maison Négienne, la plus riches de la Galaxie de l’Œil, est composée essentiellement de grands marchands et de financiers expérimentés. Considérée comme la banque de la galaxie depuis très longtemps, son économie est basée sur les échanges et le commerce.',
 			'desc2' => 'Parfois peu regardant sur la provenance des marchandises, les Négiens sont d’adroits négociateurs n’hésitant pas à profiter des opportunités qu’offrent la contre-bande, le trafic d’armes ainsi que la vente d’esclaves au détriment des accords et traités commerciaux.',
-			'desc3' => 'Vivant dans le luxe et l’opulence, les Vizirs de Négore sont à la tête de fortunes faramineuses permettant les caprices les plus fous; Orgies, casinos, courses et paris sont le quotidiens de cette province aux moeurs débridés.',
-			'desc4' => 'Doté de moyens militaires fastueux, la flotte Négienne est rutilante et persuasive, disposant d’une prodigieuse armada de vaisseaux destinée à assurer sa prospérité et son avenir économique dans la Galaxie.',
+			'desc3' => 'Doté de moyens militaires fastueux, la flotte Négienne est rutilante et persuasive, disposant d’une prodigieuse armada de vaisseaux destinée à assurer sa prospérité et son avenir économique dans la Galaxie.',
+			'desc4' => 'Vivant dans le luxe et l’opulence, les     TODO détruire un bâtiment
+    DONE Vizirs de Négore sont à la tête de fortunes faramineuses permettant les caprices les plus fous; Orgies, casinos, courses et paris sont le quotidiens de cette province aux moeurs débridés.',
 			'bonus' => array(
 				array('path' => 'faction/bonus/bonus3-1.png', 'title' => '+ 12 500 crédits', 'desc' => 'Vous débutez avec plus de crédits'),
 				array('path' => 'faction/bonus/bonus3-2.png', 'title' => '+ 5% production', 'desc' => 'Vos routes commerciales produisent plus de crédits'),
