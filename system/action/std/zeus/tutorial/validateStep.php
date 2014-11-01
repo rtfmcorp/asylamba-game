@@ -200,8 +200,8 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 		case TutorialResource::SHIP1_UNBLOCK :
 			$nextStepAlreadyDone = TutorialHelper::isNextTechnoStepAlreadyDone($playerId, Technology::SHIP1_UNBLOCK);
 			break;
-		case TutorialResource::DOCK1_LEVEL_12 :
-			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::DOCK1, 12);
+		case TutorialResource::DOCK1_LEVEL_15 :
+			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::DOCK1, 15);
 			break;
 		case TutorialResource::BUILD_SHIP1 :
 			# asdf
