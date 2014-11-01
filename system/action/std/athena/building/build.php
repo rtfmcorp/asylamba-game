@@ -91,8 +91,8 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 							TutorialHelper::setStepDone();
 						}
 						break;
-					case TutorialResource::DOCK1_LEVEL_12:
-						if ($building == OrbitalBaseResource::DOCK1 AND $currentLevel + 1 >= 12) {
+					case TutorialResource::DOCK1_LEVEL_15:
+						if ($building == OrbitalBaseResource::DOCK1 AND $currentLevel + 1 >= 15) {
 							TutorialHelper::setStepDone();
 						}
 						break;

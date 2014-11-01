@@ -36,7 +36,7 @@ class TutorialResource {
 	const STORAGE_LEVEL_12 = 21;
 	const TECHNOSPHERE_LEVEL_6 = 22;
 	const SHIP1_UNBLOCK = 23;
-	const DOCK1_LEVEL_12 = 24;
+	const DOCK1_LEVEL_15 = 24;
 	const BUILD_SHIP1 = 25;
 	const GENERATOR_SPEED = 26;
 	const REFINERY_LEVEL_22 = 27;
