@@ -244,7 +244,7 @@ class TutorialResource {
 			'title' => 'Constituer une escadrille',
 			'description' => 'Va dans l\'amirauté, si tu n\'y es pas déjà. Tu verras le commandant que tu as précédemment affecté. Pour le gérer, clique sur la petite flèche qui se trouve à droite de sa case. Des panneaux s\'ouvriront et toutes les informations du commandant s\'afficheront. Glisse vers la droite pour tout voir.
 				<br /><br />
-				Un commandant de niveau 1, un Aspirant, peut contrôler une escadrille. Chaque niveau supplémentaire lui offre une escadrille en plus. Pour affecter des vaisseaux à une escadrille il faut cliquer sur celle-ci. Si l\'opération s\'est bien déroulée, l\'esacrille est entourée par un traitillé.
+				Un commandant de niveau 1, un Aspirant, peut contrôler une escadrille. Chaque niveau supplémentaire lui offre une escadrille en plus. Pour affecter des vaisseaux à une escadrille il faut cliquer sur celle-ci. Si l\'opération s\'est bien déroulée, l\'escarille est entourée par un traitillé.
 				<br /><br />
 				Ensuite dans la colonne à droite se trouve la composition de l\'esacrille et dans la colonne suivante se trouvent les vaisseaux qui sont dans le hangar. Pour affecter un vaisseau, il suffit de cliquer sur un vaisseau du hangar et il sera transféré dans l\'escadrille.
 				<br /><br />
@@ -291,7 +291,6 @@ class TutorialResource {
 			'creditReward' => 0,
 			'resourceReward' => 0,
 			'shipReward' => array(3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-/* ---------------------------------------------------------------------------------------- */
 		array(
 			'id' => 17,
 			'title' => 'Construire la Raffinerie au niveau 10',
@@ -368,6 +367,8 @@ class TutorialResource {
 			'id' => 26,
 			'title' => 'Développer la technologie "Ingénierie du bâtiment"',
 			'description' => 'La technologie Ingénierie du bâtiment permet au Générateur d\'être plus efficient. Désormais, les bâtiments que tu construis prendront moins de temps pour être achevé.
+				<br /><br />
+				Cette technologie n\'est probablement pas encore visible dans ta Technosphère pour l\'instant. Pour qu\'elle apparaisse il faut posséder un Centre Industriel. Evolue donc ta Colonie en Centre Industriel.
 				<br /><br />
 				Comme précédemment, le développement d\'une technologie nécessite un niveau dans certaines branches de recherche fondamentale (onglet Université). Pour atteindre ce niveau, n\'hésite pas à modifier l\'investissement dans l\'onglet finance et à modifier la répartition de cet investissement dans les différentes facultés.',
 			'experienceReward' => 10,
