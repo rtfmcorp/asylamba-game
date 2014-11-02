@@ -119,13 +119,13 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				$transaction->currentRate = Game::calculateCurrentRate(ASM::$trm->getExchangeRate($transaction->type), $transaction->type, $transaction->quantity, $transaction->identifier, $transaction->price);
 				
 				# gain de prestige
-				$points = -(($transaction->currentRate - 100) / Color::COEFPOINTTRANSACTION);
+				$points = (($transaction->currentRate - 100) / Color::COEFPOINTTRANSACTION);
 
 				if (ASM::$pam->get(0)->rColor == ColorResource::NEGORA) {
 					ASM::$pam->get(0)->factionPoint += $points;
 				}
 				if (ASM::$pam->get(1)->rColor == ColorResource::NEGORA) {
-					ASM::$pam->get(1)->factionPoint += $points;
+					ASM::$pam->get(1)->factionPoint -= $points;
 				}
 				# notif pour le proposeur
 				$n = new Notification();

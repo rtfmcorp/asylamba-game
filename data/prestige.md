@@ -14,11 +14,11 @@
 ##bonus
 - DONE avoir une nouvelle route 
 - DONE faire une vente/achat intéressant 		
-	--> FAUX : actuellement ça donne du prestige dans tous les cas
+	--> FAUX : je sens que c'est pas juste
 ##malus
 - DONE perdre une route 
 - DONE faire un vente/achat pas intéressant 	
-	--> FAUX : PAS FAIT
+	--> FAUX : je sens que c'est pas juste
 
 #Cardan
 ##bonus
