@@ -119,7 +119,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				$transaction->currentRate = Game::calculateCurrentRate(ASM::$trm->getExchangeRate($transaction->type), $transaction->type, $transaction->quantity, $transaction->identifier, $transaction->price);
 				
 				# gain de prestige
-				$points = -(($transaction->currentRate - 100) / Color::COEFFPOINTTRANSACTION);
+				$points = (($transaction->currentRate - 100) / Color::COEFFPOINTTRANSACTION);
 
 				if (ASM::$pam->get(0)->rColor == 3) {
 					ASM::$pam->get(0)->factionPoint += $points;

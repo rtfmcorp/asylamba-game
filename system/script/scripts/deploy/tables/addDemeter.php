@@ -139,17 +139,17 @@ $db->query("CREATE TABLE IF NOT EXISTS `color` (
   `electionStatement` tinyint(11) NOT NULL,
   `dLastElection` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 
 echo '<h3>Remplissage de la table color</h3>';
-$qr = $db->prepare("INSERT INTO `color` (`id`, `alive`, `credits`, `players`, `activePlayers`, `points`, `sectors`, `electionStatement`, `dLastElection`) VALUES
-(1, 1, 0, 0, 0, 0, 0, 1, ?),
-(2, 1, 0, 0, 0, 0, 0, 1, ?),
-(3, 1, 0, 0, 0, 0, 0, 1, ?),
-(4, 1, 0, 0, 0, 0, 0, 1, ?),
-(5, 1, 0, 0, 0, 0, 0, 1, ?),
-(6, 1, 0, 0, 0, 0, 0, 1, ?),
-(7, 1, 0, 0, 0, 0, 0, 1, ?);");
+$qr = $db->prepare("INSERT INTO `color` (`id`, `alive`, `credits`, `players`, `activePlayers`, `points`, `sectors`, `electionStatement`, `isClosed`, `dLastElection`) VALUES
+(1, 1, 0, 0, 0, 0, 0, 1, 0, ?),
+(2, 1, 0, 0, 0, 0, 0, 1, 0, ?),
+(3, 1, 0, 0, 0, 0, 0, 1, 0, ?),
+(4, 1, 0, 0, 0, 0, 0, 1, 0, ?),
+(5, 1, 0, 0, 0, 0, 0, 1, 0, ?),
+(6, 1, 0, 0, 0, 0, 0, 1, 0, ?),
+(7, 1, 0, 0, 0, 0, 0, 1, 0, ?);");
 $date = Utils::addSecondsToDate(Utils::now(), - 500000);
 $qr->execute(array($date, $date, $date, $date, $date, $date, $date));
 
