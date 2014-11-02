@@ -91,10 +91,10 @@ echo '<div class="component size2 player new-message profil">';
 
 				if ($faction->electionStatement == Color::CAMPAIGN) {
 					echo $faction->getRegime() == Color::DEMOCRATIC
-						? '<a class="centred-link" href="' . APP_ROOT . 'faction/view-election">Présentez vous aux élections</a>'
+						? '<a class="centred-link" href="' . APP_ROOT . 'faction/view-election">Présentez-vous aux élections</a>'
 						: '<a class="centred-link" href="' . APP_ROOT . 'faction/view-election">Se proposer comme Guide</a>';
 				} elseif ($faction->electionStatement == Color::ELECTION) {
-					echo '<a class="centred-link" href="' . APP_ROOT . 'faction/view-election">Votez dès maintenant pour votre candidat favoris</a>';
+					echo '<a class="centred-link" href="' . APP_ROOT . 'faction/view-election">Votez dès maintenant pour votre candidat favori</a>';
 				}
 			} else {
 				echo '<div class="faction-flow" style="margin: 20px 0 30px 0;">';

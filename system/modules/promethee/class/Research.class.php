@@ -76,6 +76,16 @@ class Research {
 	}
 
 	public function update($player, $naturalInvest, $lifeInvest, $socialInvest, $informaticInvest) {
+		# prestige
+		$S_PAM = ASM::$pam->getCurrentSession();
+		ASM::$pam->newSession();
+		ASM::$pam->load(array('id' => $player));
+		$p = ASM::$pam->get();
+		$applyPrestige = FALSE;
+		if ($p->rColor == ColorResource::APHERA) {
+			$applyPrestige = TRUE;
+		}
+			
 		// natural technologies
 		do {
 			if ($this->naturalToPay > $naturalInvest) {
@@ -101,13 +111,10 @@ class Research {
 						CTR::$alert->add('une erreur est survenue lors de la mise à jour des technologies');
 				}
 
-				$S_PAM = ASM::$pam->getCurrentSession();
-				ASM::$pam->newSession();
-				ASM::$pam->load(array('id' => $player));
-				if (ASM::$pam->get()->rColor == 6) {
-					ASM::$pam->get()->factionPoint += Color::POINTRESEARCH;
+				# prestige
+				if ($applyPrestige) {
+					$p->factionPoint += Color::POINTRESEARCH;
 				}
-				ASM::$pam->changeSession($S_PAM);
 
 				$n = new Notification();
 				$n->setRPlayer($player);
@@ -154,6 +161,12 @@ class Research {
 						$levelReached = 0;
 						CTR::$alert->add('une erreur est survenue lors de la mise à jour des technologies');
 				}
+
+				# prestige
+				if ($applyPrestige) {
+					$p->factionPoint += Color::POINTRESEARCH;
+				}
+
 				$n = new Notification();
 				$n->setRPlayer($player);
 				$n->setTitle(ResearchResource::getInfo($this->lifeTech, 'name') . ' niveau ' . $levelReached);
@@ -197,6 +210,12 @@ class Research {
 						$levelReached = 0;
 						CTR::$alert->add('une erreur est survenue lors de la mise à jour des technologies');
 				}
+
+				# prestige
+				if ($applyPrestige) {
+					$p->factionPoint += Color::POINTRESEARCH;
+				}
+
 				$n = new Notification();
 				$n->setRPlayer($player);
 				$n->setTitle(ResearchResource::getInfo($this->socialTech, 'name') . ' niveau ' . $levelReached);
@@ -243,6 +262,12 @@ class Research {
 						$levelReached = 0;
 						CTR::$alert->add('une erreur est survenue lors de la mise à jour des technologies');
 				}
+
+				# prestige
+				if ($applyPrestige) {
+					$p->factionPoint += Color::POINTRESEARCH;
+				}
+				
 				$n = new Notification();
 				$n->setRPlayer($player);
 				$n->setTitle(ResearchResource::getInfo($this->informaticTech, 'name') . ' niveau ' . $levelReached);
@@ -268,6 +293,7 @@ class Research {
 				$this->informaticToPay = ResearchResource::getInfo($this->informaticTech, 'level', $this->getLevel($this->informaticTech) + 1, 'price');
 			}
 		} while ($informaticInvest > 0);
+		ASM::$pam->changeSession($S_PAM);
 	}
 }
 ?>

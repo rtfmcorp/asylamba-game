@@ -359,12 +359,11 @@ class OrbitalBase {
 		$experience = OrbitalBaseResource::getBuildingInfo($queue->buildingNumber, 'level', $queue->targetLevel, 'points');
 		$player->increaseExperience($experience);
 
-		if ($player->rColor == 1) {
+		# prestige
+		if ($player->rColor == ColorResource::EMPIRE) {
 			$player->factionPoint += $experience;
-		} elseif ($player->rColor == 5) {
-			$name = OrbitalBaseResource::getBuildingInfo($queue->buildingNumber, 'name');
-
-			if ($name == 'rafinery' || $name == 'dock1' || $name == 'dock2') {
+		} elseif ($player->rColor == ColorResource::NERVE) {
+			if (in_array($queue->buildingNumber, array(OrbitalBaseResource::REFINERY, OrbitalBaseResource::DOCK1, OrbitalBaseResource::DOCK2))) {
 				$player->factionPoint += $experience;
 			}
 		}
@@ -384,7 +383,8 @@ class OrbitalBase {
 		$experience = $sq->quantity * ShipResource::getInfo($sq->shipNumber, 'points');
 		$player->increaseExperience($experience);
 
-		if ($player->rColor == 2) {
+		# prestige
+		if ($player->rColor == ColorResource::KOVAHK) {
 			$player->factionPoint += Color::POINTBUILDLITTLESHIP * $sq->quantity;	
 		}
 
@@ -411,7 +411,8 @@ class OrbitalBase {
 		$experience = ShipResource::getInfo($sq->shipNumber, 'points');
 		$player->increaseExperience($experience);
 
-		if ($player->rColor == 1 || $player->rColor == 2) {
+		# prestige
+		if ($player->rColor == ColorResource::EMPIRE || $player->rColor == ColorResource::KOVAHK) {
 			$player->factionPoint += Color::POINTBUILDBIGSHIP;	
 		}
 		# alert
@@ -430,7 +431,8 @@ class OrbitalBase {
 		$experience = TechnologyResource::getInfo($tq->technology, 'points', $tq->targetLevel);
 		$player->increaseExperience($experience);
 
-		if ($player->rColor == 6) {
+		# prestige
+		if ($player->rColor == ColorResource::APHERA) {
 			$player->factionPoint += $experience;
 		}
 		# alert

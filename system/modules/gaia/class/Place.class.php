@@ -456,7 +456,7 @@ class Place {
 
 					} else {
 					# s'il est mort
-						#  enlever le commandant de la session
+						# enlever le commandant de la session
 						for ($i = 0; $i < count($commanderPlace->commanders); $i++) {
 							if ($commanderPlace->commanders[$i]->getId() == $commander->getId()) {
 								unset($commanderPlace->commanders[$i]);
@@ -464,12 +464,12 @@ class Place {
 							}
 						}
 
-						#ajouter du prestige au défenseur synelectique
-						if ($this->playerColor == 7) {
-							$placePlayer->factionPoint += Color::POINTDENFEND;
+						# ajouter du prestige au défenseur synelectique
+						if ($this->playerColor == ColorResource::SYNELLE) {
+							$placePlayer->factionPoint += Color::POINTDEFEND;
 						}
 
-						#création du rapport
+						# création du rapport
 						$report = $this->createReport();
 
 						$this->sendNotif(self::LOOTPLAYERWHITBATTLEFAIL, $commander, $report);
@@ -555,16 +555,16 @@ class Place {
 					}
 
 					# attribuer le prestige au joueur
-					if ($commander->playerColor == 1 || $commander->playerColor == 4 || $commander->playerColor == 5) {
+					if (in_array($commander->playerColor, array(ColorResource::EMPIRE, ColorResource::CARDAN, ColorResource::NERVE))) {
 						$points = 0;
 						switch ($commander->playerColor) {
-							case 1:
+							case ColorResource::EMPIRE:
 								$points = Color::POINTCONQUER;
 								break;
-							case 4:
+							case ColorResource::CARDAN:
 								$points = round($this->population);
 								break;
-							case 5:
+							case ColorResource::NERVE:
 								$points = ($this->coefResources - 45) * Color::COEFFPOINTCONQUER;
 								break;
 							default:
@@ -574,16 +574,16 @@ class Place {
 						$commanderPlayer->factionPoint += $points;
 					}
 
-					if ($this->playerColor == 1 || $this->playerColor == 4 || $this->playerColor == 5) {
+					if (in_array($this->playerColor, array(ColorResource::EMPIRE, ColorResource::CARDAN, ColorResource::NERVE))) {
 						$points = 0;
 						switch ($commander->playerColor) {
-							case 1:
+							case ColorResource::EMPIRE:
 								$points = Color::POINTCONQUER;
 								break;
-							case 4:
+							case ColorResource::CARDAN:
 								$points = round($this->population);
 								break;
-							case 5:
+							case ColorResource::NERVE:
 								$points = ($this->coefResources - 44) * Color::COEFFPOINTCONQUER;
 								break;
 							default:
@@ -615,9 +615,9 @@ class Place {
 						}
 					}
 					
-					#ajouter du prestige au défenseur synelectique
-					if ($this->playerColor == 7) {
-						$placePlayer->factionPoint += Color::POINTDENFEND;
+					# ajouter du prestige au défenseur synelectique
+					if ($this->playerColor == ColorResource::SYNELLE) {
+						$placePlayer->factionPoint += Color::POINTDEFEND;
 					}
 
 					$this->sendNotifForConquest(self::CONQUERPLAYERWHITBATTLEFAIL, $commander, $reportIds);
@@ -670,13 +670,13 @@ class Place {
 				ASM::$obm->add($ob);
 				ASM::$obm->changeSession($_OBM);
 
-				if ($commander->playerColor == 4 || $commander->playerColor == 5) {
+				if (in_array($commander->playerColor, array(ColorResource::CARDAN, ColorResource::NERVE))) {
 					$points = 0;
 					switch ($commander->playerColor) {
-						case 4:
+						case ColorResource::CARDAN:
 							$points = round($this->population);
 							break;
-						case 5:
+						case ColorResource::NERVE:
 							$points = ($this->coefResources - 44) * Color::COEFFPOINTCONQUER;
 							break;
 						default:

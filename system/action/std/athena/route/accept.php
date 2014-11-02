@@ -41,21 +41,22 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 				$price = $cr->getPrice();
 			}
 			if (CTR::$data->get('playerInfo')->get('credit') >= $price) {
-				// débit des crédits au joueur
+				# débit des crédits au joueur
 				$S_PAM1 = ASM::$pam->getCurrentSession();
 				ASM::$pam->newSession(ASM_UMODE);
 				ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
 				ASM::$pam->get()->decreaseCredit($price);
-				// augmentation de l'expérience des deux joueurs
+				# augmentation de l'expérience des deux joueurs
 				$exp = round($cr->getIncome() * CRM_COEFEXPERIENCE);
 				ASM::$pam->load(array('id' => $proposerBase->getRPlayer()));
 				ASM::$pam->get()->increaseExperience($exp);
 				ASM::$pam->get(1)->increaseExperience($exp);
 
-				if (ASM::$pam->get()->rColor == 3) {
+				# prestige
+				if (ASM::$pam->get()->rColor == ColorResource::NEGORA) {
 					ASM::$pam->get()->factionPoint += $exp;
 				}
-				if (ASM::$pam->get(1)->rColor == 3) {
+				if (ASM::$pam->get(1)->rColor == ColorResource::NEGORA) {
 					ASM::$pam->get(1)->factionPoint += $exp;
 				}
 				
