@@ -46,10 +46,11 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 				ASM::$pam->load(array('id' => array($cr->playerId1, $cr->playerId2)));
 				$exp = round($cr->getIncome() * CRM_COEFEXPERIENCE);
 
-				if (ASM::$pam->get()->rColor == 3) {
+				# prestige
+				if (ASM::$pam->get()->rColor == ColorResource::NEGORA) {
 					ASM::$pam->get()->factionPoint -= $exp;
 				}
-				if (ASM::$pam->get(1)->rColor == 3) {
+				if (ASM::$pam->get(1)->rColor == ColorResource::NEGORA) {
 					ASM::$pam->get(1)->factionPoint -= $exp;
 				}
 				

@@ -16,24 +16,34 @@ class Color {
 	const DEMOCRATIC 				= 1;
 	const ROYALISTIC 				= 2;
 	const THEOCRATIC 				= 3;
+
 	# constantes de prestiges
-	# empire
+	## empire
 	const POINTCONQUER				= 100;
 	const POINTBUILDBIGSHIP			= 25;
-	# negore
-	const COEFFPOINTTRANSACTION		= 10;
-	# cardan
-	const BONUSOUTOFSECTOR			= 50;
-	# kovakh
+
+	## negore
+	const COEFPOINTTRANSACTION		= 10;
+
+	## cardan
+	const BONUSOUTOFSECTOR			= 50; 	# pas utilisé
+	const POINTDONATE				= 10;
+	const COEFPOINTDONATE 			= 0.0001;
+
+	## kovakh
 	const POINTBUILDLITTLESHIP 		= 1;
 	const POINTCHANGETYPE 			= 50;
 	const POINTBATTLE				= 2;
-	# Synelle
-	const POINTATTACKPLAYER 		= -10;
-	const POINTDENFENDTODO  		= 20;
-	# Nerve
+
+	## Synelle
+	const POINTATTACKPLAYER 		= -10; 	# pas utilisé
+	const POINTDEFEND		  		= 20;
+
+	## Nerve
 	const COEFFPOINTCONQUER			= 10;
-	# Aphéra
+	// POINTCHANGETYPE aussi
+
+	## Aphéra
 	const POINTSPY					= 10;
 	const POINTRESEARCH				= 5;
 

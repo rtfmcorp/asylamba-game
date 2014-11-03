@@ -17,8 +17,8 @@ if ($credit) {
 	ASM::$pam->get()->decreaseCredit($credit);
 	ASM::$clm->get()->credits += $credit;
 
-	if (ASM::$pam->get()->rColor == 4) {
-		ASM::$pam->get()->factionPoint += 20;
+	if (ASM::$pam->get()->rColor == ColorResource::CARDAN) {
+		ASM::$pam->get()->factionPoint += Color::POINTDONATE + round(Color::COEFPOINTDONATE * $credit);
 	}
 
 	CTR::$alert->add('Vous venez de remplir les caisse de votre faction de ' . $credit . ' crédit' . Format::addPlural($credit) . ' :)', ALERT_STD_SUCCESS);

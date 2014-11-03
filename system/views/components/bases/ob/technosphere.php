@@ -370,7 +370,7 @@ echo '<div class="component">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<p class="long-info">' . OrbitalBaseResource::getBuildingInfo(5, 'description') . '</p>';
+			echo '<p class="long-info">' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::TECHNOSPHERE, 'description') . '</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

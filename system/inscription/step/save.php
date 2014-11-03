@@ -17,7 +17,7 @@ try {
 	$pl->setAvatar(CTR::$data->get('inscription')->get('avatar'));
 	$pl->setStatus(1);
 	
-	if ($faction == 3) {
+	if ($faction == ColorResource::NEGORA) {
 		# Négore, 12500 crédits de plus
 		$pl->credit = 17500;
 	} else {
@@ -60,7 +60,7 @@ try {
 	$rs->socialTech = Research::ECONO;
 	$rs->informaticTech = Research::NETWORK;
 
-	if ($faction == 6) {
+	if ($faction == ColorResource::APHERA) {
 		# Aphéra, 3 recherches niveau 2
 		$rs->physLevel = 2;
 		$rs->algoLevel = 2;
@@ -97,14 +97,14 @@ try {
 
 	# création des premiers bâtiments
 		# + ajout des bonus de factions
-	if ($faction == 1) {
+	if ($faction == ColorResource::EMPIRE) {
 		# Empire, générateur niveau 5
 		$ob->setLevelGenerator(5);
 		$pl->stepDone = TRUE;
 	} else {
 		$ob->setLevelGenerator(1);
 	}
-	if ($faction == 5) {
+	if ($faction == ColorResource::NERVE) {
 		# Nerve, raffinerie niveau 5
 		$ob->setLevelRefinery(5);
 	} else {
@@ -125,8 +125,8 @@ try {
 	$ob->setIAntiSpy(500);
 
 	# ajout de vaisseau en fonction de la faction
-	if ($faction == 2) {
-		# Kovakh, 3 dryades
+	if ($faction == ColorResource::KOVAHK) {
+		# Kovahk, 3 dryades
 		$ob->setShipStorage(4, 3);
 	}
 
@@ -138,13 +138,13 @@ try {
 	ASM::$obm->add($ob);
 
 	# ajout d'un commandant
-	if ($faction == 4 || $faction == 7) {
+	if ($faction == ColorResource::CARDAN || $faction == ColorResource::SYNELLE) {
 		$newCommander = new Commander();
-		if ($faction == 4) {
+		if ($faction == ColorResource::CARDAN) {
 			# Cardan, un commandant niveau 6
 			$newCommander->upExperience(rand(3000, 5000));
 		}
-		if ($faction == 7) {
+		if ($faction == ColorResource::SYNELLE) {
 			# Synelle, un commandant niveau 7
 			$newCommander->upExperience(rand(6000, 9000));
 		}

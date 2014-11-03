@@ -82,7 +82,7 @@ class ColorResource {
 			'desc3' => 'Leur longue tradition de pillage et d’exploration de la Galaxie, leur a amené de très grandes richesses ainsi qu’une habilté hors du commun pour la construction de vaisseaux de combat rapides et puissants.',
 			'desc4' => 'Basé sur un système politique très martial et militaire dirigé par un Baron, la société Kovahkarh fait preuve d’une grande discipline et d’une rigueur sans égale. Uni dans un même idéal de victoire et d’expansion, cette faction est une des plus solides de la Galaxie.',
 			'bonus' => array(
-				array('path' => 'faction/bonus/bonus2-1.png', 'title' => '3 Méduses', 'desc' => 'Vous débutez avec des vaisseaux'),
+				array('path' => 'faction/bonus/bonus2-1.png', 'title' => '3 Dryades', 'desc' => 'Vous débutez avec des vaisseaux'),
 				array('path' => 'faction/bonus/bonus2-2.png', 'title' => '+ 10% de vitesse', 'desc' => 'Vos vaisseaux gagnent en vitesse'),
 				array('path' => 'faction/bonus/bonus2-3.png', 'title' => '- 2% de défense', 'desc' => 'Vos vaisseaux perdent en défense')),
 			'mandateDuration' => 604800,
