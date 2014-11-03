@@ -352,6 +352,7 @@ class OrbitalBase {
 	}
 
 	public function uBuildingQueue($queue, $player) {
+		include_once DEMETER;
 		# update builded building
 		$this->setBuildingLevel($queue->buildingNumber, ($this->getBuildingLevel($queue->buildingNumber) + 1));
 		# update the points of the orbitalBase
