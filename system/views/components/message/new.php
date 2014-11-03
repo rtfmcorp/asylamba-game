@@ -17,8 +17,8 @@ echo '<div class="component topic size2">';
 				echo '<img src="' . MEDIA . 'avatar/medium/' . CTR::$data->get('playerInfo')->get('avatar') . '.png" alt="' . CTR::$data->get('playerInfo')->get('pseudo') . '" class="avatar" />';
 				echo '<div class="content">';
 					echo '<form action="' . APP_ROOT . 'action/a-writemessage" method="POST">';
-						echo '<input type="hidden" class="autocomplete-hidden" name="playerid" />';
-						echo '<input type="text" class="title autocomplete-player" name="name" placeholder="Destinataire" />';
+						echo '<input type="hidden" class="autocomplete-hidden" name="playerid" value="' . $sendToId . '" />';
+						echo '<input type="text" class="title autocomplete-player" name="name" placeholder="Destinataire" value="' . $sendToName . '" />';
 
 						echo '<div class="wysiwyg" data-id="new-message-wysiwyg">';
 							$parser = new Parser();
