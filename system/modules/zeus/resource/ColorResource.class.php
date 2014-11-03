@@ -63,9 +63,9 @@ class ColorResource {
 			'desc4' => 'Leurs grandes richesses, principalement acquises sur les plateformes de forage et dans d’énormes concessions minières, leur apportent des ressources de qualité et en grand nombre. Les différents accords, traités et taxes commerciales ainsi que leur situation centrale dans la Galaxie, leur apportent également des revenus stables et constants.',
 			'bonus' => array(
 				array('path' => 'faction/bonus/bonus1-2.png', 'title' => '+ 5% de défense', 'desc' => 'Vos vaisseaux gagnent en défense'),
-				array('path' => 'faction/bonus/bonus1-3.png', 'title' => '- 2% prix', 'desc' => 'Les croiseurs et croiseurs-lourds sont moins chers')),
+				array('path' => 'faction/bonus/bonus1-3.png', 'title' => '- 5% prix', 'desc' => 'Les croiseurs et croiseurs-lourds sont moins chers')),
 			'mandateDuration' => 604800,
-			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Akhénien gagne du prestige en construisant des bâtiments et des vaisseaux du chantier de ligne, mais également en conquérant les bases orbitales d\'autres joueurs. Il en perd par contre lorsqu\'il détruit un de ses bâtiments ou qu\'il perd une planète.',
+			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Akhénien gagne du prestige en construisant des bâtiments et des vaisseaux du Chantier de Ligne, mais également en conquérant les bases orbitales d\'autres joueurs. Il en perd par contre lorsqu\'il détruit un de ses bâtiments ou qu\'il perd une planète.',
 			'campaignDesc' => 'explicatif d\'une campagne'),
 		array(
 			'id' 			=> 2,
