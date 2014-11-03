@@ -62,7 +62,6 @@ class ColorResource {
 			'desc3' => 'Leur technologie, fiable et robuste, repose sur de longues strates de savoir-faire et sur un base solide d’expérience en matière d’armement et d’aérospatial. Industriellement très développée, l’économie Akhénienne est une machine bien rodée, pouvant allègrement soutenir l’effort de guerre.',
 			'desc4' => 'Leurs grandes richesses, principalement acquises sur les plateformes de forage et dans d’énormes concessions minières, leur apportent des ressources de qualité et en grand nombre. Les différents accords, traités et taxes commerciales ainsi que leur situation centrale dans la Galaxie, leur apportent également des revenus stables et constants.',
 			'bonus' => array(
-				array('path' => 'faction/bonus/bonus1-1.png', 'title' => 'Générateur niv. 5', 'desc' => 'Vous débutez avec un générateur de bon niveau'),
 				array('path' => 'faction/bonus/bonus1-2.png', 'title' => '+ 5% de défense', 'desc' => 'Vos vaisseaux gagnent en défense'),
 				array('path' => 'faction/bonus/bonus1-3.png', 'title' => '- 2% prix', 'desc' => 'Les croiseurs et croiseurs-lourds sont moins chers')),
 			'mandateDuration' => 604800,
@@ -82,9 +81,8 @@ class ColorResource {
 			'desc3' => 'Leur longue tradition de pillage et d’exploration de la Galaxie, leur a amené de très grandes richesses ainsi qu’une habilté hors du commun pour la construction de vaisseaux de combat rapides et puissants.',
 			'desc4' => 'Basé sur un système politique très martial et militaire dirigé par un Baron, la société Kovahkarh fait preuve d’une grande discipline et d’une rigueur sans égale. Uni dans un même idéal de victoire et d’expansion, cette faction est une des plus solides de la Galaxie.',
 			'bonus' => array(
-				array('path' => 'faction/bonus/bonus2-1.png', 'title' => '3 Dryades', 'desc' => 'Vous débutez avec des vaisseaux'),
-				array('path' => 'faction/bonus/bonus2-2.png', 'title' => '+ 10% de vitesse', 'desc' => 'Vos vaisseaux gagnent en vitesse'),
-				array('path' => 'faction/bonus/bonus2-3.png', 'title' => '- 2% de défense', 'desc' => 'Vos vaisseaux perdent en défense')),
+				array('path' => 'faction/bonus/bonus2-2.png', 'title' => '+ 10% de vitesse', 'desc' => 'Vos vaisseaux du Chantier Alpha gagnent en vitesse'),
+				array('path' => 'faction/bonus/bonus2-3.png', 'title' => '- 5% de défense', 'desc' => 'Vos vaisseaux du Chantier de Ligne perdent en défense')),
 			'mandateDuration' => 604800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Kovahkarh gagne du prestige en construisant des vaisseaux, en gagnant des combats et en créant des bases militaires. Il en perd lorsqu\'il se fait tuer au combat ou qu\'il perd une de ces bases militaires.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
@@ -104,11 +102,10 @@ class ColorResource {
 			'desc3' => 'Dotée de moyens militaires fastueux, la flotte Négienne est rutilante et persuasive, disposant d’une prodigieuse armada de vaisseaux destinés à assurer sa prospérité et son avenir économique dans la Galaxie.',
 			'desc4' => 'Vivant dans le luxe et l’opulence, les Vizirs de Négore sont à la tête de fortunes faramineuses permettant les caprices les plus fous; Orgies, casinos, courses et paris sont le quotidien de cette province aux moeurs débridés.',
 			'bonus' => array(
-				array('path' => 'faction/bonus/bonus3-1.png', 'title' => '+ 12 500 crédits', 'desc' => 'Vous débutez avec plus de crédits'),
 				array('path' => 'faction/bonus/bonus3-2.png', 'title' => '+ 5% production', 'desc' => 'Vos routes commerciales produisent plus de crédits'),
 				array('path' => 'faction/bonus/bonus3-3.png', 'title' => '- 3% prix', 'desc' => 'Vos routes commerciales coûtent moins de crédits')),
 			'mandateDuration' => 604800,
-			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Négien gagne du prestige en créant des routes commerciales et en faisant des ventes/achats intéressants sur le marché. Par contre il en perd lorsqu\'une de ses routes commerciales est détruite ou qu\'il fait une vente ou un achat pas rentable.',
+			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Négien gagne du prestige en créant des routes commerciales, en construisant la Plateforme Commerciale et le Spatioport et en faisant des ventes aux joueurs des autres faction sur le marché. Par contre il en perd lorsqu\'une de ses routes commerciales est détruite.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
 				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de Négore peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Viziduc de Négore. 
 				<br /><br />Le Viziduc va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la gestion de la Province de Négore. Il va devoir déterminer le Financier, le Chef de Guerre et le Ministre de la faction. '),
@@ -126,12 +123,11 @@ class ColorResource {
 			'desc3' => 'Une grande armée de puissants guerriers voués au culte de Cardan, fanatiques experts dans le maniement des armes, les combattants de Cardan n’ont peur que d’une seule chose : ne pas mourir en martyre et décevoir l’Ordre Suprême.',
 			'desc4' => 'Ils ne pratiquent que peu de commerce avec les nations étrangères, préférant se suffir à eux-même, même si cela doit aboutir à la famine et à la mort des plus démunis.',
 			'bonus' => array(
-				array('path' => 'faction/bonus/bonus4-1.png', 'title' => 'Commandant niv. 6', 'desc' => 'Vous débutez avec un commandant expérimenté'),
 				array('path' => 'faction/bonus/bonus4-2.png', 'title' => '+ 3% de crédits', 'desc' => 'Vos impôts vous amènent plus de crédits'),
 				array('path' => 'faction/bonus/bonus4-3.png', 'title' => '- 10% prix', 'desc' => 'Vos colonisations et conquêtes sont moins chères'),
 				array('path' => 'faction/bonus/bonus4-4.png', 'title' => '- 5% de ressources', 'desc' => 'Une partie des ressources pillées sont offertes aux Dieux')),
 			'mandateDuration' => 1209600,
-			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un membre de Cardan gagne du prestige en colonisant/conquérant une planète se situant en-dehors des territoires de Cardan et en faisant un don à sa faction. Il en perd par contre lorsqu\'il perd une planète.',
+			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un membre de Cardan gagne du prestige en colonisant/conquérant une planète se situant en-dehors des territoires de Cardan, en construisant le Chantier Alpha et en faisant un don à sa faction. Il en perd par contre lorsqu\'il perd une planète.',
 			'campaignDesc' => 'explicatif d\'une campagne'),
 		array(
 			'id' 			=> 5,
@@ -147,11 +143,10 @@ class ColorResource {
 			'desc3' => 'N’ayant pas une grande connaissance de l’art de la guerre, mais contraints de lutter pour la préservation de leur mode de vie, ils se sont adaptés et ont formé de redoutables forteresses défensives.',
 			'desc4' => 'Grâce à un dédale de culture hydroponique et une grande connaissance en agro-alchimie mais également en extraction de minerai, l’industriel Nervéen produit une grande quantité de ressources attirant ainsi les marchands les plus riches de la galaxie, leur permettant ainsi un essor prospère.',
 			'bonus' => array(
-				array('path' => 'faction/bonus/bonus5-1.png', 'title' => 'Raffinerie niveau 5', 'desc' => 'Vous débutez avec une Raffinerie de bon niveau'),
 				array('path' => 'faction/bonus/bonus5-2.png', 'title' => '+ 4% production', 'desc' => 'Votre Raffinerie produit plus de ressources'),
 				array('path' => 'faction/bonus/bonus5-3.png', 'title' => '+ 4% stockage', 'desc' => 'Votre Raffinerie stocke plus de ressources')),
 			'mandateDuration' => 950400,
-			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Nervéen gagne du prestige en créant des Centres Industriels, en construisant la raffinerie et les chantiers de construction de vaisseaux et en prenant des planètes (proportionnel au coefficient ressource de la planète). Il en perd en détruisant un Centre Industriel, en détruisant la raffinerie et les chantiers et en perdant le contrôle d\'une planète.',
+			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Nervéen gagne du prestige en créant des Centres Industriels, en construisant la Raffinerie et le Stockage et en prenant des planètes (proportionnel au coefficient ressource de la planète). Il en perd en détruisant un Centre Industriel et en perdant le contrôle d\'une planète.',
 			'campaignDesc' => 'explicatif d\'une campagne'),
 		array(
 			'id' 			=> 6,
@@ -167,11 +162,10 @@ class ColorResource {
 			'desc3' => 'Entrainés depuis leur plus jeune âge, les pilotes aphéréens sont de fins tacticiens et des as du pilotage, faisant preuve d’une maitrise quasi absolue aux commandes de leurs vaisseaux, le ciel est leur terrain de jeu.',
 			'desc4' => 'N’appréciant pas d’être à l’écart des décisions politiques, les aphéréens savent faire preuve de poigne lors que cela est nécessaire, déployant des moyens militaires impressionnants pour faire valoir leur idéologie démocratique au travers de toute la Galaxie.',
 			'bonus' => array(
-				array('path' => 'faction/bonus/bonus6-1.png', 'title' => '3 recherches niv. 2', 'desc' => 'Vous débutez avec trois recherches déjà trouvées'),
 				array('path' => 'faction/bonus/bonus6-2.png', 'title' => '+ 4% efficacité', 'desc' => 'Votre Université est plus efficace'),
 				array('path' => 'faction/bonus/bonus6-3.png', 'title' => '- 4% temps', 'desc' => 'Vos technologies se développent plus rapidement')),
 			'mandateDuration' => 518400,
-			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Aphéréen gagne du prestige en menant à terme une Recherche, en développant une Technologie et en réusissant un espionnage.',
+			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Aphéréen gagne du prestige en menant à terme une Recherche, en développant une Technologie et en construisant la Technosphère.',
 			'campaignDesc' => 'explicatif d\'une campagne'),
 		array(
 			'id' 			=> 7,
@@ -187,11 +181,11 @@ class ColorResource {
 			'desc3' => 'Fière de son indépendance, Synelle la sage dispose d’un important arsenal militaire prêt à défendre ses richesses contre quiconque viendra à les défier. Synelle aime rester en de bons termes avec les différentes alliances peuplant la galaxie, préfèrant la diplomatie à la guerre.',
 			'desc4' => 'Cette province, considérée comme le frigo de la galaxie de l’Œil de par son importante production de denrées alimentaires, n’est pas à la pointe de la technologie, préférant vivre simplement en accord avec ses principes de vie.',
 			'bonus' => array(
-				array('path' => 'faction/bonus/bonus7-1.png', 'title' => 'Commandant niv. 7', 'desc' => 'Vous débutez avec un commandant expérimenté'),
+				array('path' => 'faction/bonus/bonus1-2.png', 'title' => '+ 5% de défense', 'desc' => 'Vos vaisseaux gagnent en défense'),
 				array('path' => 'faction/bonus/bonus7-2.png', 'title' => '+ 6% efficacité', 'desc' => 'Votre Ecole de Commandement est plus efficace'),
 				array('path' => 'faction/bonus/bonus7-3.png', 'title' => '+ 2% efficacité', 'desc' => 'Votre Université est plus efficace')),
 			'mandateDuration' => 1382400,
-			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un membre de Synelle gagne du prestige en étant victorieux lors de la défense d\'une de ses planètes',
+			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un membre de Synelle gagne du prestige en étant victorieux lors de la défense d\'une de ses planètes et en construisant le Centre de Recyclage et le Générateur.',
 			'campaignDesc' => 'explicatif d\'une campagne')
 	);
 }
