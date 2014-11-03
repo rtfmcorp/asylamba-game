@@ -17,12 +17,7 @@ try {
 	$pl->setAvatar(CTR::$data->get('inscription')->get('avatar'));
 	$pl->setStatus(1);
 	
-	if ($faction == ColorResource::NEGORA) {
-		# Négore, 12500 crédits de plus
-		$pl->credit = 17500;
-	} else {
-		$pl->credit = 5000;
-	}
+	$pl->credit = 5000;
 	$pl->uPlayer = Utils::now();
 
 	# modifier l'expérience de base
@@ -60,21 +55,10 @@ try {
 	$rs->socialTech = Research::ECONO;
 	$rs->informaticTech = Research::NETWORK;
 
-	if ($faction == ColorResource::APHERA) {
-		# Aphéra, 3 recherches niveau 2
-		$rs->physLevel = 2;
-		$rs->algoLevel = 2;
-		$rs->mediLevel = 2;
-		$rs->naturalToPay = ResearchResource::getInfo($rs->naturalTech, 'level', 1, 'price');
-		$rs->lifeToPay = ResearchResource::getInfo($rs->lifeTech, 'level', 1, 'price');
-		$rs->socialToPay = ResearchResource::getInfo($rs->socialTech, 'level', 1, 'price');
-		$rs->informaticToPay = ResearchResource::getInfo($rs->informaticTech, 'level', 1, 'price');
-	} else {
-		$rs->naturalToPay = ResearchResource::getInfo($rs->naturalTech, 'level', 1, 'price');
-		$rs->lifeToPay = ResearchResource::getInfo($rs->lifeTech, 'level', 1, 'price');
-		$rs->socialToPay = ResearchResource::getInfo($rs->socialTech, 'level', 1, 'price');
-		$rs->informaticToPay = ResearchResource::getInfo($rs->informaticTech, 'level', 1, 'price');
-	}
+	$rs->naturalToPay = ResearchResource::getInfo($rs->naturalTech, 'level', 1, 'price');
+	$rs->lifeToPay = ResearchResource::getInfo($rs->lifeTech, 'level', 1, 'price');
+	$rs->socialToPay = ResearchResource::getInfo($rs->socialTech, 'level', 1, 'price');
+	$rs->informaticToPay = ResearchResource::getInfo($rs->informaticTech, 'level', 1, 'price');
 	ASM::$rsm->add($rs);
 
 	# CREATION DE LA BASE ORBITALE
@@ -96,20 +80,8 @@ try {
 	$ob->setName(CTR::$data->get('inscription')->get('base'));
 
 	# création des premiers bâtiments
-		# + ajout des bonus de factions
-	if ($faction == ColorResource::EMPIRE) {
-		# Empire, générateur niveau 5
-		$ob->setLevelGenerator(5);
-		$pl->stepDone = TRUE;
-	} else {
-		$ob->setLevelGenerator(1);
-	}
-	if ($faction == ColorResource::NERVE) {
-		# Nerve, raffinerie niveau 5
-		$ob->setLevelRefinery(5);
-	} else {
-		$ob->setLevelRefinery(1);
-	}
+	$ob->setLevelGenerator(1);
+	$ob->setLevelRefinery(1);
 	$ob->setLevelDock1(0);
 	$ob->setLevelDock2(0);
 	$ob->setLevelDock3(0);
@@ -124,43 +96,12 @@ try {
 	$ob->setISchool(500);
 	$ob->setIAntiSpy(500);
 
-	# ajout de vaisseau en fonction de la faction
-	if ($faction == ColorResource::KOVAHK) {
-		# Kovahk, 3 dryades
-		$ob->setShipStorage(4, 3);
-	}
-
 	# initialisation des ressources
 	$ob->setResourcesStorage(1000);
 
 	$ob->uOrbitalBase = Utils::now();
 	$ob->setDCreation(Utils::now());
 	ASM::$obm->add($ob);
-
-	# ajout d'un commandant
-	if ($faction == ColorResource::CARDAN || $faction == ColorResource::SYNELLE) {
-		$newCommander = new Commander();
-		if ($faction == ColorResource::CARDAN) {
-			# Cardan, un commandant niveau 6
-			$newCommander->upExperience(rand(3000, 5000));
-		}
-		if ($faction == ColorResource::SYNELLE) {
-			# Synelle, un commandant niveau 7
-			$newCommander->upExperience(rand(6000, 9000));
-		}
-		$newCommander->rPlayer = $pl->getId();
-		$newCommander->rBase = $ob->getId();
-		$newCommander->palmares = 0;
-		$newCommander->statement = 0;
-		$newCommander->name = CheckName::randomize();
-		$newCommander->avatar = 't' . rand(1, 21) . '-c' . $faction;
-		$newCommander->dCreation = Utils::now();
-		$newCommander->uCommander = Utils::now();
-		$newCommander->setSexe(1);
-		$newCommander->setAge(rand(40, 70));
-
-		ASM::$com->add($newCommander);
-	}
 
 	# modification de la place
 	ASM::$plm->load(array('id' => $place));
