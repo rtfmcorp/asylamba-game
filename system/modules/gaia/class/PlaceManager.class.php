@@ -29,6 +29,7 @@ class PlaceManager extends Manager {
 			s.yPosition AS yPosition,
 			s.typeOfSystem AS typeOfSystem,
 			se.tax AS tax,
+			se.rColor AS sectorColor,
 			pl.rColor AS playerColor,
 			pl.name AS playerName,
 			pl.avatar AS playerAvatar,
@@ -93,6 +94,7 @@ class PlaceManager extends Manager {
 			s.yPosition AS yPosition,
 			s.typeOfSystem AS typeOfSystem,
 			se.tax AS tax,
+			se.rColor AS sectorColor,
 			pl.rColor AS playerColor,
 			pl.name AS playerName,
 			pl.avatar AS playerAvatar,
@@ -150,6 +152,7 @@ class PlaceManager extends Manager {
 			$p->setYSystem($aw['yPosition']);
 			$p->setTypeOfSystem($aw['typeOfSystem']);
 			$p->setTax($aw['tax']);
+			$p->setSectorColor($aw['sectorColor']);
 
 			if ($aw['rPlayer'] != 0) {
 				$p->setRPlayer($aw['rPlayer']);

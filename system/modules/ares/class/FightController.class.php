@@ -306,10 +306,10 @@ class FightController {
 					$playerA->increaseVictory(1);
 					$playerD->increaseDefeat(1);
 					if ($playerA->rColor == ColorResource::KOVAHK) {
-						$playerA->factionPoint += Color::POINTBATTLE;
+						$playerA->factionPoint += Color::POINT_BATTLE_WIN;
 					}
 					if ($playerD->rColor == ColorResource::KOVAHK) {
-						$playerD->factionPoint -= Color::POINTBATTLE;
+						$playerD->factionPoint -= Color::POINT_BATTLE_LOOSE;
 					}
 				} else {
 					$playerA->increaseVictory(1);
@@ -335,10 +335,10 @@ class FightController {
 					$playerD->increaseVictory(1);
 					$playerA->increaseDefeat(1);
 					if ($playerD->rColor == ColorResource::KOVAHK) {
-						$playerD->factionPoint += Color::POINTBATTLE;
+						$playerD->factionPoint += Color::POINT_BATTLE_WIN;
 					}
 					if ($playerA->rColor == ColorResource::KOVAHK) {
-						$playerA->factionPoint -= Color::POINTBATTLE;
+						$playerA->factionPoint -= Color::POINT_BATTLE_LOOSE;
 					}
 				} else{
 					$playerA->increaseDefeat(1);

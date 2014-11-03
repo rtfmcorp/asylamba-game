@@ -63,6 +63,7 @@ class Place {
 
 	// SECTOR
 	public $tax = 0;
+	public $sectorColor = 0;
 
 	// PLAYER
 	public $playerColor = 0;
@@ -102,6 +103,7 @@ class Place {
 	public function getYSystem() 						{ return $this->ySystem; }
 	public function getTypeOfSystem() 					{ return $this->typeOfSystem; }
 	public function getTax() 							{ return $this->tax; }
+	public function getSectorColor() 					{ return $this->sectorColor; }
 	public function getPlayerColor() 					{ return $this->playerColor; }
 	public function getPlayerName() 					{ return $this->playerName; }
 	public function getPlayerAvatar() 					{ return $this->playerAvatar; }
@@ -127,6 +129,7 @@ class Place {
 	public function setYSystem($v) 						{ $this->ySystem = $v; }
 	public function setTypeOfSystem($v) 				{ $this->typeOfSystem = $v; }
 	public function setTax($v) 							{ $this->tax = $v; }
+	public function setSectorColor($v) 					{ $this->sectorColor = $v; }
 	public function setPlayerColor($v) 					{ $this->playerColor = $v; }
 	public function setPlayerName($v) 					{ $this->playerName = $v; }
 	public function setPlayerAvatar($v) 				{ $this->playerAvatar = $v; }
@@ -562,7 +565,11 @@ class Place {
 								$points = Color::POINTCONQUER;
 								break;
 							case ColorResource::CARDAN:
-								$points = round($this->population);
+								if ($this->sectorColor == ColorResource::CARDAN) {
+									$points = round($this->population);
+								} else {
+									$points = round($this->population) + Color::BONUSOUTOFSECTOR;
+								}
 								break;
 							case ColorResource::NERVE:
 								$points = ($this->coefResources - 45) * Color::COEFFPOINTCONQUER;
@@ -581,7 +588,11 @@ class Place {
 								$points = Color::POINTCONQUER;
 								break;
 							case ColorResource::CARDAN:
-								$points = round($this->population);
+								if ($this->sectorColor == ColorResource::CARDAN) {
+									$points = round($this->population);
+								} else {
+									$points = round($this->population) + Color::BONUSOUTOFSECTOR;
+								}
 								break;
 							case ColorResource::NERVE:
 								$points = ($this->coefResources - 44) * Color::COEFFPOINTCONQUER;
@@ -674,7 +685,11 @@ class Place {
 					$points = 0;
 					switch ($commander->playerColor) {
 						case ColorResource::CARDAN:
-							$points = round($this->population);
+							if ($this->sectorColor == ColorResource::CARDAN) {
+								$points = round($this->population);
+							} else {
+								$points = round($this->population) + Color::BONUSOUTOFSECTOR;
+							}
 							break;
 						case ColorResource::NERVE:
 							$points = ($this->coefResources - 44) * Color::COEFFPOINTCONQUER;

@@ -71,6 +71,22 @@ echo '<div id="content">';
 	}
 
 	if (CTR::$get->equal('mode', 'create')) {
+		$sendToId = NULL;
+		$sendToName = NULL;
+
+		if (CTR::$get->exist('sendto')) {
+			$S_PAM1 = ASM::$pam->getCurrentSession();
+			ASM::$pam->newSession();
+			ASM::$pam->load(array('id' => CTR::$get->get('sendto')));
+
+			if (ASM::$pam->size() == 1) {
+				$sendToId   = ASM::$pam->get()->id;
+				$sendToName = ASM::$pam->get()->name;
+			}
+
+			ASM::$pam->changeSession($S_PAM1);
+		}
+
 		include COMPONENT . 'message/new.php';
 	}
 

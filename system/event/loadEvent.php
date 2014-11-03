@@ -62,8 +62,10 @@ if (Utils::interval(CTR::$data->get('lastUpdate')->get('event'), Utils::now(), '
 	ASM::$com->changeSession($S_COM2);
 
 	# mettre à jour dLastActivity
-	$db = Database::getInstance();
-	$qr = $db->prepare('UPDATE player SET dLastActivity = NOW() WHERE id = ?');
-	$qr->execute(array(CTR::$data->get('playerId')));
+	$S_PAM1 = ASM::$pam->getCurrentSession();
+	ASM::$pam->newSession();
+	ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+	ASM::$pam->get()->setDLastActivity(Utils::now());
+	ASM::$pam->changeSession($S_PAM1);
 }
 ?>
