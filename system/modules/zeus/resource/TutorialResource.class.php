@@ -38,8 +38,7 @@ class TutorialResource {
 	const SHIP1_UNBLOCK = 23;
 	const DOCK1_LEVEL_15 = 24;
 	const BUILD_SHIP1 = 25;
-	const GENERATOR_SPEED = 26;
-	const REFINERY_LEVEL_22 = 27;
+	const REFINERY_LEVEL_20 = 26;
 
 	public static function stepExists($step) {
 		if ($step > 0 AND $step <= count(self::$steps)) {
@@ -365,19 +364,7 @@ class TutorialResource {
 			'shipReward' => array(0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 26,
-			'title' => 'Développer la technologie "Ingénierie du bâtiment"',
-			'description' => 'La technologie Ingénierie du bâtiment permet au Générateur d\'être plus efficient. Désormais, les bâtiments que tu construis prendront moins de temps pour être achevé.
-				<br /><br />
-				Cette technologie n\'est probablement pas encore visible dans ta Technosphère pour l\'instant. Pour qu\'elle apparaisse il faut posséder un Centre Industriel. Evolue donc ta Colonie en Centre Industriel.
-				<br /><br />
-				Comme précédemment, le développement d\'une technologie nécessite un niveau dans certaines branches de recherche fondamentale (onglet Université). Pour atteindre ce niveau, n\'hésite pas à modifier l\'investissement dans l\'onglet finance et à modifier la répartition de cet investissement dans les différentes facultés.',
-			'experienceReward' => 10,
-			'creditReward' => 10000,
-			'resourceReward' => 0,
-			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-		array(
-			'id' => 27,
-			'title' => 'Construire la Raffinerie au niveau 22',
+			'title' => 'Construire la Raffinerie au niveau 20',
 			'description' => '',
 			'experienceReward' => 10,
 			'creditReward' => 0,

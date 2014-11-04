@@ -96,8 +96,8 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 							TutorialHelper::setStepDone();
 						}
 						break;
-					case TutorialResource::REFINERY_LEVEL_22:
-						if ($building == OrbitalBaseResource::REFINERY AND $currentLevel + 1 >= 22) {
+					case TutorialResource::REFINERY_LEVEL_20:
+						if ($building == OrbitalBaseResource::REFINERY AND $currentLevel + 1 >= 20) {
 							TutorialHelper::setStepDone();
 						}
 						break;

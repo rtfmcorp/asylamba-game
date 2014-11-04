@@ -206,11 +206,8 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 		case TutorialResource::BUILD_SHIP1 :
 			# asdf
 			break;
-		case TutorialResource::GENERATOR_SPEED :
-			$nextStepAlreadyDone = TutorialHelper::isNextTechnoStepAlreadyDone($playerId, Technology::GENERATOR_SPEED);
-			break;
-		case TutorialResource::REFINERY_LEVEL_22 :
-			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::REFINERY, 22);
+		case TutorialResource::REFINERY_LEVEL_20 :
+			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::REFINERY, 20);
 			break;
 	}
 
