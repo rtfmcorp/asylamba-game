@@ -176,11 +176,11 @@ class ShipResource {
 
 	public static function dockLevelNeededFor($shipId) {
 		if (self::isAShipFromDock1($shipId)) { 
-			$building = 2; $size = 20; $shipId++;
+			$building = OrbitalBaseResource::DOCK1; $size = 40; $shipId++;
 		} elseif (self::isAShipFromDock2($shipId)) {
-			$building = 3; $size = 15; $shipId -= 5;
+			$building = OrbitalBaseResource::DOCK2; $size = 20; $shipId -= 5;
 		} else {
-			$building = 4; $size = 5; $shipId -= 11;
+			$building = OrbitalBaseResource::DOCK3; $size = 10; $shipId -= 11;
 		}
 		for ($i = 0; $i <= $size; $i++) { 
 			$relasedShip = OrbitalBaseResource::getBuildingInfo($building, 'level', $i, 'releasedShip');
