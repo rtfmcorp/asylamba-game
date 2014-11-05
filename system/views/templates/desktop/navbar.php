@@ -171,7 +171,7 @@ echo '<div id="nav">';
 			for ($i = 0; $i < ASM::$rmm->size(); $i++) { 
 				echo ($i > 0) ? '<hr />' : NULL;
 				echo '<p>';
-					echo '<em>' . Chronos::transform(ASM::$rmm->get($i)->dCreation). '</em>';
+					echo '<em>' . ASM::$rmm->get($i)->dCreation. '</em>';
 					echo ASM::$rmm->get($i)->pContent;
 				echo '</p>';
 			}
