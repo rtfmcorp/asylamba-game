@@ -12,6 +12,8 @@ class OrbitalBaseResource {
 	const RECYCLING = 8;
 	const SPATIOPORT = 9;
 
+	const BUILDING_QUANTITY = 10;
+
 	/**
 	 * 0 - generator
 	 * 1 - refinery

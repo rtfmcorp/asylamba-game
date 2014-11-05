@@ -118,14 +118,17 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				# update exchange rate
 				$transaction->currentRate = Game::calculateCurrentRate(ASM::$trm->getExchangeRate($transaction->type), $transaction->type, $transaction->quantity, $transaction->identifier, $transaction->price);
 				
-				# gain de prestige
-				$points = (($transaction->currentRate - 100) / Color::COEFPOINTTRANSACTION);
-
-				if (ASM::$pam->get(0)->rColor == ColorResource::NEGORA) {
-					ASM::$pam->get(0)->factionPoint += $points;
-				}
+				# prestige
 				if (ASM::$pam->get(1)->rColor == ColorResource::NEGORA) {
-					ASM::$pam->get(1)->factionPoint -= $points;
+					if (ASM::$pam->get()->rColor != ColorResource::NEGORA) {
+						if ($transaction->price < Color::MIN_PRICE) {
+							$points = 0;
+						} else {
+							$points = 1 + round($transaction->price * Color::COEF_POINT_SELLING);
+						}
+						# give points to the seller if the transaction is with a player from another faction than Negore
+						ASM::$pam->get(1)->factionPoint += $points;
+					}
 				}
 				# notif pour le proposeur
 				$n = new Notification();

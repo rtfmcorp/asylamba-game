@@ -222,11 +222,12 @@ class OrbitalBase {
 
 	public function updatePoints() {
 		$points = 0;
-		for ($i = 0; $i < 8; $i++) { 
+		for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) { 
 			for ($j = 0; $j < $this->getBuildingLevel($i); $j++) { 
-				$points += ceil(OrbitalBaseResource::getBuildingInfo($i, 'level', $j + 1, 'resourcePrice') / 1000);
+				$points += OrbitalBaseResource::getBuildingInfo($i, 'level', $j + 1, 'resourcePrice') / 1000;
 			}
 		}
+		$points = round($points);
 		$this->setPoints($points);
 	}
 
@@ -352,6 +353,7 @@ class OrbitalBase {
 	}
 
 	public function uBuildingQueue($queue, $player) {
+		include_once DEMETER;
 		# update builded building
 		$this->setBuildingLevel($queue->buildingNumber, ($this->getBuildingLevel($queue->buildingNumber) + 1));
 		# update the points of the orbitalBase
@@ -361,13 +363,43 @@ class OrbitalBase {
 		$player->increaseExperience($experience);
 
 		# prestige
-		if ($player->rColor == ColorResource::EMPIRE) {
-			$player->factionPoint += $experience;
-		} elseif ($player->rColor == ColorResource::NERVE) {
-			if (in_array($queue->buildingNumber, array(OrbitalBaseResource::REFINERY, OrbitalBaseResource::DOCK1, OrbitalBaseResource::DOCK2))) {
-				$player->factionPoint += $experience;
-			}
+		switch ($player->rColor) {
+			case ColorResource::EMPIRE:
+				$player->factionPoint += Color::TWO_POINTS_PER_LEVEL;
+				break;
+			case ColorResource::CARDAN:
+				if ($queue->buildingNumber == OrbitalBaseResource::DOCK1) {
+					$player->factionPoint += Color::TWO_POINTS_PER_LEVEL;
+				}
+				break;
+			case ColorResource::NERVE:
+				if (in_array($queue->buildingNumber, array(OrbitalBaseResource::REFINERY, OrbitalBaseResource::STORAGE))) {
+					$player->factionPoint += Color::TWO_POINTS_PER_LEVEL;
+				}
+				break;
+			case ColorResource::NEGORA:
+				if ($queue->buildingNumber == OrbitalBaseResource::COMMERCIAL_PLATEFORME) {
+					$player->factionPoint += Color::TWO_POINTS_PER_LEVEL;
+				}
+				if ($queue->buildingNumber == OrbitalBaseResource::SPATIOPORT) {
+					$player->factionPoint += Color::FOUR_POINTS_PER_LEVEL;
+				}
+				break;
+			case ColorResource::APHERA:
+				if ($queue->buildingNumber == OrbitalBaseResource::TECHNOSPHERE) {
+					$player->factionPoint += Color::TWO_POINTS_PER_LEVEL;
+				}
+				break;
+			case ColorResource::SYNELLE:
+				if ($queue->buildingNumber == OrbitalBaseResource::GENERATOR) {
+					$player->factionPoint += Color::TWO_POINTS_PER_LEVEL;
+				}
+				if ($queue->buildingNumber == OrbitalBaseResource::RECYCLING) {
+					$player->factionPoint += Color::FOUR_POINTS_PER_LEVEL;
+				}
+				break;
 		}
+		
 		# alert
 		if (CTR::$data->get('playerId') == $this->rPlayer) {
 			CTR::$alert->add('Construction de votre ' . OrbitalBaseResource::getBuildingInfo($queue->buildingNumber, 'frenchName') . ' niveau ' . $queue->targetLevel . ' sur ' . $this->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.', ALERT_GAM_GENERATOR);

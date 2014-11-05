@@ -14,7 +14,8 @@ class Utils {
 			'FaDcTV3lWokXHZO8tXH4divWZ',
 			'KD6wb29ElI6sxVVtVoLJY0BbO',
 			'nEYzsAcZYv',
-			'xQTjMBnqbk6rO4ysglCJxLL63'
+			'xQTjMBnqbk6rO4ysglCJxLL63',
+			'Dcc8VXaEeG6nQ49ZdkD2HusQi'
 		);
 		if (in_array($bindkey, $bindkeys)) {
 			return TRUE;

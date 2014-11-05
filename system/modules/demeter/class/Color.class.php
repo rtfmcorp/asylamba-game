@@ -18,25 +18,28 @@ class Color {
 	const THEOCRATIC 				= 3;
 
 	# constantes de prestiges
+	const TWO_POINTS_PER_LEVEL 		= 2;
+	const FOUR_POINTS_PER_LEVEL 	= 4;
 	## empire
 	const POINTCONQUER				= 100;
 	const POINTBUILDBIGSHIP			= 25;
 
 	## negore
-	const COEFPOINTTRANSACTION		= 10;
+	const MIN_PRICE 				= 10000;
+	const COEF_POINT_SELLING 		= 0.00002; 	# == * 50K
 
 	## cardan
-	const BONUSOUTOFSECTOR			= 50; 	# pas utilisé
+	const BONUSOUTOFSECTOR			= 20;
 	const POINTDONATE				= 10;
 	const COEFPOINTDONATE 			= 0.0001;
 
 	## kovakh
 	const POINTBUILDLITTLESHIP 		= 1;
 	const POINTCHANGETYPE 			= 50;
-	const POINTBATTLE				= 2;
+	const POINT_BATTLE_WIN			= 10;
+	const POINT_BATTLE_LOOSE 		= 20;
 
 	## Synelle
-	const POINTATTACKPLAYER 		= -10; 	# pas utilisé
 	const POINTDEFEND		  		= 20;
 
 	## Nerve
@@ -45,7 +48,7 @@ class Color {
 
 	## Aphéra
 	const POINTSPY					= 10;
-	const POINTRESEARCH				= 5;
+	const POINTRESEARCH				= 2;
 
 	# const
 	const NBRGOVERNMENT 			= 6;

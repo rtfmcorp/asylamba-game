@@ -113,7 +113,7 @@ class Research {
 
 				# prestige
 				if ($applyPrestige) {
-					$p->factionPoint += Color::POINTRESEARCH;
+					$p->factionPoint += Color::POINTRESEARCH + $levelReached;
 				}
 
 				$n = new Notification();
@@ -164,7 +164,7 @@ class Research {
 
 				# prestige
 				if ($applyPrestige) {
-					$p->factionPoint += Color::POINTRESEARCH;
+					$p->factionPoint += Color::POINTRESEARCH + $levelReached;
 				}
 
 				$n = new Notification();
@@ -213,7 +213,7 @@ class Research {
 
 				# prestige
 				if ($applyPrestige) {
-					$p->factionPoint += Color::POINTRESEARCH;
+					$p->factionPoint += Color::POINTRESEARCH + $levelReached;
 				}
 
 				$n = new Notification();
@@ -265,7 +265,7 @@ class Research {
 
 				# prestige
 				if ($applyPrestige) {
-					$p->factionPoint += Color::POINTRESEARCH;
+					$p->factionPoint += Color::POINTRESEARCH + $levelReached;
 				}
 				
 				$n = new Notification();

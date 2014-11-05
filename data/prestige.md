@@ -3,61 +3,67 @@
 
 #Empire
 ##bonus
-- DONE construire un batiment 
-- DONE construire un gros vaisseau 
-- DONE conquête	
+- construire un batiment (2pts par niveau)
+- construire un gros vaisseau 
+- conquête	
 ##malus
 - TODO détruire un bâtiment
-- DONE perdre une panète 
+- perdre une panète 
+
 
 #Négore
 ##bonus
-- DONE avoir une nouvelle route 
-- DONE faire une vente/achat intéressant 		
-	--> FAUX : je sens que c'est pas juste
+- construire la plateforme commerciale (2pts par niveau)
+- construire le spatioport (4pts par niveau)
+- avoir une nouvelle route 
+- faire une vente sur le marché à qqn d'une autre faction (gain en fonction des crédits qu'on gagne)
 ##malus
-- DONE perdre une route 
-- DONE faire un vente/achat pas intéressant 	
-	--> FAUX : je sens que c'est pas juste
+- perdre une route 
+
 
 #Cardan
 ##bonus
-- DONE prendre une planète, bonus si elle et hors secteur 	
-	--> Fait, mais c'est en fonction de la population, et il n'y a pas de bonus si c'est hors secteur
-- DONE faire un don à la faction
+- construction du chantier alpha (2pts par niveau)
+- prendre une planète (gain en fonction de la population), bonus si elle et hors secteur 	
+- faire un don à la faction
 ##malus
-- DONE perdre une planète 									
-	--> Fait, mais c'est en fonction de la population
+- perdre une planète 									
+
 
 #Kovakh
 ##bonus
-- DONE contruire 1 petit vaisseau 
-- DONE construire 1 gros vaisseau 
-- DONE gagner un combat 
-- DONE nomer une planète militaire 
+- contruire 1 petit vaisseau 
+- construire 1 gros vaisseau 
+- gagner un combat 
+- nomer une planète militaire 
 ##malus
-- DONE perdre un combat 
-- DONE dénommer une planète militaire 
+- perdre un combat 
+- dénommer une planète militaire 
+
 
 #Synelle
 ##bonus
-- DONE défense victorieuse 
+- construire le centre de recyclage (4pts par niveau)
+- construire le générateur (2pts par niveau)
+- défense victorieuse 
 ##malus
 - MAYBE TODO attaquer un autre joueur
 
+
 #Nerve
 ##bonus
-- DONE nommer une planète indus 
-- DONE up un batiment indus (raf, doc 1 et 2) 
-- DONE prendre une planète (points selon coeff resources) 
-
+- nommer une planète indus 
+- construire la raffinerie ou le stockage (2pts par niveau) 
+- prendre une planète (points selon coeff resources) 
 ##malus
-- DONE dénommer une plan indus 
+- dénommer une plan indus 
 - TODO déup un batiment indus
-- DONE perdre une planète (points selon coeffresources) 
+- perdre une planète (points selon coeffresources) 
+
 
 #Aphéra
 ##bonus
-- DONE trouver une recherche 
-- DONE trouver une techno 
+- construire la technosphère (2pts par niveau)
+- trouver une recherche (2pts + niveau par niveau)
+- trouver une techno 
 - TODO espionnage réussi

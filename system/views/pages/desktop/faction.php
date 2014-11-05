@@ -56,15 +56,22 @@ echo '<div id="content">';
 
 			$S_TOM1 = ASM::$tom->getCurrentSession();
 
-			for ($i = 1; $i <= ForumResources::size(); $i++) { 
+			for ($i = 1; $i <= ForumResources::size(); $i++) {
+				$forum_topics = ForumResources::getInfo($i, 'id');
+
+				$where = array(
+					'rForum' => $forum_topics, 
+					'isUp' => 0,
+					'isArchived' => 0
+				);
+
+				if ($forum_topics < 20) {
+					$where['rColor'] = CTR::$data->get('playerInfo')->get('color');
+				}
+
 				ASM::$tom->newSession();
 				ASM::$tom->load(
-					array(
-						'rForum' => ForumResources::getInfo($i, 'id'), 
-						'rColor' => CTR::$data->get('playerInfo')->get('color'),
-						'isUp' => 0,
-						'isArchived' => 0
-					),
+					$where,
 					array('dLastMessage', 'DESC'),
 					array(0, 10),
 					CTR::$data->get('playerId')
@@ -74,7 +81,7 @@ echo '<div id="content">';
 				for ($j = 0; $j < ASM::$tom->size(); $j++) { 
 					$topic_topics[$j] = ASM::$tom->get($j);
 				}
-				$forum_topics = ForumResources::getInfo($i, 'id');
+
 				$isStandard_topics = FALSE;
 				$idColum_topics = $i;
 
@@ -97,35 +104,29 @@ echo '<div id="content">';
 				? 1
 				: CTR::$get->get('forum');
 
+			$where = array(
+				'rForum' => $forumId,
+				'isArchived' => 0
+			);
+
+			if ($forumId < 20) {
+				$where['rColor'] = CTR::$data->get('playerInfo')->get('color');
+			}
+
 			$S_TOM1 = ASM::$tom->getCurrentSession();
 			ASM::$tom->newSession();
-			if ($forumId < 20) {
-				ASM::$tom->load(
-					array(
-						'rForum' => $forumId, 
-						'rColor' => CTR::$data->get('playerInfo')->get('color'),
-						'isArchived' => 0
-					),
-					array('dLastMessage', 'DESC'),
-					array(),
-					CTR::$data->get('playerId')
-				);
-			} else {
-				ASM::$tom->load(
-					array(
-						'rForum' => $forumId,
-						'isArchived' => 0
-					),
-					array('dLastMessage', 'DESC'),
-					array(),
-					CTR::$data->get('playerId')
-				);
-			}
+			ASM::$tom->load(
+				$where,
+				array('dLastMessage', 'DESC'),
+				array(0, 10),
+				CTR::$data->get('playerId')
+			);
 
 			$topic_topics = array();
 			for ($i = 0; $i < ASM::$tom->size(); $i++) { 
 				$topic_topics[$i] = ASM::$tom->get($i);
 			}
+			
 			$isStandard_topics = TRUE;
 			$forum_topics = $forumId;
 

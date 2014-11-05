@@ -35,10 +35,12 @@ echo '<div class="component profil">';
 
 			echo '<div class="number-box">';
 				echo '<span class="label">expérience</span>';
-				echo '<span class="value">';
-					echo Format::numberFormat($exp) . ' / ';
-					echo Format::numberFormat($nlv);
-				echo '</span>';
+				echo '<span class="value">' . Format::numberFormat($exp) . '</span>';
+			echo '</div>';
+
+			echo '<div class="number-box grey">';
+				echo '<span class="label">expérience nécessaire pour le prochain niveau</span>';
+				echo '<span class="value">' . Format::numberFormat($nlv) . '</span>';
 				echo '<span class="progress-bar">';
 					echo '<span style="width:' . $prc . '%;" class="content"></span>';
 				echo '</span>';

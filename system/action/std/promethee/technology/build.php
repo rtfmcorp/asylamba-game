@@ -57,11 +57,6 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 							TutorialHelper::setStepDone();
 						}
 						break;
-					case TutorialResource::GENERATOR_SPEED:
-						if ($techno == Technology::GENERATOR_SPEED) {
-							TutorialHelper::setStepDone();
-						}
-						break;
 				}
 			}
 

@@ -178,13 +178,9 @@ class PlayerBonus {
 			case 2:
 				# Kovahk
 				$this->bonus->increase(self::FIGHTER_SPEED, 10);
-				$this->bonus->increase(self::FIGHTER_DEFENSE, -2);
 				$this->bonus->increase(self::CORVETTE_SPEED, 10);
-				$this->bonus->increase(self::CORVETTE_DEFENSE, -2);
-				$this->bonus->increase(self::FRIGATE_SPEED, 10);
-				$this->bonus->increase(self::FRIGATE_DEFENSE, -2);
-				$this->bonus->increase(self::DESTROYER_SPEED, 10);
-				$this->bonus->increase(self::DESTROYER_DEFENSE, -2);
+				$this->bonus->increase(self::FRIGATE_DEFENSE, -5);
+				$this->bonus->increase(self::DESTROYER_DEFENSE, -5);
 				break;
 			case 3:
 				# Négore
@@ -208,6 +204,10 @@ class PlayerBonus {
 				# Synelle
 				$this->bonus->increase(self::COMMANDER_INVEST, 6);
 				$this->bonus->increase(self::UNI_INVEST, 2);
+				$this->bonus->increase(self::FIGHTER_DEFENSE, 5);
+				$this->bonus->increase(self::CORVETTE_DEFENSE, 5);
+				$this->bonus->increase(self::FRIGATE_DEFENSE, 5);
+				$this->bonus->increase(self::DESTROYER_DEFENSE, 5);
 				break;
 			default:
 				break;
