@@ -28,42 +28,46 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 			if (ASM::$plm->size() > 0) {
 				$commander = ASM::$com->get();
 				$place = ASM::$plm->get();
-				if (CTR::$data->get('playerInfo')->get('color') != $place->getPlayerColor()) {
-					ASM::$plm->load(array('id' => $commander->getRBase()));
-					$home = ASM::$plm->getById($commander->getRBase());
+				if ($place->typeOfPlace == Place::TERRESTRIAL) {
+					if (CTR::$data->get('playerInfo')->get('color') != $place->getPlayerColor()) {
+						ASM::$plm->load(array('id' => $commander->getRBase()));
+						$home = ASM::$plm->getById($commander->getRBase());
 
-					$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
-					$duration = Game::getTimeToTravel($home, $place, CTR::$data->get('playerBonus'));
+						$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
+						$duration = Game::getTimeToTravel($home, $place, CTR::$data->get('playerBonus'));
 
-					if ($commander->getPev() > 0) {
-						if ($commander->statement == Commander::AFFECTED) {
-							if ($duration <= Commander::MAXTRAVELTIME) {
-								if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
+						if ($commander->getPev() > 0) {
+							if ($commander->statement == Commander::AFFECTED) {
+								if ($duration <= Commander::MAXTRAVELTIME) {
+									if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
 
-									# tutorial
-									if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-										switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
-											case TutorialResource::LOOT_PLANET:
-												TutorialHelper::setStepDone();
-												break;
+										# tutorial
+										if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
+											switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+												case TutorialResource::LOOT_PLANET:
+													TutorialHelper::setStepDone();
+													break;
+											}
+										}
+										
+										if (CTR::$get->exist('redirect')) {
+											CTR::redirect('map/place-' . CTR::$get->get('redirect'));
 										}
 									}
-									
-									if (CTR::$get->exist('redirect')) {
-										CTR::redirect('map/place-' . CTR::$get->get('redirect'));
-									}
+								} else {
+									CTR::$alert->add('Cet emplacement est trop éloigné.', ALERT_STD_ERROR);	
 								}
 							} else {
-								CTR::$alert->add('Cet emplacement est trop éloigné.', ALERT_STD_ERROR);	
+								CTR::$alert->add('Cet officier est déjà en déplacement.', ALERT_STD_ERROR);	
 							}
 						} else {
-							CTR::$alert->add('Cet officier est déjà en déplacement.', ALERT_STD_ERROR);	
-						}
+							CTR::$alert->add('Vous devez affecter au moins un vaisseau à votre officier.', ALERT_STD_ERROR);	
+						}		
 					} else {
-						CTR::$alert->add('Vous devez affecter au moins un vaisseau à votre officier.', ALERT_STD_ERROR);	
-					}		
+						CTR::$alert->add('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction.', ALERT_STD_ERROR);
+					}
 				} else {
-					CTR::$alert->add('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction.', ALERT_STD_ERROR);
+					CTR::$alert->add('Ce lieu n\'est pas habité.', ALERT_STD_ERROR);
 				}
 			} else {
 				CTR::$alert->add('Ce lieu n\'existe pas.', ALERT_STD_ERROR);
