@@ -56,7 +56,7 @@ if ($type !== FALSE) {
 							$taxes = Utils::getHTTPData('taxes');
 							$rSector = Utils::getHTTPData('rsector');
 							if ($taxes !== FALSE && $rSector !== FALSE) {
-								if ($taxes > 2 && $taxes < 15) {
+								if ($taxes > 1 && $taxes < 16) {
 									$_SEM = ASM::$sem->getCurrentsession();
 									ASM::$sem->load(array('id' => $rSector)); 
 									if (ASM::$sem->size() > 0) {

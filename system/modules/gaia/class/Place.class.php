@@ -18,6 +18,9 @@ class Place {
 	const TYP_ORBITALBASE = 4;
 	const COEFFMAXRESOURCE = 600;
 
+	# typeOfPlace
+	const TERRESTRIAL = 1;
+
 	# CONST PNJ COMMANDER
 	const LEVELMAXVCOMMANDER = 15;
 	const POPMAX 			 = 250;
