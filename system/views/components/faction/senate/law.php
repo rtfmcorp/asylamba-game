@@ -35,7 +35,7 @@ echo '<div class="component">';
 					echo '</a>';
 				} else {
 					echo '<span class="button disable" style="text-align: center; line-height: 35px;>';
-						echo '<span class="text">Seul les sénateurs peuvent voter</span>';
+						echo '<span class="text">Seuls les sénateurs peuvent voter</span>';
 					echo '</span>';
 				}
 			echo '</div>';

@@ -82,7 +82,7 @@ class ShipResource {
 					if (OrbitalBaseResource::isAShipFromDock1($shipId)) {
 						$maxQueue = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::DOCK1, 'level', $sup->levelDock1, 'nbQueues');
 					} elseif (OrbitalBaseResource::isAShipFromDock2($shipId)) {
-						$maxQueue = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::DOCK2, 'level', $sup->levelDock1, 'nbQueues');
+						$maxQueue = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::DOCK2, 'level', $sup->levelDock2, 'nbQueues');
 					} else {
 						$maxQueue = 0;
 					}
