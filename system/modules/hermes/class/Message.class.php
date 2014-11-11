@@ -43,6 +43,8 @@ class Message {
 	public function getWriterName()					{
 		if ($this->getRPlayerWriter() == 0) {
 			return 'Jean-Mi, administrateur système';
+		} elseif ($this->getRPlayerWriter() == -1) {
+			return 'Bulletin de la faction';
 		} else {
 			return $this->writerName;
 		}
@@ -52,6 +54,8 @@ class Message {
 	public function getWriterAvatar()				{
 		if ($this->getRPlayerWriter() == 0) {
 			return '059-1';
+		} elseif ($this->getRPlayerWriter() == -1) {
+			return 'color' .  $this->readerColor;
 		} else {
 			return $this->writerAvatar;
 		}
@@ -103,6 +107,8 @@ class Message {
 	public function getRealName($ctrid) {
 		if ($this->getRPlayerWriter() == 0 OR $this->getRPlayerReader() == 0) {
 			return 'Jean-Mi';
+		} elseif ($this->getRPlayerWriter() == -1 OR $this->getRPlayerReader() == -1) {
+			return 'Bulletin de la faction';
 		} elseif ($this->getRPlayerWriter() == $ctrid) {
 			return $this->getReaderName();
 		} else {
@@ -113,6 +119,8 @@ class Message {
 	public function getRealAvatar($ctrid) {
 		if ($this->getRPlayerWriter() == 0 OR $this->getRPlayerReader() == 0) {
 			return '059-1';
+		} elseif ($this->getRPlayerWriter() == -1 OR $this->getRPlayerReader() == -1) {
+			return 'color' .  $this->readerColor;
 		} elseif ($this->getRPlayerWriter() == $ctrid) {
 			return $this->getReaderAvatar();
 		} else {

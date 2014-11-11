@@ -47,45 +47,50 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					$commander = ASM::$com->get();
 					$place = ASM::$plm->get();
 
-					ASM::$plm->load(array('id' => $commander->getRBase()));
-					$home = ASM::$plm->getById($commander->getRBase());
+					if ($place->typeOfPlace == Place::TERRESTRIAL) {
 
-					$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
-					$duration = Game::getTimeToTravel($home, $place, CTR::$data->get('playerBonus'));
+						ASM::$plm->load(array('id' => $commander->getRBase()));
+						$home = ASM::$plm->getById($commander->getRBase());
 
-					# compute price
-					$price = $totalBases * CREDITCOEFFTOCOLONIZE;
-					if (CTR::$data->get('playerInfo')->get('color') == ColorResource::CARDAN) {
-						# bonus if the player is from Cardan
-						$price -= round($price * ColorResource::BONUS_CARDAN_COLO / 100);
-					}
-					if (CTR::$data->get('playerInfo')->get('credit') >= $price) {
-						if ($commander->getPev() > 0) {
-							if ($commander->statement == Commander::AFFECTED) {
-								if ($duration <= Commander::MAXTRAVELTIME) {
-									if ($commander->move($place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
-										# debit credit
-										$S_PAM2 = ASM::$pam->getCurrentSession();
-										ASM::$pam->newSession(ASM_UMODE);
-										ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-										ASM::$pam->get()->decreaseCredit($price);
-										ASM::$pam->changeSession($S_PAM2);
+						$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
+						$duration = Game::getTimeToTravel($home, $place, CTR::$data->get('playerBonus'));
 
-										if (CTR::$get->exist('redirect')) {
-											CTR::redirect('map/place-' . CTR::$get->get('redirect'));
+						# compute price
+						$price = $totalBases * CREDITCOEFFTOCOLONIZE;
+						if (CTR::$data->get('playerInfo')->get('color') == ColorResource::CARDAN) {
+							# bonus if the player is from Cardan
+							$price -= round($price * ColorResource::BONUS_CARDAN_COLO / 100);
+						}
+						if (CTR::$data->get('playerInfo')->get('credit') >= $price) {
+							if ($commander->getPev() > 0) {
+								if ($commander->statement == Commander::AFFECTED) {
+									if ($duration <= Commander::MAXTRAVELTIME) {
+										if ($commander->move($place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
+											# debit credit
+											$S_PAM2 = ASM::$pam->getCurrentSession();
+											ASM::$pam->newSession(ASM_UMODE);
+											ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+											ASM::$pam->get()->decreaseCredit($price);
+											ASM::$pam->changeSession($S_PAM2);
+
+											if (CTR::$get->exist('redirect')) {
+												CTR::redirect('map/place-' . CTR::$get->get('redirect'));
+											}
 										}
+									} else {
+										CTR::$alert->add('Cet emplacement est trop éloigné.', ALERT_STD_ERROR);	
 									}
 								} else {
-									CTR::$alert->add('Cet emplacement est trop éloigné.', ALERT_STD_ERROR);	
+									CTR::$alert->add('Cet officier est déjà en déplacement.', ALERT_STD_ERROR);	
 								}
 							} else {
-								CTR::$alert->add('Cet officier est déjà en déplacement.', ALERT_STD_ERROR);	
+								CTR::$alert->add('Vous devez affecter au moins un vaisseau à votre officier.', ALERT_STD_ERROR);	
 							}
 						} else {
-							CTR::$alert->add('Vous devez affecter au moins un vaisseau à votre officier.', ALERT_STD_ERROR);	
+							CTR::$alert->add('Vous n\'avez pas assez de crédits pour coloniser cette planète.', ALERT_STD_ERROR);
 						}
 					} else {
-						CTR::$alert->add('Vous n\'avez pas assez de crédits pour coloniser cette planète.', ALERT_STD_ERROR);
+						CTR::$alert->add('Ce lieu n\'est pas habitable.', ALERT_STD_ERROR);
 					}
 				} else {
 					CTR::$alert->add('Ce lieu n\'existe pas.', ALERT_STD_ERROR);

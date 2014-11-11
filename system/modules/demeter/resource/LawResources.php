@@ -24,7 +24,7 @@ Class LawResources {
 			'duration' => 0,
 			'bonus' => 0,
 			'shortDescription' => 'Les planètes dans les secteurs sous votre contrôle vous paient un impôt et c\'est à la faction de choisir ce dernier.',
-			'longDescription' => 'Cette loi modifie le taux d\'imposition appliqué aux planètes d\'un secteur en votre possession. La redevance perçue provient autant des bases de votre faction que de celles de factions ennemies.<br /><br />Un impôt faible dans vos secteurs faibles renforcera votre faction et un impôt fort dans les secteurs partagés permettra de prendre plus de crédit de joueurs ennemis.<br /><br />L\'impôt peut varier de 2% à 15%.',
+			'longDescription' => 'Cette loi modifie le taux d\'imposition appliqué aux planètes d\'un secteur en votre possession. La redevance perçue provient autant des bases de votre faction que de celles de factions ennemies.<br /><br />Un impôt faible dans vos secteurs faibles renforcera votre faction et un impôt fort dans les secteurs partagés permettra de prendre plus de crédits de joueurs ennemis.<br /><br />L\'impôt peut varier de 2% à 15%.',
 			'image' => '',
 			'isImplemented' => TRUE),
 		array(

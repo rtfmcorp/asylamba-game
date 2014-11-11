@@ -5,13 +5,15 @@ $scripts = array(
 	array('deploy.changecolor', '/deploy/changecolor.php'),
 	array('deploy.tables.modifTopic', '/deploy/tables/modifTopic.php'),
 	array('migration.modifColor', '/migration/modifColor.php'),
+	array('migration.updatemessage', '/migration/updateMessage.php'),
 	array('test.dump', '/test/dump.php'),
 	array('test.api', '/test/api.php'),
 	array('test.ctc', '/test/ctc.php'),
 	array('test.galaxy', '/test/galaxy.php'),
 	array('cron.daily', '/cron/daily.php'),
 	array('cron.playerranking', '/cron/playerRanking.php'),
-	array('cron.factionranking', '/cron/factionRanking.php')
+	array('cron.factionranking', '/cron/factionRanking.php'),
+	array('debug.ctc', '/debug/ctc.php')
 );
 
 # unlimited time
