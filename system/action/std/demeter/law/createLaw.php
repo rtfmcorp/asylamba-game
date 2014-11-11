@@ -53,10 +53,10 @@ if ($type !== FALSE) {
 				} else {
 					switch ($type) {
 						case 1:
-							$taxes = Utils::getHTTPData('taxes');
+							$taxes = round(Utils::getHTTPData('taxes'));
 							$rSector = Utils::getHTTPData('rsector');
 							if ($taxes !== FALSE && $rSector !== FALSE) {
-								if ($taxes > 1 && $taxes < 16) {
+								if ($taxes >= 2 && $taxes <= 15) {
 									$_SEM = ASM::$sem->getCurrentsession();
 									ASM::$sem->load(array('id' => $rSector)); 
 									if (ASM::$sem->size() > 0) {
@@ -104,7 +104,7 @@ if ($type !== FALSE) {
 							}
 							break;
 						case 3:
-							$taxes = Utils::getHTTPData('taxes');
+							$taxes = round(Utils::getHTTPData('taxes'));
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($taxes !== FALSE && $rColor !== FALSE) {
 								$_CTM = ASM::$ctm->getCurrentsession();
@@ -138,7 +138,7 @@ if ($type !== FALSE) {
 							}
 							break;
 						case 4:
-							$taxes = Utils::getHTTPData('taxes');
+							$taxes = round(Utils::getHTTPData('taxes'));
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($taxes !== FALSE && $rColor !== FALSE) {
 								$_CTM = ASM::$ctm->getCurrentsession();
