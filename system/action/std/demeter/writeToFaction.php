@@ -62,7 +62,7 @@ if ($message !== FALSE) {
 						ASM::$msm->newSession();
 						ASM::$msm->load(array('rPlayerReader' => $playerId, 'rPlayerWriter' => $sender));
 
-						if (ASM::$msm->size > 0) {
+						if (ASM::$msm->size() > 0) {
 							# thread existant
 							$m->setThread(ASM::$msm->get()->getThread());
 							$m->setRPlayerReader($playerId);
