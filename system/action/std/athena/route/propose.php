@@ -9,24 +9,30 @@ for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-$baseFrom = Utils::getHTTPData('basefrom');
-$baseTo = Utils::getHTTPData('baseto');
+$baseFrom 	= Utils::getHTTPData('basefrom');
+$baseTo 	= Utils::getHTTPData('baseto');
 
 if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 	$S_OBM1 = ASM::$obm->getCurrentSession();
-	ASM::$obm->newSession(ASM_UMODE);
+	ASM::$obm->newSession();
 	ASM::$obm->load(array('rPlace' => $baseFrom));
+
 	$proposerBase = ASM::$obm->get();
-	if ($proposerBase->getLevelCommercialPlateforme() > 0) {}
+
+#	if ($proposerBase->getLevelSpatioport() > 0) {}
+
 	ASM::$obm->load(array('rPlace' => $baseTo));
+
 	$otherBase = ASM::$obm->get(1);
 
-	$S_CRM1 = ASM::$crm->getCurrentSession();
 	# check s'il y a une place de route libre
-	ASM::$crm->newSession(ASM_UMODE);
-	ASM::$crm->load(array('rOrbitalBase' => $proposerBase->getId())); // routes avec n'importe quel statement
+	$S_CRM1 = ASM::$crm->getCurrentSession();
+	ASM::$crm->newSession();
+	ASM::$crm->load(array('rOrbitalBase' => $proposerBase->getId())); # routes avec n'importe quel statement
 	ASM::$crm->load(array('rOrbitalBaseLinked' => $proposerBase->getId(), 'statement' => array(CRM_ACTIVE, CRM_STANDBY)));
-	$nbrMaxCommercialRoute = OrbitalBaseResource::getBuildingInfo(6, 'level', $proposerBase->getLevelCommercialPlateforme(), 'nbRoutesMax');
+
+	$nbrMaxCommercialRoute = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $proposerBase->getLevelSpatioport(), 'nbRoutesMax');
+	
 	# check si on n'a pas déjà une route avec ce joueur
 	$alreadyARoute = FALSE;
 	for ($i = 0; $i < ASM::$crm->size(); $i++) { 
@@ -41,11 +47,14 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 			}
 		}
 	}
-	if ((ASM::$crm->size() < $nbrMaxCommercialRoute) && (!$alreadyARoute) && ($proposerBase->getLevelCommercialPlateforme() > 0) && ($otherBase->getLevelCommercialPlateforme() > 0)) {
+
+	if ((ASM::$crm->size() < $nbrMaxCommercialRoute) && (!$alreadyARoute) && ($proposerBase->getLevelSpatioport() > 0) && ($otherBase->getLevelSpatioport() > 0)) {
 		$S_PAM1 = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession(ASM_UMODE);
+		ASM::$pam->newSession();
 		ASM::$pam->load(array('id' => $otherBase->getRPlayer()));
+
 		$player = ASM::$pam->get();
+
 		if (ASM::$obm->size() == 2 && ($proposerBase->getRPlayer() != $otherBase->getRPlayer()) && (ASM::$pam->size() == 1)) {
 			$distance = Game::getDistance($proposerBase->getXSystem(), $otherBase->getXSystem(), $proposerBase->getYSystem(), $otherBase->getYSystem());
 			$bonusA = ($proposerBase->getSector() != $otherBase->getSector()) ? CRM_ROUTEBONUSSECTOR : 1;
@@ -69,8 +78,9 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 			} else {
 				$priceWithBonus = $price;
 			}
+
 			if (CTR::$data->get('playerInfo')->get('credit') >= $priceWithBonus) {
-				// création de la route
+				# création de la route
 				$cr = new CommercialRoute();
 				$cr->setROrbitalBase($proposerBase->getId());
 				$cr->setROrbitalBaseLinked($otherBase->getId());
@@ -81,7 +91,8 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 				$cr->setDProposition(Utils::now());
 				$cr->setStatement(0);
 				ASM::$crm->add($cr);
-				// débit des crédits au joueur
+				
+				# débit des crédits au joueur
 				$S_PAM2 = ASM::$pam->getCurrentSession();
 				ASM::$pam->newSession(ASM_UMODE);
 				ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
