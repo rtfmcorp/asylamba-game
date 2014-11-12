@@ -1255,12 +1255,16 @@ class Place {
 		$vCommander = new Commander();
 		$vCommander->id = 0;
 		$vCommander->rPlayer = 0;
-		$vCommander->name = 'officier rebelle';
+		$vCommander->name = 'rebelle';
 		$vCommander->avatar = 't3-c4';
 		$vCommander->sexe = 1;
 		$vCommander->age = 42;
 		$vCommander->statement = 1;
 		$vCommander->level = round($this->population / (self::POPMAX / self::LEVELMAXVCOMMANDER));
+
+		if ($vCommander->level == 0) {
+			$vCommander->level = 1;
+		}
 
 		$nbrsquadron = round($vCommander->level * ($this->resources / (($this->population + 1) * self::COEFFMAXRESOURCE)));
 		if ($nbrsquadron == 0) {
