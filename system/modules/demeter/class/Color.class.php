@@ -137,7 +137,7 @@ class Color {
 		$_PAM1 = ASM::$pam->getCurrentsession();
 		ASM::$pam->newSession(FALSE);
 		ASM::$pam->load(array('rColor' => $this->id, 'status' => PAM_CHIEF));
-		$chiefId = ASM::$pam->get()->id;
+		$chiefId = (ASM::$pam->size() == 0) ? 0 : ASM::$pam->get()->id;
 		ASM::$pam->changeSession($_PAM1);
 
 		$_VOM = ASM::$vom->getCurrentSession();
@@ -181,7 +181,7 @@ class Color {
 				arsort($ballot);
 				reset($ballot);
 
-				if (((current($ballot) / $this->activePlayers) * 100) >= self::PUTSCHPERCENTAGE && key($ballot) != $chiefId) {
+				if (((current($ballot) / ($this->activePlayers + 1)) * 100) >= self::PUTSCHPERCENTAGE && key($ballot) != $chiefId) {
 					$_PAM1 = ASM::$pam->getCurrentsession();
 					ASM::$pam->newSession(FALSE);
 					$token_playersGovernement = ASM::$pam->getCurrentsession();
@@ -338,10 +338,11 @@ class Color {
 			$date = $date->format('Y-m-d H:i:s');
 			$this->dLastElection = $date;
 
-			$_PAM2 = ASM::$pam->getCurrentSession();
-			ASM::$pam->changeSession($token_newChief);
 
 			if ($this->getRegime() == self::ROYALISTIC) {
+				$_PAM2 = ASM::$pam->getCurrentSession();
+				ASM::$pam->changeSession($token_newChief);
+
 				$notif = new Notification();
 				$notif->setRPlayer(ASM::$pam->get()->id);
 				$notif->setTitle('Votre coup d\'état a échoué');
@@ -357,6 +358,7 @@ class Color {
 					->addLnk('diary/player-' . ASM::$pam->get()->id, ASM::$pam->get()->name)
 					->addTxt(' a tenté un coup d\'état, celui-ci a échoué');
 				ASM::$ntm->add($notif);
+				ASM::$pam->newSession($_PAM2);
 			} elseif ($this->getRegime() == self::THEOCRATIC) {
 				$notif = new Notification();
 				$notif->dSending = Utils::now();
@@ -366,8 +368,6 @@ class Color {
 					->addTxt(' Les Oracles on parlé, vous êtes toujours désigné par la Grande Lumière pour guider Cardan vers la Gloire.');
 				ASM::$ntm->add($notif);
 			}
-
-			ASM::$pam->newSession($_PAM2);
 		}
 	}
 
