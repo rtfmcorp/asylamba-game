@@ -26,13 +26,13 @@ echo '<div class="component report">';
 					echo '<div class="commander">';
 						echo '<a href="' . APP_ROOT . 'fleet"><img src="' . MEDIA . 'commander/medium/' . $report_report->avatarA . '.png" alt="' . $report_report->nameA . '" /></a>';
 						$level = Commander::nbLevelUp($report_report->levelA, $report_report->experienceA + $report_report->expCom);
-						echo '<em>' . CommanderResources::getInfo($report_report->levelA, 'grade') . ($level > 0 ? ' <span class="bonus">a passé ' . $level . ' grade</span>' : NULL) . '</em>';
+						echo '<em>' . CommanderResources::getInfo($report_report->levelA, 'grade') . ($level > 0 ? ' <span class="bonus">a passé ' . $level . ' grade' . Format::addPlural($level) . '</span>' : NULL) . '</em>';
 						echo '<strong>' . $report_report->nameA . '</strong>';
 						echo '<em>expérience : ' . Format::numberFormat($report_report->experienceA);
 							echo ' <span class="bonus">+ ' . Format::numberFormat($report_report->expCom) . '</span>';
 						echo '</em>';
-						echo '<em>victoire : ' . $report_report->palmaresA . ' <span class="bonus">+ 1</span></em>';
-						echo '<em><span class="bonus">' . Format::number($report_report->resources) . '</span> ressources gagnées</em>';
+						echo '<em>victoires : ' . $report_report->palmaresA . ' <span class="bonus">+ 1</span></em>';
+						echo '<em><span class="bonus">' . Format::number($report_report->resources) . '</span> ressource' . Format::addPlural($report_report->resources) . ' gagnée' . Format::addPlural($report_report->resources) . '</em>';
 					echo '</div>';
 				} else {
 					echo '<div class="commander">';
