@@ -599,7 +599,7 @@ class TechnologyResource {
 			'points' => 41,
 			'column' => 5,
 			'shortDescription' => 'Rend plus efficace votre investissement dans l\'Anti-Espionnage de 2% par niveau.',
-			'description' => 'La surveillance réseau est une technologie qui vous permet d’augmenter votre champ de contre-espionnage. Vos services secrets, grâce à d’importantes avancées en matière d’observation et d’espionnage, augmente considérablement leur champ de vision sans aucune augmentation des coûts.',
+			'description' => 'La surveillance réseau est une technologie qui vous permet d’augmenter votre champ de contre-espionnage. Vos services secrets, grâce à d’importantes avancées en matière d’observation et d’espionnage, augmentent considérablement leur champ de vision sans aucune augmentation des coûts.',
 			'bonus' => 2
 		),
 		array(

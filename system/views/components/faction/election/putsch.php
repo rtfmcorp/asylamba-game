@@ -28,12 +28,12 @@ echo '<div class="component profil">';
 			echo '</div>';
 
 			echo '<div class="number-box">';
-				echo '<span class="label">Nombre de soutient pour réussir</span>';
+				echo '<span class="label">Nombre de soutien pour réussir</span>';
 				echo '<span class="value">' . $follower . '</span>';
 				echo '<span class="progress-bar">';
 					echo '<span style="width:' . Format::percent($follower, ASM::$pam->size()) . '%;" class="content"></span>';
 					echo '<span class="step" style="left: ' . (Color::PUTSCHPERCENTAGE + 2) . '%;">';
-						echo '<span class="label bottom">soutient nécessaire</span>';
+						echo '<span class="label bottom">soutien nécessaire</span>';
 					echo '</span>';
 				echo '</span>';
 					echo '<br />';

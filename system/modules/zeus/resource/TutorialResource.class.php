@@ -243,7 +243,7 @@ class TutorialResource {
 			'title' => 'Constituer une escadrille',
 			'description' => 'Va dans l\'amirauté, si tu n\'y es pas déjà. Tu verras le commandant que tu as précédemment affecté. Pour le gérer, clique sur la petite flèche qui se trouve à droite de sa case. Des panneaux s\'ouvriront et toutes les informations du commandant s\'afficheront. Glisse vers la droite pour tout voir.
 				<br /><br />
-				Un commandant de niveau 1, un Aspirant, peut contrôler une escadrille. Chaque niveau supplémentaire lui offre une escadrille en plus. Pour affecter des vaisseaux à une escadrille il faut cliquer sur celle-ci. Si l\'opération s\'est bien déroulée, l\'escarille est entourée par un traitillé.
+				Un commandant de niveau 1, un Aspirant, peut contrôler une escadrille. Chaque niveau supplémentaire lui offre une escadrille en plus. Pour affecter des vaisseaux à une escadrille il faut cliquer sur celle-ci. Si l\'opération s\'est bien déroulée, l\'escadrille est entourée par un traitillé.
 				<br /><br />
 				Ensuite dans la colonne à droite se trouve la composition de l\'esacrille et dans la colonne suivante se trouvent les vaisseaux qui sont dans le hangar. Pour affecter un vaisseau, il suffit de cliquer sur un vaisseau du hangar et il sera transféré dans l\'escadrille.
 				<br /><br />
