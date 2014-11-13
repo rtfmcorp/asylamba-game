@@ -131,7 +131,7 @@ echo '<div class="component">';
 						? '<div class="item">'
 						: '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTime . '" data-progress-total-time="' . $totalTimeShips . '">';
 					echo '<a href="' . APP_ROOT . 'action/a-dequeueship/baseid-' . $ob_dock2->getId() . '/dock-2/queue-' . $queue->id . '"' . 
-						'class="button hb lt" title="annuler la commande">×</a>';
+						'class="button hb lt" title="annuler la commande (attention, vous ne récupérerez que ' . SQM_RESOURCERETURN * 100 . '% du montant investi)">×</a>';
 					echo  '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($queue->shipNumber, 'imageLink') . '.png" alt="" />';
 					echo '<strong>' . ShipResource::getInfo($queue->shipNumber, 'codeName') . '</strong>';
 					
