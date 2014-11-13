@@ -1044,5 +1044,36 @@ jQuery(document).ready(function($) {
 		$('.inscription-map .number span').removeClass('active');
 		$('#sector' + id).addClass('active');
 		$('#input-sector-id').val(id);
-	})
+	});
+
+	// show-army
+	$('.show-army').on('mouseover', function(e) {
+		var that = $(this);
+		var army = that.data('army');
+		var text = '';
+
+		for (var i = 0; i < army.length; i++) {
+			text += '<span class="label">' + game.shipsName[i] + '</span><span class="value">';
+			text += army[i] == -1
+				? '?'
+				: army[i];
+			text += '</span>';
+		};
+
+		$('body').append('<div class="army-bull"><strong>Composition de l\'armée</strong>' + text + '</div>');
+		var bull = $('.army-bull');
+
+		var sizeTop  = that.offset().top + that.height() + 12;
+		var sizeLeft = that.offset().left;
+
+		bull.css({
+			top:  sizeTop,
+			left: sizeLeft
+		});
+		bull.fadeToggle(50);
+
+		$('.show-army').live('mouseout', function(e) {
+			$('.army-bull').remove();
+		});
+	});
 });

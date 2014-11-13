@@ -3,7 +3,7 @@ include_once ATHENA;
 
 $shipsName;
 for ($i = 0; $i < 12; $i++) {
-	$shipsName[] = ShipResource::getInfo($i, 'codeName');
+	$shipsName[] = "'" . ShipResource::getInfo($i, 'codeName') . "'";
 }
 $shipsName = implode(', ', $shipsName);
 
@@ -23,8 +23,7 @@ $shipsPev = implode(', ', $shipsPev);
 		echo 'jQuery(document).ready(function($) {';
 			echo 'game = {';
 				echo 'path: \'' . APP_ROOT . '\',';
-				# encoder les accents, je sais pas pourquoi
-				# echo 'shipsName: [' . $shipsName . '],';
+				echo 'shipsName: [' . ($shipsName) . '],';
 				echo 'shipsPev: [' . $shipsPev . '],';
 			echo '};';
 		echo '});';

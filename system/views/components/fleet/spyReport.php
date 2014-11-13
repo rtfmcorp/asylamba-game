@@ -42,7 +42,13 @@ echo '<div class="component size3 space">';
 
 				if ($spyreport->success > SpyReport::STEP_FLEET) {
 					foreach ($commanders as $commander) {
-						echo '<span class="commander full position-' . $commander['line'] . '-' . ($commander['line'] == 1 ? $llp[$lLine] : $rlp[$rLine]) . '">';
+						$data  = 'data-army="';
+						$data .= $spyreport->success > SpyReport::STEP_FLEET
+							? json_encode($commander['army'])
+							: json_encode(array(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1));
+						$data .= '"';
+
+						echo '<span class="commander full show-army position-' . $commander['line'] . '-' . ($commander['line'] == 1 ? $llp[$lLine] : $rlp[$rLine]) . '" ' . $data . '>';
 							echo ($spyreport->success > SpyReport::STEP_MOVEMENT && $commander['statement'] != COM_AFFECTED)
 								? '<img src="' . MEDIA . 'map/fleet/army-away.png" alt="plein" />'
 								: '<img src="' . MEDIA . 'map/fleet/army.png" alt="plein" />';
