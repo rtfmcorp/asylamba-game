@@ -212,7 +212,7 @@ echo '<div class="component techno">';
 
 					echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTotalTime . '" data-progress-total-time="' . $totalTimeTechno . '">';
 						echo '<a href="' . APP_ROOT . 'action/a-dequeuetechno/baseid-' . $ob_tech->getId() . '/techno-' . $queue->technology . '"' . 
-							'class="button hb lt" title="annuler la recherche">×</a>';
+							'class="button hb lt" title="annuler la recherche (attention, vous ne récupérerez que ' . TQM_RESOURCERETURN * 100 . '% du montant investi)">×</a>';
 						echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($queue->technology, 'imageLink') . '.png" alt="" />';
 						echo '<strong>' . TechnologyResource::getInfo($queue->technology, 'name');
 						if (!TechnologyResource::isAnUnblockingTechnology($queue->technology)) {

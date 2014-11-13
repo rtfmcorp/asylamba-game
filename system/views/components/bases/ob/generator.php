@@ -35,7 +35,7 @@ if (ASM::$bqm->size() != 0) {
 
 		$q .= '<div class="item ' . (($realSizeQueue > 1) ? 'active' : '') . ' progress" data-progress-output="lite" data-progress-current-time="' . $nextTime . '" data-progress-total-time="' . $nextTotalTime . '">';
 		$q .= '<a href="' . APP_ROOT . 'action/a-dequeuebuilding/baseid-' . $ob_generator->getId() . '/building-' . $qe->buildingNumber . '"' . 
-				'class="button hb lt" title="annuler la construction">×</a>';
+				'class="button hb lt" title="annuler la construction (attention, vous ne récupérerez que ' . BQM_RESOURCERETURN * 100 . '% du montant investi)">×</a>';
 		$q .= '<img class="picto" src="' . MEDIA . 'orbitalbase/' . OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
 		$q .= '<strong>';
 			$q .= OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'frenchName');
