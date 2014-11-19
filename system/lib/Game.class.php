@@ -291,8 +291,11 @@ class Game {
 				return FALSE;
 		}
 
-		$price = $quantity * $minRate;
-		return round($price);
+		$price = round($quantity * $minRate);
+		if ($price < 1) {
+			$price = 1;
+		}
+		return $price;
 	}
 
 	public static function getMaxPriceRelativeToRate($transactionType, $quantity, $identifier = FALSE) {
