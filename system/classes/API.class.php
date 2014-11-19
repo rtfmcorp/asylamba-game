@@ -108,7 +108,7 @@ class API {
 				return $this->data['message'];
 			}
 		} else {
-			return 'problème';
+			return 'problÃ¨me';
 		}
 	}
 
