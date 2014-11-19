@@ -64,16 +64,6 @@ class CommercialShipping {
 			switch ($transaction->type) {
 				case Transaction::TYP_RESOURCE:
 					$orbitalBase->increaseResources($transaction->quantity);
-					# notif pour le vendeur
-					/*$n = new Notification();
-					$n->setRPlayer($this->rPlayer);
-					$n->setTitle('Ressources livrées');
-					$n->addBeg()->addTxt('Les ' . $transaction->quantity . ' ressources ont bien été livrées à ');
-					$n->addLnk('diary/player-' . $orbitalBase->getRPlayer(), 'votre acheteur')->addTxt(' sur sa base ');
-					$n->addLnk('map/base-' . $orbitalBase->getRPlace(), $orbitalBase->getName());
-					$n->addSep()->addTxt('Vos vaisseaux de transport sont sur le chemin du retour.');
-					$n->addEnd();
-					ASM::$ntm->add($n);*/
 
 					# notif pour l'acheteur
 					$n = new Notification();
@@ -86,22 +76,6 @@ class CommercialShipping {
 					break;
 				case Transaction::TYP_SHIP:
 					$orbitalBase->addShipToDock($transaction->identifier, $transaction->quantity);
-
-					# notif pour le vendeur
-					/*$n = new Notification();
-					$n->setRPlayer($this->rPlayer);
-					if ($transaction->quantity == 1) {
-						$n->setTitle('Vaisseau livré');
-						$n->addBeg()->addTxt('Le vaisseau de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' a bien été livré à ');
-					} else {
-						$n->setTitle('Vaisseaux livrés');
-						$n->addBeg()->addTxt('Les ' . $transaction->quantity . ' vaisseaux de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' ont bien été livrés à ');
-					}
-					$n->addLnk('diary/player-' . $orbitalBase->getRPlayer(), 'votre acheteur')->addTxt(' sur sa base ');
-					$n->addLnk('map/base-' . $orbitalBase->getRPlace(), $orbitalBase->getName());
-					$n->addSep()->addTxt('Vos vaisseaux de transport sont sur le chemin du retour.');
-					$n->addEnd();
-					ASM::$ntm->add($n);*/
 
 					# notif pour l'acheteur
 					$n = new Notification();
@@ -128,17 +102,6 @@ class CommercialShipping {
 					$commander->setStatement(COM_INSCHOOL);
 					$commander->setRPlayer($orbitalBase->getRPlayer());
 					$commander->setRBase($this->rBaseDestination);
-
-					# notif pour le vendeur
-					/*$n = new Notification();
-					$n->setRPlayer($this->rPlayer);
-					$n->setTitle('Commandant livré');
-					$n->addBeg()->addTxt('Le commandant ' . $commander->getName() . ' a bien été livré à ');
-					$n->addLnk('diary/player-' . $orbitalBase->getRPlayer(), 'votre acheteur')->addTxt(' sur sa base ');
-					$n->addLnk('map/base-' . $orbitalBase->getRPlace(), $orbitalBase->getName());
-					$n->addSep()->addTxt('Vos vaisseaux de transport sont sur le chemin du retour.');
-					$n->addEnd();
-					ASM::$ntm->add($n);*/
 
 					# notif pour l'acheteur
 					$n = new Notification();
@@ -199,6 +162,9 @@ class CommercialShipping {
 		echo '<div class="transaction ' . $class . '">';
 			if ($this->statement != CommercialShipping::ST_MOVING_BACK) {
 				echo '<div class="product">';
+					if ($this->statement == CommercialShipping::ST_WAITING) {
+						echo '<a href="' . APP_ROOT . 'action/a-canceltransaction/rtransaction-' . $this->rTransaction . '" class="hb lt right-link" title="supprimer cette offre coutera ' . Format::number(floor($this->price * Transaction::PERCENTAGE_TO_CANCEL / 100)) . ' crédits">×</a>';
+					}
 					if ($this->typeOfTransaction == Transaction::TYP_RESOURCE) {
 						echo '<img src="' . MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($this->quantity) . '.png" alt="" class="picto" />';
 						echo '<div class="offer">';
@@ -223,6 +189,7 @@ class CommercialShipping {
 							echo '<em>' . ShipResource::getInfo($this->identifier, 'name') . ' / ' . ShipResource::getInfo($this->identifier, 'pev') . ' pev</em>';
 						echo '</div>';
 					}
+
 					if ($this->resourceTransported == NULL) {
 						# transaction
 						echo '<div class="for">';
