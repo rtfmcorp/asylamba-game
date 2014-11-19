@@ -402,7 +402,7 @@ class OrbitalBase {
 		
 		# alert
 		if (CTR::$data->get('playerId') == $this->rPlayer) {
-			CTR::$alert->add('Construction de votre ' . OrbitalBaseResource::getBuildingInfo($queue->buildingNumber, 'frenchName') . ' niveau ' . $queue->targetLevel . ' sur ' . $this->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.', ALERT_GAM_GENERATOR);
+			CTR::$alert->add('Construction de votre <strong>' . OrbitalBaseResource::getBuildingInfo($queue->buildingNumber, 'frenchName') . ' niveau ' . $queue->targetLevel . '</strong> sur <strong>' . $this->name . '</strong> terminée. Vous gagnez ' . $experience . ' point' . Format::addPlural($experience) . ' d\'expérience.', ALERT_GAM_GENERATOR);
 		}
 		# delete queue in database
 		ASM::$bqm->deleteById($queue->id);
@@ -425,11 +425,11 @@ class OrbitalBase {
 		if (CTR::$data->get('playerId') == $this->rPlayer) {
 			$alt = 'Construction de ';
 			if ($sq->quantity > 1) {
-				$alt .= 'vos ' . $sq->quantity . ' ' . ShipResource::getInfo($sq->shipNumber, 'codeName') . 's';
+				$alt .= 'vos <strong>' . $sq->quantity . ' ' . ShipResource::getInfo($sq->shipNumber, 'codeName') . 's</strong>';
 			} else {
-				$alt .= 'votre ' . ShipResource::getInfo($sq->shipNumber, 'codeName');
+				$alt .= 'votre <strong>' . ShipResource::getInfo($sq->shipNumber, 'codeName') . '</strong>';
 			}
-			$alt .= ' sur ' . $this->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.';
+			$alt .= ' sur <strong>' . $this->name . '</strong> terminée. Vous gagnez ' . $experience . ' point' . Format::addPlural($experience) . ' d\'expérience.';
 			CTR::$alert->add($alt, ALERT_GAM_DOCK1);
 		}
 		# delete queue in database

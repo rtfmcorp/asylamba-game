@@ -178,7 +178,7 @@ class Transaction {
 					echo '</div>';
 					echo '<div class="price-detail">';
 						echo '<p>' . Format::numberFormat($this->price) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
-						echo '<p class="hb lt" title="taxe de vente de ' . ColorResource::getInfo($exportFaction, 'popularName') . ' sur les produits ' . ColorResource::getInfo($importFaction, 'demonym') . '"><span>+ taxe (' .  $exportTax . '%) </span>' . Format::numberFormat($exportPrice) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
+						echo '<p class="hb lt" title="taxe de vente de ' . ColorResource::getInfo($exportFaction, 'popularName') . ' sur les produits vendus à ' . ColorResource::getInfo($importFaction, 'popularName') . '"><span>+ taxe (' .  $exportTax . '%) </span>' . Format::numberFormat($exportPrice) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
 						echo '<p class="hb lt" title="taxe d\'achat de ' . ColorResource::getInfo($importFaction, 'popularName') . ' sur les produits ' . ColorResource::getInfo($exportFaction, 'demonym') . '"><span>+ taxe (' .  $importTax . '%) </span>' . Format::numberFormat($importPrice) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
 						echo '<hr />';
 						echo '<p><span>=</span> ' . Format::numberFormat($totalPrice) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
