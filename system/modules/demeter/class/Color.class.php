@@ -438,7 +438,7 @@ class Color {
 		// 604800s = 7j
 		include_once GAIA;
 
-		$token_ctc = CTC::createContext();
+		$token_ctc = CTC::createContext('Color');
 
 		if ($this->getRegime() == self::DEMOCRATIC) {
 			if ($this->electionStatement == self::MANDATE) {
