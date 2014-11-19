@@ -268,6 +268,11 @@ class Color {
 			$this->electionStatement = self::CAMPAIGN;
 		} else {
 			$this->updateStatus($token_pam);
+
+			$date = new DateTime($this->dLastElection);
+			$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') . ' second');
+			$date = $date->format('Y-m-d H:i:s');
+			$this->dLastElection = $date;
 		}
 	}
 
