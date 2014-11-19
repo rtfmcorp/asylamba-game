@@ -107,21 +107,25 @@ class Transaction {
 
 		$exportTax = 0;
 		$importTax = 0;
+		$exportFaction = NULL;
+		$importFaction = NULL;
 
 		for ($i = 0; $i < ASM::$ctm->size(); $i++) { 
 			$comTax = ASM::$ctm->get($i);
 
 			if ($comTax->faction == $this->sectorColor AND $comTax->relatedFaction == $ob->sectorColor) {
 				$exportTax = $comTax->exportTax;
+				$exportFaction = $comTax->faction;
 			}
 			if ($comTax->faction == $ob->sectorColor AND $comTax->relatedFaction == $this->sectorColor) {
 				$importTax = $comTax->importTax;
+				$importFaction = $comTax->faction;
 			}
 		}
 
-		$exportTax = round($this->price * $exportTax / 100);
-		$importTax = round($this->price * $importTax / 100);
-		$totalPrice = $this->price + $exportTax + $importTax;
+		$exportPrice = round($this->price * $exportTax / 100);
+		$importPrice = round($this->price * $importTax / 100);
+		$totalPrice = $this->price + $exportPrice + $importPrice;
 
 		ASM::$ctm->changeSession($S_CTM_T);
 
@@ -174,8 +178,8 @@ class Transaction {
 					echo '</div>';
 					echo '<div class="price-detail">';
 						echo '<p>' . Format::numberFormat($this->price) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
-						echo '<p><span>+ taxe </span>' . Format::numberFormat($exportTax) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
-						echo '<p><span>+ taxe </span>' . Format::numberFormat($exportTax) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
+						echo '<p class="hb lt" title="taxe de vente de ' . ColorResource::getInfo($exportFaction, 'popularName') . ' sur les produits ' . ColorResource::getInfo($importFaction, 'demonym') . '"><span>+ taxe (' .  $exportTax . '%) </span>' . Format::numberFormat($exportPrice) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
+						echo '<p class="hb lt" title="taxe d\'achat de ' . ColorResource::getInfo($importFaction, 'popularName') . ' sur les produits ' . ColorResource::getInfo($exportFaction, 'demonym') . '"><span>+ taxe (' .  $importTax . '%) </span>' . Format::numberFormat($importPrice) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
 						echo '<hr />';
 						echo '<p><span>=</span> ' . Format::numberFormat($totalPrice) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></p>';
 					echo '</div>';
