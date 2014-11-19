@@ -32,7 +32,7 @@ echo '<div class="column act">';
 							echo 'Aucun commandant selectionné.<br/>Sélectionnez-en un sur la barre latérale gauche.<br/><br />Si aucun commandant n\'est visible, vous pouvez en affecter un depuis l\'école de commandement.';
 						echo '</div>';
 						echo '<div class="item too-far">';
-							echo 'Ce commandant est trop éloigné pour coloniser cette planète';
+							echo 'Ce commandant est trop éloigné pour piller cette planète';
 						echo '</div>';
 						echo '<div class="item move">';
 							echo '<strong class="name"></strong><br />';

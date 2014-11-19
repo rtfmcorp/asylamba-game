@@ -39,13 +39,18 @@ if ($rTransaction !== FALSE) {
 
 				switch ($transaction->type) {
 					case Transaction::TYP_RESOURCE :
-						$maxStorage = OrbitalBaseResource::getBuildingInfo(1, 'level', $base->getLevelRefinery(), 'storageSpace');
+						$maxStorage = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $base->getLevelStorage(), 'storageSpace');
+						$storageBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::REFINERY_STORAGE);
+						if ($storageBonus > 0) {
+							$maxStorage += ($maxStorage * $storageBonus / 100);
+						}
 						$storageSpace = $maxStorage - $base->getResourcesStorage();
+
 						if ($storageSpace >= $transaction->quantity) {
 							$base->increaseResources($transaction->quantity);
 						} else {
 							$valid = FALSE;
-							CTR::$alert->add('Vous n\'avez pas assez de place dans votre raffinerie pour stocker les ressources. Videz un peu le hangar et revenez plus tard pour annuler cette offre.', ALERT_STD_INFO);
+							CTR::$alert->add('Vous n\'avez pas assez de place dans votre Stockage pour stocker les ressources. Videz un peu le hangar et revenez plus tard pour annuler cette offre.', ALERT_STD_INFO);
 						}
 						break;
 					case Transaction::TYP_SHIP :
@@ -55,7 +60,7 @@ if ($rTransaction !== FALSE) {
 						include_once ARES;
 						$S_COM1 = ASM::$com->getCurrentSession();
 						ASM::$com->newSession(ASM_UMODE);
-						ASM::$com->load(array('id' => $transaction->identifier));
+						ASM::$com->load(array('c.id' => $transaction->identifier));
 						$commander = ASM::$com->get();
 						$commander->setStatement(COM_INSCHOOL);
 						ASM::$com->changeSession($S_COM1);

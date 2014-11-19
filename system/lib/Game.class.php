@@ -231,7 +231,7 @@ class Game {
 					$resourceQuantity = ShipResource::getInfo($identifier, 'resourcePrice') * $quantity;
 					$thisRate = $price / $resourceQuantity;
 					# dilution of 1%
-					return (($quantity * $thisRate) + (50000 * (99 * $currentRate)) / 100) / (50000 + $quantity);
+					return (($resourceQuantity * $thisRate) + (50000 * (99 * $currentRate)) / 100) / (50000 + $resourceQuantity);
 				} else {
 					return FALSE;
 				}
@@ -291,8 +291,11 @@ class Game {
 				return FALSE;
 		}
 
-		$price = $quantity * $minRate;
-		return round($price);
+		$price = round($quantity * $minRate);
+		if ($price < 1) {
+			$price = 1;
+		}
+		return $price;
 	}
 
 	public static function getMaxPriceRelativeToRate($transactionType, $quantity, $identifier = FALSE) {

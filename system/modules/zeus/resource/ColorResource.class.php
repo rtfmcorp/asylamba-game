@@ -66,7 +66,7 @@ class ColorResource {
 				array('path' => 'faction/bonus/bonus1-3.png', 'title' => '- 5% prix', 'desc' => 'Les croiseurs et croiseurs-lourds sont moins chers')),
 			'mandateDuration' => 604800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Akhénien gagne du prestige en construisant des bâtiments et des vaisseaux du Chantier de Ligne, mais également en conquérant les bases orbitales d\'autres joueurs. Il en perd par contre lorsqu\'il détruit un de ses bâtiments ou qu\'il perd une planète.',
-			'campaignDesc' => 'explicatif d\'une campagne'),
+			'campaignDesc' => 'A tout moment, un membre du sénat ou du gouvernement peut tenter un coup d\'état. Il aura alors 7 relèves pour attirer des partisans. Il aura réuissi son putsch s\'il arrive à recruter suffisemment de partisans.'),
 		array(
 			'id' 			=> 2,
 			'officialName' 	=> 'Province de Kovahk',
@@ -85,9 +85,7 @@ class ColorResource {
 				array('path' => 'faction/bonus/bonus2-3.png', 'title' => '- 5% de défense', 'desc' => 'Vos vaisseaux du Chantier de Ligne perdent en défense')),
 			'mandateDuration' => 604800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Kovahkarh gagne du prestige en construisant des vaisseaux, en gagnant des combats et en créant des bases militaires. Il en perd lorsqu\'il se fait tuer au combat ou qu\'il perd une de ces bases militaires.',
-			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
-				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de Kovahk peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Baron de Kovahk. 
-				<br /><br />Le Baron va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la gestion de la Province de Kovahk. Il va devoir déterminer le Financier, le Chef de Guerre et le Ministre de la faction. '),
+			'campaignDesc' => 'A tout moment, un membre du sénat ou du gouvernement peut tenter un coup d\'état. Il aura alors 7 relèves pour attirer des partisans. Il aura réuissi son putsch s\'il arrive à recruter suffisemment de partisans.'),
 		array(
 			'id' 			=> 3,
 			'officialName' 	=> 'Province de Négore',
@@ -99,16 +97,14 @@ class ColorResource {
 			'devise' 		=> 'Toutes les richesses,<br />Passent par Négore',
 			'desc1' => 'La maison Négienne, la plus riches de la Galaxie de l’Œil, est composée essentiellement de grands marchands et de financiers expérimentés. Considérée comme la banque de la galaxie depuis très longtemps, son économie est basée sur les échanges et le commerce.',
 			'desc2' => 'Parfois peu regardant sur la provenance des marchandises, les Négiens sont d’adroits négociateurs n’hésitant pas à profiter des opportunités qu’offrent la contre-bande, le trafic d’armes ainsi que la vente d’esclaves au détriment des accords et traités commerciaux.',
-			'desc3' => 'Dotée de moyens militaires fastueux, la flotte Négienne est rutilante et persuasive, disposant d’une prodigieuse armada de vaisseaux destinés à assurer sa prospérité et son avenir économique dans la Galaxie.',
+			'desc3' => 'Dotée de moyens militaires fastueux, la flotte Négienne est rutilante et dissuasive, disposant d’une prodigieuse armada de vaisseaux destinés à assurer sa prospérité et son avenir économique dans la Galaxie.',
 			'desc4' => 'Vivant dans le luxe et l’opulence, les Vizirs de Négore sont à la tête de fortunes faramineuses permettant les caprices les plus fous; Orgies, casinos, courses et paris sont le quotidien de cette province aux moeurs débridés.',
 			'bonus' => array(
 				array('path' => 'faction/bonus/bonus3-2.png', 'title' => '+ 5% production', 'desc' => 'Vos routes commerciales produisent plus de crédits'),
 				array('path' => 'faction/bonus/bonus3-3.png', 'title' => '- 3% prix', 'desc' => 'Vos routes commerciales coûtent moins de crédits')),
 			'mandateDuration' => 604800,
-			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Négien gagne du prestige en créant des routes commerciales, en construisant la Plateforme Commerciale et le Spatioport et en faisant des ventes aux joueurs des autres faction sur le marché. Par contre il en perd lorsqu\'une de ses routes commerciales est détruite.',
-			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
-				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de Négore peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Viziduc de Négore. 
-				<br /><br />Le Viziduc va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la gestion de la Province de Négore. Il va devoir déterminer le Financier, le Chef de Guerre et le Ministre de la faction. '),
+			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Kovahkarh gagne du prestige en construisant des vaisseaux, en gagnant des combats et en créant des bases militaires. Il en perd lorsqu\'il se fait tuer au combat ou qu\'il perd une de ces bases militaires.',
+			'campaignDesc' => 'A tout moment, un membre du sénat ou du gouvernement peut tenter un coup d\'état. Il aura alors 7 relèves pour attirer des partisans. Il aura réuissi son putsch s\'il arrive à recruter suffisemment de partisans.'),
 		array(
 			'id' 			=> 4,
 			'officialName' 	=> 'Marche de Cardan',
@@ -128,7 +124,9 @@ class ColorResource {
 				array('path' => 'faction/bonus/bonus4-4.png', 'title' => '- 5% de ressources', 'desc' => 'Une partie des ressources pillées sont offertes aux Dieux')),
 			'mandateDuration' => 1209600,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un membre de Cardan gagne du prestige en colonisant/conquérant une planète se situant en-dehors des territoires de Cardan, en construisant le Chantier Alpha et en faisant un don à sa faction. Il en perd par contre lorsqu\'il perd une planète.',
-			'campaignDesc' => 'explicatif d\'une campagne'),
+			'campaignDesc' => 'Les membres du Sénat peuvent se proposer devant les Oracles pour prendre une place politiquement importante dans la faction. 
+				<br /><br />Une fois que toutes les candidatures ont été déposées, la Grande Lumière, via les Oracles décide de la personne la plus apte à la représenter dans le monde physique. Cet personne reçoit le titre de Guide Suprême. 
+				<br /><br />Le Guide Suprême va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Camerlingue, l\'Inquisiteur et l\'Archiprêtre de la faction. '),
 		array(
 			'id' 			=> 5,
 			'officialName' 	=> 'Province de Nerve',
@@ -147,7 +145,10 @@ class ColorResource {
 				array('path' => 'faction/bonus/bonus5-3.png', 'title' => '+ 4% stockage', 'desc' => 'Votre Raffinerie stocke plus de ressources')),
 			'mandateDuration' => 950400,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Nervéen gagne du prestige en créant des Centres Industriels, en construisant la Raffinerie et le Stockage et en prenant des planètes (proportionnel au coefficient ressource de la planète). Il en perd en détruisant un Centre Industriel et en perdant le contrôle d\'une planète.',
-			'campaignDesc' => 'explicatif d\'une campagne'),
+			'campaignDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Négien gagne du prestige en créant des routes commerciales, en construisant la Plateforme Commerciale et le Spatioport et en faisant des ventes aux joueurs des autres faction sur le marché. Par contre il en perd lorsqu\'une de ses routes commerciales est détruite.',
+			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
+				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de la Nerve peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Président. 
+				<br /><br />Le Président va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Ministre de la défense, le Ministre des finances et le Premier Ministre de la faction. '),
 		array(
 			'id' 			=> 6,
 			'officialName' 	=> 'Province d’Aphéra',
@@ -166,7 +167,9 @@ class ColorResource {
 				array('path' => 'faction/bonus/bonus6-3.png', 'title' => '- 4% temps', 'desc' => 'Vos technologies se développent plus rapidement')),
 			'mandateDuration' => 518400,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Aphéréen gagne du prestige en menant à terme une Recherche, en développant une Technologie et en construisant la Technosphère.',
-			'campaignDesc' => 'explicatif d\'une campagne'),
+			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
+				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre d\'Aphéra peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Autarque. 
+				<br /><br />L\'Autarque va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer l\'Algorithmicien, le Tacticien et l\'Archiviste de la faction. '),
 		array(
 			'id' 			=> 7,
 			'officialName'	=> 'Marche de Synelle',
@@ -186,7 +189,9 @@ class ColorResource {
 				array('path' => 'faction/bonus/bonus7-3.png', 'title' => '+ 2% efficacité', 'desc' => 'Votre Université est plus efficace')),
 			'mandateDuration' => 1382400,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un membre de Synelle gagne du prestige en étant victorieux lors de la défense d\'une de ses planètes et en construisant le Centre de Recyclage et le Générateur.',
-			'campaignDesc' => 'explicatif d\'une campagne')
+			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
+				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de Synelle peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Chancelier. 
+				<br /><br />Le Chancelier va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Consul de la défense, le Consul des finances et le Premier Consul de la faction. ')
 	);
 }
 ?>

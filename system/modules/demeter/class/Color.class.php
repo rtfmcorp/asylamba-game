@@ -268,6 +268,11 @@ class Color {
 			$this->electionStatement = self::CAMPAIGN;
 		} else {
 			$this->updateStatus($token_pam);
+
+			$date = new DateTime($this->dLastElection);
+			$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') . ' second');
+			$date = $date->format('Y-m-d H:i:s');
+			$this->dLastElection = $date;
 		}
 	}
 
@@ -433,7 +438,7 @@ class Color {
 		// 604800s = 7j
 		include_once GAIA;
 
-		$token_ctc = CTC::createContext();
+		$token_ctc = CTC::createContext('Color');
 
 		if ($this->getRegime() == self::DEMOCRATIC) {
 			if ($this->electionStatement == self::MANDATE) {
