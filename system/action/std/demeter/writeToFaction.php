@@ -15,7 +15,7 @@ $sender 			= -1;
 
 # protection des inputs
 $p = new Parser();
-$message = $p->protect($message);
+$message = $p->parse($message);
 
 if ($message !== FALSE) {
 	$S_PAM1 = ASM::$pam->getCurrentSession();
