@@ -946,10 +946,13 @@ jQuery(document).ready(function($) {
 		var box  = $(this).parents('.sell-form'),
 			maxQ = box.data('max-quantity'),
 			minP = box.data('min-price'),
+			scs  = box.data('shipcom-size'),
+			resourceRate = box.data('resource-rate'),
 			rate = box.data('rate');
 		var quantity = $(this).val(),
 			rMinP = Math.ceil(quantity * minP),
-			price = Math.ceil(quantity * rate);
+			price = Math.ceil(quantity * rate),
+			comShip = Math.ceil(quantity * resourceRate / scs);
 
 		if (quantity > maxQ || price < rMinP) {
 			box.find('input[type="submit"]').attr('disabled', 'disabled');
@@ -957,6 +960,7 @@ jQuery(document).ready(function($) {
 			box.find('input[type="submit"]').removeAttr('disabled');
 		}
 
+		box.find('.sf-comship .value').html(utils.numberFormat(Math.ceil(comShip)));
 		box.find('.sf-min-price .value').html(utils.numberFormat(Math.ceil(rMinP)));
 		box.find('.sf-price input').val(price);	
 	});

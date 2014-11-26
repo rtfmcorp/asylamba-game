@@ -2,64 +2,6 @@
 include_once ATHENA;
 
 $S_TRM1 = ASM::$trm->getCurrentSession();
-$S_CSM1 = ASM::$csm->getCurrentSession();
-$S_CTM1 = ASM::$ctm->getCurrentSession();
-
-ASM::$csm->changeSession($ob_compPlat->shippingManager);
-$usedShips = 0;
-for ($i = 0; $i < ASM::$csm->size(); $i++) { 
-	if (ASM::$csm->get($i)->rBase == $ob_compPlat->getId()) {
-		$usedShips += ASM::$csm->get($i)->shipQuantity;
-	}
-}
-
-ASM::$ctm->newSession();
-ASM::$ctm->load(array());
-
-echo '<div class="component transaction">';
-	echo '<div class="head skin-2">';
-		echo '<h2>Aperçu des ventes</h2>';
-	echo '</div>';
-	echo '<div class="fix-body">';
-		echo '<div class="body">';
-			$maxShip = OrbitalBaseResource::getBuildingInfo(6, 'level', $ob_compPlat->getLevelCommercialPlateforme(),  'nbCommercialShip');
-
-			echo '<div class="number-box">';
-				echo '<span class="label">vaisseaux de commerce disponibles</span>';
-				echo '<span class="value">';
-					echo Format::numberFormat($maxShip - $usedShips);
-					echo ' <img class="icon-color" alt="vaisseaux" src="' . MEDIA . 'resources/transport.png"> / ';
-					echo Format::numberFormat($maxShip);
-					echo ' <img class="icon-color" alt="vaisseaux" src="' . MEDIA . 'resources/transport.png">';
-				echo '</span>';
-
-				echo '<span class="progress-bar">';
-				echo '<span style="width:' . Format::percent($maxShip - $usedShips, $maxShip) . '%;" class="content"></span>';
-			echo '</div>';
-
-			echo '<h4>Convoi en route</h4>';
-			for ($i = 0; $i < ASM::$csm->size(); $i++) { 
-				if (ASM::$csm->get($i)->statement == CommercialShipping::ST_GOING && ASM::$csm->get($i)->rBase == $ob_compPlat->getId()) {
-					ASM::$csm->get($i)->render();
-				}
-			}
-			echo '<hr />';
-			echo '<h4>Retour de convoi</h4>';
-			for ($i = 0; $i < ASM::$csm->size(); $i++) { 
-				if (ASM::$csm->get($i)->statement == CommercialShipping::ST_MOVING_BACK && ASM::$csm->get($i)->rBase == $ob_compPlat->getId()) {
-					ASM::$csm->get($i)->render();
-				}
-			}
-			echo '<hr />';
-			echo '<h4>Convoi à quai</h4>';
-			for ($i = 0; $i < ASM::$csm->size(); $i++) { 
-				if (ASM::$csm->get($i)->statement == CommercialShipping::ST_WAITING && ASM::$csm->get($i)->rBase == $ob_compPlat->getId()) {
-					ASM::$csm->get($i)->render();
-				}
-			}
-		echo '</div>';
-	echo '</div>';
-echo '</div>';
 
 # resources current rate
 ASM::$trm->newSession();
@@ -74,7 +16,7 @@ echo '<div class="component market-sell">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<form class="sell-form" data-max-quantity="' . $ob_compPlat->resourcesStorage . '" data-rate="' . $resourcesCurrentRate . '" data-min-price="' . Game::getMinPriceRelativeToRate(Transaction::TYP_RESOURCE, 1) . '" action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_RESOURCE . '" method="post">';
+			echo '<form class="sell-form" data-shipcom-size="' . CommercialShipping::WEDGE . '" data-resource-rate="1" data-max-quantity="' . $ob_compPlat->resourcesStorage . '" data-rate="' . $resourcesCurrentRate . '" data-min-price="' . Transaction::MIN_RATE_RESOURCE . '" action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_RESOURCE . '" method="post">';
 				echo '<div class="label-box">';
 					echo '<span class="label">Ressources</span>';
 					echo '<span class="value">' . Format::numberFormat($ob_compPlat->resourcesStorage) . '</span>';
@@ -99,6 +41,14 @@ echo '<div class="component market-sell">';
 					echo '<label for="sell-market-price-resources" class="label">Prix</label>';
 					echo '<input id="sell-market-price-resources" class="value" type="text" name="price" autocomplete="off"/>';
 					echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
+				echo '</div>';
+
+				echo '<hr />';
+
+				echo '<div class="label-box sf-comship">';
+					echo '<span class="label">Vaisseaux</span>';
+					echo '<span class="value"></span>';
+					echo '<img class="icon-color" alt="vaisseaux transports" src="' . MEDIA . 'resources/transport.png">';
 				echo '</div>';
 
 				echo '<hr />';
@@ -151,6 +101,12 @@ echo '<div class="component market-sell">';
 						echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
 					echo '</div>';
 
+					echo '<div class="label-box">';
+						echo '<span class="label">Vaisseaux</span>';
+						echo '<span class="value">1</span>';
+						echo '<img class="icon-color" alt="vaisseaux transports" src="' . MEDIA . 'resources/transport.png">';
+					echo '</div>';
+
 					echo '<hr />';
 
 					echo '<input type="hidden" value="' . $commander->experience . '" name="quantity" />';
@@ -192,7 +148,7 @@ echo '<div class="component market-sell">';
 						echo '</div>';
 					echo '</div>';
 
-					echo '<form id="sell-ships-' . $key . '" class="sell-form" data-max-quantity="' . $ship . '" data-rate="' . ($shipCurrentRate * ShipResource::getInfo($key, 'resourcePrice')) . '" data-min-price="' . Game::getMinPriceRelativeToRate(Transaction::TYP_SHIP, 1, $key) . '" action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_SHIP . '/identifier-' . $key . '" method="post" style="display:none;">';
+					echo '<form id="sell-ships-' . $key . '" class="sell-form" data-shipcom-size="' . CommercialShipping::WEDGE . '" data-resource-rate="' . ShipResource::getInfo($key, 'resourcePrice') . '" data-max-quantity="' . $ship . '" data-rate="' . ($shipCurrentRate * ShipResource::getInfo($key, 'resourcePrice')) . '" data-min-price="' . Game::getMinPriceRelativeToRate(Transaction::TYP_SHIP, 1, $key) . '" action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_SHIP . '/identifier-' . $key . '" method="post" style="display:none;">';
 						echo '<div class="label-box">';
 							echo '<span class="label">Quantité max.</span>';
 							echo '<span class="value">' . $ship . '</span>';
@@ -219,6 +175,14 @@ echo '<div class="component market-sell">';
 
 						echo '<hr />';
 
+						echo '<div class="label-box sf-comship">';
+							echo '<span class="label">Vaisseaux</span>';
+							echo '<span class="value"></span>';
+							echo '<img class="icon-color" alt="vaisseaux transports" src="' . MEDIA . 'resources/transport.png">';
+						echo '</div>';
+
+						echo '<hr />';
+
 						echo '<p><input type="submit" value="Vendre" /></p>';
 					echo '</form>';
 				}
@@ -227,7 +191,5 @@ echo '<div class="component market-sell">';
 	echo '</div>';
 echo '</div>';
 
-ASM::$csm->changeSession($S_CSM1);
-ASM::$ctm->changeSession($S_CTM1);
 ASM::$trm->changeSession($S_TRM1);
 ?>
