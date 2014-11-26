@@ -148,6 +148,7 @@ class PlayerBonus {
 	private function addLawBonus() {
 		include_once DEMETER;
 		$_LAM = ASM::$lam->getCurrentSession();
+		ASM::$lam->newSession();
 		ASM::$lam->load(array('rColor' => $this->playerColor, 'statement' => Law::EFFECTIVE));
 		if (ASM::$lam->size() > 0) {
 			for ($i = 0; $i < ASM::$lam->size(); $i++) {
