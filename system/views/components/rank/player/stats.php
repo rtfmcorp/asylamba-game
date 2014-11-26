@@ -20,7 +20,7 @@ echo '<div class="component player rank">';
 				echo '<span class="value">' . Format::number(PlayerManager::count(array('statement' => array(PAM_ACTIVE, PAM_INACTIVE)))) . '</span>';
 			echo '</div>';
 
-			echo '<p>Le classement est mis à jour tout les jours à 3h (UTC+1) du matin.</p>';
+			echo '<p>Le classement est mis à jour tous les jours à 3h (UTC+1) du matin.</p>';
 
 			echo '<hr>';
 
