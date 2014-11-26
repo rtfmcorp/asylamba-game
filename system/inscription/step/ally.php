@@ -26,12 +26,11 @@ echo '<div id="content">';
 
 	$_CLM = ASM::$clm->getCurrentSession();
 	ASM::$clm->newSession(FALSE);
-	ASM::$clm->load(array());
+	ASM::$clm->load(array(), array('activePlayers', 'ASC'));
 
-	$allies = array(1, 2, 3, 4, 5, 6, 7);
-	shuffle($allies);
+	for ($i = 0; $i < ASM::$clm->size(); $i++) {
+		$ally = ASM::$clm->get($i)->id;
 
-	foreach ($allies as $ally) {
 		echo '<div class="component inscription color' . $ally . '">';
 			echo '<div class="head skin-1">';
 				echo '<img class="color' . $ally . '" src="' . MEDIA . 'ally/big/color' . $ally . '.png" alt="" />';
@@ -56,10 +55,14 @@ echo '<div id="content">';
 			echo '<div class="head"></div>';
 			echo '<div class="fix-body">';
 				echo '<div class="body">';
-					if (!ASM::$clm->getById($ally)->isClosed) {
+					if (!ASM::$clm->get($i)->isClosed) {
 						echo '<a href="' . APP_ROOT . 'inscription/step-2/ally-' . $ally . '" class="chooseLink">';
 							echo '<strong>choisir cette faction</strong>';
-							echo '<em>et passer à l\'étape suivante</em>';
+							if ($i == 0) {
+								echo '<em>recommandée pour les joueurs débutants</em>';
+							} else {
+								echo '<em>et passer à l\'étape suivante</em>';
+							}
 						echo '</a>';
 					} else {
 						echo '<span class="chooseLink">';
