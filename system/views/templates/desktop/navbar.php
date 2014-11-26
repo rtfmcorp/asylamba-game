@@ -137,7 +137,7 @@ echo '<div id="nav">';
 	echo '<div class="overbox" id="new-notifications">';
 		echo '<h2>Notifications</h2>';
 		if (ASM::$ntm->size() > 1) {
-			echo '<a class="link-title" href="' . APP_ROOT . 'action/a-deleteallnotif">tout supprimer</a>';
+			echo '<a class="link-title" href="' . APP_ROOT . 'action/a-readallnotif">tout marquer comme lu</a>';
 		}
 		echo '<div class="overflow">';
 			if (ASM::$ntm->size() > 0) {
