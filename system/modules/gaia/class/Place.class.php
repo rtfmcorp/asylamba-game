@@ -762,7 +762,7 @@ class Place {
 			$bonus = CTR::$data->get('playerBonus')->get(PlayerBonus::SHIP_CONTAINER);
 		}
 
-		$storage = $commander->getPev() * Commander::COEFFLOOT;
+		$storage = $commander->getPevAtEnd() * Commander::COEFFLOOT;
 		$storage += round($storage * ((2 * $bonus) / 100));
 		$resourcesLooted = 0;
 
@@ -788,7 +788,7 @@ class Place {
 
 		$resourcesToLoot = $placeBase->getResourcesStorage() - Commander::LIMITTOLOOT;
 
-		$storage = $commander->getPev() * Commander::COEFFLOOT;
+		$storage = $commander->getPevAtEnd() * Commander::COEFFLOOT;
 		$storage += round($storage * ((2 * $bonus) / 100));
 		$resourcesLooted = 0;
 
