@@ -11,10 +11,23 @@ if ($rForum && $id) {
 
 	if (ASM::$tom->size() > 0) {
 		if (CTR::$data->get('playerInfo')->get('status') > 2) {
-			ASM::$tom->get()->rForum = $rForum;
-			ASM::$tom->get()->dLastModification = Utils::now();
+			$isOk = FALSE;
 
-			CTR::redirect('faction/view-forum/forum-' . $rForum . '/topic-' . ASM::$tom->get()->id);
+			for ($i = 1; $i < ForumResources::size() + 1; $i++) { 
+				if (ForumResources::getInfo($i, 'id') == $rForum) {
+					$isOk = TRUE;
+					break;
+				}
+			}
+
+			if ($isOk) {
+				ASM::$tom->get()->rForum = $rForum;
+				ASM::$tom->get()->dLastModification = Utils::now();
+
+				CTR::redirect('faction/view-forum/forum-' . $rForum . '/topic-' . ASM::$tom->get()->id);
+			} else {
+				CTR::$alert->add('Le forum de destination n\'existe pas', ALERT_STD_FILLFORM);
+			}
 		} else {
 			CTR::$alert->add('Vous n\'avez pas les droits pour cette opération', ALERT_STD_FILLFORM);
 		}

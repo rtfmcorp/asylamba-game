@@ -14,6 +14,8 @@ class ShipResource {
 	const CERBERE = 10;
 	const PHENIX = 11;
 
+	const SHIP_QUANTITY = 12;
+
 	private static $ships = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14);
 
 	/**

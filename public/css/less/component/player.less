@@ -7,6 +7,16 @@
 	border: solid 1px #0A0A0A;
 	border-top: solid 1px #202020;
 	background: black;
+
+	a {
+		color: #ccc;
+		text-decoration: none;
+		border-bottom: solid 1px #202020;
+
+		&:hover, &:focus {
+			border-color: #4f4f4f;
+		}
+	}
 }
 
 .component.player.rank .player {
@@ -41,10 +51,20 @@
 	color: #202020;
 }
 
-.component.player.rank .player .variation {
+.component.player.rank .player .variance {
 	display: block;
 	position: absolute;
-	bottom: 2px; right: 8px;
+	top: 5px; right: -4px;
+	line-height: 26px; width: 26px;
+	border: solid 1px #202020;
+	background: #0A0A0A;
+	text-align: center;
+	font-size: 11px;
+	border-radius: 100%;
+
+	&.lower {
+		bottom: 5px; top: auto;
+	}
 }
 
 .component.player .player img {

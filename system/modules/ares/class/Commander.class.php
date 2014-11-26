@@ -163,6 +163,16 @@ class Commander {
 		}
 		return $pev;
 	}
+
+	public function getPevAtEnd() {
+		$pev = 0;
+		foreach ($this->armyAtEnd as $squadron) {
+			for ($i = 0; $i < 12; $i++) {
+				$pev += $squadron[$i] * ShipResource::getInfo($i, 'pev');
+			}
+		}
+		return $pev;
+	}
 	
 	public function getSquadron($i)	{
 		$this->setArmy();
@@ -456,6 +466,7 @@ class Commander {
 
 	public function getEventInfo() {
 		$info = new ArrayList();
+		$info->add('id', $this->id);
 		$info->add('name', $this->name);
 		$info->add('avatar', $this->avatar);
 		$info->add('level', $this->level);

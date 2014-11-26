@@ -41,6 +41,8 @@ echo '<div class="component building">';
 	echo '</div>';
 echo '</div>';
 
+include COMPONENT . 'bases/ob/complat/transaction.php';
+
 if (!CTR::$get->exist('mode') || CTR::$get->get('mode') == 'market') {
 	include COMPONENT . 'bases/ob/complat/market.php';
 } elseif (CTR::$get->get('mode') == 'sell') {
