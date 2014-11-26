@@ -500,7 +500,6 @@ class OrbitalBaseManager extends Manager {
 		} else {
 			CTR::$alert->add('Cette base orbitale n\'exite pas !', ALERT_BUG_INFO);
 			CTR::$alert->add('dans changeOwnerById de OrbitalBaseManager', ALERT_BUG_ERROR);
-
 		}
 	}
 }

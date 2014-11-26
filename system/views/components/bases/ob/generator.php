@@ -143,7 +143,7 @@ echo '<div class="component">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="number-box ' . ((CTR::$data->get('playerBonus')->get(PlayerBonus::GENERATOR_SPEED) == 0) ? 'grey' : '') . '">';
-				echo '<span class="label">bonus de vitesse de production</span>';
+				echo '<span class="label">bonus de vitesse de construction</span>';
 				echo '<span class="value">';
 					echo Format::numberFormat(CTR::$data->get('playerBonus')->get(PlayerBonus::GENERATOR_SPEED)) . ' %';
 				echo '</span>';

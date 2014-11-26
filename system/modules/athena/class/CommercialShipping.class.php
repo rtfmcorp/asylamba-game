@@ -89,7 +89,7 @@ class CommercialShipping {
 					} else {
 						$n->setTitle('Vaisseaux reçus');
 						$n->addBeg()->addTxt('Vous avez reçu les ' . $transaction->quantity . ' vaisseaux de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' que vous avez achetés au marché.');
-						$n->addSep()->addTxt('Ils ont été ajoutés à votre hanger.');
+						$n->addSep()->addTxt('Ils ont été ajoutés à votre hangar.');
 					}
 					$n->addEnd();
 					ASM::$ntm->add($n);
@@ -165,7 +165,7 @@ class CommercialShipping {
 			if ($this->statement != CommercialShipping::ST_MOVING_BACK) {
 				echo '<div class="product">';
 					if ($this->statement == CommercialShipping::ST_WAITING) {
-						echo '<a href="' . APP_ROOT . 'action/a-canceltransaction/rtransaction-' . $this->rTransaction . '" class="hb lt right-link" title="supprimer cette offre coutera ' . Format::number(floor($this->price * Transaction::PERCENTAGE_TO_CANCEL / 100)) . ' crédits">×</a>';
+						echo '<a href="' . APP_ROOT . 'action/a-canceltransaction/rtransaction-' . $this->rTransaction . '" class="hb lt right-link" title="supprimer cette offre coûtera ' . Format::number(floor($this->price * Transaction::PERCENTAGE_TO_CANCEL / 100)) . ' crédits">×</a>';
 					}
 					if ($this->typeOfTransaction == Transaction::TYP_RESOURCE) {
 						echo '<img src="' . MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($this->quantity) . '.png" alt="" class="picto" />';

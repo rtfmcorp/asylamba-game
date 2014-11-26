@@ -144,7 +144,7 @@ echo '<div class="column act">';
 				} elseif ($place->getId() == $defaultBase->getId()) {
 					echo 'Vous ne pouvez pas proposer une route commerciale sur votre propre base';
 				} elseif ($defaultBase->levelSpatioport == 0) {
-					echo 'Il vous faut un spatioport pour proposer une route commericale';
+					echo 'Il vous faut un spatioport pour proposer une route commerciale';
 				} elseif ($place->levelSpatioport == 0) {
 					echo 'Le joueur ne dispose pas d\'un spatioport';
 				} else {

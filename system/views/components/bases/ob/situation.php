@@ -70,7 +70,7 @@ echo '<div class="component generator">';
 						echo '<p><strong class="short">Flottes</strong>' . $fleetQuantity . '</p>';
 						echo '<p><strong class="short">Impôt</strong>' . (PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'tax') * 100) . '%</p>';
 						echo '<p><strong>Technologies</strong>Orienté commerce et production</p>';
-						echo '<p><strong>Bâtiments</strong>Raffinerie et Plateforme Commerciale au niveau maximum</p>'; // et Générateur de Gravité
+						echo '<p><strong>Bâtiments</strong>Plateforme Commerciale et Spatioport au niveau maximum</p>';
 						echo '<hr />';
 						echo '<p><strong>Nécessite</strong>Générateur niveau ' . OBM_LEVEL_MIN_TO_CHANGE_TYPE . '</p>';
 					echo '</div>';
@@ -96,7 +96,7 @@ echo '<div class="component generator">';
 						echo '<p><strong class="short">Flottes</strong>' . $fleetQuantity . '</p>';
 						echo '<p><strong class="short">Impôt</strong>' . (PlaceResource::get(OrbitalBase::TYP_MILITARY, 'tax') * 100) . '%</p>';
 						echo '<p><strong>Technologies</strong>Orienté militaire</p>';
-						echo '<p><strong>Bâtiments</strong>Chantier Alpha et Chantier de Ligne au niveau maximum</p>'; // et Colonne d'Assemblage
+						echo '<p><strong>Bâtiments</strong>Centre de Recyclage et Chantier de Ligne au niveau maximum</p>';
 						echo '<hr />';
 						echo '<p><strong>Nécessite</strong>Générateur niveau ' . OBM_LEVEL_MIN_TO_CHANGE_TYPE . '</p>';
 					echo '</div>';
