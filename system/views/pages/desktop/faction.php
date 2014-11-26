@@ -441,6 +441,13 @@ echo '<div id="content">';
 		include_once ZEUS;
 		$S_PAM1 = ASM::$pam->getCurrentSession();
 
+		$PAM_LAST_TOKEN = ASM::$pam->newSession(FALSE);
+		ASM::$pam->load(
+			array('rColor' => CTR::$data->get('playerInfo')->get('color')), 
+			array('dInscription', 'DESC'),
+			array(0, 100)
+		);
+
 		ASM::$pam->newSession(FALSE);
 		ASM::$pam->load(
 			array('rColor' => CTR::$data->get('playerInfo')->get('color')), 
@@ -489,6 +496,7 @@ echo '<div id="content">';
 
 		include COMPONENT . 'faction/player/statPlayer.php';
 		include COMPONENT . 'faction/player/listPlayer.php';
+		include COMPONENT . 'faction/player/last.php';
 
 		ASM::$pam->changeSession($S_PAM1);
 	} else {
