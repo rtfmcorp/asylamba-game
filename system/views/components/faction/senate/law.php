@@ -1,4 +1,10 @@
 <?php
+# require
+	# LAW/Token 		S_LAM_TOVOTE
+
+$S_LAM_LAW = ASM::$lam->getCurrentSession();
+ASM::$lam->changeSession($S_LAM_TOVOTE);
+
 echo '<div class="component">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
@@ -71,3 +77,5 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
+
+ASM::$lam->changeSession($S_LAM_LAW);
