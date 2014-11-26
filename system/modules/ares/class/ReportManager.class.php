@@ -334,7 +334,6 @@ class ReportManager extends Manager {
 		}
 
 		$this->_Add($newReport);
-
 		return $newReport->id;
 	}
 }

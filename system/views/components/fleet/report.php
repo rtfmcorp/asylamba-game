@@ -66,13 +66,13 @@ echo '<div class="component report">';
 			}
 
 			$PEVBegin 		= 0;
-			$PEVEnd			= 0;
 			$PEVDiference 	= 0;
+			$PEVEnd			= 0;
 
 			for ($i = 0; $i < 12; $i++) { 
 				$PEVBegin += $report_report->totalInBeginA[$i] * ShipResource::getInfo($i, 'pev');
-				$PEVEnd += $report_report->diferenceA[$i] * ShipResource::getInfo($i, 'pev');
-				$PEVDiference += $report_report->totalAtEndA[$i] * ShipResource::getInfo($i, 'pev');
+				$PEVDiference += $report_report->diferenceA[$i] * ShipResource::getInfo($i, 'pev');
+				$PEVEnd += $report_report->totalAtEndA[$i] * ShipResource::getInfo($i, 'pev');
 			}
 
 			echo '<div class="dammage">';
@@ -81,8 +81,8 @@ echo '<div class="component report">';
 						echo '<tr>';
 							echo '<td>Evolution des PEV</td>';
 							echo '<td>' . (($PEVBegin == 0) ? '—' : $PEVBegin) . '</td>';
-							echo '<td>' . (($PEVEnd == 0) ? '—' : $PEVEnd) . '</td>';
 							echo '<td>' . (($PEVDiference == 0) ? '—' : $PEVDiference) . '</td>';
+							echo '<td>' . (($PEVEnd == 0) ? '—' : $PEVEnd) . '</td>';
 						echo '</tr>';
 					}
 				echo '</table>';
