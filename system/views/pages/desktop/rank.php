@@ -18,11 +18,11 @@ echo '<div id="content">';
 		ASM::$prm->loadLastContext(array('rPlayer' => CTR::$data->get('playerId')));
 		$p = ASM::$prm->get();
 		
-		$generalPosition 	= ($p === FALSE || $p->generalPosition - PlayerRanking::PREV < 0) ? 0 : $p->generalPosition - PlayerRanking::PREV;
-		$experiencePosition = ($p === FALSE || $p->experiencePosition - PlayerRanking::PREV < 0) ? 0 : $p->experiencePosition - PlayerRanking::PREV;
-		$victoryPosition 	= ($p === FALSE || $p->victoryPosition - PlayerRanking::PREV < 0) ? 0 : $p->victoryPosition - PlayerRanking::PREV;
-		$defeatPosition 	= ($p === FALSE || $p->defeatPosition - PlayerRanking::PREV < 0) ? 0 : $p->defeatPosition - PlayerRanking::PREV;
-		$ratioPosition 		= ($p === FALSE || $p->ratioPosition - PlayerRanking::PREV < 0) ? 0 : $p->ratioPosition - PlayerRanking::PREV;
+		$generalPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->generalPosition - PlayerRanking::PREV < 0) ? 0 : $p->generalPosition - PlayerRanking::PREV;
+		$experiencePosition = ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->experiencePosition - PlayerRanking::PREV < 0) ? 0 : $p->experiencePosition - PlayerRanking::PREV;
+		$victoryPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->victoryPosition - PlayerRanking::PREV < 0) ? 0 : $p->victoryPosition - PlayerRanking::PREV;
+		$defeatPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->defeatPosition - PlayerRanking::PREV < 0) ? 0 : $p->defeatPosition - PlayerRanking::PREV;
+		$ratioPosition 		= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->ratioPosition - PlayerRanking::PREV < 0) ? 0 : $p->ratioPosition - PlayerRanking::PREV;
 
 		# include part
 		$PLAYER_RANKING_FRONT = ASM::$prm->newSession();
@@ -48,6 +48,8 @@ echo '<div id="content">';
 		$PLAYER_RANKING_RATIO = ASM::$prm->newSession();
 		ASM::$prm->loadLastContext(array(), array('ratioPosition', 'ASC'), array($ratioPosition, PlayerRanking::STEP));
 		include COMPONENT . 'rank/player/ratio.php';
+
+		include COMPONENT . 'rank/player/stats.php';
 
 		ASM::$prm->changeSession($S_PRM1);
 	} elseif (CTR::$get->get('view') == 'faction') {

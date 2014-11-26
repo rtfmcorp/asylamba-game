@@ -230,5 +230,28 @@ class PlayerManager extends Manager {
 
 		ASM::$pam->changeSession($S_PAM1);
 	}
+
+	public static function count($where = array()) {
+		$formatWhere = Utils::arrayToWhere($where);
+
+		$db = DataBase::getInstance();
+		$qr = $db->prepare('SELECT COUNT(id) AS nbr FROM player ' . $formatWhere);
+
+		$valuesArray = array();
+		foreach($where AS $v) {
+			if (is_array($v)) {
+				foreach ($v as $p) {
+					$valuesArray[] = $p;
+				}
+			} else {
+				$valuesArray[] = $v;
+			}
+		}
+
+		$qr->execute($valuesArray);
+		$aw = $qr->fetch();
+
+		return $aw['nbr'];
+	}
 }
 ?>
