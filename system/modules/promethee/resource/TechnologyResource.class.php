@@ -464,7 +464,7 @@ class TechnologyResource {
 			'points' => 21,
 			'column' => 4,
 			'shortDescription' => 'Augmente la vitesse d\'assemblage de votre Chantier Alpha de 3% par niveau.',
-			'description' => 'La chaine d’assemblage est un procédé optimisant d’avantage votre processus de construction de vaisseaux. En termes plus claire, ce développement diminue le temps de fabrication des pièces nécessaires à vos vaisseaux dans le Chantier Alpha.',
+			'description' => 'La chaine d’assemblage est un procédé optimisant d’avantage votre processus de construction de vaisseaux. En termes plus clairs, ce développement diminue le temps de fabrication des pièces nécessaires à vos vaisseaux dans le Chantier Alpha.',
 			'bonus' => 3
 		),
 		array(

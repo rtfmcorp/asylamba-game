@@ -89,7 +89,7 @@ class CommercialShipping {
 					} else {
 						$n->setTitle('Vaisseaux reçus');
 						$n->addBeg()->addTxt('Vous avez reçu les ' . $transaction->quantity . ' vaisseaux de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' que vous avez achetés au marché.');
-						$n->addSep()->addTxt('Ils ont été ajoutés à votre hanger.');
+						$n->addSep()->addTxt('Ils ont été ajoutés à votre hangar.');
 					}
 					$n->addEnd();
 					ASM::$ntm->add($n);
