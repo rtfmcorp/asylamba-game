@@ -245,12 +245,12 @@ class FightController {
 
 		$i = 0;
 		foreach ($commanderA->armyInBegin AS $s) {
-			LiveReport::$squadrons[] = array($i, 0, 0, $commanderA->id, $s[0], $s[1], $s[2], $s[3], $s[4], $s[5], $s[6], $s[7], $s[8], $s[9], $s[10], $s[11]);
+			LiveReport::$squadrons[] = array(0, $i, 0, 0, $commanderA->id, $s[0], $s[1], $s[2], $s[3], $s[4], $s[5], $s[6], $s[7], $s[8], $s[9], $s[10], $s[11]);
 			$i++;
 		}
 		$i = 0;
 		foreach ($commanderD->armyInBegin AS $s) {
-			LiveReport::$squadrons[] = array($i, 0, 0, $commanderD->id, $s[0], $s[1], $s[2], $s[3], $s[4], $s[5], $s[6], $s[7], $s[8], $s[9], $s[10], $s[11]);
+			LiveReport::$squadrons[] = array(0, $i, 0, 0, $commanderD->id, $s[0], $s[1], $s[2], $s[3], $s[4], $s[5], $s[6], $s[7], $s[8], $s[9], $s[10], $s[11]);
 			$i++;
 		}
 		/* array (
@@ -355,12 +355,12 @@ class FightController {
 
 		$i = 0;
 		foreach ($commanderA->armyAtEnd AS $s) {
-			LiveReport::$squadrons[] = array($i, 0, -1, $commanderA->id, $s[0], $s[1], $s[2], $s[3], $s[4], $s[5], $s[6], $s[7], $s[8], $s[9], $s[10], $s[11]);
+			LiveReport::$squadrons[] = array(0, $i, 0, -1, $commanderA->id, $s[0], $s[1], $s[2], $s[3], $s[4], $s[5], $s[6], $s[7], $s[8], $s[9], $s[10], $s[11]);
 			$i++;
 		}
 		$i = 0;
 		foreach ($commanderD->armyAtEnd AS $s) {
-			LiveReport::$squadrons[] = array($i, 0, -1, $commanderD->id, $s[0], $s[1], $s[2], $s[3], $s[4], $s[5], $s[6], $s[7], $s[8], $s[9], $s[10], $s[11]);
+			LiveReport::$squadrons[] = array(0, $i, 0, -1, $commanderD->id, $s[0], $s[1], $s[2], $s[3], $s[4], $s[5], $s[6], $s[7], $s[8], $s[9], $s[10], $s[11]);
 			$i++;
 		}
 		return array($commanderA, $commanderD);

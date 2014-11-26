@@ -19,7 +19,9 @@ class LawManager extends Manager {
 		$formatLimit = Utils::arrayToLimit($limit);
 
 		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT l.*
+		$qr = $db->prepare('SELECT l.*,
+				(SELECT COUNT(v.id) FROM voteLaw AS v WHERE rLaw = l.id AND vote = 1) AS forVote,
+				(SELECT COUNT(v.id) FROM voteLaw AS v WHERE rLaw = l.id AND vote = 0) AS againstVote
 			FROM law AS l
 			' . $formatWhere .'
 			' . $formatOrder .'
@@ -56,6 +58,9 @@ class LawManager extends Manager {
 			$law->dEndVotation = $awLaw['dEndVotation'];
 			$law->dEnd = $awLaw['dEnd'];
 			$law->dCreation = $awLaw['dCreation'];
+
+			$law->forVote = $awLaw['forVote'];
+			$law->againstVote = $awLaw['againstVote'];
 			
 			$this->_Add($law);
 		}

@@ -28,7 +28,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 			if (ASM::$plm->size() > 0) {
 				$commander = ASM::$com->get();
 				$place = ASM::$plm->get();
-				if ($place->typeOfPlace == Place::TERRESTRIAL) {
+				if ($place->typeOfPlace == Place::TERRESTRIAL || TRUE) {
 					if (CTR::$data->get('playerInfo')->get('color') != $place->getPlayerColor()) {
 						ASM::$plm->load(array('id' => $commander->getRBase()));
 						$home = ASM::$plm->getById($commander->getRBase());
@@ -38,7 +38,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 
 						if ($commander->getPev() > 0) {
 							if ($commander->statement == Commander::AFFECTED) {
-								if ($duration <= Commander::MAXTRAVELTIME) {
+								if (TRUE || $duration <= Commander::MAXTRAVELTIME) {
 									if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
 
 										# tutorial

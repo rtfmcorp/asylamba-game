@@ -95,39 +95,34 @@ class Report {
 				}
 			}
 
+
 			foreach ($this->armyInBeginA AS $sq) {
-				for ($i = 5; $i < 16; $i++) {
+				for ($i = 5; $i <= 16; $i++) {
 					$this->totalInBeginA[$i - 5] += $sq[$i];
 				}
 			}
 			foreach ($this->armyInBeginD AS $sq) {
-				for ($i = 5; $i < 16; $i++) {
+				for ($i = 5; $i <= 16; $i++) {
 					$this->totalInBeginD[$i - 5] += $sq[$i];
 				}
 			}
 			foreach ($this->armyAtEndA AS $sq) {
-				for ($i = 5; $i < 16; $i++) {
+				for ($i = 5; $i <= 16; $i++) {
 					$this->totalAtEndA[$i - 5] += $sq[$i];
 				}
 			}
 			foreach ($this->armyAtEndD AS $sq) {
-				for ($i = 5; $i < 16; $i++) {
+				for ($i = 5; $i <= 16; $i++) {
 					$this->totalAtEndD[$i - 5] += $sq[$i];
 				}
 			}
 
-			$muk = '';
 			for ($i = 0; $i < 12; $i++) {
 				$this->diferenceA[$i] = $this->totalInBeginA[$i] - $this->totalAtEndA[$i];
-				$muk .= 'A' . $i . '= ' . $this->diferenceA[$i] . ', ';
-
 			}
 			for ($i = 0; $i < 12; $i++) {
 				$this->diferenceD[$i] = $this->totalInBeginD[$i] - $this->totalAtEndD[$i];
-				$muk .= 'D' . $i . '= ' . $this->diferenceD[$i] . ', ';
-
 			}
-			CTR::$alert->add('je fais setARMIES ! result : ' . $muk, ALERT_STD_ERROR);
 
 			$this->setArmiesDone = TRUE;
 		}

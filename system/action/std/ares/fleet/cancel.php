@@ -36,6 +36,20 @@ if ($commanderId !== FALSE) {
 			$commander->dArrival = $dArrival->format('Y-m-d H:i:s');
 			$commander->travelType = 3;
 
+			if (CTR::$data->exist('playerEvent') && $commander->rPlayer == CTR::$data->get('playerId')) {
+				for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
+					if (CTR::$data->get('playerEvent')->get($i)->get('eventInfo')->get('id') == $commander->id) {
+						bug::pre(CTR::$data->get('playerEvent')->remove($i));
+					}
+				}
+				// CTR::$data->get('playerEvent')->add(
+				// 	$this->dArrival,
+				// 	EVENT_OUTGOING_ATTACK,
+				// 	$this->id,
+				// 	$commander->getEventInfo()
+				// );
+			}
+
 			CTR::$alert->add('Déplacement annulé.', ALERT_STD_SUCCESS);
 
 			if (CTR::$get->exist('redirect')) {

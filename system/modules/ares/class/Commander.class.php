@@ -456,6 +456,7 @@ class Commander {
 
 	public function getEventInfo() {
 		$info = new ArrayList();
+		$info->add('id', $this->id);
 		$info->add('name', $this->name);
 		$info->add('avatar', $this->avatar);
 		$info->add('level', $this->level);

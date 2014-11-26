@@ -43,7 +43,7 @@ echo '<div class="component size3 space">';
 				if ($spyreport->success > SpyReport::STEP_FLEET) {
 					foreach ($commanders as $commander) {
 						$data  = 'data-army="';
-						$data .= $spyreport->success > SpyReport::STEP_FLEET
+						$data .= $spyreport->success > SpyReport::STEP_ARMY
 							? json_encode($commander['army'])
 							: json_encode(array(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1));
 						$data .= '"';

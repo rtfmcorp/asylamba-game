@@ -863,12 +863,11 @@ class Place {
 
 	private function recycle($placeBase, $reportArray) {
 		# compute total resource value
-		$total = 0; //$muk = '|';
+		$total = 0;
 		foreach ($reportArray as $report) {
 			for ($i = 0; $i < ShipResource::SHIP_QUANTITY; $i++) { 
 				$total += ShipResource::getInfo($i, 'resourcePrice') * $report->diferenceA[$i];
 				$total += ShipResource::getInfo($i, 'resourcePrice') * $report->diferenceD[$i];
-				//$muk .= 'A' . $i . '= ' . $report->diferenceA[$i] . ', D' . $i . '= ' . $report->diferenceD[$i] . ';  ';
 			}
 		}
 
@@ -877,9 +876,9 @@ class Place {
 
 		# recycled amount
 		$recycledAmount = round($total * $efficiency / 100);
-		$placeBase->increaseResources($recycledAmount);
-
-		//CTR::$alert->add('total : ' . $total . ', efficiency : ' . $efficiency . ', recycled resource : ' . $recycledAmount . ', truc : ' . $muk, ALERT_STD_ERROR);
+		if ($recycledAmount > 0) {
+			$placeBase->increaseResources($recycledAmount);
+		}
 
 		return $recycledAmount;
 	}
@@ -996,10 +995,12 @@ class Place {
 					->addTxt('.')
 					->addSep()
 					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
-					->addSep()
-					->addTxt('Vos recycleurs ont collecté les débris de vaisseaux tués au combat et en ont retiré ' . $recycledAmount . ' ressources qui ont été ajoutées à votre Stockage.')
-					->addSep()
-					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
+					->addSep();
+				if ($recycledAmount > 0) {
+					$notif->addTxt('Vos recycleurs ont collecté les débris de vaisseaux tués au combat et en ont retiré ' . $recycledAmount . ' ressources qui ont été ajoutées à votre Stockage.')
+						->addSep();
+				}
+				$notif->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -1035,10 +1036,12 @@ class Place {
 					->addTxt('.')
 					->addSep()
 					->addTxt('Vous avez repoussé l\'ennemi avec succès.')
-					->addSep()
-					->addTxt('Vos recycleurs ont collecté les débris de vaisseaux tués au combat et en ont retiré ' . $recycledAmount . ' ressources qui ont été ajoutées à votre Stockage.')
-					->addSep()
-					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
+					->addSep();
+				if ($recycledAmount > 0) {
+					$notif->addTxt('Vos recycleurs ont collecté les débris de vaisseaux tués au combat et en ont retiré ' . $recycledAmount . ' ressources qui ont été ajoutées à votre Stockage.')
+						->addSep();
+				}
+				$notif->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -1208,10 +1211,12 @@ class Place {
 					->addTxt($nbrBattle . Format::addPlural($nbrBattle, ' combats ont eu lieu.', ' seul combat a eu lieu'))
 					->addSep()
 					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
-					->addSep()
-					->addTxt('Les recycleurs de la base orbitale ont collecté les débris de vaisseaux tués au combat et en ont retiré ' . $recycledAmount . ' ressources qui ont été ajoutées au Stockage.')
-					->addSep()
-					->addTxt('Elle est désormais vôtre, vous pouvez l\'administrer ')
+					->addSep();
+				if ($recycledAmount > 0) {
+					$notif->addTxt('Les recycleurs de la base orbitale ont collecté les débris de vaisseaux tués au combat et en ont retiré ' . $recycledAmount . ' ressources qui ont été ajoutées au Stockage.')
+						->addSep();
+				}
+				$notif->addTxt('Elle est désormais vôtre, vous pouvez l\'administrer ')
 					->addLnk('bases/base-' . $this->id, 'ici')
 					->addTxt('.');
 				for ($i = 0; $i < $nbrBattle; $i++) {
@@ -1279,10 +1284,12 @@ class Place {
 					->addTxt('.')
 					->addSep()
 					->addTxt($nbrBattle . Format::addPlural($nbrBattle, ' combats ont eu lieu.', ' seul combat a eu lieu'))
-					->addSep()
-					->addTxt('Vos recycleurs ont collecté les débris de vaisseaux tués au combat et en ont retiré ' . $recycledAmount . ' ressources qui ont été ajoutées à votre Stockage.')
-					->addSep()
-					->addTxt('Vous avez repoussé l\'ennemi avec succès. Bravo !');
+					->addSep();
+				if ($recycledAmount > 0) {
+					$notif->addTxt('Vos recycleurs ont collecté les débris de vaisseaux tués au combat et en ont retiré ' . $recycledAmount . ' ressources qui ont été ajoutées à votre Stockage.')
+						->addSep();
+				}
+				$notif->addTxt('Vous avez repoussé l\'ennemi avec succès. Bravo !');
 				for ($i = 0; $i < $nbrBattle; $i++) {
 					$notif->addSep();
 					$notif->addLnk('fleet/view-archive/report-' . $reports[$i], 'voir le ' . Format::ordinalNumber($i + 1) . ' rapport');

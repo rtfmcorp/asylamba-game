@@ -253,19 +253,30 @@ echo '<div id="content">';
 			$S_VLM_OLD = ASM::$vlm->getCurrentsession();
 			$S_LAM_OLD = ASM::$lam->getCurrentsession();
 
-			$S_LAM_TOT = ASM::$lam->newSession();
+			$S_LAM_TOVOTE = ASM::$lam->newSession();
 			ASM::$lam->load(array('rColor' => $faction->id, 'statement' => Law::VOTATION));
-
 			include COMPONENT . 'faction/senate/stats.php';
 
 			for ($i = 0; $i < ASM::$lam->size(); $i++) {
 				$law = ASM::$lam->get($i);
 
-				$S_LAM_LAW = ASM::$vlm->newSession();
+				$S_VLM_TOVOTE = ASM::$vlm->newSession();
 				ASM::$vlm->load(array('rLaw' => $law->id));
 
 				include COMPONENT . 'faction/senate/law.php';
 			}
+			if (ASM::$lam->size() < 1) {
+				include COMPONENT . 'default.php';
+			}
+
+			$S_LAM_HISTORIC = ASM::$lam->newSession();
+			ASM::$lam->load(
+				['rColor' => $faction->id, 'statement' => [Law::EFFECTIVE, Law::OBSOLETE, Law::REFUSED]],
+				['dCreation', 'DESC'],
+				[0, 10]
+			);
+
+			include COMPONENT . 'faction/senate/historic.php';
 
 			ASM::$lam->changeSession($S_LAM_OLD);
 			ASM::$vlm->changeSession($S_VLM_OLD);
@@ -441,6 +452,13 @@ echo '<div id="content">';
 		include_once ZEUS;
 		$S_PAM1 = ASM::$pam->getCurrentSession();
 
+		$PAM_LAST_TOKEN = ASM::$pam->newSession(FALSE);
+		ASM::$pam->load(
+			array('rColor' => CTR::$data->get('playerInfo')->get('color')), 
+			array('dInscription', 'DESC'),
+			array(0, 100)
+		);
+
 		ASM::$pam->newSession(FALSE);
 		ASM::$pam->load(
 			array('rColor' => CTR::$data->get('playerInfo')->get('color')), 
@@ -489,6 +507,7 @@ echo '<div id="content">';
 
 		include COMPONENT . 'faction/player/statPlayer.php';
 		include COMPONENT . 'faction/player/listPlayer.php';
+		include COMPONENT . 'faction/player/last.php';
 
 		ASM::$pam->changeSession($S_PAM1);
 	} else {
