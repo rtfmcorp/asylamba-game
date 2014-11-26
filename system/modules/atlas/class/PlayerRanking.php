@@ -96,15 +96,13 @@ class PlayerRanking {
 				}
 			$r .= '</span>';
 
-			$r .= '<span class="position';
-				$r .= intval($var) == 0
-					? NULL
-					: ($var > 0
-						? ' upper'
-						: ' lower'
-					)
-				;
-			$r .= '">' . $pos . '</span>';
+			$r .= '<span class="position">' . $pos . '</span>';
+
+			if (intval($var) != 0) {
+				$r .= '<span class="variance ' . ($var > 0 ? ' upper' : ' lower') . '">';
+					$r .= ($var > 0 ? '+' : '–') . abs($var);
+				$r .='</span>';
+			}
 		$r .= '</div>';
 
 		return $r;
