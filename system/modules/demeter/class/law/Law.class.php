@@ -27,12 +27,17 @@ class Law {
 	public $dEnd 	 			= '';
 	public $dCreation 			= '';
 
+	public $forVote 			= 0;
+	public $againstVote			= 0;
+
 	public function getId() { return $this->id; }
 
 	public function ballot() {
 		$_VLM = ASM::$vlm->getCurrentsession();
 		ASM::$vlm->load(array('rLaw' => $this->id));
+
 		$ballot = 0;
+
 		for ($i = 0; $i < ASM::$vlm->size(); $i++) {
 			if (ASM::$vlm->get()->vote) {
 				$ballot++;
@@ -40,6 +45,7 @@ class Law {
 				$ballot--;
 			}
 		}
+
 		ASM::$vlm->changeSession($_VLM);
 
 		if ($ballot >= 0) {
