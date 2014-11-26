@@ -92,22 +92,22 @@ class Report {
 		}
 
 		foreach ($this->armyInBeginA AS $sq) {
-			for ($i = 5; $i < 16; $i++) {
+			for ($i = 5; $i <= 16; $i++) {
 				$this->totalInBeginA[$i - 5] += $sq[$i];
 			}
 		}
 		foreach ($this->armyInBeginD AS $sq) {
-			for ($i = 5; $i < 16; $i++) {
+			for ($i = 5; $i <= 16; $i++) {
 				$this->totalInBeginD[$i - 5] += $sq[$i];
 			}
 		}
 		foreach ($this->armyAtEndA AS $sq) {
-			for ($i = 5; $i < 16; $i++) {
+			for ($i = 5; $i <= 16; $i++) {
 				$this->totalAtEndA[$i - 5] += $sq[$i];
 			}
 		}
 		foreach ($this->armyAtEndD AS $sq) {
-			for ($i = 5; $i < 16; $i++) {
+			for ($i = 5; $i <= 16; $i++) {
 				$this->totalAtEndD[$i - 5] += $sq[$i];
 			}
 		}
