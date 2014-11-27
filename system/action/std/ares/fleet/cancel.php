@@ -38,8 +38,10 @@ if ($commanderId !== FALSE) {
 
 			if (CTR::$data->exist('playerEvent') && $commander->rPlayer == CTR::$data->get('playerId')) {
 				for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
-					if (CTR::$data->get('playerEvent')->get($i)->get('eventInfo')->get('id') == $commander->id) {
-						CTR::$data->get('playerEvent')->remove($i);
+					if (CTR::$data->get('playerEvent')->get($i)->get('eventInfo') != NULL) {
+						if (CTR::$data->get('playerEvent')->get($i)->get('eventInfo')->get('id') == $commander->id) {
+							CTR::$data->get('playerEvent')->remove($i);
+						}
 					}
 				}
 				// CTR::$data->get('playerEvent')->add(
