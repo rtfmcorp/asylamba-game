@@ -34,6 +34,7 @@ class Law {
 
 	public function ballot() {
 		$_VLM = ASM::$vlm->getCurrentsession();
+		ASM::$vlm->newSession();
 		ASM::$vlm->load(array('rLaw' => $this->id));
 
 		$ballot = 0;
