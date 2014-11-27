@@ -10,21 +10,21 @@ class SchoolClassResource {
 			'point'   => 5,
 			'title'   => 'Engager un officier nul'),
 		array(
-			'credit'  => 1000,
+			'credit'  => 2500,
 			'minSize' => 1,
 			'maxSize' => 1,
-			'minExp'  => 400,
-			'maxExp'  => 1200,
-			'point'   => 10,
-			'title'   => 'Engager un officier moyen'),
+			'minExp'  => 100,
+			'maxExp'  => 210,
+			'point'   => 5,
+			'title'   => 'Engager un officier nul'),
 		array(
-			'credit'  => 85000,
+			'credit'  => 2500,
 			'minSize' => 1,
 			'maxSize' => 1,
-			'minExp'  => 1800,
-			'maxExp'  => 6200,
-			'point'   => 50,
-			'title'   => 'Engager un officier overbon')
+			'minExp'  => 100,
+			'maxExp'  => 210,
+			'point'   => 5,
+			'title'   => 'Engager un officier nul')
 		);
 
 	public static function getInfo($i, $info) {
