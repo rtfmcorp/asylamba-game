@@ -550,6 +550,7 @@ class Color {
 		}
 
 		$_LAM = ASM::$lam->getCurrentSession();
+		ASM::$lam->newSession();
 		ASM::$lam->load(array('rColor' => $this->id, 'statement' => array(Law::VOTATION, Law::EFFECTIVE)));
 
 		for ($i = 0; $i < ASM::$lam->size(); $i++) {
