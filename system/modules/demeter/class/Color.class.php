@@ -44,7 +44,7 @@ class Color {
 	const ELECTIONTIME		= 172800;
 	const PUTSCHTIME 		= 25000;
 
-	const PUTSCHPERCENTAGE	= 30;
+	const PUTSCHPERCENTAGE	= 20;
 
 	const ALIVE 			= 1;
 	const DEAD 				= 0;
@@ -135,8 +135,6 @@ class Color {
 				ASM::$pam->newSession(FALSE);
 				ASM::$pam->load(array('id' => key($ballot)));
 				ASM::$pam->get()->setStatus(PAM_CHIEF);
-
-
 				ASM::$pam->changeSession($_PAM2);
 			}
 			ASM::$vom->changeSession($_VOM);
@@ -150,7 +148,7 @@ class Color {
 				ASM::$pam->newSession(FALSE);
 				ASM::$pam->load(array('status' => PAM_CHIEF));
 				if (ASM::$pam->get()->id != key($ballot)) {
-					if (((count($ballot[0]) / $this->activePlayers) * 100) >= self::PUTSCHPERCENTAGE) {
+					if (((current($ballot) / $this->activePlayers) * 100) >= self::PUTSCHPERCENTAGE) {
 						$_PAM3 = ASM::$pam->getCurrentsession();
 						ASM::$pam->newSession(FALSE);
 						ASM::$pam->load(array('status' => array(PAM_TREASURER, PAM_WARLORD, PAM_MINISTER, PAM_CHIEF), 'rColor' => $this->id));
@@ -172,9 +170,21 @@ class Color {
 			}
 			ASM::$vom->changeSession($_VOM);
 		} else {
-			if (rand(0, 1) == 0) {
-				$ballot = array();
+			$_PAM4 = ASM::$pam->getCurrentsession();
+			ASM::$pam->newSession(FALSE);
+			ASM::$pam->load(array('rColor' => $this->id, 'status' => PAM_CHIEF));
+			if (ASM::$pam->size() > 0) {
+				$_CAM1 = ASM::$pam->getCurrentsession();
+				ASM::$cam->newSession();
+				ASM::$cam->load(array('rPlayer' => ASM::$pam->get()->id, 'rElection' => $election->id));
+				if (ASM::$cam->size() > 0) {
+					if (rand(0, 1) == 0) {
+						$ballot = array();
+					}
+				}
+				ASM::$cam->changeSession($_CAM1);
 			}
+			ASM::$pam->changeSession($_PAM4);
 			if (count($ballot) > 0) {
 				$aleaNbr = rand(0, count($ballot) - 1);
 				$_PAM3 = ASM::$pam->getCurrentsession();
@@ -352,10 +362,6 @@ class Color {
 					ASM::$elm->add($election);
 					ASM::$elm->changeSession($S_ELM);
 					$this->electionStatement = self::CAMPAIGN;
-				}
-			} elseif ($this->electionStatement == self::CAMPAIGN) {
-				if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::CAMPAIGNTIME) {
-					$this->electionStatement = self::ELECTION;
 				}
 			} else {
 				if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::CAMPAIGNTIME) {

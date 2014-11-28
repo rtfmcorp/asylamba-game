@@ -2,14 +2,14 @@
 $parser = new Parser();
 $status = ColorResource::getInfo($faction->id, 'status');
 
-$S_VOM1 = ASM::$vom->getCurrentSession();
-ASM::$vom->changeSession($VOM_ELC_TOKEN);
-
 echo '<div class="component player profil size1">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			if ($faction->electionStatement == Color::ELECTION) {
+				$S_VOM1 = ASM::$vom->getCurrentSession();
+				ASM::$vom->changeSession($VOM_ELC_TOKEN);
+
 				$hasVoted = FALSE;
 				if (ASM::$vom->size() == 1) {
 					$hasVoted = TRUE;
@@ -55,6 +55,8 @@ echo '<div class="component player profil size1">';
 						}
 					echo '</div>';
 				}
+
+				ASM::$vom->changeSession($S_VOM1);
 			}
 
 			echo '<div class="center-box">';
@@ -80,6 +82,4 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-ASM::$vom->changeSession($S_VOM1);
 ?>

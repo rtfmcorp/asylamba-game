@@ -21,7 +21,7 @@ if ($rElection !== FALSE && $rCandidate !== FALSE) {
 	ASM::$pam->load(array('rColor' => CTR::$data->get('playerInfo')->get('color'), 'status' => PAM_CHIEF));
 
 	if ($rCandidate == 0) {
-		$rCandidate = ASM::$pam->get()->id());
+		$rCandidate = ASM::$pam->get()->id;
 	}
 
 	if (ASM::$elm->size() > 0) {
