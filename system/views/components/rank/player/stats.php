@@ -12,7 +12,7 @@ echo '<div class="component player rank">';
 			echo '<div class="number-box">';
 				echo '<span class="label">Joueurs actifs</span>';
 				echo '<span class="value">' . Format::number(PlayerManager::count(array('statement' => PAM_ACTIVE))) . '</span>';
-				echo '<span class="group-link"><a href="#" title="compte tout les joueurs qui se sont connectés depuis 15 jours" class="hb lt">?</a></span>';
+				echo '<span class="group-link"><a href="#" title="compte tous les joueurs qui se sont connectés depuis 15 jours" class="hb lt">?</a></span>';
 			echo '</div>';
 
 			echo '<div class="number-box">';
