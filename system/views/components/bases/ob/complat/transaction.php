@@ -17,7 +17,7 @@ ASM::$ctm->load(array());
 
 echo '<div class="component transaction">';
 	echo '<div class="head skin-2">';
-		echo '<h2>transaction</h2>';
+		echo '<h2>Transaction</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';

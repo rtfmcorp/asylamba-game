@@ -37,7 +37,7 @@ echo '<div class="component new-message market-sell">';
 
 					echo '<hr />';
 
-					echo '<p><input type="submit" value="Vendre" /></p>';
+					echo '<p><input type="submit" value="Envoyer" /></p>';
 				echo '</div>';
 			echo '</form>';
 		echo '</div>';

@@ -21,7 +21,7 @@ echo '<div class="component">';
 					echo '</div>';
 
 					echo '<p class="desc">';
-						echo '<strong>Status</strong> : ';
+						echo '<strong>Statut</strong> : ';
 						switch ($law->statement) {
 							case Law::EFFECTIVE: echo 'application en cours'; break;
 							case Law::OBSOLETE: echo 'application terminée'; break;
