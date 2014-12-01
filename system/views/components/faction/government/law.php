@@ -63,7 +63,11 @@ echo '<div class="component profil player">';
 
 						echo '<button class="button ' . ($faction->credits >= LawResources::getInfo($governmentLaw_id, 'price') ? NULL : 'disable') . '">';
 							echo '<span class="text">';
-								echo 'Soumettre au vote<br />';
+								if (LawResources::getInfo($governmentLaw_id, 'department') == 6) {
+									echo 'Appliquer<br />';
+								} else {
+									echo 'Soumettre au vote<br />';
+								}
 								echo 'Coûte ' . Format::number(LawResources::getInfo($governmentLaw_id, 'price')) . ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits"> à la faction';
 							echo '</span>';
 						echo '</button>';
