@@ -363,7 +363,7 @@ class TechnologyResource {
 			'points' => 40,
 			'column' => 3,
 			'shortDescription' => 'Débloque le Phénix.',
-			'description' => 'Cette amélioration du châssis polymère amélioré vous permet de construire le vaisseau le plus puissant de la galaxie de l’œil – Le Phœnix. En renforçant et en améliorant l’ergonomie de ce châssis, vos chercheurs ont pu stabiliser et augmenter la puissance de feu du vaisseau.'
+			'description' => 'Cette amélioration du châssis polymère amélioré vous permet de construire le vaisseau le plus puissant de la galaxie de l’œil – Le Phénix. En renforçant et en améliorant l’ergonomie de ce châssis, vos chercheurs ont pu stabiliser et augmenter la puissance de feu du vaisseau.'
 		),
 		array(
 			'name' => 'Colonisation',

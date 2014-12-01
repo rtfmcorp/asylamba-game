@@ -206,7 +206,7 @@ class OrbitalBaseResource {
 							if ($level > self::$building[$buildingId]['maxLevel'][$sup->typeOfBase]) {
 								return 'niveau maximum atteint';
 							} elseif ($level > ($sup->realGeneratorLevel - $diminution)) {
-								return 'le niveau du générateur n\'es pas assez élevé';
+								return 'le niveau du générateur n\'est pas assez élevé';
 							} else {
 								return TRUE;
 							}

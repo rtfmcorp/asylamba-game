@@ -370,7 +370,7 @@ class ShipResource {
 			'description' => 'Le Cerbère est un grand vaisseau de guerre doté d’un épais blindage, dont l’artillerie principale est composée de deux pièces d’artilleries des plus gros calibres existants. Conçu pour les destructions de masse, les deux principaux canons du Cerbère sont accompagnés de cinq canons lasers longue portée. Ces défenses gargantuesques ont été mises en place dans un premier temps pour assurer une défense planétaire. Cependant, les gouvernements remarquèrent vite que l’utilisation du Cerbère pour les attaques massives était loin d’être inutile.'
 		),
 		array(
-			'codeName' => 'Phenix',
+			'codeName' => 'Phénix',
 			'name' => 'Croiseur lourd',
 			'class' => 3,
 			'pev' => 96,
@@ -383,7 +383,7 @@ class ShipResource {
 			'points' => 200,
 			'imageLink' => 'ship11',
 			'techno' => 16,
-			'description' => 'Le Phœnix est le type prédominant de croiseur de la galaxie de l’Œil. Conçu par le vieil Empire pour mettre un terme à la rébellion des périodes de troubles, il est le vaisseau de combat le plus massif du chantier de ligne. En effet, sa construction nécessite énormément de matériel et de main-d’œuvre. De plus, le Phœnix est piloté par un équipage de plus de 300 personnes. <br /><br />Cet appareil, très gros, est difficile à manœuvrer dans les combats de mêlée. Cependant il est d’une efficacité redoutable en dernière ligne de vos escadrilles.'
+			'description' => 'Le Phénix est le type prédominant de croiseur de la galaxie de l’Œil. Conçu par le vieil Empire pour mettre un terme à la rébellion des périodes de troubles, il est le vaisseau de combat le plus massif du chantier de ligne. En effet, sa construction nécessite énormément de matériel et de main-d’œuvre. De plus, le Phénix est piloté par un équipage de plus de 300 personnes. <br /><br />Cet appareil, très gros, est difficile à manœuvrer dans les combats de mêlée. Cependant il est d’une efficacité redoutable en dernière ligne de vos escadrilles.'
 		),
 	);
 }
