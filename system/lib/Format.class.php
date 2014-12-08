@@ -101,4 +101,17 @@ class Format {
 			return $number . 'ème';
 		}
 	}
+
+	public static function actionBuilder($action, $params = array()) {
+		$url  = APP_ROOT;
+		$url .= 'action/';
+		$url .= 'a-' . $action . '/';
+
+		foreach ($params as $key => $value) {
+			$url .= $key . '-' . $value . '/';
+		}
+
+		$url .= 'token-' . CTR::$data->get('token');
+		return $url;
+	}
 }

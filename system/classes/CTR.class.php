@@ -74,6 +74,7 @@ abstract class CTR {
 			self::$data = unserialize($_SESSION[SERVER_SESS]['data']);
 		} else {
 			self::$data = new ArrayList();
+			self::$data->add('token', Utils::generateString(5));
 		}
 
 		# initialise l'historique sessions
