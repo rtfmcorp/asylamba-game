@@ -38,7 +38,7 @@ echo '<div class="column act">';
 							echo '<strong class="name"></strong><br />';
 							echo 'Temps de l\'attaque : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, CTR::$data->get('playerBonus')), 'lite') . ' <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
 							echo 'Capacité de la soute : <span class="wedge"></span> <img src="' . MEDIA . 'resources/resource.png" class="icon-color" alt="" /><br />';
-							echo '<a class="button" href="#" data-url="' . APP_ROOT . 'action/a-loot/commanderid-{id}/placeid-' . $place->id . '">Lancer l\'attaque</a>';
+							echo '<a class="button" href="#" data-url="' . Format::actionBuilder('loot', ['commanderid' => '{id}', 'placeid' => $place->id]) . '">Lancer l\'attaque</a>';
 						echo '</div>';
 					echo '</div>';
 				}
@@ -95,7 +95,7 @@ echo '<div class="column act">';
 									$price -= round($price * ColorResource::BONUS_CARDAN_COLO / 100);
 								}
 								echo 'Coût : <span class="price">' . Format::numberFormat($price) . '</span> <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /><br />';
-								echo '<a class="button" href="#" data-url="' . APP_ROOT . 'action/a-colonize/commanderid-{id}/placeid-' . $place->id . '">Lancer la colonisation</a>';
+								echo '<a class="button" href="#" data-url="' . Format::actionBuilder('colonize', ['commanderid' => '{id}', 'placeid' => $place->id]) . '">Lancer la colonisation</a>';
 							} else {
 								$price = $totalBases * CREDITCOEFFTOCONQUER;
 								if (CTR::$data->get('playerInfo')->get('color') == ColorResource::CARDAN) {
@@ -103,7 +103,7 @@ echo '<div class="column act">';
 									$price -= round($price * ColorResource::BONUS_CARDAN_COLO / 100);
 								}
 								echo 'Coût : <span class="price">' . Format::numberFormat($price) . '</span> <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /><br />';
-								echo '<a class="button" href="#" data-url="' . APP_ROOT . 'action/a-conquer/commanderid-{id}/placeid-' . $place->id . '">Lancer la conquête</a>';
+								echo '<a class="button" href="#" data-url="' . Format::actionBuilder('conquer', ['commanderid' => '{id}', 'placeid' => $place->id]) . '">Lancer la conquête</a>';
 							}
 						echo '</div>';
 					echo '</div>';
@@ -129,7 +129,7 @@ echo '<div class="column act">';
 						echo '<div class="item move">';
 							echo '<strong class="name"></strong><br />';
 							echo 'Temps du déplacement : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, CTR::$data->get('playerBonus')), 'lite') . ' <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
-							echo '<a class="button" href="#" data-url="' . APP_ROOT . 'action/a-movefleet/commanderid-{id}/placeid-' . $place->id . '">Lancer la mission</a>';
+							echo '<a class="button" href="#" data-url="' . Format::actionBuilder('movefleet', ['commanderid' => '{id}', 'placeid' => $place->id]) . '">Lancer la mission</a>';
 						echo '</div>';
 					echo '</div>';
 				}
@@ -208,7 +208,7 @@ echo '<div class="column act">';
 							}
 
 							if ($ur < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $defaultBase->levelSpatioport, 'nbRoutesMax')) {
-								echo '<a href="' . APP_ROOT . 'action/a-proposeroute/basefrom-' . $defaultBase->getId() . '/baseto-' . $place->getId() . '" class="button">Proposer une route</a>';
+								echo '<a href="' . Format::actionBuilder('proposeroute', ['basefrom' => $defaultBase->getId(), 'baseto' => $place->getId()]) . '" class="button">Proposer une route</a>';
 							} else {
 								echo '<span class="button">Pas assez de slot</span>';
 							}
@@ -236,7 +236,7 @@ echo '<div class="column act">';
 					);
 
 					foreach ($prices as $label => $price) { 
-						echo '<a href="' . APP_ROOT . 'action/a-spy/rplace-' . $place->getId() . '/price-' . $price . '" class="spy-button">';
+						echo '<a href="' . Format::actionBuilder('spy', ['rplace' => $place->getId(), 'price' => $price]) . '" class="spy-button">';
 							echo '<img src="' . MEDIA . 'resources/credit.png" alt="" class="picto" />';
 							echo '<span class="label">' . $label . '</span>';
 							echo '<span class="price">' . Format::numberFormat($price) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /></span>';

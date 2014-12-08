@@ -165,7 +165,7 @@ class CommercialShipping {
 			if ($this->statement != CommercialShipping::ST_MOVING_BACK) {
 				echo '<div class="product">';
 					if ($this->statement == CommercialShipping::ST_WAITING) {
-						echo '<a href="' . APP_ROOT . 'action/a-canceltransaction/rtransaction-' . $this->rTransaction . '" class="hb lt right-link" title="supprimer cette offre coûtera ' . Format::number(floor($this->price * Transaction::PERCENTAGE_TO_CANCEL / 100)) . ' crédits">×</a>';
+						echo '<a href="' . Format::actionBuilder('canceltransaction', ['rtransaction' => $this->rTransaction]) . '" class="hb lt right-link" title="supprimer cette offre coûtera ' . Format::number(floor($this->price * Transaction::PERCENTAGE_TO_CANCEL / 100)) . ' crédits">×</a>';
 					}
 					if ($this->typeOfTransaction == Transaction::TYP_RESOURCE) {
 						echo '<img src="' . MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($this->quantity) . '.png" alt="" class="picto" />';

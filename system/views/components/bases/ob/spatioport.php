@@ -124,9 +124,9 @@ for ($i = 0; $i < ASM::$crm->size(); $i++) {
 								# bonus if the player is from Negore
 								$price -= round($price * ColorResource::BONUS_NEGORA_ROUTE / 100);
 							}
-							echo '<span><a href="' . APP_ROOT . 'action/a-acceptroute/base-' . $rc->getROrbitalBaseLinked() . '/route-' . $rc->getId() . '">accepter pour ' . Format::numberFormat($price) . ' crédits</a></span>';
+							echo '<span><a href="' . Format::actionBuilder('acceptroute', ['base' => $rc->getROrbitalBaseLinked(), 'route' => $rc->getId()]) . '">accepter pour ' . Format::numberFormat($price) . ' crédits</a></span>';
 						}
-						echo '<span><a href="' . APP_ROOT . 'action/a-refuseroute/base-' . $rc->getROrbitalBaseLinked() . '/route-' . $rc->getId() . '" class="hb lt" title="refuser l\'offre">x</a></span>';
+						echo '<span><a href="' . Format::actionBuilder('refuseroute', ['base' => $rc->getROrbitalBaseLinked(), 'route' => $rc->getId()]) . '" class="hb lt" title="refuser l\'offre">x</a></span>';
 					echo '</div>';
 
 					echo '<div class="number-box grey">';
@@ -199,9 +199,9 @@ for ($i = 0; $i < ASM::$crm->size(); $i++) {
 				echo '<div class="body">';
 					echo '<div class="tool">';
 					if ($rc->getStatement() == CRM_PROPOSED) {
-						echo '<span><a href="' . APP_ROOT . 'action/a-cancelroute/base-' . $ob_spatioport->getId() . '/route-' . $rc->getId() . '">annuler la proposition commerciale</a></span>';
+						echo '<span><a href="' . Format::actionBuilder('cancelroute', ['base-' => $ob_spatioport->getId(), 'route' => $rc->getId()]) . '">annuler la proposition commerciale</a></span>';
 					} else {
-						echo '<span><a href="' . APP_ROOT . 'action/a-deleteroute/base-' . $ob_spatioport->getId() . '/route-' . $rc->getId() . '">démanteler la route commerciale</a></span>';
+						echo '<span><a href="' . Format::actionBuilder('deleteroute', ['base-' => $ob_spatioport->getId(), 'route' => $rc->getId()]) . '">démanteler la route commerciale</a></span>';
 					}
 					echo '</div>';
 

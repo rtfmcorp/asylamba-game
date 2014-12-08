@@ -25,7 +25,7 @@ abstract class ActionHelper {
 
 				for ($i = 0; $i < ASM::$com->size(); $i++) {
 					if (ASM::$com->get($i)->getStatement() == COM_AFFECTED) {
-						$box .= '<a href="' . APP_ROOT . 'action/a-loot/commanderid-' . ASM::$com->get($i)->getId() . '/placeid-' . $place->getId() . '/redirect-' . $place->getId() . '" class="commander">';
+						$box .= '<a href="' . Format::actionBuilder('loot', ['commanderid' => ASM::$com->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
 							$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . ASM::$com->get($i)->getName() . '" />';
 							$box .= '<span class="label">';
 								$box .= '<strong>' . ASM::$com->get($i)->getName() . '</strong><br />';
@@ -89,7 +89,7 @@ abstract class ActionHelper {
 
 							for ($i = 0; $i < ASM::$com->size(); $i++) {
 								if (ASM::$com->get($i)->getStatement() == COM_AFFECTED) {
-									$box .= '<a href="' . APP_ROOT . 'action/a-conquer/commanderid-' . ASM::$com->get($i)->getId() . '/placeid-' . $place->getId() . '/redirect-' . $place->getId() . '" class="commander">';
+									$box .= '<a href="' . Format::actionBuilder('conquer', ['commanderid' => ASM::$com->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
 										$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . ASM::$com->get($i)->getName() . '" />';
 										$box .= '<span class="label">';
 											$box .= '<strong>' . ASM::$com->get($i)->getName() . '</strong><br />';
@@ -162,7 +162,7 @@ abstract class ActionHelper {
 
 							for ($i = 0; $i < ASM::$com->size(); $i++) { 
 								if (ASM::$com->get($i)->getStatement() == COM_AFFECTED) {
-									$box .= '<a href="' . APP_ROOT . 'action/a-colonize/commanderid-' . ASM::$com->get($i)->getId() . '/placeid-' . $place->getId() . '/redirect-' . $place->getId() . '" class="commander">';
+									$box .= '<a href="' . Format::actionBuilder('colonize', ['commanderid' => ASM::$com->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
 										$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . ASM::$com->get($i)->getName() . '" />';
 										$box .= '<span class="label">';
 											$box .= '<strong>' . ASM::$com->get($i)->getName() . '</strong><br />';
@@ -280,7 +280,7 @@ abstract class ActionHelper {
 
 										if (CTR::$data->get('playerInfo')->get('credit') >= $price) {
 											# bouton actif
-											$box .= '<a class="button" href="' . APP_ROOT . 'action/a-proposeroute/basefrom-' . $ob->getRPlace() . '/baseto-' . $place->getId() . '/redirect-' . $place->getId() . '">';
+											$box .= '<a class="button" href="' . Format::actionBuilder('proposeroute', ['basefrom' => $ob->getRPlace(), 'baseto' => $place->getId(), 'redirect' => $place->getId()]) . '">';
 												$box .= 'proposer';
 											$box .= '</a>';
 										} else {
@@ -321,7 +321,7 @@ abstract class ActionHelper {
 						$box .= '<p>Ressources en stock <strong>' . Format::numberFormat($currentStorage) . ' <img alt="ressource" src="' . MEDIA . 'resources/resource.png" class="icon-color"></strong></p>';
 						$box .= '<p>Capacité d\'envoi maximum <strong>' . Format::numberFormat($maxResourcesToSend) . ' <img alt="ressource" src="' . MEDIA . 'resources/resource.png" class="icon-color"></strong></p>';
 
-						$box .= '<form action="' . APP_ROOT . 'action/a-giveresource/baseid-' . $ob->getRPlace() . '/otherbaseid-' . $place->getId() . '/redirect-' . $place->getId() . '" method="POST">';
+						$box .= '<form action="' . Format::actionBuilder('giveresource', ['baseid' => $ob->getRPlace(), 'otherbaseid' => $place->getId(), 'redirect' => $place->getId()]) . '" method="POST">';
 							$box .= '<p><input type="text" value="0" name="quantity" /></p>';
 							$box .= '<p><input type="submit" value="envoyer" /></p>';
 						$box .= '</form>';
@@ -367,7 +367,7 @@ abstract class ActionHelper {
 					}
 
 					for ($i = 0; $i < ASM::$com->size(); $i++) {
-						$box .= '<a href="' . APP_ROOT . 'action/a-movefleet/commanderid-' . ASM::$com->get($i)->getId() . '/placeid-' . $place->getId() . '/redirect-' . $place->getId() . '" class="commander">';
+						$box .= '<a href="' . Format::actionBuilder('movefleet', ['commanderid' => ASM::$com->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
 							$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . ASM::$com->get($i)->getName() . '" />';
 							$box .= '<span class="label">';
 								$box .= '<strong>' . ASM::$com->get($i)->getName() . '</strong><br />';

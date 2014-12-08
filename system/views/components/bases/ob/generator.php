@@ -34,7 +34,7 @@ if (ASM::$bqm->size() != 0) {
 		$nextTotalTime += OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time');
 
 		$q .= '<div class="item ' . (($realSizeQueue > 1) ? 'active' : '') . ' progress" data-progress-output="lite" data-progress-current-time="' . $nextTime . '" data-progress-total-time="' . $nextTotalTime . '">';
-		$q .= '<a href="' . APP_ROOT . 'action/a-dequeuebuilding/baseid-' . $ob_generator->getId() . '/building-' . $qe->buildingNumber . '"' . 
+		$q .= '<a href="' . Format::actionBuilder('dequeuebuilding', ['baseid' => $ob_generator->getId(), 'building' => $qe->buildingNumber]) . '"' . 
 				'class="button hb lt" title="annuler la construction (attention, vous ne récupérerez que ' . BQM_RESOURCERETURN * 100 . '% du montant investi)">×</a>';
 		$q .= '<img class="picto" src="' . MEDIA . 'orbitalbase/' . OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
 		$q .= '<strong>';
@@ -123,7 +123,7 @@ for ($i = 0; $i < 10; $i++) {
 				$b[$i] .= '</span>';
 			$b[$i] .= '</span>';
 		} else {
-			$b[$i] .= '<a class="button" href="' . APP_ROOT . 'action/a-buildbuilding/baseid-' . $ob_generator->getId() . '/building-' . $i . '">';
+			$b[$i] .= '<a class="button" href="' . Format::actionBuilder('buildbuilding', ['baseid' => $ob_generator->getId(), 'building' => $i]) . '">';
 				$b[$i] .= '<span class="text">';
 					$b[$i] .= 'augmenter vers le niveau ' . $nextLevel . '<br/>';
 					$b[$i] .= $price . ' | ' . $time;

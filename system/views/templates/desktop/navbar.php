@@ -58,7 +58,7 @@ echo '<div id="nav">';
 			echo '<img src="' . MEDIA . 'map/place/place' . $currentBaseImg . '.png" alt="' . $currentBaseName . '" /> ';
 			echo $currentBaseName;
 		echo '</a>';
-		echo '<a href="' . APP_ROOT . 'action/a-switchbase/base-' . $nextBaseId . '" class="square">';
+		echo '<a href="' . Format::actionBuilder('switchbase', ['base' => $nextBaseId]) . '" class="square">';
 			echo '<img src="' . MEDIA . 'common/next-base.png" alt="base suivante" />';
 		echo '</a>';
 	echo '</div>';
@@ -125,7 +125,7 @@ echo '<div id="nav">';
 		echo '<h2>Changer de bases</h2>';
 		echo '<div class="overflow">';
 			for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
-				echo '<a href="' . APP_ROOT . 'action/a-switchbase/base-' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') . '" ' . (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == CTR::$data->get('playerParams')->get('base') ? 'class="active"' : NULL) . '>';
+				echo '<a href="' . Format::actionBuilder('switchbase', ['base' => CTR::$data->get('playerBase')->get('ob')->get($i)->get('id')]) . '" ' . (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == CTR::$data->get('playerParams')->get('base') ? 'class="active"' : NULL) . '>';
 					echo '<em>' . PlaceResource::get(CTR::$data->get('playerBase')->get('ob')->get($i)->get('type'), 'name') . '</em>';
 					echo '<strong>' . CTR::$data->get('playerBase')->get('ob')->get($i)->get('name') . '</strong>';
 				echo '</a>';
@@ -137,7 +137,7 @@ echo '<div id="nav">';
 	echo '<div class="overbox" id="new-notifications">';
 		echo '<h2>Notifications</h2>';
 		if (ASM::$ntm->size() > 1) {
-			echo '<a class="link-title" href="' . APP_ROOT . 'action/a-readallnotif">tout marquer comme lu</a>';
+			echo '<a class="link-title" href="' . Format::actionBuilder('readallnotif') . '">tout marquer comme lu</a>';
 		}
 		echo '<div class="overflow">';
 			if (ASM::$ntm->size() > 0) {
@@ -147,8 +147,8 @@ echo '<div id="nav">';
 						echo '<h4 class="read-notif switch-class-parent" data-class="open">' . $n->getTitle() . '</h4>';
 						echo '<div class="content">' . $n->getContent() . '</div>';
 						echo '<div class="footer">';
-							echo '<a class="ajax-action" data-ajax-target="' . APP_ROOT . 'ajax/a-archivenotif/id-' . $n->getId() . '" href="' . APP_ROOT . 'action/a-archivenotif/id-' . $n->getId() . '">archiver</a> ou ';
-							echo '<a class="ajax-action" data-ajax-target="' . APP_ROOT . 'ajax/a-deletenotif/id-' . $n->getId() . '" href="' . APP_ROOT . 'action/a-deletenotif/id-' . $n->getId() . '">supprimer</a><br />';
+							echo '<a class="ajax-action" data-ajax-target="' . APP_ROOT . 'ajax/a-archivenotif/id-' . $n->getId() . '" href="' . Format::actionBuilder('archivenotif', ['id' => $n->getId()]) . '">archiver</a> ou ';
+							echo '<a class="ajax-action" data-ajax-target="' . APP_ROOT . 'ajax/a-deletenotif/id-' . $n->getId() . '" href="' . Format::actionBuilder('deletenotif', ['id' => $n->getId()]) . '">supprimer</a><br />';
 							echo '— ' . Chronos::transform($n->getDSending());
 						echo '</div>';
 					echo '</div>';
@@ -193,7 +193,7 @@ echo '<div id="nav">';
 				echo '<p>' . TutorialResource::getInfo($step, 'description') . '</p>';
 			echo '</div>';
 
-			echo '<form action="' . APP_ROOT . 'action/a-validatestep" method="post">';
+			echo '<form action="' . Format::actionBuilder('validatestep') . '" method="post">';
 			if (CTR::$data->get('playerInfo')->get('stepDone') == TRUE) {
 				echo '<input type="submit" value="valider l\'étape ' . $step . '" class="button" />';
 			} else {
@@ -205,7 +205,7 @@ echo '<div id="nav">';
 
 	echo '<div class="overbox" id="bug-tracker">';
 		echo '<h2>Bug tracker</h2>';
-		echo '<form action="' . APP_ROOT . 'action/a-writebugreport" method="post">';
+		echo '<form action="' . Format::actionBuilder('writebugreport') . '" method="post">';
 			echo '<p>Rapportez-nous vos bugs ! Il vous suffit de décrire l\'erreur rencontrée directement sur la page qui a provoqué cette dernière. ';
 			echo 'Cela nous permettra de disposer du maximum d\'information.</p>';
 			echo '<input type="hidden" name="url" value="' . $_SERVER['REQUEST_URI'] . '" />';
@@ -222,7 +222,7 @@ echo '<div id="nav">';
 	echo '</div>';
 
 	echo '<div class="overbox" id="disconnect-box">';
-		echo '<a href="' . APP_ROOT . 'action/a-disconnect">Se déconnecter</a>';
+		echo '<a href="' . Format::actionBuilder('disconnect') . '">Se déconnecter</a>';
 		echo '<hr />';
 		echo '<a href="' . GETOUT_ROOT . 'profil">Changer de serveur</a>';
 		echo '<hr />';

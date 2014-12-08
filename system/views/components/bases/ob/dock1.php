@@ -75,7 +75,7 @@ for ($i = 0; $i < 6; $i++) {
 		} else {
 			$but  = '<input class="ship-pack" type="text" maxlength="2" name="quantity" value="' . $maxShip . '" data-max-ship="' . $maxShip . '" />';
 
-			$but .= '<a href="' . APP_ROOT . 'action/a-buildship/baseid-' . $ob_dock1->getId() . '/ship-' . $i . '/quantity-' . $maxShip . '" class="button">';
+			$but .= '<a href="' . Format::actionBuilder('buildship', ['baseid' => $ob_dock1->getId(), 'ship' => $i, 'quantity' => $maxShip]) . '" class="button">';
 				$but .= 'construire <span class="final-number">' . $maxShip . '</span> ' . ShipResource::getInfo($i, 'codeName') . ' pour<br />';
 				$but .= '<span class="final-cost">' . Format::numberFormat(ShipResource::getInfo($i, 'resourcePrice') * $maxShip) . '</span> ';
 				$but .= '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png"> et ';
@@ -125,7 +125,7 @@ echo '<div class="component">';
 					echo $realSizeQueue > 1
 						? '<div class="item">'
 						: '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTime . '" data-progress-total-time="' . $totalTimeShips . '">';
-					echo '<a href="' . APP_ROOT . 'action/a-dequeueship/baseid-' . $ob_dock1->getId() . '/dock-1/queue-' . $queue->id . '"' . 
+					echo '<a href="' . Format::actionBuilder('dequeueship', ['baseid' => $ob_dock1->getId(), 'dock' => '1', 'queue' => $queue->id]) . '"' . 
 						'class="button hb lt" title="annuler la commande (attention, vous ne récupérerez que ' . SQM_RESOURCERETURN * 100 . '% du montant investi)">×</a>';
 					echo  '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($queue->shipNumber, 'imageLink') . '.png" alt="" />';
 					echo '<strong>' . $queue->quantity . ' ' . ShipResource::getInfo($queue->shipNumber, 'codeName') . Format::addPlural($queue->quantity) . '</strong>';

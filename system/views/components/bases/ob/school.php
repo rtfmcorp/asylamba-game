@@ -47,7 +47,7 @@ echo '<div class="component school">';
 
 			echo '<hr />';
 
-			echo '<form action="' . APP_ROOT . 'action/a-createschoolclass/baseid-' . $ob_school->getId() . '/school-0" method="post" class="build-item">';
+			echo '<form action="' . Format::actionBuilder('createschoolclass', ['baseid' . $ob_school->getId(), 'school' => '0']) . '" method="post" class="build-item">';
 				echo '<div class="name">';
 					echo '<img src="' . MEDIA . 'school/school-1.png" alt="" />';
 					echo '<strong>Nouvel officier</strong>';
@@ -94,7 +94,7 @@ echo '<div class="component">';
 						echo '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
 						echo '<strong>' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->getName() . '</strong>';
 						echo '<em>' . Format::numberFormat($commander->getExperience()) . ' points d\'expérience</em>';
-						echo '<a href="' . APP_ROOT . 'action/a-affectcommander/id-' . $commander->getId() . '">';
+						echo '<a href="' . Format::actionBuilder('affectcommander', ['id' . $commander->getId()]) . '">';
 							echo 'affecter';
 						echo '</a>';
 						echo '<span class="progress-container">';

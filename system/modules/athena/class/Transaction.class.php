@@ -186,7 +186,7 @@ class Transaction {
 				echo '</div>';
 
 				echo '<div class="button">';
-					echo '<a href="' . APP_ROOT . 'action/a-accepttransaction/rplace-' . $ob->getId() . '/rtransaction-' . $this->id . '">';
+					echo '<a href="' . Format::actionBuilder('accepttransaction', ['rplace' => $ob->getId(), 'rtransaction' => $this->id]) . '">';
 						echo 'acheter pour ' . Format::numberFormat($totalPrice) . ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"><br /> ';
 						echo 'durée du transit ' . Chronos::secondToFormat($time, 'lite') . ' <img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
 					echo '</a>';

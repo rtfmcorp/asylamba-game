@@ -138,7 +138,7 @@ for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
 					$but .= '<img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
 				$but .= '</span>';
 			} else {
-				$but .= '<a class="button" href="' . APP_ROOT . 'action/a-buildtechno/baseid-' . $ob_tech->getId() . '/techno-' . $i . '">';
+				$but .= '<a class="button" href="' . Format::actionBuilder('buildtechno', ['baseid' => $ob_tech->getId(), 'techno' => $i]) . '">';
 					if (TechnologyResource::isAnUnblockingTechnology($i)) {
 						$but .= 'rechercher la technologie<br />';
 					} else {
@@ -211,7 +211,7 @@ echo '<div class="component techno">';
 					$remainingTotalTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
 
 					echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTotalTime . '" data-progress-total-time="' . $totalTimeTechno . '">';
-						echo '<a href="' . APP_ROOT . 'action/a-dequeuetechno/baseid-' . $ob_tech->getId() . '/techno-' . $queue->technology . '"' . 
+						echo '<a href="' . Format::actionBuilder('dequeuetechno', ['baseid' => $ob_tech->getId(), 'techno' => $queue->technology]) . '"' . 
 							'class="button hb lt" title="annuler la recherche (attention, vous ne récupérerez que ' . TQM_RESOURCERETURN * 100 . '% du montant investi)">×</a>';
 						echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($queue->technology, 'imageLink') . '.png" alt="" />';
 						echo '<strong>' . TechnologyResource::getInfo($queue->technology, 'name');

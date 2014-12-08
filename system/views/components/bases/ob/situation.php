@@ -51,7 +51,7 @@ echo '<div class="component generator">';
 
 					echo '<div class="desc-choice">';
 						if (($ob_obSituation->typeOfBase == OrbitalBase::TYP_NEUTRAL && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price') && $ob_obSituation->levelGenerator >= OBM_LEVEL_MIN_TO_CHANGE_TYPE) || (($ob_obSituation->typeOfBase == OrbitalBase::TYP_MILITARY || $ob_obSituation->typeOfBase == OrbitalBase::TYP_CAPITAL) && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price'))) {
-							echo '<a href="' . APP_ROOT . 'action/a-changebasetype/baseid-' . $ob_obSituation->getId() . '/type-' . OrbitalBase::TYP_COMMERCIAL . '" class="button">';
+							echo '<a href="' . Format::actionBuilder('changebasetype', ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_COMMERCIAL]) . '" class="button">';
 								echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'name') . '<br />';
 								echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price'));
 								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
@@ -77,7 +77,7 @@ echo '<div class="component generator">';
 
 					echo '<div class="desc-choice">';
 						if (($ob_obSituation->typeOfBase == OrbitalBase::TYP_NEUTRAL && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price') && $ob_obSituation->levelGenerator >= OBM_LEVEL_MIN_TO_CHANGE_TYPE) || (($ob_obSituation->typeOfBase == OrbitalBase::TYP_COMMERCIAL || $ob_obSituation->typeOfBase == OrbitalBase::TYP_CAPITAL) && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price'))) {
-							echo '<a href="' . APP_ROOT . 'action/a-changebasetype/baseid-' . $ob_obSituation->getId() . '/type-' . OrbitalBase::TYP_MILITARY . '" class="button">';
+							echo '<a href="' . Format::actionBuilder('changebasetype', ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_MILITARY]) . '" class="button">';
 								echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_MILITARY, 'name') . '<br />';
 								echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price'));
 								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
@@ -110,7 +110,7 @@ echo '<div class="component generator">';
 						}
 						$totalPrice = ($capitalQuantity + 1) * PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'price');
 						if ((($ob_obSituation->typeOfBase == OrbitalBase::TYP_COMMERCIAL || $ob_obSituation->typeOfBase == OrbitalBase::TYP_MILITARY) && CTR::$data->get('playerInfo')->get('credit') >= $totalPrice && $ob_obSituation->levelGenerator >= OBM_LEVEL_MIN_FOR_CAPITAL)) {
-							echo '<a href="' . APP_ROOT . 'action/a-changebasetype/baseid-' . $ob_obSituation->getId() . '/type-' . OrbitalBase::TYP_CAPITAL . '" class="button">';
+							echo '<a href="' . Format::actionBuilder('changebasetype', ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_CAPITAL]) . '" class="button">';
 								echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'name') . '<br />';
 								echo  Format::numberFormat($totalPrice);
 								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
@@ -146,7 +146,7 @@ echo '<div class="component space size3">';
 			echo '<div class="situation-content place1">';
 				echo '<div class="toolbar">';
 					echo '<a href="' . APP_ROOT . '/map/base-' . $ob_obSituation->getId() . '">Centrer sur la carte</a>';
-					echo '<form action="' . APP_ROOT . 'action/a-renamebase/baseid-' . $ob_obSituation->getId() . '" method="POST">';
+					echo '<form action="' . Format::actionBuilder('renamebase', ['baseid' => $ob_obSituation->getId()]) . '" method="POST">';
 						echo '<input type="text" name="name" value="' . $ob_obSituation->getName() . '" />';
 						echo '<input type="submit" class="button" value=" " />';
 					echo '</form>';
@@ -177,7 +177,7 @@ echo '<div class="component space size3">';
 								}
 							echo '</span>';
 						echo '</a>';
-						echo '<a class="link hb ' . ($commander->line == 1 ? 'to-right' : 'to-left') . '" title="changer de ligne" href="' . APP_ROOT . 'action/a-changeline/id-' . $commander->id . '"></a>';
+						echo '<a class="link hb ' . ($commander->line == 1 ? 'to-right' : 'to-left') . '" title="changer de ligne" href="' . Format::actionBuilder('changeline', ['id' => $commander->id]) . '"></a>';
 					echo '</div>';
 
 					if ($commander->line == 1) {

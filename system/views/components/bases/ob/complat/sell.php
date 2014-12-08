@@ -16,7 +16,7 @@ echo '<div class="component market-sell">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<form class="sell-form" data-shipcom-size="' . CommercialShipping::WEDGE . '" data-resource-rate="1" data-max-quantity="' . $ob_compPlat->resourcesStorage . '" data-rate="' . $resourcesCurrentRate . '" data-min-price="' . Transaction::MIN_RATE_RESOURCE . '" action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_RESOURCE . '" method="post">';
+			echo '<form class="sell-form" data-shipcom-size="' . CommercialShipping::WEDGE . '" data-resource-rate="1" data-max-quantity="' . $ob_compPlat->resourcesStorage . '" data-rate="' . $resourcesCurrentRate . '" data-min-price="' . Transaction::MIN_RATE_RESOURCE . '" action="' . Format::actionBuilder('proposetransaction', ['rplace' => $ob_compPlat->getId(), 'type' => Transaction::TYP_RESOURCE]) . '" method="post">';
 				echo '<div class="label-box">';
 					echo '<span class="label">Ressources</span>';
 					echo '<span class="value">' . Format::numberFormat($ob_compPlat->resourcesStorage) . '</span>';
@@ -87,7 +87,7 @@ echo '<div class="component market-sell">';
 					echo '</div>';
 				echo '</div>';
 
-				echo '<form class="sell-form" id="sell-commander-' . $i . '" action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_COMMANDER . '/identifier-' . $commander->getId() . '" method="post" style="display:none;">';
+				echo '<form class="sell-form" id="sell-commander-' . $i . '" action="' . Format::actionBuilder('proposetransaction', ['rplace' => $ob_compPlat->getId(), 'type' => Transaction::TYP_COMMANDER, 'identifier' => $commander->getId()]) . '" method="post" style="display:none;">';
 
 					echo '<div class="label-box">';
 						echo '<span class="label">Prix minimum</span>';
@@ -148,7 +148,7 @@ echo '<div class="component market-sell">';
 						echo '</div>';
 					echo '</div>';
 
-					echo '<form id="sell-ships-' . $key . '" class="sell-form" data-shipcom-size="' . CommercialShipping::WEDGE . '" data-resource-rate="' . ShipResource::getInfo($key, 'resourcePrice') . '" data-max-quantity="' . $ship . '" data-rate="' . ($shipCurrentRate * ShipResource::getInfo($key, 'resourcePrice')) . '" data-min-price="' . Game::getMinPriceRelativeToRate(Transaction::TYP_SHIP, 1, $key) . '" action="' . APP_ROOT . 'action/a-proposetransaction/rplace-' . $ob_compPlat->getId() . '/type-' . Transaction::TYP_SHIP . '/identifier-' . $key . '" method="post" style="display:none;">';
+					echo '<form id="sell-ships-' . $key . '" class="sell-form" data-shipcom-size="' . CommercialShipping::WEDGE . '" data-resource-rate="' . ShipResource::getInfo($key, 'resourcePrice') . '" data-max-quantity="' . $ship . '" data-rate="' . ($shipCurrentRate * ShipResource::getInfo($key, 'resourcePrice')) . '" data-min-price="' . Game::getMinPriceRelativeToRate(Transaction::TYP_SHIP, 1, $key) . '" action="' . Format::actionBuilder('proposetransaction', ['rplace' => $ob_compPlat->getId(), 'type' => Transaction::TYP_SHIP, 'identifier' => $key]) . '" method="post" style="display:none;">';
 						echo '<div class="label-box">';
 							echo '<span class="label">Quantité max.</span>';
 							echo '<span class="value">' . $ship . '</span>';

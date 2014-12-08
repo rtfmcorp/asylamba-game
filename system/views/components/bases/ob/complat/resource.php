@@ -7,7 +7,7 @@ echo '<div class="component new-message market-sell">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<form action="' . APP_ROOT . 'action/a-giveresource/baseid-' . $ob_compPlat->rPlace . '" method="post">';
+			echo '<form action="' . Format::actionBuilder('giveresource', ['baseid' => $ob_compPlat->rPlace]) . '" method="post">';
 				# base
 				echo '<p><label for="send-resources-target">Base destinataire</label></p>';
 				echo '<input class="autocomplete-hidden" type="hidden" name="otherbaseid" />';
