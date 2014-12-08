@@ -18,6 +18,4 @@ class Vote {
 	public $dVotation			= '';
 
 	public function getId() { return $this->id; }
-
-
 }

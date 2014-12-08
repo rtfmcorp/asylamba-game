@@ -65,7 +65,6 @@ class VoteLawManager extends Manager {
 
 	foreach ($voteLaws AS $voteLaw) {
 
-
 		$qr = $db->prepare('UPDATE voteLaw
 			SET
 				rLaw = ?,
@@ -93,12 +92,12 @@ class VoteLawManager extends Manager {
 				vote = ?,
 				dVotation = ?');
 
-			$aw = $qr->execute(array(
-				$newVoteLaw->rLaw,
-				$newVoteLaw->rPlayer,
-				$newVoteLaw->vote,
-				$newVoteLaw->dVotation
-				));
+		$aw = $qr->execute(array(
+			$newVoteLaw->rLaw,
+			$newVoteLaw->rPlayer,
+			$newVoteLaw->vote,
+			$newVoteLaw->dVotation
+		));
 
 		$newVoteLaw->id = $db->lastInsertId();
 

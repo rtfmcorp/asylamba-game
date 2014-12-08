@@ -892,7 +892,7 @@ class Place {
 				$notif->setRPlayer($commander->getRPlayer());
 				$notif->setTitle('Déplacement réussi');
 				$notif->addBeg()
-					->addTxt('Votre offier ')
+					->addTxt('Votre officier ')
 					->addLnk('fleet/commander-' . $commander->getId(), $commander->getName())
 					->addTxt(' est arrivé sur ')
 					->addLnk('map/base-' . $this->id, $this->baseName)

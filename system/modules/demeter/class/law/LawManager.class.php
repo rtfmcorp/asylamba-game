@@ -71,26 +71,25 @@ class LawManager extends Manager {
 
 		$laws = $this->_Save();
 
-	foreach ($laws AS $law) {
+		foreach ($laws AS $law) {
 
-
-		$qr = $db->prepare('UPDATE law
-			SET
-				rColor = ?,
-				type = ?,
-				statement = ?,
-				dEnd = ?,
-				dEndVotation = ?,
-				dCreation = ?
-			WHERE id = ?');
-		$aw = $qr->execute(array(
-			$law->rColor,
-			$law->type,
-			$law->statement,
-			$law->dEnd,
-			$law->dEndVotation,
-			$law->dCreation,
-			$law->id
+			$qr = $db->prepare('UPDATE law
+				SET
+					rColor = ?,
+					type = ?,
+					statement = ?,
+					dEnd = ?,
+					dEndVotation = ?,
+					dCreation = ?
+				WHERE id = ?');
+			$aw = $qr->execute(array(
+				$law->rColor,
+				$law->type,
+				$law->statement,
+				$law->dEnd,
+				$law->dEndVotation,
+				$law->dCreation,
+				$law->id
 			));
 		}
 	}
