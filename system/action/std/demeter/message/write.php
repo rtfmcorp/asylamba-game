@@ -28,7 +28,7 @@ if ($rTopic AND $content) {
 			ASM::$tom->get()->dLastMessage = Utils::now();
 			CTR::$alert->add('Message créé.', ALERT_STD_SUCCESS);
 		} else {
-			CTR::$alert->add('Ce sujet est fermé.', ALERT_STD_ERROR);		
+			CTR::$alert->add('Ce sujet est fermé.', ALERT_STD_ERROR);
 		}
 	} else {
 		CTR::$alert->add('Le topic n\'existe pas.', ALERT_STD_ERROR);

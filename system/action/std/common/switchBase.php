@@ -16,6 +16,7 @@ if ($page !== FALSE) {
 		case 'technosphere' : $page = 'bases/view-technosphere'; break;
 		case 'commercialroute' : $page = 'bases/view-commercialplateforme/mode-route'; break;
 		case 'sell' : $page = 'bases/view-commercialplateforme/mode-sell'; break;
+		case 'school' : $page = 'bases/view-school'; break;
 	}
 	CTR::redirect($page);
 }
