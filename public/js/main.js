@@ -215,12 +215,12 @@ jQuery(document).ready(function($) {
 
 	$('.uni-invest-button.increase').live('click', function(e) {
 		e.preventDefault();
-		var step = e.ctrlKey ? 10 : 1;
+		var step = (e.ctrlKey || e.metaKey) ? 10 : 1;
 		uniInvest.update($(this).data('type'), step);
 	});
 	$('.uni-invest-button.decrease').live('click', function(e) {
 		e.preventDefault();
-		var step = e.ctrlKey ? -10 : -1;
+		var step = (e.ctrlKey || e.metaKey) ? -10 : -1;
 		uniInvest.update($(this).data('type'), step);
 	});
 
