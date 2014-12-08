@@ -79,20 +79,19 @@ class CandidateManager extends Manager {
 
 		$candidates = $this->_Save();
 
-	foreach ($candidates AS $candidate) {
+		foreach ($candidates AS $candidate) {
 
-
-		$qr = $db->prepare('UPDATE candidate
-			SET
-				rElection = ?,
-				rPlayer = ?,
-				chiefChoice = ?,
-				treasurerChoice = ?,
-				warlordChoice = ?,
-				ministerChoice = ?,
-				dPresentation = ?
-			WHERE id = ?');
-		$aw = $qr->execute(array(
+			$qr = $db->prepare('UPDATE candidate
+				SET
+					rElection = ?,
+					rPlayer = ?,
+					chiefChoice = ?,
+					treasurerChoice = ?,
+					warlordChoice = ?,
+					ministerChoice = ?,
+					dPresentation = ?
+				WHERE id = ?');
+			$aw = $qr->execute(array(
 				$candidate->rElection,
 				$candidate->rPlayer,
 				$candidate->chiefChoice,
@@ -119,16 +118,16 @@ class CandidateManager extends Manager {
 				program = ?,
 				dPresentation = ?');
 
-			$aw = $qr->execute(array(
-				$newCandidate->rElection,
-				$newCandidate->rPlayer,
-				$newCandidate->chiefChoice,
-				$newCandidate->treasurerChoice,
-				$newCandidate->warlordChoice,
-				$newCandidate->ministerChoice,
-				$newCandidate->program,
-				$newCandidate->dPresentation
-				));
+		$aw = $qr->execute(array(
+			$newCandidate->rElection,
+			$newCandidate->rPlayer,
+			$newCandidate->chiefChoice,
+			$newCandidate->treasurerChoice,
+			$newCandidate->warlordChoice,
+			$newCandidate->ministerChoice,
+			$newCandidate->program,
+			$newCandidate->dPresentation
+		));
 
 		$newCandidate->id = $db->lastInsertId();
 

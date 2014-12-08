@@ -63,21 +63,19 @@ class VoteManager extends Manager {
 
 		$votes = $this->_Save();
 
-	foreach ($votes AS $vote) {
+		foreach ($votes AS $vote) {
 
-
-		$qr = $db->prepare('UPDATE vote
-			SET
-				rCandidate = ?,
-				rPlayer = ?,
-				dVotation = ?
-			WHERE id = ?');
-		$aw = $qr->execute(array(
+			$qr = $db->prepare('UPDATE vote
+				SET
+					rCandidate = ?,
+					rPlayer = ?,
+					dVotation = ?
+				WHERE id = ?');
+			$aw = $qr->execute(array(
 				$vote->rCandidate,
 				$vote->rPlayer,
 				$vote->dVotation,
 				$vote->id
-
 			));
 		}
 	}
@@ -92,12 +90,12 @@ class VoteManager extends Manager {
 				rElection = ?,
 				dVotation = ?');
 
-			$aw = $qr->execute(array(
-				$newVote->rCandidate,
-				$newVote->rPlayer,
-				$newVote->rElection,
-				$newVote->dVotation
-				));
+		$aw = $qr->execute(array(
+			$newVote->rCandidate,
+			$newVote->rPlayer,
+			$newVote->rElection,
+			$newVote->dVotation
+		));
 
 		$newVote->id = $db->lastInsertId();
 

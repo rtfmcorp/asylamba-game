@@ -26,6 +26,4 @@ class Candidate {
 	public $dPresentation		= '';
 
 	public function getId() { return $this->id; }
-
-
 }

@@ -59,21 +59,18 @@ class ElectionManager extends Manager {
 	public function save() {
 		$db = DataBase::getInstance();
 
-		$election = $this->_Save();
+		$elections = $this->_Save();
 
-	foreach ($election AS $election) {
-
-
-		$qr = $db->prepare('UPDATE election
-			SET
-				rColor = ?,
-				dElection = ?
-			WHERE id = ?');
-		$aw = $qr->execute(array(
+		foreach ($elections AS $election) {
+			$qr = $db->prepare('UPDATE election
+				SET
+					rColor = ?,
+					dElection = ?
+				WHERE id = ?');
+			$aw = $qr->execute(array(
 				$election->rColor,
 				$election->dElection,
 				$election->id
-
 			));
 		}
 	}
@@ -86,10 +83,10 @@ class ElectionManager extends Manager {
 				rColor = ?,
 				dElection = ?');
 
-			$aw = $qr->execute(array(
-				$newElection->rColor,
-				$newElection->dElection
-				));
+		$aw = $qr->execute(array(
+			$newElection->rColor,
+			$newElection->dElection
+		));
 
 		$newElection->id = $db->lastInsertId();
 

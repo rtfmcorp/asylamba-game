@@ -307,14 +307,14 @@ class Color {
 				$notif->setRPlayer(ASM::$pam->get()->id);
 				$notif->setTitle('Votre avez été élu');
 				$notif->addBeg()
-					->addTxt(' Le peuple vous à soutenu, vous avez été élu ' . $statusArray[PAM_CHIEF - 1] . ' de votre faction.');
+					->addTxt(' Le peuple vous a soutenu, vous avez été élu ' . $statusArray[PAM_CHIEF - 1] . ' de votre faction.');
 				ASM::$ntm->add($notif);
 			} elseif ($this->getRegime() == self::ROYALISTIC) {
 				$notif = new Notification();
 				$notif->setRPlayer(ASM::$pam->get()->id);
 				$notif->setTitle('Votre coup d\'état a réussi');
 				$notif->addBeg()
-					->addTxt(' Le peuple vous à soutenu, vous avez renversé le ' . $statusArray[PAM_CHIEF - 1] . ' de votre faction et avez pris sa place.');
+					->addTxt(' Le peuple vous a soutenu, vous avez renversé le ' . $statusArray[PAM_CHIEF - 1] . ' de votre faction et avez pris sa place.');
 				ASM::$ntm->add($notif);
 
 				$notif = new Notification();
@@ -343,7 +343,6 @@ class Color {
 			$date = $date->format('Y-m-d H:i:s');
 			$this->dLastElection = $date;
 
-
 			if ($this->getRegime() == self::ROYALISTIC) {
 				$_PAM2 = ASM::$pam->getCurrentSession();
 				ASM::$pam->changeSession($token_newChief);
@@ -370,7 +369,7 @@ class Color {
 				$notif->setRPlayer($idOldChief);
 				$notif->setTitle('Vous avez été nommé Guide');
 				$notif->addBeg()
-					->addTxt(' Les Oracles on parlé, vous êtes toujours désigné par la Grande Lumière pour guider Cardan vers la Gloire.');
+					->addTxt(' Les Oracles ont parlé, vous êtes toujours désigné par la Grande Lumière pour guider Cardan vers la Gloire.');
 				ASM::$ntm->add($notif);
 			}
 		}

@@ -76,29 +76,28 @@ class ForumMessageManager extends Manager {
 
 		$messages = $this->_Save();
 
-	foreach ($messages AS $message) {
-
-
-		$qr = $db->prepare('UPDATE forumMessage
-			SET
-				rPlayer = ?,
-				rTopic = ?,
-				oContent = ?,
-				pContent = ?,
-				statement = ?,
-				dCreation = ?,
-				dLastModification = ?
-			WHERE id = ?');
-		$aw = $qr->execute(array(
-				$message->rPlayer,
-				$message->rTopic,
-				$message->oContent,
-				$message->pContent,
-				$message->statement,
-				$message->dCreation,
-				Utils::now(),
-				$message->id
-			));
+		foreach ($messages AS $message) {
+			
+			$qr = $db->prepare('UPDATE forumMessage
+				SET
+					rPlayer = ?,
+					rTopic = ?,
+					oContent = ?,
+					pContent = ?,
+					statement = ?,
+					dCreation = ?,
+					dLastModification = ?
+				WHERE id = ?');
+			$aw = $qr->execute(array(
+					$message->rPlayer,
+					$message->rTopic,
+					$message->oContent,
+					$message->pContent,
+					$message->statement,
+					$message->dCreation,
+					Utils::now(),
+					$message->id
+				));
 		}
 	}
 
