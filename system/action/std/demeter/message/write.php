@@ -26,6 +26,7 @@ if ($rTopic AND $content) {
 			ASM::$fmm->add($message);
 
 			ASM::$tom->get()->dLastMessage = Utils::now();
+			CTR::redirect('faction/view-forum/forum-' . ASM::$tom->get()->rForum . '/topic-' . $rTopic . '/sftr-2');
 			CTR::$alert->add('Message créé.', ALERT_STD_SUCCESS);
 		} else {
 			CTR::$alert->add('Ce sujet est fermé.', ALERT_STD_ERROR);		

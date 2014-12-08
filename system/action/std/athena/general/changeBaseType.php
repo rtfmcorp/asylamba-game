@@ -130,7 +130,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 				$player->decreaseCredit($totalPrice);
 				$orbitalBase->typeOfBase = $type;
 				# delete commercial buildings
-				for ($i = 0; $i < 8; $i++) { 
+				for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) { 
 					$maxLevel = OrbitalBaseResource::getBuildingInfo($i, 'maxLevel', $type);
 					if ($orbitalBase->getBuildingLevel($i) > $maxLevel) {
 						$orbitalBase->setBuildingLevel($i, $maxLevel);
@@ -160,7 +160,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 					} elseif ($player->rColor == ColorResource::NERVE) {
 						$player->factionPoint += Color::POINTCHANGETYPE;
 					}
-					CTR::$alert->add('Votre base orbitale devient commerciale. Vos bâtiments militaires sont détruits.', ALERT_STD_SUCCESS);
+					CTR::$alert->add('Votre Base Militaire devient un Centre Commerciale. Vos bâtiments militaires superflus sont détruits.', ALERT_STD_SUCCESS);
 				} else {
 					# change base type in session
 					for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
@@ -176,7 +176,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 					} elseif ($player->rColor == ColorResource::KOVAHK) {
 						$player->factionPoint += Color::POINTCHANGETYPE;
 					}
-					CTR::$alert->add('Votre base orbitale devient militaire. Vos bâtiments commerciaux sont détruits.', ALERT_STD_SUCCESS);
+					CTR::$alert->add('Votre Centre Industriel devient une Base Militaire. Vos bâtiments commerciaux superflus sont détruits.', ALERT_STD_SUCCESS);
 				}
 			} else {
 				CTR::$alert->add('modification du type de la base orbitale impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
