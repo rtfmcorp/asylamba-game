@@ -16,7 +16,7 @@ echo '<div class="component topic size2">';
 			echo '<div class="message write">';
 				echo '<img src="' . MEDIA . 'avatar/medium/' . CTR::$data->get('playerInfo')->get('avatar') . '.png" alt="' . CTR::$data->get('playerInfo')->get('pseudo') . '" class="avatar" />';
 				echo '<div class="content">';
-					echo '<form action="' . APP_ROOT . 'action/a-writemessage" method="POST">';
+					echo '<form action="' . Format::actionBuilder('writemessage') . '" method="POST">';
 						echo '<input type="hidden" class="autocomplete-hidden" name="playerid" value="' . $sendToId . '" />';
 						echo '<input type="text" class="title autocomplete-player" name="name" placeholder="Destinataire" value="' . $sendToName . '" />';
 

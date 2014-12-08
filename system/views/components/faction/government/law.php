@@ -13,7 +13,7 @@ echo '<div class="component profil player">';
 
 				if (LawResources::getInfo($governmentLaw_id, 'bonusLaw')) {
 					echo $faction->credits >= LawResources::getInfo($governmentLaw_id, 'price')
-						? '<a class="button" href="' . APP_ROOT . 'action/a-createlaw/type-' . $governmentLaw_id . '">'
+						? '<a class="button" href="' . Format::actionBuilder('createlaw', ['type' => $governmentLaw_id]) . '">'
 						: '<span class="button disable">';
 						echo '<span class="text">';
 							echo 'Soumettre au vote<br />';
@@ -22,7 +22,7 @@ echo '<div class="component profil player">';
 					echo $faction->credits >= LawResources::getInfo($governmentLaw_id, 'price')
 						? '</a>' : '<span>';
 				} else {
-					echo '<form action="' . APP_ROOT . 'action/a-createlaw/type-' . $governmentLaw_id . '" method="post">';
+					echo '<form action="' . Format::actionBuilder('createlaw', ['type' => $governmentLaw_id]) . '" method="post">';
 						if ($governmentLaw_id == 1) {
 							echo '<input type="text" placeholder="Nouvel impôt en pourcent" name="taxes" />';
 							

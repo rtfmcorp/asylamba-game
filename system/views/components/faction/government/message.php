@@ -3,7 +3,7 @@ echo '<div class="component new-message params size2">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<form action="' . APP_ROOT . 'action/a-writetofaction" method="POST" />';
+			echo '<form action="' . Format::actionBuilder('writetofaction') . '" method="POST" />';
 				echo '<h4>Envoyer un message à la faction</h4>';
 
 				echo '<p>Ciblage</p>';

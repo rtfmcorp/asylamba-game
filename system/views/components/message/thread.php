@@ -18,7 +18,7 @@ echo '<div class="component topic size2">';
 				echo '<div class="message write">';
 					echo '<img src="' . MEDIA . 'avatar/medium/' . CTR::$data->get('playerInfo')->get('avatar') . '.png" alt="' . CTR::$data->get('playerInfo')->get('pseudo') . '" class="avatar" />';
 					echo '<div class="content">';
-						echo '<form action="' . APP_ROOT . 'action/a-writemessage/thread-' . ASM::$msm->get(0)->getThread() . '" method="POST">';
+						echo '<form action="' . Format::actionBuilder('writemessage', ['thread' => ASM::$msm->get(0)->getThread()]) . '" method="POST">';
 							echo '<div class="wysiwyg" data-id="new-message-wysiwyg">';
 								$parser = new Parser();
 								echo $parser->getToolbar();

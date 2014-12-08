@@ -6,7 +6,7 @@ echo '<div class="component params">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<form action="' . APP_ROOT . 'action/a-updatedisplayparams" method="post">';
+			echo '<form action="' . Format::actionBuilder('updatedisplayparams') . '" method="post">';
 				echo '<div class="info-building"><h4>Paramètres généraux</h4></div>';
 
 				echo '<label class="checkbox hb rt" title="Affiche les ascenseurs par défaut de votre système. Ces derniers sont moins beaux mais peuvent résoudrent certains problèmes.">';

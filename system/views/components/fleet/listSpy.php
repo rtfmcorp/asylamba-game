@@ -16,7 +16,7 @@ echo '<div class="component report">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="tool">';
-				echo '<span><a href="' . APP_ROOT . 'action/a-deleteallspyreport">tout supprimer</a></span>';
+				echo '<span><a href="' . Format::actionBuilder('deleteallspyreport') . '">tout supprimer</a></span>';
 			echo '</div>';
 			if (count($spyreport_listSpy) > 0) {
 				echo '<div class="set-item">';

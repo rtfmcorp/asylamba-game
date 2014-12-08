@@ -20,7 +20,7 @@ echo '<div class="component size3 list-fleet">';
 					echo '<h2>';
 						echo PlaceResource::get($base['info']['type'], 'name') . ' ';
 						echo $base['info']['name'];
-						echo ' <a href="' . APP_ROOT . 'action/a-switchbase/base-' . $base['info']['id'] . '/page-school">(affecter un officier)</a>';
+						echo ' <a href="' . Format::actionBuilder('switchbase', ['base' => $base['info']['id'], 'page' => 'school']) . '">(affecter un officier)</a>';
 					echo '</h2>';
 
 					foreach ($base['fleets'] as $commander) {
@@ -85,7 +85,7 @@ echo '<div class="component size3 list-fleet">';
 										: '&#8194;|&#8194;??? pev';
 
 									if ($commander->rPlayer == CTR::$data->get('playerId') && $commander->statement == Commander::MOVING && $commander->travelType != Commander::BACK) {
-										echo '&#8195;<a href="' . APP_ROOT . 'action/a-cancelmove/commanderid-' . $commander->id . '">annuler la mission</a>';
+										echo '&#8195;<a href="' . Format::actionBuilder('cancelmove', ['commanderid' => $commander->id]) . '">annuler la mission</a>';
 									}
 								echo '</span>';
 							echo '</div>';

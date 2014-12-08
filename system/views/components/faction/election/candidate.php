@@ -28,7 +28,7 @@ echo '<div class="component player profil size1">';
 								echo '</span>';
 							}
 						} else {
-							echo '<a class="button" href="' . APP_ROOT . 'action/a-vote/relection-' . $rElection . '/rcandidate-' . $candidat->rPlayer . '" style="text-align: center;">';
+							echo '<a class="button" href="' . Format::actionBuilder('vote', ['relection' => $rElection, 'rcandidate' => $candidat->rPlayer]) . '" style="text-align: center;">';
 								echo '<span class="text" style="line-height: 35px;">Voter</span>';
 							echo '</a>';
 						}
@@ -46,10 +46,10 @@ echo '<div class="component player profil size1">';
 								echo '</span>';
 							}
 						} else {
-							echo '<a class="button" href="' . APP_ROOT . 'action/a-vote/relection-' . $rElection . '/rcandidate-' . $candidat->rPlayer . '" style="text-align: center;">';
+							echo '<a class="button" href="' . Format::actionBuilder('vote', ['relection' => $rElection, 'rcandidate' => $candidat->rPlayer]) . '" style="text-align: center;">';
 								echo '<span class="text" style="line-height: 35px;">Soutenir le coup d\'état</span>';
 							echo '</a>';
-							echo '<a class="button" href="' . APP_ROOT . 'action/a-vote/relection-' . $rElection . '/rcandidate-0" style="text-align: center;">';
+							echo '<a class="button" href="' . Format::actionBuilder('vote', ['relection' => $rElection, 'rcandidate' => 0]) . '" style="text-align: center;">';
 								echo '<span class="text" style="line-height: 35px;">Rejeter le coup d\'état</span>';
 							echo '</a>';
 						}

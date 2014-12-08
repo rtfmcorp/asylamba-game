@@ -115,7 +115,7 @@ echo '<div class="component size2 player new-message profil">';
 						if (in_array(CTR::$data->get('playerInfo')->get('status'), array(PAM_WARLORD, PAM_TREASURER, PAM_MINISTER, PAM_PARLIAMENT))) {
 							echo '<a class="centred-link sh" href="#" data-target="makeacoup">Tenter un coup d\'état</a>';
 
-							echo '<form action="' . APP_ROOT . 'action/a-makeacoup" method="post" id="makeacoup" style="display: none;">';
+							echo '<form action="' . Format::actionBuilder('makeacoup') . '" method="post" id="makeacoup" style="display: none;">';
 								echo '<p><label for="program">Votre message politique</label></p>';
 								echo '<p class="input input-area"><textarea id="program" name="program" required style="height: 200px;"></textarea></p>';
 

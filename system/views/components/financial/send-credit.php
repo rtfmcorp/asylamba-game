@@ -14,7 +14,7 @@ echo '<div class="component new-message">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<form action="' . APP_ROOT . 'action/a-sendcredit" method="post" />';
+			echo '<form action="' . Format::actionBuilder('sendcredit') . '" method="post" />';
 				echo '<p><label for="send-credit-target">Destinataire</label></p>';
 				echo '<p class="input input-text">';
 					echo '<input type="hidden" class="autocomplete-hidden" name="playerid" />';

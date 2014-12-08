@@ -13,15 +13,15 @@ echo '<div class="component">';
 			echo '<h4>Option de modération</h4>';
 
 		#	echo '<a class="more-button" href="' . APP_ROOT . 'action/a-uptopicforum/id-' . $topic_topic->id . '">Epingler</a>';
-			echo '<a class="more-button" href="' . APP_ROOT . 'action/a-closetopicforum/id-' . $topic_topic->id . '">';
+			echo '<a class="more-button" href="' . Format::actionBuilder('closetopicforum', ['id' => $topic_topic->id]) . '">';
 				echo $topic_topic->isClosed ? 'Réouvrire' : 'Fermer';
 			echo '</a>';
 
-			echo '<a class="more-button" href="' . APP_ROOT . 'action/a-archivetopicforum/id-' . $topic_topic->id . '">';
+			echo '<a class="more-button" href="' . Format::actionBuilder('archivetopicforum', ['id' => $topic_topic->id]) . '">';
 				echo $topic_topic->isArchived ? 'Désarchiver' : 'Archiver';
 			echo '</a>';
 
-			echo '<form action="' . APP_ROOT . 'action/a-movetopicforum/id-' . $topic_topic->id . '" method="post" class="choose-government">';
+			echo '<form action="' . Format::actionBuilder('movetopicforum', ['id' => $topic_topic->id]) . '" method="post" class="choose-government">';
 				echo '<select name="rforum">';
 					echo '<option value="-1">Choisissez une catégorie</option>';
 					for ($i = 1; $i <= ForumResources::size(); $i++) { 

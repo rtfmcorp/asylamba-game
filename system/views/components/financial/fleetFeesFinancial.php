@@ -56,7 +56,6 @@ echo '<div class="component financial">';
 								echo '<span class="label">' . CommanderResources::getInfo($commander->getLevel(), 'grade') . ' ' . $commander->getName() . '</span>';
 								echo '<span class="value">';
 									echo Format::numberFormat($commander->getLevel() * COM_LVLINCOMECOMMANDER);
-									echo ' <a href="#" class="button">v</a> ';
 								echo '</span>';
 							echo '</li>';
 						}

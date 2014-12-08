@@ -28,7 +28,7 @@ echo '<div class="component profil player size1">';
 							echo '<span class="experience">' . Format::number( ASM::$pam->get($i)->factionPoint) . ' de prestige</span>';
 						echo '</div>';
 
-						echo '<a href="' . APP_ROOT . 'action/a-fireminister/rplayer-' . ASM::$pam->get($i)->id . '" class="more-button">Démettre de ses fonctions</a>';
+						echo '<a href="' . Format::actionBuilder('fireminister', ['rplayer' => ASM::$pam->get($i)->id]) . '" class="more-button">Démettre de ses fonctions</a>';
 
 						$have = TRUE;
 						break;
@@ -39,7 +39,7 @@ echo '<div class="component profil player size1">';
 						$S_PAM_DGG2 = ASM::$pam->getCurrentSession();
 						ASM::$pam->changeSession($PLAYER_SENATE_TOKEN);
 
-						echo '<form action="' . APP_ROOT . 'action/a-choosegovernment/department-' . $type . '" method="post" class="choose-government">';
+						echo '<form action="' . Format::actionBuilder('choosegovernment', ['department' => $type]) . '" method="post" class="choose-government">';
 							echo '<select name="rplayer">';
 								echo '<option value="-1">Choisissez un joueur</option>';
 								for ($j = 0; $j < ASM::$pam->size(); $j++) {

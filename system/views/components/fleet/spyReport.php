@@ -29,7 +29,7 @@ echo '<div class="component size3 space">';
 						}
 					echo '</span>';
 					echo '<span>' . $spyreport->success . ' % de réussite de l\'espionnage</span>';
-					echo '<a href="' . APP_ROOT . 'action/a-deletespyreport/id-' . $spyreport->id . '" class="hb" title="supprimer le rapport">&#215;</a>';
+					echo '<a href="' . Format::actionBuilder('deletespyreport', ['id' => $spyreport->id]) . '" class="hb" title="supprimer le rapport">&#215;</a>';
 				echo '</div>';
 
 				echo '<span class="line-help line-1">I</span>';

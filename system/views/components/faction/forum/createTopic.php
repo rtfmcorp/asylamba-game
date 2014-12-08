@@ -15,7 +15,7 @@ echo '<div class="component topic size2">';
 			echo '<div class="message write">';
 				echo '<img src="' . MEDIA . 'avatar/medium/' . CTR::$data->get('playerInfo')->get('avatar') . '.png" alt="' . CTR::$data->get('playerInfo')->get('pseudo') . '" class="avatar" />';
 				echo '<div class="content">';
-					echo '<form action="' . APP_ROOT . 'action/a-createtopicforum/rforum-' . CTR::$get->get('forum') . '" method="POST">';
+					echo '<form action="' . Format::actionBuilder('createtopicforum', ['rforum' => CTR::$get->get('forum')]) . '" method="POST">';
 						echo '<input class="title" type="text" name="title" placeholder="sujet" />';
 
 						echo '<div class="wysiwyg" data-id="new-topic-wysiwyg">';

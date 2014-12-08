@@ -32,11 +32,11 @@ echo '<div class="component">';
 						echo '<span class="text">Vous avez déjà voté</span>';
 					echo '</span>';
 				} elseif (CTR::$data->get('playerInfo')->get('status') == PAM_PARLIAMENT) {
-					echo '<a class="button" href="' . APP_ROOT . 'action/a-votelaw/rlaw-' . $law->id . '/choice-1" style="text-align: center; line-height: 35px; display: inline-block; width: 104px; margin-right: 0;">';
+					echo '<a class="button" href="' . Format::actionBuilder('votelaw', ['rlaw' => $law->id, 'choice' => '1']) . '" style="text-align: center; line-height: 35px; display: inline-block; width: 104px; margin-right: 0;">';
 						echo '<span class="text">Pour</span>';
 					echo '</a>';
 
-					echo '<a class="button" href="' . APP_ROOT . 'action/a-votelaw/rlaw-' . $law->id . '/choice-0" style="text-align: center; line-height: 35px; display: inline-block; width: 104px;">';
+					echo '<a class="button" href="' . Format::actionBuilder('votelaw', ['rlaw' => $law->id, 'choice' => '0']) . '" style="text-align: center; line-height: 35px; display: inline-block; width: 104px;">';
 						echo '<span class="text">Contre</span>';
 					echo '</a>';
 				} else {

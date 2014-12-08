@@ -17,7 +17,7 @@ echo '<div class="component new-message">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			if (CTR::$data->get('playerInfo')->get('status') >= 2) {
-				echo '<form action="' . APP_ROOT . 'action/a-postulate/relection-' . ASM::$elm->get(0)->id . '" method="post">';
+				echo '<form action="' . Format::actionBuilder('postulate', ['relection' => ASM::$elm->get(0)->id]) . '" method="post">';
 					echo '<p><label for="program">Votre message politique</label></p>';
 					echo '<p class="input input-area"><textarea id="program" name="program" required style="height: 300px;"></textarea></p>';
 
