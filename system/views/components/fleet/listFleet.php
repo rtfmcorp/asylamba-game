@@ -20,6 +20,7 @@ echo '<div class="component size3 list-fleet">';
 					echo '<h2>';
 						echo PlaceResource::get($base['info']['type'], 'name') . ' ';
 						echo $base['info']['name'];
+						echo ' <a href="' . APP_ROOT . 'action/a-switchbase/base-' . $base['info']['id'] . '/page-school">(affecter un officier)</a>';
 					echo '</h2>';
 
 					foreach ($base['fleets'] as $commander) {

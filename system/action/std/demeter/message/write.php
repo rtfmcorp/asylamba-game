@@ -29,7 +29,7 @@ if ($rTopic AND $content) {
 			CTR::redirect('faction/view-forum/forum-' . ASM::$tom->get()->rForum . '/topic-' . $rTopic . '/sftr-2');
 			CTR::$alert->add('Message créé.', ALERT_STD_SUCCESS);
 		} else {
-			CTR::$alert->add('Ce sujet est fermé.', ALERT_STD_ERROR);		
+			CTR::$alert->add('Ce sujet est fermé.', ALERT_STD_ERROR);
 		}
 	} else {
 		CTR::$alert->add('Le topic n\'existe pas.', ALERT_STD_ERROR);
