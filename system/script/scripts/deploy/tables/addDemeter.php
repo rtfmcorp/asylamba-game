@@ -137,6 +137,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `color` (
   `points` int(11) NOT NULL,
   `sectors` smallint(11) NOT NULL,
   `electionStatement` tinyint(11) NOT NULL,
+  `isClosed` tinyint(11) NOT NULL,
   `dLastElection` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
