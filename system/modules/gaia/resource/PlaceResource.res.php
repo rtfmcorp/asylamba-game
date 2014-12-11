@@ -27,7 +27,7 @@ class PlaceResource {
 
 			'price' => 250000,
 
-			'tax' => 1.5,
+			'tax' => 1.25,
 			'l-line' => 1,
 			'l-line-position' => array(2),
 			'r-line' => 1,
@@ -51,7 +51,7 @@ class PlaceResource {
 
 			'price' => 1000000,
 
-			'tax' => 1.5,
+			'tax' => 1.25,
 			'l-line' => 3,
 			'l-line-position' => array(1, 2, 3),
 			'r-line' => 2,
