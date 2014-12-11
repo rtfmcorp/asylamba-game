@@ -17,8 +17,8 @@ echo '<div class="component">';
 		echo '<div class="body">';
 			if ($commander_commanderDetail->getStatement() == COM_AFFECTED) {
 				echo '<div class="tool">';
-					echo '<span><a href="' . Format::actionBuilder('emptycommander', ['id' => $commander_commanderDetail->id]) '">retirer tous les vaisseaux</a></span>';
-					echo '<span><a href="' . Format::actionBuilder('firecommander', ['id' => $commander_commanderDetail->id]) '" class="hb lt" title="licencier l\'officier">&#215;</a></span>';
+					echo '<span><a href="' . Format::actionBuilder('emptycommander', ['id' => $commander_commanderDetail->id]) . '">retirer tous les vaisseaux</a></span>';
+					echo '<span><a href="' . Format::actionBuilder('firecommander', ['id' => $commander_commanderDetail->id]) . '" class="hb lt" title="licencier l\'officier">&#215;</a></span>';
 					echo '<span><a href="' . Format::actionBuilder('affectcommander', ['id' => $commander_commanderDetail->id]) . '" class="hb lt" title="remettre dans l\'école">E</a></span>';
 				echo '</div>';
 			}
