@@ -1,4 +1,5 @@
 <?php
+
 # vérification du joueur
 # ajout des informations dans le managers
 include_once ZEUS;

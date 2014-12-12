@@ -70,7 +70,7 @@ echo '<div class="component size2 player new-message profil">';
 						echo '<span class="progress-bar" style="width: ' . (100 - Format::percent($totalBeforeCampaing, $totalMandate, FALSE)) . '%; margin-left: auto;">';
 							echo '<span style="width: ' . (Utils::now() > $startCampaign ? Format::percent($remainCampEl, $totalCampEl, FALSE) : '0') . '%;" class="content"></span>';
 							echo '<span class="step" style="left: 0%;">';
-								echo '<span class="label bottom">Campagne</span>';
+								echo '<span class="label bottom right">Campagne</span>';
 							echo '</span>';
 
 							if ($faction->getRegime() == Color::DEMOCRATIC) {
