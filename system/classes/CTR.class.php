@@ -131,7 +131,11 @@ abstract class CTR {
 
 		# rempli l'historique
 		if (!in_array(self::$page, array('404', 'action', 'ajax', 'connection', 'api', 'script'))) {
-			self::$history->add(implode('/', $requestURI));
+			$newURI = (implode('/', $requestURI) == '')
+				? 'profil'
+				: implode('/', $requestURI);
+
+			self::$history->add($newURI);
 		}
 
 		# remplir les paramètres depuis le routing
