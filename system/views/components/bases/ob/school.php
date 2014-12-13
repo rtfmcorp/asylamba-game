@@ -60,7 +60,7 @@ echo '<div class="component school">';
 							echo Format::numberFormat(SchoolClassResource::getInfo(0, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
 						echo '</span>';
 					echo '</span>';
-				} elseif (SchoolClassResource::getInfo(0, 'credit') >= CTR::$data->get('playerInfo')->get('credit')) {
+				} elseif (SchoolClassResource::getInfo(0, 'credit') > CTR::$data->get('playerInfo')->get('credit')) {
 					echo '<span class="button disable">';
 						echo '<span class="text">';
 							echo 'vous ne disposez pas d\'assez de crédit<br/>';
