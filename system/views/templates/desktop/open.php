@@ -49,7 +49,7 @@ if (PORTALMODE) {
 
 	ga('create', 'UA-42636532-4', 'auto');
 	ga('send', 'pageview');
-	ga('set', '&uid', {{<?php echo CTR::$data->get('playerId'); ?>}});
+	ga('set', '&uid', <?php echo CTR::$data->get('playerId'); ?>);
 </script>
 <?php
 }
