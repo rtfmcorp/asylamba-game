@@ -29,18 +29,18 @@ class TutorialResource {
 	const SPY_PLANET = 15;
 	const LOOT_PLANET = 16;
 	
-	const REFINERY_LEVEL_10 = 17;
-	const STORAGE_LEVEL_8 = 18;
-	const DOCK1_LEVEL_6 = 19;
-	const REFINERY_LEVEL_16 = 20;
-	const STORAGE_LEVEL_12 = 21;
-	const TECHNOSPHERE_LEVEL_6 = 22;
-	const SHIP1_UNBLOCK = 23;
-	const DOCK1_LEVEL_15 = 24;
-	const BUILD_SHIP1 = 25;
-	const REFINERY_LEVEL_20 = 26;
+	const SHARE_ASYLAMBA = 17;
+	const REFINERY_LEVEL_10 = 18;
+	const STORAGE_LEVEL_8 = 19;
+	const DOCK1_LEVEL_6 = 20;
+	const REFINERY_LEVEL_16 = 21;
+	const STORAGE_LEVEL_12 = 22;
+	const TECHNOSPHERE_LEVEL_6 = 23;
+	const SHIP1_UNBLOCK = 24;
+	const DOCK1_LEVEL_15 = 25;
+	const BUILD_SHIP1 = 26;
+	const REFINERY_LEVEL_20 = 27;
 
-	const SHARE_ASYLAMBA = 27;
 
 	public static function stepExists($step) {
 		if ($step > 0 AND $step <= count(self::$steps)) {
@@ -294,90 +294,8 @@ class TutorialResource {
 			'shipReward' => array(3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 17,
-			'title' => 'Construire la Raffinerie au niveau 10',
-			'description' => 'Une bonne planète est une planète qui produit. Veille a progressivement augmenter le niveau de ta raffinerie de manière à toujours gagner suffisamment de ressources.',
-			'experienceReward' => 10,
-			'creditReward' => 0,
-			'resourceReward' => 3000,
-			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-		array(
-			'id' => 18,
-			'title' => 'Construire le Stockage au niveau 8',
-			'description' => 'N\'oublie pas de toujours avoir assez d\'espace de stockage pour passer la nuit en toute tranquilité. Lorsque le Stockage est plein, la Raffinerie arrête de produire.',
-			'experienceReward' => 10,
-			'creditReward' => 0,
-			'resourceReward' => 2000,
-			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-		array(
-			'id' => 19,
-			'title' => 'Construire le Chantier Alpha au niveau 6',
-			'description' => 'En plus de débloquer de nouveaux vaisseaux, augmenter le niveau de ton Chantier Alpha te permettra de disposer de plus grands hangars. Tu pourras alors commander la construction de plus de vaisseaux.',
-			'experienceReward' => 10,
-			'creditReward' => 0,
-			'resourceReward' => 0,
-			'shipReward' => array(5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-		array(
-			'id' => 20,
-			'title' => 'Construire la Raffinerie au niveau 16',
-			'description' => '',
-			'experienceReward' => 10,
-			'creditReward' => 0,
-			'resourceReward' => 6000,
-			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-		array(
-			'id' => 21,
-			'title' => 'Construire le Stockage au niveau 12',
-			'description' => '',
-			'experienceReward' => 10,
-			'creditReward' => 0,
-			'resourceReward' => 4000,
-			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-		array(
-			'id' => 22,
-			'title' => 'Construire la Technosphère au niveau 6',
-			'description' => '',
-			'experienceReward' => 10,
-			'creditReward' => 2000,
-			'resourceReward' => 2000,
-			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-		array(
-			'id' => 23,
-			'title' => 'Développer la technologie "Chassis simple amélioré"',
-			'description' => '',
-			'experienceReward' => 10,
-			'creditReward' => 2000,
-			'resourceReward' => 2000,
-			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-		array(
-			'id' => 24,
-			'title' => 'Construire le Chantier Alpha au niveau 15',
-			'description' => 'Afin de construire le nouveau type de vaisseau que tes ingénieurs de la Technosphère viennent de découvrir, tu dois disposer d\'un Chantier Alpha plus grand. Construis ce dernier au niveau 15.',
-			'experienceReward' => 10,
-			'creditReward' => 0,
-			'resourceReward' => 8000,
-			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-		array(
-			'id' => 25,
-			'title' => 'Construire un Satyre',
-			'description' => '',
-			'experienceReward' => 10,
-			'creditReward' => 0,
-			'resourceReward' => 0,
-			'shipReward' => array(0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-		array(
-			'id' => 26,
-			'title' => 'Construire la Raffinerie au niveau 20',
-			'description' => '',
-			'experienceReward' => 10,
-			'creditReward' => 0,
-			'resourceReward' => 8000,
-			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-		array(
-			'id' => 27,
 			'title' => 'Parler d\'Asylamba',
-			'description' => 'Voilà, le tutoriel touche à sa fin. Tu as maintenant toutes les cartes en main pour te débrouiller sur le jeu et pour découvrir tout ce que je n\'ai pas pu te présenter !
-				<br /><br />
-				Cette dernière étape un peu symbolique t\'encourage, si tu as aimé ce que tu as vu pour l\'instant, à parler du jeu autour de toi pour que d\'autres personnes susceptibles d\'aimer ce genre de jeu puisse le découvrir.
+			'description' => 'Cette étape un peu symbolique t\'encourage, si tu as aimé ce que tu as vu pour l\'instant, à parler du jeu autour de toi pour que d\'autres personnes susceptibles d\'aimer ce genre de jeu puisse le découvrir.
 				<br /><br />
 				Pour ce faire tu as plusieurs possibilités, dont aimer et partager la page <a href="https://facebook.com/asylamba" target="_blank">Facebook</a> d\'Asylamba ou nous suivre sur <a href="https://twitter.com/asylamba" target="_blank">Twitter</a>.
 				<br /><br />
@@ -387,6 +305,86 @@ class TutorialResource {
 			'experienceReward' => 10,
 			'creditReward' => 0,
 			'resourceReward' => 0,
+			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+		array(
+			'id' => 18,
+			'title' => 'Construire la Raffinerie au niveau 10',
+			'description' => 'Une bonne planète est une planète qui produit. Veille a progressivement augmenter le niveau de ta raffinerie de manière à toujours gagner suffisamment de ressources.',
+			'experienceReward' => 10,
+			'creditReward' => 0,
+			'resourceReward' => 3000,
+			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+		array(
+			'id' => 19,
+			'title' => 'Construire le Stockage au niveau 8',
+			'description' => 'N\'oublie pas de toujours avoir assez d\'espace de stockage pour passer la nuit en toute tranquilité. Lorsque le Stockage est plein, la Raffinerie arrête de produire.',
+			'experienceReward' => 10,
+			'creditReward' => 0,
+			'resourceReward' => 2000,
+			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+		array(
+			'id' => 20,
+			'title' => 'Construire le Chantier Alpha au niveau 6',
+			'description' => 'En plus de débloquer de nouveaux vaisseaux, augmenter le niveau de ton Chantier Alpha te permettra de disposer de plus grands hangars. Tu pourras alors commander la construction de plus de vaisseaux.',
+			'experienceReward' => 10,
+			'creditReward' => 0,
+			'resourceReward' => 0,
+			'shipReward' => array(5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+		array(
+			'id' => 21,
+			'title' => 'Construire la Raffinerie au niveau 16',
+			'description' => '',
+			'experienceReward' => 10,
+			'creditReward' => 0,
+			'resourceReward' => 6000,
+			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+		array(
+			'id' => 22,
+			'title' => 'Construire le Stockage au niveau 12',
+			'description' => '',
+			'experienceReward' => 10,
+			'creditReward' => 0,
+			'resourceReward' => 4000,
+			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+		array(
+			'id' => 23,
+			'title' => 'Construire la Technosphère au niveau 6',
+			'description' => '',
+			'experienceReward' => 10,
+			'creditReward' => 2000,
+			'resourceReward' => 2000,
+			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+		array(
+			'id' => 24,
+			'title' => 'Développer la technologie "Chassis simple amélioré"',
+			'description' => '',
+			'experienceReward' => 10,
+			'creditReward' => 2000,
+			'resourceReward' => 2000,
+			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+		array(
+			'id' => 25,
+			'title' => 'Construire le Chantier Alpha au niveau 15',
+			'description' => 'Afin de construire le nouveau type de vaisseau que tes ingénieurs de la Technosphère viennent de découvrir, tu dois disposer d\'un Chantier Alpha plus grand. Construis ce dernier au niveau 15.',
+			'experienceReward' => 10,
+			'creditReward' => 0,
+			'resourceReward' => 8000,
+			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+		array(
+			'id' => 26,
+			'title' => 'Construire un Satyre',
+			'description' => '',
+			'experienceReward' => 10,
+			'creditReward' => 0,
+			'resourceReward' => 0,
+			'shipReward' => array(0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+		array(
+			'id' => 27,
+			'title' => 'Construire la Raffinerie au niveau 20',
+			'description' => '',
+			'experienceReward' => 10,
+			'creditReward' => 0,
+			'resourceReward' => 8000,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
 	);
 }
