@@ -40,6 +40,8 @@ class TutorialResource {
 	const BUILD_SHIP1 = 25;
 	const REFINERY_LEVEL_20 = 26;
 
+	const SHARE_ASYLAMBA = 27;
+
 	public static function stepExists($step) {
 		if ($step > 0 AND $step <= count(self::$steps)) {
 			return TRUE;
@@ -369,6 +371,22 @@ class TutorialResource {
 			'experienceReward' => 10,
 			'creditReward' => 0,
 			'resourceReward' => 8000,
+			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+		array(
+			'id' => 27,
+			'title' => 'Parler d\'Asylamba',
+			'description' => 'Voilà, le tutoriel touche à sa fin. Tu as maintenant toutes les cartes en main pour te débrouiller sur le jeu et pour découvrir tout ce que je n\'ai pas pu te présenter !
+				<br /><br />
+				Cette dernière étape un peu symbolique t\'encourage, si tu as aimé ce que tu as vu pour l\'instant, à parler du jeu autour de toi pour que d\'autres personnes susceptibles d\'aimer ce genre de jeu puisse le découvrir.
+				<br /><br />
+				Pour ce faire tu as plusieurs possibilités, dont aimer et partager la page <a href="https://facebook.com/asylamba" target="_blank">Facebook</a> d\'Asylamba ou nous suivre sur <a href="https://twitter.com/asylamba" target="_blank">Twitter</a>.
+				<br /><br />
+				Merci à toi de m\'aider à propager le jeu et un grand bravo pour ton parcours jusqu\'ici. Bon jeu !
+				<br /><br />
+				Signé Jean-Mi, opérateur du jeu.',
+			'experienceReward' => 10,
+			'creditReward' => 0,
+			'resourceReward' => 0,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
 	);
 }
