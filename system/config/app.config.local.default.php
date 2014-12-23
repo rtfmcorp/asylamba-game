@@ -21,6 +21,9 @@
 	define('PWD_SCRIPT', 			'kbxm655q');
 	define('PWD_API', 				'qsafdachiefas');
 
+	# id du joueur rebelle de base
+	define('ID_GAIA', 				1);
+
 	# DB USER
 #	define('DEFAULT_SQL_USER',		'expansion_user');
 #	define('DEFAULT_SQL_HOST',		'localhost');

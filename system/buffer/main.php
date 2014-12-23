@@ -4,7 +4,7 @@ include_once ZEUS;
 
 $S_PAM1 = ASM::$pam->getCurrentSession();
 ASM::$pam->newSession(FALSE);
-ASM::$pam->load();
+ASM::$pam->load(array('statement' => PAM_ACTIVE));
 
 ?>
 <!DOCTYPE html>
