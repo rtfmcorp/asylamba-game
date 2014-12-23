@@ -50,13 +50,13 @@ echo '<div class="component generator">';
 					echo '</div>';
 
 					echo '<div class="desc-choice">';
-						if (($ob_obSituation->typeOfBase == OrbitalBase::TYP_NEUTRAL && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price') && $ob_obSituation->levelGenerator >= OBM_LEVEL_MIN_TO_CHANGE_TYPE) || (($ob_obSituation->typeOfBase == OrbitalBase::TYP_MILITARY || $ob_obSituation->typeOfBase == OrbitalBase::TYP_CAPITAL) && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price'))) {
+						if (($ob_obSituation->typeOfBase == OrbitalBase::TYP_NEUTRAL && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price') && $ob_obSituation->levelGenerator >= OBM_LEVEL_MIN_TO_CHANGE_TYPE) || (($ob_obSituation->typeOfBase == OrbitalBase::TYP_MILITARY) && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price'))) {
 							echo '<a href="' . Format::actionBuilder('changebasetype', ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_COMMERCIAL]) . '" class="button">';
 								echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'name') . '<br />';
 								echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price'));
 								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
 							echo '</a>';
-						} elseif ($ob_obSituation->typeOfBase == OrbitalBase::TYP_COMMERCIAL) {
+						} elseif ($ob_obSituation->typeOfBase == OrbitalBase::TYP_COMMERCIAL || $ob_obSituation->typeOfBase == OrbitalBase::TYP_CAPITAL) {
 							# do nothing
 						} else {
 							echo '<span class="button disable">';
@@ -76,13 +76,13 @@ echo '<div class="component generator">';
 					echo '</div>';
 
 					echo '<div class="desc-choice">';
-						if (($ob_obSituation->typeOfBase == OrbitalBase::TYP_NEUTRAL && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price') && $ob_obSituation->levelGenerator >= OBM_LEVEL_MIN_TO_CHANGE_TYPE) || (($ob_obSituation->typeOfBase == OrbitalBase::TYP_COMMERCIAL || $ob_obSituation->typeOfBase == OrbitalBase::TYP_CAPITAL) && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price'))) {
+						if (($ob_obSituation->typeOfBase == OrbitalBase::TYP_NEUTRAL && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price') && $ob_obSituation->levelGenerator >= OBM_LEVEL_MIN_TO_CHANGE_TYPE) || (($ob_obSituation->typeOfBase == OrbitalBase::TYP_COMMERCIAL) && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price'))) {
 							echo '<a href="' . Format::actionBuilder('changebasetype', ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_MILITARY]) . '" class="button">';
 								echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_MILITARY, 'name') . '<br />';
 								echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price'));
 								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
 							echo '</a>';
-						} elseif ($ob_obSituation->typeOfBase == OrbitalBase::TYP_MILITARY) {
+						} elseif ($ob_obSituation->typeOfBase == OrbitalBase::TYP_MILITARY || $ob_obSituation->typeOfBase == OrbitalBase::TYP_CAPITAL) {
 							# do nothing
 						} else {
 							echo '<span class="button disable">';

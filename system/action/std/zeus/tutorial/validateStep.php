@@ -179,6 +179,9 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 		case TutorialResource::LOOT_PLANET :
 			# asdf
 			break;
+		case TutorialResource::SHARE_ASYLAMBA :
+			$nextStepAlreadyDone = TRUE;
+			break;
 		case TutorialResource::REFINERY_LEVEL_10 :
 			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::REFINERY, 10);
 			break;

@@ -10,6 +10,7 @@ $scripts = array(
 	array('test.api', '/test/api.php'),
 	array('test.ctc', '/test/ctc.php'),
 	array('test.galaxy', '/test/galaxy.php'),
+	array('test.updatetuto', '/test/updatetuto.php'),
 	array('cron.daily', '/cron/daily.php'),
 	array('cron.playerranking', '/cron/playerRanking.php'),
 	array('cron.factionranking', '/cron/factionRanking.php'),
