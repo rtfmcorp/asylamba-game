@@ -7,7 +7,7 @@ include_once GAIA;
 # int otherbaseid 	id (rPlace) de la base orbitale à qui on veut envoyer des ressources
 # int quantity 		quantité de ressources à envoyer
 
-for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
+for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
 

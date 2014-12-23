@@ -456,6 +456,10 @@ class OrbitalBaseManager extends Manager {
 			}
 			ASM::$tqm->changeSession($S_TQM1);
 
+			# mise des invistissement à 0
+			$base->iSchool = 0;
+			$base->iAntiSpy = 0;
+
 			# ajouter/enlever la base dans le controller
 			if (CTR::$data->get('playerId') == $newOwner) {
 				CTRHelper::addBase('ob', $base->getId(), $base->getName(), $base->getSector(), $base->getSystem(), '1-' . Game::getSizeOfPlanet($base->getPlanetPopulation()), $base->typeOfBase);

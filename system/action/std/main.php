@@ -18,6 +18,7 @@ if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('tok
 		case 'giveresource':			include ACTION . 'athena/general/giveResource.php'; break;
 		case 'renamebase':				include ACTION . 'athena/general/renameBase.php'; break;
 		case 'changebasetype':			include ACTION . 'athena/general/changeBaseType.php'; break;
+		case 'leavebase':				include ACTION . 'athena/general/leaveBase.php'; break;
 
 		case 'buildbuilding':			include ACTION . 'athena/building/build.php'; break;
 		case 'dequeuebuilding':			include ACTION . 'athena/building/dequeue.php'; break;
@@ -34,6 +35,7 @@ if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('tok
 		case 'proposetransaction': 		include ACTION . 'athena/transaction/propose.php'; break;
 		case 'accepttransaction':		include ACTION . 'athena/transaction/accept.php'; break;
 		case 'canceltransaction':		include ACTION . 'athena/transaction/cancel.php'; break;
+
 
 		# HERMES
 		case 'writemessage': 			include ACTION . 'hermes/message/write.php'; break;

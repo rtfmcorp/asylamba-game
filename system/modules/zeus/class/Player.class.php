@@ -223,10 +223,12 @@ class Player {
 			$antiSpyInvests += $base->getIAntiSpy();
 
 			// paiement à l'alliance
-			for ($j = 0; $j < ASM::$clm->size(); $j++) { 
-				if (ASM::$clm->get($j)->id == $base->sectorColor) {
-					ASM::$clm->get($j)->increaseCredit($nationTax);
-					break;
+			if ($this->rColor != 0) {
+				for ($j = 0; $j < ASM::$clm->size(); $j++) { 
+					if (ASM::$clm->get($j)->id == $base->sectorColor) {
+						ASM::$clm->get($j)->increaseCredit($nationTax);
+						break;
+					}
 				}
 			}
 		}
