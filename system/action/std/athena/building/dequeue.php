@@ -18,47 +18,53 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 		$S_OBM1 = ASM::$obm->getCurrentSession();
 		ASM::$obm->newSession();
 		ASM::$obm->load(array('rPlace' => $baseId, 'rPlayer' => CTR::$data->get('playerId')));
-		$ob = ASM::$obm->get();
 
-		$S_BQM1 = ASM::$bqm->getCurrentSession();
-		ASM::$bqm->newSession();
-		ASM::$bqm->load(array('rOrbitalBase' => $baseId), array('dEnd'));
+		if (ASM::$obm->size() > 0) {
 
-		$index = NULL;
-		for ($i = 0; $i < ASM::$bqm->size(); $i++) {
-			$queue = ASM::$bqm->get($i); 
-			# get the last element from the correct building
-			if ($queue->buildingNumber == $building) {
-				$index = $i;
-				$targetLevel = $queue->targetLevel;
-				$dStart = $queue->dStart;
-				$idToRemove = $queue->id;
-			}
-		}
+			$ob = ASM::$obm->get();
 
-		if ($index !== NULL) {
-			# shift
-			for ($i = $index + 1; $i < ASM::$bqm->size(); $i++) {
-				$queue = ASM::$bqm->get($i);
+			$S_BQM1 = ASM::$bqm->getCurrentSession();
+			ASM::$bqm->newSession();
+			ASM::$bqm->load(array('rOrbitalBase' => $baseId), array('dEnd'));
 
-				$queue->dEnd = Utils::addSecondsToDate($dStart, Utils::interval($queue->dStart, $queue->dEnd, 's'));
-				$queue->dStart = $dStart;
-
-				$dStart = $queue->dEnd;
+			$index = NULL;
+			for ($i = 0; $i < ASM::$bqm->size(); $i++) {
+				$queue = ASM::$bqm->get($i); 
+				# get the last element from the correct building
+				if ($queue->buildingNumber == $building) {
+					$index = $i;
+					$targetLevel = $queue->targetLevel;
+					$dStart = $queue->dStart;
+					$idToRemove = $queue->id;
+				}
 			}
 
-			ASM::$bqm->deleteById($idToRemove);
+			if ($index !== NULL) {
+				# shift
+				for ($i = $index + 1; $i < ASM::$bqm->size(); $i++) {
+					$queue = ASM::$bqm->get($i);
 
-			// give the resources back
-			$resourcePrice = OrbitalBaseResource::getBuildingInfo($building, 'level', $targetLevel, 'resourcePrice');
-			$resourcePrice *= BQM_RESOURCERETURN;
-			$ob->increaseResources($resourcePrice);
-			CTR::$alert->add('Construction annulée, vous récupérez le ' . BQM_RESOURCERETURN * 100 . '% du montant investi pour la construction', ALERT_STD_SUCCESS);
+					$queue->dEnd = Utils::addSecondsToDate($dStart, Utils::interval($queue->dStart, $queue->dEnd, 's'));
+					$queue->dStart = $dStart;
+
+					$dStart = $queue->dEnd;
+				}
+
+				ASM::$bqm->deleteById($idToRemove);
+
+				// give the resources back
+				$resourcePrice = OrbitalBaseResource::getBuildingInfo($building, 'level', $targetLevel, 'resourcePrice');
+				$resourcePrice *= BQM_RESOURCERETURN;
+				$ob->increaseResources($resourcePrice);
+				CTR::$alert->add('Construction annulée, vous récupérez le ' . BQM_RESOURCERETURN * 100 . '% du montant investi pour la construction', ALERT_STD_SUCCESS);
+			} else {
+				CTR::$alert->add('suppression de bâtiment impossible', ALERT_STD_ERROR);
+			}
+			ASM::$bqm->changeSession($S_BQM1);
 		} else {
-			CTR::$alert->add('suppression de bâtiment impossible', ALERT_STD_ERROR);
+			CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);
 		}
 		ASM::$obm->changeSession($S_OBM1);
-		ASM::$bqm->changeSession($S_BQM1);
 	} else {
 		CTR::$alert->add('le bâtiment indiqué n\'est pas valide', ALERT_STD_ERROR);
 	}
