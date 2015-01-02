@@ -28,24 +28,29 @@ if (count($verif) > 1) {
 		if ($baseId != FALSE && in_array($baseId, $verif)) {
 			$_OBM = ASM::$obm->getCurrentSession();
 			ASM::$obm->newSession();
-			ASM::$obm->load(array('rPlace' => $baseId));
-			$_PLM = ASM::$plm->getCurrentSession();
-			ASM::$plm->newSession();
-			ASM::$plm->load(array('id' => $baseId));
+			ASM::$obm->load(array('rPlace' => $baseId, 'rPlayer' => CTR::$data->get('playerId')));
 
-			ASM::$obm->changeOwnerById($baseId, ASM::$obm->get(), ID_GAIA);
-			ASM::$plm->get()->rPlayer = ID_GAIA;
+			if (ASM::$obm->size() > 0) {
+				$_PLM = ASM::$plm->getCurrentSession();
+				ASM::$plm->newSession();
+				ASM::$plm->load(array('id' => $baseId));
 
-			ASM::$obm->changeSession($_OBM);
-			ASM::$plm->changeSession($_PLM);
-			
-			for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-				if ($verif[$i] == $baseId) {
-					unset($verif[$i]);
-					$verif = array_merge($verif);
+				ASM::$obm->changeOwnerById($baseId, ASM::$obm->get(), ID_GAIA);
+				ASM::$plm->get()->rPlayer = ID_GAIA;
+
+				ASM::$plm->changeSession($_PLM);
+				
+				for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
+					if ($verif[$i] == $baseId) {
+						unset($verif[$i]);
+						$verif = array_merge($verif);
+					}
 				}
+				CTR::redirect(Format::actionBuilder('switchbase', ['base' => $verif[0]]));
+			} else {
+				CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);	
 			}
-			CTR::redirect(Format::actionBuilder('switchbase', ['base' => $verif[0]]));
+			ASM::$obm->changeSession($_OBM);
 		} else {
 			CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);
 		}
