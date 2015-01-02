@@ -14,45 +14,54 @@ for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-if (count($verif) > 1) {
-	$_COM = ASM::$com->getCurrentSession();
-	ASM::$com->newSession();
-	ASM::$com->load(array('rBase' => $baseId));
-	$areAllFleetImmobile = TRUE;
-	for ($i = 0; $i < ASM::$com->size(); $i++) {
-		if (ASM::$com->get($i)->statement == Commander::MOVING) {
-			$areAllFleetImmobile = FALSE;
-		}
-	}
-	if ($areAllFleetImmobile) {
-		if ($baseId != FALSE && in_array($baseId, $verif)) {
-			$_OBM = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession();
-			ASM::$obm->load(array('rPlace' => $baseId));
-			$_PLM = ASM::$plm->getCurrentSession();
-			ASM::$plm->newSession();
-			ASM::$plm->load(array('id' => $baseId));
+if ($baseId !== FALSE AND in_array($baseId, $verif)) {
 
-			ASM::$obm->changeOwnerById($baseId, ASM::$obm->get(), ID_GAIA);
-			ASM::$plm->get()->rPlayer = ID_GAIA;
+	$S_OBM1 = ASM::$obm->getCurrentSession();
+	ASM::$obm->newSession();
+	ASM::$obm->load(array('rPlace' => $baseId, 'rPlayer' => CTR::$data->get('playerId')));
 
-			ASM::$obm->changeSession($_OBM);
-			ASM::$plm->changeSession($_PLM);
-			
-			for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-				if ($verif[$i] == $baseId) {
-					unset($verif[$i]);
-					$verif = array_merge($verif);
+	if (ASM::$obm->size() > 0) {
+
+		if (count($verif) > 1) {
+			$_COM = ASM::$com->getCurrentSession();
+			ASM::$com->newSession();
+			ASM::$com->load(array('rBase' => $baseId));
+			$areAllFleetImmobile = TRUE;
+			for ($i = 0; $i < ASM::$com->size(); $i++) {
+				if (ASM::$com->get($i)->statement == Commander::MOVING) {
+					$areAllFleetImmobile = FALSE;
 				}
 			}
-			CTR::redirect(Format::actionBuilder('switchbase', ['base' => $verif[0]]));
+			if ($areAllFleetImmobile) {
+
+				$_PLM = ASM::$plm->getCurrentSession();
+				ASM::$plm->newSession();
+				ASM::$plm->load(array('id' => $baseId));
+
+				ASM::$obm->changeOwnerById($baseId, ASM::$obm->get(), ID_GAIA);
+				ASM::$plm->get()->rPlayer = ID_GAIA;
+
+				ASM::$plm->changeSession($_PLM);
+				
+				for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
+					if ($verif[$i] == $baseId) {
+						unset($verif[$i]);
+						$verif = array_merge($verif);
+					}
+				}
+				CTR::$alert->add('Base abandonnée', ALERT_STD_SUCCESS);
+				CTR::redirect(Format::actionBuilder('switchbase', ['base' => $verif[0]]));
+			} else {
+				CTR::$alert->add('toute les flottes de cette base doivent être immobiles', ALERT_STD_ERROR);
+			}
+			ASM::$com->changeSession($_COM);
 		} else {
-			CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);
+			CTR::$alert->add('vous ne pouvez pas abandonner votre unique planète', ALERT_STD_ERROR);
 		}
 	} else {
-		CTR::$alert->add('toute les flottes de cette base doivent être immobiles', ALERT_STD_ERROR);
+		CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);
 	}
-	ASM::$com->changeSession($_COM);
+	ASM::$obm->changeSession($S_OBM1);
 } else {
-	CTR::$alert->add('vous ne pouvez pas abandonner votre unique planète', ALERT_STD_ERROR);
+	CTR::$alert->add('pas assez d\'arguments', ALERT_STD_ERROR);
 }
