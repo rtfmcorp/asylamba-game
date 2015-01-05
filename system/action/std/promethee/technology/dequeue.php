@@ -20,58 +20,63 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 		$S_OBM1 = ASM::$obm->getCurrentSession();
 		ASM::$obm->newSession(ASM_UMODE);
 		ASM::$obm->load(array('rPlace' => $baseId, 'rPlayer' => CTR::$data->get('playerId')));
-		$ob = ASM::$obm->get();
 
-		$S_TQM1 = ASM::$tqm->getCurrentSession();
-		ASM::$tqm->newSession(ASM_UMODE);
-		ASM::$tqm->load(array('rPlace' => $baseId), array('dEnd'));
+		if (ASM::$obm->size() > 0) {
+			$ob = ASM::$obm->get();
 
-		$S_PAM1 = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession(ASM_UMODE);
-		ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-		$player = ASM::$pam->get();
+			$S_TQM1 = ASM::$tqm->getCurrentSession();
+			ASM::$tqm->newSession(ASM_UMODE);
+			ASM::$tqm->load(array('rPlace' => $baseId), array('dEnd'));
 
-		$index = NULL;
-		$targetLevel = 0;
-		for ($i = 0; $i < ASM::$tqm->size(); $i++) {
-			$queue = ASM::$tqm->get($i); 
-			# get the queue to delete
-			if ($queue->technology == $techno AND $queue->targetLevel > $targetLevel) {
-				$index = $i;
-				$targetLevel = $queue->targetLevel;
-				$dStart = $queue->dStart;
-				$idToRemove = $queue->id;
-			}
-		}
+			$S_PAM1 = ASM::$pam->getCurrentSession();
+			ASM::$pam->newSession(ASM_UMODE);
+			ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+			$player = ASM::$pam->get();
 
-		if ($index !== NULL) {
-			# shift
-			for ($i = $index + 1; $i < ASM::$tqm->size(); $i++) {
-				$queue = ASM::$tqm->get($i);
-
-				$queue->dEnd = Utils::addSecondsToDate($dStart, Utils::interval($queue->dStart, $queue->dEnd, 's'));
-				$queue->dStart = $dStart;
-
-				$dStart = $queue->dEnd;
+			$index = NULL;
+			$targetLevel = 0;
+			for ($i = 0; $i < ASM::$tqm->size(); $i++) {
+				$queue = ASM::$tqm->get($i); 
+				# get the queue to delete
+				if ($queue->technology == $techno AND $queue->targetLevel > $targetLevel) {
+					$index = $i;
+					$targetLevel = $queue->targetLevel;
+					$dStart = $queue->dStart;
+					$idToRemove = $queue->id;
+				}
 			}
 
-			ASM::$tqm->deleteById($idToRemove);
+			if ($index !== NULL) {
+				# shift
+				for ($i = $index + 1; $i < ASM::$tqm->size(); $i++) {
+					$queue = ASM::$tqm->get($i);
 
-			// rends les ressources et les crédits au joueur
-			$resourcePrice = TechnologyResource::getInfo($techno, 'resource', $targetLevel);
-			$resourcePrice *= TQM_RESOURCERETURN;
-			$ob->increaseResources($resourcePrice);
-			$creditPrice = TechnologyResource::getInfo($techno, 'credit', $targetLevel);
-			$creditPrice *= TQM_CREDITRETURN;
-			$player->increaseCredit($creditPrice);
-			CTR::$alert->add('Construction annulée, vous récupérez le ' . TQM_RESOURCERETURN * 100 . '% des ressources ainsi que le ' . TQM_CREDITRETURN * 100 . '% des crédits investis pour le développement', ALERT_STD_SUCCESS);
+					$queue->dEnd = Utils::addSecondsToDate($dStart, Utils::interval($queue->dStart, $queue->dEnd, 's'));
+					$queue->dStart = $dStart;
 
+					$dStart = $queue->dEnd;
+				}
+
+				ASM::$tqm->deleteById($idToRemove);
+
+				// rends les ressources et les crédits au joueur
+				$resourcePrice = TechnologyResource::getInfo($techno, 'resource', $targetLevel);
+				$resourcePrice *= TQM_RESOURCERETURN;
+				$ob->increaseResources($resourcePrice);
+				$creditPrice = TechnologyResource::getInfo($techno, 'credit', $targetLevel);
+				$creditPrice *= TQM_CREDITRETURN;
+				$player->increaseCredit($creditPrice);
+				CTR::$alert->add('Construction annulée, vous récupérez le ' . TQM_RESOURCERETURN * 100 . '% des ressources ainsi que le ' . TQM_CREDITRETURN * 100 . '% des crédits investis pour le développement', ALERT_STD_SUCCESS);
+
+			} else {
+				CTR::$alert->add('impossible d\'annuler la technologie', ALERT_STD_ERROR);
+			}
 			ASM::$pam->changeSession($S_PAM1);
-			ASM::$obm->changeSession($S_OBM1);
 			ASM::$tqm->changeSession($S_TQM1);
 		} else {
-			CTR::$alert->add('impossible d\'annuler la technologie', ALERT_STD_ERROR);
+			CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);
 		}
+		ASM::$obm->changeSession($S_OBM1);
 	} else {
 		CTR::$alert->add('la technologie indiquée n\'est pas valide', ALERT_STD_ERROR);
 	}

@@ -31,6 +31,10 @@ echo '<div id="content">';
 		}
 		ASM::$com->changeSession($S_COM1);
 		include COMPONENT . 'bases/ob/situation.php';
+
+		if (CTR::$data->get('playerBase')->get('ob')->size() > 1) {
+			include COMPONENT . 'bases/ob/leavebase.php';
+		}
 	} elseif (CTR::$get->get('view') == 'generator' && $base->levelGenerator > 0) {
 		$ob_generator = $base;
 		include COMPONENT . 'bases/ob/generator.php';

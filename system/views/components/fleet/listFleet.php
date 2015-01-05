@@ -120,7 +120,7 @@ echo '<div class="component size3 list-fleet">';
 											: '<a href="' . APP_ROOT . 'map/place-' . $commander->rDestinationPlace . '">' . $commander->destinationPlaceName . '</a>';
 
 										if ($commander->rPlayer != CTR::$data->get('playerId')) {
-											echo ' (<a href="' . APP_ROOT . 'diary/player-' . $commander->rBase . '">' . $commander->playerName . '</a>)';
+											echo ' (<a href="' . APP_ROOT . 'diary/player-' . $commander->rPlayer . '">' . $commander->playerName . '</a>)';
 										}
 									echo '</span>';
 								echo '</div>';

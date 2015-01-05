@@ -157,7 +157,7 @@ class ColorResource {
 			'demonym' 		=> 'aphéréens',
 			'factionPoint' 	=> 'Points de Technologie',
 			'status' 		=> array('Citoyen', 'Technocrate', 'Algorithmicien', 'Tacticien', 'Archiviste', 'Autarque'),
-			'devise' 		=> 'Au travers du vide,<br />Nos oiseaux perçents,<br/>Levez les yeux',
+			'devise' 		=> 'Au travers du vide,<br />Nos oiseaux percent,<br/>Levez les yeux',
 			'desc1' => 'La république d’Aphéra, réputée pour son potentiel scientifique, est une faction composée des plus grands chercheurs. Avides de technologie et de progrès, les citées d’Aphéra s’étendent au dessus des nuages, créant de fantastiques villes volantes.',
 			'desc2' => 'Consciente des bienfaits de la nature, Aphéra vit en harmonie avec son environnement dont elle tire la majorité de ses ressources énergétiques. Développement durable, énergies renouvelables, cette faction fait preuve d’une conscience écologique très importante, préférant la technologie de pointe à une industrie de masse.',
 			'desc3' => 'Entrainés depuis leur plus jeune âge, les pilotes aphéréens sont de fins tacticiens et des as du pilotage, faisant preuve d’une maitrise quasi absolue aux commandes de leurs vaisseaux, le ciel est leur terrain de jeu.',

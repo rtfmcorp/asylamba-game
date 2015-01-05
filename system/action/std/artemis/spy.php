@@ -9,7 +9,7 @@ include_once ARTEMIS;
 include_once ZEUS;
 
 $rPlace = Utils::getHTTPData('rplace');
-$price = Utils::getHTTPData('price');
+$price 	= Utils::getHTTPData('price');
 
 if ($rPlace !== FALSE AND $price !== FALSE) {
 	if (CTR::$data->get('playerInfo')->get('credit') >= $price) {

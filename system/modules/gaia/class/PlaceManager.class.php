@@ -123,8 +123,9 @@ class PlaceManager extends Manager {
 							ON p.id = ms.rPlace
 							LEFT JOIN orbitalBase AS ob
 								ON p.id = ob.rPlace
-			WHERE LOWER(pl.name) LIKE LOWER(?)
-			OR    LOWER(ob.name) LIKE LOWER(?)
+			WHERE (pl.statement = 1 OR pl.statement = 2 OR pl.statement = 3)
+			AND (LOWER(pl.name) LIKE LOWER(?)
+			OR   LOWER(ob.name) LIKE LOWER(?))			
 			' . $formatOrder . '
 			' . $formatLimit
 		);

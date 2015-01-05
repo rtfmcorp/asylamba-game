@@ -18,52 +18,57 @@ if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($bas
 	if (intval($dock) > 0 AND intval($dock) < 4) {
 		$S_OBM1 = ASM::$obm->getCurrentSession();
 		ASM::$obm->newSession(ASM_UMODE);
-		ASM::$obm->load(array('rPlace' => $baseId));
-		$ob = ASM::$obm->get();
+		ASM::$obm->load(array('rPlace' => $baseId, 'rPlayer' => CTR::$data->get('playerId')));
 
-		$S_SQM1 = ASM::$sqm->getCurrentSession();
-		ASM::$sqm->newSession();
-		ASM::$sqm->load(array('rOrbitalBase' => $baseId, 'dockType' => $dock), array('dEnd'));
+		if (ASM::$obm->size() > 0) {
+			$ob = ASM::$obm->get();
 
-		$index = NULL;
-		for ($i = 0; $i < ASM::$sqm->size(); $i++) {
-			$shipQueue = ASM::$sqm->get($i); 
-			# get the index of the queue
-			if ($shipQueue->id == $queue) {
-				$index = $i;
-				$dStart = $shipQueue->dStart;
-				$shipNumber = $shipQueue->shipNumber;
-				$dockType = $shipQueue->dockType;
-				$quantity = $shipQueue->quantity;
-				break;
-			}
-		}
+			$S_SQM1 = ASM::$sqm->getCurrentSession();
+			ASM::$sqm->newSession();
+			ASM::$sqm->load(array('rOrbitalBase' => $baseId, 'dockType' => $dock), array('dEnd'));
 
-		if ($index !== NULL) {
-			# shift
-			for ($i = $index + 1; $i < ASM::$sqm->size(); $i++) {
-				$shipQueue = ASM::$sqm->get($i);
-
-				$shipQueue->dEnd = Utils::addSecondsToDate($dStart, Utils::interval($shipQueue->dStart, $shipQueue->dEnd, 's'));
-				$shipQueue->dStart = $dStart;
-
-				$dStart = $shipQueue->dEnd;
+			$index = NULL;
+			for ($i = 0; $i < ASM::$sqm->size(); $i++) {
+				$shipQueue = ASM::$sqm->get($i); 
+				# get the index of the queue
+				if ($shipQueue->id == $queue) {
+					$index = $i;
+					$dStart = $shipQueue->dStart;
+					$shipNumber = $shipQueue->shipNumber;
+					$dockType = $shipQueue->dockType;
+					$quantity = $shipQueue->quantity;
+					break;
+				}
 			}
 
-			ASM::$sqm->deleteById($queue);
+			if ($index !== NULL) {
+				# shift
+				for ($i = $index + 1; $i < ASM::$sqm->size(); $i++) {
+					$shipQueue = ASM::$sqm->get($i);
 
-			// give a part of the resources back
-			$resourcePrice = ShipResource::getInfo($shipNumber, 'resourcePrice');
-			if ($dockType == 1) {
-				$resourcePrice *= $quantity;
+					$shipQueue->dEnd = Utils::addSecondsToDate($dStart, Utils::interval($shipQueue->dStart, $shipQueue->dEnd, 's'));
+					$shipQueue->dStart = $dStart;
+
+					$dStart = $shipQueue->dEnd;
+				}
+
+				ASM::$sqm->deleteById($queue);
+
+				// give a part of the resources back
+				$resourcePrice = ShipResource::getInfo($shipNumber, 'resourcePrice');
+				if ($dockType == 1) {
+					$resourcePrice *= $quantity;
+				}
+				$resourcePrice *= SQM_RESOURCERETURN;
+				$ob->increaseResources($resourcePrice);
+				CTR::$alert->add('Commande annulée, vous récupérez le ' . SQM_RESOURCERETURN * 100 . '% du montant investi pour la construction', ALERT_STD_SUCCESS);
+			} else {
+				CTR::$alert->add('suppression de vaisseau impossible', ALERT_STD_ERROR);
 			}
-			$resourcePrice *= SQM_RESOURCERETURN;
-			$ob->increaseResources($resourcePrice);
-			CTR::$alert->add('Commande annulée, vous récupérez le ' . SQM_RESOURCERETURN * 100 . '% du montant investi pour la construction', ALERT_STD_SUCCESS);
+			ASM::$sqm->changeSession($S_SQM1);
 		} else {
-			CTR::$alert->add('suppression de vaisseau impossible', ALERT_STD_ERROR);
+			CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);	
 		}
-		ASM::$sqm->changeSession($S_SQM1);
 		ASM::$obm->changeSession($S_OBM1);
 	} else {
 		CTR::$alert->add('suppression de vaisseau impossible - chantier invalide', ALERT_STD_ERROR);
