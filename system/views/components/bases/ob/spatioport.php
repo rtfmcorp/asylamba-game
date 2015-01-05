@@ -199,9 +199,9 @@ for ($i = 0; $i < ASM::$crm->size(); $i++) {
 				echo '<div class="body">';
 					echo '<div class="tool">';
 					if ($rc->getStatement() == CRM_PROPOSED) {
-						echo '<span><a href="' . Format::actionBuilder('cancelroute', ['base-' => $ob_spatioport->getId(), 'route' => $rc->getId()]) . '">annuler la proposition commerciale</a></span>';
+						echo '<span><a href="' . Format::actionBuilder('cancelroute', ['base' => $ob_spatioport->getId(), 'route' => $rc->getId()]) . '">annuler la proposition commerciale</a></span>';
 					} else {
-						echo '<span><a href="' . Format::actionBuilder('deleteroute', ['base-' => $ob_spatioport->getId(), 'route' => $rc->getId()]) . '">démanteler la route commerciale</a></span>';
+						echo '<span><a href="' . Format::actionBuilder('deleteroute', ['base' => $ob_spatioport->getId(), 'route' => $rc->getId()]) . '">démanteler la route commerciale</a></span>';
 					}
 					echo '</div>';
 
