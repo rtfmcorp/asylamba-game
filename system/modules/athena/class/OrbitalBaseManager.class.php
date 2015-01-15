@@ -456,7 +456,7 @@ class OrbitalBaseManager extends Manager {
 			}
 			ASM::$tqm->changeSession($S_TQM1);
 
-			# mise des invistissement à 0
+			# mise des invistissements à 0
 			$base->iSchool = 0;
 			$base->iAntiSpy = 0;
 
@@ -477,13 +477,13 @@ class OrbitalBaseManager extends Manager {
 				}
 				if (ASM::$com->get($i)->statement == Commander::MOVING) {
 					ASM::$com->get($i)->statement = Commander::DESERT;
+					ASM::$com->get($i)->travelType = NULL;
+					ASM::$com->get($i)->travelLength = NULL;
+					ASM::$com->get($i)->dArrival = NULL;
+					ASM::$com->get($i)->dstart = NULL;
+					ASM::$com->get($i)->length = NULL;
+					ASM::$com->get($i)->rBase = NULL;
 				}
-				ASM::$com->get($i)->travelType = NULL;
-				ASM::$com->get($i)->travelLength = NULL;
-				ASM::$com->get($i)->dArrival = NULL;
-				ASM::$com->get($i)->dstart = NULL;
-				ASM::$com->get($i)->length = NULL;
-				ASM::$com->get($i)->rBase = NULL;
 			}
 			ASM::$com->changeSession($S_COM2);
 
