@@ -381,10 +381,9 @@ class Commander {
 			
 			// load bonus
 			$invest += $invest * $playerBonus->get(PlayerBonus::COMMANDER_INVEST) / 100;
-			$coeff = $invest / 100;
-			$earnedExperience  = round(log($coeff + 1) / log(2) * 20);
-			$earnedExperience += rand(-23, 23);
-			$earnedExperience = round($earnedExperience / 15);
+			$earnedExperience = $invest / 100;
+			$earnedExperience += rand(-($earnedExperience / 20), ($earnedExperience / 20));
+			$earnedExperience = round($earnedExperience);
 			$earnedExperience  = ($earnedExperience < 0) ? 0 : $earnedExperience;
 			
 			$this->upExperience($earnedExperience);
