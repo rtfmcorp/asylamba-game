@@ -11,6 +11,7 @@
 */
 
 class Commander {
+	Const COEFFSCHOOL 				= 100;
 	const COEFFEARNEDEXP 			= 50;
 	const COEFFEXPPLAYER			= 100;
 	const CMDBASELVL 				= 100;
@@ -381,7 +382,7 @@ class Commander {
 			
 			// load bonus
 			$invest += $invest * $playerBonus->get(PlayerBonus::COMMANDER_INVEST) / 100;
-			$earnedExperience = $invest / 100;
+			$earnedExperience = $invest / self::COEFFSCHOOL;
 			$earnedExperience += rand(-($earnedExperience / 20), ($earnedExperience / 20));
 			$earnedExperience = round($earnedExperience);
 			$earnedExperience  = ($earnedExperience < 0) ? 0 : $earnedExperience;
