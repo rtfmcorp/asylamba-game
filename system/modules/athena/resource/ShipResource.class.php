@@ -319,7 +319,7 @@ class ShipResource {
 			'points' => 80,
 			'imageLink' => 'ship7',
 			'techno' => 12,
-			'description' => 'Disposant de quatre canons ioniques convergeant en un seul faisceau dans le but d’amplifier la puissance du tire, le Cyclope est le vaisseau, toute catégorie confondue, le plus dévastateur de la galaxie de l’Œil. <br /><br />Cette frégate légère et rapide fut longtemps utilisée par l’ancien Empire pour imposer et asseoir son pouvoir sur les planètes contrebandières. Elle fut également sujet à controverse pour la population impériale de par sa puissance de feu et le nombre de victimes civiles lors de la plupart de ces nombreuses attaques.'
+			'description' => 'Disposant de quatre canons ioniques convergeant en un seul faisceau dans le but d’amplifier la puissance du tir, le Cyclope est le vaisseau, toute catégorie confondue, le plus dévastateur de la galaxie de l’Œil. <br /><br />Cette frégate légère et rapide fut longtemps utilisée par l’ancien Empire pour imposer et asseoir son pouvoir sur les planètes contrebandières. Elle fut également sujet à controverse pour la population impériale de par sa puissance de feu et le nombre de victimes civiles lors de la plupart de ces nombreuses attaques.'
 		),
 		array(
 			'codeName' => 'Minotaure',
