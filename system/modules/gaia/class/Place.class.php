@@ -922,7 +922,7 @@ class Place {
 					->addLnk('fleet/commander-' . $commander->getId(), $commander->getName())
 					->addTxt(' s\'est posé sur ')
 					->addLnk('map/base-' . $this->id, $this->baseName)
-					->addTxt(' il est en garnison car il n\'y avait pas assez de place en orbite.')
+					->addTxt('. Il est en garnison car il n\'y avait pas assez de place en orbite.')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
