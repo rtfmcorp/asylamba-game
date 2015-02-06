@@ -916,13 +916,13 @@ class Place {
 			case self::CHANGEFAIL:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Déplacement raté');
+				$notif->setTitle('Déplacement réussi');
 				$notif->addBeg()
 					->addTxt('Votre officier ')
 					->addLnk('fleet/commander-' . $commander->getId(), $commander->getName())
-					->addTxt(' n\'a pas pu se poser sur ')
+					->addTxt(' s\'est posé sur ')
 					->addLnk('map/base-' . $this->id, $this->baseName)
-					->addTxt(' car il y a déjà trop d\'officiers autour de la planète.')
+					->addTxt(' il est en garnison car il n\'y avait pas assez de place en orbite.')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
