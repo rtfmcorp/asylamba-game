@@ -108,21 +108,33 @@ echo '<div class="component generator">';
 								$capitalQuantity++;
 							}
 						}
-						$totalPrice = ($capitalQuantity + 1) * PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'price');
+						$totalPrice = PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'price');
 						if ((($ob_obSituation->typeOfBase == OrbitalBase::TYP_COMMERCIAL || $ob_obSituation->typeOfBase == OrbitalBase::TYP_MILITARY) && CTR::$data->get('playerInfo')->get('credit') >= $totalPrice && $ob_obSituation->levelGenerator >= OBM_LEVEL_MIN_FOR_CAPITAL)) {
-							echo '<a href="' . Format::actionBuilder('changebasetype', ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_CAPITAL]) . '" class="button">';
-								echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'name') . '<br />';
-								echo  Format::numberFormat($totalPrice);
-								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
-							echo '</a>';
+							if ($capitalQuantity == 0) {
+								echo '<a href="' . Format::actionBuilder('changebasetype', ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_CAPITAL]) . '" class="button">';
+									echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'name') . '<br />';
+									echo  Format::numberFormat($totalPrice);
+									echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
+								echo '</a>';
+							} else {
+								echo '<span class="button disable">';
+									echo '<span class="text">Vous avez déjà une ' . PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'name') . '<br />';
+								echo '</span>';
+							}
 						} elseif ($ob_obSituation->typeOfBase == OrbitalBase::TYP_CAPITAL) {
 							# do nothing
 						} else {
-							echo '<span class="button disable">';
-								echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'name') . '<br />';
-								echo  Format::numberFormat($totalPrice);
-								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
-							echo '</span>';
+							if ($capitalQuantity == 0) {
+								echo '<span class="button disable">';
+									echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'name') . '<br />';
+									echo  Format::numberFormat($totalPrice);
+									echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
+								echo '</span>';
+							} else {
+								echo '<span class="button disable">';
+									echo '<span class="text">Vous avez déjà une ' . PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'name') . '<br />';
+								echo '</span>';
+							}
 						}
 						echo '<h4>Avantages &amp; Inconvénients</h4>';
 						$fleetQuantity = PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'l-line') + PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'r-line');
