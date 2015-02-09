@@ -13,6 +13,7 @@ abstract class ASM {
 	public static $trm;
 	public static $csm;
 	public static $ctm;
+	public static $rlm;
 
 	protected static $runningGaia = FALSE;
 	public static $plm;
@@ -71,6 +72,7 @@ abstract class ASM {
 			self::$trm = new TransactionManager();
 			self::$csm = new CommercialShippingManager();
 			self::$ctm = new CommercialTaxManager();
+			self::$rlm = new RecyclingLogManager();
 		}
 		self::$runningAthena = TRUE;
 	}
@@ -160,6 +162,7 @@ abstract class ASM {
 			self::$trm->save();
 			self::$csm->save();
 			self::$ctm->save();
+			self::$rlm->save();
 		}
 		if (self::$runningGaia) {
 			self::$plm->save();
