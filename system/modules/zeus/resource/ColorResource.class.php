@@ -49,6 +49,23 @@ class ColorResource {
 
 	private static $colors = array(
 		array(
+			'id' 			=> 0,
+			'officialName' 	=> 'Sans Faction',
+			'popularName' 	=> '',
+			'government' 	=> '',
+			'demonym' 		=> 'Sans Faction',
+			'factionPoint' 	=> '',
+			'status' 		=> array('', '', '', '', '', ''),
+			'devise' 		=> '',
+			'desc1' => '',
+			'desc2' => '',
+			'desc3' => '',
+			'desc4' => '',
+			'bonus' => array(),
+			'mandateDuration' => 0,
+			'senateDesc' => '',
+			'campaignDesc' => ''),
+		array(
 			'id' 			=> 1,
 			'officialName' 	=> 'Ordre Impérial',
 			'popularName' 	=> 'l’Empire',
