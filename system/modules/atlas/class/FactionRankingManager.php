@@ -59,12 +59,12 @@ class FactionRankingManager extends Manager {
 			$fr->general = $aw['general'];
 			$fr->generalPosition = $aw['generalPosition'];
 			$fr->generalVariation = $aw['generalVariation'];
-			$fr->power = $aw['power'];
-			$fr->powerPosition = $aw['powerPosition'];
-			$fr->powerVariation = $aw['powerVariation'];
-			$fr->domination = $aw['domination'];
-			$fr->dominationPosition = $aw['dominationPosition'];
-			$fr->dominationVariation = $aw['dominationVariation'];
+			$fr->wealth = $aw['wealth'];
+			$fr->wealthPosition = $aw['wealthPosition'];
+			$fr->wealthVariation = $aw['wealthVariation'];
+			$fr->territorial = $aw['territorial'];
+			$fr->territorialPosition = $aw['territorialPosition'];
+			$fr->territorialVariation = $aw['territorialVariation'];
 
 			$currentT = $this->_Add($fr);
 		}
@@ -88,12 +88,12 @@ class FactionRankingManager extends Manager {
 			$fr->general = isset($aw['general']) ? $aw['general'] : NULL;
 			$fr->generalPosition = isset($aw['generalPosition']) ? $aw['generalPosition'] : NULL;
 			$fr->generalVariation = isset($aw['generalVariation']) ? $aw['generalVariation'] : NULL;
-			$fr->power = isset($aw['power']) ? $aw['power'] : NULL;
-			$fr->powerPosition = isset($aw['powerPosition']) ? $aw['powerPosition'] : NULL;
-			$fr->powerVariation = isset($aw['powerVariation']) ? $aw['powerVariation'] : NULL;
-			$fr->domination = isset($aw['domination']) ? $aw['domination'] : NULL;
-			$fr->dominationPosition = isset($aw['dominationPosition']) ? $aw['dominationPosition'] : NULL;
-			$fr->dominationVariation = isset($aw['dominationVariation']) ? $aw['dominationVariation'] : NULL;
+			$fr->wealth = isset($aw['wealth']) ? $aw['wealth'] : NULL;
+			$fr->wealthPosition = isset($aw['wealthPosition']) ? $aw['wealthPosition'] : NULL;
+			$fr->wealthVariation = isset($aw['wealthVariation']) ? $aw['wealthVariation'] : NULL;
+			$fr->territorial = isset($aw['territorial']) ? $aw['territorial'] : NULL;
+			$fr->territorialPosition = isset($aw['territorialPosition']) ? $aw['territorialPosition'] : NULL;
+			$fr->territorialVariation = isset($aw['territorialVariation']) ? $aw['territorialVariation'] : NULL;
 
 			$currentT = $this->_Add($fr);
 		}
@@ -103,7 +103,7 @@ class FactionRankingManager extends Manager {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			factionRanking(rRanking, rFaction, general, generalPosition, generalVariation, 
-				power, powerPosition, powerVariation, domination, dominationPosition, dominationVariation)
+				wealth, wealthPosition, wealthVariation, territorial, territorialPosition, territorialVariation)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$fr->rRanking,
@@ -111,12 +111,12 @@ class FactionRankingManager extends Manager {
 			$fr->general,
 			$fr->generalPosition,
 			$fr->generalVariation,
-			$fr->power,
-			$fr->powerPosition,
-			$fr->powerVariation,
-			$fr->domination,
-			$fr->dominationPosition,
-			$fr->dominationVariation
+			$fr->wealth,
+			$fr->wealthPosition,
+			$fr->wealthVariation,
+			$fr->territorial,
+			$fr->territorialPosition,
+			$fr->territorialVariation
 		));
 
 		$fr->id = $db->lastInsertId();
@@ -136,12 +136,12 @@ class FactionRankingManager extends Manager {
 					general = ?,
 					generalPosition = ?,
 					generalVariation = ?,
-					power = ?,
-					powerPosition = ?,
-					powerVariation = ?,
-					domination = ?,
-					dominationPosition = ?,
-					dominationVariation = ?
+					wealth = ?,
+					wealthPosition = ?,
+					wealthVariation = ?,
+					territorial = ?,
+					territorialPosition = ?,
+					territorialVariation = ?
 				WHERE id = ?');
 			$qr->execute(array(
 				$fr->id,
@@ -150,12 +150,12 @@ class FactionRankingManager extends Manager {
 				$fr->general,
 				$fr->generalPosition,
 				$fr->generalVariation,
-				$fr->power,
-				$fr->powerPosition,
-				$fr->powerVariation,
-				$fr->domination,
-				$fr->dominationPosition,
-				$fr->dominationVariation,
+				$fr->wealth,
+				$fr->wealthPosition,
+				$fr->wealthVariation,
+				$fr->territorial,
+				$fr->territorialPosition,
+				$fr->territorialVariation,
 				$fr->id
 			));
 		}

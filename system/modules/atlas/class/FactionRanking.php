@@ -21,13 +21,13 @@ class FactionRanking {
 	public $generalPosition;
 	public $generalVariation;
 
-	public $power; 					# sum of general ranking of the players
-	public $powerPosition;
-	public $powerVariation;
+	public $wealth; 					# sum of general ranking of the players
+	public $wealthPosition;
+	public $wealthVariation;
 
-	public $domination; 			# population dominated
-	public $dominationPosition;
-	public $dominationVariation;
+	public $territorial; 			# population dominated
+	public $territorialPosition;
+	public $territorialVariation;
 
 	public function getId() { return $this->id; }
 
@@ -38,12 +38,12 @@ class FactionRanking {
 			case 'general':
 				$pos = $this->generalPosition;
 				$var = $this->generalVariation; break;
-			case 'power':
-				$pos = $this->powerPosition;
-				$var = $this->powerVariation; break;
-			case 'domination':
-				$pos = $this->dominationPosition;
-				$var = $this->dominationVariation; break;
+			case 'wealth':
+				$pos = $this->wealthPosition;
+				$var = $this->wealthVariation; break;
+			case 'territorial':
+				$pos = $this->territorialPosition;
+				$var = $this->territorialVariation; break;
 			default: $var = ''; $pos = ''; break;
 		}
 
@@ -55,8 +55,8 @@ class FactionRanking {
 			$r .= '<span class="experience">';
 				switch ($type) {
 					case 'general': $r .= Format::number($this->general, -1) . ' crédits'; break;
-					case 'power': $r .= Format::number($this->power, -1) . ' points'; break;
-					case 'domination': $r .= Format::number($this->domination / 1000, 1) . ' milliard d\'âmes'; break;
+					case 'wealth': $r .= Format::number($this->wealth, -1) . ' points'; break;
+					case 'territorial': $r .= Format::number($this->territorial / 1000, 1) . ' milliard d\'âmes'; break;
 					default: break;
 				}
 			$r .= '</span>';
