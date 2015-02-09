@@ -19,6 +19,7 @@ class Player {
 	public $description = '';
 	public $avatar = '';
 	public $status = 1;
+	public $rGodfather = 1;
 	public $credit = 0;
 	public $uPlayer = '';
 	public $experience = 0;
