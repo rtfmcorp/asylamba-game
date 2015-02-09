@@ -9,6 +9,8 @@ include_once 'class/PlayerHelper.class.php';
 include_once 'class/CheckName.class.php';
 include_once 'class/PlayerBonus.class.php';
 include_once 'class/TutorialHelper.class.php';
+include_once 'class/CreditTransaction.class.php';
+include_once 'class/CreditTransactionManager.class.php';
 
 include_once 'resource/ColorResource.class.php';
 include_once 'resource/TutorialResource.class.php';
