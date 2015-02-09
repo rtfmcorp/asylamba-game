@@ -230,10 +230,11 @@ $.Autocompleter = function(input, options) {
 		}
 
 		var return_value = /<span class="ac_value" data-id="(.*?)">(.*?)<\/span>/.exec(v);
+
 		$input.val(return_value[2]);
 
 		// custom
-		$input.closest('form').find('.autocomplete-hidden').val(return_value[1]);
+		$input.closest('form, .form').find('.autocomplete-hidden').val(return_value[1]);
 
 		hideResultsNow();
 		$input.trigger("result", [selected.data, selected.value]);

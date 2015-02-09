@@ -53,7 +53,7 @@ echo '<div class="component">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<h3>Production par relèves de la raffinerie</h3>';
+			echo '<h3>Production par relève de la raffinerie</h3>';
 			echo '<ul class="list-type-1">';
 				$level = $ob_refinery->getLevelRefinery();
 				$from  = ($level < 3)  ? 1  : $level - 2;

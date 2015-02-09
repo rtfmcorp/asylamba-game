@@ -793,7 +793,7 @@ class TechnologyResource {
 			'credit' => 8800,
 			'points' => 24,
 			'column' => 7,
-			'shortDescription' => 'Améliore la vitesse de vos destroyers de 2% par niveau.',
+			'shortDescription' => 'Améliore la vitesse de vos destroyers/croiseurs de 2% par niveau.',
 			'description' => 'La turbo-propulsion est basée sur un système photonique, lui permettant d’augmenter sa rapidité à proximité d’une étoile. Cette amélioration augmentera la vitesse de tous vos destroyers.',
 			'bonus' => 2
 		),
@@ -808,7 +808,7 @@ class TechnologyResource {
 			'credit' => 15500,
 			'points' => 38,
 			'column' => 7,
-			'shortDescription' => 'Améliore l\'attaque de vos destroyers de 2% par niveau.',
+			'shortDescription' => 'Améliore l\'attaque de vos destroyers/croiseurs de 2% par niveau.',
 			'description' => 'L’armement lourd est une technologie améliorant la capacité d’attaque de vos destroyers. Ce système transformera quelque peu les canons de vos destroyers, leur offrant la possibilité d’augmenter leur puissance de feu dans les combats spatiaux.',
 			'bonus' => 2
 		),
@@ -823,7 +823,7 @@ class TechnologyResource {
 			'credit' => 20000,
 			'points' => 49,
 			'column' => 7,
-			'shortDescription' => 'Améliore la défense de vos destroyers de 2% par niveau.',
+			'shortDescription' => 'Améliore la défense de vos destroyers/croiseurs de 2% par niveau.',
 			'description' => 'Le bouclier amélioré n’est autre qu’une amélioration du bouclier renforcé. En effet, cette technologie n’apporte pas de modification majeur par rapport au système précédent, elle est simplement adapté aux vaisseaux de type destroyer.',
 			'bonus' => 2
 		)
