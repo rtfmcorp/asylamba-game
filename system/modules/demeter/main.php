@@ -5,6 +5,8 @@ include_once 'class/forum/ForumTopic.class.php';
 include_once 'class/forum/ForumTopicManager.class.php';
 include_once 'class/forum/ForumMessage.class.php';
 include_once 'class/forum/ForumMessageManager.class.php';
+include_once 'class/forum/newsFaction.class.php';
+include_once 'class/forum/newsFactionManager.class.php';
 
 include_once 'class/election/Election.class.php';
 include_once 'class/election/ElectionManager.class.php';
