@@ -69,15 +69,21 @@ class PlayerRankingManager extends Manager {
 			$pl->experience = $aw['experience'];
 			$pl->experiencePosition = $aw['experiencePosition'];
 			$pl->experienceVariation = $aw['experienceVariation'];
-			$pl->victory = $aw['victory'];
-			$pl->victoryPosition = $aw['victoryPosition'];
-			$pl->victoryVariation = $aw['victoryVariation'];
-			$pl->defeat = $aw['defeat'];
-			$pl->defeatPosition = $aw['defeatPosition'];
-			$pl->defeatVariation = $aw['defeatVariation'];
-			$pl->ratio = $aw['ratio'];
-			$pl->ratioPosition = $aw['ratioPosition'];
-			$pl->ratioVariation = $aw['ratioVariation'];
+			$pl->fight = $aw['fight'];
+			$pl->fightPosition = $aw['fightPosition'];
+			$pl->fightVariation = $aw['fightVariation'];
+			$pl->trader = $aw['trader'];
+			$pl->traderPosition = $aw['traderPosition'];
+			$pl->traderVariation = $aw['traderVariation'];
+			$pl->armies = $aw['armies'];
+			$pl->armiesPosition = $aw['armiesPosition'];
+			$pl->armiesVariation = $aw['armiesVariation'];
+			$pl->resources = $aw['resources'];
+			$pl->resourcesPosition = $aw['resourcesPosition'];
+			$pl->resourcesVariation = $aw['resourcesVariation'];
+			$pl->butcher = $aw['butcher'];
+			$pl->butcherPosition = $aw['butcherPosition'];
+			$pl->butcherVariation = $aw['butcherVariation'];
 
 			$pl->color = $aw['color'];
 			$pl->name = $aw['name'];
@@ -108,15 +114,21 @@ class PlayerRankingManager extends Manager {
 			if (isset($aw['experience'])) { $pl->experience = $aw['experience']; }
 			if (isset($aw['experiencePosition'])) { $pl->experiencePosition = $aw['experiencePosition']; }
 			if (isset($aw['experienceVariation'])) { $pl->experienceVariation = $aw['experienceVariation']; }
-			if (isset($aw['victory'])) { $pl->victory = $aw['victory']; }
-			if (isset($aw['victoryPosition'])) { $pl->victoryPosition = $aw['victoryPosition']; }
-			if (isset($aw['victoryVariation'])) { $pl->victoryVariation = $aw['victoryVariation']; }
-			if (isset($aw['defeat'])) { $pl->defeat = $aw['defeat']; }
-			if (isset($aw['defeatPosition'])) { $pl->defeatPosition = $aw['defeatPosition']; }
-			if (isset($aw['defeatVariation'])) { $pl->defeatVariation = $aw['defeatVariation']; }
-			if (isset($aw['ratio'])) { $pl->ratio = $aw['ratio']; }
-			if (isset($aw['ratioPosition'])) { $pl->ratioPosition = $aw['ratioPosition']; }
-			if (isset($aw['ratioVariation'])) { $pl->ratioVariation = $aw['ratioVariation']; }
+			if (isset($aw['fight'])) { $pl->fight = $aw['fight']; }
+			if (isset($aw['fightPosition'])) { $pl->fightPosition = $aw['fightPosition']; }
+			if (isset($aw['fightVariation'])) { $pl->fightVariation = $aw['fightVariation']; }
+			if (isset($aw['trader'])) { $pl->trader = $aw['trader']; }
+			if (isset($aw['traderPosition'])) { $pl->traderPosition = $aw['traderPosition']; }
+			if (isset($aw['traderVariation'])) { $pl->traderVariation = $aw['traderVariation']; }
+			if (isset($aw['armies'])) { $pl->armies = $aw['armies']; }
+			if (isset($aw['armiesPosition'])) { $pl->armiesPosition = $aw['armiesPosition']; }
+			if (isset($aw['armiesVariation'])) { $pl->armiesVariation = $aw['armiesVariation']; }
+			if (isset($aw['resources'])) { $pl->resources = $aw['resources']; }
+			if (isset($aw['resourcesPosition'])) { $pl->resourcesPosition = $aw['resourcesPosition']; }
+			if (isset($aw['resourcesVariation'])) { $pl->resourcesVariation = $aw['resourcesVariation']; }
+			if (isset($aw['butcher'])) { $pl->butcher = $aw['butcher']; }
+			if (isset($aw['butcherPosition'])) { $pl->butcherPosition = $aw['butcherPosition']; }
+			if (isset($aw['butcherVariation'])) { $pl->butcherVariation = $aw['butcherVariation']; }
 
 			if (isset($aw['color'])) { $pl->color = $aw['color']; }
 			if (isset($aw['name'])) { $pl->name = $aw['name']; }
@@ -130,11 +142,15 @@ class PlayerRankingManager extends Manager {
 	public function add(playerRanking $pl) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			playerRanking(rRanking, rPlayer, general, generalPosition, generalVariation, 
+			playerRanking(rRanking, rPlayer, 
+				general, generalPosition, generalVariation, 
 				experience, experiencePosition, experienceVariation, 
-				victory, victoryPosition, victoryVariation, 
-				defeat, defeatPosition, defeatVariation, ratio, ratioPosition, ratioVariation)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+				fight, fightPosition, fightVariation, 
+				trader, traderPosition, traderVariation, 
+				armies, armiesPosition, armiesVariation, 
+				resources, resourcesPosition, resourcesVariation, 
+				butcher, butcherPosition, butcherVariation)
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$pl->rRanking,
 			$pl->rPlayer, 
@@ -144,15 +160,21 @@ class PlayerRankingManager extends Manager {
 			$pl->experience,
 			$pl->experiencePosition,
 			$pl->experienceVariation,
-			$pl->victory,
-			$pl->victoryPosition,
-			$pl->victoryVariation,
-			$pl->defeat,
-			$pl->defeatPosition,
-			$pl->defeatVariation,
-			$pl->ratio,
-			$pl->ratioPosition,
-			$pl->ratioVariation
+			$pl->fight,
+			$pl->fightPosition,
+			$pl->fightVariation,
+			$pl->trader,
+			$pl->traderPosition,
+			$pl->traderVariation,
+			$pl->armies,
+			$pl->armiesPosition,
+			$pl->armiesVariation,
+			$pl->resources,
+			$pl->resourcesPosition,
+			$pl->resourcesVariation,
+			$pl->butcher,
+			$pl->butcherPosition,
+			$pl->butcherVariation
 		));
 
 		$pl->id = $db->lastInsertId();
@@ -175,15 +197,21 @@ class PlayerRankingManager extends Manager {
 					experience = ?,
 					experiencePosition = ?,
 					experienceVariation = ?,
-					victory = ?,
-					victoryPosition = ?,
-					victoryVariation = ?,
-					defeat = ?,
-					defeatPosition = ?,
-					defeatVariation = ?,
-					ratio = ?,
-					ratioPosition = ?,
-					ratioVariation = ?
+					fight = ?,
+					fightPosition = ?,
+					fightVariation = ?,
+					trader = ?,
+					traderPosition = ?,
+					traderVariation = ?,
+					armies = ?,
+					armiesPosition = ?,
+					armiesVariation = ?,
+					resources = ?,
+					resourcesPosition = ?,
+					resourcesVariation = ?,
+					butcher = ?,
+					butcherPosition = ?,
+					butcherVariation = ?
 				WHERE id = ?');
 			$qr->execute(array(
 				$pl->id,
@@ -195,15 +223,21 @@ class PlayerRankingManager extends Manager {
 				$pl->experience,
 				$pl->experiencePosition,
 				$pl->experienceVariation,
-				$pl->victory,
-				$pl->victoryPosition,
-				$pl->victoryVariation,
-				$pl->defeat,
-				$pl->defeatPosition,
-				$pl->defeatVariation,
-				$pl->ratio,
-				$pl->ratioPosition,
-				$pl->ratioVariation,
+				$pl->fight,
+				$pl->fightPosition,
+				$pl->fightVariation,
+				$pl->trader,
+				$pl->traderPosition,
+				$pl->traderVariation,
+				$pl->armies,
+				$pl->armiesPosition,
+				$pl->armiesVariation,
+				$pl->resources,
+				$pl->resourcesPosition,
+				$pl->resourcesVariation,
+				$pl->butcher,
+				$pl->butcherPosition,
+				$pl->butcherVariation,
 				$pl->id
 			));
 		}

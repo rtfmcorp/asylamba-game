@@ -44,8 +44,13 @@ class Report {
 	public $expPlayerD			= 0;
 	public $rPlace				= 0;
 	public $type				= 0;
+	public $isLegal 			= 0;
 	public $round				= 0;
 	public $importance			= 0;
+	public $pevInBeginA			= 0;
+	public $pevInBeginD			= 0;
+	public $pevAtEndA			= 0;
+	public $pevAtEndD			= 0;
 	public $statementAttacker	= 0;
 	public $statementDefender	= 0;
 	public $dFight				= '';
@@ -70,6 +75,8 @@ class Report {
 	private $setArmiesDone = FALSE;
 
 	public function getId() { return $this->id; }
+
+	public function setPev() {}
 
 	public function setArmies() {
 		if ($this->setArmiesDone == FALSE) {

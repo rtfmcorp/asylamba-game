@@ -14,6 +14,7 @@ class Sector {
 	public $id = 0;
 
 	public $rColor;
+	public $rSurrender;
 	public $xPosition;
 	public $yPosition;
 	public $xBarycentric;

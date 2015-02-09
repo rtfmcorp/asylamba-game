@@ -80,6 +80,7 @@ class SectorManager extends Manager {
 
 				$sector->setId($aw['id']);
 				$sector->setRColor($aw['rColor']);
+				$sector->setRSurrender($aw['rSurrender']);
 				$sector->setXPosition($aw['xPosition']);
 				$sector->setYPosition($aw['yPosition']);
 				$sector->setXBarycentric($aw['xBarycentric']);
@@ -143,6 +144,7 @@ class SectorManager extends Manager {
 
 				$sector->setId($s['id']);
 				$sector->setRColor($s['rColor']);
+				$sector->setRSurrender($s['rSurrender']);
 				$sector->setXPosition($s['xPosition']);
 				$sector->setYPosition($s['yPosition']);
 				$sector->setXBarycentric($aw['xBarycentric']);
@@ -166,10 +168,12 @@ class SectorManager extends Manager {
 			$db = DataBase::getInstance();
 			$qr = $db->prepare('UPDATE sector
 				SET
+					rSurrender = ?,
 					tax = ?,
 					name = ?
 				WHERE id = ?');
 			$qr->execute(array(
+				$s->rSurrender,
 				$s->tax,
 				$s->name,
 				$s->id
