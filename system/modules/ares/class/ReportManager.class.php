@@ -90,8 +90,13 @@ class ReportManager extends Manager {
 					$report->rPlace = $awReports[$i]['rPlace'];
 					$report->placeName = $awReports[$i]['placeName'];
 					$report->type = $awReports[$i]['type'];
+					$report->isLegal = $awReports[$i]['isLegal'];
 					$report->round = $awReports[$i]['round'];
 					$report->importance = $awReports[$i]['importance'];
+					$report->pevInBeginA = $awReports[$i]['pevInBeginA'];
+					$report->pevInBeginD = $awReports[$i]['pevInBeginD'];
+					$report->pevAtEndA = $awReports[$i]['pevAtEndA'];
+					$report->pevAtEndD = $awReports[$i]['pevAtEndD'];
 					$report->statementAttacker = $awReports[$i]['statementAttacker'];
 					$report->statementDefender = $awReports[$i]['statementDefender'];
 					$report->dFight = $awReports[$i]['dFight'];
@@ -181,8 +186,13 @@ class ReportManager extends Manager {
 			$report->rPlace = $awReport['rPlace'];
 			$report->placeName = $awReport['placeName'];
 			$report->type = $awReport['type'];
+			$report->isLegal = $awReport['isLegal'];
 			$report->round = $awReport['round'];
 			$report->importance = $awReport['importance'];
+			$report->pevInBeginA = $awReports[$i]['pevInBeginA'];
+			$report->pevInBeginD = $awReports[$i]['pevInBeginD'];
+			$report->pevAtEndA = $awReports[$i]['pevAtEndA'];
+			$report->pevAtEndD = $awReports[$i]['pevAtEndD'];
 			$report->statementAttacker = $awReport['statementAttacker'];
 			$report->statementDefender = $awReport['statementDefender'];
 			$report->dFight = $awReport['dFight'];
@@ -217,8 +227,13 @@ class ReportManager extends Manager {
 				rPlace = ?,
 				placeName = ?,
 				type = ?,
+				isLegal = ?,
 				round = ?,
 				importance = ?,
+				pevInBeginA = ?,
+				pevInBeginD = ?,
+				pevAtEndA = ?,
+				pevAtEndD = ?,
 				statementAttacker = ?,
 				statementDefender = ?,
 				dFight = ?
@@ -244,8 +259,13 @@ class ReportManager extends Manager {
 				$report->rPlace,
 				$report->placeName,
 				$report->type,
+				$report->isLegal,
 				$report->round,
 				$report->importance,
+				$report->pevInBeginA,
+				$report->pevInBeginD,
+				$report->pevAtEndA,
+				$report->pevAtEndD,
 				$report->statementAttacker,
 				$report->statementDefender,
 				$report->dFight,
@@ -279,8 +299,13 @@ class ReportManager extends Manager {
 			rPlace = ?,
 			placeName = ?,
 			type = ?,
+			isLegal = ?,
 			round = ?,
 			importance = ?,
+			pevInBeginA = ?,
+			pevInBeginD = ?,
+			pevAtEndA = ?,
+			pevAtEndD = ?,
 			statementAttacker = ?,
 			statementDefender = ?,
 			dFight = ?');
@@ -305,8 +330,13 @@ class ReportManager extends Manager {
 			$newReport->rPlace,
 			$newReport->placeName,
 			$newReport->type,
+			$newReport->isLegal,
 			$newReport->round,
 			$newReport->importance,
+			$newReport->pevInBeginA,
+			$newReport->pevInBeginD,
+			$newReport->pevAtEndA,
+			$newReport->pevAtEndD,
 			$newReport->statementAttacker,
 			$newReport->statementDefender,
 			$newReport->dFight

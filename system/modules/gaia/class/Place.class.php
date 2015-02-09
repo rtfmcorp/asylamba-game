@@ -867,6 +867,7 @@ class Place {
 		$report->dFight = LiveReport::$dFight;
 		$report->placeName = ($this->baseName == '') ? 'planète rebelle' : $this->baseName;
 		$report->setArmies();
+		$report->setPev();
 		$id = ASM::$rpm->add($report);
 		LiveReport::clear();
 
