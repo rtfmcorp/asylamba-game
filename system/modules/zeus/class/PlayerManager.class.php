@@ -118,6 +118,7 @@ class PlayerManager extends Manager {
 			$p->description,
 			$p->getAvatar(),
 			$p->getStatus(),
+			$p->rGodfather,
 			$p->getCredit(),
 			$p->uPlayer,
 			$p->getExperience(),

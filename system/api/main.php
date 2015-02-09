@@ -1,4 +1,9 @@
 <?php
+# check le serveur s
+# recup la clé
+# uncrpyt a
+# ajout dans le add
+
 $query = API::unParse($_SERVER['REQUEST_URI']);
 $query = explode('/', $query);
 

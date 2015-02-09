@@ -107,11 +107,78 @@ abstract class GalaxyGenerator {
 		self::$output = self::$output . ">_ " . $text . "<br />";
 	}
 
+
+
+
+	private static function l2p($x1, $x2, $y1, $y2) {
+		return (pow($x1 - $y1, 2) + pow($x2 - $y2, 2));
+	}
+
+	private static function distToSegment($p1, $p2, $v1, $v2, $w1, $w2) {
+		$l2 = self::l2p($v1, $v2, $w1, $w2);
+
+		if ($l2 == 0) {
+			return sqrt(self::l2p($p1, $p2, $v1, $v2));
+		}
+
+		$t  = (($p1 - $v1) * ($w1 - $v1) + ($p2 - $v2) * ($w2 - $v2)) / $l2;
+
+		if ($t < 0) {
+			return sqrt(self::l2p($p1, $p2, $v1, $v2));
+		}
+
+		if ($t > 1) {
+			return sqrt(self::l2p($p1, $p2, $w1, $w2));
+		}
+
+		$tx = $v1 + $t * ($w1 - $v1);
+		$ty = $v2 + $t * ($w2 - $v2);
+
+		return sqrt(self::l2p($p1, $p2, $tx, $ty));
+	}
+
 	private static function generateSystem() {
 		self::log('génération des systèmes');
+
 		# id
 		$k = 1;
 
+		# GENERATION DES LINES
+		for ($w = 0; $w < count(GalaxyConfiguration::$galaxy['lineSystemPosition']); $w++) {
+			# line point
+			$xA = GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][0][0];
+			$yA = GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][0][1];
+
+			$xB = GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][1][0];
+			$yB = GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][1][1];
+
+			$l  = sqrt(pow($xB - $xA, 2) + pow($yB - $yA, 2));
+
+			for ($i = 1; $i <= GalaxyConfiguration::$galaxy['size']; $i++) {
+				for ($j = 1; $j <= GalaxyConfiguration::$galaxy['size']; $j++) {
+					# current cursor position
+					$xC = $j;
+					$yC = $i;
+
+					$d  = self::distToSegment($xC, $yC, $xA, $yA, $xB, $yB);
+
+					if ($d < GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][2]) {
+						$prob = rand(0, GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][2] + 18);
+
+						if (GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][2] - $d > $prob) {
+							$type = self::getSystem();
+
+							self::$nbSystem++;
+							self::$listSystem[] = array($k, 0, 0, $xC, $yC, $type);
+
+							$k++;
+						}
+					}
+				}
+			}
+		}
+
+		# GENERATION DES ANNEAUX
 		for ($i = 1; $i <= GalaxyConfiguration::$galaxy['size']; $i++) {
 			for ($j = 1; $j <= GalaxyConfiguration::$galaxy['size']; $j++) {
 				# current cursor position
