@@ -275,7 +275,7 @@ class TutorialResource {
 				<br /><br />
 				Sur chaque planète, tu as cinq actions possibles. La cinquième correspond à l\'espionnage, clique dessus (si l\'icône est grise, choisis une autre planète). En payant une certaine somme en crédits, tu pourras espionner la planète. Plus la somme est élevée, plus tu verras d\'informations.
 				<br /><br />
-				Une fois que tu as cliqué, tu seras redirigé vers l\'amirauté, sur le rapport d\'espionnage. Si tu vois des points d\'exclamation, cela signifie que tu n\'as pas payé assez cher pour voir cette information. Si tu as payé assez cher, tu verras la flotte qu\'il y a en défense ainsi que le nombre de PEV de la flotte.',
+				Une fois que tu as cliqué, tu seras redirigé vers l\'amirauté, sur le rapport d\'espionnage. Si tu vois des points d\'interrogation, cela signifie que tu n\'as pas payé assez cher pour voir cette information. Si tu as payé assez cher, tu verras la flotte qu\'il y a en défense ainsi que le nombre de PEV de la flotte.',
 			'experienceReward' => 5,
 			'creditReward' => 10000,
 			'resourceReward' => 200,
