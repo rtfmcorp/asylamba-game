@@ -152,7 +152,7 @@ try {
 } catch (Exception $e) {
 	# tentative de réparation de l'erreur
 
-	CTR::$alert->add('erreur');
+	CTR::$alert->add('erreur' . $e->getMessage());
 	CTR::redirect('inscription/step-3');
 }
 ?>

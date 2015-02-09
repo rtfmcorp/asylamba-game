@@ -29,6 +29,8 @@ abstract class GalaxyGenerator {
 	public static function clear() {
 		$db = DataBaseAdmin::getInstance();
 
+		$db->query('SET FOREIGN_KEY_CHECKS = 0;');
+		
 		$db->query('TRUNCATE place');
 		self::log('table `place` vidées');
 
@@ -38,6 +40,7 @@ abstract class GalaxyGenerator {
 		$db->query('TRUNCATE sector');
 		self::log('table `sector` vidées');
 
+		$db->query('SET FOREIGN_KEY_CHECKS = 1;');
 		self::log('_ _ _ _');
 	}
 
@@ -46,36 +49,6 @@ abstract class GalaxyGenerator {
 
 		# clean up database
 		self::clear();
-
-		self::log('sauvegarde des places');
-		for ($i = 0; $i < ceil(count(self::$listPlace) / 5000); $i++) { 
-			$qr = 'INSERT INTO place(id, rPlayer, rSystem, typeOfPlace, position, population, coefResources, coefHistory, resources, uPlace) VALUES ';
-			
-			for ($j = $i * 5000; $j < (($i + 1) * 5000) - 1; $j++) { 
-				if (isset(self::$listPlace[$j])) {
-					$qr .= '(' . implode(', ', self::$listPlace[$j]) . ', "' . Utils::addSecondsToDate(Utils::now(), -259200) . '"), ';
-				}
-			}
-
-			$qr = substr($qr, 0, -2);
-			$db->query($qr);
-		}
-		self::log(ceil(count(self::$listPlace) / 5000) . ' requêtes `INSERT`');
-
-		self::log('sauvegarde des systèmes');
-		for ($i = 0; $i < ceil(count(self::$listSystem) / 5000); $i++) { 
-			$qr = 'INSERT INTO system(id, rSector, rColor, xPosition, yPosition, typeOfSystem) VALUES ';
-			
-			for ($j = $i * 5000; $j < (($i + 1) * 5000) - 1; $j++) { 
-				if (isset(self::$listSystem[$j])) {
-					$qr .= '(' . implode(', ', self::$listSystem[$j]) . '), ';
-				}
-			}
-
-			$qr = substr($qr, 0, -2);
-			$db->query($qr);
-		}
-		self::log(ceil(count(self::$listSystem) / 5000) . ' requêtes `INSERT`');
 
 		self::log('sauvegarde des secteurs');
 		for ($i = 0; $i < ceil(count(self::$listSector) / 5000); $i++) { 
@@ -92,6 +65,36 @@ abstract class GalaxyGenerator {
 		}
 		self::log(ceil(count(self::$listSector) / 5000) . ' requêtes `INSERT`');
 
+		self::log('sauvegarde des systèmes');
+		for ($i = 0; $i < ceil(count(self::$listSystem) / 5000); $i++) { 
+			$qr = 'INSERT INTO system(id, rSector, rColor, xPosition, yPosition, typeOfSystem) VALUES ';
+			
+			for ($j = $i * 5000; $j < (($i + 1) * 5000) - 1; $j++) { 
+				if (isset(self::$listSystem[$j])) {
+					$qr .= '(' . implode(', ', self::$listSystem[$j]) . '), ';
+				}
+			}
+
+			$qr = substr($qr, 0, -2);
+			$db->query($qr);
+		}
+		self::log(ceil(count(self::$listSystem) / 5000) . ' requêtes `INSERT`');
+
+		self::log('sauvegarde des places');
+		for ($i = 0; $i < ceil(count(self::$listPlace) / 5000); $i++) { 
+			$qr = 'INSERT INTO place(id, rPlayer, rSystem, typeOfPlace, position, population, coefResources, coefHistory, resources, uPlace) VALUES ';
+			
+			for ($j = $i * 5000; $j < (($i + 1) * 5000) - 1; $j++) { 
+				if (isset(self::$listPlace[$j])) {
+					$qr .= '(' . implode(', ', self::$listPlace[$j]) . ', "' . Utils::addSecondsToDate(Utils::now(), -259200) . '"), ';
+				}
+			}
+
+			$qr = substr($qr, 0, -2);
+			$db->query($qr);
+		}
+		self::log(ceil(count(self::$listPlace) / 5000) . ' requêtes `INSERT`');
+
 		self::log('_ _ _ _');
 	}
 
@@ -106,9 +109,6 @@ abstract class GalaxyGenerator {
 	private static function log($text) {
 		self::$output = self::$output . ">_ " . $text . "<br />";
 	}
-
-
-
 
 	private static function l2p($x1, $x2, $y1, $y2) {
 		return (pow($x1 - $y1, 2) + pow($x2 - $y2, 2));
@@ -215,13 +215,20 @@ abstract class GalaxyGenerator {
 
 			for ($i = 0; $i < $place; $i++) {
 				$type 		= self::getTypeOfPlace($system[5]);
-				$population = self::getPopulation($type);
-				$history 	= self::getHistory($type);
-				$resources 	= self::getResources($type);
+
+				if ($type == 1) {
+					$population = 10;
+					$history 	= 10;
+					$resources 	= 10;
+				} else {
+					$population = 0;
+					$history 	= 0;
+					$resources 	= 0;
+				}
 
 				self::$nbPlace++;
 				self::$popTotal += $population;
-				self::$listPlace[] = array($k, 0, $system[0], $type, ($i + 1), $population, $resources, $history, 0);
+				self::$listPlace[] = array($k, 1, $system[0], $type, ($i + 1), $population, $resources, $history, 0);
 				$k++;
 			}
 		}
@@ -392,29 +399,6 @@ abstract class GalaxyGenerator {
 
 	private static function getTypeOfPlace($systemType) {
 		return self::getProportion(GalaxyConfiguration::$systems[$systemType - 1]['placesPropotion'], rand(1, 100));
-	}
-
-	private static function getHistory($placeType) {
-		return rand(
-			GalaxyConfiguration::$places[$placeType - 1]['history'][0],
-			GalaxyConfiguration::$places[$placeType - 1]['history'][1]
-		);
-	}
-
-	private static function getResources($placeType) {
-		return rand(
-			GalaxyConfiguration::$places[$placeType - 1]['resources'][0],
-			GalaxyConfiguration::$places[$placeType - 1]['resources'][1]
-		);
-	}
-
-	private static function getPopulation($placeType) {
-		return ($placeType == 1)
-			? (rand(
-				GalaxyConfiguration::$galaxy['population'][0], 
-				GalaxyConfiguration::$galaxy['population'][1]
-			) / 100) 
-			: 0;
 	}
 }
 ?>

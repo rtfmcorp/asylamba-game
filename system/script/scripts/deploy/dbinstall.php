@@ -1133,11 +1133,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `creditTransaction` (
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 
-
-/*
 echo '<h1>Génération de la galaxie</h1>';
 
 GalaxyGenerator::generate();
 echo GalaxyGenerator::getLog();
-*/
 ?>
