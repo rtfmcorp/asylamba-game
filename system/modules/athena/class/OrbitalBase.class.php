@@ -329,6 +329,34 @@ class OrbitalBase {
 				}
 			}
 			ASM::$csm->changeSession($S_CSM1);
+
+			# RECYCLING MISSION
+			$S_REM1 = ASM::$rem->getCurrentSession();
+			ASM::$rem->changeSession($this->shippingManager);
+			ASM::$rem->load(array('rBase' => $this->id));
+			for ($i = 0; $i < ASM::$rem->size(); $i++) { 
+				$mission = ASM::$rem->get($i);
+
+				$interval = Utils::interval($mission->uRecycling, $now, 's');
+				if ($interval > $mission->cycleTime) {
+					# update time
+					$recyclingQuantity = floor($interval / $mission->cycleTime);
+					$mission->uRecycling = Utils::addSecondsToDate($mission->uRecycling, $recyclingQuantity*$cycleTime);
+
+					# Place
+					$S_PLM = ASM::$plm->getCurrentSession();
+					ASM::$plm->newSession(ASM_UMODE);
+					ASM::$plm->load(array('id' => $mission->rTarget));
+					$place = ASM::$plm->get();
+					ASM::$plm->changeSession($S_PLM);
+
+					# RESOURCES
+					for ($i = 0; $i < $recyclingQuantity; $i++) { 
+						CTC::add(Utils::addSecondsToDate($mission->uRecycling, ($i+1) * $cycleTime), $this, 'uRecycling', array($mission, $place));
+					}
+				}
+			}
+			ASM::$rem->changeSession($S_REM1);
 		}
 
 		CTC::applyContext($token);
@@ -518,6 +546,13 @@ class OrbitalBase {
 			default :
 				break;
 		}
+	}
+
+	public function uRecycling($mission, $targetPlace) {
+		# faire le recyclage : diminuer les ressources de targetPlace
+		# créer un RecyclingLog
+		# donner ce qu'il a gagné à la base $this
+		# envoyer une notif qu'il a recyclé tant (à this->rPlayer)
 	}
 
 	// OBJECT METHODS
