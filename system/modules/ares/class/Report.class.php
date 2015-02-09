@@ -45,6 +45,7 @@ class Report {
 	public $rPlace				= 0;
 	public $type				= 0;
 	public $isLegal 			= 0;
+	public $hasBeenPunished 	= 0;
 	public $round				= 0;
 	public $importance			= 0;
 	public $pevInBeginA			= 0;
@@ -76,7 +77,16 @@ class Report {
 
 	public function getId() { return $this->id; }
 
-	public function setPev() {}
+	public function setPev() {
+		include_once ATHENA;
+
+		for ($i = 0; $i < 12; $i++) {
+			$this->pevInBeginA += ShipResource::getInfo($i, 'pev') * $this->totalInBeginA[$i];
+			$this->pevInBeginD += ShipResource::getInfo($i, 'pev') * $this->totalInBeginD[$i];
+			$this->pevAtEndA += ShipResource::getInfo($i, 'pev') * $this->totalAtEndA[$i];
+			$this->pevAtEndD += ShipResource::getInfo($i, 'pev') * $this->totalAtEndD[$i];
+		}
+	}
 
 	public function setArmies() {
 		if ($this->setArmiesDone == FALSE) {

@@ -91,6 +91,7 @@ class ReportManager extends Manager {
 					$report->placeName = $awReports[$i]['placeName'];
 					$report->type = $awReports[$i]['type'];
 					$report->isLegal = $awReports[$i]['isLegal'];
+					$report->hasBeenPunished = $awReports[$i]['hasBeenPunished'];
 					$report->round = $awReports[$i]['round'];
 					$report->importance = $awReports[$i]['importance'];
 					$report->pevInBeginA = $awReports[$i]['pevInBeginA'];
@@ -187,6 +188,7 @@ class ReportManager extends Manager {
 			$report->placeName = $awReport['placeName'];
 			$report->type = $awReport['type'];
 			$report->isLegal = $awReport['isLegal'];
+			$report->hasBeenPunished = $awReport['hasBeenPunished'];
 			$report->round = $awReport['round'];
 			$report->importance = $awReport['importance'];
 			$report->pevInBeginA = $awReports[$i]['pevInBeginA'];
@@ -228,6 +230,7 @@ class ReportManager extends Manager {
 				placeName = ?,
 				type = ?,
 				isLegal = ?,
+				hasBeenPunished = ?,
 				round = ?,
 				importance = ?,
 				pevInBeginA = ?,
@@ -260,6 +263,7 @@ class ReportManager extends Manager {
 				$report->placeName,
 				$report->type,
 				$report->isLegal,
+				$report->hasBeenPunished,
 				$report->round,
 				$report->importance,
 				$report->pevInBeginA,
@@ -300,6 +304,7 @@ class ReportManager extends Manager {
 			placeName = ?,
 			type = ?,
 			isLegal = ?,
+			hasBeenPunished = ?,
 			round = ?,
 			importance = ?,
 			pevInBeginA = ?,
@@ -331,6 +336,7 @@ class ReportManager extends Manager {
 			$newReport->placeName,
 			$newReport->type,
 			$newReport->isLegal,
+			$newReport->hasBeenPunished,
 			$newReport->round,
 			$newReport->importance,
 			$newReport->pevInBeginA,
