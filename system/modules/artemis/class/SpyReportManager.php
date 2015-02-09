@@ -72,6 +72,9 @@ class SpyReportManager extends Manager {
 			$sr->enemyAvatar = $aw['enemyAvatar'];
 			$sr->enemyLevel = $aw['enemyLevel'];
 			$sr->resources = $aw['resources'];
+			$sr->shipsInStorage = $aw['shipsInStorage'];
+			$sr->antiSpyInvest = $aw['antiSpyInvest'];
+			$sr->commercialRouteIncome = $aw['commercialRouteIncome'];
 			$sr->commanders = $aw['commanders'];
 			$sr->success = $aw['success'];
 			$sr->type = $aw['type'];
@@ -94,8 +97,8 @@ class SpyReportManager extends Manager {
 	public function add(SpyReport $sr) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			spyReport(rPlayer, price, rPlace, placeColor, typeOfBase, typeOfOrbitalBase, placeName, points, rEnemy, enemyName, enemyAvatar, enemyLevel, resources, commanders, success, type, dSpying)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+			spyReport(rPlayer, price, rPlace, placeColor, typeOfBase, typeOfOrbitalBase, placeName, points, rEnemy, enemyName, enemyAvatar, enemyLevel, resources, shipsInStorage, antiSpyInvest, commercialRouteIncome, commanders, success, type, dSpying)
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$sr->rPlayer,
 			$sr->price,
@@ -110,6 +113,9 @@ class SpyReportManager extends Manager {
 			$sr->enemyAvatar,
 			$sr->enemyLevel,
 			$sr->resources,
+			$sr->shipsInStorage,
+			$sr->antiSpyInvest,
+			$sr->commercialRouteIncome,
 			$sr->commanders,
 			$sr->success,
 			$sr->type,
@@ -141,6 +147,9 @@ class SpyReportManager extends Manager {
 					enemyAvatar = ?,
 					enemyLevel = ?,
 					resources = ?,
+					shipsInStorage = ?,
+					antiSpyInvest = ?,
+					commercialRouteIncome = ?,
 					commanders = ?,
 					success = ?,
 					type = ?,
@@ -161,6 +170,9 @@ class SpyReportManager extends Manager {
 				$sr->enemyAvatar,
 				$sr->enemyLevel,
 				$sr->resources,
+				$sr->shipsInStorage,
+				$sr->antiSpyInvest,
+				$sr->commercialRouteIncome,
 				$sr->commanders,
 				$sr->success,
 				$sr->type,

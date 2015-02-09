@@ -41,6 +41,9 @@ class SpyReport {
 	public $enemyLevel;
 
 	public $resources; # from place OR base
+	public $shipsInStorage;
+	public $antiSpyInvest;
+	public $commercialRouteIncome;
 	public $commanders;
 
 	public $success; # from 0 to 100
