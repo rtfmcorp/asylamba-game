@@ -31,6 +31,7 @@ abstract class ASM {
 
 	protected static $runningZeus = FALSE;
 	public static $pam;
+	public static $crt;
 
 	protected static $runningArtemis = FALSE;
 	public static $srm;
@@ -104,6 +105,7 @@ abstract class ASM {
 	public static function runZeus() {
 		if (!self::$runningZeus) {
 			self::$pam = new PlayerManager();
+			self::$crt = new CreditTransactionManager();
 		}
 		self::$runningZeus = TRUE;
 	}
@@ -175,6 +177,7 @@ abstract class ASM {
 		}
 		if (self::$runningZeus) {
 			self::$pam->save();
+			self::$crt->save();
 		}
 		if (self::$runningArtemis) {
 			self::$srm->save();
