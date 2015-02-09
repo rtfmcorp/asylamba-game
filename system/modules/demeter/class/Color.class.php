@@ -68,6 +68,7 @@ class Color {
 
 	public $id 						= 0;
 	public $alive 					= 0;
+	public $isWinner 				= 0;
 	public $credits					= 0;
 	public $players 				= 0;
 	public $activePlayers 			= 0;

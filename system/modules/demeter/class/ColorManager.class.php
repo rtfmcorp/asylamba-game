@@ -50,6 +50,7 @@ class ColorManager extends Manager {
 
 			$color->id = $awColor['id'];
 			$color->alive = $awColor['alive'];
+			$color->alive = $awColor['isWinner'];
 			$color->credits = $awColor['credits'];
 			$color->players = $awColor['players'];
 			$color->activePlayers = $awColor['activePlayers'];
@@ -75,6 +76,7 @@ class ColorManager extends Manager {
 				SET
 					id = ?,
 					alive = ?,
+					isWinner = ?,
 					credits = ?,
 					players = ?,	
 					activePlayers = ?,
@@ -107,6 +109,7 @@ class ColorManager extends Manager {
 		SET
 			id = ?,
 			alive = ?,
+			isWinner = ?,
 			credits = ?,
 			players = ?,		
 			activePlayers = ?,
