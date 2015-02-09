@@ -100,21 +100,25 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 					}
 					ASM::$obm->changeSession($S_OBM2);
 
-					$totalPrice = ($capitalQuantity+1) * PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'price');
-					if ($player->credit >= $totalPrice) {
-						$orbitalBase->typeOfBase = $type;
-						$player->decreaseCredit($totalPrice);
+					if ($capitalQuantity == 0) {
+						$totalPrice = PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'price');
+						if ($player->credit >= $totalPrice) {
+							$orbitalBase->typeOfBase = $type;
+							$player->decreaseCredit($totalPrice);
 
-						# change base type in session
-						for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
-							if (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == $baseId) {
-								CTR::$data->get('playerBase')->get('ob')->get($i)->add('type', OrbitalBase::TYP_CAPITAL);
-								break;
+							# change base type in session
+							for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
+								if (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == $baseId) {
+									CTR::$data->get('playerBase')->get('ob')->get($i)->add('type', OrbitalBase::TYP_CAPITAL);
+									break;
+								}
 							}
+							CTR::$alert->add($orbitalBase->name . ' est désormais une capitale.', ALERT_STD_SUCCESS);
+						} else {
+							CTR::$alert->add('Modification du type de la base orbitale impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
 						}
-						CTR::$alert->add($orbitalBase->name . ' est désormais une capitale.', ALERT_STD_SUCCESS);
 					} else {
-						CTR::$alert->add('Modification du type de la base orbitale impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
+							CTR::$alert->add('Vous ne pouvez pas avoir plus d\'une Capitale. Sauf si vous en conquérez à vos ennemis bien sûr.', ALERT_STD_ERROR);
 					}
 				} else {
 					CTR::$alert->add('Pour transformer votre base en capitale, vous devez augmenter votre générateur jusqu\'au niveau ' . OBM_LEVEL_MIN_FOR_CAPITAL . '.', ALERT_STD_ERROR);
