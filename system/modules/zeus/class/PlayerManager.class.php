@@ -72,6 +72,8 @@ class PlayerManager extends Manager {
 			$p->setBind($aw['bind']);
 			$p->setRColor($aw['rColor']);
 			$p->setName($aw['name']);
+			$p->sex = ($aw['sex']);
+			$p->description = ($aw['description']);
 			$p->setAvatar($aw['avatar']);
 			$p->setStatus($aw['status']);
 			$p->setCredit($aw['credit']);
@@ -105,12 +107,14 @@ class PlayerManager extends Manager {
 	public function add(Player $p) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			player(bind, rColor, name, avatar, status, credit, uPlayer, experience, factionPoint, level, victory, defeat, stepTutorial, stepDone, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, dInscription, dLastConnection, dLastActivity, premium, statement)
+			player(bind, rColor, name, sex, description, avatar, status, credit, uPlayer, experience, factionPoint, level, victory, defeat, stepTutorial, stepDone, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, dInscription, dLastConnection, dLastActivity, premium, statement)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$p->getBind(),
 			$p->getRColor(),
 			$p->getName(),
+			$p->sex,
+			$p->description,
 			$p->getAvatar(),
 			$p->getStatus(),
 			$p->getCredit(),
@@ -149,6 +153,8 @@ class PlayerManager extends Manager {
 					bind = ?,
 					rColor = ?,
 					name = ?,
+					sex = ?,
+					description = ?,
 					avatar = ?,
 					status = ?,
 					credit = ?,
@@ -176,6 +182,8 @@ class PlayerManager extends Manager {
 				$p->getBind(),
 				$p->getRColor(),
 				$p->getName(),
+				$p->sex,
+				$p->description,
 				$p->getAvatar(),
 				$p->getStatus(),
 				$p->getCredit(),

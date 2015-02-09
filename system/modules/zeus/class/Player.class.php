@@ -15,6 +15,8 @@ class Player {
 	public $bind = 0;
 	public $rColor = 0;
 	public $name = '';
+	public $sex = 0;
+	public $description = '';
 	public $avatar = '';
 	public $status = 1;
 	public $credit = 0;
