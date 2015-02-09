@@ -33,17 +33,25 @@ class PlayerRanking {
 	public $experiencePosition;
 	public $experienceVariation;
 
-	public $victory;
-	public $victoryPosition;
-	public $victoryVariation;
+	public $butcher;
+	public $butcherPosition;
+	public $butcherVariation;
 
-	public $defeat;
-	public $defeatPosition;
-	public $defeatVariation;
+	public $trader;
+	public $traderPosition;
+	public $traderVariation;
 
-	public $ratio; 				# ratio victory - defeat 
-	public $ratioPosition;
-	public $ratioVariation;
+	public $fight; 				# nbr victoires - nbr défaites 
+	public $fightPosition;
+	public $fightVariation;
+
+	public $armies;
+	public $armiesPosition;
+	public $armiesVariation;
+
+	public $resources;
+	public $resourcesPosition;
+	public $resourcesVariation;
 
 	# additional attributes
 	public $color;
@@ -65,15 +73,15 @@ class PlayerRanking {
 			case 'xp':
 				$pos = $this->experiencePosition;
 				$var = $this->experienceVariation; break;
-			case 'victory':
-				$pos = $this->victoryPosition;
-				$var = $this->victoryVariation; break;
-			case 'defeat':
-				$pos = $this->defeatPosition;
-				$var = $this->defeatVariation; break;
-			case 'ratio':
-				$pos = $this->ratioPosition;
-				$var = $this->ratioVariation; break;
+			case 'butcher':
+				$pos = $this->butcherPosition;
+				$var = $this->butcherVariation; break;
+			case 'trader':
+				$pos = $this->traderPosition;
+				$var = $this->traderVariation; break;
+			case 'fight':
+				$pos = $this->fightPosition;
+				$var = $this->fightVariation; break;
 			default: $var = ''; $pos = ''; break;
 		}
 
@@ -89,9 +97,11 @@ class PlayerRanking {
 				switch ($type) {
 					case 'general': $r .= Format::numberFormat($this->general) . ' point' . Format::addPlural($this->general); break;
 					case 'xp': $r .= Format::numberFormat($this->experience) . ' xp'; break;
-					case 'victory': $r .= Format::numberFormat($this->victory) . ' victoire' . Format::addPlural($this->victory); break;
-					case 'defeat': $r .= Format::numberFormat($this->defeat) . ' défaite' . Format::addPlural($this->defeat); break;
-					case 'ratio': $r .= Format::numberFormat($this->ratio) . ' point' . Format::addPlural($this->ratio) . ' de combat'; break;
+					case 'butcher': $r .= Format::numberFormat($this->butcher) . ' victoire' . Format::addPlural($this->butcher); break;
+					case 'trader': $r .= Format::numberFormat($this->trader) . ' défaite' . Format::addPlural($this->trader); break;
+					case 'fight': $r .= Format::numberFormat($this->fight) . ' point' . Format::addPlural($this->fight) . ' de combat'; break;
+					case 'armies': $r .= Format::numberFormat($this->armies) . ' point' . Format::addPlural($this->armies) . ' de combat'; break;
+					case 'resources': $r .= Format::numberFormat($this->resources) . ' point' . Format::addPlural($this->resources) . ' de combat'; break;
 					default: break;
 				}
 			$r .= '</span>';
