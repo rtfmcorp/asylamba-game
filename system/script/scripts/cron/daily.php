@@ -43,7 +43,7 @@ Bug::writeLog($path, '');
 $bench->clear();
 
 # delete unreaded notifs older than 10 days
-Bug::writeLog($path, '# Clean up unredead notifications');
+Bug::writeLog($path, '# Clean up unreaded notifications');
 $bench->start();
 
 ASM::$ntm->newSession();
