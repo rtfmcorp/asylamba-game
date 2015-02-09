@@ -314,18 +314,15 @@ class Place {
 			}
 			# si place a assez de case libre :
 			if (count($this->commanders) < $maxCom) {
-				$comLine1 = 0;
 				$comLine2 = 0;
 
 				foreach ($this->commanders as $com) {
-					if ($com->line == 1) {
-						$comLine1++;
-					} else {
+					if ($com->line == 2) {
 						$comLine2++;
 					}
 				}
 
-				if ($comLine2 <= $comLine1) {
+				if ($comLine2 < 2) {
 					$commander->line = 2;
 				} else {
 					$commander->line = 1;
@@ -355,12 +352,27 @@ class Place {
 				# envoie de notif
 				$this->sendNotif(self::CHANGESUCCESS, $commander);
 			} else {
-				# NON : comeBackToHome
-				$length = Game::getDistance($this->getXSystem(), $commanderPlace->getXSystem(), $this->getYSystem(), $commanderPlace->getYSystem());
-
-				$duration = Game::getTimeToTravel($commanderPlace, $this, $playerBonus->bonus);
-				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
+				# instance de la place d'envoie + suppr commandant de ses flottes
+				# enlever à rBase le commandant
+				for ($i = 0; $i < count($commanderPlace->commanders); $i++) {
+					if ($commanderPlace->commanders[$i]->id == $commander->id) {
+						unset($commanderPlace->commanders[$i]);
+						$commanderPlace->commanders = array_merge($commanderPlace->commanders);
+					}
+				}
 				
+				# changer rBase commander
+				$commander->rBase = $this->id;
+				// $commander->rDestinationPlace = NULL;
+				$commander->travelType = NULL;
+				// $commander->rStartPlace = NULL;
+				// $commander->dArrival = NULL;
+
+				$commander->emptySquadrons();
+
+				$commander->statement = Commander::INSCHOOL;
+
+				# envoie de notif
 				$this->sendNotif(self::CHANGEFAIL, $commander);
 			}
 		} else {
@@ -904,13 +916,13 @@ class Place {
 			case self::CHANGEFAIL:
 				$notif = new Notification();
 				$notif->setRPlayer($commander->getRPlayer());
-				$notif->setTitle('Déplacement raté');
+				$notif->setTitle('Déplacement réussi');
 				$notif->addBeg()
 					->addTxt('Votre officier ')
 					->addLnk('fleet/commander-' . $commander->getId(), $commander->getName())
-					->addTxt(' n\'a pas pu se poser sur ')
+					->addTxt(' s\'est posé sur ')
 					->addLnk('map/base-' . $this->id, $this->baseName)
-					->addTxt(' car il y a déjà trop d\'officiers autour de la planète.')
+					->addTxt('. Il est en garnison car il n\'y avait pas assez de place en orbite.')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
