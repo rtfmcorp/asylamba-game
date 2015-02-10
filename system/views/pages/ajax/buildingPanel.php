@@ -42,8 +42,7 @@ echo '<div class="component panel-info size2">';
 							echo '<td class="hb lt" title="nombre de vaisseaux de transports">vaisseaux</td>';
 							break;
 						case OrbitalBaseResource::RECYCLING:
-							//echo '<td class="hb lt" title="nombre de collecteurs">collecteurs</td>';
-							echo '<td class="hb lt" title="efficacité des collecteurs en pourcentage">efficacité</td>';
+							echo '<td class="hb lt" title="nombre de collecteurs">collecteurs</td>';
 							break;
 						case OrbitalBaseResource::SPATIOPORT:
 							echo '<td class="hb lt" title="nombre de routes commerciales disponibles">routes</td>';
@@ -113,8 +112,7 @@ echo '<div class="component panel-info size2">';
 								echo '<td>' . Format::numberFormat(OrbitalBaseResource::getBuildingInfo($building, 'level', $level, 'nbCommercialShip')) . '</td>';
 								break;
 							case OrbitalBaseResource::RECYCLING:
-								//echo '<td>' . Format::numberFormat(OrbitalBaseResource::getBuildingInfo($building, 'level', $level, 'nbRecyclers')) . '</td>';
-								echo '<td>' . Format::numberFormat(OrbitalBaseResource::getBuildingInfo($building, 'level', $level, 'recyclingEfficiency')) . ' %</td>';
+								echo '<td>' . Format::numberFormat(OrbitalBaseResource::getBuildingInfo($building, 'level', $level, 'nbRecyclers')) . '</td>';
 								break;
 							case OrbitalBaseResource::SPATIOPORT:
 								echo '<td>' . Format::numberFormat(OrbitalBaseResource::getBuildingInfo($building, 'level', $level, 'nbRoutesMax')) . '</td>';
