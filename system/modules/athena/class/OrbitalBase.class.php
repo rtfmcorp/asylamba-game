@@ -40,7 +40,6 @@ class OrbitalBase {
 	public $iAntiSpy = 0;
 	public $antiSpyAverage = 0;
 	public $shipStorage = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-	public $motherShip = 0; // 1 = a motherShip level 1 is stocked, 2 = level 2, 3 = level 3
 	public $resourcesStorage = 5000;
 	public $uOrbitalBase = '';
 	public $dCreation = '';
@@ -101,7 +100,6 @@ class OrbitalBase {
 	public function getIAntiSpy() { return $this->iAntiSpy; }
 	public function getAntiSpyAverage() { return $this->antiSpyAverage; }
 	public function getShipStorage($k = -1) {return ($k == -1) ? $this->shipStorage : $this->shipStorage[$k]; }
-	public function getMotherShip() { return $this->motherShip; }
 	public function getResourcesStorage() { return $this->resourcesStorage; }
 	public function getDCreation() { return $this->dCreation; }
 
@@ -171,7 +169,6 @@ class OrbitalBase {
 	public function setIAntiSpy($var) { $this->iAntiSpy = $var; }
 	public function setAntiSpyAverage($var) { $this->antiSpyAverage = $var; }
 	public function setShipStorage($k, $v) { $this->shipStorage[$k] = $v; }
-	public function setMotherShip($var) { $this->motherShip = $var; }
 	public function setResourcesStorage($var) { $this->resourcesStorage = $var; }
 	public function setDCreation($var) { $this->dCreation = $var; }
 
@@ -333,7 +330,7 @@ class OrbitalBase {
 			# RECYCLING MISSION
 			$S_REM1 = ASM::$rem->getCurrentSession();
 			ASM::$rem->changeSession($this->shippingManager);
-			ASM::$rem->load(array('rBase' => $this->id));
+			ASM::$rem->load(array('rBase' => $this->rPlace));
 			for ($i = 0; $i < ASM::$rem->size(); $i++) { 
 				$mission = ASM::$rem->get($i);
 

@@ -28,13 +28,13 @@ class ColorResource {
 				'devise', 
 				'desc1', 
 				'desc2', 
-				'desc3', 
-				'desc4', 
+				'desc3',
+				'desc4',
 				'bonus',
 				'mandateDuration',
 				'senateDesc',
 				'campaignDesc'))) {
-				return self::$colors[$id - 1][$info];
+				return self::$colors[$id][$info];
 			} else {
 				return FALSE;
 			}

@@ -23,6 +23,7 @@
 
 	# id du joueur rebelle de base
 	define('ID_GAIA', 				1);
+	define('ID_JEANMI', 			2);
 
 	# DB USER
 #	define('DEFAULT_SQL_USER',		'expansion_user');

@@ -15,6 +15,7 @@ class FactionNews {
 	const PINNED 		= 1;
 
 	public $id 				= 0;
+	public $rColor 			= 0;
 	public $title 			= 0;
 	public $content 		= 0;
 	public $pinned 			= 0;

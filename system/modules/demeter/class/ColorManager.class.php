@@ -74,7 +74,6 @@ class ColorManager extends Manager {
 			$db = DataBase::getInstance();
 			$qr = $db->prepare('UPDATE color
 				SET
-					id = ?,
 					alive = ?,
 					isWinner = ?,
 					credits = ?,
@@ -87,8 +86,8 @@ class ColorManager extends Manager {
 					dLastElection = ?
 				WHERE id = ?');
 			$aw = $qr->execute(array(
-					$color->id,
 					$color->alive,
+					$color->isWinner,
 					$color->credits,
 					$color->players,
 					$color->activePlayers,

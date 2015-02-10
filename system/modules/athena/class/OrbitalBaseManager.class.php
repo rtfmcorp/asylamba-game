@@ -178,7 +178,6 @@ class OrbitalBaseManager extends Manager {
 			$b->setShipStorage(9 ,$aw['hydreStorage']);
 			$b->setShipStorage(10 ,$aw['cerbereStorage']);
 			$b->setShipStorage(11 ,$aw['phenixStorage']);
-			$b->setMotherShip($aw['motherShip']);
 			$b->setResourcesStorage($aw['resourcesStorage']);
 			$b->uOrbitalBase = $aw['uOrbitalBase'];
 			$b->setDCreation($aw['dCreation']);
@@ -325,11 +324,11 @@ class OrbitalBaseManager extends Manager {
 			orbitalBase(rPlace, rPlayer, name, typeOfBase, levelGenerator, levelRefinery, levelDock1, levelDock2, levelDock3, levelTechnosphere, levelCommercialPlateforme, levelStorage, levelRecycling, levelSpatioport, points,
 				iSchool, iAntiSpy, antiSpyAverage, 
 				pegaseStorage, satyreStorage, sireneStorage, dryadeStorage, chimereStorage, meduseStorage, griffonStorage, cyclopeStorage, minotaureStorage, hydreStorage, cerbereStorage, phenixStorage,
-				motherShip, resourcesStorage, uOrbitalBase, dCreation)
+				resourcesStorage, uOrbitalBase, dCreation)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,  
 				?, ?, ?, 
 				?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
-				?, ?, ?, ?)');
+				?, ?, ?)');
 		$qr->execute(array(
 			$b->getRPlace(),
 			$b->getRPlayer(),
@@ -364,7 +363,6 @@ class OrbitalBaseManager extends Manager {
 			$b->getShipStorage(10),
 			$b->getShipStorage(11),
 			
-			$b->getMotherShip(),
 			$b->getResourcesStorage(),
 			$b->uOrbitalBase,
 			$b->getDCreation()
@@ -388,7 +386,7 @@ class OrbitalBaseManager extends Manager {
 				SET	rPlace = ?, rPlayer = ?, name = ?, typeOfBase = ?, levelGenerator = ?, levelRefinery = ?, levelDock1 = ?, levelDock2 = ?, levelDock3 = ?, levelTechnosphere = ?, levelCommercialPlateforme = ?, levelStorage = ?, levelRecycling = ?, levelSpatioport = ?, points = ?,
 			iSchool = ?, iAntiSpy = ?, antiSpyAverage = ?,
 			pegaseStorage = ?, satyreStorage = ?, sireneStorage = ?, dryadeStorage = ?, chimereStorage = ?, meduseStorage = ?, griffonStorage = ?, cyclopeStorage = ?, minotaureStorage = ?, hydreStorage = ?, cerbereStorage = ?, phenixStorage = ?,
-			motherShip = ?, resourcesStorage = ?, uOrbitalBase = ?, dCreation = ?
+			resourcesStorage = ?, uOrbitalBase = ?, dCreation = ?
 				WHERE rPlace = ?');
 			$qr->execute(array(
 				$b->getRPlace(),
@@ -421,7 +419,6 @@ class OrbitalBaseManager extends Manager {
 				$b->getShipStorage(9),
 				$b->getShipStorage(10),
 				$b->getShipStorage(11),
-				$b->getMotherShip(),
 				$b->getResourcesStorage(),
 				$b->uOrbitalBase,
 				$b->getDCreation(),

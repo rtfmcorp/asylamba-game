@@ -134,7 +134,7 @@ try {
 		<br /><br />Bon jeu et à bientôt j\'espère.
 		<br /><br />Cordialement, <br />Jean-Mi';
 	$m = new Message();
-	$m->setRPlayerWriter(0);
+	$m->setRPlayerWriter(ID_JEANMI);
 	$m->setDSending(Utils::now());
 	$m->setContent($message);
 

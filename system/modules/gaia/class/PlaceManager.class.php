@@ -35,10 +35,6 @@ class PlaceManager extends Manager {
 			pl.avatar AS playerAvatar,
 			pl.status AS playerStatus,
 			pl.level AS playerLevel,
-			ms.rPlace AS msId,
-			ms.name AS msName,
-			ms.type AS msType,
-			ms.resourcesStorage AS msResources,
 			ob.rPlace AS obId,
 			ob.name AS obName,
 			ob.points AS points,
@@ -54,10 +50,8 @@ class PlaceManager extends Manager {
 					ON s.rSector = se.id
 					LEFT JOIN player AS pl
 						ON p.rPlayer = pl.id
-						LEFT JOIN motherShip AS ms
-							ON p.id = ms.rPlace
-							LEFT JOIN orbitalBase AS ob
-								ON p.id = ob.rPlace
+						LEFT JOIN orbitalBase AS ob
+							ON p.id = ob.rPlace
 		' . $formatWhere . '
 		' . $formatOrder . '
 		' . $formatLimit);
@@ -100,10 +94,6 @@ class PlaceManager extends Manager {
 			pl.avatar AS playerAvatar,
 			pl.status AS playerStatus,
 			pl.level AS playerLevel,
-			ms.rPlace AS msId,
-			ms.name AS msName,
-			ms.type AS msType,
-			ms.resourcesStorage AS msResources,
 			ob.rPlace AS obId,
 			ob.name AS obName,
 			ob.points AS points,
@@ -119,10 +109,8 @@ class PlaceManager extends Manager {
 					ON s.rSector = se.id
 					LEFT JOIN player AS pl
 						ON p.rPlayer = pl.id
-						LEFT JOIN motherShip AS ms
-							ON p.id = ms.rPlace
-							LEFT JOIN orbitalBase AS ob
-								ON p.id = ob.rPlace
+						LEFT JOIN orbitalBase AS ob
+							ON p.id = ob.rPlace
 			WHERE (pl.statement = 1 OR pl.statement = 2 OR pl.statement = 3)
 			AND (LOWER(pl.name) LIKE LOWER(?)
 			OR   LOWER(ob.name) LIKE LOWER(?))			

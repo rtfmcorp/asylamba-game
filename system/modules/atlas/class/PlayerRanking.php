@@ -97,11 +97,11 @@ class PlayerRanking {
 				switch ($type) {
 					case 'general': $r .= Format::numberFormat($this->general) . ' point' . Format::addPlural($this->general); break;
 					case 'xp': $r .= Format::numberFormat($this->experience) . ' xp'; break;
-					case 'butcher': $r .= Format::numberFormat($this->butcher) . ' victoire' . Format::addPlural($this->butcher); break;
+					case 'butcher': $r .= Format::numberFormat($this->butcher) . ' pev détruit' . Format::addPlural($this->butcher); break;
 					case 'trader': $r .= Format::numberFormat($this->trader) . ' défaite' . Format::addPlural($this->trader); break;
 					case 'fight': $r .= Format::numberFormat($this->fight) . ' point' . Format::addPlural($this->fight) . ' de combat'; break;
-					case 'armies': $r .= Format::numberFormat($this->armies) . ' point' . Format::addPlural($this->armies) . ' de combat'; break;
-					case 'resources': $r .= Format::numberFormat($this->resources) . ' point' . Format::addPlural($this->resources) . ' de combat'; break;
+					case 'armies': $r .= Format::numberFormat($this->armies) . ' point' . Format::addPlural($this->armies) . ' équivalent vaisseau'; break;
+					case 'resources': $r .= Format::numberFormat($this->resources) . ' point' . Format::addPlural($this->resources) . ' de ressources'; break;
 					default: break;
 				}
 			$r .= '</span>';

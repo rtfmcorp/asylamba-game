@@ -181,7 +181,6 @@ echo '<div id="nav">';
 	ASM::$rmm->changeSession($S_RMM_1);
 
 	# TUTORIAL
-	include_once APOLLON;
 	$step = CTR::$data->get('playerInfo')->get('stepTutorial');
 	
 	if (CTR::$data->get('playerInfo')->get('stepTutorial') > 0) {
@@ -203,7 +202,7 @@ echo '<div id="nav">';
 		echo '</div>';
 	}
 
-	echo '<div class="overbox" id="bug-tracker">';
+	/*echo '<div class="overbox" id="bug-tracker">';
 		echo '<h2>Bug tracker</h2>';
 		echo '<form action="' . Format::actionBuilder('writebugreport') . '" method="post">';
 			echo '<p>Rapportez-nous vos bugs ! Il vous suffit de décrire l\'erreur rencontrée directement sur la page qui a provoqué cette dernière. ';
@@ -219,7 +218,7 @@ echo '<div id="nav">';
 			echo '<textarea name="message" placeholder="décrivez votre erreur"></textarea>';
 			echo '<input type="submit" value="envoyer" class="button" />';
 		echo '</form>';
-	echo '</div>';
+	echo '</div>';*/
 
 	echo '<div class="overbox" id="disconnect-box">';
 		echo '<a href="' . Format::actionBuilder('disconnect') . '">Se déconnecter</a>';

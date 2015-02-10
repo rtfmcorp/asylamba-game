@@ -24,7 +24,6 @@ abstract class ASM {
 	protected static $runningHermes = FALSE;
 	public static $ntm;
 	public static $msm;
-	public static $mrm;
 	public static $rmm;
 
 	protected static $runningPromethee = FALSE;
@@ -37,9 +36,6 @@ abstract class ASM {
 
 	protected static $runningArtemis = FALSE;
 	public static $srm;
-
-	protected static $runningApollon = FALSE;
-	public static $btm;
 
 	protected static $runningDemeter = FALSE;
 	public static $tom;
@@ -92,7 +88,6 @@ abstract class ASM {
 		if (!self::$runningHermes) {
 			self::$ntm = new NotificationManager();
 			self::$msm = new MessageManager();
-			self::$mrm = new MessageRadioManager();
 			self::$rmm = new RoadMapManager();
 		}
 		self::$runningHermes = TRUE;
@@ -119,13 +114,6 @@ abstract class ASM {
 			self::$srm = new SpyReportManager();
 		}
 		self::$runningArtemis = TRUE;
-	}
-
-	public static function runApollon() {
-		if (!self::$runningApollon) {
-			self::$btm = new BugTrackerManager();
-		}
-		self::$runningApollon = TRUE;
 	}
 
 	public static function runDemeter() {
@@ -175,7 +163,6 @@ abstract class ASM {
 		if (self::$runningHermes) {
 			self::$ntm->save();
 			self::$msm->save();
-			self::$mrm->save();
 		}
 		if (self::$runningPromethee) {
 			self::$rsm->save();
@@ -187,9 +174,6 @@ abstract class ASM {
 		}
 		if (self::$runningArtemis) {
 			self::$srm->save();
-		}
-		if (self::$runningApollon) {
-			self::$btm->save();
 		}
 		if (self::$runningDemeter) {
 			self::$tom->save();

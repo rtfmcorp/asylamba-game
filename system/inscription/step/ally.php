@@ -28,7 +28,7 @@ echo '<div id="content">';
 	ASM::$clm->newSession(FALSE);
 	ASM::$clm->load(array(), array('activePlayers', 'ASC'));
 
-	for ($i = 0; $i < ASM::$clm->size(); $i++) {
+	for ($i = 1; $i < ASM::$clm->size(); $i++) {
 		$ally = ASM::$clm->get($i)->id;
 
 		echo '<div class="component inscription color' . $ally . '">';
