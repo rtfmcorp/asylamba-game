@@ -121,10 +121,8 @@ class OrbitalBaseResource {
 						return self::$building[$buildingNumber][$info][$level-1][4];
 					} elseif ($sup == 'nbCommercialShip' AND $buildingNumber == 6) {
 						return self::$building[$buildingNumber][$info][$level-1][3];
-					} elseif ($sup == 'recyclingEfficiency' AND $buildingNumber == 8) {
-						return self::$building[$buildingNumber][$info][$level-1][3];
 					} elseif ($sup == 'nbRecyclers' AND $buildingNumber == 8) {
-						return self::$building[$buildingNumber][$info][$level-1][4];
+						return self::$building[$buildingNumber][$info][$level-1][3];
 					} elseif ($sup == 'nbRoutesMax' AND $buildingNumber == 9) {
 						return self::$building[$buildingNumber][$info][$level-1][3];
 					} else {
@@ -583,40 +581,40 @@ class OrbitalBaseResource {
 			'frenchName' => 'Centre de Recyclage',
 			'imageLink' => 'recycling',
 			'level' => array(
-				// (time, resourcePrice, points, recyclingEfficiency(%), nbRecyclers)
-				array(55,		1600,	10,	2,	1),
-				array(77,		1968,	11,	4,	1),
-				array(108,		2421,	12,	6,	1),
-				array(151,		2977,	13,	8,	1),
-				array(211,		3662,	15,	10,	1),
-				array(295,		4504,	16,	12,	2),
-				array(413,		5541,	18,	14,	2),
-				array(580,		6815,	19,	16,	2),
-				array(810,		8382,	21,	18,	2),
-				array(1130,		10310,	24,	20,	2),
-				array(1580,		12682,	26,	22,	3),
-				array(2210,		15598,	29,	24,	3),
-				array(3090,		19186,	31,	26,	3),
-				array(4330,		23599,	35,	28,	3),
-				array(6060,		29026,	38,	30,	3),
-				array(8480,		35702,	42,	32,	4),
-				array(11870,	43914,	46,	34,	4),
-				array(16620,	54014,	51,	36,	4),
-				array(23270,	66437,	56,	38,	4),
-				array(26760,	81718,	61,	40,	4),
-				array(30770,	100513,	67,	42,	5),
-				array(35390,	123631,	74,	44,	5),
-				array(40700,	152066,	81,	46,	5),
-				array(46810,	187041,	90,	48,	5),
-				array(53830,	230061,	98,	50,	5),
-				array(61900,	282975,	108,52,	6),
-				array(71190,	348059,	119,54,	6),
-				array(81870,	428113,	131,56,	6),
-				array(94150,	526578,	144,58,	6),
-				array(108270,	647692,	159,60,	6)
+				// (time, resourcePrice, points, nbRecyclers)
+				array(55,		1600,	10,	1),
+				array(77,		1968,	11,	1),
+				array(108,		2421,	12,	1),
+				array(151,		2977,	13,	1),
+				array(211,		3662,	15,	1),
+				array(295,		4504,	16,	2),
+				array(413,		5541,	18,	2),
+				array(580,		6815,	19,	2),
+				array(810,		8382,	21,	2),
+				array(1130,		10310,	24,	2),
+				array(1580,		12682,	26,	3),
+				array(2210,		15598,	29,	3),
+				array(3090,		19186,	31,	3),
+				array(4330,		23599,	35,	3),
+				array(6060,		29026,	38,	3),
+				array(8480,		35702,	42,	4),
+				array(11870,	43914,	46,	4),
+				array(16620,	54014,	51,	4),
+				array(23270,	66437,	56,	4),
+				array(26760,	81718,	61,	4),
+				array(30770,	100513,	67,	5),
+				array(35390,	123631,	74,	5),
+				array(40700,	152066,	81,	5),
+				array(46810,	187041,	90,	5),
+				array(53830,	230061,	98,	5),
+				array(61900,	282975,	108,6),
+				array(71190,	348059,	119,6),
+				array(81870,	428113,	131,6),
+				array(94150,	526578,	144,6),
+				array(108270,	647692,	159,6)
 			),
 			'maxLevel' => array(20, 20, 30, 30),
-			'description' => 'Le <strong>Centre de Recyclage</strong> est l’un des bâtiments les plus intéressants économiquement parlant de votre planète. En effet, il vous permettra de générer des ressources après une attaque contre votre base. Ce bâtiment va envoyer des vaisseaux de recyclage, ou <strong>collecteurs</strong>, pour récupérer les restes et les débris de vos flottes et de la flotte ennemie dérivant aux alentours de votre planète après une attaque. Cette manœuvre vous donnera la possibilité de gagner un peu de ressources, même après une défaite écrasante.',
+			'description' => '<b>REFAIRE LE TEXTE</b>Le <strong>Centre de Recyclage</strong> est l’un des bâtiments les plus intéressants économiquement parlant de votre planète. En effet, il vous permettra de générer des ressources après une attaque contre votre base. Ce bâtiment va envoyer des vaisseaux de recyclage, ou <strong>collecteurs</strong>, pour récupérer les restes et les débris de vos flottes et de la flotte ennemie dérivant aux alentours de votre planète après une attaque. Cette manœuvre vous donnera la possibilité de gagner un peu de ressources, même après une défaite écrasante.',
 			'techno' => 3
 		),
 		array(

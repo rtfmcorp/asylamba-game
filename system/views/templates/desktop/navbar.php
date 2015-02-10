@@ -202,23 +202,17 @@ echo '<div id="nav">';
 		echo '</div>';
 	}
 
-	/*echo '<div class="overbox" id="bug-tracker">';
+	echo '<div class="overbox" id="bug-tracker">';
 		echo '<h2>Bug tracker</h2>';
-		echo '<form action="' . Format::actionBuilder('writebugreport') . '" method="post">';
-			echo '<p>Rapportez-nous vos bugs ! Il vous suffit de décrire l\'erreur rencontrée directement sur la page qui a provoqué cette dernière. ';
-			echo 'Cela nous permettra de disposer du maximum d\'information.</p>';
-			echo '<input type="hidden" name="url" value="' . $_SERVER['REQUEST_URI'] . '" />';
-			echo '<select name="type" class="option">';
-				echo '<option value="' . BugTracker::TYPE_BUG . '">bug & erreur</option>';
-				echo '<option value="' . BugTracker::TYPE_ORTHOGRAPH . '">faute d\'orthographe</option>';
-				echo '<option value="' . BugTracker::TYPE_DISPLAY . '">problème d\'affichage</option>';
-				echo '<option value="' . BugTracker::TYPE_CALIBRATION . '">problème de calibrage (ex. prix trop élevé)</option>';
-				echo '<option value="' . BugTracker::TYPE_IMPROVEMENT . '">idée d\'amélioration</option>';
-			echo '</select>';
-			echo '<textarea name="message" placeholder="décrivez votre erreur"></textarea>';
-			echo '<input type="submit" value="envoyer" class="button" />';
-		echo '</form>';
-	echo '</div>';*/
+		echo '<p>Si vous trouvez des bugs ou avez des idées d\'améliorations, nous vous invitons à les poster sur le forum principal.</p>';
+		echo '<p><b>Bug</b></p>';
+		echo '<a href="http://asylamba.com/forum/categorie-bug" target="_blank">--> Reporter un bug</a>';
+		echo '<p><b>Suggestion</b></p>';
+		echo '<a href="http://asylamba.com/forum/categorie-ideas" target="_blank">--> Proposer une amélioration</a>';
+		echo '<p><b>Bug critique</b></p>';
+		echo '<p>Pour les bugs que vous pensez critiques, vous pouvez envoyer un email directement à support@asylamba.com.</p>';
+		echo '<a href="mailto:support@asylamba.com">--> Envoyer un email</a>';
+	echo '</div>';
 
 	echo '<div class="overbox" id="disconnect-box">';
 		echo '<a href="' . Format::actionBuilder('disconnect') . '">Se déconnecter</a>';

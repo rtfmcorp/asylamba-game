@@ -87,11 +87,6 @@ if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('tok
 		case 'firecommander':			include ACTION . 'ares/commander/fire.php'; break;
 		case 'changeline':				include ACTION . 'ares/commander/changeLine.php'; break;
 
-		# APOLLON
-		case 'writebugreport':			include ACTION . 'apollon/bugReport/write.php'; break;
-		case 'archivebugreport':		include ACTION . 'apollon/bugReport/archive.php'; break;
-		case 'deletebugreport':			include ACTION . 'apollon/bugReport/delete.php'; break;
-
 		# DEMETER
 		case 'writemessageforum':		include ACTION . 'demeter/message/write.php'; break;
 		case 'movetopicforum':			include ACTION . 'demeter/topic/move.php'; break;

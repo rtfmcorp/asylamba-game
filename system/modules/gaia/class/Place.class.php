@@ -470,10 +470,7 @@ class Place {
 						# création du rapport
 						$report = $this->createReport();
 
-						# recycling
-						$recycledAmount = $this->recycle($placeBase, array($report));
-
-						$this->sendNotif(self::LOOTPLAYERWHITBATTLESUCCESS, $commander, $report->id, $recycledAmount);
+						$this->sendNotif(self::LOOTPLAYERWHITBATTLESUCCESS, $commander, $report->id);
 
 					} else {
 					# s'il est mort
@@ -493,10 +490,7 @@ class Place {
 						# création du rapport
 						$report = $this->createReport();
 
-						# recycling
-						$recycledAmount = $this->recycle($placeBase, array($report));
-
-						$this->sendNotif(self::LOOTPLAYERWHITBATTLEFAIL, $commander, $report->id, $recycledAmount);
+						$this->sendNotif(self::LOOTPLAYERWHITBATTLEFAIL, $commander, $report->id);
 					}
 				} else {
 					$this->lootAPlayerPlace($commander, $playerBonus, $placeBase);
@@ -571,17 +565,14 @@ class Place {
 					$nbrBattle++;
 				}
 
-				# recycling
-				$recycledAmount = $this->recycle($placeBase, $reportArray);
-
 				# victoire
 				if ($commander->getStatement() != COM_DEAD) {
 					include_once ATHENA;
 
 					if ($nbrBattle == 0) {
-						$this->sendNotif(self::CONQUERPLAYERWHITOUTBATTLESUCCESS, $commander, NULL, $recycledAmount);
+						$this->sendNotif(self::CONQUERPLAYERWHITOUTBATTLESUCCESS, $commander, NULL);
 					} else {
-						$this->sendNotifForConquest(self::CONQUERPLAYERWHITBATTLESUCCESS, $commander, $reportIds, $recycledAmount);
+						$this->sendNotifForConquest(self::CONQUERPLAYERWHITBATTLESUCCESS, $commander, $reportIds);
 					}
 
 					# attribuer le prestige au joueur
@@ -658,7 +649,7 @@ class Place {
 						$placePlayer->factionPoint += Color::POINTDEFEND;
 					}
 
-					$this->sendNotifForConquest(self::CONQUERPLAYERWHITBATTLEFAIL, $commander, $reportIds, $recycledAmount);
+					$this->sendNotifForConquest(self::CONQUERPLAYERWHITBATTLEFAIL, $commander, $reportIds);
 				}
 			} else {
 				$length = Game::getDistance($this->getXSystem(), $commanderPlace->getXSystem(), $this->getYSystem(), $commanderPlace->getYSystem());
@@ -874,29 +865,7 @@ class Place {
 		return $report;
 	}
 
-	private function recycle($placeBase, $reportArray) {
-		# compute total resource value
-		$total = 0;
-		foreach ($reportArray as $report) {
-			for ($i = 0; $i < ShipResource::SHIP_QUANTITY; $i++) { 
-				$total += ShipResource::getInfo($i, 'resourcePrice') * $report->diferenceA[$i];
-				$total += ShipResource::getInfo($i, 'resourcePrice') * $report->diferenceD[$i];
-			}
-		}
-
-		# recycling efficiency in %
-		$efficiency = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::RECYCLING, 'level', $placeBase->getLevelRecycling(), 'recyclingEfficiency');
-
-		# recycled amount
-		$recycledAmount = round($total * $efficiency / 100);
-		if ($recycledAmount > 0) {
-			$placeBase->increaseResources($recycledAmount);
-		}
-
-		return $recycledAmount;
-	}
-
-	private function sendNotif($case, $commander, $report = NULL, $recycledAmount = NULL) {
+	private function sendNotif($case, $commander, $report = NULL) {
 		include_once HERMES;
 
 		switch ($case) {
@@ -1008,12 +977,8 @@ class Place {
 					->addTxt('.')
 					->addSep()
 					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
-					->addSep();
-				if ($recycledAmount > 0) {
-					$notif->addTxt('Vos recycleurs ont collecté les débris de vaisseaux tués au combat et en ont retiré ' . $recycledAmount . ' ressources qui ont été ajoutées à votre Stockage.')
-						->addSep();
-				}
-				$notif->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -1049,12 +1014,8 @@ class Place {
 					->addTxt('.')
 					->addSep()
 					->addTxt('Vous avez repoussé l\'ennemi avec succès.')
-					->addSep();
-				if ($recycledAmount > 0) {
-					$notif->addTxt('Vos recycleurs ont collecté les débris de vaisseaux tués au combat et en ont retiré ' . $recycledAmount . ' ressources qui ont été ajoutées à votre Stockage.')
-						->addSep();
-				}
-				$notif->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -1205,7 +1166,7 @@ class Place {
 		}
 	}
 
-	private function sendNotifForConquest($case, $commander, $reports = array(), $recycledAmount = NULL) {
+	private function sendNotifForConquest($case, $commander, $reports = array()) {
 		$nbrBattle = count($reports);
 		switch($case) {
 			case self::CONQUERPLAYERWHITBATTLESUCCESS:
@@ -1224,12 +1185,8 @@ class Place {
 					->addTxt($nbrBattle . Format::addPlural($nbrBattle, ' combats ont eu lieu.', ' seul combat a eu lieu'))
 					->addSep()
 					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
-					->addSep();
-				if ($recycledAmount > 0) {
-					$notif->addTxt('Les recycleurs de la base orbitale ont collecté les débris de vaisseaux tués au combat et en ont retiré ' . $recycledAmount . ' ressources qui ont été ajoutées au Stockage.')
-						->addSep();
-				}
-				$notif->addTxt('Elle est désormais vôtre, vous pouvez l\'administrer ')
+					->addSep()
+					->addTxt('Elle est désormais vôtre, vous pouvez l\'administrer ')
 					->addLnk('bases/base-' . $this->id, 'ici')
 					->addTxt('.');
 				for ($i = 0; $i < $nbrBattle; $i++) {
@@ -1297,12 +1254,8 @@ class Place {
 					->addTxt('.')
 					->addSep()
 					->addTxt($nbrBattle . Format::addPlural($nbrBattle, ' combats ont eu lieu.', ' seul combat a eu lieu'))
-					->addSep();
-				if ($recycledAmount > 0) {
-					$notif->addTxt('Vos recycleurs ont collecté les débris de vaisseaux tués au combat et en ont retiré ' . $recycledAmount . ' ressources qui ont été ajoutées à votre Stockage.')
-						->addSep();
-				}
-				$notif->addTxt('Vous avez repoussé l\'ennemi avec succès. Bravo !');
+					->addSep()
+					->addTxt('Vous avez repoussé l\'ennemi avec succès. Bravo !');
 				for ($i = 0; $i < $nbrBattle; $i++) {
 					$notif->addSep();
 					$notif->addLnk('fleet/view-archive/report-' . $reports[$i], 'voir le ' . Format::ordinalNumber($i + 1) . ' rapport');
