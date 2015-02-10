@@ -390,7 +390,11 @@ class Color {
 		} else {
 			//refuser la loi
 			$law->statement = Law::REFUSED;
-			$this->credits += (LawResources::getInfo($law->type, 'price') + 90) / 100;
+			if (LawResources::getInfo($law->type, 'bonusLaw')) {
+				$this->credits += (LawResources::getInfo($law->type, 'price') * Utils::interval($law->dEndVotation, $law->dEnd) * $this->activePlayers * 90) / 100;
+			} else {
+				$this->credits += (LawResources::getInfo($law->type, 'price') * 90) / 100;
+			}
 			//envoyer un message
 		}
 	}

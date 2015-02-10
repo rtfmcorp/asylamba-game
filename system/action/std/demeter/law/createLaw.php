@@ -11,34 +11,58 @@ include_once GAIA;
 #name pour nommer des trucs
 
 $type = Utils::getHTTPData('type');
+$duration = Utils::getHTTPData('duration');
 
 if ($type !== FALSE) {
 	if (LawResources::size() >= $type) {
 		if (CTR::$data->get('playerInfo')->get('status') == LawResources::getInfo($type, 'department')) {
 			$_CLM = ASM::$clm->getCurrentsession();
 			ASM::$clm->load(array('id' => CTR::$data->get('playerInfo')->get('color')));
-			if (ASM::$clm->get()->credits >= LawResources::getInfo($type, 'price')) {
-				$law = new Law();
+			$law = new Law();
 
-				$law->rColor = CTR::$data->get('playerInfo')->get('color');
-				$law->type = $type;
-				if (LawResources::getInfo($type, 'department') == PAM_CHIEF) {
-					$law->statement = Law::EFFECTIVE;
+			$law->rColor = CTR::$data->get('playerInfo')->get('color');
+			$law->type = $type;
+			if (LawResources::getInfo($type, 'department') == PAM_CHIEF) {
+				$law->statement = Law::EFFECTIVE;
 
-					$law->dCreation = Utils::now();
-					$law->dEndVotation = Utils::now();
-					$law->dEnd = Utils::now();
-				} else {
-					$law->statement = Law::VOTATION;
+				$law->dCreation = Utils::now();
+				$law->dEndVotation = Utils::now();
 
+				if (LawResources::getInfo($type, 'undeterminedDuration')) {
 					$date = new DateTime(Utils::now());
-					$law->dCreation = $date->format('Y-m-d H:i:s');
-					$date->modify('+' . Law::VOTEDURATION . ' second');
-					$law->dEndVotation = $date->format('Y-m-d H:i:s');
-					$date->modify('+' . LawResources::getInfo($type, 'duration') . ' second');
+					$date->modify('+' . 5 . ' years');
 					$law->dEnd = $date->format('Y-m-d H:i:s');
+				} else if ($duration) {
+					$duration = ($duration > 2400) ? 2400 : $duration;
+					$date = new DateTime(Utils::now());
+					$date->modify('+' . $duration . ' hours');
+					$law->dEnd = $date->format('Y-m-d H:i:s');
+				} else {
+					$law->dEnd = Utils::now();
 				}
-				if (LawResources::getInfo($type, 'bonusLaw')) {
+			} else {
+				$law->statement = Law::VOTATION;
+
+				$date = new DateTime(Utils::now());
+				$law->dCreation = $date->format('Y-m-d H:i:s');
+				$date->modify('+' . Law::VOTEDURATION . ' second');
+				$law->dEndVotation = $date->format('Y-m-d H:i:s');
+
+				if (LawResources::getInfo($type, 'undeterminedDuration')) {
+					$date = new DateTime(Utils::now());
+					$date->modify('+' . 5 . ' years');
+					$law->dEnd = $date->format('Y-m-d H:i:s');
+				} else if ($duration) {
+					$duration = ($duration > 2400) ? 2400 : $duration;
+					$date = new DateTime(Utils::now());
+					$date->modify('+' . $duration . ' hours');
+					$law->dEnd = $date->format('Y-m-d H:i:s');
+				} else {
+					$law->dEnd = Utils::now();
+				}
+			}
+			if (LawResources::getInfo($type, 'bonusLaw')) {
+				if (ASM::$clm->get()->credits >= LawResources::getInfo($type, 'price') * $duration * ASM::$clm->get()->activePlayers) {
 					$law->options = serialize(array());
 					$_LAM = ASM::$lam->getCurrentsession();
 					ASM::$lam->newSession();
@@ -46,12 +70,16 @@ if ($type !== FALSE) {
 
 					if (ASM::$lam->size() == 0) {
 						ASM::$lam->add($law);
-						ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+						ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price') * $duration * ASM::$clm->get()->activePlayers;
 						CTR::redirect('faction/view-senate');	
 					} else {
 						CTR::$alert->add('Cette loi est déjà proposée ou en vigueur.', ALERT_STD_ERROR);
 					}
 				} else {
+					CTR::$alert->add('Il n\'y a pas assez de crédits dans les caisses de l\'Etat.', ALERT_STD_ERROR);
+				}
+			} else {
+				if (ASM::$clm->get()->credits >= LawResources::getInfo($type, 'price')) {
 					switch ($type) {
 						case 1:
 							$taxes = round(Utils::getHTTPData('taxes'));
@@ -172,14 +200,45 @@ if ($type !== FALSE) {
 								CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 							}
 							break;
+						case 7:
+							$rColor = Utils::getHTTPData('rcolor');
+							if ($rColor !== FALSE) {
+								if ($rColor >= 1 && $rColor <= 7 && $rColor != ASM::$clm->get()->id) {
+									$S_LAM = ASM::$lam->getCurrentsession();
+									ASM::$lam->newSession();
+									ASM::$lam->load(array('type' => 7, 'rColor' => ASM::$clm->get()->id));
+
+									$pactExistYet = FALSE;
+									for ($i = 0; $i < ASM::$lam->size(); $i++) {
+										if (ASM::$lam->get($i)->options['rColor'] == $rColor) {
+											$pactExistYet = TRUE;
+										}
+									}
+
+									if (!$pactExistYet) {
+										$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
+										ASM::$lam->add($law);
+										ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+										CTR::redirect('faction/view-senate');
+									} else {
+										CTR::$alert->add('Une pacte est déjà passé avec cette faction.', ALERT_STD_ERROR);
+									}
+									ASM::$lam->changeSession($S_LAM);
+								} else {
+									CTR::$alert->add('Cette faction n\'existe pas ou il s\'agit de la votre.', ALERT_STD_ERROR);
+								}
+							} else {
+								CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
+							}
+							break;
 						default:
 							CTR::$alert->add('Cette loi n\'existe pas.', ALERT_STD_ERROR);
 							break;
 					}
+				} else {
+					CTR::$alert->add('Il n\'y assez pas a de crédits dans les caisses de l\'Etat.', ALERT_STD_ERROR);
 				}
-			} else {
-			 	CTR::$alert->add('Il n\'y a pas assez de crédits dans les caisses de l\'état.', ALERT_STD_ERROR);
-		 	}
+			}
 			ASM::$clm->changeSession($_CLM);
 		} else {
 			CTR::$alert->add('Vous n\' avez pas le droit de proposer cette loi.', ALERT_STD_ERROR);

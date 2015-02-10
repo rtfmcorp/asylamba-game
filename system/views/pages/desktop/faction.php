@@ -207,7 +207,7 @@ echo '<div id="content">';
 
 				$nbLaws = 0;
 				
-				for ($i = 1; $i < LawResources::size() + 1; $i++) {
+				for ($i = 1; $i <= LawResources::size(); $i++) {
 					if (LawResources::getInfo($i, 'department') == CTR::$data->get('playerInfo')->get('status') AND LawResources::getInfo($i, 'isImplemented')) {
 						$governmentLaw_id = $i;
 						$nbLaws++;

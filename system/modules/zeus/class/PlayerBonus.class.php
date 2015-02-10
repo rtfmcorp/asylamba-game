@@ -154,7 +154,8 @@ class PlayerBonus {
 			for ($i = 0; $i < ASM::$lam->size(); $i++) {
 				switch (ASM::$lam->get($i)->type) {
 					case 5:
-						# code...
+						$this->bonus->increase(self::DOCK1_SPEED, LawResources::getInfo(ASM::$lam->get($i)->type, 'bonus'));
+						$this->bonus->increase(self::DOCK2_SPEED, LawResources::getInfo(ASM::$lam->get($i)->type, 'bonus'));
 						break;
 					case 6:
 						#subvention technologique

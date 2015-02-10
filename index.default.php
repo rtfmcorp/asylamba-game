@@ -44,7 +44,6 @@ define('ZEUS', 			MODULES . 'zeus/main.php');
 define('ATHENA', 		MODULES . 'athena/main.php');
 define('PROMETHEE', 	MODULES . 'promethee/main.php');
 define('ARTEMIS', 		MODULES . 'artemis/main.php');
-define('APOLLON', 		MODULES . 'apollon/main.php');
 define('DEMETER', 		MODULES . 'demeter/main.php');
 define('ATLAS',			MODULES . 'atlas/main.php');
 

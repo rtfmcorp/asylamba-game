@@ -45,17 +45,25 @@ echo '<div class="component profil player">';
 
 							echo '<select name="rsector">';
 								echo '<option value="-1">Choisissez un secteur</option>';
-								for ($j = 0; $j <ASM::$sem->size(); $j++) {
+								for ($j = 0; $j < ASM::$sem->size(); $j++) {
 									echo '<option value="' . ASM::$sem->get($j)->id . '">' . ASM::$sem->get($j)->name . ' (#' . ASM::$sem->get($j)->id . ')</option>';
 								}
 							echo '</select>';
 
 							ASM::$sem->changeSession($S_SEM_T);
+						} elseif ($governmentLaw_id == 7) {
+
+							echo '<select name="rcolor">';
+								echo '<option value="-1">Choisissez une faction</option>';
+								for ($j = 1; $j <= 7; $j++) {
+									echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
+								}
+							echo '</select>';
 						} elseif (in_array($governmentLaw_id, array(3, 4))) {
 							echo '<input type="text" placeholder="Nouvelle taxe en pourcent" name="taxes" />';
 							echo '<select name="rcolor">';
 								echo '<option value="-1">Choisissez une faction</option>';
-								for ($j = 1; $j < ColorResource::size() + 1; $j++) {
+								for ($j = 1; $j <= ColorResource::size(); $j++) {
 									echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'popularName') . '</option>';
 								}
 							echo '</select>';
