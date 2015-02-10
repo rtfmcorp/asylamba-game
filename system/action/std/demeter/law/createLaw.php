@@ -4,6 +4,7 @@ include_once ZEUS;
 include_once GAIA;
 
 #type
+#duaration pour les lois à durée en seconde
 #taxes taux de taxe
 #rColor autre faction concernée
 #rSector secteur concernée

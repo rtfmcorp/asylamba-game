@@ -138,7 +138,7 @@ class Color {
 		$_PAM1 = ASM::$pam->getCurrentsession();
 		ASM::$pam->newSession(FALSE);
 		ASM::$pam->load(array('rColor' => $this->id, 'status' => PAM_CHIEF));
-		$chiefId = (ASM::$pam->size() == 0) ? 0 : ASM::$pam->get()->id;
+		$chiefId = (ASM::$pam->size() == 0) ? FALSE : ASM::$pam->get()->id;
 		ASM::$pam->changeSession($_PAM1);
 
 		$_VOM = ASM::$vom->getCurrentSession();
@@ -318,14 +318,16 @@ class Color {
 					->addTxt(' Le peuple vous a soutenu, vous avez renversé le ' . $statusArray[PAM_CHIEF - 1] . ' de votre faction et avez pris sa place.');
 				ASM::$ntm->add($notif);
 
-				$notif = new Notification();
-				$notif->setRPlayer($idOldChief);
-				$notif->setTitle('Un coup d\'état a réussi');
-				$notif->addBeg()
-					->addTxt(' Le joueur ')
-					->addLnk('diary/player-' . ASM::$pam->get()->id, ASM::$pam->get()->name)
-					->addTxt(' a fait un coup d\'état, vous êtes évincé du pouvoir.');
-				ASM::$ntm->add($notif);
+				if ($idOldChief) {
+					$notif = new Notification();
+					$notif->setRPlayer($idOldChief);
+					$notif->setTitle('Un coup d\'état a réussi');
+					$notif->addBeg()
+						->addTxt(' Le joueur ')
+						->addLnk('diary/player-' . ASM::$pam->get()->id, ASM::$pam->get()->name)
+						->addTxt(' a fait un coup d\'état, vous êtes évincé du pouvoir.');
+					ASM::$ntm->add($notif);
+				}
 			} else {
 				$notif = new Notification();
 				$notif->setRPlayer(ASM::$pam->get()->id);
@@ -354,24 +356,28 @@ class Color {
 				$notif->addBeg()
 					->addTxt(' Le peuple ne vous a pas soutenu, l\'ancien gouvernement reste en place.');
 				ASM::$ntm->add($notif);
-
-				$notif = new Notification();
-				$notif->setRPlayer($idOldChief);
-				$notif->setTitle('Un coup d\'état a échoué');
-				$notif->addBeg()
-					->addTxt(' Le joueur ')
-					->addLnk('diary/player-' . ASM::$pam->get()->id, ASM::$pam->get()->name)
-					->addTxt(' a tenté un coup d\'état, celui-ci a échoué');
-				ASM::$ntm->add($notif);
-				ASM::$pam->newSession($_PAM2);
+				
+				if ($idOldChief) {
+					$notif = new Notification();
+					$notif->setRPlayer($idOldChief);
+					$notif->setTitle('Un coup d\'état a échoué');
+					$notif->addBeg()
+						->addTxt(' Le joueur ')
+						->addLnk('diary/player-' . ASM::$pam->get()->id, ASM::$pam->get()->name)
+						->addTxt(' a tenté un coup d\'état, celui-ci a échoué');
+					ASM::$ntm->add($notif);
+					ASM::$pam->newSession($_PAM2);
+				}
 			} elseif ($this->getRegime() == self::THEOCRATIC) {
-				$notif = new Notification();
-				$notif->dSending = Utils::now();
-				$notif->setRPlayer($idOldChief);
-				$notif->setTitle('Vous avez été nommé Guide');
-				$notif->addBeg()
-					->addTxt(' Les Oracles ont parlé, vous êtes toujours désigné par la Grande Lumière pour guider Cardan vers la Gloire.');
-				ASM::$ntm->add($notif);
+				if ($idOldChief) {
+					$notif = new Notification();
+					$notif->dSending = Utils::now();
+					$notif->setRPlayer($idOldChief);
+					$notif->setTitle('Vous avez été nommé Guide');
+					$notif->addBeg()
+						->addTxt(' Les Oracles ont parlé, vous êtes toujours désigné par la Grande Lumière pour guider Cardan vers la Gloire.');
+					ASM::$ntm->add($notif);
+				}
 			}
 		}
 	}
