@@ -69,11 +69,13 @@ try {
 	$qr = $db->prepare('SELECT * FROM place AS p
 		INNER JOIN system AS sy ON p.rSystem = sy.id
 			INNER JOIN sector AS se ON sy.rSector = se.id
-		WHERE p.population > 30 AND se.id = ? AND p.rPlayer = 0
+		WHERE p.population > 0 AND se.id = ? AND p.rPlayer = 0
 		ORDER BY p.population ASC LIMIT 0, 30');
 	$qr->execute(array(CTR::$data->get('inscription')->get('sector')));
 	$aw = $qr->fetchAll();
+
 	$place = $aw[rand(0, (count($aw) - 1))][0];
+
 	$ob->setRPlace($place);
 
 	$ob->setRPlayer($pl->getId());

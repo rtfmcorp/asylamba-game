@@ -228,7 +228,7 @@ abstract class GalaxyGenerator {
 
 				self::$nbPlace++;
 				self::$popTotal += $population;
-				self::$listPlace[] = array($k, 1, $system[0], $type, ($i + 1), $population, $resources, $history, 0);
+				self::$listPlace[] = array($k, 0, $system[0], $type, ($i + 1), $population, $resources, $history, 0);
 				$k++;
 			}
 		}

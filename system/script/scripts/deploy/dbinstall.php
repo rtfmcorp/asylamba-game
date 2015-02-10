@@ -229,7 +229,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `place` (
 	`uPlace` datetime DEFAULT NULL,
 
 	PRIMARY KEY (`id`),
-	CONSTRAINT fkPlacePlayer FOREIGN KEY (rPlayer) REFERENCES player(id),
 	CONSTRAINT fkPlaceSystem FOREIGN KEY (rSystem) REFERENCES system(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
 
