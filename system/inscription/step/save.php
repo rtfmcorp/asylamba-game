@@ -68,9 +68,13 @@ try {
 	$db = Database::getInstance();
 	$qr = $db->prepare('SELECT * FROM place AS p
 		INNER JOIN system AS sy ON p.rSystem = sy.id
-			INNER JOIN sector AS se ON sy.rSector = se.id
-		WHERE p.population > 0 AND se.id = ? AND p.rPlayer = 0
-		ORDER BY p.population ASC LIMIT 0, 30');
+		  INNER JOIN sector AS se ON sy.rSector = se.id
+		WHERE p.typeOfPlace = 1
+		  AND se.id = ?
+		  AND p.rPlayer = 0
+		ORDER BY p.population ASC
+		LIMIT 0, 30'
+	);
 	$qr->execute(array(CTR::$data->get('inscription')->get('sector')));
 	$aw = $qr->fetchAll();
 
@@ -107,11 +111,10 @@ try {
 
 	# modification de la place
 	ASM::$plm->load(array('id' => $place));
-	ASM::$plm->get(0)->setRPlayer($pl->getId());
-	# ressource : 45% ou 46% ou 47%
-	ASM::$plm->get(0)->coefResources = rand(45, 47);
-	# population : entre 35M et 38M
-	ASM::$plm->get(0)->population = rand(3500, 3800) / 100;
+	ASM::$plm->get()->setRPlayer($pl->getId());
+	ASM::$plm->get()->population = 50;
+	ASM::$plm->get()->coefResources = 60;
+	ASM::$plm->get()->coefHistory = 20;
 
 	# confirmation au portail
 	if (PORTALMODE) {
@@ -141,6 +144,7 @@ try {
 	$db = DataBase::getInstance();
 	$qr = $db->prepare('SELECT MAX(thread) AS maxThread FROM message');
 	$qr->execute();
+	
 	if ($aw = $qr->fetch()) {
 		$m->setThread($aw['maxThread'] + 1);
 		$m->setRPlayerReader($pl->getId());
