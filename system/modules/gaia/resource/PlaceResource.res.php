@@ -1,7 +1,7 @@
 <?php
 class PlaceResource {
 	public static function get($type, $info) {
-		if (in_array($info, array('name', 'desc', 'price', 'tax', 'l-line', 'r-line', 'l-line-position', 'r-line-position'))) {
+		if (in_array($info, array('name', 'desc', 'price', 'school-size', 'tax', 'l-line', 'r-line', 'l-line-position', 'r-line-position'))) {
 			return self::$place[$type][$info];
 		} else {
 			return FALSE;
@@ -14,6 +14,7 @@ class PlaceResource {
 			'desc' => 'Peu évoluée, la colonie vous donne accès aux bâtiments de base mais jusqu\'à un niveau peu élevé. Elle se trouvera généralement aux extrémités de votre empire et servira de relai pour l\'expansion de ce dernier.',
 
 			'price' => 0,
+			'school-size' => 3,
 
 			'tax' => 1,
 			'l-line' => 1,
@@ -26,6 +27,7 @@ class PlaceResource {
 			'desc' => 'Le centre industriel vous permet de produire beaucoup plus de ressouces en permettant d\'agrandir la raffinerie. Plus d\'impôts sont perçus à la population, vous avez donc plus de crédits à disposition à chaque relève. Les usines peuvent tourner nuit et jour et sont plus efficientes. Un plus grand impact commercial est possible.',
 
 			'price' => 250000,
+			'school-size' => 3,
 
 			'tax' => 1.25,
 			'l-line' => 1,
@@ -38,6 +40,7 @@ class PlaceResource {
 			'desc' => 'Place forte militaire, cette planète dispose d\'un nombre important de flottes en orbite, prêtes à défendre ou à attaquer. Elle dispose en outre de très bons chantiers de construction de vaisseaux.',
 
 			'price' => 250000,
+			'school-size' => 8,
 
 			'tax' => 0.5,
 			'l-line' => 3,
@@ -50,6 +53,7 @@ class PlaceResource {
 			'desc' => 'Une capitale est chère, mais son efficacité, tant commerciale que militaire, vous fera vous développer considérablement plus vite. Plus vous avez de capitales dans votre empire, plus sa construction sera coûteuse.',
 
 			'price' => 1000000,
+			'school-size' => 8,
 
 			'tax' => 1.25,
 			'l-line' => 3,

@@ -11,6 +11,7 @@
 $q = '';
 $b = array('', '', '', '', '', '', '', '', '', '');
 $realSizeQueue = 0;
+
 for ($i = 0; $i < 10; $i++) {
 	$name 		= ucfirst(OrbitalBaseResource::getBuildingInfo($i, 'name'));
 	$aLevel[$i] = intval(call_user_func(array($ob_generator, 'getLevel' . $name)));
@@ -21,12 +22,12 @@ for ($i = 0; $i < 10; $i++) {
 $S_BQM1 = ASM::$bqm->getCurrentSession();
 ASM::$bqm->changeSession($ob_generator->buildingManager);
 
-if (ASM::$bqm->size() != 0) {
-	$q .= '<div class="queue">';
-	$nextTime = 0;
-	$nextTotalTime = 0;
+$q .= '<div class="queue">';
+$nextTime = 0;
+$nextTotalTime = 0;
 
-	for ($i = 0; $i < ASM::$bqm->size(); $i++) {
+for ($i = 0; $i < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::GENERATOR, 'level', $ob_generator->levelGenerator, 'nbQueues'); $i++) {
+	if (ASM::$bqm->get($i) !== FALSE) {
 		$qe = ASM::$bqm->get($i);
 
 		$realSizeQueue++;
@@ -42,7 +43,6 @@ if (ASM::$bqm->size() != 0) {
 			$q .= ' <span class="level">niv. ' . $qe->targetLevel . '</span>';
 		$q .= '</strong>';
 		if ($realSizeQueue > 1) {
-			$q .= '<em>en attente</em>';
 			$q .= '<em><span class="progress-text">' . Chronos::secondToFormat($nextTime, 'lite') . '</span></em>';
 			$q .= '<span class="progress-container"></span>';
 		} else {
@@ -53,15 +53,17 @@ if (ASM::$bqm->size() != 0) {
 				$q .='</span>';
 			$q .= '</span>';
 		}
-		$q .= '</div>';		
+		$q .= '</div>';
+	} else {
+		$q .= '<div class="item empty">';
+			$q .= '<img class="picto" src="' . MEDIA . 'orbitalbase/build.png" alt="" />';
+			$q .= '<strong>Emplacement libre</strong>';
+			$q .= '<span class="progress-container"></span>';
+		$q .= '</div>';
 	}
-	if ($realSizeQueue >= OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::GENERATOR, 'level', $ob_generator->levelGenerator, 'nbQueues')) {
-		$q .= '<p><em>file de construction pleine...</em></p>';
-	}
-	$q .= '</div>';
-} else {
-	$q .= '<p><em>Aucun bâtiment en construction !</em></p>';
 }
+$q .= '</div>';
+
 ASM::$bqm->changeSession($S_BQM1);
 
 
@@ -149,6 +151,7 @@ echo '<div class="component">';
 				echo '</span>';
 			echo '</div>';
 			
+			echo '<h4>File de construction</h4>';
 			echo $q;
 		echo '</div>';
 	echo '</div>';
