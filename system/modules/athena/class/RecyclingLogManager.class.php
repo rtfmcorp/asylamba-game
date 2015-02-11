@@ -52,6 +52,7 @@ class RecyclingLogManager extends Manager {
 			$rl->id = $aw['id'];
 			$rl->rRecycling = $aw['rRecycling'];
 			$rl->resources = $aw['resources'];
+			//$rl->credits = $aw['credits'];
 			$rl->ship0 = $aw['ship0'];
 			$rl->ship1 = $aw['ship1'];
 			$rl->ship2 = $aw['ship2'];
@@ -76,9 +77,14 @@ class RecyclingLogManager extends Manager {
 			recyclingLog(rRecycling, resources, ship0, ship1, ship2, ship3, ship4, ship5, ship6, ship7,
 				ship8, ship9, ship10, ship11, dLog)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+		//$qr = $db->prepare('INSERT INTO
+		//	recyclingLog(rRecycling, resources, credits, ship0, ship1, ship2, ship3, ship4, ship5, ship6, ship7,
+		//		ship8, ship9, ship10, ship11, dLog)
+		//	VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$rl->rRecycling,
 			$rl->resources,
+			/*$rl->credits,*/
 			$rl->ship0,
 			$rl->ship1,
 			$rl->ship2,
@@ -122,10 +128,30 @@ class RecyclingLogManager extends Manager {
 					ship11 = ?,
 					dLog = ?
 				WHERE id = ?');
+			/*$qr = $db->prepare('UPDATE recyclingLog
+				SET	id = ?,
+					rRecycling = ?,
+					resources = ?,
+					credits = ?,
+					ship0 = ?,
+					ship1 = ?,
+					ship2 = ?,
+					ship3 = ?,
+					ship4 = ?,
+					ship5 = ?,
+					ship6 = ?,
+					ship7 = ?,
+					ship8 = ?,
+					ship9 = ?,
+					ship10 = ?,
+					ship11 = ?,
+					dLog = ?
+				WHERE id = ?');*/
 			$qr->execute(array(
 				$rl->id,
 				$rl->rRecycling,
 				$rl->resources,
+				/*$rl->credits,*/
 				$rl->ship0,
 				$rl->ship1,
 				$rl->ship2,
