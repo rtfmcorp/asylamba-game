@@ -248,10 +248,12 @@ $db->query("CREATE TABLE IF NOT EXISTS `place` (
 
 	`typeOfPlace` tinyint(3) unsigned NOT NULL,
 	`position` tinyint(3) unsigned NOT NULL,
+
 	`population` float unsigned NOT NULL,
 	`coefResources` float unsigned NOT NULL,
 	`coefHistory` float unsigned NOT NULL,
-	`resources` int(11) unsigned DEFAULT 0,
+	
+	`resources` bigint(20) unsigned DEFAULT 0,
 
 	`uPlace` datetime DEFAULT NULL,
 
@@ -1125,6 +1127,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `recyclingLog` (
 	`rRecycling` int(11) unsigned NOT NULL,
 
 	`resources` int(11) unsigned NOT NULL,
+	`credits` int(11) unsigned NOT NULL,
 	`ship0` smallint(6) unsigned NOT NULL DEFAULT 0,
 	`ship1` smallint(6) unsigned NOT NULL DEFAULT 0,
 	`ship2` smallint(6) unsigned NOT NULL DEFAULT 0,

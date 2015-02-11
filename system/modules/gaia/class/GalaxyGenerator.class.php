@@ -1,5 +1,7 @@
 <?php
 abstract class GalaxyGenerator {
+	const MAX_QUERY = 5000;
+
 	# stats
 	public static $nbSystem = 0;
 	public static $listSystem = array();
@@ -16,10 +18,10 @@ abstract class GalaxyGenerator {
 
 	public static function generate() {
 		# generation
-		self::generateSystem();
-		self::generatePlace();
 		self::generateSector();
+		self::generateSystem();
 		self::associateSystemToSector();
+		self::generatePlace();
 
 		self::save();
 
@@ -51,10 +53,10 @@ abstract class GalaxyGenerator {
 		self::clear();
 
 		self::log('sauvegarde des secteurs');
-		for ($i = 0; $i < ceil(count(self::$listSector) / 5000); $i++) { 
+		for ($i = 0; $i < ceil(count(self::$listSector) / GalaxyGenerator::MAX_QUERY); $i++) { 
 			$qr = 'INSERT INTO sector(id, rColor, xPosition, yPosition, xBarycentric, yBarycentric, tax, population, lifePlanet, name, prime) VALUES ';
 			
-			for ($j = $i * 5000; $j < (($i + 1) * 5000) - 1; $j++) { 
+			for ($j = $i * GalaxyGenerator::MAX_QUERY; $j < (($i + 1) * GalaxyGenerator::MAX_QUERY) - 1; $j++) { 
 				if (isset(self::$listSector[$j])) {
 					$qr .= '(\'' . implode('\', \'', self::$listSector[$j]) . '\'), ';
 				}
@@ -63,13 +65,13 @@ abstract class GalaxyGenerator {
 			$qr = substr($qr, 0, -2);
 			$db->query($qr);
 		}
-		self::log(ceil(count(self::$listSector) / 5000) . ' requêtes `INSERT`');
+		self::log(ceil(count(self::$listSector) / GalaxyGenerator::MAX_QUERY) . ' requêtes `INSERT`');
 
 		self::log('sauvegarde des systèmes');
-		for ($i = 0; $i < ceil(count(self::$listSystem) / 5000); $i++) { 
+		for ($i = 0; $i < ceil(count(self::$listSystem) / GalaxyGenerator::MAX_QUERY); $i++) { 
 			$qr = 'INSERT INTO system(id, rSector, rColor, xPosition, yPosition, typeOfSystem) VALUES ';
 			
-			for ($j = $i * 5000; $j < (($i + 1) * 5000) - 1; $j++) { 
+			for ($j = $i * GalaxyGenerator::MAX_QUERY; $j < (($i + 1) * GalaxyGenerator::MAX_QUERY) - 1; $j++) { 
 				if (isset(self::$listSystem[$j])) {
 					$qr .= '(' . implode(', ', self::$listSystem[$j]) . '), ';
 				}
@@ -78,13 +80,13 @@ abstract class GalaxyGenerator {
 			$qr = substr($qr, 0, -2);
 			$db->query($qr);
 		}
-		self::log(ceil(count(self::$listSystem) / 5000) . ' requêtes `INSERT`');
+		self::log(ceil(count(self::$listSystem) / GalaxyGenerator::MAX_QUERY) . ' requêtes `INSERT`');
 
 		self::log('sauvegarde des places');
-		for ($i = 0; $i < ceil(count(self::$listPlace) / 5000); $i++) { 
+		for ($i = 0; $i < ceil(count(self::$listPlace) / GalaxyGenerator::MAX_QUERY); $i++) { 
 			$qr = 'INSERT INTO place(id, rPlayer, rSystem, typeOfPlace, position, population, coefResources, coefHistory, resources, uPlace) VALUES ';
 			
-			for ($j = $i * 5000; $j < (($i + 1) * 5000) - 1; $j++) { 
+			for ($j = $i * GalaxyGenerator::MAX_QUERY; $j < (($i + 1) * GalaxyGenerator::MAX_QUERY) - 1; $j++) { 
 				if (isset(self::$listPlace[$j])) {
 					$qr .= '(' . implode(', ', self::$listPlace[$j]) . ', "' . Utils::addSecondsToDate(Utils::now(), -259200) . '"), ';
 				}
@@ -93,7 +95,7 @@ abstract class GalaxyGenerator {
 			$qr = substr($qr, 0, -2);
 			$db->query($qr);
 		}
-		self::log(ceil(count(self::$listPlace) / 5000) . ' requêtes `INSERT`');
+		self::log(ceil(count(self::$listPlace) / GalaxyGenerator::MAX_QUERY) . ' requêtes `INSERT`');
 
 		self::log('_ _ _ _');
 	}
@@ -214,21 +216,64 @@ abstract class GalaxyGenerator {
 			$place = self::getNbOfPlace($system[5]);
 
 			for ($i = 0; $i < $place; $i++) {
-				$type 		= self::getTypeOfPlace($system[5]);
+				$type = self::getTypeOfPlace($system[5]);
 
 				if ($type == 1) {
-					$population = 10;
-					$history 	= 10;
-					$resources 	= 10;
-				} else {
+					$pointsRep = rand(1, 10);
+					$abilities = [
+						'population' => 0,
+						'history' => 0,
+						'resources' => 0
+					];
+
+					# nombre de point a distribuer
+					if ($pointsRep < 2) {
+						$pointsTot = rand(90, 100);
+					} elseif ($pointsRep < 10) {
+						$pointsTot = 100;
+					} else {
+						$pointsTot = rand(100, 120);
+					}
+
+					# brassage du tableau
+					Utils::shuffle($abilities);
+
+					# répartition
+					$z = 1;
+					foreach ($abilities as $l => $v) {
+						if ($z < 3) {
+							$max = $pointsTot - ($z * 10);
+							$max = $max < 10 ? 10 : $max;
+
+							$points = rand(10, $max);
+							$abilities[$l] = $points;
+							$pointsTot -= $points;
+						} else {
+							$abilities[$l] = $pointsTot;
+						}
+
+						$z++;
+					}
+
+					$population = $abilities['population'] * 250 / 100;
+					$history 	= $abilities['history'];
+					$resources 	= $abilities['resources'];
+					$stRES		= 0;
+				} elseif ($type == 6) {
 					$population = 0;
 					$history 	= 0;
 					$resources 	= 0;
+					$stRES		= 0;
+				} else {
+					$population = GalaxyConfiguration::$places[$type - 1]['credits'];
+					$resources 	= GalaxyConfiguration::$places[$type - 1]['resources'];
+					$history 	= GalaxyConfiguration::$places[$type - 1]['history'];
+					$stRES		= rand(5000000, 100000000);
 				}
 
 				self::$nbPlace++;
 				self::$popTotal += $population;
-				self::$listPlace[] = array($k, 0, $system[0], $type, ($i + 1), $population, $resources, $history, 0);
+				self::$listPlace[] = array($k, 0, $system[0], $type, ($i + 1), $population, $resources, $history, $stRES);
 				$k++;
 			}
 		}

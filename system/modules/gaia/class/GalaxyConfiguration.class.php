@@ -344,33 +344,39 @@ abstract class GalaxyConfiguration {
 		[
 			'id' => 1,
 			'name' => 'planète tellurique',
-			'resources' => [45, 55],
-			'history' => [20, 40],
+			'resources' => 0,
+			'credits' => 0,
+			'history' => 0,
 		], [
 			'id' => 2,
 			'name' => 'planète gazeuse',
-			'resources' => [60, 80],
-			'history' => [0, 10],
+			'resources' => 38,
+			'credits' => 44,
+			'history' => 18,
 		], [
 			'id' => 3,
 			'name' => 'ruine',
-			'resources' => [30, 40],
-			'history' => [90, 100],
+			'resources' => 5,
+			'credits' => 0,
+			'history' => 95,
 		], [
 			'id' => 4,
 			'name' => 'poches de gaz',
-			'resources' => [80, 100],
-			'history' => [0, 25],
+			'resources' => 4,
+			'credits' => 92,
+			'history' => 4,
 		], [
 			'id' => 5,
 			'name' => 'ceinture d\'astéroides',
-			'resources' => [80, 100],
-			'history' => [10, 25],
+			'resources' => 90,
+			'credits' => 6,
+			'history' => 4,
 		], [
 			'id' => 6,
 			'name' => 'lieu vide',
-			'resources' => [0, 0],
-			'history' => [0, 0],
+			'resources' => 0,
+			'credits' => 0,
+			'history' => 0,
 		]
 	];
 
