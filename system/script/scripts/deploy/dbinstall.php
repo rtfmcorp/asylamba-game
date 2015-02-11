@@ -2,6 +2,7 @@
 include_once ATHENA;
 include_once ZEUS;
 include_once GAIA;
+include_once DEMETER;
 
 $db = DataBaseAdmin::getInstance();
 
@@ -1161,6 +1162,33 @@ $db->query("CREATE TABLE IF NOT EXISTS `creditTransaction` (
 
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
+
+echo '<h2>Ajout de la table colorLink</h2>';
+$db->query("DROP TABLE IF EXISTS `colorLink`");
+$db->query("CREATE TABLE IF NOT EXISTS `colorLink` (
+	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+
+	`rColor` tinyint(4) NOT NULL DEFAULT 0,
+	`rColorLinked` tinyint(4) NOT NULL DEFAULT 0,
+	`statement` tinyint(4) unsigned NOT NULL DEFAULT 0,
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+
+$values = '';
+ASM::$clm->load();
+for ($i = 1; $i < ASM::$clm->size(); $i++) {
+	for ($j = 1; $j < ASM::$clm->size(); $j++) {
+		if (!(($i == ASM::$clm->size() - 1) && ($j == ASM::$clm->size() - 1))) {
+			$values .= '(' . $i . ',' . $j . ',' . 0 .'),';
+		}
+	}
+}
+
+$values .= '(' . (ASM::$clm->size() - 1) . ',' . (ASM::$clm->size() - 1) . ',' . 0 .');';
+
+echo '<h3>Remplissage de la table colorLink</h3>';
+$qr = $db->prepare("INSERT INTO `colorLink` (`rColor`, `rColorLinked`, `statement`) VALUES" . $values);
+$qr->execute();
 
 echo '<h1>Génération de la galaxie</h1>';
 
