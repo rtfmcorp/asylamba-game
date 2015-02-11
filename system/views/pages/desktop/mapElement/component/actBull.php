@@ -16,7 +16,8 @@ echo '<div class="column act">';
 			$available = (($place->rPlayer != 0 && $place->playerColor != CTR::$data->get('playerInfo')->get('color')) || ($place->rPlayer == 0 && $place->typeOfPlace == 1)) ? NULL : 'grey';
 			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="5"><img src="' . MEDIA . 'map/action/spy.png" alt="" /></a>';
 		} else {
-			echo '<a href="#" class="actionbox-sh" data-target="1"><img src="' . MEDIA . 'map/action/loot.png" alt="" /></a>';
+			$available = ($place->sectorColor == CTR::$data->get('playerInfo')->get('color') || $place->sectorColor == ColorResource::NO_FACTION) ? NULL : 'grey';
+			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="1"><img src="' . MEDIA . 'map/action/loot.png" alt="" /></a>';
 		}
 	echo '</div>';
 	
@@ -258,26 +259,24 @@ echo '<div class="column act">';
 		echo '<div class="box" data-id="1">';
 			echo '<h2>Envoyer des collecteurs</h2>';
 			echo '<div class="box-content">';
-				echo 'Vous ne pouvez pas déplacer une flotte sur votre planète de départ';
-				/*if ($place->getId() == $defaultBase->getId()) {
-					echo 'Vous ne pouvez pas déplacer une flotte sur votre planète de départ';
-				} elseif ($place->rPlayer != CTR::$data->get('playerId')) {
-					echo 'Vous ne pouvez déplacer une flotte que vers une de vos bases';
+				if (!($place->sectorColor == CTR::$data->get('playerInfo')->get('color') || $place->sectorColor == ColorResource::NO_FACTION)) {
+					echo 'Vous ne pouvez envoyer des recycleurs que dans des secteurs non-revendiqués ou contrôlés par votre faction';
+				} elseif ($place->typeOfPlace == Place::EMPTYZONE) {
+					echo 'Cette endroit regorgait autrefois de ressources ou de gaz mais de nombreux recycleurs sont déjà passés par là et n\'ont laissé que le vide de l\'espace';
+				} elseif ($defaultBase->getLevelRecycling() == 0) {
+					echo 'Vous devez disposer d\'un centre de recyclage';
 				} else {
-					echo '<div class="commander-tile">';
-						echo '<div class="item no-commander">';
-							echo 'Aucun commandant selectionné<br/>Sélectionnez-en un sur la barre latérale gauche.<br/>Si aucun commandant n\'est visible, vous pouvez en affecter un dans l\'amirauté.';
-						echo '</div>';
-						echo '<div class="item too-far">';
-							echo 'Ce commandant est trop éloigné pour se déplacer jusqu\'ici';
-						echo '</div>';
-						echo '<div class="item move">';
-							echo '<strong class="name"></strong><br />';
-							echo 'Temps du déplacement : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, CTR::$data->get('playerBonus')), 'lite') . ' <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
-							echo '<a class="button" href="#" data-url="' . Format::actionBuilder('movefleet', ['commanderid' => '{id}', 'placeid' => $place->id]) . '">Lancer la mission</a>';
-						echo '</div>';
-					echo '</div>';
-				}*/
+					$totalShip  = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::RECYCLING, 'level', $defaultBase->levelRecycling, 'nbRecyclers');
+					$activeShip = 0;
+
+					for ($j = 0; $j < ASM::$rem->size(); $j++) { 
+						$activeShip += ASM::$rem->get($j)->recyclerQuantity;
+					}
+
+					echo 'collecteurs :' . $totalShip;
+					echo '<br />collecteurs dispo : ' . ($totalShip - $activeShip);
+					echo '<br /><a href="' . Format::actionBuilder('createmission', ['rplace' => $defaultBase->getId(), 'rtarget' => $place->getId(), 'quantity' => 1]) . '">Envoyer</a>';
+				}
 			echo '</div>';
 		echo '</div>';
 	}

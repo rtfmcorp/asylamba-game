@@ -45,6 +45,11 @@ ASM::$srm->load(array('rPlayer' => CTR::$data->get('playerId'), 'rPlace' => $pla
 # load the technologies
 $technologies = new Technology(CTR::$data->get('playerId'));
 
+# load recycling missions
+$S_REM1 = ASM::$rem->getCurrentSession();
+ASM::$rem->newSession();
+ASM::$rem->load(array('rBase' => $defaultBase->rPlace, 'statement' => array(RecyclingMission::ST_BEING_DELETED, RecyclingMission::ST_ACTIVE)));
+
 # header part
 echo '<div class="header" data-distance="' . Format::numberFormat(Game::getDistance($defaultBase->xSystem, $places[0]->xSystem, $defaultBase->ySystem, $places[0]->ySystem)) . '">';
 	echo '<ul>';
@@ -179,4 +184,5 @@ echo '</div>';
 
 ASM::$srm->changeSession($S_SRM_MAP);
 ASM::$lrm->changeSession($S_LRM_MAP);
+ASM::$rem->changeSession($S_REM1);
 ?>
