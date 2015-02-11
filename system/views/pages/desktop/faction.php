@@ -14,6 +14,7 @@ if (ASM::$clm->size() == 1) {
 } else {
 	CTR::redirect('profil');
 }
+
 # background paralax
 echo '<div id="background-paralax" class="profil"></div>';
 

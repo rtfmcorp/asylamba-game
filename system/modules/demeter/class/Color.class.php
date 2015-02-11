@@ -17,6 +17,11 @@ class Color {
 	const ROYALISTIC 				= 2;
 	const THEOCRATIC 				= 3;
 
+	# Relation avec les autres factions
+	const NEUTRAL 					= 0;
+	const ALLY 						= 1;
+	const ENEMY 					= 2;
+
 	# constantes de prestiges
 	const TWO_POINTS_PER_LEVEL 		= 2;
 	const FOUR_POINTS_PER_LEVEL 	= 4;
@@ -445,6 +450,16 @@ class Color {
 		}
 	}
 
+	public function uFinishAlly($law) {
+		$this->colorLink[$law->options['rColor']] = Color::ALLY;
+		$law->statement = Law::OBSOLETE;
+	}
+
+	public function uFinishEnemy($law) {
+		$this->colorLink[$law->options['rColor']] = Color::ENEMY;
+		$law->statement = Law::OBSOLETE;
+	}
+
 
 	public function uMethod() {
 		// 604800s = 7j
@@ -598,6 +613,12 @@ class Color {
 							ASM::$ctm->load(array('faction' => $this->id, 'relatedFaction' => ASM::$lam->get($i)->options['rColor']));
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishImportComercialTaxes', array(ASM::$lam->get($i), ASM::$ctm->get()));
 							ASM::$ctm->changeSession($_CTM);
+							break;
+						case 7:
+							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishAlly', array(ASM::$lam->get($i)));
+							break;
+						case 8:
+							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishEnemy', array(ASM::$lam->get($i)));
 							break;
 						
 						default:

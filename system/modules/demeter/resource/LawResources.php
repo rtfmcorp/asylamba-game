@@ -105,6 +105,19 @@ Class LawResources {
 			'longDescription' => '',
 			'image' => '',
 			'isImplemented' => TRUE),
+		array(
+			'id' => 8,
+			'bonusLaw' => FALSE,
+			'devName' => 'war declaration',
+			'name' => 'Déclaration de guerre',
+			'department' => 6,
+			'undeterminedDuration' => TRUE,
+			'price' => 10000,
+			'bonus' => 0,
+			'shortDescription' => 'La déclaration de guerre etc ...',
+			'longDescription' => '',
+			'image' => '',
+			'isImplemented' => TRUE),
 	);
 
 	public static function getInfo($id, $info) {

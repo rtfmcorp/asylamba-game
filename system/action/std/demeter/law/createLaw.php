@@ -204,26 +204,35 @@ if ($type !== FALSE) {
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($rColor !== FALSE) {
 								if ($rColor >= 1 && $rColor <= 7 && $rColor != ASM::$clm->get()->id) {
-									$S_LAM = ASM::$lam->getCurrentsession();
-									ASM::$lam->newSession();
-									ASM::$lam->load(array('type' => 7, 'rColor' => ASM::$clm->get()->id));
 
-									$pactExistYet = FALSE;
-									for ($i = 0; $i < ASM::$lam->size(); $i++) {
-										if (ASM::$lam->get($i)->options['rColor'] == $rColor) {
-											$pactExistYet = TRUE;
-										}
-									}
-
-									if (!$pactExistYet) {
+									if (ASM::$clm->get()->colorLink[$rColor] != Color::ALLY) {
 										$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
 										ASM::$lam->add($law);
 										ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
 										CTR::redirect('faction/view-senate');
 									} else {
-										CTR::$alert->add('Un pacte est déjà passé avec cette faction.', ALERT_STD_ERROR);
+										CTR::$alert->add('Vous considérez déjà cette faction comme votre alliée.', ALERT_STD_ERROR);
 									}
-									ASM::$lam->changeSession($S_LAM);
+								} else {
+									CTR::$alert->add('Cette faction n\'existe pas ou il s\'agit de la votre.', ALERT_STD_ERROR);
+								}
+							} else {
+								CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
+							}
+							break;
+						case 8:
+							$rColor = Utils::getHTTPData('rcolor');
+							if ($rColor !== FALSE) {
+								if ($rColor >= 1 && $rColor <= 7 && $rColor != ASM::$clm->get()->id) {
+
+									if (ASM::$clm->get()->colorLink[$rColor] != Color::ALLY) {
+										$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
+										ASM::$lam->add($law);
+										ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+										CTR::redirect('faction/view-senate');
+									} else {
+										CTR::$alert->add('Vous considérez déjà cette faction comme votre ennemmi.', ALERT_STD_ERROR);
+									}
 								} else {
 									CTR::$alert->add('Cette faction n\'existe pas ou il s\'agit de la votre.', ALERT_STD_ERROR);
 								}
