@@ -19,8 +19,12 @@ class ColorManager extends Manager {
 		$formatLimit = Utils::arrayToLimit($limit);
 
 		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT c.*
+		$qr = $db->prepare('SELECT c.*,
+				cl.rColorLinked AS clRColorLinked,
+				cl.statement AS clStatement
 			FROM color AS c
+			LEFT JOIN colorLink AS cl
+				ON cl.rColor = c.id
 			' . $formatWhere .'
 			' . $formatOrder .'
 			' . $formatLimit
@@ -42,27 +46,33 @@ class ColorManager extends Manager {
 			$qr->execute($valuesArray);
 		}
 
-		$aw = $qr->fetchAll();
+		$awColor = $qr->fetchAll();
 		$qr->closeCursor();
+		
+		for ($i = 0; $i < count($awColor); $i++) {
+			if ($i == 0 || $awColor[$i]['id'] != $awColor[$i - 1]['id']) {
+				$color = new Color();
 
-		foreach($aw AS $awColor) {
-			$color = new Color();
+				$color->id = $awColor[$i]['id'];
+				$color->alive = $awColor[$i]['alive'];
+				$color->alive = $awColor[$i]['isWinner'];
+				$color->credits = $awColor[$i]['credits'];
+				$color->players = $awColor[$i]['players'];
+				$color->activePlayers = $awColor[$i]['activePlayers'];
+				$color->points = $awColor[$i]['points'];
+				$color->sectors = $awColor[$i]['sectors'];
+				$color->electionStatement = $awColor[$i]['electionStatement'];
+				$color->isClosed = $awColor[$i]['isClosed'];
+				$color->dLastElection = $awColor[$i]['dLastElection'];
+			}
 
-			$color->id = $awColor['id'];
-			$color->alive = $awColor['alive'];
-			$color->alive = $awColor['isWinner'];
-			$color->credits = $awColor['credits'];
-			$color->players = $awColor['players'];
-			$color->activePlayers = $awColor['activePlayers'];
-			$color->points = $awColor['points'];
-			$color->sectors = $awColor['sectors'];
-			$color->electionStatement = $awColor['electionStatement'];
-			$color->isClosed = $awColor['isClosed'];
-			$color->dLastElection = $awColor['dLastElection'];
+			$color->colorLink[$awColor[$i]['clRColorLinked']] = $awColor[$i]['clStatement']; 
 
-			$this->_Add($color);
-			if ($this->currentSession->getUMode()) {
-				$color->uMethod();
+			if ($i == count($awColor) - 1 || $awColor[$i]['id'] != $awColor[$i + 1]['id']) {
+				$this->_Add($color);
+				if ($this->currentSession->getUMode()) {
+					$color->uMethod();
+				}
 			}
 		}
 	}

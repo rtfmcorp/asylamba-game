@@ -78,6 +78,8 @@ class Color {
 	public $isClosed				= 0;
 	public $dLastElection			= '';
 
+	public $colorLink 				= array();
+
 	public $chiefId					= 0;
 
 	public function getId() { return $this->id; }
