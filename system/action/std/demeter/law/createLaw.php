@@ -221,7 +221,7 @@ if ($type !== FALSE) {
 										ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
 										CTR::redirect('faction/view-senate');
 									} else {
-										CTR::$alert->add('Une pacte est déjà passé avec cette faction.', ALERT_STD_ERROR);
+										CTR::$alert->add('Un pacte est déjà passé avec cette faction.', ALERT_STD_ERROR);
 									}
 									ASM::$lam->changeSession($S_LAM);
 								} else {
