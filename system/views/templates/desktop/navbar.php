@@ -186,9 +186,9 @@ echo '<div id="nav">';
 
 			echo '<form action="' . Format::actionBuilder('validatestep') . '" method="post">';
 			if (CTR::$data->get('playerInfo')->get('stepDone') == TRUE) {
-				echo '<input type="submit" value="valider l\'étape ' . $step . '" class="button" />';
+				echo '<input class="outside-button" type="submit" value="valider l\'étape ' . $step . '" />';
 			} else {
-				echo '<input type="submit" value="étape en cours" class="button" disabled/>';
+				echo '<input class="outside-button disabled" type="submit" value="étape en cours" disabled />';
 			}
 			echo '</form>';
 		echo '</div>';
@@ -197,8 +197,8 @@ echo '<div id="nav">';
 	echo '<div class="overbox" id="bug-tracker">';
 		echo '<h2>Bug tracker</h2>';
 		echo '<p>Si vous trouvez des bugs ou avez des idées d\'améliorations, nous vous invitons à les poster sur le forum principal.</p>';
-		echo '<a class="outside-button" href="' . GETOUT_ROOT . 'forum/categorie-bug" target="_blank">Reporter un bug</a>';
-		echo '<a class="outside-button" href="' . GETOUT_ROOT . 'forum/categorie-ideas" target="_blank">Proposer une amélioration</a>';
+		echo '<a class="outside-button" target="_blank" href="' . GETOUT_ROOT . 'forum/categorie-bug" target="_blank">Reporter un bug</a>';
+		echo '<a class="outside-button" target="_blank" href="' . GETOUT_ROOT . 'forum/categorie-ideas" target="_blank">Proposer une amélioration</a>';
 		echo '<p>Pour les bugs que vous pensez critiques, vous pouvez envoyer un email directement à support@asylamba.com.</p>';
 		echo '<a class="outside-button" href="mailto:support@asylamba.com">Envoyer un email</a>';
 	echo '</div>';
