@@ -58,10 +58,6 @@ class RecyclingMissionManager extends Manager {
 			$rm->statement = $aw['statement'];
 
 			$currentRM = $this->_Add($rm);
-
-			if ($this->currentSession->getUMode()) {
-				$currentRM->uMethod();
-			}
 		}
 	}
 
