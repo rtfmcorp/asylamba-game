@@ -223,7 +223,6 @@ echo '<div class="component techno">';
 							echo '</strong>';
 							
 							if ($realSizeQueue > 1) {
-								echo '<em>en attente</em>';
 								echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTotalTime, 'lite') . '</span></em>';
 								echo '<span class="progress-container"></span>';
 							} else {

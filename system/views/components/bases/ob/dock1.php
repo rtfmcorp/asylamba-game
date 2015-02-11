@@ -136,7 +136,6 @@ echo '<div class="component">';
 						echo '<strong>' . $queue->quantity . ' ' . ShipResource::getInfo($queue->shipNumber, 'codeName') . Format::addPlural($queue->quantity) . '</strong>';
 						
 						if ($realSizeQueue > 1) {
-							echo '<em>en attente</em>';
 							echo '<span class="progress-container"></span>';
 						} else {
 							echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTime, 'lite') . '</span></em>';
