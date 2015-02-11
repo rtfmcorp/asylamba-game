@@ -12,6 +12,16 @@ class Game {
 		}
 	}
 
+	public static function getSizeOfPlanet($population) {
+		if ($population < 100) {
+			return 1;
+		} elseif ($population < 200) {
+			return 2;
+		} else {
+			return 3;
+		}
+	}
+
 	public static function formatCoord($xCoord, $yCoord, $planetPosition = 0, $sectorLocation = 0) {
 		if ($sectorLocation > 0) {
 			return '⟨' . $sectorLocation . '⟩ ' . $xCoord . ':' . $yCoord . ':' . $planetPosition . '';
@@ -23,7 +33,7 @@ class Game {
 	}
 
 	public static function resourceProduction($coeffRefinery, $coeffPlanet) {
-		return $coeffRefinery * $coeffPlanet * 1;
+		return $coeffRefinery * $coeffPlanet;
 	}
 
 	public static function getDistance($xa, $xb, $ya, $yb) {
@@ -33,46 +43,51 @@ class Game {
 
 	public static function getFleetSpeed($bonus) {
 		include_once ARES;
-		$b = ($bonus != NULL) ? Commander::FLEETSPEED * (3 * ($bonus->get(PlayerBonus::SHIP_SPEED) / 100)) : 0;
+
+		$b = $bonus != NULL
+			? Commander::FLEETSPEED * (3 * ($bonus->get(PlayerBonus::SHIP_SPEED) / 100)) : 0;
 		return Commander::FLEETSPEED + $b;
 	}
 
 	public static function getMaxTravelDistance($bonus) {
 		include_once ARES;
+
 		return round((Commander::MAXTRAVELTIME * self::getFleetSpeed($bonus)) / Commander::COEFFMOVEINTERSYSTEM);
 	}
 
 	public static function getTimeToTravel($startPlace, $destinationPlace, $bonus = NULL) {
 		# $startPlace and $destinationPlace are instance of Place
-		return self::getTimeTravel($startPlace->getRSystem(), $startPlace->getPosition(), $startPlace->getXSystem(), $startPlace->getYSystem(),
-									$destinationPlace->getRSystem(), $destinationPlace->getPosition(), $destinationPlace->getXSystem(), $destinationPlace->getYSystem(), $bonus);
+		return self::getTimeTravel(
+			$startPlace->getRSystem(),
+			$startPlace->getPosition(),
+			$startPlace->getXSystem(),
+			$startPlace->getYSystem(),
+			$destinationPlace->getRSystem(),
+			$destinationPlace->getPosition(),
+			$destinationPlace->getXSystem(),
+			$destinationPlace->getYSystem(),
+			$bonus
+		);
 	}
 
 	public static function getTimeTravel($systemFrom, $positionFrom, $xFrom, $yFrom, $systemTo, $positionTo, $xTo, $yTo, $bonus = NULL) {
-		include_once ARES;
-		if ($systemFrom == $systemTo) {
-			$distance = abs($positionFrom - $positionTo);
-			$time = round(Commander::COEFFMOVEINSYSTEM * $distance);
-			return $time;
-		} else {
-			$time = Commander::COEFFMOVEOUTOFSYSTEM;
-			$distance = self::getDistance($xFrom, $xTo, $yFrom, $yTo);
-			$time += round((Commander::COEFFMOVEINTERSYSTEM * $distance) / self::getFleetSpeed($bonus));
-			return $time;
-		}
+		return $systemFrom == $systemTo
+			? Game::getTimeTravelInSystem($positionFrom, $positionTo)
+			: Game::getTimeTravelOutOfSystem($bonus, $xFrom, $yFrom, $xTo, $yTo);
 	}
 
 	public static function getTimeTravelInSystem($startPosition, $destinationPosition) {
 		include_once ARES;
+
 		$distance = abs($startPosition - $destinationPosition);
-		$time = round(Commander::COEFFMOVEINSYSTEM * $distance);
-		return $time;
+		return round((Commander::COEFFMOVEINSYSTEM * $distance) * ((40 - $distance) / 50) + 180);
 	}
 
 	public static function getTimeTravelOutOfSystem($bonus, $startX, $startY, $destinationX, $destinationY) {
 		include_once ARES;
-		$time = Commander::COEFFMOVEOUTOFSYSTEM;
+
 		$distance = self::getDistance($startX, $destinationX, $startY, $destinationY);
+		$time  = Commander::COEFFMOVEOUTOFSYSTEM;
 		$time += round((Commander::COEFFMOVEINTERSYSTEM * $distance) / self::getFleetSpeed($bonus));
 		return $time;
 	}
@@ -85,35 +100,26 @@ class Game {
 		return round($distance * ($populationA + $populationB) * $coef * $bonusA * $bonusB);
 	}
 
-	public static function getSizeOfPlanet($population) {
-		if ($population < 100) {
-			return 1;
-		} elseif ($population < 200) {
-			return 2;
-		} else {
-			return 3;
-		}
-	}
+	
 
 	public static function getTaxFromPopulation($population, $typeOfBase) {
-		$tax = ((40 * $population) + 5000) * PAM_COEFTAX;
+		$tax  = ((40 * $population) + 5000) * PAM_COEFTAX;
 		$tax *= PlaceResource::get($typeOfBase, 'tax');
 		return $tax;
 	}
 
 	public static function getAntiSpyRadius($investment, $mode = ANTISPY_DISPLAY_MODE) {
-		if ($mode == ANTISPY_DISPLAY_MODE) {
-			// en pixels : sert à l'affichage
-			return sqrt($investment / 3.14) * 20;
-		} else { // ANTISPY_GAME_MODE
-			// en position du jeu (250x250)
-			return sqrt($investment / 3.14);
-		}
+		return $mode == ANTISPY_DISPLAY_MODE
+			# en pixels : sert à l'affichage
+			? sqrt($investment / 3.14) * 20
+			# en position du jeu (250x250)
+			: sqrt($investment / 3.14);
 	}
 
 	public static function antiSpyArea($startPlace, $destinationPlace, $arrivalDate) {
+		# dans le même système
 		if ($startPlace->getRSystem() == $destinationPlace->getRSystem()) {
-			return ANTISPY_LITTLE_CIRCLE; // dans le même système
+			return ANTISPY_LITTLE_CIRCLE; 
 		} else {
 			$duration = self::getTimeToTravel($startPlace, $destinationPlace);
 
@@ -128,7 +134,7 @@ class Game {
 			if ($antiSpyRadius >= $distanceRemaining) {
 				if ($distanceRemaining < $antiSpyRadius / 3) {
 					return ANTISPY_LITTLE_CIRCLE; 
-				} else if ($distanceRemaining < $antiSpyRadius / 3 * 2) {
+				} elseif ($distanceRemaining < $antiSpyRadius / 3 * 2) {
 					return ANTISPY_MIDDLE_CIRCLE;
 				} else {
 					return ANTISPY_BIG_CIRCLE;
@@ -140,8 +146,9 @@ class Game {
 	}
 
 	public static function getAntiSpyEntryTime($startPlace, $destinationPlace, $arrivalDate) {
+		# dans le même système
 		if ($startPlace->getRSystem() == $destinationPlace->getRSystem()) {
-			return array(TRUE, TRUE, TRUE); // dans le même système
+			return array(TRUE, TRUE, TRUE);
 		} else {
 			$duration = self::getTimeToTravel($startPlace, $destinationPlace);
 
@@ -155,13 +162,13 @@ class Game {
 
 			if ($distanceRemaining < $antiSpyRadius / 3) {
 				return array(TRUE, TRUE, TRUE);
-			} else if ($distanceRemaining < $antiSpyRadius / 3 * 2) {
+			} elseif ($distanceRemaining < $antiSpyRadius / 3 * 2) {
 				$ratio = ($antiSpyRadius / 3) / $distanceRemaining;
 				$sec = $ratio * $secRemaining;
 				$newDate = Utils::addSecondsToDate($arrivalDate, -$sec);
 
 				return array(TRUE, TRUE, $newDate);
-			} else if ($distanceRemaining < $antiSpyRadius) {
+			} elseif ($distanceRemaining < $antiSpyRadius) {
 				$ratio = ($antiSpyRadius / 3 * 2) / $distanceRemaining;
 				$sec = $ratio * $secRemaining;
 				$newDate1 = Utils::addSecondsToDate($arrivalDate, -$sec);
@@ -335,7 +342,7 @@ class Game {
 		if ($success < 50) {
 			if ($percent < 50) {
 				return SpyReport::TYP_NOT_CAUGHT;			# 50%
-			} else if ($percent < 75) {
+			} elseif ($percent < 75) {
 				return SpyReport::TYP_ANONYMOUSLY_CAUGHT;	# 25%
 			} else {
 				return SpyReport::TYP_CAUGHT;				# 25%
@@ -343,7 +350,7 @@ class Game {
 		} else {
 			if ($percent < 40) {
 				return SpyReport::TYP_NOT_CAUGHT;			# 40%
-			} else if ($percent < 70) {
+			} elseif ($percent < 70) {
 				return SpyReport::TYP_ANONYMOUSLY_CAUGHT;	# 30%
 			} else {
 				return SpyReport::TYP_CAUGHT;				# 30%
