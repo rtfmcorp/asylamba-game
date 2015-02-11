@@ -55,7 +55,9 @@ for ($i = 0; $i < ASM::$rem->size(); $i++) {
 
 	echo '<div class="component">';
 		echo '<div class="head skin-2">';
-			echo '<h2>Mission en cours</h2>';
+			if ($i == 0) {
+				echo '<h2>Mission' . Format::addPlural(ASM::$rem->size()) . ' en cours</h2>';
+			}
 		echo '</div>';
 		echo '<div class="fix-body">';
 			echo '<div class="body">';
@@ -63,6 +65,10 @@ for ($i = 0; $i < ASM::$rem->size(); $i++) {
 				echo '<p>Recycleurs utilisés : ' . $mission->recyclerQuantity . '</p>';
 				echo '<p>Lieu cible : ' . $mission->rTarget . '</p>';
 				echo '<p>Temps de cycle : ' . $mission->cycleTime . ' secondes</p>';
+
+				if ($mission->statement == RecyclingMission::ST_BEING_DELETED) {
+					echo '<p>Cette mission a été annulée, les collecteurs rentrent à la maison</p>';
+				}
 
 				echo '<div class="number-box">';
 					echo '<span class="label">progression de la mission</span>';
@@ -88,7 +94,7 @@ for ($i = 0; $i < ASM::$rem->size(); $i++) {
 					echo '</li>';
 				}
 				echo '</ul>';
-				echo '<a href="' . Format::actionBuilder('cancelmission', ['id' => $mission->id]) . '" class="hb lt right-link" title="annuler la mission">annuler la mission</a>';
+				echo '<a href="' . Format::actionBuilder('cancelmission', ['id' => $mission->id, 'place' => $mission->rBase]) . '" class="hb lt right-link" title="annuler la mission">annuler la mission</a>';
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';

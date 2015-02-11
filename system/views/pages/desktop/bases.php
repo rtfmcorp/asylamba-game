@@ -62,7 +62,7 @@ echo '<div id="content">';
 		# load recycling missions
 		$S_REM1 = ASM::$rem->getCurrentSession();
 		ASM::$rem->newSession(ASM_UMODE);
-		ASM::$rem->load(array('rBase' => $ob_recycling->rPlace));
+		ASM::$rem->load(array('rBase' => $ob_recycling->rPlace, 'statement' => array(RecyclingMission::ST_BEING_DELETED, RecyclingMission::ST_ACTIVE)));
 		$recyclingSession = ASM::$rem->getCurrentSession();
 
 		$missionLogSessions = array();
