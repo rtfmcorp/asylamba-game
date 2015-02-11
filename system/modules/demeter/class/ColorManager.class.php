@@ -66,7 +66,7 @@ class ColorManager extends Manager {
 				$color->dLastElection = $awColor[$i]['dLastElection'];
 			}
 
-			$color->colorLink[$awColor[$i]['clRColorLinked']] = $awColor[$i]['clStatement']; 
+			$color->colorLink[$awColor[$i]['clRColorLinked']] = $awColor[$i]['clStatement'];
 
 			if ($i == count($awColor) - 1 || $awColor[$i]['id'] != $awColor[$i + 1]['id']) {
 				$this->_Add($color);
@@ -108,7 +108,16 @@ class ColorManager extends Manager {
 					$color->dLastElection,
 					$color->id
 				));
+
+			$qr2 = $db->prepare('UPDATE colorLink SET
+					statement = ? WHERE rColor = ? AND rColorLinked = ?
+				');
+
+			for ($i = 1; $i <= count($color->colorLink); $i++) {
+				$qr2->execute(array($color->colorLink[$i], $color->id, $i));
+			}
 		}
+
 	}
 
 	public function add($newColor) {
