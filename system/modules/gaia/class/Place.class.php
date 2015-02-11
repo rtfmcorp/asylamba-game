@@ -20,7 +20,7 @@ class Place {
 
 	# typeOfPlace
 	const TERRESTRIAL = 1;
-	const EMPTY = 6; # zone vide
+	const EMPTYZONE = 6; # zone vide
 
 	# CONST PNJ COMMANDER
 	const LEVELMAXVCOMMANDER = 15;
