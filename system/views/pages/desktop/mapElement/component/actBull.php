@@ -85,7 +85,7 @@ echo '<div class="column act">';
 				} else {
 					echo '<div class="commander-tile">';
 						echo '<div class="item no-commander">';
-							echo 'Aucun commandant selectionné<br/>Sélectionnez-en un sur la barre latérale gauche.<br/>Si aucun commandant n\'est visible, vous pouvez en affecter un dans l\'amirauté.';
+							echo 'Aucun commandant selectionné<br/>Sélectionnez-en un sur la barre latérale gauche.<br/><br />Si aucun commandant n\'est visible, vous pouvez en affecter un dans l\'amirauté.';
 						echo '</div>';
 						echo '<div class="item too-far">';
 							echo 'Ce commandant est trop éloigné pour coloniser cette planète';

@@ -235,7 +235,7 @@ echo '<div class="component techno">';
 						echo '</div>';
 					} else {
 						echo '<div class="item empty">';
-							echo '<img class="picto" src="' . MEDIA . 'orbitalbase/build.png" alt="" />';
+							echo '<span class="picto"></span>';
 							echo '<strong>Emplacement libre</strong>';
 							echo '<span class="progress-container"></span>';
 						echo '</div>';
