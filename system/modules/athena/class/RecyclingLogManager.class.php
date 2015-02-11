@@ -73,12 +73,13 @@ class RecyclingLogManager extends Manager {
 	public function add(RecyclingLog $rl) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			recyclingLog(rRecycling, resources, ship0, ship1, ship2, ship3, ship4, ship5, ship6, ship7,
+			recyclingLog(rRecycling, resources, credits, ship0, ship1, ship2, ship3, ship4, ship5, ship6, ship7,
 				ship8, ship9, ship10, ship11, dLog)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$rl->rRecycling,
 			$rl->resources,
+			$rl->credits,
 			$rl->ship0,
 			$rl->ship1,
 			$rl->ship2,
@@ -108,6 +109,7 @@ class RecyclingLogManager extends Manager {
 				SET	id = ?,
 					rRecycling = ?,
 					resources = ?,
+					credits = ?,
 					ship0 = ?,
 					ship1 = ?,
 					ship2 = ?,
@@ -126,6 +128,7 @@ class RecyclingLogManager extends Manager {
 				$rl->id,
 				$rl->rRecycling,
 				$rl->resources,
+				$rl->credits,
 				$rl->ship0,
 				$rl->ship1,
 				$rl->ship2,
