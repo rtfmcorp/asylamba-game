@@ -154,7 +154,7 @@ class Place {
 			$this->uPlace = $now;
 
 			# RESOURCE
-			if ($this->typeOfBase == self::TYP_EMPTY) {
+			if ($this->typeOfBase == self::TYP_EMPTY && $this->typeOfPlace == self::TERRESTRIAL) {
 				foreach ($days as $key => $day) {
 					CTC::add($day, $this, 'uResources', array());
 				}
