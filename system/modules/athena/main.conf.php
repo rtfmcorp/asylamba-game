@@ -13,9 +13,6 @@ define('BQM_RESOURCERETURN', 		0.5); 	# 50%
 
 define('SQM_RESOURCERETURN',		0.5);	# 50%
 
-# commandant
-define('MAXCOMMANDERINSCHOOL',		10); # --> à vérifier si on utilise toujours
-
 # commercialRoute statement
 define('CRM_PROPOSED',				0);
 define('CRM_ACTIVE',				1);

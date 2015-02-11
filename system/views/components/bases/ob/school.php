@@ -9,11 +9,13 @@
 
 include_once ARES;
 include_once ZEUS;
+include_once GAIA;
 
 $S_COM1 = ASM::$com->getCurrentSession();
 ASM::$com->newSession();
 ASM::$com->load(array('c.statement' => Commander::INSCHOOL, 'c.rBase' => $ob_school->getId()), array('c.experience', 'DESC'));
-$comQuantity = ASM::$com->size();
+
+$maxCommanderInSchool = PlaceResource::get($ob_school->typeOfBase, 'school-size');
 
 echo '<div class="component school">';
 	echo '<div class="head skin-1">';
@@ -34,26 +36,26 @@ echo '<div class="component school">';
 				echo '</span>';
 			echo '</div>';
 
-			if (CTR::$data->get('playerBonus')->get(PlayerBonus::COMMANDER_INVEST) == 0) {
-				echo '<div class="number-box grey">';
-			} else {
-				echo '<div class="number-box">';
-			}
+			echo CTR::$data->get('playerBonus')->get(PlayerBonus::COMMANDER_INVEST) == 0
+				? '<div class="number-box grey">'
+				: '<div class="number-box">';
 				echo '<span class="label">bonus de formation</span>';
 				echo '<span class="value">';
 					echo CTR::$data->get('playerBonus')->get(PlayerBonus::COMMANDER_INVEST) . ' %';
 				echo '</span>';
 			echo '</div>';
 
+			echo '<p>Les officiers gagnent en moyenne ?? points d\'expérience par relève.</p>';
+
 			echo '<hr />';
 
 			echo '<form action="' . Format::actionBuilder('createschoolclass', ['baseid' => $ob_school->getId(), 'school' => '0']) . '" method="post" class="build-item">';
 				echo '<div class="name">';
 					echo '<img src="' . MEDIA . 'school/school-1.png" alt="" />';
-					echo '<strong>Nouvel officier</strong>';
+					echo '<strong>Former un nouvel officier</strong>';
 				echo '</div>';
 					echo '<input type="text" class="name-commander" name="name" value="' . CheckName::randomize() . '" />';
-				if ($comQuantity >= MAXCOMMANDERINSCHOOL) {
+				if (ASM::$com->size() >= $maxCommanderInSchool) {
 					echo '<span class="button disable">';
 						echo '<span class="text">';
 							echo 'trop d\'officier dans l\'école<br/>';
@@ -81,8 +83,46 @@ echo '<div class="component school">';
 echo '</div>';
 
 echo '<div class="component">';
-	echo '<div class="head skin-2">';
+	echo '<div class="head skin-5">';
 		echo '<h2>Salle de formation</h2>';
+	echo '</div>';
+	echo '<div class="fix-body">';
+		echo '<div class="body">';
+			echo '<div class="queue">';
+				for ($i = 0; $i < $maxCommanderInSchool; $i++) {
+					if (ASM::$com->get($i) !== FALSE) {
+						$commander = ASM::$com->get($i);
+						$expToLvlUp = $commander->experienceToLevelUp();
+						echo '<div class="item">';
+							echo '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
+							echo '<strong>' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->getName() . '</strong>';
+							echo '<em>' . Format::numberFormat($commander->getExperience()) . ' points d\'expérience</em>';
+							echo '<a class="button" href="' . Format::actionBuilder('affectcommander', ['id' => $commander->getId()]) . '">';
+								echo 'affecter';
+							echo '</a>';
+							echo '<span class="progress-container">';
+								echo '<span style="width: ' . Format::percent($commander->getExperience() - ($expToLvlUp / 2), $expToLvlUp - ($expToLvlUp / 2)) . '%;" class="progress-bar"></span>';
+							echo '</span>';
+						echo '</div>';
+					} else {
+						echo '<div class="item empty">';
+							echo '<img class="picto" src="' . MEDIA . 'school/school-0.png" alt="" />';
+							echo '<strong>Emplacement libre</strong>';
+							echo '<span class="progress-container"></span>';
+						echo '</div>';
+					}
+				}
+			echo '</div>';
+		echo '</div>';
+	echo '</div>';
+echo '</div>';
+
+ASM::$com->newSession();
+ASM::$com->load(array('c.statement' => Commander::INSCHOOL, 'c.rBase' => $ob_school->getId()), array('c.experience', 'DESC'));
+
+echo '<div class="component">';
+	echo '<div class="head skin-5">';
+		echo '<h2>Mess des officiers</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
@@ -94,7 +134,7 @@ echo '<div class="component">';
 						echo '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
 						echo '<strong>' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->getName() . '</strong>';
 						echo '<em>' . Format::numberFormat($commander->getExperience()) . ' points d\'expérience</em>';
-						echo '<a href="' . Format::actionBuilder('affectcommander', ['id' => $commander->getId()]) . '">';
+						echo '<a class="button" href="' . Format::actionBuilder('affectcommander', ['id' => $commander->getId()]) . '">';
 							echo 'affecter';
 						echo '</a>';
 						echo '<span class="progress-container">';
@@ -103,9 +143,11 @@ echo '<div class="component">';
 					echo '</div>';
 				}
 
-				if (ASM::$com->size() == 0) {
-					echo '<em>Classes vides, aucun commandant en formation.</em>';
-				}
+				echo '<div class="item empty">';
+					echo '<img class="picto" src="' . MEDIA . 'school/school-0.png" alt="" />';
+					echo '<strong>Emplacement libre</strong>';
+					echo '<span class="progress-container"></span>';
+				echo '</div>';
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';

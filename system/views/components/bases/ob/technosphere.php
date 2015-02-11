@@ -10,12 +10,12 @@
 include_once PROMETHEE;
 $technology = new Technology(CTR::$data->get('playerId'));
 
-// session avec les technos de cette base
+# session avec les technos de cette base
 $S_TQM1 = ASM::$tqm->getCurrentSession();
 ASM::$tqm->changeSession($ob_tech->technoQueueManager);
 $S_TQM2 = ASM::$tqm->getCurrentSession();
 
-// session avec les technos de toutes les bases
+# session avec les technos de toutes les bases
 ASM::$tqm->newSession();
 ASM::$tqm->load(array('rPlayer' => CTR::$data->get('playerId')));
 $S_TQM3 = ASM::$tqm->getCurrentSession();
@@ -28,6 +28,7 @@ ASM::$rsm->load(array('rPlayer' => CTR::$data->get('playerId')));
 $c1 = array(); $c2 = array(); $c3 = array();
 $c4 = array(); $c5 = array();
 $c6 = array(); $c7 = array();
+
 for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
 	if (!TechnologyResource::isATechnologyNotDisplayed($i)) {
 		$but = ''; $sup = ''; $ctn = array(); $ctn[0] = ''; $ctn[1] = TRUE;
@@ -50,7 +51,6 @@ for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
 		}
 		ASM::$tqm->changeSession($S_TQM2);
 		
-
 		$title = TechnologyResource::getInfo($i, 'name');
 		if (!TechnologyResource::isAnUnblockingTechnology($i) && $technology->getTechnology($i) != 0) {
 			$title .= ' [' . $technology->getTechnology($i) . ']';
@@ -198,49 +198,50 @@ echo '<div class="component techno">';
 				echo '</span>';
 			echo '</div>';
 			ASM::$tqm->changeSession($S_TQM2);
-			if (ASM::$tqm->size() > 0) {
-				echo '<div class="queue">';
+
+			echo '<h4>File de construction</h4>';
+			echo '<div class="queue">';
 				$realSizeQueue = 0;
 				$remainingTotalTime = 0;
 				$totalTimeTechno = 0;
 
-				for ($i = 0; $i < ASM::$tqm->size(); $i++) {
-					$queue = ASM::$tqm->get($i);
-					$realSizeQueue++;
-					$totalTimeTechno += TechnologyResource::getInfo($queue->technology, 'time', $queue->targetLevel);
-					$remainingTotalTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
+				for ($i = 0; $i < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::TECHNOSPHERE, 'level', $ob_tech->levelTechnosphere, 'nbQueues'); $i++) {
+					if (ASM::$tqm->get($i) !== FALSE) {
+						$queue = ASM::$tqm->get($i);
+						$realSizeQueue++;
+						$totalTimeTechno += TechnologyResource::getInfo($queue->technology, 'time', $queue->targetLevel);
+						$remainingTotalTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
 
-					echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTotalTime . '" data-progress-total-time="' . $totalTimeTechno . '">';
-						echo '<a href="' . Format::actionBuilder('dequeuetechno', ['baseid' => $ob_tech->getId(), 'techno' => $queue->technology]) . '"' . 
-							'class="button hb lt" title="annuler la recherche (attention, vous ne récupérerez que ' . TQM_RESOURCERETURN * 100 . '% du montant investi)">×</a>';
-						echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($queue->technology, 'imageLink') . '.png" alt="" />';
-						echo '<strong>' . TechnologyResource::getInfo($queue->technology, 'name');
-						if (!TechnologyResource::isAnUnblockingTechnology($queue->technology)) {
-							echo ' <span class="level">niv. ' . $queue->targetLevel . '</span>';
-						}
-						echo '</strong>';
-						
-						if ($realSizeQueue > 1) {
-							echo '<em>en attente</em>';
-							echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTotalTime, 'lite') . '</span></em>';
-							echo '<span class="progress-container"></span>';
-						} else {
-							echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTotalTime, 'lite') . '</span></em>';
-							echo '<span class="progress-container">';
-								echo '<span style="width: ' . Format::percent($totalTimeTechno - $remainingTotalTime, $totalTimeTechno) . '%;" class="progress-bar">';
+						echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTotalTime . '" data-progress-total-time="' . $totalTimeTechno . '">';
+							echo '<a href="' . Format::actionBuilder('dequeuetechno', ['baseid' => $ob_tech->getId(), 'techno' => $queue->technology]) . '"' . 
+								'class="button hb lt" title="annuler la recherche (attention, vous ne récupérerez que ' . TQM_RESOURCERETURN * 100 . '% du montant investi)">×</a>';
+							echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($queue->technology, 'imageLink') . '.png" alt="" />';
+							echo '<strong>' . TechnologyResource::getInfo($queue->technology, 'name');
+							if (!TechnologyResource::isAnUnblockingTechnology($queue->technology)) {
+								echo ' <span class="level">niv. ' . $queue->targetLevel . '</span>';
+							}
+							echo '</strong>';
+							
+							if ($realSizeQueue > 1) {
+								echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTotalTime, 'lite') . '</span></em>';
+								echo '<span class="progress-container"></span>';
+							} else {
+								echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTotalTime, 'lite') . '</span></em>';
+								echo '<span class="progress-container">';
+									echo '<span style="width: ' . Format::percent($totalTimeTechno - $remainingTotalTime, $totalTimeTechno) . '%;" class="progress-bar">';
+									echo '</span>';
 								echo '</span>';
-							echo '</span>';
-						}
-					echo '</div>';
+							}
+						echo '</div>';
+					} else {
+						echo '<div class="item empty">';
+							echo '<img class="picto" src="' . MEDIA . 'orbitalbase/build.png" alt="" />';
+							echo '<strong>Emplacement libre</strong>';
+							echo '<span class="progress-container"></span>';
+						echo '</div>';
+					}
 				}
-
-				if ($realSizeQueue >= OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::TECHNOSPHERE, 'level', $ob_tech->levelTechnosphere, 'nbQueues')) {
-					echo '<p><em>file de recherche pleine, revenez dans un moment.</em></p>';
-				}
-				echo '</div>';
-			} else {
-				echo '<p><em>Aucune technologie en développement !</em></p>';
-			}
+			echo '</div>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

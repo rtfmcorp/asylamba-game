@@ -58,8 +58,26 @@ echo '<div id="content">';
 		include COMPONENT . 'bases/ob/storage.php';
 	} elseif (CTR::$get->get('view') == 'recycling' && $base->levelRecycling > 0) {
 		$ob_recycling = $base;
+
+		# load recycling missions
+		$S_REM1 = ASM::$rem->getCurrentSession();
+		ASM::$rem->newSession(ASM_UMODE);
+		ASM::$rem->load(array('rBase' => $ob_recycling->rPlace, 'statement' => array(RecyclingMission::ST_BEING_DELETED, RecyclingMission::ST_ACTIVE)));
+		$recyclingSession = ASM::$rem->getCurrentSession();
+
+		$missionLogSessions = array();
+		$S_RLM1 = ASM::$rlm->getCurrentSession();
+		for ($i = 0; $i < ASM::$rem->size(); $i++) { 
+			ASM::$rlm->newSession();
+			ASM::$rlm->load(array('rRecycling' => ASM::$rem->get($i)->id), array('dLog'));
+			$missionLogSessions[$i] = ASM::$rlm->getCurrentSession();
+		}
+
+		ASM::$rlm->changeSession($S_RLM1);
+		ASM::$rem->changeSession($S_REM1);
+
 		include COMPONENT . 'bases/ob/recycling.php';
-		include COMPONENT . 'default.php';
+		//include COMPONENT . 'default.php';
 	} elseif (CTR::$get->get('view') == 'spatioport' && $base->levelSpatioport > 0) {
 		$ob_spatioport = $base;
 		include COMPONENT . 'bases/ob/spatioport.php';

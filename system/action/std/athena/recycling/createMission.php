@@ -78,6 +78,6 @@ if ($rPlace !== FALSE AND $rTarget !== FALSE AND $quantity !== FALSE AND in_arra
 	}
 	ASM::$obm->changeSession($S_OBM1);
 } else {
-	CTR::$alert->add('pas assez d\'informations pour faire une proposition sur le marché', ALERT_STD_FILLFORM);
+	CTR::$alert->add('pas assez d\'informations pour créer une mission de recyclage', ALERT_STD_FILLFORM);
 }
 ?>

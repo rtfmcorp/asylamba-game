@@ -44,6 +44,25 @@
 		text-align: center;
 		color: #CCC;
 	}
+
+	.outside-button {
+		display: block;
+		width: auto;
+		margin: 10px 10px 0 10px;
+		line-height: 30px;
+		padding: 0 10px;
+		background: @medium;
+		border: solid 1px @dark;
+		border-radius: 3px;
+		color: white;
+		text-decoration: none;
+		cursor: pointer;
+
+		&:hover, &:focus {
+			background: @dark;
+			border-color: @medium;
+		}
+	}
 }
 
 
@@ -120,7 +139,7 @@
 	}
 
 	&#bug-tracker {
-		width: 350px;
+		width: 250px;
 		top: 50px; right: 98px;
 		padding: 0 0 8px 0;
 
@@ -188,7 +207,7 @@
 		color: white;
 
 		form {
-			padding: 10px 15px; margin: 0;
+			padding: 0 0 10px 0; margin: 0;
 			border-top: solid 1px #202020;
 		}
 

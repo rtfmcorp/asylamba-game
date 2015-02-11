@@ -32,14 +32,6 @@ echo '<div id="nav">';
 				break;
 			}
 		}
-#		for ($i = 0; $i < CTR::$data->get('playerBase')->get('ms')->size(); $i++) { 
-#			if (CTR::$data->get('playerParams')->get('base') == CTR::$data->get('playerBase')->get('ms')->get($i)->get('id')) {
-#				$currentBaseName = CTR::$data->get('playerBase')->get('ms')->get($i)->get('name');
-#				$currentBaseImg  = CTR::$data->get('playerBase')->get('ms')->get($i)->get('img');
-#				$currentBaseId   = CTR::$data->get('playerBase')->get('ms')->get($i)->get('id');
-#				break;
-#			}
-#		}
 
 		$nextBaseId = CTR::$data->get('playerBase')->get('ob')->get(0)->get('id');
 		$finded = FALSE;
@@ -112,7 +104,7 @@ echo '<div id="nav">';
 		echo '<a href="#" class="square sh" data-target="bug-tracker"><img src="' . MEDIA . 'common/tool-bugtracker.png" alt="" /></a>';
 
 		$isActive = (in_array(CTR::getPage(), array('params'))) ? 'active' : NULL;
-		//echo '<a class="square hb lb ' . $isActive . '" title="paramètres" href="' . APP_ROOT . 'params"><img src="' . MEDIA . 'common/tool-param.png" alt="" /></a>';
+		echo '<a class="square hb lb ' . $isActive . '" title="paramètres" href="' . APP_ROOT . 'params"><img src="' . MEDIA . 'common/tool-param.png" alt="" /></a>';
 
 		echo '<a href="#" class="square sh" data-target="disconnect-box"><img src="' . MEDIA . 'common/tool-exit.png" alt="" /></a>';
 	echo '</div>';
@@ -194,9 +186,9 @@ echo '<div id="nav">';
 
 			echo '<form action="' . Format::actionBuilder('validatestep') . '" method="post">';
 			if (CTR::$data->get('playerInfo')->get('stepDone') == TRUE) {
-				echo '<input type="submit" value="valider l\'étape ' . $step . '" class="button" />';
+				echo '<input class="outside-button" type="submit" value="valider l\'étape ' . $step . '" />';
 			} else {
-				echo '<input type="submit" value="étape en cours" class="button" disabled/>';
+				echo '<input class="outside-button disabled" type="submit" value="étape en cours" disabled />';
 			}
 			echo '</form>';
 		echo '</div>';
@@ -205,13 +197,10 @@ echo '<div id="nav">';
 	echo '<div class="overbox" id="bug-tracker">';
 		echo '<h2>Bug tracker</h2>';
 		echo '<p>Si vous trouvez des bugs ou avez des idées d\'améliorations, nous vous invitons à les poster sur le forum principal.</p>';
-		echo '<p><b>Bug</b></p>';
-		echo '<a href="http://asylamba.com/forum/categorie-bug" target="_blank">--> Reporter un bug</a>';
-		echo '<p><b>Suggestion</b></p>';
-		echo '<a href="http://asylamba.com/forum/categorie-ideas" target="_blank">--> Proposer une amélioration</a>';
-		echo '<p><b>Bug critique</b></p>';
+		echo '<a class="outside-button" target="_blank" href="' . GETOUT_ROOT . 'forum/categorie-bug" target="_blank">Reporter un bug</a>';
+		echo '<a class="outside-button" target="_blank" href="' . GETOUT_ROOT . 'forum/categorie-ideas" target="_blank">Proposer une amélioration</a>';
 		echo '<p>Pour les bugs que vous pensez critiques, vous pouvez envoyer un email directement à support@asylamba.com.</p>';
-		echo '<a href="mailto:support@asylamba.com">--> Envoyer un email</a>';
+		echo '<a class="outside-button" href="mailto:support@asylamba.com">Envoyer un email</a>';
 	echo '</div>';
 
 	echo '<div class="overbox" id="disconnect-box">';

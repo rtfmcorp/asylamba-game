@@ -17,10 +17,13 @@ $technology = new Technology(CTR::$data->get('playerId'));
 $totalSpace = OrbitalBaseResource::getBuildingInfo(3, 'level', $ob_dock2->getLevelDock2(), 'storageSpace');
 $storage = $ob_dock2->getShipStorage();
 $inStorage = 0;
+
 for ($m = 6; $m < 12; $m++) {
 	$inStorage += ShipResource::getInfo($m, 'pev') * $storage[$m];
 }
+
 $inQueue = 0;
+
 if (ASM::$sqm->size() > 0) {
 	for ($j = 0; $j < ASM::$sqm->size(); $j++) {
 		$inQueue += ShipResource::getInfo(ASM::$sqm->get($j)->shipNumber, 'pev') * ASM::$sqm->get($j)->quantity;
@@ -118,44 +121,44 @@ echo '<div class="component">';
 				echo '</span>';
 			echo '</div>';
 			
-			if (ASM::$sqm->size() > 0) {
-				echo '<div class="queue">';
+			echo '<h4>File de construction</h4>';
+			echo '<div class="queue">';
 				$realSizeQueue = 0;
-				for ($i = 0; $i < ASM::$sqm->size(); $i++) {
-					$queue = ASM::$sqm->get($i);
-					$realSizeQueue++;
-					$totalTimeShips = ShipResource::getInfo($queue->shipNumber, 'time');
-					$remainingTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
 
-					echo $realSizeQueue > 1
-						? '<div class="item">'
-						: '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTime . '" data-progress-total-time="' . $totalTimeShips . '">';
-					echo '<a href="' . Format::actionBuilder('dequeueship', ['baseid' => $ob_dock2->getId(), 'dock' => '2', 'queue' => $queue->id]) . '"' . 
-						'class="button hb lt" title="annuler la commande (attention, vous ne récupérerez que ' . SQM_RESOURCERETURN * 100 . '% du montant investi)">×</a>';
-					echo  '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($queue->shipNumber, 'imageLink') . '.png" alt="" />';
-					echo '<strong>' . ShipResource::getInfo($queue->shipNumber, 'codeName') . '</strong>';
-					
-					if ($realSizeQueue > 1) {
-						echo '<em>en attente</em>';
-						echo '<span class="progress-container"></span>';
-					} else {
-						echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTime, 'lite') . '</span></em>';
-						echo '<span class="progress-container">';
-							echo '<span style="width: ' . Format::percent($totalTimeShips - $remainingTime, $totalTimeShips) . '%;" class="progress-bar">';
+				for ($i = 0; $i < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::DOCK2, 'level', $ob_dock2->levelDock2, 'nbQueues'); $i++) {
+					if (ASM::$sqm->get($i) !== FALSE) {
+						$queue = ASM::$sqm->get($i);
+						$realSizeQueue++;
+						$totalTimeShips = ShipResource::getInfo($queue->shipNumber, 'time');
+						$remainingTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
+
+						echo $realSizeQueue > 1
+							? '<div class="item">'
+							: '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTime . '" data-progress-total-time="' . $totalTimeShips . '">';
+						echo '<a href="' . Format::actionBuilder('dequeueship', ['baseid' => $ob_dock2->getId(), 'dock' => '2', 'queue' => $queue->id]) . '"' . 
+							'class="button hb lt" title="annuler la commande (attention, vous ne récupérerez que ' . SQM_RESOURCERETURN * 100 . '% du montant investi)">×</a>';
+						echo  '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($queue->shipNumber, 'imageLink') . '.png" alt="" />';
+						echo '<strong>' . ShipResource::getInfo($queue->shipNumber, 'codeName') . '</strong>';
+						
+						if ($realSizeQueue > 1) {
+							echo '<span class="progress-container"></span>';
+						} else {
+							echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTime, 'lite') . '</span></em>';
+							echo '<span class="progress-container">';
+								echo '<span style="width: ' . Format::percent($totalTimeShips - $remainingTime, $totalTimeShips) . '%;" class="progress-bar">';
+								echo '</span>';
 							echo '</span>';
-						echo '</span>';
+						}
+						echo '</div>';
+					} else {
+						echo '<div class="item empty">';
+							echo '<img class="picto" src="' . MEDIA . 'orbitalbase/build.png" alt="" />';
+							echo '<strong>Emplacement libre</strong>';
+							echo '<span class="progress-container"></span>';
+						echo '</div>';
 					}
-
-					echo '</div>';
 				}
-
-				if ($realSizeQueue > OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::DOCK2, 'level', $ob_dock2->levelDock2, 'nbQueues')) {
-					echo '<p><em>file de construction pleine, revenez dans un moment.</em></p>';
-				}
-				echo '</div>';
-			} else {
-				echo '<p><em>Aucun vaisseau en construction !</em></p>';
-			}
+			echo '</div>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
