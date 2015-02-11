@@ -1,0 +1,370 @@
+#action-box {
+	display: block;
+	z-index: 1100;
+	position: absolute;
+	width: 100%; height: 300px;
+	bottom: -300px; left: 0;
+	border-top: solid 1px #0A0A0A;
+	background: black;
+	box-shadow: 0 0 15px black;
+
+	.header {
+		position: relative;
+		background: black;
+		border-bottom: solid 1px #202020;
+		height: 36px;
+		color: #EFEFEF;
+
+		ul {
+			list-style: none inset;
+			margin: 0; padding: 0;
+
+			li {
+				display: inline-block;
+				line-height: 36px;
+				padding: 0 10px;
+				color: #CCC;
+				border-right: solid 1px #202020;
+
+				a {
+					display: inline-block;
+					line-height: 24px;
+					margin: 3px 0; padding: 0 6px;
+					text-decoration: none;
+					color: #CCC;
+					background: #0A0A0A;
+					border: solid 1px #202020;
+					border-right: none;
+					color: #8F8F8F;
+
+					&:first-child {
+						border-radius: 3px 0 0 3px;
+					}
+
+					&:last-child  {
+						border-right: solid 1px #202020;
+						border-radius: 0 3px 3px 0;
+					}
+
+					&:hover, &:focus {
+						background: #202020;
+						color: white;
+					}
+
+					&.active { 
+						color: white;
+						position: relative;
+						z-index: 1;
+						background: @dark;
+					}
+				}
+			}
+		}
+	}
+
+	.header ul li img {
+		position: relative;
+		top: 5px;
+		width: 20px;
+		border-radius: 100%;
+	}
+
+	.header .button {
+		position: absolute;
+		top: 7px; right: 10px;
+		line-height: 22px; width: 22px;
+		text-align: center;
+		background: #202020;
+		border-radius: 3px;
+		text-decoration: none;
+		text-transform: uppercase;
+		color: white;
+
+		&:focus, &:hover {
+			background: #4F4F4F;
+		}
+	}
+}
+
+#action-box .body {
+	position: relative;
+	overflow: hidden;
+	width: 100%; height: 263px;
+	background: url('src/desktop/map/common/bLine.jpg') repeat-x center #080808;
+}
+
+#action-box .actbox-movers {
+	position: absolute;
+	display: block;
+	width: 60px;
+	height: 263px;
+	z-index: 1103;
+
+	-moz-transition: all linear 100ms;
+	-webkit-transition: all linear 100ms;
+	-ms-transition: all linear 100ms;
+	-o-transition: all linear 100ms;
+	transition: all linear 100ms;
+
+	&:hover, &:focus { background-color: rgba(255, 255, 255, .05); }
+	&:active { background-color: rgba(255, 255, 255, .15); }
+
+	&#actboxToLeft { background: url('src/desktop/mover/left.png') no-repeat center; }
+	&#actboxToRight {
+		top: 0; right: 0;
+		background: url('src/desktop/mover/right.png') no-repeat center;
+	}
+}
+
+#action-box .body .system {
+	position: absolute;
+	top: 0; left: 0;
+	height: 263px;
+	width: 3000px;
+
+	ul {
+		display: inline-block;
+		list-style: none inset;
+		margin: 0; padding: 0;
+
+		li {
+			display: inline-block;
+
+			&.place a,
+			&.action {
+				width: 100px; height: 260px;
+				border-top: solid 3px white;
+				position: relative;
+			}
+			&.place.color1 a, &.action.color1 { border-top-color: @medium-1; }
+			&.place.color2 a, &.action.color2 { border-top-color: @medium-2; }
+			&.place.color3 a, &.action.color3 { border-top-color: @medium-3; }
+			&.place.color4 a, &.action.color4 { border-top-color: @medium-4; }
+			&.place.color5 a, &.action.color5 { border-top-color: @medium-5; }
+			&.place.color6 a, &.action.color6 { border-top-color: @medium-6; }
+			&.place.color7 a, &.action.color7 { border-top-color: @medium-7; }
+
+			&.star {
+				width: 300px; height: 263px;
+				border-left: solid 1px #0F0F0F;
+				background: url('src/desktop/map/systems/default.png') no-repeat center center;
+			}
+
+			&.place a {
+				display: block;
+				border-left: solid 1px #0F0F0F;
+				text-align: center;
+			}
+			&.place a strong {
+				position: absolute;
+				bottom: 8px; left: 10px;
+				font-size: 18px;
+				font-weight: bold;
+				color: white;
+			}
+			&.place a .land {
+				position: absolute;
+				z-index: 1102;
+				top: 88px; left: 10px;
+				width: 80px;
+				border-radius: 100%;
+			}
+			&.place.active a .land {
+				box-shadow: 0 0 0 1px #202020;
+				background: #080808;
+			}
+			&.place a .avatar {
+				position: absolute;
+				z-index: 1101;
+				top: 10px; left: 20px;
+				padding: 7px;
+				border: solid 1px #0F0F0F;
+				background: black;
+				width: 47px;
+				border-radius: 100%;
+			}
+
+			&.action {
+				width: 0px; overflow: hidden;
+			}
+			&.action .content {
+				position: absolute;
+				top: 9px; left: 12px;
+				height: 240px; width: 545px;
+				background: #111111;
+				border: solid 1px #202020;
+				box-shadow: inset 0 0 5px black;
+				border-radius: 3px;
+			}
+			&.action .content:before {
+				content: '';
+				position: absolute;
+				top: 107px; left: -24px;
+				border-width: 12px;
+				border-style: solid;
+				border-color: transparent #202020 transparent transparent;
+			}
+
+			&.action .content .column {
+				position: relative;
+				display: inline-block; 
+				vertical-align: top;
+				height: 240px;
+				border-right: solid 1px #202020;
+				color: white;
+			}
+
+			&.action .content .column .last-spy-link {
+				position: absolute;
+				top: 6px; right: 8px;
+				opacity: .5;
+				.transition(all linear 250ms);
+
+				&:hover, &:focus {
+					opacity: 1;
+				}
+			}
+
+			&.action .content .column.info  { width: 199px; }
+			&.action .content .column.act {
+				width: 345px;
+				border-right: none;
+			}
+
+			&.action .content .column p { margin: 2px 10px; }
+			&.action .content .column a { color: white; }
+			&.action .content .column hr {
+				margin: 8px 10px;
+				border: none; background: none;
+				border-bottom: solid 1px #202020;
+			}
+			&.action .content .column strong {
+				line-height: 30px;
+			}
+			&.action .content .column.info strong {
+				line-height: 28px;
+				font-size: 18px;
+			}
+
+			&.action .content .column .label {
+				display: inline-block;
+				width: 120px;
+				font-size: 12px;
+			}
+			&.action .content .column .value {
+				display: inline-block;
+				width: 59px; text-align: right;
+			}
+			&.action .content .column.act .top .grey {
+				opacity: .4;
+			}
+			&.action .content .column.act .top img {
+				width: 45px;
+				padding: 8px;
+				margin: 0 4px 2px 0;
+				border: solid 1px #202020;
+				background: #0A0A0A;
+				border-radius: 100%;
+			}
+			&.action .content .column .top,
+			&.action .content .column .bottom {
+				padding: 5px;
+			}
+
+			&.action .box {
+				display: none;
+				position: absolute;
+				left: 10px; right: 10px; bottom: 10px; top: 80px;
+				background: black;
+				border-radius: 3px;
+			}
+			&.action .box:nth-child(1) { display: block; }
+			&.action .box:before {
+				content: '';
+				position: absolute;
+				top: -20px;
+				border-style: solid;
+				border-width: 10px;
+				border-color: transparent transparent black transparent;
+			}
+			&.action .box:nth-child(1):before { left: 15px; }
+			&.action .box:nth-child(2):before { left: 84px; }
+			&.action .box:nth-child(3):before { left: 152px; }
+			&.action .box:nth-child(4):before { left: 218px; }
+			&.action .box:nth-child(5):before { left: 284px; }
+
+			&.action .box h2 {
+				margin: 0; padding: 0 11px; line-height: 35px;
+				font-size: 15px;
+			}
+
+			&.action .box .box-content {
+				position: absolute;
+				top: 35px; left: 0; right: 0; bottom: 0;
+				border-radius: 0 0 3px 3px;
+				padding: 8px 10px;
+				background: #080808;
+				border: solid 1px black;
+				overflow: hidden;
+			}
+
+			&.action .box .box-content .commander-tile .item { display: none; }
+			&.action .box .box-content .commander-tile .item.no-commander { display: block; }
+
+			&.action .box .box-content .spy-button {
+				display: inline-block;
+				width: 151px;
+				text-decoration: none;
+				margin: 8px 0;
+			}
+
+			&.action .box .box-content .spy-button .picto {
+				float: left;
+				width: 30px; height: 30px;
+				margin: 0 5px 0 0;
+			}
+			&.action .box .box-content .spy-button span {
+				display: block;
+			}
+			&.action .box .box-content .spy-button .icon-color {
+				width: 14px; height: 14px;
+				padding: 1px;
+			}
+
+			&.action .box .box-content .rc {
+				margin: 5px 0 0 0; padding: 10px 10px 0 50px;
+				border-top: solid 1px #202020;
+			}
+
+			&.action .box .box-content .rc .planet {
+				position: absolute;
+				top: -25px; left: -25px;
+				width: 76px; height: 76px;
+				border: solid 1px #202020;
+				border-radius: 100%;
+				background: black;
+			}
+
+			&.action .box .box-content .icon-color {
+				width: 14px; height: 14px;
+				padding: 1px;
+			}
+
+			&.action .box .box-content .button {
+				display: inline-block;
+				background: #202020;
+				border: solid 1px #4F4F4F;
+				line-height: 26px;
+				margin: 5px 0 0 0; padding: 0 8px;
+				text-align: center;
+				text-decoration: none;
+				border-radius: 3px;
+			}
+
+			&.action .box .box-content a.button {
+				background: @medium;
+			}
+		}
+	}
+
+}

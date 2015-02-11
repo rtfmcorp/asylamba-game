@@ -17,105 +17,99 @@
 			border-color: #4f4f4f;
 		}
 	}
+
+	img {
+		position: absolute;
+		top: 5px; left: 5px;
+		width: 50px; padding: 4px;
+		border: solid 1px #202020;
+		border-radius: 100%;
+		background: black;
+	}
+
+	span, strong {
+		display: block;
+		line-height: 20px;
+	}
+
+	strong {
+		font-size: 18px;
+	}
+
+	.online, .inactive {
+		position: absolute;
+		width: 18px; height: 18px;
+		background: white;
+		top: 5px; right: 5px;
+		border-radius: 100%;
+		background: #4F4F4F;
+	}
+	
+	.online {
+		background: @light;
+	}
+
+	&.faction {
+		border-left: solid 1px #0A0A0A !important;
+		width: 202px;
+
+		img {
+			top: 0; left: 10px;
+			padding: 0;
+			border: none;
+			border-radius: 0;
+			background: transparent;
+		}
+	}
 }
 
 .component.player.rank .player {
 	border-left: solid 10px #4F4F4F;
 	width: 190px;
-}
-.component.player.rank .player.color1 { border-left-color: #b01e2d; }
-.component.player.rank .player.color2 { border-left-color: #2f23c0; }
-.component.player.rank .player.color3 { border-left-color: #ffdb0f; }
-.component.player.rank .player.color4 { border-left-color: #a935c7; }
-.component.player.rank .player.color5 { border-left-color: #57c632; }
-.component.player.rank .player.color6 { border-left-color: #05bed7; }
-.component.player.rank .player.color7 { border-left-color: #ac5832; }
 
-.component.player.rank .player .title,
-.component.player.rank .player .points {
-	color: #BBB;
-}
+	&.color1 { border-left-color: #b01e2d; }
+	&.color2 { border-left-color: #2f23c0; }
+	&.color3 { border-left-color: #ffdb0f; }
+	&.color4 { border-left-color: #a935c7; }
+	&.color5 { border-left-color: #57c632; }
+	&.color6 { border-left-color: #05bed7; }
+	&.color7 { border-left-color: #ac5832; }
 
-.component.player.rank .player .position {
-	display: block;
-	position: absolute;
-	top: 14px; right: 14px;
-	line-height: 38px; width: 38px;
-	border: solid 1px #202020;
-	text-align: center;
-	border-radius: 100%;
-}
-.component.player.rank .player.active .position {
-	background: white;
-	border: solid 1px white;
-	color: #202020;
-}
-
-.component.player.rank .player .variance {
-	display: block;
-	position: absolute;
-	top: 5px; right: -4px;
-	line-height: 26px; width: 26px;
-	border: solid 1px #202020;
-	background: #0A0A0A;
-	text-align: center;
-	font-size: 11px;
-	border-radius: 100%;
-
-	&.lower {
-		bottom: 5px; top: auto;
+	.title, .points {
+		color: #BBB;
 	}
-}
 
-.component.player .player img {
-	position: absolute;
-	top: 5px; left: 5px;
-	width: 50px; padding: 4px;
-	border: solid 1px #202020;
-	border-radius: 100%;
-	background: black;
-}
+	.position {
+		display: block;
+		position: absolute;
+		top: 14px; right: 14px;
+		line-height: 38px; width: 38px;
+		border: solid 1px #202020;
+		text-align: center;
+		border-radius: 100%;
+	}
 
-.component.player .player span,
-.component.player .player strong {
-	display: block;
-	line-height: 20px;
-}
+	.variance {
+		display: block;
+		position: absolute;
+		top: 5px; right: -4px;
+		line-height: 26px; width: 26px;
+		border: solid 1px #202020;
+		background: #0A0A0A;
+		text-align: center;
+		font-size: 11px;
+		border-radius: 100%;
 
-.component.player .player strong {
-	font-size: 18px;
-}
+		&.lower {
+			bottom: 5px; top: auto;
+		}
+	}
 
-.component.player .player .online,
-.component.player .player .inactive {
-	position: absolute;
-	width: 18px; height: 18px;
-	background: white;
-	top: 5px; right: 5px;
-	border-radius: 100%;
-}
-.color1 .component.player .player .online { background: #b01e2d; }
-.color2 .component.player .player .online { background: #2f23c0; }
-.color3 .component.player .player .online { background: #ffdb0f; }
-.color4 .component.player .player .online { background: #a935c7; }
-.color5 .component.player .player .online { background: #57c632; }
-.color6 .component.player .player .online { background: #05bed7; }
-.color7 .component.player .player .online { background: #ac5832; }
-
-.component.player .player .inactive {
-	background: #4F4F4F;
-}
-
-.component.player .player.faction {
-	border-left: solid 1px #0A0A0A !important;
-	width: 202px;
-}
-.component.player .player.faction img {
-	top: 0; left: 10px;
-	padding: 0;
-	border: none;
-	border-radius: 0;
-	background: transparent;
+	&.active .position {
+		background: white;
+		border: solid 1px white;
+		color: #202020;
+	}
 }
 
 .component.player.size2 .player { width: 208px; }

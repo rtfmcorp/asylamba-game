@@ -1,0 +1,34 @@
+.color-init(@color-type) {
+	@import 'colors/color@{color-type}.less';
+}
+
+.border-radius(@radius) {
+	-webkit-border-radius: @radius;
+	   -moz-border-radius: @radius;
+	     -o-border-radius: @radius;
+	        border-radius: @radius;
+}
+
+.transition(@params) {	
+	-webkit-transition: @params;
+	   -moz-transition: @params;
+	    -ms-transition: @params;
+	     -o-transition: @params;
+	        transition: @params;
+}
+
+.tranform(@params) {
+	-webkit-transform: rotate(@params);
+	   -moz-transform: rotate(@params);
+	    -ms-transform: rotate(@params);
+	     -o-transform: rotate(@params);
+	        transform: rotate(@params);
+}
+
+.linear-bci(@image, @color1, @color2, @background) {
+	background-image: url(@image), -webkit-gradient(linear, @color1, @color2, @background);
+	background-image: url(@image),     -moz-linear-gradient(@color1, @color2, @background);
+	background-image: url(@image),      -ms-linear-gradient(@color1, @color2, @background);
+	background-image: url(@image),       -o-linear-gradient(@color1, @color2, @background);
+	background-image: url(@image),          linear-gradient(@color1, @color2, @background);
+}

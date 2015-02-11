@@ -6,80 +6,73 @@
 	border-top: solid 1px #202020;
 	background: black;
 	color: white;
-}
 
-.component.report .commander img {
-	position: absolute;
-	top: 5px; left: 5px;
-	padding: 8px; width: 40px;
-	border: solid 1px #202020;
-	background: #0A0A0A;
-	border-radius: 100%;
-}
+	img {
+		position: absolute;
+		top: 5px; left: 5px;
+		padding: 8px; width: 40px;
+		border: solid 1px #202020;
+		background: #0A0A0A;
+		border-radius: 100%;
+	}
 
-.component.report .commander strong {
-	display: block;
-	padding: 0 0 8px 0;
-	color: white;
-	font-weight: bold;
-	font-size: 17px;
-}
+	strong {
+		display: block;
+		padding: 0 0 8px 0;
+		color: white;
+		font-weight: bold;
+		font-size: 17px;
+	}
 
-.component.report .commander em {
-	display: block;
-	line-height: 20px;
-	color: white;
-	font-style: normal;
-	color: #efefef;
-}
+	em {
+		display: block;
+		line-height: 20px;
+		color: white;
+		font-style: normal;
+		color: #efefef;
 
-.component.report .commander em .bonus {
-	font-size: 90%;
-	margin: 2px 0 0 2px;
-	padding: 3px 6px;
+		.bonus {
+			font-size: 90%;
+			margin: 2px 0 0 2px;
+			padding: 3px 6px;
+		}
+	}
 }
 
 .component.report .dammage {
 	margin: 10px;
 	background: black;
-}
 
-.component.report .dammage table {
-	width: 100%;
-	border-collapse: collapse;
-	border-left: solid 1px #202020;
-	border-right: solid 1px #202020;
-}
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		border-left: solid 1px #202020;
+		border-right: solid 1px #202020;
+	}
 
-.component.report .dammage td {
-	border-color: #202020;
-	border-width: 1px;
-	border-style: solid dashed;
-	padding: 4px;
-	vertical-align: center;
-	text-align: center;
-	color: #CCC;
-	width: 28px; height: 22px;
-}
+	td {
+		border-color: #202020;
+		border-width: 1px;
+		border-style: solid dashed;
+		padding: 4px;
+		vertical-align: center;
+		text-align: center;
+		color: #CCC;
+		width: 28px; height: 22px;
 
-.component.report .dammage td:first-child {
-	text-align: left;
-	padding: 4px 8px;
-	width: auto;
-}
+		&:first-child {
+			text-align: left;
+			padding: 4px 8px;
+			width: auto;
+		}
+	}
 
-.component.report .dammage td span {
-	display: inline-block;
-	background: red;
-	line-height: 22px; width: 22px;
-	border-radius: 3px;
-	color: white;
+	td span {
+		display: inline-block;
+		background: red;
+		line-height: 22px; width: 22px;
+		border-radius: 3px;
+		color: white;
+		background: @dark;
+	}
 }
-
-.color1 .component.report .dammage td span { background: #510816; }
-.color2 .component.report .dammage td span { background: #0c0d44; }
-.color3 .component.report .dammage td span { background: #b17a00; }
-.color4 .component.report .dammage td span { background: #310948; }
-.color5 .component.report .dammage td span { background: #24500a; }
-.color6 .component.report .dammage td span { background: #004948; }
-.color7 .component.report .dammage td span { background: #401b13; }
