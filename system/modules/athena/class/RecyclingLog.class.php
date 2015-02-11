@@ -15,7 +15,7 @@ class RecyclingLog {
 	public $id = 0;
 	public $rRecycling = 0;
 	public $resources = 0;
-	//public $credits = 0;
+	public $credits = 0;
 	public $ship0 = 0;
 	public $ship1 = 0;
 	public $ship2 = 0;
