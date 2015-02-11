@@ -44,6 +44,23 @@
 		text-align: center;
 		color: #CCC;
 	}
+
+	.outside-button {
+		display: block;
+		margin: 10px 10px 0 10px;
+		line-height: 30px;
+		padding: 0 10px;
+		background: @medium;
+		border: solid 1px @dark;
+		border-radius: 3px;
+		color: white;
+		text-decoration: none;
+
+		&:hover, &:focus {
+			background: @dark;
+			border-color: @medium;
+		}
+	}
 }
 
 
@@ -120,7 +137,7 @@
 	}
 
 	&#bug-tracker {
-		width: 350px;
+		width: 250px;
 		top: 50px; right: 98px;
 		padding: 0 0 8px 0;
 
