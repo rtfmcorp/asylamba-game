@@ -1,6 +1,7 @@
 <?php
 class ColorResource {
 	# constants for factions
+	const NO_FACTION = 0;
 	const EMPIRE = 1;
 	const KOVAHK = 2;
 	const NEGORA = 3;

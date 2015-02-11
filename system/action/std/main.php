@@ -36,6 +36,8 @@ if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('tok
 		case 'accepttransaction':		include ACTION . 'athena/transaction/accept.php'; break;
 		case 'canceltransaction':		include ACTION . 'athena/transaction/cancel.php'; break;
 
+		case 'createmission':			include ACTION . 'athena/recycling/createMission.php'; break;
+
 
 		# HERMES
 		case 'writemessage': 			include ACTION . 'hermes/message/write.php'; break;
