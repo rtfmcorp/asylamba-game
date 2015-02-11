@@ -2,21 +2,27 @@
 # display part
 echo '<div class="column act">';
 	echo '<div class="top">';
-		$available = (($place->rPlayer != 0 && $place->playerColor != CTR::$data->get('playerInfo')->get('color')) || ($place->rPlayer == 0 && $place->typeOfPlace == 1)) ? NULL : 'grey';
-		echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="1"><img src="' . MEDIA . 'map/action/loot.png" alt="" /></a>';
-		echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="2"><img src="' . MEDIA . 'map/action/colo.png" alt="" /></a>';
+		if ($place->typeOfPlace == 1) {
+			$available = (($place->rPlayer != 0 && $place->playerColor != CTR::$data->get('playerInfo')->get('color')) || ($place->rPlayer == 0 && $place->typeOfPlace == 1)) ? NULL : 'grey';
+			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="1"><img src="' . MEDIA . 'map/action/loot.png" alt="" /></a>';
+			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="2"><img src="' . MEDIA . 'map/action/colo.png" alt="" /></a>';
 
-		$available = ($place->rPlayer == CTR::$data->get('playerId') && $place->getId() != $defaultBase->getId()) ? NULL : 'grey';
-		echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="3"><img src="' . MEDIA . 'map/action/move.png" alt="" /></a>';
+			$available = ($place->rPlayer == CTR::$data->get('playerId') && $place->getId() != $defaultBase->getId()) ? NULL : 'grey';
+			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="3"><img src="' . MEDIA . 'map/action/move.png" alt="" /></a>';
 
-		$available = ($place->rPlayer != 0 && $place->getId() != $defaultBase->getId()) ? NULL : 'grey';
-		echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="4"><img src="' . MEDIA . 'map/action/rc.png" alt="" /></a>';
+			$available = ($place->rPlayer != 0 && $place->getId() != $defaultBase->getId()) ? NULL : 'grey';
+			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="4"><img src="' . MEDIA . 'map/action/rc.png" alt="" /></a>';
 
-		$available = (($place->rPlayer != 0 && $place->playerColor != CTR::$data->get('playerInfo')->get('color')) || ($place->rPlayer == 0 && $place->typeOfPlace == 1)) ? NULL : 'grey';
-		echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="5"><img src="' . MEDIA . 'map/action/spy.png" alt="" /></a>';
+			$available = (($place->rPlayer != 0 && $place->playerColor != CTR::$data->get('playerInfo')->get('color')) || ($place->rPlayer == 0 && $place->typeOfPlace == 1)) ? NULL : 'grey';
+			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="5"><img src="' . MEDIA . 'map/action/spy.png" alt="" /></a>';
+		} else {
+			$available = ($place->sectorColor == CTR::$data->get('playerInfo')->get('color') || $place->sectorColor == ColorResource::NO_FACTION) ? NULL : 'grey';
+			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="1"><img src="' . MEDIA . 'map/action/loot.png" alt="" /></a>';
+		}
 	echo '</div>';
 	
 	echo '<div class="bottom">';
+		if ($place->typeOfPlace == 1) {
 		echo '<div class="box" data-id="1">';
 			echo '<h2>Lancer un pillage</h2>';
 			echo '<div class="box-content">';
@@ -229,10 +235,9 @@ echo '<div class="column act">';
 					echo 'Vous ne pouvez pas espionner une planète non-habitable';
 				} else {
 					$prices = array(
-						'petit' => 1000,
-						'moyen' => 2500,
-						'grand' => 5000,
-						'très grand' => 10000
+						'Petit' => 1000,
+						'Moyen' => 2500,
+						'Grand' => 5000
 					);
 
 					foreach ($prices as $label => $price) { 
@@ -242,9 +247,39 @@ echo '<div class="column act">';
 							echo '<span class="price">' . Format::numberFormat($price) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /></span>';
 						echo '</a>';
 					}
+
+					echo '<form class="spy-form" method="post" action="' . Format::actionBuilder('spy', ['rplace' => $place->getId()]) . '">';
+						echo '<input type="text" value="10000" />';
+						echo '<button type="submit">Espionner</button>';
+					echo '</form>';
 				}
 			echo '</div>';
 		echo '</div>';
+	} else {
+		echo '<div class="box" data-id="1">';
+			echo '<h2>Envoyer des collecteurs</h2>';
+			echo '<div class="box-content">';
+				if (!($place->sectorColor == CTR::$data->get('playerInfo')->get('color') || $place->sectorColor == ColorResource::NO_FACTION)) {
+					echo 'Vous ne pouvez envoyer des recycleurs que dans des secteurs non-revendiqués ou contrôlés par votre faction';
+				} elseif ($place->typeOfPlace == Place::EMPTYZONE) {
+					echo 'Cette endroit regorgait autrefois de ressources ou de gaz mais de nombreux recycleurs sont déjà passés par là et n\'ont laissé que le vide de l\'espace';
+				} elseif ($defaultBase->getLevelRecycling() == 0) {
+					echo 'Vous devez disposer d\'un centre de recyclage';
+				} else {
+					$totalShip  = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::RECYCLING, 'level', $defaultBase->levelRecycling, 'nbRecyclers');
+					$activeShip = 0;
+
+					for ($j = 0; $j < ASM::$rem->size(); $j++) { 
+						$activeShip += ASM::$rem->get($j)->recyclerQuantity;
+					}
+
+					echo 'collecteurs :' . $totalShip;
+					echo '<br />collecteurs dispo : ' . ($totalShip - $activeShip);
+					echo '<br /><a href="' . Format::actionBuilder('createmission', ['rplace' => $defaultBase->getId(), 'rtarget' => $place->getId(), 'quantity' => 1]) . '">Envoyer</a>';
+				}
+			echo '</div>';
+		echo '</div>';
+	}
 	echo '</div>';
 echo '</div>';
 ?>

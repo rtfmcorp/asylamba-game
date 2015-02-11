@@ -329,8 +329,8 @@ class OrbitalBase {
 
 			# RECYCLING MISSION
 			$S_REM1 = ASM::$rem->getCurrentSession();
-			ASM::$rem->changeSession($this->shippingManager);
-			ASM::$rem->load(array('rBase' => $this->rPlace));
+			ASM::$rem->newSession(ASM_UMODE);
+			ASM::$rem->load(array('rBase' => $this->rPlace, 'statement' => array(RecyclingMission::ST_ACTIVE, RecyclingMission::ST_BEING_DELETED)));
 			for ($i = 0; $i < ASM::$rem->size(); $i++) { 
 				$mission = ASM::$rem->get($i);
 
@@ -338,7 +338,6 @@ class OrbitalBase {
 				if ($interval > $mission->cycleTime) {
 					# update time
 					$recyclingQuantity = floor($interval / $mission->cycleTime);
-					$mission->uRecycling = Utils::addSecondsToDate($mission->uRecycling, $recyclingQuantity*$cycleTime);
 
 					# Place
 					$S_PLM = ASM::$plm->getCurrentSession();
@@ -347,9 +346,9 @@ class OrbitalBase {
 					$place = ASM::$plm->get();
 					ASM::$plm->changeSession($S_PLM);
 
-					# RESOURCES
 					for ($i = 0; $i < $recyclingQuantity; $i++) { 
-						CTC::add(Utils::addSecondsToDate($mission->uRecycling, ($i+1) * $cycleTime), $this, 'uRecycling', array($mission, $place));
+						$dateOfUpdate = Utils::addSecondsToDate($mission->uRecycling, ($i+1) * $mission->cycleTime);
+						CTC::add($dateOfUpdate, $this, 'uRecycling', array($mission, $place, $player, $dateOfUpdate));
 					}
 				}
 			}
@@ -545,11 +544,74 @@ class OrbitalBase {
 		}
 	}
 
-	public function uRecycling($mission, $targetPlace) {
-		# faire le recyclage : diminuer les ressources de targetPlace
-		# créer un RecyclingLog
-		# donner ce qu'il a gagné à la base $this
-		# envoyer une notif qu'il a recyclé tant (à this->rPlayer)
+	public function uRecycling($mission, $targetPlace, $player, $dateOfUpdate) {
+		# make the recycling : decrease resources on the target place
+		$totalRecycled = $mission->recyclerQuantity * RecyclingMission::RECYCLER_CAPACTIY;
+		$targetPlace->resources -= $totalRecycled;
+		# if there is no more resource, the place will be an empty place
+		if ($targetPlace->resources <= 0) {
+			$targetPlace->resources = 0;
+			$targetPlace->typeOfPlace = Place::EMPTYZONE;
+		}
+
+		$creditRecycled = $targetPlace->population * $totalRecycled / 100;
+		$resourceRecycled = $targetPlace->coefResources * $totalRecycled / 100;
+		$shipRecycled = $targetPlace->coefHistory * $totalRecycled / 100;
+
+		# convert shipRecycled to real ships
+			# todo bla bla
+			# todo : si aucun vaisseau n'a pu être construit, convertir et ajouter le montant en ressources
+
+		# create a RecyclingLog
+		$rl = new RecyclingLog();
+		$rl->rRecycling = $mission->id;
+		$rl->resources = $resourceRecycled;
+		$rl->credits = $creditRecycled;
+		$rl->ship0 = 0;
+		$rl->ship1 = 0;
+		$rl->ship2 = 0;
+		$rl->ship3 = 0;
+		$rl->ship4 = 0;
+		$rl->ship5 = 0;
+		$rl->ship6 = 0;
+		$rl->ship7 = 0;
+		$rl->ship8 = 0;
+		$rl->ship9 = 0;
+		$rl->ship10 = 0;
+		$rl->ship11 = 0;
+		$rl->dLog = Utils::addSecondsToDate($mission->uRecycling, $mission->cycleTime);
+		ASM::$rlm->add($rl);
+
+		# give to the orbitalBase ($this) and player what was recycled
+		$this->increaseResources($resourceRecycled);
+		# todo $this->addShipToDock($shipId, $quantity)
+		# todo $this->addShipToDock($shipId, $quantity)
+		# todo ...
+		$player->increaseCredit($creditRecycled);
+
+		# if a mission is over, delete it
+		if ($mission->statement == RecyclingMission::ST_BEING_DELETED) {
+			$mission->statement = RecyclingMission::ST_DELETED;
+		}
+
+		# update u
+		$mission->uRecycling = $dateOfUpdate;
+
+		# send a notification to the player
+		$n = new Notification();
+		$n->setRPlayer($player->id);
+		$n->setTitle('Retour de recyclage');
+		$n->addBeg()->addTxt('Un cycle de recyclage est terminé, vos recycleurs ont amené leurs butins sur votre ');
+		$n->addLnk('map/base-' . $this->rPlace, 'base orbitale')->addTxt('.');
+		$n->addLnk('map/place-' . $cs->rBaseDestination, 'base')->addTxt(' . ');
+		
+		$n->addBoxResource('resource', $resourceRecycled, 'ressources recyclées');
+		$n->addBoxResource('credit', $creditRecycled, 'crédits récoltés');
+		$n->addTxt('et aussi des vaisseaux, enfin peut-être.');
+
+		$n->addSep()->addLnk('map/place-' . $mission->rTarget, 'voir ce qu\'il reste sur ce lieu');
+		$n->addEnd();
+		ASM::$ntm->add($n);
 	}
 
 	// OBJECT METHODS

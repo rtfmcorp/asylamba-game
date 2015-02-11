@@ -45,22 +45,24 @@ ASM::$srm->load(array('rPlayer' => CTR::$data->get('playerId'), 'rPlace' => $pla
 # load the technologies
 $technologies = new Technology(CTR::$data->get('playerId'));
 
+# load recycling missions
+$S_REM1 = ASM::$rem->getCurrentSession();
+ASM::$rem->newSession();
+ASM::$rem->load(array('rBase' => $defaultBase->rPlace, 'statement' => array(RecyclingMission::ST_BEING_DELETED, RecyclingMission::ST_ACTIVE)));
+
 # header part
 echo '<div class="header" data-distance="' . Format::numberFormat(Game::getDistance($defaultBase->xSystem, $places[0]->xSystem, $defaultBase->ySystem, $places[0]->ySystem)) . '">';
 	echo '<ul>';
 		echo '<li>Système #' . $system->id . '</li>';
 		echo '<li>Cordonnées ' . Game::formatCoord($system->xPosition, $system->yPosition) . '</li>';
 		echo '<li>';
-			if ($system->rColor == 0) {
-				echo 'Non revendiqué';
-			} else {
-				echo '<img src="' . MEDIA . 'ally/big/color' . $system->rColor . '.png" alt="" /> ';
-				echo 'Revendiqué par ' . ColorResource::getInfo($system->rColor, 'popularName');
-			}
+			echo $system->rColor == 0
+				? 'Non revendiqué'
+				: '<img src="' . MEDIA . 'ally/big/color' . $system->rColor . '.png" alt="" /> Revendiqué par ' . ColorResource::getInfo($system->rColor, 'popularName');
 		echo '</li>';
 		echo '<li><img src="' . MEDIA . 'map/systems/t' . $system->typeOfSystem . 'c0.png" alt="" /> ' . SystemResource::getInfo($system->typeOfSystem, 'frenchName') . '</li>';
 	echo '</ul>';
-	echo '<a href="#" class="button hb tl closeactionbox" title="fermer">×</a>';
+	echo '<a href="#" class="button closeactionbox">×</a>';
 echo '</div>';
 
 # body part
@@ -69,17 +71,17 @@ echo '<div class="body">';
 	echo '<a class="actbox-movers" id="actboxToRight" href="#"></a>';
 	echo '<div class="system">';
 		echo '<ul>';
-		echo '<li class="star"></li>';
+			echo '<li class="star"></li>';
+
 		for ($i = 0; $i < count($places); $i++) {
 			$place = $places[$i];
+
 			echo '<li class="place color' . $place->playerColor . '">';
 				echo '<a href="#" class="openplace" data-target="' . $i . '">';
 					echo '<strong>' . $place->position . '</strong>';
-					if ($place->typeOfPlace == 1) {
-						echo '<img class="land" src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '-' . Game::getSizeOfPlanet($place->population) . '.png" />';
-					} else {
-						echo '<img class="land" src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '.png" />';
-					}
+					echo $place->typeOfPlace == 1
+						? '<img class="land" src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '-' . Game::getSizeOfPlanet($place->population) . '.png" />'
+						: '<img class="land" src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '.png" />';
 					if ($place->rPlayer != 0) {
 						echo '<img class="avatar" src="' . MEDIA . '/avatar/small/' . $place->playerAvatar . '.png" />';
 					}
@@ -97,64 +99,79 @@ echo '<div class="body">';
 							}
 						}
 
-						if ($place->typeOfBase != 0) {
-							echo '<p><strong>' . $place->baseName . '</strong></p>';
-							echo '<hr />';
-							echo '<p>propriété du</p>';
-							echo '<p>';
-								if ($place->playerColor != 0) {
-									$status = ColorResource::getInfo($place->playerColor, 'status');
-									echo $status[$place->playerStatus - 1] . ' ';
-									echo '<span class="player-name">';
-										echo '<a href="' . APP_ROOT . 'diary/player-' . $place->rPlayer . '" class="color' . $place->playerColor . '">' . $place->playerName . '</a>';
-									echo '</span>';
-								} else {
-									echo 'rebelle <span class="player-name">' . $place->playerName . '</span>';
-								}
-							echo '</p>';
-						} elseif (1 == 2) {
-							# gérer les vaisseaux mères
-						} else {
-							switch ($place->typeOfPlace) {
-								case 1: echo '<p><strong>Planète rebelle</strong></p>'; break;
-								case 2: echo '<p><strong>Géante gazeuse</strong></p>'; break;
-								case 3: echo '<p><strong>Ruines anciennes</strong></p>'; break;
-								case 4: echo '<p><strong>Poche de gaz</strong></p>'; break;
-								case 5: echo '<p><strong>Ceinture d\'astéroide</strong></p>'; break;
-								case 6: echo '<p><strong>Zone vide</strong></p>'; break;
-								default: break;
+						if ($place->typeOfPlace == 1) {
+							if ($place->typeOfBase != 0) {
+								echo '<p><strong>' . $place->baseName . '</strong></p>';
+								echo '<hr />';
+
+								echo '<p>propriété du</p>';
+								echo '<p>';
+									if ($place->playerColor != 0) {
+										$status = ColorResource::getInfo($place->playerColor, 'status');
+										echo $status[$place->playerStatus - 1] . ' ';
+										echo '<span class="player-name">';
+											echo '<a href="' . APP_ROOT . 'diary/player-' . $place->rPlayer . '" class="color' . $place->playerColor . '">' . $place->playerName . '</a>';
+										echo '</span>';
+									} else {
+										echo 'rebelle <span class="player-name">' . $place->playerName . '</span>';
+									}
+								echo '</p>';
+							} else {
+								echo '<p><strong>Planète rebelle</strong></p>';
+								echo '<hr />';
+								echo '<p>Non-revendiquée</p>';
 							}
+
 							echo '<hr />';
-							# gérer les vaisseaux mères
-							echo '<p>Non-revendiquée</p>';
+
+							echo '<p>';
+								echo '<span class="label">Population</span>';
+								echo '<span class="value">' . Format::numberFormat($place->population) . ' [M]</span>';
+							echo '</p>';
+							echo '<p>';
+								echo '<span class="label">Coeff. ressource</span>';
+								echo '<span class="value">' . $place->coefResources . ' %</span>';
+							echo '</p>';
+							echo '<p>';
+								echo '<span class="label">Coeff. scientifique</span>';
+								echo '<span class="value">' . $place->coefHistory . ' %</span>';
+							echo '</p>';
+						} else {
+							echo '<p><strong>' . ucfirst(Game::convertPlaceType($place->typeOfPlace)) . '</strong></p>';
+
+							echo '<hr />';
+
+							echo '<p>';
+								echo '<span class="label">Ressources</span>';
+								echo '<span class="value">' .Format::numberFormat($place->resources * $place->coefResources / 100) . '</span>';
+							echo '</p>';
+							echo '<p>';
+								echo '<span class="label">Débris</span>';
+								echo '<span class="value">' . Format::numberFormat($place->resources * $place->coefHistory / 100) . '</span>';
+							echo '</p>';
+							echo '<p>';
+								echo '<span class="label">Gaz noble</span>';
+								echo '<span class="value">' . Format::numberFormat($place->resources * $place->population / 100) . '</span>';
+							echo '</p>';
 						}
+
 						echo '<hr />';
-						echo '<p>';
-							echo '<span class="label">Coeff. histoire</span>';
-							echo '<span class="value">' . $place->coefHistory . ' %</span>';
-						echo '</p>';
-						echo '<p>';
-							echo '<span class="label">Coeff. ressource</span>';
-							echo '<span class="value">' . $place->coefResources . ' %</span>';
-						echo '</p>';
+
 						echo '<p>';
 							echo '<span class="label">Distance</span>';
 							echo '<span class="value">' . Format::numberFormat(Game::getDistance($defaultBase->xSystem, $place->xSystem, $defaultBase->ySystem, $place->ySystem)) . ' Al.</span>';
 						echo '</p>';
-						if ($place->typeOfPlace == 1) {
-							echo '<p>';
-								echo '<span class="label">Population [million]</span>';
-								echo '<span class="value">' . Format::numberFormat($place->population) . '</span>';
-							echo '</p>';
-						}
 
-						for ($j = 0; $j < ASM::$lrm->size(); $j++) { 
-							if (ASM::$lrm->get($j)->rPlace == $place->id) {
-								echo '<hr />';
-								echo '<p><em>Dernier pillage ' . Chronos::transform(ASM::$lrm->get($j)->dFight) . '.</em></p>';
-								break;
+						if ($place->typeOfPlace == 1) {
+							for ($j = 0; $j < ASM::$lrm->size(); $j++) { 
+								if (ASM::$lrm->get($j)->rPlace == $place->id) {
+									echo '<hr />';
+									echo '<p><em>Dernier pillage ' . Chronos::transform(ASM::$lrm->get($j)->dFight) . '.</em></p>';
+									break;
+								}
 							}
 						}
+
 					echo '</div>';
 
 					include PAGES . 'desktop/mapElement/component/actBull.php';
@@ -167,4 +184,5 @@ echo '</div>';
 
 ASM::$srm->changeSession($S_SRM_MAP);
 ASM::$lrm->changeSession($S_LRM_MAP);
+ASM::$rem->changeSession($S_REM1);
 ?>

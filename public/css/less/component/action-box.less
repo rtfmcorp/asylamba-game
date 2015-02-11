@@ -248,12 +248,12 @@
 
 			&.action .content .column .label {
 				display: inline-block;
-				width: 120px;
+				width: 109px;
 				font-size: 12px;
 			}
 			&.action .content .column .value {
 				display: inline-block;
-				width: 59px; text-align: right;
+				width: 70px; text-align: right;
 			}
 			&.action .content .column.act .top .grey {
 				opacity: .4;
@@ -306,65 +306,92 @@
 				background: #080808;
 				border: solid 1px black;
 				overflow: hidden;
-			}
 
-			&.action .box .box-content .commander-tile .item { display: none; }
-			&.action .box .box-content .commander-tile .item.no-commander { display: block; }
+				.commander-tile .item { display: none; }
+				.commander-tile .item.no-commander { display: block; }
 
-			&.action .box .box-content .spy-button {
-				display: inline-block;
-				width: 151px;
-				text-decoration: none;
-				margin: 8px 0;
-			}
+				.spy-button {
+					display: inline-block;
+					width: 100px;
+					text-decoration: none;
+					margin: 8px 0;
 
-			&.action .box .box-content .spy-button .picto {
-				float: left;
-				width: 30px; height: 30px;
-				margin: 0 5px 0 0;
-			}
-			&.action .box .box-content .spy-button span {
-				display: block;
-			}
-			&.action .box .box-content .spy-button .icon-color {
-				width: 14px; height: 14px;
-				padding: 1px;
-			}
+					.picto {
+						float: left;
+						width: 30px; height: 30px;
+						margin: 0 5px 0 0;
+					}
+					span {
+						display: block;
+					}
+					.icon-color {
+						width: 14px; height: 14px;
+						padding: 1px;
+					}
+				}
 
-			&.action .box .box-content .rc {
-				margin: 5px 0 0 0; padding: 10px 10px 0 50px;
-				border-top: solid 1px #202020;
-			}
+				.spy-form {
+					margin-top: 10px;
 
-			&.action .box .box-content .rc .planet {
-				position: absolute;
-				top: -25px; left: -25px;
-				width: 76px; height: 76px;
-				border: solid 1px #202020;
-				border-radius: 100%;
-				background: black;
-			}
+					input {
+						width: 180px;
+						padding: 7px;
+						border: none;
+						background: white;
+					}
 
-			&.action .box .box-content .icon-color {
-				width: 14px; height: 14px;
-				padding: 1px;
-			}
+					button {
+						width: 100px;
+						padding: 6px 6px;
+						border: none;
+						color: white;
+						background: @medium;
+						cursor: pointer;
 
-			&.action .box .box-content .button {
-				display: inline-block;
-				background: #202020;
-				border: solid 1px #4F4F4F;
-				line-height: 26px;
-				margin: 5px 0 0 0; padding: 0 8px;
-				text-align: center;
-				text-decoration: none;
-				border-radius: 3px;
-			}
+						&:hover, &:focus {
+							background: @dark;
+						}
+					}
+				}
 
-			&.action .box .box-content a.button {
-				background: @medium;
+				.rc {
+					margin: 5px 0 0 0; padding: 10px 10px 0 50px;
+					border-top: solid 1px #202020;
+				}
+
+				.rc .planet {
+					position: absolute;
+					top: -25px; left: -25px;
+					width: 76px; height: 76px;
+					border: solid 1px #202020;
+					border-radius: 100%;
+					background: black;
+				}
+
+				.icon-color {
+					width: 14px; height: 14px;
+					padding: 1px;
+				}
+
+				.button {
+					display: inline-block;
+					background: #202020;
+					border: solid 1px #4F4F4F;
+					line-height: 26px;
+					margin: 5px 0 0 0; padding: 0 8px;
+					text-align: center;
+					text-decoration: none;
+				}
+
+				a.button {
+					background: @medium;
+					border: @dark;
+
+					&:hover, &:focus {
+						background: @dark;
+					}
+				}
 			}
 		}
 	}
-
 }
