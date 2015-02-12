@@ -29,6 +29,26 @@
 			color: #CCC;
 		}
 
+		.group-link {
+			position: absolute;
+			top: 9px; right: 9px;
+
+			a {
+				display: block;
+				width: 20px; line-height: 20px;
+				margin: 0 0 5px 0;
+				border-radius: 3px;
+				color: white;
+				text-align: center;
+				text-decoration: none;
+				background: @medium;
+
+				&:hover, &:focus {
+					background: @light;
+				}
+			}
+		}
+
 		.picto {
 			float: left;
 			width: 40px; height: 40px;
