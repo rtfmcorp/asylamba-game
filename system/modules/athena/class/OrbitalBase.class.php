@@ -1,4 +1,4 @@
- <?php
+<?php
 
 /**
  * Orbital Base
@@ -346,8 +346,8 @@ class OrbitalBase {
 					$place = ASM::$plm->get();
 					ASM::$plm->changeSession($S_PLM);
 
-					for ($i = 0; $i < $recyclingQuantity; $i++) { 
-						$dateOfUpdate = Utils::addSecondsToDate($mission->uRecycling, ($i+1) * $mission->cycleTime);
+					for ($j = 0; $j < $recyclingQuantity; $j++) { 
+						$dateOfUpdate = Utils::addSecondsToDate($mission->uRecycling, ($j + 1) * $mission->cycleTime);
 						CTC::add($dateOfUpdate, $this, 'uRecycling', array($mission, $place, $player, $dateOfUpdate));
 					}
 				}
