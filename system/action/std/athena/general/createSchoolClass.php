@@ -28,9 +28,9 @@ if ($baseId !== FALSE AND $school !== FALSE AND $name !== FALSE AND in_array($ba
 	if (ASM::$obm->size() > 0) {
 		$S_COM1 = ASM::$com->getCurrentSession();
 		ASM::$com->newSession();
-		ASM::$com->load(array('c.statement' => Commander::INSCHOOL, 'c.rBase' => $baseId));
+		ASM::$com->load(array('c.statement' => array(Commander::INSCHOOL, Commander::RESERVE), 'c.rBase' => $baseId));
 
-		if (ASM::$com->size() < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'school-size')) {
+		if (ASM::$com->size() < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'total-commander')) {
 			$school = intval($school);
 			$nbrCommandersToCreate = rand(SchoolClassResource::getInfo($school, 'minSize'), SchoolClassResource::getInfo($school, 'maxSize'));
 
