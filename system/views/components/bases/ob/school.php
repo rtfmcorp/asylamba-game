@@ -28,7 +28,7 @@ echo '<div class="component school">';
 			echo '<div class="number-box">';
 				echo '<span class="label">investissements alloués à l\'école</span>';
 				echo '<span class="value">';
-					echo Format::numberFormat($ob_school->getISchool());
+					echo Format::numberFormat($ob_school->iSchool);
 					echo ' <img alt="crédits" src="' . MEDIA . 'resources/credit.png" class="icon-color">';
 				echo '</span>';
 				echo '<span class="group-link">';
@@ -45,7 +45,14 @@ echo '<div class="component school">';
 				echo '</span>';
 			echo '</div>';
 
-			echo '<p>Les officiers gagnent en moyenne ?? points d\'expérience par relève.</p>';
+			$invest  = $ob_school->iSchool;
+			$invest += $invest * CTR::$data->get('playerBonus')->get(PlayerBonus::COMMANDER_INVEST) / 100;
+			$earnedExperience  = $invest / Commander::COEFFSCHOOL;
+			$earnedExperience  = round($earnedExperience);
+			$earnedExperience  = ($earnedExperience < 0)
+				? 0 : $earnedExperience;
+
+			echo '<p>Chaque officier gagne en moyenne ' . Format::number($earnedExperience) . ' points d\'expérience par relève.</p>';
 
 			echo '<hr />';
 
