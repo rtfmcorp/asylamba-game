@@ -28,5 +28,17 @@ class RecyclingMission {
 	public $uRecycling = '';
 	public $statement = 1;
 
+	public $typeOfPlace;
+	public $position;
+	public $population;
+	public $coefResources;
+	public $coefHistory;
+	public $resources;
+	public $systemId;
+	public $xSystem;
+	public $ySystem;
+	public $typeOfSystem;
+	public $sectorId;
+
 	public function getId()	{ return $this->id; }
 }

@@ -19,8 +19,23 @@ class RecyclingMissionManager extends Manager {
 		$formatLimit = Utils::arrayToLimit($limit);
 
 		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT rm.*
+		$qr = $db->prepare('SELECT rm.*,
+				p.typeOfPlace AS typeOfPlace,
+				p.position AS position,
+				p.population AS population,
+				p.coefResources AS coefResources,
+				p.coefHistory AS coefHistory,
+				p.resources AS resources,
+				p.rSystem AS systemId,
+				s.xPosition AS xPosition,
+				s.yPosition AS yPosition,
+				s.typeOfSystem AS typeOfSystem,
+				s.rSector AS sectorId
 			FROM recyclingMission AS rm
+			LEFT JOIN place AS p
+				ON rm.rTarget = p.id
+				LEFT JOIN system AS s
+					ON p.rSystem = s.id
 			' . $formatWhere . '
 			' . $formatOrder . '
 			' . $formatLimit
@@ -56,6 +71,18 @@ class RecyclingMissionManager extends Manager {
 			$rm->recyclerQuantity = $aw['recyclerQuantity'];
 			$rm->uRecycling = $aw['uRecycling'];
 			$rm->statement = $aw['statement'];
+
+			$rm->typeOfPlace = $aw['typeOfPlace'];
+			$rm->position = $aw['position'];
+			$rm->population = $aw['population'];
+			$rm->coefResources = $aw['coefResources'];
+			$rm->coefHistory = $aw['coefHistory'];
+			$rm->resources = $aw['resources'];
+			$rm->systemId = $aw['systemId'];
+			$rm->xSystem = $aw['xPosition'];
+			$rm->ySystem = $aw['yPosition'];
+			$rm->typeOfSystem = $aw['typeOfSystem'];
+			$rm->sectorId = $aw['sectorId'];
 
 			$currentRM = $this->_Add($rm);
 		}

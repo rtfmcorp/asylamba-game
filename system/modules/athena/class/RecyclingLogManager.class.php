@@ -15,7 +15,7 @@ class RecyclingLogManager extends Manager {
 
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'rl.');
-		$formatOrder = Utils::arrayToOrder($order, 'rl.');
+		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
 		$db = DataBase::getInstance();
