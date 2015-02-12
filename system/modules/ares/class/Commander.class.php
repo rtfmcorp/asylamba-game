@@ -39,7 +39,7 @@ class Commander {
 	const DESERT 					= 4; # déserté
 	const RETIRED 					= 5; # à la retraite
 	const ONSALE 					= 6; # dans le marché
-	const ONMESS 					= 7; # dans le marché
+	const ONMESS 					= 7; # dans le mess
 
 	# types of travel
 	const MOVE						= 0; # déplacement
@@ -378,15 +378,18 @@ class Commander {
 
 	public function uExperienceInSchool($ob, $playerBonus) {
 		if ($this->statement == self::INSCHOOL) {
-
-			$invest = $ob->iSchool;
-			
-			// load bonus
+			# investissement
+			$invest  = $ob->iSchool;
 			$invest += $invest * $playerBonus->get(PlayerBonus::COMMANDER_INVEST) / 100;
-			$earnedExperience = $invest / self::COEFFSCHOOL;
-			$earnedExperience += rand(-($earnedExperience / 20), ($earnedExperience / 20));
-			$earnedExperience = round($earnedExperience);
-			$earnedExperience  = ($earnedExperience < 0) ? 0 : $earnedExperience;
+			
+			# xp gagnée
+			$earnedExperience  = $invest / self::COEFFSCHOOL;
+			$earnedExperience += (rand(0, 1) == 1) 
+				? rand(0, $earnedExperience / 20)
+				: -(rand(0, $earnedExperience / 20));
+			$earnedExperience  = round($earnedExperience);
+			$earnedExperience  = ($earnedExperience < 0)
+				? 0 : $earnedExperience;
 			
 			$this->upExperience($earnedExperience);
 		}
@@ -495,7 +498,7 @@ class Commander {
 		$now = Utils::now();
 
 		# check s'il gagne de l'exp à l'école
-		if (Utils::interval($this->uCommander, $now, 's') > 0 AND $this->statement == self::INSCHOOL) {
+		if (Utils::interval($this->uCommander, $now, 'h') > 0 AND $this->statement == self::INSCHOOL) {
 			$nbrHours = Utils::intervalDates($now, $this->uCommander);
 			$this->uCommander = $now;
 
