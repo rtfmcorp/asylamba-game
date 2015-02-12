@@ -224,6 +224,7 @@ echo '<div class="component">';
 					echo $totalSpace . ' <img class="icon-color" alt="" src="' . MEDIA . 'resources/pev.png">';
 				echo '</span>';
 				$percent = Format::numberFormat($inStorage / $totalSpace * 100);
+				$percent = $percent > 100 ? 100 : $percent;
 				echo '<span class="progress-bar hb bl" title="remplissage : ' . $percent . '%">';
 					echo '<span style="width:' . $percent . '%;" class="content"></span>';
 				echo '</span>';

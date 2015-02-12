@@ -20,6 +20,7 @@ echo '<div class="component size3 space">';
 		echo '<div class="body">';
 			echo '<div class="situation-content color' . $spyreport->placeColor . ' place1">';
 				echo '<div class="toolbar">';
+					echo '<span>Opération de ' . Format::number($spyreport->price) . ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits"></span>';
 					echo '<span>';
 						switch ($spyreport->type) {
 							case SpyReport::TYP_NOT_CAUGHT: echo 'L\'ennemi ne sait rien de cet espionnage'; break;
@@ -122,10 +123,13 @@ echo '<div class="component size3 space">';
 						echo $place_spy->coefHistory . ' % coeff. scientifique';
 					echo '</div>';
 				echo '</div>';
+
+				echo '<div class="attack-link">';
+					echo '<a href="#">Attaquer la planète</a>';
+				echo '</div>';
 			echo '</div>';
 
 			echo '<div class="situation-info">';
-				# TODO /
 				echo '<div class="item">';
 					echo 'Ressources dans les entrepôts';
 					echo '<span class="value">';
@@ -136,7 +140,6 @@ echo '<div class="component size3 space">';
 					echo '</span>';
 				echo '</div>';
 
-				# TODO /
 				echo '<div class="item">';
 					echo 'Investissement dans le contre-espionnage';
 					echo '<span class="value">';
@@ -147,7 +150,6 @@ echo '<div class="component size3 space">';
 					echo '</span>';
 				echo '</div>';
 
-				# TODO /
 				echo '<div class="item">';
 					echo 'Revenus des routes commerciales';
 					echo '<span class="value">';

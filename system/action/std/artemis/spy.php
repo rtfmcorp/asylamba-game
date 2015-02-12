@@ -12,7 +12,11 @@ $rPlace = Utils::getHTTPData('rplace');
 $price 	= Utils::getHTTPData('price');
 
 if ($rPlace !== FALSE AND $price !== FALSE) {
-	if (CTR::$data->get('playerInfo')->get('credit') >= $price) {
+	$price = intval($price);
+	$price = $price > 0 ? $price : 0;
+	$price = $price < 1000000 ? $price : 0;
+	
+	if (CTR::$data->get('playerInfo')->get('credit') >= $price && $price > 0) {
 		# place
 		$S_PLM1 = ASM::$plm->getCurrentSession();
 		ASM::$plm->newSession();
@@ -182,7 +186,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 
 		ASM::$plm->changeSession($S_PLM1);
 	} else {
-		CTR::$alert->add('Impossible de lancer un espionnage', ALERT_STD_ERROR);
+		CTR::$alert->add('Impossible de lancer un espionnage avec le montant proposé', ALERT_STD_ERROR);
 	}
 } else {
 	CTR::$alert->add('Pas assez d\'informations pour espionner', ALERT_STD_FILLFORM);

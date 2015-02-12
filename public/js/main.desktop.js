@@ -49,12 +49,13 @@ jQuery(document).ready(function($) {
 
 			if (render.calling == 1) {
 				var initSftr = parseInt($('body').data('init-sftr'));
+
 				if (initSftr > 0) {
 					panelController.position += initSftr;
 				}
-				panelController.move(0, 'left', 0);
 			}
-
+			
+			panelController.move(0, 'left', 0);
 			sbController.move('up');
 			
 			if ($('#map').length == 1) {
