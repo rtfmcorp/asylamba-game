@@ -594,7 +594,7 @@ class OrbitalBase {
 				$buyShip[] = 0;
 			}
 
-			Utils::shuffle($shipsArray1);
+			shuffle($shipsArray1);
 			$shipsArray = array();
 			$onlyThree = 0;
 			foreach ($shipsArray1 as $key => $value) {
@@ -605,17 +605,19 @@ class OrbitalBase {
 				}
 			}
 			$continue = true;
-			while($continue) {
-				foreach ($shipsArray as $key => $line) {
-					$nbmax = floor($pointsToRecycle / $line['price']);
-					$qty = rand(1, $nbmax);
-					if ($pointsToRecycle >= $qty * $line['price']) {
-						$pointsToRecycle -= $qty * $line['price'];
-						$line['buy'] = 1;
-						$buyShip[$line['ship']] += $qty;
-					} else {
-						$continue = false;
-						break;
+			if (count($shipsArray) > 0) {
+				while($continue) {
+					foreach ($shipsArray as $key => $line) {
+						$nbmax = floor($pointsToRecycle / $line['price']);
+						$qty = rand(1, $nbmax);
+						if ($pointsToRecycle >= $qty * $line['price']) {
+							$pointsToRecycle -= $qty * $line['price'];
+							$line['buy'] = 1;
+							$buyShip[$line['ship']] += $qty;
+						} else {
+							$continue = false;
+							break;
+						}
 					}
 				}
 			}
