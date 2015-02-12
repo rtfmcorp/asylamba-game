@@ -96,6 +96,7 @@
 		position: absolute;
 		display: block;
 		text-decoration: none;
+		z-index: 1;
 
 		&.empty {
 			color: #CCC;
@@ -108,6 +109,8 @@
 		&.position-2-1 { top: 215px; left: 352px; }
 		&.position-2-2 { top: 272px; left: 345px; }
 		&.position-2-3 { top: 330px; left: 352px; }
+
+		&.position-3   { top: 355px; left: 577px; }
 
 		img {
 			width: 40px; padding: 6px;
@@ -187,17 +190,6 @@
 		}
 	}
 
-	.resources {
-		position: absolute;
-		bottom: 32px; right: 190px;
-		text-align: right;
-
-		strong {
-			display: block;
-			font-size: 22px;
-		}
-	}
-
 	&.color0 {
 		.line-help { background: #202020; }
 		.toolbar { background: #0A0A0A; }
@@ -274,8 +266,7 @@
 	.item {
 		display: table-cell;
 		padding: 10px;
-		border-top: solid 8px #202020;
-		border-left: solid 1px #202020;
+		border-right: solid 1px #202020;
 
 		.value {
 			font-size: 26px;

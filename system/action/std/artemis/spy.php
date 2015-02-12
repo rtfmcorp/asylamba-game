@@ -29,20 +29,20 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 		# espionnage
 		$sr = new SpyReport();
 		$sr->rPlayer = CTR::$data->get('playerId');
-		$sr->price = $price;
 		$sr->rPlace = $rPlace;
+		$sr->price = $price;
 		$sr->placeColor = $place->playerColor;
 		$sr->typeOfBase = $place->typeOfBase;
 		$sr->placeName = $place->baseName;
 		$sr->points = $place->points;
+		$sr->shipsInStorage = serialize([]);
+		$sr->antiSpyInvest = 0;
+		$sr->commercialRouteIncome = 0;
 
-		//$sr->success = 50; # 0 to 100
-		//$sr->type = SpyReport::TYP_NOT_CAUGHT; # or TYP_ANONYMOUSLY_CAUGHT or TYP_CAUGHT
 		$sr->dSpying = Utils::now();
 
 		switch ($place->typeOfBase) {
 			case Place::TYP_EMPTY:
-
 				$sr->resources = $place->resources;
 
 				$sr->typeOfOrbitalBase = OrbitalBase::TYP_NEUTRAL;
@@ -71,7 +71,6 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 
 				break;
 			case Place::TYP_ORBITALBASE:
-
 				# orbitalBase
 				$S_OBM1 = ASM::$obm->getCurrentSession();
 				ASM::$obm->newSession();
@@ -83,6 +82,16 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 				ASM::$pam->newSession();
 				ASM::$pam->load(array('id' => $orbitalBase->rPlayer));
 				$enemy = ASM::$pam->get();
+
+				# rc
+				$S_CRM1 = ASM::$crm->getCurrentSession();
+				ASM::$crm->changeSession($orbitalBase->routeManager);
+				$RCIncome = 0;
+				for ($i = 0; $i < ASM::$crm->size(); $i++) {
+					if (ASM::$crm->get($i)->getStatement() == CRM_ACTIVE) {
+						$RCIncome += ASM::$crm->get($i)->getIncome();
+					} 
+				}
 				
 				$sr->resources = $orbitalBase->resourcesStorage;
 
@@ -92,10 +101,15 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 				$sr->enemyAvatar = $enemy->avatar;
 				$sr->enemyLevel = $enemy->level;
 
+				$sr->shipsInStorage = serialize($orbitalBase->shipStorage);
+				$sr->antiSpyInvest = $orbitalBase->iAntiSpy;
+				$sr->commercialRouteIncome = $RCIncome;
+
 				$commandersArray = array();
 				$S_COM1 = ASM::$com->getCurrentSession();
 				ASM::$com->newSession();
 				ASM::$com->load(array('rBase' => $rPlace, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING)));
+
 				for ($i = 0; $i < ASM::$com->size(); $i++) { 
 					$commandersArray[$i]['name'] = ASM::$com->get($i)->name;
 					$commandersArray[$i]['avatar'] = ASM::$com->get($i)->avatar;
@@ -110,6 +124,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 				$antiSpy = $orbitalBase->antiSpyAverage; // entre 100 et 4000
 				$sr->success = Game::getSpySuccess($antiSpy, $price);
 				$sr->type = Game::getTypeOfSpy($sr->success);
+
 				switch ($sr->type) {
 					case SpyReport::TYP_ANONYMOUSLY_CAUGHT:
 						$n = new Notification();
@@ -137,6 +152,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 						break;
 				}
 
+				ASM::$crm->changeSession($S_CRM1);
 				ASM::$com->changeSession($S_COM1);
 				ASM::$pam->changeSession($S_PAM1);
 				ASM::$obm->changeSession($S_OBM1);
