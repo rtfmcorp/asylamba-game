@@ -5,7 +5,7 @@ include_once ARES;
 
 # affect a commander
 
-# int id 	 		id du commandant
+# int id 	 		id du officier
 
 $commanderId = Utils::getHTTPData('id');
 
@@ -32,7 +32,7 @@ if ($commanderId !== FALSE) {
 		ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 1));
 		$nbrLine1 = ASM::$com->size();
 
-		if ($commander->statement == Commander::INSCHOOL) {
+		if ($commander->statement == Commander::INSCHOOL || $commander->statement == Commander::RESERVE) {
 			if ($nbrLine2 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'r-line')) {
 				$commander->dAffectation = Utils::now();
 				$commander->statement = Commander::AFFECTED;
@@ -47,7 +47,7 @@ if ($commanderId !== FALSE) {
 					}
 				}
 
-				CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté en force de réserve', ALERT_STD_SUCCESS);
+				CTR::$alert->add('Votre officier ' . $commander->getName() . ' a bien été affecté en force de réserve', ALERT_STD_SUCCESS);
 				CTR::redirect('fleet/commander-' . $commander->id . '/sftr-2');
 			} elseif ($nbrLine1 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'l-line')) {
 				$commander->dAffectation =Utils::now();
@@ -63,24 +63,35 @@ if ($commanderId !== FALSE) {
 					}
 				}
 
-				CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été affecté en force active', ALERT_STD_SUCCESS);
+				CTR::$alert->add('Votre officier ' . $commander->getName() . ' a bien été affecté en force active', ALERT_STD_SUCCESS);
 				CTR::redirect('fleet/commander-' . $commander->id . '/sftr-2');
 			} else {
-				CTR::$alert->add('Votre base a dépassé la capacité limite de commandants en activité', ALERT_STD_ERROR);			
+				CTR::$alert->add('Votre base a dépassé la capacité limite de officiers en activité', ALERT_STD_ERROR);			
 			}
 		} elseif ($commander->statement == Commander::AFFECTED) {
-			$commander->statement = Commander::INSCHOOL;
-			CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a bien été remis à l\'école', ALERT_STD_SUCCESS);
-			$commander->emptySquadrons();
+			$S_COM3 = ASM::$com->getCurrentSession();
+			ASM::$com->newSession();
+			ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => Commander::INSCHOOL));
+
+			if (ASM::$com->size() < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'school-size')) {
+				$commander->statement = Commander::INSCHOOL;
+				CTR::$alert->add('Votre officier ' . $commander->getName() . ' a été remis à l\'école', ALERT_STD_SUCCESS);
+				$commander->emptySquadrons();
+			} else {
+				$commander->statement = Commander::RESERVE;
+				CTR::$alert->add('Votre officier ' . $commander->getName() . ' a été remis dans la réserve de l\'armée', ALERT_STD_SUCCESS);
+				$commander->emptySquadrons();
+			}
+			ASM::$com->changeSession($S_COM3);
 			CTR::redirect('fleet');
 		} else {
-			CTR::$alert->add('Le status de votre commandant ne peut pas être modifié bien été remis à l\'école', ALERT_STD_ERROR);
+			CTR::$alert->add('Le status de votre officier ne peut pas être modifié', ALERT_STD_ERROR);
 		}
 
 		ASM::$com->changeSession($S_COM2);
 		ASM::$obm->changeSession($S_OBM);
 	} else {
-		CTR::$alert->add('Ce commandant n\'existe pas ou ne vous appartient pas', ALERT_STD_ERROR);
+		CTR::$alert->add('Ce officier n\'existe pas ou ne vous appartient pas', ALERT_STD_ERROR);
 	}
 
 	ASM::$com->changeSession($S_COM1);

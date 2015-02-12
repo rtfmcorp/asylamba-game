@@ -39,6 +39,7 @@ class Commander {
 	const DESERT 					= 4; # déserté
 	const RETIRED 					= 5; # à la retraite
 	const ONSALE 					= 6; # dans le marché
+	const RESERVE 					= 7; # dans la réserve (comme à l'école mais n'apprend pas)
 
 	# types of travel
 	const MOVE						= 0; # déplacement

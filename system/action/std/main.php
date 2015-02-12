@@ -84,6 +84,7 @@ if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('tok
 		case 'cancelmove':				include ACTION . 'ares/fleet/cancel.php'; break;
 
 		case 'affectcommander':			include ACTION . 'ares/commander/affect.php'; break;
+		case 'putcommanderinschool':	include ACTION . 'ares/commander/putInSchool.php'; break;
 		case 'updatenamecommander':		include ACTION . 'ares/commander/updateName.php'; break;
 		case 'emptycommander':			include ACTION . 'ares/commander/empty.php'; break;
 		case 'firecommander':			include ACTION . 'ares/commander/fire.php'; break;

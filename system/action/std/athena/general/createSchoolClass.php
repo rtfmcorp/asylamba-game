@@ -77,7 +77,7 @@ if ($baseId !== FALSE AND $school !== FALSE AND $name !== FALSE AND in_array($ba
 				CTR::$alert->add('le nom contient des caractères non autorisé ou trop de caractères.', ALERT_STD_FILLFORM);
 			}
 		} else {
-			CTR::$alert->add('Trop d\'officier dans cette école', ALERT_STD_ERROR);
+			CTR::$alert->add('Trop d\'officier dans cette école et dans le mess', ALERT_STD_ERROR);
 		}
 	} else {
 		CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);
