@@ -574,8 +574,13 @@ class OrbitalBase {
 		$resourceRecycled = round($targetPlace->coefResources * $totalRecycled / 100);
 		$shipRecycled = round($targetPlace->coefHistory * $totalRecycled / 100);
 
+		# diversify a little (resource and credit)
+		$percent = rand(-5, 5);
+		$diffAmount = round($creditRecycled * $percent / 100);
+		$creditRecycled += $diffAmount;
+		$resourceRecycled -= $diffAmount;
+
 		# convert shipRecycled to real ships
-			# todo : si aucun vaisseau n'a pu être construit, convertir et ajouter le montant en ressources
 		$pointsToRecycle = $shipRecycled * RecyclingMission::COEF_SHIP;
 		$shipsArray = array();
 		$buyShip = array();
@@ -606,23 +611,6 @@ class OrbitalBase {
 				}
 			}
 		}
-			/*$n = new Notification();
-			$n->setRPlayer($player->id);
-			$n->setTitle('debug recyclage');
-			$n->addBeg();
-
-			$n->addTxt('pointsToRecycle : ' . $shipRecycled * RecyclingMission::COEF_SHIP)->addSep();
-			//for ($i = 0; $i < count($shipsArray); $i++) { 
-			foreach ($shipsArray as $key => $value) {
-				$n->addTxt('vaiss ' . $value['ship'] . '. Prix : ' . $value['price'] . ', canBuy : ' . $value['canBuy'] . ', buy : ' . $value['buy'] . '. ');
-			}
-			$n->addSep();
-			foreach ($buyShip as $key => $value) {
-				$n->addTxt('a:' . $value . ', ');
-			}
-			$n->addSep()->addTxt('Il reste : ' . $pointsToRecycle);
-			$n->addEnd();
-			ASM::$ntm->add($n);*/
 
 		# create a RecyclingLog
 		$rl = new RecyclingLog();
@@ -646,9 +634,9 @@ class OrbitalBase {
 
 		# give to the orbitalBase ($this) and player what was recycled
 		$this->increaseResources($resourceRecycled);
-		# todo $this->addShipToDock($shipId, $quantity)
-		# todo $this->addShipToDock($shipId, $quantity)
-		# todo ...
+		for ($i = 0; $i < ShipResource::SHIP_QUANTITY; $i++) { 
+			$this->addShipToDock($i, $buyShip[$i]);
+		}
 		$player->increaseCredit($creditRecycled);
 
 		# if a mission is stopped by the user, delete it
