@@ -77,7 +77,7 @@ for ($i = 0; $i < ASM::$rem->size(); $i++) {
 
 				echo '<div class="build-item base-type">';
 					echo '<div class="name">';
-						echo '<img src="' . MEDIA . 'faction/law/common.png" alt="">';
+						echo '<img src="' . MEDIA . 'orbitalbase/recycler.png" alt="">';
 						echo '<strong>Mission ' . $missionID . '</strong>';
 					echo '</div>';
 

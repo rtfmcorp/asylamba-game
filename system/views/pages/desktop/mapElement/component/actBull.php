@@ -17,7 +17,7 @@ echo '<div class="column act">';
 			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="5"><img src="' . MEDIA . 'map/action/spy.png" alt="" /></a>';
 		} else {
 			$available = ($place->sectorColor == CTR::$data->get('playerInfo')->get('color') || $place->sectorColor == ColorResource::NO_FACTION) ? NULL : 'grey';
-			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="1"><img src="' . MEDIA . 'map/action/loot.png" alt="" /></a>';
+			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="1"><img src="' . MEDIA . 'orbitalbase/recycler.png" alt=""></a>';
 		}
 	echo '</div>';
 	
@@ -235,15 +235,14 @@ echo '<div class="column act">';
 					echo 'Vous ne pouvez pas espionner une planète non-habitable';
 				} else {
 					$prices = array(
-						'Petit' => 1000,
-						'Moyen' => 2500,
-						'Grand' => 5000
+						'faible' => 1000,
+						'moyenne' => 2500,
+						'grande' => 5000
 					);
 
 					foreach ($prices as $label => $price) { 
 						echo '<a href="' . Format::actionBuilder('spy', ['rplace' => $place->getId(), 'price' => $price]) . '" class="spy-button">';
-							echo '<img src="' . MEDIA . 'resources/credit.png" alt="" class="picto" />';
-							echo '<span class="label">' . $label . '</span>';
+							echo '<span class="label">Impact ' . $label . '</span>';
 							echo '<span class="price">' . Format::numberFormat($price) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /></span>';
 						echo '</a>';
 					}
@@ -257,7 +256,7 @@ echo '<div class="column act">';
 		echo '</div>';
 	} else {
 		echo '<div class="box" data-id="1">';
-			echo '<h2>Envoyer des collecteurs</h2>';
+			echo '<h2>Envoyer des recycleurs</h2>';
 			echo '<div class="box-content">';
 				if (!($place->sectorColor == CTR::$data->get('playerInfo')->get('color') || $place->sectorColor == ColorResource::NO_FACTION)) {
 					echo 'Vous ne pouvez envoyer des recycleurs que dans des secteurs non-revendiqués ou contrôlés par votre faction';
@@ -268,14 +267,26 @@ echo '<div class="column act">';
 				} else {
 					$totalShip  = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::RECYCLING, 'level', $defaultBase->levelRecycling, 'nbRecyclers');
 					$activeShip = 0;
+					$travelTime = Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, CTR::$data->get('playerBonus'));
 
 					for ($j = 0; $j < ASM::$rem->size(); $j++) { 
 						$activeShip += ASM::$rem->get($j)->recyclerQuantity;
 					}
 
-					echo 'collecteurs :' . $totalShip;
-					echo '<br />collecteurs dispo : ' . ($totalShip - $activeShip);
-					echo '<br /><a href="' . Format::actionBuilder('createmission', ['rplace' => $defaultBase->getId(), 'rtarget' => $place->getId(), 'quantity' => 1]) . '">Envoyer</a>';
+					echo '<span class="label-box">';
+						echo '<span class="key">Recycleurs libres</span>';
+						echo '<span class="val">' . Format::number($totalShip - $activeShip) . '</span>';
+					echo '</span>';
+
+					echo '<span class="label-box">';
+						echo '<span class="key">Temps de cycle</span>';
+						echo '<span class="val">' . Chronos::secondToFormat((2 * $travelTime) + RecyclingMission::RECYCLING_TIME, 'lite') . '</span>';
+					echo '</span>';
+
+					echo '<form class="spy-form" method="post" action="' . Format::actionBuilder('createmission', ['rplace' => $defaultBase->getId(), 'rtarget' => $place->getId()]) . '">';
+						echo '<input type="text" name="quantity" value="' . ($totalShip - $activeShip) . '" />';
+						echo '<button type="submit">Envoyer</button>';
+					echo '</form>';
 				}
 			echo '</div>';
 		echo '</div>';
