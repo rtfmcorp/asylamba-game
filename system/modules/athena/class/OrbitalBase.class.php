@@ -555,7 +555,7 @@ class OrbitalBase {
 			$targetPlace->typeOfPlace = Place::EMPTYZONE;
 
 			# stop the mission
-			$mission->statement = RecyclingMission::ST_DELETED
+			$mission->statement = RecyclingMission::ST_DELETED;
 
 			# send notification to the player
 			$n = new Notification();
@@ -575,8 +575,56 @@ class OrbitalBase {
 		$shipRecycled = round($targetPlace->coefHistory * $totalRecycled / 100);
 
 		# convert shipRecycled to real ships
-			# todo bla bla
 			# todo : si aucun vaisseau n'a pu être construit, convertir et ajouter le montant en ressources
+		$pointsToRecycle = $shipRecycled * RecyclingMission::COEF_SHIP;
+		$shipsArray = array();
+		$buyShip = array();
+		for ($i = 0; $i < ShipResource::SHIP_QUANTITY; $i++) { 
+			if (floor($pointsToRecycle / ShipResource::getInfo($i, 'resourcePrice')) > 0) {
+				$shipsArray[] = array(
+					'ship' => $i,
+					'price' => ShipResource::getInfo($i, 'resourcePrice'),
+					'canBuy' => floor($pointsToRecycle / ShipResource::getInfo($i, 'resourcePrice')),
+					'buy' => 0);
+			}
+			$buyShip[] = 0;
+		}
+
+		Utils::shuffle($shipsArray);
+		$continue = true;
+		while($continue) {
+			foreach ($shipsArray as $key => $line) {
+				//$nbmax = floor($pointsToRecycle)
+				$qty = rand(1, $line['canBuy']);
+				if ($pointsToRecycle >= $qty * $line['price']) {
+					
+					$pointsToRecycle -= $qty * $line['price'];
+					$line['canBuy'] = $line['canBuy'] - $qty;
+					$line['buy'] = 1;
+					$buyShip[$line['ship']] += $qty;
+				} else {
+					$continue = false;
+					break;
+				}
+			}
+		}
+			$n = new Notification();
+			$n->setRPlayer($player->id);
+			$n->setTitle('debug recyclage');
+			$n->addBeg();
+
+			$n->addTxt('pointsToRecycle : ' . $shipRecycled * RecyclingMission::COEF_SHIP)->addSep();
+			//for ($i = 0; $i < count($shipsArray); $i++) { 
+			foreach ($shipsArray as $key => $value) {
+				$n->addTxt('vaiss ' . $value['ship'] . '. Prix : ' . $value['price'] . ', canBuy : ' . $value['canBuy'] . ', buy : ' . $value['buy'] . '. ');
+			}
+			$n->addSep();
+			foreach ($buyShip as $key => $value) {
+				$n->addTxt('a:' . $value . ', ');
+			}
+			$n->addSep()->addTxt('Il reste : ' . $pointsToRecycle);
+			$n->addEnd();
+			ASM::$ntm->add($n);
 
 		# create a RecyclingLog
 		$rl = new RecyclingLog();
@@ -622,7 +670,7 @@ class OrbitalBase {
 			if ($creditRecycled > 0) {
 				$alt .= $creditRecycled . ' crédits transformés. ';
 			} 
-			CTR::$alert->add($alt, ALERT_BUG_INFO);
+			CTR::$alert->add($alt, ALERT_STD_SUCCESS);
 		}
 	}
 
