@@ -841,7 +841,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `squadronReport` (
 	`rCommander` int(11) unsigned NOT NULL,
 
 	`position` tinyint(4) unsigned NOT NULL,
-	`round` int(11) unsigned NOT NULL,
+	`round` int(11) NOT NULL,
 
 	`ship0` tinyint(4) unsigned NOT NULL,
 	`ship1` tinyint(4) unsigned NOT NULL,

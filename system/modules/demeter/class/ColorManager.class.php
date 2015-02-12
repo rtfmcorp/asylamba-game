@@ -48,11 +48,13 @@ class ColorManager extends Manager {
 
 		$awColor = $qr->fetchAll();
 		$qr->closeCursor();
-		
-		for ($i = 0; $i < count($awColor); $i++) {
-			if ($i == 0 || $awColor[$i]['id'] != $awColor[$i - 1]['id']) {
-				$color = new Color();
 
+		$colorsArray = array();
+		for ($i = 0; $i < count($awColor); $i++) {
+			if (array_key_exists($awColor[$i]['id'], $colorsArray)) {
+				$colorsArray[$awColor[$i]['id']]->colorLink[$awColor[$i]['clRColorLinked']] = $awColor[$i]['clStatement'];
+			} else {
+				$color = new Color();
 				$color->id = $awColor[$i]['id'];
 				$color->alive = $awColor[$i]['alive'];
 				$color->alive = $awColor[$i]['isWinner'];
@@ -64,15 +66,17 @@ class ColorManager extends Manager {
 				$color->electionStatement = $awColor[$i]['electionStatement'];
 				$color->isClosed = $awColor[$i]['isClosed'];
 				$color->dLastElection = $awColor[$i]['dLastElection'];
+				$color->colorLink[0] = Color::NEUTRAL;
+
+				$colorsArray[$color->id] = $color;
 			}
+		}
 
-			$color->colorLink[$awColor[$i]['clRColorLinked']] = $awColor[$i]['clStatement'];
-
-			if ($i == count($awColor) - 1 || $awColor[$i]['id'] != $awColor[$i + 1]['id']) {
-				$this->_Add($color);
-				if ($this->currentSession->getUMode()) {
-					$color->uMethod();
-				}
+		foreach ($colorsArray AS $color) {
+			$color->colorLink = ksort($color->colorLink);
+			$this->_Add($color);
+			if ($this->currentSession->getUMode()) {
+				$color->uMethod();
 			}
 		}
 	}
