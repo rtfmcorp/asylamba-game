@@ -23,6 +23,9 @@ class Report {
 	const STANDARD = 0;
 	const ARCHIVED = 1;
 	const DELETED = 2;
+
+	const ILLEGAL = 0;
+	const LEGAL = 1;
 	
 	public $id					= 0;
 	public $rPlayerAttacker		= 0;
@@ -44,7 +47,7 @@ class Report {
 	public $expPlayerD			= 0;
 	public $rPlace				= 0;
 	public $type				= 0;
-	public $isLegal 			= 0;
+	public $isLegal 			= 1;
 	public $hasBeenPunished 	= 0;
 	public $round				= 0;
 	public $importance			= 0;

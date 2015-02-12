@@ -360,7 +360,7 @@ class ReportManager extends Manager {
 			for ($j = 0; $j < count($newReport->squadrons); $j++) {
 				$qr .= ' (' . $newReport->squadrons[$j][1];
 					for ($i = 2; $i < 17; $i++) {
-						$qr .= ' ,' . $newReport->squadrons[$j][$i];
+						$qr .= ', ' . $newReport->squadrons[$j][$i];
 					}
 				$qr .= ($j == count($newReport->squadrons) - 1) ? ');' : '),';
 			}

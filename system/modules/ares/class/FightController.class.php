@@ -302,7 +302,7 @@ class FightController {
 				$commanderD->setDDeath(Utils::now());
 				LiveReport::$rPlayerWinner = $commanderA->rPlayer;
 
-				if ($commanderD->rPlayer != 0) {
+				if ($commanderD->rPlayer != ID_GAIA) {
 					$playerA->increaseVictory(1);
 					$playerD->increaseDefeat(1);
 					if ($playerA->rColor == ColorResource::KOVAHK) {
@@ -331,7 +331,7 @@ class FightController {
 				$commanderD->setDDeath(Utils::now());
 				LiveReport::$rPlayerWinner = $commanderD->rPlayer;
 
-				if ($commanderD->rPlayer != 0) {
+				if ($commanderD->rPlayer != ID_GAIA) {
 					$playerD->increaseVictory(1);
 					$playerA->increaseDefeat(1);
 					if ($playerD->rColor == ColorResource::KOVAHK) {
