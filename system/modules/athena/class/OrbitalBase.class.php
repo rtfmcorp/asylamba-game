@@ -609,6 +609,10 @@ class OrbitalBase {
 				while($continue) {
 					foreach ($shipsArray as $key => $line) {
 						$nbmax = floor($pointsToRecycle / $line['price']);
+						if ($nbmax < 1) {
+							$continue = false;
+							break;
+						}
 						$qty = rand(1, $nbmax);
 						if ($pointsToRecycle >= $qty * $line['price']) {
 							$pointsToRecycle -= $qty * $line['price'];
