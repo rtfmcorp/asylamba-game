@@ -28,7 +28,7 @@ echo '<div class="component school">';
 			echo '<div class="number-box">';
 				echo '<span class="label">investissements alloués à l\'école</span>';
 				echo '<span class="value">';
-					echo Format::numberFormat($ob_school->getISchool());
+					echo Format::numberFormat($ob_school->iSchool);
 					echo ' <img alt="crédits" src="' . MEDIA . 'resources/credit.png" class="icon-color">';
 				echo '</span>';
 				echo '<span class="group-link">';
@@ -45,7 +45,14 @@ echo '<div class="component school">';
 				echo '</span>';
 			echo '</div>';
 
-			echo '<p>Les officiers gagnent en moyenne ?? points d\'expérience par relève.</p>';
+			$invest  = $ob_school->iSchool;
+			$invest += $invest * CTR::$data->get('playerBonus')->get(PlayerBonus::COMMANDER_INVEST) / 100;
+			$earnedExperience  = $invest / Commander::COEFFSCHOOL;
+			$earnedExperience  = round($earnedExperience);
+			$earnedExperience  = ($earnedExperience < 0)
+				? 0 : $earnedExperience;
+
+			echo '<p>Chaque officier gagne en moyenne ' . Format::number($earnedExperience) . ' points d\'expérience par relève.</p>';
 
 			echo '<hr />';
 
@@ -106,7 +113,7 @@ echo '<div class="component">';
 						echo '</div>';
 					} else {
 						echo '<div class="item empty">';
-							echo '<img class="picto" src="' . MEDIA . 'school/school-0.png" alt="" />';
+							echo '<span class="picto"></span>';
 							echo '<strong>Emplacement libre</strong>';
 							echo '<span class="progress-container"></span>';
 						echo '</div>';
@@ -118,7 +125,7 @@ echo '<div class="component">';
 echo '</div>';
 
 ASM::$com->newSession();
-ASM::$com->load(array('c.statement' => Commander::INSCHOOL, 'c.rBase' => $ob_school->getId()), array('c.experience', 'DESC'));
+ASM::$com->load(array('c.statement' => 10, 'c.rBase' => $ob_school->getId()), array('c.experience', 'DESC'));
 
 echo '<div class="component">';
 	echo '<div class="head skin-5">';
@@ -144,7 +151,7 @@ echo '<div class="component">';
 				}
 
 				echo '<div class="item empty">';
-					echo '<img class="picto" src="' . MEDIA . 'school/school-0.png" alt="" />';
+					echo '<span class="picto"></span>';
 					echo '<strong>Emplacement libre</strong>';
 					echo '<span class="progress-container"></span>';
 				echo '</div>';
@@ -161,7 +168,9 @@ echo '<div class="component">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<p class="long-info">L’<strong>Ecole de commandement</strong> est le centre de formation de vos commandants. Il suffit pour cela d’ouvrir des classes et d’investir un peu d’argent dans l’école pour que de brillants commandants issus de toute la galaxie viennent enseigner leur savoir aux jeunes commandants de votre école.<br /><br />Au fil du temps ils gagneront de l’expérience et des niveaux. En gradant, ils acquerront la capacité de diriger une escadrille supplémentaire, ce qui augmente la taille maximale de vos flottes.<br /><br />Lorsque vous jugerez qu’un de vos commandants est assez formé, il vous suffit de l’affecter. Il sera alors à même de diriger sa flotte et de prendre part à votre guerre expansionniste.</p>';
+			echo '<p class="long-info">L’<strong>Ecole de commandement</strong> est le centre de formation de vos officiers. Il suffit pour cela d’engager de jeunes recrues sans expérience et d’investir un peu d’argent dans l’école pour que de brillants stratèges issus de toute la galaxie viennent enseigner leur savoir aux jeunes commandants de votre école.<br /><br />
+			Au fil du temps ils gagneront de l’<strong>expérience et des niveaux</strong>. En gradant, ils acquerront la capacité de diriger une escadrille supplémentaire, ce qui augmentera la taille maximale de la flotte qu’ils dirigerons. L’investissement dans l’école de commandement s’applique à tout les commandants en formation.<br /><br />
+			Le nombre de place de formation est limité. Il est cepandant plus élevé sur les <strong>bases militaires</strong> et les <strong>capitales</strong>. Le mess des officiers permet de mettre vos officiers au repos.</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

@@ -7,11 +7,13 @@
 # require
 	# {orbitalBase}					ob_recycling
 	# {RecyclingMission session} 	recyclingSession
-	# {RecyclingLog session array} 	missionLogSessions[]
+	# {RecyclingLog session}	 	missionLogSessions
 
 $S_REM2 = ASM::$rem->getCurrentSession();
 ASM::$rem->changeSession($recyclingSession);
 
+$S_RLM2 = ASM::$rlm->getCurrentSession();
+ASM::$rlm->changeSession($missionLogSessions);
 
 echo '<div class="component building">';
 	echo '<div class="head skin-1">';
@@ -22,18 +24,24 @@ echo '<div class="component building">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			$totalRecyclers = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::RECYCLING, 'level', $ob_recycling->levelRecycling, 'nbRecyclers');
+			$busyRecyclers  = 0;
+			for ($i = 0; $i < ASM::$rem->size(); $i++) { 
+				$busyRecyclers += ASM::$rem->get($i)->recyclerQuantity;
+			}
+
 			echo '<div class="number-box">';
-				echo '<span class="label">Quantité totale de recycleurs</span>';
-				echo '<span class="value">' . $totalRecyclers . '</span>';
+				echo '<span class="label">Recycleurs utilisés / totaux</span>';
+				echo '<span class="value">' . $busyRecyclers . ' / ' . $totalRecyclers . '</span>';
 			echo '</div>';
 
-			$freeRecyclers = $totalRecyclers;
-			for ($i = 0; $i < ASM::$rem->size(); $i++) { 
-				$freeRecyclers -= ASM::$rem->get($i)->recyclerQuantity;
-			}
-			echo '<div class="number-box ' . ($freeRecyclers == 0 ? 'grey' : '') . '">';
-				echo '<span class="label">Recycleurs disponibles</span>';
-				echo '<span class="value">' .  $freeRecyclers . '</span>';
+			echo '<div class="number-box grey">';
+				echo '<span class="label">Recycleurs libres</span>';
+				echo '<span class="value">' . ($totalRecyclers - $busyRecyclers) . '</span>';
+			echo '</div>';
+
+			echo '<div class="number-box grey">';
+				echo '<span class="label">Capacité des recycleurs</span>';
+				echo '<span class="value">' . Format::number(RecyclingMission::RECYCLER_CAPACTIY) . ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color"></span>';
 			echo '</div>';
 
 			echo '<hr />';
@@ -50,81 +58,104 @@ echo '</div>';
 for ($i = 0; $i < ASM::$rem->size(); $i++) { 
 	$mission = ASM::$rem->get($i);
 
-	$S_RLM2 = ASM::$rlm->getCurrentSession();
-	ASM::$rlm->changeSession($missionLogSessions[$i]);
-
 	echo '<div class="component">';
 		echo '<div class="head skin-2">';
 			if ($i == 0) {
-				echo '<h2>Mission' . Format::addPlural(ASM::$rem->size()) . ' en cours</h2>';
+				echo '<h2>Mission' . Format::plural(ASM::$rem->size()) . ' en cours</h2>';
 			}
 		echo '</div>';
 		echo '<div class="fix-body">';
 			echo '<div class="body">';
-				echo '<h3>Descriptif de mission</h3>';
-				echo '<p>Recycleurs utilisés : ' . $mission->recyclerQuantity . '</p>';
-				echo '<p>Lieu cible : ' . $mission->rTarget . '</p>';
-				echo '<p>Temps de cycle : ' . $mission->cycleTime . ' secondes</p>';
+				# usefull vars
+				$missionID = md5($mission->id . $mission->recyclerQuantity);
+				$missionID = strtoupper(substr($missionID, 0, 3) . '-' . substr($missionID, 3, 6) . '-' . substr($missionID, 10, 2));
 
-				if ($mission->statement == RecyclingMission::ST_BEING_DELETED) {
-					echo '<p>Cette mission a été annulée, les collecteurs rentrent à la maison</p>';
-				}
+				$percent   = Utils::interval(Utils::now(), $mission->uRecycling, 's') / $mission->cycleTime * 100;
+				$travelTime= ($mission->cycleTime - RecyclingMission::RECYCLING_TIME) / 2;
+				$beginRECY = Format::percent($travelTime, $mission->cycleTime);
+				$endRECY   = Format::percent($travelTime + RecyclingMission::RECYCLING_TIME, $mission->cycleTime);
 
-				echo '<div class="number-box">';
-					echo '<span class="label">progression de la mission</span>';
-					echo '<span class="value">';
-						echo Format::numberFormat($mission->cycleTime);
-						echo ' <img alt="ressources" src="' . MEDIA . 'resources/time.png" class="icon-color">';
-					echo '</span>';					  
-					$percent = Format::numberFormat(Utils::interval(Utils::now(), $mission->uRecycling, 's') / $mission->cycleTime * 100);
-					echo '<span class="progress-bar hb bl" title="remplissage : ' . $percent . '%">';
+				echo '<div class="build-item base-type">';
+					echo '<div class="name">';
+						echo '<img src="' . MEDIA . 'orbitalbase/recycler.png" alt="">';
+						echo '<strong>Mission ' . $missionID . '</strong>';
+					echo '</div>';
+
+					echo '<p class="desc">La mission recycle la <strong>' . Game::convertPlaceType($mission->typeOfPlace) . '</strong> située aux coordonnées <strong><a href="'. APP_ROOT . 'map/place-' . $mission->rTarget . '">' . Game::formatCoord($mission->xSystem, $mission->ySystem, $mission->position, $mission->sectorId) . '</a></strong>.<br /><br />
+					Il reste <strong>' . Format::number($mission->resources * $mission->coefResources / 100) . '</strong> ressources, <strong>' . Format::number($mission->resources * $mission->coefHistory / 100) . '</strong> débris et <strong>' . Format::number($mission->resources * $mission->population / 100) . '</strong> gaz nobles.</p>';
+
+					echo '<p>Retour ' . Chronos::transform(Utils::addSecondsToDate($mission->uRecycling, $mission->cycleTime)) . '</p>';
+					echo '<p><span class="progress-bar">';
 						echo '<span style="width:' . $percent . '%;" class="content"></span>';
-					echo '</span>';
+						echo '<span class="step hb lt" title="début du recyclage" style="left: ' . $beginRECY . '%;"></span>';
+						echo '<span class="step hb lt" title="fin du recyclage" style="left: ' . $endRECY . '%;"></span>';
+					echo '</span></p>';
 				echo '</div>';
 
-				echo '<p>Résumé des gains lors des 10 derniers chargements : </p>';
+				echo $mission->statement == RecyclingMission::ST_BEING_DELETED
+					? '<p>Cette mission a été annulée, les recycleurs terminent la mission puis deviennent disponibles.</p>'
+					: '<p><a href="' . Format::actionBuilder('cancelmission', ['id' => $mission->id, 'place' => $mission->rBase]) . '" class="common-link">Annuler la mission</a></p>';
+
 				echo '<ul class="list-type-1">';
-				for ($i = 0; $i < min(ASM::$rlm->size(), 10); $i++) {
-					$log = ASM::$rlm->get($i);
-					echo ($i == 0) ? '<li class="strong">' : '<li>';
-						echo '<span class="label">chargement ' . $i . '</span>';
-						echo '<span class="value">';
-							echo Format::numberFormat($log->resources) . ' ressources, ' . Format::numberFormat($log->credits) . ' crédits et x vaisseaux gagnés';
-						echo '</span>';
+					echo '<li>';
+						echo '<span class="label">Recycleurs engagés dans la mission</span>';
+						echo '<span class="value">' . Format::number($mission->recyclerQuantity) . '</span>';
 					echo '</li>';
-				}
+					echo '<li>';
+						echo '<span class="label">Soute totale de la mission</span>';
+						echo '<span class="value">' . Format::number($mission->recyclerQuantity * RecyclingMission::RECYCLER_CAPACTIY) . ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color"></span>';
+					echo '</li>';
+					echo '<li>';
+						echo '<span class="label">Durée du cycle</span>';
+						echo '<span class="value">' . Chronos::secondToFormat($mission->cycleTime, 'short') . '</span>';
+					echo '</li>';
 				echo '</ul>';
-				echo '<a href="' . Format::actionBuilder('cancelmission', ['id' => $mission->id, 'place' => $mission->rBase]) . '" class="hb lt right-link" title="annuler la mission">annuler la mission</a>';
+
+				echo '<h4>Dernières livraisons</h4>';
+				$nb = 0;
+				for ($j = 0; $j < ASM::$rlm->size(); $j++) {
+					if (ASM::$rlm->get($j)->rRecycling == $mission->id) {
+						$log = ASM::$rlm->get($j);
+
+						$wedge['ressource'] = $log->resources;
+						$wedge['crédit'] = $log->credits;
+						$wedge['pégase'] = $log->ship0;
+						$wedge['satyre'] = $log->ship1;
+						$wedge['chimère'] = $log->ship2;
+						$wedge['sirène'] = $log->ship3;
+						$wedge['dryade'] = $log->ship4;
+						$wedge['méduse'] = $log->ship5;
+						$wedge['griffon'] = $log->ship6;
+						$wedge['cyclope'] = $log->ship7;
+						$wedge['minotaure'] = $log->ship8;
+						$wedge['hydre'] = $log->ship9;
+						$wedge['cerbère'] = $log->ship10;
+						$wedge['phénix'] = $log->ship11;
+						$wedge = array_filter($wedge);
+
+						echo '<p class="info">';
+							echo 'La mission a ramené ';
+							$n = 1;
+							foreach ($wedge as $type => $number) {
+								echo '<strong>' . Format::number($number) . '</strong> ' . $type . Format::plural($number);
+								echo $n == count($wedge) - 1
+									? ' et ' : ', ';
+								$n++;
+							}
+							echo '<em>' . Chronos::transform($log->dLog) . '</em>';
+						echo '</p>';
+
+						$nb++;
+					}
+
+					if ($nb > 10) {
+						break;
+					}
+				}
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';
-	ASM::$rlm->changeSession($S_RLM2);
 }
-
-echo '<div class="component">';
-	echo '<div class="head skin-2">';
-		echo '<h2>Hangar à recycleurs</h2>';
-	echo '</div>';
-	echo '<div class="fix-body">';
-		echo '<div class="body">';
-			echo '<h3>Quantité de recycleurs par niveau</h3>';
-			echo '<ul class="list-type-1">';
-				$level = $ob_recycling->getLevelRecycling();
-				$from  = ($level < 3)  ? 1  : $level - 2;
-				$to    = ($level > 25) ? 31 : $level + 5;
-				for ($i = $from; $i < $to; $i++) {
-					echo ($i == $level) ? '<li class="strong">' : '<li>';
-						echo '<span class="label">niveau ' . $i . '</span>';
-						echo '<span class="value">';
-							$recyclerQty = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::RECYCLING, 'level', $i, 'nbRecyclers');
-							echo Format::numberFormat($recyclerQty) . ' recycleur' . Format::addPlural($recyclerQty);
-						echo '</span>';
-					echo '</li>';
-				}
-				echo '</ul>';
-		echo '</div>';
-	echo '</div>';
-echo '</div>';
 
 echo '<div class="component">';
 	echo '<div class="head skin-2">';
@@ -137,6 +168,6 @@ echo '<div class="component">';
 	echo '</div>';
 echo '</div>';
 
+ASM::$rlm->changeSession($S_RLM2);
 ASM::$rem->changeSession($S_REM2);
-
 ?>

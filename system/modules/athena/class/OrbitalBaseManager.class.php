@@ -453,6 +453,15 @@ class OrbitalBaseManager extends Manager {
 			}
 			ASM::$tqm->changeSession($S_TQM1);
 
+			# suppression des missions de recyclages ainsi que des logs de recyclages
+			$S_REM1 = ASM::$rem->getCurrentSession();
+			ASM::$rem->newSession(ASM_UMODE);
+			ASM::$rem->load(array('rBase' => $base->rPlace));
+			for ($i = ASM::$rem->size()-1; $i >= 0; $i--) {
+				ASM::$rem->deleteById(ASM::$rem->get($i)->id);
+			}
+			ASM::$rem->changeSession($S_REM1);
+
 			# mise des invistissements à 0
 			$base->iSchool = 0;
 			$base->iAntiSpy = 0;

@@ -147,7 +147,7 @@ echo '<div class="component">';
 						echo '</div>';
 					} else {
 						echo '<div class="item empty">';
-							echo '<img class="picto" src="' . MEDIA . 'orbitalbase/build.png" alt="" />';
+							echo '<span class="picto"></span>';
 							echo '<strong>Emplacement libre</strong>';
 							echo '<span class="progress-container"></span>';
 						echo '</div>';
@@ -203,7 +203,6 @@ echo '<div class="component">';
 			d’un certain nombre de PEV qui augmente en fonction du niveau de votre chantier.<br />
 			Le bouton intégration vous renverra à l’amirauté, ce qui vous permettra de vider votre hangar et de répartir vos vaisseaux dans vos flottes 
 			en orbite autour de la planète sur laquelle vous avez construit votre chantier.</p>';
-
 
 			echo '<div class="queue">';
 			for ($i = 0; $i < 6; $i++) {

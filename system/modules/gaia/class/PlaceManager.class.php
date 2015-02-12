@@ -174,17 +174,14 @@ class PlaceManager extends Manager {
 			$S_COM3 = ASM::$com->getCurrentSession();
 			ASM::$com->newSession();
 			ASM::$com->load(array('c.rBase' => $aw['id'], 'c.statement' => array(1, 2)));
+
 			for ($i = 0; $i < ASM::$com->size(); $i++) { 
 				$p->commanders[] = ASM::$com->get($i);
 			}
+			
 			ASM::$com->changeSession($S_COM3);
 
 			$currentP = $this->_Add($p);
-
-			/*if ($this->currentSession->getUMode() AND $currentP->uMode) {
-				$currentP->uMode = FALSE;
-				$currentP->uMethod();
-			}*/
 
 			if ($this->currentSession->getUMode()) {
 				$currentP->uMethod();

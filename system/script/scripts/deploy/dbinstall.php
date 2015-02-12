@@ -135,8 +135,8 @@ ASM::$pam->add($p);
 $p = new Player();
 $p->bind = Utils::generateString(25);
 $p->rColor = 0;
-$p->name = 'Jean-mi';
-$p->avatar = '000-1';
+$p->name = 'Jean-Mi';
+$p->avatar = '059-1';
 $p->status = 1;
 $p->credit = 10000000;
 $p->uPlayer = Utils::now();
@@ -1144,7 +1144,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `recyclingLog` (
 	`dLog` datetime NOT NULL,
 
 	PRIMARY KEY (`id`),
-	CONSTRAINT fkRecyclingLogRec FOREIGN KEY (rRecycling) REFERENCES recyclingMission(id)
+	CONSTRAINT fkRecyclingLogRec FOREIGN KEY (rRecycling) REFERENCES recyclingMission(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 
 #--------------------------------------------------------------------------------------------

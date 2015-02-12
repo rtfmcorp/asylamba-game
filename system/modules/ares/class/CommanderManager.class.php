@@ -58,13 +58,6 @@ class CommanderManager extends Manager {
 			' . $formatLimit
 		);
 
-		/*var_dump('SELECT c.*
-			FROM commander AS c
-			' . $formatWhere .'
-			' . $formatOrder .'
-			' . $formatLimit
-		);*/
-
 		foreach($where AS $v) {
 			if (is_array($v)) {
 				foreach ($v as $p) {
@@ -120,7 +113,6 @@ class CommanderManager extends Manager {
 
 					$commander->startPlaceName = $awCommanders[$i]['spName'];
 					$commander->destinationPlaceName = ($awCommanders[$i]['dpName'] == '') ? 'planète rebelle' : $awCommanders[$i]['dpName'];
-
 				}
 
 				$commander->squadronsIds[] = $awCommanders[$i]['sqId'];

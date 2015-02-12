@@ -23,7 +23,7 @@
 			border: solid 1px #4F4F4F;
 			border-radius: 3px;
 
-			.empty { 
+			&.empty { 
 				opacity: 0.4;
 			}
 		}
@@ -47,70 +47,70 @@
 				font-size: 18px;
 			}
 		}
+	}
 
-		.army {
-			border-collapse: collapse;
-			width: 380px;
-			margin: 25px auto;
+	.army {
+		border-collapse: collapse;
+		width: 380px;
+		margin: 25px auto;
 
-			td {
-				width: 65px; padding: 5px;
-				border-right: dashed 1px #4F4F4F;
-				vertical-align: center;
-			}
+		td {
+			width: 65px; padding: 5px;
+			border-right: dashed 1px #4F4F4F;
+			vertical-align: center;
+		}
 
-			tr:first-child td {
-				text-align: center;
-				padding: 10px 5px;
-				font-size: 18px;
+		tr:first-child td {
+			text-align: center;
+			padding: 10px 5px;
+			font-size: 18px;
+			font-weight: bold;
+		}
+
+		.block {
+			display: block;
+			width: 54px; height: 54px;
+			margin: 0 0 5px 0; padding: 5px;
+			vertical-align: top;
+			border-radius: 5px;
+			background: #0A0A0A;
+			text-align: right;
+			border: solid 1px #202020;
+			color: #4F4F4F;
+
+			strong {
+				display: block;
+				font-size: 15px;
+				height: 38px;
 				font-weight: bold;
 			}
 
-			.block {
+			em {
 				display: block;
-				width: 54px; height: 54px;
-				margin: 0 0 5px 0; padding: 5px;
-				vertical-align: top;
-				border-radius: 5px;
-				background: #0A0A0A;
-				text-align: right;
-				border: solid 1px #202020;
-				color: #4F4F4F;
+				padding: 2px;
+				font-size: 11px;
+				background: black;
+				text-align: center;
+				border-radius: 3px;
+			}
 
-				strong {
-					display: block;
-					font-size: 15px;
-					height: 38px;
-					font-weight: bold;
-				}
+			&.squadron {
+				border: solid 1px #4F4F4F;
+				color: white;
+				cursor: pointer;
+				background: @medium;
+			}
 
-				em {
-					display: block;
-					padding: 2px;
-					font-size: 11px;
-					background: black;
-					text-align: center;
-					border-radius: 3px;
-				}
+			&.squadron.full0 { background: url('src/desktop/squadron/squadron0.png') no-repeat 4px 2px @medium; }
+			&.squadron.full1 { background: url('src/desktop/squadron/squadron1.png') no-repeat 4px 2px @medium; }
+			&.squadron.full2 { background: url('src/desktop/squadron/squadron2.png') no-repeat 4px 2px @medium; }
+			&.squadron.full3 { background: url('src/desktop/squadron/squadron3.png') no-repeat 4px 2px @medium; }
 
-				&.squadron {
-					border: solid 1px #4F4F4F;
-					color: white;
-					cursor: pointer;
-					background-color: @medium;
-				}
-
-				&.squadron.full0 { background: url('src/desktop/squadron/squadron0.png') no-repeat 4px 2px; }
-				&.squadron.full1 { background: url('src/desktop/squadron/squadron1.png') no-repeat 4px 2px; }
-				&.squadron.full2 { background: url('src/desktop/squadron/squadron2.png') no-repeat 4px 2px; }
-				&.squadron.full3 { background: url('src/desktop/squadron/squadron3.png') no-repeat 4px 2px; }
-
-				&.squadron.active {
-					box-shadow: 
-						inset 0 0 6px black,
-						0 0 2px 0 white;
-					border: dashed 1px white;
-				}
+			&.squadron.active {
+				box-shadow: 
+					inset 0 0 6px black,
+					0 0 2px 0 white;
+				border: dashed 1px white;
 			}
 		}
 	}

@@ -56,7 +56,7 @@ for ($i = 0; $i < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::GENE
 		$q .= '</div>';
 	} else {
 		$q .= '<div class="item empty">';
-			$q .= '<img class="picto" src="' . MEDIA . 'orbitalbase/build.png" alt="" />';
+			$q .= '<span class="picto"></span>';
 			$q .= '<strong>Emplacement libre</strong>';
 			$q .= '<span class="progress-container"></span>';
 		$q .= '</div>';

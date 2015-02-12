@@ -334,10 +334,11 @@
 					margin-top: 10px;
 
 					input {
-						width: 180px;
+						width: 187px;
 						padding: 7px;
 						border: none;
 						background: white;
+						border-radius: 3px 0 0 3px;
 					}
 
 					button {
@@ -347,10 +348,27 @@
 						color: white;
 						background: @medium;
 						cursor: pointer;
+						border-radius: 0 3px 3px 0;
 
 						&:hover, &:focus {
 							background: @dark;
 						}
+					}
+				}
+
+				.label-box {
+					display: inline-block;
+					width: 50%;
+					margin: 5px 0;
+
+					.key {
+						display: block;
+					}
+
+					.val {
+						display: block;
+						font-size: 18px;
+						font-weight: bold;
 					}
 				}
 
