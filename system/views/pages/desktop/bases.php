@@ -61,17 +61,19 @@ echo '<div id="content">';
 
 		# load recycling missions
 		$S_REM1 = ASM::$rem->getCurrentSession();
-		ASM::$rem->newSession(ASM_UMODE);
+		ASM::$rem->newSession();
 		ASM::$rem->load(array('rBase' => $ob_recycling->rPlace, 'statement' => array(RecyclingMission::ST_BEING_DELETED, RecyclingMission::ST_ACTIVE)));
 		$recyclingSession = ASM::$rem->getCurrentSession();
 
-		$missionLogSessions = array();
-		$S_RLM1 = ASM::$rlm->getCurrentSession();
+		$recyclingIds = [];
 		for ($i = 0; $i < ASM::$rem->size(); $i++) { 
-			ASM::$rlm->newSession();
-			ASM::$rlm->load(array('rRecycling' => ASM::$rem->get($i)->id), array('dLog'));
-			$missionLogSessions[$i] = ASM::$rlm->getCurrentSession();
+			$recycling[] = ASM::$rem->get($i)->id;
 		}
+
+		$S_RLM1 = ASM::$rlm->getCurrentSession();
+		ASM::$rlm->newSession();
+		ASM::$rlm->load(['rRecycling' => $recycling], ['dLog', 'DESC'], [0, 10 * count($recycling)]);
+		$missionLogSessions = ASM::$rlm->getCurrentSession();
 
 		ASM::$rlm->changeSession($S_RLM1);
 		ASM::$rem->changeSession($S_REM1);
