@@ -24,18 +24,24 @@ echo '<div class="component building">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			$totalRecyclers = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::RECYCLING, 'level', $ob_recycling->levelRecycling, 'nbRecyclers');
+			$busyRecyclers  = 0;
+			for ($i = 0; $i < ASM::$rem->size(); $i++) { 
+				$busyRecyclers += ASM::$rem->get($i)->recyclerQuantity;
+			}
+
 			echo '<div class="number-box">';
-				echo '<span class="label">Quantité totale de recycleurs</span>';
-				echo '<span class="value">' . $totalRecyclers . '</span>';
+				echo '<span class="label">Recycleurs utilisés / totaux</span>';
+				echo '<span class="value">' . $busyRecyclers . ' / ' . $totalRecyclers . '</span>';
 			echo '</div>';
 
-			$freeRecyclers = $totalRecyclers;
-			for ($i = 0; $i < ASM::$rem->size(); $i++) { 
-				$freeRecyclers -= ASM::$rem->get($i)->recyclerQuantity;
-			}
-			echo '<div class="number-box ' . ($freeRecyclers == 0 ? 'grey' : '') . '">';
-				echo '<span class="label">Recycleurs disponibles</span>';
-				echo '<span class="value">' .  $freeRecyclers . '</span>';
+			echo '<div class="number-box grey">';
+				echo '<span class="label">Recycleurs libres</span>';
+				echo '<span class="value">' . ($totalRecyclers - $busyRecyclers) . '</span>';
+			echo '</div>';
+
+			echo '<div class="number-box grey">';
+				echo '<span class="label">Capacité des recycleurs</span>';
+				echo '<span class="value">' . Format::number(RecyclingMission::RECYCLER_CAPACTIY) . ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color"></span>';
 			echo '</div>';
 
 			echo '<hr />';
@@ -96,6 +102,10 @@ for ($i = 0; $i < ASM::$rem->size(); $i++) {
 						echo '<span class="value">' . Format::number($mission->recyclerQuantity) . '</span>';
 					echo '</li>';
 					echo '<li>';
+						echo '<span class="label">Soute totale de la mission</span>';
+						echo '<span class="value">' . Format::number($mission->recyclerQuantity * RecyclingMission::RECYCLER_CAPACTIY) . ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color"></span>';
+					echo '</li>';
+					echo '<li>';
 						echo '<span class="label">Durée du cycle</span>';
 						echo '<span class="value">' . Chronos::secondToFormat($mission->cycleTime, 'short') . '</span>';
 					echo '</li>';
@@ -107,9 +117,32 @@ for ($i = 0; $i < ASM::$rem->size(); $i++) {
 					if (ASM::$rlm->get($j)->rRecycling == $mission->id) {
 						$log = ASM::$rlm->get($j);
 
+						$wedge['ressource'] = $log->resources;
+						$wedge['crédit'] = $log->credits;
+						$wedge['pégase'] = $log->ship0;
+						$wedge['satyre'] = $log->ship1;
+						$wedge['chimère'] = $log->ship2;
+						$wedge['sirène'] = $log->ship3;
+						$wedge['dryade'] = $log->ship4;
+						$wedge['méduse'] = $log->ship5;
+						$wedge['griffon'] = $log->ship6;
+						$wedge['cyclope'] = $log->ship7;
+						$wedge['minotaure'] = $log->ship8;
+						$wedge['hydre'] = $log->ship9;
+						$wedge['cerbère'] = $log->ship10;
+						$wedge['phénix'] = $log->ship11;
+						$wedge = array_filter($wedge);
+
 						echo '<p class="info">';
-							echo 'Date de retour ' . $log->dLog . '<br />';
-							echo Format::number($log->resources) . ' ressources, ' . $log->credits . ' crédits et x vaisseaux gagnés';
+							echo 'La mission a ramené ';
+							$n = 1;
+							foreach ($wedge as $type => $number) {
+								echo '<strong>' . Format::number($number) . '</strong> ' . $type . Format::plural($number);
+								echo $n == count($wedge) - 1
+									? ' et ' : ', ';
+								$n++;
+							}
+							echo '<em>' . Chronos::transform($log->dLog) . '</em>';
 						echo '</p>';
 
 						$nb++;
