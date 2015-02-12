@@ -22,7 +22,5 @@ for ($i = 0; $i < ASM::$pam->size(); $i++) {
 
 echo '<p>Nombre de joueurs mis à jour : ' . $updateQty . '.</p>';
 
-
 ASM::$pam->changeSession($S_PAM1);
-
 ?>
