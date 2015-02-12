@@ -552,6 +552,23 @@ class OrbitalBase {
 		if ($targetPlace->resources <= 0) {
 			$targetPlace->resources = 0;
 			$targetPlace->typeOfPlace = Place::EMPTYZONE;
+
+			# todo : arrêter la mission
+			# todo : envoyer une notif au joueur
+			/*$n = new Notification();
+			$n->setRPlayer($player->id);
+			$n->setTitle('Retour de recyclage');
+			$n->addBeg()->addTxt('Un cycle de recyclage est terminé, vos recycleurs ont amené leurs butins sur votre ');
+			$n->addLnk('map/base-' . $this->rPlace, 'base orbitale')->addTxt('.');
+			$n->addLnk('map/place-' . $cs->rBaseDestination, 'base')->addTxt(' . ');
+			
+			$n->addBoxResource('resource', $resourceRecycled, 'ressources recyclées');
+			$n->addBoxResource('credit', $creditRecycled, 'crédits récoltés');
+			$n->addTxt('et aussi des vaisseaux, enfin peut-être.');
+
+			$n->addSep()->addLnk('map/place-' . $mission->rTarget, 'voir ce qu\'il reste sur ce lieu');
+			$n->addEnd();
+			ASM::$ntm->add($n);*/
 		}
 
 		$creditRecycled = $targetPlace->population * $totalRecycled / 100;
@@ -597,21 +614,8 @@ class OrbitalBase {
 		# update u
 		$mission->uRecycling = $dateOfUpdate;
 
-		# send a notification to the player
-		$n = new Notification();
-		$n->setRPlayer($player->id);
-		$n->setTitle('Retour de recyclage');
-		$n->addBeg()->addTxt('Un cycle de recyclage est terminé, vos recycleurs ont amené leurs butins sur votre ');
-		$n->addLnk('map/base-' . $this->rPlace, 'base orbitale')->addTxt('.');
-		$n->addLnk('map/place-' . $cs->rBaseDestination, 'base')->addTxt(' . ');
+		# send an alert to the player is the place is empty
 		
-		$n->addBoxResource('resource', $resourceRecycled, 'ressources recyclées');
-		$n->addBoxResource('credit', $creditRecycled, 'crédits récoltés');
-		$n->addTxt('et aussi des vaisseaux, enfin peut-être.');
-
-		$n->addSep()->addLnk('map/place-' . $mission->rTarget, 'voir ce qu\'il reste sur ce lieu');
-		$n->addEnd();
-		ASM::$ntm->add($n);
 	}
 
 	// OBJECT METHODS

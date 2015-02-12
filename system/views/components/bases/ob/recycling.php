@@ -56,7 +56,7 @@ for ($i = 0; $i < ASM::$rem->size(); $i++) {
 	echo '<div class="component">';
 		echo '<div class="head skin-2">';
 			if ($i == 0) {
-				echo '<h2>Mission' . Format::addPlural(ASM::$rem->size()) . ' en cours</h2>';
+				echo '<h2>Mission' . Format::addPlural(ASM::$rem->size() + 1) . ' en cours</h2>';
 			}
 		echo '</div>';
 		echo '<div class="fix-body">';
@@ -86,10 +86,11 @@ for ($i = 0; $i < ASM::$rem->size(); $i++) {
 				echo '<ul class="list-type-1">';
 				for ($i = 0; $i < min(ASM::$rlm->size(), 10); $i++) {
 					$log = ASM::$rlm->get($i);
+
 					echo ($i == 0) ? '<li class="strong">' : '<li>';
-						echo '<span class="label">chargement ' . $i . '</span>';
+						echo '<span class="label">date de retour ' . $i . '</span>';
 						echo '<span class="value">';
-							echo Format::numberFormat($log->resources) . ' ressources, ' . Format::numberFormat($log->credits) . ' crédits et x vaisseaux gagnés';
+							echo Format::numberFormat($log->resources) . ' ressources, ' . $log->credits . ' crédits et x vaisseaux gagnés';
 						echo '</span>';
 					echo '</li>';
 				}

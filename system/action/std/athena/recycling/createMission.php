@@ -25,7 +25,7 @@ if ($rPlace !== FALSE AND $rTarget !== FALSE AND $quantity !== FALSE AND in_arra
 	if (ASM::$obm->size() == 1) {
 		$base = ASM::$obm->get();
 
-		$maxRecyclers = OrbitalBaseResource::getInfo(OrbitalBaseResource::RECYCLING, 'level', $base->levelRecycling, 'nbRecyclers')
+		$maxRecyclers = OrbitalBaseResource::getInfo(OrbitalBaseResource::RECYCLING, 'level', $base->levelRecycling, 'nbRecyclers');
 		$usedRecyclers = 0;
 
 		$S_REM1 = ASM::$rem->getCurrentSession();

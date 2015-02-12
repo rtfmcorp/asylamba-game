@@ -52,6 +52,7 @@ class RecyclingLogManager extends Manager {
 			$rl->id = $aw['id'];
 			$rl->rRecycling = $aw['rRecycling'];
 			$rl->resources = $aw['resources'];
+			$rl->credits = $aw['credits'];
 			$rl->ship0 = $aw['ship0'];
 			$rl->ship1 = $aw['ship1'];
 			$rl->ship2 = $aw['ship2'];
