@@ -55,7 +55,7 @@ for ($i = 0; $i < ASM::$rem->size(); $i++) {
 	echo '<div class="component">';
 		echo '<div class="head skin-2">';
 			if ($i == 0) {
-				echo '<h2>Mission' . Format::plural($i) . ' en cours</h2>';
+				echo '<h2>Mission' . Format::plural(ASM::$rem->size()) . ' en cours</h2>';
 			}
 		echo '</div>';
 		echo '<div class="fix-body">';
@@ -119,19 +119,6 @@ for ($i = 0; $i < ASM::$rem->size(); $i++) {
 						break;
 					}
 				}
-			echo '</div>';
-		echo '</div>';
-	echo '</div>';
-}
-
-if (ASM::$rem->size() == 0) {
-	echo '<div class="component">';
-		echo '<div class="head skin-2">';
-			echo '<h2>À propos</h2>';
-		echo '</div>';
-		echo '<div class="fix-body">';
-			echo '<div class="body">';
-				echo '<p class="long-info">' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::RECYCLING, 'description') . '</p>';
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';
