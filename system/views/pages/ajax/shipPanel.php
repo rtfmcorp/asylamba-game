@@ -37,10 +37,10 @@ echo '<div class="component panel-info">';
 
 			# MAXIMA
 			$life 		= ($ship > 5) ? 1600 : 135;
-			$defense 	= ($ship > 5) ? 200 : 20;
+			$defense 	= ($ship > 5) ? 200 : 25;
 			$speeda 	= ($ship > 5) ? 25 : 100;
 			$speedb 	= ($ship > 5) ? 250 : 150;
-			$attack 	= ($ship > 5) ? 1000 : 50;
+			$attack 	= ($ship > 5) ? 700 : 90;
 
 			echo '<div class="skill-box">';
 				$attacks = ShipResource::getInfo($ship, 'attack');
