@@ -73,17 +73,6 @@ echo '<div class="component size3 space">';
 					}
 				}
 
-				# TODO /
-				$data  = 'data-army="';
-				$data .= $spyreport->success > SpyReport::STEP_ARMY
-					? json_encode(unserialize($spyreport->shipsInStorage))
-					: json_encode(array(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1));
-				$data .= '"';
-
-				echo '<span class="commander full show-army position-3" ' . $data . '>';
-					echo '<img src="' . MEDIA . 'orbitalbase/dock1.png" alt="chantier" />';
-				echo '</span>';
-
 				for ($lLine; $lLine < PlaceResource::get($spyreport->typeOfOrbitalBase, 'l-line'); $lLine++) { 
 					echo '<span class="commander empty position-1-' . $llp[$lLine] . '">';
 						echo $spyreport->success > SpyReport::STEP_FLEET
@@ -97,6 +86,18 @@ echo '<div class="component size3 space">';
 						echo $spyreport->success > SpyReport::STEP_FLEET
 							? '<img src="' . MEDIA . 'map/fleet/army-empty.png" alt="vide" />'
 							: '<img src="' . MEDIA . 'map/fleet/army-unknow.png" alt="vide" />';
+					echo '</span>';
+				}
+
+				if ($spyreport->typeOfBase != Place::TYP_EMPTY) {
+					$data  = 'data-army="';
+					$data .= $spyreport->success > SpyReport::STEP_ARMY
+						? json_encode(unserialize($spyreport->shipsInStorage))
+						: json_encode(array(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1));
+					$data .= '"';
+
+					echo '<span class="commander ' . ($spyreport->success > SpyReport::STEP_FLEET && array_sum(unserialize($spyreport->shipsInStorage)) > 0 ? 'full' : 'empty') . ' show-army position-3" ' . $data . '>';
+						echo '<img src="' . MEDIA . 'orbitalbase/dock1.png" alt="chantier" />';
 					echo '</span>';
 				}
 
@@ -124,6 +125,7 @@ echo '<div class="component size3 space">';
 			echo '</div>';
 
 			echo '<div class="situation-info">';
+				# TODO /
 				echo '<div class="item">';
 					echo 'Ressources dans les entrepôts';
 					echo '<span class="value">';
@@ -138,7 +140,9 @@ echo '<div class="component size3 space">';
 				echo '<div class="item">';
 					echo 'Investissement dans le contre-espionnage';
 					echo '<span class="value">';
-						echo Format::number($spyreport->antiSpyInvest);
+						echo $spyreport->success > SpyReport::STEP_RESOURCES
+							? Format::number($spyreport->antiSpyInvest)
+							: '???';
 						echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits">';
 					echo '</span>';
 				echo '</div>';
@@ -147,7 +151,9 @@ echo '<div class="component size3 space">';
 				echo '<div class="item">';
 					echo 'Revenus des routes commerciales';
 					echo '<span class="value">';
-						echo Format::number($spyreport->commercialRouteIncome);
+						echo $spyreport->success > SpyReport::STEP_RESOURCES
+							? Format::number($spyreport->commercialRouteIncome)
+							: '???';
 						echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits">';
 					echo '</span>';
 				echo '</div>';
