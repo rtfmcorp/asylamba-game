@@ -594,12 +594,10 @@ class OrbitalBase {
 		$continue = true;
 		while($continue) {
 			foreach ($shipsArray as $key => $line) {
-				//$nbmax = floor($pointsToRecycle)
-				$qty = rand(1, $line['canBuy']);
+				$nbmax = floor($pointsToRecycle / $line['price']);
+				$qty = rand(1, $nbmax);
 				if ($pointsToRecycle >= $qty * $line['price']) {
-					
 					$pointsToRecycle -= $qty * $line['price'];
-					$line['canBuy'] = $line['canBuy'] - $qty;
 					$line['buy'] = 1;
 					$buyShip[$line['ship']] += $qty;
 				} else {
@@ -608,7 +606,7 @@ class OrbitalBase {
 				}
 			}
 		}
-			$n = new Notification();
+			/*$n = new Notification();
 			$n->setRPlayer($player->id);
 			$n->setTitle('debug recyclage');
 			$n->addBeg();
@@ -624,25 +622,25 @@ class OrbitalBase {
 			}
 			$n->addSep()->addTxt('Il reste : ' . $pointsToRecycle);
 			$n->addEnd();
-			ASM::$ntm->add($n);
+			ASM::$ntm->add($n);*/
 
 		# create a RecyclingLog
 		$rl = new RecyclingLog();
 		$rl->rRecycling = $mission->id;
 		$rl->resources = $resourceRecycled;
 		$rl->credits = $creditRecycled;
-		$rl->ship0 = 0;
-		$rl->ship1 = 0;
-		$rl->ship2 = 0;
-		$rl->ship3 = 0;
-		$rl->ship4 = 0;
-		$rl->ship5 = 0;
-		$rl->ship6 = 0;
-		$rl->ship7 = 0;
-		$rl->ship8 = 0;
-		$rl->ship9 = 0;
-		$rl->ship10 = 0;
-		$rl->ship11 = 0;
+		$rl->ship0 = $buyShip[0];
+		$rl->ship1 = $buyShip[1];
+		$rl->ship2 = $buyShip[2];
+		$rl->ship3 = $buyShip[3];
+		$rl->ship4 = $buyShip[4];
+		$rl->ship5 = $buyShip[5];
+		$rl->ship6 = $buyShip[6];
+		$rl->ship7 = $buyShip[7];
+		$rl->ship8 = $buyShip[8];
+		$rl->ship9 = $buyShip[9];
+		$rl->ship10 = $buyShip[10];
+		$rl->ship11 = $buyShip[11];
 		$rl->dLog = Utils::addSecondsToDate($mission->uRecycling, $mission->cycleTime);
 		ASM::$rlm->add($rl);
 
@@ -660,18 +658,6 @@ class OrbitalBase {
 
 		# update u
 		$mission->uRecycling = $dateOfUpdate;
-
-		# send an alert to the player if he is connected
-		if (CTR::$data->get('playerId') == $this->rPlayer) {
-			$alt = 'Retour de recyclage. ';
-			if ($resourceRecycled > 0) {
-				$alt .= $resourceRecycled . ' ressources recyclées. ';
-			} 
-			if ($creditRecycled > 0) {
-				$alt .= $creditRecycled . ' crédits transformés. ';
-			} 
-			CTR::$alert->add($alt, ALERT_STD_SUCCESS);
-		}
 	}
 
 	// OBJECT METHODS
