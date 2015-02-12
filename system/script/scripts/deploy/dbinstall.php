@@ -1144,7 +1144,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `recyclingLog` (
 	`dLog` datetime NOT NULL,
 
 	PRIMARY KEY (`id`),
-	CONSTRAINT fkRecyclingLogRec FOREIGN KEY (rRecycling) REFERENCES recyclingMission(id)
+	CONSTRAINT fkRecyclingLogRec FOREIGN KEY (rRecycling) REFERENCES recyclingMission(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 
 #--------------------------------------------------------------------------------------------
