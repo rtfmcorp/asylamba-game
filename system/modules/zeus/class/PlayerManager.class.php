@@ -234,8 +234,25 @@ class PlayerManager extends Manager {
 		$api = new API(GETOUT_ROOT);
 		$api->playerIsDead($p->bind, APP_ID);
 
+		# check if there is no other player with the same dead-name
+		$futureName = '&#8224; ' . $p->name . ' ';
+		$S_PAM_INSCR = ASM::$pam->getCurrentSession();
+		while(TRUE) {
+
+			ASM::$pam->newSession(FALSE);
+			ASM::$pam->load(array('name' => $futureName));
+
+			if (ASM::$pam->size() == 0) {
+				break;
+			} else {
+				# on ajoute un 'I' à chaque fois
+				$futureName .= 'I';
+			}
+		};
+		ASM::$pam->changeSession($S_PAM_INSCR);
+
 		# deadify the player
-		$p->name = '&#8224; ' . $p->name;
+		$p->name = $futureName;
 		$p->statement = PAM_DEAD;
 		$p->bind = NULL;
 		$p->rColor = 0;
