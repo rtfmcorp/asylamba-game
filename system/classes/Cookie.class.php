@@ -31,7 +31,7 @@ class Cookie extends ArrayList {
 	}
 
 	public function rewrite() {
-		setcookie($this->name, serialize($this->elements), time() + 3000000);
+		setcookie($this->name, serialize($this->elements), time() + 3000000, '/');
 	}
 
 	public function init() {

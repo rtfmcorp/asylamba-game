@@ -9,6 +9,7 @@ include CLASSES . 'EventList.class.php';
 include CLASSES . 'History.class.php';
 include CLASSES . 'Alert.class.php';
 include CLASSES . 'Cookie.class.php';
+include CLASSES . 'Params.class.php';
 
 include CLASSES . 'Benchmark.class.php';
 include CLASSES . 'Chronos.class.php';

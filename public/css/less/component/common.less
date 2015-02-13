@@ -1081,3 +1081,21 @@
 .common-link {
 	color: white;
 }
+
+.component .top-right-button {
+	display: block;
+	position: absolute;
+
+	top: 0; right: 10px;
+	padding: 0 10px;
+	line-height: 30px;
+	color: white;
+	border-radius: 3px;
+	text-decoration: none;
+	background: @medium;
+	z-index: 1;
+
+	&:hover, &:focus {
+		background: @dark;
+	}
+}
