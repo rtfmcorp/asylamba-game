@@ -41,39 +41,43 @@ if ($direction !== FALSE AND $baseId !== FALSE AND $shipId !== FALSE AND $comman
 			if (ASM::$obm->size() == 1 AND ASM::$com->size() == 1) {
 				$base = ASM::$obm->get();
 				$commander = ASM::$com->get();
+				if ($commander->statement == Commander::AFFECTED) {
 
-				if ($direction == 'ctb') {			// commander to base
-					// if the commander has the quantity of ships required
-					if ($commander->getSquadron($squadron)->getNbrShipByType($shipId) - $quantity >= 0) {
-						$base->setShipStorage($shipId, ($base->getShipStorage($shipId) + $quantity));
-						$commander->getSquadron($squadron)->updateShip($shipId, -$quantity);
-						# CTR::$alert->add('Vaisseau(x) envoyé(s) à la base.', ALERT_BUG_SUCCESS);
-					} else {
-						CTR::$alert->add('L\'escadrille n\'a pas autant de vaisseaux !', ALERT_STD_ERROR);
-					}
-				} else {							// base to commander
-					// if the base has the quantity of ships required
-					if ($base->getShipStorage($shipId) - $quantity >= 0) {
-						// if it's enough PEV space in the commander
-						if (($commander->getSquadron($squadron)->getPev() + (ShipResource::getInfo($shipId, 'pev') * $quantity)) <= 100) {
-							$base->setShipStorage($shipId, ($base->getShipStorage($shipId) - $quantity));
-							$commander->getSquadron($squadron)->updateShip($shipId, $quantity);
-							# CTR::$alert->add('Vaisseau(x) envoyé(s) dans l\'escadrille.', ALERT_BUG_SUCCESS);
+					if ($direction == 'ctb') {			// commander to base
+						// if the commander has the quantity of ships required
+						if ($commander->getSquadron($squadron)->getNbrShipByType($shipId) - $quantity >= 0) {
+							$base->setShipStorage($shipId, ($base->getShipStorage($shipId) + $quantity));
+							$commander->getSquadron($squadron)->updateShip($shipId, -$quantity);
+							# CTR::$alert->add('Vaisseau(x) envoyé(s) à la base.', ALERT_BUG_SUCCESS);
+						} else {
+							CTR::$alert->add('L\'escadrille n\'a pas autant de vaisseaux !', ALERT_STD_ERROR);
+						}
+					} else {							// base to commander
+						// if the base has the quantity of ships required
+						if ($base->getShipStorage($shipId) - $quantity >= 0) {
+							// if it's enough PEV space in the commander
+							if (($commander->getSquadron($squadron)->getPev() + (ShipResource::getInfo($shipId, 'pev') * $quantity)) <= 100) {
+								$base->setShipStorage($shipId, ($base->getShipStorage($shipId) - $quantity));
+								$commander->getSquadron($squadron)->updateShip($shipId, $quantity);
+								# CTR::$alert->add('Vaisseau(x) envoyé(s) dans l\'escadrille.', ALERT_BUG_SUCCESS);
 
-							# tutorial
-							if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-								switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
-									case TutorialResource::FILL_SQUADRON:
-										TutorialHelper::setStepDone();
-										break;
+								# tutorial
+								if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
+									switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+										case TutorialResource::FILL_SQUADRON:
+											TutorialHelper::setStepDone();
+											break;
+									}
 								}
+							} else {
+								CTR::$alert->add('Il n\'y a pas assez de place dans l\'escadrille pour ces vaisseaux.', ALERT_STD_ERROR);
 							}
 						} else {
-							CTR::$alert->add('Il n\'y a pas assez de place dans l\'escadrille pour ces vaisseaux.', ALERT_STD_ERROR);
+							CTR::$alert->add('La base n\'a pas autant de vaisseaux !', ALERT_STD_ERROR);
 						}
-					} else {
-						CTR::$alert->add('La base n\'a pas autant de vaisseaux !', ALERT_STD_ERROR);
 					}
+				} else {
+					CTR::$alert->add('Cet officier ne peut être modifier.', ALERT_STD_ERROR);					
 				}
 			} else {
 				CTR::$alert->add('Erreur dans les commandants ou la base.', ALERT_STD_ERROR);
