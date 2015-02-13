@@ -19,6 +19,7 @@ if ($content && $id) {
 		} else {
 			CTR::$alert->add('message existe pas.', ALERT_STD_FILLFORM);	
 		}
+		ASM::$fmm->changeSession($_FMM);
 } else {
 	CTR::$alert->add('Manque d\'information.', ALERT_STD_FILLFORM);
 }

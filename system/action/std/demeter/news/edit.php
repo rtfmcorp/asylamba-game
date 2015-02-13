@@ -5,20 +5,20 @@ $content = Utils::getHTTPData('content');
 $id = Utils::getHTTPData('id');
 
 if ($content && $id) {	
-		$_FMM = ASM::$fmm->getCurrentSession();
-		ASM::$fmm->newSession();
-		ASM::$fmm->load(array('id' => $id));
+		$_FNM = ASM::$fnm->getCurrentSession();
+		ASM::$fnm->newSession();
+		ASM::$fnm->load(array('id' => $id));
 
-		if (ASM::$fmm->size() > 0) {
-			if (CTR::$data->get('playerId') == ASM::$fmm->get()->rPlayer || CTR::$data->get('playerInfo')->get('status') > 2) {
-				ASM::$fmm->get()->edit($content);
-				ASM::$fmm->get()->dLastModification = Utils::now();
+		if (ASM::$fnm->size() > 0) {
+			if (CTR::$data->get('playerInfo')->get('status') >= 3) {
+				ASM::$fnm->get()->edit($content);
 			} else {
 				CTR::$alert->add('Pas les droits.', ALERT_STD_FILLFORM);
 			}
 		} else {
 			CTR::$alert->add('message existe pas.', ALERT_STD_FILLFORM);	
 		}
+		ASM::$fnm->changeSession($_FNM);
 } else {
 	CTR::$alert->add('Manque d\'information.', ALERT_STD_FILLFORM);
 }
