@@ -14,17 +14,21 @@ echo '<div id="content">';
 		$S_COM_UKN = ASM::$com->getCurrentSession();
 
 		# set d'orbitale base
-		$obsets = array();
+		$obsets = array(); $j = 0;
 		for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
-			$obsets[$i] = array();
+			if (Params::check(Params::LIST_ALL_FLEET) || CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == CTR::$data->get('playerParams')->get('base')) {
+				$obsets[$j] = array();
 
-			$obsets[$i]['info'] = array();
-			$obsets[$i]['fleets'] = array();
+				$obsets[$j]['info'] = array();
+				$obsets[$j]['fleets'] = array();
 
-			$obsets[$i]['info']['id'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
-			$obsets[$i]['info']['name'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('name');
-			$obsets[$i]['info']['type'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('type');
-			$obsets[$i]['info']['img'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('img');
+				$obsets[$j]['info']['id'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
+				$obsets[$j]['info']['name'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('name');
+				$obsets[$j]['info']['type'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('type');
+				$obsets[$j]['info']['img'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('img');
+
+				$j++;
+			}
 		}
 
 		# commander manager : incoming attack

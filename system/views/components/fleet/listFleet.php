@@ -13,6 +13,8 @@ echo '<div class="component size3 list-fleet">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
+			echo '<a class="top-right-button" href="' . Format::actionBuilder('switchparams', ['params' => Params::LIST_ALL_FLEET]) . '">' . (Params::check(Params::LIST_ALL_FLEET) ? 'Afficher uniquement la base courante' : 'Afficher toutes les bases') . '</a>';
+
 			foreach ($obsets as $base) {
 				echo '<div class="set-fleet">';
 					echo '<img src="' . MEDIA . 'map/place/place' . $base['info']['img'] . '.png" alt="' . $base['info']['name'] . '" class="place" />';

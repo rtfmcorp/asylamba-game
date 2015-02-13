@@ -10,6 +10,7 @@ if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('tok
 	switch (CTR::$get->get('a')) {
 		# GENERAL
 		case 'switchbase':				include ACTION . 'common/switchBase.php'; break;
+		case 'switchparams':			include ACTION . 'common/switchParams.php'; break;
 
 		# ATHENA
 		case 'updateinvest': 			include ACTION . 'athena/general/updateInvest.php'; break;
