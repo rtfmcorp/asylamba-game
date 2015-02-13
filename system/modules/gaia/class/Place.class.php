@@ -277,7 +277,7 @@ class Place {
 
 								$S_CLM = ASM::$clm->getCurrentSession();
 								ASM::$clm->newSession();
-								ASM::$clm->load(array('id' => $commander->rColor));
+								ASM::$clm->load(array('id' => $commander->playerColor));
 								$commanderColor = ASM::$clm->get();
 								ASM::$clm->changeSession($S_CLM);
 
