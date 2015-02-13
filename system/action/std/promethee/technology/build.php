@@ -80,6 +80,9 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 					# bonus if the player is from Aphera
 					$bonusPercent += ColorResource::BONUS_APHERA_TECHNO;
 				}
+				# ajout du bonus du lieu
+				$bonusPercent += Game::getImprovementFromScientificCoef($ob->planetHistory);
+				
 				$bonus = round($time * $bonusPercent / 100);
 				if (ASM::$tqm->size() == 0) {
 					$tq->dStart = Utils::now();

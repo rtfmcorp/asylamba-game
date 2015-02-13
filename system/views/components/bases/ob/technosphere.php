@@ -29,6 +29,104 @@ $c1 = array(); $c2 = array(); $c3 = array();
 $c4 = array(); $c5 = array();
 $c6 = array(); $c7 = array();
 
+echo '<div class="component techno">';
+	echo '<div class="head skin-1">';
+		echo '<img src="' . MEDIA . 'orbitalbase/technosphere.png" alt="" />';
+		echo '<h2>' . OrbitalBaseResource::getBuildingInfo(5, 'frenchName') . '</h2>';
+		echo '<em>niveau ' . $ob_tech->getLevelTechnosphere() . '</em>';
+	echo '</div>';
+	echo '<div class="fix-body">';
+		echo '<div class="body">';
+
+			$coef = $ob_tech->planetHistory;
+			echo '<div class="number-box ' . (($coef == 0) ? 'grey' : '') . '">';
+				echo '<span class="label">coefficient scientifique du lieu</span>';
+				echo '<span class="value">';
+					echo $coef . ' %';
+				echo '</span>';
+			echo '</div>';
+
+			echo '<hr />';
+
+			$coefBonus = Game::getImprovementFromScientificCoef($coef);
+			echo '<div class="number-box ' . (($coefBonus == 0) ? 'grey' : '') . '">';
+				echo '<span class="label">bonus de vitesse grâce au coefficient scientifique</span>';
+				echo '<span class="value">';
+					echo $coefBonus . ' %';
+				echo '</span>';
+			echo '</div>';
+
+			$techBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::TECHNOSPHERE_SPEED);
+			if (CTR::$data->get('playerInfo')->get('color') == ColorResource::APHERA) {
+				# bonus if the player is from Aphera
+				$techBonus += ColorResource::BONUS_APHERA_TECHNO;
+			}
+
+			echo '<div class="number-box ' . (($techBonus == 0) ? 'grey' : '') . '">';
+				echo '<span class="label">bonus de vitesse grâce à la technologie Intelligence Artificielle</span>';
+				echo '<span class="value">';
+					echo $techBonus . ' %';
+				echo '</span>';
+			echo '</div>';
+			ASM::$tqm->changeSession($S_TQM2);
+
+			echo '<hr />';
+			
+			$totalBonus = $coefBonus + $techBonus;
+			echo '<div class="number-box ' . (($totalBonus == 0) ? 'grey' : '') . '">';
+				echo '<span class="label">bonus total de vitesse de recherche</span>';
+				echo '<span class="value">';
+					echo $totalBonus . ' %';
+				echo '</span>';
+			echo '</div>';
+
+			echo '<h4>File de construction</h4>';
+			echo '<div class="queue">';
+				$realSizeQueue = 0;
+				$remainingTotalTime = 0;
+				$totalTimeTechno = 0;
+
+				for ($i = 0; $i < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::TECHNOSPHERE, 'level', $ob_tech->levelTechnosphere, 'nbQueues'); $i++) {
+					if (ASM::$tqm->get($i) !== FALSE) {
+						$queue = ASM::$tqm->get($i);
+						$realSizeQueue++;
+						$totalTimeTechno += TechnologyResource::getInfo($queue->technology, 'time', $queue->targetLevel);
+						$remainingTotalTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
+
+						echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTotalTime . '" data-progress-total-time="' . $totalTimeTechno . '">';
+							echo '<a href="' . Format::actionBuilder('dequeuetechno', ['baseid' => $ob_tech->getId(), 'techno' => $queue->technology]) . '"' . 
+								'class="button hb lt" title="annuler la recherche (attention, vous ne récupérerez que ' . TQM_RESOURCERETURN * 100 . '% du montant investi)">×</a>';
+							echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($queue->technology, 'imageLink') . '.png" alt="" />';
+							echo '<strong>' . TechnologyResource::getInfo($queue->technology, 'name');
+							if (!TechnologyResource::isAnUnblockingTechnology($queue->technology)) {
+								echo ' <span class="level">niv. ' . $queue->targetLevel . '</span>';
+							}
+							echo '</strong>';
+							
+							if ($realSizeQueue > 1) {
+								echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTotalTime, 'lite') . '</span></em>';
+								echo '<span class="progress-container"></span>';
+							} else {
+								echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTotalTime, 'lite') . '</span></em>';
+								echo '<span class="progress-container">';
+									echo '<span style="width: ' . Format::percent($totalTimeTechno - $remainingTotalTime, $totalTimeTechno) . '%;" class="progress-bar">';
+									echo '</span>';
+								echo '</span>';
+							}
+						echo '</div>';
+					} else {
+						echo '<div class="item empty">';
+							echo '<span class="picto"></span>';
+							echo '<strong>Emplacement libre</strong>';
+							echo '<span class="progress-container"></span>';
+						echo '</div>';
+					}
+				}
+			echo '</div>';
+		echo '</div>';
+	echo '</div>';
+echo '</div>';
+
 for ($i = 0; $i < Technology::QUANTITY; $i++) {
 	if (!TechnologyResource::isATechnologyNotDisplayed($i)) {
 		$but = ''; $sup = ''; $ctn = array(); $ctn[0] = ''; $ctn[1] = TRUE;
@@ -82,12 +180,8 @@ for ($i = 0; $i < Technology::QUANTITY; $i++) {
 
 			# compute time to build with the bonuses
 			$timeToBuild = TechnologyResource::getInfo($i, 'time', $technology->getTechnology($i) + 1);
-			$bonusPercent = CTR::$data->get('playerBonus')->get(PlayerBonus::TECHNOSPHERE_SPEED);
-			if (CTR::$data->get('playerInfo')->get('color') == ColorResource::APHERA) {
-				# bonus if the player is from Aphera
-				$bonusPercent += ColorResource::BONUS_APHERA_TECHNO;
-			}
-			$timeToBuild -= round($timeToBuild * $bonusPercent / 100);
+			$timeToBuild -= round($timeToBuild * $totalBonus / 100);
+												# warning : $totalBonus est défini plus haut (ne pas inverser les blocs de code !)
 
 			if ($inQueue) {
 				$but .= '<span class="button disable">';
@@ -182,74 +276,6 @@ for ($i = 0; $i < Technology::QUANTITY; $i++) {
 		}
 	}
 }
-
-echo '<div class="component techno">';
-	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'orbitalbase/technosphere.png" alt="" />';
-		echo '<h2>' . OrbitalBaseResource::getBuildingInfo(5, 'frenchName') . '</h2>';
-		echo '<em>niveau ' . $ob_tech->getLevelTechnosphere() . '</em>';
-	echo '</div>';
-	echo '<div class="fix-body">';
-		echo '<div class="body">';
-			$bonus = CTR::$data->get('playerBonus')->get(PlayerBonus::TECHNOSPHERE_SPEED);
-			if (CTR::$data->get('playerInfo')->get('color') == ColorResource::APHERA) {
-				# bonus if the player is from Aphera
-				$bonus += ColorResource::BONUS_APHERA_TECHNO;
-			}
-			echo '<div class="number-box ' . (($bonus == 0) ? 'grey' : '') . '">';
-				echo '<span class="label">bonus de vitesse de recherche</span>';
-				echo '<span class="value">';
-					echo $bonus . ' %';
-				echo '</span>';
-			echo '</div>';
-			ASM::$tqm->changeSession($S_TQM2);
-
-			echo '<h4>File de construction</h4>';
-			echo '<div class="queue">';
-				$realSizeQueue = 0;
-				$remainingTotalTime = 0;
-				$totalTimeTechno = 0;
-
-				for ($i = 0; $i < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::TECHNOSPHERE, 'level', $ob_tech->levelTechnosphere, 'nbQueues'); $i++) {
-					if (ASM::$tqm->get($i) !== FALSE) {
-						$queue = ASM::$tqm->get($i);
-						$realSizeQueue++;
-						$totalTimeTechno += TechnologyResource::getInfo($queue->technology, 'time', $queue->targetLevel);
-						$remainingTotalTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
-
-						echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTotalTime . '" data-progress-total-time="' . $totalTimeTechno . '">';
-							echo '<a href="' . Format::actionBuilder('dequeuetechno', ['baseid' => $ob_tech->getId(), 'techno' => $queue->technology]) . '"' . 
-								'class="button hb lt" title="annuler la recherche (attention, vous ne récupérerez que ' . TQM_RESOURCERETURN * 100 . '% du montant investi)">×</a>';
-							echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($queue->technology, 'imageLink') . '.png" alt="" />';
-							echo '<strong>' . TechnologyResource::getInfo($queue->technology, 'name');
-							if (!TechnologyResource::isAnUnblockingTechnology($queue->technology)) {
-								echo ' <span class="level">niv. ' . $queue->targetLevel . '</span>';
-							}
-							echo '</strong>';
-							
-							if ($realSizeQueue > 1) {
-								echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTotalTime, 'lite') . '</span></em>';
-								echo '<span class="progress-container"></span>';
-							} else {
-								echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTotalTime, 'lite') . '</span></em>';
-								echo '<span class="progress-container">';
-									echo '<span style="width: ' . Format::percent($totalTimeTechno - $remainingTotalTime, $totalTimeTechno) . '%;" class="progress-bar">';
-									echo '</span>';
-								echo '</span>';
-							}
-						echo '</div>';
-					} else {
-						echo '<div class="item empty">';
-							echo '<span class="picto"></span>';
-							echo '<strong>Emplacement libre</strong>';
-							echo '<span class="progress-container"></span>';
-						echo '</div>';
-					}
-				}
-			echo '</div>';
-		echo '</div>';
-	echo '</div>';
-echo '</div>';
 
 # financial
 if (in_array($ob_tech->typeOfBase, array(OrbitalBase::TYP_COMMERCIAL, OrbitalBase::TYP_CAPITAL))) {

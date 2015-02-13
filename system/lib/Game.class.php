@@ -357,4 +357,14 @@ class Game {
 			}
 		}
 	}
+
+	public static function getImprovementFromScientificCoef($coef) {
+		# transform scientific coefficient of a place 
+		# into improvement coefficient for the technosphere
+		if ($coef < 10) {
+			return 0;
+		} else {
+			return ceil(0.001 * $coef * $coef - 0.023 * $coef + 0.43);
+		}
+	}
 }
