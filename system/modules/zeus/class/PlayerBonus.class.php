@@ -142,7 +142,11 @@ class PlayerBonus {
 	}
 
 	private function addTechnoToBonus($techno, $bonus) {
-		$this->bonus->add($bonus, $this->technology->getTechnology($techno) * TechnologyResource::getInfo($techno, 'bonus'));
+		$totalBonus = 0;
+		for ($i = 0; $i <= $this->technology->getTechnology($techno); $i++) { 
+			$totalBonus += TechnologyResource::getImprovementPercentage($techno, $i);
+		}
+		$this->bonus->add($bonus, $totalBonus);
 	}
 
 	private function addLawBonus() {
@@ -287,7 +291,11 @@ class PlayerBonus {
 		$this->addTechnoToBonus($techno, $bonusId);
 
 		if ($this->synchronized) {
-			CTR::$data->get('playerBonus')->add($bonusId, $this->technology->getTechnology($techno) * TechnologyResource::getInfo($techno, 'bonus'));
+			$totalBonus = 0;
+			for ($i = 0; $i <= $this->technology->getTechnology($techno); $i++) { 
+				$totalBonus += TechnologyResource::getImprovementPercentage($techno, $i);
+			}
+			CTR::$data->get('playerBonus')->add($bonusId, $totalBonus);
 		}
 	}
 }
