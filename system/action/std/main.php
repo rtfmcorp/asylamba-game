@@ -99,6 +99,9 @@ if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('tok
 		case 'editmessageforum':		include ACTION . 'demeter/message/edit.php'; break;
 		case 'createtopicforum':		include ACTION . 'demeter/topic/createTopic.php'; break;
 
+		case 'writenews':				include ACTION . 'demeter/news/write.php'; break;
+		case 'editnews':				include ACTION . 'demeter/news/edit.php'; break;
+
 		case 'postulate':				include ACTION . 'demeter/election/postulate.php'; break;
 		case 'makeacoup':				include ACTION . 'demeter/election/makeACoup.php'; break;
 		case 'vote':					include ACTION . 'demeter/election/vote.php'; break;

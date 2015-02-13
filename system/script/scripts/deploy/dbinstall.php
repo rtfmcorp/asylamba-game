@@ -45,11 +45,12 @@ echo '<h2>Ajout de la table factionNews</h2>';
 
 $db->query("DROP TABLE IF EXISTS `factionNews`");
 $db->query("CREATE TABLE IF NOT EXISTS `factionNews` (
-	`id` int(11) unsigned NOT NULL,
+	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 	`rFaction` int(11) unsigned NOT NULL,
 
 	`title` varchar(255) NOT NULL DEFAULT 'Nouvelle',
-	`content` text NOT NULL,
+	`oContent` text NOT NULL,
+	`pContent` text NOT NULL,
 	`pinned` tinyint(3) NOT NULL DEFAULT 0,
 	`statement` tinyint(3) NOT NULL DEFAULT 1,
 

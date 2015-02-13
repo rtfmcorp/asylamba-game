@@ -46,6 +46,7 @@ abstract class ASM {
 	public static $vom;
 	public static $lam;
 	public static $vlm;
+	public static $fnm;
 
 	protected static $runningAtlas = FALSE;
 	public static $prm;
@@ -126,6 +127,7 @@ abstract class ASM {
 			self::$vom = new VoteManager();
 			self::$lam = new LawManager();
 			self::$vlm = new VoteLawManager();
+			self::$fnm = new FactionNewsManager();
 		}
 		self::$runningDemeter = TRUE;
 	}
@@ -184,6 +186,7 @@ abstract class ASM {
 			self::$vom->save();
 			self::$lam->save();
 			self::$vlm->save();
+			self::$fnm->save();
 		}
 		if (self::$runningAtlas) {
 			self::$prm->save();

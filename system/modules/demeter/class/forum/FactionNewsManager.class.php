@@ -48,9 +48,10 @@ class FactionNewsManager extends Manager {
 		foreach($aw AS $awNews) {
 			$news = new factionNews();
 			$news->id = $awNews['id'];
-			$news->rColor = $awNews['rColor'];
+			$news->rFaction = $awNews['rFaction'];
 			$news->title = $awNews['title'];
-			$news->content = $awNews['content'];
+			$news->oContent = $awNews['oContent'];
+			$news->pContent = $awNews['pContent'];
 			$news->pinned = $awNews['pinned'];
 			$news->statement = $awNews['statement'];
 			$news->dCreation = $awNews['dCreation'];
@@ -66,19 +67,24 @@ class FactionNewsManager extends Manager {
 
 		foreach ($newsArray AS $news) {
 			
-			$qr = $db->prepare('UPDATE factionNews
+			$qr = 'UPDATE factionNews
 				SET
-					rColor = ?,
+					rFaction = ?,
 					title = ?,
-					content = ?,
+					oContent = ?,
+					pContent = ?,
 					pinned = ?,
 					statement = ?,
-					dCreation = ?,
-				WHERE id = ?');
+					dCreation = ?
+				WHERE id = ?';
+
+			$qr = $db->prepare($qr);
+			
 			$aw = $qr->execute(array(
-					$news->rColor,
+					$news->rFaction,
 					$news->title,
-					$news->content,
+					$news->oContent,
+					$news->pContent,
 					$news->pinned,
 					$news->statement,
 					$news->dCreation,
@@ -92,16 +98,18 @@ class FactionNewsManager extends Manager {
 
 		$qr = $db->prepare('INSERT INTO factionNews
 			SET
-				rColor = ?,
+				rFaction = ?,
 				title = ?,
-				content = ?,
+				oContent = ?,
+				pContent = ?,
 				pinned = ?,
 				statement = ?,
 				dCreation = ?');
 		$aw = $qr->execute(array(
-				$news->rColor,
+				$news->rFaction,
 				$news->title,
-				$news->content,
+				$news->oContent,
+				$news->pContent,
 				$news->pinned,
 				$news->statement,
 				Utils::now()
