@@ -44,6 +44,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 								$isFactionSector = (ASM::$sem->get()->rColor == $commander->playerColor) ? TRUE : FALSE;
 								ASM::$sem->changeSession($S_SEM);
 								
+								$commander->destinationPlaceName = $place->baseName;
 								if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
 									if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
 
@@ -101,6 +102,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 						$isFactionSector = (ASM::$sem->get()->rColor == $commander->playerColor) ? TRUE : FALSE;
 						ASM::$sem->changeSession($S_SEM);
 						
+						$commander->destinationPlaceName = $place->baseName;
 						if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
 							if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
 								$commander->dStart = Utils::now();

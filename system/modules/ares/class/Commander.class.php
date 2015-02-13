@@ -48,7 +48,7 @@ class Commander {
 	const BACK						= 3; # retour après une action
 
 	const MAXTRAVELTIME				= 57600;
-	const DISTANCEMAX				= 42;
+	const DISTANCEMAX				= 422;
 
 	# attributes
 	public $id 						= 0;
@@ -404,6 +404,8 @@ class Commander {
 		$this->statement = 2;
 
 		$this->dStart = ($travelType != 3) ? Utils::now() : $this->dArrival;
+		$this->startPlaceName = ($travelType != 3) ? $this->oBName : $this->destinationPlaceName;
+		$this->destinationPlaceName = ($travelType != 3) ? $this->destinationPlaceName : $this->startPlaceName;
 		$date = new DateTime($this->dStart);
 		$date->modify('+' . $duration . 'second');
 		$this->dArrival = $date->format('Y-m-d H:i:s');

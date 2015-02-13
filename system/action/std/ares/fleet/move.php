@@ -37,7 +37,8 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					ASM::$sem->load(array('id' => $place->rSector));
 					$isFactionSector = (ASM::$sem->get()->rColor == $commander->playerColor) ? TRUE : FALSE;
 					ASM::$sem->changeSession($S_SEM);
-
+					
+					$commander->destinationPlaceName = $place->baseName;
 					if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
 						$commander->move($place->getId(), $commander->rBase, Commander::MOVE, $length, $duration);
 					} else {

@@ -29,9 +29,9 @@ if ($commanderId !== FALSE) {
 			$rDestinationPlace = $commander->rDestinationPlace;
 			$commander->rDestinationPlace = $commander->rStartPlace;
 			$commander->rStartPlace = $commander->rDestinationPlace;
-			$startPlaceName = $commander->startPlaceName;
-			$commander->startPlaceName = $commander->destinationPlaceName;
-			$commander->destinationPlacename = $startPlaceName;
+			// $startPlaceName = $commander->startPlaceName;
+			// $commander->startPlaceName = $commander->destinationPlaceName;
+			// $commander->destinationPlaceName = $startPlaceName;
 			$commander->dStart = $dStart->format('Y-m-d H:i:s');
 			$commander->dArrival = $dArrival->format('Y-m-d H:i:s');
 			$commander->travelType = 3;
@@ -44,12 +44,13 @@ if ($commanderId !== FALSE) {
 						}
 					}
 				}
-				// CTR::$data->get('playerEvent')->add(
-				// 	$this->dArrival,
-				// 	EVENT_OUTGOING_ATTACK,
-				// 	$this->id,
-				// 	$commander->getEventInfo()
-				// );
+				
+				CTR::$data->get('playerEvent')->add(
+					$commander->dArrival,
+					EVENT_OUTGOING_ATTACK,
+					$commander->id,
+					$commander->getEventInfo()
+				);
 			}
 
 			CTR::$alert->add('Déplacement annulé.', ALERT_STD_SUCCESS);

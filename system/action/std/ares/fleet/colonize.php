@@ -71,6 +71,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 									$isFactionSector = (ASM::$sem->get()->rColor == $commander->playerColor) ? TRUE : FALSE;
 									ASM::$sem->changeSession($S_SEM);
 									if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
+										$commander->destinationPlaceName = $place->baseName;
 										if ($commander->move($place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
 											# debit credit
 											$S_PAM2 = ASM::$pam->getCurrentSession();

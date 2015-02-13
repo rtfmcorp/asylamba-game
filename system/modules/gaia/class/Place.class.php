@@ -395,6 +395,8 @@ class Place {
 			$length = Game::getDistance($this->getXSystem(), $commanderPlace->getXSystem(), $this->getYSystem(), $commanderPlace->getYSystem());
 
 			$duration = Game::getTimeToTravel($commanderPlace, $this, $playerBonus->bonus);
+			$commander->startPlaceName = $this->baseName;
+			$commander->destinationPlaceName = $commander->oBName;
 			$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
 			
 
@@ -427,6 +429,8 @@ class Place {
 				$length = Game::getDistance($this->getXSystem(), $commanderPlace->getXSystem(), $this->getYSystem(), $commanderPlace->getYSystem());
 
 				$duration = Game::getTimeToTravel($commanderPlace, $this, $playerBonus->bonus);
+				$commander->startPlaceName = $this->baseName;
+				$commander->destinationPlaceName = $commander->oBName;
 				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
 				
 				#création du rapport
@@ -484,6 +488,8 @@ class Place {
 						$length = Game::getDistance($this->getXSystem(), $commanderPlace->getXSystem(), $this->getYSystem(), $commanderPlace->getYSystem());
 
 						$duration = Game::getTimeToTravel($commanderPlace, $this, $playerBonus->bonus);
+						$commander->startPlaceName = $this->baseName;
+						$commander->destinationPlaceName = $commander->oBName;
 						$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
 						
 						unset($this->commanders[$aleaNbr]);
@@ -520,6 +526,8 @@ class Place {
 					$length = Game::getDistance($this->getXSystem(), $commanderPlace->getXSystem(), $this->getYSystem(), $commanderPlace->getYSystem());
 
 					$duration = Game::getTimeToTravel($commanderPlace, $this, $playerBonus->bonus);
+					$commander->startPlaceName = $this->baseName;
+					$commander->destinationPlaceName = $commander->oBName;
 					$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
 
 					$this->sendNotif(self::LOOTPLAYERWHITOUTBATTLESUCCESS, $commander);
@@ -534,6 +542,8 @@ class Place {
 				$length = Game::getDistance($this->getXSystem(), $commanderPlace->getXSystem(), $this->getYSystem(), $commanderPlace->getYSystem());
 
 				$duration = Game::getTimeToTravel($commanderPlace, $this, $playerBonus->bonus);
+				$commander->startPlaceName = $this->baseName;
+				$commander->destinationPlaceName = $commander->oBName;
 				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
 				
 				$this->sendNotif(self::LOOTLOST, $commander);
@@ -683,6 +693,8 @@ class Place {
 				$length = Game::getDistance($this->getXSystem(), $commanderPlace->getXSystem(), $this->getYSystem(), $commanderPlace->getYSystem());
 				
 				$duration = Game::getTimeToTravel($commanderPlace, $this, $playerBonus->bonus);
+				$commander->startPlaceName = $this->baseName;
+				$commander->destinationPlaceName = $commander->oBName;
 				$commander->move($commander->rBase, $this->id, Commander::BACK, $length, $duration);
 
 				$this->sendNotif(self::CONQUERLOST, $commander);
