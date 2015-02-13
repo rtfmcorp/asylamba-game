@@ -34,17 +34,37 @@ class TechnologyResource {
 					if ($level <= 0) {
 						return FALSE;
 					}
+					if ($info == 'points') {
+						return round(self::$technology[$techno][$info] * $level * Technology::COEF_POINTS);
+					} else {
+
+						switch (self::$technology[$techno]['category']) {
+							case 1:
+								$value = round(self::$technology[$techno][$info] * pow(1.75, $level-1));
+								break;
+							case 2:
+								$value = round(self::$technology[$techno][$info] * pow(1.5, $level-1));
+								break;
+							case 3:
+								$value = round(self::$technology[$techno][$info] * pow(1.3, $level-1));
+								break;
+							default:
+								return FALSE;
+						}
+						return $value;
+					}
+					/*
 					$value = self::$technology[$techno][$info] * $level;
 					//$value = self::$technology[$techno][$info][0] * $level;
 					switch ($info) {
 						case 'time' : 		$value *= TQM_TECHNOCOEFTIME; 		break;
 						case 'resource' : 	$value *= TQM_TECHNOCOEFRESOURCE; 	break;
 						case 'credit' : 	$value *= TQM_TECHNOCOEFCREDIT; 	break;
-						case 'points' : 	$value *= TQM_TECHNOCOEFPOINTS; 	break;
+						case 'points' : 	$value *= Technology::COEF_POINTS; 	break;
 						default : return FALSE;
 					}
 					//$value += self::$technology[$techno][$info][1];
-					return $value;
+					return $value;*/
 				} else {
 					CTR::$alert->add('2e argument faux pour getInof() de TechnologyResource', ALERT_BUG_ERROR);
 				}
@@ -112,6 +132,11 @@ class TechnologyResource {
 					} else {
 						return TRUE;
 					}
+					break;
+				// est-ce qu'on peut construire la techno ? Pas dépassé le niveau max
+				// arg1 est le niveau de la technologie voulue
+				case 'maxLevel' :
+					return ($arg1 <= self::getInfo($techno, 'maxLevel')) ? TRUE : FALSE;
 					break;
 				default :
 					CTR::$alert->add('Erreur dans haveRights() de TechnologyResource', ALERT_BUG_ERROR);

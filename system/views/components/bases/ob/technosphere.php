@@ -104,6 +104,11 @@ for ($i = 0; $i < Technology::QUANTITY; $i++) {
 				$ctn[1] = FALSE;
 				$sup .= '<em>développement terminé</em>';
 				$closed = 'closed';
+			} elseif (!TechnologyResource::isAnUnblockingTechnology($i) && !TechnologyResource::haveRights($i, 'maxLevel', $technology->getTechnology($i) + 1)) {
+				# max level reached
+				$but .= '<span class="button disable">';
+					$but .= 'niveau maximum atteint<br />';
+				$but .= '</span>';
 			} elseif (!TechnologyResource::haveRights($i, 'queue', $ob_tech, ASM::$tqm->size())) {
 				# queue size
 				$but .= '<span class="button disable">';
