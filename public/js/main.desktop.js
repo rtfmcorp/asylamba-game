@@ -437,7 +437,8 @@ jQuery(document).ready(function($) {
 			id: undefined,
 			maxJump: undefined,
 			name: undefined,
-			wedge: undefined
+			wedge: undefined,
+			color: undefined
 		},
 
 		params: {
@@ -488,6 +489,7 @@ jQuery(document).ready(function($) {
 					mapController.commanders.maxJump = commander.data('max-jump');
 					mapController.commanders.name = commander.data('name');
 					mapController.commanders.wedge = commander.data('wedge');
+					mapController.commanders.color = commander.data('color');
 				} else {
 					alertController.add(101, 'Ce commandant est déjà en mission');
 				}
@@ -642,7 +644,7 @@ jQuery(document).ready(function($) {
 				if (mapController.commanders.active) {
 					actionbox.obj.find('.commander-tile .item').hide();
 
-					if (actionbox.obj.find('.header').data('distance') > mapController.commanders.maxJump) {
+					if (actionbox.obj.find('.header').data('distance') > mapController.commanders.maxJump && actionbox.obj.find('.header').data('sector-color') != mapController.commanders.color) {
 						actionbox.obj.find('.commander-tile .item.too-far').show();
 					} else {
 						var items = actionbox.obj.find('.commander-tile .item.move');

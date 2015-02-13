@@ -9,7 +9,7 @@
 
 echo '<div class="component size3 table-fleet">';
 	echo '<div class="head skin-1">';
-		echo '<h1>Centre des opérations</h1>';
+		echo '<h1>Aperçu des armées</h1>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
@@ -23,8 +23,10 @@ echo '<div class="component size3 table-fleet">';
 					echo '<th><span>PEV</span></th>';
 				echo '</tr>';
 
+				$totalShips = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
 				foreach ($obsets as $base) {
-					$totalShips = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+					$totalShipsBase = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 					echo '<tr>';
 						echo '<td rowspan="' . (count($base['fleets']) + 2) . '" class="base">';
@@ -41,7 +43,7 @@ echo '<div class="component size3 table-fleet">';
 						echo '</td>';
 						$linePEV = 0;
 
-						for ($i = 0; $i < count($totalShips); $i++) {
+						for ($i = 0; $i < count($totalShipsBase); $i++) {
 							echo '<td>';
 								echo $base['dock'][$i] == 0 ? '<span class="zero-value">' : '<span>';
 									echo $base['dock'][$i];
@@ -50,6 +52,7 @@ echo '<div class="component size3 table-fleet">';
 
 							$linePEV += ShipResource::getInfo($i, 'pev') * $base['dock'][$i];
 							$totalShips[$i] += $base['dock'][$i];
+							$totalShipsBase[$i] += $base['dock'][$i];
 						}
 						echo '<td>' . $linePEV . '</td>';
 					echo '</tr>';
@@ -64,7 +67,7 @@ echo '<div class="component size3 table-fleet">';
 									echo CommanderResources::getInfo($commander->level, 'grade') . ' <strong>' . $commander->name . '</strong>';
 								echo '</a>';
 							echo '</td>';
-							for ($i = 0; $i < count($totalShips); $i++) { 
+							for ($i = 0; $i < count($totalShipsBase); $i++) { 
 								echo '<td>';
 									echo $commanderShips[$i] == 0 ? '<span class="zero-value">' : '<span>';
 										echo $commanderShips[$i];
@@ -73,6 +76,7 @@ echo '<div class="component size3 table-fleet">';
 
 								$linePEV += ShipResource::getInfo($i, 'pev') * $commanderShips[$i];
 								$totalShips[$i] += $commanderShips[$i];
+								$totalShipsBase[$i] += $commanderShips[$i];
 							}
 							echo '<td>' . $linePEV . '</td>';
 						echo '</tr>';
@@ -82,18 +86,35 @@ echo '<div class="component size3 table-fleet">';
 						echo '<td class="large">Total sur la planète</td>';
 						$linePEV = 0;
 
-						for ($i = 0; $i < count($totalShips); $i++) { 
+						for ($i = 0; $i < count($totalShipsBase); $i++) { 
 							echo '<td>';
-								echo $totalShips[$i] == 0 ? '<span class="zero-value">' : '<span>';
-									echo $totalShips[$i];
+								echo $totalShipsBase[$i] == 0 ? '<span class="zero-value">' : '<span>';
+									echo $totalShipsBase[$i];
 								echo '<span>';
 							echo '</td>';
 
-							$linePEV += ShipResource::getInfo($i, 'pev') * $totalShips[$i];
+							$linePEV += ShipResource::getInfo($i, 'pev') * $totalShipsBase[$i];
 						}
 						echo '<td>' . $linePEV . '</td>';
 					echo '</tr>';
 				}
+
+				echo '<tr>';
+					echo '<td class="base"></td>';
+					echo '<td class="large">Total général</td>';
+					$linePEV = 0;
+
+					for ($i = 0; $i < count($totalShips); $i++) { 
+						echo '<td>';
+							echo $totalShips[$i] == 0 ? '<span class="zero-value">' : '<span>';
+								echo $totalShips[$i];
+							echo '<span>';
+						echo '</td>';
+
+						$linePEV += ShipResource::getInfo($i, 'pev') * $totalShips[$i];
+					}
+					echo '<td>' . $linePEV . '</td>';
+				echo '</tr>';
 			echo '</table>';
 		echo '</div>';
 	echo '</div>';

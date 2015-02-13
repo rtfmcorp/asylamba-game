@@ -51,7 +51,7 @@ ASM::$rem->newSession();
 ASM::$rem->load(array('rBase' => $defaultBase->rPlace, 'statement' => array(RecyclingMission::ST_BEING_DELETED, RecyclingMission::ST_ACTIVE)));
 
 # header part
-echo '<div class="header" data-distance="' . Format::numberFormat(Game::getDistance($defaultBase->xSystem, $places[0]->xSystem, $defaultBase->ySystem, $places[0]->ySystem)) . '">';
+echo '<div class="header" data-sector-color="' . $places[0]->sectorColor . '" data-distance="' . Format::numberFormat(Game::getDistance($defaultBase->xSystem, $places[0]->xSystem, $defaultBase->ySystem, $places[0]->ySystem)) . '">';
 	echo '<ul>';
 		echo '<li>Système #' . $system->id . '</li>';
 		echo '<li>Cordonnées ' . Game::formatCoord($system->xPosition, $system->yPosition) . '</li>';
