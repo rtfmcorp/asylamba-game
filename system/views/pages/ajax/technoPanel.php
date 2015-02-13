@@ -22,6 +22,9 @@ if (TechnologyResource::isATechnology($tech) AND !TechnologyResource::isATechnol
 	$points = TechnologyResource::getInfo($tech, 'points', $level + 1);
 
 	$shortDescription = TechnologyResource::getInfo($tech, 'shortDescription');
+	$improvementPercentage = TechnologyResource::getImprovementPercentage($tech, $level + 1);
+	$shortDescription = str_replace('x%', $improvementPercentage . '%', $shortDescription);
+
 	$description = TechnologyResource::getInfo($tech, 'description');
 
 	$technosphere = TechnologyResource::getInfo($tech, 'requiredTechnosphere');

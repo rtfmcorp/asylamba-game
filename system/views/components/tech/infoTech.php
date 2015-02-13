@@ -28,7 +28,7 @@ echo '<div class="component panel-info">';
 			echo '</table></div>';
 
 			# description
-			echo '<h4>Prérequis</h4>';
+			echo '<h4>Prérequis pour le prochain niveau</h4>';
 			echo '<p class="info">';
 				echo 'Technosphère, niv. ' . $technosphere . '<br />';
 				foreach ($researchList as $research) {
