@@ -120,6 +120,8 @@ class Technology {
 	const DESTROYER_ATTACK = 45;
 	const DESTROYER_DEFENSE = 46;
 
+	const QUANTITY = 47;
+
 	public function __construct($rPlayer) {
 		$this->rPlayer = $rPlayer; 
 

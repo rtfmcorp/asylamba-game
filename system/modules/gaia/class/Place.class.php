@@ -84,7 +84,7 @@ class Place {
 
 	// OB
 	public $levelCommercialPlateforme = 0;
-	public $levelSpatiport = 0;
+	public $levelSpatioport = 0;
 	public $antiSpyInvest = 0;
 
 	// COMMANDER 

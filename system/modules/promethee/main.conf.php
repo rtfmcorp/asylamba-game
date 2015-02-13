@@ -6,7 +6,6 @@ define('RSM_RESEARCHMAXDIFF',		3);
 define('RSM_RESEARCHQUANTITY', 		10);
 
 // technologies de la technosphere
-define('TQM_TECHNOQUANTITY', 		47);
 define('TQM_TECHNOCOEFRESOURCE', 	1);
 define('TQM_TECHNOCOEFCREDIT', 		1);
 define('TQM_TECHNOCOEFTIME', 		1);

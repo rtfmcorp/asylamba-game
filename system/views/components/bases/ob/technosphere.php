@@ -29,7 +29,7 @@ $c1 = array(); $c2 = array(); $c3 = array();
 $c4 = array(); $c5 = array();
 $c6 = array(); $c7 = array();
 
-for ($i = 0; $i < TQM_TECHNOQUANTITY; $i++) {
+for ($i = 0; $i < Technology::QUANTITY; $i++) {
 	if (!TechnologyResource::isATechnologyNotDisplayed($i)) {
 		$but = ''; $sup = ''; $ctn = array(); $ctn[0] = ''; $ctn[1] = TRUE;
 		$disability = 'disable'; $closed = '';

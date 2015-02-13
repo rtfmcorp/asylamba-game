@@ -28,7 +28,7 @@ class TechnologyResource {
 					CTR::$alert->add('2e argument faux pour getInfo() de TechnologyResource (techno ' . $techno . ')', ALERT_BUG_ERROR);
 				}
 			} else {
-				if(in_array($info, array('name', 'progName', 'imageLink', 'requiredTechnosphere', 'requiredResearch', 'column', 'shortDescription', 'description', 'bonus'))) {
+				if(in_array($info, array('name', 'progName', 'imageLink', 'requiredTechnosphere', 'requiredResearch', 'maxLevel', 'category', 'column', 'shortDescription', 'description', 'bonus'))) {
 					return self::$technology[$techno][$info];
 				} elseif (in_array($info, array('time', 'resource', 'credit', 'points'))) {
 					if ($level <= 0) {
@@ -395,18 +395,7 @@ class TechnologyResource {
 		),
 
 	// LEVEL technologies
-		/*array(
-			'name' => 'Débloqueur du chantier naval de type b48sigma',
-			'progName' => 'fighterDefense',
-			'imageLink' => '',
-			'requiredTechnosphere' => 2,
-			'requiredResearch' => array(2,0,0,1,0,0,0,0,0,1),
-				// array(a, b) de ax+b // a = pente, b = offset
-			'time' => array(23423, 2312),
-			'resource' => array(234, 4),
-			'credit' => array(234, 23),
-			'points' => array(132, 2)
-		),*/
+
 		array(
 			'name' => 'Ingénierie du bâtiment',
 			'progName' => 'generatorSpeed',
@@ -414,6 +403,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 6,
 			'requiredResearch' => array(0,0,0,0,0,0,0,4,4,0),
 			'time' => 40800,
+			'maxLevel' => 100,
+			'category' => 2,
 			'resource' => 1150,
 			'credit' => 10500,
 			'points' => 30,
@@ -429,6 +420,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 10,
 			'requiredResearch' => array(0,0,0,0,0,5,6,0,0,0),
 			'time' => 37800,
+			'maxLevel' => 100,
+			'category' => 3,
 			'resource' => 110,
 			'credit' => 11500,
 			'points' => 28,
@@ -444,6 +437,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 14,
 			'requiredResearch' => array(0,0,0,0,0,7,7,0,0,0),
 			'time' => 46800,
+			'maxLevel' => 100,
+			'category' => 3,
 			'resource' => 1300,
 			'credit' => 12500,
 			'points' => 39,
@@ -459,6 +454,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 16,
 			'requiredResearch' => array(0,0,0,0,0,0,0,8,9,0),
 			'time' => 27000,
+			'maxLevel' => 100,
+			'category' => 2,
 			'resource' => 850,
 			'credit' => 10000,
 			'points' => 21,
@@ -474,6 +471,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 17,
 			'requiredResearch' => array(0,0,0,0,0,0,0,11,12,0),
 			'time' => 69000,
+			'maxLevel' => 100,
+			'category' => 2,
 			'resource' => 1850,
 			'credit' => 17000,
 			'points' => 48,
@@ -489,6 +488,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 12,
 			'requiredResearch' => array(0,0,0,0,0,0,0,0,9,7),
 			'time' => 60000,
+			'maxLevel' => 100,
+			'category' => 2,
 			'resource' => 1740,
 			'credit' => 16000,
 			'points' => 45,
@@ -504,6 +505,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 15,
 			'requiredResearch' => array(0,0,0,0,0,9,8,0,0,0),
 			'time' => 51000,
+			'maxLevel' => 100,
+			'category' => 3,
 			'resource' => 1600,
 			'credit' => 15500,
 			'points' => 44,
@@ -519,6 +522,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 25,
 			'requiredResearch' => array(0,0,0,0,0,9,10,0,0,0),
 			'time' => 58800,
+			'maxLevel' => 100,
+			'category' => 3,
 			'resource' => 1700,
 			'credit' => 17500,
 			'points' => 46,
@@ -534,6 +539,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 32,
 			'requiredResearch' => array(0,0,0,0,0,0,0,14,15,0),
 			'time' => 64800,
+			'maxLevel' => 100,
+			'category' => 2,
 			'resource' => 1900,
 			'credit' => 17500,
 			'points' => 47,
@@ -549,6 +556,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 20,
 			'requiredResearch' => array(0,0,0,0,0,10,8,0,0,0),
 			'time' => 41400,
+			'maxLevel' => 100,
+			'category' => 2,
 			'resource' => 1000,
 			'credit' => 11500,
 			'points' => 33,
@@ -564,6 +573,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 21,
 			'requiredResearch' => array(0,0,0,0,0,0,10,0,0,0),
 			'time' => 52200,
+			'maxLevel' => 100,
+			'category' => 2,
 			'resource' => 1680,
 			'credit' => 16000,
 			'points' => 42,
@@ -579,6 +590,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 9,
 			'requiredResearch' => array(0,0,0,0,0,4,6,0,0,0),
 			'time' => 38000,
+			'maxLevel' => 100,
+			'category' => 2,
 			'resource' => 1100,
 			'credit' => 11500,
 			'points' => 30,
@@ -594,6 +607,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 13,
 			'requiredResearch' => array(0,0,0,0,0,9,11,0,0,0),
 			'time' => 50000,
+			'maxLevel' => 100,
+			'category' => 2,
 			'resource' => 1630,
 			'credit' => 15900,
 			'points' => 41,
@@ -609,6 +624,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 25,
 			'requiredResearch' => array(0,0,0,0,0,0,0,10,0,8),
 			'time' => 60000,
+			'maxLevel' => 100,
+			'category' => 2,
 			'resource' => 1900,
 			'credit' => 17800,
 			'points' => 48,
@@ -624,6 +641,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 20,
 			'requiredResearch' => array(0,0,0,0,0,5,0,0,0,0),
 			'time' => 49800,
+			'maxLevel' => 100,
+			'category' => 2,
 			'resource' => 1650,
 			'credit' => 16000,
 			'points' => 43,
@@ -639,6 +658,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 15,
 			'requiredResearch' => array(5,0,0,0,4,4,0,4,0,0),
 			'time' => 47300,
+			'maxLevel' => 100,
+			'category' => 1,
 			'resource' => 1500,
 			'credit' => 13500,
 			'points' => 43,
@@ -654,6 +675,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 4,
 			'requiredResearch' => array(0,0,0,0,0,0,0,0,5,0),
 			'time' => 22800,
+			'maxLevel' => 100,
+			'category' => 3,
 			'resource' => 680,
 			'credit' => 5500,
 			'points' => 19,
@@ -669,6 +692,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 9,
 			'requiredResearch' => array(4,6,0,0,0,0,0,0,0,0),
 			'time' => 29400,
+			'maxLevel' => 100,
+			'category' => 3,
 			'resource' => 880,
 			'credit' => 9200,
 			'points' => 25,
@@ -684,6 +709,8 @@ class TechnologyResource {
 			'requiredTechnosphere' => 12,
 			'requiredResearch' => array(0,0,0,0,5,0,0,0,0,0),
 			'time' => 36000,
+			'maxLevel' => 100,
+			'category' => 3,
 			'resource' => 1000,
 			'credit' => 8400,
 			'points' => 29,
@@ -699,13 +726,15 @@ class TechnologyResource {
 			'requiredTechnosphere' => 15,
 			'requiredResearch' => array(0,0,0,0,0,0,0,0,8,0),
 			'time' => 27600,
+			'maxLevel' => 100,
+			'category' => 3,
 			'resource' => 750,
 			'credit' => 6800,
 			'points' => 23,
 			'column' => 6,
-			'shortDescription' => 'Améliore la vitesse de vos corvettes de 2% par niveau.',
+			'shortDescription' => 'Améliore la vitesse de vos corvettes de 3% par niveau.',
 			'description' => 'La propulsion améliorée est une technologie qui booste les réacteurs de vos corvettes, améliorant ainsi leur vitesse et leur chance d’éviter les impacts.',
-			'bonus' => 2
+			'bonus' => 3
 		),
 		array(
 			'name' => 'Armement laser',
@@ -714,13 +743,15 @@ class TechnologyResource {
 			'requiredTechnosphere' => 18,
 			'requiredResearch' => array(8,9,0,0,0,0,0,0,0,0),
 			'time' => 33600,
+			'maxLevel' => 100,
+			'category' => 3,
 			'resource' => 920,
 			'credit' => 9800,
 			'points' => 26,
 			'column' => 6,
-			'shortDescription' => 'Améliore l\'attaque de vos corvettes de 2% par niveau.',
+			'shortDescription' => 'Améliore l\'attaque de vos corvettes de 3% par niveau.',
 			'description' => 'Cette nouvelle technologie augmente le faisceau des canons laser de vos corvettes. Celles-ci seront donc plus puissantes aux combats spatiaux ou attaques de planètes.',
-			'bonus' => 2
+			'bonus' => 3
 		),
 		array(
 			'name' => 'Bouclier renforcé',
@@ -729,13 +760,15 @@ class TechnologyResource {
 			'requiredTechnosphere' => 20,
 			'requiredResearch' => array(0,0,0,0,8,0,0,0,0,0),
 			'time' => 45000,
+			'maxLevel' => 100,
+			'category' => 3,
 			'resource' => 1580,
 			'credit' => 16500,
 			'points' => 38,
 			'column' => 6,
-			'shortDescription' => 'Améliore la défense de vos corvettes de 2% par niveau.',
+			'shortDescription' => 'Améliore la défense de vos corvettes de 3% par niveau.',
 			'description' => 'Le bouclier, plus résistant que le petit bouclier, a été élaboré pour augmenter le système de défense de vos corvettes.',
-			'bonus' => 2
+			'bonus' => 3
 		),
 		array(
 			'name' => 'Turbo-propulsion double',
@@ -744,13 +777,15 @@ class TechnologyResource {
 			'requiredTechnosphere' => 2,
 			'requiredResearch' => array(0,0,0,0,0,0,0,0,10,0),
 			'time' => 33000,
+			'maxLevel' => 100,
+			'category' => 3,
 			'resource' => 980,
 			'credit' => 10500,
 			'points' => 24,
 			'column' => 7,
-			'shortDescription' => 'Améliore la vitesse de vos frégates de 2% par niveau.',
+			'shortDescription' => 'Améliore la vitesse de vos frégates de 3% par niveau.',
 			'description' => 'La super propulsion est un système de propulsion héliothermique. Ce système permet à tous vos vaisseaux de type frégate de gagner en vitesse.',
-			'bonus' => 2
+			'bonus' => 3
 		),
 		array(
 			'name' => 'Tête chercheuse',
@@ -759,13 +794,15 @@ class TechnologyResource {
 			'requiredTechnosphere' => 26,
 			'requiredResearch' => array(10,0,11,0,0,0,0,0,0,0),
 			'time' => 41400,
+			'maxLevel' => 100,
+			'category' => 3,
 			'resource' => 1220,
 			'credit' => 11500,
 			'points' => 34,
 			'column' => 7,
-			'shortDescription' => 'Améliore l\'attaque de vos frégates de 2% par niveau.',
+			'shortDescription' => 'Améliore l\'attaque de vos frégates de 3% par niveau.',
 			'description' => 'La technologie tête chercheuse augmente la capacité des missiles de vos frégates à toucher leurs cibles. Cette technique vous permettra d’imposer plus de dégâts aux navettes ennemies.',
-			'bonus' => 2
+			'bonus' => 3
 		),
 		array(
 			'name' => 'Bouclier lourd',
@@ -774,13 +811,15 @@ class TechnologyResource {
 			'requiredTechnosphere' => 28,
 			'requiredResearch' => array(0,0,0,9,11,0,0,0,0,0),
 			'time' => 59400,
+			'maxLevel' => 100,
+			'category' => 3,
 			'resource' => 1780,
 			'credit' => 17200,
 			'points' => 45,
 			'column' => 7,
-			'shortDescription' => 'Améliore la défense de vos frégates de 2% par niveau.',
+			'shortDescription' => 'Améliore la défense de vos frégates de 3% par niveau.',
 			'description' => 'Le bouclier renforcé dispose de deux protections laser enveloppent complètement la coque de vos frégates tout en procurant une protection idéal face aux attaques de type missile.',
-			'bonus' => 2
+			'bonus' => 3
 		),
 		array(
 			'name' => 'Turbo-propulsion triple',
@@ -789,13 +828,15 @@ class TechnologyResource {
 			'requiredTechnosphere' => 30,
 			'requiredResearch' => array(0,0,0,0,0,9,0,0,14,0),
 			'time' => 34200,
+			'maxLevel' => 100,
+			'category' => 3,
 			'resource' => 900,
 			'credit' => 8800,
 			'points' => 24,
 			'column' => 7,
-			'shortDescription' => 'Améliore la vitesse de vos destroyers/croiseurs de 2% par niveau.',
+			'shortDescription' => 'Améliore la vitesse de vos destroyers/croiseurs de 3% par niveau.',
 			'description' => 'La turbo-propulsion est basée sur un système photonique, lui permettant d’augmenter sa rapidité à proximité d’une étoile. Cette amélioration augmentera la vitesse de tous vos destroyers.',
-			'bonus' => 2
+			'bonus' => 3
 		),
 		array(
 			'name' => 'Canon longue portée',
@@ -804,13 +845,15 @@ class TechnologyResource {
 			'requiredTechnosphere' => 38,
 			'requiredResearch' => array(15,0,17,0,0,9,0,0,0,0),
 			'time' => 45600,
+			'maxLevel' => 100,
+			'category' => 3,
 			'resource' => 1620,
 			'credit' => 15500,
 			'points' => 38,
 			'column' => 7,
-			'shortDescription' => 'Améliore l\'attaque de vos destroyers/croiseurs de 2% par niveau.',
+			'shortDescription' => 'Améliore l\'attaque de vos destroyers/croiseurs de 3% par niveau.',
 			'description' => 'L’armement lourd est une technologie améliorant la capacité d’attaque de vos destroyers. Ce système transformera quelque peu les canons de vos destroyers, leur offrant la possibilité d’augmenter leur puissance de feu dans les combats spatiaux.',
-			'bonus' => 2
+			'bonus' => 3
 		),
 		array(
 			'name' => 'Bouclier lourd amélioré',
@@ -819,13 +862,15 @@ class TechnologyResource {
 			'requiredTechnosphere' => 40,
 			'requiredResearch' => array(0,0,0,15,18,9,0,0,0,0),
 			'time' => 72000,
+			'maxLevel' => 100,
+			'category' => 3,
 			'resource' => 1980,
 			'credit' => 20000,
 			'points' => 49,
 			'column' => 7,
-			'shortDescription' => 'Améliore la défense de vos destroyers/croiseurs de 2% par niveau.',
+			'shortDescription' => 'Améliore la défense de vos destroyers/croiseurs de 3% par niveau.',
 			'description' => 'Le bouclier amélioré n’est autre qu’une amélioration du bouclier renforcé. En effet, cette technologie n’apporte pas de modification majeur par rapport au système précédent, elle est simplement adapté aux vaisseaux de type destroyer.',
-			'bonus' => 2
+			'bonus' => 3
 		)
 	);
 
