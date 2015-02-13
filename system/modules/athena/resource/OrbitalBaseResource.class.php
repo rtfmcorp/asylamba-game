@@ -280,7 +280,7 @@ class OrbitalBaseResource {
 				array(160520,	616000,	126,	6)
 			),
 			'maxLevel' => array(30, 40, 40, 40),
-			'description' => 'Vous donnant la possibilité de construire et de faire évoluer vos bâtiments, le <strong>Générateur</strong> vous permet également de savoir à quel niveau sont vos édifices. Cette passerelle est l’institution principale de votre base orbitale. En effet, s’il n’est pas suffisamment évolué, vous remarquerez très vite qu’il devient impossible d’ériger d’autres types de bâtiments.<br /><br />Un niveau supplémentaire du Générateur permet de développer un niveau supplémentaire de chacun des autres bâtiments, à l\'exception de la Plateforme Commerciale et du Chantier de Ligne. Ces deux bâtiments ne peuvent être débloqué qu\'une fois le niveau 5 du Générateur atteint.'
+			'description' => 'le <strong>Générateur</strong> est le centre névralgique de votre base orbitale. C\'est la super-structure qui permet de construire les autres modules nécessaires à la bonne marche de votre planète. Il vous permet de construire les autres bâtiments ainsi que d\'avoir un aperçu rapide du développement de votre base. De plus, aucun bâtiment ne peut avoir un niveau supérieur à celui de votre générateur.<br /><br />'
 		),
 		array(
 			'name' => 'refinery',
@@ -522,8 +522,7 @@ class OrbitalBaseResource {
 				array(118120,	809614,	358,	3700)
 			),
 			'maxLevel' => array(20, 30, 20, 30),
-			'description' => 'La <strong>Plateforme Commerciale</strong> est véritablement la <strong>place de commerce</strong> entre les joueurs d’Asylamba. En effet, cette plateforme vous permettra de <strong>vendre</strong> ou d’<strong>acheter</strong> des vaisseaux, des commandants ou encore des ressources.<br /><br />
-							Vous devrez fixer vous-même le prix des marchandises que vous souhaitez vendre, il faudra donc faire attention aux tendances du marché, de manière à être sûr de vendre vos produits. De plus, toute vente ou achat est soumis à deux taxes, une d\'achat et une de vente. Prenez donc ces taxes en compte en fixant vos prix. Le montant des taxes revient aux factions concernées.',
+			'description' => 'La <strong>Plateforme Commerciale</strong> est véritablement la <strong>place de commerce</strong> entre les joueurs d’Asylamba. En effet, cette plateforme vous permettra de <strong>vendre</strong> ou d’<strong>acheter</strong> des vaisseaux, des commandants ou encore des ressources.<br /><br />Vous devrez fixer vous-même le prix des marchandises que vous souhaitez vendre, il faudra donc faire attention aux tendances du marché, de manière à être sûr de vendre vos produits. De plus, toute vente ou achat est soumis à deux taxes, une d\'achat et une de vente. Prenez donc ces taxes en compte en fixant vos prix. Le montant des taxes revient aux factions concernées.',
 			'techno' => 0
 		),
 		array(
@@ -614,7 +613,7 @@ class OrbitalBaseResource {
 				array(108270,	647692,	159,436)
 			),
 			'maxLevel' => array(20, 20, 30, 30),
-			'description' => 'Le <strong>Centre de Recyclage</strong> est un bâtiment très intéressant économiquement parlant. En effet, il vous permettra d\'avoir un revenu supplémentaire en recyclant des lieux autour de vous. <br />Il est possible de lancer des missions de recyclage composées de plusieurs <strong>recycleurs</strong>, ou collecteurs, sur des lieux tels que des champs de ruines, des ceintures d\'astéroïdes, des géantes gazeuses ou des poches de gaz. Le but étant l\'extraction et le forage de matériau pour en retirer des ressources, des crédits et même des vaisseaux. <br />Chaque type de lieu est riche en une ou plusieurs de ces denrées. Attention, les denrées sont épuisables.',
+			'description' => 'Le <strong>Centre de Recyclage</strong> est un bâtiment très intéressant économiquement parlant. En effet, il vous permettra d\'avoir un revenu supplémentaire en recyclant des lieux autour de vous.<br /><br />Il est possible de lancer des missions de recyclage composées de plusieurs <strong>recycleurs</strong>, ou collecteurs, sur des lieux tels que des champs de ruines, des ceintures d\'astéroïdes, des géantes gazeuses ou des poches de gaz. Le but étant l\'extraction et le forage de matériau pour en retirer des ressources, des crédits et même des vaisseaux.<br /><br />Chaque type de lieu est riche en une ou plusieurs de ces denrées. Attention, les denrées sont épuisables.',
 			'techno' => 3
 
 			
@@ -647,8 +646,7 @@ class OrbitalBaseResource {
 				array(119142,	365480,	150,10),
 			),
 			'maxLevel' => array(0, 20, 10, 20),
-			'description' => 'Le <strong>Spatio-Port</strong>, véritable plaque tournante du commerce dans votre domaine, permet, en fonction de sa taille, de créer et de gérer des <strong>routes commerciales</strong> sur le long terme avec vos partenaires. Pour valider une route commerciale vous devez la proposer et l’autre joueur doit l’accepter.<br /><br />
-								Une route commerciale génère des revenus chez les deux parties. Plus la route est longue et plus les planètes sont peuplées, meilleurs sera son rendement. De plus, les routes commerciales entre deux secteurs différents ainsi qu’avec des joueurs non-alliés ont tendance à générer plus de revenus.',
+			'description' => 'Le <strong>Spatio-Port</strong>, véritable plaque tournante du commerce dans votre domaine, permet, en fonction de sa taille, de créer et de gérer des <strong>routes commerciales</strong> sur le long terme avec vos partenaires. Pour valider une route commerciale vous devez la proposer et l’autre joueur doit l’accepter.<br /><br />Une route commerciale génère des revenus chez les deux parties. Plus la route est longue et plus les planètes sont peuplées, meilleurs sera son rendement. De plus, les routes commerciales entre deux secteurs différents ainsi qu’avec des joueurs non-alliés ont tendance à générer plus de revenus.',
 			'techno' => 4
 		)
 	);

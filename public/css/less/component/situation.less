@@ -1,4 +1,5 @@
 .component .situation-content {
+	position: relative;
 	display: block;
 	width: 100%; height: 500px;
 	border-bottom: solid 1px #0A0A0A;
@@ -21,6 +22,7 @@
 		box-shadow: 0 0 0 4px rgba(255, 255, 255, .1);
 		border-radius: 3px;
 		background: @medium;
+		z-index: 1;
 
 		a, span {
 			display: inline-block;
@@ -96,6 +98,7 @@
 		position: absolute;
 		display: block;
 		text-decoration: none;
+		z-index: 1;
 
 		&.empty {
 			color: #CCC;
@@ -108,6 +111,8 @@
 		&.position-2-1 { top: 215px; left: 352px; }
 		&.position-2-2 { top: 272px; left: 345px; }
 		&.position-2-3 { top: 330px; left: 352px; }
+
+		&.position-3   { top: 355px; left: 577px; }
 
 		img {
 			width: 40px; padding: 6px;
@@ -187,80 +192,90 @@
 		}
 	}
 
-	.resources {
+	.attack-link {
 		position: absolute;
-		bottom: 32px; right: 190px;
-		text-align: right;
+		bottom: -1px; left: 0; right: 0;
+		text-align: center;
 
-		strong {
-			display: block;
-			font-size: 22px;
+		a {
+			display: inline-block;
+			line-height: 40px;
+			padding: 0 25px;
+			border-radius: 3px 3px 0 0;
+			background: #202020;
+			color: white;
+			text-decoration: none;
+			font-size: 16px;
+
+			&:hover, &:focus {
+				box-shadow: 0 0 5px 3px black;
+			}
 		}
 	}
 
 	&.color0 {
 		.line-help { background: #202020; }
-		.toolbar { background: #0A0A0A; }
 		.commander {
 			&.full img { box-shadow: 0 0 4px white, 0 0 0 2px #202020; }
 			&.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px #202020; }
 		}
+		.attack-link a { background: #202020; }
 	}
 	&.color1 {
 		.line-help { background: @dark-1; }
-		.toolbar { background: @medium-1; }
 		.commander {
 			&.full img { box-shadow: 0 0 4px white, 0 0 0 2px @medium-1; }
 			&.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px @medium-1; }
 		}
+		.attack-link a { background: @medium-1; }
 	}
 	&.color2 {
 		.line-help { background: @dark-2; }
-		.toolbar { background: @medium-2; }
 		.commander {
 			&.full img { box-shadow: 0 0 4px white, 0 0 0 2px @medium-2; }
 			&.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px @medium-2; }
 		}
+		.attack-link a { background: @medium-2; }
 	}
 	&.color3 {
 		.line-help { background: @dark-3; }
-		.toolbar { background: @medium-3; }
 		.commander {
 			&.full img { box-shadow: 0 0 4px white, 0 0 0 2px @medium-3; }
 			&.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px @medium-3; }
 		}
+		.attack-link a { background: @medium-3; }
 	}
 	&.color4 {
 		.line-help { background: @dark-4; }
-		.toolbar { background: @medium-4; }
 		.commander {
 			&.full img { box-shadow: 0 0 4px white, 0 0 0 2px @medium-4; }
 			&.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px @medium-4; }
 		}
+		.attack-link a { background: @medium-4; }
 	}
 	&.color5 {
 		.line-help { background: @dark-5; }
-		.toolbar { background: @medium-5; }
 		.commander {
 			&.full img { box-shadow: 0 0 4px white, 0 0 0 2px @medium-5; }
 			&.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px @medium-5; }
 		}
+		.attack-link a { background: @medium-5; }
 	}
 	&.color6 {
 		.line-help { background: @dark-6; }
-		.toolbar { background: @medium-6; }
 		.commander {
 			&.full img { box-shadow: 0 0 4px white, 0 0 0 2px @medium-6; }
 			&.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px @medium-6; }
 		}
+		.attack-link a { background: @medium-6; }
 	}
 	&.color7 {
 		.line-help { background: @dark-7; }
-		.toolbar { background: @medium-7; }
 		.commander {
 			&.full img { box-shadow: 0 0 4px white, 0 0 0 2px @medium-7; }
 			&.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px @medium-7; }
 		}
+		.attack-link a { background: @medium-7; }
 	}
 }
 
@@ -274,8 +289,7 @@
 	.item {
 		display: table-cell;
 		padding: 10px;
-		border-top: solid 8px #202020;
-		border-left: solid 1px #202020;
+		border-right: solid 1px #202020;
 
 		.value {
 			font-size: 26px;
@@ -284,20 +298,6 @@
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .component .build-item.base-type .desc {
 	margin: 10px 0 0 0; padding: 15px;

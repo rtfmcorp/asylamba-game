@@ -34,6 +34,7 @@ class LiveReport {
 	public static $expPlayerD			= 0;
 	public static $rPlace				= 0;
 	public static $type					= 0;
+	public static $isLegal 				= 0;
 	public static $round				= 0;
 	public static $importance			= 0;
 	public static $statementAttacker	= 0;

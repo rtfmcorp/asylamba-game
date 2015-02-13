@@ -235,14 +235,14 @@ echo '<div class="column act">';
 					echo 'Vous ne pouvez pas espionner une planète non-habitable';
 				} else {
 					$prices = array(
-						'faible' => 1000,
-						'moyenne' => 2500,
-						'grande' => 5000
+						'Impact faible' => 1000,
+						'Impact moyen' => 2500,
+						'Grand impact' => 5000
 					);
 
 					foreach ($prices as $label => $price) { 
 						echo '<a href="' . Format::actionBuilder('spy', ['rplace' => $place->getId(), 'price' => $price]) . '" class="spy-button">';
-							echo '<span class="label">Impact ' . $label . '</span>';
+							echo '<span class="label">' . $label . '</span>';
 							echo '<span class="price">' . Format::numberFormat($price) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /></span>';
 						echo '</a>';
 					}

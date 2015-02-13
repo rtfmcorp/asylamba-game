@@ -237,7 +237,13 @@ class Place {
 									$placeBase = NULL;
 								}
 
-								CTC::add($commander->dArrival, $this, 'uLoot', array($commander, $place, $bonus, $commanderPlayer, $placePlayer, $placeBase));
+								$S_CLM = ASM::$clm->getCurrentSession();
+								ASM::$clm->newSession();
+								ASM::$clm->load(array('id' => $commander->playerColor));
+								$commanderColor = ASM::$clm->get();
+								ASM::$clm->changeSession($S_CLM);
+
+								CTC::add($commander->dArrival, $this, 'uLoot', array($commander, $place, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor));
 							}
 							break;
 
@@ -269,7 +275,13 @@ class Place {
 									$placeBase = NULL;
 								}
 
-								CTC::add($commander->dArrival, $this, 'uConquer', array($commander, $place, $bonus, $commanderPlayer, $placePlayer, $placeBase));
+								$S_CLM = ASM::$clm->getCurrentSession();
+								ASM::$clm->newSession();
+								ASM::$clm->load(array('id' => $commander->rColor));
+								$commanderColor = ASM::$clm->get();
+								ASM::$clm->changeSession($S_CLM);
+
+								CTC::add($commander->dArrival, $this, 'uConquer', array($commander, $place, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor));
 							}
 							break;
 
@@ -388,11 +400,12 @@ class Place {
 	}
 
 	# piller
-	public function uLoot($commander, $commanderPlace, $playerBonus, $commanderPlayer, $placePlayer, $placeBase) {
+	public function uLoot($commander, $commanderPlace, $playerBonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor) {
 		LiveReport::$type = Commander::LOOT;
 		LiveReport::$dFight = $commander->dArrival;
 
 		if ($this->rPlayer == 0) {
+			LiveReport::$isLegal = Report::LEGAL;
 			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
 			$commander->travelLength = NULL;
@@ -434,6 +447,11 @@ class Place {
 			}
 		# si il y a une base
 		} else {
+			if ($commanderColor->colorLink[$this->playerColor] == Color::ALLY) {
+				LiveReport::$isLegal = Report::ILLEGAL;
+			} else {
+				LiveReport::$isLegal = Report::LEGAL;
+			}
 			# planète à joueur: si $this->rColor != commandant->rColor
 			if ($this->playerColor != $commander->getPlayerColor() && $this->playerLevel > 1) {
 				// $commander->rDestinationPlace = NULL;
@@ -521,9 +539,7 @@ class Place {
 	}
 
 	# conquest
-	public function uConquer($commander, $commanderPlace, $playerBonus, $commanderPlayer, $placePlayer, $placeBase) {
-		LiveReport::$type = Commander::COLO;
-		LiveReport::$dFight = $commander->dArrival;
+	public function uConquer($commander, $commanderPlace, $playerBonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor) {
 
 		if ($this->rPlayer != 0) {
 			// $commander->rDestinationPlace = NULL;
@@ -546,6 +562,14 @@ class Place {
 				$reportArray = array();
 				while ($nbrBattle < count($this->commanders)) {
 					if ($this->commanders[$nbrBattle]->statement == Commander::AFFECTED) {
+						LiveReport::$type = Commander::COLO;
+						LiveReport::$dFight = $commander->dArrival;
+
+						if ($commanderColor->colorLink[$this->playerColor] == Color::ALLY) {
+							LiveReport::$isLegal = Report::ILLEGAL;
+						} else {
+							LiveReport::$isLegal = Report::LEGAL;
+						}
 
 						$this->startFight($commander, $commanderPlayer, $this->commanders[$nbrBattle], $placePlayer, TRUE);
 
@@ -669,6 +693,10 @@ class Place {
 			// $commander->dArrival = NULL;
 
 			# faire un combat
+			LiveReport::$type = Commander::COLO;
+			LiveReport::$dFight = $commander->dArrival;
+			LiveReport::$isLegal = Report::LEGAL;
+
 			$this->startFight($commander, $commanderPlayer);
 
 			if ($commander->getStatement() !== COM_DEAD) {
@@ -1272,8 +1300,8 @@ class Place {
 	public function createVirtualCommander() {
 		$population = $this->population;
 		$vCommander = new Commander();
-		$vCommander->id = 0;
-		$vCommander->rPlayer = 0;
+		$vCommander->id = 'Null';
+		$vCommander->rPlayer = ID_GAIA;
 		$vCommander->name = 'rebelle';
 		$vCommander->avatar = 't3-c4';
 		$vCommander->sexe = 1;
