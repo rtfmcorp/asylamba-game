@@ -3,6 +3,29 @@ include_once ATHENA;
 
 $ship = CTR::$get->get('ship');
 
+switch(ShipResource::getInfo($ship, 'class')) {
+	case 0:
+		$bonusSPE = CTR::$data->get('playerBonus')->get(PlayerBonus::FIGHTER_SPEED);
+		$bonusATT = CTR::$data->get('playerBonus')->get(PlayerBonus::FIGHTER_ATTACK);
+		$bonusDEF = CTR::$data->get('playerBonus')->get(PlayerBonus::FIGHTER_DEFENSE); break;
+	case 1:
+		$bonusSPE = CTR::$data->get('playerBonus')->get(PlayerBonus::CORVETTE_SPEED);
+		$bonusATT = CTR::$data->get('playerBonus')->get(PlayerBonus::CORVETTE_ATTACK);
+		$bonusDEF = CTR::$data->get('playerBonus')->get(PlayerBonus::CORVETTE_DEFENSE); break;
+	case 2:
+		$bonusSPE = CTR::$data->get('playerBonus')->get(PlayerBonus::FRIGATE_SPEED);
+		$bonusATT = CTR::$data->get('playerBonus')->get(PlayerBonus::FRIGATE_ATTACK);
+		$bonusDEF = CTR::$data->get('playerBonus')->get(PlayerBonus::FRIGATE_DEFENSE); break;
+	case 3:
+		$bonusSPE = CTR::$data->get('playerBonus')->get(PlayerBonus::DESTROYER_SPEED);
+		$bonusATT = CTR::$data->get('playerBonus')->get(PlayerBonus::DESTROYER_ATTACK);
+		$bonusDEF = CTR::$data->get('playerBonus')->get(PlayerBonus::DESTROYER_DEFENSE); break;
+	default:
+		$bonusSPE = 0;
+		$bonusATT = 0;
+		$bonusDEF = 0; break;
+}
+
 echo '<div class="component panel-info">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
@@ -27,10 +50,6 @@ echo '<div class="component panel-info">';
 					echo '<td class="hb lt" title="nombre de ressources que le vaisseau peut transporter">soute</td>';
 					echo '<td>' . (ShipResource::getInfo($ship, 'pev') * 250) . ' <img src="' .  MEDIA. 'resources/resource.png" alt="ressource" class="icon-color" /></td>';
 				echo '</tr>';
-				/*echo '<tr>';
-					echo '<td class="hb lt" title="points que rapporte la construction du vaisseau au joueur">points</td>';
-					echo '<td>' . ShipResource::getInfo($ship, 'points') . '</td>';
-				echo '</tr>';*/
 			echo '</table></div>';
 
 			echo '<h4>Caractéristiques</h4>';
@@ -47,7 +66,17 @@ echo '<div class="component panel-info">';
 				$eachValues = array_unique($attacks);
 				$nbr = array_count_values($attacks);
 				$value = '';
-				foreach ($nbr as $k => $v) { $value .= ($v != 1) ? $v . '×' . $k . ' + ' : $k . ' + '; }
+
+				foreach ($nbr as $k => $v) {
+					$bonus = round($k * $bonusATT / 100);
+					$bonus = $bonus == 0
+						? NULL
+						: '<span class="bonus">' . ($bonus > 0 ? '+' : NULL) . $bonus . '</span>';
+					$value .= ($v != 1)
+						? $v . '×' . $k . $bonus . ' + '
+						: $k . $bonus . ' + ';
+				}
+
 				echo '<span class="label">attaque</span>';
 				echo '<span class="value"><img src="' .  MEDIA. 'resources/attack.png" class="icon-color" /> ' . substr($value, 0, -3) . '</span>';
 				echo '<span class="progress-bar">';
@@ -57,16 +86,27 @@ echo '<div class="component panel-info">';
 					}
 				echo '</span>';
 			echo '</div>';
+
+			$bonus = round(ShipResource::getInfo($ship, 'defense') * $bonusDEF / 100);
+			$bonus = $bonus == 0
+				? NULL
+				: '<span class="bonus">' . ($bonus > 0 ? '+' : NULL) . $bonus . '</span>';
 			echo '<div class="skill-box">';
 				echo '<span class="label">défense</span>';
-				echo '<span class="value"><img src="' .  MEDIA. 'resources/defense.png" class="icon-color" /> ' . ShipResource::getInfo($ship, 'defense') . '</span>';
+				echo '<span class="value"><img src="' .  MEDIA. 'resources/defense.png" class="icon-color" /> ' . ShipResource::getInfo($ship, 'defense') . $bonus . '</span>';
 				echo '<span class="progress-bar"><span class="content" style="width: ' . Format::percent(ShipResource::getInfo($ship, 'defense'), $defense) . '%;"></span></span>';
 			echo '</div>';
+
+			$bonus = round(ShipResource::getInfo($ship, 'speed') * $bonusSPE / 100);
+			$bonus = $bonus == 0
+				? NULL
+				: '<span class="bonus">' . ($bonus > 0 ? '+' : NULL) . $bonus . '</span>';
 			echo '<div class="skill-box">';
 				echo '<span class="label">vitesse</span>';
-				echo '<span class="value"><img src="' .  MEDIA. 'resources/speed.png" class="icon-color" /> ' . ShipResource::getInfo($ship, 'speed') . '</span>';
+				echo '<span class="value"><img src="' .  MEDIA. 'resources/speed.png" class="icon-color" /> ' . ShipResource::getInfo($ship, 'speed') . $bonus . '</span>';
 				echo '<span class="progress-bar"><span class="content" style="width: ' . Format::percent((ShipResource::getInfo($ship, 'speed') - $speeda), $speedb) . '%;"></span></span>';
 			echo '</div>';
+
 			echo '<div class="skill-box">';
 				echo '<span class="label">coque</span>';
 				echo '<span class="value"><img src="' .  MEDIA. 'resources/life.png" class="icon-color" /> ' . ShipResource::getInfo($ship, 'life') . '</span>';
