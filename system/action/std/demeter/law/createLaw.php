@@ -81,7 +81,7 @@ if ($type !== FALSE) {
 			} else {
 				if (ASM::$clm->get()->credits >= LawResources::getInfo($type, 'price')) {
 					switch ($type) {
-						case 1:
+						case SECTORTAX:
 							$taxes = round(Utils::getHTTPData('taxes'));
 							$rSector = Utils::getHTTPData('rsector');
 							if ($taxes !== FALSE && $rSector !== FALSE) {
@@ -108,7 +108,7 @@ if ($type !== FALSE) {
 								CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 							}
 							break;
-						case 2:
+						case SECTORNAME:
 							$rSector = Utils::getHTTPData('rsector');
 							$name = Utils::getHTTPData('name');
 							if ($rSector !== FALSE && $name !== FALSE) {
@@ -132,7 +132,7 @@ if ($type !== FALSE) {
 								CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 							}
 							break;
-						case 3:
+						case COMTAXEXPORT:
 							$taxes = round(Utils::getHTTPData('taxes'));
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($taxes !== FALSE && $rColor !== FALSE) {
@@ -166,7 +166,7 @@ if ($type !== FALSE) {
 								CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 							}
 							break;
-						case 4:
+						case COMTAXIMPORT:
 							$taxes = round(Utils::getHTTPData('taxes'));
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($taxes !== FALSE && $rColor !== FALSE) {
@@ -200,7 +200,7 @@ if ($type !== FALSE) {
 								CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 							}
 							break;
-						case 7:
+						case PEACEPACT:
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($rColor !== FALSE) {
 								if ($rColor >= 1 && $rColor <= 7 && $rColor != ASM::$clm->get()->id) {
@@ -220,7 +220,7 @@ if ($type !== FALSE) {
 								CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 							}
 							break;
-						case 8:
+						case WARDECLARATION:
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($rColor !== FALSE) {
 								if ($rColor >= 1 && $rColor <= 7 && $rColor != ASM::$clm->get()->id) {

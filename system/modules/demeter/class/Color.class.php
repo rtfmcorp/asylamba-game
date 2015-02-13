@@ -590,34 +590,34 @@ class Color {
 				} else {
 					#loi à upgrade
 					switch (ASM::$lam->get($i)->type) {
-						case 1:
+						case lAW::SECTORTAX:
 							$_SEM = ASM::$sem->getCurrentsession();
 							ASM::$sem->load(array('id' => ASM::$lam->get($i)->options['rSector']));
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishSectorTaxes', array(ASM::$lam->get($i), ASM::$sem->get()));
 							ASM::$sem->changeSession($_SEM);
 							break;
-						case 2:
+						case lAW::SECTORNAME:
 							$_SEM = ASM::$sem->getCurrentsession();
 							ASM::$sem->load(array('id' => ASM::$lam->get($i)->options['rSector']));
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishSectorName', array(ASM::$lam->get($i), ASM::$sem->get()));
 							ASM::$sem->changeSession($_SEM);
 							break;
-						case 3:
+						case lAW::COMTAXEXPORT:
 							$_CTM = ASM::$ctm->getCurrentsession();
 							ASM::$ctm->load(array('faction' => $this->id, 'relatedFaction' => ASM::$lam->get($i)->options['rColor']));
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishExportComercialTaxes', array(ASM::$lam->get($i), ASM::$ctm->get()));
 							ASM::$ctm->changeSession($_CTM);
 							break;
-						case 4:
+						case lAW::COMTAXIMPORT:
 							$_CTM = ASM::$ctm->getCurrentsession();
 							ASM::$ctm->load(array('faction' => $this->id, 'relatedFaction' => ASM::$lam->get($i)->options['rColor']));
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishImportComercialTaxes', array(ASM::$lam->get($i), ASM::$ctm->get()));
 							ASM::$ctm->changeSession($_CTM);
 							break;
-						case 7:
+						case lAW::PEACEPACT:
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishAlly', array(ASM::$lam->get($i)));
 							break;
-						case 8:
+						case lAW::WARDECLARATION:
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishEnemy', array(ASM::$lam->get($i)));
 							break;
 						

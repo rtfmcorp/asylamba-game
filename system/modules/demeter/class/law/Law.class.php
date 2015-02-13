@@ -16,6 +16,16 @@ class Law {
 	const OBSOLETE					= 2;
 	const REFUSED					= 3;
 
+	const SECTORTAX					= 1;
+	const SECTORNAME				= 2;
+	const COMTAXEXPORT				= 3;
+	const COMTAXIMPORT				= 4;
+	const MILITARYSUBVENTION		= 5;
+	const TECHNOLOGYTRANSFER		= 6;
+	const PEACEPACT					= 7;
+	const WARDECLARATION			= 8;
+
+
 	const VOTEDURATION 				= 86400;
 
 	public $id					= 0;
