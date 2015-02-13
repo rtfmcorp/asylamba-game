@@ -34,7 +34,7 @@ echo '<div id="systems">';
 		echo '</span>';
 
 		echo '<div id="sector-info-' . ($i + 1) . '" class="sector-info color' . $sector->getRColor() . '" style="left: ' . ($sector->getXBarycentric() * GalaxyConfiguration::$scale + 55) . 'px; top: ' . ($sector->getYBarycentric() * GalaxyConfiguration::$scale - 10) . 'px">';
-			echo '<h2>Secteur ' . $sector->getName() . '</h2>';
+			echo '<h2>' . $sector->getName() . '</h2>';
 			echo '<p><a href="#">+</a> ';
 				if ($sector->getRColor() != 0) {
 					echo 'Revendiqué par ' . ColorResource::getInfo($sector->getRColor(), 'popularName') . ' | ' . $sector->getTax() . '% de taxe';

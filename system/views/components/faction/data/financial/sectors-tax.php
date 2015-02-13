@@ -19,7 +19,7 @@ echo '<div class="component profil">';
 
 					echo '<li>';
 						echo '<a href="#" class="picto color' . $sector->rColor . '">' . $sector->id . '</a>';
-						echo '<span class="label">secteur ' . $sector->name . '</span>';
+						echo '<span class="label">' . $sector->name . '</span>';
 						echo '<span class="value">' . $sector->tax . ' %</span>';
 					echo '</li>';
 				}

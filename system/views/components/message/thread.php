@@ -39,7 +39,9 @@ echo '<div class="component topic size2">';
 				}
 
 				echo '<div class="message">';
-					echo '<img src="' . MEDIA . 'avatar/medium/' . $t->getWriterAvatar() . '.png" alt="' . $t->getWriterName() . '" class="avatar" />';
+					echo '<a href="' . APP_ROOT . 'diary/player-' . $t->getRPlayerWriter() . '">';
+						echo '<img src="' . MEDIA . 'avatar/medium/' . $t->getWriterAvatar() . '.png" alt="' . $t->getWriterName() . '" class="avatar" />';
+					echo '</a>';
 					echo '<div class="content">';
 						echo '<p class="text">';
 							echo '≡ ' . $t->getWriterName() . '<br /><br />';

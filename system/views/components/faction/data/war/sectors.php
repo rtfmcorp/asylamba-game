@@ -53,7 +53,7 @@ echo '<div class="component">';
 					if ($sector['color'] == $faction->id || ($sector['nbc' . $faction->id] > 0)) {
 						echo '<li>';
 							echo '<a href="#" class="picto color' . $sector['color'] . '">' . $sector['id'] . '</a>';
-							echo '<span class="label">secteur ' . $sector['name'] . '</span>';
+							echo '<span class="label">' . $sector['name'] . '</span>';
 							echo '<span class="value">' . Format::percent($sector['nbc' . $faction->id], $sector['nbc0']) . ' %</span>';
 							echo '<span class="progress-bar hb bl" title="partage des systèmes entre les factions">';
 							foreach ($percents as $color => $percent) {
