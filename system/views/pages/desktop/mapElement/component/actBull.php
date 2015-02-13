@@ -7,7 +7,7 @@ echo '<div class="column act">';
 			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="1"><img src="' . MEDIA . 'map/action/loot.png" alt="" /></a>';
 			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="2"><img src="' . MEDIA . 'map/action/colo.png" alt="" /></a>';
 
-			$available = ($place->rPlayer == CTR::$data->get('playerId') && $place->getId() != $defaultBase->getId()) ? NULL : 'grey';
+			$available = (($place->rPlayer == CTR::$data->get('playerId') && $place->getId() != $defaultBase->getId()) || ($place->playerColor == CTR::$data->get('playerInfo')->get('color'))) ? NULL : 'grey';
 			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="3"><img src="' . MEDIA . 'map/action/move.png" alt="" /></a>';
 
 			$available = ($place->rPlayer != 0 && $place->getId() != $defaultBase->getId()) ? NULL : 'grey';
@@ -30,12 +30,12 @@ echo '<div class="column act">';
 					echo 'Vous ne pouvez pas attaquer une planète non-habitable';
 				} elseif ($place->typeOfPlace == 1 && $place->playerColor == CTR::$data->get('playerInfo')->get('color')) {
 					echo 'Vous ne pouvez pas attaquer un joueur de votre faction';
-				} elseif ($place->typeOfPlace == 1 && $place->playerLevel == 1) {
+				} elseif ($place->typeOfPlace == 1 && $place->playerLevel == 1 && !$place->playerColor == 0) {
 					echo 'Ce joueur est sous protection débutant';
 				} else {
 					echo '<div class="commander-tile">';
 						echo '<div class="item no-commander">';
-							echo 'Aucun commandant selectionné.<br/>Sélectionnez-en un sur la barre latérale gauche.<br/><br />Si aucun commandant n\'est visible, vous pouvez en affecter un depuis l\'école de commandement.';
+							echo 'Aucun commandant selectionné. Sélectionnez-en un sur la barre latérale gauche.<br/><br />Si aucun commandant n\'est visible, vous pouvez en affecter un depuis l\'école de commandement.';
 						echo '</div>';
 						echo '<div class="item too-far">';
 							echo 'Ce commandant est trop éloigné pour piller cette planète';
@@ -74,7 +74,7 @@ echo '<div class="column act">';
 					echo 'Vous ne pouvez pas coloniser une planète non-habitable';
 				} elseif ($place->typeOfPlace == 1 && $place->playerColor == CTR::$data->get('playerInfo')->get('color')) {
 					echo 'Vous ne pouvez pas conquérir un joueur de votre faction';
-				} elseif ($place->typeOfPlace == 1 && $place->playerLevel <= 3 && $place->playerLevel != 0) {
+				} elseif ($place->typeOfPlace == 1 && $place->playerLevel <= 3 && $place->playerLevel != 0 && !$place->playerColor == 0) {
 					echo 'Vous ne pouvez pas conquérir un joueur de niveau 3 ou inférieur';
 				} elseif ($place->rPlayer == 0 && $technologies->getTechnology(Technology::COLONIZATION) == 0) {
 					echo 'Vous devez développer la technologie colonisation';
@@ -85,7 +85,7 @@ echo '<div class="column act">';
 				} else {
 					echo '<div class="commander-tile">';
 						echo '<div class="item no-commander">';
-							echo 'Aucun commandant selectionné<br/>Sélectionnez-en un sur la barre latérale gauche.<br/><br />Si aucun commandant n\'est visible, vous pouvez en affecter un dans l\'amirauté.';
+							echo 'Aucun commandant selectionné. Sélectionnez-en un sur la barre latérale gauche.<br/><br />Si aucun commandant n\'est visible, vous pouvez en affecter un depuis l\'école de commandement.';
 						echo '</div>';
 						echo '<div class="item too-far">';
 							echo 'Ce commandant est trop éloigné pour coloniser cette planète';
@@ -118,16 +118,19 @@ echo '<div class="column act">';
 		echo '</div>';
 
 		echo '<div class="box" data-id="3">';
-			echo '<h2>Déplacer une flotte</h2>';
+			echo $place->rPlayer == $defaultBase->rPlayer
+				? '<h2>Déplacer une flotte</h2>'
+				: '<h2>Donner votre flotte</h2>';
+
 			echo '<div class="box-content">';
 				if ($place->getId() == $defaultBase->getId()) {
 					echo 'Vous ne pouvez pas déplacer une flotte sur votre planète de départ';
-				} elseif ($place->rPlayer != CTR::$data->get('playerId')) {
-					echo 'Vous ne pouvez déplacer une flotte que vers une de vos bases';
+				} elseif ($place->playerColor != CTR::$data->get('playerInfo')->get('color')) {
+					echo 'Vous ne pouvez donner une de vos flotte qu\'a un membre de votre faction';
 				} else {
 					echo '<div class="commander-tile">';
 						echo '<div class="item no-commander">';
-							echo 'Aucun commandant selectionné<br/>Sélectionnez-en un sur la barre latérale gauche.<br/>Si aucun commandant n\'est visible, vous pouvez en affecter un dans l\'amirauté.';
+							echo 'Aucun commandant selectionné. Sélectionnez-en un sur la barre latérale gauche.<br/><br />Si aucun commandant n\'est visible, vous pouvez en affecter un depuis l\'école de commandement.';
 						echo '</div>';
 						echo '<div class="item too-far">';
 							echo 'Ce commandant est trop éloigné pour se déplacer jusqu\'ici';
@@ -135,6 +138,9 @@ echo '<div class="column act">';
 						echo '<div class="item move">';
 							echo '<strong class="name"></strong><br />';
 							echo 'Temps du déplacement : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, CTR::$data->get('playerBonus')), 'lite') . ' <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
+							if ($place->rPlayer != $defaultBase->rPlayer) {
+								echo 'Attention, vous perdrez votre flotte !<br />';
+							}
 							echo '<a class="button" href="#" data-url="' . Format::actionBuilder('movefleet', ['commanderid' => '{id}', 'placeid' => $place->id]) . '">Lancer la mission</a>';
 						echo '</div>';
 					echo '</div>';
