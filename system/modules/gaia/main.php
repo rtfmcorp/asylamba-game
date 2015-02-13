@@ -11,7 +11,6 @@ include_once 'resource/SquadronResource.res.php';
 include_once 'class/GalaxyColorManager.class.php';
 include_once 'class/GalaxyConfiguration.class.php';
 include_once 'class/GalaxyGenerator.class.php';
-# include_once 'class/GalaxyManager.class.php';
 include_once 'class/PointLocation.class.php';
 include_once 'class/SectorManager.class.php';
 include_once 'class/Sector.class.php';

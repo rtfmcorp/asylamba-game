@@ -83,7 +83,8 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 				CTR::$data->get('inscription')->add('pseudo', CTR::$post->get('pseudo'));
 
 				# check avatar
-				if (TRUE) {
+				
+				if ((int)CTR::$post->get('avatar') > 0 && (int)CTR::$post->get('avatar') <= NB_AVATAR) {
 					CTR::$data->get('inscription')->add('avatar', CTR::$post->get('avatar'));
 				} elseif (!CTR::$data->get('inscription')->exist('avatar')) {
 					CTR::$alert->add('Cet avatar n\'existe pas ou est invalide');

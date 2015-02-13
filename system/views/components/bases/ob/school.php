@@ -15,13 +15,22 @@ $S_COM1 = ASM::$com->getCurrentSession();
 ASM::$com->newSession();
 ASM::$com->load(array('c.statement' => Commander::INSCHOOL, 'c.rBase' => $ob_school->getId()), array('c.experience', 'DESC'));
 
+# max commander
 $maxCommanderInSchool = PlaceResource::get($ob_school->typeOfBase, 'school-size');
+
+# gain en crédit
+$invest  = $ob_school->iSchool;
+$invest += $invest * CTR::$data->get('playerBonus')->get(PlayerBonus::COMMANDER_INVEST) / 100;
+$earnedExperience  = $invest / Commander::COEFFSCHOOL;
+$earnedExperience  = round($earnedExperience);
+$earnedExperience  = ($earnedExperience < 0)
+	? 0 : $earnedExperience;
 
 echo '<div class="component school">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'orbitalbase/school.png" alt="" />';
 		echo '<h2>Ecole de Cmd.</h2>';
-		echo '<em>formation des officiers</em>';
+		echo '<em>Formation des officiers</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
@@ -44,15 +53,6 @@ echo '<div class="component school">';
 					echo CTR::$data->get('playerBonus')->get(PlayerBonus::COMMANDER_INVEST) . ' %';
 				echo '</span>';
 			echo '</div>';
-
-			$invest  = $ob_school->iSchool;
-			$invest += $invest * CTR::$data->get('playerBonus')->get(PlayerBonus::COMMANDER_INVEST) / 100;
-			$earnedExperience  = $invest / Commander::COEFFSCHOOL;
-			$earnedExperience  = round($earnedExperience);
-			$earnedExperience  = ($earnedExperience < 0)
-				? 0 : $earnedExperience;
-
-			echo '<p>Chaque officier gagne en moyenne ' . Format::number($earnedExperience) . ' points d\'expérience par relève.</p>';
 
 			echo '<hr />';
 
@@ -104,6 +104,7 @@ echo '<div class="component">';
 							echo '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
 							echo '<strong>' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->getName() . '</strong>';
 							echo '<em>' . Format::numberFormat($commander->getExperience()) . ' points d\'expérience</em>';
+							echo '<em>&#177; ' . Format::number($earnedExperience) . 'xp/relève</em>';
 							echo '<span class="group-link">';
 								echo '<a class="hb lt" title="affecter l\'officier" href="' . Format::actionBuilder('affectcommander', ['id' => $commander->getId()]) . '">&#8593;</a>';
 								echo '<a class="hb lt" title="placer l\'officier dans le mess" href="' . Format::actionBuilder('putcommanderinschool', ['id' => $commander->getId()]) . '">&#8594;</a>';

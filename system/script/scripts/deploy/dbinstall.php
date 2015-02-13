@@ -11,17 +11,17 @@ echo '<h2>Ajout de la table color</h2>';
 
 $db->query("DROP TABLE IF EXISTS `color`");
 $db->query("CREATE TABLE IF NOT EXISTS `color` (
-	`id` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL,
 
-	`alive` tinyint(4) NOT NULL DEFAULT 0,
-	`isWinner` tinyint(4) NOT NULL DEFAULT 0,
-	`credits` int(20) unsigned NOT NULL DEFAULT 0,
-	`players` int(5) unsigned NOT NULL DEFAULT 0,
-	`activePlayers` int(5) unsigned NOT NULL DEFAULT 0,
-	`points` int(11) unsigned NOT NULL DEFAULT 0,
-	`sectors` smallint(6) unsigned NOT NULL DEFAULT 0,
-	`electionStatement` tinyint(4) NOT NULL DEFAULT 0,
-	`isClosed` tinyint(4) NOT NULL DEFAULT 1,
+	`alive` TINYINT NOT NULL DEFAULT 0,
+	`isWinner` TINYINT NOT NULL DEFAULT 0,
+	`credits` INT unsigned NOT NULL DEFAULT 0,
+	`players` SMALLINT unsigned NOT NULL DEFAULT 0,
+	`activePlayers` SMALLINT unsigned NOT NULL DEFAULT 0,
+	`points` INT unsigned NOT NULL DEFAULT 0,
+	`sectors` TINYINT unsigned NOT NULL DEFAULT 0,
+	`electionStatement` TINYINT NOT NULL DEFAULT 0,
+	`isClosed` TINYINT NOT NULL DEFAULT 1,
 
 	`dLastElection` datetime DEFAULT NULL,
 	PRIMARY KEY (`id`)
@@ -29,7 +29,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `color` (
 
 echo '<h3>Remplissage de la table color</h3>';
 $qr = $db->prepare("INSERT INTO `color` (`id`, `alive`, `credits`, `players`, `activePlayers`, `points`, `sectors`, `electionStatement`, `isClosed`, `dLastElection`) VALUES
-(0, 0, 0, 0, 0, 0, 0, 1, 0, ?),
+(0, 0, 0, 0, 0, 0, 0, 1, 1, ?),
 (1, 1, 0, 0, 0, 0, 0, 1, 0, ?),
 (2, 1, 0, 0, 0, 0, 0, 1, 0, ?),
 (3, 1, 0, 0, 0, 0, 0, 1, 0, ?),
@@ -45,14 +45,14 @@ echo '<h2>Ajout de la table factionNews</h2>';
 
 $db->query("DROP TABLE IF EXISTS `factionNews`");
 $db->query("CREATE TABLE IF NOT EXISTS `factionNews` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rFaction` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rFaction` INT unsigned NOT NULL,
 
 	`title` varchar(255) NOT NULL DEFAULT 'Nouvelle',
 	`oContent` text NOT NULL,
 	`pContent` text NOT NULL,
-	`pinned` tinyint(3) NOT NULL DEFAULT 0,
-	`statement` tinyint(3) NOT NULL DEFAULT 1,
+	`pinned` TINYINT unsigned NOT NULL DEFAULT 0,
+	`statement` TINYINT unsigned NOT NULL DEFAULT 1,
 
 	`dCreation` datetime DEFAULT NULL,
 
@@ -65,33 +65,33 @@ echo '<h2>Ajout de la table player</h2>';
 
 $db->query("DROP TABLE IF EXISTS `player`");
 $db->query("CREATE TABLE IF NOT EXISTS `player` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rColor` int(10) unsigned NOT NULL,
-	`rGodfather` int(10) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rColor` INT unsigned NOT NULL,
+	`rGodfather` INT unsigned NOT NULL,
 
 	`bind` varchar(50) default NULL,
 	`name` varchar(25) NOT NULL,
 	`avatar` varchar(12) NOT NULL,
-	`sex` tinyint(4) NOT NULL DEFAULT 1,
-	`status` smallint(6) unsigned NOT NULL DEFAULT 1,
-	`credit` bigint(20) unsigned NOT NULL DEFAULT 0,
-	`experience` bigint(20) unsigned NOT NULL DEFAULT 0,
-	`factionPoint` int(11) unsigned NOT NULL DEFAULT 0,
-	`level` tinyint(4) unsigned DEFAULT NULL DEFAULT 0,
-	`victory` int(10) unsigned DEFAULT NULL DEFAULT 0,
-	`defeat` int(10) unsigned DEFAULT NULL DEFAULT 0,
-	`premium` tinyint(4) NOT NULL DEFAULT 0,
-	`statement` tinyint(4) NOT NULL DEFAULT 0,
+	`sex` TINYINT NOT NULL DEFAULT 1,
+	`status` SMALLINT unsigned NOT NULL DEFAULT 1,
+	`credit` BIGINT unsigned NOT NULL DEFAULT 0,
+	`experience` INT unsigned NOT NULL DEFAULT 0,
+	`factionPoint` INT unsigned NOT NULL DEFAULT 0,
+	`level` TINYINT unsigned DEFAULT NULL DEFAULT 0,
+	`victory` INT unsigned DEFAULT NULL DEFAULT 0,
+	`defeat` INT unsigned DEFAULT NULL DEFAULT 0,
+	`premium` TINYINT NOT NULL DEFAULT 0,
+	`statement` TINYINT NOT NULL DEFAULT 0,
 	`description` text DEFAULT NULL,
 
-	`stepTutorial` tinyint(4) unsigned DEFAULT NULL,
-	`stepDone` tinyint(4) unsigned NOT NULL DEFAULT 0,
+	`stepTutorial` TINYINT unsigned DEFAULT NULL,
+	`stepDone` TINYINT unsigned NOT NULL DEFAULT 0,
 
-	`iUniversity` int(10) unsigned NOT NULL DEFAULT 0,
-	`partNaturalSciences` int(10) unsigned NOT NULL DEFAULT 0,
-	`partLifeSciences` int(10) unsigned NOT NULL DEFAULT 0,
-	`partSocialPoliticalSciences` int(10) unsigned NOT NULL DEFAULT 0,
-	`partInformaticEngineering` int(10) unsigned NOT NULL DEFAULT 0,
+	`iUniversity` SMALLINT unsigned NOT NULL DEFAULT 0,
+	`partNaturalSciences` TINYINT unsigned NOT NULL DEFAULT 0,
+	`partLifeSciences` TINYINT unsigned NOT NULL DEFAULT 0,
+	`partSocialPoliticalSciences` TINYINT unsigned NOT NULL DEFAULT 0,
+	`partInformaticEngineering` TINYINT unsigned NOT NULL DEFAULT 0,
 
 	`dInscription` datetime DEFAULT NULL,
 	`dLastConnection` datetime DEFAULT NULL,
@@ -100,17 +100,14 @@ $db->query("CREATE TABLE IF NOT EXISTS `player` (
 
 	PRIMARY KEY (`id`),
 	UNIQUE KEY `name_UNIQUE` (`name`),
-	CONSTRAINT fkPlayerColor FOREIGN KEY (rColor) REFERENCES color(id)
+	CONSTRAINT fkPlayerColor FOREIGN KEY (rColor) REFERENCES color(id),
+	CONSTRAINT fkPlayerPlayer FOREIGN KEY (rGodfather) REFERENCES player(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 1;");
 
 #--------------------------------------------------------------------------------------------
 echo '<h3>Ajout du Joueur Gaia</h3>';
 
 $p = new Player();
-$p->bind = Utils::generateString(25);
-$p->rColor = 0;
-$p->name = 'Rebelle';
-$p->avatar = '000-1';
 $p->status = 1;
 $p->credit = 10000000;
 $p->uPlayer = Utils::now();
@@ -131,33 +128,19 @@ $p->dLastConnection = Utils::now();
 $p->dLastActivity = Utils::now();
 $p->premium = 0;
 $p->statement = PAM_DEAD;
+
+# Joueur rebelle
+$p->bind = Utils::generateString(25);
+$p->name = 'Rebelle';
+$p->avatar = 'rebel';
+$p->rColor = 0;
 ASM::$pam->add($p);
 
-$p = new Player();
+# Jean-Mi
 $p->bind = Utils::generateString(25);
-$p->rColor = 0;
 $p->name = 'Jean-Mi';
-$p->avatar = '059-1';
-$p->status = 1;
-$p->credit = 10000000;
-$p->uPlayer = Utils::now();
-$p->experience = 15000;
-$p->factionPoint = 0;
-$p->level = 5;
-$p->victory = 0;
-$p->defeat = 0;
-$p->stepTutorial = 0;
-$p->stepDone = 0;
-$p->iUniversity = 0;
-$p->partNaturalSciences = 25;
-$p->partLifeSciences = 25;
-$p->partSocialPoliticalSciences = 25;
-$p->partInformaticEngineering = 25;
-$p->dInscription = Utils::now();
-$p->dLastConnection = Utils::now();
-$p->dLastActivity = Utils::now();
-$p->premium = 0;
-$p->statement = PAM_DEAD;
+$p->avatar = 'jm';
+$p->rColor = 0;
 ASM::$pam->add($p);
 
 #--------------------------------------------------------------------------------------------
@@ -165,19 +148,19 @@ echo '<h2>Ajout de la table sector</h2>';
 
 $db->query("DROP TABLE IF EXISTS `sector`");
 $db->query("CREATE TABLE IF NOT EXISTS `sector` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rColor` int(11) unsigned NOT NULL,
-	`rSurrender` int(11) unsigned DEFAULT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rColor` INT unsigned NOT NULL,
+	`rSurrender` INT unsigned DEFAULT NULL,
 
-	`xPosition` smallint(5) unsigned DEFAULT NULL,
-	`yPosition` smallint(5) unsigned DEFAULT NULL,
-	`xBarycentric` smallint(5) unsigned NOT NULL DEFAULT 0,
-	`yBarycentric` smallint(5) unsigned NOT NULL DEFAULT 0,
-	`tax` smallint(5) unsigned NOT NULL DEFAULT 0,
-	`population` int(11) unsigned NOT NULL,
-	`lifePlanet` int(11) unsigned DEFAULT NULL,
+	`xPosition` SMALLINT unsigned DEFAULT NULL,
+	`yPosition` SMALLINT unsigned DEFAULT NULL,
+	`xBarycentric` SMALLINT unsigned NOT NULL DEFAULT 0,
+	`yBarycentric` SMALLINT unsigned NOT NULL DEFAULT 0,
+	`tax` TINYINT unsigned NOT NULL DEFAULT 0,
+	`population` INT unsigned NOT NULL,
+	`lifePlanet` INT unsigned DEFAULT NULL,
 	`name` varchar(255) DEFAULT NULL,
-	`prime` tinyint(1) NOT NULL DEFAULT 0,
+	`prime` TINYINT NOT NULL DEFAULT 0,
 
 	PRIMARY KEY (`id`),
 	CONSTRAINT fkSectorColor FOREIGN KEY (rColor) REFERENCES color(id)
@@ -207,13 +190,13 @@ echo '<h2>Ajout de la table system</h2>';
 
 $db->query("DROP TABLE IF EXISTS `system`");
 $db->query("CREATE TABLE IF NOT EXISTS `system` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rSector` int(11) unsigned NOT NULL,
-	`rColor` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rSector` INT unsigned NOT NULL,
+	`rColor` INT unsigned NOT NULL,
 
-	`xPosition` smallint(5) unsigned DEFAULT NULL,
-	`yPosition` smallint(5) unsigned DEFAULT NULL,
-	`typeOfSystem` smallint(5) unsigned DEFAULT NULL,
+	`xPosition` SMALLINT unsigned DEFAULT NULL,
+	`yPosition` SMALLINT unsigned DEFAULT NULL,
+	`typeOfSystem` SMALLINT unsigned DEFAULT NULL,
 
 	PRIMARY KEY (`id`),
 	CONSTRAINT fkSystemSector FOREIGN KEY (rSector) REFERENCES sector(id),
@@ -244,22 +227,24 @@ echo '<h2>Ajout de la table place</h2>';
 
 $db->query("DROP TABLE IF EXISTS `place`");
 $db->query("CREATE TABLE IF NOT EXISTS `place` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rPlayer` int(11) unsigned NOT NULL,
-	`rSystem` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rPlayer` INT unsigned NULL,
+	`rSystem` INT unsigned NOT NULL,
 
-	`typeOfPlace` tinyint(3) unsigned NOT NULL,
-	`position` tinyint(3) unsigned NOT NULL,
+	`typeOfPlace` TINYINT unsigned NOT NULL,
+	`position` TINYINT unsigned NOT NULL,
 
 	`population` float unsigned NOT NULL,
 	`coefResources` float unsigned NOT NULL,
 	`coefHistory` float unsigned NOT NULL,
 	
-	`resources` bigint(20) unsigned DEFAULT 0,
+	`resources` INT unsigned DEFAULT 0,
+	`danger` TINYINT unsigned DEFAULT 0,
 
 	`uPlace` datetime DEFAULT NULL,
 
 	PRIMARY KEY (`id`),
+	CONSTRAINT fkPlacePlayer FOREIGN KEY (rPlayer) REFERENCES player(id),
 	CONSTRAINT fkPlaceSystem FOREIGN KEY (rSystem) REFERENCES system(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
 
@@ -287,10 +272,10 @@ echo '<h2>Ajout de la table changeColorPlace</h2>';
 
 $db->query("DROP TABLE IF EXISTS `changeColorPlace`");
 $db->query("CREATE TABLE IF NOT EXISTS `changeColorPlace` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rPlace` int(11) unsigned NOT NULL,
-	`oldPlayer` tinyint(3) unsigned NOT NULL,
-	`newPlayer` tinyint(3) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rPlace` INT unsigned NOT NULL,
+	`oldPlayer` TINYINT unsigned NOT NULL,
+	`newPlayer` TINYINT unsigned NOT NULL,
 	`dChangement` datetime DEFAULT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
@@ -300,10 +285,10 @@ echo '<h2>Ajout de la table changeColorSector</h2>';
 
 $db->query("DROP TABLE IF EXISTS `changeColorSector`");
 $db->query("CREATE TABLE IF NOT EXISTS `changeColorSector` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rSector` int(11) unsigned NOT NULL,
-	`oldColor` tinyint(3) unsigned NOT NULL,
-	`newColor` tinyint(3) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rSector` INT unsigned NOT NULL,
+	`oldColor` TINYINT unsigned NOT NULL,
+	`newColor` TINYINT unsigned NOT NULL,
 	`dChangement` datetime DEFAULT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
@@ -313,10 +298,10 @@ echo '<h2>Ajout de la table changeColorSystem</h2>';
 
 $db->query("DROP TABLE IF EXISTS `changeColorSystem`");
 $db->query("CREATE TABLE IF NOT EXISTS `changeColorSystem` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rSystem` int(11) unsigned NOT NULL,
-	`oldColor` tinyint(3) unsigned NOT NULL,
-	`newColor` tinyint(3) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rSystem` INT unsigned NOT NULL,
+	`oldColor` TINYINT unsigned NOT NULL,
+	`newColor` TINYINT unsigned NOT NULL,
 	`dChangement` datetime DEFAULT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
@@ -338,42 +323,42 @@ echo '<h2>Ajout de la table orbitalBase</h2>';
 
 $db->query("DROP TABLE IF EXISTS `orbitalBase`");
 $db->query("CREATE TABLE IF NOT EXISTS `orbitalBase` (
-	`rPlace` int(11) unsigned NOT NULL,
-	`rPlayer` int(11) unsigned NOT NULL,
+	`rPlace` INT unsigned NOT NULL,
+	`rPlayer` INT unsigned NOT NULL,
 
 	`name` varchar(45) COLLATE utf8_bin NOT NULL,
-	`typeOfBase` tinyint(3) unsigned NOT NULL DEFAULT 0,
-	`levelGenerator` tinyint(3) unsigned DEFAULT 0,
-	`levelRefinery` tinyint(3) unsigned DEFAULT 0,
-	`levelDock1` tinyint(3) unsigned DEFAULT 0,
-	`levelDock2` tinyint(3) unsigned DEFAULT 0,
-	`levelDock3` tinyint(3) unsigned DEFAULT 0,
-	`levelTechnosphere` tinyint(3) unsigned DEFAULT 0,
-	`levelCommercialPlateforme` tinyint(3) unsigned DEFAULT 0,
-	`levelStorage` tinyint(3) unsigned DEFAULT 0,
-	`levelRecycling` tinyint(3) unsigned DEFAULT 0,
-	`levelSpatioport` tinyint(3) unsigned DEFAULT 0,
-	`points` int(10) unsigned DEFAULT 0,
+	`typeOfBase` TINYINT unsigned NOT NULL DEFAULT 0,
+	`levelGenerator` TINYINT unsigned DEFAULT 0,
+	`levelRefinery` TINYINT unsigned DEFAULT 0,
+	`levelDock1` TINYINT unsigned DEFAULT 0,
+	`levelDock2` TINYINT unsigned DEFAULT 0,
+	`levelDock3` TINYINT unsigned DEFAULT 0,
+	`levelTechnosphere` TINYINT unsigned DEFAULT 0,
+	`levelCommercialPlateforme` TINYINT unsigned DEFAULT 0,
+	`levelStorage` TINYINT unsigned DEFAULT 0,
+	`levelRecycling` TINYINT unsigned DEFAULT 0,
+	`levelSpatioport` TINYINT unsigned DEFAULT 0,
+	`points` INT unsigned DEFAULT 0,
 
-	`iSchool` int(10) unsigned DEFAULT 0,
-	`iAntiSpy` int(11) unsigned DEFAULT 0,
-	`antiSpyAverage` int(10) unsigned DEFAULT 0,
+	`iSchool` INT unsigned DEFAULT 0,
+	`iAntiSpy` INT unsigned DEFAULT 0,
+	`antiSpyAverage` INT unsigned DEFAULT 0,
 
-	`pegaseStorage` smallint(5) unsigned DEFAULT 0,
-	`satyreStorage` smallint(5) unsigned DEFAULT 0,
-	`sireneStorage` smallint(5) unsigned DEFAULT 0,
-	`dryadeStorage` smallint(5) unsigned DEFAULT 0,
-	`chimereStorage` smallint(5) unsigned DEFAULT 0,
-	`meduseStorage` smallint(5) unsigned DEFAULT 0,
-	`griffonStorage` smallint(5) unsigned DEFAULT 0,
-	`cyclopeStorage` smallint(5) unsigned DEFAULT 0,
-	`minotaureStorage` smallint(5) unsigned DEFAULT 0,
-	`hydreStorage` smallint(5) unsigned DEFAULT 0,
-	`cerbereStorage` smallint(5) unsigned DEFAULT 0,
-	`phenixStorage` smallint(5) unsigned DEFAULT 0,
+	`pegaseStorage` SMALLINT unsigned DEFAULT 0,
+	`satyreStorage` SMALLINT unsigned DEFAULT 0,
+	`sireneStorage` SMALLINT unsigned DEFAULT 0,
+	`dryadeStorage` SMALLINT unsigned DEFAULT 0,
+	`chimereStorage` SMALLINT unsigned DEFAULT 0,
+	`meduseStorage` SMALLINT unsigned DEFAULT 0,
+	`griffonStorage` SMALLINT unsigned DEFAULT 0,
+	`cyclopeStorage` SMALLINT unsigned DEFAULT 0,
+	`minotaureStorage` SMALLINT unsigned DEFAULT 0,
+	`hydreStorage` SMALLINT unsigned DEFAULT 0,
+	`cerbereStorage` SMALLINT unsigned DEFAULT 0,
+	`phenixStorage` SMALLINT unsigned DEFAULT 0,
 
-	`motherShip` tinyint(1) DEFAULT 0,
-	`resourcesStorage` bigint(20) unsigned DEFAULT 0,
+	`motherShip` TINYINT DEFAULT 0,
+	`resourcesStorage` INT unsigned DEFAULT 0,
 
 	`uOrbitalBase` datetime DEFAULT NULL,
 	`dCreation` datetime DEFAULT NULL,
@@ -388,18 +373,18 @@ echo '<h2>Ajout de la table commercialRoute</h2>';
 
 $db->query("DROP TABLE IF EXISTS `commercialRoute`");
 $db->query("CREATE TABLE IF NOT EXISTS `commercialRoute` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rOrbitalBase` int(11) unsigned NOT NULL,
-	`rOrbitalBaseLinked` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rOrbitalBase` INT unsigned NOT NULL,
+	`rOrbitalBaseLinked` INT unsigned NOT NULL,
 
 	`imageLink` varchar(10) NOT NULL,
-	`distance` int(10) unsigned NOT NULL,
-	`price` int(10) unsigned NOT NULL,
-	`income` int(10) unsigned NOT NULL,
+	`distance` SMALLINT unsigned NOT NULL,
+	`price` SMALLINT unsigned NOT NULL,
+	`income` SMALLINT unsigned NOT NULL,
 
 	`dProposition` datetime DEFAULT NULL,
 	`dCreation` datetime DEFAULT NULL,
-	`statement` tinyint(3) unsigned NOT NULL COMMENT '0 = pas acceptée, 1 = active',
+	`statement` TINYINT unsigned NOT NULL COMMENT '0 = pas acceptée, 1 = active',
 
 	PRIMARY KEY (`id`),
 	CONSTRAINT fkCommercialRouteOrbitalBaseA FOREIGN KEY (rOrbitalBase) REFERENCES orbitalBase(rPlace),
@@ -411,11 +396,11 @@ echo '<h2>Ajout de la table orbitalBaseBuildingQueue</h2>';
 
 $db->query("DROP TABLE IF EXISTS `orbitalBaseBuildingQueue`");
 $db->query("CREATE TABLE IF NOT EXISTS `orbitalBaseBuildingQueue` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rOrbitalBase` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rOrbitalBase` INT unsigned NOT NULL,
 
-	`buildingNumber` tinyint(3) unsigned NOT NULL,
-	`targetLevel` tinyint(3) unsigned NOT NULL,
+	`buildingNumber` TINYINT unsigned NOT NULL,
+	`targetLevel` TINYINT unsigned NOT NULL,
 	`dStart` datetime NOT NULL,
 	`dEnd` datetime NOT NULL,
 
@@ -428,12 +413,12 @@ echo '<h2>Ajout de la table orbitalBaseShipQueue</h2>';
 
 $db->query("DROP TABLE IF EXISTS `orbitalBaseShipQueue`");
 $db->query("CREATE TABLE IF NOT EXISTS `orbitalBaseShipQueue` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rOrbitalBase` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rOrbitalBase` INT unsigned NOT NULL,
 
-	`dockType` tinyint(3) unsigned NOT NULL,
-	`shipNumber` tinyint(3) unsigned NOT NULL,
-	`quantity` int(10) unsigned NOT NULL,
+	`dockType` TINYINT unsigned NOT NULL,
+	`shipNumber` TINYINT unsigned NOT NULL,
+	`quantity` SMALLINT unsigned NOT NULL,
 
 	`dStart` datetime NOT NULL,
 	`dEnd` datetime NOT NULL,
@@ -447,16 +432,16 @@ echo '<h2>Ajout de la table transaction</h2>';
 
 $db->query("DROP TABLE IF EXISTS `transaction`");
 $db->query("CREATE TABLE IF NOT EXISTS `transaction` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rPlayer` int(11) unsigned NOT NULL,
-	`rPlace` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rPlayer` INT unsigned NOT NULL,
+	`rPlace` INT unsigned NOT NULL,
 
-	`type` tinyint(4) NOT NULL COMMENT '0 = resource, 1 = ship, 2 = commander',
-	`quantity` int(11) NOT NULL,
-	`identifier` int(11) DEFAULT NULL,
-	`price` int(11) NOT NULL,
-	`commercialShipQuantity` int(11) NOT NULL,
-	`statement` tinyint(4) NOT NULL COMMENT '0 = proposed, 1 = completed, 2 = canceled',
+	`type` TINYINT NOT NULL COMMENT '0 = resource, 1 = ship, 2 = commander',
+	`quantity` SMALLINT NOT NULL,
+	`identifier` SMALLINT DEFAULT NULL,
+	`price` INT NOT NULL,
+	`commercialShipQuantity` SMALLINT NOT NULL,
+	`statement` TINYINT NOT NULL COMMENT '0 = proposed, 1 = completed, 2 = canceled',
 
 	`dPublication` datetime NOT NULL,
 	`dValidation` datetime DEFAULT NULL,
@@ -481,18 +466,18 @@ echo '<h2>Ajout de la table commercialShipping</h2>';
 
 $db->query("DROP TABLE IF EXISTS `commercialShipping`");
 $db->query("CREATE TABLE IF NOT EXISTS `commercialShipping` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rPlayer` int(11) unsigned NOT NULL,
-	`rBase` int(11) unsigned NOT NULL,
-	`rBaseDestination` int(11) unsigned NOT NULL,
-	`rTransaction` int(11) unsigned DEFAULT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rPlayer` INT unsigned NOT NULL,
+	`rBase` INT unsigned NOT NULL,
+	`rBaseDestination` INT unsigned NOT NULL,
+	`rTransaction` INT unsigned DEFAULT NULL,
 
-	`resourceTransported` int(11) DEFAULT NULL,
-	`shipQuantity` int(11) NOT NULL,
+	`resourceTransported` INT DEFAULT NULL,
+	`shipQuantity` INT NOT NULL,
 
 	`dDeparture` datetime NOT NULL,
 	`dArrival` datetime NOT NULL,
-	`statement` smallint(6) NOT NULL COMMENT '0 = prêt au départ, 1 = aller, 2 = retour',
+	`statement` SMALLINT NOT NULL COMMENT '0 = prêt au départ, 1 = aller, 2 = retour',
 
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
@@ -502,9 +487,9 @@ echo '<h2>Ajout de la table commercialTax</h2>';
 
 $db->query("DROP TABLE IF EXISTS `commercialTax`");
 $db->query("CREATE TABLE IF NOT EXISTS `commercialTax` (
-	`id` int(11) NOT NULL AUTO_INCREMENT,
-	`faction` smallint(6) NOT NULL,
-	`relatedFaction` smallint(6) NOT NULL,
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`faction` SMALLINT NOT NULL,
+	`relatedFaction` SMALLINT NOT NULL,
 	`exportTax` float NOT NULL,
 	`importTax` float NOT NULL,
 	PRIMARY KEY (`id`)
@@ -574,11 +559,11 @@ echo '<h2>Ajout de la table law</h2>';
 
 $db->query("DROP TABLE IF EXISTS `law`");
 $db->query("CREATE TABLE IF NOT EXISTS `law` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rColor` int(10) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rColor` INT unsigned NOT NULL,
 
-	`type` int(11) NOT NULL,
-	`statement` int(11) NOT NULL,
+	`type` INT NOT NULL,
+	`statement` INT NOT NULL,
 	`options` text DEFAULT NULL,
 
 	`dEnd` datetime DEFAULT NULL,
@@ -594,12 +579,12 @@ echo '<h2>Ajout de la table voteLaw</h2>';
 
 $db->query("DROP TABLE IF EXISTS `voteLaw`");
 $db->query("CREATE TABLE IF NOT EXISTS `voteLaw` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
 
-	`rLaw` int(11) unsigned NOT NULL,
-	`rPlayer` int(11) unsigned NOT NULL,
+	`rLaw` INT unsigned NOT NULL,
+	`rPlayer` INT unsigned NOT NULL,
 
-	`vote` tinyint(4) NOT NULL,
+	`vote` TINYINT NOT NULL,
 	`dVotation` date NOT NULL,
 
 	PRIMARY KEY (`id`),
@@ -612,15 +597,15 @@ echo '<h2>Ajout de la table forumTopic</h2>';
 
 $db->query("DROP TABLE IF EXISTS `forumTopic`");
 $db->query("CREATE TABLE IF NOT EXISTS `forumTopic` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rColor` int(11) unsigned NOT NULL,
-	`rPlayer` int(11) unsigned NOT NULL,
-	`rForum` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rColor` INT unsigned NOT NULL,
+	`rPlayer` INT unsigned NOT NULL,
+	`rForum` INT unsigned NOT NULL,
 
 	`title` varchar(255) NOT NULL,
-	`isClosed` tinyint(4) NOT NULL DEFAULT 0,
-	`isArchived` tinyint(4) NOT NULL DEFAULT 0,
-	`isUp` tinyint(4) NOT NULL DEFAULT 0,
+	`isClosed` TINYINT NOT NULL DEFAULT 0,
+	`isArchived` TINYINT NOT NULL DEFAULT 0,
+	`isUp` TINYINT NOT NULL DEFAULT 0,
 
 	`dCreation` datetime NOT NULL,
 	`dLastMessage` datetime NOT NULL,
@@ -635,14 +620,14 @@ echo '<h2>Ajout de la table forumMessage</h2>';
 
 $db->query("DROP TABLE IF EXISTS `forumMessage`");
 $db->query("CREATE TABLE IF NOT EXISTS `forumMessage` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rPlayer` int(11) unsigned NOT NULL,
-	`rTopic` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rPlayer` INT unsigned NOT NULL,
+	`rTopic` INT unsigned NOT NULL,
 
 	`oContent` text NOT NULL,
 	`pContent` text NOT NULL,
 
-	`statement` int(11) NOT NULL DEFAULT 0,
+	`statement` INT NOT NULL DEFAULT 0,
 
 	`dCreation` datetime NOT NULL,
 	`dLastModification` datetime DEFAULT NULL,
@@ -657,9 +642,9 @@ echo '<h2>Ajout de la table forumLastView</h2>';
 
 $db->query("DROP TABLE IF EXISTS `forumLastView`");
 $db->query("CREATE TABLE IF NOT EXISTS `forumLastView` (
-	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-	`rPlayer` int(11) unsigned NOT NULL,
-	`rTopic` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rPlayer` INT unsigned NOT NULL,
+	`rTopic` INT unsigned NOT NULL,
 
 	`dView` datetime NOT NULL,
 
@@ -673,8 +658,8 @@ echo '<h2>Ajout de la table election</h2>';
 
 $db->query("DROP TABLE IF EXISTS `election`");
 $db->query("CREATE TABLE IF NOT EXISTS `election` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rColor` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rColor` INT unsigned NOT NULL,
 
 	`dElection` datetime NOT NULL,
 	PRIMARY KEY (`id`),
@@ -686,14 +671,14 @@ echo '<h2>Ajout de la table candidate</h2>';
 
 $db->query("DROP TABLE IF EXISTS `candidate`");
 $db->query("CREATE TABLE IF NOT EXISTS `candidate` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rElection` int(11) unsigned NOT NULL,
-	`rPlayer` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rElection` INT unsigned NOT NULL,
+	`rPlayer` INT unsigned NOT NULL,
 
-	`chiefChoice` tinyint(4) unsigned DEFAULT 1,
-	`treasurerChoice` tinyint(4) unsigned DEFAULT 1,
-	`warlordChoice` tinyint(4) unsigned DEFAULT 1,
-	`ministerChoice` tinyint(4) unsigned DEFAULT 1,
+	`chiefChoice` TINYINT unsigned DEFAULT 1,
+	`treasurerChoice` TINYINT unsigned DEFAULT 1,
+	`warlordChoice` TINYINT unsigned DEFAULT 1,
+	`ministerChoice` TINYINT unsigned DEFAULT 1,
 
 	`program` text,
 	`dPresentation` datetime NOT NULL,
@@ -708,10 +693,10 @@ echo '<h2>Ajout de la table vote</h2>';
 
 $db->query("DROP TABLE IF EXISTS `vote`");
 $db->query("CREATE TABLE IF NOT EXISTS `vote` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rCandidate` int(11) unsigned NOT NULL,
-	`rPlayer` int(11) unsigned NOT NULL,
-	`rElection` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rCandidate` INT unsigned NOT NULL,
+	`rPlayer` INT unsigned NOT NULL,
+	`rElection` INT unsigned NOT NULL,
 
 	`dVotation` datetime NOT NULL,
 
@@ -726,27 +711,27 @@ echo '<h2>Ajout de la table commander</h2>';
 
 $db->query("DROP TABLE IF EXISTS `commander`");
 $db->query("CREATE TABLE IF NOT EXISTS `commander` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rPlayer` int(11) unsigned NOT NULL,
-	`rBase` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rPlayer` INT unsigned NOT NULL,
+	`rBase` INT unsigned NOT NULL,
 
 	`name` varchar(45) NOT NULL,
 	`comment` text,
-	`sexe` tinyint(4) NOT NULL DEFAULT 1,
-	`age` int(10) unsigned NOT NULL DEFAULT 20,
+	`sexe` TINYINT NOT NULL DEFAULT 1,
+	`age` INT unsigned NOT NULL DEFAULT 20,
 	`avatar` varchar(20) NOT NULL,
-	`level` tinyint(4) unsigned NOT NULL DEFAULT 1,
-	`experience` int(10) unsigned NOT NULL DEFAULT 1,
-	`palmares` int(10) unsigned NOT NULL DEFAULT 0,
-	`statement` tinyint(4) unsigned NOT NULL DEFAULT 0,
-	`line` tinyint(4) unsigned DEFAULT NULL,
-	`rStartPlace` int(11) unsigned DEFAULT NULL,
-	`rDestinationPlace` int(11) unsigned DEFAULT NULL,
+	`level` TINYINT unsigned NOT NULL DEFAULT 1,
+	`experience` INT unsigned NOT NULL DEFAULT 1,
+	`palmares` INT unsigned NOT NULL DEFAULT 0,
+	`statement` TINYINT unsigned NOT NULL DEFAULT 0,
+	`line` TINYINT unsigned DEFAULT NULL,
+	`rStartPlace` INT unsigned DEFAULT NULL,
+	`rDestinationPlace` INT unsigned DEFAULT NULL,
 	`dStart` datetime DEFAULT NULL,
 	`dArrival` datetime DEFAULT NULL,
-	`resources` int(11)unsigned NOT NULL DEFAULT 0,
-	`travelType` tinyint(4) unsigned DEFAULT NULL,
-	`travelLength` tinyint(4) unsigned DEFAULT NULL,
+	`resources` INT unsigned NOT NULL DEFAULT 0,
+	`travelType` TINYINT unsigned DEFAULT NULL,
+	`travelLength` TINYINT unsigned DEFAULT NULL,
 
 	`dCreation` datetime DEFAULT NULL,
 	`dAffectation` datetime DEFAULT NULL,
@@ -763,21 +748,21 @@ echo '<h2>Ajout de la table squadron</h2>';
 
 $db->query("DROP TABLE IF EXISTS `squadron`");
 $db->query("CREATE TABLE IF NOT EXISTS `squadron` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rCommander` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rCommander` INT unsigned NOT NULL,
 
-	`ship0` tinyint(4) unsigned DEFAULT 0,
-	`ship1` tinyint(4) unsigned DEFAULT 0,
-	`ship2` tinyint(4) unsigned DEFAULT 0,
-	`ship3` tinyint(4) unsigned DEFAULT 0,
-	`ship4` tinyint(4) unsigned DEFAULT 0,
-	`ship5` tinyint(4) unsigned DEFAULT 0,
-	`ship6` tinyint(4) unsigned DEFAULT 0,
-	`ship7` tinyint(4) unsigned DEFAULT 0,
-	`ship8` tinyint(4) unsigned DEFAULT 0,
-	`ship9` tinyint(4) unsigned DEFAULT 0,
-	`ship10` tinyint(4) unsigned DEFAULT 0,
-	`ship11` tinyint(4) unsigned DEFAULT 0,
+	`ship0` SMALLINT unsigned DEFAULT 0,
+	`ship1` SMALLINT unsigned DEFAULT 0,
+	`ship2` SMALLINT unsigned DEFAULT 0,
+	`ship3` SMALLINT unsigned DEFAULT 0,
+	`ship4` SMALLINT unsigned DEFAULT 0,
+	`ship5` SMALLINT unsigned DEFAULT 0,
+	`ship6` SMALLINT unsigned DEFAULT 0,
+	`ship7` SMALLINT unsigned DEFAULT 0,
+	`ship8` SMALLINT unsigned DEFAULT 0,
+	`ship9` SMALLINT unsigned DEFAULT 0,
+	`ship10` SMALLINT unsigned DEFAULT 0,
+	`ship11` SMALLINT unsigned DEFAULT 0,
 
 	`dCreation` datetime DEFAULT NULL,
 	`dLastModification` datetime DEFAULT NULL,
@@ -791,39 +776,39 @@ echo '<h2>Ajout de la table report</h2>';
 
 $db->query("DROP TABLE IF EXISTS `report`");
 $db->query("CREATE TABLE IF NOT EXISTS `report` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rPlayerAttacker` int(11) unsigned NOT NULL,
-	`rPlayerDefender` int(11) unsigned NOT NULL,
-	`rPlayerWinner` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rPlayerAttacker` INT unsigned NOT NULL,
+	`rPlayerDefender` INT unsigned NOT NULL,
+	`rPlayerWinner` INT unsigned NOT NULL,
 
-	`resources` int(11) unsigned NOT NULL,
-	`expCom` int(11) unsigned NOT NULL,
-	`rPlace` int(10) unsigned NOT NULL,
+	`resources` INT unsigned NOT NULL,
+	`expCom` INT unsigned NOT NULL,
+	`rPlace` INT unsigned NOT NULL,
 	`placeName` varchar(45) NOT NULL,
-	`type` tinyint(4) unsigned DEFAULT NULL,
-	`isLegal` tinyint(4) unsigned DEFAULT 1,
-	`hasBeenPunished` tinyint(4) unsigned DEFAULT 0,
-	`round` int(11) unsigned DEFAULT 0,
-	`importance` int(11) unsigned DEFAULT NULL,
-	`pevInBeginA` smallint(6) unsigned,
-	`pevInBeginD` smallint(6) unsigned,
-	`pevAtEndA` smallint(6) unsigned,
-	`pevAtEndD` smallint(6) unsigned,
+	`type` TINYINT unsigned DEFAULT NULL,
+	`isLegal` TINYINT unsigned DEFAULT 1,
+	`hasBeenPunished` TINYINT unsigned DEFAULT 0,
+	`round` INT unsigned DEFAULT 0,
+	`importance` INT unsigned DEFAULT NULL,
+	`pevInBeginA` SMALLINT unsigned,
+	`pevInBeginD` SMALLINT unsigned,
+	`pevAtEndA` SMALLINT unsigned,
+	`pevAtEndD` SMALLINT unsigned,
 
 	`avatarA` varchar(255) NOT NULL,
 	`avatarD` varchar(255) NOT NULL,
 	`nameA` varchar(255) NOT NULL,
 	`nameD` varchar(255) NOT NULL,
-	`levelA` int(10) unsigned NOT NULL,
-	`levelD` int(10) unsigned NOT NULL,
-	`experienceA` int(10) unsigned NOT NULL,
-	`experienceD` int(10) unsigned NOT NULL,
-	`palmaresA` int(10) unsigned NOT NULL,
-	`palmaresD` int(10) unsigned NOT NULL,
-	`expPlayerA` int(10) unsigned NOT NULL,
-	`expPlayerD` int(10) unsigned NOT NULL,
-	`statementAttacker` tinyint(4) unsigned NOT NULL DEFAULT 0,
-	`statementDefender` tinyint(4) unsigned NOT NULL DEFAULT 0,
+	`levelA` SMALLINT unsigned NOT NULL,
+	`levelD` SMALLINT unsigned NOT NULL,
+	`experienceA` SMALLINT unsigned NOT NULL,
+	`experienceD` SMALLINT unsigned NOT NULL,
+	`palmaresA` SMALLINT unsigned NOT NULL,
+	`palmaresD` SMALLINT unsigned NOT NULL,
+	`expPlayerA` INT unsigned NOT NULL,
+	`expPlayerD` INT unsigned NOT NULL,
+	`statementAttacker` TINYINT unsigned NOT NULL DEFAULT 0,
+	`statementDefender` TINYINT unsigned NOT NULL DEFAULT 0,
 
 	`dFight` datetime DEFAULT NULL,
 	PRIMARY KEY (`id`),
@@ -837,25 +822,25 @@ echo '<h2>Ajout de la table squadronReport</h2>';
 
 $db->query("DROP TABLE IF EXISTS `squadronReport`");
 $db->query("CREATE TABLE IF NOT EXISTS `squadronReport` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rReport` int(11) unsigned NOT NULL,
-	`rCommander` int(11) unsigned NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rReport` INT unsigned NOT NULL,
+	`rCommander` INT unsigned NULL,
 
-	`position` tinyint(4) unsigned NOT NULL,
-	`round` int(11) NOT NULL,
+	`position` TINYINT unsigned NOT NULL,
+	`round` INT NOT NULL,
 
-	`ship0` tinyint(4) unsigned NOT NULL,
-	`ship1` tinyint(4) unsigned NOT NULL,
-	`ship2` tinyint(4) unsigned NOT NULL,
-	`ship3` tinyint(4) unsigned NOT NULL,
-	`ship4` tinyint(4) unsigned NOT NULL,
-	`ship5` tinyint(4) unsigned NOT NULL,
-	`ship6` tinyint(4) unsigned NOT NULL,
-	`ship7` tinyint(4) unsigned NOT NULL,
-	`ship8` tinyint(4) unsigned NOT NULL,
-	`ship9` tinyint(4) unsigned NOT NULL,
-	`ship10` tinyint(4) unsigned NOT NULL,
-	`ship11` tinyint(4) unsigned NOT NULL,
+	`ship0` SMALLINT unsigned NOT NULL,
+	`ship1` SMALLINT unsigned NOT NULL,
+	`ship2` SMALLINT unsigned NOT NULL,
+	`ship3` SMALLINT unsigned NOT NULL,
+	`ship4` SMALLINT unsigned NOT NULL,
+	`ship5` SMALLINT unsigned NOT NULL,
+	`ship6` SMALLINT unsigned NOT NULL,
+	`ship7` SMALLINT unsigned NOT NULL,
+	`ship8` SMALLINT unsigned NOT NULL,
+	`ship9` SMALLINT unsigned NOT NULL,
+	`ship10` SMALLINT unsigned NOT NULL,
+	`ship11` SMALLINT unsigned NOT NULL,
 
 	PRIMARY KEY (`id`),
 	CONSTRAINT fkSquadronReportReport FOREIGN KEY (rReport) REFERENCES report(id),
@@ -867,27 +852,27 @@ echo '<h2>Ajout de la table spyReport</h2>';
 
 $db->query("DROP TABLE IF EXISTS `spyReport`");
 $db->query("CREATE TABLE IF NOT EXISTS `spyReport` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rPlayer` int(11) unsigned NOT NULL,
-	`rPlace` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rPlayer` INT unsigned NOT NULL,
+	`rPlace` INT unsigned NOT NULL,
 	
-	`price` int(11) unsigned NOT NULL,
-	`placeColor` smallint(6) unsigned NOT NULL,
-	`typeOfBase` tinyint(4) unsigned NOT NULL,
-	`typeOfOrbitalBase` tinyint(4) unsigned NOT NULL,
+	`price` INT unsigned NOT NULL,
+	`placeColor` SMALLINT unsigned NOT NULL,
+	`typeOfBase` TINYINT unsigned NOT NULL,
+	`typeOfOrbitalBase` TINYINT unsigned NOT NULL,
 	`placeName` varchar(255) NOT NULL,
-	`points` int(11) unsigned NOT NULL,
-	`rEnemy` int(11) unsigned NOT NULL,
+	`points` INT unsigned NOT NULL,
+	`rEnemy` INT unsigned NOT NULL,
 	`enemyName` varchar(255) NOT NULL,
 	`enemyAvatar` varchar(255) NOT NULL,
-	`enemyLevel` int(11) unsigned NOT NULL,
-	`resources` int(11) unsigned NOT NULL,
+	`enemyLevel` INT unsigned NOT NULL,
+	`resources` INT unsigned NOT NULL,
 	`shipsInStorage` text NOT NULL,
-	`antiSpyInvest` int(11) NOT NULL,
-	`commercialRouteIncome` int(11) NOT NULL,
+	`antiSpyInvest` INT NOT NULL,
+	`commercialRouteIncome` INT NOT NULL,
 	`commanders` text NOT NULL,
-	`success` smallint(6) unsigned NOT NULL,
-	`type` tinyint(4) unsigned NOT NULL,
+	`success` SMALLINT unsigned NOT NULL,
+	`type` TINYINT unsigned NOT NULL,
 
 	`dSpying` datetime NOT NULL,
 
@@ -901,10 +886,10 @@ echo '<h2>Ajout de la table ranking</h2>';
 
 $qr = $db->prepare("DROP TABLE IF EXISTS `ranking`");
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `ranking` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
 	`dRanking` datetime NOT NULL,
-	`player` tinyint(1) unsigned NOT NULL DEFAULT 0,
-	`faction` tinyint(1) unsigned NOT NULL DEFAULT 0,
+	`player` TINYINT unsigned NOT NULL DEFAULT 0,
+	`faction` TINYINT unsigned NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 $qr->execute();
@@ -915,41 +900,41 @@ echo '<h2>Ajout de la table playerRanking</h2>';
 $qr = $db->prepare("DROP TABLE IF EXISTS `playerRanking`");
 $qr->execute();
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `playerRanking` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rRanking` int(11) unsigned NOT NULL,
-	`rPlayer` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rRanking` INT unsigned NOT NULL,
+	`rPlayer` INT unsigned NOT NULL,
 
-	`general` int(11) unsigned NOT NULL,
-	`generalPosition` smallint(6) NOT NULL,
-	`generalVariation` smallint(6) NOT NULL,
+	`general` INT unsigned NOT NULL,
+	`generalPosition` SMALLINT NOT NULL,
+	`generalVariation` SMALLINT NOT NULL,
 
-	`experience` int(11) unsigned NOT NULL,
-	`experiencePosition` smallint(6) NOT NULL,
-	`experienceVariation` smallint(6) NOT NULL,
+	`experience` INT unsigned NOT NULL,
+	`experiencePosition` SMALLINT NOT NULL,
+	`experienceVariation` SMALLINT NOT NULL,
 
-	`butcher` int(11) unsigned NOT NULL,
-	`butcherDestroyedPEV` int(11) unsigned NOT NULL,
-	`butcherLostPEV` int(11) unsigned NOT NULL,
-	`butcherPosition` smallint(6) NOT NULL,
-	`butcherVariation` smallint(6) NOT NULL,
+	`butcher` INT unsigned NOT NULL,
+	`butcherDestroyedPEV` INT unsigned NOT NULL,
+	`butcherLostPEV` INT unsigned NOT NULL,
+	`butcherPosition` SMALLINT NOT NULL,
+	`butcherVariation` SMALLINT NOT NULL,
 
-	`armies` int(11) unsigned NOT NULL,
-	`armiesPosition` smallint(6) NOT NULL,
-	`armiesVariation` smallint(6) NOT NULL,
+	`armies` INT unsigned NOT NULL,
+	`armiesPosition` SMALLINT NOT NULL,
+	`armiesVariation` SMALLINT NOT NULL,
 
-	`trader` int(11) unsigned NOT NULL,
-	`traderPosition` smallint(6) NOT NULL,
-	`traderVariation` smallint(6) NOT NULL,
+	`trader` INT unsigned NOT NULL,
+	`traderPosition` SMALLINT NOT NULL,
+	`traderVariation` SMALLINT NOT NULL,
 
-	`resources` int(11) unsigned NOT NULL,
-	`resourcesPosition` smallint(6) NOT NULL,
-	`resourcesVariation` smallint(6) NOT NULL,
+	`resources` INT unsigned NOT NULL,
+	`resourcesPosition` SMALLINT NOT NULL,
+	`resourcesVariation` SMALLINT NOT NULL,
 
-	`fight` int(11) unsigned NOT NULL,
-	`victories` int(11) unsigned NOT NULL,
-	`defeat` int(11) unsigned NOT NULL,
-	`fightPosition` smallint(6) NOT NULL,
-	`fightVariation` smallint(6) NOT NULL,
+	`fight` INT unsigned NOT NULL,
+	`victories` INT unsigned NOT NULL,
+	`defeat` INT unsigned NOT NULL,
+	`fightPosition` SMALLINT NOT NULL,
+	`fightVariation` SMALLINT NOT NULL,
 
 	PRIMARY KEY (`id`),
 	CONSTRAINT fkPlayerRankingRanking FOREIGN KEY (rRanking) REFERENCES ranking(id),
@@ -963,21 +948,21 @@ echo '<h2>Ajout de la table factionRanking</h2>';
 $qr = $db->prepare("DROP TABLE IF EXISTS `factionRanking`");
 $qr->execute();
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `factionRanking` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rRanking` int(11) unsigned NOT NULL,
-	`rFaction` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rRanking` INT unsigned NOT NULL,
+	`rFaction` INT unsigned NOT NULL,
 
-	`general` int(11) unsigned NOT NULL,
-	`generalPosition` smallint(6) NOT NULL,
-	`generalVariation` smallint(6) NOT NULL,
+	`general` INT unsigned NOT NULL,
+	`generalPosition` SMALLINT NOT NULL,
+	`generalVariation` SMALLINT NOT NULL,
 
-	`wealth` int(11) unsigned NOT NULL,
-	`wealthPosition` smallint(6) NOT NULL,
-	`wealthVariation` smallint(6) NOT NULL,
+	`wealth` INT unsigned NOT NULL,
+	`wealthPosition` SMALLINT NOT NULL,
+	`wealthVariation` SMALLINT NOT NULL,
 
-	`territorial` int(11) unsigned NOT NULL,
-	`territorialPosition` smallint(6) NOT NULL,
-	`territorialVariation` smallint(6) NOT NULL,
+	`territorial` INT unsigned NOT NULL,
+	`territorialPosition` SMALLINT NOT NULL,
+	`territorialVariation` SMALLINT NOT NULL,
 
 	PRIMARY KEY (`id`),
 	CONSTRAINT fkFactionRankingRanking FOREIGN KEY (rRanking) REFERENCES ranking(id),
@@ -990,10 +975,10 @@ echo '<h2>Ajout de la table message</h2>';
 
 $db->query("DROP TABLE IF EXISTS `message`");
 $db->query("CREATE TABLE IF NOT EXISTS `message` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`thread` int(11) unsigned DEFAULT NULL,
-	`rPlayerWriter` int(11) unsigned DEFAULT NULL,
-	`rPlayerReader` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`thread` INT unsigned DEFAULT NULL,
+	`rPlayerWriter` INT unsigned DEFAULT NULL,
+	`rPlayerReader` INT unsigned NOT NULL,
 	`dSending` datetime NOT NULL,
 	`content` text NOT NULL,
 	`readed` tinyint(1) DEFAULT 0,
@@ -1010,13 +995,13 @@ echo '<h2>Ajout de la table notification</h2>';
 
 $db->query("DROP TABLE IF EXISTS `notification`");
 $db->query("CREATE TABLE IF NOT EXISTS `notification` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rPlayer` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rPlayer` INT unsigned NOT NULL,
 	`title` varchar(100) NOT NULL,
 	`content` text,
 	`dSending` datetime NOT NULL,
-	`readed` tinyint(1) DEFAULT 0,
-	`archived` tinyint(1) DEFAULT 0,
+	`readed` TINYINT DEFAULT 0,
+	`archived` TINYINT DEFAULT 0,
 
 	PRIMARY KEY (`id`),
 	CONSTRAINT fkNotificationPlayer FOREIGN KEY (rPlayer) REFERENCES player(id)
@@ -1027,11 +1012,11 @@ echo '<h2>Ajout de la table roadMap</h2>';
 
 $db->query("DROP TABLE IF EXISTS `roadMap`");
 $db->query("CREATE TABLE IF NOT EXISTS `roadMap` (
-	`id` int(11) NOT NULL AUTO_INCREMENT,
-	`rPlayer` int(11) NOT NULL,
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`rPlayer` INT NOT NULL,
 	`oContent` text NOT NULL,
 	`pContent` text NOT NULL,
-	`statement` tinyint(4) NOT NULL COMMENT '0 = caché, 1 = affiché',
+	`statement` TINYINT NOT NULL COMMENT '0 = caché, 1 = affiché',
 	`dCreation` datetime NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
@@ -1041,26 +1026,26 @@ echo '<h2>Ajout de la table research</h2>';
 
 $db->query("DROP TABLE IF EXISTS `research`");
 $db->query("CREATE TABLE IF NOT EXISTS `research` (
-	`rPlayer` int(11) unsigned NOT NULL,
+	`rPlayer` INT unsigned NOT NULL,
 
-	`mathLevel` tinyint(3) unsigned NOT NULL DEFAULT 0,
-	`physLevel` tinyint(3) unsigned NOT NULL DEFAULT 0,
-	`chemLevel` tinyint(3) unsigned NOT NULL DEFAULT 0,
-	`bioLevel` tinyint(3) unsigned NOT NULL DEFAULT 0,
-	`mediLevel` tinyint(3) unsigned NOT NULL DEFAULT 0,
-	`econoLevel` tinyint(3) unsigned NOT NULL DEFAULT 0,
-	`psychoLevel` tinyint(3) unsigned NOT NULL DEFAULT 0,
-	`networkLevel` tinyint(3) unsigned NOT NULL DEFAULT 0,
-	`algoLevel` tinyint(3) unsigned NOT NULL DEFAULT 0,
-	`statLevel` tinyint(3) unsigned NOT NULL DEFAULT 0,
-	`naturalTech` tinyint(4) NOT NULL DEFAULT 0,
-	`lifeTech` tinyint(4) NOT NULL DEFAULT 3,
-	`socialTech` tinyint(4) NOT NULL DEFAULT 5,
-	`informaticTech` tinyint(4) NOT NULL DEFAULT 7,
-	`naturalToPay` int(11) unsigned NOT NULL,
-	`lifeToPay` int(11) unsigned NOT NULL,
-	`socialToPay` int(11) unsigned NOT NULL,
-	`informaticToPay` int(11) unsigned NOT NULL,
+	`mathLevel` TINYINT unsigned NOT NULL DEFAULT 0,
+	`physLevel` TINYINT unsigned NOT NULL DEFAULT 0,
+	`chemLevel` TINYINT unsigned NOT NULL DEFAULT 0,
+	`bioLevel` TINYINT unsigned NOT NULL DEFAULT 0,
+	`mediLevel` TINYINT unsigned NOT NULL DEFAULT 0,
+	`econoLevel` TINYINT unsigned NOT NULL DEFAULT 0,
+	`psychoLevel` TINYINT unsigned NOT NULL DEFAULT 0,
+	`networkLevel` TINYINT unsigned NOT NULL DEFAULT 0,
+	`algoLevel` TINYINT unsigned NOT NULL DEFAULT 0,
+	`statLevel` TINYINT unsigned NOT NULL DEFAULT 0,
+	`naturalTech` TINYINT NOT NULL DEFAULT 0,
+	`lifeTech` TINYINT NOT NULL DEFAULT 3,
+	`socialTech` TINYINT NOT NULL DEFAULT 5,
+	`informaticTech` TINYINT NOT NULL DEFAULT 7,
+	`naturalToPay` INT unsigned NOT NULL,
+	`lifeToPay` INT unsigned NOT NULL,
+	`socialToPay` INT unsigned NOT NULL,
+	`informaticToPay` INT unsigned NOT NULL,
 
 	PRIMARY KEY (`rPlayer`),
 	CONSTRAINT fkResearchPlayer FOREIGN KEY (rPlayer) REFERENCES player(id)
@@ -1071,11 +1056,11 @@ echo '<h2>Ajout de la table technology</h2>';
 
 $db->query("DROP TABLE IF EXISTS `technology`");
 $db->query("CREATE TABLE IF NOT EXISTS `technology` (
-	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-	`rPlayer` int(10) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rPlayer` INT unsigned NOT NULL,
 
-	`technology` smallint(5) unsigned NOT NULL,
-	`level` tinyint(3) unsigned NOT NULL,
+	`technology` SMALLINT unsigned NOT NULL,
+	`level` TINYINT unsigned NOT NULL,
 
 	PRIMARY KEY (`id`),
 	CONSTRAINT fkTechnologyPlayer FOREIGN KEY (rPlayer) REFERENCES player(id)
@@ -1086,12 +1071,12 @@ echo '<h2>Ajout de la table technologyQueue</h2>';
 
 $db->query("DROP TABLE IF EXISTS `technologyQueue`");
 $db->query("CREATE TABLE IF NOT EXISTS `technologyQueue` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rPlayer` int(11) unsigned NOT NULL,
-	`rPlace` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rPlayer` INT unsigned NOT NULL,
+	`rPlace` INT unsigned NOT NULL,
 
-	`technology` smallint(5) unsigned NOT NULL,
-	`targetLevel` tinyint(3) unsigned NOT NULL,
+	`technology` SMALLINT unsigned NOT NULL,
+	`targetLevel` TINYINT unsigned NOT NULL,
 
 	`dStart` datetime NOT NULL,
 	`dEnd` datetime NOT NULL,
@@ -1106,15 +1091,15 @@ echo '<h2>Ajout de la table recyclingMission</h2>';
 
 $db->query("DROP TABLE IF EXISTS `recyclingMission`");
 $db->query("CREATE TABLE IF NOT EXISTS `recyclingMission` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rBase` int(11) unsigned NOT NULL,
-	`rTarget` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rBase` INT unsigned NOT NULL,
+	`rTarget` INT unsigned NOT NULL,
 
-	`cycleTime` int(11) unsigned NOT NULL,
-	`recyclerQuantity` smallint(6) unsigned NOT NULL,
+	`cycleTime` INT unsigned NOT NULL,
+	`recyclerQuantity` SMALLINT unsigned NOT NULL,
 
 	`uRecycling` datetime NOT NULL,
-	`statement` tinyint(3) NOT NULL,
+	`statement` TINYINT NOT NULL,
 
 	PRIMARY KEY (`id`),
 	CONSTRAINT fkRecyclingMissionOB FOREIGN KEY (rBase) REFERENCES orbitalBase(rPlace)
@@ -1125,23 +1110,23 @@ echo '<h2>Ajout de la table recyclingLog</h2>';
 
 $db->query("DROP TABLE IF EXISTS `recyclingLog`");
 $db->query("CREATE TABLE IF NOT EXISTS `recyclingLog` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rRecycling` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rRecycling` INT unsigned NOT NULL,
 
-	`resources` int(11) unsigned NOT NULL,
-	`credits` int(11) unsigned NOT NULL,
-	`ship0` smallint(6) unsigned NOT NULL DEFAULT 0,
-	`ship1` smallint(6) unsigned NOT NULL DEFAULT 0,
-	`ship2` smallint(6) unsigned NOT NULL DEFAULT 0,
-	`ship3` smallint(6) unsigned NOT NULL DEFAULT 0,
-	`ship4` smallint(6) unsigned NOT NULL DEFAULT 0,
-	`ship5` smallint(6) unsigned NOT NULL DEFAULT 0,
-	`ship6` smallint(6) unsigned NOT NULL DEFAULT 0,
-	`ship7` smallint(6) unsigned NOT NULL DEFAULT 0,
-	`ship8` smallint(6) unsigned NOT NULL DEFAULT 0,
-	`ship9` smallint(6) unsigned NOT NULL DEFAULT 0,
-	`ship10` smallint(6) unsigned NOT NULL DEFAULT 0,
-	`ship11` smallint(6) unsigned NOT NULL DEFAULT 0,
+	`resources` INT unsigned NOT NULL,
+	`credits` INT unsigned NOT NULL,
+	`ship0` SMALLINT unsigned NOT NULL DEFAULT 0,
+	`ship1` SMALLINT unsigned NOT NULL DEFAULT 0,
+	`ship2` SMALLINT unsigned NOT NULL DEFAULT 0,
+	`ship3` SMALLINT unsigned NOT NULL DEFAULT 0,
+	`ship4` SMALLINT unsigned NOT NULL DEFAULT 0,
+	`ship5` SMALLINT unsigned NOT NULL DEFAULT 0,
+	`ship6` SMALLINT unsigned NOT NULL DEFAULT 0,
+	`ship7` SMALLINT unsigned NOT NULL DEFAULT 0,
+	`ship8` SMALLINT unsigned NOT NULL DEFAULT 0,
+	`ship9` SMALLINT unsigned NOT NULL DEFAULT 0,
+	`ship10` SMALLINT unsigned NOT NULL DEFAULT 0,
+	`ship11` SMALLINT unsigned NOT NULL DEFAULT 0,
 	`dLog` datetime NOT NULL,
 
 	PRIMARY KEY (`id`),
@@ -1153,11 +1138,11 @@ echo '<h2>Ajout de la table creditTransaction</h2>';
 
 $db->query("DROP TABLE IF EXISTS `creditTransaction`");
 $db->query("CREATE TABLE IF NOT EXISTS `creditTransaction` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`rPlayer` int(11) unsigned NOT NULL,
-	`rColor` int(11) unsigned NOT NULL,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`rPlayer` INT unsigned NOT NULL,
+	`rColor` INT unsigned NOT NULL,
 
-	`amout` int(11) unsigned NOT NULL,
+	`amout` INT unsigned NOT NULL,
 	`dTransaction` datetime NOT NULL,
 	`comment` text DEFAULT NULL,
 
@@ -1167,11 +1152,11 @@ $db->query("CREATE TABLE IF NOT EXISTS `creditTransaction` (
 echo '<h2>Ajout de la table colorLink</h2>';
 $db->query("DROP TABLE IF EXISTS `colorLink`");
 $db->query("CREATE TABLE IF NOT EXISTS `colorLink` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
 
-	`rColor` tinyint(4) NOT NULL DEFAULT 0,
-	`rColorLinked` tinyint(4) NOT NULL DEFAULT 0,
-	`statement` tinyint(4) unsigned NOT NULL DEFAULT 0,
+	`rColor` TINYINT NOT NULL DEFAULT 0,
+	`rColorLinked` TINYINT NOT NULL DEFAULT 0,
+	`statement` TINYINT unsigned NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 

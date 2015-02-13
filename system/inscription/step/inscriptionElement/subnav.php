@@ -12,7 +12,7 @@ echo '<div id="inscription-subnav">';
 		if (CTR::$data->get('inscription')->exist('avatar')) {
 			echo '<img src="' . MEDIA . 'avatar/big/' . CTR::$data->get('inscription')->get('avatar') . '.png" alt="" />';
 		} else {
-			echo '<img src="' . MEDIA . 'avatar/big/000-0.png" alt="" />';
+			echo '<img src="' . MEDIA . 'avatar/big/empty.png" alt="" />';
 		}
 		echo '<span class="level">1</span>';
 		echo '<span class="experience">';

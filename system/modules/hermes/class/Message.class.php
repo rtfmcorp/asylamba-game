@@ -53,9 +53,9 @@ class Message {
 	public function getWriterColor()				{ return $this->writerColor; }
 	public function getWriterAvatar()				{
 		if ($this->getRPlayerWriter() == 0) {
-			return '059-1';
+			return 'jm';
 		} elseif ($this->getRPlayerWriter() == -1) {
-			return 'color' .  $this->readerColor;
+			return 'color-' .  $this->readerColor;
 		} else {
 			return $this->writerAvatar;
 		}

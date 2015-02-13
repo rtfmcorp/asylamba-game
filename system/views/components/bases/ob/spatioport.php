@@ -38,7 +38,7 @@ echo '<div class="component building rc">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'orbitalbase/commercialplateforme.png" alt="" />';
 		echo '<h2>' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'frenchName') . '</h2>';
-		echo '<em>niveau ' . $ob_spatioport->getLevelSpatioport() . '</em>';
+		echo '<em>Niveau ' . $ob_spatioport->getLevelSpatioport() . '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
@@ -108,7 +108,7 @@ for ($i = 0; $i < ASM::$crm->size(); $i++) {
 		$base2 .= '</div>';
 
 		echo '<div class="component rc">';
-			echo '<div class="head skin-2">';
+			echo '<div class="head skin-5">';
 				echo ($j == 0) ? '<h2>Propositions</h2>' : '';
 			echo '</div>';
 			echo '<div class="fix-body">';
@@ -192,7 +192,7 @@ for ($i = 0; $i < ASM::$crm->size(); $i++) {
 		$base2 .= '</div>';
 
 		echo '<div class="component rc">';
-			echo '<div class="head skin-2">';
+			echo '<div class="head skin-5">';
 				echo ($j == 0) ? '<h2>Routes commerciales</h2>' : '';
 			echo '</div>';
 			echo '<div class="fix-body">';
@@ -247,7 +247,7 @@ for ($i = 0; $i < ASM::$crm->size(); $i++) {
 
 echo '<div class="component">';
 	echo '<div class="head skin-2">';
-		echo '<h2>A propos</h2>';
+		echo '<h2>À propos</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';

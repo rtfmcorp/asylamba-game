@@ -90,6 +90,19 @@ echo '<div id="subnav">';
 			echo '</a>';
 		}
 
+		if ($base->getLevelRecycling() > 0) {
+			$active = (CTR::$get->get('view') == 'recycling') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'bases/view-recycling" class="item ' . $active . '">';
+				echo '<span class="picto">';
+					echo '<img src="' . MEDIA . 'orbitalbase/recycling.png" alt="" />';
+					echo '<span class="number">' . $base->getLevelRecycling() . '</span>';
+				echo '</span>';
+				echo '<span class="content skin-1">';
+					echo '<span>' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::RECYCLING, 'frenchName') . '</span>';
+				echo '</span>';
+			echo '</a>';
+		}
+
 		if ($base->getLevelRefinery() > 0) {
 			$active = (CTR::$get->get('view') == 'refinery') ? 'active' : '';
 			echo '<a href="' . APP_ROOT . 'bases/view-refinery" class="item ' . $active . '">';
@@ -112,19 +125,6 @@ echo '<div id="subnav">';
 				echo '</span>';
 				echo '<span class="content skin-1">';
 					echo '<span>' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::STORAGE, 'frenchName') . '</span>';
-				echo '</span>';
-			echo '</a>';
-		}
-
-		if ($base->getLevelRecycling() > 0) {
-			$active = (CTR::$get->get('view') == 'recycling') ? 'active' : '';
-			echo '<a href="' . APP_ROOT . 'bases/view-recycling" class="item ' . $active . '">';
-				echo '<span class="picto">';
-					echo '<img src="' . MEDIA . 'orbitalbase/recycling.png" alt="" />';
-					echo '<span class="number">' . $base->getLevelRecycling() . '</span>';
-				echo '</span>';
-				echo '<span class="content skin-1">';
-					echo '<span>' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::RECYCLING, 'frenchName') . '</span>';
 				echo '</span>';
 			echo '</a>';
 		}

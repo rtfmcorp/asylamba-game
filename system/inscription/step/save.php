@@ -68,10 +68,10 @@ try {
 	$db = Database::getInstance();
 	$qr = $db->prepare('SELECT * FROM place AS p
 		INNER JOIN system AS sy ON p.rSystem = sy.id
-		  INNER JOIN sector AS se ON sy.rSector = se.id
+			INNER JOIN sector AS se ON sy.rSector = se.id
 		WHERE p.typeOfPlace = 1
-		  AND se.id = ?
-		  AND p.rPlayer = 0
+			AND se.id = ?
+			AND p.rPlayer IS NULL
 		ORDER BY p.population ASC
 		LIMIT 0, 30'
 	);

@@ -19,36 +19,40 @@ echo '<div class="component building">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'orbitalbase/recycling.png" alt="" />';
 		echo '<h2>' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::RECYCLING, 'frenchName') . '</h2>';
-		echo '<em>niveau ' . $ob_recycling->getLevelRecycling() . '</em>';
+		echo '<em>Niveau ' . $ob_recycling->getLevelRecycling() . '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			$totalRecyclers = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::RECYCLING, 'level', $ob_recycling->levelRecycling, 'nbRecyclers');
 			$busyRecyclers  = 0;
+
 			for ($i = 0; $i < ASM::$rem->size(); $i++) { 
 				$busyRecyclers += ASM::$rem->get($i)->recyclerQuantity;
 			}
 
+			$freeRecyclers  = $totalRecyclers - $busyRecyclers;
+
 			echo '<div class="number-box">';
-				echo '<span class="label">Recycleurs utilisés / totaux</span>';
+				echo '<span class="label">recycleurs utilisés / totaux</span>';
 				echo '<span class="value">' . $busyRecyclers . ' / ' . $totalRecyclers . '</span>';
 			echo '</div>';
 
 			echo '<div class="number-box grey">';
-				echo '<span class="label">Recycleurs libres</span>';
-				echo '<span class="value">' . ($totalRecyclers - $busyRecyclers) . '</span>';
+				echo '<span class="label">recycleur' . Format::plural($freeRecyclers) . ' libre' . Format::plural($freeRecyclers) . '</span>';
+				echo '<span class="value">' . $freeRecyclers . '</span>';
 			echo '</div>';
 
 			echo '<div class="number-box grey">';
-				echo '<span class="label">Capacité des recycleurs</span>';
+				echo '<span class="label">capacité de transport des recycleurs</span>';
 				echo '<span class="value">' . Format::number(RecyclingMission::RECYCLER_CAPACTIY) . ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color"></span>';
 			echo '</div>';
 
 			echo '<hr />';
 
 			$missionQuantity = ASM::$rem->size();
+
 			echo '<div class="number-box ' . ($missionQuantity == 0 ? 'grey' : '') . '">';
-				echo '<span class="label">Missions actives</span>';
+				echo '<span class="label">missions actives</span>';
 				echo '<span class="value">' .  $missionQuantity . '</span>';
 			echo '</div>';
 		echo '</div>';
@@ -59,7 +63,7 @@ for ($i = 0; $i < ASM::$rem->size(); $i++) {
 	$mission = ASM::$rem->get($i);
 
 	echo '<div class="component">';
-		echo '<div class="head skin-2">';
+		echo '<div class="head skin-5">';
 			if ($i == 0) {
 				echo '<h2>Mission' . Format::plural(ASM::$rem->size()) . ' en cours</h2>';
 			}
@@ -78,7 +82,7 @@ for ($i = 0; $i < ASM::$rem->size(); $i++) {
 				echo '<div class="build-item base-type">';
 					echo '<div class="name">';
 						echo '<img src="' . MEDIA . 'orbitalbase/recycler.png" alt="">';
-						echo '<strong>Mission ' . $missionID . '</strong>';
+						echo '<strong>Mission<br /> ' . $missionID . '</strong>';
 					echo '</div>';
 
 					echo '<p class="desc">La mission recycle la <strong>' . Game::convertPlaceType($mission->typeOfPlace) . '</strong> située aux coordonnées <strong><a href="'. APP_ROOT . 'map/place-' . $mission->rTarget . '">' . Game::formatCoord($mission->xSystem, $mission->ySystem, $mission->position, $mission->sectorId) . '</a></strong>.<br /><br />

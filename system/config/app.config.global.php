@@ -65,4 +65,6 @@ define('ANTISPY_LITTLE_CIRCLE',	3);
 # pour Game::antiSpyRadius()
 define('ANTISPY_DISPLAY_MODE', 	0);
 define('ANTISPY_GAME_MODE', 	1);
+
+define('NB_AVATAR', 			67);
 ?>
