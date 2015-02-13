@@ -95,6 +95,54 @@ echo '<div id="content">';
 		}
 
 		ASM::$com->changeSession($S_COM_UKN);
+	} elseif (CTR::$get->get('view') == 'overview') {
+		# inclusion des modules
+		include_once ARES;
+		$S_COM_UKN = ASM::$com->getCurrentSession();
+		$S_OBM_UKN = ASM::$obm->getCurrentSession();
+
+		# set d'orbitale base
+		$obsets = [];
+		for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
+			$obsets[$i] = array();
+
+			$obsets[$i]['info'] = [];
+			$obsets[$i]['fleets'] = [];
+			$obsets[$i]['dock'] = [];
+
+			$obsets[$i]['info']['id'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
+			$obsets[$i]['info']['name'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('name');
+			$obsets[$i]['info']['type'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('type');
+		}
+
+		# commander manager : yours
+		ASM::$com->newSession();
+		ASM::$com->load(['c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => [COM_AFFECTED, COM_MOVING]], ['c.rBase', 'DESC']);
+
+		for ($i = 0; $i < count($obsets); $i++) {
+			for ($j = 0; $j < ASM::$com->size(); $j++) {
+				if (ASM::$com->get($j)->rBase == $obsets[$i]['info']['id']) {
+					$obsets[$i]['fleets'][] = ASM::$com->get($j);
+				}
+			}
+		}
+
+		# ship in dock
+		ASM::$obm->newSession();
+		ASM::$obm->load(['rPlayer' => CTR::$data->get('playerId')]);
+
+		for ($i = 0; $i < count($obsets); $i++) {
+			for ($j = 0; $j < ASM::$obm->size(); $j++) {
+				if (ASM::$obm->get($j)->rPlace == $obsets[$i]['info']['id']) {
+					$obsets[$i]['dock'] = ASM::$obm->get($j)->shipStorage;
+				}
+			}
+		}
+
+		include COMPONENT . 'fleet/overview.php';
+
+		ASM::$obm->changeSession($S_OBM_UKN);
+		ASM::$com->changeSession($S_COM_UKN);
 	} elseif (CTR::$get->get('view') == 'spyreport') {
 		# inclusion des modules
 		include_once ARTEMIS;

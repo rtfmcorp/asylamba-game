@@ -12,6 +12,16 @@ echo '<div id="subnav">';
 			echo '</span>';
 		echo '</a>';
 
+		$active = (CTR::$get->get('view') == 'overview') ? 'active' : '';
+		echo '<a href="' . APP_ROOT . 'fleet/view-overview" class="item ' . $active . '">';
+			echo '<span class="picto">';
+				echo '<img src="' . MEDIA . 'fleet/tmp.png" alt="" />';
+			echo '</span>';
+			echo '<span class="content skin-1">';
+				echo '<span>Aperçu des armées';
+			echo '</span>';
+		echo '</a>';
+
 		$active = (CTR::$get->get('view') == 'spyreport') ? 'active' : '';
 		echo '<a href="' . APP_ROOT . 'fleet/view-spyreport" class="item ' . $active . '">';
 			echo '<span class="picto">';
