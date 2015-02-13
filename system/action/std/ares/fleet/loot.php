@@ -95,12 +95,20 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					$duration = Game::getTimeToTravel($home, $place, CTR::$data->get('playerBonus'));
 
 					if ($commander->getPev() > 0) {
-						if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
-							$commander->dStart = Utils::now();
-							CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
+						$S_SEM = ASM::$sem->getCurrentSession();
+						ASM::$sem->newSession();
+						ASM::$sem->load(array('id' => $place->rSector));
+						$isFactionSector = (ASM::$sem->get()->rColor == $commander->playerColor) ? TRUE : FALSE;
+						ASM::$sem->changeSession($S_SEM);
+						
+						if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
+							if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
+								$commander->dStart = Utils::now();
+								CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
 
-							if (CTR::$get->exist('redirect')) {
-								CTR::redirect('map/place-' . CTR::$get->get('redirect'));
+								if (CTR::$get->exist('redirect')) {
+									CTR::redirect('map/place-' . CTR::$get->get('redirect'));
+								}
 							}
 						}
 					} else {
