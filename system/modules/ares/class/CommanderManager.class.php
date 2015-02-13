@@ -111,7 +111,7 @@ class CommanderManager extends Manager {
 					$commander->rStartPlace = $awCommanders[$i]['rStartPlace'];
 					$commander->rDestinationPlace = $awCommanders[$i]['rDestinationPlace'];
 
-					$commander->startPlaceName = $awCommanders[$i]['spName'];
+					$commander->startPlaceName = ($awCommanders[$i]['spName'] == '') ? 'planète rebelle' : $awCommanders[$i]['spName'];
 					$commander->destinationPlaceName = ($awCommanders[$i]['dpName'] == '') ? 'planète rebelle' : $awCommanders[$i]['dpName'];
 				}
 

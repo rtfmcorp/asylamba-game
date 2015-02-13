@@ -28,7 +28,7 @@ if ($commanderId !== FALSE) {
 
 			$rDestinationPlace = $commander->rDestinationPlace;
 			$commander->rDestinationPlace = $commander->rStartPlace;
-			$commander->rStartPlace = $commander->rDestinationPlace;
+			$commander->rStartPlace = $rDestinationPlace;
 			// $startPlaceName = $commander->startPlaceName;
 			// $commander->startPlaceName = $commander->destinationPlaceName;
 			// $commander->destinationPlaceName = $startPlaceName;
