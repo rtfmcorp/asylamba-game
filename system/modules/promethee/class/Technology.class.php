@@ -123,6 +123,7 @@ class Technology {
 	const QUANTITY = 47;
 
 	const COEF_POINTS = 1;
+	const COEF_TIME = 1;
 
 	public function __construct($rPlayer) {
 		$this->rPlayer = $rPlayer; 
