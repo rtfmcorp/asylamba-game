@@ -30,7 +30,7 @@ echo '<div class="column act">';
 					echo 'Vous ne pouvez pas attaquer une planète non-habitable';
 				} elseif ($place->typeOfPlace == 1 && $place->playerColor == CTR::$data->get('playerInfo')->get('color')) {
 					echo 'Vous ne pouvez pas attaquer un joueur de votre faction';
-				} elseif ($place->typeOfPlace == 1 && $place->playerLevel == 1) {
+				} elseif ($place->typeOfPlace == 1 && $place->playerLevel == 1 && !$place->playerColor == 0) {
 					echo 'Ce joueur est sous protection débutant';
 				} else {
 					echo '<div class="commander-tile">';
@@ -74,7 +74,7 @@ echo '<div class="column act">';
 					echo 'Vous ne pouvez pas coloniser une planète non-habitable';
 				} elseif ($place->typeOfPlace == 1 && $place->playerColor == CTR::$data->get('playerInfo')->get('color')) {
 					echo 'Vous ne pouvez pas conquérir un joueur de votre faction';
-				} elseif ($place->typeOfPlace == 1 && $place->playerLevel <= 3 && $place->playerLevel != 0) {
+				} elseif ($place->typeOfPlace == 1 && $place->playerLevel <= 3 && $place->playerLevel != 0 && !$place->playerColor == 0) {
 					echo 'Vous ne pouvez pas conquérir un joueur de niveau 3 ou inférieur';
 				} elseif ($place->rPlayer == 0 && $technologies->getTechnology(Technology::COLONIZATION) == 0) {
 					echo 'Vous devez développer la technologie colonisation';
