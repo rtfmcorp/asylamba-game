@@ -22,6 +22,7 @@
 		box-shadow: 0 0 0 4px rgba(255, 255, 255, .1);
 		border-radius: 3px;
 		background: @medium;
+		z-index: 1;
 
 		a, span {
 			display: inline-block;
@@ -201,13 +202,13 @@
 			line-height: 40px;
 			padding: 0 25px;
 			border-radius: 3px 3px 0 0;
-			background: #4f4f4f;
+			background: #202020;
 			color: white;
 			text-decoration: none;
 			font-size: 16px;
 
 			&:hover, &:focus {
-				box-shadow: 0 0 8px 5px black;
+				box-shadow: 0 0 5px 3px black;
 			}
 		}
 	}
@@ -218,7 +219,7 @@
 			&.full img { box-shadow: 0 0 4px white, 0 0 0 2px #202020; }
 			&.full img:hover { box-shadow: 0 0 10px white, 0 0 0 6px #202020; }
 		}
-		.attack-link a { background: @medium-0; }
+		.attack-link a { background: #202020; }
 	}
 	&.color1 {
 		.line-help { background: @dark-1; }

@@ -125,7 +125,7 @@ echo '<div class="component size3 space">';
 				echo '</div>';
 
 				echo '<div class="attack-link">';
-					echo '<a href="#">Attaquer la planète</a>';
+					echo '<a href="' . APP_ROOT . 'map/place-' . $spyreport->rPlace . '">Attaquer la planète</a>';
 				echo '</div>';
 			echo '</div>';
 
