@@ -320,7 +320,7 @@ class Place {
 	# se poser
 	public function uChangeBase($commander, $commanderPlace, $playerBonus) {
 		# si la place et le commander ont le même joueur
-		if ($this->rPlayer == $commander->getRPlayer() AND $this->typeOfBase == 4) {
+		if ($this->playerColor == $commander->playerColor AND $this->typeOfBase == 4) {
 			$maxCom = OrbitalBase::MAXCOMMANDERSTANDARD;
 			if ($this->typeOfOrbitalBase == OrbitalBase::TYP_MILITARY || $this->typeOfOrbitalBase == OrbitalBase::TYP_CAPITAL) {
 				$maxCom = OrbitalBase::MAXCOMMANDERMILITARY;
@@ -356,6 +356,9 @@ class Place {
 				$commander->travelType = NULL;
 				// $commander->rStartPlace = NULL;
 				// $commander->dArrival = NULL;
+
+				#modifier le rPlayer (ne se modifie pas si c'est le même)
+				$commander->rPlayer = $this->rPlayer;
 
 				$commander->statement = Commander::AFFECTED;
 

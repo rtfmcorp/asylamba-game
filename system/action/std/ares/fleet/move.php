@@ -24,7 +24,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 
 	if (ASM::$com->size() > 0) {
 		if (ASM::$plm->size() > 0) {
-			if (CTR::$data->get('playerId') == $place->getRPlayer()) {
+			if ($commander->playerColor == $place->playerColor) {
 				ASM::$plm->load(array('id' => $commander->getRBase()));
 				$home = ASM::$plm->getById($commander->getRBase());
 
