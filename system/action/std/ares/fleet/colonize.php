@@ -64,7 +64,13 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 						if (CTR::$data->get('playerInfo')->get('credit') >= $price) {
 							if ($commander->getPev() > 0) {
 								if ($commander->statement == Commander::AFFECTED) {
-									if ($length <= Commander::DISTANCEMAX) {
+
+									$S_SEM = ASM::$sem->getCurrentSession();
+									ASM::$sem->newSession();
+									ASM::$sem->load(array('id' => $place->rSector));
+									$isFactionSector = (ASM::$sem->get()->rColor == $commander->playerColor) ? TRUE : FALSE;
+									ASM::$sem->changeSession($S_SEM);
+									if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
 										if ($commander->move($place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
 											# debit credit
 											$S_PAM2 = ASM::$pam->getCurrentSession();

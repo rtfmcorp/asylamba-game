@@ -72,7 +72,7 @@ class Commander {
 	# variables de jointure quelconque
 	public $oBName					= '';
 	public $playerName				= '';
-	public $playerColor				= '';
+	public $playerColor				= 0;
 
 	# variables de combat
 	public $squadronsIds			= array();
