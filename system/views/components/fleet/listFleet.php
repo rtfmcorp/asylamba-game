@@ -115,7 +115,9 @@ echo '<div class="component size3 list-fleet">';
 
 							if ($commander->statement == Commander::MOVING) {
 								echo '<div class="right">';
-									echo '<img src="' . MEDIA . 'map/place/place1-2.png" alt="" class="cover" />';
+									echo $commander->travelType == Commander::BACK
+										? '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($commander->startPlacePop) . '.png" alt="" class="cover" />'
+										: '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($commander->destinationPlacePop) . '.png" alt="" class="cover" />';
 									echo '<span class="top">';
 										echo $reversed
 											? '<a href="' . APP_ROOT . 'map/place-' . $commander->rStartPlace . '">' . $commander->startPlaceName . '</a>'

@@ -25,6 +25,8 @@ class CommanderManager extends Manager {
 				o.iSchool, o.name AS oName,
 				p.name AS pName,
 				p.rColor AS pColor,
+				pd.population AS destinationPlacePop,
+				ps.population AS startPlacePop,
 				dp.name AS dpName,
 				sp.name AS spName,
 				sq.id AS sqId,
@@ -49,8 +51,12 @@ class CommanderManager extends Manager {
 				ON p.id = c.rPlayer
 			LEFT JOIN orbitalBase AS dp
 				ON dp.rPlace = c.rDestinationPlace
+				LEFT JOIN place AS pd
+					ON pd.id = c.rDestinationPlace
 			LEFT JOIN orbitalBase AS sp
 				ON sp.rPlace = c.rStartPlace
+				LEFT JOIN place AS ps
+					ON ps.id = c.rStartPlace
 			LEFT JOIN squadron AS sq
 				ON sq.rCommander = c.id
 			' . $formatWhere .'
@@ -113,6 +119,8 @@ class CommanderManager extends Manager {
 
 					$commander->startPlaceName = ($awCommanders[$i]['spName'] == '') ? 'planète rebelle' : $awCommanders[$i]['spName'];
 					$commander->destinationPlaceName = ($awCommanders[$i]['dpName'] == '') ? 'planète rebelle' : $awCommanders[$i]['dpName'];
+					$commander->destinationPlacePop = $awCommanders[$i]['destinationPlacePop'];
+					$commander->startPlacePop = $awCommanders[$i]['startPlacePop'];
 				}
 
 				$commander->squadronsIds[] = $awCommanders[$i]['sqId'];

@@ -92,8 +92,9 @@ class Commander {
 	public $rStartPlace				= 0;
 	public $rDestinationPlace		= 0;
 	public $startPlaceName			= '';
+	public $startPlacePop			= 0;
 	public $destinationPlaceName	= '';
-
+	public $destinationPlacePop		= 0;
 
 	public $uCommander				= '';
 	public $hasToU					= TRUE;
