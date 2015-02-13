@@ -52,7 +52,7 @@ class Game {
 	public static function getMaxTravelDistance($bonus) {
 		include_once ARES;
 
-		return round((Commander::MAXTRAVELTIME * self::getFleetSpeed($bonus)) / Commander::COEFFMOVEINTERSYSTEM);
+		return Commander::DISTANCEMAX;
 	}
 
 	public static function getTimeToTravel($startPlace, $destinationPlace, $bonus = NULL) {

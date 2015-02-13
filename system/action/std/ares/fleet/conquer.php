@@ -68,7 +68,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 							if (CTR::$data->get('playerInfo')->get('credit') >= $price) {
 								if ($commander->getPev() > 0) {
 									if ($commander->statement == Commander::AFFECTED) {
-										if ($duration <= Commander::MAXTRAVELTIME) {
+										if ($length <= Commander::DISTANCEMAX) {
 											if ($commander->move($place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
 												# debit credit
 												$S_PAM2 = ASM::$pam->getCurrentSession();

@@ -38,7 +38,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 
 						if ($commander->getPev() > 0) {
 							if ($commander->statement == Commander::AFFECTED) {
-								if ($duration <= Commander::MAXTRAVELTIME) {
+								if ($length <= Commander::DISTANCEMAX) {
 									if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
 
 										# tutorial

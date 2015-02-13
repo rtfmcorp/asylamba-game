@@ -32,7 +32,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 				$duration = Game::getTimeToTravel($home, $place, CTR::$data->get('playerBonus'));
 			
 				if ($commander->statement == Commander::AFFECTED) {
-					if ($duration <= Commander::MAXTRAVELTIME) {
+					if ($length <= Commander::DISTANCEMAX) {
 						$commander->move($place->getId(), $commander->rBase, Commander::MOVE, $length, $duration);
 					} else {
 						CTR::$alert->add('Cet emplacement est trop éloigné.', ALERT_STD_ERROR);	
