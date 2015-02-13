@@ -55,18 +55,6 @@ class TechnologyResource {
 						}
 						return $value;
 					}
-					/*
-					$value = self::$technology[$techno][$info] * $level;
-					//$value = self::$technology[$techno][$info][0] * $level;
-					switch ($info) {
-						case 'time' : 		$value *= TQM_TECHNOCOEFTIME; 		break;
-						case 'resource' : 	$value *= TQM_TECHNOCOEFRESOURCE; 	break;
-						case 'credit' : 	$value *= TQM_TECHNOCOEFCREDIT; 	break;
-						case 'points' : 	$value *= Technology::COEF_POINTS; 	break;
-						default : return FALSE;
-					}
-					//$value += self::$technology[$techno][$info][1];
-					return $value;*/
 				} else {
 					CTR::$alert->add('2e argument faux pour getInof() de TechnologyResource', ALERT_BUG_ERROR);
 				}
@@ -154,9 +142,11 @@ class TechnologyResource {
 		}
 	}
 
-	public static function getImprovementPercentage($techno, $level = 0) {
+	public static function getImprovementPercentage($techno, $level = -1) {
 		$baseBonus = self::getInfo($techno, 'bonus');
 		if ($level == 0) {
+			return 0;
+		} elseif ($level == -1) {
 			return $baseBonus;
 		} else {
 			return $baseBonus + floor(($level - 1) / 4);
