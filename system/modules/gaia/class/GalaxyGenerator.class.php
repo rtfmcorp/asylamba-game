@@ -271,7 +271,7 @@ abstract class GalaxyGenerator {
 					$stRES		= rand(5000000, 100000000);
 				}
 
-				# TODO
+				# TODO DANGER
 
 				self::$nbPlace++;
 				self::$popTotal += $population;

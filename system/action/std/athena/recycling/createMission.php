@@ -21,7 +21,7 @@ if ($rPlace !== FALSE AND $rTarget !== FALSE AND $quantity !== FALSE AND in_arra
 	if ($quantity > 0) {
 	
 		$S_OBM1 = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession(ASM_UMODE);
+		ASM::$obm->newSession();
 		ASM::$obm->load(array('rPlace' => $rPlace));
 
 		if (ASM::$obm->size() == 1) {
@@ -31,7 +31,7 @@ if ($rPlace !== FALSE AND $rTarget !== FALSE AND $quantity !== FALSE AND in_arra
 			$usedRecyclers = 0;
 
 			$S_REM1 = ASM::$rem->getCurrentSession();
-			ASM::$rem->newSession(ASM_UMODE);
+			ASM::$rem->newSession();
 			ASM::$rem->load(array('rBase' => $rPlace, 'statement' => RecyclingMission::ST_ACTIVE));
 
 			for ($i = 0; $i < ASM::$rem->size(); $i++) { 
@@ -39,20 +39,17 @@ if ($rPlace !== FALSE AND $rTarget !== FALSE AND $quantity !== FALSE AND in_arra
 			}
 
 			if ($maxRecyclers - $usedRecyclers >= $quantity) {
-
 				$S_PLM1 = ASM::$plm->getCurrentSession();
-				ASM::$plm->newSession(ASM_UMODE);
-				ASM::$plm->load(array('id' => $rPlace));
-				ASM::$plm->load(array('id' => $rTarget));
+				ASM::$plm->newSession();
+				ASM::$plm->load(array('id' => [$rPlace, $rTarget]));
 
 				if (ASM::$plm->size() == 2) {
+					$startPlace 		= ASM::$plm->getById($rPlace);
+					$destinationPlace 	= ASM::$plm->getById($rTarget);
 
-					$startPlace = ASM::$plm->get(0);
-					$destinationPlace = ASM::$plm->get(1);
 					$travelTime = Game::getTimeToTravel($startPlace, $destinationPlace);
 
 					if ($startPlace->sectorColor == $destinationPlace->sectorColor || $destinationPlace->sectorColor == ColorResource::NO_FACTION) {
-						
 						# create mission
 						$rm = new RecyclingMission();
 						$rm->rBase = $rPlace;
