@@ -49,7 +49,7 @@ class Place {
 
 	// PLACE
 	public $id = 0;
-	public $rPlayer = 0;
+	public $rPlayer = NULL;
 	public $rSystem = 0;
 	public $typeOfPlace = 0;
 	public $position = 0;

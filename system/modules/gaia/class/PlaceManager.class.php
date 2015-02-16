@@ -216,6 +216,7 @@ class PlaceManager extends Manager {
 
 		foreach ($places AS $p) {
 			$db = DataBase::getInstance();
+
 			$qr = $db->prepare('UPDATE place
 				SET	id = ?,
 					rPlayer = ?,
