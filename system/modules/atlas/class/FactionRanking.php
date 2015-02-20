@@ -17,15 +17,15 @@ class FactionRanking {
 	public $rRanking;
 	public $rFaction; 
 
-	public $general; 				# credits
+	public $general; 				# sum of general ranking of the players
 	public $generalPosition;
 	public $generalVariation;
 
-	public $wealth; 					# sum of general ranking of the players
+	public $wealth; 				# credits
 	public $wealthPosition;
 	public $wealthVariation;
 
-	public $territorial; 			# population dominated
+	public $territorial; 			# sectors owned
 	public $territorialPosition;
 	public $territorialVariation;
 

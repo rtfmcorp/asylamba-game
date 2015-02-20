@@ -38,18 +38,18 @@ function cmpGeneral($a, $b) {
     return ($a['general'] > $b['general']) ? -1 : 1;
 }
 
-function cmpPower($a, $b) {
-    if ($a['power'] == $b['power']) {
+function cmpWealth($a, $b) {
+    if ($a['wealth'] == $b['wealth']) {
         return 0;
     }
-    return ($a['power'] > $b['power']) ? -1 : 1;
+    return ($a['wealth'] > $b['wealth']) ? -1 : 1;
 }
 
-function cmpDomination($a, $b) {
-    if ($a['domination'] == $b['domination']) {
+function cmpTerritorial($a, $b) {
+    if ($a['territorial'] == $b['territorial']) {
         return 0;
     }
-    return ($a['domination'] > $b['domination']) ? -1 : 1;
+    return ($a['territorial'] > $b['territorial']) ? -1 : 1;
 }
 
 # load the factions (colors)
@@ -60,19 +60,13 @@ $list = array();
 for ($i = 0; $i < ASM::$clm->size(); $i++) {
 	$list[ASM::$clm->get($i)->id] = array(
 		'general' => 0, 
-		'power' => 0, 
-		'domination' => 0);
+		'wealth' => 0, 
+		'territorial' => 0);
 }
 
 const COEF_RESOURCE = 0.001;
 
 #-------------------------------- GENERAL RANKING --------------------------------#
-for ($i = 0; $i < ASM::$clm->size(); $i++) { 
-	$faction = ASM::$clm->get($i);
-	$list[$faction->id]['general'] = $faction->credits;
-}
-
-#-------------------------------- POWER RANKING ----------------------------------#
 # sum of general player ranking
 # load all the players
 ASM::$pam->load(array('statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY)));
@@ -82,10 +76,16 @@ for ($i = 0; $i < ASM::$prm->size(); $i++) {
 
 	$player = ASM::$pam->getById($playerRank->rPlayer);
 
-	$list[$player->rColor]['power'] += $playerRank->general;
+	$list[$player->rColor]['general'] += $playerRank->general;
 }
 
-#-------------------------------- DOMINATION RANKING -----------------------------#
+#-------------------------------- WEALTH RANKING ----------------------------------#
+for ($i = 0; $i < ASM::$clm->size(); $i++) { 
+	$faction = ASM::$clm->get($i);
+	$list[$faction->id]['wealth'] = $faction->credits;
+}
+
+#-------------------------------- TERRITORIAL RANKING -----------------------------#
 $sectorsOwnership = array();
 for ($i = 0; $i < ASM::$clm->size(); $i++) { 
 	$sectorsOwnership[$i] = 0;
@@ -96,22 +96,22 @@ $sectorManager->load();
 for ($i = 0; $i < $sectorManager->size(); $i++) {
 	$sector = $sectorManager->get($i);
 	if ($sector->rColor != 0) {
-		$list[$sector->rColor]['domination'] += $sector->population;
+		$list[$sector->rColor]['territorial'] += 1;
 
-		# update sectore ownership in colors
+		# update sector ownership in colors
 		$sectorsOwnership[$sector->rColor-1]++;
 	}
 }
 
 # copy the arrays
 $listG = $list;
-$listP = $list;
-$listD = $list;
+$listW = $list;
+$listT = $list;
 
 # sort all the copies
 uasort($listG, 'cmpGeneral');
-uasort($listP, 'cmpPower');
-uasort($listD, 'cmpDomination');
+uasort($listW, 'cmpWealth');
+uasort($listT, 'cmpTerritorial');
 
 /*foreach ($list as $key => $value) {
 	echo $key . ' => ' . $value['general'] . '<br/>';
@@ -121,9 +121,9 @@ uasort($listD, 'cmpDomination');
 $position = 1;
 foreach ($listG as $key => $value) { $listG[$key]['position'] = $position++;}
 $position = 1;
-foreach ($listP as $key => $value) { $listP[$key]['position'] = $position++;}
+foreach ($listW as $key => $value) { $listW[$key]['position'] = $position++;}
 $position = 1;
-foreach ($listD as $key => $value) { $listD[$key]['position'] = $position++;}
+foreach ($listT as $key => $value) { $listT[$key]['position'] = $position++;}
 
 foreach ($list as $faction => $value) {
 	$fr = new FactionRanking();
@@ -143,16 +143,16 @@ foreach ($list as $faction => $value) {
 	$fr->generalPosition = $listG[$faction]['position'];
 	$fr->generalVariation = $firstRanking ? 0 : $oldRanking->generalPosition - $fr->generalPosition;
 
-	$fr->power = $listP[$faction]['power'];
-	$fr->powerPosition = $listP[$faction]['position'];
-	$fr->powerVariation = $firstRanking ? 0 : $oldRanking->powerPosition - $fr->powerPosition;
+	$fr->wealth = $listW[$faction]['wealth'];
+	$fr->wealthPosition = $listW[$faction]['position'];
+	$fr->wealthVariation = $firstRanking ? 0 : $oldRanking->wealthPosition - $fr->wealthPosition;
 
-	$fr->domination = $listD[$faction]['domination'];
-	$fr->dominationPosition = $listD[$faction]['position'];
-	$fr->dominationVariation = $firstRanking ? 0 : $oldRanking->dominationPosition - $fr->dominationPosition;
+	$fr->territorial = $listT[$faction]['territorial'];
+	$fr->territorialPosition = $listT[$faction]['position'];
+	$fr->territorialVariation = $firstRanking ? 0 : $oldRanking->territorialPosition - $fr->territorialPosition;
 
 	# update faction infos
-	ASM::$clm->getById($faction)->points = $listP[$faction]['power'];
+	ASM::$clm->getById($faction)->points = $listG[$faction]['general'];
 	ASM::$clm->getById($faction)->sectors = $sectorsOwnership[$faction-1];
 	ASM::$clm->updateInfos($faction);
 
