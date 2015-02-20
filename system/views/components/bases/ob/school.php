@@ -65,7 +65,7 @@ echo '<div class="component school">';
 				if (ASM::$com->size() >= $maxCommanderInSchool) {
 					echo '<span class="button disable">';
 						echo '<span class="text">';
-							echo 'trop d\'officier dans l\'école<br/>';
+							echo 'trop d\'officiers dans l\'école<br/>';
 							echo Format::numberFormat(SchoolClassResource::getInfo(0, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
 						echo '</span>';
 					echo '</span>';

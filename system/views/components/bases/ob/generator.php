@@ -12,7 +12,7 @@ $q = '';
 $b = array('', '', '', '', '', '', '', '', '', '');
 $realSizeQueue = 0;
 
-for ($i = 0; $i < 10; $i++) {
+for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) {
 	$name 		= ucfirst(OrbitalBaseResource::getBuildingInfo($i, 'name'));
 	$aLevel[$i] = intval(call_user_func(array($ob_generator, 'getLevel' . $name)));
 	$rLevel[$i] = intval(call_user_func(array($ob_generator, 'getReal' . $name . 'Level')));
@@ -69,7 +69,7 @@ ASM::$bqm->changeSession($S_BQM1);
 
 # building
 $technology = new Technology(CTR::$data->get('playerId'));
-for ($i = 0; $i < 10; $i++) {
+for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) {
 	$level = $aLevel[$i];
 	$nextLevel =  $rLevel[$i] + 1;
 
