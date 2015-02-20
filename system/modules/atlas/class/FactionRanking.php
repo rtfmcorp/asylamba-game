@@ -54,9 +54,9 @@ class FactionRanking {
 			$r .= '<strong class="name">' . ColorResource::getInfo($this->rFaction, 'popularName') . '</strong>';
 			$r .= '<span class="experience">';
 				switch ($type) {
-					case 'general': $r .= Format::number($this->general, -1) . ' crédits'; break;
-					case 'wealth': $r .= Format::number($this->wealth, -1) . ' points'; break;
-					case 'territorial': $r .= Format::number($this->territorial / 1000, 1) . ' milliard d\'âmes'; break;
+					case 'general': $r .= Format::number($this->general, -1) . ' points'; break;
+					case 'wealth': $r .= Format::number($this->wealth, -1) . ' crédits'; break;
+					case 'territorial': $r .= Format::number($this->territorial, -1) . ' secteurs'; break;
 					default: break;
 				}
 			$r .= '</span>';

@@ -86,10 +86,6 @@ for ($i = 0; $i < ASM::$clm->size(); $i++) {
 }
 
 #-------------------------------- TERRITORIAL RANKING -----------------------------#
-$sectorsOwnership = array();
-for ($i = 0; $i < ASM::$clm->size(); $i++) { 
-	$sectorsOwnership[$i] = 0;
-}
 
 $sectorManager = new SectorManager();
 $sectorManager->load();
@@ -97,9 +93,6 @@ for ($i = 0; $i < $sectorManager->size(); $i++) {
 	$sector = $sectorManager->get($i);
 	if ($sector->rColor != 0) {
 		$list[$sector->rColor]['territorial'] += 1;
-
-		# update sector ownership in colors
-		$sectorsOwnership[$sector->rColor-1]++;
 	}
 }
 
@@ -153,7 +146,7 @@ foreach ($list as $faction => $value) {
 
 	# update faction infos
 	ASM::$clm->getById($faction)->points = $listG[$faction]['general'];
-	ASM::$clm->getById($faction)->sectors = $sectorsOwnership[$faction-1];
+	ASM::$clm->getById($faction)->sectors = $listT[$faction]['territorial'];
 	ASM::$clm->updateInfos($faction);
 
 	ASM::$frm->add($fr);

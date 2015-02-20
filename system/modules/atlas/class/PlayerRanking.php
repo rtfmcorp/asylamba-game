@@ -82,6 +82,12 @@ class PlayerRanking {
 			case 'fight':
 				$pos = $this->fightPosition;
 				$var = $this->fightVariation; break;
+			case 'armies':
+				$pos = $this->fightPosition;
+				$var = $this->fightVariation; break;
+			case 'resources':
+				$pos = $this->fightPosition;
+				$var = $this->fightVariation; break;
 			default: $var = ''; $pos = ''; break;
 		}
 

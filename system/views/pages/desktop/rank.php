@@ -57,20 +57,20 @@ echo '<div id="content">';
 
 		# include part
 		$FACTION_RANKING_FRONT = ASM::$frm->newSession();
-		ASM::$frm->loadLastContext(array(), array('powerPosition', 'ASC'), array(0, 1));
+		ASM::$frm->loadLastContext(array(), array('generalPosition', 'ASC'), array(0, 1));
 		include COMPONENT . 'rank/faction/front.php';
-
-		$FACTION_RANKING_POWER = ASM::$frm->newSession();
-		ASM::$frm->loadLastContext(array(), array('powerPosition', 'ASC'));
-		include COMPONENT . 'rank/faction/power.php';
 
 		$FACTION_RANKING_GENERAL = ASM::$frm->newSession();
 		ASM::$frm->loadLastContext(array(), array('generalPosition', 'ASC'));
 		include COMPONENT . 'rank/faction/general.php';
 
-		$FACTION_RANKING_DOMINATION = ASM::$frm->newSession();
-		ASM::$frm->loadLastContext(array(), array('dominationPosition', 'ASC'));
-		include COMPONENT . 'rank/faction/domination.php';
+		$FACTION_RANKING_WEALTH = ASM::$frm->newSession();
+		ASM::$frm->loadLastContext(array(), array('wealthPosition', 'ASC'));
+		include COMPONENT . 'rank/faction/wealth.php';
+
+		$FACTION_RANKING_TERRITORIAL = ASM::$frm->newSession();
+		ASM::$frm->loadLastContext(array(), array('territorialPosition', 'ASC'));
+		include COMPONENT . 'rank/faction/territorial.php';
 
 		ASM::$frm->changeSession($S_FRM1);
 	} else {
