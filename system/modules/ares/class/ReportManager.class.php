@@ -279,6 +279,12 @@ class ReportManager extends Manager {
 		}
 	}
 
+	public function emptySession() {
+		# empty the session, for player rankings
+		$this->_EmptyCurrentSession();
+		$this->newSession(FALSE);
+	}
+
 	public function add($newReport) {
 		$db = DataBase::getInstance();
 

@@ -14,10 +14,14 @@ ASM::$pam->newSession(FALSE);
 include_once ATHENA;
 $S_OBM1 = ASM::$obm->getCurrentSession();
 ASM::$obm->newSession(FALSE);
+$S_CRM1 = ASM::$crm->getCurrentSession();
+ASM::$crm->newSession(FALSE);
 
 include_once ARES;
 $S_COM1 = ASM::$com->getCurrentSession();
 ASM::$com->newSession(FALSE);
+$S_RPM1 = ASM::$rpm->getCurrentSession();
+ASM::$rpm->newSession(FALSE);
 
 # create a new ranking
 $db = DataBase::getInstance();
@@ -92,6 +96,8 @@ for ($i = 0; $i < ASM::$pam->size(); $i++) {
 		'fight' => 0,
 		'armies' => 0,
 		'butcher' => 0,
+		'butcherDestroyedPEV' => 0,
+		'butcherLostPEV' => 0,
 		'trader' => 0);
 }
 
@@ -156,6 +162,40 @@ while (true) {
 	$start += $qty;
 	
 	ASM::$com->emptySession();
+};
+
+#-------------------------------- BUTCHER RANKING --------------------------------#
+# load the reports
+$start = 0;
+$qty = 250;
+
+while (true) {
+	ASM::$rpm->load(array(), array(), array($start, $qty));
+	
+	# exit when all the reports are loaded
+	if (ASM::$rpm->size() == 0) { break; }
+
+	for ($i = 0; $i < ASM::$rpm->size(); $i++) {
+		$report = ASM::$rpm->get($i);
+
+		$attackerPEVLost = $report->pevInBeginA - $report->pevAtEndA;
+		$defenderPEVLost = $report->pevInBeginD - $report->pevAtEndD;
+
+		if (isset($list[$report->rPlayerAttacker])) {
+			$list[$report->rPlayerAttacker]['butcherDestroyedPEV'] += $defenderPEVLost;
+			$list[$report->rPlayerAttacker]['butcherLostPEV'] += $attackerPEVLost;
+			$list[$report->rPlayerAttacker]['butcher'] += $defenderPEVLost - $attackerPEVLost;
+		}
+
+		if (isset($list[$report->rPlayerDefender])) {
+			$list[$report->rPlayerDefender]['butcherDestroyedPEV'] += $attackerPEVLost;
+			$list[$report->rPlayerDefender]['butcherLostPEV'] += $defenderPEVLost;
+			$list[$report->rPlayerDefender]['butcher'] += $attackerPEVLost - $defenderPEVLost;
+		}
+	}
+	$start += $qty;
+	
+	ASM::$rpm->emptySession();
 };
 
 #-------------------------------- FIGHT & EXPERIENCE RANKING --------------------------------#
@@ -246,8 +286,8 @@ foreach ($list as $player => $value) {
 	$pr->armiesVariation = $firstRanking ? 0 : $oldRanking->armiesPosition - $pr->armiesPosition;
 
 	$pr->butcher = $listB[$player]['butcher'];
-	$pr->butcherDestroyedPEV = 0;//$listB[$player]['butcherDestroyedPEV'];
-	$pr->butcherLostPEV = 0;//$listB[$player]['butcherLostPEV'];
+	$pr->butcherDestroyedPEV = $listB[$player]['butcherDestroyedPEV'];
+	$pr->butcherLostPEV = $listB[$player]['butcherLostPEV'];
 	$pr->butcherPosition = $listB[$player]['position'];
 	$pr->butcherVariation = $firstRanking ? 0 : $oldRanking->butcherPosition - $pr->butcherPosition;
 
@@ -255,11 +295,12 @@ foreach ($list as $player => $value) {
 	$pr->traderPosition = $listT[$player]['position'];
 	$pr->traderVariation = $firstRanking ? 0 : $oldRanking->traderPosition - $pr->traderPosition;
 
-
 	ASM::$prm->add($pr);
 }
 
+ASM::$rpm->changeSession($S_RPM1);
 ASM::$com->changeSession($S_COM1);
+ASM::$crm->changeSession($S_CRM1);
 ASM::$obm->changeSession($S_OBM1);
 ASM::$pam->changeSession($S_PAM1);
 ASM::$prm->changeSession($S_PRM1);
