@@ -19,6 +19,7 @@ echo '<div id="content">';
 		$p = ASM::$prm->get();
 		
 		$generalPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->generalPosition - PlayerRanking::PREV < 0) ? 0 : $p->generalPosition - PlayerRanking::PREV;
+		$resourcesPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->resourcesPosition - PlayerRanking::PREV < 0) ? 0 : $p->resourcesPosition - PlayerRanking::PREV;
 		$experiencePosition = ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->experiencePosition - PlayerRanking::PREV < 0) ? 0 : $p->experiencePosition - PlayerRanking::PREV;
 		//$victoryPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->victoryPosition - PlayerRanking::PREV < 0) ? 0 : $p->victoryPosition - PlayerRanking::PREV;
 		//$defeatPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->defeatPosition - PlayerRanking::PREV < 0) ? 0 : $p->defeatPosition - PlayerRanking::PREV;
@@ -48,6 +49,10 @@ echo '<div id="content">';
 		$PLAYER_RANKING_FIGHT = ASM::$prm->newSession();
 		ASM::$prm->loadLastContext(array(), array('fightPosition', 'ASC'), array($fightPosition, PlayerRanking::STEP));
 		include COMPONENT . 'rank/player/fight.php';
+
+		$PLAYER_RANKING_RESOURCES = ASM::$prm->newSession();
+		ASM::$prm->loadLastContext(array(), array('resourcesPosition', 'ASC'), array($resourcesPosition, PlayerRanking::STEP));
+		include COMPONENT . 'rank/player/resources.php';
 
 		include COMPONENT . 'rank/player/stats.php';
 

@@ -36,6 +36,13 @@ function cmpGeneral($a, $b) {
     return ($a['general'] > $b['general']) ? -1 : 1;
 }
 
+function cmpResources($a, $b) {
+    if($a['resources'] == $b['resources']) {
+        return 0;
+    }
+    return ($a['resources'] > $b['resources']) ? -1 : 1;
+}
+
 function cmpExperience($a, $b) {
     if($a['experience'] == $b['experience']) {
         return 0;
@@ -57,6 +64,7 @@ $list = array();
 for ($i = 0; $i < ASM::$pam->size(); $i++) {
 	$list[ASM::$pam->get($i)->id] = array(
 		'general' => 0, 
+		'resources' => 0,
 		'experience' => 0, 
 		'victory' => 0,
 		'defeat' => 0,
@@ -65,17 +73,19 @@ for ($i = 0; $i < ASM::$pam->size(); $i++) {
 
 const COEF_RESOURCE = 0.001;
 
-#-------------------------------- GENERAL RANKING --------------------------------#
+#-------------------------------- GENERAL & RESOURCES RANKING --------------------------------#
 # load all the bases
 ASM::$obm->load();
 for ($i = 0; $i < ASM::$obm->size(); $i++) {
 	$orbitalBase = ASM::$obm->get($i);
 	if (isset($list[$orbitalBase->rPlayer])) {
+		# FOR GENERAL RANKING
 		# count the points of a base
 		$points = 0;
 		$points += $orbitalBase->points;
 
 		$points += round($orbitalBase->resourcesStorage * COEF_RESOURCE);
+
 
 		$shipPrice = 0;
 		for ($j = 0; $j < 12; $j++) {
@@ -84,6 +94,10 @@ for ($i = 0; $i < ASM::$obm->size(); $i++) {
 		$points += round($shipPrice * COEF_RESOURCE);
 		# add the points to the list
 		$list[$orbitalBase->rPlayer]['general'] += $points;
+
+		# FOR RESOURCES RANKING
+		$resourcesProd = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $orbitalBase->levelRefinery, 'refiningCoefficient'), $orbitalBase->getPlanetResources());
+		$list[$orbitalBase->rPlayer]['resources'] += $resourcesProd;
 	}
 }
 
@@ -116,7 +130,7 @@ while (true) {
 	ASM::$com->emptySession();
 };
 
-#-------------------------------- FIGHT RANKING --------------------------------#
+#-------------------------------- FIGHT & EXPERIENCE RANKING --------------------------------#
 for ($i = 0; $i < ASM::$pam->size(); $i++) {
 	$pl = ASM::$pam->get($i);
 	if (isset($list[$pl->id])) {
@@ -130,11 +144,13 @@ for ($i = 0; $i < ASM::$pam->size(); $i++) {
 
 # copy the arrays
 $listG = $list;
+$listR = $list;
 $listE = $list;
 $listF = $list;
 
 # sort all the copies
 uasort($listG, 'cmpGeneral');
+uasort($listR, 'cmpResources');
 uasort($listE, 'cmpExperience');
 uasort($listF, 'cmpFight');
 
@@ -145,6 +161,8 @@ uasort($listF, 'cmpFight');
 # put the position in each array
 $position = 1;
 foreach ($listG as $key => $value) { $listG[$key]['position'] = $position++;}
+$position = 1;
+foreach ($listR as $key => $value) { $listR[$key]['position'] = $position++;}
 $position = 1;
 foreach ($listE as $key => $value) { $listE[$key]['position'] = $position++;}
 $position = 1;
@@ -169,6 +187,10 @@ foreach ($list as $player => $value) {
 	$pr->generalPosition = $listG[$player]['position'];
 	$pr->generalVariation = $firstRanking ? 0 : $oldRanking->generalPosition - $pr->generalPosition;
 
+	$pr->resources = $listR[$player]['resources'];
+	$pr->resourcesPosition = $listR[$player]['position'];
+	$pr->resourcesVariation = $firstRanking ? 0 : $oldRanking->resourcesPosition - $pr->resourcesPosition;
+
 	$pr->experience = $listE[$player]['experience'];
 	$pr->experiencePosition = $listE[$player]['position'];
 	$pr->experienceVariation = $firstRanking ? 0 : $oldRanking->experiencePosition - $pr->experiencePosition;
@@ -190,9 +212,7 @@ foreach ($list as $player => $value) {
 	$pr->armies = 0;
 	$pr->armiesPosition = 0;
 	$pr->armiesVariation = 0;
-	$pr->resources = 0;
-	$pr->resourcesPosition = 0;
-	$pr->resourcesVariation = 0;
+
 
 	ASM::$prm->add($pr);
 }
