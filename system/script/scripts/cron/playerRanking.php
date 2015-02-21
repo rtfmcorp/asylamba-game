@@ -198,6 +198,33 @@ while (true) {
 	ASM::$rpm->emptySession();
 };
 
+#-------------------------------- TRADER RANKING --------------------------------#
+# load the commercial routes
+$start = 0;
+$qty = 250;
+
+while (true) {
+	ASM::$crm->load(array('statement' => CRM_ACTIVE), array(), array($start, $qty));
+	
+	# exit when all the routes are loaded
+	if (ASM::$crm->size() == 0) { break; }
+
+	for ($i = 0; $i < ASM::$crm->size(); $i++) {
+		$route = ASM::$crm->get($i);
+
+		if (isset($list[$route->playerId1])) {
+			$list[$route->playerId1]['trader'] += $route->income;
+		}
+
+		if (isset($list[$route->playerId2])) {
+			$list[$route->playerId2]['trader'] += $route->income;
+		}
+	}
+	$start += $qty;
+	
+	ASM::$crm->emptySession();
+};
+
 #-------------------------------- FIGHT & EXPERIENCE RANKING --------------------------------#
 for ($i = 0; $i < ASM::$pam->size(); $i++) {
 	$pl = ASM::$pam->get($i);
