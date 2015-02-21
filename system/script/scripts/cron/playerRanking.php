@@ -97,31 +97,32 @@ for ($i = 0; $i < ASM::$pam->size(); $i++) {
 
 const COEF_RESOURCE = 0.001;
 
-#-------------------------------- GENERAL & RESOURCES RANKING --------------------------------#
+#-------------------------------- GENERAL & RESOURCES & ARMIES RANKING --------------------------------#
 # load all the bases
 ASM::$obm->load();
 for ($i = 0; $i < ASM::$obm->size(); $i++) {
 	$orbitalBase = ASM::$obm->get($i);
 	if (isset($list[$orbitalBase->rPlayer])) {
-		# FOR GENERAL RANKING
 		# count the points of a base
 		$points = 0;
 		$points += $orbitalBase->points;
 
 		$points += round($orbitalBase->resourcesStorage * COEF_RESOURCE);
 
-
 		$shipPrice = 0;
+		$pevQuantity = 0;
 		for ($j = 0; $j < 12; $j++) {
 			$shipPrice += ShipResource::getInfo($j, 'resourcePrice') * $orbitalBase->getShipStorage($j);
+			$pevQuantity += ShipResource::getInfo($j, 'pev') * $orbitalBase->getShipStorage($j);
 		}
 		$points += round($shipPrice * COEF_RESOURCE);
 		# add the points to the list
 		$list[$orbitalBase->rPlayer]['general'] += $points;
+		$list[$orbitalBase->rPlayer]['armies'] += $pevQuantity;
 
-		# FOR RESOURCES RANKING
 		$resourcesProd = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $orbitalBase->levelRefinery, 'refiningCoefficient'), $orbitalBase->getPlanetResources());
 		$list[$orbitalBase->rPlayer]['resources'] += $resourcesProd;
+
 	}
 }
 
@@ -141,12 +142,15 @@ while (true) {
 			$points = 0;
 			$shipList = $commander->getNbrShipByType();
 			$shipPrice = 0;
+			$pevQuantity = 0;
 			for ($j = 0; $j < 12; $j++) {
 				$shipPrice += ShipResource::getInfo($j, 'resourcePrice') * $shipList[$j];
+				$pevQuantity += ShipResource::getInfo($j, 'pev') * $shipList[$j];
 			}
 			$points += round($shipPrice * COEF_RESOURCE);
 
 			$list[$commander->rPlayer]['general'] += $points;
+			$list[$commander->rPlayer]['armies'] += $pevQuantity;
 		}
 	}
 	$start += $qty;
