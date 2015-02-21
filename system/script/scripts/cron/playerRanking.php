@@ -43,25 +43,11 @@ function cmpExperience($a, $b) {
     return ($a['experience'] > $b['experience']) ? -1 : 1;
 }
 
-function cmpVictory($a, $b) {
-    if($a['victory'] == $b['victory']) {
+function cmpFight($a, $b) {
+    if($a['fight'] == $b['fight']) {
         return 0;
     }
-    return ($a['victory'] > $b['victory']) ? -1 : 1;
-}
-
-function cmpDefeat($a, $b) {
-    if($a['defeat'] == $b['defeat']) {
-        return 0;
-    }
-    return ($a['defeat'] > $b['defeat']) ? -1 : 1;
-}
-
-function cmpRatio($a, $b) {
-    if($a['ratio'] == $b['ratio']) {
-        return 0;
-    }
-    return ($a['ratio'] > $b['ratio']) ? -1 : 1;
+    return ($a['fight'] > $b['fight']) ? -1 : 1;
 }
 
 ASM::$pam->load(array('statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY)));
@@ -74,7 +60,7 @@ for ($i = 0; $i < ASM::$pam->size(); $i++) {
 		'experience' => 0, 
 		'victory' => 0,
 		'defeat' => 0,
-		'ratio' => 0);
+		'fight' => 0);
 }
 
 const COEF_RESOURCE = 0.001;
@@ -130,7 +116,7 @@ while (true) {
 	ASM::$com->emptySession();
 };
 
-#-------------------------------- OTHER RANKINGs --------------------------------#
+#-------------------------------- FIGHT RANKING --------------------------------#
 for ($i = 0; $i < ASM::$pam->size(); $i++) {
 	$pl = ASM::$pam->get($i);
 	if (isset($list[$pl->id])) {
@@ -138,23 +124,19 @@ for ($i = 0; $i < ASM::$pam->size(); $i++) {
 		$list[$pl->id]['experience'] += $pl->experience;
 		$list[$pl->id]['victory'] += $pl->victory;
 		$list[$pl->id]['defeat'] += $pl->defeat;
-		$list[$pl->id]['ratio'] += $pl->victory - $pl->defeat;
+		$list[$pl->id]['fight'] += $pl->victory - $pl->defeat;
 	}
 }
 
 # copy the arrays
 $listG = $list;
 $listE = $list;
-$listV = $list;
-$listD = $list;
-$listR = $list;
+$listF = $list;
 
 # sort all the copies
 uasort($listG, 'cmpGeneral');
 uasort($listE, 'cmpExperience');
-uasort($listV, 'cmpVictory');
-uasort($listD, 'cmpDefeat');
-uasort($listR, 'cmpRatio');
+uasort($listF, 'cmpFight');
 
 /*foreach ($list as $key => $value) {
 	echo $key . ' => ' . $value['general'] . '<br/>';
@@ -166,11 +148,7 @@ foreach ($listG as $key => $value) { $listG[$key]['position'] = $position++;}
 $position = 1;
 foreach ($listE as $key => $value) { $listE[$key]['position'] = $position++;}
 $position = 1;
-foreach ($listV as $key => $value) { $listV[$key]['position'] = $position++;}
-$position = 1;
-foreach ($listD as $key => $value) { $listD[$key]['position'] = $position++;}
-$position = 1;
-foreach ($listR as $key => $value) { $listR[$key]['position'] = $position++;}
+foreach ($listF as $key => $value) { $listF[$key]['position'] = $position++;}
 
 foreach ($list as $player => $value) {
 	$pr = new PlayerRanking();
@@ -195,17 +173,26 @@ foreach ($list as $player => $value) {
 	$pr->experiencePosition = $listE[$player]['position'];
 	$pr->experienceVariation = $firstRanking ? 0 : $oldRanking->experiencePosition - $pr->experiencePosition;
 
-	$pr->victory = $listV[$player]['victory'];
-	$pr->victoryPosition = $listV[$player]['position'];
-	$pr->victoryVariation = $firstRanking ? 0 : $oldRanking->victoryPosition - $pr->victoryPosition;
+	$pr->fight = $listF[$player]['fight'];
+	$pr->victories = $listF[$player]['victory'];
+	$pr->defeat = $listF[$player]['defeat'];
+	$pr->fightPosition = $listF[$player]['position'];
+	$pr->fightVariation = $firstRanking ? 0 : $oldRanking->fightPosition - $pr->fightPosition;
 
-	$pr->defeat = $listD[$player]['defeat'];
-	$pr->defeatPosition = $listD[$player]['position'];
-	$pr->defeatVariation = $firstRanking ? 0 : $oldRanking->defeatPosition - $pr->defeatPosition;
-
-	$pr->ratio = $listR[$player]['ratio'];
-	$pr->ratioPosition = $listR[$player]['position'];
-	$pr->ratioVariation = $firstRanking ? 0 : $oldRanking->ratioPosition - $pr->ratioPosition;
+	$pr->butcher = 0;
+	$pr->butcherDestroyedPEV = 0;
+	$pr->butcherLostPEV = 0;
+	$pr->butcherPosition = 0;
+	$pr->butcherVariation = 0;
+	$pr->trader = 0;
+	$pr->traderPosition = 0;
+	$pr->traderVariation = 0;
+	$pr->armies = 0;
+	$pr->armiesPosition = 0;
+	$pr->armiesVariation = 0;
+	$pr->resources = 0;
+	$pr->resourcesPosition = 0;
+	$pr->resourcesVariation = 0;
 
 	ASM::$prm->add($pr);
 }

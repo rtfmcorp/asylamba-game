@@ -20,9 +20,9 @@ echo '<div id="content">';
 		
 		$generalPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->generalPosition - PlayerRanking::PREV < 0) ? 0 : $p->generalPosition - PlayerRanking::PREV;
 		$experiencePosition = ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->experiencePosition - PlayerRanking::PREV < 0) ? 0 : $p->experiencePosition - PlayerRanking::PREV;
-		$victoryPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->victoryPosition - PlayerRanking::PREV < 0) ? 0 : $p->victoryPosition - PlayerRanking::PREV;
-		$defeatPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->defeatPosition - PlayerRanking::PREV < 0) ? 0 : $p->defeatPosition - PlayerRanking::PREV;
-		$ratioPosition 		= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->ratioPosition - PlayerRanking::PREV < 0) ? 0 : $p->ratioPosition - PlayerRanking::PREV;
+		//$victoryPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->victoryPosition - PlayerRanking::PREV < 0) ? 0 : $p->victoryPosition - PlayerRanking::PREV;
+		//$defeatPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->defeatPosition - PlayerRanking::PREV < 0) ? 0 : $p->defeatPosition - PlayerRanking::PREV;
+		$fightPosition 		= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->fightPosition - PlayerRanking::PREV < 0) ? 0 : $p->fightPosition - PlayerRanking::PREV;
 
 		# include part
 		$PLAYER_RANKING_FRONT = ASM::$prm->newSession();
@@ -37,17 +37,17 @@ echo '<div id="content">';
 		ASM::$prm->loadLastContext(array(), array('experiencePosition', 'ASC'), array($experiencePosition, PlayerRanking::STEP));
 		include COMPONENT . 'rank/player/xp.php';
 
-		$PLAYER_RANKING_VICTORY = ASM::$prm->newSession();
+		/*$PLAYER_RANKING_VICTORY = ASM::$prm->newSession();
 		ASM::$prm->loadLastContext(array(), array('victoryPosition', 'ASC'), array($victoryPosition, PlayerRanking::STEP));
 		include COMPONENT . 'rank/player/victory.php';
 
 		$PLAYER_RANKING_DEFEAT = ASM::$prm->newSession();
 		ASM::$prm->loadLastContext(array(), array('defeatPosition', 'ASC'), array($defeatPosition, PlayerRanking::STEP));
-		include COMPONENT . 'rank/player/defeat.php';
+		include COMPONENT . 'rank/player/defeat.php';*/
 
-		$PLAYER_RANKING_RATIO = ASM::$prm->newSession();
-		ASM::$prm->loadLastContext(array(), array('ratioPosition', 'ASC'), array($ratioPosition, PlayerRanking::STEP));
-		include COMPONENT . 'rank/player/ratio.php';
+		$PLAYER_RANKING_FIGHT = ASM::$prm->newSession();
+		ASM::$prm->loadLastContext(array(), array('fightPosition', 'ASC'), array($fightPosition, PlayerRanking::STEP));
+		include COMPONENT . 'rank/player/fight.php';
 
 		include COMPONENT . 'rank/player/stats.php';
 

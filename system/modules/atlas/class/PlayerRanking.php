@@ -29,27 +29,31 @@ class PlayerRanking {
 	public $generalPosition;
 	public $generalVariation;
 
-	public $experience;
+	public $experience; 		# experience
 	public $experiencePosition;
 	public $experienceVariation;
 
-	public $butcher;
+	public $butcher;			# destroyedPEV - lostPEV
+	public $butcherDestroyedPEV;
+	public $butcherLostPEV;
 	public $butcherPosition;
 	public $butcherVariation;
 
-	public $trader;
+	public $trader;				# revenu total des routes
 	public $traderPosition;
 	public $traderVariation;
 
 	public $fight; 				# nbr victoires - nbr défaites 
+	public $victories;
+	public $defeat;
 	public $fightPosition;
 	public $fightVariation;
 
-	public $armies;
+	public $armies;				# nb de pev total flotte + hangar (ou pas)
 	public $armiesPosition;
 	public $armiesVariation;
 
-	public $resources;
+	public $resources; 			# resource in stockage
 	public $resourcesPosition;
 	public $resourcesVariation;
 
@@ -66,6 +70,9 @@ class PlayerRanking {
 		$r = '';
 		$status = ColorResource::getInfo($this->color, 'status');
 
+		$plus = null;
+		$minus = null;
+
 		switch ($type) {
 			case 'general':
 				$pos = $this->generalPosition;
@@ -75,19 +82,23 @@ class PlayerRanking {
 				$var = $this->experienceVariation; break;
 			case 'butcher':
 				$pos = $this->butcherPosition;
+				$plus = $this->butcherDestroyedPEV;
+				$minus = $this->butcherLostPEV;
 				$var = $this->butcherVariation; break;
 			case 'trader':
 				$pos = $this->traderPosition;
 				$var = $this->traderVariation; break;
 			case 'fight':
 				$pos = $this->fightPosition;
+				$plus = $this->victories;
+				$minus = $this->defeat;
 				$var = $this->fightVariation; break;
 			case 'armies':
-				$pos = $this->fightPosition;
-				$var = $this->fightVariation; break;
+				$pos = $this->armiesPosition;
+				$var = $this->armiesVariation; break;
 			case 'resources':
-				$pos = $this->fightPosition;
-				$var = $this->fightVariation; break;
+				$pos = $this->resourcesPosition;
+				$var = $this->resourcesVariation; break;
 			default: $var = ''; $pos = ''; break;
 		}
 
@@ -105,7 +116,11 @@ class PlayerRanking {
 					case 'xp': $r .= Format::numberFormat($this->experience) . ' xp'; break;
 					case 'butcher': $r .= Format::numberFormat($this->butcher) . ' pev détruit' . Format::addPlural($this->butcher); break;
 					case 'trader': $r .= Format::numberFormat($this->trader) . ' défaite' . Format::addPlural($this->trader); break;
-					case 'fight': $r .= Format::numberFormat($this->fight) . ' point' . Format::addPlural($this->fight) . ' de combat'; break;
+					case 'fight': 
+						$r .= Format::numberFormat($this->fight) . ' point' . Format::addPlural($this->fight);
+						$r .= ' (' . Format::numberFormat($this->victories) . ' victoire' . Format::addPlural($this->victories); 
+						$r .= ' - ' . Format::numberFormat($this->defeat) . ' défaite' . Format::addPlural($this->defeat) . ')';
+						break;
 					case 'armies': $r .= Format::numberFormat($this->armies) . ' point' . Format::addPlural($this->armies) . ' équivalent vaisseau'; break;
 					case 'resources': $r .= Format::numberFormat($this->resources) . ' point' . Format::addPlural($this->resources) . ' de ressources'; break;
 					default: break;
