@@ -21,9 +21,10 @@ echo '<div id="content">';
 		$generalPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->generalPosition - PlayerRanking::PREV < 0) ? 0 : $p->generalPosition - PlayerRanking::PREV;
 		$resourcesPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->resourcesPosition - PlayerRanking::PREV < 0) ? 0 : $p->resourcesPosition - PlayerRanking::PREV;
 		$experiencePosition = ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->experiencePosition - PlayerRanking::PREV < 0) ? 0 : $p->experiencePosition - PlayerRanking::PREV;
-		//$victoryPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->victoryPosition - PlayerRanking::PREV < 0) ? 0 : $p->victoryPosition - PlayerRanking::PREV;
-		//$defeatPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->defeatPosition - PlayerRanking::PREV < 0) ? 0 : $p->defeatPosition - PlayerRanking::PREV;
 		$fightPosition 		= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->fightPosition - PlayerRanking::PREV < 0) ? 0 : $p->fightPosition - PlayerRanking::PREV;
+		$armiesPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->armiesPosition - PlayerRanking::PREV < 0) ? 0 : $p->armiesPosition - PlayerRanking::PREV;
+		$butcherPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->butcherPosition - PlayerRanking::PREV < 0) ? 0 : $p->butcherPosition - PlayerRanking::PREV;
+		$traderPosition 	= ($p === FALSE || CTR::$get->equal('mode', 'top') || $p->traderPosition - PlayerRanking::PREV < 0) ? 0 : $p->traderPosition - PlayerRanking::PREV;
 
 		# include part
 		$PLAYER_RANKING_FRONT = ASM::$prm->newSession();
@@ -38,14 +39,6 @@ echo '<div id="content">';
 		ASM::$prm->loadLastContext(array(), array('experiencePosition', 'ASC'), array($experiencePosition, PlayerRanking::STEP));
 		include COMPONENT . 'rank/player/xp.php';
 
-		/*$PLAYER_RANKING_VICTORY = ASM::$prm->newSession();
-		ASM::$prm->loadLastContext(array(), array('victoryPosition', 'ASC'), array($victoryPosition, PlayerRanking::STEP));
-		include COMPONENT . 'rank/player/victory.php';
-
-		$PLAYER_RANKING_DEFEAT = ASM::$prm->newSession();
-		ASM::$prm->loadLastContext(array(), array('defeatPosition', 'ASC'), array($defeatPosition, PlayerRanking::STEP));
-		include COMPONENT . 'rank/player/defeat.php';*/
-
 		$PLAYER_RANKING_FIGHT = ASM::$prm->newSession();
 		ASM::$prm->loadLastContext(array(), array('fightPosition', 'ASC'), array($fightPosition, PlayerRanking::STEP));
 		include COMPONENT . 'rank/player/fight.php';
@@ -53,6 +46,18 @@ echo '<div id="content">';
 		$PLAYER_RANKING_RESOURCES = ASM::$prm->newSession();
 		ASM::$prm->loadLastContext(array(), array('resourcesPosition', 'ASC'), array($resourcesPosition, PlayerRanking::STEP));
 		include COMPONENT . 'rank/player/resources.php';
+
+		$PLAYER_RANKING_ARMIES = ASM::$prm->newSession();
+		ASM::$prm->loadLastContext(array(), array('armiesPosition', 'ASC'), array($armiesPosition, PlayerRanking::STEP));
+		include COMPONENT . 'rank/player/armies.php';
+
+		$PLAYER_RANKING_BUTCHER = ASM::$prm->newSession();
+		ASM::$prm->loadLastContext(array(), array('butcherPosition', 'ASC'), array($butcherPosition, PlayerRanking::STEP));
+		include COMPONENT . 'rank/player/butcher.php';
+
+		$PLAYER_RANKING_TRADER = ASM::$prm->newSession();
+		ASM::$prm->loadLastContext(array(), array('traderPosition', 'ASC'), array($traderPosition, PlayerRanking::STEP));
+		include COMPONENT . 'rank/player/trader.php';
 
 		include COMPONENT . 'rank/player/stats.php';
 

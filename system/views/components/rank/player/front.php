@@ -1,8 +1,8 @@
 <?php
-# rankVictory component
+# rankFront component
 # in rank package
 
-# liste les joueurs aux meilleures victoires
+# le meilleur joueur
 
 # require
 	# _T PRM 		PLAYER_RANKING_FRONT

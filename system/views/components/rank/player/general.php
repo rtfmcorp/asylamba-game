@@ -1,8 +1,8 @@
 <?php
-# rankVictory component
+# rankGeneral component
 # in rank package
 
-# liste les joueurs aux meilleures victoires
+# classement joueur en fonction des points totaux
 
 # require
 	# _T PRM 		PLAYER_RANKING_GENERAL

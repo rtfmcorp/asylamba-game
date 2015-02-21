@@ -57,6 +57,27 @@ function cmpFight($a, $b) {
     return ($a['fight'] > $b['fight']) ? -1 : 1;
 }
 
+function cmpArmies($a, $b) {
+    if($a['armies'] == $b['armies']) {
+        return 0;
+    }
+    return ($a['armies'] > $b['armies']) ? -1 : 1;
+}
+
+function cmpButcher($a, $b) {
+    if($a['butcher'] == $b['butcher']) {
+        return 0;
+    }
+    return ($a['butcher'] > $b['butcher']) ? -1 : 1;
+}
+
+function cmpTrader($a, $b) {
+    if($a['trader'] == $b['trader']) {
+        return 0;
+    }
+    return ($a['trader'] > $b['trader']) ? -1 : 1;
+}
+
 ASM::$pam->load(array('statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY)));
 
 # create an array with all the players
@@ -68,7 +89,10 @@ for ($i = 0; $i < ASM::$pam->size(); $i++) {
 		'experience' => 0, 
 		'victory' => 0,
 		'defeat' => 0,
-		'fight' => 0);
+		'fight' => 0,
+		'armies' => 0,
+		'butcher' => 0,
+		'trader' => 0);
 }
 
 const COEF_RESOURCE = 0.001;
@@ -147,12 +171,18 @@ $listG = $list;
 $listR = $list;
 $listE = $list;
 $listF = $list;
+$listA = $list;
+$listB = $list;
+$listT = $list;
 
 # sort all the copies
 uasort($listG, 'cmpGeneral');
 uasort($listR, 'cmpResources');
 uasort($listE, 'cmpExperience');
 uasort($listF, 'cmpFight');
+uasort($listA, 'cmpArmies');
+uasort($listB, 'cmpButcher');
+uasort($listT, 'cmpTrader');
 
 /*foreach ($list as $key => $value) {
 	echo $key . ' => ' . $value['general'] . '<br/>';
@@ -167,6 +197,12 @@ $position = 1;
 foreach ($listE as $key => $value) { $listE[$key]['position'] = $position++;}
 $position = 1;
 foreach ($listF as $key => $value) { $listF[$key]['position'] = $position++;}
+$position = 1;
+foreach ($listA as $key => $value) { $listA[$key]['position'] = $position++;}
+$position = 1;
+foreach ($listB as $key => $value) { $listB[$key]['position'] = $position++;}
+$position = 1;
+foreach ($listT as $key => $value) { $listT[$key]['position'] = $position++;}
 
 foreach ($list as $player => $value) {
 	$pr = new PlayerRanking();
@@ -201,17 +237,19 @@ foreach ($list as $player => $value) {
 	$pr->fightPosition = $listF[$player]['position'];
 	$pr->fightVariation = $firstRanking ? 0 : $oldRanking->fightPosition - $pr->fightPosition;
 
-	$pr->butcher = 0;
-	$pr->butcherDestroyedPEV = 0;
-	$pr->butcherLostPEV = 0;
-	$pr->butcherPosition = 0;
-	$pr->butcherVariation = 0;
-	$pr->trader = 0;
-	$pr->traderPosition = 0;
-	$pr->traderVariation = 0;
-	$pr->armies = 0;
-	$pr->armiesPosition = 0;
-	$pr->armiesVariation = 0;
+	$pr->armies = $listA[$player]['armies'];
+	$pr->armiesPosition = $listA[$player]['position'];
+	$pr->armiesVariation = $firstRanking ? 0 : $oldRanking->armiesPosition - $pr->armiesPosition;
+
+	$pr->butcher = $listB[$player]['butcher'];
+	$pr->butcherDestroyedPEV = 0;//$listB[$player]['butcherDestroyedPEV'];
+	$pr->butcherLostPEV = 0;//$listB[$player]['butcherLostPEV'];
+	$pr->butcherPosition = $listB[$player]['position'];
+	$pr->butcherVariation = $firstRanking ? 0 : $oldRanking->butcherPosition - $pr->butcherPosition;
+
+	$pr->trader = $listT[$player]['trader'];
+	$pr->traderPosition = $listT[$player]['position'];
+	$pr->traderVariation = $firstRanking ? 0 : $oldRanking->traderPosition - $pr->traderPosition;
 
 
 	ASM::$prm->add($pr);

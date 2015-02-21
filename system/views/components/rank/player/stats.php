@@ -1,7 +1,5 @@
 <?php
 # require
-	# _T PRM 		PLAYER_RANKING_GENERAL
-
 
 echo '<div class="component player rank">';
 	echo '<div class="head"></div>';

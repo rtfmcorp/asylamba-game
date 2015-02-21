@@ -21,7 +21,7 @@ echo '<div class="component player rank">';
 				$p = ASM::$prm->get($i);
 
 				if ($i == 0 && $p->fightPosition != 1) {
-					echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-morerank/dir-next/type-ratio/current-' . $p->fightPosition . '" data-dir="top">';
+					echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-morerank/dir-next/type-fight/current-' . $p->fightPosition . '" data-dir="top">';
 						echo 'afficher les joueurs précédents';
 					echo '</a>';
 				}
@@ -29,7 +29,7 @@ echo '<div class="component player rank">';
 				echo $p->commonRender('fight');
 
 				if ($i == ASM::$prm->size() - 1) {
-					echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-morerank/dir-prev/type-ratio/current-' . $p->fightPosition . '">';
+					echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-morerank/dir-prev/type-fight/current-' . $p->fightPosition . '">';
 						echo 'afficher les joueurs suivants';
 					echo '</a>';
 				}

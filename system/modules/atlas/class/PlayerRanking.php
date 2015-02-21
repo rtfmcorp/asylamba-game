@@ -43,17 +43,17 @@ class PlayerRanking {
 	public $traderPosition;
 	public $traderVariation;
 
-	public $fight; 				# nbr victoires - nbr défaites 
+	public $fight; 				# victoires - défaites 
 	public $victories;
 	public $defeat;
 	public $fightPosition;
 	public $fightVariation;
 
-	public $armies;				# nb de pev total flotte + hangar (ou pas)
+	public $armies;				# nb de pev total flotte + hangar
 	public $armiesPosition;
 	public $armiesVariation;
 
-	public $resources; 			# resource in stockage
+	public $resources; 			# production de ressources par relève (on peut ajouter les recyclages p-e)
 	public $resourcesPosition;
 	public $resourcesVariation;
 
@@ -114,8 +114,12 @@ class PlayerRanking {
 				switch ($type) {
 					case 'general': $r .= Format::numberFormat($this->general) . ' point' . Format::addPlural($this->general); break;
 					case 'xp': $r .= Format::numberFormat($this->experience) . ' xp'; break;
-					case 'butcher': $r .= Format::numberFormat($this->butcher) . ' pev détruit' . Format::addPlural($this->butcher); break;
-					case 'trader': $r .= Format::numberFormat($this->trader) . ' défaite' . Format::addPlural($this->trader); break;
+					case 'butcher': 
+						$r .= Format::numberFormat($this->butcher) . ' point' . Format::addPlural($this->butcher);
+						$r .= ' (' . Format::numberFormat($this->butcherDestroyedPEV) . ' PEV détruit' . Format::addPlural($this->butcherDestroyedPEV); 
+						$r .= ' - ' . Format::numberFormat($this->butcherLostPEV) . ' PEV perdu' . Format::addPlural($this->butcherLostPEV) . ')';
+						break;
+					case 'trader': $r .= Format::numberFormat($this->trader) . ' crédit' . Format::addPlural($this->trader); break;
 					case 'fight': 
 						$r .= Format::numberFormat($this->fight) . ' point' . Format::addPlural($this->fight);
 						$r .= ' (' . Format::numberFormat($this->victories) . ' victoire' . Format::addPlural($this->victories); 

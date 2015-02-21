@@ -8,7 +8,7 @@ $type			= Utils::getHTTPData('type');
 
 if ($direction !== FALSE && $current !== FALSE && $type !== FALSE) {
 	if (in_array($direction, array('next', 'prev'))) {
-		if (in_array($type, array('general', 'xp', 'victory', 'defeat', 'ratio'))) {
+		if (in_array($type, array('general', 'resources', 'xp', 'fight', 'armies', 'butcher', 'trader'))) {
 			# var
 			$fty = ($type == 'xp')
 				? 'experience'
