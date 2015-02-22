@@ -16,7 +16,7 @@ $techno = Utils::getHTTPData('techno');
 
 
 if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
-	if (TechnologyResource::isATechnology($techno)) {
+	if (TechnologyResource::isATechnology($techno) && !TechnologyResource::isATechnologyNotDisplayed($techno)) {
 		$technos = new Technology(CTR::$data->get('playerId'));
 		$targetLevel = $technos->getTechnology($techno) + 1;
 		$S_TQM1 = ASM::$tqm->getCurrentSession();
