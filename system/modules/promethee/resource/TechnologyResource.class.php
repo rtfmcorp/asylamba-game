@@ -130,6 +130,27 @@ class TechnologyResource {
 						return ($arg1 <= self::getInfo($techno, 'maxLevel')) ? TRUE : FALSE;
 					}
 					break;
+				// est-ce qu'on peut construire la techno en fonction du type de la base ?
+				// arg1 est le type de la base
+				case 'baseType' :
+					switch ($arg1) {
+						case OrbitalBase::TYP_NEUTRAL:
+							return in_array(self::getInfo($techno, 'column'), array(1, 2, 3));
+							break;
+						case OrbitalBase::TYP_COMMERCIAL:
+							return in_array(self::getInfo($techno, 'column'), array(1, 2, 3, 4, 5));
+							break;
+						case OrbitalBase::TYP_MILITARY:
+							return in_array(self::getInfo($techno, 'column'), array(1, 2, 3, 6, 7));
+							break;
+						case OrbitalBase::TYP_CAPITAL:
+							return in_array(self::getInfo($techno, 'column'), array(1, 2, 3, 4, 5, 6, 7));
+							break;
+						default:
+							return FALSE;
+							break;
+					}
+					break;
 				default :
 					CTR::$alert->add('Erreur dans haveRights() de TechnologyResource', ALERT_BUG_ERROR);
 					return FALSE;
