@@ -12,7 +12,7 @@ ASM::$prm->changeSession($PLAYER_RANKING_BUTCHER);
 echo '<div class="component player rank">';
 	echo '<div class="head skin-4">';
 		echo '<img class="main" alt="ressource" src="' . MEDIA . 'rank/cup.png">';
-		echo '<h2>Le boucher</h2>';
+		echo '<h2>Boucher</h2>';
 		echo '<em>PEV détruits moins PEV perdus</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';

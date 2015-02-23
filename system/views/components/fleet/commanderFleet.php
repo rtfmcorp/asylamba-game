@@ -12,23 +12,32 @@ $dockStorage = $ob_commanderFleet->getShipStorage();
 $lineCoord   = $commander_commanderFleet->getFormatLineCoord();
 
 echo '<div class="component size2 commander-fleet">';
-	echo '<div class="head skin-2">';
-		echo '<h2>Représentation des escadrilles</h2>';
+	echo '<div class="head skin-1">';
+		echo '<img src="' . MEDIA . 'commander/medium/' . $commander_commanderDetail->avatar . '.png" alt="' . $commander_commanderDetail->getName() . '" />';
+		echo '<h2>' . $commander_commanderDetail->name . '</h2>';
+		echo '<em>' . CommanderResources::getInfo($commander_commanderDetail->level, 'grade') . '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="fleet">';
-				echo '<table class="army commanderTransfer"><tr>';
-					for ($i = 5; $i > 0; $i--) { 
-						echo '<td>#' . $i . '</td>';
-					}
-				echo '</tr><tr>';
+				echo '<table class="army commanderTransfer">';
+					echo '<tr>';
+						echo '<td></td>';
+						for ($i = 5; $i > 0; $i--) { 
+							echo '<td>#' . $i . '</td>';
+						}
+					echo '</tr><tr>';
+						echo '<td>Ceci représente la composition de votre flotte. Chaque carré montre une esquadrille. Vous pouvez remplir cette esquadrille en cliquant dessus puis en cliquant sur un type de vaisseau dans les colonnes à droite.<br /><br />La première colonne représente votre esquadrille et la seconde votre hangar.<br /><br />En pressant CTRL + clic (CMD + clic), vous pouvez transférer le maximum de vaisseau possible.</td>';
 					for ($i = 5; $i > 0; $i--) { 
 						echo '<td>';
 						if (max($lineCoord) >= $i) {
+							$nbInColumn = 0;
+
 							foreach ($lineCoord as $k => $v) {
 								if ($v == $i) {
 									$nbr = $k + 1;
+									$nbInColumn++;
+
 									if ($nbr == count($lineCoord)) {
 										echo '<span class="block" title="prochaine escadrille disponible">';
 											echo '<strong>' . $nbr . '</strong>';
@@ -44,8 +53,9 @@ echo '<div class="component size2 commander-fleet">';
 										} else {
 											$full = 'full3';
 										}
+
 										echo '<span ';
-											echo 'class="block squadron  ' . $full . '"';
+											echo 'class="block squadron ' . $full . '"';
 											echo 'data-squadron-id="' . ($nbr - 1) . '"';
 											echo 'data-squadron-ships="[' . implode(', ', $commander_commanderFleet->getSquadron($k)->getArrayOfShips()) . ']"';
 											echo 'data-squadron-pev="' . $commander_commanderFleet->getSquadron($k)->getPev() . '"';
@@ -55,6 +65,14 @@ echo '<div class="component size2 commander-fleet">';
 										echo '</span>';
 									}
 								}
+							}
+
+							for ($j = $nbInColumn; $j < 5; $j++) { 
+								echo '<span class="block empty"></span>';
+							}
+						} else {
+							for ($j = 0; $j < 5; $j++) { 
+								echo '<span class="block empty"></span>';
 							}
 						}
 						echo '</td>';

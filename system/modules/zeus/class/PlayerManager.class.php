@@ -76,7 +76,7 @@ class PlayerManager extends Manager {
 			$p->description = $aw['description'];
 			$p->setAvatar($aw['avatar']);
 			$p->setStatus($aw['status']);
-			$p->rGodfather = $aw['status'];
+			$p->rGodfather = $aw['rGodfather'];
 			$p->setCredit($aw['credit']);
 			$p->uPlayer = $aw['uPlayer'];
 			$p->setExperience($aw['experience']);

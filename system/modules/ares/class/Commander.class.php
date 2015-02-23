@@ -334,11 +334,9 @@ class Commander {
 		while (1) {
 			if ($this->experience >= $this->experienceToLevelUp()) {
 				$this->level++;
-
-				/*if ($this->statement != COM_INSCHOOL) {
-					CTR::$alert->add('Votre commandant ' . $this->name . ' gagne un niveau', ALERT_GAM_ATTACK);				
-				}*/
-			} else { break; }
+			} else {
+				break;
+			}
 		}
 	}
 

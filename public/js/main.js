@@ -236,10 +236,12 @@ jQuery(document).ready(function($) {
 
 		ref: {
 			commander: 0,
-			base: 0
+			base: 0,
 		},
 
 		squadronSelected: undefined,
+		squadronShipsOld: undefined,
+		squadronShipsNew: undefined,
 		token: false,
 
 		// initialisation
@@ -253,13 +255,24 @@ jQuery(document).ready(function($) {
 				// ref data
 				this.ref.commander = $('.baseTransfer').data('commander');
 				this.ref.base = $('.baseTransfer').data('base');
+
+				setInterval(function() {
+					squadronTransfer.sendRequest();
+				}, 5000);
 			}
 		},
 
+		// TODO : faire la requete
 		// change l'esquadrille selectionnée
 		changeSquadron: function(id) {
+			// si l'esquadrille à changé : modification
+			this.sendRequest();
+
 			// remise a zero
 			this.squadronSelected = undefined;
+			this.squadronShipsOld = undefined;
+			this.squadronShipsNew = undefined;
+
 			squadronTransfer.obj.squadron.find('a').each(function(i) {
 				$(this).addClass('empty');
 				$(this).find('.quantity').text('0');
@@ -268,13 +281,22 @@ jQuery(document).ready(function($) {
 			this.obj.army.find('.squadron').each(function(i) {
 				if (id == $(this).data('squadron-id')) {
 					$(this).addClass('active');
+
 					squadronTransfer.squadronSelected = $(this).data('squadron-id');
-					var ships = $(this).data('squadron-ships');
+
+					var tmp = $(this).data('squadron-ships');
+						squadronTransfer.squadronShipsOld = [];
+						squadronTransfer.squadronShipsNew = [];
+
+					for (var i = 0; i < tmp.length; i++) {
+						squadronTransfer.squadronShipsOld[i] = tmp[i];
+						squadronTransfer.squadronShipsNew[i] = tmp[i];
+					};
 
 					squadronTransfer.obj.squadron.find('a').each(function(i) {
-						if (ships[i] > 0) {
+						if (squadronTransfer.squadronShipsOld[i] > 0) {
 							$(this).removeClass('empty');
-							$(this).find('.quantity').text(ships[i]);
+							$(this).find('.quantity').text(squadronTransfer.squadronShipsOld[i]);
 						}
 					});
 
@@ -284,10 +306,10 @@ jQuery(document).ready(function($) {
 			});
 		},
 
-		// déplace un/des vaisseau/x vers le dock
+		// Déplace un/des vaisseau/x vers le dock
 		move: function(direction, shipId, quantity) {
 			if (this.squadronSelected == undefined) {
-				// alertController.add(101, 'Vous devez d\'abord sélectionner une escadrille pour transférer des vaisseaux');
+				// Nothing
 			} else {
 				var olQuantity = parseInt(this.obj.squadron.find('a:nth-child(' + (shipId + 1) + ') .quantity').text());
 				var orQuantity = parseInt(this.obj.dock.find('a:nth-child(' + (shipId + 1) + ') .quantity').text());
@@ -307,9 +329,9 @@ jQuery(document).ready(function($) {
 				}
 
 				if (direction == 'ctb' && nlQuantity < 0) {
-					// alertController.add(101, 'Pas de vaisseau de ce type dans l\'esquadrille');	
+					// Pas de vaisseau de ce type dans l'esquadrille
 				} else if (direction == 'btc' && nrQuantity < 0) {
-					// alertController.add(101, 'Pas de vaisseau de ce type dans les hangars');	
+					// Pas de vaisseau de ce type dans les hangars	
 				} else {
 					if (direction == 'ctb') {
 						this.updateSquadron(this.squadronSelected, 'remove', shipId, Math.abs(quantity));
@@ -318,22 +340,13 @@ jQuery(document).ready(function($) {
 					}
 
 					if (!this.token) {
-						// alertController.add(101, 'Esquadrille pleine');
+						// Esquadrille pleine
 					} else {
 						var lShip = this.obj.squadron.find('a:nth-child(' + (shipId + 1) + ')');
 						var rShip = this.obj.dock.find('a:nth-child(' + (shipId + 1) + ')');
 
 						this.updateShip(lShip, nlQuantity);
 						this.updateShip(rShip, nrQuantity);
-
-						// envoyer la requête
-						$.get(game.path 
-							+ 'ajax/a-assignship/base-' + this.ref.base 
-							+ '/commander-' + this.ref.commander 
-							+ '/direction-' + direction
-							+ '/squadron-' + this.squadronSelected
-							+ '/ship-' + shipId
-							+ '/quantity-' + quantity);
 					}
 				}
 			}
@@ -379,6 +392,8 @@ jQuery(document).ready(function($) {
 						$(this).data('squadron-pev', nPev);
 						$(this).data('squadron-ships', ships);
 
+						squadronTransfer.squadronShipsNew = ships;
+
 						$(this).removeClass('full0 full1 full2 full3');
 
 						if (nPev == 0) {
@@ -395,6 +410,28 @@ jQuery(document).ready(function($) {
 					}
 				}
 			});
+		},
+
+		isSquadronsDifferents: function() {
+			return (this.squadronShipsOld.join('-') != this.squadronShipsNew.join('-'))
+				? true : false;
+		},
+
+		sendRequest: function() {
+			if (this.squadronSelected != undefined) {
+				if (this.isSquadronsDifferents()) {
+					$.get(game.path 
+						+ 'ajax/a-updatesquadron/base-' + this.ref.base 
+						+ '/commander-' + this.ref.commander 
+						+ '/squadron-' + this.squadronSelected
+						+ '/army-' + this.squadronShipsNew.join('_')
+					);
+
+					for (var i = 0; i < this.squadronShipsOld.length; i++) {
+						this.squadronShipsOld[i] = this.squadronShipsNew[i];
+					};
+				}
+			}
 		}
 	};
 

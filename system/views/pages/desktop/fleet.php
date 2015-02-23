@@ -84,11 +84,12 @@ echo '<div id="content">';
 
 				# commanderDetail component
 				$commander_commanderDetail = ASM::$com->get();
-				include COMPONENT . 'fleet/commanderDetail.php';
-				# commanderFleet component
 				$commander_commanderFleet = ASM::$com->get();
 				$ob_commanderFleet = ASM::$obm->get();
+				
+				# commanderFleet component
 				include COMPONENT . 'fleet/commanderFleet.php';
+				include COMPONENT . 'fleet/commanderDetail.php';
 
 				ASM::$com->changeSession($S_COM_ID);
 				ASM::$obm->changeSession($S_OBM_DOCK);

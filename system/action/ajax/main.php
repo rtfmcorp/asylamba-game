@@ -8,6 +8,7 @@ switch (CTR::$get->get('a')) {
 
 	# ARES
 	case 'assignship':				include AJAX . 'ares/ship/assign.php'; break;
+	case 'updatesquadron':			include AJAX . 'ares/squadron/update.php'; break;
 
 	# ATHENA
 	case 'increaseinvestuni':		include AJAX . 'zeus/university/increaseInvest.php'; break;

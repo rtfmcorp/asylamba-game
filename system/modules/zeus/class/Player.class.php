@@ -14,12 +14,12 @@ class Player {
 	public $id = 0; 
 	public $bind = 0;
 	public $rColor = 0;
+	public $rGodfather = NULL;
 	public $name = '';
 	public $sex = 0;
 	public $description = '';
 	public $avatar = '';
 	public $status = 1;
-	public $rGodfather = 1;
 	public $credit = 0;
 	public $uPlayer = '';
 	public $experience = 0;

@@ -8,11 +8,7 @@
 	# {commander}		commander_commanderDetail
 
 echo '<div class="component">';
-	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'commander/medium/' . $commander_commanderDetail->avatar . '.png" alt="' . $commander_commanderDetail->getName() . '" />';
-		echo '<h2>' . $commander_commanderDetail->name . '</h2>';
-		echo '<em>' . CommanderResources::getInfo($commander_commanderDetail->level, 'grade') . '</em>';
-	echo '</div>';
+	echo '<div class="head skin-1"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			if ($commander_commanderDetail->getStatement() == COM_AFFECTED) {

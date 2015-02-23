@@ -126,7 +126,7 @@ echo '<div class="body">';
 
 							echo '<p>';
 								echo '<span class="label">Population</span>';
-								echo '<span class="value">' . Format::numberFormat($place->population) . ' [M]</span>';
+								echo '<span class="value">' . Format::numberFormat($place->population) . 'mio.</span>';
 							echo '</p>';
 							echo '<p>';
 								echo '<span class="label">Coeff. ressource</span>';

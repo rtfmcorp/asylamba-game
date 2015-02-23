@@ -51,13 +51,21 @@
 
 	.army {
 		border-collapse: collapse;
-		width: 380px;
-		margin: 25px auto;
+		width: 560px;
+		margin: 20px;
 
 		td {
 			width: 65px; padding: 5px;
 			border-right: dashed 1px #4F4F4F;
 			vertical-align: center;
+		}
+
+		td:first-child {
+			width: auto;
+			vertical-align: top;
+			text-align: right;
+			padding: 0 20px;
+			font-size: 12px;
 		}
 
 		tr:first-child td {
@@ -77,6 +85,11 @@
 			text-align: right;
 			border: solid 1px #202020;
 			color: #4F4F4F;
+
+			&.empty {
+				background: black;
+				border: solid 1px #0A0A0A;
+			}
 
 			strong {
 				display: block;

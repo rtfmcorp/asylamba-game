@@ -14,7 +14,7 @@ echo '<div class="component topic size2">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			if (ASM::$msm->get(0)->getRPlayerWriter() > 0) {
+			if (ASM::$msm->get(0)->getRealStatement(CTR::$data->get('playerId')) != PAM_DEAD) {
 				echo '<div class="message write">';
 					echo '<img src="' . MEDIA . 'avatar/medium/' . CTR::$data->get('playerInfo')->get('avatar') . '.png" alt="' . CTR::$data->get('playerInfo')->get('pseudo') . '" class="avatar" />';
 					echo '<div class="content">';

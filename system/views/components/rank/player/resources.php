@@ -12,7 +12,7 @@ ASM::$prm->changeSession($PLAYER_RANKING_RESOURCES);
 echo '<div class="component player rank">';
 	echo '<div class="head skin-4">';
 		echo '<img class="main" alt="ressource" src="' . MEDIA . 'rank/cup.png">';
-		echo '<h2>Ressources</h2>';
+		echo '<h2>Mineur</h2>';
 		echo '<em>Production totale par relève</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';

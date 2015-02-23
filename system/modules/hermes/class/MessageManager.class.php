@@ -24,9 +24,11 @@ class MessageManager extends Manager {
 				p1.name AS writerName,
 				p1.rColor AS writerColor,
 				p1.avatar AS writerAvatar,
+				p1.statement AS writerStatement,
 				p2.name AS readerName,
 				p2.rColor AS readerColor,
-				p2.avatar AS readerAvatar
+				p2.avatar AS readerAvatar,
+				p2.statement AS readerStatement
 			FROM message AS m
 			LEFT JOIN player AS p1
 				ON m.rPlayerWriter = p1.id
@@ -63,15 +65,17 @@ class MessageManager extends Manager {
 			$m->setDSending($aw['dSending']);
 			$m->setContent($aw['content']);
 			$m->setReaded($aw['readed']);
-			$m->setWriterStatement($aw['writerStatement']);
-			$m->setReaderStatement($aw['readerStatement']);
+			$m->setWriterMessageStatement($aw['writerStatement']);
+			$m->setReaderMessageStatement($aw['readerStatement']);
 
 			$m->setWriterName($aw['writerName']);
 			$m->setWriterColor($aw['writerColor']);
 			$m->setWriterAvatar($aw['writerAvatar']);
+			$m->setWriterStatement($aw['writerStatement']);
 			$m->setReaderName($aw['readerName']);
 			$m->setReaderColor($aw['readerColor']);
 			$m->setReaderAvatar($aw['readerAvatar']);
+			$m->setReaderStatement($aw['readerStatement']);
 
 			$this->_Add($m);
 		}
@@ -84,9 +88,11 @@ class MessageManager extends Manager {
 				p1.name AS writerName,
 				p1.rColor AS writerColor,
 				p1.avatar AS writerAvatar,
+				p1.statement AS writerStatement,
 				p2.name AS readerName,
 				p2.rColor AS readerColor,
-				p2.avatar AS readerAvatar
+				p2.avatar AS readerAvatar,
+				p2.statement AS readerStatement
 			FROM message AS m
 			LEFT JOIN player AS p1
 				ON m.rPlayerWriter = p1.id
@@ -113,9 +119,11 @@ class MessageManager extends Manager {
 			$m->setWriterName($aw['writerName']);
 			$m->setWriterColor($aw['writerColor']);
 			$m->setWriterAvatar($aw['writerAvatar']);
+			$m->setWriterStatement($aw['writerStatement']);
 			$m->setReaderName($aw['readerName']);
 			$m->setReaderColor($aw['readerColor']);
 			$m->setReaderAvatar($aw['readerAvatar']);
+			$m->setReaderStatement($aw['readerStatement']);
 
 			$this->_Add($m);
 		}

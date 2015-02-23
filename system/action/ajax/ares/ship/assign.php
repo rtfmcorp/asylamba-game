@@ -16,12 +16,13 @@ for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-$direction = Utils::getHTTPData('direction');
-$baseId = Utils::getHTTPData('base');
-$shipId = Utils::getHTTPData('ship');
-$quantity = Utils::getHTTPData('quantity');
-$commanderId = Utils::getHTTPData('commander');
-$squadron = Utils::getHTTPData('squadron');
+
+$direction 		= Utils::getHTTPData('direction');
+$baseId 		= Utils::getHTTPData('base');
+$shipId 		= Utils::getHTTPData('ship');
+$quantity 		= Utils::getHTTPData('quantity');
+$commanderId 	= Utils::getHTTPData('commander');
+$squadron 		= Utils::getHTTPData('squadron');
 
 
 if ($direction !== FALSE AND $baseId !== FALSE AND $shipId !== FALSE AND $commanderId !== FALSE AND $squadron !== FALSE AND in_array($baseId, $verif)) {

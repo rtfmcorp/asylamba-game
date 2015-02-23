@@ -12,7 +12,7 @@ ASM::$prm->changeSession($PLAYER_RANKING_TRADER);
 echo '<div class="component player rank">';
 	echo '<div class="head skin-4">';
 		echo '<img class="main" alt="ressource" src="' . MEDIA . 'rank/cup.png">';
-		echo '<h2>Le trader</h2>';
+		echo '<h2>Trader</h2>';
 		echo '<em>Revenu de toutes les routes commerciales par relève</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';

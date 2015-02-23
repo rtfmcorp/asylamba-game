@@ -12,8 +12,7 @@ $thread = Utils::getHTTPData('thread');
 $name = FALSE;
 $message = Utils::getHTTPData('message');
 
-
-// protection des inputs
+# protection des inputs
 $p = new Parser();
 $message = $p->parse($message);
 
@@ -79,7 +78,7 @@ if (($id OR $thread OR $name) AND $message !== '') {
 						ASM::$msm->add($m);
 						CTR::$alert->add('Message envoyé', ALERT_STD_SUCCESS);
 					} else {
-						//création d'n nouveau thread
+						# création d'n nouveau thread
 						$db = DataBase::getInstance();
 						$qr = $db->prepare('SELECT MAX(thread) AS maxThread FROM message');
 						$qr->execute();

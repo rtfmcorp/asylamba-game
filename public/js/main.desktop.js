@@ -15,6 +15,10 @@ jQuery(document).ready(function($) {
 			defaultSize: 300
 		},
 
+		animation: {
+			defaultSpeed: 500
+		},
+
 		make: function() {
 			render.calling++;
 			render.column.number = 0;
@@ -22,7 +26,7 @@ jQuery(document).ready(function($) {
 			render.viewport.h = parseInt($('body').css('height'));
 			render.viewport.w = parseInt($('body').css('width'));
 
-			// hauteur du #contenair
+			// hauteur du #conteneur
 			var hBar = parseInt($('#nav').css('height'));
 			var hContent = render.viewport.h - (2 * (hBar + 3));
 
@@ -45,7 +49,7 @@ jQuery(document).ready(function($) {
 				}
 			});
 
-			$('#content').css('width', (render.column.number * render.column.defaultSize + 10000));
+			$('#content').css('width', ((render.column.number * render.column.defaultSize) + 500 + (3 * render.column.defaultSize)));
 
 			if (render.calling == 1) {
 				var initSftr = parseInt($('body').data('init-sftr'));
@@ -65,7 +69,7 @@ jQuery(document).ready(function($) {
 
 		addComponent: function(position, content, time, callback) {
 			var newColumn;
-			var time = (time == undefined) ? 500 : time;
+			var time = (time == undefined) ? render.animation.defaultSpeed : time;
 
 			if (position > 0) {
 				$('.component:nth-child(' + position + ')').after(content);
@@ -114,11 +118,9 @@ jQuery(document).ready(function($) {
 		removeComponent: function(position, time, callback) {
 			var time = (time == undefined) ? 500 : time;
 
-			if (position > 0) {
-				var	component = $('.component:nth-child(' + (position + 1) + ')');
-			} else {
-				var	component = $('.component:last');
-			}
+			var	component = position > 0
+				? $('.component:nth-child(' + (position + 1) + ')')
+				: $('.component:last');
 			
 			component.find('.head').html('');
 			component.find('.body').html('');
@@ -127,6 +129,7 @@ jQuery(document).ready(function($) {
 				'width': 0
 			}, time, function() {
 				component.remove();
+
 				if (callback != undefined) {
 					callback();
 				}
@@ -139,7 +142,7 @@ jQuery(document).ready(function($) {
 		render.make();
 	});
 
-	$('input, textarea').live('focusin',  function(e) { render.inInput = true; });
+	$('input, textarea').live('focusin',  function(e) { render.inInput = true;  });
 	$('input, textarea').live('focusout', function(e) { render.inInput = false; });
 
 	// ADD INFOPANEL COMPONENT
@@ -165,6 +168,7 @@ jQuery(document).ready(function($) {
 		 		render.removeComponent(infoPanel.addedColumn, 500, function() {
 					render.addComponent(index, data);
 		 		});
+		 		
 			 	infoPanel.addedColumn = undefined;
 			 	infoPanel.addedColumn = index;
 		 	} else {

@@ -122,11 +122,10 @@ class PlayerRanking {
 					case 'trader': $r .= Format::numberFormat($this->trader) . ' crédit' . Format::addPlural($this->trader); break;
 					case 'fight': 
 						$r .= Format::numberFormat($this->fight) . ' point' . Format::addPlural($this->fight);
-						$r .= ' (' . Format::numberFormat($this->victories) . ' victoire' . Format::addPlural($this->victories); 
-						$r .= ' - ' . Format::numberFormat($this->defeat) . ' défaite' . Format::addPlural($this->defeat) . ')';
+						$r .= ' (' . Format::numberFormat($this->defeat) . ' défaite' . Format::addPlural($this->defeat) . ')';
 						break;
 					case 'armies': $r .= Format::numberFormat($this->armies) . ' point' . Format::addPlural($this->armies) . ' équivalent vaisseau'; break;
-					case 'resources': $r .= Format::numberFormat($this->resources) . ' ressource' . Format::addPlural($this->resources); break;
+					case 'resources': $r .= Format::numberFormat($this->resources) . ' ress/rel'; break;
 					default: break;
 				}
 			$r .= '</span>';
