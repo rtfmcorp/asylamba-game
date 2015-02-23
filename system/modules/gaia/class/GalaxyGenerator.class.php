@@ -213,6 +213,14 @@ abstract class GalaxyGenerator {
 		$k = 1;
 
 		foreach (self::$listSystem AS $system) {
+			$sectorDanger = 0;
+			foreach (GalaxyConfiguration::$sectors as $sector) {
+				if ($system[1] == $sector['id']) {
+					$sectorDanger = $sector['danger'];
+					break;
+				}
+			}
+
 			$place = self::getNbOfPlace($system[5]);
 
 			for ($i = 0; $i < $place; $i++) {
@@ -272,10 +280,29 @@ abstract class GalaxyGenerator {
 				}
 
 				# TODO DANGER
+				switch ($sectorDanger) {
+					case GalaxyConfiguration::DNG_CASUAL:
+						$danger = rand(0,  Place::DNG_CASUAL);
+					break;
+					case GalaxyConfiguration::DNG_EASY:
+						$danger = rand(5,  Place::DNG_EASY);
+					break;
+					case GalaxyConfiguration::DNG_MEDIUM:
+						$danger = rand(10, Place::DNG_MEDIUM);
+					break;
+					case GalaxyConfiguration::DNG_HARD:
+						$danger = rand(30, Place::DNG_HARD);
+					break;
+					case GalaxyConfiguration::DNG_VERY_HARD:
+						$danger = rand(50, Place::DNG_VERY_HARD);
+					break;
+					
+					default: $danger = 0; break;
+				}
 
 				self::$nbPlace++;
 				self::$popTotal += $population;
-				self::$listPlace[] = array($k, $system[0], $type, ($i + 1), $population, $resources, $history, $stRES, 2);
+				self::$listPlace[] = array($k, $system[0], $type, ($i + 1), $population, $resources, $history, $stRES, $danger);
 				$k++;
 			}
 		}

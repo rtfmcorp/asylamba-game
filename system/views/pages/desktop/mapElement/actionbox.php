@@ -120,6 +120,29 @@ echo '<div class="body">';
 								echo '<p><strong>Planète rebelle</strong></p>';
 								echo '<hr />';
 								echo '<p>Non-revendiquée</p>';
+								echo '<hr />';
+
+								if ($place->danger >= Place::DNG_HARD) {
+									$danger = 'défense extremement forte';
+								} elseif ($place->danger >= Place::DNG_MEDIUM) {
+									$danger = 'défense forte';
+								} elseif ($place->danger >= Place::DNG_EASY) {
+									$danger = 'défense moyenne';
+								} elseif ($place->danger >= Place::DNG_CASUAL) {
+									$danger = 'défense faible';
+								} else {
+									$danger = 'défense pratiquement inexistante';
+								}
+
+								echo '<p>';
+									echo '<span class="label">Défense</span>';
+									echo '<span class="value hb rt" title="' . $danger . '">';
+										echo '<img src="' . MEDIA . 'resources/defense.png" class="icon' . ($place->danger >= Place::DNG_HARD ? '-color' : NULL) . '" alt="" />';
+										echo '<img src="' . MEDIA . 'resources/defense.png" class="icon' . ($place->danger >= Place::DNG_MEDIUM ? '-color' : NULL) . '" alt="" />';
+										echo '<img src="' . MEDIA . 'resources/defense.png" class="icon' . ($place->danger >= Place::DNG_EASY ? '-color' : NULL) . '" alt="" />';
+										echo '<img src="' . MEDIA . 'resources/defense.png" class="icon' . ($place->danger >= Place::DNG_CASUAL ? '-color' : NULL) . '" alt="" />';
+									echo '</span>';
+								echo '</p>';
 							}
 
 							echo '<hr />';
@@ -129,11 +152,11 @@ echo '<div class="body">';
 								echo '<span class="value">' . Format::numberFormat($place->population) . 'mio.</span>';
 							echo '</p>';
 							echo '<p>';
-								echo '<span class="label">Coeff. ressource</span>';
+								echo '<span class="label">Ressource</span>';
 								echo '<span class="value">' . $place->coefResources . ' %</span>';
 							echo '</p>';
 							echo '<p>';
-								echo '<span class="label">Coeff. scientifique</span>';
+								echo '<span class="label">Science</span>';
 								echo '<span class="value">' . $place->coefHistory . ' %</span>';
 							echo '</p>';
 						} else {

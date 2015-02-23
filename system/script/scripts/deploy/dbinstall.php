@@ -67,7 +67,7 @@ $db->query("DROP TABLE IF EXISTS `player`");
 $db->query("CREATE TABLE IF NOT EXISTS `player` (
 	`id` INT unsigned NOT NULL AUTO_INCREMENT,
 	`rColor` INT unsigned NOT NULL,
-	`rGodfather` INT unsigned NOT NULL,
+	`rGodfather` INT unsigned NULL,
 
 	`bind` varchar(50) default NULL,
 	`name` varchar(25) NOT NULL,

@@ -47,6 +47,13 @@ class Place {
 
 	const COMEBACK 								= 40;
 
+	# constante de danger
+	const DNG_CASUAL 							= 10;
+	const DNG_EASY 								= 25;
+	const DNG_MEDIUM 							= 50;
+	const DNG_HARD 								= 75;
+	const DNG_VERY_HARD 						= 100;
+
 	// PLACE
 	public $id = 0;
 	public $rPlayer = NULL;
@@ -56,7 +63,8 @@ class Place {
 	public $population = 0;
 	public $coefResources = 0;
 	public $coefHistory = 0;
-	public $resources = 0; // de la place si $typeOfBase = 0, sinon de la base
+	public $resources = 0; 						# de la place si $typeOfBase = 0, sinon de la base
+	public $danger = 0; 						# danger le place (force des flottes rebelles)
 	public $uPlace = '';
 
 	// SYSTEM

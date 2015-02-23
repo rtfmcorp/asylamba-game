@@ -135,7 +135,9 @@ class PlaceManager extends Manager {
 			$p->setCoefResources($aw['coefResources']);
 			$p->setCoefHistory($aw['coefHistory']);
 			$p->setResources($aw['resources']);
+			$p->danger = $aw['danger'];
 			$p->uPlace = $aw['uPlace'];
+
 			$p->setRSector($aw['rSector']);
 			$p->setXSystem($aw['xPosition']);
 			$p->setYSystem($aw['yPosition']);
@@ -192,7 +194,7 @@ class PlaceManager extends Manager {
 	public static function add(Place $p) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			place(rPlayer, rSystem, typeOfPlace, position, population, coefResources, coefHistory, resources, uPlace)
+			place(rPlayer, rSystem, typeOfPlace, position, population, coefResources, coefHistory, resources, danger, uPlace)
 			VALUES(?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$p->getRPlayer(),
@@ -203,6 +205,7 @@ class PlaceManager extends Manager {
 			$p->getCoefResources(),
 			$p->getCoefHistory(),
 			$p->getResources(),
+			$p->danger,
 			$p->uPlace
 		));
 
@@ -227,6 +230,7 @@ class PlaceManager extends Manager {
 					coefResources = ?,
 					coefHistory = ?,
 					resources = ?,
+					danger = ?,
 					uPlace = ?
 				WHERE id = ?');
 			$qr->execute(array(
@@ -239,6 +243,7 @@ class PlaceManager extends Manager {
 				$p->getCoefResources(),
 				$p->getCoefHistory(),
 				$p->getResources(),
+				$p->danger,
 				$p->uPlace,
 				$p->getId()
 			));
