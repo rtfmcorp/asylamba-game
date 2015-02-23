@@ -24,7 +24,7 @@ echo '<head>';
 
 	echo '<link href="http://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic" rel="stylesheet" type="text/css">';
 
-	if (PORTALMODE) {
+	if (COLORSTYLE) {
 		echo (CTR::getPage() == 'inscription' && (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')))
 			? '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.color1.css" />'
 			: '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.' . $color . '.css" />';
@@ -39,7 +39,7 @@ echo '<head>';
 	echo '<link rel="icon" type="image/png" href="' . MEDIA . '/favicon/' . $color . '.png" />';
 echo '</head>';
 
-if (PORTALMODE) {
+if (ANALYTICS) {
 ?>
 <script>
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

@@ -1,6 +1,10 @@
 <?php
-CTR::$data = NULL;
-session_destroy();
+
+
+CTR::$data = new ArrayList();
+
+
+# session_destroy();
 
 # CTR::$data->remove('playerId');
 # CTR::$data->remove('playerInfo');

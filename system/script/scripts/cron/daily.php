@@ -82,7 +82,7 @@ for ($i = ASM::$pam->size() - 1; $i >= 0; $i--) {
 		ASM::$pam->get($i)->statement = PAM_INACTIVE;
 
 		# sending email API call
-		$api = new API(GETOUT_ROOT);
+		$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
 		$api->sendMail(ASM::$pam->get($i)->bind, APP_ID, API::TEMPLATE_INACTIVE_PLAYER);
 
 		$unactivatedPlayers++;

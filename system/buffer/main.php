@@ -1,5 +1,5 @@
 <?php
-if (DEVMODE || CTR::$get->equal('pwd', PWD_SCRIPT)) {
+if (DEVMODE || CTR::$get->equal('key', KEY_BUFFER)) {
 include_once ZEUS;
 
 $S_PAM1 = ASM::$pam->getCurrentSession();
@@ -25,7 +25,7 @@ ASM::$pam->load(array('statement' => PAM_ACTIVE));
 
 	<div class="content">
 <?php
-		echo '<a href="' . APP_ROOT . 'inscription/bindkey-' . Utils::generateString(10) . '">';
+		echo '<a href="' . APP_ROOT . 'inscription/bindkey-' . Security::crypt(Security::buildBindkey(Utils::generateString(10)), KEY_SERVER) . '">';
 			echo '<em>Créer un</em>';
 			echo '<strong>Personnage</strong>';
 			echo '<img src="' . MEDIA . 'avatar/big/000-0.png" alt="" />';
@@ -34,7 +34,7 @@ ASM::$pam->load(array('statement' => PAM_ACTIVE));
 		for ($i = 0; $i < ASM::$pam->size(); $i++) {
 			$player = ASM::$pam->get($i);
 
-			echo '<a class="color' . $player->rColor . '" href="' . APP_ROOT . 'connection/bindkey-' . $player->bind . '">';
+			echo '<a class="color' . $player->rColor . '" href="' . APP_ROOT . 'connection/bindkey-' . Security::crypt(Security::buildBindkey($player->bind), KEY_SERVER) . '">';
 				echo '<em>Grade ' . $player->level . '</em>';
 				echo '<strong>' . $player->name . '</strong>';
 				echo '<img src="' . MEDIA . 'avatar/big/' . $player->avatar . '.png" alt="" />';

@@ -2,27 +2,36 @@
 class API {
 	# API user
 	private $path;
+	private $server;
+	private $key;
 
 	public $query;
 	public $data;
 
 	const TEMPLATE_INACTIVE_PLAYER = 51;
 
-	public function __construct($path) {
+	public function __construct($path, $server, $key) {
 		$this->path = $path;
+		$this->server = $server;
+		$this->key  = $key;
 	}
 
 	private function query($api, $args) {
-		$arg = '';
+		$targ = '';
 		$ch  = curl_init();
 
-		foreach ($args as $k => $v) { $arg .= $k . '-' . $v . '/'; }
-		$this->query = $this->path . API::parse('a-' . $api . '/' . $arg);
+		foreach ($args as $k => $v) {
+			$targ .= $k . '-' . $v . '/';
+		}
 
+		$this->query = $this->path . 'api/s-' . $this->server . '/a-' . Security::crypt('a-' . $api . '/' . $targ, $this->key);
+		
 		curl_setopt($ch, CURLOPT_URL, $this->query);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER , TRUE);
 		$answer = curl_exec($ch);
 		curl_close($ch);
+
+		var_dump($answer);
 
 		if ($answer !== FALSE) {
 			$this->data = unserialize($answer);
@@ -92,60 +101,11 @@ class API {
 		}
 	}
 
+	# TODO
 	public function getPlayerStatement($bindkey) {
 		# a faire
 		return FALSE;
 		return $this->query('getplayerstatement', array('bindkey' => $bindkey));
-	}
-
-	public function banPlayer($bindkey) {
-		# a faire
-		return FALSE;
-		if ($this->query('ban', array('bindkey' => $bindkey))) {
-			if ($this->data['statement'] == 'success') {
-				return 'ok';
-			} else {
-				return $this->data['message'];
-			}
-		} else {
-			return 'problÃ¨me';
-		}
-	}
-
-	# API worker
-	private static $key = 'jefaispipisurlesfleurs21';
-
-	public static function parse($query) {
-		$cipher = mcrypt_module_open('rijndael-256', '', 'ecb', '');
-		$ivSize = mcrypt_enc_get_iv_size($cipher);
-		$iv = mcrypt_create_iv($ivSize, MCRYPT_RAND);
-
-		mcrypt_generic_init($cipher, self::$key, $iv);
-
-		$crypted = mcrypt_generic($cipher, $query); 
-		$crypted = base64_encode($crypted);  
-
-		mcrypt_generic_deinit($cipher);
-
-		return 'api/s-' .  $crypted;
-	}
-
-	public static function unParse($query) {
-		$part = explode('s-', $query);
-
-		$cipher = mcrypt_module_open('rijndael-256', '', 'ecb', '');
-		$ivSize = mcrypt_enc_get_iv_size($cipher);
-		$iv = mcrypt_create_iv($ivSize, MCRYPT_RAND);
-
-		mcrypt_generic_init($cipher, self::$key, $iv);
-
-		$crypted = base64_decode($part[1]);
-		$decrypted = trim(mdecrypt_generic($cipher, $crypted));
-
-		mcrypt_generic_deinit($cipher);
-		mcrypt_module_close($cipher);  
-
-		return $decrypted;
 	}
 }
 ?>

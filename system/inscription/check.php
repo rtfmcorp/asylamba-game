@@ -3,12 +3,23 @@ include_once DEMETER;
 # choix des étapes
 if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 	if (CTR::$get->exist('bindkey')) {
-		CTR::$data->add('prebindkey', CTR::$get->get('bindkey'));
-		CTR::redirect('inscription');
+		# extraction du bindkey
+		$query  = Security::uncrypt(CTR::$get->get('bindkey'), KEY_SERVER);
+		$bindkey= Security::extractBindkey($query);
+		$time 	= Security::extractTime($query);
+
+		# vérification de la validité du bindkey
+		if (abs((int)$time - time()) <= 300) {
+			CTR::$data->add('prebindkey', $bindkey);
+			CTR::redirect('inscription');
+		} else {
+			header('Location: ' . GETOUT_ROOT . 'profil');
+			exit();
+		}
 	} elseif (CTR::$data->exist('prebindkey')) {
-		if (PORTALMODE) {
+		if (APIMODE) {
 			# utilisation de l'API
-			$api = new API(GETOUT_ROOT);
+			$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
 
 			if ($api->userExist(CTR::$data->get('prebindkey')) || TRUE) {
 				include_once ZEUS;

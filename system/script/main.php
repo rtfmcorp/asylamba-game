@@ -24,18 +24,18 @@ ini_set('display_errors', TRUE);
 
 include SCRIPT . 'template/open.php';
 
-if (DEVMODE || CTR::$get->equal('password', PWD_SCRIPT)) {
+if (DEVMODE || CTR::$get->equal('key', KEY_SCRIPT)) {
 	if (!CTR::$get->exist('a')) {
 		echo '<div class="list-script">';
 			echo '<h1>Liste des scripts</h1>';
 
 			foreach ($scripts as $i => $script) {
-				echo '<a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/a-' . $script[0] . '">' . $script[1] . '</a>';
+				echo '<a href="' . APP_ROOT . 'script/key-' . KEY_SCRIPT . '/a-' . $script[0] . '">' . $script[1] . '</a>';
 			}
 		echo '</div>';
 	} else {
 		echo '<div class="content-script">';
-			echo '<div class="return"><a href="' . APP_ROOT . 'script/password-' . PWD_SCRIPT . '/">revenir vers les scripts</a></div>';
+			echo '<div class="return"><a href="' . APP_ROOT . 'script/key-' . KEY_SCRIPT . '/">revenir vers les scripts</a></div>';
 
 			foreach ($scripts as $i => $script) {
 				if (CTR::$get->get('a') == $script[0]) {

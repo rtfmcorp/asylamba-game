@@ -231,7 +231,7 @@ class PlayerManager extends Manager {
 		$p = ASM::$pam->get();
 
 		# API call
-		$api = new API(GETOUT_ROOT);
+		$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
 		$api->playerIsDead($p->bind, APP_ID);
 
 		# check if there is no other player with the same dead-name

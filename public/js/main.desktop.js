@@ -282,7 +282,6 @@ jQuery(document).ready(function($) {
 
 	// movers scroll event FIREFOX
 	$(window).bind('DOMMouseScroll', function(e) {
-		e.preventDefault();
 		if (e.originalEvent.detail > 0) {
 			columnController.move($('.no-scrolling .component .fix-body.hover'), 'bottom', false);
 		} else {
@@ -291,7 +290,6 @@ jQuery(document).ready(function($) {
 	});
 	// movers scroll event OTHERS
 	$(window).bind('mousewheel', function(e) {
-		e.preventDefault();
 		if (e.originalEvent.wheelDelta < 0) {
 			columnController.move($('.no-scrolling .component .fix-body.hover'), 'bottom', false);
 		} else {

@@ -117,8 +117,8 @@ try {
 	ASM::$plm->get()->coefHistory = 20;
 
 	# confirmation au portail
-	if (PORTALMODE) {
-		$api = new API(GETOUT_ROOT);
+	if (APIMODE) {
+		$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
 		$api->confirmInscription(CTR::$data->get('inscription')->get('bindkey'), APP_ID);
 	}
 
@@ -154,7 +154,7 @@ try {
 	}
 
 	# redirection vers connection
-	CTR::redirect('connection/bindkey-' . $pl->getBind() . '/mode-splash');
+	CTR::redirect('connection/bindkey-' . Security::crypt(Security::buildBindkey(Utils::generateString($pl->getBind())), KEY_SERVER) . '/mode-splash');
 } catch (Exception $e) {
 	# tentative de réparation de l'erreur
 

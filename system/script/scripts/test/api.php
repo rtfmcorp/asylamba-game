@@ -1,8 +1,7 @@
 <?php
-# $api = new API('http://www.expansion-lejeu.ch/portail/');
-# $api->userExist('test');
+$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
+$api->userExist('jq2Bjf0uKzzE0aMErO6rpBxcg');
 
-echo API::parse('http://localhost/expansion/dev_11/api/a-ban/bindkey-ee');
 
-# var_dump($api);
+var_dump($api);
 ?>
