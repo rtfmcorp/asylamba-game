@@ -229,7 +229,7 @@ class Place {
 								$commanderPlayer = ASM::$pam->get();
 								ASM::$pam->changeSession($S_PAM1);
 
-								if ($this->rPlayer != ID_GAIA) {
+								if ($this->rPlayer != NULL) {
 									$S_PAM1 = ASM::$pam->getCurrentSession();
 									ASM::$pam->newSession();
 									ASM::$pam->load(array('id' => $this->rPlayer));
@@ -267,7 +267,7 @@ class Place {
 								$commanderPlayer = ASM::$pam->get();
 								ASM::$pam->changeSession($S_PAM1);
 
-								if (!($this->rPlayer == ID_GAIA || $this->rPlayer == NULL)) {
+								if ($this->rPlayer != NULL) {
 									$S_PAM2 = ASM::$pam->getCurrentSession();
 									ASM::$pam->newSession();
 									ASM::$pam->load(array('id' => $this->rPlayer));
@@ -418,7 +418,7 @@ class Place {
 		LiveReport::$type = Commander::LOOT;
 		LiveReport::$dFight = $commander->dArrival;
 
-		if ($this->rPlayer == ID_GAIA || $this->rPlayer == NULL) {
+		if ($this->rPlayer == NULL) {
 			LiveReport::$isLegal = Report::LEGAL;
 			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
@@ -444,6 +444,8 @@ class Place {
 				
 				#création du rapport
 				$report = $this->createReport();
+				$percentage = (($report->PevAtEndD + 1) / ($report->setPevInBeginD + 1)) * 100;
+				$this->danger = round(($percentage * $this->danger) / 100);
 
 				$this->sendNotif(self::LOOTEMPTYSSUCCESS, $commander, $report->id);
 			} else {
@@ -458,6 +460,8 @@ class Place {
 				
 				#création du rapport
 				$report = $this->createReport();
+				$percentage = (($report->PevAtEndD + 1) / ($report->setPevInBeginD + 1)) * 100;
+				$this->danger = round(($percentage * $this->danger) / 100);
 
 				$this->sendNotif(self::LOOTEMPTYFAIL, $commander, $report->id);
 			}
@@ -563,7 +567,7 @@ class Place {
 	# conquest
 	public function uConquer($commander, $commanderPlace, $playerBonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor) {
 
-		if (!($this->rPlayer == ID_GAIA || $this->rPlayer == NULL)) {
+		if ($this->rPlayer != NULL) {
 			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
 			$commander->travelLength = NULL;
@@ -784,12 +788,16 @@ class Place {
 				
 				#création du rapport
 				$report = $this->createReport();
+				$percentage = (($report->PevAtEndD + 1) / ($report->setPevInBeginD + 1)) * 100;
+				$this->danger = round(($percentage * $this->danger) / 100);
 
 				$this->sendNotif(self::CONQUEREMPTYSSUCCESS, $commander, $report->id);
 			# s'il est mort
 			} else {
 				#création du rapport
 				$report = $this->createReport();
+				$percentage = (($report->PevAtEndD + 1) / ($report->setPevInBeginD + 1)) * 100;
+				$this->danger = round(($percentage * $this->danger) / 100);
 
 				$this->sendNotif(self::CONQUEREMPTYFAIL, $commander);
 				# enlever le commandant de la session
