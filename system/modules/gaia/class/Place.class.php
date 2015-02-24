@@ -64,7 +64,8 @@ class Place {
 	public $coefResources = 0;
 	public $coefHistory = 0;
 	public $resources = 0; 						# de la place si $typeOfBase = 0, sinon de la base
-	public $danger = 0; 						# danger le place (force des flottes rebelles)
+	public $danger = 0;							# danger actuel de la place (force des flottes rebelles)
+	public $maxDanger = 0;							# danger max de la place (force des flottes rebelles)
 	public $uPlace = '';
 
 	// SYSTEM
@@ -228,7 +229,7 @@ class Place {
 								$commanderPlayer = ASM::$pam->get();
 								ASM::$pam->changeSession($S_PAM1);
 
-								if ($this->rPlayer != 0) {
+								if ($this->rPlayer != ID_GAIA) {
 									$S_PAM1 = ASM::$pam->getCurrentSession();
 									ASM::$pam->newSession();
 									ASM::$pam->load(array('id' => $this->rPlayer));
@@ -266,7 +267,7 @@ class Place {
 								$commanderPlayer = ASM::$pam->get();
 								ASM::$pam->changeSession($S_PAM1);
 
-								if ($this->rPlayer != 0) {
+								if (!($this->rPlayer == ID_GAIA || $this->rPlayer == NULL)) {
 									$S_PAM2 = ASM::$pam->getCurrentSession();
 									ASM::$pam->newSession();
 									ASM::$pam->load(array('id' => $this->rPlayer));
@@ -417,7 +418,7 @@ class Place {
 		LiveReport::$type = Commander::LOOT;
 		LiveReport::$dFight = $commander->dArrival;
 
-		if ($this->rPlayer == 0) {
+		if ($this->rPlayer == ID_GAIA || $this->rPlayer == NULL) {
 			LiveReport::$isLegal = Report::LEGAL;
 			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
@@ -562,7 +563,7 @@ class Place {
 	# conquest
 	public function uConquer($commander, $commanderPlace, $playerBonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor) {
 
-		if ($this->rPlayer != 0) {
+		if (!($this->rPlayer == ID_GAIA || $this->rPlayer == NULL)) {
 			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
 			$commander->travelLength = NULL;
