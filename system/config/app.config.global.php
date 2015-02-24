@@ -1,5 +1,5 @@
 <?php
-# réglage temporel et niveau d'erreur
+# rÃ©glage temporel et niveau d'erreur
 error_reporting(E_ALL | E_STRICT);
 date_default_timezone_set('Europe/Zurich');
 #	ini_set('memory_limit', '512M');
@@ -7,7 +7,7 @@ date_default_timezone_set('Europe/Zurich');
 	ini_set('error_prepend_string', 'System Error #');
 	ini_set('error_log', 'public/log/php/' . date('Y-m-d') . '.log');
 
-# démarrage de la session
+# dÃ©marrage de la session
 session_set_cookie_params(0);
 ini_set('session.gc_maxlifetime', 3600 * 24);
 session_start();
@@ -48,11 +48,11 @@ define('ALERT_GAM_ATTACK',		312);	# fight
 define('ALERT_GAM_MARKET',		313);	# transaction in the market
 
 # event constantes
-define('EVENT_BASE', 			0);		# correspond à une construction (batiment ou vaisseau) dans une base	
+define('EVENT_BASE', 			0);		# correspond Ã  une construction (batiment ou vaisseau) dans une base	
 define('EVENT_OUTGOING_ATTACK', 1);
 define('EVENT_INCOMING_ATTACK', 2);
 
-# constante de temps pour la mise à jour des événements dans loadEvent.php
+# constante de temps pour la mise Ã  jour des Ã©vÃ©nements dans loadEvent.php
 # 300 s = 5 minutes
 define('TIME_EVENT_UPDATE',		300);
 

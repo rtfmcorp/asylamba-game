@@ -1,4 +1,4 @@
 <?php
-CTR::$data = new ArrayList();
+CTR::$data->destroy();
 CTR::redirect(GETOUT_ROOT . 'profil', TRUE);
 ?>
