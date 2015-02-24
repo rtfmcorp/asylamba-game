@@ -1,13 +1,6 @@
 <?php
-/* DEFAULT INDEX FILE
-	fill the constants
-	and rename the file without the ".default"
-*/
-
 # définition des ROOT
-# define('PUBLICR',		'http://game.expansion-lejeu.ch/server3/public/');
-# define('PUBLICR',		'http://localhost/expansion/dev12/public/');
-define('PUBLICR',		'http://localhost/Expansion/dev12/public/');			# TO FILL
+define('PUBLICR',		'http://localhost/Expansion/dev12/public/');
 define('SYSTEMR',		'system/');
 
 # définition des ROOT
@@ -18,7 +11,7 @@ define('LOG', 			PUBLICR . 'log/');
 
 define('MODULES', 		SYSTEMR . 'modules/');
 define('CLASSES',		SYSTEMR . 'classes/');
-define('LIB', 			SYSTEMR . 'lib/');
+define('LIB', 			CLASSES . 'lib/');
 define('CONFIG', 		SYSTEMR . 'config/');
 define('EVENT', 		SYSTEMR . 'event/');
 
@@ -44,16 +37,19 @@ define('ZEUS', 			MODULES . 'zeus/main.php');
 define('ATHENA', 		MODULES . 'athena/main.php');
 define('PROMETHEE', 	MODULES . 'promethee/main.php');
 define('ARTEMIS', 		MODULES . 'artemis/main.php');
+define('APOLLON', 		MODULES . 'apollon/main.php');
 define('DEMETER', 		MODULES . 'demeter/main.php');
 define('ATLAS',			MODULES . 'atlas/main.php');
 
 # inclusion des fichiers de configurations
 include CONFIG . 'app.config.local.php';
 include CONFIG . 'app.config.global.php';
-include CONFIG . 'app.loader.php';
+
+# inclusion des classes
+include CLASSES . 'loader.php';
 
 # Action du controller
-CTR::initialize();
+CTR::init();
 CTR::checkPermission();
 CTR::getInclude();
 CTR::save();

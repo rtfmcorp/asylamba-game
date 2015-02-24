@@ -468,9 +468,9 @@ class OrbitalBaseManager extends Manager {
 
 			# ajouter/enlever la base dans le controller
 			if (CTR::$data->get('playerId') == $newOwner) {
-				CTRHelper::addBase('ob', $base->getId(), $base->getName(), $base->getSector(), $base->getSystem(), '1-' . Game::getSizeOfPlanet($base->getPlanetPopulation()), $base->typeOfBase);
+				CTR::$data->addBase('ob', $base->getId(), $base->getName(), $base->getSector(), $base->getSystem(), '1-' . Game::getSizeOfPlanet($base->getPlanetPopulation()), $base->typeOfBase);
 			} else {
-				CTRHelper::removeBase('ob', $base->getId());
+				CTR::$data->removeBase('ob', $base->getId());
 			}
 
 			# rendre déserteuses les flottes en voyage

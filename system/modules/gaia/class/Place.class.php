@@ -49,7 +49,7 @@ class Place {
 
 	# constante de danger
 	const DNG_CASUAL 							= 10;
-	const DNG_EASY 								= 25;
+	const DNG_EASY 								= 20;
 	const DNG_MEDIUM 							= 50;
 	const DNG_HARD 								= 75;
 	const DNG_VERY_HARD 						= 100;
@@ -777,7 +777,7 @@ class Place {
 				}
 
 				if (CTR::$data->get('playerId') == $commander->getRPlayer()) { 
-					CTRHelper::addBase('ob', 
+					CTR::$data->addBase('ob', 
 						$ob->getId(), 
 						$ob->getName(), 
 						$this->rSector, 

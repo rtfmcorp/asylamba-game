@@ -2,6 +2,7 @@
 # exécute les événements s'il sont dans la liste
 include_once ATHENA;
 include_once ARES;
+
 $now = Utils::now();
 
 $pastEvents = CTR::$data->get('playerEvent')->getPastEvents($now); # stacklist
@@ -23,7 +24,6 @@ if ($pastEvents->size() > 0) {
 				ASM::$obm->load(array('rPlace' => $event->get('eventId')));
 				ASM::$obm->changeSession($S_OBM1);
 			}
-			#$event->get('eventId') # rPlace de la base orbitale
 		}
 
 		# événements concernant les attaques sortantes et entrantes
