@@ -240,6 +240,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `place` (
 	
 	`resources` INT unsigned DEFAULT 0,
 	`danger` TINYINT unsigned DEFAULT 0,
+	`maxDanger` TINYINT unsigned DEFAULT 0,
 
 	`uPlace` datetime DEFAULT NULL,
 

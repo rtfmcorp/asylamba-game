@@ -84,7 +84,7 @@ abstract class GalaxyGenerator {
 
 		self::log('sauvegarde des places');
 		for ($i = 0; $i < ceil(count(self::$listPlace) / GalaxyGenerator::MAX_QUERY); $i++) { 
-			$qr = 'INSERT INTO place(id, rSystem, typeOfPlace, position, population, coefResources, coefHistory, resources, danger, uPlace) VALUES ';
+			$qr = 'INSERT INTO place(id, rSystem, typeOfPlace, position, population, coefResources, coefHistory, resources, danger, maxDanger, uPlace) VALUES ';
 			
 			for ($j = $i * GalaxyGenerator::MAX_QUERY; $j < (($i + 1) * GalaxyGenerator::MAX_QUERY) - 1; $j++) { 
 				if (isset(self::$listPlace[$j])) {
@@ -302,7 +302,7 @@ abstract class GalaxyGenerator {
 
 				self::$nbPlace++;
 				self::$popTotal += $population;
-				self::$listPlace[] = array($k, $system[0], $type, ($i + 1), $population, $resources, $history, $stRES, $danger);
+				self::$listPlace[] = array($k, $system[0], $type, ($i + 1), $population, $resources, $history, $stRES, $danger, $danger);
 				$k++;
 			}
 		}
