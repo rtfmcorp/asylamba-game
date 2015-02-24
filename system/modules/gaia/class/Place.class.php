@@ -64,7 +64,8 @@ class Place {
 	public $coefResources = 0;
 	public $coefHistory = 0;
 	public $resources = 0; 						# de la place si $typeOfBase = 0, sinon de la base
-	public $danger = 0; 						# danger le place (force des flottes rebelles)
+	public $danger = 0;							# danger actuel de la place (force des flottes rebelles)
+	public $maxDanger = 0;							# danger max de la place (force des flottes rebelles)
 	public $uPlace = '';
 
 	// SYSTEM
