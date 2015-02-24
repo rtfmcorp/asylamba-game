@@ -154,7 +154,7 @@ try {
 	}
 
 	# redirection vers connection
-	CTR::redirect('connection/bindkey-' . Security::crypt(Security::buildBindkey(Utils::generateString($pl->getBind())), KEY_SERVER) . '/mode-splash');
+	CTR::redirect('connection/bindkey-' . Security::crypt(Security::buildBindkey($pl->getBind()), KEY_SERVER) . '/mode-splash');
 } catch (Exception $e) {
 	# tentative de réparation de l'erreur
 
