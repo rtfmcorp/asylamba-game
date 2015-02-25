@@ -122,13 +122,13 @@ echo '<div class="body">';
 								echo '<p>Non-revendiquée</p>';
 								echo '<hr />';
 
-								if ($place->danger >= Place::DNG_HARD) {
+								if ($place->maxDanger >= Place::DNG_HARD) {
 									$danger = 'défense extremement forte';
-								} elseif ($place->danger >= Place::DNG_MEDIUM) {
+								} elseif ($place->maxDanger >= Place::DNG_MEDIUM) {
 									$danger = 'défense forte';
-								} elseif ($place->danger >= Place::DNG_EASY) {
+								} elseif ($place->maxDanger >= Place::DNG_EASY) {
 									$danger = 'défense moyenne';
-								} elseif ($place->danger >= Place::DNG_CASUAL) {
+								} elseif ($place->maxDanger >= Place::DNG_CASUAL) {
 									$danger = 'défense faible';
 								} else {
 									$danger = 'défense pratiquement inexistante';
@@ -137,10 +137,10 @@ echo '<div class="body">';
 								echo '<p>';
 									echo '<span class="label">Défense</span>';
 									echo '<span class="value hb rt" title="' . $danger . '">';
-										echo '<img src="' . MEDIA . 'resources/defense.png" class="icon' . ($place->danger >= Place::DNG_HARD ? '-color' : NULL) . '" alt="" />';
-										echo '<img src="' . MEDIA . 'resources/defense.png" class="icon' . ($place->danger >= Place::DNG_MEDIUM ? '-color' : NULL) . '" alt="" />';
-										echo '<img src="' . MEDIA . 'resources/defense.png" class="icon' . ($place->danger >= Place::DNG_EASY ? '-color' : NULL) . '" alt="" />';
-										echo '<img src="' . MEDIA . 'resources/defense.png" class="icon' . ($place->danger >= Place::DNG_CASUAL ? '-color' : NULL) . '" alt="" />';
+										echo '<img src="' . MEDIA . 'resources/defense.png" class="icon' . ($place->maxDanger >= Place::DNG_HARD ? '-color' : NULL) . '" alt="" />';
+										echo '<img src="' . MEDIA . 'resources/defense.png" class="icon' . ($place->maxDanger >= Place::DNG_MEDIUM ? '-color' : NULL) . '" alt="" />';
+										echo '<img src="' . MEDIA . 'resources/defense.png" class="icon' . ($place->maxDanger >= Place::DNG_EASY ? '-color' : NULL) . '" alt="" />';
+										echo '<img src="' . MEDIA . 'resources/defense.png" class="icon' . ($place->maxDanger >= Place::DNG_CASUAL ? '-color' : NULL) . '" alt="" />';
 									echo '</span>';
 								echo '</p>';
 							}
