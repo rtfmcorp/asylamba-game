@@ -1045,12 +1045,12 @@ jQuery(document).ready(function($) {
 	});
 
 	// inscription stuff
-	$('.inscription-map .enabled').click(function(e) {
+	$('.tactical-map.reactive .enabled').click(function(e) {
 		e.preventDefault();
 
 		var id = $(this).data('id');
 
-		$('.inscription-map .number span').removeClass('active');
+		$('.tactical-map .number span').removeClass('active');
 		$('#sector' + id).addClass('active');
 		$('#input-sector-id').val(id);
 	});

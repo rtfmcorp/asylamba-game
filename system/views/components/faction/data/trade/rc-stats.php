@@ -34,12 +34,12 @@ echo '<div class="component profil">';
 			echo '<h4>Routes commerciales</h4>';
 
 			echo '<div class="number-box">';
-				echo '<span class="label">Routes commerciales actives</span>';
+				echo '<span class="label">routes commerciales actives</span>';
 				echo '<span class="value">' . Format::number($aw1['nb']) . '</span>';
 			echo '</div>';
 
 			echo '<div class="number-box">';
-				echo '<span class="label">Revenu total par relève</span>';
+				echo '<span class="label">revenu total par relève</span>';
 				echo '<span class="value">';
 					echo Format::number($aw1['income']);
 					echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits">';
@@ -48,17 +48,16 @@ echo '<div class="component profil">';
 			echo '</div>';
 
 			echo '<div class="number-box grey">';
-				echo '<span class="label">Part du commerce intérieur</span>';
+				echo '<span class="label">part du commerce intérieur</span>';
 				echo '<span class="value">' . Format::percent($aw2['nb'], $aw1['nb']) . ' %</span>';
 				echo '<span class="progress-bar">';
 					echo '<span style="width:' . Format::percent($aw2['nb'], $aw1['nb']) . '%;" class="content"></span>';
 				echo '</span>';
 			echo '</div>';
 
-			echo '<hr />';
-			echo '<h4>Part du commerce extérieur</h4>';
+			echo '<h4>Répartition du commerce extérieur</h4>';
 
-			for ($i = 1; $i < ColorResource::size() + 1; $i++) {
+			for ($i = 1; $i < ColorResource::size(); $i++) {
 				if (ColorResource::getInfo($i, 'id') != $faction->id) {
 					$qr = $db->prepare('SELECT
 						COUNT(cr.id) AS nb ' . $join . '
@@ -68,7 +67,7 @@ echo '<div class="component profil">';
 					$aw3 = $qr->fetch(); $qr->closeCursor();
 
 					echo '<div class="number-box grey">';
-						echo '<span class="label">Routes commerciales avec ' . ColorResource::getInfo($i, 'popularName') . '</span>';
+						echo '<span class="label">routes commerciales avec ' . ColorResource::getInfo($i, 'popularName') . '</span>';
 						echo '<span class="value">' . Format::number($aw3['nb']) . '</span>';
 						echo '<span class="progress-bar">';
 							echo '<span style="width:' . Format::percent($aw3['nb'], (100 - Format::percent($aw2['nb'], $aw1['nb'])) * $aw1['nb'] / 100) . '%;" class="content"></span>';

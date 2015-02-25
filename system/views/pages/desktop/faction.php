@@ -58,17 +58,59 @@ echo '<div id="content">';
 
 			for ($i = 1; $i <= ForumResources::size(); $i++) {
 				$forum_topics = ForumResources::getInfo($i, 'id');
+				
+				if ($forum_topics < 10 || ($forum_topics >= 10 && $forum_topics < 20 && CTR::$data->get('playerInfo')->get('status') > 2) || ($forum_topics >= 20 && $forum_topics < 30 && CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF)) {
+					
+					$where = array(
+						'rForum' => $forum_topics, 
+						'isUp' => 0,
+						'isArchived' => 0
+					);
+
+					if ($forum_topics < 20) {
+						$where['rColor'] = CTR::$data->get('playerInfo')->get('color');
+					}
+
+					ASM::$tom->newSession();
+					ASM::$tom->load(
+						$where,
+						array('dLastMessage', 'DESC'),
+						array(0, 10),
+						CTR::$data->get('playerId')
+					);
+
+					$topic_topics = array();
+
+					for ($j = 0; $j < ASM::$tom->size(); $j++) { 
+						$topic_topics[$j] = ASM::$tom->get($j);
+					}
+
+					$isStandard_topics = FALSE;
+					$idColum_topics = $i;
+					
+					include COMPONENT . 'faction/forum/topics.php';
+				}
+			}
+
+			ASM::$tom->changeSession($S_TOM1);
+		} else {
+			$forumId = !CTR::$get->exist('forum')
+				? 1 : CTR::$get->get('forum');
+				
+			if ($forumId < 10 || ($forumId >= 10 && $forumId < 20 && CTR::$data->get('playerInfo')->get('status') > 2) || ($forumId >= 20 && $forumId < 30 && CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF)) {
+				# forum component
+				include COMPONENT . 'faction/forum/forum.php';
 
 				$where = array(
-					'rForum' => $forum_topics, 
-					'isUp' => 0,
+					'rForum' => $forumId,
 					'isArchived' => 0
 				);
 
-				if ($forum_topics < 20) {
+				if ($forumId < 20) {
 					$where['rColor'] = CTR::$data->get('playerInfo')->get('color');
 				}
 
+				$S_TOM1 = ASM::$tom->getCurrentSession();
 				ASM::$tom->newSession();
 				ASM::$tom->load(
 					$where,
@@ -78,63 +120,13 @@ echo '<div id="content">';
 				);
 
 				$topic_topics = array();
-				for ($j = 0; $j < ASM::$tom->size(); $j++) { 
-					$topic_topics[$j] = ASM::$tom->get($j);
+				for ($i = 0; $i < ASM::$tom->size(); $i++) { 
+					$topic_topics[$i] = ASM::$tom->get($i);
 				}
+				
+				$isStandard_topics = TRUE;
+				$forum_topics = $forumId;
 
-				$isStandard_topics = FALSE;
-				$idColum_topics = $i;
-
-				if ($forum_topics < 10) {
-					include COMPONENT . 'faction/forum/topics.php';
-				} elseif ($forum_topics >= 10 && $forum_topics < 20 && CTR::$data->get('playerInfo')->get('status') > 2) {
-					include COMPONENT . 'faction/forum/topics.php';
-				} elseif ($forum_topics >= 20 && $forum_topics < 30 && CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
-					include COMPONENT . 'faction/forum/topics.php';
-				}
-			}
-
-			ASM::$tom->changeSession($S_TOM1);
-		} else {
-			# forum component
-			include COMPONENT . 'faction/forum/forum.php';
-
-			# topics component
-			$forumId = !CTR::$get->exist('forum')
-				? 1
-				: CTR::$get->get('forum');
-
-			$where = array(
-				'rForum' => $forumId,
-				'isArchived' => 0
-			);
-
-			if ($forumId < 20) {
-				$where['rColor'] = CTR::$data->get('playerInfo')->get('color');
-			}
-
-			$S_TOM1 = ASM::$tom->getCurrentSession();
-			ASM::$tom->newSession();
-			ASM::$tom->load(
-				$where,
-				array('dLastMessage', 'DESC'),
-				array(0, 10),
-				CTR::$data->get('playerId')
-			);
-
-			$topic_topics = array();
-			for ($i = 0; $i < ASM::$tom->size(); $i++) { 
-				$topic_topics[$i] = ASM::$tom->get($i);
-			}
-			
-			$isStandard_topics = TRUE;
-			$forum_topics = $forumId;
-
-			if ($forumId < 10) {
-				include COMPONENT . 'faction/forum/topics.php';
-			} elseif ($forumId >= 10 && $forumId < 20 && CTR::$data->get('playerInfo')->get('status') > 2) {
-				include COMPONENT . 'faction/forum/topics.php';
-			} elseif ($forumId >= 20 && $forumId < 30 && CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
 				include COMPONENT . 'faction/forum/topics.php';
 			} else {
 				CTR::redirect('faction/view-forum');
@@ -183,9 +175,17 @@ echo '<div id="content">';
 			include COMPONENT . 'faction/data/trade/tax-in.php';
 		} elseif (CTR::$get->get('mode') == 'war') {
 			include COMPONENT . 'faction/data/war/stats.php';
-			include COMPONENT . 'faction/data/war/sectors.php';
+			include COMPONENT . 'faction/data/war/reports.php';
 			include COMPONENT . 'faction/data/war/incoming.php';
 			include COMPONENT . 'faction/data/war/levels.php';
+		} elseif (CTR::$get->get('mode') == 'tactical') {
+			include COMPONENT . 'faction/data/tactical/map.php';
+			include COMPONENT . 'faction/data/tactical/sectors.php';
+			include COMPONENT . 'faction/data/tactical/targets.php';
+		} elseif (CTR::$get->get('mode') == 'diplomacy') {
+			include COMPONENT . 'default.php';
+			include COMPONENT . 'default.php';
+			include COMPONENT . 'default.php';
 		} elseif (CTR::$get->get('mode') == 'law') {
 			$listlaw_status = 6;
 			include COMPONENT . 'faction/data/law/list.php';

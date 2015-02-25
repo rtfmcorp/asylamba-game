@@ -10,8 +10,8 @@ ASM::$frm->loadByRequest(
 
 $creditBase = 0;
 for ($i = 0; $i < ASM::$frm->size(); $i++) {
-	if ($creditBase < ASM::$frm->get($i)->general) {
-		$creditBase = ASM::$frm->get($i)->general;
+	if ($creditBase < ASM::$frm->get($i)->wealth) {
+		$creditBase = ASM::$frm->get($i)->wealth;
 	}
 }
 $creditBase += $creditBase * 12 / 100;
@@ -35,11 +35,11 @@ echo '<div class="component profil">';
 
 			echo '<div class="evolution">';
 				echo '<div class="header">Evolution de la fortune de la faction sur les 20 derniers segments.</div>';
-				echo '<div class="body">';
+				echo '<div class="diargam">';
 				for ($i = 0; $i < ASM::$frm->size(); $i++) {
 					echo '<span class="progress-bar">';
-						echo '<span style="width:' . Format::percent(ASM::$frm->get($i)->general, $creditBase) . '%;" class="content">';
-							echo Format::number(ASM::$frm->get($i)->general, -2);
+						echo '<span style="width:' . Format::percent(ASM::$frm->get($i)->wealth, $creditBase) . '%;" class="content">';
+							echo Format::number(ASM::$frm->get($i)->wealth, -2);
 						echo '</span>';
 					echo '</span>';
 				}

@@ -51,13 +51,13 @@ echo '<div class="component profil">';
 			echo '<h4>Statistiques générales</h4>';
 
 			echo '<div class="number-box">';
-				echo '<span class="label">Officiers actifs</span>';
+				echo '<span class="label">officiers actifs</span>';
 				echo '<span class="value">' . Format::number($aw1['nb']) . '</span>';
 				echo '<span class="group-link"><a href="#" title="officiers affectés en première ou deuxième ligne sur des planètes de la faction" class="hb lt">?</a></span>';
 			echo '</div>';
 
 			echo '<div class="number-box grey">';
-				echo '<span class="label">Grade moyen des officiers actifs</span>';
+				echo '<span class="label">grade moyen des officiers actifs</span>';
 				echo '<span class="value">' . (isset($aw1['avgLevel']) ? CommanderResources::getInfo(Format::number($aw1['avgLevel']), 'grade') : 'Inconnu') . '</span>';
 
 			echo '</div>';
@@ -80,8 +80,6 @@ echo '<div class="component profil">';
 					echo ' <img class="icon-color" src="' . MEDIA . 'resources/pev.png" alt="pev">';
 				echo '</span>';
 			echo '</div>';
-
-			echo '<hr />';
 
 			echo '<h4>Nombre d\'appareils par type</h4>';
 			echo '<ul class="list-type-1">';

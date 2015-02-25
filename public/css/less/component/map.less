@@ -384,3 +384,86 @@
 	font-size: 20px;
 	text-align: center;
 }
+
+.tactical-map {
+	margin: 10px;
+	position: relative;
+	background: url('src/desktop/map/common/map.jpg') repeat #0A0A0A;
+
+	polygon {
+		stroke: white;
+		stroke-width: .30px;
+		opacity: 0.15;
+
+		&.enabled {
+			position: relative;
+			stroke-width: 2px;
+			opacity: 0.80;
+			z-index: 1;
+			
+			&.ally1 { stroke: @dark-1; }
+			&.ally2 { stroke: @dark-2; }
+			&.ally3 { stroke: @dark-3; }
+			&.ally4 { stroke: @dark-4; }
+			&.ally5 { stroke: @dark-5; }
+			&.ally6 { stroke: @dark-6; }
+			&.ally7 { stroke: @dark-7; }
+		}
+
+		&.ally0 { fill: #202020; }
+		&.ally1 { fill: @medium-1; }
+		&.ally2 { fill: @medium-2; }
+		&.ally3 { fill: @medium-3; }
+		&.ally4 { fill: @medium-4; }
+		&.ally5 { fill: @medium-5; }
+		&.ally6 { fill: @medium-6; }
+		&.ally7 { fill: @medium-7; }
+	}
+
+	.number {
+		position: absolute;
+		z-index: 800;
+		top: 0; left: 0;
+
+		span {
+			position: absolute;
+			color: rgba(255, 255, 255, .8);
+			font-size: 12px;
+			line-height: 22px; width: 22px;
+			text-align: center;
+			border-radius: 100%;
+			box-shadow: 0 0 1px white;
+
+			&.ally0 { background: #0A0A0A; }
+			&.ally1 { background: #510816; }
+			&.ally2 { background: #0c0d44; }
+			&.ally3 { background: #b17a00; }
+			&.ally4 { background: #310948; }
+			&.ally5 { background: #24500a; }
+			&.ally6 { background: #004948; }
+			&.ally7 { background: #401b13; }
+
+			&.active {
+				background: white;
+				color: black;
+				box-shadow: 0 0 10px black;
+			}
+		}
+	}
+}
+
+.tactical-map.reactive {
+	polygon.enabled {
+		&:hover, &.active {
+			cursor: pointer;
+
+			&.ally1 { fill: @dark-1; }
+			&.ally2 { fill: @dark-2; }
+			&.ally3 { fill: @dark-3; }
+			&.ally4 { fill: @dark-4; }
+			&.ally5 { fill: @dark-5; }
+			&.ally6 { fill: @dark-6; }
+			&.ally7 { fill: @dark-7; }
+		}
+	}
+}
