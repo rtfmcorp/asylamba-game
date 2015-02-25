@@ -20,15 +20,16 @@ class Place {
 	const COEFFRESOURCE = 2;
 	const REPOPDANGER = 2;
 	const COEFFPOPRESOURCE = 50;
-	const COEFFPOPDANGER = 50;
+	const COEFFDANGER = 5;
 
 	# typeOfPlace
 	const TERRESTRIAL = 1;
 	const EMPTYZONE = 6; # zone vide
 
 	# CONST PNJ COMMANDER
-	const LEVELMAXVCOMMANDER = 15;
+	const LEVELMAXVCOMMANDER = 20;
 	const POPMAX 			 = 250;
+	const DANGERMAX 		= 100;
 
 	# CONST RESULT BATTLE
 	const CHANGESUCCESS 						= 10;
@@ -1358,9 +1359,10 @@ class Place {
 		$vCommander->sexe = 1;
 		$vCommander->age = 42;
 		$vCommander->statement = 1;
-		$vCommander->level = ceil((ceil($this->population / self::COEFFPOPDANGER) * $this->maxDanger) / 30);
+		$vCommander->level = ceil((((($this->maxDanger / (self::DANGERMAX / self::LEVELMAXVCOMMANDER))) * 9) + ($this->population / (self::POPMAX / self::LEVELMAXVCOMMANDER))) / 10);
 
-		$nbrsquadron = ceil($vCommander->level * ($this->danger / $this->maxDanger));
+		$nbrsquadron = ceil($vCommander->level * (($this->danger + 1) / ($this->maxDanger + 1)));
+		$vCommander->id = $nbrsquadron;
 
 		$army = array();
 		$squadronsIds = array();

@@ -15,7 +15,8 @@ $scripts = array(
 	array('cron.daily', '/cron/daily.php'),
 	array('cron.playerranking', '/cron/playerRanking.php'),
 	array('cron.factionranking', '/cron/factionRanking.php'),
-	array('debug.ctc', '/debug/ctc.php')
+	array('debug.ctc', '/debug/ctc.php'),
+	array('testVC', '/debug/testVCommander.php')
 );
 
 # unlimited time
