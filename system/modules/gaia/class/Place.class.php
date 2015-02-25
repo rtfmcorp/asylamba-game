@@ -19,6 +19,8 @@ class Place {
 	const COEFFMAXRESOURCE = 600;
 	const COEFFRESOURCE = 2;
 	const REPOPDANGER = 2;
+	const COEFFPOPRESOURCE = 50;
+	const COEFFPOPDANGER = 50;
 
 	# typeOfPlace
 	const TERRESTRIAL = 1;
@@ -335,7 +337,7 @@ class Place {
 	}
 
 	public function uResources() {
-		$maxResources = ($this->population / 50) * self::COEFFMAXRESOURCE * $this->maxDanger;
+		$maxResources = ceil($this->population / self::COEFFPOPRESOURCE) * self::COEFFMAXRESOURCE * $this->maxDanger;
 		$this->resources += floor(self::COEFFRESOURCE * $this->population * 24);
 
 		if ($this->resources > $maxResources) {
@@ -1356,16 +1358,9 @@ class Place {
 		$vCommander->sexe = 1;
 		$vCommander->age = 42;
 		$vCommander->statement = 1;
-		$vCommander->level = round($this->population / (self::POPMAX / self::LEVELMAXVCOMMANDER));
+		$vCommander->level = ceil((ceil($this->population / self::COEFFPOPDANGER) * $this->maxDanger) / 30);
 
-		if ($vCommander->level == 0) {
-			$vCommander->level = 1;
-		}
-
-		$nbrsquadron = round($vCommander->level * ($this->resources / (($this->population + 1) * self::COEFFMAXRESOURCE)));
-		if ($nbrsquadron == 0) {
-			$nbrsquadron = 1;
-		}
+		$nbrsquadron = ceil($vCommander->level * ($this->danger / $this->maxDanger));
 
 		$army = array();
 		$squadronsIds = array();
