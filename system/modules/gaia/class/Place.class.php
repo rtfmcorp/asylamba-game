@@ -17,6 +17,8 @@ class Place {
 	const TYP_MS3 = 3;
 	const TYP_ORBITALBASE = 4;
 	const COEFFMAXRESOURCE = 600;
+	const COEFFRESOURCE = 2;
+	const REPOPDANGER = 2;
 
 	# typeOfPlace
 	const TERRESTRIAL = 1;
@@ -161,12 +163,19 @@ class Place {
 		if (Utils::interval($this->uPlace, $now, 's') > 0) {
 			# update time
 			$days = Utils::intervalDates($now, $this->uPlace, 'd');
+			$hours = Utils::intervalDates($now, $this->uPlace);
 			$this->uPlace = $now;
 
 			# RESOURCE
 			if ($this->typeOfBase == self::TYP_EMPTY && $this->typeOfPlace == self::TERRESTRIAL) {
 				foreach ($days as $key => $day) {
 					CTC::add($day, $this, 'uResources', array());
+				}
+			}
+
+			if ($this->rPlayer == NULL) {
+				foreach ($hours as $hour) {
+					CTC::add($hour, $this, 'uDanger', array());
 				}
 			}
 
@@ -317,9 +326,17 @@ class Place {
 		CTC::applyContext($token);
 	}
 
+	public function uDanger() {
+		$this->danger += 2;
+
+		if ($this->danger > $this->maxDanger) {
+			$this->danger = $this->maxDanger;
+		}
+	}
+
 	public function uResources() {
-		$maxResources = $this->population * self::COEFFMAXRESOURCE;
-		$this->resources += floor(PLM_RESSOURCECOEFF * $this->population * 24);
+		$maxResources = ($this->population / 50) * self::COEFFMAXRESOURCE * $this->maxDanger;
+		$this->resources += floor(self::COEFFRESOURCE * $this->population * 24);
 
 		if ($this->resources > $maxResources) {
 			$this->resources = $maxResources;
