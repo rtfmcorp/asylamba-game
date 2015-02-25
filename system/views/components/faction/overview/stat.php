@@ -18,7 +18,7 @@ ASM::$frm->newSession();
 ASM::$frm->loadLastContext();
 for ($i = 0; $i < ASM::$frm->size(); $i++) { 
 	if (ASM::$frm->get($i)->rFaction == $faction->id) {
-		$factionRanking = ASM::$frm->get($i)->powerPosition;
+		$factionRanking = ASM::$frm->get($i)->generalPosition;
 		break;
 	}
 }

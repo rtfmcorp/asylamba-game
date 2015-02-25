@@ -26,7 +26,7 @@ echo '<div id="content">';
 		echo '</div>';
 
 		echo '<div class="component inscription size2 color' . CTR::$data->get('inscription')->get('ally') . '">';
-			echo '<div class="head skin-2">';
+			echo '<div class="head skin-5">';
 				echo '<h2>Choisissez l\'emplacement dans la galaxie</h2>';
 			echo '</div>';
 			echo '<div class="fix-body">';
@@ -36,28 +36,17 @@ echo '<div id="content">';
 					$sm->load();
 					$rate = 750 / GalaxyConfiguration::$galaxy['size'];
 
-					echo '<div class="inscription-map">';
+					echo '<div class="tactical-map reactive">';
 						echo '<input type="hidden" id="input-sector-id" name="sector" />';
 						echo '<svg class="sectors" viewBox="0, 0, 750, 750" xmlns="http://www.w3.org/2000/svg">';
 							for ($i = 0; $i < $sm->size(); $i++) {
 								$s = $sm->get($i);
-								if ($s->getRColor() != CTR::$data->get('inscription')->get('ally')) {
-									echo '<polygon data-id="' . $s->getId() . '"';
-										echo 'class="ally' . $s->getRColor() . ' ' . ($s->getRColor() == CTR::$data->get('inscription')->get('ally') ? 'enabled' : 'disabled') . '" ';
-										echo 'points="' . GalaxyConfiguration::getSectorCoord($s->getId(), $rate, 0) . '" ';
-									echo '/>';
-								}
+								echo '<polygon data-id="' . $s->getId() . '"';
+									echo 'class="ally' . $s->getRColor() . ' ' . ($s->getRColor() == CTR::$data->get('inscription')->get('ally') ? 'enabled' : 'disabled') . '" ';
+									echo 'points="' . GalaxyConfiguration::getSectorCoord($s->getId(), $rate, 0) . '" ';
+								echo '/>';
 							}
 
-							for ($i = 0; $i < $sm->size(); $i++) {
-								$s = $sm->get($i);
-								if ($s->getRColor() == CTR::$data->get('inscription')->get('ally')) {
-									echo '<polygon data-id="' . $s->getId() . '"';
-										echo 'class="ally' . $s->getRColor() . ' ' . ($s->getRColor() == CTR::$data->get('inscription')->get('ally') ? 'enabled' : 'disabled') . '" ';
-										echo 'points="' . GalaxyConfiguration::getSectorCoord($s->getId(), $rate, 0) . '" ';
-									echo '/>';
-								}
-							}
 						echo '</svg>';
 						echo '<div class="number">';
 							for ($i = 0; $i < $sm->size(); $i++) {

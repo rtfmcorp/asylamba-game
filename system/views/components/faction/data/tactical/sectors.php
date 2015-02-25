@@ -38,6 +38,8 @@ echo '<div class="component">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			foreach ($sectort as $type => $sectors) {
+				$displayed = 0;
+
 				echo '<h4>' . $type . '</h4>';
 				echo '<ul class="list-type-1">';
 
@@ -61,10 +63,16 @@ echo '<div class="component">';
 							}
 							echo '</span>';
 						echo '</li>';
+
+						$displayed++;
 					}
 				}
 
 				echo '</ul>';
+				
+				if ($displayed == 0) {
+					echo '<p>Aucun secteur</p>';
+				}
 			}
 		echo '</div>';
 	echo '</div>';

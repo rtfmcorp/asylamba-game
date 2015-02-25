@@ -23,12 +23,26 @@ echo '<div class="component nav">';
 			echo '<a href="' . APP_ROOT . 'faction/view-data/mode-war" class="nav-element ' . $active . '">';
 				echo '<img src="' . MEDIA . 'fleet/movement.png" alt="" />';
 				echo '<strong>Guerre</strong>';
-				echo '<em>Territoires, armées et mouvements de flottes</em>';
+				echo '<em>Armées, mouvements de flottes et rapports de combat</em>';
+			echo '</a>';
+
+			$active = (CTR::$get->get('mode') == 'tactical') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'faction/view-data/mode-tactical" class="nav-element ' . $active . '">';
+				echo '<img src="' . MEDIA . 'faction/data/tactical.png" alt="" />';
+				echo '<strong>Tactique</strong>';
+				echo '<em>Territoires et objectifs de victoire</em>';
+			echo '</a>';
+
+			$active = (CTR::$get->get('mode') == 'diplomacy') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'faction/view-data/mode-diplomacy" class="nav-element ' . $active . '">';
+				echo '<img src="' . MEDIA . 'faction/data/diplomacy.png" alt="" />';
+				echo '<strong>Diplomatie</strong>';
+				echo '<em>Accords et traités</em>';
 			echo '</a>';
 
 			$active = (CTR::$get->get('mode') == 'law') ? 'active' : '';
 			echo '<a href="' . APP_ROOT . 'faction/view-data/mode-law" class="nav-element ' . $active . '">';
-				echo '<img src="' . MEDIA . 'faction/law/common.png" alt="" />';
+				echo '<img src="' . MEDIA . 'faction/data/law.png" alt="" />';
 				echo '<strong>Lois</strong>';
 				echo '<em>Table des Lois</em>';
 			echo '</a>';
