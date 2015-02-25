@@ -196,7 +196,7 @@ class PlaceManager extends Manager {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			place(rPlayer, rSystem, typeOfPlace, position, population, coefResources, coefHistory, resources, danger, maxDanger, uPlace)
-			VALUES(?, ?, ?, ?, ?)');
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$p->getRPlayer(),
 			$p->getRSystem(),
