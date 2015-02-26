@@ -28,7 +28,7 @@ ASM::$pam->load(array('statement' => PAM_ACTIVE));
 		echo '<a href="' . APP_ROOT . 'inscription/bindkey-' . Security::crypt(Security::buildBindkey(Utils::generateString(10)), KEY_SERVER) . '">';
 			echo '<em>Créer un</em>';
 			echo '<strong>Personnage</strong>';
-			echo '<img src="' . MEDIA . 'avatar/big/000-0.png" alt="" />';
+			echo '<img src="' . MEDIA . 'avatar/big/empty.png" alt="" />';
 		echo '</a>';
 
 		for ($i = 0; $i < ASM::$pam->size(); $i++) {
