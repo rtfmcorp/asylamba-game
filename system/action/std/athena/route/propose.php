@@ -113,7 +113,7 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 
 				CTR::$alert->add('Route commerciale proposée', ALERT_STD_SUCCESS);
 			} else {
-				CTR::$alert->add('impossible de proposer une route commerciale (1)', ALERT_STD_ERROR);
+				CTR::$alert->add('impossible de proposer une route commerciale - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
 			}
 		} else {
 			CTR::$alert->add('impossible de proposer une route commerciale (2)', ALERT_STD_ERROR);

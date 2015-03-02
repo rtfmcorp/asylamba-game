@@ -9,7 +9,6 @@ if (CTR::$get->exist('sftr')) {
 if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('token'))) {
 	switch (CTR::$get->get('a')) {
 		# GENERAL
-		case 'switchbase':				include ACTION . 'common/switchBase.php'; break;
 		case 'switchparams':			include ACTION . 'common/switchParams.php'; break;
 
 		# ATHENA
@@ -121,6 +120,9 @@ if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('tok
 			CTR::$alert->add('action inconnue ou non-référencée', ALERT_STD_ERROR);
 			break;
 	}
+} elseif (CTR::$get->get('a') == 'switchbase') {
+	# action sans token
+	include ACTION . 'common/switchBase.php';
 } else {
 	CTR::$alert->add('votre token CSRF a expiré', ALERT_STD_ERROR);
 }

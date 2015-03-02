@@ -93,17 +93,12 @@ class Game {
 	}
 
 	public static function getRCPrice($distance) {
-	#public static function getRCPrice($distance, $populationA, $populationB, $coef) {
-		# $populationA et $populationB ne sont plus utiles
-		#return round($distance * ($populationA + $populationB) * $coef);
 		include_once ATHENA;
 
 		return $distance * CommercialRoute::COEF_PRICE;
 	}
 
 	public static function getRCIncome($distance, $bonusA = 1, $bonusB = 1) {
-	#public static function getRCIncome($distance, $populationA, $populationB, $coef, $bonusA = 1, $bonusB = 1) {
-		#return round($distance * ($populationA + $populationB) * $coef * $bonusA * $bonusB);
 		include_once ATHENA;
 
 		$income = CommercialRoute::COEF_INCOME_2 * sqrt($distance * CommercialRoute::COEF_INCOME_1);

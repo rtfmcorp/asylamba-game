@@ -17,6 +17,7 @@ if ($page !== FALSE) {
 		case 'commercialroute' : $page = 'bases/view-commercialplateforme/mode-route'; break;
 		case 'sell' : $page = 'bases/view-commercialplateforme/mode-sell'; break;
 		case 'school' : $page = 'bases/view-school'; break;
+		case 'spatioport' : $page = 'bases/view-spatioport'; break;
 	}
 	CTR::redirect($page);
 }
