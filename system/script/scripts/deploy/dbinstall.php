@@ -1140,10 +1140,10 @@ echo '<h2>Ajout de la table creditTransaction</h2>';
 $db->query("DROP TABLE IF EXISTS `creditTransaction`");
 $db->query("CREATE TABLE IF NOT EXISTS `creditTransaction` (
 	`id` INT unsigned NOT NULL AUTO_INCREMENT,
-	`rPlayer` INT unsigned NOT NULL,
-	`rColor` INT unsigned NOT NULL,
-
-	`amout` INT unsigned NOT NULL,
+	`rSender` INT unsigned NOT NULL,
+	`rReceiver` INT unsigned NOT NULL,
+	`amount` INT unsigned NOT NULL,
+	`type` TINYINT unsigned NOT NULL,
 	`dTransaction` datetime NOT NULL,
 	`comment` text DEFAULT NULL,
 

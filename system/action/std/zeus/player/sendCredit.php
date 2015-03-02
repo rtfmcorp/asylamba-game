@@ -32,6 +32,16 @@ if ($name !== FALSE AND $quantity !== FALSE AND strlen($text) < 500) {
 			if ($sender->credit >= $credit) {
 				$sender->decreaseCredit($credit);
 				$receiver->increaseCredit($credit);
+
+				# create the transaction
+				$ct = new CreditTransaction();
+				$ct->rSender = CTR::$data->get('playerId');
+				$ct->type = CreditTransaction::TYP_PLAYER;
+				$ct->rReceiver = $receiver->id;
+				$ct->amount = $credit;
+				$ct->dTransaction = Utils::now();
+				$ct->comment = $text;
+				ASM::$crt->add($ct);
 						
 				$n = new Notification();
 				$n->setRPlayer($receiver->id);

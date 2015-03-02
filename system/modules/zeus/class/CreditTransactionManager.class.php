@@ -50,8 +50,9 @@ class CreditTransactionManager extends Manager {
 			$ct = new CreditTransaction();
 
 			$ct->id = $aw['id'];
-			$ct->rPlayer = $aw['rPlayer'];
-			$ct->rColor = $aw['rColor'];
+			$ct->rSender = $aw['rSender'];
+			$ct->type = $aw['type'];
+			$ct->rReceiver = $aw['rReceiver'];
 			$ct->amount = $aw['amount'];
 			$ct->dTransaction = $aw['dTransaction'];
 			$ct->comment = $aw['comment'];
@@ -63,11 +64,12 @@ class CreditTransactionManager extends Manager {
 	public function add(CreditTransaction $ct) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			creditTransaction(rPlayer, rColor, amount, dTransaction, comment)
-			VALUES(?, ?, ?, ?, ?)');
+			creditTransaction(rSender, type, rReceiver, amount, dTransaction, comment)
+			VALUES(?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
-			$ct->rPlayer,
-			$ct->rColor,
+			$ct->rSender,
+			$ct->type,
+			$ct->rReceiver,
 			$ct->amount,
 			$ct->dTransaction,
 			$ct->comment
@@ -85,16 +87,18 @@ class CreditTransactionManager extends Manager {
 			$db = DataBase::getInstance();
 			$qr = $db->prepare('UPDATE creditTransaction
 				SET	id = ?,
-					rPlayer = ?,
-					rColor = ?,
+					rSender = ?,
+					type = ?,
+					rReceiver = ?,
 					amount = ?,
 					dTransaction = ?,
 					comment = ?
 				WHERE id = ?');
 			$qr->execute(array(
 				$ct->id,
-				$ct->rPlayer,
-				$ct->rColor,
+				$ct->rSender,
+				$ct->type,
+				$ct->rReceiver,
 				$ct->amount,
 				$ct->dTransaction,
 				$ct->comment,

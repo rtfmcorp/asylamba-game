@@ -11,7 +11,7 @@
 */
 
 class Commander {
-	Const COEFFSCHOOL 				= 100;
+	const COEFFSCHOOL 				= 100;
 	const COEFFEARNEDEXP 			= 50;
 	const COEFFEXPPLAYER			= 100;
 	const CMDBASELVL 				= 100;

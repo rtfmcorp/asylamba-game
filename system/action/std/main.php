@@ -9,6 +9,7 @@ if (CTR::$get->exist('sftr')) {
 if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('token'))) {
 	switch (CTR::$get->get('a')) {
 		# GENERAL
+		case 'switchbase': 				include ACTION . 'common/switchBase.php'; break;
 		case 'switchparams':			include ACTION . 'common/switchParams.php'; break;
 
 		# ATHENA

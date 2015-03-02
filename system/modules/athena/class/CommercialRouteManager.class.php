@@ -114,6 +114,12 @@ class CommercialRouteManager extends Manager {
 		}
 	}
 
+	public function emptySession() {
+		# empty the session, for player rankings
+		$this->_EmptyCurrentSession();
+		$this->newSession(FALSE);
+	}
+
 	public function add(CommercialRoute $cr) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
