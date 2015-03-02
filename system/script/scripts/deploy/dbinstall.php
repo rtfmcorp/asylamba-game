@@ -380,8 +380,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `commercialRoute` (
 
 	`imageLink` varchar(10) NOT NULL,
 	`distance` SMALLINT unsigned NOT NULL,
-	`price` SMALLINT unsigned NOT NULL,
-	`income` SMALLINT unsigned NOT NULL,
+	`price` INT unsigned NOT NULL,
+	`income` INT unsigned NOT NULL,
 
 	`dProposition` datetime DEFAULT NULL,
 	`dCreation` datetime DEFAULT NULL,
