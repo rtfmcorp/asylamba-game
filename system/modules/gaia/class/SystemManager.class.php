@@ -13,7 +13,6 @@
 class SystemManager extends Manager {
 	protected $managerType = '_System';
 
-	//charge depuis la base de donnée avec ce qu'on veut
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 's.');
 		$formatOrder = Utils::arrayToOrder($order);

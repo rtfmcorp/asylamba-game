@@ -2,41 +2,72 @@ body {
 	margin: 0; padding: 0;
 	font-family: 'Roboto', 'Trebuchet MS', 'Arial', sans-serif;
 	font-size: 14px;
+	background: #EFEFEF;
 }
 
 .list-script h1 {
-	margin: 0 0 25px 0; padding: 0 50px;
-	line-height: 100px;
-	background: #EFEFEF;
-	border-bottom: solid 1px #CCC;
-	font-size: 50px;
+	margin: 0; padding: 0 50px;
+	line-height: 80px;
+	font-size: 30px;
 	font-weight: normal;
+
+	color: white;
+	background: #202020;
+	border-bottom: solid 1px #0A0A0A;
 }
 
-.list-script a {
-	display: block;
-	margin: 0 50px; padding: 0 10px;
-	line-height: 28px;
+.list-script .scripts {
+	padding: 30px 50px;
+}
+
+.list-script .scripts a {
+	display: inline-block;
+	margin: 0 10px 10px 0;
+	padding: 10px 20px;
+	width: 225px;
+
 	text-decoration: none;
-	color: #0A0A0A;
+
+	color: black;
+	background: rgba(0, 0, 0, .1);
+	border: solid 1px rgba(0, 0, 0, .2);
+}
+
+.list-script .scripts a strong {
+	display: block;
+	font-size: 18px;
+	font-weight: normal;
+	color: rgba(0, 0, 0, .4);
 }
 
 .list-script a:hover {
 	background: #EFEFEF;
 }
 
+
 .content-script .return {
-	margin: 0 0 25px 0; padding: 10px 50px;
-	background: #EFEFEF;
-	border-bottom: solid 1px #CCC;
+	margin: 0; padding: 0 50px;
+	line-height: 80px;
+	font-size: 30px;
+	font-weight: normal;
+
+	color: white;
+	background: #202020;
+	border-bottom: solid 1px #0A0A0A;
 }
 
 .content-script .return a {
 	display: inline-block;
-	line-height: 30px; padding: 0 10px;
-	border-radius: 3px;
+	line-height: 50px; width: 50px;
+	border-radius: 100%;
+	font-size: 30px; margin-right: 10px;
+	text-align: center;
 	background: #AE2F1B;
 	color: white;
 	text-decoration: none;
-	font-size: 14px;
+}
+
+.content-script .script {
+	padding: 30px 50px;
+	position: relative;
 }

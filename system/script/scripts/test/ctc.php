@@ -1,51 +1,69 @@
 <?php
-class A {
-	public $u = '2014-01-29 12:00:00';
-	public $credit = 5000;
+echo '<h1>Analyse du CTC</h1>';
 
-	public function uMethod() {
-		$token = CTC::createContext();
+$file = @fopen(LOG . 'ctc/2014-11-07.log', 'r');
+$base = array();
+$i    = 0;
 
-		$interval = Utils::interval($this->u, Utils::now());
+if ($file) {
+	while (!feof($file)) {
+		$line = fgets($file);
 
-		for ($i = 0; $i < $interval; $i++) { 
-			CTC::add(Utils::nextOClock($this->u, $i + 1), $this, 'addCredit', 1000);
-		}
-		# deuxième truc
-		$b = new B();
-		$b->uMethod();
+		if (strpos($line, 'uResources') !== FALSE) {
+			$data = NULL;
 
-		CTC::applyContext($token);
-	}
+			preg_match('#\(.+\)#', $line, $data);
+			$id   = substr(substr($data[0], 1), 0, -1);
 
-	public function addCredit($credit) {
-		$this->credit += $credit;
-	}
-}
+		#	preg_match('#\[.+\]#', $line, $data);
+		#	$time = substr(substr($data[0], 1), 0, -1) . '<br />';
 
-class B {
-	public $u = '2014-01-29 18:00:00';
-	public $point = 5000;
-
-	public function uMethod() {
-		$token = CTC::createContext();
-
-		$interval = Utils::interval($this->u, Utils::now());
-
-		for ($i = 0; $i < $interval; $i++) { 
-			CTC::add(Utils::nextOClock($this->u, $i + 1), $this, 'addPoint', 1000);
+			$base[$id][] = $line;
 		}
 
-		CTC::applyContext($token);
-	}
+		$i++;
 
-	public function addPoint($point) {
-		$this->point += $point;
+		if ($i == 10000) {
+			break;
+		}
 	}
+	fclose($file);
+} else {
+	echo 'fichier introuvable';
 }
 
-$a = new A;
-$a->uMethod();
+# affichage
+foreach ($base as $id => $b) {
+	$hasJump = FALSE;
+	$before  = NULL;
 
-var_dump($a);
+	foreach ($b as $line) {
+		$data = NULL;
+
+		preg_match('#[0-9]{4}-[0-9]{2}-[0-9]{2} ([0-9]{2}):[0-9]{2}:[0-9]{2}#', $line, $data);
+
+		$hour = (int)$data[1];
+
+		if (empty($before)) {
+			# do nothing
+		} elseif ($before == 23 && $hour != 0) {
+			$hasJump = TRUE;
+		} elseif ($before + 1 != $hour) {
+			$hasJump = TRUE;
+		} else {
+			# do nothing
+		}
+
+		$before = $hour;
+	}
+	
+	if ($hasJump) {
+		echo '<br /><br />';
+		echo 'erreur dans la base ' . $id . '<br />';
+
+		foreach ($b as $line) {
+			echo $line . '<br />';
+		}
+	}
+}
 ?>
