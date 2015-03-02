@@ -92,15 +92,27 @@ class Game {
 		return $time;
 	}
 
-	public static function getRCPrice($distance, $populationA, $populationB, $coef) {
-		return round($distance * ($populationA + $populationB) * $coef);
+	public static function getRCPrice($distance) {
+	#public static function getRCPrice($distance, $populationA, $populationB, $coef) {
+		# $populationA et $populationB ne sont plus utiles
+		#return round($distance * ($populationA + $populationB) * $coef);
+		include_once ATHENA;
+
+		return $distance * CommercialRoute::COEF_PRICE;
 	}
 
-	public static function getRCIncome($distance, $populationA, $populationB, $coef, $bonusA = 1, $bonusB = 1) {
-		return round($distance * ($populationA + $populationB) * $coef * $bonusA * $bonusB);
-	}
+	public static function getRCIncome($distance, $bonusA = 1, $bonusB = 1) {
+	#public static function getRCIncome($distance, $populationA, $populationB, $coef, $bonusA = 1, $bonusB = 1) {
+		#return round($distance * ($populationA + $populationB) * $coef * $bonusA * $bonusB);
+		include_once ATHENA;
 
-	
+		$income = CommercialRoute::COEF_INCOME_2 * sqrt($distance * CommercialRoute::COEF_INCOME_1);
+		$maxIncome = CommercialRoute::COEF_INCOME_2 * sqrt(100 * CommercialRoute::COEF_INCOME_1);
+		if ($income > $maxIncome) {
+			$income = $maxIncome;
+		}
+		return round($income * $bonusA * $bonusB);
+	}
 
 	public static function getTaxFromPopulation($population, $typeOfBase) {
 		$tax  = ((40 * $population) + 5000) * PAM_COEFTAX;

@@ -268,8 +268,8 @@ abstract class ActionHelper {
 									$distance = Game::getDistance($ob->getXSystem(), $place->getXSystem(), $ob->getYSystem(), $place->getYSystem());
 									$bonusA = ($ob->getSector() != $place->getRSector()) ? CRM_ROUTEBONUSSECTOR : 1;
 									$bonusB = (CTR::$data->get('playerInfo')->get('color')) != $place->getPlayerColor() ? CRM_ROUTEBONUSCOLOR : 1;
-									$price = Game::getRCPrice($distance, $ob->getPlanetPopulation(), $place->getPopulation(), CRM_COEFROUTEPRICE);
-									$income = Game::getRCIncome($distance, $ob->getPlanetPopulation(), $place->getPopulation(), CRM_COEFROUTEINCOME, $bonusA, $bonusB);
+									$price = Game::getRCPrice($distance);
+									$income = Game::getRCIncome($distance, $bonusA, $bonusB);
 
 									$box .= '<h5>Proposer une route commerciale</h5>';
 

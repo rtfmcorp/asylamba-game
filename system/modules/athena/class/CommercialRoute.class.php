@@ -12,6 +12,11 @@
 
 class CommercialRoute {
 
+	//CONSTANTS
+	const COEF_PRICE = 14000;
+	const COEF_INCOME_1 = 300;
+	const COEF_INCOME_2 = 20;
+
 	//ATTRIBUTES
 	public $id = 0;
 	public $rOrbitalBase = 0;

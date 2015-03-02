@@ -59,8 +59,8 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 			$distance = Game::getDistance($proposerBase->getXSystem(), $otherBase->getXSystem(), $proposerBase->getYSystem(), $otherBase->getYSystem());
 			$bonusA = ($proposerBase->getSector() != $otherBase->getSector()) ? CRM_ROUTEBONUSSECTOR : 1;
 			$bonusB = (CTR::$data->get('playerInfo')->get('color')) != $player->getRColor() ? CRM_ROUTEBONUSCOLOR : 1;
-			$price = Game::getRCPrice($distance, $proposerBase->getPlanetPopulation(), $otherBase->getPlanetPopulation(), CRM_COEFROUTEPRICE);
-			$income = Game::getRCIncome($distance, $proposerBase->getPlanetPopulation(), $otherBase->getPlanetPopulation(), CRM_COEFROUTEINCOME, $bonusA, $bonusB);
+			$price = Game::getRCPrice($distance);
+			$income = Game::getRCIncome($distance, $bonusA, $bonusB);
 			
 			if ($distance == 1) {
 				$imageLink = '1-' . rand(1, 3);

@@ -191,8 +191,8 @@ echo '<div class="column act">';
 					$distance = Game::getDistance($defaultBase->xSystem, $place->xSystem, $defaultBase->ySystem, $place->ySystem);
 					$bonusA = ($defaultBase->sector != $place->rSector) ? CRM_ROUTEBONUSSECTOR : 1;
 					$bonusB = (CTR::$data->get('playerInfo')->get('color')) != $place->playerColor ? CRM_ROUTEBONUSCOLOR : 1;
-					$price = Game::getRCPrice($distance, $defaultBase->planetPopulation, $place->population, CRM_COEFROUTEPRICE);
-					$income = Game::getRCIncome($distance, $defaultBase->planetPopulation, $place->population, CRM_COEFROUTEINCOME, $bonusA, $bonusB);
+					$price = Game::getRCPrice($distance);
+					$income = Game::getRCIncome($distance, $bonusA, $bonusB);
 
 					echo '<div class="rc">';
 						echo '<img src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '-' . Game::getSizeOfPlanet($place->population) . '.png" alt="" class="planet" />';
