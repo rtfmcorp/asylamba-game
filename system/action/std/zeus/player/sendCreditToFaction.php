@@ -1,5 +1,6 @@
 <?php
 include_once ZEUS;
+include_once DEMETER;
 # give credit action
 
 # int quantity 		quantity of credit to send
@@ -28,6 +29,16 @@ if ($quantity !== FALSE) {
 						# make the transaction
 						$sender->decreaseCredit($credit);
 						ASM::$clm->get()->increaseCredit($credit);
+
+						# create the transaction
+						$ct = new CreditTransaction();
+						$ct->rSender = CTR::$data->get('playerId');
+						$ct->type = CreditTransaction::TYP_FACTION;
+						$ct->rReceiver = $sender->rColor;
+						$ct->amount = $credit;
+						$ct->dTransaction = Utils::now();
+						$ct->comment = NULL;
+						ASM::$crt->add($ct);
 
 						CTR::$alert->add('Crédits envoyés', ALERT_STD_SUCCESS);
 						ASM::$clm->changeSession($S_CLM1);
