@@ -125,9 +125,10 @@ echo '<div id="content">';
 		ASM::$obm->changeSession($S_OBM_FIN);
 		ASM::$com->changeSession($S_COM_FIN);
 	} elseif (CTR::$get->get('view') == 'send') {
-		include COMPONENT . 'financial/send-credit.php';
-		include COMPONENT . 'default.php';
-		include COMPONENT . 'default.php';
+		include COMPONENT . 'financial/send-credit-player.php';
+		include COMPONENT . 'financial/send-credit-faction.php';
+		include COMPONENT . 'financial/last-send-credit.php';
+		include COMPONENT . 'financial/last-receive-credit.php';
 	}
 echo '</div>';
 ?>

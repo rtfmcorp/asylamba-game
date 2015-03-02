@@ -23,9 +23,11 @@ class CreditTransactionManager extends Manager {
 				p1.name AS receiverName,
 				p1.avatar AS receiverAvatar,
 				p1.status AS receiverStatus,
+				p1.rColor AS receiverColor,
 				p2.name AS senderName,
 				p2.avatar AS senderAvatar,
-				p2.status AS senderStatus
+				p2.status AS senderStatus,
+				p2.rColor AS senderColor
 			FROM creditTransaction AS ct
 			LEFT JOIN player AS p1
 				ON ct.rReceiver = p1.id
@@ -70,11 +72,13 @@ class CreditTransactionManager extends Manager {
 			$ct->senderName = $aw['senderName'];
 			$ct->senderAvatar = $aw['senderAvatar'];
 			$ct->senderStatus = $aw['senderStatus'];
+			$ct->senderColor = $aw['senderColor'];
 
 			if ($ct->type == CreditTransaction::TYP_PLAYER) {
 				$ct->receiverName = $aw['receiverName'];
 				$ct->receiverAvatar = $aw['receiverAvatar'];
 				$ct->receiverStatus = $aw['receiverStatus'];
+				$ct->receiverColor = $aw['receiverColor'];
 			}
 
 			$this->_Add($ct);

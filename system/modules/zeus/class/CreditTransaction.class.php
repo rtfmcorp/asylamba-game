@@ -26,10 +26,45 @@ class CreditTransaction {
 	public $senderName = '';
 	public $senderAvatar = '';
 	public $senderStatus = '';
+	public $senderColor = '';
 
 	public $receiverName = '';
 	public $receiverAvatar = '';
 	public $receiverStatus = '';
+	public $receiverColor = '';
+
+	public function getFormatedReceiverLink() {
+		return $this->type == CreditTransaction::TYP_PLAYER
+			? APP_ROOT . 'diary/player-' . $this->rReceiver
+			: APP_ROOT . '404';
+	}
+
+	public function getFormatedReceiverName() {
+		return $this->type == CreditTransaction::TYP_PLAYER
+			? $this->receiverName
+			: ColorResource::getInfo($this->rReceiver, 'popularName');
+	}
+
+	public function getFormatedReceiverAvatar() {
+		return $this->type == CreditTransaction::TYP_PLAYER
+			? $this->receiverAvatar
+			: 'color' . $this->rReceiver;
+	}
+
+	public function getFormatedReceiverStatus() {
+		if ($this->type == CreditTransaction::TYP_PLAYER) {
+			$status = ColorResource::getInfo($this->receiverColor, 'status');
+			return $status[$this->receiverStatus - 1];
+		} else {
+			return ColorResource::getInfo($this->rReceiver, 'government');
+		}
+	}
+
+	public function getFormatedReceiverColor() {
+		return $this->type == CreditTransaction::TYP_PLAYER
+			? $this->receiverColor
+			: $this->rReceiver;
+	}
 
 	public function getId()	{ return $this->id; }
 }
