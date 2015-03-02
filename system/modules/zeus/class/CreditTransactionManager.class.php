@@ -19,8 +19,18 @@ class CreditTransactionManager extends Manager {
 		$formatLimit = Utils::arrayToLimit($limit);
 
 		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT ct.*
+		$qr = $db->prepare('SELECT ct.*,
+				p1.name AS receiverName,
+				p1.avatar AS receiverAvatar,
+				p1.status AS receiverStatus,
+				p2.name AS senderName,
+				p2.avatar AS senderAvatar,
+				p2.status AS senderStatus
 			FROM creditTransaction AS ct
+			LEFT JOIN player AS p1
+				ON ct.rReceiver = p1.id
+			LEFT JOIN player AS p2
+				ON ct.rSender = p2.id
 			' . $formatWhere . '
 			' . $formatOrder . '
 			' . $formatLimit
@@ -56,6 +66,16 @@ class CreditTransactionManager extends Manager {
 			$ct->amount = $aw['amount'];
 			$ct->dTransaction = $aw['dTransaction'];
 			$ct->comment = $aw['comment'];
+
+			$ct->senderName = $aw['senderName'];
+			$ct->senderAvatar = $aw['senderAvatar'];
+			$ct->senderStatus = $aw['senderStatus'];
+
+			if ($ct->type == CreditTransaction::TYP_PLAYER) {
+				$ct->receiverName = $aw['receiverName'];
+				$ct->receiverAvatar = $aw['receiverAvatar'];
+				$ct->receiverStatus = $aw['receiverStatus'];
+			}
 
 			$this->_Add($ct);
 		}

@@ -23,5 +23,13 @@ class CreditTransaction {
 	public $dTransaction = 0;
 	public $comment = '';
 
+	public $senderName = '';
+	public $senderAvatar = '';
+	public $senderStatus = '';
+
+	public $receiverName = '';
+	public $receiverAvatar = '';
+	public $receiverStatus = '';
+
 	public function getId()	{ return $this->id; }
 }
