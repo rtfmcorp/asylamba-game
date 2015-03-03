@@ -104,7 +104,7 @@ class PlayerRanking {
 
 		$r .= '<div class="player color' . $this->color . ' ' . (CTR::$data->get('playerId') == $this->rPlayer ? 'active' : NULL) . '">';
 			$r .= '<a href="' . APP_ROOT . 'diary/player-' . $this->rPlayer . '">';
-				$r .= '<img src="' . MEDIA . 'avatar/small/' . $this->avatar . '.png" alt="' . $this->name . '" />';
+				$r .= '<img src="' . MEDIA . 'avatar/small/' . $this->avatar . '.png" alt="' . $this->name . '" class="picto" />';
 			$r .= '</a>';
 
 			$r .= '<span class="title">' . $status[$this->status - 1] . '</span>';
@@ -116,16 +116,15 @@ class PlayerRanking {
 					case 'xp': $r .= Format::numberFormat($this->experience) . ' xp'; break;
 					case 'butcher': 
 						$r .= Format::numberFormat($this->butcher) . ' point' . Format::addPlural($this->butcher);
-						$r .= ' (' . Format::numberFormat($this->butcherDestroyedPEV) . ' PEV détruit' . Format::addPlural($this->butcherDestroyedPEV); 
-						$r .= ' - ' . Format::numberFormat($this->butcherLostPEV) . ' PEV perdu' . Format::addPlural($this->butcherLostPEV) . ')';
+						$r .= ' (' . Format::numberFormat($this->butcherDestroyedPEV) . ' <img src="' . MEDIA . 'resources/pev.png" class="icon-color" alt="pev" /> détruit' . Format::addPlural($this->butcherDestroyedPEV) . ')';
 						break;
-					case 'trader': $r .= Format::numberFormat($this->trader) . ' crédit' . Format::addPlural($this->trader); break;
+					case 'trader': $r .= Format::numberFormat($this->trader) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédits" />' . Format::addPlural($this->trader); break;
 					case 'fight': 
 						$r .= Format::numberFormat($this->fight) . ' point' . Format::addPlural($this->fight);
 						$r .= ' (' . Format::numberFormat($this->defeat) . ' défaite' . Format::addPlural($this->defeat) . ')';
 						break;
-					case 'armies': $r .= Format::numberFormat($this->armies) . ' point' . Format::addPlural($this->armies) . ' équivalent vaisseau'; break;
-					case 'resources': $r .= Format::numberFormat($this->resources) . ' ress/rel'; break;
+					case 'armies': $r .= Format::numberFormat($this->armies) . ' <img src="' . MEDIA . 'resources/pev.png" class="icon-color" alt="pev" />'; break;
+					case 'resources': $r .= Format::numberFormat($this->resources) . ' <img src="' . MEDIA . 'resources/resource.png" class="icon-color" alt="ressources" />'; break;
 					default: break;
 				}
 			$r .= '</span>';

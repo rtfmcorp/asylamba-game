@@ -18,13 +18,18 @@
 		}
 	}
 
-	img {
+	img.picto {
 		position: absolute;
 		top: 5px; left: 5px;
 		width: 50px; padding: 4px;
 		border: solid 1px #202020;
 		border-radius: 100%;
 		background: black;
+	}
+
+	.icon, .icon-color {
+		height: 16px;
+		padding: 1px;
 	}
 
 	span, strong {
@@ -67,13 +72,13 @@
 	border-left: solid 10px #4F4F4F;
 	width: 190px;
 
-	&.color1 { border-left-color: #b01e2d; }
-	&.color2 { border-left-color: #2f23c0; }
-	&.color3 { border-left-color: #ffdb0f; }
-	&.color4 { border-left-color: #a935c7; }
-	&.color5 { border-left-color: #57c632; }
-	&.color6 { border-left-color: #05bed7; }
-	&.color7 { border-left-color: #ac5832; }
+	&.color1 { border-left-color: @light-1; }
+	&.color2 { border-left-color: @light-2; }
+	&.color3 { border-left-color: @light-3; }
+	&.color4 { border-left-color: @light-4; }
+	&.color5 { border-left-color: @light-5; }
+	&.color6 { border-left-color: @light-6; }
+	&.color7 { border-left-color: @light-7; }
 
 	.title, .points {
 		color: #BBB;

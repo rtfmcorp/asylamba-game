@@ -48,7 +48,7 @@ class FactionRanking {
 		}
 
 		$r .= '<div class="player faction color' . $this->rFaction . ' ' . (CTR::$data->get('playerInfo')->get('color') == $this->rFaction ? 'active' : NULL) . '">';
-			$r .= '<img src="' . MEDIA . 'faction/flag/flag-' . $this->rFaction . '.png" alt="' . $this->rFaction . '" />';
+			$r .= '<img src="' . MEDIA . 'faction/flag/flag-' . $this->rFaction . '.png" alt="' . $this->rFaction . '" class="picto" />';
 
 			$r .= '<span class="title">' . ColorResource::getInfo($this->rFaction, 'government') . '</span>';
 			$r .= '<strong class="name">' . ColorResource::getInfo($this->rFaction, 'popularName') . '</strong>';

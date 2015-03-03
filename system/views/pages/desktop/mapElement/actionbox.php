@@ -122,25 +122,22 @@ echo '<div class="body">';
 								echo '<p>Non-revendiquée</p>';
 								echo '<hr />';
 
-								if ($place->maxDanger >= Place::DNG_HARD) {
-									$danger = 'défense extremement forte';
-								} elseif ($place->maxDanger >= Place::DNG_MEDIUM) {
-									$danger = 'défense forte';
-								} elseif ($place->maxDanger >= Place::DNG_EASY) {
-									$danger = 'défense moyenne';
-								} elseif ($place->maxDanger >= Place::DNG_CASUAL) {
-									$danger = 'défense faible';
-								} else {
-									$danger = 'défense pratiquement inexistante';
-								}
 
 								echo '<p>';
 									echo '<span class="label">Défense</span>';
-									echo '<span class="value hb rt" title="' . $danger . '">';
-										echo '<img src="' . MEDIA . 'resources/defense.png" class="icon' . ($place->maxDanger >= Place::DNG_HARD ? '-color' : NULL) . '" alt="" />';
-										echo '<img src="' . MEDIA . 'resources/defense.png" class="icon' . ($place->maxDanger >= Place::DNG_MEDIUM ? '-color' : NULL) . '" alt="" />';
-										echo '<img src="' . MEDIA . 'resources/defense.png" class="icon' . ($place->maxDanger >= Place::DNG_EASY ? '-color' : NULL) . '" alt="" />';
-										echo '<img src="' . MEDIA . 'resources/defense.png" class="icon' . ($place->maxDanger >= Place::DNG_CASUAL ? '-color' : NULL) . '" alt="" />';
+									echo '<span class="value">';
+										$danger = [
+											0 => 'défense pratiquement inexistante',
+											Place::DNG_CASUAL => 'défense faible',
+											Place::DNG_EASY => 'défense moyenne',
+											Place::DNG_MEDIUM => 'défense forte',
+											Place::DNG_HARD => 'défense extrêmement forte'
+										];
+										foreach ($danger as $value => $label) {
+											if ($place->maxDanger >= $value) {
+												echo '<img src="' . MEDIA . 'resources/defense.png" class="icon-color" alt="" />';
+											}
+										}
 									echo '</span>';
 								echo '</p>';
 							}
@@ -149,15 +146,55 @@ echo '<div class="body">';
 
 							echo '<p>';
 								echo '<span class="label">Population</span>';
-								echo '<span class="value">' . Format::numberFormat($place->population) . 'mio.</span>';
+								echo '<span class="value">';
+									$population = [
+										0 => '',
+										50 => '',
+										100 => '',
+										150 => '',
+										200 => ''
+									];
+									foreach ($population as $value => $label) {
+										if ($place->population >= $value) {
+											echo '<img src="' . MEDIA . 'resources/population.png" class="icon-color" alt="" />';
+										}
+									}
+								echo '</span>';
 							echo '</p>';
 							echo '<p>';
 								echo '<span class="label">Ressource</span>';
-								echo '<span class="value">' . $place->coefResources . ' %</span>';
+								echo '<span class="value ">';
+									$resources = [
+										0 => '',
+										20 => '',
+										40 => '',
+										60 => '',
+										80 => ''
+									];
+									foreach ($resources as $value => $label) {
+										if ($place->coefResources >= $value) {
+											echo '<img src="' . MEDIA . 'resources/resource.png" class="icon-color" alt="" />';
+										}
+									}
+								echo '</span>';
 							echo '</p>';
 							echo '<p>';
 								echo '<span class="label">Science</span>';
-								echo '<span class="value">' . $place->coefHistory . ' %</span>';
+								echo '<span class="value">';
+								$coefHistory = Game::getImprovementFromScientificCoef($place->coefHistory);
+									$science = [
+										0 => '',
+										8 => '',
+										16 => '',
+										24 => '',
+										32 => ''
+									];
+									foreach ($science as $value => $label) {
+										if ($coefHistory >= $value) {
+											echo '<img src="' . MEDIA . 'resources/science.png" class="icon-color" alt="" />';
+										}
+									}
+								echo '</span>';
 							echo '</p>';
 						} else {
 							echo '<p><strong>' . ucfirst(Game::convertPlaceType($place->typeOfPlace)) . '</strong></p>';

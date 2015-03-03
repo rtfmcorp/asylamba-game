@@ -495,19 +495,8 @@ echo '<div id="content">';
 			$players_listPlayer[] = $player;
 		}
 
-		$avgVictoryPlayer_statPlayer = $nbPlayer_statPlayer != 0
-			? Format::numberFormat($avgVictoryPlayer_statPlayer / $nbPlayer_statPlayer, 2)
-			: 0;
-		$avgDefeatPlayer_statPlayer = $nbPlayer_statPlayer != 0
-			? Format::numberFormat($avgDefeatPlayer_statPlayer / $nbPlayer_statPlayer, 2)
-			: 0;
-		$avgPointsPlayer_statPlayer = $nbPlayer_statPlayer != 0
-			? Format::numberFormat($avgPointsPlayer_statPlayer / $nbPlayer_statPlayer, 2)
-			: 0;
-
 		include COMPONENT . 'faction/player/statPlayer.php';
 		include COMPONENT . 'faction/player/listPlayer.php';
-		include COMPONENT . 'faction/player/last.php';
 
 		ASM::$pam->changeSession($S_PAM1);
 	} else {

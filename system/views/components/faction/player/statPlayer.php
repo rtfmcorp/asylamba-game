@@ -12,7 +12,13 @@
 	# int 		avgDefeatPlayer_statPlayer
 	# int 		avgPointsPlayer_statPlayer
 
-echo '<div class="component">';
+$status = ColorResource::getInfo($faction->id, 'status');
+
+$S_PAM_LAST = ASM::$pam->getCurrentSession();
+ASM::$pam->changeSession($PAM_LAST_TOKEN);
+
+# work
+echo '<div class="component player rank">';
 	echo '<div class="head skin-1">';
 		echo '<h1>Membres</h1>';
 	echo '</div>';
@@ -23,28 +29,39 @@ echo '<div class="component">';
 				echo '<span class="value">' . $nbPlayer_statPlayer . '</span>';
 			echo '</div>';
 
-			echo '<hr />';
-
 			echo '<div class="number-box grey">';
 				echo '<span class="label">Joueurs en ligne actuellement</span>';
 				echo '<span class="value">' . $nbOnlinePlayer_statPlayer . '</span>';
 			echo '</div>';
 			
-			echo '<hr />';
+			echo '<h4>Nouveaux membres</h4>';
 
-			echo '<div class="number-box grey">';
-				echo '<span class="label">Moyenne de l\'expérience des joueurs</span>';
-				echo '<span class="value">' . $avgPointsPlayer_statPlayer . '</span>';
-			echo '</div>';
-			echo '<div class="number-box grey">';
-				echo '<span class="label">Nombre moyen des victoires des joueurs</span>';
-				echo '<span class="value">' . $avgVictoryPlayer_statPlayer . '</span>';
-			echo '</div>';
-			echo '<div class="number-box grey">';
-				echo '<span class="label">Nombre moyen des défaites des joueurs</span>';
-				echo '<span class="value">' . $avgDefeatPlayer_statPlayer . '</span>';
-			echo '</div>';
+			for ($i = 0; $i < ASM::$pam->size(); $i++) {
+				$p = ASM::$pam->get($i);
+
+				if (Utils::interval($p->dInscription, Utils::now(), 's') > 259200) {
+					if ($i == 0) {
+						echo '<p>Aucun nouveau membre ces 3 derniers jours</p>';
+					}
+					break;
+				}
+
+				echo '<div class="player">';
+					echo '<a href="' . APP_ROOT . 'diary/player-' . $p->id . '">';
+						echo '<img src="' . MEDIA . 'avatar/small/' . $p->avatar . '.png" class="picto" alt="' . $p->name . '" />';
+					echo '</a>';
+					echo '<span class="title">' . $status[$p->status - 1] . '</span>';
+					echo '<strong class="name">' . $p->name . '</strong>';
+
+					if ($p->id != CTR::$data->get('playerId')) {
+						echo '<span class="experience"><a href="' . APP_ROOT . 'message/mode-create/sendto-' . $p->id . '">Souhaiter la bienvenue</a></span>';
+					}
+				echo '</div>';
+			}
+
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
+
+ASM::$pam->changeSession($S_PAM_LAST);
 ?>

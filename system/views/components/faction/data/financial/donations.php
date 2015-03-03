@@ -19,7 +19,7 @@ echo '<div class="component player rank">';
 
 				echo '<div class="player color' . $transaction->senderColor . '">';
 					echo '<a href="' . APP_ROOT . 'diary/player-' . $transaction->rSender . '">';
-						echo '<img src="' . MEDIA . 'avatar/small/' . $transaction->senderAvatar . '.png" alt="' . $transaction->senderName . '">';
+						echo '<img src="' . MEDIA . 'avatar/small/' . $transaction->senderAvatar . '.png" class="picto" alt="' . $transaction->senderName . '">';
 					echo '</a>';
 
 					$status = ColorResource::getInfo($transaction->senderColor, 'status');
