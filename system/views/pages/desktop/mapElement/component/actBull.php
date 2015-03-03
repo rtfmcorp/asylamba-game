@@ -254,7 +254,7 @@ echo '<div class="column act">';
 					}
 
 					echo '<form class="spy-form" method="post" action="' . Format::actionBuilder('spy', ['rplace' => $place->getId()]) . '">';
-						echo '<input type="text" value="10000" />';
+						echo '<input type="text" value="10000" name="price" />';
 						echo '<button type="submit">Espionner</button>';
 					echo '</form>';
 				}
