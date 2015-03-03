@@ -87,7 +87,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `player` (
 	`stepTutorial` TINYINT unsigned DEFAULT NULL,
 	`stepDone` TINYINT unsigned NOT NULL DEFAULT 0,
 
-	`iUniversity` SMALLINT unsigned NOT NULL DEFAULT 0,
+	`iUniversity` INT unsigned NOT NULL DEFAULT 0,
 	`partNaturalSciences` TINYINT unsigned NOT NULL DEFAULT 0,
 	`partLifeSciences` TINYINT unsigned NOT NULL DEFAULT 0,
 	`partSocialPoliticalSciences` TINYINT unsigned NOT NULL DEFAULT 0,

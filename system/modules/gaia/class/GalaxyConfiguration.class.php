@@ -34,7 +34,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [125, 125],
 			'display' => [125, 125],
 			'name' => 'Secteur 1',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_VERY_HARD
 		], 
 		[
 			'id' => 2,
@@ -43,7 +43,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [133, 90],
 			'display' => [133, 90],
 			'name' => 'Secteur 2',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_HARD
 		], 
 		[
 			'id' => 3,
@@ -52,7 +52,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [157, 110],
 			'display' => [157, 110],
 			'name' => 'Secteur 3',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_HARD
 		], 
 		[
 			'id' => 4,
@@ -61,7 +61,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [157, 141],
 			'display' => [157, 141],
 			'name' => 'Secteur 4',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_HARD
 		], 
 		[
 			'id' => 5,
@@ -70,7 +70,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [133, 161],
 			'display' => [133, 161],
 			'name' => 'Secteur 5',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_HARD
 		], 
 		[
 			'id' => 6,
@@ -79,7 +79,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [102, 153],
 			'display' => [102, 153],
 			'name' => 'Secteur 6',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_HARD
 		], 
 		[
 			'id' => 7,
@@ -88,7 +88,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [89, 125],
 			'display' => [89, 125],
 			'name' => 'Secteur 7',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_HARD
 		], 
 		[
 			'id' => 8,
@@ -97,7 +97,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [102, 97],
 			'display' => [102, 97],
 			'name' => 'Secteur 8',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_HARD
 		], 
 		[
 			'id' => 9,
@@ -106,7 +106,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [109, 59],
 			'display' => [109, 59],
 			'name' => 'Secteur 9',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_MEDIUM
 		], 
 		[
 			'id' => 10,
@@ -115,7 +115,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [167, 72],
 			'display' => [167, 72],
 			'name' => 'Secteur 10',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_MEDIUM
 		], 
 		[
 			'id' => 11,
@@ -124,7 +124,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [193, 125],
 			'display' => [193, 125],
 			'name' => 'Secteur 11',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_MEDIUM
 		], 
 		[
 			'id' => 12,
@@ -133,7 +133,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [167, 178],
 			'display' => [167, 178],
 			'name' => 'Secteur 12',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_MEDIUM
 		], 
 		[
 			'id' => 13,
@@ -142,7 +142,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [109, 191],
 			'display' => [109, 191],
 			'name' => 'Secteur 13',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_MEDIUM
 		], 
 		[
 			'id' => 14,
@@ -151,7 +151,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [64, 155],
 			'display' => [64, 155],
 			'name' => 'Secteur 14',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_MEDIUM
 		], 
 		[
 			'id' => 15,
@@ -160,7 +160,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [64, 95],
 			'display' => [64, 95],
 			'name' => 'Secteur 15',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_MEDIUM
 		], 
 		[
 			'id' => 16,
@@ -169,7 +169,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [32, 61],
 			'display' => [32, 61],
 			'name' => 'Secteur 16',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_EASY
 		], 
 		[
 			'id' => 17,
@@ -187,7 +187,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [86, 26],
 			'display' => [86, 26],
 			'name' => 'Secteur 18',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_EASY
 		], 
 		[
 			'id' => 19,
@@ -196,7 +196,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [115, 23],
 			'display' => [115, 23],
 			'name' => 'Secteur 19',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_EASY
 		], 
 		[
 			'id' => 20,
@@ -214,7 +214,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [181, 30],
 			'display' => [181, 30],
 			'name' => 'Secteur 21',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_EASY
 		], 
 		[
 			'id' => 22,
@@ -223,7 +223,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [215, 38],
 			'display' => [215, 38],
 			'name' => 'Secteur 22',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_EASY
 		], 
 		[
 			'id' => 23,
@@ -241,7 +241,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [227, 110],
 			'display' => [227, 110],
 			'name' => 'Secteur 24',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_EASY
 		], 
 		[
 			'id' => 25,
@@ -250,7 +250,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [227, 140],
 			'display' => [227, 140],
 			'name' => 'Secteur 25',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_EASY
 		], 
 		[
 			'id' => 26,
@@ -268,7 +268,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [215, 212],
 			'display' => [215, 212],
 			'name' => 'Secteur 27',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_EASY
 		], 
 		[
 			'id' => 28,
@@ -277,7 +277,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [181, 220],
 			'display' => [181, 220],
 			'name' => 'Secteur 28',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_EASY
 		], 
 		[
 			'id' => 29,
@@ -295,7 +295,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [115, 227],
 			'display' => [115, 227],
 			'name' => 'Secteur 30',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_EASY
 		], 
 		[
 			'id' => 31,
@@ -304,7 +304,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [86, 224],
 			'display' => [86, 224],
 			'name' => 'Secteur 31',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_EASY
 		], 
 		[
 			'id' => 32,
@@ -322,7 +322,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [32, 189],
 			'display' => [32, 189],
 			'name' => 'Secteur 33',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_EASY
 		], 
 		[
 			'id' => 34,
@@ -331,7 +331,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [24, 158],
 			'display' => [24, 158],
 			'name' => 'Secteur 34',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_EASY
 		], 
 		[
 			'id' => 35,
@@ -349,7 +349,7 @@ abstract class GalaxyConfiguration {
 			'barycentre' => [24, 92],
 			'display' => [24, 92],
 			'name' => 'Secteur 36',
-			'danger' => GalaxyConfiguration::DNG_CASUAL
+			'danger' => GalaxyConfiguration::DNG_EASY
 		], 
 	];
 
@@ -405,7 +405,7 @@ abstract class GalaxyConfiguration {
 			'id' => 1,
 			'name' => 'ruine',
 			'placesPropotion' => [0, 0, 80, 10, 0, 10],
-			'nbrPlaces' => [1, 5]
+			'nbrPlaces' => [1, 6]
 		], [
 			'id' => 2,
 			'name' => 'nébuleuse',
@@ -415,17 +415,17 @@ abstract class GalaxyConfiguration {
 			'id' => 3,
 			'name' => 'géante bleue',
 			'placesPropotion' => [40, 25, 10, 0, 20, 5],
-			'nbrPlaces' => [12, 18]
+			'nbrPlaces' => [8, 12]
 		], [
 			'id' => 4,
 			'name' => 'naine jaune',
 			'placesPropotion' => [55, 20, 5, 0, 15, 5],
-			'nbrPlaces' => [6, 12]
+			'nbrPlaces' => [6, 10]
 		], [
 			'id' => 5,
 			'name' => 'naine rouge',
 			'placesPropotion' => [70, 10, 5, 0, 10, 5],
-			'nbrPlaces' => [2, 6]
+			'nbrPlaces' => [1, 5]
 		]
 	];
 
@@ -440,8 +440,8 @@ abstract class GalaxyConfiguration {
 			'id' => 2,
 			'name' => 'planète gazeuse',
 			'resources' => 38,
-			'credits' => 44,
-			'history' => 18,
+			'credits' => 52,
+			'history' => 10,
 		], [
 			'id' => 3,
 			'name' => 'ruine',
@@ -451,15 +451,15 @@ abstract class GalaxyConfiguration {
 		], [
 			'id' => 4,
 			'name' => 'poches de gaz',
-			'resources' => 4,
-			'credits' => 92,
+			'resources' => 0,
+			'credits' => 96,
 			'history' => 4,
 		], [
 			'id' => 5,
 			'name' => 'ceinture d\'astéroides',
-			'resources' => 90,
-			'credits' => 6,
-			'history' => 4,
+			'resources' => 98,
+			'credits' => 0,
+			'history' => 2,
 		], [
 			'id' => 6,
 			'name' => 'lieu vide',

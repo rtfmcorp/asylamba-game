@@ -257,7 +257,7 @@ abstract class GalaxyGenerator {
 							$abilities[$l] = $points;
 							$pointsTot -= $points;
 						} else {
-							$abilities[$l] = $pointsTot;
+							$abilities[$l] = $pointsTot < 5 ? 5 : $pointsTot;
 						}
 
 						$z++;
@@ -276,7 +276,7 @@ abstract class GalaxyGenerator {
 					$population = GalaxyConfiguration::$places[$type - 1]['credits'];
 					$resources 	= GalaxyConfiguration::$places[$type - 1]['resources'];
 					$history 	= GalaxyConfiguration::$places[$type - 1]['history'];
-					$stRES		= rand(5000000, 100000000);
+					$stRES		= rand(5000000, 80000000);
 				}
 
 				# TODO DANGER
