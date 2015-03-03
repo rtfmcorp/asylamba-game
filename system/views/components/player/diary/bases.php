@@ -17,7 +17,7 @@ echo '<div class="component">';
 				$ob = $ob_diaryBases[$i];
 				echo '<div class="number-box grey">';
 					echo '<span class="value">' . $ob->getName() . '</span>';
-					echo '<span class="label">secteur ' . $ob->getSector() . ' | ' . $ob->getPoints() . ' points</span>';
+					echo '<span class="label">secteur ' . $ob->getSector() . '</span>';
 
 					echo '<span class="group-link">';
 						echo '<a href="' . APP_ROOT . 'map/place-' . $ob->getId() . '" class="hb lt" title="voir sur la carte">→</a>';
