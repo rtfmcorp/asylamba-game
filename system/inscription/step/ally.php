@@ -26,67 +26,70 @@ echo '<div id="content">';
 
 	$_CLM = ASM::$clm->getCurrentSession();
 	ASM::$clm->newSession(FALSE);
-	ASM::$clm->load(array(), array('activePlayers', 'ASC'));
+	ASM::$clm->load([], ['activePlayers', 'ASC']);
 
-	for ($i = 1; $i < ASM::$clm->size(); $i++) {
-		$ally = ASM::$clm->get($i)->id;
+	for ($i = 0; $i < ASM::$clm->size(); $i++) {
+		$ally = ASM::$clm->get($i);
 
-		echo '<div class="component inscription color' . $ally . '">';
-			echo '<div class="head skin-1">';
-				echo '<img class="color' . $ally . '" src="' . MEDIA . 'ally/big/color' . $ally . '.png" alt="" />';
-				echo '<h2>' . ColorResource::getInfo($ally, 'officialName') . '</h2>';
-				echo '<em>' . ColorResource::getInfo($ally, 'government') . '</em>';
-			echo '</div>';
-			echo '<div class="fix-body">';
-				echo '<div class="body">';
-					echo '<h4>A propos</h4>';
-					echo '<p>' . ColorResource::getInfo($ally, 'desc1') . '</p>';
-					echo '<h4>Moeurs & autres</h4>';
-					echo '<p>' . ColorResource::getInfo($ally, 'desc2') . '</p>';
-					echo '<h4>Guerre</h4>';
-					echo '<p>' . ColorResource::getInfo($ally, 'desc3') . '</p>';
-					echo '<h4>Culture</h4>';
-					echo '<p>' . ColorResource::getInfo($ally, 'desc4') . '</p>';
+		if ($ally->id != 0) {
+			echo '<div class="component inscription color' . $ally->id . '">';
+				echo '<div class="head skin-1">';
+					echo '<img class="color' . $ally->id . '" src="' . MEDIA . 'ally/big/color' . $ally->id . '.png" alt="" />';
+					echo '<h2>' . ColorResource::getInfo($ally->id, 'officialName') . '</h2>';
+					echo '<em>' . ColorResource::getInfo($ally->id, 'government') . '</em>';
+				echo '</div>';
+				echo '<div class="fix-body">';
+					echo '<div class="body">';
+						echo '<h4>A propos</h4>';
+						echo '<p>' . ColorResource::getInfo($ally->id, 'desc1') . '</p>';
+						echo '<h4>Moeurs & autres</h4>';
+						echo '<p>' . ColorResource::getInfo($ally->id, 'desc2') . '</p>';
+						echo '<h4>Guerre</h4>';
+						echo '<p>' . ColorResource::getInfo($ally->id, 'desc3') . '</p>';
+						echo '<h4>Culture</h4>';
+						echo '<p>' . ColorResource::getInfo($ally->id, 'desc4') . '</p>';
+					echo '</div>';
 				echo '</div>';
 			echo '</div>';
-		echo '</div>';
 
-		echo '<div class="component inscription color' . $ally . '">';
-			echo '<div class="head"></div>';
-			echo '<div class="fix-body">';
-				echo '<div class="body">';
-					if (!ASM::$clm->get($i)->isClosed) {
-						echo '<a href="' . APP_ROOT . 'inscription/step-2/ally-' . $ally . '" class="chooseLink">';
-							echo '<strong>choisir cette faction</strong>';
-							if ($i == 0) {
-								echo '<em>recommandée pour les joueurs débutants</em>';
-							} else {
-								echo '<em>et passer à l\'étape suivante</em>';
-							}
-						echo '</a>';
-					} else {
-						echo '<span class="chooseLink">';
-							echo '<strong>Cette faction est actuellement fermée</strong>';
-							echo '<em>De manière à équilibrer le jeu</em>';
-						echo '</span>';
-					}
-					echo '<blockquote>"' . ColorResource::getInfo($ally, 'devise') . '"</blockquote>';
-
-						echo '<h4>Bonus & Malus de faction</h4>';
-						$bonuses = ColorResource::getInfo($ally, 'bonus');
-						foreach ($bonuses as $bonus) {
-							echo '<div class="build-item" style="margin: 25px 0;">';
-								echo '<div class="name">';
-									echo '<img src="' . MEDIA . $bonus['path'] . '" alt="" />';
-									echo '<strong>' . $bonus['title'] . '</strong>';
-									echo '<em>' . $bonus['desc'] . '</em>';
-								echo '</div>';
-							echo '</div>';
+			echo '<div class="component inscription color' . $ally->id . '">';
+				echo '<div class="head"></div>';
+				echo '<div class="fix-body">';
+					echo '<div class="body">';
+						if (!$ally->isClosed) {
+							echo '<a href="' . APP_ROOT . 'inscription/step-2/ally-' . $ally->id . '" class="chooseLink">';
+								echo '<strong>choisir cette faction</strong>';
+								if ($i == 0) {
+									echo '<em>recommandée pour les joueurs débutants</em>';
+								} else {
+									echo '<em>et passer à l\'étape suivante</em>';
+								}
+							echo '</a>';
+						} else {
+							echo '<span class="chooseLink">';
+								echo '<strong>Cette faction est actuellement fermée</strong>';
+								echo '<em>De manière à équilibrer le jeu</em>';
+							echo '</span>';
 						}
+						echo '<blockquote>"' . ColorResource::getInfo($ally->id, 'devise') . '"</blockquote>';
+
+							echo '<h4>Bonus & Malus de faction</h4>';
+							$bonuses = ColorResource::getInfo($ally->id, 'bonus');
+							foreach ($bonuses as $bonus) {
+								echo '<div class="build-item" style="margin: 25px 0;">';
+									echo '<div class="name">';
+										echo '<img src="' . MEDIA . $bonus['path'] . '" alt="" />';
+										echo '<strong>' . $bonus['title'] . '</strong>';
+										echo '<em>' . $bonus['desc'] . '</em>';
+									echo '</div>';
+								echo '</div>';
+							}
+					echo '</div>';
 				echo '</div>';
 			echo '</div>';
-		echo '</div>';
+		}
 	}
+
 	ASM::$clm->changeSession($_CLM);
 echo '</div>';
 ?>

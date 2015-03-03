@@ -12,6 +12,7 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 		if (abs((int)$time - time()) <= 300) {
 			CTR::$data->add('prebindkey', $bindkey);
 
+			# mode de création de joueur
 			if (HIGHMODE && CTR::$get->exist('mode')) {
 				CTR::$data->add('high-mode', TRUE);
 			} else {
@@ -64,9 +65,9 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 			# algorythme de fermeture automatique des alliances (auto-balancing)
 		$_CLM = ASM::$clm->getCurrentSession();
 		ASM::$clm->newSession(FALSE);
-		ASM::$clm->load(array());
+		ASM::$clm->load(['isClosed' => FALSE]);
 
-		$ally = array();
+		$ally = [];
 
 		for ($i = 0; $i < ASM::$clm->size(); $i++) {
 			if (!ASM::$clm->get($i)->isClosed) {
@@ -79,7 +80,7 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 			CTR::$data->get('inscription')->add('ally', CTR::$get->get('ally'));
 		} elseif (!CTR::$data->get('inscription')->exist('ally')) {
 			CTR::$alert->add('faction inconnues ou non-sélectionnable');
-			CTR::redirect('inscription/bindkey-' . CTR::$data->get('inscription')->get('bindkey'));
+			CTR::redirect('inscription/');
 		}
 	} else {
 		header('Location: ' . GETOUT_ROOT . '/profil/message-forbiddenaccess');
@@ -87,8 +88,9 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 	}
 } elseif (CTR::$get->get('step') == 3) {
 	if (CTR::$data->exist('inscription')) {
-		# check nom dejà utilisé
 		include_once ZEUS;
+
+		# check nom dejà utilisé
 		$S_PAM_INSCR2 = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession();
 		ASM::$pam->load(array('name' => CTR::$post->get('pseudo')));
@@ -101,7 +103,6 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 				CTR::$data->get('inscription')->add('pseudo', CTR::$post->get('pseudo'));
 
 				# check avatar
-				
 				if ((int)CTR::$post->get('avatar') > 0 && (int)CTR::$post->get('avatar') <= NB_AVATAR) {
 					CTR::$data->get('inscription')->add('avatar', CTR::$post->get('avatar'));
 				} elseif (!CTR::$data->get('inscription')->exist('avatar')) {
