@@ -57,6 +57,19 @@ try {
 	$rs = new Research();
 	$rs->rPlayer = $pl->getId();
 
+	if (CTR::$data->get('high-mode')) {
+		$rs->mathLevel = 15;
+		$rs->physLevel = 15;
+		$rs->chemLevel = 15;
+		$rs->bioLevel = 15;
+		$rs->mediLevel = 15;
+		$rs->econoLevel = 15;
+		$rs->psychoLevel = 15;
+		$rs->networkLevel = 15;
+		$rs->algoLevel = 15;
+		$rs->statLevel = 15;
+	}
+
 	$rs->naturalTech = Research::MATH;
 	$rs->lifeTech = Research::BIO;
 	$rs->socialTech = Research::ECONO;
