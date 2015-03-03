@@ -27,9 +27,18 @@ ASM::$pam->load(array('statement' => PAM_ACTIVE));
 <?php
 		echo '<a href="' . APP_ROOT . 'inscription/bindkey-' . Security::crypt(Security::buildBindkey(Utils::generateString(10)), KEY_SERVER) . '">';
 			echo '<em>Créer un</em>';
-			echo '<strong>Personnage</strong>';
+			echo '<strong>Personnage lvl. 1</strong>';
 			echo '<img src="' . MEDIA . 'avatar/big/empty.png" alt="" />';
 		echo '</a>';
+
+		if (HIGHMODE) {
+			echo '<a href="' . APP_ROOT . 'inscription/bindkey-' . Security::crypt(Security::buildBindkey(Utils::generateString(10)), KEY_SERVER) . '/mode-high">';
+				echo '<em>Créer un</em>';
+				echo '<strong>Personnage lvl. 5</strong>';
+				echo '<img src="' . MEDIA . 'avatar/big/empty.png" alt="" />';
+				echo '<span class="number">+5</span>';
+			echo '</a>';
+		}
 
 		for ($i = 0; $i < ASM::$pam->size(); $i++) {
 			$player = ASM::$pam->get($i);

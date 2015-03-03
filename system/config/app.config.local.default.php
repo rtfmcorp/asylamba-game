@@ -9,6 +9,8 @@ define('DEVMODE', 				TRUE);
 # active les APIs de confirmation
 # note : il faut remplir d'autre infos pour que ça marche
 define('APIMODE', 				TRUE);
+# active la création de personnage au niveau 5
+define('HIGHMODE', 				FALSE);
 # active les feuilles de style multiples par faction
 # note : les style peuvent ne pas être à jour
 define('COLORSTYLE', 			TRUE);

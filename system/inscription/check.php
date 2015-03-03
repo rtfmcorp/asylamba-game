@@ -11,6 +11,13 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 		# vérification de la validité du bindkey
 		if (abs((int)$time - time()) <= 300) {
 			CTR::$data->add('prebindkey', $bindkey);
+
+			if (HIGHMODE && CTR::$get->exist('mode')) {
+				CTR::$data->add('high-mode', TRUE);
+			} else {
+				CTR::$data->add('high-mode', FALSE);
+			}
+
 			CTR::redirect('inscription');
 		} else {
 			header('Location: ' . GETOUT_ROOT . 'profil');
