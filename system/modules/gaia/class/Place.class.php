@@ -464,7 +464,7 @@ class Place {
 				
 				#création du rapport
 				$report = $this->createReport();
-				$percentage = (($report->PevAtEndD + 1) / ($report->setPevInBeginD + 1)) * 100;
+				$percentage = (($report->pevAtEndD + 1) / ($report->pevInBeginD + 1)) * 100;
 				$this->danger = round(($percentage * $this->danger) / 100);
 
 				$this->sendNotif(self::LOOTEMPTYSSUCCESS, $commander, $report->id);
@@ -480,7 +480,7 @@ class Place {
 				
 				#création du rapport
 				$report = $this->createReport();
-				$percentage = (($report->PevAtEndD + 1) / ($report->setPevInBeginD + 1)) * 100;
+				$percentage = (($report->pevAtEndD + 1) / ($report->pevInBeginD + 1)) * 100;
 				$this->danger = round(($percentage * $this->danger) / 100);
 
 				$this->sendNotif(self::LOOTEMPTYFAIL, $commander, $report->id);
@@ -808,7 +808,7 @@ class Place {
 				
 				#création du rapport
 				$report = $this->createReport();
-				$percentage = (($report->PevAtEndD + 1) / ($report->setPevInBeginD + 1)) * 100;
+				$percentage = (($report->pevAtEndD + 1) / ($report->pevInBeginD + 1)) * 100;
 				$this->danger = round(($percentage * $this->danger) / 100);
 
 				$this->sendNotif(self::CONQUEREMPTYSSUCCESS, $commander, $report->id);
@@ -816,7 +816,7 @@ class Place {
 			} else {
 				#création du rapport
 				$report = $this->createReport();
-				$percentage = (($report->PevAtEndD + 1) / ($report->setPevInBeginD + 1)) * 100;
+				$percentage = (($report->pevAtEndD + 1) / ($report->pevInBeginD + 1)) * 100;
 				$this->danger = round(($percentage * $this->danger) / 100);
 
 				$this->sendNotif(self::CONQUEREMPTYFAIL, $commander);
@@ -940,6 +940,7 @@ class Place {
 		$report->placeName = ($this->baseName == '') ? 'planète rebelle' : $this->baseName;
 		$report->setArmies();
 		$report->setPev();
+		
 		$id = ASM::$rpm->add($report);
 		LiveReport::clear();
 
@@ -1362,7 +1363,6 @@ class Place {
 		$vCommander->level = ceil((((($this->maxDanger / (self::DANGERMAX / self::LEVELMAXVCOMMANDER))) * 9) + ($this->population / (self::POPMAX / self::LEVELMAXVCOMMANDER))) / 10);
 
 		$nbrsquadron = ceil($vCommander->level * (($this->danger + 1) / ($this->maxDanger + 1)));
-		$vCommander->id = $nbrsquadron;
 
 		$army = array();
 		$squadronsIds = array();

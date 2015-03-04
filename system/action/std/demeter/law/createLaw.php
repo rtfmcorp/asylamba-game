@@ -13,7 +13,7 @@ include_once GAIA;
 $type = Utils::getHTTPData('type');
 $duration = Utils::getHTTPData('duration');
 
-if ($type !== FALSE) {
+if ($type !== FALSE)) {
 	if (LawResources::size() >= $type) {
 		if (CTR::$data->get('playerInfo')->get('status') == LawResources::getInfo($type, 'department')) {
 			$_CLM = ASM::$clm->getCurrentsession();
