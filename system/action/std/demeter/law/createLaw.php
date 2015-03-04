@@ -53,7 +53,11 @@ if ($type !== FALSE)) {
 					$date->modify('+' . 5 . ' years');
 					$law->dEnd = $date->format('Y-m-d H:i:s');
 				} else if ($duration) {
-					$duration = ($duration > 2400) ? 2400 : $duration;
+					if ($duration > 2400) {
+						$duration = 2400;
+					} else if ($duration < 1) {
+						$duration = 1;
+					}
 					$date = new DateTime(Utils::now());
 					$date->modify('+' . $duration . ' hours');
 					$law->dEnd = $date->format('Y-m-d H:i:s');
@@ -62,21 +66,23 @@ if ($type !== FALSE)) {
 				}
 			}
 			if (LawResources::getInfo($type, 'bonusLaw')) {
-				if (ASM::$clm->get()->credits >= LawResources::getInfo($type, 'price') * $duration * ASM::$clm->get()->activePlayers) {
-					$law->options = serialize(array());
-					$_LAM = ASM::$lam->getCurrentsession();
-					ASM::$lam->newSession();
-					ASM::$lam->load(array('type' => $type, 'rColor' => CTR::$data->get('playerInfo')->get('color'), 'statement' => array(Law::EFFECTIVE, Law::VOTATION)));
+				if ($duration != FALSE) {
+					if (ASM::$clm->get()->credits >= LawResources::getInfo($type, 'price') * $duration * ASM::$clm->get()->activePlayers) {
+						$law->options = serialize(array());
+						$_LAM = ASM::$lam->getCurrentsession();
+						ASM::$lam->newSession();
+						ASM::$lam->load(array('type' => $type, 'rColor' => CTR::$data->get('playerInfo')->get('color'), 'statement' => array(Law::EFFECTIVE, Law::VOTATION)));
 
-					if (ASM::$lam->size() == 0) {
-						ASM::$lam->add($law);
-						ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price') * $duration * ASM::$clm->get()->activePlayers;
-						CTR::redirect('faction/view-senate');	
+						if (ASM::$lam->size() == 0) {
+							ASM::$lam->add($law);
+							ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price') * $duration * ASM::$clm->get()->activePlayers;
+							CTR::redirect('faction/view-senate');	
+						} else {
+							CTR::$alert->add('Cette loi est déjà proposée ou en vigueur.', ALERT_STD_ERROR);
+						}
 					} else {
-						CTR::$alert->add('Cette loi est déjà proposée ou en vigueur.', ALERT_STD_ERROR);
+						CTR::$alert->add('Il n\'y a pas assez de crédits dans les caisses de l\'Etat.', ALERT_STD_ERROR);
 					}
-				} else {
-					CTR::$alert->add('Il n\'y a pas assez de crédits dans les caisses de l\'Etat.', ALERT_STD_ERROR);
 				}
 			} else {
 				if (ASM::$clm->get()->credits >= LawResources::getInfo($type, 'price')) {

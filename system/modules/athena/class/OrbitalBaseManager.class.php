@@ -466,6 +466,9 @@ class OrbitalBaseManager extends Manager {
 			$base->iSchool = 0;
 			$base->iAntiSpy = 0;
 
+			# mise à jour de la date de création pour qu'elle soit dans l'ordre
+			$base->dCreation = Utils::now();
+
 			# ajouter/enlever la base dans le controller
 			if (CTR::$data->get('playerId') == $newOwner) {
 				CTR::$data->addBase('ob', $base->getId(), $base->getName(), $base->getSector(), $base->getSystem(), '1-' . Game::getSizeOfPlanet($base->getPlanetPopulation()), $base->typeOfBase);
