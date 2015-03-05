@@ -229,7 +229,7 @@ echo '<div id="content">';
 			} elseif (CTR::$get->get('mode') == 'manage') {
 				$S_PAM_OLD = ASM::$pam->getCurrentSession();
 
-				$PLAYER_GOV_TOKEN = ASM::$pam->newSession();
+				$PLAYER_GOV_TOKEN = ASM::$pam->newSession(FALSE);
 				ASM::$pam->load(
 					array('rColor' => $faction->id, 'status' => array(PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER)),
 					array('status', 'DESC')
@@ -238,7 +238,10 @@ echo '<div id="content">';
 				$PLAYER_SENATE_TOKEN = ASM::$pam->newSession();
 				ASM::$pam->load(array('rColor' => $faction->id, 'status' => PAM_PARLIAMENT));
 
+				$targetMode = TRUE;
+
 				include COMPONENT . 'faction/government/manage/main.php';
+				include COMPONENT . 'faction/data/tactical/targets.php';
 				include COMPONENT . 'default.php';
 
 				ASM::$pam->changeSession($S_PAM_OLD);

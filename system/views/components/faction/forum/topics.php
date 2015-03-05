@@ -50,7 +50,7 @@ echo '<div class="component report topic nav">';
 							$isNew = '';
 						}
 
-						echo '<div class="item ' . $isNew . '">';
+						echo '<div class="item">';
 							echo '<div class="left">';
 								echo '<span class="' . $isNew . '">' . $t->nbMessage . '</span>';
 							echo '</div>';

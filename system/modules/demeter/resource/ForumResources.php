@@ -12,7 +12,6 @@
 
 #id des forums : < 10 = pour tous les gens d'une faction, >= 10 < 20 = pour le gouvernement d'une fac, >= 20 pour les chefs de toutes les factions
 Class ForumResources {
-
 	private static $idLink = array(1, 2, 3, 4, 5, 10, 20);
 
 	private static $forums = array(

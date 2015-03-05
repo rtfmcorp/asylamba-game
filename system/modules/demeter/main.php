@@ -25,6 +25,7 @@ include_once 'class/Color.class.php';
 include_once 'class/ColorManager.class.php';
 
 include_once 'resource/ForumResources.php';
+include_once 'resource/VictoryResources.php';
 include_once 'resource/LawResources.php';
 
 ASM::runDemeter();
