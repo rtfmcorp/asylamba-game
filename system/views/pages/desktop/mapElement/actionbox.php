@@ -119,8 +119,6 @@ echo '<div class="body">';
 							} else {
 								echo '<p><strong>Planète rebelle</strong></p>';
 								echo '<hr />';
-								echo '<p>Non-revendiquée</p>';
-								echo '<hr />';
 
 
 								echo '<p>';

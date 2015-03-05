@@ -189,20 +189,30 @@ echo '<div class="column act">';
 					ASM::$crm->changeSession($S_CRM3);
 
 					$distance = Game::getDistance($defaultBase->xSystem, $place->xSystem, $defaultBase->ySystem, $place->ySystem);
+
 					$bonusA = ($defaultBase->sector != $place->rSector) ? CRM_ROUTEBONUSSECTOR : 1;
 					$bonusB = (CTR::$data->get('playerInfo')->get('color')) != $place->playerColor ? CRM_ROUTEBONUSCOLOR : 1;
+
 					$price = Game::getRCPrice($distance);
 					$income = Game::getRCIncome($distance, $bonusA, $bonusB);
 
 					echo '<div class="rc">';
 						echo '<img src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '-' . Game::getSizeOfPlanet($place->population) . '.png" alt="" class="planet" />';
-						echo 'Revenu par relève : ' . Format::numberFormat($income) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" /><br />';
-						echo 'Bassin de population : ' . Format::numberFormat($place->population + $defaultBase->planetPopulation) . ' millions<br />';
+
+						echo '<span class="label-box">';
+							echo '<span class="key">Revenu par relève</span>';
+							echo '<span class="val">' . Format::numberFormat($income) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" /></span>';
+						echo '</span>';
+
 						if (CTR::$data->get('playerInfo')->get('color') == ColorResource::NEGORA) {
 							# bonus if the player is from Negore
 							$price -= round($price * ColorResource::BONUS_NEGORA_ROUTE / 100);
 						}
-						echo 'Coûts de construction : ' . Format::numberFormat($price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" /><br />';
+						echo '<span class="label-box">';
+							echo '<span class="key">Coût de construction</span>';
+							echo '<span class="val">' . Format::numberFormat($price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" /></span>';
+						echo '</span>';
+
 						if ($proposed) {
 							echo '<a href="' . APP_ROOT . 'bases/view-spatioport" class="button">Annuler la proposition</a>';
 						} elseif ($notAccepted) {
@@ -219,8 +229,10 @@ echo '<div class="column act">';
 								}
 							}
 
-							if ($ur < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $defaultBase->levelSpatioport, 'nbRoutesMax')) {
-								echo '<a href="' . Format::actionBuilder('proposeroute', ['basefrom' => $defaultBase->getId(), 'baseto' => $place->getId()]) . '" class="button">Proposer une route</a>';
+							if ($price > CTR::$data->get('playerInfo')->get('credit')) {
+								echo '<span class="button">Vous n\'avez pas assez de crédit</span>';
+							} elseif ($ur < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $defaultBase->levelSpatioport, 'nbRoutesMax')) {
+								echo '<a href="' . Format::actionBuilder('proposeroute', ['basefrom' => $defaultBase->getId(), 'baseto' => $place->getId()]) . '" class="button">Proposer une route commerciale</a>';
 							} else {
 								echo '<span class="button">Pas assez de slot</span>';
 							}
