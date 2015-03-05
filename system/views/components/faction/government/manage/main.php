@@ -21,7 +21,7 @@ echo '<div class="component profil player size1">';
 					if (ASM::$pam->get($i)->status == $type) {
 						echo '<div class="player">';
 							echo '<a href="' . APP_ROOT . 'diary/player-' .  ASM::$pam->get($i)->id . '">';
-								echo '<img src="' . MEDIA . 'avatar/small/' .  ASM::$pam->get($i)->avatar . '.png" alt="' .  ASM::$pam->get($i)->name . '"  class="picto"/>';
+								echo '<img src="' . MEDIA . 'avatar/small/' .  ASM::$pam->get($i)->avatar . '.png" alt="' .  ASM::$pam->get($i)->name . '"  class="picto" />';
 							echo '</a>';
 							echo '<span class="title">' . $status[ ASM::$pam->get($i)->status - 1] . '</span>';
 							echo '<strong class="name">' .  ASM::$pam->get($i)->name . '</strong>';

@@ -20,7 +20,7 @@ echo '<div class="component player rank">';
 
 				echo '<div class="player color' . $transaction->getFormatedReceiverColor() . '">';
 					echo '<a href="' . $transaction->getFormatedReceiverLink() . '">';
-						echo '<img src="' . MEDIA . 'avatar/small/' . $transaction->getFormatedReceiverAvatar() . '.png" alt="' . $transaction->getFormatedReceiverName() . '">';
+						echo '<img src="' . MEDIA . 'avatar/small/' . $transaction->getFormatedReceiverAvatar() . '.png" alt="' . $transaction->getFormatedReceiverName() . '" class="picto" />';
 					echo '</a>';
 
 					echo '<span class="title">' . $transaction->getFormatedReceiverStatus() . '</span>';
