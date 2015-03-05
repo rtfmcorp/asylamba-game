@@ -230,10 +230,12 @@ echo '<div class="component space size3">';
 						echo '<strong>' . Game::formatCoord($ob_obSituation->getXSystem(), $ob_obSituation->getYSystem(), $ob_obSituation->getPosition(), $ob_obSituation->getSector()) . '</strong>';
 					echo '</div>';
 					echo '<img src="' . MEDIA . 'orbitalbase/place1-' . Game::getSizeOfPlanet($ob_obSituation->getPlanetPopulation()) . '.png" alt="planète" />';
+
+					$science = Game::getImprovementFromScientificCoef($ob_obSituation->getPlanetHistory());
 					echo '<div class="info bottom">';
 						echo '<strong>' . Format::numberFormat($ob_obSituation->getPlanetPopulation() * 1000000) . '</strong> habitants<br />';
-						echo $ob_obSituation->getPlanetResources() . ' % coeff. ressource<br />';
-						echo $ob_obSituation->getPlanetHistory() . ' % coeff. historique';
+						echo '<strong>' . $ob_obSituation->getPlanetResources() . '</strong> % coeff. ressource<br />';
+						echo '<strong>' . $science . '</strong> % de bonus scientifique';
 					echo '</div>';
 				echo '</div>';
 			echo '</div>';

@@ -117,10 +117,12 @@ echo '<div class="component size3 space">';
 						echo '</strong>';
 					echo '</div>';
 					echo '<img src="' . MEDIA . 'orbitalbase/place1-' . Game::getSizeOfPlanet($place_spy->population) . '.png" alt="planète" />';
+
+					$science = Game::getImprovementFromScientificCoef($place_spy->coefHistory);
 					echo '<div class="info bottom">';
 						echo '<strong>' . Format::numberFormat($place_spy->population * 1000000) . '</strong> habitants<br />';
-						echo $place_spy->coefResources . ' % coeff. ressource<br />';
-						echo $place_spy->coefHistory . ' % coeff. scientifique';
+						echo '<strong>' . $place_spy->coefResources . '</strong> % coeff. ressource<br />';
+						echo '<strong>' . $science . '</strong> % de bonus scientifique';
 					echo '</div>';
 				echo '</div>';
 
