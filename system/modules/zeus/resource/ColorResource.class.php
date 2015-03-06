@@ -14,7 +14,7 @@ class ColorResource {
 	const BONUS_EMPIRE_CRUISER = 5;		# price 5% less for cruiser and heavy cruiser
 	const BONUS_NEGORA_ROUTE = 3;		# price 3% less for the price of a commercial route
 	const BONUS_CARDAN_COLO = 10;		# price 10% less for colo or conquest
-	const BONUS_APHERA_TECHNO = 4;		# 4% less time to build technologies
+	const BONUS_APHERA_TECHNO = 2;		# 4% less time to build technologies
 
 	public static function getInfo($id, $info) {
 		if ($id <= count(self::$colors)) {
@@ -182,7 +182,7 @@ class ColorResource {
 			'desc4' => 'N’appréciant pas d’être à l’écart des décisions politiques, les aphéréens savent faire preuve de poigne lors que cela est nécessaire, déployant des moyens militaires impressionnants pour faire valoir leur idéologie démocratique au travers de toute la Galaxie.',
 			'bonus' => array(
 				array('path' => 'faction/bonus/bonus6-2.png', 'title' => '+ 4% efficacité', 'desc' => 'Votre Université est plus efficace'),
-				array('path' => 'faction/bonus/bonus6-3.png', 'title' => '- 4% temps', 'desc' => 'Vos technologies se développent plus rapidement')),
+				array('path' => 'faction/bonus/bonus6-3.png', 'title' => '- 2% temps', 'desc' => 'Vos technologies se développent plus rapidement')),
 			'mandateDuration' => 518400,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Aphéréen gagne du prestige en menant à terme une Recherche, en développant une Technologie et en construisant la Technosphère.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 

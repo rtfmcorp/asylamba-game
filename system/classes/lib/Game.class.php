@@ -371,7 +371,7 @@ class Game {
 		if ($coef < 10) {
 			return 0;
 		} else {
-			return ceil(0.001 * $coef * $coef - 0.023 * $coef + 0.43);
+			return ceil(0.0029 * $coef * $coef - 0.0115 * $coef + 0.7251);
 		}
 	}
 }

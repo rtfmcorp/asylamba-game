@@ -537,7 +537,7 @@ class TechnologyResource {
 			'requiredTechnosphere' => 12,
 			'requiredResearch' => array(0,0,0,0,0,0,0,0,9,7),
 			'time' => 60000,
-			'maxLevel' => 25,
+			'maxLevel' => 15,
 			'category' => 2,
 			'resource' => 1740,
 			'credit' => 16000,
@@ -545,7 +545,7 @@ class TechnologyResource {
 			'column' => 5,
 			'shortDescription' => 'Le prochain niveau augmentera la vitesse de développement de technologies dans la Technosphère de {x}%.',
 			'description' => 'La technologie « Intelligence artificielle » vous permet d’augmenter la vitesse de recherche de vos technologies. En effet, après que vos scientifiques aient pu mettre en place un réseau de robotique pour gérer la totalité de votre Technosphère, le complexe a gagné en efficacité.',
-			'bonus' => 2
+			'bonus' => 1
 		),
 		array(
 			'name' => 'Mercatique',

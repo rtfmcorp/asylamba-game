@@ -87,9 +87,9 @@ Class LawResources {
 			'department' => 5,
 			'undeterminedDuration' => FALSE,
 			'price' => 10,
-			'bonus' => 25,
-			'shortDescription' => 'Augmente la vitesse de développement des technologies (dans la technosphère) de 25% pendant 30 relèves.',
-			'longDescription' => 'Cette loi offre à tous les membres de la factions un bonus dans le développement de leur technologies de 25% (cumulé avec les autres bonus). La durée est de 30 relèves.<br /><br />Seules les recherches lancées lorsque le bonus est actif seront impactées.',
+			'bonus' => 10,
+			'shortDescription' => 'Augmente la vitesse de développement des technologies (dans la technosphère) de 10% pendant 30 relèves.',
+			'longDescription' => 'Cette loi offre à tous les membres de la faction un bonus dans le développement de leurs technologies de 10% (cumulé avec les autres bonus). La durée est de 30 relèves.<br /><br />Seules les recherches lancées lorsque le bonus est actif seront impactées.',
 			'image' => '',
 			'isImplemented' => TRUE),
 		array(
