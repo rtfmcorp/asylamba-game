@@ -57,10 +57,6 @@ echo '<div class="component techno">';
 			echo '</div>';
 
 			$techBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::TECHNOSPHERE_SPEED);
-			if (CTR::$data->get('playerInfo')->get('color') == ColorResource::APHERA) {
-				# bonus if the player is from Aphera
-				$techBonus += ColorResource::BONUS_APHERA_TECHNO;
-			}
 
 			echo '<div class="number-box ' . (($techBonus == 0) ? 'grey' : '') . '">';
 				echo '<span class="label">bonus de vitesse grâce à la technologie Intelligence Artificielle</span>';
@@ -70,9 +66,20 @@ echo '<div class="component techno">';
 			echo '</div>';
 			ASM::$tqm->changeSession($S_TQM2);
 
+			$factionBonus = 0;
+			if (CTR::$data->get('playerInfo')->get('color') == ColorResource::APHERA) {
+				# bonus if the player is from Aphera
+				$factionBonus += ColorResource::BONUS_APHERA_TECHNO;
+				echo '<div class="number-box ' . (($factionBonus == 0) ? 'grey' : '') . '">';
+					echo '<span class="label">bonus de faction Aphéra</span>';
+					echo '<span class="value">';
+						echo $factionBonus . ' %';
+					echo '</span>';
+				echo '</div>';
+			}
 			echo '<hr />';
 			
-			$totalBonus = $coefBonus + $techBonus;
+			$totalBonus = $coefBonus + $techBonus + $factionBonus;
 			echo '<div class="number-box ' . (($totalBonus == 0) ? 'grey' : '') . '">';
 				echo '<span class="label">bonus total de vitesse de recherche</span>';
 				echo '<span class="value">';

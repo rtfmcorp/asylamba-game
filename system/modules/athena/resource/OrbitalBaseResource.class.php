@@ -646,7 +646,7 @@ class OrbitalBaseResource {
 				array(119142,	365480,	150,10),
 			),
 			'maxLevel' => array(0, 20, 10, 20),
-			'description' => 'Le <strong>Spatio-Port</strong>, véritable plaque tournante du commerce dans votre domaine, permet, en fonction de sa taille, de créer et de gérer des <strong>routes commerciales</strong> sur le long terme avec vos partenaires. Pour valider une route commerciale vous devez la proposer et l’autre joueur doit l’accepter.<br /><br />Une route commerciale génère des revenus chez les deux parties. Plus la route est longue et plus les planètes sont peuplées, meilleurs sera son rendement. De plus, les routes commerciales entre deux secteurs différents ainsi qu’avec des joueurs non-alliés ont tendance à générer plus de revenus.',
+			'description' => 'Le <strong>Spatio-Port</strong>, véritable plaque tournante du commerce dans votre domaine, permet, en fonction de sa taille, de créer et de gérer des <strong>routes commerciales</strong> sur le long terme avec vos partenaires. Pour valider une route commerciale vous devez la proposer et l’autre joueur doit l’accepter.<br /><br />Une route commerciale génère des revenus chez les deux parties. Plus la route est longue, plus le prix pour la mettre en place sera élevé. Le rendement d\'une route est également proportionnel à la distance, mais il est par contre plafonné aux environs de 100 années lumières. Il faudra donc plus de temps pour rentabiliser une très longue route.<br /> Les routes commerciales entre deux secteurs différents ainsi qu’avec des joueurs non-alliés ont tendance à générer plus de revenus.',
 			'techno' => 4
 		)
 	);

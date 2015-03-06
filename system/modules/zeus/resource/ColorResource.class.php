@@ -14,7 +14,7 @@ class ColorResource {
 	const BONUS_EMPIRE_CRUISER = 5;		# price 5% less for cruiser and heavy cruiser
 	const BONUS_NEGORA_ROUTE = 3;		# price 3% less for the price of a commercial route
 	const BONUS_CARDAN_COLO = 10;		# price 10% less for colo or conquest
-	const BONUS_APHERA_TECHNO = 4;		# 4% less time to build technologies
+	const BONUS_APHERA_TECHNO = 2;		# 4% less time to build technologies
 
 	public static function getInfo($id, $info) {
 		if ($id <= count(self::$colors)) {
@@ -153,7 +153,7 @@ class ColorResource {
 			'demonym' 		=> 'nervéens',
 			'factionPoint' 	=> 'Points d\'industrie',
 			'status' 		=> array('Citoyen', 'Député', 'Ministre des Finances', 'Ministre de la Défense', 'Premier Ministre', 'Président'),
-			'devise' 		=> 'Jamais ne tombera,<br />La ville aux Milles Sous-sols',
+			'devise' 		=> 'Jamais ne tombera,<br />La ville aux Mille Sous-sols',
 			'desc1' => 'La république Nervéenne est composée d’une grande communauté préférant vivre à l’écart, cachée dans d’incroyables labyrinthes sous-terrain. Elle est connue principalement pour sa capacité à camoufler la quasi-totalité de ses infrastructures à ses ennemis ainsi que pour ses qualités de bâtisseurs hors-normes.',
 			'desc2' => 'Communauté soudée autour de son Président, la Nerve est une faction de grands travailleurs et de bâtisseurs parmi les plus fameux de toute la Galaxie. Ils réalisent des édifices enfouis d’une finesse et d’une complexité incroyable.',
 			'desc3' => 'N’ayant pas une grande connaissance de l’art de la guerre, mais contraints de lutter pour la préservation de leur mode de vie, ils se sont adaptés et ont formé de redoutables forteresses défensives.',
@@ -182,7 +182,7 @@ class ColorResource {
 			'desc4' => 'N’appréciant pas d’être à l’écart des décisions politiques, les aphéréens savent faire preuve de poigne lors que cela est nécessaire, déployant des moyens militaires impressionnants pour faire valoir leur idéologie démocratique au travers de toute la Galaxie.',
 			'bonus' => array(
 				array('path' => 'faction/bonus/bonus6-2.png', 'title' => '+ 4% efficacité', 'desc' => 'Votre Université est plus efficace'),
-				array('path' => 'faction/bonus/bonus6-3.png', 'title' => '- 4% temps', 'desc' => 'Vos technologies se développent plus rapidement')),
+				array('path' => 'faction/bonus/bonus6-3.png', 'title' => '- 2% temps', 'desc' => 'Vos technologies se développent plus rapidement')),
 			'mandateDuration' => 518400,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Aphéréen gagne du prestige en menant à terme une Recherche, en développant une Technologie et en construisant la Technosphère.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
