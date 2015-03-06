@@ -102,7 +102,6 @@ echo '<div class="body">';
 						if ($place->typeOfPlace == 1) {
 							if ($place->typeOfBase != 0) {
 								echo '<p><strong>' . $place->baseName . '</strong></p>';
-								echo '<hr />';
 
 								echo '<p>propriété du</p>';
 								echo '<p>';
@@ -118,8 +117,8 @@ echo '<div class="body">';
 								echo '</p>';
 							} else {
 								echo '<p><strong>Planète rebelle</strong></p>';
+								
 								echo '<hr />';
-
 
 								echo '<p>';
 									echo '<span class="label">Défense</span>';
@@ -212,8 +211,6 @@ echo '<div class="body">';
 								echo '<span class="value">' . Format::numberFormat($place->resources * $place->population / 100) . '</span>';
 							echo '</p>';
 						}
-
-						echo '<hr />';
 
 						echo '<p>';
 							echo '<span class="label">Distance</span>';
