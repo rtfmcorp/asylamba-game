@@ -153,7 +153,7 @@ class ColorResource {
 			'demonym' 		=> 'nervéens',
 			'factionPoint' 	=> 'Points d\'industrie',
 			'status' 		=> array('Citoyen', 'Député', 'Ministre des Finances', 'Ministre de la Défense', 'Premier Ministre', 'Président'),
-			'devise' 		=> 'Jamais ne tombera,<br />La ville aux Milles Sous-sols',
+			'devise' 		=> 'Jamais ne tombera,<br />La ville aux Mille Sous-sols',
 			'desc1' => 'La république Nervéenne est composée d’une grande communauté préférant vivre à l’écart, cachée dans d’incroyables labyrinthes sous-terrain. Elle est connue principalement pour sa capacité à camoufler la quasi-totalité de ses infrastructures à ses ennemis ainsi que pour ses qualités de bâtisseurs hors-normes.',
 			'desc2' => 'Communauté soudée autour de son Président, la Nerve est une faction de grands travailleurs et de bâtisseurs parmi les plus fameux de toute la Galaxie. Ils réalisent des édifices enfouis d’une finesse et d’une complexité incroyable.',
 			'desc3' => 'N’ayant pas une grande connaissance de l’art de la guerre, mais contraints de lutter pour la préservation de leur mode de vie, ils se sont adaptés et ont formé de redoutables forteresses défensives.',

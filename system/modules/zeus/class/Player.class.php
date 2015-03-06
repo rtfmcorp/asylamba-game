@@ -121,63 +121,65 @@ class Player {
 
 	// UPDATE METHOD
 	public function uMethod() {
-		$token = CTC::createContext('player');
-		$now   = Utils::now();
+		if ($this->statement != PAM_DEAD) {
+			$token = CTC::createContext('player');
+			$now   = Utils::now();
 
-		if (Utils::interval($this->uPlayer, $now, 'h') > 0) {
-			# update time
-			$hours = Utils::intervalDates($now, $this->uPlayer);
-			$this->uPlayer = $now;
+			if (Utils::interval($this->uPlayer, $now, 'h') > 0) {
+				# update time
+				$hours = Utils::intervalDates($now, $this->uPlayer);
+				$this->uPlayer = $now;
 
-			include_once ATHENA;
-			include_once HERMES;
-			include_once PROMETHEE;
-			include_once ARES;
-			include_once DEMETER;
-			include_once GAIA;
+				include_once ATHENA;
+				include_once HERMES;
+				include_once PROMETHEE;
+				include_once ARES;
+				include_once DEMETER;
+				include_once GAIA;
 
-			# load orbital bases
-			$S_OBM1 = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession();
-			ASM::$obm->load(array('rPlayer' => $this->id));
+				# load orbital bases
+				$S_OBM1 = ASM::$obm->getCurrentSession();
+				ASM::$obm->newSession();
+				ASM::$obm->load(array('rPlayer' => $this->id));
 
-			# load the bonus
-			$playerBonus = new PlayerBonus($this->id);
-			$playerBonus->load();
+				# load the bonus
+				$playerBonus = new PlayerBonus($this->id);
+				$playerBonus->load();
 
-			# load the commanders
-			$S_COM1 = ASM::$com->getCurrentSession();
-			ASM::$com->newSession();
-			ASM::$com->load(
-				array(
-					'c.rPlayer' => $this->id,
-					'c.statement' => array(Commander::AFFECTED, Commander::MOVING)), 
-				array(
-					'c.experience', 'DESC',
-					'c.statement', 'ASC')
-			);
+				# load the commanders
+				$S_COM1 = ASM::$com->getCurrentSession();
+				ASM::$com->newSession();
+				ASM::$com->load(
+					array(
+						'c.rPlayer' => $this->id,
+						'c.statement' => array(Commander::AFFECTED, Commander::MOVING)), 
+					array(
+						'c.experience', 'DESC',
+						'c.statement', 'ASC')
+				);
 
-			# load the researches
-			$S_RSM1 = ASM::$rsm->getCurrentSession();
-			ASM::$rsm->newSession();
-			ASM::$rsm->load(array('rPlayer' => $this->id));
+				# load the researches
+				$S_RSM1 = ASM::$rsm->getCurrentSession();
+				ASM::$rsm->newSession();
+				ASM::$rsm->load(array('rPlayer' => $this->id));
 
-			# load the colors (faction)
-			$S_CLM1 = ASM::$clm->getCurrentSession();
-			ASM::$clm->newSession();
-			ASM::$clm->load(array());
+				# load the colors (faction)
+				$S_CLM1 = ASM::$clm->getCurrentSession();
+				ASM::$clm->newSession();
+				ASM::$clm->load(array());
 
-			foreach ($hours as $key => $hour) {
-				CTC::add($hour, $this, 'uCredit', array(ASM::$obm->getCurrentSession(), $playerBonus, ASM::$com->getCurrentSession(), ASM::$rsm->getCurrentSession(), ASM::$clm->getCurrentSession()));
+				foreach ($hours as $key => $hour) {
+					CTC::add($hour, $this, 'uCredit', array(ASM::$obm->getCurrentSession(), $playerBonus, ASM::$com->getCurrentSession(), ASM::$rsm->getCurrentSession(), ASM::$clm->getCurrentSession()));
+				}
+
+				ASM::$clm->changeSession($S_CLM1);
+				ASM::$rsm->changeSession($S_RSM1);
+				ASM::$com->changeSession($S_COM1);
+				ASM::$obm->changeSession($S_OBM1);
 			}
 
-			ASM::$clm->changeSession($S_CLM1);
-			ASM::$rsm->changeSession($S_RSM1);
-			ASM::$com->changeSession($S_COM1);
-			ASM::$obm->changeSession($S_OBM1);
+			CTC::applyContext($token);
 		}
-
-		CTC::applyContext($token);
 	}
 
 	public function uCredit($obmSession, $playerBonus, $comSession, $rsmSession, $clmSession) {
