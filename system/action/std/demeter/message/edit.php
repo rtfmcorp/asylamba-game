@@ -17,7 +17,7 @@ if ($content && $id) {
 				CTR::$alert->add('Pas les droits.', ALERT_STD_FILLFORM);
 			}
 		} else {
-			CTR::$alert->add('message existe pas.', ALERT_STD_FILLFORM);	
+			CTR::$alert->add('message existe pas.', ALERT_STD_FILLFORM);
 		}
 		ASM::$fmm->changeSession($_FMM);
 } else {

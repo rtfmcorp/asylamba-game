@@ -143,6 +143,15 @@ $p->avatar = 'jm';
 $p->rColor = 0;
 ASM::$pam->add($p);
 
+# Joueurs de factions
+for ($i = 1; $i <= 7; $i++) {
+	$p->bind = Utils::generateString(25);
+	$p->name = ColorResource::getInfo($i, 'officialName');
+	$p->avatar = ('color-' . $i);
+	$p->rColor = $i;
+	ASM::$pam->add($p);
+}
+
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table sector</h2>';
 

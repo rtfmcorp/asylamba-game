@@ -87,4 +87,5 @@ define('KEY_API', 				'123456');
 # définition des ids des différants joueurs systèmes
 define('ID_GAIA', 				1);
 define('ID_JEANMI', 			2);
+define('SHIFT_FACTION', 		2);
 ?>

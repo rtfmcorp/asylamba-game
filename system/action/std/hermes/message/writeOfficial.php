@@ -14,13 +14,13 @@ if (CTR::$data->get('playerInfo')->get('admin') == FALSE) {
 	$ally = Utils::getHTTPData('ally');
 	$message = Utils::getHTTPData('message');
 
-	// protection des inputs
+	# protection des inputs
 	$p = new Parser();
 	$message = $p->protect($message);
 
 	if ($message !== '') {
 		# sender
-		$jeanMi = 0;
+		$jeanMi = ID_JEANMI;
 		$messageCounter = 0;
 
 		# message

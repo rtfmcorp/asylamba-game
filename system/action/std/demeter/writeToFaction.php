@@ -11,8 +11,6 @@ $n3 				= Utils::getHTTPData('target-n3');
 $n2 				= Utils::getHTTPData('target-n2');
 $n1 				= Utils::getHTTPData('target-n1');
 
-$sender 			= -1;
-
 # protection des inputs
 $p = new Parser();
 $message = $p->parse($message);
@@ -23,6 +21,9 @@ if ($message !== FALSE) {
 	ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
 
 	if (ASM::$pam->size() == 1) {
+		# find sender ID
+		$sender = ASM::$pam->get()->rColor + SHIFT_FACTION;
+
 		if (ASM::$pam->get()->status > PAM_PARLIAMENT) {
 			if ($message !== '' && strlen($message) < 25000) {
 				$counter = 0;
@@ -46,7 +47,7 @@ if ($message !== FALSE) {
 
 				if (!empty($avbRank)) {
 					ASM::$pam->newSession(FALSE);
-					ASM::$pam->load(array('rColor' => $faction, 'status' => $avbRank));
+					ASM::$pam->load(array('rColor' => $faction, 'status' => $avbRank, 'statement' => PAM_ACTIVE));
 
 					$S_MSM1 = ASM::$msm->getCurrentSession();
 
