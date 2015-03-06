@@ -33,50 +33,55 @@ if (count($verif) > 1) {
 			if (ASM::$obm->size() > 0) {
 				$base = ASM::$obm->get();
 
-				# delete buildings in queue
-				$S_BQM1 = ASM::$bqm->getCurrentSession();
-				ASM::$bqm->newSession(ASM_UMODE);
-				ASM::$bqm->load(array('rOrbitalBase' => $baseId), array('dEnd'));
-				for ($i = ASM::$bqm->size() - 1; $i >= 0; $i--) {
-					ASM::$bqm->deleteById(ASM::$bqm->get($i)->id);
-				}
-				ASM::$bqm->changeSession($S_BQM1);
+				if (Utils::interval(Utils::now(), $base->dCreation, 'h') >= OrbitalBase::COOL_DOWN) {
 
-				# change base type if it is a capital
-				if ($base->typeOfBase == OrbitalBase::TYP_CAPITAL) {
-					if (rand(0,1) == 0) {
-						$newType = OrbitalBase::TYP_COMMERCIAL;
-					} else {
-						$newType = OrbitalBase::TYP_MILITARY;
+					# delete buildings in queue
+					$S_BQM1 = ASM::$bqm->getCurrentSession();
+					ASM::$bqm->newSession(ASM_UMODE);
+					ASM::$bqm->load(array('rOrbitalBase' => $baseId), array('dEnd'));
+					for ($i = ASM::$bqm->size() - 1; $i >= 0; $i--) {
+						ASM::$bqm->deleteById(ASM::$bqm->get($i)->id);
 					}
-					# delete extra buildings
-					for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) { 
-						$maxLevel = OrbitalBaseResource::getBuildingInfo($i, 'maxLevel', $newType);
-						if ($base->getBuildingLevel($i) > $maxLevel) {
-							$base->setBuildingLevel($i, $maxLevel);
+					ASM::$bqm->changeSession($S_BQM1);
+
+					# change base type if it is a capital
+					if ($base->typeOfBase == OrbitalBase::TYP_CAPITAL) {
+						if (rand(0,1) == 0) {
+							$newType = OrbitalBase::TYP_COMMERCIAL;
+						} else {
+							$newType = OrbitalBase::TYP_MILITARY;
+						}
+						# delete extra buildings
+						for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) { 
+							$maxLevel = OrbitalBaseResource::getBuildingInfo($i, 'maxLevel', $newType);
+							if ($base->getBuildingLevel($i) > $maxLevel) {
+								$base->setBuildingLevel($i, $maxLevel);
+							}
+						}
+						# change base type
+						$base->typeOfBase = $newType;
+					}
+
+					$_PLM = ASM::$plm->getCurrentSession();
+					ASM::$plm->newSession();
+					ASM::$plm->load(array('id' => $baseId));
+
+					ASM::$obm->changeOwnerById($baseId, $base, ID_GAIA);
+					ASM::$plm->get()->rPlayer = ID_GAIA;
+
+					ASM::$plm->changeSession($_PLM);
+					
+					for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
+						if ($verif[$i] == $baseId) {
+							unset($verif[$i]);
+							$verif = array_merge($verif);
 						}
 					}
-					# change base type
-					$base->typeOfBase = $newType;
+					CTR::$alert->add('Base abandonnée', ALERT_STD_SUCCESS);
+					CTR::redirect(Format::actionBuilder('switchbase', ['base' => $verif[0]]));
+				} else {
+					CTR::$alert->add('Vous ne pouvez pas abandonner de base dans les ' . OrbitalBase::COOL_DOWN . ' premières heures.', ALERT_STD_ERROR);	
 				}
-
-				$_PLM = ASM::$plm->getCurrentSession();
-				ASM::$plm->newSession();
-				ASM::$plm->load(array('id' => $baseId));
-
-				ASM::$obm->changeOwnerById($baseId, $base, ID_GAIA);
-				ASM::$plm->get()->rPlayer = ID_GAIA;
-
-				ASM::$plm->changeSession($_PLM);
-				
-				for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-					if ($verif[$i] == $baseId) {
-						unset($verif[$i]);
-						$verif = array_merge($verif);
-					}
-				}
-				CTR::$alert->add('Base abandonnée', ALERT_STD_SUCCESS);
-				CTR::redirect(Format::actionBuilder('switchbase', ['base' => $verif[0]]));
 			} else {
 				CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);	
 			}
