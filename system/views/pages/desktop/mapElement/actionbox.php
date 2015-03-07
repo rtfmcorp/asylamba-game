@@ -79,9 +79,19 @@ echo '<div class="body">';
 			echo '<li class="place color' . $place->playerColor . '">';
 				echo '<a href="#" class="openplace" data-target="' . $i . '">';
 					echo '<strong>' . $place->position . '</strong>';
-					echo $place->typeOfPlace == 1
-						? '<img class="land" src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '-' . Game::getSizeOfPlanet($place->population) . '.png" />'
-						: '<img class="land" src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '.png" />';
+					if ($place->typeOfPlace == 1) {
+						echo '<img class="land" src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '-' . Game::getSizeOfPlanet($place->population) . '.png" />';
+					} else {
+						if ($place->resources > 50000000) {
+							$size = 3;
+						} elseif ($place->resources > 25000000) {
+							$size = 2;
+						} else {
+							$size = 1;
+						}
+
+						echo '<img class="land" src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '-' . $size . '.png" />';
+					}
 					if ($place->rPlayer != 0) {
 						echo '<img class="avatar" src="' . MEDIA . '/avatar/small/' . $place->playerAvatar . '.png" />';
 					}
