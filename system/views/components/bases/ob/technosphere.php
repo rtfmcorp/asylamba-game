@@ -39,53 +39,23 @@ echo '<div class="component techno">';
 		echo '<div class="body">';
 
 			$coef = $ob_tech->planetHistory;
-			echo '<div class="number-box ' . (($coef == 0) ? 'grey' : '') . '">';
-				echo '<span class="label">coefficient scientifique du lieu</span>';
-				echo '<span class="value">';
-					echo $coef . ' %';
-				echo '</span>';
-			echo '</div>';
-
-			echo '<hr />';
-
 			$coefBonus = Game::getImprovementFromScientificCoef($coef);
-			echo '<div class="number-box ' . (($coefBonus == 0) ? 'grey' : '') . '">';
-				echo '<span class="label">bonus de vitesse grâce au coefficient scientifique</span>';
-				echo '<span class="value">';
-					echo $coefBonus . ' %';
-				echo '</span>';
-			echo '</div>';
-
 			$techBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::TECHNOSPHERE_SPEED);
-
-			echo '<div class="number-box ' . (($techBonus == 0) ? 'grey' : '') . '">';
-				echo '<span class="label">bonus de vitesse grâce à la technologie Intelligence Artificielle</span>';
-				echo '<span class="value">';
-					echo $techBonus . ' %';
-				echo '</span>';
-			echo '</div>';
-			ASM::$tqm->changeSession($S_TQM2);
-
 			$factionBonus = 0;
 			if (CTR::$data->get('playerInfo')->get('color') == ColorResource::APHERA) {
 				# bonus if the player is from Aphera
 				$factionBonus += ColorResource::BONUS_APHERA_TECHNO;
-				echo '<div class="number-box ' . (($factionBonus == 0) ? 'grey' : '') . '">';
-					echo '<span class="label">bonus de faction Aphéra</span>';
-					echo '<span class="value">';
-						echo $factionBonus . ' %';
-					echo '</span>';
-				echo '</div>';
-			}
-			echo '<hr />';
-			
+			}			
 			$totalBonus = $coefBonus + $techBonus + $factionBonus;
+			
 			echo '<div class="number-box ' . (($totalBonus == 0) ? 'grey' : '') . '">';
 				echo '<span class="label">bonus total de vitesse de recherche</span>';
 				echo '<span class="value">';
 					echo $totalBonus . ' %';
 				echo '</span>';
 			echo '</div>';
+
+			ASM::$tqm->changeSession($S_TQM2);
 
 			echo '<h4>File de construction</h4>';
 			echo '<div class="queue">';

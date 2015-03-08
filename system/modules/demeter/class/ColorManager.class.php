@@ -142,11 +142,12 @@ class ColorManager extends Manager {
 			points = ?,
 			sectors = ?,
 			electionStatement = ?,
-			$color->electionStatement,
+			isClosed = ?,
 			dLastElection = ?');
 		$aw = $qr->execute(array(
 				$color->id,
 				$color->alive,
+				$color->isWinner,
 				$color->credits,
 				$color->players,
 				$color->activePlayers,
