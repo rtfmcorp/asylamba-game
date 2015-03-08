@@ -206,6 +206,26 @@ if ($type !== FALSE) {
 								CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 							}
 							break;
+						case Law::NEUTRALPACT:
+							$rColor = Utils::getHTTPData('rcolor');
+							if ($rColor !== FALSE) {
+								if ($rColor >= 1 && $rColor <= 7 && $rColor != ASM::$clm->get()->id) {
+
+									if (ASM::$clm->get()->colorLink[$rColor] != Color::NEUTRAL) {
+										$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
+										ASM::$lam->add($law);
+										ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+										CTR::redirect('faction/view-senate');
+									} else {
+										CTR::$alert->add('Vous considérez déjà cette faction comme votre alliée.', ALERT_STD_ERROR);
+									}
+								} else {
+									CTR::$alert->add('Cette faction n\'existe pas ou il s\'agit de la votre.', ALERT_STD_ERROR);
+								}
+							} else {
+								CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
+							}
+							break;
 						case Law::PEACEPACT:
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($rColor !== FALSE) {

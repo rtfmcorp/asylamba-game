@@ -451,6 +451,11 @@ class Color {
 		}
 	}
 
+	public function uFinishNeutral($law) {
+		$this->colorLink[$law->options['rColor']] = Color::NEUTRAL;
+		$law->statement = Law::OBSOLETE;
+	}
+
 	public function uFinishPeace($law) {
 		$this->colorLink[$law->options['rColor']] = Color::PEACE;
 		$law->statement = Law::OBSOLETE;
@@ -628,6 +633,9 @@ class Color {
 							break;
 						case lAW::TOTALALLIANCE:
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishAlly', array(ASM::$lam->get($i)));
+							break;
+						case lAW::NEUTRALPACT:
+							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishNeutral', array(ASM::$lam->get($i)));
 							break;
 						
 						default:

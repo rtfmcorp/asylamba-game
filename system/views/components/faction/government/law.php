@@ -51,6 +51,14 @@ echo '<div class="component profil player">';
 							echo '</select>';
 
 							ASM::$sem->changeSession($S_SEM_T);
+						} elseif ($governmentLaw_id == Law::NEUTRALPACT) {
+
+							echo '<select name="rcolor">';
+								echo '<option value="-1">Choisissez une faction</option>';
+								for ($j = 1; $j <= 7; $j++) {
+									echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
+								}
+							echo '</select>';
 						} elseif ($governmentLaw_id == Law::PEACEPACT) {
 
 							echo '<select name="rcolor">';
