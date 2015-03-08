@@ -13,7 +13,7 @@ include_once GAIA;
 $type = Utils::getHTTPData('type');
 $duration = Utils::getHTTPData('duration');
 
-if ($type !== FALSE)) {
+if ($type !== FALSE) {
 	if (LawResources::size() >= $type) {
 		if (CTR::$data->get('playerInfo')->get('status') == LawResources::getInfo($type, 'department')) {
 			$_CLM = ASM::$clm->getCurrentsession();
@@ -87,7 +87,7 @@ if ($type !== FALSE)) {
 			} else {
 				if (ASM::$clm->get()->credits >= LawResources::getInfo($type, 'price')) {
 					switch ($type) {
-						case SECTORTAX:
+						case Law::SECTORTAX:
 							$taxes = round(Utils::getHTTPData('taxes'));
 							$rSector = Utils::getHTTPData('rsector');
 							if ($taxes !== FALSE && $rSector !== FALSE) {
@@ -114,7 +114,7 @@ if ($type !== FALSE)) {
 								CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 							}
 							break;
-						case SECTORNAME:
+						case Law::SECTORNAME:
 							$rSector = Utils::getHTTPData('rsector');
 							$name = Utils::getHTTPData('name');
 							if ($rSector !== FALSE && $name !== FALSE) {
@@ -138,7 +138,7 @@ if ($type !== FALSE)) {
 								CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 							}
 							break;
-						case COMTAXEXPORT:
+						case Law::COMTAXEXPORT:
 							$taxes = round(Utils::getHTTPData('taxes'));
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($taxes !== FALSE && $rColor !== FALSE) {
@@ -172,7 +172,7 @@ if ($type !== FALSE)) {
 								CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 							}
 							break;
-						case COMTAXIMPORT:
+						case Law::COMTAXIMPORT:
 							$taxes = round(Utils::getHTTPData('taxes'));
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($taxes !== FALSE && $rColor !== FALSE) {
@@ -206,7 +206,27 @@ if ($type !== FALSE)) {
 								CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 							}
 							break;
-						case PEACEPACT:
+						case Law::PEACEPACT:
+							$rColor = Utils::getHTTPData('rcolor');
+							if ($rColor !== FALSE) {
+								if ($rColor >= 1 && $rColor <= 7 && $rColor != ASM::$clm->get()->id) {
+
+									if (ASM::$clm->get()->colorLink[$rColor] != Color::PEACE) {
+										$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
+										ASM::$lam->add($law);
+										ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+										CTR::redirect('faction/view-senate');
+									} else {
+										CTR::$alert->add('Vous considérez déjà cette faction comme votre alliée.', ALERT_STD_ERROR);
+									}
+								} else {
+									CTR::$alert->add('Cette faction n\'existe pas ou il s\'agit de la votre.', ALERT_STD_ERROR);
+								}
+							} else {
+								CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
+							}
+							break;
+						case Law::TOTALALLIANCE:
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($rColor !== FALSE) {
 								if ($rColor >= 1 && $rColor <= 7 && $rColor != ASM::$clm->get()->id) {
@@ -226,12 +246,12 @@ if ($type !== FALSE)) {
 								CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 							}
 							break;
-						case WARDECLARATION:
+						case Law::WARDECLARATION:
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($rColor !== FALSE) {
 								if ($rColor >= 1 && $rColor <= 7 && $rColor != ASM::$clm->get()->id) {
 
-									if (ASM::$clm->get()->colorLink[$rColor] != Color::ALLY) {
+									if (ASM::$clm->get()->colorLink[$rColor] != Color::ENEMY) {
 										$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
 										ASM::$lam->add($law);
 										ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');

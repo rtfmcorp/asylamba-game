@@ -118,6 +118,19 @@ Class LawResources {
 			'longDescription' => '',
 			'image' => '',
 			'isImplemented' => TRUE),
+		array(
+			'id' => 9,
+			'bonusLaw' => FALSE,
+			'devName' => 'total alliance',
+			'name' => 'alliance totale',
+			'department' => 6,
+			'undeterminedDuration' => FALSE,
+			'price' => 10000,
+			'bonus' => 0,
+			'shortDescription' => 'Avoir une alliance totale entre 2 factions ...',
+			'longDescription' => '',
+			'image' => '',
+			'isImplemented' => TRUE),
 	);
 
 	public static function getInfo($id, $info) {

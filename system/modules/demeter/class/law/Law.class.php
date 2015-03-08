@@ -24,6 +24,7 @@ class Law {
 	const TECHNOLOGYTRANSFER		= 6;
 	const PEACEPACT					= 7;
 	const WARDECLARATION			= 8;
+	const TOTALALLIANCE				= 9;
 
 
 	const VOTEDURATION 				= 86400;

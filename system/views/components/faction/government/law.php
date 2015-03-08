@@ -23,7 +23,7 @@ echo '<div class="component profil player">';
 						? '</a>' : '<span>';
 				} else {
 					echo '<form action="' . Format::actionBuilder('createlaw', ['type' => $governmentLaw_id]) . '" method="post">';
-						if ($governmentLaw_id == SECTORTAX) {
+						if ($governmentLaw_id == Law::SECTORTAX) {
 							echo '<input type="text" placeholder="Nouvel impôt en pourcent" name="taxes" />';
 							
 							$S_SEM_T = ASM::$sem->getCurrentSession();
@@ -37,7 +37,7 @@ echo '<div class="component profil player">';
 							echo '</select>';
 
 							ASM::$sem->changeSession($S_SEM_T);
-						} elseif ($governmentLaw_id == SECTORNAME) {
+						} elseif ($governmentLaw_id == Law::SECTORNAME) {
 							echo '<input type="text" placeholder="Nouveau nom du secteur" name="name" />';
 							
 							$S_SEM_T = ASM::$sem->getCurrentSession();
@@ -51,7 +51,7 @@ echo '<div class="component profil player">';
 							echo '</select>';
 
 							ASM::$sem->changeSession($S_SEM_T);
-						} elseif ($governmentLaw_id == PEACEPACT) {
+						} elseif ($governmentLaw_id == Law::PEACEPACT) {
 
 							echo '<select name="rcolor">';
 								echo '<option value="-1">Choisissez une faction</option>';
@@ -59,7 +59,15 @@ echo '<div class="component profil player">';
 									echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
 								}
 							echo '</select>';
-						} elseif ($governmentLaw_id == WARDECLARATION) {
+						} elseif ($governmentLaw_id == Law::WARDECLARATION) {
+
+							echo '<select name="rcolor">';
+								echo '<option value="-1">Choisissez une faction</option>';
+								for ($j = 1; $j <= 7; $j++) {
+									echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
+								}
+							echo '</select>';
+						} elseif ($governmentLaw_id == Law::TOTALALLIANCE) {
 
 							echo '<select name="rcolor">';
 								echo '<option value="-1">Choisissez une faction</option>';

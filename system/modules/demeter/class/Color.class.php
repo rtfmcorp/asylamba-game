@@ -19,8 +19,9 @@ class Color {
 
 	# Relation avec les autres factions
 	const NEUTRAL 					= 0;
-	const ALLY 						= 1;
-	const ENEMY 					= 2;
+	const PEACE 					= 1;
+	const ALLY 					= 2;
+	const ENEMY 					= 3;
 
 	# constantes de prestiges
 	const TWO_POINTS_PER_LEVEL 		= 2;
@@ -450,6 +451,11 @@ class Color {
 		}
 	}
 
+	public function uFinishPeace($law) {
+		$this->colorLink[$law->options['rColor']] = Color::PEACE;
+		$law->statement = Law::OBSOLETE;
+	}
+
 	public function uFinishAlly($law) {
 		$this->colorLink[$law->options['rColor']] = Color::ALLY;
 		$law->statement = Law::OBSOLETE;
@@ -615,10 +621,13 @@ class Color {
 							ASM::$ctm->changeSession($_CTM);
 							break;
 						case lAW::PEACEPACT:
-							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishAlly', array(ASM::$lam->get($i)));
+							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishPeace', array(ASM::$lam->get($i)));
 							break;
 						case lAW::WARDECLARATION:
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishEnemy', array(ASM::$lam->get($i)));
+							break;
+						case lAW::TOTALALLIANCE:
+							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishAlly', array(ASM::$lam->get($i)));
 							break;
 						
 						default:
