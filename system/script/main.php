@@ -19,6 +19,7 @@ $scripts = array(
 	array('test.updatetuto', '/test/updatetuto.php'),
 	array('test.ctc', '/test/ctc.php'),
 	array('test.virtualcommander', '/test/virtualcommander.php'),
+	array('test.ally', '/test/ally.php'),
 
 	array('utils.sectors', '/utils/sectors.php'),
 	array('utils.maprender', '/utils/map-render.php'),

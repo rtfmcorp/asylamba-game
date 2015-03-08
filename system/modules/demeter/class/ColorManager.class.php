@@ -19,12 +19,8 @@ class ColorManager extends Manager {
 		$formatLimit = Utils::arrayToLimit($limit);
 
 		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT c.*,
-				cl.rColorLinked AS clRColorLinked,
-				cl.statement AS clStatement
+		$qr = $db->prepare('SELECT c.*
 			FROM color AS c
-			LEFT JOIN colorLink AS cl
-				ON cl.rColor = c.id
 			' . $formatWhere .'
 			' . $formatOrder .'
 			' . $formatLimit
@@ -47,38 +43,46 @@ class ColorManager extends Manager {
 		}
 
 		$awColor = $qr->fetchAll();
+
+		$qr->closeCursor();
+
+		$qr = $db->prepare('SELECT c.*
+			FROM colorLink AS c ORDER BY rColorLinked'
+		);
+
+		$qr->execute();
+
+		$awColorLink = $qr->fetchAll();
 		$qr->closeCursor();
 
 		$colorsArray = array();
 		for ($i = 0; $i < count($awColor); $i++) {
-			if (array_key_exists($awColor[$i]['id'], $colorsArray)) {
-				$colorsArray[$awColor[$i]['id']]->colorLink[$awColor[$i]['clRColorLinked']] = $awColor[$i]['clStatement'];
-			} else {
-				$color = new Color();
-				$color->id = $awColor[$i]['id'];
-				$color->alive = $awColor[$i]['alive'];
-				$color->alive = $awColor[$i]['isWinner'];
-				$color->credits = $awColor[$i]['credits'];
-				$color->players = $awColor[$i]['players'];
-				$color->activePlayers = $awColor[$i]['activePlayers'];
-				$color->points = $awColor[$i]['points'];
-				$color->sectors = $awColor[$i]['sectors'];
-				$color->electionStatement = $awColor[$i]['electionStatement'];
-				$color->isClosed = $awColor[$i]['isClosed'];
-				$color->dLastElection = $awColor[$i]['dLastElection'];
-				$color->colorLink[0] = Color::NEUTRAL;
+			$color = new Color();
+			$color->id = $awColor[$i]['id'];
+			$color->alive = $awColor[$i]['alive'];
+			$color->alive = $awColor[$i]['isWinner'];
+			$color->credits = $awColor[$i]['credits'];
+			$color->players = $awColor[$i]['players'];
+			$color->activePlayers = $awColor[$i]['activePlayers'];
+			$color->points = $awColor[$i]['points'];
+			$color->sectors = $awColor[$i]['sectors'];
+			$color->electionStatement = $awColor[$i]['electionStatement'];
+			$color->isClosed = $awColor[$i]['isClosed'];
+			$color->dLastElection = $awColor[$i]['dLastElection'];
+			$color->colorLink[0] = Color::NEUTRAL;
 
-				$colorsArray[$color->id] = $color;
+			foreach ($awColorLink AS $colorLink) {
+				if ($colorLink['rColor'] == $color->id) {
+					$color->colorLink[] = $colorLink['statement'];
+				}
 			}
-		}
 
-		foreach ($colorsArray AS $color) {
-			$color->colorLink = ksort($color->colorLink);
 			$this->_Add($color);
 			if ($this->currentSession->getUMode()) {
 				$color->uMethod();
 			}
 		}
+			
 	}
 
 	public function save() {
