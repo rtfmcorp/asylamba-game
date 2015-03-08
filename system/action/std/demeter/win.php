@@ -13,8 +13,8 @@ if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
 	$hasAlreadyWin 	= FALSE;
 	$faction 		= NULL;
 
-	for ($i = 0; $i < ASM::$clm->size(); $i++) { 
-		if (ASM::$clm->get($i)->isWinner) {
+	for ($i = 0; $i < ASM::$clm->size(); $i++) {
+		if (ASM::$clm->get($i)->isWinner == TRUE) {
 			$hasAlreadyWin = TRUE;
 		}
 
@@ -31,28 +31,32 @@ if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
 		$sm->load();
 
 		# vérification des objectifs
+		$isTargetsValid = FALSE;
+
 		for ($i = 1; $i <= VictoryResources::size(); $i++) { 
-			$targets = VictoryResources::getInfo($i ,'targets');
-			$isValid = 0;
+			$targets = VictoryResources::getInfo($i, 'targets');
+			$isTargetValid = TRUE;
 
 			foreach ($targets as $key => $target) {
 				$sectors = 0;
 
-				for ($i = 0; $i < $sm->size(); $i++) {
-					if ($sm->get($i)->rColor == $faction->id && in_array($sm->get($i)->id, $target['sectors'])) {
+				for ($j = 0; $j < $sm->size(); $j++) {
+					if ($sm->get($j)->rColor == $faction->id && in_array($sm->get($j)->id, $target['sectors'])) {
 						$sectors++;
 					}
 				}
 
-				if ($sectors >= $target['nb']) {
-					$isValid++;
-				}
+				$isTargetValid = $sectors >= $target['nb']
+					? $isTargetValid && TRUE
+					: $isTargetValid && FALSE;
 			}
+
+			$isTargetsValid = $isTargetsValid || $isTargetValid;
 		}
 
-		if ($isValid == count($targets)) {
+		if ($isTargetsValid) {
 			# la faction gagne
-			$faction->isWinner == TRUE;
+			$faction->isWinner = TRUE;
 
 			# envoi de notif aux chefs de factions
 			# TODO
@@ -60,7 +64,7 @@ if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
 			# page de "garde" pour tout les joueurs
 			# TODO
 
-			CTR::$alert->add('Vous avez gagné !', ALERT_STD_ERROR);
+			CTR::$alert->add('Vous avez gagné !', ALERT_STD_SUCCESS);
 		} else {
 			CTR::$alert->add('Tous les objectifs ne sont pas rempli.', ALERT_STD_ERROR);
 		}

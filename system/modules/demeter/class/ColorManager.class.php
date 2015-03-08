@@ -57,7 +57,7 @@ class ColorManager extends Manager {
 				$color = new Color();
 				$color->id = $awColor[$i]['id'];
 				$color->alive = $awColor[$i]['alive'];
-				$color->alive = $awColor[$i]['isWinner'];
+				$color->isWinner = $awColor[$i]['isWinner'];
 				$color->credits = $awColor[$i]['credits'];
 				$color->players = $awColor[$i]['players'];
 				$color->activePlayers = $awColor[$i]['activePlayers'];
@@ -138,11 +138,12 @@ class ColorManager extends Manager {
 			points = ?,
 			sectors = ?,
 			electionStatement = ?,
-			$color->electionStatement,
+			isClosed = ?,
 			dLastElection = ?');
 		$aw = $qr->execute(array(
 				$color->id,
 				$color->alive,
+				$color->isWinner,
 				$color->credits,
 				$color->players,
 				$color->activePlayers,
