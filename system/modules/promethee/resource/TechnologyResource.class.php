@@ -705,7 +705,7 @@ class TechnologyResource {
 			'progName' => 'baseQuantity',
 			'imageLink' => 'basequantity',
 			'requiredTechnosphere' => 15,
-			'requiredResearch' => array(5,0,0,0,4,4,0,4,0,0),
+			'requiredResearch' => array(0,0,0,0,0,4,5,4,0,0),
 			'time' => 47300,
 			'maxLevel' => 14,
 			'category' => 1,

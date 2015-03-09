@@ -285,7 +285,7 @@ class Commander {
 			((($this->pevInBegin + 1) * (($enemyCommander->getLevel() + 1) / 
 				($this->level + 1))));
 
-		$this->earnedExperience = $importance * COM_COEFFEARNEDEXP;
+		$this->earnedExperience = $importance * self::COEFFEARNEDEXP;
 		if($this->winner) {
 			LiveReport::$importance = $importance;
 		}
@@ -295,7 +295,7 @@ class Commander {
 			ASM::$pam->newSession();
 			ASM::$pam->load(array('id' => $this->rPlayer));
 			
-			$exp = round($this->earnedExperience / COEFFEXPPLAYER);
+			$exp = round($this->earnedExperience / self::COEFFEXPPLAYER);
 			ASM::$pam->get(0)->increaseExperience($exp);
 
 			if ($enemyCommander->isAttacker == TRUE) {

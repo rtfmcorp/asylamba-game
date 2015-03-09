@@ -16,7 +16,7 @@ class CommercialShipping {
 	const ST_GOING = 1;			# aller
 	const ST_MOVING_BACK = 2;	# retour
 
-	const WEDGE = 1000;	# retour
+	const WEDGE = 1000;	# soute
 
 	# attributes
 	public $id = 0; 

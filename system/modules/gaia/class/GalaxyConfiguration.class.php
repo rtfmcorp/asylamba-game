@@ -404,28 +404,28 @@ abstract class GalaxyConfiguration {
 		[
 			'id' => 1,
 			'name' => 'ruine',
-			'placesPropotion' => [0, 0, 80, 10, 0, 10],
-			'nbrPlaces' => [1, 6]
+			'placesPropotion' => [0, 0, 85, 10, 0, 5],
+			'nbrPlaces' => [2, 6]
 		], [
 			'id' => 2,
 			'name' => 'nébuleuse',
-			'placesPropotion' => [5, 5, 10, 75, 0, 5],
+			'placesPropotion' => [0, 0, 5, 90, 0, 5],
 			'nbrPlaces' => [2, 8]
 		], [
 			'id' => 3,
 			'name' => 'géante bleue',
-			'placesPropotion' => [40, 25, 10, 0, 20, 5],
+			'placesPropotion' => [60, 20, 2, 0, 15, 3],
 			'nbrPlaces' => [8, 12]
 		], [
 			'id' => 4,
 			'name' => 'naine jaune',
-			'placesPropotion' => [55, 20, 5, 0, 15, 5],
+			'placesPropotion' => [65, 15, 3, 0, 15, 2],
 			'nbrPlaces' => [6, 10]
 		], [
 			'id' => 5,
 			'name' => 'naine rouge',
-			'placesPropotion' => [70, 10, 5, 0, 10, 5],
-			'nbrPlaces' => [1, 5]
+			'placesPropotion' => [75, 10, 3, 0, 10, 2],
+			'nbrPlaces' => [3, 6]
 		]
 	];
 

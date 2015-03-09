@@ -121,7 +121,7 @@ class ColorManager extends Manager {
 					statement = ? WHERE rColor = ? AND rColorLinked = ?
 				');
 
-			for ($i = 1; $i <= count($color->colorLink); $i++) {
+			for ($i = 1; $i <= count($color->colorLink) - 1; $i++) {
 				$qr2->execute(array($color->colorLink[$i], $color->id, $i));
 			}
 		}
