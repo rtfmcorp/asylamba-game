@@ -107,6 +107,7 @@ try {
 
 	# création des premiers bâtiments
 	if (CTR::$data->get('high-mode')) {
+		# batiments haut-level
 		$ob->setLevelGenerator(40);
 		$ob->setLevelRefinery(40);
 		$ob->setLevelDock1(40);
@@ -118,6 +119,20 @@ try {
 		$ob->setLevelRecycling(20);
 		$ob->setLevelSpatioport(12);
 		$ob->setResourcesStorage(4000000);
+
+		# remplir le dock
+		$ob->addShipToDock(1, 50);
+		$ob->addShipToDock(2, 50);
+		$ob->addShipToDock(3, 10);
+		$ob->addShipToDock(4, 10);
+		$ob->addShipToDock(5, 5);
+		$ob->addShipToDock(6, 5);
+		$ob->addShipToDock(7, 2);
+		$ob->addShipToDock(8, 2);
+		$ob->addShipToDock(9, 1);
+		$ob->addShipToDock(10, 1);
+		$ob->addShipToDock(11, 0);
+		$ob->addShipToDock(12, 0);
 	} else {
 		$ob->setLevelGenerator(1);
 		$ob->setLevelRefinery(1);
@@ -142,6 +157,30 @@ try {
 	$ob->uOrbitalBase = Utils::now();
 	$ob->setDCreation(Utils::now());
 	ASM::$obm->add($ob);
+
+	# ajout des techs haut-level
+	if (CTR::$data->get('high-mode')) {
+		Technology::addTech($pl->id, Technology::COM_PLAT_UNBLOCK, 1);
+		Technology::addTech($pl->id, Technology::DOCK2_UNBLOCK, 1);
+		Technology::addTech($pl->id, Technology::DOCK3_UNBLOCK, 1);
+		Technology::addTech($pl->id, Technology::RECYCLING_UNBLOCK, 1);
+		Technology::addTech($pl->id, Technology::SPATIOPORT_UNBLOCK, 1);
+
+		Technology::addTech($pl->id, Technology::SHIP0_UNBLOCK, 1);
+		Technology::addTech($pl->id, Technology::SHIP1_UNBLOCK, 1);
+		Technology::addTech($pl->id, Technology::SHIP2_UNBLOCK, 1);
+		Technology::addTech($pl->id, Technology::SHIP3_UNBLOCK, 1);
+		Technology::addTech($pl->id, Technology::SHIP4_UNBLOCK, 1);
+		Technology::addTech($pl->id, Technology::SHIP5_UNBLOCK, 1);
+		Technology::addTech($pl->id, Technology::SHIP6_UNBLOCK, 1);
+		Technology::addTech($pl->id, Technology::SHIP7_UNBLOCK, 1);
+		Technology::addTech($pl->id, Technology::SHIP8_UNBLOCK, 1);
+		Technology::addTech($pl->id, Technology::SHIP9_UNBLOCK, 1);
+
+		Technology::addTech($pl->id, Technology::COLONIZATION, 1);
+		Technology::addTech($pl->id, Technology::CONQUEST, 1);
+		Technology::addTech($pl->id, Technology::BASE_QUANTITY, 4);
+	}
 
 	# modification de la place
 	ASM::$plm->load(array('id' => $place));
