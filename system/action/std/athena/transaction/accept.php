@@ -101,7 +101,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				ASM::$plm->newSession(ASM_UMODE);
 				ASM::$plm->load(array('id' => $commercialShipping->rBase));
 				ASM::$plm->load(array('id' => $rPlace));
-				$timeToTravel = Game::getTimeToTravel(ASM::$plm->get(0), ASM::$plm->get(1));
+				$timeToTravel = Game::getTimeToTravelCommercial(ASM::$plm->get(0), ASM::$plm->get(1));
 				$departure = Utils::now();
 				$arrival = Utils::addSecondsToDate($departure, $timeToTravel);
 				ASM::$plm->changeSession($S_PLM1);

@@ -55,6 +55,10 @@ class Game {
 		return Commander::DISTANCEMAX;
 	}
 
+	public static function getTimeToTravelCommercial($startPlace, $destinationPlace, $bonus = NULL) {
+		return round(self::getTimeToTravel($startPlace, $destinationPlace, $bonus) / 10);
+	}
+
 	public static function getTimeToTravel($startPlace, $destinationPlace, $bonus = NULL) {
 		# $startPlace and $destinationPlace are instance of Place
 		return self::getTimeTravel(
@@ -68,6 +72,10 @@ class Game {
 			$destinationPlace->getYSystem(),
 			$bonus
 		);
+	}
+
+	public static function getTimeTravelCommercial($systemFrom, $positionFrom, $xFrom, $yFrom, $systemTo, $positionTo, $xTo, $yTo, $bonus = NULL) {
+		return round(self::getTimeTravel($systemFrom, $positionFrom, $xFrom, $yFrom, $systemTo, $positionTo, $xTo, $yTo, $bonus) / 10);
 	}
 
 	public static function getTimeTravel($systemFrom, $positionFrom, $xFrom, $yFrom, $systemTo, $positionTo, $xTo, $yTo, $bonus = NULL) {

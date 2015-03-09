@@ -584,7 +584,7 @@ class OrbitalBase {
 			$resourceRecycled -= $diffAmount;
 
 			# convert shipRecycled to real ships
-			$pointsToRecycle = $shipRecycled * RecyclingMission::COEF_SHIP;
+			$pointsToRecycle = round($shipRecycled * RecyclingMission::COEF_SHIP);
 			$shipsArray1 = array();
 			$buyShip = array();
 			for ($i = 0; $i < ShipResource::SHIP_QUANTITY; $i++) { 

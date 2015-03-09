@@ -58,7 +58,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_
 							ASM::$plm->newSession(ASM_UMODE);
 							ASM::$plm->load(array('id' => $orbitalBase->rPlace));
 							ASM::$plm->load(array('id' => $otherBase->rPlace));
-							$timeToTravel = Game::getTimeToTravel(ASM::$plm->get(0), ASM::$plm->get(1));
+							$timeToTravel = Game::getTimeToTravelCommercial(ASM::$plm->get(0), ASM::$plm->get(1));
 							$departure = Utils::now();
 							$arrival = Utils::addSecondsToDate($departure, $timeToTravel);
 							ASM::$plm->changeSession($S_PLM1);

@@ -100,7 +100,7 @@ class Transaction {
 	public function render($currentRate, $token, $ob) {
 	#	$rv = '1:' . Format::numberFormat(Game::calculateRate($this->type, $this->quantity, $this->identifier, $this->price), 3);
 		$rv = round(Game::calculateRate($this->type, $this->quantity, $this->identifier, $this->price) / $currentRate * 100);
-		$time = Game::getTimeTravel($this->rSystem, $this->positionInSystem, $this->xSystem, $this->ySystem, $ob->getSystem(), $ob->getPosition(), $ob->getXSystem(), $ob->getYSystem());
+		$time = Game::getTimeTravelCommercial($this->rSystem, $this->positionInSystem, $this->xSystem, $this->ySystem, $ob->getSystem(), $ob->getPosition(), $ob->getXSystem(), $ob->getYSystem());
 
 		$S_CTM_T = ASM::$ctm->getCurrentSession();
 		ASM::$ctm->changeSession($token);
