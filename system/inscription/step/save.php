@@ -41,7 +41,7 @@ try {
 
 	# ajout des variables dépendantes
 	if (CTR::$data->get('high-mode')) {
-		$pl->credit = 100000000;
+		$pl->credit = 10000000;
 		$pl->setExperience(18000);
 		$pl->setLevel(5);
 	} else {
@@ -108,17 +108,17 @@ try {
 	# création des premiers bâtiments
 	if (CTR::$data->get('high-mode')) {
 		# batiments haut-level
-		$ob->setLevelGenerator(40);
-		$ob->setLevelRefinery(40);
-		$ob->setLevelDock1(40);
-		$ob->setLevelDock2(12);
+		$ob->setLevelGenerator(35);
+		$ob->setLevelRefinery(35);
+		$ob->setLevelDock1(35);
+		$ob->setLevelDock2(10);
 		$ob->setLevelDock3(0);
-		$ob->setLevelTechnosphere(40);
-		$ob->setLevelCommercialPlateforme(12);
-		$ob->setLevelStorage(40);
-		$ob->setLevelRecycling(20);
-		$ob->setLevelSpatioport(12);
-		$ob->setResourcesStorage(4000000);
+		$ob->setLevelTechnosphere(35);
+		$ob->setLevelCommercialPlateforme(10);
+		$ob->setLevelStorage(35);
+		$ob->setLevelRecycling(15);
+		$ob->setLevelSpatioport(10);
+		$ob->setResourcesStorage(3000000);
 
 		# remplir le dock
 		$ob->addShipToDock(1, 50);
