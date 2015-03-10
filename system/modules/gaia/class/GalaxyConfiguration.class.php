@@ -317,7 +317,7 @@ abstract class GalaxyConfiguration {
 		], 
 		[
 			'id' => 33,
-			'beginColor' => 0,
+			'beginColor' => 7,
 			'vertices' =>[40, 171, 56, 172, 63, 180, 0, 237, 0, 185],
 			'barycentre' => [32, 189],
 			'display' => [32, 189],
