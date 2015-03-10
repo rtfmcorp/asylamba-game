@@ -45,6 +45,7 @@ class LiveReport {
 	public static function clear() {
 		self::$squadrons = array();
 		self::$halfround = 0;
+		self::$littleRound = 0;
 
 		self::$rPlayerAttacker		= 0;
 		self::$rPlayerDefender		= 0;
@@ -65,6 +66,7 @@ class LiveReport {
 		self::$expPlayerD			= 0;
 		self::$rPlace				= 0;
 		self::$type					= 0;
+		self::$isLegal 				= 0;
 		self::$round				= 0;
 		self::$importance			= 0;
 		self::$statementAttacker	= 0;
