@@ -626,13 +626,15 @@ class Place {
 							$reportIds[] = $report->id;
 							$nbrBattle++;
 							break;
+						} else {
+							$report = $this->createReport();
+							$reportArray[] = $report;
+							$reportIds[] = $report->id;
+							
+							$nbrBattle++;
 						}
 					}
-					#création du rapport
-					$report = $this->createReport();
-					$reportArray[] = $report;
-					$reportIds[] = $report->id;
-					
+
 					$nbrBattle++;
 				}
 
