@@ -42,7 +42,7 @@ echo '<div class="component player profil size1">';
 								echo '</span>';
 							} else {
 								echo '<span class="button disable" style="text-align: center;">';
-									echo '<span class="text" style="line-height: 35px;">Voux n\'avez pas soutenu le coup d\'état</span>';
+									echo '<span class="text" style="line-height: 35px;">Vous n\'avez pas soutenu le coup d\'état</span>';
 								echo '</span>';
 							}
 						} else {
