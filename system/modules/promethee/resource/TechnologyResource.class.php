@@ -23,7 +23,7 @@ class TechnologyResource {
 				if(in_array($info, array('name', 'progName', 'imageLink', 'requiredTechnosphere', 'requiredResearch', 'time', 'resource', 'credit', 'points', 'column', 'shortDescription', 'description'))) {
 					return self::$technology[$techno][$info];
 				} else {
-					CTR::$alert->add('2e argument faux pour getInfo() de TechnologyResource (techno ' . $techno . ')', ALERT_BUG_ERROR);
+					CTR::$alert->add('2e argument faux pour getInfo() de TechnologyResource (techno ' . $techno . ', ' . $info . ')', ALERT_BUG_ERROR);
 				}
 			} else {
 				if(in_array($info, array('name', 'progName', 'imageLink', 'requiredTechnosphere', 'requiredResearch', 'maxLevel', 'category', 'column', 'shortDescription', 'description', 'bonus'))) {
@@ -162,14 +162,17 @@ class TechnologyResource {
 	}
 
 	public static function getImprovementPercentage($techno, $level = -1) {
-		$baseBonus = self::getInfo($techno, 'bonus');
-		if ($level == 0) {
-			return 0;
-		} elseif ($level == -1) {
-			return $baseBonus;
-		} else {
-			return $baseBonus + floor(($level - 1) / 5);
+		if (!self::isAnUnblockingTechnology($techno)) {
+			$baseBonus = self::getInfo($techno, 'bonus');
+			if ($level == 0) {
+				return 0;
+			} elseif ($level == -1) {
+				return $baseBonus;
+			} else {
+				return $baseBonus + floor(($level - 1) / 5);
+			}
 		}
+		return 0;
 	}
 
 	private static $technology = array(
