@@ -151,7 +151,7 @@ class TutorialResource {
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 7,
-			'title' => 'Modifier l\'investissement de l\'Université',
+			'title' => 'Modifier l\'investissement universitaire dans les finances',
 			'description' => 'Dans Asylamba, tu dois gérer tes crédits. Pour cela tu as un résumé de tes finances dans l\'onglet "finance" qui se trouve en-haut de l\'écran (quatrième icône du deuxième groupe de menus).
 				<br /><br />
 				Depuis là, tu peux voir si tu gagnes ou perds des crédits à chaque relève. Tu peux être en négatif, mais sache que ça va puiser dans ta réserve de crédits. 
