@@ -1,7 +1,7 @@
 <?php
 class PlaceResource {
 	public static function get($type, $info) {
-		if (in_array($info, array('name', 'desc', 'price', 'school-size', 'total-commander', 'tax', 'l-line', 'r-line', 'l-line-position', 'r-line-position'))) {
+		if (in_array($info, array('name', 'desc', 'price', 'school-size', 'tax', 'l-line', 'r-line', 'l-line-position', 'r-line-position'))) {
 			return self::$place[$type][$info];
 		} else {
 			return FALSE;
@@ -15,7 +15,6 @@ class PlaceResource {
 
 			'price' => 0,
 			'school-size' => 3,
-			'total-commander' => 20,
 
 			'tax' => 1,
 			'l-line' => 1,
@@ -29,7 +28,6 @@ class PlaceResource {
 
 			'price' => 250000,
 			'school-size' => 3,
-			'total-commander' => 20,
 
 			'tax' => 1.25,
 			'l-line' => 1,
@@ -43,7 +41,6 @@ class PlaceResource {
 
 			'price' => 250000,
 			'school-size' => 8,
-			'total-commander' => 20,
 
 			'tax' => 0.5,
 			'l-line' => 3,
@@ -57,7 +54,6 @@ class PlaceResource {
 
 			'price' => 1000000,
 			'school-size' => 8,
-			'total-commander' => 20,
 
 			'tax' => 1.25,
 			'l-line' => 3,
