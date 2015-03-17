@@ -210,7 +210,7 @@ echo '<div id="nav">';
 		echo '<hr />';
 		echo '<a href="#" class="sh" data-target="roadmap">Dernières mises à jour</a>';
 		echo '<hr />';
-		echo '<a target="_blank" href="' . GETOUT_ROOT . '">Aller à l\'accueil</a>';
+		echo '<a target="_blank" href="' . GETOUT_ROOT . 'forum">Discuter sur le forum</a>';
 		echo '<a target="_blank" href="' . GETOUT_ROOT . 'blog">Voir le blog</a>';
 		echo '<a target="_blank" href="' . GETOUT_ROOT . 'wiki">Consulter le wiki</a>';
 		echo '<hr />';
