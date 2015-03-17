@@ -711,7 +711,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `vote` (
 	`dVotation` datetime NOT NULL,
 
 	PRIMARY KEY (`id`),
-	CONSTRAINT fkVoteCandidate FOREIGN KEY (rCandidate) REFERENCES candidate(id),
+	CONSTRAINT fkVoteCandidate FOREIGN KEY (rCandidate) REFERENCES player(id),
 	CONSTRAINT fkVotePlayer FOREIGN KEY (rPlayer) REFERENCES player(id),
 	CONSTRAINT fkVoteElection FOREIGN KEY (rElection) REFERENCES election(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
