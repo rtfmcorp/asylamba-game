@@ -755,10 +755,6 @@ class Place {
 				$this->rPlayer = $commander->rPlayer;
 				$this->commanders[] = $commander;
 
-				#attibuer le commander à la place
-				$commander->rBase = $this->id;
-				$commander->statement = COM_AFFECTED;
-				$commander->line = 1;
 
 				# créer une Base
 				include_once ATHENA;
@@ -778,6 +774,11 @@ class Place {
 				ASM::$obm->add($ob);
 				ASM::$obm->changeSession($_OBM);
 
+				#attibuer le commander à la place
+				$commander->rBase = $this->id;
+				$commander->statement = COM_AFFECTED;
+				$commander->line = 1;
+				
 				if (in_array($commander->playerColor, array(ColorResource::CARDAN, ColorResource::NERVE))) {
 					$points = 0;
 					switch ($commander->playerColor) {
