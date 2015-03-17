@@ -118,7 +118,7 @@ echo '<div class="component generator">';
 								echo '</a>';
 							} else {
 								echo '<span class="button disable">';
-									echo '<span class="text">Vous avez déjà une ' . PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'name') . '<br />';
+									echo '<span class="text">Vous avez déjà une ' . PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'name') . '</span><br />';
 								echo '</span>';
 							}
 						} elseif ($ob_obSituation->typeOfBase == OrbitalBase::TYP_CAPITAL) {
@@ -132,7 +132,7 @@ echo '<div class="component generator">';
 								echo '</span>';
 							} else {
 								echo '<span class="button disable">';
-									echo '<span class="text">Vous avez déjà une ' . PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'name') . '<br />';
+									echo '<span class="text">Vous avez déjà une ' . PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'name') . '</span><br />';
 								echo '</span>';
 							}
 						}

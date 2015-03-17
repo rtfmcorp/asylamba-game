@@ -50,7 +50,7 @@ class PlaceResource {
 		),
 		array(
 			'name' => 'Capitale',
-			'desc' => 'Une capitale est chère, mais son efficacité, tant commerciale que militaire, vous fera vous développer considérablement plus vite. Plus vous avez de capitales dans votre empire, plus sa construction sera coûteuse.',
+			'desc' => 'Une capitale est chère, mais son efficacité, tant commerciale que militaire, vous fera vous développer considérablement plus vite. Vous ne pouvez créer qu’une capitale pour votre empire, néanmoins vous pouvez conquérir celles des joueurs ennemis pour en disposer de plusieurs.',
 
 			'price' => 1000000,
 			'school-size' => 8,
