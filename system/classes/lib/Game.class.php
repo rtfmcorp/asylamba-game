@@ -378,7 +378,7 @@ class Game {
 		# into improvement coefficient for the technosphere
 		if ($coef < 10) {
 			return 0;
-		} elseif ($coef >= 100)
+		} elseif ($coef >= 100) {
 			return 40;
 		} else {
 			return ceil(0.004 * $coef * $coef - 0.01 * $coef + 0.7);
