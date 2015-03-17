@@ -15,7 +15,7 @@ echo '<div id="subnav">';
 		$active = (CTR::$get->get('view') == 'overview') ? 'active' : '';
 		echo '<a href="' . APP_ROOT . 'fleet/view-overview" class="item ' . $active . '">';
 			echo '<span class="picto">';
-				echo '<img src="' . MEDIA . 'fleet/tmp.png" alt="" />';
+				echo '<img src="' . MEDIA . 'fleet/armies.png" alt="" />';
 			echo '</span>';
 			echo '<span class="content skin-1">';
 				echo '<span>Aperçu des armées';
