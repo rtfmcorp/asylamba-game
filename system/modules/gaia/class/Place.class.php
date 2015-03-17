@@ -761,7 +761,7 @@ class Place {
 				$ob = new OrbitalBase();
 				$ob->rPlace = $this->id;
 				$ob->setRPlayer($commander->getRPlayer());
-				$ob->setName('Base de ' . $commander->getPlayerName());
+				$ob->setName('colonie');
 				$ob->iSchool = 500;
 				$ob->iAntiSpy = 500;
 				$ob->resourcesStorage = 2000;
