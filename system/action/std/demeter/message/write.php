@@ -26,7 +26,11 @@ if ($rTopic AND $content) {
 			ASM::$fmm->add($message);
 
 			ASM::$tom->get()->dLastMessage = Utils::now();
-			CTR::redirect('faction/view-forum/forum-' . ASM::$tom->get()->rForum . '/topic-' . $rTopic . '/sftr-2');
+
+			if (ASM::$tom->get()->rForum != 30) {
+				CTR::redirect('faction/view-forum/forum-' . ASM::$tom->get()->rForum . '/topic-' . $rTopic . '/sftr-2');
+			}
+
 			CTR::$alert->add('Message créé.', ALERT_STD_SUCCESS);
 		} else {
 			CTR::$alert->add('Ce sujet est fermé.', ALERT_STD_ERROR);
@@ -34,6 +38,7 @@ if ($rTopic AND $content) {
 	} else {
 		CTR::$alert->add('Le topic n\'existe pas.', ALERT_STD_ERROR);
 	}
+
 	ASM::$tom->changeSession($S_TOM_1);
 } else {
 	CTR::$alert->add('Manque d\'information.', ALERT_STD_FILLFORM);
