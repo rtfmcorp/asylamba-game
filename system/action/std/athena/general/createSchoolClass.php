@@ -7,7 +7,8 @@ include_once ARES;
 # create school class action
 
 # int baseid 		id de la base orbitale
-# int id 			type de base
+# int school 		not used anymore
+# string name 		name of the officer
 
 for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -28,9 +29,9 @@ if ($baseId !== FALSE AND $school !== FALSE AND $name !== FALSE AND in_array($ba
 	if (ASM::$obm->size() > 0) {
 		$S_COM1 = ASM::$com->getCurrentSession();
 		ASM::$com->newSession();
-		ASM::$com->load(array('c.statement' => array(Commander::INSCHOOL, Commander::RESERVE), 'c.rBase' => $baseId));
+		ASM::$com->load(array('c.statement' => Commander::INSCHOOL, 'c.rBase' => $baseId));
 
-		if (ASM::$com->size() < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'total-commander')) {
+		if (ASM::$com->size() <= PlaceResource::get(ASM::$obm->get()->typeOfBase, 'school-size')) {
 			$school = intval($school);
 			$nbrCommandersToCreate = rand(SchoolClassResource::getInfo($school, 'minSize'), SchoolClassResource::getInfo($school, 'maxSize'));
 
@@ -77,7 +78,7 @@ if ($baseId !== FALSE AND $school !== FALSE AND $name !== FALSE AND in_array($ba
 				CTR::$alert->add('le nom contient des caractères non autorisé ou trop de caractères.', ALERT_STD_FILLFORM);
 			}
 		} else {
-			CTR::$alert->add('Trop d\'officier dans cette école et dans le mess', ALERT_STD_ERROR);
+			CTR::$alert->add('Trop d\'officiers en formation. Déplacez des officiers dans le mess pour libérer de la place.', ALERT_STD_ERROR);
 		}
 	} else {
 		CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);

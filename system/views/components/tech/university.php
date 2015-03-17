@@ -101,7 +101,7 @@ echo '<div class="component">';
 				echo '</span>';
 			echo '</div>';
 
-			echo '<p>Augmente ou baisse tes investissements par 10% avec "CTRL + clic".</p>';
+			echo '<p>Augmente ou baisse tes investissements par 10% avec "CTRL + clic" ou "CMD + clic".</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
