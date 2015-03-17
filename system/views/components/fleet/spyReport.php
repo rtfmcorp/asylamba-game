@@ -23,7 +23,7 @@ echo '<div class="component size3 space">';
 					echo '<span>Opération de ' . Format::number($spyreport->price) . ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits"></span>';
 					echo '<span>';
 						switch ($spyreport->type) {
-							case SpyReport::TYP_NOT_CAUGHT: echo 'L\'ennemi ne sait rien de cet espionnage'; break;
+							case SpyReport::TYP_NOT_CAUGHT: echo 'L\'ennemi ne sait rien'; break;
 							case SpyReport::TYP_ANONYMOUSLY_CAUGHT: echo 'L\'ennemi ne vous soupçonne pas'; break;
 							case SpyReport::TYP_CAUGHT: echo 'L\'ennemi vous a vu'; break;
 							default: break;
