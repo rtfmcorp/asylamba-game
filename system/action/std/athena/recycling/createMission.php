@@ -49,7 +49,7 @@ if ($rPlace !== FALSE AND $rTarget !== FALSE AND $quantity !== FALSE AND in_arra
 
 					$travelTime = Game::getTimeToTravel($startPlace, $destinationPlace);
 
-					if ($startPlace->sectorColor == $destinationPlace->sectorColor || $destinationPlace->sectorColor == ColorResource::NO_FACTION) {
+					if (CTR::$data->get('playerInfo')->get('color') == $destinationPlace->sectorColor || $destinationPlace->sectorColor == ColorResource::NO_FACTION) {
 						# create mission
 						$rm = new RecyclingMission();
 						$rm->rBase = $rPlace;
