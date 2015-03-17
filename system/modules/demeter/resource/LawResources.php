@@ -122,7 +122,7 @@ Class LawResources {
 			'id' => 9,
 			'bonusLaw' => FALSE,
 			'devName' => 'total alliance',
-			'name' => 'alliance totale',
+			'name' => 'Alliance totale',
 			'department' => 6,
 			'undeterminedDuration' => FALSE,
 			'price' => 10000,

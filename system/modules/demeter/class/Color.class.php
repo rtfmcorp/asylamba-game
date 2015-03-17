@@ -601,40 +601,40 @@ class Color {
 				} else {
 					#loi à upgrade
 					switch (ASM::$lam->get($i)->type) {
-						case lAW::SECTORTAX:
+						case Law::SECTORTAX:
 							$_SEM = ASM::$sem->getCurrentsession();
 							ASM::$sem->load(array('id' => ASM::$lam->get($i)->options['rSector']));
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishSectorTaxes', array(ASM::$lam->get($i), ASM::$sem->get()));
 							ASM::$sem->changeSession($_SEM);
 							break;
-						case lAW::SECTORNAME:
+						case Law::SECTORNAME:
 							$_SEM = ASM::$sem->getCurrentsession();
 							ASM::$sem->load(array('id' => ASM::$lam->get($i)->options['rSector']));
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishSectorName', array(ASM::$lam->get($i), ASM::$sem->get()));
 							ASM::$sem->changeSession($_SEM);
 							break;
-						case lAW::COMTAXEXPORT:
+						case Law::COMTAXEXPORT:
 							$_CTM = ASM::$ctm->getCurrentsession();
 							ASM::$ctm->load(array('faction' => $this->id, 'relatedFaction' => ASM::$lam->get($i)->options['rColor']));
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishExportComercialTaxes', array(ASM::$lam->get($i), ASM::$ctm->get()));
 							ASM::$ctm->changeSession($_CTM);
 							break;
-						case lAW::COMTAXIMPORT:
+						case Law::COMTAXIMPORT:
 							$_CTM = ASM::$ctm->getCurrentsession();
 							ASM::$ctm->load(array('faction' => $this->id, 'relatedFaction' => ASM::$lam->get($i)->options['rColor']));
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishImportComercialTaxes', array(ASM::$lam->get($i), ASM::$ctm->get()));
 							ASM::$ctm->changeSession($_CTM);
 							break;
-						case lAW::PEACEPACT:
+						case Law::PEACEPACT:
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishPeace', array(ASM::$lam->get($i)));
 							break;
-						case lAW::WARDECLARATION:
+						case Law::WARDECLARATION:
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishEnemy', array(ASM::$lam->get($i)));
 							break;
-						case lAW::TOTALALLIANCE:
+						case Law::TOTALALLIANCE:
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishAlly', array(ASM::$lam->get($i)));
 							break;
-						case lAW::NEUTRALPACT:
+						case Law::NEUTRALPACT:
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishNeutral', array(ASM::$lam->get($i)));
 							break;
 						
