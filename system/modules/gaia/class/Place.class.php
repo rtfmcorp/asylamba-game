@@ -778,7 +778,7 @@ class Place {
 				$commander->rBase = $this->id;
 				$commander->statement = COM_AFFECTED;
 				$commander->line = 1;
-				
+
 				if (in_array($commander->playerColor, array(ColorResource::CARDAN, ColorResource::NERVE))) {
 					$points = 0;
 					switch ($commander->playerColor) {
@@ -1164,6 +1164,8 @@ class Place {
 					->addTxt('Votre empire s\'étend, administrez votre ')
 					->addLnk('bases/base-' . $this->id, 'nouvelle planète')
 					->addTxt('.')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -1179,6 +1181,8 @@ class Place {
 					->addTxt('.')
 					->addSep()
 					->addTxt('Il a désormais rejoint le Mémorial. Que son âme traverse l\'Univers dans la paix.')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
