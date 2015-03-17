@@ -243,6 +243,7 @@ jQuery(document).ready(function($) {
 		squadronShipsOld: undefined,
 		squadronShipsNew: undefined,
 		token: false,
+		lastClick: undefined,
 
 		// initialisation
 		init: function() {
@@ -258,7 +259,7 @@ jQuery(document).ready(function($) {
 
 				setInterval(function() {
 					squadronTransfer.sendRequest();
-				}, 5000);
+				}, 500);
 			}
 		},
 
@@ -311,6 +312,9 @@ jQuery(document).ready(function($) {
 			if (this.squadronSelected == undefined) {
 				// Nothing
 			} else {
+				// mise à jour du click
+				squadronTransfer.lastClick = new Date().getTime();
+
 				var olQuantity = parseInt(this.obj.squadron.find('a:nth-child(' + (shipId + 1) + ') .quantity').text());
 				var orQuantity = parseInt(this.obj.dock.find('a:nth-child(' + (shipId + 1) + ') .quantity').text());
 
@@ -419,17 +423,19 @@ jQuery(document).ready(function($) {
 
 		sendRequest: function() {
 			if (this.squadronSelected != undefined) {
-				if (this.isSquadronsDifferents()) {
-					$.get(game.path 
-						+ 'ajax/a-updatesquadron/base-' + this.ref.base 
-						+ '/commander-' + this.ref.commander 
-						+ '/squadron-' + this.squadronSelected
-						+ '/army-' + this.squadronShipsNew.join('_')
-					);
+				if (Math.abs(Date.now() - squadronTransfer.lastClick) > 300) {
+					if (this.isSquadronsDifferents()) {
+						$.get(game.path 
+							+ 'ajax/a-updatesquadron/base-' + this.ref.base 
+							+ '/commander-' + this.ref.commander 
+							+ '/squadron-' + this.squadronSelected
+							+ '/army-' + this.squadronShipsNew.join('_')
+						);
 
-					for (var i = 0; i < this.squadronShipsOld.length; i++) {
-						this.squadronShipsOld[i] = this.squadronShipsNew[i];
-					};
+						for (var i = 0; i < this.squadronShipsOld.length; i++) {
+							this.squadronShipsOld[i] = this.squadronShipsNew[i];
+						};
+					}
 				}
 			}
 		}
