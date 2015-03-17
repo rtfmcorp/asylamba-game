@@ -32,6 +32,8 @@ class SquadronResource {
 	#	niv min, niv max, liste de vaisseaux
 
 	#	extrèmement petit officier (lvl 1)
+		array(1, 1, array(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+		array(1, 1, array(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(1, 1, array(2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(1, 1, array(5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(1, 1, array(0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
@@ -98,15 +100,7 @@ class SquadronResource {
 		array(11, 20, array(2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0)),
 
 	#	extrèmement fort officier (lvl 20)
-		array(20, 20, array(2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1)),
-
-	#	vide
-		array(1, 16, array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-		array(1, 16, array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-		array(1, 16, array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-		array(1, 16, array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-		array(1, 16, array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
-		array(1, 16, array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+		array(20, 20, array(2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1))
 	);
 }
 ?>
