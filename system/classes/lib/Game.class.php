@@ -6,7 +6,7 @@ class Game {
 			case 2 : return 'géante gazeuse'; break;
 			case 3 : return 'ruine'; break;
 			case 4 : return 'poche de gaz'; break;
-			case 5 : return 'ceinture d\'astéroides'; break;
+			case 5 : return 'ceinture d\'astéroïdes'; break;
 			case 6 : return 'zone vide'; break;
 			default: return 'rien'; break;
 		}
@@ -378,8 +378,10 @@ class Game {
 		# into improvement coefficient for the technosphere
 		if ($coef < 10) {
 			return 0;
+		} elseif ($coef >= 100)
+			return 40;
 		} else {
-			return ceil(0.0029 * $coef * $coef - 0.0115 * $coef + 0.7251);
+			return ceil(0.004 * $coef * $coef - 0.01 * $coef + 0.7);
 		}
 	}
 }
