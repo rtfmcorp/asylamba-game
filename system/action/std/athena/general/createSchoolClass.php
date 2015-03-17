@@ -32,50 +32,56 @@ if ($baseId !== FALSE AND $school !== FALSE AND $name !== FALSE AND in_array($ba
 		ASM::$com->load(array('c.statement' => Commander::INSCHOOL, 'c.rBase' => $baseId));
 
 		if (ASM::$com->size() <= PlaceResource::get(ASM::$obm->get()->typeOfBase, 'school-size')) {
-			$school = intval($school);
-			$nbrCommandersToCreate = rand(SchoolClassResource::getInfo($school, 'minSize'), SchoolClassResource::getInfo($school, 'maxSize'));
+			ASM::$com->load(array('c.statement' => Commander::RESERVE, 'c.rBase' => $baseId));
 
-			if ($cn->checkLength($name) && $cn->checkChar($name)) {
-				if (SchoolClassResource::getInfo($school, 'credit') <= CTR::$data->get('playerInfo')->get('credit')) {
-					# tutorial
-					if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-						include_once ZEUS;
-						switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
-							case TutorialResource::CREATE_COMMANDER:
-								TutorialHelper::setStepDone();
-								break;
+			if (ASM::$com->size() < Orbitalbase::MAXCOMMANDERINMESS) {
+				$school = intval($school);
+				$nbrCommandersToCreate = rand(SchoolClassResource::getInfo($school, 'minSize'), SchoolClassResource::getInfo($school, 'maxSize'));
+
+				if ($cn->checkLength($name) && $cn->checkChar($name)) {
+					if (SchoolClassResource::getInfo($school, 'credit') <= CTR::$data->get('playerInfo')->get('credit')) {
+						# tutorial
+						if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
+							include_once ZEUS;
+							switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+								case TutorialResource::CREATE_COMMANDER:
+									TutorialHelper::setStepDone();
+									break;
+							}
 						}
+
+						# débit des crédits au joueur
+						$S_PAM1 = ASM::$pam->getCurrentSession();
+						ASM::$pam->newSession(ASM_UMODE);
+						ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+						ASM::$pam->get()->decreaseCredit(SchoolClassResource::getInfo($school, 'credit'));
+						ASM::$pam->changeSession($S_PAM1);
+
+						for ($i = 0; $i < $nbrCommandersToCreate; $i++) {
+							$newCommander = new Commander();
+							$newCommander->upExperience(rand(SchoolClassResource::getInfo($school, 'minExp'), SchoolClassResource::getInfo($school, 'maxExp')));
+							$newCommander->rPlayer = CTR::$data->get('playerId');
+							$newCommander->rBase = $baseId;
+							$newCommander->palmares = 0;
+							$newCommander->statement = 0;
+							$newCommander->name = $name;
+							$newCommander->avatar = 't' . rand(1, 21) . '-c' . CTR::$data->get('playerInfo')->get('color');
+							$newCommander->dCreation = Utils::now();
+							$newCommander->uCommander = Utils::now();
+							$newCommander->setSexe(1);
+							$newCommander->setAge(rand(40, 70));
+
+							ASM::$com->add($newCommander);
+						}
+						CTR::$alert->add($nbrCommandersToCreate . ' commandant' . Format::addPlural($nbrCommandersToCreate) . ' inscrit' . Format::addPlural($nbrCommandersToCreate) . ' au programme d\'entraînement.', ALERT_STD_SUCCESS);
+					} else {
+						CTR::$alert->add('vous n\'avez pas assez de crédit.', ALERT_STD_FILLFORM);
 					}
-
-					# débit des crédits au joueur
-					$S_PAM1 = ASM::$pam->getCurrentSession();
-					ASM::$pam->newSession(ASM_UMODE);
-					ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-					ASM::$pam->get()->decreaseCredit(SchoolClassResource::getInfo($school, 'credit'));
-					ASM::$pam->changeSession($S_PAM1);
-
-					for ($i = 0; $i < $nbrCommandersToCreate; $i++) {
-						$newCommander = new Commander();
-						$newCommander->upExperience(rand(SchoolClassResource::getInfo($school, 'minExp'), SchoolClassResource::getInfo($school, 'maxExp')));
-						$newCommander->rPlayer = CTR::$data->get('playerId');
-						$newCommander->rBase = $baseId;
-						$newCommander->palmares = 0;
-						$newCommander->statement = 0;
-						$newCommander->name = $name;
-						$newCommander->avatar = 't' . rand(1, 21) . '-c' . CTR::$data->get('playerInfo')->get('color');
-						$newCommander->dCreation = Utils::now();
-						$newCommander->uCommander = Utils::now();
-						$newCommander->setSexe(1);
-						$newCommander->setAge(rand(40, 70));
-
-						ASM::$com->add($newCommander);
-					}
-					CTR::$alert->add($nbrCommandersToCreate . ' commandant' . Format::addPlural($nbrCommandersToCreate) . ' inscrit' . Format::addPlural($nbrCommandersToCreate) . ' au programme d\'entraînement.', ALERT_STD_SUCCESS);
 				} else {
-					CTR::$alert->add('vous n\'avez pas assez de crédit.', ALERT_STD_FILLFORM);
+					CTR::$alert->add('le nom contient des caractères non autorisé ou trop de caractères.', ALERT_STD_FILLFORM);
 				}
 			} else {
-				CTR::$alert->add('le nom contient des caractères non autorisé ou trop de caractères.', ALERT_STD_FILLFORM);
+				CTR::$alert->add('Vous ne pouvez pas créer de nouveaux officiers si vous en avez déjà ' . Orbitalbase::MAXCOMMANDERINMESS . ' ou plus.', ALERT_STD_ERROR);
 			}
 		} else {
 			CTR::$alert->add('Trop d\'officiers en formation. Déplacez des officiers dans le mess pour libérer de la place.', ALERT_STD_ERROR);

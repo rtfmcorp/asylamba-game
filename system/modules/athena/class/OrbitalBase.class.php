@@ -22,6 +22,8 @@ class OrbitalBase {
 
 	const COOL_DOWN = 48;
 
+	const MAXCOMMANDERINMESS = 20;
+
 	//ATTRIBUTES : ORBITALBASE
 	public $rPlace;
 	public $rPlayer;
