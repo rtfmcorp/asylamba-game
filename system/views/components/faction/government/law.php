@@ -83,7 +83,7 @@ echo '<div class="component profil player">';
 									echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
 								}
 							echo '</select>';
-						} elseif (in_array($governmentLaw_id, array(COMTAXEXPORT, COMTAXIMPORT))) {
+						} elseif (in_array($governmentLaw_id, array(Law::COMTAXEXPORT, Law::COMTAXIMPORT))) {
 							echo '<input type="text" placeholder="Nouvelle taxe en pourcent" name="taxes" />';
 							echo '<select name="rcolor">';
 								echo '<option value="-1">Choisissez une faction</option>';
