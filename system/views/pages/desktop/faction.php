@@ -183,8 +183,8 @@ echo '<div id="content">';
 			include COMPONENT . 'faction/data/tactical/sectors.php';
 			include COMPONENT . 'faction/data/tactical/targets.php';
 		} elseif (CTR::$get->get('mode') == 'diplomacy') {
-			include COMPONENT . 'default.php';
-			include COMPONENT . 'default.php';
+			include COMPONENT . 'faction/data/diplomacy/main.php';
+			include COMPONENT . 'faction/data/diplomacy/about.php';
 			include COMPONENT . 'default.php';
 		} elseif (CTR::$get->get('mode') == 'law') {
 			$listlaw_status = 6;
