@@ -324,7 +324,7 @@ class Player {
 					
 					# on vend le commandant
 					$commander->setStatement(COM_ONSALE);
-					$commander->setRPlayer(0);
+					$commander->setRPlayer(ID_GAIA);
 
 					// TODO : vendre le commandant au marché 
 					//			(ou alors le mettre en statement COM_DESERT et supprimer ses escadrilles)
