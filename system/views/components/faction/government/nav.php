@@ -26,6 +26,13 @@ echo '<div class="component nav">';
 				echo '<em>Envoi de messages aux membres de la faction</em>';
 			echo '</a>';
 
+			$active = (CTR::$get->get('mode') == 'description') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'faction/view-government/mode-description" class="nav-element ' . $active . '">';
+				echo '<img src="' . MEDIA . 'faction/law/common.png" alt="" />';
+				echo '<strong>Description</strong>';
+				echo '<em>Edition de la description publique</em>';
+			echo '</a>';
+
 			if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
 				$active = (CTR::$get->get('mode') == 'manage') ? 'active' : '';
 				echo '<a href="' . APP_ROOT . 'faction/view-government/mode-manage" class="nav-element ' . $active . '">';

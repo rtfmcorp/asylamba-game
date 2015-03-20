@@ -30,7 +30,7 @@ class Message {
 	private $readerAvatar = '';
 	private $readerStatement = '';
 	
-	//GETTERS
+	# GETTERS
 	public function getId()							{ return $this->id; }
 	public function getThread()						{ return $this->thread; }
 	public function getRPlayerWriter()				{ return $this->rPlayerWriter; }
@@ -41,7 +41,7 @@ class Message {
 	public function getWriterMessageStatement()		{ return $this->writerMessageStatement; }
 	public function getReaderMessageStatement()		{ return $this->readerMessageStatement; }
 	
-	// GETTER DE JOINTURES
+	# GETTER DE JOINTURES
 	public function getWriterName()					{ return $this->writerName; }
 	public function getWriterColor()				{ return $this->writerColor; }
 	public function getWriterAvatar()				{ return $this->writerAvatar; }
@@ -51,7 +51,7 @@ class Message {
 	public function getReaderAvatar()				{ return $this->readerAvatar; }
 	public function getReaderStatement()			{ return $this->readerStatement; }
 
-	// SETTERS
+	# SETTERS
 	public function setId($var = 0)					{ $this->id = $var; }
 	public function setThread($var = 0)				{ $this->thread = $var; }
 	public function setRPlayerWriter($var = 0)		{ $this->rPlayerWriter = $var; }
@@ -62,7 +62,7 @@ class Message {
 	public function setWriterMessageStatement($var = 0)	{ $this->writerMessageStatement = $var; }
 	public function setReaderMessageStatement($var = 0)	{ $this->readerMessageStatement = $var; }
 
-	// SETTER DE JOINTURES
+	# SETTER DE JOINTURES
 	public function setWriterName($var = '')		{ $this->writerName = $var; }
 	public function setWriterColor($var = 0)		{ $this->writerColor = $var; }
 	public function setWriterAvatar($var = '')		{ $this->writerAvatar = $var; }

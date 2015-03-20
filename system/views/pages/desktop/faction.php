@@ -226,6 +226,8 @@ echo '<div id="content">';
 				include COMPONENT . 'default.php';
 			} elseif (CTR::$get->get('mode') == 'message') {
 				include COMPONENT . 'faction/government/message.php';
+			} elseif (CTR::$get->get('mode') == 'description') {
+				include COMPONENT . 'faction/government/description.php';
 			} elseif (CTR::$get->get('mode') == 'manage') {
 				$S_PAM_OLD = ASM::$pam->getCurrentSession();
 

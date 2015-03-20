@@ -82,6 +82,7 @@ class Color {
 	public $sectors					= 0;
 	public $electionStatement		= 0;
 	public $isClosed				= 0;
+	public $description				= 0;
 	public $dLastElection			= '';
 
 	public $colorLink 				= array();
@@ -89,6 +90,11 @@ class Color {
 	public $chiefId					= 0;
 
 	public function getId() { return $this->id; }
+	public function getParsedDescription() {
+		$p = new Parser();
+		$p->parseBigTag = TRUE;
+		return $p->parse($this->description);
+	}
 
 	public function getRegime() {
 		if (in_array($this->id, array(1, 2, 3))) {

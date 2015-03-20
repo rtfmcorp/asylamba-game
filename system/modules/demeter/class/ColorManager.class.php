@@ -68,6 +68,7 @@ class ColorManager extends Manager {
 			$color->sectors = $awColor[$i]['sectors'];
 			$color->electionStatement = $awColor[$i]['electionStatement'];
 			$color->isClosed = $awColor[$i]['isClosed'];
+			$color->description = $awColor[$i]['description'];
 			$color->dLastElection = $awColor[$i]['dLastElection'];
 			$color->colorLink[0] = Color::NEUTRAL;
 
@@ -101,6 +102,7 @@ class ColorManager extends Manager {
 					sectors = ?,
 					electionStatement = ?,
 					isClosed = ?,
+					description = ?,
 					dLastElection = ?
 				WHERE id = ?');
 			$aw = $qr->execute(array(
@@ -113,6 +115,7 @@ class ColorManager extends Manager {
 					$color->sectors,
 					$color->electionStatement,
 					$color->isClosed,
+					$color->description,
 					$color->dLastElection,
 					$color->id
 				));
@@ -143,6 +146,7 @@ class ColorManager extends Manager {
 			sectors = ?,
 			electionStatement = ?,
 			isClosed = ?,
+			description = ?,
 			dLastElection = ?');
 		$aw = $qr->execute(array(
 				$color->id,
@@ -155,6 +159,7 @@ class ColorManager extends Manager {
 				$color->sectors,
 				$color->electionStatement,
 				$color->isClosed,
+				$color->description,
 				$color->dLastElection
 			));
 
