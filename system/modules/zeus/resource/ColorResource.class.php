@@ -133,7 +133,7 @@ class ColorResource {
 			'status' 		=> array('Fidèle', 'Prêtre', 'Camerlingue', 'Inquisiteur', 'Archiprêtre', 'Guide Suprême'),
 			'devise' 		=> 'La lumière vous balaiera',
 			'desc1' => 'L’Eglise Cardanienne est la seule faction théocratique de la Galaxie. Elle fût pendant de longues années un mouvement discriminé, peuplé uniquement par des moines et des hommes pieux. Mais des dérives fanatiques ont poussé la Marche de Cardan à devenir une faction belliqueuse et extrémiste, éblouie par un pouvoir suprême et divin qui les mènera à la victoire.',
-			'desc2' => 'Les rites prennent une place très importante dans le mode de vie des cardaniens. Nombreux sacrifices et rituels sont faits à chaque Segment en l’honneur des Dieux. Les fidèles se doivent de se plier à la loi cardanienne et respecter les ordres du Guide Suprême.',
+			'desc2' => 'Les rites prennent une place très importante dans le mode de vie des Cardaniens. Nombreux sacrifices et rituels sont faits à chaque Segment en l’honneur des Dieux. Les fidèles se doivent de se plier à la loi cardanienne et respecter les ordres du Guide Suprême.',
 			'desc3' => 'Une grande armée de puissants guerriers voués au culte de Cardan, fanatiques experts dans le maniement des armes, les combattants de Cardan n’ont peur que d’une seule chose : ne pas mourir en martyre et décevoir l’Ordre Suprême.',
 			'desc4' => 'Ils ne pratiquent que peu de commerce avec les nations étrangères, préférant se suffir à eux-même, même si cela doit aboutir à la famine et à la mort des plus démunis.',
 			'bonus' => array(
@@ -179,7 +179,7 @@ class ColorResource {
 			'desc1' => 'La république d’Aphéra, réputée pour son potentiel scientifique, est une faction composée des plus grands chercheurs. Avides de technologie et de progrès, les cités d’Aphéra s’étendent au-dessus des nuages, créant de fantastiques villes volantes.',
 			'desc2' => 'Consciente des bienfaits de la nature, Aphéra vit en harmonie avec son environnement dont elle tire la majorité de ses ressources énergétiques. Développement durable, énergies renouvelables, cette faction fait preuve d’une conscience écologique très importante, préférant la technologie de pointe à une industrie de masse.',
 			'desc3' => 'Entrainés depuis leur plus jeune âge, les pilotes aphéréens sont de fins tacticiens et des as du pilotage. Ils font preuve d’une maitrise quasi absolue aux commandes de leurs vaisseaux. Le ciel est leur terrain de jeu.',
-			'desc4' => 'N’appréciant pas d’être à l’écart des décisions politiques, les aphéréens savent faire preuve de poigne lors que cela est nécessaire, déployant des moyens militaires impressionnants pour faire valoir leur idéologie démocratique au travers de toute la Galaxie.',
+			'desc4' => 'N’appréciant pas d’être à l’écart des décisions politiques, les Aphéréens savent faire preuve de poigne lors que cela est nécessaire, déployant des moyens militaires impressionnants pour faire valoir leur idéologie démocratique au travers de toute la Galaxie.',
 			'bonus' => array(
 				array('path' => 'faction/bonus/bonus6-2.png', 'title' => '+ 4% efficacité', 'desc' => 'Votre Université est plus efficace'),
 				array('path' => 'faction/bonus/bonus6-3.png', 'title' => '- 2% temps', 'desc' => 'Vos technologies se développent plus rapidement')),
