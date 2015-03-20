@@ -29,17 +29,18 @@ class TutorialResource {
 	const SPY_PLANET = 15;
 	const LOOT_PLANET = 16;
 	
-	const SHARE_ASYLAMBA = 17;
-	const REFINERY_LEVEL_10 = 18;
-	const STORAGE_LEVEL_8 = 19;
-	const DOCK1_LEVEL_6 = 20;
-	const REFINERY_LEVEL_16 = 21;
-	const STORAGE_LEVEL_12 = 22;
-	const TECHNOSPHERE_LEVEL_6 = 23;
-	const SHIP1_UNBLOCK = 24;
-	const DOCK1_LEVEL_15 = 25;
-	const BUILD_SHIP1 = 26;
-	const REFINERY_LEVEL_20 = 27;
+	const FACTION_FORUM = 17;
+	const SHARE_ASYLAMBA = 18;
+	const REFINERY_LEVEL_10 = 19;
+	const STORAGE_LEVEL_8 = 20;
+	const DOCK1_LEVEL_6 = 21;
+	const REFINERY_LEVEL_16 = 22;
+	const STORAGE_LEVEL_12 = 23;
+	const TECHNOSPHERE_LEVEL_6 = 24;
+	const SHIP1_UNBLOCK = 25;
+	const DOCK1_LEVEL_15 = 26;
+	const BUILD_SHIP1 = 27;
+	const REFINERY_LEVEL_20 = 28;
 
 
 	public static function stepExists($step) {
@@ -294,6 +295,18 @@ class TutorialResource {
 			'shipReward' => array(3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 17,
+			'title' => 'Poster un message sur le forum de faction',
+			'description' => 'Le forum de faction est un lieu essentiel dans le développement au sein du jeu. C\'est là que tu peux discuter avec les membres de ta faction sur divers points, que ça soit de stratégie, de commerce, de politique. Il y a même un Biasto !
+				<br /><br />
+				Pour accéder au forum, tu dois d\'abord cliquer sur l\'onglet faction en haut de ton écran puis cliquer sur le menu faction. Là tu trouveras diverses catégories. Chaque partie du forum a son utilité.
+				<br /><br />
+				Pour passer cette étape, tu dois créer un sujet dans le forum ou répondre à un sujet déjà créé. Dis bonjour à tes nouveaux collègues.',
+			'experienceReward' => 10,
+			'creditReward' => 0,
+			'resourceReward' => 0,
+			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+		array(
+			'id' => 18,
 			'title' => 'Parler d\'Asylamba',
 			'description' => 'Cette étape un peu symbolique t\'encourage, si tu as aimé ce que tu as vu pour l\'instant, à parler du jeu autour de toi pour que d\'autres personnes susceptibles d\'aimer ce genre de jeu puisse le découvrir.
 				<br /><br />
@@ -307,7 +320,7 @@ class TutorialResource {
 			'resourceReward' => 0,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
-			'id' => 18,
+			'id' => 19,
 			'title' => 'Construire la Raffinerie au niveau 10',
 			'description' => 'Une bonne planète est une planète qui produit. Veille a progressivement augmenter le niveau de ta raffinerie de manière à toujours gagner suffisamment de ressources.',
 			'experienceReward' => 10,
@@ -315,7 +328,7 @@ class TutorialResource {
 			'resourceReward' => 3000,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
-			'id' => 19,
+			'id' => 20,
 			'title' => 'Construire le Stockage au niveau 8',
 			'description' => 'N\'oublie pas de toujours avoir assez d\'espace de stockage pour passer la nuit en toute tranquilité. Lorsque le Stockage est plein, la Raffinerie arrête de produire.',
 			'experienceReward' => 10,
@@ -323,7 +336,7 @@ class TutorialResource {
 			'resourceReward' => 2000,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
-			'id' => 20,
+			'id' => 21,
 			'title' => 'Construire le Chantier Alpha au niveau 6',
 			'description' => 'En plus de débloquer de nouveaux vaisseaux, augmenter le niveau de ton Chantier Alpha te permettra de disposer de plus grands hangars. Tu pourras alors commander la construction de plus de vaisseaux.',
 			'experienceReward' => 10,
@@ -331,7 +344,7 @@ class TutorialResource {
 			'resourceReward' => 0,
 			'shipReward' => array(5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
-			'id' => 21,
+			'id' => 22,
 			'title' => 'Construire la Raffinerie au niveau 16',
 			'description' => '',
 			'experienceReward' => 10,
@@ -339,7 +352,7 @@ class TutorialResource {
 			'resourceReward' => 6000,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
-			'id' => 22,
+			'id' => 23,
 			'title' => 'Construire le Stockage au niveau 12',
 			'description' => '',
 			'experienceReward' => 10,
@@ -347,7 +360,7 @@ class TutorialResource {
 			'resourceReward' => 4000,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
-			'id' => 23,
+			'id' => 24,
 			'title' => 'Construire la Technosphère au niveau 6',
 			'description' => '',
 			'experienceReward' => 10,
@@ -355,7 +368,7 @@ class TutorialResource {
 			'resourceReward' => 2000,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
-			'id' => 24,
+			'id' => 25,
 			'title' => 'Développer la technologie "Chassis simple amélioré"',
 			'description' => '',
 			'experienceReward' => 10,
@@ -363,7 +376,7 @@ class TutorialResource {
 			'resourceReward' => 2000,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
-			'id' => 25,
+			'id' => 26,
 			'title' => 'Construire le Chantier Alpha au niveau 15',
 			'description' => 'Afin de construire le nouveau type de vaisseau que tes ingénieurs de la Technosphère viennent de découvrir, tu dois disposer d\'un Chantier Alpha plus grand. Construis ce dernier au niveau 15.',
 			'experienceReward' => 10,
@@ -371,7 +384,7 @@ class TutorialResource {
 			'resourceReward' => 8000,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
-			'id' => 26,
+			'id' => 27,
 			'title' => 'Construire un Satyre',
 			'description' => '',
 			'experienceReward' => 10,
@@ -379,7 +392,7 @@ class TutorialResource {
 			'resourceReward' => 0,
 			'shipReward' => array(0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
-			'id' => 27,
+			'id' => 28,
 			'title' => 'Construire la Raffinerie au niveau 20',
 			'description' => '',
 			'experienceReward' => 10,

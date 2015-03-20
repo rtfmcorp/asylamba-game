@@ -179,6 +179,9 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 		case TutorialResource::LOOT_PLANET :
 			# asdf
 			break;
+		case TutorialResource::FACTION_FORUM :
+			# asdf
+			break;
 		case TutorialResource::SHARE_ASYLAMBA :
 			$nextStepAlreadyDone = TRUE;
 			break;
