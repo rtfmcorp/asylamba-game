@@ -29,16 +29,22 @@ echo '<div class="component report topic nav">';
 				echo '</a>';
 			}
 
-			echo '<div class="set-item">';
-				echo '<a class="item" href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '/mode-create/sftr-2">';
-					echo '<div class="left">';
-						echo '<span>+</span>';
-					echo '</div>';
+			if ($archivedMode) {
+				echo '<a class="more-button" href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '/">Revenir aux sujets</a>';
+			}
 
-					echo '<div class="center">';
-						echo 'Créer un nouveau sujet';
-					echo '</div>';
-				echo '</a>';
+			echo '<div class="set-item">';
+				if (!$archivedMode) {
+					echo '<a class="item" href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '/mode-create/sftr-2">';
+						echo '<div class="left">';
+							echo '<span>+</span>';
+						echo '</div>';
+
+						echo '<div class="center">';
+							echo 'Créer un nouveau sujet';
+						echo '</div>';
+					echo '</a>';
+				}
 			
 				if (count($topic_topics) > 0) {
 					foreach ($topic_topics as $t) {
@@ -57,21 +63,29 @@ echo '<div class="component report topic nav">';
 
 							echo '<div class="center">';
 								if ($t->isClosed) {
-									echo '[Fermé] ';
+									echo '&#128274; ';
+								} elseif ($t->isUp) {
+									echo '&#9733; ';
 								}
 								echo $t->title;
 							echo '</div>';
 
 							echo '<div class="right">';
-								echo '<a class="' . (CTR::$get->equal('topic', $t->id)  ? 'active' : NULL) . '" href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '/topic-' . $t->id . '/sftr-2"></a>';
+								echo '<a class="' . (CTR::$get->equal('topic', $t->id)  ? 'active' : NULL) . '" href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '/topic-' . $t->id . '/' . ($archivedMode ? 'mode-archived/' : NULL) . 'sftr-2"></a>';
 							echo '</div>';
 						echo '</div>';
 					}
-					echo '</div>';
-				} else {
-					echo '</div>';
-					echo '<p>Aucun sujet n\'a encore été créé dans cette section du forum.</p>';
 				}
+			echo '</div>';
+
+			if (count($topic_topics) == 0) {
+				echo '<p>Aucun sujet n\'a encore été créé dans cette section du forum.</p>';
+			}
+
+			if ($isStandard_topics && !$archivedMode && in_array(CTR::$data->get('playerInfo')->get('status'), [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER])) {
+				echo '<a class="more-button" href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '/mode-archived">Voir les messages archivés</a>';
+			}
 		echo '</div>';
+		
 	echo '</div>';
 echo '</div>';

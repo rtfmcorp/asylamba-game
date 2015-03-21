@@ -11,7 +11,7 @@ $content = Utils::getHTTPData('content');
 $rForum = Utils::getHTTPData('rforum');
 
 
-if ($title AND $content AND $rForum) {
+if ($title !== FALSE AND $content !== FALSE AND $rForum !== FALSE) {
 	$topic = new ForumTopic();
 	$topic->title = $title;
 	$topic->rForum = $rForum;

@@ -4,7 +4,7 @@ include_once DEMETER;
 $rForum = Utils::getHTTPData('rforum');
 $id = Utils::getHTTPData('id');
 
-if ($rForum && $id) {
+if ($rForum !== FALSE && $id !== FALSE) {
 	$_TOM = ASM::$tom->getCurrentSession();
 	ASM::$tom->newSession();
 	ASM::$tom->load(array('id' => $id));

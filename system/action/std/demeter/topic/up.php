@@ -1,28 +1,31 @@
 <?php
 include_once DEMETER;
 
-$id = Utils::getHTTPData('id');
+$id 		= Utils::getHTTPData('id');
 
-if ($id) {
-	$_TOM = ASM::$tom->getCurrensession();
+if ($id !== FALSE) {
+	$_TOM = ASM::$tom->getCurrentsession();
+	ASM::$tom->newSession();
 	ASM::$tom->load(array('id' => $id));
-	if (CTR::$data->get('playerInfo')->get('status') > 2)) {
-		if (ASM::$tom->get()->isUp = 1) {
-			ASM::$tom->get()->isUp = 0;
-		} else {
-			$rForum = ASM::$tom->get()->rForum;
-			ASM::$tom->get()->isUp = 1;
-			$_TOM2 = ASM::$tom->getCurrensession();
-			ASM::$tom->load(array('isUp' => 1, 'rForum' => $rForum));
 
-			if (ASM::$tom->size() > 0) {
-				ASM::$tom->isUp = 0;
+	if (ASM::$tom->size() == 1) {
+		if (in_array(CTR::$data->get('playerInfo')->get('status'), [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER])) {
+			$topic = ASM::$tom->get();
+
+			if ($topic->isUp) {
+				$topic->isUp = FALSE;
+			} else {
+				$topic->isUp = TRUE;
 			}
-			ASM::$tom->changeSession($_TOM2);
+		} else {
+			CTR::$alert->add('Vous ne disposez pas des droits nécessaires pour cette action.', ALERT_STD_ERROR);
 		}
+	} else {
+		CTR::$alert->add('Le sujet demandé n\'existe pas.', ALERT_STD_ERROR);
 	}
+	
+	CTR::redirect('faction/view-forum/forum-' . ASM::$tom->get()->rForum . '/topic-' . ASM::$tom->get()->id . '/sftr-2');
 	ASM::$tom->changeSession($_TOM);
-	CTR::redirect('faction/view-forum/forum-' . $topic->rForum . '/topic-' . ASM::$tom->id . '/sftr-2');
 } else {
-	CTR::$alert->add('Manque d\information.', ALERT_STD_FILLFORM);
+	CTR::$alert->add('Manque d\'information.', ALERT_STD_ERROR);
 }

@@ -12,7 +12,9 @@ echo '<div class="component">';
 		echo '<div class="body">';
 			echo '<h4>Option de modération</h4>';
 
-		#	echo '<a class="more-button" href="' . APP_ROOT . 'action/a-uptopicforum/id-' . $topic_topic->id . '">Epingler</a>';
+			echo '<a class="more-button" href="' . Format::actionBuilder('uptopicforum', ['id' => $topic_topic->id]) . '">';
+				echo $topic_topic->isUp ? 'Enlever la mention importante' : 'Marquer comme important';
+			echo '</a>';
 			echo '<a class="more-button" href="' . Format::actionBuilder('closetopicforum', ['id' => $topic_topic->id]) . '">';
 				echo $topic_topic->isClosed ? 'Réouvrire' : 'Fermer';
 			echo '</a>';
