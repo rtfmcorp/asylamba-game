@@ -31,6 +31,16 @@ if ($title AND $content AND $rForum) {
 
 	ASM::$fmm->add($message);
 
+	# tutorial
+	if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
+		include_once ZEUS;
+		switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+			case TutorialResource::FACTION_FORUM :
+				TutorialHelper::setStepDone();						
+				break;
+		}
+	}
+
 	CTR::redirect('faction/view-forum/forum-' . $topic->rForum . '/topic-' . $topic->id . '/sftr-2');
 	CTR::$alert->add('Topic créé.', ALERT_STD_SUCCESS);
 } else {

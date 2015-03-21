@@ -133,7 +133,7 @@ class CommanderManager extends Manager {
 					$awCommanders[$i]['sqShip4'], 
 					$awCommanders[$i]['sqShip5'], 
 					$awCommanders[$i]['sqShip6'], 
-					$awCommanders[$i]['sqShip7'], 
+					$awCommanders[$i]['sqShip7'],
 					$awCommanders[$i]['sqShip8'], 
 					$awCommanders[$i]['sqShip9'], 
 					$awCommanders[$i]['sqShip10'], 
