@@ -28,6 +28,7 @@ abstract class CTR {
 		'spying' => array('spying', 'Espionnage'),
 
 		'diary' => array('diary', 'Journal'),
+		'embassy' => array('embassy', 'Ambassades'),
 
 		'bases' => array('bases', 'Vos Bases'),
 
