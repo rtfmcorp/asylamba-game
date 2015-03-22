@@ -19,8 +19,14 @@ class LittleReportManager extends Manager {
 		$formatLimit = Utils::arrayToLimit($limit);
 
 		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT r.*
+		$qr = $db->prepare('SELECT r.*,
+				p1.rColor AS colorA,
+				p2.rColor AS colorD
 			FROM report AS r
+			LEFT JOIN player AS p1
+				ON p1.id = r.rPlayerAttacker
+			LEFT JOIN player AS p2
+				ON p2.id = r.rPlayerDefender
 			' . $formatWhere .'
 			' . $formatOrder .'
 			' . $formatLimit
@@ -74,6 +80,9 @@ class LittleReportManager extends Manager {
 			$report->statementAttacker = $awReport['statementAttacker'];
 			$report->statementDefender = $awReport['statementDefender'];
 			$report->dFight = $awReport['dFight'];
+
+			$report->colorA = $awReport['colorA'];
+			$report->colorD = $awReport['colorD'];
 
 			$this->_Add($report);
 		}

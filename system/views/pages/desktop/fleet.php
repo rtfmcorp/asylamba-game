@@ -204,7 +204,7 @@ echo '<div id="content">';
 		# loading des objets
 		$S_LRM1 = ASM::$lrm->getCurrentSession();
 		ASM::$lrm->newSession();
-		ASM::$lrm->load(array('r.rPlayerAttacker' => CTR::$data->get('playerId')), array('r.dFight', 'DESC'));
+		ASM::$lrm->load(['r.rPlayerAttacker' => CTR::$data->get('playerId')], ['r.dFight', 'DESC'], [0, 50]);
 
 		# listReport component
 		$report_listReport = array();
@@ -215,7 +215,7 @@ echo '<div id="content">';
 		include COMPONENT . 'fleet/listReport.php';
 
 		ASM::$lrm->newSession();
-		ASM::$lrm->load(array('r.rPlayerDefender' => CTR::$data->get('playerId')), array('r.dFight', 'DESC'));
+		ASM::$lrm->load(['r.rPlayerDefender' => CTR::$data->get('playerId')], ['r.dFight', 'DESC'], [0, 50]);
 
 		$report_listReport = array();
 		for ($i = 0; $i < ASM::$lrm->size(); $i++) { 

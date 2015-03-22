@@ -16,13 +16,9 @@ echo '<div class="component report">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			/*echo '<div class="tool">';
-				echo '<span><a href="#" class="hb lt" title="cette action n\'a pas encore été développée">tout supprimer</a></span>';
-				echo '<span><a href="#" class="hb lt sh" data-target="info-report" title="plus d\'infos">?</a></span>';
-			echo '</div>';*/
 			echo $type_listReport == 1
-				? '<h3>Rapports d\'attaque</h3>'
-				: '<h3>Rapports de défense</h3>';
+				? '<h4>Rapports d\'attaque</h4>'
+				: '<h4>Rapports de défense</h4>';
 			
 			if (count($report_listReport) > 0) {
 				echo '<div class="set-item">';
@@ -65,7 +61,7 @@ echo '<div class="component report">';
 
 						echo '<div class="item">';
 							echo '<div class="left">';
-								echo '<img src="' . MEDIA . 'map/action/' . $img . '" alt="" />';
+								echo '<img class="color' . ($type_listReport == 1 ? $r->colorD : $r->colorA) . '" src="' . MEDIA . 'map/action/' . $img . '" alt="" />';
 							echo '</div>';
 
 							echo '<div class="center">';

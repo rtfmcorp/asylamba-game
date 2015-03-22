@@ -60,6 +60,9 @@ class Report {
 	public $dFight				= '';
 	public $placeName			= '';
 
+	public $colorA				= -1;
+	public $colorD				= -1;
+
 	public $squadrons = array();
 
 	public $armyInBeginA = array();
