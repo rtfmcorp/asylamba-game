@@ -132,7 +132,7 @@ echo '<div class="component size2 player new-message profil">';
 
 			for ($i = 0; $i < ASM::$pam->size(); $i++) { 
 				echo '<div class="player">';
-					echo '<a href="' . APP_ROOT . 'diary/player-' .  ASM::$pam->get($i)->id . '">';
+					echo '<a href="' . APP_ROOT . 'embassy/player-' .  ASM::$pam->get($i)->id . '">';
 						echo '<img src="' . MEDIA . 'avatar/small/' .  ASM::$pam->get($i)->avatar . '.png" alt="' .  ASM::$pam->get($i)->name . '" class="picto" />';
 					echo '</a>';
 					echo '<span class="title">' . $status[ ASM::$pam->get($i)->status - 1] . '</span>';

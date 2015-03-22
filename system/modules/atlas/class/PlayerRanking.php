@@ -103,7 +103,7 @@ class PlayerRanking {
 		}
 
 		$r .= '<div class="player color' . $this->color . ' ' . (CTR::$data->get('playerId') == $this->rPlayer ? 'active' : NULL) . '">';
-			$r .= '<a href="' . APP_ROOT . 'diary/player-' . $this->rPlayer . '">';
+			$r .= '<a href="' . APP_ROOT . 'embassy/player-' . $this->rPlayer . '">';
 				$r .= '<img src="' . MEDIA . 'avatar/small/' . $this->avatar . '.png" alt="' . $this->name . '" class="picto" />';
 			$r .= '</a>';
 

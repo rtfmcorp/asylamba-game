@@ -75,7 +75,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 				$n->setRPlayer($proposerBase->getRPlayer());
 				$n->setTitle('Route commerciale acceptée');
 				$n->addBeg();
-				$n->addLnk('diary/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'))->addTxt(' a accepté la route commerciale proposée entre ');
+				$n->addLnk('embassy/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'))->addTxt(' a accepté la route commerciale proposée entre ');
 				$n->addLnk('map/place-' . $acceptorBase->getRPlace(), $acceptorBase->getName())->addTxt(' et ');
 				$n->addLnk('map/base-' . $proposerBase->getRPlace(), $proposerBase->getName());
 				$n->addSep()->addTxt('Cette route vous rapporte ' . Format::numberFormat($cr->getIncome()) . ' crédits par relève.');

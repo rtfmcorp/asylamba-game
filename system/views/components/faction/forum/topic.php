@@ -52,7 +52,7 @@ echo '<div class="component topic size2">';
 					$status = 'Rebelle';
 				}
 				echo '<div class="message">';
-					echo '<a href="' . APP_ROOT . 'diary/player-' . $m->rPlayer . '"><img src="' . MEDIA . 'avatar/medium/' . $m->playerAvatar . '.png" alt="' . $m->playerName . '" class="avatar" /></a>';
+					echo '<a href="' . APP_ROOT . 'embassy/player-' . $m->rPlayer . '"><img src="' . MEDIA . 'avatar/medium/' . $m->playerAvatar . '.png" alt="' . $m->playerName . '" class="avatar" /></a>';
 					echo '<div class="content">';
 						echo '<p class="text">';
 							echo '≡ ' . $status . ' ' . $m->playerName . '<br /><br />';

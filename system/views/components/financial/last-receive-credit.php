@@ -19,7 +19,7 @@ echo '<div class="component player rank">';
 				$transaction = ASM::$crt->get($i);
 
 				echo '<div class="player color' . $transaction->senderColor . '">';
-					echo '<a href="' . APP_ROOT . 'diary/player-' . $transaction->rSender . '">';
+					echo '<a href="' . APP_ROOT . 'embassy/player-' . $transaction->rSender . '">';
 						echo '<img src="' . MEDIA . 'avatar/small/' . $transaction->senderAvatar . '.png" alt="' . $transaction->senderName . '" class="picto" />';
 					echo '</a>';
 

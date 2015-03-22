@@ -36,7 +36,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 		$n = new Notification();
 		$n->setRPlayer($proposerBase->getRPlayer());
 		$n->setTitle('Route commerciale refusée');
-		$n->addBeg()->addLnk('diary/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'))->addTxt(' a refusé la route commerciale proposée entre ');
+		$n->addBeg()->addLnk('embassy/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'))->addTxt(' a refusé la route commerciale proposée entre ');
 		$n->addLnk('map/place-' . $refusingBase->getRPlace(), $refusingBase->getName())->addTxt(' et ');
 		$n->addLnk('map/base-' . $proposerBase->getRPlace(), $proposerBase->getName())->addTxt('.');
 		$n->addSep()->addTxt('Les ' . Format::numberFormat($cr->getPrice()) . ' crédits bloqués sont à nouveau disponibles.');

@@ -47,7 +47,7 @@ echo '<div class="component player rank">';
 				}
 
 				echo '<div class="player">';
-					echo '<a href="' . APP_ROOT . 'diary/player-' . $p->id . '">';
+					echo '<a href="' . APP_ROOT . 'embassy/player-' . $p->id . '">';
 						echo '<img src="' . MEDIA . 'avatar/small/' . $p->avatar . '.png" class="picto" alt="' . $p->name . '" />';
 					echo '</a>';
 					echo '<span class="title">' . $status[$p->status - 1] . '</span>';

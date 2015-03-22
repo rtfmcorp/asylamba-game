@@ -38,7 +38,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 		$n->setRPlayer($linkedBase->getRPlayer());
 		$n->setTitle('Route commerciale annulée');
 
-		$n->addBeg()->addLnk('diary/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'))->addTxt(' a finalement retiré la proposition de route commerciale qu\'il avait faite entre ');
+		$n->addBeg()->addLnk('embassy/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'))->addTxt(' a finalement retiré la proposition de route commerciale qu\'il avait faite entre ');
 		$n->addLnk('map/base-' . $linkedBase->getRPlace(), $linkedBase->getName())->addTxt(' et ');
 		$n->addLnk('map/place-' . $proposerBase->getRPlace(), $proposerBase->getName());
 		$n->addEnd();

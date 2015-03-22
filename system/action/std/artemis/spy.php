@@ -146,7 +146,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 							$n->setRPlayer($orbitalBase->rPlayer);
 							$n->setTitle('Espionnage intercepté');
 							$n->addBeg();
-							$n->addLnk('diary/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'))->addTxt(' a espionné votre base ');
+							$n->addLnk('embassy/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'))->addTxt(' a espionné votre base ');
 							$n->addLnk('map/base-' . $orbitalBase->rPlace, $orbitalBase->name)->addTxt('.');
 							$n->addBrk()->addTxt('L\'espion s\'est fait attrapé en train de fouiller dans vos affaires.');
 							$n->addEnd();

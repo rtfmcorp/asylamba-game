@@ -173,7 +173,7 @@ class Transaction {
 			echo '<div class="hidden" id="transaction-' . $type . '-' . $this->id . '">';
 				echo '<div class="info">';
 					echo '<div class="seller">';
-						echo '<p>vendu par<br /> <a href="' . APP_ROOT . 'diary/player-' . $this->rPlayer . '" class="color' . $this->playerColor . '">' . $this->playerName . '</a></p>';
+						echo '<p>vendu par<br /> <a href="' . APP_ROOT . 'embassy/player-' . $this->rPlayer . '" class="color' . $this->playerColor . '">' . $this->playerName . '</a></p>';
 						echo '<p>depuis<br /> <a href="' . APP_ROOT . 'map/place-' . $this->rPlace . '">' . $this->placeName . '</a> <span class="color' . $this->sectorColor . '">[' . $this->sector . ']</span></p>';
 					echo '</div>';
 					echo '<div class="price-detail">';

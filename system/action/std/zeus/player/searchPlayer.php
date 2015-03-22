@@ -11,7 +11,7 @@ if ($playerid !== FALSE) {
 	ASM::$pam->load(array('id' => $playerid));
 	
 	if (ASM::$pam->size() == 1) {
-		CTR::redirect('diary/player-' . ASM::$pam->get()->getId());
+		CTR::redirect('embassy/player-' . ASM::$pam->get()->getId());
 	} else {
 		CTR::$alert->add('Aucun joueur ne correspond à votre recherche.', ALERT_STD_ERROR);
 	}

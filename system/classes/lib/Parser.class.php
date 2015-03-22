@@ -91,7 +91,7 @@ class Parser {
 
 				if (ASM::$pam->size() > 0) {
 					$player = ASM::$pam->get();
-					return '<a href="' . APP_ROOT . 'diary/player-' . $player->getId() . '" class="color' . $player->getRColor() . ' hb lt" title="voir le profil">' . $player->getName() . '</a>';
+					return '<a href="' . APP_ROOT . 'embassy/player-' . $player->getId() . '" class="color' . $player->getRColor() . ' hb lt" title="voir le profil">' . $player->getName() . '</a>';
 				} else {
 					return $m[0];
 				}

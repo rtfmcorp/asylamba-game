@@ -47,7 +47,7 @@ if ($name !== FALSE AND $quantity !== FALSE AND strlen($text) < 500) {
 				$n->setRPlayer($receiver->id);
 				$n->setTitle('Réception de crédits');
 				$n->addBeg();
-				$n->addLnk('diary/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'));
+				$n->addLnk('embassy/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'));
 				$n->addTxt(' vous a envoyé des crédits');
 				if ($text !== '') {
 					$n->addTxt(' avec le message suivant : ')->addBrk()->addTxt('"' . $text . '"');

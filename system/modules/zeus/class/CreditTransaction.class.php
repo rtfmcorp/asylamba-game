@@ -35,7 +35,7 @@ class CreditTransaction {
 
 	public function getFormatedReceiverLink() {
 		return $this->type == CreditTransaction::TYP_PLAYER
-			? APP_ROOT . 'diary/player-' . $this->rReceiver
+			? APP_ROOT . 'embassy/player-' . $this->rReceiver
 			: APP_ROOT . '404';
 	}
 

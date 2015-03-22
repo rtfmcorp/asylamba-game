@@ -39,7 +39,7 @@ echo '<div class="component size3 dock1 admin bugtracker">';
 				foreach ($bugtracker as $bug) {
 					if ($bug->statement == BugTracker::ST_WAITING) {
 						echo '<tr>';
-							echo '<td><a href="' . APP_ROOT . 'diary/player-' . $bug->rPlayer . '" class="button hb lt" title="voir le joueur qui a rapporter ce bug">' . $bug->rPlayer . '</td>';
+							echo '<td><a href="' . APP_ROOT . 'embassy/player-' . $bug->rPlayer . '" class="button hb lt" title="voir le joueur qui a rapporter ce bug">' . $bug->rPlayer . '</td>';
 							echo '<td>' . $bug->dSending . '</td>';
 							echo '<td>' . $bug->url . '<br /><br />' . $bug->message . '</td>';
 							echo '<td>';
@@ -62,7 +62,7 @@ echo '<div class="component size3 dock1 admin bugtracker">';
 				foreach ($bugtracker as $bug) {
 					if ($bug->statement == BugTracker::ST_ARCHIVED) {
 						echo '<tr>';
-							echo '<td><a href="' . APP_ROOT . 'diary/player-' . $bug->rPlayer . '" class="button hb lt" title="voir le joueur qui a rapporter ce bug">' . $bug->rPlayer . '</td>';
+							echo '<td><a href="' . APP_ROOT . 'embassy/player-' . $bug->rPlayer . '" class="button hb lt" title="voir le joueur qui a rapporter ce bug">' . $bug->rPlayer . '</td>';
 							echo '<td>' . $bug->dSending . '</td>';
 							echo '<td>' . $bug->url . '<br /><br />' . $bug->message . '</td>';
 							echo '<td>';
@@ -75,51 +75,3 @@ echo '<div class="component size3 dock1 admin bugtracker">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-/*
-echo '<div class="component nav">';
-	echo '<div class="head">';
-		echo '<h1>Bugtracker</h1>';
-	echo '</div>';
-	echo '<div class="fix-body">';
-		echo '<div class="body">';
-			echo '<div class="number-box">';
-				echo '<span class="label">bla</span>';
-				echo '<span class="value">' . Format::numberFormat(0) . '</span>';
-			echo '</div>';
-
-			echo '<hr />';
-
-			echo '<div class="number-box">';
-				echo '<span class="label">Erreurs en attente</span>';
-				echo '<span class="value">' . Format::numberFormat($waitingBug_mainBugtracker) . '</span>';
-			echo '</div>';
-			echo '<div class="number-box">';
-				echo '<span class="label">Erreurs corrigées</span>';
-				echo '<span class="value">' . Format::numberFormat($archivedBug_mainBugtracker) . '</span>';
-			echo '</div>';
-
-			echo '<hr />';
-
-			echo '<div class="number-box">';
-				echo '<span class="label">Bugs & erreurs</span>';
-				echo '<span class="value">' . Format::numberFormat(count($bugtracker_error)) . '</span>';
-			echo '</div>';
-			echo '<div class="number-box">';
-				echo '<span class="label">Fautes d\'orthographe</span>';
-				echo '<span class="value">' . Format::numberFormat(count($bugtracker_orthograph)) . '</span>';
-			echo '</div>';
-			echo '<div class="number-box">';
-				echo '<span class="label">Boite à idées</span>';
-				echo '<span class="value">' . Format::numberFormat(count($bugtracker_improvement)) . '</span>';
-			echo '</div>';
-			echo '<div class="number-box">';
-				echo '<span class="label">Erreurs d\'affichage</span>';
-				echo '<span class="value">' . Format::numberFormat(count($bugtracker_display)) . '</span>';
-			echo '</div>';
-			echo '<div class="number-box">';
-				echo '<span class="label">Erreurs diverses</span>';
-				echo '<span class="value">' . Format::numberFormat(count($bugtracker_bug)) . '</span>';
-			echo '</div>';
-		echo '</div>';
-	echo '</div>';
-echo '</div>';*/

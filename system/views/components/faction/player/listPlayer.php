@@ -40,7 +40,7 @@ echo '<div class="component player size3">';
 
 				foreach ($players as $p) {
 					echo '<div class="player">';
-						echo '<a href="' . APP_ROOT . 'diary/player-' . $p->getId() . '">';
+						echo '<a href="' . APP_ROOT . 'embassy/player-' . $p->getId() . '">';
 							echo '<img src="' . MEDIA . 'avatar/small/' . $p->getAvatar() . '.png" class="picto" alt="' . $p->getName() . '" />';
 						echo '</a>';
 						echo '<span class="title">' . $status[$p->getStatus() - 1] . '</span>';

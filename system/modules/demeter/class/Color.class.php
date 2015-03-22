@@ -338,7 +338,7 @@ class Color {
 					$notif->setTitle('Un coup d\'état a réussi');
 					$notif->addBeg()
 						->addTxt(' Le joueur ')
-						->addLnk('diary/player-' . ASM::$pam->get()->id, ASM::$pam->get()->name)
+						->addLnk('embassy/player-' . ASM::$pam->get()->id, ASM::$pam->get()->name)
 						->addTxt(' a fait un coup d\'état, vous êtes évincé du pouvoir.');
 					ASM::$ntm->add($notif);
 				}
@@ -377,7 +377,7 @@ class Color {
 					$notif->setTitle('Un coup d\'état a échoué');
 					$notif->addBeg()
 						->addTxt(' Le joueur ')
-						->addLnk('diary/player-' . ASM::$pam->get()->id, ASM::$pam->get()->name)
+						->addLnk('embassy/player-' . ASM::$pam->get()->id, ASM::$pam->get()->name)
 						->addTxt(' a tenté un coup d\'état, celui-ci a échoué');
 					ASM::$ntm->add($notif);
 					ASM::$pam->newSession($_PAM2);

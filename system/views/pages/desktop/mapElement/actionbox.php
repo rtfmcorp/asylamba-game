@@ -119,7 +119,7 @@ echo '<div class="body">';
 										$status = ColorResource::getInfo($place->playerColor, 'status');
 										echo $status[$place->playerStatus - 1] . ' ';
 										echo '<span class="player-name">';
-											echo '<a href="' . APP_ROOT . 'diary/player-' . $place->rPlayer . '" class="color' . $place->playerColor . '">' . $place->playerName . '</a>';
+											echo '<a href="' . APP_ROOT . 'embassy/player-' . $place->rPlayer . '" class="color' . $place->playerColor . '">' . $place->playerName . '</a>';
 										echo '</span>';
 									} else {
 										echo 'rebelle <span class="player-name">' . $place->playerName . '</span>';

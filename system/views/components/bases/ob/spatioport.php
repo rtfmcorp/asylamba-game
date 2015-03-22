@@ -96,14 +96,14 @@ for ($i = 0; $i < ASM::$crm->size(); $i++) {
 		$base1  = '<div class="base">';
 			$base1 .= '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation1()) . '.png" alt="' . $ob_spatioport->getName() . '" class="place" />';
 			$base1 .= '' . PlaceResource::get($rc->baseType1, 'name') . ' <a href="' . APP_ROOT . 'map/place-' . $rc->getROrbitalBase() . '">' . $rc->getBaseName1() . '</a><br />';
-			$base1 .= 'de <a href="' . APP_ROOT . 'diary/player-' . $rc->getPlayerId1() . '">' . $rc->getPlayerName1() . '</a><br />';
+			$base1 .= 'de <a href="' . APP_ROOT . 'embassy/player-' . $rc->getPlayerId1() . '">' . $rc->getPlayerName1() . '</a><br />';
 			$base1 .= Format::numberFormat($rc->getPopulation1()) . ' millions de population';
 		$base1 .= '</div>';
 
 		$base2  = '<div class="base">';
 			$base2 .= '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation2()) . '.png" alt="' . $ob_spatioport->getName() . '" class="place" />';
 			$base2 .= '' . PlaceResource::get($rc->baseType2, 'name') . ' <a href="' . APP_ROOT . 'map/place-' . $rc->getROrbitalBaseLinked() . '">' . $rc->getBaseName2() . '</a><br />';
-			$base2 .= 'de <a href="' . APP_ROOT . 'diary/player-' . $rc->getPlayerId2() . '">' . $rc->getPlayerName2() . '</a><br />';
+			$base2 .= 'de <a href="' . APP_ROOT . 'embassy/player-' . $rc->getPlayerId2() . '">' . $rc->getPlayerName2() . '</a><br />';
 			$base2 .= Format::numberFormat($rc->getPopulation2()) . ' millions de population';
 		$base2 .= '</div>';
 
@@ -180,14 +180,14 @@ for ($i = 0; $i < ASM::$crm->size(); $i++) {
 		$base1  = '<div class="base">';
 			$base1 .= '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation1()) . '.png" class="place" />';
 			$base1 .= '' . PlaceResource::get($rc->baseType1, 'name') . ' <a href="' . APP_ROOT . 'map/place-' . $rc->getROrbitalBase() . '">' . $rc->getBaseName1() . '</a><br />';
-			$base1 .= 'de <a href="' . APP_ROOT . 'diary/player-' . $rc->getPlayerId1() . '">' . $rc->getPlayerName1() . '</a><br />';
+			$base1 .= 'de <a href="' . APP_ROOT . 'embassy/player-' . $rc->getPlayerId1() . '">' . $rc->getPlayerName1() . '</a><br />';
 			$base1 .= Format::numberFormat($rc->getPopulation1()) . ' millions de population';
 		$base1 .= '</div>';
 
 		$base2  = '<div class="base">';
 			$base2 .= '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation2()) . '.png" class="place" />';
 			$base2 .= '' . PlaceResource::get($rc->baseType2, 'name') . ' <a href="' . APP_ROOT . 'map/place-' . $rc->getROrbitalBaseLinked() . '">' . $rc->getBaseName2() . '</a><br />';
-			$base2 .= 'de <a href="' . APP_ROOT . 'diary/player-' . $rc->getPlayerId2() . '">' . $rc->getPlayerName2() . '</a><br />';
+			$base2 .= 'de <a href="' . APP_ROOT . 'embassy/player-' . $rc->getPlayerId2() . '">' . $rc->getPlayerName2() . '</a><br />';
 			$base2 .= Format::numberFormat($rc->getPopulation2()) . ' millions de population';
 		$base2 .= '</div>';
 

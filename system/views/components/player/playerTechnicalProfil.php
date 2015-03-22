@@ -13,7 +13,7 @@ echo '<div class="component">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="tool">';
-				echo '<span><a href="' . APP_ROOT . 'diary/player-' . $player_playerTechnicalProfil->getId() . '">voir votre journal</a></span>';
+				echo '<span><a href="' . APP_ROOT . 'embassy/player-' . $player_playerTechnicalProfil->getId() . '">voir votre journal</a></span>';
 			echo '</div>';
 
 			echo '<div class="number-box">';

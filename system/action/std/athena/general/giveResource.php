@@ -82,7 +82,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_
 								$n->setRPlayer($otherBase->getRPlayer());
 								$n->setTitle('Envoi de ressources');
 								$n->addBeg()->addTxt($otherBase->getName())->addSep();
-								$n->addLnk('diary/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'));
+								$n->addLnk('embassy/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'));
 								$n->addTxt(' a lancé un convoi de ')->addStg(Format::numberFormat($resource))->addTxt(' ressources depuis sa base ');
 								$n->addLnk('map/place' . $orbitalBase->getRPlace(), $orbitalBase->getName())->addTxt('. ');
 								$n->addBrk()->addTxt('Quand le convoi arrivera, les ressources seront à vous.');
