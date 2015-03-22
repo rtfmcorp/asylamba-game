@@ -14,7 +14,7 @@ echo '<div class="component player rank">';
 					$id = ASM::$ctm->get($i)->relatedFaction;
 
 					echo '<div class="player faction color' . $id . '">';
-						echo '<a href="' . APP_ROOT . 'rank/view-list/faction-' . $id . '">';
+						echo '<a href="' . APP_ROOT . 'embassy/faction-' . $id . '">';
 							echo '<img src="' . MEDIA . 'faction/flag/flag-' . $id . '.png" alt="" class="picto">';
 						echo '</a>';
 						echo '<span class="title">produits ' . ColorResource::getInfo($id, 'demonym') . '</span>';

@@ -83,40 +83,6 @@ echo '<div id="content">';
 		include COMPONENT . 'rank/faction/territorial.php';
 
 		ASM::$frm->changeSession($S_FRM1);
-	} elseif (CTR::$get->get('view') == 'list') {
-		if (CTR::$get->exist('faction') && in_array(CTR::$get->get('faction'), [1, 2, 3, 4, 5, 6, 7])) {
-			# load module
-			include_once DEMETER;
-			include_once ZEUS;
-
-			# load data
-			$S_COL_1 = ASM::$clm->getCurrentSession();
-			ASM::$clm->newSession();
-			ASM::$clm->load(array('id' => CTR::$get->get('faction')));
-			$faction = ASM::$clm->get(0);
-
-			$S_PAM_1 = ASM::$pam->getCurrentSession();
-			$FACTION_GOV_TOKEN = ASM::$pam->newSession(FALSE);
-			ASM::$pam->load(
-				array('rColor' => $faction->id, 'status' => array(6, 5, 4, 3)),
-				array('status', 'DESC')
-			);
-
-			# include component
-			include COMPONENT . 'public/faction/nav.php';
-			
-			include COMPONENT . 'public/faction/infos.php';
-			include COMPONENT . 'public/faction/government.php';
-
-			$eraseColor = $faction->id;
-			include COMPONENT . 'faction/data/diplomacy/main.php';
-
-			# close session
-			ASM::$pam->changeSession($S_PAM_1);
-			ASM::$clm->changeSession($S_COL_1);
-		} else {
-			CTR::redirect('404');
-		}
 	} else {
 		CTR::redirect('404');
 	}

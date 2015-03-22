@@ -23,7 +23,7 @@ echo '<div class="component player rank">';
 				foreach ($faction->colorLink as $color => $st) {
 					if ($color != 0 && $color != $eraseColor && $st == $statement) {
 						echo '<div class="player faction color' . $color . '">';
-							echo '<a href="' . APP_ROOT . 'rank/view-list/faction-' . $color . '">';
+							echo '<a href="' . APP_ROOT . 'embassy/faction-' . $color . '">';
 								echo '<img src="' . MEDIA . 'faction/flag/flag-' . $color . '.png" alt="" class="picto">';
 							echo '</a>';
 							echo '<span class="title">' . ColorResource::getInfo($color, 'government') . '</span>';

@@ -21,16 +21,6 @@ echo '<div id="subnav">';
 				echo '<span>Classement des factions</span>';
 			echo '</span>';
 		echo '</a>';
-
-		$active = (CTR::$get->get('view') == 'list') ? 'active' : '';
-		echo '<a href="' . APP_ROOT . 'rank/view-list/faction-' . CTR::$data->get('playerInfo')->get('color') . '" class="item ' . $active . '">';
-			echo '<span class="picto">';
-				echo '<img src="' . MEDIA . 'rank/list.png" alt="" />';
-			echo '</span>';
-			echo '<span class="content skin-1">';
-				echo '<span>Ambassades</span>';
-			echo '</span>';
-		echo '</a>';
 	echo '</div>';
 	echo '<button class="move-side-bar bottom" data-dir="down"> </button>';
 echo '</div>';
