@@ -344,6 +344,7 @@ class OrbitalBase {
 					$recyclingQuantity = floor($interval / $mission->cycleTime);
 
 					# Place
+					include_once GAIA;
 					$S_PLM = ASM::$plm->getCurrentSession();
 					ASM::$plm->newSession(ASM_UMODE);
 					ASM::$plm->load(array('id' => $mission->rTarget));
