@@ -33,7 +33,7 @@ echo '<div class="component generator">';
 				echo '<span class="more-button">Action impossible</span>';
 				echo '<p>Vous possédez la planète depuis moins de ' . OrbitalBase::COOL_DOWN . ' relèves.</p>';
 			} else {
-				echo '<a class="more-button" href="' . Format::actionBuilder('leavebase', ['id' => $ob_obSituation->getId()]) . '">Abandonner la planète</a>';
+				echo '<a class="more-button confirm" href="' . Format::actionBuilder('leavebase', ['id' => $ob_obSituation->getId()]) . '">Abandonner la planète</a>';
 			}
 		echo '</div>';
 	echo '</div>';

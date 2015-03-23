@@ -87,7 +87,7 @@ echo '<div class="component size3 list-fleet">';
 										: '&#8194;|&#8194;??? pev';
 
 									if ($commander->rPlayer == CTR::$data->get('playerId') && $commander->statement == Commander::MOVING && $commander->travelType != Commander::BACK) {
-										echo '&#8195;<a href="' . Format::actionBuilder('cancelmove', ['commanderid' => $commander->id]) . '">annuler la mission</a>';
+										echo '&#8195;<a class="confirm" href="' . Format::actionBuilder('cancelmove', ['commanderid' => $commander->id]) . '">annuler la mission</a>';
 									}
 								echo '</span>';
 							echo '</div>';

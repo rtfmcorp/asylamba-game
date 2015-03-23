@@ -849,4 +849,16 @@ jQuery(document).ready(function($) {
 	// using module
 	$('.autocomplete-player').autocomplete(game.path + 'ajax/a-autocompleteplayer/');
 	$('.autocomplete-orbitalbase').autocomplete(game.path + 'ajax/a-autocompleteorbitalbase/');
-});
+
+	// confirm box
+	$('.confirm').live('click', function(e) {
+		var label = $(this).data('confirm-label');
+			label = label == undefined
+				? 'Êtes-vous sur de vouloir faire cette action'
+				: label;
+
+		if (!confirm(label)) {
+			e.preventDefault();
+		}
+	});
+});	
