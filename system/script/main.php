@@ -21,6 +21,7 @@ $scripts = array(
 	array('test.virtualcommander', '/test/virtualcommander.php'),
 	array('test.ally', '/test/ally.php'),
 
+	array('utils.commanderAttack', '/utils/commanderAttack.php'),
 	array('utils.sectors', '/utils/sectors.php'),
 	array('utils.maprender', '/utils/map-render.php'),
 	array('utils.findsectorinfos', '/utils/find-sector-infos.php'),

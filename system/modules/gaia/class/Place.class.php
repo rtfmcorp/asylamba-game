@@ -487,7 +487,7 @@ class Place {
 			}
 		# si il y a une base
 		} else {
-			if ($commanderColor->colorLink[$this->playerColor] == Color::ALLY) {
+			if ($commanderColor->colorLink[$this->playerColor] == Color::ALLY || $commanderColor->colorLink[$this->playerColor] == Color::PEACE) {
 				LiveReport::$isLegal = Report::ILLEGAL;
 			} else {
 				LiveReport::$isLegal = Report::LEGAL;
@@ -611,7 +611,7 @@ class Place {
 						LiveReport::$type = Commander::COLO;
 						LiveReport::$dFight = $commander->dArrival;
 
-						if ($commanderColor->colorLink[$this->playerColor] == Color::ALLY) {
+						if ($commanderColor->colorLink[$this->playerColor] == Color::ALLY || $commanderColor->colorLink[$this->playerColor] == Color::PEACE) {
 							LiveReport::$isLegal = Report::ILLEGAL;
 						} else {
 							LiveReport::$isLegal = Report::LEGAL;
@@ -940,6 +940,7 @@ class Place {
 		$report->importance = LiveReport::$importance;
 		$report->squadrons = LiveReport::$squadrons;
 		$report->dFight = LiveReport::$dFight;
+		$report->isLegal = 3;
 		$report->placeName = ($this->baseName == '') ? 'planète rebelle' : $this->baseName;
 		$report->setArmies();
 		$report->setPev();

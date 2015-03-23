@@ -75,6 +75,7 @@ class LittleReportManager extends Manager {
 			$report->expPlayerA = $awReport['expPlayerA'];
 			$report->expPlayerD = $awReport['expPlayerD'];
 			$report->rPlace = $awReport['rPlace'];
+			$report->isLegal = $awReport['isLegal'];
 			$report->placeName = $awReport['placeName'];
 			$report->type = $awReport['type'];
 			$report->round = $awReport['round'];
@@ -116,6 +117,7 @@ class LittleReportManager extends Manager {
 				expPlayerA = ?,
 				expPlayerD = ?,
 				rPlace = ?,
+				isLegal = ?,
 				placeName = ?,
 				type = ?,
 				round = ?,
@@ -143,6 +145,7 @@ class LittleReportManager extends Manager {
 				$report->expPlayerA,
 				$report->expPlayerD,
 				$report->rPlace,
+				$report->isLegal,
 				$report->placeName,
 				$report->type,
 				$report->round,
