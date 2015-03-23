@@ -23,41 +23,7 @@ echo '<div class="component report">';
 			if (count($report_listReport) > 0) {
 				echo '<div class="set-item">';
 					foreach ($report_listReport as $r) {
-						if ($r->rPlayerAttacker == CTR::$data->get('playerId')) {
-							if ($r->rPlayerWinner == $r->rPlayerAttacker) {
-								if ($r->type == Commander::LOOT) {
-									$title = 'Pillage de ' . $r->placeName;
-									$img = 'loot.png';
-								} else {
-									$title = $r->rPlayerDefender == 0
-										? 'Colonisation réussie'
-										: 'Conquête de ' . $r->placeName;
-									$img = 'colo.png';
-								}
-							} else {
-								if ($r->type == Commander::LOOT) {
-									$title = 'Pillage raté de ' . $r->placeName;
-									$img = 'loot.png';
-								} else {
-									$title = $r->rPlayerDefender == 0
-										? 'Colonisation ratée'
-										: 'Conquête ratée de ' . $r->placeName;
-									$img = 'colo.png';
-								}
-							}
-						} else {
-							if ($r->rPlayerWinner == $r->rPlayerDefender) {
-								$title = $r->type == Commander::LOOT
-									? 'Pillage repoussé'
-									: 'Conquête repoussée';
-								$img = 'shield.png';
-							} else {
-								$title = $r->type == Commander::LOOT
-									? 'Défense ratée lors d\'un pillage'
-									: 'Défense ratée lors d\'une conquête';
-								$img = 'shield.png';
-							}
-						}
+						list($title, $img) = $r->getTypeOfReport(CTR::$data->get('playerInfo')->get('color'));
 
 						echo '<div class="item">';
 							echo '<div class="left">';

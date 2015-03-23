@@ -60,8 +60,10 @@ class Report {
 	public $dFight				= '';
 	public $placeName			= '';
 
-	public $colorA				= -1;
-	public $colorD				= -1;
+	public $colorA				= 0;
+	public $colorD				= 0;
+	public $playerNameA			= '';
+	public $playerNameD			= '';
 
 	public $squadrons = array();
 
@@ -82,6 +84,48 @@ class Report {
 	private $setArmiesDone = FALSE;
 
 	public function getId() { return $this->id; }
+
+	public function getTypeOfReport($playerColor) {
+		$place = '<a href="' . APP_ROOT . 'map/place-' . $this->rPlace . '">' . $this->placeName . '</a>';
+
+		if ($this->colorA == $playerColor) {
+			if ($this->rPlayerWinner == $this->rPlayerAttacker) {
+				if ($this->type == Commander::LOOT) {
+					$title = 'Pillage de ' . $place;
+					$img = 'loot.png';
+				} else {
+					$title = $this->rPlayerDefender == 0
+						? 'Colonisation réussie'
+						: 'Conquête de ' . $place;
+					$img = 'colo.png';
+				}
+			} else {
+				if ($this->type == Commander::LOOT) {
+					$title = 'Pillage raté de ' . $place;
+					$img = 'loot.png';
+				} else {
+					$title = $this->rPlayerDefender == 0
+						? 'Colonisation ratée'
+						: 'Conquête ratée de ' . $place;
+					$img = 'colo.png';
+				}
+			}
+		} else {
+			if ($this->rPlayerWinner == $this->rPlayerDefender) {
+				$title = $this->type == Commander::LOOT
+					? 'Pillage repoussé'
+					: 'Conquête repoussée';
+				$img = 'shield.png';
+			} else {
+				$title = $this->type == Commander::LOOT
+					? 'Défense ratée lors d\'un pillage'
+					: 'Défense ratée lors d\'une conquête';
+				$img = 'shield.png';
+			}
+		}
+
+		return [$title, $img];
+	}
 
 	public function setPev() {
 		include_once ATHENA;
@@ -117,7 +161,6 @@ class Report {
 					}
 				}
 			}
-
 
 			foreach ($this->armyInBeginA AS $sq) {
 				for ($i = 5; $i <= 16; $i++) {

@@ -186,8 +186,8 @@ echo '<div id="content">';
 			include COMPONENT . 'faction/data/trade/tax-in.php';
 		} elseif (CTR::$get->get('mode') == 'war') {
 			include COMPONENT . 'faction/data/war/stats.php';
-			include COMPONENT . 'faction/data/war/reports.php';
-			include COMPONENT . 'faction/data/war/incoming.php';
+			include COMPONENT . 'faction/data/war/reports-attack.php';
+			include COMPONENT . 'faction/data/war/reports-defend.php';
 			include COMPONENT . 'faction/data/war/levels.php';
 		} elseif (CTR::$get->get('mode') == 'tactical') {
 			include COMPONENT . 'faction/data/tactical/map.php';

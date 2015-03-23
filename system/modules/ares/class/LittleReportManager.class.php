@@ -21,7 +21,9 @@ class LittleReportManager extends Manager {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('SELECT r.*,
 				p1.rColor AS colorA,
-				p2.rColor AS colorD
+				p2.rColor AS colorD,
+				p1.name AS playerNameA,
+				p2.name AS playerNameD
 			FROM report AS r
 			LEFT JOIN player AS p1
 				ON p1.id = r.rPlayerAttacker
@@ -83,6 +85,8 @@ class LittleReportManager extends Manager {
 
 			$report->colorA = $awReport['colorA'];
 			$report->colorD = $awReport['colorD'];
+			$report->playerNameA = $awReport['playerNameA'];
+			$report->playerNameD = $awReport['playerNameD'];
 
 			$this->_Add($report);
 		}
