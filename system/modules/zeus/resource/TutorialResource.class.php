@@ -298,7 +298,7 @@ class TutorialResource {
 			'title' => 'Poster un message sur le forum de faction',
 			'description' => 'Le forum de faction est un lieu essentiel dans le développement au sein du jeu. C\'est là que tu peux discuter avec les membres de ta faction sur divers points, que ça soit de stratégie, de commerce, de politique. Il y a même un Biasto !
 				<br /><br />
-				Pour accéder au forum, tu dois d\'abord cliquer sur l\'onglet faction en haut de ton écran puis cliquer sur le menu faction. Là tu trouveras diverses catégories. Chaque partie du forum a son utilité.
+				Pour accéder au forum, tu dois d\'abord cliquer sur l\'onglet faction en haut de ton écran puis cliquer sur le menu forum. Là tu trouveras diverses catégories. Chaque partie du forum a son utilité.
 				<br /><br />
 				Pour passer cette étape, tu dois créer un sujet dans le forum ou répondre à un sujet déjà créé. Dis bonjour à tes nouveaux collègues.',
 			'experienceReward' => 10,

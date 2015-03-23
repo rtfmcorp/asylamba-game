@@ -70,7 +70,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 					
 					$sr->commanders = serialize($commandersArray);
 
-					$antiSpy = $place->population * 20; // population : entre 0 et 250
+					$antiSpy = $place->maxDanger * 40;
 					$sr->success = Game::getSpySuccess($antiSpy, $price);
 					$sr->type = SpyReport::TYP_NOT_CAUGHT;
 
