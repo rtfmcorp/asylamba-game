@@ -35,8 +35,10 @@ echo '<div class="component">';
 
 							echo '<div class="center">';
 								echo '<strong>' . $title . '</strong>';
-								echo 'par <a href="' . APP_ROOT . 'embassy/player-' . $r->rPlayerAttacker . '">' . $r->playerNameA . '</a> (' . $r->isLegal . ')';
+								echo 'par <a href="' . APP_ROOT . 'embassy/player-' . $r->rPlayerAttacker . '">' . $r->playerNameA . '</a>';
 							echo '</div>';
+
+							echo !$r->isLegal ? '<span class="group-link"><a href="#" class="hb lt" title="cette attaque viole un traité">!</a></span>' : NULL;
 						echo '</div>';
 					}
 				echo '</div>';
