@@ -2,6 +2,7 @@
 # WORK PART
 ###########
 include_once GAIA;
+include_once ATHENA;
 
 # load notif
 include_once HERMES;
@@ -185,6 +186,24 @@ echo '<div id="nav">';
 			echo '<div class="overflow">';
 				echo '<h3><span class="number">' . $step . '</span> ' . TutorialResource::getInfo($step, 'title') . '</h3>';
 				echo '<p>' . TutorialResource::getInfo($step, 'description') . '</p>';
+
+				echo '<p>Récompense :<br />';
+				$creditReward = TutorialResource::getInfo($step, 'creditReward');
+				$resourceReward = TutorialResource::getInfo($step, 'resourceReward');
+				$shipReward = TutorialResource::getInfo($step, 'shipReward');
+
+				if ($creditReward > 0) {
+					echo '&nbsp;&nbsp;&nbsp;- ' . $creditReward . ' crédits<br />';
+				}
+				if ($resourceReward > 0) {
+					echo '&nbsp;&nbsp;&nbsp;- ' . $resourceReward . ' ressources<br />';
+				}
+				foreach ($shipReward as $key => $value) {
+					if ($value > 0) {
+						echo '&nbsp;&nbsp;&nbsp;- ' . $value . ' ' . ShipResource::getInfo($key, 'codeName') . Format::plural($value) . '<br />';
+					}
+				}
+				echo '</p>';
 			echo '</div>';
 
 			echo '<form action="' . Format::actionBuilder('validatestep') . '" method="post">';
