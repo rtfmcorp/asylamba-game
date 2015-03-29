@@ -294,7 +294,7 @@ if ($type != FALSE) {
 								ASM::$pam->newSession();
 								ASM::$pam->load(array('id' => $rPlayer));
 								if (ASM::$pam->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
-									$law->options = serialize(array('rPlayer' => $rPlayer, 'credits' => $credits));
+									$law->options = serialize(array('rPlayer' => $rPlayer, 'credits' => $credits, 'display' => array('Joueur' => ASM::$pam->get()->name)));
 									ASM::$lam->add($law);
 									ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
 									CTR::redirect('faction/view-senate');	
