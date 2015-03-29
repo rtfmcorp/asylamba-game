@@ -12,15 +12,16 @@ echo '<div class="component profil player">';
 				echo '<p class="desc">' . LawResources::getInfo($governmentLaw_id, 'shortDescription') . '</p>';
 
 				if (LawResources::getInfo($governmentLaw_id, 'bonusLaw')) {
-					echo $faction->credits >= LawResources::getInfo($governmentLaw_id, 'price')
-						? '<a class="button" href="' . Format::actionBuilder('createlaw', ['type' => $governmentLaw_id]) . '">'
-						: '<span class="button disable">';
-						echo '<span class="text">';
-							echo 'Soumettre au vote<br />';
-							echo 'Coûte ' . Format::number(LawResources::getInfo($governmentLaw_id, 'price')) . ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits"> à la faction';
-						echo '</span>';
-					echo $faction->credits >= LawResources::getInfo($governmentLaw_id, 'price')
-						? '</a>' : '<span>';
+					echo '<form action="' . Format::actionBuilder('createlaw', ['type' => $governmentLaw_id]) . '" method="post">';
+						echo '<input type="text" placeholder="Nombre de relève d\'activité" name="duration" />';
+
+						echo '<button class="button">';
+							echo '<span class="text">';
+								echo 'Soumettre au vote<br />';
+								echo 'Coûte ' . Format::number(LawResources::getInfo($governmentLaw_id, 'price') * $nbPlayer) . ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits"> par relève à la faction';
+							echo '</span>';
+						echo '</button>';
+					echo '</form>';
 				} else {
 					echo '<form action="' . Format::actionBuilder('createlaw', ['type' => $governmentLaw_id]) . '" method="post">';
 						if ($governmentLaw_id == Law::SECTORTAX) {
