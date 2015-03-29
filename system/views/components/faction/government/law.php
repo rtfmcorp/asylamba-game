@@ -92,6 +92,24 @@ echo '<div class="component profil player">';
 									echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'popularName') . '</option>';
 								}
 							echo '</select>';
+						} elseif ($governmentLaw_id == Law::PUNITION) {
+							echo '<input type="text" placeholder="Montant de l\'amende" name="credits" />';
+
+							$S_PAM_LAW = ASM::$pam->getCurrentSession();
+							ASM::$pam->newSession(FALSE);
+							ASM::$pam->load(
+								['rColor' => CTR::$data->get('playerInfo')->get('color'), 'statement' => [PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY]], 
+								['status', 'DESC', 'factionPoint', 'DESC']
+							);
+
+							echo '<select name="rplayer">';
+								echo '<option value="-1">Choisissez un joueur</option>';
+								for ($j = 1; $j < ASM::$pam->size(); $j++) {
+									echo '<option value="' . ASM::$pam->get($j)->id . '">' . ASM::$pam->get($j)->name . '</option>';
+								}
+							echo '</select>';
+
+							ASM::$pam->changeSession($S_PAM_LAW);
 						}
 
 						echo '<button class="button ' . ($faction->credits >= LawResources::getInfo($governmentLaw_id, 'price') ? NULL : 'disable') . '">';
