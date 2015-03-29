@@ -66,5 +66,5 @@ define('ANTISPY_LITTLE_CIRCLE',	3);
 define('ANTISPY_DISPLAY_MODE', 	0);
 define('ANTISPY_GAME_MODE', 	1);
 
-define('NB_AVATAR', 			67);
+define('NB_AVATAR', 			80);
 ?>
