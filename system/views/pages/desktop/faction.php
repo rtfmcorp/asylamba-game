@@ -231,6 +231,7 @@ echo '<div id="content">';
 				ASM::$sem->load(array('rColor' => $faction->id));
 
 				$nbLaws = 0;
+				$nbPlayer = PlayerManager::count(['rColor' => $faction->id, 'statement' => [PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY]]);
 				
 				for ($i = 1; $i <= LawResources::size(); $i++) {
 					if (LawResources::getInfo($i, 'department') == CTR::$data->get('playerInfo')->get('status') AND LawResources::getInfo($i, 'isImplemented')) {
@@ -278,7 +279,7 @@ echo '<div id="content">';
 				);
 
 				$PLAYER_SENATE_TOKEN = ASM::$pam->newSession();
-				ASM::$pam->load(array('rColor' => $faction->id, 'status' => PAM_PARLIAMENT));
+				ASM::$pam->load(array('rColor' => $faction->id, 'status' => PAM_PARLIAMENT, 'statement' => [PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY]));
 
 				$targetMode = TRUE;
 

@@ -12,15 +12,16 @@ echo '<div class="component profil player">';
 				echo '<p class="desc">' . LawResources::getInfo($governmentLaw_id, 'shortDescription') . '</p>';
 
 				if (LawResources::getInfo($governmentLaw_id, 'bonusLaw')) {
-					echo $faction->credits >= LawResources::getInfo($governmentLaw_id, 'price')
-						? '<a class="button" href="' . Format::actionBuilder('createlaw', ['type' => $governmentLaw_id]) . '">'
-						: '<span class="button disable">';
-						echo '<span class="text">';
-							echo 'Soumettre au vote<br />';
-							echo 'Coûte ' . Format::number(LawResources::getInfo($governmentLaw_id, 'price')) . ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits"> à la faction';
-						echo '</span>';
-					echo $faction->credits >= LawResources::getInfo($governmentLaw_id, 'price')
-						? '</a>' : '<span>';
+					echo '<form action="' . Format::actionBuilder('createlaw', ['type' => $governmentLaw_id]) . '" method="post">';
+						echo '<input type="text" placeholder="Nombre de relève d\'activité" name="duration" />';
+
+						echo '<button class="button">';
+							echo '<span class="text">';
+								echo 'Soumettre au vote<br />';
+								echo 'Coûte ' . Format::number(LawResources::getInfo($governmentLaw_id, 'price') * $nbPlayer) . ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits"> par relève à la faction';
+							echo '</span>';
+						echo '</button>';
+					echo '</form>';
 				} else {
 					echo '<form action="' . Format::actionBuilder('createlaw', ['type' => $governmentLaw_id]) . '" method="post">';
 						if ($governmentLaw_id == Law::SECTORTAX) {
@@ -91,6 +92,24 @@ echo '<div class="component profil player">';
 									echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'popularName') . '</option>';
 								}
 							echo '</select>';
+						} elseif ($governmentLaw_id == Law::PUNITION) {
+							echo '<input type="text" placeholder="Montant de l\'amende" name="credits" />';
+
+							$S_PAM_LAW = ASM::$pam->getCurrentSession();
+							ASM::$pam->newSession(FALSE);
+							ASM::$pam->load(
+								['rColor' => CTR::$data->get('playerInfo')->get('color'), 'statement' => [PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY]], 
+								['status', 'DESC', 'factionPoint', 'DESC']
+							);
+
+							echo '<select name="rplayer">';
+								echo '<option value="-1">Choisissez un joueur</option>';
+								for ($j = 1; $j < ASM::$pam->size(); $j++) {
+									echo '<option value="' . ASM::$pam->get($j)->id . '">' . ASM::$pam->get($j)->name . '</option>';
+								}
+							echo '</select>';
+
+							ASM::$pam->changeSession($S_PAM_LAW);
 						}
 
 						echo '<button class="button ' . ($faction->credits >= LawResources::getInfo($governmentLaw_id, 'price') ? NULL : 'disable') . '">';
