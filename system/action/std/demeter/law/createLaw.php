@@ -230,14 +230,23 @@ if ($type != FALSE) {
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($rColor != FALSE) {
 								if ($rColor >= 1 && $rColor <= 7 && $rColor != ASM::$clm->get()->id) {
-
-									if (ASM::$clm->get()->colorLink[$rColor] != Color::PEACE) {
-										$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
-										ASM::$lam->add($law);
-										ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
-										CTR::redirect('faction/view-senate');
+									$nbrPact = 0;
+									foreach (ASM::$clm->get()->colorLink as $relation) {
+										if($relation == Color::PEACE) {
+											$nbrPact++;
+										}
+									}
+									if ($nbrPact < 2) {
+										if (ASM::$clm->get()->colorLink[$rColor] != Color::PEACE) {
+											$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
+											ASM::$lam->add($law);
+											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+											CTR::redirect('faction/view-senate');
+										} else {
+											CTR::$alert->add('Vous considérez déjà cette faction comme votre alliée.', ALERT_STD_ERROR);
+										}
 									} else {
-										CTR::$alert->add('Vous considérez déjà cette faction comme votre alliée.', ALERT_STD_ERROR);
+										CTR::$alert->add('Vous ne pouvez faire que 2 pactes de ce type.', ALERT_STD_ERROR);		
 									}
 								} else {
 									CTR::$alert->add('Cette faction n\'existe pas ou il s\'agit de la votre.', ALERT_STD_ERROR);
@@ -250,14 +259,23 @@ if ($type != FALSE) {
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($rColor != FALSE) {
 								if ($rColor >= 1 && $rColor <= 7 && $rColor != ASM::$clm->get()->id) {
-
-									if (ASM::$clm->get()->colorLink[$rColor] != Color::ALLY) {
-										$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
-										ASM::$lam->add($law);
-										ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
-										CTR::redirect('faction/view-senate');
+									$allyYet = FALSE;
+									foreach (ASM::$clm->get()->colorLink as $relation) {
+										if($relation == Color::ALLY) {
+											$allyYet = TRUE;
+										}
+									}
+									if (!$allyYet) {
+										if (ASM::$clm->get()->colorLink[$rColor] != Color::ALLY) {
+											$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
+											ASM::$lam->add($law);
+											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+											CTR::redirect('faction/view-senate');
+										} else {
+											CTR::$alert->add('Vous considérez déjà cette faction comme votre alliée.', ALERT_STD_ERROR);
+										}
 									} else {
-										CTR::$alert->add('Vous considérez déjà cette faction comme votre alliée.', ALERT_STD_ERROR);
+										CTR::$alert->add('Vous ne pouvez considérez qu\'une seule faction comme alliée.', ALERT_STD_ERROR);
 									}
 								} else {
 									CTR::$alert->add('Cette faction n\'existe pas ou il s\'agit de la votre.', ALERT_STD_ERROR);
@@ -294,7 +312,7 @@ if ($type != FALSE) {
 								ASM::$pam->newSession();
 								ASM::$pam->load(array('id' => $rPlayer));
 								if (ASM::$pam->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
-									$law->options = serialize(array('rPlayer' => $rPlayer, 'credits' => $credits, 'display' => array('Joueur' => ASM::$pam->get()->name)));
+									$law->options = serialize(array('rPlayer' => $rPlayer, 'credits' => $credits, 'display' => array('Joueur' => ASM::$pam->get()->name, 'amende' => $credits)));
 									ASM::$lam->add($law);
 									ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
 									CTR::redirect('faction/view-senate');	
