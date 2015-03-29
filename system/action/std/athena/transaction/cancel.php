@@ -47,7 +47,7 @@ if ($rTransaction !== FALSE) {
 						$storageSpace = $maxStorage - $base->getResourcesStorage();
 
 						if ($storageSpace >= $transaction->quantity) {
-							$base->increaseResources($transaction->quantity);
+							$base->increaseResources($transaction->quantity, TRUE);
 						} else {
 							$valid = FALSE;
 							CTR::$alert->add('Vous n\'avez pas assez de place dans votre Stockage pour stocker les ressources. Videz un peu le hangar et revenez plus tard pour annuler cette offre.', ALERT_STD_INFO);

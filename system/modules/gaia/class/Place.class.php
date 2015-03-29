@@ -847,7 +847,7 @@ class Place {
 		$this->sendNotif(self::COMEBACK, $commander);
 
 		if ($commander->getResourcesTransported() > 0) {
-			$commanderBase->increaseResources($commander->resources);
+			$commanderBase->increaseResources($commander->resources, TRUE);
 			$commander->resources = 0;
 		}
 	}

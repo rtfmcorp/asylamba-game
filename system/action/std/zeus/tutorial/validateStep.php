@@ -52,7 +52,7 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 				$alert .= ' et ' . $resource . ' ressources';
 			}
 			$alert .= ' sur votre base orbitale ' . $ob->name . '. ';
-			$ob->increaseResources($resource);
+			$ob->increaseResources($resource, TRUE);
 		}
 
 		if ($ship != array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)) {

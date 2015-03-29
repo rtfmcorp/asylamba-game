@@ -60,7 +60,7 @@ if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($bas
 					$resourcePrice *= $quantity;
 				}
 				$resourcePrice *= SQM_RESOURCERETURN;
-				$ob->increaseResources($resourcePrice);
+				$ob->increaseResources($resourcePrice, TRUE);
 				CTR::$alert->add('Commande annulée, vous récupérez le ' . SQM_RESOURCERETURN * 100 . '% du montant investi pour la construction', ALERT_STD_SUCCESS);
 			} else {
 				CTR::$alert->add('suppression de vaisseau impossible', ALERT_STD_ERROR);

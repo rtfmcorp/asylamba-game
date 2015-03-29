@@ -62,7 +62,7 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 				// rends les ressources et les crédits au joueur
 				$resourcePrice = TechnologyResource::getInfo($techno, 'resource', $targetLevel);
 				$resourcePrice *= TQM_RESOURCERETURN;
-				$ob->increaseResources($resourcePrice);
+				$ob->increaseResources($resourcePrice, TRUE);
 				$creditPrice = TechnologyResource::getInfo($techno, 'credit', $targetLevel);
 				$creditPrice *= TQM_CREDITRETURN;
 				$player->increaseCredit($creditPrice);
