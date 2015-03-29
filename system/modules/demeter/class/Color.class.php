@@ -10,6 +10,7 @@
  * @update 06.10.13
 */
 include_once ZEUS;
+include_once ATHENA;
 
 class Color {
 	# Regime
@@ -460,21 +461,25 @@ class Color {
 	public function uFinishNeutral($law) {
 		$this->colorLink[$law->options['rColor']] = Color::NEUTRAL;
 		$law->statement = Law::OBSOLETE;
+		CommercialRouteManager::freezeRoute($this->id, $law->options['rColor'], False);
 	}
 
 	public function uFinishPeace($law) {
 		$this->colorLink[$law->options['rColor']] = Color::PEACE;
 		$law->statement = Law::OBSOLETE;
+		CommercialRouteManager::freezeRoute($this->id, $law->options['rColor'], False);
 	}
 
 	public function uFinishAlly($law) {
 		$this->colorLink[$law->options['rColor']] = Color::ALLY;
 		$law->statement = Law::OBSOLETE;
+		CommercialRouteManager::freezeRoute($this->id, $law->options['rColor'], False);
 	}
 
 	public function uFinishEnemy($law) {
 		$this->colorLink[$law->options['rColor']] = Color::ENEMY;
 		$law->statement = Law::OBSOLETE;
+		CommercialRouteManager::freezeRoute($this->id, $law->options['rColor'], True);
 	}
 
 
