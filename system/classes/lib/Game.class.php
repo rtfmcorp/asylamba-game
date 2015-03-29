@@ -344,11 +344,12 @@ class Game {
 	public static function getSpySuccess($antiSpy, $priceInvested) {
 		# spy success must be between 0 and 100
 		$ratio = $priceInvested / $antiSpy;
-		if ($ratio > 2) {
-			return 100;
-		} else {
-			return round($ratio * 50);
+		$percent = round($ratio * 33);
+		# ça veut dire qu'il payer 3x plus que ce que le gars investi pour tout voir
+		if ($percent > 100) {
+			$percent = 100;
 		}
+		return $percent;
 	}
 
 	public static function getTypeOfSpy($success) {

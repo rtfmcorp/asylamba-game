@@ -55,7 +55,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 				// give the resources back
 				$resourcePrice = OrbitalBaseResource::getBuildingInfo($building, 'level', $targetLevel, 'resourcePrice');
 				$resourcePrice *= BQM_RESOURCERETURN;
-				$ob->increaseResources($resourcePrice);
+				$ob->increaseResources($resourcePrice, TRUE);
 				CTR::$alert->add('Construction annulée, vous récupérez le ' . BQM_RESOURCERETURN * 100 . '% du montant investi pour la construction', ALERT_STD_SUCCESS);
 			} else {
 				CTR::$alert->add('suppression de bâtiment impossible', ALERT_STD_ERROR);

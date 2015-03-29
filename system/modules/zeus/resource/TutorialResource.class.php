@@ -84,7 +84,7 @@ class TutorialResource {
 				Pour suivre le tutoriel, tu devras faire ce qui t\'es indiqué ici. D\'une fois que tu as accompli la tâche, la petite étoile sera colorée avec la couleur de ta faction. Tu peux cliquer dessus et valider l\'étape. Ensuite reviens ici et l\'étape suivante sera disponible.',
 			'experienceReward' => 1,
 			'creditReward' => 0,
-			'resourceReward' => 0,
+			'resourceReward' => 50,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 2,
@@ -148,7 +148,7 @@ class TutorialResource {
 				A chaque fois que tu construis un nouveau bâtiment, une nouvelle icône s\'ajoute dans la barre de navigation sur la gauche de l\'écran.',
 			'experienceReward' => 3,
 			'creditReward' => 0,
-			'resourceReward' => 0,
+			'resourceReward' => 100,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 7,
@@ -254,7 +254,7 @@ class TutorialResource {
 				<br /><br />
 				NB: Si des vaisseaux ont été transférés dans l\'escadrille et que l\'étoile du tutoriel ne s\'allume pas, rafraîchis ta page (F5).',
 			'experienceReward' => 2,
-			'creditReward' => 0,
+			'creditReward' => 200,
 			'resourceReward' => 0,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
@@ -302,7 +302,7 @@ class TutorialResource {
 				<br /><br />
 				Pour passer cette étape, tu dois créer un sujet dans le forum ou répondre à un sujet déjà créé. Dis bonjour à tes nouveaux collègues.',
 			'experienceReward' => 10,
-			'creditReward' => 0,
+			'creditReward' => 400,
 			'resourceReward' => 0,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
@@ -316,8 +316,8 @@ class TutorialResource {
 				<br /><br />
 				Signé Jean-Mi, opérateur du jeu.',
 			'experienceReward' => 10,
-			'creditReward' => 0,
-			'resourceReward' => 0,
+			'creditReward' => 100,
+			'resourceReward' => 100,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 19,

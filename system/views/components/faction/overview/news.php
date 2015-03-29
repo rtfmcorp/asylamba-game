@@ -12,10 +12,16 @@ echo '<div class="component">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<p class="info">';
-				echo 'Module de news de factions. Encore en construction. Mais ça va arriver bientôt.';
-			echo '</p>';
-			echo '<a class="more-button" href="#">Voir toutes les news</a>';
+			for ($i = 0; $i < ASM::$fnm->size(); $i++) {
+				$news = ASM::$fnm->get($i);
+
+				echo '<h4>' . $news->title . '</h4>';
+				echo '<p class="long-info">' . $news->pContent . '</p>';
+			}
+
+			echo $mode == 'all'
+				? '<a class="more-button" href="' . APP_ROOT . 'faction/view-overview">Voir l\'annonce mise en avant</a>'
+				: '<a class="more-button" href="' . APP_ROOT . 'faction/view-overview/news-list">Voir toutes les annonces</a>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

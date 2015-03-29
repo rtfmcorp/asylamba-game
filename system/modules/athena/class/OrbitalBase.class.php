@@ -21,6 +21,7 @@ class OrbitalBase {
 	const MAXCOMMANDERMILITARY = 5;
 
 	const COOL_DOWN = 48;
+	const EXTRA_STOCK = 25000;
 
 	const MAXCOMMANDERINMESS = 20;
 
@@ -669,7 +670,7 @@ class OrbitalBase {
 	}
 
 	// OBJECT METHODS
-	public function increaseResources($resources) {
+	public function increaseResources($resources, $canGoHigher = FALSE) {
 		if (intval($resources)) {
 			# load the bonus
 			$playerBonus = new PlayerBonus($this->rPlayer);
@@ -681,14 +682,17 @@ class OrbitalBase {
 			$maxStorage = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $this->levelStorage, 'storageSpace');
 			$maxStorage += $maxStorage * $bonus / 100;
 
+			if ($canGoHigher) {
+				$maxStorage += OrbitalBase::EXTRA_STOCK;
+			}
+
 			if ($newResources > $maxStorage) {
 				$this->resourcesStorage = $maxStorage;
 			} else {
 				$this->resourcesStorage = $newResources;
 			}
 		} else {
-			CTR::$alert->add('un nombre est requis');
-			CTR::$alert->add('dans increaseResources de OrbitalBase', ALERT_BUG_ERROR);
+			CTR::$alert->add('Problème dans increaseResources de OrbitalBase', ALERT_BUG_ERROR);
 		}
 	}
 
@@ -696,8 +700,7 @@ class OrbitalBase {
 		if (intval($resources)) {
 			$this->resourcesStorage -= abs($resources);
 		} else {
-			CTR::$alert->add('un nombre est requis');
-			CTR::$alert->add('dans decreaseResources de OrbitalBase', ALERT_BUG_ERROR);
+			CTR::$alert->add('Problème dans decreaseResources de OrbitalBase', ALERT_BUG_ERROR);
 		}
 	}
 

@@ -573,7 +573,8 @@ class OrbitalBaseResource {
 				array(77680,	257000,	83,	6589900)
 			),
 			'maxLevel' => array(30, 40, 40, 40),
-			'description' => 'Comme son nom l’indique, le <strong>Stockage</strong> est le lieu où vous allez emmagasiner vos <strong>ressources</strong>. Il vous sera utile pour économiser des ressources dans le but de construire certains bâtiments ou vaisseaux.'
+			'description' => 'Comme son nom l’indique, le <strong>Stockage</strong> est le lieu où vous allez emmagasiner vos <strong>ressources</strong>. Il vous sera utile pour économiser des ressources dans le but de construire certains bâtiments ou vaisseaux.
+			<br /><br />Notez qu\'il est possible de dépasser de 25\'000 le stockage maximal dans certains cas (comme la réception de ressources ou l\'annulation d\'une construction).' 
 		),
 		array(
 			'name' => 'recycling',

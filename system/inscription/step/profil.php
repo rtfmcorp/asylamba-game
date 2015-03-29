@@ -29,11 +29,18 @@ echo '<div id="content">';
 
 					echo '<p>Nous déconseillons les noms moins roleplay, essayez de coller avec l\'histoire et les moeurs de votre faction.</p>';
 					echo '<p>Ce nom ne pourra pas être changé plus tard.</p>';
+
+					echo '<hr />';
+
+					echo '<button type="submit" class="chooseLink">';
+						echo '<strong>Définir son profil</strong>';
+						echo '<em>et passer à l\'étape suivante</em>';
+					echo '</button>';
 				echo '</div>';
 			echo '</div>';
 		echo '</div>';
 
-		echo '<div class="component inscription size2 color' . CTR::$data->get('inscription')->get('ally') . '">';
+		echo '<div class="component inscription size3 color' . CTR::$data->get('inscription')->get('ally') . '">';
 			echo '<div class="head skin-2">';
 				echo '<h2>Choisissez un avatar</h2>';
 			echo '</div>';
@@ -48,8 +55,9 @@ echo '<div id="content">';
 
 						shuffle($avatars);
 
-						$break = 3; $j = 1;
-						for ($i = 0; $i < 24; $i++) { 
+						$isLong = FALSE;
+						$cursor = 0;
+						for ($i = 0; $i < 80; $i++) { 
 							echo '<div class="avatar">';
 								echo '<input type="radio" name="avatar" value="' . $avatars[$i] . '" id="avatar' . $i . '" required />';
 								echo '<label for="avatar' . $i . '">';
@@ -57,28 +65,19 @@ echo '<div id="content">';
 								echo '</label>';
 							echo '</div>';
 
-							if ($j == $break) {
-								echo '<br />';
-								$break = $break == 3 ? 4 : 3;
-								$j = 0;
-							}
+							$cursor++;
 
-							$j++;
+							if (!$isLong && $cursor == 5) {
+								$cursor = 0;
+								$isLong = TRUE;
+								echo '<br />';
+							} elseif ($isLong && $cursor == 6) {
+								$cursor = 0;
+								$isLong = FALSE;
+								echo '<br />';
+							}
 						}
 					echo '</div>';
-				echo '</div>';
-			echo '</div>';
-		echo '</div>';
-
-		echo '<div class="component inscription color' . CTR::$data->get('inscription')->get('ally') . '">';
-			echo '<div class="head">';
-			echo '</div>';
-			echo '<div class="fix-body">';
-				echo '<div class="body">';
-					echo '<button type="submit" class="chooseLink">';
-						echo '<strong>Définir son profil</strong>';
-						echo '<em>et passer à l\'étape suivante</em>';
-					echo '</button>';
 				echo '</div>';
 			echo '</div>';
 		echo '</div>';

@@ -102,6 +102,8 @@ if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('tok
 
 		case 'writenews':				include ACTION . 'demeter/news/write.php'; break;
 		case 'editnews':				include ACTION . 'demeter/news/edit.php'; break;
+		case 'pinnews':					include ACTION . 'demeter/news/pin.php'; break;
+		case 'deletenews':				include ACTION . 'demeter/news/delete.php'; break;
 
 		case 'postulate':				include ACTION . 'demeter/election/postulate.php'; break;
 		case 'makeacoup':				include ACTION . 'demeter/election/makeACoup.php'; break;

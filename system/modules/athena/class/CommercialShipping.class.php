@@ -65,7 +65,7 @@ class CommercialShipping {
 			$orbitalBase = ASM::$obm->get();
 			switch ($transaction->type) {
 				case Transaction::TYP_RESOURCE:
-					$orbitalBase->increaseResources($transaction->quantity);
+					$orbitalBase->increaseResources($transaction->quantity, TRUE);
 
 					# notif pour l'acheteur
 					$n = new Notification();
@@ -132,7 +132,7 @@ class CommercialShipping {
 			ASM::$obm->load(array('rPlace' => $this->rBaseDestination));
 			$orbitalBase = ASM::$obm->get();
 
-			$orbitalBase->increaseResources($this->resourceTransported);
+			$orbitalBase->increaseResources($this->resourceTransported, TRUE);
 
 			# notif for the player who receive the resources
 			$n = new Notification();
