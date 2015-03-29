@@ -99,7 +99,7 @@ echo '<div class="component profil player">';
 							ASM::$pam->newSession(FALSE);
 							ASM::$pam->load(
 								['rColor' => CTR::$data->get('playerInfo')->get('color'), 'statement' => [PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY]], 
-								['status', 'DESC', 'factionPoint', 'DESC']
+								['name', 'ASC']
 							);
 
 							echo '<select name="rplayer">';
