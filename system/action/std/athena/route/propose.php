@@ -55,69 +55,79 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 
 		$player = ASM::$pam->get();
 
-		if (ASM::$obm->size() == 2 && ($proposerBase->getRPlayer() != $otherBase->getRPlayer()) && (ASM::$pam->size() == 1)) {
-			$distance = Game::getDistance($proposerBase->getXSystem(), $otherBase->getXSystem(), $proposerBase->getYSystem(), $otherBase->getYSystem());
-			$bonusA = ($proposerBase->getSector() != $otherBase->getSector()) ? CRM_ROUTEBONUSSECTOR : 1;
-			$bonusB = (CTR::$data->get('playerInfo')->get('color')) != $player->getRColor() ? CRM_ROUTEBONUSCOLOR : 1;
-			$price = Game::getRCPrice($distance);
-			$income = Game::getRCIncome($distance, $bonusA, $bonusB);
-			
-			if ($distance == 1) {
-				$imageLink = '1-' . rand(1, 3);
-			} elseif ($distance < 26) {
-				$imageLink = '2-' . rand(1, 3);
-			} elseif ($distance < 126) {
-				$imageLink = '3-' . rand(1, 3);
-			} else {
-				$imageLink = '4-' . rand(1, 3);
-			}
+		$S_CLM1 = ASM::$clm->getCurrentSession();
+		ASM::$clm->newSession();
+		ASM::$clm->load(array('id' => array(CTR::$data->get('playerInfo')->get('color'), $player->rColor)));
 
-			# compute bonus if the proposer is from Negore
-			if (CTR::$data->get('playerInfo')->get('color') == ColorResource::NEGORA) {
-				$priceWithBonus = round($price - ($price * ColorResource::BONUS_NEGORA_ROUTE / 100));
-			} else {
-				$priceWithBonus = $price;
-			}
+		if (ASM::$clm->get(0)->colorLink[$player->rColor] != Color::ENEMY && ASM::$clm->get(1)->colorLink[CTR::$data->get('playerInfo')->get('color')] != Color::ENEMY) {
 
-			if (CTR::$data->get('playerInfo')->get('credit') >= $priceWithBonus) {
-				# création de la route
-				$cr = new CommercialRoute();
-				$cr->setROrbitalBase($proposerBase->getId());
-				$cr->setROrbitalBaseLinked($otherBase->getId());
-				$cr->setImageLink($imageLink);
-				$cr->setDistance($distance);
-				$cr->setPrice($price);
-				$cr->setIncome($income);
-				$cr->setDProposition(Utils::now());
-				$cr->setStatement(0);
-				ASM::$crm->add($cr);
+			if (ASM::$obm->size() == 2 && ($proposerBase->getRPlayer() != $otherBase->getRPlayer()) && (ASM::$pam->size() == 1)) {
+				$distance = Game::getDistance($proposerBase->getXSystem(), $otherBase->getXSystem(), $proposerBase->getYSystem(), $otherBase->getYSystem());
+				$bonusA = ($proposerBase->getSector() != $otherBase->getSector()) ? CRM_ROUTEBONUSSECTOR : 1;
+				$bonusB = (CTR::$data->get('playerInfo')->get('color')) != $player->getRColor() ? CRM_ROUTEBONUSCOLOR : 1;
+				$price = Game::getRCPrice($distance);
+				$income = Game::getRCIncome($distance, $bonusA, $bonusB);
 				
-				# débit des crédits au joueur
-				$S_PAM2 = ASM::$pam->getCurrentSession();
-				ASM::$pam->newSession(ASM_UMODE);
-				ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-				ASM::$pam->get()->decreaseCredit($priceWithBonus);
-				ASM::$pam->changeSession($S_PAM2);
+				if ($distance == 1) {
+					$imageLink = '1-' . rand(1, 3);
+				} elseif ($distance < 26) {
+					$imageLink = '2-' . rand(1, 3);
+				} elseif ($distance < 126) {
+					$imageLink = '3-' . rand(1, 3);
+				} else {
+					$imageLink = '4-' . rand(1, 3);
+				}
 
-				$n = new Notification();
-				$n->setRPlayer($otherBase->getRPlayer());
-				$n->setTitle('Proposition de route commerciale');
-				$n->addBeg()->addLnk('embassy/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'));
-				$n->addTxt(' vous propose une route commerciale liant ');
-				$n->addLnk('map/place-' . $proposerBase->getRPlace(), $proposerBase->getName())->addTxt(' et ');
-				$n->addLnk('map/base-' . $otherBase->getRPlace(), $otherBase->getName())->addTxt('.');
-				$n->addSep()->addTxt('Les frais de l\'opération vous coûteraient ' . Format::numberFormat($priceWithBonus) . ' crédits; Les gains estimés pour cette route sont de ' . Format::numberFormat($income) . ' crédits par relève.');
-				$n->addSep()->addLnk('action/a-switchbase/base-' . $otherBase->getRPlace() . '/page-spatioport', 'En savoir plus ?');
-				$n->addEnd();
-				ASM::$ntm->add($n);
+				# compute bonus if the proposer is from Negore
+				if (CTR::$data->get('playerInfo')->get('color') == ColorResource::NEGORA) {
+					$priceWithBonus = round($price - ($price * ColorResource::BONUS_NEGORA_ROUTE / 100));
+				} else {
+					$priceWithBonus = $price;
+				}
 
-				CTR::$alert->add('Route commerciale proposée', ALERT_STD_SUCCESS);
+				if (CTR::$data->get('playerInfo')->get('credit') >= $priceWithBonus) {
+					# création de la route
+					$cr = new CommercialRoute();
+					$cr->setROrbitalBase($proposerBase->getId());
+					$cr->setROrbitalBaseLinked($otherBase->getId());
+					$cr->setImageLink($imageLink);
+					$cr->setDistance($distance);
+					$cr->setPrice($price);
+					$cr->setIncome($income);
+					$cr->setDProposition(Utils::now());
+					$cr->setStatement(0);
+					ASM::$crm->add($cr);
+					
+					# débit des crédits au joueur
+					$S_PAM2 = ASM::$pam->getCurrentSession();
+					ASM::$pam->newSession(ASM_UMODE);
+					ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+					ASM::$pam->get()->decreaseCredit($priceWithBonus);
+					ASM::$pam->changeSession($S_PAM2);
+
+					$n = new Notification();
+					$n->setRPlayer($otherBase->getRPlayer());
+					$n->setTitle('Proposition de route commerciale');
+					$n->addBeg()->addLnk('embassy/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'));
+					$n->addTxt(' vous propose une route commerciale liant ');
+					$n->addLnk('map/place-' . $proposerBase->getRPlace(), $proposerBase->getName())->addTxt(' et ');
+					$n->addLnk('map/base-' . $otherBase->getRPlace(), $otherBase->getName())->addTxt('.');
+					$n->addSep()->addTxt('Les frais de l\'opération vous coûteraient ' . Format::numberFormat($priceWithBonus) . ' crédits; Les gains estimés pour cette route sont de ' . Format::numberFormat($income) . ' crédits par relève.');
+					$n->addSep()->addLnk('action/a-switchbase/base-' . $otherBase->getRPlace() . '/page-spatioport', 'En savoir plus ?');
+					$n->addEnd();
+					ASM::$ntm->add($n);
+
+					CTR::$alert->add('Route commerciale proposée', ALERT_STD_SUCCESS);
+				} else {
+					CTR::$alert->add('impossible de proposer une route commerciale - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
+				}
 			} else {
-				CTR::$alert->add('impossible de proposer une route commerciale - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
+				CTR::$alert->add('impossible de proposer une route commerciale (2)', ALERT_STD_ERROR);
 			}
 		} else {
-			CTR::$alert->add('impossible de proposer une route commerciale (2)', ALERT_STD_ERROR);
+			CTR::$alert->add('impossible de proposer une route commerciale à ce joueur, vos factions sont en guerre.', ALERT_STD_ERROR);
 		}
+		ASM::$clm->changeSession($S_CLM1);
 		ASM::$pam->changeSession($S_PAM1);
 	} else {
 		CTR::$alert->add('impossible de proposer une route commerciale (3)', ALERT_STD_ERROR);

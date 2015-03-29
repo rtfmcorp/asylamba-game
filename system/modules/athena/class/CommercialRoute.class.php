@@ -33,6 +33,7 @@ class CommercialRoute {
 	public $baseType1;
 	public $playerId1;
 	public $playerName1;
+	public $playerColor1;
 	public $avatar1;
 	public $population1;
 
@@ -40,6 +41,7 @@ class CommercialRoute {
 	public $baseType2;
 	public $playerId2;
 	public $playerName2;
+	public $playerColor2;
 	public $avatar2;
 	public $population2;
 

@@ -36,6 +36,7 @@ class CommercialRouteManager extends Manager {
 			ob1.name AS baseName1,
 			ob1.typeOfBase AS baseType1,
 			pl1.name AS playerName1,
+			pl1.rColor AS playerColor1,
 			pl1.avatar AS avatar1,
 			p1.population AS population1,
 
@@ -43,6 +44,7 @@ class CommercialRouteManager extends Manager {
 			ob2.name AS baseName2,
 			ob2.typeOfBase AS baseType2,
 			pl2.name AS playerName2,
+			pl2.rColor AS playerColor2,
 			pl2.avatar AS avatar2,
 			p2.population AS population2
 
@@ -100,6 +102,7 @@ class CommercialRouteManager extends Manager {
 			$cr->baseType1 = $aw['baseType1'];
 			$cr->setPlayerId1($aw['playerId1']);
 			$cr->setPlayerName1($aw['playerName1']);
+			$cr->playerColor1 = $aw['playerColor1'];
 			$cr->setAvatar1($aw['avatar1']);
 			$cr->setPopulation1($aw['population1']);
 
@@ -107,6 +110,7 @@ class CommercialRouteManager extends Manager {
 			$cr->baseType2 = $aw['baseType2'];
 			$cr->setPlayerId2($aw['playerId2']);
 			$cr->setPlayerName2($aw['playerName2']);
+			$cr->playerColor2 = $aw['playerColor2'];
 			$cr->setAvatar2($aw['avatar2']);
 			$cr->setPopulation2($aw['population2']);
 
