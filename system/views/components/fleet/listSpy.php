@@ -27,11 +27,8 @@ echo '<div class="component report">';
 							echo '</div>';
 
 							echo '<div class="center">';
-								echo '<strong>' . $r->placeName . '</strong>';
+								echo '<strong><a href="' . APP_ROOT . 'map/place-' . $r->rPlace . '">' . $r->placeName . '</a></strong>';
 								echo Chronos::transform($r->dSpying);
-							#	echo '<a href="' . APP_ROOT . 'map/place-' . $r->rPlace . '">';
-							#		echo Game::formatCoord($r->xPosition, $r->yPosition, $r->position, $r->rSector);
-							#	echo '</a>';
 							echo '</div>';
 
 							echo '<div class="right">';
