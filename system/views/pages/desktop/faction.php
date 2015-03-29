@@ -470,15 +470,15 @@ echo '<div id="content">';
 
 		$PAM_LAST_TOKEN = ASM::$pam->newSession(FALSE);
 		ASM::$pam->load(
-			array('rColor' => CTR::$data->get('playerInfo')->get('color')), 
-			array('dInscription', 'DESC'),
-			array(0, 100)
+			['rColor' => CTR::$data->get('playerInfo')->get('color')], 
+			['dInscription', 'DESC'],
+			[0, 100]
 		);
 
 		ASM::$pam->newSession(FALSE);
 		ASM::$pam->load(
-			array('rColor' => CTR::$data->get('playerInfo')->get('color')), 
-			array('status', 'DESC', 'factionPoint', 'DESC')
+			['rColor' => CTR::$data->get('playerInfo')->get('color'), 'statement' => [PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY]], 
+			['status', 'DESC', 'factionPoint', 'DESC']
 		);
 
 		# statPlayer component
