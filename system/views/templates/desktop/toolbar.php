@@ -100,6 +100,24 @@ echo '<div id="tools">';
 					echo ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color">';
 				echo '</span>';
 			echo '</div>';
+
+			echo '<div class="number-box grey">';
+				echo '<span class="label">ressources en stock</span>';
+				echo '<span class="value">';
+					echo Format::numberFormat($currentBase->getResourcesStorage());
+					echo ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color">';
+				echo '</span>';
+				$storageSpace = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $currentBase->getLevelStorage(), 'storageSpace');
+				$storageBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::REFINERY_STORAGE);
+				if ($storageBonus > 0) {
+					$storageSpace += ($storageSpace * $storageBonus / 100);
+				}
+				$percent = Format::numberFormat($currentBase->getResourcesStorage() / $storageSpace * 100);
+				echo '<span class="progress-bar hb bl" title="remplissage : ' . $percent . '%">';
+					echo '<span style="width:' . $percent . '%;" class="content"></span>';
+				echo '</span>';
+			echo '</div>';
+				
 			echo '<a href="' . APP_ROOT . 'bases/view-refinery" class="more-link">vers la raffinerie</a>';
 		echo '</div>';
 	echo '</div>';
