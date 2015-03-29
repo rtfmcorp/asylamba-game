@@ -183,5 +183,31 @@ class CommercialRouteManager extends Manager {
 		$this->_Remove($id);
 		return TRUE;
 	}
+
+	public static function freezeRoute($color1, $color2, $freeze) {
+		$db = DataBase::getInstance();
+		$qr = $db->prepare(
+			'UPDATE commercialRoute AS cr
+				LEFT JOIN orbitalBase AS ob1
+					ON cr.rOrbitalBase = ob1.rPlace
+				LEFT JOIN player AS pl1
+					ON ob1.rPlayer = pl1.id
+				LEFT JOIN orbitalBase AS ob2
+					ON cr.rOrbitalBaseLinked = ob2.rPlace
+				LEFT JOIN player AS pl2
+					ON ob2.rPlayer = pl2.id
+			SET cr.statement = ?
+				WHERE
+					((pl1.rColor = ? AND pl2.rColor = ?) OR
+					(pl1.rColor = ? AND pl2.rColor = ?)) AND
+					cr.statement = ?'
+		);
+
+		if ($freeze) {
+			$qr->execute(array(CRM_STANDBY, $color1, $color2, $color2, $color1, CRM_ACTIVE));
+		} else {
+			$qr->execute(array(CRM_ACTIVE, $color1, $color2, $color2, $color1, CRM_STANDBY));
+		}
+	} 
 }
 ?>
