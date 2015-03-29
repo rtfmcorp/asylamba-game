@@ -15,7 +15,7 @@ echo '<div id="subnav">';
 		$active = (CTR::$get->exist('faction')) ? 'active' : NULL;
 		echo '<a href="' . APP_ROOT . 'embassy/faction-' . CTR::$data->get('playerInfo')->get('color') . '" class="item ' . $active . '">';
 			echo '<span class="picto">';
-				echo '<img src="' . MEDIA . 'profil/faction.png" alt="" />';
+				echo '<img src="' . MEDIA . 'rank/faction.png" alt="" />';
 			echo '</span>';
 			echo '<span class="content skin-1">';
 				echo '<span>Ambassades</span>';
