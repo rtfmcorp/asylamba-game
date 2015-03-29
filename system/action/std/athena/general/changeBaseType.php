@@ -132,56 +132,293 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 					$totalPrice = PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price');
 				}
 				if ($player->credit >= $totalPrice) {
-					$player->decreaseCredit($totalPrice);
-					$orbitalBase->typeOfBase = $type;
-					# delete commercial buildings
-					for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) { 
-						$maxLevel = OrbitalBaseResource::getBuildingInfo($i, 'maxLevel', $type);
-						if ($orbitalBase->getBuildingLevel($i) > $maxLevel) {
-							$orbitalBase->setBuildingLevel($i, $maxLevel);
-						}
-					}
-					# delete buildings in queue
-					$S_BQM1 = ASM::$bqm->getCurrentSession();
-					ASM::$bqm->newSession(ASM_UMODE);
-					ASM::$bqm->load(array('rOrbitalBase' => $baseId), array('dEnd'));
-					for ($i = ASM::$bqm->size() - 1; $i >= 0; $i--) {
-						ASM::$bqm->deleteById(ASM::$bqm->get($i)->id);
-					}
-					ASM::$bqm->changeSession($S_BQM1);
-					# send the right alert
+					$canChangeBaseType = TRUE;
 					if ($type == OrbitalBase::TYP_COMMERCIAL) {
-						# change base type in session
-						for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
-							if (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == $baseId) {
-								CTR::$data->get('playerBase')->get('ob')->get($i)->add('type', OrbitalBase::TYP_COMMERCIAL);
-								break;
+						# verify if fleets are moving or not
+						# transfer to the mess the extra commanders and change line if needed
+						include_once ARES;
+						$S_COM2 = ASM::$com->getCurrentSession();
+
+						ASM::$com->newSession();
+						ASM::$com->load(array('c.rBase' => $orbitalBase->rPlace, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 1));
+						$totalQtyLine1 = ASM::$com->size();
+						$movingQtyLine1 = 0;
+						for ($i = 0; $i < ASM::$com->size(); $i++) { 
+							if (ASM::$com->get($i)->statement == Commander::MOVING) {
+								$movingQtyLine1++;
+							}
+						}
+						$S_COM_Sess1 = ASM::$com->getCurrentSession();
+
+						ASM::$com->newSession();
+						ASM::$com->load(array('c.rBase' => $orbitalBase->rPlace, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 2));
+						$totalQtyLine2 = ASM::$com->size();
+						$movingQtyLine2 = 0;
+						for ($i = 0; $i < ASM::$com->size(); $i++) { 
+							if (ASM::$com->get($i)->statement == Commander::MOVING) {
+								$movingQtyLine2++;
+							}
+						}
+						$S_COM_Sess2 = ASM::$com->getCurrentSession();
+
+						$totalQty = $totalQtyLine1 + $totalQtyLine2;
+						$movingQty = $movingQtyLine1 + $movingQtyLine2;
+
+						if ($totalQty >= 2) {
+							switch ($movingQty){
+								case 2 :
+									$line1 = FALSE;
+									$line2 = FALSE;
+									ASM::$com->changeSession($S_COM_Sess1);
+									for ($i = 0; $i < ASM::$com->size(); $i++) { 
+										if (ASM::$com->get($i)->statement == Commander::MOVING) {
+											if ($line1) {
+												# move to line 2
+												ASM::$com->get($i)->line = 2;
+												$line2 = TRUE;
+											} else {
+												# stay on line 1
+												$line1 = TRUE;
+											}
+										} else {
+											# move to the mess
+											ASM::$com->get($i)->statement = Commander::RESERVE;
+											ASM::$com->get($i)->emptySquadrons();
+										}
+									}
+									ASM::$com->changeSession($S_COM_Sess2);
+									for ($i = 0; $i < ASM::$com->size(); $i++) { 
+										if (ASM::$com->get($i)->statement == Commander::MOVING) {
+											if ($line2) {
+												# move to line 1
+												ASM::$com->get($i)->line = 1;
+												$line1 = TRUE;
+											} else {
+												# stay on line 2
+												$line2 = TRUE;
+											}
+										} else {
+											# move to the mess
+											ASM::$com->get($i)->statement = Commander::RESERVE;
+											ASM::$com->get($i)->emptySquadrons();
+										}
+									}
+									break;
+								case 1 :
+									if ($movingQtyLine1 == 1) {
+										if ($totalQtyLine1 >= 1 && $totalQtyLine2 >= 1) {
+											// let stay one cmder on each line
+											ASM::$com->changeSession($S_COM_Sess1);
+											for ($i = 0; $i < ASM::$com->size(); $i++) { 
+												if (ASM::$com->get($i)->statement != Commander::MOVING) {
+													# move to the mess
+													ASM::$com->get($i)->statement = Commander::RESERVE;
+													ASM::$com->get($i)->emptySquadrons();
+												}
+											}
+											ASM::$com->changeSession($S_COM_Sess2);
+											$line2 = FALSE;
+											for ($i = 0; $i < ASM::$com->size(); $i++) { 
+												if (!$line2) {
+													$line2 = TRUE;
+												} else {
+													# move to the mess
+													ASM::$com->get($i)->statement = Commander::RESERVE;
+													ASM::$com->get($i)->emptySquadrons();
+												}
+											}
+										} else {
+											// change line of one from line 1 to 2
+											ASM::$com->changeSession($S_COM_Sess1);
+											$line2 = FALSE;
+											for ($i = 0; $i < ASM::$com->size(); $i++) { 
+												if (ASM::$com->get($i)->statement != Commander::MOVING) {
+													if (!$line2) {
+														$line2 = TRUE;
+													} else {
+														# move to the mess
+														ASM::$com->get($i)->statement = Commander::RESERVE;
+														ASM::$com->get($i)->emptySquadrons();
+													}
+												}
+											}
+										}
+									} else { # $movingQtyLine2 == 1
+										if ($totalQtyLine1 >= 1 && $totalQtyLine2 >= 1) {
+											// let stay one cmder on each line
+											ASM::$com->changeSession($S_COM_Sess2);
+											for ($i = 0; $i < ASM::$com->size(); $i++) { 
+												if (ASM::$com->get($i)->statement != Commander::MOVING) {
+													# move to the mess
+													ASM::$com->get($i)->statement = Commander::RESERVE;
+													ASM::$com->get($i)->emptySquadrons();
+												}
+											}
+											ASM::$com->changeSession($S_COM_Sess1);
+											$line1 = FALSE;
+											for ($i = 0; $i < ASM::$com->size(); $i++) { 
+												if (!$line1) {
+													$line1 = TRUE;
+												} else {
+													# move to the mess
+													ASM::$com->get($i)->statement = Commander::RESERVE;
+													ASM::$com->get($i)->emptySquadrons();
+												}
+											}
+										} else {
+											// change line of one from line 2 to 1
+											ASM::$com->changeSession($S_COM_Sess2);
+											$line1 = FALSE;
+											for ($i = 0; $i < ASM::$com->size(); $i++) { 
+												if (ASM::$com->get($i)->statement != Commander::MOVING) {
+													if (!$line1) {
+														$line1 = TRUE;
+													} else {
+														# move to the mess
+														ASM::$com->get($i)->statement = Commander::RESERVE;
+														ASM::$com->get($i)->emptySquadrons();
+													}
+												}
+											}
+										}
+									}
+									break;
+								case 0 :
+									if ($totalQtyLine1 == 0) {
+										# one from line 2 to line 1
+										ASM::$com->changeSession($S_COM_Sess1);
+										$line1 = FALSE;
+										$line2 = FALSE;
+										for ($i = 0; $i < ASM::$com->size(); $i++) { 
+											if (!$line1) {
+												$line1 = TRUE;
+											} else if (!$line2) {
+												# move one to line 2
+												ASM::$com->get($i)->line = 2;
+												$line2 = TRUE;
+											} else {
+												# move to the mess
+												ASM::$com->get($i)->statement = Commander::RESERVE;
+												ASM::$com->get($i)->emptySquadrons();
+											}
+										}
+									} else if ($totalQtyLine2 == 0) {
+										# one from line 1 to line 2
+										ASM::$com->changeSession($S_COM_Sess2);
+										$line1 = FALSE;
+										$line2 = FALSE;
+										for ($i = 0; $i < ASM::$com->size(); $i++) { 
+											if (!$line2) {
+												$line2 = TRUE;
+											} else if (!$line1) {
+												# move one to line 1
+												ASM::$com->get($i)->line = 1;
+												$line1 = TRUE;
+											} else {
+												# move to the mess
+												ASM::$com->get($i)->statement = Commander::RESERVE;
+												ASM::$com->get($i)->emptySquadrons();
+											}
+										}
+									} else {
+										# one on each line
+										ASM::$com->changeSession($S_COM_Sess1);
+										$line1 = FALSE;
+										for ($i = 0; $i < ASM::$com->size(); $i++) { 
+											if (!$line1) {
+												$line1 = TRUE;
+											} else {
+												# move to the mess
+												ASM::$com->get($i)->statement = Commander::RESERVE;
+												ASM::$com->get($i)->emptySquadrons();
+											}
+										}
+										ASM::$com->changeSession($S_COM_Sess2);
+										$line2 = FALSE;
+										for ($i = 0; $i < ASM::$com->size(); $i++) { 
+											if (!$line2) {
+												$line2 = TRUE;
+											} else {
+												# move to the mess
+												ASM::$com->get($i)->statement = Commander::RESERVE;
+												ASM::$com->get($i)->emptySquadrons();
+											}
+										}
+									}
+									break;
+								default :
+									# the user can't change base type to commercial right now !
+									$canChangeBaseType = FALSE;
+							}
+						} else {
+							if ($totalQtyLine1 == 2) {
+								# switch one from line 1 to line 2
+								ASM::$com->changeSession($S_COM_Sess1);
+								ASM::$com->get()->line = 2;
+							}
+							if ($totalQtyLine2 == 2) {
+								# switch one from line 2 to line 1
+								ASM::$com->changeSession($S_COM_Sess2);
+								ASM::$com->get()->line = 1;
 							}
 						}
 
-						# prestige
-						if ($player->rColor == ColorResource::KOVAHK) {
-							$player->factionPoint -= Color::POINTCHANGETYPE;
-						} elseif ($player->rColor == ColorResource::NERVE) {
-							$player->factionPoint += Color::POINTCHANGETYPE;
+						ASM::$com->changeSession($S_COM2);
+					}
+					if ($canChangeBaseType) {
+						$player->decreaseCredit($totalPrice);
+						$orbitalBase->typeOfBase = $type;
+						# delete commercial buildings
+						for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) { 
+							$maxLevel = OrbitalBaseResource::getBuildingInfo($i, 'maxLevel', $type);
+							if ($orbitalBase->getBuildingLevel($i) > $maxLevel) {
+								$orbitalBase->setBuildingLevel($i, $maxLevel);
+							}
 						}
-						CTR::$alert->add('Votre Base Militaire devient un Centre Commerciale. Vos bâtiments militaires superflus sont détruits.', ALERT_STD_SUCCESS);
+						# delete buildings in queue
+						$S_BQM1 = ASM::$bqm->getCurrentSession();
+						ASM::$bqm->newSession(ASM_UMODE);
+						ASM::$bqm->load(array('rOrbitalBase' => $baseId), array('dEnd'));
+						for ($i = ASM::$bqm->size() - 1; $i >= 0; $i--) {
+							ASM::$bqm->deleteById(ASM::$bqm->get($i)->id);
+						}
+						ASM::$bqm->changeSession($S_BQM1);
+						# send the right alert
+						if ($type == OrbitalBase::TYP_COMMERCIAL) {
+							# change base type in session
+							for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
+								if (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == $baseId) {
+									CTR::$data->get('playerBase')->get('ob')->get($i)->add('type', OrbitalBase::TYP_COMMERCIAL);
+									break;
+								}
+							}
+
+							# prestige
+							if ($player->rColor == ColorResource::KOVAHK) {
+								$player->factionPoint -= Color::POINTCHANGETYPE;
+							} elseif ($player->rColor == ColorResource::NERVE) {
+								$player->factionPoint += Color::POINTCHANGETYPE;
+							}
+							CTR::$alert->add('Votre Base Militaire devient un Centre Commerciale. Vos bâtiments militaires superflus sont détruits.', ALERT_STD_SUCCESS);
+						} else {
+							# change base type in session
+							for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
+								if (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == $baseId) {
+									CTR::$data->get('playerBase')->get('ob')->get($i)->add('type', OrbitalBase::TYP_MILITARY);
+									break;
+								}
+							}
+
+							# prestige
+							if ($player->rColor == ColorResource::NERVE) {
+								$player->factionPoint -= Color::POINTCHANGETYPE;
+							} elseif ($player->rColor == ColorResource::KOVAHK) {
+								$player->factionPoint += Color::POINTCHANGETYPE;
+							}
+							CTR::$alert->add('Votre Centre Industriel devient une Base Militaire. Vos bâtiments commerciaux superflus sont détruits.', ALERT_STD_SUCCESS);
+						}
 					} else {
-						# change base type in session
-						for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
-							if (CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == $baseId) {
-								CTR::$data->get('playerBase')->get('ob')->get($i)->add('type', OrbitalBase::TYP_MILITARY);
-								break;
-							}
-						}
-
-						# prestige
-						if ($player->rColor == ColorResource::NERVE) {
-							$player->factionPoint -= Color::POINTCHANGETYPE;
-						} elseif ($player->rColor == ColorResource::KOVAHK) {
-							$player->factionPoint += Color::POINTCHANGETYPE;
-						}
-						CTR::$alert->add('Votre Centre Industriel devient une Base Militaire. Vos bâtiments commerciaux superflus sont détruits.', ALERT_STD_SUCCESS);
+						CTR::$alert->add('modification du type de la base orbitale impossible - vous avez trop de flottes en mouvement pour changer votre base en Centre Industriel', ALERT_STD_ERROR);
 					}
 				} else {
 					CTR::$alert->add('modification du type de la base orbitale impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
