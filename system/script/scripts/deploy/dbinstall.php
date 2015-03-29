@@ -150,6 +150,7 @@ for ($i = 1; $i <= 7; $i++) {
 	$p->name = ColorResource::getInfo($i, 'officialName');
 	$p->avatar = ('color-' . $i);
 	$p->rColor = $i;
+	$p->status = 6;
 	ASM::$pam->add($p);
 }
 
