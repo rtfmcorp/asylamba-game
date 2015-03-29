@@ -21,16 +21,20 @@ echo '<div class="component">';
 					echo '</div>';
 
 					echo '<p class="desc">';
-						echo '<strong>Statut</strong> : ';
-						switch ($law->statement) {
-							case Law::EFFECTIVE: echo 'application en cours'; break;
-							case Law::OBSOLETE: echo 'application terminée'; break;
-							case Law::REFUSED: echo 'refusée'; break;
-							default: echo 'inconnu'; break;
+						if (LawResources::getInfo($law->type, 'department') == 6) {
+							echo '<strong>Statut</strong> : appliquée<br>';
+						} else {
+							echo '<strong>Statut</strong> : ';
+							switch ($law->statement) {
+								case Law::EFFECTIVE: echo 'application en cours'; break;
+								case Law::OBSOLETE: echo 'application terminée'; break;
+								case Law::REFUSED: echo 'refusée'; break;
+								default: echo 'inconnu'; break;
+							}
+							echo '<br>';
+							echo '<strong>Votes pour</strong> : ' . $law->forVote . '<br>';
+							echo '<strong>Votes contre</strong> : ' . $law->againstVote;
 						}
-						echo '<br>';
-						echo '<strong>Votes pour</strong> : ' . $law->forVote . '<br>';
-						echo '<strong>Votes contre</strong> : ' . $law->againstVote;
 					echo '</p>';
 					echo '<p>';
 						echo Chronos::transform($law->dCreation) . '<br>';
