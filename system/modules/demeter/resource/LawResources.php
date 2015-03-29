@@ -74,8 +74,8 @@ Class LawResources {
 			'department' => 4,
 			'undeterminedDuration' => FALSE,
 			'price' => 10,
-			'bonus' => 10,
-			'shortDescription' => 'Augmente la vitesse de production des vaisseaux de 10%.',
+			'bonus' => 20,
+			'shortDescription' => 'La production des vaisseaux et améliorée de 20% mais la production de ressource diminue de 10%.',
 			'longDescription' => '',
 			'image' => '',
 			'isImplemented' => TRUE),
@@ -144,6 +144,19 @@ Class LawResources {
 			'longDescription' => '',
 			'image' => '',
 			'isImplemented' => TRUE),
+		array(
+			'id' => 11,
+			'bonusLaw' => FALSE,
+			'devName' => 'punition',
+			'name' => 'Amende',
+			'department' => 5,
+			'undeterminedDuration' => FALSE,
+			'price' => 2000,
+			'bonus' => 0,
+			'shortDescription' => 'Permet d\'amender un joueur',
+			'longDescription' => '',
+			'image' => '',
+			'isImplemented' => TRUE)
 	);
 
 	public static function getInfo($id, $info) {
