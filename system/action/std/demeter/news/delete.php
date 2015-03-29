@@ -2,21 +2,16 @@
 include_once DEMETER;
 
 $id 		= Utils::getHTTPData('id');
-$content	= Utils::getHTTPData('content');
-$title		= Utils::getHTTPData('title');
 
-if ($title !== FALSE AND $content !== FALSE && $id !== FALSE) {	
+if ($id !== FALSE) {	
 	$S_FNM_1 = ASM::$fnm->getCurrentSession();
 	ASM::$fnm->newSession();
 	ASM::$fnm->load(array('id' => $id));
 
 	if (ASM::$fnm->size() == 1) {
-		if (CTR::$data->get('playerInfo')->get('status') >= 3) {
-			ASM::$fnm->get()->title = $title;
-			ASM::$fnm->get()->edit($content);
-		} else {
-			CTR::$alert->add('Vous n\'avez pas le droit pour créer une annonce.', ALERT_STD_ERROR);
-		}
+		ASM::$fnm->deleteById($id);
+
+		CTR::$alert->add('L\'annonce a bien été supprimée.', ALERT_STD_SUCCESS);
 	} else {
 		CTR::$alert->add('Cette annonce n\'existe pas.', ALERT_STD_FILLFORM);
 	}

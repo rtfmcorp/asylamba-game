@@ -27,6 +27,21 @@ echo '<div id="content">';
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'overview') {
 		include_once ZEUS;
 
+		$S_FNM_OW = ASM::$fnm->getCurrentSession();
+		$TOKEN_NEWS = ASM::$fnm->newSession();
+		
+		if (CTR::$get->equal('news', 'list')) {
+			ASM::$fnm->load(['rFaction' => $faction->id, 'pinned' => FALSE], ['dCreation', 'DESC']);
+			$mode = 'all';
+		} else {
+			ASM::$fnm->load(['rFaction' => $faction->id, 'pinned' => TRUE]);
+			$mode = 'pin';
+		}
+
+		include COMPONENT . 'faction/overview/news.php';
+
+		ASM::$fnm->changeSession($S_FNM_OW);
+
 		$S_PAM_1 = ASM::$pam->getCurrentSession();
 		$PLAYER_GOV_TOKEN = ASM::$pam->newSession(FALSE);
 		ASM::$pam->load(
@@ -34,7 +49,6 @@ echo '<div id="content">';
 			array('status', 'DESC')
 		);
 
-		include COMPONENT . 'faction/overview/news.php';
 		include COMPONENT . 'faction/overview/stat.php';
 
 		$S_LAM_OLD = ASM::$lam->getCurrentsession();
@@ -233,8 +247,23 @@ echo '<div id="content">';
 				}
 				ASM::$sem->changeSession($S_SEM_OLD);
 			} elseif (CTR::$get->get('mode') == 'news') {
-				include COMPONENT . 'default.php';
-				include COMPONENT . 'default.php';
+				$S_FNM_1 = ASM::$fnm->getCurrentSession();
+				$TOKEN_NEWS_LIST = ASM::$fnm->newSession();
+				ASM::$fnm->load(['rFaction' => $faction->id], ['dCreation', 'DESC']);
+				
+				include COMPONENT . 'faction/news/list.php';
+
+				if (CTR::$get->exist('news')) {
+					if (ASM::$fnm->getById(CTR::$get->get('news')) !== FALSE) {
+						include COMPONENT . 'faction/news/edit.php';
+					} else {
+						CTR::redirect('faction/view-government/mode-news');
+					}
+				} else {
+					include COMPONENT . 'faction/news/create.php';
+				}
+
+				ASM::$fnm->changeSession($S_FNM_1);
 			} elseif (CTR::$get->get('mode') == 'message') {
 				include COMPONENT . 'faction/government/message.php';
 			} elseif (CTR::$get->get('mode') == 'description') {
@@ -472,7 +501,7 @@ echo '<div id="content">';
 		ASM::$pam->load(
 			['rColor' => CTR::$data->get('playerInfo')->get('color')], 
 			['dInscription', 'DESC'],
-			[0, 100]
+			[0, 25]
 		);
 
 		ASM::$pam->newSession(FALSE);

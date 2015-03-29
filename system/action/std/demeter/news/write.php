@@ -5,25 +5,25 @@
 
 include_once DEMETER;
 
-$content = Utils::getHTTPData('content');
-$title  = Utils::getHTTPData('title');
+$content 	= Utils::getHTTPData('content');
+$title  	= Utils::getHTTPData('title');
 
-
-if ($title AND $content) {
+if ($title !== FALSE AND $content !== FALSE) {
 	if (CTR::$data->get('playerInfo')->get('status') >= 3) {
+		$S_FNM_1 = ASM::$fnm->getCurrentSession();
+		ASM::$fnm->newSession();
+
 		$news = new FactionNews();
+
 		$news->rFaction = CTR::$data->get('playerInfo')->get('color');
 		$news->title = $title;
-		$news->dCreation = Utils::now();
-
 		$news->edit($content);
+		$news->dCreation = Utils::now();
 		
 		ASM::$fnm->add($news);
-
-		CTR::redirect('faction/');
-		CTR::$alert->add('news créé.', ALERT_STD_SUCCESS);
+		ASM::$fnm->changeSession($S_FNM_1);
 	} else {
-		CTR::$alert->add('Vous n\'avez pas le droit de créer de news.', ALERT_STD_ERROR);
+		CTR::$alert->add('Vous n\'avez pas le droit pour créer une annonce.', ALERT_STD_ERROR);
 	}
 } else {
 	CTR::$alert->add('Manque d\'information.', ALERT_STD_FILLFORM);
