@@ -317,6 +317,13 @@ jQuery(document).ready(function($) {
 
 				var olQuantity = parseInt(this.obj.squadron.find('a:nth-child(' + (shipId + 1) + ') .quantity').text());
 				var orQuantity = parseInt(this.obj.dock.find('a:nth-child(' + (shipId + 1) + ') .quantity').text());
+				var squadronPEV = 0;
+
+				this.obj.army.find('.squadron').each(function(i) {
+					if (squadronTransfer.squadronSelected == $(this).data('squadron-id')) {
+						squadronPEV = $(this).data('squadron-pev');
+					}
+				});
 
 				if (direction == 'ctb') {
 					quantity = (quantity == undefined)
@@ -328,6 +335,10 @@ jQuery(document).ready(function($) {
 					quantity = (quantity == undefined)
 						? orQuantity
 						: quantity;
+
+					maxQuantity = Math.floor((100 - squadronPEV) / game.shipsPev[shipId]);
+					quantity = quantity > maxQuantity ? maxQuantity : quantity;
+
 					var nlQuantity = olQuantity + quantity;
 					var nrQuantity = orQuantity - quantity;
 				}
