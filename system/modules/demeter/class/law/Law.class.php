@@ -26,6 +26,7 @@ class Law {
 	const WARDECLARATION			= 8;
 	const TOTALALLIANCE				= 9;
 	const NEUTRALPACT				= 10;
+	const PUNITION					= 11;
 
 
 	const VOTEDURATION 				= 86400;

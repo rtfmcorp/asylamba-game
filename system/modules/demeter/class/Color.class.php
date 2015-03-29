@@ -482,6 +482,11 @@ class Color {
 		CommercialRouteManager::freezeRoute($this->id, $law->options['rColor'], True);
 	}
 
+	public function uFinishPunition($law, $player) {
+		$player->decreaseCredit($law->options['credits']);
+		$law->statement = Law::OBSOLETE;
+	}
+
 
 	public function uMethod() {
 		// 604800s = 7j
@@ -647,6 +652,13 @@ class Color {
 							break;
 						case Law::NEUTRALPACT:
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishNeutral', array(ASM::$lam->get($i)));
+							break;
+						case Law::PUNITION:
+							$S_PAM = ASM::$pam->getCurrentsession();
+							ASM::$pam->newSession();
+							ASM::$pam->load(array('id' => ASM::$lam->get($i)->options['rPlayer']));
+							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishPunition', array(ASM::$lam->get($i), ASM::$pam->get()));
+							ASM::$pam->changeSession($S_PAM);
 							break;
 						
 						default:
