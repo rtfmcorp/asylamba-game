@@ -28,6 +28,7 @@ echo '<div id="content">';
 	ASM::$clm->newSession(FALSE);
 	ASM::$clm->load([], ['activePlayers', 'ASC']);
 
+	$firstAlly = TRUE;
 	for ($i = 0; $i < ASM::$clm->size(); $i++) {
 		$ally = ASM::$clm->get($i);
 
@@ -59,8 +60,9 @@ echo '<div id="content">';
 						if (!$ally->isClosed) {
 							echo '<a href="' . APP_ROOT . 'inscription/step-2/ally-' . $ally->id . '" class="chooseLink">';
 								echo '<strong>choisir cette faction</strong>';
-								if ($i == 0) {
+								if ($firstAlly) {
 									echo '<em>recommandée pour les joueurs débutants</em>';
+									$firstAlly = FALSE;
 								} else {
 									echo '<em>et passer à l\'étape suivante</em>';
 								}
