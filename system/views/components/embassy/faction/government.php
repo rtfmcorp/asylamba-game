@@ -10,7 +10,7 @@ echo '<div class="component player rank">';
 		echo '<div class="body">';
 			echo '<h4>Gouvernement</h4>';
 			for ($i = 0; $i < ASM::$pam->size(); $i++) { 
-				echo '<div class="player">';
+				echo '<div class="player color' . $faction->id . '">';
 					echo '<a href="' . APP_ROOT . 'embassy/player-' .  ASM::$pam->get($i)->id . '">';
 						echo '<img src="' . MEDIA . 'avatar/small/' .  ASM::$pam->get($i)->avatar . '.png" alt="' .  ASM::$pam->get($i)->name . '" class="picto" />';
 					echo '</a>';

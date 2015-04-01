@@ -11,7 +11,7 @@ echo '<div class="component nav">';
 				echo '<a href="' . APP_ROOT . 'embassy/faction-' . $i . '" class="nav-element ' . $active . '">';
 					echo '<img src="' . MEDIA . 'avatar/small/color-' . $i . '.png" alt="" />';
 					echo '<strong>' . ColorResource::getInfo($i, 'officialName') . '</strong>';
-					echo '<em>' . ColorResource::getInfo($i, 'government') . '</em>';
+					echo '<em>Ambassade des ' . ucfirst(ColorResource::getInfo($i, 'demonym')) . '</em>';
 				echo '</a>';
 			}
 		echo '</div>';
