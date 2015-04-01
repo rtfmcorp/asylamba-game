@@ -343,7 +343,8 @@ class Game {
 
 	public static function getSpySuccess($antiSpy, $priceInvested) {
 		# spy success must be between 0 and 100
-		$ratio = $priceInvested / $antiSpy;
+		$antiSpy = $antiSpy == 0 ? 1 : $antiSpy;
+		$ratio   = $priceInvested / $antiSpy;
 		$percent = round($ratio * 33);
 		# ça veut dire qu'il payer 3x plus que ce que le gars investi pour tout voir
 		if ($percent > 100) {
