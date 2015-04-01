@@ -121,7 +121,7 @@ class PlayerRanking {
 					case 'fight': 
 						$r .= Format::numberFormat($this->fight) . ' point' . Format::addPlural($this->fight);
 						break;
-					case 'armies': $r .= Format::numberFormat($this->armies) . ' <img src="' . MEDIA . 'resources/pev.png" class="icon-color" alt="pev" />'; break;
+				#	case 'armies': $r .= Format::numberFormat($this->armies) . ' <img src="' . MEDIA . 'resources/pev.png" class="icon-color" alt="pev" />'; break;
 					case 'resources': $r .= Format::numberFormat($this->resources) . ' <img src="' . MEDIA . 'resources/resource.png" class="icon-color" alt="ressources" />'; break;
 					default: break;
 				}
