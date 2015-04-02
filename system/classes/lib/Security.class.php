@@ -8,7 +8,7 @@ class Security {
 		mcrypt_generic_init($cipher, $key, $iv);
 
 		$data = mcrypt_generic($cipher, $query); 
-		$data = rtrim(strtr(base64_encode($data), '+/', '|_'), '=');
+		$data = rtrim(strtr(base64_encode($data), '+/', '~_'), '=');
 
 		mcrypt_generic_deinit($cipher);
 
@@ -22,7 +22,7 @@ class Security {
 
 		mcrypt_generic_init($cipher, $key, $iv);
 
-		$crypted = base64_decode(str_pad(strtr($query, '|_', '+/'), strlen($query) % 4, '=', STR_PAD_RIGHT));
+		$crypted = base64_decode(str_pad(strtr($query, '~_', '+/'), strlen($query) % 4, '=', STR_PAD_RIGHT));
 		$decrypted = trim(mdecrypt_generic($cipher, $crypted));
 
 		mcrypt_generic_deinit($cipher);
