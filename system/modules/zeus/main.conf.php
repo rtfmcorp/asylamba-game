@@ -6,7 +6,7 @@ define('PAM_BASEAP',				10);
 define('PAM_COEFFAP',				5);
 
 # impot planete
-define('PAM_COEFTAX',				1.5);
+define('PAM_COEFTAX',				1);
 
 # player statements
 define('PAM_ACTIVE', 				1);
