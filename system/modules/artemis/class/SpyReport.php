@@ -18,10 +18,14 @@ class SpyReport {
 
 	const STEP_RESOURCES = 10;
 	const STEP_FLEET = 20;
+	const STEP_ANITSPY = 30;
 	const STEP_COMMANDER = 40;
+	const STEP_RC = 50;
 	const STEP_PEV = 60;
+	const STEP_POINT = 70;
 	const STEP_MOVEMENT = 80;
 	const STEP_ARMY = 95;
+	const STEP_DOCK = 99;
 	
 	# attributes
 	public $id = 0; 
