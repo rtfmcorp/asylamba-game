@@ -965,8 +965,8 @@ jQuery(document).ready(function($) {
 			box.find('input[type="submit"]').removeAttr('disabled');
 		}
 
-		box.find('.sf-comship .value').html(utils.numberFormat(Math.ceil(comShip)));
-		box.find('.sf-min-price .value').html(utils.numberFormat(Math.ceil(rMinP)));
+		box.find('.sf-comship .value').html(utils.numberFormat(comShip));
+		box.find('.sf-min-price .value').html(utils.numberFormat(rMinP));
 		box.find('.sf-price input').val(price);	
 	});
 	
