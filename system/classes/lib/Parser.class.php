@@ -68,9 +68,8 @@ class Parser {
 	}
 
 	protected function parseLink($string) {
-		$string = preg_replace('#http://[a-z0-9._/-?-&\#]+#i', '<a href="$0" target="_blank">$0</a>', $string);
-		$string = preg_replace('#https://[a-z0-9._/-?-&\#]+#i', '<a href="$0" target="_blank">$0</a>', $string);
-
+		$pattern = "/(?i)\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))/";
+		$string = preg_replace($pattern, '<a href="$0" target="_blank">$0</a>', $string);
 		return $string;
 	}
 
