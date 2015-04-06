@@ -16,8 +16,8 @@ class RecyclingMission {
 	const ST_ACTIVE = 1;
 	const ST_BEING_DELETED = 2;
 
-	const RECYCLER_CAPACTIY = 1000;
-	const RECYCLING_TIME = 7200; # 2 hours, in seconds
+	const RECYCLER_CAPACTIY = 800;
+	const RECYCLING_TIME = 18000; # 5 hours, in seconds
 	const COEF_SHIP = 0.4; # to convert points to resource for ships
 
 	public $id = 0;
