@@ -474,7 +474,7 @@ class TechnologyResource {
 			'time' => 37800,
 			'maxLevel' => 25,
 			'category' => 3,
-			'resource' => 110,
+			'resource' => 1100,
 			'credit' => 11500,
 			'points' => 28,
 			'column' => 4,
