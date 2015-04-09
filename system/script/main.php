@@ -7,6 +7,7 @@ $scripts = array(
 	array('migration.modifcolor', '/migration/modifColor.php'),
 	array('migration.updatemessage', '/migration/updateMessage.php'),
 	array('migration.addgaiaplayer', '/migration/addGaiaPlayer.php'),
+	array('migration.updaterecycling', '/migration/updateRecycling.php'),
 
 	array('cron.daily', '/cron/daily.php'),
 	array('cron.playerranking', '/cron/playerRanking.php'),
