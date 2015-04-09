@@ -195,12 +195,12 @@ class TutorialResource {
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 10,
-			'title' => 'Développer la technologie "Chassis simple léger"',
-			'description' => 'Nous voulons construire un Pégase, malheureusement il nous manque un prérequis : la technologie "Chassis simple léger". 
+			'title' => 'Développer la technologie "Châssis simple léger"',
+			'description' => 'Nous voulons construire un Pégase, malheureusement il nous manque un prérequis : la technologie "Châssis simple léger". 
 				Rends-toi donc dans la Technosphère pour développer cette technologie.
 				<br /><br />
 				Dans la Technosphère, plusieurs types de technologie sont disponibles. 
-				Les "Chassis" permettent de débloquer de nouveaux vaisseaux. 
+				Les "Châssis" permettent de débloquer de nouveaux vaisseaux. 
 				Les "Nouvelles technologies" permettent de débloquer de nouveaux bâtiments ou de nouvelles actions indispensables comme la "Colonisation" par exemple.
 				Les "Améliorations industrielles" permettent de rendre plus efficace divers points du jeu, par exemple augmentation de la production de ressources, augmentation de la vitesse de construction de certaines vaisseaux, augmentation de la force de frappe d\'un vaisseau, etc.
 				Les deux premières catégories sont des technologies qu\'on débloque une seule fois, par contre les améliorations industrielles se font par niveau.
@@ -209,7 +209,7 @@ class TutorialResource {
 				Ces prérequis comprennent à chaque fois un niveau de la Technosphère et des "Recherches".
 				Tes niveaux actuels de recherche sont visibles en cliquant sur l\'onglet "technologie" qui se trouve parmi les icônes tout au sommet de ton écran.
 				<br /><br />
-				Tu as tous les prérequis pour développer "Chassis simple léger", fais-le donc.',
+				Tu as tous les prérequis pour développer "Châssis simple léger", fais-le donc.',
 			'experienceReward' => 4,
 			'creditReward' => 0,
 			'resourceReward' => 3000,
@@ -369,7 +369,7 @@ class TutorialResource {
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 25,
-			'title' => 'Développer la technologie "Chassis simple amélioré"',
+			'title' => 'Développer la technologie "Châssis simple amélioré"',
 			'description' => '',
 			'experienceReward' => 10,
 			'creditReward' => 2000,
