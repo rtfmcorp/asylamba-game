@@ -733,8 +733,8 @@ class TechnologyResource {
 			'credit' => 5500,
 			'points' => 19,
 			'column' => 6,
-			'shortDescription' => 'Le prochain niveau améliorera la vitesse de vos chasseurs de {x}%.',
-			'description' => 'Cette technologie améliore la vitesse de vos chasseurs en augmentant le nombre de réacteurs. Vous pourrez donc attaquer plus rapidement vos ennemis lors des combats.',
+			'shortDescription' => 'Le prochain niveau améliorera la maniabilité de vos chasseurs de {x}%.',
+			'description' => 'Cette technologie améliore la maniabilité de vos chasseurs en augmentant le nombre de réacteurs. Vous pourrez donc attaquer plus rapidement vos ennemis lors des combats.',
 			'bonus' => 3
 		),
 		array(
@@ -784,8 +784,8 @@ class TechnologyResource {
 			'credit' => 6800,
 			'points' => 23,
 			'column' => 6,
-			'shortDescription' => 'Le prochain niveau améliorera la vitesse de vos corvettes de {x}%.',
-			'description' => 'La propulsion améliorée est une technologie qui booste les réacteurs de vos corvettes, améliorant ainsi leur vitesse et leur chance d’éviter les impacts.',
+			'shortDescription' => 'Le prochain niveau améliorera la maniabilité de vos corvettes de {x}%.',
+			'description' => 'La propulsion améliorée est une technologie qui booste les réacteurs de vos corvettes, améliorant ainsi leur maniabilité et leur chance d’éviter les impacts.',
 			'bonus' => 3
 		),
 		array(
@@ -835,8 +835,8 @@ class TechnologyResource {
 			'credit' => 10500,
 			'points' => 24,
 			'column' => 7,
-			'shortDescription' => 'Le prochain niveau améliorera la vitesse de vos frégates de {x}%.',
-			'description' => 'La super propulsion est un système de propulsion héliothermique. Ce système permet à tous vos vaisseaux de type frégate de gagner en vitesse.',
+			'shortDescription' => 'Le prochain niveau améliorera la maniabilité de vos frégates de {x}%.',
+			'description' => 'La super propulsion est un système de propulsion héliothermique. Ce système permet à tous vos vaisseaux de type frégate de gagner en maniabilité.',
 			'bonus' => 3
 		),
 		array(
@@ -886,8 +886,8 @@ class TechnologyResource {
 			'credit' => 8800,
 			'points' => 24,
 			'column' => 7,
-			'shortDescription' => 'Le prochain niveau améliorera la vitesse de vos destroyers/croiseurs de {x}%.',
-			'description' => 'La turbo-propulsion est basée sur un système photonique, lui permettant d’augmenter sa rapidité à proximité d’une étoile. Cette amélioration augmentera la vitesse de tous vos destroyers.',
+			'shortDescription' => 'Le prochain niveau améliorera la maniabilité de vos destroyers/croiseurs de {x}%.',
+			'description' => 'La turbo-propulsion est basée sur un système photonique, lui permettant d’augmenter sa rapidité à proximité d’une étoile. Cette amélioration augmentera la maniabilité de tous vos destroyers.',
 			'bonus' => 3
 		),
 		array(
