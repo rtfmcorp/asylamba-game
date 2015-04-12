@@ -101,7 +101,7 @@ class CommercialShipping {
 					ASM::$com->load(array('c.id' => $transaction->identifier));
 
 					$commander = ASM::$com->get();
-					$commander->setStatement(COM_INSCHOOL);
+					$commander->setStatement(Commander::RESERVE);
 					$commander->setRPlayer($orbitalBase->getRPlayer());
 					$commander->setRBase($this->rBaseDestination);
 
