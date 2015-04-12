@@ -58,33 +58,33 @@ echo '<div id="nav">';
 
 	echo '<div class="box left-2">';
 		$isActive = (in_array(CTR::getPage(), array('profil'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'profil" class="square ' . $isActive . '"><img src="' . MEDIA . 'common/nav-profil.png" alt="" /></a>';
+		echo '<a href="' . APP_ROOT . 'profil" class="square hb rb ' . $isActive . '" title="profil"><img src="' . MEDIA . 'common/nav-profil.png" alt="" /></a>';
 
 		$isActive = (in_array(CTR::getPage(), array('fleet'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'fleet" class="square ' . $isActive . '"><img src="' . MEDIA . 'common/nav-fleet.png" alt="" /></a>';
+		echo '<a href="' . APP_ROOT . 'fleet" class="square hb rb ' . $isActive . '" title="flottes"><img src="' . MEDIA . 'common/nav-fleet.png" alt="" /></a>';
 
 		$isActive = (in_array(CTR::getPage(), array('map'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'map" class="square ' . $isActive . '"><img src="' . MEDIA . 'common/nav-map.png" alt="" /></a>';
+		echo '<a href="' . APP_ROOT . 'map" class="square hb rb ' . $isActive . '" title="galaxie"><img src="' . MEDIA . 'common/nav-map.png" alt="" /></a>';
 		
 		$isActive = (in_array(CTR::getPage(), array('financial'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'financial" class="square ' . $isActive . '"><img src="' . MEDIA . 'common/nav-financial.png" alt="" /></a>';
+		echo '<a href="' . APP_ROOT . 'financial" class="square hb rb ' . $isActive . '" title="finances"><img src="' . MEDIA . 'common/nav-financial.png" alt="" /></a>';
 	
 		$isActive = (in_array(CTR::getPage(), array('technology'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'technology" class="square ' . $isActive . '"><img src="' . MEDIA . 'common/nav-techno.png" alt="" /></a>';
+		echo '<a href="' . APP_ROOT . 'technology" class="square hb rb ' . $isActive . '" title="université"><img src="' . MEDIA . 'common/nav-techno.png" alt="" /></a>';
 		
 		$isActive = (in_array(CTR::getPage(), array('faction'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'faction" class="square ' . $isActive . '"><img src="' . MEDIA . 'common/nav-faction.png" alt="" /></a>';
+		echo '<a href="' . APP_ROOT . 'faction" class="square hb rb ' . $isActive . '" title="faction"><img src="' . MEDIA . 'common/nav-faction.png" alt="" /></a>';
 	echo '</div>';
 
 	echo '<div class="box left-3">';
 		$isActive = (in_array(CTR::getPage(), array('rank'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'rank" class="square ' . $isActive . '"><img src="' . MEDIA . 'common/nav-rank.png" alt="" /></a>';
+		echo '<a href="' . APP_ROOT . 'rank" class="square hb rb ' . $isActive . '" title="classements"><img src="' . MEDIA . 'common/nav-rank.png" alt="" /></a>';
 
 		$isActive = (in_array(CTR::getPage(), array('embassy'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'embassy" class="square ' . $isActive . '"><img src="' . MEDIA . 'common/nav-embassy.png" alt="" /></a>';
+		echo '<a href="' . APP_ROOT . 'embassy" class="square hb rb ' . $isActive . '" title="ambassades"><img src="' . MEDIA . 'common/nav-embassy.png" alt="" /></a>';
 
 		$isActive = (in_array(CTR::getPage(), array('message'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'message" class="square ' . $isActive . '"><img src="' . MEDIA . 'common/nav-message.png" alt="" />';
+		echo '<a href="' . APP_ROOT . 'message" class="square hb rb ' . $isActive . '" title="messagerie"><img src="' . MEDIA . 'common/nav-message.png" alt="" />';
 			echo ($message > 0) ? '<span class="number">' . $message . '</span>' : NULL;
 		echo '</a>';
 
