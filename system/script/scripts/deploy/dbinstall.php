@@ -6,6 +6,8 @@ include_once DEMETER;
 
 $db = DataBaseAdmin::getInstance();
 
+$db->query('SET FOREIGN_KEY_CHECKS = 0;');
+
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table color</h2>';
 
@@ -178,7 +180,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `sector` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 
 echo '<h3>Ajout du trigger sector</h3>';
-
 $db->query("DROP TRIGGER IF EXISTS `saveSectorChange`;");
 $db->query("CREATE TRIGGER `saveSectorChange` BEFORE UPDATE ON `sector`
  FOR EACH ROW BEGIN
@@ -215,7 +216,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `system` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
 
 echo '<h3>Ajout du trigger system</h3>';
-
 $db->query("DROP TRIGGER IF EXISTS `saveSystemChange`;");
 $db->query("CREATE TRIGGER `saveSystemChange` BEFORE UPDATE ON `system`
  FOR EACH ROW BEGIN
@@ -1187,6 +1187,8 @@ $values .= '(' . (ASM::$clm->size() - 1) . ',' . (ASM::$clm->size() - 1) . ',' .
 echo '<h3>Remplissage de la table colorLink</h3>';
 $qr = $db->prepare("INSERT INTO `colorLink` (`rColor`, `rColorLinked`, `statement`) VALUES" . $values);
 $qr->execute();
+
+$db->query('SET FOREIGN_KEY_CHECKS = 1;');
 
 echo '<h1>Génération de la galaxie</h1>';
 
