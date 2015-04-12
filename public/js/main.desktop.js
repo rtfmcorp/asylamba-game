@@ -633,6 +633,12 @@ jQuery(document).ready(function($) {
 		mapController.selectCommander($(this));
 	})
 
+	// ajax-switch-params
+	$('.ajax-switch-params').on('click', function(e) {
+		var param = $(this).data('switch-params');
+		$.get(game.path + 'ajax/a-switchparams/params-' + param);
+	});
+
 // ################################# //
 // ####### ACTION BOX MODULE ####### //
 // ################################# //

@@ -64,8 +64,6 @@ if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('tok
 		case 'sendcredit': 				include ACTION . 'zeus/player/sendCredit.php'; break;
 		case 'sendcredittofaction':		include ACTION . 'zeus/player/sendCreditToFaction.php'; break;
 
-		case 'updatedisplayparams': 	include ACTION . 'zeus/params/display.php'; break;
-
 		case 'validatestep':			include ACTION . 'zeus/tutorial/validateStep.php'; break;
 
 		# ARTEMIS
