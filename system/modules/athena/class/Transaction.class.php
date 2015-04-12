@@ -27,7 +27,7 @@ class Transaction {
 
 	# minimum rates for each type
 	const MIN_RATE_RESOURCE = 0.2;
-	const MIN_RATE_SHIP = 0.5;
+	const MIN_RATE_SHIP = 1;
 	const MIN_RATE_COMMANDER = 1;
 
 	# maximum rates for each type
