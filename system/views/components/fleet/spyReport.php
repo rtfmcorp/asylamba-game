@@ -93,7 +93,7 @@ echo '<div class="component size3 space">';
 				if ($spyreport->typeOfBase != Place::TYP_EMPTY) {
 					$data  = 'data-army="';
 					$data .= $spyreport->success > SpyReport::STEP_DOCK
-						? json_encode(unserialize($spyreport->shipsInStorage))
+						? json_encode(array_map('intval', unserialize($spyreport->shipsInStorage)))
 						: json_encode(array(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1));
 					$data .= '"';
 
