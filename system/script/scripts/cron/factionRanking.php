@@ -53,7 +53,7 @@ function cmpTerritorial($a, $b) {
 }
 
 # load the factions (colors)
-ASM::$clm->load();
+ASM::$clm->load(array('id' => array(1,2,3,4,5,6,7)));
 
 # create an array with all the factions
 $list = array();
