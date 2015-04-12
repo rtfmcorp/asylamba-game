@@ -59,7 +59,7 @@ echo '<div id="content">';
 					echo '<div class="body">';
 						if (!$ally->isClosed) {
 							echo '<a href="' . APP_ROOT . 'inscription/step-2/ally-' . $ally->id . '" class="chooseLink">';
-								echo '<strong>choisir cette faction</strong>';
+								echo '<strong>Choisir cette faction</strong>';
 								if ($firstAlly) {
 									echo '<em>recommandée pour les joueurs débutants</em>';
 									$firstAlly = FALSE;

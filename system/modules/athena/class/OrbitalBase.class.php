@@ -371,10 +371,12 @@ class OrbitalBase {
 		$maxStorage = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $this->levelStorage, 'storageSpace');
 		$maxStorage += $maxStorage * $playerBonus->bonus->get(PlayerBonus::REFINERY_STORAGE) / 100;
 
-		if ($newResources > $maxStorage) {
-			$this->resourcesStorage = $maxStorage;
-		} else {
-			$this->resourcesStorage = $newResources;
+		if ($this->resourcesStorage < $maxStorage) {
+			if ($newResources > $maxStorage) {
+				$this->resourcesStorage = $maxStorage;
+			} else {
+				$this->resourcesStorage = $newResources;
+			}
 		}
 	}
 

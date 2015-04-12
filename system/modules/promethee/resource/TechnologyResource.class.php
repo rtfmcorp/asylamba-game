@@ -250,7 +250,7 @@ class TechnologyResource {
 		),
 		// unblock ships
 		array(
-			'name' => 'Chassis simple léger',
+			'name' => 'Châssis simple léger',
 			'progName' => 'ship0Unblock',
 			'imageLink' => 'ship0unblock',
 			'requiredTechnosphere' => 1,
@@ -264,7 +264,7 @@ class TechnologyResource {
 			'description' => 'Le châssis léger simple est une technologie qui vous permet de développer et de produire vos tous premiers vaisseaux, les Pégases.'
 		),
 		array(
-			'name' => 'Chassis simple amélioré',
+			'name' => 'Châssis simple amélioré',
 			'progName' => 'ship1Unblock',
 			'imageLink' => 'ship1unblock',
 			'requiredTechnosphere' => 6,
@@ -278,7 +278,7 @@ class TechnologyResource {
 			'description' => 'En modifiant quelque peu le châssis léger simple et en transformant la carcasse d’un pégase, vos chercheurs peuvent développer un nouveau type de chasseur, le Satyre.'
 		),
 		array(
-			'name' => 'Chassis simple double',
+			'name' => 'Châssis simple double',
 			'progName' => 'ship2Unblock',
 			'imageLink' => 'ship2unblock',
 			'requiredTechnosphere' => 10,
@@ -292,7 +292,7 @@ class TechnologyResource {
 			'description' => 'Le châssis simple double est un développement relativement complexe qui vous permet de créer des Chimères, un type de navette multi-tourelle.'
 		),
 		array(
-			'name' => 'Chassis nodal léger',
+			'name' => 'Châssis nodal léger',
 			'progName' => 'ship3Unblock',
 			'imageLink' => 'ship3unblock',
 			'requiredTechnosphere' => 16,
@@ -306,7 +306,7 @@ class TechnologyResource {
 			'description' => 'Le châssis nodal, permettant la construction de la corvette « Sirène », améliore et renforce considérablement la puissance de défense des vaisseaux.'
 		),
 		array(
-			'name' => 'Chassis nodal amélioré',
+			'name' => 'Châssis nodal amélioré',
 			'progName' => 'ship4Unblock',
 			'imageLink' => 'ship4unblock',
 			'requiredTechnosphere' => 20,
@@ -320,7 +320,7 @@ class TechnologyResource {
 			'description' => 'Le châssis nodal amélioré, plus grand et plus solide que le châssis nodal, vous donne la possibilité de produire la corvette « Dryade ». Cette corvette gagne, grâce à ce nouveau châssis, en puissance d’attaque et en défense.'
 		),
 		array(
-			'name' => 'Chassis nodal lourd',
+			'name' => 'Châssis nodal lourd',
 			'progName' => 'ship5Unblock',
 			'imageLink' => 'ship5unblock',
 			'requiredTechnosphere' => 26,
@@ -334,7 +334,7 @@ class TechnologyResource {
 			'description' => 'Plus compliqué et plus performant que les deux châssis nodaux précédents, le châssis nodal lourd est spécialement adapté pour les vaisseaux de type multi-tourelle. En effet, grâce au renforcement de ce châssis et à l’amélioration de la corvette « Dryade », vous pouvez désormais construire la corvette multi-tourelle « Méduse ».'
 		),
 		array(
-			'name' => 'Chassis modulaire',
+			'name' => 'Châssis modulaire',
 			'progName' => 'ship6Unblock',
 			'imageLink' => 'ship6unblock',
 			'requiredTechnosphere' => 14,
@@ -348,7 +348,7 @@ class TechnologyResource {
 			'description' => 'Le châssis modulaire, nouvelle découverte de votre éminent groupe de recherche, vous permet de construire un nouveau type de vaisseau, les frégates d’attaque de type Griffon.'
 		),
 		array(
-			'name' => 'Chassis modulaire renforcé',
+			'name' => 'Châssis modulaire renforcé',
 			'progName' => 'ship7Unblock',
 			'imageLink' => 'ship7unblock',
 			'requiredTechnosphere' => 20,
@@ -362,7 +362,7 @@ class TechnologyResource {
 			'description' => 'En renforçant et en améliorant légèrement son petit frère, le châssis modulaire, un groupe de chercheur a découvert une nouvelle frégate. En effet, plus puissante et plus grosse, la frégate ionique vient embellir vos rangs.'
 		),
 		array(
-			'name' => 'Chassis polymère',
+			'name' => 'Châssis polymère',
 			'progName' => 'ship8Unblock',
 			'imageLink' => 'ship8unblock',
 			'requiredTechnosphere' => 24,
@@ -376,7 +376,7 @@ class TechnologyResource {
 			'description' => 'Le châssis polymère, développé pour la construction de destroyer, vous donnera la possibilité de construire le destroyer Minotaure. Ce châssis est trois fois plus grand que le châssis modulaire, mais également beaucoup plus solide.'
 		),
 		array(
-			'name' => 'Chassis polymère renforcé',
+			'name' => 'Châssis polymère renforcé',
 			'progName' => 'ship9Unblock',
 			'imageLink' => 'ship9unblock',
 			'requiredTechnosphere' => 30,
@@ -390,7 +390,7 @@ class TechnologyResource {
 			'description' => 'Le châssis polymère renforcé a été développé pour améliorer la stabilité du destroyer missile Hydre, dans le but de lui permettre de lancer de plus gros missiles tout en gardant une bonne précision.'
 		),
 		array(
-			'name' => 'Chassis polymère amélioré',
+			'name' => 'Châssis polymère amélioré',
 			'progName' => 'ship10Unblock',
 			'imageLink' => 'ship10unblock',
 			'requiredTechnosphere' => 34,
@@ -404,7 +404,7 @@ class TechnologyResource {
 			'description' => 'En modifiant quelque peu le châssis polymère renforcé, une de vos équipes de chercheurs a développé un nouveau type de vaisseau – le Croiseur Cerbère.'
 		),
 		array(
-			'name' => 'Chassis polymère lourd',
+			'name' => 'Châssis polymère lourd',
 			'progName' => 'ship11Unblock',
 			'imageLink' => 'ship11unblock',
 			'requiredTechnosphere' => 40,
@@ -474,7 +474,7 @@ class TechnologyResource {
 			'time' => 37800,
 			'maxLevel' => 25,
 			'category' => 3,
-			'resource' => 110,
+			'resource' => 1100,
 			'credit' => 11500,
 			'points' => 28,
 			'column' => 4,
