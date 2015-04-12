@@ -11,7 +11,7 @@ ASM::$pam->load(array('statement' => PAM_ACTIVE));
 <html lang="fr">
 
 <head>
-	<title><?php echo CTR::getTitle() ?> — <?php echo APP_SUBNAME ?> — Expansion</title>
+	<title><?php echo CTR::getTitle() ?> — <?php echo APP_SUBNAME ?> — Asylamba</title>
 
 	<meta charset="utf-8" />
 	<meta name="description" content="<?php echo APP_DESCRIPTION ?>" />
