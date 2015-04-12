@@ -666,7 +666,7 @@ class Place {
 								}
 								break;
 							case ColorResource::NERVE:
-								$points = ($this->coefResources - 45) * Color::COEFFPOINTCONQUER;
+								$points = $this->coefResources * Color::COEFFPOINTCONQUER;
 								break;
 							default:
 								$points = 0;
@@ -689,7 +689,7 @@ class Place {
 								}
 								break;
 							case ColorResource::NERVE:
-								$points = ($this->coefResources - 44) * Color::COEFFPOINTCONQUER;
+								$points = $this->coefResources * Color::COEFFPOINTCONQUER;
 								break;
 							default:
 								$points = 0;
@@ -793,7 +793,7 @@ class Place {
 							}
 							break;
 						case ColorResource::NERVE:
-							$points = ($this->coefResources - 44) * Color::COEFFPOINTCONQUER;
+							$points = $this->coefResources * Color::COEFFPOINTCONQUER;
 							break;
 						default:
 							$points = 0;
