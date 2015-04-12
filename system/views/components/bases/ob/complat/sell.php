@@ -61,7 +61,7 @@ echo '</div>';
 
 $S_COM1 = ASM::$com->getCurrentSession();
 ASM::$com->newSession();
-ASM::$com->load(array('c.statement' => Commander::INSCHOOL, 'c.rBase' => $ob_compPlat->getId()), array('c.experience', 'DESC'));
+ASM::$com->load(array('c.statement' => array(Commander::INSCHOOL, Commander::RESERVE), 'c.rBase' => $ob_compPlat->getId()), array('c.experience', 'DESC'));
 
 # commander current rate
 ASM::$trm->newSession();
