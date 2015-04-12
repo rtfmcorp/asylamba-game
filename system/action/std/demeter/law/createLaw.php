@@ -13,7 +13,7 @@ include_once GAIA;
 $type = Utils::getHTTPData('type');
 $duration = Utils::getHTTPData('duration');
 
-if ($type != FALSE) {
+if ($type !== FALSE) {
 	if (LawResources::size() >= $type) {
 		if (CTR::$data->get('playerInfo')->get('status') == LawResources::getInfo($type, 'department')) {
 			$_CLM = ASM::$clm->getCurrentsession();
@@ -66,7 +66,7 @@ if ($type != FALSE) {
 				}
 			}
 			if (LawResources::getInfo($type, 'bonusLaw')) {
-				if ($duration != FALSE) {
+				if ($duration !== FALSE) {
 					if (ASM::$clm->get()->credits >= LawResources::getInfo($type, 'price') * $duration * ASM::$clm->get()->activePlayers) {
 						$law->options = serialize(array());
 						$_LAM = ASM::$lam->getCurrentsession();
@@ -90,7 +90,7 @@ if ($type != FALSE) {
 						case Law::SECTORTAX:
 							$taxes = round(Utils::getHTTPData('taxes'));
 							$rSector = Utils::getHTTPData('rsector');
-							if ($taxes != FALSE && $rSector != FALSE) {
+							if ($taxes !== FALSE && $rSector !== FALSE) {
 								if ($taxes >= 2 && $taxes <= 15) {
 									$_SEM = ASM::$sem->getCurrentsession();
 									ASM::$sem->load(array('id' => $rSector)); 
@@ -117,7 +117,7 @@ if ($type != FALSE) {
 						case Law::SECTORNAME:
 							$rSector = Utils::getHTTPData('rsector');
 							$name = Utils::getHTTPData('name');
-							if ($rSector != FALSE && $name != FALSE) {
+							if ($rSector !== FALSE && $name !== FALSE) {
 								$name = Parser::protect($name);
 								$_SEM = ASM::$sem->getCurrentsession();
 								ASM::$sem->load(array('id' => $rSector)); 
@@ -141,7 +141,7 @@ if ($type != FALSE) {
 						case Law::COMTAXEXPORT:
 							$taxes = round(Utils::getHTTPData('taxes'));
 							$rColor = Utils::getHTTPData('rcolor');
-							if ($taxes != FALSE && $rColor != FALSE) {
+							if ($taxes !== FALSE && $rColor !== FALSE) {
 								$_CTM = ASM::$ctm->getCurrentsession();
 								ASM::$ctm->load(array('faction' => CTR::$data->get('playerInfo')->get('color'), 'relatedFaction' => $rColor)); 
 								if (ASM::$ctm->size() > 0) {
@@ -175,7 +175,7 @@ if ($type != FALSE) {
 						case Law::COMTAXIMPORT:
 							$taxes = round(Utils::getHTTPData('taxes'));
 							$rColor = Utils::getHTTPData('rcolor');
-							if ($taxes != FALSE && $rColor != FALSE) {
+							if ($taxes !== FALSE && $rColor !== FALSE) {
 								$_CTM = ASM::$ctm->getCurrentsession();
 								ASM::$ctm->load(array('faction' => CTR::$data->get('playerInfo')->get('color'), 'relatedFaction' => $rColor)); 
 								if (ASM::$ctm->size() > 0) {
@@ -208,7 +208,7 @@ if ($type != FALSE) {
 							break;
 						case Law::NEUTRALPACT:
 							$rColor = Utils::getHTTPData('rcolor');
-							if ($rColor != FALSE) {
+							if ($rColor !== FALSE) {
 								if ($rColor >= 1 && $rColor <= 7 && $rColor != ASM::$clm->get()->id) {
 
 									if (ASM::$clm->get()->colorLink[$rColor] != Color::NEUTRAL) {
@@ -228,7 +228,7 @@ if ($type != FALSE) {
 							break;
 						case Law::PEACEPACT:
 							$rColor = Utils::getHTTPData('rcolor');
-							if ($rColor != FALSE) {
+							if ($rColor !== FALSE) {
 								if ($rColor >= 1 && $rColor <= 7 && $rColor != ASM::$clm->get()->id) {
 									$nbrPact = 0;
 									foreach (ASM::$clm->get()->colorLink as $relation) {
@@ -257,7 +257,7 @@ if ($type != FALSE) {
 							break;
 						case Law::TOTALALLIANCE:
 							$rColor = Utils::getHTTPData('rcolor');
-							if ($rColor != FALSE) {
+							if ($rColor !== FALSE) {
 								if ($rColor >= 1 && $rColor <= 7 && $rColor != ASM::$clm->get()->id) {
 									$allyYet = FALSE;
 									foreach (ASM::$clm->get()->colorLink as $relation) {
@@ -286,7 +286,7 @@ if ($type != FALSE) {
 							break;
 						case Law::WARDECLARATION:
 							$rColor = Utils::getHTTPData('rcolor');
-							if ($rColor != FALSE) {
+							if ($rColor !== FALSE) {
 								if ($rColor >= 1 && $rColor <= 7 && $rColor != ASM::$clm->get()->id) {
 
 									if (ASM::$clm->get()->colorLink[$rColor] != Color::ENEMY) {
@@ -307,7 +307,7 @@ if ($type != FALSE) {
 						case Law::PUNITION:
 							$rPlayer = Utils::getHTTPData('rplayer');
 							$credits = Utils::getHTTPData('credits');
-							if ($rPlayer != FALSE && $credits != FALSE) {
+							if ($rPlayer !== FALSE && $credits !== FALSE) {
 								$S_PAM = ASM::$pam->getCurrentsession();
 								ASM::$pam->newSession();
 								ASM::$pam->load(array('id' => $rPlayer));
