@@ -688,10 +688,12 @@ class OrbitalBase {
 				$maxStorage += OrbitalBase::EXTRA_STOCK;
 			}
 
-			if ($newResources > $maxStorage) {
-				$this->resourcesStorage = $maxStorage;
-			} else {
-				$this->resourcesStorage = $newResources;
+			if ($this->resourcesStorage < $maxStorage || $canGoHigher) {
+				if ($newResources > $maxStorage) {
+					$this->resourcesStorage = $maxStorage;
+				} else {
+					$this->resourcesStorage = $newResources;
+				}
 			}
 		} else {
 			CTR::$alert->add('Problème dans increaseResources de OrbitalBase', ALERT_BUG_ERROR);
