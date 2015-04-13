@@ -24,7 +24,7 @@ $qr = $db->query('SELECT
 		ob2.rPlayer = ' . CTR::$data->get('playerId'));
 $aw = $qr->fetchAll();
 
-echo '<div id="commercial-routes" style="display: none;">';
+echo '<div id="commercial-routes" ' . (Params::check(Params::SHOW_MAP_RC) ? NULL : 'style="display:none;"') . '>';
 	echo '<svg viewBox="0, 0, ' . (GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size']) . ', ' . (GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';
 			foreach ($aw as $route) {
 				$class = ($route['statement'] == CRM_ACTIVE) ? 'active' : 'standBy';

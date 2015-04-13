@@ -1,6 +1,8 @@
 <?php
 switch (CTR::$get->get('a')) {
-
+	# COMMON
+	case 'switchparams':			include AJAX . 'common/switchParams.php'; break;
+	
 	# HERMES
 	case 'readnotif': 				include AJAX . 'hermes/notification/read.php'; break;
 	case 'archivenotif': 			include AJAX . 'hermes/notification/archive.php'; break;

@@ -16,7 +16,7 @@ $S_PLM_MAPLAYER = ASM::$plm->getCurrentSession();
 ASM::$plm->newSession();
 ASM::$plm->load(array('id' => $placesId));
 
-echo '<div id="fleet-movements">';
+echo '<div id="fleet-movements" ' . (Params::check(Params::SHOW_MAP_FLEETOUT) ? NULL : 'style="display:none;"') . '>';
 	echo '<svg viewBox="0, 0, ' . (GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size']) . ', ' . (GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';
 			for ($i = 0; $i < ASM::$com->size(); $i++) {
 				$commander = ASM::$com->get($i);
