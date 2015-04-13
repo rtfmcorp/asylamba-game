@@ -43,7 +43,7 @@ echo '<div class="component building">';
 			echo '</div>';
 
 			echo '<div class="number-box grey">';
-				echo '<span class="label">capacité de transport des recycleurs</span>';
+				echo '<span class="label">capacité de transport d\'un recycleur</span>';
 				echo '<span class="value">' . Format::number(RecyclingMission::RECYCLER_CAPACTIY) . ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color"></span>';
 			echo '</div>';
 
