@@ -1,5 +1,6 @@
 <?php
 include_once ATHENA;
+include_once DEMETER;
 # propose a commercial route action
 
 # int basefrom 		id (rPlace) de la base orbitale qui propose la route
