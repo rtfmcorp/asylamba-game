@@ -250,18 +250,20 @@ class OrbitalBase {
 			$player = ASM::$pam->get();
 			ASM::$pam->changeSession($S_PAM1);
 
-			# load the bonus
-			$playerBonus = new PlayerBonus($this->rPlayer);
-			$playerBonus->load();
+			if (count($hours)) {
+				# load the bonus
+				$playerBonus = new PlayerBonus($this->rPlayer);
+				$playerBonus->load();
 
-			# RESOURCES
-			foreach ($hours as $key => $hour) {
-				CTC::add($hour, $this, 'uResources', array($playerBonus));
-			}
+				# RESOURCES
+				foreach ($hours as $key => $hour) {
+					CTC::add($hour, $this, 'uResources', array($playerBonus));
+				}
 
-			# ANTI-SPY
-			foreach ($hours as $key => $hour) {
-				CTC::add($hour, $this, 'uAntiSpy', array());
+				# ANTI-SPY
+				foreach ($hours as $key => $hour) {
+					CTC::add($hour, $this, 'uAntiSpy', array());
+				}
 			}
 
 			# BUILDING QUEUE

@@ -57,30 +57,30 @@ class Utils {
 
 	public static function intervalDates($date1, $date2, $precision = 'h') {
 		# give each full hours between two dates
-		$dates = array();
+		$dates = [];
 
 		$baseDate = ($date1 < $date2) ? $date1 : $date2;
-		$endDate = ($date1 < $date2) ? $date2 : $date1;
+		$endDate  = ($date1 < $date2) ? $date2 : $date1;
 
 		if ($precision == 'h') {
-			$hoursInterval = floor((abs(strtotime($date1) - strtotime($date2))) / (60 * 60));
+			$baseTmst = strtotime($baseDate);
+			$tail     = new DateTime($endDate);
+			$cursor   = new DateTime(
+				date('Y', $baseTmst) . '-' . 
+				date('m', $baseTmst) . '-' . 
+				date('d', $baseTmst) . ' ' . 
+				date('H', $baseTmst) . ':00:00'
+			);
 
-			$seconds = strtotime($baseDate) + 3600;
-			$nextHour = floor($seconds / 3600) * 3600;
-			$fullHour = date('Y-m-d H:i:s', $nextHour);
-
-			for ($i = 0; $i < $hoursInterval; $i++) { 
-				# add date to array
-				$dates[] = $fullHour;
-				# compute next date
-				$newTime = strtotime($fullHour) + 3600;
-				$fullHour = date('Y-m-d H:i:s', $newTime);
+			while(TRUE) {
+				$cursor->add(DateInterval::createFromDateString('1 hour'));
+				
+				if ($cursor->getTimestamp() <= $tail->getTimestamp()) {
+					$dates[] = $cursor->format('Y-m-d H:i:s');
+				} else {
+					break;
+				}
 			}
-			# if there is an hour change at the end
-			if ($fullHour < $endDate) {
-				$dates[] = $fullHour;
-			}
-			return $dates;
 		} elseif ($precision == 'd') {
 			# the changement is at 01:00:00
 			$daysInterval = floor((abs(strtotime($date1) - strtotime($date2))) / (60 * 60 * 24));
@@ -100,8 +100,9 @@ class Utils {
 			if ($fullDay < $endDate) {
 				$dates[] = $fullDay;
 			}
-			return $dates;
 		}
+
+		return $dates;
 	}
 
 	public static function hasAlreadyHappened($date, $now = FALSE) {

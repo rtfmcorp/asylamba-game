@@ -15,7 +15,9 @@ $scripts = [
 		['utils.maprender', '/utils/map-render.php'],
 		['utils.findsectorinfos', '/utils/find-sector-infos.php'],
 	],
-	'Test' => [],
+	'Test' => [
+		['test.main', '/test/test.php'],
+	],
 	'Migration' => []
 ];
 
