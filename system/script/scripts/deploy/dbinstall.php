@@ -449,7 +449,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `transaction` (
 	`rPlace` INT unsigned NOT NULL,
 
 	`type` TINYINT NOT NULL COMMENT '0 = resource, 1 = ship, 2 = commander',
-	`quantity` SMALLINT NOT NULL,
+	`quantity` INT NOT NULL,
 	`identifier` SMALLINT DEFAULT NULL,
 	`price` INT NOT NULL,
 	`commercialShipQuantity` SMALLINT NOT NULL,
