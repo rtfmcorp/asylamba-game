@@ -250,18 +250,20 @@ class OrbitalBase {
 			$player = ASM::$pam->get();
 			ASM::$pam->changeSession($S_PAM1);
 
-			# load the bonus
-			$playerBonus = new PlayerBonus($this->rPlayer);
-			$playerBonus->load();
+			if (count($hours)) {
+				# load the bonus
+				$playerBonus = new PlayerBonus($this->rPlayer);
+				$playerBonus->load();
 
-			# RESOURCES
-			foreach ($hours as $key => $hour) {
-				CTC::add($hour, $this, 'uResources', array($playerBonus));
-			}
+				# RESOURCES
+				foreach ($hours as $key => $hour) {
+					CTC::add($hour, $this, 'uResources', array($playerBonus));
+				}
 
-			# ANTI-SPY
-			foreach ($hours as $key => $hour) {
-				CTC::add($hour, $this, 'uAntiSpy', array());
+				# ANTI-SPY
+				foreach ($hours as $key => $hour) {
+					CTC::add($hour, $this, 'uAntiSpy', array());
+				}
 			}
 
 			# BUILDING QUEUE
@@ -371,10 +373,12 @@ class OrbitalBase {
 		$maxStorage = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $this->levelStorage, 'storageSpace');
 		$maxStorage += $maxStorage * $playerBonus->bonus->get(PlayerBonus::REFINERY_STORAGE) / 100;
 
-		if ($newResources > $maxStorage) {
-			$this->resourcesStorage = $maxStorage;
-		} else {
-			$this->resourcesStorage = $newResources;
+		if ($this->resourcesStorage < $maxStorage) {
+			if ($newResources > $maxStorage) {
+				$this->resourcesStorage = $maxStorage;
+			} else {
+				$this->resourcesStorage = $newResources;
+			}
 		}
 	}
 
@@ -686,10 +690,12 @@ class OrbitalBase {
 				$maxStorage += OrbitalBase::EXTRA_STOCK;
 			}
 
-			if ($newResources > $maxStorage) {
-				$this->resourcesStorage = $maxStorage;
-			} else {
-				$this->resourcesStorage = $newResources;
+			if ($this->resourcesStorage < $maxStorage || $canGoHigher) {
+				if ($newResources > $maxStorage) {
+					$this->resourcesStorage = $maxStorage;
+				} else {
+					$this->resourcesStorage = $newResources;
+				}
 			}
 		} else {
 			CTR::$alert->add('Problème dans increaseResources de OrbitalBase', ALERT_BUG_ERROR);

@@ -8,41 +8,7 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
-	if (CTR::$get->exist('faction')) {
-		if (CTR::$get->exist('faction') && in_array(CTR::$get->get('faction'), [1, 2, 3, 4, 5, 6, 7])) {
-			# load module
-			include_once DEMETER;
-			include_once ZEUS;
-
-			# load data
-			$S_COL_1 = ASM::$clm->getCurrentSession();
-			ASM::$clm->newSession();
-			ASM::$clm->load(array('id' => CTR::$get->get('faction')));
-			$faction = ASM::$clm->get(0);
-
-			$S_PAM_1 = ASM::$pam->getCurrentSession();
-			$FACTION_GOV_TOKEN = ASM::$pam->newSession(FALSE);
-			ASM::$pam->load(
-				array('rColor' => $faction->id, 'status' => array(6, 5, 4, 3)),
-				array('status', 'DESC')
-			);
-
-			# include component
-			include COMPONENT . 'embassy/faction/nav.php';
-			
-			include COMPONENT . 'embassy/faction/infos.php';
-			include COMPONENT . 'embassy/faction/government.php';
-
-			$eraseColor = $faction->id;
-			include COMPONENT . 'faction/data/diplomacy/main.php';
-
-			# close session
-			ASM::$pam->changeSession($S_PAM_1);
-			ASM::$clm->changeSession($S_COL_1);
-		} else {
-			CTR::redirect('404');
-		}
-	} else {
+	if (CTR::$get->exist('player')) {
 		# inclusion des modules
 		include_once ZEUS;
 		include_once ATHENA;
@@ -93,6 +59,43 @@ echo '<div id="content">';
 		ASM::$obm->changeSession($S_OBM1);
 		ASM::$msm->changeSession($S_MSM1);
 		ASM::$pam->changeSession($S_PAM1);
+	} else {
+		$color = CTR::$get->exist('faction')
+			? CTR::$get->get('faction')
+			: CTR::$data->get('playerInfo')->get('color');
+
+		if (in_array($color, [1, 2, 3, 4, 5, 6, 7])) {
+			# load module
+			include_once DEMETER;
+			include_once ZEUS;
+
+			# load data
+			$S_COL_1 = ASM::$clm->getCurrentSession();
+			ASM::$clm->newSession();
+			ASM::$clm->load(array('id' => $color));
+			$faction = ASM::$clm->get(0);
+
+			$S_PAM_1 = ASM::$pam->getCurrentSession();
+			$FACTION_GOV_TOKEN = ASM::$pam->newSession(FALSE);
+			ASM::$pam->load(
+				array('rColor' => $faction->id, 'status' => array(6, 5, 4, 3)),
+				array('status', 'DESC')
+			);
+
+			# include component
+			include COMPONENT . 'embassy/faction/nav.php';
+			
+			include COMPONENT . 'embassy/faction/flag.php';
+			include COMPONENT . 'embassy/faction/infos.php';
+			include COMPONENT . 'embassy/faction/government.php';
+
+			$eraseColor = $faction->id;
+			include COMPONENT . 'faction/data/diplomacy/main.php';
+
+			# close session
+			ASM::$pam->changeSession($S_PAM_1);
+			ASM::$clm->changeSession($S_COL_1);
+		}
 	}
 echo '</div>';
 ?>

@@ -1,6 +1,6 @@
 <?php
 $rate = 400 / GalaxyConfiguration::$galaxy['size'];
-echo '<div id="map-content">';
+echo '<div id="map-content" ' . (Params::check(Params::SHOW_MAP_MINIMAP) ? NULL : 'style="display:none;"') . '>';
 	echo '<div class="mini-map">';
 		echo '<svg class="sectors" viewBox="0, 0, 400, 400" xmlns="http://www.w3.org/2000/svg">';
 			for ($i = 0; $i < $sm->size(); $i++) {

@@ -27,7 +27,7 @@ echo '<div class="component size2 commander-fleet">';
 							echo '<td>#' . $i . '</td>';
 						}
 					echo '</tr><tr>';
-						echo '<td>Ceci représente la composition de votre flotte. Chaque carré montre une esquadrille. Vous pouvez remplir cette esquadrille en cliquant dessus puis en cliquant sur un type de vaisseau dans les colonnes à droite.<br /><br />La première colonne représente votre esquadrille et la seconde votre hangar.<br /><br />En pressant CTRL + clic (CMD + clic), vous pouvez transférer le maximum de vaisseau possible.</td>';
+						echo '<td>Ceci représente la composition de votre flotte. Chaque carré montre une escadrille. Vous pouvez remplir cette escadrille en cliquant dessus puis en cliquant sur un type de vaisseau dans les colonnes à droite.<br /><br />La première colonne représente votre escadrille et la seconde votre hangar.<br /><br />En pressant CTRL + clic (CMD + clic), vous pouvez transférer le maximum de vaisseaux possible.</td>';
 					for ($i = 5; $i > 0; $i--) { 
 						echo '<td>';
 						if (max($lineCoord) >= $i) {

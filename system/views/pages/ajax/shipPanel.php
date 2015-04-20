@@ -102,7 +102,7 @@ echo '<div class="component panel-info">';
 				? NULL
 				: '<span class="bonus">' . ($bonus > 0 ? '+' : NULL) . $bonus . '</span>';
 			echo '<div class="skill-box">';
-				echo '<span class="label">vitesse</span>';
+				echo '<span class="label">maniabilité</span>';
 				echo '<span class="value"><img src="' .  MEDIA. 'resources/speed.png" class="icon-color" /> ' . ShipResource::getInfo($ship, 'speed') . $bonus . '</span>';
 				echo '<span class="progress-bar"><span class="content" style="width: ' . Format::percent((ShipResource::getInfo($ship, 'speed') - $speeda), $speedb) . '%;"></span></span>';
 			echo '</div>';

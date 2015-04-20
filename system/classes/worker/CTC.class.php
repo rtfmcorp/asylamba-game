@@ -26,16 +26,6 @@ abstract class CTC {
 			if (count(self::$events) > 0) {
 				$beforeUsort = count(self::$events);
 				
-				/*usort(self::$events, function($a, $b) {
-					if ($a['timest'] == $b['timest']) {
-						return 0;
-					} else {
-						return ($a['timest'] < $b['timest'])
-							? -1
-							: 1;
-					}
-				});*/
-				
 				self::$events = CTC::insertion(self::$events);
 
 				$afterUsort = count(self::$events);

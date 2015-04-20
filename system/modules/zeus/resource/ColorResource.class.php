@@ -99,7 +99,7 @@ class ColorResource {
 			'desc3' => 'Leur longue tradition de pillage et d’exploration de la Galaxie, leur a amené de très grandes richesses ainsi qu’une habilté hors du commun pour la construction de vaisseaux de combat rapides et puissants.',
 			'desc4' => 'Basé sur un système politique très martial et militaire dirigé par un Baron, la société Kovahkarh fait preuve d’une grande discipline et d’une rigueur sans égale. Unie dans un même idéal de victoire et d’expansion, cette faction est une des plus solides de la Galaxie.',
 			'bonus' => array(
-				array('path' => 'faction/bonus/bonus2-2.png', 'title' => '+ 10% de vitesse', 'desc' => 'Vos vaisseaux du Chantier Alpha gagnent en vitesse'),
+				array('path' => 'faction/bonus/bonus2-2.png', 'title' => '+ 10% de maniabilité', 'desc' => 'Vos vaisseaux du Chantier Alpha gagnent en maniabilité'),
 				array('path' => 'faction/bonus/bonus2-3.png', 'title' => '- 5% de défense', 'desc' => 'Vos vaisseaux du Chantier de Ligne perdent en défense')),
 			'mandateDuration' => 604800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Kovahkarh gagne du prestige en construisant des vaisseaux, en gagnant des combats et en créant des bases militaires. Il en perd lorsqu\'il se fait tuer au combat ou qu\'il perd une de ces bases militaires.',

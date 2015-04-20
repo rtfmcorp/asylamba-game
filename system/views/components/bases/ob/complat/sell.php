@@ -61,7 +61,7 @@ echo '</div>';
 
 $S_COM1 = ASM::$com->getCurrentSession();
 ASM::$com->newSession();
-ASM::$com->load(array('c.statement' => Commander::INSCHOOL, 'c.rBase' => $ob_compPlat->getId()), array('c.experience', 'DESC'));
+ASM::$com->load(array('c.statement' => array(Commander::INSCHOOL, Commander::RESERVE), 'c.rBase' => $ob_compPlat->getId()), array('c.experience', 'DESC'));
 
 # commander current rate
 ASM::$trm->newSession();
@@ -148,7 +148,7 @@ echo '<div class="component market-sell">';
 						echo '</div>';
 					echo '</div>';
 
-					echo '<form id="sell-ships-' . $key . '" class="sell-form" data-shipcom-size="' . CommercialShipping::WEDGE . '" data-resource-rate="' . ShipResource::getInfo($key, 'resourcePrice') . '" data-max-quantity="' . $ship . '" data-rate="' . ($shipCurrentRate * ShipResource::getInfo($key, 'resourcePrice')) . '" data-min-price="' . Game::getMinPriceRelativeToRate(Transaction::TYP_SHIP, 1, $key) . '" action="' . Format::actionBuilder('proposetransaction', ['rplace' => $ob_compPlat->getId(), 'type' => Transaction::TYP_SHIP, 'identifier' => $key]) . '" method="post" style="display:none;">';
+					echo '<form id="sell-ships-' . $key . '" class="sell-form" data-shipcom-size="' . CommercialShipping::WEDGE . '" data-resource-rate="' . (ShipResource::getInfo($key, 'pev') * 1000) . '" data-max-quantity="' . $ship . '" data-rate="' . ($shipCurrentRate * ShipResource::getInfo($key, 'resourcePrice')) . '" data-min-price="' . Game::getMinPriceRelativeToRate(Transaction::TYP_SHIP, 1, $key) . '" action="' . Format::actionBuilder('proposetransaction', ['rplace' => $ob_compPlat->getId(), 'type' => Transaction::TYP_SHIP, 'identifier' => $key]) . '" method="post" style="display:none;">';
 						echo '<div class="label-box">';
 							echo '<span class="label">Quantité max.</span>';
 							echo '<span class="value">' . $ship . '</span>';

@@ -420,7 +420,7 @@ class Place {
 				// $commander->rStartPlace = NULL;
 				// $commander->dArrival = NULL;
 
-				#modifier le rPlayer (ne se modifie pas si c'est le même)
+				# modifier le rPlayer (ne se modifie pas si c'est le même)
 				$commander->rPlayer = $this->rPlayer;
 
 				$commander->statement = Commander::AFFECTED;
@@ -447,9 +447,12 @@ class Place {
 				// $commander->rStartPlace = NULL;
 				// $commander->dArrival = NULL;
 
+				# modifier le rPlayer (ne se modifie pas si c'est le même)
+				$commander->rPlayer = $this->rPlayer;
+
 				$commander->emptySquadrons();
 
-				$commander->statement = Commander::INSCHOOL;
+				$commander->statement = Commander::RESERVE;
 
 				# envoie de notif
 				$this->sendNotif(self::CHANGEFAIL, $commander);
@@ -697,7 +700,7 @@ class Place {
 								}
 								break;
 							case ColorResource::NERVE:
-								$points = ($this->coefResources - 45) * Color::COEFFPOINTCONQUER;
+								$points = $this->coefResources * Color::COEFFPOINTCONQUER;
 								break;
 							default:
 								$points = 0;
@@ -720,7 +723,7 @@ class Place {
 								}
 								break;
 							case ColorResource::NERVE:
-								$points = ($this->coefResources - 44) * Color::COEFFPOINTCONQUER;
+								$points = $this->coefResources * Color::COEFFPOINTCONQUER;
 								break;
 							default:
 								$points = 0;
@@ -824,7 +827,7 @@ class Place {
 							}
 							break;
 						case ColorResource::NERVE:
-							$points = ($this->coefResources - 44) * Color::COEFFPOINTCONQUER;
+							$points = $this->coefResources * Color::COEFFPOINTCONQUER;
 							break;
 						default:
 							$points = 0;

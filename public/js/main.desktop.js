@@ -633,6 +633,12 @@ jQuery(document).ready(function($) {
 		mapController.selectCommander($(this));
 	})
 
+	// ajax-switch-params
+	$('.ajax-switch-params').on('click', function(e) {
+		var param = $(this).data('switch-params');
+		$.get(game.path + 'ajax/a-switchparams/params-' + param);
+	});
+
 // ################################# //
 // ####### ACTION BOX MODULE ####### //
 // ################################# //
@@ -965,8 +971,8 @@ jQuery(document).ready(function($) {
 			box.find('input[type="submit"]').removeAttr('disabled');
 		}
 
-		box.find('.sf-comship .value').html(utils.numberFormat(Math.ceil(comShip)));
-		box.find('.sf-min-price .value').html(utils.numberFormat(Math.ceil(rMinP)));
+		box.find('.sf-comship .value').html(utils.numberFormat(comShip));
+		box.find('.sf-min-price .value').html(utils.numberFormat(rMinP));
 		box.find('.sf-price input').val(price);	
 	});
 	

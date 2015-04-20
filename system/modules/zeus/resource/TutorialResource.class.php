@@ -195,12 +195,12 @@ class TutorialResource {
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 10,
-			'title' => 'Développer la technologie "Chassis simple léger"',
-			'description' => 'Nous voulons construire un Pégase, malheureusement il nous manque un prérequis : la technologie "Chassis simple léger". 
+			'title' => 'Développer la technologie "Châssis simple léger"',
+			'description' => 'Nous voulons construire un Pégase, malheureusement il nous manque un prérequis : la technologie "Châssis simple léger". 
 				Rends-toi donc dans la Technosphère pour développer cette technologie.
 				<br /><br />
 				Dans la Technosphère, plusieurs types de technologie sont disponibles. 
-				Les "Chassis" permettent de débloquer de nouveaux vaisseaux. 
+				Les "Châssis" permettent de débloquer de nouveaux vaisseaux. 
 				Les "Nouvelles technologies" permettent de débloquer de nouveaux bâtiments ou de nouvelles actions indispensables comme la "Colonisation" par exemple.
 				Les "Améliorations industrielles" permettent de rendre plus efficace divers points du jeu, par exemple augmentation de la production de ressources, augmentation de la vitesse de construction de certaines vaisseaux, augmentation de la force de frappe d\'un vaisseau, etc.
 				Les deux premières catégories sont des technologies qu\'on débloque une seule fois, par contre les améliorations industrielles se font par niveau.
@@ -209,7 +209,7 @@ class TutorialResource {
 				Ces prérequis comprennent à chaque fois un niveau de la Technosphère et des "Recherches".
 				Tes niveaux actuels de recherche sont visibles en cliquant sur l\'onglet "technologie" qui se trouve parmi les icônes tout au sommet de ton écran.
 				<br /><br />
-				Tu as tous les prérequis pour développer "Chassis simple léger", fais-le donc.',
+				Tu as tous les prérequis pour développer "Châssis simple léger", fais-le donc.',
 			'experienceReward' => 4,
 			'creditReward' => 0,
 			'resourceReward' => 3000,
@@ -248,7 +248,7 @@ class TutorialResource {
 				<br /><br />
 				Un commandant de niveau 1, un Aspirant, peut contrôler une escadrille. Chaque niveau supplémentaire lui offre une escadrille en plus. Pour affecter des vaisseaux à une escadrille il faut cliquer sur celle-ci. Si l\'opération s\'est bien déroulée, l\'escadrille est entourée par un traitillé.
 				<br /><br />
-				Ensuite dans la colonne à droite se trouve la composition de l\'esacrille et dans la colonne suivante se trouvent les vaisseaux qui sont dans le hangar. Pour affecter un vaisseau, il suffit de cliquer sur un vaisseau du hangar et il sera transféré dans l\'escadrille.
+				Ensuite dans la colonne à droite se trouve la composition de l\'escadrille et dans la colonne suivante se trouvent les vaisseaux qui sont dans le hangar. Pour affecter un vaisseau, il suffit de cliquer sur un vaisseau du hangar et il sera transféré dans l\'escadrille.
 				<br /><br />
 				Chaque vaisseau vaut un nombre de PEV (points-équivalant-vaisseau), plus le vaisseau est grand, plus il a de PEV. Attention, une escadrille est constituée au maximum de 100 PEV, choisis donc bien la composition de ton escadrille.
 				<br /><br />
@@ -296,7 +296,7 @@ class TutorialResource {
 		array(
 			'id' => 17,
 			'title' => 'Poster un message sur le forum de faction',
-			'description' => 'Le forum de faction est un lieu essentiel dans le développement au sein du jeu. C\'est là que tu peux discuter avec les membres de ta faction sur divers points, que ça soit de stratégie, de commerce, de politique. Il y a même un Biasto !
+			'description' => 'Le forum de faction est un lieu essentiel dans le développement au sein du jeu. C\'est là que tu peux discuter avec les membres de ta faction sur divers points, que ça soit de stratégie, de commerce, de politique. Il y a même un Biastro !
 				<br /><br />
 				Pour accéder au forum, tu dois d\'abord cliquer sur l\'onglet faction en haut de ton écran puis cliquer sur le menu forum. Là tu trouveras diverses catégories. Chaque partie du forum a son utilité.
 				<br /><br />
@@ -369,7 +369,7 @@ class TutorialResource {
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(
 			'id' => 25,
-			'title' => 'Développer la technologie "Chassis simple amélioré"',
+			'title' => 'Développer la technologie "Châssis simple amélioré"',
 			'description' => '',
 			'experienceReward' => 10,
 			'creditReward' => 2000,

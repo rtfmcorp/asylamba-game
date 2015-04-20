@@ -581,10 +581,10 @@ jQuery(document).ready(function($) {
 			setInterval(function() {
 				currentTime--;
 
-				if (currentTime <= 0 && reload) {
+				if (currentTime == 0 && reload) {
 					window.location.reload();
-				} else if (currentTime <= 0 && !reload) {
-					// no
+				} else if (currentTime <= 0) {
+					// wait
 				} else {
 					position = (((totalTime - currentTime) / totalTime) * 100);
 

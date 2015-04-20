@@ -117,8 +117,8 @@ class Game {
 		return round($income * $bonusA * $bonusB);
 	}
 
-	public static function getTaxFromPopulation($population, $typeOfBase) {
-		$tax  = ((40 * $population) + 5000) * PAM_COEFTAX;
+ 	public static function getTaxFromPopulation($population, $typeOfBase) {
+		$tax  = ((180 * $population) + 1500) * PAM_COEFTAX;
 		$tax *= PlaceResource::get($typeOfBase, 'tax');
 		return $tax;
 	}
@@ -244,7 +244,8 @@ class Game {
 				# 1 resource = x credit
 				$thisRate = $price / $quantity;
 				# dilution of 1%
-				return (($quantity * $thisRate) + (50000 * (99 * $currentRate)) / 100) / (50000 + $quantity);
+				$newRate = (($quantity * $thisRate) + (50000 * (99 * $currentRate)) / 100) / (50000 + $quantity);
+				return max($newRate, Transaction::MIN_RATE_RESOURCE);
 				break;
 			case Transaction::TYP_SHIP :
 				# 1 resource = x credit
@@ -253,7 +254,8 @@ class Game {
 					$resourceQuantity = ShipResource::getInfo($identifier, 'resourcePrice') * $quantity;
 					$thisRate = $price / $resourceQuantity;
 					# dilution of 1%
-					return (($resourceQuantity * $thisRate) + (50000 * (99 * $currentRate)) / 100) / (50000 + $resourceQuantity);
+					$newRate = (($resourceQuantity * $thisRate) + (50000 * (99 * $currentRate)) / 100) / (50000 + $resourceQuantity);
+					return max($newRate, Transaction::MIN_RATE_SHIP);
 				} else {
 					return FALSE;
 				}
@@ -262,7 +264,8 @@ class Game {
 				# 1 experience = x credit
 				$thisRate = $price / $quantity;
 				# dilution of 1%
-				return (($quantity * $thisRate) + (50000 * (99 * $currentRate)) / 100) / (50000 + $quantity);
+				$newRate = (($quantity * $thisRate) + (50000 * (99 * $currentRate)) / 100) / (50000 + $quantity);
+				return max($newRate, Transaction::MIN_RATE_COMMANDER);
 				break;
 			default :
 				return 0;
@@ -343,7 +346,8 @@ class Game {
 
 	public static function getSpySuccess($antiSpy, $priceInvested) {
 		# spy success must be between 0 and 100
-		$ratio = $priceInvested / $antiSpy;
+		$antiSpy = $antiSpy == 0 ? 1 : $antiSpy;
+		$ratio   = $priceInvested / $antiSpy;
 		$percent = round($ratio * 33);
 		# ça veut dire qu'il payer 3x plus que ce que le gars investi pour tout voir
 		if ($percent > 100) {

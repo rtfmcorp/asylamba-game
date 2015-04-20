@@ -92,8 +92,8 @@ echo '<div class="component size3 space">';
 
 				if ($spyreport->typeOfBase != Place::TYP_EMPTY) {
 					$data  = 'data-army="';
-					$data .= $spyreport->success > SpyReport::STEP_ARMY
-						? json_encode(unserialize($spyreport->shipsInStorage))
+					$data .= $spyreport->success > SpyReport::STEP_DOCK
+						? json_encode(array_map('intval', unserialize($spyreport->shipsInStorage)))
 						: json_encode(array(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1));
 					$data .= '"';
 
@@ -106,7 +106,10 @@ echo '<div class="component size3 space">';
 					echo '<div class="info top">';
 						echo PlaceResource::get($spyreport->typeOfOrbitalBase, 'name') . '<br />';
 						echo '<strong>' . $spyreport->placeName . '</strong><br />';
-						echo Format::numberFormat($spyreport->points) . ' points';
+						echo $spyreport->success > SpyReport::STEP_POINT
+							? Format::numberFormat($spyreport->points)
+							: '???'; 
+						echo  ' points';
 					echo '</div>';
 					echo '<div class="info middle">';
 						echo 'coordonnées<br />';
@@ -145,7 +148,7 @@ echo '<div class="component size3 space">';
 				echo '<div class="item">';
 					echo 'Investissement dans le contre-espionnage';
 					echo '<span class="value">';
-						echo $spyreport->success > SpyReport::STEP_RESOURCES
+						echo $spyreport->success > SpyReport::STEP_ANITSPY
 							? Format::number($spyreport->antiSpyInvest)
 							: '???';
 						echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits">';
@@ -155,7 +158,7 @@ echo '<div class="component size3 space">';
 				echo '<div class="item">';
 					echo 'Revenus des routes commerciales';
 					echo '<span class="value">';
-						echo $spyreport->success > SpyReport::STEP_RESOURCES
+						echo $spyreport->success > SpyReport::STEP_RC
 							? Format::number($spyreport->commercialRouteIncome)
 							: '???';
 						echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits">';

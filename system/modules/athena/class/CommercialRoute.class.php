@@ -15,7 +15,7 @@ class CommercialRoute {
 	//CONSTANTS
 	const COEF_PRICE = 14000;
 	const COEF_INCOME_1 = 300;
-	const COEF_INCOME_2 = 20;
+	const COEF_INCOME_2 = 17;
 
 	//ATTRIBUTES
 	public $id = 0;

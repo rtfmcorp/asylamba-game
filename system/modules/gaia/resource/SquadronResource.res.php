@@ -54,23 +54,23 @@ class SquadronResource {
 		array(2, 6, array(0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0)),
 
 	#	officier moyen (5-9)
-	#	esquadrille moyenne chasseur
+	#	escadrille moyenne chasseur
 		array(4, 12, array(15, 8, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(4, 12, array(0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(4, 12, array(0, 0, 4, 4, 1, 0, 0, 0, 0, 0, 0, 0)),
 		array(4, 12, array(8, 8, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0)),
 
-	#	esquadrille moyenne gros
+	#	escadrille moyenne gros
 		array(4, 12, array(0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)),
 		array(4, 12, array(0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0)),
 		array(4, 12, array(0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0)),
 		array(4, 12, array(0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0)),
 
-	#	esquadrille moyenne mixte
+	#	escadrille moyenne mixte
 		array(4, 12, array(0, 5, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0)),
 		array(4, 12, array(12, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0)),
 
-	#	esquadrille forte chasseur
+	#	escadrille forte chasseur
 		array(8, 16, array(20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(8, 16, array(0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
 		array(8, 16, array(0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
@@ -79,7 +79,7 @@ class SquadronResource {
 		array(8, 18, array(10, 8, 8, 2, 2, 2, 0, 0, 0, 0, 0, 0)),
 		array(8, 18, array(0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0)),
 
-	#	esquadrille forte gros
+	#	escadrille forte gros
 		array(11, 20, array(0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0)),
 		array(11, 20, array(0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0)),
 		array(11, 20, array(0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0)),
@@ -89,7 +89,7 @@ class SquadronResource {
 		array(11, 20, array(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0)),
 		array(11, 20, array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0)),
 
-	#	esquadrille forte mixte
+	#	escadrille forte mixte
 		array(11, 20, array(10, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0)),
 		array(11, 20, array(5, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0)),
 		array(11, 20, array(0, 1, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0)),
