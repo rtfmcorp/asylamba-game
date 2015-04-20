@@ -291,9 +291,43 @@ class Place {
 									ASM::$obm->load(array('rPlace' => $this->id));
 									$placeBase = ASM::$obm->get();
 									ASM::$obm->changeSession($S_OBM1);
+
+									$S_CRM1 = ASM::$crm->getCurrentSession();
+									ASM::$crm->newSession();
+									ASM::$crm->load(array('rOrbitalBase' => $this->id));
+									ASM::$crm->load(array('rOrbitalBaseLinked' => $this->id));
+									$S_CRM2 = ASM::$crm->getCurrentSession();
+									ASM::$crm->changeSession($S_CRM1);
+
+									$S_REM1 = ASM::$rem->getCurrentSession();
+									ASM::$rem->newSession();
+									ASM::$rem->load(array('rBase' => $this->id));
+									$S_REM2 = ASM::$rem->getCurrentSession();
+									ASM::$rem->changeSession($S_REM1);
+
+									$S_COM2 = ASM::$com->getCurrentSession();
+									ASM::$com->newSession(FALSE); # FALSE obligatory, else the umethod make shit
+									ASM::$com->load(array('c.rBase' => $this->id));
+									$S_COM3 = ASM::$com->getCurrentSession();
+									ASM::$com->changeSession($S_COM2);
+
+									$S_OBM2 = ASM::$obm->getCurrentSession();
+									ASM::$obm->newSession(FALSE); # FALSE obligatory
+									ASM::$obm->load(array('rPlayer' => $this->rPlayer));
+									if (ASM::$obm->size() == 1) {
+										$lastPlanet = TRUE;
+									} else {
+										$lastPlanet = FALSE;
+									}
+									ASM::$obm->changeSession($S_OBM2);
+
 								} else {
 									$placePlayer = NULL;
 									$placeBase = NULL;
+									$S_CRM2 = NULL;
+									$S_REM2 = NULL;
+									$S_COM3 = NULL;
+									$lastPlanet = NULL;
 								}
 
 								$S_CLM = ASM::$clm->getCurrentSession();
@@ -302,7 +336,7 @@ class Place {
 								$commanderColor = ASM::$clm->get();
 								ASM::$clm->changeSession($S_CLM);
 
-								CTC::add($commander->dArrival, $this, 'uConquer', array($commander, $place, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor));
+								CTC::add($commander->dArrival, $this, 'uConquer', array($commander, $place, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $S_CRM2, $S_REM2, $S_COM3, $lastPlanet));
 							}
 							break;
 
@@ -588,7 +622,7 @@ class Place {
 	}
 
 	# conquest
-	public function uConquer($commander, $commanderPlace, $playerBonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor) {
+	public function uConquer($commander, $commanderPlace, $playerBonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $routeSession, $recyclingSession, $commanderSession, $lastPlanet) {
 
 		if ($this->rPlayer != NULL) {
 			// $commander->rDestinationPlace = NULL;
@@ -703,7 +737,7 @@ class Place {
 					$this->rColor = $commander->playerColor;
 					$this->rPlayer = $commander->rPlayer;
 					# changer l'appartenance de la base (et de la place)
-					ASM::$obm->changeOwnerById($this->id, $placeBase, $commander->getRPlayer());
+					ASM::$obm->changeOwnerById($this->id, $placeBase, $commander->getRPlayer(), $routeSession, $recyclingSession, $commanderSession, $lastPlanet);
 
 					$this->commanders[] = $commander;
 

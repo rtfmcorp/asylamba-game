@@ -307,6 +307,7 @@ if ($type !== FALSE) {
 						case Law::PUNITION:
 							$rPlayer = Utils::getHTTPData('rplayer');
 							$credits = Utils::getHTTPData('credits');
+
 							if ($rPlayer !== FALSE && $credits !== FALSE) {
 								$S_PAM = ASM::$pam->getCurrentsession();
 								ASM::$pam->newSession();

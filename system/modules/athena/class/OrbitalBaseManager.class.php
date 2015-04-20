@@ -427,7 +427,7 @@ class OrbitalBaseManager extends Manager {
 		}
 	}
 
-	public function changeOwnerById($id, $base, $newOwner) {
+	public function changeOwnerById($id, $base, $newOwner, $routeSession, $recyclingSession, $commanderSession, $lastPlanet) {
 
 		if ($base->getId() != 0) {
 			# attribuer le rPlayer à la Base
@@ -436,9 +436,7 @@ class OrbitalBaseManager extends Manager {
 
 			# suppression des routes commerciales
 			$S_CRM1 = ASM::$crm->getCurrentSession();
-			ASM::$crm->newSession();
-			ASM::$crm->load(array('rOrbitalBase' => $base->getRPlace()));
-			ASM::$crm->load(array('rOrbitalBaseLinked' => $base->getRPlace()));
+			ASM::$crm->changeSession($routeSession);
 			for ($i = ASM::$crm->size()-1; $i >= 0; $i--) { 
 				ASM::$crm->deleteById(ASM::$crm->get($i)->getId());
 				# envoyer une notif
@@ -455,8 +453,7 @@ class OrbitalBaseManager extends Manager {
 
 			# suppression des missions de recyclages ainsi que des logs de recyclages
 			$S_REM1 = ASM::$rem->getCurrentSession();
-			ASM::$rem->newSession(ASM_UMODE);
-			ASM::$rem->load(array('rBase' => $base->rPlace));
+			ASM::$rem->changeSession($recyclingSession);
 			for ($i = ASM::$rem->size()-1; $i >= 0; $i--) {
 				ASM::$rem->deleteById(ASM::$rem->get($i)->id);
 			}
@@ -478,8 +475,7 @@ class OrbitalBaseManager extends Manager {
 
 			# rendre déserteuses les flottes en voyage
 			$S_COM2 = ASM::$com->getCurrentSession();
-			ASM::$com->newSession(FALSE); # FALSE obligatory, else the umethod make shit
-			ASM::$com->load(array('c.rBase' => $id));
+			ASM::$com->changeSession($commanderSession);
 			for ($i = 0; $i < ASM::$com->size(); $i++) {
 				if (ASM::$com->get($i)->statement != Commander::DEAD) {
 					ASM::$com->get($i)->rPlayer = $newOwner;
@@ -497,15 +493,9 @@ class OrbitalBaseManager extends Manager {
 			ASM::$com->changeSession($S_COM2);
 
 			# vérifie si le joueur n'a plus de planète, si c'est le cas, il est mort
-			$S_OBM2 = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession(FALSE); # FALSE obligatory
-			ASM::$obm->load(array('rPlayer' => $oldOwner));
-
-			if (ASM::$obm->size() == 0 OR (ASM::$obm->size() == 1 AND ASM::$obm->get()->rPlace == $id)) {
+			if ($lastPlanet) {
 				ASM::$pam->kill($oldOwner);
 			}
-			ASM::$obm->changeSession($S_OBM2);
-
 			# applique en cascade le changement de couleur des sytèmes
 			include_once GAIA;
 			GalaxyColorManager::apply();
