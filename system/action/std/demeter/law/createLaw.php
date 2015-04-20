@@ -308,7 +308,7 @@ if ($type != FALSE) {
 							$rPlayer = Utils::getHTTPData('rplayer');
 							$credits = Utils::getHTTPData('credits');
 							if ($rPlayer != FALSE && $credits != FALSE) {
-								$S_PAM = ASM::$pam->getCurrentsession();
+								$S_PAM = AbSM::$pam->getCurrentsession();
 								ASM::$pam->newSession();
 								ASM::$pam->load(array('id' => $rPlayer));
 								if (ASM::$pam->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
