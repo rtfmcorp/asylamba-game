@@ -311,23 +311,12 @@ class Place {
 									$S_COM3 = ASM::$com->getCurrentSession();
 									ASM::$com->changeSession($S_COM2);
 
-									$S_OBM2 = ASM::$obm->getCurrentSession();
-									ASM::$obm->newSession(FALSE); # FALSE obligatory
-									ASM::$obm->load(array('rPlayer' => $this->rPlayer));
-									if (ASM::$obm->size() == 1) {
-										$lastPlanet = TRUE;
-									} else {
-										$lastPlanet = FALSE;
-									}
-									ASM::$obm->changeSession($S_OBM2);
-
 								} else {
 									$placePlayer = NULL;
 									$placeBase = NULL;
 									$S_CRM2 = NULL;
 									$S_REM2 = NULL;
 									$S_COM3 = NULL;
-									$lastPlanet = NULL;
 								}
 
 								$S_CLM = ASM::$clm->getCurrentSession();
@@ -336,7 +325,7 @@ class Place {
 								$commanderColor = ASM::$clm->get();
 								ASM::$clm->changeSession($S_CLM);
 
-								CTC::add($commander->dArrival, $this, 'uConquer', array($commander, $place, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $S_CRM2, $S_REM2, $S_COM3, $lastPlanet));
+								CTC::add($commander->dArrival, $this, 'uConquer', array($commander, $place, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $S_CRM2, $S_REM2, $S_COM3));
 							}
 							break;
 
@@ -622,7 +611,7 @@ class Place {
 	}
 
 	# conquest
-	public function uConquer($commander, $commanderPlace, $playerBonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $routeSession, $recyclingSession, $commanderSession, $lastPlanet) {
+	public function uConquer($commander, $commanderPlace, $playerBonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $routeSession, $recyclingSession, $commanderSession) {
 
 		if ($this->rPlayer != NULL) {
 			// $commander->rDestinationPlace = NULL;
@@ -737,7 +726,7 @@ class Place {
 					$this->rColor = $commander->playerColor;
 					$this->rPlayer = $commander->rPlayer;
 					# changer l'appartenance de la base (et de la place)
-					ASM::$obm->changeOwnerById($this->id, $placeBase, $commander->getRPlayer(), $routeSession, $recyclingSession, $commanderSession, $lastPlanet);
+					ASM::$obm->changeOwnerById($this->id, $placeBase, $commander->getRPlayer(), $routeSession, $recyclingSession, $commanderSession);
 
 					$this->commanders[] = $commander;
 

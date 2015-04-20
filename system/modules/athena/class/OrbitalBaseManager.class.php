@@ -427,7 +427,7 @@ class OrbitalBaseManager extends Manager {
 		}
 	}
 
-	public function changeOwnerById($id, $base, $newOwner, $routeSession, $recyclingSession, $commanderSession, $lastPlanet) {
+	public function changeOwnerById($id, $base, $newOwner, $routeSession, $recyclingSession, $commanderSession) {
 
 		if ($base->getId() != 0) {
 			# attribuer le rPlayer à la Base
@@ -493,12 +493,17 @@ class OrbitalBaseManager extends Manager {
 			ASM::$com->changeSession($S_COM2);
 
 			# vérifie si le joueur n'a plus de planète, si c'est le cas, il est mort
-			if ($lastPlanet) {
+			$S_OBM2 = ASM::$obm->getCurrentSession();
+			ASM::$obm->newSession(FALSE); # FALSE obligatory
+			ASM::$obm->load(array('rPlayer' => $oldOwner));
+			if (ASM::$obm->size() == 0 || (ASM::$obm->get()->rPlace == $id && ASM::$obm->size() == 1)) {
 				ASM::$pam->kill($oldOwner);
 			}
+			ASM::$obm->changeSession($S_OBM2);
+
 			# applique en cascade le changement de couleur des sytèmes
 			include_once GAIA;
-			GalaxyColorManager::apply();
+			// GalaxyColorManager::apply();
 
 		} else {
 			CTR::$alert->add('Cette base orbitale n\'exite pas !', ALERT_BUG_INFO);
