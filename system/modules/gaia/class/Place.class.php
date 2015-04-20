@@ -727,7 +727,7 @@ class Place {
 					$this->rPlayer = $commander->rPlayer;
 					# changer l'appartenance de la base (et de la place)
 					ASM::$obm->changeOwnerById($this->id, $placeBase, $commander->getRPlayer(), $routeSession, $recyclingSession, $commanderSession);
-
+					// $placeBase->rPlayer = $commander->rPlayer;
 					$this->commanders[] = $commander;
 
 					$commander->rBase = $this->id;

@@ -454,7 +454,7 @@ class OrbitalBaseManager extends Manager {
 			# suppression des missions de recyclages ainsi que des logs de recyclages
 			$S_REM1 = ASM::$rem->getCurrentSession();
 			ASM::$rem->changeSession($recyclingSession);
-			for ($i = ASM::$rem->size()-1; $i >= 0; $i--) {
+			for ($i = ASM::$rem->size() - 1; $i >= 0; $i--) {
 				ASM::$rem->deleteById(ASM::$rem->get($i)->id);
 			}
 			ASM::$rem->changeSession($S_REM1);
@@ -474,23 +474,17 @@ class OrbitalBaseManager extends Manager {
 			}
 
 			# rendre déserteuses les flottes en voyage
-			$S_COM2 = ASM::$com->getCurrentSession();
+			$S_COM4 = ASM::$com->getCurrentSession();
 			ASM::$com->changeSession($commanderSession);
 			for ($i = 0; $i < ASM::$com->size(); $i++) {
+				if (ASM::$com->get($i)->statement == Commander::MOVING) {
+					ASM::$com->get($i)->statement = Commander::DEAD;
+				}
 				if (ASM::$com->get($i)->statement != Commander::DEAD) {
 					ASM::$com->get($i)->rPlayer = $newOwner;
 				}
-				if (ASM::$com->get($i)->statement == Commander::MOVING) {
-					ASM::$com->get($i)->statement = Commander::DESERT;
-					ASM::$com->get($i)->travelType = NULL;
-					ASM::$com->get($i)->travelLength = NULL;
-					ASM::$com->get($i)->dArrival = NULL;
-					ASM::$com->get($i)->dstart = NULL;
-					ASM::$com->get($i)->length = NULL;
-					ASM::$com->get($i)->rBase = NULL;
-				}
 			}
-			ASM::$com->changeSession($S_COM2);
+			ASM::$com->changeSession($S_COM4);
 
 			# vérifie si le joueur n'a plus de planète, si c'est le cas, il est mort
 			$S_OBM2 = ASM::$obm->getCurrentSession();
@@ -503,7 +497,7 @@ class OrbitalBaseManager extends Manager {
 
 			# applique en cascade le changement de couleur des sytèmes
 			include_once GAIA;
-			// GalaxyColorManager::apply();
+			GalaxyColorManager::apply();
 
 		} else {
 			CTR::$alert->add('Cette base orbitale n\'exite pas !', ALERT_BUG_INFO);
