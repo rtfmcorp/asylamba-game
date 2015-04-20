@@ -293,14 +293,14 @@ class Place {
 									ASM::$obm->changeSession($S_OBM1);
 
 									$S_CRM1 = ASM::$crm->getCurrentSession();
-									ASM::$crm->newSession(FALSE);
+									ASM::$crm->newSession();
 									ASM::$crm->load(array('rOrbitalBase' => $this->id));
 									ASM::$crm->load(array('rOrbitalBaseLinked' => $this->id));
 									$S_CRM2 = ASM::$crm->getCurrentSession();
 									ASM::$crm->changeSession($S_CRM1);
 
 									$S_REM1 = ASM::$rem->getCurrentSession();
-									ASM::$rem->newSession(FALSE);
+									ASM::$rem->newSession();
 									ASM::$rem->load(array('rBase' => $this->id));
 									$S_REM2 = ASM::$rem->getCurrentSession();
 									ASM::$rem->changeSession($S_REM1);
