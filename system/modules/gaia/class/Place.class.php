@@ -293,21 +293,21 @@ class Place {
 									ASM::$obm->changeSession($S_OBM1);
 
 									$S_CRM1 = ASM::$crm->getCurrentSession();
-									ASM::$crm->newSession();
-									ASM::$crm->load(array('rOrbitalBase' => $base->getRPlace()));
-									ASM::$crm->load(array('rOrbitalBaseLinked' => $base->getRPlace()));
+									ASM::$crm->newSession(FALSE);
+									ASM::$crm->load(array('rOrbitalBase' => $this->id));
+									ASM::$crm->load(array('rOrbitalBaseLinked' => $this->id));
 									$S_CRM2 = ASM::$crm->getCurrentSession();
 									ASM::$crm->changeSession($S_CRM1);
 
 									$S_REM1 = ASM::$rem->getCurrentSession();
-									ASM::$rem->newSession(ASM_UMODE);
-									ASM::$rem->load(array('rBase' => $base->rPlace));
+									ASM::$rem->newSession(FALSE);
+									ASM::$rem->load(array('rBase' => $this->id));
 									$S_REM2 = ASM::$rem->getCurrentSession();
 									ASM::$rem->changeSession($S_REM1);
 
 									$S_COM2 = ASM::$com->getCurrentSession();
 									ASM::$com->newSession(FALSE); # FALSE obligatory, else the umethod make shit
-									ASM::$com->load(array('c.rBase' => $id));
+									ASM::$com->load(array('c.rBase' => $this->id));
 									$S_COM3 = ASM::$com->getCurrentSession();
 									ASM::$com->changeSession($S_COM2);
 
