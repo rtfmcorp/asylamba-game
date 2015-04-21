@@ -66,7 +66,26 @@ if (count($verif) > 1) {
 					ASM::$plm->newSession();
 					ASM::$plm->load(array('id' => $baseId));
 
-					ASM::$obm->changeOwnerById($baseId, $base, ID_GAIA);
+					$S_CRM1 = ASM::$crm->getCurrentSession();
+					ASM::$crm->newSession();
+					ASM::$crm->load(array('rOrbitalBase' => $baseId));
+					ASM::$crm->load(array('rOrbitalBaseLinked' => $baseId));
+					$S_CRM2 = ASM::$crm->getCurrentSession();
+					ASM::$crm->changeSession($S_CRM1);
+
+					$S_REM1 = ASM::$rem->getCurrentSession();
+					ASM::$rem->newSession();
+					ASM::$rem->load(array('rBase' => $baseId));
+					$S_REM2 = ASM::$rem->getCurrentSession();
+					ASM::$rem->changeSession($S_REM1);
+
+					$S_COM2 = ASM::$com->getCurrentSession();
+					ASM::$com->newSession(FALSE); # FALSE obligatory, else the umethod make shit
+					ASM::$com->load(array('c.rBase' => $baseId));
+					$S_COM3 = ASM::$com->getCurrentSession();
+					ASM::$com->changeSession($S_COM2);
+
+					ASM::$obm->changeOwnerById($baseId, $base, ID_GAIA, $S_CRM2, $S_REM2, $S_COM3);
 					ASM::$plm->get()->rPlayer = ID_GAIA;
 
 					ASM::$plm->changeSession($_PLM);
