@@ -39,7 +39,7 @@ echo '<div class="component">';
 				echo '</div>';
 
 				if ($mode) {
-					if ($isValid == count($targets)) {
+					if ($isValid == count($targets) AND Utils::now() > '2015-05-11 08:00:00') {
 						echo '<a class="more-button" href="' . Format::actionBuilder('iwin') . '">Revendiquer la victoire</a>';
 					} else {
 						echo '<span class="more-button">Tous les objectifs ne sont pas remplis</span>';
@@ -48,6 +48,7 @@ echo '<div class="component">';
 					echo '<p>' . VictoryResources::getInfo($i ,'infos') . '</p>';
 				}
 			}
+			echo '<p>La victoire ne peut être revendiquée qu\'à partir du 11 mai 2015 à 10h00 (UTC+1, heure d\'été).</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
