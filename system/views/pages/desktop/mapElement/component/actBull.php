@@ -71,24 +71,24 @@ echo '<div class="column act">';
 			echo '<h2>Lancer une ' . ($place->rPlayer == 0 ? 'colonisation' : 'conquête') . '</h2>';
 			echo '<div class="box-content">';
 				if ($place->rPlayer == 0 && $place->typeOfPlace != 1) {
-					echo 'Vous ne pouvez pas coloniser une planète non-habitable';
+					echo 'Vous ne pouvez pas coloniser une planète non-habitable.';
 				} elseif ($place->typeOfPlace == 1 && $place->playerColor == CTR::$data->get('playerInfo')->get('color')) {
-					echo 'Vous ne pouvez pas conquérir un joueur de votre faction';
+					echo 'Vous ne pouvez pas conquérir un joueur de votre faction.';
 				} elseif ($place->typeOfPlace == 1 && $place->playerLevel <= 3 && $place->playerLevel != 0 && !$place->playerColor == 0) {
-					echo 'Vous ne pouvez pas conquérir un joueur de niveau 3 ou inférieur';
+					echo 'Vous ne pouvez pas conquérir un joueur de niveau 3 ou inférieur.';
 				} elseif ($place->rPlayer == 0 && $technologies->getTechnology(Technology::COLONIZATION) == 0) {
-					echo 'Vous devez développer la technologie colonisation';
+					echo 'Vous devez développer la technologie colonisation.';
 				} elseif ($place->rPlayer != 0 && $technologies->getTechnology(Technology::CONQUEST) == 0) {
-					echo 'Vous devez développer la technologie conquête';
+					echo 'Vous devez développer la technologie conquête.';
 				} elseif ($totalBases >= $maxBasesQuantity) {
-					echo 'Vous devez améliorer le niveau de la technologie administration étendue pour disposer de planète supplémentaire';
+					echo 'Vous devez améliorer le niveau de la technologie administration étendue pour disposer de planète supplémentaire.';
 				} else {
 					echo '<div class="commander-tile">';
 						echo '<div class="item no-commander">';
 							echo 'Aucun commandant selectionné. Sélectionnez-en un sur la barre latérale gauche.<br/><br />Si aucun commandant n\'est visible, vous pouvez en affecter un depuis l\'école de commandement.';
 						echo '</div>';
 						echo '<div class="item too-far">';
-							echo 'Ce commandant est trop éloigné pour coloniser cette planète';
+							echo 'Ce commandant est trop éloigné pour coloniser cette planète.';
 						echo '</div>';
 						echo '<div class="item move">';
 							echo '<strong class="name"></strong><br />';
@@ -133,7 +133,7 @@ echo '<div class="column act">';
 							echo 'Aucun commandant selectionné. Sélectionnez-en un sur la barre latérale gauche.<br/><br />Si aucun commandant n\'est visible, vous pouvez en affecter un depuis l\'école de commandement.';
 						echo '</div>';
 						echo '<div class="item too-far">';
-							echo 'Ce commandant est trop éloigné pour se déplacer jusqu\'ici';
+							echo 'Ce commandant est trop éloigné pour se déplacer jusqu\'ici.';
 						echo '</div>';
 						echo '<div class="item move">';
 							echo '<strong class="name"></strong><br />';
@@ -152,13 +152,13 @@ echo '<div class="column act">';
 			echo '<h2>Proposer une route commerciale</h2>';
 			echo '<div class="box-content">';
 				if ($place->rPlayer == 0) {
-					echo 'Vous ne pouvez proposer une route commerciale qu\'à des joueurs';
+					echo 'Vous ne pouvez proposer une route commerciale qu\'à des joueurs.';
 				} elseif ($place->getId() == $defaultBase->getId()) {
-					echo 'Vous ne pouvez pas proposer une route commerciale sur votre propre base';
+					echo 'Vous ne pouvez pas proposer une route commerciale sur votre propre base.';
 				} elseif ($defaultBase->levelSpatioport == 0) {
-					echo 'Il vous faut un spatioport pour proposer une route commerciale';
+					echo 'Il vous faut un spatioport pour proposer une route commerciale.';
 				} elseif ($place->levelSpatioport == 0) {
-					echo 'Le joueur ne dispose pas d\'un spatioport';
+					echo 'Le joueur ne dispose pas d\'un spatioport.';
 				} else {
 					$proposed 	 = FALSE;
 					$notAccepted = FALSE;
@@ -218,7 +218,7 @@ echo '<div class="column act">';
 						} elseif ($notAccepted) {
 							echo '<a href="' . APP_ROOT . 'bases/view-spatioport" class="button">Accepter la proposition</a>';
 						} elseif ($standby) {
-							echo '<span class="button">C\'est la guerre</span>';
+							echo '<span class="button">C\'est la guerre.</span>';
 						} else {
 							$S_CRM2 = ASM::$crm->getCurrentSession();
 							ASM::$crm->changeSession($defaultBase->routeManager);
@@ -230,11 +230,11 @@ echo '<div class="column act">';
 							}
 
 							if ($price > CTR::$data->get('playerInfo')->get('credit')) {
-								echo '<span class="button">Vous n\'avez pas assez de crédit</span>';
+								echo '<span class="button">Vous n\'avez pas assez de crédits.</span>';
 							} elseif ($ur < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $defaultBase->levelSpatioport, 'nbRoutesMax')) {
 								echo '<a href="' . Format::actionBuilder('proposeroute', ['basefrom' => $defaultBase->getId(), 'baseto' => $place->getId()]) . '" class="button">Proposer une route commerciale</a>';
 							} else {
-								echo '<span class="button">Pas assez de slot</span>';
+								echo '<span class="button">Pas assez de slots.</span>';
 							}
 
 							ASM::$crm->changeSession($S_CRM2);
@@ -277,11 +277,11 @@ echo '<div class="column act">';
 			echo '<h2>Envoyer des recycleurs</h2>';
 			echo '<div class="box-content">';
 				if (!($place->sectorColor == CTR::$data->get('playerInfo')->get('color') || $place->sectorColor == ColorResource::NO_FACTION)) {
-					echo 'Vous ne pouvez envoyer des recycleurs que dans des secteurs non-revendiqués ou contrôlés par votre faction';
+					echo 'Vous ne pouvez envoyer des recycleurs que dans des secteurs non-revendiqués ou contrôlés par votre faction.';
 				} elseif ($place->typeOfPlace == Place::EMPTYZONE) {
-					echo 'Cette endroit regorgait autrefois de ressources ou de gaz mais de nombreux recycleurs sont déjà passés par là et n\'ont laissé que le vide de l\'espace';
+					echo 'Cette endroit regorgait autrefois de ressources ou de gaz mais de nombreux recycleurs sont déjà passés par là et n\'ont laissé que le vide de l\'espace.';
 				} elseif ($defaultBase->getLevelRecycling() == 0) {
-					echo 'Vous devez disposer d\'un centre de recyclage';
+					echo 'Vous devez disposer d\'un centre de recyclage.';
 				} else {
 					$totalShip  = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::RECYCLING, 'level', $defaultBase->levelRecycling, 'nbRecyclers');
 					$activeShip = 0;
