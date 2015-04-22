@@ -32,6 +32,8 @@ echo '<div class="component generator">';
 			} elseif (Utils::interval(Utils::now(), $ob_obSituation->dCreation, 'h') < OrbitalBase::COOL_DOWN) {
 				echo '<span class="more-button">Action impossible</span>';
 				echo '<p>Vous possédez la planète depuis moins de ' . OrbitalBase::COOL_DOWN . ' relèves.</p>';
+				$totalSec = OrbitalBase::COOL_DOWN * 60 * 60 - Utils::interval(Utils::now(), $ob_obSituation->dCreation, 's');
+				echo '<p>Il reste ' . Chronos::secondToFormat($totalSec, $format = 'large') . ' avant que vous puissiez abandonner la planète.</p>';
 			} else {
 				echo '<a class="more-button confirm" href="' . Format::actionBuilder('leavebase', ['id' => $ob_obSituation->getId()]) . '">Abandonner la planète</a>';
 			}
