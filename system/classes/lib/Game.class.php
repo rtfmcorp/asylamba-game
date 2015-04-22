@@ -56,7 +56,7 @@ class Game {
 	}
 
 	public static function getTimeToTravelCommercial($startPlace, $destinationPlace, $bonus = NULL) {
-		return round(self::getTimeToTravel($startPlace, $destinationPlace, $bonus) / 10);
+		return round(self::getTimeToTravel($startPlace, $destinationPlace, $bonus) / 5);
 	}
 
 	public static function getTimeToTravel($startPlace, $destinationPlace, $bonus = NULL) {
