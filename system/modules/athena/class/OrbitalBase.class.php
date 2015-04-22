@@ -20,7 +20,7 @@ class OrbitalBase {
 	const MAXCOMMANDERSTANDARD = 2;
 	const MAXCOMMANDERMILITARY = 5;
 
-	const COOL_DOWN = 12;
+	const COOL_DOWN = 48;
 	const EXTRA_STOCK = 25000;
 
 	const MAXCOMMANDERINMESS = 20;
