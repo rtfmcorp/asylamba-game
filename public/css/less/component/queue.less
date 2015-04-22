@@ -8,12 +8,24 @@
 		border: solid 1px #0A0A0A;
 		border-top: solid 1px #202020;
 		min-height: 60px;
+		display: block;
 
 		&.empty {
 			background: #0A0A0A;
 
 			strong {
 				font-weight: normal;
+			}
+		}
+
+		&.link {
+			min-height: auto;
+			padding: 10px;
+			color: #4F4F4F;
+			text-decoration: none;
+
+			&:hover, &:focus {
+				color: #CCC;
 			}
 		}
 
