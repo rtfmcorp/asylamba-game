@@ -464,13 +464,13 @@ jQuery(document).ready(function($) {
 
 	$('.baseTransfer .squadron a').live('click', function(e) {
 		e.preventDefault();
-		var step = e.ctrlKey ? undefined : 1;
+		var step = (e.ctrlKey || e.metaKey) ? undefined : 1;
 		squadronTransfer.move('ctb', $(this).data('ship-id'), step);
 	});
 
 	$('.baseTransfer .dock a').live('click', function(e) {
 		e.preventDefault();
-		var step = e.ctrlKey ? undefined : 1;
+		var step = (e.ctrlKey || e.metaKey) ? undefined : 1;
 		squadronTransfer.move('btc', $(this).data('ship-id'), step);
 	});
 

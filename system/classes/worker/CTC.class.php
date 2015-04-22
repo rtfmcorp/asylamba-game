@@ -36,7 +36,6 @@ abstract class CTC {
 
 				$logt .= '> Page : ' . $_SERVER['REQUEST_URI'] . "\n";
 
-
 				$j = 0;
 				foreach (self::$events as $k => $event) {
 					$j++;
