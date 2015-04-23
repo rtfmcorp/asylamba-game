@@ -387,10 +387,18 @@ class Place {
 					}
 				}
 
-				if ($comLine2 < 2) {
-					$commander->line = 2;
+				if ($maxCom == OrbitalBase::MAXCOMMANDERMILITARY) {
+					if ($comLine2 < 2) {
+						$commander->line = 2;
+					} else {
+						$commander->line = 1;
+					}					
 				} else {
-					$commander->line = 1;
+					if ($comLine2 < 1) {
+						$commander->line = 2;
+					} else {
+						$commander->line = 1;
+					}	
 				}
 
 				# instance de la place d'envoie + suppr commandant de ses flottes
