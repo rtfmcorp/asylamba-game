@@ -678,6 +678,8 @@ class Place {
 								$commander->armyInBegin[$j][$i] = $commander->armyAtEnd[$j][$i];
 							}
 						}
+					} else {
+						$nbrBattle++;
 					}
 				}
 
