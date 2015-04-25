@@ -620,7 +620,6 @@ class Place {
 
 	# conquest
 	public function uConquer($commander, $commanderPlace, $playerBonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $routeSession, $recyclingSession, $commanderSession) {
-
 		if ($this->rPlayer != NULL) {
 			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
@@ -629,13 +628,18 @@ class Place {
 			// $commander->dArrival = NULL;
 
 			if ($this->playerColor != $commander->getPlayerColor() && $this->playerLevel > 3) {
-				for ($i = 0; $i < count($this->commanders) - 1; $i++) {
-					if ($this->commanders[$i + 1]->line < $this->commanders[$i]->line) {
-						$tempCom = $this->commanders[$i];
-						$this->commanders[$i] = $this->commanders[$i + 1];
-						$this->commanders[$i + 1] = $tempCom;
+				$tempCom = array();
+				for ($i = 0; $i < count($this->commanders); $i++) {
+					if ($this->commanders[$i]->line == 1) {
+						$tempCom[] = $this->commanders[$i];
 					}
 				}
+				for ($i = 0; $i < count($this->commanders); $i++) {
+					if ($this->commanders[$i]->line == 2) {
+						$tempCom[] = $this->commanders[$i];
+					}
+				}
+				$this->commanders = $tempCom;
 
 				$nbrBattle = 0;
 				$reportIds = array();
@@ -667,9 +671,14 @@ class Place {
 							
 							$nbrBattle++;
 						}
-					}
 
-					$nbrBattle++;
+						// mettre à jour armyInBegin si prochain combat pour prochain rapport
+						for ($j = 0; $j < count($commander->armyAtEnd); $j++) {
+							for ($i = 0; $i < 12; $i++) { 
+								$commander->armyInBegin[$j][$i] = $commander->armyAtEnd[$j][$i];
+							}
+						}
+					}
 				}
 
 				# victoire
