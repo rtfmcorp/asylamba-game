@@ -292,6 +292,35 @@ class FightController {
 			$nbrShipsD = 0;
 			$nbrShipsA = 0;
 			
+			foreach ($commanderA->getArmy() as $squadronA) {
+				$nbrShipsA += $squadronA->getNbrShips();
+			}
+			if ($nbrShipsA == 0) {
+				$commanderD->resultOfFight(TRUE, $commanderA);
+				$commanderA->resultOfFight(FALSE, $commanderD);
+				$commanderA->setStatement(3);
+				$commanderD->setDDeath(Utils::now());
+				LiveReport::$rPlayerWinner = $commanderD->rPlayer;
+
+				if ($commanderD->rPlayer != ID_GAIA) {
+					$playerD->increaseVictory(1);
+					$playerA->increaseDefeat(1);
+					if ($playerD->rColor == ColorResource::KOVAHK) {
+						$playerD->factionPoint += Color::POINT_BATTLE_WIN;
+					}
+					if ($playerA->rColor == ColorResource::KOVAHK) {
+						$playerA->factionPoint -= Color::POINT_BATTLE_LOOSE;
+					}
+				} else{
+					$playerA->increaseDefeat(1);
+				}
+
+				break;
+			} else {
+				$commanderA = $commanderD->engage($commanderA, $commanderD);
+				LiveReport::$halfround++;
+			}
+			
 			foreach ($commanderD->getArmy() as $squadronD) {
 				$nbrShipsD += $squadronD->getNbrShips();
 			}
@@ -321,34 +350,6 @@ class FightController {
 				LiveReport::$halfround++;
 			}
 			
-			foreach ($commanderA->getArmy() as $squadronA) {
-				$nbrShipsA += $squadronA->getNbrShips();
-			}
-			if ($nbrShipsA == 0) {
-				$commanderD->resultOfFight(TRUE, $commanderA);
-				$commanderA->resultOfFight(FALSE, $commanderD);
-				$commanderA->setStatement(3);
-				$commanderD->setDDeath(Utils::now());
-				LiveReport::$rPlayerWinner = $commanderD->rPlayer;
-
-				if ($commanderD->rPlayer != ID_GAIA) {
-					$playerD->increaseVictory(1);
-					$playerA->increaseDefeat(1);
-					if ($playerD->rColor == ColorResource::KOVAHK) {
-						$playerD->factionPoint += Color::POINT_BATTLE_WIN;
-					}
-					if ($playerA->rColor == ColorResource::KOVAHK) {
-						$playerA->factionPoint -= Color::POINT_BATTLE_LOOSE;
-					}
-				} else{
-					$playerA->increaseDefeat(1);
-				}
-
-				break;
-			} else {
-				$commanderA = $commanderD->engage($commanderA, $commanderD);
-				LiveReport::$halfround++;
-			}
 			LiveReport::$round++;
 			self::$currentLine++;
 		}

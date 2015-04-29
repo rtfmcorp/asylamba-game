@@ -159,7 +159,7 @@ class PlayerBonus {
 				switch (ASM::$lam->get($i)->type) {
 					case 5:
 						$this->bonus->increase(self::DOCK1_SPEED, LawResources::getInfo(ASM::$lam->get($i)->type, 'bonus'));
-						$this->bonus->increase(self::DOCK1_SPEED, LawResources::getInfo(ASM::$lam->get($i)->type, 'bonus'));
+						$this->bonus->increase(self::DOCK2_SPEED, LawResources::getInfo(ASM::$lam->get($i)->type, 'bonus'));
 						$this->bonus->increase(self::REFINERY_REFINING, -10);
 						$this->bonus->increase(self::REFINERY_REFINING, -10);
 						break;
