@@ -53,7 +53,7 @@ class Law {
 		$ballot = 0;
 
 		for ($i = 0; $i < ASM::$vlm->size(); $i++) {
-			if (ASM::$vlm->get()->vote) {
+			if (ASM::$vlm->get($i)->vote) {
 				$ballot++;
 			} else {
 				$ballot--;
