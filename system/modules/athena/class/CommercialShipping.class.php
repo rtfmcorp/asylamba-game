@@ -52,24 +52,17 @@ class CommercialShipping {
 
 	public function getId() { return $this->id; }
 
-	public function deliver() {
-		$S_TRM1 = ASM::$trm->getCurrentSession();
-		ASM::$trm->newSession(FALSE);
-		ASM::$trm->load(array('id' => $this->rTransaction));
-		$transaction = ASM::$trm->get();
+	public function deliver($transaction, $destOB, $commander) {
 
-		if (ASM::$trm->size() == 1 AND $transaction->statement == Transaction::ST_COMPLETED) {
-			$S_OBM1 = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession(FALSE);
-			ASM::$obm->load(array('rPlace' => $this->rBaseDestination));
-			$orbitalBase = ASM::$obm->get();
+		if ($transaction !== NULL AND $transaction->statement == Transaction::ST_COMPLETED) {
+
 			switch ($transaction->type) {
 				case Transaction::TYP_RESOURCE:
-					$orbitalBase->increaseResources($transaction->quantity, TRUE);
+					$destOB->increaseResources($transaction->quantity, TRUE);
 
 					# notif pour l'acheteur
 					$n = new Notification();
-					$n->setRPlayer($orbitalBase->getRPlayer());
+					$n->setRPlayer($destOB->getRPlayer());
 					$n->setTitle('Ressources reçues');
 					$n->addBeg()->addTxt('Vous avez reçu les ' . $transaction->quantity . ' ressources que vous avez achetées au marché.');
 					$n->addEnd();
@@ -77,11 +70,11 @@ class CommercialShipping {
 
 					break;
 				case Transaction::TYP_SHIP:
-					$orbitalBase->addShipToDock($transaction->identifier, $transaction->quantity);
+					$destOB->addShipToDock($transaction->identifier, $transaction->quantity);
 
 					# notif pour l'acheteur
 					$n = new Notification();
-					$n->setRPlayer($orbitalBase->getRPlayer());
+					$n->setRPlayer($destOB->getRPlayer());
 					if ($transaction->quantity == 1) {
 						$n->setTitle('Vaisseau reçu');
 						$n->addBeg()->addTxt('Vous avez reçu le vaisseau de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' que vous avez acheté au marché.');
@@ -95,26 +88,18 @@ class CommercialShipping {
 					ASM::$ntm->add($n);
 					break;
 				case Transaction::TYP_COMMANDER:
-					include_once ARES;
-					$S_COM1 = ASM::$com->getCurrentSession();
-					ASM::$com->newSession(ASM_UMODE);
-					ASM::$com->load(array('c.id' => $transaction->identifier));
-
-					$commander = ASM::$com->get();
 					$commander->setStatement(Commander::RESERVE);
-					$commander->setRPlayer($orbitalBase->getRPlayer());
+					$commander->setRPlayer($destOB->getRPlayer());
 					$commander->setRBase($this->rBaseDestination);
 
 					# notif pour l'acheteur
 					$n = new Notification();
-					$n->setRPlayer($orbitalBase->getRPlayer());
+					$n->setRPlayer($destOB->getRPlayer());
 					$n->setTitle('Commandant reçu');
 					$n->addBeg()->addTxt('Le commandant ' . $commander->getName() . ' que vous avez acheté au marché est bien arrivé.');
 					$n->addSep()->addTxt('Il se trouve pour le moment dans votre école de commandement');
 					$n->addEnd();
 					ASM::$ntm->add($n);
-
-					ASM::$com->changeSession($S_COM1);
 					break;
 				default:
 					CTR::$alert->add('type de transaction inconnue dans deliver()', ALERT_STD_ERROR);
@@ -123,22 +108,16 @@ class CommercialShipping {
 
 			$this->statement = self::ST_MOVING_BACK;
 
-			ASM::$obm->changeSession($S_OBM1);
-		} elseif ($this->rTransaction == NULL AND $this->resourceTransported != NULL) {
+		} elseif ($transaction === NULL AND $this->rTransaction == NULL AND $this->resourceTransported != NULL) {
 			# resource sending
 
-			$S_OBM1 = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession(FALSE);
-			ASM::$obm->load(array('rPlace' => $this->rBaseDestination));
-			$orbitalBase = ASM::$obm->get();
-
-			$orbitalBase->increaseResources($this->resourceTransported, TRUE);
+			$destOB->increaseResources($this->resourceTransported, TRUE);
 
 			# notif for the player who receive the resources
 			$n = new Notification();
-			$n->setRPlayer($orbitalBase->getRPlayer());
+			$n->setRPlayer($destOB->getRPlayer());
 			$n->setTitle('Ressources reçues');
-			$n->addBeg()->addTxt('Vous avez bien reçu les ' . $this->resourceTransported . ' ressources sur votre base orbitale ' . $orbitalBase->name . '.');
+			$n->addBeg()->addTxt('Vous avez bien reçu les ' . $this->resourceTransported . ' ressources sur votre base orbitale ' . $destOB->name . '.');
 			$n->addEnd();
 			ASM::$ntm->add($n);
 
@@ -146,8 +125,6 @@ class CommercialShipping {
 		} else {
 			CTR::$alert->add('impossible de délivrer ce chargement', ALERT_STD_ERROR);
 		}
-
-		ASM::$trm->changeSession($S_TRM1);
 	}
 
 	public function render() {

@@ -329,7 +329,46 @@ class OrbitalBase {
 				$cs = ASM::$csm->get($i);
 
 				if ($cs->dArrival < $now AND $cs->dArrival !== '0000-00-00 00:00:00') {
-					CTC::add($cs->dArrival, $this, 'uCommercialShipping', array($cs));
+
+					$commander = NULL;
+
+					# load transaction (if it's not a resource shipping)
+					$S_TRM1 = ASM::$trm->getCurrentSession();
+					ASM::$trm->newSession();
+					ASM::$trm->load(array('id' => $cs->rTransaction));
+					if (ASM::$trm->size() == 1) {
+						$transaction = ASM::$trm->get();
+
+						# load commander if it's a commander shipping
+						if ($transaction->type == Transaction::TYP_COMMANDER) {
+							include_once ARES;
+							$S_COM1 = ASM::$com->getCurrentSession();
+							ASM::$com->newSession();
+							ASM::$com->load(array('c.id' => $transaction->identifier));
+
+							if (ASM::$com->size() == 1) {
+								$commander = ASM::$com->get();
+							}
+							ASM::$com->changeSession($S_COM1);
+						}
+					} else {
+						$transaction = NULL;
+					}
+
+					# load destination orbital base
+					$S_OBM1 = ASM::$obm->getCurrentSession();
+					ASM::$obm->newSession(FALSE);
+					ASM::$obm->load(array('rPlace' => $cs->rBaseDestination));
+					if (ASM::$obm->size() == 1) {
+						$destOB = ASM::$obm->get();
+					} else {
+						$destOB = NULL;
+					}
+
+					CTC::add($cs->dArrival, $this, 'uCommercialShipping', array($cs, $transaction, $destOB, $commander));
+
+					ASM::$obm->changeSession($S_OBM1);
+					ASM::$trm->changeSession($S_TRM1);
 				}
 			}
 			ASM::$csm->changeSession($S_CSM1);
@@ -515,11 +554,11 @@ class OrbitalBase {
 		ASM::$tqm->deleteById($tq->id);
 	}
 
-	public function uCommercialShipping($cs) {
+	public function uCommercialShipping($cs, $transaction, $destOB, $commander) {
 		switch ($cs->statement) {
 			case CommercialShipping::ST_GOING :
 				# shipping arrived, delivery of items to rBaseDestination
-				$cs->deliver();
+				$cs->deliver($transaction, $destOB, $commander);
 				# prepare commercialShipping for moving back
 				$cs->statement = CommercialShipping::ST_MOVING_BACK;
 				$timeToTravel = strtotime($cs->dArrival) - strtotime($cs->dDeparture);
