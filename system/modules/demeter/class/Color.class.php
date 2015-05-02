@@ -128,7 +128,7 @@ class Color {
 						$notif = new Notification();
 						$notif->setRPlayer(ASM::$pam->get($i)->id);
 						$notif->setTitle('Vous êtes sénateur');
-						$notf->dSending = Utils::now();
+						$notif->dSending = Utils::now();
 						$notif->addBeg()
 							->addTxt('Vos actions vous ont fait gagner assez de prestige pour faire partie du sénat.');
 						ASM::$ntm->add($notif);
@@ -139,7 +139,7 @@ class Color {
 						$notif = new Notification();
 						$notif->setRPlayer(ASM::$pam->get($i)->id);
 						$notif->setTitle('Vous n\'êtes plus sénateur');
-						$notf->dSending = Utils::now();
+						$notif->dSending = Utils::now();
 						$notif->addBeg()
 							->addTxt('Vous n\'avez plus assez de prestige pour rester dans le sénat.');
 						ASM::$ntm->add($notif);
@@ -318,13 +318,13 @@ class Color {
 
 			$this->electionStatement = self::MANDATE;
 
+			$statusArray = ColorResource::getInfo($this->id, 'status');
+			
 			if ($this->getRegime() == self::DEMOCRATIC) {
-				$statusArray = ColorResource::getInfo($this->id, 'status');
-
 				$notif = new Notification();
 				$notif->setRPlayer(ASM::$pam->get()->id);
 				$notif->setTitle('Votre avez été élu');
-				$notf->dSending = Utils::now();
+				$notif->dSending = Utils::now();
 				$notif->addBeg()
 					->addTxt(' Le peuple vous a soutenu, vous avez été élu ' . $statusArray[PAM_CHIEF - 1] . ' de votre faction.');
 				ASM::$ntm->add($notif);
@@ -332,7 +332,7 @@ class Color {
 				$notif = new Notification();
 				$notif->setRPlayer(ASM::$pam->get()->id);
 				$notif->setTitle('Votre coup d\'état a réussi');
-				$notf->dSending = Utils::now();
+				$notif->dSending = Utils::now();
 				$notif->addBeg()
 					->addTxt(' Le peuple vous a soutenu, vous avez renversé le ' . $statusArray[PAM_CHIEF - 1] . ' de votre faction et avez pris sa place.');
 				ASM::$ntm->add($notif);
@@ -341,7 +341,7 @@ class Color {
 					$notif = new Notification();
 					$notif->setRPlayer($idOldChief);
 					$notif->setTitle('Un coup d\'état a réussi');
-					$notf->dSending = Utils::now();
+					$notif->dSending = Utils::now();
 					$notif->addBeg()
 						->addTxt(' Le joueur ')
 						->addLnk('embassy/player-' . ASM::$pam->get()->id, ASM::$pam->get()->name)
@@ -352,7 +352,7 @@ class Color {
 				$notif = new Notification();
 				$notif->setRPlayer(ASM::$pam->get()->id);
 				$notif->setTitle('Vous avez été nommé Guide');
-				$notf->dSending = Utils::now();
+				$notif->dSending = Utils::now();
 				$notif->addBeg()
 					->addTxt(' Les Oracles ont parlé, vous êtes désigné par la Grande Lumière pour guider Cardan vers la Gloire.');
 				ASM::$ntm->add($notif);
@@ -374,7 +374,7 @@ class Color {
 				$notif = new Notification();
 				$notif->setRPlayer(ASM::$pam->get()->id);
 				$notif->setTitle('Votre coup d\'état a échoué');
-				$notf->dSending = Utils::now();
+				$notif->dSending = Utils::now();
 				$notif->addBeg()
 					->addTxt(' Le peuple ne vous a pas soutenu, l\'ancien gouvernement reste en place.');
 				ASM::$ntm->add($notif);
@@ -383,7 +383,7 @@ class Color {
 					$notif = new Notification();
 					$notif->setRPlayer($idOldChief);
 					$notif->setTitle('Un coup d\'état a échoué');
-					$notf->dSending = Utils::now();
+					$notif->dSending = Utils::now();
 					$notif->addBeg()
 						->addTxt(' Le joueur ')
 						->addLnk('embassy/player-' . ASM::$pam->get()->id, ASM::$pam->get()->name)
