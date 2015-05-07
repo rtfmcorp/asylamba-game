@@ -865,7 +865,7 @@ jQuery(document).ready(function($) {
 	$('.confirm').live('click', function(e) {
 		var label = $(this).data('confirm-label');
 			label = label == undefined
-				? 'Êtes-vous sur de vouloir faire cette action'
+				? 'Êtes-vous sûr de vouloir faire cette action ?'
 				: label;
 
 		if (!confirm(label)) {

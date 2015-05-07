@@ -7,14 +7,18 @@ echo '<div class="component">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<p class="info">Les params, bla bla, cookies</p>';
+			echo '<p class="info">'	;
+			echo 'Informations : Nous utilisons des cookies pour retenir vos préférences d\'affichage sur la carte de la galaxie.';
+			echo '</p>';
 
 			echo '<hr />';
 
-			echo '<a href="#">Abandonner la partie</a>';
-			echo '<a href="#">Recommencer dans ce serveur</a>';
+			echo '<p class="info">';
+			echo 'Pour abandonner la partie, cliquez sur le bouton ci-dessous. Attention, cette action est irréversible. ';
+			echo 'Si vous souhaitez recommencer, vous pouvez abandonner la partie ici et recommencer dans cette partie depuis le portail principal.';
+			echo '<a class="more-button confirm" href="' . Format::actionBuilder('abandonserver') . '">Abandonner la partie</a>';
+			echo '</p>';
 
-			echo '<hr />';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

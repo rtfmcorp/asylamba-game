@@ -101,6 +101,18 @@ class API {
 		}
 	}
 
+	public function abandonServer($bindkey, $serverId) {
+		if ($this->query('abandonserver', array('bindkey' => $bindkey, 'serverid' => $serverId))) {
+			if ($this->data['statement'] == 'success') {
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		} else {
+			return FALSE;
+		}
+	}
+
 	# TODO
 	public function getPlayerStatement($bindkey) {
 		# a faire
