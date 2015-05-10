@@ -14,11 +14,14 @@ $scripts = [
 		['utils.sectors', '/utils/sectors.php'],
 		['utils.maprender', '/utils/map-render.php'],
 		['utils.findsectorinfos', '/utils/find-sector-infos.php'],
+		['utils.getstatistic', '/utils/get-stats.php'],
 	],
 	'Test' => [
 		['test.main', '/test/test.php'],
 	],
-	'Migration' => []
+	'Migration' => [
+		['migration.color', '/migration/updateColor.php'],
+	]
 ];
 
 # unlimited time

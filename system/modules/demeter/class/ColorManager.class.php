@@ -60,7 +60,7 @@ class ColorManager extends Manager {
 			$color = new Color();
 			$color->id = $awColor[$i]['id'];
 			$color->alive = $awColor[$i]['alive'];
-			$color->alive = $awColor[$i]['isWinner'];
+			$color->isWinner = $awColor[$i]['isWinner'];
 			$color->credits = $awColor[$i]['credits'];
 			$color->players = $awColor[$i]['players'];
 			$color->activePlayers = $awColor[$i]['activePlayers'];
@@ -69,6 +69,7 @@ class ColorManager extends Manager {
 			$color->electionStatement = $awColor[$i]['electionStatement'];
 			$color->isClosed = $awColor[$i]['isClosed'];
 			$color->description = $awColor[$i]['description'];
+			$color->dClaimVictory = $awColor[$i]['dClaimVictory'];
 			$color->dLastElection = $awColor[$i]['dLastElection'];
 			$color->colorLink[0] = Color::NEUTRAL;
 
@@ -83,7 +84,6 @@ class ColorManager extends Manager {
 				$color->uMethod();
 			}
 		}
-			
 	}
 
 	public function save() {
@@ -103,6 +103,7 @@ class ColorManager extends Manager {
 					electionStatement = ?,
 					isClosed = ?,
 					description = ?,
+					dClaimVictory = ?,
 					dLastElection = ?
 				WHERE id = ?');
 			$aw = $qr->execute(array(
@@ -116,6 +117,7 @@ class ColorManager extends Manager {
 					$color->electionStatement,
 					$color->isClosed,
 					$color->description,
+					$color->dClaimVictory,
 					$color->dLastElection,
 					$color->id
 				));
@@ -147,6 +149,7 @@ class ColorManager extends Manager {
 			electionStatement = ?,
 			isClosed = ?,
 			description = ?,
+			dClaimVictory = ?,
 			dLastElection = ?');
 		$aw = $qr->execute(array(
 				$color->id,
@@ -160,6 +163,7 @@ class ColorManager extends Manager {
 				$color->electionStatement,
 				$color->isClosed,
 				$color->description,
+				$color->dClaimVictory,
 				$color->dLastElection
 			));
 

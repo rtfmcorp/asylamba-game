@@ -67,4 +67,7 @@ define('ANTISPY_DISPLAY_MODE', 	0);
 define('ANTISPY_GAME_MODE', 	1);
 
 define('NB_AVATAR', 			80);
+
+# time to win de game
+define('HOURS_TO_WIN', 			80);
 ?>

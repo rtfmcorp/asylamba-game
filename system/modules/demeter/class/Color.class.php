@@ -73,6 +73,10 @@ class Color {
 	const CAMPAIGN		 			= 2;
 	const ELECTION 					= 3;
 
+	const WIN_NO_TARGET				= 0;
+	const WIN_TARGET 				= 1;
+	const WIN_CONFIRM 				= 2;
+
 	public $id 						= 0;
 	public $alive 					= 0;
 	public $isWinner 				= 0;
@@ -84,6 +88,7 @@ class Color {
 	public $electionStatement		= 0;
 	public $isClosed				= 0;
 	public $description				= 0;
+	public $dClaimVictory			= '';
 	public $dLastElection			= '';
 
 	public $colorLink 				= array();
@@ -99,11 +104,11 @@ class Color {
 
 	public function getRegime() {
 		if (in_array($this->id, array(1, 2, 3))) {
-			return self::ROYALISTIC;			
+			return self::ROYALISTIC;
 		} elseif (in_array($this->id, array(5, 6, 7))) {
 			return self::DEMOCRATIC;
 		} else {
-			return self::THEOCRATIC;			
+			return self::THEOCRATIC;
 		}
 	}
 
