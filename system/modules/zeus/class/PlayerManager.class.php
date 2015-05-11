@@ -260,6 +260,127 @@ class PlayerManager extends Manager {
 		ASM::$pam->changeSession($S_PAM1);
 	}
 
+	public function reborn($player) {
+		include_once GAIA;
+		include_once ATHENA;
+		include_once HERMES;
+
+		$S_PAM1 = ASM::$pam->getCurrentSession();
+		ASM::$pam->newSession(FALSE);
+		ASM::$pam->load(array('id' => $player));
+		$player = ASM::$pam->get();
+
+		# reinitialize some values of the player
+		$player->iUniversity = 1000;
+		$player->partNaturalSciences = 25;
+		$player->partLifeSciences = 25;
+		$player->partSocialPoliticalSciences = 25;
+		$player->partInformaticEngineering = 25;
+		$player->setStatement(1);
+
+		# sector choice 
+		$S_SEM1 = ASM::$sem->getCurrentSession();
+		ASM::$sem->newSession(FALSE);
+		ASM::$sem->load(array('rColor' => $player->rColor), array('id', 'DESC'));
+
+		$placeFound = FALSE;
+		$place = NULL;
+		for ($i = 0; $i < ASM::$sem->size(); $i++) { 
+			$sector = ASM::$sem->get($i);
+
+			# place choice
+			$db = Database::getInstance();
+			$qr = $db->prepare('SELECT * FROM place AS p
+				INNER JOIN system AS sy ON p.rSystem = sy.id
+					INNER JOIN sector AS se ON sy.rSector = se.id
+				WHERE p.typeOfPlace = 1
+					AND se.id = ?
+					AND p.rPlayer IS NULL
+				ORDER BY p.population ASC
+				LIMIT 0, 30'
+			);
+			$qr->execute(array($sector->id));
+			$aw = $qr->fetchAll();
+			if ($aw !== NULL) {
+				$placeFound = TRUE;
+				$place = $aw[rand(0, (count($aw) - 1))][0];
+				break;
+			}
+		}
+
+		ASM::$sem->changeSession($S_SEM1);
+
+		if ($placeFound) {
+
+			# attribute new base and place to player
+			$ob = new OrbitalBase();
+
+			$ob->setRPlace($place);
+
+			$ob->setRPlayer($player->id);
+			$ob->setName("Colonie");
+
+			$ob->setLevelGenerator(1);
+			$ob->setLevelRefinery(1);
+			$ob->setLevelDock1(0);
+			$ob->setLevelDock2(0);
+			$ob->setLevelDock3(0);
+			$ob->setLevelTechnosphere(0);
+			$ob->setLevelCommercialPlateforme(0);
+			$ob->setLevelStorage(1);
+			$ob->setLevelRecycling(0);
+			$ob->setLevelSpatioport(0);
+			$ob->setResourcesStorage(1000);
+
+			$ob->updatePoints();
+
+			# initialisation des investissement
+			$ob->setISchool(500);
+			$ob->setIAntiSpy(500);
+
+			# ajout de la base
+			$ob->uOrbitalBase = Utils::now();
+			$ob->dCreation = Utils::now();
+			ASM::$obm->add($ob);
+
+			# modification de la place
+			ASM::$plm->load(array('id' => $place));
+			ASM::$plm->get()->rPlayer = $player->id;
+			ASM::$plm->get()->population = 50;
+			ASM::$plm->get()->coefResources = 60;
+			ASM::$plm->get()->coefHistory = 20;
+
+			GalaxyColorManager::apply();
+
+			# send a message with Jean-Mi
+			$message = 'Salut,  
+				<br /><br />Tu t\'es malheureusement fait prendre ta dernière planète. Une nouvelle t\'a été attribuée. Cela te permet de continuer le jeu si tu le souhaites.
+				<br />Tu n\'as rien perdu de ton expérience. Tu peux donc continuer le jeu et te relancer facilement en demandant de l\'aide à tes camarades de faction.
+				<br /><br />Dans le cas où tu voudrais recommencer dans une autre faction, tu peux te diriger dans l\'onglet des paramètres et cliquer sur le bouton recommencer, tu pourras alors choisir une nouvelle faction.
+				<br />Attention, cette action supprimera tout de ton joueur dans cette faction.
+				<br /><br />Un grand merci d\'avoir joué à Asylamba. J\'espère en tout cas que l\'expérience t\'a plu.
+				<br /><br />Bonne continuation.
+				<br /><br />Cordialement, <br />Jean-Mi';
+
+			$m = new Message();
+			$m->rPlayerWriter = ID_JEANMI;
+			$m->dSending = Utils::now();
+			$m->content = $message;
+
+			$S_MSM1 = ASM::$msm->getCurrentSession();
+			ASM::$msm->newSession();
+			ASM::$msm->load(array('rPlayerReader' => $player->id, 'rPlayerWriter' => ID_JEANMI));
+			$m->thread = ASM::$msm->get()->getThread();
+			$m->rPlayerReader = $player->id;
+			ASM::$msm->add($m);
+			ASM::$msm->changeSession($S_MSM1);
+		} else {
+			# si on ne trouve pas de lieu pour le faire poper ou si la faction n'a plus de secteur, le joueur meurt
+			$this->kill($player);
+		}
+		ASM::$pam->changeSession($S_PAM1);
+	}
+
 	public static function count($where = array()) {
 		$formatWhere = Utils::arrayToWhere($where);
 
