@@ -34,16 +34,22 @@ echo '<div id="nav">';
 			}
 		}
 
-		$nextBaseId = CTR::$data->get('playerBase')->get('ob')->get(0)->get('id');
-		$finded = FALSE;
-		for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-			if ($finded) {
-				$nextBaseId = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
-				break;
+		if (CTR::$data->get('playerBase')->get('ob')->get(0)) {
+			$nextBaseId = CTR::$data->get('playerBase')->get('ob')->get(0)->get('id');
+			$finded = FALSE;
+			for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
+				if ($finded) {
+					$nextBaseId = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
+					break;
+				}
+				if (CTR::$data->get('playerParams')->get('base') == CTR::$data->get('playerBase')->get('ob')->get($i)->get('id')) {
+					$finded = TRUE;
+				}
 			}
-			if (CTR::$data->get('playerParams')->get('base') == CTR::$data->get('playerBase')->get('ob')->get($i)->get('id')) {
-				$finded = TRUE;
-			}
+		} else {
+			$nextBaseId = 0;
+			$currentBaseName = 'Reconnectez-vous';
+			$currentBaseImg = '1-1';
 		}
 
 		$isActive = (in_array(CTR::getPage(), array('bases'))) ? 'active' : NULL;

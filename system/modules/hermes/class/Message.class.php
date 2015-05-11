@@ -11,24 +11,24 @@
 
 class Message {
 	//ATTRIBUTES
-	private $id = 0;
-	private $thread = 0;
-	private $rPlayerWriter = 0;
-	private $rPlayerReader = 0;
-	private $dSending = '';
-	private $content = '';
-	private $readed = 0;
-	private $writerMessageStatement = 1;
-	private $readerMessageStatement = 1;
+	public $id = 0;
+	public $thread = 0;
+	public $rPlayerWriter = 0;
+	public $rPlayerReader = 0;
+	public $dSending = '';
+	public $content = '';
+	public $readed = 0;
+	public $writerMessageStatement = 1;
+	public $readerMessageStatement = 1;
 	
-	private $writerName = '';
-	private $writerColor = 0;
-	private $writerAvatar = '';
-	private $writerStatement = '';
-	private $readerName = '';
-	private $readerColor = 0;
-	private $readerAvatar = '';
-	private $readerStatement = '';
+	public $writerName = '';
+	public $writerColor = 0;
+	public $writerAvatar = '';
+	public $writerStatement = '';
+	public $readerName = '';
+	public $readerColor = 0;
+	public $readerAvatar = '';
+	public $readerStatement = '';
 	
 	# GETTERS
 	public function getId()							{ return $this->id; }
