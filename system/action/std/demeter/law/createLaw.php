@@ -118,22 +118,26 @@ if ($type !== FALSE) {
 							$rSector = Utils::getHTTPData('rsector');
 							$name = Utils::getHTTPData('name');
 							if ($rSector !== FALSE && $name !== FALSE) {
-								$name = Parser::protect($name);
-								$_SEM = ASM::$sem->getCurrentsession();
-								ASM::$sem->load(array('id' => $rSector)); 
-								if (ASM::$sem->size() > 0) {
-									if (ASM::$sem->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
-										$law->options = serialize(array('name' => $name, 'rSector' => $rSector));
-										ASM::$lam->add($law);
-										ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
-										CTR::redirect('faction/view-senate');
+								if (strlen($name) >= 1 AND strlen($name) <= 50) {
+									$name = Parser::protect($name);
+									$_SEM = ASM::$sem->getCurrentsession();
+									ASM::$sem->load(array('id' => $rSector)); 
+									if (ASM::$sem->size() > 0) {
+										if (ASM::$sem->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
+											$law->options = serialize(array('name' => $name, 'rSector' => $rSector));
+											ASM::$lam->add($law);
+											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+											CTR::redirect('faction/view-senate');
+										} else {
+											CTR::$alert->add('Ce secteur n\'est pas sous votre contrôle.', ALERT_STD_ERROR);
+										}
 									} else {
-										CTR::$alert->add('Ce secteur n\'est pas sous votre contrôle.', ALERT_STD_ERROR);
+										CTR::$alert->add('Ce secteur n\'existe pas.', ALERT_STD_ERROR);
 									}
+									ASM::$sem->changeSession($_SEM);
 								} else {
-									CTR::$alert->add('Ce secteur n\'existe pas.', ALERT_STD_ERROR);
+									CTR::$alert->add('Le nom doit faire entre 1 et 50 caractères.', ALERT_STD_ERROR);
 								}
-								ASM::$sem->changeSession($_SEM);
 							} else {
 								CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 							}
