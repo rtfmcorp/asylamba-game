@@ -2,6 +2,7 @@
 include_once ARES;
 include_once GAIA;
 include_once ZEUS;
+include_once DEMETER;
 
 # send a fleet to loot a place
 
@@ -68,8 +69,17 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 									$S_SEM = ASM::$sem->getCurrentSession();
 									ASM::$sem->newSession();
 									ASM::$sem->load(array('id' => $place->rSector));
-									$isFactionSector = (ASM::$sem->get()->rColor == $commander->playerColor) ? TRUE : FALSE;
+
+									$_CLM2 = ASM::$clm->getCurrentSession();
+									ASM::$clm->newSession();
+									ASM::$clm->load(array('id' => ASM::$sem->get()->rColor));
+									
+									$sectorColor = ASM::$clm->get();
+									$isFactionSector = (ASM::$sem->get()->rColor == $commander->playerColor || $sectorColor->colorLink[CTR::$data->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
+									
 									ASM::$sem->changeSession($S_SEM);
+									ASM::$clm->changeSession($_CLM2);
+
 									if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
 										$commander->destinationPlaceName = $place->baseName;
 										if ($commander->move($place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {

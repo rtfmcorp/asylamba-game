@@ -73,10 +73,14 @@ class ColorManager extends Manager {
 			$color->dLastElection = $awColor[$i]['dLastElection'];
 			$color->colorLink[0] = Color::NEUTRAL;
 
-			foreach ($awColorLink AS $colorLink) {
-				if ($colorLink['rColor'] == $color->id) {
-					$color->colorLink[] = $colorLink['statement'];
+			if ($color->id != 0) {
+				foreach ($awColorLink AS $colorLink) {
+					if ($colorLink['rColor'] == $color->id) {
+						$color->colorLink[] = $colorLink['statement'];
+					}
 				}
+			} else {
+				$color->colorLink = array(Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL);
 			}
 
 			$this->_Add($color);
