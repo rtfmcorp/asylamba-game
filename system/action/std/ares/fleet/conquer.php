@@ -2,6 +2,7 @@
 include_once ARES;
 include_once GAIA;
 include_once ZEUS;
+include_once DEMETER;
 # send a fleet to loot a place
 
 # int commanderid 			id du commandant à envoyer
@@ -52,7 +53,13 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 						$commander = ASM::$com->get();
 						$place = ASM::$plm->get();
 
-						if (CTR::$data->get('playerInfo')->get('color') != $place->getPlayerColor()) {
+						$_CLM1 = ASM::$clm->getCurrentSession();
+						ASM::$clm->newSession();
+						ASM::$clm->load(array('id' => CTR::$data->get('playerInfo')->get('color')));
+						$color = ASM::$clm->get();
+						ASM::$clm->changeSession($_CLM1);
+
+						if (CTR::$data->get('playerInfo')->get('color') != $place->getPlayerColor() && $color->colorLink[ASM::$pam->get()->rColor] != Color::ALLY) {
 							ASM::$plm->load(array('id' => $commander->getRBase()));
 							$home = ASM::$plm->getById($commander->getRBase());
 
@@ -104,7 +111,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 								CTR::$alert->add('Vous n\'avez pas assez de crédits pour conquérir cette base.', ALERT_STD_ERROR);
 							}		
 						} else {
-							CTR::$alert->add('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction.', ALERT_STD_ERROR);
+							CTR::$alert->add('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction ou d\'une faction alliée.', ALERT_STD_ERROR);
 						}
 					} else {
 						CTR::$alert->add('Ce lieu n\'existe pas.', ALERT_STD_ERROR);
