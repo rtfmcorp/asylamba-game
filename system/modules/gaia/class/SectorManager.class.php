@@ -28,7 +28,7 @@ class SectorManager extends Manager {
 		}
 	}
 
-	public function getBYId($id) {
+	public function getById($id) {
 		foreach ($this->sectors as $k => $v) {
 			if ($v[0]->getId() == $id) {
 				$this->sectors[$k][1] = FALSE;

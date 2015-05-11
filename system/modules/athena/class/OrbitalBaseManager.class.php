@@ -486,12 +486,12 @@ class OrbitalBaseManager extends Manager {
 			}
 			ASM::$com->changeSession($S_COM4);
 
-			# vérifie si le joueur n'a plus de planète, si c'est le cas, il est mort
+			# vérifie si le joueur n'a plus de planète, si c'est le cas, il est mort, on lui redonne une planète
 			$S_OBM2 = ASM::$obm->getCurrentSession();
 			ASM::$obm->newSession(FALSE); # FALSE obligatory
 			ASM::$obm->load(array('rPlayer' => $oldOwner));
 			if (ASM::$obm->size() == 0 || (ASM::$obm->get()->rPlace == $id && ASM::$obm->size() == 1)) {
-				ASM::$pam->kill($oldOwner);
+				ASM::$pam->reborn($oldOwner);
 			}
 			ASM::$obm->changeSession($S_OBM2);
 
