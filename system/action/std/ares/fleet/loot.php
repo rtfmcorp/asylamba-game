@@ -39,11 +39,20 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 
 						if ($commander->getPev() > 0) {
 							if ($commander->statement == Commander::AFFECTED) {
+
 								$S_SEM = ASM::$sem->getCurrentSession();
 								ASM::$sem->newSession();
 								ASM::$sem->load(array('id' => $place->rSector));
-								$isFactionSector = (ASM::$sem->get()->rColor == $commander->playerColor) ? TRUE : FALSE;
+
+								$_CLM2 = ASM::$clm->getCurrentSession();
+								ASM::$clm->newSession();
+								ASM::$clm->load(array('id' => ASM::$sem->get()->rColor));
+								
+								$sectorColor = ASM::$clm->get();
+								$isFactionSector = (ASM::$sem->get()->rColor == $commander->playerColor || $sectorColor->colorLink[CTR::$data->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
+								
 								ASM::$sem->changeSession($S_SEM);
+								ASM::$clm->changeSession($_CLM2);
 								
 								$commander->destinationPlaceName = $place->baseName;
 								if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
@@ -93,7 +102,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 				ASM::$clm->newSession();
 				ASM::$clm->load(array('id' => CTR::$data->get('playerInfo')->get('color')));
 				$color = ASM::$clm->get();
-				ASM::$clm->changeSession($_CLM1);
+				
 				if (CTR::$data->get('playerInfo')->get('color') != $place->getPlayerColor() && $color->colorLink[ASM::$pam->get()->rColor] != Color::ALLY) {
 					ASM::$plm->load(array('id' => $commander->getRBase()));
 					$home = ASM::$plm->getById($commander->getRBase());
@@ -105,8 +114,16 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 						$S_SEM = ASM::$sem->getCurrentSession();
 						ASM::$sem->newSession();
 						ASM::$sem->load(array('id' => $place->rSector));
-						$isFactionSector = (ASM::$sem->get()->rColor == $commander->playerColor) ? TRUE : FALSE;
+
+						$_CLM3 = ASM::$clm->getCurrentSession();
+						ASM::$clm->newSession();
+						ASM::$clm->load(array('id' => ASM::$sem->get()->rColor));
+						
+						$sectorColor = ASM::$clm->get();
+						$isFactionSector = (ASM::$sem->get()->rColor == $commander->playerColor || $sectorColor->colorLink[CTR::$data->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
+						
 						ASM::$sem->changeSession($S_SEM);
+						ASM::$clm->changeSession($_CLM3);
 						
 						$commander->destinationPlaceName = $place->baseName;
 						if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
@@ -118,6 +135,8 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 									CTR::redirect('map/place-' . CTR::$get->get('redirect'));
 								}
 							}
+						} else {
+							CTR::$alert->add('Ce lieu est trop éloigné.', ALERT_STD_ERROR);		
 						}
 					} else {
 						CTR::$alert->add('Vous devez affecter au moins un vaisseau à votre officier.', ALERT_STD_ERROR);	
@@ -125,6 +144,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 				} else {
 					CTR::$alert->add('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction ou d\'une faction alliée.', ALERT_STD_ERROR);
 				}
+				ASM::$clm->changeSession($_CLM1);
 			} else {
 				CTR::$alert->add('Ce lieu n\'existe pas.', ALERT_STD_ERROR);
 			}
