@@ -1,5 +1,8 @@
 <?php
 class Game {
+
+	const COMMERCIAL_TIME_TRAVEL = 0.2;
+
 	public static function convertPlaceType($type) {
 		switch ($type) {
 			case 1 : return 'planète tellurique'; break;
@@ -56,7 +59,7 @@ class Game {
 	}
 
 	public static function getTimeToTravelCommercial($startPlace, $destinationPlace, $bonus = NULL) {
-		return round(self::getTimeToTravel($startPlace, $destinationPlace, $bonus) / 5);
+		return round(self::getTimeToTravel($startPlace, $destinationPlace, $bonus) * self::COMMERCIAL_TIME_TRAVEL);
 	}
 
 	public static function getTimeToTravel($startPlace, $destinationPlace, $bonus = NULL) {
@@ -75,7 +78,7 @@ class Game {
 	}
 
 	public static function getTimeTravelCommercial($systemFrom, $positionFrom, $xFrom, $yFrom, $systemTo, $positionTo, $xTo, $yTo, $bonus = NULL) {
-		return round(self::getTimeTravel($systemFrom, $positionFrom, $xFrom, $yFrom, $systemTo, $positionTo, $xTo, $yTo, $bonus) / 10);
+		return round(self::getTimeTravel($systemFrom, $positionFrom, $xFrom, $yFrom, $systemTo, $positionTo, $xTo, $yTo, $bonus) * self::COMMERCIAL_TIME_TRAVEL);
 	}
 
 	public static function getTimeTravel($systemFrom, $positionFrom, $xFrom, $yFrom, $systemTo, $positionTo, $xTo, $yTo, $bonus = NULL) {
