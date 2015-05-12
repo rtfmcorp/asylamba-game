@@ -107,8 +107,8 @@ class Transaction {
 
 		$exportTax = 0;
 		$importTax = 0;
-		$exportFaction = NULL;
-		$importFaction = NULL;
+		$exportFaction = 0;
+		$importFaction = 0;
 
 		for ($i = 0; $i < ASM::$ctm->size(); $i++) { 
 			$comTax = ASM::$ctm->get($i);
