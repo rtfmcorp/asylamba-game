@@ -61,10 +61,12 @@ echo '<div class="component">';
 				echo '</div>';
 
 				if ($mode) {
-					if ($isValid == count($targets) AND Utils::now() > '2015-05-11 08:00:00') {
-						echo '<a class="more-button" href="' . Format::actionBuilder('iwin') . '">Revendiquer la victoire</a>';
-					} else {
-						echo '<span class="more-button">Tous les objectifs ne sont pas remplis</span>';
+					if ($faction->isWinner == Color::WIN_NO_TARGET) {
+						if ($isValid == count($targets) AND Utils::now() > '2015-05-11 08:00:00') {
+							echo '<a class="more-button" href="' . Format::actionBuilder('iwin') . '">Revendiquer la victoire</a>';
+						} else {
+							echo '<span class="more-button">Tous les objectifs ne sont pas remplis</span>';
+						}
 					}
 				} else {
 					echo '<p>' . VictoryResources::getInfo($i ,'infos') . '</p>';

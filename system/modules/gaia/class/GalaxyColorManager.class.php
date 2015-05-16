@@ -127,6 +127,8 @@ class GalaxyColorManager {
 	}
 
 	public function changeColorSector() {
+		$sectorUpdatedColor = [];
+
 		foreach ($this->sector as $k => $v) {
 			$colorRepartition = array(0, 0, 0, 0, 0, 0, 0);
 
@@ -149,20 +151,80 @@ class GalaxyColorManager {
 			if ($nbrColor >= LIMIT_CONQUEST_SECTOR) {
 				$maxColor = array_keys($colorRepartition, max($colorRepartition));
 				$this->sector[$k]['prime'] = FALSE;
+				
 				if ($nbrColorSector == NULL) {
+					$sectorUpdatedColor[] = $this->sector[$k]['color'];
 					$this->sector[$k]['color'] = $maxColor[0] + 1;
 					$this->sector[$k]['hasChanged'] = TRUE;
 				} elseif ($nbrColor > $nbrColorSector AND ($maxColor[0] + 1) != $v['color']) {
+					$sectorUpdatedColor[] = $this->sector[$k]['color'];
 					$this->sector[$k]['color'] = $maxColor[0] + 1;
 					$this->sector[$k]['hasChanged'] = TRUE;
 				}
 			} else {
 				# ne modifie pas un secteur prime s'il n'y a pas assez de joueur dedans
 				if ($this->sector[$k]['prime'] == 0) {
+					$sectorUpdatedColor[] = $this->sector[$k]['color'];
 					$this->sector[$k]['color'] = 0;
 					$this->sector[$k]['hasChanged'] = TRUE;
 				}
 			}
+		}
+
+		# enlève les doublons
+		$sectorUpdatedColor = array_unique($sectorUpdatedColor);
+
+		# compteur de faction
+		$udpatedFaction = 0;
+
+		# charge les factions concernées
+		include_once DEMETER;
+		$S_COL = ASM::$clm->getCurrentSession();
+		ASM::$clm->newSession(FALSE);
+		ASM::$clm->load([
+			'id' => $sectorUpdatedColor,
+			'isWinner' => Color::WIN_TARGET
+		]);
+
+		for ($l = 0; $l < ASM::$clm->size(); $l++) {
+			$faction = ASM::$clm->get($l);
+
+			# vérification des objectifs
+			$isTargetsValid = FALSE;
+
+			for ($i = 1; $i <= VictoryResources::size(); $i++) { 
+				$targets = VictoryResources::getInfo($i, 'targets');
+				$isTargetValid = TRUE;
+
+				foreach ($targets as $key => $target) {
+					$sectors = 0;
+
+					foreach ($this->sector as $n => $s) {
+						if ($this->sector[$n]['color'] == $faction->id && in_array($this->sector[$n]['color'], $target['sectors'])) {
+							$sectors++;
+						}
+					}
+
+					$isTargetValid = $sectors >= $target['nb']
+						? $isTargetValid && TRUE
+						: $isTargetValid && FALSE;
+				}
+
+				$isTargetsValid = $isTargetsValid || $isTargetValid;
+			}
+			
+			if (!$isTargetsValid) {
+				$faction->isWinner = Color::WIN_NO_TARGET;
+				$faction->dClaimVictory = NULL;
+
+				$udpatedFaction++;
+			}
+		}
+
+		ASM::$clm->changeSession($S_COL);
+
+		if ($udpatedFaction > 0) {
+			ASM::$clm->save();
 		}
 	}
 }
