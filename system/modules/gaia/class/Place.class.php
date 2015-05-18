@@ -527,7 +527,7 @@ class Place {
 				LiveReport::$isLegal = Report::LEGAL;
 			}
 			# planète à joueur: si $this->rColor != commandant->rColor
-			if ($this->playerColor != $commander->getPlayerColor() && $this->playerLevel > 1) {
+			if ($this->playerColor != $commander->getPlayerColor() && $this->playerLevel > 1 && $commanderColor->colorLink[$this->playerColor] != Color::ALLY) {
 				// $commander->rDestinationPlace = NULL;
 				$commander->travelType = NULL;
 				$commander->travelLength = NULL;
@@ -627,7 +627,7 @@ class Place {
 			// $commander->rStartPlace = NULL;
 			// $commander->dArrival = NULL;
 
-			if ($this->playerColor != $commander->getPlayerColor() && $this->playerLevel > 3) {
+			if ($this->playerColor != $commander->getPlayerColor() && $this->playerLevel > 3 && $commanderColor->colorLink[$this->playerColor] != Color::ALLY) {
 				$tempCom = array();
 				for ($i = 0; $i < count($this->commanders); $i++) {
 					if ($this->commanders[$i]->line == 1) {
@@ -1193,7 +1193,7 @@ class Place {
 					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' n\'a pas attaqué la planète ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
-					->addTxt(' car son joueur est de votre faction ou sous la protection débutant.')
+					->addTxt(' car son joueur est de votre faction, sous la protection débutant ou un allié.')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
@@ -1277,7 +1277,7 @@ class Place {
 					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' n\'a pas attaqué la planète ')
 					->addLnk('map/place-' . $this->id, $this->baseName)
-					->addTxt(' car le joueur est dans votre faction ou sous la protection débutant.')
+					->addTxt(' car le joueur est dans votre faction, sous la protection débutant ou votre allié.')
 					->addEnd();
 				ASM::$ntm->add($notif);
 				break;
