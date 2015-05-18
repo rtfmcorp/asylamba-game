@@ -4,10 +4,6 @@
 
 Passage en revue du jeu et listing des choses à faire ou à améliorer.
 
-## Accueil
-
-- les box sont trop hautes sur chrome
-
 ## Vue de situation
 
 - ajouter une colonne résumé
@@ -31,7 +27,6 @@ Passage en revue du jeu et listing des choses à faire ou à améliorer.
 
 ## Centre de recyclage
 
-- pouvoir rajouter des recycleurs dans une mission en cours
 - voir les anciennes missions (avec le total de ce que ça a rapporté)
 - à la fin du cycle, s'annuler si le secteur a changé de couleur (si c'est le cas, envoyer une notif)
 - un recycleur doit amener plus de crédits (et le noter qqpart)
