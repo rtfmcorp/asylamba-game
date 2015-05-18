@@ -430,6 +430,23 @@ class OrbitalBaseManager extends Manager {
 	public function changeOwnerById($id, $base, $newOwner, $routeSession, $recyclingSession, $commanderSession) {
 
 		if ($base->getId() != 0) {
+			# changement de possesseur des offres du marché
+			$S_TRM1 = ASM::$trm->getCurrentSession();
+			ASM::$trm->newSession();
+			ASM::$trm->load(array('rPlayer' => $base->rPlayer, 'rPlace' => $base->rPlace, 'statement' => Transaction::ST_PROPOSED));
+			for ($i = 0; $i < ASM::$trm->size(); $i++) {
+				# change owner of transaction
+				ASM::$trm->get($i)->rPlayer = $newOwner;
+
+				$S_CSM1 = ASM::$csm->getCurrentSession();
+				ASM::$csm->newSession();
+				ASM::$csm->load(array('rTransaction' => ASM::$trm->get($i)->id, 'rPlayer' => $base->rPlayer));
+				# change owner of commercial shipping
+				ASM::$csm->get()->rPlayer = $newOwner;
+				ASM::$csm->changeSession($S_CSM1);
+			}
+			ASM::$trm->changeSession($S_TRM1);
+
 			# attribuer le rPlayer à la Base
 			$oldOwner = $base->rPlayer;
 			$base->setRPlayer($newOwner);
