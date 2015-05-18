@@ -585,6 +585,13 @@ class Place {
 						# création du rapport
 						$report = $this->createReport();
 
+						#mise à jour des flottes du commandant défenseur
+						for ($j = 0; $j < count($commanderPlayer->armyAtEnd); $j++) {
+							for ($i = 0; $i < 12; $i++) { 
+								$commanderPlayer->armyInBegin[$j][$i] = $commanderPlayer->armyAtEnd[$j][$i];
+							}
+						}
+
 						$this->sendNotif(self::LOOTPLAYERWHITBATTLEFAIL, $commander, $report->id);
 					}
 				} else {
@@ -676,6 +683,11 @@ class Place {
 						for ($j = 0; $j < count($commander->armyAtEnd); $j++) {
 							for ($i = 0; $i < 12; $i++) { 
 								$commander->armyInBegin[$j][$i] = $commander->armyAtEnd[$j][$i];
+							}
+						}
+						for ($j = 0; $j < count($commanderPlayer->armyAtEnd); $j++) {
+							for ($i = 0; $i < 12; $i++) { 
+								$commanderPlayer->armyInBegin[$j][$i] = $commanderPlayer->armyAtEnd[$j][$i];
 							}
 						}
 					} else {
