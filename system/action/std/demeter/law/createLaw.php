@@ -88,7 +88,7 @@ if ($type !== FALSE) {
 				if (ASM::$clm->get()->credits >= LawResources::getInfo($type, 'price')) {
 					switch ($type) {
 						case Law::SECTORTAX:
-							$taxes = round(Utils::getHTTPData('taxes'));
+							$taxes = intval(Utils::getHTTPData('taxes'));
 							$rSector = Utils::getHTTPData('rsector');
 							if ($taxes !== FALSE && $rSector !== FALSE) {
 								if ($taxes >= 2 && $taxes <= 15) {
@@ -143,7 +143,7 @@ if ($type !== FALSE) {
 							}
 							break;
 						case Law::COMTAXEXPORT:
-							$taxes = round(Utils::getHTTPData('taxes'));
+							$taxes = intval(Utils::getHTTPData('taxes'));
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($taxes !== FALSE && $rColor !== FALSE) {
 								$_CTM = ASM::$ctm->getCurrentsession();
@@ -177,7 +177,7 @@ if ($type !== FALSE) {
 							}
 							break;
 						case Law::COMTAXIMPORT:
-							$taxes = round(Utils::getHTTPData('taxes'));
+							$taxes = intval(Utils::getHTTPData('taxes'));
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($taxes !== FALSE && $rColor !== FALSE) {
 								$_CTM = ASM::$ctm->getCurrentsession();
