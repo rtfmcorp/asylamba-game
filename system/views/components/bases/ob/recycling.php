@@ -100,14 +100,15 @@ for ($i = 0; $i < ASM::$rem->size(); $i++) {
 					? '<p>Cette mission a été annulée, les recycleurs terminent la mission puis deviennent disponibles.</p>'
 					: '<p><a href="' . Format::actionBuilder('cancelmission', ['id' => $mission->id, 'place' => $mission->rBase]) . '" class="common-link">Annuler la mission</a></p>';
 
-				if ($mission->statement == RecyclingMission::ST_ACTIVE) {
-					echo '<p><a href="' . Format::actionBuilder('addtomission', ['id' => $mission->id, 'place' => $mission->rBase, 'quantity' => 10]) . '" class="common-link">Ajouter 10 recycleurs à la mission</a></p>';
-				}
-
 				echo '<ul class="list-type-1">';
 					echo '<li>';
 						echo '<span class="label">Recycleurs engagés dans la mission</span>';
 						echo '<span class="value">' . Format::number($mission->recyclerQuantity) . '</span>';
+
+						if ($mission->statement == RecyclingMission::ST_ACTIVE && $freeRecyclers > 0) {
+							echo '<span class="buttons"><a href="#" class="sh" data-target="add-recycler-' . $mission->id . '">+</a></span>';
+							echo '<form action="' . Format::actionBuilder('addtomission', ['id' => $mission->id, 'place' => $mission->rBase]) . '" method="POST" id="add-recycler-' . $mission->id . '"><p><input name="quantity" value="' . $freeRecyclers . '" type="text"><input value="ok" type="submit"></p></form>';
+						}
 					echo '</li>';
 					echo '<li>';
 						echo '<span class="label">Soute totale de la mission</span>';
