@@ -497,6 +497,7 @@ class Color {
 
 	public function uFinishPunition($law, $player) {
 		$player->decreaseCredit($law->options['credits']);
+		$this->credits += $law->options['credits'];
 		$law->statement = Law::OBSOLETE;
 	}
 
