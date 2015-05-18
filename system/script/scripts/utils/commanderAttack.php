@@ -3,10 +3,9 @@
 
 include_once ARES;
 
-ASM::$com->load(array());
+ASM::$com->newSession();
+ASM::$com->load(['c.statement' => Commander::MOVING]);
 
 for ($i = 0; $i < ASM::$com->size(); $i++) {
-	$date = new DateTime(ASM::$com->get($i)->dArrival);
-	$date->modify('-100000 second');
-	ASM::$com->dArrival = $date;
+	ASM::$com->get($i)->dArrival = ASM::$com->get($i)->dStart;
 }
