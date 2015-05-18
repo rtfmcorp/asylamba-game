@@ -1,0 +1,26 @@
+.on-off-button {
+	display: block;
+	margin: 10px;
+	padding: 10px;
+
+	background: #4F4F4F;
+	border: solid 1px #202020;
+	color: #CCCCCC;
+	text-decoration: none;
+
+	&:hover, &:focus {
+		background: #202020;
+		border: solid 1px #4F4F4F;
+	}
+
+	&.active {
+		background: @medium;
+		border: solid 1px @dark;
+		color: white;
+
+		&:hover, &:focus {
+			background: @dark;
+			border: solid 1px @medium;
+		}
+	}
+}

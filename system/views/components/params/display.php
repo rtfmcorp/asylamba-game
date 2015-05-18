@@ -1,110 +1,62 @@
 <?php
 # display
-echo '<div class="component params">';
+echo '<div class="component">';
 	echo '<div class="head skin-5">';
-		echo '<h2>Paramètres d\'affichage</h2>';
+		echo '<h2>Paramètres de la carte</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<form action="' . Format::actionBuilder('updatedisplayparams') . '" method="post">';
-				echo '<div class="info-building"><h4>Paramètres généraux</h4></div>';
+			echo '<a href="' . Format::actionBuilder('switchparams', ['params' => Params::SHOW_MAP_MINIMAP]) . '"" class="on-off-button ' . (Params::check(Params::SHOW_MAP_MINIMAP) ? 'active' : NULL) . '">';
+				echo 'Afficher la minimap';
+			echo '</a>';
+	
+			echo '<a href="' . Format::actionBuilder('switchparams', ['params' => Params::SHOW_MAP_RC]) . '"" class="on-off-button ' . (Params::check(Params::SHOW_MAP_RC) ? 'active' : NULL) . '">';
+				echo 'Afficher les routes commerciales';
+			echo '</a>';
 
-				echo '<label class="checkbox hb rt" title="Affiche les ascenseurs par défaut de votre système. Ces derniers sont moins beaux mais peuvent résoudrent certains problèmes.">';
-					if (CTR::$cookie->equal('movers', TRUE)) {
-						$check = 'checked';
-					} elseif (CTR::$cookie->equal('movers', FALSE)) {
-						$check = NULL;
-					} else {
-						$check = NULL;
-					}
-					echo '<input type="checkbox" name="movers" value="1" ' . $check . ' />';
-					echo 'Ascenseur système';
-				echo '</label>';
+			echo '<a href="' . Format::actionBuilder('switchparams', ['params' => Params::SHOW_MAP_ANTISPY]) . '"" class="on-off-button ' . (Params::check(Params::SHOW_MAP_ANTISPY) ? 'active' : NULL) . '">';
+				echo 'Afficher les cercles de contre-espionnage';
+			echo '</a>';
 
-				echo '<label class="checkbox hb rt" title="Améliore les performances d\'affichage lorsqu\'elles sont désactivées">';
-					if (CTR::$cookie->equal('anims', TRUE)) {
-						$check = 'checked';
-					} elseif (CTR::$cookie->equal('anims', FALSE)) {
-						$check = NULL;
-					} else {
-						$check = 'checked';
-					}
-					echo '<input type="checkbox" name="anims" value="1" ' . $check . ' />';
-					echo 'Animations activées';
-				echo '</label>';
+			echo '<a href="' . Format::actionBuilder('switchparams', ['params' => Params::SHOW_MAP_FLEETOUT]) . '"" class="on-off-button ' . (Params::check(Params::SHOW_MAP_FLEETOUT) ? 'active' : NULL) . '">';
+				echo 'Afficher les attaques sortantes';
+			echo '</a>';
 
-				/*echo '<label class="radio">';
-					echo '<input type="checkbox" name="panel" value="1" ' . $check . ' />';
-					echo 'panneau vide par défaut';
-				echo '</label>';*/
-
-				echo '<div class="info-building"><h4>Paramètres de la carte</h4></div>';
-
-				echo '<label class="checkbox">';
-					if (CTR::$cookie->equal('minimap', TRUE)) {
-						$check = 'checked';
-					} elseif (CTR::$cookie->equal('minimap', FALSE)) {
-						$check = NULL;
-					} else {
-						$check = 'checked';
-					}
-					echo '<input type="checkbox" name="minimap" value="1" ' . $check . ' />';
-					echo 'Afficher la minimap';
-				echo '</label>';
-
-				echo '<label class="checkbox">';
-					if (CTR::$cookie->equal('rc', TRUE)) {
-						$check = 'checked';
-					} elseif (CTR::$cookie->equal('rc', FALSE)) {
-						$check = NULL;
-					} else {
-						$check = NULL;
-					}
-					echo '<input type="checkbox" name="rc" value="1" ' . $check . ' />';
-					echo 'Afficher les routes commerciales';
-				echo '</label>';
-
-				echo '<label class="checkbox">';
-					if (CTR::$cookie->equal('spying', TRUE)) {
-						$check = 'checked';
-					} elseif (CTR::$cookie->equal('spying', FALSE)) {
-						$check = NULL;
-					} else {
-						$check = 'checked';
-					}
-					echo '<input type="checkbox" name="spying" value="1" ' . $check . ' />';
-					echo 'Afficher les cercles de contre-espionnage';
-				echo '</label>';
-
-				echo '<label class="checkbox">';
-					if (CTR::$cookie->equal('movements', TRUE)) {
-						$check = 'checked';
-					} elseif (CTR::$cookie->equal('movements', FALSE)) {
-						$check = NULL;
-					} else {
-						$check = 'checked';
-					}
-					echo '<input type="checkbox" name="movements" value="1" ' . $check . ' />';
-					echo 'Afficher vos mouvements de flotte';
-				echo '</label>';
-
-				echo '<label class="checkbox">';
-					if (CTR::$cookie->equal('attacks', TRUE)) {
-						$check = 'checked';
-					} elseif (CTR::$cookie->equal('attacks', FALSE)) {
-						$check = NULL;
-					} else {
-						$check = 'checked';
-					}
-					echo '<input type="checkbox" name="attacks" value="1" ' . $check . ' />';
-					echo 'Afficher les attaques entrantes';
-				echo '</label>';
-
-				echo '<p>';
-					echo '<input type="submit" value="sauvegarder" />';
-				echo '</p>';
-			echo '</form>';
+			echo '<a href="' . Format::actionBuilder('switchparams', ['params' => Params::SHOW_MAP_FLEETIN]) . '"" class="on-off-button ' . (Params::check(Params::SHOW_MAP_FLEETIN) ? 'active' : NULL) . '">';
+				echo 'Afficher les attaques entrantes';
+			echo '</a>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>
+
+/*
+echo '<h4>Paramètres généraux</h4>';
+echo '<label class="checkbox hb rt" title="Affiche les ascenseurs par défaut de votre système. Ces derniers sont moins beaux mais peuvent résoudrent certains problèmes.">';
+	if (CTR::$cookie->equal('movers', TRUE)) {
+		$check = 'checked';
+	} elseif (CTR::$cookie->equal('movers', FALSE)) {
+		$check = NULL;
+	} else {
+		$check = NULL;
+	}
+	echo '<input type="checkbox" name="movers" value="1" ' . $check . ' />';
+	echo 'Ascenseur système';
+echo '</label>';
+
+echo '<label class="checkbox hb rt" title="Améliore les performances d\'affichage lorsqu\'elles sont désactivées">';
+	if (CTR::$cookie->equal('anims', TRUE)) {
+		$check = 'checked';
+	} elseif (CTR::$cookie->equal('anims', FALSE)) {
+		$check = NULL;
+	} else {
+		$check = 'checked';
+	}
+	echo '<input type="checkbox" name="anims" value="1" ' . $check . ' />';
+	echo 'Animations activées';
+echo '</label>';
+
+/*echo '<label class="radio">';
+	echo '<input type="checkbox" name="panel" value="1" ' . $check . ' />';
+	echo 'panneau vide par défaut';
+echo '</label>';
+*/
