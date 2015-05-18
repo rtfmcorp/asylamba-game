@@ -270,14 +270,6 @@ class PlayerManager extends Manager {
 		ASM::$pam->load(array('id' => $player));
 		$player = ASM::$pam->get();
 
-		# reinitialize some values of the player
-		$player->iUniversity = 1000;
-		$player->partNaturalSciences = 25;
-		$player->partLifeSciences = 25;
-		$player->partSocialPoliticalSciences = 25;
-		$player->partInformaticEngineering = 25;
-		$player->setStatement(1);
-
 		# sector choice 
 		$S_SEM1 = ASM::$sem->getCurrentSession();
 		ASM::$sem->newSession(FALSE);
@@ -312,6 +304,21 @@ class PlayerManager extends Manager {
 
 		if ($placeFound) {
 
+			# reinitialize some values of the player
+			$player->iUniversity = 1000;
+			$player->partNaturalSciences = 25;
+			$player->partLifeSciences = 25;
+			$player->partSocialPoliticalSciences = 25;
+			$player->partInformaticEngineering = 25;
+			$player->statement = PAM_ACTIVE;
+			$player->factionPoint = 0;
+
+			$technos = new Technology($player->id);
+			$levelAE = $technos->getTechnology(Technology::BASE_QUANTITY);
+			if ($levelAE != 0) {
+				Technology::deleteByRPlayer($player->id, Technology::BASE_QUANTITY);
+			}
+			
 			# attribute new base and place to player
 			$ob = new OrbitalBase();
 
