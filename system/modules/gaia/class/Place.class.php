@@ -754,7 +754,7 @@ class Place {
 
 					#attribuer le joueur à la place
 					$this->commanders = array();
-					$this->rColor = $commander->playerColor;
+					$this->playerColor = $commander->playerColor;
 					$this->rPlayer = $commander->rPlayer;
 					# changer l'appartenance de la base (et de la place)
 					ASM::$obm->changeOwnerById($this->id, $placeBase, $commander->getRPlayer(), $routeSession, $recyclingSession, $commanderSession);
@@ -811,7 +811,8 @@ class Place {
 				# attribuer le rPlayer à la Place !
 				$this->rPlayer = $commander->rPlayer;
 				$this->commanders[] = $commander;
-
+				$this->playerColor = $commander->playerColor;
+				$this->typeOfBase = 4; 
 
 				# créer une Base
 				include_once ATHENA;
