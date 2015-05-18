@@ -310,21 +310,25 @@ if ($type !== FALSE) {
 							break;
 						case Law::PUNITION:
 							$rPlayer = Utils::getHTTPData('rplayer');
-							$credits = Utils::getHTTPData('credits');
+							$credits = intval(Utils::getHTTPData('credits'));
 
 							if ($rPlayer !== FALSE && $credits !== FALSE) {
-								$S_PAM = ASM::$pam->getCurrentsession();
-								ASM::$pam->newSession();
-								ASM::$pam->load(array('id' => $rPlayer));
-								if (ASM::$pam->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
-									$law->options = serialize(array('rPlayer' => $rPlayer, 'credits' => $credits, 'display' => array('Joueur' => ASM::$pam->get()->name, 'amende' => $credits)));
-									ASM::$lam->add($law);
-									ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
-									CTR::redirect('faction/view-senate');	
+								if ($credits > 0) {
+									$S_PAM = ASM::$pam->getCurrentsession();
+									ASM::$pam->newSession();
+									ASM::$pam->load(array('id' => $rPlayer));
+									if (ASM::$pam->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
+										$law->options = serialize(array('rPlayer' => $rPlayer, 'credits' => $credits, 'display' => array('Joueur' => ASM::$pam->get()->name, 'amende' => $credits)));
+										ASM::$lam->add($law);
+										ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+										CTR::redirect('faction/view-senate');	
+									} else {
+										CTR::$alert->add('Ce joueur n\'est pas de votre faction.', ALERT_STD_ERROR);	
+									}
+									ASM::$pam->changeSession($S_PAM);
 								} else {
-									CTR::$alert->add('Ce joueur n\'est pas de votre faction.', ALERT_STD_ERROR);	
+									CTR::$alert->add('l\'amende doit être un entier positif.', ALERT_STD_ERROR);
 								}
-								ASM::$pam->changeSession($S_PAM);
 							} else {
 								CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
 							}
