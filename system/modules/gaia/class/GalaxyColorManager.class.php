@@ -224,7 +224,7 @@ class GalaxyColorManager {
 		ASM::$clm->changeSession($S_COL);
 
 		if ($udpatedFaction > 0) {
-			ASM::$clm->save();
+#			ASM::$clm->save();
 		}
 	}
 }
