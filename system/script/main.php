@@ -15,6 +15,7 @@ $scripts = [
 		['utils.maprender', '/utils/map-render.php'],
 		['utils.findsectorinfos', '/utils/find-sector-infos.php'],
 		['utils.getstatistic', '/utils/get-stats.php'],
+		['utils.recolorsector', '/utils/recolor-sector.php'],
 	],
 	'Test' => [
 		['test.main', '/test/test.php'],
