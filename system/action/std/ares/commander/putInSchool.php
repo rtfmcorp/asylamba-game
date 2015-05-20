@@ -28,6 +28,7 @@ if ($commanderId !== FALSE) {
 
 			if (ASM::$com->size() < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'school-size')) {
 				$commander->statement = Commander::INSCHOOL;
+				$commander->uCommander = Utils::now();
 			} else {
 				CTR::$alert->add('Votre école est déjà pleine.', ALERT_STD_ERROR);
 			}
@@ -35,6 +36,7 @@ if ($commanderId !== FALSE) {
 			ASM::$com->changeSession($S_COM2);
 		} elseif ($commander->statement == Commander::INSCHOOL) {
 			$commander->statement = Commander::RESERVE;
+			$commander->uCommander = Utils::now();
 		} else {
 			CTR::$alert->add('Vous ne pouvez rien faire avec cet officier.', ALERT_STD_ERROR);
 		}

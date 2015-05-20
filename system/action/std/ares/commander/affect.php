@@ -73,6 +73,7 @@ if ($commanderId !== FALSE) {
 			ASM::$com->newSession();
 			ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => Commander::INSCHOOL));
 
+			$commander->uCommander = Utils::now();
 			if (ASM::$com->size() < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'school-size')) {
 				$commander->statement = Commander::INSCHOOL;
 				CTR::$alert->add('Votre officier ' . $commander->getName() . ' a été remis à l\'école', ALERT_STD_SUCCESS);

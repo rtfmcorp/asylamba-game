@@ -18,7 +18,6 @@ Passage en revue du jeu et listing des choses à faire ou à améliorer.
 - pouvoir envoyer des commandants
 - pouvoir envoyer des vaisseaux
 - faire que les vaisseaux aillent plus lentement
-- pouvoir supprimer des offres quand on conquis une planète
 
 ## Spatiport
 
