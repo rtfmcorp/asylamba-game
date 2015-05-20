@@ -412,10 +412,7 @@ class Place {
 				
 				# changer rBase commander
 				$commander->rBase = $this->id;
-				// $commander->rDestinationPlace = NULL;
 				$commander->travelType = NULL;
-				// $commander->rStartPlace = NULL;
-				// $commander->dArrival = NULL;
 
 				# modifier le rPlayer (ne se modifie pas si c'est le même)
 				$commander->rPlayer = $this->rPlayer;
@@ -439,10 +436,7 @@ class Place {
 				
 				# changer rBase commander
 				$commander->rBase = $this->id;
-				// $commander->rDestinationPlace = NULL;
 				$commander->travelType = NULL;
-				// $commander->rStartPlace = NULL;
-				// $commander->dArrival = NULL;
 
 				# modifier le rPlayer (ne se modifie pas si c'est le même)
 				$commander->rPlayer = $this->rPlayer;
@@ -474,11 +468,8 @@ class Place {
 
 		if ($this->rPlayer == NULL) {
 			LiveReport::$isLegal = Report::LEGAL;
-			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
 			$commander->travelLength = NULL;
-			// $commander->rStartPlace = NULL;
-			// $commander->dArrival = NULL;
 
 			# planète vide -> faire un combat
 			$this->startFight($commander, $commanderPlayer);
@@ -526,13 +517,11 @@ class Place {
 			} else {
 				LiveReport::$isLegal = Report::LEGAL;
 			}
+
 			# planète à joueur: si $this->rColor != commandant->rColor
 			if ($this->playerColor != $commander->getPlayerColor() && $this->playerLevel > 1 && $commanderColor->colorLink[$this->playerColor] != Color::ALLY) {
-				// $commander->rDestinationPlace = NULL;
 				$commander->travelType = NULL;
 				$commander->travelLength = NULL;
-				// $commander->rStartPlace = NULL;
-				// $commander->dArrival = NULL;
 
 				$dCommanders = array();
 				foreach ($this->commanders AS $dCommander) {
@@ -586,9 +575,9 @@ class Place {
 						$report = $this->createReport();
 
 						#mise à jour des flottes du commandant défenseur
-						for ($j = 0; $j < count($commanderPlayer->armyAtEnd); $j++) {
+						for ($j = 0; $j < count($dCommanders[$aleaNbr]->armyAtEnd); $j++) {
 							for ($i = 0; $i < 12; $i++) { 
-								$commanderPlayer->armyInBegin[$j][$i] = $commanderPlayer->armyAtEnd[$j][$i];
+								$dCommanders[$aleaNbr]->armyInBegin[$j][$i] = $dCommanders[$aleaNbr]->armyAtEnd[$j][$i];
 							}
 						}
 
@@ -608,10 +597,8 @@ class Place {
 				}
 			# si c'est a même couleur
 			} else {
-				// $commander->rDestinationPlace = NULL;
 				$commander->travelType = NULL;
 				$commander->travelLength = NULL;
-				// $commander->rStartPlace = NULL;
 				
 				$length = Game::getDistance($this->getXSystem(), $commanderPlace->getXSystem(), $this->getYSystem(), $commanderPlace->getYSystem());
 
@@ -628,11 +615,8 @@ class Place {
 	# conquest
 	public function uConquer($commander, $commanderPlace, $playerBonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $routeSession, $recyclingSession, $commanderSession) {
 		if ($this->rPlayer != NULL) {
-			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
 			$commander->travelLength = NULL;
-			// $commander->rStartPlace = NULL;
-			// $commander->dArrival = NULL;
 
 			if ($this->playerColor != $commander->getPlayerColor() && $this->playerLevel > 3 && $commanderColor->colorLink[$this->playerColor] != Color::ALLY) {
 				$tempCom = array();
@@ -685,9 +669,9 @@ class Place {
 								$commander->armyInBegin[$j][$i] = $commander->armyAtEnd[$j][$i];
 							}
 						}
-						for ($j = 0; $j < count($commanderPlayer->armyAtEnd); $j++) {
+						for ($j = 0; $j < count($commanders[$nbrBattle - 1]->armyAtEnd); $j++) {
 							for ($i = 0; $i < 12; $i++) { 
-								$commanderPlayer->armyInBegin[$j][$i] = $commanderPlayer->armyAtEnd[$j][$i];
+								$commanders[$nbrBattle - 1]->armyInBegin[$j][$i] = $commanders[$nbrBattle - 1]->armyAtEnd[$j][$i];
 							}
 						}
 					} else {
@@ -793,11 +777,8 @@ class Place {
 			}
 		# planète rebelle
 		} else {
-			// $commander->rDestinationPlace = NULL;
 			$commander->travelType = NULL;
 			$commander->travelLength = NULL;
-			// $commander->rStartPlace = NULL;
-			// $commander->dArrival = NULL;
 
 			# faire un combat
 			LiveReport::$type = Commander::COLO;
@@ -894,10 +875,8 @@ class Place {
 
 	# retour à la maison
 	public function uComeBackHome($commander, $commanderBase) {
-		// $commander->rDestinationPlace = NULL;
 		$commander->travelType = NULL;
 		$commander->travelLength = NULL;
-		// $commander->rStartPlace = NULL;
 		$commander->dArrival = NULL;
 
 		$commander->statement = Commander::AFFECTED;
