@@ -18,7 +18,7 @@ $totalSpace = OrbitalBaseResource::getBuildingInfo(3, 'level', $ob_dock2->getLev
 $storage = $ob_dock2->getShipStorage();
 $inStorage = 0;
 
-for ($m = 6; $m < 12; $m++) {
+for ($m = 6; $m < ShipResource::SHIP_QUANTITY; $m++) {
 	$inStorage += ShipResource::getInfo($m, 'pev') * $storage[$m];
 }
 
@@ -30,7 +30,7 @@ if (ASM::$sqm->size() > 0) {
 	}
 }
 
-for ($i = 6; $i < 12; $i++) {
+for ($i = 6; $i < ShipResource::SHIP_QUANTITY; $i++) {
 	# calcul du nombre de vaisseaux max
 	$maxShipResource = floor($ob_dock2->getResourcesStorage() / ShipResource::getInfo($i, 'resourcePrice'));
 	$maxShipResource = ($maxShipResource < 100) ? $maxShipResource : 99;
@@ -209,11 +209,15 @@ echo '<div class="component">';
 			en orbite autour de la planète sur laquelle vous avez construit votre chantier.</p>';
 
 			echo '<div class="queue">';
-			for ($i = 6; $i < 12; $i++) {
+			for ($i = 6; $i < ShipResource::SHIP_QUANTITY; $i++) {
 				if ($storage[$i] !== 0) {
 					echo '<div class="item">';
 						echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($i, 'imageLink') . '.png" alt="" />';
-						echo '<strong><span class="big">' . $storage[$i] . '</span> ' . ShipResource::getInfo($i, 'codeName') . Format::addPlural($storage[$i]) . '</strong>';
+						if ($i == ShipResource::PHENIX) {
+							echo '<strong><span class="big">' . $storage[$i] . '</span> ' . ShipResource::getInfo($i, 'codeName') . '</strong>';
+						} else {
+							echo '<strong><span class="big">' . $storage[$i] . '</span> ' . ShipResource::getInfo($i, 'codeName') . Format::addPlural($storage[$i]) . '</strong>';
+						}
 						echo '<em>' . ($storage[$i] * ShipResource::getInfo($i, 'pev')) . ' PEV</em>';
 					echo '</div>';
 				}
