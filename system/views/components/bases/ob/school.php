@@ -172,7 +172,7 @@ echo '<div class="component">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<p class="long-info">L’<strong>Ecole de commandement</strong> est le centre de formation de vos officiers. Il suffit pour cela d’engager de jeunes recrues sans expérience et d’investir un peu d’argent dans l’école pour que de brillants stratèges issus de toute la galaxie viennent enseigner leur savoir aux jeunes commandants de votre école.<br /><br />
-			Au fil du temps ils gagneront de l’<strong>expérience et des niveaux</strong>. En gradant, ils acquerront la capacité de diriger une escadrille supplémentaire, ce qui augmentera la taille maximale de la flotte qu’ils dirigerons. L’investissement dans l’école de commandement s’applique à tout les commandants en formation.<br /><br />
+			Au fil du temps ils gagneront de l’<strong>expérience et des niveaux</strong>. En gradant, ils acquerront la capacité de diriger une escadrille supplémentaire, ce qui augmentera la taille maximale de la flotte qu’ils dirigeront. L’investissement dans l’école de commandement s’applique à tout les commandants en formation.<br /><br />
 			Le nombre de place de formation est limité. Il est cepandant plus élevé sur les <strong>bases militaires</strong> et les <strong>capitales</strong>. Le mess des officiers permet de mettre vos officiers au repos.</p>';
 		echo '</div>';
 	echo '</div>';
