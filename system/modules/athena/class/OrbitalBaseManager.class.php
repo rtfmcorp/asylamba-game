@@ -472,6 +472,7 @@ class OrbitalBaseManager extends Manager {
 			$S_REM1 = ASM::$rem->getCurrentSession();
 			ASM::$rem->changeSession($recyclingSession);
 			for ($i = ASM::$rem->size() - 1; $i >= 0; $i--) {
+				ASM::$rlm->deleteAllFromMission(ASM::$rem->get($i)->id);
 				ASM::$rem->deleteById(ASM::$rem->get($i)->id);
 			}
 			ASM::$rem->changeSession($S_REM1);
