@@ -1,5 +1,6 @@
 <?php
 include_once GAIA;
+include_once DEMETER;
 
 if (CTR::$get->exist('systemid')) {
 	$systemId = CTR::$get->get('systemid');

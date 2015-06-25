@@ -1,6 +1,7 @@
 <?php
 # galaxy loading
 include_once GAIA;
+include_once DEMETER;
 
 $sm = new SectorManager();
 $sm->load();
