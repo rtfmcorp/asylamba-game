@@ -488,7 +488,7 @@ class Place {
 
 			# planète à joueur : si $this->rColor != commandant->rColor
 			# si il peut l'attaquer
-			if ($this->playerColor != $commander->getPlayerColor() && $this->playerLevel > 1 && $commanderColor->colorLink[$this->playerColor] != Color::ALLY) {
+			if (($this->playerColor != $commander->getPlayerColor() && $this->playerLevel > 1 && $commanderColor->colorLink[$this->playerColor] != Color::ALLY) || ($this->playerColor == 0)) {
 				$commander->travelType = NULL;
 				$commander->travelLength = NULL;
 
@@ -563,7 +563,7 @@ class Place {
 			$commander->travelType = NULL;
 			$commander->travelLength = NULL;
 
-			if ($this->playerColor != $commander->getPlayerColor() && $this->playerLevel > 3 && $commanderColor->colorLink[$this->playerColor] != Color::ALLY) {
+			if (($this->playerColor != $commander->getPlayerColor() && $this->playerLevel > 3 && $commanderColor->colorLink[$this->playerColor] != Color::ALLY) || ($this->playerColor == 0)) {
 				$tempCom = array();
 
 				for ($i = 0; $i < count($this->commanders); $i++) {
