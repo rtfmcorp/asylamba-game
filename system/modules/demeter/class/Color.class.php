@@ -110,6 +110,7 @@ class Color {
 	public $mandateDuration = 0;
 	public $senateDesc = '';
 	public $campaignDesc = '';
+	public $isInGame = 0;
 
 	public $colorLink 				= array();
 
