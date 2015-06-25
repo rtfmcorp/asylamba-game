@@ -122,16 +122,6 @@ class Color {
 		return $p->parse($this->description);
 	}
 
-	public function getRegime() {
-		if (in_array($this->id, array(1, 2, 3))) {
-			return self::ROYALISTIC;
-		} elseif (in_array($this->id, array(5, 6, 7))) {
-			return self::DEMOCRATIC;
-		} else {
-			return self::THEOCRATIC;
-		}
-	}
-
 	public function increaseCredit($credit) {
 		$this->credits = $this->credits + $credit;
 	}
@@ -196,7 +186,7 @@ class Color {
 			}
 		}
 
-		if ($this->getRegime() == self::DEMOCRATIC) {
+		if ($this->regime == self::DEMOCRATIC) {
 			if (count($ballot) > 0) {
 				$_PAM1 = ASM::$pam->getCurrentsession();
 				ASM::$pam->newSession(FALSE);
@@ -219,7 +209,7 @@ class Color {
 			}
 			ASM::$vom->changeSession($_VOM);
 
-		} elseif ($this->getRegime() == self::ROYALISTIC) {
+		} elseif ($this->regime == self::ROYALISTIC) {
 			if (count($ballot) > 0) {
 				arsort($ballot);
 				reset($ballot);
@@ -237,7 +227,7 @@ class Color {
 					ASM::$pam->load(array('id' => key($ballot)));
 					ASM::$pam->changeSession($_PAM2);
 
-					$statusArray = ColorResource::getInfo($this->id, 'status');
+					$statusArray = $this->status;
 
 					CTC::add($date, $this, 'uMandate', array($token_playersGovernement, $token_newChief, $chiefId, TRUE));
 				} else {
@@ -295,7 +285,7 @@ class Color {
 	}
 
 	public function uCampaign($token_pam) {
-		if ($this->getRegime() == self::DEMOCRATIC || $this->getRegime() == self::THEOCRATIC) {
+		if ($this->regime == self::DEMOCRATIC || $this->regime == self::THEOCRATIC) {
 			$this->updateStatus($token_pam);
 			$S_ELM = ASM::$elm->getCurrentsession();
 			ASM::$elm->newSession();
@@ -303,7 +293,7 @@ class Color {
 			$election->rColor = $this->id;
 
 			$date = new DateTime($this->dLastElection);
-			$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
+			$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
 			$election->dElection = $date->format('Y-m-d H:i:s');
 
 			ASM::$elm->add($election);
@@ -313,7 +303,7 @@ class Color {
 			$this->updateStatus($token_pam);
 
 			$date = new DateTime($this->dLastElection);
-			$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') . ' second');
+			$date->modify('+' . $this->mandateDuration . ' second');
 			$date = $date->format('Y-m-d H:i:s');
 			$this->dLastElection = $date;
 		}
@@ -326,7 +316,7 @@ class Color {
 	public function uMandate($token_playersGovernement, $token_newChief, $idOldChief, $hadVoted) {
 		if ($hadVoted) {
 			$date = new DateTime($this->dLastElection);
-			$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
+			$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
 			$date = $date->format('Y-m-d H:i:s');
 			$this->dLastElection = $date;
 
@@ -343,9 +333,9 @@ class Color {
 
 			$this->electionStatement = self::MANDATE;
 
-			$statusArray = ColorResource::getInfo($this->id, 'status');
+			$statusArray = $this->status;;
 			
-			if ($this->getRegime() == self::DEMOCRATIC) {
+			if ($this->regime == self::DEMOCRATIC) {
 				$notif = new Notification();
 				$notif->setRPlayer(ASM::$pam->get()->id);
 				$notif->setTitle('Votre avez été élu');
@@ -353,7 +343,7 @@ class Color {
 				$notif->addBeg()
 					->addTxt(' Le peuple vous a soutenu, vous avez été élu ' . $statusArray[PAM_CHIEF - 1] . ' de votre faction.');
 				ASM::$ntm->add($notif);
-			} elseif ($this->getRegime() == self::ROYALISTIC) {
+			} elseif ($this->regime == self::ROYALISTIC) {
 				$notif = new Notification();
 				$notif->setRPlayer(ASM::$pam->get()->id);
 				$notif->setTitle('Votre coup d\'état a réussi');
@@ -388,11 +378,11 @@ class Color {
 			$this->electionStatement = self::MANDATE;
 
 			$date = new DateTime($this->dLastElection);
-			$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
+			$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
 			$date = $date->format('Y-m-d H:i:s');
 			$this->dLastElection = $date;
 
-			if ($this->getRegime() == self::ROYALISTIC) {
+			if ($this->regime == self::ROYALISTIC) {
 				$_PAM2 = ASM::$pam->getCurrentSession();
 				ASM::$pam->changeSession($token_newChief);
 
@@ -416,7 +406,7 @@ class Color {
 					ASM::$ntm->add($notif);
 					ASM::$pam->newSession($_PAM2);
 				}
-			} elseif ($this->getRegime() == self::THEOCRATIC) {
+			} elseif ($this->regime == self::THEOCRATIC) {
 				if ($idOldChief) {
 					$notif = new Notification();
 					$notif->setRPlayer($idOldChief);
@@ -528,9 +518,9 @@ class Color {
 
 		$token_ctc = CTC::createContext('Color');
 
-		if ($this->getRegime() == self::DEMOCRATIC) {
+		if ($this->regime == self::DEMOCRATIC) {
 			if ($this->electionStatement == self::MANDATE) {
-				if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration')) {
+				if (Utils::interval($this->dLastElection, Utils::now(), 's') > $this->mandateDuration) {
 					$_PAM = ASM::$pam->getCurrentSession();
 					ASM::$pam->newSession(FALSE);
 					ASM::$pam->load(array('rColor' => $this->id), array('factionPoint', 'DESC', 'experience', 'DESC'));
@@ -538,23 +528,23 @@ class Color {
 					ASM::$pam->changeSession($_PAM);
 
 					$date = new DateTime($this->dLastElection);
-					$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') . ' second');
+					$date->modify('+' . $this->mandateDuration . ' second');
 					$date = $date->format('Y-m-d H:i:s');
 
 					CTC::add($date, $this, 'uCampaign', array($token_pam));
 				}
 			} elseif ($this->electionStatement == self::CAMPAIGN) {
-				if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::CAMPAIGNTIME) {
+				if (Utils::interval($this->dLastElection, Utils::now(), 's') > $this->mandateDuration + self::CAMPAIGNTIME) {
 					$date = new DateTime($this->dLastElection);
-					$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') . ' second');
+					$date->modify('+' . $this->mandateDuration . ' second');
 					$date = $date->format('Y-m-d H:i:s');
 
 					CTC::add($date, $this, 'uElection', array());
 				}
 			} else {
-				if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + self::CAMPAIGNTIME) {
+				if (Utils::interval($this->dLastElection, Utils::now(), 's') > $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME) {
 					$date = new DateTime($this->dLastElection);
-					$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
+					$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
 					$date = $date->format('Y-m-d H:i:s');
 
 					$_ELM = ASM::$elm->getCurrentSession();
@@ -565,9 +555,9 @@ class Color {
 					ASM::$elm->changeSession($_ELM);
 				}
 			}
-		} elseif ($this->getRegime() == self::ROYALISTIC) {
+		} elseif ($this->regime == self::ROYALISTIC) {
 			if ($this->electionStatement == self::MANDATE) {
-				if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration')) {
+				if (Utils::interval($this->dLastElection, Utils::now(), 's') > $this->mandateDuration) {
 					$_PAM = ASM::$pam->getCurrentSession();
 					ASM::$pam->newSession(FALSE);
 					ASM::$pam->load(array('rColor' => $this->id), array('factionPoint', 'DESC', 'experience', 'DESC'));
@@ -575,7 +565,7 @@ class Color {
 					ASM::$pam->changeSession($_PAM);
 
 					$date = new DateTime($this->dLastElection);
-					$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') . ' second');
+					$date->modify('+' . $this->mandateDuration . ' second');
 					$date = $date->format('Y-m-d H:i:s');
 
 					CTC::add($date, $this, 'uCampaign', array($token_pam));
@@ -583,7 +573,7 @@ class Color {
 			} elseif ($this->electionStatement == self::ELECTION) {
 				if (Utils::interval($this->dLastElection, Utils::now(), 's') > self::PUTSCHTIME) {
 					$date = new DateTime($this->dLastElection);
-					$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
+					$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
 					$date = $date->format('Y-m-d H:i:s');
 
 					$_ELM = ASM::$elm->getCurrentSession();
@@ -600,7 +590,7 @@ class Color {
 					ASM::$pam->changeSession($_PAM);
 
 					$date = new DateTime($this->dLastElection);
-					$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
+					$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
 					$date = $date->format('Y-m-d H:i:s');
 
 					CTC::add($date, $this, 'uCampaign', array($token_pam));
@@ -608,7 +598,7 @@ class Color {
 			}
 		} else {
 			if ($this->electionStatement == self::MANDATE) {
-				if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration')) {
+				if (Utils::interval($this->dLastElection, Utils::now(), 's') > $this->mandateDuration) {
 					$_PAM = ASM::$pam->getCurrentSession();
 					ASM::$pam->newSession(FALSE);
 					ASM::$pam->load(array('rColor' => $this->id), array('factionPoint', 'DESC', 'experience', 'DESC'));
@@ -616,15 +606,15 @@ class Color {
 					ASM::$pam->changeSession($_PAM);
 
 					$date = new DateTime($this->dLastElection);
-					$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') . ' second');
+					$date->modify('+' . $this->mandateDuration . ' second');
 					$date = $date->format('Y-m-d H:i:s');
 
 					CTC::add($date, $this, 'uCampaign', array($token_pam));
 				}
 			} else {
-				if (Utils::interval($this->dLastElection, Utils::now(), 's') > ColorResource::getInfo($this->id, 'mandateDuration') + self::CAMPAIGNTIME) {
+				if (Utils::interval($this->dLastElection, Utils::now(), 's') > $this->mandateDuration + self::CAMPAIGNTIME) {
 					$date = new DateTime($this->dLastElection);
-					$date->modify('+' . ColorResource::getInfo($this->id, 'mandateDuration') + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
+					$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
 					$date = $date->format('Y-m-d H:i:s');
 
 					$_ELM = ASM::$elm->getCurrentSession();

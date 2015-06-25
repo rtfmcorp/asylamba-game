@@ -17,6 +17,7 @@ class ColorResource {
 	const BONUS_APHERA_TECHNO = 2;		# 4% less time to build technologies
 
 	public static function getInfo($id, $info) {
+		var_dump($id);
 		if ($id <= count(self::$colors)) {
 			if (in_array($info, [
 				'id', 
