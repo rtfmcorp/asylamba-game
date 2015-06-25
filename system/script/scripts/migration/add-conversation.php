@@ -21,8 +21,8 @@ $db = DataBase::getInstance();
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `conversationUser` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`rConversation` INT(11) NOT NULL,
-	`rUser` INT(11) NOT NULL,
-	`userStatement` INT(5) NOT NULL DEFAULT 0,
+	`rPlayer` INT(11) NOT NULL,
+	`playerStatement` INT(5) NOT NULL DEFAULT 0,
 	`convStatement` INT(5) NOT NULL DEFAULT 0,
 	`dLastView` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -35,7 +35,7 @@ $db = DataBase::getInstance();
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `conversationMessage` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`rConversation` INT(11) NOT NULL,
-	`rUser` INT(11) NOT NULL,
+	`rPlayer` INT(11) NOT NULL,
 	`type` INT(5) NOT NULL DEFAULT 0,
 
 	`content` TEXT NOT NULL,

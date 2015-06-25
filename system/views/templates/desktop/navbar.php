@@ -11,11 +11,12 @@ ASM::$ntm->newSession();
 ASM::$ntm->load(array('rPlayer' => CTR::$data->get('playerId'), 'readed' => 0), array('dSending', 'DESC'));
 
 # load message
-$db = DataBase::getInstance();
+/*$db = DataBase::getInstance();
 $qr = $db->prepare('SELECT COUNT(id) AS n FROM message WHERE readed = 0 AND rPlayerReader = ? GROUP BY rPlayerReader');
 $qr->execute(array(CTR::$data->get('playerId')));
 $aw = $qr->fetch();
-$message = (count($aw['n']) > 0) ? $aw['n'] : 0;
+$message = (count($aw['n']) > 0) ? $aw['n'] : 0;*/
+$message = 0;
 
 # DISPLAY NAV BAR
 #################
