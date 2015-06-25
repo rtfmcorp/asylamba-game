@@ -8,6 +8,7 @@
 	# {orbitalBase}		ob_dock2
 
 # work
+include_once DEMETER;
 $S_SQM1 = ASM::$sqm->getCurrentSession();
 ASM::$sqm->changeSession($ob_dock2->dock2Manager);
 $s = array('', '', '', '', '', '');
@@ -33,6 +34,14 @@ if (ASM::$sqm->size() > 0) {
 for ($i = 6; $i < ShipResource::SHIP_QUANTITY; $i++) {
 	# calcul du nombre de vaisseaux max
 	$maxShipResource = floor($ob_dock2->getResourcesStorage() / ShipResource::getInfo($i, 'resourcePrice'));
+	if (CTR::$data->get('playerInfo')->get('color') == ColorResource::EMPIRE) {
+		if ($i == ShipResource::CERBERE || $i == ShipResource::PHENIX) {
+			# bonus if the player is from the Empire
+			$resourcePrice = ShipResource::getInfo($i, 'resourcePrice');
+			$resourcePrice -= round($resourcePrice * ColorResource::BONUS_EMPIRE_CRUISER / 100);
+			$maxShipResource = floor($ob_dock2->getResourcesStorage() / $resourcePrice);
+		}
+	}
 	$maxShipResource = ($maxShipResource < 100) ? $maxShipResource : 99;
 	$maxShipPev = $totalSpace - $inStorage - $inQueue;
 	$maxShipPev = floor($maxShipPev /ShipResource::getInfo($i, 'pev'));

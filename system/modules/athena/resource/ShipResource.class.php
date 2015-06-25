@@ -1,4 +1,5 @@
 <?php
+include_once DEMETER;
 class ShipResource {
 
 	const PEGASE = 0;

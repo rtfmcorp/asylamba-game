@@ -2,6 +2,7 @@
 include_once ATHENA;
 include_once PROMETHEE;
 include_once ZEUS;
+include_once DEMETER;
 # building a technology action
 
 # int baseid 		id de la base orbitale
