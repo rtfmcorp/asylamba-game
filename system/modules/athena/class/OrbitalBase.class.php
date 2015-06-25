@@ -620,6 +620,24 @@ class OrbitalBase {
 				ASM::$ntm->add($n);
 			}
 
+			# if the sector change its color between 2 recyclings
+			if ($player->rColor != $targetPlace->sectorColor && $targetPlace->sectorColor != ColorResource::NO_FACTION) {
+				# stop the mission
+				$mission->statement = RecyclingMission::ST_DELETED;
+
+				# send notification to the player
+				$n = new Notification();
+				$n->setRPlayer($player->id);
+				$n->setTitle('Arrêt de mission de recyclage');
+				$n->addBeg()->addTxt('Le secteur d\'un ');
+				$n->addLnk('map/place-' . $mission->rTarget, 'lieu');
+				$n->addTxt(' que vous recycliez est passé à l\'ennemi, vous ne pouvez donc plus y envoyer vos recycleurs. La mission est annulée.');
+				$n->addSep()->addTxt('Vos recycleurs restent donc stationnés sur votre ');
+				$n->addLnk('map/base-' . $this->rPlace, 'base orbitale')->addTxt(' le temps que vous programmiez une autre mission.');
+				$n->addEnd();
+				ASM::$ntm->add($n);
+			}
+
 			$creditRecycled = round($targetPlace->population * $totalRecycled / 100);
 			$resourceRecycled = round($targetPlace->coefResources * $totalRecycled / 100);
 			$shipRecycled = round($targetPlace->coefHistory * $totalRecycled / 100);

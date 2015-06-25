@@ -8,6 +8,7 @@
 	# {orbitalBase}		ob_tech
 
 include_once PROMETHEE;
+include_once DEMETER;
 $technology = new Technology(CTR::$data->get('playerId'));
 
 # session avec les technos de cette base
