@@ -76,7 +76,9 @@ for ($i = 0; $i < ASM::$prm->size(); $i++) {
 
 	$player = ASM::$pam->getById($playerRank->rPlayer);
 
-	$list[$player->rColor]['general'] += $playerRank->general;
+	if (isset($player->rColor)) {
+		$list[$player->rColor]['general'] += $playerRank->general;
+	}
 }
 
 #-------------------------------- WEALTH RANKING ----------------------------------#
