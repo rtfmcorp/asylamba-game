@@ -39,6 +39,11 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 				}
 			}
 
+			# if it's the first, the next must restart by now
+			if ($index == 0) {
+				$dStart = Utils::now();
+			}
+
 			if ($index !== NULL) {
 				# shift
 				for ($i = $index + 1; $i < ASM::$bqm->size(); $i++) {
