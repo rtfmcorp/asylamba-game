@@ -31,7 +31,7 @@ echo '<div class="component size2 player new-message profil">';
 		echo '<div class="body">';
 			echo '<h4>Agenda politique</h4>';
 
-			if (in_array($faction->getRegime(), array(Color::DEMOCRATIC, Color::THEOCRATIC))) {
+			if (in_array($faction->regime, array(Color::DEMOCRATIC, Color::THEOCRATIC))) {
 				# time variables
 				$startCampaign = Utils::addSecondsToDate($faction->dLastElection, ColorResource::getInfo($faction->id, 'mandateDuration'));
 				$endCampaign   = Utils::addSecondsToDate($faction->dLastElection, ColorResource::getInfo($faction->id, 'mandateDuration') + Color::CAMPAIGNTIME);
@@ -40,7 +40,7 @@ echo '<div class="component size2 player new-message profil">';
 				$endElection   = Utils::addSecondsToDate($faction->dLastElection, ColorResource::getInfo($faction->id, 'mandateDuration') + Color::CAMPAIGNTIME + Color::ELECTIONTIME);
 
 				$startMandate  = $faction->dLastElection;
-				$endMandate = $faction->getRegime() == Color::DEMOCRATIC
+				$endMandate = $faction->regime == Color::DEMOCRATIC
 					? $endElection
 					: $endCampaign;
 
@@ -73,7 +73,7 @@ echo '<div class="component size2 player new-message profil">';
 								echo '<span class="label bottom right">Campagne</span>';
 							echo '</span>';
 
-							if ($faction->getRegime() == Color::DEMOCRATIC) {
+							if ($faction->regime == Color::DEMOCRATIC) {
 								echo '<span class="step" style="left: ' . Format::percent($totalCampaing, $totalCampEl, FALSE) . '%;">';
 									echo '<span class="label bottom right">Elections</span>';
 								echo '</span>';
@@ -90,7 +90,7 @@ echo '<div class="component size2 player new-message profil">';
 				echo '</div>';
 
 				if ($faction->electionStatement == Color::CAMPAIGN) {
-					echo $faction->getRegime() == Color::DEMOCRATIC
+					echo $faction->regime == Color::DEMOCRATIC
 						? '<a class="centred-link" href="' . APP_ROOT . 'faction/view-election">Présentez-vous aux élections</a>'
 						: '<a class="centred-link" href="' . APP_ROOT . 'faction/view-election">Se proposer comme Guide</a>';
 				} elseif ($faction->electionStatement == Color::ELECTION) {

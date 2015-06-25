@@ -8,6 +8,7 @@
 	# _T PRM 		PLAYER_RANKING_FRONT
 
 include_once ZEUS;
+include_once DEMETER;
 
 ASM::$prm->changeSession($PLAYER_RANKING_FRONT);
 $p = ASM::$prm->get(0);
