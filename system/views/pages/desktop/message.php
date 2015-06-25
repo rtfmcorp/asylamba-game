@@ -11,6 +11,60 @@ echo '<div id="content">';
 	# inclusion des modules
 	include_once HERMES;
 
+	# liste des conv's
+	$limit = [0, Conversation::CONVERSATION_BY_PAGE];
+	$display = CTR::$get->equal('mode', 'archive')
+		? ConversationUser::CS_ARCHIVED
+		: ConversationUser::CS_DISPLAY;
+
+	# chargement de toutes les conversations
+	ASM::$cvm->newSession();
+	ASM::$cvm->load(
+		array('cu.rPlayer' => CTR::$data->get('playerId'), 'cu.convStatement' => $display),
+		array('c.dLastMessage', 'DESC'),
+		$limit
+	);
+
+	include COMPONENT . 'conversation/list.php';
+
+	if (CTR::$get->exist('conversation')) {
+		if (CTR::$get->equal('conversation', 'new')) {
+			include COMPONENT . 'conversation/create.php';
+		} else {
+			include COMPONENT . 'conversation/messages.php';
+			include COMPONENT . 'conversation/manage.php';
+		}
+	} else {
+		include COMPONENT . 'conversation/new.php';
+	}
+
+
+	# NOTIFICATION
+	$S_NTM1 = ASM::$ntm->getCurrentSession();
+
+	$C_NTM1 = ASM::$ntm->newSession();
+	ASM::$ntm->load(
+		array('rPlayer' => CTR::$data->get('playerId'), 'archived' => 0),
+		array('dSending', 'DESC'),
+		array(0, 50)
+	);
+	include COMPONENT . 'notif/last.php';
+
+	$C_NTM2 = ASM::$ntm->newSession();
+	ASM::$ntm->load(
+		array('rPlayer' => CTR::$data->get('playerId'), 'archived' => 1),
+		array('dSending', 'DESC'),
+		array(0, 50)
+	);
+
+	if (ASM::$ntm->size() > 0) {
+		include COMPONENT . 'notif/archived.php';
+	}
+
+	ASM::$ntm->changeSession($S_NTM1);
+echo '</div>';
+
+/*
 	# MESSAGE
 	$S_MSM1 = ASM::$msm->getCurrentSession();
 
@@ -107,32 +161,4 @@ echo '<div id="content">';
 
 	ASM::$msm->changeSession($S_MSM1);
 
-	# NOTIFICATION
-	$S_NTM1 = ASM::$ntm->getCurrentSession();
-
-	$C_NTM1 = ASM::$ntm->newSession();
-	ASM::$ntm->load(
-		array('rPlayer' => CTR::$data->get('playerId'), 'archived' => 0),
-		array('dSending', 'DESC'),
-		array(0, 50)
-	);
-	include COMPONENT . 'notif/last.php';
-
-	$C_NTM2 = ASM::$ntm->newSession();
-	ASM::$ntm->load(
-		array('rPlayer' => CTR::$data->get('playerId'), 'archived' => 1),
-		array('dSending', 'DESC'),
-		array(0, 50)
-	);
-
-	if (ASM::$ntm->size() > 0) {
-		include COMPONENT . 'notif/archived.php';
-	}
-
-	ASM::$ntm->changeSession($S_NTM1);
-
-	if (!(CTR::$get->equal('mode', 'create') || CTR::$get->exist('thread'))) {
-		include COMPONENT . 'default.php';
-	}
-echo '</div>';
-?>
+*/

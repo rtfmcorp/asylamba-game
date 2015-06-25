@@ -5,11 +5,11 @@ class ConversationUserManager extends Manager {
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('SELECT c.*,
-				u.id AS playerId,
-				u.color AS playerColor,
-				u.name AS playerName,
-				u.avatar AS playerAvatar,
-				u.status AS playerStatus
+				p.id AS playerId,
+				p.rColor AS playerColor,
+				p.name AS playerName,
+				p.avatar AS playerAvatar,
+				p.status AS playerStatus
 			FROM conversationMessage AS c
 			LEFT JOIN player AS p
 				ON c.rPlayer = p.id
