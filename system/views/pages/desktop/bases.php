@@ -30,7 +30,14 @@ echo '<div id="content">';
 			$commanders_obSituation[] = ASM::$com->get($i);
 		}
 		ASM::$com->changeSession($S_COM1);
+
+		$ob_index = 0;
+		$ob_fastView = $base;
+		$fastView_profil = FALSE;
+		include COMPONENT . 'bases/fastView.php';
+
 		include COMPONENT . 'bases/ob/situation.php';
+		include COMPONENT . 'bases/ob/base-type.php';
 
 		if (CTR::$data->get('playerBase')->get('ob')->size() > 1) {
 			include COMPONENT . 'bases/ob/leavebase.php';
@@ -83,6 +90,8 @@ echo '<div id="content">';
 		ASM::$rlm->changeSession($S_RLM1);
 		ASM::$rem->changeSession($S_REM1);
 	} elseif (CTR::$get->get('view') == 'spatioport' && $base->levelSpatioport > 0) {
+		include_once DEMETER;
+
 		$ob_spatioport = $base;
 		include COMPONENT . 'bases/ob/spatioport.php';
 	} elseif (CTR::$get->get('view') == 'school') {
@@ -92,6 +101,5 @@ echo '<div id="content">';
 		CTR::redirect('bases');
 	}
 echo '</div>';
-ASM::$com->changeSession($S_OBM1);
 
-?>
+ASM::$com->changeSession($S_OBM1);
