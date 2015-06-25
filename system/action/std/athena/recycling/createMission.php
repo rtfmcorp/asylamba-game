@@ -36,6 +36,7 @@ if ($rPlace !== FALSE AND $rTarget !== FALSE AND $quantity !== FALSE AND in_arra
 
 			for ($i = 0; $i < ASM::$rem->size(); $i++) { 
 				$usedRecyclers += ASM::$rem->get($i)->recyclerQuantity;
+				$usedRecyclers += ASM::$rem->get($i)->addToNextMission;
 			}
 
 			if ($maxRecyclers - $usedRecyclers >= $quantity) {

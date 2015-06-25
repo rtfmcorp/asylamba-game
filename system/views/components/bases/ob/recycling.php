@@ -28,6 +28,7 @@ echo '<div class="component building">';
 
 			for ($i = 0; $i < ASM::$rem->size(); $i++) { 
 				$busyRecyclers += ASM::$rem->get($i)->recyclerQuantity;
+				$busyRecyclers += ASM::$rem->get($i)->addToNextMission;
 			}
 
 			$freeRecyclers  = $totalRecyclers - $busyRecyclers;
@@ -103,7 +104,11 @@ for ($i = 0; $i < ASM::$rem->size(); $i++) {
 				echo '<ul class="list-type-1">';
 					echo '<li>';
 						echo '<span class="label">Recycleurs engagés dans la mission</span>';
-						echo '<span class="value">' . Format::number($mission->recyclerQuantity) . '</span>';
+						if ($mission->addToNextMission == 0) {
+							echo '<span class="value">' . Format::number($mission->recyclerQuantity) . '</span>';
+						} else {
+							echo '<span class="value">' . Format::number($mission->recyclerQuantity) . ' + ' . Format::number($mission->addToNextMission) . '</span>';
+						}
 
 						if ($mission->statement == RecyclingMission::ST_ACTIVE && $freeRecyclers > 0) {
 							echo '<span class="buttons"><a href="#" class="sh" data-target="add-recycler-' . $mission->id . '">+</a></span>';

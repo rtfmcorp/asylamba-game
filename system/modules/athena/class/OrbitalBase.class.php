@@ -671,6 +671,10 @@ class OrbitalBase {
 			}
 			$player->increaseCredit($creditRecycled);
 
+			# add recyclers waiting to the mission
+			$mission->recyclerQuantity += $mission->addToNextMission;
+			$mission->addToNextMission = 0;
+
 			# if a mission is stopped by the user, delete it
 			if ($mission->statement == RecyclingMission::ST_BEING_DELETED) {
 				$mission->statement = RecyclingMission::ST_DELETED;

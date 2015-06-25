@@ -26,6 +26,7 @@ class RecyclingMission {
 	public $rTarget = 0;
 	public $cycleTime = 0;
 	public $recyclerQuantity = 0;
+	public $addToNextMission = 0;
 	public $uRecycling = '';
 	public $statement = 1;
 

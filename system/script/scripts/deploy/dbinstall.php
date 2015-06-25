@@ -1110,6 +1110,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `recyclingMission` (
 
 	`cycleTime` INT unsigned NOT NULL,
 	`recyclerQuantity` SMALLINT unsigned NOT NULL,
+	`addToNextMission` SMALLINT unsigned NOT NULL,
 
 	`uRecycling` datetime NOT NULL,
 	`statement` TINYINT NOT NULL,

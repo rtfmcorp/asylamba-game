@@ -289,6 +289,7 @@ echo '<div class="column act">';
 
 					for ($j = 0; $j < ASM::$rem->size(); $j++) { 
 						$activeShip += ASM::$rem->get($j)->recyclerQuantity;
+						$activeShip += ASM::$rem->get($j)->addToNextMission;
 					}
 
 					echo '<span class="label-box">';

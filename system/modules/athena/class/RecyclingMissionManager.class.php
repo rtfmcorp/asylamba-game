@@ -69,6 +69,7 @@ class RecyclingMissionManager extends Manager {
 			$rm->rTarget = $aw['rTarget'];
 			$rm->cycleTime = $aw['cycleTime'];
 			$rm->recyclerQuantity = $aw['recyclerQuantity'];
+			$rm->addToNextMission = $aw['addToNextMission'];
 			$rm->uRecycling = $aw['uRecycling'];
 			$rm->statement = $aw['statement'];
 
@@ -91,13 +92,14 @@ class RecyclingMissionManager extends Manager {
 	public function add(RecyclingMission $rm) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			recyclingMission(rBase, rTarget, cycleTime, recyclerQuantity, uRecycling, statement)
-			VALUES(?, ?, ?, ?, ?, ?)');
+			recyclingMission(rBase, rTarget, cycleTime, recyclerQuantity, addToNextMission, uRecycling, statement)
+			VALUES(?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$rm->rBase,
 			$rm->rTarget,
 			$rm->cycleTime,
 			$rm->recyclerQuantity,
+			$rm->addToNextMission,
 			$rm->uRecycling,
 			$rm->statement
 		));
@@ -118,6 +120,7 @@ class RecyclingMissionManager extends Manager {
 					rTarget = ?,
 					cycleTime = ?,
 					recyclerQuantity = ?,
+					addToNextMission = ?,
 					uRecycling = ?,
 					statement = ?
 				WHERE id = ?');
@@ -127,6 +130,7 @@ class RecyclingMissionManager extends Manager {
 				$rm->rTarget,
 				$rm->cycleTime,
 				$rm->recyclerQuantity,
+				$rm->addToNextMission,
 				$rm->uRecycling,
 				$rm->statement,
 				$rm->id
