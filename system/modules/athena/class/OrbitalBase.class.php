@@ -148,8 +148,7 @@ class OrbitalBase {
 			case 8 : return $this->levelRecycling;
 			case 9 : return $this->levelSpatioport;
 			default : 
-				CTR::$alert->add('Bâtiment invalide');
-				CTR::$alert->add('dans getBuildingLevel de OrbitalBase', ALERT_BUG_ERROR);
+				CTR::$alert->add('Bâtiment invalide dans getBuildingLevel de OrbitalBase', ALERT_BUG_ERROR);
 				return FALSE;
 		}
 	}
@@ -217,18 +216,19 @@ class OrbitalBase {
 			case 8 : $this->levelRecycling = $level; break;
 			case 9 : $this->levelSpatioport = $level; break;
 			default : 
-				CTR::$alert->add('bâtiment invalide');
-				CTR::$alert->add('dans setBuildingLevel de OrbitalBase', ALERT_BUG_ERROR);
+				CTR::$alert->add('Bâtiment invalide dans setBuildingLevel de OrbitalBase', ALERT_BUG_ERROR);
 		}
 	}
 
 	public function updatePoints() {
 		$points = 0;
+
 		for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) { 
 			for ($j = 0; $j < $this->getBuildingLevel($i); $j++) { 
 				$points += OrbitalBaseResource::getBuildingInfo($i, 'level', $j + 1, 'resourcePrice') / 1000;
 			}
 		}
+
 		$points = round($points);
 		$this->setPoints($points);
 	}
@@ -434,44 +434,6 @@ class OrbitalBase {
 		# increase player experience
 		$experience = OrbitalBaseResource::getBuildingInfo($queue->buildingNumber, 'level', $queue->targetLevel, 'points');
 		$player->increaseExperience($experience);
-
-		# prestige
-		switch ($player->rColor) {
-			case ColorResource::EMPIRE:
-				$player->factionPoint += Color::TWO_POINTS_PER_LEVEL;
-				break;
-			case ColorResource::CARDAN:
-				if ($queue->buildingNumber == OrbitalBaseResource::DOCK1) {
-					$player->factionPoint += Color::TWO_POINTS_PER_LEVEL;
-				}
-				break;
-			case ColorResource::NERVE:
-				if (in_array($queue->buildingNumber, array(OrbitalBaseResource::REFINERY, OrbitalBaseResource::STORAGE))) {
-					$player->factionPoint += Color::TWO_POINTS_PER_LEVEL;
-				}
-				break;
-			case ColorResource::NEGORA:
-				if ($queue->buildingNumber == OrbitalBaseResource::COMMERCIAL_PLATEFORME) {
-					$player->factionPoint += Color::TWO_POINTS_PER_LEVEL;
-				}
-				if ($queue->buildingNumber == OrbitalBaseResource::SPATIOPORT) {
-					$player->factionPoint += Color::FOUR_POINTS_PER_LEVEL;
-				}
-				break;
-			case ColorResource::APHERA:
-				if ($queue->buildingNumber == OrbitalBaseResource::TECHNOSPHERE) {
-					$player->factionPoint += Color::TWO_POINTS_PER_LEVEL;
-				}
-				break;
-			case ColorResource::SYNELLE:
-				if ($queue->buildingNumber == OrbitalBaseResource::GENERATOR) {
-					$player->factionPoint += Color::TWO_POINTS_PER_LEVEL;
-				}
-				if ($queue->buildingNumber == OrbitalBaseResource::RECYCLING) {
-					$player->factionPoint += Color::FOUR_POINTS_PER_LEVEL;
-				}
-				break;
-		}
 		
 		# alert
 		if (CTR::$data->get('playerId') == $this->rPlayer) {
@@ -489,11 +451,6 @@ class OrbitalBase {
 		$experience = $sq->quantity * ShipResource::getInfo($sq->shipNumber, 'points');
 		$player->increaseExperience($experience);
 
-		# prestige
-		if ($player->rColor == ColorResource::KOVAHK) {
-			$player->factionPoint += Color::POINTBUILDLITTLESHIP * $sq->quantity;	
-		}
-
 		# alert
 		if (CTR::$data->get('playerId') == $this->rPlayer) {
 			$alt = 'Construction de ';
@@ -505,6 +462,7 @@ class OrbitalBase {
 			$alt .= ' sur <strong>' . $this->name . '</strong> terminée. Vous gagnez ' . $experience . ' point' . Format::addPlural($experience) . ' d\'expérience.';
 			CTR::$alert->add($alt, ALERT_GAM_DOCK1);
 		}
+
 		# delete queue in database
 		ASM::$sqm->deleteById($sq->id);
 	}
@@ -517,14 +475,11 @@ class OrbitalBase {
 		$experience = ShipResource::getInfo($sq->shipNumber, 'points');
 		$player->increaseExperience($experience);
 
-		# prestige
-		if ($player->rColor == ColorResource::EMPIRE || $player->rColor == ColorResource::KOVAHK) {
-			$player->factionPoint += Color::POINTBUILDBIGSHIP;	
-		}
 		# alert
 		if (CTR::$data->get('playerId') == $this->rPlayer) {
 			CTR::$alert->add('Construction de votre ' . ShipResource::getInfo($sq->shipNumber, 'codeName') . ' sur ' . $this->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.', ALERT_GAM_DOCK2);
 		}
+
 		# delete queue in database
 		ASM::$sqm->deleteById($sq->id);
 	}
@@ -537,10 +492,6 @@ class OrbitalBase {
 		$experience = TechnologyResource::getInfo($tq->technology, 'points', $tq->targetLevel);
 		$player->increaseExperience($experience);
 
-		# prestige
-		if ($player->rColor == ColorResource::APHERA) {
-			$player->factionPoint += $experience;
-		}
 		# alert
 		if (CTR::$data->get('playerId') == $this->rPlayer) {
 			$alt = 'Développement de votre technologie ' . TechnologyResource::getInfo($tq->technology, 'name');
@@ -550,6 +501,7 @@ class OrbitalBase {
 			$alt .= ' terminée. Vous gagnez ' . $experience . ' d\'expérience.';
 			CTR::$alert->add($alt, ALERT_GAM_TECHNO);
 		}
+
 		# delete queue in database
 		ASM::$tqm->deleteById($tq->id);
 	}
@@ -588,8 +540,7 @@ class OrbitalBase {
 				# delete commercialShipping
 				ASM::$csm->deleteById($cs->id);
 				break;
-			default :
-				break;
+			default :break;
 		}
 	}
 
@@ -769,4 +720,3 @@ class OrbitalBase {
 		}
 	}
 }
-?>

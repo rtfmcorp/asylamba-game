@@ -428,23 +428,24 @@ class OrbitalBaseManager extends Manager {
 	}
 
 	public function changeOwnerById($id, $base, $newOwner, $routeSession, $recyclingSession, $commanderSession) {
-
 		if ($base->getId() != 0) {
 			# changement de possesseur des offres du marché
 			$S_TRM1 = ASM::$trm->getCurrentSession();
-			ASM::$trm->newSession();
+			ASM::$trm->newSession(FALSE);
 			ASM::$trm->load(array('rPlayer' => $base->rPlayer, 'rPlace' => $base->rPlace, 'statement' => Transaction::ST_PROPOSED));
+
 			for ($i = 0; $i < ASM::$trm->size(); $i++) {
 				# change owner of transaction
 				ASM::$trm->get($i)->rPlayer = $newOwner;
 
 				$S_CSM1 = ASM::$csm->getCurrentSession();
-				ASM::$csm->newSession();
+				ASM::$csm->newSession(FALSE);
 				ASM::$csm->load(array('rTransaction' => ASM::$trm->get($i)->id, 'rPlayer' => $base->rPlayer));
 				# change owner of commercial shipping
 				ASM::$csm->get()->rPlayer = $newOwner;
 				ASM::$csm->changeSession($S_CSM1);
 			}
+
 			ASM::$trm->changeSession($S_TRM1);
 
 			# attribuer le rPlayer à la Base
@@ -458,6 +459,7 @@ class OrbitalBaseManager extends Manager {
 				ASM::$crm->deleteById(ASM::$crm->get($i)->getId());
 				# envoyer une notif
 			}
+
 			ASM::$crm->changeSession($S_CRM1);
 
 			# suppression des technologies en cours de développement
@@ -477,7 +479,7 @@ class OrbitalBaseManager extends Manager {
 			}
 			ASM::$rem->changeSession($S_REM1);
 
-			# mise des invistissements à 0
+			# mise des investissements à 0
 			$base->iSchool = 0;
 			$base->iAntiSpy = 0;
 
@@ -516,7 +518,6 @@ class OrbitalBaseManager extends Manager {
 			# applique en cascade le changement de couleur des sytèmes
 			include_once GAIA;
 			GalaxyColorManager::apply();
-
 		} else {
 			CTR::$alert->add('Cette base orbitale n\'exite pas !', ALERT_BUG_INFO);
 			CTR::$alert->add('dans changeOwnerById de OrbitalBaseManager', ALERT_BUG_ERROR);
