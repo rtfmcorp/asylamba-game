@@ -145,6 +145,7 @@ echo '<div class="component generator">';
 						}
 						echo '<h4>Avantages &amp; Inconvénients</h4>';
 						$fleetQuantity = PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'l-line') + PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'r-line');
+						echo '<p>Vous ne pouvez avoir qu\'une capitale</p>';
 						echo '<p><strong class="short">Flottes</strong>' . $fleetQuantity . '</p>';
 						echo '<p><strong class="short">Impôt</strong>' . (PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'tax') * 100) . '%</p>';
 						echo '<p><strong>Technologies</strong>Toutes disponibles</p>';
