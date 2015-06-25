@@ -20,6 +20,7 @@ include 'defaultElement/movers.php';
 echo '<div id="content">';
 	# inclusion des modules
 	include_once ZEUS;
+	include_once DEMETER;
 	include_once ATHENA;
 
 	# loading des objets

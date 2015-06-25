@@ -73,6 +73,23 @@ class ColorManager extends Manager {
 			$color->dLastElection = $awColor[$i]['dLastElection'];
 			$color->colorLink[0] = Color::NEUTRAL;
 
+			$color->officialName = ColorResource::getInfo($color->id, 'officialName');
+			$color->popularName = ColorResource::getInfo($color->id, 'popularName');
+			$color->government = ColorResource::getInfo($color->id, 'government');
+			$color->demonym = ColorResource::getInfo($color->id, 'demonym');
+			$color->factionPoint = ColorResource::getInfo($color->id, 'factionPoint');
+			$color->status = ColorResource::getInfo($color->id, 'status');
+			$color->regime = ColorResource::getInfo($color->id, 'regime');
+			$color->devise = ColorResource::getInfo($color->id, 'devise');
+			$color->desc1 = ColorResource::getInfo($color->id, 'desc1');
+			$color->desc2 = ColorResource::getInfo($color->id, 'desc2');
+			$color->desc3 = ColorResource::getInfo($color->id, 'desc3');
+			$color->desc4 = ColorResource::getInfo($color->id, 'desc4');
+			$color->bonus = ColorResource::getBonus(ColorResource::getInfo($color->id, 'bonus'));
+			$color->mandateDuration = ColorResource::getInfo($color->id, 'mandateDuration');
+			$color->senateDesc = ColorResource::getInfo($color->id, 'senateDesc');
+			$color->campaignDesc = ColorResource::getInfo($color->id, 'campaignDesc');
+
 			if ($color->id != 0) {
 				foreach ($awColorLink AS $colorLink) {
 					if ($colorLink['rColor'] == $color->id) {

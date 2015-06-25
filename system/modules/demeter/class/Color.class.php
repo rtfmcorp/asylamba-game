@@ -77,6 +77,7 @@ class Color {
 	const WIN_TARGET 				= 1;
 	const WIN_CONFIRM 				= 2;
 
+	# attributs issus de la db
 	public $id 						= 0;
 	public $alive 					= 0;
 	public $isWinner 				= 0;
@@ -90,6 +91,25 @@ class Color {
 	public $description				= 0;
 	public $dClaimVictory			= '';
 	public $dLastElection			= '';
+
+	# attributs issus des resources
+
+	public $officialName = '';
+	public $popularName = '';
+	public $government = '';
+	public $demonym = '';
+	public $factionPoint = '';
+	public $status = [''];
+	public $regime = 0;
+	public $devise = '';
+	public $desc1 = '';
+	public $desc2 = '';
+	public $desc3 = '';
+	public $desc4 = '';
+	public $bonus = [''];
+	public $mandateDuration = 0;
+	public $senateDesc = '';
+	public $campaignDesc = '';
 
 	public $colorLink 				= array();
 
