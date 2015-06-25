@@ -71,7 +71,7 @@ try {
 	}
 
 	$rs->naturalTech = Research::MATH;
-	$rs->lifeTech = Research::BIO;
+	$rs->lifeTech = Research::LAW;
 	$rs->socialTech = Research::ECONO;
 	$rs->informaticTech = Research::NETWORK;
 

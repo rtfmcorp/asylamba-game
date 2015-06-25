@@ -13,14 +13,14 @@
 class Research {
 	// ATTRIBUTES
 	public $rPlayer;
-	public $mathLevel = 0;		//naturalTech
+	public $mathLevel = 0;						//naturalTech
 	public $physLevel = 0;
 	public $chemLevel = 0;
-	public $bioLevel = 0;		//lifeTech
-	public $mediLevel = 0;
-	public $econoLevel = 0;		//socialTech
+	public $bioLevel = 0;	# bio == law		//lifeTech
+	public $mediLevel = 0;  # medi == comm
+	public $econoLevel = 0;						//socialTech
 	public $psychoLevel = 0;
-	public $networkLevel = 0;	//informaticTech
+	public $networkLevel = 0;					//informaticTech
 	public $algoLevel = 0;
 	public $statLevel = 0;
 	public $naturalTech = 0;
@@ -35,8 +35,8 @@ class Research {
 	const MATH = 0;
 	const PHYS = 1;
 	const CHEM = 2;
-	const BIO = 3;
-	const MEDI = 4;
+	const LAW = 3;
+	const COMM = 4;
 	const ECONO = 5;
 	const PSYCHO = 6;
 	const NETWORK = 7;
@@ -141,7 +141,7 @@ class Research {
 				$this->naturalToPay = ResearchResource::getInfo($this->naturalTech, 'level', $this->getLevel($this->naturalTech) + 1, 'price');
 			}
 		} while ($naturalInvest > 0);
-		// life technologies
+		// life technologies (en fait ce sont les sciences politiques)
 		do {
 			if ($this->lifeToPay > $lifeInvest) {
 				$this->lifeToPay -= $lifeInvest;
@@ -171,7 +171,7 @@ class Research {
 				$n->setRPlayer($player);
 				$n->setTitle(ResearchResource::getInfo($this->lifeTech, 'name') . ' niveau ' . $levelReached);
 				$n->setContent('Vos investissements dans l\'Université ont payé !<br />
-					Vos chercheurs du département des <strong>Sciences de la Vie</strong> ont fait des avancées en <strong>' 
+					Vos chercheurs du département des <strong>Sciences Politiques</strong> ont fait des avancées en <strong>' 
 					. ResearchResource::getInfo($this->lifeTech, 'name') . '</strong>. Vous êtes actuellement au <strong>niveau ' 
 					. $levelReached . '</strong> dans ce domaine. Félicitations !');
 				ASM::$ntm->add($n);
@@ -220,7 +220,7 @@ class Research {
 				$n->setRPlayer($player);
 				$n->setTitle(ResearchResource::getInfo($this->socialTech, 'name') . ' niveau ' . $levelReached);
 				$n->setContent('Vos investissements dans l\'Université ont payé !<br />
-					Vos chercheurs du département des <strong>Sciences Sociales et Politiques</strong> ont fait des avancées en <strong>' 
+					Vos chercheurs du département des <strong>Sciences Economiques et Sociales</strong> ont fait des avancées en <strong>' 
 					. ResearchResource::getInfo($this->socialTech, 'name') . '</strong>. Vous êtes actuellement au <strong>niveau ' 
 					. $levelReached . '</strong> dans ce domaine. Félicitations !');
 				ASM::$ntm->add($n);
