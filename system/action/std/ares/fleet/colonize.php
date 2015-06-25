@@ -30,7 +30,14 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 		# check si la technologie BASE_QUANTITY a un niveau assez élevé
 		$maxBasesQuantity = $technologies->getTechnology(Technology::BASE_QUANTITY) + 1;
 		$obQuantity = CTR::$data->get('playerBase')->get('ob')->size();
-		$msQuantity = CTR::$data->get('playerBase')->get('ms')->size();
+
+		# count ob quantity via request to be sure (the session is sometimes not valid)
+		$db = DataBase::getInstance();
+		$qr = $db->prepare('SELECT COUNT(*) AS count FROM `orbitalBase` WHERE `rPlayer`=?'); 
+		$qr->execute([$pl]);
+		$aw = $qr->fetch();
+		$obQuantity = $aw['count'];
+
 		$coloQuantity = 0;
 		$S_COM2 = ASM::$com->getCurrentSession();
 		ASM::$com->newSession();
@@ -41,7 +48,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 			}
 		}
 		ASM::$com->changeSession($S_COM2);
-		$totalBases = $obQuantity + $msQuantity + $coloQuantity;
+		$totalBases = $obQuantity + $coloQuantity;
 		if ($totalBases < $maxBasesQuantity) {
 			if (ASM::$com->size() > 0) {
 				if (ASM::$plm->size() > 0) {
