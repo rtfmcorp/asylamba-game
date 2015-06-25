@@ -1,27 +1,29 @@
 <?php
 $scripts = [
 	'Déploiment' => [
-		['deploy.dbinstall', '/deploy/dbinstall.php'],
-		['deploy.newgalaxy', '/deploy/newgalaxy.php'],
+		['dbinstall', '/deploy/dbinstall.php'],
+		['newgalaxy', '/deploy/newgalaxy.php'],
 	],
 	'Tâches Cron' => [
-		['cron.daily', '/cron/daily.php'],
-		['cron.playerranking', '/cron/playerRanking.php'],
-		['cron.factionranking', '/cron/factionRanking.php'],
+		['daily', '/cron/daily.php'],
+		['playerranking', '/cron/playerRanking.php'],
+		['factionranking', '/cron/factionRanking.php'],
 	],
 	'Utilitaires' => [
-		['utils.commanderAttack', '/utils/commanderAttack.php'],
-		['utils.sectors', '/utils/sectors.php'],
-		['utils.maprender', '/utils/map-render.php'],
-		['utils.findsectorinfos', '/utils/find-sector-infos.php'],
-		['utils.getstatistic', '/utils/get-stats.php'],
-		['utils.recolorsector', '/utils/recolor-sector.php'],
+		['commanderAttack', '/utils/commanderAttack.php'],
+		['sectors', '/utils/sectors.php'],
+		['maprender', '/utils/map-render.php'],
+		['findsectorinfos', '/utils/find-sector-infos.php'],
+		['getstatistic', '/utils/get-stats.php'],
+		['recolorsector', '/utils/recolor-sector.php'],
 	],
 	'Test' => [
-		['test.main', '/test/test.php'],
+		['main', '/test/test.php'],
 	],
 	'Migration' => [
-		['migration.color', '/migration/updateColor.php'],
+		['color', '/migration/updateColor.php'],
+		['addconversation', '/migration/add-conversation.php'],
+		['removemessage', '/migration/remove-message.php'],
 	]
 ];
 
@@ -45,7 +47,7 @@ if (DEVMODE || CTR::$get->equal('key', KEY_SCRIPT)) {
 
 					foreach ($typeScripts as $i => $script) {
 						echo '<a href="' . APP_ROOT . 'script/key-' . KEY_SCRIPT . '/a-' . $script[0] . '">';
-							echo '<strong>Lancer</strong>';
+							echo '<strong>' . $script[0] . '</strong>';
 							echo $script[1];
 						echo '</a>';
 					}
