@@ -134,6 +134,16 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 				if ($player->credit >= $totalPrice) {
 					$canChangeBaseType = TRUE;
 					if ($type == OrbitalBase::TYP_COMMERCIAL) {
+						# delete all recycling missions and logs
+						$S_REM1 = ASM::$rem->getCurrentSession();
+						ASM::$rem->newSession();
+						ASM::$rem->load(array('rBase' => $orbitalBase->rPlace));
+						for ($i = ASM::$rem->size() - 1; $i >= 0; $i--) {
+							ASM::$rlm->deleteAllFromMission(ASM::$rem->get($i)->id);
+							ASM::$rem->deleteById(ASM::$rem->get($i)->id);
+						}
+						ASM::$rem->changeSession($S_REM1);
+
 						# verify if fleets are moving or not
 						# transfer to the mess the extra commanders and change line if needed
 						include_once ARES;

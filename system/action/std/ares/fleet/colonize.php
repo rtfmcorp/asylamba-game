@@ -34,7 +34,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 		# count ob quantity via request to be sure (the session is sometimes not valid)
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('SELECT COUNT(*) AS count FROM `orbitalBase` WHERE `rPlayer`=?'); 
-		$qr->execute([$pl]);
+		$qr->execute([CTR::$data->get('playerId')]);
 		$aw = $qr->fetch();
 		$obQuantity = $aw['count'];
 
