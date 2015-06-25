@@ -31,33 +31,23 @@ echo '<div id="content">';
 	$S_OBM1 = ASM::$obm->getCurrentSession();
 	ASM::$obm->newSession();
 	ASM::$obm->load(array('rPlayer' => CTR::$data->get('playerId')), array('dCreation', 'ASC'));
-#	ASM::$msm->load(array('rPlayer' => CTR::$data->get('playerId')));
 
 	# playerRoleplayProfil component
 	$player_playerRoleplayProfil = ASM::$pam->get(0);
 	include COMPONENT . 'player/playerRoleplayProfil.php';
 
-	# playerTechnicalProfil component
-	# $player_playerTechnicalProfil = ASM::$pam->get(0);
-	# include COMPONENT . 'player/playerTechnicalProfil.php';
-
 	# obFastView component
 	for ($i = 0; $i < ASM::$obm->size(); $i++) {
 		$ob_index = ($i + 1);
-		$ob_obFastView = ASM::$obm->get($i);
-		include COMPONENT . 'bases/obFastView.php';
+		$ob_fastView = ASM::$obm->get($i);
+		$fastView_profil = TRUE;
+		include COMPONENT . 'bases/fastView.php';
 	}
 
 	if (ASM::$obm->size() == 1) {
 		include COMPONENT . 'default.php';
 	}
 
-	# msFastView component
-	/* for ($i = 0; $i < ASM::$obm->size(); $i++) {
-		$ob_index = ($i + 1);
-		$ob_obFastView = ASM::$obm->get($i);
-		include COMPONENT . 'athena/obFastView.php';
-	} */
 	ASM::$pam->changeSession($S_PAM1);
 	ASM::$obm->changeSession($S_OBM1);
 echo '</div>';
