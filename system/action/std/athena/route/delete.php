@@ -45,14 +45,6 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 				ASM::$pam->newSession();
 				ASM::$pam->load(array('id' => array($cr->playerId1, $cr->playerId2)));
 				$exp = round($cr->getIncome() * CRM_COEFEXPERIENCE);
-
-				# prestige
-				if (ASM::$pam->get()->rColor == ColorResource::NEGORA) {
-					ASM::$pam->get()->factionPoint -= $exp;
-				}
-				if (ASM::$pam->get(1)->rColor == ColorResource::NEGORA) {
-					ASM::$pam->get(1)->factionPoint -= $exp;
-				}
 				
 				ASM::$pam->changeSession($S_PAM1);
 				//notification

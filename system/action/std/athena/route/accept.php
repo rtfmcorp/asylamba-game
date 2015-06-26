@@ -62,14 +62,6 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 					ASM::$pam->load(array('id' => $proposerBase->getRPlayer()));
 					ASM::$pam->get()->increaseExperience($exp);
 					ASM::$pam->get(1)->increaseExperience($exp);
-
-					# prestige
-					if (ASM::$pam->get()->rColor == ColorResource::NEGORA) {
-						ASM::$pam->get()->factionPoint += $exp;
-					}
-					if (ASM::$pam->get(1)->rColor == ColorResource::NEGORA) {
-						ASM::$pam->get(1)->factionPoint += $exp;
-					}
 					
 					ASM::$pam->changeSession($S_PAM1);
 					
