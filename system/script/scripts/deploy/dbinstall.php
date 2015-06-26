@@ -24,6 +24,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `color` (
 	`sectors` TINYINT unsigned NOT NULL DEFAULT 0,
 	`electionStatement` TINYINT NOT NULL DEFAULT 0,
 	`isClosed` TINYINT NOT NULL DEFAULT 1,
+	`isInGame` TINYINT NOT NULL DEFAULT 0,
 	`description` TEXT NULL,
 
 	`dClaimVictory` datetime NULL DEFAULT NULL,
