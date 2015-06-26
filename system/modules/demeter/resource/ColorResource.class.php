@@ -25,7 +25,8 @@ class ColorResource {
 				'government', 
 				'demonym', 
 				'factionPoint', 
-				'status', 
+				'status',
+				'regime',
 				'devise', 
 				'desc1', 
 				'desc2', 
@@ -34,7 +35,8 @@ class ColorResource {
 				'bonus',
 				'mandateDuration',
 				'senateDesc',
-				'campaignDesc'])) {
+				'campaignDesc',
+				'isInGame'])) {
 				return self::$colors[$id][$info];
 			} else {
 				return FALSE;

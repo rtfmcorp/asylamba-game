@@ -6,6 +6,7 @@ $rPlayer = Utils::getHTTPData('rplayer');
 $department = Utils::getHTTPData('department');
 
 include_once ZEUS;
+include_once DEMETER;
 
 if ($rPlayer !== FALSE && $department !== FALSE) {
 	$_PAM2 = ASM::$pam->getCurrentsession();

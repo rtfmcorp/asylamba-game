@@ -45,6 +45,106 @@ class PlayerManager extends Manager {
 		$this->fill($qr);
 	}
 
+	public function loadFromFactionByRank($factionId) {
+		$order = ['generalPosition', 'ASC'];
+
+		$formatOrder = Utils::arrayToOrder($order);
+		$formatLimit = Utils::arrayToLimit([]);
+
+		$db = DataBase::getInstance();
+		$qr = $db->prepare('SELECT pl.id,
+				p.id AS pId,
+				p.bind AS bind,
+				p.rColor AS rColor,
+				p.name AS name,
+				p.sex AS sex,
+				p.description AS description,
+				p.avatar AS avatar,
+				p.status AS status,
+				p.rGodfather AS rGodfather,
+				p.credit AS credit,
+				p.uPlayer AS uPlayer,
+				p.experience AS experience,
+				p.factionPoint AS factionPoint,
+				p.level AS level,
+				p.victory AS victory,
+				p.defeat AS defeat,
+				p.stepTutorial AS stepTutorial,
+				p.stepDone AS stepDone,
+				p.iUniversity AS iUniversity,
+				p.partNaturalSciences AS partNaturalSciences,
+				p.partLifeSciences AS partLifeSciences,
+				p.partSocialPoliticalSciences AS partSocialPoliticalSciences,
+				p.partInformaticEngineering AS partInformaticEngineering,
+				p.dInscription AS dInscription,
+				p.dLastConnection AS dLastConnection,
+				p.dLastActivity AS dLastActivity,
+				p.premium AS premium,
+				p.statement AS statement
+			FROM playerRanking AS pl
+			LEFT JOIN player AS p 
+				ON pl.rPlayer = p.id
+			WHERE p.rColor = ' . $factionId . '
+			' . $formatOrder . '
+			' . $formatLimit
+		);
+
+		// foreach($where AS $v) {
+		// 	if (is_array($v)) {
+		// 		foreach ($v as $p) {
+		// 			$valuesArray[] = $p;
+		// 		}
+		// 	} else {
+		// 		$valuesArray[] = $v;
+		// 	}
+		// }
+
+		if(empty($valuesArray)) {
+			$qr->execute();
+		} else {
+			$qr->execute($valuesArray);
+		}
+
+		while ($aw = $qr->fetch()) {
+			$p = new Player();
+
+			$p->setId($aw['pId']);
+			$p->setBind($aw['bind']);
+			$p->setRColor($aw['rColor']);
+			$p->setName($aw['name']);
+			$p->sex = $aw['sex'];
+			$p->description = $aw['description'];
+			$p->setAvatar($aw['avatar']);
+			$p->setStatus($aw['status']);
+			$p->rGodfather = $aw['rGodfather'];
+			$p->setCredit($aw['credit']);
+			$p->uPlayer = $aw['uPlayer'];
+			$p->setExperience($aw['experience']);
+			$p->factionPoint = $aw['factionPoint'];
+			$p->setLevel($aw['level']);
+			$p->setVictory($aw['victory']);
+			$p->setDefeat($aw['defeat']);
+			$p->setStepTutorial($aw['stepTutorial']);
+			$p->stepDone = $aw['stepDone'];
+			$p->iUniversity = $aw['iUniversity'];
+			$p->partNaturalSciences = $aw['partNaturalSciences'];
+			$p->partLifeSciences = $aw['partLifeSciences'];
+			$p->partSocialPoliticalSciences = $aw['partSocialPoliticalSciences'];
+			$p->partInformaticEngineering = $aw['partInformaticEngineering'];
+			$p->setDInscription($aw['dInscription']);
+			$p->setDLastConnection($aw['dLastConnection']);
+			$p->setDLastActivity($aw['dLastActivity']);
+			$p->setPremium($aw['premium']);
+			$p->setStatement($aw['statement']);
+
+			$currentP = $this->_Add($p);
+
+			if ($this->currentSession->getUMode()) {
+				$currentP->uMethod();
+			}
+		}
+	}
+
 	public function search($search, $order = array(), $limit = array()) {
 		$search = '%' . $search . '%';
 		

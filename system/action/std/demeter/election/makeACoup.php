@@ -23,7 +23,7 @@ if ($program !== FALSE) {
 		ASM::$clm->load(array('id' => CTR::$data->get('playerInfo')->get('color')));
 
 		if(ASM::$clm->get()->electionStatement == Color::MANDATE) {
-			if (ASM::$clm->get()->getRegime() == COLOR::ROYALISTIC) {
+			if (ASM::$clm->get()->regime == COLOR::ROYALISTIC) {
 
 				$election = new Election();
 				$election->rColor = ASM::$clm->get()->id;

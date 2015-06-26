@@ -15,7 +15,7 @@ echo '<div class="component player profil size1">';
 					$hasVoted = TRUE;
 				}
 
-				if ($faction->getRegime() != Color::ROYALISTIC) {
+				if ($faction->regime != Color::ROYALISTIC) {
 					echo '<div class="build-item">';
 						if ($hasVoted) {
 							if (ASM::$vom->get()->rCandidate == $candidat->rPlayer) {

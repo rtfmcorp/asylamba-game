@@ -409,7 +409,7 @@ echo '<div id="content">';
 			$PAM_ELC_TOKEN = ASM::$pam->newSession(FALSE);
 			ASM::$pam->load(array('rColor' => CTR::$data->get('playerInfo')->get('color')));
 
-			if ($faction->getRegime() == Color::DEMOCRATIC) {
+			if ($faction->regime == Color::DEMOCRATIC) {
 				$nbCandidate = ASM::$cam->size();
 				include COMPONENT . 'faction/election/election.php';
 
@@ -451,7 +451,7 @@ echo '<div id="content">';
 				} else {
 					include COMPONENT . 'default.php';
 				}
-			} elseif ($faction->getRegime() == Color::ROYALISTIC) {
+			} elseif ($faction->regime == Color::ROYALISTIC) {
 				$candidat  = ASM::$cam->get(0);
 				$rElection = ASM::$elm->get(0)->id;
 

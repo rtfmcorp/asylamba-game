@@ -524,7 +524,7 @@ class Color {
 				if (Utils::interval($this->dLastElection, Utils::now(), 's') > $this->mandateDuration) {
 					$_PAM = ASM::$pam->getCurrentSession();
 					ASM::$pam->newSession(FALSE);
-					ASM::$pam->load(array('rColor' => $this->id), array('factionPoint', 'DESC', 'experience', 'DESC'));
+					ASM::$pam->loadFromFactionByRank($this->id);
 					$token_pam = ASM::$pam->getCurrentSession();
 					ASM::$pam->changeSession($_PAM);
 
@@ -561,7 +561,7 @@ class Color {
 				if (Utils::interval($this->dLastElection, Utils::now(), 's') > $this->mandateDuration) {
 					$_PAM = ASM::$pam->getCurrentSession();
 					ASM::$pam->newSession(FALSE);
-					ASM::$pam->load(array('rColor' => $this->id), array('factionPoint', 'DESC', 'experience', 'DESC'));
+					ASM::$pam->loadFromFactionByRank($this->id);
 					$token_pam = ASM::$pam->getCurrentSession();
 					ASM::$pam->changeSession($_PAM);
 
@@ -586,7 +586,7 @@ class Color {
 
 					$_PAM = ASM::$pam->getCurrentSession();
 					ASM::$pam->newSession(FALSE);
-					ASM::$pam->load(array('rColor' => $this->id), array('factionPoint', 'DESC', 'experience', 'DESC'));
+					ASM::$pam->loadFromFactionByRank($this->id);
 					$token_pam = ASM::$pam->getCurrentSession();
 					ASM::$pam->changeSession($_PAM);
 
@@ -602,7 +602,7 @@ class Color {
 				if (Utils::interval($this->dLastElection, Utils::now(), 's') > $this->mandateDuration) {
 					$_PAM = ASM::$pam->getCurrentSession();
 					ASM::$pam->newSession(FALSE);
-					ASM::$pam->load(array('rColor' => $this->id), array('factionPoint', 'DESC', 'experience', 'DESC'));
+					ASM::$pam->loadFromFactionByRank($this->id);
 					$token_pam = ASM::$pam->getCurrentSession();
 					ASM::$pam->changeSession($_PAM);
 
