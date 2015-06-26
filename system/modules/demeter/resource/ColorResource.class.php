@@ -10,6 +10,22 @@ class ColorResource {
 	const APHERA = 6;
 	const SYNELLE = 7;
 
+	const DEFENSEBONUS = 0;
+	const PRICEBIGSHIPBONUS = 1;
+	const SPEEDLITTLESHIPBONUS = 2;
+	const DEFENSELITTLESHIPMALUS = 3;
+	const COMMERCIALROUTEBONUS = 4;
+	const COMMERCIALROUTEPRICEBONUS = 5;
+	const TAXBONUS = 6;
+	const COLOPRICEBONUS = 7;
+	const LOOTRESOURCESMALUS = 8;
+	const RAFINERYBONUS = 9;
+	const STORAGEBONUS = 10;
+	const BIGACADEMICBONUS = 11;
+	const TECHNOLOGYBONUS = 12;
+	const COMMANDERSCHOOLBONUS = 13;
+	const LITTLEACADEMICBONUS = 14;
+
 	# constants for the actions bonuses of the factions
 	const BONUS_EMPIRE_CRUISER = 5;		# price 5% less for cruiser and heavy cruiser
 	const BONUS_NEGORA_ROUTE = 3;		# price 3% less for the price of a commercial route
@@ -71,10 +87,9 @@ class ColorResource {
 		['path' => 'faction/bonus/bonus5-3.png', 'title' => '+ 4% stockage', 'desc' => 'Votre Raffinerie stocke plus de ressources'],
 		['path' => 'faction/bonus/bonus6-2.png', 'title' => '+ 4% efficacité', 'desc' => 'Votre Université est plus efficace'],
 		['path' => 'faction/bonus/bonus6-3.png', 'title' => '- 2% temps', 'desc' => 'Vos technologies se développent plus rapidement'],
-		['path' => 'faction/bonus/bonus1-2.png', 'title' => '+ 5% de défense', 'desc' => 'Vos vaisseaux gagnent en défense'],
 		['path' => 'faction/bonus/bonus7-2.png', 'title' => '+ 6% efficacité', 'desc' => 'Votre Ecole de Commandement est plus efficace'],
-		# 15
 		['path' => 'faction/bonus/bonus7-3.png', 'title' => '+ 2% efficacité', 'desc' => 'Votre Université est plus efficace']
+		#14
 	];
 
 	private static $colors = [
@@ -231,7 +246,7 @@ class ColorResource {
 			'desc2' => 'Le cursus académique et la formation prennent une place extrêmement importante dans le mode de vie des Syns. Vivant selon les principes du Premier Consul, cette société calme et autarcique renferme une très grande partie du patrimoine historique de la Galaxie dans de gigantesques bibliothèques.',
 			'desc3' => 'Fière de son indépendance, Synelle la sage dispose d’un important arsenal militaire prêt à défendre ses richesses contre quiconque viendra à les défier. Synelle aime rester en de bons termes avec les différentes alliances peuplant la galaxie, préfèrant la diplomatie à la guerre.',
 			'desc4' => 'Cette province, considérée comme le frigo de la galaxie de l’Œil de par son importante production de denrées alimentaires, n’est pas à la pointe de la technologie, préférant vivre simplement en accord avec ses principes de vie.',
-			'bonus' => [13, 14, 15],
+			'bonus' => [0, 13, 14],
 			'mandateDuration' => 1382400,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un membre de Synelle gagne du prestige en étant victorieux lors de la défense d\'une de ses planètes et en construisant le Centre de Recyclage et le Générateur.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
