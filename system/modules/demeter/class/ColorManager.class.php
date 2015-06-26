@@ -71,6 +71,7 @@ class ColorManager extends Manager {
 			$color->description = $awColor[$i]['description'];
 			$color->dClaimVictory = $awColor[$i]['dClaimVictory'];
 			$color->dLastElection = $awColor[$i]['dLastElection'];
+			$color->isInGame = $awColor[$i]['isInGame'];
 			$color->colorLink[0] = Color::NEUTRAL;
 
 			$color->officialName = ColorResource::getInfo($color->id, 'officialName');
@@ -88,7 +89,6 @@ class ColorManager extends Manager {
 			$color->mandateDuration = ColorResource::getInfo($color->id, 'mandateDuration');
 			$color->senateDesc = ColorResource::getInfo($color->id, 'senateDesc');
 			$color->campaignDesc = ColorResource::getInfo($color->id, 'campaignDesc');
-			$color->isInGame = ColorResource::getInfo($color->id, 'isInGame');
 	
 			$color->bonus = [];
 			foreach (ColorResource::getInfo($color->id, 'bonus') AS $k) {
@@ -128,6 +128,7 @@ class ColorManager extends Manager {
 					sectors = ?,
 					electionStatement = ?,
 					isClosed = ?,
+					isInGame = ?,
 					description = ?,
 					dClaimVictory = ?,
 					dLastElection = ?
@@ -142,6 +143,7 @@ class ColorManager extends Manager {
 					$color->sectors,
 					$color->electionStatement,
 					$color->isClosed,
+					$color->isInGame,
 					$color->description,
 					$color->dClaimVictory,
 					$color->dLastElection,
@@ -174,6 +176,7 @@ class ColorManager extends Manager {
 			sectors = ?,
 			electionStatement = ?,
 			isClosed = ?,
+			isInGame = ?,
 			description = ?,
 			dClaimVictory = ?,
 			dLastElection = ?');
@@ -188,6 +191,7 @@ class ColorManager extends Manager {
 				$color->sectors,
 				$color->electionStatement,
 				$color->isClosed,
+				$color->isInGame,
 				$color->description,
 				$color->dClaimVictory,
 				$color->dLastElection

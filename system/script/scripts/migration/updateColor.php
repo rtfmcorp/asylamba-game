@@ -1,6 +1,15 @@
 <?php
+include_once DEMETER;
+
 $db = DataBaseAdmin::getInstance();
 
-echo '<h2>Ajout de dClaimVictory dans color</h2>';
+echo '<h2>Ajout de isInGame dans color</h2>';
 
-$db->query("ALTER TABLE `color` ADD `dClaimVictory` DATETIME NULL DEFAULT NULL AFTER `isClosed`;");
+$db->query("ALTER TABLE `color` ADD `isInGame` TINYINT NULL DEFAULT 0 AFTER `isClosed`;");
+
+ASM::$clm->newSession();
+ASM::$clm->load();
+
+for ($i = 1; $i <= 7; $i++) {
+	ASM::$clm->get($i)->isInGame = 1;
+}

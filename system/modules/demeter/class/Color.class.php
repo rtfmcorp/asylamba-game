@@ -91,26 +91,26 @@ class Color {
 	public $description				= 0;
 	public $dClaimVictory			= '';
 	public $dLastElection			= '';
+	public $isInGame 				= 0;
 
 	# attributs issus des resources
 
-	public $officialName = '';
-	public $popularName = '';
-	public $government = '';
-	public $demonym = '';
-	public $factionPoint = '';
-	public $status = [''];
-	public $regime = 0;
-	public $devise = '';
-	public $desc1 = '';
-	public $desc2 = '';
-	public $desc3 = '';
-	public $desc4 = '';
-	public $bonus = [''];
-	public $mandateDuration = 0;
-	public $senateDesc = '';
-	public $campaignDesc = '';
-	public $isInGame = 0;
+	public $officialName 			= '';
+	public $popularName 			= '';
+	public $government 				= '';
+	public $demonym 				= '';
+	public $factionPoint 			= '';
+	public $status 					= [''];
+	public $regime 					= 0;
+	public $devise 					= '';
+	public $desc1 					= '';
+	public $desc2 					= '';
+	public $desc3 					= '';
+	public $desc4 					= '';
+	public $bonus 					= [''];
+	public $mandateDuration 		= 0;
+	public $senateDesc 				= '';
+	public $campaignDesc 			= '';
 
 	public $colorLink 				= array();
 

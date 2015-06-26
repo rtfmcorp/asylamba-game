@@ -51,8 +51,7 @@ class ColorResource {
 				'bonus',
 				'mandateDuration',
 				'senateDesc',
-				'campaignDesc',
-				'isInGame'])) {
+				'campaignDesc'])) {
 				return self::$colors[$id][$info];
 			} else {
 				return FALSE;
@@ -110,9 +109,8 @@ class ColorResource {
 			'bonus' => [],
 			'mandateDuration' => 0,
 			'senateDesc' => '',
-			'campaignDesc' => '',
-			'isInGame' => 0
-		], [
+			'campaignDesc' => ''
+	], [
 			'id' 			=> 1,
 			'officialName' 	=> 'Ordre Impérial',
 			'popularName' 	=> 'l’Empire',
@@ -129,9 +127,8 @@ class ColorResource {
 			'bonus' => [0, 1],
 			'mandateDuration' => 604800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Akhénien gagne du prestige en construisant des bâtiments et des vaisseaux du Chantier de Ligne, mais également en conquérant les bases orbitales d\'autres joueurs. Il en perd par contre lorsqu\'il détruit un de ses bâtiments ou qu\'il perd une planète.',
-			'campaignDesc' => 'À tout moment, un membre du sénat ou du gouvernement peut tenter un coup d\'état. Il aura alors 7 relèves pour attirer des partisans. Il aura réussi son putsch s\'il arrive à recruter suffisemment de partisans.',
-			'isInGame' => 1
-		], [
+			'campaignDesc' => 'À tout moment, un membre du sénat ou du gouvernement peut tenter un coup d\'état. Il aura alors 7 relèves pour attirer des partisans. Il aura réussi son putsch s\'il arrive à recruter suffisemment de partisans.'
+	], [
 			'id' 			=> 2,
 			'officialName' 	=> 'Province de Kovahk',
 			'popularName' 	=> 'l’Essaim',
@@ -148,9 +145,8 @@ class ColorResource {
 			'bonus' => [2, 3],
 			'mandateDuration' => 604800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Kovahkarh gagne du prestige en construisant des vaisseaux, en gagnant des combats et en créant des bases militaires. Il en perd lorsqu\'il se fait tuer au combat ou qu\'il perd une de ces bases militaires.',
-			'campaignDesc' => 'À tout moment, un membre du sénat ou du gouvernement peut tenter un coup d\'état. Il aura alors 7 relèves pour attirer des partisans. Il aura réussi son putsch s\'il arrive à recruter suffisemment de partisans.', 
-			'isInGame' => 1
-		], [
+			'campaignDesc' => 'À tout moment, un membre du sénat ou du gouvernement peut tenter un coup d\'état. Il aura alors 7 relèves pour attirer des partisans. Il aura réussi son putsch s\'il arrive à recruter suffisemment de partisans.',
+	], [
 			'id' 			=> 3,
 			'officialName' 	=> 'Province de Négore',
 			'popularName' 	=> 'Négore',
@@ -167,9 +163,8 @@ class ColorResource {
 			'bonus' => [4, 5], 
 			'mandateDuration' => 604800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Kovahkarh gagne du prestige en construisant des vaisseaux, en gagnant des combats et en créant des bases militaires. Il en perd lorsqu\'il se fait tuer au combat ou qu\'il perd une de ces bases militaires.',
-			'campaignDesc' => 'À tout moment, un membre du sénat ou du gouvernement peut tenter un coup d\'état. Il aura alors 7 relèves pour attirer des partisans. Il aura réussi son putsch s\'il arrive à recruter suffisemment de partisans.',
-			'isInGame' => 1
-		], [
+			'campaignDesc' => 'À tout moment, un membre du sénat ou du gouvernement peut tenter un coup d\'état. Il aura alors 7 relèves pour attirer des partisans. Il aura réussi son putsch s\'il arrive à recruter suffisemment de partisans.'
+	], [
 			'id' 			=> 4,
 			'officialName' 	=> 'Marche de Cardan',
 			'popularName' 	=> 'la Marche',
@@ -188,8 +183,7 @@ class ColorResource {
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un membre de Cardan gagne du prestige en colonisant/conquérant une planète se situant en-dehors des territoires de Cardan, en construisant le Chantier Alpha et en faisant un don à sa faction. Il en perd par contre lorsqu\'il perd une planète.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se proposer devant les Oracles pour prendre une place politiquement importante dans la faction. 
 				<br /><br />Une fois que toutes les candidatures ont été déposées, la Grande Lumière, via les Oracles décide de la personne la plus apte à la représenter dans le monde physique. Cet personne reçoit le titre de Guide Suprême. 
-				<br /><br />Le Guide Suprême va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Camerlingue, l\'Inquisiteur et l\'Archiprêtre de la faction. ',
-			'isInGame' => 1
+				<br /><br />Le Guide Suprême va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Camerlingue, l\'Inquisiteur et l\'Archiprêtre de la faction. '
 		], [
 			'id' 			=> 5,
 			'officialName' 	=> 'Province de Nerve',
@@ -209,8 +203,7 @@ class ColorResource {
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Nervéen gagne du prestige en créant des Centres Industriels, en construisant la Raffinerie et le Stockage et en prenant des planètes (proportionnel au coefficient ressource de la planète). Il en perd en détruisant un Centre Industriel et en perdant le contrôle d\'une planète.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
 				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de la Nerve peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Président. 
-				<br /><br />Le Président va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Ministre de la défense, le Ministre des finances et le Premier Ministre de la faction. ',
-			'isInGame' => 1
+				<br /><br />Le Président va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Ministre de la défense, le Ministre des finances et le Premier Ministre de la faction. '
 		], [
 			'id' 			=> 6,
 			'officialName' 	=> 'Province d’Aphéra',
@@ -230,8 +223,7 @@ class ColorResource {
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Aphéréen gagne du prestige en menant à terme une Recherche, en développant une Technologie et en construisant la Technosphère.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
 				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre d\'Aphéra peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Autarque. 
-				<br /><br />L\'Autarque va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer l\'Algorithmicien, le Tacticien et l\'Archiviste de la faction. ',
-			'isInGame' => 1
+				<br /><br />L\'Autarque va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer l\'Algorithmicien, le Tacticien et l\'Archiviste de la faction. '
 		], [
 			'id' 			=> 7,
 			'officialName'	=> 'Marche de Synelle',
@@ -251,8 +243,7 @@ class ColorResource {
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un membre de Synelle gagne du prestige en étant victorieux lors de la défense d\'une de ses planètes et en construisant le Centre de Recyclage et le Générateur.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
 				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de Synelle peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Chancelier. 
-				<br /><br />Le Chancelier va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Consul de la défense, le Consul des finances et le Premier Consul de la faction. ',
-			'isInGame' => 1
+				<br /><br />Le Chancelier va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Consul de la défense, le Consul des finances et le Premier Consul de la faction. '
 		]
 	];
 }
