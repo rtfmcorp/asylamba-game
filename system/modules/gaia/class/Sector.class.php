@@ -21,9 +21,12 @@ class Sector {
 	public $yBarycentric;
 	public $tax;
 	public $name;
+	public $points;
 
 	public $population;
 	public $lifePlanet;
+
+	# public $prime
 
 	public $systems = array();
 
@@ -38,6 +41,7 @@ class Sector {
 	public function getYBarycentric() 	{ return $this->yBarycentric; }
 	public function getTax() 			{ return $this->tax; }
 	public function getName() 			{ return $this->name; }
+	public function getPoints() 		{ return $this->points; }
 	public function getPopulation() 	{ return $this->population; }
 	public function getLifePlanet() 	{ return $this->lifePlanet; }
 
@@ -50,6 +54,7 @@ class Sector {
 	public function setYBarycentric($v) { $this->yBarycentric = $v; }
 	public function setTax($v) 			{ $this->tax = $v; }
 	public function setName($v) 		{ $this->name = $v; }
+	public function setPoints($v) 		{ $this->points = $v; }
 	public function setPopulation($v) 	{ $this->population = $v; }
 	public function setLifePlanet($v) 	{ $this->lifePlanet = $v; }
 

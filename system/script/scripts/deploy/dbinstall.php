@@ -173,6 +173,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `sector` (
 	`tax` TINYINT unsigned NOT NULL DEFAULT 0,
 	`population` INT unsigned NOT NULL,
 	`lifePlanet` INT unsigned DEFAULT NULL,
+	`points` INT unsigned NOT NULL DEFAULT 1,
 	`name` varchar(255) DEFAULT NULL,
 	`prime` TINYINT NOT NULL DEFAULT 0,
 

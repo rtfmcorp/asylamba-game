@@ -13,7 +13,7 @@ echo '<div class="component player rank">';
 	echo '<div class="head skin-4">';
 		echo '<img class="main" alt="ressource" src="' . MEDIA . 'rank/cup.png">';
 		echo '<h2>Territorial</h2>';
-		echo '<em>Nombre de secteurs controlés</em>';
+		echo '<em>Nombre de points des secteurs controlés</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';

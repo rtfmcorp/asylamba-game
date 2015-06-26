@@ -87,6 +87,7 @@ class SectorManager extends Manager {
 				$sector->setYBarycentric($aw['yBarycentric']);
 				$sector->setTax($aw['tax']);
 				$sector->setName($aw['name']);
+				$sector->setPoints($aw['points']);
 				$sector->setPopulation($aw['population']);
 				$sector->setLifePlanet($aw['lifePlanet']);
 
@@ -151,6 +152,7 @@ class SectorManager extends Manager {
 				$sector->setYBarycentric($aw['yBarycentric']);
 				$sector->setTax($s['tax']);
 				$sector->setName($s['name']);
+				$sector->setPoints($s['points']);
 				$sector->setPopulation($s['population']);
 				$sector->setLifePlanet($s['lifePlanet']);
 

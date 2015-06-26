@@ -56,7 +56,7 @@ class FactionRanking {
 				switch ($type) {
 					case 'general': $r .= Format::number($this->general, -1) . ' points'; break;
 					case 'wealth': $r .= Format::number($this->wealth, -1) . ' crédits'; break;
-					case 'territorial': $r .= Format::number($this->territorial, -1) . ' secteurs'; break;
+					case 'territorial': $r .= Format::number($this->territorial, -1) . ' points'; break;
 					default: break;
 				}
 			$r .= '</span>';

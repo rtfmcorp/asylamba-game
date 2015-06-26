@@ -2,6 +2,7 @@
 # daily cron
 # call at x am. every day
 
+include_once ATHENA;
 include_once ATLAS;
 $S_FRM1 = ASM::$frm->getCurrentSession();
 ASM::$frm->newSession();
@@ -53,7 +54,7 @@ function cmpTerritorial($a, $b) {
 }
 
 # load the factions (colors)
-ASM::$clm->load(array('id' => array(1,2,3,4,5,6,7)));
+ASM::$clm->load(array('isInGame' => 1));
 
 # create an array with all the factions
 $list = array();
@@ -82,9 +83,33 @@ for ($i = 0; $i < ASM::$prm->size(); $i++) {
 }
 
 #-------------------------------- WEALTH RANKING ----------------------------------#
+$db = DataBase::getInstance();
+
 for ($i = 0; $i < ASM::$clm->size(); $i++) { 
-	$faction = ASM::$clm->get($i);
-	$list[$faction->id]['wealth'] = $faction->credits;
+	$color = ASM::$clm->get($i)->id;
+	$qr = $db->prepare('SELECT
+		COUNT(cr.id) AS nb,
+		SUM(cr.income) AS income
+		FROM commercialRoute AS cr
+		LEFT JOIN orbitalBase AS ob1
+			ON cr.rOrbitalBase = ob1.rPlace
+			LEFT JOIN player AS pl1
+				ON ob1.rPlayer = pl1.id
+		LEFT JOIN orbitalBase AS ob2
+			ON cr.rOrbitalBaseLinked = ob2.rPlace
+			LEFT JOIN player AS pl2
+				ON ob2.rPlayer = pl2.id
+		WHERE (pl1.rColor = ? OR pl2.rColor = ?) AND cr.statement = ?
+	');
+	# hint : en fait ça compte qu'une fois une route interfaction, mais chut
+	$qr->execute([$color, $color, CRM_ACTIVE]);
+	$aw = $qr->fetch();
+	if ($aw['income'] == NULL) {
+		$income = 0;
+	} else {
+		$income = $aw['income'];
+	}
+	$list[$color]['wealth'] = $income;
 }
 
 #-------------------------------- TERRITORIAL RANKING -----------------------------#
@@ -94,7 +119,7 @@ $sectorManager->load();
 for ($i = 0; $i < $sectorManager->size(); $i++) {
 	$sector = $sectorManager->get($i);
 	if ($sector->rColor != 0) {
-		$list[$sector->rColor]['territorial'] += 1;
+		$list[$sector->rColor]['territorial'] += $sector->points;
 	}
 }
 

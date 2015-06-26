@@ -13,7 +13,7 @@ echo '<div class="component player rank">';
 	echo '<div class="head skin-4">';
 		echo '<img class="main" alt="ressource" src="' . MEDIA . 'rank/cup.png">';
 		echo '<h2>Richesse</h2>';
-		echo '<em>Richesse totale de la faction</em>';
+		echo '<em>Revenu des routes commerciales de la faction</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';

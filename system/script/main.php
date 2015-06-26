@@ -23,6 +23,7 @@ $scripts = [
 	'Migration' => [
 		['migration.color', '/migration/updateColor.php'],
 		['migration.recycling', '/migration/updateRecycling.php'],
+		['migration.sector', '/migration/updateSector.php'],
 	]
 ];
 
