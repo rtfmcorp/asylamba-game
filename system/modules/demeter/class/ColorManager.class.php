@@ -90,7 +90,7 @@ class ColorManager extends Manager {
 			$color->campaignDesc = ColorResource::getInfo($color->id, 'campaignDesc');
 			$color->isInGame = ColorResource::getInfo($color->id, 'isInGame');
 	
-			$color->bonus = array();
+			$color->bonus = [];
 			foreach (ColorResource::getInfo($color->id, 'bonus') AS $k) {
 				$color->bonus[] = ColorResource::getBonus($k);
 			}
