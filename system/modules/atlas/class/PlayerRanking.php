@@ -9,6 +9,7 @@
  * @package Atlas
  * @update 04.06.14
  */
+include_once DEMETER;
 
 class PlayerRanking {
 	# set number of player before you (remove 1) in rank view

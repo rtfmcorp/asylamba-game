@@ -12,16 +12,7 @@ $S_PAM1 = ASM::$pam->getCurrentSession();
 ASM::$pam->newSession(FALSE);
 
 include_once ATHENA;
-$S_OBM1 = ASM::$obm->getCurrentSession();
-ASM::$obm->newSession(FALSE);
-$S_CRM1 = ASM::$crm->getCurrentSession();
-ASM::$crm->newSession(FALSE);
-
 include_once ARES;
-$S_COM1 = ASM::$com->getCurrentSession();
-ASM::$com->newSession(FALSE);
-$S_RPM1 = ASM::$rpm->getCurrentSession();
-ASM::$rpm->newSession(FALSE);
 
 # create a new ranking
 $db = DataBase::getInstance();
@@ -103,127 +94,231 @@ for ($i = 0; $i < ASM::$pam->size(); $i++) {
 
 const COEF_RESOURCE = 0.001;
 
-#-------------------------------- GENERAL & RESOURCES & ARMIES RANKING --------------------------------#
-# load all the bases
-ASM::$obm->load();
-for ($i = 0; $i < ASM::$obm->size(); $i++) {
-	$orbitalBase = ASM::$obm->get($i);
-	if (isset($list[$orbitalBase->rPlayer])) {
-		# count the points of a base
-		$points = 0;
-		$points += $orbitalBase->points;
+#-------------------------------- RESOURCES --------------------------------#
+$qr = $db->prepare('SELECT 
+		p.id AS player,
+		ob.levelRefinery AS levelRefinery,
+		pl.coefResources AS coefResources
+	FROM orbitalBase AS ob 
+	LEFT JOIN place AS pl
+		ON pl.id = ob.rPlace
+	LEFT JOIN player AS p
+		on p.id = ob.rPlayer
+	WHERE p.statement = ? OR p.statement = ? OR p.statement = ?');
+$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY));
 
-		$points += round($orbitalBase->resourcesStorage * COEF_RESOURCE);
+while ($aw = $qr->fetch()) {
+	if (isset($list[$aw['player']])) {
+		$resourcesProd = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $aw['levelRefinery'], 'refiningCoefficient'), $aw['coefResources']);
+		$list[$aw['player']]['resources'] += $resourcesProd;
+	}
+}
 
+
+#-------------------------------- GENERAL & ARMIES RANKING --------------------------------#
+# load the bases
+$qr = $db->prepare('SELECT 
+		p.id AS player,
+		SUM(ob.points) AS points,
+		SUM(ob.resourcesStorage) AS resources,
+		SUM(ob.pegaseStorage) AS s0,
+		SUM(ob.satyreStorage) AS s1,
+		SUM(ob.sireneStorage) AS s3,
+		SUM(ob.dryadeStorage) AS s4,
+		SUM(ob.chimereStorage) AS s2,
+		SUM(ob.meduseStorage) AS s5,
+		SUM(ob.griffonStorage) AS s6,
+		SUM(ob.cyclopeStorage) AS s7,
+		SUM(ob.minotaureStorage) AS s8,
+		SUM(ob.hydreStorage) AS s9,
+		SUM(ob.cerbereStorage) AS s10,
+		SUM(ob.phenixStorage) AS s11
+	FROM orbitalBase AS ob 
+	LEFT JOIN player AS p
+		ON p.id = ob.rPlayer
+
+	WHERE p.statement = ? OR p.statement = ? OR p.statement = ?
+	GROUP BY p.id');
+$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY));
+
+while ($aw = $qr->fetch()) {
+	if (isset($list[$aw['player']])) {
 		$shipPrice = 0;
+		$shipPrice += ShipResource::getInfo(0, 'resourcePrice') * $aw['s0'];
+		$shipPrice += ShipResource::getInfo(1, 'resourcePrice') * $aw['s1'];
+		$shipPrice += ShipResource::getInfo(2, 'resourcePrice') * $aw['s2'];
+		$shipPrice += ShipResource::getInfo(3, 'resourcePrice') * $aw['s3'];
+		$shipPrice += ShipResource::getInfo(4, 'resourcePrice') * $aw['s4'];
+		$shipPrice += ShipResource::getInfo(5, 'resourcePrice') * $aw['s5'];
+		$shipPrice += ShipResource::getInfo(6, 'resourcePrice') * $aw['s6'];
+		$shipPrice += ShipResource::getInfo(7, 'resourcePrice') * $aw['s7'];
+		$shipPrice += ShipResource::getInfo(8, 'resourcePrice') * $aw['s8'];
+		$shipPrice += ShipResource::getInfo(9, 'resourcePrice') * $aw['s9'];
+		$shipPrice += ShipResource::getInfo(10, 'resourcePrice') * $aw['s10'];
+		$shipPrice += ShipResource::getInfo(11, 'resourcePrice') * $aw['s11'];
+		$points = round($shipPrice * COEF_RESOURCE);
+		$points += $aw['points'];
+		$points += round($aw['resources'] * COEF_RESOURCE);
+		$list[$aw['player']]['general'] += $points;
+
 		$pevQuantity = 0;
-		for ($j = 0; $j < 12; $j++) {
-			$shipPrice += ShipResource::getInfo($j, 'resourcePrice') * $orbitalBase->getShipStorage($j);
-			$pevQuantity += ShipResource::getInfo($j, 'pev') * $orbitalBase->getShipStorage($j);
-		}
-		$points += round($shipPrice * COEF_RESOURCE);
-		# add the points to the list
-		$list[$orbitalBase->rPlayer]['general'] += $points;
-		$list[$orbitalBase->rPlayer]['armies'] += $pevQuantity;
-
-		$resourcesProd = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $orbitalBase->levelRefinery, 'refiningCoefficient'), $orbitalBase->getPlanetResources());
-		$list[$orbitalBase->rPlayer]['resources'] += $resourcesProd;
-
+		$pevQuantity += ShipResource::getInfo(0, 'pev') * $aw['s0'];
+		$pevQuantity += ShipResource::getInfo(1, 'pev') * $aw['s1'];
+		$pevQuantity += ShipResource::getInfo(2, 'pev') * $aw['s2'];
+		$pevQuantity += ShipResource::getInfo(3, 'pev') * $aw['s3'];
+		$pevQuantity += ShipResource::getInfo(4, 'pev') * $aw['s4'];
+		$pevQuantity += ShipResource::getInfo(5, 'pev') * $aw['s5'];
+		$pevQuantity += ShipResource::getInfo(6, 'pev') * $aw['s6'];
+		$pevQuantity += ShipResource::getInfo(7, 'pev') * $aw['s7'];
+		$pevQuantity += ShipResource::getInfo(8, 'pev') * $aw['s8'];
+		$pevQuantity += ShipResource::getInfo(9, 'pev') * $aw['s9'];
+		$pevQuantity += ShipResource::getInfo(10, 'pev') * $aw['s10'];
+		$pevQuantity += ShipResource::getInfo(11, 'pev') * $aw['s11'];
+		$list[$aw['player']]['armies'] += $pevQuantity;
 	}
 }
 
 # load the commanders
-$start = 0;
-$qty = 250;
+$qr = $db->prepare('SELECT 
+		p.id AS player,
+		SUM(sq.ship0) as s0,
+		SUM(sq.ship1) as s1,
+		SUM(sq.ship2) as s2,
+		SUM(sq.ship3) as s3,
+		SUM(sq.ship4) as s4,
+		SUM(sq.ship5) as s5,
+		SUM(sq.ship6) as s6,
+		SUM(sq.ship7) as s7,
+		SUM(sq.ship8) as s8,
+		SUM(sq.ship9) as s9,
+		SUM(sq.ship10) as s10,
+		SUM(sq.ship11) as s11
+	FROM squadron AS sq 
+	LEFT JOIN commander AS c
+		ON c.id = sq.rCommander
+	LEFT JOIN player AS p
+		ON p.id = c.rPlayer
+	WHERE c.statement = ? || c.statement = ?
+	GROUP BY p.id');
+$qr->execute(array(Commander::AFFECTED, Commander::MOVING));
 
-while (true) {
-	ASM::$com->load(array('c.statement' => array(Commander::AFFECTED, Commander::MOVING)), array(), array($start, $qty));
-	
-	# exit when all the commanders are loaded
-	if (ASM::$com->size() == 0) { break; }
-	for ($i = 0; $i < ASM::$com->size(); $i++) {
-		$commander = ASM::$com->get($i);
-		if (isset($list[$commander->rPlayer])) {
-			# count the points of a commander
-			$points = 0;
-			$shipList = $commander->getNbrShipByType();
-			$shipPrice = 0;
-			$pevQuantity = 0;
-			for ($j = 0; $j < 12; $j++) {
-				$shipPrice += ShipResource::getInfo($j, 'resourcePrice') * $shipList[$j];
-				$pevQuantity += ShipResource::getInfo($j, 'pev') * $shipList[$j];
-			}
-			$points += round($shipPrice * COEF_RESOURCE);
+while ($aw = $qr->fetch()) {
+	if (isset($list[$aw['player']])) {
+		$shipPrice = 0;
+		$shipPrice += ShipResource::getInfo(0, 'resourcePrice') * $aw['s0'];
+		$shipPrice += ShipResource::getInfo(1, 'resourcePrice') * $aw['s1'];
+		$shipPrice += ShipResource::getInfo(2, 'resourcePrice') * $aw['s2'];
+		$shipPrice += ShipResource::getInfo(3, 'resourcePrice') * $aw['s3'];
+		$shipPrice += ShipResource::getInfo(4, 'resourcePrice') * $aw['s4'];
+		$shipPrice += ShipResource::getInfo(5, 'resourcePrice') * $aw['s5'];
+		$shipPrice += ShipResource::getInfo(6, 'resourcePrice') * $aw['s6'];
+		$shipPrice += ShipResource::getInfo(7, 'resourcePrice') * $aw['s7'];
+		$shipPrice += ShipResource::getInfo(8, 'resourcePrice') * $aw['s8'];
+		$shipPrice += ShipResource::getInfo(9, 'resourcePrice') * $aw['s9'];
+		$shipPrice += ShipResource::getInfo(10, 'resourcePrice') * $aw['s10'];
+		$shipPrice += ShipResource::getInfo(11, 'resourcePrice') * $aw['s11'];
+		$points = round($shipPrice * COEF_RESOURCE);
+		$list[$aw['player']]['general'] += $points;
 
-			$list[$commander->rPlayer]['general'] += $points;
-			$list[$commander->rPlayer]['armies'] += $pevQuantity;
-		}
+		$pevQuantity = 0;
+		$pevQuantity += ShipResource::getInfo(0, 'pev') * $aw['s0'];
+		$pevQuantity += ShipResource::getInfo(1, 'pev') * $aw['s1'];
+		$pevQuantity += ShipResource::getInfo(2, 'pev') * $aw['s2'];
+		$pevQuantity += ShipResource::getInfo(3, 'pev') * $aw['s3'];
+		$pevQuantity += ShipResource::getInfo(4, 'pev') * $aw['s4'];
+		$pevQuantity += ShipResource::getInfo(5, 'pev') * $aw['s5'];
+		$pevQuantity += ShipResource::getInfo(6, 'pev') * $aw['s6'];
+		$pevQuantity += ShipResource::getInfo(7, 'pev') * $aw['s7'];
+		$pevQuantity += ShipResource::getInfo(8, 'pev') * $aw['s8'];
+		$pevQuantity += ShipResource::getInfo(9, 'pev') * $aw['s9'];
+		$pevQuantity += ShipResource::getInfo(10, 'pev') * $aw['s10'];
+		$pevQuantity += ShipResource::getInfo(11, 'pev') * $aw['s11'];
+		$list[$aw['player']]['armies'] += $pevQuantity;
 	}
-	$start += $qty;
-	
-	ASM::$com->emptySession();
-};
+}
 
 #-------------------------------- BUTCHER RANKING --------------------------------#
 # load the reports
-$start = 0;
-$qty = 250;
+$qr = $db->prepare('SELECT
+		p.id AS player,
+		(SUM(pevInBeginA) - SUM(`pevAtEndA`)) AS lostPEV,
+		(SUM(pevInBeginD) - SUM(`pevAtEndD`)) AS destroyedPEV
+	FROM report AS r
+	RIGHT JOIN player AS p
+		ON p.id = r.rPlayerAttacker
+	WHERE p.statement = ? OR p.statement = ? OR p.statement = ?
+	GROUP BY p.id
+	ORDER BY p.id');
+$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY));
 
-while (true) {
-	ASM::$rpm->load(array(), array(), array($start, $qty));
-	
-	# exit when all the reports are loaded
-	if (ASM::$rpm->size() == 0) { break; }
-
-	for ($i = 0; $i < ASM::$rpm->size(); $i++) {
-		$report = ASM::$rpm->get($i);
-
-		$attackerPEVLost = $report->pevInBeginA - $report->pevAtEndA;
-		$defenderPEVLost = $report->pevInBeginD - $report->pevAtEndD;
-
-		if (isset($list[$report->rPlayerAttacker])) {
-			$list[$report->rPlayerAttacker]['butcherDestroyedPEV'] += $defenderPEVLost;
-			$list[$report->rPlayerAttacker]['butcherLostPEV'] += $attackerPEVLost;
-			$list[$report->rPlayerAttacker]['butcher'] += $defenderPEVLost - $attackerPEVLost;
-		}
-
-		if (isset($list[$report->rPlayerDefender])) {
-			$list[$report->rPlayerDefender]['butcherDestroyedPEV'] += $attackerPEVLost;
-			$list[$report->rPlayerDefender]['butcherLostPEV'] += $defenderPEVLost;
-			$list[$report->rPlayerDefender]['butcher'] += $attackerPEVLost - $defenderPEVLost;
-		}
+while ($aw = $qr->fetch()) {
+	if (isset($list[$aw['player']])) {
+		$list[$aw['player']]['butcherDestroyedPEV'] += $aw['destroyedPEV'];
+		$list[$aw['player']]['butcherLostPEV'] += $aw['lostPEV'];
+		$list[$aw['player']]['butcher'] += $aw['destroyedPEV'] - $aw['lostPEV'];
 	}
-	$start += $qty;
-	
-	ASM::$rpm->emptySession();
-};
+}
+
+$qr = $db->prepare('SELECT
+		p.id AS player,
+		(SUM(pevInBeginD) - SUM(`pevAtEndD`)) AS lostPEV,
+		(SUM(pevInBeginA) - SUM(`pevAtEndA`)) AS destroyedPEV,
+		((SUM(pevInBeginD) - SUM(`pevAtEndD`)) - (SUM(pevInBeginA) - SUM(`pevAtEndA`))) AS score
+	FROM report AS r
+	RIGHT JOIN player AS p
+		ON p.id = r.rPlayerDefender
+	WHERE p.statement = ? OR p.statement = ? OR p.statement = ?
+	GROUP BY p.id
+	ORDER BY p.id');
+$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY));
+
+while ($aw = $qr->fetch()) {
+	if (isset($list[$aw['player']])) {
+		$list[$aw['player']]['butcherDestroyedPEV'] += $aw['destroyedPEV'];
+		$list[$aw['player']]['butcherLostPEV'] += $aw['lostPEV'];
+		$list[$aw['player']]['butcher'] += $aw['destroyedPEV'] - $aw['lostPEV'];
+	}
+}
 
 #-------------------------------- TRADER RANKING --------------------------------#
 # load the commercial routes
-$start = 0;
-$qty = 250;
+$qr = $db->prepare('SELECT 
+		p.id AS player,
+		SUM(income) AS income
+	FROM commercialRoute AS c
+	LEFT JOIN orbitalBase AS o
+		ON o.rPlace = c.rOrbitalBase
+		RIGHT JOIN player AS p
+			ON p.id = o.rPlayer
+	WHERE p.statement = ? OR p.statement = ? OR p.statement = ?
+	GROUP BY p.id
+	ORDER BY p.id');
+$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY));
 
-while (true) {
-	ASM::$crm->load(array('statement' => CRM_ACTIVE), array(), array($start, $qty));
-	
-	# exit when all the routes are loaded
-	if (ASM::$crm->size() == 0) { break; }
-
-	for ($i = 0; $i < ASM::$crm->size(); $i++) {
-		$route = ASM::$crm->get($i);
-
-		if (isset($list[$route->playerId1])) {
-			$list[$route->playerId1]['trader'] += $route->income;
-		}
-
-		if (isset($list[$route->playerId2])) {
-			$list[$route->playerId2]['trader'] += $route->income;
-		}
+while ($aw = $qr->fetch()) {
+	if (isset($list[$aw['player']])) {
+		$list[$aw['player']]['trader'] += $aw['income'];
 	}
-	$start += $qty;
-	
-	ASM::$crm->emptySession();
-};
+}
+
+$qr = $db->prepare('SELECT 
+		p.id AS player,
+		SUM(income) AS income
+	FROM `commercialRoute` AS c
+	LEFT JOIN orbitalBase AS o
+		ON o.rPlace = c.rOrbitalBaseLinked
+		RIGHT JOIN player AS p
+			ON p.id = o.rPlayer
+	WHERE p.statement = ? OR p.statement = ? OR p.statement = ?
+	GROUP BY p.id
+	ORDER BY p.id');
+$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY));
+
+while ($aw = $qr->fetch()) {
+	if (isset($list[$aw['player']])) {
+		$list[$aw['player']]['trader'] += $aw['income'];
+	}
+}
 
 #-------------------------------- FIGHT & EXPERIENCE RANKING --------------------------------#
 for ($i = 0; $i < ASM::$pam->size(); $i++) {
@@ -325,11 +420,6 @@ foreach ($list as $player => $value) {
 	ASM::$prm->add($pr);
 }
 
-ASM::$rpm->changeSession($S_RPM1);
-ASM::$com->changeSession($S_COM1);
-ASM::$crm->changeSession($S_CRM1);
-ASM::$obm->changeSession($S_OBM1);
 ASM::$pam->changeSession($S_PAM1);
 ASM::$prm->changeSession($S_PRM1);
-
 ?>
