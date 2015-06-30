@@ -104,7 +104,7 @@ echo '<div class="component">';
 							echo '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
 							echo '<strong>' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->getName() . '</strong>';
 							echo '<em>' . Format::numberFormat($commander->getExperience()) . ' points d\'expérience</em>';
-							echo '<em>&#177; ' . Format::number($earnedExperience) . 'xp/relève</em>';
+							echo '<em>~ ' . Format::number($earnedExperience) . 'xp/relève</em>';
 							echo '<span class="group-link">';
 								echo '<a class="hb lt" title="affecter l\'officier" href="' . Format::actionBuilder('affectcommander', ['id' => $commander->getId()]) . '">&#8593;</a>';
 								echo '<a class="hb lt" title="placer l\'officier dans le mess" href="' . Format::actionBuilder('putcommanderinschool', ['id' => $commander->getId()]) . '">&#8594;</a>';

@@ -203,7 +203,7 @@ try {
 	GalaxyColorManager::apply();
 
 	# send welcome message with Jean-Mi
-	$message = 'Salut,  
+/*	$message = 'Salut,  
 		<br /><br />Moi c\'est Jean-Mi, l\'opérateur du jeu. 
 		<br />Je te souhaite la bienvenue sur Asylamba et espère que tu t\'y plairas.
 		<br />Je t\'enverrai des messages quand tu devras être au courant de choses importantes au fur et à mesure du temps.
@@ -224,7 +224,7 @@ try {
 		ASM::$msm->add($m);
 	} else {
 		CTR::$alert->add('Création du message d\'accueil raté :-(. Bienvenue quand même !', ALERT_STD_ERROR);
-	}
+	}*/
 
 	# redirection vers connection
 	CTR::redirect('connection/bindkey-' . Security::crypt(Security::buildBindkey($pl->getBind()), KEY_SERVER) . '/mode-splash');
