@@ -86,13 +86,14 @@ class ColorManager extends Manager {
 			$color->desc2 = ColorResource::getInfo($color->id, 'desc2');
 			$color->desc3 = ColorResource::getInfo($color->id, 'desc3');
 			$color->desc4 = ColorResource::getInfo($color->id, 'desc4');
+			$color->bonus = ColorResource::getInfo($color->id, 'bonus');
 			$color->mandateDuration = ColorResource::getInfo($color->id, 'mandateDuration');
 			$color->senateDesc = ColorResource::getInfo($color->id, 'senateDesc');
 			$color->campaignDesc = ColorResource::getInfo($color->id, 'campaignDesc');
 	
-			$color->bonus = [];
+			$color->bonusText = [];
 			foreach (ColorResource::getInfo($color->id, 'bonus') AS $k) {
-				$color->bonus[] = ColorResource::getBonus($k);
+				$color->bonusText[] = ColorResource::getBonus($k);
 			}
 
 			if ($color->id != 0) {

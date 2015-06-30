@@ -1,6 +1,7 @@
 <?php
 include_once ATHENA;
 include_once PROMETHEE;
+include_once DEMETER;
 # build ship action
 
 # int baseid 		id (rPlace) de la base orbitale
@@ -89,10 +90,14 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 				// débit des ressources au joueur
 				$resourcePrice = ShipResource::getInfo($ship, 'resourcePrice') * $quantity;
 				if ($ship == ShipResource::CERBERE || $ship == ShipResource::PHENIX) {
-					if (CTR::$data->get('playerInfo')->get('color') == ColorResource::EMPIRE) {
-						# bonus if the player is from the Empire
+
+					$_CLM1 = ASM::$clm->getCurrentSession();
+					ASM::$clm->newSession();
+					ASM::$clm->load(['id' => CTR::$data->get('playerInfo')->get('color')]);
+					if (in_array(ColorResource::PRICEBIGSHIPBONUS, ASM::$clm->get()->bonus)) {
 						$resourcePrice -= round($resourcePrice * ColorResource::BONUS_EMPIRE_CRUISER / 100);
 					}
+					ASM::$clm->changeSession($_CLM1);
 				}
 				$ob->decreaseResources($resourcePrice);
 

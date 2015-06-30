@@ -10,7 +10,7 @@ class ColorResource {
 	const APHERA = 6;
 	const SYNELLE = 7;
 
-	const DEFENSEBONUS = 0;
+	const DEFENSELITTLESHIPBONUS = 0;
 	const PRICEBIGSHIPBONUS = 1;
 	const SPEEDLITTLESHIPBONUS = 2;
 	const DEFENSELITTLESHIPMALUS = 3;
@@ -36,7 +36,7 @@ class ColorResource {
 		if ($id <= count(self::$colors)) {
 			if (in_array($info, [
 				'id', 
-				'officialName', 
+				'officialName',
 				'popularName', 
 				'government', 
 				'demonym', 
@@ -71,24 +71,24 @@ class ColorResource {
 
 	private static $bonus = [
 		# 0
-		['path' => 'faction/bonus/bonus1-2.png', 'title' => '+ 5% de défense', 'desc' => 'Vos vaisseaux gagnent en défense'],
-		['path' => 'faction/bonus/bonus1-3.png', 'title' => '- 5% prix', 'desc' => 'Les croiseurs et croiseurs-lourds sont moins chers'],
-		['path' => 'faction/bonus/bonus2-2.png', 'title' => '+ 10% de maniabilité', 'desc' => 'Vos vaisseaux du Chantier Alpha gagnent en maniabilité'],
-		['path' => 'faction/bonus/bonus2-3.png', 'title' => '- 5% de défense', 'desc' => 'Vos vaisseaux du Chantier de Ligne perdent en défense'],
-		['path' => 'faction/bonus/bonus3-2.png', 'title' => '+ 5% production', 'desc' => 'Vos routes commerciales produisent plus de crédits'],
+		['path' => 'faction/bonus/bonus1-2.png', 'title' => '+ 5% de défense', 'desc' => 'Vos vaisseaux gagnent en défense'], # DONE
+		['path' => 'faction/bonus/bonus1-3.png', 'title' => '- 5% prix', 'desc' => 'Les croiseurs et croiseurs-lourds sont moins chers'], # DONE
+		['path' => 'faction/bonus/bonus2-2.png', 'title' => '+ 10% de maniabilité', 'desc' => 'Vos vaisseaux du Chantier Alpha gagnent en maniabilité'], # DONE
+		['path' => 'faction/bonus/bonus2-3.png', 'title' => '- 5% de défense', 'desc' => 'Vos vaisseaux du Chantier de Ligne perdent en défense'], # DONE
+		['path' => 'faction/bonus/bonus3-2.png', 'title' => '+ 5% production', 'desc' => 'Vos routes commerciales produisent plus de crédits'], # DONE
 		# 5
-		['path' => 'faction/bonus/bonus3-3.png', 'title' => '- 3% prix', 'desc' => 'Vos routes commerciales coûtent moins de crédits'],
-		['path' => 'faction/bonus/bonus4-2.png', 'title' => '+ 3% de crédits', 'desc' => 'Vos impôts vous amènent plus de crédits'],
-		['path' => 'faction/bonus/bonus4-3.png', 'title' => '- 10% prix', 'desc' => 'Vos colonisations et conquêtes sont moins chères'],
-		['path' => 'faction/bonus/bonus4-4.png', 'title' => '- 5% de ressources', 'desc' => 'Une partie des ressources pillées sont offertes aux Dieux'],
-		['path' => 'faction/bonus/bonus5-2.png', 'title' => '+ 4% production', 'desc' => 'Votre Raffinerie produit plus de ressources'],
+		['path' => 'faction/bonus/bonus3-3.png', 'title' => '- 3% prix', 'desc' => 'Vos routes commerciales coûtent moins de crédits'], # DONE
+		['path' => 'faction/bonus/bonus4-2.png', 'title' => '+ 3% de crédits', 'desc' => 'Vos impôts vous amènent plus de crédits'], # DONE
+		['path' => 'faction/bonus/bonus4-3.png', 'title' => '- 10% prix', 'desc' => 'Vos colonisations et conquêtes sont moins chères'], # DONE
+		['path' => 'faction/bonus/bonus4-4.png', 'title' => '- 5% de ressources', 'desc' => 'Une partie des ressources pillées sont offertes aux Dieux'], # DONE
+		['path' => 'faction/bonus/bonus5-2.png', 'title' => '+ 4% production', 'desc' => 'Votre Raffinerie produit plus de ressources'], # DONDE
 		#10
-		['path' => 'faction/bonus/bonus5-3.png', 'title' => '+ 4% stockage', 'desc' => 'Votre Raffinerie stocke plus de ressources'],
-		['path' => 'faction/bonus/bonus6-2.png', 'title' => '+ 4% efficacité', 'desc' => 'Votre Université est plus efficace'],
-		['path' => 'faction/bonus/bonus6-3.png', 'title' => '- 2% temps', 'desc' => 'Vos technologies se développent plus rapidement'],
-		['path' => 'faction/bonus/bonus7-2.png', 'title' => '+ 6% efficacité', 'desc' => 'Votre Ecole de Commandement est plus efficace'],
-		['path' => 'faction/bonus/bonus7-3.png', 'title' => '+ 2% efficacité', 'desc' => 'Votre Université est plus efficace']
-		#14
+		['path' => 'faction/bonus/bonus5-3.png', 'title' => '+ 4% stockage', 'desc' => 'Votre Raffinerie stocke plus de ressources'], # DONE
+		['path' => 'faction/bonus/bonus6-2.png', 'title' => '+ 4% efficacité', 'desc' => 'Votre Université est plus efficace'], # DONE
+		['path' => 'faction/bonus/bonus6-3.png', 'title' => '- 2% temps', 'desc' => 'Vos technologies se développent plus rapidement'], # DONE
+		['path' => 'faction/bonus/bonus7-2.png', 'title' => '+ 6% efficacité', 'desc' => 'Votre Ecole de Commandement est plus efficace'], # DONE
+		['path' => 'faction/bonus/bonus7-3.png', 'title' => '+ 2% efficacité', 'desc' => 'Votre Université est plus efficace'] # DONE
+		#15
 	];
 
 	private static $colors = [

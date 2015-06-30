@@ -107,12 +107,14 @@ class Color {
 	public $desc2 					= '';
 	public $desc3 					= '';
 	public $desc4 					= '';
-	public $bonus 					= [''];
+	public $bonus 					= []; # array des id des bonus
 	public $mandateDuration 		= 0;
 	public $senateDesc 				= '';
 	public $campaignDesc 			= '';
 
-	public $colorLink 				= array();
+	public $bonusText 					= ['']; # array des descriptions des bonus
+
+	public $colorLink 				= [];
 
 	public $chiefId					= 0;
 

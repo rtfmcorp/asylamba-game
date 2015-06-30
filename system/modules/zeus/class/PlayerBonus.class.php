@@ -175,51 +175,74 @@ class PlayerBonus {
 		ASM::$lam->changeSession($_LAM);
 	}
 	private function addFactionBonus() {
-		switch ($this->playerColor) {
-			case 1:
-				# Empire
-				$this->bonus->increase(self::FIGHTER_DEFENSE, 5);
-				$this->bonus->increase(self::CORVETTE_DEFENSE, 5);
-				$this->bonus->increase(self::FRIGATE_DEFENSE, 5);
-				$this->bonus->increase(self::DESTROYER_DEFENSE, 5);
-				break;
-			case 2:
-				# Kovahk
-				$this->bonus->increase(self::FIGHTER_SPEED, 10);
-				$this->bonus->increase(self::CORVETTE_SPEED, 10);
-				$this->bonus->increase(self::FRIGATE_DEFENSE, -5);
-				$this->bonus->increase(self::DESTROYER_DEFENSE, -5);
-				break;
-			case 3:
-				# Négore
-				$this->bonus->increase(self::COMMERCIAL_INCOME, 5);
-				break;
-			case 4:
-				# Cardan
-				$this->bonus->increase(self::POPULATION_TAX, 3);
-				$this->bonus->increase(self::SHIP_CONTAINER, -5);
-				break;
-			case 5:
-				# Nerve
-				$this->bonus->increase(self::REFINERY_REFINING, 4);
-				$this->bonus->increase(self::REFINERY_STORAGE, 4);
-				break;
-			case 6:
-				# Aphéra
-				$this->bonus->increase(self::UNI_INVEST, 4);
-				break;
-			case 7:
-				# Synelle
-				$this->bonus->increase(self::COMMANDER_INVEST, 6);
-				$this->bonus->increase(self::UNI_INVEST, 2);
-				$this->bonus->increase(self::FIGHTER_DEFENSE, 5);
-				$this->bonus->increase(self::CORVETTE_DEFENSE, 5);
-				$this->bonus->increase(self::FRIGATE_DEFENSE, 5);
-				$this->bonus->increase(self::DESTROYER_DEFENSE, 5);
-				break;
-			default:
-				break;
+		include_once DEMETER;
+
+		$_CLM = ASM::$clm->getCurrentSession();
+		ASM::$clm->newSession();
+		ASM::$clm->load(['id' => $this->playerColor]);
+		$color = ASM::$clm->get();
+
+		if (in_array(ColorResource::DEFENSELITTLESHIPBONUS, $color->bonus)) {
+			$this->bonus->increase(self::FIGHTER_DEFENSE, 5);
+			$this->bonus->increase(self::CORVETTE_DEFENSE, 5);
+			$this->bonus->increase(self::FRIGATE_DEFENSE, 5);
+			$this->bonus->increase(self::DESTROYER_DEFENSE, 5);
 		}
+		
+		if (in_array(ColorResource::SPEEDLITTLESHIPBONUS, $color->bonus)) {
+			$this->bonus->increase(self::FIGHTER_SPEED, 10);
+			$this->bonus->increase(self::CORVETTE_SPEED, 10);
+		}
+
+		if (in_array(ColorResource::DEFENSELITTLESHIPMALUS, $color->bonus)) {
+			$this->bonus->increase(self::FRIGATE_DEFENSE, -5);
+			$this->bonus->increase(self::DESTROYER_DEFENSE, -5);
+		}
+		
+		if (in_array(ColorResource::COMMERCIALROUTEBONUS, $color->bonus)) {
+			$this->bonus->increase(self::COMMERCIAL_INCOME, 5);
+		}
+		
+		if (in_array(ColorResource::TAXBONUS, $color->bonus)) {
+			$this->bonus->increase(self::POPULATION_TAX, 3);
+		}		
+
+		if (in_array(ColorResource::LOOTRESOURCESMALUS, $color->bonus)) {
+			$this->bonus->increase(self::SHIP_CONTAINER, -5);
+		}
+		
+		if (in_array(ColorResource::RAFINERYBONUS, $color->bonus)) {	
+			$this->bonus->increase(self::REFINERY_REFINING, 4);
+		}
+
+		if (in_array(ColorResource::STORAGEBONUS, $color->bonus)) {	
+			$this->bonus->increase(self::REFINERY_STORAGE, 4);
+		}
+		
+		if (in_array(ColorResource::BIGACADEMICBONUS, $color->bonus)) {
+			$this->bonus->increase(self::UNI_INVEST, 4);
+		}
+		
+		if (in_array(ColorResource::COMMANDERSCHOOLBONUS, $color->bonus)) {
+			$this->bonus->increase(self::COMMANDER_INVEST, 6);
+		}
+
+		if (in_array(ColorResource::LITTLEACADEMICBONUS, $color->bonus)) {
+			$this->bonus->increase(self::UNI_INVEST, 2);
+		}
+
+		if (in_array(ColorResource::TECHNOLOGYBONUS, $color->bonus)) {
+			$this->bonus->increase(self::TECHNOSPHERE_SPEED, 2);
+		}
+
+		if (in_array(ColorResource::DEFENSELITTLESHIPBONUS, $color->bonus)) {
+			$this->bonus->increase(self::FIGHTER_DEFENSE, 5);
+			$this->bonus->increase(self::CORVETTE_DEFENSE, 5);
+			$this->bonus->increase(self::FRIGATE_DEFENSE, 5);
+			$this->bonus->increase(self::DESTROYER_DEFENSE, 5);		
+		}
+		
+		ASM::$clm->changeSession($_CLM);
 	}
 
 	public function increment($bonusId, $increment) {

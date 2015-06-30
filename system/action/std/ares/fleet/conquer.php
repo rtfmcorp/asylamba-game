@@ -67,10 +67,17 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 
 							# compute price
 							$price = $totalBases * CREDITCOEFFTOCONQUER;
-							if (CTR::$data->get('playerInfo')->get('color') == ColorResource::CARDAN) {
-								# bonus if the player is from Cardan
+							
+							# calcul du bonus
+							$_CLM46 = ASM::$clm->getCurrentSession();
+							ASM::$clm->newSession();
+							ASM::$clm->load(['id' => CTR::$data->get('playerInfo')->get('color')]);
+							
+							if (in_array(ColorResource::COLOPRICEBONUS, ASM::$clm->get()->bonus)) {
 								$price -= round($price * ColorResource::BONUS_CARDAN_COLO / 100);
 							}
+							ASM::$clm->changeSession($_CLM46);
+
 							if (CTR::$data->get('playerInfo')->get('credit') >= $price) {
 								if ($commander->getPev() > 0) {
 									if ($commander->statement == Commander::AFFECTED) {

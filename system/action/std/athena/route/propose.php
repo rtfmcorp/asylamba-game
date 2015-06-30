@@ -79,12 +79,17 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 					$imageLink = '4-' . rand(1, 3);
 				}
 
-				# compute bonus if the proposer is from Negore
-				if (CTR::$data->get('playerInfo')->get('color') == ColorResource::NEGORA) {
+				# compute bonus
+				$_CLM23 = ASM::$clm->getCurrentSession();
+				ASM::$clm->newSession();
+				ASM::$clm->load(['id' => CTR::$data->get('playerInfo')->get('color')]);
+				if (in_array(ColorResource::COMMERCIALROUTEPRICEBONUS, ASM::$clm->get()->bonus)) {
 					$priceWithBonus = round($price - ($price * ColorResource::BONUS_NEGORA_ROUTE / 100));
 				} else {
 					$priceWithBonus = $price;
 				}
+
+				ASM::$clm->changeSession($_CLM23);
 
 				if (CTR::$data->get('playerInfo')->get('credit') >= $priceWithBonus) {
 					# création de la route

@@ -76,7 +76,7 @@ echo '<div id="content">';
 						echo '<blockquote>"' . ColorResource::getInfo($ally->id, 'devise') . '"</blockquote>';
 
 							echo '<h4>Bonus & Malus de faction</h4>';
-							foreach ($ally->bonus as $bonus) {
+							foreach ($ally->bonusText as $bonus) {
 								echo '<div class="build-item" style="margin: 25px 0;">';
 									echo '<div class="name">';
 										echo '<img src="' . MEDIA . $bonus['path'] . '" alt="" />';

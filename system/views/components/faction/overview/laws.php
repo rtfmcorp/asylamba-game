@@ -51,7 +51,7 @@ echo '<div class="component uni">';
 
 			echo '<h4>Bonus de faction</h4>';
 
-			$bonus = $faction->bonus;
+			$bonus = $faction->bonusText;
 			foreach ($bonus as $b) {
 				echo '<div class="build-item">';
 					echo '<div class="name">';
