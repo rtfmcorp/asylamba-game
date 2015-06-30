@@ -24,6 +24,7 @@ $scripts = [
 		['migration.color', '/migration/updateColor.php'],
 		['migration.recycling', '/migration/updateRecycling.php'],
 		['migration.sector', '/migration/updateSector.php'],
+		['migration.factionranking', '/migration/updateFactionRanking.php'],
 	]
 ];
 
