@@ -1001,6 +1001,7 @@ echo '<h2>Remplissage des conversations</h2>';
 $conv = new Conversation();
 $conv->messages = 0;
 $conv->type = Conversation::TY_SYSTEM;
+$conv->title = 'Jean-Mi, administrateur système';
 $conv->dCreation = Utils::now();
 $conv->dLastMessage = Utils::now();
 ASM::$cvm->add($conv);

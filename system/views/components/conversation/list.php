@@ -25,6 +25,14 @@ for ($i = 0; $i < ASM::$cvm->size(); $i++) {
 
 	$ownLastView = NULL;
 
+	if (count($conv->players) > 2) {
+		$convAvatar = 'multi';
+		$convColor  = 0;
+	} else {
+		$convAvatar = $conv->players[0]->playerAvatar;
+		$convColor  = $conv->players[0]->playerColor;
+	}
+
 	foreach ($conv->players as $player) {
 		if (CTR::$data->get('playerId') !== $player->rPlayer) {
 			if ($counter < 5) {
@@ -32,10 +40,12 @@ for ($i = 0; $i < ASM::$cvm->size(); $i++) {
 			} else {
 				$restPlayer++;
 			}
-			
-			if ($counter == 0) {
-				$convAvatar = $player->playerAvatar;
-				$convColor = $player->playerColor;
+
+			if ($conv->type == Conversation::TY_SYSTEM) {
+				if ($player->convPlayerStatement == ConversationUser::US_ADMIN) {
+					$convAvatar = $player->playerAvatar;
+					$convColor  = $player->playerColor;
+				}
 			}
 
 			$counter++;
@@ -46,11 +56,6 @@ for ($i = 0; $i < ASM::$cvm->size(); $i++) {
 
 	if ($restPlayer !== 0) {
 		$convName[count($convName) - 1] .= ' et <strong>' . $restPlayer . '+</strong>';
-	}
-
-	if ($counter > 2) {
-		$convAvatar = 'multi';
-		$convColor  = 0;
 	}
 
 	echo '<a class="conv-item" href="' . APP_ROOT . 'message/mode-' . $display . '/conversation-' . $conv->id . '">';

@@ -217,7 +217,7 @@ try {
 	$user->rConversation = $conv->id;
 	$user->rPlayer = $pl->getId();
 	$user->convPlayerStatement = ConversationUser::US_STANDARD;
-	$user->convStatement = ConversationUser::CS_DISPLAY;
+	$user->convStatement = ConversationUser::CS_ARCHIVED;
 	$user->dLastView = $readingDate;
 	ASM::$cum->add($user);
 
