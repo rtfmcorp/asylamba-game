@@ -1,32 +1,32 @@
 <?php
 $scripts = [
 	'Déploiment' => [
-		['dbinstall', '/deploy/dbinstall.php'],
-		['newgalaxy', '/deploy/newgalaxy.php'],
+		['deploy.dbinstall', '/deploy/dbinstall.php'],
+		['deploy.newgalaxy', '/deploy/newgalaxy.php'],
 	],
 	'Tâches Cron' => [
-		['daily', '/cron/daily.php'],
-		['playerranking', '/cron/playerRanking.php'],
-		['factionranking', '/cron/factionRanking.php'],
+		['cron.daily', '/cron/daily.php'],
+		['cron.playerranking', '/cron/playerRanking.php'],
+		['cron.factionranking', '/cron/factionRanking.php'],
 	],
 	'Utilitaires' => [
-		['commanderAttack', '/utils/commanderAttack.php'],
-		['sectors', '/utils/sectors.php'],
-		['maprender', '/utils/map-render.php'],
-		['findsectorinfos', '/utils/find-sector-infos.php'],
-		['getstatistic', '/utils/get-stats.php'],
-		['recolorsector', '/utils/recolor-sector.php'],
+		['utils.commanderAttack', '/utils/commanderAttack.php'],
+		['utils.sectors', '/utils/sectors.php'],
+		['utils.maprender', '/utils/map-render.php'],
+		['utils.findsectorinfos', '/utils/find-sector-infos.php'],
+		['utils.getstatistic', '/utils/get-stats.php'],
+		['utils.recolorsector', '/utils/recolor-sector.php'],
 	],
 	'Test' => [
-		['main', '/test/test.php'],
+		['test.main', '/test/test.php'],
 	],
 	'Migration' => [
-		['color', '/migration/updateColor.php'],
-		['recycling', '/migration/updateRecycling.php'],
-		['sector', '/migration/updateSector.php'],
-		['factionranking', '/migration/updateFactionRanking.php'],
-		['addconversation', '/migration/add-conversation.php'],
-		['removemessage', '/migration/remove-message.php'],
+		['migration.color', '/migration/updateColor.php'],
+		['migration.recycling', '/migration/updateRecycling.php'],
+		['migration.sector', '/migration/updateSector.php'],
+		['migration.factionranking', '/migration/updateFactionRanking.php'],
+		['migration.addconversation', '/migration/add-conversation.php'],
+		['migration.removemessage', '/migration/remove-message.php'],
 	]
 ];
 
