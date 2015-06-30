@@ -63,7 +63,7 @@ function cmpPoints($a, $b) {
 ASM::$clm->load(array('isInGame' => 1));
 
 # create an array with all the factions
-$list = array();
+$list = [];
 for ($i = 0; $i < ASM::$clm->size(); $i++) {
 	$list[ASM::$clm->get($i)->id] = array(
 		'general' => 0, 
@@ -71,7 +71,6 @@ for ($i = 0; $i < ASM::$clm->size(); $i++) {
 		'territorial' => 0,
 		'points' => ASM::$clm->get($i)->rankingPoints);
 }
-
 const COEF_RESOURCE = 0.001;
 
 #-------------------------------- GENERAL RANKING --------------------------------#

@@ -36,15 +36,15 @@ $db->query("CREATE TABLE IF NOT EXISTS `color` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 echo '<h3>Remplissage de la table color</h3>';
-$qr = $db->prepare("INSERT INTO `color` (`id`, `alive`, `credits`, `players`, `activePlayers`, `points`, `sectors`, `electionStatement`, `isClosed`, `description`, `dClaimVictory`, `dLastElection`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL, ?)");
+$qr = $db->prepare("INSERT INTO `color` (`id`, `alive`, `credits`, `players`, `activePlayers`, `points`, `sectors`, `electionStatement`, `isClosed`, `isInGame`, `description`, `dClaimVictory`, `dLastElection`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL, ?)");
 $date = Utils::addSecondsToDate(Utils::now(), - 500000);
 
 # génération de la faction zero
-$qr->execute(array(0, 0, 0, 0, 0, 0, 0, 1, 1, $date));
+$qr->execute(array(0, 0, 0, 0, 0, 0, 0, 1, 1, 0, $date));
 
 # génération des factions disponibles
 foreach ($AVAILABLE_FACTIONS as $faction) {
-	$qr->execute(array($faction, 1, 0, 0, 0, 0, 0, 1, 0, $date));
+	$qr->execute(array($faction, 1, 0, 0, 0, 0, 0, 1, 0, 1, $date));
 }
 
 #--------------------------------------------------------------------------------------------
