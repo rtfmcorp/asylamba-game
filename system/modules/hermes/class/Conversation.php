@@ -12,7 +12,7 @@ class Conversation {
 	public $dCreation			= '';
 	public $dLastMessage		= NULL;
 
-	public $users 				= array();
+	public $players				= array();
 
 	public function getId() { return $this->id; }
 

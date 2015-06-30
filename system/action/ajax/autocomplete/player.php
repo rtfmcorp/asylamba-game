@@ -1,5 +1,7 @@
 <?php
 include_once ZEUS;
+include_once DEMETER;
+
 $S_PAM1 = ASM::$pam->newSession(FALSE);
 
 ASM::$pam->search($_GET['q'], array('experience', 'DESC'), array(0, 20));

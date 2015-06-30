@@ -20,8 +20,8 @@ echo '<div id="content">';
 	# chargement de toutes les conversations
 	ASM::$cvm->newSession();
 	ASM::$cvm->load(
-		array('cu.rPlayer' => CTR::$data->get('playerId'), 'cu.convStatement' => $display),
-		array('c.dLastMessage', 'DESC'),
+		['cu.rPlayer' => CTR::$data->get('playerId'), 'cu.convStatement' => $display],
+		['c.dLastMessage', 'DESC'],
 		$limit
 	);
 
@@ -31,8 +31,42 @@ echo '<div id="content">';
 		if (CTR::$get->equal('conversation', 'new')) {
 			include COMPONENT . 'conversation/create.php';
 		} else {
-			include COMPONENT . 'conversation/messages.php';
-			include COMPONENT . 'conversation/manage.php';
+			# chargement d'une conversation
+			ASM::$cvm->newSession();
+			ASM::$cvm->load(
+				['c.id' => CTR::$get->get('conversation'), 'cu.rPlayer' => CTR::$data->get('playerId')]
+			);
+
+			if (ASM::$cvm->size() == 1) {
+				# chargement des infos d'une conversation
+				ASM::$cum->newSession();
+				ASM::$cum->load(['c.rConversation' => CTR::$get->get('conversation')]);
+
+				# dernière vue
+
+				# mis à jour de l'heure de la dernière vue
+				for ($i = 0; $i < ASM::$cum->size(); $i++) { 
+					if (ASM::$cum->get($i)->rPlayer == CTR::$data->get('playerId')) {
+						$dPlayerLastMessage = ASM::$cum->get($i)->dLastView;
+						$currentUser = ASM::$cum->get($i);
+						
+						ASM::$cum->get($i)->dLastView = Utils::now();
+					}
+				}
+
+				# chargement des messages
+				ASM::$cme->newSession();
+				ASM::$cme->load(
+					['c.rConversation' => CTR::$get->get('conversation')],
+					['c.dCreation', 'DESC'],
+					[0, ConversationMessage::MESSAGE_BY_PAGE]
+				);
+
+				include COMPONENT . 'conversation/messages.php';
+				include COMPONENT . 'conversation/manage.php';
+			} else {
+				CTR::redirect('message');
+			}
 		}
 	} else {
 		include COMPONENT . 'conversation/new.php';

@@ -33,7 +33,7 @@ class Parser {
 	}
 
 	public function getToolbar() {
-		$tl  = '<div class="toolbar">';
+		$tl  = '<span class="toolbar">';
 			if ($this->parseTag) {
 				$tl .= '<button data-tag="bl">Gras</button>';
 				$tl .= '<button data-tag="it">Italique</button>';
@@ -47,7 +47,7 @@ class Parser {
 			if ($this->parsePlace) {
 				$tl .= '<button data-tag="pl">Planète</button>';
 			}
-		$tl .= '</div>';
+		$tl .= '</span>';
 
 		return $tl;
 	}

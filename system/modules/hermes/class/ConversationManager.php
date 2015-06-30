@@ -55,7 +55,7 @@ class ConversationManager extends Manager {
 
 			for ($i = 0; $i < ASM::$cum->size(); $i++) {
 				if (ASM::$cum->get($i)->rConversation == $conv->id) {
-					$conv->users[] = ASM::$cum->get($i);
+					$conv->players[] = ASM::$cum->get($i);
 				}
 			}
 			

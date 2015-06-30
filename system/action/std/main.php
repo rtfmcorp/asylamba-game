@@ -42,15 +42,20 @@ if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('tok
 		case 'addtomission': 			include ACTION . 'athena/recycling/addToMission.php'; break;
 
 		# HERMES
-		case 'writemessage': 			include ACTION . 'hermes/message/write.php'; break;
-		case 'writeofficial':			include ACTION . 'hermes/message/writeOfficial.php'; break;
+	#	case 'writemessage': 			include ACTION . 'hermes/message/write.php'; break;
+	#	case 'writeofficial':			include ACTION . 'hermes/message/writeOfficial.php'; break;
+
+		case 'startconversation': 		include ACTION . 'hermes/conversation/start.php'; break;
+		case 'writeconversation': 		include ACTION . 'hermes/conversation/write.php'; break;
+		case 'leaveconversation':		include ACTION . 'hermes/conversation/leave.php'; break;
+		case 'adduserconversation':		include ACTION . 'hermes/conversation/addUser.php'; break;
+		case 'updatedisplayconversation':include ACTION . 'hermes/conversation/updateDisplay.php'; break;
+		case 'updatetitleconversation':	include ACTION . 'hermes/conversation/updateTitle.php'; break;
 		
 		case 'readallnotif': 			include ACTION . 'hermes/notification/readAll.php'; break;
 		case 'deleteallnotif':			include ACTION . 'hermes/notification/deleteAll.php'; break;
 		case 'deletenotif':				include ACTION . 'hermes/notification/delete.php'; break;
 		case 'archivenotif': 			include ACTION . 'hermes/notification/archive.php'; break;
-
-		case 'writeradio':				include ACTION . 'hermes/radio/write.php'; break;
 
 		case 'writeroadmap':			include ACTION . 'hermes/roadmap/write.php'; break;
 

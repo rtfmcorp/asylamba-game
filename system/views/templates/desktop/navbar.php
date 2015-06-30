@@ -19,7 +19,7 @@ $qr = $db->prepare('SELECT COUNT(c.id) AS count
 	WHERE u.rPlayer = ?
 	AND u.dLastView < c.dLastMessage'
 );
-$qr->execute(array(CTR::$data->get('userId')));
+$qr->execute(array(CTR::$data->get('playerId')));
 $message = $qr->fetch();
 $message = $message['count'];
 $qr->closeCursor();

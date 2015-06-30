@@ -10,7 +10,7 @@ class ConversationUserManager extends Manager {
 				p.name AS playerName,
 				p.avatar AS playerAvatar,
 				p.status AS playerStatus
-			FROM conversationMessage AS c
+			FROM conversationUser AS c
 			LEFT JOIN player AS p
 				ON c.rPlayer = p.id
 			' . Utils::arrayToWhere($where) .'
