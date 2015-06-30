@@ -54,7 +54,7 @@ abstract class GalaxyGenerator {
 
 		self::log('sauvegarde des secteurs');
 		for ($i = 0; $i < ceil(count(self::$listSector) / GalaxyGenerator::MAX_QUERY); $i++) { 
-			$qr = 'INSERT INTO sector(id, rColor, xPosition, yPosition, xBarycentric, yBarycentric, tax, population, lifePlanet, name, prime) VALUES ';
+			$qr = 'INSERT INTO sector(id, rColor, xPosition, yPosition, xBarycentric, yBarycentric, tax, population, lifePlanet, name, prime, points) VALUES ';
 			
 			for ($j = $i * GalaxyGenerator::MAX_QUERY; $j < (($i + 1) * GalaxyGenerator::MAX_QUERY) - 1; $j++) { 
 				if (isset(self::$listSector[$j])) {
@@ -333,7 +333,8 @@ abstract class GalaxyGenerator {
 				0,
 				0,
 				$sector['name'],
-				$prime
+				$prime,
+				$sector['points']
 			);
 
 			$k++;
