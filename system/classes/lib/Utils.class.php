@@ -43,7 +43,6 @@ class Utils {
 			$hour2 = explode(':', $date2[1]);
 			$newDate2 = $date2[0] . ' ' . $hour2[0] . ':00:00';
 			$time2 = strtotime($newDate2) / 3600;
-
 			$interval = abs($time1 - $time2);
 			return $interval;
 		} elseif ($precision == 's') {

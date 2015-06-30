@@ -20,6 +20,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `color` (
 	`credits` INT unsigned NOT NULL DEFAULT 0,
 	`players` SMALLINT unsigned NOT NULL DEFAULT 0,
 	`activePlayers` SMALLINT unsigned NOT NULL DEFAULT 0,
+	`rankingPoints` INT unsigned NOT NULL DEFAULT 0,
 	`points` INT unsigned NOT NULL DEFAULT 0,
 	`sectors` TINYINT unsigned NOT NULL DEFAULT 0,
 	`electionStatement` TINYINT NOT NULL DEFAULT 0,
@@ -966,6 +967,11 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `factionRanking` (
 	`id` INT unsigned NOT NULL AUTO_INCREMENT,
 	`rRanking` INT unsigned NOT NULL,
 	`rFaction` INT unsigned NOT NULL,
+
+	`points` INT unsigned NOT NULL,
+	`pointsPosition` SMALLINT NOT NULL,
+	`pointsVariation` SMALLINT NOT NULL,
+	`newPoints` SMALLINT NOT NULL,
 
 	`general` INT unsigned NOT NULL,
 	`generalPosition` SMALLINT NOT NULL,

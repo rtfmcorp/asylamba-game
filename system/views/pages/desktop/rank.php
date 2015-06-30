@@ -71,6 +71,10 @@ echo '<div id="content">';
 		ASM::$frm->loadLastContext(array('rFaction' => array(1,2,3,4,5,6,7)), array('generalPosition', 'ASC'), array(0, 1));
 		include COMPONENT . 'rank/faction/front.php';
 
+		$FACTION_RANKING_POINTS = ASM::$frm->newSession();
+		ASM::$frm->loadLastContext(array('rFaction' => array(1,2,3,4,5,6,7)), array('pointsPosition', 'ASC'));
+		include COMPONENT . 'rank/faction/points.php';
+
 		$FACTION_RANKING_GENERAL = ASM::$frm->newSession();
 		ASM::$frm->loadLastContext(array('rFaction' => array(1,2,3,4,5,6,7)), array('generalPosition', 'ASC'));
 		include COMPONENT . 'rank/faction/general.php';

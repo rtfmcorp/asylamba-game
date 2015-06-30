@@ -64,6 +64,7 @@ class ColorManager extends Manager {
 			$color->credits = $awColor[$i]['credits'];
 			$color->players = $awColor[$i]['players'];
 			$color->activePlayers = $awColor[$i]['activePlayers'];
+			$color->rankingPoints = $awColor[$i]['rankingPoints'];
 			$color->points = $awColor[$i]['points'];
 			$color->sectors = $awColor[$i]['sectors'];
 			$color->electionStatement = $awColor[$i]['electionStatement'];
@@ -125,6 +126,7 @@ class ColorManager extends Manager {
 					credits = ?,
 					players = ?,	
 					activePlayers = ?,
+					rankingPoints = ?,
 					points = ?,
 					sectors = ?,
 					electionStatement = ?,
@@ -140,6 +142,7 @@ class ColorManager extends Manager {
 					$color->credits,
 					$color->players,
 					$color->activePlayers,
+					$color->rankingPoints,
 					$color->points,
 					$color->sectors,
 					$color->electionStatement,
@@ -173,6 +176,7 @@ class ColorManager extends Manager {
 			credits = ?,
 			players = ?,		
 			activePlayers = ?,
+			rankingPoints = ?,
 			points = ?,
 			sectors = ?,
 			electionStatement = ?,
@@ -188,6 +192,7 @@ class ColorManager extends Manager {
 				$color->credits,
 				$color->players,
 				$color->activePlayers,
+				$color->rankingPoints,
 				$color->points,
 				$color->sectors,
 				$color->electionStatement,

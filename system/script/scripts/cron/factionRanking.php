@@ -31,7 +31,6 @@ $rRanking = $db->lastInsertId();
 
 echo 'Numéro du ranking : ' . $rRanking . '<br /><br />';
 
-
 function cmpGeneral($a, $b) {
     if ($a['general'] == $b['general']) {
         return 0;
@@ -53,6 +52,13 @@ function cmpTerritorial($a, $b) {
     return ($a['territorial'] > $b['territorial']) ? -1 : 1;
 }
 
+function cmpPoints($a, $b) {
+    if ($a['points'] == $b['points']) {
+        return 0;
+    }
+    return ($a['points'] > $b['points']) ? -1 : 1;
+}
+
 # load the factions (colors)
 ASM::$clm->load(array('isInGame' => 1));
 
@@ -62,7 +68,8 @@ for ($i = 0; $i < ASM::$clm->size(); $i++) {
 	$list[ASM::$clm->get($i)->id] = array(
 		'general' => 0, 
 		'wealth' => 0, 
-		'territorial' => 0);
+		'territorial' => 0,
+		'points' => ASM::$clm->get($i)->rankingPoints);
 }
 
 const COEF_RESOURCE = 0.001;
@@ -123,6 +130,8 @@ for ($i = 0; $i < $sectorManager->size(); $i++) {
 	}
 }
 
+#---------------- COMPUTING -------------------#
+
 # copy the arrays
 $listG = $list;
 $listW = $list;
@@ -144,6 +153,44 @@ $position = 1;
 foreach ($listW as $key => $value) { $listW[$key]['position'] = $position++;}
 $position = 1;
 foreach ($listT as $key => $value) { $listT[$key]['position'] = $position++;}
+
+#-------------------------------- POINTS RANKING -----------------------------#
+
+# faire ce classement uniquement après x jours de jeu
+if (Utils::interval(SERVER_START_TIME, Utils::now(), 'h') > HOURS_BEFORE_START_OF_RANKING) {
+	# points qu'on gagne en fonction de sa place dans le classement
+	$pointsToEarn = [40, 20, 10, 0, 0, 0, 0, 0, 0, 0, 0];
+	$coefG = 0.3; # 12 6 3 0 0 0 ...
+	$coefW = 0.2; # 8 4 2 0 0 0 ...
+	$coefT = 0.5; # 20 10 5 0 0 0 ...
+
+	for ($i = 0; $i < ASM::$clm->size(); $i++) {
+		$faction = ASM::$clm->get($i)->id;
+		$additionalPoints = 0;
+
+		# general
+		$additionalPoints += intval($pointsToEarn[$listG[$faction]['position'] - 1] * $coefG);
+
+		# wealth
+		$additionalPoints += intval($pointsToEarn[$listW[$faction]['position'] - 1] * $coefW);
+
+		# territorial
+		$additionalPoints += intval($pointsToEarn[$listT[$faction]['position'] - 1] * $coefT);
+
+		$list[$faction]['points'] += $additionalPoints;
+	}
+}
+
+
+#---------------- LAST COMPUTING -------------------#
+
+$listP = $list;
+uasort($listP, 'cmpPoints');
+
+$position = 1;
+foreach ($listP as $key => $value) { $listP[$key]['position'] = $position++;}
+
+#---------------- SAVING -------------------#
 
 foreach ($list as $faction => $value) {
 	$fr = new FactionRanking();
@@ -171,7 +218,13 @@ foreach ($list as $faction => $value) {
 	$fr->territorialPosition = $listT[$faction]['position'];
 	$fr->territorialVariation = $firstRanking ? 0 : $oldRanking->territorialPosition - $fr->territorialPosition;
 
+	$fr->points = $listP[$faction]['points'];
+	$fr->pointsPosition = $listP[$faction]['position'];
+	$fr->pointsVariation = $firstRanking ? 0 : $oldRanking->pointsPosition - $fr->pointsPosition;
+	$fr->newPoints = $firstRanking ? $fr->points : $fr->points - $oldRanking->points;
+
 	# update faction infos
+	ASM::$clm->getById($faction)->rankingPoints = $listP[$faction]['points'];
 	ASM::$clm->getById($faction)->points = $listG[$faction]['general'];
 	ASM::$clm->getById($faction)->sectors = $listT[$faction]['territorial'];
 	ASM::$clm->updateInfos($faction);

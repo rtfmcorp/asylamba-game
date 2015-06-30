@@ -84,6 +84,7 @@ class Color {
 	public $credits					= 0;
 	public $players 				= 0;
 	public $activePlayers 			= 0;
+	public $rankingPoints 			= 0;
 	public $points					= 0;
 	public $sectors					= 0;
 	public $electionStatement		= 0;

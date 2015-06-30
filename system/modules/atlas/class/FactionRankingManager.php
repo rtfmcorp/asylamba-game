@@ -56,6 +56,10 @@ class FactionRankingManager extends Manager {
 			$fr->id = $aw['id']; 
 			$fr->rRanking = $aw['rRanking'];
 			$fr->rFaction = $aw['rFaction']; 
+			$fr->points = $aw['points'];
+			$fr->pointsPosition = $aw['pointsPosition'];
+			$fr->pointsVariation = $aw['pointsVariation'];
+			$fr->newPoints = $aw['newPoints'];
 			$fr->general = $aw['general'];
 			$fr->generalPosition = $aw['generalPosition'];
 			$fr->generalVariation = $aw['generalVariation'];
@@ -85,6 +89,10 @@ class FactionRankingManager extends Manager {
 			$fr->id = isset($aw['id']) ? $aw['id'] : NULL;
 			$fr->rRanking = isset($aw['rRanking']) ? $aw['rRanking'] : NULL;
 			$fr->rFaction = isset($aw['rFaction']) ? $aw['rFaction'] : NULL;
+			$fr->points = isset($aw['points']) ? $aw['points'] : NULL;
+			$fr->pointsPosition = isset($aw['pointsPosition']) ? $aw['pointsPosition'] : NULL;
+			$fr->pointsVariation = isset($aw['pointsVariation']) ? $aw['pointsVariation'] : NULL;
+			$fr->newPoints = isset($aw['newPoints']) ? $aw['newPoints'] : NULL;
 			$fr->general = isset($aw['general']) ? $aw['general'] : NULL;
 			$fr->generalPosition = isset($aw['generalPosition']) ? $aw['generalPosition'] : NULL;
 			$fr->generalVariation = isset($aw['generalVariation']) ? $aw['generalVariation'] : NULL;
@@ -102,12 +110,16 @@ class FactionRankingManager extends Manager {
 	public function add(FactionRanking $fr) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO
-			factionRanking(rRanking, rFaction, general, generalPosition, generalVariation, 
+			factionRanking(rRanking, rFaction, points, pointsPosition, pointsVariation, newPoints, general, generalPosition, generalVariation, 
 				wealth, wealthPosition, wealthVariation, territorial, territorialPosition, territorialVariation)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
 			$fr->rRanking,
 			$fr->rFaction, 
+			$fr->points,
+			$fr->pointsPosition,
+			$fr->pointsVariation,
+			$fr->newPoints,
 			$fr->general,
 			$fr->generalPosition,
 			$fr->generalVariation,
@@ -132,7 +144,11 @@ class FactionRankingManager extends Manager {
 			$qr = $db->prepare('UPDATE factionRanking
 				SET	id = ?,
 					rRanking = ?,
-					rFaction = ?, 
+					rFaction = ?,
+					points = ?,
+					pointsPosition = ?,
+					pointsVariation = ?, 
+					newPoints = ?,
 					general = ?,
 					generalPosition = ?,
 					generalVariation = ?,
@@ -147,6 +163,10 @@ class FactionRankingManager extends Manager {
 				$fr->id,
 				$fr->rRanking,
 				$fr->rFaction, 
+				$fr->points,
+				$fr->pointsPosition,
+				$fr->pointsVariation,
+				$fr->newPoints,
 				$fr->general,
 				$fr->generalPosition,
 				$fr->generalVariation,

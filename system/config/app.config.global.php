@@ -52,7 +52,7 @@ define('EVENT_BASE', 			0);		# correspond Ã  une construction (batiment ou vais
 define('EVENT_OUTGOING_ATTACK', 1);
 define('EVENT_INCOMING_ATTACK', 2);
 
-# constante de temps pour la mise Ã  jour des Ã©vÃ©nements dans loadEvent.php
+# constante de temps pour la mise à jour des événements dans loadEvent.php
 # 300 s = 5 minutes
 define('TIME_EVENT_UPDATE',		300);
 
@@ -68,6 +68,7 @@ define('ANTISPY_GAME_MODE', 	1);
 
 define('NB_AVATAR', 			80);
 
-# time to win de game
-define('HOURS_TO_WIN', 			72);
+# durée en heures avant que le classement total démarre
+	# 2 semaines = 336 h
+define('HOURS_BEFORE_START_OF_RANKING', 336);
 ?>
