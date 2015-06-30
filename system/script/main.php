@@ -19,6 +19,7 @@ $scripts = [
 	],
 	'Test' => [
 		['test.main', '/test/test.php'],
+		['test.http', '/test/http-data.php'],
 	],
 	'Migration' => [
 		['migration.color', '/migration/updateColor.php'],
