@@ -12,10 +12,17 @@ ASM::$ntm->load(array('rPlayer' => CTR::$data->get('playerId'), 'readed' => 0), 
 
 # load message
 $db = DataBase::getInstance();
-$qr = $db->prepare('SELECT COUNT(id) AS n FROM message WHERE readed = 0 AND rPlayerReader = ? GROUP BY rPlayerReader');
+$qr = $db->prepare('SELECT COUNT(c.id) AS count
+	FROM `conversation` AS c
+	LEFT JOIN `conversationUser` AS u
+		ON u.rConversation = c.id
+	WHERE u.rPlayer = ?
+	AND u.dLastView < c.dLastMessage'
+);
 $qr->execute(array(CTR::$data->get('playerId')));
-$aw = $qr->fetch();
-$message = (count($aw['n']) > 0) ? $aw['n'] : 0;
+$message = $qr->fetch();
+$message = $message['count'];
+$qr->closeCursor();
 
 # DISPLAY NAV BAR
 #################
@@ -253,4 +260,3 @@ ASM::$ntm->changeSession($S_NTM1);
 
 # open general container
 echo '<div id="container">';
-?>	

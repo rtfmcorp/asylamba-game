@@ -121,7 +121,7 @@ ASM::$obm->changeSession($S_OBM1);
 # check the commanders (outgoing attacks)
 $S_COM1 = ASM::$com->getCurrentSession();
 ASM::$com->newSession();
-ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => COM_MOVING, 'c.travelType' => array(COM_LOOT, COM_COLO)));
+ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => COM_MOVING, 'c.travelType' => array(COM_LOOT, COM_COLO, COM_BACK)));
 
 for ($i = 0; $i < ASM::$com->size(); $i++) { 
 	CTR::$data->get('playerEvent')->add(

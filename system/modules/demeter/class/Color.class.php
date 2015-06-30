@@ -180,7 +180,7 @@ class Color {
 		$_VOM = ASM::$vom->getCurrentSession();
 		ASM::$vom->newSession();
 		ASM::$vom->load(array('rElection' => $election->id));
-		$ballot = array();
+		$ballot = [];
 
 		for ($i = 0; $i < ASM::$vom->size(); $i++) {
 			if (array_key_exists(ASM::$vom->get($i)->rCandidate, $ballot)) {
@@ -218,7 +218,11 @@ class Color {
 				arsort($ballot);
 				reset($ballot);
 
-				if (((current($ballot) / ($this->activePlayers + 1)) * 100) >= self::PUTSCHPERCENTAGE && key($ballot) != $chiefId) {
+				if (key($ballot) == $chiefId) {
+					next($ballot);
+				}
+
+				if (((current($ballot) / ($this->activePlayers + 1)) * 100) >= self::PUTSCHPERCENTAGE) {
 					$_PAM1 = ASM::$pam->getCurrentsession();
 					ASM::$pam->newSession(FALSE);
 					$token_playersGovernement = ASM::$pam->getCurrentsession();

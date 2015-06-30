@@ -19,12 +19,15 @@ $scripts = [
 	],
 	'Test' => [
 		['test.main', '/test/test.php'],
+		['test.http', '/test/http-data.php'],
 	],
 	'Migration' => [
 		['migration.color', '/migration/updateColor.php'],
 		['migration.recycling', '/migration/updateRecycling.php'],
 		['migration.sector', '/migration/updateSector.php'],
 		['migration.factionranking', '/migration/updateFactionRanking.php'],
+		['migration.addconversation', '/migration/add-conversation.php'],
+		['migration.removemessage', '/migration/remove-message.php'],
 	]
 ];
 
@@ -48,7 +51,7 @@ if (DEVMODE || CTR::$get->equal('key', KEY_SCRIPT)) {
 
 					foreach ($typeScripts as $i => $script) {
 						echo '<a href="' . APP_ROOT . 'script/key-' . KEY_SCRIPT . '/a-' . $script[0] . '">';
-							echo '<strong>Lancer</strong>';
+							echo '<strong>' . $script[0] . '</strong>';
 							echo $script[1];
 						echo '</a>';
 					}

@@ -4,6 +4,8 @@ include_once ZEUS;
 include_once GAIA;
 include_once DEMETER;
 
+include CONFIG . 'app.config.install.php';
+
 $db = DataBaseAdmin::getInstance();
 
 $db->query('SET FOREIGN_KEY_CHECKS = 0;');
@@ -34,17 +36,16 @@ $db->query("CREATE TABLE IF NOT EXISTS `color` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 echo '<h3>Remplissage de la table color</h3>';
-$qr = $db->prepare("INSERT INTO `color` (`id`, `alive`, `credits`, `players`, `activePlayers`, `points`, `sectors`, `electionStatement`, `isClosed`, `description`, `dClaimVictory`, `dLastElection`) VALUES
-(0, 0, 0, 0, 0, 0, 0, 1, 1, NULL, NULL, ?),
-(1, 1, 0, 0, 0, 0, 0, 1, 0, NULL, NULL, ?),
-(2, 1, 0, 0, 0, 0, 0, 1, 0, NULL, NULL, ?),
-(3, 1, 0, 0, 0, 0, 0, 1, 0, NULL, NULL, ?),
-(4, 1, 0, 0, 0, 0, 0, 1, 0, NULL, NULL, ?),
-(5, 1, 0, 0, 0, 0, 0, 1, 0, NULL, NULL, ?),
-(6, 1, 0, 0, 0, 0, 0, 1, 0, NULL, NULL, ?),
-(7, 1, 0, 0, 0, 0, 0, 1, 0, NULL, NULL, ?);");
+$qr = $db->prepare("INSERT INTO `color` (`id`, `alive`, `credits`, `players`, `activePlayers`, `points`, `sectors`, `electionStatement`, `isClosed`, `description`, `dClaimVictory`, `dLastElection`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL, ?)");
 $date = Utils::addSecondsToDate(Utils::now(), - 500000);
-$qr->execute(array($date, $date, $date, $date, $date, $date, $date, $date));
+
+# génération de la faction zero
+$qr->execute(array(0, 0, 0, 0, 0, 0, 0, 1, 1, $date));
+
+# génération des factions disponibles
+foreach ($AVAILABLE_FACTIONS as $faction) {
+	$qr->execute(array($faction, 1, 0, 0, 0, 0, 0, 1, 0, $date));
+}
 
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table factionNews</h2>';
@@ -150,12 +151,13 @@ $p->rColor = 0;
 ASM::$pam->add($p);
 
 # Joueurs de factions
-for ($i = 1; $i <= 7; $i++) {
+foreach ($AVAILABLE_FACTIONS as $faction) {
 	$p->bind = Utils::generateString(25);
-	$p->name = ColorResource::getInfo($i, 'officialName');
-	$p->avatar = ('color-' . $i);
-	$p->rColor = $i;
+	$p->name = ColorResource::getInfo($faction, 'officialName');
+	$p->avatar = ('color-' . $faction);
+	$p->rColor = $faction;
 	$p->status = 6;
+
 	ASM::$pam->add($p);
 }
 
@@ -512,63 +514,14 @@ $db->query("CREATE TABLE IF NOT EXISTS `commercialTax` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 
 echo '<h3>Remplissage de la table commercialTax</h3>';
-$qr = $db->prepare("INSERT INTO `commercialTax` (`faction`, `relatedFaction`, `exportTax`, `importTax`) VALUES
-(1, 1, 5, 5),
-(1, 2, 5, 5),
-(1, 3, 5, 5),
-(1, 4, 5, 5),
-(1, 5, 5, 5),
-(1, 6, 5, 5),
-(1, 7, 5, 5),
+$qr = $db->prepare("INSERT INTO `commercialTax` (`faction`, `relatedFaction`, `exportTax`, `importTax`) VALUES (?, ?, 5, 5)");
 
-(2, 1, 5, 5),
-(2, 2, 5, 5),
-(2, 3, 5, 5),
-(2, 4, 5, 5),
-(2, 5, 5, 5),
-(2, 6, 5, 5),
-(2, 7, 5, 5),
-
-(3, 1, 5, 5),
-(3, 2, 5, 5),
-(3, 3, 5, 5),
-(3, 4, 5, 5),
-(3, 5, 5, 5),
-(3, 6, 5, 5),
-(3, 7, 5, 5),
-
-(4, 1, 5, 5),
-(4, 2, 5, 5),
-(4, 3, 5, 5),
-(4, 4, 5, 5),
-(4, 5, 5, 5),
-(4, 6, 5, 5),
-(4, 7, 5, 5),
-
-(5, 1, 5, 5),
-(5, 2, 5, 5),
-(5, 3, 5, 5),
-(5, 4, 5, 5),
-(5, 5, 5, 5),
-(5, 6, 5, 5),
-(5, 7, 5, 5),
-
-(6, 1, 5, 5),
-(6, 2, 5, 5),
-(6, 3, 5, 5),
-(6, 4, 5, 5),
-(6, 5, 5, 5),
-(6, 6, 5, 5),
-(6, 7, 5, 5),
-
-(7, 1, 5, 5),
-(7, 2, 5, 5),
-(7, 3, 5, 5),
-(7, 4, 5, 5),
-(7, 5, 5, 5),
-(7, 6, 5, 5),
-(7, 7, 5, 5);");
-$qr->execute();
+# génération des taxes
+foreach ($AVAILABLE_FACTIONS as $faction) {
+	foreach ($AVAILABLE_FACTIONS as $rfaction) {
+		$qr->execute(array($faction, $rfaction));
+	}
+}
 
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table law</h2>';
@@ -992,24 +945,55 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `factionRanking` (
 $qr->execute();
 
 #--------------------------------------------------------------------------------------------
-echo '<h2>Ajout de la table message</h2>';
+echo '<h1>Ajout du module de Conversation</h1>';
 
-$db->query("DROP TABLE IF EXISTS `message`");
-$db->query("CREATE TABLE IF NOT EXISTS `message` (
-	`id` INT unsigned NOT NULL AUTO_INCREMENT,
-	`thread` INT unsigned DEFAULT NULL,
-	`rPlayerWriter` INT unsigned DEFAULT NULL,
-	`rPlayerReader` INT unsigned NOT NULL,
-	`dSending` datetime NOT NULL,
-	`content` text NOT NULL,
-	`readed` tinyint(1) DEFAULT 0,
-	`writerStatement` tinyint(1) DEFAULT 1,
-	`readerStatement` tinyint(1) DEFAULT 1,
+echo '<h2>Ajout de la table Conversation</h2>';
 
-	PRIMARY KEY (`id`),
-	CONSTRAINT fkMessagePlayerA FOREIGN KEY (rPlayerWriter) REFERENCES player(id),
-	CONSTRAINT fkMessagePlayerB FOREIGN KEY (rPlayerReader) REFERENCES player(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
+$db = DataBase::getInstance();
+$db->query("DROP TABLE IF EXISTS `conversation`");
+$qr = $db->prepare("CREATE TABLE IF NOT EXISTS `conversation` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`title` VARCHAR(255) NULL,
+	`messages` INT(5) NOT NULL DEFAULT 0,
+	`type` TINYINT(2) NOT NULL DEFAULT 1,
+	`dCreation` datetime NOT NULL,
+	`dLastMessage` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
+$qr->execute();
+
+echo '<h2>Ajout de la table userConversation</h2>';
+
+$db = DataBase::getInstance();
+$db->query("DROP TABLE IF EXISTS `conversationUser`");
+$qr = $db->prepare("CREATE TABLE IF NOT EXISTS `conversationUser` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`rConversation` INT(11) NOT NULL,
+	`rPlayer` INT(11) NOT NULL,
+	`playerStatement` INT(5) NOT NULL DEFAULT 0,
+	`convStatement` INT(5) NOT NULL DEFAULT 0,
+	`dLastView` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
+$qr->execute();
+
+echo '<h2>Ajout de la table messageConversation</h2>';
+
+$db = DataBase::getInstance();
+$db->query("DROP TABLE IF EXISTS `conversationMessage`");
+$qr = $db->prepare("CREATE TABLE IF NOT EXISTS `conversationMessage` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`rConversation` INT(11) NOT NULL,
+	`rPlayer` INT(11) NOT NULL,
+	`type` INT(5) NOT NULL DEFAULT 0,
+
+	`content` TEXT NOT NULL,
+
+	`dCreation` datetime NOT NULL,
+	`dLastModification` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
+$qr->execute();
 
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table notification</h2>';
@@ -1108,9 +1092,11 @@ $db->query("CREATE TABLE IF NOT EXISTS `technologyQueue` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 
 #--------------------------------------------------------------------------------------------
+$db->query("DROP TABLE IF EXISTS `recyclingLog`");
+$db->query("DROP TABLE IF EXISTS `recyclingMission`");
+
 echo '<h2>Ajout de la table recyclingMission</h2>';
 
-$db->query("DROP TABLE IF EXISTS `recyclingMission`");
 $db->query("CREATE TABLE IF NOT EXISTS `recyclingMission` (
 	`id` INT unsigned NOT NULL AUTO_INCREMENT,
 	`rBase` INT unsigned NOT NULL,
@@ -1130,7 +1116,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `recyclingMission` (
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table recyclingLog</h2>';
 
-$db->query("DROP TABLE IF EXISTS `recyclingLog`");
 $db->query("CREATE TABLE IF NOT EXISTS `recyclingLog` (
 	`id` INT unsigned NOT NULL AUTO_INCREMENT,
 	`rRecycling` INT unsigned NOT NULL,

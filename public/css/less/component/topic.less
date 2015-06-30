@@ -52,7 +52,6 @@
 
 		.footer {
 			margin: 0; padding: 6px 10px;
-			text-align: right;
 			font-size: 12px;
 			color: #CCC;
 
@@ -106,4 +105,86 @@
 	}
 }
 
+.component.topic .system-message {
+	position: relative;
+	padding: 0 0 0 90px; margin: 10px;
 
+	&:before {
+		content: '';
+		position: absolute;
+		top: 10px; left: 0;
+		height: 1px; width: 70px;
+		background: #4F4F4F;
+	}
+}
+
+.conv-item {
+	position: relative;
+	display: block;
+	border: solid 1px #202020;
+	border-bottom: none;
+	background: #0A0A0A;
+	height: 59px;
+	padding: 5px 5px 5px 70px;
+	margin: 0 10px;
+	color: white;
+	text-decoration: none;
+	overflow: hidden;
+
+	.cover {
+		position: absolute;
+		display: block;
+		top: 0; left: 0; bottom: 0;
+		width: 60px;
+		padding: 5px;
+
+		.picture {
+			width: 52px; height: 52px;
+			background: #202020;
+			border-radius: 100%;
+			padding: 4px;
+
+			&.color0 { box-shadow: 0 0 0 2px #4F4F4F; }
+			&.color1 { box-shadow: 0 0 0 2px @medium-1; }
+			&.color2 { box-shadow: 0 0 0 2px @medium-2; }
+			&.color3 { box-shadow: 0 0 0 2px @medium-3; }
+			&.color4 { box-shadow: 0 0 0 2px @medium-4; }
+			&.color5 { box-shadow: 0 0 0 2px @medium-5; }
+			&.color6 { box-shadow: 0 0 0 2px @medium-6; }
+			&.color7 { box-shadow: 0 0 0 2px @medium-7; }
+		}
+
+		.number, .new-message {
+			position: absolute;
+			width: 22px; height: 22px;
+			border-radius: 100%;
+			background: #0A0A0A;
+			bottom: 5px; right: 5px;
+			border: solid 1px #4F4F4F;
+			text-align: center; line-height: 22px;
+			font-size: 11px;
+		}
+
+		.new-message {
+			left: 5px; top: 5px;
+
+			img {
+				display: block;
+				width: 18px; height: 18px;
+				margin: 2px;
+			}
+		}
+	}
+
+	.data {
+		line-height: 20px;
+	}
+
+	&:last-child {
+		border: solid 1px #202020;
+	}
+
+	&:hover, &:focus {
+		background: #0C0C0C;
+	}
+}

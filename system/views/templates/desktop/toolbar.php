@@ -274,7 +274,7 @@ echo '<div id="tools">';
 									case Commander::MOVE: echo 'déplacement vers ' . $commander->get('eventInfo')->get('nDestination'); break;
 									case Commander::LOOT: echo 'pillage de ' . $commander->get('eventInfo')->get('nDestination'); break;
 									case Commander::COLO: echo 'colonisation de ' . $commander->get('eventInfo')->get('nDestination'); break;
-									case Commander::BACK: echo 'retour vers ' . $commander->get('eventInfo')->get('nStart'); break;
+									case Commander::BACK: echo 'retour vers ' . $commander->get('eventInfo')->get('nDestination'); break;
 									default: echo 'autre'; break;
 								}
 							echo '</em>';
@@ -317,7 +317,7 @@ echo '<div id="tools">';
 									case Commander::MOVE: echo 'déplacement vers ' . $commander->get('eventInfo')->get('nArrival'); break;
 									case Commander::LOOT: echo 'pillage de ' . $commander->get('eventInfo')->get('nArrival'); break;
 									case Commander::COLO: echo 'colonisation de ' . $commander->get('eventInfo')->get('nArrival'); break;
-									case Commander::BACK: echo 'retour vers ' . $commander->get('eventInfo')->get('nStart'); break;
+									case Commander::BACK: echo 'retour vers ' . $commander->get('eventInfo')->get('nArrival'); break;
 									default: echo 'autre'; break;
 								}
 							echo '</em>';

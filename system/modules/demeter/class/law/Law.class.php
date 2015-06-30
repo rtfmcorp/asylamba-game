@@ -46,7 +46,7 @@ class Law {
 	public function getId() { return $this->id; }
 
 	public function ballot() {
-		$_VLM = ASM::$vlm->getCurrentsession();
+		$_VLM213 = ASM::$vlm->getCurrentsession();
 		ASM::$vlm->newSession();
 		ASM::$vlm->load(array('rLaw' => $this->id));
 
@@ -60,7 +60,7 @@ class Law {
 			}
 		}
 
-		ASM::$vlm->changeSession($_VLM);
+		ASM::$vlm->changeSession($_VLM213);
 
 		if ($ballot >= 0) {
 			return TRUE;

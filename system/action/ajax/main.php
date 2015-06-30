@@ -25,8 +25,8 @@ switch (CTR::$get->get('a')) {
 	case 'buildingpanel': 			include PAGES . 'ajax/buildingPanel.php'; break;
 	case 'shippanel': 				include PAGES . 'ajax/shipPanel.php'; break;
 	case 'technopanel': 			include PAGES . 'ajax/technoPanel.php'; break;
-	case 'moremessage': 			include PAGES . 'ajax/message/moreMessage.php'; break;
-	case 'morethread': 				include PAGES . 'ajax/message/moreThread.php'; break;
+	case 'moremessage': 			include PAGES . 'ajax/conversation/message.php'; break;
+	case 'moreconversation': 		include PAGES . 'ajax/conversation/conversation.php'; break;
 	case 'morerank': 				include PAGES . 'ajax/morerank.php'; break;
 
 	# XHR RETURN WYSIWYG

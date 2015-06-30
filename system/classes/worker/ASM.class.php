@@ -23,8 +23,10 @@ abstract class ASM {
 
 	protected static $runningHermes = FALSE;
 	public static $ntm;
-	public static $msm;
 	public static $rmm;
+	public static $cvm;
+	public static $cum;
+	public static $cme;
 
 	protected static $runningPromethee = FALSE;
 	public static $rsm;
@@ -88,8 +90,10 @@ abstract class ASM {
 	public static function runHermes() {
 		if (!self::$runningHermes) {
 			self::$ntm = new NotificationManager();
-			self::$msm = new MessageManager();
 			self::$rmm = new RoadMapManager();
+			self::$cvm = new ConversationManager();
+			self::$cum = new ConversationUserManager();
+			self::$cme = new ConversationMessageManager();
 		}
 		self::$runningHermes = TRUE;
 	}
@@ -164,7 +168,9 @@ abstract class ASM {
 		}
 		if (self::$runningHermes) {
 			self::$ntm->save();
-			self::$msm->save();
+			self::$cvm->save();
+			self::$cum->save();
+			self::$cme->save();
 		}
 		if (self::$runningPromethee) {
 			self::$rsm->save();

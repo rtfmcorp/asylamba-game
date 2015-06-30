@@ -30,9 +30,9 @@ if ($commanderId !== FALSE) {
 				$rDestinationPlace = $commander->rDestinationPlace;
 				$commander->rDestinationPlace = $commander->rStartPlace;
 				$commander->rStartPlace = $rDestinationPlace;
-				// $startPlaceName = $commander->startPlaceName;
-				// $commander->startPlaceName = $commander->destinationPlaceName;
-				// $commander->destinationPlaceName = $startPlaceName;
+				$startPlaceName = $commander->startPlaceName;
+				$commander->startPlaceName = $commander->destinationPlaceName;
+				$commander->destinationPlaceName = $startPlaceName;
 				$commander->dStart = $dStart->format('Y-m-d H:i:s');
 				$commander->dArrival = $dArrival->format('Y-m-d H:i:s');
 				$commander->travelType = COM_BACK;
