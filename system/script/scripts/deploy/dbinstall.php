@@ -995,6 +995,34 @@ $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `conversationMessage` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
 $qr->execute();
 
+echo '<h2>Remplissage des conversations</h2>';
+
+# conv jeanmi
+$conv = new Conversation();
+$conv->messages = 0;
+$conv->type = Conversation::TY_SYSTEM;
+$conv->dCreation = Utils::now();
+$conv->dLastMessage = Utils::now();
+ASM::$cvm->add($conv);
+
+$user = new ConversationUser();
+$user->rConversation = $conv->id;
+$user->rPlayer = ID_JEANMI;
+$user->convPlayerStatement = ConversationUser::US_ADMIN;
+$user->convStatement = ConversationUser::CS_DISPLAY;
+$user->dLastView = Utils::now();
+ASM::$cum->add($user);
+
+/*foreach ($AVAILABLE_FACTIONS as $faction) {
+	$p->bind = Utils::generateString(25);
+	$p->name = ColorResource::getInfo($faction, 'officialName');
+	$p->avatar = ('color-' . $faction);
+	$p->rColor = $faction;
+	$p->status = 6;
+
+	ASM::$pam->add($p);
+}*/
+
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table notification</h2>';
 

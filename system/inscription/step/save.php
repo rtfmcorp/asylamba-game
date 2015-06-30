@@ -203,28 +203,23 @@ try {
 	GalaxyColorManager::apply();
 
 	# send welcome message with Jean-Mi
-/*	$message = 'Salut,  
-		<br /><br />Moi c\'est Jean-Mi, l\'opérateur du jeu. 
-		<br />Je te souhaite la bienvenue sur Asylamba et espère que tu t\'y plairas.
-		<br />Je t\'enverrai des messages quand tu devras être au courant de choses importantes au fur et à mesure du temps.
-		<br /><br />Bon jeu et à bientôt j\'espère.
-		<br /><br />Cordialement, <br />Jean-Mi';
-	$m = new Message();
-	$m->setRPlayerWriter(ID_JEANMI);
-	$m->setDSending(Utils::now());
-	$m->setContent($message);
+	$S_CVM = ASM::$cvm->getCurrentSession();
+	ASM::$cvm->newSession();
+	ASM::$cvm->load([
+			'cu.rPlayer' => ID_JEANMI
+		], [], [0, 1]
+	);
 
-	$db = DataBase::getInstance();
-	$qr = $db->prepare('SELECT MAX(thread) AS maxThread FROM message');
-	$qr->execute();
-	
-	if ($aw = $qr->fetch()) {
-		$m->setThread($aw['maxThread'] + 1);
-		$m->setRPlayerReader($pl->getId());
-		ASM::$msm->add($m);
-	} else {
-		CTR::$alert->add('Création du message d\'accueil raté :-(. Bienvenue quand même !', ALERT_STD_ERROR);
-	}*/
+	$conv = ASM::$cvm->get();
+	$readingDate = date('Y-m-d H:i:s', (strtotime(Utils::now()) - 20));
+
+	$user = new ConversationUser();
+	$user->rConversation = $conv->id;
+	$user->rPlayer = $pl->getId();
+	$user->convPlayerStatement = ConversationUser::US_STANDARD;
+	$user->convStatement = ConversationUser::CS_DISPLAY;
+	$user->dLastView = $readingDate;
+	ASM::$cum->add($user);
 
 	# redirection vers connection
 	CTR::redirect('connection/bindkey-' . Security::crypt(Security::buildBindkey($pl->getBind()), KEY_SERVER) . '/mode-splash');
