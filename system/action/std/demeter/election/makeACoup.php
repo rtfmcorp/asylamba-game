@@ -15,6 +15,7 @@ $ministerChoice = Utils::getHTTPData('ministerchoice');
 
 include_once DEMETER;
 include_once ZEUS;
+include_once HERMES;
 
 if ($program !== FALSE) {
 	if (CTR::$data->get('playerInfo')->get('status') > PAM_STANDARD && CTR::$data->get('playerInfo')->get('status') < PAM_CHIEF) {
@@ -64,6 +65,23 @@ if ($program !== FALSE) {
 				$vote->rElection = $election->id;
 				$vote->dVotation = Utils::now();
 				ASM::$vom->add($vote);
+
+				$_PAM123 = ASM::$pam->getCurrentsession();
+				ASM::$pam->newSession();
+				ASM::$pam->load(['rColor' => ASM::$clm->get()->id]);
+
+				for ($i = 0; $i < ASM::$pam->size(); $i++) {
+					$notif = new Notification();
+					$notif->setRPlayer(ASM::$pam->get($i)->id);
+					$notif->setTitle('Coup d\'Etat.');
+					$notif->addBeg()
+						->addTxt('Un membre de votre Faction soulève une partie du peuple et tente un coup d\'état contre le gouvernement.')
+						->addSep()
+						->addLnk('faction/view-election', 'prendre parti sur le coup d\'état.')
+						->addEnd();
+					ASM::$ntm->add($notif);
+				}
+				ASM::$pam->changeSession($_PAM123);
 
 				CTR::$alert->add('Coup d\'état lancé.', ALERT_STD_SUCCESS);
 			} else {
