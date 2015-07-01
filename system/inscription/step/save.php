@@ -202,24 +202,40 @@ try {
 	include_once GAIA;
 	GalaxyColorManager::apply();
 
-	# send welcome message with Jean-Mi
-	$S_CVM = ASM::$cvm->getCurrentSession();
-	ASM::$cvm->newSession();
-	ASM::$cvm->load([
-			'cu.rPlayer' => ID_JEANMI
-		], [], [0, 1]
+	# ajout aux conversation de faction et techniques
+	$readingDate = date('Y-m-d H:i:s', (strtotime(Utils::now()) - 20));
+	
+	$S_PAM = ASM::$pam->getCurrentSession();
+	ASM::$pam->newSession(FALSE);
+	ASM::$pam->load(
+		['statement' => PAM_DEAD, 'rColor' => $pl->rColor],
+		['id', 'ASC'],
+		[0, 1]
 	);
 
-	$conv = ASM::$cvm->get();
-	$readingDate = date('Y-m-d H:i:s', (strtotime(Utils::now()) - 20));
+	if (ASM::$pam->size() == 1) {
+		$S_CVM = ASM::$cvm->getCurrentSession();
+		ASM::$cvm->newSession();
+		ASM::$cvm->load([
+				'cu.rPlayer' => [ID_JEANMI, ASM::$pam->get()->id]
+			], [], [0, 2]
+		);
 
-	$user = new ConversationUser();
-	$user->rConversation = $conv->id;
-	$user->rPlayer = $pl->getId();
-	$user->convPlayerStatement = ConversationUser::US_STANDARD;
-	$user->convStatement = ConversationUser::CS_ARCHIVED;
-	$user->dLastView = $readingDate;
-	ASM::$cum->add($user);
+		for ($i = 0; $i < ASM::$cvm->size(); $i++) { 
+			$user = new ConversationUser();
+			$user->rConversation = ASM::$cvm->get($i)->id;
+			$user->rPlayer = $pl->getId();
+			$user->convPlayerStatement = ConversationUser::US_STANDARD;
+			$user->convStatement = ConversationUser::CS_ARCHIVED;
+			$user->dLastView = $readingDate;
+
+			ASM::$cum->add($user);
+		}
+		
+		ASM::$cvm->changeSession($S_CVM);
+	}
+
+	ASM::$pam->changeSession($S_PAM);
 
 	# redirection vers connection
 	CTR::redirect('connection/bindkey-' . Security::crypt(Security::buildBindkey($pl->getBind()), KEY_SERVER) . '/mode-splash');

@@ -114,6 +114,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `player` (
 #--------------------------------------------------------------------------------------------
 echo '<h3>Ajout du Joueur Gaia</h3>';
 
+$S_PAM_ALL = ASM::$pam->getCurrentSession();
+ASM::$pam->newSession();
+
 $p = new Player();
 $p->status = 1;
 $p->credit = 10000000;
@@ -137,6 +140,7 @@ $p->premium = 0;
 $p->statement = PAM_DEAD;
 
 # Joueur rebelle
+$p = clone($p);
 $p->bind = Utils::generateString(25);
 $p->name = 'Rebelle';
 $p->avatar = 'rebel';
@@ -144,6 +148,7 @@ $p->rColor = 0;
 ASM::$pam->add($p);
 
 # Jean-Mi
+$p = clone($p);
 $p->bind = Utils::generateString(25);
 $p->name = 'Jean-Mi';
 $p->avatar = 'jm';
@@ -152,6 +157,7 @@ ASM::$pam->add($p);
 
 # Joueurs de factions
 foreach ($AVAILABLE_FACTIONS as $faction) {
+	$p = clone($p);
 	$p->bind = Utils::generateString(25);
 	$p->name = ColorResource::getInfo($faction, 'officialName');
 	$p->avatar = ('color-' . $faction);
@@ -160,6 +166,8 @@ foreach ($AVAILABLE_FACTIONS as $faction) {
 
 	ASM::$pam->add($p);
 }
+
+ASM::$pam->changeSession($S_PAM_ALL);
 
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table sector</h2>';
@@ -1014,15 +1022,33 @@ $user->convStatement = ConversationUser::CS_DISPLAY;
 $user->dLastView = Utils::now();
 ASM::$cum->add($user);
 
-/*foreach ($AVAILABLE_FACTIONS as $faction) {
-	$p->bind = Utils::generateString(25);
-	$p->name = ColorResource::getInfo($faction, 'officialName');
-	$p->avatar = ('color-' . $faction);
-	$p->rColor = $faction;
-	$p->status = 6;
+$S_PAM_ALL = ASM::$pam->getCurrentSession();
+ASM::$pam->newSession(FALSE);
+ASM::$pam->load(
+	['rColor' => $AVAILABLE_FACTIONS, 'statement' => PAM_DEAD]
+);
 
-	ASM::$pam->add($p);
-}*/
+for ($i = 0; $i < ASM::$pam->size(); $i++) {
+	$player = ASM::$pam->get($i);
+
+	$conv = new Conversation();
+	$conv->messages = 0;
+	$conv->type = Conversation::TY_SYSTEM;
+	$conv->title = 'Communication de ' . ColorResource::getInfo($player->rColor, 'popularName');
+	$conv->dCreation = Utils::now();
+	$conv->dLastMessage = Utils::now();
+	ASM::$cvm->add($conv);
+
+	$user = new ConversationUser();
+	$user->rConversation = $conv->id;
+	$user->rPlayer = $player->id;
+	$user->convPlayerStatement = ConversationUser::US_ADMIN;
+	$user->convStatement = ConversationUser::CS_DISPLAY;
+	$user->dLastView = Utils::now();
+	ASM::$cum->add($user);
+}
+
+ASM::$pam->changeSession($S_PAM_ALL);
 
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table notification</h2>';
