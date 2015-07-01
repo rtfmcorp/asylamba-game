@@ -41,6 +41,32 @@ echo '<div class="component nav">';
 					echo '<em>Gestion de votre gouvernement</em>';
 				echo '</a>';
 			}
+
+			echo '<hr />';
+			echo '<h4>Abandonner ses fonctions</h4>';
+
+			if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
+				if ($faction->regime == Color::DEMOCRATIC) {
+					echo '<a href="' . Format::actionBuilder('abdicate') . '" class="more-button confirm" data-confirm-label="Cette action est définitive.">Organiser des élections anticipées</a>';
+				} else {
+					$S_PAM_DGG2 = ASM::$pam->getCurrentSession();
+					ASM::$pam->changeSession($PLAYER_SENATE_TOKEN);
+
+					echo '<form action="' . Format::actionBuilder('abdicate') . '" method="post" class="choose-government">';
+						echo '<select name="rplayer">';
+							echo '<option value="-1">Choisissez un joueur</option>';
+							for ($j = 0; $j < ASM::$pam->size(); $j++) {
+								echo '<option value="' . ASM::$pam->get($j)->id . '">' . $status[ ASM::$pam->get($i)->status - 1] . ' ' . ASM::$pam->get($j)->name . '</option>';
+							}
+						echo '</select>';
+						echo '<button type="submit">Désigner comme successeur</button>';
+					echo '</form>';
+					
+					ASM::$pam->changeSession($S_PAM_DGG2);
+				}
+			} else {
+				echo '<a href="' . Format::actionBuilder('resign') . '" class="more-button confirm" data-confirm-label="Cette action est définitive.">Démissioner du gouvernement</a>';
+			}
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

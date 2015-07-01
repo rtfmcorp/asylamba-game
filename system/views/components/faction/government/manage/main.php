@@ -62,4 +62,3 @@ echo '<div class="component profil player size1">';
 echo '</div>';
 
 ASM::$pam->changeSession($S_PAM_DGG);
-?>

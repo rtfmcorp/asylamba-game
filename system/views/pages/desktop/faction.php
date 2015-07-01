@@ -222,6 +222,10 @@ echo '<div id="content">';
 		}
 	} elseif (CTR::$get->get('view') == 'government') {
 		if (in_array(CTR::$data->get('playerInfo')->get('status'), [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER])) {
+			$S_PAM_OLD = ASM::$pam->getCurrentSession();
+			$PLAYER_SENATE_TOKEN = ASM::$pam->newSession();
+			ASM::$pam->load(array('rColor' => $faction->id, 'status' => PAM_PARLIAMENT, 'statement' => [PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY]));
+
 			include COMPONENT . 'faction/government/nav.php';
 
 			if (!CTR::$get->exist('mode') OR CTR::$get->get('mode') == 'law') {
@@ -269,25 +273,20 @@ echo '<div id="content">';
 			} elseif (CTR::$get->get('mode') == 'description') {
 				include COMPONENT . 'faction/government/description.php';
 			} elseif (CTR::$get->get('mode') == 'manage') {
-				$S_PAM_OLD = ASM::$pam->getCurrentSession();
-
 				$PLAYER_GOV_TOKEN = ASM::$pam->newSession(FALSE);
 				ASM::$pam->load(
 					array('rColor' => $faction->id, 'status' => [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER]),
 					array('status', 'DESC')
 				);
 
-				$PLAYER_SENATE_TOKEN = ASM::$pam->newSession();
-				ASM::$pam->load(array('rColor' => $faction->id, 'status' => PAM_PARLIAMENT, 'statement' => [PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY]));
-
-
 				include COMPONENT . 'faction/government/manage/main.php';
 				include COMPONENT . 'default.php';
 
-				ASM::$pam->changeSession($S_PAM_OLD);
 			} else {
 				CTR::redirect('faction');
 			}
+			
+			ASM::$pam->changeSession($S_PAM_OLD);
 		} else {
 			CTR::redirect('faction');
 		}
