@@ -154,14 +154,14 @@ class ColorResource {
 			'demonym' 		=> 'négiens',
 			'factionPoint' 	=> 'Points de Marchandage',
 			'status' 		=> ['Commerçant', 'Mécène', 'Grand Argentier', 'Condottiere', 'Intendant', 'Doge'],
-			'regime'		=> 1,
+			'regime'		=> 2,
 			'devise' 		=> 'Toutes les richesses,<br />Passent par Négore',
 			'desc1' => 'La maison Négienne, la plus riche de la Galaxie de l’Œil, est composée essentiellement de grands marchands et de financiers expérimentés. Considérée comme la banque de la galaxie depuis très longtemps, son économie est basée sur les échanges et le commerce.',
 			'desc2' => 'Parfois peu regardant sur la provenance des marchandises, les Négiens sont d’adroits négociateurs n’hésitant pas à profiter des opportunités qu’offrent la contre-bande, le trafic d’armes ainsi que la vente d’esclaves au détriment des accords et traités commerciaux.',
 			'desc3' => 'Dotée de moyens militaires fastueux, la flotte Négienne est rutilante et dissuasive, disposant d’une prodigieuse armada de vaisseaux destinés à assurer sa prospérité et son avenir économique dans la Galaxie.',
 			'desc4' => 'Vivant dans le luxe et l’opulence, les Vizirs de Négore sont à la tête de fortunes faramineuses permettant les caprices les plus fous; Orgies, casinos, courses et paris sont le quotidien de cette province aux moeurs débridés.',
 			'bonus' => [4, 5], 
-			'mandateDuration' => 1209600,
+			'mandateDuration' => 604800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Kovahkarh gagne du prestige en construisant des vaisseaux, en gagnant des combats et en créant des bases militaires. Il en perd lorsqu\'il se fait tuer au combat ou qu\'il perd une de ces bases militaires.',
 			'campaignDesc' => 'À tout moment, un membre du sénat ou du gouvernement peut tenter un coup d\'état. Il aura alors 7 relèves pour attirer des partisans. Il aura réussi son putsch s\'il arrive à recruter suffisemment de partisans.'
 	], [

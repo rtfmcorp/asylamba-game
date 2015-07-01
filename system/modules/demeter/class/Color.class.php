@@ -334,6 +334,7 @@ class Color {
 			}
 			ASM::$pam->changeSession($_PAM4);
 			if (count($ballot) > 0) {
+				reset($ballot);
 				$aleaNbr = rand(0, count($ballot) - 1);
 				
 				$_PAM1 = ASM::$pam->getCurrentsession();
@@ -434,7 +435,7 @@ class Color {
 				$message->type = ConversationMessage::TY_STD;
 				$message->dCreation = Utils::now();
 				$message->dLastModification = NULL;
-				$message->content = 'La période électorale est terminée. Un nouveau dirigeant a été désigné pour faire valoir la force de ' . $this->popularName . ' à travers de la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong><br /><br />Voici les résultats des élections :<br /><br />';
+				$message->content = 'La période électorale est terminée. Un nouveau dirigeant a été élu pour faire valoir la force de ' . $this->popularName . ' à travers la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong><br /><br />Voici les résultats des élections :<br /><br />';
 				foreach ($candidate as $player) {
 					$message->content .= $player['name'] . ' a reçu ' . $player['vote'] . ' vote' . Format::plural($player['vote']) . '<br />';
 				}
@@ -459,6 +460,22 @@ class Color {
 						->addTxt(' a fait un coup d\'état, vous êtes évincé du pouvoir.');
 					ASM::$ntm->add($notif);
 				}
+
+				# création du message
+				reset($candidate);
+				if (current($candidate)['id'] == $idOldChief) {
+					next($candidate);
+				}
+				$message = new ConversationMessage();
+				$message->rConversation = $conv->id;
+				$message->rPlayer = $convPlayerID;
+				$message->type = ConversationMessage::TY_STD;
+				$message->dCreation = Utils::now();
+				$message->dLastModification = NULL;
+				$message->content = 'Un putsch a réussi, un nouveau dirigeant va faire valoir la force de ' . $this->popularName . ' à travers la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong><br /><br />De Nombreux membres de la faction ont soutenu le mouvement révolutionnaire :<br /><br />';
+				$message->content .= current($candidate)['name'] . ' a reçu le soutient de ' . Format::number((current($candidate)['vote'] / $this->activePlayers) * 100) . '% de la population.' . '<br />';
+				ASM::$cme->add($message);
+
 			} else {
 				$notif = new Notification();
 				$notif->dSending = Utils::now();
@@ -467,6 +484,15 @@ class Color {
 				$notif->addBeg()
 					->addTxt(' Les Oracles ont parlé, vous êtes désigné par la Grande Lumière pour guider Cardan vers la Gloire.');
 				ASM::$ntm->add($notif);
+
+				$message = new ConversationMessage();
+				$message->rConversation = $conv->id;
+				$message->rPlayer = $convPlayerID;
+				$message->type = ConversationMessage::TY_STD;
+				$message->dCreation = Utils::now();
+				$message->dLastModification = NULL;
+				$message->content = 'Les Oracles ont parlé, un nouveau dirigeant va faire valoir la force de ' . $this->popularName . ' à travers la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong><br /><br /><br /><br />';
+				ASM::$cme->add($message);
 			}
 			
 			ASM::$pam->changeSession($_PAM);
