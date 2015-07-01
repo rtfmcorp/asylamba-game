@@ -419,16 +419,16 @@ class OrbitalBaseResource {
 			'imageLink' => 'dock3',
 			'level' => array(
 				// (time, resourcePrice, points, releasedShip)
-				array(60000,	200000,	100,	1),
-				array(78000,	240000,	120,	1),
-				array(101000,	288000,	140,	1),
-				array(131000,	346000,	170,	1),
-				array(170000,	415000,	200,	2),
-				array(221000,	498000,	240,	2),
-				array(287000,	598000,	290,	2),
-				array(373000,	718000,	350,	2),
-				array(485000,	862000,	420,	2),
-				array(631000,	1034000,500,	3)
+				array(60000,	200000,	0,	1),
+				array(78000,	240000,	0,	1),
+				array(101000,	288000,	0,	1),
+				array(131000,	346000,	0,	1),
+				array(170000,	415000,	0,	2),
+				array(221000,	498000,	0,	2),
+				array(287000,	598000,	0,	2),
+				array(373000,	718000,	0,	2),
+				array(485000,	862000,	0,	2),
+				array(631000,	1034000,0,	3)
 			),
 			'maxLevel' => array(0, 0, 0, 10),
 			'description' => 'La <strong>Colonne d’Assemblage</strong> est le troisième atelier de construction d’appareils. Spécifique aux vaisseaux-mères, ce chantier spatial est indispensable à toute tentative de colonisation. Ce chantier titanesque conçu pour fabriquer des vaisseaux de taille quasi-planétaire, vous donnera la possibilité de construire trois types de vaisseaux-mères. Chacun de ces bâtiments spatiaux dispose de quasiment le même nombre d’aptitudes, excepté sa taille. En effet, lorsque vous créez un vaisseau mère de catégorie trois, il disposera de plus de place de construction que ses deux cadets.<br /><br />La Colonne d’Assemblage est la plus grosse plateforme que vous pouvez construire sur votre base. Elle est également la plus couteuse.',
