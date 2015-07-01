@@ -26,7 +26,18 @@ echo '<div class="component">';
 
 			/*echo '<h4>Concours</h4>';
 			echo '<p>De plus un concours est mis en place pour gagner de gros prix, à savoir des vaisseaux (Phenix et autre). Le x x 201x, nous compterons les points de parrainage de tout le monde. Un filleul niveau 1 rapporte 1 point, un filleul niveau 2 rapporte 2 points, etc. Les joueurs du top 3 se verront recevoir des prix.</p>';*/
+			echo '<h4>Liste de vos filleuls</h4>';
+			$qr = $db->prepare('SELECT 
+					p.id AS id,
+					p.name AS name,
+					p.level AS level
+				FROM player AS p 
+				WHERE p.rGodFather = ?');
+			$qr->execute(array(CTR::$data->get('playerId')));
 
+			while ($aw = $qr->fetch()) {
+				echo '<p><a href="' . APP_ROOT . 'embassy/player-' . $aw['id'] . '">' . $aw['name'] . '</a> : niveau ' . $aw['level'] . '</p>';
+			}
 			echo '<br/><br/>';
 		echo '</div>';
 	echo '</div>';
