@@ -9,6 +9,7 @@ class API {
 	public $data;
 
 	const TEMPLATE_INACTIVE_PLAYER = 51;
+	const TEMPLATE_SPONSORSHIP = 52;
 
 	public function __construct($path, $server, $key) {
 		$this->path = $path;
@@ -91,6 +92,18 @@ class API {
 
 	public function sendMail($bindkey, $serverId, $template) {
 		if ($this->query('sendmail', array('bindkey' => $bindkey, 'serverid' => $serverId, 'template' => $template))) {
+			if ($this->data['statement'] == 'success') {
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		} else {
+			return FALSE;
+		}
+	}
+
+	public function sendMail2($email, $serverId, $template, $specialLink) {
+		if ($this->query('sendmail2', array('email' => $email, 'serverid' => $serverId, 'template' => $template, 'link' => $specialLink))) {
 			if ($this->data['statement'] == 'success') {
 				return TRUE;
 			} else {
