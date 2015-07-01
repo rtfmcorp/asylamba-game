@@ -18,11 +18,12 @@ echo '<div id="content">';
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'message') {
 		# main message
 		include COMPONENT . 'admin/message/newOfficialMessage.php';
+		include COMPONENT . 'default.php';
 	} elseif (CTR::$get->get('view') == 'roadmap') {
 		# main roadmap
 		include COMPONENT . 'admin/roadmap/addEntry.php';
+		include COMPONENT . 'default.php';
 	} else {
 		CTR::redirect('404');
 	}
 echo '</div>';
-?>
