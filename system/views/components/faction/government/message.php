@@ -21,4 +21,3 @@ echo '<div class="component new-message size2">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

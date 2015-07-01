@@ -109,10 +109,10 @@ class ConversationMessageManager extends Manager {
 				$message->dLastModification
 		));
 
-		$conv->id = $db->lastInsertId();
-		$this->_Add($conv);
+		$message->id = $db->lastInsertId();
+		$this->_Add($message);
 
-		return $conv->id;
+		return $message->id;
 	}
 
 	public function deleteById($id) {
