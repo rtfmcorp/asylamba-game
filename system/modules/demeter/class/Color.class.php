@@ -130,6 +130,27 @@ class Color {
 		$this->credits = $this->credits + $credit;
 	}
 
+	public function sendSenateNotif() {
+		include_once HERMES;
+
+		$_PAM121 = ASM::$pam->getCurrentsession();
+		ASM::$pam->newSession();
+		ASM::$pam->load(['rColor' => $this->id, 'status' => PAM_PARLIAMENT]);
+
+		for ($i = 0; $i < ASM::$pam->size(); $i++) {
+			$notif = new Notification();
+			$notif->setRPlayer(ASM::$pam->get($i)->id);
+			$notif->setTitle('Loi proposée');
+			$notif->addBeg()
+				->addTxt('Votre gouvernement a proposé un projet de loi, en tant que membre du sénat, il est de votre devoir de voté pour l\'acceptatoin ou non de ladite loi.')
+				->addSep()
+				->addLnk('faction/view-senate', 'voir les lois en cours de vote')
+				->addEnd();
+			ASM::$ntm->add($notif);
+		}
+		ASM::$pam->changeSession($_PAM121);
+	}
+
 	private function updateStatus($token_pam) {
 		include_once ZEUS;
 

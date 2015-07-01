@@ -19,30 +19,32 @@ if ($conversation !== FALSE AND $content !== FALSE) {
 		if (ASM::$cvm->size() == 1) {
 			$conv = ASM::$cvm->get();
 
-			$conv->messages++;
-			$conv->dLastMessage = Utils::now();
+			if ($conv->type != Conversation::TY_SYSTEM) {
+				$conv->messages++;
+				$conv->dLastMessage = Utils::now();
 
-			# désarchiver tout les users
-			$users = $conv->players;
-			foreach ($users as $user) {
-				$user->convStatement = ConversationUser::CS_DISPLAY;
+				# désarchiver tout les users
+				$users = $conv->players;
+				foreach ($users as $user) {
+					$user->convStatement = ConversationUser::CS_DISPLAY;
 
-				if ($user->rPlayer == CTR::$data->get('playerId')) {
-					$user->dLastView = Utils::now();
+					if ($user->rPlayer == CTR::$data->get('playerId')) {
+						$user->dLastView = Utils::now();
+					}
 				}
+
+				# création du message
+				$message = new ConversationMessage();
+
+				$message->rConversation = $conv->id;
+				$message->rPlayer = CTR::$data->get('playerId');
+				$message->type = ConversationMessage::TY_STD;
+				$message->content = $content;
+				$message->dCreation = Utils::now();
+				$message->dLastModification = NULL;
+
+				ASM::$cme->add($message);
 			}
-
-			# création du message
-			$message = new ConversationMessage();
-
-			$message->rConversation = $conv->id;
-			$message->rPlayer = CTR::$data->get('playerId');
-			$message->type = ConversationMessage::TY_STD;
-			$message->content = $content;
-			$message->dCreation = Utils::now();
-			$message->dLastModification = NULL;
-
-			ASM::$cme->add($message);
 		} else {
 			CTR::$alert->add('La conversation n\'existe pas ou ne vous appartient pas.', ALERT_STD_ERROR);
 		}

@@ -8,19 +8,21 @@ if (!$message_listmode) {
 		echo '</div>';
 		echo '<div class="fix-body">';
 			echo '<div class="body">';
-				echo '<div class="message write">';
-					echo '<img src="' . MEDIA . 'avatar/small/' . CTR::$data->get('playerInfo')->get('avatar') . '.png" alt="' . CTR::$data->get('playerInfo')->get('pseudo') . '" class="avatar" />';
-					echo '<div class="content">';
-						echo '<form action="' . Format::actionBuilder('writeconversation', ['conversation' => ASM::$cvm->get()->id]) . '" method="post">';
-							echo '<div class="wysiwyg" data-id="new-message">';
-								echo (new Parser())->getToolbar();
-								echo '<textarea name="content" id="new-message"></textarea>';
-							echo '</div>';
+				if (ASM::$cvm->get()->type != Conversation::TY_SYSTEM) {
+					echo '<div class="message write">';
+						echo '<img src="' . MEDIA . 'avatar/small/' . CTR::$data->get('playerInfo')->get('avatar') . '.png" alt="' . CTR::$data->get('playerInfo')->get('pseudo') . '" class="avatar" />';
+						echo '<div class="content">';
+							echo '<form action="' . Format::actionBuilder('writeconversation', ['conversation' => ASM::$cvm->get()->id]) . '" method="post">';
+								echo '<div class="wysiwyg" data-id="new-message">';
+									echo (new Parser())->getToolbar();
+									echo '<textarea name="content" id="new-message"></textarea>';
+								echo '</div>';
 
-							echo '<button>Répondre</button>';
-						echo '</form>';
+								echo '<button>Répondre</button>';
+							echo '</form>';
+						echo '</div>';
 					echo '</div>';
-				echo '</div>';
+				}
 }
 
 for ($i = 0; $i < ASM::$cme->size(); $i++) {

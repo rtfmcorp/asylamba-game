@@ -202,29 +202,40 @@ try {
 	include_once GAIA;
 	GalaxyColorManager::apply();
 
-	# send welcome message with Jean-Mi
-/*	$message = 'Salut,  
-		<br /><br />Moi c\'est Jean-Mi, l\'opérateur du jeu. 
-		<br />Je te souhaite la bienvenue sur Asylamba et espère que tu t\'y plairas.
-		<br />Je t\'enverrai des messages quand tu devras être au courant de choses importantes au fur et à mesure du temps.
-		<br /><br />Bon jeu et à bientôt j\'espère.
-		<br /><br />Cordialement, <br />Jean-Mi';
-	$m = new Message();
-	$m->setRPlayerWriter(ID_JEANMI);
-	$m->setDSending(Utils::now());
-	$m->setContent($message);
-
-	$db = DataBase::getInstance();
-	$qr = $db->prepare('SELECT MAX(thread) AS maxThread FROM message');
-	$qr->execute();
+	# ajout aux conversation de faction et techniques
+	$readingDate = date('Y-m-d H:i:s', (strtotime(Utils::now()) - 20));
 	
-	if ($aw = $qr->fetch()) {
-		$m->setThread($aw['maxThread'] + 1);
-		$m->setRPlayerReader($pl->getId());
-		ASM::$msm->add($m);
-	} else {
-		CTR::$alert->add('Création du message d\'accueil raté :-(. Bienvenue quand même !', ALERT_STD_ERROR);
-	}*/
+	$S_PAM = ASM::$pam->getCurrentSession();
+	ASM::$pam->newSession(FALSE);
+	ASM::$pam->load(
+		['statement' => PAM_DEAD, 'rColor' => $pl->rColor],
+		['id', 'ASC'],
+		[0, 1]
+	);
+
+	if (ASM::$pam->size() == 1) {
+		$S_CVM = ASM::$cvm->getCurrentSession();
+		ASM::$cvm->newSession();
+		ASM::$cvm->load([
+				'cu.rPlayer' => [ID_JEANMI, ASM::$pam->get()->id]
+			], [], [0, 2]
+		);
+
+		for ($i = 0; $i < ASM::$cvm->size(); $i++) { 
+			$user = new ConversationUser();
+			$user->rConversation = ASM::$cvm->get($i)->id;
+			$user->rPlayer = $pl->getId();
+			$user->convPlayerStatement = ConversationUser::US_STANDARD;
+			$user->convStatement = ConversationUser::CS_ARCHIVED;
+			$user->dLastView = $readingDate;
+
+			ASM::$cum->add($user);
+		}
+		
+		ASM::$cvm->changeSession($S_CVM);
+	}
+
+	ASM::$pam->changeSession($S_PAM);
 
 	# redirection vers connection
 	CTR::redirect('connection/bindkey-' . Security::crypt(Security::buildBindkey($pl->getBind()), KEY_SERVER) . '/mode-splash');

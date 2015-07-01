@@ -76,6 +76,7 @@ if ($type !== FALSE) {
 						if (ASM::$lam->size() == 0) {
 							ASM::$lam->add($law);
 							ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price') * $duration * ASM::$clm->get()->activePlayers;
+							ASM::$clm->get()->sendSenateNotif();
 							CTR::redirect('faction/view-senate');	
 						} else {
 							CTR::$alert->add('Cette loi est déjà proposée ou en vigueur.', ALERT_STD_ERROR);
@@ -99,6 +100,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('taxes' => $taxes, 'rSector' => $rSector, 'display' => array('Secteur' => ASM::$sem->get()->name, 'Taxe actuelle' => ASM::$sem->get()->tax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+											ASM::$clm->get()->sendSenateNotif();
 											CTR::redirect('faction/view-senate');
 										} else {
 											CTR::$alert->add('Ce secteur n\'est pas sous votre contrôle.', ALERT_STD_ERROR);
@@ -127,6 +129,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('name' => $name, 'rSector' => $rSector));
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+											ASM::$clm->get()->sendSenateNotif();
 											CTR::redirect('faction/view-senate');
 										} else {
 											CTR::$alert->add('Ce secteur n\'est pas sous votre contrôle.', ALERT_STD_ERROR);
@@ -154,6 +157,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'), 'Taxe actuelle' => ASM::$ctm->get()->exportTax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+											ASM::$clm->get()->sendSenateNotif();
 											CTR::redirect('faction/view-senate');
 										} else {
 											CTR::$alert->add('Pas plus que 15.', ALERT_STD_ERROR);
@@ -163,6 +167,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'), 'Taxe actuelle' => ASM::$ctm->get()->exportTax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+											ASM::$clm->get()->sendSenateNotif();
 											CTR::redirect('faction/view-senate');
 										} else {
 											CTR::$alert->add('Entre 2 et 15.', ALERT_STD_ERROR);
@@ -188,6 +193,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'), 'Taxe actuelle' => ASM::$ctm->get()->importTax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+											ASM::$clm->get()->sendSenateNotif();
 											CTR::redirect('faction/view-senate');
 										} else {
 											CTR::$alert->add('Pas plus que 15.', ALERT_STD_ERROR);
@@ -197,6 +203,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'), 'Taxe actuelle' => ASM::$ctm->get()->importTax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+											ASM::$clm->get()->sendSenateNotif();
 											CTR::redirect('faction/view-senate');
 										} else {
 											CTR::$alert->add('Entre 2 et 15.', ALERT_STD_ERROR);
@@ -219,6 +226,7 @@ if ($type !== FALSE) {
 										$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
 										ASM::$lam->add($law);
 										ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+										ASM::$clm->get()->sendSenateNotif();
 										CTR::redirect('faction/view-senate');
 									} else {
 										CTR::$alert->add('Vous considérez déjà cette faction comme votre alliée.', ALERT_STD_ERROR);
@@ -245,6 +253,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+											ASM::$clm->get()->sendSenateNotif();
 											CTR::redirect('faction/view-senate');
 										} else {
 											CTR::$alert->add('Vous considérez déjà cette faction comme votre alliée.', ALERT_STD_ERROR);
@@ -274,6 +283,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+											ASM::$clm->get()->sendSenateNotif();
 											CTR::redirect('faction/view-senate');
 										} else {
 											CTR::$alert->add('Vous considérez déjà cette faction comme votre alliée.', ALERT_STD_ERROR);
@@ -297,6 +307,7 @@ if ($type !== FALSE) {
 										$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
 										ASM::$lam->add($law);
 										ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+										ASM::$clm->get()->sendSenateNotif();
 										CTR::redirect('faction/view-senate');
 									} else {
 										CTR::$alert->add('Vous considérez déjà cette faction comme votre ennemmi.', ALERT_STD_ERROR);
@@ -321,6 +332,7 @@ if ($type !== FALSE) {
 										$law->options = serialize(array('rPlayer' => $rPlayer, 'credits' => $credits, 'display' => array('Joueur' => ASM::$pam->get()->name, 'amende' => $credits)));
 										ASM::$lam->add($law);
 										ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
+										ASM::$clm->get()->sendSenateNotif();
 										CTR::redirect('faction/view-senate');	
 									} else {
 										CTR::$alert->add('Ce joueur n\'est pas de votre faction.', ALERT_STD_ERROR);	
