@@ -18,7 +18,7 @@ try {
 	$pl->setAvatar(CTR::$data->get('inscription')->get('avatar'));
 
 	if (CTR::$data->exist('rgodfather')) {
-		$pl->rGodFather = CTR::$data->get('rgodfather');
+		$pl->rGodfather = CTR::$data->get('rgodfather');
 	}
 
 	$pl->setStatus(1);
@@ -57,9 +57,9 @@ try {
 	ASM::$pam->add($pl);
 
 	if (CTR::$data->exist('rgodfather')) {
-		# send a message to the godFather
+		# send a message to the godfather
 		$n = new Notification();
-		$n->setRPlayer($pl->rGodFather);
+		$n->setRPlayer($pl->rGodfather);
 		$n->setTitle('Votre filleul s\'est inscrit');
 		$n->addBeg()->addTxt('Un de vos amis a créé un compte.')->addSep();
 		$n->addTxt('Vous pouvez le contacter, son nom de joueur est ');
@@ -72,10 +72,10 @@ try {
 		ASM::$ntm->add($n);
 		ASM::$ntm->changeSession($S_NTM1);
 
-		# add 1000 credits to the godFather
+		# add 1000 credits to the godfather
 		$S_PAM1 = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession();
-		ASM::$pam->load(array('id' => $pl->rGodFather));
+		ASM::$pam->load(array('id' => $pl->rGodfather));
 		if (ASM::$pam->size() == 1) {
 			ASM::$pam->get()->increaseCredit(1000);
 		} 

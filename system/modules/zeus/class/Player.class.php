@@ -435,17 +435,17 @@ class Player {
 			ASM::$ntm->changeSession($S_NTM1);
 
 			# parrainage : au niveau 3, le parrain gagne 1M crédits
-			if ($this->level == 3 AND $this->rGodFather != NULL) {
-				# add 1'000'000 credits to the godFather
+			if ($this->level == 3 AND $this->rGodfather != NULL) {
+				# add 1'000'000 credits to the godfather
 				$S_PAM1 = ASM::$pam->getCurrentSession();
 				ASM::$pam->newSession();
-				ASM::$pam->load(array('id' => $this->rGodFather));
+				ASM::$pam->load(array('id' => $this->rGodfather));
 				if (ASM::$pam->size() == 1) {
 					ASM::$pam->get()->increaseCredit(1000000);
 
-					# send a message to the godFather
+					# send a message to the godfather
 					$n = new Notification();
-					$n->setRPlayer($this->rGodFather);
+					$n->setRPlayer($this->rGodfather);
 					$n->setTitle('Récompense de parrainage');
 					$n->addBeg()->addTxt('Un de vos filleuls a atteint le niveau 3. ');
 					$n->addTxt('Il s\'agit de ');

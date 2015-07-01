@@ -1,7 +1,7 @@
 <?php
 $email = Utils::getHTTPData('email');
 
-$sponsorLink = GETOUT_ROOT . '/action/a-invitation/i-' . CTR::$data->get('playerId') . '/s-' . APP_ID;
+$sponsorLink = GETOUT_ROOT . 'action/a-invitation/i-' . CTR::$data->get('playerId') . '/s-' . APP_ID;
 
 # sending email API call
 $api = new API(GETOUT_ROOT, APP_ID, KEY_API);
