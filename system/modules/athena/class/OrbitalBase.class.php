@@ -589,7 +589,7 @@ class OrbitalBase {
 				ASM::$ntm->add($n);
 			}
 
-			$creditRecycled = round($targetPlace->population * $totalRecycled / 100);
+			$creditRecycled = round($targetPlace->population * $totalRecycled * 10 / 100);
 			$resourceRecycled = round($targetPlace->coefResources * $totalRecycled / 100);
 			$shipRecycled = round($targetPlace->coefHistory * $totalRecycled / 100);
 

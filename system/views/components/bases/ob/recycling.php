@@ -42,10 +42,17 @@ echo '<div class="component building">';
 				echo '<span class="label">recycleur' . Format::plural($freeRecyclers) . ' libre' . Format::plural($freeRecyclers) . '</span>';
 				echo '<span class="value">' . $freeRecyclers . '</span>';
 			echo '</div>';
+			
+			echo '<hr />';
 
+			echo '<h4>capacité de transport d\'un recycleur</h4>';
 			echo '<div class="number-box grey">';
-				echo '<span class="label">capacité de transport d\'un recycleur</span>';
+				echo '<span class="label">en ressources</span>';
 				echo '<span class="value">' . Format::number(RecyclingMission::RECYCLER_CAPACTIY) . ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color"></span>';
+			echo '</div>';
+			echo '<div class="number-box grey">';
+				echo '<span class="label">en crédits</span>';
+				echo '<span class="value">' . Format::number(RecyclingMission::RECYCLER_CAPACTIY * 10) . ' <img alt="crédits" src="' . MEDIA . 'resources/credit.png" class="icon-color"></span>';
 			echo '</div>';
 
 			echo '<hr />';
