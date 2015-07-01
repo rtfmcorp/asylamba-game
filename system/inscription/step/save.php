@@ -17,6 +17,10 @@ try {
 	$pl->setName(trim(CTR::$data->get('inscription')->get('pseudo')));
 	$pl->setAvatar(CTR::$data->get('inscription')->get('avatar'));
 
+	if (CTR::$data->exists('rgodfather')) {
+		$pl->rGodFather = CTR::$data->get('rgodfather');
+	}
+
 	$pl->setStatus(1);
 	$pl->uPlayer = Utils::now();
 
@@ -51,6 +55,35 @@ try {
 	}
 
 	ASM::$pam->add($pl);
+
+	if (CTR::$data->exists('rgodfather')) {
+		# send a message to the godFather
+		$n = new Notification();
+		$n->setRPlayer($pl->rGodFather);
+		$n->setTitle('Votre filleul s\'est inscrit');
+		$n->addBeg()->addTxt('Un de vos amis a créé un compte.')->addSep();
+		$n->addTxt('Vous pouvez le contacter, son nom de joueur est ');
+		$n->addLnk('embassy/player-' . $pl->getId(), '"' . $pl->name . '"')->addTxt('.');
+		$n->addBrk()->addTxt('Vous venez de gagner 1000 crédits. Vous en gagnerez 1 million de plus lorsqu\'il atteindra le niveau 3.');
+		$n->addEnd();
+
+		$S_NTM1 = ASM::$ntm->getCurrentSession();
+		ASM::$ntm->newSession();
+		ASM::$ntm->add($n);
+		ASM::$ntm->changeSession($S_NTM1);
+
+		# add 1000 credits to the godFather
+		$S_PAM1 = ASM::$pam->getCurrentSession();
+		ASM::$pam->newSession();
+		ASM::$pam->load(array('id' => $pl->rGodFather));
+		if (ASM::$pam->size() == 1) {
+			ASM::$pam->get()->increaseCredit(1000);
+		} 
+		ASM::$pam->changeSession($S_PAM1);
+
+		# remove godFather from session
+		CTR::$data->remove('rgodfather');
+	}
 
 	# INITIALISATION DES RECHERCHES
 		# rendre aléatoire

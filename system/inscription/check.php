@@ -19,6 +19,10 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 				CTR::$data->add('high-mode', FALSE);
 			}
 
+			if (CTR::$get->exist('rgodfather')) {
+				CTR::$data->add('rgodfather', CTR::$get->get('rgodfather'));
+			}
+
 			CTR::redirect('inscription');
 		} else {
 			header('Location: ' . GETOUT_ROOT . 'profil');
