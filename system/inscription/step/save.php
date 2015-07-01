@@ -17,7 +17,7 @@ try {
 	$pl->setName(trim(CTR::$data->get('inscription')->get('pseudo')));
 	$pl->setAvatar(CTR::$data->get('inscription')->get('avatar'));
 
-	if (CTR::$data->exists('rgodfather')) {
+	if (CTR::$data->exist('rgodfather')) {
 		$pl->rGodFather = CTR::$data->get('rgodfather');
 	}
 
@@ -56,7 +56,7 @@ try {
 
 	ASM::$pam->add($pl);
 
-	if (CTR::$data->exists('rgodfather')) {
+	if (CTR::$data->exist('rgodfather')) {
 		# send a message to the godFather
 		$n = new Notification();
 		$n->setRPlayer($pl->rGodFather);

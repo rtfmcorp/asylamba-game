@@ -9,7 +9,7 @@ echo '<div class="component">';
 			echo '<h4>Parrainez vos amis !</h4>';
 			echo '<p>Vous avez la possibilité de parrainer vos amis. Pour le faire, deux solutions. Vous pouvez soit envoyer le lien ci-dessous à vos amis, soit entrer leur adresse e-mail et nous leur enverrons un e-mail.</p>';
 			echo '<p>Envoyez le lien suivant à vos amis :</p>';
-			$sponsorLink = 'http://asylamba.com/invitationde-' . CTR::$data->get('playerId') . '/sur-' . APP_ID;
+			$sponsorLink = GETOUT_ROOT . '/action/a-invitation/i-' . CTR::$data->get('playerId') . '/s-' . APP_ID;
 			//echo '<p><input type="text" name="sponsor-link" value="' . $sponsorLink . '""></p>';
 			echo '<p><textarea name="textarea" rows="2">' . $sponsorLink . '</textarea></p>';
 			echo '<form action="' . Format::actionBuilder('sendsponsorshipemail') . '" method="post">';
