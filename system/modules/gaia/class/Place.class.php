@@ -619,9 +619,9 @@ class Place {
 								$commander->armyInBegin[$j][$i] = $commander->armyAtEnd[$j][$i];
 							}
 						}
-						for ($j = 0; $j < count($commanders[$nbrBattle - 1]->armyAtEnd); $j++) {
+						for ($j = 0; $j < count($this->commanders[$nbrBattle - 1]->armyAtEnd); $j++) {
 							for ($i = 0; $i < 12; $i++) { 
-								$commanders[$nbrBattle - 1]->armyInBegin[$j][$i] = $commanders[$nbrBattle - 1]->armyAtEnd[$j][$i];
+								$this->commanders[$nbrBattle - 1]->armyInBegin[$j][$i] = $this->commanders[$nbrBattle - 1]->armyAtEnd[$j][$i];
 							}
 						}
 					} else {
