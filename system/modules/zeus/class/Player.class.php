@@ -433,6 +433,33 @@ class Player {
 			ASM::$ntm->newSession();
 			ASM::$ntm->add($n);
 			ASM::$ntm->changeSession($S_NTM1);
+
+			# parrainage : au niveau 3, le parrain gagne 1M crédits
+			if ($this->level == 3 AND $this->rGodFather != NULL) {
+				# add 1'000'000 credits to the godFather
+				$S_PAM1 = ASM::$pam->getCurrentSession();
+				ASM::$pam->newSession();
+				ASM::$pam->load(array('id' => $this->rGodFather));
+				if (ASM::$pam->size() == 1) {
+					ASM::$pam->get()->increaseCredit(1000000);
+
+					# send a message to the godFather
+					$n = new Notification();
+					$n->setRPlayer($this->rGodFather);
+					$n->setTitle('Récompense de parrainage');
+					$n->addBeg()->addTxt('Un de vos filleuls a atteint le niveau 3. ');
+					$n->addTxt('Il s\'agit de ');
+					$n->addLnk('embassy/player-' . $this->getId(), '"' . $this->name . '"')->addTxt('.');
+					$n->addBrk()->addTxt('Vous venez de gagner 1\'000\'000 crédits. N\'hésitez pas à parrainer d\'autres personnes pour gagner encore plus.');
+					$n->addEnd();
+
+					$S_NTM2 = ASM::$ntm->getCurrentSession();
+					ASM::$ntm->newSession();
+					ASM::$ntm->add($n);
+					ASM::$ntm->changeSession($S_NTM2);
+				} 
+				ASM::$pam->changeSession($S_PAM1);
+			}
 		}
 	}
 }

@@ -15,21 +15,7 @@ echo '<div class="component new-message size2">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<form action="' . Format::actionBuilder('writeofficial') . '" method="POST" />';
-				echo '<p><label for="new-message-target">Destinataire</label></p>';
-				echo '<p class="input input-text"><input type="text" id="new-message-target" name="player" placeholder="Laissez-vide pour envoyer un message à tous les joueurs" /></p>';
-
-				echo '<p><label for="new-message-faction">Faction (ne rien sélectionner pour envoyer à toutes les factions)</label></p>';
-				echo '<p class="input input-text">';
-					echo '<select id="new-message-faction" name="ally">';
-						echo '<option value="">Toutes les factions</option>';
-
-						for ($i = 1; $i <= 7; $i++) { 
-							echo '<option value="' . $i . '">' . ColorResource::getInfo($i, 'officialName') . '</option>';
-						}
-					echo '</select> ';
-				echo '</p>';
-
+			echo '<form action="' . Format::actionBuilder('writeofficialconversation') . '" method="POST" />';
 				echo '<p><label for="new-message-message">Votre message</label></p>';
 				echo '<p class="input input-area"><textarea id="new-message-message" name="message"></textarea></p>';
 
@@ -38,4 +24,3 @@ echo '<div class="component new-message size2">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>
