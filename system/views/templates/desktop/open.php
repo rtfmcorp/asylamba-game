@@ -26,10 +26,10 @@ echo '<head>';
 
 	if (COLORSTYLE) {
 		echo (CTR::getPage() == 'inscription' && (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')))
-			? '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.v2.color1.css" />'
-			: '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.v2.' . $color . '.css" />';
+			? '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.v3.color1.css" />'
+			: '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.v3.' . $color . '.css" />';
 	} else {
-		echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.v2.css" />';
+		echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.v3.css" />';
 	}
 
 	echo CTR::getPage() == 'inscription'
