@@ -206,7 +206,6 @@ echo '<div id="content">';
 		} elseif (CTR::$get->get('mode') == 'tactical') {
 			include COMPONENT . 'faction/data/tactical/map.php';
 			include COMPONENT . 'faction/data/tactical/sectors.php';
-			include COMPONENT . 'faction/data/tactical/targets.php';
 		} elseif (CTR::$get->get('mode') == 'diplomacy') {
 			include COMPONENT . 'faction/data/diplomacy/main.php';
 			include COMPONENT . 'faction/data/diplomacy/about.php';
@@ -281,10 +280,8 @@ echo '<div id="content">';
 				$PLAYER_SENATE_TOKEN = ASM::$pam->newSession();
 				ASM::$pam->load(array('rColor' => $faction->id, 'status' => PAM_PARLIAMENT, 'statement' => [PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY]));
 
-				$targetMode = TRUE;
 
 				include COMPONENT . 'faction/government/manage/main.php';
-				include COMPONENT . 'faction/data/tactical/targets.php';
 				include COMPONENT . 'default.php';
 
 				ASM::$pam->changeSession($S_PAM_OLD);

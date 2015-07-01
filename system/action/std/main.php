@@ -117,7 +117,6 @@ if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('tok
 		case 'fireminister':			include ACTION . 'demeter/election/fire.php'; break;
 		case 'resign':					include ACTION . 'demeter/election/resign.php'; break;
 		case 'abdicate':				include ACTION . 'demeter/election/abdicate.php'; break;
-		case 'iwin':					include ACTION . 'demeter/win.php'; break;
 
 		case 'votelaw':					include ACTION . 'demeter/law/vote.php'; break;
 		case 'createlaw':				include ACTION . 'demeter/law/createLaw.php'; break;
