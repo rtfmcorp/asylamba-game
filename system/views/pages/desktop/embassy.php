@@ -56,7 +56,18 @@ echo '<div id="content">';
 			? CTR::$get->get('faction')
 			: CTR::$data->get('playerInfo')->get('color');
 
-		if (in_array($color, [1, 2, 3, 4, 5, 6, 7])) {
+		$S_COL_1 = ASM::$clm->getCurrentSession();
+		ASM::$clm->newSession();
+		ASM::$clm->load(array('isInGame' => TRUE));
+
+		$factions = [];
+		for ($i = 0; $i < ASM::$clm->size(); $i++) { 
+			$factions[] = ASM::$clm->get($i)->id;
+		}
+
+		ASM::$clm->changeSession($S_COL_1);
+
+		if (in_array($color, $factions)) {
 			# load module
 			include_once DEMETER;
 			include_once ZEUS;
@@ -87,7 +98,8 @@ echo '<div id="content">';
 			# close session
 			ASM::$pam->changeSession($S_PAM_1);
 			ASM::$clm->changeSession($S_COL_1);
+		} else {
+			CTR::redirect('embassy');
 		}
 	}
 echo '</div>';
-?>

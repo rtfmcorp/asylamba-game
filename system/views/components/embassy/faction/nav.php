@@ -5,7 +5,7 @@ echo '<div class="component nav">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			for ($i = 1; $i <= 7; $i++) { 
+			foreach ($factions as $i) {
 				$active = $faction->id == $i ? 'active' : NULL;
 
 				echo '<a href="' . APP_ROOT . 'embassy/faction-' . $i . '" class="nav-element ' . $active . '">';
