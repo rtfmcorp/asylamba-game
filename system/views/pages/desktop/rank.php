@@ -68,24 +68,32 @@ echo '<div id="content">';
 
 		# include part
 		$FACTION_RANKING_FRONT = ASM::$frm->newSession();
-		ASM::$frm->loadLastContext(array('rFaction' => array(1,2,3,4,5,6,7)), array('generalPosition', 'ASC'), array(0, 1));
+
+		if (Utils::interval(SERVER_START_TIME, Utils::now(), 'h') > HOURS_BEFORE_START_OF_RANKING) {
+			ASM::$frm->loadLastContext([], ['pointsPosition', 'ASC'], [0, 1]);
+		} else {
+			ASM::$frm->loadLastContext([], ['generalPosition', 'ASC'], [0, 1]);
+		}
+
 		include COMPONENT . 'rank/faction/front.php';
 
 		$FACTION_RANKING_POINTS = ASM::$frm->newSession();
-		ASM::$frm->loadLastContext(array('rFaction' => array(1,2,3,4,5,6,7)), array('pointsPosition', 'ASC'));
+		ASM::$frm->loadLastContext([], ['pointsPosition', 'ASC']);
 		include COMPONENT . 'rank/faction/points.php';
 
 		$FACTION_RANKING_GENERAL = ASM::$frm->newSession();
-		ASM::$frm->loadLastContext(array('rFaction' => array(1,2,3,4,5,6,7)), array('generalPosition', 'ASC'));
+		ASM::$frm->loadLastContext([], ['generalPosition', 'ASC']);
 		include COMPONENT . 'rank/faction/general.php';
 
 		$FACTION_RANKING_WEALTH = ASM::$frm->newSession();
-		ASM::$frm->loadLastContext(array('rFaction' => array(1,2,3,4,5,6,7)), array('wealthPosition', 'ASC'));
+		ASM::$frm->loadLastContext([], ['wealthPosition', 'ASC']);
 		include COMPONENT . 'rank/faction/wealth.php';
 
 		$FACTION_RANKING_TERRITORIAL = ASM::$frm->newSession();
-		ASM::$frm->loadLastContext(array('rFaction' => array(1,2,3,4,5,6,7)), array('territorialPosition', 'ASC'));
+		ASM::$frm->loadLastContext([], ['territorialPosition', 'ASC']);
 		include COMPONENT . 'rank/faction/territorial.php';
+
+		include COMPONENT . 'rank/faction/info-victory.php';
 
 		ASM::$frm->changeSession($S_FRM1);
 	} else {
