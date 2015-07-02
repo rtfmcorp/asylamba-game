@@ -29,13 +29,6 @@ echo '<div id="content">';
 			'statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY, PAM_BANNED)
 		));
 
-		$S_MSM1 = ASM::$msm->getCurrentSession();
-		ASM::$msm->newSession();
-		ASM::$msm->loadByRequest(
-			'WHERE ((rPlayerWriter = ? AND rPlayerReader = ?) OR (rPlayerWriter = ? AND rPlayerReader = ?)) ORDER BY dSending DESC',
-			array($player, CTR::$data->get('playerId'), CTR::$data->get('playerId'), $player)
-		);
-
 		$S_OBM1 = ASM::$obm->getCurrentSession();
 		ASM::$obm->newSession();
 		ASM::$obm->load(array('rPlayer' => $player), array('dCreation', 'ASC'));
@@ -57,7 +50,6 @@ echo '<div id="content">';
 		include COMPONENT . 'default.php';
 
 		ASM::$obm->changeSession($S_OBM1);
-		ASM::$msm->changeSession($S_MSM1);
 		ASM::$pam->changeSession($S_PAM1);
 	} else {
 		$color = CTR::$get->exist('faction')
