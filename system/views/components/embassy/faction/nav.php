@@ -17,4 +17,3 @@ echo '<div class="component nav">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>
