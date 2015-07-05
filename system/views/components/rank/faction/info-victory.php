@@ -48,7 +48,7 @@ echo '<div class="component profil panel-info">';
 						echo '<td>+ 0</td>';
 					echo '</tr>';
 					echo '<tr class="small-grey">';
-						echo '<td>Général</td>';
+						echo '<td>Territorial</td>';
 						echo '<td>+ 20</td>';
 						echo '<td>+ 10</td>';
 						echo '<td>+ 5</td>';

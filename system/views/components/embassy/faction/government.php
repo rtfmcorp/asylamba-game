@@ -33,7 +33,7 @@ echo '<div class="component player rank">';
 				echo '<span class="value">' . Format::number($faction->credits) . ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" /></span>';
 			echo '</div>';
 			echo '<div class="number-box grey">';
-				echo '<span class="label">Nombre de territoires contrôlés</span>';
+				echo '<span class="label">Nombre de points des territoires contrôlés</span>';
 				echo '<span class="value">' . Format::number($faction->sectors) . '</span>';
 			echo '</div>';
 			echo '<div class="number-box grey">';
