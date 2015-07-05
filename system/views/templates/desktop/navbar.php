@@ -74,7 +74,7 @@ echo '<div id="nav">';
 		echo '<a href="' . APP_ROOT . 'profil" class="square hb rb ' . $isActive . '" title="profil"><img src="' . MEDIA . 'common/nav-profil.png" alt="" /></a>';
 
 		$isActive = (in_array(CTR::getPage(), array('fleet'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'fleet" class="square hb rb ' . $isActive . '" title="flottes"><img src="' . MEDIA . 'common/nav-fleet.png" alt="" /></a>';
+		echo '<a href="' . APP_ROOT . 'fleet" class="square hb rb ' . $isActive . '" title="amirauté"><img src="' . MEDIA . 'common/nav-fleet.png" alt="" /></a>';
 
 		$isActive = (in_array(CTR::getPage(), array('map'))) ? 'active' : NULL;
 		echo '<a href="' . APP_ROOT . 'map" class="square hb rb ' . $isActive . '" title="galaxie"><img src="' . MEDIA . 'common/nav-map.png" alt="" /></a>';
