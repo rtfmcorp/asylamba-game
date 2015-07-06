@@ -388,6 +388,7 @@ foreach ($list as $player => $value) {
 	$pr->general = $listG[$player]['general'];
 	$pr->generalPosition = $listG[$player]['position'];
 	$pr->generalVariation = $firstRanking ? 0 : $oldRanking->generalPosition - $pr->generalPosition;
+	ASM::$pam->getById($player)->factionPoint = $pr->general;
 
 	$pr->resources = $listR[$player]['resources'];
 	$pr->resourcesPosition = $listR[$player]['position'];
