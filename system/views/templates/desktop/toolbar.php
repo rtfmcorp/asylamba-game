@@ -271,10 +271,10 @@ echo '<div id="tools">';
 							echo '<strong>' . CommanderResources::getInfo($commander->get('eventInfo')->get('level'), 'grade') . ' ' . $commander->get('eventInfo')->get('name') . '</strong>';
 							echo '<em>';
 								switch ($commander->get('eventInfo')->get('travelType')) {
-									case Commander::MOVE: echo 'déplacement vers ' . $commander->get('eventInfo')->get('nDestination'); break;
-									case Commander::LOOT: echo 'pillage de ' . $commander->get('eventInfo')->get('nDestination'); break;
-									case Commander::COLO: echo 'colonisation de ' . $commander->get('eventInfo')->get('nDestination'); break;
-									case Commander::BACK: echo 'retour vers ' . $commander->get('eventInfo')->get('nDestination'); break;
+									case Commander::MOVE: echo 'déplacement vers ' . $commander->get('eventInfo')->get('nArrival'); break;
+									case Commander::LOOT: echo 'pillage de ' . $commander->get('eventInfo')->get('nArrival'); break;
+									case Commander::COLO: echo 'colonisation de ' . $commander->get('eventInfo')->get('nArrival'); break;
+									case Commander::BACK: echo 'retour vers ' . $commander->get('eventInfo')->get('nArrival'); break;
 									default: echo 'autre'; break;
 								}
 							echo '</em>';
