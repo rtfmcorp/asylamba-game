@@ -73,9 +73,8 @@ class Color {
 	const CAMPAIGN		 			= 2;
 	const ELECTION 					= 3;
 
-	const WIN_NO_TARGET				= 0;
-	const WIN_TARGET 				= 1;
-	const WIN_CONFIRM 				= 2;
+	const NOT_WIN 					= 0;
+	const WIN 						= 1;
 
 	# attributs issus de la db
 	public $id 						= 0;

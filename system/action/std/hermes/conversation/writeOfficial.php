@@ -24,7 +24,7 @@ if (CTR::$data->get('playerInfo')->get('admin') == FALSE) {
 				$conv->messages++;
 				$conv->dLastMessage = Utils::now();
 
-				# désarchiver tout les users
+				# désarchiver tous les users
 				$users = $conv->players;
 				foreach ($users as $user) {
 					$user->convStatement = ConversationUser::CS_DISPLAY;
