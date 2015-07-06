@@ -384,28 +384,15 @@ class PlayerManager extends Manager {
 
 			GalaxyColorManager::apply();
 
-			# send a message with Jean-Mi
-			$message = 'Salut,  
-				<br /><br />Tu t\'es malheureusement fait prendre ta dernière planète. Une nouvelle t\'a été attribuée. Cela te permet de continuer le jeu si tu le souhaites.
-				<br />Tu n\'as rien perdu de ton expérience. Tu peux donc continuer le jeu et te relancer facilement en demandant de l\'aide à tes camarades de faction.
-				<br /><br />Dans le cas où tu voudrais recommencer dans une autre faction, tu peux te diriger dans l\'onglet des paramètres et cliquer sur le bouton recommencer, tu pourras alors choisir une nouvelle faction.
-				<br />Attention, cette action supprimera tout de ton joueur dans cette faction.
-				<br /><br />Un grand merci d\'avoir joué à Asylamba. J\'espère en tout cas que l\'expérience t\'a plu.
-				<br /><br />Bonne continuation.
-				<br /><br />Cordialement, <br />Jean-Mi';
+			# envoi d'une notif
 
-			$m = new Message();
-			$m->rPlayerWriter = ID_JEANMI;
-			$m->dSending = Utils::now();
-			$m->content = $message;
-
-			$S_MSM1 = ASM::$msm->getCurrentSession();
-			ASM::$msm->newSession();
-			ASM::$msm->load(array('rPlayerReader' => $player->id, 'rPlayerWriter' => ID_JEANMI));
-			$m->thread = ASM::$msm->get()->getThread();
-			$m->rPlayerReader = $player->id;
-			ASM::$msm->add($m);
-			ASM::$msm->changeSession($S_MSM1);
+			$notif = new Notification();
+			$notif->setRPlayer($player->id);
+			$notif->setTitle('Nouvelle Colonie');
+			$notif->addBeg()
+				->addTxt('Vous vous êtes malheureusement fait prendre votre dernière planète. Une nouvelle colonie vous a été attribuée')
+				->addEnd();
+			ASM::$ntm->add($notif);
 		} else {
 			# si on ne trouve pas de lieu pour le faire poper ou si la faction n'a plus de secteur, le joueur meurt
 			$this->kill($player);
