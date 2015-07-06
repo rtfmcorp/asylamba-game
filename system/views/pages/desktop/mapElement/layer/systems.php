@@ -37,9 +37,9 @@ echo '<div id="systems">';
 			echo '<h2>' . $sector->getName() . '</h2>';
 			echo '<p><a href="#">+</a> ';
 				if ($sector->getRColor() != 0) {
-					echo 'Revendiqué par ' . ColorResource::getInfo($sector->getRColor(), 'popularName') . ' | ' . $sector->getTax() . '% de taxe';
+					echo 'Revendiqué par ' . ColorResource::getInfo($sector->getRColor(), 'popularName') . ' | ' . $sector->getTax() . '% de taxe' . ' | rapporte ' . $sector->points . ' points';
 				} else {
-					echo 'Non revendiqué | Aucune taxe</p> ';
+					echo 'Non revendiqué | Aucune taxe' . ' | rapporte ' . $sector->points . ' points</p>';
 				}
 			echo '</p>';
 		echo '</div>';
