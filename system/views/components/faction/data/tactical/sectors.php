@@ -1,22 +1,29 @@
 <?php
-$db = DataBase::getInstance();
-$qr = $db->prepare('SELECT
+$_CLM = ASM::$clm->getCurrentSession();
+ASM::$clm->newSession();
+ASM::$clm->load();
+
+$qr = 'SELECT
 		se.id AS id,
 		se.rColor AS color,
 		se.name AS name,
-		(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rSector = se.id) AS nbc0,
-		(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = 1 AND sy.rSector = se.id) AS nbc1,
-		(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = 2 AND sy.rSector = se.id) AS nbc2,
-		(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = 3 AND sy.rSector = se.id) AS nbc3,
-		(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = 4 AND sy.rSector = se.id) AS nbc4,
-		(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = 5 AND sy.rSector = se.id) AS nbc5,
-		(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = 6 AND sy.rSector = se.id) AS nbc6,
-		(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = 7 AND sy.rSector = se.id) AS nbc7
-	FROM sector AS se
-	ORDER BY (nbc' . $faction->id . ' / nbc0) DESC
-');
+		(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rSector = se.id) AS nbc0,';
+
+for ($i = 1; $i < ASM::$clm->size(); $i++) {
+	if ($i < ASM::$clm->size() - 1) {
+		$qr .= '(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = ' . ASM::$clm->get($i)->id . ' AND sy.rSector = se.id) AS nbc' . ASM::$clm->get($i)->id .',';
+	} else {
+		$qr .= '(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = ' . ASM::$clm->get($i)->id . ' AND sy.rSector = se.id) AS nbc' . ASM::$clm->get($i)->id;
+	}
+}
+
+$qr .= '	FROM sector AS se ORDER BY (nbc' . $faction->id . ' / nbc0) DESC';
+
+$db = DataBase::getInstance();
+$qr = $db->prepare($qr);
 $qr->execute();
 $aw = $qr->fetchAll(); $qr->closeCursor();
+
 
 $sectort = array(
 	'Secteurs conquis' => array(),
@@ -46,8 +53,8 @@ echo '<div class="component">';
 				foreach ($sectors as $sector) {
 					$percents = array();
 					
-					for ($j = 1; $j < 8; $j++) {
-						$percents['color' . $j] = Format::percent($sector['nbc' . $j], $sector['nbc0']);
+					for ($j = 1; $j < ASM::$clm->size(); $j++) {
+						$percents['color' . ASM::$clm->get($j)->id] = Format::percent($sector['nbc' . ASM::$clm->get($j)->id], $sector['nbc0']);
 					}
 
 					arsort($percents);
@@ -77,4 +84,5 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
+ASM::$clm->changeSession($_CLM);
 ?>
