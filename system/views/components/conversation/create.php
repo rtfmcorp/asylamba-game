@@ -9,9 +9,22 @@ echo '<div class="component size2 new-message">';
 				echo '<p>';
 					echo 'Destinataire';
 				echo '</p>';
+
+				$player = Utils::getHTTPData('sendto');
+				$name = '';
+				if ($player !== FALSE) {
+					$S_PAM = ASM::$pam->getCurrentSession();
+					ASM::$pam->newSession();
+					ASM::$pam->load(array('id' => $player));
+					if (ASM::$pam->size() == 1) {
+						$name = ASM::$pam->get()->name;
+					}
+					ASM::$pam->changeSession($S_PAM);
+				} 
+				
 				echo '<p class="input input-text">';
-					echo '<input class="autocomplete-hidden" name="recipients" type="hidden" />';
-					echo '<input autocomplete="off" class="autocomplete-player ac_input" name="name" placeholder="Destinataire" type="text" />';
+					echo '<input class="autocomplete-hidden" name="recipients" type="hidden" value="' . $player . '" />';
+					echo '<input autocomplete="off" class="autocomplete-player ac_input" name="name" placeholder="Destinataire" type="text" value="' . $name . '"/>';
 				echo '</p>';
 
 				echo '<p>';

@@ -45,10 +45,6 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 									break;
 								}
 							}
-							# prestige
-							if ($player->rColor == ColorResource::NERVE) {
-								$player->factionPoint += Color::POINTCHANGETYPE;
-							}
 							CTR::$alert->add($orbitalBase->name . ' est désormais un Centre Industriel', ALERT_STD_SUCCESS);
 						} else {
 							CTR::$alert->add('Evolution de votre colonie impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
@@ -67,11 +63,6 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 									CTR::$data->get('playerBase')->get('ob')->get($i)->add('type', OrbitalBase::TYP_MILITARY);
 									break;
 								}
-							}
-
-							# prestige
-							if ($player->rColor == ColorResource::KOVAHK) {
-								$player->factionPoint += Color::POINTCHANGETYPE;
 							}
 							CTR::$alert->add($orbitalBase->name . ' est désormais une Base Militaire', ALERT_STD_SUCCESS);
 						} else {
@@ -402,13 +393,6 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 									break;
 								}
 							}
-
-							# prestige
-							if ($player->rColor == ColorResource::KOVAHK) {
-								$player->factionPoint -= Color::POINTCHANGETYPE;
-							} elseif ($player->rColor == ColorResource::NERVE) {
-								$player->factionPoint += Color::POINTCHANGETYPE;
-							}
 							CTR::$alert->add('Votre Base Militaire devient un Centre Commerciale. Vos bâtiments militaires superflus sont détruits.', ALERT_STD_SUCCESS);
 						} else {
 							# change base type in session
@@ -417,13 +401,6 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 									CTR::$data->get('playerBase')->get('ob')->get($i)->add('type', OrbitalBase::TYP_MILITARY);
 									break;
 								}
-							}
-
-							# prestige
-							if ($player->rColor == ColorResource::NERVE) {
-								$player->factionPoint -= Color::POINTCHANGETYPE;
-							} elseif ($player->rColor == ColorResource::KOVAHK) {
-								$player->factionPoint += Color::POINTCHANGETYPE;
 							}
 							CTR::$alert->add('Votre Centre Industriel devient une Base Militaire. Vos bâtiments commerciaux superflus sont détruits.', ALERT_STD_SUCCESS);
 						}

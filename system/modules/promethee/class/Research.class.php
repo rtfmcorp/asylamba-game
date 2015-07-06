@@ -111,11 +111,6 @@ class Research {
 						CTR::$alert->add('une erreur est survenue lors de la mise à jour des technologies');
 				}
 
-				# prestige
-				if ($applyPrestige) {
-					$p->factionPoint += Color::POINTRESEARCH + $levelReached;
-				}
-
 				$n = new Notification();
 				$n->setRPlayer($player);
 				$n->setTitle(ResearchResource::getInfo($this->naturalTech, 'name') . ' niveau ' . $levelReached);
@@ -162,11 +157,6 @@ class Research {
 						CTR::$alert->add('une erreur est survenue lors de la mise à jour des technologies');
 				}
 
-				# prestige
-				if ($applyPrestige) {
-					$p->factionPoint += Color::POINTRESEARCH + $levelReached;
-				}
-
 				$n = new Notification();
 				$n->setRPlayer($player);
 				$n->setTitle(ResearchResource::getInfo($this->lifeTech, 'name') . ' niveau ' . $levelReached);
@@ -209,11 +199,6 @@ class Research {
 					default :
 						$levelReached = 0;
 						CTR::$alert->add('une erreur est survenue lors de la mise à jour des technologies');
-				}
-
-				# prestige
-				if ($applyPrestige) {
-					$p->factionPoint += Color::POINTRESEARCH + $levelReached;
 				}
 
 				$n = new Notification();
@@ -261,11 +246,6 @@ class Research {
 					default :
 						$levelReached = 0;
 						CTR::$alert->add('une erreur est survenue lors de la mise à jour des technologies');
-				}
-
-				# prestige
-				if ($applyPrestige) {
-					$p->factionPoint += Color::POINTRESEARCH + $levelReached;
 				}
 				
 				$n = new Notification();

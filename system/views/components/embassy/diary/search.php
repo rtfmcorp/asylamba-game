@@ -32,7 +32,7 @@ echo '<div class="component search-player size2 color' . $player_selected->rColo
 				
 				if ($player_selected->id != CTR::$data->get('playerId')) {
 					echo '<hr />';
-					echo '<p><a href="' . APP_ROOT . 'message/mode-create/sendto-' . $player_selected->id . '" style="text-decoration: none; color: white; border-bottom: solid 1px #4f4f4f">Envoyer un message</a></p>';
+					echo '<p><a href="' . APP_ROOT . 'message/conversation-new/sendto-' . $player_selected->id . '" style="text-decoration: none; color: white; border-bottom: solid 1px #4f4f4f">Envoyer un message</a></p>';
 				}
 			echo '</div>';
 		echo '</div>';
