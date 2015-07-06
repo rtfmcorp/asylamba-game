@@ -6,7 +6,7 @@ echo '<div class="component new-message">';
 		echo '<div class="body">';
 			echo '<h4>Propagez votre lien</h4>';
 
-			echo '<p>Vous pouvez coller ce lien sur vos profil de vos réseaux sociaux ou les partagers, toutes personnes qui s\'inscrira à Asylamba après avoir cliqué sur ce lien sera considérée comme votre filleul.</p>';
+			echo '<p>Vous pouvez coller ce lien sur vos profils de vos réseaux sociaux ou les partager, toute personne qui s\'inscrira à Asylamba après avoir cliqué sur ce lien sera considérée comme votre filleul.</p>';
 
 			echo '<p>Copiez ce lien</p>';
 			echo '<p class="input input-area">';

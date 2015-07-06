@@ -50,44 +50,71 @@ class LittleReportManager extends Manager {
 			$qr->execute($valuesArray);
 		}
 
-		$awReports = $qr->fetchAll();
+		$this->fill($qr);
 		$qr->closeCursor();
+	}
 
-		foreach ($awReports AS $awReport) {
+	public function loadByRequest($request, $params) {
+		$db = DataBase::getInstance();
+		$qr = $db->prepare('SELECT r.*,
+				p1.rColor AS colorA,
+				p2.rColor AS colorD,
+				p1.name AS playerNameA,
+				p2.name AS playerNameD
+			FROM report AS r
+			LEFT JOIN player AS p1
+				ON p1.id = r.rPlayerAttacker
+			LEFT JOIN player AS p2
+				ON p2.id = r.rPlayerDefender
+			' . $request
+		);
+
+		if (empty($params)) {
+			$qr->execute();
+		} else {
+			$qr->execute($params);
+		}
+
+		$this->fill($qr);
+		$qr->closeCursor();
+	}
+
+	protected function fill($qr) {
+		while ($aw = $qr->fetch()) {
 			$report = new Report();
 
-			$report->id = $awReport['id'];
-			$report->rPlayerAttacker = $awReport['rPlayerAttacker'];
-			$report->rPlayerDefender = $awReport['rPlayerDefender'];
-			$report->rPlayerWinner = $awReport['rPlayerWinner'];
-			$report->avatarA = $awReport['avatarA'];
-			$report->avatarD = $awReport['avatarD'];
-			$report->nameA = $awReport['nameA'];
-			$report->nameD = $awReport['nameD'];
-			$report->levelA = $awReport['levelA'];
-			$report->levelD = $awReport['levelD'];
-			$report->experienceA = $awReport['experienceA'];
-			$report->experienceD = $awReport['experienceD'];
-			$report->palmaresA = $awReport['palmaresA'];
-			$report->palmaresD = $awReport['palmaresD'];
-			$report->resources = $awReport['resources'];
-			$report->expCom = $awReport['expCom'];
-			$report->expPlayerA = $awReport['expPlayerA'];
-			$report->expPlayerD = $awReport['expPlayerD'];
-			$report->rPlace = $awReport['rPlace'];
-			$report->isLegal = $awReport['isLegal'];
-			$report->placeName = $awReport['placeName'];
-			$report->type = $awReport['type'];
-			$report->round = $awReport['round'];
-			$report->importance = $awReport['importance'];
-			$report->statementAttacker = $awReport['statementAttacker'];
-			$report->statementDefender = $awReport['statementDefender'];
-			$report->dFight = $awReport['dFight'];
+			$report->id = $aw['id'];
+			$report->rPlayerAttacker = $aw['rPlayerAttacker'];
+			$report->rPlayerDefender = $aw['rPlayerDefender'];
+			$report->rPlayerWinner = $aw['rPlayerWinner'];
+			$report->avatarA = $aw['avatarA'];
+			$report->avatarD = $aw['avatarD'];
+			$report->nameA = $aw['nameA'];
+			$report->nameD = $aw['nameD'];
+			$report->levelA = $aw['levelA'];
+			$report->levelD = $aw['levelD'];
+			$report->experienceA = $aw['experienceA'];
+			$report->experienceD = $aw['experienceD'];
+			$report->palmaresA = $aw['palmaresA'];
+			$report->palmaresD = $aw['palmaresD'];
+			$report->resources = $aw['resources'];
+			$report->expCom = $aw['expCom'];
+			$report->expPlayerA = $aw['expPlayerA'];
+			$report->expPlayerD = $aw['expPlayerD'];
+			$report->rPlace = $aw['rPlace'];
+			$report->isLegal = $aw['isLegal'];
+			$report->placeName = $aw['placeName'];
+			$report->type = $aw['type'];
+			$report->round = $aw['round'];
+			$report->importance = $aw['importance'];
+			$report->statementAttacker = $aw['statementAttacker'];
+			$report->statementDefender = $aw['statementDefender'];
+			$report->dFight = $aw['dFight'];
 
-			$report->colorA = $awReport['colorA'];
-			$report->colorD = $awReport['colorD'];
-			$report->playerNameA = $awReport['playerNameA'];
-			$report->playerNameD = $awReport['playerNameD'];
+			$report->colorA = $aw['colorA'];
+			$report->colorD = $aw['colorD'];
+			$report->playerNameA = $aw['playerNameA'];
+			$report->playerNameD = $aw['playerNameD'];
 
 			$this->_Add($report);
 		}

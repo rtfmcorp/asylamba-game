@@ -70,5 +70,7 @@ define('NB_AVATAR', 			80);
 
 # durée en heures avant que le classement total démarre
 	# 2 semaines = 336 h
-define('HOURS_BEFORE_START_OF_RANKING', 336);
+	# 20 jours = 480h
+define('HOURS_BEFORE_START_OF_RANKING', 480);
+define('POINTS_TO_WIN', 2000);
 ?>

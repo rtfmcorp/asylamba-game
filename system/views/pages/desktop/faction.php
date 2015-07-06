@@ -206,6 +206,7 @@ echo '<div id="content">';
 		} elseif (CTR::$get->get('mode') == 'tactical') {
 			include COMPONENT . 'faction/data/tactical/map.php';
 			include COMPONENT . 'faction/data/tactical/sectors.php';
+			include COMPONENT . 'faction/data/tactical/targets.php';
 		} elseif (CTR::$get->get('mode') == 'diplomacy') {
 			include COMPONENT . 'faction/data/diplomacy/main.php';
 			include COMPONENT . 'faction/data/diplomacy/about.php';

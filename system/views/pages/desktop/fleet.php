@@ -204,7 +204,28 @@ echo '<div id="content">';
 		# loading des objets
 		$S_LRM1 = ASM::$lrm->getCurrentSession();
 		ASM::$lrm->newSession();
-		ASM::$lrm->load(['r.rPlayerAttacker' => CTR::$data->get('playerId')], ['r.dFight', 'DESC'], [0, 50]);
+
+		if (CTR::$get->get('mode', 'archived')) {
+			$archived = Report::ARCHIVED;
+		} else {
+			$archived = Report::STANDARD;
+		}
+
+		$rebels = Params::check(Params::SHOW_REBEL_REPORT)
+			? NULL
+			: 'AND p2.rColor != 0';
+
+		if (Params::check(Params::SHOW_ATTACK_REPORT)) {
+			ASM::$lrm->loadByRequest(
+				'WHERE rPlayerAttacker = ? AND statementAttacker = ? ' . $rebels . ' ORDER BY dFight DESC LIMIT 0, 50',
+				[CTR::$data->get('playerId'), $archived]
+			);
+		} else {
+			ASM::$lrm->loadByRequest(
+				'WHERE rPlayerDefender = ? AND statementDefender = ? ' . $rebels . ' ORDER BY dFight DESC LIMIT 0, 50',
+				[CTR::$data->get('playerId'), $archived]
+			);
+		}
 
 		# listReport component
 		$report_listReport = array();
@@ -212,17 +233,7 @@ echo '<div id="content">';
 			$report_listReport[$i] = ASM::$lrm->get($i);
 		}
 		$type_listReport = 1;
-		include COMPONENT . 'fleet/listReport.php';
-
-		ASM::$lrm->newSession();
-		ASM::$lrm->load(['r.rPlayerDefender' => CTR::$data->get('playerId')], ['r.dFight', 'DESC'], [0, 50]);
-
-		$report_listReport = array();
-		for ($i = 0; $i < ASM::$lrm->size(); $i++) { 
-			$report_listReport[$i] = ASM::$lrm->get($i);
-		}
-		$type_listReport = 2;
-		include COMPONENT . 'fleet/listReport.php';
+		include COMPONENT . 'fleet/list-report.php';
 
 		# report component
 		if (CTR::$get->exist('report')) {
@@ -243,6 +254,7 @@ echo '<div id="content">';
 				$defender_report = ASM::$pam->getById($report_report->rPlayerDefender);
 
 				include COMPONENT . 'fleet/report.php';
+				include COMPONENT . 'fleet/manage-report.php';
 
 				ASM::$pam->changeSession($S_PAM1);
 			} else {

@@ -20,12 +20,10 @@ include_once 'class/law/VoteLawManager.class.php';
 include_once 'class/law/Law.class.php';
 include_once 'class/law/LawManager.class.php';
 
-
 include_once 'class/Color.class.php';
 include_once 'class/ColorManager.class.php';
 
 include_once 'resource/ForumResources.php';
-include_once 'resource/VictoryResources.php';
 include_once 'resource/LawResources.php';
 include_once 'resource/ColorResource.class.php';
 

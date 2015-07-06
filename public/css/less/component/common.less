@@ -17,6 +17,7 @@
 		&:first-child {
 			border: solid 5px transparent;
 			width: auto;
+			text-align: center;
 
 			a { width: auto; }
 		}
@@ -24,8 +25,8 @@
 		a {
 			position: relative;
 			display: block;
-			margin: 0; padding: 0 5px;
-			line-height: 30px;
+			margin: 0; padding: 0;
+			line-height: 30px; width: 30px;
 			background: #0A0A0A;
 			color: #4F4F4F;
 			text-decoration: none;
@@ -39,10 +40,17 @@
 			}
 
 			&.active {
-				background: @light;
+				background: @medium;
+				color: white;
+				border-color: @light;
 
 				&.down { box-shadow: 0 2px 0 0 #CCC; }
 				&.up { box-shadow: 0 -2px 0 0 #CCC; }
+
+				&:hover, &:focus {
+					color: #CCC;
+					box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+				}
 			}
 
 			&:hover, &:focus, &:active {

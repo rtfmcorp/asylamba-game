@@ -63,6 +63,7 @@ function cmpPoints($a, $b) {
 ASM::$clm->load(array('isInGame' => 1));
 
 # create an array with all the factions
+$gameover = FALSE;
 $list = [];
 for ($i = 0; $i < ASM::$clm->size(); $i++) {
 	$list[ASM::$clm->get($i)->id] = array(
@@ -70,6 +71,9 @@ for ($i = 0; $i < ASM::$clm->size(); $i++) {
 		'wealth' => 0, 
 		'territorial' => 0,
 		'points' => ASM::$clm->get($i)->rankingPoints);
+	if (ASM::$clm->get($i)->isWinner == 1) {
+		$gameover = TRUE;
+	}
 }
 const COEF_RESOURCE = 0.001;
 
@@ -191,6 +195,8 @@ foreach ($listP as $key => $value) { $listP[$key]['position'] = $position++;}
 
 #---------------- SAVING -------------------#
 
+$rankings = [];
+
 foreach ($list as $faction => $value) {
 	$fr = new FactionRanking();
 	$fr->rRanking = $rRanking;
@@ -217,10 +223,17 @@ foreach ($list as $faction => $value) {
 	$fr->territorialPosition = $listT[$faction]['position'];
 	$fr->territorialVariation = $firstRanking ? 0 : $oldRanking->territorialPosition - $fr->territorialPosition;
 
-	$fr->points = $listP[$faction]['points'];
-	$fr->pointsPosition = $listP[$faction]['position'];
-	$fr->pointsVariation = $firstRanking ? 0 : $oldRanking->pointsPosition - $fr->pointsPosition;
-	$fr->newPoints = $firstRanking ? $fr->points : $fr->points - $oldRanking->points;
+	if ($gameover) {
+		$fr->points = $oldRanking->points;
+		$fr->pointsPosition = $oldRanking->pointsPosition;
+		$fr->pointsVariation = 0;
+		$fr->newPoints = 0;
+	} else {
+		$fr->points = $listP[$faction]['points'];
+		$fr->pointsPosition = $listP[$faction]['position'];
+		$fr->pointsVariation = $firstRanking ? 0 : $oldRanking->pointsPosition - $fr->pointsPosition;
+		$fr->newPoints = $firstRanking ? $fr->points : $fr->points - $oldRanking->points;
+	}
 
 	# update faction infos
 	ASM::$clm->getById($faction)->rankingPoints = $listP[$faction]['points'];
@@ -228,6 +241,7 @@ foreach ($list as $faction => $value) {
 	ASM::$clm->getById($faction)->sectors = $listT[$faction]['territorial'];
 	ASM::$clm->updateInfos($faction);
 
+	$rankings[] = $fr;
 	ASM::$frm->add($fr);
 }
 
@@ -235,5 +249,71 @@ ASM::$clm->changeSession($S_CLM1);
 ASM::$pam->changeSession($S_PAM1);
 ASM::$prm->changeSession($S_PRM1);
 ASM::$frm->changeSession($S_FRM1);
+
+if ($gameover == FALSE) {
+	# check if a faction wins the game
+	$winRanking = NULL;
+	foreach ($rankings as $ranking) {
+		if ($ranking->points >= POINTS_TO_WIN) {
+			if ($winRanking !== NULL) {
+				if ($winRanking->points < $ranking->points) {
+					$winRanking = $ranking;
+				}
+			} else {
+				$winRanking = $ranking;
+			}
+		}
+	}
+	if ($winRanking !== NULL) {
+		# there is a winner !!!
+		$S_CLM2 = ASM::$clm->getCurrentSession();
+		ASM::$clm->newSession(FALSE);
+		ASM::$clm->load(array('id' => $winRanking->rFaction));
+
+		ASM::$clm->get()->isWinner = Color::WIN;
+
+		# envoyer un message de Jean-Mi
+		$winnerName = ColorResource::getInfo(ASM::$clm->get()->id, 'officialName');
+		$content = 'Salut,<br /><br />La victoire vient d\'être remportée par : <br /><strong>' . $winnerName . '</strong><br />';
+		$content .= 'Cette faction a atteint les ' . POINTS_TO_WIN . ' points, la partie est donc terminée.<br /><br />Bravo et un grand merci à tous les participants !';
+
+		include_once HERMES;
+		$S_CVM1 = ASM::$cvm->getCurrentSession();
+		ASM::$cvm->newSession();
+		ASM::$cvm->load(
+			['cu.rPlayer' => ID_JEANMI]
+		);
+
+		if (ASM::$cvm->size() == 1) {
+			$conv = ASM::$cvm->get();
+
+			$conv->messages++;
+			$conv->dLastMessage = Utils::now();
+
+			# désarchiver tous les users
+			$users = $conv->players;
+			foreach ($users as $user) {
+				$user->convStatement = ConversationUser::CS_DISPLAY;
+			}
+
+			# création du message
+			$message = new ConversationMessage();
+
+			$message->rConversation = $conv->id;
+			$message->rPlayer = ID_JEANMI;
+			$message->type = ConversationMessage::TY_STD;
+			$message->content = $content;
+			$message->dCreation = Utils::now();
+			$message->dLastModification = NULL;
+
+			ASM::$cme->add($message);
+		} else {
+			CTR::$alert->add('La conversation n\'existe pas ou ne vous appartient pas.', ALERT_STD_ERROR);
+		}
+
+		ASM::$clm->changeSession($S_CLM2);
+		ASM::$cvm->changeSession($S_CVM1);
+	}
+}
 
 ?>

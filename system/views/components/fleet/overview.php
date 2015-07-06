@@ -44,7 +44,7 @@ echo '<div class="component size3 table-fleet">';
 						$linePEV = 0;
 
 						for ($i = 0; $i < count($totalShipsBase); $i++) {
-							echo '<td>';
+							echo '<td ' . ($i == 6 ? 'class="sep"' : NULL) . '>';
 								echo $base['dock'][$i] == 0 ? '<span class="zero-value">' : '<span>';
 									echo $base['dock'][$i];
 								echo '<span>';
@@ -68,7 +68,7 @@ echo '<div class="component size3 table-fleet">';
 								echo '</a>';
 							echo '</td>';
 							for ($i = 0; $i < count($totalShipsBase); $i++) { 
-								echo '<td>';
+								echo '<td ' . ($i == 6 ? 'class="sep"' : NULL) . '>';
 									echo $commanderShips[$i] == 0 ? '<span class="zero-value">' : '<span>';
 										echo $commanderShips[$i];
 									echo '<span>';
@@ -87,7 +87,7 @@ echo '<div class="component size3 table-fleet">';
 						$linePEV = 0;
 
 						for ($i = 0; $i < count($totalShipsBase); $i++) { 
-							echo '<td>';
+							echo '<td ' . ($i == 6 ? 'class="sep"' : NULL) . '>';
 								echo $totalShipsBase[$i] == 0 ? '<span class="zero-value">' : '<span>';
 									echo $totalShipsBase[$i];
 								echo '<span>';
@@ -105,7 +105,7 @@ echo '<div class="component size3 table-fleet">';
 					$linePEV = 0;
 
 					for ($i = 0; $i < count($totalShips); $i++) { 
-						echo '<td>';
+						echo '<td ' . ($i == 6 ? 'class="sep"' : NULL) . '>';
 							echo $totalShips[$i] == 0 ? '<span class="zero-value">' : '<span>';
 								echo $totalShips[$i];
 							echo '<span>';
