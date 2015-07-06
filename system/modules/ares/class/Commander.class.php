@@ -48,7 +48,7 @@ class Commander {
 	const BACK						= 3; # retour après une action
 
 	const MAXTRAVELTIME				= 57600;
-	const DISTANCEMAX				= 300;
+	const DISTANCEMAX				= 30;
 
 	# attributes
 	public $id 						= 0;
