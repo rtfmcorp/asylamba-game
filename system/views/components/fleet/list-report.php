@@ -16,9 +16,17 @@ echo '<div class="component report">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo $type_listReport == 1
-				? '<h4>Rapports d\'attaque</h4>'
-				: '<h4>Rapports de défense</h4>';
+			echo '<div class="tool">';
+				echo '<span>';
+					echo '<a href="' . Format::actionBuilder('switchparams', ['params' => Params::SHOW_ATTACK_REPORT]) . '" class="active">' . (Params::check(Params::SHOW_ATTACK_REPORT) ? 'Rapports d\'attaque' : 'Rapports de défense') . '</a>';
+				echo '</span>';
+				echo '<span>';
+					echo '<a href="' . Format::actionBuilder('switchparams', ['params' => Params::SHOW_REBEL_REPORT]) . '" class="hb lt ' . (Params::check(Params::SHOW_REBEL_REPORT) ? 'active' : NULL) . '" title="' . (Params::check(Params::SHOW_REBEL_REPORT) ? 'masquer' : 'afficher') . ' les rapports contre des rebelles">R</a>';
+				echo '</span>';
+				echo '<span>';
+					echo '<a href="' . Format::actionBuilder('deleteallreport') . '" class="hb lt" title="supprimer tout les rapports">&#215;</a>';
+				echo '</span>';
+			echo '</div>';
 			
 			if (count($report_listReport) > 0) {
 				echo '<div class="set-item">';
@@ -43,6 +51,12 @@ echo '<div class="component report">';
 				echo '</div>';
 			} else {
 				echo '<p>Il n\'y a aucun rapport de combat dans vos archives militaires.</p>';
+			}
+
+			if (CTR::$get->get('mode', 'archived')) {
+				echo '<a class="more-button" href="' . APP_ROOT . 'fleet/view-archive">Voir tous les rapports</a>';
+			} else {
+				echo '<a class="more-button" href="' . APP_ROOT . 'fleet/view-archive/mode-archived">Voir les archives des rapports</a>';
 			}
 		echo '</div>';
 	echo '</div>';

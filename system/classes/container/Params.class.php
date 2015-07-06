@@ -6,6 +6,8 @@ class Params {
 	const SHOW_MAP_ANTISPY = 4;
 	const SHOW_MAP_FLEETOUT = 5;
 	const SHOW_MAP_FLEETIN = 6;
+	const SHOW_ATTACK_REPORT = 7;
+	const SHOW_REBEL_REPORT = 8;
 
 	private static $params = [
 		self::LIST_ALL_FLEET 	=> TRUE,
@@ -14,6 +16,8 @@ class Params {
 		self::SHOW_MAP_ANTISPY 	=> TRUE,
 		self::SHOW_MAP_FLEETOUT => TRUE,
 		self::SHOW_MAP_FLEETIN 	=> TRUE,
+		self::SHOW_ATTACK_REPORT=> TRUE,
+		self::SHOW_REBEL_REPORT => TRUE,
 	];
 
 	public static function check($params) {
