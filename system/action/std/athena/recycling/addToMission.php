@@ -48,7 +48,7 @@ if ($rPlace !== FALSE AND $missionId !== FALSE AND $quantity !== FALSE AND in_ar
 					}
 				}
 				if ($mission !== NULL) {
-					$mission->addToNextMission = $quantity;
+					$mission->addToNextMission += $quantity;
 					CTR::$alert->add('Vos recycleurs ont bien été affectés, ils seront ajouté à la prochaine mission.', ALERT_STD_SUCCESS);
 				} else {
 					CTR::$alert->add('Il y a un problème, la mission est introuvable. Veuillez contacter un administrateur.', ALERT_STD_ERROR);
