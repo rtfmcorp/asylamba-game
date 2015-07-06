@@ -36,6 +36,7 @@ abstract class CTR {
 
 		'faction' => array('faction', 'Votre Faction'),
 		'params' => array('params', 'Paramètres'),
+		'sponsorship' => array('sponsorship', 'Parrainage'),
 		'rank' => array('rank', 'Classements'),
 
 		'admin' => array('admin', 'Administration'),

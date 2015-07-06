@@ -6,23 +6,23 @@ echo '<div class="component">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<a href="' . Format::actionBuilder('switchparams', ['params' => Params::SHOW_MAP_MINIMAP]) . '"" class="on-off-button ' . (Params::check(Params::SHOW_MAP_MINIMAP) ? 'active' : NULL) . '">';
+			echo '<a href="' . Format::actionBuilder('switchparams', ['params' => Params::SHOW_MAP_MINIMAP]) . '"" class="on-off-button ' . (Params::check(Params::SHOW_MAP_MINIMAP) ? NULL : 'disabled') . '">';
 				echo 'Afficher la minimap';
 			echo '</a>';
 	
-			echo '<a href="' . Format::actionBuilder('switchparams', ['params' => Params::SHOW_MAP_RC]) . '"" class="on-off-button ' . (Params::check(Params::SHOW_MAP_RC) ? 'active' : NULL) . '">';
+			echo '<a href="' . Format::actionBuilder('switchparams', ['params' => Params::SHOW_MAP_RC]) . '"" class="on-off-button ' . (Params::check(Params::SHOW_MAP_RC) ? NULL : 'disabled') . '">';
 				echo 'Afficher les routes commerciales';
 			echo '</a>';
 
-			echo '<a href="' . Format::actionBuilder('switchparams', ['params' => Params::SHOW_MAP_ANTISPY]) . '"" class="on-off-button ' . (Params::check(Params::SHOW_MAP_ANTISPY) ? 'active' : NULL) . '">';
+			echo '<a href="' . Format::actionBuilder('switchparams', ['params' => Params::SHOW_MAP_ANTISPY]) . '"" class="on-off-button ' . (Params::check(Params::SHOW_MAP_ANTISPY) ? NULL : 'disabled') . '">';
 				echo 'Afficher les cercles de contre-espionnage';
 			echo '</a>';
 
-			echo '<a href="' . Format::actionBuilder('switchparams', ['params' => Params::SHOW_MAP_FLEETOUT]) . '"" class="on-off-button ' . (Params::check(Params::SHOW_MAP_FLEETOUT) ? 'active' : NULL) . '">';
+			echo '<a href="' . Format::actionBuilder('switchparams', ['params' => Params::SHOW_MAP_FLEETOUT]) . '"" class="on-off-button ' . (Params::check(Params::SHOW_MAP_FLEETOUT) ? NULL : 'disabled') . '">';
 				echo 'Afficher les attaques sortantes';
 			echo '</a>';
 
-			echo '<a href="' . Format::actionBuilder('switchparams', ['params' => Params::SHOW_MAP_FLEETIN]) . '"" class="on-off-button ' . (Params::check(Params::SHOW_MAP_FLEETIN) ? 'active' : NULL) . '">';
+			echo '<a href="' . Format::actionBuilder('switchparams', ['params' => Params::SHOW_MAP_FLEETIN]) . '"" class="on-off-button ' . (Params::check(Params::SHOW_MAP_FLEETIN) ? NULL : 'disabled') . '">';
 				echo 'Afficher les attaques entrantes';
 			echo '</a>';
 		echo '</div>';
