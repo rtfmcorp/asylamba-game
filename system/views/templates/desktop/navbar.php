@@ -248,6 +248,7 @@ echo '<div id="nav">';
 		echo '<a target="_blank" href="' . GETOUT_ROOT . 'forum">Discuter sur le forum</a>';
 		echo '<a target="_blank" href="' . GETOUT_ROOT . 'blog">Voir le blog</a>';
 		echo '<a target="_blank" href="' . GETOUT_ROOT . 'wiki">Consulter le wiki</a>';
+		echo '<a href="' . APP_ROOT . 'sponsorship">Parrainage</a>';
 		echo '<hr />';
 		echo '<a target="_blank" href="' . FACEBOOK_LINK . '">Rejoindre la page Facebook</a>';
 		echo '<a target="_blank" href="' . GOOGLE_PLUS_LINK . '">Nous suivre sur Google+</a>';
