@@ -96,16 +96,16 @@ class ColorManager extends Manager {
 			foreach (ColorResource::getInfo($color->id, 'bonus') AS $k) {
 				$color->bonusText[] = ColorResource::getBonus($k);
 			}
-
 			if ($color->id != 0) {
 				foreach ($awColorLink AS $colorLink) {
 					if ($colorLink['rColor'] == $color->id) {
-						$color->colorLink[] = $colorLink['statement'];
+						$color->colorLink[$colorLink['rColorLinked']] = $colorLink['statement'];
 					}
 				}
 			} else {
 				$color->colorLink = array(Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL);
 			}
+
 
 			$this->_Add($color);
 			if ($this->currentSession->getUMode()) {

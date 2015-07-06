@@ -1227,12 +1227,12 @@ ASM::$clm->load();
 for ($i = 1; $i < ASM::$clm->size(); $i++) {
 	for ($j = 1; $j < ASM::$clm->size(); $j++) {
 		if (!(($i == ASM::$clm->size() - 1) && ($j == ASM::$clm->size() - 1))) {
-			$values .= '(' . $i . ',' . $j . ',' . 0 .'),';
+			$values .= '(' . ASM::$clm->get($i)->id . ',' . ASM::$clm->get($j)->id . ',' . 0 .'),';
 		}
 	}
 }
 
-$values .= '(' . (ASM::$clm->size() - 1) . ',' . (ASM::$clm->size() - 1) . ',' . 0 .');';
+$values .= '(' . ASM::$clm->get(ASM::$clm->size() - 1)->id . ',' . ASM::$clm->get(ASM::$clm->size() - 1)->id . ',' . 0 .');';
 
 echo '<h3>Remplissage de la table colorLink</h3>';
 $qr = $db->prepare("INSERT INTO `colorLink` (`rColor`, `rColorLinked`, `statement`) VALUES" . $values);
