@@ -197,7 +197,7 @@ class TechnologyResource {
 			'progName' => 'dock2Unblock',
 			'imageLink' => 'dock2unblock',
 			'requiredTechnosphere' => 16,
-			'requiredResearch' => array(8, 9, 7, 0, 0, 0, 0, 0, 0, 0),
+			'requiredResearch' => array(4, 5, 2, 0, 0, 0, 0, 0, 0, 0),
 			'time' => 15000,
 			'resource' => 600,
 			'credit' => 7000,
