@@ -19,7 +19,7 @@ echo '<div class="component profil panel-info">';
 
 			echo '<div class="center-box">';
 				echo '<span class="label">Points requis pour mettre fin au serveur</span>';
-				echo '<span class="value">15 000</span>';
+				echo '<span class="value">' . Format::number(POINTS_TO_WIN) . '</span>';
 			echo '</div>';
 
 			echo '<p>Les différents classements n\'ont pas tous le même poids. Les gain journaliers en fonction du classement et de la position dans ce dernier sont disponibles dans le tableau ci-dessous.';
