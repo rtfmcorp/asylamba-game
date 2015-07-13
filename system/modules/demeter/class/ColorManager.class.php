@@ -56,6 +56,7 @@ class ColorManager extends Manager {
 		$qr->closeCursor();
 
 		$colorsArray = array();
+
 		for ($i = 0; $i < count($awColor); $i++) {
 			$color = new Color();
 			$color->id = $awColor[$i]['id'];
@@ -96,6 +97,7 @@ class ColorManager extends Manager {
 			foreach (ColorResource::getInfo($color->id, 'bonus') AS $k) {
 				$color->bonusText[] = ColorResource::getBonus($k);
 			}
+
 			if ($color->id != 0) {
 				foreach ($awColorLink AS $colorLink) {
 					if ($colorLink['rColor'] == $color->id) {
@@ -105,7 +107,6 @@ class ColorManager extends Manager {
 			} else {
 				$color->colorLink = array(Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL);
 			}
-
 
 			$this->_Add($color);
 			if ($this->currentSession->getUMode()) {
@@ -162,7 +163,6 @@ class ColorManager extends Manager {
 				$qr2->execute(array($color->colorLink[$i], $color->id, $i));
 			}
 		}
-
 	}
 
 	public function add($newColor) {

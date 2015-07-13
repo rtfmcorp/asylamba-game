@@ -25,7 +25,7 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 
 			CTR::redirect('inscription');
 		} else {
-			header('Location: ' . GETOUT_ROOT . 'profil');
+			header('Location: ' . GETOUT_ROOT . 'serveurs');
 			exit();
 		}
 	} elseif (CTR::$data->exist('prebindkey')) {
@@ -33,7 +33,7 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 			# utilisation de l'API
 			$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
 
-			if ($api->userExist(CTR::$data->get('prebindkey')) || TRUE) {
+			if ($api->userExist(CTR::$data->get('prebindkey'))) {
 				include_once ZEUS;
 				$S_PAM_INSCR = ASM::$pam->getCurrentSession();
 				ASM::$pam->newSession();
@@ -44,12 +44,12 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 					CTR::$data->get('inscription')->add('bindkey', CTR::$data->get('prebindkey'));
 					CTR::$data->get('inscription')->add('portalPseudo', $api->data['userInfo']['pseudo']);
 				} else {
-					header('Location: ' . GETOUT_ROOT . '/profil/message-useralreadysigned');
+					header('Location: ' . GETOUT_ROOT . 'serveurs/message-useralreadysigned');
 					exit();
 				}
 				ASM::$pam->changeSession($S_PAM_INSCR);
 			} else {
-				header('Location: ' . GETOUT_ROOT . '/profil/message-unknowuser');
+				header('Location: ' . GETOUT_ROOT . 'serveurs/message-unknowuser');
 				exit();
 			}
 		} else {
@@ -58,7 +58,7 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 			CTR::$data->get('inscription')->add('portalPseudo', NULL);
 		}
 	} else {
-		header('Location: ' . GETOUT_ROOT . '/profil/message-nobindkey');
+		header('Location: ' . GETOUT_ROOT . 'serveurs/message-nobindkey');
 		exit();
 	}
 } elseif (CTR::$get->get('step') == 2) {
@@ -87,7 +87,7 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 			CTR::redirect('inscription/');
 		}
 	} else {
-		header('Location: ' . GETOUT_ROOT . '/profil/message-forbiddenaccess');
+		header('Location: ' . GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
 		exit();
 	}
 } elseif (CTR::$get->get('step') == 3) {
@@ -123,7 +123,7 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 		}
 		ASM::$pam->changeSession($S_PAM_INSCR2);
 	} else {
-		header('Location: ' . GETOUT_ROOT . '/profil/message-forbiddenaccess');
+		header('Location: ' . GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
 		exit();
 	}
 } elseif (CTR::$get->get('step') == 4) {
@@ -162,11 +162,11 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 				CTR::redirect('inscription/step-3');
 			}
 		} else {
-			header('Location: ' . GETOUT_ROOT . '/profil/message-forbiddenaccess');
+			header('Location: ' . GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
 			exit();
 		}
 	} else {
-		header('Location: ' . GETOUT_ROOT . '/profil/message-forbiddenaccess');
+		header('Location: ' . GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
 		exit();
 	}
 

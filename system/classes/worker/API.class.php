@@ -32,8 +32,6 @@ class API {
 		$answer = curl_exec($ch);
 		curl_close($ch);
 
-		var_dump($answer);
-
 		if ($answer !== FALSE) {
 			$this->data = unserialize($answer);
 			return TRUE;

@@ -6,10 +6,7 @@ include_once ARES;
 $S_LRM1 = ASM::$lrm->getCurrentSession();
 ASM::$lrm->newSession();
 ASM::$lrm->load(
-	[
-		'p1.rColor' => CTR::$data->get('playerInfo')->get('color'),
-		'p2.rColor' => [1, 2, 3, 4, 5, 6, 7]
-	],
+	['p1.rColor' => CTR::$data->get('playerInfo')->get('color')],
 	['r.dFight', 'DESC'],
 	[0, 25]
 );
