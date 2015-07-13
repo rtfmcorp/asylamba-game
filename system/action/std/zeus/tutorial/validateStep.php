@@ -215,6 +215,9 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 		case TutorialResource::REFINERY_LEVEL_20 :
 			$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::REFINERY, 20);
 			break;
+		case TutorialResource::SPONSORSHIP :
+			$nextStepAlreadyDone = TRUE;
+			break;
 	}
 
 	if (!$nextStepAlreadyDone) {
