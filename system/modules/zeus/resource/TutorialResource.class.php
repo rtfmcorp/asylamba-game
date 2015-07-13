@@ -42,6 +42,8 @@ class TutorialResource {
 	const BUILD_SHIP1 = 27;
 	const REFINERY_LEVEL_20 = 28;
 
+	const SPONSORSHIP = 29;
+
 
 	public static function stepExists($step) {
 		if ($step > 0 AND $step <= count(self::$steps)) {
@@ -398,6 +400,20 @@ class TutorialResource {
 			'experienceReward' => 10,
 			'creditReward' => 0,
 			'resourceReward' => 8000,
+			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)),
+		array(
+			'id' => 29,
+			'title' => 'Parrainer vos amis',
+			'description' => 'Vous avez la possiblité de parrainer vos amis. Cela consiste à les faire découvrir le jeu. Et s\'ils commencent à jouer, vous serez récompensé.
+				<br /><br />
+				Tout est expliqué sur la page prévue à cet effet que tu peux trouver en cliquant sur le bouton de déconnexion tout en-haut de la page à droite et ensuite en cliquant sur "parrainage".
+				<br /><br />
+				Plus il y a de monde sur le jeu, plus il se portera bien. Ceci est valable pour moi comme pour toi. C\'est un petit geste qui m\'aidera à conquérir le monde avec Aslymaba. Merci beaucoup d\'avance. Bon jeu !
+				<br /><br />
+				Signé Jean-Mi, opérateur du jeu.',
+			'experienceReward' => 10,
+			'creditReward' => 1000,
+			'resourceReward' => 0,
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
 	);
 }
