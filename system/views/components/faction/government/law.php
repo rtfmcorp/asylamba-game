@@ -56,40 +56,50 @@ echo '<div class="component profil player">';
 
 							echo '<select name="rcolor">';
 								echo '<option value="-1">Choisissez une faction</option>';
-								for ($j = 1; $j < count($faction->colorLink); $j++) {
-									echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
+								foreach ($faction->colorLink as $j => $k) {
+									if ($j != 0) {
+										echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
+									}
 								}
 							echo '</select>';
 						} elseif ($governmentLaw_id == Law::PEACEPACT) {
 
 							echo '<select name="rcolor">';
 								echo '<option value="-1">Choisissez une faction</option>';
-								for ($j = 1; $j < count($faction->colorLink); $j++) {
-									echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
+								foreach ($faction->colorLink as $j => $k) {
+									if ($j != 0) {
+										echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
+									}
 								}
 							echo '</select>';
 						} elseif ($governmentLaw_id == Law::WARDECLARATION) {
 
 							echo '<select name="rcolor">';
 								echo '<option value="-1">Choisissez une faction</option>';
-								for ($j = 1; $j < count($faction->colorLink); $j++) {
-									echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
+								foreach ($faction->colorLink as $j => $k) {
+									if ($j != 0) {
+										echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
+									}
 								}
 							echo '</select>';
 						} elseif ($governmentLaw_id == Law::TOTALALLIANCE) {
 
 							echo '<select name="rcolor">';
 								echo '<option value="-1">Choisissez une faction</option>';
-								for ($j = 1; $j < count($faction->colorLink); $j++) {
-									echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
+								foreach ($faction->colorLink as $j => $k) {
+									if ($j != 0) {
+										echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
+									}
 								}
 							echo '</select>';
 						} elseif (in_array($governmentLaw_id, array(Law::COMTAXEXPORT, Law::COMTAXIMPORT))) {
 							echo '<input type="text" placeholder="Nouvelle taxe en pourcent" name="taxes" />';
 							echo '<select name="rcolor">';
 								echo '<option value="-1">Choisissez une faction</option>';
-								for ($j = 1; $j < count($faction->colorLink); $j++) {
-									echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'popularName') . '</option>';
+								foreach ($faction->colorLink as $j => $k) {
+									if ($j != 0) {
+										echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'popularName') . '</option>';
+									}
 								}
 							echo '</select>';
 						} elseif ($governmentLaw_id == Law::PUNITION) {
