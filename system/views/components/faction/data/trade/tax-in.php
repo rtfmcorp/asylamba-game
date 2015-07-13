@@ -10,17 +10,17 @@ echo '<div class="component player rank">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<h4>Taxes à l\'achat</h4>';
-			for ($i = 0; $i < ASM::$ctm->size(); $i++) {
-				$id = ASM::$ctm->get($i)->relatedFaction;
+				for ($i = 0; $i < ASM::$ctm->size(); $i++) {
+					$id = ASM::$ctm->get($i)->relatedFaction;
 
-				echo '<div class="player faction color' . $id . '">';
-					echo '<a href="' . APP_ROOT . 'embassy/faction-' . $id . '">';
-						echo '<img src="' . MEDIA . 'faction/flag/flag-' . $id . '.png" alt="" class="picto">';
-					echo '</a>';
-					echo '<span class="title">produits ' . ColorResource::getInfo($id, 'demonym') . '</span>';
-					echo '<strong class="name">' . ASM::$ctm->get($i)->importTax . ' %</strong>';
-				echo '</div>';
-			}
+					echo '<div class="player faction color' . $id . '">';
+						echo '<a href="' . APP_ROOT . 'embassy/faction-' . $id . '">';
+							echo '<img src="' . MEDIA . 'faction/flag/flag-' . $id . '.png" alt="" class="picto">';
+						echo '</a>';
+						echo '<span class="title">produits ' . ColorResource::getInfo($id, 'demonym') . '</span>';
+						echo '<strong class="name">' . ASM::$ctm->get($i)->importTax . ' %</strong>';
+					echo '</div>';
+				}
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

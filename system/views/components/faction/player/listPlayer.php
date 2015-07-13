@@ -45,7 +45,7 @@ echo '<div class="component player size3">';
 						echo '</a>';
 						echo '<span class="title">' . $status[$p->getStatus() - 1] . '</span>';
 						echo '<strong class="name">' . $p->getName() . '</strong>';
-						echo '<span class="experience">' . Format::numberFormat($p->factionPoint) . ' points de prestige</span>';
+						echo '<span class="experience">' . Format::numberFormat($p->factionPoint) . ' points</span>';
 						if (Utils::interval(Utils::now(), $p->getDLastActivity(), 's') < (TIME_EVENT_UPDATE * 2)) {
 							echo '<span class="online hb lt" title="est en ligne actuellement"></span>';
 						} elseif (Utils::interval(Utils::now(), $p->getDLastActivity()) > PAM_TIME_ALLY_INACTIVE) {

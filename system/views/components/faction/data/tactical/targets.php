@@ -10,13 +10,12 @@ echo '<div class="component">';
 			if ($faction->isWinner == Color::NOT_WIN) {
 
 				echo '<h4>Conditions de victoire</h4>';
-				echo '<p>Pour gagner, votre faction doit collecter ' . POINTS_TO_WIN . ' points au classement total de faction.</p>';
+				echo '<p>Pour gagner, votre faction doit collecter ' . Format::number(POINTS_TO_WIN) . ' points au classement total de faction.</p>';
 				echo '<p>Vous avez actuellement ' . $faction->rankingPoints . ' points.</p>';
 
 				$percent = Format::percent($faction->rankingPoints, POINTS_TO_WIN);
 				echo '<ul class="list-type-1">';
 				echo '<li>';
-					#echo '<a href="#" class="picto color' . $faction->id . '">:)</a>';
 					echo '<span class="label">avancement</span>';
 					echo '<span class="value">' . $percent . ' %</span>';
 					echo '<span class="progress-bar hb bl" title="points">';

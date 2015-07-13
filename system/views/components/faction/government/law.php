@@ -56,7 +56,7 @@ echo '<div class="component profil player">';
 
 							echo '<select name="rcolor">';
 								echo '<option value="-1">Choisissez une faction</option>';
-								for ($j = 1; $j <= 7; $j++) {
+								for ($j = 1; $j < count($faction->colorLink); $j++) {
 									echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
 								}
 							echo '</select>';
@@ -64,7 +64,7 @@ echo '<div class="component profil player">';
 
 							echo '<select name="rcolor">';
 								echo '<option value="-1">Choisissez une faction</option>';
-								for ($j = 1; $j <= 7; $j++) {
+								for ($j = 1; $j < count($faction->colorLink); $j++) {
 									echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
 								}
 							echo '</select>';
@@ -72,7 +72,7 @@ echo '<div class="component profil player">';
 
 							echo '<select name="rcolor">';
 								echo '<option value="-1">Choisissez une faction</option>';
-								for ($j = 1; $j <= 7; $j++) {
+								for ($j = 1; $j < count($faction->colorLink); $j++) {
 									echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
 								}
 							echo '</select>';
@@ -80,7 +80,7 @@ echo '<div class="component profil player">';
 
 							echo '<select name="rcolor">';
 								echo '<option value="-1">Choisissez une faction</option>';
-								for ($j = 1; $j <= 7; $j++) {
+								for ($j = 1; $j < count($faction->colorLink); $j++) {
 									echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
 								}
 							echo '</select>';
@@ -88,7 +88,7 @@ echo '<div class="component profil player">';
 							echo '<input type="text" placeholder="Nouvelle taxe en pourcent" name="taxes" />';
 							echo '<select name="rcolor">';
 								echo '<option value="-1">Choisissez une faction</option>';
-								for ($j = 1; $j <= ColorResource::size(); $j++) {
+								for ($j = 1; $j < count($faction->colorLink); $j++) {
 									echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'popularName') . '</option>';
 								}
 							echo '</select>';
