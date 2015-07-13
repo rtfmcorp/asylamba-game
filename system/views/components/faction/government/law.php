@@ -57,7 +57,7 @@ echo '<div class="component profil player">';
 							echo '<select name="rcolor">';
 								echo '<option value="-1">Choisissez une faction</option>';
 								foreach ($faction->colorLink as $j => $k) {
-									if ($j != 0) {
+									if ($j != 0 && $j != $faction->id) {
 										echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
 									}
 								}
@@ -67,7 +67,7 @@ echo '<div class="component profil player">';
 							echo '<select name="rcolor">';
 								echo '<option value="-1">Choisissez une faction</option>';
 								foreach ($faction->colorLink as $j => $k) {
-									if ($j != 0) {
+									if ($j != 0 && $j != $faction->id) {
 										echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
 									}
 								}
@@ -77,7 +77,7 @@ echo '<div class="component profil player">';
 							echo '<select name="rcolor">';
 								echo '<option value="-1">Choisissez une faction</option>';
 								foreach ($faction->colorLink as $j => $k) {
-									if ($j != 0) {
+									if ($j != 0 && $j != $faction->id) {
 										echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
 									}
 								}
@@ -87,7 +87,7 @@ echo '<div class="component profil player">';
 							echo '<select name="rcolor">';
 								echo '<option value="-1">Choisissez une faction</option>';
 								foreach ($faction->colorLink as $j => $k) {
-									if ($j != 0) {
+									if ($j != 0 && $j != $faction->id) {
 										echo '<option value="' . ColorResource::getInfo($j, 'id') . '">' . ColorResource::getInfo($j, 'officialName') . '</option>';
 									}
 								}

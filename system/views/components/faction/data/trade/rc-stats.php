@@ -58,7 +58,7 @@ echo '<div class="component profil">';
 			echo '<h4>Répartition du commerce extérieur</h4>';
 
 			foreach ($faction->colorLink as $i => $k) {
-				if ($i != 0 && ColorResource::getInfo($i, 'id') != $faction->id) {
+				if ($i != 0 && $i != $faction->id) {
 					$qr = $db->prepare('SELECT
 						COUNT(cr.id) AS nb ' . $join . '
 						WHERE ((pl1.rColor = ? AND pl2.rColor = ?) OR (pl1.rColor = ? AND pl2.rColor = ?)) AND cr.statement = ?'
