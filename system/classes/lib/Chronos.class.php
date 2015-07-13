@@ -1,23 +1,24 @@
 <?php
 class Chronos {
-	private static $strateShortName  = 'strate';
-	private static $strateLongName   = 'strate';
-	private static $strateCoeff		 = 720;
-	private static $segmentShortName = 'segment';
-	private static $segmentLongName  = 'segment';
-	private static $segmentCoeff 	 = 24;
-	private static $releveShortName  = 'relève';
-	private static $releveLongName   = 'relève';
-	private static $minuteShortName  = '\'';
-	private static $minuteLongName   = 'minute';
-	private static $secondShortName  = '\'\'';
-	private static $secondLongName   = 'seconde';
+	const SN_STR	= 'STR';
+	const LN_STR	= 'strate';
+	const CO_STR	= 2400;
+	const SN_SEG	= 'SEG';
+	const LN_SEG	= 'segment';
+	const CO_SEG	= 24;
+	const SN_REL	= 'REL';
+	const LN_REL	= 'relève';
 
-	const REALTIME = '2014-01-10 18:00:00';
-	const PLAYTIME = '16604';
+	const SN_MIN	= '\'';
+	const LN_MIN	= 'minute';
+	const SN_SEC	= '\'\'';
+	const LN_SEC	= 'seconde';
+
+	const REAL_TIME = SERVER_START_TIME;
+	const SEG_SHIFT = 500;
 	
 	/*
-	 * return le temps restant avant la prochaine relève
+	 * retourne le temps restant avant la prochaine relève
 	 * arg : $type
 	 *     : str 'i' => minutes
 	 *     : str 's' => secondes
@@ -27,11 +28,11 @@ class Chronos {
 		if ($ret < 10) {
 			$ret = '0' . $ret;
 		}
-		return $ret;
+		return (int) $ret;
 	}
 
 	/*
-	 * return le temps écouler depuis le début du serveur
+	 * retourne le temps écoulé depuis le début du serveur
 	 * arg : $type
 	 *     : str 'str' => strates
 	 *     : str 'seg' => segments
@@ -41,22 +42,27 @@ class Chronos {
 	 */
 	public static function getDate($type) {
 		$now  = time();
-		$date = strtotime(Chronos::REALTIME);
-		$itv  = abs($now - $date);
-		$rel  = (floor($itv / 3600)) + Chronos::PLAYTIME;
+		$date = strtotime(Chronos::REAL_TIME);
+		$intr = $now - $date;
+		$rel  = (floor($intr / 3600)) + (Chronos::SEG_SHIFT * Chronos::CO_SEG);
+		
 		if ($type == 'str') {
-			$str  = floor($rel / self::$strateCoeff);
-			return $str;
+			return floor($rel / Chronos::CO_STR);
 		} elseif ($type == 'seg') {
-			$str  = floor($rel / self::$strateCoeff);
-			$seg  = floor(($rel - ($str * self::$strateCoeff)) / self::$segmentCoeff);
-			return $seg;
+			return floor($rel / Chronos::CO_SEG);
 		} elseif ($type == 'rel') {
-			$str  = floor($rel / self::$strateCoeff);
-			$seg  = floor(($rel - ($str * self::$strateCoeff)) / self::$segmentCoeff);
-			$rel  = $rel - ($str * self::$strateCoeff) - ($seg * self::$segmentCoeff);
-			return $rel + 1;
+			$str = floor($rel / Chronos::CO_STR);
+			$seg = floor(($rel - ($str * Chronos::CO_STR)) / Chronos::CO_SEG);
+			return $rel - ($str * Chronos::CO_STR) - ($seg * Chronos::CO_SEG) + 1;
 		}
+	}
+
+	private static function getRel($date) {
+		$origin = strtotime(Chronos::REAL_TIME);
+		$date 	= strtotime($date);
+		$intr 	= $date - $origin;
+
+		return (floor($intr / 3600)) + (Chronos::SEG_SHIFT * Chronos::CO_SEG);
 	}
 
 	/*
@@ -71,61 +77,16 @@ class Chronos {
 	 *     : bol FALSE => la date est collée à la relève précédente
 	 */
 	public static function transform($date, $reference = FALSE, $collapse = FALSE) {
-		if (!empty($date)) {
-			if ($reference) {
-				$return = 'a faire !';
-				// temps depuis
-			} else {
-				$return = '';
-				
-				// définition des composants nécessaires
-				$now  = time();
-				$date = strtotime($date);
-				$dir  = ($now - $date >= 0) ? 'pasted' : 'futur';
-				$itv  = abs($now - $date);
+		$date = new DateTime($date);
 
-				// normalisation de l'interval
-				$rel  = floor($itv / 3600);
-				if ($collapse) { $rel++; }
-				$itv -= $rel * 3600;
-				$str  = floor($rel / self::$strateCoeff);
-				$rel -= $str * self::$strateCoeff;
-				$seg  = floor($rel / self::$segmentCoeff);
-				$rel -= $seg * self::$segmentCoeff;
-				if ($collapse) {
-					$min = 0;
-				} else {
-					$min  = floor($itv / 60);
-					$sec  = $itv - ($min * 60);
-				}
-				$data = array();
-				if ($str > 0) { $data[self::$strateLongName] = $str; }
-				if ($seg > 0) { $data[self::$segmentLongName] = $seg; }
-				if ($rel > 0) { $data[self::$releveLongName] = $rel; }
-				if ($min > 0) { $data[self::$minuteLongName] = $min; }
+		$releve  = self::getRel($date->format('Y-m-d H:i:s'));
+		$segment = floor($releve / Chronos::CO_SEG);
+		$releve -= $segment * Chronos::CO_SEG;
 
-				$return = ($dir == 'pasted') ? 'il y a ' : 'dans ';
+		$return = 'SEG' . $segment . ' REL' . $releve;
+		$title  = $date->format('j.m.Y à H:i:s');
 
-				if (!empty($data)) {
-					$max = 1;
-					foreach ($data AS $k => $v) {
-						if ($max == 1) {
-							$return .= $v . ' ' . $k . Format::addPlural($v);
-						} elseif ($max == 2) {
-							$return .= ' et ' . $v . ' ' . $k . Format::addPlural($v);
-						} else {
-							break;
-						}
-						$max++;
-					}
-				} else {
-					$return .= 'moins d\'une minute';
-				}
-			}
-			return $return;
-		} else {
-			return FALSE;
-		}
+		return '<span class="hb lt" title="' . $title . '">' . $return . '</span>';
 	}
 
 	public static function secondToFormat($seconds, $format = 'large') {
@@ -135,11 +96,11 @@ class Chronos {
 		$sec = $seconds - ($rel * 3600) - ($min * 60);
 
 		if ($format == 'large') {
-			$return .= ($rel > 0) ? $rel . ' ' . self::$releveLongName . Format::addPlural($rel) . ', ' : '';
-			$return .= ($min > 0) ? $min . ' ' . self::$minuteLongName . Format::addPlural($min) . ', ' : '';
-			$return .= ($sec > 0) ? $sec . ' ' . self::$secondLongName . Format::addPlural($sec) : '';
+			$return .= ($rel > 0) ? $rel . ' ' . Chronos::LN_REL . Format::addPlural($rel) . ', ' : '';
+			$return .= ($min > 0) ? $min . ' ' . Chronos::LN_MIN . Format::addPlural($min) . ', ' : '';
+			$return .= ($sec > 0) ? $sec . ' ' . Chronos::SN_SEC . Format::addPlural($sec) : '';
 		} elseif ($format == 'short') {
-			$return .= $rel . ' ' . self::$releveShortName . Format::addPlural($rel) . ', ' . $min . ' ' . self::$minuteShortName . Format::addPlural($min) . ', ' . $sec . ' ' . self::$secondShortName . Format::addPlural($sec);
+			$return .= $rel . ' ' . Chronos::SN_REL . Format::addPlural($rel) . ', ' . $min . ' ' . Chronos::SN_MIN . Format::addPlural($min) . ', ' . $sec . ' ' . Chronos::SN_SEC . Format::addPlural($sec);
 		} elseif ($format == 'lite') {
 			$min = ($min > 9) ? $min : '0' . $min;
 			$sec = ($sec > 9) ? $sec : '0' . $sec;
@@ -147,13 +108,5 @@ class Chronos {
 		}
 
 		return trim($return, ', ');
-	}
-
-	public static function convert($nbrReleve) {
-		if (!empty($nbrReleve)) {
-
-		} else {
-			return FALSE;
-		}
 	}
 }
