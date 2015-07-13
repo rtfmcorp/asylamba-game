@@ -144,6 +144,9 @@ echo '<div class="component panel-info size2">';
 				echo '.<br />';
 			}
 			echo '</p>';
+
+			echo '<h4>A propos</h4>';
+			echo '<p class="info">' . OrbitalBaseResource::getBuildingInfo($building, 'description') . '</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
