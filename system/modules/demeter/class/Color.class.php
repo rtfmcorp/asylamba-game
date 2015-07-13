@@ -128,7 +128,7 @@ class Color {
 		$this->credits = $this->credits + $credit;
 	}
 
-	public function sendSenateNotif() {
+	public function sendSenateNotif($fromChief = FALSE) {
 		include_once HERMES;
 
 		$_PAM121 = ASM::$pam->getCurrentsession();
@@ -138,12 +138,21 @@ class Color {
 		for ($i = 0; $i < ASM::$pam->size(); $i++) {
 			$notif = new Notification();
 			$notif->setRPlayer(ASM::$pam->get($i)->id);
-			$notif->setTitle('Loi proposée');
-			$notif->addBeg()
-				->addTxt('Votre gouvernement a proposé un projet de loi, en tant que membre du sénat, il est de votre devoir de voter pour l\'acceptation ou non de ladite loi.')
-				->addSep()
-				->addLnk('faction/view-senate', 'voir les lois en cours de vote')
-				->addEnd();
+			if ($fromChief == FALSE) {
+				$notif->setTitle('Loi proposée');
+				$notif->addBeg()
+					->addTxt('Votre gouvernement a proposé un projet de loi, en tant que membre du sénat, il est de votre devoir de voter pour l\'acceptation ou non de ladite loi.')
+					->addSep()
+					->addLnk('faction/view-senate', 'voir les lois en cours de vote')
+					->addEnd();
+			} else {
+				$notif->setTitle('Loi appliquée');
+				$notif->addBeg()
+					->addTxt('Votre ' . ColorResource::getInfo($this->id, 'status')[5] . ' a appliqué une loi.')
+					->addSep()
+					->addLnk('faction/view-senate', 'voir les lois appliquées')
+					->addEnd();
+			}
 			ASM::$ntm->add($notif);
 		}
 		ASM::$pam->changeSession($_PAM121);

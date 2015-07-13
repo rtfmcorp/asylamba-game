@@ -46,7 +46,7 @@ echo '<div class="component uni">';
 			}
 
 			if (ASM::$lam->size() == 0) {
-				echo '<p><em>Aucune loi active</em></p>';
+				echo '<p><em>Aucune loi en cours de votation</em></p>';
 			}
 
 			echo '<h4>Bonus de faction</h4>';

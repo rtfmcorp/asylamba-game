@@ -129,7 +129,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('name' => $name, 'rSector' => $rSector));
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
-											ASM::$clm->get()->sendSenateNotif();
+											ASM::$clm->get()->sendSenateNotif(TRUE);
 											CTR::redirect('faction/view-senate');
 										} else {
 											CTR::$alert->add('Ce secteur n\'est pas sous votre contrôle.', ALERT_STD_ERROR);
@@ -226,7 +226,7 @@ if ($type !== FALSE) {
 										$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
 										ASM::$lam->add($law);
 										ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
-										ASM::$clm->get()->sendSenateNotif();
+										ASM::$clm->get()->sendSenateNotif(TRUE);
 										CTR::redirect('faction/view-senate');
 									} else {
 										CTR::$alert->add('Vous considérez déjà cette faction comme votre alliée.', ALERT_STD_ERROR);
@@ -253,7 +253,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
-											ASM::$clm->get()->sendSenateNotif();
+											ASM::$clm->get()->sendSenateNotif(TRUE);
 											CTR::redirect('faction/view-senate');
 										} else {
 											CTR::$alert->add('Vous considérez déjà cette faction comme votre alliée.', ALERT_STD_ERROR);
@@ -283,7 +283,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
 											ASM::$lam->add($law);
 											ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
-											ASM::$clm->get()->sendSenateNotif();
+											ASM::$clm->get()->sendSenateNotif(TRUE);
 											CTR::redirect('faction/view-senate');
 										} else {
 											CTR::$alert->add('Vous considérez déjà cette faction comme votre alliée.', ALERT_STD_ERROR);
@@ -307,7 +307,7 @@ if ($type !== FALSE) {
 										$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
 										ASM::$lam->add($law);
 										ASM::$clm->get()->credits -= LawResources::getInfo($type, 'price');
-										ASM::$clm->get()->sendSenateNotif();
+										ASM::$clm->get()->sendSenateNotif(TRUE);
 										CTR::redirect('faction/view-senate');
 									} else {
 										CTR::$alert->add('Vous considérez déjà cette faction comme votre ennemmi.', ALERT_STD_ERROR);
