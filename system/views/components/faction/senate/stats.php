@@ -18,7 +18,7 @@ echo '<div class="component">';
 				echo '</span>';
 			echo '</div>';
 
-			echo '<p class="info">Infos sur les lois</p>';
+			#echo '<p class="info">Infos sur les lois</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
