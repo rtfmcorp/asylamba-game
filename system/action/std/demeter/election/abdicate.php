@@ -18,7 +18,7 @@ if ($statusArray = ColorResource::getInfo(CTR::$data->get('playerInfo')->get('co
 			$date->modify('-' . ASM::$clm->get()->mandateDuration . ' second');
 			$date = $date->format('Y-m-d H:i:s');
 			ASM::$clm->get()->dLastElection = $date;			
-			CTR::$alert->add('Des élection anticipées vont être lancées.', ALERT_STD_SUCCESS);	
+			CTR::$alert->add('Des élections anticipées vont être lancées.', ALERT_STD_SUCCESS);	
 		} else {
 			CTR::$alert->add('Des élections sont déjà en cours.', ALERT_STD_ERROR);	
 		}
@@ -57,7 +57,7 @@ if ($statusArray = ColorResource::getInfo(CTR::$data->get('playerInfo')->get('co
 							$notif->setRPlayer($rPlayer);
 							$notif->setTitle('Héritier du Trône.');
 							$notif->addBeg()
-								->addTxt('Vous avez été choisi par le ' . $statusArray[5] . ' de votre faction pour être son succésseur, vous prenez la tête du gouvernement immédiatement.');
+								->addTxt('Vous avez été choisi par le ' . $statusArray[5] . ' de votre faction pour être son successeur, vous prenez la tête du gouvernement immédiatement.');
 							ASM::$ntm->add($notif);
 
 							CTR::$alert->add(ASM::$pam->get()->name . ' est désigné comme votre successeur.', ALERT_STD_SUCCESS);	
