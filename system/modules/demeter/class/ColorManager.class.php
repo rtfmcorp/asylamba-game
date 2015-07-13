@@ -105,7 +105,7 @@ class ColorManager extends Manager {
 					}
 				}
 			} else {
-				$color->colorLink = array(Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL);
+				$color->colorLink = array(Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL, Color::NEUTRAL);
 			}
 
 			$this->_Add($color);
@@ -159,8 +159,8 @@ class ColorManager extends Manager {
 					statement = ? WHERE rColor = ? AND rColorLinked = ?
 				');
 
-			for ($i = 1; $i <= count($color->colorLink) - 1; $i++) {
-				$qr2->execute(array($color->colorLink[$i], $color->id, $i));
+			foreach ($color->colorLink as $key => $value) {
+				$qr2->execute(array($value, $color->id, $key));
 			}
 		}
 	}
