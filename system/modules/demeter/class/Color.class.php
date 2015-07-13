@@ -140,7 +140,7 @@ class Color {
 			$notif->setRPlayer(ASM::$pam->get($i)->id);
 			$notif->setTitle('Loi proposée');
 			$notif->addBeg()
-				->addTxt('Votre gouvernement a proposé un projet de loi, en tant que membre du sénat, il est de votre devoir de voté pour l\'acceptatoin ou non de ladite loi.')
+				->addTxt('Votre gouvernement a proposé un projet de loi, en tant que membre du sénat, il est de votre devoir de voter pour l\'acceptation ou non de ladite loi.')
 				->addSep()
 				->addLnk('faction/view-senate', 'voir les lois en cours de vote')
 				->addEnd();
@@ -434,7 +434,7 @@ class Color {
 				$message->type = ConversationMessage::TY_STD;
 				$message->dCreation = Utils::now();
 				$message->dLastModification = NULL;
-				$message->content = 'La période électorale est terminée. Un nouveau dirigeant a été élu pour faire valoir la force de ' . $this->popularName . ' à travers la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong><br /><br />Voici les résultats des élections :<br /><br />';
+				$message->content = 'La période électorale est terminée. Un nouveau dirigeant a été élu pour faire valoir la force de ' . $this->popularName . ' à travers la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong>.<br /><br />Voici les résultats des élections :<br /><br />';
 				foreach ($candidate as $player) {
 					$message->content .= $player['name'] . ' a reçu ' . $player['vote'] . ' vote' . Format::plural($player['vote']) . '<br />';
 				}
@@ -471,7 +471,7 @@ class Color {
 				$message->type = ConversationMessage::TY_STD;
 				$message->dCreation = Utils::now();
 				$message->dLastModification = NULL;
-				$message->content = 'Un putsch a réussi, un nouveau dirigeant va faire valoir la force de ' . $this->popularName . ' à travers la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong><br /><br />De Nombreux membres de la faction ont soutenu le mouvement révolutionnaire :<br /><br />';
+				$message->content = 'Un putsch a réussi, un nouveau dirigeant va faire valoir la force de ' . $this->popularName . ' à travers la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong>.<br /><br />De nombreux membres de la faction ont soutenu le mouvement révolutionnaire :<br /><br />';
 				$message->content .= current($candidate)['name'] . ' a reçu le soutient de ' . Format::number((current($candidate)['vote'] / $this->activePlayers) * 100) . '% de la population.' . '<br />';
 				ASM::$cme->add($message);
 
@@ -490,7 +490,7 @@ class Color {
 				$message->type = ConversationMessage::TY_STD;
 				$message->dCreation = Utils::now();
 				$message->dLastModification = NULL;
-				$message->content = 'Les Oracles ont parlé, un nouveau dirigeant va faire valoir la force de ' . $this->popularName . ' à travers la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong><br /><br /><br /><br />';
+				$message->content = 'Les Oracles ont parlé, un nouveau dirigeant va faire valoir la force de ' . $this->popularName . ' à travers la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong>.<br /><br /><br /><br />';
 				ASM::$cme->add($message);
 			}
 			
@@ -523,7 +523,7 @@ class Color {
 					$notif->addBeg()
 						->addTxt(' Le joueur ')
 						->addLnk('embassy/player-' . ASM::$pam->get()->id, ASM::$pam->get()->name)
-						->addTxt(' a tenté un coup d\'état, celui-ci a échoué');
+						->addTxt(' a tenté un coup d\'état, celui-ci a échoué.');
 					ASM::$ntm->add($notif);
 				}
 				
