@@ -452,6 +452,8 @@ class Place {
 			# planète vide : faire un combat
 			$this->startFight($commander, $commanderPlayer);
 
+			# création du rapport de combat
+			$report = $this->createReport();
 
 			# réduction de la force de la planète
 			$percentage = (($report->pevAtEndD + 1) / ($report->pevInBeginD + 1)) * 100;
@@ -475,10 +477,6 @@ class Place {
 
 				$this->sendNotif(self::LOOTEMPTYFAIL, $commander, $report->id);
 			}
-		
-			# création du rapport de combat
-			$report = $this->createReport();
-			
 		# si il y a une base d'un joueur
 		} else {
 			if ($commanderColor->colorLink[$this->playerColor] == Color::ALLY || $commanderColor->colorLink[$this->playerColor] == Color::PEACE) {
