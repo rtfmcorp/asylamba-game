@@ -160,11 +160,13 @@ class RecyclingLogManager extends Manager {
 
 	public function deleteAllFromMission($missionId) {
 		$db = DataBase::getInstance();
-		$qr = $db->prepare('DELETE FROM recyclingLog WHERE rRecycling = ?');
+		$qr = $db->prepare('SELECT id FROM recyclingLog WHERE rRecycling = ?');
 		$qr->execute(array($missionId));
 
-		$this->_Remove($missionId);
-		
+		while ($aw = $qr->fetch()) {
+			$this->deleteById($aw['id']);
+		}
+
 		return TRUE;
 	}
 }
