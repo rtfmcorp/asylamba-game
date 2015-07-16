@@ -17,6 +17,8 @@ abstract class GalaxyGenerator {
 	public static $output;
 
 	public static function generate() {
+		self::clear();
+
 		# generation
 		self::generateSector();
 		self::generateSystem();
@@ -112,33 +114,6 @@ abstract class GalaxyGenerator {
 		self::$output = self::$output . ">_ " . $text . "<br />";
 	}
 
-	private static function l2p($x1, $x2, $y1, $y2) {
-		return (pow($x1 - $y1, 2) + pow($x2 - $y2, 2));
-	}
-
-	private static function distToSegment($p1, $p2, $v1, $v2, $w1, $w2) {
-		$l2 = self::l2p($v1, $v2, $w1, $w2);
-
-		if ($l2 == 0) {
-			return sqrt(self::l2p($p1, $p2, $v1, $v2));
-		}
-
-		$t  = (($p1 - $v1) * ($w1 - $v1) + ($p2 - $v2) * ($w2 - $v2)) / $l2;
-
-		if ($t < 0) {
-			return sqrt(self::l2p($p1, $p2, $v1, $v2));
-		}
-
-		if ($t > 1) {
-			return sqrt(self::l2p($p1, $p2, $w1, $w2));
-		}
-
-		$tx = $v1 + $t * ($w1 - $v1);
-		$ty = $v2 + $t * ($w2 - $v2);
-
-		return sqrt(self::l2p($p1, $p2, $tx, $ty));
-	}
-
 	private static function generateSystem() {
 		self::log('génération des systèmes');
 
@@ -164,10 +139,18 @@ abstract class GalaxyGenerator {
 
 					$d  = self::distToSegment($xC, $yC, $xA, $yA, $xB, $yB);
 
-					if ($d < GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][2]) {
-						$prob = rand(0, GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][2] + 18);
+					$thickness = GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][2];
+					$intensity = GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][3];
 
-						if (GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][2] - $d > $prob) {
+					if ($d < GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][2]) {
+						#$prob = rand(0, GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][3]);
+						$prob = rand(0, 100);
+
+
+						#if (GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][2] - $d > $prob) {
+						if (round($intensity - ($d * $intensity / $thickness)) >= $prob) {
+
+
 							$type = self::getSystem();
 
 							self::$nbSystem++;
@@ -180,26 +163,67 @@ abstract class GalaxyGenerator {
 			}
 		}
 
-		# GENERATION DES ANNEAUX
-		for ($i = 1; $i <= GalaxyConfiguration::$galaxy['size']; $i++) {
-			for ($j = 1; $j <= GalaxyConfiguration::$galaxy['size']; $j++) {
-				# current cursor position
-				$xPosition = $j;
-				$yPosition = $i;
-				
-				# calcul de la distance entre la case et le centre
-				$d2o = sqrt(
-					pow(abs((GalaxyConfiguration::$galaxy['size'] / 2) - $xPosition), 2) + 
-					pow(abs((GalaxyConfiguration::$galaxy['size'] / 2) - $yPosition), 2)
-				);
-				
-				if (self::isPointInMap($d2o)) {
-					$type = self::getSystem();
+		# GENERATION DES ANNEAUX (circleSystemPosition)
+		for ($w = 0; $w < count(GalaxyConfiguration::$galaxy['circleSystemPosition']); $w++) {
+			# line point
+			$xC = GalaxyConfiguration::$galaxy['circleSystemPosition'][$w][0][0];
+			$yC = GalaxyConfiguration::$galaxy['circleSystemPosition'][$w][0][1];
 
-					self::$nbSystem++;
-					self::$listSystem[] = array($k, 0, 0, $xPosition, $yPosition, $type);
+			$radius 	= GalaxyConfiguration::$galaxy['circleSystemPosition'][$w][1];
+			$thickness 	= GalaxyConfiguration::$galaxy['circleSystemPosition'][$w][2];
+			$intensity	= GalaxyConfiguration::$galaxy['circleSystemPosition'][$w][3];
 
-					$k++;
+			for ($i = 1; $i <= GalaxyConfiguration::$galaxy['size']; $i++) {
+				for ($j = 1; $j <= GalaxyConfiguration::$galaxy['size']; $j++) {
+					# current cursor position
+					$xPosition = $j;
+					$yPosition = $i;
+
+					# calcul de la distance entre la case et le centre
+					$d = sqrt(
+						pow(abs($xC - $xPosition), 2) + 
+						pow(abs($yC - $yPosition), 2)
+					);
+	
+					if ($d >= ($radius - $thickness) && $d <= ($radius + $thickness)) {
+						$dtoseg = abs($d - $radius);
+						$prob 	= rand(0, 100);
+
+						if (round($intensity - ($dtoseg * $intensity / $thickness)) >= $prob) {
+							$type = self::getSystem();
+
+							self::$nbSystem++;
+							self::$listSystem[] = array($k, 0, 0, $xPosition, $yPosition, $type);
+
+							$k++;
+						}
+					}
+				}
+			}
+		}
+
+		# GENERATION PAR VAGUES
+		if (GalaxyConfiguration::$galaxy['systemPosition'] !== NULL) {
+			for ($i = 1; $i <= GalaxyConfiguration::$galaxy['size']; $i++) {
+				for ($j = 1; $j <= GalaxyConfiguration::$galaxy['size']; $j++) {
+					# current cursor position
+					$xPosition = $j;
+					$yPosition = $i;
+					
+					# calcul de la distance entre la case et le centre
+					$d2o = sqrt(
+						pow(abs((GalaxyConfiguration::$galaxy['size'] / 2) - $xPosition), 2) + 
+						pow(abs((GalaxyConfiguration::$galaxy['size'] / 2) - $yPosition), 2)
+					);
+					
+					if (self::isPointInMap($d2o)) {
+						$type = self::getSystem();
+
+						self::$nbSystem++;
+						self::$listSystem[] = array($k, 0, 0, $xPosition, $yPosition, $type);
+
+						$k++;
+					}
 				}
 			}
 		}
@@ -363,18 +387,17 @@ abstract class GalaxyGenerator {
 			}
 			$k++;
 		}
+
+		foreach (self::$listSystem as $v) {
+			if ($v[1] == 0) {
+				$systemToDelete[] = $v[0];
+			}
+		}
 		
 		# suppression des systemes sur des lignes ou des angles
 		for ($i = count(self::$listSystem) - 1; $i >= 0; $i--) { 
 			if (in_array(self::$listSystem[$i][0], $systemToDelete)) {
 				unset(self::$listSystem[$i]);
-			}
-		}
-
-		# suppression des places liée a des systems supprimés
-		for ($i = count(self::$listPlace) - 1; $i >= 0; $i--) { 
-			if (in_array(self::$listPlace[$i][2], $systemToDelete)) {
-				unset(self::$listPlace[$i]);
 			}
 		}
 
@@ -431,6 +454,33 @@ abstract class GalaxyGenerator {
 			return FALSE;
 		}
 
+	}
+
+	private static function l2p($x1, $x2, $y1, $y2) {
+		return (pow($x1 - $y1, 2) + pow($x2 - $y2, 2));
+	}
+
+	private static function distToSegment($p1, $p2, $v1, $v2, $w1, $w2) {
+		$l2 = self::l2p($v1, $v2, $w1, $w2);
+
+		if ($l2 == 0) {
+			return sqrt(self::l2p($p1, $p2, $v1, $v2));
+		}
+
+		$t  = (($p1 - $v1) * ($w1 - $v1) + ($p2 - $v2) * ($w2 - $v2)) / $l2;
+
+		if ($t < 0) {
+			return sqrt(self::l2p($p1, $p2, $v1, $v2));
+		}
+
+		if ($t > 1) {
+			return sqrt(self::l2p($p1, $p2, $w1, $w2));
+		}
+
+		$tx = $v1 + $t * ($w1 - $v1);
+		$ty = $v2 + $t * ($w2 - $v2);
+
+		return sqrt(self::l2p($p1, $p2, $tx, $ty));
 	}
 
 	private static function getProportion($params, $value) {
