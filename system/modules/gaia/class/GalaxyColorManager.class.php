@@ -1,4 +1,5 @@
 <?php
+
 class GalaxyColorManager {
 	public static function apply() {
 		CTR::$applyGalaxy = TRUE;
@@ -18,35 +19,34 @@ class GalaxyColorManager {
 	protected $sector = array();
 
 	public function loadSystem() {
+		include_once CONFIG . 'app.config.install.php';
+		$requestPart = '';
+		foreach ($AVAILABLE_FACTIONS as $faction) {
+			$requestPart .= '(SELECT COUNT(pa.rColor) FROM place AS pl LEFT JOIN player AS pa ON pl.rPlayer = pa.id WHERE pl.rSystem = se.id AND pa.rColor = ' . $faction . ') AS color' . $faction . ',';
+		}
+		$requestPart = rtrim($requestPart, ","); # to remove last comma
+
 		$db = DataBase::getInstance();
-		$qr = $db->query('SELECT
+		$query = 'SELECT
 			se.id AS id,
 			se.rSector AS sector,
 			se.rColor AS color,
 			(SELECT COUNT(pl.id) FROM place AS pl WHERE pl.rSystem = se.id) AS nbPlace,
-			(SELECT COUNT(pa.rColor) FROM place AS pl LEFT JOIN player AS pa ON pl.rPlayer = pa.id WHERE pl.rSystem = se.id AND pa.rColor = 1) AS color1,
-			(SELECT COUNT(pa.rColor) FROM place AS pl LEFT JOIN player AS pa ON pl.rPlayer = pa.id WHERE pl.rSystem = se.id AND pa.rColor = 2) AS color2,
-			(SELECT COUNT(pa.rColor) FROM place AS pl LEFT JOIN player AS pa ON pl.rPlayer = pa.id WHERE pl.rSystem = se.id AND pa.rColor = 3) AS color3,
-			(SELECT COUNT(pa.rColor) FROM place AS pl LEFT JOIN player AS pa ON pl.rPlayer = pa.id WHERE pl.rSystem = se.id AND pa.rColor = 4) AS color4,
-			(SELECT COUNT(pa.rColor) FROM place AS pl LEFT JOIN player AS pa ON pl.rPlayer = pa.id WHERE pl.rSystem = se.id AND pa.rColor = 5) AS color5,
-			(SELECT COUNT(pa.rColor) FROM place AS pl LEFT JOIN player AS pa ON pl.rPlayer = pa.id WHERE pl.rSystem = se.id AND pa.rColor = 6) AS color6,
-			(SELECT COUNT(pa.rColor) FROM place AS pl LEFT JOIN player AS pa ON pl.rPlayer = pa.id WHERE pl.rSystem = se.id AND pa.rColor = 7) AS color7
+			' . $requestPart . '
 		FROM system AS se
-		ORDER BY se.id');
+		ORDER BY se.id';
+		$qr = $db->query($query);
 		
 		while ($aw = $qr->fetch()) {
+			$colors = [];
+			foreach ($AVAILABLE_FACTIONS as $faction) {
+				$colors[$faction] = $aw['color' . $faction]; 
+			}
 			$this->system[$aw['id']] = array(
 				'sector' => $aw['sector'],
 				'systemColor' => $aw['color'],
 				'nbPlace' => $aw['nbPlace'],
-				'color' => array(
-					'1' => $aw['color1'],
-					'2' => $aw['color2'],
-					'3' => $aw['color3'],
-					'4' => $aw['color4'],
-					'5' => $aw['color5'],
-					'6' => $aw['color6'],
-					'7' => $aw['color7']),
+				'color' => $colors,
 				'hasChanged' => FALSE
 			);
 		}
@@ -130,7 +130,7 @@ class GalaxyColorManager {
 		$sectorUpdatedColor = [];
 
 		foreach ($this->sector as $k => $v) {
-			$colorRepartition = array(0, 0, 0, 0, 0, 0, 0);
+			$colorRepartition = array(0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 			foreach ($this->system as $m => $n) {
 				if ($n['sector'] == $k) {
