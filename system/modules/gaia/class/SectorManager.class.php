@@ -15,10 +15,6 @@ class SectorManager extends Manager {
 
 	private $sectors = array();
 
-	private $genStats = array(0, 0, 0, 0, 0, 0, 0);
-	private $avrStats = array(0, 0, 0, 0, 0, 0, 0);
-	private $colStats = array(array(0, 0, 0, 0, 0, 0, 0), array(0, 0, 0, 0, 0, 0, 0), array(0, 0, 0, 0, 0, 0, 0), array(0, 0, 0, 0, 0, 0, 0), array(0, 0, 0, 0, 0, 0, 0), array(0, 0, 0, 0, 0, 0, 0), array(0, 0, 0, 0, 0, 0, 0));
-
 	public function get($position = 0) {
 		if (isset($this->sectors[$position][0])) {
 			$this->sectors[$position][1] = FALSE;
@@ -36,18 +32,6 @@ class SectorManager extends Manager {
 			}
 		}
 		return FALSE;
-	}
-
-	public function getGenStats($type, $stats) {
-		if ($type == 'avr') {
-			return $this->avrStats[$stats];
-		} else {
-			return $this->genStats[$stats];
-		}
-	}
-
-	public function getColStats($color, $stats) {
-		return $this->colStats[$color - 1][$stats];
 	}
 
 	public function load($where = array(), $order = array(), $limit = array()) {
@@ -75,6 +59,7 @@ class SectorManager extends Manager {
 		$answer = $qr->fetchAll();
 		if (!empty($answer)) {
 			$k = 1;
+
 			foreach ($answer as $aw) {
 				$sector = new Sector();
 
@@ -93,22 +78,9 @@ class SectorManager extends Manager {
 
 				$this->sectors[] = array($sector, TRUE);
 
-				$this->genStats[0] += $aw['population'];
-				$this->genStats[1] += $aw['lifePlanet'];
-
-				if ($aw['rColor']) {
-					$this->colStats[$aw['rColor'] - 1][0] += $aw['population'];
-					$this->colStats[$aw['rColor'] - 1][1] += $aw['lifePlanet'];
-				}
-
 				$k++;
 
 				$this->_Add($sector);
-			}
-
-			$this->avrStats = $this->genStats;
-			for ($i = 0; $i < count($this->avrStats); $i++) { 
-				$this->avrStats[$i] = round($this->avrStats[$i] / $k, 2);
 			}
 			return TRUE;
 		} else {

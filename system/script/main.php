@@ -32,7 +32,7 @@ $scripts = [
 ];
 
 # unlimited time
-set_time_limit(60);
+set_time_limit(250);
 ini_set('display_errors', TRUE);
 
 include SCRIPT . 'template/open.php';

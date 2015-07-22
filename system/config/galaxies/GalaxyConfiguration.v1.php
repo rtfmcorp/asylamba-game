@@ -424,11 +424,12 @@ abstract class GalaxyConfiguration {
 			echo '[' . "\r\n";
 			echo '	\'id\' => ' . $k . ',' . "\r\n";
 			echo '	\'beginColor\' => 0,' . "\r\n";
-			echo '	\'vertices\' =>[' . implode(', ', $sector['vertices']) . '],' . "\r\n";
+			echo '	\'vertices\' => [' . implode(', ', $sector['vertices']) . '],' . "\r\n";
 			echo '	\'barycentre\' => [' . $gx . ', ' . $gy . '],' . "\r\n";
 			echo '	\'display\' => [' . $gx . ', ' . $gy . '],' . "\r\n";
 			echo '	\'name\' => \'Secteur ' . $k . "',\r\n";
-			echo '	\'danger\' => GalaxyConfiguration::DNG_CASUAL' . "\r\n";
+			echo '	\'danger\' => GalaxyConfiguration::DNG_CASUAL,' . "\r\n";
+			echo '	\'points\' => 1' . "\r\n";
 			echo '], ' . "\r\n";
 		
 			$k++;
