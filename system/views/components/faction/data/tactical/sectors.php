@@ -7,6 +7,7 @@ $qr = 'SELECT
 		se.id AS id,
 		se.rColor AS color,
 		se.name AS name,
+		se.points AS points,
 		(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rSector = se.id) AS nbc0,';
 
 for ($i = 1; $i < ASM::$clm->size(); $i++) {
@@ -62,7 +63,7 @@ echo '<div class="component">';
 					if ($sector['color'] == $faction->id || ($sector['nbc' . $faction->id] > 0)) {
 						echo '<li>';
 							echo '<a href="#" class="picto color' . $sector['color'] . '">' . $sector['id'] . '</a>';
-							echo '<span class="label">' . $sector['name'] . '</span>';
+							echo '<span class="label">' . $sector['name'] . ' (' . $sector['points'] . ' point' . Format::plural($sector['points']). ')</span>';
 							echo '<span class="value">' . Format::percent($sector['nbc' . $faction->id], $sector['nbc0']) . ' %</span>';
 							echo '<span class="progress-bar hb bl" title="partage des systèmes entre les factions">';
 							foreach ($percents as $color => $percent) {
