@@ -244,6 +244,44 @@ class ColorResource {
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
 				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de Synelle peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Chancelier. 
 				<br /><br />Le Chancelier va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Consul de la défense, le Consul des finances et le Premier Consul de la faction. '
+		], [
+			'id' 			=> 8,
+			'officialName'	=> 'Ligue Seldarine',
+			'popularName' 	=> 'la Ligue',
+			'government' 	=> 'Conseil de la Ligue',
+			'demonym' 		=> 'seldarins',
+			'factionPoint' 	=> 'Points de Courage',
+			'status' 		=> ['Bourgeois', 'Électeur', 'Grand Argentier', 'Champion', 'Licteur', 'Chancelier'],
+			'regime'		=> 2,
+			'devise' 		=> 'Brisons nos chaînes et marchons libres',
+			'desc1' => 'En 260 après Akhéna, l\'Empire a le contrôle de la presque totalité de la galaxie, hormis les quelques territoires occupés par Cardan.<br /><br />Profitant de ce désordre politique et d\'un règne sans force de l\'héritier de l\'impératrice Akhénattia, des industriels et financiers impériaux avec l\'appui de nombreuses maisons mineures, passent à l\'action. Un traité est signé sur la planète Seldare pour affirmer leur indépendance et faire tomber l\'Empereur de son trône : la Ligue Seldarine est créée. Elle n\'aura de cesse de vouloir se substituer au pouvoir en place.',
+			'desc2' => 'Esprit très libéraux mais néanmoins attaché à la hiérarchisation de la société, ceux qu\'on appelle communément les Seldarins rêve de devenir les maître d\'un immense Empire où banquiers et entrepreneurs se partageraient le pouvoir, régnant chacun leur tour pour assurer l\'équilibre.',
+			'desc3' => 'La ligue peut s\'appuyer sur une économie florissante et d\'énormes moyens de production. Si elle n\'est pas maîtresse dans l\'art de la guerre, elle ne manquera pas de vaisseaux pour s\'entraîner.',
+			'desc4' => 'Majoritairement marchands et industriels, leur idéologie repose sur la méritocratie. Les familles noble et bourgeoise cohabitent sans encombre tant que leurs libertés financières et économiques sont garanties.',
+			'bonus' => [1, 5],
+			'mandateDuration' => 604800,
+			'senateDesc' => 'TODO',
+			'campaignDesc' => 'TODO'
+		], [
+			'id' 			=> 9,
+			'officialName'	=> 'Nouvelle Nerve',
+			'popularName' 	=> 'Nerve',
+			'government' 	=> 'République Nervéenne',
+			'demonym' 		=> 'nervéens',
+			'factionPoint' 	=> 'Points d\'industrie',
+			'status' 		=> ['Citoyen', 'Député', 'Ministre des Finances', 'Ministre de la Défense', 'Premier Ministre', 'Président'],
+			'regime'		=> 1,
+			'devise' 		=> 'Du fond des gouffres finiront les valses du ciel',
+			'desc1' => 'TODO',
+			'desc2' => 'TODO',
+			'desc3' => 'TODO',
+			'desc4' => 'TODO',
+			'bonus' => [9, 10],
+			'mandateDuration' => 950400,
+			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de prestige. Un Nervéen gagne du prestige en créant des Centres Industriels, en construisant la Raffinerie et le Stockage et en prenant des planètes (proportionnel au coefficient ressource de la planète). Il en perd en détruisant un Centre Industriel et en perdant le contrôle d\'une planète.',
+			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
+				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de la Nerve peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Président. 
+				<br /><br />Le Président va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Ministre de la défense, le Ministre des finances et le Premier Ministre de la faction. '
 		]
 	];
 }

@@ -32,9 +32,9 @@ echo '<head>';
 		echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.v3.css" />';
 	}
 
-	echo CTR::getPage() == 'inscription'
-		? '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'inscription.desktop.css" />'
-		: NULL;
+#	echo CTR::getPage() == 'inscription'
+#		? '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'inscription.desktop.css" />'
+#		: NULL;
 
 	echo '<link rel="icon" type="image/png" href="' . MEDIA . '/favicon/' . $color . '.png" />';
 echo '</head>';

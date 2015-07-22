@@ -1,0 +1,262 @@
+.inscription {
+	#nav .box {
+		&.left span {
+			display: inline-block;
+			line-height: 32px;
+			padding: 0 10px; margin: 5px 2px;
+			font-size: 14px;
+			width: 80px;
+			text-align: center;
+			color: #4f4f4f;
+			text-decoration: none;
+			font-variant: small-caps;
+
+			&.active {
+				color: white;
+			}
+		}
+
+		&.right {
+			display: none;
+		}
+	}
+
+	/* SUBNAV */
+	#inscription-subnav {
+		position: fixed;
+		top: 45px; left: 0;
+		width: 210px;
+		margin: 0 20px 0 60px;
+		z-index: 500;
+
+		.bind {
+			height: 15px;
+			background: url('src/desktop/inscriptionSubnav/bBind.png') no-repeat center;
+		}
+
+		.head {
+			position: relative;
+			height: 214px;
+			background: url('src/desktop/inscriptionSubnav/bHead.png') no-repeat center;
+
+			h2 {
+				position: absolute;
+				margin: 0; padding: 0;
+				top: 5px;
+				font-weight: bold;
+				font-size: 16px; line-height: 24px;
+				width: 210px; overflow: hidden;
+				text-align: center;
+				color: white;
+			}
+
+			img {
+				position: absolute;
+				top: 43px; left: 28px;
+				width: 125px; height: 125px;
+				background: #0A0A0A;
+			}
+
+			.level {
+				position: absolute;
+				display: block;
+				bottom: 15px; left: 0;
+				width: 100%;
+				font-size: 20px;
+				line-height: 41px;
+				color: white;
+				text-align: center;
+				background: url('src/desktop/inscriptionSubnav/bLevel.png') no-repeat center;
+			}
+
+			.experience {
+				position: absolute;
+				display: inline-block;
+				top: 50px; right: 32px;
+				width: 21px; height: 112px;
+
+				.value {
+					position: absolute;
+					display: block;
+					width: 100%; bottom: 0;
+					border-radius: 3px;
+				}
+			}
+		}
+	}
+
+	#inscription-subnav .foot { height: 290px; }
+	.color0 #inscription-subnav .foot { background: url('src/desktop/inscriptionSubnav/bFootColor0.png') no-repeat top left; }
+	.color1 #inscription-subnav .foot { background: url('src/desktop/inscriptionSubnav/bFootColor1.png') no-repeat top left; }
+	.color2 #inscription-subnav .foot { background: url('src/desktop/inscriptionSubnav/bFootColor2.png') no-repeat top left; }
+	.color3 #inscription-subnav .foot { background: url('src/desktop/inscriptionSubnav/bFootColor3.png') no-repeat top left; }
+	.color4 #inscription-subnav .foot { background: url('src/desktop/inscriptionSubnav/bFootColor4.png') no-repeat top left; }
+	.color5 #inscription-subnav .foot { background: url('src/desktop/inscriptionSubnav/bFootColor5.png') no-repeat top left; }
+	.color6 #inscription-subnav .foot { background: url('src/desktop/inscriptionSubnav/bFootColor6.png') no-repeat top left; }
+	.color7 #inscription-subnav .foot { background: url('src/desktop/inscriptionSubnav/bFootColor7.png') no-repeat top left; }
+	.color8 #inscription-subnav .foot { background: url('src/desktop/inscriptionSubnav/bFootColor8.png') no-repeat top left; }
+
+	#movers .toLeft {
+		left: 0 !important;
+	}
+
+	/* ALLY */
+	.component.inscription img.color1 { background: @medium-1 !important; }
+	.component.inscription img.color2 { background: @medium-2 !important; }
+	.component.inscription img.color3 { background: @medium-3 !important; }
+	.component.inscription img.color4 { background: @medium-4 !important; }
+	.component.inscription img.color5 { background: @medium-5 !important; }
+	.component.inscription img.color6 { background: @medium-6 !important; }
+	.component.inscription img.color7 { background: @medium-7 !important; }
+	.component.inscription img.color8 { background: @medium-8 !important; }
+
+	.component.inscription .chooseLink {
+		display: block;
+		margin: 10px; padding: 10px 60px 10px 20px;
+		background: url('src/desktop/mover/right.png') no-repeat 235px center #CCC;
+		text-decoration: none;
+		color: white;
+		text-shadow: 0 0 2px black;
+		border: solid 1px #202020;
+		cursor: pointer;
+
+		.transition(all linear 200ms);
+
+		&:focus, &:hover {
+			box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .25);
+		}
+	}
+
+	.component.inscription button.chooseLink {
+		width: 277px;
+		text-align: left;
+	}
+
+	.component.inscription.color1 .chooseLink { background-color: @medium-1; }
+	.component.inscription.color2 .chooseLink { background-color: @medium-2; }
+	.component.inscription.color3 .chooseLink { background-color: @medium-3; }
+	.component.inscription.color4 .chooseLink { background-color: @medium-4; }
+	.component.inscription.color5 .chooseLink { background-color: @medium-5; }
+	.component.inscription.color6 .chooseLink { background-color: @medium-6; }
+	.component.inscription.color7 .chooseLink { background-color: @medium-7; }
+	.component.inscription.color8 .chooseLink { background-color: @medium-8; }
+	.component.inscription.color1 .chooseLink:hover, .component.inscription.color1 .chooseLink:focus { background-color: @dark-1; }
+	.component.inscription.color2 .chooseLink:hover, .component.inscription.color2 .chooseLink:focus { background-color: @dark-2; }
+	.component.inscription.color3 .chooseLink:hover, .component.inscription.color3 .chooseLink:focus { background-color: @dark-3; }
+	.component.inscription.color4 .chooseLink:hover, .component.inscription.color4 .chooseLink:focus { background-color: @dark-4; }
+	.component.inscription.color5 .chooseLink:hover, .component.inscription.color5 .chooseLink:focus { background-color: @dark-5; }
+	.component.inscription.color6 .chooseLink:hover, .component.inscription.color6 .chooseLink:focus { background-color: @dark-6; }
+	.component.inscription.color7 .chooseLink:hover, .component.inscription.color7 .chooseLink:focus { background-color: @dark-7; }
+	.component.inscription.color8 .chooseLink:hover, .component.inscription.color8 .chooseLink:focus { background-color: @dark-8; }
+
+	.component.inscription .chooseLink strong {
+		display: block;
+		font-size: 15px;
+		border-bottom: solid 1px rgba(255, 255, 255, .25);
+		padding: 0 0 5px 0; margin: 0 0 5px 0;
+	}
+
+	.component.inscription .chooseLink em {
+		font-style: normal;
+	}
+
+	.component.inscription span.chooseLink {
+		background: #202020 !important;
+		box-shadow: inset 0 0 0 2px rgba(0, 0, 0, .25);
+		cursor: auto;
+		padding: 10px;
+
+		&:focus, &:hover {
+			box-shadow: inset 0 0 0 2px rgba(0, 0, 0, .25);
+		}
+	}
+
+	.component.inscription blockquote {
+		line-height: 200%;
+	}
+
+	.component.inscription #pseudo,
+	.component.inscription #base {
+		position: relative;
+		width: 100%;
+		border: none;
+		padding: 12px 0; margin: 0;
+		text-align: center;
+		font-size: 26px;
+		font-weight: bold;
+		background: white;
+		border-radius: 3px;
+	}
+	.component.inscription.color1 #pseudo { color: @dark-1; }
+	.component.inscription.color2 #pseudo { color: @dark-2; }
+	.component.inscription.color3 #pseudo { color: @dark-3; }
+	.component.inscription.color4 #pseudo { color: @dark-4; }
+	.component.inscription.color5 #pseudo { color: @dark-5; }
+	.component.inscription.color6 #pseudo { color: @dark-6; }
+	.component.inscription.color7 #pseudo { color: @dark-7; }
+	.component.inscription.color8 #pseudo { color: @dark-8; }
+
+	.component.inscription .avatars {
+		padding: 5px;
+		text-align: center;
+	}
+
+	.component.inscription .avatar {
+		position: relative;
+		display: inline-block;
+		margin: 0 5px; padding: 5px;
+		background: #202020;
+		border: solid 5px #0A0A0A;
+		border-radius: 100%;
+	}
+
+	.component.inscription .avatar input {
+		position: absolute;
+		top: 10px; left: 10px;
+	}
+
+	.component.inscription .avatar img {
+		display: block;
+		width: 117px;
+		cursor: pointer;
+		border-radius: 100%;
+	}
+	.component.inscription.color1 .avatar:hover { border-color: @dark-1; }
+	.component.inscription.color2 .avatar:hover { border-color: @dark-2; }
+	.component.inscription.color3 .avatar:hover { border-color: @dark-3; }
+	.component.inscription.color4 .avatar:hover { border-color: @dark-4; }
+	.component.inscription.color5 .avatar:hover { border-color: @dark-5; }
+	.component.inscription.color6 .avatar:hover { border-color: @dark-6; }
+	.component.inscription.color7 .avatar:hover { border-color: @dark-7; }
+	.component.inscription.color8 .avatar:hover { border-color: @dark-8; }
+
+	.component.inscription.color1 .avatar.active{ border-color: @light-1; }
+	.component.inscription.color2 .avatar.active{ border-color: @light-2; }
+	.component.inscription.color3 .avatar.active{ border-color: @light-3; }
+	.component.inscription.color4 .avatar.active{ border-color: @light-4; }
+	.component.inscription.color5 .avatar.active{ border-color: @light-5; }
+	.component.inscription.color6 .avatar.active{ border-color: @light-6; }
+	.component.inscription.color7 .avatar.active{ border-color: @light-7; }
+	.component.inscription.color8 .avatar.active{ border-color: @light-8; }
+
+	#alert {
+		bottom: -12px;
+		z-index: 10000;
+	}
+
+	.build-item {
+		min-height: 60px;
+
+		.name {
+			padding-top: 2px !important;
+
+			strong {
+				font-size: 16px !important;
+			}
+
+			em {
+				font-size: 12px !important;
+			}
+		}
+	}
+}

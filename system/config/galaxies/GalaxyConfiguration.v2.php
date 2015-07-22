@@ -33,7 +33,7 @@ abstract class GalaxyConfiguration {
 	public static $sectors = [
 		[
 			'id' => 1,
-			'beginColor' => 0,
+			'beginColor' => 8,
 			'vertices' =>[0, 0, 0, 250, 250, 250, 250, 0],
 			'barycentre' => [125, 125],
 			'display' => [125, 125],

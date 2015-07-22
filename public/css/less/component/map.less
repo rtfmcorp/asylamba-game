@@ -35,6 +35,7 @@
 		.ally5 { fill: @medium-5; }
 		.ally6 { fill: @medium-6; }
 		.ally7 { fill: @medium-7; }
+		.ally8 { fill: @medium-8; }
 	}
 
 
@@ -77,6 +78,7 @@
 		&.color5 { stroke: @light-5; }
 		&.color6 { stroke: @light-6; }
 		&.color7 { stroke: @light-7; }
+		&.color8 { stroke: @light-8; }
 	}
 
 	#attacks circle {
@@ -87,6 +89,7 @@
 		&.color5 { fill: @light-5; }
 		&.color6 { fill: @light-6; }
 		&.color7 { fill: @light-7; }
+		&.color8 { fill: @light-8; }
 	}
 
 	#systems a {
@@ -138,6 +141,7 @@
 			&.color5 { background: @medium-5; }
 			&.color6 { background: @medium-6; }
 			&.color7 { background: @medium-7; }
+			&.color8 { background: @medium-8; }
 		}
 
 		.sector-info {
@@ -194,6 +198,7 @@
 			&.color5 p a { background: @medium-5; }
 			&.color6 p a { background: @medium-6; }
 			&.color7 p a { background: @medium-7; }
+			&.color8 p a { background: @medium-8; }
 		}
 	}
 
@@ -252,46 +257,52 @@
 	padding: 3px 0;
 	background: url('src/desktop/map/bOption.png') repeat-x;
 	top: 30px; right: 20px;
+
+	&:before {
+		content: '';
+		position: absolute;
+		display: block;
+		left: -10px; top: 0;
+		height: 38px; width: 10px;
+		background: url('src/desktop/map/bLeftOption.png');
+	}
+
+	&:after {
+		content: '';
+		position: absolute;
+		display: block;
+		right: -10px; top: 0;
+		height: 38px; width: 10px;
+		background: url('src/desktop/map/bRightOption.png');
+	}
+
+	a {
+		position: relative;
+		display: inline-block;
+		height: 30px; width: 30px;
+		margin: 1px 0 1px 1px;
+		background: #0A0A0A;
+
+		&.active {
+			background: #004948;
+		}
+
+		img {
+			position: absolute;
+			top: 5px; left: 5px;
+			width: 22px;
+		}
+	}
 }
 
-#map-option:before {
-	content: '';
-	position: absolute;
-	display: block;
-	left: -10px; top: 0;
-	height: 38px; width: 10px;
-	background: url('src/desktop/map/bLeftOption.png');
-}
-#map-option:after {
-	content: '';
-	position: absolute;
-	display: block;
-	right: -10px; top: 0;
-	height: 38px; width: 10px;
-	background: url('src/desktop/map/bRightOption.png');
-}
-#map-option a {
-	position: relative;
-	display: inline-block;
-	height: 30px; width: 30px;
-	margin: 1px 0 1px 1px;
-	background: #0A0A0A;
-}
-#map-option a img {
-	position: absolute;
-	top: 5px; left: 5px;
-	width: 22px;
-}
-#map-option a.active {
-	background: #004948;
-}
-.color1 #map-option a.active { background: #510816; }
-.color2 #map-option a.active { background: #0c0d44; }
-.color3 #map-option a.active { background: #b17a00; }
-.color4 #map-option a.active { background: #310948; }
-.color5 #map-option a.active { background: #24500a; }
-.color6 #map-option a.active { background: #004948; }
-.color7 #map-option a.active { background: #401b13; }
+.color1 #map-option a.active { background: @dark-1; }
+.color2 #map-option a.active { background: @dark-2; }
+.color3 #map-option a.active { background: @dark-3; }
+.color4 #map-option a.active { background: @dark-4; }
+.color5 #map-option a.active { background: @dark-5; }
+.color6 #map-option a.active { background: @dark-6; }
+.color7 #map-option a.active { background: @dark-7; }
+.color8 #map-option a.active { background: @dark-8; }
 
 #map-content {
 	z-index: 1000;
@@ -324,6 +335,7 @@
 			&.ally5 { fill: @medium-5; }
 			&.ally6 { fill: @medium-6; }
 			&.ally7 { fill: @medium-7; }
+			&.ally8 { fill: @medium-8; }
 		}
 
 		.number {
@@ -408,6 +420,7 @@
 			&.ally5 { stroke: @dark-5; }
 			&.ally6 { stroke: @dark-6; }
 			&.ally7 { stroke: @dark-7; }
+			&.ally8 { stroke: @dark-8; }
 		}
 
 		&.ally0 { fill: #202020; }
@@ -418,6 +431,7 @@
 		&.ally5 { fill: @medium-5; }
 		&.ally6 { fill: @medium-6; }
 		&.ally7 { fill: @medium-7; }
+		&.ally8 { fill: @medium-8; }
 	}
 
 	.number {
@@ -435,13 +449,14 @@
 			box-shadow: 0 0 1px white;
 
 			&.ally0 { background: #0A0A0A; }
-			&.ally1 { background: #510816; }
-			&.ally2 { background: #0c0d44; }
-			&.ally3 { background: #b17a00; }
-			&.ally4 { background: #310948; }
-			&.ally5 { background: #24500a; }
-			&.ally6 { background: #004948; }
-			&.ally7 { background: #401b13; }
+			&.ally1 { background: @dark-1; }
+			&.ally2 { background: @dark-2; }
+			&.ally3 { background: @dark-3; }
+			&.ally4 { background: @dark-4; }
+			&.ally5 { background: @dark-5; }
+			&.ally6 { background: @dark-6; }
+			&.ally7 { background: @dark-7; }
+			&.ally8 { background: @dark-8; }
 
 			&.active {
 				background: white;
@@ -464,6 +479,7 @@
 			&.ally5 { fill: @dark-5; }
 			&.ally6 { fill: @dark-6; }
 			&.ally7 { fill: @dark-7; }
+			&.ally8 { fill: @dark-8; }
 		}
 	}
 }
