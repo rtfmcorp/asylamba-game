@@ -82,9 +82,9 @@ echo '<div class="body">';
 					if ($place->typeOfPlace == 1) {
 						echo '<img class="land" src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '-' . Game::getSizeOfPlanet($place->population) . '.png" />';
 					} else {
-						if ($place->resources > 50000000) {
+						if ($place->resources > 10000000) {
 							$size = 3;
-						} elseif ($place->resources > 25000000) {
+						} elseif ($place->resources > 5000000) {
 							$size = 2;
 						} else {
 							$size = 1;

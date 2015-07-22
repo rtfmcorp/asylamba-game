@@ -300,7 +300,7 @@ abstract class GalaxyGenerator {
 					$population = GalaxyConfiguration::$places[$type - 1]['credits'];
 					$resources 	= GalaxyConfiguration::$places[$type - 1]['resources'];
 					$history 	= GalaxyConfiguration::$places[$type - 1]['history'];
-					$stRES		= rand(5000000, 80000000);
+					$stRES		= rand(2000000, 20000000);
 				}
 
 				# TODO DANGER
