@@ -19,10 +19,6 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 				CTR::$data->add('high-mode', FALSE);
 			}
 
-			if (CTR::$get->exist('rgodfather')) {
-				CTR::$data->add('rgodfather', CTR::$get->get('rgodfather'));
-			}
-
 			CTR::redirect('inscription');
 		} else {
 			header('Location: ' . GETOUT_ROOT . 'serveurs');
@@ -35,6 +31,7 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 
 			if ($api->userExist(CTR::$data->get('prebindkey'))) {
 				include_once ZEUS;
+
 				$S_PAM_INSCR = ASM::$pam->getCurrentSession();
 				ASM::$pam->newSession();
 				ASM::$pam->load(array('bind' => CTR::$data->get('prebindkey')));
@@ -43,6 +40,15 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 					CTR::$data->add('inscription', new ArrayList());
 					CTR::$data->get('inscription')->add('bindkey', CTR::$data->get('prebindkey'));
 					CTR::$data->get('inscription')->add('portalPseudo', $api->data['userInfo']['pseudo']);
+
+					# check du rgodfather
+					if (!empty($api->data['userInfo']['sponsorship'])) {
+						list($server, $player) = explode('#', $api->data['userInfo']['sponsorship']);
+
+						if ($server == APP_ID) {
+							CTR::$data->add('rgodfather', $player);
+						}
+					}
 				} else {
 					header('Location: ' . GETOUT_ROOT . 'serveurs/message-useralreadysigned');
 					exit();
