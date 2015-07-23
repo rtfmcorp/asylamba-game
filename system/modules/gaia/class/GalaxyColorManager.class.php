@@ -20,6 +20,7 @@ class GalaxyColorManager {
 
 	public function loadSystem() {
 		include_once CONFIG . 'app.config.install.php';
+		
 		$requestPart = '';
 		foreach ($AVAILABLE_FACTIONS as $faction) {
 			$requestPart .= '(SELECT COUNT(pa.rColor) FROM place AS pl LEFT JOIN player AS pa ON pl.rPlayer = pa.id WHERE pl.rSystem = se.id AND pa.rColor = ' . $faction . ') AS color' . $faction . ',';

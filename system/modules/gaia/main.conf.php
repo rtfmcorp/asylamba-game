@@ -1,2 +1,2 @@
 <?php
-define('LIMIT_CONQUEST_SECTOR',			10);
+define('LIMIT_CONQUEST_SECTOR',			4);

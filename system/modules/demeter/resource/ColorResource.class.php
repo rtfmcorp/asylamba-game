@@ -267,7 +267,7 @@ class ColorResource {
 			'officialName'	=> 'Nouvelle-Nerve',
 			'popularName' 	=> 'Nouvelle-Nerve',
 			'government' 	=> 'République Nervéenne',
-			'demonym' 		=> 'nervéens',
+			'demonym' 		=> 'néo-nervéens',
 			'factionPoint' 	=> 'Points d\'industrie',
 			'status' 		=> ['Citoyen', 'Député', 'Ministre des Finances', 'Ministre de la Défense', 'Premier Ministre', 'Président'],
 			'regime'		=> 1,
