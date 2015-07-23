@@ -5,10 +5,9 @@ include_once ARES;
 # loading des objets
 $S_LRM1 = ASM::$lrm->getCurrentSession();
 ASM::$lrm->newSession();
-ASM::$lrm->load(
-	['p2.rColor' => CTR::$data->get('playerInfo')->get('color')],
-	['r.dFight', 'DESC'],
-	[0, 25]
+ASM::$lrm->loadByRequest(
+	'WHERE p2.rColor = ? AND p1.rColor != 0 ORDER BY dFight DESC LIMIT 0, 30',
+	[CTR::$data->get('playerInfo')->get('color')]
 );
 
 # work
