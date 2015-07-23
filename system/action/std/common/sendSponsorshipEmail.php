@@ -5,7 +5,7 @@ $sponsorLink = GETOUT_ROOT . 'action/a-invitation/i-' . CTR::$data->get('playerI
 
 # sending email API call
 $api = new API(GETOUT_ROOT, APP_ID, KEY_API);
-$ok = $api->sendMail2($email, APP_ID, API::TEMPLATE_SPONSORSHIP, $sponsorLink);
+$ok = $api->sendMail2($email, APP_ID, API::TEMPLATE_SPONSORSHIP, $playerId);
 
 if ($ok) {
 	CTR::$alert->add('Un e-mail va être envoyé dans quelques minutes à ' . $email, ALERT_STD_SUCCESS);

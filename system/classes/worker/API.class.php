@@ -100,8 +100,8 @@ class API {
 		}
 	}
 
-	public function sendMail2($email, $serverId, $template, $specialLink) {
-		if ($this->query('sendmail2', array('email' => $email, 'serverid' => $serverId, 'template' => $template, 'link' => $specialLink))) {
+	public function sendMail2($email, $serverId, $template, $playerId) {
+		if ($this->query('sendmail2', array('email' => $email, 'serverid' => $serverId, 'template' => $template, 'playerid' => $playerId))) {
 			if ($this->data['statement'] == 'success') {
 				return TRUE;
 			} else {
