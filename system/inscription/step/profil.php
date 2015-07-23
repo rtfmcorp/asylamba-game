@@ -48,9 +48,11 @@ echo '<div id="content">';
 				echo '<div class="body">';
 					echo '<div class="avatars">';
 						for ($i = 1; $i <= NB_AVATAR; $i++) {
-							$avatar    = $i < 10 ? '00' : '0';
-							$avatar   .= $i . '-' . CTR::$data->get('inscription')->get('ally');
-							$avatars[] = $avatar;
+							if (!in_array($i, array(77, 19))) {
+								$avatar    = $i < 10 ? '00' : '0';
+								$avatar   .= $i . '-' . CTR::$data->get('inscription')->get('ally');
+								$avatars[] = $avatar;
+							}
 						}
 
 						shuffle($avatars);
