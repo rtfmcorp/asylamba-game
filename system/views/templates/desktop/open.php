@@ -45,7 +45,6 @@ if (ANALYTICS) {
 
 	ga('create', 'UA-42636532-6', 'auto');
 	ga('send', 'pageview');
-	ga(‘set’, ‘&uid’, <?php echo CTR::$data->get('playerId'); ?>);
 </script>
 <?php
 }
