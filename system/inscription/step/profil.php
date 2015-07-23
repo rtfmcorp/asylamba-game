@@ -59,7 +59,7 @@ echo '<div id="content">';
 
 						$isLong = FALSE;
 						$cursor = 0;
-						for ($i = 0; $i < 80; $i++) { 
+						for ($i = 0; $i < (NB_AVATAR - 2); $i++) { 
 							echo '<div class="avatar">';
 								echo '<input type="radio" name="avatar" value="' . $avatars[$i] . '" id="avatar' . $i . '" required />';
 								echo '<label for="avatar' . $i . '">';
