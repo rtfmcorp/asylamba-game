@@ -261,26 +261,26 @@ class ColorResource {
 			'bonus' => [1, 5],
 			'mandateDuration' => 604800,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de points. Ces points sont consultables dans le classement général.',
-			'campaignDesc' => 'TODO'
+			'campaignDesc' => 'À tout moment, un membre du sénat ou du gouvernement peut tenter un coup d\'état. Il aura alors 7 relèves pour attirer des partisans. Il aura réussi son putsch s\'il arrive à recruter suffisemment de partisans.'
 		], [
 			'id' 			=> 9,
-			'officialName'	=> 'Nouvelle Nerve',
-			'popularName' 	=> 'Nerve',
+			'officialName'	=> 'Nouvelle-Nerve',
+			'popularName' 	=> 'Nouvelle-Nerve',
 			'government' 	=> 'République Nervéenne',
 			'demonym' 		=> 'nervéens',
 			'factionPoint' 	=> 'Points d\'industrie',
 			'status' 		=> ['Citoyen', 'Député', 'Ministre des Finances', 'Ministre de la Défense', 'Premier Ministre', 'Président'],
 			'regime'		=> 1,
-			'devise' 		=> 'Du fond des gouffres finiront les valses du ciel',
-			'desc1' => 'TODO',
-			'desc2' => 'TODO',
-			'desc3' => 'TODO',
-			'desc4' => 'TODO',
+			'devise' 		=> 'Au fond des gouffres,<br />finiront les valses du ciel',
+			'desc1' => 'Décimés puis déportés en 27 par la Grande Amirale Alba Valseciel, les Nervéens ont toujours été nourri d’un sentiment patriote très fort. Grâce à leurs efforts conjoints, ils achevèrent la restauration de la citadelle aux mille sous-sols en 75. Militant avec vigueur pour plus d’indépendance, Nerve obtient, enfin, en 89, un statut d’autonomie. Elle jouit alors d’une grande liberté sous Valerio et prospéra. Mais le règne sévère d’Akhénattia vint lui retirer de nombreux privilèges ce qui ternit à nouveau les relations avec l’Empire duquel les Nervéens s’étaient pourtant rapprochés au fil des ans. Lorsqu’Eris monta sur le trône et mena son règne sans autorité, les Nervéens firent sécession et déclarèrent leur indépendance en temps que Nouvelle Nerve.',
+			'desc2' => 'Les Néo-Nervéens sont très fiers. Attachés à leur liberté et à la démocratie comme nul autre, ils méprisent la grande majorité des peuples de la galaxie. Qui plus est, ils vouent une haine dévorante à la Maison Valseciel, responsable de la chute de la Première Nerve.',
+			'desc3' => 'Les Néo-Nervéens sont emprunt d’un tel amour pour leur Mère Patrie, qu’ils sont considérés comme des soldats sans peur et téméraires. Contrairement à leurs ancêtres, leur stratégie n’est plus uniquement basée sur la défense de forteresses. En effet, ils ne rechignent pas à prendre les devants et à combattre en orbite. Cependant, la force de la Nouvelle Nerve repose sur un savoir faire ancestrale et sur des matériaux de qualité. Les sous-sols des mondes nervéens sont extrêmement riches et consistent en leur plus précieux atout.',
+			'desc4' => 'Tous frères dans la République, les Néo-Nervéens sont comme leurs prédécesseurs, amoureux des arts, de l’ingénierie et des matières nobles. Les monuments les plus fantastiques de la galaxie sont souvent l’ouvrage d’architectes et d’artistes de Nerve. Il faut dire que la citadelle est un chef d’oeuvre en soi, bien que les stigmates des Valseciel soient encore par endroit visibles.',
 			'bonus' => [9, 10],
 			'mandateDuration' => 950400,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de points. Ces points sont consultables dans le classement général.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
-				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de la Nerve peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Président. 
+				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de la Nouvelle-Nerve peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Président. 
 				<br /><br />Le Président va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Ministre de la défense, le Ministre des finances et le Premier Ministre de la faction. '
 		]
 	];
