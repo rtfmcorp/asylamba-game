@@ -137,7 +137,7 @@ echo '<div class="component size2 player new-message profil">';
 					echo '</a>';
 					echo '<span class="title">' . $status[ ASM::$pam->get($i)->status - 1] . '</span>';
 					echo '<strong class="name">' .  ASM::$pam->get($i)->name . '</strong>';
-					echo '<span class="experience">' . Format::number( ASM::$pam->get($i)->factionPoint) . ' de prestige</span>';
+					echo '<span class="experience">' . Format::number( ASM::$pam->get($i)->factionPoint) . ' points</span>';
 				echo '</div>';
 			}
 
