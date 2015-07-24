@@ -15,7 +15,7 @@ class Chronos {
 	const LN_SEC	= 'seconde';
 
 	const REAL_TIME = SERVER_START_TIME;
-	const SEG_SHIFT = 500;
+	const SEG_SHIFT = 260;
 	
 	/*
 	 * retourne le temps restant avant la prochaine relève
