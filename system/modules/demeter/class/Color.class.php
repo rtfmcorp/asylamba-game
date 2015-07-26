@@ -178,7 +178,7 @@ class Color {
 						$notif->dSending = Utils::now();
 						$notif->addBeg()
 							->addTxt('Vos actions vous ont fait gagner assez de prestige pour faire partie du sénat.');
-						ASM::$ntm->add($notif);
+					#	ASM::$ntm->add($notif);
 					}
 					ASM::$pam->get($i)->status = PAM_PARLIAMENT;
 				} else {
@@ -189,7 +189,7 @@ class Color {
 						$notif->dSending = Utils::now();
 						$notif->addBeg()
 							->addTxt('Vous n\'avez plus assez de prestige pour rester dans le sénat.');
-						ASM::$ntm->add($notif);
+					#	ASM::$ntm->add($notif);
 					}
 					ASM::$pam->get($i)->status = PAM_STANDARD;
 				}
