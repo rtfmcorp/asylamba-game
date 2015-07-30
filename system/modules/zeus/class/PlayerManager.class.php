@@ -56,7 +56,7 @@ class PlayerManager extends Manager {
 			FROM playerRanking AS pl
 			LEFT JOIN player AS p 
 				ON pl.rPlayer = p.id
-			WHERE p.rColor = ' . $factionId . '
+			WHERE p.rColor = ' . $factionId . ' AND pl.rRanking = (SELECT MAX(id) FROM ranking)
 			' . $formatOrder . '
 			' . $formatLimit
 		);
