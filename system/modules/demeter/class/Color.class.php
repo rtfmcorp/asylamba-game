@@ -776,24 +776,28 @@ class Color {
 					switch (ASM::$lam->get($i)->type) {
 						case Law::SECTORTAX:
 							$_SEM = ASM::$sem->getCurrentsession();
+							ASM::$sem->newSession();
 							ASM::$sem->load(array('id' => ASM::$lam->get($i)->options['rSector']));
-							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishSectorTaxes', array(ASM::$lam->get($i), ASM::$sem->get()));
+							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishSectorTaxes', array(ASM::$lam->get($i), ASM::$sem->getById(ASM::$lam->get($i)->options['rSector'])));
 							ASM::$sem->changeSession($_SEM);
 							break;
 						case Law::SECTORNAME:
 							$_SEM = ASM::$sem->getCurrentsession();
+							ASM::$sem->newSession();
 							ASM::$sem->load(array('id' => ASM::$lam->get($i)->options['rSector']));
-							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishSectorName', array(ASM::$lam->get($i), ASM::$sem->get()));
+							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishSectorName', array(ASM::$lam->get($i), ASM::$sem->getById(ASM::$lam->get($i)->options['rSector'])));
 							ASM::$sem->changeSession($_SEM);
 							break;
 						case Law::COMTAXEXPORT:
 							$_CTM = ASM::$ctm->getCurrentsession();
+							ASM::$ctm->newSession();
 							ASM::$ctm->load(array('faction' => $this->id, 'relatedFaction' => ASM::$lam->get($i)->options['rColor']));
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishExportComercialTaxes', array(ASM::$lam->get($i), ASM::$ctm->get()));
 							ASM::$ctm->changeSession($_CTM);
 							break;
 						case Law::COMTAXIMPORT:
 							$_CTM = ASM::$ctm->getCurrentsession();
+							ASM::$ctm->newSession();
 							ASM::$ctm->load(array('faction' => $this->id, 'relatedFaction' => ASM::$lam->get($i)->options['rColor']));
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishImportComercialTaxes', array(ASM::$lam->get($i), ASM::$ctm->get()));
 							ASM::$ctm->changeSession($_CTM);
@@ -826,7 +830,7 @@ class Color {
 		}
 
 		ASM::$lam->changeSession($_LAM);
-
 		CTC::applyContext($token_ctc);
+
 	}
 }
