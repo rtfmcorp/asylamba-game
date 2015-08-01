@@ -14,13 +14,9 @@ echo '<div id="map-info">';
 	echo '<h3>Revendication</h3>';
 	echo '<ul>';
 		echo '<li>Non revendiquée <img src="' . MEDIA . 'map/systems/t4c0.png" /></li>';
-		echo '<li>Ordre Impérial <img src="' . MEDIA . 'map/systems/t4c1.png" /></li>';
-		echo '<li>Province de Khovakh <img src="' . MEDIA . 'map/systems/t4c2.png" /></li>';
-		echo '<li>Province de Négore <img src="' . MEDIA . 'map/systems/t4c3.png" /></li>';
-		echo '<li>Marche de Cardan <img src="' . MEDIA . 'map/systems/t4c4.png" /></li>';
-		echo '<li>Province de Nerve <img src="' . MEDIA . 'map/systems/t4c5.png" /></li>';
-		echo '<li>Province d\'Aphéra <img src="' . MEDIA . 'map/systems/t4c6.png" /></li>';
-		echo '<li>Fédération Synélectique <img src="' . MEDIA . 'map/systems/t4c7.png" /></li>';
+		
+		foreach ([1, 4, 8, 9] as $faction) {
+			echo '<li>' . ColorResource::getInfo($faction, 'officialName') . ' <img src="' . MEDIA . 'map/systems/t4c' . $faction . '.png" /></li>';
+		}
 	echo '</ul>';
 echo '</div>';
-?>
