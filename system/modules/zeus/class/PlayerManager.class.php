@@ -45,30 +45,30 @@ class PlayerManager extends Manager {
 		$this->fill($qr);
 	}
 
-	public function loadFromFactionByRank($factionId) {
-		$order = ['generalPosition', 'ASC'];
+	// public function loadFromFactionByRank($factionId) {
+	// 	$order = ['generalPosition', 'ASC'];
 
-		$formatOrder = Utils::arrayToOrder($order);
-		$formatLimit = Utils::arrayToLimit([]);
+	// 	$formatOrder = Utils::arrayToOrder($order);
+	// 	$formatLimit = Utils::arrayToLimit([]);
 
-		$db = DataBase::getInstance();
-		$qr = $db->prepare('SELECT p.*
-			FROM playerRanking AS pl
-			LEFT JOIN player AS p 
-				ON pl.rPlayer = p.id
-			WHERE p.rColor = ' . $factionId . ' AND pl.rRanking = (SELECT MAX(id) FROM ranking)
-			' . $formatOrder . '
-			' . $formatLimit
-		);
+	// 	$db = DataBase::getInstance();
+	// 	$qr = $db->prepare('SELECT p.*
+	// 		FROM playerRanking AS pl
+	// 		LEFT JOIN player AS p 
+	// 			ON pl.rPlayer = p.id
+	// 		WHERE p.rColor = ' . $factionId . '
+	// 		' . $formatOrder . '
+	// 		' . $formatLimit
+	// 	);
 
-		if(empty($valuesArray)) {
-			$qr->execute();
-		} else {
-			$qr->execute($valuesArray);
-		}
+	// 	if(empty($valuesArray)) {
+	// 		$qr->execute();
+	// 	} else {
+	// 		$qr->execute($valuesArray);
+	// 	}
 
-		$this->fill($qr);
-	}
+	// 	$this->fill($qr);
+	// }
 
 	public function search($search, $order = array(), $limit = array()) {
 		$search = '%' . $search . '%';

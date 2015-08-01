@@ -160,7 +160,6 @@ class Color {
 
 	private function updateStatus($token_pam) {
 		include_once ZEUS;
-
 		$limit = round($this->players / 4);
 		if ($limit < 10) { $limit = 10; }
 		if ($limit > 40) { $limit = 40; }
@@ -168,6 +167,7 @@ class Color {
 		$_PAM1 = ASM::$pam->getCurrentSession();
 		ASM::$pam->changeSession($token_pam);
 
+		echo ASM::$pam->size();
 		for ($i = 0; $i < ASM::$pam->size(); $i++) {
 			if (ASM::$pam->get($i)->status < PAM_TREASURER) {
 				if ($i < $limit) {
@@ -178,7 +178,7 @@ class Color {
 						$notif->dSending = Utils::now();
 						$notif->addBeg()
 							->addTxt('Vos actions vous ont fait gagner assez de prestige pour faire partie du sénat.');
-					#	ASM::$ntm->add($notif);
+						ASM::$ntm->add($notif);
 					}
 					ASM::$pam->get($i)->status = PAM_PARLIAMENT;
 				} else {
@@ -189,7 +189,7 @@ class Color {
 						$notif->dSending = Utils::now();
 						$notif->addBeg()
 							->addTxt('Vous n\'avez plus assez de prestige pour rester dans le sénat.');
-					#	ASM::$ntm->add($notif);
+						ASM::$ntm->add($notif);
 					}
 					ASM::$pam->get($i)->status = PAM_STANDARD;
 				}
@@ -654,7 +654,7 @@ class Color {
 				if (Utils::interval($this->dLastElection, Utils::now(), 's') > $this->mandateDuration) {
 					$_PAM = ASM::$pam->getCurrentSession();
 					ASM::$pam->newSession(FALSE);
-					ASM::$pam->loadFromFactionByRank($this->id);
+					ASM::$pam->load(['rColor' => $this->id], ['factionPoint', 'DESC']);
 					$token_pam = ASM::$pam->getCurrentSession();
 					ASM::$pam->changeSession($_PAM);
 
@@ -692,7 +692,7 @@ class Color {
 				if (Utils::interval($this->dLastElection, Utils::now(), 's') > $this->mandateDuration) {
 					$_PAM = ASM::$pam->getCurrentSession();
 					ASM::$pam->newSession(FALSE);
-					ASM::$pam->loadFromFactionByRank($this->id);
+					ASM::$pam->load(['rColor' => $this->id], ['factionPoint', 'DESC']);
 					$token_pam = ASM::$pam->getCurrentSession();
 					ASM::$pam->changeSession($_PAM);
 
@@ -718,7 +718,7 @@ class Color {
 
 					$_PAM = ASM::$pam->getCurrentSession();
 					ASM::$pam->newSession(FALSE);
-					ASM::$pam->loadFromFactionByRank($this->id);
+					ASM::$pam->load(['rColor' => $this->id], ['factionPoint', 'DESC']);
 					$token_pam = ASM::$pam->getCurrentSession();
 					ASM::$pam->changeSession($_PAM);
 
@@ -734,7 +734,7 @@ class Color {
 				if (Utils::interval($this->dLastElection, Utils::now(), 's') > $this->mandateDuration) {
 					$_PAM = ASM::$pam->getCurrentSession();
 					ASM::$pam->newSession(FALSE);
-					ASM::$pam->loadFromFactionByRank($this->id);
+					ASM::$pam->load(['rColor' => $this->id], ['factionPoint', 'DESC']);
 					$token_pam = ASM::$pam->getCurrentSession();
 					ASM::$pam->changeSession($_PAM);
 
