@@ -368,7 +368,7 @@ class Place {
 
 	# déplacement de flotte
 	public function uChangeBase($commander, $commanderPlace, $playerBonus) {
-		# si la place et la flotte ont le même joueur
+		# si la place et la flotte ont la même couleur
 		# on pose la flotte si il y a assez de place
 		# sinon on met la flotte dans les hangars
 		if ($this->playerColor == $commander->playerColor AND $this->typeOfBase == 4) {
@@ -400,6 +400,9 @@ class Place {
 					}
 				}
 
+				# changer rBase commander
+				$commander->rBase = $this->id;
+				$commander->travelType = NULL;
 				$commander->statement = Commander::AFFECTED;
 
 				# ajouter à la place le commandant
@@ -408,16 +411,16 @@ class Place {
 				# envoi de notif
 				$this->sendNotif(self::CHANGESUCCESS, $commander);
 			} else {
+				# changer rBase commander
+				$commander->rBase = $this->id;
+				$commander->travelType = NULL;
 				$commander->statement = Commander::RESERVE;
+
 				$commander->emptySquadrons();
 
 				# envoi de notif
 				$this->sendNotif(self::CHANGEFAIL, $commander);
 			}
-
-			# changer rBase commander
-			$commander->rBase = $this->id;
-			$commander->travelType = NULL;
 
 			# modifier le rPlayer (ne se modifie pas si c'est le même)
 			$commander->rPlayer = $this->rPlayer;
@@ -546,10 +549,18 @@ class Place {
 					$this->sendNotif(self::LOOTPLAYERWHITOUTBATTLESUCCESS, $commander);
 				}
 
-			# si c'est a même couleur
-			# on tente de se poser ou de revenir en arrière
 			} else {
-				$this->uChangeBase($commander, $commanderPlace, $playerBonus);
+				# si c'est la même couleur
+				if ($this->rPlayer == $commander->rPlayer) {
+					# si c'est une de nos planètes
+					# on tente de se poser
+					$this->uChangeBase($commander, $commanderPlace, $playerBonus);
+				} else {
+					# si c'est une base alliée
+					# on repart
+					$this->comeBack($commander, $commanderPlace, $playerBonus);
+					$this->sendNotif(self::CHANGELOST, $commander);
+				}
 			}
 		}
 	}
@@ -662,10 +673,18 @@ class Place {
 
 					$this->sendNotifForConquest(self::CONQUERPLAYERWHITBATTLEFAIL, $commander, $reportIds);
 				}
-			# si c'est a même couleur
-			# on tente de se poser ou de revenir en arrière
 			} else {
-				$this->uChangeBase($commander, $commanderPlace, $playerBonus);
+				# si c'est la même couleur
+				if ($this->rPlayer == $commander->rPlayer) {
+					# si c'est une de nos planètes
+					# on tente de se poser
+					$this->uChangeBase($commander, $commanderPlace, $playerBonus);
+				} else {
+					# si c'est une base alliée
+					# on repart
+					$this->comeBack($commander, $commanderPlace, $playerBonus);
+					$this->sendNotif(self::CHANGELOST, $commander);
+				}
 			}
 
 		# colonisation
