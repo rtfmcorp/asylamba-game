@@ -155,30 +155,33 @@ echo '<div id="content">';
 				$S_TOM2 = ASM::$tom->getCurrentSession();
 				ASM::$tom->newSession();
 				ASM::$tom->load(
-					['id' => CTR::$get->get('topic')],
+					['id' => CTR::$get->get('topic'), 'rColor' => CTR::$data->get('playerInfo')->get('color')],
 					[], [],
 					CTR::$data->get('playerId')
 				);
 
-				$topic_topic = ASM::$tom->get(0);
-				$topic_topic->updateLastView(CTR::$data->get('playerId'));
+				if (ASM::$tom->size() == 0) {
+					CTR::$alert->add('Les données sont illisibles, les messages doivent sûrement être cryptés !', ALERT_STD_ERROR);
+				} else {
+					$topic_topic = ASM::$tom->get(0);
+					$topic_topic->updateLastView(CTR::$data->get('playerId'));
 
-				$S_FMM1 = ASM::$fmm->getCurrentSession();
-				ASM::$fmm->newSession();
-				ASM::$fmm->load(array('rTopic' => $topic_topic->id), array('dCreation', 'DESC', 'id', 'DESC'));
+					$S_FMM1 = ASM::$fmm->getCurrentSession();
+					ASM::$fmm->newSession();
+					ASM::$fmm->load(array('rTopic' => $topic_topic->id), array('dCreation', 'DESC', 'id', 'DESC'));
 
-				$message_topic = array();
-				for ($i = 0; $i < ASM::$fmm->size(); $i++) { 
-					$message_topic[$i] = ASM::$fmm->get($i);
+					$message_topic = array();
+					for ($i = 0; $i < ASM::$fmm->size(); $i++) { 
+						$message_topic[$i] = ASM::$fmm->get($i);
+					}
+
+					include COMPONENT . 'faction/forum/topic.php';
+
+					if (in_array(CTR::$data->get('playerInfo')->get('status'), [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER])) {
+						include COMPONENT . 'faction/forum/manage-topic.php';
+					}
+					ASM::$fmm->changeSession($S_FMM1);
 				}
-
-				include COMPONENT . 'faction/forum/topic.php';
-
-				if (in_array(CTR::$data->get('playerInfo')->get('status'), [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER])) {
-					include COMPONENT . 'faction/forum/manage-topic.php';
-				}
-
-				ASM::$fmm->changeSession($S_FMM1);
 				ASM::$tom->changeSession($S_TOM2);
 			} elseif (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'create') {
 				# créer un topic

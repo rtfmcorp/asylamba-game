@@ -101,7 +101,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_
 					CTR::$alert->add('envoi de ressources impossible - vous ne pouvez pas envoyer plus que ce que vous possédez', ALERT_STD_ERROR);
 				}
 			} else {
-				CTR::$alert->add('envoi de ressources impossible - il faut envoyer un nombre positif', ALERT_STD_ERROR);
+				CTR::$alert->add('envoi de ressources impossible - il faut envoyer un nombre entier positif', ALERT_STD_ERROR);
 			}
 		} else {
 			CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);

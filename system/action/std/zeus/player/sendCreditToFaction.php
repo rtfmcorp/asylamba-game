@@ -57,7 +57,7 @@ if ($quantity !== FALSE) {
 		}
 		ASM::$pam->changeSession($S_PAM1);
 	} else {
-		CTR::$alert->add('envoi de crédits impossible - il faut envoyer un nombre positif', ALERT_STD_ERROR);
+		CTR::$alert->add('envoi de crédits impossible - il faut envoyer un nombre entier positif', ALERT_STD_ERROR);
 	}
 } else {
 	CTR::$alert->add('pas assez d\'informations pour envoyer des crédits', ALERT_STD_FILLFORM);
