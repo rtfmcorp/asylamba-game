@@ -23,7 +23,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 
 	switch ($type) {
 		case Transaction::TYP_RESOURCE :
-			if ($quantity !== FALSE AND $quantity > 0) {
+			if ($quantity !== FALSE AND intval($quantity) > 0) {
 				$identifier = 0;
 			} else {
 				$valid = FALSE;
@@ -35,7 +35,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 					if ($quantity === FALSE) {
 						$quantity = 1;
 					} else {
-						if ($quantity < 1) {
+						if (intval($quantity) < 1) {
 							$valid = FALSE;
 						}
 					}
