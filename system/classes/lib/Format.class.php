@@ -102,8 +102,11 @@ class Format {
 		}
 	}
 
-	public static function actionBuilder($action, $params = array()) {
-		$url  = APP_ROOT;
+	public static function actionBuilder($action, $params = array(), $hasRoot = TRUE) {
+		$url = '';
+		if ($hasRoot) {
+			$url .= APP_ROOT;
+		}
 		$url .= 'action/';
 		$url .= 'a-' . $action . '/';
 

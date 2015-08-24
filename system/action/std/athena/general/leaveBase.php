@@ -97,7 +97,7 @@ if (count($verif) > 1) {
 						}
 					}
 					CTR::$alert->add('Base abandonnée', ALERT_STD_SUCCESS);
-					CTR::redirect(Format::actionBuilder('switchbase', ['base' => $verif[0]]));
+					CTR::redirect(Format::actionBuilder('switchbase', ['base' => $verif[0]], FALSE));
 				} else {
 					CTR::$alert->add('Vous ne pouvez pas abandonner de base dans les ' . OrbitalBase::COOL_DOWN . ' premières relèves.', ALERT_STD_ERROR);	
 				}

@@ -11,7 +11,6 @@ include_once GAIA;
 for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
 }
-
 $missionId = Utils::getHTTPData('id');
 $rPlace = Utils::getHTTPData('place');
 $quantity = Utils::getHTTPData('quantity');
