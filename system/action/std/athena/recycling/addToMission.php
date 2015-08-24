@@ -34,7 +34,7 @@ if ($rPlace !== FALSE AND $missionId !== FALSE AND $quantity !== FALSE AND in_ar
 			ASM::$rem->load(array('rBase' => $rPlace, 'statement' => array(RecyclingMission::ST_ACTIVE, RecyclingMission::ST_BEING_DELETED)));
 
 			for ($i = 0; $i < ASM::$rem->size(); $i++) { 
-				$usedRecyclers += ASM::$rem->get($i)->recyclerQuantity;
+				$usedRecyclers += ASM::$rem->get($i)->recyclerQuantity + ASM::$rem->get($i)->addToNextMission;
 			}
 
 			if ($maxRecyclers - $usedRecyclers >= $quantity) {
@@ -48,7 +48,7 @@ if ($rPlace !== FALSE AND $missionId !== FALSE AND $quantity !== FALSE AND in_ar
 				}
 				if ($mission !== NULL) {
 					$mission->addToNextMission += $quantity;
-					CTR::$alert->add('Vos recycleurs ont bien été affectés, ils seront ajouté à la prochaine mission.', ALERT_STD_SUCCESS);
+					CTR::$alert->add('Vos recycleurs ont bien été affectés, ils seront ajoutés à la prochaine mission.', ALERT_STD_SUCCESS);
 				} else {
 					CTR::$alert->add('Il y a un problème, la mission est introuvable. Veuillez contacter un administrateur.', ALERT_STD_ERROR);
 				}
