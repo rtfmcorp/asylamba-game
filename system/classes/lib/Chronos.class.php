@@ -98,9 +98,9 @@ class Chronos {
 		if ($format == 'large') {
 			$return .= ($rel > 0) ? $rel . ' ' . Chronos::LN_REL . Format::addPlural($rel) . ', ' : '';
 			$return .= ($min > 0) ? $min . ' ' . Chronos::LN_MIN . Format::addPlural($min) . ', ' : '';
-			$return .= ($sec > 0) ? $sec . ' ' . Chronos::SN_SEC . Format::addPlural($sec) : '';
+			$return .= ($sec > 0) ? $sec . ' ' . Chronos::SN_SEC : '';
 		} elseif ($format == 'short') {
-			$return .= $rel . ' ' . Chronos::SN_REL . Format::addPlural($rel) . ', ' . $min . ' ' . Chronos::SN_MIN . Format::addPlural($min) . ', ' . $sec . ' ' . Chronos::SN_SEC . Format::addPlural($sec);
+			$return .= $rel . ' ' . Chronos::SN_REL . Format::addPlural($rel) . ', ' . $min . ' ' . Chronos::SN_MIN . ', ' . $sec . ' ' . Chronos::SN_SEC;
 		} elseif ($format == 'lite') {
 			$min = ($min > 9) ? $min : '0' . $min;
 			$sec = ($sec > 9) ? $sec : '0' . $sec;

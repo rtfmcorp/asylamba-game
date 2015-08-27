@@ -7,7 +7,7 @@ ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
 
 if (ASM::$pam->size() == 1) {
 
-	# sending email API call
+	# sending API call to delete account link to server
 	$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
 	$success = $api->abandonServer(ASM::$pam->get()->bind, APP_ID);
 
