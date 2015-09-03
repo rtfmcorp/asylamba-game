@@ -154,11 +154,20 @@ echo '<div id="content">';
 				# topic component
 				$S_TOM2 = ASM::$tom->getCurrentSession();
 				ASM::$tom->newSession();
-				ASM::$tom->load(
-					['id' => CTR::$get->get('topic'), 'rColor' => CTR::$data->get('playerInfo')->get('color')],
-					[], [],
-					CTR::$data->get('playerId')
-				);
+
+				if ($forumId < 10 || ($forumId >= 10 && $forumId < 20 && CTR::$data->get('playerInfo')->get('status') > 2)) {
+					ASM::$tom->load(
+						['id' => CTR::$get->get('topic'), 'rColor' => CTR::$data->get('playerInfo')->get('color'), 'rForum' => $forumId],
+						[], [],
+						CTR::$data->get('playerId')
+					);
+				} else if ($forumId >= 20 && $forumId < 30 && CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
+					ASM::$tom->load(
+						['id' => CTR::$get->get('topic'), 'rForum' => $forumId],
+						[], [],
+						CTR::$data->get('playerId')
+					);
+				}
 
 				if (ASM::$tom->size() == 0) {
 					CTR::$alert->add('Les données sont illisibles, les messages doivent sûrement être cryptés !', ALERT_STD_ERROR);
