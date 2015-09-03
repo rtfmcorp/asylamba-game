@@ -220,7 +220,7 @@ if ($type !== FALSE) {
 						case Law::NEUTRALPACT:
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($rColor !== FALSE) {
-								if ($rColor >= 1 && $rColor <= (ColorResource::size() + 1) && $rColor != ASM::$clm->get()->id) {
+								if ($rColor >= 1 && $rColor <= (ColorResource::size() - 1) && $rColor != ASM::$clm->get()->id) {
 
 									if (ASM::$clm->get()->colorLink[$rColor] != Color::NEUTRAL) {
 										$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
@@ -271,7 +271,7 @@ if ($type !== FALSE) {
 						case Law::TOTALALLIANCE:
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($rColor !== FALSE) {
-								if ($rColor >= 1 && $rColor <= (ColorResource::size() + 1) && $rColor != ASM::$clm->get()->id) {
+								if ($rColor >= 1 && $rColor <= (ColorResource::size() - 1) && $rColor != ASM::$clm->get()->id) {
 									$allyYet = FALSE;
 									foreach (ASM::$clm->get()->colorLink as $relation) {
 										if($relation == Color::ALLY) {
@@ -301,7 +301,7 @@ if ($type !== FALSE) {
 						case Law::WARDECLARATION:
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($rColor !== FALSE) {
-								if ($rColor >= 1 && $rColor <= (ColorResource::size() + 1) && $rColor != ASM::$clm->get()->id) {
+								if ($rColor >= 1 && $rColor <= (ColorResource::size() - 1) && $rColor != ASM::$clm->get()->id) {
 
 									if (ASM::$clm->get()->colorLink[$rColor] != Color::ENEMY) {
 										$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
