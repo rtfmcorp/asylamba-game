@@ -56,7 +56,7 @@ echo '<div class="component nav">';
 						echo '<select name="rplayer">';
 							echo '<option value="-1">Choisissez un joueur</option>';
 							for ($j = 0; $j < ASM::$pam->size(); $j++) {
-								echo '<option value="' . ASM::$pam->get($j)->id . '">' . $status[ ASM::$pam->get($i)->status - 1] . ' ' . ASM::$pam->get($j)->name . '</option>';
+								echo '<option value="' . ASM::$pam->get($j)->id . '">' . $status[ ASM::$pam->get($j)->status - 1] . ' ' . ASM::$pam->get($j)->name . '</option>';
 							}
 						echo '</select>';
 						echo '<button type="submit">Désigner comme successeur</button>';
