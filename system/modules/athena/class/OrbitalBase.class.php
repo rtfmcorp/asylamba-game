@@ -682,6 +682,24 @@ class OrbitalBase {
 
 			# update u
 			$mission->uRecycling = $dateOfUpdate;
+		} else {
+			# the place become an empty place
+			$targetPlace->resources = 0;
+
+			# stop the mission
+			$mission->statement = RecyclingMission::ST_DELETED;
+
+			# send notification to the player
+			$n = new Notification();
+			$n->setRPlayer($player->id);
+			$n->setTitle('Arrêt de mission de recyclage');
+			$n->addBeg()->addTxt('Un ');
+			$n->addLnk('map/place-' . $mission->rTarget, 'lieu');
+			$n->addTxt(' que vous recycliez est désormais totalement dépourvu de ressources et s\'est donc transformé en lieu vide.');
+			$n->addSep()->addTxt('Vos recycleurs restent donc stationnés sur votre ');
+			$n->addLnk('map/base-' . $this->rPlace, 'base orbitale')->addTxt(' le temps que vous programmiez une autre mission.');
+			$n->addEnd();
+			ASM::$ntm->add($n);
 		}
 	}
 
