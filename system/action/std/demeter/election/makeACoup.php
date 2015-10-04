@@ -68,7 +68,7 @@ if ($program !== FALSE) {
 
 				$_PAM123 = ASM::$pam->getCurrentsession();
 				ASM::$pam->newSession();
-				ASM::$pam->load(['rColor' => ASM::$clm->get()->id]);
+				ASM::$pam->load(['rColor' => ASM::$clm->get()->id, 'statement' => PAM_ACTIVE]);
 
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
 					$notif = new Notification();
