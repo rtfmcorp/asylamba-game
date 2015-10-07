@@ -8,6 +8,8 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
+	include COMPONENT . 'publicity.php';
+
 	include_once ATLAS;
 	include_once DEMETER;
 
