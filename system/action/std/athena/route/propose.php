@@ -60,12 +60,17 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 		ASM::$clm->newSession();
 		ASM::$clm->load(array('id' => array(CTR::$data->get('playerInfo')->get('color'), $player->rColor)));
 
-		if (ASM::$clm->get(0)->id == CTR::$data->get('playerInfo')->get('color')) {
-			$myColor = ASM::$clm->get(0);
-			$otherColor = ASM::$clm->get(1);
+		if (ASM::$clm->size() == 2) {
+			if (ASM::$clm->get(0)->id == CTR::$data->get('playerInfo')->get('color')) {
+				$myColor = ASM::$clm->get(0);
+				$otherColor = ASM::$clm->get(1);
+			} else {
+				$myColor = ASM::$clm->get(1);
+				$otherColor = ASM::$clm->get(0);
+			}
 		} else {
-			$myColor = ASM::$clm->get(1);
-			$otherColor = ASM::$clm->get(0);
+			$myColor = ASM::$clm->get();
+			$otherColor = ASM::$clm->get();
 		}
 		if ($myColor->colorLink[$player->rColor] != Color::ENEMY && $otherColor->colorLink[CTR::$data->get('playerInfo')->get('color')] != Color::ENEMY) {
 

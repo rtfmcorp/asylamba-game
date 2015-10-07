@@ -26,7 +26,20 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 		ASM::$clm->newSession();
 		ASM::$clm->load(array('id' => array($cr->playerColor1, $cr->playerColor2)));
 
-		if (ASM::$clm->get(0)->colorLink[$cr->playerColor1] != Color::ENEMY && ASM::$clm->get(1)->colorLink[$cr->playerColor2] != Color::ENEMY) {
+		if (ASM::$clm->size() == 2) {
+			if (ASM::$clm->get(0)->id == $cr->playerColor1) {
+				$color1 = ASM::$clm->get(0);
+				$color2 = ASM::$clm->get(1);
+			} else {
+				$color1 = ASM::$clm->get(1);
+				$color2 = ASM::$clm->get(0);
+			}
+		} else {
+			$color1 = ASM::$clm->get();
+			$color2 = ASM::$clm->get();
+		}
+
+		if ($color1->colorLink[$cr->playerColor2] != Color::ENEMY && $color2->colorLink[$cr->playerColor1] != Color::ENEMY) {
 			$S_OBM1 = ASM::$obm->getCurrentSession();
 			ASM::$obm->newSession();
 			ASM::$obm->load(array('rPlace' => $cr->getROrbitalBase()));

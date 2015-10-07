@@ -12,6 +12,7 @@ Date de lancement : mercredi 14 octobre à 20h.
 [ ] les rapports d'attaque sont faux
 [ ] lors d'une conquête, des fois les flottes ne défendent pas
 [ ] bug des statuts de guerre
+[ ] mettre un bloc vide en premier dans la phase d'inscription (Gil)
 ```
 
 ```
