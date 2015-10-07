@@ -15,7 +15,7 @@ $route = Utils::getHTTPData('route');
 if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 	$S_CRM1 = ASM::$crm->getCurrentSession();
 	ASM::$crm->newSession(ASM_UMODE);
-	ASM::$crm->load(array('id'=>$route, 'statement' => CRM_ACTIVE));
+	ASM::$crm->load(array('id' => $route, 'statement' => [CRM_ACTIVE, CRM_STANDBY]));
 	if (ASM::$crm->get() && ASM::$crm->size() == 1) {
 		$cr = ASM::$crm->get();
 		if ($cr->playerId1 == CTR::$data->get('playerId') || $cr->playerId2 == CTR::$data->get('playerId')) {
