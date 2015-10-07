@@ -16,6 +16,8 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
+	include COMPONENT . 'publicity.php';
+	
 	# obNav component
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'main') {
 		include_once ARES;
