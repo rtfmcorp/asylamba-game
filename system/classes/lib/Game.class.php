@@ -359,24 +359,44 @@ class Game {
 		return $percent;
 	}
 
-	public static function getTypeOfSpy($success) {
+	public static function getTypeOfSpy($success, $antiSpy) {
 		include_once ARTEMIS;
+		if ($antiSpy < 1000) {
+			return SpyReport::TYP_NOT_CAUGHT;
+		}
+
 		$percent = rand(0, 100);
-		if ($success < 50) {
-			if ($percent < 50) {
-				return SpyReport::TYP_NOT_CAUGHT;			# 50%
-			} elseif ($percent < 75) {
-				return SpyReport::TYP_ANONYMOUSLY_CAUGHT;	# 25%
+		if ($success < 40) {
+			if ($percent < 5) {
+				return SpyReport::TYP_NOT_CAUGHT;			# 5%
+			} elseif ($percent < 50) {
+				return SpyReport::TYP_ANONYMOUSLY_CAUGHT;	# 45%
 			} else {
-				return SpyReport::TYP_CAUGHT;				# 25%
+				return SpyReport::TYP_CAUGHT;				# 50%
 			}
-		} else {
-			if ($percent < 40) {
-				return SpyReport::TYP_NOT_CAUGHT;			# 40%
-			} elseif ($percent < 70) {
+		} else if ($success < 80) {
+			if ($percent < 30) {
+				return SpyReport::TYP_NOT_CAUGHT;			# 30%
+			} elseif ($percent < 60) {
 				return SpyReport::TYP_ANONYMOUSLY_CAUGHT;	# 30%
 			} else {
-				return SpyReport::TYP_CAUGHT;				# 30%
+				return SpyReport::TYP_CAUGHT;				# 40%
+			}
+		} else if ($success < 100) {
+			if ($percent < 50) {
+				return SpyReport::TYP_NOT_CAUGHT;			# 50%
+			} elseif ($percent < 80) {
+				return SpyReport::TYP_ANONYMOUSLY_CAUGHT;	# 30%
+			} else {
+				return SpyReport::TYP_CAUGHT;				# 20%
+			}
+		} else { # success == 100
+			if ($percent < 70) {
+				return SpyReport::TYP_NOT_CAUGHT;			# 70%
+			} elseif ($percent < 90) {
+				return SpyReport::TYP_ANONYMOUSLY_CAUGHT;	# 20%
+			} else {
+				return SpyReport::TYP_CAUGHT;				# 10%
 			}
 		}
 	}

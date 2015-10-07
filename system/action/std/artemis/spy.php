@@ -127,7 +127,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 					
 					$antiSpy = $orbitalBase->antiSpyAverage; // entre 100 et 4000
 					$sr->success = Game::getSpySuccess($antiSpy, $price);
-					$sr->type = Game::getTypeOfSpy($sr->success);
+					$sr->type = Game::getTypeOfSpy($sr->success, $antiSpy);
 
 					switch ($sr->type) {
 						case SpyReport::TYP_ANONYMOUSLY_CAUGHT:
