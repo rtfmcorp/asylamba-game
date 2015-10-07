@@ -37,7 +37,7 @@ class Player {
 	public $dInscription = '';
 	public $dLastConnection = '';
 	public $dLastActivity = '';
-	public $premium = 0;
+	public $premium = 0; 	# 0 = publicité, 1 = pas de publicité
 	public $statement = 0;
 
 	protected $synchronized = FALSE;
