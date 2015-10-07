@@ -1,5 +1,5 @@
 <?php
-class DataBaseAdmin {
+class DatabaseAdmin {
 	private $PDOInstance = null;
 	private static $instance = null;
 	private static $nbrOfQuery = 0;
@@ -15,7 +15,7 @@ class DataBaseAdmin {
 	private function __construct() {
 		try {
 			$pdoOptions[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
-			$pdoOptions[PDO::ATTR_EMULATE_PREPARES] = TRUE;
+			$pdoOptions[PDO::ATTR_EMULATE_PREPARES] = FALSE;
 			# $pdoOptions[PDO::ATTR_DEFAULT_FETCH_MODE] = PDO::FETCH_ASSOC;
 			$this->PDOInstance = new PDO(
 				'mysql:dbname=' . ADMIN_SQL_DTB . ';host=' . ADMIN_SQL_HOST . ';charset=utf8', 
@@ -31,9 +31,10 @@ class DataBaseAdmin {
 
 	public static function getInstance() {
 		if (is_null(self::$instance)) {
-			self::$instance = new DataBaseAdmin();
+			self::$instance = new DatabaseAdmin();
 			self::$nbrOfInstance++;
 		}
+
 		return self::$instance;
 	}
 	
@@ -42,10 +43,10 @@ class DataBaseAdmin {
 		return $this->PDOInstance->query($query);
 	}
 	public function prepare($query) {
+		self::$nbrOfQuery++;
 		return $this->PDOInstance->prepare($query);
 	}
 	public function execute($query) {
-		self::$nbrOfQuery++;
 		return $this->PDOInstance->exec($query);
 	}
 	public function lastInsertId() {

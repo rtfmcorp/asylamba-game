@@ -214,7 +214,6 @@ jQuery(document).ready(function($) {
 				var hFixBody = parseInt(fixBody.css('height'));
 				var hBody	 = parseInt(content.css('height'));
 
-				
 				var position = 0;
 				var nextPosition  = (content.css('top') == 'auto') ? 0 : parseInt(content.css('top'));
 				
@@ -301,7 +300,7 @@ jQuery(document).ready(function($) {
 // #### MOVING PANEL MODULE ####
 // #############################
 	panelController = {
-		position: -2,
+		position: -1,
 		maxPosition: 0,
 
 		// déplace si possible le panneau
@@ -332,7 +331,7 @@ jQuery(document).ready(function($) {
 					}, time);
 				}
 
-				panelController.position < 0
+				panelController.position < 1
 					? $('#movers .toLeft').hide()
 					: $('#movers .toLeft').show();
 
