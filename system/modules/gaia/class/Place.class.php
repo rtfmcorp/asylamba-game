@@ -577,12 +577,12 @@ class Place {
 				$tempCom = array();
 
 				for ($i = 0; $i < count($this->commanders); $i++) {
-					if ($this->commanders[$i]->line == 1) {
+					if ($this->commanders[$i]->line <= 1) {
 						$tempCom[] = $this->commanders[$i];
 					}
 				}
 				for ($i = 0; $i < count($this->commanders); $i++) {
-					if ($this->commanders[$i]->line == 2) {
+					if ($this->commanders[$i]->line >= 2) {
 						$tempCom[] = $this->commanders[$i];
 					}
 				}
@@ -606,22 +606,11 @@ class Place {
 
 						$this->startFight($commander, $commanderPlayer, $this->commanders[$nbrBattle], $placePlayer, TRUE);
 
-						# mort du commandant
-						# arrêt des combats
-						if ($commander->getStatement() == COM_DEAD) {
-							$report = $this->createReport();
-							$reportArray[] = $report;
-							$reportIds[] = $report->id;
+						$report = $this->createReport();
+						$reportArray[] = $report;
+						$reportIds[] = $report->id;
+						
 
-							$nbrBattle++;
-							break;
-						} else {
-							$report = $this->createReport();
-							$reportArray[] = $report;
-							$reportIds[] = $report->id;
-							
-							$nbrBattle++;
-						}
 
 						# mettre à jour armyInBegin si prochain combat pour prochain rapport
 						for ($j = 0; $j < count($commander->armyAtEnd); $j++) {
@@ -629,10 +618,17 @@ class Place {
 								$commander->armyInBegin[$j][$i] = $commander->armyAtEnd[$j][$i];
 							}
 						}
-						for ($j = 0; $j < count($this->commanders[$nbrBattle - 1]->armyAtEnd); $j++) {
-							for ($i = 0; $i < 12; $i++) { 
-								$this->commanders[$nbrBattle - 1]->armyInBegin[$j][$i] = $this->commanders[$nbrBattle - 1]->armyAtEnd[$j][$i];
+						for ($j = 0; $j < count($this->commanders[$nbrBattle]->armyAtEnd); $j++) {
+							for ($i = 0; $i < 12; $i++) {
+								$this->commanders[$nbrBattle]->armyInBegin[$j][$i] = $this->commanders[$nbrBattle]->armyAtEnd[$j][$i];
 							}
+						}
+						
+						$nbrBattle++;
+						# mort du commandant
+						# arrêt des combats
+						if ($commander->getStatement() == COM_DEAD) {
+							break;
 						}
 					} else {
 						$nbrBattle++;

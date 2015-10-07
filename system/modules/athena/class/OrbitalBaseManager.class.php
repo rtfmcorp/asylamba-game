@@ -497,11 +497,12 @@ class OrbitalBaseManager extends Manager {
 			$S_COM4 = ASM::$com->getCurrentSession();
 			ASM::$com->changeSession($commanderSession);
 			for ($i = 0; $i < ASM::$com->size(); $i++) {
-				if (ASM::$com->get($i)->statement == Commander::MOVING) {
-					ASM::$com->get($i)->statement = Commander::DEAD;
-				}
-				if (ASM::$com->get($i)->statement != Commander::DEAD) {
+				if (in_array(ASM::$com->get($i)->statement), [Commander::INSCHOOL, Commander::ONSALE, Commander::RESERVE]) {
 					ASM::$com->get($i)->rPlayer = $newOwner;
+				} else if (ASM::$com->get($i)->statement == Commander::MOVING) {
+					ASM::$com->get($i)->statement = Commander::RETIRED;
+				} else {
+					ASM::$com->get($i)->statement = Commander::DEAD;		
 				}
 			}
 			ASM::$com->changeSession($S_COM4);

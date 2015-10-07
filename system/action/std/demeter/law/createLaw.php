@@ -241,7 +241,7 @@ if ($type !== FALSE) {
 						case Law::PEACEPACT:
 							$rColor = Utils::getHTTPData('rcolor');
 							if ($rColor !== FALSE) {
-								if ($rColor >= 1 && $rColor <= 7 && $rColor != ASM::$clm->get()->id) {
+								if ($rColor >= 1 && $rColor <= (ColorResource::size() - 1 && $rColor != ASM::$clm->get()->id) {
 									$nbrPact = 0;
 									foreach (ASM::$clm->get()->colorLink as $relation) {
 										if($relation == Color::PEACE) {

@@ -20,7 +20,7 @@ if ($rLaw !== FALSE) {
 
 		ASM::$cam->changeSession($_LAM);
 	} else {
-		CTR::$alert->add('Vous n\'avez pas le droit d\'annauler cette loi.', ALERT_STD_ERROR);
+		CTR::$alert->add('Vous n\'avez pas le droit d\'annuler cette loi.', ALERT_STD_ERROR);
 	}
 } else {
 	CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
