@@ -1,5 +1,6 @@
 <div class="component invisible">
 	<div class="publicity">
+	<?php if (CTR::$data->get('playerInfo')->get('premium') == 0) { ?>
 		<p>Annonces</p>
 		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 		<!-- BlocIG_txt -->
@@ -10,5 +11,6 @@
 		<script>
 		(adsbygoogle = window.adsbygoogle || []).push({});
 		</script>
+	<?php } ?>
 	</div>
 </div>
