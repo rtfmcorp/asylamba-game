@@ -60,7 +60,14 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 		ASM::$clm->newSession();
 		ASM::$clm->load(array('id' => array(CTR::$data->get('playerInfo')->get('color'), $player->rColor)));
 
-		if (ASM::$clm->get(0)->colorLink[$player->rColor] != Color::ENEMY && ASM::$clm->get(1)->colorLink[CTR::$data->get('playerInfo')->get('color')] != Color::ENEMY) {
+		if (ASM::$clm->get(0)->id == CTR::$data->get('playerInfo')->get('color')) {
+			$myColor = ASM::$clm->get(0);
+			$otherColor = ASM::$clm->get(1);
+		} else {
+			$myColor = ASM::$clm->get(1);
+			$otherColor = ASM::$clm->get(0);
+		}
+		if ($myColor->colorLink[$player->rColor] != Color::ENEMY && $otherColor->colorLink[CTR::$data->get('playerInfo')->get('color')] != Color::ENEMY) {
 
 			if (ASM::$obm->size() == 2 && ($proposerBase->getRPlayer() != $otherBase->getRPlayer()) && (ASM::$pam->size() == 1)) {
 				$distance = Game::getDistance($proposerBase->getXSystem(), $otherBase->getXSystem(), $proposerBase->getYSystem(), $otherBase->getYSystem());
