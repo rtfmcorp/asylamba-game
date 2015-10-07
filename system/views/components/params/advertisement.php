@@ -15,7 +15,6 @@ echo '<div class="component">';
 			echo '<a href="' . Format::actionBuilder('switchadvertisement') . '"" class="on-off-button ' . (CTR::$data->get('playerInfo')->get('premium') ? 'disabled' : '') . '">';
 				echo (CTR::$data->get('playerInfo')->get('premium') ? 'Afficher des publicités' : 'Cacher les publicités');
 			echo '</a>';
-			//Bug::pre(CTR::$data->get('playerInfo')->get('premium'));
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
