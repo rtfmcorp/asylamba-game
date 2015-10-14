@@ -18,7 +18,7 @@ class RecyclingMission {
 
 	const RECYCLER_CAPACTIY = 400;
 	const RECYCLING_TIME = 28800; # 8 hours, in seconds
-	const COEF_SHIP = 1.7; # to convert points to resource for ships
+	const COEF_SHIP = 1.6; # to convert points to resource for ships
 		# coef_ship a été calculé par un ingénieur. Si on change la capacité, il faut rechanger coef_ship
 
 	public $id = 0;
