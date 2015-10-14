@@ -23,9 +23,9 @@ Date de lancement : mercredi 14 octobre à 20h.
 ### Création de la nouvelle partie
 
 ```
-[ ] nouvelles factions
+[x] nouvelles factions
 [ ] couleur (avatars, drapeau)
-[ ] secteurs
+[x] secteurs
 ```
 
 ### Promo
