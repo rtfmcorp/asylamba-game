@@ -39,7 +39,7 @@ abstract class GalaxyConfiguration {
 			'beginColor' => 8,
 			'vertices' => [0, 0, 35, 0, 20, 60, 0, 55],
 			'barycentre' => [14, 29],
-			'display' => [14, 29],
+			'display' => [16, 29],
 			'name' => 'Secteur 1',
 			'danger' => GalaxyConfiguration::DNG_CASUAL,
 			'points' => 1
