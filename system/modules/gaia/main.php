@@ -9,7 +9,7 @@ include_once 'resource/SquadronResource.res.php';
 
 // classes
 include_once 'class/GalaxyColorManager.class.php';
-include_once SYSTEMR . 'config/galaxies/GalaxyConfiguration.v2.php';
+include_once SYSTEMR . 'config/galaxies/GalaxyConfiguration.v3.php';
 include_once 'class/GalaxyGenerator.class.php';
 include_once 'class/PointLocation.class.php';
 include_once 'class/SectorManager.class.php';
