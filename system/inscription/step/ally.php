@@ -11,6 +11,8 @@ include 'inscriptionElement/subnav.php';
 
 # contenu spécifique
 echo '<div id="content">';
+	include COMPONENT . 'invisible.php';
+
 	echo '<div class="component">';
 		echo '<div class="head">';
 			echo '<h1>Faction</h1>';
