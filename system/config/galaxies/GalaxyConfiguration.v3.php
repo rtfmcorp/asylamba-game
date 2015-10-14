@@ -207,7 +207,7 @@ abstract class GalaxyConfiguration {
 		[
 			'id' => 18,
 			'beginColor' => 0,
-			'vertices' => [45, 190, 65, 130, 80, 190, 60, 205],
+			'vertices' => [45, 190, 65, 135, 80, 190, 60, 205],
 			'barycentre' => [63, 179],
 			'display' => [63, 179],
 			'name' => 'Secteur 18',
