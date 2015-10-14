@@ -1,5 +1,6 @@
 <?php
 # display
+/*
 echo '<div class="component">';
 	echo '<div class="head skin-5">';
 		echo '<h2>Paramètres des annonces</h2>';
@@ -18,3 +19,4 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
+*/
