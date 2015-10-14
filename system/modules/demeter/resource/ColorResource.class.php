@@ -265,7 +265,7 @@ class ColorResource {
 		], [
 			'id' 			=> 9,
 			'officialName'	=> 'Nouvelle-Nerve',
-			'popularName' 	=> 'Nouvelle-Nerve',
+			'popularName' 	=> 'la Nouvelle-Nerve',
 			'government' 	=> 'République Nervéenne',
 			'demonym' 		=> 'néo-nervéens',
 			'factionPoint' 	=> 'Points d\'industrie',
@@ -282,7 +282,60 @@ class ColorResource {
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
 				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de la Nouvelle-Nerve peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Président. 
 				<br /><br />Le Président va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Ministre de la défense, le Ministre des finances et le Premier Ministre de la faction. '
+		], [
+			'id' 			=> 10,
+			'officialName' 	=> 'Culte Magothique',
+			'popularName' 	=> 'le Culte',
+			'government' 	=> 'Assemblée de Magoth',
+			'demonym' 		=> 'magoths',
+			'factionPoint' 	=> '',
+			'status' 		=> ['', '', '', '', '', ''],
+			'regime'		=> 3,
+			'devise' 		=> '',
+			'desc1' => '',
+			'desc2' => '',
+			'desc3' => '',
+			'desc4' => '',
+			'bonus' => [8, 13, 6],
+			'mandateDuration' => 0,
+			'senateDesc' => '',
+			'campaignDesc' => ''
+		], [
+			'id' 			=> 11,
+			'officialName' 	=> 'Néo-Humaniste',
+			'popularName' 	=> 'Néo-Humaniste',
+			'government' 	=> 'Nouvelle Eglise Cardanienne',
+			'demonym' 		=> 'néo-cardaniens',
+			'factionPoint' 	=> '',
+			'status' 		=> ['', '', '', '', '', ''],
+			'regime'		=> 1,
+			'devise' 		=> '',
+			'desc1' => '',
+			'desc2' => '',
+			'desc3' => '',
+			'desc4' => '',
+			'bonus' => [6, 12],
+			'mandateDuration' => 0,
+			'senateDesc' => '',
+			'campaignDesc' => ''
+		], [
+			'id' 			=> 12,
+			'officialName' 	=> 'Impérialiste',
+			'popularName' 	=> 'Impérialiste',
+			'government' 	=> 'Maison de Dhase',
+			'demonym' 		=> 'impérialistes',
+			'factionPoint' 	=> '',
+			'status' 		=> ['', '', '', '', '', ''],
+			'regime'		=> 2,
+			'devise' 		=> '',
+			'desc1' => '',
+			'desc2' => '',
+			'desc3' => '',
+			'desc4' => '',
+			'bonus' => [0, 1],
+			'mandateDuration' => 0,
+			'senateDesc' => '',
+			'campaignDesc' => ''
 		]
 	];
 }
-?>
