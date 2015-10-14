@@ -296,7 +296,7 @@ class ColorResource {
 			'desc2' => '',
 			'desc3' => '',
 			'desc4' => '',
-			'bonus' => [8, 13, 6],
+			'bonus' => [8, 2, 6],
 			'mandateDuration' => 0,
 			'senateDesc' => '',
 			'campaignDesc' => ''
