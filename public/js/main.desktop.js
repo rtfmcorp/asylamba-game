@@ -53,10 +53,7 @@ jQuery(document).ready(function($) {
 
 			if (render.calling == 1) {
 				var initSftr = parseInt($('body').data('init-sftr'));
-
-				if (initSftr > 0) {
-					panelController.position += initSftr;
-				}
+				panelController.position += initSftr - 1;
 			}
 			
 			panelController.move(0, 'left', 0);

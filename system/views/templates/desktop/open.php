@@ -61,7 +61,7 @@ echo '<body ';
 	} elseif (CTR::$get->exist('sftr')) {
 		echo 'data-init-sftr="' . CTR::$get->get('sftr') . '"';
 	} else {
-		echo 'data-init-sftr="1"';
+		echo 'data-init-sftr="2"';
 	}
 
 echo '>';
