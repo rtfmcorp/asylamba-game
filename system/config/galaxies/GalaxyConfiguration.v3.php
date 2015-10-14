@@ -388,7 +388,7 @@ abstract class GalaxyConfiguration {
 			'id' => 36,
 			'beginColor' => 0,
 			'vertices' => [65, 135, 90, 150, 90, 170, 115, 175, 80, 190],
-			'barycentre' => [88, 164],
+			'barycentre' => [82, 164],
 			'display' => [82, 164],
 			'name' => 'Secteur 36',
 			'danger' => GalaxyConfiguration::DNG_MEDIUM,
