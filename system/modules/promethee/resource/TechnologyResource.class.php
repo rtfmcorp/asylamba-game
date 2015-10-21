@@ -699,7 +699,7 @@ class TechnologyResource {
 			'credit' => 16000,
 			'points' => 43,
 			'column' => 5,
-			'shortDescription' => 'Le prochain niveau augmentera la capactité à transporter des ressources de vos vaisseaux de {x}%.',
+			'shortDescription' => 'Le prochain niveau augmentera la capacité à transporter des ressources de vos vaisseaux de {x}%.',
 			'description' => 'En mariant différents domaines scientifiques et en se basant sur les résultats du silo-compresseur, vos chercheurs ont réussi à adapter ce système à vos vaisseaux. Cette technique permet à vos flottes de ramener plus de ressource dans leur soute de transport.',
 			'bonus' => 2
 		),

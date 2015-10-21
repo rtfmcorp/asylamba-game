@@ -15,7 +15,7 @@ echo '<div class="component profil panel-info">';
 		echo '<div class="body">';
 			echo '<h4>Informations sur les conditions de victoire</h4>';
 
-			echo '<p>Les différents classements (général, richesse et territorial) rapportent des points à la faction chaque jour en fonction de la position de cette dernière dans les classements. Ces points sont additionnés et font monter une jauge. Lorsqu\'un faction atteins le nombre de point requis, le serveur se termine et la victoire est revendiquée.';
+			echo '<p>Les différents classements (général, richesse et territorial) rapportent des points à la faction chaque jour en fonction de la position de cette dernière dans les classements. Ces points sont additionnés et font monter une jauge. Lorsqu\'un faction atteint le nombre de point requis, le serveur se termine et la victoire est revendiquée.';
 
 			echo '<div class="center-box">';
 				echo '<span class="label">Points requis pour mettre fin au serveur</span>';
