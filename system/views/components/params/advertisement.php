@@ -6,7 +6,7 @@ echo '<div class="component">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<h3>Publicité</h3>';
+			echo '<h4>Publicité</h4>';
 			echo '<p>Nous avons ajouté en encart publicitaire en bas à gauche de plusieurs page sur le jeu. Ce n\'est pas du tout définitif. Il s\'agit d\'un test de la part des développeurs du jeu.</p>';
 			echo '<p>Vous avez ici la possibilité de masquer cet encart si vous le souhaitez. Cependant nous vous rappelons que le jeu est totalement gratuit et que tous les frais actuels sont à notre charge.</p>';
 			echo '<p>Cela comprend les frais de nom de domaine, les frais d\'hébergement et les heures de travail bénévole.</p>';
