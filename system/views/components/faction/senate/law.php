@@ -5,6 +5,10 @@
 $S_LAM_LAW = ASM::$lam->getCurrentSession();
 ASM::$lam->changeSession($S_LAM_TOVOTE);
 
+# durée de la loi
+$lawDuration = (strtotime($law->dEnd) - strtotime($law->dEndVotation)) / 3600;
+$lawDuration = $lawDuration < 1 ? 1 : $lawDuration;
+
 echo '<div class="component">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
@@ -51,10 +55,19 @@ echo '<div class="component">';
 			echo '<ul class="list-type-1">';
 				echo '<li>';
 					echo '<span class="label">Coût</span>';
-					echo '<span class="value">' . Format::number(LawResources::getInfo($law->type, 'price')) . '</span>';
+					echo '<span class="value">';
+						echo LawResources::getInfo($law->type, 'bonusLaw')
+							? Format::number(LawResources::getInfo($law->type, 'price') * $faction->activePlayers * $lawDuration)
+							: Format::number(LawResources::getInfo($law->type, 'price'));
+					echo '<img class="icon-color" src="http://localhost/asylamba/game/public/media/resources/credit.png" alt="crédits"></span>';
 				echo '</li>';
 
-				if (!LawResources::getInfo($law->type, 'bonusLaw')) {
+				if (LawResources::getInfo($law->type, 'bonusLaw')) {
+					echo '<li>';
+						echo '<span class="label">Durée d\'application</span>';
+						echo '<span class="value">' . Format::number($lawDuration) . ' relève' . Format::plural($lawDuration) . '</span>';
+					echo '</li>';
+				} else {
 					if (isset($law->options['display'])) {
 						foreach ($law->options['display'] as $label => $value) {
 							echo '<li>';
@@ -67,12 +80,7 @@ echo '<div class="component">';
 			echo '</ul>';
 
 			echo '<h4>Date application</h4>';
-			if (LawResources::getInfo($law->type, 'bonusLaw')) {
-				echo '<p>Début ' . Chronos::transform($law->dEndVotation) . '</p>';
-				echo '<p>Fin ' . Chronos::transform($law->dEnd) . '</p>';
-			} else {
-				echo '<p>Mise en application ' . Chronos::transform($law->dEndVotation) . '</p>';
-			}
+			echo '<p>Mise en application ' . Chronos::transform($law->dEndVotation) . '</p>';
 			echo '</ul>';
 		echo '</div>';
 	echo '</div>';
