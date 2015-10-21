@@ -119,11 +119,11 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 								break;
 							case Transaction::TYP_COMMANDER :
 								$S_COM1 = ASM::$com->getCurrentSession();
-								ASM::$com->newSession(ASM_UMODE);
+								ASM::$com->newSession();
 								ASM::$com->load(array('c.id' => $identifier));
-								if (ASM::$com->size() == 1 AND ASM::$com->get()->getRPlayer() == CTR::$data->get('playerId')) {
+								if (ASM::$com->size() == 1 AND ASM::$com->get()->getRPlayer() == CTR::$data->get('playerId') AND $commander->statement !== Commander::ONSALE) {
 									$commander = ASM::$com->get();
-									$commander->setStatement(COM_ONSALE);
+									$commander->statement = Commander::ONSALE;
 									$commander->emptySquadrons();
 								} else {
 									$valid = FALSE;
