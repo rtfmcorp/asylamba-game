@@ -51,15 +51,32 @@ echo '<div class="component topic size2">';
 				} else {
 					$status = 'Rebelle';
 				}
-				echo '<div class="message">';
+
+				$canEdit = (CTR::$data->get('playerId') == $m->rPlayer || (CTR::$data->get('playerInfo')->get('status') > 2 && $topic_topic->rForum != 20));
+
+				echo '<div class="message write">';
 					echo '<a href="' . APP_ROOT . 'embassy/player-' . $m->rPlayer . '"><img src="' . MEDIA . 'avatar/medium/' . $m->playerAvatar . '.png" alt="' . $m->playerName . '" class="avatar" /></a>';
 					echo '<div class="content">';
 						echo '<p class="text">';
 							echo '≡ ' . $status . ' ' . $m->playerName . '<br /><br />';
 							echo $m->pContent;
 						echo '</p>';
+
+						if ($canEdit) {
+							echo '<form style="display:none;" action="' . Format::actionBuilder('editmessageforum', ['id' => $m->id]) . '" id="edit-m-' . $m->id . '" method="post">';
+								echo '<div class="wysiwyg" data-id="edit-wysiwyg-m-' . $m->id . '">';
+									$parser = new Parser();
+									echo $parser->getToolbar();
+									
+									echo '<textarea name="content" id="edit-wysiwyg-m-' . $m->id . '" placeholder="Répondez">' . $m->oContent . '</textarea>';
+								echo '</div>';
+
+								echo '<button>Envoyer le message</button>';
+							echo '</form>';
+						}
+
 						echo '<p class="footer">';
-							echo '— ' . Chronos::transform($m->dCreation);
+							echo '— ' . Chronos::transform($m->dCreation) . ($canEdit ? '&#8195;|&#8195;<a href="#" class="sh" data-target="edit-m-' . $m->id . '">Editer</a>' : NULL);
 						echo '</p>';
 					echo '</div>';
 				echo '</div>';
