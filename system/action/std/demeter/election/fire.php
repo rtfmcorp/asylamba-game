@@ -4,6 +4,7 @@
 $rPlayer = Utils::getHTTPData('rplayer');
 
 include_once ZEUS;
+include_once DEMETER;
 
 if ($rPlayer !== FALSE) {
 	if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
