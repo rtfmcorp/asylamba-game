@@ -265,7 +265,7 @@ class ColorResource {
 		], [
 			'id' 			=> 9,
 			'officialName'	=> 'Nouvelle-Nerve',
-			'popularName' 	=> 'Nouvelle-Nerve',
+			'popularName' 	=> 'la Nouvelle-Nerve',
 			'government' 	=> 'République Nervéenne',
 			'demonym' 		=> 'néo-nervéens',
 			'factionPoint' 	=> 'Points d\'industrie',
@@ -282,7 +282,64 @@ class ColorResource {
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
 				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de la Nouvelle-Nerve peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Président. 
 				<br /><br />Le Président va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Ministre de la défense, le Ministre des finances et le Premier Ministre de la faction. '
+		], [
+			'id' 			=> 10,
+			'officialName' 	=> 'Culte Magothique',
+			'popularName' 	=> 'le Culte',
+			'government' 	=> 'Assemblée de Magoth',
+			'demonym' 		=> 'magoths',
+			'factionPoint' 	=> 'Points d\'industrie',
+			'status' 		=> ['Disciple', 'Oracle', 'Gardien des coffres', 'Chef inquisiteur', 'Patriarche', 'Grand dignitaire'],
+			'regime'		=> 3,
+			'devise' 		=> 'Point de vraie foi en dehors du sang et des larmes',
+			'desc1' => 'Les Magothistes, persuadés de posséder la vraie foi se fondent sur la parole de Magoth uniquement. Celle-ci demande un maximum de sacrifices et de souffrance. Ils sont prêts à tout pour que la Galaxie voue un culte aux vrais Dieux. Seuls les élus et les personnes baptisées exclusivement par le triumvirat religieux peuvent prétendre à la vie. Leur extrémisme et leur vision bornée de la foi ont fait qu’ils ont été banni du coeur de Cardan.',
+			'desc2' => 'Les Magothistes possèdent la seule et unique vérité, la parole de Magoth. Leur existence est tourné vers ces préceptes qui excluent évidemment la tolérance envers les non-croyants. Les hérétiques aiment dire que la vie d’un Magothiste est ponctuée de prières, de purification, de châtiments corporels et d’expiation de pêchés. A cela s’ajoutent la méditation, la recherche du geste parfait, la conscience aiguë du partage entre initiés, le don de soi et l’amour inconditionnel de son prochain. C’est pour cette dernière raison qu’il est primordial que les Magothistes fassent comprendre à la galaxie l’erreur dans laquelle elle s’embourbe. Pour le bien de l’humanité, il est de leur devoir divin de délivrer les populations des hérétiques afin de les ramener dans la lumière et sauver leurs âmes.',
+			'desc3' => 'Il serait une erreur de penser que les Magothistes se contentent de foncer sur leurs ennemis sans réfléchir. Leur stratégie inclut le sacrifice des troupes mais seulement en cas de nécessité. Leur principal objectif est de couper les têtes des gouverneurs des planètes mais d’épargner les populations afin de les sauver en les convertissant à la parole de Magoth. Ainsi, leur armée est faite des guerriers les plus courageux et sans peur qu’on puisse trouver dans la galaxie, mais est aussi composée d’une logistique à toute épreuve pour s’occuper des civils.',
+			'desc4' => 'Que ferait un magoth sans sa cinquantaine d’icônes ? Il est certain que leur dévotion nécessite le support de ces oeuvres sublimes. Le titre de peintre d’icône est réservé à quelques élus seulement qui, de ce fait, sont admirés et bénis par le reste des Magothistes. Nul autre personne n’a le droit d’en peindre sans la bénédiction du clergé. L’écriture des textes sacrés est aussi relayée au rang d’art. Les enluminures sont aussi précises que finement décorées. Enfin, la musique est au centre des méditations. Chaque magoth connaît plusieurs chants religieux qui l\'amèneront dans un état de transe nécessaire pour entendre la voix des Dieux. ',
+			'bonus' => [8, 2, 6],
+			'mandateDuration' => 1209600,
+			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de points. Ces points sont consultables dans le classement général.',
+			'campaignDesc' => 'Les membres du Sénat peuvent se proposer devant les Oracles pour prendre une place politiquement importante dans la faction. 
+				<br /><br />Une fois que toutes les candidatures ont été déposées, la Grande Lumière, via les Oracles décide de la personne la plus apte à la représenter dans le monde physique. Cet personne reçoit le titre de Guide Suprême. 
+				<br /><br />Le Guide Suprême va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Camerlingue, l\'Inquisiteur et l\'Archiprêtre de la faction. '
+		], [
+			'id' 			=> 11,
+			'officialName' 	=> 'Néo-Humaniste',
+			'popularName' 	=> 'Néo-Humaniste',
+			'government' 	=> 'Nouvelle Eglise Cardanienne',
+			'demonym' 		=> 'néo-cardaniens',
+			'factionPoint' 	=> 'Points d\'industrie',
+			'status' 		=> ['Éveillé', 'Philosophe', 'Drapier', 'Grand Général', 'Sénéchal', 'Primat'],
+			'regime'		=> 1,
+			'devise' 		=> 'Le vrai chemin est celui de la mesure et de la subtilité',
+			'desc1' => 'Les Néo-Humanistes, majoritairement issus des descendants des Néo-Nervéens vivant sur les territoires conquis en SEG280. Ils prônent une foi plus ouverte et plus progressiste que la doctrine orthodoxe. Ils cherchent avant tout à sortir Cardan de son autarcie séculaire et défendent ainsi une politique plus ouverte au commerce avec le reste de la galaxie tout en restant indépendants faces aux autres grandes puissances.',
+			'desc2' => 'Si l’on devait choisir un adjectif qui décrirait les néo-humanistes, celui qui conviendrait le mieux serait probablement “mesuré”. Partant du pragmatisme quasiment matérialiste des néo-nervéens, les néo-humanistes y ont ajouté une touche de religion qui désormais éclaire leur morale. Très vite, ils se sont intéressés aux nouvelles sciences qui avaient été interdites par les décrets magothistes. Ils disposent désormais d’universités parmi les plus performantes de la galaxie.',
+			'desc3' => 'Préférant la diplomatie à la guerre, les néo-humanistes ne disposaient il y a peu que d’une force armée très limitée. Mais lors des premiers troubles qui secouèrent Cardan, un nouveau groupe politique beaucoup moins pacifique fit son apparition. Les généraux Cardaniens s’étant prononcés pour une réforme politique de la faction et donc contre le clergé Magothiste, ont massivement rejoint la Nouvelle Église Cardanienne. Désormais il y a nombre de bons stratèges néo-humanistes qui ont commencé à militariser certaines bases orbitales stratégiques dans la possibilité d’une attaque magothe sur les terres que contrôlent la Nouvelle Église Cardanienne.',
+			'desc4' => 'Les néo-humanistes, tout comme chez leurs prédécesseurs, ont un certain goût pour l’esthétisme, l’ingénierie et les matières nobles. Aimant la simplicité que l’on retrouve dans les arts immémoriaux telles que la peinture ou la sculpture, ils trouvent parfois surfaits les héritages des anciens monuments de la Nerve. Ils préfèrent bâtir des cathédrales exposées à la lumière des astres plutôt que dans de longues galeries souterraines.',
+			'bonus' => [6, 12],
+			'mandateDuration' => 950400,
+			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de points. Ces points sont consultables dans le classement général.',
+			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
+				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de la Nerve peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Président. 
+				<br /><br />Le Président va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Ministre de la défense, le Ministre des finances et le Premier Ministre de la faction. '
+		], [
+			'id' 			=> 12,
+			'officialName' 	=> 'Impérialiste',
+			'popularName' 	=> 'Impérialiste',
+			'government' 	=> 'Maison de Dhase',
+			'demonym' 		=> 'impérialistes',
+			'factionPoint' 	=> 'Points d\'industrie',
+			'status' 		=> ['Noble', 'Prince', 'Vidôme', 'Maréchal', 'Préfet', 'Gouverneur Général'],
+			'regime'		=> 2,
+			'devise' 		=> 'Pour l’honneur, la vertu et la foi !',
+			'desc1' => 'Les Impérialistes, regroupés derrière la maison de Dhase, ancienne famille de souches impériales et néo-nervéennes gouvernant la province de Cardan avant son indépendance, ont aussi pris les armes contre les autres factions. Ils recherchent à rattacher leurs territoires à l’Empire et rejettent désormais la foi cardanienne orthodoxe au profit d’un culte lié à l’empereur.',
+			'desc2' => 'Depuis l’indépendance de Cardan, les anciens nobles qui travaillaient pour l’administration de la marche ont été forcés d’abandonner leur privilèges. Si beaucoup d’entre eux ont quitté Cardan pour la Ligue ou l’Empire, la minorité qui est restée dans les Cardamines ont développé des coutumes hybrides combinant celles de la haute noblesse impériale et la ferveur cardanienne. Simple dans leur quotidien mais aimant le faste des grandes réceptions, les impérialistes sont un curieux mélange de deux sociétés opposées que peu auraient imaginé possible.',
+			'desc3' => 'Inspirés par les conquêtes d’Akhéna, les impérialistes sont de grands stratèges dans l’âme. Aimant les combats et la guerre, les soldats impérialistes ne jurent que par et pour l’honneur. Le culte des anciens empereurs glorifie l’héroïsme et le sacrifice, ce qui rend les guerriers de cette faction redoutables. Ils sont convaincus que leur courage combiné à leur technologie récemment achetée à l’Empire les feront maître des Cardamines.',
+			'desc4' => 'Ils aiment les arts raffinés, comme la peinture, la sculpture et les holoreportages. Ils sont friands de rassemblements où des pièces antiques en théâtre ou en musique sont rejouées. La littérature ainsi que le sport, car comme tout le monde le sait, le sport est la base d’une âme pure, est au coeur des loisirs des impérialistes.',
+			'bonus' => [0, 1],
+			'mandateDuration' => 604800,
+			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de points. Ces points sont consultables dans le classement général.',
+			'campaignDesc' => 'À tout moment, un membre du sénat ou du gouvernement peut tenter un coup d\'état. Il aura alors 7 relèves pour attirer des partisans. Il aura réussi son putsch s\'il arrive à recruter suffisemment de partisans.'
 		]
 	];
 }
-?>

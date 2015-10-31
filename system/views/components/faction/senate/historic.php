@@ -41,6 +41,10 @@ echo '<div class="component">';
 					echo '</p>';
 				echo '</div>';
 			}
+
+			if (ASM::$lam->size() == 0) {
+				echo '<p><em>Aucune loi n\'a été votée pour le moment.</em></p>';
+			}
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

@@ -131,7 +131,7 @@ class GalaxyColorManager {
 		$sectorUpdatedColor = [];
 
 		foreach ($this->sector as $k => $v) {
-			$colorRepartition = array(0, 0, 0, 0, 0, 0, 0, 0, 0);
+			$colorRepartition = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 			foreach ($this->system as $m => $n) {
 				if ($n['sector'] == $k) {

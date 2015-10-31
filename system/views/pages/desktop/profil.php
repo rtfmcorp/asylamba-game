@@ -18,6 +18,8 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
+	include COMPONENT . 'publicity.php';
+
 	# inclusion des modules
 	include_once ZEUS;
 	include_once DEMETER;

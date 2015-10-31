@@ -290,10 +290,10 @@ $qr = $db->prepare('SELECT
 		ON o.rPlace = c.rOrbitalBase
 		RIGHT JOIN player AS p
 			ON p.id = o.rPlayer
-	WHERE p.statement = ? OR p.statement = ? OR p.statement = ?
+	WHERE (p.statement = ? OR p.statement = ? OR p.statement = ?) AND c.statement = ?
 	GROUP BY p.id
 	ORDER BY p.id');
-$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY));
+$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY, CRM_ACTIVE));
 
 while ($aw = $qr->fetch()) {
 	if (isset($list[$aw['player']])) {
@@ -309,10 +309,10 @@ $qr = $db->prepare('SELECT
 		ON o.rPlace = c.rOrbitalBaseLinked
 		RIGHT JOIN player AS p
 			ON p.id = o.rPlayer
-	WHERE p.statement = ? OR p.statement = ? OR p.statement = ?
+	WHERE (p.statement = ? OR p.statement = ? OR p.statement = ?) AND c.statement = ?
 	GROUP BY p.id
 	ORDER BY p.id');
-$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY));
+$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY, CRM_ACTIVE));
 
 while ($aw = $qr->fetch()) {
 	if (isset($list[$aw['player']])) {

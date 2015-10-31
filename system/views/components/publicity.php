@@ -1,6 +1,8 @@
-<div class="component invisible">
+<?php 
+/*<div class="component invisible">
 	<div class="publicity">
-		<p>Annonces</p>
+	<?php if (CTR::$data->get('playerInfo')->get('premium') == 0) { ?>
+		<?php echo '<p>Annonces (Les masquer ? <a href="' . APP_ROOT . '/params">paramètres</a>)</p>'; ?>
 		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 		<!-- BlocIG_txt -->
 		<ins class="adsbygoogle"
@@ -10,5 +12,13 @@
 		<script>
 		(adsbygoogle = window.adsbygoogle || []).push({});
 		</script>
+	<?php } ?>
+	</div>
+</div>*/
+?>
+
+<div class="component invisible">
+	<div class="fix-body">
+		<div class="body"></div>
 	</div>
 </div>

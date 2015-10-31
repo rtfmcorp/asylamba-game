@@ -43,7 +43,7 @@ if (ANALYTICS) {
 	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-	ga('create', 'UA-42636532-6', 'auto');
+	ga('create', 'UA-42636532-7', 'auto');
 	ga('send', 'pageview');
 </script>
 <?php
@@ -61,7 +61,7 @@ echo '<body ';
 	} elseif (CTR::$get->exist('sftr')) {
 		echo 'data-init-sftr="' . CTR::$get->get('sftr') . '"';
 	} else {
-		echo 'data-init-sftr="1"';
+		echo 'data-init-sftr="2"';
 	}
 
 echo '>';

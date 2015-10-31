@@ -8,7 +8,6 @@ include_once DEMETER;
 $content = Utils::getHTTPData('content');
 $rTopic  = Utils::getHTTPData('rtopic');
 
-
 if ($rTopic AND $content) {
 	$S_TOM_1 = ASM::$tom->getCurrentSession();
 	ASM::$tom->load(array('id' => $rTopic));

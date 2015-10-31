@@ -11,7 +11,9 @@ include 'inscriptionElement/subnav.php';
 
 # contenu spécifique
 echo '<div id="content">';
+
 	echo '<form action="' . APP_ROOT . 'inscription/step-4" method="post" >';
+		include COMPONENT . 'invisible.php';
 		echo '<div class="component inscription color' . CTR::$data->get('inscription')->get('ally') . '">';
 			echo '<div class="head">';
 				echo '<h1>Localisation</h1>';

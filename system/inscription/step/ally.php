@@ -11,6 +11,8 @@ include 'inscriptionElement/subnav.php';
 
 # contenu spécifique
 echo '<div id="content">';
+	include COMPONENT . 'invisible.php';
+
 	echo '<div class="component">';
 		echo '<div class="head">';
 			echo '<h1>Faction</h1>';
@@ -18,7 +20,7 @@ echo '<div id="content">';
 		echo '<div class="fix-body">';
 			echo '<div class="body">';
 				echo '<h4>Choisissez votre faction</h4>';
-				echo '<p>Il vous faut choisir entre l\'une des sept factions disponibles.</p>';
+				echo '<p>Il vous faut choisir entre l\'une des cinq factions disponibles.</p>';
 				echo '<p>Chaque faction a ses forces et ses faiblesses. Certaines sont plus belliqueuses, certaines sont plus sages. De plus, le système politique change en fonction de la faction.</p>';
 			echo '</div>';
 		echo '</div>';

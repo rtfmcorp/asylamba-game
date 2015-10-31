@@ -167,7 +167,6 @@ class Color {
 		$_PAM1 = ASM::$pam->getCurrentSession();
 		ASM::$pam->changeSession($token_pam);
 
-		echo ASM::$pam->size();
 		for ($i = 0; $i < ASM::$pam->size(); $i++) {
 			if (ASM::$pam->get($i)->status < PAM_TREASURER) {
 				if ($i < $limit) {

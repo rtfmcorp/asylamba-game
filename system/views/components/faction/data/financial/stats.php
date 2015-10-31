@@ -34,7 +34,7 @@ echo '<div class="component profil">';
 
 
 			echo '<div class="evolution">';
-				echo '<div class="header">Evolution de la fortune de la faction sur les 20 derniers segments.</div>';
+				echo '<div class="header">Evolution de la puissance commerciale de la faction sur les 20 derniers segments.</div>';
 				echo '<div class="diargam">';
 				for ($i = 0; $i < ASM::$frm->size(); $i++) {
 					echo '<span class="progress-bar">';

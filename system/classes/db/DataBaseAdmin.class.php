@@ -15,7 +15,7 @@ class DatabaseAdmin {
 	private function __construct() {
 		try {
 			$pdoOptions[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
-			$pdoOptions[PDO::ATTR_EMULATE_PREPARES] = FALSE;
+			$pdoOptions[PDO::ATTR_EMULATE_PREPARES] = TRUE;
 			# $pdoOptions[PDO::ATTR_DEFAULT_FETCH_MODE] = PDO::FETCH_ASSOC;
 			$this->PDOInstance = new PDO(
 				'mysql:dbname=' . ADMIN_SQL_DTB . ';host=' . ADMIN_SQL_HOST . ';charset=utf8', 

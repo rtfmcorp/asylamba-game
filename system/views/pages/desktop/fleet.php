@@ -8,6 +8,8 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
+	include COMPONENT . 'publicity.php';
+
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'movement' OR CTR::$get->get('view') == 'main') {
 		# inclusion des modules
 		include_once ARES;

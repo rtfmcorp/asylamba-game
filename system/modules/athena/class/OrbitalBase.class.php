@@ -599,6 +599,9 @@ class OrbitalBase {
 			$creditRecycled += $diffAmount;
 			$resourceRecycled -= $diffAmount;
 
+			if ($creditRecycled < 0) { $creditRecycled = 0; }
+			if ($resourceRecycled < 0) { $resourceRecycled = 0; }
+
 			# convert shipRecycled to real ships
 			$pointsToRecycle = round($shipRecycled * RecyclingMission::COEF_SHIP);
 			$shipsArray1 = array();

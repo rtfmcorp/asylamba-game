@@ -109,7 +109,7 @@ for ($i = 6; $i < ShipResource::SHIP_QUANTITY; $i++) {
 			$s[$i - 6] .= '<em>' . ShipResource::getInfo($i, 'name') . '</em>'; 
 			$s[$i - 6] .= '<a href="#" class="addInfoPanel info hb lt" title="plus d\'info" data-ship-id="' . $i . '" data-info-type="ship">+</a>';
 		$s[$i - 6] .= '</div>';
-		$s[$i - 6] .= '<div class="ship-illu"><img src="' . MEDIA . 'ship/img/' . (($i + 1 < 10) ? '0' : '') . ($i + 1) . '-0' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="" /></div>';
+		$s[$i - 6] .= '<div class="ship-illu"><img src="' . MEDIA . 'ship/img/' . Format::paddingNumber($i + 1, 2) . '-' . Format::paddingNumber(CTR::$data->get('playerInfo')->get('color'), 2) . '.png" alt="" /></div>';
 		$s[$i - 6] .= $but;
 	$s[$i - 6] .= '</div>';
 }
@@ -150,6 +150,7 @@ echo '<div class="component">';
 						echo '<strong>' . ShipResource::getInfo($queue->shipNumber, 'codeName') . '</strong>';
 						
 						if ($realSizeQueue > 1) {
+							echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTime, 'lite') . '</span></em>';
 							echo '<span class="progress-container"></span>';
 						} else {
 							echo '<em><span class="progress-text">' . Chronos::secondToFormat($remainingTime, 'lite') . '</span></em>';

@@ -48,22 +48,26 @@ if ($rPlace !== FALSE AND $rTarget !== FALSE AND $quantity !== FALSE AND in_arra
 					$startPlace 		= ASM::$plm->getById($rPlace);
 					$destinationPlace 	= ASM::$plm->getById($rTarget);
 
-					$travelTime = Game::getTimeToTravel($startPlace, $destinationPlace);
+					if ($destinationPlace->rPlayer == NULL AND in_array($destinationPlace->typeOfPlace, [2, 3, 4 ,5])) {
+						$travelTime = Game::getTimeToTravel($startPlace, $destinationPlace);
 
-					if (CTR::$data->get('playerInfo')->get('color') == $destinationPlace->sectorColor || $destinationPlace->sectorColor == ColorResource::NO_FACTION) {
-						# create mission
-						$rm = new RecyclingMission();
-						$rm->rBase = $rPlace;
-						$rm->rTarget = $rTarget;
-						$rm->cycleTime = (2 * $travelTime) + RecyclingMission::RECYCLING_TIME;
-						$rm->recyclerQuantity = $quantity;
-						$rm->uRecycling = Utils::now();
-						$rm->statement = RecyclingMission::ST_ACTIVE;
-						ASM::$rem->add($rm);
+						if (CTR::$data->get('playerInfo')->get('color') == $destinationPlace->sectorColor || $destinationPlace->sectorColor == ColorResource::NO_FACTION) {
+							# create mission
+							$rm = new RecyclingMission();
+							$rm->rBase = $rPlace;
+							$rm->rTarget = $rTarget;
+							$rm->cycleTime = (2 * $travelTime) + RecyclingMission::RECYCLING_TIME;
+							$rm->recyclerQuantity = $quantity;
+							$rm->uRecycling = Utils::now();
+							$rm->statement = RecyclingMission::ST_ACTIVE;
+							ASM::$rem->add($rm);
 
-						CTR::$alert->add('Votre mission a été lancée.', ALERT_STD_SUCCESS);
+							CTR::$alert->add('Votre mission a été lancée.', ALERT_STD_SUCCESS);
+						} else {
+							CTR::$alert->add('Vous pouvez recycler uniquement dans les secteurs de votre faction ainsi que dans les secteurs neutres.', ALERT_STD_ERROR);
+						}
 					} else {
-						CTR::$alert->add('Vous pouvez recycler uniquement dans les secteurs de votre faction ainsi que dans les secteurs neutres.', ALERT_STD_ERROR);
+						CTR::$alert->add('On ne peut pas recycler ce lieu, petit hacker.', ALERT_STD_ERROR);
 					}
 				} else {
 					CTR::$alert->add('Il y a un problème avec le lieu de départ ou d\'arrivée. Veuillez contacter un administrateur.', ALERT_STD_ERROR);

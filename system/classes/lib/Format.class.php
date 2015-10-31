@@ -117,4 +117,16 @@ class Format {
 		$url .= 'token-' . CTR::$data->get('token');
 		return $url;
 	}
+
+	public static function paddingNumber($number, $size) {
+		$digits = strlen((string) $number);
+
+		if ($digits < $size) {
+			for ($i = 0; $i < $size - $digits; $i++) { 
+				$number = '0' . $number;
+			}
+		}
+
+		return $number;
+	}
 }

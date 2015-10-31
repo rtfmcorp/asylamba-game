@@ -24,6 +24,8 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
+	include COMPONENT . 'publicity.php';
+
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'overview') {
 		include_once ZEUS;
 

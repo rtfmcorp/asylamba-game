@@ -24,7 +24,7 @@ abstract class GalaxyConfiguration {
 	];
 
 	public static $sectors = [
-		[
+		/*[
 			'id' => 1,
 			'beginColor' => 1,
 			'vertices' => [0, 250, 250, 250, 250, 0, 0, 0],
@@ -33,431 +33,487 @@ abstract class GalaxyConfiguration {
 			'name' => 'Secteur 1',
 			'danger' => GalaxyConfiguration::DNG_CASUAL,
 			'points' => 1
-		]
-		/*[
+		]*/
+		[
 			'id' => 1,
-			'beginColor' => 1,
-			'vertices' => [0, 250, 0, 220, 25, 215, 50, 220, 35, 235, 30, 250],
-			'barycentre' => [23, 232],
-			'display' => [23, 232],
+			'beginColor' => 8,
+			'vertices' => [0, 0, 35, 0, 20, 60, 0, 55],
+			'barycentre' => [14, 29],
+			'display' => [16, 29],
 			'name' => 'Secteur 1',
 			'danger' => GalaxyConfiguration::DNG_CASUAL,
 			'points' => 1
-		], [
+		], 
+		[
 			'id' => 2,
-			'beginColor' => 1,
-			'vertices' => [30, 250, 35, 235, 50, 220, 60, 190, 75, 215, 65, 250],
-			'barycentre' => [53, 227],
-			'display' => [53, 227],
+			'beginColor' => 8,
+			'vertices' => [35, 0, 55, 0, 60, 35, 20, 60],
+			'barycentre' => [43, 24],
+			'display' => [41, 21],
 			'name' => 'Secteur 2',
 			'danger' => GalaxyConfiguration::DNG_CASUAL,
 			'points' => 1
-		], [
+		], 
+		[
 			'id' => 3,
-			'beginColor' => 1,
-			'vertices' => [0, 220, 0, 195, 40, 180, 60, 190, 50, 220, 25, 215],
-			'barycentre' => [29, 203],
-			'display' => [29, 195],
-			'name' => 'Secteur 3',
-			'danger' => GalaxyConfiguration::DNG_CASUAL,
-			'points' => 1
-		], [
-			'id' => 4,
 			'beginColor' => 0,
-			'vertices' => [0, 195, 0, 155, 15, 145, 25, 155, 40, 155, 40, 180],
-			'barycentre' => [20, 164],
-			'display' => [20, 164],
-			'name' => 'Secteur 4',
+			'vertices' => [55, 0, 120, 0, 90, 35, 60, 35],
+			'barycentre' => [81, 18],
+			'display' => [81, 18],
+			'name' => 'Secteur 3',
 			'danger' => GalaxyConfiguration::DNG_EASY,
 			'points' => 1
-		], [
+		], 
+		[
+			'id' => 4,
+			'beginColor' => 0,
+			'vertices' => [120, 0, 130, 0, 150, 10, 125, 50, 90, 35],
+			'barycentre' => [123, 19],
+			'display' => [121, 19],
+			'name' => 'Secteur 4',
+			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'points' => 1
+		], 
+		[
 			'id' => 5,
 			'beginColor' => 0,
-			'vertices' => [15, 145, 30, 145, 40, 155, 25, 155],
-			'barycentre' => [28, 150],
-			'display' => [25, 147],
+			'vertices' => [125, 50, 150, 10, 175, 25, 125, 75],
+			'barycentre' => [144, 40],
+			'display' => [146, 40],
 			'name' => 'Secteur 5',
 			'danger' => GalaxyConfiguration::DNG_HARD,
-			'points' => 2
-		], [
+			'points' => 1
+		], 
+		[
 			'id' => 6,
 			'beginColor' => 0,
-			'vertices' => [15, 145, 25, 115, 55, 125, 40, 155, 30, 145],
-			'barycentre' => [33, 137],
-			'display' => [33, 130],
+			'vertices' => [175, 25, 195, 40, 155, 80, 125, 75],
+			'barycentre' => [163, 55],
+			'display' => [163, 55],
 			'name' => 'Secteur 6',
 			'danger' => GalaxyConfiguration::DNG_MEDIUM,
 			'points' => 1
-		], [
+		], 
+		[
 			'id' => 7,
 			'beginColor' => 0,
-			'vertices' => [0, 105, 0, 85, 25, 85, 30, 95, 70, 105, 75, 120, 55, 125, 25, 115],
-			'barycentre' => [35, 104],
-			'display' => [35, 104],
+			'vertices' => [195, 40, 210, 55, 175, 110, 155, 80],
+			'barycentre' => [184, 71],
+			'display' => [184, 71],
 			'name' => 'Secteur 7',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => GalaxyConfiguration::DNG_HARD,
 			'points' => 1
-		], [
+		], 
+		[
 			'id' => 8,
 			'beginColor' => 0,
-			'vertices' => [25, 85, 40, 70, 50, 85, 30, 95],
-			'barycentre' => [36, 84],
-			'display' => [36, 78],
+			'vertices' => [210, 55, 240, 100, 200, 100, 175, 110],
+			'barycentre' => [206, 91],
+			'display' => [206, 91],
 			'name' => 'Secteur 8',
-			'danger' => GalaxyConfiguration::DNG_HARD,
-			'points' => 2
-		], [
+			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'points' => 1
+		], 
+		[
 			'id' => 9,
 			'beginColor' => 0,
-			'vertices' => [0, 85, 0, 55, 25, 50, 40, 50, 40, 70, 25, 85],
-			'barycentre' => [22, 66],
-			'display' => [18, 66],
+			'vertices' => [200, 100, 240, 100, 250, 120, 250, 150, 225, 160],
+			'barycentre' => [233, 126],
+			'display' => [233, 126],
 			'name' => 'Secteur 9',
-			'danger' => GalaxyConfiguration::DNG_EASY,
+			'danger' => GalaxyConfiguration::DNG_HARD,
 			'points' => 1
-		], [
+		], 
+		[
 			'id' => 10,
-			'beginColor' => 8,
-			'vertices' => [0, 55, 0, 0, 50, 0, 55, 15, 50, 35, 40, 25, 20, 30, 25, 50],
-			'barycentre' => [30, 26],
-			'display' => [11, 11],
+			'beginColor' => 0,
+			'vertices' => [200, 155, 225, 160, 250, 150, 250, 180, 190, 195],
+			'barycentre' => [223, 168],
+			'display' => [220, 168],
 			'name' => 'Secteur 10',
-			'danger' => GalaxyConfiguration::DNG_CASUAL,
+			'danger' => GalaxyConfiguration::DNG_MEDIUM,
 			'points' => 1
-		], [
+		], 
+		[
 			'id' => 11,
-			'beginColor' => 8,
-			'vertices' => [25, 50, 20, 30, 40, 25, 50, 35, 40, 50],
-			'barycentre' => [35, 38],
-			'display' => [30, 33],
+			'beginColor' => 0,
+			'vertices' => [190, 195, 250, 180, 250, 220, 215, 215],
+			'barycentre' => [226, 203],
+			'display' => [222, 203],
 			'name' => 'Secteur 11',
-			'danger' => GalaxyConfiguration::DNG_CASUAL,
-			'points' => 2
-		], [
+			'danger' => GalaxyConfiguration::DNG_HARD,
+			'points' => 1
+		], 
+		[
 			'id' => 12,
 			'beginColor' => 0,
-			'vertices' => [50, 35, 55, 15, 50, 0, 85, 0, 85, 30, 75, 40],
-			'barycentre' => [67, 20],
-			'display' => [67, 16],
+			'vertices' => [215, 215, 250, 220, 250, 250, 200, 250],
+			'barycentre' => [229, 234],
+			'display' => [229, 234],
 			'name' => 'Secteur 12',
-			'danger' => GalaxyConfiguration::DNG_EASY,
+			'danger' => GalaxyConfiguration::DNG_MEDIUM,
 			'points' => 1
-		], [
+		], 
+		[
 			'id' => 13,
 			'beginColor' => 0,
-			'vertices' => [40, 70, 40, 50, 50, 35, 75, 40, 50, 85],
-			'barycentre' => [51, 56],
-			'display' => [51, 50],
+			'vertices' => [190, 195, 215, 215, 200, 250, 185, 250, 180, 210],
+			'barycentre' => [194, 224],
+			'display' => [192, 224],
 			'name' => 'Secteur 13',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
-			'points' => 1
-		], [
-			'id' => 14,
-			'beginColor' => 0,
-			'vertices' => [30, 95, 50, 85, 75, 40, 90, 60, 70, 105],
-			'barycentre' => [63, 77],
-			'display' => [63, 77],
-			'name' => 'Secteur 14',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
-			'points' => 1
-		], [
-			'id' => 15,
-			'beginColor' => 0,
-			'vertices' => [75, 40, 85, 30, 100, 50, 90, 60],
-			'barycentre' => [88, 45],
-			'display' => [83, 40],
-			'name' => 'Secteur 15',
-			'danger' => GalaxyConfiguration::DNG_HARD,
-			'points' => 2
-		], [
-			'id' => 16,
-			'beginColor' => 0,
-			'vertices' => [85, 30, 85, 0, 110, 0, 130, 60, 100, 50],
-			'barycentre' => [105, 35],
-			'display' => [100, 20],
-			'name' => 'Secteur 16',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
-			'points' => 1
-		], [
-			'id' => 17,
-			'beginColor' => 0,
-			'vertices' => [130, 75, 130, 60, 110, 0, 115, 0, 160, 30, 135, 75],
-			'barycentre' => [130, 40],
-			'display' => [135, 30],
-			'name' => 'Secteur 17',
 			'danger' => GalaxyConfiguration::DNG_EASY,
 			'points' => 1
-		], [
-			'id' => 18,
+		], 
+		[
+			'id' => 14,
+			'beginColor' => 12,
+			'vertices' => [150, 200, 190, 195, 180, 210, 185, 250, 175, 250],
+			'barycentre' => [176, 221],
+			'display' => [172, 219],
+			'name' => 'Secteur 14',
+			'danger' => GalaxyConfiguration::DNG_CASUAL,
+			'points' => 2
+		], 
+		[
+			'id' => 15,
+			'beginColor' => 12,
+			'vertices' => [125, 210, 150, 200, 175, 250, 155, 250],
+			'barycentre' => [151, 228],
+			'display' => [151, 228],
+			'name' => 'Secteur 15',
+			'danger' => GalaxyConfiguration::DNG_CASUAL,
+			'points' => 1
+		], 
+		[
+			'id' => 16,
 			'beginColor' => 0,
-			'vertices' => [70, 105, 90, 60, 100, 50, 130, 60, 130, 75, 110, 75],
-			'barycentre' => [105, 71],
-			'display' => [100, 60],
-			'name' => 'Secteur 18',
+			'vertices' => [95, 210, 125, 210, 155, 250, 90, 250, 75, 225],
+			'barycentre' => [108, 229],
+			'display' => [108, 229],
+			'name' => 'Secteur 16',
+			'danger' => GalaxyConfiguration::DNG_EASY,
+			'points' => 1
+		], 
+		[
+			'id' => 17,
+			'beginColor' => 0,
+			'vertices' => [60, 205, 80, 190, 115, 175, 95, 210, 75, 225],
+			'barycentre' => [85, 201],
+			'display' => [85, 201],
+			'name' => 'Secteur 17',
 			'danger' => GalaxyConfiguration::DNG_MEDIUM,
 			'points' => 1
-		], [
+		], 
+		[
+			'id' => 18,
+			'beginColor' => 0,
+			'vertices' => [45, 190, 65, 135, 80, 190, 60, 205],
+			'barycentre' => [63, 179],
+			'display' => [63, 179],
+			'name' => 'Secteur 18',
+			'danger' => GalaxyConfiguration::DNG_HARD,
+			'points' => 1
+		], 
+		[
 			'id' => 19,
 			'beginColor' => 0,
-			'vertices' => [75, 120, 70, 105, 80, 110, 85, 120],
-			'barycentre' => [78, 114],
-			'display' => [74, 110],
+			'vertices' => [25, 175, 50, 115, 65, 135, 45, 190],
+			'barycentre' => [46, 154],
+			'display' => [46, 151],
 			'name' => 'Secteur 19',
-			'danger' => GalaxyConfiguration::DNG_VERY_HARD,
-			'points' => 5
-		], [
+			'danger' => GalaxyConfiguration::DNG_EASY,
+			'points' => 1
+		], 
+		[
 			'id' => 20,
 			'beginColor' => 0,
-			'vertices' => [55, 125, 75, 120, 85, 120, 110, 110, 85, 155],
-			'barycentre' => [82, 126],
-			'display' => [78, 130],
+			'vertices' => [0, 160, 45, 90, 50, 115, 25, 175],
+			'barycentre' => [30, 135],
+			'display' => [27, 135],
 			'name' => 'Secteur 20',
 			'danger' => GalaxyConfiguration::DNG_MEDIUM,
 			'points' => 1
-		], [
+		], 
+		[
 			'id' => 21,
 			'beginColor' => 0,
-			'vertices' => [70, 105, 110, 75, 115, 95, 110, 110, 85, 120, 80, 110],
-			'barycentre' => [95, 103],
-			'display' => [95, 93],
+			'vertices' => [0, 115, 20, 105, 45, 90, 0, 160],
+			'barycentre' => [16, 118],
+			'display' => [15, 118],
 			'name' => 'Secteur 21',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => GalaxyConfiguration::DNG_EASY,
 			'points' => 1
-		], [
+		], 
+		[
 			'id' => 22,
-			'beginColor' => 0,
-			'vertices' => [110, 110, 115, 95, 130, 100, 130, 105],
-			'barycentre' => [121, 103],
-			'display' => [115, 98],
+			'beginColor' => 8,
+			'vertices' => [0, 55, 20, 60, 20, 105, 0, 115],
+			'barycentre' => [10, 84],
+			'display' => [10, 84],
 			'name' => 'Secteur 22',
-			'danger' => GalaxyConfiguration::DNG_HARD,
-			'points' => 2
-		], [
+			'danger' => GalaxyConfiguration::DNG_CASUAL,
+			'points' => 1
+		], 
+		[
 			'id' => 23,
 			'beginColor' => 0,
-			'vertices' => [115, 95, 110, 75, 130, 75, 135, 75, 145, 95, 160, 115, 130, 130, 110, 110, 130, 105, 130, 100],
-			'barycentre' => [130, 98],
-			'display' => [137, 103],
+			'vertices' => [20, 60, 60, 75, 45, 90, 20, 105],
+			'barycentre' => [36, 83],
+			'display' => [36, 81],
 			'name' => 'Secteur 23',
 			'danger' => GalaxyConfiguration::DNG_MEDIUM,
-			'points' => 1
-		], [
+			'points' => 2
+		], 
+		[
 			'id' => 24,
-			'beginColor' => 4,
-			'vertices' => [135, 75, 160, 30, 175, 40, 160, 90, 145, 95],
-			'barycentre' => [155, 66],
-			'display' => [150, 66],
+			'beginColor' => 0,
+			'vertices' => [20, 60, 60, 35, 55, 55, 60, 75],
+			'barycentre' => [49, 56],
+			'display' => [45, 56],
 			'name' => 'Secteur 24',
-			'danger' => GalaxyConfiguration::DNG_CASUAL,
-			'points' => 1
-		], [
+			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'points' => 2
+		], 
+		[
 			'id' => 25,
-			'beginColor' => 4,
-			'vertices' => [160, 90, 175, 40, 210, 75, 175, 100],
-			'barycentre' => [180, 76],
-			'display' => [177, 70],
+			'beginColor' => 0,
+			'vertices' => [60, 35, 90, 35, 90, 60, 55, 55],
+			'barycentre' => [74, 46],
+			'display' => [74, 46],
 			'name' => 'Secteur 25',
-			'danger' => GalaxyConfiguration::DNG_CASUAL,
-			'points' => 1
-		], [
+			'danger' => GalaxyConfiguration::DNG_HARD,
+			'points' => 2
+		], 
+		[
 			'id' => 26,
-			'beginColor' => 4,
-			'vertices' => [130, 130, 160, 115, 145, 95, 160, 90, 175, 100, 210, 75, 185, 120, 140, 140],
-			'barycentre' => [163, 108],
-			'display' => [170, 108],
+			'beginColor' => 0,
+			'vertices' => [90, 35, 125, 50, 125, 75, 90, 60],
+			'barycentre' => [108, 55],
+			'display' => [108, 55],
 			'name' => 'Secteur 26',
-			'danger' => GalaxyConfiguration::DNG_CASUAL,
-			'points' => 1
-		], [
+			'danger' => GalaxyConfiguration::DNG_HARD,
+			'points' => 2
+		], 
+		[
 			'id' => 27,
 			'beginColor' => 0,
-			'vertices' => [85, 155, 110, 110, 130, 130, 95, 165],
-			'barycentre' => [105, 140],
-			'display' => [105, 133],
+			'vertices' => [90, 60, 125, 75, 90, 100, 100, 75],
+			'barycentre' => [101, 78],
+			'display' => [111, 78],
 			'name' => 'Secteur 27',
 			'danger' => GalaxyConfiguration::DNG_MEDIUM,
-			'points' => 1
-		], [
+			'points' => 2
+		], 
+		[
 			'id' => 28,
-			'beginColor' => 0,
-			'vertices' => [95, 165, 130, 130, 140, 140, 130, 165, 125, 170],
-			'barycentre' => [124, 154],
-			'display' => [117, 154],
+			'beginColor' => 4,
+			'vertices' => [90, 100, 125, 75, 145, 105, 125, 135],
+			'barycentre' => [121, 104],
+			'display' => [117, 104],
 			'name' => 'Secteur 28',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => GalaxyConfiguration::DNG_CASUAL,
 			'points' => 1
-		], [
+		], 
+		[
 			'id' => 29,
-			'beginColor' => 0,
-			'vertices' => [95, 165, 125, 170, 130, 180, 140, 180, 125, 195],
-			'barycentre' => [123, 178],
-			'display' => [117, 178],
+			'beginColor' => 4,
+			'vertices' => [125, 75, 155, 80, 175, 110, 145, 105],
+			'barycentre' => [150, 93],
+			'display' => [152, 93],
 			'name' => 'Secteur 29',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => GalaxyConfiguration::DNG_EASY,
 			'points' => 1
-		], [
+		], 
+		[
 			'id' => 30,
-			'beginColor' => 0,
-			'vertices' => [125, 170, 130, 165, 140, 170, 140, 180, 130, 180],
-			'barycentre' => [133, 173],
-			'display' => [130, 170],
+			'beginColor' => 4,
+			'vertices' => [145, 105, 175, 110, 175, 145, 150, 145, 125, 135],
+			'barycentre' => [154, 128],
+			'display' => [152, 128],
 			'name' => 'Secteur 30',
-			'danger' => GalaxyConfiguration::DNG_VERY_HARD,
-			'points' => 5
-		], [
+			'danger' => GalaxyConfiguration::DNG_CASUAL,
+			'points' => 1
+		], 
+		[
 			'id' => 31,
 			'beginColor' => 0,
-			'vertices' => [130, 165, 140, 140, 185, 120, 185, 135, 190, 160, 140, 170],
-			'barycentre' => [162, 148],
-			'display' => [162, 148],
+			'vertices' => [175, 110, 200, 100, 225, 160, 200, 155, 175, 145],
+			'barycentre' => [195, 134],
+			'display' => [195, 134],
 			'name' => 'Secteur 31',
 			'danger' => GalaxyConfiguration::DNG_MEDIUM,
 			'points' => 1
-		], [
+		], 
+		[
 			'id' => 32,
 			'beginColor' => 0,
-			'vertices' => [185, 135, 185, 120, 210, 130],
-			'barycentre' => [193, 128],
-			'display' => [190, 124],
+			'vertices' => [150, 145, 175, 145, 200, 155, 190, 195, 180, 170, 155, 160],
+			'barycentre' => [175, 162],
+			'display' => [177, 162],
 			'name' => 'Secteur 32',
-			'danger' => GalaxyConfiguration::DNG_HARD,
+			'danger' => GalaxyConfiguration::DNG_EASY,
 			'points' => 2
-		], [
+		], 
+		[
 			'id' => 33,
 			'beginColor' => 0,
-			'vertices' => [185, 120, 210, 75, 235, 100, 215, 110, 210, 130],
-			'barycentre' => [211, 107],
-			'display' => [204, 100],
+			'vertices' => [180, 170, 190, 195, 150, 200, 150, 185],
+			'barycentre' => [168, 188],
+			'display' => [168, 188],
 			'name' => 'Secteur 33',
-			'danger' => GalaxyConfiguration::DNG_EASY,
-			'points' => 1
-		], [
+			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'points' => 2
+		], 
+		[
 			'id' => 34,
 			'beginColor' => 0,
-			'vertices' => [210, 130, 215, 110, 235, 100, 250, 135, 250, 145],
-			'barycentre' => [232, 124],
-			'display' => [226, 118],
+			'vertices' => [130, 185, 150, 185, 150, 200, 125, 210],
+			'barycentre' => [139, 195],
+			'display' => [139, 195],
 			'name' => 'Secteur 34',
 			'danger' => GalaxyConfiguration::DNG_MEDIUM,
-			'points' => 1
-		], [
+			'points' => 2
+		], 
+		[
 			'id' => 35,
 			'beginColor' => 0,
-			'vertices' => [190, 160, 185, 135, 210, 130, 250, 145, 250, 155, 215, 150, 215, 165],
-			'barycentre' => [216, 149],
-			'display' => [200, 144],
+			'vertices' => [115, 175, 130, 185, 125, 210, 95, 210],
+			'barycentre' => [116, 195],
+			'display' => [116, 196],
 			'name' => 'Secteur 35',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
-			'points' => 1
-		], [
-			'id' => 36,
-			'beginColor' => 0,
-			'vertices' => [195, 180, 215, 170, 215, 165, 215, 150, 250, 155, 250, 170, 210, 195],
-			'barycentre' => [221, 169],
-			'display' => [225, 163],
-			'name' => 'Secteur 36',
-			'danger' => GalaxyConfiguration::DNG_EASY,
-			'points' => 1
-		], [
-			'id' => 37,
-			'beginColor' => 0,
-			'vertices' => [195, 180, 190, 160, 215, 165, 215, 170],
-			'barycentre' => [204, 169],
-			'display' => [199, 166],
-			'name' => 'Secteur 37',
 			'danger' => GalaxyConfiguration::DNG_HARD,
 			'points' => 2
-		], [
-			'id' => 38,
+		], 
+		[
+			'id' => 36,
 			'beginColor' => 0,
-			'vertices' => [160, 205, 170, 180, 195, 180, 210, 195, 200, 210, 185, 200, 175, 200],
-			'barycentre' => [185, 196],
-			'display' => [185, 187],
-			'name' => 'Secteur 38',
+			'vertices' => [65, 135, 90, 150, 90, 170, 115, 175, 80, 190],
+			'barycentre' => [88, 164],
+			'display' => [82, 164],
+			'name' => 'Secteur 36',
 			'danger' => GalaxyConfiguration::DNG_MEDIUM,
-			'points' => 1
-		], [
-			'id' => 39,
-			'beginColor' => 0,
-			'vertices' => [125, 195, 140, 180, 140, 170, 190, 160, 195, 180, 170, 180, 160, 205],
-			'barycentre' => [160, 181],
-			'display' => [150, 178],
-			'name' => 'Secteur 39',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
-			'points' => 1
-		], [
-			'id' => 40,
-			'beginColor' => 9,
-			'vertices' => [200, 250, 200, 210, 210, 235, 220, 210, 235, 205, 210, 195, 250, 170, 250, 250],
-			'barycentre' => [222, 216],
-			'display' => [230, 230],
-			'name' => 'Secteur 40',
+			'points' => 2
+		], 
+		[
+			'id' => 37,
+			'beginColor' => 11,
+			'vertices' => [65, 135, 95, 125, 110, 135, 90, 150],
+			'barycentre' => [90, 136],
+			'display' => [90, 136],
+			'name' => 'Secteur 37',
 			'danger' => GalaxyConfiguration::DNG_CASUAL,
 			'points' => 1
-		], [
-			'id' => 41,
-			'beginColor' => 9,
-			'vertices' => [200, 210, 210, 195, 235, 205, 220, 210, 210, 235],
-			'barycentre' => [215, 211],
-			'display' => [210, 205],
-			'name' => 'Secteur 41',
+		], 
+		[
+			'id' => 38,
+			'beginColor' => 11,
+			'vertices' => [50, 115, 75, 105, 95, 125, 65, 135],
+			'barycentre' => [71, 120],
+			'display' => [70, 120],
+			'name' => 'Secteur 38',
 			'danger' => GalaxyConfiguration::DNG_CASUAL,
 			'points' => 2
-		], [
+		], 
+		[
+			'id' => 39,
+			'beginColor' => 0,
+			'vertices' => [45, 90, 60, 75, 75, 105, 50, 115],
+			'barycentre' => [58, 96],
+			'display' => [58, 96],
+			'name' => 'Secteur 39',
+			'danger' => GalaxyConfiguration::DNG_HARD,
+			'points' => 2
+		], 
+		[
+			'id' => 40,
+			'beginColor' => 0,
+			'vertices' => [55, 55, 90, 60, 100, 75, 60, 75],
+			'barycentre' => [76, 66],
+			'display' => [75, 66],
+			'name' => 'Secteur 40',
+			'danger' => GalaxyConfiguration::DNG_VERY_HARD,
+			'points' => 5
+		], 
+		[
+			'id' => 41,
+			'beginColor' => 0,
+			'vertices' => [60, 75, 100, 75, 90, 100, 95, 125, 75, 105],
+			'barycentre' => [84, 96],
+			'display' => [84, 96],
+			'name' => 'Secteur 41',
+			'danger' => GalaxyConfiguration::DNG_HARD,
+			'points' => 2
+		], 
+		[
 			'id' => 42,
 			'beginColor' => 0,
-			'vertices' => [170, 250, 175, 220, 190, 225, 185, 200, 200, 210, 200, 250],
-			'barycentre' => [187, 226],
-			'display' => [185, 235],
+			'vertices' => [90, 100, 125, 135, 110, 135, 95, 125],
+			'barycentre' => [105, 124],
+			'display' => [105, 124],
 			'name' => 'Secteur 42',
-			'danger' => GalaxyConfiguration::DNG_EASY,
-			'points' => 1
-		], [
+			'danger' => GalaxyConfiguration::DNG_HARD,
+			'points' => 2
+		], 
+		[
 			'id' => 43,
 			'beginColor' => 0,
-			'vertices' => [175, 220, 175, 200, 185, 200, 190, 225],
-			'barycentre' => [181, 211],
-			'display' => [178, 208],
+			'vertices' => [110, 135, 125, 135, 130, 160, 115, 150],
+			'barycentre' => [120, 145],
+			'display' => [120, 145],
 			'name' => 'Secteur 43',
 			'danger' => GalaxyConfiguration::DNG_HARD,
 			'points' => 2
-		], [
+		], 
+		[
 			'id' => 44,
-			'beginColor' => 0,
-			'vertices' => [145, 250, 145, 235, 160, 205, 175, 200, 175, 220, 170, 250],
-			'barycentre' => [162, 227],
-			'display' => [157, 227],
+			'beginColor' => 10,
+			'vertices' => [125, 135, 150, 145, 155, 160, 130, 160],
+			'barycentre' => [140, 150],
+			'display' => [141, 150],
 			'name' => 'Secteur 44',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => GalaxyConfiguration::DNG_CASUAL,
 			'points' => 1
-		], [
+		], 
+		[
 			'id' => 45,
-			'beginColor' => 0,
-			'vertices' => [120, 220, 135, 215, 125, 195, 160, 205, 145, 235, 130, 230],
-			'barycentre' => [136, 217],
-			'display' => [140, 210],
+			'beginColor' => 10,
+			'vertices' => [130, 160, 155, 160, 180, 170, 150, 185],
+			'barycentre' => [154, 169],
+			'display' => [154, 171],
 			'name' => 'Secteur 45',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
-			'points' => 1
-		], [
+			'danger' => GalaxyConfiguration::DNG_CASUAL,
+			'points' => 2
+		], 
+		[
 			'id' => 46,
 			'beginColor' => 0,
-			'vertices' => [120, 220, 110, 205, 125, 195, 135, 215],
-			'barycentre' => [123, 209],
-			'display' => [120, 206],
+			'vertices' => [130, 160, 150, 185, 130, 185, 115, 175],
+			'barycentre' => [131, 176],
+			'display' => [131, 176],
 			'name' => 'Secteur 46',
 			'danger' => GalaxyConfiguration::DNG_HARD,
 			'points' => 2
-		], [
+		], 
+		[
 			'id' => 47,
 			'beginColor' => 0,
-			'vertices' => [65, 250, 75, 215, 110, 205, 120, 220, 130, 230, 95, 250],
-			'barycentre' => [99, 228],
-			'display' => [92, 228],
+			'vertices' => [115, 150, 130, 160, 115, 175, 90, 170],
+			'barycentre' => [113, 164],
+			'display' => [114, 164],
 			'name' => 'Secteur 47',
-			'danger' => GalaxyConfiguration::DNG_EASY,
-			'points' => 1
-		]*/
+			'danger' => GalaxyConfiguration::DNG_VERY_HARD,
+			'points' => 5
+		], 
+		[
+			'id' => 48,
+			'beginColor' => 0,
+			'vertices' => [90, 150, 110, 135, 115, 150, 90, 170],
+			'barycentre' => [101, 151],
+			'display' => [102, 151],
+			'name' => 'Secteur 48',
+			'danger' => GalaxyConfiguration::DNG_HARD,
+			'points' => 2
+		]
 	];
 
 	public static function getSectorCoord($i, $scale = 1, $xTranslate = 0) {
