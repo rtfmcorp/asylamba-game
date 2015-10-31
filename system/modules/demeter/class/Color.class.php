@@ -805,28 +805,28 @@ class Color {
 						case Law::PEACEPACT:
 							$S_CLM321 = ASM::$clm->getCurrentsession();
 							ASM::$clm->newSession();
-							ASM::$clm->load(['id' => ASM::$lam->options['rColor']]);
+							ASM::$clm->load(['id' => ASM::$lam->get($i)->options['rColor']]);
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishPeace', array(ASM::$lam->get($i), ASM::$clm->get()));
 							ASM::$clm->changeSession($S_CLM321);
 							break;
 						case Law::WARDECLARATION:
 							$S_CLM322 = ASM::$clm->getCurrentsession();
 							ASM::$clm->newSession();
-							ASM::$clm->load(['id' => ASM::$lam->options['rColor']]);
+							ASM::$clm->load(['id' => ASM::$lam->get($i)->options['rColor']]);
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishEnemy', array(ASM::$lam->get($i), ASM::$clm->get()));
 							ASM::$clm->changeSession($S_CLM322);
 							break;
 						case Law::TOTALALLIANCE:
 							$S_CLM323 = ASM::$clm->getCurrentsession();
 							ASM::$clm->newSession();
-							ASM::$clm->load(['id' => ASM::$lam->options['rColor']]);
+							ASM::$clm->load(['id' => ASM::$lam->get($i)->options['rColor']]);
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishAlly', array(ASM::$lam->get($i),ASM::$clm->get()));
 							ASM::$clm->changeSession($S_CLM323);
 							break;
 						case Law::NEUTRALPACT:
 							$S_CLM324 = ASM::$clm->getCurrentsession();
 							ASM::$clm->newSession();
-							ASM::$clm->load(['id' => ASM::$lam->options['rColor']]);
+							ASM::$clm->load(['id' => ASM::$lam->get($i)->options['rColor']]);
 							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishNeutral', array(ASM::$lam->get($i), ASM::$clm->get()));
 							ASM::$clm->changeSession($S_CLM324);
 							break;
