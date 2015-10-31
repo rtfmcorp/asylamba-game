@@ -656,7 +656,7 @@ class Place {
 
 					$commander->rBase = $this->id;
 					$commander->statement = Commander::AFFECTED;
-					$commander->line = 1;
+					$commander->line = 2;
 
 				# défaite
 				} else {
@@ -725,7 +725,7 @@ class Place {
 				# attibuer le commander à la place
 				$commander->rBase = $this->id;
 				$commander->statement = COM_AFFECTED;
-				$commander->line = 1;
+				$commander->line = 2;
 
 				# ajout de la place en session
 				if (CTR::$data->get('playerId') == $commander->getRPlayer()) {
