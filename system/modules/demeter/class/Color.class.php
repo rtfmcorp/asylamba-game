@@ -612,28 +612,29 @@ class Color {
 		}
 	}
 
-	public function uFinishNeutral($law) {
+	public function uFinishNeutral($law, $enemyColor) {
 		$this->colorLink[$law->options['rColor']] = Color::NEUTRAL;
 		$law->statement = Law::OBSOLETE;
-		CommercialRouteManager::freezeRoute($this->id, $law->options['rColor'], False);
+		CommercialRouteManager::freezeRoute($this, $enemyColor);
 	}
 
-	public function uFinishPeace($law) {
+	public function uFinishPeace($law, $enemyColor) {
 		$this->colorLink[$law->options['rColor']] = Color::PEACE;
 		$law->statement = Law::OBSOLETE;
-		CommercialRouteManager::freezeRoute($this->id, $law->options['rColor'], False);
+		CommercialRouteManager::freezeRoute($this, $enemyColor);
 	}
 
-	public function uFinishAlly($law) {
+	public function uFinishAlly($law,$enemyColor) {
 		$this->colorLink[$law->options['rColor']] = Color::ALLY;
 		$law->statement = Law::OBSOLETE;
-		CommercialRouteManager::freezeRoute($this->id, $law->options['rColor'], False);
+		CommercialRouteManager::freezeRoute($this, $enemyColor);
 	}
 
-	public function uFinishEnemy($law) {
+	public function uFinishEnemy($law, $enemyColor) {
 		$this->colorLink[$law->options['rColor']] = Color::ENEMY;
+		$enemyColor->colorLink[$this->id] = Color::ENEMY;
 		$law->statement = Law::OBSOLETE;
-		CommercialRouteManager::freezeRoute($this->id, $law->options['rColor'], True);
+		CommercialRouteManager::freezeRoute($this, $enemyColor);
 	}
 
 	public function uFinishPunition($law, $player) {
@@ -803,16 +804,32 @@ class Color {
 							ASM::$ctm->changeSession($_CTM);
 							break;
 						case Law::PEACEPACT:
-							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishPeace', array(ASM::$lam->get($i)));
+							$S_CLM321 = ASM::$clm->getCurrentsession();
+							ASM::$clm->newSession();
+							ASM::$clm->load(['id' => ASM::$lam->options['rColor']]);
+							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishPeace', array(ASM::$lam->get($i), ASM::$clm->get()));
+							ASM::$clm->changeSession($S_CLM321);
 							break;
 						case Law::WARDECLARATION:
-							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishEnemy', array(ASM::$lam->get($i)));
+							$S_CLM322 = ASM::$clm->getCurrentsession();
+							ASM::$clm->newSession();
+							ASM::$clm->load(['id' => ASM::$lam->options['rColor']]);
+							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishEnemy', array(ASM::$lam->get($i), ASM::$clm->get()));
+							ASM::$clm->changeSession($S_CLM322);
 							break;
 						case Law::TOTALALLIANCE:
-							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishAlly', array(ASM::$lam->get($i)));
+							$S_CLM323 = ASM::$clm->getCurrentsession();
+							ASM::$clm->newSession();
+							ASM::$clm->load(['id' => ASM::$lam->options['rColor']]);
+							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishAlly', array(ASM::$lam->get($i),ASM::$clm->get()));
+							ASM::$clm->changeSession($S_CLM323);
 							break;
 						case Law::NEUTRALPACT:
-							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishNeutral', array(ASM::$lam->get($i)));
+							$S_CLM324 = ASM::$clm->getCurrentsession();
+							ASM::$clm->newSession();
+							ASM::$clm->load(['id' => ASM::$lam->options['rColor']]);
+							CTC::add(ASM::$lam->get($i)->dEnd, $this, 'uFinishNeutral', array(ASM::$lam->get($i), ASM::$clm->get()));
+							ASM::$clm->changeSession($S_CLM324);
 							break;
 						case Law::PUNITION:
 							$S_PAM = ASM::$pam->getCurrentsession();

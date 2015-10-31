@@ -188,7 +188,11 @@ class CommercialRouteManager extends Manager {
 		return TRUE;
 	}
 
-	public static function freezeRoute($color1, $color2, $freeze) {
+	public static function freezeRoute($color1, $color2) {
+		$freeze = TRUE;
+		if (!($color1->colorLink[$color2->id] == Color::ENEMY || $color2->colorLink[$color1->id] == Color::ENEMY)) {
+			$freeze = FALSE;
+		}
 		$db = DataBase::getInstance();
 		$qr = $db->prepare(
 			'UPDATE commercialRoute AS cr
@@ -208,9 +212,9 @@ class CommercialRouteManager extends Manager {
 		);
 
 		if ($freeze) {
-			$qr->execute(array(CRM_ACTIVE, $color1, $color2, $color2, $color1, CRM_STANDBY));
+			$qr->execute(array(CRM_ACTIVE, $color1->id, $color2->id, $color2->id, $color1->id, CRM_STANDBY));
 		} else {
-			$qr->execute(array(CRM_STANDBY, $color1, $color2, $color2, $color1, CRM_ACTIVE));
+			$qr->execute(array(CRM_STANDBY, $color1->id, $color2->id, $color2->id, $color1->id, CRM_ACTIVE));
 		}
 	} 
 }
