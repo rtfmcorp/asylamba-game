@@ -1,10 +1,5 @@
 index.php
 system/config/app.config.local.php
 
-public/log/call/*
-public/log/cron/*
-public/log/ctc/*
-public/log/php/*
-public/log/stats/*
-
+*.log
 *.psd
