@@ -419,7 +419,7 @@ class Game {
 		for ($i = 0; $i < ShipResource::SHIP_QUANTITY; $i++) { 
 			$cost += ShipResource::getInfo($i, 'cost') * $ships[$i];
 		}
-		if ($affected) {
+		if (!$affected) {
 			$cost *= ShipResource::COST_REDUCTION;
 		} 
 		return ceil($cost);

@@ -52,6 +52,7 @@ echo '<div id="content">';
 		$financial_totalInvest = 0;
 		$financial_totalInvestUni = 0;
 		$financial_totalFleetFees = 0;
+		$financial_totalShipsFees = 0;
 		$financial_totalTaxOut = 0;
 		$financial_totalMSFees = 0;
 
@@ -75,6 +76,10 @@ echo '<div id="content">';
 			$financial_totalInvest += ASM::$obm->get($i)->getISchool();
 			$financial_totalInvest += ASM::$obm->get($i)->getIAntiSpy();
 
+			$financial_totalShipsFees += Game::getFleetCost(ASM::$obm->get($i)->shipStorage, FALSE);
+
+			# TODO cout des trucs en vente
+
 			$S_CRM1 = ASM::$crm->getCurrentSession();
 			ASM::$crm->changeSession(ASM::$obm->get($i)->routeManager);
 			for ($k = 0; $k < ASM::$crm->size(); $k++) { 
@@ -89,12 +94,13 @@ echo '<div id="content">';
 		for ($i = 0; $i < ASM::$com->size(); $i++) {
 			$commander_generalFinancial[] = ASM::$com->get($i);
 			$financial_totalFleetFees += ASM::$com->get($i)->getLevel() * COM_LVLINCOMECOMMANDER;
+			$financial_totalShipsFees += Game::getFleetCost(ASM::$com->get($i)->getNbrShipByType());
 		}
 
 		$financial_totalIncome = $financial_totalTaxIn + $financial_totalTaxInBonus + $financial_totalRouteIncome + $financial_totalRouteIncomeBonus;
-		$financial_totalFess = $financial_totalInvest + $financial_totalInvestUni + $financial_totalTaxOut + $financial_totalMSFees + $financial_totalFleetFees;
+		$financial_totalFess = $financial_totalInvest + $financial_totalInvestUni + $financial_totalTaxOut + $financial_totalMSFees + $financial_totalFleetFees + $financial_totalShipsFees;
 
-		$financial_benefice =  $financial_totalIncome - $financial_totalFess;
+		$financial_benefice = $financial_totalIncome - $financial_totalFess;
 		$financial_remains  = round($financial_credit) + round($financial_benefice);
 
 		# generalFinancial component
@@ -116,6 +122,10 @@ echo '<div id="content">';
 		# taxOutFinancial component
 		$ob_taxOutFinancial = $ob_generalFinancial;
 		include COMPONENT . 'financial/taxOutFinancial.php';
+
+		$commander_shipsFeesFinancial = $commander_generalFinancial;
+		$ob_shipsFeesFinancial = $ob_generalFinancial;
+		include COMPONENT . 'financial/shipFeesFinancial.php';
 
 		# fleetFeesFinancial component
 		$commander_fleetFeesFinancial = $commander_generalFinancial;

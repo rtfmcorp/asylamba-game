@@ -20,7 +20,7 @@ foreach ($commander_fleetFeesFinancial as $commander) {
 # view part
 echo '<div class="component financial">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'financial/commander.png" alt="vaisseau mère" />';
+		echo '<img src="' . MEDIA . 'financial/commander.png" alt="commandants" />';
 		echo '<h2>Commandants</h2>';
 		echo '<em>Salaires des commandants</em>';
 	echo '</div>';
