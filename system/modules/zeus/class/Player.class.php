@@ -306,8 +306,6 @@ class Player {
 			$newCredit = $credits;
 		}
 
-		// payer les vaisseaux mères --> to do
-
 		// payer les commandants
 		$nbOfComNotPaid = 0;
 		$comList = new ArrayList();
@@ -352,7 +350,7 @@ class Player {
 					$n->addTxt($comList->get($i) . ', ');
 				}
 				$n->addTxt($comList->get($comList->size() - 2) . ' et ' . $comList->get($comList->size() - 1) . '.');
-				$n->addBrk()->addTxt('Ils sont tous allé proposer leurs services sur le marché. Si vous voulez les récupérer, vous pouvez vous y rendre et les racheter.');
+				$n->addBrk()->addTxt('Ils sont tous allés proposer leurs services sur le marché. Si vous voulez les récupérer, vous pouvez vous y rendre et les racheter.');
 			}
 			$n->addEnd();
 			$S_NTM1 = ASM::$ntm->getCurrentSession();
@@ -360,6 +358,127 @@ class Player {
 			ASM::$ntm->add($n);
 			ASM::$ntm->changeSession($S_NTM1);
 		}
+
+		// payer l'entretien des vaisseaux
+		// vaisseaux affectés
+/*		$nbOfShipsNotPaid = 0; 				EN CHANTIER
+		$comList = new ArrayList();
+		$S_COM1 = ASM::$com->getCurrentSession();
+		ASM::$com->changeSession($comSession);
+		for ($i = (ASM::$com->size() - 1); $i >= 0; $i--) {
+			$commander = ASM::$com->get($i);
+			if ($commander->getStatement() == 1 OR $commander->getStatement() == 2) {
+				if ($newCredit >= (COM_LVLINCOMECOMMANDER * $commander->getLevel())) {
+					$newCredit -= (COM_LVLINCOMECOMMANDER * $commander->getLevel());
+				} else {
+					# on remet les vaisseaux dans les hangars
+					$commander->emptySquadrons();
+					
+					# on vend le commandant
+					$commander->setStatement(COM_ONSALE);
+					$commander->setRPlayer(ID_GAIA);
+
+					$comList->add($nbOfComNotPaid, $commander->getName());
+					$nbOfComNotPaid++;
+				}
+			}
+		}*/
+		ASM::$com->changeSession($S_COM1);
+		// vaisseaux sur la planète
+		for ($i = 0; $i < ASM::$obm->size(); $i++) {
+			$base = ASM::$obm->get($i);
+			$cost = Game::getFleetCost($base->shipStorage, 'on the floor');
+
+			if ($newCredit >= $cost) {
+				$newCredit -= $cost;
+			} else {
+				// n'arrive pas à tous les payer !
+				for ($j = ShipResource::SHIP_QUANTITY-1; $j >= 0; $j--) { 
+					if ($base->shipStorage[$j] > 0) {
+						$unitCost = ShipResource::getInfo($j, 'cost');
+
+						$possibleMaintenable = floor($newCredit / $unitCost);
+						if ($possibleMaintenable > $base->shipStorage[$j]) {
+							$possibleMaintenable = $base->shipStorage[$j];
+						}
+						$newCredit -= $possibleMaintenable * $unitCost;
+
+						$toKill = $base->shipStorage[$j] - $possibleMaintenable;
+						if ($toKill > 0) {
+							$base->removeShipFromDock($j, $toKill);
+
+							$n = new Notification();
+							$n->setRPlayer($this->id);
+							$n->setTitle('Entretien vaisseau impayé');
+
+							$n->addBeg()->addTxt('Domaine')->addSep();
+							if ($toKill == 1) {
+								$n->addTxt('Vous n\'avez pas assez de crédits pour payer l\'entretien d\'un(e) ' . ShipResource::getInfo($j, 'codeName') . ' sur ' . $base->name . '. Ce vaisseau part donc à la casse ! ');
+							} else {
+								$n->addTxt('Vous n\'avez pas assez de crédits pour payer l\'entretien de ' . $toKill . ' ' . ShipResource::getInfo($j, 'codeName') . 's sur ' . $base->name . '. Ces vaisseaux partent donc à la casse ! ');
+							}
+							$n->addEnd();
+							$S_NTM1 = ASM::$ntm->getCurrentSession();
+							ASM::$ntm->newSession();
+							ASM::$ntm->add($n);
+							ASM::$ntm->changeSession($S_NTM1);
+						}
+					}
+				}
+			}
+		}
+		// vaisseaux en vente TODO
+/*		$nbOfShipsNotPaid = 0;
+		$comList = new ArrayList();
+		$S_COM1 = ASM::$com->getCurrentSession();
+		ASM::$com->changeSession($comSession);
+		for ($i = (ASM::$com->size() - 1); $i >= 0; $i--) {
+			$commander = ASM::$com->get($i);
+			if ($commander->getStatement() == 1 OR $commander->getStatement() == 2) {
+				if ($newCredit >= (COM_LVLINCOMECOMMANDER * $commander->getLevel())) {
+					$newCredit -= (COM_LVLINCOMECOMMANDER * $commander->getLevel());
+				} else {
+					# on remet les vaisseaux dans les hangars
+					$commander->emptySquadrons();
+					
+					# on vend le commandant
+					$commander->setStatement(COM_ONSALE);
+					$commander->setRPlayer(ID_GAIA);
+
+					// TODO : vendre le commandant au marché 
+					//			(ou alors le mettre en statement COM_DESERT et supprimer ses escadrilles)
+
+					$comList->add($nbOfComNotPaid, $commander->getName());
+					$nbOfComNotPaid++;
+				}
+			}
+		}
+		ASM::$com->changeSession($S_COM1);
+		// si des vaisseaux ne peuvent pas être entretenus --> envoyer une notif
+		if ($nbOfComNotPaid) {	
+			$n = new Notification();
+			$n->setRPlayer($this->id);
+			$n->setTitle('Commandant impayé');
+
+			$n->addBeg()->addTxt('Domaine')->addSep();
+			if ($nbOfComNotPaid == 1) {
+				$n->addTxt('Vous n\'avez pas assez de crédits pour payer votre commandant ' . $comList->get(0) . '. Celui-ci a donc déserté ! ');
+				$n->addBrk()->addTxt('Il est allé proposer ses services sur le marché. Si vous voulez le récupérer, vous pouvez vous y rendre et le racheter.');
+			} else {
+				$n->addTxt('Vous n\'avez pas assez de crédits pour payer certains de vos commandants. Ils ont donc déserté ! ')->addBrk();
+				$n->addTxt('Voici la liste de ces commandants : ');
+				for ($i = 0; $i < $comList->size() - 2; $i++) { 
+					$n->addTxt($comList->get($i) . ', ');
+				}
+				$n->addTxt($comList->get($comList->size() - 2) . ' et ' . $comList->get($comList->size() - 1) . '.');
+				$n->addBrk()->addTxt('Ils sont tous allés proposer leurs services sur le marché. Si vous voulez les récupérer, vous pouvez vous y rendre et les racheter.');
+			}
+			$n->addEnd();
+			$S_NTM1 = ASM::$ntm->getCurrentSession();
+			ASM::$ntm->newSession();
+			ASM::$ntm->add($n);
+			ASM::$ntm->changeSession($S_NTM1);
+		}*/
 
 		// faire les recherches
 		$S_RSM1 = ASM::$rsm->getCurrentSession();

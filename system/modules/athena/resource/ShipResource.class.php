@@ -17,6 +17,8 @@ class ShipResource {
 
 	const SHIP_QUANTITY = 12;
 
+	const COST_REDUCTION = 0.8;
+
 	private static $ships = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14);
 
 	/**
@@ -49,7 +51,7 @@ class ShipResource {
 
 	public static function getInfo($shipNumber, $info) {
 		if(self::isAShip($shipNumber)) {
-			if(in_array($info, array('codeName', 'name', 'class', 'pev', 'life', 'speed', 'defense', 'attack', 'time', 'resourcePrice', 'points', 'imageLink', 'techno', 'description'))) {
+			if(in_array($info, array('codeName', 'name', 'class', 'pev', 'life', 'speed', 'defense', 'attack', 'cost', 'time', 'resourcePrice', 'points', 'imageLink', 'techno', 'description'))) {
 				return self::$ship[$shipNumber][$info];
 			} else {
 				CTR::$alert->add('info inconnue dans getInfo de ShipResource', ALT_BUG_ERROR);
@@ -203,6 +205,7 @@ class ShipResource {
 			'speed' => 195,
 			'defense' => 1,
 			'attack' => array(5),
+			'cost' => 10,
 			'time' => 500,
 			'resourcePrice' => 2980,
 			'points' => 3,
@@ -219,6 +222,7 @@ class ShipResource {
 			'speed' => 190,
 			'defense' => 5,
 			'attack' => array(7),
+			'cost' => 10,
 			'time' => 810,
 			'resourcePrice' => 3860, 
 			'points' => 4,
@@ -235,6 +239,7 @@ class ShipResource {
 			'speed' => 195,
 			'defense' => 3,
 			'attack' => array(6, 6),
+			'cost' => 10,
 			'time' => 850,
 			'resourcePrice' => 4220, 
 			'points' => 4,
@@ -251,6 +256,7 @@ class ShipResource {
 			'speed' => 190,
 			'defense' => 6,
 			'attack' => array(20, 2, 2),
+			'cost' => 10,
 			'time' => 1600,
 			'resourcePrice' => 7120, 
 			'points' => 6,
@@ -267,6 +273,7 @@ class ShipResource {
 			'speed' => 165,
 			'defense' => 23,
 			'attack' => array(30),
+			'cost' => 10,
 			'time' => 1880,
 			'resourcePrice' => 8350,
 			'points' => 8,
@@ -283,6 +290,7 @@ class ShipResource {
 			'speed' => 145,
 			'defense' => 8,
 			'attack' => array(20, 12, 12, 12, 12, 7, 7, 7),
+			'cost' => 10,
 			'time' => 2500,
 			'resourcePrice' => 15300, 
 			'points' => 15,
@@ -299,6 +307,7 @@ class ShipResource {
 			'speed' => 100,
 			'defense' => 40,
 			'attack' => array(15, 15, 15, 15),
+			'cost' => 10,
 			'time' => 5700,
 			'resourcePrice' => 40000,
 			'points' => 55,
@@ -315,6 +324,7 @@ class ShipResource {
 			'speed' => 90,
 			'defense' => 40,
 			'attack' => array(225),
+			'cost' => 10,
 			'time' => 6360,
 			'resourcePrice' => 80000, 
 			'points' => 80,
@@ -331,6 +341,7 @@ class ShipResource {
 			'speed' => 88,
 			'defense' => 120,
 			'attack' => array(35, 35, 35, 35, 25, 10, 10),
+			'cost' => 10,
 			'time' => 13560,
 			'resourcePrice' => 112000, 
 			'points' => 96,
@@ -347,6 +358,7 @@ class ShipResource {
 			'speed' => 75,
 			'defense' => 100,
 			'attack' => array(21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21),
+			'cost' => 10,
 			'time' => 14580,
 			'resourcePrice' => 143000, 
 			'points' => 100,
@@ -363,6 +375,7 @@ class ShipResource {
 			'speed' => 80,
 			'defense' => 135,
 			'attack' => array(175, 50, 50, 25, 25, 25, 25, 6, 6, 6),
+			'cost' => 10,
 			'time' => 15960,
 			'resourcePrice' => 208000, 
 			'points' => 150,
@@ -379,6 +392,7 @@ class ShipResource {
 			'speed' => 75,
 			'defense' => 150,
 			'attack' => array(200, 50, 50, 50, 50, 25, 25, 25, 25, 6, 6, 6),
+			'cost' => 10,
 			'time' => 18000,
 			'resourcePrice' => 300000, 
 			'points' => 200,

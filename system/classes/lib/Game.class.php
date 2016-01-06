@@ -412,4 +412,16 @@ class Game {
 			return ceil(0.004 * $coef * $coef - 0.01 * $coef + 0.7);
 		}
 	}
+
+	public static function getFleetCost($ships, $mode='affected') {
+		include_once ATHENA;
+		$cost = 0;
+		for ($i = 0; $i < ShipResource::SHIP_QUANTITY; $i++) { 
+			$cost += ShipResource::getInfo($i, 'cost') * $ships[$i];
+		}
+		if ($mode != 'affected') {
+			$cost *= ShipResource::COST_REDUCTION;
+		} 
+		return ceil($cost);
+	}
 }
