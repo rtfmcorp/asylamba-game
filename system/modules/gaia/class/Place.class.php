@@ -466,7 +466,7 @@ class Place {
 				$this->lootAnEmptyPlace($commander, $playerBonus);
 				# création du rapport de combat
 				$report = $this->createReport();
-				
+
 				$this->comeBack($commander, $commanderPlace, $playerBonus);
 				$this->sendNotif(self::LOOTEMPTYSSUCCESS, $commander, $report->id);
 			} else {
@@ -613,7 +613,20 @@ class Place {
 						$reportArray[] = $report;
 						$reportIds[] = $report->id;
 						
-
+						# PATCH DEGUEU POUR LES MUTLIS-COMBATS
+						$_RPM341 = ASM::$rpm->getCurrentSession();
+						ASM::$rpm->newSession(TRUE);
+						ASM::$rpm->load(['rPlayerAttacker' => $commander->rPlayer, 'rPlace' => $this->id, 'dFight' => $commander->dArrival]);
+						if (ASM::$rpm->size() > 0) {
+							for ($i = 0; $i < ASM::$rpm->size(); $i++) {
+								if (ASM::$rpm->get($i)->id != $report->id) {
+									echo ASM::$rpm->get($i)->statementAttacker = Report::DELETED;
+									echo ASM::$rpm->get($i)->statementDefender = Report::DELETED;
+								}
+							}
+						}
+						ASM::$rpm->changeSession($_RPM341);
+						########################################
 
 						# mettre à jour armyInBegin si prochain combat pour prochain rapport
 						for ($j = 0; $j < count($commander->armyAtEnd); $j++) {
@@ -648,6 +661,19 @@ class Place {
 						$this->sendNotifForConquest(self::CONQUERPLAYERWHITBATTLESUCCESS, $commander, $reportIds);
 					}
 
+					# PATCH DEGUEU POUR LES MUTLIS-COMBATS
+					$_NTM465 = ASM::$ntm->getCurrentSession();
+					ASM::$ntm->newSession(TRUE);
+					ASM::$ntm->load(['rPlayer' => $commander->rPlayer, 'dSending' => $commander->dArrival]);
+					ASM::$ntm->load(['rPlayer' => $this->rPlayer, 'dSending' => $commander->dArrival]);
+					if (ASM::$ntm->size() > 2) {
+						for ($i = 0; $i < ASM::$ntm->size() - 2; $i++) {
+							ASM::$ntm->deleteById(ASM::$ntm->get($i)->id);
+						}
+					}
+					ASM::$ntm->changeSession($_NTM465);
+					######################################33
+
 					#attribuer le joueur à la place
 					$this->commanders = array();
 					$this->playerColor = $commander->playerColor;
@@ -672,6 +698,7 @@ class Place {
 
 					$this->sendNotifForConquest(self::CONQUERPLAYERWHITBATTLEFAIL, $commander, $reportIds);
 				}
+
 			} else {
 				# si c'est la même couleur
 				if ($this->rPlayer == $commander->rPlayer) {
