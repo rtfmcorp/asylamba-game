@@ -200,7 +200,6 @@ class Commander {
 				$array[$i] += $squadron[$i];
 			}
 		}
-
 		return $array;
 	}
 	

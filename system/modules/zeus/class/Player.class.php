@@ -361,33 +361,39 @@ class Player {
 
 		// payer l'entretien des vaisseaux
 		// vaisseaux affectés
-/*		$nbOfShipsNotPaid = 0; 				EN CHANTIER
+		$nbOfShipsNotPaid = 0;
 		$comList = new ArrayList();
 		$S_COM1 = ASM::$com->getCurrentSession();
 		ASM::$com->changeSession($comSession);
 		for ($i = (ASM::$com->size() - 1); $i >= 0; $i--) {
 			$commander = ASM::$com->get($i);
-			if ($commander->getStatement() == 1 OR $commander->getStatement() == 2) {
-				if ($newCredit >= (COM_LVLINCOMECOMMANDER * $commander->getLevel())) {
-					$newCredit -= (COM_LVLINCOMECOMMANDER * $commander->getLevel());
-				} else {
-					# on remet les vaisseaux dans les hangars
-					$commander->emptySquadrons();
-					
-					# on vend le commandant
-					$commander->setStatement(COM_ONSALE);
-					$commander->setRPlayer(ID_GAIA);
+			$ships = $commander->getNbrShipByType();
+			$cost = Game::getFleetCost($ships, TRUE);
 
-					$comList->add($nbOfComNotPaid, $commander->getName());
-					$nbOfComNotPaid++;
-				}
+			if ($newCredit >= $cost) {
+				$newCredit -= $cost;
+			} else {
+				# on vend le commandant car on n'arrive pas à payer la flotte (trash hein)
+				$commander->setStatement(COM_ONSALE);
+				$commander->setRPlayer(ID_GAIA);
+
+				$n = new Notification();
+				$n->setRPlayer($this->id);
+				$n->setTitle('Flotte impayée');
+				$n->addBeg()->addTxt('Domaine')->addSep();
+				$n->addTxt('Vous n\'avez pas assez de crédits pour payer l\'entretien de la flotte de votre officier ' . $commander->name . '. Celui-ci a donc déserté ! ... avec la flotte, désolé.');
+				$n->addEnd();
+				$S_NTM1 = ASM::$ntm->getCurrentSession();
+				ASM::$ntm->newSession();
+				ASM::$ntm->add($n);
+				ASM::$ntm->changeSession($S_NTM1);
 			}
-		}*/
+		}
 		ASM::$com->changeSession($S_COM1);
 		// vaisseaux sur la planète
 		for ($i = 0; $i < ASM::$obm->size(); $i++) {
 			$base = ASM::$obm->get($i);
-			$cost = Game::getFleetCost($base->shipStorage, 'on the floor');
+			$cost = Game::getFleetCost($base->shipStorage, FALSE);
 
 			if ($newCredit >= $cost) {
 				$newCredit -= $cost;
