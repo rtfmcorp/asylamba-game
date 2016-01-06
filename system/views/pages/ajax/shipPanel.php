@@ -48,7 +48,15 @@ echo '<div class="component panel-info">';
 				echo '</tr>';
 				echo '<tr>';
 					echo '<td class="hb lt" title="nombre de ressources que le vaisseau peut transporter">soute</td>';
-					echo '<td>' . (ShipResource::getInfo($ship, 'pev') * 250) . ' <img src="' .  MEDIA. 'resources/resource.png" alt="ressource" class="icon-color" /></td>';
+					echo '<td>' . Format::numberFormat(ShipResource::getInfo($ship, 'pev') * 250) . ' <img src="' .  MEDIA. 'resources/resource.png" alt="ressource" class="icon-color" /></td>';
+				echo '</tr>';
+				echo '<tr>';
+					echo '<td class="hb lt" title="nombre de crédit par relève que coûte le vaisseau affecté à un commandant">entretien en affectation</td>';
+					echo '<td>' . Format::numberFormat(ShipResource::getInfo($ship, 'cost')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="ressource" class="icon-color" /> / <img src="' .  MEDIA. 'resources/time.png" alt="relève" class="icon-color" /></td>';
+				echo '</tr>';
+				echo '<tr>';
+					echo '<td class="hb lt" title="nombre de crédit par relève que coûte le vaisseau à quai ou en vente au marché">entretien à quai</td>';
+					echo '<td>' . Format::numberFormat(ceil(ShipResource::getInfo($ship, 'cost') * ShipResource::COST_REDUCTION)) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="ressource" class="icon-color" /> / <img src="' .  MEDIA. 'resources/time.png" alt="relève" class="icon-color" /></td>';
 				echo '</tr>';
 			echo '</table></div>';
 
