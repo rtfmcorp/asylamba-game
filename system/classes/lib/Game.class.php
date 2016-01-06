@@ -413,13 +413,13 @@ class Game {
 		}
 	}
 
-	public static function getFleetCost($ships, $mode='affected') {
+	public static function getFleetCost($ships, $affected = TRUE) {
 		include_once ATHENA;
 		$cost = 0;
 		for ($i = 0; $i < ShipResource::SHIP_QUANTITY; $i++) { 
 			$cost += ShipResource::getInfo($i, 'cost') * $ships[$i];
 		}
-		if ($mode != 'affected') {
+		if ($affected) {
 			$cost *= ShipResource::COST_REDUCTION;
 		} 
 		return ceil($cost);
