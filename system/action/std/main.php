@@ -18,6 +18,7 @@ if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('tok
 		case 'switchdockmode':			include ACTION . 'athena/general/switchDockMode.php'; break;
 		case 'createschoolclass':		include ACTION . 'athena/general/createSchoolClass.php'; break;
 		case 'giveresource':			include ACTION . 'athena/general/giveResource.php'; break;
+		case 'giveships':				include ACTION . 'athena/general/giveShips.php'; break;
 		case 'renamebase':				include ACTION . 'athena/general/renameBase.php'; break;
 		case 'changebasetype':			include ACTION . 'athena/general/changeBaseType.php'; break;
 		case 'leavebase':				include ACTION . 'athena/general/leaveBase.php'; break;

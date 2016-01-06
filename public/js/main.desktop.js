@@ -949,7 +949,7 @@ jQuery(document).ready(function($) {
 // ###########################
 // #### MARKET MECHANISME ####
 // ###########################
-	$('.sell-form input[name="quantity"]').live('keyup', function() {
+	$('.sell-form input[name="quantity"], .sell-form .val-quantity').live('keyup', function() {
 		var box  = $(this).parents('.sell-form'),
 			maxQ = box.data('max-quantity'),
 			minP = box.data('min-price'),
