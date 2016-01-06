@@ -6,8 +6,8 @@ jQuery(document).ready(function($) {
 		// propriétés du module
 		queue: [],
 		counter: 0,
-		launcher: 500,
-		speed: 1500,
+		launcher: 250,
+		speed: 300,
 
 		// ressources du modules
 		imgPath: game.path + 'public/media/alert/',
@@ -69,23 +69,15 @@ jQuery(document).ready(function($) {
 			alertController.counter++;
 
 			$('#alert').append(alert);
-
 			var alertElement = $('#alert li:last-child()');
 			alertElement.css({
-				'position': 'absolute',
 				'opacity': 0,
-				'bottom': 3,
-				'right': 0
-			}).animate({
-					'right': ($('#alert').width() - (alertController.counter * 67)),
+				'bottom': -30
+				}).animate({
+					'bottom': 0,
 					'opacity': 1
-				}, alertController.speed, function() {
-					alertElement.css({
-						'position': 'relative',
-						'bottom': 0,
-						'right': 0
-					});
-			});
+				}, alertController.speed
+			);
 		},
 
 		// supprime une alert affichée
@@ -93,10 +85,10 @@ jQuery(document).ready(function($) {
 			alertController.counter--;
 			$('.alert-bull').remove();
 			alert.animate({
-					'bottom': -30,
-					'opacity': 0
-				}, 250, function() {
-					alert.remove();
+				'bottom': -30,
+				'opacity': 0
+			}, alertController.speed, function() {
+				alert.remove();
 			});
 		},
 
@@ -111,7 +103,9 @@ jQuery(document).ready(function($) {
 	};
 
 	// initialisation du module
-	alertController.init();
+	setTimeout(function() {
+		alertController.init();
+	}, 500);
 
 	// suppression d'une alert
 	$('#alert li').live('click', function(e) {
