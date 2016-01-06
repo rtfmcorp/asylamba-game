@@ -16,7 +16,7 @@ echo '<div class="component">';
 				$news = ASM::$fnm->get($i);
 
 				echo '<h4>' . $news->title . '</h4>';
-				echo '<p class="long-info">' . $news->pContent . '</p>';
+				echo '<p class="long-info text-bloc">' . $news->pContent . '</p>';
 			}
 
 			echo $mode == 'all'
