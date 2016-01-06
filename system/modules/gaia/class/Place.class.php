@@ -455,8 +455,6 @@ class Place {
 			# planète vide : faire un combat
 			$this->startFight($commander, $commanderPlayer);
 
-			# création du rapport de combat
-			$report = $this->createReport();
 
 			# réduction de la force de la planète
 			$percentage = (($report->pevAtEndD + 1) / ($report->pevInBeginD + 1)) * 100;
@@ -466,6 +464,9 @@ class Place {
 			if ($commander->getStatement() != Commander::DEAD) {
 				# piller la planète
 				$this->lootAnEmptyPlace($commander, $playerBonus);
+				# création du rapport de combat
+				$report = $this->createReport();
+				
 				$this->comeBack($commander, $commanderPlace, $playerBonus);
 				$this->sendNotif(self::LOOTEMPTYSSUCCESS, $commander, $report->id);
 			} else {
@@ -478,6 +479,8 @@ class Place {
 					}
 				}
 
+				# création du rapport de combat
+				$report = $this->createReport();
 				$this->sendNotif(self::LOOTEMPTYFAIL, $commander, $report->id);
 			}
 		# si il y a une base d'un joueur
@@ -777,7 +780,7 @@ class Place {
 
 		$this->sendNotif(self::COMEBACK, $commander);
 
-		if ($commander->getResourcesTransported() > 0) {
+		if ($commander->resources > 0) {
 			$commanderBase->increaseResources($commander->resources, TRUE);
 			$commander->resources = 0;
 		}
