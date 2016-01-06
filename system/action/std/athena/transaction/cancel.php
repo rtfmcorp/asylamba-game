@@ -62,7 +62,7 @@ if ($rTransaction !== FALSE) {
 						ASM::$com->newSession(ASM_UMODE);
 						ASM::$com->load(array('c.id' => $transaction->identifier));
 						$commander = ASM::$com->get();
-						$commander->setStatement(COM_INSCHOOL);
+						$commander->setStatement(Commander::RESERVE);
 						ASM::$com->changeSession($S_COM1);
 						break;
 					default :
