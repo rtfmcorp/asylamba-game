@@ -68,42 +68,46 @@ class Parser {
 	}
 
 	protected function parseLink($string) {
-		$pattern = "/(?i)\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))/";
-		$string = preg_replace($pattern, '<a href="$0" target="_blank">$0</a>', $string);
-		return $string;
+		return preg_replace_callback(
+			"/(?i)\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))/",
+			function($m) {
+				$url = $m[0];
+				$str = $url;
+				$str = preg_replace('#^https?://#', '', $str);
+				$str = strlen($str) > 32 ? substr($str, 0, 32) . '...' : $str;
+				return '<a href="' . $url . '" target="_blank">' . $str . '</a>';
+			},
+			$string
+		);
 	}
 
 	protected function parseSmile($string) {
-		// some actions
 		return $string;
 	}
 
 	protected function parsePlayer($string) {
-		$string = preg_replace_callback(
+		return preg_replace_callback(
 			'#\[\@(.+)\]#isU', 
 			function($m) {
 				include_once ZEUS;
 				$S_PAM1 = ASM::$pam->getCurrentSession();
 				ASM::$pam->newSession(FALSE);
-
 				ASM::$pam->load(array('name' => $m[1]));
 
-				if (ASM::$pam->size() > 0) {
-					$player = ASM::$pam->get();
-					return '<a href="' . APP_ROOT . 'embassy/player-' . $player->getId() . '" class="color' . $player->getRColor() . ' hb lt" title="voir le profil">' . $player->getName() . '</a>';
-				} else {
-					return $m[0];
-				}
+				$ret = ASM::$pam->size() > 0
+					? '<a href="' . APP_ROOT . 'embassy/player-' . ASM::$pam->get()->getId() . '" class="color' . ASM::$pam->get()->getRColor() . ' hb lt" title="voir le profil">' . ASM::$pam->get()->getName() . '</a>'
+					: $m[0];
 
 				ASM::$pam->changeSession($S_PAM1);
-			}, 
-			$string);
 
-		return $string;
+				return $ret;
+			},
+			$string
+		);
 	}
 
 	protected function parsePlace($string) {
-		$string = preg_replace_callback(
+		return preg_replace_callback(
 			'#\[\#(.+)\]#isU', 
 			function($m) {
 				include_once GAIA;
@@ -125,9 +129,8 @@ class Parser {
 
 				ASM::$plm->changeSession($S_PLM1);
 			}, 
-			$string);
-
-		return $string;
+			$string
+		);
 	}
 
 	protected function parseTag($string) {
@@ -138,7 +141,6 @@ class Parser {
 	}
 
 	protected function parseBigTag($string) {
-		// some actions
 		return $string;
 	}
 }
