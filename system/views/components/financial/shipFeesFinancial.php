@@ -1,7 +1,6 @@
 <?php
 
 $commanderByBase = [];
-
 foreach ($commander_shipsFeesFinancial as $commander) {
 	if (!isset($commanderByBase[$commander->getRBase()])) {
 		$commanderByBase[$commander->getRBase()] = [];
@@ -12,7 +11,7 @@ foreach ($commander_shipsFeesFinancial as $commander) {
 
 echo '<div class="component financial">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'financial/commander.png" alt="flottes" />';
+		echo '<img src="' . MEDIA . 'financial/fleet.png" alt="flottes" />';
 		echo '<h2>Entretien</h2>';
 		echo '<em>Entretien des vaisseaux</em>';
 	echo '</div>';
@@ -28,6 +27,13 @@ echo '<div class="component financial">';
 					$totalBase += Game::getFleetCost($commander->getNbrShipByType());
 				}
 
+				$baseTransaction = 0;
+				foreach ($transaction_shipsFeesFinancial as $t) {
+					if ($t->rPlace == $base->getId()) {
+						$baseTransaction += ShipResource::getInfo($transaction->identifier, 'cost') * ShipResource::COST_REDUCTION * $transaction->quantity;
+					}
+				}
+
 				echo '<li>';
 					echo '<span class="buttons">';
 						echo '<a href="#" class="sh" data-target="ships-base-' . $base->getId() . '">↓</a>';
@@ -41,16 +47,16 @@ echo '<div class="component financial">';
 
 					echo '<ul class="sub-list-type-1" id="ships-base-' . $base->getId() . '">';
 						echo '<li>';
-							echo '<span class="label">Hangar</span>';
+							echo '<span class="label">Dans le hangar</span>';
 							echo '<span class="value">';
 								echo Format::numberFormat(Game::getFleetCost($base->shipStorage, FALSE));
 							echo '</span>';
 						echo '</li>';
 
 						echo '<li>';
-							echo '<span class="label">En vente # TODO</span>';
+							echo '<span class="label">En vente</span>';
 							echo '<span class="value">';
-								echo Format::numberFormat(0);
+								echo Format::numberFormat($baseTransaction);
 							echo '</span>';
 						echo '</li>';
 
@@ -75,7 +81,7 @@ echo '<div class="component financial">';
 			echo '</li>';
 		echo '</ul>';
 
-		echo '<p class="info">TODO</p>';
+		echo '<p class="info">Les frais d\'entretien des vaisseaux sont nécessaires pour que les différents appareils continuent à voler sans risque. Ils représentent une part importante de vos finances et sont par nature très volatiles, pensez donc à garder un oeil dessus.</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

@@ -372,7 +372,7 @@ class Player {
 		$transactionTotalCost = 0;
 		for ($i = (ASM::$trm->size() - 1); $i >= 0; $i--) {
 			$transaction = ASM::$trm->get($i);
-			$transactionTotalCost += ShipResource::getInfo($transaction->identifier, 'cost') * $transaction->quantity;
+			$transactionTotalCost += ShipResource::getInfo($transaction->identifier, 'cost') * ShipResource::COST_REDUCTION * $transaction->quantity;
 		}
 		if ($newCredit >= $transactionTotalCost) {
 			$newCredit -= $transactionTotalCost;

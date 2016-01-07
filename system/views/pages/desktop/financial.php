@@ -38,6 +38,10 @@ echo '<div id="content">';
 			array('c.rBase', 'ASC')
 		);
 
+		$S_TRM1 = ASM::$trm->getCurrentSession();
+		ASM::$trm->newSession();
+		ASM::$trm->load(array('rPlayer' => CTR::$data->get('playerId'), 'type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_PROPOSED));
+
 		# global variable
 		$taxBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::POPULATION_TAX);
 		$rcBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::COMMERCIAL_INCOME);
@@ -91,10 +95,18 @@ echo '<div id="content">';
 			ASM::$crm->changeSession($S_CRM1);
 		}
 
+		$commander_generalFinancial = [];
 		for ($i = 0; $i < ASM::$com->size(); $i++) {
 			$commander_generalFinancial[] = ASM::$com->get($i);
 			$financial_totalFleetFees += ASM::$com->get($i)->getLevel() * COM_LVLINCOMECOMMANDER;
 			$financial_totalShipsFees += Game::getFleetCost(ASM::$com->get($i)->getNbrShipByType());
+		}
+
+		$transaction_generalFinancial = [];
+		for ($i = 0; $i < ASM::$trm->size(); $i++) {
+			$transaction = ASM::$trm->get($i);
+			$transaction_generalFinancial[] = $transaction;
+			$financial_totalShipsFees += ShipResource::getInfo($transaction->identifier, 'cost') * ShipResource::COST_REDUCTION * $transaction->quantity;
 		}
 
 		$financial_totalIncome = $financial_totalTaxIn + $financial_totalTaxInBonus + $financial_totalRouteIncome + $financial_totalRouteIncomeBonus;
@@ -123,7 +135,9 @@ echo '<div id="content">';
 		$ob_taxOutFinancial = $ob_generalFinancial;
 		include COMPONENT . 'financial/taxOutFinancial.php';
 
+		# shipsFeesFinancial component
 		$commander_shipsFeesFinancial = $commander_generalFinancial;
+		$transaction_shipsFeesFinancial = $transaction_generalFinancial;
 		$ob_shipsFeesFinancial = $ob_generalFinancial;
 		include COMPONENT . 'financial/shipFeesFinancial.php';
 
@@ -133,6 +147,7 @@ echo '<div id="content">';
 		include COMPONENT . 'financial/fleetFeesFinancial.php';
 
 		# close
+		ASM::$trm->changeSession($S_TRM1);
 		ASM::$pam->changeSession($S_PAM_FIN);
 		ASM::$obm->changeSession($S_OBM_FIN);
 		ASM::$com->changeSession($S_COM_FIN);
