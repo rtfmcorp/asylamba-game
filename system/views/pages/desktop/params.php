@@ -11,6 +11,6 @@ echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
 	include COMPONENT . 'params/general.php';
 	include COMPONENT . 'params/display.php';
-	include COMPONENT . 'params/advertisement.php';
-	//include COMPONENT . 'default.php';
+	include COMPONENT . 'params/chat.php';
+#	include COMPONENT . 'params/advertisement.php';
 echo '</div>';

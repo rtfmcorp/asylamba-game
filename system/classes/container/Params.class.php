@@ -8,6 +8,7 @@ class Params {
 	const SHOW_MAP_FLEETIN = 6;
 	const SHOW_ATTACK_REPORT = 7;
 	const SHOW_REBEL_REPORT = 8;
+	const REDIRECT_CHAT = 9;
 
 	private static $params = [
 		self::LIST_ALL_FLEET 	=> TRUE,
@@ -18,6 +19,7 @@ class Params {
 		self::SHOW_MAP_FLEETIN 	=> TRUE,
 		self::SHOW_ATTACK_REPORT=> TRUE,
 		self::SHOW_REBEL_REPORT => TRUE,
+		self::REDIRECT_CHAT 	=> FALSE,
 	];
 
 	public static function check($params) {
