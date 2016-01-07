@@ -464,6 +464,10 @@ class Place {
 				# création du rapport de combat
 				$report = $this->createReport();
 
+				# réduction de la force de la planète
+				$percentage = (($report->pevAtEndD + 1) / ($report->pevInBeginD + 1)) * 100;
+				$this->danger = round(($percentage * $this->danger) / 100);
+
 				$this->comeBack($commander, $commanderPlace, $playerBonus);
 				$this->sendNotif(self::LOOTEMPTYSSUCCESS, $commander, $report->id);
 			} else {
@@ -479,7 +483,7 @@ class Place {
 				# création du rapport de combat
 				$report = $this->createReport();
 				$this->sendNotif(self::LOOTEMPTYFAIL, $commander, $report->id);
-				
+
 				# réduction de la force de la planète
 				$percentage = (($report->pevAtEndD + 1) / ($report->pevInBeginD + 1)) * 100;
 				$this->danger = round(($percentage * $this->danger) / 100);
