@@ -31,9 +31,9 @@ class Transaction {
 	const MIN_RATE_COMMANDER = 1;
 
 	# maximum rates for each type
-	const MAX_RATE_RESOURCE = 1000;
-	const MAX_RATE_SHIP = 10000000;
-	const MAX_RATE_COMMANDER = 500;
+	const MAX_RATE_RESOURCE = 100;
+	const MAX_RATE_SHIP = 100;
+	const MAX_RATE_COMMANDER = 100;
 
 	# attributes
 	public $id = 0; 
