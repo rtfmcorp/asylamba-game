@@ -456,9 +456,6 @@ class Place {
 			$this->startFight($commander, $commanderPlayer);
 
 
-			# réduction de la force de la planète
-			$percentage = (($report->pevAtEndD + 1) / ($report->pevInBeginD + 1)) * 100;
-			$this->danger = round(($percentage * $this->danger) / 100);
 
 			# victoire
 			if ($commander->getStatement() != Commander::DEAD) {
@@ -482,6 +479,10 @@ class Place {
 				# création du rapport de combat
 				$report = $this->createReport();
 				$this->sendNotif(self::LOOTEMPTYFAIL, $commander, $report->id);
+				
+				# réduction de la force de la planète
+				$percentage = (($report->pevAtEndD + 1) / ($report->pevInBeginD + 1)) * 100;
+				$this->danger = round(($percentage * $this->danger) / 100);
 			}
 		# si il y a une base d'un joueur
 		} else {
