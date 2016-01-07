@@ -1,10 +1,10 @@
 <?php
 
-$commanderByBase = array();
+$commanderByBase = [];
 
 foreach ($commander_shipsFeesFinancial as $commander) {
 	if (!isset($commanderByBase[$commander->getRBase()])) {
-		$commanderByBase[$commander->getRBase()] = array();
+		$commanderByBase[$commander->getRBase()] = [];
 	}
 
 	$commanderByBase[$commander->getRBase()][] = $commander;
@@ -21,13 +21,16 @@ echo '<div class="component financial">';
 		echo '<ul class="list-type-1">';
 			foreach ($ob_impositionFinancial as $base) {
 				$totalBase = Game::getFleetCost($base->shipStorage, FALSE);
-				foreach ($commanderByBase[$base->getId()] as $commander) {
+				$cbb = isset($commanderByBase[$base->getId()])
+					? $commanderByBase[$base->getId()] : [];
+
+				foreach ($cbb as $commander) {
 					$totalBase += Game::getFleetCost($commander->getNbrShipByType());
 				}
 
 				echo '<li>';
 					echo '<span class="buttons">';
-						echo '<a href="#" class="sh" data-target="commander-base-1">↓</a>';
+						echo '<a href="#" class="sh" data-target="ships-base-' . $base->getId() . '">↓</a>';
 					echo '</span>';
 
 					echo '<span class="label">' . $base->getName() . '</span>';
@@ -36,7 +39,7 @@ echo '<div class="component financial">';
 						echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
 					echo '</span>';
 
-					echo '<ul class="sub-list-type-1" id="commander-base-1">';
+					echo '<ul class="sub-list-type-1" id="ships-base-' . $base->getId() . '">';
 						echo '<li>';
 							echo '<span class="label">Hangar</span>';
 							echo '<span class="value">';
@@ -51,9 +54,9 @@ echo '<div class="component financial">';
 							echo '</span>';
 						echo '</li>';
 
-						foreach ($commanderByBase[$base->getId()] as $commander) {
+						foreach ($cbb as $commander) {
 							echo '<li>';
-								echo '<span class="label">' . CommanderResources::getInfo($commander->getLevel(), 'grade') . ' ' . $commander->getName() . '</span>';
+								echo '<span class="label">' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->name . '</span>';
 								echo '<span class="value">';
 									echo Format::numberFormat(Game::getFleetCost($commander->getNbrShipByType()));
 								echo '</span>';

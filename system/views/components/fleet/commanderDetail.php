@@ -11,93 +11,82 @@ echo '<div class="component">';
 	echo '<div class="head skin-1"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			if ($commander_commanderDetail->getStatement() == COM_AFFECTED) {
+			if ($commander_commanderDetail->statement == Commander::AFFECTED) {
 				echo '<div class="tool">';
-					echo '<span><a href="' . Format::actionBuilder('emptycommander', ['id' => $commander_commanderDetail->id]) . '">retirer tous les vaisseaux</a></span>';
+					echo '<span><a href="' . Format::actionBuilder('emptycommander', ['id' => $commander_commanderDetail->id]) . '">Retirer tous les vaisseaux</a></span>';
 					echo '<span><a href="' . Format::actionBuilder('firecommander', ['id' => $commander_commanderDetail->id]) . '" class="hb lt" title="licencier l\'officier">&#215;</a></span>';
 					echo '<span><a href="' . Format::actionBuilder('affectcommander', ['id' => $commander_commanderDetail->id]) . '" class="hb lt" title="remettre dans l\'école">E</a></span>';
 				echo '</div>';
 			}
 
-			if ($commander_commanderDetail->getStatement() == COM_INSCHOOL) {
-				echo '<div class="number-box">';
-					echo '<span class="label">état de l\'officier</span>';
-					echo '<span class="value">A l\'école</span>';
-				echo '</div>';
-			} elseif ($commander_commanderDetail->getStatement() == COM_AFFECTED) {
-				echo '<div class="number-box">';
-					echo '<span class="label">état de l\'officier</span>';
-					echo '<span class="value">A quai</span>';
-				echo '</div>';
-			} elseif ($commander_commanderDetail->getStatement() == COM_MOVING) {
-				echo '<div class="number-box">';
-					echo '<span class="label">état de l\'officier</span>';
+			echo '<div class="number-box">';
+				echo '<span class="label">État de l\'officier</span>';
+				if ($commander_commanderDetail->statement == Commander::INSCHOOL) {
+					echo '<span class="value">À l\'école</span>';
+				} elseif ($commander_commanderDetail->statement == Commander::AFFECTED) {
+					echo '<span class="value">À quai</span>';
+				} elseif ($commander_commanderDetail->statement == Commander::MOVING) {
 					echo '<span class="value">En mission</span>';
-				echo '</div>';
-				# affichage conditionnel d'info
-				switch ($commander_commanderDetail->getTypeOfMove()) {
-					case COM_MOVE: 
-						echo '<div class="number-box">';
-							echo '<span class="label">mission</span>';
-							echo '<span class="value">Déplacement</span>';
-						echo '</div>';
-						echo '<div class="number-box">';
-							echo '<span class="label">vers</span>';
-							echo '<span class="value">' . $commander_commanderDetail->destinationPlaceName . '</span>';
-						echo '</div>'; break;
-					case COM_LOOT: 
-						echo '<div class="number-box">';
-							echo '<span class="label">mission</span>';
-							echo '<span class="value">Pillage</span>';
-						echo '</div>';
-						echo '<div class="number-box">';
-							echo '<span class="label">cible</span>';
-							echo '<span class="value">' . $commander_commanderDetail->destinationPlaceName . '</span>';
-						echo '</div>'; break;
-					case COM_COLO: 
-						echo '<div class="number-box">';
-							echo '<span class="label">mission</span>';
-							echo '<span class="value">Colonisation</span>';
-						echo '</div>';
-						echo '<div class="number-box">';
-							echo '<span class="label">cible</span>';
-							echo '<span class="value">' . $commander_commanderDetail->destinationPlaceName . '</span>';
-						echo '</div>'; break;
-					case COM_BACK: 
-						echo '<div class="number-box">';
-							echo '<span class="label">mission</span>';
-							echo '<span class="value">Retour victorieux</span>';
-						echo '</div>';
-						echo '<div class="number-box">';
-							echo '<span class="label">ressources transportées</span>';
-							echo '<span class="value">' . Format::numberFormat($commander_commanderDetail->getResourcesTransported()) . '</span>';
-						echo '</div>'; break;
-					default: break;
-				}
-			} elseif ($commander_commanderDetail->getStatement() == COM_DEAD) {
-				echo '<div class="number-box">';
-					echo '<span class="label">état de l\'officier</span>';
+				} else {
 					echo '<span class="value">Tombé au combat</span>';
-				echo '</div>';
+				}
+			echo '</div>';
+
+			if ($commander_commanderDetail->statement == Commander::MOVING) {
+				echo '<div class="number-box">';
+					echo '<span class="label">Mission</span>';
+						switch ($commander_commanderDetail->getTypeOfMove()) {
+							case Commander::MOVE: 
+									echo '<span class="value">Déplacement</span>';
+								echo '</div>';
+								echo '<div class="number-box">';
+									echo '<span class="label">Vers</span>';
+									echo '<span class="value">' . $commander_commanderDetail->destinationPlaceName . '</span>';
+								break;
+							case Commander::LOOT: 
+									echo '<span class="value">Pillage</span>';
+								echo '</div>';
+								echo '<div class="number-box">';
+									echo '<span class="label">Cible</span>';
+									echo '<span class="value">' . $commander_commanderDetail->destinationPlaceName . '</span>';
+								break;
+							case Commander::COLO: 
+									echo '<span class="value">Colonisation</span>';
+								echo '</div>';
+								echo '<div class="number-box">';
+									echo '<span class="label">Cible</span>';
+									echo '<span class="value">' . $commander_commanderDetail->destinationPlaceName . '</span>';
+								break;
+							case Commander::BACK: 
+									echo '<span class="value">Retour victorieux</span>';
+								echo '</div>';
+								echo '<div class="number-box">';
+									echo '<span class="label">Ressources transportées</span>';
+									echo '<span class="value">' . Format::numberFormat($commander_commanderDetail->getResourcesTransported()) . '</span>';
+								break;
+							default: break;
+						}
+				echo '</div>'; 
 			}
+
 			echo '<hr />';
 
 			echo '<div class="number-box grey">';
-				echo '<span class="label">nom</span>';
+				echo '<span class="label">Nom</span>';
 				echo '<span class="value">' . $commander_commanderDetail->getName() . '</span>';
 			echo '</div>';
 			echo '<div class="number-box">';
-				echo '<span class="label">victoire' . Format::addPlural($commander_commanderDetail->getPalmares()) . '</span>';
+				echo '<span class="label">Victoire' . Format::addPlural($commander_commanderDetail->getPalmares()) . '</span>';
 				echo '<span class="value">' . $commander_commanderDetail->getPalmares() . '</span>';
 			echo '</div>';
 			echo '<div class="number-box grey">';
-				echo '<span class="label">grade</span>';
-				echo '<span class="value">' . $commander_commanderDetail->getLevel() . '</span>';
+				echo '<span class="label">Grade</span>';
+				echo '<span class="value">' . CommanderResources::getInfo($commander_commanderDetail->level, 'grade') . '</span>';
 			echo '</div>';
 
-			if (in_array($commander_commanderDetail->getStatement(), array(COM_AFFECTED, COM_MOVING, COM_INSCHOOL))) {
+			if (in_array($commander_commanderDetail->getStatement(), [Commander::AFFECTED, Commander::MOVING, Commander::INSCHOOL])) {
 				echo '<div class="number-box grey">';
-					echo '<span class="label">expérience</span>';
+					echo '<span class="label">Expérience</span>';
 					$expToLvlUp = $commander_commanderDetail->experienceToLevelUp();
 					$percent = Format::percent($commander_commanderDetail->getExperience() - ($expToLvlUp / 2), $expToLvlUp - ($expToLvlUp / 2));
 					echo '<span class="value">' . Format::numberFormat($commander_commanderDetail->getExperience()) . ' / ' . Format::numberFormat($commander_commanderDetail->experienceToLevelUp()) . '</span>';
@@ -107,6 +96,17 @@ echo '<div class="component">';
 				echo '</div>';
 			}
 
+			echo '<hr />';
+
+			echo '<div class="number-box grey">';
+				echo '<span class="label">Salaire de l\'officier</span>';
+				echo '<span class="value">' . Format::numberFormat($commander_commanderDetail->level * Commander::LVLINCOMECOMMANDER) . ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits"></span>';
+			echo '</div>';
+
+			echo '<div class="number-box grey">';
+				echo '<span class="label">Frais d\'entretien des vaisseaux</span>';
+				echo '<span class="value">' . Format::numberFormat(Game::getFleetCost($commander_commanderDetail->getNbrShipByType())) . ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits"></span>';
+			echo '</div>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
