@@ -12,6 +12,7 @@ if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('tok
 		case 'switchbase': 				include ACTION . 'common/switchBase.php'; break;
 		case 'switchparams':			include ACTION . 'common/switchParams.php'; break;
 		case 'sendsponsorshipemail': 	include ACTION . 'common/sendSponsorshipEmail.php'; break;
+		case 'discordrequest': 			include ACTION . 'common/discordRequest.php'; break;
 
 		# ATHENA
 		case 'updateinvest': 			include ACTION . 'athena/general/updateInvest.php'; break;
