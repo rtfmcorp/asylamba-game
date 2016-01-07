@@ -168,10 +168,16 @@ class Player {
 				ASM::$clm->newSession();
 				ASM::$clm->load(array());
 
+				# load the transactions
+				$S_TRM1 = ASM::$trm->getCurrentSession();
+				ASM::$trm->newSession();
+				ASM::$trm->load(array('rPlayer' => $this->id, 'type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_PROPOSED));
+
 				foreach ($hours as $key => $hour) {
-					CTC::add($hour, $this, 'uCredit', array(ASM::$obm->getCurrentSession(), $playerBonus, ASM::$com->getCurrentSession(), ASM::$rsm->getCurrentSession(), ASM::$clm->getCurrentSession()));
+					CTC::add($hour, $this, 'uCredit', array(ASM::$obm->getCurrentSession(), $playerBonus, ASM::$com->getCurrentSession(), ASM::$rsm->getCurrentSession(), ASM::$clm->getCurrentSession(), ASM::$trm->getCurrentSession()));
 				}
 
+				ASM::$trm->changeSession($S_TRM1);
 				ASM::$clm->changeSession($S_CLM1);
 				ASM::$rsm->changeSession($S_RSM1);
 				ASM::$com->changeSession($S_COM1);
@@ -182,7 +188,7 @@ class Player {
 		}
 	}
 
-	public function uCredit($obmSession, $playerBonus, $comSession, $rsmSession, $clmSession) {
+	public function uCredit($obmSession, $playerBonus, $comSession, $rsmSession, $clmSession, $trmSession) {
 		$S_OBM1 = ASM::$obm->getCurrentSession();
 		ASM::$obm->changeSession($obmSession);
 
@@ -208,7 +214,7 @@ class Player {
 			$popTax += $popTax * $playerBonus->bonus->get(PlayerBonus::POPULATION_TAX) / 100;
 			$nationTax = $base->tax * $popTax / 100;
 
-			// revenu des routes commerciales
+			# revenu des routes commerciales
 			$routesIncome = 0;
 			$S_CRM1 =  ASM::$crm->getCurrentSession();
 			ASM::$crm->changeSession($base->routeManager);
@@ -223,11 +229,11 @@ class Player {
 			$credits += ($popTax - $nationTax + $routesIncome);
 			$totalGain += $popTax - $nationTax + $routesIncome;
 
-			// investments
+			# investments
 			$schoolInvests += $base->getISchool();
 			$antiSpyInvests += $base->getIAntiSpy();
 
-			// paiement à l'alliance
+			# paiement à l'alliance
 			if ($this->rColor != 0) {
 				for ($j = 0; $j < ASM::$clm->size(); $j++) { 
 					if (ASM::$clm->get($j)->id == $base->sectorColor) {
@@ -239,12 +245,12 @@ class Player {
 		}
 		ASM::$clm->changeSession($S_CLM1);
 
-		// si la balance de crédit est positive
+		# si la balance de crédit est positive
 		$totalInvests = $uniInvests + $schoolInvests + $antiSpyInvests;
 		if ($credits >= $totalInvests) {
 			$credits -= $totalInvests;
 			$newCredit = $credits;
-		} else { // si elle est négative
+		} else { # si elle est négative
 			$n = new Notification();
 			$n->setRPlayer($this->id);
 			$n->setTitle('Caisses vides');
@@ -306,7 +312,7 @@ class Player {
 			$newCredit = $credits;
 		}
 
-		// payer les commandants
+		# payer les commandants
 		$nbOfComNotPaid = 0;
 		$comList = new ArrayList();
 		$S_COM1 = ASM::$com->getCurrentSession();
@@ -324,8 +330,8 @@ class Player {
 					$commander->setStatement(COM_ONSALE);
 					$commander->setRPlayer(ID_GAIA);
 
-					// TODO : vendre le commandant au marché 
-					//			(ou alors le mettre en statement COM_DESERT et supprimer ses escadrilles)
+					# TODO : vendre le commandant au marché 
+					#			(ou alors le mettre en statement COM_DESERT et supprimer ses escadrilles)
 
 					$comList->add($nbOfComNotPaid, $commander->getName());
 					$nbOfComNotPaid++;
@@ -333,7 +339,7 @@ class Player {
 			}
 		}
 		ASM::$com->changeSession($S_COM1);
-		// si au moins un commandant n'a pas pu être payé --> envoyer une notif
+		# si au moins un commandant n'a pas pu être payé --> envoyer une notif
 		if ($nbOfComNotPaid) {	
 			$n = new Notification();
 			$n->setRPlayer($this->id);
@@ -359,10 +365,22 @@ class Player {
 			ASM::$ntm->changeSession($S_NTM1);
 		}
 
-		// payer l'entretien des vaisseaux
-		// vaisseaux affectés
-		$nbOfShipsNotPaid = 0;
-		$comList = new ArrayList();
+		# payer l'entretien des vaisseaux
+		# vaisseaux en vente
+		$S_TRM1 = ASM::$trm->getCurrentSession();
+		ASM::$trm->changeSession($trmSession);
+		$transactionTotalCost = 0;
+		for ($i = (ASM::$trm->size() - 1); $i >= 0; $i--) {
+			$transaction = ASM::$trm->get($i);
+			$transactionTotalCost += ShipResource::getInfo($transaction->identifier, 'cost') * $transaction->quantity;
+		}
+		if ($newCredit >= $transactionTotalCost) {
+			$newCredit -= $transactionTotalCost;
+		} else {
+			$newCredit = 0;
+		}
+		ASM::$com->changeSession($S_TRM1);
+		# vaisseaux affectés
 		$S_COM1 = ASM::$com->getCurrentSession();
 		ASM::$com->changeSession($comSession);
 		for ($i = (ASM::$com->size() - 1); $i >= 0; $i--) {
@@ -390,7 +408,7 @@ class Player {
 			}
 		}
 		ASM::$com->changeSession($S_COM1);
-		// vaisseaux sur la planète
+		# vaisseaux sur la planète
 		for ($i = 0; $i < ASM::$obm->size(); $i++) {
 			$base = ASM::$obm->get($i);
 			$cost = Game::getFleetCost($base->shipStorage, FALSE);
@@ -398,7 +416,7 @@ class Player {
 			if ($newCredit >= $cost) {
 				$newCredit -= $cost;
 			} else {
-				// n'arrive pas à tous les payer !
+				# n'arrive pas à tous les payer !
 				for ($j = ShipResource::SHIP_QUANTITY-1; $j >= 0; $j--) { 
 					if ($base->shipStorage[$j] > 0) {
 						$unitCost = ShipResource::getInfo($j, 'cost');
@@ -433,64 +451,12 @@ class Player {
 				}
 			}
 		}
-		// vaisseaux en vente TODO
-/*		$nbOfShipsNotPaid = 0;
-		$comList = new ArrayList();
-		$S_COM1 = ASM::$com->getCurrentSession();
-		ASM::$com->changeSession($comSession);
-		for ($i = (ASM::$com->size() - 1); $i >= 0; $i--) {
-			$commander = ASM::$com->get($i);
-			if ($commander->getStatement() == 1 OR $commander->getStatement() == 2) {
-				if ($newCredit >= (COM_LVLINCOMECOMMANDER * $commander->getLevel())) {
-					$newCredit -= (COM_LVLINCOMECOMMANDER * $commander->getLevel());
-				} else {
-					# on remet les vaisseaux dans les hangars
-					$commander->emptySquadrons();
-					
-					# on vend le commandant
-					$commander->setStatement(COM_ONSALE);
-					$commander->setRPlayer(ID_GAIA);
-
-					// TODO : vendre le commandant au marché 
-					//			(ou alors le mettre en statement COM_DESERT et supprimer ses escadrilles)
-
-					$comList->add($nbOfComNotPaid, $commander->getName());
-					$nbOfComNotPaid++;
-				}
-			}
-		}
-		ASM::$com->changeSession($S_COM1);
-		// si des vaisseaux ne peuvent pas être entretenus --> envoyer une notif
-		if ($nbOfComNotPaid) {	
-			$n = new Notification();
-			$n->setRPlayer($this->id);
-			$n->setTitle('Commandant impayé');
-
-			$n->addBeg()->addTxt('Domaine')->addSep();
-			if ($nbOfComNotPaid == 1) {
-				$n->addTxt('Vous n\'avez pas assez de crédits pour payer votre commandant ' . $comList->get(0) . '. Celui-ci a donc déserté ! ');
-				$n->addBrk()->addTxt('Il est allé proposer ses services sur le marché. Si vous voulez le récupérer, vous pouvez vous y rendre et le racheter.');
-			} else {
-				$n->addTxt('Vous n\'avez pas assez de crédits pour payer certains de vos commandants. Ils ont donc déserté ! ')->addBrk();
-				$n->addTxt('Voici la liste de ces commandants : ');
-				for ($i = 0; $i < $comList->size() - 2; $i++) { 
-					$n->addTxt($comList->get($i) . ', ');
-				}
-				$n->addTxt($comList->get($comList->size() - 2) . ' et ' . $comList->get($comList->size() - 1) . '.');
-				$n->addBrk()->addTxt('Ils sont tous allés proposer leurs services sur le marché. Si vous voulez les récupérer, vous pouvez vous y rendre et les racheter.');
-			}
-			$n->addEnd();
-			$S_NTM1 = ASM::$ntm->getCurrentSession();
-			ASM::$ntm->newSession();
-			ASM::$ntm->add($n);
-			ASM::$ntm->changeSession($S_NTM1);
-		}*/
-
-		// faire les recherches
+		
+		# faire les recherches
 		$S_RSM1 = ASM::$rsm->getCurrentSession();
 		ASM::$rsm->changeSession($rsmSession);
 		if (ASM::$rsm->size() == 1) {
-			// add the bonus
+			# add the bonus
 			$naturalTech += $naturalTech * $playerBonus->bonus->get(PlayerBonus::UNI_INVEST) / 100;
 			$lifeTech += $lifeTech * $playerBonus->bonus->get(PlayerBonus::UNI_INVEST) / 100;
 			$socialTech += $socialTech * $playerBonus->bonus->get(PlayerBonus::UNI_INVEST) / 100;
