@@ -40,17 +40,22 @@ class TechnologyResource {
 
 						switch (self::$technology[$techno]['category']) {
 							case 1:
-								$value = round(self::$technology[$techno][$info] * pow(1.75, $level-1));
-								break;
-							case 2:
 								$value = round(self::$technology[$techno][$info] * pow(1.5, $level-1));
 								break;
-							case 3:
+							case 2:
 								$value = round(self::$technology[$techno][$info] * pow(1.3, $level-1));
+								break;
+							case 3:
+								$value = round(self::$technology[$techno][$info] * pow(1.2, $level-1));
 								break;
 							default:
 								return FALSE;
 						}
+
+					#	$value = round(self::$technology[$techno][$info] * pow(1.75, $level-1));
+					#	$value = round(self::$technology[$techno][$info] * pow(1.5, $level-1));
+					#	$value = round(self::$technology[$techno][$info] * pow(1.3, $level-1));
+
 						return $value;
 					}
 				} else {
@@ -492,7 +497,7 @@ class TechnologyResource {
 			'maxLevel' => 30,
 			'category' => 3,
 			'resource' => 1300,
-			'credit' => 12500,
+			'credit' => 10000,
 			'points' => 39,
 			'column' => 4,
 			'shortDescription' => 'Le prochain niveau augmentera la taille de votre Stockage de ressources de {x}%.',
@@ -509,7 +514,7 @@ class TechnologyResource {
 			'maxLevel' => 25,
 			'category' => 2,
 			'resource' => 850,
-			'credit' => 10000,
+			'credit' => 9000,
 			'points' => 21,
 			'column' => 4,
 			'shortDescription' => 'Le prochain niveau augmentera la vitesse d\'assemblage de votre Chantier Alpha de {x}%.',
@@ -526,7 +531,7 @@ class TechnologyResource {
 			'maxLevel' => 25,
 			'category' => 2,
 			'resource' => 1850,
-			'credit' => 17000,
+			'credit' => 12000,
 			'points' => 48,
 			'column' => 4,
 			'shortDescription' => 'Le prochain niveau augmentera la vitesse d\'assemblage de votre Chantier de Ligne de {x}%.',
@@ -543,7 +548,7 @@ class TechnologyResource {
 			'maxLevel' => 15,
 			'category' => 2,
 			'resource' => 1740,
-			'credit' => 16000,
+			'credit' => 15000,
 			'points' => 45,
 			'column' => 5,
 			'shortDescription' => 'Le prochain niveau augmentera la vitesse de développement de technologies dans la Technosphère de {x}%.',
@@ -560,7 +565,7 @@ class TechnologyResource {
 			'maxLevel' => 30,
 			'category' => 3,
 			'resource' => 1600,
-			'credit' => 15500,
+			'credit' => 12500,
 			'points' => 44,
 			'column' => 5,
 			'shortDescription' => 'Le prochain niveau augmentera la production de vos routes commerciales de {x}%.',
@@ -611,7 +616,7 @@ class TechnologyResource {
 			'maxLevel' => 30,
 			'category' => 2,
 			'resource' => 1000,
-			'credit' => 11500,
+			'credit' => 10000,
 			'points' => 33,
 			'column' => 5,
 			'shortDescription' => 'Le prochain niveau augmentera les impôts que vous percevez à votre population de {x}%.',
@@ -628,7 +633,7 @@ class TechnologyResource {
 			'maxLevel' => 30,
 			'category' => 2,
 			'resource' => 1680,
-			'credit' => 16000,
+			'credit' => 12500,
 			'points' => 42,
 			'column' => 5,
 			'shortDescription' => 'Le prochain niveau accélérera la formation de vos commandants dans l\'école de {x}%.',
@@ -679,7 +684,7 @@ class TechnologyResource {
 			'maxLevel' => 30,
 			'category' => 2,
 			'resource' => 1900,
-			'credit' => 17800,
+			'credit' => 15800,
 			'points' => 48,
 			'column' => 5,
 			'shortDescription' => 'Le prochain niveau augmentera la vitesse de vos vaisseaux de {x}%.',
@@ -696,7 +701,7 @@ class TechnologyResource {
 			'maxLevel' => 30,
 			'category' => 2,
 			'resource' => 1650,
-			'credit' => 16000,
+			'credit' => 10000,
 			'points' => 43,
 			'column' => 5,
 			'shortDescription' => 'Le prochain niveau augmentera la capacité à transporter des ressources de vos vaisseaux de {x}%.',
@@ -713,7 +718,7 @@ class TechnologyResource {
 			'maxLevel' => 14,
 			'category' => 1,
 			'resource' => 4000,
-			'credit' => 48000,
+			'credit' => 35000,
 			'points' => 43,
 			'column' => 1,
 			'shortDescription' => 'Chaque niveau supplémentaire de cette technologie vous permet de gérer une base de plus (colonisation ou conquête)',
