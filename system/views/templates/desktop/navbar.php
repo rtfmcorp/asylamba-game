@@ -112,6 +112,8 @@ echo '<div id="nav">';
 			echo '<a href="' . APP_ROOT . 'admin" class="square ' . $isActive . '"><img src="' . MEDIA . 'common/tool-admin.png" alt="" /></a>';
 		}
 
+		echo '<a ' . (Params::check(Params::REDIRECT_CHAT) ? 'href="https://discordapp.com" target="_blank"' : 'href="' . APP_ROOT . 'params"') . '" class="square"><img src="' . MEDIA . 'common/nav-chat.png" alt="" /></a>';
+
 		if (CTR::$data->get('playerInfo')->get('stepTutorial') > 0) {
 			echo '<a href="#" class="hide-slpash square sh ' . (CTR::$data->get('playerInfo')->get('stepDone') ? 'active flashy' : '') . '" data-target="tutorial">';
 				echo '<img src="' . MEDIA . 'common/tool-star.png" alt="tutoriel" />';
