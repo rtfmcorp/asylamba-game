@@ -258,7 +258,7 @@ abstract class GalaxyConfiguration {
 			'points' => 1
 		], [
 			'id' => 26,
-			'beginColor' => 0,
+			'beginColor' => 8,
 			'vertices' => [130, 130, 160, 115, 145, 95, 160, 90, 175, 100, 210, 75, 185, 120, 140, 140],
 			'barycentre' => [163, 108],
 			'display' => [170, 108],
