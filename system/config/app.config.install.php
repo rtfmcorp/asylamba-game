@@ -1,3 +1,3 @@
 <?php
 # liste les IDs de factions disponibles
-$AVAILABLE_FACTIONS	= [4, 8, 10, 11, 12];
+$AVAILABLE_FACTIONS	= [1, 8, 11];
