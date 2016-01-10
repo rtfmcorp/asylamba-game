@@ -24,14 +24,20 @@ if ($discordId !== FALSE AND $discordId !== '') {
 	if ($answer !== FALSE) {
 		#$rep = unserialize($answer);
 		switch($answer) {
-			case 'OK':
+			case 'user register correctly':
 				CTR::$alert->add('Vos droits ont été ajoutés sur Discord. Rendez-vous là-bas.', ALERT_STD_SUCCESS);
 				break;
-			case 'Thanks for the data':
-				CTR::$alert->add('Chicken, tu dois encore gérer les retours ;-)', ALERT_STD_SUCCESS);
+			case 'Wrong factionColor':
+				CTR::$alert->add('Vous êtes dans une faction inexistance, cela doit être une erreur, contactez un administrateur', ALERT_STD_ERROR);
+				break;
+			case 'disord user already register':
+				CTR::$alert->add('Vous avez déjà vos droits sur Discord, le faire une seconde fois ne sert à rien. S\'il s\'agit d\'une erreur, contactez un administrateur.', ALERT_STD_ERROR);
+				break;
+			case 'userID not found in Aslymaba 2.0 server':
+				CTR::$alert->add('Cet identifiant n\'existe pas. Créez un compte sur Discord et entrez votre identifiant dans le champ', ALERT_STD_ERROR);
 				break;
 			default:
-				CTR::$alert->add('Oxy, il faut que tu gères ce retour (auto-message)', ALERT_STD_SUCCESS);
+				CTR::$alert->add('Erreur, contactez un administrateur', ALERT_STD_ERROR);
 		}
 		CTR::$alert->add('message de retour : ' . $answer, ALERT_STD_SUCCESS);
 	} else {
