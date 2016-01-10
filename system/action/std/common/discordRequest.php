@@ -5,7 +5,7 @@ if ($discordId !== FALSE AND $discordId !== '') {
  	
  	$chickenBot = 'http://chickenbot.cloudapp.net:8080';
 
-	$data = array("discordId" => intval($discordId), "server" => "s" . APP_ID, "username" => "bertrand", "factionColor" => 3); 
+	$data = array("discordId" => $discordId, "server" => "s" . APP_ID, "username" => "bertrand", "factionColor" => 3); 
 	$data_string = json_encode($data);
 	$ch = curl_init($chickenBot);
 	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
