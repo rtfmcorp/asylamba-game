@@ -681,7 +681,7 @@ class Color {
 					$_ELM = ASM::$elm->getCurrentSession();
 					ASM::$elm->newSession();
 					ASM::$elm->load(array('rColor' => $this->id), array('id', 'DESC'), array('0', '1'));
-					
+					$this->dLastElection = $date;
 					$this->ballot($date, ASM::$elm->get());
 
 					ASM::$elm->changeSession($_ELM);
@@ -711,7 +711,7 @@ class Color {
 					$_ELM = ASM::$elm->getCurrentSession();
 					ASM::$elm->newSession();
 					ASM::$elm->load(array('rColor' => $this->id), array('id', 'DESC'), array('0', '1'));
-					
+					$this->dLastElection = $date;
 					$this->ballot($date, ASM::$elm->get());
 
 					ASM::$elm->changeSession($_ELM);
@@ -753,6 +753,7 @@ class Color {
 					$_ELM = ASM::$elm->getCurrentSession();
 					ASM::$elm->newSession();
 					ASM::$elm->load(array('rColor' => $this->id), array('id', 'DESC'), array('0', '1'));
+					$this->dLastElection = $date;
 					$this->ballot($date, ASM::$elm->get());
 
 					ASM::$elm->changeSession($_ELM);

@@ -225,6 +225,7 @@ class Place {
 
 					# only if the commander isn't in travel
 					if ($commander->dArrival <= $now AND $commander->rDestinationPlace != NULL) {
+						$commander->rDestinationPlace = NULL;
 						switch ($commander->travelType) {
 							case Commander::MOVE: 
 								$place = ASM::$plm->getById($commander->rBase);
@@ -454,8 +455,6 @@ class Place {
 
 			# planète vide : faire un combat
 			$this->startFight($commander, $commanderPlayer);
-
-
 
 			# victoire
 			if ($commander->getStatement() != Commander::DEAD) {
