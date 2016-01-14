@@ -309,16 +309,16 @@ abstract class GalaxyGenerator {
 						$danger = rand(0,  Place::DNG_CASUAL);
 					break;
 					case GalaxyConfiguration::DNG_EASY:
-						$danger = rand(5,  Place::DNG_EASY);
+						$danger = rand(3,  Place::DNG_EASY);
 					break;
 					case GalaxyConfiguration::DNG_MEDIUM:
-						$danger = rand(10, Place::DNG_MEDIUM);
+						$danger = rand(6, Place::DNG_MEDIUM);
 					break;
 					case GalaxyConfiguration::DNG_HARD:
-						$danger = rand(15, Place::DNG_HARD);
+						$danger = rand(9, Place::DNG_HARD);
 					break;
 					case GalaxyConfiguration::DNG_VERY_HARD:
-						$danger = rand(20, Place::DNG_VERY_HARD);
+						$danger = rand(12, Place::DNG_VERY_HARD);
 					break;
 					default: $danger = 0; break;
 				}
