@@ -40,7 +40,7 @@ echo '<div id="content">';
 
 					echo '<div class="tactical-map reactive">';
 						echo '<input type="hidden" id="input-sector-id" name="sector" />';
-						echo '<svg class="sectors" viewBox="0, 0, 750, 750" xmlns="http://www.w3.org/2000/svg">';
+						echo '<svg class="sectors" viewBox="0, 0, 750, 750" xmlns="http://www.w3.org/2000/svg" style="width: 580px; height: 580px;">';
 							for ($i = 0; $i < $sm->size(); $i++) {
 								$s = $sm->get($i);
 								echo '<polygon data-id="' . $s->getId() . '"';
