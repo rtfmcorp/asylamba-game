@@ -228,7 +228,10 @@ class TutorialResource {
 				<br /><br />
 				Si tu as assez de ressources, tu peux lancer la construction de plusieurs vaisseaux de même type à la fois. 
 				Cela te facilitera la vie et te permet de mettre beaucoup de vaisseaux en construction. 
-				Attention, la file de construction est limitée en place.',
+				Attention, la file de construction est limitée en place.
+				<br /><br />
+				Les vaisseaux, une fois produits, ont un coût d\'entretien qui est différent pour chaque vaisseau. Un vaisseau affecté coûte plus cher qu\'un vaisseau stocké dans les hangars. 
+				Pensez-donc à vérifier l\'état de vos finances de temps à autre, il serait bête d\'envoyer vos vaisseaux à la casse par manque de crédits.',
 			'experienceReward' => 8,
 			'creditReward' => 0,
 			'resourceReward' => 0,
