@@ -307,7 +307,7 @@ class ColorResource {
 			'officialName' 	=> 'Néo-Humaniste',
 			'popularName' 	=> 'Néo-Humaniste',
 			'government' 	=> 'Nouvelle Eglise Cardanienne',
-			'demonym' 		=> 'néo-cardaniens',
+			'demonym' 		=> 'néo-humanistes',
 			'factionPoint' 	=> 'Points d\'industrie',
 			'status' 		=> ['Éveillé', 'Philosophe', 'Drapier', 'Grand Général', 'Sénéchal', 'Primat'],
 			'regime'		=> 1,
