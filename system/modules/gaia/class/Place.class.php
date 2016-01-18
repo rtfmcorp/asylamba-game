@@ -624,8 +624,8 @@ class Place {
 						if (ASM::$rpm->size() > 0) {
 							for ($i = 0; $i < ASM::$rpm->size(); $i++) {
 								if (ASM::$rpm->get($i)->id != $report->id) {
-									echo ASM::$rpm->get($i)->statementAttacker = Report::DELETED;
-									echo ASM::$rpm->get($i)->statementDefender = Report::DELETED;
+									ASM::$rpm->get($i)->statementAttacker = Report::DELETED;
+									ASM::$rpm->get($i)->statementDefender = Report::DELETED;
 								}
 							}
 						}
@@ -665,18 +665,6 @@ class Place {
 						$this->sendNotifForConquest(self::CONQUERPLAYERWHITBATTLESUCCESS, $commander, $reportIds);
 					}
 
-					# PATCH DEGUEU POUR LES MUTLIS-COMBATS
-					$_NTM465 = ASM::$ntm->getCurrentSession();
-					ASM::$ntm->newSession(TRUE);
-					ASM::$ntm->load(['rPlayer' => $commander->rPlayer, 'dSending' => $commander->dArrival]);
-					ASM::$ntm->load(['rPlayer' => $this->rPlayer, 'dSending' => $commander->dArrival]);
-					if (ASM::$ntm->size() > 2) {
-						for ($i = 0; $i < ASM::$ntm->size() - 2; $i++) {
-							ASM::$ntm->deleteById(ASM::$ntm->get($i)->id);
-						}
-					}
-					ASM::$ntm->changeSession($_NTM465);
-					######################################33
 
 					#attribuer le joueur à la place
 					$this->commanders = array();
@@ -690,6 +678,19 @@ class Place {
 					$commander->rBase = $this->id;
 					$commander->statement = Commander::AFFECTED;
 					$commander->line = 2;
+
+					# PATCH DEGUEU POUR LES MUTLIS-COMBATS
+					$_NTM465 = ASM::$ntm->getCurrentSession();
+					ASM::$ntm->newSession(TRUE);
+					ASM::$ntm->load(['rPlayer' => $commander->rPlayer, 'dSending' => $commander->dArrival]);
+					ASM::$ntm->load(['rPlayer' => $this->rPlayer, 'dSending' => $commander->dArrival]);
+					if (ASM::$ntm->size() > 2) {
+						for ($i = 0; $i < ASM::$ntm->size() - 2; $i++) {
+							ASM::$ntm->deleteById(ASM::$ntm->get($i)->id);
+						}
+					}
+					ASM::$ntm->changeSession($_NTM465);
+					######################################33
 
 				# défaite
 				} else {
