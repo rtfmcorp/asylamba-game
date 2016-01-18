@@ -2,7 +2,7 @@
 $discordId = Utils::getHTTPData('discord-id');
 
 if ($discordId !== FALSE AND $discordId !== '') {
-	
+
 	$chickenBot = 'http://chickenbot.cloudapp.net:8080';
 
 	$data = array("discordId" => $discordId, "server" => "s" . APP_ID, "username" => CTR::$data->get('playerInfo')->get('name'), "factionColor" => CTR::$data->get('playerInfo')->get('color')); 
@@ -27,6 +27,9 @@ if ($discordId !== FALSE AND $discordId !== '') {
 			case 'user register correctly':
 				CTR::$alert->add('Vos droits ont été ajoutés sur Discord. Rendez-vous là-bas.', ALERT_STD_SUCCESS);
 				break;
+			case 'user register correctly (update Status)':
+				CTR::$alert->add('Vos droits ont été mis à jour sur Discord. Rendez-vous là-bas.', ALERT_STD_SUCCESS);
+				break;
 			case 'Wrong factionColor':
 				CTR::$alert->add('Vous êtes dans une faction inexistance, cela doit être une erreur, contactez un administrateur', ALERT_STD_ERROR);
 				break;
@@ -39,7 +42,7 @@ if ($discordId !== FALSE AND $discordId !== '') {
 			default:
 				CTR::$alert->add('Erreur, contactez un administrateur', ALERT_STD_ERROR);
 		}
-		CTR::$alert->add('message de retour : ' . $answer, ALERT_STD_SUCCESS);
+		#CTR::$alert->add('message de retour : ' . $answer, ALERT_STD_SUCCESS);
 	} else {
 		CTR::$alert->add('Le Chicken Bot ne répond pas. Ré-essayez plus tard et/ou contactez un admin.', ALERT_STD_ERROR);
 	}
