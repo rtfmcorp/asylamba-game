@@ -2,10 +2,10 @@
 $discordId = Utils::getHTTPData('discord-id');
 
 if ($discordId !== FALSE AND $discordId !== '') {
- 	
- 	$chickenBot = 'http://chickenbot.cloudapp.net:8080';
+	
+	$chickenBot = 'http://chickenbot.cloudapp.net:8080';
 
-	$data = array("discordId" => $discordId, "server" => "s" . APP_ID, "username" => "bertrand", "factionColor" => CTR::$data->get('playerInfo')->get('color')); 
+	$data = array("discordId" => $discordId, "server" => "s" . APP_ID, "username" => CTR::$data->get('playerInfo')->get('name'), "factionColor" => CTR::$data->get('playerInfo')->get('color')); 
 	$data_string = json_encode($data);
 	$ch = curl_init($chickenBot);
 	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
