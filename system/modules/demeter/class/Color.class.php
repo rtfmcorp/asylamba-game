@@ -375,9 +375,9 @@ class Color {
 			$election = new Election();
 			$election->rColor = $this->id;
 
-			$date = new DateTime($this->dLastElection);
+			/*$date = new DateTime($this->dLastElection);
 			$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
-			$election->dElection = $date->format('Y-m-d H:i:s');
+			$election->dElection = $date->format('Y-m-d H:i:s');*/
 
 			ASM::$elm->add($election);
 			ASM::$elm->changeSession($S_ELM);
@@ -385,10 +385,10 @@ class Color {
 		} else {
 			$this->updateStatus($token_pam);
 
-			$date = new DateTime($this->dLastElection);
+			/*$date = new DateTime($this->dLastElection);
 			$date->modify('+' . $this->mandateDuration . ' second');
 			$date = $date->format('Y-m-d H:i:s');
-			$this->dLastElection = $date;
+			$this->dLastElection = $date;*/
 		}
 	}
 
@@ -408,10 +408,10 @@ class Color {
 		}
 		
 		if ($hadVoted) {
-			$date = new DateTime($this->dLastElection);
+/*			$date = new DateTime($this->dLastElection);
 			$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
 			$date = $date->format('Y-m-d H:i:s');
-			$this->dLastElection = $date;
+			$this->dLastElection = $date;*/
 
 			$_PAM = ASM::$pam->getCurrentSession();
 			ASM::$pam->changeSession($token_playersGovernement);
@@ -506,10 +506,10 @@ class Color {
 		} else {
 			$this->electionStatement = self::MANDATE;
 
-			$date = new DateTime($this->dLastElection);
+/*			$date = new DateTime($this->dLastElection);
 			$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
 			$date = $date->format('Y-m-d H:i:s');
-			$this->dLastElection = $date;
+			$this->dLastElection = $date;*/
 
 			if ($this->regime == self::ROYALISTIC) {
 				$_PAM2 = ASM::$pam->getCurrentSession();
