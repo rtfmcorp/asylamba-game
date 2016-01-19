@@ -376,11 +376,14 @@ class PlayerManager extends Manager {
 			ASM::$obm->add($ob);
 
 			# modification de la place
+			$_PLM8761 = ASM::$plm->getCurrentSession();
+			ASM::$plm->newSession();
 			ASM::$plm->load(array('id' => $place));
 			ASM::$plm->get()->rPlayer = $player->id;
 			ASM::$plm->get()->population = 50;
 			ASM::$plm->get()->coefResources = 60;
 			ASM::$plm->get()->coefHistory = 20;
+			ASM::$plm->changeSession($_PLM8761);
 
 			GalaxyColorManager::apply();
 
