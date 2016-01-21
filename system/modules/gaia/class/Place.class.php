@@ -359,7 +359,7 @@ class Place {
 	}
 
 	public function uResources() {
-		$maxResources = ceil($this->population / self::COEFFPOPRESOURCE) * self::COEFFMAXRESOURCE * $this->maxDanger;
+		$maxResources = ceil($this->population / self::COEFFPOPRESOURCE) * self::COEFFMAXRESOURCE * ($this->maxDanger + 1);
 		$this->resources += floor(self::COEFFRESOURCE * $this->population * 24);
 
 		if ($this->resources > $maxResources) {
