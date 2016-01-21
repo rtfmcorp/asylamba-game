@@ -166,14 +166,13 @@ class Place {
 
 		if (Utils::interval($this->uPlace, $now, 's') > 0) {
 			# update time
-			$days  = Utils::intervalDates($now, $this->uPlace, 'd');
 			$hours = Utils::intervalDates($now, $this->uPlace);
 			$this->uPlace = $now;
 
 			# RESOURCE
 			if ($this->typeOfBase == self::TYP_EMPTY && $this->typeOfPlace == self::TERRESTRIAL) {
-				foreach ($days as $key => $day) {
-					CTC::add($day, $this, 'uResources', array());
+				foreach ($hours as $hour) {
+					CTC::add($hour, $this, 'uResources', array());
 				}
 			}
 
@@ -360,7 +359,7 @@ class Place {
 
 	public function uResources() {
 		$maxResources = ceil($this->population / self::COEFFPOPRESOURCE) * self::COEFFMAXRESOURCE * ($this->maxDanger + 1);
-		$this->resources += floor(self::COEFFRESOURCE * $this->population * 24);
+		$this->resources += floor(self::COEFFRESOURCE * $this->population);
 
 		if ($this->resources > $maxResources) {
 			$this->resources = $maxResources;
