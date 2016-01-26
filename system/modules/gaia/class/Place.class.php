@@ -223,12 +223,13 @@ class Place {
 					$commander = ASM::$com->get($i);
 
 					# only if the commander isn't in travel
-					if ($commander->dArrival <= $now AND $commander->rDestinationPlace != NULL) {
-						$commander->rDestinationPlace = NULL;
+					if ($commander->dArrival <= $now AND $commander->rDestinationPlace != 0) {
 						switch ($commander->travelType) {
 							case Commander::MOVE: 
 								$place = ASM::$plm->getById($commander->rBase);
 								$bonus = $playerBonuses[$commander->rPlayer];
+								
+								$commander->rDestinationPlace = 0;
 								CTC::add($commander->dArrival, $this, 'uChangeBase', [$commander, $place, $bonus]);
 							break;
 
@@ -264,7 +265,7 @@ class Place {
 								ASM::$clm->load(['id' => $commander->playerColor]);
 								$commanderColor = ASM::$clm->get();
 								ASM::$clm->changeSession($S_CLM_L1);
-
+								$commander->rDestinationPlace = 0;
 								CTC::add($commander->dArrival, $this, 'uLoot', array($commander, $place, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor));
 							break;
 
@@ -323,7 +324,8 @@ class Place {
 								ASM::$clm->load(array('id' => $commander->playerColor));
 								$commanderColor = ASM::$clm->get();
 								ASM::$clm->changeSession($S_CLM);
-
+								
+								$commander->rDestinationPlace = 0;
 								CTC::add($commander->dArrival, $this, 'uConquer', array($commander, $place, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $S_CRM_C2, $S_REM_C2, $S_COM_C2));
 							break;
 
@@ -334,7 +336,8 @@ class Place {
 								ASM::$obm->load(array('rPlace' => $commander->getRBase()));
 								$base = ASM::$obm->get();
 								ASM::$obm->changeSession($S_OBM_B1);
-
+								
+								$commander->rDestinationPlace = 0;
 								CTC::add($commander->dArrival, $this, 'uComeBackHome', array($commander, $base));
 							break;
 
