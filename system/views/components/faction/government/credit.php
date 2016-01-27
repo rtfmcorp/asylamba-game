@@ -1,40 +1,29 @@
 <?php
-# load
-$S_CRT_1 = ASM::$crt->getCurrentSession();
-ASM::$crt->newSession();
-ASM::$crt->load(
-	['rReceiver' => $faction->id, 'type' => CreditTransaction::TYP_FACTION],
-	['dTransaction', 'DESC'],
-	[0, 20]
-);
-
-echo '<div class="component player rank">';
-	echo '<div class="head skin-2">';
-		echo '<h2>Donations</h2>';
-	echo '</div>';
+echo '<div class="component new-message">';
+	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			for ($i = 0; $i < ASM::$crt->size(); $i++) {
-				$transaction = ASM::$crt->get($i);
+			echo '<h4>Envoi de crédits</h4>';
+			echo '<p>Seul le trésorier du gouvernement peut faire des versements à des membres.</p>';
+			echo '<form action="' . Format::actionBuilder('sendcreditfromfaction') . '" method="post" />';
+				echo '<p><label for="send-credit-target">Destinataire</label></p>';
+				echo '<p class="input input-text">';
+					echo '<input type="hidden" class="autocomplete-hidden" name="playerid" />';
+					echo '<input type="text" id="send-credit-target" class="autocomplete-player" name="name" />';
+				echo '</p>';
 
-				echo '<div class="player color' . $transaction->senderColor . '">';
-					echo '<a href="' . APP_ROOT . 'embassy/player-' . $transaction->rSender . '">';
-						echo '<img src="' . MEDIA . 'avatar/small/' . $transaction->senderAvatar . '.png" class="picto" alt="' . $transaction->senderName . '">';
-					echo '</a>';
+				echo '<p><label for="send-credit-credit">Nombre de crédit</label></p>';
+				echo '<p class="input input-text"><input type="text" id="send-credit-credit" name="quantity" /></p>';
 
-					$status = ColorResource::getInfo($transaction->senderColor, 'status');
-					echo '<span class="title">' . $status[$transaction->senderStatus - 1] . '</span>';
-					echo '<strong class="name">' . $transaction->senderName . '</strong>';
-					echo '<span class="experience">' . Format::number($transaction->amount) . ' crédits</span>';
-				echo '</div>';
-			}
+				echo '<p><label for="send-credit-message">Votre message (* facultatif)</label></p>';
+				echo '<p class="input input-area"><textarea id="send-credit-message" name="text"></textarea></p>';
 
-			if (ASM::$crt->size() == 0) {
-				echo '<p>Aucune donations n\'a encore été faite.</p>';
-			}
+				echo '<p class="button"><button type="submit">Envoyer</button></p>';
+			echo '</form>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
+
 
 $S_CRT_1 = ASM::$crt->getCurrentSession();
 ASM::$crt->newSession();
@@ -45,11 +34,10 @@ ASM::$crt->load(
 );
 
 echo '<div class="component player rank">';
-	echo '<div class="head skin-2">';
-		echo '<h2>Transferts à des membres</h2>';
-	echo '</div>';
+	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
+			echo '<h4>Dernières transactions</h4>';
 			for ($i = 0; $i < ASM::$crt->size(); $i++) {
 				$transaction = ASM::$crt->get($i);
 

@@ -33,6 +33,13 @@ echo '<div class="component nav">';
 				echo '<em>Edition de la description publique</em>';
 			echo '</a>';
 
+			$active = (CTR::$get->get('mode') == 'credit') ? 'active' : '';
+			echo '<a href="' . APP_ROOT . 'faction/view-government/mode-credit" class="nav-element ' . $active . '">';
+				echo '<img src="' . MEDIA . 'faction/law/common.png" alt="" />';
+				echo '<strong>Gestion des finances</strong>';
+				echo '<em>Envoi de crédits aux membres de la faction</em>';
+			echo '</a>';
+
 			if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
 				$active = (CTR::$get->get('mode') == 'manage') ? 'active' : '';
 				echo '<a href="' . APP_ROOT . 'faction/view-government/mode-manage" class="nav-element ' . $active . '">';

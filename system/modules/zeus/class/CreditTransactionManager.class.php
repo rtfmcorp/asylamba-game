@@ -74,12 +74,10 @@ class CreditTransactionManager extends Manager {
 			$ct->senderStatus = $aw['senderStatus'];
 			$ct->senderColor = $aw['senderColor'];
 
-			if ($ct->type == CreditTransaction::TYP_PLAYER) {
-				$ct->receiverName = $aw['receiverName'];
-				$ct->receiverAvatar = $aw['receiverAvatar'];
-				$ct->receiverStatus = $aw['receiverStatus'];
-				$ct->receiverColor = $aw['receiverColor'];
-			}
+			$ct->receiverName = $aw['receiverName'];
+			$ct->receiverAvatar = $aw['receiverAvatar'];
+			$ct->receiverStatus = $aw['receiverStatus'];
+			$ct->receiverColor = $aw['receiverColor'];
 
 			$this->_Add($ct);
 		}

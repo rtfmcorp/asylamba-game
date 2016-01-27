@@ -125,7 +125,11 @@ class Color {
 	}
 
 	public function increaseCredit($credit) {
-		$this->credits = $this->credits + $credit;
+		$this->credits += $credit;
+	}
+
+	public function decreaseCredit($credit) {
+		$this->credits -= $credit;
 	}
 
 	public function sendSenateNotif($fromChief = FALSE) {

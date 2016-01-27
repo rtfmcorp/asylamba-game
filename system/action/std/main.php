@@ -71,6 +71,7 @@ if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('tok
 		case 'disconnect': 				include ACTION . 'zeus/player/disconnect.php'; break;
 		case 'sendcredit': 				include ACTION . 'zeus/player/sendCredit.php'; break;
 		case 'sendcredittofaction':		include ACTION . 'zeus/player/sendCreditToFaction.php'; break;
+		case 'sendcreditfromfaction':	include ACTION . 'zeus/player/sendCreditFromFaction.php'; break;
 		case 'abandonserver': 			include ACTION . 'zeus/player/abandonServer.php'; break;
 		case 'switchadvertisement':		include ACTION . 'zeus/player/switchAdvertisement.php'; break;
 

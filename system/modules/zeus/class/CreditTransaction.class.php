@@ -14,6 +14,7 @@ class CreditTransaction {
 
 	const TYP_PLAYER = 0;
 	const TYP_FACTION = 1;
+	const TYP_F_TO_P = 2; # faction to player
 
 	public $id = 0;
 	public $rSender = 0;

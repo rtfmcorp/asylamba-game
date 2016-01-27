@@ -287,6 +287,8 @@ echo '<div id="content">';
 				include COMPONENT . 'faction/government/message.php';
 			} elseif (CTR::$get->get('mode') == 'description') {
 				include COMPONENT . 'faction/government/description.php';
+			} elseif (CTR::$get->get('mode') == 'credit') {
+				include COMPONENT . 'faction/government/credit.php';
 			} elseif (CTR::$get->get('mode') == 'manage') {
 				$PLAYER_GOV_TOKEN = ASM::$pam->newSession(FALSE);
 				ASM::$pam->load(
