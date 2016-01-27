@@ -29,6 +29,7 @@ if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('tok
 
 		case 'buildship':				include ACTION . 'athena/ship/build.php'; break;
 		case 'dequeueship':				include ACTION . 'athena/ship/dequeue.php'; break;
+		case 'recycleship':				include ACTION . 'athena/ship/recycle.php'; break;
 
 		case 'proposeroute':			include ACTION . 'athena/route/propose.php'; break;
 		case 'acceptroute':				include ACTION . 'athena/route/accept.php'; break;
