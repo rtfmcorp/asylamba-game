@@ -91,7 +91,7 @@ echo '<div class="component new-message market-sell">';
 
 							echo '<hr />';
 
-							echo '<p><input type="submit" name="identifier-' . $key . '" value="Vendre" /></p>';
+							echo '<p><input type="submit" name="identifier-' . $key . '" value="Envoyer" /></p>';
 						echo '</div>';
 					}
 				}
