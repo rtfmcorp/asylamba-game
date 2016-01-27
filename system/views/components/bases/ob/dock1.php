@@ -205,16 +205,43 @@ echo '<div class="component">';
 			Le bouton intégration vous renverra à l’amirauté, ce qui vous permettra de vider votre hangar et de répartir vos vaisseaux dans vos flottes 
 			en orbite autour de la planète sur laquelle vous avez construit votre chantier.</p>';
 
-			echo '<div class="queue">';
-			for ($i = 0; $i < 6; $i++) {
-				if ($storage[$i] !== 0) {
-					echo '<div class="item">';
-						echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($i, 'imageLink') . '.png" alt="" />';
-						echo '<strong><span class="big">' . $storage[$i] . '</span> ' . ShipResource::getInfo($i, 'codeName') . Format::addPlural($storage[$i]) . '</strong>';
-						echo '<em>' . ($storage[$i] * ShipResource::getInfo($i, 'pev')) . ' PEV</em>';
-					echo '</div>';
+			echo '<div class="component market-sell">';
+				for ($i = 0; $i < 6; $i++) {
+					if ($storage[$i] !== 0) {
+						echo '<div class="queue sh" data-target="sell-ships-' . $i . '">';
+							echo '<div class="item">';
+								echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($i, 'imageLink') . '.png" alt="" />';
+								echo '<strong><span class="big">' . $storage[$i] . '</span> ' . ShipResource::getInfo($i, 'codeName') . Format::addPlural($storage[$i]) . '</strong>';
+								echo '<em>' . ($storage[$i] * ShipResource::getInfo($i, 'pev')) . ' PEV</em>';
+							echo '</div>';
+						echo '</div>';
+					}
+					
+					echo '<form id="sell-ships-' . $i . 
+					'" class="sell-form"
+					" data-max-quantity="' . $storage[$i] .
+					'" data-min-price="' . (ShipResource::getInfo($i, 'resourcePrice') / 2) . 
+					'" action="' . Format::actionBuilder('recycleship', 
+						['baseid' => $ob_dock1->getId(), 'typeofship' => $i]) . 
+					'" method="post" style="display:none;">';
+						
+						echo '<h4>recycler des vaisseaux</h4>';
+						echo '<hr />';
+						echo '<div class="label-box sf-quantity">';
+							echo '<label for="sell-market-quantity-ship" class="label">Quantité</label>';
+							echo '<input id="sell-market-quantity-ship" class="value" type="text" name="quantity" autocomplete="off" />';
+						echo '</div>';
+
+						echo '<div class="label-box sf-min-price">';
+							echo '<span class="label">Ressources</span>';
+							echo '<span class="value"></span>';
+							echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/resource.png">';
+						echo '</div>';
+
+						echo '<hr />';
+						echo '<p><input type="submit" value="Recycler" /></p>';
+					echo '</form>';
 				}
-			}
 			echo '</div>';
 
 			echo '<div class="number-box">';
