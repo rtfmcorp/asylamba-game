@@ -59,6 +59,21 @@ function cmpPoints($a, $b) {
     return ($a['points'] > $b['points']) ? -1 : 1;
 }
 
+function setPositions($list, $attribute) {
+	$position = 1;
+	$index = 1;
+	$previous = PHP_INT_MAX;
+	foreach ($list as $key => $value) { 
+		if ($previous > $list[$key][$attribute]) {
+			$position = $index;
+		}
+		$list[$key]['position'] = $position;
+		$index++;
+		$previous = $list[$key][$attribute];
+	}
+	return $list;
+}
+
 # load the factions (colors)
 ASM::$clm->load(array('isInGame' => 1));
 
@@ -150,12 +165,9 @@ uasort($listT, 'cmpTerritorial');
 }*/
 
 # put the position in each array
-$position = 1;
-foreach ($listG as $key => $value) { $listG[$key]['position'] = $position++;}
-$position = 1;
-foreach ($listW as $key => $value) { $listW[$key]['position'] = $position++;}
-$position = 1;
-foreach ($listT as $key => $value) { $listT[$key]['position'] = $position++;}
+$listG = setPositions($listG, 'general');
+$listW = setPositions($listW, 'wealth');
+$listT = setPositions($listT, 'territorial');
 
 #-------------------------------- POINTS RANKING -----------------------------#
 
