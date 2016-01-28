@@ -95,7 +95,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND in_array($baseId, $verif)) 
 									$cs->rBase = $orbitalBase->rPlace;
 									$cs->rBaseDestination = $otherBase->rPlace;
 									$cs->rTransaction = $tr->id;
-									$cs->resourceTransported = NULL;
+									$cs->resourceTransported = 0;
 									$cs->shipQuantity = $commercialShipQuantity;
 									$cs->dDeparture = $departure;
 									$cs->dArrival = $arrival;

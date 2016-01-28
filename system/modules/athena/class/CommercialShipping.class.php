@@ -177,6 +177,12 @@ class CommercialShipping {
 						echo '<div class="price">';
 							echo Format::numberFormat($this->price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
 						echo '</div>';
+					} elseif ($this->resourceTransported == 0) {
+						# ships sending
+						echo '<div class="for"><span></span></div>';
+						echo '<div class="price">';
+							echo 'envoi de vaisseaux';
+						echo '</div>';
 					} else {
 						# resources sending
 						echo '<div class="for"><span></span></div>';
