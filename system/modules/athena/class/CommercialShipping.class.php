@@ -64,7 +64,13 @@ class CommercialShipping {
 					$n = new Notification();
 					$n->setRPlayer($destOB->getRPlayer());
 					$n->setTitle('Ressources reçues');
-					$n->addBeg()->addTxt('Vous avez reçu les ' . $transaction->quantity . ' ressources que vous avez achetées au marché.');
+					if ($this->resourceTransported == NULL) {
+						# transaction
+						$n->addBeg()->addTxt('Vous avez reçu les ' . $transaction->quantity . ' ressources que vous avez achetées au marché.');
+					} else {
+						# resources sending
+						$n->addBeg()->addTxt('Vous avez reçu les ' . $transaction->quantity . ' ressources envoyées par un marchand galactique.');
+					}
 					$n->addEnd();
 					ASM::$ntm->add($n);
 
@@ -75,14 +81,28 @@ class CommercialShipping {
 					# notif pour l'acheteur
 					$n = new Notification();
 					$n->setRPlayer($destOB->getRPlayer());
-					if ($transaction->quantity == 1) {
-						$n->setTitle('Vaisseau reçu');
-						$n->addBeg()->addTxt('Vous avez reçu le vaisseau de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' que vous avez acheté au marché.');
-						$n->addSep()->addTxt('Il a été ajouté à votre hangar.');
+					if ($this->resourceTransported == NULL) {
+						# transaction
+						if ($transaction->quantity == 1) {
+							$n->setTitle('Vaisseau reçu');
+							$n->addBeg()->addTxt('Vous avez reçu le vaisseau de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' que vous avez acheté au marché.');
+							$n->addSep()->addTxt('Il a été ajouté à votre hangar.');
+						} else {
+							$n->setTitle('Vaisseaux reçus');
+							$n->addBeg()->addTxt('Vous avez reçu les ' . $transaction->quantity . ' vaisseaux de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' que vous avez achetés au marché.');
+							$n->addSep()->addTxt('Ils ont été ajoutés à votre hangar.');
+						}
 					} else {
-						$n->setTitle('Vaisseaux reçus');
-						$n->addBeg()->addTxt('Vous avez reçu les ' . $transaction->quantity . ' vaisseaux de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' que vous avez achetés au marché.');
-						$n->addSep()->addTxt('Ils ont été ajoutés à votre hangar.');
+						# ships sending
+						if ($transaction->quantity == 1) {
+							$n->setTitle('Vaisseau reçu');
+							$n->addBeg()->addTxt('Vous avez reçu le vaisseau de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' envoyé par un marchand galactique.');
+							$n->addSep()->addTxt('Il a été ajouté à votre hangar.');
+						} else {
+							$n->setTitle('Vaisseaux reçus');
+							$n->addBeg()->addTxt('Vous avez reçu les ' . $transaction->quantity . ' vaisseaux de type ' . ShipResource::getInfo($transaction->identifier, 'codeName') . ' envoyés par un marchand galactique.');
+							$n->addSep()->addTxt('Ils ont été ajoutés à votre hangar.');
+						}
 					}
 					$n->addEnd();
 					ASM::$ntm->add($n);
