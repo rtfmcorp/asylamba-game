@@ -64,13 +64,7 @@ class CommercialShipping {
 					$n = new Notification();
 					$n->setRPlayer($destOB->getRPlayer());
 					$n->setTitle('Ressources reçues');
-					if ($this->resourceTransported == NULL) {
-						# transaction
-						$n->addBeg()->addTxt('Vous avez reçu les ' . $transaction->quantity . ' ressources que vous avez achetées au marché.');
-					} else {
-						# resources sending
-						$n->addBeg()->addTxt('Vous avez reçu les ' . $transaction->quantity . ' ressources envoyées par un marchand galactique.');
-					}
+					$n->addBeg()->addTxt('Vous avez reçu les ' . $transaction->quantity . ' ressources que vous avez achetées au marché.');
 					$n->addEnd();
 					ASM::$ntm->add($n);
 
