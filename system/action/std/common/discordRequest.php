@@ -3,7 +3,7 @@ $discordId = Utils::getHTTPData('discord-id');
 
 if ($discordId !== FALSE AND $discordId !== '') {
 
-	$chickenBot = 'http://chickenbot.cloudapp.net:8080';
+	$chickenBot = 'http://chickenbot.cloudapp.net:8080/register';
 
 	$data = array("discordId" => $discordId, "server" => "s" . APP_ID, "username" => CTR::$data->get('playerInfo')->get('name'), "factionColor" => CTR::$data->get('playerInfo')->get('color')); 
 	$data_string = json_encode($data);
