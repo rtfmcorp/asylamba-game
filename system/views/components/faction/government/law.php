@@ -13,7 +13,7 @@ echo '<div class="component profil player">';
 
 				if (LawResources::getInfo($governmentLaw_id, 'bonusLaw')) {
 					echo '<form action="' . Format::actionBuilder('createlaw', ['type' => $governmentLaw_id]) . '" method="post">';
-						echo '<input type="text" placeholder="Nombre de relève d\'activité" name="duration" />';
+						echo '<input type="text" placeholder="Nombre de relèves d\'activité" name="duration" />';
 
 						echo '<button class="button">';
 							echo '<span class="text">';
