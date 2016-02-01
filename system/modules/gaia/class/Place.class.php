@@ -229,8 +229,9 @@ class Place {
 								$place = ASM::$plm->getById($commander->rBase);
 								$bonus = $playerBonuses[$commander->rPlayer];
 								
-								$commander->rDestinationPlace = 0;
-								CTC::add($commander->dArrival, $this, 'uChangeBase', [$commander, $place, $bonus]);
+								if (CTC::add($commander->dArrival, $this, 'uChangeBase', [$commander, $place, $bonus])) {
+									$commander->rDestinationPlace = NULL;
+								}
 							break;
 
 							case Commander::LOOT: 
@@ -265,8 +266,10 @@ class Place {
 								ASM::$clm->load(['id' => $commander->playerColor]);
 								$commanderColor = ASM::$clm->get();
 								ASM::$clm->changeSession($S_CLM_L1);
-								$commander->rDestinationPlace = 0;
-								CTC::add($commander->dArrival, $this, 'uLoot', array($commander, $place, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor));
+
+								if (CTC::add($commander->dArrival, $this, 'uLoot', array($commander, $place, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor))) {
+									$commander->rDestinationPlace = NULL;
+								}
 							break;
 
 							case Commander::COLO: 
@@ -325,8 +328,9 @@ class Place {
 								$commanderColor = ASM::$clm->get();
 								ASM::$clm->changeSession($S_CLM);
 								
-								$commander->rDestinationPlace = 0;
-								CTC::add($commander->dArrival, $this, 'uConquer', array($commander, $place, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $S_CRM_C2, $S_REM_C2, $S_COM_C2));
+								if (CTC::add($commander->dArrival, $this, 'uConquer', array($commander, $place, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $S_CRM_C2, $S_REM_C2, $S_COM_C2))) {
+									$commander->rDestinationPlace = NULL;
+								}
 							break;
 
 							case Commander::BACK: 
@@ -337,8 +341,9 @@ class Place {
 								$base = ASM::$obm->get();
 								ASM::$obm->changeSession($S_OBM_B1);
 								
-								$commander->rDestinationPlace = 0;
-								CTC::add($commander->dArrival, $this, 'uComeBackHome', array($commander, $base));
+								if (CTC::add($commander->dArrival, $this, 'uComeBackHome', array($commander, $base))) {
+									$commander->rDestinationPlace = NULL;
+								}
 							break;
 
 							default: CTR::$alert->add('Cette action n\'existe pas.', ALT_BUG_INFO);

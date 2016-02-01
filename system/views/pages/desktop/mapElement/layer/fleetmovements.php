@@ -21,7 +21,7 @@ echo '<div id="fleet-movements" ' . (Params::check(Params::SHOW_MAP_FLEETOUT) ? 
 			for ($i = 0; $i < ASM::$com->size(); $i++) {
 				$commander = ASM::$com->get($i);
 
-				if ($commander->rDestinationPlace !== NULL && $commander->rDestinationPlace !== 0) {
+				if ($commander->rDestinationPlace !== NULL) {
 					$x1 = ASM::$plm->getById($commander->rStartPlace)->getXSystem() * GalaxyConfiguration::$scale;
 					$x2 = ASM::$plm->getById($commander->rDestinationPlace)->getXSystem() * GalaxyConfiguration::$scale;
 					$y1 = ASM::$plm->getById($commander->rStartPlace)->getYSystem() * GalaxyConfiguration::$scale;

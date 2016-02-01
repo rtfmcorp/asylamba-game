@@ -80,6 +80,7 @@ abstract class CTC {
 				'random' => rand()
 			);
 			self::$events[] = $event;
+			return TRUE;
 		}
 	}
 
