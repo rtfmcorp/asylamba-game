@@ -99,6 +99,8 @@ class Commander {
 	public $uCommander				= '';
 	public $hasToU					= TRUE;
 	public $hasArmySetted			= FALSE;
+	public $uMethodCtced			= FALSE;
+	public $lastUMethod				= NULL;
 
 
 	# Tableau d'objets squadron       

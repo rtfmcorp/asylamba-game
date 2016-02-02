@@ -223,14 +223,23 @@ class Place {
 					$commander = ASM::$com->get($i);
 
 					# only if the commander isn't in travel
-					if ($commander->dArrival <= $now AND $commander->rDestinationPlace != 0) {
+					$hasntU = TRUE;
+					if ($commander->uMethodCtced) {
+						$hasntU = FALSE;
+
+						if (Utils::interval($commander->lasrUMethod, Utils::now(), 's') > 10) {
+							$hasntU = TRUE;
+						}
+					}
+					if ($commander->dArrival <= $now and $hasntU) {
 						switch ($commander->travelType) {
 							case Commander::MOVE: 
 								$place = ASM::$plm->getById($commander->rBase);
 								$bonus = $playerBonuses[$commander->rPlayer];
 								
 								if (CTC::add($commander->dArrival, $this, 'uChangeBase', [$commander, $place, $bonus])) {
-									$commander->rDestinationPlace = NULL;
+									$commander->uMethodCtced = TRUE;
+									$commander->lastUMethod = Utils::now();
 								}
 							break;
 
@@ -268,7 +277,8 @@ class Place {
 								ASM::$clm->changeSession($S_CLM_L1);
 
 								if (CTC::add($commander->dArrival, $this, 'uLoot', array($commander, $place, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor))) {
-									$commander->rDestinationPlace = NULL;
+									$commander->uMethodCtced = TRUE;
+									$commander->lastUMethod = Utils::now();
 								}
 							break;
 
@@ -329,7 +339,8 @@ class Place {
 								ASM::$clm->changeSession($S_CLM);
 								
 								if (CTC::add($commander->dArrival, $this, 'uConquer', array($commander, $place, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $S_CRM_C2, $S_REM_C2, $S_COM_C2))) {
-									$commander->rDestinationPlace = NULL;
+									$commander->uMethodCtced = TRUE;
+									$commander->lastUMethod = Utils::now();
 								}
 							break;
 
@@ -342,7 +353,8 @@ class Place {
 								ASM::$obm->changeSession($S_OBM_B1);
 								
 								if (CTC::add($commander->dArrival, $this, 'uComeBackHome', array($commander, $base))) {
-									$commander->rDestinationPlace = NULL;
+									$commander->uMethodCtced = TRUE;
+									$commander->lastUMethod = Utils::now();
 								}
 							break;
 
