@@ -611,7 +611,8 @@ class OrbitalBase {
 				if (floor($pointsToRecycle / ShipResource::getInfo($i, 'resourcePrice')) > 0) {
 					$shipsArray1[] = array(
 						'ship' => $i,
-						'price' => ShipResource::getInfo($i, 'resourcePrice'));
+						'price' => ShipResource::getInfo($i, 'resourcePrice'),
+						'canBuild' => TRUE);
 				}
 				$buyShip[] = 0;
 			}
@@ -626,24 +627,34 @@ class OrbitalBase {
 					break;
 				}
 			}
-			$continue = true;
+			$continue = TRUE;
 			if (count($shipsArray) > 0) {
 				while($continue) {
+					if ($lkj > 5) {exit();}
 					foreach ($shipsArray as $key => $line) {
-						$nbmax = floor($pointsToRecycle / $line['price']);
-						if ($nbmax < 1) {
-							$continue = false;
+						if ($line['canBuild']) {
+							$nbmax = floor($pointsToRecycle / $line['price']);
+							if ($nbmax < 1) {
+								$shipsArray[$key]['canBuild'] = FALSE;
+							} else {
+								$qty = rand(1, $nbmax);
+								$pointsToRecycle -= $qty * $line['price'];
+								$buyShip[$line['ship']] += $qty;
+							}
+						}
+					}
+
+					$canBuild = FALSE;
+					# verify if we can build one more ship
+					foreach ($shipsArray as $key => $line) {
+						if ($line['canBuild']) {
+							$canBuild = TRUE;
 							break;
 						}
-						$qty = rand(1, $nbmax);
-						if ($pointsToRecycle >= $qty * $line['price']) {
-							$pointsToRecycle -= $qty * $line['price'];
-							$line['buy'] = 1;
-							$buyShip[$line['ship']] += $qty;
-						} else {
-							$continue = false;
-							break;
-						}
+					}
+					if (!$canBuild) {
+						# if the 3 types of ships can't be build anymore --> stop
+						$continue = FALSE;
 					}
 				}
 			}
