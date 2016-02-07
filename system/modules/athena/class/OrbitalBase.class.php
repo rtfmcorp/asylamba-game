@@ -595,9 +595,10 @@ class OrbitalBase {
 
 			# diversify a little (resource and credit)
 			$percent = rand(-5, 5);
-			$diffAmount = round($creditRecycled * $percent / 100);
-			$creditRecycled += $diffAmount;
-			$resourceRecycled -= $diffAmount;
+			$diffAmountCredit = round($creditRecycled * $percent / 100);
+			$diffAmountResource = round($resourceRecycled * $percent / 100);
+			$creditRecycled += $diffAmountCredit;
+			$resourceRecycled -= $diffAmountResource;
 
 			if ($creditRecycled < 0) { $creditRecycled = 0; }
 			if ($resourceRecycled < 0) { $resourceRecycled = 0; }
