@@ -726,10 +726,6 @@ class Color {
 					$token_pam = ASM::$pam->getCurrentSession();
 					ASM::$pam->changeSession($_PAM);
 
-					$date = new DateTime($this->dLastElection);
-					$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
-					$date = $date->format('Y-m-d H:i:s');
-
 					CTC::add($date, $this, 'uCampaign', array($token_pam));
 				}
 			}
