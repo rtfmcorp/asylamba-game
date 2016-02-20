@@ -630,7 +630,6 @@ class OrbitalBase {
 			$continue = TRUE;
 			if (count($shipsArray) > 0) {
 				while($continue) {
-					if ($lkj > 5) {exit();}
 					foreach ($shipsArray as $key => $line) {
 						if ($line['canBuild']) {
 							$nbmax = floor($pointsToRecycle / $line['price']);

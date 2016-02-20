@@ -54,7 +54,7 @@ echo '<div class="component new-message market-sell">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<form action="' . Format::actionBuilder('giveships', ['baseid' => $ob_compPlat->getId(), 'identifier' => $key]) . '" method="post">';
+			echo '<form action="' . Format::actionBuilder('giveships', ['baseid' => $ob_compPlat->getId()]) . '" method="post">';
 				echo '<p><label for="send-ships-target">Base destinataire</label></p>';
 				echo '<input class="autocomplete-hidden" type="hidden" name="otherbaseid" />';
 				echo '<p class="input input-text"><input type="text" id="send-ships-target" class="autocomplete-orbitalbase" name="name" autocomplete="off" /></p>';
