@@ -67,7 +67,7 @@ if ($program !== FALSE) {
 				ASM::$vom->add($vote);
 
 				$_PAM123 = ASM::$pam->getCurrentsession();
-				ASM::$pam->newSession();
+				ASM::$pam->newSession(FALSE);
 				ASM::$pam->load(['rColor' => ASM::$clm->get()->id, 'statement' => PAM_ACTIVE]);
 
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
