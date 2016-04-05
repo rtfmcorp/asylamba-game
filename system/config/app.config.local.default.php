@@ -91,4 +91,5 @@ define('SHIFT_FACTION', 		2);
 
 # date de début du serveur
 define('SERVER_START_TIME', '2015-06-30 10:00:00');
+define('SEGMENT_SHIFT', 650);
 ?>
