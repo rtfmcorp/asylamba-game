@@ -228,6 +228,16 @@ try {
 		$api->confirmInscription(CTR::$data->get('inscription')->get('bindkey'), APP_ID);
 	}
 
+	# enregistrement DA
+	if (DATA_ANALYSIS) {
+		$db = DataBase::getInstance();
+		$qr = $db->prepare('INSERT INTO 
+			DA_Player(color, dInscription)
+			VALUES(?, ?)'
+		);
+		$qr->execute([$pl->rColor, Utils::now()]);
+	}
+
 	# clear les sessions
 	CTR::$data->remove('inscription');
 	CTR::$data->remove('prebindkey');
