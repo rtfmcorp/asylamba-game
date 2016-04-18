@@ -90,6 +90,16 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_
 								$n->addEnd();
 								ASM::$ntm->add($n);
 							}
+
+							if (DATA_ANALYSIS) {
+								$db = DataBase::getInstance();
+								$qr = $db->prepare('INSERT INTO 
+									DA_CommercialRelation(`from`, `to`, type, weight, dAction)
+									VALUES(?, ?, ?, ?, ?)'
+								);
+								$qr->execute([CTR::$data->get('playerId'), $otherBase->getRPlayer(), 4, DataAnalysis::resourceToStdUnit($resource), Utils::now()]);
+							}
+
 							CTR::$alert->add('Ressources envoyées', ALERT_STD_SUCCESS);
 						} else {
 							CTR::$alert->add('envoi de ressources impossible - erreur dans les bases orbitales', ALERT_STD_ERROR);
