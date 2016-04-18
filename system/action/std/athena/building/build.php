@@ -110,7 +110,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 				$bq = new BuildingQueue();
 				$bq->rOrbitalBase = $baseId;
 				$bq->buildingNumber = $building;
-				$bq->targetLevel = $currentLevel+1;
+				$bq->targetLevel = $currentLevel + 1;
 				$time = OrbitalBaseResource::getBuildingInfo($building, 'level', $currentLevel + 1, 'time');
 				$bonus = $time * CTR::$data->get('playerBonus')->get(PlayerBonus::GENERATOR_SPEED) / 100;
 				if (ASM::$bqm->size() == 0) {
@@ -123,6 +123,15 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 
 				# debit resources
 				$ob->decreaseResources(OrbitalBaseResource::getBuildingInfo($building, 'level', $currentLevel + 1, 'resourcePrice'));
+
+				if (DATA_ANALYSIS) {
+					$db = DataBase::getInstance();
+					$qr = $db->prepare('INSERT INTO 
+						DA_BaseAction(`from`, type, opt1, opt2, weight, dAction)
+						VALUES(?, ?, ?, ?, ?, ?)'
+					);
+					$qr->execute([CTR::$data->get('playerId'), 1, $building, $currentLevel + 1, DataAnalysis::resourceToStdUnit(OrbitalBaseResource::getBuildingInfo($building, 'level', $currentLevel + 1, 'resourcePrice')), Utils::now()]);
+				}
 
 				# add the event in controller
 				CTR::$data->get('playerEvent')->add($bq->dEnd, EVENT_BASE, $baseId);

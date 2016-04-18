@@ -5,7 +5,7 @@ $db->query("DROP TABLE IF EXISTS `DA_SocialRelation`");
 $db->query("CREATE TABLE IF NOT EXISTS `DA_SocialRelation` (
 	`id` INT unsigned NOT NULL AUTO_INCREMENT,
 	`from` INT unsigned NOT NULL,
-	`to` INT unsigned NOT NULL,
+	`to` INT unsigned NULL DEFAULT NULL,
 
 	`type` SMALLINT unsigned NOT NULL,
 	`message` TEXT NOT NULL,

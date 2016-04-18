@@ -89,6 +89,7 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 						# bonus if the player is from Aphera
 						$bonusPercent += ColorResource::BONUS_APHERA_TECHNO;
 					}
+
 					# ajout du bonus du lieu
 					$bonusPercent += Game::getImprovementFromScientificCoef($ob->planetHistory);
 					
@@ -103,11 +104,21 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 
 					// débit resources
 					$ob->decreaseResources(TechnologyResource::getInfo($techno, 'resource', $targetLevel));
+					
 					// débit des crédits
 					ASM::$pam->get()->decreaseCredit(TechnologyResource::getInfo($techno, 'credit', $targetLevel));
 					
 					// ajout de l'event dans le contrôleur
 					CTR::$data->get('playerEvent')->add($tq->dEnd, EVENT_BASE, $baseId);
+
+					if (DATA_ANALYSIS) {
+						$db = DataBase::getInstance();
+						$qr = $db->prepare('INSERT INTO 
+							DA_BaseAction(`from`, type, opt1, opt2, weight, dAction)
+							VALUES(?, ?, ?, ?, ?, ?)'
+						);
+						$qr->execute([CTR::$data->get('playerId'), 2, $techno, $targetLevel, (DataAnalysis::resourceToStdUnit(TechnologyResource::getInfo($techno, 'resource', $targetLevel)) + DataAnalysis::creditToStdUnit(TechnologyResource::getInfo($techno, 'credit', $targetLevel))), Utils::now()]);
+					}
 
 					// alerte
 					CTR::$alert->add('Développement de la technologie programmée', ALERT_STD_SUCCESS);

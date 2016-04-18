@@ -232,10 +232,10 @@ try {
 	if (DATA_ANALYSIS) {
 		$db = DataBase::getInstance();
 		$qr = $db->prepare('INSERT INTO 
-			DA_Player(color, dInscription)
-			VALUES(?, ?)'
+			DA_Player(id, color, dInscription)
+			VALUES(?, ?, ?)'
 		);
-		$qr->execute([$pl->rColor, Utils::now()]);
+		$qr->execute([$pl->getId(), $pl->rColor, Utils::now()]);
 	}
 
 	# clear les sessions

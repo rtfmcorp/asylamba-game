@@ -7,8 +7,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `DA_BaseAction` (
 	`from` INT unsigned NOT NULL,
 
 	`type` SMALLINT unsigned NOT NULL,
-	`opt1` SMALLINT unsigned NOT NULL,
-	`opt2` SMALLINT unsigned NOT NULL,
+	`opt1` SMALLINT unsigned NULL DEFAULT NULL,
+	`opt2` SMALLINT unsigned NULL DEFAULT NULL,
 	`weight` INT unsigned NOT NULL,
 	`dAction` datetime DEFAULT NULL,
 	
