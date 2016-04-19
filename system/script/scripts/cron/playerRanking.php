@@ -23,7 +23,6 @@ $rRanking = $db->lastInsertId();
 
 echo 'Numéro du ranking : ' . $rRanking . '<br /><br />';
 
-
 function cmpGeneral($a, $b) {
     if($a['general'] == $b['general']) {
         return 0;
@@ -78,7 +77,7 @@ ASM::$pam->load(array('statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY
 # create an array with all the players
 $list = array();
 for ($i = 0; $i < ASM::$pam->size(); $i++) {
-	$list[ASM::$pam->get($i)->id] = array(
+	$list[ASM::$pam->get($i)->id] = [
 		'general' => 0, 
 		'resources' => 0,
 		'experience' => 0, 
@@ -89,7 +88,11 @@ for ($i = 0; $i < ASM::$pam->size(); $i++) {
 		'butcher' => 0,
 		'butcherDestroyedPEV' => 0,
 		'butcherLostPEV' => 0,
-		'trader' => 0);
+		'trader' => 0,
+
+		'DA_Resources' => 0,
+		'DA_PlanetNumber' => 0
+	];
 }
 
 const COEF_RESOURCE = 0.001;
@@ -111,6 +114,40 @@ while ($aw = $qr->fetch()) {
 	if (isset($list[$aw['player']])) {
 		$resourcesProd = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $aw['levelRefinery'], 'refiningCoefficient'), $aw['coefResources']);
 		$list[$aw['player']]['resources'] += $resourcesProd;
+	}
+}
+
+#-------------------------------- DA_Resources --------------------------------#
+$qr = $db->prepare('SELECT 
+		p.id AS player,
+		SUM(ob.resourcesStorage) AS sumResources
+	FROM orbitalBase AS ob 
+	LEFT JOIN player AS p
+		on p.id = ob.rPlayer
+	WHERE p.statement = ? OR p.statement = ? OR p.statement = ?
+	GROUP BY ob.rPlace');
+$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY));
+
+while ($aw = $qr->fetch()) {
+	if (isset($list[$aw['player']])) {
+		$list[$aw['player']]['DA_Resources'] += DataAnalysis::resourceToStdUnit($aw['sumResources']);
+	}
+}
+
+#-------------------------------- DA_PlanetNumber --------------------------------#
+$qr = $db->prepare('SELECT 
+		p.id AS player,
+		COUNT(ob.rPlace) AS sumPlanets
+	FROM orbitalBase AS ob
+	LEFT JOIN player AS p
+		on p.id = ob.rPlayer
+	WHERE p.statement = ? OR p.statement = ? OR p.statement = ?
+	GROUP BY ob.rPlace');
+$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY));
+
+while ($aw = $qr->fetch()) {
+	if (isset($list[$aw['player']])) {
+		$list[$aw['player']]['DA_PlanetNumber'] += $aw['sumPlanets'];
 	}
 }
 
@@ -419,8 +456,36 @@ foreach ($list as $player => $value) {
 	$pr->traderVariation = $firstRanking ? 0 : $oldRanking->traderPosition - $pr->traderPosition;
 
 	ASM::$prm->add($pr);
+
+	if (DATA_ANALYSIS) {
+		$p = ASM::$pam->getById($player);
+
+		$db = DataBase::getInstance();
+		$qr = $db->prepare('INSERT INTO 
+			DA_PlayerDaily(rPlayer, credit, experience, level, victory, defeat, status, resources, fleetSize, nbPlanet, planetPoints, rkGeneral, rkFighter, rkProducer, rkButcher, rkTrader, dStorage)
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+		);
+		$qr->execute([
+			$p->id,
+			$p->credit,
+			$p->experience,
+			$p->level,
+			$p->victory,
+			$p->defeat,
+			$p->status,
+			$list[$player]['DA_Resources'],
+			$pr->armies,
+			$list[$player]['DA_PlanetNumber'],
+			$pr->general / $list[$player]['DA_PlanetNumber'],
+			$pr->general,
+			$pr->fight,
+			$pr->resources,
+			$pr->butcher,
+			$pr->trader,
+			Utils::now()
+		]);
+	}
 }
 
 ASM::$pam->changeSession($S_PAM1);
 ASM::$prm->changeSession($S_PRM1);
-?>

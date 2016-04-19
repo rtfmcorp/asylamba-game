@@ -1245,7 +1245,7 @@ if (DATA_ANALYSIS) {
 
 	include 'data-analysis/player.php';
 	include 'data-analysis/playerDaily.php';
-	include 'data-analysis/fleetMovement.php';
+//	include 'data-analysis/fleetMovement.php';
 	include 'data-analysis/commercialRelation.php';
 	include 'data-analysis/socialRelation.php';
 	include 'data-analysis/baseAction.php';
