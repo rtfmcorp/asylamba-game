@@ -202,7 +202,7 @@ class ColorResource {
 			'mandateDuration' => 950400,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de points. Ces points sont consultables dans le classement général.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
-				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de la Nerve peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Président. 
+				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de la Nerve peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voix est élue Président. 
 				<br /><br />Le Président va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Ministre de la défense, le Ministre des finances et le Premier Ministre de la faction. '
 		], [
 			'id' 			=> 6,
@@ -222,7 +222,7 @@ class ColorResource {
 			'mandateDuration' => 518400,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de points. Ces points sont consultables dans le classement général.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
-				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre d\'Aphéra peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Autarque. 
+				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre d\'Aphéra peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voix est élue Autarque. 
 				<br /><br />L\'Autarque va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer l\'Algorithmicien, le Tacticien et l\'Archiviste de la faction. '
 		], [
 			'id' 			=> 7,
@@ -242,7 +242,7 @@ class ColorResource {
 			'mandateDuration' => 1382400,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de points. Ces points sont consultables dans le classement général.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
-				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de Synelle peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Chancelier. 
+				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de Synelle peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voix est élue Chancelier. 
 				<br /><br />Le Chancelier va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Consul de la défense, le Consul des finances et le Premier Consul de la faction. '
 		], [
 			'id' 			=> 8,
@@ -280,7 +280,7 @@ class ColorResource {
 			'mandateDuration' => 950400,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de points. Ces points sont consultables dans le classement général.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
-				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de la Nouvelle-Nerve peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Président. 
+				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de la Nouvelle-Nerve peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voix est élue Président. 
 				<br /><br />Le Président va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Ministre de la défense, le Ministre des finances et le Premier Ministre de la faction. '
 		], [
 			'id' 			=> 10,
@@ -320,7 +320,7 @@ class ColorResource {
 			'mandateDuration' => 950400,
 			'senateDesc' => 'Le sénat est composé des membres de la faction qui possèdent le plus de points. Ces points sont consultables dans le classement général.',
 			'campaignDesc' => 'Les membres du Sénat peuvent se présenter aux élections pour prendre une place politiquement importante dans la faction. 
-				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de la Nerve peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voies est élu Président. 
+				<br /><br />Une fois que toutes les candidatures ont été déposées, chaque membre de la Nerve peut voter pour le candidat de son choix. À la fin de la période de vote, la personne ayant reçu le plus de voix est élue Président. 
 				<br /><br />Le Président va ensuite choisir trois personnes parmi les membres du Sénat pour le seconder dans la Faction. Il va devoir déterminer le Ministre de la défense, le Ministre des finances et le Premier Ministre de la faction. '
 		], [
 			'id' 			=> 12,
