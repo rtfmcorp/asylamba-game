@@ -39,8 +39,25 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					ASM::$sem->changeSession($S_SEM);
 					
 					$commander->destinationPlaceName = $place->baseName;
+
 					if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
 						$commander->move($place->getId(), $commander->rBase, Commander::MOVE, $length, $duration);
+
+						if (DATA_ANALYSIS) {
+							$db = DataBase::getInstance();
+							$qr = $db->prepare('INSERT INTO 
+								DA_CommercialRelation(`from`, `to`, type, weight, dAction)
+								VALUES(?, ?, ?, ?, ?)'
+							);
+							$ships = $commander->getNbrShipByType();
+							$price = 0;
+
+							for ($i = 0; $i < count($ships); $i++) { 
+								$price += DataAnalysis::resourceToStdUnit(ShipResource::getInfo($i, 'resourcePrice') * $ships[$i]);
+							}
+
+							$qr->execute([$commander->rPlayer, $place->rPlayer, 7, $price, Utils::now()]);
+						}
 					} else {
 						CTR::$alert->add('Cet emplacement est trop éloigné.', ALERT_STD_ERROR);	
 					}

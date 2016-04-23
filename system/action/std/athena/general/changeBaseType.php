@@ -45,6 +45,15 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 									break;
 								}
 							}
+							if (DATA_ANALYSIS) {
+								$db = DataBase::getInstance();
+								$qr = $db->prepare('INSERT INTO 
+									DA_BaseAction(`from`, type, opt1, weight, dAction)
+									VALUES(?, ?, ?, ?, ?)'
+								);
+								$qr->execute([CTR::$data->get('playerId'), 4, $type, DataAnalysis::creditToStdUnit($totalPrice), Utils::now()]);
+							}
+
 							CTR::$alert->add($orbitalBase->name . ' est désormais un Centre Industriel', ALERT_STD_SUCCESS);
 						} else {
 							CTR::$alert->add('Evolution de votre colonie impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
@@ -64,6 +73,16 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 									break;
 								}
 							}
+
+							if (DATA_ANALYSIS) {
+								$db = DataBase::getInstance();
+								$qr = $db->prepare('INSERT INTO 
+									DA_BaseAction(`from`, type, opt1, weight, dAction)
+									VALUES(?, ?, ?, ?, ?)'
+								);
+								$qr->execute([CTR::$data->get('playerId'), 4, $type, DataAnalysis::creditToStdUnit($totalPrice), Utils::now()]);
+							}
+
 							CTR::$alert->add($orbitalBase->name . ' est désormais une Base Militaire', ALERT_STD_SUCCESS);
 						} else {
 							CTR::$alert->add('Evolution de votre colonie impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);
@@ -104,6 +123,16 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 									break;
 								}
 							}
+
+							if (DATA_ANALYSIS) {
+								$db = DataBase::getInstance();
+								$qr = $db->prepare('INSERT INTO 
+									DA_BaseAction(`from`, type, opt1, weight, dAction)
+									VALUES(?, ?, ?, ?, ?)'
+								);
+								$qr->execute([CTR::$data->get('playerId'), 4, $type, DataAnalysis::creditToStdUnit($totalPrice), Utils::now()]);
+							}
+							
 							CTR::$alert->add($orbitalBase->name . ' est désormais une capitale.', ALERT_STD_SUCCESS);
 						} else {
 							CTR::$alert->add('Modification du type de la base orbitale impossible - vous n\'avez pas assez de crédits', ALERT_STD_ERROR);

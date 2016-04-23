@@ -95,6 +95,15 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 					$n->addEnd();
 					ASM::$ntm->add($n);
 
+					if (DATA_ANALYSIS) {
+						$db = DataBase::getInstance();
+						$qr = $db->prepare('INSERT INTO 
+							DA_CommercialRelation(`from`, `to`, type, weight, dAction)
+							VALUES(?, ?, ?, ?, ?)'
+						);
+						$qr->execute([$cr->playerId1, $cr->playerId2, 6, DataAnalysis::creditToStdUnit($cr->price), Utils::now()]);
+					}
+
 					CTR::$alert->add('Route commerciale acceptée, vous gagnez ' . $exp . ' points d\'expérience', ALERT_STD_SUCCESS);
 				} else {
 					CTR::$alert->add('impossible d\'accepter une route commerciale', ALERT_STD_ERROR);

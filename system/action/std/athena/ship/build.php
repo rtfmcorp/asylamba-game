@@ -87,6 +87,7 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 				}
 				$sq->dEnd = Utils::addSecondsToDate($sq->dStart, round($time - $bonus));
 				ASM::$sqm->add($sq);
+				
 				// débit des ressources au joueur
 				$resourcePrice = ShipResource::getInfo($ship, 'resourcePrice') * $quantity;
 				if ($ship == ShipResource::CERBERE || $ship == ShipResource::PHENIX) {
@@ -103,6 +104,15 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 
 				// ajout de l'event dans le contrôleur
 				CTR::$data->get('playerEvent')->add($sq->dEnd, EVENT_BASE, $baseId);
+
+				if (DATA_ANALYSIS) {
+					$db = DataBase::getInstance();
+					$qr = $db->prepare('INSERT INTO 
+						DA_BaseAction(`from`, type, opt1, opt2, weight, dAction)
+						VALUES(?, ?, ?, ?, ?, ?)'
+					);
+					$qr->execute([CTR::$data->get('playerId'), 3, $ship, $quantity, DataAnalysis::resourceToStdUnit(ShipResource::getInfo($ship, 'resourcePrice') * $quantity), Utils::now()]);
+				}
 
 				// alerte
 				if ($quantity == 1) {

@@ -20,6 +20,8 @@ if ($conversation !== FALSE AND $content !== FALSE) {
 			$conv = ASM::$cvm->get();
 
 			if ($conv->type != Conversation::TY_SYSTEM) {
+				$DA_recipient;
+
 				$conv->messages++;
 				$conv->dLastMessage = Utils::now();
 
@@ -30,6 +32,8 @@ if ($conversation !== FALSE AND $content !== FALSE) {
 
 					if ($user->rPlayer == CTR::$data->get('playerId')) {
 						$user->dLastView = Utils::now();
+					} else {
+						$DA_recipient = $user->rPlayer;
 					}
 				}
 
@@ -44,6 +48,15 @@ if ($conversation !== FALSE AND $content !== FALSE) {
 				$message->dLastModification = NULL;
 
 				ASM::$cme->add($message);
+
+				if (DATA_ANALYSIS) {
+					$db = DataBase::getInstance();
+					$qr = $db->prepare('INSERT INTO 
+						DA_SocialRelation(`from`, `to`, `type`, `message`, dAction)
+						VALUES(?, ?, ?, ?, ?)'
+					);
+					$qr->execute([CTR::$data->get('playerId'), $DA_recipient, 2, $content, Utils::now()]);
+				}
 			}
 		} else {
 			CTR::$alert->add('La conversation n\'existe pas ou ne vous appartient pas.', ALERT_STD_ERROR);

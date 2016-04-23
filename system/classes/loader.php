@@ -31,6 +31,7 @@ include CLASSES . 'lib/Game.class.php';
 include CLASSES . 'lib/Bug.class.php';
 include CLASSES . 'lib/Benchtime.class.php';
 include CLASSES . 'lib/Security.class.php';
+include CLASSES . 'lib/DataAnalysis.class.php';
 
 include_once HERMES;
 ?>
