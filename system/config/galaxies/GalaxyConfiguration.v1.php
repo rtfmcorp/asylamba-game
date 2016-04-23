@@ -36,7 +36,7 @@ abstract class GalaxyConfiguration {
 			'display' => [125, 125],
 			'name' => 'Secteur 1',
 			'danger' => GalaxyConfiguration::DNG_CASUAL,
-			'points' => 5,
+			'points' => 1,
 		], 
 		[
 			'id' => 2,
@@ -46,7 +46,7 @@ abstract class GalaxyConfiguration {
 			'display' => [133, 90],
 			'name' => 'Secteur 2',
 			'danger' => GalaxyConfiguration::DNG_EASY,
-			'points' => 2,
+			'points' => 1,
 		], 
 		[
 			'id' => 3,
@@ -56,7 +56,7 @@ abstract class GalaxyConfiguration {
 			'display' => [157, 110],
 			'name' => 'Secteur 3',
 			'danger' => GalaxyConfiguration::DNG_HARD,
-			'points' => 2,
+			'points' => 1,
 		], 
 		[
 			'id' => 4,
@@ -66,7 +66,7 @@ abstract class GalaxyConfiguration {
 			'display' => [157, 141],
 			'name' => 'Secteur 4',
 			'danger' => GalaxyConfiguration::DNG_EASY,
-			'points' => 2,
+			'points' => 1,
 		], 
 		[
 			'id' => 5,
@@ -76,7 +76,7 @@ abstract class GalaxyConfiguration {
 			'display' => [133, 161],
 			'name' => 'Secteur 5',
 			'danger' => GalaxyConfiguration::DNG_EASY,
-			'points' => 2,
+			'points' => 1,
 		], 
 		[
 			'id' => 6,
@@ -86,7 +86,7 @@ abstract class GalaxyConfiguration {
 			'display' => [102, 153],
 			'name' => 'Secteur 6',
 			'danger' => GalaxyConfiguration::DNG_CASUAL,
-			'points' => 2,
+			'points' => 1,
 		], 
 		[
 			'id' => 7,
@@ -96,7 +96,7 @@ abstract class GalaxyConfiguration {
 			'display' => [89, 125],
 			'name' => 'Secteur 7',
 			'danger' => GalaxyConfiguration::DNG_MEDIUM,
-			'points' => 2,
+			'points' => 1,
 		], 
 		[
 			'id' => 8,
@@ -106,7 +106,7 @@ abstract class GalaxyConfiguration {
 			'display' => [102, 97],
 			'name' => 'Secteur 8',
 			'danger' => GalaxyConfiguration::DNG_EASY,
-			'points' => 2,
+			'points' => 1,
 		], 
 		[
 			'id' => 9,
@@ -116,7 +116,7 @@ abstract class GalaxyConfiguration {
 			'display' => [109, 59],
 			'name' => 'Secteur 9',
 			'danger' => GalaxyConfiguration::DNG_VERY_HARD,
-			'points' => 1,
+			'points' => 2,
 		], 
 		[
 			'id' => 10,
@@ -126,7 +126,7 @@ abstract class GalaxyConfiguration {
 			'display' => [167, 72],
 			'name' => 'Secteur 10',
 			'danger' => GalaxyConfiguration::DNG_HARD,
-			'points' => 1,
+			'points' => 2,
 		], 
 		[
 			'id' => 11,
@@ -136,7 +136,7 @@ abstract class GalaxyConfiguration {
 			'display' => [193, 125],
 			'name' => 'Secteur 11',
 			'danger' => GalaxyConfiguration::DNG_VERY_HARD,
-			'points' => 1,
+			'points' => 2,
 		], 
 		[
 			'id' => 12,
@@ -146,7 +146,7 @@ abstract class GalaxyConfiguration {
 			'display' => [167, 178],
 			'name' => 'Secteur 12',
 			'danger' => GalaxyConfiguration::DNG_HARD,
-			'points' => 1,
+			'points' => 2,
 		], 
 		[
 			'id' => 13,
@@ -156,7 +156,7 @@ abstract class GalaxyConfiguration {
 			'display' => [109, 191],
 			'name' => 'Secteur 13',
 			'danger' => GalaxyConfiguration::DNG_VERY_HARD,
-			'points' => 1,
+			'points' => 2,
 		], 
 		[
 			'id' => 14,
@@ -166,7 +166,7 @@ abstract class GalaxyConfiguration {
 			'display' => [64, 155],
 			'name' => 'Secteur 14',
 			'danger' => GalaxyConfiguration::DNG_VERY_HARD,
-			'points' => 1,
+			'points' => 2,
 		], 
 		[
 			'id' => 15,
@@ -176,7 +176,7 @@ abstract class GalaxyConfiguration {
 			'display' => [64, 95],
 			'name' => 'Secteur 15',
 			'danger' => GalaxyConfiguration::DNG_HARD,
-			'points' => 1,
+			'points' => 2,
 		], 
 		[
 			'id' => 16,
@@ -346,7 +346,7 @@ abstract class GalaxyConfiguration {
 			'display' => [40, 223],
 			'name' => 'Secteur 32',
 			'danger' => GalaxyConfiguration::DNG_HARD,
-			'points' => 1,
+			'points' => 2,
 		], 
 		[
 			'id' => 33,
