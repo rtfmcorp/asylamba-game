@@ -488,7 +488,11 @@ class Player {
 	}
 
 	public function decreaseCredit($credit) {
-		$this->credit -= abs($credit);
+		if (abs($credit) > $this->credit) {
+			$this->credit = 0;
+		} else {
+			$this->credit -= abs($credit);
+		}
 		if ($this->synchronized) {
 			CTR::$data->get('playerInfo')->add('credit', $this->credit);
 		}
