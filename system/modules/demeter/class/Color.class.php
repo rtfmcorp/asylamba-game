@@ -162,7 +162,7 @@ class Color {
 		ASM::$pam->changeSession($_PAM121);
 	}
 
-	private function updateStatus($token_pam) {
+	public function updateStatus($token_pam) {
 		include_once ZEUS;
 		$limit = round($this->players / 4);
 		if ($limit < 10) { $limit = 10; }
