@@ -15,7 +15,8 @@ echo '<div id="map-info">';
 	echo '<ul>';
 		echo '<li>Non revendiquée <img src="' . MEDIA . 'map/systems/t4c0.png" /></li>';
 		
-		foreach ([4, 8, 10, 11, 12] as $faction) {
+		//foreach ([4, 8, 10, 11, 12] as $faction) {
+		foreach ([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as $faction) {
 			echo '<li>' . ColorResource::getInfo($faction, 'officialName') . ' <img src="' . MEDIA . 'map/systems/t4c' . $faction . '.png" /></li>';
 		}
 	echo '</ul>';

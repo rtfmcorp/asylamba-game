@@ -162,7 +162,7 @@ class Color {
 		ASM::$pam->changeSession($_PAM121);
 	}
 
-	private function updateStatus($token_pam) {
+	public function updateStatus($token_pam) {
 		include_once ZEUS;
 		$limit = round($this->players / 4);
 		if ($limit < 10) { $limit = 10; }
@@ -484,7 +484,7 @@ class Color {
 				$message->dCreation = Utils::now();
 				$message->dLastModification = NULL;
 				$message->content = 'Un putsch a réussi, un nouveau dirigeant va faire valoir la force de ' . $this->popularName . ' à travers la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong>.<br /><br />De nombreux membres de la faction ont soutenu le mouvement révolutionnaire :<br /><br />';
-				$message->content .= current($candidate)['name'] . ' a reçu le soutient de ' . Format::number((current($candidate)['vote'] / $this->activePlayers) * 100) . '% de la population.' . '<br />';
+				$message->content .= current($candidate)['name'] . ' a reçu le soutien de ' . Format::number((current($candidate)['vote'] / $this->activePlayers) * 100) . '% de la population.' . '<br />';
 				ASM::$cme->add($message);
 
 			} else {
@@ -641,8 +641,12 @@ class Color {
 	}
 
 	public function uFinishPunition($law, $player) {
-		$player->decreaseCredit($law->options['credits']);
-		$this->credits += $law->options['credits'];
+		$toPay = $law->options['credits'];
+		if ($player->credit < $law->options['credits']) {
+			$toPay = $player->credit;
+		}
+		$player->decreaseCredit($toPay);
+		$this->credits += $toPay;
 		$law->statement = Law::OBSOLETE;
 	}
 
