@@ -66,7 +66,6 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 			ASM::$pam->load(array('id' => $transaction->rPlayer));
 
 			if (ASM::$pam->size() == 2) {
-
 				# transfert des crédits entre joueurs
 				ASM::$pam->get(0)->decreaseCredit($totalPrice);
 				ASM::$pam->get(1)->increaseCredit($transaction->price);
@@ -115,6 +114,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				# update transaction statement
 				$transaction->statement = Transaction::ST_COMPLETED;
 				$transaction->dValidation = Utils::now();
+
 				# update exchange rate
 				$transaction->currentRate = Game::calculateCurrentRate(ASM::$trm->getExchangeRate($transaction->type), $transaction->type, $transaction->quantity, $transaction->identifier, $transaction->price);
 				
@@ -130,6 +130,15 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				$n->addSep()->addLnk('action/a-switchbase/base-' . $commercialShipping->rBase . '/page-sell', 'En savoir plus ?');
 				$n->addEnd();
 				ASM::$ntm->add($n);
+
+				if (DATA_ANALYSIS) {
+					$db = DataBase::getInstance();
+					$qr = $db->prepare('INSERT INTO 
+						DA_CommercialRelation(`from`, `to`, type, weight, dAction)
+						VALUES(?, ?, ?, ?, ?)'
+					);
+					$qr->execute([$transaction->rPlayer, CTR::$data->get('playerId'), $transaction->type, DataAnalysis::creditToStdUnit($transaction->price), Utils::now()]);
+				}
 
 				CTR::$alert->add('Proposition acceptée. Les vaisseaux commerciaux sont en route vers votre base orbitale.', ALERT_GAM_MARKET);
 			} else {

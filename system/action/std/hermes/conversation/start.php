@@ -50,7 +50,7 @@ if ($recipients !== FALSE AND $content !== FALSE) {
 				ASM::$cum->add($user);
 
 				# créer la liste des users
-				for ($i = 0; $i < ASM::$pam->size(); $i++) { 
+				for ($i = 0; $i < ASM::$pam->size(); $i++) {
 					$user = new ConversationUser();
 
 					$user->rConversation = $conv->id;
@@ -73,6 +73,15 @@ if ($recipients !== FALSE AND $content !== FALSE) {
 				$message->dLastModification = NULL;
 
 				ASM::$cme->add($message);
+
+				if (DATA_ANALYSIS) {
+					$db = DataBase::getInstance();
+					$qr = $db->prepare('INSERT INTO 
+						DA_SocialRelation(`from`, `to`, `type`, `message`, dAction)
+						VALUES(?, ?, ?, ?, ?)'
+					);
+					$qr->execute([CTR::$data->get('playerId'), ASM::$pam->get(0)->id, 2, $content, Utils::now()]);
+				}
 
 				CTR::$alert->add('La conversation a été créée.', ALERT_STD_SUCCESS);
 				CTR::redirect('message/conversation-' . $conv->id);

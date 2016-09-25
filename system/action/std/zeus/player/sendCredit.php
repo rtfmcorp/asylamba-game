@@ -59,6 +59,15 @@ if ($name !== FALSE AND $quantity !== FALSE) {
 					$n->addEnd();
 					ASM::$ntm->add($n);
 
+					if (DATA_ANALYSIS) {
+						$db = DataBase::getInstance();
+						$qr = $db->prepare('INSERT INTO 
+							DA_CommercialRelation(`from`, `to`, type, weight, dAction)
+							VALUES(?, ?, ?, ?, ?)'
+						);
+						$qr->execute([$ct->rSender, $ct->rReceiver, 5, DataAnalysis::creditToStdUnit($ct->amount), Utils::now()]);
+					}
+
 					CTR::$alert->add('Crédits envoyés', ALERT_STD_SUCCESS);
 						
 				} else {

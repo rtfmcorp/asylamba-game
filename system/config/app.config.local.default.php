@@ -16,6 +16,8 @@ define('HIGHMODE', 				FALSE);
 define('COLORSTYLE', 			TRUE);
 # active l'ajout du script analytics
 define('ANALYTICS', 			TRUE);
+# active la captation des données d'analyse (TB)
+define('DATA_ANALYSIS', 		FALSE);
 
 #########
 # INFOS #

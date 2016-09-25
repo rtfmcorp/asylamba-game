@@ -18,7 +18,7 @@ abstract class GalaxyConfiguration {
 		],
 		'circleSystemPosition' => [
 		#	[[X1], RAYON, EPAISSEUR, INTENSITE],
-			[[-200, 450], 460, 95, 10],
+			[[-200, 450], 460, 95, 4],
 		],
 		'population' => [700, 25000],
 	];

@@ -41,6 +41,15 @@ if ($title !== FALSE AND $content !== FALSE AND $rForum !== FALSE) {
 		}
 	}
 
+	if (DATA_ANALYSIS) {
+		$db = DataBase::getInstance();
+		$qr = $db->prepare('INSERT INTO 
+			DA_SocialRelation(`from`, type, message, dAction)
+			VALUES(?, ?, ?, ?)'
+		);
+		$qr->execute([CTR::$data->get('playerId'), 1, $content, Utils::now()]);
+	}
+
 	CTR::redirect('faction/view-forum/forum-' . $topic->rForum . '/topic-' . $topic->id . '/sftr-2');
 	CTR::$alert->add('Topic créé.', ALERT_STD_SUCCESS);
 } else {

@@ -40,6 +40,15 @@ if ($rTopic AND $content) {
 				CTR::redirect('faction/view-forum/forum-' . ASM::$tom->get()->rForum . '/topic-' . $rTopic . '/sftr-2');
 			}
 
+			if (DATA_ANALYSIS) {
+				$db = DataBase::getInstance();
+				$qr = $db->prepare('INSERT INTO 
+					DA_SocialRelation(`from`, type, message, dAction)
+					VALUES(?, ?, ?, ?)'
+				);
+				$qr->execute([CTR::$data->get('playerId'), 1, $content, Utils::now()]);
+			}
+
 			CTR::$alert->add('Message créé.', ALERT_STD_SUCCESS);
 		} else {
 			CTR::$alert->add('Ce sujet est fermé.', ALERT_STD_ERROR);

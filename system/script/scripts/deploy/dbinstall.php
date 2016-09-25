@@ -1240,6 +1240,17 @@ $qr->execute();
 
 $db->query('SET FOREIGN_KEY_CHECKS = 1;');
 
+if (DATA_ANALYSIS) {
+	echo '<h1>Création des tables du module d\'analyse</h1>';
+
+	include 'data-analysis/player.php';
+	include 'data-analysis/playerDaily.php';
+//	include 'data-analysis/fleetMovement.php';
+	include 'data-analysis/commercialRelation.php';
+	include 'data-analysis/socialRelation.php';
+	include 'data-analysis/baseAction.php';
+}
+
 echo '<h1>Génération de la galaxie</h1>';
 
 GalaxyGenerator::generate();

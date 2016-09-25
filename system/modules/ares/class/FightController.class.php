@@ -243,6 +243,17 @@ class FightController {
 		LiveReport::$palmaresA = $commanderA->palmares;
 		LiveReport::$palmaresD = $commanderD->palmares;
 
+		$shipsA = $commanderA->getNbrShipByType();
+		$shipsD = $commanderD->getNbrShipByType();
+		$weight = 0;
+
+		for ($i = 0; $i < count($shipsA); $i++) { 
+			$weight += DataAnalysis::resourceToStdUnit(ShipResource::getInfo($i, 'resourcePrice') * $shipsA[$i]);
+			$weight += DataAnalysis::resourceToStdUnit(ShipResource::getInfo($i, 'resourcePrice') * $shipsD[$i]);
+		}
+
+		LiveReport::$importance = $weight;
+
 		$i = 0;
 		foreach ($commanderA->armyInBegin AS $s) {
 			LiveReport::$squadrons[] = array(0, $i, 0, 0, $commanderA->id, $s[0], $s[1], $s[2], $s[3], $s[4], $s[5], $s[6], $s[7], $s[8], $s[9], $s[10], $s[11]);
