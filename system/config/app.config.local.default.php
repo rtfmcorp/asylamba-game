@@ -8,14 +8,14 @@ define('DEVMODE', 				TRUE);
 	ini_set('display_errors', 	DEVMODE);
 # active les APIs de confirmation
 # note : il faut remplir d'autre infos pour que ça marche
-define('APIMODE', 				TRUE);
+define('APIMODE', 				FALSE);
 # active la création de personnage au niveau 5
-define('HIGHMODE', 				FALSE);
+define('HIGHMODE', 				TRUE);
 # active les feuilles de style multiples par faction
 # note : les style peuvent ne pas être à jour
 define('COLORSTYLE', 			TRUE);
 # active l'ajout du script analytics
-define('ANALYTICS', 			TRUE);
+define('ANALYTICS', 			FALSE);
 # active la captation des données d'analyse (TB)
 define('DATA_ANALYSIS', 		FALSE);
 
@@ -29,9 +29,9 @@ define('SERVER_SESS',	 		'server');
 # défini le titre du serveur (affiché comme titre)
 define('APP_NAME',				'Asylamba');
 # défini le sous-titre du serveur (affiché comme titre)
-define('APP_SUBNAME',			'Local');
+define('APP_SUBNAME',			'Expansion Stellaire');
 # un peu inutile
-define('APP_VERSION',			'0.12');
+define('APP_VERSION',			'0.14');
 # un peu inutile
 define('APP_CREATOR',			'Asylamba team');
 # défini la description du serveur (affichée dans la page)
@@ -57,7 +57,7 @@ define('GETOUT_ROOT',			APP_ROOT . 'buffer/');
 define('DEFAULT_SQL_HOST',		'127.0.0.1');
 define('ADMIN_SQL_HOST',		DEFAULT_SQL_HOST);
 # défini la base de donnée
-define('DEFAULT_SQL_DTB',		'expansion-game');
+define('DEFAULT_SQL_DTB',		'asylamba-game');
 define('ADMIN_SQL_DTB',		 	DEFAULT_SQL_DTB);
 # défini l'utilisateur par défaut
 define('DEFAULT_SQL_USER',		'root');

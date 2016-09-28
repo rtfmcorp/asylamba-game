@@ -1,6 +1,6 @@
 <?php
 # définition des ROOT
-define('PUBLICR',		'http://localhost/Expansion/dev12/public/');
+define('PUBLICR',		'http://localhost/[ your path here ]/public/');
 define('SYSTEMR',		'system/');
 
 # définition des ROOT

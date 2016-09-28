@@ -1,50 +1,35 @@
-# ASYLAMBA
+# ASYLAMBA : Expansion Stellaire
 
 Jeu de stragégie en ligne multi-joueur. [http://asylamba.com](http://asylamba.com)
 
-## Lancement de **La Révolution Cardanienne**
 
-Date de lancement : mercredi 14 octobre à 20h.
+## Dépendances
 
-### Régler les bugs majeurs
+- Apache 2.4.7
+- PHP 5.5.9
+- MySQL 5.5.49
 
-```
-[ ] les rapports d'attaque sont faux
-[ ] lors d'une conquête, des fois les flottes ne défendent pas
-[ ] bug des statuts de guerre
-[ ] mettre un bloc vide en premier dans la phase d'inscription (Gil)
-```
+## Installation
 
-```
-[ ] mettre à jour le wiki
-[ ] lois : dire qu'on peut recycler chez les alliés
-```
+Procédure pour une installation locale :
 
-### Création de la nouvelle partie
+- copier `index.default.php` et le renommer en `index.php`, y modifier la constante PUBLICR avec votre chemin
+- copier `system/config/app.config.local.default.php` et le renommer `app.config.local.php`, y modifier la constante APP_ROOT et d'autres infos (connexion à la base de données, etc.)
+- créer une base de données (nom correspondant à la constante DEFAULT_SQL_DTB du fichier du point précédent)
 
-```
-[x] nouvelles factions
-[ ] couleur (avatars, drapeau)
-[x] secteurs
-```
+A partir de là, vous pouvez accéder à une interface qui permet de créer toutes les tables de la base de données : http://localhost/[ votre chemin ]/script. Pour faire l'installation, cliquez sur le premier bouton "deploy.dbinstall". 
 
-### Promo
+Si aucune erreur s'affiche, vous pouvez ensuite créer des personnages en allant sur http://localhost/[ votre chemin ]/buffer. Cette interface permet de se connecter à tous les personnages créés.
 
-```
-[ ] "ce n'est plus une bêta"
-[ ] 25 CHF (+ 100) sur google adwords
-[ ] tester la pub sur le jeu
-[ ] concours de parrainage depuis le début
-[ ] étapes :
-	[ ] mail le 7 oct
-	[ ] billet de blog le 8 oct
-	[ ] sortie mercredi 14 à 20h
-	[ ] mail "c'est sorti" et "concours de parrainage" mercredi 14 nuit
-```
+Trois scripts permettent de mettre à jour le jeu quotidiennement, il s'agit des trois boutons sous le titre "Tâches Cron". Vous pouvez soit les lancer à la main, soit appeler leurs URLs avec des crons.
 
 
 ## Contributeurs
 
-* abdelaz3r
-* acknowledge
-* Estiocle
+* [abdelaz3r](https://github.com/abdelaz3r)
+* [acknowledge](https://github.com/acknowledge)
+* [N03](https://github.com/N03)
+
+## Licence
+
+[WIP]
