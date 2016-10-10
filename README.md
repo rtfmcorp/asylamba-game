@@ -1,7 +1,7 @@
 ASYLAMBA : Expansion Stellaire
 ==============================
 
-Jeu de stragégie en ligne multi-joueur. [http://asylamba.com](http://asylamba.com)
+Jeu de stragégie en ligne multi-joueur. [asylamba.com](http://asylamba.com)
 
 ![](http://asylamba.com/public/media/files/sources/asylambacom.png)
 
@@ -27,6 +27,32 @@ A partir de là, vous pouvez accéder à une interface qui permet de créer tout
 Si aucune erreur s'affiche, vous pouvez ensuite créer des personnages en allant sur `http://localhost/[votre chemin]/buffer`. Cette interface permet de se connecter à tous les personnages créés.
 
 Trois scripts permettent de mettre à jour le jeu quotidiennement, il s'agit des trois boutons sous le titre "Tâches Cron". Vous pouvez soit les lancer à la main, soit appeler leurs URLs avec des crons.
+
+
+Structure du projet
+-------------------
+
+Le jeu a été développé sans framework aucun, cela pour des raisons de performances et de besoins spécifiques pour un jeu de ce type. Il y a donc vraiment peu de dépendances à des librairies externes. Les dépendances sont citées plus haut, nous ajoutons à cela jQuery ainsi que LESS pour la compilation CSS. Tout le reste est en pur HTML/CSS/JavaScript/PHP.
+
+Le projet contient deux dossiers principaux :
+
+- `public/` : pour les images, le CSS, le JavaScript et les logs
+- `system/` : pour les vues, le cœur du jeu et tout ce qui est "mécanique"
+
+Le dossier system est plutôt fourni mais les noms des dossiers qu'il contient sont assez explicites. Le sous-dossier `system/modules` mérite toutefois quelques précisions. Il contient toutes les classes principales du jeu qui sont regroupées en modules. Chacun de ces modules possède un nom de dieu grec. La liste se trouve ci-dessous.
+
+
+| Module    | Fonction |
+|-----------|----------|
+| Arès      | la guerre (commandants, combats, flottes) |
+| Artémis   | l'espionnage |
+| Athéna    | la base ortibale (base orbitale, bâtiments, envois commerciaux, recyclage, constructions, transactions) |
+| Atlas     | les classements (faction, joueur) |
+| Déméter   | les factions (élections, lois, forums) |
+| Gaïa      | la galaxie (secteurs, systèmes solaires, planètes) |
+| Hermès    | la communication (messagerie, notification) |
+| Prométhée | la technologie (recherches, technologies) |
+| Zeus      | le joueur (tutoriel, gestion des bonus, envois de crédit) |
 
 
 Contribuer
