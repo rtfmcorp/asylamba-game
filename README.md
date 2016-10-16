@@ -9,7 +9,7 @@ Jeu de stragégie en ligne multi-joueur. Visitez [asylamba.com](http://asylamba.
 
 ![logo Asylamba](http://asylamba.com/public/media/files/sources/asylambacom.png)
 
-For the english version, follow this link : [English version](README.en.md) 
+For the english version, follow this link : [English version](README.en.md)
 
 Dépendances
 -----------
