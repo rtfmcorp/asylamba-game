@@ -1,9 +1,9 @@
 ASYLAMBA : Expansion Stellaire
 ==============================
 
-Jeu de stragégie en ligne multi-joueur. [asylamba.com](http://asylamba.com)
+Jeu de stragégie en ligne multi-joueur. Visitez [asylamba.com](http://asylamba.com) pour tester le jeu.
 
-![](http://asylamba.com/public/media/files/sources/asylambacom.png)
+![logo Asylamba](http://asylamba.com/public/media/files/sources/asylambacom.png)
 
 Dépendances
 -----------
