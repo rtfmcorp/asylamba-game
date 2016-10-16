@@ -460,7 +460,7 @@ class TechnologyResource {
 			'requiredTechnosphere' => 6,
 			'requiredResearch' => array(0, 0, 0, 0, 0, 0, 0, 0, 4, 4),
 			'time' => 40800,
-			'maxLevel' => 25,
+			'maxLevel' => 20,
 			'category' => 2,
 			'resource' => 1150,
 			'credit' => 10500,
