@@ -31,7 +31,7 @@ define('APP_NAME',				'Asylamba');
 # défini le sous-titre du serveur (affiché comme titre)
 define('APP_SUBNAME',			'Expansion Stellaire');
 # numéro de version de l'app
-define('APP_VERSION',			'0.14');
+define('APP_VERSION',			'1.4.0');
 # créateurs du projet
 define('APP_CREATOR',			'Gil Clavien, Jacky Casas, Noé Zufferey');
 # défini la description du serveur (affichée dans la page)
