@@ -3,3 +3,6 @@ system/config/app.config.local.php
 
 *.log
 *.psd
+
+/nbproject/
+/vendor/

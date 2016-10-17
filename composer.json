@@ -1,0 +1,12 @@
+{
+    "name": "rtfmcorp/asylamba-game",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Asylamba\\": "system/"
+        }
+    },
+    "require": {
+        "php": ">=5.5.9"
+    }
+}
