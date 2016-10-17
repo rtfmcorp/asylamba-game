@@ -6,4 +6,3 @@ system/config/app.config.local.php
 
 /nbproject/
 /vendor/
-composer.lock
