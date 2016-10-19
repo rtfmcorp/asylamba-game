@@ -1,0 +1,77 @@
+ASYLAMBA : Expansion Stellaire
+==============================
+
+Multiplayer online strategy game. Visit [asylamba.com](http://asylamba.com) to try the game. It's only in French for the moment.
+
+![Asylamba logo](http://asylamba.com/public/media/files/sources/asylambacom.png)
+
+Read this file in other languages : [Français](README.md), [English](README.en.md) 
+
+Dependencies
+------------
+
+- Apache 2.4.7
+- PHP 5.5.9
+- MySQL 5.5.49
+
+
+Installation
+------------
+
+Procedure for a local install :
+
+- copy the file `index.default.php` and name it `index.php`, modify the `PUBLICR` constant with your own path
+- copy the file `system/config/app.config.local.default.php` and name it `app.config.local.php`, modify the `APP_ROOT` constant and some others if needed (connection to database, and so on.)
+- create a database (the name must be the same as the `DEFAULT_SQL_DTB` constant from the last point file)
+
+From there, you can access an interface that permits to create all the SQL tables of the DB : `http://localhost/[votre chemin]/script`. To do the install, click on the first button : "deploy.dbinstall".
+
+If no errors are displayed, you can go to `http://localhost/[votre chemin]/buffer` and create your first players. This interface allows you to connect to each and every player created.
+
+Three scripts are available to update the game on a daily basis, it the ones under the title "Tâches Cron" (cron tasks). You can either launch them by hand or call the related URLs with crons.
+
+
+Structure of the project
+------------------------
+
+The game was developed without any framework for performance and specific needs reasons. There are not many dependencies at that time. We can notice the use of jQuery and LESS for CSS compilation. The rest is in pure HTML/CSS/JavaScript/PHP.
+
+The project contains mainly two folders :
+
+- `public/` : for images, CSS, JavaScript and logs
+- `system/` : for views and game core 
+
+The `system/` folder contains a lot of sub-folders. It's pretty easy to guess what's inside for most of them. However the `system/modules` folder requires some explanations. It contains the main classes of the game that are grouped by modules. Each one of these modules is called with a greek god name. The list with explanations is just down there.
+
+
+| Module    | Goal |
+|-----------|----------|
+| Ares      | the war (commanders, fights, fleets) |
+| Artemis   | the spy |
+| Athena    | the orbital base (orbital base, buildings, commercial shippings, recycling, transactions) |
+| Atlas     | the rankings (faction, player) |
+| Demeter   | the factions (elections, law, forums) |
+| Gaia      | the galaxy (sectors, solar systems, planets) |
+| Hermes    | the communication (message, notification) |
+| Promethee | the technology (research, technologies) |
+| Zeus      | the joueur (tutorial, bonus management, credit sendings) |
+
+
+Contribute
+----------
+
+If you want to contribute to the project, it's possible ! Thanks to read the [instructions](CONTRIBUTING.en.md) before starting.
+
+
+Contributors
+------------
+
+* [abdelaz3r](https://github.com/abdelaz3r)
+* [acknowledge](https://github.com/acknowledge)
+* [N03](https://github.com/N03)
+
+
+License
+-------
+
+[WIP]

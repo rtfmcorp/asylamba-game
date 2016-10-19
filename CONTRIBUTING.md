@@ -15,7 +15,7 @@ Voici les différentes choses que vous pouvez faire :
 
 - corriger des fautes d'orthographe ou fautes de frappe
 - faire du refactoring, optimisation
-- optimiser l'interface (reponse design par exemple)
+- optimiser l'interface (reponsive design par exemple)
 - créer de la documentation (dans ce cas, il serait mieux de discuter en premier lieu de la technique utilisée, ainsi d'autres personnes pourront vous aider, et vous aurez plus de chance que ça soit accepté)
 
 En ce qui concerne l'ajout ou la modification de fonctionnalités, il est fort probable que ça soit refusé. Si vous souhaitez vous lancer là-dedans, il faut en discuter au préalable avec l'équipe de développement, directement sur le forum du jeu ou sur le serveur Discord d'Asylamba. Cela permettra de ne pas sortir de la ligne directrice.
