@@ -5,6 +5,8 @@ Jeu de stragégie en ligne multi-joueur. Visitez [asylamba.com](http://asylamba.
 
 ![logo Asylamba](http://asylamba.com/public/media/files/sources/asylambacom.png)
 
+For the english version, follow this link : [English version](README.en.md) 
+
 Dépendances
 -----------
 
@@ -18,7 +20,7 @@ Installation
 
 Procédure pour une installation locale :
 
-- copier `index.default.php` et le renommer en `index.php`, y modifier la constante PUBLICR avec votre chemin
+- copier `index.default.php` et le renommer en `index.php`, y modifier la constante `PUBLICR` avec votre chemin
 - copier `system/config/app.config.local.default.php` et le renommer `app.config.local.php`, y modifier la constante `APP_ROOT` et d'autres infos (connexion à la base de données, etc.)
 - créer une base de données (nom correspondant à la constante `DEFAULT_SQL_DTB` du fichier du point précédent)
 
