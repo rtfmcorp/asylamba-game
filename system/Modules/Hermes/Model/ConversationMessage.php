@@ -1,4 +1,7 @@
 <?php
+
+namespace Asylamba\Modules\Hermes\Model;
+
 class ConversationMessage {
 	const MESSAGE_BY_PAGE		= 25;
 

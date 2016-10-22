@@ -9,6 +9,12 @@
  * @package Hermes
  * @update 20.05.13
 */
+namespace Asylamba\Modules\Hermes\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Hermes\Model\Notification;
 
 class NotificationManager extends Manager {
 	protected $managerType = '_Notification';
@@ -18,7 +24,7 @@ class NotificationManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT *
 			FROM notification
 			' . $formatWhere . '
@@ -58,7 +64,7 @@ class NotificationManager extends Manager {
 	}
 
 	public function add(Notification $n) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			notification(rPlayer, title, content, dSending, readed, archived)
 			VALUES(?, ?, ?, ?, ?, ?)');
@@ -80,7 +86,7 @@ class NotificationManager extends Manager {
 		$notifications = $this->_Save();
 
 		foreach ($notifications AS $n) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE notification
 				SET	id = ?,
 					rPlayer = ?,
@@ -104,7 +110,7 @@ class NotificationManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM notification WHERE id = ?');
 		$qr->execute(array($id));
 
@@ -113,7 +119,7 @@ class NotificationManager extends Manager {
 	}
 
 	public function deleteByRPlayer($rPlayer) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM notification WHERE rPlayer = ? AND archived = 0');
 		$qr->execute(array($rPlayer));
 
@@ -131,7 +137,7 @@ class NotificationManager extends Manager {
 
 	public static function countAll($where = array()) {
 		$formatWhere = Utils::arrayToWhere($where);
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT 
 				COUNT(id) AS nbr
 			FROM notification

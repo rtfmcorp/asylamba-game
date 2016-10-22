@@ -9,6 +9,13 @@
  * @package Hermes
  * @update 21.12.13
 */
+namespace Asylamba\Modules\Hermes\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+
+use Asylamba\Modules\Hermes\Model\RoadMap;
 
 class RoadMapManager extends Manager {
 	protected $managerType = '_RoadMap';
@@ -18,7 +25,7 @@ class RoadMapManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT
 				r.*,
 				p.name AS name,
@@ -67,7 +74,7 @@ class RoadMapManager extends Manager {
 	}
 
 	public function add(RoadMap $rm) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			roadMap(rPlayer, oContent, pContent, statement, dCreation)
 			VALUES(?, ?, ?, ?, ?)');
@@ -88,7 +95,7 @@ class RoadMapManager extends Manager {
 		$roadmap = $this->_Save();
 
 		foreach ($roadmap AS $rm) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE roadMap
 				SET	rPlayer = ?,
 					oContent = ?,
@@ -108,7 +115,7 @@ class RoadMapManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM roadMap WHERE id = ?');
 		$qr->execute(array($id));
 

@@ -1,4 +1,13 @@
 <?php
+
+namespace Asylamba\Modules\Hermes\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+
+use Asylamba\Modules\Hermes\Model\ConversationMessage;
+
 class ConversationMessageManager extends Manager {
 	protected $managerType ='_ConversationMessage';
 
@@ -7,7 +16,7 @@ class ConversationMessageManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT c.*,
 				p.rColor AS playerColor,
 				p.name AS playerName,
@@ -61,7 +70,7 @@ class ConversationMessageManager extends Manager {
 	}
 
 	public function save() {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 
 		$messages = $this->_Save();
 
@@ -89,7 +98,7 @@ class ConversationMessageManager extends Manager {
 	}
 
 	public function add($message) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 
 		$qr = $db->prepare('INSERT INTO conversationMessage
 			SET rConversation = ?,
@@ -116,7 +125,7 @@ class ConversationMessageManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM conversationMessage WHERE id = ?');
 		$qr->execute(array($id));
 

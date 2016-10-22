@@ -1,4 +1,7 @@
 <?php
+
+namespace Asylamba\Modules\Hermes\Model;
+
 class ConversationUser {
 	# constante
 	const MAX_USERS				= 25;

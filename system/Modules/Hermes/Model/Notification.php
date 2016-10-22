@@ -9,6 +9,11 @@
  * @package Hermes
  * @update 20.05.13
 */
+namespace Asylamba\Modules\Hermes\Model;
+
+use Asylamba\Classes\Worker\CTC;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Utils;
 
 class Notification {
 	// ATTRIBUTES
@@ -116,4 +121,3 @@ class Notification {
 		}
 	}
 }
-?>

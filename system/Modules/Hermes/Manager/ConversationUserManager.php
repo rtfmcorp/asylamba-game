@@ -1,9 +1,17 @@
 <?php
+
+namespace Asylamba\Modules\Hermes\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Hermes\Model\ConversationUser;
+
 class ConversationUserManager extends Manager {
 	protected $managerType ='_ConversationUser';
 
 	public function load($where = array(), $order = array(), $limit = array()) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT c.*,
 				p.id AS playerId,
 				p.rColor AS playerColor,
@@ -57,7 +65,7 @@ class ConversationUserManager extends Manager {
 	}
 
 	public function save() {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$userConvs = $this->_Save();
 
 		foreach ($userConvs AS $userConv) {
@@ -82,7 +90,7 @@ class ConversationUserManager extends Manager {
 	}
 
 	public function add($userConv) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 
 		$qr = $db->prepare('INSERT INTO conversationUser
 			SET rConversation = ?,
@@ -107,7 +115,7 @@ class ConversationUserManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM conversationUser WHERE id = ?');
 		$qr->execute(array($id));
 

@@ -10,6 +10,10 @@
  * @update 21.10.13
 */
 
+namespace Asylamba\Modules\Hermes\Model;
+
+use Asylamba\Classes\Library\Parser;
+
 class RoadMap {
 	// ATTRIBUTES
 	public $id 			 = 0;
@@ -45,4 +49,3 @@ class RoadMap {
 	public function hide() { $this->statement = 0; }
 	public function show() { $this->statement = 1; }
 }
-?>
