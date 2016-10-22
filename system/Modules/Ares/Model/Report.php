@@ -19,6 +19,10 @@ exp avant le combat
 nbr victoires
 */
 
+namespace Asylamba\Modules\Ares\Model;
+
+use Asylamba\Modules\Athena\Resource\ShipResource;
+
 class Report {
 	const STANDARD = 0;
 	const ARCHIVED = 1;

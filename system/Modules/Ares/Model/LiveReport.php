@@ -10,6 +10,8 @@
  * @update 01.06.14
 */
 
+namespace Asylamba\Modules\Ares\Model;
+
 class LiveReport {
 	public static $squadrons = array();
 	public static $halfround = 0;

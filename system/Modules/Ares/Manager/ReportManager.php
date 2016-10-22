@@ -10,6 +10,15 @@
  * @update 12.07.13
 */
 
+namespace Asylamba\Modules\Ares\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Library\Utils;
+
+use Asylamba\Classes\Database\Database;
+
+use Asylamba\Modules\Ares\Model\Report;
+
 class ReportManager extends Manager {
 	protected $managerType ='_Report';
 
@@ -18,7 +27,7 @@ class ReportManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT r.*,
 				sq.id AS sqId,
 				sq.position AS sqPosition,
@@ -136,7 +145,7 @@ class ReportManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT r.*
 			FROM report AS r
 			' . $formatWhere .'
@@ -204,7 +213,7 @@ class ReportManager extends Manager {
 	}
 
 	public function save() {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$reports = $this->_Save();
 
 		foreach ($reports as $report) {
@@ -286,7 +295,7 @@ class ReportManager extends Manager {
 	}
 
 	public function add($newReport) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 
 		$qr = $db->prepare('INSERT INTO report SET
 			rPlayerAttacker = ?,
@@ -378,4 +387,3 @@ class ReportManager extends Manager {
 		return $newReport->id;
 	}
 }
-?>

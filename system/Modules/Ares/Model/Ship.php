@@ -12,6 +12,11 @@
 
 include_once ATHENA;
 
+namespace Asylamba\Modules\Ares\Model;
+
+use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
+
 class Ship {
 	
 	public $id = 0;

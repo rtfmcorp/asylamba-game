@@ -10,6 +10,19 @@
  * @update 13.02.14_
 */
 
+namespace Asylamba\Modules\Ares\Model;
+
+use Asylamba\Modules\Athena\Resource\ShipResource;
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Container\ArrayList;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTC;
+
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
+
 class Commander {
 	const COEFFSCHOOL 				= 100;
 	const COEFFEARNEDEXP 			= 50;
@@ -544,4 +557,3 @@ class Commander {
 		CTC::applyContext($token);
 	}
 }
-?>

@@ -10,6 +10,8 @@
  * @update 04.03.2014
 */
 
+namespace Asylamba\Modules\Ares\Resource;
+
 class CommanderResources {
 	private static $commanders = array(
 		array(
@@ -90,4 +92,3 @@ class CommanderResources {
 		return count(self::$commanders);
 	}
 }
-?>

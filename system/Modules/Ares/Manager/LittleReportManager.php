@@ -10,6 +10,14 @@
  * @update 12.07.13
 */
 
+namespace Asylamba\Modules\Ares\Manager;
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\Manager;
+
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Ares\Model\Report;
+
 class LittleReportManager extends Manager {
 	protected $managerType ='_LittleReport';
 
@@ -18,7 +26,7 @@ class LittleReportManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT r.*,
 				p1.rColor AS colorA,
 				p2.rColor AS colorD,
@@ -55,7 +63,7 @@ class LittleReportManager extends Manager {
 	}
 
 	public function loadByRequest($request, $params) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT r.*,
 				p1.rColor AS colorA,
 				p2.rColor AS colorD,
@@ -121,7 +129,7 @@ class LittleReportManager extends Manager {
 	}
 
 	public function save() {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$reports = $this->_Save();
 
 		foreach ($reports as $report) {
@@ -186,4 +194,3 @@ class LittleReportManager extends Manager {
 		}
 	}
 }
-?>

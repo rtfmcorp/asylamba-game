@@ -9,6 +9,11 @@
  * @package Arès
  * @update 14.02.14
 */
+namespace Asylamba\Modules\Ares;
+
+use Asylamba\Modules\Ares\Model\LiveReport;
+use Asylamba\Classes\Library\DataAnalysis;
+use Asylamba\Modules\Athena\Resource\ShipResource;
 
 class FightController {
 	private $isAFight = FALSE;
@@ -366,4 +371,3 @@ class FightController {
 		return array($commanderA, $commanderD);
 	}
 }
-?>
