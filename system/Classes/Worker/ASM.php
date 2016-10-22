@@ -1,4 +1,52 @@
 <?php
+
+namespace Asylamba\Classes\Worker;
+
+use Asylamba\Modules\Ares\Manager\CommanderManager;
+use Asylamba\Modules\Ares\Manager\ReportManager;
+use Asylamba\Modules\Ares\Manager\LittleReportManager;
+
+use Asylamba\Modules\Artemis\Manager\SpyReportManager;
+
+use Asylamba\Modules\Athena\Manager\BuildingQueueManager;
+use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
+use Asylamba\Modules\Athena\Manager\CommercialShippingManager;
+use Asylamba\Modules\Athena\Manager\CommercialTaxManager;
+use Asylamba\Modules\Athena\Manager\OrbitalBaseManager;
+use Asylamba\Modules\Athena\Manager\RecyclingLogManager;
+use Asylamba\Modules\Athena\Manager\RecyclingMissionManager;
+use Asylamba\Modules\Athena\Manager\ShipQueueManager;
+use Asylamba\Modules\Athena\Manager\TransactionManager;
+
+use Asylamba\Modules\Atlas\Manager\FactionRankingManager;
+use Asylamba\Modules\Atlas\Manager\PlayerRankingManager;
+
+use Asylamba\Modules\Demeter\Manager\Election\CandidateManager;
+use Asylamba\Modules\Demeter\Manager\Election\ElectionManager;
+use Asylamba\Modules\Demeter\Manager\Election\VoteManager;
+use Asylamba\Modules\Demeter\Manager\Forum\FactionNewsManager;
+use Asylamba\Modules\Demeter\Manager\Forum\ForumTopicManager;
+use Asylamba\Modules\Demeter\Manager\Law\LawManager;
+use Asylamba\Modules\Demeter\Manager\Law\VoteLawManager;
+use Asylamba\Modules\Demeter\Manager\ColorManager;
+use Asylamba\Modules\Demeter\Manager\Forum\ForumMessageManager;
+
+use Asylamba\Modules\Gaia\Manager\PlaceManager;
+use Asylamba\Modules\Gaia\Manager\SectorManager;
+use Asylamba\Modules\Gaia\Manager\SystemManager;
+
+use Asylamba\Modules\Hermes\Manager\ConversationManager;
+use Asylamba\Modules\Hermes\Manager\ConversationMessageManager;
+use Asylamba\Modules\Hermes\Manager\ConversationUserManager;
+use Asylamba\Modules\Hermes\Manager\NotificationManager;
+use Asylamba\Modules\Hermes\Manager\RoadMapManager;
+
+use Asylamba\Modules\Promethee\Manager\ResearchManager;
+use Asylamba\Modules\Promethee\Manager\TechnologyQueueManager;
+
+use Asylamba\Modules\Zeus\Manager\CreditTransactionManager;
+use Asylamba\Modules\Zeus\Manager\PlayerManager;
+
 abstract class ASM {
 	public static $runningAres = FALSE;
 	public static $com;

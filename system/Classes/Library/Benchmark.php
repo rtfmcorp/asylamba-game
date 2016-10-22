@@ -9,6 +9,8 @@
  * @version 0.1
  **/
 
+namespace Asylamba\Classes\Library;
+
 class Benchmark {
 	protected $bTime = 0;
 	protected $eTime = 0;
@@ -48,7 +50,7 @@ class Benchmark {
 			$this->bTime = $this->getMicrotime();
 			$this->running = TRUE;
 		} else {
-			throw new Exception('Benchmark object is currently running', 1);
+			throw new \Exception('Benchmark object is currently running', 1);
 		}
 	}
 
@@ -58,7 +60,7 @@ class Benchmark {
 			$this->rTime = $this->eTime - $this->bTime;
 			$this->running = FALSE;
 		} else {
-			throw new Exception('Benchmark object is not running', 1);
+			throw new \Exception('Benchmark object is not running', 1);
 		}
 	}
 
@@ -83,12 +85,12 @@ class Benchmark {
 				break;
 			case 'h'  : $formatTime = $this->rTime / 360;
 				break;
-			default   : throw new Exception('Unknow return time format', 1);
+			default   : throw new \Exception('Unknow return time format', 1);
 				break;
 		}
 
 		if ($precision < -10 OR $precision > 10) {
-			throw new Exception('Out of range time precision', 1);
+			throw new \Exception('Out of range time precision', 1);
 		}
 
 		$formatTime = round($formatTime, $precision);
@@ -100,4 +102,3 @@ class Benchmark {
 		return ((float)$usec + (float)$sec);
 	}
 }
-?>

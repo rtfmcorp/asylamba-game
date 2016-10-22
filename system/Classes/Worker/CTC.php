@@ -1,4 +1,10 @@
 <?php
+
+namespace Asylamba\Classes\Worker;
+
+use Asylamba\Classes\Library\Bug;
+use Asylamba\Classes\Library\Utils;
+
 abstract class CTC {
 	private static $running = FALSE;
 	private static $currentDate = NULL;
@@ -25,7 +31,7 @@ abstract class CTC {
 		if ($token) {
 			if (count(self::$events) > 0) {
 				$beforeUsort = count(self::$events);
-				
+
 				self::$events = CTC::insertion(self::$events);
 
 				$afterUsort = count(self::$events);
@@ -41,7 +47,7 @@ abstract class CTC {
 					$j++;
 					self::$currentDate = $event['date'];
 					call_user_func_array(array($event['object'], $event['method']), $event['args']);
-					
+
 					$logt .= '> [' . $event['date'] . '] ' . get_class($event['object']) . '(' . $event['object']->getId() . ')::' . $event['method'] . "\n";
 				}
 
@@ -55,7 +61,7 @@ abstract class CTC {
 				$logt .= "> \n";
 
 				$logt .= "\n";
-				
+
 				$path  = 'public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
 				Bug::writeLog($path, $logt);
 			}
@@ -68,11 +74,11 @@ abstract class CTC {
 
 	public static function add($date, $object, $method, $args = array()) {
 		if (!self::$running) {
-			throw new Exception('CTC isn\'t running actually', 1);
+			throw new \Exception('CTC isn\'t running actually', 1);
 		} else {
 			self::$add++;
 			$event = array(
-				'timest' => strtotime($date), 
+				'timest' => strtotime($date),
 				'date' 	 => $date,
 				'object' => $object,
 				'method' => $method,
@@ -128,4 +134,3 @@ abstract class CTC {
 		return self::$events;
 	}
 }
-?>

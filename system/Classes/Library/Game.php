@@ -1,4 +1,17 @@
 <?php
+
+namespace Asylamba\Classes\Library;
+
+use Asylamba\Modules\Ares\Model\Commander;
+
+use Asylamba\Modules\Athena\Model\CommercialRoute;
+use Asylamba\Modules\Athena\Model\Transaction;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+
+use Asylamba\Modules\Gaia\Resource\PlaceResource;
+
+use Asylamba\Modules\Artemis\Model\SpyReport;
+
 class Game {
 
 	const COMMERCIAL_TIME_TRAVEL = 0.2;
@@ -45,16 +58,12 @@ class Game {
 	}
 
 	public static function getFleetSpeed($bonus) {
-		include_once ARES;
-
 		$b = $bonus != NULL
 			? Commander::FLEETSPEED * (3 * ($bonus->get(PlayerBonus::SHIP_SPEED) / 100)) : 0;
 		return Commander::FLEETSPEED + $b;
 	}
 
 	public static function getMaxTravelDistance($bonus) {
-		include_once ARES;
-
 		return Commander::DISTANCEMAX;
 	}
 
@@ -88,15 +97,11 @@ class Game {
 	}
 
 	public static function getTimeTravelInSystem($startPosition, $destinationPosition) {
-		include_once ARES;
-
 		$distance = abs($startPosition - $destinationPosition);
 		return round((Commander::COEFFMOVEINSYSTEM * $distance) * ((40 - $distance) / 50) + 180);
 	}
 
 	public static function getTimeTravelOutOfSystem($bonus, $startX, $startY, $destinationX, $destinationY) {
-		include_once ARES;
-
 		$distance = self::getDistance($startX, $destinationX, $startY, $destinationY);
 		$time  = Commander::COEFFMOVEOUTOFSYSTEM;
 		$time += round((Commander::COEFFMOVEINTERSYSTEM * $distance) / self::getFleetSpeed($bonus));
@@ -137,7 +142,7 @@ class Game {
 	public static function antiSpyArea($startPlace, $destinationPlace, $arrivalDate) {
 		# dans le même système
 		if ($startPlace->getRSystem() == $destinationPlace->getRSystem()) {
-			return ANTISPY_LITTLE_CIRCLE; 
+			return ANTISPY_LITTLE_CIRCLE;
 		} else {
 			$duration = self::getTimeToTravel($startPlace, $destinationPlace);
 
@@ -151,7 +156,7 @@ class Game {
 
 			if ($antiSpyRadius >= $distanceRemaining) {
 				if ($distanceRemaining < $antiSpyRadius / 3) {
-					return ANTISPY_LITTLE_CIRCLE; 
+					return ANTISPY_LITTLE_CIRCLE;
 				} elseif ($distanceRemaining < $antiSpyRadius / 3 * 2) {
 					return ANTISPY_MIDDLE_CIRCLE;
 				} else {
@@ -194,7 +199,7 @@ class Game {
 				$ratio = ($antiSpyRadius / 3) / $distanceRemaining;
 				$sec = $ratio * $secRemaining;
 				$newDate2 = Utils::addSecondsToDate($arrivalDate, -$sec);
-				
+
 				return array(TRUE, $newDate1, $newDate2);
 			} else {
 				$ratio = $antiSpyRadius / $distanceRemaining;
@@ -208,7 +213,7 @@ class Game {
 				$ratio = ($antiSpyRadius / 3) / $distanceRemaining;
 				$sec = $ratio * $secRemaining;
 				$newDate3 = Utils::addSecondsToDate($arrivalDate, -$sec);
-				
+
 				return array($newDate1, $newDate2, $newDate3);
 			}
 		}
@@ -217,7 +222,7 @@ class Game {
 	public static function getCommercialShipQuantityNeeded($transactionType, $quantity, $identifier = 0) {
 		include_once ATHENA;
 		switch ($transactionType) {
-			case Transaction::TYP_RESOURCE : 
+			case Transaction::TYP_RESOURCE :
 				# 1000 ressources => 1 commercialShip
 				$needed = ceil($quantity / 1000);
 				break;
@@ -402,7 +407,7 @@ class Game {
 	}
 
 	public static function getImprovementFromScientificCoef($coef) {
-		# transform scientific coefficient of a place 
+		# transform scientific coefficient of a place
 		# into improvement coefficient for the technosphere
 		if ($coef < 10) {
 			return 0;
@@ -416,12 +421,12 @@ class Game {
 	public static function getFleetCost($ships, $affected = TRUE) {
 		include_once ATHENA;
 		$cost = 0;
-		for ($i = 0; $i < ShipResource::SHIP_QUANTITY; $i++) { 
+		for ($i = 0; $i < ShipResource::SHIP_QUANTITY; $i++) {
 			$cost += ShipResource::getInfo($i, 'cost') * $ships[$i];
 		}
 		if (!$affected) {
 			$cost *= ShipResource::COST_REDUCTION;
-		} 
+		}
 		return ceil($cost);
 	}
 }

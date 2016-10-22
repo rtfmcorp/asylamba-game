@@ -1,8 +1,13 @@
 <?php
+
+namespace Asylamba\Classes\Library;
+
+use Asylamba\Classes\Worker\CTR;
+
 class Utils {
 	private static $autorizedChar = array(
-		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
-		'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
+		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+		'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
 	);
 
@@ -63,17 +68,17 @@ class Utils {
 
 		if ($precision == 'h') {
 			$baseTmst = strtotime($baseDate);
-			$tail     = new DateTime($endDate);
-			$cursor   = new DateTime(
-				date('Y', $baseTmst) . '-' . 
-				date('m', $baseTmst) . '-' . 
-				date('d', $baseTmst) . ' ' . 
+			$tail     = new \DateTime($endDate);
+			$cursor   = new \DateTime(
+				date('Y', $baseTmst) . '-' .
+				date('m', $baseTmst) . '-' .
+				date('d', $baseTmst) . ' ' .
 				date('H', $baseTmst) . ':00:00'
 			);
 
 			while(TRUE) {
-				$cursor->add(DateInterval::createFromDateString('1 hour'));
-				
+				$cursor->add(\DateInterval::createFromDateString('1 hour'));
+
 				if ($cursor->getTimestamp() <= $tail->getTimestamp()) {
 					$dates[] = $cursor->format('Y-m-d H:i:s');
 				} else {
@@ -88,7 +93,7 @@ class Utils {
 			$nextDay = floor($seconds / 86400) * 86400;
 			$fullDay = date('Y-m-d H:i:s', $nextDay);
 
-			for ($i = 0; $i < $daysInterval; $i++) { 
+			for ($i = 0; $i < $daysInterval; $i++) {
 				# add date to array
 				$dates[] = $fullDay;
 				# compute next date
@@ -149,7 +154,7 @@ class Utils {
 		}
 		return $string;
 	}
-	
+
 	public static function arrayToWhere($array, $prefix = '') {
 		if (!empty($array)) {
 			$i = 0;	$return = '';
@@ -162,7 +167,7 @@ class Utils {
 				}
 				if (is_array($v)) {
 					$return .= ' (';
-					for ($j = 0; $j < count($v); $j++) { 
+					for ($j = 0; $j < count($v); $j++) {
 						if ($j == 0) {
 							$return .= $prefix . $k . ' = ?';
 						} else {
@@ -178,7 +183,7 @@ class Utils {
 			return $return;
 		}
 	}
-	
+
 	public static function arrayToOrder($array, $prefix = '') {
 		if (!empty($array)) {
 			$return = 'ORDER BY';
@@ -193,7 +198,7 @@ class Utils {
 			return $return;
 		}
 	}
-	
+
 	public static function arrayToLimit($array) {
 		if (empty($array)) {
 			return '';

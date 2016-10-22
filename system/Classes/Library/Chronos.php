@@ -1,4 +1,7 @@
 <?php
+
+namespace Asylamba\Classes\Library;
+
 class Chronos {
 	const SN_STR	= 'STR';
 	const LN_STR	= 'strate';
@@ -16,7 +19,7 @@ class Chronos {
 
 	const REAL_TIME = SERVER_START_TIME;
 	const SEG_SHIFT = SEGMENT_SHIFT;
-	
+
 	/*
 	 * retourne le temps restant avant la prochaine relève
 	 * arg : $type
@@ -45,7 +48,7 @@ class Chronos {
 		$date = strtotime(Chronos::REAL_TIME);
 		$intr = $now - $date;
 		$rel  = (floor($intr / 3600)) + (Chronos::SEG_SHIFT * Chronos::CO_SEG);
-		
+
 		if ($type == 'str') {
 			return floor($rel / Chronos::CO_STR);
 		} elseif ($type == 'seg') {
@@ -77,7 +80,7 @@ class Chronos {
 	 *     : bol FALSE => la date est collée à la relève précédente
 	 */
 	public static function transform($date, $reference = FALSE, $collapse = FALSE) {
-		$date = new DateTime($date);
+		$date = new \DateTime($date);
 
 		$releve  = self::getRel($date->format('Y-m-d H:i:s'));
 		$segment = floor($releve / Chronos::CO_SEG);

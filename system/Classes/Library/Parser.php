@@ -1,4 +1,9 @@
 <?php
+
+namespace Asylamba\Classes\Library;
+
+use Asylamba\Classes\Worker\ASM;
+
 class Parser {
 	public $parseIcon	= TRUE;
 	public $parseLink	= TRUE;
@@ -28,7 +33,7 @@ class Parser {
 		$string = trim($string);
 		$string = htmlspecialchars($string);
 		$string = nl2br($string);
-		
+
 		return $string;
 	}
 
@@ -87,7 +92,7 @@ class Parser {
 
 	protected function parsePlayer($string) {
 		return preg_replace_callback(
-			'#\[\@(.+)\]#isU', 
+			'#\[\@(.+)\]#isU',
 			function($m) {
 				include_once ZEUS;
 				$S_PAM1 = ASM::$pam->getCurrentSession();
@@ -108,7 +113,7 @@ class Parser {
 
 	protected function parsePlace($string) {
 		return preg_replace_callback(
-			'#\[\#(.+)\]#isU', 
+			'#\[\#(.+)\]#isU',
 			function($m) {
 				include_once GAIA;
 				$S_PLM1 = ASM::$plm->getCurrentSession();
@@ -128,7 +133,7 @@ class Parser {
 				}
 
 				ASM::$plm->changeSession($S_PLM1);
-			}, 
+			},
 			$string
 		);
 	}

@@ -1,10 +1,13 @@
 <?php
-class DataBase {
+
+namespace Asylamba\Classes\Database;
+
+class Database {
 	private $PDOInstance = null;
 	private static $instance = null;
 	private static $nbrOfQuery = 0;
 	private static $nbrOfInstance = 0;
-	
+
 	public static function getNbrOfQuery() {
 		return self::$nbrOfQuery;
 	}
@@ -14,16 +17,16 @@ class DataBase {
 
 	private function __construct() {
 		try {
-			$pdoOptions[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
-			$pdoOptions[PDO::ATTR_EMULATE_PREPARES] = FALSE;
+			$pdoOptions[\PDO::ATTR_ERRMODE] = \PDO::ERRMODE_EXCEPTION;
+			$pdoOptions[\PDO::ATTR_EMULATE_PREPARES] = FALSE;
 			# $pdoOptions[PDO::ATTR_DEFAULT_FETCH_MODE] = PDO::FETCH_ASSOC;
-			$this->PDOInstance = new PDO(
-				'mysql:dbname=' . DEFAULT_SQL_DTB . ';host=' . DEFAULT_SQL_HOST . ';charset=utf8', 
-				DEFAULT_SQL_USER, 
-				DEFAULT_SQL_PASS, 
+			$this->PDOInstance = new \PDO(
+				'mysql:dbname=' . DEFAULT_SQL_DTB . ';host=' . DEFAULT_SQL_HOST . ';charset=utf8',
+				DEFAULT_SQL_USER,
+				DEFAULT_SQL_PASS,
 				$pdoOptions
 			);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			echo 'Erreur de connection à la base de donnée : ' . $e->getMessage();
 			exit();
 		}
@@ -31,12 +34,12 @@ class DataBase {
 
 	public static function getInstance() {
 		if (is_null(self::$instance)) {
-			self::$instance = new DataBase();
+			self::$instance = new Database();
 			self::$nbrOfInstance++;
 		}
 		return self::$instance;
 	}
-	
+
 	public function query($query) {
 		self::$nbrOfQuery++;
 		return $this->PDOInstance->query($query);

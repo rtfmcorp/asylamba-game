@@ -1,13 +1,18 @@
 <?php
+
+namespace Asylamba\Classes\Library;
+
+use Asylamba\Classes\Worker\CTR;
+
 class Format {
-	
+
 	/*
 	 * retourne un s ou un mot au pluriel si $number est supérieur à 1
 	 * arg : $number
 	 *     : int => nombre qui définit ou non le pluriel
 	 * arg : $return *
 	 *     : str => retourne la chaine (ou s si non spécifié) si number est supérieur à 1
-	 * arg : 
+	 * arg :
 	 */
 	public static function addPlural($number, $return = '', $expression = '') {
 		if ($number > 1) {
@@ -122,7 +127,7 @@ class Format {
 		$digits = strlen((string) $number);
 
 		if ($digits < $size) {
-			for ($i = 0; $i < $size - $digits; $i++) { 
+			for ($i = 0; $i < $size - $digits; $i++) {
 				$number = '0' . $number;
 			}
 		}

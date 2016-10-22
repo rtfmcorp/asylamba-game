@@ -1,4 +1,7 @@
 <?php
+
+namespace Asylamba\Classes\Library;
+
 class DataAnalysis {
 	// AFFICHE $DATA
 	public static function creditToStdUnit($credit) {

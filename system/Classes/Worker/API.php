@@ -1,8 +1,16 @@
 <?php
+
+namespace Asylamba\Classes\Worker;
+
+use Asylamba\Classes\Library\Security;
+
 class API {
 	# API user
+	/** @var string **/
 	private $path;
+	/** @var string **/
 	private $server;
+	/** @var string **/
 	private $key;
 
 	public $query;
@@ -26,7 +34,7 @@ class API {
 		}
 
 		$this->query = $this->path . 'api/s-' . $this->server . '/a-' . Security::crypt('a-' . $api . '/' . $targ, $this->key);
-		
+
 		curl_setopt($ch, CURLOPT_URL, $this->query);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER , TRUE);
 		$answer = curl_exec($ch);

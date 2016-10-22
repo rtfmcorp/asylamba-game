@@ -1,4 +1,7 @@
 <?php
+
+namespace Asylamba\Classes\Library;
+
 class Security {
 	public static function crypt($query, $key) {
 		$cipher = mcrypt_module_open('rijndael-256', '', 'ecb', '');
@@ -7,7 +10,7 @@ class Security {
 
 		mcrypt_generic_init($cipher, $key, $iv);
 
-		$data = mcrypt_generic($cipher, $query); 
+		$data = mcrypt_generic($cipher, $query);
 		$data = rtrim(strtr(base64_encode($data), '+/', '~_'), '=');
 
 		mcrypt_generic_deinit($cipher);
@@ -26,7 +29,7 @@ class Security {
 		$decrypted = trim(mdecrypt_generic($cipher, $crypted));
 
 		mcrypt_generic_deinit($cipher);
-		mcrypt_module_close($cipher);  
+		mcrypt_module_close($cipher);
 
 		return $decrypted;
 	}

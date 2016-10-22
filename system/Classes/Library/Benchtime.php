@@ -8,6 +8,8 @@
 # @author Gil Clavien
 # @version 0.2
 
+namespace Asylamba\Classes\Library;
+
 class Benchtime {
 	# time storage
 	protected $name;
@@ -64,16 +66,16 @@ class Benchtime {
 		} elseif ($mode == self::PHP) {
 			$ret = $interval;
 		}
-		
+
 		return $ret;
 	}
 
 	protected function transform() {
 		$interval = array();
 
-		for ($i = 1; $i < count($this->time); $i++) { 
+		for ($i = 1; $i < count($this->time); $i++) {
 			$interval[] = array(
-				'name' => $this->time[$i]['name'], 
+				'name' => $this->time[$i]['name'],
 				'time' => $this->time[$i]['time'] - $this->time[$i - 1]['time']
 			);
 		}

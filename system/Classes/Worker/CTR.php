@@ -1,4 +1,20 @@
 <?php
+
+namespace Asylamba\Classes\Worker;
+
+use Asylamba\Classes\Container\Alert;
+use Asylamba\Classes\Container\ArrayList;
+use Asylamba\Classes\Container\Cookie;
+use Asylamba\Classes\Container\History;
+use Asylamba\Classes\Container\Session;
+
+use Asylamba\Classes\Library\Benchmark;
+use Asylamba\Classes\Library\Bug;
+
+use Asylamba\Classes\Database\Database;
+
+use Asylamba\Modules\Gaia\Manager\GalaxyColorManager;
+
 abstract class CTR {
 	public static $data;
 	public static $history;
@@ -42,7 +58,7 @@ abstract class CTR {
 		'admin' => array('admin', 'Administration'),
 
 		'404' => array('notfound', '404'),
-		
+
 		'action' => array('action', 'Action'),
 		'ajax' => array('ajax', 'Ajax'),
 		'inscription' => array('inscription', 'Inscription'),
@@ -95,7 +111,7 @@ abstract class CTR {
 			self::$post->add($k, $v);
 		}
 		self::parseRoute();
-		
+
 		# initialise les données de message d'erreur
 		if (isset($_SESSION[SERVER_SESS]['alert'])) {
 			self::$alert = unserialize($_SESSION[SERVER_SESS]['alert']);
@@ -139,8 +155,9 @@ abstract class CTR {
 			self::$history->add($newURI);
 		}
 
+                $nbParams = count($requestURI);
 		# remplir les paramètres depuis le routing
-		for ($i = 1; $i < count($requestURI); $i++) {
+		for ($i = 1; $i < $nbParams; ++$i) {
 			$params = explode('-', $requestURI[$i]);
 			if (count($params) == 2) {
 				self::$get->add($params[0], $params[1]);
@@ -205,7 +222,7 @@ abstract class CTR {
 				include TEMPLATE . self::$data->get('screenmode') . '/stepbar.php';
 
 				include INSCRIPTION . 'content.php';
-				
+
 				include TEMPLATE . self::$data->get('screenmode') . '/btmbar.php';
 				include TEMPLATE . self::$data->get('screenmode') . '/alert.php';
 				include TEMPLATE . self::$data->get('screenmode') . '/close.php';
@@ -214,12 +231,12 @@ abstract class CTR {
 			include EVENT . 'loadEvent.php';
 			include EVENT . 'executeEvent.php';
 			include EVENT . 'updateGame.php';
-			
+
 			include TEMPLATE . self::$data->get('screenmode') . '/open.php';
 			include TEMPLATE . self::$data->get('screenmode') . '/navbar.php';
-			
+
 			include    PAGES . self::$data->get('screenmode') . '/' . self::$page . '.php';
-			
+
 			include TEMPLATE . self::$data->get('screenmode') . '/toolbar.php';
 			include TEMPLATE . self::$data->get('screenmode') . '/alert.php';
 			include TEMPLATE . self::$data->get('screenmode') . '/close.php';
@@ -233,7 +250,7 @@ abstract class CTR {
 			$ctn  = "### " . date('H:i:s') . " ###\r";
 			$ctn .= "# path  : " . $_SERVER['REQUEST_URI'] . "\r";
 			$ctn .= "# time  : " . self::$benchmark->getTime('mls', 0) . "ms\r";
-			$ctn .= "# query : " . DataBase::getNbrOfQuery() . "\r";
+			$ctn .= "# query : " . Database::getNbrOfQuery() . "\r";
 
 			Bug::writeLog($path, $ctn);
 		}
@@ -270,4 +287,3 @@ abstract class CTR {
 		}
 	}
 }
-?>
