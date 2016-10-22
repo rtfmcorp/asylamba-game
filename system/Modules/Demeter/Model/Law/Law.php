@@ -9,6 +9,9 @@
  * @package Demeter
  * @update 29.09.14
 */
+namespace Asylamba\Modules\Demeter\Model\Law;
+
+use Asylamba\Classes\Worker\ASM;
 
 class Law {
 	const VOTATION					= 0;

@@ -9,6 +9,12 @@
  * @package Demeter
  * @update 29.09.14
 */
+namespace Asylamba\Modules\Demeter\Manager\Law;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Demeter\Model\Law\Law;
 
 class LawManager extends Manager {
 	protected $managerType ='_Law';
@@ -18,7 +24,7 @@ class LawManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT l.*,
 				(SELECT COUNT(v.id) FROM voteLaw AS v WHERE rLaw = l.id AND vote = 1) AS forVote,
 				(SELECT COUNT(v.id) FROM voteLaw AS v WHERE rLaw = l.id AND vote = 0) AS againstVote
@@ -67,7 +73,7 @@ class LawManager extends Manager {
 	}
 
 	public function save() {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 
 		$laws = $this->_Save();
 
@@ -95,7 +101,7 @@ class LawManager extends Manager {
 	}
 
 	public function add($newLaw) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 
 		$qr = $db->prepare('INSERT INTO law
 			SET
@@ -125,7 +131,7 @@ class LawManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM law WHERE id = ?');
 		$qr->execute(array($id));
 

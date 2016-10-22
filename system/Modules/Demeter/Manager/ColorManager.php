@@ -10,6 +10,15 @@
  * @update 26.11.13
 */
 
+namespace Asylamba\Modules\Demeter\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Classes\Worker\ASM;
+
 class ColorManager extends Manager {
 	protected $managerType ='_Color';
 
@@ -18,7 +27,7 @@ class ColorManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT c.*
 			FROM color AS c
 			' . $formatWhere .'
@@ -119,7 +128,7 @@ class ColorManager extends Manager {
 		$colors = $this->_Save();
 
 		foreach ($colors AS $color) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE color
 				SET
 					alive = ?,
@@ -166,7 +175,7 @@ class ColorManager extends Manager {
 	}
 
 	public function add($newColor) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 
 		$qr = $db->prepare('INSERT INTO color
 		SET
@@ -211,7 +220,7 @@ class ColorManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM color WHERE id = ?');
 		$qr->execute(array($id));
 

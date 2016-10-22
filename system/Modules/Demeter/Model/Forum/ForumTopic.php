@@ -9,6 +9,10 @@
  * @package Demeter
  * @update 06.10.13
 */
+namespace Asylamba\Modules\Demeter\Model\Forum;
+
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Utils;
 
 class ForumTopic {
 	public $id 				= 0;
@@ -31,7 +35,7 @@ class ForumTopic {
 
 	public function updateLastView($playerId) {
 		if ($this->lastView == NULL) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 
 			$qr = $db->prepare('INSERT INTO forumLastView 
 				SET
@@ -45,7 +49,7 @@ class ForumTopic {
 				)
 			);
 		} else {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 
 			$qr = $db->prepare('UPDATE forumLastView
 				SET

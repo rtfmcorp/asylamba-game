@@ -9,6 +9,12 @@
  * @package Demeter
  * @update 06.10.13
 */
+namespace Asylamba\Modules\Demeter\Manager\Forum;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Demeter\Model\Forum\ForumMessage;
 
 class ForumMessageManager extends Manager {
 	protected $managerType ='_ForumMessage';
@@ -18,7 +24,7 @@ class ForumMessageManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT m.*,
 				p.name AS playerName,
 				p.rColor AS playerColor,
@@ -72,7 +78,7 @@ class ForumMessageManager extends Manager {
 	}
 
 	public function save() {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 
 		$messages = $this->_Save();
 
@@ -102,7 +108,7 @@ class ForumMessageManager extends Manager {
 	}
 
 	public function add($newMessage) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 
 		$qr = $db->prepare('INSERT INTO forumMessage
 			SET
@@ -127,7 +133,7 @@ class ForumMessageManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM forumMessage WHERE id = ?');
 		$qr->execute(array($id));
 

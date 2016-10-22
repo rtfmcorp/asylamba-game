@@ -9,6 +9,12 @@
  * @package Demeter
  * @update 06.10.13
 */
+namespace Asylamba\Modules\Demeter\Manager\Election;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Demeter\Model\Election\Vote;
 
 class VoteManager extends Manager {
 	protected $managerType ='_Vote';
@@ -18,7 +24,7 @@ class VoteManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT v.*
 			FROM vote AS v
 			' . $formatWhere .'
@@ -59,7 +65,7 @@ class VoteManager extends Manager {
 	}
 
 	public function save() {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 
 		$votes = $this->_Save();
 
@@ -81,7 +87,7 @@ class VoteManager extends Manager {
 	}
 
 	public function add($newVote) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 
 		$qr = $db->prepare('INSERT INTO vote
 			SET
@@ -105,7 +111,7 @@ class VoteManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM vote WHERE id = ?');
 		$qr->execute(array($id));
 

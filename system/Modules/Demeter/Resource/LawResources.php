@@ -9,6 +9,7 @@
  * @package Demeter
  * @update 29.09.14
 */
+namespace Asylamba\Modules\Demeter\Resource;
 
 #id des forums : < 10 = pour tous les gens d'une faction, >= 10 < 20 = pour le gouvernement d'une fac, >= 20 pour les chefs de toutes les factions
 Class LawResources {

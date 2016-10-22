@@ -9,6 +9,12 @@
  * @package Demeter
  * @update 06.10.13
 */
+namespace Asylamba\Modules\Demeter\Manager\Election;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Demeter\Model\Election\Election;
 
 class ElectionManager extends Manager {
 	protected $managerType ='_Election';
@@ -18,7 +24,7 @@ class ElectionManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT e.*
 			FROM election AS e
 			' . $formatWhere .'
@@ -57,7 +63,7 @@ class ElectionManager extends Manager {
 	}
 
 	public function save() {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 
 		$elections = $this->_Save();
 
@@ -76,7 +82,7 @@ class ElectionManager extends Manager {
 	}
 
 	public function add($newElection) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 
 		$qr = $db->prepare('INSERT INTO election
 			SET
@@ -85,7 +91,7 @@ class ElectionManager extends Manager {
 
 		$aw = $qr->execute(array(
 			$newElection->rColor,
-			$newElection->dElection
+			$newElection->dElection->format('Y-m-d H:i:s')
 		));
 
 		$newElection->id = $db->lastInsertId();
@@ -96,7 +102,7 @@ class ElectionManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM election WHERE id = ?');
 		$qr->execute(array($id));
 

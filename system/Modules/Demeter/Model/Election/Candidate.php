@@ -9,6 +9,7 @@
  * @package Demeter
  * @update 06.10.13
 */
+namespace Asylamba\Modules\Demeter\Model\Election;
 
 class Candidate {
 	public $id					= 0;

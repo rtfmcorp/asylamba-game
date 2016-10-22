@@ -9,6 +9,12 @@
  * @package Demeter
  * @update 09.01.15
 */
+namespace Asylamba\Modules\Demeter\Manager\Forum;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Demeter\Model\Forum\FactionNews;
 
 class FactionNewsManager extends Manager {
 	protected $managerType ='_factionNews';
@@ -18,7 +24,7 @@ class FactionNewsManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT n.* 
 			FROM factionNews AS n
 			' . $formatWhere .'
@@ -46,7 +52,7 @@ class FactionNewsManager extends Manager {
 		$qr->closeCursor();
 
 		foreach($aw AS $awNews) {
-			$news = new factionNews();
+			$news = new FactionNews();
 			$news->id = $awNews['id'];
 			$news->rFaction = $awNews['rFaction'];
 			$news->title = $awNews['title'];
@@ -61,7 +67,7 @@ class FactionNewsManager extends Manager {
 	}
 
 	public function save() {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 
 		$newsArray = $this->_Save();
 
@@ -94,7 +100,7 @@ class FactionNewsManager extends Manager {
 	}
 
 	public function add($news) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 
 		$qr = $db->prepare('INSERT INTO factionNews
 			SET
@@ -123,7 +129,7 @@ class FactionNewsManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM factionNews WHERE id = ?');
 		$qr->execute(array($id));
 

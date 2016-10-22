@@ -9,6 +9,12 @@
  * @package Demeter
  * @update 29.09.14
 */
+namespace Asylamba\Modules\Demeter\Manager\Law;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Demeter\Model\Law\VoteLaw;
 
 class VoteLawManager extends Manager {
 	protected $managerType ='_VoteLaw';
@@ -18,7 +24,7 @@ class VoteLawManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT v.*
 			FROM voteLaw AS v
 			' . $formatWhere .'
@@ -59,7 +65,7 @@ class VoteLawManager extends Manager {
 	}
 
 	public function save() {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 
 		$voteLaws = $this->_Save();
 
@@ -84,7 +90,7 @@ class VoteLawManager extends Manager {
 	}
 
 	public function add($newVoteLaw) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO voteLaw
 			SET
 				rLaw = ?,
@@ -107,7 +113,7 @@ class VoteLawManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM voteLaw WHERE id = ?');
 		$qr->execute(array($id));
 

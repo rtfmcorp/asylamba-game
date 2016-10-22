@@ -9,8 +9,18 @@
  * @package Demeter
  * @update 06.10.13
 */
-include_once ZEUS;
-include_once ATHENA;
+
+namespace Asylamba\Modules\Demeter\Model;
+
+use Asylamba\Classes\Library\Parser;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTC;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Demeter\Model\Election\Election;
+use Asylamba\Modules\Hermes\Model\ConversationUser;
+use Asylamba\Modules\Demeter\Resource\LawResources;
+use Asylamba\Modules\Demeter\Model\Law\Law;
 
 class Color {
 	# Regime
@@ -378,7 +388,9 @@ class Color {
 			ASM::$elm->newSession();
 			$election = new Election();
 			$election->rColor = $this->id;
-
+                        // @WARNING : DEFAULT VALUE
+                        $election->dElection = new \DateTime();
+                            
 			/*$date = new DateTime($this->dLastElection);
 			$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
 			$election->dElection = $date->format('Y-m-d H:i:s');*/
@@ -666,7 +678,7 @@ class Color {
 					$token_pam = ASM::$pam->getCurrentSession();
 					ASM::$pam->changeSession($_PAM);
 
-					$date = new DateTime($this->dLastElection);
+					$date = new \DateTime($this->dLastElection);
 					$date->modify('+' . $this->mandateDuration . ' second');
 					$date = $date->format('Y-m-d H:i:s');
 
@@ -674,7 +686,7 @@ class Color {
 				}
 			} elseif ($this->electionStatement == self::CAMPAIGN) {
 				if (Utils::interval($this->dLastElection, Utils::now(), 's') > $this->mandateDuration + self::CAMPAIGNTIME) {
-					$date = new DateTime($this->dLastElection);
+					$date = new \DateTime($this->dLastElection);
 					$date->modify('+' . $this->mandateDuration . ' second');
 					$date = $date->format('Y-m-d H:i:s');
 
@@ -682,7 +694,7 @@ class Color {
 				}
 			} else {
 				if (Utils::interval($this->dLastElection, Utils::now(), 's') > $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME) {
-					$date = new DateTime($this->dLastElection);
+					$date = new \DateTime($this->dLastElection);
 					$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
 					$date = $date->format('Y-m-d H:i:s');
 
@@ -704,7 +716,7 @@ class Color {
 					$token_pam = ASM::$pam->getCurrentSession();
 					ASM::$pam->changeSession($_PAM);
 
-					$date = new DateTime($this->dLastElection);
+					$date = new \DateTime($this->dLastElection);
 					$date->modify('+' . $this->mandateDuration . ' second');
 					$date = $date->format('Y-m-d H:i:s');
 
@@ -712,7 +724,7 @@ class Color {
 				}
 			} elseif ($this->electionStatement == self::ELECTION) {
 				if (Utils::interval($this->dLastElection, Utils::now(), 's') > self::PUTSCHTIME) {
-					$date = new DateTime($this->dLastElection);
+					$date = new \DateTime($this->dLastElection);
 					$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
 					$date = $date->format('Y-m-d H:i:s');
 
@@ -742,7 +754,7 @@ class Color {
 					$token_pam = ASM::$pam->getCurrentSession();
 					ASM::$pam->changeSession($_PAM);
 
-					$date = new DateTime($this->dLastElection);
+					$date = new \DateTime($this->dLastElection);
 					$date->modify('+' . $this->mandateDuration . ' second');
 					$date = $date->format('Y-m-d H:i:s');
 
@@ -750,7 +762,7 @@ class Color {
 				}
 			} else {
 				if (Utils::interval($this->dLastElection, Utils::now(), 's') > $this->mandateDuration + self::CAMPAIGNTIME) {
-					$date = new DateTime($this->dLastElection);
+					$date = new \DateTime($this->dLastElection);
 					$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
 					$date = $date->format('Y-m-d H:i:s');
 

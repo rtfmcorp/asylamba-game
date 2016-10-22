@@ -9,6 +9,12 @@
  * @package Demeter
  * @update 06.10.13
 */
+namespace Asylamba\Modules\Demeter\Manager\Forum;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Demeter\Model\Forum\ForumTopic;
 
 class ForumTopicManager extends Manager {
 	protected $managerType ='_ForumTopic';
@@ -18,7 +24,7 @@ class ForumTopicManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT t.*,
 				(SELECT lv.dView FROM forumLastView AS lv WHERE rTopic = t.id AND rPlayer = ?) AS lastView,
 				COUNT(m.id) AS nbMessage
@@ -72,7 +78,7 @@ class ForumTopicManager extends Manager {
 	}
 
 	public function save() {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$topics = $this->_Save();
 
 		foreach ($topics AS $topic) {
@@ -104,7 +110,7 @@ class ForumTopicManager extends Manager {
 	}
 
 	public function add($newTopic) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 
 		$qr = $db->prepare('INSERT INTO forumTopic
 			SET
@@ -138,7 +144,7 @@ class ForumTopicManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM forumTopic WHERE id = ?');
 		$qr->execute(array($id));
 

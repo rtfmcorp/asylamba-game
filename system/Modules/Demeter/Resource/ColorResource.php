@@ -1,4 +1,7 @@
 <?php
+
+namespace Asylamba\Modules\Demeter\Resource;
+
 class ColorResource {
 	# constants for factions
 	const NO_FACTION = 0;

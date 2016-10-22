@@ -1,21 +1,20 @@
 <?php
 
 /**
- * Vote Law
+ * election Forum
  *
  * @author Noé Zufferey
  * @copyright Expansion - le jeu
  *
  * @package Demeter
- * @update 29.09.14
+ * @update 06.10.13
 */
+namespace Asylamba\Modules\Demeter\Model\Election;
 
-class VoteLaw {
+class Election {
 	public $id 					= 0;
-	public $rLaw 				= 0;
-	public $rPlayer				= 0;
-	public $vote 	 			= 0;
-	public $dVotation			= '';
+	public $rColor 				= 0;
+	public $dElection			= 0;
 
 	public function getId() { return $this->id; }
 }

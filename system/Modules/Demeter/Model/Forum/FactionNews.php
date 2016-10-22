@@ -9,6 +9,9 @@
  * @package Demeter
  * @update 09.01.15
 */
+namespace Asylamba\Modules\Demeter\Model\Forum;
+
+use Asylamba\Classes\Library\Parser;
 
 class FactionNews {
 	const STANDARD 		= 0;

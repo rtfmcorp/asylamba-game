@@ -9,6 +9,9 @@
  * @package Demeter
  * @update 06.10.13
 */
+namespace Asylamba\Modules\Demeter\Model\Forum;
+
+use Asylamba\Classes\Library\Parser;
 
 class ForumMessage {
 	const PUBLISHED 		= 1;
