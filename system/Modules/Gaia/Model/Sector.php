@@ -9,6 +9,7 @@
  * @package Gaia
  * @update xx.xx.xx
 */
+namespace Asylamba\Modules\Gaia\Model;
 
 class Sector {
 	public $id = 0;

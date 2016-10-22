@@ -1,4 +1,9 @@
 <?php
+
+namespace Asylamba\Modules\Gaia\Resource;
+
+use Asylamba\Classes\Library\Utils;
+
 class SquadronResource {
 	public static function get($level, $aleaNbr) {
 		while ($aleaNbr >= self::size()) {
@@ -103,4 +108,3 @@ class SquadronResource {
 		array(20, 20, array(2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1))
 	);
 }
-?>

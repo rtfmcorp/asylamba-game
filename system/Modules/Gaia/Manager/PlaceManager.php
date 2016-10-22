@@ -9,8 +9,15 @@
  * @package Gaia
  * @update 20.05.13
 */
+namespace Asylamba\Modules\Gaia\Manager;
 
-include_once ARES;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+
+use Asylamba\Modules\Gaia\Model\Place;
 
 class PlaceManager extends Manager {
 	protected $managerType = '_Place';
@@ -22,7 +29,7 @@ class PlaceManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order, 'p.');
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT p.*,
 			s.rSector AS rSector,
 			s.xPosition AS xPosition,
@@ -81,7 +88,7 @@ class PlaceManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT p.*,
 			s.rSector AS rSector,
 			s.xPosition AS xPosition,
@@ -193,7 +200,7 @@ class PlaceManager extends Manager {
 	}
 
 	public static function add(Place $p) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			place(rPlayer, rSystem, typeOfPlace, position, population, coefResources, coefHistory, resources, danger, maxDanger, uPlace)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
@@ -220,7 +227,7 @@ class PlaceManager extends Manager {
 		$places = $this->_Save();
 
 		foreach ($places AS $p) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 
 			$qr = $db->prepare('UPDATE place
 				SET	id = ?,
@@ -255,7 +262,7 @@ class PlaceManager extends Manager {
 	}
 
 	public static function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM place WHERE id = ?');
 		$qr->execute(array($id));
 		$this->_Remove($id);
@@ -263,4 +270,3 @@ class PlaceManager extends Manager {
 		return TRUE;
 	}	
 }
-?>

@@ -1,5 +1,10 @@
 <?php
 
+namespace Asylamba\Modules\Gaia\Manager;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Database\Database;
+
 class GalaxyColorManager {
 	public static function apply() {
 		CTR::$applyGalaxy = TRUE;
@@ -27,7 +32,7 @@ class GalaxyColorManager {
 		}
 		$requestPart = rtrim($requestPart, ","); # to remove last comma
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$query = 'SELECT
 			se.id AS id,
 			se.rSector AS sector,
@@ -54,7 +59,7 @@ class GalaxyColorManager {
 	}
 
 	public function saveSystem() {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		foreach ($this->system as $k => $v) {
 			if ($v['hasChanged'] == TRUE) {
 				$qr = $db->prepare('UPDATE system SET rColor = ? WHERE id = ?');
@@ -64,7 +69,7 @@ class GalaxyColorManager {
 	}
 
 	public function loadSector() {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->query('SELECT id, rColor, prime FROM sector ORDER BY id');
 		while ($aw = $qr->fetch()) {
 			$this->sector[$aw['id']] = array(
@@ -76,7 +81,7 @@ class GalaxyColorManager {
 	}
 
 	public function saveSector() {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		foreach ($this->sector as $k => $v) {
 			if ($v['hasChanged'] == TRUE) {
 				$qr = $db->prepare('UPDATE sector SET rColor = ?, prime = ? WHERE id = ?');

@@ -1,4 +1,7 @@
 <?php
+
+namespace Asylamba\Modules\Gaia\Model;
+
 Class PointLocation {
 	var $pointOnVertex;
 

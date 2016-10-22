@@ -1,4 +1,18 @@
 <?php
+
+namespace Asylamba\Modules\Gaia\Helper;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\Format;
+
+use Asylamba\Modules\Promethee\Model\Technology;
+
+use Asylamba\Modules\Promethee\Resource\TechnologyResource;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+
 abstract class ActionHelper {
 
 	public static function loot($ob, &$link, &$box, $id, $place, $commanderSession) {
@@ -388,4 +402,3 @@ abstract class ActionHelper {
 		$box .= '</div>';
 	}
 }
-?>

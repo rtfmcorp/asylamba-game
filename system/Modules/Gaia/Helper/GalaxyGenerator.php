@@ -1,4 +1,17 @@
 <?php
+
+namespace Asylamba\Modules\Gaia\Helper;
+
+use Asylamba\Classes\Database\DatabaseAdmin;
+use Asylamba\Classes\Library\Utils;
+
+use Asylamba\Modules\Gaia\Helper\GalaxyGenerator;
+use GalaxyConfiguration;
+
+use Asylamba\Modules\Gaia\Model\PointLocation;
+use Asylamba\Modules\Gaia\Model\Place;
+use Asylamba\Classes\Library\Format;
+
 abstract class GalaxyGenerator {
 	const MAX_QUERY = 5000;
 
@@ -31,7 +44,7 @@ abstract class GalaxyGenerator {
 	}
 
 	public static function clear() {
-		$db = DataBaseAdmin::getInstance();
+		$db = DatabaseAdmin::getInstance();
 
 		$db->query('SET FOREIGN_KEY_CHECKS = 0;');
 		
@@ -49,7 +62,7 @@ abstract class GalaxyGenerator {
 	}
 
 	public static function save() {
-		$db = DataBaseAdmin::getInstance();
+		$db = DatabaseAdmin::getInstance();
 
 		# clean up database
 		self::clear();
@@ -405,7 +418,7 @@ abstract class GalaxyGenerator {
 	}
 
 	private static function getStatisticsSector() {
-		$db = DataBaseAdmin::getInstance();
+		$db = DatabaseAdmin::getInstance();
 
 		foreach (self::$listSector as $sector) {
 			$id = $sector[0];
@@ -525,4 +538,3 @@ abstract class GalaxyGenerator {
 		return self::getProportion(GalaxyConfiguration::$systems[$systemType - 1]['placesPropotion'], rand(1, 100));
 	}
 }
-?>

@@ -9,6 +9,7 @@
  * @package Gaia
  * @update xx.xx.xx
 */
+namespace Asylamba\Modules\Gaia\Model;
 
 class System {
 	public $id			 	= 0;

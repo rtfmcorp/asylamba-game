@@ -9,6 +9,13 @@
  * @package Gaia
  * @update 09.07.13
 */
+namespace Asylamba\Modules\Gaia\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Utils;
+
+use Asylamba\Modules\Gaia\Model\System;
 
 class SystemManager extends Manager {
 	protected $managerType = '_System';
@@ -18,7 +25,7 @@ class SystemManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT s.*
 			FROM system AS s
 			' . $formatWhere .'
@@ -62,7 +69,7 @@ class SystemManager extends Manager {
 		$systems = $this->_Save();
 
 		foreach ($systems AS $s) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE system
 				SET	rColor = ?
 				WHERE id = ?');

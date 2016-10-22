@@ -1,4 +1,7 @@
 <?php
+
+namespace Asylamba\Modules\Gaia\Resource;
+
 class SystemResource {
 	public static function getInfo($id, $info) {
 		if (in_array($info, array('id', 'frenchName'))) {
@@ -31,4 +34,3 @@ class SystemResource {
 		)
 	);
 }
-?>

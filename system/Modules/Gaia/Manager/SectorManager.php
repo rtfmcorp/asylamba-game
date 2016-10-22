@@ -9,6 +9,12 @@
  * @package Gaia
  * @update 20.05.13
 */
+namespace Asylamba\Modules\Gaia\Manager;
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Modules\Gaia\Model\Sector;
 
 class SectorManager extends Manager {
 	protected $managerType = '_Sector';
@@ -39,7 +45,7 @@ class SectorManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT *
 			FROM sector
 			' . $formatWhere . '
@@ -93,7 +99,7 @@ class SectorManager extends Manager {
 		foreach ($list as $v) { $query .= $module . ' = ? OR '; }
 		$query = trim($query, 'OR ');
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT 
 			DISTINCT(se.id),
 			se.*
@@ -139,7 +145,7 @@ class SectorManager extends Manager {
 	public function save() {
 		$sectors = $this->_Save();
 		foreach ($sectors AS $s) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE sector
 				SET
 					rSurrender = ?,

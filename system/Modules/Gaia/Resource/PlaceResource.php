@@ -1,4 +1,7 @@
 <?php
+
+namespace Asylamba\Modules\Gaia\Resource;
+
 class PlaceResource {
 	public static function get($type, $info) {
 		if (in_array($info, array('name', 'desc', 'price', 'school-size', 'tax', 'l-line', 'r-line', 'l-line-position', 'r-line-position'))) {
@@ -63,4 +66,3 @@ class PlaceResource {
 		)
 	);
 }
-?>
