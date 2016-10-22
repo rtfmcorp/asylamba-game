@@ -9,6 +9,14 @@
  * @package Prométhée
  * @update 19.04.13
 */
+namespace Asylamba\Modules\Promethee\Model;
+
+use Asylamba\Modules\Promethee\Resource\ResearchResource;
+use Asylamba\Classes\Container\StackList;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 class Research {
 	// ATTRIBUTES
@@ -276,4 +284,3 @@ class Research {
 		ASM::$pam->changeSession($S_PAM);
 	}
 }
-?>

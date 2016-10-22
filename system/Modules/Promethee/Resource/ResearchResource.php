@@ -1,4 +1,9 @@
 <?php
+
+namespace Asylamba\Modules\Promethee\Resource;
+
+use Asylamba\Classes\Worker\CTR;
+
 class ResearchResource {
 	/**
 	 * 0 = math, 1 = physique, 2 = chimie
@@ -173,4 +178,3 @@ class ResearchResource {
 		)
 	);
 }
-?>

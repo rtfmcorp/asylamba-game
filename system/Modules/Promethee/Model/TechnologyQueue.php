@@ -9,6 +9,7 @@
  * @package Prométhée
  * @update 10.02.14
 */
+namespace Asylamba\Modules\Promethee\Model;
 
 class TechnologyQueue {
 	// ATTRIBUTES
@@ -24,4 +25,3 @@ class TechnologyQueue {
 		return $this->id;
 	}
 }
-?>

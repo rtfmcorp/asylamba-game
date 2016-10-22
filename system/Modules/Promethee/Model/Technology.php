@@ -9,6 +9,12 @@
  * @package Prométhée
  * @update 04.06.13
 */
+namespace Asylamba\Modules\Promethee\Model;
+
+use Asylamba\Classes\Database\Database;
+
+use Asylamba\Modules\Promethee\Resource\TechnologyResource;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
 class Technology {
 	// ATTRIBUTES
@@ -128,7 +134,7 @@ class Technology {
 	public function __construct($rPlayer) {
 		$this->rPlayer = $rPlayer; 
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT *
 			FROM technology
 			WHERE rPlayer = ?');
@@ -270,7 +276,7 @@ class Technology {
 	}
 
 	public static function addTech($rPlayer, $technology, $level) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			technology(rPlayer, technology, level)
 			VALUES(?, ?, ?)');
@@ -282,7 +288,7 @@ class Technology {
 	}
 
 	public function updateTech($technology, $level) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('UPDATE technology
 			SET	level = ?
 			WHERE rPlayer = ? AND technology = ?');
@@ -298,10 +304,9 @@ class Technology {
 	}
 
 	public static function deleteByRPlayer($rPlayer, $techno) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM technology WHERE rPlayer = ? and technology = ?');
 		$qr->execute(array($rPlayer, $techno));
 		return TRUE;
 	}
 }
-?>

@@ -8,6 +8,12 @@
  * @package Prométhée
  * @update 10.02.14
 */
+namespace Asylamba\Modules\Promethee\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Promethee\Model\TechnologyQueue;
 
 class TechnologyQueueManager extends Manager {
 	protected $managerType = '_TechnologyQueue';
@@ -17,7 +23,7 @@ class TechnologyQueueManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT *
 			FROM technologyQueue
 			' . $formatWhere . '
@@ -57,7 +63,7 @@ class TechnologyQueueManager extends Manager {
 	}
 
 	public function add(TechnologyQueue $t) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			technologyQueue(rPlayer, rPlace, technology, targetLevel, dStart, dEnd)
 			VALUES(?, ?, ?, ?, ?, ?)');
@@ -76,7 +82,7 @@ class TechnologyQueueManager extends Manager {
 	public function save() {
 		$technologyQueues = $this->_Save();
 		foreach ($technologyQueues AS $k => $t) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE technologyQueue
 				SET	id = ?,
 					rPlayer = ?,
@@ -100,7 +106,7 @@ class TechnologyQueueManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM technologyQueue WHERE id = ?');
 		$qr->execute(array($id));
 
@@ -109,4 +115,3 @@ class TechnologyQueueManager extends Manager {
 		return TRUE;
 	}
 }
-?>

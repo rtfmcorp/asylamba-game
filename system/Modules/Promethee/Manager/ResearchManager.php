@@ -10,6 +10,13 @@
  * @update 20.05.13
 */
 
+namespace Asylamba\Modules\Promethee\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Promethee\Model\Research;
+
 class ResearchManager extends Manager {
 	protected $managerType = '_Research';
 
@@ -18,7 +25,7 @@ class ResearchManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT *
 			FROM research
 			' . $formatWhere . '
@@ -70,7 +77,7 @@ class ResearchManager extends Manager {
 	}
 
 	public function add(Research $res) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			research(rPlayer, mathLevel, physLevel, chemLevel, bioLevel, mediLevel, econoLevel, psychoLevel, networkLevel, algoLevel, statLevel, naturalTech, lifeTech, socialTech, informaticTech, naturalToPay, lifeToPay, socialToPay, informaticToPay)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
@@ -103,7 +110,7 @@ class ResearchManager extends Manager {
 		$researches = $this->_Save();
 
 		foreach ($researches AS $k => $res) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE research
 				SET	rPlayer = ?,
 					mathLevel = ?,
@@ -162,4 +169,3 @@ class ResearchManager extends Manager {
 		}
 	}*/
 }
-?>
