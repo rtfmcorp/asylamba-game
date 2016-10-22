@@ -9,6 +9,11 @@
  * @package Atlas
  * @update 04.06.14
  */
+namespace Asylamba\Modules\Atlas\Model;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 class FactionRanking {
 	

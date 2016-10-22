@@ -9,12 +9,18 @@
  * @package Atlas
  * @version 04.06.14
  **/
+namespace Asylamba\Modules\Atlas\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Atlas\Model\PlayerRanking;
 
 class PlayerRankingManager extends Manager {
 	protected $managerType = '_PlayerRanking';
 
 	public function loadLastContext($where = array(), $order = array(), $limit = array()) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT * FROM ranking WHERE player = 1 ORDER BY dRanking DESC LIMIT 1');
 		$qr->execute();
 		$aw = $qr->fetch();
@@ -27,7 +33,7 @@ class PlayerRankingManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT pl.*,
 				p.rColor AS color,
 				p.name AS name,
@@ -58,7 +64,7 @@ class PlayerRankingManager extends Manager {
 		}
 
 		while($aw = $qr->fetch()) {
-			$pl = new playerRanking();
+			$pl = new PlayerRanking();
 
 			$pl->id = $aw['id']; 
 			$pl->rRanking = $aw['rRanking'];
@@ -99,7 +105,7 @@ class PlayerRankingManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare($request);
 
 		while($aw = $qr->fetch()) {
@@ -140,7 +146,7 @@ class PlayerRankingManager extends Manager {
 	}
 
 	public function add(playerRanking $pl) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			playerRanking(rRanking, rPlayer, 
 				general, generalPosition, generalVariation, 
@@ -186,7 +192,7 @@ class PlayerRankingManager extends Manager {
 		$rankings = $this->_Save();
 
 		foreach ($rankings AS $pl) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE playerRanking
 				SET	id = ?,
 					rRanking = ?,
@@ -243,4 +249,3 @@ class PlayerRankingManager extends Manager {
 		}
 	}
 }
-?>

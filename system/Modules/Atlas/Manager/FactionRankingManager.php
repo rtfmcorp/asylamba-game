@@ -9,12 +9,18 @@
  * @package Atlas
  * @version 04.06.14
  **/
+namespace Asylamba\Modules\Atlas\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Atlas\Model\FactionRanking;
 
 class FactionRankingManager extends Manager {
 	protected $managerType = '_FactionRanking';
 
 	public function loadLastContext($where = array(), $order = array(), $limit = array()) {	
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT * FROM ranking WHERE faction = 1 ORDER BY dRanking DESC LIMIT 1');
 		$qr->execute();
 		$aw = $qr->fetch();
@@ -75,7 +81,7 @@ class FactionRankingManager extends Manager {
 	}
 
 	public function loadByRequest($request, $args = array()) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT *
 			FROM factionRanking AS fr
 			' . $request
@@ -108,7 +114,7 @@ class FactionRankingManager extends Manager {
 	}
 
 	public function add(FactionRanking $fr) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			factionRanking(rRanking, rFaction, points, pointsPosition, pointsVariation, newPoints, general, generalPosition, generalVariation, 
 				wealth, wealthPosition, wealthVariation, territorial, territorialPosition, territorialVariation)
@@ -140,7 +146,7 @@ class FactionRankingManager extends Manager {
 		$rankings = $this->_Save();
 
 		foreach ($rankings AS $fr) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE factionRanking
 				SET	id = ?,
 					rRanking = ?,
@@ -181,4 +187,3 @@ class FactionRankingManager extends Manager {
 		}
 	}
 }
-?>
