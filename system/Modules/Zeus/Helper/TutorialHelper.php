@@ -9,6 +9,12 @@
  * @package Zeus
  * @update 25.04.14
  */
+namespace Asylamba\Modules\Zeus\Helper;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+
+use Asylamba\Modules\Promethee\Model\Technology;
 
 class TutorialHelper {
 	public static function checkTutorial() {
@@ -114,4 +120,3 @@ class TutorialHelper {
 		return $nextStepAlreadyDone;
 	}
 }
-?>

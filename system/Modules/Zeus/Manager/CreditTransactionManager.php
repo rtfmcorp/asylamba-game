@@ -9,6 +9,13 @@
  * @package Zeus
  * @version 09.02.15
  **/
+namespace Asylamba\Modules\Zeus\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+
+use Asylamba\Modules\Zeus\Model\CreditTransaction;
 
 class CreditTransactionManager extends Manager {
 	protected $managerType = '_CreditTransaction';
@@ -18,7 +25,7 @@ class CreditTransactionManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT ct.*,
 				p1.name AS receiverName,
 				p1.avatar AS receiverAvatar,
@@ -84,7 +91,7 @@ class CreditTransactionManager extends Manager {
 	}
 
 	public function add(CreditTransaction $ct) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			creditTransaction(rSender, type, rReceiver, amount, dTransaction, comment)
 			VALUES(?, ?, ?, ?, ?, ?)');
@@ -106,7 +113,7 @@ class CreditTransactionManager extends Manager {
 		$cts = $this->_Save();
 
 		foreach ($cts AS $ct) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE creditTransaction
 				SET	id = ?,
 					rSender = ?,
@@ -130,7 +137,7 @@ class CreditTransactionManager extends Manager {
 	}
 
 	public static function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM creditTransaction WHERE id = ?');
 		$qr->execute(array($id));
 
@@ -139,4 +146,3 @@ class CreditTransactionManager extends Manager {
 		return TRUE;
 	}
 }
-?>

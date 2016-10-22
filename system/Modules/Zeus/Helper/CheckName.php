@@ -1,4 +1,7 @@
 <?php
+
+namespace Asylamba\Modules\Zeus\Helper;
+
 class CheckName {
 	public $minLenght = 2;
 	public $maxLenght = 15;
@@ -93,4 +96,3 @@ class CheckName {
 		return $name[rand(0, (count($name) - 1))];
 	}
 }
-?>

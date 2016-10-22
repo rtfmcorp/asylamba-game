@@ -1,7 +1,12 @@
 <?php
+
+namespace Asylamba\Modules\Zeus\Helper;
+
+use Asylamba\Classes\Database\Database;
+
 class PlayerHelper {
 	public static function listOrbitalBases($playerId) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT 
 				ob.rPlace, ob.name, sy.rSector
 			FROM orbitalBase AS ob

@@ -10,6 +10,10 @@
  * @update 09.02.15
  */
 
+namespace Asylamba\Modules\Zeus\Model;
+
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 class CreditTransaction {
 
 	const TYP_PLAYER = 0;

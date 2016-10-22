@@ -9,6 +9,21 @@
  * @package Zeus
  * @version 20.05.13
  **/
+namespace Asylamba\Modules\Zeus\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Worker\API;
+use Asylamba\Classes\Worker\ASM;
+
+use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Modules\Promethee\Model\Technology;
+use Asylamba\Modules\Athena\Model\OrbitalBase;
+use Asylamba\Modules\Hermes\Model\Notification;
+
+use Asylamba\Modules\Gaia\Manager\GalaxyColorManager;
 
 class PlayerManager extends Manager {
 	protected $managerType = '_Player';
@@ -18,7 +33,7 @@ class PlayerManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT p.*
 			FROM player AS p
 			' . $formatWhere . '
@@ -76,7 +91,7 @@ class PlayerManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT p.*
 			FROM player AS p
 			WHERE LOWER(name) LIKE LOWER(?)
@@ -131,7 +146,7 @@ class PlayerManager extends Manager {
 	}
 
 	public function add(Player $p) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			player(bind, rColor, name, sex, description, avatar, status, rGodfather, credit, uPlayer, experience, factionPoint, level, victory, defeat, stepTutorial, stepDone, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, dInscription, dLastConnection, dLastActivity, premium, statement)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
@@ -174,7 +189,7 @@ class PlayerManager extends Manager {
 		$players = $this->_Save();
 
 		foreach ($players AS $p) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE player
 				SET	id = ?,
 					bind = ?,
@@ -240,7 +255,7 @@ class PlayerManager extends Manager {
 	}
 
 	public static function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM player WHERE id = ?');
 		$qr->execute(array($id));
 
@@ -406,7 +421,7 @@ class PlayerManager extends Manager {
 	public static function count($where = array()) {
 		$formatWhere = Utils::arrayToWhere($where);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT COUNT(id) AS nbr FROM player ' . $formatWhere);
 
 		$valuesArray = array();
@@ -426,4 +441,3 @@ class PlayerManager extends Manager {
 		return $aw['nbr'];
 	}
 }
-?>

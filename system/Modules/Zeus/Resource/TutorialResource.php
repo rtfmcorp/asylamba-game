@@ -9,6 +9,7 @@
  * @package Zeus
  * @update 25.04.14
  */
+namespace Asylamba\Modules\Zeus\Resource;
 
 class TutorialResource {
 
@@ -420,4 +421,3 @@ class TutorialResource {
 			'shipReward' => array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
 	);
 }
-?>

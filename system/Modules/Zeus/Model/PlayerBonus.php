@@ -10,8 +10,19 @@
  * @update 18.07.13
 */
 
-include_once PROMETHEE;
-include_once ZEUS;
+namespace Asylamba\Modules\Zeus\Model;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+
+use Asylamba\Classes\Container\StackList;
+
+use Asylamba\Modules\Promethee\Model\Technology;
+use Asylamba\Modules\Demeter\Model\Law\Law;
+
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Promethee\Resource\TechnologyResource;
+use Asylamba\Modules\Demeter\Resource\LawResources;
 
 class PlayerBonus {
 	// ATTRIBUTES
@@ -324,4 +335,3 @@ class PlayerBonus {
 		}
 	}
 }
-?>

@@ -10,6 +10,23 @@
  * @update 20.05.13
  */
 
+namespace Asylamba\Modules\Zeus\Model;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\CTC;
+use Asylamba\Classes\Worker\ASM;
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Game;
+
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Athena\Model\Transaction;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Classes\Container\ArrayList;
+
+use Asylamba\Modules\Athena\Resource\ShipResource;
+
 class Player {
 	public $id = 0; 
 	public $bind = 0;
