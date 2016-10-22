@@ -10,6 +10,8 @@
  * @update 26.03.14
  */
 
+namespace Asylamba\Modules\Artemis\Model;
+
 class SpyReport {
 	# constants
 	const TYP_NOT_CAUGHT = 0;

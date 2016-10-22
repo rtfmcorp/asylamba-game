@@ -10,6 +10,14 @@
  * @version 26.03.14
  **/
 
+namespace Asylamba\Modules\Artemis\Manager;
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Database\Database;
+
+use Asylamba\Modules\Artemis\Model\SpyReport;
+
 class SpyReportManager extends Manager {
 	protected $managerType = '_SpyReport';
 
@@ -18,7 +26,7 @@ class SpyReportManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT sr.*,
 			p.typeOfPlace AS typeOfPlace,
 			p.position AS position,
@@ -95,7 +103,7 @@ class SpyReportManager extends Manager {
 	}
 
 	public function add(SpyReport $sr) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			spyReport(rPlayer, price, rPlace, placeColor, typeOfBase, typeOfOrbitalBase, placeName, points, rEnemy, enemyName, enemyAvatar, enemyLevel, resources, shipsInStorage, antiSpyInvest, commercialRouteIncome, commanders, success, type, dSpying)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
@@ -131,7 +139,7 @@ class SpyReportManager extends Manager {
 		$reports = $this->_Save();
 
 		foreach ($reports AS $sr) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE spyReport
 				SET	id = ?,
 					rPlayer = ?,
@@ -183,7 +191,7 @@ class SpyReportManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM spyReport WHERE id = ?');
 		$qr->execute(array($id));
 
@@ -192,7 +200,7 @@ class SpyReportManager extends Manager {
 	}
 
 	public function deleteByRPlayer($rPlayer) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM spyReport WHERE rPlayer = ?');
 		$qr->execute(array($rPlayer));
 
@@ -208,4 +216,3 @@ class SpyReportManager extends Manager {
 		return $nbrDeleted;
 	}
 }
-?>
