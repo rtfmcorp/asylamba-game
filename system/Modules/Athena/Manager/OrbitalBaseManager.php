@@ -1,6 +1,4 @@
 <?php
-include_once HERMES;
-include_once ZEUS;
 
 /**
  * Orbital Base Manager
@@ -11,6 +9,20 @@ include_once ZEUS;
  * @package Athena
  * @update 02.01.14
 */
+namespace Asylamba\Modules\Athena\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Gaia\Manager\GalaxyColorManager;
+
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Athena\Model\OrbitalBase;
+
+include_once HERMES;
+include_once ZEUS;
 
 class OrbitalBaseManager extends Manager {
 	protected $managerType = '_OrbitalBase';
@@ -20,7 +32,7 @@ class OrbitalBaseManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT 
 			ob.*,
 			p.position AS position,
@@ -89,7 +101,7 @@ class OrbitalBaseManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT 
 			ob.*,
 			p.position AS position,
@@ -319,7 +331,7 @@ class OrbitalBaseManager extends Manager {
 		include_once GAIA;
 		GalaxyColorManager::apply();
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			orbitalBase(rPlace, rPlayer, name, typeOfBase, levelGenerator, levelRefinery, levelDock1, levelDock2, levelDock3, levelTechnosphere, levelCommercialPlateforme, levelStorage, levelRecycling, levelSpatioport, points,
 				iSchool, iAntiSpy, antiSpyAverage, 
@@ -381,7 +393,7 @@ class OrbitalBaseManager extends Manager {
 	public function save() {
 		$bases = $this->_Save();
 		foreach ($bases AS $k => $b) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE orbitalBase
 				SET	rPlace = ?, rPlayer = ?, name = ?, typeOfBase = ?, levelGenerator = ?, levelRefinery = ?, levelDock1 = ?, levelDock2 = ?, levelDock3 = ?, levelTechnosphere = ?, levelCommercialPlateforme = ?, levelStorage = ?, levelRecycling = ?, levelSpatioport = ?, points = ?,
 			iSchool = ?, iAntiSpy = ?, antiSpyAverage = ?,
@@ -525,4 +537,3 @@ class OrbitalBaseManager extends Manager {
 		}
 	}
 }
-?>

@@ -1,4 +1,13 @@
 <?php
+
+namespace Asylamba\Modules\Athena\Resource;
+
+use Asylamba\Modules\Athena\Model\OrbitalBase;
+
+use Asylamba\Modules\Promethee\Resource\TechnologyResource;
+
+use Asylamba\Classes\Worker\CTR;
+
 class OrbitalBaseResource {
 
 	const GENERATOR = 0;

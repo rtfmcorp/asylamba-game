@@ -10,6 +10,8 @@
  * @update 09.02.15
  */
 
+namespace Asylamba\Modules\Athena\Model;
+
 class RecyclingLog {
 
 	public $id = 0;

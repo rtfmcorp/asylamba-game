@@ -9,6 +9,22 @@
  * @package Athena
  * @update 02.01.14
 */
+namespace Asylamba\Modules\Athena\Model;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\CTC;
+use Asylamba\Classes\Worker\ASM;
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Game;
+
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Promethee\Model\Technology;
+
+use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Promethee\Resource\TechnologyResource;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 
 class OrbitalBase {
 	# type of base

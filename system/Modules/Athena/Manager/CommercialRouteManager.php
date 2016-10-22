@@ -9,6 +9,13 @@
  * @package Athena
  * @update 20.05.13
 */
+namespace Asylamba\Modules\Athena\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Athena\CommercialRoute;
+use Asylamba\Modules\Demeter\Model\Color;
 
 class CommercialRouteManager extends Manager {
 	protected $managerType = '_CommercialRoute';
@@ -19,7 +26,7 @@ class CommercialRouteManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT 
 			cr.id AS id,
 			cr.rOrbitalBase AS rOrbitalBase,
@@ -125,7 +132,7 @@ class CommercialRouteManager extends Manager {
 	}
 
 	public function add(CommercialRoute $cr) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			commercialRoute(rOrbitalBase, rOrbitalBaseLinked, imageLink, distance, price, income, dProposition, dCreation, statement)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)');
@@ -148,7 +155,7 @@ class CommercialRouteManager extends Manager {
 	public function save() {
 		$routes = $this->_Save();
 		foreach ($routes AS $k => $cr) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE commercialRoute
 				SET id = ?,
 					rOrbitalBase = ?,
@@ -179,7 +186,7 @@ class CommercialRouteManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM commercialRoute WHERE id = ?');
 		$qr->execute(array($id));
 		
@@ -193,7 +200,7 @@ class CommercialRouteManager extends Manager {
 		if (!($color1->colorLink[$color2->id] == Color::ENEMY || $color2->colorLink[$color1->id] == Color::ENEMY)) {
 			$freeze = FALSE;
 		}
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare(
 			'UPDATE commercialRoute AS cr
 				LEFT JOIN orbitalBase AS ob1
@@ -218,4 +225,3 @@ class CommercialRouteManager extends Manager {
 		}
 	} 
 }
-?>

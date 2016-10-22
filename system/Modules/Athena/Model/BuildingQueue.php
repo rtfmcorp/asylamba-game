@@ -9,6 +9,7 @@
  * @package Athena
  * @update 10.02.14
 */
+namespace Asylamba\Modules\Athena\Model;
 
 class BuildingQueue {
 	// ATTRIBUTES
@@ -23,4 +24,3 @@ class BuildingQueue {
 		return $this->id; 
 	}
 }
-?>

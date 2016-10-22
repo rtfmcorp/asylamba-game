@@ -9,6 +9,7 @@
  * @package Athena
  * @update 20.05.13
 */
+namespace Asylamba\Modules\Athena;
 
 class CommercialRoute {
 
@@ -94,4 +95,3 @@ class CommercialRoute {
 	public function setAvatar2($var) { $this->avatar2 = $var; }
 	public function setPopulation2($var) { $this->population2 = $var; }
 }
-?>

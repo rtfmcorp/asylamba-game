@@ -9,6 +9,13 @@
  * @package Athena
  * @version 05.03.14
  **/
+namespace Asylamba\Modules\Athena\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+
+use Asylamba\Modules\Athena\Model\CommercialTax;
 
 class CommercialTaxManager extends Manager {
 	protected $managerType = '_CommercialTax';
@@ -18,7 +25,7 @@ class CommercialTaxManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT *
 			FROM commercialTax
 			' . $formatWhere . '
@@ -56,7 +63,7 @@ class CommercialTaxManager extends Manager {
 	}
 
 	public function add(CommercialTax $ct) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			commercialTax(faction, relatedFaction, exportTax, importTax)
 			VALUES(?, ?, ?, ?)');
@@ -76,7 +83,7 @@ class CommercialTaxManager extends Manager {
 		$commercialTaxes = $this->_Save();
 
 		foreach ($commercialTaxes AS $t) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE commercialTax
 				SET	id = ?,
 					faction = ?,
@@ -95,4 +102,3 @@ class CommercialTaxManager extends Manager {
 		}
 	}
 }
-?>

@@ -9,6 +9,12 @@
  * @package Athena
  * @version 19.11.13
  **/
+namespace Asylamba\Modules\Athena\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Athena\Model\CommercialShipping;
 
 class CommercialShippingManager extends Manager {
 	protected $managerType = '_CommercialShipping';
@@ -18,7 +24,7 @@ class CommercialShippingManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT cs.*, 
 			p1.rSystem AS rSystem1, p1.position AS position1, s1.xPosition AS xSystem1, s1.yPosition AS ySystem1,
 			p2.rSystem AS rSystem2, p2.position AS position2, s2.xPosition AS xSystem2, s2.yPosition AS ySystem2,
@@ -98,7 +104,7 @@ class CommercialShippingManager extends Manager {
 	}
 
 	public function add(CommercialShipping $cs) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			commercialShipping(rPlayer, rBase, rBaseDestination, rTransaction, resourceTransported, shipQuantity, dDeparture, dArrival, statement)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)');
@@ -123,7 +129,7 @@ class CommercialShippingManager extends Manager {
 		$commercialShippings = $this->_Save();
 
 		foreach ($commercialShippings AS $cs) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE commercialShipping
 				SET	id = ?,
 					rPlayer = ?,
@@ -153,7 +159,7 @@ class CommercialShippingManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM commercialShipping WHERE id = ?');
 		$qr->execute(array($id));
 
@@ -162,4 +168,3 @@ class CommercialShippingManager extends Manager {
 		return TRUE;
 	}
 }
-?>

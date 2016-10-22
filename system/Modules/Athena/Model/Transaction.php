@@ -9,6 +9,16 @@
  * @package Athena
  * @update 19.11.13
  */
+namespace Asylamba\Modules\Athena\Model;
+
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Classes\Library\Format;
+
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
+use Asylamba\Modules\Athena\Resource\ShipResource;
 
 class Transaction {
 	# statement

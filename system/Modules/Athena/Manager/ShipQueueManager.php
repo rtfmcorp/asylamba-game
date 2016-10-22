@@ -10,6 +10,14 @@
  * @update 10.02.14
 */
 
+namespace Asylamba\Modules\Athena\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+
+use Asylamba\Modules\Athena\Model\ShipQueue;
+
 class ShipQueueManager extends Manager {
 	protected $managerType = '_ShipQueue';
 
@@ -18,7 +26,7 @@ class ShipQueueManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT *
 			FROM orbitalBaseShipQueue
 			' . $formatWhere . '
@@ -58,7 +66,7 @@ class ShipQueueManager extends Manager {
 	}
 
 	public function add(ShipQueue $sq) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			orbitalBaseShipQueue(rOrbitalBase, dockType, shipNumber, quantity, dStart, dEnd)
 			VALUES(?, ?, ?, ?, ?, ?)');
@@ -78,7 +86,7 @@ class ShipQueueManager extends Manager {
 	public function save() {
 		$shipQueues = $this->_Save();
 		foreach ($shipQueues AS $k => $sq) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE orbitalBaseShipQueue
 				SET	id = ?,
 					rOrbitalBase = ?,
@@ -102,7 +110,7 @@ class ShipQueueManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM orbitalBaseShipQueue WHERE id = ?');
 		$qr->execute(array($id));
 
@@ -112,4 +120,3 @@ class ShipQueueManager extends Manager {
 		return TRUE;
 	}
 }
-?>

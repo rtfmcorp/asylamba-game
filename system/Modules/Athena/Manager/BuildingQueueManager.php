@@ -9,6 +9,12 @@
  * @package Athena
  * @update 10.02.14
 */
+namespace Asylamba\Modules\Athena\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use \Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Athena\Model\BuildingQueue;
 
 class BuildingQueueManager extends Manager {
 	protected $managerType = '_BuildingQueue';
@@ -18,7 +24,7 @@ class BuildingQueueManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT *
 			FROM orbitalBaseBuildingQueue
 			' . $formatWhere . '
@@ -57,7 +63,7 @@ class BuildingQueueManager extends Manager {
 	}
 
 	public function add(BuildingQueue $bq) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			orbitalBaseBuildingQueue(rOrbitalBase, buildingNumber, targetLevel, dStart, dEnd)
 			VALUES(?, ?, ?, ?, ?)');
@@ -76,7 +82,7 @@ class BuildingQueueManager extends Manager {
 	public function save() {
 		$buildingQueues = $this->_Save();
 		foreach ($buildingQueues AS $bq) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE orbitalBaseBuildingQueue
 				SET	id = ?,
 					rOrbitalBase = ?,
@@ -98,7 +104,7 @@ class BuildingQueueManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM orbitalBaseBuildingQueue WHERE id = ?');
 		$qr->execute(array($id));
 
@@ -108,4 +114,3 @@ class BuildingQueueManager extends Manager {
 		return TRUE;
 	}
 }
-?>

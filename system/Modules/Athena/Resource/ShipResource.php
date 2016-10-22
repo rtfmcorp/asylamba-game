@@ -1,5 +1,15 @@
 <?php
+
+namespace Asylamba\Modules\Athena\Resource;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Promethee\Resource\TechnologyResource;
+
 include_once DEMETER;
+
 class ShipResource {
 
 	const PEGASE = 0;
@@ -402,4 +412,3 @@ class ShipResource {
 		),
 	);
 }
-?>

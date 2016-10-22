@@ -10,6 +10,14 @@
  * @version 19.11.13
  **/
 
+namespace Asylamba\Modules\Athena\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+
+use Asylamba\Modules\Athena\Model\Transaction;
+
 class TransactionManager extends Manager {
 	protected $managerType = '_Transaction';
 
@@ -18,7 +26,7 @@ class TransactionManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT t.*,
 			play.name AS playerName,
 			play.rColor AS playerColor,
@@ -105,7 +113,7 @@ class TransactionManager extends Manager {
 	}
 
 	public function getExchangeRate($transactionType) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT currentRate
 			FROM transaction 
 			WHERE type = ? AND statement = ?
@@ -118,7 +126,7 @@ class TransactionManager extends Manager {
 	}
 
 	public function add(Transaction $t) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			transaction(rPlayer, rPlace, type, quantity, identifier, price, commercialShipQuantity, statement, dPublication, dValidation, currentRate)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
@@ -145,7 +153,7 @@ class TransactionManager extends Manager {
 		$transactions = $this->_Save();
 
 		foreach ($transactions AS $t) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE transaction
 				SET	id = ?,
 					rPlayer = ?,
@@ -179,7 +187,7 @@ class TransactionManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM transaction WHERE id = ?');
 		$qr->execute(array($id));
 
@@ -188,4 +196,3 @@ class TransactionManager extends Manager {
 		return TRUE;
 	}
 }
-?>

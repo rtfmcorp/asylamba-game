@@ -9,6 +9,13 @@
  * @package Zeus
  * @version 09.02.15
  **/
+namespace Asylamba\Modules\Athena\Manager;
+
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+
+use Asylamba\Modules\Athena\Model\RecyclingLog;
 
 class RecyclingLogManager extends Manager {
 	protected $managerType = '_RecyclingLog';
@@ -18,7 +25,7 @@ class RecyclingLogManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT rl.*
 			FROM recyclingLog AS rl
 			' . $formatWhere . '
@@ -72,7 +79,7 @@ class RecyclingLogManager extends Manager {
 	}
 
 	public function add(RecyclingLog $rl) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO
 			recyclingLog(rRecycling, resources, credits, ship0, ship1, ship2, ship3, ship4, ship5, ship6, ship7,
 				ship8, ship9, ship10, ship11, dLog)
@@ -105,7 +112,7 @@ class RecyclingLogManager extends Manager {
 		$recyclingLogs = $this->_Save();
 
 		foreach ($recyclingLogs AS $rl) {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('UPDATE recyclingLog
 				SET	id = ?,
 					rRecycling = ?,
@@ -149,7 +156,7 @@ class RecyclingLogManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('DELETE FROM recyclingLog WHERE id = ?');
 		$qr->execute(array($id));
 
@@ -159,7 +166,7 @@ class RecyclingLogManager extends Manager {
 	}
 
 	public function deleteAllFromMission($missionId) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT id FROM recyclingLog WHERE rRecycling = ?');
 		$qr->execute(array($missionId));
 
@@ -170,4 +177,3 @@ class RecyclingLogManager extends Manager {
 		return TRUE;
 	}
 }
-?>

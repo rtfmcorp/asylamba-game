@@ -9,6 +9,7 @@
  * @package Athena
  * @update 05.03.14
  */
+namespace Asylamba\Modules\Athena\Model;
 
 class CommercialTax {
 

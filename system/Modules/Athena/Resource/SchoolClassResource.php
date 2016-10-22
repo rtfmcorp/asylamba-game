@@ -1,4 +1,8 @@
 <?php
+namespace Asylamba\Modules\Athena\Resource;
+
+use Asylamba\Classes\Worker\CTR;
+
 class SchoolClassResource {
 	private static $classes = array(
 		array(
@@ -44,4 +48,3 @@ class SchoolClassResource {
 		return count(self::$classes);
 	}
 }
-?>
