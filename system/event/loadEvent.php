@@ -1,9 +1,11 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+
 # chargement des événements concernant les flottes qui attaquent le joueur
 if (Utils::interval(CTR::$data->get('lastUpdate')->get('event'), Utils::now(), 's') > TIME_EVENT_UPDATE) {
-	include_once ZEUS;
-	include_once ARES;
-	include_once GAIA;
 
 	# update de l'heure dans le contrôleur
 	CTR::$data->get('lastUpdate')->add('event', Utils::now());
@@ -68,4 +70,3 @@ if (Utils::interval(CTR::$data->get('lastUpdate')->get('event'), Utils::now(), '
 	ASM::$pam->get()->setDLastActivity(Utils::now());
 	ASM::$pam->changeSession($S_PAM1);
 }
-?>

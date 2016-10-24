@@ -1,7 +1,9 @@
 <?php
 # exécute les événements s'il sont dans la liste
-include_once ATHENA;
-include_once ARES;
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
 
 $now = Utils::now();
 
@@ -38,4 +40,3 @@ if ($pastEvents->size() > 0) {
 	}
 	CTR::$data->get('playerEvent')->clearPastEvents($now);
 }
-?>
