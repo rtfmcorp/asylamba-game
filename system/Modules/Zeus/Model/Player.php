@@ -147,13 +147,6 @@ class Player {
 				$hours = Utils::intervalDates($now, $this->uPlayer);
 				$this->uPlayer = $now;
 
-				include_once ATHENA;
-				include_once HERMES;
-				include_once PROMETHEE;
-				include_once ARES;
-				include_once DEMETER;
-				include_once GAIA;
-
 				# load orbital bases
 				$S_OBM1 = ASM::$obm->getCurrentSession();
 				ASM::$obm->newSession();

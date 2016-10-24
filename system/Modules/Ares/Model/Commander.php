@@ -287,7 +287,6 @@ class Commander {
 
 	private function setEarnedExperience($enemyCommander) {
 		$this->setArmy();
-		include_once ZEUS;
 		$finalOwnPev = 0;
 
 		foreach ($this->army AS $squadron) {
@@ -372,8 +371,6 @@ class Commander {
 	}
 
 	public function emptySquadrons() {
-		include_once ATHENA;
-
 		$S_OBM = ASM::$obm->getCurrentSession();
 		ASM::$obm->newSession();
 		ASM::$obm->load(array('rPlace' => $this->rBase));
@@ -518,15 +515,12 @@ class Commander {
 			$nbrHours = Utils::intervalDates($now, $this->uCommander);
 			$this->uCommander = $now;
 
-			include_once ATHENA;
-
 			$S_OBM = ASM::$obm->getCurrentSession();
 			ASM::$obm->newSession();
 			ASM::$obm->load(array('rPlace' => $this->rBase));
 			$ob = ASM::$obm->get();
 			ASM::$obm->changeSession($S_OBM);
-				
-			include_once ZEUS;
+                        
 			$playerBonus = 0;
 			if ($this->rPlayer != CTR::$data->get('playerId')) {
 				$playerBonus = new PlayerBonus($this->rPlayer);
@@ -543,8 +537,6 @@ class Commander {
 
 		# test si il y a des combats
 		if ($this->dArrival <= Utils::now() AND $this->statement == self::MOVING AND $this->hasToU) {
-			include_once GAIA;
-
 			$this->hasToU = FALSE;
 
 			$S_PLM = ASM::$plm->getCurrentSession();

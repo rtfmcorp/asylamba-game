@@ -199,9 +199,6 @@ class Place {
 					CTC::add($hour, $this, 'uDanger', array());
 				}
 			}
-
-			include_once ARES;
-
 			$S_COM_OUT = ASM::$com->getCurrentSession();
 			ASM::$com->newSession();
 			ASM::$com->load([
@@ -211,10 +208,6 @@ class Place {
 			);
 
 			if (ASM::$com->size() > 0) {
-				include_once ATHENA;
-				include_once ZEUS;
-				include_once DEMETER;
-
 				$places = array();
 				$playerBonuses = array();
 
@@ -694,8 +687,6 @@ class Place {
 
 				# victoire
 				if ($commander->getStatement() != COM_DEAD) {
-					include_once ATHENA;
-
 					if ($nbrBattle == 0) {
 						$this->sendNotif(self::CONQUERPLAYERWHITOUTBATTLESUCCESS, $commander, NULL);
 					} else {
@@ -776,8 +767,6 @@ class Place {
 				$this->typeOfBase = 4; 
 
 				# créer une base
-				include_once ATHENA;
-
 				$ob = new OrbitalBase();
 				$ob->rPlace = $this->id;
 				$ob->setRPlayer($commander->getRPlayer());
@@ -959,8 +948,6 @@ class Place {
 	}
 
 	private function sendNotif($case, $commander, $report = NULL) {
-		include_once HERMES;
-
 		switch ($case) {
 			case self::CHANGESUCCESS:
 				$notif = new Notification();

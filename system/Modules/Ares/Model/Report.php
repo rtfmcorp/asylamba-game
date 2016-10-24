@@ -132,8 +132,6 @@ class Report {
 	}
 
 	public function setPev() {
-		include_once ATHENA;
-
 		for ($i = 0; $i < 12; $i++) {
 			$this->pevInBeginA += ShipResource::getInfo($i, 'pev') * $this->totalInBeginA[$i];
 			$this->pevInBeginD += ShipResource::getInfo($i, 'pev') * $this->totalInBeginD[$i];

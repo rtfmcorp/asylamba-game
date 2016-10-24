@@ -94,7 +94,6 @@ class Parser {
 		return preg_replace_callback(
 			'#\[\@(.+)\]#isU',
 			function($m) {
-				include_once ZEUS;
 				$S_PAM1 = ASM::$pam->getCurrentSession();
 				ASM::$pam->newSession(FALSE);
 				ASM::$pam->load(array('name' => $m[1]));
@@ -115,7 +114,6 @@ class Parser {
 		return preg_replace_callback(
 			'#\[\#(.+)\]#isU',
 			function($m) {
-				include_once GAIA;
 				$S_PLM1 = ASM::$plm->getCurrentSession();
 				ASM::$plm->newSession(FALSE);
 

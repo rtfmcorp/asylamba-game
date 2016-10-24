@@ -156,7 +156,6 @@ class CommercialShipping {
 			case Transaction::TYP_RESOURCE: $class = 'resources'; break;
 			case Transaction::TYP_COMMANDER: $class = 'commander'; break;
 			case Transaction::TYP_SHIP:
-				include_once ARES;
 				$class = 'ship';
 				break;
 			default: break;

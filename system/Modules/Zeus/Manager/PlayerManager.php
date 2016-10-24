@@ -301,10 +301,6 @@ class PlayerManager extends Manager {
 	}
 
 	public function reborn($player) {
-		include_once GAIA;
-		include_once ATHENA;
-		include_once HERMES;
-
 		$S_PAM1 = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession(FALSE);
 		ASM::$pam->load(array('id' => $player));

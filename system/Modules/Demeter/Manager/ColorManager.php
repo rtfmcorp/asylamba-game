@@ -235,8 +235,6 @@ class ColorManager extends Manager {
 	}
 
 	public static function updatePlayers($id) {
-		include_once ZEUS;
-
 		$_CLM1 = ASM::$clm->getCurrentSession();
 		ASM::$clm->newSession();
 		ASM::$clm->load(array('id' => $id));
@@ -252,8 +250,6 @@ class ColorManager extends Manager {
 	}
 
 	public static function updateActivePlayers($id) {
-		include_once ZEUS;
-
 		$_CLM1 = ASM::$clm->getCurrentSession();
 		ASM::$clm->newSession();
 		ASM::$clm->load(array('id' => $id));

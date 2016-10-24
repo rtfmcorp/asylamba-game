@@ -357,7 +357,6 @@ class OrbitalBase {
 
 						# load commander if it's a commander shipping
 						if ($transaction->type == Transaction::TYP_COMMANDER) {
-							include_once ARES;
 							$S_COM1 = ASM::$com->getCurrentSession();
 							ASM::$com->newSession();
 							ASM::$com->load(array('c.id' => $transaction->identifier));
@@ -402,7 +401,6 @@ class OrbitalBase {
 					$recyclingQuantity = floor($interval / $mission->cycleTime);
 
 					# Place
-					include_once GAIA;
 					$S_PLM = ASM::$plm->getCurrentSession();
 					ASM::$plm->newSession(ASM_UMODE);
 					ASM::$plm->load(array('id' => $mission->rTarget));
@@ -442,7 +440,6 @@ class OrbitalBase {
 	}
 
 	public function uBuildingQueue($queue, $player) {
-		include_once DEMETER;
 		# update builded building
 		$this->setBuildingLevel($queue->buildingNumber, ($this->getBuildingLevel($queue->buildingNumber) + 1));
 		# update the points of the orbitalBase
@@ -460,7 +457,6 @@ class OrbitalBase {
 	}
 
 	public function uShipQueue1($sq, $player) {
-		include_once DEMETER;
 		# vaisseau construit
 		$this->setShipStorage($sq->shipNumber, $this->getShipStorage($sq->shipNumber) + $sq->quantity);
 		# increase player experience
@@ -484,7 +480,6 @@ class OrbitalBase {
 	}
 
 	public function uShipQueue2($sq, $player) {
-		include_once DEMETER;
 		# vaisseau construit
 		$this->setShipStorage($sq->shipNumber, $this->getShipStorage($sq->shipNumber) + 1);
 		# increase player experience

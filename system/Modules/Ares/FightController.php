@@ -226,8 +226,6 @@ class FightController {
 	*/
 
 	public function startFight($commanderA, $playerA, $commanderD, $playerD = NULL) {
-		include_once DEMETER;
-
 		$commanderA->setIsAttacker(TRUE);
 		$commanderD->setIsAttacker(FALSE);
 		

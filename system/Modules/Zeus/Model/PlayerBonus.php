@@ -161,7 +161,6 @@ class PlayerBonus {
 	}
 
 	private function addLawBonus() {
-		include_once DEMETER;
 		$_LAM = ASM::$lam->getCurrentSession();
 		ASM::$lam->newSession();
 		ASM::$lam->load(array('rColor' => $this->playerColor, 'statement' => Law::EFFECTIVE));
@@ -186,8 +185,6 @@ class PlayerBonus {
 		ASM::$lam->changeSession($_LAM);
 	}
 	private function addFactionBonus() {
-		include_once DEMETER;
-
 		$_CLM = ASM::$clm->getCurrentSession();
 		ASM::$clm->newSession();
 		ASM::$clm->load(['id' => $this->playerColor]);

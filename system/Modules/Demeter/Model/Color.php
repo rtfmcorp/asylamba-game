@@ -143,8 +143,6 @@ class Color {
 	}
 
 	public function sendSenateNotif($fromChief = FALSE) {
-		include_once HERMES;
-
 		$_PAM121 = ASM::$pam->getCurrentsession();
 		ASM::$pam->newSession();
 		ASM::$pam->load(['rColor' => $this->id, 'status' => PAM_PARLIAMENT]);
@@ -173,7 +171,6 @@ class Color {
 	}
 
 	public function updateStatus($token_pam) {
-		include_once ZEUS;
 		$limit = round($this->players / 4);
 		if ($limit < 10) { $limit = 10; }
 		if ($limit > 40) { $limit = 40; }
@@ -665,8 +662,6 @@ class Color {
 
 	public function uMethod() {
 		// 604800s = 7j
-		include_once GAIA;
-
 		$token_ctc = CTC::createContext('Color');
 
 		if ($this->regime == self::DEMOCRATIC) {

@@ -98,7 +98,6 @@ class TutorialHelper {
 	public static function isNextTechnoStepAlreadyDone($playerId, $technoId, $level = 1) {
 		$nextStepAlreadyDone = FALSE;
 
-		include_once PROMETHEE;
 		$tech = new Technology($playerId);
 		if ($tech->getTechnology($technoId) >= $level) {
 			$nextStepAlreadyDone = TRUE;

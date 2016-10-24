@@ -10,8 +10,6 @@
  * @update 14.02.14
 */
 
-include_once ATHENA;
-
 namespace Asylamba\Modules\Ares\Model;
 
 use Asylamba\Modules\Athena\Resource\ShipResource;

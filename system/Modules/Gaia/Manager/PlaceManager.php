@@ -23,8 +23,6 @@ class PlaceManager extends Manager {
 	protected $managerType = '_Place';
 	
 	public function load($where = array(), $order = array(), $limit = array()) {
-		include_once ARES;
-		
 		$formatWhere = Utils::arrayToWhere($where, 'p.');
 		$formatOrder = Utils::arrayToOrder($order, 'p.');
 		$formatLimit = Utils::arrayToLimit($limit);

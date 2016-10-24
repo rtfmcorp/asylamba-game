@@ -21,9 +21,6 @@ use Asylamba\Modules\Gaia\Manager\GalaxyColorManager;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 
-include_once HERMES;
-include_once ZEUS;
-
 class OrbitalBaseManager extends Manager {
 	protected $managerType = '_OrbitalBase';
 
@@ -303,7 +300,6 @@ class OrbitalBaseManager extends Manager {
 			ASM::$crm->changeSession($S_CRM1);
 
 			# TechnologyQueueManager
-			include_once PROMETHEE;
 			$S_TQM1 = ASM::$tqm->getCurrentSession();
 			ASM::$tqm->newSession(ASM_UMODE);
 			ASM::$tqm->load(array('rPlace' => $aw['rPlace']), array('dEnd'));
@@ -328,7 +324,6 @@ class OrbitalBaseManager extends Manager {
 
 	public function add(OrbitalBase $b) {
 		# prépare le rechargement de la map
-		include_once GAIA;
 		GalaxyColorManager::apply();
 
 		$db = Database::getInstance();
@@ -529,7 +524,6 @@ class OrbitalBaseManager extends Manager {
 			ASM::$obm->changeSession($S_OBM2);
 
 			# applique en cascade le changement de couleur des sytèmes
-			include_once GAIA;
 			GalaxyColorManager::apply();
 		} else {
 			CTR::$alert->add('Cette base orbitale n\'exite pas !', ALERT_BUG_INFO);

@@ -262,7 +262,6 @@ abstract class CTR {
 
 		# application de la galaxie si necessaire
 		if (CTR::$applyGalaxy) {
-			include_once GAIA;
 			GalaxyColorManager::applyAndSave();
 		}
 

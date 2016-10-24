@@ -8,8 +8,6 @@ use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Promethee\Resource\TechnologyResource;
 
-include_once DEMETER;
-
 class ShipResource {
 
 	const PEGASE = 0;

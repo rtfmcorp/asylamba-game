@@ -109,14 +109,10 @@ class Game {
 	}
 
 	public static function getRCPrice($distance) {
-		include_once ATHENA;
-
 		return $distance * CommercialRoute::COEF_PRICE;
 	}
 
 	public static function getRCIncome($distance, $bonusA = 1, $bonusB = 1) {
-		include_once ATHENA;
-
 		$income = CommercialRoute::COEF_INCOME_2 * sqrt($distance * CommercialRoute::COEF_INCOME_1);
 		$maxIncome = CommercialRoute::COEF_INCOME_2 * sqrt(100 * CommercialRoute::COEF_INCOME_1);
 		if ($income > $maxIncome) {
@@ -220,7 +216,6 @@ class Game {
 	}
 
 	public static function getCommercialShipQuantityNeeded($transactionType, $quantity, $identifier = 0) {
-		include_once ATHENA;
 		switch ($transactionType) {
 			case Transaction::TYP_RESOURCE :
 				# 1000 ressources => 1 commercialShip
@@ -257,7 +252,6 @@ class Game {
 				break;
 			case Transaction::TYP_SHIP :
 				# 1 resource = x credit
-				include_once ATHENA;
 				if (ShipResource::isAShip($identifier)) {
 					$resourceQuantity = ShipResource::getInfo($identifier, 'resourcePrice') * $quantity;
 					$thisRate = $price / $resourceQuantity;
@@ -289,7 +283,6 @@ class Game {
 				break;
 			case Transaction::TYP_SHIP :
 				# 1 resource = x credit
-				include_once ATHENA;
 				if (ShipResource::isAShip($identifier)) {
 					$resourceQuantity = ShipResource::getInfo($identifier, 'resourcePrice') * $quantity;
 					return $price / $resourceQuantity;
@@ -313,7 +306,6 @@ class Game {
 				$minRate = Transaction::MIN_RATE_RESOURCE;
 				break;
 			case Transaction::TYP_SHIP:
-				include_once ATHENA;
 				$minRate = Transaction::MIN_RATE_SHIP;
 				$quantity = ShipResource::getInfo($identifier, 'resourcePrice') * $quantity;
 				break;
@@ -337,7 +329,6 @@ class Game {
 				$minRate = Transaction::MAX_RATE_RESOURCE;
 				break;
 			case Transaction::TYP_SHIP:
-				include_once ATHENA;
 				$minRate = Transaction::MAX_RATE_SHIP;
 				$quantity = ShipResource::getInfo($identifier, 'resourcePrice') * $quantity;
 				break;
@@ -365,7 +356,6 @@ class Game {
 	}
 
 	public static function getTypeOfSpy($success, $antiSpy) {
-		include_once ARTEMIS;
 		if ($antiSpy < 1000) {
 			return SpyReport::TYP_NOT_CAUGHT;
 		}
@@ -419,7 +409,6 @@ class Game {
 	}
 
 	public static function getFleetCost($ships, $affected = TRUE) {
-		include_once ATHENA;
 		$cost = 0;
 		for ($i = 0; $i < ShipResource::SHIP_QUANTITY; $i++) {
 			$cost += ShipResource::getInfo($i, 'cost') * $ships[$i];
