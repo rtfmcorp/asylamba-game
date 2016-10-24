@@ -1,4 +1,10 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Hermes\Model\ConversationUser;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Hermes\Model\Conversation;
+
 # background paralax
 echo '<div id="background-paralax" class="message"></div>';
 

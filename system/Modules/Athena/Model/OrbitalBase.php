@@ -17,6 +17,7 @@ use Asylamba\Classes\Worker\ASM;
 
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\Format;
 
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Hermes\Model\Notification;
