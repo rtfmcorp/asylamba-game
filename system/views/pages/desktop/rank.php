@@ -10,9 +10,6 @@ include 'defaultElement/movers.php';
 echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
 
-	include_once ATLAS;
-	include_once DEMETER;
-
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'player') {
 		$S_PRM1 = ASM::$prm->getCurrentSession();
 

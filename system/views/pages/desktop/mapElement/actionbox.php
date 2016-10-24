@@ -1,7 +1,15 @@
 <?php
-include_once GAIA;
-include_once ATHENA;
-include_once ZEUS;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Gaia\Resource\SystemResource;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Athena\Model\RecyclingMission;
+use Asylamba\Modules\Gaia\Model\Place;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Promethee\Model\Technology;
 
 if (CTR::$get->exist('relatedplace')) {
 	$S_OBM2 = ASM::$obm->getCurrentSession();
@@ -40,7 +48,6 @@ if (isset($defaultBase)) {
 	ASM::$lrm->newSession();
 	ASM::$lrm->load(array('rPlayerAttacker' => CTR::$data->get('playerId'), 'r.rPlace' => $placesId), array('r.dFight', 'DESC'), array(0, 30));
 
-	include_once ARTEMIS;
 	$S_SRM_MAP = ASM::$srm->getCurrentSession();
 	ASM::$srm->newSession();
 	ASM::$srm->load(array('rPlayer' => CTR::$data->get('playerId'), 'rPlace' => $placesId), array('dSpying', 'DESC'), array(0, 30));

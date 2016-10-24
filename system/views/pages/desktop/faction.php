@@ -1,7 +1,4 @@
 <?php
-# inclusion des modules
-include_once DEMETER;
-
 # factionNav component
 $color_factionNav = CTR::$data->get('playerInfo')->get('color');
 
@@ -27,8 +24,6 @@ echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
 
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'overview') {
-		include_once ZEUS;
-
 		$S_FNM_OW = ASM::$fnm->getCurrentSession();
 		$TOKEN_NEWS = ASM::$fnm->newSession();
 		
@@ -508,7 +503,6 @@ echo '<div id="content">';
 			ASM::$pam->changeSession($S_PAM_1);
 		}
 	} elseif (CTR::$get->get('view') == 'player') {
-		include_once ZEUS;
 		$S_PAM1 = ASM::$pam->getCurrentSession();
 
 		$PAM_LAST_TOKEN = ASM::$pam->newSession(FALSE);

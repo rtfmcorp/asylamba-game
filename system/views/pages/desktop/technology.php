@@ -10,10 +10,6 @@ include 'defaultElement/movers.php';
 # contenu spécifique
 echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
-
-	# inclusion des modules
-	include_once ZEUS;
-
 	# loading des objets
 	$S_PAM_TECH = ASM::$pam->getCurrentSession();
 	ASM::$pam->newSession();

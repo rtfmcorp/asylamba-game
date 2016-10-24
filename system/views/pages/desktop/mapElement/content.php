@@ -1,4 +1,10 @@
 <?php
+
+use Asylamba\Classes\Container\Params;
+use Asylamba\Classes\Worker\ASM;
+
+use GalaxyConfiguration;
+
 $rate = 400 / GalaxyConfiguration::$galaxy['size'];
 echo '<div id="map-content" ' . (Params::check(Params::SHOW_MAP_MINIMAP) ? NULL : 'style="display:none;"') . '>';
 	echo '<div class="mini-map">';
@@ -27,4 +33,3 @@ echo '<div id="map-content" ' . (Params::check(Params::SHOW_MAP_MINIMAP) ? NULL 
 		echo '<div class="viewport"></div>';
 	echo '</div>';
 echo '</div>';
-?>

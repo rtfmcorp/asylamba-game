@@ -1,13 +1,13 @@
 <?php
-# galaxy loading
-include_once GAIA;
-include_once DEMETER;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Gaia\Manager\SectorManager;
+use GalaxyConfiguration;
 
 $sm = new SectorManager();
 $sm->load();
 
-# bases loading
-include_once ATHENA;
 $S_OBM_MAP = ASM::$obm->getCurrentSession();
 ASM::$obm->newSession();
 ASM::$obm->load(array('rPlayer' => CTR::$data->get('playerId')));
@@ -114,4 +114,3 @@ echo '>';
 echo '</div>';
 
 ASM::$obm->changeSession($S_OBM_MAP);
-?>

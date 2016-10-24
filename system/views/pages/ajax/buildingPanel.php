@@ -1,6 +1,10 @@
 <?php
-include_once ATHENA;
 
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Classes\Library\Game;
 
 $building 		= Utils::getHTTPData('building');
 $currentLevel 	= Utils::getHTTPData('lvl');
@@ -126,7 +130,6 @@ echo '<div class="component panel-info size2">';
 			echo '</table></div>';
 
 			# generate the footnotes
-			include_once GAIA;
 			$quantityArray = array_count_values($footnoteArray);
 			echo '<p class="info">';
 			foreach ($quantityArray as $footnote => $quantity) {
@@ -150,4 +153,3 @@ echo '<div class="component panel-info size2">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

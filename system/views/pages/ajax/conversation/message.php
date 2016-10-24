@@ -1,7 +1,9 @@
 <?php
-# inclusion des modules
-include_once HERMES;
-include_once DEMETER;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Hermes\Model\ConversationMessage;
 
 $page = CTR::$get->exist('page') 
 	? CTR::$get->get('page')

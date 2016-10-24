@@ -9,11 +9,7 @@ include 'defaultElement/movers.php';
 # contenu spécifique
 echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
-
-	# inclusion des modules
-	include_once HERMES;
-
-	# liste des conv's
+        # liste des conv's
 	$display = CTR::$get->equal('mode', ConversationUser::CS_ARCHIVED)
 		? ConversationUser::CS_ARCHIVED
 		: ConversationUser::CS_DISPLAY;

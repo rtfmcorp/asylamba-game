@@ -1,5 +1,10 @@
 <?php
-include_once ARES;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
+use Asylamba\Classes\Library\Format;
 
 $S_COM_MAP_COM = ASM::$com->getCurrentSession();
 ASM::$com->newSession();
@@ -62,4 +67,3 @@ echo '<div id="subnav">';
 echo '</div>';
 
 ASM::$com->changeSession($S_COM_MAP_COM);
-?>

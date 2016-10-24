@@ -11,11 +11,6 @@ echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
 
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'invest') {
-		# inclusion des modules
-		include_once ATHENA;
-		include_once ZEUS;
-		include_once ARES;
-
 		# loading des objets
 		$S_PAM_FIN = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession();

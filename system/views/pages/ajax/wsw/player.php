@@ -11,4 +11,3 @@ echo '<div class="modal form">';
 	echo '<input class="autocomplete-hidden" name="playerid" value="" type="hidden" />';
 	echo '<input type="text" class="autocomplete-player" autocomplete="off" id="wsw-py-pseudo" />';
 echo '</div>';
-?>

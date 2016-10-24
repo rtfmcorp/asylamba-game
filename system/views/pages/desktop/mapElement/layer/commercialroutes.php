@@ -1,5 +1,11 @@
 <?php
-$db = DataBase::getInstance();
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Container\Params;
+use GalaxyConfiguration;
+
+$db = Database::getInstance();
 $qr = $db->query('SELECT
 		sy1.xPosition AS sy1x,
 		sy1.yPosition AS sy1y,
@@ -32,4 +38,3 @@ echo '<div id="commercial-routes" ' . (Params::check(Params::SHOW_MAP_RC) ? NULL
 			}
 	echo '</svg>';
 echo '</div>';
-?>

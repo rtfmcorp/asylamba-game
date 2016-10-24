@@ -1,5 +1,10 @@
 <?php
-include_once ATHENA;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
 $ship = CTR::$get->get('ship');
 
@@ -128,4 +133,3 @@ echo '<div class="component panel-info">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

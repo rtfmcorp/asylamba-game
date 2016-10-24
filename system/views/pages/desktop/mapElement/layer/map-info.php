@@ -1,4 +1,7 @@
 <?php
+
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 echo '<div id="map-info">';
 	echo '<h2>Légende</h2>';
 
