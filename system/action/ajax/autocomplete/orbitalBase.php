@@ -1,5 +1,7 @@
 <?php
-include_once GAIA;
+
+use Asylamba\Classes\Worker\ASM;
+
 $S_PLM1 = ASM::$plm->newSession(FALSE);
 
 ASM::$plm->search($_GET['q'], array('pl.id', 'DESC'), array(0, 20));
@@ -16,4 +18,3 @@ if (ASM::$plm->size() != 0) {
 }
 
 ASM::$plm->changeSession($S_PLM1);
-?>

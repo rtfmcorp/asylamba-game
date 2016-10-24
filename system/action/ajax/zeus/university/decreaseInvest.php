@@ -1,9 +1,11 @@
 <?php
-include_once ATHENA;
 # decrease university investment action
 
 # int category 	 	catégorie ('natural', 'life', 'social' ou 'informatic')
 # int quantity		percentage of increasment
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
 
 $category = Utils::getHTTPData('category');
 $quantity = Utils::getHTTPData('quantity');
@@ -62,4 +64,3 @@ if ($category !== FALSE AND $quantity !== FALSE) {
 } else {
 	CTR::$alert->add('Pas assez d\'informations pour augmenter l\'investissement', ALERT_STD_FILLFORM);
 }
-?>

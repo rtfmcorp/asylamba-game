@@ -1,6 +1,4 @@
 <?php
-include_once ARES;
-include_once ATHENA;
 # assign ship action
 
 # string direction 	'ctb' = commander to base / 'btc' = base to commander
@@ -11,6 +9,13 @@ include_once ATHENA;
 # int quantity		ship quantity
 # int commander		commander id
 # int squadron 		squadron id
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Zeus\Helper\TutorialHelper;
+use Asylamba\Modules\Zeus\Resource\TutorialResource;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -94,4 +99,3 @@ if ($direction !== FALSE AND $baseId !== FALSE AND $shipId !== FALSE AND $comman
 } else {
 	CTR::$alert->add('Pas assez d\'informations pour assigner un vaisseau', ALERT_STD_FILLFORM);
 }
-?>
