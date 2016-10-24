@@ -17,7 +17,7 @@ $S_CLM1 = ASM::$clm->getCurrentSession();
 ASM::$clm->newSession(FALSE);
 
 # create a new ranking
-$db = DataBase::getInstance();
+$db = Database::getInstance();
 $qr = $db->prepare('INSERT INTO ranking(dRanking, player, faction) VALUES (?, 0, 1)');
 $qr->execute(array(Utils::now()));
 
@@ -102,7 +102,7 @@ for ($i = 0; $i < ASM::$prm->size(); $i++) {
 }
 
 #-------------------------------- WEALTH RANKING ----------------------------------#
-$db = DataBase::getInstance();
+$db = Database::getInstance();
 
 for ($i = 0; $i < ASM::$clm->size(); $i++) { 
 	$color = ASM::$clm->get($i)->id;

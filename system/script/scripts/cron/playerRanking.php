@@ -11,7 +11,7 @@ ASM::$pam->newSession(FALSE);
 
 
 # create a new ranking
-$db = DataBase::getInstance();
+$db = Database::getInstance();
 $qr = $db->prepare('INSERT INTO ranking(dRanking, player, faction) VALUES (?, 1, 0)');
 $qr->execute(array(Utils::now()));
 
@@ -456,7 +456,7 @@ foreach ($list as $player => $value) {
 	if (DATA_ANALYSIS) {
 		$p = ASM::$pam->getById($player);
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO 
 			DA_PlayerDaily(rPlayer, credit, experience, level, victory, defeat, status, resources, fleetSize, nbPlanet, planetPoints, rkGeneral, rkFighter, rkProducer, rkButcher, rkTrader, dStorage)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'

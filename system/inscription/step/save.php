@@ -238,7 +238,7 @@ try {
 
 	# enregistrement DA
 	if (DATA_ANALYSIS) {
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('INSERT INTO 
 			DA_Player(id, color, dInscription)
 			VALUES(?, ?, ?)'

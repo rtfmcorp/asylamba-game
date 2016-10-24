@@ -57,7 +57,7 @@ if ($conversation !== FALSE AND $content !== FALSE) {
 				ASM::$cme->add($message);
 
 				if (DATA_ANALYSIS) {
-					$db = DataBase::getInstance();
+					$db = Database::getInstance();
 					$qr = $db->prepare('INSERT INTO 
 						DA_SocialRelation(`from`, `to`, `type`, `message`, dAction)
 						VALUES(?, ?, ?, ?, ?)'

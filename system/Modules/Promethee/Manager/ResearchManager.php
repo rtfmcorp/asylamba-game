@@ -160,7 +160,7 @@ class ResearchManager extends Manager {
 	/* This will no longer work
 	public static function deleteByRPlayer($rPlayer) {
 		try {
-			$db = DataBase::getInstance();
+			$db = Database::getInstance();
 			$qr = $db->prepare('DELETE FROM research WHERE rPlayer = ?');
 			$qr->execute(array($rPlayer));
 			return TRUE;

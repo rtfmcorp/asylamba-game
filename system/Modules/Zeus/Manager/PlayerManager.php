@@ -66,7 +66,7 @@ class PlayerManager extends Manager {
 	// 	$formatOrder = Utils::arrayToOrder($order);
 	// 	$formatLimit = Utils::arrayToLimit([]);
 
-	// 	$db = DataBase::getInstance();
+	// 	$db = Database::getInstance();
 	// 	$qr = $db->prepare('SELECT p.*
 	// 		FROM playerRanking AS pl
 	// 		LEFT JOIN player AS p 

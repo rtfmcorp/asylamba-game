@@ -134,7 +134,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 				$ob->decreaseResources(OrbitalBaseResource::getBuildingInfo($building, 'level', $currentLevel + 1, 'resourcePrice'));
 
 				if (DATA_ANALYSIS) {
-					$db = DataBase::getInstance();
+					$db = Database::getInstance();
 					$qr = $db->prepare('INSERT INTO 
 						DA_BaseAction(`from`, type, opt1, opt2, weight, dAction)
 						VALUES(?, ?, ?, ?, ?, ?)'
