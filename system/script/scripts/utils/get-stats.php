@@ -1,6 +1,9 @@
 <?php
 
-include_once ZEUS;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Zeus\Manager\PlayerManager;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 echo '<h1>Création automatisée de statistiques</h1>';
 

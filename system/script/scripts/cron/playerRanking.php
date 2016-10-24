@@ -2,17 +2,13 @@
 # daily cron
 # call at x am. every day
 
-include_once ATLAS;
 $S_PRM1 = ASM::$prm->getCurrentSession();
 ASM::$prm->newSession();
 ASM::$prm->loadLastContext();
 
-include_once ZEUS;
 $S_PAM1 = ASM::$pam->getCurrentSession();
 ASM::$pam->newSession(FALSE);
 
-include_once ATHENA;
-include_once ARES;
 
 # create a new ranking
 $db = DataBase::getInstance();

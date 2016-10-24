@@ -1,5 +1,8 @@
 <?php
-$db = DataBaseAdmin::getInstance();
+
+use Asylamba\Classes\Database\DatabaseAdmin;
+
+$db = DatabaseAdmin::getInstance();
 
 echo '<h2>Ajout de points dans sector</h2>';
 

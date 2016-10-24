@@ -1,7 +1,9 @@
 <?php
-include_once DEMETER;
 
-$db = DataBaseAdmin::getInstance();
+use Asylamba\Classes\Database\DatabaseAdmin;
+use Asylamba\Classes\Worker\ASM;
+
+$db = DatabaseAdmin::getInstance();
 
 echo '<h2>Ajout de isInGame dans color</h2>';
 

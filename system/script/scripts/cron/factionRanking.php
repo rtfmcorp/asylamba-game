@@ -2,8 +2,6 @@
 # daily cron
 # call at x am. every day
 
-include_once ATHENA;
-include_once ATLAS;
 $S_FRM1 = ASM::$frm->getCurrentSession();
 ASM::$frm->newSession();
 ASM::$frm->loadLastContext();
@@ -12,15 +10,11 @@ $S_PRM1 = ASM::$prm->getCurrentSession();
 ASM::$prm->newSession();
 ASM::$prm->loadLastContext();
 
-include_once ZEUS;
 $S_PAM1 = ASM::$pam->getCurrentSession();
 ASM::$pam->newSession(FALSE);
 
-include_once DEMETER;
 $S_CLM1 = ASM::$clm->getCurrentSession();
 ASM::$clm->newSession(FALSE);
-
-include_once GAIA; # for Sector and SectorManager
 
 # create a new ranking
 $db = DataBase::getInstance();
@@ -289,7 +283,6 @@ if ($gameover == FALSE) {
 		$content = 'Salut,<br /><br />La victoire vient d\'être remportée par : <br /><strong>' . $winnerName . '</strong><br />';
 		$content .= 'Cette faction a atteint les ' . POINTS_TO_WIN . ' points, la partie est donc terminée.<br /><br />Bravo et un grand merci à tous les participants !';
 
-		include_once HERMES;
 		$S_CVM1 = ASM::$cvm->getCurrentSession();
 		ASM::$cvm->newSession();
 		ASM::$cvm->load(

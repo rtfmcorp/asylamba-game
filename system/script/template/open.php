@@ -1,4 +1,7 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+
 echo '<!DOCTYPE html>';
 echo '<html lang="fr">';
 
@@ -15,4 +18,3 @@ echo '<head>';
 echo '</head>';
 
 echo '<body>';
-?>
