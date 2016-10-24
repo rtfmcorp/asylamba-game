@@ -1,5 +1,9 @@
 <?php
-include_once ZEUS;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+
 # search player profile
 
 # string name 	nom du joueur
@@ -20,4 +24,3 @@ if ($playerid !== FALSE) {
 } else {
 	CTR::$alert->add('pas assez d\'informations pour chercher un joueur', ALERT_STD_FILLFORM);
 }
-?>

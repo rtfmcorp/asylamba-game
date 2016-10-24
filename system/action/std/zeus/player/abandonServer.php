@@ -1,5 +1,8 @@
 <?php
-include_once ZEUS;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\API;
 
 $S_PAM1 = ASM::$pam->getCurrentSession();
 ASM::$pam->newSession();
@@ -29,6 +32,3 @@ if (ASM::$pam->size() == 1) {
 }
 
 ASM::$pam->changeSession($S_PAM1);
-
-
-?>

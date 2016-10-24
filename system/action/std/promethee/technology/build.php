@@ -1,12 +1,20 @@
 <?php
-include_once ATHENA;
-include_once PROMETHEE;
-include_once ZEUS;
-include_once DEMETER;
 # building a technology action
 
 # int baseid 		id de la base orbitale
 # int techno 	 	id de la technologie
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Modules\Promethee\Model\Technology;
+use Asylamba\Modules\Promethee\Model\TechnologyQueue;
+use Asylamba\Modules\Promethee\Resource\TechnologyResource;
+use Asylamba\Modules\Zeus\Helper\TutorialHelper;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -57,7 +65,6 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 
 					# tutorial
 					if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-						include_once ZEUS;
 						switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
 							case TutorialResource::SHIP0_UNBLOCK:
 								if ($techno == Technology::SHIP0_UNBLOCK) {
@@ -112,7 +119,7 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 					CTR::$data->get('playerEvent')->add($tq->dEnd, EVENT_BASE, $baseId);
 
 					if (DATA_ANALYSIS) {
-						$db = DataBase::getInstance();
+						$db = Database::getInstance();
 						$qr = $db->prepare('INSERT INTO 
 							DA_BaseAction(`from`, type, opt1, opt2, weight, dAction)
 							VALUES(?, ?, ?, ?, ?, ?)'
@@ -141,4 +148,3 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 } else {
 	CTR::$alert->add('pas assez d\'informations pour développer une technologie', ALERT_STD_FILLFORM);
 }
-?>

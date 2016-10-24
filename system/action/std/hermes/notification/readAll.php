@@ -1,7 +1,8 @@
 <?php
 # read all notifications
 
-include_once HERMES;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
 
 $S_NTM1 = ASM::$ntm->getCurrentSession();
 ASM::$ntm->newSession(ASM_UMODE);

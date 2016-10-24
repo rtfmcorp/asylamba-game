@@ -1,13 +1,17 @@
 <?php
-include_once ARES;
-include_once GAIA;
-include_once ZEUS;
-include_once DEMETER;
 
 # send a fleet to loot a place
 
 # int commanderid 			id du commandant à envoyer
 # int placeid				id de la place attaquée
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Promethee\Model\Technology;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Modules\Ares\Model\Commander;
 
 $commanderId = Utils::getHTTPData('commanderid');
 $placeId = Utils::getHTTPData('placeid');
@@ -32,7 +36,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 		$obQuantity = CTR::$data->get('playerBase')->get('ob')->size();
 
 		# count ob quantity via request to be sure (the session is sometimes not valid)
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT COUNT(*) AS count FROM `orbitalBase` WHERE `rPlayer`=?'); 
 		$qr->execute([CTR::$data->get('playerId')]);
 		$aw = $qr->fetch();

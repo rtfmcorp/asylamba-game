@@ -1,9 +1,12 @@
 <?php
-include_once ZEUS;
-include_once DEMETER;
 # give credit action
 
 # int quantity 		quantity of credit to send
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Zeus\Model\CreditTransaction;
 
 $quantity = Utils::getHTTPData('quantity');
 

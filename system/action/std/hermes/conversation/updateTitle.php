@@ -1,6 +1,9 @@
 <?php
-include_once ZEUS;
-include_once HERMES;
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Parser;
 
 $conversation 	= Utils::getHTTPData('conversation');
 $title 			= Utils::getHTTPData('title');

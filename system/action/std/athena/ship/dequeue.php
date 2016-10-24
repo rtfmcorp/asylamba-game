@@ -1,10 +1,14 @@
 <?php
-include_once ATHENA;
 # dequeue ship action
 
 # int baseId 		id (rPlace) de la base orbitale
 # int queue 		id de la file de construction
 # int dock 			numéro du dock (1, 2, ou 3)
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Athena\Resource\ShipResource;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -81,4 +85,3 @@ if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($bas
 } else {
 	CTR::$alert->add('pas assez d\'informations pour enlever un vaisseau de la file d\'attente', ALERT_STD_FILLFORM);
 }
-?>

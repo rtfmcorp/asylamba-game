@@ -1,8 +1,13 @@
 <?php
-include_once ATHENA;
 # modify investments in university action
 
 # int credit 		nouveau montant à investir
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Zeus\Helper\TutorialHelper;
+use Asylamba\Modules\Zeus\Resource\TutorialResource;
 
 $credit = Utils::getHTTPData('credit');
 
@@ -32,4 +37,3 @@ if ($credit !== FALSE) {
 } else {
 	CTR::$alert->add('pas assez d\'informations pour modifier cet investissement', ALERT_STD_FILLFORM);
 }
-?>

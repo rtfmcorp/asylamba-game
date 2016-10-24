@@ -1,7 +1,10 @@
 <?php
-include_once ZEUS;
-include_once ATHENA;
 # validate tutorial step action
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Zeus\Resource\TutorialResource;
+use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 
 $playerId = CTR::$data->get('playerId');
 $stepTutorial = CTR::$data->get('playerInfo')->get('stepTutorial');
@@ -244,4 +247,3 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 } else {
 	CTR::$alert->add('Impossible de valider l\'étape avant de l\'avoir effectuée.', ALERT_STD_FILLFORM);
 }
-?>

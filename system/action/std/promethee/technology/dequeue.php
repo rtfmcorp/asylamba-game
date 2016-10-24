@@ -1,11 +1,13 @@
 <?php
-include_once ATHENA;
-include_once ZEUS;
-include_once PROMETHEE;
 # dequeue a technology action
 
 # int baseid 		id de la base orbitale
 # int techno 	 	id de la technologie
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Promethee\Resource\TechnologyResource;
 
 for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -88,4 +90,3 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 } else {
 	CTR::$alert->add('pas assez d\'informations pour annuler le développement d\'une technologie', ALERT_STD_FILLFORM);
 }
-?>

@@ -1,9 +1,12 @@
 <?php
-include_once ATHENA;
 # switch dock mode (production/storage) action
 
 # int baseId 		id de la base orbitale
 # int dock 			dock number
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -46,4 +49,3 @@ if ($baseId !== FALSE AND $dock !== FALSE AND in_array($baseId, $verif)) {
 } else {
 	CTR::$alert->add('pas assez d\'informations pour changer le mode du dock', ALERT_STD_FILLFORM);
 }
-?>

@@ -1,11 +1,17 @@
 <?php
-include_once ARES;
-include_once GAIA;
-include_once ZEUS;
 # send a fleet to move to a place
 
 # int commanderid 			id du commandant à envoyer
 # int placeid				id de la place de destination
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Classes\Library\DataAnalysis;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Athena\Resource\ShipResource;
 
 $commanderId = Utils::getHTTPData('commanderid');
 $placeId = Utils::getHTTPData('placeid');
@@ -44,7 +50,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 						$commander->move($place->getId(), $commander->rBase, Commander::MOVE, $length, $duration);
 
 						if (DATA_ANALYSIS) {
-							$db = DataBase::getInstance();
+							$db = Database::getInstance();
 							$qr = $db->prepare('INSERT INTO 
 								DA_CommercialRelation(`from`, `to`, type, weight, dAction)
 								VALUES(?, ?, ?, ?, ?)'

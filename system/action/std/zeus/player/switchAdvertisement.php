@@ -1,5 +1,8 @@
 <?php
-include_once ZEUS;
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+
 # switch advertisement action
 
 $S_PAM1 = ASM::$pam->getCurrentSession();

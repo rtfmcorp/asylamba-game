@@ -1,6 +1,13 @@
 <?php
-include_once ZEUS;
-include_once HERMES;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Parser;
+use Asylamba\Modules\Hermes\Model\Conversation;
+use Asylamba\Modules\Hermes\Model\ConversationUser;
+use Asylamba\Modules\Hermes\Model\ConversationMessage;
+
 
 $conversation 	= Utils::getHTTPData('conversation');
 $content 		= Utils::getHTTPData('content');

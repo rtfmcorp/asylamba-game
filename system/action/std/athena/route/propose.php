@@ -1,10 +1,17 @@
 <?php
-include_once ATHENA;
-include_once DEMETER;
 # propose a commercial route action
 
 # int basefrom 		id (rPlace) de la base orbitale qui propose la route
 # int baseto 		id (rPlace) de la base orbitale à qui la route est proposée
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Modules\Athena\CommercialRoute;
+use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Classes\Library\Format;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -155,4 +162,3 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 } else {
 	CTR::$alert->add('pas assez d\'informations pour proposer une route commerciale', ALERT_STD_FILLFORM);
 }
-?>

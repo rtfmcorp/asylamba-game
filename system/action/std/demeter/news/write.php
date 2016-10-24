@@ -3,7 +3,9 @@
 # content
 # title
 
-include_once DEMETER;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Utils;
 
 $content 	= Utils::getHTTPData('content');
 $title  	= Utils::getHTTPData('title');

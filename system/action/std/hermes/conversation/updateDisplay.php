@@ -1,5 +1,9 @@
 <?php
-include_once HERMES;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Hermes\Model\ConversationUser;
 
 $conversation 	= Utils::getHTTPData('conversation');
 

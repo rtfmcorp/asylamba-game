@@ -1,12 +1,24 @@
 <?php
-include_once ATHENA;
-include_once PROMETHEE;
-include_once DEMETER;
 # build ship action
 
 # int baseid 		id (rPlace) de la base orbitale
 # int ship 			id du vaisseau
 # int quantity 		nombre de vaisseaux à construire
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\DataAnalysis;
+use Asylamba\Classes\Library\Format;
+
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Promethee\Model\Technology;
+use Asylamba\Modules\Athena\Model\ShipQueue;
+
+use Asylamba\Modules\Zeus\Helper\TutorialHelper;
+use Asylamba\Modules\Zeus\Resource\TutorialResource;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -45,7 +57,6 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 
 				# tutorial
 				if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-					include_once ZEUS;
 					switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
 						case TutorialResource::BUILD_SHIP0:
 							if ($ship == ShipResource::PEGASE) {
@@ -106,7 +117,7 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 				CTR::$data->get('playerEvent')->add($sq->dEnd, EVENT_BASE, $baseId);
 
 				if (DATA_ANALYSIS) {
-					$db = DataBase::getInstance();
+					$db = Database::getInstance();
 					$qr = $db->prepare('INSERT INTO 
 						DA_BaseAction(`from`, type, opt1, opt2, weight, dAction)
 						VALUES(?, ?, ?, ?, ?, ?)'
@@ -134,4 +145,3 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 } else {
 	CTR::$alert->add('pas assez d\'informations pour construire un vaisseau', ALERT_STD_FILLFORM);
 }
-?>

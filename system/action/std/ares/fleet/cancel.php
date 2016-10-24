@@ -1,11 +1,12 @@
 <?php
-include_once ARES;
-include_once GAIA;
-include_once ZEUS;
 # send a fleet to loot a place
 
 # int commanderid 			id du commandant à envoyer
 # int placeid				id de la place attaquée
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
 
 $commanderId = Utils::getHTTPData('commanderid');
 
@@ -19,12 +20,12 @@ if ($commanderId !== FALSE) {
 			if ($commander->travelType != COM_BACK) {
 
 				$interval = Utils::interval($commander->dArrival, Utils::now(), 's');
-				$dStart = new DateTime(Utils::now());
+				$dStart = new \DateTime(Utils::now());
 				$dStart->modify('-' . $interval . ' second');
 
 				$duration = Utils::interval($commander->dStart, $commander->dArrival, 's');
 
-				$dArrival = new DateTime($dStart->format('Y-m-d H:i:s'));
+				$dArrival = new \DateTime($dStart->format('Y-m-d H:i:s'));
 				$dArrival->modify('+' . $duration . ' second');
 
 				$rDestinationPlace = $commander->rDestinationPlace;

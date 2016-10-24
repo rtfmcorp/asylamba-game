@@ -1,8 +1,11 @@
 <?php
-include_once DEMETER;
-include_once ZEUS;
 
 #rlaw	id de la loi
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Demeter\Resource\LawResources;
 
 $rLaw = Utils::getHTTPData('rlaw');
 

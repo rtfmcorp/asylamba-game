@@ -1,7 +1,8 @@
 <?php
 #rplayer	id du joueur
 
-include_once ZEUS;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
 
 if (CTR::$data->get('playerInfo')->get('status') > PAM_PARLIAMENT && CTR::$data->get('playerInfo')->get('status') < PAM_CHIEF) {
 	$_PAM = ASM::$pam->getCurrentsession();

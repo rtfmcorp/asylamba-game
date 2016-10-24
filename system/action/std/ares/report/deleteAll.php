@@ -1,5 +1,8 @@
 <?php
-include_once ARES;
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Ares\Model\Report;
 
 $S_LRM = ASM::$lrm->getCurrentSession();
 ASM::$lrm->newSession();

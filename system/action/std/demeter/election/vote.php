@@ -3,11 +3,14 @@
 #rcandidate id du candidat
 #relection id election
 
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Demeter\Model\Election\Vote;
+use Asylamba\Classes\Library\Utils;
+
 $rElection = Utils::getHTTPData('relection');
 $rCandidate = Utils::getHTTPData('rcandidate');
-
-include_once DEMETER;
-include_once ZEUS;
 
 if ($rElection !== FALSE && $rCandidate !== FALSE) {
 	$_ELM = ASM::$elm->getCurrentSession();

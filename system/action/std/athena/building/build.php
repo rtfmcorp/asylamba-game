@@ -1,10 +1,20 @@
 <?php
-include_once ATHENA;
-include_once PROMETHEE;
+
 # building a building action
 
 # int baseid 		id de la base orbitale
 # int building 	 	id du bâtiment
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Promethee\Model\Technology;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Zeus\Helper\TutorialHelper;
+use Asylamba\Modules\Zeus\Resource\TutorialResource;
+use Asylamba\Modules\Athena\Model\BuildingQueue;
+use Asylamba\Classes\Library\DataAnalysis;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -36,7 +46,6 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 
 				# tutorial
 				if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-					include_once ZEUS;
 					switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
 						case TutorialResource::GENERATOR_LEVEL_2:
 							if ($building == OrbitalBaseResource::GENERATOR AND $currentLevel + 1 >= 2) {
@@ -152,4 +161,3 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 } else {
 	CTR::$alert->add('pas assez d\'informations pour construire un bâtiment', ALERT_STD_FILLFORM);
 }
-?>

@@ -1,9 +1,13 @@
 <?php
-include_once ATHENA;
 # delete a commercial route action
 
 # int base 			id (rPlace) de la base orbitale qui veut supprimer la route
 # int route 		id de la route commerciale
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Hermes\Model\Notification;
 
 for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -76,4 +80,3 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 } else {
 	CTR::$alert->add('pas assez d\'informations pour supprimer une route commerciale', ALERT_STD_FILLFORM);
 }
-?>

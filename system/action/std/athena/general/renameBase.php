@@ -1,9 +1,14 @@
 <?php
-include_once ATHENA;
 # rename the orbital base action
 
 # int baseid 		id (rPlayer) de la base orbitale
 # string name 		new name for the orbital base
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Parser;
+use Asylamba\Modules\Zeus\Helper\CheckName;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -52,4 +57,3 @@ if ($baseId !== FALSE AND $name !== FALSE AND in_array($baseId, $verif)) {
 } else {
 	CTR::$alert->add('pas assez d\'informations pour changer le nom de la base orbitale', ALERT_STD_FILLFORM);
 }
-?>
