@@ -7,6 +7,9 @@
 # require
 	# _T PRM 		FACTION_RANKING_POINTS
 
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Format;
+
 ASM::$frm->changeSession($FACTION_RANKING_POINTS);
 
 echo '<div class="component profil panel-info">';

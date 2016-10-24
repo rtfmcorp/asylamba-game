@@ -7,6 +7,10 @@
 # require
 	# [{spyreport}]	spyreport_listSpy
 
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Classes\Worker\CTR;
+
 $i = 0;
 
 echo '<div class="component report">';
@@ -45,4 +49,3 @@ echo '<div class="component report">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

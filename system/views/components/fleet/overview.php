@@ -7,6 +7,11 @@
 # require
 	# [{commander}]		commander_listFleetIncoming
 
+use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Gaia\Resource\PlaceResource;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
+
 echo '<div class="component size3 table-fleet">';
 	echo '<div class="head skin-1">';
 		echo '<h1>Aperçu des armées</h1>';

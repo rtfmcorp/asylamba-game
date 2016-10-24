@@ -9,6 +9,11 @@
 	# {player}		attacker_report
 	# {player}		defender_report
 
+use Asylamba\Modules\Ares\Resource\CommanderResources;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+
 echo '<div class="component report">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'avatar/medium/' . $attacker_report->avatar . '.png" alt="' . $attacker_report->name . '" />';

@@ -12,7 +12,6 @@ ASM::$pam->changeSession($PLAYER_GOV_TOKEN);
 $status = ColorResource::getInfo($faction->id, 'status');
 
 # ranking
-include_once ATLAS;
 $S_FRM1 = ASM::$frm->getCurrentSession();
 ASM::$frm->newSession();
 ASM::$frm->loadLastContext();

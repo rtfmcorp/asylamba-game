@@ -7,6 +7,9 @@
 # require
 	# _T PRM 		FACTION_RANKING_FRONT
 
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 ASM::$frm->changeSession($FACTION_RANKING_FRONT);
 $f = ASM::$frm->get(0);
 

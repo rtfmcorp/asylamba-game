@@ -1,4 +1,10 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Zeus\Model\CreditTransaction;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 # load
 $S_CRT_1 = ASM::$crt->getCurrentSession();
 ASM::$crt->newSession();
@@ -71,4 +77,3 @@ echo '<div class="component player rank">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

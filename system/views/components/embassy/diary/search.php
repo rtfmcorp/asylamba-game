@@ -9,6 +9,10 @@
 # 	{ob}		ob_selected
 #	bool 		player_ishim
 
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Worker\CTR;
+
 $status = ColorResource::getInfo($player_selected->rColor, 'status');
 
 echo '<div class="component search-player size2 color' . $player_selected->rColor . '">';
@@ -38,4 +42,3 @@ echo '<div class="component search-player size2 color' . $player_selected->rColo
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

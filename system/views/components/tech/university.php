@@ -8,7 +8,11 @@
 	# {player}		player_university
 
 # work
-include_once PROMETHEE;
+
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Promethee\Resource\ResearchResource;
 
 echo '<div class="component">';
 	echo '<div class="head skin-1">';
@@ -248,4 +252,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

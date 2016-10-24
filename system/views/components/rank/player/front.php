@@ -7,8 +7,8 @@
 # require
 	# _T PRM 		PLAYER_RANKING_FRONT
 
-include_once ZEUS;
-include_once DEMETER;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 ASM::$prm->changeSession($PLAYER_RANKING_FRONT);
 $p = ASM::$prm->get(0);

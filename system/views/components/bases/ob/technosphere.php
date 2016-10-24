@@ -7,8 +7,19 @@
 # require
 	# {orbitalBase}		ob_tech
 
-include_once PROMETHEE;
-include_once DEMETER;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Modules\Promethee\Resource\TechnologyResource;
+use Asylamba\Modules\Promethee\Model\Technology;
+use Asylamba\Modules\Athena\Model\OrbitalBase;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Classes\Library\Format;
+
 $technology = new Technology(CTR::$data->get('playerId'));
 
 # session avec les technos de cette base
@@ -387,4 +398,3 @@ echo '</div>';
 
 ASM::$tqm->changeSession($S_TQM1);
 ASM::$rsm->changeSession($S_RSM1);
-?>

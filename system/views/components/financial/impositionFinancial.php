@@ -8,6 +8,10 @@
 	# [{orbitalBase}]			ob_impositionFinancial
 
 # view part
+
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Game;
+
 echo '<div class="component financial">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'financial/taxin.png" alt="" />';

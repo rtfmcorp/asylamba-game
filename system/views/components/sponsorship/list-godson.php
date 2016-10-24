@@ -1,4 +1,7 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+
 $S_PAM_1 = ASM::$pam->getCurrentSession();
 ASM::$pam->newSession();
 ASM::$pam->load(

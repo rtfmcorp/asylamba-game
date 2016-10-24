@@ -1,5 +1,12 @@
 <?php
-include_once ATHENA;
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Modules\Athena\Model\Transaction;
+use Asylamba\Modules\Athena\Model\CommercialShipping;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
+use Asylamba\Modules\Athena\Resource\ShipResource;
 
 $S_TRM1 = ASM::$trm->getCurrentSession();
 
@@ -192,4 +199,3 @@ echo '<div class="component market-sell">';
 echo '</div>';
 
 ASM::$trm->changeSession($S_TRM1);
-?>

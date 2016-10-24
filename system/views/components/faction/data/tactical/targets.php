@@ -1,4 +1,8 @@
 <?php
+
+use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Classes\Library\Format;
+
 $mode = isset($targetMode) ? $targetMode : FALSE;
 
 echo '<div class="component">';

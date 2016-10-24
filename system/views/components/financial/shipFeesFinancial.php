@@ -1,5 +1,10 @@
 <?php
 
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
+
 $commanderByBase = [];
 foreach ($commander_shipsFeesFinancial as $commander) {
 	if (!isset($commanderByBase[$commander->getRBase()])) {

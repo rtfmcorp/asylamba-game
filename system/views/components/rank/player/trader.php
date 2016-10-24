@@ -7,6 +7,8 @@
 # require
 	# _T PRM 		PLAYER_RANKING_TRADER
 
+use Asylamba\Classes\Worker\ASM;
+
 ASM::$prm->changeSession($PLAYER_RANKING_TRADER);
 
 echo '<div class="component player rank">';

@@ -1,4 +1,10 @@
 <?php
+
+use Asylamba\Modules\Gaia\Resource\PlaceResource;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\Format;
+
 # obSituation component
 # in athena.bases package
 
@@ -100,4 +106,3 @@ echo '<div class="component space size3">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?> 

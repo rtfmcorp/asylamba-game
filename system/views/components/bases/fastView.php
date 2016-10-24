@@ -10,6 +10,19 @@
 	# (bool)			fastView_profil
 
 # calcul
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Modules\Gaia\Resource\PlaceResource;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Promethee\Resource\TechnologyResource;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
+
 if ($ob_fastView->getLevelSpatioport() > 0) {
 	$S_CRM_OFV = ASM::$crm->getCurrentSession();
 	ASM::$crm->changeSession($ob_fastView->routeManager);
@@ -311,4 +324,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

@@ -7,6 +7,9 @@
 # require
 	# {player}	player_diaryRoplay
 
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Classes\Library\Format;
+
 echo '<div class="component profil thread">';
 	echo '<div class="head">';
 		echo '<h1>Journal</h1>';
@@ -51,4 +54,3 @@ echo '<div class="component profil thread">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

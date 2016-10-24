@@ -8,6 +8,11 @@
 	# [{report}]	report_listReport
 	# (INT)			type_listReport
 
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Container\Params;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Classes\Worker\CTR;
+
 echo '<div class="component report">';
 	echo '<div class="head skin-2">';
 		if ($type_listReport == 1) {
@@ -61,4 +66,3 @@ echo '<div class="component report">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

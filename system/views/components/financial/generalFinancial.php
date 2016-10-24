@@ -8,6 +8,9 @@
 	# *
 
 # view part
+
+use Asylamba\Classes\Library\Format;
+
 echo '<div class="component size2 financial">';
 	echo '<div class="head">';
 		echo '<h1>Finance</h1>';
@@ -164,4 +167,3 @@ echo '<div class="component size2 financial">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

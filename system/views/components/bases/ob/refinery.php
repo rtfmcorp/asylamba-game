@@ -7,6 +7,12 @@
 # require
 	# {orbitalBase}		ob_refinery
 
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
+
 echo '<div class="component building">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'orbitalbase/refinery.png" alt="" />';
@@ -88,4 +94,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>
