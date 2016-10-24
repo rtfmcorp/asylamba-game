@@ -4,6 +4,9 @@
 # uncrpyt a
 # ajout dans le add
 
+use Asylamba\Classes\Worker\API;
+use Asylamba\Classes\Worker\CTR;
+
 $query = API::unParse($_SERVER['REQUEST_URI']);
 $query = explode('/', $query);
 
@@ -35,4 +38,3 @@ if (DEVMODE || CTR::$get->exist('password')) {
 		'message' => 'Accès refusé'
 	));
 }
-?>
