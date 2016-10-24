@@ -1,5 +1,12 @@
 <?php
-include_once DEMETER;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Security;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Container\ArrayList;
+use Asylamba\Modules\Gaia\Manager\SectorManager;
+use Asylamba\Modules\Zeus\Helper\CheckName;
+
 # choix des étapes
 if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 	if (CTR::$get->exist('bindkey')) {
@@ -30,7 +37,6 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 			$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
 
 			if ($api->userExist(CTR::$data->get('prebindkey'))) {
-				include_once ZEUS;
 
 				$S_PAM_INSCR = ASM::$pam->getCurrentSession();
 				ASM::$pam->newSession();
@@ -98,7 +104,6 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 	}
 } elseif (CTR::$get->get('step') == 3) {
 	if (CTR::$data->exist('inscription')) {
-		include_once ZEUS;
 
 		# check nom dejà utilisé
 		$S_PAM_INSCR2 = ASM::$pam->getCurrentSession();
@@ -106,7 +111,6 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 		ASM::$pam->load(array('name' => CTR::$post->get('pseudo')));
 
 		if (ASM::$pam->size() == 0) {
-			include_once ZEUS;
 			$check = new CheckName();
 
 			if (CTR::$post->exist('pseudo') && $check->checkLength(CTR::$post->get('pseudo')) && $check->checkChar(CTR::$post->get('pseudo'))) {
@@ -133,20 +137,17 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 		exit();
 	}
 } elseif (CTR::$get->get('step') == 4) {
-	include_once ZEUS;
 	$S_PAM_INSCR = ASM::$pam->getCurrentSession();
 	ASM::$pam->newSession();
 	ASM::$pam->load(array('bind' => CTR::$data->get('bindkey')));
 
 	if (ASM::$pam->size() == 0) {
 		if (CTR::$data->exist('inscription')) {
-			include_once ZEUS;
 			$check = new CheckName();
 
 			if (CTR::$post->exist('base') && $check->checkLength(CTR::$post->get('base')) && $check->checkChar(CTR::$post->get('base'))) {
 				CTR::$data->get('inscription')->add('base', CTR::$post->get('base'));
 
-				include_once GAIA;
 				$sm = new SectorManager();
 				$sm->load();
 
@@ -178,4 +179,3 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 
 	ASM::$pam->changeSession($S_PAM_INSCR);
 }
-?>

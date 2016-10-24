@@ -1,10 +1,18 @@
 <?php
-include_once GAIA;
-include_once ATHENA;
-include_once ZEUS;
-include_once PROMETHEE;
-include_once ARES;
-include_once HERMES;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Modules\Promethee\Model\Research;
+use Asylamba\Modules\Athena\Model\OrbitalBase;
+use Asylamba\Modules\Promethee\Resource\ResearchResource;
+use Asylamba\Modules\Promethee\Model\Technology;
+use Asylamba\Classes\Worker\API;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Security;
+use Asylamba\Modules\Gaia\Manager\GalaxyColorManager;
+use Asylamba\Modules\Hermes\Model\ConversationUser;
 
 try {
 	$faction = CTR::$data->get('inscription')->get('ally');
@@ -242,7 +250,6 @@ try {
 	CTR::$data->remove('inscription');
 	CTR::$data->remove('prebindkey');
 
-	include_once GAIA;
 	GalaxyColorManager::apply();
 
 	# ajout aux conversation de faction et techniques
@@ -288,4 +295,3 @@ try {
 	CTR::$alert->add('erreur' . $e->getMessage());
 	CTR::redirect('inscription/step-3');
 }
-?>

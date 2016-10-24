@@ -1,4 +1,7 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+
 // choix des étapes
 if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 	if (!CTR::$get->exist('bindkey')) {
@@ -11,4 +14,3 @@ if (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')) {
 } elseif (CTR::$get->get('step') == 4) {
 	include INSCRIPTION . 'step/save.php';
 }
-?>
