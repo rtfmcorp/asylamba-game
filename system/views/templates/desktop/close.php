@@ -1,5 +1,6 @@
 <?php
-include_once ATHENA;
+
+use Asylamba\Modules\Athena\Resource\ShipResource;
 
 $shipsName;
 for ($i = 0; $i < 12; $i++) {

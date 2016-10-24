@@ -1,7 +1,16 @@
 <?php
-# load base
-include_once ATHENA;
-include_once ARES;
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Promethee\Resource\TechnologyResource;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
 $S_OBM1 = ASM::$obm->getCurrentSession();
 ASM::$obm->newSession();
@@ -343,4 +352,3 @@ echo '<div id="tools">';
 echo '</div>';
 
 ASM::$obm->changeSession($S_OBM1);
-?>
