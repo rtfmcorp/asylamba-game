@@ -14,7 +14,7 @@ namespace Asylamba\Modules\Athena\Manager;
 use Asylamba\Classes\Worker\Manager;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Database\Database;
-use Asylamba\Modules\Athena\CommercialRoute;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
 use Asylamba\Modules\Demeter\Model\Color;
 
 class CommercialRouteManager extends Manager {

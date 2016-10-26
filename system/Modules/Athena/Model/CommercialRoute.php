@@ -9,7 +9,7 @@
  * @package Athena
  * @update 20.05.13
 */
-namespace Asylamba\Modules\Athena;
+namespace Asylamba\Modules\Athena\Model;
 
 class CommercialRoute {
 

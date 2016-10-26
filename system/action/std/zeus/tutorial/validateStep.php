@@ -3,9 +3,11 @@
 
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Promethee\Model\Technology;
 
 $playerId = CTR::$data->get('playerId');

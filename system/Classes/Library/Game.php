@@ -12,6 +12,9 @@ use Asylamba\Modules\Gaia\Resource\PlaceResource;
 
 use Asylamba\Modules\Artemis\Model\SpyReport;
 
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
+
+
 class Game {
 
 	const COMMERCIAL_TIME_TRAVEL = 0.2;

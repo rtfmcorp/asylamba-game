@@ -10,6 +10,7 @@ use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Model\Transaction;

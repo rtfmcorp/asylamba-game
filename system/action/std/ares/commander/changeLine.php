@@ -5,6 +5,8 @@ use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Zeus\Resource\TutorialResource;
+use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 
 # change of line a commander
 

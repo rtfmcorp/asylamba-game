@@ -2,6 +2,7 @@
 
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Athena\Model\CommercialShipping;
+use Asylamba\Modules\Athena\Resource\ShipResource;
 
 echo '<div class="component new-message market-sell">';
 	echo '<div class="head skin-4 sh">';

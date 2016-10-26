@@ -13,6 +13,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Model\CommercialShipping;
+use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Modules\Hermes\Model\Notification;
 
 for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
