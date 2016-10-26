@@ -9,7 +9,7 @@
  * @package Demeter
  * @update 06.10.13
 */
-namespace Asylamba\Modules\Promethee\Resource;
+namespace Asylamba\Modules\Demeter\Resource;
 
 #id des forums : < 10 = pour tous les gens d'une faction, >= 10 < 20 = pour le gouvernement d'une fac, >= 20 pour les chefs de toutes les factions
 Class ForumResources {

@@ -9,6 +9,7 @@ use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Demeter\Model\Forum\ForumMessage;
 
 $content = Utils::getHTTPData('content');
 $rTopic  = Utils::getHTTPData('rtopic');

@@ -4,6 +4,9 @@
 
 # affichage de la liste des topics
 
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Demeter\Resource\ForumResources;
+
 # require
 	# int 			forum_topics
 	# [{topic}] 	topic_topics

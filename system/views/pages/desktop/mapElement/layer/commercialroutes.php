@@ -3,7 +3,6 @@
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Container\Params;
-use GalaxyConfiguration;
 
 $db = Database::getInstance();
 $qr = $db->query('SELECT

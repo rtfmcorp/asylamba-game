@@ -2,7 +2,6 @@
 
 use Asylamba\Classes\Container\Params;
 use Asylamba\Classes\Worker\ASM;
-use GalaxyConfiguration;
 use Asylamba\Classes\Library\Game;
 
 echo '<div id="spying" ' . (Params::check(Params::SHOW_MAP_ANTISPY) ? NULL : 'style="display:none;"') . '>';

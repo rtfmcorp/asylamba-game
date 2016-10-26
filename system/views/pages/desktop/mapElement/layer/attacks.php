@@ -3,7 +3,6 @@
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Container\Params;
-use GalaxyConfiguration;
 use Asylamba\Classes\Library\Utils;
 
 # chargement des id des commandants attaquants

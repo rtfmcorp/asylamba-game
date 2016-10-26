@@ -1,4 +1,8 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+
 # background paralax
 echo '<div id="background-paralax" class="technology"></div>';
 

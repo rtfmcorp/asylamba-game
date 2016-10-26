@@ -2,7 +2,6 @@
 
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Worker\ASM;
-use GalaxyConfiguration;
 use Asylamba\Classes\Library\Game;
 
 echo '<div id="own-base">';

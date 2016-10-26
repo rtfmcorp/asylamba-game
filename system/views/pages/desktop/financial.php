@@ -1,4 +1,11 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Athena\Model\Transaction;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Classes\Library\Game;
+
 # background paralax
 echo '<div id="background-paralax" class="financial"></div>';
 

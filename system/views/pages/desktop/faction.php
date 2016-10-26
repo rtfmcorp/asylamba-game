@@ -1,4 +1,10 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Demeter\Model\Law\Law;
+use Asylamba\Modules\Demeter\Resource\ForumResources;
+
 # factionNav component
 $color_factionNav = CTR::$data->get('playerInfo')->get('color');
 

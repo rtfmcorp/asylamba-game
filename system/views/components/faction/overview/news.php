@@ -6,6 +6,8 @@
 
 # require
 
+use Asylamba\Classes\Worker\ASM;
+
 echo '<div class="component">';
 	echo '<div class="head skin-2">';
 		echo '<h1>Faction</h1>';

@@ -4,6 +4,9 @@
 
 # affichage du menu des forums
 
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Demeter\Resource\ForumResources;
+
 # require
 
 echo '<div class="component nav">';

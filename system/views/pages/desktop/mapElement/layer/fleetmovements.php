@@ -4,7 +4,6 @@ use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Container\Params;
 use Asylamba\Classes\Library\Utils;
-use GalaxyConfiguration;
 use Asylamba\Modules\Ares\Model\Commander;
 
 $S_COM_MAPLAYER = ASM::$com->getCurrentSession();

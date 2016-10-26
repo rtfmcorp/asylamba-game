@@ -13,6 +13,7 @@ use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
+use Asylamba\Modules\Athena\Model\OrbitalBase;
 
 $rPlace = Utils::getHTTPData('rplace');
 $price 	= Utils::getHTTPData('price');

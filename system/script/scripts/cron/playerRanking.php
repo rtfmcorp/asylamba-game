@@ -2,6 +2,16 @@
 # daily cron
 # call at x am. every day
 
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\DataAnalysis;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Atlas\Model\PlayerRanking;
+
 $S_PRM1 = ASM::$prm->getCurrentSession();
 ASM::$prm->newSession();
 ASM::$prm->loadLastContext();

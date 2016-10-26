@@ -2,7 +2,6 @@
 
 use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Worker\ASM;
-use GalaxyConfiguration;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 

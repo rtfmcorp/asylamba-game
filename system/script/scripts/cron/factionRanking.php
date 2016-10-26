@@ -2,6 +2,12 @@
 # daily cron
 # call at x am. every day
 
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Gaia\Manager\SectorManager;
+use Asylamba\Modules\Atlas\Model\FactionRanking;
+
 $S_FRM1 = ASM::$frm->getCurrentSession();
 ASM::$frm->newSession();
 ASM::$frm->loadLastContext();

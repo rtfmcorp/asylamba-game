@@ -4,6 +4,12 @@
 
 # affichage d'un topic
 
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Parser;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 # require
 	# {topic}				topic_topic
 	# [{message}]			message_topic

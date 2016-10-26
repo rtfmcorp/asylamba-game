@@ -5,6 +5,7 @@ use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Zeus\Helper\TutorialHelper;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 
 $playerId = CTR::$data->get('playerId');
 $stepTutorial = CTR::$data->get('playerInfo')->get('stepTutorial');
@@ -224,9 +225,8 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 				$nextStepAlreadyDone = TRUE;
 				break;
 		}
-
 		if (!$nextStepAlreadyDone) {
-			$player->stepDone = FALSE;
+			$player->stepDone = 0;
 			CTR::$data->get('playerInfo')->add('stepDone', FALSE);
 		}
 		$player->stepTutorial = $nextStep;

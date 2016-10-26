@@ -13,6 +13,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Promethee\Resource\ResearchResource;
+use Asylamba\Modules\Promethee\Model\Research;
 
 echo '<div class="component">';
 	echo '<div class="head skin-1">';
