@@ -135,19 +135,17 @@ abstract class Manager {
         return NULL;
     }
 
-    public function _Save() {
-        if (!empty($this->objects)) {
-            return [];
-        }
+    public function _Save() { 
         $savingList = array();
-        foreach ($this->sessions AS $s) {
-            foreach ($this->objects[$s->getId()] AS $k => $o) {
-                if ($this->objects[$s->getId()][$k] != $this->origin[$s->getId()][$k]) {
-                    $savingList[] = $o;
+        if (!empty($this->objects)) {
+            foreach ($this->sessions AS $s) {
+                foreach ($this->objects[$s->getId()] AS $k => $o) {
+                    if ($this->objects[$s->getId()][$k] != $this->origin[$s->getId()][$k]) {
+                        $savingList[] = $o;
+                    }
                 }
-            }
+            } $this->statSavingObject = count($savingList);
         }
-        $this->statSavingObject = count($savingList);
         return $savingList;
     }
 

@@ -1,7 +1,6 @@
 <?php
 
 use Asylamba\Classes\Worker\CTR;
-use GalaxyConfiguration;
 use Asylamba\Modules\Gaia\Manager\SectorManager;
 
 # background paralax
