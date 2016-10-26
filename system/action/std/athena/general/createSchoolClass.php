@@ -9,6 +9,7 @@
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Zeus\Helper\CheckName;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
@@ -16,7 +17,6 @@ use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Modules\Athena\Resource\SchoolClassResource;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Zeus\Helper\TutorialHelper;
-use Asylamba\Classes\Library\Format;
 
 for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');

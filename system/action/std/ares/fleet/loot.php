@@ -9,6 +9,7 @@ use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 

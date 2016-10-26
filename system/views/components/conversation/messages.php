@@ -1,6 +1,7 @@
 <?php
 
 use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Hermes\Model\Conversation;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
 use Asylamba\Classes\Library\Chronos;

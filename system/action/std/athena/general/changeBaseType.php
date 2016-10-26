@@ -8,11 +8,11 @@ use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\DataAnalysis;
+use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
-use Asylamba\Classes\Database\Database;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');

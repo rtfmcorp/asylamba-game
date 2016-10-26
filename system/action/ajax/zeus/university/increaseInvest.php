@@ -5,7 +5,6 @@
 # int quantity		percentage of increasment (facultatif, si non-défini, $quantity = 1)
 
 use Asylamba\Classes\Library\Utils;
-
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Worker\CTR;
 

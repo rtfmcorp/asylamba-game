@@ -22,6 +22,7 @@ use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Worker\CTC;
 
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Ares\FightController;
 
 class Commander {
 	const COEFFSCHOOL 				= 100;
@@ -416,7 +417,7 @@ class Commander {
 		$this->dStart = ($travelType != 3) ? Utils::now() : $this->dArrival;
 		$this->startPlaceName = ($travelType != 3) ? $this->oBName : $this->destinationPlaceName;
 		$this->destinationPlaceName = ($travelType != 3) ? $this->destinationPlaceName : $this->startPlaceName;
-		$date = new DateTime($this->dStart);
+		$date = new \DateTime($this->dStart);
 		$date->modify('+' . $duration . 'second');
 		$this->dArrival = $date->format('Y-m-d H:i:s');
 

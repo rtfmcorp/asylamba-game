@@ -4,6 +4,7 @@ use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Container\Params;
 use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Ares\Model\Commander;
 
 # chargement des id des commandants attaquants
 $commandersId = array(0);

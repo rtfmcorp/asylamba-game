@@ -4,7 +4,7 @@ use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Container\Params;
 use Asylamba\Classes\Library\Format;
-
+use Asylamba\Modules\Ares\Model\Report;
 
 # background paralax
 echo '<div id="background-paralax" class="fleet"></div>';

@@ -5,10 +5,10 @@
 # int route 		id de la route commerciale
 
 use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Worker\ASM;
-use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Hermes\Model\Notification;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');

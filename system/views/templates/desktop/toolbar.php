@@ -11,6 +11,7 @@ use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Promethee\Resource\TechnologyResource;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Ares\Model\Commander;
 
 $S_OBM1 = ASM::$obm->getCurrentSession();
 ASM::$obm->newSession();

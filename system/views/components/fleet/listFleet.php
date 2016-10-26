@@ -15,6 +15,7 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\Chronos;
 
 echo '<div class="component size3 list-fleet">';
 	echo '<div class="head skin-1">';

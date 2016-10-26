@@ -3,9 +3,9 @@
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Parser;
+use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Zeus\Model\CreditTransaction;
 use Asylamba\Modules\Hermes\Model\Notification;
-use Asylamba\Classes\Library\Format;
 
 # give credit from faction to player action
 

@@ -7,11 +7,11 @@
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Demeter\Model\Forum\ForumTopic;
 use Asylamba\Modules\Demeter\Model\Forum\ForumMessage;
 use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
-use Asylamba\Classes\Database\Database;
 
 $title = Utils::getHTTPData('title');
 $content = Utils::getHTTPData('content');

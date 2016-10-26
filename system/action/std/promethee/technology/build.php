@@ -8,11 +8,11 @@ use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Promethee\Model\TechnologyQueue;
 use Asylamba\Modules\Promethee\Resource\TechnologyResource;
 use Asylamba\Modules\Zeus\Helper\TutorialHelper;
-use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 

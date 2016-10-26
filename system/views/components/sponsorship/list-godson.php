@@ -1,6 +1,7 @@
 <?php
 
 use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
 
 $S_PAM_1 = ASM::$pam->getCurrentSession();
 ASM::$pam->newSession();

@@ -1,9 +1,11 @@
 <?php
 
 use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Hermes\Model\Conversation;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
-use Asylamba\Classes\Library\Chronos;
+use Asylamba\Modules\Hermes\Manager\ConversationManager;
 
 if (!$conversation_listmode) {
 	echo '<div class="component">';

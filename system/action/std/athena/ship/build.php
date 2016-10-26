@@ -19,6 +19,7 @@ use Asylamba\Modules\Athena\Model\ShipQueue;
 
 use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');

@@ -6,6 +6,7 @@ use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Promethee\Model\Technology;
 
 $playerId = CTR::$data->get('playerId');
 $stepTutorial = CTR::$data->get('playerInfo')->get('stepTutorial');

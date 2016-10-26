@@ -11,8 +11,9 @@
 */
 namespace Asylamba\Modules\Ares;
 
-use Asylamba\Modules\Ares\Model\LiveReport;
 use Asylamba\Classes\Library\DataAnalysis;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Ares\Model\LiveReport;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 
 class FightController {

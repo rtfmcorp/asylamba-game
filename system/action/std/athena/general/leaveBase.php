@@ -5,10 +5,10 @@
 # int id 		id (rPlace) de la base orbitale
 
 use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
-use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 
 $baseId = Utils::getHTTPData('id');

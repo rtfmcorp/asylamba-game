@@ -3,6 +3,7 @@
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Game;
 
 # chargement des événements concernant les flottes qui attaquent le joueur
 if (Utils::interval(CTR::$data->get('lastUpdate')->get('event'), Utils::now(), 's') > TIME_EVENT_UPDATE) {

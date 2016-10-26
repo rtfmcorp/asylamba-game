@@ -2,6 +2,7 @@
 
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Demeter\Model\Color;
 
 $eraseColor = isset($eraseColor)
 	? $eraseColor

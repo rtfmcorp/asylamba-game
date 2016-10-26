@@ -8,12 +8,12 @@
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\DataAnalysis;
 use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Athena\Model\BuildingQueue;
-use Asylamba\Classes\Library\DataAnalysis;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 

@@ -6,12 +6,12 @@
 
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\CommercialRoute;
 use Asylamba\Modules\Hermes\Model\Notification;
-use Asylamba\Classes\Library\Format;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
