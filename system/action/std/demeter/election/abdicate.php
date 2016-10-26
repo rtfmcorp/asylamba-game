@@ -3,10 +3,10 @@
 #department
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Modules\Demeter\Resource\ColorResource;
-use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Hermes\Model\Notification;
 
 $rPlayer = Utils::getHTTPData('rplayer');

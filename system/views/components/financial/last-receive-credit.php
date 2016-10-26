@@ -1,7 +1,9 @@
 <?php
 
 use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Zeus\Model\CreditTransaction;
 
 # load
 $S_CRT_1 = ASM::$crt->getCurrentSession();

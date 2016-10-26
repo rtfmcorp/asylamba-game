@@ -177,6 +177,7 @@ class PlaceManager extends Manager {
 			} else {
 				$p->setTypeOfBase(Place::TYP_EMPTY);
 				$p->setBaseName('Planète rebelle');
+				$p->setPoints(0);
 			}
 
 			$S_COM3 = ASM::$com->getCurrentSession();

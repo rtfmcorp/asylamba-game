@@ -9,8 +9,9 @@
 	# {player}		attacker_report
 	# {player}		defender_report
 
-use Asylamba\Modules\Ares\Resource\CommanderResources;
+use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 
