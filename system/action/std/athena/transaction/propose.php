@@ -129,7 +129,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 								$S_COM1 = ASM::$com->getCurrentSession();
 								ASM::$com->newSession();
 								ASM::$com->load(array('c.id' => $identifier));
-								if (ASM::$com->size() == 1 AND ASM::$com->get()->getRPlayer() == CTR::$data->get('playerId') AND $commander->statement !== Commander::ONSALE) {
+								if (ASM::$com->size() == 1 AND ASM::$com->get()->getRPlayer() == CTR::$data->get('playerId') AND ASM::$com->get()->statement !== Commander::ONSALE) {
 									$commander = ASM::$com->get();
 									$commander->statement = Commander::ONSALE;
 									$commander->emptySquadrons();
@@ -163,8 +163,8 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 							$cs->rTransaction = $tr->id;
 							$cs->resourceTransported = NULL;
 							$cs->shipQuantity = $commercialShipQuantity;
-							$cs->dDeparture = '';
-							$cs->dArrival = '';
+							$cs->dDeparture = NULL;
+							$cs->dArrival = NULL;
 							$cs->statement = CommercialShipping::ST_WAITING;
 							ASM::$csm->add($cs);
 

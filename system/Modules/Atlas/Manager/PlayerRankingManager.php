@@ -155,8 +155,10 @@ class PlayerRankingManager extends Manager {
 				trader, traderPosition, traderVariation, 
 				armies, armiesPosition, armiesVariation, 
 				resources, resourcesPosition, resourcesVariation, 
-				butcher, butcherPosition, butcherVariation)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+				butcher, butcherPosition, butcherVariation, 
+				butcherDestroyedPEV, butcherLostPEV, victories, defeat)
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+			?, ?, ?, ?)');
 		$qr->execute(array(
 			$pl->rRanking,
 			$pl->rPlayer, 
@@ -180,7 +182,11 @@ class PlayerRankingManager extends Manager {
 			$pl->resourcesVariation,
 			$pl->butcher,
 			$pl->butcherPosition,
-			$pl->butcherVariation
+			$pl->butcherVariation,
+			$pl->butcherDestroyedPEV,
+			$pl->butcherLostPEV,
+			$pl->victories,
+			$pl->defeat
 		));
 
 		$pl->id = $db->lastInsertId();

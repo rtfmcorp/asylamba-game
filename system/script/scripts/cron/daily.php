@@ -110,3 +110,5 @@ ASM::$ntm->changeSession($S_NTM1);
 ASM::$pam->changeSession($S_PAM1);
 
 Bug::writeLog($path, '');
+
+echo 'Done';

@@ -122,6 +122,7 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 					$cr->setPrice($price);
 					$cr->setIncome($income);
 					$cr->setDProposition(Utils::now());
+					$cr->setDCreation(NULL);
 					$cr->setStatement(0);
 					ASM::$crm->add($cr);
 					

@@ -13,6 +13,7 @@ use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Demeter\Model\Color;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');

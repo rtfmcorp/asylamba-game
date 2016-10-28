@@ -508,8 +508,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `commercialShipping` (
 	`resourceTransported` INT DEFAULT NULL,
 	`shipQuantity` INT NOT NULL,
 
-	`dDeparture` datetime NOT NULL,
-	`dArrival` datetime NOT NULL,
+	`dDeparture` datetime,
+	`dArrival` datetime,
 	`statement` SMALLINT NOT NULL COMMENT '0 = prêt au départ, 1 = aller, 2 = retour',
 
 	PRIMARY KEY (`id`)
