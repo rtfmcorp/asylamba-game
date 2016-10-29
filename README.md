@@ -13,12 +13,29 @@ Dépendances
 - Apache 2.4.7
 - PHP 5.5.9
 - MySQL 5.5.49
-
+- Composer
 
 Installation
 ------------
 
-Procédure pour une installation locale :
+Si vous le souhaitez, vous pouvez utiliser le [dépôt Docker](https://github.com/rtfmcorp/asylamba-docker) du projet pour installer votre environnement.
+
+Cette seciton traite uniquement de l'installation du jeu et suppose que votre environnement est prêt.
+
+Tout d'abord, vous devez cloner le dépôt du jeu. Pour ce faire, ouvrez une invite de commandes, et entrez la commande suivante :
+
+```sh
+git clone git@github.com:rtfmcorp/asylamba-game.git
+```
+
+Ensuite, rendez-vous dans le dossier nouvellement créé et installez les dépendances du projet à l'aide de [Composer](https://getcomposer.org/) :
+
+```sh
+cd asylamba-game
+composer install
+```
+
+Vous pouvez ensuite suivre la procédure suivante :
 
 - copier `index.default.php` et le renommer en `index.php`, y modifier la constante `PUBLICR` avec votre chemin
 - copier `system/config/app.config.local.default.php` et le renommer `app.config.local.php`, y modifier la constante `APP_ROOT` et d'autres infos (connexion à la base de données, etc.)
