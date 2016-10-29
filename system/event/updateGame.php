@@ -1,6 +1,9 @@
 <?php
 # met à jour tout ce qui concerne un joueur
-include_once ZEUS;
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
 
 # mise à jour chaque heure
 if (Utils::interval(CTR::$data->get('lastUpdate')->get('game'), Utils::now(), 'h') > 0) {
@@ -52,4 +55,3 @@ if (Utils::interval(CTR::$data->get('lastUpdate')->get('game'), Utils::now(), 'h
 	$path = 'public/log/stats/tmp.log';
 	Bug::writeLog($path, "### recharge à : " . date('H:i:s') . " ###");
 }*/
-?>

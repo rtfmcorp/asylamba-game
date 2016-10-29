@@ -1,4 +1,7 @@
 <?php
+
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 echo '<div class="component profil">';
 	echo '<div class="head skin-2">';
 		echo '<h2>A propos</h2>';
@@ -14,4 +17,3 @@ echo '<div class="component profil">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

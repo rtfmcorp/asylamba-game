@@ -1,11 +1,14 @@
 <?php
-include_once ATHENA;
-include_once GAIA;
-include_once ARES;
 
 # change of line a commander
 
 # int id 	 		id du commandant
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Gaia\Resource\PlaceResource;
 
 $commanderId = Utils::getHTTPData('id');
 
@@ -49,5 +52,3 @@ if ($commanderId !== FALSE) {
 } else {
 	CTR::$alert->add('erreur dans le traitement de la requête', ALERT_BUG_ERROR);
 }
-
-?>

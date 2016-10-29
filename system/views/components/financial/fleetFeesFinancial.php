@@ -7,6 +7,9 @@
 # require
 	# [{commander}]			commander_fleetFeesFinancial
 
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
+
 $commanderByBase = array();
 
 foreach ($commander_fleetFeesFinancial as $commander) {

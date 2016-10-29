@@ -1,5 +1,7 @@
 <?php
-include_once DEMETER;
+
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Demeter\Resource\LawResources;
 
 # status list
 $status = ColorResource::getInfo($faction->id, 'status');
@@ -28,4 +30,3 @@ echo '<div class="component profil">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

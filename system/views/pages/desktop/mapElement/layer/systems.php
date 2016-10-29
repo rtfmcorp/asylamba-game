@@ -1,6 +1,12 @@
 <?php
+
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 echo '<div id="systems">';
-	$db = DataBase::getInstance();
+	$db = Database::getInstance();
 	$qr = $db->prepare('SELECT * FROM system');
 	$qr->execute();
 	$aw = $qr->fetchAll();
@@ -46,4 +52,3 @@ echo '<div id="systems">';
 	}
 	
 echo '</div>';
-?>

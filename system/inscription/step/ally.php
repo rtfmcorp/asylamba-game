@@ -1,6 +1,7 @@
 <?php
-include_once ZEUS;
-include_once DEMETER;
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 # background paralax
 echo '<div id="background-paralax" class="profil"></div>';
@@ -97,4 +98,3 @@ echo '<div id="content">';
 
 	ASM::$clm->changeSession($_CLM);
 echo '</div>';
-?>

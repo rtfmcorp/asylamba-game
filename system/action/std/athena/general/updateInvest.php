@@ -1,10 +1,13 @@
 <?php
-include_once ATHENA;
 # modify investments action
 
 # int baseId 		id de la base orbitale
 # string category 	catégorie
 # int credit 		nouveau montant à investir
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -50,4 +53,3 @@ if ($baseId !== FALSE AND $credit !== FALSE AND $category !== FALSE AND in_array
 } else {
 	CTR::$alert->add('pas assez d\'informations pour modifier un investissement', ALERT_STD_FILLFORM);
 }
-?>

@@ -8,6 +8,9 @@
 	# [{mothership}]			ob_msFeesFinancial
 
 # view part
+
+use Asylamba\Modules\Hermes\Model\Notification;
+
 echo '<div class="component financial">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'financial/mothership.png" alt="vaisseau mère" />';
@@ -17,7 +20,6 @@ echo '<div class="component financial">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<p>Rien pour le moment !</p>';
-			include_once HERMES;
 			$notif = new Notification();
 		echo '</div>';
 	echo '</div>';

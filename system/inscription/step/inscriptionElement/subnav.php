@@ -1,5 +1,6 @@
 <?php
-include_once ZEUS;
+
+use Asylamba\Classes\Worker\CTR;
 
 echo '<div id="inscription-subnav">';
 	echo '<div class="bind"></div>';
@@ -21,4 +22,3 @@ echo '<div id="inscription-subnav">';
 	echo '</div>';
 	echo '<div class="foot"></div>';
 echo '</div>';
-?>

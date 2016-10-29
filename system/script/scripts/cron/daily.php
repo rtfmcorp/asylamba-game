@@ -8,9 +8,15 @@
 	# ...
 
 # worker
-include_once HERMES;
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Bug;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Benchmark;
+use Asylamba\Classes\Worker\API;
+use Asylamba\Modules\Gaia\Manager\GalaxyColorManager;
+
 $S_NTM1 = ASM::$ntm->getCurrentSession();
-include_once ZEUS;
 $S_PAM1 = ASM::$pam->getCurrentSession();
 
 $path = 'public/log/cron/' . date('Y') . '-' . date('m') . '.log';
@@ -90,7 +96,6 @@ for ($i = ASM::$pam->size() - 1; $i >= 0; $i--) {
 }
 
 # applique en cascade le changement de couleur des sytèmes
-include_once GAIA;
 GalaxyColorManager::apply();
 
 Bug::writeLog($path, '# [OK] Status');
@@ -105,4 +110,5 @@ ASM::$ntm->changeSession($S_NTM1);
 ASM::$pam->changeSession($S_PAM1);
 
 Bug::writeLog($path, '');
-?>
+
+echo 'Done';

@@ -4,6 +4,10 @@
 
 # création d'un topic
 
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Parser;
+
 # require
 
 echo '<div class="component topic size2">';

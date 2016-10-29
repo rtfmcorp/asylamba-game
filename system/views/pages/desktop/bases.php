@@ -1,6 +1,11 @@
 <?php
 # bases loading
-include_once ATHENA;
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Athena\Model\RecyclingMission;
+
 # choix de la base
 $S_OBM1 = ASM::$obm->getCurrentSession();
 ASM::$obm->newSession();
@@ -20,8 +25,6 @@ echo '<div id="content">';
 	
 	# obNav component
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'main') {
-		include_once ARES;
-		
 		$ob_obSituation = $base;
 		$commanders_obSituation = array();
 
@@ -92,8 +95,6 @@ echo '<div id="content">';
 		ASM::$rlm->changeSession($S_RLM1);
 		ASM::$rem->changeSession($S_REM1);
 	} elseif (CTR::$get->get('view') == 'spatioport' && $base->levelSpatioport > 0) {
-		include_once DEMETER;
-
 		$ob_spatioport = $base;
 		include COMPONENT . 'bases/ob/spatioport.php';
 	} elseif (CTR::$get->get('view') == 'school') {

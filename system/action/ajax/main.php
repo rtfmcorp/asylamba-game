@@ -1,4 +1,7 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+
 switch (CTR::$get->get('a')) {
 	# COMMON
 	case 'switchparams':			include AJAX . 'common/switchParams.php'; break;
@@ -37,4 +40,3 @@ switch (CTR::$get->get('a')) {
 		CTR::$alert->add('action inconnue ou non-référencée', ALERT_STD_ERROR);
 		break;
 }
-?>

@@ -1,6 +1,9 @@
 <?php
 # require
 
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Zeus\Manager\PlayerManager;
+
 echo '<div class="component player rank">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';

@@ -1,4 +1,14 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Hermes\Model\Conversation;
+use Asylamba\Modules\Hermes\Model\ConversationMessage;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Parser;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 if (!$message_listmode) {
 	echo '<div class="component topic size2">';
 		echo '<div class="head skin-5">';

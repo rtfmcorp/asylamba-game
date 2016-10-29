@@ -9,6 +9,14 @@
 	# {RecyclingMission session} 	recyclingSession
 	# {RecyclingLog session}	 	missionLogSessions
 
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Modules\Athena\Model\RecyclingMission;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+
 $S_REM2 = ASM::$rem->getCurrentSession();
 ASM::$rem->changeSession($recyclingSession);
 
@@ -191,4 +199,3 @@ echo '</div>';
 
 ASM::$rlm->changeSession($S_RLM2);
 ASM::$rem->changeSession($S_REM2);
-?>

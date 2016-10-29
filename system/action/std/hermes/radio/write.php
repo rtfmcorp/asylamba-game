@@ -1,9 +1,11 @@
 <?php
-include_once GAIA;
 # write a message in a radio action
 
 # int sector 		id du secteur de la radio dans laquelle on veut poster
 # string content 	contenu du message
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Parser;
 
 for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('sector');
@@ -34,4 +36,3 @@ if ($sector !== FALSE AND $content !== FALSE AND in_array($sector, $verif) AND $
 } else {
 	CTR::$alert->add('pas assez d\'informations pour écrire un message dans une radio', ALERT_STD_FILLFORM);
 }
-?>

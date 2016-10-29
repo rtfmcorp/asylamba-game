@@ -1,4 +1,11 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Athena\Model\CommercialShipping;
+use Asylamba\Modules\Athena\Model\Transaction;
+use Asylamba\Classes\Library\Format;
+
 $S_TRM1 = ASM::$trm->getCurrentSession();
 $S_CSM1 = ASM::$csm->getCurrentSession();
 ASM::$csm->changeSession($ob_compPlat->shippingManager);
@@ -142,4 +149,3 @@ echo '</div>';
 ASM::$trm->changeSession($S_TRM1);
 ASM::$csm->changeSession($S_CSM1);
 ASM::$ctm->changeSession($S_CTM1);
-?>

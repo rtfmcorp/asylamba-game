@@ -1,4 +1,8 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+
 # background paralax
 echo '<div id="background-paralax" class="embassy"></div>';
 
@@ -11,11 +15,6 @@ echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
 
 	if (CTR::$get->exist('player')) {
-		# inclusion des modules
-		include_once ZEUS;
-		include_once ATHENA;
-		include_once HERMES;
-
 		$player = CTR::$get->exist('player')
 			? CTR::$get->get('player')
 			: CTR::$data->get('playerId');
@@ -70,10 +69,6 @@ echo '<div id="content">';
 		ASM::$clm->changeSession($S_COL_1);
 
 		if (in_array($color, $factions)) {
-			# load module
-			include_once DEMETER;
-			include_once ZEUS;
-
 			# load data
 			$S_COL_1 = ASM::$clm->getCurrentSession();
 			ASM::$clm->newSession();

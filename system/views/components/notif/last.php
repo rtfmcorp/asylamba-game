@@ -7,6 +7,10 @@
 # require
 	# [{notification}]	notification_lastNotif
 
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Chronos;
+
 $S_NTM_SCOPE = ASM::$ntm->getCurrentSession();
 ASM::$ntm->changeSession($C_NTM1);
 
@@ -51,4 +55,3 @@ echo '<div class="component">';
 echo '</div>';
 
 ASM::$ntm->changeSession($S_NTM_SCOPE);
-?>

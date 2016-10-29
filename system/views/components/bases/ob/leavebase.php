@@ -8,6 +8,11 @@
 	# {orbitalBase}		ob_obSituation
 	# [{commander}]		commanders_obSituation
 
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Modules\Athena\Model\OrbitalBase;
+use Asylamba\Modules\Ares\Model\Commander;
+
 $onMission = FALSE;
 foreach ($commanders_obSituation as $commander) {
 	if (in_array($commander->statement, [Commander::MOVING])) {

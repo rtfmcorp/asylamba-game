@@ -7,6 +7,11 @@
 # require
 	# {orbitalBase}		ob_storage
 
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
+
 echo '<div class="component building">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'orbitalbase/storage.png" alt="" />';
@@ -84,4 +89,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

@@ -1,6 +1,7 @@
 <?php
-# inclusion des modules
-include_once ARES;
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
 
 # loading des objets
 $S_LRM1 = ASM::$lrm->getCurrentSession();
@@ -43,4 +44,3 @@ echo '<div class="component">';
 echo '</div>';
 
 ASM::$lrm->changeSession($S_LRM1);
-?>

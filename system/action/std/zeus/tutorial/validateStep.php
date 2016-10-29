@@ -1,7 +1,14 @@
 <?php
-include_once ZEUS;
-include_once ATHENA;
 # validate tutorial step action
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Zeus\Resource\TutorialResource;
+use Asylamba\Modules\Zeus\Helper\TutorialHelper;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Promethee\Model\Technology;
 
 $playerId = CTR::$data->get('playerId');
 $stepTutorial = CTR::$data->get('playerInfo')->get('stepTutorial');
@@ -221,9 +228,8 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 				$nextStepAlreadyDone = TRUE;
 				break;
 		}
-
 		if (!$nextStepAlreadyDone) {
-			$player->stepDone = FALSE;
+			$player->stepDone = 0;
 			CTR::$data->get('playerInfo')->add('stepDone', FALSE);
 		}
 		$player->stepTutorial = $nextStep;
@@ -244,4 +250,3 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 } else {
 	CTR::$alert->add('Impossible de valider l\'étape avant de l\'avoir effectuée.', ALERT_STD_FILLFORM);
 }
-?>

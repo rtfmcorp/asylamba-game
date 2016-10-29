@@ -1,4 +1,8 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Demeter\Model\Color;
+
 echo '<div id="subnav">';
 	echo '<button class="move-side-bar top" data-dir="up"> </button>';
 	echo '<div class="overflow">';
@@ -80,4 +84,3 @@ echo '<div id="subnav">';
 	echo '</div>';
 	echo '<button class="move-side-bar bottom" data-dir="down"> </button>';
 echo '</div>';
-?>

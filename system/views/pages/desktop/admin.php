@@ -1,4 +1,7 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+
 # bases loading
 if (CTR::$data->get('playerInfo')->get('admin') == FALSE) {
 	header('Location: ' . APP_ROOT . 'profil');

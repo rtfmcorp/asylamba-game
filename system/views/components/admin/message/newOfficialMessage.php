@@ -7,7 +7,7 @@
 # require
 	# NULL
 
-include_once ZEUS;
+use Asylamba\Classes\Library\Format;
 
 echo '<div class="component new-message size2">';
 	echo '<div class="head">';

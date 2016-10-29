@@ -73,4 +73,3 @@ define('NB_AVATAR', 			80);
 	# 20 jours = 480h
 define('HOURS_BEFORE_START_OF_RANKING', 480);
 define('POINTS_TO_WIN', 2000);
-?>

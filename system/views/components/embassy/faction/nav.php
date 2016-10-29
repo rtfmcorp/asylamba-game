@@ -1,4 +1,7 @@
 <?php
+
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 echo '<div class="component nav">';
 	echo '<div class="head skin-1">';
 		echo '<h1>Ambassades</h1>';

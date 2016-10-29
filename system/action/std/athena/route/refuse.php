@@ -1,9 +1,14 @@
 <?php
-include_once ATHENA;
 # refuse a commercial route action
 
 # int base 			id (rPlace) de la base orbitale qui refuse la route
 # int route 		id de la route commerciale
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Hermes\Model\Notification;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -55,4 +60,3 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 } else {
 	CTR::$alert->add('pas assez d\'informations pour refuser une route commerciale', ALERT_STD_FILLFORM);
 }
-?>

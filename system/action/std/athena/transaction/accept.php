@@ -1,12 +1,19 @@
 <?php
-include_once ATHENA;
-include_once ZEUS;
-include_once GAIA;
-include_once DEMETER;
 # accept a transaction action
 
 # int rplace 		id de la base orbitale
 # int rtransaction 	id de la transaction
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\DataAnalysis;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Athena\Model\Transaction;
+use Asylamba\Modules\Athena\Model\CommercialShipping;
+use Asylamba\Modules\Hermes\Model\Notification;
 
 for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -132,7 +139,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				ASM::$ntm->add($n);
 
 				if (DATA_ANALYSIS) {
-					$db = DataBase::getInstance();
+					$db = Database::getInstance();
 					$qr = $db->prepare('INSERT INTO 
 						DA_CommercialRelation(`from`, `to`, type, weight, dAction)
 						VALUES(?, ?, ?, ?, ?)'
@@ -158,4 +165,3 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 } else {
 	CTR::$alert->add('pas assez d\'informations pour accepter une proposition sur le marché', ALERT_STD_FILLFORM);
 }
-?>

@@ -1,4 +1,10 @@
 <?php
+
+use Asylamba\Modules\Gaia\Resource\PlaceResource;
+use Asylamba\Modules\Athena\Model\OrbitalBase;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Worker\CTR;
+
 # affichage du type de base
 
 # require

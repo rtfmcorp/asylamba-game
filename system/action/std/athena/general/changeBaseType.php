@@ -1,12 +1,18 @@
 <?php
-include_once ATHENA;
-include_once GAIA;
-include_once ZEUS;
-include_once DEMETER;
 # change the type of the base action
 
 # int baseid 		id of the orbital base
 # int type			new type for the base
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\DataAnalysis;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Athena\Model\OrbitalBase;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Gaia\Resource\PlaceResource;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -46,7 +52,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 								}
 							}
 							if (DATA_ANALYSIS) {
-								$db = DataBase::getInstance();
+								$db = Database::getInstance();
 								$qr = $db->prepare('INSERT INTO 
 									DA_BaseAction(`from`, type, opt1, weight, dAction)
 									VALUES(?, ?, ?, ?, ?)'
@@ -75,7 +81,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 							}
 
 							if (DATA_ANALYSIS) {
-								$db = DataBase::getInstance();
+								$db = Database::getInstance();
 								$qr = $db->prepare('INSERT INTO 
 									DA_BaseAction(`from`, type, opt1, weight, dAction)
 									VALUES(?, ?, ?, ?, ?)'
@@ -125,7 +131,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 							}
 
 							if (DATA_ANALYSIS) {
-								$db = DataBase::getInstance();
+								$db = Database::getInstance();
 								$qr = $db->prepare('INSERT INTO 
 									DA_BaseAction(`from`, type, opt1, weight, dAction)
 									VALUES(?, ?, ?, ?, ?)'
@@ -166,7 +172,6 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 
 						# verify if fleets are moving or not
 						# transfer to the mess the extra commanders and change line if needed
-						include_once ARES;
 						$S_COM2 = ASM::$com->getCurrentSession();
 
 						ASM::$com->newSession();
@@ -472,4 +477,3 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 } else {
 	CTR::$alert->add('pas assez d\'informations pour changer le type de la base orbitale', ALERT_STD_FILLFORM);
 }
-?>

@@ -1,4 +1,7 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+
 echo '<div class="component nav">';
 	echo '<div class="head skin-1">';
 		echo '<h1>Registres</h1>';

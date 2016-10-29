@@ -1,6 +1,8 @@
 <?php
-# inclusion des modules
-include_once HERMES;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Hermes\Model\ConversationUser;
 
 # liste des conv's
 $display = CTR::$get->equal('mode', ConversationUser::CS_ARCHIVED)

@@ -10,6 +10,7 @@
 	# int 			archivedBugQuantity
 	# string 		listName
 
+use Asylamba\Classes\Library\Format;
 
 echo '<div class="component size3 dock1 admin bugtracker">';
 	echo '<div class="head skin-1">';

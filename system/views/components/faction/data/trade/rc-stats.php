@@ -1,4 +1,9 @@
 <?php
+
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 $join = 'FROM commercialRoute AS cr
 LEFT JOIN orbitalBase AS ob1
 ON cr.rOrbitalBase = ob1.rPlace
@@ -9,7 +14,7 @@ ON cr.rOrbitalBaseLinked = ob2.rPlace
 	LEFT JOIN player AS pl2
 	ON ob2.rPlayer = pl2.id';
 
-$db = DataBase::getInstance();
+$db = Database::getInstance();
 
 $qr = $db->prepare('SELECT
 		COUNT(cr.id) AS nb,
@@ -78,4 +83,3 @@ echo '<div class="component profil">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

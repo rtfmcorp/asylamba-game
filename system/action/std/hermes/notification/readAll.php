@@ -1,18 +1,22 @@
 <?php
 # read all notifications
 
-include_once HERMES;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
 
 $S_NTM1 = ASM::$ntm->getCurrentSession();
 ASM::$ntm->newSession(ASM_UMODE);
 ASM::$ntm->load(array('rPlayer' => CTR::$data->get('playerId'), 'readed' => 0));
-for ($i = 0; $i < ASM::$ntm->size(); $i++) {
+
+$nbNotifications = ASM::$ntm->size();
+
+for ($i = 0; $i < $nbNotifications; $i++) {
 	$notif = ASM::$ntm->get($i);
 	$notif->setReaded(1);
 }
 
-if (ASM::$ntm->size() > 1) {
-	CTR::$alert->add(ASM::$ntm->size() . ' notifications ont été marquées comme lues.', ALERT_STD_SUCCESS);
+if ($nbNotifications > 1) {
+	CTR::$alert->add($nbNotifications . ' notifications ont été marquées comme lues.', ALERT_STD_SUCCESS);
 } else if (ASM::$ntm->size() == 1) {
 	CTR::$alert->add('Une notification a été marquée comme lue.', ALERT_STD_SUCCESS);
 } else {

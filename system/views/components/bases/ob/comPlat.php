@@ -7,6 +7,9 @@
 # require
 	# {orbitalBase}		ob_compPlat
 
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+
 echo '<div class="component building">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'orbitalbase/commercialplateforme.png" alt="" />';

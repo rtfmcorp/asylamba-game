@@ -1,4 +1,9 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Format;
+
 # load
 $S_CRT_1 = ASM::$crt->getCurrentSession();
 ASM::$crt->newSession();

@@ -1,5 +1,7 @@
 <?php
-include_once ARES;
+
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
 
 $expLevel = Commander::CMDBASELVL;
 
@@ -38,4 +40,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

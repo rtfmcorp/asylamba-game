@@ -1,6 +1,10 @@
 <?php
-include_once DEMETER;
-$db = DataBaseAdmin::getInstance();
+
+use Asylamba\Classes\Database\DatabaseAdmin;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Demeter\Model\Color;
+
+$db = DatabaseAdmin::getInstance();
 
 echo '<h2>Mise à jour du sénat d\'Aphera</h2>';
 

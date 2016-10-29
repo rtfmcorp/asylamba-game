@@ -7,6 +7,17 @@
 # require
 	# {orbitalBase}		ob_spatioport
 
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Gaia\Resource\PlaceResource;
+use Asylamba\Classes\Library\Game;
+
 $S_CRM1 = ASM::$crm->getCurrentSession();
 ASM::$crm->changeSession($ob_spatioport->routeManager);
 
@@ -157,7 +168,7 @@ if (CTR::$get->equal('mode', 'search')) {
 			}
 		}
 
-		$db = DataBase::getInstance();
+		$db = Database::getInstance();
 		$qr = $db->prepare('SELECT 
 				pa.rColor AS playerColor,
 				pa.avatar AS playerAvatar,

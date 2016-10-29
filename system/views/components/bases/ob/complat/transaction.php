@@ -1,5 +1,10 @@
 <?php
-include_once ATHENA;
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Athena\Model\CommercialShipping;
+
 
 $S_CSM1 = ASM::$csm->getCurrentSession();
 $S_CTM1 = ASM::$ctm->getCurrentSession();

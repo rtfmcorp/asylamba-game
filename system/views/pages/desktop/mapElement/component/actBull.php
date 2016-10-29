@@ -1,4 +1,16 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Promethee\Model\Technology;
+use Asylamba\Modules\Gaia\Model\Place;
+use Asylamba\Modules\Athena\Model\RecyclingMission;
+
 # display part
 echo '<div class="column act">';
 	echo '<div class="top">';
@@ -312,4 +324,3 @@ echo '<div class="column act">';
 	}
 	echo '</div>';
 echo '</div>';
-?>

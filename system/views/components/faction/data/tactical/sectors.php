@@ -1,4 +1,9 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Format;
+
 $_CLM = ASM::$clm->getCurrentSession();
 ASM::$clm->newSession();
 ASM::$clm->load();
@@ -20,7 +25,7 @@ for ($i = 1; $i < ASM::$clm->size(); $i++) {
 
 $qr .= '	FROM sector AS se ORDER BY (nbc' . $faction->id . ' / nbc0) DESC';
 
-$db = DataBase::getInstance();
+$db = Database::getInstance();
 $qr = $db->prepare($qr);
 $qr->execute();
 $aw = $qr->fetchAll(); $qr->closeCursor();
@@ -86,4 +91,3 @@ echo '<div class="component">';
 	echo '</div>';
 echo '</div>';
 ASM::$clm->changeSession($_CLM);
-?>

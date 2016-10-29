@@ -1,6 +1,4 @@
 <?php
-include_once ARES;
-include_once ATHENA;
 # udpate ships in squadron
 
 # int base 			ref base id
@@ -8,6 +6,15 @@ include_once ATHENA;
 # int squadron 		ref squadron id
 
 # string newSquadron	liste de vaisseaux séparé par un _
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+
+use Asylamba\Modules\Zeus\Helper\TutorialHelper;
+use Asylamba\Modules\Zeus\Resource\TutorialResource;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Ares\Model\Commander;
 
 for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -101,4 +108,3 @@ if ($baseID !== FALSE AND $commanderID !== FALSE AND $squadronID !== FALSE AND $
 } else {
 	CTR::$alert->add('Pas assez d\'informations pour assigner un vaisseau.', ALERT_STD_FILLFORM);
 }
-?>

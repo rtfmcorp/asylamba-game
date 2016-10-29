@@ -1,7 +1,12 @@
 <?php
-include_once ARES;
 
-$db = DataBase::getInstance();
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+
+$db = Database::getInstance();
 
 $qr = $db->prepare('SELECT
 		COUNT(c.id) AS nb,
@@ -94,4 +99,3 @@ echo '<div class="component profil">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

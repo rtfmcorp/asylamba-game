@@ -1,4 +1,7 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+
 echo '<ul id="alert"></ul>';
 
 # affichage
@@ -23,5 +26,3 @@ if (CTR::$alert->size() > 0 && empty($redir)) {
 	
 	CTR::$alert->clear();
 }
-
-?>

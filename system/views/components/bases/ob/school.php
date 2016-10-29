@@ -7,9 +7,15 @@
 # require
 	# {orbitalBase}		ob_school
 
-include_once ARES;
-include_once ZEUS;
-include_once GAIA;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Zeus\Helper\CheckName;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Athena\Resource\SchoolClassResource;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
+use Asylamba\Modules\Gaia\Resource\PlaceResource;
 
 $S_COM1 = ASM::$com->getCurrentSession();
 ASM::$com->newSession();
@@ -177,4 +183,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

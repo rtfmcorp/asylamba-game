@@ -2,11 +2,14 @@
 #rplayer	id du joueur
 #department
 
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 $rPlayer = Utils::getHTTPData('rplayer');
 $department = Utils::getHTTPData('department');
-
-include_once ZEUS;
-include_once DEMETER;
 
 if ($rPlayer !== FALSE && $department !== FALSE) {
 	$_PAM2 = ASM::$pam->getCurrentsession();

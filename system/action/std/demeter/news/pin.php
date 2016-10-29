@@ -1,5 +1,8 @@
 <?php
-include_once DEMETER;
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
 
 $id 		= Utils::getHTTPData('id');
 

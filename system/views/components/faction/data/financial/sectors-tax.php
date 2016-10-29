@@ -1,5 +1,6 @@
 <?php
-include_once GAIA;
+
+use Asylamba\Classes\Worker\ASM;
 
 $S_SEM_T = ASM::$sem->getCurrentSession();
 ASM::$sem->newSession();
@@ -29,4 +30,3 @@ echo '<div class="component profil">';
 echo '</div>';
 
 ASM::$sem->changeSession($S_SEM_T);
-?>

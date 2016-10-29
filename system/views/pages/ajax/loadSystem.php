@@ -1,6 +1,7 @@
 <?php
-include_once GAIA;
-include_once DEMETER;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
 
 if (CTR::$get->exist('systemid')) {
 	$systemId = CTR::$get->get('systemid');
@@ -35,4 +36,3 @@ if (ASM::$sys->size() == 1) {
 }
 
 ASM::$sys->changeSession($S_SYS1);
-?>

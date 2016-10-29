@@ -1,14 +1,18 @@
 <?php
-include_once ATHENA;
-include_once GAIA;
-include_once ARES;
 
 # affect a commander
 
 # int id 	 		id du officier
 
-$commanderId = Utils::getHTTPData('id');
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Gaia\Resource\PlaceResource;
+use Asylamba\Modules\Zeus\Helper\TutorialHelper;
+use Asylamba\Modules\Zeus\Resource\TutorialResource;
 
+$commanderId = Utils::getHTTPData('id');
 
 if ($commanderId !== FALSE) {
 	$S_COM1 = ASM::$com->getCurrentSession();
@@ -99,5 +103,3 @@ if ($commanderId !== FALSE) {
 } else {
 	CTR::$alert->add('erreur dans le traitement de la requête', ALERT_BUG_ERROR);
 }
-
-?>

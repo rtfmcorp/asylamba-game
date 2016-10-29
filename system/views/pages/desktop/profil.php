@@ -1,4 +1,8 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+
 if (CTR::$get->equal('mode', 'splash')) {
 	echo '<div class="splash-screen">';
 		echo '<div class="modal">';
@@ -19,11 +23,6 @@ include 'defaultElement/movers.php';
 # contenu spécifique
 echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
-
-	# inclusion des modules
-	include_once ZEUS;
-	include_once DEMETER;
-	include_once ATHENA;
 
 	# loading des objets
 	$S_PAM1 = ASM::$pam->getCurrentSession();
@@ -53,4 +52,3 @@ echo '<div id="content">';
 	ASM::$pam->changeSession($S_PAM1);
 	ASM::$obm->changeSession($S_OBM1);
 echo '</div>';
-?>

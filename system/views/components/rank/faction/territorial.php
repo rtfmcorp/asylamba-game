@@ -7,6 +7,8 @@
 # require
 	# _T PRM 		FACTION_RANKING_TERRITORIAL
 
+use Asylamba\Classes\Worker\ASM;
+
 ASM::$frm->changeSession($FACTION_RANKING_TERRITORIAL);
 
 echo '<div class="component player rank">';

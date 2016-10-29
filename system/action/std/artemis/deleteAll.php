@@ -1,7 +1,8 @@
 <?php
 # delete all notifications
 
-include_once ARTEMIS;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
 
 $S_SRM1 = ASM::$srm->getCurrentSession();
 ASM::$srm->newSession(ASM_UMODE);

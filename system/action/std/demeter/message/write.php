@@ -3,7 +3,13 @@
 # content
 # rtopic
 
-include_once DEMETER;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Zeus\Helper\TutorialHelper;
+use Asylamba\Modules\Zeus\Resource\TutorialResource;
+use Asylamba\Modules\Demeter\Model\Forum\ForumMessage;
 
 $content = Utils::getHTTPData('content');
 $rTopic  = Utils::getHTTPData('rtopic');
@@ -28,7 +34,6 @@ if ($rTopic AND $content) {
 
 			# tutorial
 			if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-				include_once ZEUS;
 				switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
 					case TutorialResource::FACTION_FORUM :
 						TutorialHelper::setStepDone();						
@@ -41,7 +46,7 @@ if ($rTopic AND $content) {
 			}
 
 			if (DATA_ANALYSIS) {
-				$db = DataBase::getInstance();
+				$db = Database::getInstance();
 				$qr = $db->prepare('INSERT INTO 
 					DA_SocialRelation(`from`, type, message, dAction)
 					VALUES(?, ?, ?, ?)'

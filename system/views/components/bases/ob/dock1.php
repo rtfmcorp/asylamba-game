@@ -8,6 +8,17 @@
 	# {orbitalBase}		ob_dock1
 
 # work
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Promethee\Model\Technology;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
+
 $S_SQM1 = ASM::$sqm->getCurrentSession();
 ASM::$sqm->changeSession($ob_dock1->dock1Manager);
 $s = array('', '', '', '', '', '');
@@ -272,4 +283,3 @@ echo '<div class="component">';
 echo '</div>';
 
 ASM::$sqm->changeSession($S_SQM1);
-?>

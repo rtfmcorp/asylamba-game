@@ -1,4 +1,8 @@
 <?php
+
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Container\Params;
+
 # display
 echo '<div class="component">';
 	echo '<div class="head skin-5">';

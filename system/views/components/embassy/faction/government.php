@@ -1,4 +1,9 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Classes\Library\Format;
+
 $S_PAM_DGG = ASM::$pam->getCurrentSession();
 ASM::$pam->changeSession($FACTION_GOV_TOKEN);
 

@@ -1,4 +1,11 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Container\Params;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Ares\Model\Report;
+
 # background paralax
 echo '<div id="background-paralax" class="fleet"></div>';
 
@@ -11,8 +18,6 @@ echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
 
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'movement' OR CTR::$get->get('view') == 'main') {
-		# inclusion des modules
-		include_once ARES;
 		$S_COM_UKN = ASM::$com->getCurrentSession();
 
 		# set d'orbitale base
@@ -79,7 +84,6 @@ echo '<div id="content">';
 			));
 
 			if (ASM::$com->size() == 1) {
-				include_once ATHENA;
 				$S_OBM_DOCK = ASM::$obm->getCurrentSession();
 				ASM::$obm->newSession();
 				ASM::$obm->load(array('rPlace' => ASM::$com->get()->getRBase()));
@@ -103,8 +107,6 @@ echo '<div id="content">';
 
 		ASM::$com->changeSession($S_COM_UKN);
 	} elseif (CTR::$get->get('view') == 'overview') {
-		# inclusion des modules
-		include_once ARES;
 		$S_COM_UKN = ASM::$com->getCurrentSession();
 		$S_OBM_UKN = ASM::$obm->getCurrentSession();
 
@@ -151,9 +153,6 @@ echo '<div id="content">';
 		ASM::$obm->changeSession($S_OBM_UKN);
 		ASM::$com->changeSession($S_COM_UKN);
 	} elseif (CTR::$get->get('view') == 'spyreport') {
-		# inclusion des modules
-		include_once ARTEMIS;
-
 		# loading des objets
 		$S_SRM1 = ASM::$srm->getCurrentSession();
 		ASM::$srm->newSession();
@@ -176,8 +175,6 @@ echo '<div id="content">';
 		}
 
 		if (ASM::$srm->size() == 1) {
-			include_once GAIA;
-
 			$spyreport = ASM::$srm->get(0);
 
 			$S_PLM_SPY = ASM::$plm->getCurrentSession();
@@ -200,9 +197,6 @@ echo '<div id="content">';
 
 		ASM::$srm->changeSession($S_SRM1);
 	} elseif (CTR::$get->get('view') == 'archive') {
-		# inclusion des modules
-		include_once ARES;
-
 		# loading des objets
 		$S_LRM1 = ASM::$lrm->getCurrentSession();
 		ASM::$lrm->newSession();
@@ -244,8 +238,6 @@ echo '<div id="content">';
 			ASM::$rpm->load(array('r.id' => CTR::$get->get('report')));
 
 			if (ASM::$rpm->size() == 1 && (ASM::$rpm->get()->rPlayerAttacker == CTR::$data->get('playerId') || ASM::$rpm->get()->rPlayerDefender == CTR::$data->get('playerId'))) {
-				include_once ZEUS;
-
 				$S_PAM1 = ASM::$pam->getCurrentSession();
 				ASM::$pam->newSession();
 				ASM::$pam->load(array('id' => array(ASM::$rpm->get()->rPlayerAttacker, ASM::$rpm->get()->rPlayerDefender)));
@@ -272,9 +264,6 @@ echo '<div id="content">';
 
 		ASM::$lrm->changeSession($S_LRM1);
 	} elseif (CTR::$get->get('view') == 'memorial') {
-		# inclusion des modules
-		include_once ARES;
-
 		# loading des objets
 		$S_COM1 = ASM::$com->getCurrentSession();
 		ASM::$com->newSession();
@@ -308,4 +297,3 @@ echo '<div id="content">';
 	}
 
 echo '</div>';
-?>

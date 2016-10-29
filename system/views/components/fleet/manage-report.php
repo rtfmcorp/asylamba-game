@@ -4,6 +4,8 @@
 
 # liste tous les derniers rapports de combats du joueur
 
+use Asylamba\Classes\Library\Format;
+
 echo '<div class="component report">';
 	echo '<div class="head skin-2"></div>';
 	echo '<div class="fix-body">';

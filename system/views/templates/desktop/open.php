@@ -1,4 +1,7 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+
 if (CTR::getPage() == 'inscription' && (CTR::$get->get('step') == 1 || !CTR::$get->exist('step'))) {
 	$color = 'color0';
 } elseif (CTR::getPage() == 'inscription') {
@@ -66,4 +69,3 @@ echo '<body ';
 	}
 
 echo '>';
-?>

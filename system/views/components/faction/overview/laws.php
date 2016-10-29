@@ -2,7 +2,7 @@
 # createTopic component
 # in demeter.forum package
 
-# création d'un topic
+use Asylamba\Classes\Worker\ASM;
 
 # require
 

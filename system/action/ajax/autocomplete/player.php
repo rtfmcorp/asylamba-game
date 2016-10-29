@@ -1,6 +1,7 @@
 <?php
-include_once ZEUS;
-include_once DEMETER;
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 $S_PAM1 = ASM::$pam->newSession(FALSE);
 
@@ -26,4 +27,3 @@ if (ASM::$pam->size() != 0) {
 	}
 }
 ASM::$pam->changeSession($S_PAM1);
-?>

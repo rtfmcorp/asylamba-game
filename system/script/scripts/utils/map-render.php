@@ -1,5 +1,6 @@
 <?php
-include_once GAIA;
+
+use Asylamba\Classes\Worker\ASM;
 
 $S_PLM_1 = ASM::$sys->getCurrentSession();
 ASM::$sys->newSession(FALSE);
@@ -86,4 +87,3 @@ echo '<div id="lieux">';
 		}
 	}
 echo '</div>';
-?>

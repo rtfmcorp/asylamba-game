@@ -1,4 +1,12 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Hermes\Model\ConversationUser;
+use Asylamba\Modules\Hermes\Model\Conversation;
+use Asylamba\Modules\Hermes\Model\ConversationMessage;
+
 # background paralax
 echo '<div id="background-paralax" class="message"></div>';
 
@@ -9,11 +17,7 @@ include 'defaultElement/movers.php';
 # contenu spécifique
 echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
-
-	# inclusion des modules
-	include_once HERMES;
-
-	# liste des conv's
+        # liste des conv's
 	$display = CTR::$get->equal('mode', ConversationUser::CS_ARCHIVED)
 		? ConversationUser::CS_ARCHIVED
 		: ConversationUser::CS_DISPLAY;

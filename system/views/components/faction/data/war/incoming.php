@@ -1,7 +1,8 @@
 <?php
-include_once ARES;
 
-$db = DataBase::getInstance();
+use Asylamba\Classes\Database\Database;
+
+$db = Database::getInstance();
 
 $qr = $db->prepare('SELECT
 		COUNT(c.id) AS nb
@@ -37,4 +38,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

@@ -3,10 +3,11 @@
 
 # int id 			id du rapport
 
-include_once ARTEMIS;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
 
 $id = Utils::getHTTPData('id');
-
 
 if ($id) {
 	$S_SRM1 = ASM::$srm->getCurrentSession();

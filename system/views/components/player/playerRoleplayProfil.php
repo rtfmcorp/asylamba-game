@@ -7,6 +7,11 @@
 # require
 	# {player}	player_playerRoleplayProfil
 
+
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Format;
+
 echo '<div class="component profil">';
 	echo '<div class="head">';
 		echo '<h1>Votre profil</h1>';
@@ -48,4 +53,3 @@ echo '<div class="component profil">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

@@ -1,4 +1,5 @@
 <?php
+use Asylamba\Classes\Library\Format;
 # void
 echo '<div class="component">';
 	echo '<div class="head">';
@@ -13,4 +14,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

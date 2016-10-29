@@ -1,7 +1,12 @@
 <?php
 # vérification du joueur
 # ajout des informations dans le managers
-include_once ZEUS;
+
+use Asylamba\Classes\Library\Security;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\API;
 
 # extraction du bindkey
 $query  = Security::uncrypt(CTR::$get->get('bindkey'), KEY_SERVER);
@@ -49,4 +54,3 @@ if (ASM::$pam->size() == 1) {
 }
 
 ASM::$pam->changeSession($S_PAM1);
-?>

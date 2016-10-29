@@ -1,4 +1,7 @@
 <?php
+
+use Asylamba\Classes\Container\Params;
+
 echo '<div id="map-option">';
 	echo '<a ';
 		echo 'href="#" ';
@@ -67,4 +70,3 @@ echo '<div id="map-option">';
 		echo '<img src="' . MEDIA . 'map/option/info.png" alt="information" />';
 	echo '</a>';
 echo '</div>';
-?>

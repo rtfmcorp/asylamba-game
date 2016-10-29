@@ -1,5 +1,8 @@
 <?php
-$db = DataBaseAdmin::getInstance();
+
+use Asylamba\Classes\Database\DatabaseAdmin;
+
+$db = DatabaseAdmin::getInstance();
 
 echo '<h2>Ajout du classement total (points) dans playerRanking</h2>';
 
