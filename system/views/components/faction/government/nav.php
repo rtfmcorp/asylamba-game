@@ -1,4 +1,11 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Demeter\Model\Color;
+
 echo '<div class="component nav">';
 	echo '<div class="head skin-1">';
 		echo '<h1>Gouvernement</h1>';

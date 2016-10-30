@@ -1,4 +1,8 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Format;
+
 $S_FNM_C = ASM::$fnm->getCurrentSession();
 ASM::$fnm->changeSession($TOKEN_NEWS_LIST);
 

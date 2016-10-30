@@ -3,6 +3,7 @@
 # in demeter.forum package
 
 use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Demeter\Resource\LawResources;
 
 # require
 

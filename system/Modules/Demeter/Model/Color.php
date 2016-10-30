@@ -21,6 +21,8 @@ use Asylamba\Modules\Demeter\Model\Election\Election;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Demeter\Resource\LawResources;
 use Asylamba\Modules\Demeter\Model\Law\Law;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
 
 class Color {
 	# Regime

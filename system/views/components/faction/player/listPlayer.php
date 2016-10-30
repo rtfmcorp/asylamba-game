@@ -1,4 +1,9 @@
 <?php
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 # listPlayer component
 # in player.demeter package
 
@@ -57,4 +62,3 @@ echo '<div class="component player size3">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

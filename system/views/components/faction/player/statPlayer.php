@@ -1,4 +1,10 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 # statPlayer component
 # in player.demeter package
 
@@ -64,4 +70,3 @@ echo '<div class="component player rank">';
 echo '</div>';
 
 ASM::$pam->changeSession($S_PAM_LAST);
-?>

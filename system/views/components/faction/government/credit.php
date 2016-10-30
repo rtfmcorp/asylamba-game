@@ -1,4 +1,10 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Zeus\Model\CreditTransaction;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 echo '<div class="component new-message">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';

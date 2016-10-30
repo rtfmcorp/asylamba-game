@@ -6,9 +6,10 @@
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Demeter\Model\Forum\FactionNews;
 
-$content 	= Utils::getHTTPData('content');
-$title  	= Utils::getHTTPData('title');
+$content = Utils::getHTTPData('content');
+$title = Utils::getHTTPData('title');
 
 if ($title !== FALSE AND $content !== FALSE) {
 	if (CTR::$data->get('playerInfo')->get('status') >= 3) {

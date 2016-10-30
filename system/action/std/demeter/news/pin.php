@@ -4,7 +4,7 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Worker\ASM;
 
-$id 		= Utils::getHTTPData('id');
+$id = Utils::getHTTPData('id');
 
 if ($id !== FALSE) {
 	$S_FNM_1 = ASM::$fnm->getCurrentSession();
@@ -19,9 +19,9 @@ if ($id !== FALSE) {
 
 		for ($i = 0; $i < ASM::$fnm->size(); $i++) { 
 			if (ASM::$fnm->get($i)->id == $id) {
-				ASM::$fnm->get($i)->pinned = TRUE;
+				ASM::$fnm->get($i)->pinned = 1;
 			} else {
-				ASM::$fnm->get($i)->pinned = FALSE;
+				ASM::$fnm->get($i)->pinned = 0;
 			}
 		}
 

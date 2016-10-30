@@ -9,7 +9,6 @@ use Asylamba\Modules\Demeter\Resource\LawResources;
 
 $rLaw = Utils::getHTTPData('rlaw');
 
-
 if ($rLaw !== FALSE) {
 	if (CTR::$data->get('playerInfo')->get('status') == LawResources::getInfo($type, 'department')) {
 		$_LAM = ASM::$lam->getCurrentSession();

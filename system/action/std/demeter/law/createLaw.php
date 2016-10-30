@@ -8,6 +8,7 @@
 #name pour nommer des trucs
 
 use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Parser;
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Demeter\Resource\LawResources;

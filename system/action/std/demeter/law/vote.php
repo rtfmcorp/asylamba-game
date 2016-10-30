@@ -11,7 +11,6 @@ use Asylamba\Modules\Demeter\Model\Law\Law;
 $rLaw = Utils::getHTTPData('rlaw');
 $choice = Utils::getHTTPData('choice');
 
-
 if ($rLaw !== FALSE && $choice !== FALSE) {
 	if (CTR::$data->get('playerInfo')->get('status') == PAM_PARLIAMENT) {
 		$_LAM = ASM::$lam->getCurrentSession();

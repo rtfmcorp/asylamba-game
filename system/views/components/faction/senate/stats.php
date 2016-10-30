@@ -1,4 +1,8 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Format;
+
 # require
 	# LAW/Token 		S_LAM_TOVOTE
 
