@@ -5,11 +5,13 @@
 # int placeid				id de la place attaquée
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Modules\Promethee\Model\Technology;
-use Asylamba\Modules\Ares\Model\Commander;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Promethee\Model\Technology;
+use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 $commanderId = Utils::getHTTPData('commanderid');
 $placeId = Utils::getHTTPData('placeid');

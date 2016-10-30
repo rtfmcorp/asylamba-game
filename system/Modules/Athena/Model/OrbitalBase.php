@@ -22,10 +22,12 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Promethee\Model\Technology;
+use Asylamba\Modules\Gaia\Model\Place;
 
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Promethee\Resource\TechnologyResource;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+
 
 class OrbitalBase {
 	# type of base

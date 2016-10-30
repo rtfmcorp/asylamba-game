@@ -10,7 +10,6 @@
 */
 namespace Asylamba\Modules\Gaia\Model;
 
-use Asylamba\Modules\Ares\FightController;
 use Asylamba\Classes\Worker\CTC;
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Worker\CTR;
@@ -18,12 +17,14 @@ use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Format;
 
+use Asylamba\Modules\Ares\FightController;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Ares\Model\LiveReport;
 use Asylamba\Modules\Ares\Model\Report;
 use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Demeter\Model\Color;
 
 use Asylamba\Modules\Gaia\Resource\SquadronResource;
 

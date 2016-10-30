@@ -12,8 +12,9 @@ use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Promethee\Model\TechnologyQueue;
 use Asylamba\Modules\Promethee\Resource\TechnologyResource;
-use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Zeus\Resource\TutorialResource;
+use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
