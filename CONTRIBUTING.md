@@ -6,6 +6,7 @@ Il y a plusieurs moyens de contribuer :
 - Si vous trouvez un problème dans le jeu, vous pouvez ouvrir une [*issue*](https://github.com/rtfmcorp/asylamba-game/issues) en décrivant le problème, directement dans l'interface de Github.
 - Si vous voulez directement corriger un problème, vous pouvez le faire, pour cela merci de suivre la procédure ci-dessous.
 
+
 Quel type de problème régler ?
 ------------------------------
 
@@ -20,6 +21,7 @@ Voici les différentes choses que vous pouvez faire :
 
 En ce qui concerne l'ajout ou la modification de fonctionnalités, il est fort probable que ça soit refusé. Si vous souhaitez vous lancer là-dedans, il faut en discuter au préalable avec l'équipe de développement, directement sur le forum du jeu ou sur le serveur Discord d'Asylamba. Cela permettra de ne pas sortir de la ligne directrice.
 
+
 Comment contribuer ?
 --------------------
 
@@ -31,6 +33,7 @@ La branche principale est *master*, la branche *dev* sert au développement. Nou
 
 Un guide de contribution officiel est disponible [ici](https://guides.github.com/activities/contributing-to-open-source/#contributing). Nous sommes également disponible si vous avez des questions sur la façon de faire. Vous pouvez nous contacter sur Asylamba, par mail ou sur Discord.
 
+
 Les bonnes pratiques
 --------------------
 
@@ -39,3 +42,15 @@ Les bonnes pratiques
 - les commentaires sont en anglais ou en français
 - les commits doivent avoir un nom clair (soit en français soit en anglais)
 - un commit modifie/améliore une chose, ça doit être clair et concis
+
+
+Modifier l'interface
+--------------------
+
+Si vous souhaitez modifier le CSS, il faudra éditer les fichiers au format [LESS](http://lesscss.org) se trouvant dans `public/css/less/`. Afin de compiler ces fichiers en CSS, il faut utiliser [Gulp](http://gulpjs.com). Vous devez d'abord installer NPM puis GULP sur votre système, ensuite il faut installer les dépendances du projet en tapant :
+
+    npm install
+
+Les dépendances s'installeront dans le dossier `node_modules/`. Pour compiler le CSS, il suffit de taper :
+
+    gulp less

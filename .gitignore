@@ -6,3 +6,4 @@ system/config/app.config.local.php
 
 /nbproject/
 /vendor/
+/node_modules/

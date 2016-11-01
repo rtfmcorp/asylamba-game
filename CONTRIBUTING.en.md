@@ -43,3 +43,15 @@ Good practices
 - the comments are in english or french
 - the commits names must be clear (in french or english)
 - a commit modifies/improves one thing, it must be clear and concise
+
+
+Modify the front-end
+--------------------
+
+If you want to modify the CSS, you must edit the [LESS](http://lesscss.org) files that are located in `public/css/less`. To compile them, [Gulp](http://gulpjs.com) is used. First you need to install NPM and GULP on your system, then you have to install the dependencies of the project by typing :
+
+    npm install
+
+The dependencies will be installed in the `node_modules/` folder. To compile the CSS, just type :
+
+    gulp less
