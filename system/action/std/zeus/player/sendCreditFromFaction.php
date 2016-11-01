@@ -66,7 +66,7 @@ if ($name !== FALSE AND $quantity !== FALSE) {
 							} else {
 								$n->addTxt('.');
 							}
-							$n->addBoxResource('credit', Format::numberFormat($credit), 'crédits reçus');
+							$n->addBoxResource('credit', Format::numberFormat($credit), ($credit == 1 ? 'crédit reçu' : 'crédits reçus'));
 							$n->addEnd();
 							ASM::$ntm->add($n);
 

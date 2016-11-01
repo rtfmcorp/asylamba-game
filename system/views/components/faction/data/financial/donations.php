@@ -31,12 +31,12 @@ echo '<div class="component player rank">';
 					$status = ColorResource::getInfo($transaction->senderColor, 'status');
 					echo '<span class="title">' . $status[$transaction->senderStatus - 1] . '</span>';
 					echo '<strong class="name">' . $transaction->senderName . '</strong>';
-					echo '<span class="experience">' . Format::number($transaction->amount) . ' crédits</span>';
+					echo '<span class="experience">' . Format::number($transaction->amount) . ($transaction->amount == 1 ? ' crédit' : ' crédits') . '</span>';
 				echo '</div>';
 			}
 
 			if (ASM::$crt->size() == 0) {
-				echo '<p>Aucune donations n\'a encore été faite.</p>';
+				echo '<p>Aucune donation n\'a encore été faite.</p>';
 			}
 		echo '</div>';
 	echo '</div>';
@@ -67,7 +67,7 @@ echo '<div class="component player rank">';
 					$status = ColorResource::getInfo($transaction->receiverColor, 'status');
 					echo '<span class="title">' . $status[$transaction->receiverStatus - 1] . '</span>';
 					echo '<strong class="name">' . $transaction->receiverName . '</strong>';
-					echo '<span class="experience">' . Format::number($transaction->amount) . ' crédits</span>';
+					echo '<span class="experience">' . Format::number($transaction->amount) . ($transaction->amount == 1 ? ' crédit' : ' crédits') . '</span>';
 				echo '</div>';
 			}
 

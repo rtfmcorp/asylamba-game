@@ -30,7 +30,7 @@ echo '<div class="component player rank">';
 
 					echo '<span class="title">' . $transaction->getFormatedReceiverStatus() . '</span>';
 					echo '<strong class="name">' . $transaction->getFormatedReceiverName() . '</strong>';
-					echo '<span class="experience">' . Format::number($transaction->amount) . ' crédits</span>';
+					echo '<span class="experience">' . Format::number($transaction->amount) . ($transaction->amount == 1 ? ' crédit' : ' crédits') . '</span>';
 				echo '</div>';
 			}
 
