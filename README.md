@@ -1,6 +1,8 @@
 ASYLAMBA : Expansion Stellaire
 ==============================
 
+[![Build Status](https://travis-ci.org/rtfmcorp/asylamba-game.svg?branch=master)](https://travis-ci.org/rtfmcorp/asylamba-game)
+
 Jeu de stragégie en ligne multi-joueur. Visitez [asylamba.com](http://asylamba.com) pour tester le jeu.
 
 ![logo Asylamba](http://asylamba.com/public/media/files/sources/asylambacom.png)
