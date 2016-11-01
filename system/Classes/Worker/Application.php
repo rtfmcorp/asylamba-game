@@ -11,13 +11,7 @@ class Application {
         $this->container = new Container();
     }
     
-    public function run()
-    {
-        
-    }
-    
     /**
-     * e
      * @return Container
      */
     public function getContainer()
