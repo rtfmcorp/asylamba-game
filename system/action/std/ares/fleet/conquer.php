@@ -1,12 +1,17 @@
 <?php
-include_once ARES;
-include_once GAIA;
-include_once ZEUS;
-include_once DEMETER;
 # send a fleet to loot a place
 
 # int commanderid 			id du commandant à envoyer
 # int placeid				id de la place attaquée
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Promethee\Model\Technology;
+use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 $commanderId = Utils::getHTTPData('commanderid');
 $placeId = Utils::getHTTPData('placeid');

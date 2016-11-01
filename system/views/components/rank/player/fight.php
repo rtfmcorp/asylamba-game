@@ -7,6 +7,8 @@
 # require
 	# _T PRM 		PLAYER_RANKING_FIGHT
 
+use Asylamba\Classes\Worker\ASM;
+
 ASM::$prm->changeSession($PLAYER_RANKING_FIGHT);
 
 echo '<div class="component player rank">';

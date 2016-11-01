@@ -1,4 +1,8 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+
 # background paralax
 echo '<div id="background-paralax" class="technology"></div>';
 
@@ -10,10 +14,6 @@ include 'defaultElement/movers.php';
 # contenu spécifique
 echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
-
-	# inclusion des modules
-	include_once ZEUS;
-
 	# loading des objets
 	$S_PAM_TECH = ASM::$pam->getCurrentSession();
 	ASM::$pam->newSession();

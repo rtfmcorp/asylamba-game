@@ -1,12 +1,15 @@
 <?php
-include_once DEMETER;
-include_once ZEUS;
 #rlaw	id de la loi
 #choice le vote du joueur
 
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Demeter\Model\Law\VoteLaw;
+use Asylamba\Modules\Demeter\Model\Law\Law;
+
 $rLaw = Utils::getHTTPData('rlaw');
 $choice = Utils::getHTTPData('choice');
-
 
 if ($rLaw !== FALSE && $choice !== FALSE) {
 	if (CTR::$data->get('playerInfo')->get('status') == PAM_PARLIAMENT) {

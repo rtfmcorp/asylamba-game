@@ -1,5 +1,4 @@
 <?php
-include_once ATHENA;
 # propose a transaction action
 
 # int rplace 		id de la base orbitale
@@ -7,6 +6,16 @@ include_once ATHENA;
 # [int quantity] 	quantitiy of resources or ships
 # [int identifier]	rCommander or shipId
 # int price 		price defined by the proposer
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Modules\Athena\Model\Transaction;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Athena\Model\CommercialShipping;
+use Asylamba\Modules\Ares\Model\Commander;
 
 for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -47,7 +56,6 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 			}
 			break;
 		case Transaction::TYP_COMMANDER :
-			include_once ARES;
 			if ($identifier === FALSE OR $identifier < 1) {
 				$valid = FALSE;
 			}
@@ -121,7 +129,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 								$S_COM1 = ASM::$com->getCurrentSession();
 								ASM::$com->newSession();
 								ASM::$com->load(array('c.id' => $identifier));
-								if (ASM::$com->size() == 1 AND ASM::$com->get()->getRPlayer() == CTR::$data->get('playerId') AND $commander->statement !== Commander::ONSALE) {
+								if (ASM::$com->size() == 1 AND ASM::$com->get()->getRPlayer() == CTR::$data->get('playerId') AND ASM::$com->get()->statement !== Commander::ONSALE) {
 									$commander = ASM::$com->get();
 									$commander->statement = Commander::ONSALE;
 									$commander->emptySquadrons();
@@ -155,8 +163,8 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 							$cs->rTransaction = $tr->id;
 							$cs->resourceTransported = NULL;
 							$cs->shipQuantity = $commercialShipQuantity;
-							$cs->dDeparture = '';
-							$cs->dArrival = '';
+							$cs->dDeparture = NULL;
+							$cs->dArrival = NULL;
 							$cs->statement = CommercialShipping::ST_WAITING;
 							ASM::$csm->add($cs);
 
@@ -191,4 +199,3 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 } else {
 	CTR::$alert->add('pas assez d\'informations pour faire une proposition sur le marché', ALERT_STD_FILLFORM);
 }
-?>

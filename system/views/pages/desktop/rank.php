@@ -1,4 +1,10 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Atlas\Model\PlayerRanking;
+use Asylamba\Classes\Library\Utils;
+
 # background paralax
 echo '<div id="background-paralax" class="rank"></div>';
 
@@ -9,9 +15,6 @@ include 'defaultElement/movers.php';
 # contenu spécifique
 echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
-
-	include_once ATLAS;
-	include_once DEMETER;
 
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'player') {
 		$S_PRM1 = ASM::$prm->getCurrentSession();

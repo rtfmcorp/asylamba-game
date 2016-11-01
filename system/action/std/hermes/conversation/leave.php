@@ -1,5 +1,11 @@
 <?php
-include_once HERMES;
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Hermes\Model\Conversation;
+use Asylamba\Modules\Hermes\Model\ConversationUser;
+use Asylamba\Modules\Hermes\Model\ConversationMessage;
 
 $conversation 	= Utils::getHTTPData('conversation');
 

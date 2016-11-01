@@ -8,6 +8,13 @@
 	# {report}		spyreport
 	# {place}		place_spy
 
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Modules\Artemis\Model\SpyReport;
+use Asylamba\Modules\Gaia\Model\Place;
+use Asylamba\Modules\Gaia\Resource\PlaceResource;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
+
 echo '<div class="component size3 space">';
 	echo '<div class="head skin-1">';
 		echo ($spyreport->rEnemy == 0)
@@ -168,4 +175,3 @@ echo '<div class="component size3 space">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

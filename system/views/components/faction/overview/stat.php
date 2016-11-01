@@ -2,7 +2,12 @@
 # createTopic component
 # in demeter.forum package
 
-# création d'un topic
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Utils;
 
 # require
 $S_PAM_DGG = ASM::$pam->getCurrentSession();
@@ -12,7 +17,6 @@ ASM::$pam->changeSession($PLAYER_GOV_TOKEN);
 $status = ColorResource::getInfo($faction->id, 'status');
 
 # ranking
-include_once ATLAS;
 $S_FRM1 = ASM::$frm->getCurrentSession();
 ASM::$frm->newSession();
 ASM::$frm->loadLastContext();

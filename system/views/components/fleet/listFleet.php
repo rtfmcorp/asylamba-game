@@ -7,6 +7,16 @@
 # require
 	# [{commander}]		commander_listFleetIncoming
 
+use Asylamba\Modules\Gaia\Resource\PlaceResource;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Container\Params;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\Chronos;
+
 echo '<div class="component size3 list-fleet">';
 	echo '<div class="head skin-1">';
 		echo '<h1>Centre des opérations</h1>';

@@ -1,11 +1,16 @@
 <?php
-include_once HERMES;
-include_once ZEUS;
 
 # int player 		id du joueur (facultatif)
 # string message 	message à envoyer
 
-$content 			= Utils::getHTTPData('message');
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Parser;
+use Asylamba\Modules\Hermes\Model\ConversationUser;
+use Asylamba\Modules\Hermes\Model\ConversationMessage;
+
+$content = Utils::getHTTPData('message');
 
 # protection des inputs
 $p = new Parser();

@@ -577,4 +577,3 @@ abstract class GalaxyConfiguration {
 	# display params
 	public static $scale = 20;
 }
-?>

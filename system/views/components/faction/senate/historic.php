@@ -1,4 +1,10 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Modules\Demeter\Resource\LawResources;
+use Asylamba\Modules\Demeter\Model\Law\Law;
+
 # require
 	# LAM/Token 		S_LAM_HISTORIC
 

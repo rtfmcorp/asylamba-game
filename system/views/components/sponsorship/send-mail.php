@@ -1,4 +1,8 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Format;
+
 # display
 echo '<div class="component new-message">';
 	echo '<div class="head skin-2"></div>';

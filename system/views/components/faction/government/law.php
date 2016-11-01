@@ -1,4 +1,12 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Demeter\Resource\LawResources;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Demeter\Model\Law\Law;
+
 echo '<div class="component profil player">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';

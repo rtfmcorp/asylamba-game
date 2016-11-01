@@ -1,7 +1,4 @@
 <?php
-include_once DEMETER;
-include_once ZEUS;
-include_once GAIA;
 
 #type
 #duration pour les lois à durée en seconde
@@ -9,6 +6,15 @@ include_once GAIA;
 #rColor autre faction concernée
 #rSector secteur concernée
 #name pour nommer des trucs
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Parser;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Demeter\Resource\LawResources;
+use Asylamba\Modules\Demeter\Model\Law\Law;
+use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 $type = Utils::getHTTPData('type');
 $duration = Utils::getHTTPData('duration');

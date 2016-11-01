@@ -7,15 +7,19 @@
 #warlordchoice
 #ministerchoice
 
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Demeter\Model\Election\Election;
+use Asylamba\Modules\Demeter\Model\Election\Candidate;
+use Asylamba\Modules\Demeter\Model\Forum\ForumTopic;
+use Asylamba\Modules\Demeter\Model\Election\Vote;
+
 $program = Utils::getHTTPData('program');
 $chiefChoice = Utils::getHTTPData('chiefchoice');
 $treasurerChoice = Utils::getHTTPData('treasurerchoice');
 $warlordChoice = Utils::getHTTPData('warlordchoice');
 $ministerChoice = Utils::getHTTPData('ministerchoice');
-
-include_once DEMETER;
-include_once ZEUS;
-include_once HERMES;
 
 if ($program !== FALSE) {
 	if (CTR::$data->get('playerInfo')->get('status') > PAM_STANDARD && CTR::$data->get('playerInfo')->get('status') < PAM_CHIEF) {
@@ -29,13 +33,13 @@ if ($program !== FALSE) {
 				$election = new Election();
 				$election->rColor = ASM::$clm->get()->id;
 
-				$date = new DateTime(Utils::now());
+				$date = new \DateTime(Utils::now());
 				$date->modify('+' . COLOR::PUTSCHTIME . ' second');
 				$election->dElection = $date->format('Y-m-d H:i:s');
 
 				ASM::$elm->add($election);
 
-				$candidate = new candidate();
+				$candidate = new Candidate();
 				$candidate->rElection = $election->id;
 				$candidate->rPlayer = CTR::$data->get('playerId');
 				$candidate->chiefChoice = $chiefChoice;

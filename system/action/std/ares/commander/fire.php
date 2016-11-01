@@ -1,10 +1,12 @@
 <?php
-include_once ATHENA;
-include_once ARES;
 
 # fire a commander
 
 # int id 	 		id du commandant
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
 
 $commanderId = Utils::getHTTPData('id');
 
@@ -35,5 +37,3 @@ if ($commanderId !== FALSE) {
 } else {
 	CTR::$alert->add('manque d\'information pour le traitement de la requête', ALERT_BUG_ERROR);
 }
-
-?>

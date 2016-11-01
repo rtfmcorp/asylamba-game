@@ -1,4 +1,8 @@
 <?php
+
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Chronos;
+
 echo '<div class="component panel-info">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
@@ -44,4 +48,3 @@ echo '<div class="component panel-info">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

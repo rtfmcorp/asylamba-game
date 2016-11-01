@@ -1,10 +1,13 @@
 <?php
 #rplayer	id du joueur
 
-$rPlayer = Utils::getHTTPData('rplayer');
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Hermes\Model\Notification;
 
-include_once ZEUS;
-include_once DEMETER;
+$rPlayer = Utils::getHTTPData('rplayer');
 
 if ($rPlayer !== FALSE) {
 	if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {

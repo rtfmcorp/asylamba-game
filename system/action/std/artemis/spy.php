@@ -4,9 +4,17 @@
 # int rplace 		id of the place to spy
 # int price			credit price for spying
 
-include_once GAIA;
-include_once ARTEMIS;
-include_once ZEUS;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Modules\Artemis\Model\SpyReport;
+use Asylamba\Modules\Gaia\Model\Place;
+use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Zeus\Helper\TutorialHelper;
+use Asylamba\Modules\Zeus\Resource\TutorialResource;
+use Asylamba\Modules\Athena\Model\OrbitalBase;
+use Asylamba\Modules\Ares\Model\Commander;
 
 $rPlace = Utils::getHTTPData('rplace');
 $price 	= Utils::getHTTPData('price');

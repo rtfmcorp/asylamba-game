@@ -1,6 +1,10 @@
 <?php
-include_once ARES;
-include_once GAIA;
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Container\Params;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Ares\Model\Commander;
 
 $S_COM_MAPLAYER = ASM::$com->getCurrentSession();
 ASM::$com->newSession();
@@ -41,4 +45,3 @@ echo '</div>';
 
 ASM::$plm->changeSession($S_PLM_MAPLAYER);
 ASM::$com->changeSession($S_COM_MAPLAYER);
-?>

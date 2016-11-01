@@ -1,10 +1,19 @@
 <?php
-include_once ATHENA;
-include_once DEMETER;
 # accept a commercial route action
 
 # int base 			id (rPlace) de la base orbitale qui accepte la route
 # int route 		id de la route commerciale
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\DataAnalysis;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Demeter\Model\Color;
 
 for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -96,7 +105,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 					ASM::$ntm->add($n);
 
 					if (DATA_ANALYSIS) {
-						$db = DataBase::getInstance();
+						$db = Database::getInstance();
 						$qr = $db->prepare('INSERT INTO 
 							DA_CommercialRelation(`from`, `to`, type, weight, dAction)
 							VALUES(?, ?, ?, ?, ?)'
@@ -123,4 +132,3 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 } else {
 	CTR::$alert->add('pas assez d\'informations pour accepter une route commerciale', ALERT_STD_FILLFORM);
 }
-?>

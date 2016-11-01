@@ -23,4 +23,3 @@ echo '<body>';
 		echo '<a href="' . GETOUT_ROOT . 'blog">où peut-être au blog</a>';
 	echo '</div>';
 echo '</body>';
-?>

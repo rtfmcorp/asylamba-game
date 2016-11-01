@@ -1,4 +1,8 @@
 <?php
+
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Parser;
+
 echo '<div class="component new-message size2">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';

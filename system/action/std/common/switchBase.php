@@ -1,4 +1,8 @@
 <?php
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\CTR;
+
 $base = Utils::getHTTPData('base');
 $page = Utils::getHTTPData('page'); # facultatif
 
@@ -22,4 +26,3 @@ if ($page !== FALSE) {
 	}
 	CTR::redirect($page);
 }
-?>

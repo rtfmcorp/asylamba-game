@@ -1,6 +1,7 @@
 <?php
-include_once GAIA;
-include_once ZEUS;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Gaia\Manager\SectorManager;
 
 # background paralax
 echo '<div id="background-paralax" class="profil"></div>';
@@ -77,4 +78,3 @@ echo '<div id="content">';
 		echo '</div>';
 	echo '</form>';
 echo '</div>';
-?>

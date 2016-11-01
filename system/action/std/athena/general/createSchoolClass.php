@@ -1,14 +1,22 @@
 <?php
-include_once ATHENA;
-include_once ZEUS;
-include_once GAIA;
-include_once ARES;
 
 # create school class action
 
 # int baseid 		id de la base orbitale
 # int school 		not used anymore
 # string name 		name of the officer
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Zeus\Helper\CheckName;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Athena\Model\OrbitalBase;
+use Asylamba\Modules\Gaia\Resource\PlaceResource;
+use Asylamba\Modules\Athena\Resource\SchoolClassResource;
+use Asylamba\Modules\Zeus\Resource\TutorialResource;
+use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 
 for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -34,7 +42,7 @@ if ($baseId !== FALSE AND $school !== FALSE AND $name !== FALSE AND in_array($ba
 		if (ASM::$com->size() < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'school-size')) {
 			ASM::$com->load(array('c.statement' => Commander::RESERVE, 'c.rBase' => $baseId));
 
-			if (ASM::$com->size() < Orbitalbase::MAXCOMMANDERINMESS) {
+			if (ASM::$com->size() < OrbitalBase::MAXCOMMANDERINMESS) {
 				$school = intval($school);
 				$nbrCommandersToCreate = rand(SchoolClassResource::getInfo($school, 'minSize'), SchoolClassResource::getInfo($school, 'maxSize'));
 
@@ -42,7 +50,6 @@ if ($baseId !== FALSE AND $school !== FALSE AND $name !== FALSE AND in_array($ba
 					if (SchoolClassResource::getInfo($school, 'credit') <= CTR::$data->get('playerInfo')->get('credit')) {
 						# tutorial
 						if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-							include_once ZEUS;
 							switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
 								case TutorialResource::CREATE_COMMANDER:
 									TutorialHelper::setStepDone();

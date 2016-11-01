@@ -1,4 +1,7 @@
 <?php
+
+use Asylamba\Modules\Gaia\Manager\SectorManager;
+
 $sm = new SectorManager();
 $sm->load();
 $rate = 750 / GalaxyConfiguration::$galaxy['size'];

@@ -1,6 +1,8 @@
 <?php
-include ATLAS;
-include ZEUS;
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Atlas\Model\PlayerRanking;
 
 $direction		= Utils::getHTTPData('dir');
 $current		= Utils::getHTTPData('current');
@@ -46,4 +48,3 @@ if ($direction !== FALSE && $current !== FALSE && $type !== FALSE) {
 		}
 	}
 }
-?>

@@ -1,3 +1,3 @@
 <?php
-include_once GAIA;
-GalaxyColorManager::apply();
+
+\Asylamba\Modules\Gaia\Manager\GalaxyColorManager::apply();

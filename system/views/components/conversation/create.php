@@ -1,4 +1,10 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Parser;
+
 echo '<div class="component size2 new-message">';
 	echo '<div class="head skin-5">';
 		echo '<h2>Démarrer une nouvelle conversation</h2>';

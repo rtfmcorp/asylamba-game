@@ -1,11 +1,13 @@
 <?php
-include_once ATHENA;
-include_once ZEUS;
-include_once GAIA;
 # cancel recycling mission
 
 # int id 			id de la mission
 # int place 		id de la base orbitale
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Athena\Model\RecyclingMission;
 
 for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -42,4 +44,3 @@ if ($missionId !== FALSE AND $rPlace !== FALSE AND in_array($rPlace, $verif)) {
 } else {
 	CTR::$alert->add('pas assez d\'informations pour supprimer une mission de recyclage', ALERT_STD_FILLFORM);
 }
-?>

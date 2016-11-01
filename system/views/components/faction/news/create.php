@@ -1,4 +1,7 @@
 <?php
+
+use Asylamba\Classes\Library\Format;
+
 echo '<div class="component new-message">';
 	echo '<div class="head skin-2">';
 		echo '<h2>Créer une annonce</h2>';

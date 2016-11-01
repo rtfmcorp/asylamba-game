@@ -1,4 +1,10 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 # require
 $S_PAM_DGG = ASM::$pam->getCurrentSession();
 ASM::$pam->changeSession($PLAYER_GOV_TOKEN);
@@ -23,9 +29,9 @@ echo '<div class="component profil player size1">';
 							echo '<a href="' . APP_ROOT . 'embassy/player-' .  ASM::$pam->get($i)->id . '">';
 								echo '<img src="' . MEDIA . 'avatar/small/' .  ASM::$pam->get($i)->avatar . '.png" alt="' .  ASM::$pam->get($i)->name . '"  class="picto" />';
 							echo '</a>';
-							echo '<span class="title">' . $status[ ASM::$pam->get($i)->status - 1] . '</span>';
+							echo '<span class="title">' . $status[ASM::$pam->get($i)->status - 1] . '</span>';
 							echo '<strong class="name">' .  ASM::$pam->get($i)->name . '</strong>';
-							echo '<span class="experience">' . Format::number( ASM::$pam->get($i)->factionPoint) . ' de prestige</span>';
+							echo '<span class="experience">' . Format::number(ASM::$pam->get($i)->factionPoint) . ' de prestige</span>';
 						echo '</div>';
 
 						echo '<a href="' . Format::actionBuilder('fireminister', ['rplayer' => ASM::$pam->get($i)->id]) . '" class="more-button">Démettre de ses fonctions</a>';
@@ -43,7 +49,7 @@ echo '<div class="component profil player size1">';
 							echo '<select name="rplayer">';
 								echo '<option value="-1">Choisissez un joueur</option>';
 								for ($j = 0; $j < ASM::$pam->size(); $j++) {
-									echo '<option value="' . ASM::$pam->get($j)->id . '">' . $status[ ASM::$pam->get($i)->status - 1] . ' ' . ASM::$pam->get($j)->name . '</option>';
+									echo '<option value="' . ASM::$pam->get($j)->id . '">' . $status[ASM::$pam->get($j)->status - 1] . ' ' . ASM::$pam->get($j)->name . '</option>';
 								}
 							echo '</select>';
 							echo '<button type="submit">Nommer au poste</button>';

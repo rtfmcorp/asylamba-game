@@ -1,6 +1,13 @@
 <?php
-include_once ZEUS;
-include_once DEMETER;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Parser;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Zeus\Model\CreditTransaction;
+use Asylamba\Modules\Hermes\Model\Notification;
+
 # give credit from faction to player action
 
 # int name 			destination player name
@@ -59,7 +66,7 @@ if ($name !== FALSE AND $quantity !== FALSE) {
 							} else {
 								$n->addTxt('.');
 							}
-							$n->addBoxResource('credit', Format::numberFormat($credit), 'crédits reçus');
+							$n->addBoxResource('credit', Format::numberFormat($credit), ($credit == 1 ? 'crédit reçu' : 'crédits reçus'));
 							$n->addEnd();
 							ASM::$ntm->add($n);
 

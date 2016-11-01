@@ -7,6 +7,11 @@
 # require
 	# {commander}		commander_commanderDetail
 
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Game;
+
 echo '<div class="component">';
 	echo '<div class="head skin-1"></div>';
 	echo '<div class="fix-body">';

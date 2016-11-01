@@ -1,5 +1,7 @@
 <?php
-include_once ZEUS;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
 
 if (CTR::$get->exist('bindkey')) {
 	$S_PAM_1 = ASM::$pam->getCurrentSession();
@@ -24,4 +26,3 @@ if (CTR::$get->exist('bindkey')) {
 		'message' => 'Donnée manquante'
 	));
 }
-?>

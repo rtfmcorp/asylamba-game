@@ -7,6 +7,8 @@
 # require
 	# {player}	player_playerTechnicalProfil
 
+use Asylamba\Classes\Library\Format;
+
 echo '<div class="component">';
 	echo '<div class="head">';
 	echo '</div>';
@@ -51,4 +53,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

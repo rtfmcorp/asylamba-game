@@ -1,6 +1,14 @@
 <?php
-include_once ZEUS;
-include_once HERMES;
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Parser;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Hermes\Model\ConversationUser;
+use Asylamba\Modules\Hermes\Model\Conversation;
+use Asylamba\Modules\Hermes\Model\ConversationMessage;
+
 
 $recipients 	= Utils::getHTTPData('recipients');
 $content 		= Utils::getHTTPData('content');
@@ -75,7 +83,7 @@ if ($recipients !== FALSE AND $content !== FALSE) {
 				ASM::$cme->add($message);
 
 				if (DATA_ANALYSIS) {
-					$db = DataBase::getInstance();
+					$db = Database::getInstance();
 					$qr = $db->prepare('INSERT INTO 
 						DA_SocialRelation(`from`, `to`, `type`, `message`, dAction)
 						VALUES(?, ?, ?, ?, ?)'

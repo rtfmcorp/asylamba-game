@@ -1,12 +1,16 @@
 <?php
-include_once ATHENA;
-include_once ZEUS;
-include_once GAIA;
 # create recycling mission
 
 # int rplace 		id de la base orbitale
 # int rtarget 		id de la place cible
 # int quantity 		recyclers quantity
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Athena\Model\RecyclingMission;
 
 for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -87,4 +91,3 @@ if ($rPlace !== FALSE AND $rTarget !== FALSE AND $quantity !== FALSE AND in_arra
 } else {
 	CTR::$alert->add('pas assez d\'informations pour créer une mission de recyclage', ALERT_STD_FILLFORM);
 }
-?>

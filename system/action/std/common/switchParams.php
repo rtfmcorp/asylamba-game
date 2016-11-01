@@ -1,4 +1,8 @@
 <?php
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Container\Params;
+
 $params = Utils::getHTTPData('params');
 
 if ($params !== FALSE) {
@@ -10,4 +14,3 @@ if ($params !== FALSE) {
 		}
 	}
 }
-?>

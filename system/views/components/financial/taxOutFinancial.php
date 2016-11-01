@@ -8,6 +8,10 @@
 	# [{orbitalBase}]			ob_taxOutFinancial
 
 # view part
+
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\Format;
+
 echo '<div class="component financial">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'financial/taxout.png" alt="" />';

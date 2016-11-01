@@ -1,9 +1,14 @@
 <?php
-include_once ATHENA;
-include_once ZEUS;
 # cancel a transaction action
 
 # int rtransaction 		id de la transaction
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Athena\Model\Transaction;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
 $rTransaction = Utils::getHTTPData('rtransaction');
 
@@ -57,7 +62,6 @@ if ($rTransaction !== FALSE) {
 						$base->addShipToDock($transaction->identifier, $transaction->quantity);
 						break;
 					case Transaction::TYP_COMMANDER :
-						include_once ARES;
 						$S_COM1 = ASM::$com->getCurrentSession();
 						ASM::$com->newSession(ASM_UMODE);
 						ASM::$com->load(array('c.id' => $transaction->identifier));
@@ -108,4 +112,3 @@ if ($rTransaction !== FALSE) {
 } else {
 	CTR::$alert->add('pas assez d\'informations pour annuler une proposition sur le marché', ALERT_STD_FILLFORM);
 }
-?>

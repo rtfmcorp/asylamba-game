@@ -2,10 +2,14 @@
 #rplayer	id du joueur
 #department
 
-$rPlayer = Utils::getHTTPData('rplayer');
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Modules\Hermes\Model\Notification;
 
-include_once ZEUS;
-include_once DEMETER;
+$rPlayer = Utils::getHTTPData('rplayer');
 
 if ($statusArray = ColorResource::getInfo(CTR::$data->get('playerInfo')->get('color'), 'regime') == Color::DEMOCRATIC) {
 	if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
@@ -14,7 +18,7 @@ if ($statusArray = ColorResource::getInfo(CTR::$data->get('playerInfo')->get('co
 		ASM::$clm->load(['id' => CTR::$data->get('playerInfo')->get('color')]);
 
 		if (ASM::$clm->get()->electionStatement == Color::MANDATE) {
-			$date = new DateTime(Utils::now());
+			$date = new \DateTime(Utils::now());
 			$date->modify('-' . ASM::$clm->get()->mandateDuration . ' second');
 			$date = $date->format('Y-m-d H:i:s');
 			ASM::$clm->get()->dLastElection = $date;			

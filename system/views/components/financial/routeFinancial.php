@@ -8,6 +8,10 @@
 	# [{orbitalBase}]			ob_routeFinancial
 
 # view part
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Format;
+
 echo '<div class="component financial">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'financial/commercial-route.png" alt="route commerciale" />';

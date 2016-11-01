@@ -1,17 +1,22 @@
 <?php
-# WORK PART
-###########
-include_once GAIA;
-include_once ATHENA;
 
-# load notif
-include_once HERMES;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Container\Params;
+use Asylamba\Modules\Gaia\Resource\PlaceResource;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Modules\Hermes\Model\RoadMap;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Zeus\Resource\TutorialResource;
+
 $S_NTM1 = ASM::$ntm->getCurrentSession();
 ASM::$ntm->newSession();
 ASM::$ntm->load(array('rPlayer' => CTR::$data->get('playerId'), 'readed' => 0), array('dSending', 'DESC'));
 
 # load message
-$db = DataBase::getInstance();
+$db = Database::getInstance();
 $qr = $db->prepare('SELECT COUNT(c.id) AS count
 	FROM `conversation` AS c
 	LEFT JOIN `conversationUser` AS u

@@ -1,4 +1,8 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Demeter\Model\Color;
+
 $eraseColor = isset($eraseColor)
 	? $eraseColor
 	: CTR::$data->get('playerInfo')->get('color');
@@ -32,4 +36,3 @@ echo '<div class="component player rank">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

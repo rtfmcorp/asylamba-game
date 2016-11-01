@@ -2,7 +2,9 @@
 # archive or unarchive action
 # int id 			id de la notif
 
-include_once HERMES;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
 
 $id = Utils::getHTTPData('id');
 

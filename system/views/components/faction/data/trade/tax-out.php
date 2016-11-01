@@ -1,5 +1,7 @@
 <?php
-include_once ATHENA;
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 $S_CTM_T = ASM::$ctm->getCurrentSession();
 ASM::$ctm->newSession();
@@ -26,4 +28,3 @@ echo '<div class="component player rank">';
 echo '</div>';
 
 ASM::$ctm->changeSession($S_CTM_T);
-?>

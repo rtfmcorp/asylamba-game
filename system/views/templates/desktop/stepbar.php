@@ -1,4 +1,7 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+
 echo '<div id="nav">';
 	echo '<div class="box left">';
 		$isActive = (!in_array(CTR::$get->get('step'), array(2, 3))) ? 'class="active"' : '';
@@ -25,4 +28,3 @@ echo '<div id="nav">';
 echo '</div>';
 
 echo '<div id="container">';
-?>

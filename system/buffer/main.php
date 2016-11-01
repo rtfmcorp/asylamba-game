@@ -1,6 +1,11 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Security;
+use Asylamba\Classes\Library\Utils;
+
 if (DEVMODE || CTR::$get->equal('key', KEY_BUFFER)) {
-include_once ZEUS;
 
 $S_PAM1 = ASM::$pam->getCurrentSession();
 ASM::$pam->newSession(FALSE);

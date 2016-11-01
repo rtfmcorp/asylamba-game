@@ -1,34 +1,37 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
+
 $scripts = [
 	'Déploiment' => [
-		['deploy.dbinstall', '/deploy/dbinstall.php'],
-		['deploy.newgalaxy', '/deploy/newgalaxy.php'],
+		['deploy_dbinstall', '/deploy/dbinstall.php'],
+		['deploy_newgalaxy', '/deploy/newgalaxy.php'],
 	],
 	'Tâches Cron' => [
-		['cron.daily', '/cron/daily.php'],
-		['cron.playerranking', '/cron/playerRanking.php'],
-		['cron.factionranking', '/cron/factionRanking.php'],
+		['cron_daily', '/cron/daily.php'],
+		['cron_playerranking', '/cron/playerRanking.php'],
+		['cron_factionranking', '/cron/factionRanking.php'],
 	],
 	'Utilitaires' => [
-		['utils.commanderAttack', '/utils/commanderAttack.php'],
-		['utils.sectors', '/utils/sectors.php'],
-		['utils.maprender', '/utils/map-render.php'],
-		['utils.findsectorinfos', '/utils/find-sector-infos.php'],
-		['utils.getstatistic', '/utils/get-stats.php'],
-		['utils.recolorsector', '/utils/recolor-sector.php'],
+		['utils_commanderAttack', '/utils/commanderAttack.php'],
+		['utils_sectors', '/utils/sectors.php'],
+		['utils_maprender', '/utils/map-render.php'],
+		['utils_findsectorinfos', '/utils/find-sector-infos.php'],
+		['utils_getstatistic', '/utils/get-stats.php'],
+		['utils_recolorsector', '/utils/recolor-sector.php'],
 	],
 	'Test' => [
-		['test.main', '/test/test.php'],
-		['test.http', '/test/http-data.php'],
-		['test.updateSenatAphera', '/test/updateSenate.php'],
+		['test_main', '/test/test.php'],
+		['test_http', '/test/http-data.php'],
+		['test_updateSenatAphera', '/test/updateSenate.php'],
 	],
 	'Migration' => [
-		['migration.color', '/migration/updateColor.php'],
-		['migration.recycling', '/migration/updateRecycling.php'],
-		['migration.sector', '/migration/updateSector.php'],
-		['migration.factionranking', '/migration/updateFactionRanking.php'],
-		['migration.addconversation', '/migration/add-conversation.php'],
-		['migration.removemessage', '/migration/remove-message.php'],
+		['migration_color', '/migration/updateColor.php'],
+		['migration_recycling', '/migration/updateRecycling.php'],
+		['migration_sector', '/migration/updateSector.php'],
+		['migration_factionranking', '/migration/updateFactionRanking.php'],
+		['migration_addconversation', '/migration/add-conversation.php'],
+		['migration_removemessage', '/migration/remove-message.php'],
 	]
 ];
 
@@ -60,9 +63,10 @@ if (DEVMODE || CTR::$get->equal('key', KEY_SCRIPT)) {
 			echo '</div>';
 		echo '</div>';
 	} else {
+                $requestedScript = CTR::$get->get('a');
 		foreach ($scripts as $typeScripts) {
 			foreach ($typeScripts as $i => $script) {
-				if (CTR::$get->get('a') == $script[0]) {
+				if ($requestedScript === $script[0]) {
 					$scrp = SCRIPT . 'scripts' . $script[1];
 					$name = $script[1];
 				}
@@ -83,4 +87,3 @@ if (DEVMODE || CTR::$get->equal('key', KEY_SCRIPT)) {
 }
 
 include SCRIPT . 'template/close.php';
-?>

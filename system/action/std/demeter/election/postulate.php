@@ -7,15 +7,21 @@
 #warlordchoice
 #ministerchoice
 
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Demeter\Model\Election\Candidate;
+use Asylamba\Modules\Demeter\Model\Forum\ForumTopic;
+use Asylamba\Modules\Demeter\Model\Election\Vote;
+use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 $rElection			 = Utils::getHTTPData('relection');
 $program			 = Utils::getHTTPData('program');
 $chiefChoice		 = Utils::getHTTPData('chiefchoice');
 $treasurerChoice	 = Utils::getHTTPData('treasurerchoice');
 $warlordChoice		 = Utils::getHTTPData('warlordchoice');
 $ministerChoice		 = Utils::getHTTPData('ministerchoice');
-
-include_once DEMETER;
-include_once ZEUS;
 
 if ($rElection !== FALSE && $program !== FALSE) {
 	$_ELM = ASM::$elm->getCurrentSession();

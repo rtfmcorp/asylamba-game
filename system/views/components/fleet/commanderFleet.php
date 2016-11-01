@@ -8,6 +8,9 @@
 	# {commander}		commander_commanderFleet
 	# {orbitalBase}		ob_commanderFleet
 
+use Asylamba\Modules\Ares\Resource\CommanderResources;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+
 $dockStorage = $ob_commanderFleet->getShipStorage();
 $lineCoord   = $commander_commanderFleet->getFormatLineCoord();
 

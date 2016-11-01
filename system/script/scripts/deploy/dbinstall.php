@@ -1,12 +1,19 @@
 <?php
-include_once ATHENA;
-include_once ZEUS;
-include_once GAIA;
-include_once DEMETER;
+
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Database\DatabaseAdmin;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Athena\Model\Transaction;
+use Asylamba\Modules\Hermes\Model\Conversation;
+use Asylamba\Modules\Hermes\Model\ConversationUser;
+use Asylamba\Modules\Gaia\Helper\GalaxyGenerator;
 
 include CONFIG . 'app.config.install.php';
 
-$db = DataBaseAdmin::getInstance();
+$db = DatabaseAdmin::getInstance();
 
 $db->query('SET FOREIGN_KEY_CHECKS = 0;');
 
@@ -501,8 +508,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `commercialShipping` (
 	`resourceTransported` INT DEFAULT NULL,
 	`shipQuantity` INT NOT NULL,
 
-	`dDeparture` datetime NOT NULL,
-	`dArrival` datetime NOT NULL,
+	`dDeparture` datetime,
+	`dArrival` datetime,
 	`statement` SMALLINT NOT NULL COMMENT '0 = prêt au départ, 1 = aller, 2 = retour',
 
 	PRIMARY KEY (`id`)
@@ -957,7 +964,7 @@ echo '<h1>Ajout du module de Conversation</h1>';
 
 echo '<h2>Ajout de la table Conversation</h2>';
 
-$db = DataBase::getInstance();
+$db = Database::getInstance();
 $db->query("DROP TABLE IF EXISTS `conversation`");
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `conversation` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -972,7 +979,7 @@ $qr->execute();
 
 echo '<h2>Ajout de la table userConversation</h2>';
 
-$db = DataBase::getInstance();
+$db = Database::getInstance();
 $db->query("DROP TABLE IF EXISTS `conversationUser`");
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `conversationUser` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -987,7 +994,7 @@ $qr->execute();
 
 echo '<h2>Ajout de la table messageConversation</h2>';
 
-$db = DataBase::getInstance();
+$db = Database::getInstance();
 $db->query("DROP TABLE IF EXISTS `conversationMessage`");
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `conversationMessage` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,

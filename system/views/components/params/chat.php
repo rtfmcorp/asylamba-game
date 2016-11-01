@@ -1,4 +1,8 @@
 <?php
+
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Container\Params;
+
 echo '<div class="component new-message">';
 	echo '<div class="head skin-5">';
 		echo '<h2>Paramètres du chat</h2>';

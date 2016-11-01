@@ -1,12 +1,22 @@
 <?php
-include_once ATHENA;
-include_once GAIA;
 # give resources action
 
 # int baseid 		id (rPlace) de la base orbitale
 # int otherbaseid 	id (rPlace) de la base orbitale à qui on veut envoyer des ressources
 # int quantity 		quantité de ressources à envoyer
 # [int identifier]	shipId
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Athena\Model\Transaction;
+use Asylamba\Modules\Athena\Model\CommercialShipping;
+use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Classes\Database\Database;
 
 for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
@@ -120,7 +130,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND in_array($baseId, $verif)) 
 									}
 
 									if (DATA_ANALYSIS) {
-										$db = DataBase::getInstance();
+										$db = Database::getInstance();
 										$qr = $db->prepare('INSERT INTO 
 											DA_CommercialRelation(`from`, `to`, type, weight, dAction)
 											VALUES(?, ?, ?, ?, ?)'

@@ -1,4 +1,6 @@
 <?php
+
+use Asylamba\Classes\Worker\CTR;
 # démarre la redirection standard vers la page précédente
 CTR::redirect();
 
@@ -140,4 +142,3 @@ if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('tok
 } else {
 	CTR::$alert->add('votre token CSRF a expiré', ALERT_STD_ERROR);
 }
-?>

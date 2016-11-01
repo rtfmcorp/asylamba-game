@@ -1,8 +1,11 @@
 <?php
-include_once HERMES;
 # read notification action
 
 # int notif 		notif id
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
 
 $notif = Utils::getHTTPData('notif');
 
@@ -22,4 +25,3 @@ if ($notif !== FALSE) {
 } else {
 	CTR::$alert->add('Erreur dans la requête AJAX', ALERT_STD_FILLFORM);
 }
-?>

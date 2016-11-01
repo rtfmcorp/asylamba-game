@@ -1,11 +1,13 @@
 <?php
-include_once DEMETER;
-include_once ZEUS;
 
 #rlaw	id de la loi
 
-$rLaw = Utils::getHTTPData('rlaw');
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Demeter\Resource\LawResources;
 
+$rLaw = Utils::getHTTPData('rlaw');
 
 if ($rLaw !== FALSE) {
 	if (CTR::$data->get('playerInfo')->get('status') == LawResources::getInfo($type, 'department')) {

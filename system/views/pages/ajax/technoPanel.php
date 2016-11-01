@@ -1,5 +1,10 @@
 <?php
-include PROMETHEE;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Promethee\Resource\ResearchResource;
+use Asylamba\Modules\Promethee\Model\Technology;
+use Asylamba\Modules\Promethee\Resource\TechnologyResource;
 
 $tech = CTR::$get->get('techno');
 if (TechnologyResource::isATechnology($tech) AND !TechnologyResource::isATechnologyNotDisplayed($tech)) {
@@ -45,4 +50,3 @@ if (TechnologyResource::isATechnology($tech) AND !TechnologyResource::isATechnol
 	# component
 	include COMPONENT . 'tech/infoTech.php';
 }
-?>

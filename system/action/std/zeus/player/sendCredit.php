@@ -1,5 +1,15 @@
 <?php
-include_once ZEUS;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Parser;
+use Asylamba\Classes\Library\DataAnalysis;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Zeus\Model\CreditTransaction;
+use Asylamba\Modules\Hermes\Model\Notification;
+
 # give credit action
 
 # int name 			destination player name
@@ -55,12 +65,12 @@ if ($name !== FALSE AND $quantity !== FALSE) {
 					} else {
 						$n->addTxt('.');
 					}
-					$n->addBoxResource('credit', Format::numberFormat($credit), 'crédits reçus');
+					$n->addBoxResource('credit', Format::numberFormat($credit), ($credit == 1 ? 'crédit reçu' : 'crédits reçus'));
 					$n->addEnd();
 					ASM::$ntm->add($n);
 
 					if (DATA_ANALYSIS) {
-						$db = DataBase::getInstance();
+						$db = Database::getInstance();
 						$qr = $db->prepare('INSERT INTO 
 							DA_CommercialRelation(`from`, `to`, type, weight, dAction)
 							VALUES(?, ?, ?, ?, ?)'

@@ -7,6 +7,10 @@
 # require
 	# [{notification}]	notification_lastNotif
 
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Chronos;
+
 $S_NTM_SCOPE = ASM::$ntm->getCurrentSession();
 ASM::$ntm->changeSession($C_NTM1);
 
@@ -24,7 +28,7 @@ echo '<div class="component">';
 			
 			echo '<p class="info" id="info-notif" style="display:none;">';
 				echo 'Les notifications sont les messages que vous recevez du gouvernement de votre ou vos planètes. Ces messages vous avertissent de 
-				toutes les actions qui prennent fin dans le jeu, comme les constructions, les attaques et les développements technologiques par exemple. 
+				toutes les actions qui prennent fin dans le jeu, comme les attaques et les développements technologiques par exemple. 
 				Elles vous permettent d’avoir un compte rendu de toutes vos activités sur Asylamba.<br/>Au bout d\'un certain temps, elles seront automatiquement supprimées, sauf si vous les archivez.';
 			echo '</p>'; 
 			
@@ -51,4 +55,3 @@ echo '<div class="component">';
 echo '</div>';
 
 ASM::$ntm->changeSession($S_NTM_SCOPE);
-?>

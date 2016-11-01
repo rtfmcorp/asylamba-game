@@ -1,7 +1,10 @@
 <?php
 # int id 			id du rapport
 
-include_once ARES;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Ares\Model\Report;
 
 $id = Utils::getHTTPData('id');
 

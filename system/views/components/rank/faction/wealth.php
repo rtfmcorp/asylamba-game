@@ -7,6 +7,8 @@
 # require
 	# _T PRM 		FACTION_RANKING_WEALTH
 
+use Asylamba\Classes\Worker\ASM;
+
 ASM::$frm->changeSession($FACTION_RANKING_WEALTH);
 
 echo '<div class="component player rank">';

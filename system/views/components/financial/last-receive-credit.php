@@ -1,4 +1,11 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Zeus\Model\CreditTransaction;
+
 # load
 $S_CRT_1 = ASM::$crt->getCurrentSession();
 ASM::$crt->newSession();
@@ -26,7 +33,7 @@ echo '<div class="component player rank">';
 					$status = ColorResource::getInfo($transaction->senderColor, 'status');
 					echo '<span class="title">' . $status[$transaction->senderStatus - 1] . '</span>';
 					echo '<strong class="name">' . $transaction->senderName . '</strong>';
-					echo '<span class="experience">' . Format::number($transaction->amount) . ' crédits</span>';
+					echo '<span class="experience">' . Format::number($transaction->amount) . ($transaction->amount == 1 ? ' crédit' : ' crédits') . '</span>';
 				echo '</div>';
 			}
 

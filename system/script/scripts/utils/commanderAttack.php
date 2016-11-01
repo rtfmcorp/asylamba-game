@@ -1,7 +1,7 @@
 <?php
 #avance l'attaque de tous les officiers
-
-include_once ARES;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Ares\Model\Commander;
 
 ASM::$com->newSession();
 ASM::$com->load(['c.statement' => Commander::MOVING]);

@@ -1,10 +1,14 @@
 <?php
-include_once ARES;
 
 # affect a commander
 
 # int id 	 		id du commandant
 # string name 		nom du commandant
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Parser;
 
 $id = Utils::getHTTPData('id');
 $name = Utils::getHTTPData('name');
@@ -36,5 +40,3 @@ if ($id !== FALSE) {
 } else {
 	CTR::$alert->add('manque d\'information', ALERT_BUG_ERROR);
 }
-
-?>

@@ -1,8 +1,11 @@
 <?php
-include_once ATHENA;
-include_once ARES;
-include_once GAIA;
-include_once DEMETER;
+
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Container\ArrayList;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
 # création des tableaux de données dans le contrôler
 CTR::$data->initPlayerInfo();
@@ -179,4 +182,3 @@ for ($i = 0; $i < ASM::$com->size(); $i++) {
 }
 ASM::$plm->changeSession($S_PLM1);
 ASM::$com->changeSession($S_COM2);
-?>

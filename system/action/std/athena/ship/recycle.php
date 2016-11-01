@@ -1,10 +1,14 @@
 <?php
-include_once ATHENA;
 # dequeue ship action
 
 # int baseId 		id (rPlace) de la base orbitale
 # int typeofship 	type de vaisseau
 # int quantity 			nombre de vaisseaux à recycler
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Athena\Resource\ShipResource;
 
 $baseId = Utils::getHTTPData('baseid');
 $typeOfShip = Utils::getHTTPData('typeofship');
@@ -31,4 +35,3 @@ if ($baseId !== FALSE AND $typeOfShip !== FALSE AND $quantity !== FALSE) {
 } else {
 	CTR::$alert->add('pas assez d\'informations', ALERT_STD_FILLFORM);
 }
-?>

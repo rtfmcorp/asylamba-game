@@ -1,4 +1,9 @@
 <?php
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\API;
+use Asylamba\Classes\Worker\CTR;
+
 $email = Utils::getHTTPData('email');
 
 $sponsorLink = GETOUT_ROOT . 'action/a-invitation/i-' . CTR::$data->get('playerId') . '/s-' . APP_ID;
@@ -13,4 +18,3 @@ if ($ok) {
 	CTR::$alert->add('L\'e-mail n\'a pas pu être envoyé, veuillez ré-essayer. Si cela persiste, contactez un administrateur.', ALERT_STD_ERROR);
 }
 
-?>

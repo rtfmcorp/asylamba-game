@@ -1,4 +1,11 @@
 <?php
+
+use Asylamba\Modules\Hermes\Model\ConversationUser;
+use Asylamba\Modules\Hermes\Model\Conversation;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 echo '<div class="component player rank new-message">';
 	echo '<div class="head skin-2"></div>';
 	echo '<div class="fix-body">';

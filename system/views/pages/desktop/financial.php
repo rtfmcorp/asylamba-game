@@ -1,4 +1,11 @@
 <?php
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Athena\Model\Transaction;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Classes\Library\Game;
+
 # background paralax
 echo '<div id="background-paralax" class="financial"></div>';
 
@@ -11,11 +18,6 @@ echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
 
 	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'invest') {
-		# inclusion des modules
-		include_once ATHENA;
-		include_once ZEUS;
-		include_once ARES;
-
 		# loading des objets
 		$S_PAM_FIN = ASM::$pam->getCurrentSession();
 		ASM::$pam->newSession();

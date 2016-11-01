@@ -13,4 +13,3 @@ echo '<div class="modal">';
 		echo '<input type="text" class="autocomplete-orbitalbase" autocomplete="off" />';
 	echo '</form>';
 echo '</div>';
-?>

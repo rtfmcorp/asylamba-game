@@ -1,4 +1,8 @@
 <?php
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\CTR;
+
 $discordId = Utils::getHTTPData('discord-id');
 
 if ($discordId !== FALSE AND $discordId !== '') {
@@ -50,4 +54,3 @@ if ($discordId !== FALSE AND $discordId !== '') {
 } else {
 	CTR::$alert->add('il faut entrer votre identifiant Discord dans le champ de texte', ALERT_STD_FILLFORM);
 }
-?>

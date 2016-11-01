@@ -1,6 +1,8 @@
 <?php
-include_once ZEUS;
-include_once DEMETER;
+
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\ASM;
 
 # string description 	description à envoyer
 

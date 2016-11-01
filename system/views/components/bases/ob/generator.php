@@ -8,6 +8,16 @@
 	# {orbitalBase}		ob_generator
 
 # work
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Modules\Promethee\Model\Technology;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+
 $q = '';
 $b = array('', '', '', '', '', '', '', '', '', '');
 $realSizeQueue = 0;
@@ -203,4 +213,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

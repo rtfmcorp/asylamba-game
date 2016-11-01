@@ -1,5 +1,7 @@
 <?php
-include_once ATLAS;
+
+use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Format;
 
 $S_FRM1 = ASM::$frm->getCurrentSession();
 ASM::$frm->newSession();
@@ -51,4 +53,3 @@ echo '<div class="component profil">';
 echo '</div>';
 
 ASM::$frm->changeSession($S_FRM1);
-?>
