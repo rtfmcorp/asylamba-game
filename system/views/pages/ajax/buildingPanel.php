@@ -6,6 +6,7 @@ use Asylamba\Classes\Library\Chronos;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Gaia\Resource\PlaceResource;
 
 $building 		= Utils::getHTTPData('building');
 $currentLevel 	= Utils::getHTTPData('lvl');
