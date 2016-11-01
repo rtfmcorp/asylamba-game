@@ -3,7 +3,8 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "Asylamba\\": "system/"
+            "Asylamba\\": "system/",
+            "Tests\\Asylamba\\": "tests/"
         }
     },
     "require": {
