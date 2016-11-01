@@ -43,6 +43,7 @@ Good practices
 - the comments are in english or french
 - the commits names must be clear (in french or english)
 - a commit modifies/improves one thing, it must be clear and concise
+- each modification must be unit tested to ensure the safety of the code
 
 
 Modify the front-end
@@ -55,3 +56,12 @@ If you want to modify the CSS, you must edit the [LESS](http://lesscss.org) file
 The dependencies will be installed in the `node_modules/` folder. To compile the CSS, just type :
 
     gulp less
+
+Application testing
+---------------------
+
+You can use the following command to run the tests :
+
+```sh
+make test
+```
