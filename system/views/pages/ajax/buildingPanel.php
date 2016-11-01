@@ -1,10 +1,11 @@
 <?php
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Chronos;
 use Asylamba\Classes\Library\Game;
+use Asylamba\Modules\Athena\Model\OrbitalBase;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 
 $building 		= Utils::getHTTPData('building');
 $currentLevel 	= Utils::getHTTPData('lvl');

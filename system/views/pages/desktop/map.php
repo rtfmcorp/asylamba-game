@@ -3,7 +3,6 @@
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Gaia\Manager\SectorManager;
-use GalaxyConfiguration;
 
 $sm = new SectorManager();
 $sm->load();

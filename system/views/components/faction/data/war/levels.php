@@ -1,5 +1,6 @@
 <?php
 
+use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 

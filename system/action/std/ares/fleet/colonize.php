@@ -14,6 +14,7 @@ use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Demeter\Model\Color;
 
 $commanderId = Utils::getHTTPData('commanderid');
 $placeId = Utils::getHTTPData('placeid');

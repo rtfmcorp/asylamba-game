@@ -14,6 +14,7 @@ use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
+use Asylamba\Modules\Ares\Model\Commander;
 
 $rPlace = Utils::getHTTPData('rplace');
 $price 	= Utils::getHTTPData('price');
