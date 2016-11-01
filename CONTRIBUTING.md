@@ -42,6 +42,7 @@ Les bonnes pratiques
 - les commentaires sont en anglais ou en français
 - les commits doivent avoir un nom clair (soit en français soit en anglais)
 - un commit modifie/améliore une chose, ça doit être clair et concis
+- chaque modification/ajout doit être accompagné de tests unitaires pertinents assurant le bon fonctionnement du code
 
 
 Modifier l'interface
@@ -54,3 +55,13 @@ Si vous souhaitez modifier le CSS, il faudra éditer les fichiers au format [LES
 Les dépendances s'installeront dans le dossier `node_modules/`. Pour compiler le CSS, il suffit de taper :
 
     gulp less
+
+
+Tester l'application
+---------------------
+
+Pour lancer les tests automatisés de l'application, vous pouvez lancer la commande suivante :
+
+```sh
+make test
+```
