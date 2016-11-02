@@ -1,3 +1,13 @@
+## [Unreleased]
+### Added
+- Container class for services and parameters
+- Application core class
+- Tests PSR-4 autoload
+- Tests shortcut command
+
+### Removed
+- Support of HHVM
+
 ## [2.0.0] - 2016-11-01
 ### Added
 * Composer project file
