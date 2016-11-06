@@ -4,6 +4,7 @@
 - Application core class
 - Tests PSR-4 autoload
 - Tests shortcut command
+- Services and parameters configuration files
 
 ### Removed
 - Support of HHVM
