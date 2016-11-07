@@ -28,13 +28,31 @@ use Asylamba\Modules\Gaia\Manager\GalaxyColorManager;
 class PlayerManager extends Manager {
 	protected $managerType = '_Player';
 
+	protected $database;
+	
+	protected $sectorManager;
+	
+	protected $notificationManager;
+	
+	protected $orbitalBaseManager;
+	
+	protected $placeManager;
+	
+	public function __construct(Database $database, SectorManager $sectorManager, NotificationManager $notificationManager, OrbitalBaseManager $orbitalBaseManager, PlaceManager $placeManager)
+	{
+		$this->database = $database;
+		$this->sectorManager = $sectorManager;
+		$this->notificationManager = $notificationManager;
+		$this->orbitalBaseManager = $orbitalBaseManager;
+		$this->placeManager = $placeManager;
+	}
+			
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'p.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT p.*
+		$qr = $this->database->prepare('SELECT p.*
 			FROM player AS p
 			' . $formatWhere . '
 			' . $formatOrder . '
@@ -91,8 +109,7 @@ class PlayerManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT p.*
+		$qr = $this->database->prepare('SELECT p.*
 			FROM player AS p
 			WHERE LOWER(name) LIKE LOWER(?)
 			' . $formatOrder . ' 
@@ -146,8 +163,7 @@ class PlayerManager extends Manager {
 	}
 
 	public function add(Player $p) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
+		$qr = $this->database->prepare('INSERT INTO
 			player(bind, rColor, name, sex, description, avatar, status, rGodfather, credit, uPlayer, experience, factionPoint, level, victory, defeat, stepTutorial, stepDone, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, dInscription, dLastConnection, dLastActivity, premium, statement)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
@@ -189,8 +205,7 @@ class PlayerManager extends Manager {
 		$players = $this->_Save();
 
 		foreach ($players AS $p) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE player
+			$qr = $this->database->prepare('UPDATE player
 				SET	id = ?,
 					bind = ?,
 					rColor = ?,
@@ -265,10 +280,10 @@ class PlayerManager extends Manager {
 	}
 
 	public function kill($player) {
-		$S_PAM1 = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession(FALSE);
-		ASM::$pam->load(array('id' => $player));
-		$p = ASM::$pam->get();
+		$S_PAM1 = $this->getCurrentSession();
+		$this->newSession(FALSE);
+		$this->load(array('id' => $player));
+		$p = $this->get();
 
 		# API call
 		$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
@@ -276,20 +291,20 @@ class PlayerManager extends Manager {
 
 		# check if there is no other player with the same dead-name
 		$futureName = '&#8224; ' . $p->name . ' ';
-		$S_PAM_INSCR = ASM::$pam->getCurrentSession();
+		$S_PAM_INSCR = $this->getCurrentSession();
 		while(TRUE) {
 
-			ASM::$pam->newSession(FALSE);
-			ASM::$pam->load(array('name' => $futureName));
+			$this->newSession(FALSE);
+			$this->load(array('name' => $futureName));
 
-			if (ASM::$pam->size() == 0) {
+			if ($this->size() == 0) {
 				break;
 			} else {
 				# on ajoute un 'I' à chaque fois
 				$futureName .= 'I';
 			}
 		};
-		ASM::$pam->changeSession($S_PAM_INSCR);
+		$this->changeSession($S_PAM_INSCR);
 
 		# deadify the player
 		$p->name = $futureName;
@@ -297,28 +312,27 @@ class PlayerManager extends Manager {
 		$p->bind = NULL;
 		$p->rColor = 0;
 
-		ASM::$pam->changeSession($S_PAM1);
+		$this->changeSession($S_PAM1);
 	}
 
 	public function reborn($player) {
-		$S_PAM1 = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession(FALSE);
-		ASM::$pam->load(array('id' => $player));
-		$player = ASM::$pam->get();
+		$S_PAM1 = $this->getCurrentSession();
+		$this->newSession(FALSE);
+		$this->load(array('id' => $player));
+		$player = $this->get();
 
 		# sector choice 
-		$S_SEM1 = ASM::$sem->getCurrentSession();
-		ASM::$sem->newSession(FALSE);
-		ASM::$sem->load(array('rColor' => $player->rColor), array('id', 'DESC'));
+		$S_SEM1 = $this->sectorManager->getCurrentSession();
+		$this->sectorManager->newSession(FALSE);
+		$this->sectorManager->load(array('rColor' => $player->rColor), array('id', 'DESC'));
 
 		$placeFound = FALSE;
 		$place = NULL;
-		for ($i = 0; $i < ASM::$sem->size(); $i++) { 
-			$sector = ASM::$sem->get($i);
+		for ($i = 0; $i < $this->sectorManager->size(); $i++) { 
+			$sector = $this->sectorManager->get($i);
 
 			# place choice
-			$db = Database::getInstance();
-			$qr = $db->prepare('SELECT * FROM place AS p
+			$qr = $this->database->prepare('SELECT * FROM place AS p
 				INNER JOIN system AS sy ON p.rSystem = sy.id
 					INNER JOIN sector AS se ON sy.rSector = se.id
 				WHERE p.typeOfPlace = 1
@@ -335,8 +349,7 @@ class PlayerManager extends Manager {
 				break;
 			}
 		}
-
-		ASM::$sem->changeSession($S_SEM1);
+		$this->sectorManager->changeSession($S_SEM1);
 
 		if ($placeFound) {
 
@@ -384,17 +397,17 @@ class PlayerManager extends Manager {
 			# ajout de la base
 			$ob->uOrbitalBase = Utils::now();
 			$ob->dCreation = Utils::now();
-			ASM::$obm->add($ob);
+			$this->orbitalBaseManager->add($ob);
 
 			# modification de la place
-			$_PLM8761 = ASM::$plm->getCurrentSession();
-			ASM::$plm->newSession();
-			ASM::$plm->load(array('id' => $place));
-			ASM::$plm->get()->rPlayer = $player->id;
-			ASM::$plm->get()->population = 50;
-			ASM::$plm->get()->coefResources = 60;
-			ASM::$plm->get()->coefHistory = 20;
-			ASM::$plm->changeSession($_PLM8761);
+			$_PLM8761 = $this->placeManager->getCurrentSession();
+			$this->placeManager->newSession();
+			$this->placeManager->load(array('id' => $place));
+			$this->placeManager->get()->rPlayer = $player->id;
+			$this->placeManager->get()->population = 50;
+			$this->placeManager->get()->coefResources = 60;
+			$this->placeManager->get()->coefHistory = 20;
+			$this->placeManager->changeSession($_PLM8761);
 
 			GalaxyColorManager::apply();
 
@@ -406,19 +419,18 @@ class PlayerManager extends Manager {
 			$notif->addBeg()
 				->addTxt('Vous vous êtes malheureusement fait prendre votre dernière planète. Une nouvelle colonie vous a été attribuée')
 				->addEnd();
-			ASM::$ntm->add($notif);
+			$this->notificationManager->add($notif);
 		} else {
 			# si on ne trouve pas de lieu pour le faire poper ou si la faction n'a plus de secteur, le joueur meurt
 			$this->kill($player);
 		}
-		ASM::$pam->changeSession($S_PAM1);
+		$this->playerManager->changeSession($S_PAM1);
 	}
 
 	public static function count($where = array()) {
 		$formatWhere = Utils::arrayToWhere($where);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT COUNT(id) AS nbr FROM player ' . $formatWhere);
+		$qr = $this->database->prepare('SELECT COUNT(id) AS nbr FROM player ' . $formatWhere);
 
 		$valuesArray = array();
 		foreach($where AS $v) {
