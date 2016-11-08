@@ -5,7 +5,7 @@ namespace Tests\Asylamba\Classes\Worker;
 use Asylamba\Classes\Worker\Application;
 use Asylamba\Classes\Worker\Container;
 
-use Asylamba\Classes\Library\Parser;
+use Asylamba\Modules\Ares\AresModule;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase {
 	protected $application;
@@ -21,7 +21,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 		
 		$container = $this->application->getContainer();
 		$this->assertInstanceOf(Container::class, $container);
-		$this->assertInstanceOf(Parser::class, $container->get('parser'));
-		$this->assertCount(6, $container->getParameters());
+		$this->assertCount(74, $container->getParameters());
+		$this->assertCount(9, $this->application->getModules());
+		$this->assertINstanceOf(AresModule::class, $this->application->getModule('ares'));
 	}
 }
