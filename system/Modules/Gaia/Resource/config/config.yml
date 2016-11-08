@@ -1,0 +1,6 @@
+---
+parameters:
+    gaia.limit_conquest_sector: 4
+    
+services:
+    
