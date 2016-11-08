@@ -1,0 +1,29 @@
+---
+parameters:
+    zeus.player.base_level: 1250
+    zeus.player.base_commander_level: 100
+    zeus.player.base_ap: 10
+    zeus.player.coeff_ap: 5
+
+    zeus.player.tax_coeff: 1
+
+    zeus.player.active: 1
+    zeus.player.inactive: 2
+    zeus.player.holiday: 3
+    zeus.player.banned: 4
+    zeus.player.deleted: 5
+    zeus.player.dead: 6
+
+    zeus.player.standard: 1
+    zeus.player.parliament: 2
+    zeus.player.treasurer: 3
+    zeus.player.warlord: 4
+    zeus.player.minister: 5
+    zeus.player.chief: 6
+
+    zeus.player.ally_inactive_time: 24 * 7
+    zeus.player.global_inactive_time: 24 * 15
+    zeus.player.inactive_time_limit: 24 * 25
+
+services:
+    

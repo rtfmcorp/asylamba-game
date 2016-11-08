@@ -1,0 +1,31 @@
+---
+parameters:
+    ares.commander.base_level: 100
+    ares.commander.income_level: 200
+    
+    ares.coeff.move_in_system: 584
+    ares.coeff.move_out_of_system: 600
+    ares.coeff.move_intersystem: 1000
+    
+    ares.coeff.colonization_cost: 80000
+    ares.coeff.conquest_cost: 150000
+    
+    ares.loot_limit: 5000
+    ares.coeff.loot: 275
+    
+    ares.commander.school: 0
+    ares.commander.affected: 1
+    ares.commander.moving: 2
+    ares.commander.dead: 3
+    ares.commander.desert: 4
+    ares.commander.retired: 5
+    ares.commander.on_sale: 6
+    
+    ares.commander.move: 0
+    ares.commander.loot: 1
+    ares.commander.colonize: 2
+    ares.commander.returning: 3
+    
+    
+services:
+    
