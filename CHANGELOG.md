@@ -5,6 +5,7 @@
 - Tests PSR-4 autoload
 - Tests shortcut command
 - Services and parameters configuration files
+- Module main class with specific configuration file
 
 ### Removed
 - Support of HHVM
