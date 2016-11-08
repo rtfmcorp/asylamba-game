@@ -4,9 +4,11 @@
 - Application core class
 - Tests PSR-4 autoload
 - Tests shortcut command
+- Services and parameters configuration files
 
 ### Removed
 - Support of HHVM
+- Support of PHP 5.5
 
 ## [2.0.0] - 2016-11-01
 ### Added

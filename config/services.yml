@@ -1,0 +1,20 @@
+---
+services:
+    database:
+        class: Asylamba\Classes\Database\Database
+        arguments:
+            - "%database_host"
+            - "%database_name"
+            - "%database_user"
+            - "%database_password"
+            
+    database_admin:
+        class: Asylamba\Classes\Database\DatabaseAdmin
+        arguments:
+            - "%database_host"
+            - "%database_name"
+            - "%database_admin_user"
+            - "%database_admin_password"
+            
+    parser:
+        class: Asylamba\Classes\Library\Parser

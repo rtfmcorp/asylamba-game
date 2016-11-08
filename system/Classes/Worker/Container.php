@@ -20,7 +20,7 @@ class Container {
         }
         $this->services[$key] = [
             'class' => $definition['class'],
-            'arguments' => $definition['arguments'],
+            'arguments' => (isset($definition['arguments'])) ? $definition['arguments'] : [],
             'instance' => null
         ];
     }
@@ -77,19 +77,12 @@ class Container {
 	 * @param array $service
 	 * @return object
 	 */
-	protected function instanciateService($service, $args = [])
+	protected function instanciateService($service, $args)
 	{
 		if (count($args) === 0) {
 			return new $service['class']();
-		} elseif (version_compare(phpversion(), '5.6.0', '>=')) {
-			return new $service['class'](eval('...') . $args);
-		} else {
-			$reflect = new \ReflectionClass($service['class']);
-			if (!$reflect->hasMethod('__construct')) {
-				return new $service['class'];
-			}
-			return $reflect->newInstance($args);
 		}
+		return new $service['class'](...$args);
 	}
     
     /**
