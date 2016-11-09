@@ -18,3 +18,14 @@ services:
             
     parser:
         class: Asylamba\Classes\Library\Parser
+        arguments:
+            - "@database"
+            - "@player_manager"
+            - "@place_manager"
+            
+    player_manager:
+        class: Asylamba\Modules\Zeus\Manager\PlayerManager
+        
+    place_manager:
+        class: Asylamba\Modules\Gaia\Manager\PlaceManager
+

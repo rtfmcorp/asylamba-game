@@ -1,0 +1,24 @@
+---
+parameters:
+    # routes commerciales
+    athena.trade.route.cancellation_refund: 0.8	# 80% de crédits rendu si on annule la route avant qu'elle soit acceptée
+    athena.trade.route.sector_bonus: 1.1
+    athena.trade.route.color_bonus: 1.5
+    athena.trade.experience_coeff: 0.1
+
+    # pourcentage de ressources rendues lors
+    # de l'annulation d'une construciton de batiment
+    athena.building.bqm_resource_refund: 0.5 # 50%
+    athena.building.sqm_resource_refund: 0.5 # 50%
+
+    # commercialRoute statement
+    athena.trade.route.proposed: 0
+    athena.trade.route.active: 1
+    athena.trade.route.stand_by: 2
+
+    # type of base constants
+    athena.obm.change_type_min_level: 20 # minimal generator level
+    athena.obm.capital_min_level: 35 # minimal generator level to build a capital base
+
+services:
+    
