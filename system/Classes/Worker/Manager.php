@@ -4,6 +4,8 @@ namespace Asylamba\Classes\Worker;
 
 use Asylamba\Classes\Library\Bug;
 
+use Asylamba\Classes\Database\Database;
+
 abstract class Manager {
     // SESSION MANAGER CORE
     /** @var string **/
@@ -11,8 +13,15 @@ abstract class Manager {
     protected $currentSession;
     /** @var array **/
     protected $sessions = array();
-
-    public function __construct() {
+	/** @var Database **/
+	protected $database;
+	
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database)
+	{
+		$this->database = $database;
         $this->newSession();
     }
 
