@@ -17,18 +17,28 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
-use Asylamba\Classes\Worker\ASM;
 
 class ColorManager extends Manager {
+	/** @var string **/
 	protected $managerType ='_Color';
-
+	/** @var PlayerManager **/
+	protected $playerManager;
+	
+	/**
+	 * @param Database $database
+	 * @param PlayerManager $playerManager
+	 */
+	public function __construct(Database $database, PlayerManager $playerManager) {
+		parent::__construct($database);
+		$this->playerManager = $playerManager;
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'c.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT c.*
+		$qr = $this->database->prepare('SELECT c.*
 			FROM color AS c
 			' . $formatWhere .'
 			' . $formatOrder .'
@@ -55,7 +65,7 @@ class ColorManager extends Manager {
 
 		$qr->closeCursor();
 
-		$qr = $db->prepare('SELECT c.*
+		$qr = $this->database->prepare('SELECT c.*
 			FROM colorLink AS c ORDER BY rColorLinked'
 		);
 
@@ -128,8 +138,7 @@ class ColorManager extends Manager {
 		$colors = $this->_Save();
 
 		foreach ($colors AS $color) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE color
+			$qr = $this->database->prepare('UPDATE color
 				SET
 					alive = ?,
 					isWinner = ?,
@@ -164,7 +173,7 @@ class ColorManager extends Manager {
 					$color->id
 				));
 
-			$qr2 = $db->prepare('UPDATE colorLink SET
+			$qr2 = $this->database->prepare('UPDATE colorLink SET
 					statement = ? WHERE rColor = ? AND rColorLinked = ?
 				');
 
@@ -175,9 +184,7 @@ class ColorManager extends Manager {
 	}
 
 	public function add($newColor) {
-		$db = Database::getInstance();
-
-		$qr = $db->prepare('INSERT INTO color
+		$qr = $this->database->prepare('INSERT INTO color
 		SET
 			id = ?,
 			alive = ?,
@@ -212,7 +219,7 @@ class ColorManager extends Manager {
 				$color->dLastElection
 			));
 
-		$newColor->id = $db->lastInsertId();
+		$newColor->id = $this->database->lastInsertId();
 
 		$this->_Add($newColor);
 
@@ -220,8 +227,7 @@ class ColorManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM color WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM color WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);
@@ -235,32 +241,32 @@ class ColorManager extends Manager {
 	}
 
 	public static function updatePlayers($id) {
-		$_CLM1 = ASM::$clm->getCurrentSession();
-		ASM::$clm->newSession();
-		ASM::$clm->load(array('id' => $id));
+		$_CLM1 = $this->getCurrentSession();
+		$this->newSession();
+		$this->load(array('id' => $id));
 
-		$_PAM = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession(FALSE);
-		ASM::$pam->load(array('statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY), 'rColor' => $id));
+		$_PAM = $this->playerManager->getCurrentSession();
+		$this->playerManager->newSession(FALSE);
+		$this->playerManager->load(array('statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY), 'rColor' => $id));
 
-		ASM::$clm->getById($id)->players = ASM::$pam->size();	
+		$this->getById($id)->players = $this->playerManager->size();	
 
-		ASM::$pam->changeSession($_PAM);
-		ASM::$clm->changeSession($_CLM1);
+		$this->playerManager->changeSession($_PAM);
+		$this->changeSession($_CLM1);
 	}
 
 	public static function updateActivePlayers($id) {
-		$_CLM1 = ASM::$clm->getCurrentSession();
-		ASM::$clm->newSession();
-		ASM::$clm->load(array('id' => $id));
+		$_CLM1 = $this->getCurrentSession();
+		$this->newSession();
+		$this->load(array('id' => $id));
 
-		$_PAM = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession(FALSE);
-		ASM::$pam->load(array('statement' => PAM_ACTIVE, 'rColor' => $id));
+		$_PAM = $this->playerManager->getCurrentSession();
+		$this->playerManager->newSession(FALSE);
+		$this->playerManager->load(array('statement' => PAM_ACTIVE, 'rColor' => $id));
 		
-		ASM::$clm->getById($id)->activePlayers = ASM::$pam->size();
+		$this->getById($id)->activePlayers = $this->playerManager->size();
 
-		ASM::$pam->changeSession($_PAM);
-		ASM::$clm->changeSession($_CLM1);
+		$this->playerManager->changeSession($_PAM);
+		$this->changeSession($_CLM1);
 	}
 }

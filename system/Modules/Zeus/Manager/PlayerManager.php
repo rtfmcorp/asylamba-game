@@ -16,7 +16,6 @@ use Asylamba\Classes\Worker\Manager;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Worker\API;
-use Asylamba\Classes\Worker\ASM;
 
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Promethee\Model\Technology;
@@ -24,23 +23,34 @@ use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Hermes\Model\Notification;
 
 use Asylamba\Modules\Gaia\Manager\GalaxyColorManager;
+use Asylamba\Modules\Gaia\Manager\SectorManager;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Gaia\Manager\PlaceManager;
+use Asylamba\Modules\Athena\Manager\OrbitalBaseManager;
+use Asylamba\Modules\Hermes\Manager\NotificationManager;
 
 class PlayerManager extends Manager {
+	/** @var string */
 	protected $managerType = '_Player';
-
-	protected $database;
-	
+	/** @var SectorManager */
 	protected $sectorManager;
-	
+	/** @var NotificationManager **/
 	protected $notificationManager;
-	
+	/** @var OrbitalBaseManager **/
 	protected $orbitalBaseManager;
-	
+	/** @var PlaceManager **/
 	protected $placeManager;
 	
+	/**
+	 * @param Database $database
+	 * @param SectorManager $sectorManager
+	 * @param NotificationManager $notificationManager
+	 * @param OrbitalBaseManager $orbitalBaseManager
+	 * @param PlaceManager $placeManager
+	 */
 	public function __construct(Database $database, SectorManager $sectorManager, NotificationManager $notificationManager, OrbitalBaseManager $orbitalBaseManager, PlaceManager $placeManager)
 	{
-		$this->database = $database;
+		parent::__construct($database);
 		$this->sectorManager = $sectorManager;
 		$this->notificationManager = $notificationManager;
 		$this->orbitalBaseManager = $orbitalBaseManager;
@@ -270,8 +280,7 @@ class PlayerManager extends Manager {
 	}
 
 	public static function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM player WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM player WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);

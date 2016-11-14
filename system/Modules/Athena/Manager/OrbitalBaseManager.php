@@ -12,8 +12,7 @@
 namespace Asylamba\Modules\Athena\Manager;
 
 use Asylamba\Classes\Worker\Manager;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Container\Session;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Database\Database;
@@ -22,17 +21,82 @@ use Asylamba\Modules\Gaia\Manager\GalaxyColorManager;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
+use Asylamba\Modules\Athena\Manager\BuildingQueueManager;
+use Asylamba\Modules\Athena\Manager\ShipQueueManager;
+use Asylamba\Modules\Promethee\Manager\TechnologyQueueManager;
+use Asylamba\Modules\Athena\Manager\CommercialShippingManager;
+use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
+
+use Asylamba\Classes\Container\Alert;
 
 class OrbitalBaseManager extends Manager {
 	protected $managerType = '_OrbitalBase';
-
+	/** @var BuildingQueueManager **/
+	protected $buildingQueueManager;
+	/** @var ShipQueueManager **/
+	protected $shipQueueManager;
+	/** @var TechnologyQueueManager **/
+	protected $technologyQueueManager;
+	/** @var CommercialShippingManager **/
+	protected $shippingManager;
+	/** @var CommercialRouteManager **/
+	protected $commercialRouteManager;
+	/** @var TransactionManager **/
+	protected $transactionManager;
+	/** @var GalaxyColorManager **/
+	protected $galaxyColorManager;
+	/** @var PlayerManager **/
+	protected $playerManager;
+	/** @var Alert **/
+	protected $alert;
+	/** @var Session **/
+	protected $session;
+	
+	/**
+	 * @param Database $database
+	 * @param BuildingQueueManager $buildingQueueManager
+	 * @param ShipQueueManager $shipQueueManager
+	 * @param TechnologyQueueManager $technologyQueueManager
+	 * @param CommercialShippingManager $commercialShippingManager
+	 * @param CommercialRouteManager $commercialRouteManager
+	 * @param TransactionManager $transactionManager
+	 * @param GalaxyColorManager $galaxyColorManager
+	 * @param PlayerManager $playerManager
+	 * @param Alert $alert
+	 * @param Session $session
+	 */
+	public function __construct(
+		Database $database,
+		BuildingQueueManager $buildingQueueManager,
+		ShipQueueManager $shipQueueManager,
+		TechnologyQueueManager $technologyQueueManager,
+		CommercialShippingManager $commercialShippingManager,
+		CommercialRouteManager $commercialRouteManager,
+		TransactionManager $transactionManager,
+		GalaxyColorManager $galaxyColorManager,
+		PlayerManager $playerManager,
+		Alert $alert,
+		Session $session
+	) {
+		parent::__construct($database);
+		$this->buildingQueueManager = $buildingQueueManager;
+		$this->shipQueueManager = $shipQueueManager;
+		$this->technologyQueueManager = $technologyQueueManager;
+		$this->shippingManager = $commercialShippingManager;
+		$this->commercialRouteManager = $commercialRouteManager;
+		$this->transactionManager = $transactionManager;
+		$this->galaxyColorManager = $galaxyColorManager;
+		$this->playerManager = $playerManager;
+		$this->alert = $alert;
+		$this->session = $session;
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'ob.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT 
+		$qr = $this->database->prepare('SELECT 
 			ob.*,
 			p.position AS position,
 			p.rSystem AS system,
@@ -100,8 +164,7 @@ class OrbitalBaseManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT 
+		$qr = $this->database->prepare('SELECT 
 			ob.*,
 			p.position AS position,
 			p.rSystem AS system,
@@ -216,11 +279,11 @@ class OrbitalBaseManager extends Manager {
 			$b->setRoutesNumber($aw['routesNumber']);
 
 			# BuildingQueueManager
-			$oldBQMSess = ASM::$bqm->getCurrentSession();
-			ASM::$bqm->newSession(ASM_UMODE);
-			ASM::$bqm->load(array('rOrbitalBase' => $aw['rPlace']), array('dEnd', 'ASC'));
-			$b->buildingManager = ASM::$bqm->getCurrentSession();
-			$size = ASM::$bqm->size();
+			$oldBQMSess = $this->buildingQueueManager->getCurrentSession();
+			$this->buildingQueueManager->newSession(ASM_UMODE);
+			$this->buildingQueueManager->load(array('rOrbitalBase' => $aw['rPlace']), array('dEnd', 'ASC'));
+			$b->buildingManager = $this->buildingQueueManager->getCurrentSession();
+			$size = $this->buildingQueueManager->size();
 
 			$realGeneratorLevel = $aw['levelGenerator'];
 			$realRefineryLevel = $aw['levelRefinery'];
@@ -234,7 +297,7 @@ class OrbitalBaseManager extends Manager {
 			$realSpatioportLevel = $aw['levelSpatioport'];
 
 			for ($i = 0; $i < $size; $i++) {
-				switch (ASM::$bqm->get($i)->buildingNumber) {
+				switch ($this->buildingQueueManager->get($i)->buildingNumber) {
 					case 0 :
 						$realGeneratorLevel++;
 						break;
@@ -266,8 +329,8 @@ class OrbitalBaseManager extends Manager {
 						$realSpatioportLevel++;
 						break;
 					default :
-						CTR::$alert->add('Erreur dans la base de données');
-						CTR::$alert->add('dans load() de OrbitalBaseManager', ALT_BUG_ERROR);
+						$this->alert->add('Erreur dans la base de données');
+						$this->alert->add('dans load() de OrbitalBaseManager', ALT_BUG_ERROR);
 				}
 			}
 
@@ -281,40 +344,40 @@ class OrbitalBaseManager extends Manager {
 			$b->setRealStorageLevel($realStorageLevel);
 			$b->setRealRecyclingLevel($realRecyclingLevel);
 			$b->setRealSpatioportLevel($realSpatioportLevel);
-			ASM::$bqm->changeSession($oldBQMSess);
+			$this->buildingQueueManager->changeSession($oldBQMSess);
 
 			# ShipQueueManager
-			$S_SQM1 = ASM::$sqm->getCurrentSession();
-			ASM::$sqm->newSession(ASM_UMODE);
-			ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 1), array('dEnd'));
-			$b->dock1Manager = ASM::$sqm->getCurrentSession();
-			ASM::$sqm->newSession(ASM_UMODE);
-			ASM::$sqm->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 2), array('dEnd'));
-			$b->dock2Manager = ASM::$sqm->getCurrentSession();
-			ASM::$sqm->changeSession($S_SQM1);
+			$S_SQM1 = $this->shipQueueManager->getCurrentSession();
+			$this->shipQueueManager->newSession(ASM_UMODE);
+			$this->shipQueueManager->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 1), array('dEnd'));
+			$b->dock1Manager = $this->shipQueueManager->getCurrentSession();
+			$this->shipQueueManager->newSession(ASM_UMODE);
+			$this->shipQueueManager->load(array('rOrbitalBase' => $aw['rPlace'], 'dockType' => 2), array('dEnd'));
+			$b->dock2Manager = $this->shipQueueManager->getCurrentSession();
+			$this->shipQueueManager->changeSession($S_SQM1);
 
 			# CommercialRouteManager
-			$S_CRM1 = ASM::$crm->getCurrentSession();
-			ASM::$crm->newSession(ASM_UMODE);
-			ASM::$crm->load(array('rOrbitalBase' => $aw['rPlace']));
-			ASM::$crm->load(array('rOrbitalBaseLinked' => $aw['rPlace']));
-			$b->routeManager = ASM::$crm->getCurrentSession();
-			ASM::$crm->changeSession($S_CRM1);
+			$S_CRM1 = $this->commercialRouteManager->getCurrentSession();
+			$this->commercialRouteManager->newSession(ASM_UMODE);
+			$this->commercialRouteManager->load(array('rOrbitalBase' => $aw['rPlace']));
+			$this->commercialRouteManager->load(array('rOrbitalBaseLinked' => $aw['rPlace']));
+			$b->routeManager = $this->commercialRouteManager->getCurrentSession();
+			$this->commercialRouteManager->changeSession($S_CRM1);
 
 			# TechnologyQueueManager
-			$S_TQM1 = ASM::$tqm->getCurrentSession();
-			ASM::$tqm->newSession(ASM_UMODE);
-			ASM::$tqm->load(array('rPlace' => $aw['rPlace']), array('dEnd'));
-			$b->technoQueueManager = ASM::$tqm->getCurrentSession();
-			ASM::$tqm->changeSession($S_TQM1);
+			$S_TQM1 = $this->technologyQueueManager->getCurrentSession();
+			$this->technologyQueueManager->newSession(ASM_UMODE);
+			$this->technologyQueueManager->load(array('rPlace' => $aw['rPlace']), array('dEnd'));
+			$b->technoQueueManager = $this->technologyQueueManager->getCurrentSession();
+			$this->technologyQueueManager->changeSession($S_TQM1);
 
 			# CommercialShippingManager
-			$S_CSM1 = ASM::$csm->getCurrentSession();
-			ASM::$csm->newSession(ASM_UMODE);
-			ASM::$csm->load(array('rBase' => $aw['rPlace']));
-			ASM::$csm->load(array('rBaseDestination' => $aw['rPlace']));
-			$b->shippingManager = ASM::$csm->getCurrentSession();
-			ASM::$csm->changeSession($S_CSM1);
+			$S_CSM1 = $this->shippingManager->getCurrentSession();
+			$this->shippingManager->newSession(ASM_UMODE);
+			$this->shippingManager->load(array('rBase' => $aw['rPlace']));
+			$this->shippingManager->load(array('rBaseDestination' => $aw['rPlace']));
+			$b->shippingManager = $this->shippingManager->getCurrentSession();
+			$this->shippingManager->changeSession($S_CSM1);
 
 			$currentB = $this->_Add($b);
 
@@ -326,10 +389,9 @@ class OrbitalBaseManager extends Manager {
 
 	public function add(OrbitalBase $b) {
 		# prépare le rechargement de la map
-		GalaxyColorManager::apply();
+		$this->galaxyColorManager->apply();
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
+		$qr = $this->database->prepare('INSERT INTO
 			orbitalBase(rPlace, rPlayer, name, typeOfBase, levelGenerator, levelRefinery, levelDock1, levelDock2, levelDock3, levelTechnosphere, levelCommercialPlateforme, levelStorage, levelRecycling, levelSpatioport, points,
 				iSchool, iAntiSpy, antiSpyAverage, 
 				pegaseStorage, satyreStorage, sireneStorage, dryadeStorage, chimereStorage, meduseStorage, griffonStorage, cyclopeStorage, minotaureStorage, hydreStorage, cerbereStorage, phenixStorage,
@@ -376,13 +438,13 @@ class OrbitalBaseManager extends Manager {
 			$b->uOrbitalBase,
 			$b->getDCreation()
 		));
-		$b->buildingManager = ASM::$bqm->getFirstSession();
-		$b->dock1Manager = ASM::$sqm->getFirstSession();
-		$b->dock2Manager = ASM::$sqm->getFirstSession();
-		$b->dock3Manager = ASM::$sqm->getFirstSession();
-		$b->routeManager = ASM::$crm->getFirstSession();
-		$b->technoQueueManager = ASM::$tqm->getFirstSession();
-		$b->shippingManager = ASM::$csm->getFirstSession();
+		$b->buildingManager = $this->buildingQueueManager->getFirstSession();
+		$b->dock1Manager = $this->shipQueueManager->getFirstSession();
+		$b->dock2Manager = $this->shipQueueManager->getFirstSession();
+		$b->dock3Manager = $this->shipQueueManager->getFirstSession();
+		$b->routeManager = $this->commercialRouteManager->getFirstSession();
+		$b->technoQueueManager = $this->technologyQueueManager->getFirstSession();
+		$b->shippingManager = $this->shippingManager->getFirstSession();
 
 		$this->_Add($b);
 	}
@@ -390,8 +452,7 @@ class OrbitalBaseManager extends Manager {
 	public function save() {
 		$bases = $this->_Save();
 		foreach ($bases AS $k => $b) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE orbitalBase
+			$qr = $this->database->prepare('UPDATE orbitalBase
 				SET	rPlace = ?, rPlayer = ?, name = ?, typeOfBase = ?, levelGenerator = ?, levelRefinery = ?, levelDock1 = ?, levelDock2 = ?, levelDock3 = ?, levelTechnosphere = ?, levelCommercialPlateforme = ?, levelStorage = ?, levelRecycling = ?, levelSpatioport = ?, points = ?,
 			iSchool = ?, iAntiSpy = ?, antiSpyAverage = ?,
 			pegaseStorage = ?, satyreStorage = ?, sireneStorage = ?, dryadeStorage = ?, chimereStorage = ?, meduseStorage = ?, griffonStorage = ?, cyclopeStorage = ?, minotaureStorage = ?, hydreStorage = ?, cerbereStorage = ?, phenixStorage = ?,
@@ -439,54 +500,54 @@ class OrbitalBaseManager extends Manager {
 	public function changeOwnerById($id, $base, $newOwner, $routeSession, $recyclingSession, $commanderSession) {
 		if ($base->getId() != 0) {
 			# changement de possesseur des offres du marché
-			$S_TRM1 = ASM::$trm->getCurrentSession();
-			ASM::$trm->newSession(FALSE);
-			ASM::$trm->load(array('rPlayer' => $base->rPlayer, 'rPlace' => $base->rPlace, 'statement' => Transaction::ST_PROPOSED));
+			$S_TRM1 = $this->transactionManager->getCurrentSession();
+			$this->transactionManager->newSession(FALSE);
+			$this->transactionManager->load(array('rPlayer' => $base->rPlayer, 'rPlace' => $base->rPlace, 'statement' => Transaction::ST_PROPOSED));
 
-			for ($i = 0; $i < ASM::$trm->size(); $i++) {
+			for ($i = 0; $i < $this->transactionManager->size(); $i++) {
 				# change owner of transaction
-				ASM::$trm->get($i)->rPlayer = $newOwner;
+				$this->transactionManager->get($i)->rPlayer = $newOwner;
 
-				$S_CSM1 = ASM::$csm->getCurrentSession();
-				ASM::$csm->newSession(FALSE);
-				ASM::$csm->load(array('rTransaction' => ASM::$trm->get($i)->id, 'rPlayer' => $base->rPlayer));
+				$S_CSM1 = $this->shippingManager->getCurrentSession();
+				$this->shippingManager->newSession(FALSE);
+				$this->shippingManager->load(array('rTransaction' => $this->transactionManager->get($i)->id, 'rPlayer' => $base->rPlayer));
 				# change owner of commercial shipping
-				ASM::$csm->get()->rPlayer = $newOwner;
-				ASM::$csm->changeSession($S_CSM1);
+				$this->shippingManager->get()->rPlayer = $newOwner;
+				$this->shippingManager->changeSession($S_CSM1);
 			}
 
-			ASM::$trm->changeSession($S_TRM1);
+			$this->transactionManager->changeSession($S_TRM1);
 
 			# attribuer le rPlayer à la Base
 			$oldOwner = $base->rPlayer;
 			$base->setRPlayer($newOwner);
 
 			# suppression des routes commerciales
-			$S_CRM1 = ASM::$crm->getCurrentSession();
-			ASM::$crm->changeSession($routeSession);
-			for ($i = ASM::$crm->size()-1; $i >= 0; $i--) { 
-				ASM::$crm->deleteById(ASM::$crm->get($i)->getId());
+			$S_CRM1 = $this->commercialRouteManager->getCurrentSession();
+			$this->commercialRouteManager->changeSession($routeSession);
+			for ($i = $this->commercialRouteManager->size()-1; $i >= 0; $i--) { 
+				$this->commercialRouteManager->deleteById($this->commercialRouteManager->get($i)->getId());
 				# envoyer une notif
 			}
 
-			ASM::$crm->changeSession($S_CRM1);
+			$this->commercialRouteManager->changeSession($S_CRM1);
 
 			# suppression des technologies en cours de développement
-			$S_TQM1 = ASM::$tqm->getCurrentSession();
-			ASM::$tqm->changeSession($base->technoQueueManager);
-			for ($i = ASM::$tqm->size()-1; $i >= 0; $i--) { 
-				ASM::$tqm->deleteById(ASM::$tqm->get($i)->getId());
+			$S_TQM1 = $this->technologyQueueManager->getCurrentSession();
+			$this->technologyQueueManager->changeSession($base->technoQueueManager);
+			for ($i = $this->technologyQueueManager->size()-1; $i >= 0; $i--) { 
+				$this->technologyQueueManager->deleteById($this->technologyQueueManager->get($i)->getId());
 			}
-			ASM::$tqm->changeSession($S_TQM1);
+			$this->technologyQueueManager->changeSession($S_TQM1);
 
 			# suppression des missions de recyclages ainsi que des logs de recyclages
-			$S_REM1 = ASM::$rem->getCurrentSession();
-			ASM::$rem->changeSession($recyclingSession);
-			for ($i = ASM::$rem->size() - 1; $i >= 0; $i--) {
-				ASM::$rlm->deleteAllFromMission(ASM::$rem->get($i)->id);
-				ASM::$rem->deleteById(ASM::$rem->get($i)->id);
+			$S_REM1 = $this->recyclingMissionManager->getCurrentSession();
+			$this->recyclingMissionManager->changeSession($recyclingSession);
+			for ($i = $this->recyclingMissionManager->size() - 1; $i >= 0; $i--) {
+				$this->recyclingLogManager->deleteAllFromMission($this->recyclingMissionManager->get($i)->id);
+				$this->recyclingMissionManager->deleteById($this->recyclingMissionManager->get($i)->id);
 			}
-			ASM::$rem->changeSession($S_REM1);
+			$this->recyclingMissionManager->changeSession($S_REM1);
 
 			# mise des investissements à 0
 			$base->iSchool = 0;
@@ -496,40 +557,40 @@ class OrbitalBaseManager extends Manager {
 			$base->dCreation = Utils::now();
 
 			# ajouter/enlever la base dans le controller
-			if (CTR::$data->get('playerId') == $newOwner) {
-				CTR::$data->addBase('ob', $base->getId(), $base->getName(), $base->getSector(), $base->getSystem(), '1-' . Game::getSizeOfPlanet($base->getPlanetPopulation()), $base->typeOfBase);
+			if ($this->session->get('playerId') == $newOwner) {
+				$this->session->addBase('ob', $base->getId(), $base->getName(), $base->getSector(), $base->getSystem(), '1-' . Game::getSizeOfPlanet($base->getPlanetPopulation()), $base->typeOfBase);
 			} else {
-				CTR::$data->removeBase('ob', $base->getId());
+				$this->session->removeBase('ob', $base->getId());
 			}
 
 			# rendre déserteuses les flottes en voyage
-			$S_COM4 = ASM::$com->getCurrentSession();
-			ASM::$com->changeSession($commanderSession);
-			for ($i = 0; $i < ASM::$com->size(); $i++) {
-				if (in_array(ASM::$com->get($i)->statement, [Commander::INSCHOOL, Commander::ONSALE, Commander::RESERVE])) {
-					ASM::$com->get($i)->rPlayer = $newOwner;
-				} else if (ASM::$com->get($i)->statement == Commander::MOVING) {
-					ASM::$com->get($i)->statement = Commander::RETIRED;
+			$S_COM4 = $this->commanderManager->getCurrentSession();
+			$this->commanderManager->changeSession($commanderSession);
+			for ($i = 0; $i < $this->commanderManager->size(); $i++) {
+				if (in_array($this->commanderManager->get($i)->statement, [Commander::INSCHOOL, Commander::ONSALE, Commander::RESERVE])) {
+					$this->commanderManager->get($i)->rPlayer = $newOwner;
+				} else if ($this->commanderManager->get($i)->statement == Commander::MOVING) {
+					$this->commanderManager->get($i)->statement = Commander::RETIRED;
 				} else {
-					ASM::$com->get($i)->statement = Commander::DEAD;		
+					$this->commanderManager->get($i)->statement = Commander::DEAD;		
 				}
 			}
-			ASM::$com->changeSession($S_COM4);
+			$this->commanderManager->changeSession($S_COM4);
 
 			# vérifie si le joueur n'a plus de planète, si c'est le cas, il est mort, on lui redonne une planète
-			$S_OBM2 = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession(FALSE); # FALSE obligatory
-			ASM::$obm->load(array('rPlayer' => $oldOwner));
-			if (ASM::$obm->size() == 0 || (ASM::$obm->get()->rPlace == $id && ASM::$obm->size() == 1)) {
-				ASM::$pam->reborn($oldOwner);
+			$S_OBM2 = $this->getCurrentSession();
+			$this->newSession(FALSE); # FALSE obligatory
+			$this->load(array('rPlayer' => $oldOwner));
+			if ($this->size() == 0 || ($this->get()->rPlace == $id && $this->size() == 1)) {
+				$this->playerManager->reborn($oldOwner);
 			}
-			ASM::$obm->changeSession($S_OBM2);
+			$this->changeSession($S_OBM2);
 
 			# applique en cascade le changement de couleur des sytèmes
-			GalaxyColorManager::apply();
+			$this->galaxyColorManager->apply();
 		} else {
-			CTR::$alert->add('Cette base orbitale n\'exite pas !', ALERT_BUG_INFO);
-			CTR::$alert->add('dans changeOwnerById de OrbitalBaseManager', ALERT_BUG_ERROR);
+			$this->alert->add('Cette base orbitale n\'exite pas !', ALERT_BUG_INFO);
+			$this->alert->add('dans changeOwnerById de OrbitalBaseManager', ALERT_BUG_ERROR);
 		}
 	}
 }

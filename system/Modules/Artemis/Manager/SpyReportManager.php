@@ -21,13 +21,19 @@ use Asylamba\Modules\Artemis\Model\SpyReport;
 class SpyReportManager extends Manager {
 	protected $managerType = '_SpyReport';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'sr.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT sr.*,
+		$qr = $this->database->prepare('SELECT sr.*,
 			p.typeOfPlace AS typeOfPlace,
 			p.position AS position,
 			p.population AS population,
@@ -103,8 +109,7 @@ class SpyReportManager extends Manager {
 	}
 
 	public function add(SpyReport $sr) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
+		$qr = $this->database->prepare('INSERT INTO
 			spyReport(rPlayer, price, rPlace, placeColor, typeOfBase, typeOfOrbitalBase, placeName, points, rEnemy, enemyName, enemyAvatar, enemyLevel, resources, shipsInStorage, antiSpyInvest, commercialRouteIncome, commanders, success, type, dSpying)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
@@ -130,7 +135,7 @@ class SpyReportManager extends Manager {
 			$sr->dSpying
 		));
 
-		$sr->id = $db->lastInsertId();
+		$sr->id = $this->database->lastInsertId();
 
 		$this->_Add($sr);
 	}
@@ -139,8 +144,7 @@ class SpyReportManager extends Manager {
 		$reports = $this->_Save();
 
 		foreach ($reports AS $sr) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE spyReport
+			$qr = $this->database->prepare('UPDATE spyReport
 				SET	id = ?,
 					rPlayer = ?,
 					price = ?,
@@ -191,8 +195,7 @@ class SpyReportManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM spyReport WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM spyReport WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);
@@ -200,8 +203,7 @@ class SpyReportManager extends Manager {
 	}
 
 	public function deleteByRPlayer($rPlayer) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM spyReport WHERE rPlayer = ?');
+		$qr = $this->database->prepare('DELETE FROM spyReport WHERE rPlayer = ?');
 		$qr->execute(array($rPlayer));
 
 		$nbrDeleted = 0;

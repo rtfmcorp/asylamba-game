@@ -20,13 +20,19 @@ use Asylamba\Modules\Athena\Model\RecyclingLog;
 class RecyclingLogManager extends Manager {
 	protected $managerType = '_RecyclingLog';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'rl.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT rl.*
+		$qr = $this->database->prepare('SELECT rl.*
 			FROM recyclingLog AS rl
 			' . $formatWhere . '
 			' . $formatOrder . '
@@ -112,8 +118,7 @@ class RecyclingLogManager extends Manager {
 		$recyclingLogs = $this->_Save();
 
 		foreach ($recyclingLogs AS $rl) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE recyclingLog
+			$qr = $this->database->prepare('UPDATE recyclingLog
 				SET	id = ?,
 					rRecycling = ?,
 					resources = ?,
@@ -156,8 +161,7 @@ class RecyclingLogManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM recyclingLog WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM recyclingLog WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);
@@ -166,8 +170,7 @@ class RecyclingLogManager extends Manager {
 	}
 
 	public function deleteAllFromMission($missionId) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT id FROM recyclingLog WHERE rRecycling = ?');
+		$qr = $this->database->prepare('SELECT id FROM recyclingLog WHERE rRecycling = ?');
 		$qr->execute(array($missionId));
 
 		while ($aw = $qr->fetch()) {

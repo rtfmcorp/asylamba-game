@@ -16,7 +16,35 @@ use Asylamba\Classes\Worker\ASM;
 
 use Asylamba\Modules\Promethee\Model\Technology;
 
+use Asylamba\Modules\Zeus\Manager\PlayerManager;
+use Asylamba\Modules\Athena\Manager\OrbitalBaseManager;
+use Asylamba\Modules\Athena\Manager\BuildingQueueManager;
+use Asylamba\Modules\Promethee\Manager\TechnologyQueueManager;
+
 class TutorialHelper {
+	/** @var PlayerManager **/
+	protected $playerManager;
+	/** @var OrbitalBaseManager **/
+	protected $orbitalBaseManager;
+	/** @var BuildingQueueManager **/
+	protected $buildingQueueManager;
+	/** @var TechnologyQueueManager **/
+	protected $technologyQueueManager;
+	
+	/**
+	 * @param PlayerManager $playerManager
+	 * @param OrbitalBaseManager $orbitalBaseManager
+	 * @param BuildingQueueManager $buildingQueueManager
+	 * @param TechnologyQueueManager $technologyQueueManager
+	 */
+	public function __construct(PlayerManager $playerManager, OrbitalBaseManager $orbitalBaseManager, BuildingQueueManager $buildingQueueManager, TechnologyQueueManager $technologyQueueManager)
+	{
+		$this->playerManager = $playerManager;
+		$this->orbitalBaseManager = $orbitalBaseManager;
+		$this->buildingQueueManager = $buildingQueueManager;
+		$this->technologyQueueManager = $technologyQueueManager;
+	}
+	
 	public static function checkTutorial() {
 		# PAS UTILISEE POUR L'INSTANT (le sera quand il y aura une étape passive dans le tutoriel)
 		$player = CTR::$data->get('playerId');

@@ -19,14 +19,21 @@ use Asylamba\Modules\Zeus\Model\CreditTransaction;
 
 class CreditTransactionManager extends Manager {
 	protected $managerType = '_CreditTransaction';
+	
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database)
+	{
+		parent::__construct($database);
+	}
 
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'ct.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT ct.*,
+		$qr = $this->database->prepare('SELECT ct.*,
 				p1.name AS receiverName,
 				p1.avatar AS receiverAvatar,
 				p1.status AS receiverStatus,
@@ -91,8 +98,7 @@ class CreditTransactionManager extends Manager {
 	}
 
 	public function add(CreditTransaction $ct) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
+		$qr = $this->database->prepare('INSERT INTO
 			creditTransaction(rSender, type, rReceiver, amount, dTransaction, comment)
 			VALUES(?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
@@ -113,8 +119,7 @@ class CreditTransactionManager extends Manager {
 		$cts = $this->_Save();
 
 		foreach ($cts AS $ct) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE creditTransaction
+			$qr = $this->database->prepare('UPDATE creditTransaction
 				SET	id = ?,
 					rSender = ?,
 					type = ?,
@@ -137,8 +142,7 @@ class CreditTransactionManager extends Manager {
 	}
 
 	public static function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM creditTransaction WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM creditTransaction WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);

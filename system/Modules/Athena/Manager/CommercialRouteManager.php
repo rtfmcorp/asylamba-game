@@ -20,14 +20,20 @@ use Asylamba\Modules\Demeter\Model\Color;
 class CommercialRouteManager extends Manager {
 	protected $managerType = '_CommercialRoute';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	//METHODS
 	public function load($where, $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'cr.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT 
+		$qr = $this->database->prepare('SELECT 
 			cr.id AS id,
 			cr.rOrbitalBase AS rOrbitalBase,
 			cr.rOrbitalBaseLinked AS rOrbitalBaseLinked,
@@ -132,8 +138,7 @@ class CommercialRouteManager extends Manager {
 	}
 
 	public function add(CommercialRoute $cr) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
+		$qr = $this->database->prepare('INSERT INTO
 			commercialRoute(rOrbitalBase, rOrbitalBaseLinked, imageLink, distance, price, income, dProposition, dCreation, statement)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
@@ -148,15 +153,14 @@ class CommercialRouteManager extends Manager {
 			$cr->getStatement()
 		));
 
-		$cr->setId($db->lastInsertId());
+		$cr->setId($this->database->lastInsertId());
 		$this->_Add($cr);
 	}
 
 	public function save() {
 		$routes = $this->_Save();
 		foreach ($routes AS $k => $cr) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE commercialRoute
+			$qr = $this->database->prepare('UPDATE commercialRoute
 				SET id = ?,
 					rOrbitalBase = ?,
 					rOrbitalBaseLinked = ?,
@@ -186,8 +190,7 @@ class CommercialRouteManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM commercialRoute WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM commercialRoute WHERE id = ?');
 		$qr->execute(array($id));
 		
 		// suppression de l'objet du manager
@@ -200,8 +203,7 @@ class CommercialRouteManager extends Manager {
 		if (!($color1->colorLink[$color2->id] == Color::ENEMY || $color2->colorLink[$color1->id] == Color::ENEMY)) {
 			$freeze = FALSE;
 		}
-		$db = Database::getInstance();
-		$qr = $db->prepare(
+		$qr = $this->database->prepare(
 			'UPDATE commercialRoute AS cr
 				LEFT JOIN orbitalBase AS ob1
 					ON cr.rOrbitalBase = ob1.rPlace

@@ -19,13 +19,19 @@ use Asylamba\Modules\Demeter\Model\Election\Vote;
 class VoteManager extends Manager {
 	protected $managerType ='_Vote';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'v.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT v.*
+		$qr = $this->database->prepare('SELECT v.*
 			FROM vote AS v
 			' . $formatWhere .'
 			' . $formatOrder .'
@@ -65,13 +71,11 @@ class VoteManager extends Manager {
 	}
 
 	public function save() {
-		$db = Database::getInstance();
-
 		$votes = $this->_Save();
 
 		foreach ($votes AS $vote) {
 
-			$qr = $db->prepare('UPDATE vote
+			$qr = $this->database->prepare('UPDATE vote
 				SET
 					rCandidate = ?,
 					rPlayer = ?,
@@ -87,9 +91,7 @@ class VoteManager extends Manager {
 	}
 
 	public function add($newVote) {
-		$db = Database::getInstance();
-
-		$qr = $db->prepare('INSERT INTO vote
+		$qr = $this->database->prepare('INSERT INTO vote
 			SET
 				rCandidate = ?,
 				rPlayer = ?,
@@ -103,7 +105,7 @@ class VoteManager extends Manager {
 			$newVote->dVotation
 		));
 
-		$newVote->id = $db->lastInsertId();
+		$newVote->id = $this->database->lastInsertId();
 
 		$this->_Add($newVote);
 
@@ -111,8 +113,7 @@ class VoteManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM vote WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM vote WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);
