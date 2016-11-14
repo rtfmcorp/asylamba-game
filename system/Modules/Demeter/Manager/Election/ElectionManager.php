@@ -18,14 +18,20 @@ use Asylamba\Modules\Demeter\Model\Election\Election;
 
 class ElectionManager extends Manager {
 	protected $managerType ='_Election';
+	
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
 
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'e.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT e.*
+		$qr = $this->database->prepare('SELECT e.*
 			FROM election AS e
 			' . $formatWhere .'
 			' . $formatOrder .'
@@ -63,12 +69,10 @@ class ElectionManager extends Manager {
 	}
 
 	public function save() {
-		$db = Database::getInstance();
-
 		$elections = $this->_Save();
 
 		foreach ($elections AS $election) {
-			$qr = $db->prepare('UPDATE election
+			$qr = $this->database->prepare('UPDATE election
 				SET
 					rColor = ?,
 					dElection = ?
@@ -82,9 +86,7 @@ class ElectionManager extends Manager {
 	}
 
 	public function add($newElection) {
-		$db = Database::getInstance();
-
-		$qr = $db->prepare('INSERT INTO election
+		$qr = $this->database->prepare('INSERT INTO election
 			SET
 				rColor = ?,
 				dElection = ?');
@@ -94,7 +96,7 @@ class ElectionManager extends Manager {
 			$newElection->dElection->format('Y-m-d H:i:s')
 		));
 
-		$newElection->id = $db->lastInsertId();
+		$newElection->id = $this->database->lastInsertId();
 
 		$this->_Add($newElection);
 
@@ -102,8 +104,7 @@ class ElectionManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM election WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM election WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);

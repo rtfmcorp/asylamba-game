@@ -19,13 +19,16 @@ use Asylamba\Modules\Demeter\Model\Forum\FactionNews;
 class FactionNewsManager extends Manager {
 	protected $managerType ='_factionNews';
 
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'n.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT n.* 
+		$qr = $this->database->prepare('SELECT n.* 
 			FROM factionNews AS n
 			' . $formatWhere .'
 			' . $formatOrder .'
@@ -67,8 +70,6 @@ class FactionNewsManager extends Manager {
 	}
 
 	public function save() {
-		$db = Database::getInstance();
-
 		$newsArray = $this->_Save();
 
 		foreach ($newsArray AS $news) {
@@ -84,7 +85,7 @@ class FactionNewsManager extends Manager {
 					dCreation = ?
 				WHERE id = ?';
 
-			$qr = $db->prepare($qr);
+			$qr = $this->database->prepare($qr);
 			
 			$aw = $qr->execute(array(
 					$news->rFaction,
@@ -100,9 +101,7 @@ class FactionNewsManager extends Manager {
 	}
 
 	public function add($news) {
-		$db = Database::getInstance();
-
-		$qr = $db->prepare('INSERT INTO factionNews
+		$qr = $this->database->prepare('INSERT INTO factionNews
 			SET
 				rFaction = ?,
 				title = ?,
@@ -121,7 +120,7 @@ class FactionNewsManager extends Manager {
 				Utils::now()
 				));
 
-		$news->id = $db->lastInsertId();
+		$news->id = $this->database->lastInsertId();
 
 		$this->_Add($news);
 
@@ -129,8 +128,7 @@ class FactionNewsManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM factionNews WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM factionNews WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);

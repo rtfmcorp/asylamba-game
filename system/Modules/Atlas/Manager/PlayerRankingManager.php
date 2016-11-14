@@ -19,9 +19,15 @@ use Asylamba\Modules\Atlas\Model\PlayerRanking;
 class PlayerRankingManager extends Manager {
 	protected $managerType = '_PlayerRanking';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function loadLastContext($where = array(), $order = array(), $limit = array()) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT * FROM ranking WHERE player = 1 ORDER BY dRanking DESC LIMIT 1');
+		$qr = $this->database->prepare('SELECT * FROM ranking WHERE player = 1 ORDER BY dRanking DESC LIMIT 1');
 		$qr->execute();
 		$aw = $qr->fetch();
 		$rRanking = $aw['id'];
@@ -33,8 +39,7 @@ class PlayerRankingManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT pl.*,
+		$qr = $this->database->prepare('SELECT pl.*,
 				p.rColor AS color,
 				p.name AS name,
 				p.avatar AS avatar,
@@ -105,7 +110,6 @@ class PlayerRankingManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
 		$qr = $db->prepare($request);
 
 		while($aw = $qr->fetch()) {
@@ -146,8 +150,7 @@ class PlayerRankingManager extends Manager {
 	}
 
 	public function add(playerRanking $pl) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
+		$qr = $this->database->prepare('INSERT INTO
 			playerRanking(rRanking, rPlayer, 
 				general, generalPosition, generalVariation, 
 				experience, experiencePosition, experienceVariation, 
@@ -189,7 +192,7 @@ class PlayerRankingManager extends Manager {
 			$pl->defeat
 		));
 
-		$pl->id = $db->lastInsertId();
+		$pl->id = $this->database->lastInsertId();
 
 		$this->_Add($pl);
 	}
@@ -198,8 +201,7 @@ class PlayerRankingManager extends Manager {
 		$rankings = $this->_Save();
 
 		foreach ($rankings AS $pl) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE playerRanking
+			$qr = $this->database->prepare('UPDATE playerRanking
 				SET	id = ?,
 					rRanking = ?,
 					rPlayer = ?, 

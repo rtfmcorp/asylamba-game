@@ -18,13 +18,20 @@ use Asylamba\Modules\Promethee\Model\TechnologyQueue;
 class TechnologyQueueManager extends Manager {
 	protected $managerType = '_TechnologyQueue';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database)
+	{
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where);
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT *
+		$qr = $this->database->prepare('SELECT *
 			FROM technologyQueue
 			' . $formatWhere . '
 			' . $formatOrder . '
@@ -63,8 +70,7 @@ class TechnologyQueueManager extends Manager {
 	}
 
 	public function add(TechnologyQueue $t) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
+		$qr = $this->database->prepare('INSERT INTO
 			technologyQueue(rPlayer, rPlace, technology, targetLevel, dStart, dEnd)
 			VALUES(?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
@@ -75,15 +81,14 @@ class TechnologyQueueManager extends Manager {
 			$t->dStart,
 			$t->dEnd
 		));
-		$t->id = $db->lastInsertId();
+		$t->id = $this->database->lastInsertId();
 		$this->_Add($t);
 	}
 
 	public function save() {
 		$technologyQueues = $this->_Save();
 		foreach ($technologyQueues AS $k => $t) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE technologyQueue
+			$qr = $this->database->prepare('UPDATE technologyQueue
 				SET	id = ?,
 					rPlayer = ?,
 					rPlace = ?,
@@ -106,8 +111,7 @@ class TechnologyQueueManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM technologyQueue WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM technologyQueue WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);

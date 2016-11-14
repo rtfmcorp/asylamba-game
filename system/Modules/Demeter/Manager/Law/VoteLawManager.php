@@ -19,13 +19,19 @@ use Asylamba\Modules\Demeter\Model\Law\VoteLaw;
 class VoteLawManager extends Manager {
 	protected $managerType ='_VoteLaw';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'v.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT v.*
+		$qr = $this->database->prepare('SELECT v.*
 			FROM voteLaw AS v
 			' . $formatWhere .'
 			' . $formatOrder .'
@@ -65,20 +71,18 @@ class VoteLawManager extends Manager {
 	}
 
 	public function save() {
-		$db = Database::getInstance();
-
 		$voteLaws = $this->_Save();
 
-	foreach ($voteLaws AS $voteLaw) {
+		foreach ($voteLaws AS $voteLaw) {
 
-		$qr = $db->prepare('UPDATE voteLaw
-			SET
-				rLaw = ?,
-				rPlayer = ?,
-				vote = ?,
-				dVotation = ?
-			WHERE id = ?');
-		$aw = $qr->execute(array(
+			$qr = $this->database->prepare('UPDATE voteLaw
+				SET
+					rLaw = ?,
+					rPlayer = ?,
+					vote = ?,
+					dVotation = ?
+				WHERE id = ?');
+			$aw = $qr->execute(array(
 				$voteLaw->rLaw,
 				$voteLaw->rPlayer,
 				$voteLaw->vote,
@@ -90,8 +94,7 @@ class VoteLawManager extends Manager {
 	}
 
 	public function add($newVoteLaw) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO voteLaw
+		$qr = $this->database->prepare('INSERT INTO voteLaw
 			SET
 				rLaw = ?,
 				rPlayer = ?,
@@ -105,7 +108,7 @@ class VoteLawManager extends Manager {
 			$newVoteLaw->dVotation
 		));
 
-		$newVoteLaw->id = $db->lastInsertId();
+		$newVoteLaw->id = $this->database->lastInsertId();
 
 		$this->_Add($newVoteLaw);
 
@@ -113,8 +116,7 @@ class VoteLawManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM voteLaw WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM voteLaw WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);

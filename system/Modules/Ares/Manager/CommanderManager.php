@@ -22,14 +22,20 @@ use Asylamba\Modules\Ares\Model\Commander;
 class CommanderManager extends Manager {
     protected $managerType = '_Commander';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
     //charge depuis la base de donnée avec ce qu'on veut
     public function load($where = array(), $order = array(), $limit = array()) {
             $formatWhere = Utils::arrayToWhere($where);
             $formatOrder = Utils::arrayToOrder($order);
             $formatLimit = Utils::arrayToLimit($limit);
 
-            $db = Database::getInstance();
-            $qr = $db->prepare('SELECT c.*,
+            $qr = $this->database->prepare('SELECT c.*,
                             o.iSchool, o.name AS oName,
                             p.name AS pName,
                             p.rColor AS pColor,
@@ -168,7 +174,6 @@ class CommanderManager extends Manager {
 
     //inscrit un nouveau commandant en bdd
     public function add($newCommander) {
-            $db = Database::getInstance();
             $qr = 'INSERT INTO commander
             SET 
                     name = ?,
@@ -182,7 +187,7 @@ class CommanderManager extends Manager {
                     uCommander = ?,
                     statement = ?,
                     dCreation = ?';
-            $qr = $db->prepare($qr);
+            $qr = $this->database->prepare($qr);
             $aw = $qr->execute(array(
                     $newCommander->name,
                     $newCommander->avatar,
@@ -196,20 +201,20 @@ class CommanderManager extends Manager {
                     $newCommander->statement,
                     $newCommander->dCreation,
                     ));
-            $newCommander->setId($db->lastInsertId());
+            $newCommander->setId($this->database->lastInsertId());
 
             $nbrSquadrons = $newCommander->getLevel();
-            $maxId = $db->lastInsertId();
+            $maxId = $this->database->lastInsertId();
             $qr2 = 'INSERT INTO 
                     squadron(rCommander, dCreation)
                     VALUES(?, NOW())';
-            $qr2 = $db->prepare($qr2);
+            $qr2 = $this->database->prepare($qr2);
 
             for ($i = 0; $i < $nbrSquadrons; $i++) {
                     $aw2 = $qr2->execute(array($maxId));
             }
 
-            $lastSquadronId = $db->lastInsertId();
+            $lastSquadronId = $this->database->lastInsertId();
             for ($i = 0; $i < count($newCommander->getArmy()); $i++) {
                     $newCommander->getSquadron[$i]->setId($lastSquadronId);
                     $lastSquadronId--;
@@ -222,7 +227,6 @@ class CommanderManager extends Manager {
     public function save() {
             $commanders = $this->_Save();
             foreach ($commanders AS $k => $commander) {
-                    $db = Database::getInstance();
                     $qr = 'UPDATE commander
                             SET				
                                     name = ?,
@@ -251,7 +255,7 @@ class CommanderManager extends Manager {
 
                             WHERE id = ?';
 
-                    $qr = $db->prepare($qr);
+                    $qr = $this->database->prepare($qr);
                     //uper les commandants
                     $qr->execute(array( 				
                             $commander->name,
@@ -296,7 +300,7 @@ class CommanderManager extends Manager {
                             DLAstModification = NOW()
                     WHERE id = ?';
 
-                    $qr = $db->prepare($qr);
+                    $qr = $this->database->prepare($qr);
                     $army = $commander->getArmy();
 
                     foreach ($army AS $squadron) {
@@ -329,7 +333,7 @@ class CommanderManager extends Manager {
                                     $qr .= ',(' . $commander->getId() . ', NOW())';
                                     $i++;
                             }
-                            $qr = $db->prepare($qr);
+                            $qr = $this->database->prepare($qr);
                             $qr->execute();
                     }
             }

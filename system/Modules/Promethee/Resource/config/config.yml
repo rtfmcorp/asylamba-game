@@ -8,4 +8,12 @@ parameters:
     promethee.technology_queue.credit_refund: 0.5    
     
 services:
-    
+    promethee.research_manager:
+        class: Asylamba\Modules\Promethee\Manager\ResearchManager
+        arguments:
+            - "@database"
+            
+    promethee.technology_queue_manager:
+        class: Asylamba\Modules\Promethee\Manager\TechnologyQueueManager
+        arguments:
+            - "@database"

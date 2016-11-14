@@ -26,4 +26,33 @@ parameters:
     zeus.player.inactive_time_limit: 24 * 25
 
 services:
+    zeus.player_manager:
+        class: Asylamba\Modules\Zeus\Manager\PlayerManager
+        arguments:
+            - "@database"
+            - "@gaia.sector_manager"
+            - "@hermes.notification_manager"
+            - "@athena.orbital_base_manager"
+            - "@gaia.place_manager"
     
+    zeus.credit_transaction_manager:
+        class: Asylamba\Modules\Zeus\Manager\CreditTransactionManager
+        arguments:
+            - "@database"
+            
+    zeus.check_name_helper:
+        class: Asylamba\Modules\Zeus\Helper\CheckName
+        
+    zeus.player_helper:
+        class: Asylamba\Modules\Zeus\Helper\PlayerHelper
+        arguments:
+            - "@database"
+            
+    zeus.tutorial_helper:
+        class: Asylamba\Modules\Zeus\Helper\TutorialHelper
+        arguments:
+            - "@zeus.player_manager"
+            - "@athena.orbital_base_manager"
+            - "@athena.building_queue_manager"
+            - "@promethee.technology_queue_manager"
+         

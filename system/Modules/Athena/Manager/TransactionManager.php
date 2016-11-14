@@ -21,13 +21,19 @@ use Asylamba\Modules\Athena\Model\Transaction;
 class TransactionManager extends Manager {
 	protected $managerType = '_Transaction';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 't.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT t.*,
+		$qr = $this->database->prepare('SELECT t.*,
 			play.name AS playerName,
 			play.rColor AS playerColor,
 			ob.name AS placeName,
@@ -113,8 +119,7 @@ class TransactionManager extends Manager {
 	}
 
 	public function getExchangeRate($transactionType) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT currentRate
+		$qr = $this->database->prepare('SELECT currentRate
 			FROM transaction 
 			WHERE type = ? AND statement = ?
 			ORDER BY dValidation DESC 
@@ -126,8 +131,7 @@ class TransactionManager extends Manager {
 	}
 
 	public function add(Transaction $t) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
+		$qr = $this->database->prepare('INSERT INTO
 			transaction(rPlayer, rPlace, type, quantity, identifier, price, commercialShipQuantity, statement, dPublication, dValidation, currentRate)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
@@ -144,7 +148,7 @@ class TransactionManager extends Manager {
 			$t->currentRate
 		));
 
-		$t->id = $db->lastInsertId();
+		$t->id = $this->database->lastInsertId();
 
 		$this->_Add($t);
 	}
@@ -153,8 +157,7 @@ class TransactionManager extends Manager {
 		$transactions = $this->_Save();
 
 		foreach ($transactions AS $t) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE transaction
+			$qr = $this->database->prepare('UPDATE transaction
 				SET	id = ?,
 					rPlayer = ?,
 					rPlace = ?,
@@ -187,8 +190,7 @@ class TransactionManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM transaction WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM transaction WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);

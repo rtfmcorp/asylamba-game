@@ -28,6 +28,20 @@ abstract class GalaxyGenerator {
 	public static $listSector = array();
 
 	public static $output;
+	/** @var DatabaseAdmin **/
+	protected $databaseAdmin;
+	/** @var GalaxyConfiguration **/
+	protected $galaxyConfiguration;
+	
+	/**
+	 * @param DatabaseAdmin $databaseAdmin
+	 * @param GalaxyConfiguration $galaxyConfiguration
+	 */
+	public function __construct(DatabaseAdmin $databaseAdmin, GalaxyConfiguration $galaxyConfiguration)
+	{
+		$this->databaseAdmin = $databaseAdmin;
+		$this->galaxyConfiguration = $galaxyConfiguration;
+	}
 
 	public static function generate() {
 		self::clear();
@@ -44,73 +58,69 @@ abstract class GalaxyGenerator {
 	}
 
 	public static function clear() {
-		$db = DatabaseAdmin::getInstance();
-
-		$db->query('SET FOREIGN_KEY_CHECKS = 0;');
+		$this->databaseAdmin->query('SET FOREIGN_KEY_CHECKS = 0;');
 		
-		$db->query('TRUNCATE place');
+		$this->databaseAdmin->query('TRUNCATE place');
 		self::log('table `place` vidées');
 
-		$db->query('TRUNCATE system');
+		$this->databaseAdmin->query('TRUNCATE system');
 		self::log('table `system` vidées');
 
-		$db->query('TRUNCATE sector');
+		$this->databaseAdmin->query('TRUNCATE sector');
 		self::log('table `sector` vidées');
 
-		$db->query('SET FOREIGN_KEY_CHECKS = 1;');
+		$this->databaseAdmin->query('SET FOREIGN_KEY_CHECKS = 1;');
 		self::log('_ _ _ _');
 	}
 
 	public static function save() {
-		$db = DatabaseAdmin::getInstance();
-
 		# clean up database
 		self::clear();
 
 		self::log('sauvegarde des secteurs');
-		for ($i = 0; $i < ceil(count(self::$listSector) / GalaxyGenerator::MAX_QUERY); $i++) { 
+		for ($i = 0; $i < ceil(count(self::$listSector) / self::MAX_QUERY); $i++) { 
 			$qr = 'INSERT INTO sector(id, rColor, xPosition, yPosition, xBarycentric, yBarycentric, tax, population, lifePlanet, name, prime, points) VALUES ';
 			
-			for ($j = $i * GalaxyGenerator::MAX_QUERY; $j < (($i + 1) * GalaxyGenerator::MAX_QUERY) - 1; $j++) { 
+			for ($j = $i * self::MAX_QUERY; $j < (($i + 1) * self::MAX_QUERY) - 1; $j++) { 
 				if (isset(self::$listSector[$j])) {
 					$qr .= '(\'' . implode('\', \'', self::$listSector[$j]) . '\'), ';
 				}
 			}
 
 			$qr = substr($qr, 0, -2);
-			$db->query($qr);
+			$this->databaseAdmin->query($qr);
 		}
-		self::log(ceil(count(self::$listSector) / GalaxyGenerator::MAX_QUERY) . ' requêtes `INSERT`');
+		self::log(ceil(count(self::$listSector) / self::MAX_QUERY) . ' requêtes `INSERT`');
 
 		self::log('sauvegarde des systèmes');
-		for ($i = 0; $i < ceil(count(self::$listSystem) / GalaxyGenerator::MAX_QUERY); $i++) { 
+		for ($i = 0; $i < ceil(count(self::$listSystem) / self::MAX_QUERY); $i++) { 
 			$qr = 'INSERT INTO system(id, rSector, rColor, xPosition, yPosition, typeOfSystem) VALUES ';
 			
-			for ($j = $i * GalaxyGenerator::MAX_QUERY; $j < (($i + 1) * GalaxyGenerator::MAX_QUERY) - 1; $j++) { 
+			for ($j = $i * self::MAX_QUERY; $j < (($i + 1) * self::MAX_QUERY) - 1; $j++) { 
 				if (isset(self::$listSystem[$j])) {
 					$qr .= '(' . implode(', ', self::$listSystem[$j]) . '), ';
 				}
 			}
 
 			$qr = substr($qr, 0, -2);
-			$db->query($qr);
+			$this->databaseAdmin->query($qr);
 		}
-		self::log(ceil(count(self::$listSystem) / GalaxyGenerator::MAX_QUERY) . ' requêtes `INSERT`');
+		self::log(ceil(count(self::$listSystem) / self::MAX_QUERY) . ' requêtes `INSERT`');
 
 		self::log('sauvegarde des places');
-		for ($i = 0; $i < ceil(count(self::$listPlace) / GalaxyGenerator::MAX_QUERY); $i++) { 
+		for ($i = 0; $i < ceil(count(self::$listPlace) / self::MAX_QUERY); $i++) { 
 			$qr = 'INSERT INTO place(id, rSystem, typeOfPlace, position, population, coefResources, coefHistory, resources, danger, maxDanger, uPlace) VALUES ';
 			
-			for ($j = $i * GalaxyGenerator::MAX_QUERY; $j < (($i + 1) * GalaxyGenerator::MAX_QUERY) - 1; $j++) { 
+			for ($j = $i * self::MAX_QUERY; $j < (($i + 1) * self::MAX_QUERY) - 1; $j++) { 
 				if (isset(self::$listPlace[$j])) {
 					$qr .= '(' . implode(', ', self::$listPlace[$j]) . ', "' . Utils::addSecondsToDate(Utils::now(), -259200) . '"), ';
 				}
 			}
 
 			$qr = substr($qr, 0, -2);
-			$db->query($qr);
+			$this->databaseAdmin->query($qr);
 		}
-		self::log(ceil(count(self::$listPlace) / GalaxyGenerator::MAX_QUERY) . ' requêtes `INSERT`');
+		self::log(ceil(count(self::$listPlace) / self::MAX_QUERY) . ' requêtes `INSERT`');
 
 		self::log('_ _ _ _');
 	}
@@ -134,33 +144,33 @@ abstract class GalaxyGenerator {
 		$k = 1;
 
 		# GENERATION DES LINES
-		for ($w = 0; $w < count(GalaxyConfiguration::$galaxy['lineSystemPosition']); $w++) {
+		for ($w = 0; $w < count($this->galaxyConfiguration->galaxy['lineSystemPosition']); $w++) {
 			# line point
-			$xA = GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][0][0];
-			$yA = GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][0][1];
+			$xA = $this->galaxyConfiguration->galaxy['lineSystemPosition'][$w][0][0];
+			$yA = $this->galaxyConfiguration->galaxy['lineSystemPosition'][$w][0][1];
 
-			$xB = GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][1][0];
-			$yB = GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][1][1];
+			$xB = $this->galaxyConfiguration->galaxy['lineSystemPosition'][$w][1][0];
+			$yB = $this->galaxyConfiguration->galaxy['lineSystemPosition'][$w][1][1];
 
 			$l  = sqrt(pow($xB - $xA, 2) + pow($yB - $yA, 2));
 
-			for ($i = 1; $i <= GalaxyConfiguration::$galaxy['size']; $i++) {
-				for ($j = 1; $j <= GalaxyConfiguration::$galaxy['size']; $j++) {
+			for ($i = 1; $i <= $this->galaxyConfiguration->galaxy['size']; $i++) {
+				for ($j = 1; $j <= $this->galaxyConfiguration->galaxy['size']; $j++) {
 					# current cursor position
 					$xC = $j;
 					$yC = $i;
 
 					$d  = self::distToSegment($xC, $yC, $xA, $yA, $xB, $yB);
 
-					$thickness = GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][2];
-					$intensity = GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][3];
+					$thickness = $this->galaxyConfiguration->galaxy['lineSystemPosition'][$w][2];
+					$intensity = $this->galaxyConfiguration->galaxy['lineSystemPosition'][$w][3];
 
-					if ($d < GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][2]) {
-						#$prob = rand(0, GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][3]);
+					if ($d < $this->galaxyConfiguration->galaxy['lineSystemPosition'][$w][2]) {
+						#$prob = rand(0, $this->galaxyConfiguration->galaxy['lineSystemPosition'][$w][3]);
 						$prob = rand(0, 100);
 
 
-						#if (GalaxyConfiguration::$galaxy['lineSystemPosition'][$w][2] - $d > $prob) {
+						#if ($this->galaxyConfiguration->galaxy['lineSystemPosition'][$w][2] - $d > $prob) {
 						if (round($intensity - ($d * $intensity / $thickness)) >= $prob) {
 
 
@@ -177,17 +187,17 @@ abstract class GalaxyGenerator {
 		}
 
 		# GENERATION DES ANNEAUX (circleSystemPosition)
-		for ($w = 0; $w < count(GalaxyConfiguration::$galaxy['circleSystemPosition']); $w++) {
+		for ($w = 0; $w < count($this->galaxyConfiguration->galaxy['circleSystemPosition']); $w++) {
 			# line point
-			$xC = GalaxyConfiguration::$galaxy['circleSystemPosition'][$w][0][0];
-			$yC = GalaxyConfiguration::$galaxy['circleSystemPosition'][$w][0][1];
+			$xC = $this->galaxyConfiguration->galaxy['circleSystemPosition'][$w][0][0];
+			$yC = $this->galaxyConfiguration->galaxy['circleSystemPosition'][$w][0][1];
 
-			$radius 	= GalaxyConfiguration::$galaxy['circleSystemPosition'][$w][1];
-			$thickness 	= GalaxyConfiguration::$galaxy['circleSystemPosition'][$w][2];
-			$intensity	= GalaxyConfiguration::$galaxy['circleSystemPosition'][$w][3];
+			$radius 	= $this->galaxyConfiguration->galaxy['circleSystemPosition'][$w][1];
+			$thickness 	= $this->galaxyConfiguration->galaxy['circleSystemPosition'][$w][2];
+			$intensity	= $this->galaxyConfiguration->galaxy['circleSystemPosition'][$w][3];
 
-			for ($i = 1; $i <= GalaxyConfiguration::$galaxy['size']; $i++) {
-				for ($j = 1; $j <= GalaxyConfiguration::$galaxy['size']; $j++) {
+			for ($i = 1; $i <= $this->galaxyConfiguration->galaxy['size']; $i++) {
+				for ($j = 1; $j <= $this->galaxyConfiguration->galaxy['size']; $j++) {
 					# current cursor position
 					$xPosition = $j;
 					$yPosition = $i;
@@ -216,17 +226,17 @@ abstract class GalaxyGenerator {
 		}
 
 		# GENERATION PAR VAGUES
-		if (GalaxyConfiguration::$galaxy['systemPosition'] !== NULL) {
-			for ($i = 1; $i <= GalaxyConfiguration::$galaxy['size']; $i++) {
-				for ($j = 1; $j <= GalaxyConfiguration::$galaxy['size']; $j++) {
+		if ($this->galaxyConfiguration->galaxy['systemPosition'] !== NULL) {
+			for ($i = 1; $i <= $this->galaxyConfiguration->galaxy['size']; $i++) {
+				for ($j = 1; $j <= $this->galaxyConfiguration->galaxy['size']; $j++) {
 					# current cursor position
 					$xPosition = $j;
 					$yPosition = $i;
 					
 					# calcul de la distance entre la case et le centre
 					$d2o = sqrt(
-						pow(abs((GalaxyConfiguration::$galaxy['size'] / 2) - $xPosition), 2) + 
-						pow(abs((GalaxyConfiguration::$galaxy['size'] / 2) - $yPosition), 2)
+						pow(abs(($this->galaxyConfiguration->galaxy['size'] / 2) - $xPosition), 2) + 
+						pow(abs(($this->galaxyConfiguration->galaxy['size'] / 2) - $yPosition), 2)
 					);
 					
 					if (self::isPointInMap($d2o)) {
@@ -251,7 +261,7 @@ abstract class GalaxyGenerator {
 
 		foreach (self::$listSystem AS $system) {
 			$sectorDanger = 0;
-			foreach (GalaxyConfiguration::$sectors as $sector) {
+			foreach ($this->galaxyConfiguration->sectors as $sector) {
 				if ($system[1] == $sector['id']) {
 					$sectorDanger = $sector['danger'];
 					break;
@@ -310,9 +320,9 @@ abstract class GalaxyGenerator {
 					$resources 	= 0;
 					$stRES		= 0;
 				} else {
-					$population = GalaxyConfiguration::$places[$type - 1]['credits'];
-					$resources 	= GalaxyConfiguration::$places[$type - 1]['resources'];
-					$history 	= GalaxyConfiguration::$places[$type - 1]['history'];
+					$population = $this->galaxyConfiguration->places[$type - 1]['credits'];
+					$resources 	= $this->galaxyConfiguration->places[$type - 1]['resources'];
+					$history 	= $this->galaxyConfiguration->places[$type - 1]['history'];
 					$stRES		= rand(2000000, 20000000);
 				}
 
@@ -352,7 +362,7 @@ abstract class GalaxyGenerator {
 		self::log('génération des secteurs');
 		$k = 1;
 
-		foreach (GalaxyConfiguration::$sectors as $sector) {
+		foreach ($this->galaxyConfiguration->sectors as $sector) {
 			self::$nbSector++;
 
 			$prime = ($sector['beginColor'] != 0)
@@ -387,7 +397,7 @@ abstract class GalaxyGenerator {
 		$k = 0;
 
 		foreach (self::$listSystem as $v) {
-			foreach (GalaxyConfiguration::$sectors as $w) {
+			foreach ($this->galaxyConfiguration->sectors as $w) {
 				$place = $pl->pointInPolygon($v[3] . ', ' . $v[4], $w['vertices']);
 
 				if ($place == 1 OR $place == 2) {
@@ -418,12 +428,12 @@ abstract class GalaxyGenerator {
 	}
 
 	private static function getStatisticsSector() {
-		$db = DatabaseAdmin::getInstance();
+		$this->databaseAdmin = DatabaseAdmin::getInstance();
 
 		foreach (self::$listSector as $sector) {
 			$id = $sector[0];
 
-			$qr = $db->prepare('SELECT
+			$qr = $this->databaseAdmin->prepare('SELECT
 					COUNT(pl.id) AS planet,
 					SUM(pl.population) AS population
 				FROM sector AS se
@@ -441,7 +451,7 @@ abstract class GalaxyGenerator {
 
 			$qr->closeCursor();
 
-			$qr = $db->prepare('UPDATE sector SET lifePlanet = ?, population = ? WHERE id = ?');
+			$qr = $this->databaseAdmin->prepare('UPDATE sector SET lifePlanet = ?, population = ? WHERE id = ?');
 			$qr->execute(array($nbrPlanet, $population, $id));
 
 			$qr->closeCursor();
@@ -449,16 +459,16 @@ abstract class GalaxyGenerator {
 	}
 
 	private static function isPointInMap($d2o) {
-		$mask = rand(1, GalaxyConfiguration::$galaxy['mask']);
+		$mask = rand(1, $this->galaxyConfiguration->galaxy['mask']);
 
 		if ($mask < 3) {
-			$realPosition = GalaxyConfiguration::$galaxy['diag'] - $d2o;
-			$step 		  = GalaxyConfiguration::$galaxy['diag'] / count(GalaxyConfiguration::$galaxy['systemPosition']);
+			$realPosition = $this->galaxyConfiguration->galaxy['diag'] - $d2o;
+			$step 		  = $this->galaxyConfiguration->galaxy['diag'] / count($this->galaxyConfiguration->galaxy['systemPosition']);
 			$currentStep  = floor($realPosition / $step);
 
 			$random = rand(0, 100);
 
-			if (GalaxyConfiguration::$galaxy['systemPosition'][$currentStep] > $random) {
+			if ($this->galaxyConfiguration->galaxy['systemPosition'][$currentStep] > $random) {
 				return TRUE;
 			} else {
 				return FALSE;
@@ -524,17 +534,17 @@ abstract class GalaxyGenerator {
 	}
 
 	private static function getSystem() {
-		return self::getProportion(GalaxyConfiguration::$galaxy['systemProportion'], rand(1, 100));
+		return self::getProportion($this->galaxyConfiguration->galaxy['systemProportion'], rand(1, 100));
 	}
 
 	private static function getNbOfPlace($systemType) {
 		return rand(
-			GalaxyConfiguration::$systems[$systemType - 1]['nbrPlaces'][0],
-			GalaxyConfiguration::$systems[$systemType - 1]['nbrPlaces'][1]
+			$this->galaxyConfiguration->systems[$systemType - 1]['nbrPlaces'][0],
+			$this->galaxyConfiguration->systems[$systemType - 1]['nbrPlaces'][1]
 		);
 	}
 
 	private static function getTypeOfPlace($systemType) {
-		return self::getProportion(GalaxyConfiguration::$systems[$systemType - 1]['placesPropotion'], rand(1, 100));
+		return self::getProportion($this->galaxyConfiguration->systems[$systemType - 1]['placesPropotion'], rand(1, 100));
 	}
 }

@@ -20,13 +20,17 @@ use Asylamba\Modules\Promethee\Model\Research;
 class ResearchManager extends Manager {
 	protected $managerType = '_Research';
 
+	public function __construct(Database $database)
+	{
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where);
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT *
+		$qr = $this->database->prepare('SELECT *
 			FROM research
 			' . $formatWhere . '
 			' . $formatOrder . '
@@ -77,8 +81,7 @@ class ResearchManager extends Manager {
 	}
 
 	public function add(Research $res) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
+		$qr = $this->database->prepare('INSERT INTO
 			research(rPlayer, mathLevel, physLevel, chemLevel, bioLevel, mediLevel, econoLevel, psychoLevel, networkLevel, algoLevel, statLevel, naturalTech, lifeTech, socialTech, informaticTech, naturalToPay, lifeToPay, socialToPay, informaticToPay)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
@@ -110,8 +113,7 @@ class ResearchManager extends Manager {
 		$researches = $this->_Save();
 
 		foreach ($researches AS $k => $res) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE research
+			$qr = $this->database->prepare('UPDATE research
 				SET	rPlayer = ?,
 					mathLevel = ?,
 					physLevel = ?,

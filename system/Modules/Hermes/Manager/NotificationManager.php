@@ -19,13 +19,16 @@ use Asylamba\Modules\Hermes\Model\Notification;
 class NotificationManager extends Manager {
 	protected $managerType = '_Notification';
 
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where);
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT *
+		$qr = $this->database->prepare('SELECT *
 			FROM notification
 			' . $formatWhere . '
 			' . $formatOrder . '
@@ -64,8 +67,7 @@ class NotificationManager extends Manager {
 	}
 
 	public function add(Notification $n) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
+		$qr = $this->database->prepare('INSERT INTO
 			notification(rPlayer, title, content, dSending, readed, archived)
 			VALUES(?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
@@ -77,7 +79,7 @@ class NotificationManager extends Manager {
 			$n->getArchived()
 		));
 
-		$n->setId($db->lastInsertId());
+		$n->setId($this->database->lastInsertId());
 
 		$this->_Add($n);
 	}
@@ -86,8 +88,7 @@ class NotificationManager extends Manager {
 		$notifications = $this->_Save();
 
 		foreach ($notifications AS $n) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE notification
+			$qr = $this->database->prepare('UPDATE notification
 				SET	id = ?,
 					rPlayer = ?,
 					title = ?,
@@ -110,8 +111,7 @@ class NotificationManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM notification WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM notification WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);
@@ -119,8 +119,7 @@ class NotificationManager extends Manager {
 	}
 
 	public function deleteByRPlayer($rPlayer) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM notification WHERE rPlayer = ? AND archived = 0');
+		$qr = $this->database->prepare('DELETE FROM notification WHERE rPlayer = ? AND archived = 0');
 		$qr->execute(array($rPlayer));
 
 		$nbrDeleted = 0;
@@ -137,8 +136,7 @@ class NotificationManager extends Manager {
 
 	public static function countAll($where = array()) {
 		$formatWhere = Utils::arrayToWhere($where);
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT 
+		$qr = $this->database->prepare('SELECT 
 				COUNT(id) AS nbr
 			FROM notification
 			' . $formatWhere

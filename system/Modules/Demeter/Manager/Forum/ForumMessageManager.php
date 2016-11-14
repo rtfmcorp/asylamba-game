@@ -19,13 +19,19 @@ use Asylamba\Modules\Demeter\Model\Forum\ForumMessage;
 class ForumMessageManager extends Manager {
 	protected $managerType ='_ForumMessage';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'm.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT m.*,
+		$qr = $this->database->prepare('SELECT m.*,
 				p.name AS playerName,
 				p.rColor AS playerColor,
 				p.avatar AS playerAvatar,
@@ -78,13 +84,11 @@ class ForumMessageManager extends Manager {
 	}
 
 	public function save() {
-		$db = Database::getInstance();
-
 		$messages = $this->_Save();
 
 		foreach ($messages AS $message) {
 			
-			$qr = $db->prepare('UPDATE forumMessage
+			$qr = $this->database->prepare('UPDATE forumMessage
 				SET
 					rPlayer = ?,
 					rTopic = ?,
@@ -108,9 +112,7 @@ class ForumMessageManager extends Manager {
 	}
 
 	public function add($newMessage) {
-		$db = Database::getInstance();
-
-		$qr = $db->prepare('INSERT INTO forumMessage
+		$qr = $this->database->prepare('INSERT INTO forumMessage
 			SET
 				rPlayer = ?,
 				rTopic = ?,
@@ -125,7 +127,7 @@ class ForumMessageManager extends Manager {
 				Utils::now()
 				));
 
-		$newMessage->id = $db->lastInsertId();
+		$newMessage->id = $this->database->lastInsertId();
 
 		$this->_Add($newMessage);
 
@@ -133,8 +135,7 @@ class ForumMessageManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM forumMessage WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM forumMessage WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);

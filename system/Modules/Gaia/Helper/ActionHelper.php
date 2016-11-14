@@ -3,7 +3,6 @@
 namespace Asylamba\Modules\Gaia\Helper;
 
 use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Chronos;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Format;
@@ -13,19 +12,35 @@ use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Promethee\Resource\TechnologyResource;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 
-abstract class ActionHelper {
+use Asylamba\Modules\Ares\Manager\CommanderManager;
+use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
 
+abstract class ActionHelper {
+	/** @var CommanderManager **/
+	protected $commanderManager;
+	/** @var CommercialRouteManager **/
+	protected $commercialRouteManager;
+	
+	/**
+	 * @param CommanderManager $commanderManager
+	 * @param CommercialRouteManager $commercialRouteManager
+	 */
+	public function __construct(CommanderManager $commanderManager, CommercialRouteManager $commercialRouteManager) {
+		$this->commanderManager = $commanderManager;
+		$this->commercialRouteManager = $commercialRouteManager;
+	}
+	
 	public static function loot($ob, &$link, &$box, $id, $place, $commanderSession) {
 		$link .= '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . MEDIA . 'map/action/loot.png" alt="pillage" /></a>';
 
 		$box .= '<div data-id="' . $id . '" class="act-bull" style="display:' . (($id == 1) ? 'block' : 'none') . ';" >';
 			$box .= '<h5>Effectuer un pillage</h5>';
 			# check si au moins un commandant est disponible
-			$S_COM2 = ASM::$com->getCurrentSession();
-			ASM::$com->changeSession($commanderSession);
+			$S_COM2 = $this->commanderManager->getCurrentSession();
+			$this->commanderManager->changeSession($commanderSession);
 			$commanderQuantity = 0;
-			for ($i = 0; $i < ASM::$com->size(); $i++) { 
-				if (ASM::$com->get($i)->getStatement() == COM_AFFECTED) {
+			for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
+				if ($this->commanderManager->get($i)->getStatement() == COM_AFFECTED) {
 	  				$commanderQuantity++;
 				}
 			}
@@ -37,14 +52,14 @@ abstract class ActionHelper {
 					$time = Game::getTimeTravelOutOfSystem($ob->getXSystem(), $ob->getYSystem(), $place->getXSystem(), $place->getYSystem());
 				}
 
-				for ($i = 0; $i < ASM::$com->size(); $i++) {
-					if (ASM::$com->get($i)->getStatement() == COM_AFFECTED) {
-						$box .= '<a href="' . Format::actionBuilder('loot', ['commanderid' => ASM::$com->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
-							$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . ASM::$com->get($i)->getName() . '" />';
+				for ($i = 0; $i < $this->commanderManager->size(); $i++) {
+					if ($this->commanderManager->get($i)->getStatement() == COM_AFFECTED) {
+						$box .= '<a href="' . Format::actionBuilder('loot', ['commanderid' => $this->commanderManager->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
+							$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
 							$box .= '<span class="label">';
-								$box .= '<strong>' . ASM::$com->get($i)->getName() . '</strong><br />';
-								$box .= ASM::$com->get($i)->getPev() . ' pev<br />';
-								$box .= Format::numberFormat(ASM::$com->get($i)->getPev() * COEFFLOOT) . ' de soute';
+								$box .= '<strong>' . $this->commanderManager->get($i)->getName() . '</strong><br />';
+								$box .= $this->commanderManager->get($i)->getPev() . ' pev<br />';
+								$box .= Format::numberFormat($this->commanderManager->get($i)->getPev() * COEFFLOOT) . ' de soute';
 							$box .= '</span>';
 							$box .= '<span class="value">';
 								$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . MEDIA . 'resources/time.png" class="icon-color">';
@@ -55,7 +70,7 @@ abstract class ActionHelper {
 			} else {
 				$box .= '<p class="info">Vous n\'avez aucun commandant en fonction sur ' . $ob->getName() . '. <a href="' . APP_ROOT . 'bases/base-' . $ob->getId() . '/view-school">Affectez un commandant</a> et envoyez un pillage depuis ' . $ob->getName() . '.</p>';
 			}
-			ASM::$com->changeSession($S_COM2);
+			$this->commanderManager->changeSession($S_COM2);
 		$box .= '</div>';
 	}
 
@@ -71,21 +86,21 @@ abstract class ActionHelper {
 				$obQuantity = CTR::$data->get('playerBase')->get('ob')->size();
 				$msQuantity = CTR::$data->get('playerBase')->get('ms')->size();
 				$coloQuantity = 0;
-				$S_COM2 = ASM::$com->getCurrentSession();
-				ASM::$com->changeSession($movingCommandersSession);
-				for ($i = 0; $i < ASM::$com->size(); $i++) { 
-					if (ASM::$com->get($i)->getTypeOfMove() == COM_COLO) {
+				$S_COM2 = $this->commanderManager->getCurrentSession();
+				$this->commanderManager->changeSession($movingCommandersSession);
+				for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
+					if ($this->commanderManager->get($i)->getTypeOfMove() == COM_COLO) {
 						$coloQuantity++;
 					}
 				}
-				ASM::$com->changeSession($S_COM2);
+				$this->commanderManager->changeSession($S_COM2);
 				if ($obQuantity + $msQuantity + $coloQuantity < $maxBasesQuantity) {
 					# check si au moins un commandant est disponible
-					$S_COM2 = ASM::$com->getCurrentSession();
-					ASM::$com->changeSession($commanderSession);
+					$S_COM2 = $this->commanderManager->getCurrentSession();
+					$this->commanderManager->changeSession($commanderSession);
 					$commanderQuantity = 0;
-					for ($i = 0; $i < ASM::$com->size(); $i++) { 
-						if (ASM::$com->get($i)->getStatement() == COM_AFFECTED) {
+					for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
+						if ($this->commanderManager->get($i)->getStatement() == COM_AFFECTED) {
 							$commanderQuantity++;
 						}
 					}
@@ -101,13 +116,13 @@ abstract class ActionHelper {
 								$time = Game::getTimeTravelOutOfSystem($ob->getXSystem(), $ob->getYSystem(), $place->getXSystem(), $place->getYSystem());
 							}
 
-							for ($i = 0; $i < ASM::$com->size(); $i++) {
-								if (ASM::$com->get($i)->getStatement() == COM_AFFECTED) {
-									$box .= '<a href="' . Format::actionBuilder('conquer', ['commanderid' => ASM::$com->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
-										$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . ASM::$com->get($i)->getName() . '" />';
+							for ($i = 0; $i < $this->commanderManager->size(); $i++) {
+								if ($this->commanderManager->get($i)->getStatement() == COM_AFFECTED) {
+									$box .= '<a href="' . Format::actionBuilder('conquer', ['commanderid' => $this->commanderManager->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
+										$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
 										$box .= '<span class="label">';
-											$box .= '<strong>' . ASM::$com->get($i)->getName() . '</strong><br />';
-											$box .= ASM::$com->get($i)->getPev() . ' pev';
+											$box .= '<strong>' . $this->commanderManager->get($i)->getName() . '</strong><br />';
+											$box .= $this->commanderManager->get($i)->getPev() . ' pev';
 										$box .= '</span>';
 										$box .= '<span class="value">';
 											$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . MEDIA . 'resources/time.png" class="icon-color"><br />';
@@ -122,7 +137,7 @@ abstract class ActionHelper {
 					} else {
 						$box .= '<p class="info">Vous n\'avez aucun commandant en fonction sur ' . $ob->getName() . '. <a href="' . APP_ROOT . 'bases/base-' . $ob->getId() . '/view-school">Affectez un commandant</a> et envoyez un pillage depuis ' . $ob->getName() . '.</p>';
 					}
-					ASM::$com->changeSession($S_COM2);
+					$this->commanderManager->changeSession($S_COM2);
 				} else {
 					$box .= '<p class="info">Pour pouvoir conquérir une planète supplémentaire, il faut augmenter le niveau de la technologie ' . TechnologyResource::getInfo(Technology::BASE_QUANTITY, 'name') . '.</p>';
 				}
@@ -144,21 +159,21 @@ abstract class ActionHelper {
 				$obQuantity = CTR::$data->get('playerBase')->get('ob')->size();
 				$msQuantity = CTR::$data->get('playerBase')->get('ms')->size();
 				$coloQuantity = 0;
-				$S_COM2 = ASM::$com->getCurrentSession();
-				ASM::$com->changeSession($movingCommandersSession);
-				for ($i = 0; $i < ASM::$com->size(); $i++) { 
-					if (ASM::$com->get($i)->getTypeOfMove() == COM_COLO) {
+				$S_COM2 = $this->commanderManager->getCurrentSession();
+				$this->commanderManager->changeSession($movingCommandersSession);
+				for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
+					if ($this->commanderManager->get($i)->getTypeOfMove() == COM_COLO) {
 						$coloQuantity++;
 					}
 				}
-				ASM::$com->changeSession($S_COM2);
+				$this->commanderManager->changeSession($S_COM2);
 				if ($obQuantity + $msQuantity + $coloQuantity < $maxBasesQuantity) {
 					# check si au moins un commandant est disponible
-					$S_COM2 = ASM::$com->getCurrentSession();
-					ASM::$com->changeSession($commanderSession);
+					$S_COM2 = $this->commanderManager->getCurrentSession();
+					$this->commanderManager->changeSession($commanderSession);
 					$commanderQuantity = 0;
-					for ($i = 0; $i < ASM::$com->size(); $i++) { 
-						if (ASM::$com->get($i)->getStatement() == COM_AFFECTED) {
+					for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
+						if ($this->commanderManager->get($i)->getStatement() == COM_AFFECTED) {
 							$commanderQuantity++;
 						}
 					}
@@ -174,13 +189,13 @@ abstract class ActionHelper {
 								$time = Game::getTimeTravelOutOfSystem($ob->getXSystem(), $ob->getYSystem(), $place->getXSystem(), $place->getYSystem());
 							}
 
-							for ($i = 0; $i < ASM::$com->size(); $i++) { 
-								if (ASM::$com->get($i)->getStatement() == COM_AFFECTED) {
-									$box .= '<a href="' . Format::actionBuilder('colonize', ['commanderid' => ASM::$com->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
-										$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . ASM::$com->get($i)->getName() . '" />';
+							for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
+								if ($this->commanderManager->get($i)->getStatement() == COM_AFFECTED) {
+									$box .= '<a href="' . Format::actionBuilder('colonize', ['commanderid' => $this->commanderManager->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
+										$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
 										$box .= '<span class="label">';
-											$box .= '<strong>' . ASM::$com->get($i)->getName() . '</strong><br />';
-											$box .= ASM::$com->get($i)->getPev() . ' pev';
+											$box .= '<strong>' . $this->commanderManager->get($i)->getName() . '</strong><br />';
+											$box .= $this->commanderManager->get($i)->getPev() . ' pev';
 										$box .= '</span>';
 										$box .= '<span class="value">';
 											$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . MEDIA . 'resources/time.png" class="icon-color"><br />';
@@ -195,7 +210,7 @@ abstract class ActionHelper {
 					} else {
 						$box .= '<p class="info">Vous n\'avez aucun commandant en fonction sur ' . $ob->getName() . '. <a href="' . APP_ROOT . 'bases/base-' . $ob->getId() . '/view-school">Affectez un commandant</a> et envoyez un pillage depuis ' . $ob->getName() . '.</p>';
 					}
-					ASM::$com->changeSession($S_COM2);
+					$this->commanderManager->changeSession($S_COM2);
 				} else {
 					$box .= '<p class="info">Pour pouvoir coloniser une planète supplémentaire, il faut augmenter le niveau de la technologie ' . TechnologyResource::getInfo(Technology::BASE_QUANTITY, 'name') . '.</p>';
 				}
@@ -222,21 +237,21 @@ abstract class ActionHelper {
 				if ($ob->getLevelCommercialPlateforme() > 0) {
 					if ($place->getLevelCommercialPlateforme() > 0) {
 						# check si on a déjà une route avec ce joueur
-						$S_CRM1 = ASM::$crm->getCurrentSession();
-						ASM::$crm->changeSession($ob->routeManager);
-						for ($i = 0; $i < ASM::$crm->size(); $i++) { 
-							if (ASM::$crm->get($i)->getROrbitalBaseLinked() == $ob->getRPlace()) {
-								if (ASM::$crm->get($i)->getROrbitalBase() == $place->getId()) {
-									switch(ASM::$crm->get($i)->getStatement()) {
+						$S_CRM1 = $this->commercialRouteManager->getCurrentSession();
+						$this->commercialRouteManager->changeSession($ob->routeManager);
+						for ($i = 0; $i < $this->commercialRouteManager->size(); $i++) { 
+							if ($this->commercialRouteManager->get($i)->getROrbitalBaseLinked() == $ob->getRPlace()) {
+								if ($this->commercialRouteManager->get($i)->getROrbitalBase() == $place->getId()) {
+									switch($this->commercialRouteManager->get($i)->getStatement()) {
 										case CRM_PROPOSED: $notAccepted = TRUE; break;
 										case CRM_ACTIVE: $sendResources = TRUE; break;
 										case CRM_STANDBY: $standby = TRUE; break;
 									}
 								}
 							}
-							if (ASM::$crm->get($i)->getROrbitalBase() == $ob->getRPlace()) {
-								if (ASM::$crm->get($i)->getROrbitalBaseLinked() == $place->getId()) {
-									switch(ASM::$crm->get($i)->getStatement()) {
+							if ($this->commercialRouteManager->get($i)->getROrbitalBase() == $ob->getRPlace()) {
+								if ($this->commercialRouteManager->get($i)->getROrbitalBaseLinked() == $place->getId()) {
+									switch($this->commercialRouteManager->get($i)->getStatement()) {
 										case CRM_PROPOSED: $proposed = TRUE; break;
 										case CRM_ACTIVE: $sendResources = TRUE; break;
 										case CRM_STANDBY: $standby = TRUE; break;
@@ -244,7 +259,7 @@ abstract class ActionHelper {
 								}
 							}
 						}
-						ASM::$crm->changeSession($S_CRM1);
+						$this->commercialRouteManager->changeSession($S_CRM1);
 						if ($sendResources == FALSE) {
 							if ($proposed == TRUE) {
 								$box .= '<h5>Route commerciale en suspens</h5>';
@@ -266,12 +281,12 @@ abstract class ActionHelper {
 								$box .= '.</p>';
 							} else {
 								# check si encore des routes libres
-								$S_CRM1 = ASM::$crm->getCurrentSession();
-								ASM::$crm->changeSession($ob->routeManager);
-								$usedRoutes = ASM::$crm->size();
-								for ($i = 0; $i < ASM::$crm->size(); $i++) {
-									if (ASM::$crm->get($i)->getROrbitalBaseLinked() == $ob->getRPlace()) {
-										if (ASM::$crm->get($i)->getStatement() == CRM_PROPOSED) {
+								$S_CRM1 = $this->commercialRouteManager->getCurrentSession();
+								$this->commercialRouteManager->changeSession($ob->routeManager);
+								$usedRoutes = $this->commercialRouteManager->size();
+								for ($i = 0; $i < $this->commercialRouteManager->size(); $i++) {
+									if ($this->commercialRouteManager->get($i)->getROrbitalBaseLinked() == $ob->getRPlace()) {
+										if ($this->commercialRouteManager->get($i)->getStatement() == CRM_PROPOSED) {
 											# on soustrait les routes qu'on nous a proposé et qu'on n'a pas encore accepté
 											$usedRoutes--;
 										}
@@ -308,7 +323,7 @@ abstract class ActionHelper {
 									$box .= '<h5>Proposer une route commerciale</h5>';
 									$box .= '<p class="info">Toutes vos routes commerciales sont déjà créées. Pour pouvoir proposer une nouvelle route, il faut soit augmenter le niveau de votre plateforme commerciale, soit annuler une route existante.</p>';
 								}
-								ASM::$crm->changeSession($S_CRM1);
+								$this->commercialRouteManager->changeSession($S_CRM1);
 							}
 						}
 					} else {
@@ -364,11 +379,11 @@ abstract class ActionHelper {
 			# check s'il y a une place libre dans la destination
 			if (count($place->commanders) < 3) {
 				# check si au moins 1 commandant disponible
-				$S_COM2 = ASM::$com->getCurrentSession();
-				ASM::$com->changeSession($commanderSession);
+				$S_COM2 = $this->commanderManager->getCurrentSession();
+				$this->commanderManager->changeSession($commanderSession);
 				$commanderQuantity = 0;
-				for ($i = 0; $i < ASM::$com->size(); $i++) { 
-					if (ASM::$com->get($i)->getStatement() == COM_AFFECTED) {
+				for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
+					if ($this->commanderManager->get($i)->getStatement() == COM_AFFECTED) {
 						$commanderQuantity++;
 					}
 				}
@@ -380,12 +395,12 @@ abstract class ActionHelper {
 						$time = Game::getTimeTravelOutOfSystem($ob->getXSystem(), $ob->getYSystem(), $place->getXSystem(), $place->getYSystem());
 					}
 
-					for ($i = 0; $i < ASM::$com->size(); $i++) {
-						$box .= '<a href="' . Format::actionBuilder('movefleet', ['commanderid' => ASM::$com->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
-							$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . ASM::$com->get($i)->getName() . '" />';
+					for ($i = 0; $i < $this->commanderManager->size(); $i++) {
+						$box .= '<a href="' . Format::actionBuilder('movefleet', ['commanderid' => $this->commanderManager->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
+							$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
 							$box .= '<span class="label">';
-								$box .= '<strong>' . ASM::$com->get($i)->getName() . '</strong><br />';
-								$box .= ASM::$com->get($i)->getPev() . ' pev';
+								$box .= '<strong>' . $this->commanderManager->get($i)->getName() . '</strong><br />';
+								$box .= $this->commanderManager->get($i)->getPev() . ' pev';
 							$box .= '</span>';
 							$box .= '<span class="value">';
 								$box .= Chronos::secondToFormat($time, 'lite') . ' <img alt="temps" src="' . MEDIA . 'resources/time.png" class="icon-color"><br />';
@@ -395,7 +410,7 @@ abstract class ActionHelper {
 				} else {
 					$box .= '<p class="info">Vous n\'avez aucun commandant susceptible d\'être transféré sur cette base.</p>';
 				}
-				ASM::$com->changeSession($S_COM2);
+				$this->commanderManager->changeSession($S_COM2);
 			} else {
 				$box .= '<p class="info">Cette base n\'a pas la capacité d\'accueillir une flotte supplémentaire.</p>';
 			}

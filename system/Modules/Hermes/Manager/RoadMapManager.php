@@ -20,13 +20,19 @@ use Asylamba\Modules\Hermes\Model\RoadMap;
 class RoadMapManager extends Manager {
 	protected $managerType = '_RoadMap';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'r.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
-
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT
+		
+		$qr = $this->database->prepare('SELECT
 				r.*,
 				p.name AS name,
 				p.rColor AS color,
@@ -74,8 +80,7 @@ class RoadMapManager extends Manager {
 	}
 
 	public function add(RoadMap $rm) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
+		$qr = $this->database->prepare('INSERT INTO
 			roadMap(rPlayer, oContent, pContent, statement, dCreation)
 			VALUES(?, ?, ?, ?, ?)');
 		$qr->execute(array(
@@ -86,7 +91,7 @@ class RoadMapManager extends Manager {
 			$rm->dCreation
 		));
 
-		$rm->id = $db->lastInsertId();
+		$rm->id = $this->database->lastInsertId();
 
 		$this->_Add($rm);
 	}
@@ -95,8 +100,7 @@ class RoadMapManager extends Manager {
 		$roadmap = $this->_Save();
 
 		foreach ($roadmap AS $rm) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE roadMap
+			$qr = $this->database->prepare('UPDATE roadMap
 				SET	rPlayer = ?,
 					oContent = ?,
 					pContent = ?,
@@ -115,8 +119,7 @@ class RoadMapManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM roadMap WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM roadMap WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);

@@ -1,3 +1,39 @@
 ---
 services:
-    
+    demeter.candidate_manager:
+        class: Asylamba\Modules\Demeter\Manager\Election\CandidateManager
+        arguments:
+            - "@database"
+    demeter.election_manager:
+        class: Asylamba\Modules\Demeter\Manager\Election\ElectionManager
+        arguments:
+            - "@database"
+    demeter.vote_manager:
+        class: Asylamba\Modules\Demeter\Manager\Election\VoteManager
+        arguments:
+            - "@database"
+    demeter.faction_news_manager:
+        class: Asylamba\Modules\Demeter\Manager\Forum\FactionNewsManager
+        arguments:
+            - "@database"
+    demeter.forum_message_manager:
+        class: Asylamba\Modules\Demeter\Manager\Forum\ForumMessageManager
+        arguments:
+            - "@database"
+    demeter.forum_topic_manager:
+        class: Asylamba\Modules\Demeter\Manager\Forum\ForumTopicManager
+        arguments:
+            - "@database"
+    demeter.law_manager:
+        class: Asylamba\Modules\Demeter\Manager\Law\LawManager
+        arguments:
+            - "@database"
+    demeter.vote_law_manager:
+        class: Asylamba\Modules\Demeter\Manager\Law\VoteLawManager
+        arguments:
+            - "@database"
+    demeter.color_manager:
+        class: Asylamba\Modules\Demeter\Manager\ColorManager
+        arguments:
+            - "@database"
+            - "@zeus.player_manager"

@@ -6,10 +6,21 @@ use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Database\Database;
 
 class GalaxyColorManager {
+	/** @var Database **/
+	protected $database;
+	
 	public static function apply() {
 		CTR::$applyGalaxy = TRUE;
 	}
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database)
+	{
+		$this->database = $database;
+	}
+	
 	public static function applyAndSave() {
 		$gcm = new GalaxyColorManager();
 		$gcm->loadSystem();
@@ -32,7 +43,6 @@ class GalaxyColorManager {
 		}
 		$requestPart = rtrim($requestPart, ","); # to remove last comma
 
-		$db = Database::getInstance();
 		$query = 'SELECT
 			se.id AS id,
 			se.rSector AS sector,
@@ -41,7 +51,7 @@ class GalaxyColorManager {
 			' . $requestPart . '
 		FROM system AS se
 		ORDER BY se.id';
-		$qr = $db->query($query);
+		$qr = $this->database->query($query);
 		
 		while ($aw = $qr->fetch()) {
 			$colors = [];
@@ -59,18 +69,16 @@ class GalaxyColorManager {
 	}
 
 	public function saveSystem() {
-		$db = Database::getInstance();
 		foreach ($this->system as $k => $v) {
 			if ($v['hasChanged'] == TRUE) {
-				$qr = $db->prepare('UPDATE system SET rColor = ? WHERE id = ?');
+				$qr = $this->database->prepare('UPDATE system SET rColor = ? WHERE id = ?');
 				$qr->execute(array($v['systemColor'], $k));
 			}
 		}
 	}
 
 	public function loadSector() {
-		$db = Database::getInstance();
-		$qr = $db->query('SELECT id, rColor, prime FROM sector ORDER BY id');
+		$qr = $this->database->query('SELECT id, rColor, prime FROM sector ORDER BY id');
 		while ($aw = $qr->fetch()) {
 			$this->sector[$aw['id']] = array(
 				'color' => $aw['rColor'],
@@ -81,10 +89,9 @@ class GalaxyColorManager {
 	}
 
 	public function saveSector() {
-		$db = Database::getInstance();
 		foreach ($this->sector as $k => $v) {
 			if ($v['hasChanged'] == TRUE) {
-				$qr = $db->prepare('UPDATE sector SET rColor = ?, prime = ? WHERE id = ?');
+				$qr = $this->database->prepare('UPDATE sector SET rColor = ?, prime = ? WHERE id = ?');
 				$qr->execute(array($v['color'], $v['prime'], $k));
 			}
 		}

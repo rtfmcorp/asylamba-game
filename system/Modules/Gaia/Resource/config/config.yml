@@ -3,4 +3,36 @@ parameters:
     gaia.limit_conquest_sector: 4
     
 services:
-    
+    gaia.action_helper:
+        class: Asylamba\Modules\Gaia\Helper\ActionHelper
+        arguments:
+            - "@database"
+            - "@ares.commander_manager"
+            - "@athena.commercial_route_manager"
+            
+    gaia.galaxy_generator:
+        class: Asylamba\Modules\Gaia\Helper\GalaxyGenerator
+        arguments:
+            - "@database_admin"
+            - "@galaxy_configuration"
+            
+    gaia.galaxy_color_manager:
+        class: Asylamba\Modules\Gaia\Manager\GalaxyColorManager
+        arguments:
+            - "@database"
+            
+    gaia.place_manager:
+        class: Asylamba\Modules\Gaia\Manager\PlaceManager
+        arguments:
+            - "@database"
+            - "@ares.commander_manager"
+            
+    gaia.sector_manager:
+        class: Asylamba\Modules\Gaia\Manager\SectorManager
+        arguments:
+            - "@database"
+            
+    gaia.system_manager:
+        class: Asylamba\Modules\Gaia\Manager\SystemManager
+        arguments:
+            - "@database"

@@ -28,4 +28,17 @@ parameters:
     
     
 services:
-    
+    ares.commander_manager:
+        class: Asylamba\Modules\Ares\Manager\CommanderManager
+        arguments:
+            - "@database"
+            
+    ares.little_report_manager:
+        class: Asylamba\Modules\Ares\Manager\LittleReportManager
+        arguments:
+            - "@database"
+            
+    ares.report_manager:
+        class: Asylamba\Modules\Ares\Manager\ReportManager
+        arguments:
+            - "@database"

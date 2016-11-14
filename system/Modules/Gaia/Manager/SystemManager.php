@@ -20,13 +20,19 @@ use Asylamba\Modules\Gaia\Model\System;
 class SystemManager extends Manager {
 	protected $managerType = '_System';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 's.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT s.*
+		$qr = $this->database->prepare('SELECT s.*
 			FROM system AS s
 			' . $formatWhere .'
 			' . $formatOrder .'
@@ -69,8 +75,7 @@ class SystemManager extends Manager {
 		$systems = $this->_Save();
 
 		foreach ($systems AS $s) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE system
+			$qr = $this->database->prepare('UPDATE system
 				SET	rColor = ?
 				WHERE id = ?');
 			$qr->execute(array(

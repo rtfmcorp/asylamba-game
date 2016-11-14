@@ -19,13 +19,19 @@ use Asylamba\Modules\Athena\Model\CommercialShipping;
 class CommercialShippingManager extends Manager {
 	protected $managerType = '_CommercialShipping';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'cs.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT cs.*, 
+		$qr = $this->database->prepare('SELECT cs.*, 
 			p1.rSystem AS rSystem1, p1.position AS position1, s1.xPosition AS xSystem1, s1.yPosition AS ySystem1,
 			p2.rSystem AS rSystem2, p2.position AS position2, s2.xPosition AS xSystem2, s2.yPosition AS ySystem2,
 			t.type AS typeOfTransaction, t.quantity AS quantity, t.identifier AS identifier, t.price AS price,
@@ -104,8 +110,7 @@ class CommercialShippingManager extends Manager {
 	}
 
 	public function add(CommercialShipping $cs) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
+		$qr = $this->database->prepare('INSERT INTO
 			commercialShipping(rPlayer, rBase, rBaseDestination, rTransaction, resourceTransported, shipQuantity, dDeparture, dArrival, statement)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
@@ -120,7 +125,7 @@ class CommercialShippingManager extends Manager {
 			$cs->statement
 		));
 
-		$cs->id = $db->lastInsertId();
+		$cs->id = $this->database->lastInsertId();
 
 		$this->_Add($cs);
 	}
@@ -129,8 +134,7 @@ class CommercialShippingManager extends Manager {
 		$commercialShippings = $this->_Save();
 
 		foreach ($commercialShippings AS $cs) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE commercialShipping
+			$qr = $this->database->prepare('UPDATE commercialShipping
 				SET	id = ?,
 					rPlayer = ?,
 					rBase = ?,
@@ -159,8 +163,7 @@ class CommercialShippingManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM commercialShipping WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM commercialShipping WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);
