@@ -11,6 +11,7 @@
         "php": ">=5.5.9",
         "phpunit/phpunit": "4.8",
 		"symfony/config": "~2.6",
-		"symfony/yaml": "~2.6"
+		"symfony/yaml": "~2.6",
+        "ocramius/proxy-manager": "^2.0"
     }
 }
