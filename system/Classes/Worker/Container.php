@@ -2,12 +2,24 @@
 
 namespace Asylamba\Classes\Worker;
 
+use ProxyManager\Factory\LazyLoadingGhostFactory;
+use ProxyManager\Proxy\GhostObjectInterface;
+
+use Asylamba\Classes\Exception\CriticalException;
+
 class Container {
+	/** @var LazyLoadingGhostFactory **/
+	protected $serviceFactory;
     /** @var array **/
     protected $services = [];
     /** @var array **/
     protected $parameters = [];
 
+	public function __construct()
+	{
+		$this->serviceFactory = new LazyLoadingGhostFactory();
+	}
+	
     /**
      * @param string $key
      * @param array $definition
@@ -19,10 +31,15 @@ class Container {
             throw new \InvalidArgumentException("Service $key is already defined");
         }
         $this->services[$key] = [
-            'class' => $definition['class'],
+			'class' => ($definition['class']{0} === '%') ? $this->getParameter(ltrim($definition['class'], '%')) : $definition['class'],
             'arguments' => (isset($definition['arguments'])) ? $definition['arguments'] : [],
+			'tags' => [],
             'instance' => null
         ];
+		if (isset($definition['tags'])) {
+			$this->services[$key]['tags'] = $definition['tags'];
+			$this->parseTags($key, $definition['tags']);
+		}
     }
     
     /**
@@ -32,7 +49,9 @@ class Container {
      */
     public function set($key, $service)
     {
-        $this->services[$key] = $service;
+		// This way of doing things ensures that we do not erase service previous data
+        $this->services[$key]['class'] = get_class($service);
+		$this->services[$key]['instance'] = $service;
         
         return $this;
     }
@@ -68,8 +87,7 @@ class Container {
     protected function loadService($key)
     {
         $service = &$this->services[$key];
-        $args = $this->parseArguments($service['arguments']);
-		
+        $args = $this->parseArguments($key, $service['arguments']);
 		$service['instance'] = $this->instanciateService($service, $args);
     }
 	
@@ -84,12 +102,29 @@ class Container {
 		}
 		return new $service['class'](...$args);
 	}
+	
+	/**
+	 * @param string $serviceKey
+	 * @param array $tags
+	 */
+	public function parseTags($serviceKey, $tags)
+	{
+		foreach($tags as $tag) {
+			if ($tag['type'] === 'event_listener') {
+				$this->get('event_dispatcher')->registerListener([
+					'key' => $serviceKey,
+					'method' => $tag['method']
+				], $tag['event']);
+			}
+		}
+	}
     
     /**
+	 * @param string $serviceKey
      * @param array $arguments
      * @return array
      */
-    protected function parseArguments($arguments)
+    protected function parseArguments($serviceKey, $arguments)
     {
         $args = [];
         foreach ($arguments as $argument) {
@@ -98,13 +133,60 @@ class Container {
                 continue;
             }
             if ($argument{0} === '@') {
-                $args[] = $this->get(ltrim($argument, '@'));
+				$args[] = $this->prepareServiceInjection($serviceKey, $argument);
                 continue;
             }
 			$args[] = $argument;
         }
         return $args;
     }
+	
+	/**
+	 * 
+	 * @param string $serviceKey
+	 * @param array $argument
+	 * @return object
+	 */
+	protected function prepareServiceInjection($serviceKey, $argument)
+	{
+		$key = ltrim($argument, '@');
+		$injectedService = &$this->services[$key];
+		
+		if(!isset($injectedService['arguments'])) {
+			return $this->get($key);
+		}
+		// This part of the code ensures that there is no circular dependency between two services
+		// If one is found, 
+		foreach($injectedService['arguments'] as $argument) {
+			if ($argument === "@$serviceKey") {
+				$this->handleCircularDependency($injectedService);
+			}
+		}
+		return $this->get($key);
+	}
+	
+	/**
+	 * @param array $dependency
+	 */
+	public function handleCircularDependency(&$dependency)
+	{
+		$dependency['instance'] = $this->serviceFactory->createProxy($dependency['class'], function (
+			GhostObjectInterface $ghostObject,
+			string $method,
+			array $parameters,
+			& $initializer,
+			array $properties
+		) {
+			$initializer   = null; // disable initialization
+
+			// load data and modify the object here
+
+			// you may also call methods on the object, but remember that
+			// the constructor was not called yet:
+
+			return true; // confirm that initialization occurred correctly
+		});
+	}
     
     /**
      * @param string $key
