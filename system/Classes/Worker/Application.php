@@ -5,8 +5,18 @@ namespace Asylamba\Classes\Worker;
 use Asylamba\Classes\Configuration\Configuration;
 use Symfony\Component\Config\FileLocator;
 
+use Asylamba\Classes\Library\Benchmark;
+use Asylamba\Classes\Container\Cookie;
+use Asylamba\Classes\Container\History;
+use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Container\Alert;
+use Asylamba\Classes\Library\Bug;
+
 use Asylamba\Classes\Library\Http\Request;
 use Asylamba\Classes\Library\Http\Response;
+
+use Asylamba\Classes\Event\ExceptionEvent;
+use Asylamba\Classes\Event\ErrorEvent;
 
 class Application {
     /** @var Container **/
@@ -16,9 +26,22 @@ class Application {
     
     public function boot()
     {
-        $this->container = new Container();
-		$this->configure();
-		$this->registerModules();
+		try {
+			$this->container = new Container();
+			$this->container->set('app.container', $this->container);
+			$this->configure();
+			$this->registerModules();
+			$this->init();
+			$this->checkPermission();
+			$this->getInclude();
+			$this->save();
+		} catch (\Exception $ex) {
+			$this->container->get('event_dispatcher')->dispatch(new ExceptionEvent($ex));
+			die('BUGGIS IPSUM LOGGUM SIT AMET');
+		} catch (\Error $err) {
+			$this->container->get('event_dispatcher')->dispatch(new ErrorEvent($err));
+			die('BUGGIS IPSUM LOGGUM SIT AMET');
+		}
     }
 	
 	public function configure()
@@ -72,8 +95,6 @@ class Application {
 	{
 		return $this->modules[$name];
 	}
-	
-	public $applyGalaxy = FALSE;
 
 	private $pageResources = array(
 		'profil' => array('profil', 'Profil'),
@@ -133,7 +154,7 @@ class Application {
 			? unserialize($_SESSION[SERVER_SESS]['alert'])
 			: new Alert()
 		);
-		$this->container->get('session')->add('screenmode',
+		$this->container->get('app.session')->add('screenmode',
 			(($screenMode = $request->query->get('screenmode')) && in_array($screenMode, ['desktop', 'mobile']))
 			? $screenMode
 			: 'desktop'
@@ -144,7 +165,7 @@ class Application {
 		$request = $this->container->get('app.request');
 		$request->setUrl($_SERVER['REQUEST_URI']);
 		
-		$response = new Response();
+		$response = new Response($request, $this->container->get('app.history'));
 		$this->container->set('app.response', $response);
 
 		$requestURI = array_values(array_diff(
@@ -183,7 +204,7 @@ class Application {
 
 	public function checkPermission() {
 		$page = $this->container->get('app.response')->getPage();
-		$session = $this->container->get('session');
+		$session = $this->container->get('app.session');
 		
 		if ($page === 'inscription') {
 			if (!$session->exist('playerId')) {
@@ -244,8 +265,7 @@ class Application {
 				break;
 			case 'inscription':
 				include INSCRIPTION . 'check.php';
-
-				if (!$this->container->get('app.request')->isRedirect()) {
+				if (!$this->container->get('app.response')->getRedirect()) {
 					include TEMPLATE . $screenMode . '/open.php';
 					include TEMPLATE . $screenMode . '/stepbar.php';
 					include INSCRIPTION . 'content.php';
@@ -283,11 +303,12 @@ class Application {
 
 	public function save() {
 		# sauvegarde en db des objets
-		ASM::save();
+		//ASM::save();
 
 		# application de la galaxie si necessaire
-		if ($this->applyGalaxy) {
-			$this->container->get('gaia.galaxy_color_manager')->applyAndSave();
+		$galaxyColorManager = $this->container->get('gaia.galaxy_color_manager');
+		if ($galaxyColorManager->mustApply()) {
+			$galaxyColorManager->applyAndSave();
 		}
 
 		# sauvegarde en session des données
@@ -298,12 +319,13 @@ class Application {
 		# fin du benchmark
 		$this->getStat();
 
+		$response = $this->container->get('app.response');
 		# redirection, si spécifié
-		if ($this->container->get('app.request')->isRedirect()) {
-			if ($this->xDomain == TRUE) {
-				header('Location: ' . $this->redirect);
+		if (($redirect = $response->getRedirect())) {
+			if ($this->container->get('app.request')->getCrossDomain() == TRUE) {
+				header('Location: /' . $redirect);
 			} else {
-				header('Location: ' . APP_ROOT . $this->redirect);
+				header('Location: ' . APP_ROOT . $redirect);
 			}
 			exit();
 		} else {
