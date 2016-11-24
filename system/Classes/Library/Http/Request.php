@@ -7,6 +7,12 @@ use Asylamba\Classes\Library\ParameterBag;
 class Request {
 	/** @var string **/
 	protected $url;
+	/** @var boolean **/
+	protected $isCrossDomain = false;
+	/** @var string **/
+	protected $externalDomain;
+	/** @var string **/
+	protected $redirect;
 	/** @var ParameterBag **/
 	public $headers;
 	/** @var ParameterBag **/
@@ -51,5 +57,22 @@ class Request {
 	public function getUrl()
 	{
 		return $this->url;
+	}
+	
+	/**
+	 * @param string $externalDomain
+	 * @return \Asylamba\Classes\Library\Http\Request
+	 */
+	public function setCrossDomain($externalDomain)
+	{
+		$this->externalDomain = $externalDomain;
+		$this->isCrossDomain = true;
+		
+		return $this;
+	}
+	
+	public function getCrossDomain()
+	{
+		return $this->isCrossDomain;
 	}
 }
