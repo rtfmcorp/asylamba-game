@@ -107,7 +107,7 @@ class Format {
 		}
 	}
 
-	public static function actionBuilder($action, $params = array(), $hasRoot = TRUE) {
+	public static function actionBuilder($action, $token, $params = array(), $hasRoot = TRUE) {
 		$url = '';
 		if ($hasRoot) {
 			$url .= APP_ROOT;
@@ -119,7 +119,7 @@ class Format {
 			$url .= $key . '-' . $value . '/';
 		}
 
-		$url .= 'token-' . CTR::$data->get('token');
+		$url .= 'token-' . $token;
 		return $url;
 	}
 
