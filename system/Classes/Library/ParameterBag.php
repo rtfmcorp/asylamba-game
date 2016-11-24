@@ -44,7 +44,7 @@ class ParameterBag {
 	 */
 	public function get($key)
 	{
-		return $this->parameters[$key];
+		return ($this->has($key)) ? $this->parameters[$key] : null;
 	}
 	
 	/**

@@ -3,7 +3,7 @@
 namespace Asylamba\Classes\Library;
 
 class Security {
-	public static function crypt($query, $key) {
+	public function crypt($query, $key) {
 		$cipher = mcrypt_module_open('rijndael-256', '', 'ecb', '');
 		$ivSize = mcrypt_enc_get_iv_size($cipher);
 		$iv = mcrypt_create_iv($ivSize, MCRYPT_RAND);
@@ -18,7 +18,7 @@ class Security {
 		return $data;
 	}
 
-	public static function uncrypt($query, $key) {
+	public function uncrypt($query, $key) {
 		$cipher = mcrypt_module_open('rijndael-256', '', 'ecb', '');
 		$ivSize = mcrypt_enc_get_iv_size($cipher);
 		$iv = mcrypt_create_iv($ivSize, MCRYPT_RAND);
@@ -34,7 +34,7 @@ class Security {
 		return $decrypted;
 	}
 
-	public static function buildBindkey($bindkey) {
+	public function buildBindkey($bindkey) {
 		$key  = Utils::generateString(5);
 		$key .= '-';
 		$key .= $bindkey;
@@ -44,14 +44,14 @@ class Security {
 		return $key;
 	}
 
-	public static function extractBindkey($key) {
+	public function extractBindkey($key) {
 		$data = explode('-', $key);
 
 		return isset($data[1])
 			? $data[1] : FALSE;
 	}
 
-	public static function extractTime($key) {
+	public function extractTime($key) {
 		$data = explode('-', $key);
 
 		return isset($data[2])
