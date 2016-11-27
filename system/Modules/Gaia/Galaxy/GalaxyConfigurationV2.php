@@ -1,5 +1,5 @@
 <?php
-abstract class GalaxyConfiguration {
+abstract class GalaxyConfigurationV2 {
 	# general params
 	const DNG_CASUAL = 1;
 	const DNG_EASY = 2;
