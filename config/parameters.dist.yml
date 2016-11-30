@@ -6,4 +6,9 @@ parameters:
     database_password: asylamba
     database_admin_user: root
     database_admin_password: asylamba
+    
+    log_handler: Asylamba\Classes\Logger\FileLogger
+    log_rotation: 3
+
+    gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV2
 
