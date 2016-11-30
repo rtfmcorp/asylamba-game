@@ -1,13 +1,9 @@
 <?php
-abstract class GalaxyConfigurationV3 {
-	# general params
-	const DNG_CASUAL = 1;
-	const DNG_EASY = 2;
-	const DNG_MEDIUM = 3;
-	const DNG_HARD = 4;
-	const DNG_VERY_HARD = 5;
 
-	public static $galaxy = [
+namespace Asylamba\Modules\Gaia\Galaxy;
+
+class GalaxyConfigurationV3 extends GalaxyConfiguration {
+	public $galaxy = [
 		'size' => 250,
 		'diag' => 177,
 		'mask' => 15,
@@ -23,7 +19,7 @@ abstract class GalaxyConfigurationV3 {
 		'population' => [700, 25000],
 	];
 
-	public static $sectors = [
+	public $sectors = [
 		/*[
 			'id' => 1,
 			'beginColor' => 1,
@@ -31,7 +27,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [23, 232],
 			'display' => [23, 232],
 			'name' => 'Secteur 1',
-			'danger' => GalaxyConfiguration::DNG_CASUAL,
+			'danger' => self::DNG_CASUAL,
 			'points' => 1
 		]*/
 		[
@@ -41,7 +37,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [14, 29],
 			'display' => [16, 29],
 			'name' => 'Secteur 1',
-			'danger' => GalaxyConfiguration::DNG_CASUAL,
+			'danger' => self::DNG_CASUAL,
 			'points' => 1
 		], 
 		[
@@ -51,7 +47,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [43, 24],
 			'display' => [41, 21],
 			'name' => 'Secteur 2',
-			'danger' => GalaxyConfiguration::DNG_CASUAL,
+			'danger' => self::DNG_CASUAL,
 			'points' => 1
 		], 
 		[
@@ -61,7 +57,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [81, 18],
 			'display' => [81, 18],
 			'name' => 'Secteur 3',
-			'danger' => GalaxyConfiguration::DNG_EASY,
+			'danger' => self::DNG_EASY,
 			'points' => 1
 		], 
 		[
@@ -71,7 +67,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [123, 19],
 			'display' => [121, 19],
 			'name' => 'Secteur 4',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => self::DNG_MEDIUM,
 			'points' => 1
 		], 
 		[
@@ -81,7 +77,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [144, 40],
 			'display' => [146, 40],
 			'name' => 'Secteur 5',
-			'danger' => GalaxyConfiguration::DNG_HARD,
+			'danger' => self::DNG_HARD,
 			'points' => 1
 		], 
 		[
@@ -91,7 +87,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [163, 55],
 			'display' => [163, 55],
 			'name' => 'Secteur 6',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => self::DNG_MEDIUM,
 			'points' => 1
 		], 
 		[
@@ -101,7 +97,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [184, 71],
 			'display' => [184, 71],
 			'name' => 'Secteur 7',
-			'danger' => GalaxyConfiguration::DNG_HARD,
+			'danger' => self::DNG_HARD,
 			'points' => 1
 		], 
 		[
@@ -111,7 +107,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [206, 91],
 			'display' => [206, 91],
 			'name' => 'Secteur 8',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => self::DNG_MEDIUM,
 			'points' => 1
 		], 
 		[
@@ -121,7 +117,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [233, 126],
 			'display' => [233, 126],
 			'name' => 'Secteur 9',
-			'danger' => GalaxyConfiguration::DNG_HARD,
+			'danger' => self::DNG_HARD,
 			'points' => 1
 		], 
 		[
@@ -131,7 +127,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [223, 168],
 			'display' => [220, 168],
 			'name' => 'Secteur 10',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => self::DNG_MEDIUM,
 			'points' => 1
 		], 
 		[
@@ -141,7 +137,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [226, 203],
 			'display' => [222, 203],
 			'name' => 'Secteur 11',
-			'danger' => GalaxyConfiguration::DNG_HARD,
+			'danger' => self::DNG_HARD,
 			'points' => 1
 		], 
 		[
@@ -151,7 +147,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [229, 234],
 			'display' => [229, 234],
 			'name' => 'Secteur 12',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => self::DNG_MEDIUM,
 			'points' => 1
 		], 
 		[
@@ -161,7 +157,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [194, 224],
 			'display' => [192, 224],
 			'name' => 'Secteur 13',
-			'danger' => GalaxyConfiguration::DNG_EASY,
+			'danger' => self::DNG_EASY,
 			'points' => 1
 		], 
 		[
@@ -171,7 +167,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [176, 221],
 			'display' => [172, 219],
 			'name' => 'Secteur 14',
-			'danger' => GalaxyConfiguration::DNG_CASUAL,
+			'danger' => self::DNG_CASUAL,
 			'points' => 2
 		], 
 		[
@@ -181,7 +177,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [151, 228],
 			'display' => [151, 228],
 			'name' => 'Secteur 15',
-			'danger' => GalaxyConfiguration::DNG_CASUAL,
+			'danger' => self::DNG_CASUAL,
 			'points' => 1
 		], 
 		[
@@ -191,7 +187,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [108, 229],
 			'display' => [108, 229],
 			'name' => 'Secteur 16',
-			'danger' => GalaxyConfiguration::DNG_EASY,
+			'danger' => self::DNG_EASY,
 			'points' => 1
 		], 
 		[
@@ -201,7 +197,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [85, 201],
 			'display' => [85, 201],
 			'name' => 'Secteur 17',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => self::DNG_MEDIUM,
 			'points' => 1
 		], 
 		[
@@ -211,7 +207,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [63, 179],
 			'display' => [63, 179],
 			'name' => 'Secteur 18',
-			'danger' => GalaxyConfiguration::DNG_HARD,
+			'danger' => self::DNG_HARD,
 			'points' => 1
 		], 
 		[
@@ -221,7 +217,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [46, 154],
 			'display' => [46, 151],
 			'name' => 'Secteur 19',
-			'danger' => GalaxyConfiguration::DNG_EASY,
+			'danger' => self::DNG_EASY,
 			'points' => 1
 		], 
 		[
@@ -231,7 +227,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [30, 135],
 			'display' => [27, 135],
 			'name' => 'Secteur 20',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => self::DNG_MEDIUM,
 			'points' => 1
 		], 
 		[
@@ -241,7 +237,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [16, 118],
 			'display' => [15, 118],
 			'name' => 'Secteur 21',
-			'danger' => GalaxyConfiguration::DNG_EASY,
+			'danger' => self::DNG_EASY,
 			'points' => 1
 		], 
 		[
@@ -251,7 +247,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [10, 84],
 			'display' => [10, 84],
 			'name' => 'Secteur 22',
-			'danger' => GalaxyConfiguration::DNG_CASUAL,
+			'danger' => self::DNG_CASUAL,
 			'points' => 1
 		], 
 		[
@@ -261,7 +257,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [36, 83],
 			'display' => [36, 81],
 			'name' => 'Secteur 23',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => self::DNG_MEDIUM,
 			'points' => 2
 		], 
 		[
@@ -271,7 +267,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [49, 56],
 			'display' => [45, 56],
 			'name' => 'Secteur 24',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => self::DNG_MEDIUM,
 			'points' => 2
 		], 
 		[
@@ -281,7 +277,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [74, 46],
 			'display' => [74, 46],
 			'name' => 'Secteur 25',
-			'danger' => GalaxyConfiguration::DNG_HARD,
+			'danger' => self::DNG_HARD,
 			'points' => 2
 		], 
 		[
@@ -291,7 +287,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [108, 55],
 			'display' => [108, 55],
 			'name' => 'Secteur 26',
-			'danger' => GalaxyConfiguration::DNG_HARD,
+			'danger' => self::DNG_HARD,
 			'points' => 2
 		], 
 		[
@@ -301,7 +297,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [101, 78],
 			'display' => [111, 78],
 			'name' => 'Secteur 27',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => self::DNG_MEDIUM,
 			'points' => 2
 		], 
 		[
@@ -311,7 +307,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [121, 104],
 			'display' => [117, 104],
 			'name' => 'Secteur 28',
-			'danger' => GalaxyConfiguration::DNG_CASUAL,
+			'danger' => self::DNG_CASUAL,
 			'points' => 1
 		], 
 		[
@@ -321,7 +317,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [150, 93],
 			'display' => [152, 93],
 			'name' => 'Secteur 29',
-			'danger' => GalaxyConfiguration::DNG_EASY,
+			'danger' => self::DNG_EASY,
 			'points' => 1
 		], 
 		[
@@ -331,7 +327,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [154, 128],
 			'display' => [152, 128],
 			'name' => 'Secteur 30',
-			'danger' => GalaxyConfiguration::DNG_CASUAL,
+			'danger' => self::DNG_CASUAL,
 			'points' => 1
 		], 
 		[
@@ -341,7 +337,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [195, 134],
 			'display' => [195, 134],
 			'name' => 'Secteur 31',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => self::DNG_MEDIUM,
 			'points' => 1
 		], 
 		[
@@ -351,7 +347,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [175, 162],
 			'display' => [177, 162],
 			'name' => 'Secteur 32',
-			'danger' => GalaxyConfiguration::DNG_EASY,
+			'danger' => self::DNG_EASY,
 			'points' => 2
 		], 
 		[
@@ -361,7 +357,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [168, 188],
 			'display' => [168, 188],
 			'name' => 'Secteur 33',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => self::DNG_MEDIUM,
 			'points' => 2
 		], 
 		[
@@ -371,7 +367,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [139, 195],
 			'display' => [139, 195],
 			'name' => 'Secteur 34',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => self::DNG_MEDIUM,
 			'points' => 2
 		], 
 		[
@@ -381,7 +377,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [116, 195],
 			'display' => [116, 196],
 			'name' => 'Secteur 35',
-			'danger' => GalaxyConfiguration::DNG_HARD,
+			'danger' => self::DNG_HARD,
 			'points' => 2
 		], 
 		[
@@ -391,7 +387,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [88, 164],
 			'display' => [82, 164],
 			'name' => 'Secteur 36',
-			'danger' => GalaxyConfiguration::DNG_MEDIUM,
+			'danger' => self::DNG_MEDIUM,
 			'points' => 2
 		], 
 		[
@@ -401,7 +397,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [90, 136],
 			'display' => [90, 136],
 			'name' => 'Secteur 37',
-			'danger' => GalaxyConfiguration::DNG_CASUAL,
+			'danger' => self::DNG_CASUAL,
 			'points' => 1
 		], 
 		[
@@ -411,7 +407,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [71, 120],
 			'display' => [70, 120],
 			'name' => 'Secteur 38',
-			'danger' => GalaxyConfiguration::DNG_CASUAL,
+			'danger' => self::DNG_CASUAL,
 			'points' => 2
 		], 
 		[
@@ -421,7 +417,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [58, 96],
 			'display' => [58, 96],
 			'name' => 'Secteur 39',
-			'danger' => GalaxyConfiguration::DNG_HARD,
+			'danger' => self::DNG_HARD,
 			'points' => 2
 		], 
 		[
@@ -431,7 +427,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [76, 66],
 			'display' => [75, 66],
 			'name' => 'Secteur 40',
-			'danger' => GalaxyConfiguration::DNG_VERY_HARD,
+			'danger' => self::DNG_VERY_HARD,
 			'points' => 5
 		], 
 		[
@@ -441,7 +437,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [84, 96],
 			'display' => [84, 96],
 			'name' => 'Secteur 41',
-			'danger' => GalaxyConfiguration::DNG_HARD,
+			'danger' => self::DNG_HARD,
 			'points' => 2
 		], 
 		[
@@ -451,7 +447,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [105, 124],
 			'display' => [105, 124],
 			'name' => 'Secteur 42',
-			'danger' => GalaxyConfiguration::DNG_HARD,
+			'danger' => self::DNG_HARD,
 			'points' => 2
 		], 
 		[
@@ -461,7 +457,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [120, 145],
 			'display' => [120, 145],
 			'name' => 'Secteur 43',
-			'danger' => GalaxyConfiguration::DNG_HARD,
+			'danger' => self::DNG_HARD,
 			'points' => 2
 		], 
 		[
@@ -471,7 +467,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [140, 150],
 			'display' => [141, 150],
 			'name' => 'Secteur 44',
-			'danger' => GalaxyConfiguration::DNG_CASUAL,
+			'danger' => self::DNG_CASUAL,
 			'points' => 1
 		], 
 		[
@@ -481,7 +477,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [154, 169],
 			'display' => [154, 171],
 			'name' => 'Secteur 45',
-			'danger' => GalaxyConfiguration::DNG_CASUAL,
+			'danger' => self::DNG_CASUAL,
 			'points' => 2
 		], 
 		[
@@ -491,7 +487,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [131, 176],
 			'display' => [131, 176],
 			'name' => 'Secteur 46',
-			'danger' => GalaxyConfiguration::DNG_HARD,
+			'danger' => self::DNG_HARD,
 			'points' => 2
 		], 
 		[
@@ -501,7 +497,7 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [113, 164],
 			'display' => [114, 164],
 			'name' => 'Secteur 47',
-			'danger' => GalaxyConfiguration::DNG_VERY_HARD,
+			'danger' => self::DNG_VERY_HARD,
 			'points' => 5
 		], 
 		[
@@ -511,13 +507,13 @@ abstract class GalaxyConfigurationV3 {
 			'barycentre' => [101, 151],
 			'display' => [102, 151],
 			'name' => 'Secteur 48',
-			'danger' => GalaxyConfiguration::DNG_HARD,
+			'danger' => self::DNG_HARD,
 			'points' => 2
 		]
 	];
 
-	public static function getSectorCoord($i, $scale = 1, $xTranslate = 0) {
-		$sector = self::$sectors[$i - 1]['vertices'];
+	public function getSectorCoord($i, $scale = 1, $xTranslate = 0) {
+		$sector = $this->sectors[$i - 1]['vertices'];
 
 		foreach ($sector as $k => $v) {
 			$sector[$k] = (($v * $scale) + $xTranslate);
@@ -527,13 +523,13 @@ abstract class GalaxyConfigurationV3 {
 		return $sector;
 	}
 
-	public static function fillSectorsData() {
+	public function fillSectorsData() {
 		$k = 1;
 
 		echo '<pre>';
-		foreach (self::$sectors as $key => $sector) {
+		foreach ($this->sectors as $key => $sector) {
 			# calculate barycentre
-			$strArray = self::getSectorCoord($key + 1);
+		$strArray = $this->getSectorCoord($key + 1);
 			$array = explode(', ', $strArray);
 
 			$gx = 0; $gy = 0;
@@ -555,7 +551,7 @@ abstract class GalaxyConfigurationV3 {
 			echo '	\'barycentre\' => [' . $gx . ', ' . $gy . '],' . "\r\n";
 			echo '	\'display\' => [' . $gx . ', ' . $gy . '],' . "\r\n";
 			echo '	\'name\' => \'Secteur ' . $k . "',\r\n";
-			echo '	\'danger\' => GalaxyConfiguration::DNG_CASUAL,' . "\r\n";
+			echo '	\'danger\' => self::DNG_CASUAL,' . "\r\n";
 			echo '	\'points\' => 1' . "\r\n";
 			echo '], ' . "\r\n";
 		
@@ -564,7 +560,7 @@ abstract class GalaxyConfigurationV3 {
 		echo '</pre>';
 	}
 
-	public static $systems = [
+	public $systems = [
 		[
 			'id' => 1,
 			'name' => 'ruine',
@@ -593,7 +589,7 @@ abstract class GalaxyConfigurationV3 {
 		]
 	];
 
-	public static $places = [
+	public $places = [
 		[
 			'id' => 1,
 			'name' => 'planète tellurique',
@@ -634,6 +630,5 @@ abstract class GalaxyConfigurationV3 {
 	];
 
 	# display params
-	public static $scale = 20;
+	public $scale = 20;
 }
-?>
