@@ -3,9 +3,8 @@
 namespace Asylamba\Classes\Worker;
 
 use ProxyManager\Factory\LazyLoadingGhostFactory;
+use Asylamba\Classes\Worker\Manager;
 use ProxyManager\Proxy\GhostObjectInterface;
-
-use Asylamba\Classes\Exception\CriticalException;
 
 class Container {
 	/** @var LazyLoadingGhostFactory **/
@@ -70,11 +69,18 @@ class Container {
      * @return object
      * @throws \InvalidArgumentException
      */
-    public function get($key)
+    public function get($key, $force = false)
     {
         if (!$this->hasService($key)) {
             throw new \InvalidArgumentException("Service $key not found");
         }
+		// In case a proxy service was generated to avoid circular dependency, we have to generate the right service then
+		if ($this->services[$key]['instance'] instanceof GhostObjectInterface && $force === true) {
+			echo("get<br>");
+			var_dump(spl_object_hash($this->services[$key]['instance']));
+			echo("<br>");
+            $this->loadService($key);
+		}
         if (empty($this->services[$key]['instance'])) {
             $this->loadService($key);
         }
@@ -124,7 +130,7 @@ class Container {
      * @param array $arguments
      * @return array
      */
-    protected function parseArguments($serviceKey, $arguments)
+    protected function parseArguments($serviceKey, $arguments, $debug = false)
     {
         $args = [];
         foreach ($arguments as $argument) {
@@ -159,31 +165,62 @@ class Container {
 		// If one is found, 
 		foreach($injectedService['arguments'] as $argument) {
 			if ($argument === "@$serviceKey") {
-				$this->handleCircularDependency($injectedService);
+				$this->handleCircularDependency($key, $injectedService);
 			}
 		}
 		return $this->get($key);
 	}
 	
 	/**
+	 * @param string $key
 	 * @param array $dependency
 	 */
-	public function handleCircularDependency(&$dependency)
+	public function handleCircularDependency($key, &$dependency)
 	{
+		// This factory is based on a closure which will be called when a proxy object property will be handled
+		// This closure is not called when the service is instanciated
+		// It is called when the service is used and its internal properties are used
 		$dependency['instance'] = $this->serviceFactory->createProxy($dependency['class'], function (
 			GhostObjectInterface $ghostObject,
 			string $method,
 			array $parameters,
-			& $initializer,
+			&$initializer,
 			array $properties
-		) {
-			$initializer   = null; // disable initialization
-
-			// load data and modify the object here
-
-			// you may also call methods on the object, but remember that
-			// the constructor was not called yet:
-
+		) use ($key, $dependency) {
+			// Disable the proxy initialization. It prevents it from executing the closure again
+			$initializer = null;
+			// For each property of the proxy class, we check if it matchs with the service arguments
+			foreach($properties as $property => $value) {
+				// First, we convert the property from CamelCase to snake_case
+				$snakeCaseProperty = $this->formatToSnakeCase($property);
+				// Then we loop through the service arguments looking for a match
+				foreach($dependency['arguments'] as $argument) {
+					$argumentKey =
+						($argument{0} === '@')
+						? ltrim($argument, '@')
+						: ltrim($argument, '%')
+					;
+					// Remove module name to match with the property name format
+					$data = explode('.', $argumentKey);
+					// The last element of the array will always be the property name candidate
+					if (array_pop($data) === $snakeCaseProperty) {
+						// The $properties array are linked to the proxy object properties
+						// It is the proxy properties we are dynamically affecting here
+						$properties[$property] =
+							($argument{0} === '@')
+							? $this->get($argumentKey)
+							: $this->getParameter($argumentKey)
+						;
+						// Avoid useless iterations
+						break;
+					}
+				}
+			}
+			
+			if ($ghostObject instanceof Manager) {
+				$ghostObject->newSession();
+			}
+			
 			return true; // confirm that initialization occurred correctly
 		});
 	}
@@ -229,5 +266,25 @@ class Container {
     {
         return $this->parameters;
     }
+	
+	public function save()
+	{
+		foreach($this->services as $service)
+		{
+			if(!$service instanceof Manager) {
+				continue;
+			}
+			$service->save();
+		}
+	}
+	
+	function formatToSnakeCase($property) {
+		preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $property, $matches);
+		$ret = $matches[0];
+		foreach ($ret as &$match) {
+			$match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
+		}
+		return implode('_', $ret);
+	}
 }
 
