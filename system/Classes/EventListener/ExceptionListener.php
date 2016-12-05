@@ -26,13 +26,13 @@ class ExceptionListener {
 	{
 		$exception = $event->getException();
 		
-		$this->logger->log("{$exception->getMessage()} at {$exception->getFile()}.l{$exception->getLine()}", Logger::LOG_LEVEL_ERROR);
+		$this->logger->log("{$exception->getMessage()} at {$exception->getFile()} at line {$exception->getLine()}", Logger::LOG_LEVEL_ERROR);
 	}
 	
 	public function onCoreError(ErrorEvent $event)
 	{
 		$error = $event->getError();
 		
-		$this->logger->log("{$error->getMessage()} at {$error->getFile()}.l{$error->getLine()}", Logger::LOG_LEVEL_CRITICAL);
+		$this->logger->log("{$error->getMessage()} at {$error->getFile()} at line {$error->getLine()}", Logger::LOG_LEVEL_CRITICAL);
 	}
 }
