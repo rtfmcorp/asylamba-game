@@ -38,7 +38,7 @@ class OrbitalBaseManager extends Manager {
 	/** @var TechnologyQueueManager **/
 	protected $technologyQueueManager;
 	/** @var CommercialShippingManager **/
-	protected $shippingManager;
+	protected $commercialShippingManager;
 	/** @var CommercialRouteManager **/
 	protected $commercialRouteManager;
 	/** @var TransactionManager **/
@@ -82,7 +82,7 @@ class OrbitalBaseManager extends Manager {
 		$this->buildingQueueManager = $buildingQueueManager;
 		$this->shipQueueManager = $shipQueueManager;
 		$this->technologyQueueManager = $technologyQueueManager;
-		$this->shippingManager = $commercialShippingManager;
+		$this->commercialShippingManager = $commercialShippingManager;
 		$this->commercialRouteManager = $commercialRouteManager;
 		$this->transactionManager = $transactionManager;
 		$this->galaxyColorManager = $galaxyColorManager;
@@ -372,12 +372,12 @@ class OrbitalBaseManager extends Manager {
 			$this->technologyQueueManager->changeSession($S_TQM1);
 
 			# CommercialShippingManager
-			$S_CSM1 = $this->shippingManager->getCurrentSession();
-			$this->shippingManager->newSession(ASM_UMODE);
-			$this->shippingManager->load(array('rBase' => $aw['rPlace']));
-			$this->shippingManager->load(array('rBaseDestination' => $aw['rPlace']));
-			$b->shippingManager = $this->shippingManager->getCurrentSession();
-			$this->shippingManager->changeSession($S_CSM1);
+			$S_CSM1 = $this->commercialShippingManager->getCurrentSession();
+			$this->commercialShippingManager->newSession(ASM_UMODE);
+			$this->commercialShippingManager->load(array('rBase' => $aw['rPlace']));
+			$this->commercialShippingManager->load(array('rBaseDestination' => $aw['rPlace']));
+			$b->shippingManager = $this->commercialShippingManager->getCurrentSession();
+			$this->commercialShippingManager->changeSession($S_CSM1);
 
 			$currentB = $this->_Add($b);
 
@@ -444,7 +444,7 @@ class OrbitalBaseManager extends Manager {
 		$b->dock3Manager = $this->shipQueueManager->getFirstSession();
 		$b->routeManager = $this->commercialRouteManager->getFirstSession();
 		$b->technoQueueManager = $this->technologyQueueManager->getFirstSession();
-		$b->shippingManager = $this->shippingManager->getFirstSession();
+		$b->shippingManager = $this->commercialShippingManager->getFirstSession();
 
 		$this->_Add($b);
 	}
@@ -508,12 +508,12 @@ class OrbitalBaseManager extends Manager {
 				# change owner of transaction
 				$this->transactionManager->get($i)->rPlayer = $newOwner;
 
-				$S_CSM1 = $this->shippingManager->getCurrentSession();
-				$this->shippingManager->newSession(FALSE);
-				$this->shippingManager->load(array('rTransaction' => $this->transactionManager->get($i)->id, 'rPlayer' => $base->rPlayer));
+				$S_CSM1 = $this->commercialShippingManager->getCurrentSession();
+				$this->commercialShippingManager->newSession(FALSE);
+				$this->commercialShippingManager->load(array('rTransaction' => $this->transactionManager->get($i)->id, 'rPlayer' => $base->rPlayer));
 				# change owner of commercial shipping
-				$this->shippingManager->get()->rPlayer = $newOwner;
-				$this->shippingManager->changeSession($S_CSM1);
+				$this->commercialShippingManager->get()->rPlayer = $newOwner;
+				$this->commercialShippingManager->changeSession($S_CSM1);
 			}
 
 			$this->transactionManager->changeSession($S_TRM1);
