@@ -30,16 +30,16 @@ class Request {
 	public function initialize()
 	{
 		foreach ($_GET as $key => $value) {
-			$this->query[$key] = $value;
+			$this->query->set($key, $value);
 		}
 		foreach ($_POST as $key => $value) {
-			$this->request[$key] = $value;
+			$this->request->set($key, $value);
 		}
 		foreach ($_SERVER as $key => $value) {
 			if (!strpos($key, 'HTTP_')) {
 				continue;
 			}
-			$this->headers[$key] = $value;
+			$this->headers->set($key, $value);
 		}
 	}
 
