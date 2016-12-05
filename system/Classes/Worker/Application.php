@@ -303,8 +303,7 @@ class Application {
 
 	public function save() {
 		# sauvegarde en db des objets
-		//ASM::save();
-
+		$this->container->save();
 		# application de la galaxie si necessaire
 		$galaxyColorManager = $this->container->get('gaia.galaxy_color_manager');
 		if ($galaxyColorManager->mustApply()) {
