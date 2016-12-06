@@ -11,8 +11,6 @@
 */
 namespace Asylamba\Modules\Promethee\Model;
 
-use Asylamba\Classes\Database\Database;
-
 use Asylamba\Modules\Promethee\Resource\TechnologyResource;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
@@ -131,19 +129,6 @@ class Technology {
 	const COEF_POINTS = 1;
 	const COEF_TIME = 1;
 
-	public function __construct($rPlayer) {
-		$this->rPlayer = $rPlayer; 
-
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT *
-			FROM technology
-			WHERE rPlayer = ?');
-		$qr->execute(array($rPlayer));
-		while($aw = $qr->fetch()) {
-			$this->setTechnology($aw['technology'], $aw['level'], TRUE);
-		}
-	}
-
 	public function getTechnology($id) {
 		if (TechnologyResource::isATechnology($id)) {
 			switch ($id) {
@@ -200,113 +185,59 @@ class Technology {
 		return FALSE;
 	}
 
-	public function setTechnology($id, $value, $load = FALSE) { // ajouter une entrée bdd ou modifier ligne !!!
-		if (TechnologyResource::isATechnology($id)) {
-			switch ($id) {
-				case 0 : $this->comPlatUnblock = $value; break;
-				case 1 : $this->dock2Unblock = $value; break;
-				case 2 : $this->dock3Unblock = $value; break;
-				case 3 : $this->recyclingUnblock = $value; break;
-				case 4 : $this->spatioportUnblock = $value; break;
-				case 5 : $this->ship0Unblock = $value; break;
-				case 6 : $this->ship1Unblock = $value; break;
-				case 7 : $this->ship2Unblock = $value; break;
-				case 8 : $this->ship3Unblock = $value; break;
-				case 9 : $this->ship4Unblock = $value; break;
-				case 10 : $this->ship5Unblock = $value; break;
-				case 11 : $this->ship6Unblock = $value; break;
-				case 12 : $this->ship7Unblock = $value; break;
-				case 13 : $this->ship8Unblock = $value; break;
-				case 14 : $this->ship9Unblock = $value; break;
-				case 15 : $this->ship10Unblock = $value; break;
-				case 16 : $this->ship11Unblock = $value; break;
-				case 17 : $this->colonization = $value; break;
-				case 18 : $this->conquest = $value; break;
-				case 19 : $this->generatorSpeed = $value; break;
-				case 20 : $this->refineryRefining = $value; break;
-				case 21 : $this->refineryStorage = $value; break;
-				case 22 : $this->dock1Speed = $value; break;
-				case 23 : $this->dock2Speed = $value; break;
-				case 24 : $this->technosphereSpeed = $value; break;
-				case 25 : $this->commercialIncomeUp = $value; break;
-				case 26 : $this->gravitModuleUp = $value; break;
-				case 27 : $this->dock3Speed = $value; break;
-				case 28 : $this->populationTaxUp = $value; break;
-				case 29 : $this->commanderInvestUp = $value; break;
-				case 30 : $this->uniInvestUp = $value; break;
-				case 31 : $this->antiSpyInvestUp = $value; break;
-				case 32 : $this->spaceShipsSpeed = $value; break;
-				case 33 : $this->spaceShipsContainer = $value; break;
-				case 34 : $this->baseQuantity = $value; break;
-				case 35 : $this->fighterSpeed = $value; break;
-				case 36 : $this->fighterAttack = $value; break;
-				case 37 : $this->fighterDefense = $value; break;
-				case 38 : $this->corvetteSpeed = $value; break;
-				case 39 : $this->corvetteAttack = $value; break;
-				case 40 : $this->corvetteDefense = $value; break;
-				case 41 : $this->frigateSpeed = $value; break;
-				case 42 : $this->frigateAttack = $value; break;
-				case 43 : $this->frigateDefense = $value; break;
-				case 44 : $this->destroyerSpeed = $value; break;
-				case 45 : $this->destroyerAttack = $value; break;
-				case 46 : $this->destroyerDefense = $value; break;
-				default : return FALSE;
-			}
-			if ($load == TRUE) {
-				return TRUE;
-			} else {
-				if ($value < 1) {
-					Technology::deleteByRPlayer($this->rPlayer, $id);
-				} else {
-					if ($value == 1) {
-						Technology::addTech($this->rPlayer, $id, $value);
-					} else {
-						$this->updateTech($id, $value);
-					}
-					if (!TechnologyResource::isAnUnblockingTechnology($id)) {
-						$bonus = new PlayerBonus($this->rPlayer);
-						$bonus->load();
-						$bonus->updateTechnoBonus($id, $value);
-					}
-				}
-				return TRUE;
-			}
+	public function setTechnology($id, $value) { // ajouter une entrée bdd ou modifier ligne !!!
+		if (!TechnologyResource::isATechnology($id)) {
+			return false;
 		}
-		return FALSE;
-	}
-
-	public static function addTech($rPlayer, $technology, $level) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
-			technology(rPlayer, technology, level)
-			VALUES(?, ?, ?)');
-		$qr->execute(array(
-			$rPlayer,
-			$technology,
-			$level
-		));
-	}
-
-	public function updateTech($technology, $level) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('UPDATE technology
-			SET	level = ?
-			WHERE rPlayer = ? AND technology = ?');
-		$qr->execute(array(
-			$level,
-			$this->rPlayer,
-			$technology
-		));
-	}
-
-	public function delete($techno) {
-		$this->setTechnology($techno, 0);
-	}
-
-	public static function deleteByRPlayer($rPlayer, $techno) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM technology WHERE rPlayer = ? and technology = ?');
-		$qr->execute(array($rPlayer, $techno));
-		return TRUE;
+		switch ($id) {
+			case 0 : $this->comPlatUnblock = $value; break;
+			case 1 : $this->dock2Unblock = $value; break;
+			case 2 : $this->dock3Unblock = $value; break;
+			case 3 : $this->recyclingUnblock = $value; break;
+			case 4 : $this->spatioportUnblock = $value; break;
+			case 5 : $this->ship0Unblock = $value; break;
+			case 6 : $this->ship1Unblock = $value; break;
+			case 7 : $this->ship2Unblock = $value; break;
+			case 8 : $this->ship3Unblock = $value; break;
+			case 9 : $this->ship4Unblock = $value; break;
+			case 10 : $this->ship5Unblock = $value; break;
+			case 11 : $this->ship6Unblock = $value; break;
+			case 12 : $this->ship7Unblock = $value; break;
+			case 13 : $this->ship8Unblock = $value; break;
+			case 14 : $this->ship9Unblock = $value; break;
+			case 15 : $this->ship10Unblock = $value; break;
+			case 16 : $this->ship11Unblock = $value; break;
+			case 17 : $this->colonization = $value; break;
+			case 18 : $this->conquest = $value; break;
+			case 19 : $this->generatorSpeed = $value; break;
+			case 20 : $this->refineryRefining = $value; break;
+			case 21 : $this->refineryStorage = $value; break;
+			case 22 : $this->dock1Speed = $value; break;
+			case 23 : $this->dock2Speed = $value; break;
+			case 24 : $this->technosphereSpeed = $value; break;
+			case 25 : $this->commercialIncomeUp = $value; break;
+			case 26 : $this->gravitModuleUp = $value; break;
+			case 27 : $this->dock3Speed = $value; break;
+			case 28 : $this->populationTaxUp = $value; break;
+			case 29 : $this->commanderInvestUp = $value; break;
+			case 30 : $this->uniInvestUp = $value; break;
+			case 31 : $this->antiSpyInvestUp = $value; break;
+			case 32 : $this->spaceShipsSpeed = $value; break;
+			case 33 : $this->spaceShipsContainer = $value; break;
+			case 34 : $this->baseQuantity = $value; break;
+			case 35 : $this->fighterSpeed = $value; break;
+			case 36 : $this->fighterAttack = $value; break;
+			case 37 : $this->fighterDefense = $value; break;
+			case 38 : $this->corvetteSpeed = $value; break;
+			case 39 : $this->corvetteAttack = $value; break;
+			case 40 : $this->corvetteDefense = $value; break;
+			case 41 : $this->frigateSpeed = $value; break;
+			case 42 : $this->frigateAttack = $value; break;
+			case 43 : $this->frigateDefense = $value; break;
+			case 44 : $this->destroyerSpeed = $value; break;
+			case 45 : $this->destroyerAttack = $value; break;
+			case 46 : $this->destroyerDefense = $value; break;
+			default : return FALSE;
+		}
 	}
 }
