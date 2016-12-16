@@ -68,6 +68,10 @@ define('ANTISPY_GAME_MODE', 	1);
 
 define('NB_AVATAR', 			80);
 
+define('PAM_COEFTAX', 1);
+
+define('RSM_RESEARCHQUANTITY', 		10);
+
 # durée en heures avant que le classement total démarre
 	# 2 semaines = 336 h
 	# 20 jours = 480h

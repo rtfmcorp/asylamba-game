@@ -12,3 +12,6 @@ parameters:
 
     gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV2
 
+    game.available_factions: [4, 8, 10, 11, 12]
+    
+    environment: dev
