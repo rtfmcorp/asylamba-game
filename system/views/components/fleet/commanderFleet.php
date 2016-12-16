@@ -10,6 +10,7 @@
 
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Ares\Model\Commander;
 
 $dockStorage = $ob_commanderFleet->getShipStorage();
 $lineCoord   = $commander_commanderFleet->getFormatLineCoord();
@@ -86,7 +87,7 @@ echo '<div class="component size2 commander-fleet">';
 	echo '</div>';
 echo '</div>';
 
-if ($commander_commanderFleet->getStatement() == COM_AFFECTED) {
+if ($commander_commanderFleet->getStatement() == Commander::AFFECTED) {
 	echo '<div ';
 		echo 'class="component commander-fleet baseTransfer" ';
 		echo 'data-base="' . $commander_commanderFleet->getRBase() . '" ';

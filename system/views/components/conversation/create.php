@@ -1,9 +1,11 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Parser;
+
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
 
 echo '<div class="component size2 new-message">';
 	echo '<div class="head skin-5">';
@@ -11,7 +13,7 @@ echo '<div class="component size2 new-message">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<form action="' . Format::actionBuilder('startconversation') . '" method="post">';
+			echo '<form action="' . Format::actionBuilder('startconversation', $sessionToken) . '" method="post">';
 				echo '<p>';
 					echo 'Destinataire';
 				echo '</p>';
@@ -19,13 +21,13 @@ echo '<div class="component size2 new-message">';
 				$player = Utils::getHTTPData('sendto');
 				$name = '';
 				if ($player !== FALSE) {
-					$S_PAM = ASM::$pam->getCurrentSession();
-					ASM::$pam->newSession();
-					ASM::$pam->load(array('id' => $player));
-					if (ASM::$pam->size() == 1) {
-						$name = ASM::$pam->get()->name;
+					$S_PAM = $playerManager->getCurrentSession();
+					$playerManager->newSession();
+					$playerManager->load(array('id' => $player));
+					if ($playerManager->size() == 1) {
+						$name = $playerManager->get()->name;
 					}
-					ASM::$pam->changeSession($S_PAM);
+					$playerManager->changeSession($S_PAM);
 				} 
 				
 				echo '<p class="input input-text">';

@@ -1,10 +1,21 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Container\Params;
-use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Modules\Ares\Model\Report;
+use Asylamba\Classes\Exception\ErrorException;
+
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
+$session = $this->getContainer()->get('app.session');
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
+$reportManager = $this->getContainer()->get('ares.report_manager');
+$littleReportManager = $this->getContainer()->get('ares.little_report_manager');
+$spyReportManager = $this->getContainer()->get('artemis.spy_report_manager');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$placeManager = $this->getContainer()->get('gaia.place_manager');
 
 # background paralax
 echo '<div id="background-paralax" class="fleet"></div>';
@@ -17,22 +28,22 @@ include 'defaultElement/movers.php';
 echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
 
-	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'movement' OR CTR::$get->get('view') == 'main') {
-		$S_COM_UKN = ASM::$com->getCurrentSession();
+	if (!$request->query->has('view') OR $request->query->get('view') == 'movement' OR $request->query->get('view') == 'main') {
+		$S_COM_UKN = $commanderManager->getCurrentSession();
 
 		# set d'orbitale base
 		$obsets = array(); $j = 0;
-		for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
-			if (Params::check(Params::LIST_ALL_FLEET) || CTR::$data->get('playerBase')->get('ob')->get($i)->get('id') == CTR::$data->get('playerParams')->get('base')) {
+		for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
+			if ($request->cookies->get('p' . Params::LIST_ALL_FLEET, Params::LIST_ALL_FLEET) || $session->get('playerBase')->get('ob')->get($i)->get('id') == $session->get('playerParams')->get('base')) {
 				$obsets[$j] = array();
 
 				$obsets[$j]['info'] = array();
 				$obsets[$j]['fleets'] = array();
 
-				$obsets[$j]['info']['id'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
-				$obsets[$j]['info']['name'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('name');
-				$obsets[$j]['info']['type'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('type');
-				$obsets[$j]['info']['img'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('img');
+				$obsets[$j]['info']['id'] = $session->get('playerBase')->get('ob')->get($i)->get('id');
+				$obsets[$j]['info']['name'] = $session->get('playerBase')->get('ob')->get($i)->get('name');
+				$obsets[$j]['info']['type'] = $session->get('playerBase')->get('ob')->get($i)->get('type');
+				$obsets[$j]['info']['img'] = $session->get('playerBase')->get('ob')->get($i)->get('img');
 
 				$j++;
 			}
@@ -40,33 +51,33 @@ echo '<div id="content">';
 
 		# commander manager : incoming attack
 		$commandersId = array(0);
-		for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
-			if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
-				if (CTR::$data->get('playerEvent')->get($i)->get('eventInfo')->size() > 0) {
-					$commandersId[] = CTR::$data->get('playerEvent')->get($i)->get('eventId');
+		for ($i = 0; $i < $session->get('playerEvent')->size(); $i++) {
+			if ($session->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
+				if ($session->get('playerEvent')->get($i)->get('eventInfo')->size() > 0) {
+					$commandersId[] = $session->get('playerEvent')->get($i)->get('eventId');
 				}
 			}
 		}
 
-		$S_COM_ATK = ASM::$com->newSession();
-		ASM::$com->load(array('c.id' => $commandersId));
+		$S_COM_ATK = $commanderManager->newSession();
+		$commanderManager->load(array('c.id' => $commandersId));
 
 		for ($i = 0; $i < count($obsets); $i++) {
-			for ($j = 0; $j < ASM::$com->size(); $j++) {
-				if (ASM::$com->get($j)->rDestinationPlace == $obsets[$i]['info']['id']) {
-					$obsets[$i]['fleets'][] = ASM::$com->get($j);
+			for ($j = 0; $j < $commanderManager->size(); $j++) {
+				if ($commanderManager->get($j)->rDestinationPlace == $obsets[$i]['info']['id']) {
+					$obsets[$i]['fleets'][] = $commanderManager->get($j);
 				}
 			}
 		}
 		
 		# commander manager : yours
-		$S_COM_BSE = ASM::$com->newSession();
-		ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => array(COM_AFFECTED, COM_MOVING)), array('c.rBase', 'DESC'));
+		$S_COM_BSE = $commanderManager->newSession();
+		$commanderManager->load(array('c.rPlayer' => $session->get('playerId'), 'c.statement' => array(Commander::AFFECTED, Commander::MOVING)), array('c.rBase', 'DESC'));
 
 		for ($i = 0; $i < count($obsets); $i++) {
-			for ($j = 0; $j < ASM::$com->size(); $j++) {
-				if (ASM::$com->get($j)->rBase == $obsets[$i]['info']['id']) {
-					$obsets[$i]['fleets'][] = ASM::$com->get($j);
+			for ($j = 0; $j < $commanderManager->size(); $j++) {
+				if ($commanderManager->get($j)->rBase == $obsets[$i]['info']['id']) {
+					$obsets[$i]['fleets'][] = $commanderManager->get($j);
 				}
 			}
 		}
@@ -74,210 +85,210 @@ echo '<div id="content">';
 		include COMPONENT . 'fleet/listFleet.php';
 
 		# commander id
-		if (CTR::$get->exist('commander')) {
-			$S_COM_ID = ASM::$com->getCurrentSession();
-			ASM::$com->newSession();
-			ASM::$com->load(array(
-				'c.rPlayer' => CTR::$data->get('playerId'),
-				'c.id' => CTR::$get->get('commander'),
-				'c.statement' => array(COM_AFFECTED, COM_MOVING)
+		if ($request->query->has('commander')) {
+			$S_COM_ID = $commanderManager->getCurrentSession();
+			$commanderManager->newSession();
+			$commanderManager->load(array(
+				'c.rPlayer' => $session->get('playerId'),
+				'c.id' => $request->query->get('commander'),
+				'c.statement' => array(Commander::AFFECTED, Commander::MOVING)
 			));
-
-			if (ASM::$com->size() == 1) {
-				$S_OBM_DOCK = ASM::$obm->getCurrentSession();
-				ASM::$obm->newSession();
-				ASM::$obm->load(array('rPlace' => ASM::$com->get()->getRBase()));
+			
+			if ($commanderManager->size() == 1) {
+				$S_OBM_DOCK = $orbitalBaseManager->getCurrentSession();
+				$orbitalBaseManager->newSession();
+				$orbitalBaseManager->load(array('rPlace' => $commanderManager->get()->getRBase()));
 
 				# commanderDetail component
-				$commander_commanderDetail = ASM::$com->get();
-				$commander_commanderFleet = ASM::$com->get();
-				$ob_commanderFleet = ASM::$obm->get();
+				$commander_commanderDetail = $commanderManager->get();
+				$commander_commanderFleet = $commanderManager->get();
+				$ob_commanderFleet = $orbitalBaseManager->get();
 				
 				# commanderFleet component
 				include COMPONENT . 'fleet/commanderFleet.php';
 				include COMPONENT . 'fleet/commanderDetail.php';
 
-				ASM::$com->changeSession($S_COM_ID);
-				ASM::$obm->changeSession($S_OBM_DOCK);
+				$commanderManager->changeSession($S_COM_ID);
+				$orbitalBaseManager->changeSession($S_OBM_DOCK);
 			} else {
-				CTR::$alert->add('Cet officier ne vous appartient pas ou n\'existe pas');
-				CTR::redirect('fleet');
+				throw new ErrorException('Cet officier ne vous appartient pas ou n\'existe pas');
+				//CTR::redirect('fleet');
 			}
 		}
 
-		ASM::$com->changeSession($S_COM_UKN);
-	} elseif (CTR::$get->get('view') == 'overview') {
-		$S_COM_UKN = ASM::$com->getCurrentSession();
-		$S_OBM_UKN = ASM::$obm->getCurrentSession();
+		$commanderManager->changeSession($S_COM_UKN);
+	} elseif ($request->query->get('view') == 'overview') {
+		$S_COM_UKN = $commanderManager->getCurrentSession();
+		$S_OBM_UKN = $orbitalBaseManager->getCurrentSession();
 
 		# set d'orbitale base
 		$obsets = [];
-		for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
+		for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
 			$obsets[$i] = array();
 
 			$obsets[$i]['info'] = [];
 			$obsets[$i]['fleets'] = [];
 			$obsets[$i]['dock'] = [];
 
-			$obsets[$i]['info']['id'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
-			$obsets[$i]['info']['name'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('name');
-			$obsets[$i]['info']['type'] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('type');
+			$obsets[$i]['info']['id'] = $session->get('playerBase')->get('ob')->get($i)->get('id');
+			$obsets[$i]['info']['name'] = $session->get('playerBase')->get('ob')->get($i)->get('name');
+			$obsets[$i]['info']['type'] = $session->get('playerBase')->get('ob')->get($i)->get('type');
 		}
 
 		# commander manager : yours
-		ASM::$com->newSession();
-		ASM::$com->load(['c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => [COM_AFFECTED, COM_MOVING]], ['c.rBase', 'DESC']);
+		$commanderManager->newSession();
+		$commanderManager->load(['c.rPlayer' => $session->get('playerId'), 'c.statement' => [Commander::AFFECTED, Commander::MOVING]], ['c.rBase', 'DESC']);
 
 		for ($i = 0; $i < count($obsets); $i++) {
-			for ($j = 0; $j < ASM::$com->size(); $j++) {
-				if (ASM::$com->get($j)->rBase == $obsets[$i]['info']['id']) {
-					$obsets[$i]['fleets'][] = ASM::$com->get($j);
+			for ($j = 0; $j < $commanderManager->size(); $j++) {
+				if ($commanderManager->get($j)->rBase == $obsets[$i]['info']['id']) {
+					$obsets[$i]['fleets'][] = $commanderManager->get($j);
 				}
 			}
 		}
 
 		# ship in dock
-		ASM::$obm->newSession();
-		ASM::$obm->load(['rPlayer' => CTR::$data->get('playerId')]);
+		$orbitalBaseManager->newSession();
+		$orbitalBaseManager->load(['rPlayer' => $session->get('playerId')]);
 
 		for ($i = 0; $i < count($obsets); $i++) {
-			for ($j = 0; $j < ASM::$obm->size(); $j++) {
-				if (ASM::$obm->get($j)->rPlace == $obsets[$i]['info']['id']) {
-					$obsets[$i]['dock'] = ASM::$obm->get($j)->shipStorage;
+			for ($j = 0; $j < $orbitalBaseManager->size(); $j++) {
+				if ($orbitalBaseManager->get($j)->rPlace == $obsets[$i]['info']['id']) {
+					$obsets[$i]['dock'] = $orbitalBaseManager->get($j)->shipStorage;
 				}
 			}
 		}
 
 		include COMPONENT . 'fleet/overview.php';
 
-		ASM::$obm->changeSession($S_OBM_UKN);
-		ASM::$com->changeSession($S_COM_UKN);
-	} elseif (CTR::$get->get('view') == 'spyreport') {
+		$orbitalBaseManager->changeSession($S_OBM_UKN);
+		$commanderManager->changeSession($S_COM_UKN);
+	} elseif ($request->query->get('view') == 'spyreport') {
 		# loading des objets
-		$S_SRM1 = ASM::$srm->getCurrentSession();
-		ASM::$srm->newSession();
-		ASM::$srm->load(array('rPlayer' => CTR::$data->get('playerId')), array('dSpying', 'DESC'), array(0, 40));
+		$S_SRM1 = $spyReportManager->getCurrentSession();
+		$spyReportManager->newSession();
+		$spyReportManager->load(array('rPlayer' => $session->get('playerId')), array('dSpying', 'DESC'), array(0, 40));
 
 		# listReport component
 		$spyreport_listSpy = array();
-		for ($i = 0; $i < ASM::$srm->size(); $i++) { 
-			$spyreport_listSpy[$i] = ASM::$srm->get($i);
+		for ($i = 0; $i < $spyReportManager->size(); $i++) { 
+			$spyreport_listSpy[$i] = $spyReportManager->get($i);
 		}
 		include COMPONENT . 'fleet/listSpy.php';
 
 		# report component
-		ASM::$srm->newSession();
+		$spyReportManager->newSession();
 
-		if (CTR::$get->exist('report')) {
-			ASM::$srm->load(array('id' => CTR::$get->get('report'), 'rPlayer' => CTR::$data->get('playerId')));
+		if ($request->query->has('report')) {
+			$spyReportManager->load(array('id' => $request->query->get('report'), 'rPlayer' => $session->get('playerId')));
 		} else {
-			ASM::$srm->load(array('rPlayer' => CTR::$data->get('playerId')), array('dSpying', 'DESC'), array(0, 1));
+			$spyReportManager->load(array('rPlayer' => $session->get('playerId')), array('dSpying', 'DESC'), array(0, 1));
 		}
 
-		if (ASM::$srm->size() == 1) {
-			$spyreport = ASM::$srm->get(0);
+		if ($spyReportManager->size() == 1) {
+			$spyreport = $spyReportManager->get(0);
 
-			$S_PLM_SPY = ASM::$plm->getCurrentSession();
-			ASM::$plm->newSession();
-			ASM::$plm->load(array('id' => $spyreport->rPlace));
-			$place_spy = ASM::$plm->get(0);
+			$S_PLM_SPY = $placeManager->getCurrentSession();
+			$placeManager->newSession();
+			$placeManager->load(array('id' => $spyreport->rPlace));
+			$place_spy = $placeManager->get(0);
 
 			include COMPONENT . 'fleet/spyReport.php';
 
-			ASM::$plm->changeSession($S_PLM_SPY);
+			$placeManager->changeSession($S_PLM_SPY);
 		} else {
-			if (CTR::$get->exist('report')) {
-				CTR::$alert->add('Ce rapport ne vous appartient pas ou n\'existe pas');
-				CTR::redirect('fleet/view-spyreport');
+			if ($request->query->has('report')) {
+				throw new ErrorException('Ce rapport ne vous appartient pas ou n\'existe pas');
+				//CTR::redirect('fleet/view-spyreport');
 			} else {
 				include COMPONENT . 'default.php';
 				include COMPONENT . 'default.php';
 			}
 		}
 
-		ASM::$srm->changeSession($S_SRM1);
-	} elseif (CTR::$get->get('view') == 'archive') {
+		$spyReportManager->changeSession($S_SRM1);
+	} elseif ($request->query->get('view') == 'archive') {
 		# loading des objets
-		$S_LRM1 = ASM::$lrm->getCurrentSession();
-		ASM::$lrm->newSession();
+		$S_LRM1 = $littleReportManager->getCurrentSession();
+		$littleReportManager->newSession();
 
-		if (CTR::$get->get('mode', 'archived')) {
+		if ($request->query->get('mode', 'archived')) {
 			$archived = Report::ARCHIVED;
 		} else {
 			$archived = Report::STANDARD;
 		}
 
-		$rebels = Params::check(Params::SHOW_REBEL_REPORT)
+		$rebels = $request->cookies->get('p'. Params::SHOW_REBEL_REPORT, Params::SHOW_REBEL_REPORT)
 			? NULL
 			: 'AND p2.rColor != 0';
 
-		if (Params::check(Params::SHOW_ATTACK_REPORT)) {
-			ASM::$lrm->loadByRequest(
+		if ($request->cookies->get('p'. Params::SHOW_ATTACK_REPORT, Params::SHOW_ATTACK_REPORT)) {
+			$littleReportManager->loadByRequest(
 				'WHERE rPlayerAttacker = ? AND statementAttacker = ? ' . $rebels . ' ORDER BY dFight DESC LIMIT 0, 50',
-				[CTR::$data->get('playerId'), $archived]
+				[$session->get('playerId'), $archived]
 			);
 		} else {
-			ASM::$lrm->loadByRequest(
+			$littleReportManager->loadByRequest(
 				'WHERE rPlayerDefender = ? AND statementDefender = ? ' . $rebels . ' ORDER BY dFight DESC LIMIT 0, 50',
-				[CTR::$data->get('playerId'), $archived]
+				[$session->get('playerId'), $archived]
 			);
 		}
 
 		# listReport component
 		$report_listReport = array();
-		for ($i = 0; $i < ASM::$lrm->size(); $i++) { 
-			$report_listReport[$i] = ASM::$lrm->get($i);
+		for ($i = 0; $i < $littleReportManager->size(); $i++) { 
+			$report_listReport[$i] = $littleReportManager->get($i);
 		}
 		$type_listReport = 1;
 		include COMPONENT . 'fleet/list-report.php';
 
 		# report component
-		if (CTR::$get->exist('report')) {
-			$S_RPM2 = ASM::$rpm->getCurrentSession();
-			ASM::$rpm->newSession();
-			ASM::$rpm->load(array('r.id' => CTR::$get->get('report')));
+		if ($request->query->has('report')) {
+			$S_RPM2 = $reportManager->getCurrentSession();
+			$reportManager->newSession();
+			$reportManager->load(array('r.id' => $request->query->get('report')));
 
-			if (ASM::$rpm->size() == 1 && (ASM::$rpm->get()->rPlayerAttacker == CTR::$data->get('playerId') || ASM::$rpm->get()->rPlayerDefender == CTR::$data->get('playerId'))) {
-				$S_PAM1 = ASM::$pam->getCurrentSession();
-				ASM::$pam->newSession();
-				ASM::$pam->load(array('id' => array(ASM::$rpm->get()->rPlayerAttacker, ASM::$rpm->get()->rPlayerDefender)));
+			if ($reportManager->size() == 1 && ($reportManager->get()->rPlayerAttacker == $session->get('playerId') || $reportManager->get()->rPlayerDefender == $session->get('playerId'))) {
+				$S_PAM1 = $playerManager->getCurrentSession();
+				$playerManager->newSession();
+				$playerManager->load(array('id' => array($reportManager->get()->rPlayerAttacker, $reportManager->get()->rPlayerDefender)));
 
-				$report_report = ASM::$rpm->get();
+				$report_report = $reportManager->get();
 
-				$attacker_report = ASM::$pam->getById($report_report->rPlayerAttacker);
-				$defender_report = ASM::$pam->getById($report_report->rPlayerDefender);
+				$attacker_report = $playerManager->getById($report_report->rPlayerAttacker);
+				$defender_report = $playerManager->getById($report_report->rPlayerDefender);
 
 				include COMPONENT . 'fleet/report.php';
 				include COMPONENT . 'fleet/manage-report.php';
 
-				ASM::$pam->changeSession($S_PAM1);
+				$playerManager->changeSession($S_PAM1);
 			} else {
-				CTR::$alert->add('Ce rapport ne vous appartient pas ou n\'existe pas');
-				CTR::redirect('fleet/view-archive');
+				throw new ErrorException('Ce rapport ne vous appartient pas ou n\'existe pas');
+				//CTR::redirect('fleet/view-archive');
 			}
 
-			ASM::$rpm->changeSession($S_RPM2);
+			$reportManager->changeSession($S_RPM2);
 		} else {
 			include COMPONENT . 'default.php';
 			include COMPONENT . 'default.php';
 		}
 
-		ASM::$lrm->changeSession($S_LRM1);
-	} elseif (CTR::$get->get('view') == 'memorial') {
+		$littleReportManager->changeSession($S_LRM1);
+	} elseif ($request->query->get('view') == 'memorial') {
 		# loading des objets
-		$S_COM1 = ASM::$com->getCurrentSession();
-		ASM::$com->newSession();
-		ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => COM_DEAD), array('c.palmares', 'DESC'));
+		$S_COM1 = $commanderManager->getCurrentSession();
+		$commanderManager->newSession();
+		$commanderManager->load(array('c.rPlayer' => $session->get('playerId'), 'c.statement' => Commander::DEAD), array('c.palmares', 'DESC'));
 
 		# memorialTxt component
 		include COMPONENT . 'fleet/memorialTxt.php';
 
-		for ($i = 0; $i < ASM::$com->size(); $i++) {
+		for ($i = 0; $i < $commanderManager->size(); $i++) {
 			if ($i < 6) {
-				$commander_commanderDetail = ASM::$com->get($i);
+				$commander_commanderDetail = $commanderManager->get($i);
 				include COMPONENT . 'fleet/commanderDetail.php';
 			} else {
-				$commander_shortMemorial = ASM::$com->get($i);
+				$commander_shortMemorial = $commanderManager->get($i);
 				include COMPONENT . 'default.php';
 			}
 		}
@@ -291,9 +302,9 @@ echo '<div id="content">';
 		if (isset($commander_shortMemorial) && count($commander_shortMemorial) > 0) {
 		}
 
-		ASM::$com->changeSession($S_COM1);
+		$commanderManager->changeSession($S_COM1);
 	} else {
-		CTR::redirect('404');
+		$response->redirect('404');
 	}
 
 echo '</div>';

@@ -47,7 +47,7 @@ echo '<div class="component nav">';
 				echo '<em>Envoi de crédits aux membres de la faction</em>';
 			echo '</a>';
 
-			if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
+			if (CTR::$data->get('playerInfo')->get('status') == Player::CHIEF) {
 				$active = (CTR::$get->get('mode') == 'manage') ? 'active' : '';
 				echo '<a href="' . APP_ROOT . 'faction/view-government/mode-manage" class="nav-element ' . $active . '">';
 					echo '<img src="' . MEDIA . 'faction/law/common.png" alt="" />';
@@ -59,7 +59,7 @@ echo '<div class="component nav">';
 			echo '<hr />';
 			echo '<h4>Abandonner ses fonctions</h4>';
 
-			if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
+			if (CTR::$data->get('playerInfo')->get('status') == Player::CHIEF) {
 				if ($faction->regime == Color::DEMOCRATIC) {
 					echo '<a href="' . Format::actionBuilder('abdicate') . '" class="more-button confirm" data-confirm-label="Cette action est définitive.">Organiser des élections anticipées</a>';
 				} else {

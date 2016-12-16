@@ -2,11 +2,14 @@
 
 use Asylamba\Classes\Worker\CTR;
 
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+
 echo '<div id="subnav">';
 	echo '<button class="move-side-bar top" data-dir="up"> </button>';
 	echo '<div class="overflow">';
-		$active = (CTR::$get->exist('faction')) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'embassy/faction-' . CTR::$data->get('playerInfo')->get('color') . '" class="item ' . $active . '">';
+		$active = ($request->query->has('faction')) ? 'active' : NULL;
+		echo '<a href="' . APP_ROOT . 'embassy/faction-' . $session->get('playerInfo')->get('color') . '" class="item ' . $active . '">';
 			echo '<span class="picto">';
 				echo '<img src="' . MEDIA . 'rank/faction.png" alt="" />';
 			echo '</span>';
@@ -15,8 +18,8 @@ echo '<div id="subnav">';
 			echo '</span>';
 		echo '</a>';
 
-		$active = (CTR::$get->exist('player')) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'embassy/player-' . CTR::$data->get('playerId') . '" class="item ' . $active . '">';
+		$active = ($request->query->has('player')) ? 'active' : NULL;
+		echo '<a href="' . APP_ROOT . 'embassy/player-' . $session->get('playerId') . '" class="item ' . $active . '">';
 			echo '<span class="picto">';
 				echo '<img src="' . MEDIA . 'profil/diary.png" alt="" />';
 			echo '</span>';

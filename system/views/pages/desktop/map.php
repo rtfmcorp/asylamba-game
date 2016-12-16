@@ -1,18 +1,20 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Modules\Gaia\Manager\SectorManager;
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$placeManager = $this->getContainer()->get('gaia.place_manager');
+$sectorManager = $this->getContainer()->get('gaia.sector_manager');
+$systemManager = $this->getContainer()->get('gaia.system_manager');
+$galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
+$sectorManager->load();
 
-$sm = new SectorManager();
-$sm->load();
-
-$S_OBM_MAP = ASM::$obm->getCurrentSession();
-ASM::$obm->newSession();
-ASM::$obm->load(array('rPlayer' => CTR::$data->get('playerId')));
+$S_OBM_MAP = $orbitalBaseManager->getCurrentSession();
+$orbitalBaseManager->newSession();
+$orbitalBaseManager->load(array('rPlayer' => $session->get('playerId')));
 
 # base choice
-$defaultBase = ASM::$obm->getById(CTR::$data->get('playerParams')->get('base'));
+$defaultBase = $orbitalBaseManager->getById($session->get('playerParams')->get('base'));
 
 # map default position
 $x = $defaultBase->getXSystem();
@@ -21,35 +23,35 @@ $systemId = 0;
 
 # other default location
 # par place
-if (CTR::$get->exist('place')) {
-	$S_PLM_MAP = ASM::$plm->getCurrentSession();
-	ASM::$plm->newSession();
-	ASM::$plm->load(array('id' => CTR::$get->get('place')));
+if ($request->query->has('place')) {
+	$S_PLM_MAP = $placeManager->getCurrentSession();
+	$placeManager->newSession();
+	$placeManager->load(array('id' => $request->query->get('place')));
 
-	if (ASM::$plm->size() == 1) {
-		$x = ASM::$plm->get(0)->getXSystem();
-		$y = ASM::$plm->get(0)->getYSystem();
-		$systemId = ASM::$plm->get(0)->getRSystem();
+	if ($placeManager->size() == 1) {
+		$x = $placeManager->get(0)->getXSystem();
+		$y = $placeManager->get(0)->getYSystem();
+		$systemId = $placeManager->get(0)->getRSystem();
 	}
 	
-	ASM::$plm->changeSession($S_PLM_MAP);
+	$placeManager->changeSession($S_PLM_MAP);
 # par system
-} elseif (CTR::$get->exist('system')) {
-	$_SYS_MAP = ASM::$sys->getCurrentSession();
-	ASM::$sys->newSession();
-	ASM::$sys->load(array('id' => CTR::$get->get('system')));
+} elseif ($request->query->has('system')) {
+	$_SYS_MAP = $systemManager->getCurrentSession();
+	$systemManager->newSession();
+	$systemManager->load(array('id' => $request->query->get('system')));
 
-	if (ASM::$sys->size() == 1) {
-		$x = ASM::$sys->get(0)->xPosition;
-		$y = ASM::$sys->get(0)->yPosition;
-		$systemId = CTR::$get->get('system');
+	if ($systemManager->size() == 1) {
+		$x = $systemManager->get(0)->xPosition;
+		$y = $systemManager->get(0)->yPosition;
+		$systemId = $request->query->get('system');
 	}
 	
-	ASM::$sys->changeSession($_SYS_MAP);
+	$systemManager->changeSession($_SYS_MAP);
 # par coordonnée
-} elseif (CTR::$get->exist('x') && CTR::$get->exist('y')) {
-	$x = CTR::$get->get('x');
-	$y = CTR::$get->get('y');
+} elseif ($request->query->has('x') && $request->query->has('y')) {
+	$x = $request->query->get('x');
+	$y = $request->query->get('y');
 }
 
 # control include
@@ -59,23 +61,23 @@ include 'mapElement/commanders.php';
 include 'mapElement/coordbox.php';
 
 if ($systemId != 0) {
-	$S_SYS1 = ASM::$sys->getCurrentSession();
-	ASM::$sys->newSession();
-	ASM::$sys->load(array('id' => $systemId));
+	$S_SYS1 = $systemManager->getCurrentSession();
+	$systemManager->newSession();
+	$systemManager->load(array('id' => $systemId));
 
-	if (ASM::$sys->size() == 1) {
+	if ($systemManager->size() == 1) {
 		# objet système
-		$system = ASM::$sys->get();
+		$system = $systemManager->get();
 
 		# objet place
 		$places = array();
-		$S_PLM1 = ASM::$plm->getCurrentSession();
-		ASM::$plm->newSession();
-		ASM::$plm->load(array('rSystem' => $systemId), array('position'));
-		for ($i = 0; $i < ASM::$plm->size(); $i++) {
-			$places[] = ASM::$plm->get($i);
+		$S_PLM1 = $placeManager->getCurrentSession();
+		$placeManager->newSession();
+		$placeManager->load(array('rSystem' => $systemId), array('position'));
+		for ($i = 0; $i < $placeManager->size(); $i++) {
+			$places[] = $placeManager->get($i);
 		}
-		ASM::$plm->changeSession($S_PLM1);
+		$placeManager->changeSession($S_PLM1);
 
 		$noAJAX = TRUE;
 
@@ -84,7 +86,7 @@ if ($systemId != 0) {
 			include PAGES . 'desktop/mapElement/actionbox.php';
 		echo '</div>';
 	}
-	ASM::$sys->changeSession($S_SYS1);
+	$systemManager->changeSession($S_SYS1);
 } else {
 	echo '<div id="action-box"></div>';
 }
@@ -94,9 +96,9 @@ echo '<div id="map" ';
 	echo 'data-begin-x-position="' . $x . '" ';
 	echo 'data-begin-y-position="' . $y . '" ';
 	echo 'data-related-place="' . $defaultBase->getId() . '"';
-	echo 'data-map-size="' . (GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size']) . '"';
-	echo 'data-map-ratio="' . GalaxyConfiguration::$scale . '"';
-	echo 'style="width: ' . ((GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size'])) . 'px; height: ' . ((GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size'])) . 'px;"';
+	echo 'data-map-size="' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . '"';
+	echo 'data-map-ratio="' . $galaxyConfiguration->scale . '"';
+	echo 'style="width: ' . (($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size'])) . 'px; height: ' . (($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size'])) . 'px;"';
 echo '>';
 	include 'mapElement/layer/background.php';
 
@@ -112,4 +114,4 @@ echo '>';
 	include 'mapElement/layer/map-info.php';
 echo '</div>';
 
-ASM::$obm->changeSession($S_OBM_MAP);
+$orbitalBaseManager->changeSession($S_OBM_MAP);

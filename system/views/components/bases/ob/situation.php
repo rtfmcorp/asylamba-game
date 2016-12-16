@@ -4,6 +4,7 @@ use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Ares\Model\Commander;
 
 # obSituation component
 # in athena.bases package
@@ -14,6 +15,8 @@ use Asylamba\Classes\Library\Format;
 	# {orbitalBase}		ob_obSituation
 	# [{commander}]		commanders_obSituation
 
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
+
 echo '<div class="component space size3">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
@@ -21,7 +24,7 @@ echo '<div class="component space size3">';
 			echo '<div class="situation-content place1">';
 				echo '<div class="toolbar">';
 					echo '<a href="' . APP_ROOT . '/map/base-' . $ob_obSituation->getId() . '">Centrer sur la carte</a>';
-					echo '<form action="' . Format::actionBuilder('renamebase', ['baseid' => $ob_obSituation->getId()]) . '" method="POST">';
+					echo '<form action="' . Format::actionBuilder('renamebase', $sessionToken, ['baseid' => $ob_obSituation->getId()]) . '" method="POST">';
 						echo '<input type="text" name="name" value="' . $ob_obSituation->getName() . '" />';
 						echo '<input type="submit" class="button" value=" " />';
 					echo '</form>';
@@ -36,23 +39,23 @@ echo '<div class="component space size3">';
 				foreach ($commanders_obSituation as $commander) {
 					echo '<div class="commander position-' . $commander->line . '-' . ($commander->line == 1 ? $llp[$lLine] : $rlp[$rLine]) . '">';
 						echo '<a href="' . APP_ROOT . 'fleet/view-movement/commander-' . $commander->getId() . '/sftr-3" class="commander full">';
-							echo '<img src="' . MEDIA . 'map/fleet/' . (($commander->getStatement() == COM_AFFECTED) ? 'army' : 'army-away') . '.png" alt="plein" />';
+							echo '<img src="' . MEDIA . 'map/fleet/' . (($commander->getStatement() == Commander::AFFECTED) ? 'army' : 'army-away') . '.png" alt="plein" />';
 							echo '<span class="info">';
 								echo CommanderResources::getInfo($commander->getLevel(), 'grade') . ' <strong>' . $commander->getName() . '</strong><br />';
 								echo $commander->getPev() . ' Pev';
-								if ($commander->getStatement() == COM_MOVING) {
+								if ($commander->getStatement() == Commander::MOVING) {
 									echo '<br />&#8594;	';
 									switch ($commander->getTypeOfMove()) {
-										case COM_MOVE: echo 'déplacement'; break;
-										case COM_LOOT: echo 'pillage'; break;
-										case COM_COLO: echo 'colonisation'; break;
-										case COM_BACK: echo 'retour'; break;
+										case Commander::MOVE: echo 'déplacement'; break;
+										case Commander::LOOT: echo 'pillage'; break;
+										case Commander::COLO: echo 'colonisation'; break;
+										case Commander::BACK: echo 'retour'; break;
 										default: break;
 									}
 								}
 							echo '</span>';
 						echo '</a>';
-						echo '<a class="link hb ' . ($commander->line == 1 ? 'to-right' : 'to-left') . '" title="changer de ligne" href="' . Format::actionBuilder('changeline', ['id' => $commander->id]) . '"></a>';
+						echo '<a class="link hb ' . ($commander->line == 1 ? 'to-right' : 'to-left') . '" title="changer de ligne" href="' . Format::actionBuilder('changeline', $sessionToken, ['id' => $commander->id]) . '"></a>';
 					echo '</div>';
 
 					if ($commander->line == 1) {

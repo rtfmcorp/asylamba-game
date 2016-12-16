@@ -2,8 +2,11 @@
 
 use Asylamba\Classes\Worker\CTR;
 
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+
 # bases loading
-if (CTR::$data->get('playerInfo')->get('admin') == FALSE) {
+if ($session->get('playerInfo')->get('admin') == FALSE) {
 	header('Location: ' . APP_ROOT . 'profil');
 	exit();
 }
@@ -18,15 +21,15 @@ include 'defaultElement/movers.php';
 # contenu spécifique
 echo '<div id="content">';
 	# admin component
-	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'message') {
+	if (!$request->query->has('view') OR $request->query->get('view') == 'message') {
 		# main message
 		include COMPONENT . 'admin/message/newOfficialMessage.php';
 		include COMPONENT . 'default.php';
-	} elseif (CTR::$get->get('view') == 'roadmap') {
+	} elseif ($request->query->get('view') == 'roadmap') {
 		# main roadmap
 		include COMPONENT . 'admin/roadmap/addEntry.php';
 		include COMPONENT . 'default.php';
 	} else {
-		CTR::redirect('404');
+		$this->getContainer()->get('app.response')->redirect('404');
 	}
 echo '</div>';

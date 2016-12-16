@@ -9,7 +9,6 @@
 	# {RecyclingMission session} 	recyclingSession
 	# {RecyclingLog session}	 	missionLogSessions
 
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
@@ -17,26 +16,31 @@ use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Athena\Model\RecyclingMission;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 
-$S_REM2 = ASM::$rem->getCurrentSession();
-ASM::$rem->changeSession($recyclingSession);
+$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
+$recyclingLogManager = $this->getContainer()->get('athena.recycling_log_manager');
+$sessionToken = $this->getContainer()->get('app.session');
 
-$S_RLM2 = ASM::$rlm->getCurrentSession();
-ASM::$rlm->changeSession($missionLogSessions);
+$S_REM2 = $recyclingMissionManager->getCurrentSession();
+$recyclingMissionManager->changeSession($recyclingSession);
+
+$S_RLM2 = $recyclingLogManager->getCurrentSession();
+$recyclingLogManager->changeSession($missionLogSessions);
 
 echo '<div class="component building">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'orbitalbase/recycling.png" alt="" />';
-		echo '<h2>' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::RECYCLING, 'frenchName') . '</h2>';
+		echo '<h2>' . $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::RECYCLING, 'frenchName') . '</h2>';
 		echo '<em>Niveau ' . $ob_recycling->getLevelRecycling() . '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			$totalRecyclers = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::RECYCLING, 'level', $ob_recycling->levelRecycling, 'nbRecyclers');
+			$totalRecyclers = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::RECYCLING, 'level', $ob_recycling->levelRecycling, 'nbRecyclers');
 			$busyRecyclers  = 0;
 
-			for ($i = 0; $i < ASM::$rem->size(); $i++) { 
-				$busyRecyclers += ASM::$rem->get($i)->recyclerQuantity;
-				$busyRecyclers += ASM::$rem->get($i)->addToNextMission;
+			for ($i = 0; $i < $recyclingMissionManager->size(); $i++) { 
+				$busyRecyclers += $recyclingMissionManager->get($i)->recyclerQuantity;
+				$busyRecyclers += $recyclingMissionManager->get($i)->addToNextMission;
 			}
 
 			$freeRecyclers  = $totalRecyclers - $busyRecyclers;
@@ -65,7 +69,7 @@ echo '<div class="component building">';
 
 			echo '<hr />';
 
-			$missionQuantity = ASM::$rem->size();
+			$missionQuantity = $recyclingMissionManager->size();
 
 			echo '<div class="number-box ' . ($missionQuantity == 0 ? 'grey' : '') . '">';
 				echo '<span class="label">missions actives</span>';
@@ -75,13 +79,13 @@ echo '<div class="component building">';
 	echo '</div>';
 echo '</div>';
 
-for ($i = 0; $i < ASM::$rem->size(); $i++) { 
-	$mission = ASM::$rem->get($i);
+for ($i = 0; $i < $recyclingMissionManager->size(); $i++) { 
+	$mission = $recyclingMissionManager->get($i);
 
 	echo '<div class="component">';
 		echo '<div class="head skin-5">';
 			if ($i == 0) {
-				echo '<h2>Mission' . Format::plural(ASM::$rem->size()) . ' en cours</h2>';
+				echo '<h2>Mission' . Format::plural($recyclingMissionManager->size()) . ' en cours</h2>';
 			}
 		echo '</div>';
 		echo '<div class="fix-body">';
@@ -114,7 +118,7 @@ for ($i = 0; $i < ASM::$rem->size(); $i++) {
 
 				echo $mission->statement == RecyclingMission::ST_BEING_DELETED
 					? '<p>Cette mission a été annulée, les recycleurs terminent la mission puis deviennent disponibles.</p>'
-					: '<p><a href="' . Format::actionBuilder('cancelmission', ['id' => $mission->id, 'place' => $mission->rBase]) . '" class="common-link">Annuler la mission</a></p>';
+					: '<p><a href="' . Format::actionBuilder('cancelmission', $sessionToken, ['id' => $mission->id, 'place' => $mission->rBase]) . '" class="common-link">Annuler la mission</a></p>';
 
 				echo '<ul class="list-type-1">';
 					echo '<li>';
@@ -127,7 +131,7 @@ for ($i = 0; $i < ASM::$rem->size(); $i++) {
 
 						if ($mission->statement == RecyclingMission::ST_ACTIVE && $freeRecyclers > 0) {
 							echo '<span class="buttons"><a href="#" class="sh" data-target="add-recycler-' . $mission->id . '">+</a></span>';
-							echo '<form action="' . Format::actionBuilder('addtomission', ['id' => $mission->id, 'place' => $mission->rBase]) . '" method="POST" id="add-recycler-' . $mission->id . '"><p><input name="quantity" value="' . $freeRecyclers . '" type="text"><input value="ok" type="submit"></p></form>';
+							echo '<form action="' . Format::actionBuilder('addtomission', $sessionToken, ['id' => $mission->id, 'place' => $mission->rBase]) . '" method="POST" id="add-recycler-' . $mission->id . '"><p><input name="quantity" value="' . $freeRecyclers . '" type="text"><input value="ok" type="submit"></p></form>';
 						}
 					echo '</li>';
 					echo '<li>';
@@ -142,9 +146,9 @@ for ($i = 0; $i < ASM::$rem->size(); $i++) {
 
 				echo '<h4>Dernières livraisons</h4>';
 				$nb = 0;
-				for ($j = 0; $j < ASM::$rlm->size(); $j++) {
-					if (ASM::$rlm->get($j)->rRecycling == $mission->id) {
-						$log = ASM::$rlm->get($j);
+				for ($j = 0; $j < $recyclingLogManager->size(); $j++) {
+					if ($recyclingLogManager->get($j)->rRecycling == $mission->id) {
+						$log = $recyclingLogManager->get($j);
 
 						$wedge['ressource'] = $log->resources;
 						$wedge['crédit'] = $log->credits;
@@ -192,10 +196,10 @@ echo '<div class="component">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<p class="long-info">' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::RECYCLING, 'description') . '</p>';
+			echo '<p class="long-info">' . $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::RECYCLING, 'description') . '</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
 
-ASM::$rlm->changeSession($S_RLM2);
-ASM::$rem->changeSession($S_REM2);
+$recyclingLogManager->changeSession($S_RLM2);
+$recyclingMissionManager->changeSession($S_REM2);

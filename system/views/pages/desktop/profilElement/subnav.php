@@ -1,11 +1,9 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-
 echo '<div id="subnav">';
 	echo '<button class="move-side-bar top" data-dir="up"> </button>';
 	echo '<div class="overflow">';
-		$active = (in_array(CTR::getPage(), array('profil'))) ? 'active' : NULL;
+		$active = (in_array($this->getContainer()->get('app.response')->getPage(), array('profil'))) ? 'active' : NULL;
 		echo '<a href="' . APP_ROOT . 'profil" class="item ' . $active . '">';
 			echo '<span class="picto">';
 				echo '<img src="' . MEDIA . 'profil/profil.png" alt="" />';

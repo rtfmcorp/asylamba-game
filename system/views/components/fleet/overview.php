@@ -12,6 +12,8 @@ use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
+
 echo '<div class="component size3 table-fleet">';
 	echo '<div class="head skin-1">';
 		echo '<h1>Aperçu des armées</h1>';
@@ -42,7 +44,7 @@ echo '<div class="component size3 table-fleet">';
 						echo '</td>';
 
 						echo '<td class="large">';
-							echo '<a href="' . Format::actionBuilder('switchbase', ['base' => $base['info']['id'], 'page' => 'dock1']) . '">';
+							echo '<a href="' . Format::actionBuilder('switchbase', $sessionToken, ['base' => $base['info']['id'], 'page' => 'dock1']) . '">';
 								echo 'Vaisseaux dans les hangars';
 							echo '</a>';
 						echo '</td>';

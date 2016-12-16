@@ -7,12 +7,14 @@
 # require
 	# [{notification}]	notification_lastNotif
 
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Chronos;
 
-$S_NTM_SCOPE = ASM::$ntm->getCurrentSession();
-ASM::$ntm->changeSession($C_NTM1);
+$notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
+
+$S_NTM_SCOPE = $notificationManager->getCurrentSession();
+$notificationManager->changeSession($C_NTM1);
 
 echo '<div class="component">';
 	echo '<div class="head skin-2">';
@@ -21,8 +23,8 @@ echo '<div class="component">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="tool">';
-				echo '<span><a href="' . Format::actionBuilder('readallnotif') . '">tout marquer comme lu</a></span>';
-				echo '<span><a href="' . Format::actionBuilder('deleteallnotif') . '" class="hb lt" title="tout supprimer">×</a></span>';
+				echo '<span><a href="' . Format::actionBuilder('readallnotif', $sessionToken) . '">tout marquer comme lu</a></span>';
+				echo '<span><a href="' . Format::actionBuilder('deleteallnotif', $sessionToken) . '" class="hb lt" title="tout supprimer">×</a></span>';
 				echo '<span><a href="#" class="hb lt sh" data-target="info-notif" title="plus d\'information">?</a></span>';
 			echo '</div>';
 			
@@ -32,17 +34,17 @@ echo '<div class="component">';
 				Elles vous permettent d’avoir un compte rendu de toutes vos activités sur Asylamba.<br/>Au bout d\'un certain temps, elles seront automatiquement supprimées, sauf si vous les archivez.';
 			echo '</p>'; 
 			
-			if (ASM::$ntm->size() > 0) {
-				for ($i = 0; $i < ASM::$ntm->size(); $i++) {
-					$n = ASM::$ntm->get($i);
+			if ($notificationManager->size() > 0) {
+				for ($i = 0; $i < $notificationManager->size(); $i++) {
+					$n = $notificationManager->get($i);
 
 					$readed = ($n->getReaded()) ? '' : 'unreaded';
 					echo '<div class="notif ' . $readed . '" data-notif-id="' . $n->getId() . '">';
 						echo '<h4 class="read-notif switch-class-parent" data-class="open">' . $n->getTitle() . '</h4>';
 						echo '<div class="content">' . $n->getContent() . '</div>';
 						echo '<div class="footer">';
-							echo '<a href="' . Format::actionBuilder('archivenotif', ['id' => $n->getId()]) . '">archiver</a> ou ';
-							echo '<a href="' . Format::actionBuilder('deletenotif', ['id' => $n->getId()]) . '">supprimer</a><br />';
+							echo '<a href="' . Format::actionBuilder('archivenotif', $sessionToken, ['id' => $n->getId()]) . '">archiver</a> ou ';
+							echo '<a href="' . Format::actionBuilder('deletenotif', $sessionToken, ['id' => $n->getId()]) . '">supprimer</a><br />';
 							echo '— ' . Chronos::transform($n->getDSending());
 						echo '</div>';
 					echo '</div>';
@@ -54,4 +56,4 @@ echo '<div class="component">';
 	echo '</div>';
 echo '</div>';
 
-ASM::$ntm->changeSession($S_NTM_SCOPE);
+$notificationManager->changeSession($S_NTM_SCOPE);

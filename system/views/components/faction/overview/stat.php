@@ -116,7 +116,7 @@ echo '<div class="component size2 player new-message profil">';
 						echo '</div>';
 						echo '<a class="centred-link" href="' . APP_ROOT . 'faction/view-election">Prendre position sur le coup d\'état</a>';
 					} else {
-						if (in_array(CTR::$data->get('playerInfo')->get('status'), array(PAM_WARLORD, PAM_TREASURER, PAM_MINISTER, PAM_PARLIAMENT))) {
+						if (in_array(CTR::$data->get('playerInfo')->get('status'), array(Player::WARLORD, Player::TREASURER, Player::MINISTER, Player::PARLIAMENT))) {
 							echo '<a class="centred-link sh" href="#" data-target="makeacoup">Tenter un coup d\'état</a>';
 
 							echo '<form action="' . Format::actionBuilder('makeacoup') . '" method="post" id="makeacoup" style="display: none;">';

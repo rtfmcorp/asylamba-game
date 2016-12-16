@@ -1,33 +1,34 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
+$request = $this->getContainer()->get('app.request');
+$systemManager = $this->getContainer()->get('gaia.system_manager');
+$placeManager = $this->getContainer()->get('gaia.place_manager');
 
-if (CTR::$get->exist('systemid')) {
-	$systemId = CTR::$get->get('systemid');
-} else if (CTR::$post->exist('systemid')) {
-	$systemId = CTR::$post->get('systemid');
+if ($request->query->has('systemid')) {
+	$systemId = $request->query->get('systemid');
+} else if ($request->request->has('systemid')) {
+	$systemId = $request->request->get('systemid');
 } else {
 	$systemId = FALSE;
 }
 
-$S_SYS1 = ASM::$sys->getCurrentSession();
-ASM::$sys->newSession();
-ASM::$sys->load(array('id' => $systemId));
+$S_SYS1 = $systemManager->getCurrentSession();
+$systemManager->newSession();
+$systemManager->load(array('id' => $systemId));
 
-if (ASM::$sys->size() == 1) {
+if ($systemManager->size() == 1) {
 	# objet système
-	$system = ASM::$sys->get();
+	$system = $systemManager->get();
 
 	# objet place
 	$places = array();
-	$S_PLM1 = ASM::$plm->getCurrentSession();
-	ASM::$plm->newSession();
-	ASM::$plm->load(array('rSystem' => $systemId), array('position'));
-	for ($i = 0; $i < ASM::$plm->size(); $i++) {
-		$places[] = ASM::$plm->get($i);
+	$S_PLM1 = $placeManager->getCurrentSession();
+	$placeManager->newSession();
+	$placeManager->load(array('rSystem' => $systemId), array('position'));
+	for ($i = 0; $i < $placeManager->size(); $i++) {
+		$places[] = $placeManager->get($i);
 	}
-	ASM::$plm->changeSession($S_PLM1);
+	$placeManager->changeSession($S_PLM1);
 
 	# inclusion du "composant"
 	include PAGES . 'desktop/mapElement/actionbox.php';
@@ -35,4 +36,4 @@ if (ASM::$sys->size() == 1) {
 	return FALSE;
 }
 
-ASM::$sys->changeSession($S_SYS1);
+$systemManager->changeSession($S_SYS1);

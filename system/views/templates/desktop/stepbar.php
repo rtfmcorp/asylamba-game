@@ -1,16 +1,16 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
+$request = $this->getContainer()->get('app.request');
 
 echo '<div id="nav">';
 	echo '<div class="box left">';
-		$isActive = (!in_array(CTR::$get->get('step'), array(2, 3))) ? 'class="active"' : '';
+		$isActive = (!in_array($request->query->get('step'), array(2, 3))) ? 'class="active"' : '';
 		echo '<span href="#" ' . $isActive . '>Etape 1</span>';
 
-		$isActive = (CTR::$get->get('step') == 2) ? 'class="active"' : '';
+		$isActive = ($request->query->get('step') == 2) ? 'class="active"' : '';
 		echo '<span href="#" ' . $isActive . '>Etape 2</span>';
 
-		$isActive = (CTR::$get->get('step') == 3) ? 'class="active"' : '';
+		$isActive = ($request->query->get('step') == 3) ? 'class="active"' : '';
 		echo '<span href="#" ' . $isActive . '>Etape 3</span>';
 	echo '</div>';
 
