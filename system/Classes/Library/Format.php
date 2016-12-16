@@ -118,7 +118,6 @@ class Format {
 		foreach ($params as $key => $value) {
 			$url .= $key . '-' . $value . '/';
 		}
-
 		$url .= 'token-' . $token;
 		return $url;
 	}

@@ -85,4 +85,9 @@ class Response
 	{
 		return $this->redirect;
 	}
+	
+	public function rewriteCookies()
+	{
+		
+	}
 }
