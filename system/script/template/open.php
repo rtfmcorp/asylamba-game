@@ -1,12 +1,10 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-
 echo '<!DOCTYPE html>';
 echo '<html lang="fr">';
 
 echo '<head>';
-	echo '<title>' . CTR::getTitle() . ' — ' . APP_SUBNAME . ' — ' . APP_NAME . '</title>';
+	echo '<title>' . $this->getContainer()->get('app.response')->getTitle() . ' — ' . APP_SUBNAME . ' — ' . APP_NAME . '</title>';
 
 	echo '<meta charset="utf-8" />';
 	echo '<meta name="description" content="' . APP_DESCRIPTION . '" />';
