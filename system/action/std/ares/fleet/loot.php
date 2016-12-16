@@ -5,163 +5,171 @@
 # int placeid				id de la place attaquée
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 
-$commanderId = Utils::getHTTPData('commanderid');
-$placeId = Utils::getHTTPData('placeid');
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
+$session = $this->getContainer()->get('app.session');
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
+$placeManager = $this->getContainer()->get('gaia.place_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$colorManager = $this->getContainer()->get('demeter.color_manager');
+$sectorManager = $this->getContainer()->get('gaia.sector_manager');
+
+$commanderId = $request->query->get('commanderid');
+$placeId = $request->query->get('placeid');
 
 if ($commanderId !== FALSE AND $placeId !== FALSE) {
-	$S_COM1 = ASM::$com->getCurrentSession();
-	ASM::$com->newSession(ASM_UMODE);
-	ASM::$com->load(array('c.id' => $commanderId, 'c.rPlayer' => CTR::$data->get('playerId')));
+	$S_COM1 = $commanderManager->getCurrentSession();
+	$commanderManager->newSession(ASM_UMODE);
+	$commanderManager->load(array('c.id' => $commanderId, 'c.rPlayer' => $session->get('playerId')));
 	
-	$S_PLM1 = ASM::$plm->getCurrentSession();
-	ASM::$plm->newSession(ASM_UMODE);
-	ASM::$plm->load(array('id' => $placeId));
+	$S_PLM1 = $placeManager->getCurrentSession();
+	$placeManager->newSession(ASM_UMODE);
+	$placeManager->load(array('id' => $placeId));
 
-	$S_PAM1 = ASM::$pam->getCurrentSession();
-	ASM::$pam->newSession(ASM_UMODE);
-	ASM::$pam->load(array('id' => ASM::$plm->get()->rPlayer));
+	$S_PAM1 = $playerManager->getCurrentSession();
+	$playerManager->newSession(ASM_UMODE);
+	$playerManager->load(array('id' => $placeManager->get()->rPlayer));
 
-	if (ASM::$pam->size() == 0) {
-		if (ASM::$com->size() > 0) {
-			if (ASM::$plm->size() > 0) {
-				$commander = ASM::$com->get();
-				$place = ASM::$plm->get();
+	if ($playerManager->size() == 0) {
+		if ($commanderManager->size() > 0) {
+			if ($placeManager->size() > 0) {
+				$commander = $commanderManager->get();
+				$place = $placeManager->get();
 				if ($place->typeOfPlace == Place::TERRESTRIAL) {
-					if (CTR::$data->get('playerInfo')->get('color') != $place->getPlayerColor()) {
-						ASM::$plm->load(array('id' => $commander->getRBase()));
-						$home = ASM::$plm->getById($commander->getRBase());
+					if ($session->get('playerInfo')->get('color') != $place->getPlayerColor()) {
+						$placeManager->load(array('id' => $commander->getRBase()));
+						$home = $placeManager->getById($commander->getRBase());
 
 						$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
-						$duration = Game::getTimeToTravel($home, $place, CTR::$data->get('playerBonus'));
+						$duration = Game::getTimeToTravel($home, $place, $session->get('playerBonus'));
 
 						if ($commander->getPev() > 0) {
 							if ($commander->statement == Commander::AFFECTED) {
 
-								$S_SEM = ASM::$sem->getCurrentSession();
-								ASM::$sem->newSession();
-								ASM::$sem->load(array('id' => $place->rSector));
+								$S_SEM = $sectorManager->getCurrentSession();
+								$sectorManager->newSession();
+								$sectorManager->load(array('id' => $place->rSector));
 
-								$_CLM2 = ASM::$clm->getCurrentSession();
-								ASM::$clm->newSession();
-								ASM::$clm->load(array('id' => ASM::$sem->get()->rColor));
+								$_CLM2 = $colorManager->getCurrentSession();
+								$colorManager->newSession();
+								$colorManager->load(array('id' => $sectorManager->get()->rColor));
 								
-								$sectorColor = ASM::$clm->get();
-								$isFactionSector = (ASM::$sem->get()->rColor == $commander->playerColor || $sectorColor->colorLink[CTR::$data->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
+								$sectorColor = $colorManager->get();
+								$isFactionSector = ($sectorManager->get()->rColor == $commander->playerColor || $sectorColor->colorLink[$session->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
 								
-								ASM::$sem->changeSession($S_SEM);
-								ASM::$clm->changeSession($_CLM2);
+								$sectorManager->changeSession($S_SEM);
+								$colorManager->changeSession($_CLM2);
 								
 								$commander->destinationPlaceName = $place->baseName;
 								if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
-									if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
+									if ($commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
 
 										# tutorial
-										if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-											switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+										if ($session->get('playerInfo')->get('stepDone') == FALSE) {
+											switch ($session->get('playerInfo')->get('stepTutorial')) {
 												case TutorialResource::LOOT_PLANET:
 													TutorialHelper::setStepDone();
 													break;
 											}
 										}
 										
-										if (CTR::$get->exist('redirect')) {
-											CTR::redirect('map/place-' . CTR::$get->get('redirect'));
+										if ($request->query->has('redirect')) {
+											$response-> redirect('map/place-' . $request->query->get('redirect'));
 										}
 									}
 								} else {
-									CTR::$alert->add('Cet emplacement est trop éloigné.', ALERT_STD_ERROR);	
+									throw new ErrorException('Cet emplacement est trop éloigné.');	
 								}
 							} else {
-								CTR::$alert->add('Cet officier est déjà en déplacement.', ALERT_STD_ERROR);	
+								throw new ErrorException('Cet officier est déjà en déplacement.');	
 							}
 						} else {
-							CTR::$alert->add('Vous devez affecter au moins un vaisseau à votre officier.', ALERT_STD_ERROR);	
+							throw new ErrorException('Vous devez affecter au moins un vaisseau à votre officier.');	
 						}		
 					} else {
-						CTR::$alert->add('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction.', ALERT_STD_ERROR);
+						throw new ErrorException('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction.');
 					}
 				} else {
-					CTR::$alert->add('Ce lieu n\'est pas habité.', ALERT_STD_ERROR);
+					throw new ErrorException('Ce lieu n\'est pas habité.');
 				}
 			} else {
-				CTR::$alert->add('Ce lieu n\'existe pas.', ALERT_STD_ERROR);
+				throw new ErrorException('Ce lieu n\'existe pas.');
 			}
 		} else {
-			CTR::$alert->add('Ce commandant ne vous appartient pas ou n\'existe pas.', ALERT_STD_ERROR);
+			throw new ErrorException('Ce commandant ne vous appartient pas ou n\'existe pas.');
 		}
-	} elseif (ASM::$pam->get()->level > 1 || ASM::$pam->get()->statement >= PAM_DELETED) {
-		if (ASM::$com->size() > 0) {
-			if (ASM::$plm->size() > 0) {
-				$commander = ASM::$com->get();
-				$place = ASM::$plm->get();
+	} elseif ($playerManager->get()->level > 1 || $playerManager->get()->statement >= Player::DELETED) {
+		if ($commanderManager->size() > 0) {
+			if ($placeManager->size() > 0) {
+				$commander = $commanderManager->get();
+				$place = $placeManager->get();
 
-				$_CLM1 = ASM::$clm->getCurrentSession();
-				ASM::$clm->newSession();
-				ASM::$clm->load(array('id' => CTR::$data->get('playerInfo')->get('color')));
-				$color = ASM::$clm->get();
+				$_CLM1 = $colorManager->getCurrentSession();
+				$colorManager->newSession();
+				$colorManager->load(array('id' => $session->get('playerInfo')->get('color')));
+				$color = $colorManager->get();
 				
-				if (CTR::$data->get('playerInfo')->get('color') != $place->getPlayerColor() && $color->colorLink[ASM::$pam->get()->rColor] != Color::ALLY) {
-					ASM::$plm->load(array('id' => $commander->getRBase()));
-					$home = ASM::$plm->getById($commander->getRBase());
+				if ($session->get('playerInfo')->get('color') != $place->getPlayerColor() && $color->colorLink[$playerManager->get()->rColor] != Color::ALLY) {
+					$placeManager->load(array('id' => $commander->getRBase()));
+					$home = $placeManager->getById($commander->getRBase());
 
 					$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
-					$duration = Game::getTimeToTravel($home, $place, CTR::$data->get('playerBonus'));
+					$duration = Game::getTimeToTravel($home, $place, $session->get('playerBonus'));
 
 					if ($commander->getPev() > 0) {
-						$S_SEM = ASM::$sem->getCurrentSession();
-						ASM::$sem->newSession();
-						ASM::$sem->load(array('id' => $place->rSector));
+						$S_SEM = $sectorManager->getCurrentSession();
+						$sectorManager->newSession();
+						$sectorManager->load(array('id' => $place->rSector));
 
-						$_CLM3 = ASM::$clm->getCurrentSession();
-						ASM::$clm->newSession();
-						ASM::$clm->load(array('id' => ASM::$sem->get()->rColor));
+						$_CLM3 = $colorManager->getCurrentSession();
+						$colorManager->newSession();
+						$colorManager->load(array('id' => $sectorManager->get()->rColor));
 						
-						$sectorColor = ASM::$clm->get();
-						$isFactionSector = (ASM::$sem->get()->rColor == $commander->playerColor || $sectorColor->colorLink[CTR::$data->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
+						$sectorColor = $colorManager->get();
+						$isFactionSector = ($sectorManager->get()->rColor == $commander->playerColor || $sectorColor->colorLink[$session->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
 						
-						ASM::$sem->changeSession($S_SEM);
-						ASM::$clm->changeSession($_CLM3);
+						$sectorManager->changeSession($S_SEM);
+						$colorManager->changeSession($_CLM3);
 						
 						$commander->destinationPlaceName = $place->baseName;
 						if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
-							if ($commander->move($place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
+							if ($commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
 								$commander->dStart = Utils::now();
-								CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
+								$response->flashbag->add('Flotte envoyée.', Response::FLASHBAG_SUCCESS);
 
-								if (CTR::$get->exist('redirect')) {
-									CTR::redirect('map/place-' . CTR::$get->get('redirect'));
+								if ($request->query->has('redirect')) {
+									$response->redirect('map/place-' . $request->query->get('redirect'));
 								}
 							}
 						} else {
-							CTR::$alert->add('Ce lieu est trop éloigné.', ALERT_STD_ERROR);		
+							throw new ErrorException('Ce lieu est trop éloigné.');		
 						}
 					} else {
-						CTR::$alert->add('Vous devez affecter au moins un vaisseau à votre officier.', ALERT_STD_ERROR);	
+						throw new ErrorException('Vous devez affecter au moins un vaisseau à votre officier.');	
 					}	
 				} else {
-					CTR::$alert->add('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction ou d\'une faction alliée.', ALERT_STD_ERROR);
+					throw new ErrorException('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction ou d\'une faction alliée.');
 				}
-				ASM::$clm->changeSession($_CLM1);
+				$colorManager->changeSession($_CLM1);
 			} else {
-				CTR::$alert->add('Ce lieu n\'existe pas.', ALERT_STD_ERROR);
+				throw new ErrorException('Ce lieu n\'existe pas.');
 			}
 		} else {
-			CTR::$alert->add('Ce commandant ne vous appartient pas ou n\'existe pas.', ALERT_STD_ERROR);
+			throw new ErrorException('Ce commandant ne vous appartient pas ou n\'existe pas.');
 		}
 	} else {
-		CTR::$alert->add('Vous ne pouvez pas piller un joueur de niveau 1.', ALERT_STD_ERROR);
+		throw new ErrorException('Vous ne pouvez pas piller un joueur de niveau 1.');
 	}
-	ASM::$pam->changeSession($S_PAM1);
-	ASM::$plm->changeSession($S_PLM1);
-	ASM::$com->changeSession($S_COM1);
+	$playerManager->changeSession($S_PAM1);
+	$placeManager->changeSession($S_PLM1);
+	$commanderManager->changeSession($S_COM1);
 } else {
-	CTR::$alert->add('Manque de précision sur le commandant ou la position.', ALERT_STD_ERROR);
+	throw new ErrorException('Manque de précision sur le commandant ou la position.');
 }

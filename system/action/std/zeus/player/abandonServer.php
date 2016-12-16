@@ -17,7 +17,7 @@ if (ASM::$pam->size() == 1) {
 	if ($success) {
 
 		ASM::$pam->get()->bind = ASM::$pam->get()->bind . 'ABANDON';
-		ASM::$pam->get()->statement = PAM_DELETED;
+		ASM::$pam->get()->statement = Player::DELETED;
 		
 		# clean session
 		CTR::$data->destroy();

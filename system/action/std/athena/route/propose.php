@@ -39,7 +39,7 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 	$S_CRM1 = ASM::$crm->getCurrentSession();
 	ASM::$crm->newSession();
 	ASM::$crm->load(array('rOrbitalBase' => $proposerBase->getId())); # routes avec n'importe quel statement
-	ASM::$crm->load(array('rOrbitalBaseLinked' => $proposerBase->getId(), 'statement' => array(CRM_ACTIVE, CRM_STANDBY)));
+	ASM::$crm->load(array('rOrbitalBaseLinked' => $proposerBase->getId(), 'statement' => array(CommercialRoute::ACTIVE, CommercialRoute::STANDBY)));
 
 	$nbrMaxCommercialRoute = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $proposerBase->getLevelSpatioport(), 'nbRoutesMax');
 	

@@ -1,24 +1,26 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Ares\Model\Report;
+use Asylamba\Classes\Exception\ErrorException;
 
-$S_LRM = ASM::$lrm->getCurrentSession();
-ASM::$lrm->newSession();
-ASM::$lrm->load(array('rPlayerAttacker' => CTR::$data->get('playerId'), 'statementAttacker' => Report::STANDARD));
-ASM::$lrm->load(array('rPlayerDefender' => CTR::$data->get('playerId'), 'statementDefender' => Report::STANDARD));
+$session = $this->getContainer()->get('app.session');
+$littleReportManager = $this->getContainer()->get('ares.little_report_manager');
 
-if (ASM::$lrm->size() > 0) {
-	for ($i = 0; $i < ASM::$lrm->size(); $i++) {
-		if (ASM::$lrm->get($i)->rPlayerAttacker == CTR::$data->get('playerId')) {
-			ASM::$lrm->get($i)->statementAttacker = Report::DELETED;
-		} elseif (ASM::$lrm->get($i)->rPlayerDefender == CTR::$data->get('playerId')) {
-			ASM::$lrm->get($i)->statementDefender = Report::DELETED;
+$S_LRM = $littleReportManager->getCurrentSession();
+$littleReportManager->newSession();
+$littleReportManager->load(array('rPlayerAttacker' => $session->get('playerId'), 'statementAttacker' => Report::STANDARD));
+$littleReportManager->load(array('rPlayerDefender' => $session->get('playerId'), 'statementDefender' => Report::STANDARD));
+
+if ($littleReportManager->size() > 0) {
+	for ($i = 0; $i < $littleReportManager->size(); $i++) {
+		if ($littleReportManager->get($i)->rPlayerAttacker == $session->get('playerId')) {
+			$littleReportManager->get($i)->statementAttacker = Report::DELETED;
+		} elseif ($littleReportManager->get($i)->rPlayerDefender == $session->get('playerId')) {
+			$littleReportManager->get($i)->statementDefender = Report::DELETED;
 		} else {
-			CTR::$alert->add('Ces rapport ne vous appartient pas', ALERT_STD_ERROR);
+			throw new ErrorException('Ces rapport ne vous appartient pas');
 		}
 	}
 }
 
-ASM::$lrm->changeSession($S_LRM);
+$littleReportManager->changeSession($S_LRM);

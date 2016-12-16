@@ -1,85 +1,83 @@
 <?php
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 
+use Asylamba\Classes\Exception\ErrorException;
+
 # change of line a commander
 
 # int id 	 		id du commandant
 
-$commanderId = Utils::getHTTPData('id');
+if(($commanderId = $this->getContainer()->get('app.request')->request->get('id')) === null) {
+	throw new ErrorException('erreur dans le traitement de la requête');	
+}
 
-if ($commanderId !== FALSE) {
-	$S_COM1 = ASM::$com->getCurrentSession();
-	ASM::$com->newSession();
-	ASM::$com->load(array('c.id' => $commanderId, 'c.rPlayer' => CTR::$data->get('playerId')));
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$session = $this->getContainer()->get('app.session');
+$response = $this->getContainer()->get('app.response');
 
-	if (ASM::$com->size() == 1) {
-		$commander = ASM::$com->get();
-		
-		$S_OBM = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession();
-		ASM::$obm->load(array('rPlace' => $commander->rBase));
+$S_COM1 = $commanderManager->getCurrentSession();
+$commanderManager->newSession();
+$commanderManager->load(array('c.id' => $commanderId, 'c.rPlayer' => $session->get('playerId')));
 
-		# checker si on a assez de place !!!!!
-		if ($commander->line == 1) {
-			$S_COM2 = ASM::$com->getCurrentSession();
-			ASM::$com->newSession();
-			ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 2));
-			$nbrLine2 = ASM::$com->size();
+if ($commanderManager->size() !== 1) {
+	throw new ErrorException('Ce commandant n\'existe pas ou ne vous appartient pas');
+}
+$commander = $commanderManager->get();
 
-			if ($nbrLine2 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'r-line')) {
-				$commander->line = 2;
+$S_OBM = $orbitalBaseManager->getCurrentSession();
+$orbitalBaseManager->newSession();
+$orbitalBaseManager->load(array('rPlace' => $commander->rBase));
 
-				CTR::redirect();
-				
-			} else {
-				$commander->line = 2;
-				ASM::$com->get()->line = 1;
-				CTR::redirect();
-				CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a échangé sa place avec ' . ASM::$com->get()->name . '.', ALERT_STD_SUCCESS);
-			}
-			ASM::$com->changeSession($S_COM2);
-		} else {
-			$S_COM2 = ASM::$com->getCurrentSession();
-			ASM::$com->newSession();
-			ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 1));
-			$nbrLine1 = ASM::$com->size();
+# checker si on a assez de place !!!!!
+if ($commander->line == 1) {
+	$S_COM2 = $commanderManager->getCurrentSession();
+	$commanderManager->newSession();
+	$commanderManager->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 2));
+	$nbrLine2 = $commanderManager->size();
 
-			# tutorial
-			if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-				switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
-					case TutorialResource::MOVE_FLEET_LINE:
-						TutorialHelper::setStepDone();
-						break;
-				}
-			}
-			
-			if ($nbrLine1 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'l-line')) {
-				$commander->line = 1;
+	if ($nbrLine2 < PlaceResource::get($orbitalBaseManager->get()->typeOfBase, 'r-line')) {
+		$commander->line = 2;
 
-				CTR::redirect();
-			} else {
-				$commander->line = 1;
-				ASM::$com->get()->line = 2;
-				CTR::redirect();
-				CTR::$alert->add('Votre commandant ' . $commander->getName() . ' a échangé sa place avec ' . ASM::$com->get()->name . '.', ALERT_STD_SUCCESS);
-			}
-			ASM::$com->changeSession($S_COM2);
-		}
+		$response->redirect();
 
-		ASM::$com->changeSession($S_COM2);
-		ASM::$obm->changeSession($S_OBM);
 	} else {
-		CTR::$alert->add('Ce commandant n\'existe pas ou ne vous appartient pas', ALERT_STD_ERROR);
+		$commander->line = 2;
+		$commanderManager->get()->line = 1;
+		$response->redirect();
+		$response->flashbag->add('Votre commandant ' . $commander->getName() . ' a échangé sa place avec ' . $commanderManager->get()->name . '.', Response::FLASHBAG_SUCCESS);
+	}
+	$commanderManager->changeSession($S_COM2);
+} else {
+	$S_COM2 = $commanderManager->getCurrentSession();
+	$commanderManager->newSession();
+	$commanderManager->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 1));
+	$nbrLine1 = $commanderManager->size();
+
+	# tutorial
+	if ($session->get('playerInfo')->get('stepDone') === FALSE && $session->get('playerInfo')->get('stepTutorial') === TutorialResource::MOVE_FLEET_LINE) {
+		TutorialHelper::setStepDone();
 	}
 
-	ASM::$com->changeSession($S_COM1);
-} else {
-	CTR::$alert->add('erreur dans le traitement de la requête', ALERT_BUG_ERROR);
+	if ($nbrLine1 < PlaceResource::get($orbitalBaseManager->get()->typeOfBase, 'l-line')) {
+		$commander->line = 1;
+
+		$response->redirect();
+	} else {
+		$commander->line = 1;
+		$commanderManager->get()->line = 2;
+		$response->redirect();
+		$response->flashbag->add('Votre commandant ' . $commander->getName() . ' a échangé sa place avec ' . $commanderManager->get()->name . '.', Response::FLASHBAG_SUCCESS);
+	}
+	$commanderManager->changeSession($S_COM2);
 }
+
+$commanderManager->changeSession($S_COM2);
+$orbitalBaseManager->changeSession($S_OBM);
+
+$commanderManager->changeSession($S_COM1);

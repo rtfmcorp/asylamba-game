@@ -21,7 +21,7 @@ if ($rElection !== FALSE && $rCandidate !== FALSE) {
 	ASM::$cam->load(array('rPlayer' => $rCandidate, 'rElection' => $rElection));
 
 	$_PAM = ASM::$pam->getCurrentSession();
-	ASM::$pam->load(array('rColor' => CTR::$data->get('playerInfo')->get('color'), 'status' => PAM_CHIEF));
+	ASM::$pam->load(array('rColor' => CTR::$data->get('playerInfo')->get('color'), 'status' => Player::CHIEF));
 
 	if ($rCandidate == 0) {
 		$rCandidate = ASM::$pam->get()->id;

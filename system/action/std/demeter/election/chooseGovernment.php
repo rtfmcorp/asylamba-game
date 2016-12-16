@@ -16,15 +16,15 @@ if ($rPlayer !== FALSE && $department !== FALSE) {
 	ASM::$pam->newSession();
 	ASM::$pam->load(array('status' => $department, 'rColor' => CTR::$data->get('playerInfo')->get('color')));
 	if (ASM::$pam->size() == 0) {
-		if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
+		if (CTR::$data->get('playerInfo')->get('status') == Player::CHIEF) {
 			$_PAM = ASM::$pam->getCurrentsession();
 			ASM::$pam->newSession();
 			ASM::$pam->load(array('id' => $rPlayer));
 
 			if (ASM::$pam->size() > 0) {
 				if (ASM::$pam->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
-					if (ASM::$pam->get()->status == PAM_PARLIAMENT) {
-						if ($department > PAM_PARLIAMENT && $department < PAM_CHIEF) {
+					if (ASM::$pam->get()->status == Player::PARLIAMENT) {
+						if ($department > Player::PARLIAMENT && $department < Player::CHIEF) {
 							ASM::$pam->get()->status = $department;
 							
 							$statusArray = ColorResource::getInfo(ASM::$pam->get()->rColor, 'status');

@@ -3,19 +3,17 @@
 
 # int id 			id de la notif
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Exception\ErrorException;
 
-$id = Utils::getHTTPData('id');
-
+$id = $this->getContainer()->get('app.request')->request->get('id');
+$notificationManager = $this->getContainer()->get('hermes.notification_manager');
 
 if ($id) {
-	$S_NTM1 = ASM::$ntm->getCurrentSession();
-	ASM::$ntm->newSession(ASM_UMODE);
-	ASM::$ntm->load(array('id' => $id));
-	ASM::$ntm->deleteById($id);	
-	ASM::$ntm->changeSession($S_NTM1);
+	$S_NTM1 = $notificationManager->getCurrentSession();
+	$notificationManager->newSession(ASM_UMODE);
+	$notificationManager->load(array('id' => $id));
+	$notificationManager->deleteById($id);	
+	$notificationManager->changeSession($S_NTM1);
 } else {
-	CTR::$alert->add('Cette notification n\'existe pas', ALERT_STD_ERROR);
+	throw new ErrorException('Cette notification n\'existe pas');
 }

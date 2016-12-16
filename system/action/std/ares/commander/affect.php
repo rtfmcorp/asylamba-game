@@ -5,101 +5,95 @@
 # int id 	 		id du officier
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
+use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Exception\ErrorException;
 
-$commanderId = Utils::getHTTPData('id');
+if (($commanderId = $this->getContainer()->get('app.request')->query->get('id')) === null) {
+	throw new ErrorException('erreur dans le traitement de la requête');
+}
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$session  = $this->getContainer()->get('app.session');
+$response = $this->getContainer()->get('app.response');
 
-if ($commanderId !== FALSE) {
-	$S_COM1 = ASM::$com->getCurrentSession();
-	ASM::$com->newSession();
-	ASM::$com->load(array('c.id' => $commanderId, 'c.rPlayer' => CTR::$data->get('playerId')));
+$S_COM1 = $commanderManager->getCurrentSession();
+$commanderManager->newSession();
+$commanderManager->load(array('c.id' => $commanderId, 'c.rPlayer' => $session->get('playerId')));
 
-	if (ASM::$com->size() == 1) {
-		$commander = ASM::$com->get();
-		
-		$S_OBM = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession();
-		ASM::$obm->load(array('rPlace' => $commander->rBase));
+if ($commanderManager->size() !== 1) {
+	throw new ErrorException('Ce officier n\'existe pas ou ne vous appartient pas');
+}
+$commander = $commanderManager->get();
 
-		# checker si on a assez de place !!!!!
-		$S_COM2 = ASM::$com->getCurrentSession();
-		ASM::$com->newSession();
-		ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 2));
-		$nbrLine2 = ASM::$com->size();
+$S_OBM = $orbitalBaseManager->getCurrentSession();
+$orbitalBaseManager->newSession();
+$orbitalBaseManager->load(array('rPlace' => $commander->rBase));
 
-		ASM::$com->newSession();
-		ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 1));
-		$nbrLine1 = ASM::$com->size();
+# checker si on a assez de place !!!!!
+$S_COM2 = $commanderManager->getCurrentSession();
+$commanderManager->newSession();
+$commanderManager->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 2));
+$nbrLine2 = $commanderManager->size();
 
-		if ($commander->statement == Commander::INSCHOOL || $commander->statement == Commander::RESERVE) {
-			if ($nbrLine2 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'r-line')) {
-				$commander->dAffectation = Utils::now();
-				$commander->statement = Commander::AFFECTED;
-				$commander->line = 2;
+$commanderManager->newSession();
+$commanderManager->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 1));
+$nbrLine1 = $commanderManager->size();
 
-				# tutorial
-				if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-					switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
-						case TutorialResource::AFFECT_COMMANDER:
-							TutorialHelper::setStepDone();
-							break;
-					}
-				}
+if ($commander->statement == Commander::INSCHOOL || $commander->statement == Commander::RESERVE) {
+	if ($nbrLine2 < PlaceResource::get($orbitalBaseManager->get()->typeOfBase, 'r-line')) {
+		$commander->dAffectation = Utils::now();
+		$commander->statement = Commander::AFFECTED;
+		$commander->line = 2;
 
-				CTR::$alert->add('Votre officier ' . $commander->getName() . ' a bien été affecté en force de réserve', ALERT_STD_SUCCESS);
-				CTR::redirect('fleet/commander-' . $commander->id . '/sftr-2');
-			} elseif ($nbrLine1 < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'l-line')) {
-				$commander->dAffectation =Utils::now();
-				$commander->statement = Commander::AFFECTED;
-				$commander->line = 1;
-
-				# tutorial
-				if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-					switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
-						case TutorialResource::AFFECT_COMMANDER:
-							TutorialHelper::setStepDone();
-							break;
-					}
-				}
-
-				CTR::$alert->add('Votre officier ' . $commander->getName() . ' a bien été affecté en force active', ALERT_STD_SUCCESS);
-				CTR::redirect('fleet/commander-' . $commander->id . '/sftr-2');
-			} else {
-				CTR::$alert->add('Votre base a dépassé la capacité limite de officiers en activité', ALERT_STD_ERROR);			
-			}
-		} elseif ($commander->statement == Commander::AFFECTED) {
-			$S_COM3 = ASM::$com->getCurrentSession();
-			ASM::$com->newSession();
-			ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => Commander::INSCHOOL));
-
-			$commander->uCommander = Utils::now();
-			if (ASM::$com->size() < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'school-size')) {
-				$commander->statement = Commander::INSCHOOL;
-				CTR::$alert->add('Votre officier ' . $commander->getName() . ' a été remis à l\'école', ALERT_STD_SUCCESS);
-				$commander->emptySquadrons();
-			} else {
-				$commander->statement = Commander::RESERVE;
-				CTR::$alert->add('Votre officier ' . $commander->getName() . ' a été remis dans la réserve de l\'armée', ALERT_STD_SUCCESS);
-				$commander->emptySquadrons();
-			}
-			ASM::$com->changeSession($S_COM3);
-			CTR::redirect('fleet');
-		} else {
-			CTR::$alert->add('Le status de votre officier ne peut pas être modifié', ALERT_STD_ERROR);
+		# tutorial
+		if ($session->get('playerInfo')->get('stepDone') == FALSE && $session->get('playerInfo')->get('stepTutorial') === TutorialResource::AFFECT_COMMANDER) {
+			TutorialHelper::setStepDone();
 		}
 
-		ASM::$com->changeSession($S_COM2);
-		ASM::$obm->changeSession($S_OBM);
-	} else {
-		CTR::$alert->add('Ce officier n\'existe pas ou ne vous appartient pas', ALERT_STD_ERROR);
-	}
+		$response->flashbag->add('Votre officier ' . $commander->getName() . ' a bien été affecté en force de réserve', Response::FLASHBAG_SUCCESS);
+		$response->redirect('fleet/commander-' . $commander->id . '/sftr-2');
+	} elseif ($nbrLine1 < PlaceResource::get($orbitalBaseManager->get()->typeOfBase, 'l-line')) {
+		die('nok');
+		$commander->dAffectation =Utils::now();
+		$commander->statement = Commander::AFFECTED;
+		$commander->line = 1;
 
-	ASM::$com->changeSession($S_COM1);
+		# tutorial
+		if ($session->get('playerInfo')->get('stepDone') == FALSE && $session->get('playerInfo')->get('stepTutorial') === TutorialResource::AFFECT_COMMANDER) {
+			TutorialHelper::setStepDone();
+		}
+
+		$response->flashbag->add('Votre officier ' . $commander->getName() . ' a bien été affecté en force active', Response::FLASHBAG_SUCCESS);
+		$response->redirect('fleet/commander-' . $commander->id . '/sftr-2');
+	} else {
+		throw new ErrorException('Votre base a dépassé la capacité limite de officiers en activité');			
+	}
+} elseif ($commander->statement == Commander::AFFECTED) {
+	$S_COM3 = $commanderManager->getCurrentSession();
+	$commanderManager->newSession();
+	$commanderManager->load(array('c.rBase' => $commander->rBase, 'c.statement' => Commander::INSCHOOL));
+
+	$commander->uCommander = Utils::now();
+	if ($commanderManager->size() < PlaceResource::get($orbitalBaseManager->get()->typeOfBase, 'school-size')) {
+		$commander->statement = Commander::INSCHOOL;
+		$response->flashbag->add('Votre officier ' . $commander->getName() . ' a été remis à l\'école', Response::FLASHBAG_SUCCESS);
+		$commander->emptySquadrons();
+	} else {
+		$commander->statement = Commander::RESERVE;
+		$response->flashbag->add('Votre officier ' . $commander->getName() . ' a été remis dans la réserve de l\'armée', Response::FLASHBAG_SUCCESS);
+		$commander->emptySquadrons();
+	}
+	$commanderManager->changeSession($S_COM3);
+	$response->redirect('fleet');
 } else {
-	CTR::$alert->add('erreur dans le traitement de la requête', ALERT_BUG_ERROR);
+	throw new ErrorException('Le status de votre officier ne peut pas être modifié');
 }
+
+$commanderManager->changeSession($S_COM2);
+$orbitalBaseManager->changeSession($S_OBM);
+
+$commanderManager->changeSession($S_COM1);
