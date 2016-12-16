@@ -30,16 +30,6 @@ class Params {
 
     /**
      * @param string $params
-     * @return boolean
-     */
-    public static function check($params) {
-        return CTR::$cookie->exist('p' . $params)
-                ? (bool)CTR::$cookie->get('p' . $params)
-                : self::$params[$params];
-    }
-
-    /**
-     * @param string $params
      * @param mixed $value
      */
     public static function update($params, $value) {

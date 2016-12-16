@@ -19,12 +19,15 @@ class Request {
 	public $request;
 	/** @var ParameterBag **/
 	public $query;
+	/** @var ParameterBag **/
+	public $cookies;
 	
 	public function __construct()
 	{
 		$this->headers = new ParameterBag();
 		$this->request = new ParameterBag();
 		$this->query = new ParameterBag();
+		$this->cookies = new ParameterBag();
 	}
 	
 	public function initialize()
@@ -41,6 +44,14 @@ class Request {
 			}
 			$this->headers->set($key, $value);
 		}
+		
+		$cookieName = APP_NAME . '_' . SERVER_SESS;
+		if (isset($_COOKIE[$cookieName])) {
+            $data = unserialize($_COOKIE[$cookieName]);
+			foreach($data as $cookie => $value) {
+				$this->cookies->set($cookie, $value);
+			}
+        }
 	}
 
 	/**
