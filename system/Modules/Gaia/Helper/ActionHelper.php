@@ -14,23 +14,35 @@ use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 
 use Asylamba\Modules\Ares\Manager\CommanderManager;
 use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
+use Asylamba\Classes\Container\Session;
 
 abstract class ActionHelper {
 	/** @var CommanderManager **/
 	protected $commanderManager;
 	/** @var CommercialRouteManager **/
 	protected $commercialRouteManager;
+	/** @var Session **/
+	protected $session;
+	/** @var string **/
+	protected $sessionToken;
 	
 	/**
 	 * @param CommanderManager $commanderManager
 	 * @param CommercialRouteManager $commercialRouteManager
+	 * @param Session $session
 	 */
-	public function __construct(CommanderManager $commanderManager, CommercialRouteManager $commercialRouteManager) {
+	public function __construct(
+		CommanderManager $commanderManager,
+		CommercialRouteManager $commercialRouteManager,
+		Session $session
+	) {
 		$this->commanderManager = $commanderManager;
 		$this->commercialRouteManager = $commercialRouteManager;
+		$this->session = $session;
+		$this->sessionToken = $session->get('token');
 	}
 	
-	public static function loot($ob, &$link, &$box, $id, $place, $commanderSession) {
+	public function loot($ob, &$link, &$box, $id, $place, $commanderSession) {
 		$link .= '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . MEDIA . 'map/action/loot.png" alt="pillage" /></a>';
 
 		$box .= '<div data-id="' . $id . '" class="act-bull" style="display:' . (($id == 1) ? 'block' : 'none') . ';" >';
@@ -40,7 +52,7 @@ abstract class ActionHelper {
 			$this->commanderManager->changeSession($commanderSession);
 			$commanderQuantity = 0;
 			for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
-				if ($this->commanderManager->get($i)->getStatement() == COM_AFFECTED) {
+				if ($this->commanderManager->get($i)->getStatement() == Commander::AFFECTED) {
 	  				$commanderQuantity++;
 				}
 			}
@@ -53,9 +65,9 @@ abstract class ActionHelper {
 				}
 
 				for ($i = 0; $i < $this->commanderManager->size(); $i++) {
-					if ($this->commanderManager->get($i)->getStatement() == COM_AFFECTED) {
-						$box .= '<a href="' . Format::actionBuilder('loot', ['commanderid' => $this->commanderManager->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
-							$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
+					if ($this->commanderManager->get($i)->getStatement() == Commander::AFFECTED) {
+						$box .= '<a href="' . Format::actionBuilder('loot', $this->sessionToken, ['commanderid' => $this->commanderManager->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
+							$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . $this->session->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
 							$box .= '<span class="label">';
 								$box .= '<strong>' . $this->commanderManager->get($i)->getName() . '</strong><br />';
 								$box .= $this->commanderManager->get($i)->getPev() . ' pev<br />';
@@ -74,7 +86,7 @@ abstract class ActionHelper {
 		$box .= '</div>';
 	}
 
-	public static function conquest($ob, &$link, &$box, $id, $place, $commanderSession, $movingCommandersSession, $technologies) {
+	public function conquest($ob, &$link, &$box, $id, $place, $commanderSession, $movingCommandersSession, $technologies) {
 		$link .= '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . MEDIA . 'map/action/colonize.png" alt="conquête" /></a>';
 
 		$box .= '<div data-id="' . $id . '" class="act-bull" style="display:' . (($id == 1) ? 'block' : 'none') . ';" >';
@@ -83,13 +95,13 @@ abstract class ActionHelper {
 			if ($technologies->getTechnology(Technology::CONQUEST) == 1) {
 				# check si la technologie BASE_QUANTITY a un niveau assez élevé
 				$maxBasesQuantity = $technologies->getTechnology(Technology::BASE_QUANTITY) + 1;
-				$obQuantity = CTR::$data->get('playerBase')->get('ob')->size();
-				$msQuantity = CTR::$data->get('playerBase')->get('ms')->size();
+				$obQuantity = $this->session->get('playerBase')->get('ob')->size();
+				$msQuantity = $this->session->get('playerBase')->get('ms')->size();
 				$coloQuantity = 0;
 				$S_COM2 = $this->commanderManager->getCurrentSession();
 				$this->commanderManager->changeSession($movingCommandersSession);
 				for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
-					if ($this->commanderManager->get($i)->getTypeOfMove() == COM_COLO) {
+					if ($this->commanderManager->get($i)->getTypeOfMove() == Commander::COLO) {
 						$coloQuantity++;
 					}
 				}
@@ -100,7 +112,7 @@ abstract class ActionHelper {
 					$this->commanderManager->changeSession($commanderSession);
 					$commanderQuantity = 0;
 					for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
-						if ($this->commanderManager->get($i)->getStatement() == COM_AFFECTED) {
+						if ($this->commanderManager->get($i)->getStatement() == Commander::AFFECTED) {
 							$commanderQuantity++;
 						}
 					}
@@ -108,7 +120,7 @@ abstract class ActionHelper {
 						# check si assez de crédits
 						$creditPrice = ($obQuantity + $coloQuantity) * CREDITCOEFFTOCONQUER;
 
-						if (CTR::$data->get('playerInfo')->get('credit') >= $creditPrice) {
+						if ($this->session->get('playerInfo')->get('credit') >= $creditPrice) {
 							# check si assez de points d'attaque
 							if ($place->getRSystem() == $ob->getSystem()) {
 								$time = Game::getTimeTravelInSystem($ob->getPosition(), $place->getPosition());
@@ -117,9 +129,9 @@ abstract class ActionHelper {
 							}
 
 							for ($i = 0; $i < $this->commanderManager->size(); $i++) {
-								if ($this->commanderManager->get($i)->getStatement() == COM_AFFECTED) {
-									$box .= '<a href="' . Format::actionBuilder('conquer', ['commanderid' => $this->commanderManager->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
-										$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
+								if ($this->commanderManager->get($i)->getStatement() == Commander::AFFECTED) {
+									$box .= '<a href="' . Format::actionBuilder('conquer', $this->sessionToken, ['commanderid' => $this->commanderManager->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
+										$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . $this->session->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
 										$box .= '<span class="label">';
 											$box .= '<strong>' . $this->commanderManager->get($i)->getName() . '</strong><br />';
 											$box .= $this->commanderManager->get($i)->getPev() . ' pev';
@@ -147,7 +159,7 @@ abstract class ActionHelper {
 		$box .= '</div>';
 	}
 
-	public static function colonize($ob, &$link, &$box, $id, $place, $commanderSession, $movingCommandersSession, $technologies) {
+	public function colonize($ob, &$link, &$box, $id, $place, $commanderSession, $movingCommandersSession, $technologies) {
 		$link .= '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . MEDIA . 'map/action/colonize.png" alt="colonisation" /></a>';
 
 		$box .= '<div data-id="' . $id . '" class="act-bull" style="display:' . (($id == 1) ? 'block' : 'none') . ';" >';
@@ -156,13 +168,13 @@ abstract class ActionHelper {
 			if ($technologies->getTechnology(Technology::COLONIZATION) == 1) {
 				# check si la technologie BASE_QUANTITY a un niveau assez élevé
 				$maxBasesQuantity = $technologies->getTechnology(Technology::BASE_QUANTITY) + 1;
-				$obQuantity = CTR::$data->get('playerBase')->get('ob')->size();
-				$msQuantity = CTR::$data->get('playerBase')->get('ms')->size();
+				$obQuantity = $this->session->get('playerBase')->get('ob')->size();
+				$msQuantity = $this->session->get('playerBase')->get('ms')->size();
 				$coloQuantity = 0;
 				$S_COM2 = $this->commanderManager->getCurrentSession();
 				$this->commanderManager->changeSession($movingCommandersSession);
 				for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
-					if ($this->commanderManager->get($i)->getTypeOfMove() == COM_COLO) {
+					if ($this->commanderManager->get($i)->getTypeOfMove() == Commander::COLO) {
 						$coloQuantity++;
 					}
 				}
@@ -173,7 +185,7 @@ abstract class ActionHelper {
 					$this->commanderManager->changeSession($commanderSession);
 					$commanderQuantity = 0;
 					for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
-						if ($this->commanderManager->get($i)->getStatement() == COM_AFFECTED) {
+						if ($this->commanderManager->get($i)->getStatement() == Commander::AFFECTED) {
 							$commanderQuantity++;
 						}
 					}
@@ -181,7 +193,7 @@ abstract class ActionHelper {
 						# check si assez de crédits
 						$creditPrice = ($obQuantity + $coloQuantity) * CREDITCOEFFTOCOLONIZE;
 
-						if (CTR::$data->get('playerInfo')->get('credit') >= $creditPrice) {
+						if ($this->session->get('playerInfo')->get('credit') >= $creditPrice) {
 							# check si assez de points d'attaque
 							if ($place->getRSystem() == $ob->getSystem()) {
 								$time = Game::getTimeTravelInSystem($ob->getPosition(), $place->getPosition());
@@ -190,9 +202,9 @@ abstract class ActionHelper {
 							}
 
 							for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
-								if ($this->commanderManager->get($i)->getStatement() == COM_AFFECTED) {
-									$box .= '<a href="' . Format::actionBuilder('colonize', ['commanderid' => $this->commanderManager->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
-										$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
+								if ($this->commanderManager->get($i)->getStatement() == Commander::AFFECTED) {
+									$box .= '<a href="' . Format::actionBuilder('colonize', $this->sessionToken, ['commanderid' => $this->commanderManager->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
+										$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . $this->session->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
 										$box .= '<span class="label">';
 											$box .= '<strong>' . $this->commanderManager->get($i)->getName() . '</strong><br />';
 											$box .= $this->commanderManager->get($i)->getPev() . ' pev';
@@ -220,7 +232,7 @@ abstract class ActionHelper {
 		$box .= '</div>';
 	}
 
-	public static function proposeRC($ob, &$link, &$box, $id, $place) {
+	public function proposeRC($ob, &$link, &$box, $id, $place) {
 		$tmpLink = '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . MEDIA . 'map/action/proposeRC.png" alt="conquête" /></a>';
 		
 		# gérer soit l'un soit l'autre
@@ -243,18 +255,18 @@ abstract class ActionHelper {
 							if ($this->commercialRouteManager->get($i)->getROrbitalBaseLinked() == $ob->getRPlace()) {
 								if ($this->commercialRouteManager->get($i)->getROrbitalBase() == $place->getId()) {
 									switch($this->commercialRouteManager->get($i)->getStatement()) {
-										case CRM_PROPOSED: $notAccepted = TRUE; break;
-										case CRM_ACTIVE: $sendResources = TRUE; break;
-										case CRM_STANDBY: $standby = TRUE; break;
+										case CommercialRoute::PROPOSED: $notAccepted = TRUE; break;
+										case CommercialRoute::ACTIVE: $sendResources = TRUE; break;
+										case CommercialRoute::STANDBY: $standby = TRUE; break;
 									}
 								}
 							}
 							if ($this->commercialRouteManager->get($i)->getROrbitalBase() == $ob->getRPlace()) {
 								if ($this->commercialRouteManager->get($i)->getROrbitalBaseLinked() == $place->getId()) {
 									switch($this->commercialRouteManager->get($i)->getStatement()) {
-										case CRM_PROPOSED: $proposed = TRUE; break;
-										case CRM_ACTIVE: $sendResources = TRUE; break;
-										case CRM_STANDBY: $standby = TRUE; break;
+										case CommercialRoute::PROPOSED: $proposed = TRUE; break;
+										case CommercialRoute::ACTIVE: $sendResources = TRUE; break;
+										case CommercialRoute::STANDBY: $standby = TRUE; break;
 									}
 								}
 							}
@@ -286,7 +298,7 @@ abstract class ActionHelper {
 								$usedRoutes = $this->commercialRouteManager->size();
 								for ($i = 0; $i < $this->commercialRouteManager->size(); $i++) {
 									if ($this->commercialRouteManager->get($i)->getROrbitalBaseLinked() == $ob->getRPlace()) {
-										if ($this->commercialRouteManager->get($i)->getStatement() == CRM_PROPOSED) {
+										if ($this->commercialRouteManager->get($i)->getStatement() == CommercialRoute::PROPOSED) {
 											# on soustrait les routes qu'on nous a proposé et qu'on n'a pas encore accepté
 											$usedRoutes--;
 										}
@@ -296,7 +308,7 @@ abstract class ActionHelper {
 								if ($usedRoutes < $maxRoute) {
 									$distance = Game::getDistance($ob->getXSystem(), $place->getXSystem(), $ob->getYSystem(), $place->getYSystem());
 									$bonusA = ($ob->getSector() != $place->getRSector()) ? CRM_ROUTEBONUSSECTOR : 1;
-									$bonusB = (CTR::$data->get('playerInfo')->get('color')) != $place->getPlayerColor() ? CRM_ROUTEBONUSCOLOR : 1;
+									$bonusB = ($this->session->get('playerInfo')->get('color')) != $place->getPlayerColor() ? CRM_ROUTEBONUSCOLOR : 1;
 									$price = Game::getRCPrice($distance);
 									$income = Game::getRCIncome($distance, $bonusA, $bonusB);
 
@@ -307,9 +319,9 @@ abstract class ActionHelper {
 										$box .= '<p>Coût de la mise en place <strong>' . Format::numberFormat($price) . ' <img alt="credit" src="' . MEDIA . 'resources/credit.png" class="icon-color"></strong></p>';
 										$box .= '<p>Revenu par relève <strong>' . Format::numberFormat($income) . ' <img alt="credit" src="' . MEDIA . 'resources/credit.png" class="icon-color"></strong></p>';
 
-										if (CTR::$data->get('playerInfo')->get('credit') >= $price) {
+										if ($this->session->get('playerInfo')->get('credit') >= $price) {
 											# bouton actif
-											$box .= '<a class="button" href="' . Format::actionBuilder('proposeroute', ['basefrom' => $ob->getRPlace(), 'baseto' => $place->getId(), 'redirect' => $place->getId()]) . '">';
+											$box .= '<a class="button" href="' . Format::actionBuilder('proposeroute', $this->sessionToken, ['basefrom' => $ob->getRPlace(), 'baseto' => $place->getId(), 'redirect' => $place->getId()]) . '">';
 												$box .= 'proposer';
 											$box .= '</a>';
 										} else {
@@ -350,7 +362,7 @@ abstract class ActionHelper {
 						$box .= '<p>Ressources en stock <strong>' . Format::numberFormat($currentStorage) . ' <img alt="ressource" src="' . MEDIA . 'resources/resource.png" class="icon-color"></strong></p>';
 						$box .= '<p>Capacité d\'envoi maximum <strong>' . Format::numberFormat($maxResourcesToSend) . ' <img alt="ressource" src="' . MEDIA . 'resources/resource.png" class="icon-color"></strong></p>';
 
-						$box .= '<form action="' . Format::actionBuilder('giveresource', ['baseid' => $ob->getRPlace(), 'otherbaseid' => $place->getId(), 'redirect' => $place->getId()]) . '" method="POST">';
+						$box .= '<form action="' . Format::actionBuilder('giveresource', $this->sessionToken, ['baseid' => $ob->getRPlace(), 'otherbaseid' => $place->getId(), 'redirect' => $place->getId()]) . '" method="POST">';
 							$box .= '<p><input type="text" value="0" name="quantity" /></p>';
 							$box .= '<p><input type="submit" value="envoyer" /></p>';
 						$box .= '</form>';
@@ -362,7 +374,7 @@ abstract class ActionHelper {
 		$link .= $tmpLink;
 	}
 
-	public static function motherShip($ob, &$link, &$box, $id) {
+	public function motherShip($ob, &$link, &$box, $id) {
 		$link .= '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . MEDIA . 'map/action/motherShip.png" alt="vaisseau mère" /></a>';
 
 		$box .= '<div data-id="' . $id . '" class="act-bull" style="display:' . (($id == 1) ? 'block' : 'none') . ';" >';
@@ -371,7 +383,7 @@ abstract class ActionHelper {
 		$box .= '</div>';
 	}
 
-	public static function move($ob, &$link, &$box, $id, $place, $commanderSession) {
+	public function move($ob, &$link, &$box, $id, $place, $commanderSession) {
 		$link .= '<a href="#" class="actionbox-sh" data-target="' . $id . '"><img src="' . MEDIA . 'map/action/move.png" alt="flotte" /></a>';
 
 		$box .= '<div data-id="' . $id . '" class="act-bull" style="display:' . (($id == 1) ? 'block' : 'none') . ';" >';
@@ -383,7 +395,7 @@ abstract class ActionHelper {
 				$this->commanderManager->changeSession($commanderSession);
 				$commanderQuantity = 0;
 				for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
-					if ($this->commanderManager->get($i)->getStatement() == COM_AFFECTED) {
+					if ($this->commanderManager->get($i)->getStatement() == Commander::AFFECTED) {
 						$commanderQuantity++;
 					}
 				}
@@ -396,8 +408,8 @@ abstract class ActionHelper {
 					}
 
 					for ($i = 0; $i < $this->commanderManager->size(); $i++) {
-						$box .= '<a href="' . Format::actionBuilder('movefleet', ['commanderid' => $this->commanderManager->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
-							$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
+						$box .= '<a href="' . Format::actionBuilder('movefleet', $this->sessionToken, ['commanderid' => $this->commanderManager->get($i)->getId(), 'placeid' => $place->getId(), 'redirect' => $place->getId()]) . '" class="commander">';
+							$box .= '<img class="avatar" src="' . MEDIA . 'commander/small/c1-l1-c' . $this->session->get('playerInfo')->get('color') . '.png" alt="' . $this->commanderManager->get($i)->getName() . '" />';
 							$box .= '<span class="label">';
 								$box .= '<strong>' . $this->commanderManager->get($i)->getName() . '</strong><br />';
 								$box .= $this->commanderManager->get($i)->getPev() . ' pev';
