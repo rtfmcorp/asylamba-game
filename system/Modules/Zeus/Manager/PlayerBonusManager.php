@@ -7,12 +7,15 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Container\StackList;
 
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Promethee\Model\Technology;
+use Asylamba\Modules\Demeter\Model\Law\Law;
 
 use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Modules\Demeter\Manager\Law\LawManager;
 use Asylamba\Modules\Demeter\Manager\ColorManager;
 use Asylamba\Modules\Promethee\Manager\TechnologyManager;
+use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
 use Asylamba\Classes\Container\Session;
 
 use Asylamba\Modules\Demeter\Resource\ColorResource;
@@ -30,6 +33,8 @@ class PlayerBonusManager
 	protected $colorManager;
 	/** @var TechnologyManager **/
 	protected $technologyManager;
+	/** @var TechnologyHelper **/
+	protected $technologyHelper;
 	/** @var Session **/
 	protected $session;
 	
@@ -39,6 +44,7 @@ class PlayerBonusManager
 	 * @param LawManager $lawManager
 	 * @param ColorManager $colorManager
 	 * @param TechnologyManager $technologyManager
+	 * @param TechnologyHelper $technologyHelper
 	 * @param Session $session
 	 */
 	public function __construct(
@@ -47,6 +53,7 @@ class PlayerBonusManager
 		LawManager $lawManager,
 		ColorManager $colorManager,
 		TechnologyManager $technologyManager,
+		TechnologyHelper $technologyHelper,
 		Session $session
 	)
 	{
@@ -55,6 +62,7 @@ class PlayerBonusManager
 		$this->lawManager = $lawManager;
 		$this->colorManager = $colorManager;
 		$this->technologyManager = $technologyManager;
+		$this->technologyHelper = $technologyHelper;
 		$this->session = $session;
 	}
 	
@@ -71,7 +79,7 @@ class PlayerBonusManager
 		$S_PAM1 = $this->playerManager->getCurrentSession();
 		$this->playerManager->newSession();
 		$this->playerManager->load(array('id' => $playerId));
-		$this->playerColor = $this->playerManager->get()->rColor;
+		$playerBonus->playerColor = $this->playerManager->get()->rColor;
 		$this->playerManager->changeSession($S_PAM1);
 
 		$playerBonus->bonus = new StackList();
@@ -150,7 +158,7 @@ class PlayerBonusManager
 	private function addTechnoToBonus(PlayerBonus $playerBonus, $techno, $bonus) {
 		$totalBonus = 0;
 		for ($i = 0; $i <= $playerBonus->technology->getTechnology($techno); $i++) { 
-			$totalBonus += TechnologyResource::getImprovementPercentage($techno, $i);
+			$totalBonus += $this->technologyHelper->getImprovementPercentage($techno, $i);
 		}
 		$playerBonus->bonus->add($bonus, $totalBonus);
 	}
@@ -320,7 +328,7 @@ class PlayerBonusManager
 		if ($playerBonus->synchronized) {
 			$totalBonus = 0;
 			for ($i = 0; $i <= $playerBonus->technology->getTechnology($techno); $i++) { 
-				$totalBonus += TechnologyResource::getImprovementPercentage($techno, $i);
+				$totalBonus += $this->technologyHelper->getImprovementPercentage($techno, $i);
 			}
 			$this->session->get('playerBonus')->add($bonusId, $totalBonus);
 		}
