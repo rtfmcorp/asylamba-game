@@ -9,7 +9,7 @@ if (CTR::$get->exist('bindkey')) {
 	ASM::$pam->load(array('bind' => CTR::$get->get('bindkey')));
 
 	if (ASM::$pam->size() == 1) {
-		ASM::$pam->get()->setStatement(PAM_BANNED);
+		ASM::$pam->get()->setStatement(Player::BANNED);
 
 		echo serialize(array('statement' => 'success'));
 	} else {
