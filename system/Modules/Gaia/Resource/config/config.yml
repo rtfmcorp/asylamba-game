@@ -6,26 +6,39 @@ services:
     gaia.action_helper:
         class: Asylamba\Modules\Gaia\Helper\ActionHelper
         arguments:
-            - "@database"
             - "@ares.commander_manager"
             - "@athena.commercial_route_manager"
+            - "@app.session"
             
     gaia.galaxy_generator:
         class: Asylamba\Modules\Gaia\Helper\GalaxyGenerator
         arguments:
             - "@database_admin"
-            - "@galaxy_configuration"
+            - "@gaia.galaxy_configuration"
             
     gaia.galaxy_color_manager:
         class: Asylamba\Modules\Gaia\Manager\GalaxyColorManager
         arguments:
             - "@database"
+            - "%game.available_factions"
+            - "%gaia.limit_conquest_sector"
             
     gaia.place_manager:
         class: Asylamba\Modules\Gaia\Manager\PlaceManager
         arguments:
             - "@database"
             - "@ares.commander_manager"
+            - "@ares.fight_manager"
+            - "@ares.report_manager"
+            - "@zeus.player_manager"
+            - "@zeus.player_bonus_manager"
+            - "@athena.orbital_base_manager"
+            - "@athena.commercial_route_manager"
+            - "@demeter.color_manager"
+            - "@promethee.research_manager"
+            - "@hermes.notification_manager"
+            - "@ctc"
+            - "@app.session"
             
     gaia.sector_manager:
         class: Asylamba\Modules\Gaia\Manager\SectorManager
@@ -36,3 +49,6 @@ services:
         class: Asylamba\Modules\Gaia\Manager\SystemManager
         arguments:
             - "@database"
+            
+    gaia.galaxy_configuration:
+        class: "%gaia.galaxy_configuration.class"
