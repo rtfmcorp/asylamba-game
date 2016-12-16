@@ -114,7 +114,7 @@ class ColorManager extends Manager {
 		$formatWhere = Utils::arrayToWhere($where, 'c.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
-
+		
 		$qr = $this->database->prepare('SELECT c.*
 			FROM color AS c
 			' . $formatWhere .'
