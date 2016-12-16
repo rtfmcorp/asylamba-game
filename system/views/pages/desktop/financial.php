@@ -35,7 +35,7 @@ echo '<div id="content">';
 		ASM::$com->load(
 			array(
 				'c.rPlayer' => CTR::$data->get('playerId'),
-				'c.statement' => array(COM_AFFECTED, COM_MOVING)
+				'c.statement' => array(Commander::AFFECTED, Commander::MOVING)
 			), 
 			array('c.rBase', 'ASC')
 		);
@@ -89,7 +89,7 @@ echo '<div id="content">';
 			$S_CRM1 = ASM::$crm->getCurrentSession();
 			ASM::$crm->changeSession(ASM::$obm->get($i)->routeManager);
 			for ($k = 0; $k < ASM::$crm->size(); $k++) { 
-				if (ASM::$crm->get($k)->getStatement() == CRM_ACTIVE) {
+				if (ASM::$crm->get($k)->getStatement() == CommercialRoute::ACTIVE) {
 					$financial_totalRouteIncome += ASM::$crm->get($k)->getIncome();
 					$financial_totalRouteIncomeBonus += ASM::$crm->get($k)->getIncome() * $rcBonus / 100;
 				}

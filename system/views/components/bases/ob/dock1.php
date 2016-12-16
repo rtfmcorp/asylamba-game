@@ -9,23 +9,27 @@
 
 # work
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
-$S_SQM1 = ASM::$sqm->getCurrentSession();
-ASM::$sqm->changeSession($ob_dock1->dock1Manager);
+$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$shipHelper = $this->getContainer()->get('athena.ship_helper');
+$shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
+$technologyManager = $this->getContainer()->get('promethee.technology_manager');
+$session = $this->getContainer()->get('app.session');
+$sessionToken = $session->get('token');
+
+$S_SQM1 = $shipQueueManager->getCurrentSession();
+$shipQueueManager->changeSession($ob_dock1->dock1Manager);
 $s = array('', '', '', '', '', '');
-$technology = new Technology(CTR::$data->get('playerId'));
+$technology = $technologyManager->getPlayerTechnology($session->get('playerId'));
 
 #place dans le hangar
-$totalSpace = OrbitalBaseResource::getBuildingInfo(2, 'level', $ob_dock1->getLevelDock1(), 'storageSpace');
+$totalSpace = $orbitalBaseHelper->getBuildingInfo(2, 'level', $ob_dock1->getLevelDock1(), 'storageSpace');
 $storage = $ob_dock1->getShipStorage();
 $inStorage = 0;
 
@@ -35,9 +39,9 @@ for ($m = 0; $m < 6; $m++) {
 
 $inQueue = 0;
 
-if (ASM::$sqm->size() > 0) {
-	for ($j = 0; $j < ASM::$sqm->size(); $j++) {
-		$inQueue += ShipResource::getInfo(ASM::$sqm->get($j)->shipNumber, 'pev') * ASM::$sqm->get($j)->quantity;
+if ($shipQueueManager->size() > 0) {
+	for ($j = 0; $j < $shipQueueManager->size(); $j++) {
+		$inQueue += ShipResource::getInfo($shipQueueManager->get($j)->shipNumber, 'pev') * $shipQueueManager->get($j)->quantity;
 	}
 }
 
@@ -55,12 +59,12 @@ for ($i = 0; $i < 6; $i++) {
 	$picto = MEDIA . 'ship/picto/' . ShipResource::getInfo($i, 'imageLink') . '.png';
 	$disability = 'disable';
 
-	if (($answer = ShipResource::haveRights($i, 'techno', $technology)) !== TRUE) {
+	if (($answer = $shipHelper->haveRights($i, 'techno', $technology)) !== TRUE) {
 		# technology
 		$but  = '<span class="button disable">';
 			$but .= $answer;
 		$but .= '</span>';
-	} elseif (!ShipResource::haveRights($i, 'shipTree', $ob_dock1)) {
+	} elseif (!$shipHelper->haveRights($i, 'shipTree', $ob_dock1)) {
 		# ship tree
 		$but  = '<span class="button disable">';
 			$but .= 'il vous faut augmenter votre chantier alpha au niveau ' .  ShipResource::dockLevelNeededFor($i);
@@ -69,7 +73,7 @@ for ($i = 0; $i < 6; $i++) {
 		# usable ship
 		$disability = '';
 
-		if (!ShipResource::haveRights($i, 'queue', $ob_dock1, ASM::$sqm->size())) {
+		if (!$shipHelper->haveRights($i, 'queue', $ob_dock1, $shipQueueManager->size())) {
 			# queue size
 			$but = '<span class="button disable">';
 				$but .= 'file de construction pleine<br />';
@@ -89,7 +93,7 @@ for ($i = 0; $i < 6; $i++) {
 		} else {
 			$but  = '<input class="ship-pack" type="text" maxlength="2" name="quantity" value="' . $maxShip . '" data-max-ship="' . $maxShip . '" />';
 
-			$but .= '<a href="' . Format::actionBuilder('buildship', ['baseid' => $ob_dock1->getId(), 'ship' => $i, 'quantity' => $maxShip]) . '" class="button">';
+			$but .= '<a href="' . Format::actionBuilder('buildship', $sessionToken, ['baseid' => $ob_dock1->getId(), 'ship' => $i, 'quantity' => $maxShip]) . '" class="button">';
 				$but .= 'construire <span class="final-number">' . $maxShip . '</span> ' . ShipResource::getInfo($i, 'codeName') . ' pour<br />';
 				$but .= '<span class="final-cost">' . Format::numberFormat(ShipResource::getInfo($i, 'resourcePrice') * $maxShip) . '</span> ';
 				$but .= '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png"> et ';
@@ -107,7 +111,7 @@ for ($i = 0; $i < 6; $i++) {
 			$s[$i] .= '<em>' . ShipResource::getInfo($i, 'name') . '</em>'; 
 			$s[$i] .= '<a href="#" class="addInfoPanel info hb lt" title="plus d\'info" data-ship-id="' . $i . '" data-info-type="ship">+</a>';
 		$s[$i] .= '</div>';
-		$s[$i] .= '<div class="ship-illu"><img src="' . MEDIA . 'ship/img/' . Format::paddingNumber($i + 1, 2) . '-' . Format::paddingNumber(CTR::$data->get('playerInfo')->get('color'), 2) . '.png" alt="" /></div>';
+		$s[$i] .= '<div class="ship-illu"><img src="' . MEDIA . 'ship/img/' . Format::paddingNumber($i + 1, 2) . '-' . Format::paddingNumber($session->get('playerInfo')->get('color'), 2) . '.png" alt="" /></div>';
 		$s[$i] .= $but;
 	$s[$i] .= '</div>';
 }
@@ -115,15 +119,15 @@ for ($i = 0; $i < 6; $i++) {
 echo '<div class="component">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'orbitalbase/dock1.png" alt="" />';
-		echo '<h2>' . OrbitalBaseResource::getBuildingInfo(2, 'frenchName') . '</h2>';
+		echo '<h2>' . $orbitalBaseHelper->getBuildingInfo(2, 'frenchName') . '</h2>';
 		echo '<em>niveau ' . $ob_dock1->getLevelDock1() . '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<div class="number-box ' . ((CTR::$data->get('playerBonus')->get(PlayerBonus::DOCK1_SPEED) == 0) ? 'grey' : '') . '">';
+			echo '<div class="number-box ' . (($session->get('playerBonus')->get(PlayerBonus::DOCK1_SPEED) == 0) ? 'grey' : '') . '">';
 				echo '<span class="label">bonus de vitesse de production</span>';
 				echo '<span class="value">';
-					echo Format::numberFormat(CTR::$data->get('playerBonus')->get(PlayerBonus::DOCK1_SPEED)) . ' %';
+					echo Format::numberFormat($session->get('playerBonus')->get(PlayerBonus::DOCK1_SPEED)) . ' %';
 				echo '</span>';
 			echo '</div>';
 
@@ -131,9 +135,9 @@ echo '<div class="component">';
 			echo '<div class="queue">';
 				$realSizeQueue = 0;
 
-				for ($i = 0; $i < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::DOCK1, 'level', $ob_dock1->levelDock1, 'nbQueues'); $i++) {
-					if (ASM::$sqm->get($i) !== FALSE) {
-						$queue = ASM::$sqm->get($i);
+				for ($i = 0; $i < $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::DOCK1, 'level', $ob_dock1->levelDock1, 'nbQueues'); $i++) {
+					if ($shipQueueManager->get($i) !== FALSE) {
+						$queue = $shipQueueManager->get($i);
 						$realSizeQueue++;
 						$totalTimeShips = $queue->quantity * ShipResource::getInfo($queue->shipNumber, 'time');
 						$remainingTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
@@ -141,7 +145,7 @@ echo '<div class="component">';
 						echo $realSizeQueue > 1
 							? '<div class="item">'
 							: '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTime . '" data-progress-total-time="' . $totalTimeShips . '">';
-						echo '<a href="' . Format::actionBuilder('dequeueship', ['baseid' => $ob_dock1->getId(), 'dock' => '1', 'queue' => $queue->id]) . '"' . 
+						echo '<a href="' . Format::actionBuilder('dequeueship', $sessionToken, ['baseid' => $ob_dock1->getId(), 'dock' => '1', 'queue' => $queue->id]) . '"' . 
 							'class="button hb lt" title="annuler la commande (attention, vous ne récupérerez que ' . SQM_RESOURCERETURN * 100 . '% du montant investi)">×</a>';
 						echo  '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($queue->shipNumber, 'imageLink') . '.png" alt="" />';
 						echo '<strong>' . $queue->quantity . ' ' . ShipResource::getInfo($queue->shipNumber, 'codeName') . Format::addPlural($queue->quantity) . '</strong>';
@@ -232,7 +236,7 @@ echo '<div class="component">';
 					'" class="sell-form"
 					" data-max-quantity="' . $storage[$i] .
 					'" data-min-price="' . (ShipResource::getInfo($i, 'resourcePrice') / 2) . 
-					'" action="' . Format::actionBuilder('recycleship', 
+					'" action="' . Format::actionBuilder('recycleship', $sessionToken,
 						['baseid' => $ob_dock1->getId(), 'typeofship' => $i]) . 
 					'" method="post" style="display:none;">';
 						
@@ -277,9 +281,9 @@ echo '<div class="component">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<p class="long-info">' . OrbitalBaseResource::getBuildingInfo(2, 'description') . '</p>';
+			echo '<p class="long-info">' . $orbitalBaseHelper->getBuildingInfo(2, 'description') . '</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
 
-ASM::$sqm->changeSession($S_SQM1);
+$shipQueueManager->changeSession($S_SQM1);

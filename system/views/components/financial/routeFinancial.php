@@ -27,13 +27,13 @@ echo '<div class="component financial">';
 
 				$nbRoute = 0;
 				for ($k = 0; $k < ASM::$crm->size(); $k++) {
-					if (ASM::$crm->get($k)->getStatement() == CRM_ACTIVE) {
+					if (ASM::$crm->get($k)->getStatement() == CommercialRoute::ACTIVE) {
 						$nbRoute++;
 					}
 				}
 				$routeIncome = 0;
 				for ($k = 0; $k < ASM::$crm->size(); $k++) {
-					if (ASM::$crm->get($k)->getStatement() == CRM_ACTIVE) {
+					if (ASM::$crm->get($k)->getStatement() == CommercialRoute::ACTIVE) {
 						$routeIncome += ASM::$crm->get($k)->getIncome();
 					}
 				}
@@ -57,7 +57,7 @@ echo '<div class="component financial">';
 						echo '<ul class="sub-list-type-1" id="rc-base-' . $base->getId() . '">';
 							for ($k = 0; $k < ASM::$crm->size(); $k++) {
 								$route = ASM::$crm->get($k);
-								if (ASM::$crm->get($k)->getStatement() == CRM_ACTIVE) {
+								if (ASM::$crm->get($k)->getStatement() == CommercialRoute::ACTIVE) {
 									echo '<li>';
 										$rBaseName = ($route->getBaseName1() == $base->getName()) ? $route->getBaseName2(): $route->getBaseName1();
 										echo '<span class="label">' . $rBaseName . '</span>';

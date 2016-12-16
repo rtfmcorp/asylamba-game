@@ -85,7 +85,7 @@ echo '<div class="component report topic nav">';
 				echo '<p>Aucun sujet n\'a encore été créé dans cette section du forum.</p>';
 			}
 
-			if ($isStandard_topics && !$archivedMode && in_array(CTR::$data->get('playerInfo')->get('status'), [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER])) {
+			if ($isStandard_topics && !$archivedMode && in_array(CTR::$data->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER])) {
 				echo '<a class="more-button" href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '/mode-archived">Voir les messages archivés</a>';
 			}
 		echo '</div>';

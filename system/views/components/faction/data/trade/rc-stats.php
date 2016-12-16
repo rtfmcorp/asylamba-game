@@ -23,11 +23,11 @@ $qr = $db->prepare('SELECT
 	WHERE (pl1.rColor = ? OR pl2.rColor = ?)
 		AND cr.statement = ?
 ');
-$qr->execute(array($faction->id, $faction->id, CRM_ACTIVE));
+$qr->execute(array($faction->id, $faction->id, CommercialRoute::ACTIVE));
 $aw1 = $qr->fetch(); $qr->closeCursor();
 
 $qr = $db->prepare('SELECT COUNT(cr.id) AS nb ' . $join . ' WHERE pl1.rColor = ? AND pl2.rColor = ? AND cr.statement = ?');
-$qr->execute(array($faction->id, $faction->id, CRM_ACTIVE));
+$qr->execute(array($faction->id, $faction->id, CommercialRoute::ACTIVE));
 $aw2 = $qr->fetch(); $qr->closeCursor();
 
 echo '<div class="component profil">';
@@ -68,7 +68,7 @@ echo '<div class="component profil">';
 						COUNT(cr.id) AS nb ' . $join . '
 						WHERE ((pl1.rColor = ? AND pl2.rColor = ?) OR (pl1.rColor = ? AND pl2.rColor = ?)) AND cr.statement = ?'
 					);
-					$qr->execute(array($faction->id, ColorResource::getInfo($i, 'id'), ColorResource::getInfo($i, 'id'), $faction->id, CRM_ACTIVE));
+					$qr->execute(array($faction->id, ColorResource::getInfo($i, 'id'), ColorResource::getInfo($i, 'id'), $faction->id, CommercialRoute::ACTIVE));
 					$aw3 = $qr->fetch(); $qr->closeCursor();
 
 					echo '<div class="number-box grey">';

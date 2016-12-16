@@ -1,6 +1,5 @@
 <?php
 
-use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Chronos;
 use Asylamba\Classes\Library\Game;
@@ -8,8 +7,10 @@ use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 
-$building 		= Utils::getHTTPData('building');
-$currentLevel 	= Utils::getHTTPData('lvl');
+$request = $this->getContainer()->get('app.request');
+
+$building 		= $request->query->get('building');
+$currentLevel 	= $request->query->get('lvl');
 
 echo '<div class="component panel-info size2">';
 	echo '<div class="head"></div>';

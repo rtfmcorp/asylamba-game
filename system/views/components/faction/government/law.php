@@ -116,7 +116,7 @@ echo '<div class="component profil player">';
 							$S_PAM_LAW = ASM::$pam->getCurrentSession();
 							ASM::$pam->newSession(FALSE);
 							ASM::$pam->load(
-								['rColor' => CTR::$data->get('playerInfo')->get('color'), 'statement' => [PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY]], 
+								['rColor' => CTR::$data->get('playerInfo')->get('color'), 'statement' => [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]], 
 								['name', 'ASC']
 							);
 

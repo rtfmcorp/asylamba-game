@@ -81,7 +81,7 @@ echo '<div id="content">';
 			for ($i = 1; $i <= ForumResources::size(); $i++) {
 				$forum_topics = ForumResources::getInfo($i, 'id');
 				
-				if ($forum_topics < 10 || ($forum_topics >= 10 && $forum_topics < 20 && CTR::$data->get('playerInfo')->get('status') > 2) || ($forum_topics >= 20 && $forum_topics < 30 && CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF)) {
+				if ($forum_topics < 10 || ($forum_topics >= 10 && $forum_topics < 20 && CTR::$data->get('playerInfo')->get('status') > 2) || ($forum_topics >= 20 && $forum_topics < 30 && CTR::$data->get('playerInfo')->get('status') == Player::CHIEF)) {
 					
 					$where = [
 						'rForum' => $forum_topics,
@@ -116,10 +116,10 @@ echo '<div id="content">';
 			ASM::$tom->changeSession($S_TOM1);
 		} else {
 			$forumId = !CTR::$get->exist('forum') ? 1 : CTR::$get->get('forum');
-			$archivedMode = CTR::$get->equal('mode', 'archived') && in_array(CTR::$data->get('playerInfo')->get('status'), [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER])
+			$archivedMode = CTR::$get->equal('mode', 'archived') && in_array(CTR::$data->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER])
 				? TRUE : FALSE;
 				
-			if ($forumId < 10 || ($forumId >= 10 && $forumId < 20 && CTR::$data->get('playerInfo')->get('status') > 2) || ($forumId >= 20 && $forumId < 30 && CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF)) {
+			if ($forumId < 10 || ($forumId >= 10 && $forumId < 20 && CTR::$data->get('playerInfo')->get('status') > 2) || ($forumId >= 20 && $forumId < 30 && CTR::$data->get('playerInfo')->get('status') == Player::CHIEF)) {
 				# forum component
 				include COMPONENT . 'faction/forum/forum.php';
 
@@ -167,7 +167,7 @@ echo '<div id="content">';
 						[], [],
 						CTR::$data->get('playerId')
 					);
-				} else if ($forumId >= 20 && $forumId < 30 && CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
+				} else if ($forumId >= 20 && $forumId < 30 && CTR::$data->get('playerInfo')->get('status') == Player::CHIEF) {
 					ASM::$tom->load(
 						['id' => CTR::$get->get('topic'), 'rForum' => $forumId],
 						[], [],
@@ -192,7 +192,7 @@ echo '<div id="content">';
 
 					include COMPONENT . 'faction/forum/topic.php';
 
-					if (in_array(CTR::$data->get('playerInfo')->get('status'), [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER])) {
+					if (in_array(CTR::$data->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER])) {
 						include COMPONENT . 'faction/forum/manage-topic.php';
 					}
 					ASM::$fmm->changeSession($S_FMM1);
@@ -240,10 +240,10 @@ echo '<div id="content">';
 			include COMPONENT . 'faction/data/law/list.php';
 		}
 	} elseif (CTR::$get->get('view') == 'government') {
-		if (in_array(CTR::$data->get('playerInfo')->get('status'), [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER])) {
+		if (in_array(CTR::$data->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER])) {
 			$S_PAM_OLD = ASM::$pam->getCurrentSession();
 			$PLAYER_SENATE_TOKEN = ASM::$pam->newSession();
-			ASM::$pam->load(array('rColor' => $faction->id, 'status' => PAM_PARLIAMENT, 'statement' => [PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY]));
+			ASM::$pam->load(array('rColor' => $faction->id, 'status' => Player::PARLIAMENT, 'statement' => [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]));
 
 			include COMPONENT . 'faction/government/nav.php';
 
@@ -253,7 +253,7 @@ echo '<div id="content">';
 				ASM::$sem->load(array('rColor' => $faction->id));
 
 				$nbLaws = 0;
-				$nbPlayer = PlayerManager::count(['rColor' => $faction->id, 'statement' => [PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY]]);
+				$nbPlayer = PlayerManager::count(['rColor' => $faction->id, 'statement' => [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]]);
 				
 				for ($i = 1; $i <= LawResources::size(); $i++) {
 					if (LawResources::getInfo($i, 'department') == CTR::$data->get('playerInfo')->get('status') AND LawResources::getInfo($i, 'isImplemented')) {
@@ -296,7 +296,7 @@ echo '<div id="content">';
 			} elseif (CTR::$get->get('mode') == 'manage') {
 				$PLAYER_GOV_TOKEN = ASM::$pam->newSession(FALSE);
 				ASM::$pam->load(
-					array('rColor' => $faction->id, 'status' => [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER]),
+					array('rColor' => $faction->id, 'status' => [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER]),
 					array('status', 'DESC')
 				);
 
@@ -312,7 +312,7 @@ echo '<div id="content">';
 			CTR::redirect('faction');
 		}
 	} elseif (CTR::$get->get('view') == 'senate') {
-		if (in_array(CTR::$data->get('playerInfo')->get('status'), [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER, PAM_PARLIAMENT])) {
+		if (in_array(CTR::$data->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER, Player::PARLIAMENT])) {
 			$S_VLM_OLD = ASM::$vlm->getCurrentsession();
 			$S_LAM_OLD = ASM::$lam->getCurrentsession();
 
@@ -523,7 +523,7 @@ echo '<div id="content">';
 
 		ASM::$pam->newSession(FALSE);
 		ASM::$pam->load(
-			['rColor' => CTR::$data->get('playerInfo')->get('color'), 'statement' => [PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY]], 
+			['rColor' => CTR::$data->get('playerInfo')->get('color'), 'statement' => [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]], 
 			['status', 'DESC', 'factionPoint', 'DESC']
 		);
 

@@ -42,7 +42,7 @@ echo '<div class="component">';
 					echo '<span class="button disable" style="text-align: center; line-height: 35px;>';
 						echo '<span class="text">Vous avez déjà voté</span>';
 					echo '</span>';
-				} elseif (CTR::$data->get('playerInfo')->get('status') == PAM_PARLIAMENT) {
+				} elseif (CTR::$data->get('playerInfo')->get('status') == Player::PARLIAMENT) {
 					echo '<a class="button" href="' . Format::actionBuilder('votelaw', ['rlaw' => $law->id, 'choice' => '1']) . '" style="text-align: center; line-height: 35px; display: inline-block; width: 104px; margin-right: 0;">';
 						echo '<span class="text">Pour</span>';
 					echo '</a>';

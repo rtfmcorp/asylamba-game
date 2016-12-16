@@ -14,6 +14,8 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Ares\Model\Commander;
 
+$sessioNtoken = $this->getContainer()->get('app.session')->get('token');
+
 $onMission = FALSE;
 foreach ($commanders_obSituation as $commander) {
 	if (in_array($commander->statement, [Commander::MOVING])) {
@@ -41,7 +43,7 @@ echo '<div class="component generator">';
 				$totalSec = OrbitalBase::COOL_DOWN * 60 * 60 - Utils::interval(Utils::now(), $ob_obSituation->dCreation, 's');
 				echo '<p>Il reste ' . Chronos::secondToFormat($totalSec, $format = 'large') . ' avant que vous puissiez abandonner la planète.</p>';
 			} else {
-				echo '<a class="more-button confirm" href="' . Format::actionBuilder('leavebase', ['id' => $ob_obSituation->getId()]) . '">Abandonner la planète</a>';
+				echo '<a class="more-button confirm" href="' . Format::actionBuilder('leavebase', $sessionToken, ['id' => $ob_obSituation->getId()]) . '">Abandonner la planète</a>';
 			}
 		echo '</div>';
 	echo '</div>';

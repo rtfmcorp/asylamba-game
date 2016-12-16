@@ -17,7 +17,7 @@ echo '<div class="component profil player size1">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			$list = array(PAM_MINISTER, PAM_WARLORD, PAM_TREASURER);
+			$list = array(Player::MINISTER, Player::WARLORD, Player::TREASURER);
 
 			foreach ($list as $type) {
 				echo '<h4>' . $status[$type - 1] . '</h4>';
@@ -41,7 +41,7 @@ echo '<div class="component profil player size1">';
 					}
 				}
 				if (!$have) {
-					if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
+					if (CTR::$data->get('playerInfo')->get('status') == Player::CHIEF) {
 						$S_PAM_DGG2 = ASM::$pam->getCurrentSession();
 						ASM::$pam->changeSession($PLAYER_SENATE_TOKEN);
 

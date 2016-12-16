@@ -17,13 +17,17 @@ use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Chronos;
 
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$sessionToken = $session->get('token');
+
 echo '<div class="component size3 list-fleet">';
 	echo '<div class="head skin-1">';
 		echo '<h1>Centre des opérations</h1>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<a class="top-right-button" href="' . Format::actionBuilder('switchparams', ['params' => Params::LIST_ALL_FLEET]) . '">' . (Params::check(Params::LIST_ALL_FLEET) ? 'Afficher uniquement la base courante' : 'Afficher toutes les bases') . '</a>';
+			echo '<a class="top-right-button" href="' . Format::actionBuilder('switchparams', $sessionToken, ['params' => Params::LIST_ALL_FLEET]) . '">' . ($request->cookies->get('p' . Params::LIST_ALL_FLEET, Params::LIST_ALL_FLEET) ? 'Afficher uniquement la base courante' : 'Afficher toutes les bases') . '</a>';
 
 			foreach ($obsets as $base) {
 				echo '<div class="set-fleet">';
@@ -32,16 +36,16 @@ echo '<div class="component size3 list-fleet">';
 					echo '<h2>';
 						echo PlaceResource::get($base['info']['type'], 'name') . ' ';
 						echo $base['info']['name'];
-						echo ' <a href="' . Format::actionBuilder('switchbase', ['base' => $base['info']['id'], 'page' => 'school']) . '">(affecter un officier)</a>';
+						echo ' <a href="' . Format::actionBuilder('switchbase', $sessionToken, ['base' => $base['info']['id'], 'page' => 'school']) . '">(affecter un officier)</a>';
 					echo '</h2>';
 
 					foreach ($base['fleets'] as $commander) {
 						$step = 0;
-						$reversed = $commander->rPlayer != CTR::$data->get('playerId') || $commander->travelType == Commander::BACK;
+						$reversed = $commander->rPlayer != $session->get('playerId') || $commander->travelType == Commander::BACK;
 
-						if ($commander->rPlayer != CTR::$data->get('playerId')) {
-							for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
-								$event = CTR::$data->get('playerEvent')->get($i);
+						if ($commander->rPlayer != $session->get('playerId')) {
+							for ($i = 0; $i < $session->get('playerEvent')->size(); $i++) {
+								$event = $session->get('playerEvent')->get($i);
 								if ($event->get('eventId') == $commander->getId() && $event->exist('eventInfo')) {
 									foreach ($event->get('eventInfo')->get('inCircle') as $date) {
 										if (strtotime(Utils::now()) >= strtotime($date)) { $step++; } else { break; }
@@ -52,7 +56,7 @@ echo '<div class="component size3 list-fleet">';
 
 						echo '<div class="item color' . $commander->playerColor . '">';
 							echo '<div class="left">';
-								if ($commander->rPlayer != CTR::$data->get('playerId')) {
+								if ($commander->rPlayer != $session->get('playerId')) {
 									echo '<img src="' . MEDIA . 'map/action/shield.png" alt="" class="status" />';
 								} elseif ($commander->statement == Commander::AFFECTED) {
 									echo '<img src="' . MEDIA . 'map/action/anchor.png" alt="" class="status" />';
@@ -66,15 +70,15 @@ echo '<div class="component size3 list-fleet">';
 									}
 								}
 								echo '<span class="top">';
-									echo (($commander->rPlayer == CTR::$data->get('playerId')) || ($commander->rPlayer != CTR::$data->get('playerId') && $step >= 2))
+									echo (($commander->rPlayer == $session->get('playerId')) || ($commander->rPlayer != $session->get('playerId') && $step >= 2))
 										? CommanderResources::getInfo($commander->level, 'grade') . ' <strong>' . $commander->name . '</strong>, '
 										: 'Officier inconnu, ';
 
-									if ($commander->rPlayer != CTR::$data->get('playerId')) {
+									if ($commander->rPlayer != $session->get('playerId')) {
 										if ($step >= 2) {
 											switch ($commander->getTypeOfMove()) {
-												case COM_LOOT: $type = 'tente de vous piller'; break;
-												case COM_COLO: $type = 'tente de vous conquérir'; break;
+												case Commander::LOOT: $type = 'tente de vous piller'; break;
+												case Commander::COLO: $type = 'tente de vous conquérir'; break;
 												default: $type = 'erreur'; break;
 											}
 										} else {
@@ -92,12 +96,12 @@ echo '<div class="component size3 list-fleet">';
 										}
 									}
 
-									echo (($commander->rPlayer == CTR::$data->get('playerId')) || ($commander->rPlayer != CTR::$data->get('playerId') && $step >= 3))
+									echo (($commander->rPlayer == $session->get('playerId')) || ($commander->rPlayer != $session->get('playerId') && $step >= 3))
 										? '&#8194;|&#8194;' . Format::number($commander->getPev()) . ' pev'
 										: '&#8194;|&#8194;??? pev';
 
-									if ($commander->rPlayer == CTR::$data->get('playerId') && $commander->statement == Commander::MOVING && $commander->travelType != Commander::BACK) {
-										echo '&#8195;<a class="confirm" href="' . Format::actionBuilder('cancelmove', ['commanderid' => $commander->id]) . '">annuler la mission</a>';
+									if ($commander->rPlayer == $session->get('playerId') && $commander->statement == Commander::MOVING && $commander->travelType != Commander::BACK) {
+										echo '&#8195;<a class="confirm" href="' . Format::actionBuilder('cancelmove', $sessionToken, ['commanderid' => $commander->id]) . '">annuler la mission</a>';
 									}
 								echo '</span>';
 							echo '</div>';
@@ -133,15 +137,15 @@ echo '<div class="component size3 list-fleet">';
 											? '<a href="' . APP_ROOT . 'map/place-' . $commander->rStartPlace . '">' . $commander->startPlaceName . '</a>'
 											: '<a href="' . APP_ROOT . 'map/place-' . $commander->rDestinationPlace . '">' . $commander->destinationPlaceName . '</a>';
 
-										if ($commander->rPlayer != CTR::$data->get('playerId')) {
+										if ($commander->rPlayer != $session->get('playerId')) {
 											echo ' (<a href="' . APP_ROOT . 'embassy/player-' . $commander->rPlayer . '">' . $commander->playerName . '</a>)';
 										}
 									echo '</span>';
 								echo '</div>';
 							}
 
-							if ($commander->rPlayer == CTR::$data->get('playerId')) {
-								echo '<a href="' . APP_ROOT . 'fleet/commander-' . $commander->id . '/sftr-2" class="show-commander ' . (CTR::$get->exist('commander') && CTR::$get->get('commander') == $commander->id ? 'active' : NULL) . '"></a>';
+							if ($commander->rPlayer == $session->get('playerId')) {
+								echo '<a href="' . APP_ROOT . 'fleet/commander-' . $commander->id . '/sftr-2" class="show-commander ' . ($request->query->has('commander') && $request->query->get('commander') == $commander->id ? 'active' : NULL) . '"></a>';
 							}
 						echo '</div>';
 					}

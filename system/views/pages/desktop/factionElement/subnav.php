@@ -38,7 +38,7 @@ echo '<div id="subnav">';
 			echo '</span>';
 		echo '</a>';
 
-		if (in_array(CTR::$data->get('playerInfo')->get('status'), array(PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER))) {
+		if (in_array(CTR::$data->get('playerInfo')->get('status'), array(Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER))) {
 			$active = (CTR::$get->get('view') == 'government') ? 'active' : '';
 			echo '<a href="' . APP_ROOT . 'faction/view-government" class="item ' . $active . '">';
 				echo '<span class="picto">';
@@ -50,7 +50,7 @@ echo '<div id="subnav">';
 			echo '</a>';
 		}
 
-		if (in_array(CTR::$data->get('playerInfo')->get('status'), array(PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER, PAM_PARLIAMENT))) {
+		if (in_array(CTR::$data->get('playerInfo')->get('status'), array(Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER, Player::PARLIAMENT))) {
 			$active = (CTR::$get->get('view') == 'senate') ? 'active' : '';
 			echo '<a href="' . APP_ROOT . 'faction/view-senate" class="item ' . $active . '">';
 				echo '<span class="picto">';

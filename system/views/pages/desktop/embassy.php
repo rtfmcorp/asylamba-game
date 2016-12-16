@@ -27,7 +27,7 @@ echo '<div id="content">';
 		ASM::$pam->newSession();
 		ASM::$pam->load(array(
 			'id' => $player,
-			'statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY, PAM_BANNED)
+			'statement' => array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY, Player::BANNED)
 		));
 
 		$S_OBM1 = ASM::$obm->getCurrentSession();

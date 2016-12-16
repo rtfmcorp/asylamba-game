@@ -1,16 +1,20 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Http\Response;
 
 echo '<ul id="alert"></ul>';
 
+$response = $this->getContainer()->get('app.response');
+
 # affichage
-$redir = CTR::getRedirect();
-if (CTR::$alert->size() > 0 && empty($redir)) {
+$redir = $response->getRedirect();
+$nbFlashbags = count($response->flashbag);
+
+if ($nbFlashbags > 0 && empty($redir)) {
 	echo '<ul id="alert-content">';
-		for ($i = 0; $i < CTR::$alert->size(); $i++) {
-			$alert = CTR::$alert->get($i);
-			if (in_array($alert[1], array(ALERT_BUG_INFO, ALERT_BUG_ERROR, ALERT_BUG_SUCCESS))) {
+		for ($i = 0; $i < $nbFlashbags; ++$i) {
+			$alert = $response->flashbag->get($i);
+			if (in_array($alert[1], array(Response::FLASHBAG_ERROR, Response::FLASHBAG_SUCCESS))) {
 				if (DEVMODE) {
 					echo '<li data-type="' . $alert[1] . '">';
 						echo $alert[0];
@@ -23,6 +27,4 @@ if (CTR::$alert->size() > 0 && empty($redir)) {
 			}
 		}
 	echo '</ul>';
-	
-	CTR::$alert->clear();
 }
