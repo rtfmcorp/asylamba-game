@@ -53,8 +53,20 @@ services:
             - "@athena.transaction_manager"
             - "@gaia.galaxy_color_manager"
             - "@zeus.player_manager"
+            - "@zeus.player_bonus_manager"
+            - "@athena.recycling_mission_manager"
+            - "@gaia.place_manager"
+            - "@ares.commander_manager"
+            - "@hermes.notification_manager"
+            - "@athena.orbital_base_helper"
             - "@app.alert"
+            - "@ctc"
             - "@app.session"
+            
+    athena.orbital_base_helper:
+        class: Asylamba\Modules\Athena\Helper\OrbitalBaseHelper
+        arguments:
+            - "@promethee.technology_helper"
             
     athena.recycling_log_manager:
         class: Asylamba\Modules\Athena\Manager\RecyclingLogManager
@@ -70,6 +82,14 @@ services:
         class: Asylamba\Modules\Athena\Manager\ShipQueueManager
         arguments:
             - "@database"
+            
+    athena.ship_helper:
+        class: Asylamba\Modules\Athena\Helper\ShipHelper
+        arguments:
+            - "@app.session"
+            - "@athena.orbital_base_helper"
+            - "@promethee.technology_helper"
+            - "@athena.ship_queue_manager"
             
     athena.transaction_manager:
         class: Asylamba\Modules\Athena\Manager\TransactionManager
