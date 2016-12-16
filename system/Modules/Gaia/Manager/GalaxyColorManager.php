@@ -2,43 +2,54 @@
 
 namespace Asylamba\Modules\Gaia\Manager;
 
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Database\Database;
 
 class GalaxyColorManager {
 	/** @var Database **/
 	protected $database;
+	/** @var boolean **/
+	protected $mustApply = true;
+	/** @var array **/
+	protected $availableFactions;
+	/** @var int **/
+	protected $limitConquestSector;
 	
-	public static function apply() {
-		CTR::$applyGalaxy = TRUE;
+	public function apply() {
+		$this->mustApply = true;
+	}
+	
+	public function mustApply()
+	{
+		return $this->mustApply;
 	}
 
 	/**
 	 * @param Database $database
+	 * @param array $availableFactions
+	 * @param int $limitConquestSector
 	 */
-	public function __construct(Database $database)
+	public function __construct(Database $database, $availableFactions, $limitConquestSector)
 	{
 		$this->database = $database;
+		$this->availableFactions = $availableFactions;
+		$this->limitConquestSector = $limitConquestSector;
 	}
 	
-	public static function applyAndSave() {
-		$gcm = new GalaxyColorManager();
-		$gcm->loadSystem();
-		$gcm->loadSector();
-		$gcm->changeColorSystem();
-		$gcm->changeColorSector();
-		$gcm->saveSystem();
-		$gcm->saveSector();
+	public function applyAndSave() {
+		$this->loadSystem();
+		$this->loadSector();
+		$this->changeColorSystem();
+		$this->changeColorSector();
+		$this->saveSystem();
+		$this->saveSector();
 	}
 
 	protected $system = array();
 	protected $sector = array();
 
 	public function loadSystem() {
-		include_once CONFIG . 'app.config.install.php';
-		
 		$requestPart = '';
-		foreach ($AVAILABLE_FACTIONS as $faction) {
+		foreach ($this->availableFactions as $faction) {
 			$requestPart .= '(SELECT COUNT(pa.rColor) FROM place AS pl LEFT JOIN player AS pa ON pl.rPlayer = pa.id WHERE pl.rSystem = se.id AND pa.rColor = ' . $faction . ') AS color' . $faction . ',';
 		}
 		$requestPart = rtrim($requestPart, ","); # to remove last comma
@@ -55,7 +66,7 @@ class GalaxyColorManager {
 		
 		while ($aw = $qr->fetch()) {
 			$colors = [];
-			foreach ($AVAILABLE_FACTIONS as $faction) {
+			foreach ($this->availableFactions as $faction) {
 				$colors[$faction] = $aw['color' . $faction]; 
 			}
 			$this->system[$aw['id']] = array(
@@ -161,7 +172,7 @@ class GalaxyColorManager {
 				$nbrColorSector = $colorRepartition[$v['color'] - 1];
 			}
 
-			if ($nbrColor >= LIMIT_CONQUEST_SECTOR) {
+			if ($nbrColor >= $this->limitConquestSector) {
 				$maxColor = array_keys($colorRepartition, max($colorRepartition));
 				$this->sector[$k]['prime'] = FALSE;
 				
