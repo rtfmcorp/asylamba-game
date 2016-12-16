@@ -14,16 +14,6 @@ namespace Asylamba\Modules\Ares\Model;
 
 use Asylamba\Modules\Athena\Resource\ShipResource;
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Container\ArrayList;
-
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTC;
-
-use Asylamba\Modules\Zeus\Model\PlayerBonus;
-use Asylamba\Modules\Ares\FightController;
-
 class Commander {
 	const COEFFSCHOOL 				= 100;
 	const COEFFEARNEDEXP 			= 50;
@@ -77,7 +67,7 @@ class Commander {
 	public $level 					= 0;
 	public $uExperience 			= 0;
 	public $palmares 				= 0;
-	public $statement 				= COM_INSCHOOL;
+	public $statement 				= Commander::INSCHOOL;
 	public $line 					= 1;
 	public $dCreation 				= '';
 	public $dAffectation 			= '';
@@ -121,7 +111,7 @@ class Commander {
 	public $army = array();
 
 	# Const de lineCoord
-	private static $LINECOORD = array(1, 1, 1, 2, 2, 1, 2, 3, 3, 1, 2, 3, 4, 4, 2, 3, 4, 5, 5, 3, 4, 5, 6, 6, 4, 5, 6, 7, 7, 5, 6, 7);
+	public static $LINECOORD = array(1, 1, 1, 2, 2, 1, 2, 3, 3, 1, 2, 3, 4, 4, 2, 3, 4, 5, 5, 3, 4, 5, 6, 6, 4, 5, 6, 7, 7, 5, 6, 7);
 
 	# GETTER
 	public function getId() 					{ return $this->id; }
@@ -277,276 +267,12 @@ class Commander {
 	}
 
 #mettre le setArmy
-	private function setArmyAtEnd() {
+	public function setArmyAtEnd() {
 		$this->setArmy();
 		$i = 0;
 		foreach ($this->army AS $squadron) {
 			$this->armyAtEnd[$i] = $squadron->getArrayOfShips();
 			$i++;
 		}
-	}
-
-	private function setEarnedExperience($enemyCommander) {
-		$this->setArmy();
-		$finalOwnPev = 0;
-
-		foreach ($this->army AS $squadron) {
-			foreach ($squadron->getSquadron() AS $ship) {
-				$finalOwnPev += $ship->getPev();
-			}
-		}
-		$importance = (($finalOwnPev + 1) * ($enemyCommander->getPevInBegin())) / 
-			((($this->pevInBegin + 1) * (($enemyCommander->getLevel() + 1) / 
-				($this->level + 1))));
-
-		$this->earnedExperience = $importance * self::COEFFEARNEDEXP;
-		if($this->winner) {
-			LiveReport::$importance = $importance;
-		}
-		
-		if ($this->rPlayer > 0) {
-			$S_PLM1 = ASM::$pam->getCurrentSession();
-			ASM::$pam->newSession();
-			ASM::$pam->load(array('id' => $this->rPlayer));
-			
-			$exp = round($this->earnedExperience / self::COEFFEXPPLAYER);
-			ASM::$pam->get(0)->increaseExperience($exp);
-
-			if ($enemyCommander->isAttacker == TRUE) {
-				LiveReport::$expPlayerD = $exp;
-			} else {
-				LiveReport::$expPlayerA = $exp;
-			}
-			
-			ASM::$pam->changeSession($S_PLM1);
-		}
-	}
-
-	public function setBonus() {
-		$this->setArmy();
-		if ($this->rPlayer != CTR::$data->get('playerId')) {
-			$playerBonus = new PlayerBonus($this->rPlayer);
-			$playerBonus->load();
-			
-			foreach ($this->army AS $squadron) {
-				foreach ($squadron->squadron AS $ship) {
-					$ship->setBonus($playerBonus->bonus);
-				}
-			}
-		} else {
-			foreach ($this->army AS $squadron) {
-				foreach ($squadron->squadron AS $ship) {
-					$ship->setBonus(CTR::$data->get('playerBonus'));
-				}
-			}
-		}
-	}
-
-	public function upExperience($earnedExperience) {
-		$this->experience += $earnedExperience;
-
-		while (1) {
-			if ($this->experience >= $this->experienceToLevelUp()) {
-				$this->level++;
-			} else {
-				break;
-			}
-		}
-	}
-
-	public static function nbLevelUp($level, $newExperience) {
-		$oLevel = $level;
-		$nLevel = $level;
-		while (1) {
-			if ($newExperience >= (pow(2, $nLevel) * COM_CMDBASELVL)) {
-				$nLevel++;
-			} else {
-				break;
-			}
-		}
-		return $nLevel - $oLevel;
-	}
-
-	public function experienceToLevelUp() {
-		return pow(2, $this->level) * COM_CMDBASELVL;
-	}
-
-	public function emptySquadrons() {
-		$S_OBM = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession();
-		ASM::$obm->load(array('rPlace' => $this->rBase));
-
-		if (ASM::$obm->size() > 0) {
-			for ($i = 0; $i < count($this->squadronsIds); $i++) {
-				for ($j = 0; $j < 12; $j++) {
-					ASM::$obm->get()->setShipStorage($j, ASM::$obm->get()->getShipStorage($j) + $this->getSquadron($i)->getNbrShipByType($j));
-				}
-				$this->getSquadron($i)->emptySquadron();
-			}
-		}
-
-		ASM::$obm->changeSession($S_OBM);
-	}
-
-	public function uExperienceInSchool($ob, $playerBonus) {
-		if ($this->statement == self::INSCHOOL) {
-			# investissement
-			$invest  = $ob->iSchool;
-			$invest += $invest * $playerBonus->get(PlayerBonus::COMMANDER_INVEST) / 100;
-			
-			# xp gagnée
-			$earnedExperience  = $invest / self::COEFFSCHOOL;
-			$earnedExperience += (rand(0, 1) == 1) 
-				? rand(0, $earnedExperience / 20)
-				: -(rand(0, $earnedExperience / 20));
-			$earnedExperience  = round($earnedExperience);
-			$earnedExperience  = ($earnedExperience < 0)
-				? 0 : $earnedExperience;
-			
-			$this->upExperience($earnedExperience);
-		}
-	}
-
-	public function move($rDestinationPlace, $rStartPlace, $travelType, $travelLength, $duration) {
-		$this->rDestinationPlace = $rDestinationPlace;
-		$this->rStartPlace = $rStartPlace;
-		$this->travelType = $travelType;
-		$this->travelLength = $travelLength;
-		$this->statement = 2;
-
-		$this->dStart = ($travelType != 3) ? Utils::now() : $this->dArrival;
-		$this->startPlaceName = ($travelType != 3) ? $this->oBName : $this->destinationPlaceName;
-		$this->destinationPlaceName = ($travelType != 3) ? $this->destinationPlaceName : $this->startPlaceName;
-		$date = new \DateTime($this->dStart);
-		$date->modify('+' . $duration . 'second');
-		$this->dArrival = $date->format('Y-m-d H:i:s');
-
-		// ajout de l'event dans le contrôleur
-		if (CTR::$data->exist('playerEvent') && $this->rPlayer == CTR::$data->get('playerId')) {
-			CTR::$data->get('playerEvent')->add(
-				$this->dArrival,
-				EVENT_OUTGOING_ATTACK,
-				$this->id,
-				$this->getEventInfo()
-			);
-		}
-
-		return TRUE;
-	}
-	
-	public function resultOfFight($isWinner, $enemyCommander) {
-		if ($isWinner == TRUE) {
-			$this->setEarnedExperience($enemyCommander);
-			$this->earnedExperience = round($this->earnedExperience);
-			LiveReport::$expCom = $this->earnedExperience;
-
-			$this->winner = TRUE;
-			$this->palmares++;
-			$this->setArmyAtEnd();
-			$this->upExperience($this->earnedExperience);
-			$this->hasChanged = TRUE;
-		} else {
-			$this->setEarnedExperience($enemyCommander);
-			$this->earnedExperience = round($this->earnedExperience);
-
-			$this->winner = FALSE;
-			$this->setArmyAtEnd();
-			$this->upExperience($this->earnedExperience);
-			$this->hasChanged = TRUE;
-		}
-	}
-
-	# ENGAGE UN COMBAT ENTRE CHAQUE SQUADRON CONTRE UN COMMANDANT
-	public function engage($enemyCommander, $thisCommander) {
-		$this->setArmy();
-
-		for ($i = 0; $i < count($this->squadronsIds); $i++) {
-			$this->getSquadron($i)->relId = 0;
-		}
-		$idSquadron = 0;
-		foreach ($this->army as $squadron) {
-			if ($squadron->getNbrShips() != 0 AND $squadron->getLineCoord() * 3 <= FightController::getCurrentLine()) {
-				$enemyCommander = $squadron->engage($enemyCommander, $idSquadron, $this->id, $this->name, $thisCommander);
-			}
-			$idSquadron++;
-		}
-		return $enemyCommander;
-	}
-
-	public function getPosition ($x1, $y1, $x2, $y2) {
-		$x = $x1;
-		$y = $y1;
-		if ($this->statement == self::MOVING) {
-			$parcouredTime = Utils::interval($this->dStart, Utils::now(), 's');
-			$totalTime = Utils::interval($this->dStart, $this->dArrival, 's');
-			$progression = $parcouredTime / $totalTime;
-
-			$x = $x1 + $progression * ($x2-$x1);
-			$y = $y1 + $progression * ($y2-$y1);
-		}
-		return array($x, $y);
-	}
-
-	public function getEventInfo() {
-		$info = new ArrayList();
-		$info->add('id', $this->id);
-		$info->add('name', $this->name);
-		$info->add('avatar', $this->avatar);
-		$info->add('level', $this->level);
-
-		$info->add('dStart', $this->dStart);
-		$info->add('rStart', $this->rStartPlace);
-		$info->add('nStart', $this->startPlaceName);
-		$info->add('dArrival', $this->dArrival);
-		$info->add('rArrival', $this->rDestinationPlace);
-		$info->add('nArrival', $this->destinationPlaceName);
-
-		$info->add('travelType', $this->travelType);
-		$info->add('resources', $this->resources);
-
-		return $info;
-	}
-
-	public function uCommander() {
-		$token = CTC::createContext();
-		$now = Utils::now();
-
-		# check s'il gagne de l'exp à l'école
-		if (Utils::interval($this->uCommander, $now, 'h') > 0 AND $this->statement == self::INSCHOOL) {
-			$nbrHours = Utils::intervalDates($now, $this->uCommander);
-			$this->uCommander = $now;
-
-			$S_OBM = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession();
-			ASM::$obm->load(array('rPlace' => $this->rBase));
-			$ob = ASM::$obm->get();
-			ASM::$obm->changeSession($S_OBM);
-                        
-			$playerBonus = 0;
-			if ($this->rPlayer != CTR::$data->get('playerId')) {
-				$playerBonus = new PlayerBonus($this->rPlayer);
-				$playerBonus->load();
-				$playerBonus = $playerBonus->bonus;
-			} else {
-				$playerBonus = CTR::$data->get('playerBonus');
-			}
-
-			foreach ($nbrHours as $hour) {
-				CTC::add($hour, $this, 'uExperienceInSchool', array($ob, $playerBonus));
-			}
-		}
-
-		# test si il y a des combats
-		if ($this->dArrival <= Utils::now() AND $this->statement == self::MOVING AND $this->hasToU) {
-			$this->hasToU = FALSE;
-
-			$S_PLM = ASM::$plm->getCurrentSession();
-			ASM::$plm->newSession();
-			ASM::$plm->load(array('id' => $this->rDestinationPlace));
-			$pl = ASM::$plm->get();
-			ASM::$plm->changeSession($S_PLM);
-		}
-
-		CTC::applyContext($token);
 	}
 }
