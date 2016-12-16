@@ -24,7 +24,7 @@ $name = $p->protect($name);
 $text = $p->parse($text);
 
 if ($name !== FALSE AND $quantity !== FALSE) {
-	if (CTR::$data->get('playerInfo')->get('status') == PAM_TREASURER) {
+	if (CTR::$data->get('playerInfo')->get('status') == Player::TREASURER) {
 		if (strlen($text) < 500) {
 			$credit = intval($quantity);
 

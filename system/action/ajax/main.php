@@ -1,8 +1,8 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Exception\ErrorException;
 
-switch (CTR::$get->get('a')) {
+switch ($this->getContainer()->get('app.request')->query->get('a')) {
 	# COMMON
 	case 'switchparams':			include AJAX . 'common/switchParams.php'; break;
 	
@@ -37,6 +37,5 @@ switch (CTR::$get->get('a')) {
 	case 'wswpl':					include PAGES . 'ajax/wsw/place.php'; break;
 
 	default:
-		CTR::$alert->add('action inconnue ou non-référencée', ALERT_STD_ERROR);
-		break;
+		throw new ErrorException('action inconnue ou non-référencée');
 }

@@ -14,7 +14,7 @@ if ($description !== FALSE) {
 	ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
 
 	if (ASM::$pam->size() == 1) {
-		if (ASM::$pam->get()->status > PAM_PARLIAMENT) {
+		if (ASM::$pam->get()->status > Player::PARLIAMENT) {
 			if ($description !== '' && strlen($description) < 25000) {
 				$S_COL_1 = ASM::$clm->getCurrentSession();
 				ASM::$clm->newSession();

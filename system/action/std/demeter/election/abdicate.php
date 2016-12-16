@@ -12,7 +12,7 @@ use Asylamba\Modules\Hermes\Model\Notification;
 $rPlayer = Utils::getHTTPData('rplayer');
 
 if ($statusArray = ColorResource::getInfo(CTR::$data->get('playerInfo')->get('color'), 'regime') == Color::DEMOCRATIC) {
-	if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
+	if (CTR::$data->get('playerInfo')->get('status') == Player::CHIEF) {
 		$_CLM = ASM::$clm->getCurrentsession();
 		ASM::$clm->newSession();
 		ASM::$clm->load(['id' => CTR::$data->get('playerInfo')->get('color')]);
@@ -34,26 +34,26 @@ if ($statusArray = ColorResource::getInfo(CTR::$data->get('playerInfo')->get('co
 	if ($rPlayer !== FALSE) {
 		$_PAM2 = ASM::$pam->getCurrentsession();
 		ASM::$pam->newSession();
-		if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
+		if (CTR::$data->get('playerInfo')->get('status') == Player::CHIEF) {
 			$_PAM = ASM::$pam->getCurrentsession();
 			ASM::$pam->newSession();
 			ASM::$pam->load(array('id' => $rPlayer));
 
 			if (ASM::$pam->size() > 0) {
 				if (ASM::$pam->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
-					if (ASM::$pam->get()->status >= PAM_PARLIAMENT) {
+					if (ASM::$pam->get()->status >= Player::PARLIAMENT) {
 						$_CLM = ASM::$clm->getCurrentsession();
 						ASM::$clm->newSession();
 						ASM::$clm->load(['id' => CTR::$data->get('playerInfo')->get('color')]);
 
 						if (ASM::$clm->get()->electionStatement == Color::MANDATE) {
-							ASM::$pam->get()->status = PAM_CHIEF;
+							ASM::$pam->get()->status = Player::CHIEF;
 							
 							$_PAM23 = ASM::$pam->getCurrentsession();
 							ASM::$pam->newSession();
 							ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-							ASM::$pam->get()->status = PAM_PARLIAMENT;
-							CTR::$data->get('playerInfo')->add('status', PAM_PARLIAMENT);
+							ASM::$pam->get()->status = Player::PARLIAMENT;
+							CTR::$data->get('playerInfo')->add('status', Player::PARLIAMENT);
 							ASM::$pam->changeSession($_PAM23);
 
 							$statusArray = ColorResource::getInfo(ASM::$pam->get()->rColor, 'status');

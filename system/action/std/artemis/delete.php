@@ -3,30 +3,34 @@
 
 # int id 			id du rapport
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Exception\ErrorException;
 
-$id = Utils::getHTTPData('id');
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
+$session = $this->getContainer()->get('app.session');
+$spyReportManager = $this->getContainer()->get('artemis.spy_report_manager');
+
+$id = $request->query->get('id');
 
 if ($id) {
-	$S_SRM1 = ASM::$srm->getCurrentSession();
-	ASM::$srm->newSession();
-	ASM::$srm->load(array('id' => $id));
-	$report = ASM::$srm->get();
-	if (ASM::$srm->size() == 1) {
+	$S_SRM1 = $spyReportManager->getCurrentSession();
+	$spyReportManager->newSession();
+	$spyReportManager->load(array('id' => $id));
+	$report = $spyReportManager->get();
+	if ($spyReportManager->size() == 1) {
 
-		if ($report->rPlayer == CTR::$data->get('playerId')) {
-			ASM::$srm->deleteById($report->id);
-			CTR::$alert->add('Rapport d\'espionnage supprimé', ALERT_STD_SUCCESS);
-			CTR::redirect('fleet/view-spyreport');
+		if ($report->rPlayer == $session->get('playerId')) {
+			$spyReportManager->deleteById($report->id);
+			$response->flashbag->add('Rapport d\'espionnage supprimé', Response::FLASHBAG_SUCCESS);
+			$response->redirect('fleet/view-spyreport');
 		} else {
-			CTR::$alert->add('Ce rapport ne vous appartient pas', ALERT_STD_ERROR);
+			throw new ErrorException('Ce rapport ne vous appartient pas');
 		}
 	} else {
-		CTR::$alert->add('Ce rapport n\'existe pas', ALERT_STD_ERROR);
+		throw new ErrorException('Ce rapport n\'existe pas');
 	}
-	ASM::$srm->changeSession($S_SRM1);
+	$spyReportManager->changeSession($S_SRM1);
 } else {
-	CTR::$alert->add('veuillez indiquer le numéro du rapport', ALERT_STD_ERROR);
+	throw new ErrorException('veuillez indiquer le numéro du rapport');
 }

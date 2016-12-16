@@ -35,7 +35,7 @@ if ($rElection !== FALSE && $program !== FALSE) {
 			$warlordChoice = 1;
 			$ministerChoice = 1;
 
-			if (CTR::$data->get('playerInfo')->get('status') > PAM_STANDARD) {
+			if (CTR::$data->get('playerInfo')->get('status') > Player::STANDARD) {
 				$_CLM = ASM::$clm->getCurrentSession();
 				ASM::$clm->newSession();
 				ASM::$clm->load(array('id' => CTR::$data->get('playerInfo')->get('color')));

@@ -40,7 +40,7 @@ if ($recipients !== FALSE AND $conversation !== FALSE) {
 			# chargement des utilisateurs
 			$S_PAM = ASM::$pam->getCurrentSession();
 			ASM::$pam->newSession();
-			ASM::$pam->load(array('id' => $recipients, 'statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY)));
+			ASM::$pam->load(array('id' => $recipients, 'statement' => array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY)));
 
 			if (ASM::$pam->size() >= 1) {
 				# création de la date précédente

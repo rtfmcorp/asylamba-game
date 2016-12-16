@@ -22,7 +22,7 @@ $warlordChoice = Utils::getHTTPData('warlordchoice');
 $ministerChoice = Utils::getHTTPData('ministerchoice');
 
 if ($program !== FALSE) {
-	if (CTR::$data->get('playerInfo')->get('status') > PAM_STANDARD && CTR::$data->get('playerInfo')->get('status') < PAM_CHIEF) {
+	if (CTR::$data->get('playerInfo')->get('status') > Player::STANDARD && CTR::$data->get('playerInfo')->get('status') < Player::CHIEF) {
 		$_CLM = ASM::$clm->getCurrentSession();
 		ASM::$clm->newSession();
 		ASM::$clm->load(array('id' => CTR::$data->get('playerInfo')->get('color')));
@@ -72,7 +72,7 @@ if ($program !== FALSE) {
 
 				$_PAM123 = ASM::$pam->getCurrentsession();
 				ASM::$pam->newSession(FALSE);
-				ASM::$pam->load(['rColor' => ASM::$clm->get()->id, 'statement' => PAM_ACTIVE]);
+				ASM::$pam->load(['rColor' => ASM::$clm->get()->id, 'statement' => Player::ACTIVE]);
 
 				for ($i = 0; $i < ASM::$pam->size(); $i++) {
 					$notif = new Notification();

@@ -3,64 +3,64 @@
 
 # int category 	 	catégorie ('natural', 'life', 'social' ou 'informatic')
 # int quantity		percentage of increasment
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 
-$category = Utils::getHTTPData('category');
-$quantity = Utils::getHTTPData('quantity');
+use Asylamba\Classes\Exception\FormException;
+use Asylamba\Classes\Exception\ErrorException;
 
-if ($category !== FALSE AND $quantity !== FALSE) {
-	if (in_array($category, array('natural', 'life', 'social', 'informatic'))) {
-		$S_PAM1 = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession();
-		ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+$request = $this->getContainer()->get('app.request');
 
-		$player = ASM::$pam->get();
+if (($category = $request->request->get('category')) === null || ($quantity = $request->request->get('quantity')) === null) {
+	throw new FormException('Pas assez d\'informations pour augmenter l\'investissement');
+}
+if (!in_array($category, array('natural', 'life', 'social', 'informatic'))) {
+	throw new ErrorException('Changement d\'investissement impossible - faculté inconnue');
+}
 
-		if ($quantity === FALSE) {
-			$quantity = 1;
-		}
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$session = $this->getContainer()->get('app.session');
 
-		switch ($category) {
-			case 'natural' :
-				$oldInvest = $player->partNaturalSciences;
-				break;
-			case 'life' : 
-				$oldInvest = $player->partLifeSciences;
-				break;
-			case 'social' :
-				$oldInvest = $player->partSocialPoliticalSciences;
-				break;
-			case 'informatic' : 
-				$oldInvest = $player->partInformaticEngineering;
-				break;
-		}
+$S_PAM1 = $notificationManager->getCurrentSession();
+$notificationManager->newSession();
+$notificationManager->load(array('id' => $session->get('playerId')));
 
-		if ($oldInvest != 0) {
-			if ($oldInvest < $quantity) {
-				$quantity = $oldInvest;
-			}
-			switch ($category) {
-				case 'natural' :
-					$player->partNaturalSciences = $player->partNaturalSciences - $quantity;
-					break;
-				case 'life' : 
-					$player->partLifeSciences = $player->partLifeSciences - $quantity;
-					break;
-				case 'social' : 
-					$player->partSocialPoliticalSciences = $player->partSocialPoliticalSciences - $quantity;
-					break;
-				case 'informatic' : 
-					$player->partInformaticEngineering = $player->partInformaticEngineering - $quantity;
-					break;
-			}
+$player = $notificationManager->get();
 
-			ASM::$pam->changeSession($S_PAM1);
-		}
-	} else {
-	CTR::$alert->add('Changement d\'investissement impossible - faculté inconnue', ALERT_STD_ERROR);
+if ($quantity === FALSE) {
+	$quantity = 1;
+}
+
+switch ($category) {
+	case 'natural' :
+		$oldInvest = $player->partNaturalSciences;
+		break;
+	case 'life' : 
+		$oldInvest = $player->partLifeSciences;
+		break;
+	case 'social' :
+		$oldInvest = $player->partSocialPoliticalSciences;
+		break;
+	case 'informatic' : 
+		$oldInvest = $player->partInformaticEngineering;
+		break;
+}
+
+if ($oldInvest != 0) {
+	if ($oldInvest < $quantity) {
+		$quantity = $oldInvest;
 	}
-} else {
-	CTR::$alert->add('Pas assez d\'informations pour augmenter l\'investissement', ALERT_STD_FILLFORM);
+	switch ($category) {
+		case 'natural' :
+			$player->partNaturalSciences = $player->partNaturalSciences - $quantity;
+			break;
+		case 'life' : 
+			$player->partLifeSciences = $player->partLifeSciences - $quantity;
+			break;
+		case 'social' : 
+			$player->partSocialPoliticalSciences = $player->partSocialPoliticalSciences - $quantity;
+			break;
+		case 'informatic' : 
+			$player->partInformaticEngineering = $player->partInformaticEngineering - $quantity;
+			break;
+	}
+	$notificationManager->changeSession($S_PAM1);
 }

@@ -1,14 +1,14 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
+$placeManager = $this->getContainer()->get('gaia.place_manager');
 
-$S_PLM1 = ASM::$plm->newSession(FALSE);
+$S_PLM1 = $placeManager->newSession(FALSE);
 
-ASM::$plm->search($_GET['q'], array('pl.id', 'DESC'), array(0, 20));
+$placeManager->search($_GET['q'], array('pl.id', 'DESC'), array(0, 20));
 
-if (ASM::$plm->size() != 0) {
-	for ($i = 0; $i < ASM::$plm->size(); $i++) {
-		$place = ASM::$plm->get($i);
+if ($placeManager->size() != 0) {
+	for ($i = 0; $i < $placeManager->size(); $i++) {
+		$place = $placeManager->get($i);
 
 		echo '<img class="img" src="' . MEDIA . 'avatar/small/' . $place->playerAvatar . '.png" alt="' . $place->playerName . '" /> ';
 		echo '<span class="value-2">' . $place->playerName . '</span>';
@@ -17,4 +17,4 @@ if (ASM::$plm->size() != 0) {
 	}
 }
 
-ASM::$plm->changeSession($S_PLM1);
+$placeManager->changeSession($S_PLM1);

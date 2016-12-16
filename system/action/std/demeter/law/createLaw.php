@@ -28,7 +28,7 @@ if ($type !== FALSE) {
 
 			$law->rColor = CTR::$data->get('playerInfo')->get('color');
 			$law->type = $type;
-			if (LawResources::getInfo($type, 'department') == PAM_CHIEF) {
+			if (LawResources::getInfo($type, 'department') == Player::CHIEF) {
 				$law->statement = Law::EFFECTIVE;
 
 				$law->dCreation = Utils::now();

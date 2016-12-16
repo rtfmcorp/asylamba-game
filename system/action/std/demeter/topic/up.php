@@ -12,7 +12,7 @@ if ($id !== FALSE) {
 	ASM::$tom->load(array('id' => $id));
 
 	if (ASM::$tom->size() == 1) {
-		if (in_array(CTR::$data->get('playerInfo')->get('status'), [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER])) {
+		if (in_array(CTR::$data->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER])) {
 			$topic = ASM::$tom->get();
 
 			if ($topic->isUp) {

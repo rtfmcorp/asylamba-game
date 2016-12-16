@@ -26,7 +26,7 @@ $route 	= Utils::getHTTPData('route');
 if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 	$S_CRM1 = ASM::$crm->getCurrentSession();
 	ASM::$crm->newSession();
-	ASM::$crm->load(array('id'=>$route, 'rOrbitalBaseLinked' => $base, 'statement' => CRM_PROPOSED));
+	ASM::$crm->load(array('id'=>$route, 'rOrbitalBaseLinked' => $base, 'statement' => CommercialRoute::PROPOSED));
 
 	if (ASM::$crm->get() && ASM::$crm->size() == 1) {
 		$cr = ASM::$crm->get();
@@ -58,8 +58,8 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 			$acceptorBase = ASM::$obm->get(1);
 
 			ASM::$crm->load(array('rOrbitalBase' => $acceptorBase->getId()));
-			ASM::$crm->load(array('rOrbitalBaseLinked' => $acceptorBase->getId(), 'statement' => CRM_ACTIVE));
-			ASM::$crm->load(array('rOrbitalBaseLinked' => $acceptorBase->getId(), 'statement' => CRM_STANDBY));
+			ASM::$crm->load(array('rOrbitalBaseLinked' => $acceptorBase->getId(), 'statement' => CommercialRoute::ACTIVE));
+			ASM::$crm->load(array('rOrbitalBaseLinked' => $acceptorBase->getId(), 'statement' => CommercialRoute::STANDBY));
 
 			$nbrCommercialRoute = ASM::$crm->size() - 1;
 			$nbrMaxCommercialRoute = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $acceptorBase->getLevelSpatioport(), 'nbRoutesMax'); 
@@ -88,7 +88,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 					ASM::$pam->changeSession($S_PAM1);
 					
 					# activation de la route
-					$cr->setStatement(CRM_ACTIVE);
+					$cr->setStatement(CommercialRoute::ACTIVE);
 					$cr->setDCreation(Utils::now());
 
 					$n = new Notification();

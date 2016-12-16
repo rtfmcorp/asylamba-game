@@ -1,21 +1,24 @@
 <?php
 # delete all notifications
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Http\Response;
 
-$S_NTM1 = ASM::$ntm->getCurrentSession();
-ASM::$ntm->newSession(ASM_UMODE);
-ASM::$ntm->load(array('rPlayer' => CTR::$data->get('playerId')));
+$notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$response = $this->getContainer()->get('app.response');
+$session = $this->getContainer()->get('app.session');
 
-$nbr = ASM::$ntm->deleteByRPlayer(CTR::$data->get('playerId'));
+$S_NTM1 = $notificationManager->getCurrentSession();
+$notificationManager->newSession(ASM_UMODE);
+$notificationManager->load(array('rPlayer' => $session->get('playerId')));
+
+$nbr = $notificationManager->deleteByRPlayer($session->get('playerId'));
 
 if ($nbr > 1) {
-	CTR::$alert->add($nbr . ' notifications ont été supprimées.', ALERT_STD_SUCCESS);
+	$response->flashbag->add($nbr . ' notifications ont été supprimées.', Response::FLASHBAG_SUCCESS);
 } else if ($nbr == 1) {
-	CTR::$alert->add('Une notification a été supprimée.', ALERT_STD_SUCCESS);
+	$response->flashbag->add('Une notification a été supprimée.', Response::FLASHBAG_SUCCESS);
 } else {
-	CTR::$alert->add('Toutes vos notifications ont déjà été supprimées.', ALERT_STD_SUCCESS);
+	$response->flashbag->add('Toutes vos notifications ont déjà été supprimées.', Response::FLASHBAG_SUCCESS);
 }
 
-ASM::$ntm->changeSession($S_NTM1);
+$notificationManager->changeSession($S_NTM1);

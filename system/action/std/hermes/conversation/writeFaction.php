@@ -22,14 +22,14 @@ if ($content !== FALSE) {
 	ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
 
 	if (ASM::$pam->size() == 1) {
-		if (ASM::$pam->get()->status > PAM_PARLIAMENT) {
+		if (ASM::$pam->get()->status > Player::PARLIAMENT) {
 			$senderID = ASM::$pam->get()->id;
 			$senderColor = ASM::$pam->get()->rColor;
 
 			if ($content !== '' && strlen($content) < 25000) {
 				ASM::$pam->newSession(FALSE);
 				ASM::$pam->load(
-					['statement' => PAM_DEAD, 'rColor' => $senderColor],
+					['statement' => Player::DEAD, 'rColor' => $senderColor],
 					['id', 'ASC'],
 					[0, 1]
 				);
