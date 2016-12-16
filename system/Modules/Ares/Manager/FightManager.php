@@ -9,14 +9,26 @@
  * @package Arès
  * @update 14.02.14
 */
-namespace Asylamba\Modules\Ares;
+namespace Asylamba\Modules\Ares\Manager;
 
 use Asylamba\Classes\Library\DataAnalysis;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Ares\Model\LiveReport;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 
-class FightController {
+class FightManager {
+	/** @var CommanderManager **/
+	protected $commanderManager;
+	
+	/**
+	 * @param \Asylamba\Modules\Ares\Manager\CommanderManager $commanderManager
+	 */
+	public function __construct(CommanderManager $commanderManager)
+	{
+		$this->commanderManager = $commanderManager;
+		self::$currentLine = 3;
+	}
+	
 	private $isAFight = FALSE;
 
 	# ATTRIBUT STATIC DE LIGNE COURANTE
@@ -33,12 +45,9 @@ class FightController {
 	private static $DFrigateBonus = array(1, 1, 1, 1);
 	private static $DDestroyerBonus = array(1, 1, 1, 1);
 	
-	# REPLACAGE DE LA LIGNE A 3 A CHAQUE INSTANCE DE FIGHTMANAGER
-	
-	public function __construct($bool = FALSE) {
-		if ($bool == NULL){}
-		else {$this->isAFight = $bool;}
-		self::$currentLine = 3;
+	public function setFightControl($isAFight = false)
+	{
+		$this->isAFight = $isAFight;
 	}
 	
 	# GETTER
@@ -326,7 +335,7 @@ class FightController {
 
 				break;
 			} else {
-				$commanderA = $commanderD->engage($commanderA, $commanderD);
+				$commanderA = $this->commanderManager->engage($commanderD, $commanderA, $commanderD);
 				LiveReport::$halfround++;
 			}
 			
@@ -334,8 +343,8 @@ class FightController {
 				$nbrShipsD += $squadronD->getNbrShips();
 			}
 			if($nbrShipsD == 0) {
-				$commanderA->resultOfFight(TRUE, $commanderD);
-				$commanderD->resultOfFight(FALSE, $commanderA);
+				$this->commanderManager->resultOfFight($commanderA, TRUE, $commanderD);
+				$this->commanderManager->resultOfFight($commanderD, FALSE, $commanderA);
 				$commanderD->setStatement(3);
 				$commanderD->setDDeath(Utils::now());
 				LiveReport::$rPlayerWinner = $commanderA->rPlayer;
@@ -349,7 +358,7 @@ class FightController {
 
 				break;
 			} else {
-				$commanderD = $commanderA->engage($commanderD, $commanderA);
+				$commanderD = $this->commanderManager->engage($commanderA, $commanderD, $commanderA);
 				LiveReport::$halfround++;
 			}
 			
