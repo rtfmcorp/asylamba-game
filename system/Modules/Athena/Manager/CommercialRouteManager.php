@@ -221,9 +221,9 @@ class CommercialRouteManager extends Manager {
 		);
 
 		if ($freeze) {
-			$qr->execute(array(CRM_STANDBY, $color1->id, $color2->id, $color2->id, $color1->id, CRM_ACTIVE));
+			$qr->execute(array(CommercialRoute::STANDBY, $color1->id, $color2->id, $color2->id, $color1->id, CommercialRoute::ACTIVE));
 		} else {
-			$qr->execute(array(CRM_ACTIVE, $color1->id, $color2->id, $color2->id, $color1->id, CRM_STANDBY));
+			$qr->execute(array(CommercialRoute::ACTIVE, $color1->id, $color2->id, $color2->id, $color1->id, CommercialRoute::STANDBY));
 		}
 	} 
 }
