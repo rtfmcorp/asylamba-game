@@ -6,7 +6,6 @@ use Asylamba\Classes\Configuration\Configuration;
 use Symfony\Component\Config\FileLocator;
 
 use Asylamba\Classes\Library\Benchmark;
-use Asylamba\Classes\Container\Cookie;
 use Asylamba\Classes\Container\History;
 use Asylamba\Classes\Container\Session;
 use Asylamba\Classes\Container\Alert;
@@ -37,10 +36,10 @@ class Application {
 			$this->save();
 		} catch (\Exception $ex) {
 			$this->container->get('event_dispatcher')->dispatch(new ExceptionEvent($ex));
-			die('BUGGIS IPSUM LOGGUM SIT AMET');
+			die("{$ex->getMessage()} in {$ex->getFile()} at {$ex->getLine()}<br><pre>" . $ex->getTraceAsString() . '</pre>');
 		} catch (\Error $err) {
 			$this->container->get('event_dispatcher')->dispatch(new ErrorEvent($err));
-			die('BUGGIS IPSUM LOGGUM SIT AMET');
+			die("{$err->getMessage()} in {$err->getFile()} at {$err->getLine()}<br><pre>" . $err->getTraceAsString() . '</pre>');
 		}
     }
 	
@@ -141,7 +140,12 @@ class Application {
 			? unserialize($_SESSION[SERVER_SESS]['history'])
 			: new History()
 		);
-		$this->container->set('app.cookie', new Cookie());
+		
+		if ($this->getContainer()->getParameter('environment') === 'dev') {
+			set_error_handler(function($errno, $errstr, $errfile, $errline) {
+				throw new \ErrorException($errstr, $errno, 1, $errfile, $errline);
+			});
+		}
 		
 		$request = new Request();
 		$request->initialize();
