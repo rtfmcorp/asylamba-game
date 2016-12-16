@@ -7,6 +7,17 @@ class ParameterBag {
 	protected $parameters = [];
 	
 	/**
+	 * @param mixed $value
+	 * @return \Asylamba\Classes\Library\ParameterBag
+	 */
+	public function add($value)
+	{
+		$this->parameters[] = $value;
+		
+		return $this;
+	}
+	
+	/**
 	 * @param string $key
 	 * @param mixed $value
 	 * @return $this
@@ -40,11 +51,12 @@ class ParameterBag {
 
 	/**
 	 * @param string $key
+	 * @param mixed $default
 	 * @return mixed
 	 */
-	public function get($key)
+	public function get($key, $default = null)
 	{
-		return ($this->has($key)) ? $this->parameters[$key] : null;
+		return ($this->has($key)) ? $this->parameters[$key] : $default;
 	}
 	
 	/**
