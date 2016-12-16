@@ -85,6 +85,15 @@ class CTC {
 		}
 	}
 
+	/**
+	 * @param string $date
+	 * @param object $object
+	 * @param string $method
+	 * @param object $model
+	 * @param array $args
+	 * @return boolean
+	 * @throws \Exception
+	 */
 	public function add($date, $object, $method, $model = null, $args = array()) {
 		if (!$this->running) {
 			throw new \Exception('CTC isn\'t running actually', 1);

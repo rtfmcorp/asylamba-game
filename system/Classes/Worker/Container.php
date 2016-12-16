@@ -202,8 +202,13 @@ class Container {
 					;
 					// Remove module name to match with the property name format
 					$data = explode('.', $argumentKey);
+					
+					if(count($data) > 1) {
+						array_shift($data);
+					}
 					// The last element of the array will always be the property name candidate
-					if (array_pop($data) === $snakeCaseProperty) {
+					// We remove the module name and replace the remaining dots
+					if (str_replace('.', '_', implode('.', $data)) === $snakeCaseProperty) {
 						// The $properties array are linked to the proxy object properties
 						// It is the proxy properties we are dynamically affecting here
 						$properties[$property] =
@@ -271,10 +276,10 @@ class Container {
 	{
 		foreach($this->services as $service)
 		{
-			if(!$service instanceof Manager) {
+			if(!$service['instance'] instanceof Manager) {
 				continue;
 			}
-			$service->save();
+			$service['instance']->save();
 		}
 	}
 	
