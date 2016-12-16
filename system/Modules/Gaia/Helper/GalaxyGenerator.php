@@ -5,29 +5,29 @@ namespace Asylamba\Modules\Gaia\Helper;
 use Asylamba\Classes\Database\DatabaseAdmin;
 use Asylamba\Classes\Library\Utils;
 
-use Asylamba\Modules\Gaia\Helper\GalaxyGenerator;
-use GalaxyConfiguration;
+use Asylamba\Modules\Gaia\Galaxy\GalaxyConfiguration;
 
 use Asylamba\Modules\Gaia\Model\PointLocation;
 use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Classes\Library\Format;
 
-abstract class GalaxyGenerator {
+class GalaxyGenerator {
 	const MAX_QUERY = 5000;
 
 	# stats
-	public static $nbSystem = 0;
-	public static $listSystem = array();
+	public $nbSystem = 0;
+	public $listSystem = array();
 
-	public static $nbPlace = 0;
-	public static $popTotal = 0;
-	public static $listPlace = array();
+	public $nbPlace = 0;
+	public $popTotal = 0;
+	public $listPlace = array();
 
-	public static $nbSector = 0;
-	public static $systemDeleted = 0;
-	public static $listSector = array();
+	public $nbSector = 0;
+	public $systemDeleted = 0;
+	public $listSector = array();
 
-	public static $output;
+	/** @var string **/
+	protected $output;
 	/** @var DatabaseAdmin **/
 	protected $databaseAdmin;
 	/** @var GalaxyConfiguration **/
@@ -43,102 +43,102 @@ abstract class GalaxyGenerator {
 		$this->galaxyConfiguration = $galaxyConfiguration;
 	}
 
-	public static function generate() {
-		self::clear();
+	public function generate() {
+		$this->clear();
 
 		# generation
-		self::generateSector();
-		self::generateSystem();
-		self::associateSystemToSector();
-		self::generatePlace();
+		$this->generateSector();
+		$this->generateSystem();
+		$this->associateSystemToSector();
+		$this->generatePlace();
 
-		self::save();
+		$this->save();
 
-		self::getStatisticsSector();
+		$this->getStatisticsSector();
 	}
 
-	public static function clear() {
+	public function clear() {
 		$this->databaseAdmin->query('SET FOREIGN_KEY_CHECKS = 0;');
 		
 		$this->databaseAdmin->query('TRUNCATE place');
-		self::log('table `place` vidées');
+		$this->log('table `place` vidées');
 
 		$this->databaseAdmin->query('TRUNCATE system');
-		self::log('table `system` vidées');
+		$this->log('table `system` vidées');
 
 		$this->databaseAdmin->query('TRUNCATE sector');
-		self::log('table `sector` vidées');
+		$this->log('table `sector` vidées');
 
 		$this->databaseAdmin->query('SET FOREIGN_KEY_CHECKS = 1;');
-		self::log('_ _ _ _');
+		$this->log('_ _ _ _');
 	}
 
-	public static function save() {
+	public function save() {
 		# clean up database
-		self::clear();
+		$this->clear();
 
-		self::log('sauvegarde des secteurs');
-		for ($i = 0; $i < ceil(count(self::$listSector) / self::MAX_QUERY); $i++) { 
+		$this->log('sauvegarde des secteurs');
+		for ($i = 0; $i < ceil(count($this->listSector) / self::MAX_QUERY); $i++) { 
 			$qr = 'INSERT INTO sector(id, rColor, xPosition, yPosition, xBarycentric, yBarycentric, tax, population, lifePlanet, name, prime, points) VALUES ';
 			
 			for ($j = $i * self::MAX_QUERY; $j < (($i + 1) * self::MAX_QUERY) - 1; $j++) { 
-				if (isset(self::$listSector[$j])) {
-					$qr .= '(\'' . implode('\', \'', self::$listSector[$j]) . '\'), ';
+				if (isset($this->listSector[$j])) {
+					$qr .= '(\'' . implode('\', \'', $this->listSector[$j]) . '\'), ';
 				}
 			}
 
 			$qr = substr($qr, 0, -2);
 			$this->databaseAdmin->query($qr);
 		}
-		self::log(ceil(count(self::$listSector) / self::MAX_QUERY) . ' requêtes `INSERT`');
+		$this->log(ceil(count($this->listSector) / self::MAX_QUERY) . ' requêtes `INSERT`');
 
-		self::log('sauvegarde des systèmes');
-		for ($i = 0; $i < ceil(count(self::$listSystem) / self::MAX_QUERY); $i++) { 
+		$this->log('sauvegarde des systèmes');
+		for ($i = 0; $i < ceil(count($this->listSystem) / self::MAX_QUERY); $i++) { 
 			$qr = 'INSERT INTO system(id, rSector, rColor, xPosition, yPosition, typeOfSystem) VALUES ';
 			
 			for ($j = $i * self::MAX_QUERY; $j < (($i + 1) * self::MAX_QUERY) - 1; $j++) { 
-				if (isset(self::$listSystem[$j])) {
-					$qr .= '(' . implode(', ', self::$listSystem[$j]) . '), ';
+				if (isset($this->listSystem[$j])) {
+					$qr .= '(' . implode(', ', $this->listSystem[$j]) . '), ';
 				}
 			}
 
 			$qr = substr($qr, 0, -2);
 			$this->databaseAdmin->query($qr);
 		}
-		self::log(ceil(count(self::$listSystem) / self::MAX_QUERY) . ' requêtes `INSERT`');
+		$this->log(ceil(count($this->listSystem) / self::MAX_QUERY) . ' requêtes `INSERT`');
 
-		self::log('sauvegarde des places');
-		for ($i = 0; $i < ceil(count(self::$listPlace) / self::MAX_QUERY); $i++) { 
+		$this->log('sauvegarde des places');
+		for ($i = 0; $i < ceil(count($this->listPlace) / self::MAX_QUERY); $i++) { 
 			$qr = 'INSERT INTO place(id, rSystem, typeOfPlace, position, population, coefResources, coefHistory, resources, danger, maxDanger, uPlace) VALUES ';
 			
 			for ($j = $i * self::MAX_QUERY; $j < (($i + 1) * self::MAX_QUERY) - 1; $j++) { 
-				if (isset(self::$listPlace[$j])) {
-					$qr .= '(' . implode(', ', self::$listPlace[$j]) . ', "' . Utils::addSecondsToDate(Utils::now(), -259200) . '"), ';
+				if (isset($this->listPlace[$j])) {
+					$qr .= '(' . implode(', ', $this->listPlace[$j]) . ', "' . Utils::addSecondsToDate(Utils::now(), -259200) . '"), ';
 				}
 			}
 
 			$qr = substr($qr, 0, -2);
 			$this->databaseAdmin->query($qr);
 		}
-		self::log(ceil(count(self::$listPlace) / self::MAX_QUERY) . ' requêtes `INSERT`');
+		$this->log(ceil(count($this->listPlace) / self::MAX_QUERY) . ' requêtes `INSERT`');
 
-		self::log('_ _ _ _');
+		$this->log('_ _ _ _');
 	}
 
-	public static function getLog() {
+	public function getLog() {
 		$rt  = '<pre style="font-family: consolas;">';
-			$rt .= self::$output;
+			$rt .= $this->output;
 		$rt .= '</pre>';
 
 		return $rt;
 	}
 
-	private static function log($text) {
-		self::$output = self::$output . ">_ " . $text . "<br />";
+	private function log($text) {
+		$this->output .= ">_ $text <br />";
 	}
 
-	private static function generateSystem() {
-		self::log('génération des systèmes');
+	private function generateSystem() {
+		$this->log('génération des systèmes');
 
 		# id
 		$k = 1;
@@ -160,7 +160,7 @@ abstract class GalaxyGenerator {
 					$xC = $j;
 					$yC = $i;
 
-					$d  = self::distToSegment($xC, $yC, $xA, $yA, $xB, $yB);
+					$d  = $this->distToSegment($xC, $yC, $xA, $yA, $xB, $yB);
 
 					$thickness = $this->galaxyConfiguration->galaxy['lineSystemPosition'][$w][2];
 					$intensity = $this->galaxyConfiguration->galaxy['lineSystemPosition'][$w][3];
@@ -174,10 +174,10 @@ abstract class GalaxyGenerator {
 						if (round($intensity - ($d * $intensity / $thickness)) >= $prob) {
 
 
-							$type = self::getSystem();
+							$type = $this->getSystem();
 
-							self::$nbSystem++;
-							self::$listSystem[] = array($k, 0, 0, $xC, $yC, $type);
+							$this->nbSystem++;
+							$this->listSystem[] = array($k, 0, 0, $xC, $yC, $type);
 
 							$k++;
 						}
@@ -213,10 +213,10 @@ abstract class GalaxyGenerator {
 						$prob 	= rand(0, 100);
 
 						if (round($intensity - ($dtoseg * $intensity / $thickness)) >= $prob) {
-							$type = self::getSystem();
+							$type = $this->getSystem();
 
-							self::$nbSystem++;
-							self::$listSystem[] = array($k, 0, 0, $xPosition, $yPosition, $type);
+							$this->nbSystem++;
+							$this->listSystem[] = array($k, 0, 0, $xPosition, $yPosition, $type);
 
 							$k++;
 						}
@@ -239,11 +239,11 @@ abstract class GalaxyGenerator {
 						pow(abs(($this->galaxyConfiguration->galaxy['size'] / 2) - $yPosition), 2)
 					);
 					
-					if (self::isPointInMap($d2o)) {
-						$type = self::getSystem();
+					if ($this->isPointInMap($d2o)) {
+						$type = $this->getSystem();
 
-						self::$nbSystem++;
-						self::$listSystem[] = array($k, 0, 0, $xPosition, $yPosition, $type);
+						$this->nbSystem++;
+						$this->listSystem[] = array($k, 0, 0, $xPosition, $yPosition, $type);
 
 						$k++;
 					}
@@ -251,15 +251,15 @@ abstract class GalaxyGenerator {
 			}
 		}
 
-		self::log(self::$nbSystem . ' systèmes générés');
-		self::log('_ _ _ _');
+		$this->log($this->nbSystem . ' systèmes générés');
+		$this->log('_ _ _ _');
 	}
 
-	public static function generatePlace() {
-		self::log('génération des places');
+	public function generatePlace() {
+		$this->log('génération des places');
 		$k = 1;
 
-		foreach (self::$listSystem AS $system) {
+		foreach ($this->listSystem AS $system) {
 			$sectorDanger = 0;
 			foreach ($this->galaxyConfiguration->sectors as $sector) {
 				if ($system[1] == $sector['id']) {
@@ -268,10 +268,10 @@ abstract class GalaxyGenerator {
 				}
 			}
 
-			$place = self::getNbOfPlace($system[5]);
+			$place = $this->getNbOfPlace($system[5]);
 
 			for ($i = 0; $i < $place; $i++) {
-				$type = self::getTypeOfPlace($system[5]);
+				$type = $this->getTypeOfPlace($system[5]);
 
 				if ($type == 1) {
 					$pointsRep = rand(1, 10);
@@ -346,30 +346,30 @@ abstract class GalaxyGenerator {
 					default: $danger = 0; break;
 				}
 
-				self::$nbPlace++;
-				self::$popTotal += $population;
-				self::$listPlace[] = array($k, $system[0], $type, ($i + 1), $population, $resources, $history, $stRES, $danger, $danger);
+				$this->nbPlace++;
+				$this->popTotal += $population;
+				$this->listPlace[] = array($k, $system[0], $type, ($i + 1), $population, $resources, $history, $stRES, $danger, $danger);
 				$k++;
 			}
 		}
 
-		self::log(self::$nbPlace . ' places générées');
-		self::log(Format::numberFormat(self::$popTotal * 1000000) . ' de population');
-		self::log('_ _ _ _');
+		$this->log($this->nbPlace . ' places générées');
+		$this->log(Format::numberFormat($this->popTotal * 1000000) . ' de population');
+		$this->log('_ _ _ _');
 	}
 
-	public static function generateSector() {
-		self::log('génération des secteurs');
+	public function generateSector() {
+		$this->log('génération des secteurs');
 		$k = 1;
 
 		foreach ($this->galaxyConfiguration->sectors as $sector) {
-			self::$nbSector++;
+			$this->nbSector++;
 
 			$prime = ($sector['beginColor'] != 0)
 				? 1
 				: 0;
 
-			self::$listSector[] = array(
+			$this->listSector[] = array(
 				$k, 
 				$sector['beginColor'], 
 				$sector['display'][0], 
@@ -387,16 +387,16 @@ abstract class GalaxyGenerator {
 			$k++;
 		}
 
-		self::log(self::$nbSector . ' secteurs générés');
-		self::log('_ _ _ _');
+		$this->log($this->nbSector . ' secteurs générés');
+		$this->log('_ _ _ _');
 	}
 
-	public static function associateSystemToSector() {
+	public function associateSystemToSector() {
 		$pl = new PointLocation();
 		$systemToDelete = array();
 		$k = 0;
 
-		foreach (self::$listSystem as $v) {
+		foreach ($this->listSystem as $v) {
 			foreach ($this->galaxyConfiguration->sectors as $w) {
 				$place = $pl->pointInPolygon($v[3] . ', ' . $v[4], $w['vertices']);
 
@@ -404,33 +404,31 @@ abstract class GalaxyGenerator {
 					$systemToDelete[] = $v[0];
 					break;
 				} elseif ($place == 3) {
-					self::$listSystem[$k][1] = $w['id'];
+					$this->listSystem[$k][1] = $w['id'];
 					break;
 				}
 			}
 			$k++;
 		}
 
-		foreach (self::$listSystem as $v) {
+		foreach ($this->listSystem as $v) {
 			if ($v[1] == 0) {
 				$systemToDelete[] = $v[0];
 			}
 		}
 		
 		# suppression des systemes sur des lignes ou des angles
-		for ($i = count(self::$listSystem) - 1; $i >= 0; $i--) { 
-			if (in_array(self::$listSystem[$i][0], $systemToDelete)) {
-				unset(self::$listSystem[$i]);
+		for ($i = count($this->listSystem) - 1; $i >= 0; $i--) { 
+			if (in_array($this->listSystem[$i][0], $systemToDelete)) {
+				unset($this->listSystem[$i]);
 			}
 		}
 
-		self::$systemDeleted = count($systemToDelete);
+		$this->systemDeleted = count($systemToDelete);
 	}
 
-	private static function getStatisticsSector() {
-		$this->databaseAdmin = DatabaseAdmin::getInstance();
-
-		foreach (self::$listSector as $sector) {
+	protected function getStatisticsSector() {
+		foreach ($this->listSector as $sector) {
 			$id = $sector[0];
 
 			$qr = $this->databaseAdmin->prepare('SELECT
@@ -458,7 +456,7 @@ abstract class GalaxyGenerator {
 		}
 	}
 
-	private static function isPointInMap($d2o) {
+	protected function isPointInMap($d2o) {
 		$mask = rand(1, $this->galaxyConfiguration->galaxy['mask']);
 
 		if ($mask < 3) {
@@ -479,34 +477,34 @@ abstract class GalaxyGenerator {
 
 	}
 
-	private static function l2p($x1, $x2, $y1, $y2) {
+	protected function l2p($x1, $x2, $y1, $y2) {
 		return (pow($x1 - $y1, 2) + pow($x2 - $y2, 2));
 	}
 
-	private static function distToSegment($p1, $p2, $v1, $v2, $w1, $w2) {
-		$l2 = self::l2p($v1, $v2, $w1, $w2);
+	protected function distToSegment($p1, $p2, $v1, $v2, $w1, $w2) {
+		$l2 = $this->l2p($v1, $v2, $w1, $w2);
 
 		if ($l2 == 0) {
-			return sqrt(self::l2p($p1, $p2, $v1, $v2));
+			return sqrt($this->l2p($p1, $p2, $v1, $v2));
 		}
 
 		$t  = (($p1 - $v1) * ($w1 - $v1) + ($p2 - $v2) * ($w2 - $v2)) / $l2;
 
 		if ($t < 0) {
-			return sqrt(self::l2p($p1, $p2, $v1, $v2));
+			return sqrt($this->l2p($p1, $p2, $v1, $v2));
 		}
 
 		if ($t > 1) {
-			return sqrt(self::l2p($p1, $p2, $w1, $w2));
+			return sqrt($this->l2p($p1, $p2, $w1, $w2));
 		}
 
 		$tx = $v1 + $t * ($w1 - $v1);
 		$ty = $v2 + $t * ($w2 - $v2);
 
-		return sqrt(self::l2p($p1, $p2, $tx, $ty));
+		return sqrt($this->l2p($p1, $p2, $tx, $ty));
 	}
 
-	private static function getProportion($params, $value) {
+	protected function getProportion($params, $value) {
 		$cursor	= 0;
 		$type 	= 0;
 		$min 	= 0;
@@ -533,18 +531,18 @@ abstract class GalaxyGenerator {
 		}
 	}
 
-	private static function getSystem() {
-		return self::getProportion($this->galaxyConfiguration->galaxy['systemProportion'], rand(1, 100));
+	protected function getSystem() {
+		return $this->getProportion($this->galaxyConfiguration->galaxy['systemProportion'], rand(1, 100));
 	}
 
-	private static function getNbOfPlace($systemType) {
+	protected function getNbOfPlace($systemType) {
 		return rand(
 			$this->galaxyConfiguration->systems[$systemType - 1]['nbrPlaces'][0],
 			$this->galaxyConfiguration->systems[$systemType - 1]['nbrPlaces'][1]
 		);
 	}
 
-	private static function getTypeOfPlace($systemType) {
-		return self::getProportion($this->galaxyConfiguration->systems[$systemType - 1]['placesPropotion'], rand(1, 100));
+	protected function getTypeOfPlace($systemType) {
+		return $this->getProportion($this->galaxyConfiguration->systems[$systemType - 1]['placesPropotion'], rand(1, 100));
 	}
 }
