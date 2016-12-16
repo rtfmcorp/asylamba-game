@@ -1,19 +1,14 @@
 <?php
 
-use Asylamba\Classes\Database\Database;
-use Asylamba\Classes\Database\DatabaseAdmin;
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Modules\Hermes\Model\Conversation;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
-use Asylamba\Modules\Gaia\Helper\GalaxyGenerator;
 
-include CONFIG . 'app.config.install.php';
-
-$db = DatabaseAdmin::getInstance();
+$availableFactions = $this->getContainer()->getParameter('game.available_factions');
+$db = $this->getContainer()->get('database_admin');
 
 $db->query('SET FOREIGN_KEY_CHECKS = 0;');
 
@@ -50,10 +45,9 @@ $date = Utils::addSecondsToDate(Utils::now(), - 500000);
 $qr->execute(array(0, 0, 0, 0, 0, 0, 0, 1, 1, 0, $date));
 
 # génération des factions disponibles
-foreach ($AVAILABLE_FACTIONS as $faction) {
+foreach ($availableFactions as $faction) {
 	$qr->execute(array($faction, 1, 0, 0, 0, 0, 0, 1, 0, 1, $date));
 }
-
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table factionNews</h2>';
 
@@ -121,8 +115,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `player` (
 #--------------------------------------------------------------------------------------------
 echo '<h3>Ajout du Joueur Gaia</h3>';
 
-$S_PAM_ALL = ASM::$pam->getCurrentSession();
-ASM::$pam->newSession();
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$S_PAM_ALL = $playerManager->getCurrentSession();
+$playerManager->newSession();
 
 $p = new Player();
 $p->status = 1;
@@ -144,7 +139,7 @@ $p->dInscription = Utils::now();
 $p->dLastConnection = Utils::now();
 $p->dLastActivity = Utils::now();
 $p->premium = 0;
-$p->statement = PAM_DEAD;
+$p->statement = Player::DEAD;
 
 # Joueur rebelle
 $p = clone($p);
@@ -152,7 +147,7 @@ $p->bind = Utils::generateString(25);
 $p->name = 'Rebelle';
 $p->avatar = 'rebel';
 $p->rColor = 0;
-ASM::$pam->add($p);
+$playerManager->add($p);
 
 # Jean-Mi
 $p = clone($p);
@@ -160,10 +155,10 @@ $p->bind = Utils::generateString(25);
 $p->name = 'Jean-Mi';
 $p->avatar = 'jm';
 $p->rColor = 0;
-ASM::$pam->add($p);
+$playerManager->add($p);
 
 # Joueurs de factions
-foreach ($AVAILABLE_FACTIONS as $faction) {
+foreach ($availableFactions as $faction) {
 	$p = clone($p);
 	$p->bind = Utils::generateString(25);
 	$p->name = ColorResource::getInfo($faction, 'officialName');
@@ -171,10 +166,10 @@ foreach ($AVAILABLE_FACTIONS as $faction) {
 	$p->rColor = $faction;
 	$p->status = 6;
 
-	ASM::$pam->add($p);
+	$playerManager->add($p);
 }
 
-ASM::$pam->changeSession($S_PAM_ALL);
+$playerManager->changeSession($S_PAM_ALL);
 
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table sector</h2>';
@@ -532,8 +527,8 @@ echo '<h3>Remplissage de la table commercialTax</h3>';
 $qr = $db->prepare("INSERT INTO `commercialTax` (`faction`, `relatedFaction`, `exportTax`, `importTax`) VALUES (?, ?, 5, 5)");
 
 # génération des taxes
-foreach ($AVAILABLE_FACTIONS as $faction) {
-	foreach ($AVAILABLE_FACTIONS as $rfaction) {
+foreach ($availableFactions as $faction) {
+	foreach ($availableFactions as $rfaction) {
 		$qr->execute(array($faction, $rfaction));
 	}
 }
@@ -964,7 +959,7 @@ echo '<h1>Ajout du module de Conversation</h1>';
 
 echo '<h2>Ajout de la table Conversation</h2>';
 
-$db = Database::getInstance();
+$db = $this->getContainer()->get('database');
 $db->query("DROP TABLE IF EXISTS `conversation`");
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `conversation` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -979,7 +974,6 @@ $qr->execute();
 
 echo '<h2>Ajout de la table userConversation</h2>';
 
-$db = Database::getInstance();
 $db->query("DROP TABLE IF EXISTS `conversationUser`");
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `conversationUser` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -994,7 +988,6 @@ $qr->execute();
 
 echo '<h2>Ajout de la table messageConversation</h2>';
 
-$db = Database::getInstance();
 $db->query("DROP TABLE IF EXISTS `conversationMessage`");
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `conversationMessage` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -1019,7 +1012,8 @@ $conv->type = Conversation::TY_SYSTEM;
 $conv->title = 'Jean-Mi, administrateur système';
 $conv->dCreation = Utils::now();
 $conv->dLastMessage = Utils::now();
-ASM::$cvm->add($conv);
+$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
+$conversationManager->add($conv);
 
 $user = new ConversationUser();
 $user->rConversation = $conv->id;
@@ -1027,16 +1021,17 @@ $user->rPlayer = ID_JEANMI;
 $user->convPlayerStatement = ConversationUser::US_ADMIN;
 $user->convStatement = ConversationUser::CS_DISPLAY;
 $user->dLastView = Utils::now();
-ASM::$cum->add($user);
+$conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
+$conversationUserManager->add($user);
 
-$S_PAM_ALL = ASM::$pam->getCurrentSession();
-ASM::$pam->newSession(FALSE);
-ASM::$pam->load(
-	['rColor' => $AVAILABLE_FACTIONS, 'statement' => PAM_DEAD]
+$S_PAM_ALL = $playerManager->getCurrentSession();
+$playerManager->newSession(FALSE);
+$playerManager->load(
+	['rColor' => $availableFactions, 'statement' => Player::DEAD]
 );
 
-for ($i = 0; $i < ASM::$pam->size(); $i++) {
-	$player = ASM::$pam->get($i);
+for ($i = 0; $i < $playerManager->size(); $i++) {
+	$player = $playerManager->get($i);
 
 	$conv = new Conversation();
 	$conv->messages = 0;
@@ -1044,7 +1039,7 @@ for ($i = 0; $i < ASM::$pam->size(); $i++) {
 	$conv->title = 'Communication de ' . ColorResource::getInfo($player->rColor, 'popularName');
 	$conv->dCreation = Utils::now();
 	$conv->dLastMessage = Utils::now();
-	ASM::$cvm->add($conv);
+	$conversationManager->add($conv);
 
 	$user = new ConversationUser();
 	$user->rConversation = $conv->id;
@@ -1052,10 +1047,10 @@ for ($i = 0; $i < ASM::$pam->size(); $i++) {
 	$user->convPlayerStatement = ConversationUser::US_ADMIN;
 	$user->convStatement = ConversationUser::CS_DISPLAY;
 	$user->dLastView = Utils::now();
-	ASM::$cum->add($user);
+	$conversationUserManager->add($user);
 }
 
-ASM::$pam->changeSession($S_PAM_ALL);
+$playerManager->changeSession($S_PAM_ALL);
 
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table notification</h2>';
@@ -1230,16 +1225,17 @@ $db->query("CREATE TABLE IF NOT EXISTS `colorLink` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 $values = '';
-ASM::$clm->load();
-for ($i = 1; $i < ASM::$clm->size(); $i++) {
-	for ($j = 1; $j < ASM::$clm->size(); $j++) {
-		if (!(($i == ASM::$clm->size() - 1) && ($j == ASM::$clm->size() - 1))) {
-			$values .= '(' . ASM::$clm->get($i)->id . ',' . ASM::$clm->get($j)->id . ',' . 0 .'),';
+$colorManager = $this->getContainer()->get('demeter.color_manager');
+$colorManager->load();
+for ($i = 1; $i < $colorManager->size(); $i++) {
+	for ($j = 1; $j < $colorManager->size(); $j++) {
+		if (!(($i == $colorManager->size() - 1) && ($j == $colorManager->size() - 1))) {
+			$values .= '(' . $colorManager->get($i)->id . ',' . $colorManager->get($j)->id . ',' . 0 .'),';
 		}
 	}
 }
 
-$values .= '(' . ASM::$clm->get(ASM::$clm->size() - 1)->id . ',' . ASM::$clm->get(ASM::$clm->size() - 1)->id . ',' . 0 .');';
+$values .= '(' . $colorManager->get($colorManager->size() - 1)->id . ',' . $colorManager->get($colorManager->size() - 1)->id . ',' . 0 .');';
 
 echo '<h3>Remplissage de la table colorLink</h3>';
 $qr = $db->prepare("INSERT INTO `colorLink` (`rColor`, `rColorLinked`, `statement`) VALUES" . $values);
@@ -1260,6 +1256,6 @@ if (DATA_ANALYSIS) {
 
 echo '<h1>Génération de la galaxie</h1>';
 
-GalaxyGenerator::generate();
-echo GalaxyGenerator::getLog();
-?>
+$galaxyGenerator = $this->getContainer()->get('gaia.galaxy_generator');
+$galaxyGenerator->generate();
+echo $galaxyGenerator->getLog();
