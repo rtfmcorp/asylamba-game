@@ -12,8 +12,6 @@
 
 namespace Asylamba\Modules\Zeus\Model;
 
-use Asylamba\Classes\Worker\CTR;
-
 class Player {
 	public $id = 0; 
 	public $bind = 0;
@@ -77,6 +75,14 @@ class Player {
 	public function getDLastActivity()		{ return $this->dLastActivity; }
 	public function getPremium()			{ return $this->premium; }
 	public function getStatement()			{ return $this->statement; }
+	
+	/**
+	 * @return boolean
+	 */
+	public function isSynchronized()
+	{
+		return $this->synchronized;
+	}
 
 	public function setId($v, $playerId) { 
 		$this->id = $v; 
@@ -89,40 +95,26 @@ class Player {
 	}
 	public function setRColor($v) { 
 		$this->rColor = $v; 
-		if ($this->synchronized) {
-			CTR::$data->get('playerInfo')->add('color', $v);
-		}
 	}
 	public function setName($v) {
-		$this->name = $v; 
-		if ($this->synchronized) {
-			CTR::$data->get('playerInfo')->add('name', $v);
-		}
+		$this->name = $v;
 	}
 	public function setAvatar($v) { 
-		$this->avatar = $v; 
-		if ($this->synchronized) {
-			CTR::$data->get('playerInfo')->add('avatar', $v);
-		}
+		$this->avatar = $v;
 	}
-	public function setStatus($v) 			{ $this->status = $v; }
+	public function setStatus($v) 
+	{
+		$this->status = $v;
+	}
+	
 	public function setCredit($v) { 
-		$this->credit = $v; 
-		if ($this->synchronized) {
-			CTR::$data->get('playerInfo')->add('credit', $v);
-		}
+		$this->credit = $v;
 	}
 	public function setExperience($v) { 
-		$this->experience = $v; 
-		if ($this->synchronized) {
-			CTR::$data->get('playerInfo')->add('experience', $v);
-		}
+		$this->experience = $v;
 	}
 	public function setLevel($v) { 
-		$this->level = $v; 
-		if ($this->synchronized) {
-			CTR::$data->get('playerInfo')->add('level', $v);
-		}
+		$this->level = $v;
 	}
 	public function setVictory($v) 			{ $this->victory = $v; }
 	public function setDefeat($v) 			{ $this->defeat = $v; }

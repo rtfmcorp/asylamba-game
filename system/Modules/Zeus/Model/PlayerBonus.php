@@ -15,9 +15,10 @@ namespace Asylamba\Modules\Zeus\Model;
 class PlayerBonus {
 	// ATTRIBUTES
 	public $rPlayer;
-	private $synchronized = FALSE;
-	private $technology;
+	public $synchronized = FALSE;
+	public $technology;
 	public $bonus;
+	public $playerColor;
 
 	// CONSTANTS 
 	const BONUS_QUANTITY = 28;

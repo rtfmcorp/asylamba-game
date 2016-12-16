@@ -20,9 +20,12 @@ use Asylamba\Classes\Worker\API;
 use Asylamba\Classes\Container\Session;
 
 use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Athena\Model\Transaction;
 
 use Asylamba\Modules\Demeter\Manager\ColorManager;
 use Asylamba\Modules\Ares\Manager\CommanderManager;
@@ -35,6 +38,11 @@ use Asylamba\Modules\Promethee\Manager\ResearchManager;
 use Asylamba\Modules\Athena\Manager\TransactionManager;
 use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
 use Asylamba\Modules\Promethee\Manager\TechnologyManager;
+
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Container\ArrayList;
+
+use Asylamba\Classes\Exception\ErrorException;
 
 class PlayerManager extends Manager {
 	/** @var string */
@@ -61,10 +69,14 @@ class PlayerManager extends Manager {
 	protected $commercialRouteManager;
 	/** @var TechnologyManager **/
 	protected $technologyManager;
+	/** @var PlayerBonusManager **/
+	protected $playerBonusManager;
 	/** @var CTC **/
 	protected $ctc;
 	/** @var Session **/
 	protected $session;
+	/** @var int **/
+	protected $baseLevelPlayer;
 	
 	/**
 	 * @param Database $database
@@ -79,8 +91,10 @@ class PlayerManager extends Manager {
 	 * @param TransactionManager $transactionManager
 	 * @param CommercialRouteManager $commercialRouteManager
 	 * @param TechnologyManager $technologyManager
+	 * @param PlayerBonusManager $playerBonusManager
 	 * @param CTC $ctc
 	 * @param Session $session
+	 * @param int $baseLevelPlayer
 	 */
 	public function __construct(
 		Database $database,
@@ -95,8 +109,10 @@ class PlayerManager extends Manager {
 		TransactionManager $transactionManager,
 		CommercialRouteManager $commercialRouteManager,
 		TechnologyManager $technologyManager,
+		PlayerBonusManager $playerBonusManager,
 		CTC $ctc,
-		Session $session
+		Session $session,
+		$baseLevelPlayer
 	)
 	{
 		parent::__construct($database);
@@ -111,8 +127,10 @@ class PlayerManager extends Manager {
 		$this->transactionManager = $transactionManager;
 		$this->commercialRouteManager = $commercialRouteManager;
 		$this->technologyManager = $technologyManager;
+		$this->playerBonusManager = $playerBonusManager;
 		$this->ctc = $ctc;
 		$this->session = $session;
+		$this->baseLevelPlayer = $baseLevelPlayer;
 	}
 			
 	public function load($where = array(), $order = array(), $limit = array()) {
@@ -194,6 +212,7 @@ class PlayerManager extends Manager {
 		while ($aw = $qr->fetch()) {
 			$p = new Player();
 
+			
 			$p->setId($aw['id'], $playerId);
 			$p->setBind($aw['bind']);
 			$p->setRColor($aw['rColor']);
@@ -225,10 +244,30 @@ class PlayerManager extends Manager {
 
 			$currentP = $this->_Add($p);
 
+			if ($currentP->isSynchronized()) {
+				$this->saveSessionData($currentP);
+			}
+			
 			if ($this->currentSession->getUMode()) {
 				$this->uMethod($currentP);
 			}
 		}
+	}
+	
+	/**
+	 * @param Player $player
+	 */
+	public function saveSessionData(Player $player)
+	{
+		if(!$this->session->exist('playerInfo')) {
+			$this->session->add('playerInfo', new ArrayList());
+		}
+		$this->session->get('playerInfo')->add('color', $player->getRColor());
+		$this->session->get('playerInfo')->add('name', $player->getName());
+		$this->session->get('playerInfo')->add('avatar', $player->getAvatar());
+		$this->session->get('playerInfo')->add('credit', $player->getCredit());
+		$this->session->get('playerInfo')->add('experience', $player->getExperience());
+		$this->session->get('playerInfo')->add('level', $player->getLevel());
 	}
 
 	public function add(Player $p) {
@@ -533,8 +572,8 @@ class PlayerManager extends Manager {
 				$this->orbitalBaseManager->load(array('rPlayer' => $player->id));
 
 				# load the bonus
-				$playerBonus = new PlayerBonus($player->id);
-				$playerBonus->load();
+				$playerBonus = $this->playerBonusManager->getBonusByPlayer($player->id);
+				$this->playerBonusManager->load($playerBonus);
 
 				# load the commanders
 				$S_COM1 = $this->commanderManager->getCurrentSession();
@@ -564,7 +603,7 @@ class PlayerManager extends Manager {
 				$this->transactionManager->load(array('rPlayer' => $player->id, 'type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_PROPOSED));
 
 				foreach ($hours as $key => $hour) {
-					$this->ctc->add($hour, $this, 'uCredit', $player, array($this->orbitalBaseManager->getCurrentSession(), $playerBonus, $this->commanderManager->getCurrentSession(), $this->researchManager->getCurrentSession(), $this->colorManager->getCurrentSession(), $this->transactionManager->getCurrentSession()));
+					$this->ctc->add($hour, $this, 'uCredit', $player, array($player, $this->orbitalBaseManager->getCurrentSession(), $playerBonus, $this->commanderManager->getCurrentSession(), $this->researchManager->getCurrentSession(), $this->colorManager->getCurrentSession(), $this->transactionManager->getCurrentSession()));
 				}
 				$this->transactionManager->changeSession($S_TRM1);
 				$this->colorManager->changeSession($S_CLM1);
@@ -576,7 +615,8 @@ class PlayerManager extends Manager {
 		}
 	}
 
-	public function uCredit($obmSession, $playerBonus, $comSession, $rsmSession, $clmSession, $trmSession) {
+	public function uCredit(Player $player, $obmSession, $playerBonus, $comSession, $rsmSession, $clmSession, $trmSession) {
+		
 		$S_OBM1 = $this->orbitalBaseManager->getCurrentSession();
 		$this->orbitalBaseManager->changeSession($obmSession);
 
@@ -607,7 +647,7 @@ class PlayerManager extends Manager {
 			$S_CRM1 =  $this->commercialRouteManager->getCurrentSession();
 			$this->commercialRouteManager->changeSession($base->routeManager);
 			for ($r = 0; $r < $this->commercialRouteManager->size(); $r++) {
-				if ($this->commercialRouteManager->get($r)->getStatement() == CRM_ACTIVE) {
+				if ($this->commercialRouteManager->get($r)->getStatement() == CommercialRoute::ACTIVE) {
 					$routesIncome += $this->commercialRouteManager->get($r)->getIncome();
 				}
 			}
@@ -708,14 +748,14 @@ class PlayerManager extends Manager {
 		for ($i = ($this->commanderManager->size() - 1); $i >= 0; $i--) {
 			$commander = $this->commanderManager->get($i);
 			if ($commander->getStatement() == 1 OR $commander->getStatement() == 2) {
-				if ($newCredit >= (COM_LVLINCOMECOMMANDER * $commander->getLevel())) {
-					$newCredit -= (COM_LVLINCOMECOMMANDER * $commander->getLevel());
+				if ($newCredit >= (Commander::LVLINCOMECOMMANDER * $commander->getLevel())) {
+					$newCredit -= (Commander::LVLINCOMECOMMANDER * $commander->getLevel());
 				} else {
 					# on remet les vaisseaux dans les hangars
 					$commander->emptySquadrons();
 					
 					# on vend le commandant
-					$commander->setStatement(COM_ONSALE);
+					$commander->setStatement(Commander::ONSALE);
 					$commander->setRPlayer(ID_GAIA);
 
 					# TODO : vendre le commandant au marché 
@@ -780,7 +820,7 @@ class PlayerManager extends Manager {
 				$newCredit -= $cost;
 			} else {
 				# on vend le commandant car on n'arrive pas à payer la flotte (trash hein)
-				$commander->setStatement(COM_ONSALE);
+				$commander->setStatement(Commander::ONSALE);
 				$commander->setRPlayer(ID_GAIA);
 
 				$n = new Notification();
@@ -851,15 +891,14 @@ class PlayerManager extends Manager {
 			$informaticTech += $informaticTech * $playerBonus->bonus->get(PlayerBonus::UNI_INVEST) / 100;
 
 			$tech = $this->researchManager->get();
-			$tech->update($player->id, $naturalTech, $lifeTech, $socialTech, $informaticTech);
+			$this->researchManager->update($tech, $player->id, $naturalTech, $lifeTech, $socialTech, $informaticTech);
 		} else {
-			CTR::$alert->add('une erreur est survenue lors de la mise à jour des investissements de recherche');
-			CTR::$alert->add(' pour le joueur ' . $player->id . '.', ALERT_STD_ERROR);
+			throw new ErrorException('une erreur est survenue lors de la mise à jour des investissements de recherche pour le joueur ' . $player->id . '.');
 		}
 		$this->researchManager->changeSession($S_RSM1);
 
 		$player->credit = $newCredit;
-		if ($player->synchronized) {
+		if ($player->isSynchronized()) {
 			$this->session->get('playerInfo')->add('credit', $newCredit);
 		}
 
@@ -867,7 +906,7 @@ class PlayerManager extends Manager {
 	}
 
 	// OBJECT METHOD
-	public function increaseCredit($credit) {
+	public function increaseCredit(Player $player, $credit) {
 		$player->credit += abs($credit);
 
 		if ($player->synchronized) {
@@ -875,27 +914,27 @@ class PlayerManager extends Manager {
 		}
 	}
 
-	public function decreaseCredit($credit) {
+	public function decreaseCredit(Player $player, $credit) {
 		if (abs($credit) > $player->credit) {
 			$player->credit = 0;
 		} else {
 			$player->credit -= abs($credit);
 		}
-		if ($player->synchronized) {
+		if ($player->isSynchronized()) {
 			$this->session->get('playerInfo')->add('credit', $player->credit);
 		}
 	}
 
-	public function increaseExperience($exp) {
+	public function increaseExperience(Player $player, $exp) {
 		$exp = round($exp);
 		$player->experience += $exp;
-		if ($player->synchronized) {
+		if ($player->isSynchronized()) {
 			$this->session->get('playerInfo')->add('experience', $player->experience);
 		}
-		$nextLevel =  PAM_BASELVLPLAYER * pow(2, ($player->level - 1));
+		$nextLevel =  $this->baseLevelPlayer * pow(2, ($player->level - 1));
 		if ($player->experience >= $nextLevel) {
 			$player->level++;
-			if ($player->synchronized) {
+			if ($player->isSynchronized()) {
 				$this->session->get('playerInfo')->add('level', $player->level);
 			}
 			$n = new Notification();
@@ -924,7 +963,7 @@ class PlayerManager extends Manager {
 				$this->newSession();
 				$this->load(array('id' => $player->rGodfather));
 				if ($this->size() == 1) {
-					$this->get()->increaseCredit(1000000);
+					$this->increaseCredit($this->get(), 1000000);
 
 					# send a message to the godfather
 					$n = new Notification();
