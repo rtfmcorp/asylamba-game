@@ -16,20 +16,12 @@ class CheckName {
 	public function setMaxLenght($i){ $this->maxLenght = $i; }
 
 	public function checkLength($str) {
-		$lenght = strlen($str);
-		if ($lenght >= $this->minLenght AND $lenght <= $this->maxLenght) {
-			return TRUE;
-		} else {
-			return FALSE;
-		}
+		$length = strlen($str);
+		return $length >= $this->minLenght && $length <= $this->maxLenght;
 	}
 
 	public function checkChar($str) {
-		if (preg_match('^[\p{L}\p{N}]*\p{L}[\p{L}\p{N}]*$^', $str)) {
-			return TRUE;
-		} else {
-			return FALSE;
-		}
+		return preg_match('^[\p{L}\p{N}]*\p{L}[\p{L}\p{N}]*$^', $str);
 	}
 
 	public function checkBeauty($str) {
