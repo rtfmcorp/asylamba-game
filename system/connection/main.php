@@ -2,16 +2,19 @@
 # vérification du joueur
 # ajout des informations dans le managers
 
-use Asylamba\Classes\Library\Security;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Worker\API;
 
+$security = $this->getContainer()->get('security');
+$request = $this->getContainer()->get('app.request');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$session = $this->getContainer()->get('app.session');
+
 # extraction du bindkey
-$query  = Security::uncrypt(CTR::$get->get('bindkey'), KEY_SERVER);
-$bindkey= Security::extractBindkey($query);
-$time 	= Security::extractTime($query);
+$query  = $security->uncrypt($request->query->get('bindkey'), KEY_SERVER);
+$bindkey= $security->extractBindkey($query);
+$time 	= $security->extractTime($query);
 
 # vérification de la validité du bindkey
 if (abs((int)$time - time()) > 300) {
@@ -19,16 +22,16 @@ if (abs((int)$time - time()) > 300) {
 	exit();
 }
 
-$S_PAM1 = ASM::$pam->getCurrentSession();
-ASM::$pam->newSession();
-ASM::$pam->load(array('bind' => $bindkey, 'statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY)));
+$S_PAM1 = $playerManager->getCurrentSession();
+$playerManager->newSession();
+$playerManager->load(array('bind' => $bindkey, 'statement' => array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY)));
 
-if (ASM::$pam->size() == 1) {
-	$player = ASM::$pam->get();
-	$player->setStatement(PAM_ACTIVE);
+if ($playerManager->size() == 1) {
+	$player = $playerManager->get();
+	$player->setStatement(Player::ACTIVE);
 
-	CTR::$data->initLastUpdate();
-	CTR::$data->add('token', Utils::generateString(5));
+	$session->initLastUpdate();
+	$session->add('token', Utils::generateString(5));
 
 	include_once CONNECTION . '/create-session.php';
 
@@ -42,15 +45,15 @@ if (ASM::$pam->size() == 1) {
 		$api->confirmConnection($bindkey, APP_ID);
 	}
 
-	# redirection vers page de départ
-	if (CTR::$get->equal('mode', 'splash')) {
-		CTR::redirect('profil/mode-splash');
-	} else {
-		CTR::redirect('profil');
-	}
+	// redirection vers page de départ
+	$this->getContainer()->get('app.response')->redirect(
+		($request->query->get('mode') === 'splash')
+		? 'profil/mode-splash'
+		: 'profil'
+	);
 } else { 
 	header('Location: ' . GETOUT_ROOT . 'profil');
 	exit();
 }
 
-ASM::$pam->changeSession($S_PAM1);
+$playerManager->changeSession($S_PAM1);
