@@ -12,7 +12,7 @@
 
 namespace Asylamba\Modules\Ares\Model;
 
-use Asylamba\Modules\Ares\FightController;
+use Asylamba\Modules\Ares\Manager\FightManager;
 
 use Asylamba\Modules\Ares\Model\LiveReport;
 use Asylamba\Modules\Ares\Model\Ship;
@@ -129,7 +129,7 @@ class Squadron {
 	private function chooseEnemy($enemyCommander) {
 		$nbrShipsInLine = 0;
 		foreach ($enemyCommander->getArmy() as $enemySquadron) {
-			if ($enemySquadron->getLineCoord() * 3 <= FightController::getCurrentLine()) {
+			if ($enemySquadron->getLineCoord() * 3 <= FightManager::getCurrentLine()) {
 				$nbrShipsInLine += $enemySquadron->getNbrShips();
 			}
 		}
@@ -140,7 +140,7 @@ class Squadron {
 		} else {
 			$aleaNbr = rand(0, count($enemyCommander->squadronsIds) - 1);
 			for($i = 0; $i < $enemyCommander->getLevel(); $i++) {
-				if ($enemyCommander->getSquadron($aleaNbr)->getLineCoord() * 3 <= FightController::getCurrentLine() AND $enemyCommander->getSquadron($aleaNbr)->getNbrShips() > 0) {
+				if ($enemyCommander->getSquadron($aleaNbr)->getLineCoord() * 3 <= FightManager::getCurrentLine() AND $enemyCommander->getSquadron($aleaNbr)->getNbrShips() > 0) {
 					break;
 				} else {
 					if ($aleaNbr == count($enemyCommander->squadronsIds) - 1) {
