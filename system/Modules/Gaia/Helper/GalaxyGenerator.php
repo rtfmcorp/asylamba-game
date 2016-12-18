@@ -31,7 +31,6 @@ abstract class GalaxyGenerator {
 
 	public static function generate() {
 		self::clear();
-
 		# generation
 		self::generateSector();
 		self::generateSystem();
