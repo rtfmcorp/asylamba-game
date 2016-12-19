@@ -7,6 +7,7 @@ var less = require('gulp-less');
 var rename = require('gulp-rename');
 var replace = require('gulp-replace');
 var imagemin = require('gulp-imagemin');
+var jshint = require('gulp-jshint');
 
 
 // -------------------- GULP TASKS --------------------
@@ -39,4 +40,14 @@ gulp.task('images', () => {
 	gulp.src('public/media-src/**/*')
 		.pipe(imagemin({ progressive: true }))
 		.pipe(gulp.dest('public/media'))
+});
+
+// JS hint report
+gulp.task('jshint', function() {
+	gulp.src('./public/js/main.desktop.js')
+		.pipe(jshint())
+		.pipe(jshint.reporter('default'));
+	gulp.src('./public/js/main.js')
+		.pipe(jshint())
+		.pipe(jshint.reporter('default'));
 });
