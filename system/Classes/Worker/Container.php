@@ -69,18 +69,11 @@ class Container {
      * @return object
      * @throws \InvalidArgumentException
      */
-    public function get($key, $force = false)
+    public function get($key, $debug = false)
     {
         if (!$this->hasService($key)) {
             throw new \InvalidArgumentException("Service $key not found");
         }
-		// In case a proxy service was generated to avoid circular dependency, we have to generate the right service then
-		if ($this->services[$key]['instance'] instanceof GhostObjectInterface && $force === true) {
-			echo("get<br>");
-			var_dump(spl_object_hash($this->services[$key]['instance']));
-			echo("<br>");
-            $this->loadService($key);
-		}
         if (empty($this->services[$key]['instance'])) {
             $this->loadService($key);
         }
@@ -186,7 +179,7 @@ class Container {
 			array $parameters,
 			&$initializer,
 			array $properties
-		) use ($key, $dependency) {
+		) use ($key, &$dependency) {
 			// Disable the proxy initialization. It prevents it from executing the closure again
 			$initializer = null;
 			// For each property of the proxy class, we check if it matchs with the service arguments
@@ -225,7 +218,7 @@ class Container {
 			if ($ghostObject instanceof Manager) {
 				$ghostObject->newSession();
 			}
-			
+			$dependency['instance'] = $ghostObject;
 			return true; // confirm that initialization occurred correctly
 		});
 	}
