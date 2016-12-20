@@ -2,7 +2,7 @@
 
 require_once('vendor/autoload.php');
 
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Worker\Application;
 
 # définition des ROOT
 define('PUBLICR',		'http://localhost/[ your path here ]/public/');
@@ -38,20 +38,5 @@ define('COMPONENT', 	SYSTEMR . 'views/components/');
 include CONFIG . 'app.config.local.php';
 include CONFIG . 'app.config.global.php';
 
-# définition des ROOT des MODULES
-include_once MODULES . 'Ares/main.php';
-include_once MODULES . 'Hermes/main.php';
-include_once MODULES . 'Gaia/main.php';
-include_once MODULES . 'Zeus/main.php';
-include_once MODULES . 'Athena/main.php';
-include_once MODULES . 'Promethee/main.php';
-include_once MODULES . 'Artemis/main.php';
-//include_once MODULES . 'Apollon/main.php';
-include_once MODULES . 'Demeter/main.php';
-include_once MODULES . 'Atlas/main.php';
-
-# Action du controller
-CTR::init();
-CTR::checkPermission();
-CTR::getInclude();
-CTR::save();
+$application = new Application();
+$application->boot();
