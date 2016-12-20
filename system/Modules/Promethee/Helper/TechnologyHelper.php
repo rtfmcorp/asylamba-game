@@ -4,6 +4,7 @@ namespace Asylamba\Modules\Promethee\Helper;
 
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Athena\Helper\OrbitalBaseHelper;
 use Asylamba\Classes\Container\StackList;
 use Asylamba\Classes\Container\ArrayList;
 use Asylamba\Modules\Promethee\Model\Technology;
@@ -12,17 +13,21 @@ use Asylamba\Modules\Promethee\Resource\TechnologyResource;
 use Asylamba\Classes\Exception\ErrorException;
 
 class TechnologyHelper {
+	/** @var OrbitalBaseHelper **/
+	protected $orbitalBaseHelper;
 	/** @var ResearchHelper **/
 	protected $researchHelper;
 	/** @var int **/
 	protected $researchQuantity;
 	
 	/**
+	 * @param OrbitalBaseHelper $orbitalBaseHelper
 	 * @param ResearchHelper $researchHelper
 	 * @param int $researchQuantity
 	 */
-	public function __construct(ResearchHelper $researchHelper, $researchQuantity)
+	public function __construct(OrbitalBaseHelper $orbitalBaseHelper, ResearchHelper $researchHelper, $researchQuantity)
 	{
+		$this->orbitalBaseHelper = $orbitalBaseHelper;
 		$this->researchHelper = $researchHelper;
 		$this->researchQuantity = $researchQuantity;
 	}
@@ -105,7 +110,7 @@ class TechnologyHelper {
 				// $arg1 est un objet de type OrbitalBase
 				// $arg2 est le nombre de technologies dans la queue
 				case 'queue' : 
-					$maxQueue = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::TECHNOSPHERE, 'level', $arg1->levelTechnosphere, 'nbQueues');
+					$maxQueue = $this->orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::TECHNOSPHERE, 'level', $arg1->levelTechnosphere, 'nbQueues');
 					return ($arg2 < $maxQueue) ? TRUE : FALSE;
 					break;
 				// a-t-on le droit de construire ce niveau ?

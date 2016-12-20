@@ -1,7 +1,5 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('app.session');
 

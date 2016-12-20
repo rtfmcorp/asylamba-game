@@ -4,36 +4,44 @@
 # int baseId 		id de la base orbitale
 # int building 	 	id du bâtiment
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Exception\FormException;
+use Asylamba\Classes\Exception\ErrorException;
 
-for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
+$buildingResourceRefund = $this->getContainer()->getParameter('athena.building.building_queue_resource_refund');
+
+for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
+	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-$baseId = Utils::getHTTPData('baseid');
-$building = Utils::getHTTPData('building');
+$baseId = $request->query->get('baseid');
+$building = $request->query->get('building');
 
 
 if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
-	if (OrbitalBaseResource::isABuilding($building)) {
-		$S_OBM1 = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession();
-		ASM::$obm->load(array('rPlace' => $baseId, 'rPlayer' => CTR::$data->get('playerId')));
+	if ($orbitalBaseHelper->isABuilding($building)) {
+		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
+		$orbitalBaseManager->newSession();
+		$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
 
-		if (ASM::$obm->size() > 0) {
+		if ($orbitalBaseManager->size() > 0) {
 
-			$ob = ASM::$obm->get();
+			$ob = $orbitalBaseManager->get();
 
-			$S_BQM1 = ASM::$bqm->getCurrentSession();
-			ASM::$bqm->newSession();
-			ASM::$bqm->load(array('rOrbitalBase' => $baseId), array('dEnd'));
+			$S_BQM1 = $buildingQueueManager->getCurrentSession();
+			$buildingQueueManager->newSession();
+			$buildingQueueManager->load(array('rOrbitalBase' => $baseId), array('dEnd'));
 
 			$index = NULL;
-			for ($i = 0; $i < ASM::$bqm->size(); $i++) {
-				$queue = ASM::$bqm->get($i); 
+			for ($i = 0; $i < $buildingQueueManager->size(); $i++) {
+				$queue = $buildingQueueManager->get($i); 
 				# get the last element from the correct building
 				if ($queue->buildingNumber == $building) {
 					$index = $i;
@@ -50,8 +58,8 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 
 			if ($index !== NULL) {
 				# shift
-				for ($i = $index + 1; $i < ASM::$bqm->size(); $i++) {
-					$queue = ASM::$bqm->get($i);
+				for ($i = $index + 1; $i < $buildingQueueManager->size(); $i++) {
+					$queue = $buildingQueueManager->get($i);
 
 					$queue->dEnd = Utils::addSecondsToDate($dStart, Utils::interval($queue->dStart, $queue->dEnd, 's'));
 					$queue->dStart = $dStart;
@@ -59,24 +67,24 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 					$dStart = $queue->dEnd;
 				}
 
-				ASM::$bqm->deleteById($idToRemove);
+				$buildingQueueManager->deleteById($idToRemove);
 
 				// give the resources back
-				$resourcePrice = OrbitalBaseResource::getBuildingInfo($building, 'level', $targetLevel, 'resourcePrice');
-				$resourcePrice *= BQM_RESOURCERETURN;
+				$resourcePrice = $orbitalBaseHelper->getBuildingInfo($building, 'level', $targetLevel, 'resourcePrice');
+				$resourcePrice *= $buildingResourceRefund;
 				$ob->increaseResources($resourcePrice, TRUE);
-				CTR::$alert->add('Construction annulée, vous récupérez le ' . BQM_RESOURCERETURN * 100 . '% du montant investi pour la construction', ALERT_STD_SUCCESS);
+				$response->flashbag->add('Construction annulée, vous récupérez le ' . $buildingResourceRefund * 100 . '% du montant investi pour la construction', Response::FLASHBAG_SUCCESS);
 			} else {
-				CTR::$alert->add('suppression de bâtiment impossible', ALERT_STD_ERROR);
+				throw new ErrorException('suppression de bâtiment impossible');
 			}
-			ASM::$bqm->changeSession($S_BQM1);
+			$buildingQueueManager->changeSession($S_BQM1);
 		} else {
-			CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);
+			throw new ErrorException('cette base ne vous appartient pas');
 		}
-		ASM::$obm->changeSession($S_OBM1);
+		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
-		CTR::$alert->add('le bâtiment indiqué n\'est pas valide', ALERT_STD_ERROR);
+		throw new ErrorException('le bâtiment indiqué n\'est pas valide');
 	}
 } else {
-	CTR::$alert->add('pas assez d\'informations pour annuler la construction d\'un bâtiment', ALERT_STD_FILLFORM);
+	throw new FormException('pas assez d\'informations pour annuler la construction d\'un bâtiment');
 }

@@ -26,6 +26,7 @@ services:
     promethee.technology_helper:
         class: Asylamba\Modules\Promethee\Helper\TechnologyHelper
         arguments:
+            - "@athena.orbital_base_helper"
             - "@promethee.research_helper"
             - "%promethee.research.quantity"
             

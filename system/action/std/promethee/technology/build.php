@@ -4,69 +4,78 @@
 # int baseid 		id de la base orbitale
 # int techno 	 	id de la technologie
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
-use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Promethee\Model\TechnologyQueue;
-use Asylamba\Modules\Promethee\Resource\TechnologyResource;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 
-for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
+$database = $this->getContainer()->get('database');
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
+$technologyQueueManager = $this->getContainer()->get('promethee.technology_queue_manager');
+$technologyHelper = $this->getContainer()->get('promethee.technology_helper');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$researchManager = $this->getContainer()->get('promethee.research_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+
+for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
+	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-$baseId = Utils::getHTTPData('baseid');
-$techno = Utils::getHTTPData('techno');
+$baseId = $request->query->get('baseid');
+$techno = $request->query->get('techno');
 
 
 if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
-	if (TechnologyResource::isATechnology($techno) && !TechnologyResource::isATechnologyNotDisplayed($techno)) {
+	if ($technologyHelper->isATechnology($techno) && !$technologyHelper->isATechnologyNotDisplayed($techno)) {
 		
-		$S_TQM1 = ASM::$tqm->getCurrentSession();
-		ASM::$tqm->newSession(ASM_UMODE);
-		ASM::$tqm->load(array('rPlayer' => CTR::$data->get('playerId'), 'technology' => $techno));
+		$S_TQM1 = $technologyQueueManager->getCurrentSession();
+		$technologyQueueManager->newSession(ASM_UMODE);
+		$technologyQueueManager->load(array('rPlayer' => $session->get('playerId'), 'technology' => $techno));
 
-		if (ASM::$tqm->size() == 0) {
+		if ($technologyQueueManager->size() == 0) {
 
-			$technos = new Technology(CTR::$data->get('playerId'));
+			$technos = new Technology($session->get('playerId'));
 			$targetLevel = $technos->getTechnology($techno) + 1;
-			ASM::$tqm->newSession(ASM_UMODE);
-			ASM::$tqm->load(array('rPlace' => $baseId), array('dEnd'));
-			for ($i = 0; $i < ASM::$tqm->size(); $i++) { 
-				if (ASM::$tqm->get($i)->technology == $techno) {
+			$technologyQueueManager->newSession(ASM_UMODE);
+			$technologyQueueManager->load(array('rPlace' => $baseId), array('dEnd'));
+			for ($i = 0; $i < $technologyQueueManager->size(); $i++) { 
+				if ($technologyQueueManager->get($i)->technology == $techno) {
 					$targetLevel++;
 				}
 			}
 
-			$S_OBM1 = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession(ASM_UMODE);
-			ASM::$obm->load(array('rPlace' => $baseId, 'rPlayer' => CTR::$data->get('playerId')));
+			$S_OBM1 = $orbitalBaseManager->getCurrentSession();
+			$orbitalBaseManager->newSession(ASM_UMODE);
+			$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
 
-			if (ASM::$obm->size() > 0) {
-				$ob = ASM::$obm->get();
+			if ($orbitalBaseManager->size() > 0) {
+				$ob = $orbitalBaseManager->get();
 
-				$S_RSM1 = ASM::$rsm->getCurrentSession();
-				ASM::$rsm->newSession(ASM_UMODE);
-				ASM::$rsm->load(array('rPlayer' => CTR::$data->get('playerId')));
+				$S_RSM1 = $researchManager->getCurrentSession();
+				$researchManager->newSession(ASM_UMODE);
+				$researchManager->load(array('rPlayer' => $session->get('playerId')));
 
-				if (TechnologyResource::haveRights($techno, 'resource', $targetLevel, $ob->getResourcesStorage())
-					AND TechnologyResource::haveRights($techno, 'credit', $targetLevel, CTR::$data->get('playerInfo')->get('credit'))
-					AND TechnologyResource::haveRights($techno, 'queue', $ob, ASM::$tqm->size())
-					AND TechnologyResource::haveRights($techno, 'levelPermit', $targetLevel)
-					AND TechnologyResource::haveRights($techno, 'technosphereLevel', $ob->getLevelTechnosphere())
-					AND (TechnologyResource::haveRights($techno, 'research', $targetLevel, ASM::$rsm->get()->getResearchList()) === TRUE)
-					AND TechnologyResource::haveRights($techno, 'maxLevel', $targetLevel)
-					AND TechnologyResource::haveRights($techno, 'baseType', $ob->typeOfBase)) {
+				if ($technologyHelper->haveRights($techno, 'resource', $targetLevel, $ob->getResourcesStorage())
+					AND $technologyHelper->haveRights($techno, 'credit', $targetLevel, $session->get('playerInfo')->get('credit'))
+					AND $technologyHelper->haveRights($techno, 'queue', $ob, $technologyQueueManager->size())
+					AND $technologyHelper->haveRights($techno, 'levelPermit', $targetLevel)
+					AND $technologyHelper->haveRights($techno, 'technosphereLevel', $ob->getLevelTechnosphere())
+					AND ($technologyHelper->haveRights($techno, 'research', $targetLevel, $researchManager->getResearchList($researchManager->get())) === TRUE)
+					AND $technologyHelper->haveRights($techno, 'maxLevel', $targetLevel)
+					AND $technologyHelper->haveRights($techno, 'baseType', $ob->typeOfBase)) {
 
 					# tutorial
-					if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-						switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+					if ($session->get('playerInfo')->get('stepDone') == FALSE) {
+						switch ($session->get('playerInfo')->get('stepTutorial')) {
 							case TutorialResource::SHIP0_UNBLOCK:
 								if ($techno == Technology::SHIP0_UNBLOCK) {
 									TutorialHelper::setStepDone();
@@ -81,19 +90,19 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 					}
 
 					// load du joueur
-					$S_PAM1 = ASM::$pam->getCurrentSession();
-					ASM::$pam->newSession(ASM_UMODE);
-					ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+					$S_PAM1 = $playerManager->getCurrentSession();
+					$playerManager->newSession(ASM_UMODE);
+					$playerManager->load(array('id' => $session->get('playerId')));
 
 					// construit la nouvelle techno
 					$tq = new TechnologyQueue();
-					$tq->rPlayer = CTR::$data->get('playerId');
+					$tq->rPlayer = $session->get('playerId');
 					$tq->rPlace = $baseId;
 					$tq->technology = $techno;
 					$tq->targetLevel = $targetLevel;
-					$time = TechnologyResource::getInfo($techno, 'time', $targetLevel);
-					$bonusPercent = CTR::$data->get('playerBonus')->get(PlayerBonus::TECHNOSPHERE_SPEED);
-					if (CTR::$data->get('playerInfo')->get('color') == ColorResource::APHERA) {
+					$time = $technologyHelper->getInfo($techno, 'time', $targetLevel);
+					$bonusPercent = $session->get('playerBonus')->get(PlayerBonus::TECHNOSPHERE_SPEED);
+					if ($session->get('playerInfo')->get('color') == ColorResource::APHERA) {
 						# bonus if the player is from Aphera
 						$bonusPercent += ColorResource::BONUS_APHERA_TECHNO;
 					}
@@ -102,50 +111,49 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 					$bonusPercent += Game::getImprovementFromScientificCoef($ob->planetHistory);
 					
 					$bonus = round($time * $bonusPercent / 100);
-					if (ASM::$tqm->size() == 0) {
+					if ($technologyQueueManager->size() == 0) {
 						$tq->dStart = Utils::now();
 					} else {
-						$tq->dStart = ASM::$tqm->get(ASM::$tqm->size() - 1)->dEnd;
+						$tq->dStart = $technologyQueueManager->get($technologyQueueManager->size() - 1)->dEnd;
 					}
 					$tq->dEnd = Utils::addSecondsToDate($tq->dStart, round($time - $bonus));
-					ASM::$tqm->add($tq);
+					$technologyQueueManager->add($tq);
 
 					// débit resources
-					$ob->decreaseResources(TechnologyResource::getInfo($techno, 'resource', $targetLevel));
+					$orbitalBaseManager->decreaseResources($ob, $technologyHelper->getInfo($techno, 'resource', $targetLevel));
 					
 					// débit des crédits
-					ASM::$pam->get()->decreaseCredit(TechnologyResource::getInfo($techno, 'credit', $targetLevel));
+					$playerManager->decreaseCredit($playerManager->get(), $technologyHelper->getInfo($techno, 'credit', $targetLevel));
 					
 					// ajout de l'event dans le contrôleur
-					CTR::$data->get('playerEvent')->add($tq->dEnd, EVENT_BASE, $baseId);
+					$session->get('playerEvent')->add($tq->dEnd, EVENT_BASE, $baseId);
 
 					if (DATA_ANALYSIS) {
-						$db = Database::getInstance();
-						$qr = $db->prepare('INSERT INTO 
+						$qr = $database->prepare('INSERT INTO 
 							DA_BaseAction(`from`, type, opt1, opt2, weight, dAction)
 							VALUES(?, ?, ?, ?, ?, ?)'
 						);
-						$qr->execute([CTR::$data->get('playerId'), 2, $techno, $targetLevel, (DataAnalysis::resourceToStdUnit(TechnologyResource::getInfo($techno, 'resource', $targetLevel)) + DataAnalysis::creditToStdUnit(TechnologyResource::getInfo($techno, 'credit', $targetLevel))), Utils::now()]);
+						$qr->execute([$session->get('playerId'), 2, $techno, $targetLevel, (DataAnalysis::resourceToStdUnit($technologyHelper->getInfo($techno, 'resource', $targetLevel)) + DataAnalysis::creditToStdUnit($technologyHelper->getInfo($techno, 'credit', $targetLevel))), Utils::now()]);
 					}
 
 					// alerte
-					CTR::$alert->add('Développement de la technologie programmée', ALERT_STD_SUCCESS);
-					ASM::$pam->changeSession($S_PAM1);
+					$response->flashbag->add('Développement de la technologie programmée', Response::FLASHBAG_SUCCESS);
+					$playerManager->changeSession($S_PAM1);
 				} else {
-					CTR::$alert->add('les conditions ne sont pas remplies pour développer une technologie', ALERT_STD_ERROR);
+					throw new ErrorException('les conditions ne sont pas remplies pour développer une technologie');
 				}
-				ASM::$rsm->changeSession($S_RSM1);
+				$researchManager->changeSession($S_RSM1);
 			} else {
-				CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);	
+				throw new ErrorException('cette base ne vous appartient pas');	
 			}
-			ASM::$obm->changeSession($S_OBM1);
+			$orbitalBaseManager->changeSession($S_OBM1);
 		} else {
-			CTR::$alert->add('Cette technologie est déjà en construction', ALERT_STD_ERROR);
+			throw new ErrorException('Cette technologie est déjà en construction');
 		}
-		ASM::$tqm->changeSession($S_TQM1);
+		$technologyQueueManager->changeSession($S_TQM1);
 	} else {
-		CTR::$alert->add('la technologie indiquée n\'est pas valide', ALERT_STD_ERROR);
+		throw new ErrorException('la technologie indiquée n\'est pas valide');
 	}
 } else {
-	CTR::$alert->add('pas assez d\'informations pour développer une technologie', ALERT_STD_FILLFORM);
+	throw new FormException('pas assez d\'informations pour développer une technologie');
 }

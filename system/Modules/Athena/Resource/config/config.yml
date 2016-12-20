@@ -55,6 +55,7 @@ services:
             - "@zeus.player_manager"
             - "@zeus.player_bonus_manager"
             - "@athena.recycling_mission_manager"
+            - "@athena.recycling_log_manager"
             - "@gaia.place_manager"
             - "@ares.commander_manager"
             - "@hermes.notification_manager"
