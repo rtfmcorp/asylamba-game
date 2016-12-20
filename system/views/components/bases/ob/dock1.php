@@ -22,6 +22,7 @@ $shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
 $technologyManager = $this->getContainer()->get('promethee.technology_manager');
 $session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
+$shipResourceRefund = $this->getContainer()->getParameter('athena.building.ship_queue_resource_refund');
 
 $S_SQM1 = $shipQueueManager->getCurrentSession();
 $shipQueueManager->changeSession($ob_dock1->dock1Manager);
@@ -67,7 +68,7 @@ for ($i = 0; $i < 6; $i++) {
 	} elseif (!$shipHelper->haveRights($i, 'shipTree', $ob_dock1)) {
 		# ship tree
 		$but  = '<span class="button disable">';
-			$but .= 'il vous faut augmenter votre chantier alpha au niveau ' .  ShipResource::dockLevelNeededFor($i);
+			$but .= 'il vous faut augmenter votre chantier alpha au niveau ' .  $shipHelper->dockLevelNeededFor($i);
 		$but .= '</span>';
 	} else {
 		# usable ship
@@ -146,7 +147,7 @@ echo '<div class="component">';
 							? '<div class="item">'
 							: '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTime . '" data-progress-total-time="' . $totalTimeShips . '">';
 						echo '<a href="' . Format::actionBuilder('dequeueship', $sessionToken, ['baseid' => $ob_dock1->getId(), 'dock' => '1', 'queue' => $queue->id]) . '"' . 
-							'class="button hb lt" title="annuler la commande (attention, vous ne récupérerez que ' . SQM_RESOURCERETURN * 100 . '% du montant investi)">×</a>';
+							'class="button hb lt" title="annuler la commande (attention, vous ne récupérerez que ' . $shipResourceRefund * 100 . '% du montant investi)">×</a>';
 						echo  '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($queue->shipNumber, 'imageLink') . '.png" alt="" />';
 						echo '<strong>' . $queue->quantity . ' ' . ShipResource::getInfo($queue->shipNumber, 'codeName') . Format::addPlural($queue->quantity) . '</strong>';
 						

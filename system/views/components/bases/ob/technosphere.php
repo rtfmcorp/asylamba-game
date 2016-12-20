@@ -10,7 +10,6 @@
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Chronos;
-use Asylamba\Modules\Promethee\Resource\TechnologyResource;
 use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
@@ -21,9 +20,11 @@ use Asylamba\Classes\Library\Format;
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $technologyManager = $this->getContainer()->get('promethee.technology_manager');
 $technologyQueueManager = $this->getContainer()->get('promethee.technology_queue_manager');
+$technologyHelper = $this->getContainer()->get('promethee.technology_helper');
 $researchManager = $this->getContainer()->get('promethee.research_manager');
 $session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
+$technologyResourceRefund = $this->getContainer()->getParameter('promethee.technology_queue.resource_refund');
 
 $technology = $technologyManager->getPlayerTechnology($session->get('playerId'));
 
@@ -84,15 +85,15 @@ echo '<div class="component techno">';
 					if ($technologyQueueManager->get($i) !== FALSE) {
 						$queue = $technologyQueueManager->get($i);
 						$realSizeQueue++;
-						$totalTimeTechno += TechnologyResource::getInfo($queue->technology, 'time', $queue->targetLevel);
+						$totalTimeTechno += $technologyHelper->getInfo($queue->technology, 'time', $queue->targetLevel);
 						$remainingTotalTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
 
 						echo '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTotalTime . '" data-progress-total-time="' . $totalTimeTechno . '">';
 							echo '<a href="' . Format::actionBuilder('dequeuetechno', $sessionToken, ['baseid' => $ob_tech->getId(), 'techno' => $queue->technology]) . '"' . 
-								'class="button hb lt" title="annuler la recherche (attention, vous ne récupérerez que ' . TQM_RESOURCERETURN * 100 . '% du montant investi)">×</a>';
-							echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($queue->technology, 'imageLink') . '.png" alt="" />';
-							echo '<strong>' . TechnologyResource::getInfo($queue->technology, 'name');
-							if (!TechnologyResource::isAnUnblockingTechnology($queue->technology)) {
+								'class="button hb lt" title="annuler la recherche (attention, vous ne récupérerez que ' . $technologyResourceRefund * 100 . '% du montant investi)">×</a>';
+							echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . $technologyHelper->getInfo($queue->technology, 'imageLink') . '.png" alt="" />';
+							echo '<strong>' . $technologyHelper->getInfo($queue->technology, 'name');
+							if (!$technologyHelper->isAnUnblockingTechnology($queue->technology)) {
 								echo ' <span class="level">niv. ' . $queue->targetLevel . '</span>';
 							}
 							echo '</strong>';
@@ -122,7 +123,7 @@ echo '<div class="component techno">';
 echo '</div>';
 
 for ($i = 0; $i < Technology::QUANTITY; $i++) {
-	if (!TechnologyResource::isATechnologyNotDisplayed($i)) {
+	if (!$technologyHelper->isATechnologyNotDisplayed($i)) {
 		$but = ''; $sup = ''; $ctn = array(); $ctn[0] = ''; $ctn[1] = TRUE;
 		$disability = 'disable'; $closed = '';
 		$inQueue = FALSE;
@@ -143,21 +144,21 @@ for ($i = 0; $i < Technology::QUANTITY; $i++) {
 		}
 		$technologyQueueManager->changeSession($S_TQM2);
 		
-		$title = TechnologyResource::getInfo($i, 'name');
-		if (!TechnologyResource::isAnUnblockingTechnology($i) && $technology->getTechnology($i) != 0) {
+		$title = $technologyHelper->getInfo($i, 'name');
+		if (!$technologyHelper->isAnUnblockingTechnology($i) && $technology->getTechnology($i) != 0) {
 			$title .= ' [' . $technology->getTechnology($i) . ']';
 		}
 
-		if (TechnologyResource::isAnUnblockingTechnology($i)) {
-			$answer = TechnologyResource::haveRights($i, 'research', 1, $researchManager->getResearchList($researchManager->get()));
+		if ($technologyHelper->isAnUnblockingTechnology($i)) {
+			$answer = $technologyHelper->haveRights($i, 'research', 1, $researchManager->getResearchList($researchManager->get()));
 		} else {
-			$answer = TechnologyResource::haveRights($i, 'research', $technology->getTechnology($i) + 1, $researchManager->getResearchList($researchManager->get()));
+			$answer = $technologyHelper->haveRights($i, 'research', $technology->getTechnology($i) + 1, $researchManager->getResearchList($researchManager->get()));
 		}
 
-		if (!TechnologyResource::haveRights($i, 'technosphereLevel', $ob_tech->getLevelTechnosphere())) {
+		if (!$technologyHelper->haveRights($i, 'technosphereLevel', $ob_tech->getLevelTechnosphere())) {
 			# building
 			$but  .= '<span class="button disable">';
-				$but .= 'il vous faut augmenter votre technosphère au niveau ' . TechnologyResource::getInfo($i, 'requiredTechnosphere');
+				$but .= 'il vous faut augmenter votre technosphère au niveau ' . $technologyHelper->getInfo($i, 'requiredTechnosphere');
 			$but .= '</span>';
 		} elseif ($answer !== TRUE) {
 			# recherche
@@ -173,14 +174,14 @@ for ($i = 0; $i < Technology::QUANTITY; $i++) {
 			$disability = '';
 
 			# compute time to build with the bonuses
-			$timeToBuild = TechnologyResource::getInfo($i, 'time', $technology->getTechnology($i) + 1);
+			$timeToBuild = $technologyHelper->getInfo($i, 'time', $technology->getTechnology($i) + 1);
 			$timeToBuild -= round($timeToBuild * $totalBonus / 100);
 												# warning : $totalBonus est défini plus haut (ne pas inverser les blocs de code !)
 
 			if ($inQueue) {
 				$but .= '<span class="button disable">';
 					$but .= 'technologie en cours<br />de recherche';
-					if (!TechnologyResource::isAnUnblockingTechnology($i)) {
+					if (!$technologyHelper->isAnUnblockingTechnology($i)) {
 						$but .= ' vers le niveau ' . ($technology->getTechnology($i) + 1);
 					}
 					if (!$inALocalQueue) {
@@ -188,58 +189,58 @@ for ($i = 0; $i < Technology::QUANTITY; $i++) {
 					}
 				$but .= '</span>';
 
-			} elseif (TechnologyResource::isAnUnblockingTechnology($i) && $technology->getTechnology($i)) {
+			} elseif ($technologyHelper->isAnUnblockingTechnology($i) && $technology->getTechnology($i)) {
 				$ctn[1] = FALSE;
 				$sup .= '<em>développement terminé</em>';
 				$closed = 'closed';
-			} elseif (!TechnologyResource::isAnUnblockingTechnology($i) && !TechnologyResource::haveRights($i, 'maxLevel', $technology->getTechnology($i) + 1)) {
+			} elseif (!$technologyHelper->isAnUnblockingTechnology($i) && !$technologyHelper->haveRights($i, 'maxLevel', $technology->getTechnology($i) + 1)) {
 				# max level reached
 				$but .= '<span class="button disable">';
 					$but .= 'niveau maximum atteint<br />';
 				$but .= '</span>';
-			} elseif (!TechnologyResource::haveRights($i, 'queue', $ob_tech, $technologyQueueManager->size())) {
+			} elseif (!$technologyHelper->haveRights($i, 'queue', $ob_tech, $technologyQueueManager->size())) {
 				# queue size
 				$but .= '<span class="button disable">';
 					$but .= 'file de recherche pleine<br />';
-					$but .= '<span class="final-cost">' . Format::numberFormat(TechnologyResource::getInfo($i, 'resource', $technology->getTechnology($i) + 1)) . '</span> ';
+					$but .= '<span class="final-cost">' . Format::numberFormat($technologyHelper->getInfo($i, 'resource', $technology->getTechnology($i) + 1)) . '</span> ';
 					$but .= '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">, ';
-						$but .= '<span class="final-cost">' . Format::numberFormat(TechnologyResource::getInfo($i, 'credit', $technology->getTechnology($i) + 1)) . '</span> ';
+						$but .= '<span class="final-cost">' . Format::numberFormat($technologyHelper->getInfo($i, 'credit', $technology->getTechnology($i) + 1)) . '</span> ';
 					$but .= '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"> et ';
 					$but .= '<span class="final-time">' . Chronos::secondToFormat($timeToBuild, 'lite') . '</span> ';
 					$but .= '<img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
 				$but .= '</span>';
-			} elseif (!TechnologyResource::haveRights($i, 'credit', $technology->getTechnology($i) + 1, $session->get('playerInfo')->get('credit'))) {
+			} elseif (!$technologyHelper->haveRights($i, 'credit', $technology->getTechnology($i) + 1, $session->get('playerInfo')->get('credit'))) {
 				# crédit
 				$but .= '<span class="button disable">';
 					$but .= 'pas assez de crédits<br />';
-					$but .= '<span class="final-cost">' . Format::numberFormat(TechnologyResource::getInfo($i, 'resource', $technology->getTechnology($i) + 1)) . '</span> ';
+					$but .= '<span class="final-cost">' . Format::numberFormat($technologyHelper->getInfo($i, 'resource', $technology->getTechnology($i) + 1)) . '</span> ';
 					$but .= '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">, ';
-						$but .= '<span class="final-cost">' . Format::numberFormat(TechnologyResource::getInfo($i, 'credit', $technology->getTechnology($i) + 1)) . '</span> ';
+						$but .= '<span class="final-cost">' . Format::numberFormat($technologyHelper->getInfo($i, 'credit', $technology->getTechnology($i) + 1)) . '</span> ';
 					$but .= '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"> et ';
 					$but .= '<span class="final-time">' . Chronos::secondToFormat($timeToBuild, 'lite') . '</span> ';
 					$but .= '<img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
 				$but .= '</span>';
-			} elseif (!TechnologyResource::haveRights($i, 'resource', $technology->getTechnology($i) + 1, $ob_tech->getResourcesStorage())) {
+			} elseif (!$technologyHelper->haveRights($i, 'resource', $technology->getTechnology($i) + 1, $ob_tech->getResourcesStorage())) {
 				# ressources
 				$but .= '<span class="button disable">';
 					$but .= 'pas assez de ressources<br />';
-					$but .= '<span class="final-cost">' . Format::numberFormat(TechnologyResource::getInfo($i, 'resource', $technology->getTechnology($i) + 1)) . '</span> ';
+					$but .= '<span class="final-cost">' . Format::numberFormat($technologyHelper->getInfo($i, 'resource', $technology->getTechnology($i) + 1)) . '</span> ';
 					$but .= '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">, ';
-						$but .= '<span class="final-cost">' . Format::numberFormat(TechnologyResource::getInfo($i, 'credit', $technology->getTechnology($i) + 1)) . '</span> ';
+						$but .= '<span class="final-cost">' . Format::numberFormat($technologyHelper->getInfo($i, 'credit', $technology->getTechnology($i) + 1)) . '</span> ';
 					$but .= '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"> et ';
 					$but .= '<span class="final-time">' . Chronos::secondToFormat($timeToBuild, 'lite') . '</span> ';
 					$but .= '<img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
 				$but .= '</span>';
 			} else {
 				$but .= '<a class="button" href="' . Format::actionBuilder('buildtechno', $sessionToken, ['baseid' => $ob_tech->getId(), 'techno' => $i]) . '">';
-					if (TechnologyResource::isAnUnblockingTechnology($i)) {
+					if ($technologyHelper->isAnUnblockingTechnology($i)) {
 						$but .= 'rechercher la technologie<br />';
 					} else {
 						$but .= 'rechercher le niveau ' . ($technology->getTechnology($i) + 1) . '<br />';
 					}
-					$but .= '<span class="final-cost">' . Format::numberFormat(TechnologyResource::getInfo($i, 'resource', $technology->getTechnology($i) + 1)) . '</span> ';
+					$but .= '<span class="final-cost">' . Format::numberFormat($technologyHelper->getInfo($i, 'resource', $technology->getTechnology($i) + 1)) . '</span> ';
 					$but .= '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png"> | ';
-						$but .= '<span class="final-cost">' . Format::numberFormat(TechnologyResource::getInfo($i, 'credit', $technology->getTechnology($i) + 1)) . '</span> ';
+						$but .= '<span class="final-cost">' . Format::numberFormat($technologyHelper->getInfo($i, 'credit', $technology->getTechnology($i) + 1)) . '</span> ';
 					$but .= '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"> | ';
 					$but .= '<span class="final-time">' . Chronos::secondToFormat($timeToBuild, 'lite') . '</span> ';
 					$but .= '<img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
@@ -250,15 +251,15 @@ for ($i = 0; $i < Technology::QUANTITY; $i++) {
 		$ctn[0] .= '<div class="build-item ' . $disability . ' ' . $closed . '">';
 			$ctn[0] .= '<div class="name">';
 				$ctn[0] .= '<a href="#" class="addInfoPanel hb lt info" title="plus d\'informations" data-techno-id="' . $i . '" data-info-type="techno">+</a>';
-				$ctn[0] .= '<img src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($i, 'imageLink') . '.png" alt="" />';
+				$ctn[0] .= '<img src="' . MEDIA . 'technology/picto/' . $technologyHelper->getInfo($i, 'imageLink') . '.png" alt="" />';
 				$ctn[0] .= '<strong>' . $title . '</strong>';
 				$ctn[0] .= $sup;
 			$ctn[0] .= '</div>';
-			$ctn[0] .= '<div class="ship-illu"><img class="illu" src="' . MEDIA . 'technology/img/' . TechnologyResource::getInfo($i, 'imageLink') . '.png" /></div>';
+			$ctn[0] .= '<div class="ship-illu"><img class="illu" src="' . MEDIA . 'technology/img/' . $technologyHelper->getInfo($i, 'imageLink') . '.png" /></div>';
 			$ctn[0] .= $but;
 		$ctn[0] .= '</div>';
 
-		switch (TechnologyResource::getInfo($i, 'column')) {
+		switch ($technologyHelper->getInfo($i, 'column')) {
 			case 1 : $c1[] = $ctn; break;
 			case 2 : $c2[] = $ctn; break;
 			case 3 : $c3[] = $ctn; break;

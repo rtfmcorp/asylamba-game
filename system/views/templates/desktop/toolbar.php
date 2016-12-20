@@ -6,7 +6,6 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Resource\ShipResource;
-use Asylamba\Modules\Promethee\Resource\TechnologyResource;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Ares\Model\Commander;
@@ -17,6 +16,7 @@ $buildingQueueManager = $this->getContainer()->get('athena.building_queue_manage
 $shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
 $technologyQueueManager = $this->getContainer()->get('promethee.technology_queue_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$technologyHelper = $this->getContainer()->get('promethee.technology_helper');
 
 $S_OBM1 = $orbitalBaseManager->getCurrentSession();
 $orbitalBaseManager->newSession();
@@ -251,17 +251,17 @@ echo '<div id="tools">';
 			if ($technologyQueueManager->size() > 0) {
 				$qe = $technologyQueueManager->get(0);
 				echo '<div class="queue">';
-					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel) . '">';
-						echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($qe->technology, 'imageLink') . '.png" alt="" />';
-						echo '<strong>' . TechnologyResource::getInfo($qe->technology, 'name');
-						if (!TechnologyResource::isAnUnblockingTechnology($qe->technology)) {
+					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $technologyHelper->getInfo($qe->technology, 'time', $qe->targetLevel) . '">';
+						echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . $technologyHelper->getInfo($qe->technology, 'imageLink') . '.png" alt="" />';
+						echo '<strong>' . $technologyHelper->getInfo($qe->technology, 'name');
+						if (!$technologyHelper->isAnUnblockingTechnology($qe->technology)) {
 							echo ' <span class="level">niv. ' . $qe->targetLevel . '</span>';
 						}
 						echo '</strong>';
 						
 						echo '<em><span class="progress-text">' . Chronos::secondToFormat(Utils::interval(Utils::now(), $qe->dEnd, 's'), 'lite') . '</span></em>';
 						echo '<span class="progress-container">';
-							echo '<span style="width: ' . Format::percent(TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel) - Utils::interval(Utils::now(), $qe->dEnd, 's'), TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel)) . '%;" class="progress-bar">';
+							echo '<span style="width: ' . Format::percent($technologyHelper->getInfo($qe->technology, 'time', $qe->targetLevel) - Utils::interval(Utils::now(), $qe->dEnd, 's'), $technologyHelper->getInfo($qe->technology, 'time', $qe->targetLevel)) . '%;" class="progress-bar">';
 							echo '</span>';
 						echo '</span>';
 					echo '</div>';

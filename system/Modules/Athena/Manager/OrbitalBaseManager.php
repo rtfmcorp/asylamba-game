@@ -29,6 +29,7 @@ use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Modules\Zeus\Manager\PlayerBonusManager;
 use Asylamba\Modules\Athena\Manager\RecyclingMissionManager;
+use Asylamba\Modules\Athena\Manager\RecyclingLogManager;
 use Asylamba\Modules\Gaia\Manager\PlaceManager;
 use Asylamba\Modules\Ares\Manager\CommanderManager;
 use Asylamba\Modules\Hermes\Manager\NotificationManager;
@@ -66,6 +67,8 @@ class OrbitalBaseManager extends Manager {
 	protected $playerBonusManager;
 	/** @var RecyclingMissionManager **/
 	protected $recyclingMissionManager;
+	/** @var RecyclingLogManager **/
+	protected $recyclingLogManager;
 	/** @var PlaceManager **/
 	protected $placeManager;
 	/** @var CommanderManager **/
@@ -113,6 +116,7 @@ class OrbitalBaseManager extends Manager {
 		PlayerManager $playerManager,
 		PlayerBonusManager $playerBonusManager,
 		RecyclingMissionManager $recyclingMissionManager,
+		RecyclingLogManager $recyclingLogManager,
 		PlaceManager $placeManager,
 		CommanderManager $commanderManager,
 		NotificationManager $notificationManager,
@@ -132,6 +136,7 @@ class OrbitalBaseManager extends Manager {
 		$this->playerManager = $playerManager;
 		$this->playerBonusManager = $playerBonusManager;
 		$this->recyclingMissionManager = $recyclingMissionManager;
+		$this->recyclingLogManager = $recyclingLogManager;
 		$this->placeManager = $placeManager;
 		$this->commanderManager = $commanderManager;
 		$this->notificationManager = $notificationManager;
@@ -1096,7 +1101,7 @@ class OrbitalBaseManager extends Manager {
 			$rl->ship10 = $buyShip[10];
 			$rl->ship11 = $buyShip[11];
 			$rl->dLog = Utils::addSecondsToDate($mission->uRecycling, $mission->cycleTime);
-			ASM::$rlm->add($rl);
+			$this->recyclingLogManager->add($rl);
 
 			# give to the orbitalBase ($orbitalBase) and player what was recycled
 			$orbitalBase->increaseResources($resourceRecycled);

@@ -29,6 +29,7 @@ $technologyQueueManager = $this->getContainer()->get('promethee.technology_queue
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $buildingResourceRefund = $this->getContainer()->getParameter('athena.building.building_queue_resource_refund');
 $sessionToken = $session->get('token');
+$technologyHelper = $this->getContainer()->get('promethee.technology_helper');
 
 if ($ob_fastView->getLevelSpatioport() > 0) {
 	$S_CRM_OFV = $commercialRouteManager->getCurrentSession();
@@ -248,13 +249,13 @@ echo '<div class="component">';
 					if ($technologyQueueManager->get($j) !== FALSE) {
 						$queue = $technologyQueueManager->get($j);
 						$realSizeQueue++;
-						$totalTimeTechno += TechnologyResource::getInfo($queue->technology, 'time', $queue->targetLevel);
+						$totalTimeTechno += $technologyHelper->getInfo($queue->technology, 'time', $queue->targetLevel);
 						$remainingTotalTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
 
 						echo '<div class="item active progress" data-progress-output="lite" data-progress-no-reload="true" data-progress-current-time="' . $remainingTotalTime . '" data-progress-total-time="' . $totalTimeTechno . '">';
-							echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($queue->technology, 'imageLink') . '.png" alt="" />';
-							echo '<strong>' . TechnologyResource::getInfo($queue->technology, 'name');
-							if (!TechnologyResource::isAnUnblockingTechnology($queue->technology)) {
+							echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . $technologyHelper->getInfo($queue->technology, 'imageLink') . '.png" alt="" />';
+							echo '<strong>' . $technologyHelper->getInfo($queue->technology, 'name');
+							if (!$technologyHelper->isAnUnblockingTechnology($queue->technology)) {
 								echo ' <span class="level">niv. ' . $queue->targetLevel . '</span>';
 							}
 							echo '</strong>';
