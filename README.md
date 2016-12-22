@@ -20,7 +20,7 @@ Installation
 
 Si vous le souhaitez, vous pouvez utiliser le [dépôt Docker](https://github.com/rtfmcorp/asylamba-docker) du projet pour installer votre environnement.
 
-Cette seciton traite uniquement de l'installation du jeu et suppose que votre environnement est prêt.
+Cette section traite uniquement de l'installation du jeu et suppose que votre environnement est prêt.
 
 Tout d'abord, vous devez cloner le dépôt du jeu. Pour ce faire, ouvrez une invite de commandes, et entrez la commande suivante :
 
