@@ -17,6 +17,8 @@ use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Classes\Event\ExceptionEvent;
 use Asylamba\Classes\Event\ErrorEvent;
 
+use Asylamba\Classes\DependencyInjection\Container;
+
 class Application {
     /** @var Container **/
     protected $container;

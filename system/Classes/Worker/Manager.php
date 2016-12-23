@@ -34,7 +34,6 @@ abstract class Manager {
         } else {
             $session = new ManagerSession('_' . (count($this->sessions) + 1), $this->managerType, $uMode);
         }
-
         $this->currentSession = $session;
         $this->sessions[] = $session;
 

@@ -2,6 +2,8 @@
 
 namespace Asylamba\Classes\Worker;
 
+use Asylamba\Classes\DependencyInjection\Container;
+
 class EventDispatcher {
 	/** @var array **/
 	protected $events = [];
