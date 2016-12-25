@@ -1,14 +1,13 @@
 <?php
 
-use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 
-$db = Database::getInstance();
+$database = $this->getContainer()->get('database');
 
-$qr = $db->prepare('SELECT
+$qr = $database->prepare('SELECT
 		COUNT(c.id) AS nb,
 		AVG(c.level) AS avgLevel
 	FROM commander AS c
@@ -19,7 +18,7 @@ $qr = $db->prepare('SELECT
 $qr->execute(array($faction->id, Commander::AFFECTED, Commander::MOVING));
 $aw1 = $qr->fetch(); $qr->closeCursor();
 
-$qr = $db->prepare('SELECT
+$qr = $database->prepare('SELECT
 		SUM(s.ship0) AS nbs0,
 		SUM(s.ship1) AS nbs1,
 		SUM(s.ship2) AS nbs2,

@@ -1,14 +1,15 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Zeus\Model\CreditTransaction;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
+$creditTransactionManager = $this->getContainer()->get('zeus.credit_transaction_manager');
+
 # load
-$S_CRT_1 = ASM::$crt->getCurrentSession();
-ASM::$crt->newSession();
-ASM::$crt->load(
+$S_CRT_1 = $creditTransactionManager->getCurrentSession();
+$creditTransactionManager->newSession();
+$creditTransactionManager->load(
 	['rReceiver' => $faction->id, 'type' => CreditTransaction::TYP_FACTION],
 	['dTransaction', 'DESC'],
 	[0, 20]
@@ -20,8 +21,8 @@ echo '<div class="component player rank">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			for ($i = 0; $i < ASM::$crt->size(); $i++) {
-				$transaction = ASM::$crt->get($i);
+			for ($i = 0; $i < $creditTransactionManager->size(); $i++) {
+				$transaction = $creditTransactionManager->get($i);
 
 				echo '<div class="player color' . $transaction->senderColor . '">';
 					echo '<a href="' . APP_ROOT . 'embassy/player-' . $transaction->rSender . '">';
@@ -35,16 +36,16 @@ echo '<div class="component player rank">';
 				echo '</div>';
 			}
 
-			if (ASM::$crt->size() == 0) {
+			if ($creditTransactionManager->size() == 0) {
 				echo '<p>Aucune donation n\'a encore été faite.</p>';
 			}
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
 
-$S_CRT_1 = ASM::$crt->getCurrentSession();
-ASM::$crt->newSession();
-ASM::$crt->load(
+$S_CRT_1 = $creditTransactionManager->getCurrentSession();
+$creditTransactionManager->newSession();
+$creditTransactionManager->load(
 	['rSender' => $faction->id, 'type' => CreditTransaction::TYP_F_TO_P],
 	['dTransaction', 'DESC'],
 	[0, 20]
@@ -56,8 +57,8 @@ echo '<div class="component player rank">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			for ($i = 0; $i < ASM::$crt->size(); $i++) {
-				$transaction = ASM::$crt->get($i);
+			for ($i = 0; $i < $creditTransactionManager->size(); $i++) {
+				$transaction = $creditTransactionManager->get($i);
 
 				echo '<div class="player color' . $transaction->receiverColor . '">';
 					echo '<a href="' . APP_ROOT . 'embassy/player-' . $transaction->rReceiver . '">';
@@ -71,7 +72,7 @@ echo '<div class="component player rank">';
 				echo '</div>';
 			}
 
-			if (ASM::$crt->size() == 0) {
+			if ($creditTransactionManager->size() == 0) {
 				echo '<p>Aucune transaction n\'a encore été effectuée.</p>';
 			}
 		echo '</div>';

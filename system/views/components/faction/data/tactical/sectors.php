@@ -1,12 +1,14 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\Format;
 
-$_CLM = ASM::$clm->getCurrentSession();
-ASM::$clm->newSession();
-ASM::$clm->load();
+$colorManager = $this->getContainer()->get('demeter.color_manager');
+$database = $this->getContainer()->get('database');
+
+$_CLM = $colorManager->getCurrentSession();
+$colorManager->newSession();
+$colorManager->load();
 
 $qr = 'SELECT
 		se.id AS id,
@@ -15,18 +17,17 @@ $qr = 'SELECT
 		se.points AS points,
 		(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rSector = se.id) AS nbc0,';
 
-for ($i = 1; $i < ASM::$clm->size(); $i++) {
-	if ($i < ASM::$clm->size() - 1) {
-		$qr .= '(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = ' . ASM::$clm->get($i)->id . ' AND sy.rSector = se.id) AS nbc' . ASM::$clm->get($i)->id .',';
+for ($i = 1; $i < $colorManager->size(); $i++) {
+	if ($i < $colorManager->size() - 1) {
+		$qr .= '(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = ' . $colorManager->get($i)->id . ' AND sy.rSector = se.id) AS nbc' . $colorManager->get($i)->id .',';
 	} else {
-		$qr .= '(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = ' . ASM::$clm->get($i)->id . ' AND sy.rSector = se.id) AS nbc' . ASM::$clm->get($i)->id;
+		$qr .= '(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = ' . $colorManager->get($i)->id . ' AND sy.rSector = se.id) AS nbc' . $colorManager->get($i)->id;
 	}
 }
 
 $qr .= '	FROM sector AS se ORDER BY (nbc' . $faction->id . ' / nbc0) DESC';
 
-$db = Database::getInstance();
-$qr = $db->prepare($qr);
+$qr = $database->prepare($qr);
 $qr->execute();
 $aw = $qr->fetchAll(); $qr->closeCursor();
 
@@ -59,8 +60,8 @@ echo '<div class="component">';
 				foreach ($sectors as $sector) {
 					$percents = array();
 					
-					for ($j = 1; $j < ASM::$clm->size(); $j++) {
-						$percents['color' . ASM::$clm->get($j)->id] = Format::percent($sector['nbc' . ASM::$clm->get($j)->id], $sector['nbc0']);
+					for ($j = 1; $j < $colorManager->size(); $j++) {
+						$percents['color' . $colorManager->get($j)->id] = Format::percent($sector['nbc' . $colorManager->get($j)->id], $sector['nbc0']);
 					}
 
 					arsort($percents);
@@ -90,4 +91,4 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-ASM::$clm->changeSession($_CLM);
+$colorManager->changeSession($_CLM);
