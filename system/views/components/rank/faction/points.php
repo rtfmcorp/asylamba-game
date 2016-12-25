@@ -7,10 +7,12 @@
 # require
 	# _T PRM 		FACTION_RANKING_POINTS
 
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Utils;
 
-ASM::$frm->changeSession($FACTION_RANKING_POINTS);
+$factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
+$session = $this->getContainer()->get('app.session');
+
+$factionRankingManager->changeSession($FACTION_RANKING_POINTS);
 
 echo '<div class="component player profil rank">';
 	echo '<div class="head skin-4">';
@@ -21,8 +23,8 @@ echo '<div class="component player profil rank">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			if (Utils::interval(SERVER_START_TIME, Utils::now(), 'h') > HOURS_BEFORE_START_OF_RANKING) {
-				for ($i = 0; $i < ASM::$frm->size(); $i++) {
-					echo ASM::$frm->get($i)->commonRender('points');
+				for ($i = 0; $i < $factionRankingManager->size(); $i++) {
+					echo $factionRankingManager->get($i)->commonRender($session->get('playerInfo'), 'points');
 				}
 			} else {
 				echo '<div class="center-box">';
