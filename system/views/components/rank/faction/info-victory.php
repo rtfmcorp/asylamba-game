@@ -7,10 +7,11 @@
 # require
 	# _T PRM 		FACTION_RANKING_POINTS
 
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Format;
 
-ASM::$frm->changeSession($FACTION_RANKING_POINTS);
+$factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
+
+$factionRankingManager->changeSession($FACTION_RANKING_POINTS);
 
 echo '<div class="component profil panel-info">';
 	echo '<div class="head skin-2"></div>';

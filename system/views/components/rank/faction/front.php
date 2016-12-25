@@ -7,11 +7,12 @@
 # require
 	# _T PRM 		FACTION_RANKING_FRONT
 
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-ASM::$frm->changeSession($FACTION_RANKING_FRONT);
-$f = ASM::$frm->get(0);
+$factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
+
+$factionRankingManager->changeSession($FACTION_RANKING_FRONT);
+$f = $factionRankingManager->get(0);
 
 # display
 echo '<div class="component profil">';
