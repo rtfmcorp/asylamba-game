@@ -4,6 +4,8 @@
 
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Atlas\Model\FactionRanking;
+use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
 $playerRankingManager = $this->getContainer()->get('atlas.player_ranking_manager');

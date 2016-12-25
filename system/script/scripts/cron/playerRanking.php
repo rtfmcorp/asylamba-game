@@ -9,9 +9,12 @@ use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Atlas\Model\PlayerRanking;
+use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $playerRankingManager = $this->getContainer()->get('atlas.player_ranking_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
+$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $database = $this->getContainer()->get('database');
 
 $S_PRM1 = $playerRankingManager->getCurrentSession();
@@ -118,7 +121,7 @@ $qr->execute(array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY));
 
 while ($aw = $qr->fetch()) {
 	if (isset($list[$aw['player']])) {
-		$resourcesProd = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $aw['levelRefinery'], 'refiningCoefficient'), $aw['coefResources']);
+		$resourcesProd = Game::resourceProduction($orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $aw['levelRefinery'], 'refiningCoefficient'), $aw['coefResources']);
 		$list[$aw['player']]['resources'] += $resourcesProd;
 	}
 }

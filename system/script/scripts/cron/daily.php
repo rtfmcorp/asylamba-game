@@ -13,9 +13,14 @@ use Asylamba\Classes\Library\Bug;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Benchmark;
 use Asylamba\Classes\Worker\API;
+use Asylamba\Modules\Zeus\Model\Player;
 
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
+$readNotificationTimeout = $this->getContainer()->getParameter('hermes.notifications.timeout.read');
+$unreadNotificationTimeout = $this->getContainer()->getParameter('hermes.notifications.timeout.unread');
+$playerGlobalInactiveTime = $this->getContainer()->getParameter('zeus.player.global_inactive_time');
+$playerInactiveTimeLimit = $this->getContainer()->getParameter('zeus.player.inactive_time_limit');
 
 $S_NTM1 = $notificationManager->getCurrentSession();
 $S_PAM1 = $playerManager->getCurrentSession();
@@ -37,7 +42,7 @@ $notificationManager->load(array('readed' => 1, 'archived' => 0));
 
 $deletedReadedNotifs = 0;
 for ($i = $notificationManager->size() - 1; $i >= 0; $i--) { 
-	if (Utils::interval(Utils::now(), $notificationManager->get($i)->getDSending()) >= NTM_TIMEOUT_READED) {
+	if (Utils::interval(Utils::now(), $notificationManager->get($i)->getDSending()) >= $readNotificationTimeout) {
 		$notificationManager->deleteById($notificationManager->get($i)->getId());
 		$deletedReadedNotifs++;
 	}
@@ -58,7 +63,7 @@ $notificationManager->load(array('readed' => 0, 'archived' => 0));
 
 $deletedUnreadedNotifs = 0;
 for ($i = $notificationManager->size() - 1; $i >= 0; $i--) { 
-	if (Utils::interval(Utils::now(), $notificationManager->get($i)->getDSending()) >= NTM_TIMEOUT_UNREADED) {
+	if (Utils::interval(Utils::now(), $notificationManager->get($i)->getDSending()) >= $unreadNotificationTimeout) {
 		$notificationManager->deleteById($notificationManager->get($i)->getId());
 		$deletedUnreadedNotifs++;
 	}
@@ -80,12 +85,12 @@ $playerManager->load(array('statement' => array(Player::ACTIVE, Player::INACTIVE
 $unactivatedPlayers = 0;
 $deletedPlayers 	= 0;
 for ($i = $playerManager->size() - 1; $i >= 0; $i--) { 
-	if (Utils::interval(Utils::now(), $playerManager->get($i)->getDLastConnection()) >= PAM_TIME_LIMIT_INACTIVE) {
+	if (Utils::interval(Utils::now(), $playerManager->get($i)->getDLastConnection()) >= $playerInactiveTimeLimit) {
 
 		$playerManager->kill($playerManager->get($i)->id);
 
 		$deletedPlayers++;
-	} elseif (Utils::interval(Utils::now(), $playerManager->get($i)->getDLastConnection()) >= PAM_TIME_GLOBAL_INACTIVE AND $playerManager->get($i)->statement == Player::ACTIVE) {
+	} elseif (Utils::interval(Utils::now(), $playerManager->get($i)->getDLastConnection()) >= $playerGlobalInactiveTime AND $playerManager->get($i)->statement == Player::ACTIVE) {
 		$playerManager->get($i)->statement = Player::INACTIVE;
 
 		# sending email API call
