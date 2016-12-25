@@ -1,11 +1,15 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Demeter\Resource\LawResources;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Model\Law\Law;
+use Asylamba\Modules\Zeus\Model\Player;
+
+$sectorManager = $this->getContainer()->get('gaia.sector_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$session = $this->getContainer()->get('app.session');
+$sessionToken = $session->get('token');
 
 echo '<div class="component profil player">';
 	echo '<div class="head"></div>';
@@ -20,7 +24,7 @@ echo '<div class="component profil player">';
 				echo '<p class="desc">' . LawResources::getInfo($governmentLaw_id, 'shortDescription') . '</p>';
 
 				if (LawResources::getInfo($governmentLaw_id, 'bonusLaw')) {
-					echo '<form action="' . Format::actionBuilder('createlaw', ['type' => $governmentLaw_id]) . '" method="post">';
+					echo '<form action="' . Format::actionBuilder('createlaw', $sessionToken, ['type' => $governmentLaw_id]) . '" method="post">';
 						echo '<input type="text" placeholder="Nombre de relèves d\'activité" name="duration" />';
 
 						echo '<button class="button">';
@@ -31,35 +35,35 @@ echo '<div class="component profil player">';
 						echo '</button>';
 					echo '</form>';
 				} else {
-					echo '<form action="' . Format::actionBuilder('createlaw', ['type' => $governmentLaw_id]) . '" method="post">';
+					echo '<form action="' . Format::actionBuilder('createlaw', $sessionToken, ['type' => $governmentLaw_id]) . '" method="post">';
 						if ($governmentLaw_id == Law::SECTORTAX) {
 							echo '<input type="text" placeholder="Nouvel impôt en pourcent" name="taxes" />';
 							
-							$S_SEM_T = ASM::$sem->getCurrentSession();
-							ASM::$sem->changeSession($S_SEM_LAW);
+							$S_SEM_T = $sectorManager->getCurrentSession();
+							$sectorManager->changeSession($S_SEM_LAW);
 
 							echo '<select name="rsector">';
 								echo '<option value="-1">Choisissez un secteur</option>';
-								for ($j = 0; $j <ASM::$sem->size(); $j++) {
-									echo '<option value="' . ASM::$sem->get($j)->id . '">' . ASM::$sem->get($j)->name . ' (taxe ' . ASM::$sem->get($j)->tax . '%)</option>';
+								for ($j = 0; $j <$sectorManager->size(); $j++) {
+									echo '<option value="' . $sectorManager->get($j)->id . '">' . $sectorManager->get($j)->name . ' (taxe ' . $sectorManager->get($j)->tax . '%)</option>';
 								}
 							echo '</select>';
 
-							ASM::$sem->changeSession($S_SEM_T);
+							$sectorManager->changeSession($S_SEM_T);
 						} elseif ($governmentLaw_id == Law::SECTORNAME) {
 							echo '<input type="text" placeholder="Nouveau nom du secteur" name="name" />';
 							
-							$S_SEM_T = ASM::$sem->getCurrentSession();
-							ASM::$sem->changeSession($S_SEM_LAW);
+							$S_SEM_T = $sectorManager->getCurrentSession();
+							$sectorManager->changeSession($S_SEM_LAW);
 
 							echo '<select name="rsector">';
 								echo '<option value="-1">Choisissez un secteur</option>';
-								for ($j = 0; $j < ASM::$sem->size(); $j++) {
-									echo '<option value="' . ASM::$sem->get($j)->id . '">' . ASM::$sem->get($j)->name . ' (#' . ASM::$sem->get($j)->id . ')</option>';
+								for ($j = 0; $j < $sectorManager->size(); $j++) {
+									echo '<option value="' . $sectorManager->get($j)->id . '">' . $sectorManager->get($j)->name . ' (#' . $sectorManager->get($j)->id . ')</option>';
 								}
 							echo '</select>';
 
-							ASM::$sem->changeSession($S_SEM_T);
+							$sectorManager->changeSession($S_SEM_T);
 						} elseif ($governmentLaw_id == Law::NEUTRALPACT) {
 
 							echo '<select name="rcolor">';
@@ -113,21 +117,21 @@ echo '<div class="component profil player">';
 						} elseif ($governmentLaw_id == Law::PUNITION) {
 							echo '<input type="text" placeholder="Montant de l\'amende" name="credits" />';
 
-							$S_PAM_LAW = ASM::$pam->getCurrentSession();
-							ASM::$pam->newSession(FALSE);
-							ASM::$pam->load(
-								['rColor' => CTR::$data->get('playerInfo')->get('color'), 'statement' => [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]], 
+							$S_PAM_LAW = $playerManager->getCurrentSession();
+							$playerManager->newSession(FALSE);
+							$playerManager->load(
+								['rColor' => $session->get('playerInfo')->get('color'), 'statement' => [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]], 
 								['name', 'ASC']
 							);
 
 							echo '<select name="rplayer">';
 								echo '<option value="-1">Choisissez un joueur</option>';
-								for ($j = 1; $j < ASM::$pam->size(); $j++) {
-									echo '<option value="' . ASM::$pam->get($j)->id . '">' . ASM::$pam->get($j)->name . '</option>';
+								for ($j = 1; $j < $playerManager->size(); $j++) {
+									echo '<option value="' . $playerManager->get($j)->id . '">' . $playerManager->get($j)->name . '</option>';
 								}
 							echo '</select>';
 
-							ASM::$pam->changeSession($S_PAM_LAW);
+							$playerManager->changeSession($S_PAM_LAW);
 						}
 
 						echo '<button class="button ' . ($faction->credits >= LawResources::getInfo($governmentLaw_id, 'price') ? NULL : 'disable') . '">';

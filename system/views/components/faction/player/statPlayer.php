@@ -1,9 +1,10 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
+
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$session = $this->getContainer()->get('app.session');
 
 # statPlayer component
 # in player.demeter package
@@ -20,8 +21,8 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 $status = ColorResource::getInfo($faction->id, 'status');
 
-$S_PAM_LAST = ASM::$pam->getCurrentSession();
-ASM::$pam->changeSession($PAM_LAST_TOKEN);
+$S_PAM_LAST = $playerManager->getCurrentSession();
+$playerManager->changeSession($PAM_LAST_TOKEN);
 
 # work
 echo '<div class="component player rank">';
@@ -42,8 +43,8 @@ echo '<div class="component player rank">';
 			
 			echo '<h4>Nouveaux membres</h4>';
 
-			for ($i = 0; $i < ASM::$pam->size(); $i++) {
-				$p = ASM::$pam->get($i);
+			for ($i = 0; $i < $playerManager->size(); $i++) {
+				$p = $playerManager->get($i);
 
 				if (Utils::interval($p->dInscription, Utils::now(), 's') > 259200) {
 					if ($i == 0) {
@@ -59,7 +60,7 @@ echo '<div class="component player rank">';
 					echo '<span class="title">' . $status[$p->status - 1] . '</span>';
 					echo '<strong class="name">' . $p->name . '</strong>';
 
-					if ($p->id != CTR::$data->get('playerId')) {
+					if ($p->id != $session->get('playerId')) {
 						echo '<span class="experience"><a href="' . APP_ROOT . 'message/mode-create/sendto-' . $p->id . '">Souhaiter la bienvenue</a></span>';
 					}
 				echo '</div>';
@@ -69,4 +70,4 @@ echo '<div class="component player rank">';
 	echo '</div>';
 echo '</div>';
 
-ASM::$pam->changeSession($S_PAM_LAST);
+$playerManager->changeSession($S_PAM_LAST);

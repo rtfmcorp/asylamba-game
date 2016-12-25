@@ -2,6 +2,7 @@
 
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Demeter\Resource\LawResources;
+use Asylamba\Modules\Zeus\Model\Player;
 
 # status list
 $status = ColorResource::getInfo($faction->id, 'status');

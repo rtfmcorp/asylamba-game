@@ -1,19 +1,20 @@
 <?php
-
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Format;
 
-$S_FRM1 = ASM::$frm->getCurrentSession();
-ASM::$frm->newSession();
-ASM::$frm->loadByRequest(
+$factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
+
+$S_FRM1 = $factionRankingManager->getCurrentSession();
+$factionRankingManager->newSession();
+$factionRankingManager->loadByRequest(
 	'WHERE rFaction = ? ORDER BY rRanking DESC LIMIT 0, 20',
 	array($faction->id)
 );
 
 $creditBase = 0;
-for ($i = 0; $i < ASM::$frm->size(); $i++) {
-	if ($creditBase < ASM::$frm->get($i)->wealth) {
-		$creditBase = ASM::$frm->get($i)->wealth;
+for ($i = 0; $i < $factionRankingManager->size(); $i++) {
+	if ($creditBase < $factionRankingManager->get($i)->wealth) {
+		$creditBase = $factionRankingManager->get($i)->wealth;
 	}
 }
 $creditBase += $creditBase * 12 / 100;
@@ -38,10 +39,10 @@ echo '<div class="component profil">';
 			echo '<div class="evolution">';
 				echo '<div class="header">Evolution de la puissance commerciale de la faction sur les 20 derniers segments.</div>';
 				echo '<div class="diargam">';
-				for ($i = 0; $i < ASM::$frm->size(); $i++) {
+				for ($i = 0; $i < $factionRankingManager->size(); $i++) {
 					echo '<span class="progress-bar">';
-						echo '<span style="width:' . Format::percent(ASM::$frm->get($i)->wealth, $creditBase) . '%;" class="content">';
-							echo Format::number(ASM::$frm->get($i)->wealth, -2);
+						echo '<span style="width:' . Format::percent($factionRankingManager->get($i)->wealth, $creditBase) . '%;" class="content">';
+							echo Format::number($factionRankingManager->get($i)->wealth, -2);
 						echo '</span>';
 					echo '</span>';
 				}
@@ -52,4 +53,4 @@ echo '<div class="component profil">';
 	echo '</div>';
 echo '</div>';
 
-ASM::$frm->changeSession($S_FRM1);
+$factionRankingManager->changeSession($S_FRM1);

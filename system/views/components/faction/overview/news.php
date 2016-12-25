@@ -6,7 +6,7 @@
 
 # require
 
-use Asylamba\Classes\Worker\ASM;
+$factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
 
 echo '<div class="component">';
 	echo '<div class="head skin-2">';
@@ -14,8 +14,8 @@ echo '<div class="component">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			for ($i = 0; $i < ASM::$fnm->size(); $i++) {
-				$news = ASM::$fnm->get($i);
+			for ($i = 0; $i < $factionNewsManager->size(); $i++) {
+				$news = $factionNewsManager->get($i);
 
 				echo '<h4>' . $news->title . '</h4>';
 				echo '<p class="long-info text-bloc">' . $news->pContent . '</p>';

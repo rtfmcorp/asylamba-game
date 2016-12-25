@@ -4,10 +4,11 @@
 
 # création d'un topic
 
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Library\Parser;
 
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$sessionToken = $session->get('token');
 # require
 
 echo '<div class="component topic size2">';
@@ -17,13 +18,13 @@ echo '<div class="component topic size2">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="message write">';
-				echo '<img src="' . MEDIA . 'avatar/medium/' . CTR::$data->get('playerInfo')->get('avatar') . '.png" alt="' . CTR::$data->get('playerInfo')->get('pseudo') . '" class="avatar" />';
+				echo '<img src="' . MEDIA . 'avatar/medium/' . $session->get('playerInfo')->get('avatar') . '.png" alt="' . $session->get('playerInfo')->get('pseudo') . '" class="avatar" />';
 				echo '<div class="content">';
-					echo '<form action="' . Format::actionBuilder('createtopicforum', ['rforum' => CTR::$get->get('forum')]) . '" method="POST">';
+					echo '<form action="' . Format::actionBuilder('createtopicforum', $sessionToken, ['rforum' => $request->query->get('forum')]) . '" method="POST">';
 						echo '<input class="title" type="text" name="title" placeholder="sujet" />';
 
 						echo '<div class="wysiwyg" data-id="new-topic-wysiwyg">';
-							$parser = new Parser();
+							$parser = $this->getContainer()->get('parser');
 							echo $parser->getToolbar();
 							
 							echo '<textarea name="content" id="new-topic-wysiwyg" placeholder="Votre message"></textarea>';

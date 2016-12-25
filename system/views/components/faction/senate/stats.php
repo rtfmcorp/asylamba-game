@@ -1,13 +1,14 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Format;
 
 # require
 	# LAW/Token 		S_LAM_TOVOTE
 
-$S_LAM_LAW = ASM::$lam->getCurrentSession();
-ASM::$lam->changeSession($S_LAM_TOVOTE);
+$lawManager = $this->getContainer()->get('demeter.law_manager');
+
+$S_LAM_LAW = $lawManager->getCurrentSession();
+$lawManager->changeSession($S_LAM_TOVOTE);
 
 echo '<div class="component">';
 	echo '<div class="head skin-2">';
@@ -18,7 +19,7 @@ echo '<div class="component">';
 			echo '<div class="number-box">';
 				echo '<span class="label">Lois en cours de votation</span>';
 				echo '<span class="value">';
-					echo Format::number(ASM::$lam->size());
+					echo Format::number($lawManager->size());
 				echo '</span>';
 			echo '</div>';
 
@@ -27,4 +28,4 @@ echo '<div class="component">';
 	echo '</div>';
 echo '</div>';
 
-ASM::$lam->changeSession($S_LAM_LAW);
+$lawManager->changeSession($S_LAM_LAW);

@@ -1,7 +1,5 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Demeter\Resource\LawResources;
@@ -9,8 +7,13 @@ use Asylamba\Modules\Demeter\Resource\LawResources;
 # require
 	# LAW/Token 		S_LAM_TOVOTE
 
-$S_LAM_LAW = ASM::$lam->getCurrentSession();
-ASM::$lam->changeSession($S_LAM_TOVOTE);
+$lawManager = $this->getContainer()->get('demeter.law_manager');
+$voteLawManager = $this->getContainer()->get('demeter.vote_law_manager');
+$session = $this->getContainer()->get('app.session');
+$sessionToken = $session->get('token');
+
+$S_LAM_LAW = $lawManager->getCurrentSession();
+$lawManager->changeSession($S_LAM_TOVOTE);
 
 # durée de la loi
 $lawDuration = (strtotime($law->dEnd) - strtotime($law->dEndVotation)) / 3600;
@@ -31,8 +34,8 @@ echo '<div class="component">';
 				echo '<p class="desc">' . LawResources::getInfo($law->type, 'shortDescription') . '</p>';
 
 				$hasVoted = FALSE;
-				for ($j = 0; $j < ASM::$vlm->size(); $j++) { 
-					if (ASM::$vlm->get($j)->rPlayer == CTR::$data->get('playerId')) {
+				for ($j = 0; $j < $voteLawManager->size(); $j++) { 
+					if ($voteLawManager->get($j)->rPlayer == $session->get('playerId')) {
 						$hasVoted = TRUE;
 						break;
 					}
@@ -42,12 +45,12 @@ echo '<div class="component">';
 					echo '<span class="button disable" style="text-align: center; line-height: 35px;>';
 						echo '<span class="text">Vous avez déjà voté</span>';
 					echo '</span>';
-				} elseif (CTR::$data->get('playerInfo')->get('status') == Player::PARLIAMENT) {
-					echo '<a class="button" href="' . Format::actionBuilder('votelaw', ['rlaw' => $law->id, 'choice' => '1']) . '" style="text-align: center; line-height: 35px; display: inline-block; width: 104px; margin-right: 0;">';
+				} elseif ($session->get('playerInfo')->get('status') == Player::PARLIAMENT) {
+					echo '<a class="button" href="' . Format::actionBuilder('votelaw', $sessionToken, ['rlaw' => $law->id, 'choice' => '1']) . '" style="text-align: center; line-height: 35px; display: inline-block; width: 104px; margin-right: 0;">';
 						echo '<span class="text">Pour</span>';
 					echo '</a>';
 
-					echo '<a class="button" href="' . Format::actionBuilder('votelaw', ['rlaw' => $law->id, 'choice' => '0']) . '" style="text-align: center; line-height: 35px; display: inline-block; width: 104px;">';
+					echo '<a class="button" href="' . Format::actionBuilder('votelaw', $sessionToken, ['rlaw' => $law->id, 'choice' => '0']) . '" style="text-align: center; line-height: 35px; display: inline-block; width: 104px;">';
 						echo '<span class="text">Contre</span>';
 					echo '</a>';
 				} else {
@@ -93,4 +96,4 @@ echo '<div class="component">';
 	echo '</div>';
 echo '</div>';
 
-ASM::$lam->changeSession($S_LAM_LAW);
+$lawManager->changeSession($S_LAM_LAW);
