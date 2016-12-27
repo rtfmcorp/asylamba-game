@@ -1,23 +1,28 @@
 <?php
 #rplayer	id du joueur
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Modules\Zeus\Model\Player;
 
-if (CTR::$data->get('playerInfo')->get('status') > Player::PARLIAMENT && CTR::$data->get('playerInfo')->get('status') < Player::CHIEF) {
-	$_PAM = ASM::$pam->getCurrentsession();
-	ASM::$pam->newSession();
-	ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
 
-	if (ASM::$pam->size() > 0) {
-		ASM::$pam->get()->status = Player::PARLIAMENT;
-		CTR::$data->get('playerInfo')->add('status', Player::PARLIAMENT);
-		CTR::$alert->add('Vous n\'êtes plus membre du gouvernement.', ALERT_STD_SUCCESS);
+if ($session->get('playerInfo')->get('status') > Player::PARLIAMENT && $session->get('playerInfo')->get('status') < Player::CHIEF) {
+	$_PAM = $playerManager->getCurrentsession();
+	$playerManager->newSession();
+	$playerManager->load(array('id' => $session->get('playerId')));
+
+	if ($playerManager->size() > 0) {
+		$playerManager->get()->status = Player::PARLIAMENT;
+		$session->get('playerInfo')->add('status', Player::PARLIAMENT);
+		$response->flashbag->add('Vous n\'êtes plus membre du gouvernement.', Response::FLASHBAG_SUCCESS);
 	} else {
-		CTR::$alert->add('Ce joueur n\'existe pas.', ALERT_STD_ERROR);
+		throw new ErrorException('Ce joueur n\'existe pas.');
 	}
 
-	ASM::$pam->changeSession($_PAM);
+	$playerManager->changeSession($_PAM);
 } else {
-	CTR::$alert->add('Vous n\'êtes pas dans le gouvernement de votre faction ou en êtes le chef.', ALERT_STD_ERROR);
+	throw new ErrorException('Vous n\'êtes pas dans le gouvernement de votre faction ou en êtes le chef.');
 }
