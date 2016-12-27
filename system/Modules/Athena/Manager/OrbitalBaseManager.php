@@ -35,14 +35,19 @@ use Asylamba\Modules\Ares\Manager\CommanderManager;
 use Asylamba\Modules\Hermes\Manager\NotificationManager;
 use Asylamba\Modules\Athena\Helper\OrbitalBaseHelper;
 use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Promethee\Model\Technology;
 
 use Asylamba\Modules\Athena\Model\RecyclingMission;
+use Asylamba\Modules\Athena\Model\RecyclingLog;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Gaia\Model\Place;
+use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Modules\Athena\Model\CommercialShipping;
 
 use Asylamba\Classes\Container\Alert;
 use Asylamba\Classes\Worker\CTC;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
-use Asylamba\Modules\Promethee\Resource\TechnologyResource;
+use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 
 class OrbitalBaseManager extends Manager {
@@ -53,6 +58,8 @@ class OrbitalBaseManager extends Manager {
 	protected $shipQueueManager;
 	/** @var TechnologyQueueManager **/
 	protected $technologyQueueManager;
+	/** @var TechnologyHelper **/
+	protected $technologyHelper;
 	/** @var CommercialShippingManager **/
 	protected $commercialShippingManager;
 	/** @var CommercialRouteManager **/
@@ -89,6 +96,7 @@ class OrbitalBaseManager extends Manager {
 	 * @param BuildingQueueManager $buildingQueueManager
 	 * @param ShipQueueManager $shipQueueManager
 	 * @param TechnologyQueueManager $technologyQueueManager
+	 * @param TechnologyHelper $technologyHelper
 	 * @param CommercialShippingManager $commercialShippingManager
 	 * @param CommercialRouteManager $commercialRouteManager
 	 * @param TransactionManager $transactionManager
@@ -109,6 +117,7 @@ class OrbitalBaseManager extends Manager {
 		BuildingQueueManager $buildingQueueManager,
 		ShipQueueManager $shipQueueManager,
 		TechnologyQueueManager $technologyQueueManager,
+		TechnologyHelper $technologyHelper,
 		CommercialShippingManager $commercialShippingManager,
 		CommercialRouteManager $commercialRouteManager,
 		TransactionManager $transactionManager,
@@ -129,6 +138,7 @@ class OrbitalBaseManager extends Manager {
 		$this->buildingQueueManager = $buildingQueueManager;
 		$this->shipQueueManager = $shipQueueManager;
 		$this->technologyQueueManager = $technologyQueueManager;
+		$this->technologyHelper = $technologyHelper;
 		$this->commercialShippingManager = $commercialShippingManager;
 		$this->commercialRouteManager = $commercialRouteManager;
 		$this->transactionManager = $transactionManager;
@@ -823,7 +833,7 @@ class OrbitalBaseManager extends Manager {
 
 					for ($j = 0; $j < $recyclingQuantity; $j++) { 
 						$dateOfUpdate = Utils::addSecondsToDate($mission->uRecycling, ($j + 1) * $mission->cycleTime);
-						$this->ctc->add($dateOfUpdate, $this, 'uRecycling', $orbitalBase, array($orbitalBase, $mission, $place, $player, $dateOfUpdate));
+						$this->ctc->add($dateOfUpdate, $this, 'uRecycling', $mission, array($orbitalBase, $mission, $place, $player, $dateOfUpdate));
 					}
 				}
 			}
@@ -875,7 +885,7 @@ class OrbitalBaseManager extends Manager {
 		$orbitalBase->setShipStorage($sq->shipNumber, $orbitalBase->getShipStorage($sq->shipNumber) + $sq->quantity);
 		# increase player experience
 		$experience = $sq->quantity * ShipResource::getInfo($sq->shipNumber, 'points');
-		$player->increaseExperience($experience);
+		$this->playerManager->increaseExperience($player, $experience);
 
 		# alert
 		if ($this->session->get('playerId') == $orbitalBase->rPlayer) {
@@ -914,12 +924,12 @@ class OrbitalBaseManager extends Manager {
 		$techno = new Technology($player->getId());
 		$techno->setTechnology($tq->technology, $tq->targetLevel);
 		# increase player experience
-		$experience = TechnologyResource::getInfo($tq->technology, 'points', $tq->targetLevel);
-		$player->increaseExperience($experience);
+		$experience = $this->technologyHelper->getInfo($tq->technology, 'points', $tq->targetLevel);
+		$this->playerManager->increaseExperience($player, $experience);
 
 		# alert
 		if ($this->session->get('playerId') == $orbitalBase->rPlayer) {
-			$alt = 'Développement de votre technologie ' . TechnologyResource::getInfo($tq->technology, 'name');
+			$alt = 'Développement de votre technologie ' . $this->technologyHelper->getInfo($tq->technology, 'name');
 			if ($tq->targetLevel > 1) {
 				$alt .= ' niveau ' . $tq->targetLevel;
 			} 
@@ -969,7 +979,7 @@ class OrbitalBaseManager extends Manager {
 		}
 	}
 
-	public function uRecycling($mission, $targetPlace, $player, $dateOfUpdate) {
+	public function uRecycling(OrbitalBase $orbitalBase, RecyclingMission $mission, Place $targetPlace, Player $player, $dateOfUpdate) {
 		if ($targetPlace->typeOfPlace != Place::EMPTYZONE) {
 			# make the recycling : decrease resources on the target place
 			$totalRecycled = $mission->recyclerQuantity * RecyclingMission::RECYCLER_CAPACTIY;
@@ -1104,11 +1114,11 @@ class OrbitalBaseManager extends Manager {
 			$this->recyclingLogManager->add($rl);
 
 			# give to the orbitalBase ($orbitalBase) and player what was recycled
-			$orbitalBase->increaseResources($resourceRecycled);
+			$this->increaseResources($orbitalBase, $resourceRecycled);
 			for ($i = 0; $i < ShipResource::SHIP_QUANTITY; $i++) { 
 				$this->addShipToDock($orbitalBase, $i, $buyShip[$i]);
 			}
-			$player->increaseCredit($creditRecycled);
+			$this->playerManager->increaseCredit($player, $creditRecycled);
 
 			# add recyclers waiting to the mission
 			$mission->recyclerQuantity += $mission->addToNextMission;

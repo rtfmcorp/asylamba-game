@@ -85,8 +85,7 @@ class RecyclingLogManager extends Manager {
 	}
 
 	public function add(RecyclingLog $rl) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
+		$qr = $this->database->prepare('INSERT INTO
 			recyclingLog(rRecycling, resources, credits, ship0, ship1, ship2, ship3, ship4, ship5, ship6, ship7,
 				ship8, ship9, ship10, ship11, dLog)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
@@ -109,7 +108,7 @@ class RecyclingLogManager extends Manager {
 			$rl->dLog
 		));
 
-		$rl->id = $db->lastInsertId();
+		$rl->id = $this->database->lastInsertId();
 
 		$this->_Add($rl);
 	}
