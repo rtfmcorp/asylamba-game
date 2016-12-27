@@ -325,7 +325,7 @@ abstract class GalaxyConfiguration {
 		], 
 		[
 			'id' => 30,
-			'beginColor' => 7,
+			'beginColor' => 2,
 			'vertices' => [90, 250, 120, 230, 130, 240, 140, 230, 170, 250],
 			'barycentre' => [132, 243],
 			'display' => [132, 243],
@@ -335,7 +335,7 @@ abstract class GalaxyConfiguration {
 		], 
 		[
 			'id' => 31,
-			'beginColor' => 7,
+			'beginColor' => 2,
 			'vertices' => [0, 250, 30, 220, 40, 220, 55, 205, 90, 230, 120, 230, 90, 250],
 			'barycentre' => [61, 229],
 			'display' => [61, 229],
@@ -355,7 +355,7 @@ abstract class GalaxyConfiguration {
 		], 
 		[
 			'id' => 33,
-			'beginColor' => 2,
+			'beginColor' => 7,
 			'vertices' => [0, 80, 20, 120, 10, 130, 20, 140, 0, 170],
 			'barycentre' => [7, 122],
 			'display' => [7, 122],
@@ -365,7 +365,7 @@ abstract class GalaxyConfiguration {
 		], 
 		[
 			'id' => 34,
-			'beginColor' => 2,
+			'beginColor' => 7,
 			'vertices' => [0, 0, 30, 30, 30, 40, 45, 55, 20, 80, 20, 120, 0, 80],
 			'barycentre' => [21, 58],
 			'display' => [21, 58],
