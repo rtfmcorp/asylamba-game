@@ -76,7 +76,7 @@ class PlayerManager extends Manager {
 	/** @var Session **/
 	protected $session;
 	/** @var int **/
-	protected $baseLevelPlayer;
+	protected $playerBaseLevel;
 	
 	/**
 	 * @param Database $database
@@ -94,7 +94,7 @@ class PlayerManager extends Manager {
 	 * @param PlayerBonusManager $playerBonusManager
 	 * @param CTC $ctc
 	 * @param Session $session
-	 * @param int $baseLevelPlayer
+	 * @param int $playerBaseLevel
 	 */
 	public function __construct(
 		Database $database,
@@ -112,7 +112,7 @@ class PlayerManager extends Manager {
 		PlayerBonusManager $playerBonusManager,
 		CTC $ctc,
 		Session $session,
-		$baseLevelPlayer
+		$playerBaseLevel
 	)
 	{
 		parent::__construct($database);
@@ -130,7 +130,7 @@ class PlayerManager extends Manager {
 		$this->playerBonusManager = $playerBonusManager;
 		$this->ctc = $ctc;
 		$this->session = $session;
-		$this->baseLevelPlayer = $baseLevelPlayer;
+		$this->playerBaseLevel = $playerBaseLevel;
 	}
 			
 	public function load($where = array(), $order = array(), $limit = array()) {
@@ -931,7 +931,7 @@ class PlayerManager extends Manager {
 		if ($player->isSynchronized()) {
 			$this->session->get('playerInfo')->add('experience', $player->experience);
 		}
-		$nextLevel =  $this->baseLevelPlayer * pow(2, ($player->level - 1));
+		$nextLevel =  $this->playerBaseLevel * pow(2, ($player->level - 1));
 		if ($player->experience >= $nextLevel) {
 			$player->level++;
 			if ($player->isSynchronized()) {
