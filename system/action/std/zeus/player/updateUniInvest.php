@@ -3,37 +3,39 @@
 
 # int credit 		nouveau montant à investir
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
+use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 
-$credit = Utils::getHTTPData('credit');
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
+$session = $this->getContainer()->get('app.session');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
+
+$credit = $request->request->get('credit');
 
 
 if ($credit !== FALSE) { 
 	if ($credit <= 500000) {
-		$S_PAM1 = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession();
-		ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-		ASM::$pam->get()->iUniversity = $credit;
+		$S_PAM1 = $playerManager->getCurrentSession();
+		$playerManager->newSession();
+		$playerManager->load(array('id' => $session->get('playerId')));
+		$playerManager->get()->iUniversity = $credit;
 
 		# tutorial
-		if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-			switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
-				case TutorialResource::MODIFY_UNI_INVEST:
-					TutorialHelper::setStepDone();
-					break;
-			}
+		if ($session->get('playerInfo')->get('stepDone') == FALSE &&
+			$session->get('playerInfo')->get('stepTutorial') === TutorialResource::MODIFY_UNI_INVEST) {
+			$tutorialHelper->setStepDone();
 		}
 
-		CTR::$alert->add('L\'investissement dans l\'université a été modifié', ALERT_STD_SUCCESS);
+		$response->flashbag->add('L\'investissement dans l\'université a été modifié', Response::FLASHBAG_SUCCESS);
 
-		ASM::$pam->changeSession($S_PAM1);
+		$playerManager->changeSession($S_PAM1);
 	} else {
-		CTR::$alert->add('La limite maximale d\'investissement dans l\'Université est de 500\'000 crédits.', ALERT_STD_ERROR);
+		throw new ErrorException('La limite maximale d\'investissement dans l\'Université est de 500\'000 crédits.');
 	}
 } else {
-	CTR::$alert->add('pas assez d\'informations pour modifier cet investissement', ALERT_STD_FILLFORM);
+	throw new FormException('pas assez d\'informations pour modifier cet investissement');
 }

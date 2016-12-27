@@ -11,6 +11,7 @@ use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
+use Asylamba\Modules\Demeter\Model\Color;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');

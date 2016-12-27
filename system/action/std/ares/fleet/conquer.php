@@ -6,12 +6,11 @@
 
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Library\Game;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
 
@@ -19,11 +18,14 @@ if (($commanderId = $request->request->get('commanderid')) === null || ($placeId
 	throw new ErrorException('Manque de précision sur le commandant ou la position.');
 }
 
+$response = $this->getContainer()->get('app.response');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $colorManager = $this->getContainer()->get('demeter.color_manager');
+$sectorManager = $this->getContainer()->get('gaia.sector_manager');
 $session = $this->getContainer()->get('app.session');
+$conquestCost = $this->getContainer()->getParameter('ares.coeff.conquest_cost');
 
 $S_COM1 = $commanderManager->getCurrentSession();
 $commanderManager->newSession(ASM_UMODE);
@@ -34,7 +36,7 @@ $placeManager->newSession(ASM_UMODE);
 $placeManager->load(array('id' => $placeId));
 
 	// load the technologies
-$technologies = new Technology($session->get('playerId'));
+$technologies = $technologyManager->getPlayerTechnology($session->get('playerId'));
 
 # check si technologie CONQUEST débloquée
 if ($technologies->getTechnology(Technology::CONQUEST) !== 1) {
@@ -82,7 +84,7 @@ if ($technologies->getTechnology(Technology::CONQUEST) !== 1) {
 						$duration = Game::getTimeToTravel($home, $place, $session->get('playerBonus'));
 
 						# compute price
-						$price = $totalBases * CREDITCOEFFTOCONQUER;
+						$price = $totalBases * $conquestCost;
 
 						# calcul du bonus
 						$_CLM46 = $colorManager->getCurrentSession();
@@ -97,18 +99,18 @@ if ($technologies->getTechnology(Technology::CONQUEST) !== 1) {
 						if ($session->get('playerInfo')->get('credit') >= $price) {
 							if ($commander->getPev() > 0) {
 								if ($commander->statement == Commander::AFFECTED) {
-									$S_SEM = ASM::$sem->getCurrentSession();
-									ASM::$sem->newSession();
-									ASM::$sem->load(array('id' => $place->rSector));
+									$S_SEM = $sectorManager->getCurrentSession();
+									$sectorManager->newSession();
+									$sectorManager->load(array('id' => $place->rSector));
 
 									$_CLM2 = $colorManager->getCurrentSession();
 									$colorManager->newSession();
-									$colorManager->load(array('id' => ASM::$sem->get()->rColor));
+									$colorManager->load(array('id' => $sectorManager->get()->rColor));
 
 									$sectorColor = $colorManager->get();
-									$isFactionSector = (ASM::$sem->get()->rColor == $commander->playerColor || $sectorColor->colorLink[$session->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
+									$isFactionSector = ($sectorManager->get()->rColor == $commander->playerColor || $sectorColor->colorLink[$session->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
 
-									ASM::$sem->changeSession($S_SEM);
+									$sectorManager->changeSession($S_SEM);
 									$colorManager->changeSession($_CLM2);
 
 									if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
@@ -119,40 +121,40 @@ if ($technologies->getTechnology(Technology::CONQUEST) !== 1) {
 											$S_PAM2 = $playerManager->getCurrentSession();
 											$playerManager->newSession(ASM_UMODE);
 											$playerManager->load(array('id' => $session->get('playerId')));
-											$playerManager->get()->decreaseCredit($price);
+											$playerManager->decreaseCredit($playerManager->get(), $price);
 											$playerManager->changeSession($S_PAM2);
 
-											#CTR::$alert->add('Flotte envoyée.', ALERT_STD_SUCCESS);
+											#throw new ErrorException('Flotte envoyée.', ALERT_STD_SUCCESS);
 
-											if (CTR::$get->exist('redirect')) {
-												CTR::redirect('map/place-' . CTR::$get->get('redirect'));
+											if ($request->query->has('redirect')) {
+												$response->redirect('map/place-' . $request->query->get('redirect'));
 											}
 										}
 									} else {
-										CTR::$alert->add('Cet emplacement est trop éloigné.', ALERT_STD_ERROR);	
+										throw new ErrorException('Cet emplacement est trop éloigné.');	
 									}
 								} else {
-									CTR::$alert->add('Cet officier est déjà en déplacement.', ALERT_STD_ERROR);	
+									throw new ErrorException('Cet officier est déjà en déplacement.');	
 								}
 							} else {
-								CTR::$alert->add('Vous devez affecter au moins un vaisseau à votre officier.', ALERT_STD_ERROR);	
+								throw new ErrorException('Vous devez affecter au moins un vaisseau à votre officier.');	
 							}
 						} else {
-							CTR::$alert->add('Vous n\'avez pas assez de crédits pour conquérir cette base.', ALERT_STD_ERROR);
+							throw new ErrorException('Vous n\'avez pas assez de crédits pour conquérir cette base.');
 						}		
 					} else {
-						CTR::$alert->add('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction ou d\'une faction alliée.', ALERT_STD_ERROR);
+						throw new ErrorException('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction ou d\'une faction alliée.');
 					}
 
 					$colorManager->changeSession($_CLM1);
 				} else {
-					CTR::$alert->add('Ce lieu n\'existe pas.', ALERT_STD_ERROR);
+					throw new ErrorException('Ce lieu n\'existe pas.');
 				}
 			} else {
-				CTR::$alert->add('Ce commandant ne vous appartient pas ou n\'existe pas.', ALERT_STD_ERROR);
+				throw new ErrorException('Ce commandant ne vous appartient pas ou n\'existe pas.');
 			}
 		} else {
-			CTR::$alert->add('Vous ne pouvez pas conquérir un joueur de niveau 3 ou moins.', ALERT_STD_ERROR);
+			throw new ErrorException('Vous ne pouvez pas conquérir un joueur de niveau 3 ou moins.');
 		}
 		$playerManager->changeSession($S_PAM1);
 $placeManager->changeSession($S_PLM1);

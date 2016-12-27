@@ -6,10 +6,9 @@
 # int building 	 	id du bâtiment
 
 use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Classes\Library\DataAnalysis;
-use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
-use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Athena\Model\BuildingQueue;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
@@ -20,6 +19,8 @@ $session = $this->getContainer()->get('app.session');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$technologyManager = $this->getContainer()->get('promethee.technology_manager');
+$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 $request = $this->getContainer()->get('app.request');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
@@ -44,7 +45,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 			$buildingQueueManager->load(array('rOrbitalBase' => $baseId), array('dEnd'));
 
 			$currentLevel = call_user_func(array($ob, 'getReal' . ucfirst($orbitalBaseHelper->getBuildingInfo($building, 'name')) . 'Level'));
-			$technos = new Technology($session->get('playerId'));
+			$technos = $technologyManager->getPlayerTechnology($session->get('playerId'));
 			if ($orbitalBaseHelper->haveRights($building, $currentLevel + 1, 'resource', $ob->getResourcesStorage())
 				AND $orbitalBaseHelper->haveRights(OrbitalBaseResource::GENERATOR, $ob->getLevelGenerator(), 'queue', $buildingQueueManager->size()) 
 				AND ($orbitalBaseHelper->haveRights($building, $currentLevel + 1, 'buildingTree', $ob) === TRUE)
@@ -55,67 +56,67 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 					switch ($session->get('playerInfo')->get('stepTutorial')) {
 						case TutorialResource::GENERATOR_LEVEL_2:
 							if ($building == OrbitalBaseResource::GENERATOR AND $currentLevel + 1 >= 2) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::REFINERY_LEVEL_3:
 							if ($building == OrbitalBaseResource::REFINERY AND $currentLevel + 1 >= 3) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::STORAGE_LEVEL_3:
 							if ($building == OrbitalBaseResource::STORAGE AND $currentLevel + 1 >= 3) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::DOCK1_LEVEL_1:
 							if ($building == OrbitalBaseResource::DOCK1 AND $currentLevel + 1 >= 1) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::TECHNOSPHERE_LEVEL_1:
 							if ($building == OrbitalBaseResource::TECHNOSPHERE AND $currentLevel + 1 >= 1) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::REFINERY_LEVEL_10:
 							if ($building == OrbitalBaseResource::REFINERY AND $currentLevel + 1 >= 10) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::STORAGE_LEVEL_8:
 							if ($building == OrbitalBaseResource::STORAGE AND $currentLevel + 1 >= 8) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::DOCK1_LEVEL_6:
 							if ($building == OrbitalBaseResource::DOCK1 AND $currentLevel + 1 >= 6) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::REFINERY_LEVEL_16:
 							if ($building == OrbitalBaseResource::REFINERY AND $currentLevel + 1 >= 16) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::STORAGE_LEVEL_12:
 							if ($building == OrbitalBaseResource::STORAGE AND $currentLevel + 1 >= 12) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::TECHNOSPHERE_LEVEL_6:
 							if ($building == OrbitalBaseResource::TECHNOSPHERE AND $currentLevel + 1 >= 6) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::DOCK1_LEVEL_15:
 							if ($building == OrbitalBaseResource::DOCK1 AND $currentLevel + 1 >= 15) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::REFINERY_LEVEL_20:
 							if ($building == OrbitalBaseResource::REFINERY AND $currentLevel + 1 >= 20) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 					}
@@ -151,7 +152,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 				# add the event in controller
 				$session->get('playerEvent')->add($bq->dEnd, EVENT_BASE, $baseId);
 
-				$this->getContainer()->get('app.response')->flashbag->add('Construction programmée');
+				$this->getContainer()->get('app.response')->flashbag->add('Construction programmée', Response::FLASHBAG_SUCCESS);
 			} else {
 				throw new ErrorException('les conditions ne sont pas remplies pour construire ce bâtiment');
 			}

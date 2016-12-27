@@ -24,6 +24,7 @@ $request = $this->getContainer()->get('app.request');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
+$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 
 for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -56,12 +57,9 @@ if ($baseId !== FALSE AND $school !== FALSE AND $name !== FALSE AND in_array($ba
 				if ($cn->checkLength($name) && $cn->checkChar($name)) {
 					if (SchoolClassResource::getInfo($school, 'credit') <= $session->get('playerInfo')->get('credit')) {
 						# tutorial
-						if ($session->get('playerInfo')->get('stepDone') == FALSE) {
-							switch ($session->get('playerInfo')->get('stepTutorial')) {
-								case TutorialResource::CREATE_COMMANDER:
-									TutorialHelper::setStepDone();
-									break;
-							}
+						if ($session->get('playerInfo')->get('stepDone') == FALSE &&
+							$session->get('playerInfo')->get('stepTutorial') === TutorialResource::CREATE_COMMANDER) {
+							$tutorialHelper->setStepDone();
 						}
 
 						# débit des crédits au joueur

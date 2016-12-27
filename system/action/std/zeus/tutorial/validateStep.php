@@ -13,6 +13,7 @@ use Asylamba\Classes\Exception\FormException;
 $session = $this->getContainer()->get('app.session');
 $response = $this->getContainer()->get('app.response');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
+$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
 
@@ -131,16 +132,16 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 				$nextStepAlreadyDone = TRUE;
 				break;
 			case TutorialResource::GENERATOR_LEVEL_2 :
-				$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::GENERATOR, 2);
+				$nextStepAlreadyDone = $tutorialHelper->isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::GENERATOR, 2);
 				break;
 			case TutorialResource::REFINERY_LEVEL_3 :
-				$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::REFINERY, 3);
+				$nextStepAlreadyDone = $tutorialHelper->isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::REFINERY, 3);
 				break;
 			case TutorialResource::STORAGE_LEVEL_3 :
-				$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::STORAGE, 3);
+				$nextStepAlreadyDone = $tutorialHelper->isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::STORAGE, 3);
 				break;
 			case TutorialResource::TECHNOSPHERE_LEVEL_1 :
-				$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::TECHNOSPHERE, 1);
+				$nextStepAlreadyDone = $tutorialHelper->isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::TECHNOSPHERE, 1);
 				break;
 			case TutorialResource::MODIFY_UNI_INVEST:
 				# asdf
@@ -149,10 +150,10 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 				# asdf
 				break;
 			case TutorialResource::DOCK1_LEVEL_1 :
-				$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::DOCK1, 1);
+				$nextStepAlreadyDone = $tutorialHelper->isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::DOCK1, 1);
 				break;
 			case TutorialResource::SHIP0_UNBLOCK :
-				$nextStepAlreadyDone = TutorialHelper::isNextTechnoStepAlreadyDone($playerId, Technology::SHIP0_UNBLOCK);
+				$nextStepAlreadyDone = $tutorialHelper->isNextTechnoStepAlreadyDone($playerId, Technology::SHIP0_UNBLOCK);
 				break;
 			case TutorialResource::BUILD_SHIP0 :
 				# verify in the queue
@@ -201,34 +202,34 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 				$nextStepAlreadyDone = TRUE;
 				break;
 			case TutorialResource::REFINERY_LEVEL_10 :
-				$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::REFINERY, 10);
+				$nextStepAlreadyDone = $tutorialHelper->isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::REFINERY, 10);
 				break;
 			case TutorialResource::STORAGE_LEVEL_8 :
-				$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::STORAGE, 8);
+				$nextStepAlreadyDone = $tutorialHelper->isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::STORAGE, 8);
 				break;
 			case TutorialResource::DOCK1_LEVEL_6 :
-				$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::DOCK1, 6);
+				$nextStepAlreadyDone = $tutorialHelper->isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::DOCK1, 6);
 				break;
 			case TutorialResource::REFINERY_LEVEL_16 :
-				$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::REFINERY, 16);
+				$nextStepAlreadyDone = $tutorialHelper->isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::REFINERY, 16);
 				break;
 			case TutorialResource::STORAGE_LEVEL_12 :
-				$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::STORAGE, 12);
+				$nextStepAlreadyDone = $tutorialHelper->isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::STORAGE, 12);
 				break;
 			case TutorialResource::TECHNOSPHERE_LEVEL_6 :
-				$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::TECHNOSPHERE, 6);
+				$nextStepAlreadyDone = $tutorialHelper->isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::TECHNOSPHERE, 6);
 				break;
 			case TutorialResource::SHIP1_UNBLOCK :
-				$nextStepAlreadyDone = TutorialHelper::isNextTechnoStepAlreadyDone($playerId, Technology::SHIP1_UNBLOCK);
+				$nextStepAlreadyDone = $tutorialHelper->isNextTechnoStepAlreadyDone($playerId, Technology::SHIP1_UNBLOCK);
 				break;
 			case TutorialResource::DOCK1_LEVEL_15 :
-				$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::DOCK1, 15);
+				$nextStepAlreadyDone = $tutorialHelper->isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::DOCK1, 15);
 				break;
 			case TutorialResource::BUILD_SHIP1 :
 				# asdf
 				break;
 			case TutorialResource::REFINERY_LEVEL_20 :
-				$nextStepAlreadyDone = TutorialHelper::isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::REFINERY, 20);
+				$nextStepAlreadyDone = $tutorialHelper->isNextBuildingStepAlreadyDone($playerId, OrbitalBaseResource::REFINERY, 20);
 				break;
 			case TutorialResource::SPONSORSHIP :
 				$nextStepAlreadyDone = TRUE;

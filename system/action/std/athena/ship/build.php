@@ -7,13 +7,10 @@
 
 
 use Asylamba\Classes\Library\Http\Response;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\DataAnalysis;
 use Asylamba\Classes\Library\Format;
 
-use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Athena\Model\ShipQueue;
 
@@ -30,6 +27,8 @@ $technologyManager = $this->getContainer()->get('promethee.technology_manager');
 $shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
 $shipHelper = $this->getContainer()->get('athena.ship_helper');
 $colorManager = $this->getContainer()->get('demeter.color_manager');
+$database = $this->getContainer()->get('database');
+$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -71,12 +70,12 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 					switch ($session->get('playerInfo')->get('stepTutorial')) {
 						case TutorialResource::BUILD_SHIP0:
 							if ($ship == ShipResource::PEGASE) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::BUILD_SHIP1:
 							if ($ship == ShipResource::SATYRE) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 					}
@@ -128,8 +127,7 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 				$session->get('playerEvent')->add($sq->dEnd, EVENT_BASE, $baseId);
 
 				if (DATA_ANALYSIS) {
-					$db = Database::getInstance();
-					$qr = $db->prepare('INSERT INTO 
+					$qr = $database->prepare('INSERT INTO 
 						DA_BaseAction(`from`, type, opt1, opt2, weight, dAction)
 						VALUES(?, ?, ?, ?, ?, ?)'
 					);

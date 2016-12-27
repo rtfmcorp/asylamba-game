@@ -24,7 +24,9 @@ $technologyQueueManager = $this->getContainer()->get('promethee.technology_queue
 $technologyHelper = $this->getContainer()->get('promethee.technology_helper');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $researchManager = $this->getContainer()->get('promethee.research_manager');
+$technologyManager = $this->getContainer()->get('promethee.technology_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
+$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -43,7 +45,7 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 
 		if ($technologyQueueManager->size() == 0) {
 
-			$technos = new Technology($session->get('playerId'));
+			$technos = $technologyManager->getPlayerTechnology($session->get('playerId'));
 			$targetLevel = $technos->getTechnology($techno) + 1;
 			$technologyQueueManager->newSession(ASM_UMODE);
 			$technologyQueueManager->load(array('rPlace' => $baseId), array('dEnd'));
@@ -78,12 +80,12 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 						switch ($session->get('playerInfo')->get('stepTutorial')) {
 							case TutorialResource::SHIP0_UNBLOCK:
 								if ($techno == Technology::SHIP0_UNBLOCK) {
-									TutorialHelper::setStepDone();
+									$tutorialHelper->setStepDone();
 								}
 								break;
 							case TutorialResource::SHIP1_UNBLOCK:
 								if ($techno == Technology::SHIP1_UNBLOCK) {
-									TutorialHelper::setStepDone();
+									$tutorialHelper->setStepDone();
 								}
 								break;
 						}

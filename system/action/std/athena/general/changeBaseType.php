@@ -6,7 +6,6 @@
 
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\DataAnalysis;
-use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
