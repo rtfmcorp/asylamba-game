@@ -35,6 +35,9 @@ services:
         class: Asylamba\Modules\Athena\Manager\CommercialShippingManager
         arguments:
             - "@database"
+            - "@athena.orbital_base_manager"
+            - "@hermes.notification_manager"
+            - "@app.session"
             
     athena.commercial_tax_manager:
         class: Asylamba\Modules\Athena\Manager\CommercialTaxManager
@@ -48,6 +51,7 @@ services:
             - "@athena.building_queue_manager"
             - "@athena.ship_queue_manager"
             - "@promethee.technology_queue_manager"
+            - "@promethee.technology_helper"
             - "@athena.commercial_shipping_manager"
             - "@athena.commercial_route_manager"
             - "@athena.transaction_manager"
@@ -96,3 +100,5 @@ services:
         class: Asylamba\Modules\Athena\Manager\TransactionManager
         arguments:
             - "@database"
+            - "@athena.commercial_tax_manager"
+            - "@app.session"

@@ -2,12 +2,6 @@
 
 namespace Asylamba\Modules\Athena\Resource;
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
-
-use Asylamba\Modules\Demeter\Resource\ColorResource;
-use Asylamba\Modules\Promethee\Resource\TechnologyResource;
-
 class ShipResource {
 
 	const PEGASE = 0;
