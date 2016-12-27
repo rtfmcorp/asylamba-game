@@ -908,7 +908,7 @@ class OrbitalBaseManager extends Manager {
 		$orbitalBase->setShipStorage($sq->shipNumber, $orbitalBase->getShipStorage($sq->shipNumber) + 1);
 		# increase player experience
 		$experience = ShipResource::getInfo($sq->shipNumber, 'points');
-		$player->increaseExperience($experience);
+		$this->playerManager->increaseExperience($player, $experience);
 
 		# alert
 		if ($this->session->get('playerId') == $orbitalBase->rPlayer) {

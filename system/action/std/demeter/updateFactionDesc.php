@@ -1,39 +1,41 @@
 <?php
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Exception\FormException;
 
+$colorManager = $this->getContainer()->get('demeter.color_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
 # string description 	description à envoyer
 
-$description 			= Utils::getHTTPData('description');
+$description = $request->request->get('description');
 
 if ($description !== FALSE) {
-	$S_PAM1 = ASM::$pam->getCurrentSession();
-	ASM::$pam->newSession(FALSE);
-	ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+	$S_PAM1 = $playerManager->getCurrentSession();
+	$playerManager->newSession(FALSE);
+	$playerManager->load(array('id' => $session->get('playerId')));
 
-	if (ASM::$pam->size() == 1) {
-		if (ASM::$pam->get()->status > Player::PARLIAMENT) {
+	if ($playerManager->size() == 1) {
+		if ($playerManager->get()->status > Player::PARLIAMENT) {
 			if ($description !== '' && strlen($description) < 25000) {
-				$S_COL_1 = ASM::$clm->getCurrentSession();
-				ASM::$clm->newSession();
-				ASM::$clm->load(array('id' => ASM::$pam->get()->rColor));
+				$S_COL_1 = $colorManager->getCurrentSession();
+				$colorManager->newSession();
+				$colorManager->load(array('id' => $playerManager->get()->rColor));
 
-				ASM::$clm->get()->description = $description;				
+				$colorManager->get()->description = $description;				
 				
-				ASM::$clm->changeSession($S_COL_1);
+				$colorManager->changeSession($S_COL_1);
 			} else {
-				CTR::$alert->add('Le description est vide ou trop longue', ALERT_STD_FILLFORM);
+				throw new FormException('La description est vide ou trop longue');
 			}
 		} else {
-			CTR::$alert->add('Vous n\'avez pas les droits pour poster une description', ALERT_STD_FILLFORM);
+			throw new FormException('Vous n\'avez pas les droits pour poster une description');
 		}
 	} else {
-		CTR::$alert->add('Vous n\'existez pas', ALERT_STD_FILLFORM);
+		throw new FormException('Vous n\'existez pas');
 	}
 
-	ASM::$pam->changeSession($S_PAM1);
+	$playerManager->changeSession($S_PAM1);
 } else {
-	CTR::$alert->add('Pas assez d\'informations pour écrire une description', ALERT_STD_FILLFORM);
+	throw new FormException('Pas assez d\'informations pour écrire une description');
 }
