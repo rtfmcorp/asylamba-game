@@ -162,7 +162,6 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 						$factionSectors[] = $sm->get($i)->getId();
 					}
 				}
-
 				if (in_array($request->request->get('sector'), $factionSectors)) {
 					$session->get('inscription')->add('sector', $request->request->get('sector'));
 				} else {
