@@ -29,16 +29,6 @@ class Params {
     ];
 
     /**
-     * @param string $params
-     * @param mixed $value
-     */
-    public static function update($params, $value) {
-        if (in_array($params, self::$params)) {
-            CTR::$cookie->add('p' . $params, $value);
-        }
-    }
-
-    /**
      * @return array
      */
     public static function getParams() {
