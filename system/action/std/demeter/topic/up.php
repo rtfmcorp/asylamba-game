@@ -1,19 +1,23 @@
 <?php
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Classes\Exception\ErrorException;
 
-$id 		= Utils::getHTTPData('id');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$topicManager = $this->getContainer()->get('demeter.forum_topic_manager');
+
+$id 		= $request->query->get('id');
 
 if ($id !== FALSE) {
-	$_TOM = ASM::$tom->getCurrentsession();
-	ASM::$tom->newSession();
-	ASM::$tom->load(array('id' => $id));
+	$_TOM = $topicManager->getCurrentsession();
+	$topicManager->newSession();
+	$topicManager->load(array('id' => $id));
 
-	if (ASM::$tom->size() == 1) {
-		if (in_array(CTR::$data->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER])) {
-			$topic = ASM::$tom->get();
+	if ($topicManager->size() == 1) {
+		if (in_array($session->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER])) {
+			$topic = $topicManager->get();
 
 			if ($topic->isUp) {
 				$topic->isUp = FALSE;
@@ -21,14 +25,14 @@ if ($id !== FALSE) {
 				$topic->isUp = TRUE;
 			}
 		} else {
-			CTR::$alert->add('Vous ne disposez pas des droits nécessaires pour cette action.', ALERT_STD_ERROR);
+			throw new ErrorException('Vous ne disposez pas des droits nécessaires pour cette action.');
 		}
 	} else {
-		CTR::$alert->add('Le sujet demandé n\'existe pas.', ALERT_STD_ERROR);
+		throw new ErrorException('Le sujet demandé n\'existe pas.');
 	}
 	
-	CTR::redirect('faction/view-forum/forum-' . ASM::$tom->get()->rForum . '/topic-' . ASM::$tom->get()->id . '/sftr-2');
-	ASM::$tom->changeSession($_TOM);
+	$this->getContainer()->get('app.response')->redirect('faction/view-forum/forum-' . $topicManager->get()->rForum . '/topic-' . $topicManager->get()->id . '/sftr-2');
+	$topicManager->changeSession($_TOM);
 } else {
-	CTR::$alert->add('Manque d\'information.', ALERT_STD_ERROR);
+	throw new ErrorException('Manque d\'information.');
 }

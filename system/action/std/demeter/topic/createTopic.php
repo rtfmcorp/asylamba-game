@@ -5,59 +5,60 @@
 # rforum
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Modules\Demeter\Model\Forum\ForumTopic;
 use Asylamba\Modules\Demeter\Model\Forum\ForumMessage;
-use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
+use Asylamba\Classes\Exception\FormException;
 
-$title = Utils::getHTTPData('title');
-$content = Utils::getHTTPData('content');
-$rForum = Utils::getHTTPData('rforum');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$database = $this->getContainer()->get('database');
+$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
+$topicManager = $this->getContainer()->get('demeter.forum_topic_manager');
+$forumMessageManager = $this->getContainer()->get('demeter.forum_message_manager');
+
+$title = $request->request->get('title');
+$content = $request->request->get('content');
+$rForum = $request->query->get('rforum');
 
 
 if ($title !== FALSE AND $content !== FALSE AND $rForum !== FALSE) {
 	$topic = new ForumTopic();
 	$topic->title = $title;
 	$topic->rForum = $rForum;
-	$topic->rPlayer = CTR::$data->get('playerId');
-	$topic->rColor = CTR::$data->get('playerInfo')->get('color');
+	$topic->rPlayer = $session->get('playerId');
+	$topic->rColor = $session->get('playerInfo')->get('color');
 	$topic->dCreation = Utils::now();
 	$topic->dLastMessage = Utils::now();
 
-	$rTopic = ASM::$tom->add($topic);
+	$rTopic = $topicManager->add($topic);
 
 	$message = new ForumMessage();
-	$message->rPlayer = CTR::$data->get('playerId');
+	$message->rPlayer = $session->get('playerId');
 	$message->rTopic = $rTopic;
-	$message->edit($content);
+	$forumMessageManager->edit($message, $content);
 	$message->dCreation = Utils::now();
 	$message->dLastMessage = Utils::now();
 
-	ASM::$fmm->add($message);
+	$forumMessageManager->add($message);
 
 	# tutorial
-	if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-		switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
-			case TutorialResource::FACTION_FORUM :
-				TutorialHelper::setStepDone();						
-				break;
-		}
+	if ($session->get('playerInfo')->get('stepDone') == FALSE &&
+		$session->get('playerInfo')->get('stepTutorial') === TutorialResource::FACTION_FORUM) {
+		$tutorialHelper->setStepDone();
 	}
 
 	if (DATA_ANALYSIS) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO 
+		$qr = $database->prepare('INSERT INTO 
 			DA_SocialRelation(`from`, type, message, dAction)
 			VALUES(?, ?, ?, ?)'
 		);
-		$qr->execute([CTR::$data->get('playerId'), 1, $content, Utils::now()]);
+		$qr->execute([$session->get('playerId'), 1, $content, Utils::now()]);
 	}
 
-	CTR::redirect('faction/view-forum/forum-' . $topic->rForum . '/topic-' . $topic->id . '/sftr-2');
-	CTR::$alert->add('Topic créé.', ALERT_STD_SUCCESS);
+	$response->redirect('faction/view-forum/forum-' . $topic->rForum . '/topic-' . $topic->id . '/sftr-2');
+	$response->flashbag->add('Topic créé.', Response::FLASHBAG_SUCCESS);
 } else {
-	CTR::$alert->add('Manque d\information.', ALERT_STD_FILLFORM);
+	throw new FormException('Manque d\information.');
 }

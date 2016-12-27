@@ -153,4 +153,30 @@ class ForumTopicManager extends Manager {
 		$this->_Remove($id);
 		return TRUE;
 	}
+
+	public function updateLastView(ForumTopic $topic, $playerId) {
+		if ($topic->lastView == NULL) {
+			$qr = $this->database->prepare('INSERT INTO forumLastView 
+				SET
+					rPlayer = ?,
+					rTopic = ?,
+					dView = ?');
+			$aw = $qr->execute(array(
+					$playerId,
+					$topic->id,
+					Utils::now()
+				)
+			);
+		} else {
+			$qr = $this->database->prepare('UPDATE forumLastView
+				SET
+					dView = ?
+				WHERE rPlayer = ? AND rTopic = ?');
+			$aw = $qr->execute(array(
+				Utils::now(),
+				$playerId,
+				$topic->id
+			));
+		}
+	}
 }

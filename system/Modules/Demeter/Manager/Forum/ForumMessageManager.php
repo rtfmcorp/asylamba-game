@@ -15,15 +15,20 @@ use Asylamba\Classes\Worker\Manager;
 use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Demeter\Model\Forum\ForumMessage;
+use Asylamba\Classes\Library\Parser;
 
 class ForumMessageManager extends Manager {
 	protected $managerType ='_ForumMessage';
+	/** @var Parser **/
+	protected $parser;
 
 	/**
 	 * @param Database $database
+	 * @param Parser $parser
 	 */
-	public function __construct(Database $database) {
+	public function __construct(Database $database, Parser $parser) {
 		parent::__construct($database);
+		$this->parser = $parser;
 	}
 	
 	public function load($where = array(), $order = array(), $limit = array()) {
@@ -140,5 +145,14 @@ class ForumMessageManager extends Manager {
 
 		$this->_Remove($id);
 		return TRUE;
+	}
+
+	public function edit(ForumMessage $message, $content) {
+		$this->oContent = $content;
+
+		$this->parser->parseBigTag = TRUE;
+		$content = $this->parser->parse($content);
+
+		$this->pContent = $content;
 	}
 }

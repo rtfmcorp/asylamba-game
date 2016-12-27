@@ -1,32 +1,35 @@
 <?php
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Exception\FormException;
 
-$id = Utils::getHTTPData('id');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$topicManager = $this->getContainer()->get('demeter.forum_topic_manager');
+
+$id = $request->query->get('id');
 
 if ($id !== FALSE) {
-	$S_TOM = ASM::$tom->getCurrentSession();
-	ASM::$tom->newSession();
-	ASM::$tom->load(array('id' => $id));
+	$S_TOM = $topicManager->getCurrentSession();
+	$topicManager->newSession();
+	$topicManager->load(array('id' => $id));
 
-	if (ASM::$tom->size() == 1) {
-		if (CTR::$data->get('playerInfo')->get('status') > 2) {
-			if (ASM::$tom->get()->isClosed == 1) {
-				ASM::$tom->get()->isClosed = 0;
+	if ($topicManager->size() == 1) {
+		if ($session->get('playerInfo')->get('status') > 2) {
+			if ($topicManager->get()->isClosed == 1) {
+				$topicManager->get()->isClosed = 0;
 			} else {
-				ASM::$tom->get()->isClosed = 1;
+				$topicManager->get()->isClosed = 1;
 			}
-			CTR::$alert->add('Le sujet a bien été fermé/ouvert', ALERT_STD_SUCCESS);
+			$this->getContainer()->get('app.response')->add('Le sujet a bien été fermé/ouvert', Response::FLASHBAG_SUCCESS);
 		} else {
-			CTR::$alert->add('Vous n\'avez pas les droits', ALERT_STD_FILLFORM);	
+			throw new FormException('Vous n\'avez pas les droits');	
 		}
 	} else {
-		CTR::$alert->add('Ce sujet n\'existe pas', ALERT_STD_FILLFORM);
+		throw new FormException('Ce sujet n\'existe pas');
 	}
 
-	ASM::$tom->changeSession($S_TOM);
+	$topicManager->changeSession($S_TOM);
 } else {
-	CTR::$alert->add('Manque d\'information', ALERT_STD_FILLFORM);
+	throw new FormException('Manque d\'information');
 }
