@@ -1,20 +1,23 @@
 <?php
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Promethee\Resource\ForumResources;
+use Asylamba\Classes\Exception\FormException;
 
-$rForum = Utils::getHTTPData('rforum');
-$id = Utils::getHTTPData('id');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$topicManager = $this->getContainer()->get('demeter.forum_topic_manager');
+
+$rForum = $request->query->get('rforum');
+$id = $request->query->get('id');
 
 if ($rForum !== FALSE && $id !== FALSE) {
-	$_TOM = ASM::$tom->getCurrentSession();
-	ASM::$tom->newSession();
-	ASM::$tom->load(array('id' => $id));
+	$_TOM = $topicManager->getCurrentSession();
+	$topicManager->newSession();
+	$topicManager->load(array('id' => $id));
 
-	if (ASM::$tom->size() > 0) {
-		if (CTR::$data->get('playerInfo')->get('status') > 2) {
+	if ($topicManager->size() > 0) {
+		if ($session->get('playerInfo')->get('status') > 2) {
 			$isOk = FALSE;
 
 			for ($i = 1; $i < ForumResources::size() + 1; $i++) { 
@@ -25,20 +28,20 @@ if ($rForum !== FALSE && $id !== FALSE) {
 			}
 
 			if ($isOk) {
-				ASM::$tom->get()->rForum = $rForum;
-				ASM::$tom->get()->dLastModification = Utils::now();
+				$topicManager->get()->rForum = $rForum;
+				$topicManager->get()->dLastModification = Utils::now();
 
-				CTR::redirect('faction/view-forum/forum-' . $rForum . '/topic-' . ASM::$tom->get()->id);
+				$this->getContainer()->get('app.response')->redirect('faction/view-forum/forum-' . $rForum . '/topic-' . $topicManager->get()->id);
 			} else {
-				CTR::$alert->add('Le forum de destination n\'existe pas', ALERT_STD_FILLFORM);
+				throw new FormException('Le forum de destination n\'existe pas');
 			}
 		} else {
-			CTR::$alert->add('Vous n\'avez pas les droits pour cette opération', ALERT_STD_FILLFORM);
+			throw new FormException('Vous n\'avez pas les droits pour cette opération');
 		}
 	} else {
-		CTR::$alert->add('Ce sujet n\'existe pas', ALERT_STD_FILLFORM);	
+		throw new FormException('Ce sujet n\'existe pas');	
 	}
-	ASM::$tom->changeSession($_TOM);
+	$topicManager->changeSession($_TOM);
 } else {
-	CTR::$alert->add('Manque d\'information', ALERT_STD_FILLFORM);
+	throw new FormException('Manque d\'information');
 }

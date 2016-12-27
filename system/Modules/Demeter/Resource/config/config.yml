@@ -20,6 +20,7 @@ services:
         class: Asylamba\Modules\Demeter\Manager\Forum\ForumMessageManager
         arguments:
             - "@database"
+            - "@parser"
     demeter.forum_topic_manager:
         class: Asylamba\Modules\Demeter\Manager\Forum\ForumTopicManager
         arguments:
@@ -47,4 +48,5 @@ services:
             - "@athena.commercial_tax_manager"
             - "@gaia.sector_manager"
             - "@athena.commercial_route_manager"
+            - "@parser"
             - "@ctc"

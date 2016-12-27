@@ -12,18 +12,6 @@
 
 namespace Asylamba\Modules\Demeter\Model;
 
-use Asylamba\Classes\Library\Parser;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTC;
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Modules\Hermes\Model\Notification;
-use Asylamba\Modules\Demeter\Model\Election\Election;
-use Asylamba\Modules\Hermes\Model\ConversationUser;
-use Asylamba\Modules\Demeter\Resource\LawResources;
-use Asylamba\Modules\Demeter\Model\Law\Law;
-use Asylamba\Modules\Demeter\Resource\ColorResource;
-use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
-
 class Color {
 	# Regime
 	const DEMOCRATIC 				= 1;
@@ -130,11 +118,6 @@ class Color {
 	public $chiefId					= 0;
 
 	public function getId() { return $this->id; }
-	public function getParsedDescription() {
-		$p = new Parser();
-		$p->parseBigTag = TRUE;
-		return $p->parse($this->description);
-	}
 
 	public function increaseCredit($credit) {
 		$this->credits += $credit;

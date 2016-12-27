@@ -36,6 +36,7 @@ use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Demeter\Model\Election\Election;
+use Asylamba\Classes\Library\Parser;
 
 class ColorManager extends Manager {
 	/** @var string **/
@@ -62,6 +63,8 @@ class ColorManager extends Manager {
 	protected $sectorManager;
 	/** @var CommercialRouteManager **/
 	protected $commercialRouteManager;
+	/** @var Parser **/
+	protected $parser;
 	/** @var CTC **/
 	protected $ctc;
 	
@@ -78,6 +81,7 @@ class ColorManager extends Manager {
 	 * @param CommercialTaxManager $commercialTaxManager
 	 * @param SectorManager $sectorManager
 	 * @param CommercialRouteManager $commercialRouteManager
+	 * @param Parser $parser
 	 * @param CTC $ctc
 	 */
 	public function __construct(
@@ -93,6 +97,7 @@ class ColorManager extends Manager {
 		CommercialTaxManager $commercialTaxManager,
 		SectorManager $sectorManager,
 		CommercialRouteManager $commercialRouteManager,
+		Parser $parser,
 		CTC $ctc
 	) {
 		parent::__construct($database);
@@ -107,7 +112,17 @@ class ColorManager extends Manager {
 		$this->commercialTaxManager = $commercialTaxManager;
 		$this->sectorManager = $sectorManager;
 		$this->commercialRouteManager = $commercialRouteManager;
+		$this->parser = $parser;
 		$this->ctc = $ctc;
+	}
+	
+	/**
+	 * @param Color $color
+	 * @return string
+	 */
+	public function getParsedDescription(Color $color) {
+		$this->parser->parseBigTag = TRUE;
+		return $this->parser->parse($color->description);
 	}
 	
 	public function load($where = array(), $order = array(), $limit = array()) {
@@ -312,12 +327,12 @@ class ColorManager extends Manager {
 	}
 
 	// FONCTIONS STATICS
-	public static function updateInfos($id) {
-		self::updatePlayers($id);
-		self::updateActivePlayers($id);
+	public function updateInfos($id) {
+		$this->updatePlayers($id);
+		$this->updateActivePlayers($id);
 	}
 
-	public static function updatePlayers($id) {
+	public function updatePlayers($id) {
 		$_CLM1 = $this->getCurrentSession();
 		$this->newSession();
 		$this->load(array('id' => $id));
@@ -332,7 +347,7 @@ class ColorManager extends Manager {
 		$this->changeSession($_CLM1);
 	}
 
-	public static function updateActivePlayers($id) {
+	public function updateActivePlayers($id) {
 		$_CLM1 = $this->getCurrentSession();
 		$this->newSession();
 		$this->load(array('id' => $id));
