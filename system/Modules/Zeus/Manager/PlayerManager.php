@@ -909,7 +909,7 @@ class PlayerManager extends Manager {
 	public function increaseCredit(Player $player, $credit) {
 		$player->credit += abs($credit);
 
-		if ($player->synchronized) {
+		if ($player->isSynchronized()) {
 			$this->session->get('playerInfo')->add('credit', $player->credit);
 		}
 	}
