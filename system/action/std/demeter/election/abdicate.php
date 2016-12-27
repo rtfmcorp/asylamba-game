@@ -3,89 +3,96 @@
 #department
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Zeus\Model\Player;
 
-$rPlayer = Utils::getHTTPData('rplayer');
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$colorManager = $this->getContainer()->get('demeter.color_manager');
+$notificationManager = $this->getContainer()->get('hermes.notification_manager');
 
-if ($statusArray = ColorResource::getInfo(CTR::$data->get('playerInfo')->get('color'), 'regime') == Color::DEMOCRATIC) {
-	if (CTR::$data->get('playerInfo')->get('status') == Player::CHIEF) {
-		$_CLM = ASM::$clm->getCurrentsession();
-		ASM::$clm->newSession();
-		ASM::$clm->load(['id' => CTR::$data->get('playerInfo')->get('color')]);
+$rPlayer = $request->query->get('rplayer');
 
-		if (ASM::$clm->get()->electionStatement == Color::MANDATE) {
+if ($statusArray = ColorResource::getInfo($session->get('playerInfo')->get('color'), 'regime') == Color::DEMOCRATIC) {
+	if ($session->get('playerInfo')->get('status') == Player::CHIEF) {
+		$_CLM = $colorManager->getCurrentsession();
+		$colorManager->newSession();
+		$colorManager->load(['id' => $session->get('playerInfo')->get('color')]);
+
+		if ($colorManager->get()->electionStatement == Color::MANDATE) {
 			$date = new \DateTime(Utils::now());
-			$date->modify('-' . ASM::$clm->get()->mandateDuration . ' second');
+			$date->modify('-' . $colorManager->get()->mandateDuration . ' second');
 			$date = $date->format('Y-m-d H:i:s');
-			ASM::$clm->get()->dLastElection = $date;			
-			CTR::$alert->add('Des élections anticipées vont être lancées.', ALERT_STD_SUCCESS);	
+			$colorManager->get()->dLastElection = $date;			
+			$response->flashbag->add('Des élections anticipées vont être lancées.', Response::FLASHBAG_SUCCESS);	
 		} else {
-			CTR::$alert->add('Des élections sont déjà en cours.', ALERT_STD_ERROR);	
+			throw new ErrorException('Des élections sont déjà en cours.');	
 		}
-		ASM::$clm->changeSession($_CLM);
+		$colorManager->changeSession($_CLM);
 	} else {
-		CTR::$alert->add('Vous n\'êtes pas le chef de votre faction.', ALERT_STD_ERROR);
+		throw new ErrorException('Vous n\'êtes pas le chef de votre faction.');
 	}
 } else {
 	if ($rPlayer !== FALSE) {
-		$_PAM2 = ASM::$pam->getCurrentsession();
-		ASM::$pam->newSession();
-		if (CTR::$data->get('playerInfo')->get('status') == Player::CHIEF) {
-			$_PAM = ASM::$pam->getCurrentsession();
-			ASM::$pam->newSession();
-			ASM::$pam->load(array('id' => $rPlayer));
+		$_PAM2 = $playerManager->getCurrentsession();
+		$playerManager->newSession();
+		if ($session->get('playerInfo')->get('status') == Player::CHIEF) {
+			$_PAM = $playerManager->getCurrentsession();
+			$playerManager->newSession();
+			$playerManager->load(array('id' => $rPlayer));
 
-			if (ASM::$pam->size() > 0) {
-				if (ASM::$pam->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
-					if (ASM::$pam->get()->status >= Player::PARLIAMENT) {
-						$_CLM = ASM::$clm->getCurrentsession();
-						ASM::$clm->newSession();
-						ASM::$clm->load(['id' => CTR::$data->get('playerInfo')->get('color')]);
+			if ($playerManager->size() > 0) {
+				if ($playerManager->get()->rColor == $session->get('playerInfo')->get('color')) {
+					if ($playerManager->get()->status >= Player::PARLIAMENT) {
+						$_CLM = $colorManager->getCurrentsession();
+						$colorManager->newSession();
+						$colorManager->load(['id' => $session->get('playerInfo')->get('color')]);
 
-						if (ASM::$clm->get()->electionStatement == Color::MANDATE) {
-							ASM::$pam->get()->status = Player::CHIEF;
+						if ($colorManager->get()->electionStatement == Color::MANDATE) {
+							$playerManager->get()->status = Player::CHIEF;
 							
-							$_PAM23 = ASM::$pam->getCurrentsession();
-							ASM::$pam->newSession();
-							ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-							ASM::$pam->get()->status = Player::PARLIAMENT;
-							CTR::$data->get('playerInfo')->add('status', Player::PARLIAMENT);
-							ASM::$pam->changeSession($_PAM23);
+							$_PAM23 = $playerManager->getCurrentsession();
+							$playerManager->newSession();
+							$playerManager->load(array('id' => $session->get('playerId')));
+							$playerManager->get()->status = Player::PARLIAMENT;
+							$session->get('playerInfo')->add('status', Player::PARLIAMENT);
+							$playerManager->changeSession($_PAM23);
 
-							$statusArray = ColorResource::getInfo(ASM::$pam->get()->rColor, 'status');
+							$statusArray = ColorResource::getInfo($playerManager->get()->rColor, 'status');
 							$notif = new Notification();
 							$notif->setRPlayer($rPlayer);
 							$notif->setTitle('Héritier du Trône.');
 							$notif->addBeg()
 								->addTxt('Vous avez été choisi par le ' . $statusArray[5] . ' de votre faction pour être son successeur, vous prenez la tête du gouvernement immédiatement.');
-							ASM::$ntm->add($notif);
+							$notificationManager->add($notif);
 
-							CTR::$alert->add(ASM::$pam->get()->name . ' est désigné comme votre successeur.', ALERT_STD_SUCCESS);	
+							$response->flashbag->add($playerManager->get()->name . ' est désigné comme votre successeur.', Response::FLASHBAG_SUCCESS);	
 						} else {
-							CTR::$alert->add('vous ne pouvez pas abdiquer pendant un putsch.', ALERT_STD_ERROR);	
+							throw new ErrorException('vous ne pouvez pas abdiquer pendant un putsch.');	
 						}
-						ASM::$clm->changeSession($_CLM);
+						$colorManager->changeSession($_CLM);
 						
 					} else {
-						CTR::$alert->add('Vous ne pouvez choisir qu\'un membre du sénat ou du gouvernement.', ALERT_STD_ERROR);
+						throw new ErrorException('Vous ne pouvez choisir qu\'un membre du sénat ou du gouvernement.');
 					}
 				} else {
-					CTR::$alert->add('Vous ne pouvez pas choisir un joueur d\'une autre faction.', ALERT_STD_ERROR);
+					throw new ErrorException('Vous ne pouvez pas choisir un joueur d\'une autre faction.');
 				}
 			} else {
-				CTR::$alert->add('Ce joueur n\'existe pas.', ALERT_STD_ERROR);
+				throw new ErrorException('Ce joueur n\'existe pas.');
 			}
 
-			ASM::$pam->changeSession($_PAM);
+			$playerManager->changeSession($_PAM);
 		} else {
-			CTR::$alert->add('Vous n\'êtes pas le chef de votre faction.', ALERT_STD_ERROR);	
+			throw new ErrorException('Vous n\'êtes pas le chef de votre faction.');	
 		}
-		ASM::$pam->changeSession($_PAM2);
+		$playerManager->changeSession($_PAM2);
 	} else {
-		CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
+		throw new ErrorException('Informations manquantes.');
 	}
 }
