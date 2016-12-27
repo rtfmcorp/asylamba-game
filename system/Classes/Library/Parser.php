@@ -2,8 +2,6 @@
 
 namespace Asylamba\Classes\Library;
 
-use Asylamba\Classes\Worker\ASM;
-
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Modules\Gaia\Manager\PlaceManager;
 

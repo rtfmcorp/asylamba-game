@@ -30,9 +30,8 @@ services:
     parser:
         class: Asylamba\Classes\Library\Parser
         arguments:
-            - "@database"
-            - "@zeus.player_manager"
             - "@gaia.place_manager"
+            - "@zeus.player_manager"
 
     security:
         class: Asylamba\Classes\Library\Security
