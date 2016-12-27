@@ -1,11 +1,11 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
+$request = $this->getContainer()->get('app.request');
 
 echo '<div id="subnav">';
 	echo '<button class="move-side-bar top" data-dir="up"> </button>';
 	echo '<div class="overflow">';
-		$active = (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'invest') ? 'active' : '';
+		$active = (!$request->query->has('view') OR $request->query->get('view') == 'invest') ? 'active' : '';
 		echo '<a href="' . APP_ROOT . 'financial/view-invest" class="item ' . $active . '">';
 			echo '<span class="picto">';
 				echo '<img src="' . MEDIA . 'financial/invest.png" alt="" />';
@@ -15,7 +15,7 @@ echo '<div id="subnav">';
 			echo '</span>';
 		echo '</a>';
 
-		$active = (CTR::$get->get('view') == 'send') ? 'active' : '';
+		$active = ($request->query->get('view') == 'send') ? 'active' : '';
 		echo '<a href="' . APP_ROOT . 'financial/view-send" class="item ' . $active . '">';
 			echo '<span class="picto">';
 				echo '<img src="' . MEDIA . 'financial/send-credit.png" alt="" />';

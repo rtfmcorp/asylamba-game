@@ -11,6 +11,8 @@
 
 use Asylamba\Classes\Library\Format;
 
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
+
 echo '<div class="component new-message">';
 	echo '<div class="head skin-2">';
 		echo '<h2>Envoi de crédit</h2>';
@@ -18,7 +20,7 @@ echo '<div class="component new-message">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<h4>A un joueur</h4>';
-			echo '<form action="' . Format::actionBuilder('sendcredit') . '" method="post" />';
+			echo '<form action="' . Format::actionBuilder('sendcredit', $sessionToken) . '" method="post" />';
 				echo '<p><label for="send-credit-target">Destinataire</label></p>';
 				echo '<p class="input input-text">';
 					echo '<input type="hidden" class="autocomplete-hidden" name="playerid" />';
