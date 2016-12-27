@@ -3,7 +3,7 @@
 namespace Asylamba\Classes\Configuration;
 
 use Asylamba\Classes\Configuration\Loader\YamlLoader;
-use Asylamba\Classes\Worker\Container;
+use Asylamba\Classes\DependencyInjection\Container;
 use Symfony\Component\Config\FileLocatorInterface;
 
 class Configuration {
