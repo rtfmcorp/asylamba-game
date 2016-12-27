@@ -212,7 +212,6 @@ class PlayerManager extends Manager {
 		while ($aw = $qr->fetch()) {
 			$p = new Player();
 
-			
 			$p->setId($aw['id'], $playerId);
 			$p->setBind($aw['bind']);
 			$p->setRColor($aw['rColor']);
@@ -519,7 +518,6 @@ class PlayerManager extends Manager {
 			$this->galaxyColorManager->apply();
 
 			# envoi d'une notif
-
 			$notif = new Notification();
 			$notif->setRPlayer($player->id);
 			$notif->setTitle('Nouvelle Colonie');
@@ -723,7 +721,6 @@ class PlayerManager extends Manager {
 					$lifeTech += ($newISchool * $player->partLifeSciences / 100);
 					$socialTech += ($newISchool * $player->partSocialPoliticalSciences / 100);
 					$informaticTech += ($newISchool * $player->partInformaticEngineering / 100);
-					
 				}
 				$n->addTxt(' Seuls ')->addStg($ratioDifference . '%')->addTxt(' des crédits d\'investissements peuvent être honorés.')->addBrk();
 				$n->addTxt(' Vos investissements dans l\'université ont été mis à zéro et les autres diminués de façon pondérée afin qu\'aux prochaines relèves vous puissiez payer. Attention, cette situation ne vous apporte pas de crédits.');
