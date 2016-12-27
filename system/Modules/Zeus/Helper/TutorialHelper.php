@@ -11,11 +11,7 @@
  */
 namespace Asylamba\Modules\Zeus\Helper;
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Container\Session;
-
-use Asylamba\Modules\Promethee\Model\Technology;
 
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Modules\Athena\Manager\OrbitalBaseManager;

@@ -110,7 +110,7 @@ class CreditTransactionManager extends Manager {
 			$ct->comment
 		));
 
-		$ct->id = $db->lastInsertId();
+		$ct->id = $this->database->lastInsertId();
 
 		$this->_Add($ct);
 	}
