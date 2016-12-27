@@ -6,8 +6,8 @@ parameters:
 
     hermes.notifications.display_tool: 5
 
-    hermes.notifications.timeout.readed: 24 * 3
-    hermes.notifications.timeout.unreaded: 24 * 10
+    hermes.notifications.timeout.read: 24 * 3
+    hermes.notifications.timeout.unread: 24 * 10
 
     hermes.notifications.mrm.message_display: 50
 
