@@ -21,6 +21,7 @@ class Response
 	protected $redirect;
 	
 	const FLASHBAG_SUCCESS = 'success';
+	const FLASHBAG_MARKET_SUCCESS = 'market-success';
 	const FLASHBAG_ERROR = 'error';
 	
 	/**
