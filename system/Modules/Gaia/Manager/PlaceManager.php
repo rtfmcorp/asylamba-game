@@ -481,7 +481,7 @@ class PlaceManager extends Manager {
 								$commanderPlayer = $this->playerManager->get();
 								$this->playerManager->changeSession($S_PAM_C1);
 
-								if ($this->rPlayer != NULL) {
+								if ($place->rPlayer != NULL) {
 									$S_PAM_C2 = $this->playerManager->getCurrentSession();
 									$this->playerManager->newSession();
 									$this->playerManager->load(array('id' => $place->rPlayer));
@@ -946,10 +946,10 @@ class PlaceManager extends Manager {
 			# victoire
 			if ($commander->getStatement() !== Commander::DEAD) {
 				# attribuer le rPlayer à la Place !
-				$this->rPlayer = $commander->rPlayer;
-				$this->commanders[] = $commander;
-				$this->playerColor = $commander->playerColor;
-				$this->typeOfBase = 4; 
+				$place->rPlayer = $commander->rPlayer;
+				$place->commanders[] = $commander;
+				$place->playerColor = $commander->playerColor;
+				$place->typeOfBase = 4; 
 
 				# créer une base
 				$ob = new OrbitalBase();
@@ -961,7 +961,7 @@ class PlaceManager extends Manager {
 				$ob->resourcesStorage = 2000;
 				$ob->uOrbitalBase = Utils::now();
 				$ob->dCreation = Utils::now();
-				$ob->updatePoints();
+				$this->orbitalBaseManager->updatePoints($ob);
 
 				$_OBM_UC1 = $this->orbitalBaseManager->getCurrentSession();
 				$this->orbitalBaseManager->newSession();
@@ -1234,7 +1234,7 @@ class PlaceManager extends Manager {
 				$this->notificationManager->add($notif);
 
 				$notif = new Notification();
-				$notif->setRPlayer($this->rPlayer);
+				$notif->setRPlayer($place->rPlayer);
 				$notif->setTitle('Rapport de pillage');
 				$notif->addBeg()
 					->addTxt('L\'officier ')
@@ -1385,7 +1385,7 @@ class PlaceManager extends Manager {
 					->addSep()
 					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
 					->addTxt('Elle est désormais votre, vous pouvez l\'administrer ')
-					->addLnk('bases/base-' . $this->id, 'ici')
+					->addLnk('bases/base-' . $place->id, 'ici')
 					->addTxt('.')
 					->addEnd();
 				$this->notificationManager->add($notif);
