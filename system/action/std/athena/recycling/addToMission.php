@@ -5,67 +5,74 @@
 # int place 		id de la base orbitale
 # int quantity 		recyclers quantity
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Modules\Athena\Model\RecyclingMission;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 
-for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
+$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
+
+for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
+	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
-$missionId = Utils::getHTTPData('id');
-$rPlace = Utils::getHTTPData('place');
-$quantity = Utils::getHTTPData('quantity');
+$missionId = $request->query->get('id');
+$rPlace = $request->query->get('place');
+$quantity = $request->query->get('quantity');
 
 if ($rPlace !== FALSE AND $missionId !== FALSE AND $quantity !== FALSE AND in_array($rPlace, $verif)) {
 
 	if ($quantity > 0) {
 	
-		$S_OBM1 = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession();
-		ASM::$obm->load(array('rPlace' => $rPlace));
+		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
+		$orbitalBaseManager->newSession();
+		$orbitalBaseManager->load(array('rPlace' => $rPlace));
 
-		if (ASM::$obm->size() == 1) {
-			$base = ASM::$obm->get();
+		if ($orbitalBaseManager->size() == 1) {
+			$base = $orbitalBaseManager->get();
 
-			$maxRecyclers = OrbitalBaseResource::getInfo(OrbitalBaseResource::RECYCLING, 'level', $base->levelRecycling, 'nbRecyclers');
+			$maxRecyclers = $orbitalBaseHelper->getInfo(OrbitalBaseResource::RECYCLING, 'level', $base->levelRecycling, 'nbRecyclers');
 			$usedRecyclers = 0;
 
-			$S_REM1 = ASM::$rem->getCurrentSession();
-			ASM::$rem->newSession();
-			ASM::$rem->load(array('rBase' => $rPlace, 'statement' => array(RecyclingMission::ST_ACTIVE, RecyclingMission::ST_BEING_DELETED)));
+			$S_REM1 = $recyclingMissionManager->getCurrentSession();
+			$recyclingMissionManager->newSession();
+			$recyclingMissionManager->load(array('rBase' => $rPlace, 'statement' => array(RecyclingMission::ST_ACTIVE, RecyclingMission::ST_BEING_DELETED)));
 
-			for ($i = 0; $i < ASM::$rem->size(); $i++) { 
-				$usedRecyclers += ASM::$rem->get($i)->recyclerQuantity + ASM::$rem->get($i)->addToNextMission;
+			for ($i = 0; $i < $recyclingMissionManager->size(); $i++) { 
+				$usedRecyclers += $recyclingMissionManager->get($i)->recyclerQuantity + $recyclingMissionManager->get($i)->addToNextMission;
 			}
 
 			if ($maxRecyclers - $usedRecyclers >= $quantity) {
 
 				$mission = NULL;
-				for ($i = 0; $i < ASM::$rem->size(); $i++) {
-					if (ASM::$rem->get($i)->id == $missionId && ASM::$rem->get($i)->statement == RecyclingMission::ST_ACTIVE) {
-						$mission = ASM::$rem->get($i);
+				for ($i = 0; $i < $recyclingMissionManager->size(); $i++) {
+					if ($recyclingMissionManager->get($i)->id == $missionId && $recyclingMissionManager->get($i)->statement == RecyclingMission::ST_ACTIVE) {
+						$mission = $recyclingMissionManager->get($i);
 						break;
 					}
 				}
 				if ($mission !== NULL) {
 					$mission->addToNextMission += $quantity;
-					CTR::$alert->add('Vos recycleurs ont bien été affectés, ils seront ajoutés à la prochaine mission.', ALERT_STD_SUCCESS);
+					$response->flashbag->add('Vos recycleurs ont bien été affectés, ils seront ajoutés à la prochaine mission.', Response::FLASHBAG_SUCCESS);
 				} else {
-					CTR::$alert->add('Il y a un problème, la mission est introuvable. Veuillez contacter un administrateur.', ALERT_STD_ERROR);
+					throw new ErrorException('Il y a un problème, la mission est introuvable. Veuillez contacter un administrateur.');
 				}
 			} else {
-				CTR::$alert->add('Vous n\'avez pas assez de recycleurs libres pour lancer cette mission.', ALERT_STD_ERROR);
+				throw new ErrorException('Vous n\'avez pas assez de recycleurs libres pour lancer cette mission.');
 			}
-			ASM::$rem->changeSession($S_REM1);
+			$recyclingMissionManager->changeSession($S_REM1);
 		} else {
-			CTR::$alert->add('cette base orbitale ne vous appartient pas', ALERT_STD_ERROR);
+			throw new ErrorException('cette base orbitale ne vous appartient pas');
 		}
-		ASM::$obm->changeSession($S_OBM1);
+		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
-		CTR::$alert->add('Ca va être dur de recycler avec autant peu de recycleurs. Entrez un nombre plus grand que zéro.', ALERT_STD_FILLFORM);
+		throw new FormException('Ca va être dur de recycler avec autant peu de recycleurs. Entrez un nombre plus grand que zéro.');
 	}
 } else {
-	CTR::$alert->add('pas assez d\'informations pour créer une mission de recyclage', ALERT_STD_FILLFORM);
+	throw new FormException('pas assez d\'informations pour créer une mission de recyclage');
 }

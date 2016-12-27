@@ -3,6 +3,9 @@
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Worker\CTR;
 
+$request = $this->getContainer()->get('app.request');
+$session =  $this->getContainer()->get('app.session');
+
 $discordId = Utils::getHTTPData('discord-id');
 
 if ($discordId !== FALSE AND $discordId !== '') {

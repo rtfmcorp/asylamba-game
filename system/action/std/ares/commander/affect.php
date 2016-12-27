@@ -7,7 +7,6 @@
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
-use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Classes\Exception\ErrorException;
@@ -17,6 +16,7 @@ if (($commanderId = $this->getContainer()->get('app.request')->query->get('id'))
 }
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 $session  = $this->getContainer()->get('app.session');
 $response = $this->getContainer()->get('app.response');
 
@@ -51,7 +51,7 @@ if ($commander->statement == Commander::INSCHOOL || $commander->statement == Com
 
 		# tutorial
 		if ($session->get('playerInfo')->get('stepDone') == FALSE && $session->get('playerInfo')->get('stepTutorial') === TutorialResource::AFFECT_COMMANDER) {
-			TutorialHelper::setStepDone();
+			$tutorialHelper->setStepDone();
 		}
 
 		$response->flashbag->add('Votre officier ' . $commander->getName() . ' a bien été affecté en force de réserve', Response::FLASHBAG_SUCCESS);
@@ -64,7 +64,7 @@ if ($commander->statement == Commander::INSCHOOL || $commander->statement == Com
 
 		# tutorial
 		if ($session->get('playerInfo')->get('stepDone') == FALSE && $session->get('playerInfo')->get('stepTutorial') === TutorialResource::AFFECT_COMMANDER) {
-			TutorialHelper::setStepDone();
+			$tutorialHelper->setStepDone();
 		}
 
 		$response->flashbag->add('Votre officier ' . $commander->getName() . ' a bien été affecté en force active', Response::FLASHBAG_SUCCESS);

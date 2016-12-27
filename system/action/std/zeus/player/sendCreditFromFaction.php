@@ -1,12 +1,18 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Library\Parser;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Zeus\Model\CreditTransaction;
 use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Zeus\Model\Player;
+
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
+$session = $this->getContainer()->get('app.session');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$colorManager = $this->getContainer()->get('demeter.color_manager');
+$creditTransactionManager = $this->getContainer()->get('zeus.credit_transaction_manager');
+$notificationManager = $this->getContainer()->get('hermes.notification_manager');
 
 # give credit from faction to player action
 
@@ -14,47 +20,47 @@ use Asylamba\Modules\Hermes\Model\Notification;
 # int quantity 		quantity of credit to send
 # [string text] 	facultative text
 
-$name = Utils::getHTTPData('name');
-$quantity = Utils::getHTTPData('quantity');
-$text = Utils::getHTTPData('text');
+$name = $request->query->get('name');
+$quantity = $request->query->get('quantity');
+$text = $request->query->get('text');
 
 // input protection
-$p = new Parser();
+$p = $this->getContainer()->get('parser');
 $name = $p->protect($name);
 $text = $p->parse($text);
 
 if ($name !== FALSE AND $quantity !== FALSE) {
-	if (CTR::$data->get('playerInfo')->get('status') == Player::TREASURER) {
+	if ($session->get('playerInfo')->get('status') == Player::TREASURER) {
 		if (strlen($text) < 500) {
 			$credit = intval($quantity);
 
 			if ($credit > 0) {
 
-				$S_PAM1 = ASM::$pam->getCurrentSession();
-				ASM::$pam->newSession(ASM_UMODE);
-				ASM::$pam->load(array('name' => $name));
+				$S_PAM1 = $playerManager->getCurrentSession();
+				$playerManager->newSession(ASM_UMODE);
+				$playerManager->load(array('name' => $name));
 
-				$S_CLM1 = ASM::$clm->getCurrentSession();
-				ASM::$clm->newSession();
-				ASM::$clm->load(array('id' => CTR::$data->get('playerInfo')->get('color')));
-				if (ASM::$clm->size() == 1) {
-					if (ASM::$pam->size() == 1) {
-						$receiver = ASM::$pam->get();
-						$faction = ASM::$clm->get();
+				$S_CLM1 = $colorManager->getCurrentSession();
+				$colorManager->newSession();
+				$colorManager->load(array('id' => $session->get('playerInfo')->get('color')));
+				if ($colorManager->size() == 1) {
+					if ($playerManager->size() == 1) {
+						$receiver = $playerManager->get();
+						$faction = $colorManager->get();
 
 						if ($faction->credits >= $credit) {
 							$faction->decreaseCredit($credit);
-							$receiver->increaseCredit($credit);
+							$playerManager->increaseCredit($receiver, $credit);
 
 							# create the transaction
 							$ct = new CreditTransaction();
-							$ct->rSender = CTR::$data->get('playerInfo')->get('color');
+							$ct->rSender = $session->get('playerInfo')->get('color');
 							$ct->type = CreditTransaction::TYP_F_TO_P;
 							$ct->rReceiver = $receiver->id;
 							$ct->amount = $credit;
 							$ct->dTransaction = Utils::now();
 							$ct->comment = $text;
-							ASM::$crt->add($ct);
+							$creditTransactionManager->add($ct);
 									
 							$n = new Notification();
 							$n->setRPlayer($receiver->id);
@@ -68,29 +74,29 @@ if ($name !== FALSE AND $quantity !== FALSE) {
 							}
 							$n->addBoxResource('credit', Format::numberFormat($credit), ($credit == 1 ? 'crédit reçu' : 'crédits reçus'));
 							$n->addEnd();
-							ASM::$ntm->add($n);
+							$notificationManager->add($n);
 
-							CTR::$alert->add('Crédits envoyés', ALERT_STD_SUCCESS);
+							$response->flashbag->add('Crédits envoyés', Response::FLASHBAG_SUCCESS);
 								
 						} else {
-							CTR::$alert->add('envoi de crédits impossible - vous ne pouvez pas envoyer plus que ce que vous possédez', ALERT_STD_ERROR);
+							throw new ErrorException('envoi de crédits impossible - vous ne pouvez pas envoyer plus que ce que vous possédez');
 						}
 					} else {
-						CTR::$alert->add('envoi de crédits impossible - erreur dans les joueurs', ALERT_STD_ERROR);
+						throw new ErrorException('envoi de crédits impossible - erreur dans les joueurs');
 					}
 				} else {
-					CTR::$alert->add('envoi de crédits impossible - erreur dans la faction', ALERT_STD_ERROR);
+					throw new ErrorException('envoi de crédits impossible - erreur dans la faction');
 				}
-				ASM::$pam->changeSession($S_PAM1);
+				$playerManager->changeSession($S_PAM1);
 			} else {
-				CTR::$alert->add('envoi de crédits impossible - il faut envoyer un nombre entier positif', ALERT_STD_ERROR);
+				throw new ErrorException('envoi de crédits impossible - il faut envoyer un nombre entier positif');
 			}
 		} else {
-			CTR::$alert->add('le texte ne doit pas dépasser les 500 caractères', ALERT_STD_FILLFORM);
+			throw new FormException('le texte ne doit pas dépasser les 500 caractères');
 		}
 	} else {
-		CTR::$alert->add('Seul le responsable financier de votre faction peut faire cette action.', ALERT_STD_ERROR);
+		throw new ErrorException('Seul le responsable financier de votre faction peut faire cette action.');
 	}
 } else {
-	CTR::$alert->add('pas assez d\'informations pour envoyer des crédits', ALERT_STD_FILLFORM);
+	throw new FormException('pas assez d\'informations pour envoyer des crédits');
 }

@@ -22,6 +22,8 @@ $sectorManager = $this->getContainer()->get('gaia.sector_manager');
 $database = $this->getContainer()->get('database');
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
+$colonizationCost = $this->getContainer()->getParameter('ares.coeff.colonization_cost');
+$conquestCost = $this->getContainer()->getParameter('ares.coeff.conquest_cost');
 
 $commanderId = $request->query->get('commanderid');
 $placeId = $request->query->get('placeid');
@@ -77,7 +79,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 						$duration = Game::getTimeToTravel($home, $place, $session->get('playerBonus'));
 
 						# compute price
-						$price = $totalBases * CREDITCOEFFTOCOLONIZE;
+						$price = $totalBases * $colonizationCost;
 
 						# calcul du bonus
 						$_CLM46 = $colorManager->getCurrentSession();
@@ -93,28 +95,28 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 							if ($commander->getPev() > 0) {
 								if ($commander->statement == Commander::AFFECTED) {
 
-									$S_SEM = $semManager->getCurrentSession();
-									$semManager->newSession();
-									$semManager->load(array('id' => $place->rSector));
+									$S_SEM = $sectorManager->getCurrentSession();
+									$sectorManager->newSession();
+									$sectorManager->load(array('id' => $place->rSector));
 
 									$_CLM2 = $colorManager->getCurrentSession();
 									$colorManager->newSession();
-									$colorManager->load(array('id' => $semManager->get()->rColor));
+									$colorManager->load(array('id' => $sectorManager->get()->rColor));
 									
 									$sectorColor = $colorManager->get();
-									$isFactionSector = ($semManager->get()->rColor == $commander->playerColor || $sectorColor->colorLink[$session->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
+									$isFactionSector = ($sectorManager->get()->rColor == $commander->playerColor || $sectorColor->colorLink[$session->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
 									
-									$semManager->changeSession($S_SEM);
+									$sectorManager->changeSession($S_SEM);
 									$colorManager->changeSession($_CLM2);
 
 									if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
 										$commander->destinationPlaceName = $place->baseName;
-										if ($commander->move($place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
+										if ($commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
 											# debit credit
 											$S_PAM2 = $playerManager->getCurrentSession();
 											$playerManager->newSession(ASM_UMODE);
 											$playerManager->load(array('id' => $session->get('playerId')));
-											$playerManager->get()->decreaseCredit($price);
+											$playerManager->decreaseCredit($playerManager->get(), $price);
 											$playerManager->changeSession($S_PAM2);
 
 											if ($request->query->has('redirect')) {
