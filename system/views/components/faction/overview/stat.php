@@ -6,6 +6,7 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Zeus\Model\Player;
 
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
