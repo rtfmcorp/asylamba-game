@@ -1,5 +1,6 @@
 <?php
 
+use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');

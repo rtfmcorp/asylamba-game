@@ -16,6 +16,8 @@ $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_ma
 $recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $sessionToken = $session->get('token');
+$colonizationCost = $this->getContainer()->getParameter('ares.coeff.colonization_cost');
+$conquestCost = $this->getContainer()->getParameter('ares.coeff.conquest_cost');
 
 # display part
 echo '<div class="column act">';
@@ -113,7 +115,7 @@ echo '<div class="column act">';
 							echo 'Temps de l\'attaque : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, $session->get('playerBonus')), 'lite') . ' <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
 
 							if ($place->rPlayer == 0) {
-								$price = $totalBases * CREDITCOEFFTOCOLONIZE;
+								$price = $totalBases * $colonizationCost;
 								if ($session->get('playerInfo')->get('color') == ColorResource::CARDAN) {
 									# bonus if the player is from Cardan
 									$price -= round($price * ColorResource::BONUS_CARDAN_COLO / 100);
@@ -121,7 +123,7 @@ echo '<div class="column act">';
 								echo 'Coût : <span class="price">' . Format::numberFormat($price) . '</span> <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /><br />';
 								echo '<a class="button" href="#" data-url="' . Format::actionBuilder('colonize', $sessionToken, ['commanderid' => '{id}', 'placeid' => $place->id]) . '">Lancer la colonisation</a>';
 							} else {
-								$price = $totalBases * CREDITCOEFFTOCONQUER;
+								$price = $totalBases * $conquestCost;
 								if ($session->get('playerInfo')->get('color') == ColorResource::CARDAN) {
 									# bonus if the player is from Cardan
 									$price -= round($price * ColorResource::BONUS_CARDAN_COLO / 100);

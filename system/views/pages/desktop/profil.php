@@ -1,6 +1,5 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
 
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('app.session');

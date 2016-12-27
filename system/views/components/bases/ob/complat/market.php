@@ -6,7 +6,7 @@ use Asylamba\Classes\Library\Format;
 
 $transactionManager = $this->getContainer()->get('athena.transaction_manager');
 $commercialShippingManager = $this->getContainer()->get('athena.commercial_shipping_manager');
-$commercialTradeManager = $this->getContainer()->get('athena.commercial_trade_manager');
+$commercialTradeManager = $this->getContainer()->get('athena.commercial_tax_manager');
 $session = $this->getContainer()->get('app.session');
 
 $S_TRM1 = $transactionManager->getCurrentSession();

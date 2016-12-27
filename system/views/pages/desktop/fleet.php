@@ -2,7 +2,6 @@
 
 use Asylamba\Classes\Container\Params;
 use Asylamba\Modules\Ares\Model\Commander;
-use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Modules\Ares\Model\Report;
 use Asylamba\Classes\Exception\ErrorException;
 

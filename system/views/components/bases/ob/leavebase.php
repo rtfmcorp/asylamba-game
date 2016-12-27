@@ -14,7 +14,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Ares\Model\Commander;
 
-$sessioNtoken = $this->getContainer()->get('app.session')->get('token');
+$sessiontoken = $this->getContainer()->get('app.session')->get('token');
 
 $onMission = FALSE;
 foreach ($commanders_obSituation as $commander) {
