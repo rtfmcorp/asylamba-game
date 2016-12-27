@@ -8,7 +8,6 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Athena\Model\RecyclingMission;
 use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Modules\Ares\Model\Commander;
-use Asylamba\Modules\Promethee\Model\Technology;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
@@ -18,6 +17,7 @@ $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $littleReportManager = $this->getContainer()->get('ares.little_report_manager');
 $spyReportManager = $this->getContainer()->get('artemis.spy_report_manager');
 $recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
+$technologyManager = $this->getContainer()->get('promethee.technology_manager');
 
 if ($request->query->has('relatedplace')) {
 	$S_OBM2 = $orbitalBaseManager->getCurrentSession();
@@ -61,7 +61,7 @@ if (isset($defaultBase)) {
 	$spyReportManager->load(array('rPlayer' => $session->get('playerId'), 'rPlace' => $placesId), array('dSpying', 'DESC'), array(0, 30));
 
 	# load the technologies
-	$technologies = new Technology($session->get('playerId'));
+	$technologies = $technologyManager->getPlayerTechnology($session->get('playerId'));
 
 	# load recycling missions
 	$S_REM1 = $recyclingMissionManager->getCurrentSession();

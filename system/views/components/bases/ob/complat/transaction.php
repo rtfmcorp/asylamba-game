@@ -1,11 +1,10 @@
 <?php
 
 use Asylamba\Classes\Library\Format;
-use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Model\CommercialShipping;
 
 $commercialShippingManager = $this->getContainer()->get('athena.commercial_shipping_manager');
-$commercialTradeManager = $this->getContainer()->get('athena.commercial_trade_manager');
+$commercialTradeManager = $this->getContainer()->get('athena.commercial_tax_manager');
 
 $S_CSM1 = $commercialShippingManager->getCurrentSession();
 $S_CTM1 = $commercialTradeManager->getCurrentSession();
@@ -45,21 +44,21 @@ echo '<div class="component transaction">';
 			echo '<h4>Convoi en route</h4>';
 			for ($i = 0; $i < $commercialShippingManager->size(); $i++) { 
 				if ($commercialShippingManager->get($i)->statement == CommercialShipping::ST_GOING && $commercialShippingManager->get($i)->rBase == $ob_compPlat->getId()) {
-					$commercialShippingManager->get($i)->render();
+					$commercialShippingManager->render($commercialShippingManager->get($i));
 				}
 			}
 			echo '<hr />';
 			echo '<h4>Retour de convoi</h4>';
 			for ($i = 0; $i < $commercialShippingManager->size(); $i++) { 
 				if ($commercialShippingManager->get($i)->statement == CommercialShipping::ST_MOVING_BACK && $commercialShippingManager->get($i)->rBase == $ob_compPlat->getId()) {
-					$commercialShippingManager->get($i)->render();
+					$commercialShippingManager->render($commercialShippingManager->get($i));
 				}
 			}
 			echo '<hr />';
 			echo '<h4>Convoi à quai</h4>';
 			for ($i = 0; $i < $commercialShippingManager->size(); $i++) { 
 				if ($commercialShippingManager->get($i)->statement == CommercialShipping::ST_WAITING && $commercialShippingManager->get($i)->rBase == $ob_compPlat->getId()) {
-					$commercialShippingManager->get($i)->render();
+					$commercialShippingManager->render($commercialShippingManager->get($i));
 				}
 			}
 		echo '</div>';
