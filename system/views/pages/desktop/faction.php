@@ -192,7 +192,7 @@ echo '<div id="content">';
 					throw new ErrorException('Les données sont illisibles, les messages doivent sûrement être cryptés !');
 				} else {
 					$topic_topic = $forumTopicManager->get(0);
-					$topic_topic->updateLastView($session->get('playerId'));
+					$forumTopicManager->updateLastView($topic_topic, $session->get('playerId'));
 
 					$S_FMM1 = $forumMessageManager->getCurrentSession();
 					$forumMessageManager->newSession();

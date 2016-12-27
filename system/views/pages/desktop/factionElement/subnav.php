@@ -1,6 +1,5 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Zeus\Model\Player;
 
