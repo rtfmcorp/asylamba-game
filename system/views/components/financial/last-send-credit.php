@@ -1,14 +1,15 @@
 <?php
 
 use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Format;
 
+$creditTransactionManager = $this->getContainer()->get('zeus.credit_transaction_manager');
+$session = $this->getContainer()->get('app.session');
 # load
-$S_CRT_1 = ASM::$crt->getCurrentSession();
-ASM::$crt->newSession();
-ASM::$crt->load(
-	['rSender' => CTR::$data->get('playerId')],
+$S_CRT_1 = $creditTransactionManager->getCurrentSession();
+$creditTransactionManager->newSession();
+$creditTransactionManager->load(
+	['rSender' => $session->get('playerId')],
 	['dTransaction', 'DESC'],
 	[0, 20]
 );
@@ -20,8 +21,8 @@ echo '<div class="component player rank">';
 		echo '<div class="body">';
 			echo '<h4>Derniers envois</h4>';
 
-			for ($i = 0; $i < ASM::$crt->size(); $i++) {
-				$transaction = ASM::$crt->get($i);
+			for ($i = 0; $i < $creditTransactionManager->size(); $i++) {
+				$transaction = $creditTransactionManager->get($i);
 
 				echo '<div class="player color' . $transaction->getFormatedReceiverColor() . '">';
 					echo '<a href="' . $transaction->getFormatedReceiverLink() . '">';
@@ -34,11 +35,11 @@ echo '<div class="component player rank">';
 				echo '</div>';
 			}
 
-			if (ASM::$crt->size() == 0) {
+			if ($creditTransactionManager->size() == 0) {
 				echo '<p>Vous n\'avez fait aucun envoi de crédit.</p>';
 			}
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
 
-ASM::$crt->changeSession($S_CRT_1);
+$creditTransactionManager->changeSession($S_CRT_1);

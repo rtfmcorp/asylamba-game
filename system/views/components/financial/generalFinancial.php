@@ -11,6 +11,8 @@
 
 use Asylamba\Classes\Library\Format;
 
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
+
 echo '<div class="component size2 financial">';
 	echo '<div class="head">';
 		echo '<h1>Finance</h1>';
@@ -82,7 +84,7 @@ echo '<div class="component size2 financial">';
 							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
 						echo '</span>';
 
-						echo '<form action="' . Format::actionBuilder('updateuniinvest') . '" method="POST" id="invest-uni">';
+						echo '<form action="' . Format::actionBuilder('updateuniinvest', $sessionToken) . '" method="POST" id="invest-uni">';
 							echo '<p>';
 								echo '<input type="text" name="credit" value="' . $financial_totalInvestUni . '" />';
 								echo '<input type="submit" value="ok" />';
