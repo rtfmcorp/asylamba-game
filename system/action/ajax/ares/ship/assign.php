@@ -11,7 +11,6 @@
 # int squadron 		squadron id
 
 use Asylamba\Modules\Athena\Resource\ShipResource;
-use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 
 use Asylamba\Classes\Exception\FormException;
@@ -19,6 +18,7 @@ use Asylamba\Classes\Exception\ErrorException;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
+$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
     $verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -92,7 +92,7 @@ if ($direction == 'ctb') { // commander to base
 
     # tutorial
     if ($session->get('playerInfo')->get('stepDone') == false && $session->get('playerInfo')->get('stepTutorial') === TutorialResource::FILL_SQUADRON) {
-        TutorialHelper::setStepDone();
+        $tutorialHelper->setStepDone();
     }
 }
 $commanderManager->changeSession($S_COM1);
