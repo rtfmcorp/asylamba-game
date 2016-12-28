@@ -1,6 +1,7 @@
 <?php
 
 use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Zeus\Model\Player;
 
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 
