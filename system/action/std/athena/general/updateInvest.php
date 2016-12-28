@@ -5,8 +5,13 @@
 # string category 	catégorie
 # int credit 		nouveau montant à investir
 
+use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
+
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
@@ -14,7 +19,7 @@ for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
 }
 
 $baseId = $request->query->get('baseid');
-$credit = $request->query->get('credit');
+$credit = $request->request->get('credit');
 $category = $request->query->get('category');
 
 
