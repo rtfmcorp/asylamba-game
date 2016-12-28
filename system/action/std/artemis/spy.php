@@ -12,7 +12,6 @@ use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Artemis\Model\SpyReport;
 use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Modules\Hermes\Model\Notification;
-use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Ares\Model\Commander;
@@ -27,10 +26,10 @@ $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
 $spyReportManager = $this->getContainer()->get('artemis.spy_report_manager');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
-
+$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 
 $rPlace = $request->query->get('rplace');
-$price 	= $request->query->get('price');
+$price 	= $request->request->get('price');
 
 if ($rPlace !== FALSE AND $price !== FALSE) {
 	$price = intval($price);
@@ -189,12 +188,9 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 			$spyReportManager->add($sr);
 
 			# tutorial
-			if ($session->get('playerInfo')->get('stepDone') == FALSE) {
-				switch ($session->get('playerInfo')->get('stepTutorial')) {
-					case TutorialResource::SPY_PLANET:
-						TutorialHelper::setStepDone();
-						break;
-				}
+			if ($session->get('playerInfo')->get('stepDone') == FALSE &&
+				$session->get('playerInfo')->get('stepTutorial') === TutorialResource::SPY_PLANET) {
+				$tutorialHelper->setStepDone();
 			}
 
 			$response->flashbag->add('Espionnage effectué.', Response::FLASHBAG_SUCCESS);
