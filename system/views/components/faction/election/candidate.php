@@ -1,8 +1,12 @@
 <?php
 
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 $voteManager = $this->getContainer()->get('demeter.vote_manager');
 $parser = $this->getContainer()->get('parser');
-$sessionToken = $this->getContainer()->get('session')->get('token');
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
 
 $status = ColorResource::getInfo($faction->id, 'status');
 

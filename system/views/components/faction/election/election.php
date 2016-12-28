@@ -1,6 +1,9 @@
 <?php
 # require
 
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 $voteManager = $this->getContainer()->get('demeter.vote_manager');
 $electionManager = $this->getContainer()->get('demeter.election_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');

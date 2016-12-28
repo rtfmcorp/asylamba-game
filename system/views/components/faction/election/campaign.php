@@ -1,5 +1,6 @@
 <?php
 # require
+use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 $electionManager = $this->getContainer()->get('demeter.election_manager');
 $session = $this->getContainer()->get('app.session');
