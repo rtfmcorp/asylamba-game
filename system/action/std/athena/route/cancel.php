@@ -17,6 +17,7 @@ $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$routeCancelRefund = $this->getContainer()->getParameter('athena.trade.route.cancellation_refund');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -43,7 +44,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 		$S_PAM1 = $playerManager->getCurrentSession();
 		$playerManager->newSession(ASM_UMODE);
 		$playerManager->load(array('id' => $session->get('playerId')));
-		$playerManager->get()->increaseCredit(round($cr->getPrice() * CRM_CANCELROUTE));
+		$playerManager->increaseCredit($playerManager->get(), round($cr->getPrice() * $routeCancelRefund));
 		$playerManager->changeSession($S_PAM1);
 
 		//notification
