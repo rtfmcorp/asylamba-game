@@ -18,6 +18,7 @@ $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
 $recyclingLogManager = $this->getContainer()->get('athena.recycling_log_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $database = $this->getContainer()->get('database');
@@ -413,7 +414,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 						$orbitalBase->typeOfBase = $type;
 						# delete commercial buildings
 						for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) { 
-							$maxLevel = OrbitalBaseResource::getBuildingInfo($i, 'maxLevel', $type);
+							$maxLevel = $orbitalBaseHelper->getBuildingInfo($i, 'maxLevel', $type);
 							if ($orbitalBase->getBuildingLevel($i) > $maxLevel) {
 								$orbitalBase->setBuildingLevel($i, $maxLevel);
 							}
