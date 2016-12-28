@@ -9,7 +9,7 @@ use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
 
-if (($category = $request->request->get('category')) === null || ($quantity = $request->request->get('quantity')) === null) {
+if (($category = $request->query->get('category')) === null || ($quantity = $request->query->get('quantity')) === null) {
 	throw new FormException('Pas assez d\'informations pour augmenter l\'investissement');
 }
 if (!in_array($category, array('natural', 'life', 'social', 'informatic'))) {
@@ -19,11 +19,11 @@ if (!in_array($category, array('natural', 'life', 'social', 'informatic'))) {
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $session = $this->getContainer()->get('app.session');
 
-$S_PAM1 = $notificationManager->getCurrentSession();
-$notificationManager->newSession();
-$notificationManager->load(array('id' => $session->get('playerId')));
+$S_PAM1 = $playerManager->getCurrentSession();
+$playerManager->newSession();
+$playerManager->load(array('id' => $session->get('playerId')));
 
-$player = $notificationManager->get();
+$player = $playerManager->get();
 
 if ($quantity === FALSE) {
 	$quantity = 1;
@@ -62,5 +62,5 @@ if ($oldInvest != 0) {
 			$player->partInformaticEngineering = $player->partInformaticEngineering - $quantity;
 			break;
 	}
-	$notificationManager->changeSession($S_PAM1);
+	$playerManager->changeSession($S_PAM1);
 }
