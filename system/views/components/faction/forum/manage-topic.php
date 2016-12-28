@@ -1,6 +1,8 @@
 <?php
 # forum component
 # in demeter.forum package
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Demeter\Resource\ForumResources;
 
 # affichage du menu des forums
 $session = $this->getContainer()->get('app.session');
