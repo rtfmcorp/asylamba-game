@@ -16,7 +16,7 @@ if ($id !== FALSE) {
 	if ($factionNewsManager->size() == 1) {
 		$factionNewsManager->deleteById($id);
 
-		$this->getContainer()->get('app.response')->add('L\'annonce a bien été supprimée.', Response::FLASHBAG_SUCCESS);
+		$this->getContainer()->get('app.response')->flashbag->add('L\'annonce a bien été supprimée.', Response::FLASHBAG_SUCCESS);
 	} else {
 		throw new FormException('Cette annonce n\'existe pas.');
 	}
