@@ -9,6 +9,7 @@ use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Modules\Athena\Model\RecyclingMission;
 use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $session = $this->getContainer()->get('app.session');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');

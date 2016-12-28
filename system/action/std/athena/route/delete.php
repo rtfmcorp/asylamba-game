@@ -8,6 +8,7 @@ use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
@@ -16,6 +17,7 @@ $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_ma
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$routeExperienceCoeff = $this->getContainer()->getParameter('athena.trade.experience_coeff');
 
 for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -56,7 +58,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 				$S_PAM1 = $playerManager->getCurrentSession();
 				$playerManager->newSession();
 				$playerManager->load(array('id' => array($cr->playerId1, $cr->playerId2)));
-				$exp = round($cr->getIncome() * CRM_COEFEXPERIENCE);
+				$exp = round($cr->getIncome() * $routeExperienceCoeff);
 				
 				$playerManager->changeSession($S_PAM1);
 				//notification
