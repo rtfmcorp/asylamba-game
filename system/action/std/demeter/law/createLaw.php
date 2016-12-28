@@ -322,7 +322,7 @@ if ($type !== FALSE) {
 										$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
 										$lawManager->add($law);
 										$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-										$colorManager->get()->sendSenateNotif(TRUE);
+										$colorManager->sendSenateNotif($colorManager->get(), TRUE);
 										$response->redirect('faction/view-senate');
 									} else {
 										throw new ErrorException('Vous considérez déjà cette faction comme votre ennemmi.');

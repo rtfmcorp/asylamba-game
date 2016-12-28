@@ -1043,7 +1043,7 @@ class ColorManager extends Manager {
 							$S_CLM322 = $this->getCurrentsession();
 							$this->newSession();
 							$this->load(['id' => $law->options['rColor']]);
-							$this->ctc->add($law->dEnd, $this, 'u$colorFinishEnemy', $color, array($color, $law, $this->get()));
+							$this->ctc->add($law->dEnd, $this, 'uFinishEnemy', $color, array($color, $law, $this->get()));
 							$this->changeSession($S_CLM322);
 							break;
 						case Law::TOTALALLIANCE:
