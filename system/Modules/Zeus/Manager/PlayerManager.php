@@ -751,7 +751,7 @@ class PlayerManager extends Manager {
 					$newCredit -= (Commander::LVLINCOMECOMMANDER * $commander->getLevel());
 				} else {
 					# on remet les vaisseaux dans les hangars
-					$commander->emptySquadrons();
+					$this->commanderManager->emptySquadrons($commander);
 					
 					# on vend le commandant
 					$commander->setStatement(Commander::ONSALE);
