@@ -35,7 +35,7 @@ if ($comingCommercialShipping > 0) {
 				echo '<h4>Convoi en approche</h4>';
 				for ($i = 0; $i < $commercialShippingManager->size(); $i++) { 
 					if ($commercialShippingManager->get($i)->statement == CommercialShipping::ST_GOING && $commercialShippingManager->get($i)->rBaseDestination == $ob_compPlat->getId()) {
-						$commercialShippingManager->get($i)->render();
+						$commercialShippingManager->render($commercialShippingManager->get($i));
 					}
 				}
 			echo '</div>';
@@ -69,7 +69,7 @@ echo '<div class="component transaction">';
 			echo '<div class="sort-content">';
 				for ($i = 0; $i < $transactionManager->size(); $i++) {
 					if ($session->get('playerId') != $transactionManager->get($i)->rPlayer) {
-						$transactionManager->get($i)->render($ressourceCurrentRate, $S_CTM2, $ob_compPlat);
+						$transactionManager->render($transactionManager->get($i), $ressourceCurrentRate, $S_CTM2, $ob_compPlat);
 					}
 				}
 			echo '</div>';
@@ -107,7 +107,7 @@ echo '<div class="component transaction">';
 			echo '<div class="sort-content">';
 				for ($i = 0; $i < $transactionManager->size(); $i++) {
 					if ($session->get('playerId') != $transactionManager->get($i)->rPlayer) {
-						$transactionManager->get($i)->render($commanderCurrentRate, $S_CTM2, $ob_compPlat);
+						$transactionManager->render($transactionManager->get($i), $commanderCurrentRate, $S_CTM2, $ob_compPlat);
 					}
 				}
 			echo '</div>';
@@ -141,7 +141,7 @@ echo '<div class="component transaction">';
 			echo '<div class="sort-content">';
 				for ($i = 0; $i < $transactionManager->size(); $i++) {
 					if ($session->get('playerId') != $transactionManager->get($i)->rPlayer) {
-						$transactionManager->get($i)->render($shipCurrentRate, $S_CTM2, $ob_compPlat);
+						$transactionManager->render($transactionManager->get($i), $shipCurrentRate, $S_CTM2, $ob_compPlat);
 					}
 				}
 			echo '</div>';
