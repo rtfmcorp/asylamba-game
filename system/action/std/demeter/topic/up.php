@@ -1,6 +1,5 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Classes\Exception\ErrorException;
 

@@ -1,7 +1,7 @@
 <?php
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Modules\Promethee\Resource\ForumResources;
+use Asylamba\Modules\Demeter\Resource\ForumResources;
 use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
