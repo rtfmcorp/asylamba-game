@@ -60,7 +60,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 
 		//destruction de la route
 		$commercialRouteManager->deleteById($route);
-		$response->flashbag->add('Route commerciale annulée. Vous récupérez les ' . CRM_CANCELROUTE * 100 . '% du montant investi.', Response::FLASHBAG_SUCCESS);
+		$response->flashbag->add('Route commerciale annulée. Vous récupérez les ' . $routeCancelRefund * 100 . '% du montant investi.', Response::FLASHBAG_SUCCESS);
 		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
 		throw new ErrorException('impossible d\'annuler une route commerciale');
