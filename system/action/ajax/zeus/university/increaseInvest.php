@@ -9,7 +9,7 @@ use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
 
-if (($category = $request->request->get('category')) === null || ($quantity = $request->request->get('quantity')) === null) {
+if (($category = $request->query->get('category')) === null || ($quantity = $request->query->get('quantity')) === null) {
 	throw new FormException('Pas assez d\'informations pour augmenter l\'investissement');
 }
 if (!in_array($category, array('natural', 'life', 'social', 'informatic'))) {
@@ -21,7 +21,7 @@ $session = $this->getContainer()->get('app.session');
 
 $S_PAM1 = $playerManager->getCurrentSession();
 $playerManager->newSession();
-$playerManager->load(array('id' => CTR::$data->get('playerId')));
+$playerManager->load(array('id' => $session->get('playerId')));
 
 $player = $playerManager->get();
 
