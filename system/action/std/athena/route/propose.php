@@ -12,6 +12,9 @@ use Asylamba\Modules\Athena\Model\CommercialRoute;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
@@ -22,6 +25,8 @@ $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
 $colorManager = $this->getContainer()->get('demeter.color_manager');
+$routeColorBonus = $this->getContainer()->getParameter('athena.trade.route.color_bonus');
+$routeSectorBonus = $this->getContainer()->getParameter('athena.trade.route.sector_bonus');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -92,8 +97,8 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 
 			if ($orbitalBaseManager->size() == 2 && ($proposerBase->getRPlayer() != $otherBase->getRPlayer()) && ($playerManager->size() == 1)) {
 				$distance = Game::getDistance($proposerBase->getXSystem(), $otherBase->getXSystem(), $proposerBase->getYSystem(), $otherBase->getYSystem());
-				$bonusA = ($proposerBase->getSector() != $otherBase->getSector()) ? CRM_ROUTEBONUSSECTOR : 1;
-				$bonusB = ($session->get('playerInfo')->get('color')) != $player->getRColor() ? CRM_ROUTEBONUSCOLOR : 1;
+				$bonusA = ($proposerBase->getSector() != $otherBase->getSector()) ? $routeSectorBonus : 1;
+				$bonusB = ($session->get('playerInfo')->get('color')) != $player->getRColor() ? $routeColorBonus : 1;
 				$price = Game::getRCPrice($distance);
 				$income = Game::getRCIncome($distance, $bonusA, $bonusB);
 				
