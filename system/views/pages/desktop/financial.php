@@ -5,6 +5,7 @@ use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('app.session');
@@ -168,4 +169,3 @@ echo '<div id="content">';
 		include COMPONENT . 'financial/last-receive-credit.php';
 	}
 echo '</div>';
-?>
