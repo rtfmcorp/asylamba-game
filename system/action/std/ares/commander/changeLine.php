@@ -4,20 +4,19 @@ use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
-use Asylamba\Modules\Zeus\Helper\TutorialHelper;
-
 use Asylamba\Classes\Exception\ErrorException;
 
 # change of line a commander
 
 # int id 	 		id du commandant
 
-if(($commanderId = $this->getContainer()->get('app.request')->request->get('id')) === null) {
+if(($commanderId = $this->getContainer()->get('app.request')->query->get('id')) === null) {
 	throw new ErrorException('erreur dans le traitement de la requête');	
 }
 
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 $session = $this->getContainer()->get('app.session');
 $response = $this->getContainer()->get('app.response');
 
@@ -60,8 +59,8 @@ if ($commander->line == 1) {
 	$nbrLine1 = $commanderManager->size();
 
 	# tutorial
-	if ($session->get('playerInfo')->get('stepDone') === FALSE && $session->get('playerInfo')->get('stepTutorial') === TutorialResource::MOVE_FLEET_LINE) {
-		TutorialHelper::setStepDone();
+	if ($session->get('playerInfo')->get('stepDone') !== true && $session->get('playerInfo')->get('stepTutorial') === TutorialResource::MOVE_FLEET_LINE) {
+		$tutorialHelper->setStepDone();
 	}
 
 	if ($nbrLine1 < PlaceResource::get($orbitalBaseManager->get()->typeOfBase, 'l-line')) {
