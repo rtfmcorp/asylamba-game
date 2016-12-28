@@ -4,7 +4,7 @@ $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('app.session');
 
 $base = $request->query->get('base');
-$page = $request->request->get('page'); # facultatif
+$page = $request->query->get('page'); # facultatif
 
 if ($base !== FALSE) {
 	if ($session->baseExist($base)) {
