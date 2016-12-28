@@ -1,5 +1,8 @@
 <?php
 
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
+
 $factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('app.session');
@@ -16,7 +19,7 @@ if ($title !== FALSE AND $content !== FALSE && $id !== FALSE) {
 	if ($factionNewsManager->size() == 1) {
 		if ($session->get('playerInfo')->get('status') >= 3) {
 			$factionNewsManager->get()->title = $title;
-			$factionNewsManager->get()->edit($content);
+			$factionNewsManager->edit($factionNewsManager->get(), $content);
 		} else {
 			throw new ErrorException('Vous n\'avez pas le droit pour créer une annonce.');
 		}

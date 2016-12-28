@@ -1,5 +1,8 @@
 <?php
 
+use Asylamba\Classes\Exception\FormException;
+use Asylamba\Classes\Exception\ErrorException;
+
 $factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('app.session');

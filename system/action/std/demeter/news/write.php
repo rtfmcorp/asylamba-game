@@ -3,8 +3,8 @@
 # content
 # title
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Demeter\Model\Forum\FactionNews;
 
@@ -24,7 +24,7 @@ if ($title !== FALSE AND $content !== FALSE) {
 
 		$news->rFaction = $session->get('playerInfo')->get('color');
 		$news->title = $title;
-		$news->edit($content);
+		$factionNewsManager->edit($news, $content);
 		$news->dCreation = Utils::now();
 		
 		$factionNewsManager->add($news);
