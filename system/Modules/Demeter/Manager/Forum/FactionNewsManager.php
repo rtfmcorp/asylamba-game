@@ -15,12 +15,20 @@ use Asylamba\Classes\Worker\Manager;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Demeter\Model\Forum\FactionNews;
+use Asylamba\Classes\Library\Parser;
 
 class FactionNewsManager extends Manager {
 	protected $managerType ='_factionNews';
-
-	public function __construct(Database $database) {
+	/** @var Parser **/
+	protected $parser;
+	
+	/**
+	 * @param Database $database
+	 * @param Parser $parser
+	 */
+	public function __construct(Database $database, Parser $parser) {
 		parent::__construct($database);
+		$this->parser = $parser;
 	}
 	
 	public function load($where = array(), $order = array(), $limit = array()) {
@@ -133,5 +141,17 @@ class FactionNewsManager extends Manager {
 
 		$this->_Remove($id);
 		return TRUE;
+	}
+
+	/**
+	 * @param FactionNews $factionNews
+	 * @param string $content
+	 */
+	public function edit(FactionNews $factionNews, $content) {
+		$factionNews->oContent = $content;
+
+		$this->parser->parseBigTag = TRUE;
+
+		$factionNews->pContent = $this->parser->parse($content);
 	}
 }
