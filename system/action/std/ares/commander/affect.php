@@ -57,7 +57,6 @@ if ($commander->statement == Commander::INSCHOOL || $commander->statement == Com
 		$response->flashbag->add('Votre officier ' . $commander->getName() . ' a bien été affecté en force de réserve', Response::FLASHBAG_SUCCESS);
 		$response->redirect('fleet/commander-' . $commander->id . '/sftr-2');
 	} elseif ($nbrLine1 < PlaceResource::get($orbitalBaseManager->get()->typeOfBase, 'l-line')) {
-		die('nok');
 		$commander->dAffectation =Utils::now();
 		$commander->statement = Commander::AFFECTED;
 		$commander->line = 1;
