@@ -381,7 +381,7 @@ class ColorManager extends Manager {
 			} else {
 				$notif->setTitle('Loi appliquée');
 				$notif->addBeg()
-					->addTxt('Votre ' . ColorResource::getInfo($this->id, 'status')[5] . ' a appliqué une loi.')
+					->addTxt('Votre ' . ColorResource::getInfo($color->id, 'status')[5] . ' a appliqué une loi.')
 					->addSep()
 					->addLnk('faction/view-senate', 'voir les lois appliquées')
 					->addEnd();

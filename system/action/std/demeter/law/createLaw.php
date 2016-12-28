@@ -115,7 +115,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('taxes' => $taxes, 'rSector' => $rSector, 'display' => array('Secteur' => $sectorManager->get()->name, 'Taxe actuelle' => $sectorManager->get()->tax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											$lawManager->add($law);
 											$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-											$colorManager->get()->sendSenateNotif();
+											$colorManager->sendSenateNotif($colorManager->get());
 											$response->redirect('faction/view-senate');
 										} else {
 											throw new ErrorException('Ce secteur n\'est pas sous votre contrôle.');
@@ -144,7 +144,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('name' => $name, 'rSector' => $rSector));
 											$lawManager->add($law);
 											$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-											$colorManager->get()->sendSenateNotif(TRUE);
+											$colorManager->sendSenateNotif($colorManager->get(), TRUE);
 											$response->redirect('faction/view-senate');
 										} else {
 											throw new ErrorException('Ce secteur n\'est pas sous votre contrôle.');
@@ -172,7 +172,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'), 'Taxe actuelle' => $commercialTaxManager->get()->exportTax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											$lawManager->add($law);
 											$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-											$colorManager->get()->sendSenateNotif();
+											$colorManager->sendSenateNotif($colorManager->get());
 											$response->redirect('faction/view-senate');
 										} else {
 											throw new ErrorException('Pas plus que 15.');
@@ -182,7 +182,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'), 'Taxe actuelle' => $commercialTaxManager->get()->exportTax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											$lawManager->add($law);
 											$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-											$colorManager->get()->sendSenateNotif();
+											$colorManager->sendSenateNotif($colorManager->get());
 											$response->redirect('faction/view-senate');
 										} else {
 											throw new ErrorException('Entre 2 et 15.');
@@ -208,7 +208,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'), 'Taxe actuelle' => $commercialTaxManager->get()->importTax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											$lawManager->add($law);
 											$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-											$colorManager->get()->sendSenateNotif();
+											$colorManager->sendSenateNotif($colorManager->get());
 											$response->redirect('faction/view-senate');
 										} else {
 											throw new ErrorException('Pas plus que 15.');
@@ -218,7 +218,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'), 'Taxe actuelle' => $commercialTaxManager->get()->importTax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											$lawManager->add($law);
 											$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-											$colorManager->get()->sendSenateNotif();
+											$colorManager->sendSenateNotif($colorManager->get());
 											$response->redirect('faction/view-senate');
 										} else {
 											throw new ErrorException('Entre 2 et 15.');
@@ -241,7 +241,7 @@ if ($type !== FALSE) {
 										$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
 										$lawManager->add($law);
 										$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-										$colorManager->get()->sendSenateNotif(TRUE);
+										$colorManager->sendSenateNotif($colorManager->get(), TRUE);
 										$response->redirect('faction/view-senate');
 									} else {
 										throw new ErrorException('Vous considérez déjà cette faction comme votre alliée.');
@@ -268,7 +268,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
 											$lawManager->add($law);
 											$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-											$colorManager->get()->sendSenateNotif(TRUE);
+											$colorManager->sendSenateNotif($colorManager->get(), TRUE);
 											$response->redirect('faction/view-senate');
 										} else {
 											throw new ErrorException('Vous considérez déjà cette faction comme votre alliée.');
@@ -298,7 +298,7 @@ if ($type !== FALSE) {
 											$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
 											$lawManager->add($law);
 											$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-											$colorManager->get()->sendSenateNotif(TRUE);
+											$colorManager->sendSenateNotif($colorManager->get(), TRUE);
 											$response->redirect('faction/view-senate');
 										} else {
 											throw new ErrorException('Vous considérez déjà cette faction comme votre alliée.');
@@ -347,7 +347,7 @@ if ($type !== FALSE) {
 										$law->options = serialize(array('rPlayer' => $rPlayer, 'credits' => $credits, 'display' => array('Joueur' => $playerManager->get()->name, 'amende' => $credits)));
 										$lawManager->add($law);
 										$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-										$colorManager->get()->sendSenateNotif();
+										$colorManager->sendSenateNotif($colorManager->get());
 										$response->redirect('faction/view-senate');	
 									} else {
 										throw new ErrorException('Ce joueur n\'est pas de votre faction.');	

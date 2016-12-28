@@ -12,7 +12,7 @@ $request = $this->getContainer()->get('app.request');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
 
-$rPlayer = $request->query->get('rplayer');
+$rPlayer = $request->request->get('rplayer');
 $department = $request->query->get('department');
 
 if ($rPlayer !== FALSE && $department !== FALSE) {

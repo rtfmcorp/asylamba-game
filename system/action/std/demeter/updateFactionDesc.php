@@ -1,6 +1,7 @@
 <?php
 
 use Asylamba\Classes\Exception\FormException;
+use Asylamba\Modules\Zeus\Model\Player;
 
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
