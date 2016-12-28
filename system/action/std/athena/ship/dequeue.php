@@ -15,7 +15,7 @@ $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
-$shipResourceRefund = $this->getContainer()->get('athena.building.ship_queue_resource_refund');
+$shipResourceRefund = $this->getContainer()->getParameter('athena.building.ship_queue_resource_refund');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
