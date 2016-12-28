@@ -18,6 +18,8 @@ $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $sessionToken = $session->get('token');
 $colonizationCost = $this->getContainer()->getParameter('ares.coeff.colonization_cost');
 $conquestCost = $this->getContainer()->getParameter('ares.coeff.conquest_cost');
+$routeColorBonus = $this->getContainer()->getParameter('athena.trade.route.color_bonus');
+$routeSectorBonus = $this->getContainer()->getParameter('athena.trade.route.sector_bonus');
 
 # display part
 echo '<div class="column act">';
@@ -210,8 +212,8 @@ echo '<div class="column act">';
 
 					$distance = Game::getDistance($defaultBase->xSystem, $place->xSystem, $defaultBase->ySystem, $place->ySystem);
 
-					$bonusA = ($defaultBase->sector != $place->rSector) ? CRM_ROUTEBONUSSECTOR : 1;
-					$bonusB = ($session->get('playerInfo')->get('color')) != $place->playerColor ? CRM_ROUTEBONUSCOLOR : 1;
+					$bonusA = ($defaultBase->sector != $place->rSector) ? $routeSectorBonus : 1;
+					$bonusB = ($session->get('playerInfo')->get('color')) != $place->playerColor ? $routeColorBonus : 1;
 
 					$price = Game::getRCPrice($distance);
 					$income = Game::getRCIncome($distance, $bonusA, $bonusB);

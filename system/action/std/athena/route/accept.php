@@ -14,6 +14,7 @@ use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
@@ -25,6 +26,7 @@ $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_ma
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$routeExperienceCoeff = $this->getContainer()->getParameter('athena.trade.experience_coeff');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -88,13 +90,13 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 					$S_PAM1 = $playerManager->getCurrentSession();
 					$playerManager->newSession(ASM_UMODE);
 					$playerManager->load(array('id' => $session->get('playerId')));
-					$playerManager->get()->decreaseCredit($price);
+					$playerManager->decreaseCredit($playerManager->get(), $price);
 
 					# augmentation de l'expérience des deux joueurs
-					$exp = round($cr->getIncome() * CRM_COEFEXPERIENCE);
+					$exp = round($cr->getIncome() * $routeExperienceCoeff);
 					$playerManager->load(array('id' => $proposerBase->getRPlayer()));
-					$playerManager->get()->increaseExperience($exp);
-					$playerManager->get(1)->increaseExperience($exp);
+					$playerManager->increaseExperience($playerManager->get(), $exp);
+					$playerManager->increaseExperience($playerManager->get(1), $exp);
 					
 					$playerManager->changeSession($S_PAM1);
 					

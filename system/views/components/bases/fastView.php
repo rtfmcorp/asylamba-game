@@ -18,8 +18,8 @@ use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Modules\Promethee\Resource\TechnologyResource;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $session = $this->getContainer()->get('app.session');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');

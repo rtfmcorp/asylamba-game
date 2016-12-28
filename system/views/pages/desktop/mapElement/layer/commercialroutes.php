@@ -1,6 +1,7 @@
 <?php
 
 use Asylamba\Classes\Container\Params;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $session = $this->getContainer()->get('app.session');
 $galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
