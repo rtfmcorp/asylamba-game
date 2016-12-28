@@ -174,7 +174,7 @@ for ($i = 0; $i < $commanderManager->size(); $i++) {
 		$times = Game::getAntiSpyEntryTime($startPlace, $destinationPlace, $commanderManager->get($i)->getArrivalDate());
 
 		if (strtotime(Utils::now()) >= strtotime($times[0])) {
-			$info = $commanderManager->get($i)->getEventInfo();
+			$info = $commanderManager->getEventInfo($commanderManager->get($i));
 			$info->add('inCircle', $times);
 
 			# ajout de l'événement
