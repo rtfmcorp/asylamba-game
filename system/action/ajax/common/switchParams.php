@@ -6,6 +6,6 @@ $params = $this->getContainer()->get('app.request')->request->get('params');
 
 if ($params !== FALSE) {
 	if (in_array($params, Params::getParams())) {
-		Params::update($params, !Params::check($params));
+		$request->cookies->set('p' . $params, !$request->cookies->get('p' . $params, $params));
 	}
 }
