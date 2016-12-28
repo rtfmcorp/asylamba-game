@@ -769,7 +769,7 @@ class PlayerManager extends Manager {
 		# si au moins un commandant n'a pas pu être payé --> envoyer une notif
 		if ($nbOfComNotPaid) {	
 			$n = new Notification();
-			$n->setRPlayer($this->id);
+			$n->setRPlayer($player->id);
 			$n->setTitle('Commandant impayé');
 
 			$n->addBeg()->addTxt('Domaine')->addSep();
