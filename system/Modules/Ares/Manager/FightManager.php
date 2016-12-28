@@ -320,8 +320,8 @@ class FightManager {
 				$nbrShipsA += $squadronA->getNbrShips();
 			}
 			if ($nbrShipsA == 0) {
-				$commanderD->resultOfFight(TRUE, $commanderA);
-				$commanderA->resultOfFight(FALSE, $commanderD);
+				$this->commanderManager->resultOfFight($commanderD, TRUE, $commanderA);
+				$this->commanderManager->resultOfFight($commanderA, FALSE, $commanderD);
 				$commanderA->setStatement(3);
 				$commanderD->setDDeath(Utils::now());
 				LiveReport::$rPlayerWinner = $commanderD->rPlayer;
