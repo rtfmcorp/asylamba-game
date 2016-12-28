@@ -16,6 +16,7 @@ services:
         class: Asylamba\Modules\Demeter\Manager\Forum\FactionNewsManager
         arguments:
             - "@database"
+            - "@parser"
     demeter.forum_message_manager:
         class: Asylamba\Modules\Demeter\Manager\Forum\ForumMessageManager
         arguments:
