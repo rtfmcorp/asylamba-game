@@ -93,7 +93,7 @@ class VoteLawManager extends Manager {
 		}
 	}
 
-	public function add($newVoteLaw) {
+	public function add(VoteLaw $newVoteLaw) {
 		$qr = $this->database->prepare('INSERT INTO voteLaw
 			SET
 				rLaw = ?,
