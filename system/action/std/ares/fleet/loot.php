@@ -9,9 +9,9 @@ use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Gaia\Model\Place;
-use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
@@ -21,6 +21,7 @@ $placeManager = $this->getContainer()->get('gaia.place_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $sectorManager = $this->getContainer()->get('gaia.sector_manager');
+$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 
 $commanderId = $request->query->get('commanderid');
 $placeId = $request->query->get('placeid');
@@ -73,16 +74,13 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 									if ($commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
 
 										# tutorial
-										if ($session->get('playerInfo')->get('stepDone') == FALSE) {
-											switch ($session->get('playerInfo')->get('stepTutorial')) {
-												case TutorialResource::LOOT_PLANET:
-													TutorialHelper::setStepDone();
-													break;
-											}
+										if ($session->get('playerInfo')->get('stepDone') == FALSE &&
+											$session->get('playerInfo')->get('stepTutorial') === TutorialResource::LOOT_PLANET) {
+												$tutorialHelper->setStepDone();
 										}
 										
 										if ($request->query->has('redirect')) {
-											$response-> redirect('map/place-' . $request->query->get('redirect'));
+											$response->redirect('map/place-' . $request->query->get('redirect'));
 										}
 									}
 								} else {
