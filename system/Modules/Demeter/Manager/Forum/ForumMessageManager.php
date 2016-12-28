@@ -148,11 +148,10 @@ class ForumMessageManager extends Manager {
 	}
 
 	public function edit(ForumMessage $message, $content) {
-		$this->oContent = $content;
+		$message->oContent = $content;
 
 		$this->parser->parseBigTag = TRUE;
-		$content = $this->parser->parse($content);
 
-		$this->pContent = $content;
+		$message->pContent = $this->parser->parse($content);
 	}
 }

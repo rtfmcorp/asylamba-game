@@ -135,7 +135,7 @@ class CandidateManager extends Manager {
 			$newCandidate->dPresentation
 		));
 
-		$newCandidate->id = $db->lastInsertId();
+		$newCandidate->id = $this->database->lastInsertId();
 
 		$this->_Add($newCandidate);
 
