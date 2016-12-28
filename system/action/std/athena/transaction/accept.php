@@ -22,7 +22,7 @@ $database = $this->getContainer()->get('database');
 $transactionManager = $this->getContainer()->get('athena.transaction_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $commercialShippingManager = $this->getContainer()->get('athena.commercial_shipping_manager');
-$creditTransactionManager = $this->getContainer()->get('zeus.credit_transaction_manager');
+$commercialTaxManager = $this->getContainer()->get('athena.commercial_tax_manager');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $colorManager = $this->getContainer()->get('demeter.color_manager');
@@ -58,12 +58,12 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 		$importTax = 0;
 
 		#compute total price
-		$S_CTM1 = $creditTransactionManager->getCurrentSession();
-		$creditTransactionManager->newSession();
-		$creditTransactionManager->load(array());
+		$S_CTM1 = $commercialTaxManager->getCurrentSession();
+		$commercialTaxManager->newSession();
+		$commercialTaxManager->load(array());
 
-		for ($i = 0; $i < $creditTransactionManager->size(); $i++) { 
-			$comTax = $creditTransactionManager->get($i);
+		for ($i = 0; $i < $commercialTaxManager->size(); $i++) { 
+			$comTax = $commercialTaxManager->get($i);
 
 			if ($comTax->faction == $transaction->sectorColor AND $comTax->relatedFaction == $base->sectorColor) {
 				$exportTax = $comTax->exportTax;
@@ -167,7 +167,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 		} else {
 			throw new ErrorException('vous n\'avez pas assez de crédits pour accepter cette proposition');
 		}
-		$creditTransactionManager->changeSession($S_CTM1);
+		$commercialTaxManager->changeSession($S_CTM1);
 		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
 		throw new ErrorException('erreur dans les propositions sur le marché');
