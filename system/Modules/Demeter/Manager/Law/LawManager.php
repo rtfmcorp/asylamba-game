@@ -18,12 +18,16 @@ use Asylamba\Modules\Demeter\Model\Law\Law;
 
 class LawManager extends Manager {
 	protected $managerType ='_Law';
+	/** @var VoteLawManager **/
+	protected $voteLawManager;
 
 	/**
 	 * @param Database $database
+	 * @param VoteLawManager $voteLawManager
 	 */
-	public function __construct(Database $database) {
+	public function __construct(Database $database, VoteLawManager $voteLawManager) {
 		parent::__construct($database);
+		$this->voteLawManager = $voteLawManager;
 	}
 	
 	public function load($where = array(), $order = array(), $limit = array()) {
@@ -138,5 +142,28 @@ class LawManager extends Manager {
 
 		$this->_Remove($id);
 		return TRUE;
+	}
+
+	/**
+	 * @param Law $law
+	 * @return bool
+	 */
+	public function ballot(Law $law) {
+		$_VLM213 = $this->voteLawManager->getCurrentsession();
+		$this->voteLawManager->newSession();
+		$this->voteLawManager->load(array('rLaw' => $law->id));
+
+		$ballot = 0;
+
+		for ($i = 0; $i < $this->voteLawManager->size(); $i++) {
+			if ($this->voteLawManager->get($i)->vote) {
+				$ballot++;
+			} else {
+				$ballot--;
+			}
+		}
+		$this->voteLawManager->changeSession($_VLM213);
+
+		return $ballot >= 0;
 	}
 }
