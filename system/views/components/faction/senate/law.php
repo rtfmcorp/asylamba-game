@@ -2,6 +2,7 @@
 
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Chronos;
+use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Demeter\Resource\LawResources;
 
 # require
