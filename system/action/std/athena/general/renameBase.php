@@ -18,8 +18,7 @@ for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
 }
 
 $baseId = $request->query->get('baseid');
-$name = $request->query->get('name');
-
+$name = $request->request->get('name');
 
 // protection du nouveau nom de la base
 $p = $this->getContainer()->get('parser');
