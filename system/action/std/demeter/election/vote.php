@@ -8,6 +8,7 @@ use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Demeter\Model\Election\Vote;
 use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Modules\Demeter\Model\Color;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
