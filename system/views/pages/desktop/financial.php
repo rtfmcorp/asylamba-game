@@ -4,6 +4,7 @@ use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Classes\Library\Game;
+use Asylamba\Modules\Athena\Resource\ShipResource;
 
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('app.session');
