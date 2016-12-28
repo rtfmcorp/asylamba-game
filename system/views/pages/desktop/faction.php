@@ -5,6 +5,7 @@ use Asylamba\Modules\Demeter\Model\Law\Law;
 use Asylamba\Modules\Demeter\Resource\ForumResources;
 use Asylamba\Modules\Demeter\Resource\LawResources;
 use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Modules\Demeter\Model\Color;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
@@ -500,7 +501,7 @@ echo '<div id="content">';
 
 				if ($forumTopicManager->size() == 1) {
 					$topic_topic = $forumTopicManager->get(0);
-					$topic_topic->updateLastView($session->get('playerId'));
+					$forumTopicManager->updateLastView($topic_topic, $session->get('playerId'));
 
 					$S_FMM1 = $forumMessageManager->getCurrentSession();
 					$forumMessageManager->newSession();

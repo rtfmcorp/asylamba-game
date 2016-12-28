@@ -15,6 +15,8 @@ use Asylamba\Modules\Demeter\Model\Election\Vote;
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Classes\Library\Http\Response;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
@@ -43,10 +45,7 @@ if ($program !== FALSE) {
 
 				$election = new Election();
 				$election->rColor = $colorManager->get()->id;
-
-				$date = new \DateTime(Utils::now());
-				$date->modify('+' . Color::PUTSCHTIME . ' second');
-				$election->dElection = $date->format('Y-m-d H:i:s');
+				$election->dElection = new \DateTime('+' . Color::PUTSCHTIME . ' second');
 
 				$electionManager->add($election);
 

@@ -1,5 +1,9 @@
 <?php
 
+use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Classes\Library\Format;
+
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
 $candidateManager = $this->getContainer()->get('demeter.candidate_manager');

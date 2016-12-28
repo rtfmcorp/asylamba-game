@@ -1,5 +1,11 @@
 <?php
 
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
 $voteManager = $this->getContainer()->get('demeter.vote_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $session = $this->getContainer()->get('app.session');
