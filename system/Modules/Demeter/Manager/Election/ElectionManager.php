@@ -85,7 +85,7 @@ class ElectionManager extends Manager {
 		}
 	}
 
-	public function add($newElection) {
+	public function add(Election $newElection) {
 		$qr = $this->database->prepare('INSERT INTO election
 			SET
 				rColor = ?,

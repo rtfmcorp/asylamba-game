@@ -3,6 +3,7 @@
 use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
+use Asylamba\Classes\Library\Utils;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
@@ -28,7 +29,7 @@ if ($content && $id) {
 		$t = $topicManager->get();
 
 		if ($session->get('playerId') == $m->rPlayer || ($session->get('playerInfo')->get('status') > 2 && $t->rForum != 20)) {
-			$m->edit($content);
+			$forumMessageManager->edit($m, $content);
 			$m->dLastModification = Utils::now();
 
 			$response->flashbag->add('Message édité.', Response::FLASHBAG_SUCCESS);
