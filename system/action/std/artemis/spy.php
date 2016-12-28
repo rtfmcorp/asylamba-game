@@ -29,7 +29,7 @@ $notificationManager = $this->getContainer()->get('hermes.notification_manager')
 $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 
 $rPlace = $request->query->get('rplace');
-$price 	= $request->request->get('price');
+$price 	= $request->query->has('price') ? $request->query->get('price') : $request->request->get('price');
 
 if ($rPlace !== FALSE AND $price !== FALSE) {
 	$price = intval($price);
