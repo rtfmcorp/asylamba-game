@@ -10,7 +10,7 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 $conversationManager = $this->getContainer()->get('hermes.conversation_manager');
 $conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
 $session = $this->getContainer()->get('app.session');
-$sessionToken = $this->get('token');
+$sessionToken = $session->get('token');
 
 if (!$message_listmode) {
 	echo '<div class="component topic size2">';
