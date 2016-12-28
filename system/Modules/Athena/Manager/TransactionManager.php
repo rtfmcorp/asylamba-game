@@ -18,6 +18,11 @@ use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Container\Session;
 use Asylamba\Modules\Athena\Manager\CommercialTaxManager;
 use Asylamba\Modules\Athena\Model\Transaction;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Modules\Athena\Resource\ShipResource;
 
 class TransactionManager extends Manager {
 	protected $managerType = '_Transaction';
