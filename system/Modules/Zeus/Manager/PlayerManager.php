@@ -38,6 +38,7 @@ use Asylamba\Modules\Promethee\Manager\ResearchManager;
 use Asylamba\Modules\Athena\Manager\TransactionManager;
 use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
 use Asylamba\Modules\Promethee\Manager\TechnologyManager;
+use Asylamba\Modules\Athena\Resource\ShipResource;
 
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Container\ArrayList;

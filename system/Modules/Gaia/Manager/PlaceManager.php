@@ -30,7 +30,7 @@ use Asylamba\Modules\Zeus\Manager\PlayerBonusManager;
 use Asylamba\Modules\Athena\Manager\OrbitalBaseManager;
 use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
 use Asylamba\Modules\Demeter\Manager\ColorManager;
-use Asylamba\Modules\Promethee\Manager\ResearchManager;
+use Asylamba\Modules\Athena\Manager\RecyclingMissionManager;
 use Asylamba\Modules\Hermes\Manager\NotificationManager;
 
 use Asylamba\Modules\Gaia\Model\Place;
@@ -60,8 +60,8 @@ class PlaceManager extends Manager {
 	protected $commercialRouteManager;
 	/** @var ColorManager **/
 	protected $colorManager;
-	/** @var ResearchManager **/
-	protected $researchManager;
+	/** @var RecyclingMissionManager **/
+	protected $recyclingMissionManager;
 	/** @var NotificationManager **/
 	protected $notificationManager;
 	/** @var CTC **/
@@ -79,7 +79,7 @@ class PlaceManager extends Manager {
 	 * @param OrbitalBaseManager $orbitalBaseManager
 	 * @param CommercialRouteManager $commercialRouteManager
 	 * @param ColorManager $colorManager
-	 * @param ResearchManager $researchManager
+	 * @param RecyclingMissionManager $recyclingMissionManager
 	 * @param NotificationManager $notificationManager
 	 * @param CTC $ctc
 	 * @param Session $session
@@ -94,7 +94,7 @@ class PlaceManager extends Manager {
 		OrbitalBaseManager $orbitalBaseManager,
 		CommercialRouteManager $commercialRouteManager,
 		ColorManager $colorManager,
-		ResearchManager $researchManager,
+		RecyclingMissionManager $recyclingMissionManager,
 		NotificationManager $notificationManager,
 		CTC $ctc,
 		Session $session
@@ -108,7 +108,7 @@ class PlaceManager extends Manager {
 		$this->orbitalBaseManager = $orbitalBaseManager;
 		$this->commercialRouteManager = $commercialRouteManager;
 		$this->colorManager = $colorManager;
-		$this->researchManager = $researchManager;
+		$this->recyclingMissionManager = $recyclingMissionManager;
 		$this->notificationManager = $notificationManager;
 		$this->ctc = $ctc;
 		$this->session = $session;
@@ -501,11 +501,11 @@ class PlaceManager extends Manager {
 									$S_CRM_C2 = $this->commercialRouteManager->getCurrentSession();
 									$this->commercialRouteManager->changeSession($S_CRM_C1);
 
-									$S_REM_C1 = $this->researchManager->getCurrentSession();
-									$this->researchManager->newSession();
-									$this->researchManager->load(array('rBase' => $place->id));
-									$S_REM_C2 = $this->researchManager->getCurrentSession();
-									$this->researchManager->changeSession($S_REM_C1);
+									$S_REM_C1 = $this->recyclingMissionManager->getCurrentSession();
+									$this->recyclingMissionManager->newSession();
+									$this->recyclingMissionManager->load(array('rBase' => $place->id));
+									$S_REM_C2 = $this->recyclingMissionManager->getCurrentSession();
+									$this->recyclingMissionManager->changeSession($S_REM_C1);
 
 									$S_COM_C1 = $this->commanderManager->getCurrentSession();
 									$this->commanderManager->newSession(); # CRASH
