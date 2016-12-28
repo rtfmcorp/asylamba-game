@@ -198,7 +198,7 @@ class CommercialRouteManager extends Manager {
 		return TRUE;
 	}
 
-	public static function freezeRoute($color1, $color2) {
+	public function freezeRoute($color1, $color2) {
 		$freeze = TRUE;
 		if (!($color1->colorLink[$color2->id] == Color::ENEMY || $color2->colorLink[$color1->id] == Color::ENEMY)) {
 			$freeze = FALSE;
