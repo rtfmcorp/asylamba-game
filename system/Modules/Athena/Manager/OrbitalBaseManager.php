@@ -24,6 +24,7 @@ use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Athena\Manager\BuildingQueueManager;
 use Asylamba\Modules\Athena\Manager\ShipQueueManager;
 use Asylamba\Modules\Promethee\Manager\TechnologyQueueManager;
+use Asylamba\Modules\Promethee\Manager\TechnologyManager;
 use Asylamba\Modules\Athena\Manager\CommercialShippingManager;
 use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
@@ -35,7 +36,7 @@ use Asylamba\Modules\Ares\Manager\CommanderManager;
 use Asylamba\Modules\Hermes\Manager\NotificationManager;
 use Asylamba\Modules\Athena\Helper\OrbitalBaseHelper;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Modules\Promethee\Model\Technology;
+use Asylamba\Classes\Library\Http\Response;
 
 use Asylamba\Modules\Athena\Model\RecyclingMission;
 use Asylamba\Modules\Athena\Model\RecyclingLog;
@@ -44,7 +45,6 @@ use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Athena\Model\CommercialShipping;
 
-use Asylamba\Classes\Container\Alert;
 use Asylamba\Classes\Worker\CTC;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
@@ -58,6 +58,8 @@ class OrbitalBaseManager extends Manager {
 	protected $shipQueueManager;
 	/** @var TechnologyQueueManager **/
 	protected $technologyQueueManager;
+	/** @var TechnologyManager **/
+	protected $technologyManager;
 	/** @var TechnologyHelper **/
 	protected $technologyHelper;
 	/** @var CommercialShippingManager **/
@@ -84,10 +86,10 @@ class OrbitalBaseManager extends Manager {
 	protected $notificationManager;
 	/** @var OrbitalBaseHelper **/
 	protected $orbitalBaseHelper;
-	/** @var Alert **/
-	protected $alert;
 	/** @var CTC **/
 	protected $ctc;
+	/** @var Response **/
+	protected $response;
 	/** @var Session **/
 	protected $session;
 	
@@ -108,7 +110,6 @@ class OrbitalBaseManager extends Manager {
 	 * @param CommanderManager $commanderManager
 	 * @param NotificationManager $notificationManager
 	 * @param OrbitalBaseHelper $orbitalBaseHelper
-	 * @param Alert $alert
 	 * @param CTC $ctc
 	 * @param Session $session
 	 */
@@ -117,6 +118,7 @@ class OrbitalBaseManager extends Manager {
 		BuildingQueueManager $buildingQueueManager,
 		ShipQueueManager $shipQueueManager,
 		TechnologyQueueManager $technologyQueueManager,
+		TechnologyManager $technologyManager,
 		TechnologyHelper $technologyHelper,
 		CommercialShippingManager $commercialShippingManager,
 		CommercialRouteManager $commercialRouteManager,
@@ -130,14 +132,15 @@ class OrbitalBaseManager extends Manager {
 		CommanderManager $commanderManager,
 		NotificationManager $notificationManager,
 		OrbitalBaseHelper $orbitalBaseHelper,
-		Alert $alert,
 		CTC $ctc,
+		Response $response,
 		Session $session
 	) {
 		parent::__construct($database);
 		$this->buildingQueueManager = $buildingQueueManager;
 		$this->shipQueueManager = $shipQueueManager;
 		$this->technologyQueueManager = $technologyQueueManager;
+		$this->technologyManager = $technologyManager;
 		$this->technologyHelper = $technologyHelper;
 		$this->commercialShippingManager = $commercialShippingManager;
 		$this->commercialRouteManager = $commercialRouteManager;
@@ -151,8 +154,8 @@ class OrbitalBaseManager extends Manager {
 		$this->commanderManager = $commanderManager;
 		$this->notificationManager = $notificationManager;
 		$this->orbitalBaseHelper = $orbitalBaseHelper;
-		$this->alert = $alert;
 		$this->ctc = $ctc;
+		$this->response = $response;
 		$this->session = $session;
 	}
 	
@@ -394,8 +397,7 @@ class OrbitalBaseManager extends Manager {
 						$realSpatioportLevel++;
 						break;
 					default :
-						$this->alert->add('Erreur dans la base de données');
-						$this->alert->add('dans load() de OrbitalBaseManager', ALT_BUG_ERROR);
+						throw new ErrorException('Erreur dans la base de données dans load() de OrbitalBaseManager');
 				}
 			}
 
@@ -654,8 +656,7 @@ class OrbitalBaseManager extends Manager {
 			# applique en cascade le changement de couleur des sytèmes
 			$this->galaxyColorManager->apply();
 		} else {
-			$this->alert->add('Cette base orbitale n\'exite pas !', ALERT_BUG_INFO);
-			$this->alert->add('dans changeOwnerById de OrbitalBaseManager', ALERT_BUG_ERROR);
+			throw new ErrorException('Cette base orbitale n\'exite pas !');
 		}
 	}
 	
@@ -874,7 +875,7 @@ class OrbitalBaseManager extends Manager {
 		
 		# alert
 		if ($this->session->get('playerId') == $orbitalBase->rPlayer) {
-			$this->alert->add('Construction de votre <strong>' . $this->orbitalBaseHelper->getBuildingInfo($queue->buildingNumber, 'frenchName') . ' niveau ' . $queue->targetLevel . '</strong> sur <strong>' . $orbitalBase->name . '</strong> terminée. Vous gagnez ' . $experience . ' point' . Format::addPlural($experience) . ' d\'expérience.', ALERT_GAM_GENERATOR);
+			$this->response->flashbag->add('Construction de votre <strong>' . $this->orbitalBaseHelper->getBuildingInfo($queue->buildingNumber, 'frenchName') . ' niveau ' . $queue->targetLevel . '</strong> sur <strong>' . $orbitalBase->name . '</strong> terminée. Vous gagnez ' . $experience . ' point' . Format::addPlural($experience) . ' d\'expérience.', Response::FLASHBAG_GENERATOR_SUCCESS);
 		}
 		# delete queue in database
 		$this->buildingQueueManager->deleteById($queue->id);
@@ -896,7 +897,7 @@ class OrbitalBaseManager extends Manager {
 				$alt .= 'votre <strong>' . ShipResource::getInfo($sq->shipNumber, 'codeName') . '</strong>';
 			}
 			$alt .= ' sur <strong>' . $orbitalBase->name . '</strong> terminée. Vous gagnez ' . $experience . ' point' . Format::addPlural($experience) . ' d\'expérience.';
-			$this->alert->add($alt, ALERT_GAM_DOCK1);
+			$this->response->flashbag->add($alt, Response::FLASHBAG_DOCK1_SUCCESS);
 		}
 
 		# delete queue in database
@@ -912,7 +913,7 @@ class OrbitalBaseManager extends Manager {
 
 		# alert
 		if ($this->session->get('playerId') == $orbitalBase->rPlayer) {
-			$this->alert->add('Construction de votre ' . ShipResource::getInfo($sq->shipNumber, 'codeName') . ' sur ' . $orbitalBase->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.', ALERT_GAM_DOCK2);
+			$this->response->flashbag->add('Construction de votre ' . ShipResource::getInfo($sq->shipNumber, 'codeName') . ' sur ' . $orbitalBase->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.', Response::FLASHBAG_DOCK2_SUCCESS);
 		}
 
 		# delete queue in database
@@ -921,8 +922,8 @@ class OrbitalBaseManager extends Manager {
 
 	public function uTechnologyQueue(OrbitalBase $orbitalBase, $tq, $player) {
 		# technologie construite
-		$techno = new Technology($player->getId());
-		$techno->setTechnology($tq->technology, $tq->targetLevel);
+		$technology = $this->technologyManager->getPlayerTechnology($player->getId());
+		$this->technologyManager->affectTechnology($technology, $tq->technology, $tq->targetLevel);
 		# increase player experience
 		$experience = $this->technologyHelper->getInfo($tq->technology, 'points', $tq->targetLevel);
 		$this->playerManager->increaseExperience($player, $experience);
@@ -934,7 +935,7 @@ class OrbitalBaseManager extends Manager {
 				$alt .= ' niveau ' . $tq->targetLevel;
 			} 
 			$alt .= ' terminée. Vous gagnez ' . $experience . ' d\'expérience.';
-			$this->alert->add($alt, ALERT_GAM_TECHNO);
+			$this->response->flashbag->add($alt, Response::FLASHBAG_TECHNOLOGY_SUCCESS);
 		}
 
 		# delete queue in database
@@ -945,7 +946,7 @@ class OrbitalBaseManager extends Manager {
 		switch ($cs->statement) {
 			case CommercialShipping::ST_GOING :
 				# shipping arrived, delivery of items to rBaseDestination
-				$cs->deliver($transaction, $destOB, $commander);
+				$this->commercialShippingManager->deliver($cs, $transaction, $destOB, $commander);
 				# prepare commercialShipping for moving back
 				$cs->statement = CommercialShipping::ST_MOVING_BACK;
 				$timeToTravel = strtotime($cs->dArrival) - strtotime($cs->dDeparture);
@@ -1177,7 +1178,7 @@ class OrbitalBaseManager extends Manager {
 				}
 			}
 		} else {
-			$this->alert->add('Problème dans increaseResources de OrbitalBase', ALERT_BUG_ERROR);
+			throw new ErrorException('Problème dans increaseResources de OrbitalBase');
 		}
 	}
 
