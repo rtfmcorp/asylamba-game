@@ -35,6 +35,7 @@ services:
         arguments:
             - "@database"
             - "@zeus.player_bonus_manager"
+            - "@promethee.technology_helper"
             
     promethee.technology_queue_manager:
         class: Asylamba\Modules\Promethee\Manager\TechnologyQueueManager

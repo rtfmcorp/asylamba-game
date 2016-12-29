@@ -21,7 +21,11 @@ class Response
 	protected $redirect;
 	
 	const FLASHBAG_SUCCESS = 'success';
+	const FLASHBAG_GENERATOR_SUCCESS = 'generator-success';
+	const FLASHBAG_DOCK1_SUCCESS = 'dock1-success';
+	const FLASHBAG_DOCK2_SUCCESS = 'dock2-success';
 	const FLASHBAG_MARKET_SUCCESS = 'market-success';
+	const FLASHBAG_TECHNOLOGY_SUCCESS = 'technology-success';
 	const FLASHBAG_ERROR = 'error';
 	
 	/**

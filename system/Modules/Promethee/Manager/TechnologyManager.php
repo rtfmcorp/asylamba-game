@@ -6,21 +6,26 @@ use Asylamba\Modules\Promethee\Model\Technology;
 
 use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Zeus\Manager\PlayerBonusManager;
+use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
 
 class TechnologyManager {
 	/** @var Database **/
 	protected $database;
 	/** @var PlayerBonusManager **/
 	protected $playerBonusManager;
+	/** @var TechnologyHelper **/
+	protected $technologyHelper;
 	
 	/**
 	 * @param Database $database
 	 * @param PlayerBonusManager $playerBonusManager
+	 * @param TechnologyHelper $technologyHelper
 	 */
-	public function __construct(Database $database, PlayerBonusManager $playerBonusManager)
+	public function __construct(Database $database, PlayerBonusManager $playerBonusManager, TechnologyHelper $technologyHelper)
 	{
 		$this->database = $database;
 		$this->playerBonusManager = $playerBonusManager;
+		$this->technologyHelper = $technologyHelper;
 	}
 	
 	/**
@@ -62,9 +67,9 @@ class TechnologyManager {
 				if ($value == 1) {
 					$this->addTech($technology->rPlayer, $id, $value);
 				} else {
-					$this->updateTech($id, $value);
+					$this->updateTech($technology->rPlayer, $id, $value);
 				}
-				if (!TechnologyResource::isAnUnblockingTechnology($id)) {
+				if (!$this->technologyHelper->isAnUnblockingTechnology($id)) {
 					$bonus = $this->playerBonusManager->getBonusByPlayer($technology->rPlayer);
 					$this->playerBonusManager->load($bonus);
 					$this->playerBonusManager->updateTechnoBonus($bonus, $id, $value);

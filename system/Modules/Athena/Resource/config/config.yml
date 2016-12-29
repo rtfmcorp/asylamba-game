@@ -51,6 +51,7 @@ services:
             - "@athena.building_queue_manager"
             - "@athena.ship_queue_manager"
             - "@promethee.technology_queue_manager"
+            - "@promethee.technology_manager"
             - "@promethee.technology_helper"
             - "@athena.commercial_shipping_manager"
             - "@athena.commercial_route_manager"
@@ -64,8 +65,8 @@ services:
             - "@ares.commander_manager"
             - "@hermes.notification_manager"
             - "@athena.orbital_base_helper"
-            - "@app.alert"
             - "@ctc"
+            - "@app.response"
             - "@app.session"
             
     athena.orbital_base_helper:
