@@ -174,7 +174,7 @@ class GalaxyColorManager {
 
 			if ($nbrColor >= $this->limitConquestSector) {
 				$maxColor = array_keys($colorRepartition, max($colorRepartition));
-				$this->sector[$k]['prime'] = FALSE;
+				$this->sector[$k]['prime'] = 0;
 				
 				if ($nbrColorSector == NULL) {
 					$sectorUpdatedColor[] = $this->sector[$k]['color'];
