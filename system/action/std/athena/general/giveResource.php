@@ -18,7 +18,7 @@ use Asylamba\Modules\Hermes\Model\Notification;
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
-$notificationManager = $this->getContainer()->get('hermes.notification_anager');
+$notificationManager = $this->getContainer()->get('hermes.notification_manager');
 $commercialShippingManager = $this->getContainer()->get('athena.commercial_shipping_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
