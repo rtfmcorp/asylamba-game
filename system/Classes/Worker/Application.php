@@ -51,10 +51,11 @@ class Application {
 			__DIR__ . '/../../../config/parameters.yml',
 			__DIR__ . '/../../../config/services.yml'
 		];
+		$this->container->setParameter('root_path', realpath('.'));
 		$configuration = new Configuration(new FileLocator($configurationFiles));
 		$configuration->buildContainer($this->container, $configurationFiles);
+		$configuration->defineOldConstants();
 		
-		$this->container->setParameter('root_path', realpath('.'));
 	}
 	
 	public function registerModules()
