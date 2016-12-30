@@ -37,9 +37,8 @@ composer install
 
 You're now able to follow the install procedure :
 
-- copy the file `index.default.php` and rename it `index.php`, modify the `PUBLICR` constant with your own path
 - copy the file `config/parameters.dist.yml` and rename it `parameters.yml`
-- copy the file `system/config/app.config.local.default.php` and rename it `app.config.local.php`, modify the `APP_ROOT` constant and some others if needed (connection to database, and so on.)
+- copy the file `system/config/app.config.local.default.php` and rename it `app.config.local.php`, modify the `APP_ROOT` constant and some others if needed (connection to database, and so on.) and also the `PUBLICR` constant with your own path
 - create a database (the name must be the same as the `DEFAULT_SQL_DTB` constant from the last point file)
 
 From there, you can access an interface that permits to create all the SQL tables of the DB : `http://localhost/[votre chemin]/script`. To do the install, click on the first button : "deploy.dbinstall".
