@@ -80,11 +80,11 @@ if ($commander->statement == Commander::INSCHOOL || $commander->statement == Com
 	if ($commanderManager->size() < PlaceResource::get($orbitalBaseManager->get()->typeOfBase, 'school-size')) {
 		$commander->statement = Commander::INSCHOOL;
 		$response->flashbag->add('Votre officier ' . $commander->getName() . ' a été remis à l\'école', Response::FLASHBAG_SUCCESS);
-		$commander->emptySquadrons();
+		$commanderManager->emptySquadrons($commander);
 	} else {
 		$commander->statement = Commander::RESERVE;
 		$response->flashbag->add('Votre officier ' . $commander->getName() . ' a été remis dans la réserve de l\'armée', Response::FLASHBAG_SUCCESS);
-		$commander->emptySquadrons();
+		$commanderManager->emptySquadrons($commander);
 	}
 	$commanderManager->changeSession($S_COM3);
 	$response->redirect('fleet');
