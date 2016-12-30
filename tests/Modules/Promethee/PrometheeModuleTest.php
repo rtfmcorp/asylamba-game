@@ -4,7 +4,7 @@ namespace Tests\Asylamba\Modules\Promethee;
 
 use Asylamba\Modules\Promethee\PrometheeModule;
 use Asylamba\Classes\Worker\Application;
-use Asylamba\Classes\Worker\Container;
+use Asylamba\Classes\DependencyInjection\Container;
 
 class PrometheeModuleTest extends \PHPUnit_Framework_TestCase
 {

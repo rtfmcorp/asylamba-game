@@ -4,7 +4,7 @@ namespace Tests\Asylamba\Modules\Gaia;
 
 use Asylamba\Modules\Gaia\GaiaModule;
 use Asylamba\Classes\Worker\Application;
-use Asylamba\Classes\Worker\Container;
+use Asylamba\Classes\DependencyInjection\Container;
 
 class GaiaModuleTest extends \PHPUnit_Framework_TestCase
 {
