@@ -996,7 +996,7 @@ class ColorManager extends Manager {
 		for ($i = 0; $i < $this->lawManager->size(); $i++) {
 			$law = $this->lawManager->get($i);
 			if ($law->statement == Law::VOTATION && $law->dEndVotation < Utils::now()) {
-				$this->ctc->add($law->dEndVotation, $this, 'uVoteLaw', $color, array($color, $law, $law->ballot($law)));
+				$this->ctc->add($law->dEndVotation, $this, 'uVoteLaw', $color, array($color, $law, $this->lawManager->ballot($law)));
 			} elseif ($law->statement == Law::EFFECTIVE && $law->dEnd < Utils::now()) {
 				if (LawResources::getInfo($law->type, 'bonusLaw')) {
 					#lois à bonus
