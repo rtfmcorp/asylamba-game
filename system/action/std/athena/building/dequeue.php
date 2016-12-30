@@ -72,7 +72,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 				// give the resources back
 				$resourcePrice = $orbitalBaseHelper->getBuildingInfo($building, 'level', $targetLevel, 'resourcePrice');
 				$resourcePrice *= $buildingResourceRefund;
-				$ob->increaseResources($resourcePrice, TRUE);
+				$orbitalBaseManager->increaseResources($ob, $resourcePrice, TRUE);
 				$response->flashbag->add('Construction annulée, vous récupérez le ' . $buildingResourceRefund * 100 . '% du montant investi pour la construction', Response::FLASHBAG_SUCCESS);
 			} else {
 				throw new ErrorException('suppression de bâtiment impossible');
