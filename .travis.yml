@@ -3,12 +3,7 @@ language: php
 sudo: false
 
 php:
-    - 5.6
     - 7.0
-
-matrix:
-    allow_failures:
-        - php: 7.0
 
 before_script:
     - cp config/parameters.dist.yml config/parameters.yml
