@@ -4,7 +4,7 @@ namespace Tests\Asylamba\Modules\Zeus;
 
 use Asylamba\Modules\Zeus\ZeusModule;
 use Asylamba\Classes\Worker\Application;
-use Asylamba\Classes\Worker\Container;
+use Asylamba\Classes\DependencyInjection\Container;
 
 class ZeusModuleTest extends \PHPUnit_Framework_TestCase
 {

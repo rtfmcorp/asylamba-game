@@ -4,7 +4,7 @@ namespace Tests\Asylamba\Modules\Ares;
 
 use Asylamba\Modules\Ares\AresModule;
 use Asylamba\Classes\Worker\Application;
-use Asylamba\Classes\Worker\Container;
+use Asylamba\Classes\DependencyInjection\Container;
 
 class AresModuleTest extends \PHPUnit_Framework_TestCase
 {

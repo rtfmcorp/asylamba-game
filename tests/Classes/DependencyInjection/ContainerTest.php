@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Asylamba\Classes\Worker;
+namespace Tests\Asylamba\Classes\DependencyInjection;
 
-use Asylamba\Classes\Worker\Container;
+use Asylamba\Classes\DependencyInjection\Container;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase {
     /** @var Container **/
