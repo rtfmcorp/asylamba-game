@@ -93,12 +93,15 @@ for ($i = $playerManager->size() - 1; $i >= 0; $i--) {
 	} elseif (Utils::interval(Utils::now(), $playerManager->get($i)->getDLastConnection()) >= $playerGlobalInactiveTime AND $playerManager->get($i)->statement == Player::ACTIVE) {
 		$playerManager->get($i)->statement = Player::INACTIVE;
 
-		# sending email API call
-		$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
-		$api->sendMail($playerManager->get($i)->bind, APP_ID, API::TEMPLATE_INACTIVE_PLAYER);
+		if (APIMODE) {
+			# sending email API call
+			$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
+			$api->sendMail($playerManager->get($i)->bind, APP_ID, API::TEMPLATE_INACTIVE_PLAYER);
+		}
 
 		$unactivatedPlayers++;
 	}
+
 }
 
 # applique en cascade le changement de couleur des sytèmes
