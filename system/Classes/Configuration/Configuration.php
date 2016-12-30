@@ -65,15 +65,8 @@ class Configuration {
 	public function defineOldConstants()
 	{
 		# définition des ROOT
-		define('PUBLICR',		'http://game.asylamba.local/public/');
 		define('SYSTEMR',		__DIR__ . '/../../');
-		define('CLASSES',               SYSTEMR . 'Classes/');
-
-		# définition des ROOT
-		define('CSS', 			PUBLICR . 'css/');
-		define('JS', 		 	PUBLICR . 'js/');
-		define('MEDIA', 		PUBLICR . 'media/');
-		define('LOG', 			PUBLICR . 'log/');
+		define('CLASSES',       SYSTEMR . 'Classes/');
 
 		define('MODULES', 		SYSTEMR . 'Modules/');
 		define('LIB', 			CLASSES . 'lib/');
