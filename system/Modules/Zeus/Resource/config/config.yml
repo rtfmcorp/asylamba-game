@@ -7,9 +7,9 @@ parameters:
 
     zeus.player.tax_coeff: 1
 
-    zeus.player.ally_inactive_time: 24 * 7
-    zeus.player.global_inactive_time: 24 * 15
-    zeus.player.inactive_time_limit: 24 * 25
+    zeus.player.ally_inactive_time: 168     # 7 days
+    zeus.player.global_inactive_time: 360   # 15 days
+    zeus.player.inactive_time_limit: 600    # 25 days
 
 services:
     zeus.player_manager:
