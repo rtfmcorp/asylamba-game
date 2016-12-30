@@ -1157,7 +1157,7 @@ class OrbitalBaseManager extends Manager {
 
 	// OBJECT METHODS
 	public function increaseResources(OrbitalBase $orbitalBase, $resources, $canGoHigher = FALSE) {
-		if (intval($resources)) {
+		if (intval($resources) >= 0) {
 			# load the bonus
 			$playerBonus = $this->playerBonusManager->getBonusByPlayer($orbitalBase->rPlayer);
 			$this->playerBonusManager->load($playerBonus);
