@@ -3,6 +3,13 @@
 # MODE #
 ########
 
+
+# définition des ROOT
+define('PUBLICR',		'http://game.asylamba.local/public/');
+define('CSS', 			PUBLICR . 'css/');
+define('JS', 		 	PUBLICR . 'js/');
+define('MEDIA', 		PUBLICR . 'media/');
+define('LOG', 			PUBLICR . 'log/');
 # active le buffer et la page des scripts sans mot de passe
 define('DEVMODE', 				TRUE);
 	ini_set('display_errors', 	DEVMODE);
