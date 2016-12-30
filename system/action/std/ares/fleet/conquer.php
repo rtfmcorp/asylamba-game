@@ -116,7 +116,7 @@ if ($technologies->getTechnology(Technology::CONQUEST) !== 1) {
 									if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
 										$commander->destinationPlaceName = $place->baseName;
 
-										if ($commander->move($place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
+										if ($commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
 											# debit credit
 											$S_PAM2 = $playerManager->getCurrentSession();
 											$playerManager->newSession(ASM_UMODE);

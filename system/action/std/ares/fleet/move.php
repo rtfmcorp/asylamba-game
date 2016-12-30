@@ -52,7 +52,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					$commander->destinationPlaceName = $place->baseName;
 
 					if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
-						$commander->move($place->getId(), $commander->rBase, Commander::MOVE, $length, $duration);
+						$commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::MOVE, $length, $duration);
 
 						if (DATA_ANALYSIS) {
 							$qr = $database->prepare('INSERT INTO 
