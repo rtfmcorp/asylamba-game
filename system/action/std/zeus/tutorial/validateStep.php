@@ -118,7 +118,7 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 		$nextStep = $stepTutorial;
 		if (TutorialResource::isLastStep($stepTutorial)) {
 			$nextStep = 0;
-			$repsonse->flashbag->add('Bravo, vous avez terminé le tutoriel. Bonne continuation et bon amusement sur Asylamba, vous pouvez maintenant voler de vos propres ailes !', Response::FLASHBAG_SUCCESS);
+			$response->flashbag->add('Bravo, vous avez terminé le tutoriel. Bonne continuation et bon amusement sur Asylamba, vous pouvez maintenant voler de vos propres ailes !', Response::FLASHBAG_SUCCESS);
 		} else {
 			$nextStep += 1;
 		}
