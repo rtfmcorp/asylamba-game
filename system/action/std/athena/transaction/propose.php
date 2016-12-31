@@ -15,6 +15,8 @@ use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Model\CommercialShipping;
 use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
