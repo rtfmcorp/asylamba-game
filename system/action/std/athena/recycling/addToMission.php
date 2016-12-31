@@ -23,7 +23,7 @@ for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
 }
 $missionId = $request->query->get('id');
 $rPlace = $request->query->get('place');
-$quantity = $request->query->get('quantity');
+$quantity = $request->request->get('quantity');
 
 if ($rPlace !== FALSE AND $missionId !== FALSE AND $quantity !== FALSE AND in_array($rPlace, $verif)) {
 

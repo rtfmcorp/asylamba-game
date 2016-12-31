@@ -1,6 +1,7 @@
 <?php
 
 use Asylamba\Modules\Hermes\Model\ConversationUser;
+use Asylamba\Modules\Hermes\Model\Conversation;
 
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('app.session');
