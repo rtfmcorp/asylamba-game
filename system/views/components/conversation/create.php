@@ -1,11 +1,11 @@
 <?php
 
 use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Library\Parser;
 
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $sessionToken = $this->getContainer()->get('app.session')->get('token');
+$request = $this->getContainer()->get('app.request');
+$parser = $this->getContainer()->get('parser');
 
 echo '<div class="component size2 new-message">';
 	echo '<div class="head skin-5">';
@@ -18,7 +18,7 @@ echo '<div class="component size2 new-message">';
 					echo 'Destinataire';
 				echo '</p>';
 
-				$player = Utils::getHTTPData('sendto');
+				$player = $request->request->get('sendto');
 				$name = '';
 				if ($player !== FALSE) {
 					$S_PAM = $playerManager->getCurrentSession();
@@ -40,7 +40,7 @@ echo '<div class="component size2 new-message">';
 				echo '</p>';
 				echo '<p class="input input-area">';
 					echo '<span class="wysiwyg" data-id="new-message-wysiwyg">';
-						echo (new Parser())->getToolbar();
+						echo $parser->getToolbar();
 						echo '<textarea name="content" id="new-message-wysiwyg"></textarea>';
 					echo '</span>';
 				echo '</p>';

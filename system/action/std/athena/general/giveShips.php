@@ -10,6 +10,7 @@ use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Modules\Athena\Model\CommercialShipping;
@@ -145,7 +146,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND in_array($baseId, $verif)) 
 										);
 										$qr->execute([$session->get('playerId'), $otherBase->getRPlayer(), 3, DataAnalysis::resourceToStdUnit(ShipResource::getInfo($shipType, 'resourcePrice') * $ships), Utils::now()]);
 									}
-									$response->flashbag->add('Vaisseaux envoyés', Repsonse::FLASHBAG_SUCCESS);
+									$response->flashbag->add('Vaisseaux envoyés', Response::FLASHBAG_SUCCESS);
 								} else {
 									throw new ErrorException('Erreur dans les bases orbitales');
 								}
