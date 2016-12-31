@@ -6,10 +6,10 @@
 # string name 		nom du commandant
 
 use Asylamba\Classes\Library\Http\Response;
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Library\Parser;
+use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
 
 
 if (($commanderId = $request->request->get('id')) === null || ($name = $request->request->get('name')) === null) {
@@ -20,7 +20,7 @@ $commanderManager = $this->getContainer()->get('ares.commander_manager');
 
 $S_COM1 = $commanderManager->getCurrentSession();
 $commanderManager->newSession();
-$commanderManager->load(array('c.id' => $commandantId, 'c.rPlayer' => CTR::$data->get('playerId')));
+$commanderManager->load(array('c.id' => $commandantId, 'c.rPlayer' => $session->get('playerId')));
 if ($commanderManager->size() !== 1) {
 	throw new ErrorException('Ce commandant n\'existe pas ou ne vous appartient pas');
 }
