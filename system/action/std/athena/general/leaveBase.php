@@ -8,7 +8,6 @@ use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 
@@ -111,7 +110,7 @@ if (count($verif) > 1) {
 						}
 					}
 					$response->flashbag->add('Base abandonnée', Response::FLASHBAG_SUCCESS);
-					CTR::redirect(Format::actionBuilder('switchbase', ['base' => $verif[0]], FALSE));
+					$response->redirect(Format::actionBuilder('switchbase', $sessionToken, ['base' => $verif[0]], FALSE));
 				} else {
 					throw new ErrorException('Vous ne pouvez pas abandonner de base dans les ' . OrbitalBase::COOL_DOWN . ' premières relèves.');	
 				}

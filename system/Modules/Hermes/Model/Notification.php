@@ -11,8 +11,8 @@
 */
 namespace Asylamba\Modules\Hermes\Model;
 
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Exception\ErrorException;
 
 class Notification {
 	// ATTRIBUTES
@@ -50,7 +50,7 @@ class Notification {
 		if (strlen($v) <= 100) {
 			$this->title = $v; 
 		} else {
-			CTR::$alert->add('Le titre de la notification est trop long.', ALT_BUG_ERROR);
+			throw new ErrorException('Le titre de la notification est trop long.');
 		}
 	}
 
@@ -108,7 +108,7 @@ class Notification {
 		if (isset($v) && ($v == 0 || $v == 1)) {
 			$this->readed = $v; 
 		} else {
-			CTR::$alert->add('La notification peut être lue ou non-lue, il n\' a pas d\'autres possibilités !');
+			throw new ErrorException('La notification peut être lue ou non-lue, il n\' a pas d\'autres possibilités !');
 		}
 	}
 
@@ -116,7 +116,7 @@ class Notification {
 		if (isset($v) && ($v == 0 || $v == 1)) {
 			$this->archived = $v; 
 		} else {
-			CTR::$alert->add('La notification peut être archivée ou non-archivée, il n\' a pas d\'autres possibilités !');
+			throw new ErrorException('La notification peut être archivée ou non-archivée, il n\' a pas d\'autres possibilités !');
 		}
 	}
 }
