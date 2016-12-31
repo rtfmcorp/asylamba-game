@@ -3,6 +3,7 @@
 use Asylamba\Modules\Atlas\Model\PlayerRanking;
 
 $request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
 $playerRankingManager = $this->getContainer()->get('atlas.player_ranking_manager');
 
 $direction		= $request->query->get('dir');
@@ -36,7 +37,7 @@ if ($direction !== FALSE && $current !== FALSE && $type !== FALSE) {
 			}
 
 			for ($i = 0; $i < $playerRankingManager->size(); $i++) {
-				echo $playerRankingManager->get($i)->commonRender($type);
+				echo $playerRankingManager->get($i)->commonRender($session->get('playerId'), $type);
 			}
 
 			if ($direction == 'prev' && $playerRankingManager->size() == PlayerRanking::PAGE) {
