@@ -84,13 +84,13 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 										}
 									}
 								} else {
-									throw new ErrorException('Cet emplacement est trop éloigné.');	
+									throw new ErrorException('Cet emplacement est trop éloigné.');
 								}
 							} else {
-								throw new ErrorException('Cet officier est déjà en déplacement.');	
+								throw new ErrorException('Cet officier est déjà en déplacement.');
 							}
 						} else {
-							throw new ErrorException('Vous devez affecter au moins un vaisseau à votre officier.');	
+							throw new ErrorException('Vous devez affecter au moins un vaisseau à votre officier.');
 						}		
 					} else {
 						throw new ErrorException('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction.');
