@@ -5,33 +5,36 @@
 # int typeofship 	type de vaisseau
 # int quantity 			nombre de vaisseaux à recycler
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 
-$baseId = Utils::getHTTPData('baseid');
-$typeOfShip = Utils::getHTTPData('typeofship');
-$quantity = Utils::getHTTPData('quantity');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+
+$baseId = $request->query->get('baseid');
+$typeOfShip = $request->query->get('typeofship');
+$quantity = $request->request->get('quantity');
 
 if ($baseId !== FALSE AND $typeOfShip !== FALSE AND $quantity !== FALSE) {
-		$S_OBM1 = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession(ASM_UMODE);
-		ASM::$obm->load(array('rPlace' => $baseId, 'rPlayer' => CTR::$data->get('playerId')));
+		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
+		$orbitalBaseManager->newSession(ASM_UMODE);
+		$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
 
-		if (ASM::$obm->size() > 0) {
-			$ob = ASM::$obm->get();
+		if ($orbitalBaseManager->size() > 0) {
+			$ob = $orbitalBaseManager->get();
 			if ($quantity > 0 && $quantity <= $ob->shipStorage[$typeOfShip]) {
 				$resources = ($quantity * ShipResource::getInfo($typeOfShip, 'resourcePrice')) / 2;
 				$ob->shipStorage[$typeOfShip] -= $quantity;
-				$ob->increaseResources($resources);
+				$orbitalBaseManager->increaseResources($ob, $resources);
 			} else {
-				CTR::$alert->add('cette quantité ne correspond pas à votre stock', ALERT_STD_ERROR);	
+				throw new ErrorException('cette quantité ne correspond pas à votre stock');	
 			}
 		} else {
-			CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);	
+			throw new ErrorException('cette base ne vous appartient pas');	
 		}
-		ASM::$obm->changeSession($S_OBM1);
+		$orbitalBaseManager->changeSession($S_OBM1);
 } else {
-	CTR::$alert->add('pas assez d\'informations', ALERT_STD_FILLFORM);
+	throw new FormException('pas assez d\'informations');
 }
