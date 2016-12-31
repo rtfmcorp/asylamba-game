@@ -6,22 +6,29 @@ use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
 
-$conversation 	= Utils::getHTTPData('conversation');
-$recipients 	= Utils::getHTTPData('recipients');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
+$conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
+$conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
+$playerManager = $this->getContainer()->get('hermes.player_manager');
+
+$conversation 	= $request->query->add('conversation');
+$recipients 	= $request->query->add('recipients');
 
 if ($recipients !== FALSE AND $conversation !== FALSE) {
-	$S_CVM = ASM::$cvm->getCurrentSession();
-	ASM::$cvm->newSession();
-	ASM::$cvm->load(
+	$S_CVM = $conversationManager->getCurrentSession();
+	$conversationManager->newSession();
+	$conversationManager->load(
 		array(
 			'c.id' => $conversation,
-			'cu.rPlayer' => CTR::$data->get('playerId'),
+			'cu.rPlayer' => $session->get('playerId'),
 			'cu.playerStatement' => ConversationUser::US_ADMIN
 		)
 	);
 
-	if (ASM::$cvm->size() == 1) {
-		$conv  = ASM::$cvm->get();
+	if ($conversationManager->size() == 1) {
+		$conv  = $conversationManager->get();
 		$players = $conv->players;
 
 		$playersId = array();
@@ -32,44 +39,44 @@ if ($recipients !== FALSE AND $conversation !== FALSE) {
 		# traitement des utilisateurs multiples
 		$recipients = explode(',', $recipients);
 		$recipients = array_filter($recipients, function($e) {
-			return $e == CTR::$data->get('playerId') ? FALSE : TRUE;
+			return $e == $session->get('playerId') ? FALSE : TRUE;
 		});
 		$recipients[] = 0;
 
 		if ((count($recipients) + count($players)) <= ConversationUser::MAX_USERS) {
 			# chargement des utilisateurs
-			$S_PAM = ASM::$pam->getCurrentSession();
-			ASM::$pam->newSession();
-			ASM::$pam->load(array('id' => $recipients, 'statement' => array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY)));
+			$S_PAM = $playerManager->getCurrentSession();
+			$playerManager->newSession();
+			$playerManager->load(array('id' => $recipients, 'statement' => array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY)));
 
-			if (ASM::$pam->size() >= 1) {
+			if ($playerManager->size() >= 1) {
 				# création de la date précédente
 				$readingDate = date('Y-m-d H:i:s', (strtotime(Utils::now()) - 20));
 
 				# créer la liste des users
-				for ($i = 0; $i < ASM::$pam->size(); $i++) {
-					if (!in_array(ASM::$pam->get($i)->id, $playersId)) {
+				for ($i = 0; $i < $playerManager->size(); $i++) {
+					if (!in_array($playerManager->get($i)->id, $playersId)) {
 						$user = new ConversationUser();
 
 						$user->rConversation = $conv->id;
-						$user->rPlayer = ASM::$pam->get($i)->id;
+						$user->rPlayer = $playerManager->get($i)->id;
 						$user->convPlayerStatement = ConversationUser::US_STANDARD;
 						$user->convStatement = ConversationUser::CS_DISPLAY;
 						$user->dLastView = $readingDate;
 
-						ASM::$cum->add($user);
+						$conversationUserManager->add($user);
 
 						# création du message système
 						$message = new ConversationMessage();
 
 						$message->rConversation = $conv->id;
-						$message->rPlayer = ASM::$pam->get($i)->id;
+						$message->rPlayer = $playerManager->get($i)->id;
 						$message->type = ConversationMessage::TY_SYSTEM;
-						$message->content = ASM::$pam->get($i)->name . ' est entré dans la conversation';
+						$message->content = $playerManager->get($i)->name . ' est entré dans la conversation';
 						$message->dCreation = Utils::now();
 						$message->dLastModification = NULL;
 
-						ASM::$cme->add($message);
+						$conversationMessageManager->add($message);
 
 						# mise à jour de la conversation
 						$conv->messages++;
@@ -77,20 +84,20 @@ if ($recipients !== FALSE AND $conversation !== FALSE) {
 					}
 				}
 
-				CTR::$alert->add('Le joueur a été ajouté.', ALERT_STD_SUCCESS);
+				$response->flashbag->add('Le joueur a été ajouté.', Response::FLASHBAG_SUCCESS);
 			} else {
-				CTR::$alert->add('Le joueur n\'est pas joignable.', ALERT_STD_ERROR);		
+				throw new ErrorException('Le joueur n\'est pas joignable.');		
 			}
 
-			ASM::$pam->changeSession($S_PAM);
+			$playerManager->changeSession($S_PAM);
 		} else {
-			CTR::$alert->add('Nombre maximum de joueur atteint.', ALERT_STD_ERROR);
+			throw new ErrorException('Nombre maximum de joueur atteint.');
 		}
 	} else {
-		CTR::$alert->add('La conversation n\'existe pas ou ne vous appartient pas.', ALERT_STD_ERROR);
+		throw new ErrorException('La conversation n\'existe pas ou ne vous appartient pas.');
 	}
 
-	ASM::$cvm->changeSession($S_CVM);
+	$conversationManager->changeSession($S_CVM);
 } else {
-	CTR::$alert->add('Informations manquantes pour ajouter un joueur à la conversation.', ALERT_STD_ERROR);
+	throw new ErrorException('Informations manquantes pour ajouter un joueur à la conversation.');
 }
