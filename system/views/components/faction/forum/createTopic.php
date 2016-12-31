@@ -8,6 +8,7 @@ use Asylamba\Classes\Library\Format;
 
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('app.session');
+$parser = $this->getContainer()->get('parser');
 $sessionToken = $session->get('token');
 # require
 
@@ -24,7 +25,6 @@ echo '<div class="component topic size2">';
 						echo '<input class="title" type="text" name="title" placeholder="sujet" />';
 
 						echo '<div class="wysiwyg" data-id="new-topic-wysiwyg">';
-							$parser = $this->getContainer()->get('parser');
 							echo $parser->getToolbar();
 							
 							echo '<textarea name="content" id="new-topic-wysiwyg" placeholder="Votre message"></textarea>';
