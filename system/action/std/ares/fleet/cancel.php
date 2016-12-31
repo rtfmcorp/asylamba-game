@@ -7,12 +7,15 @@
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Modules\Ares\Model\Commander;
 
 $request = $this->getContainer()->get('app.request');
 
-if (($request->request->get('commanderid')) === null) {
+if (($request->query->get('commanderid')) === null) {
 	throw new ErrorException('Manque de précision sur le commandant ou la position.');
 }
+$commanderId = $request->query->get('commanderid');
+
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $session = $this->getContainer()->get('app.session');
 
@@ -24,7 +27,7 @@ if ($commanderManager->size() === 0) {
 	throw new ErrorException('Ce commandant ne vous appartient pas ou n\'existe pas.');
 }
 $commander = $commanderManager->get();
-if ($commander->travelType != Commander::BACK) {
+if ($commander->travelType == Commander::BACK) {
 	throw new ErrorException('Vous ne pouvez pas annuler un retour.');
 }
 
@@ -60,7 +63,7 @@ if ($session->exist('playerEvent') && $commander->rPlayer == $session->get('play
 		$commander->dArrival,
 		EVENT_OUTGOING_ATTACK,
 		$commander->id,
-		$commander->getEventInfo()
+		$commanderManager->getEventInfo($commander)
 	);
 }
 
