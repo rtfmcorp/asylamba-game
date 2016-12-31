@@ -14,6 +14,8 @@ use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Modules\Athena\Model\CommercialShipping;
 use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');

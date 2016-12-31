@@ -10,6 +10,8 @@ use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\DataAnalysis;
 use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Athena\Model\ShipQueue;

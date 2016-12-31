@@ -59,7 +59,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 								$sectorManager->newSession();
 								$sectorManager->load(array('id' => $place->rSector));
 
-								$_CLM2 = $colorManager->getCurrentSession();
+								$S_CLM2 = $colorManager->getCurrentSession();
 								$colorManager->newSession();
 								$colorManager->load(array('id' => $sectorManager->get()->rColor));
 								
@@ -67,7 +67,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 								$isFactionSector = ($sectorManager->get()->rColor == $commander->playerColor || $sectorColor->colorLink[$session->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
 								
 								$sectorManager->changeSession($S_SEM);
-								$colorManager->changeSession($_CLM2);
+								$colorManager->changeSession($S_CLM2);
 								
 								$commander->destinationPlaceName = $place->baseName;
 								if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
