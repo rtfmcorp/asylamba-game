@@ -20,9 +20,9 @@ $notificationManager = $this->getContainer()->get('hermes.notification_manager')
 # int quantity 		quantity of credit to send
 # [string text] 	facultative text
 
-$name = $request->query->get('name');
-$quantity = $request->query->get('quantity');
-$text = $request->query->get('text');
+$name = $request->request->get('name');
+$quantity = $request->request->get('quantity');
+$text = $request->request->get('text');
 
 // input protection
 $p = $this->getContainer()->get('parser');
