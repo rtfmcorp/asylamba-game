@@ -1,10 +1,13 @@
 <?php
 
-use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Zeus\Model\CreditTransaction;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
@@ -61,7 +64,7 @@ if ($name !== FALSE AND $quantity !== FALSE) {
 							$ct->dTransaction = Utils::now();
 							$ct->comment = $text;
 							$creditTransactionManager->add($ct);
-									
+
 							$n = new Notification();
 							$n->setRPlayer($receiver->id);
 							$n->setTitle('Réception de crédits');
@@ -75,9 +78,8 @@ if ($name !== FALSE AND $quantity !== FALSE) {
 							$n->addBoxResource('credit', Format::numberFormat($credit), ($credit == 1 ? 'crédit reçu' : 'crédits reçus'));
 							$n->addEnd();
 							$notificationManager->add($n);
-
+							
 							$response->flashbag->add('Crédits envoyés', Response::FLASHBAG_SUCCESS);
-								
 						} else {
 							throw new ErrorException('envoi de crédits impossible - vous ne pouvez pas envoyer plus que ce que vous possédez');
 						}
