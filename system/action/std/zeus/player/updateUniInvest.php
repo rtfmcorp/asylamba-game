@@ -16,7 +16,6 @@ $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 
 $credit = $request->request->get('credit');
 
-
 if ($credit !== FALSE) { 
 	if ($credit <= 500000) {
 		$S_PAM1 = $playerManager->getCurrentSession();
