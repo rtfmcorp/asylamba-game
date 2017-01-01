@@ -12,6 +12,7 @@ use Asylamba\Modules\Hermes\Model\RoadMap;
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
+$parser = $this->getContainer()->get('parser');
 $roadmapManager = $this->getContainer()->get('hermes.roadmap_manager');
 
 if ($session->get('playerInfo')->get('admin') == FALSE) {
@@ -25,6 +26,7 @@ if ($session->get('playerInfo')->get('admin') == FALSE) {
 		$rm = new RoadMap();
 		$rm->rPlayer = $session->get('playerId');
 		$rm->setContent($content);
+		$rm->setParsedContent($parser->parse($content));
 		if ($statement !== FALSE) {
 			if ($statement == 0 OR $statement == 1) {
 				$rm->statement = $statement;

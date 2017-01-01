@@ -39,10 +39,9 @@ class RoadMap {
 
 	public function setContent($content) {
 		$this->oContent = $content;
-
-		$parser = new Parser();
-		$content = $parser->parse($content);
-		
+	}
+	
+	public function setParsedContent($content) {
 		$this->pContent = $content;
 	}
 

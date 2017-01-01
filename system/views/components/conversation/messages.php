@@ -4,11 +4,11 @@ use Asylamba\Modules\Hermes\Model\Conversation;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
 use Asylamba\Classes\Library\Chronos;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Library\Parser;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 $conversationManager = $this->getContainer()->get('hermes.conversation_manager');
 $conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
+$parser = $this->getContainer()->get('parser');
 $session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
 
@@ -27,7 +27,7 @@ if (!$message_listmode) {
 						echo '<div class="content">';
 							echo '<form action="' . Format::actionBuilder('writeconversation', $sessionToken, ['conversation' => $conversationManager->get()->id]) . '" method="post">';
 								echo '<div class="wysiwyg" data-id="new-message">';
-									echo (new Parser())->getToolbar();
+									echo $parser->getToolbar();
 									echo '<textarea name="content" id="new-message"></textarea>';
 								echo '</div>';
 
