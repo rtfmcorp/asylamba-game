@@ -632,7 +632,7 @@ class PlaceManager extends Manager {
 				$commander->travelType = NULL;
 				$commander->statement = Commander::RESERVE;
 
-				$commander->emptySquadrons();
+				$this->commanderManager->emptySquadrons($commander);
 
 				# envoi de notif
 				$this->sendNotif($place, Place::CHANGEFAIL, $commander);
