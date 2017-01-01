@@ -1,15 +1,18 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Zeus\Model\Player;
 
-if (CTR::$get->exist('bindkey')) {
-	$S_PAM_1 = ASM::$pam->getCurrentSession();
-	ASM::$pam->newSession();
-	ASM::$pam->load(array('bind' => CTR::$get->get('bindkey')));
+$request = $this->getContainer()->get('app.request');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
 
-	if (ASM::$pam->size() == 1) {
-		ASM::$pam->get()->setStatement(Player::BANNED);
+
+if ($request->query->exist('bindkey')) {
+	$S_PAM_1 = $playerManager->getCurrentSession();
+	$playerManager->newSession();
+	$playerManager->load(array('bind' => $request->query->get('bindkey')));
+
+	if ($playerManager->size() == 1) {
+		$playerManager->get()->setStatement(Player::BANNED);
 
 		echo serialize(array('statement' => 'success'));
 	} else {
@@ -19,7 +22,7 @@ if (CTR::$get->exist('bindkey')) {
 		));
 	}
 
-	ASM::$pam->changeSession($S_PAM_1);
+	$playerManager->changeSession($S_PAM_1);
 } else {
 	echo serialize(array(
 		'statement' => 'error',
