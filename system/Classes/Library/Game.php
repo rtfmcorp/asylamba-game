@@ -124,8 +124,8 @@ class Game {
 		return round($income * $bonusA * $bonusB);
 	}
 
- 	public static function getTaxFromPopulation($population, $typeOfBase) {
-		$tax  = ((180 * $population) + 1500) * PAM_COEFTAX;
+ 	public static function getTaxFromPopulation($population, $typeOfBase, $taxCoeff) {
+		$tax  = ((180 * $population) + 1500) * $taxCoeff;
 		$tax *= PlaceResource::get($typeOfBase, 'tax');
 		return $tax;
 	}

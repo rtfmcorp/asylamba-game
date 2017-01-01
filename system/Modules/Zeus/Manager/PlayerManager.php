@@ -79,6 +79,8 @@ class PlayerManager extends Manager {
 	protected $session;
 	/** @var int **/
 	protected $playerBaseLevel;
+	/** @var int **/
+	protected $playerTaxCoeff;
 	
 	/**
 	 * @param Database $database
@@ -97,6 +99,7 @@ class PlayerManager extends Manager {
 	 * @param CTC $ctc
 	 * @param Session $session
 	 * @param int $playerBaseLevel
+	 * @param int $playerTaxCoeff
 	 */
 	public function __construct(
 		Database $database,
@@ -114,7 +117,8 @@ class PlayerManager extends Manager {
 		PlayerBonusManager $playerBonusManager,
 		CTC $ctc,
 		Session $session,
-		$playerBaseLevel
+		$playerBaseLevel,
+		$playerTaxCoeff
 	)
 	{
 		parent::__construct($database);
@@ -133,6 +137,7 @@ class PlayerManager extends Manager {
 		$this->ctc = $ctc;
 		$this->session = $session;
 		$this->playerBaseLevel = $playerBaseLevel;
+		$this->playerTaxCoeff = $playerTaxCoeff;
 	}
 			
 	public function load($where = array(), $order = array(), $limit = array()) {
@@ -638,7 +643,7 @@ class PlayerManager extends Manager {
 		
 		for ($i = 0; $i < $this->orbitalBaseManager->size(); $i++) {
 			$base = $this->orbitalBaseManager->get($i);
-			$popTax = Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase);
+			$popTax = Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase, $this->playerTaxCoeff);
 			$popTax += $popTax * $playerBonus->bonus->get(PlayerBonus::POPULATION_TAX) / 100;
 			$nationTax = $base->tax * $popTax / 100;
 
