@@ -17,15 +17,15 @@ if ($conversation !== FALSE) {
 	$S_CVM = $conversationManager->getCurrentSession();
 	$conversationManager->newSession();
 	$conversationManager->load(
-		array('c.id' => $conversation, 'cu.rPlayer' => $conversationManager->get('playerId'))
+		array('c.id' => $conversation, 'cu.rPlayer' => $session->get('playerId'))
 	);
-
+	
 	if ($conversationManager->size() == 1) {
 		$conv  = $conversationManager->get();
 		$users = $conv->players;
 
 		foreach ($users as $user) {
-			if ($user->rPlayer == $conversationManager->get('playerId')) {
+			if ($user->rPlayer == $session->get('playerId')) {
 				if ($user->convStatement == ConversationUser::CS_DISPLAY) {
 					$user->convStatement = ConversationUser::CS_ARCHIVED;
 					$response->flashbag->add('La conversation a été archivée.', Response::FLASHBAG_SUCCESS);
