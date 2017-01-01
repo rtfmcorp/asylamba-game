@@ -14,6 +14,7 @@ $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $transactionManager = $this->getContainer()->get('athena.transaction_manager');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
+$taxCoeff = $this->getContainer()->getParameter('zeus.player.tax_coeff');
 
 # background paralax
 echo '<div id="background-paralax" class="financial"></div>';
@@ -81,7 +82,7 @@ echo '<div id="content">';
 		for ($i = 0; $i < $orbitalBaseManager->size(); $i++) {
 			$ob_generalFinancial[] = $orbitalBaseManager->get($i);
 			
-			$thisTaxIn = Game::getTaxFromPopulation($orbitalBaseManager->get($i)->getPlanetPopulation(), $orbitalBaseManager->get($i)->typeOfBase);
+			$thisTaxIn = Game::getTaxFromPopulation($orbitalBaseManager->get($i)->getPlanetPopulation(), $orbitalBaseManager->get($i)->typeOfBase, $taxCoeff);
 			$thisTaxInBonus = $thisTaxIn * $taxBonus / 100;
 			$financial_totalTaxIn += $thisTaxIn;
 			$financial_totalTaxInBonus += $thisTaxInBonus;

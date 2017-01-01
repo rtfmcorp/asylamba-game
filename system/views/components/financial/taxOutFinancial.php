@@ -12,6 +12,8 @@
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Format;
 
+$taxCoeff = $this->getContainer()->getParameter('zeus.player.tax_coeff');
+
 echo '<div class="component financial">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'financial/taxout.png" alt="" />';
@@ -22,7 +24,11 @@ echo '<div class="component financial">';
 		echo '<div class="body">';
 			echo '<ul class="list-type-1">';
 				foreach ($ob_taxOutFinancial as $base) {
-					$baseTaxOut = (Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase) + (Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase) * $taxBonus / 100)) * $base->getTax() / 100;
+					$baseTaxOut = 
+						(Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase, $taxCoeff) +
+						(Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase, $taxCoeff) * $taxBonus / 100))
+						* $base->getTax() / 100
+					;
 
 					echo '<li>';
 						echo '<span class="label">' . $base->getName() . ' [' . $base->getTax() . '% de taxe]</span>';
