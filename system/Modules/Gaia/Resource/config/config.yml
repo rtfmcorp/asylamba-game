@@ -8,6 +8,9 @@ services:
         arguments:
             - "@ares.commander_manager"
             - "@athena.commercial_route_manager"
+            - "@athena.orbital_base_manager"
+            - "%athena.route.sector_bonus"
+            - "%athena.route.color_bonus"
             - "@app.session"
             
     gaia.galaxy_generator:

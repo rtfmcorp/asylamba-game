@@ -2,7 +2,6 @@
 
 namespace Asylamba\Modules\Gaia\Helper;
 
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Chronos;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Format;
@@ -11,6 +10,7 @@ use Asylamba\Modules\Promethee\Model\Technology;
 
 use Asylamba\Modules\Promethee\Resource\TechnologyResource;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Athena\Helper\OrbitalBaseHelper;
 
 use Asylamba\Modules\Ares\Manager\CommanderManager;
 use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
@@ -21,6 +21,12 @@ abstract class ActionHelper {
 	protected $commanderManager;
 	/** @var CommercialRouteManager **/
 	protected $commercialRouteManager;
+	/** @var OrbitalBaseHelper **/
+	protected $orbitalBaseHelper;
+	/** @var int **/
+	protected $routeSectorBonus;
+	/** @var int **/
+	protected $routeColorBonus;
 	/** @var Session **/
 	protected $session;
 	/** @var string **/
@@ -29,15 +35,24 @@ abstract class ActionHelper {
 	/**
 	 * @param CommanderManager $commanderManager
 	 * @param CommercialRouteManager $commercialRouteManager
+	 * @param OrbitalBaseHelper $orbitalBaseHelper
+	 * @param int $routeSectorBonus
+	 * @param int $routeColorBonus
 	 * @param Session $session
 	 */
 	public function __construct(
 		CommanderManager $commanderManager,
 		CommercialRouteManager $commercialRouteManager,
+		OrbitalBaseHelper $orbitalBaseHelper,
+		$routeSectorBonus,
+		$routeColorBonus,
 		Session $session
 	) {
 		$this->commanderManager = $commanderManager;
 		$this->commercialRouteManager = $commercialRouteManager;
+		$this->orbitalBaseHelper = $orbitalBaseHelper;
+		$this->routeSectorBonus = $routeSectorBonus;
+		$this->routeColorBonus = $routeColorBonus;
 		$this->session = $session;
 		$this->sessionToken = $session->get('token');
 	}
@@ -304,11 +319,11 @@ abstract class ActionHelper {
 										}
 									}
 								}
-								$maxRoute = OrbitalBaseResource::getBuildingInfo(6, 'level', $ob->getLevelCommercialPlateforme(), 'nbRoutesMax');
+								$maxRoute = $this->orbitalBaseHelper->getBuildingInfo(6, 'level', $ob->getLevelCommercialPlateforme(), 'nbRoutesMax');
 								if ($usedRoutes < $maxRoute) {
 									$distance = Game::getDistance($ob->getXSystem(), $place->getXSystem(), $ob->getYSystem(), $place->getYSystem());
-									$bonusA = ($ob->getSector() != $place->getRSector()) ? CRM_ROUTEBONUSSECTOR : 1;
-									$bonusB = ($this->session->get('playerInfo')->get('color')) != $place->getPlayerColor() ? CRM_ROUTEBONUSCOLOR : 1;
+									$bonusA = ($ob->getSector() != $place->getRSector()) ? $this->routeSectorBonus : 1;
+									$bonusB = ($this->session->get('playerInfo')->get('color')) != $place->getPlayerColor() ? $this->routeColorBonus : 1;
 									$price = Game::getRCPrice($distance);
 									$income = Game::getRCIncome($distance, $bonusA, $bonusB);
 
