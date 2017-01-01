@@ -2,13 +2,10 @@
 
 namespace Asylamba\Classes\Library\Http;
 
-use Asylamba\Classes\Library\ParameterBag;
 use Asylamba\Classes\Container\History;
 
 class Response
 {
-	/** @var ParameterBag **/
-	public $flashbag;
 	/** @var string **/
 	protected $title;
 	/** @var string **/
@@ -20,14 +17,6 @@ class Response
 	/** @var string **/
 	protected $redirect;
 	
-	const FLASHBAG_SUCCESS = 'success';
-	const FLASHBAG_GENERATOR_SUCCESS = 'generator-success';
-	const FLASHBAG_DOCK1_SUCCESS = 'dock1-success';
-	const FLASHBAG_DOCK2_SUCCESS = 'dock2-success';
-	const FLASHBAG_MARKET_SUCCESS = 'market-success';
-	const FLASHBAG_TECHNOLOGY_SUCCESS = 'technology-success';
-	const FLASHBAG_ERROR = 'error';
-	
 	/**
 	 * @param \Asylamba\Classes\Library\Http\Request $request
 	 * @param History $history
@@ -35,7 +24,6 @@ class Response
 	public function __construct(Request $request, History $history) {
 		$this->request = $request;
 		$this->history = $history;
-		$this->flashbag = new ParameterBag();
 	}
 	
 	/**
