@@ -1,8 +1,9 @@
 <?php
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
 
@@ -11,21 +12,19 @@ $session = $this->getContainer()->get('app.session');
 $conversationManager = $this->getContainer()->get('hermes.conversation_manager');
 $conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
 $conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
-$playerManager = $this->getContainer()->get('hermes.player_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
 
-$conversation 	= $request->query->add('conversation');
-$recipients 	= $request->query->add('recipients');
+$conversation 	= $request->query->get('conversation');
+$recipients 	= $request->request->get('recipients');
 
 if ($recipients !== FALSE AND $conversation !== FALSE) {
 	$S_CVM = $conversationManager->getCurrentSession();
 	$conversationManager->newSession();
-	$conversationManager->load(
-		array(
-			'c.id' => $conversation,
-			'cu.rPlayer' => $session->get('playerId'),
-			'cu.playerStatement' => ConversationUser::US_ADMIN
-		)
-	);
+	$conversationManager->load([
+		'c.id' => $conversation,
+		'cu.rPlayer' => $session->get('playerId'),
+		'cu.playerStatement' => ConversationUser::US_ADMIN
+	]);
 
 	if ($conversationManager->size() == 1) {
 		$conv  = $conversationManager->get();
@@ -38,7 +37,7 @@ if ($recipients !== FALSE AND $conversation !== FALSE) {
 
 		# traitement des utilisateurs multiples
 		$recipients = explode(',', $recipients);
-		$recipients = array_filter($recipients, function($e) {
+		$recipients = array_filter($recipients, function($e) use ($session) {
 			return $e == $session->get('playerId') ? FALSE : TRUE;
 		});
 		$recipients[] = 0;
@@ -48,7 +47,7 @@ if ($recipients !== FALSE AND $conversation !== FALSE) {
 			$S_PAM = $playerManager->getCurrentSession();
 			$playerManager->newSession();
 			$playerManager->load(array('id' => $recipients, 'statement' => array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY)));
-
+			
 			if ($playerManager->size() >= 1) {
 				# création de la date précédente
 				$readingDate = date('Y-m-d H:i:s', (strtotime(Utils::now()) - 20));
