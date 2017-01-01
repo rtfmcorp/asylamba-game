@@ -1,11 +1,11 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
+$request = $this->getContainer()->get('app.request');
 
 echo '<div id="subnav">';
 	echo '<button class="move-side-bar top" data-dir="up"> </button>';
 	echo '<div class="overflow">';
-		$active = (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'university') ? 'active' : '';
+		$active = (!$request->query->has('view') OR $request->query->get('view') == 'university') ? 'active' : '';
 		echo '<a href="' . APP_ROOT . 'technology/view-university" class="item ' . $active . '">';
 			echo '<span class="picto">';
 				echo '<img src="' . MEDIA . 'orbitalbase/university.png" alt="" />';
@@ -15,7 +15,7 @@ echo '<div id="subnav">';
 			echo '</span>';
 		echo '</a>';
 
-		$active = (CTR::$get->get('view') == 'technos') ? 'active' : '';
+		$active = ($request->query->get('view') == 'technos') ? 'active' : '';
 		echo '<a href="' . APP_ROOT . 'technology/view-technos" class="item ' . $active . '">';
 			echo '<span class="picto">';
 				echo '<img src="' . MEDIA . 'orbitalbase/technosphere.png" alt="" />';

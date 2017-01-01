@@ -1,30 +1,34 @@
 <?php
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Library\Parser;
+use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 
-$content 	= Utils::getHTTPData('message');
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
+$session = $this->getContainer()->get('app.session');
+$parser = $this->getContainer()->get('parser');
+$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
+$conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
 
-$p 			= new Parser();
-$content 	= $p->parse($content);
+$content 	= $query->request->get('message');
 
-if (CTR::$data->get('playerInfo')->get('admin') == FALSE) {
-	CTR::redirect('profil');
+$content 	= $parser->parse($content);
+
+if ($session->get('playerInfo')->get('admin') == FALSE) {
+	$response->redirect('profil');
 } else {
 	if ($content !== FALSE) {
 		if (strlen($content) < 10000) {
-			$S_CVM = ASM::$cvm->getCurrentSession();
-			ASM::$cvm->newSession();
-			ASM::$cvm->load(
+			$S_CVM = $conversationManager->getCurrentSession();
+			$conversationManager->newSession();
+			$conversationManager->load(
 				['cu.rPlayer' => ID_JEANMI]
 			);
 
-			if (ASM::$cvm->size() == 1) {
-				$conv = ASM::$cvm->get();
+			if ($conversationManager->size() == 1) {
+				$conv = $conversationManager->get();
 
 				$conv->messages++;
 				$conv->dLastMessage = Utils::now();
@@ -45,16 +49,16 @@ if (CTR::$data->get('playerInfo')->get('admin') == FALSE) {
 				$message->dCreation = Utils::now();
 				$message->dLastModification = NULL;
 
-				ASM::$cme->add($message);
+				$conversationMessageManager->add($message);
 			} else {
-				CTR::$alert->add('La conversation n\'existe pas ou ne vous appartient pas.', ALERT_STD_ERROR);
+				throw new ErrorException('La conversation n\'existe pas ou ne vous appartient pas.');
 			}
 			
-			ASM::$cvm->changeSession($S_CVM);
+			$conversationManager->changeSession($S_CVM);
 		} else {
-			CTR::$alert->add('Le message est trop long.', ALERT_STD_ERROR);
+			throw new ErrorException('Le message est trop long.');
 		}
 	} else {
-		CTR::$alert->add('Informations manquantes pour démarrer une nouvelle conversation.', ALERT_STD_ERROR);
+		throw new ErrorException('Informations manquantes pour démarrer une nouvelle conversation.');
 	}
 }
