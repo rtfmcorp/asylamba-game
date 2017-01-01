@@ -5,13 +5,12 @@
 # int building 	 	id du bâtiment
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Exception\ErrorException;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
@@ -73,7 +72,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 				$resourcePrice = $orbitalBaseHelper->getBuildingInfo($building, 'level', $targetLevel, 'resourcePrice');
 				$resourcePrice *= $buildingResourceRefund;
 				$orbitalBaseManager->increaseResources($ob, $resourcePrice, TRUE);
-				$response->flashbag->add('Construction annulée, vous récupérez le ' . $buildingResourceRefund * 100 . '% du montant investi pour la construction', Response::FLASHBAG_SUCCESS);
+				$session->addFlashbag('Construction annulée, vous récupérez le ' . $buildingResourceRefund * 100 . '% du montant investi pour la construction', Flashbag::TYPE_SUCCESS);
 			} else {
 				throw new ErrorException('suppression de bâtiment impossible');
 			}

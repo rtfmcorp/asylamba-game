@@ -4,7 +4,7 @@
 # int rplace 		id de la base orbitale
 # int rtransaction 	id de la transaction
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Library\Utils;
@@ -16,7 +16,6 @@ use Asylamba\Modules\Athena\Model\CommercialShipping;
 use Asylamba\Modules\Hermes\Model\Notification;
 
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 $database = $this->getContainer()->get('database');
 $transactionManager = $this->getContainer()->get('athena.transaction_manager');
@@ -159,7 +158,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 					$qr->execute([$transaction->rPlayer, $session->get('playerId'), $transaction->type, DataAnalysis::creditToStdUnit($transaction->price), Utils::now()]);
 				}
 
-				$response->flashbag->add('Proposition acceptée. Les vaisseaux commerciaux sont en route vers votre base orbitale.', Response::FLASHBAG_MARKET_SUCCESS);
+				$session->addFlashbag('Proposition acceptée. Les vaisseaux commerciaux sont en route vers votre base orbitale.', Flashbag::TYPE_MARKET_SUCCESS);
 			} else {
 				throw new ErrorException('erreur dans les propositions sur le marché, joueur inexistant');
 			}

@@ -15,7 +15,7 @@ use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Modules\Athena\Resource\SchoolClassResource;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
-use Asylamba\Modules\Zeus\Helper\TutorialHelper;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
@@ -84,7 +84,7 @@ if ($baseId !== FALSE AND $school !== FALSE AND $name !== FALSE AND in_array($ba
 							$newCommander->setAge(rand(40, 70));
 							$commanderManager->add($newCommander);
 						}
-						$this->getContainer()->get('app.response')->flashbag->add($nbrCommandersToCreate . ' commandant' . Format::addPlural($nbrCommandersToCreate) . ' inscrit' . Format::addPlural($nbrCommandersToCreate) . ' au programme d\'entraînement.', Response::FLASHBAG_SUCCESS);
+						$session->addFlashbag($nbrCommandersToCreate . ' commandant' . Format::addPlural($nbrCommandersToCreate) . ' inscrit' . Format::addPlural($nbrCommandersToCreate) . ' au programme d\'entraînement.', Flashbag::TYPE_SUCCESS);
 					} else {
 						throw new FormException('vous n\'avez pas assez de crédit.');
 					}

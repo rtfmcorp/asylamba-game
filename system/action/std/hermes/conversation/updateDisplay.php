@@ -1,11 +1,10 @@
 <?php
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 $conversationManager = $this->getContainer()->get('hermes.conversation_manager');
 
@@ -28,10 +27,10 @@ if ($conversation !== FALSE) {
 			if ($user->rPlayer == $session->get('playerId')) {
 				if ($user->convStatement == ConversationUser::CS_DISPLAY) {
 					$user->convStatement = ConversationUser::CS_ARCHIVED;
-					$response->flashbag->add('La conversation a été archivée.', Response::FLASHBAG_SUCCESS);
+					$session->addFlashbag('La conversation a été archivée.', Flashbag::TYPE_SUCCESS);
 				} else {
 					$user->convStatement = ConversationUser::CS_DISPLAY;
-					$response->flashbag->add('La conversation a été désarchivée.', Response::FLASHBAG_SUCCESS);
+					$session->addFlashbag('La conversation a été désarchivée.', Flashbag::TYPE_SUCCESS);
 				}
 				break;
 			}

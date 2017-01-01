@@ -17,7 +17,6 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Classes\Worker\CTC;
 use Asylamba\Classes\Exception\ErrorException;
 
@@ -51,6 +50,7 @@ use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
 use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Classes\Library\Flashbag;
 
 class OrbitalBaseManager extends Manager {
 	protected $managerType = '_OrbitalBase';
@@ -90,8 +90,6 @@ class OrbitalBaseManager extends Manager {
 	protected $orbitalBaseHelper;
 	/** @var CTC **/
 	protected $ctc;
-	/** @var Response **/
-	protected $response;
 	/** @var Session **/
 	protected $session;
 	
@@ -135,7 +133,6 @@ class OrbitalBaseManager extends Manager {
 		NotificationManager $notificationManager,
 		OrbitalBaseHelper $orbitalBaseHelper,
 		CTC $ctc,
-		Response $response,
 		Session $session
 	) {
 		parent::__construct($database);
@@ -157,7 +154,6 @@ class OrbitalBaseManager extends Manager {
 		$this->notificationManager = $notificationManager;
 		$this->orbitalBaseHelper = $orbitalBaseHelper;
 		$this->ctc = $ctc;
-		$this->response = $response;
 		$this->session = $session;
 	}
 	
@@ -877,7 +873,7 @@ class OrbitalBaseManager extends Manager {
 		
 		# alert
 		if ($this->session->get('playerId') == $orbitalBase->rPlayer) {
-			$this->response->flashbag->add('Construction de votre <strong>' . $this->orbitalBaseHelper->getBuildingInfo($queue->buildingNumber, 'frenchName') . ' niveau ' . $queue->targetLevel . '</strong> sur <strong>' . $orbitalBase->name . '</strong> terminée. Vous gagnez ' . $experience . ' point' . Format::addPlural($experience) . ' d\'expérience.', Response::FLASHBAG_GENERATOR_SUCCESS);
+			$this->session->addFlashbag('Construction de votre <strong>' . $this->orbitalBaseHelper->getBuildingInfo($queue->buildingNumber, 'frenchName') . ' niveau ' . $queue->targetLevel . '</strong> sur <strong>' . $orbitalBase->name . '</strong> terminée. Vous gagnez ' . $experience . ' point' . Format::addPlural($experience) . ' d\'expérience.', Flashbag::TYPE_GENERATOR_SUCCESS);
 		}
 		# delete queue in database
 		$this->buildingQueueManager->deleteById($queue->id);
@@ -899,7 +895,7 @@ class OrbitalBaseManager extends Manager {
 				$alt .= 'votre <strong>' . ShipResource::getInfo($sq->shipNumber, 'codeName') . '</strong>';
 			}
 			$alt .= ' sur <strong>' . $orbitalBase->name . '</strong> terminée. Vous gagnez ' . $experience . ' point' . Format::addPlural($experience) . ' d\'expérience.';
-			$this->response->flashbag->add($alt, Response::FLASHBAG_DOCK1_SUCCESS);
+			$this->session->addFlashbag($alt, Flashbag::TYPE_DOCK1_SUCCESS);
 		}
 
 		# delete queue in database
@@ -915,7 +911,7 @@ class OrbitalBaseManager extends Manager {
 
 		# alert
 		if ($this->session->get('playerId') == $orbitalBase->rPlayer) {
-			$this->response->flashbag->add('Construction de votre ' . ShipResource::getInfo($sq->shipNumber, 'codeName') . ' sur ' . $orbitalBase->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.', Response::FLASHBAG_DOCK2_SUCCESS);
+			$this->session->addFlashbag('Construction de votre ' . ShipResource::getInfo($sq->shipNumber, 'codeName') . ' sur ' . $orbitalBase->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.', Flashbag::TYPE_DOCK2_SUCCESS);
 		}
 
 		# delete queue in database
@@ -937,7 +933,7 @@ class OrbitalBaseManager extends Manager {
 				$alt .= ' niveau ' . $tq->targetLevel;
 			} 
 			$alt .= ' terminée. Vous gagnez ' . $experience . ' d\'expérience.';
-			$this->response->flashbag->add($alt, Response::FLASHBAG_TECHNOLOGY_SUCCESS);
+			$this->session->addFlashbag($alt, Flashbag::TYPE_TECHNOLOGY_SUCCESS);
 		}
 
 		# delete queue in database

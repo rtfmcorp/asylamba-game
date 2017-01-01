@@ -4,7 +4,7 @@
 
 # int id 	 		id du commandant
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 
 if (($commanderId = $this->getContainer()->get('app.request')->request->get('id')) === null) {
@@ -27,5 +27,5 @@ if ($commander->statement !== 1) {
 // vider le commandant
 $commander->emptySquadrons();
 
-$this->getContainer()->get('app.response')->flashbag->add('Vous avez vidé l\'armée menée par votre commandant ' . $commander->getName() . '.', Response::FLASHBAG_SUCCESS);
+$this->getContainer()->get('app.session')->addFlashbag('Vous avez vidé l\'armée menée par votre commandant ' . $commander->getName() . '.', Flashbag::TYPE_SUCCESS);
 $commanderManager->changeSession($S_COM1);

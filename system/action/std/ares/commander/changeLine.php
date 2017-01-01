@@ -1,6 +1,6 @@
 <?php
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
@@ -49,7 +49,7 @@ if ($commander->line == 1) {
 		$commander->line = 2;
 		$commanderManager->get()->line = 1;
 		$response->redirect();
-		$response->flashbag->add('Votre commandant ' . $commander->getName() . ' a échangé sa place avec ' . $commanderManager->get()->name . '.', Response::FLASHBAG_SUCCESS);
+		$session->addFlashbag('Votre commandant ' . $commander->getName() . ' a échangé sa place avec ' . $commanderManager->get()->name . '.', Flashbag::TYPE_SUCCESS);
 	}
 	$commanderManager->changeSession($S_COM2);
 } else {
@@ -71,7 +71,7 @@ if ($commander->line == 1) {
 		$commander->line = 1;
 		$commanderManager->get()->line = 2;
 		$response->redirect();
-		$response->flashbag->add('Votre commandant ' . $commander->getName() . ' a échangé sa place avec ' . $commanderManager->get()->name . '.', Response::FLASHBAG_SUCCESS);
+		$session->addFlashbag('Votre commandant ' . $commander->getName() . ' a échangé sa place avec ' . $commanderManager->get()->name . '.', Flashbag::TYPE_SUCCESS);
 	}
 	$commanderManager->changeSession($S_COM2);
 }

@@ -4,8 +4,7 @@
 # int id 			id de la mission
 # int place 		id de la base orbitale
 # int quantity 		recyclers quantity
-
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Modules\Athena\Model\RecyclingMission;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Classes\Exception\ErrorException;
@@ -13,7 +12,6 @@ use Asylamba\Classes\Exception\FormException;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
@@ -58,7 +56,7 @@ if ($rPlace !== FALSE AND $missionId !== FALSE AND $quantity !== FALSE AND in_ar
 				}
 				if ($mission !== NULL) {
 					$mission->addToNextMission += $quantity;
-					$response->flashbag->add('Vos recycleurs ont bien été affectés, ils seront ajoutés à la prochaine mission.', Response::FLASHBAG_SUCCESS);
+					$session->addFlashbag('Vos recycleurs ont bien été affectés, ils seront ajoutés à la prochaine mission.', Flashbag::TYPE_SUCCESS);
 				} else {
 					throw new ErrorException('Il y a un problème, la mission est introuvable. Veuillez contacter un administrateur.');
 				}

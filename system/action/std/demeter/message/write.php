@@ -4,7 +4,7 @@
 # rtopic
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Demeter\Model\Forum\ForumMessage;
 use Asylamba\Classes\Exception\ErrorException;
@@ -57,7 +57,7 @@ if ($rTopic AND $content) {
 				$qr->execute([$session->get('playerId'), 1, $content, Utils::now()]);
 			}
 
-			$response->flashbag->add('Message créé.', Response::FLASHBAG_SUCCESS);
+			$session->addFlashbag('Message créé.', Flashbag::TYPE_SUCCESS);
 		} else {
 			throw new ErrorException('Ce sujet est fermé.');
 		}

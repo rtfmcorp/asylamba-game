@@ -1,7 +1,7 @@
 <?php
 
 use Asylamba\Classes\Exception\FormException;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 
 $factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
 $request = $this->getContainer()->get('app.request');
@@ -16,7 +16,7 @@ if ($id !== FALSE) {
 	if ($factionNewsManager->size() == 1) {
 		$factionNewsManager->deleteById($id);
 
-		$this->getContainer()->get('app.response')->flashbag->add('L\'annonce a bien été supprimée.', Response::FLASHBAG_SUCCESS);
+		$this->getContainer()->get('app.session')->addFlashbag('L\'annonce a bien été supprimée.', Flashbag::TYPE_SUCCESS);
 	} else {
 		throw new FormException('Cette annonce n\'existe pas.');
 	}

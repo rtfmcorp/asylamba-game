@@ -4,7 +4,7 @@
 #relection id election
 
 use Asylamba\Classes\Exception\ErrorException;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Demeter\Model\Election\Vote;
 use Asylamba\Modules\Zeus\Model\Player;
@@ -55,7 +55,7 @@ if ($rElection !== FALSE && $rCandidate !== FALSE) {
 						$vote->rElection = $rElection;
 						$vote->dVotation = Utils::now();
 						$voteManager->add($vote);
-						$response->flashbag->add('Vous avez voté.', Response::FLASHBAG_SUCCESS);
+						$session->addFlashbag('Vous avez voté.', Flashbag::TYPE_SUCCESS);
 					} else {
 						throw new ErrorException('Vous ne pouvez voter pour un candidat qu\'en période d\'élection.');
 					}

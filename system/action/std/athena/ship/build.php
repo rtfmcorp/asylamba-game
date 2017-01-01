@@ -6,7 +6,7 @@
 # int quantity 		nombre de vaisseaux à construire
 
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\DataAnalysis;
 use Asylamba\Classes\Library\Format;
@@ -16,13 +16,11 @@ use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Athena\Model\ShipQueue;
 
-use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $technologyManager = $this->getContainer()->get('promethee.technology_manager');
@@ -138,9 +136,9 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 
 				// alerte
 				if ($quantity == 1) {
-					$response->flashbag->add('Construction d\'' . (ShipResource::isAFemaleShipName($ship) ? 'une ' : 'un ') . ShipResource::getInfo($ship, 'codeName') . ' commandée', Response::FLASHBAG_SUCCESS);
+					$session->addFlashbag('Construction d\'' . (ShipResource::isAFemaleShipName($ship) ? 'une ' : 'un ') . ShipResource::getInfo($ship, 'codeName') . ' commandée', Flashbag::TYPE_SUCCESS);
 				} else {
-					$response->flashbag->add('Construction de ' . $quantity . ' ' . ShipResource::getInfo($ship, 'codeName') . Format::addPlural($quantity) . ' commandée', Response::FLASHBAG_SUCCESS);
+					$session->addFlashbag('Construction de ' . $quantity . ' ' . ShipResource::getInfo($ship, 'codeName') . Format::addPlural($quantity) . ' commandée', Flashbag::TYPE_SUCCESS);
 				}
 			} else {
 				throw new ErrorException('les conditions ne sont pas remplies pour construire ce vaisseau');

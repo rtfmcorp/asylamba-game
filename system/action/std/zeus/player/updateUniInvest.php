@@ -4,12 +4,11 @@
 # int credit 		nouveau montant à investir
 
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
@@ -29,7 +28,7 @@ if ($credit !== FALSE) {
 			$tutorialHelper->setStepDone();
 		}
 
-		$response->flashbag->add('L\'investissement dans l\'université a été modifié', Response::FLASHBAG_SUCCESS);
+		$session->addFlashbag('L\'investissement dans l\'université a été modifié', Flashbag::TYPE_SUCCESS);
 
 		$playerManager->changeSession($S_PAM1);
 	} else {

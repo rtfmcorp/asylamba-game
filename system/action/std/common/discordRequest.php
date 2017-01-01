@@ -2,10 +2,9 @@
 
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 
 $request = $this->getContainer()->get('app.request');
-$response =  $this->getContainer()->get('app.response');
 $session =  $this->getContainer()->get('app.session');
 
 $discordId = $request->query->get('discord-id');
@@ -34,10 +33,10 @@ if ($discordId !== FALSE AND $discordId !== '') {
 		#$rep = unserialize($answer);
 		switch($answer) {
 			case 'user register correctly':
-				$response->flashbag->add('Vos droits ont été ajoutés sur Discord. Rendez-vous là-bas.', Response::FLASHBAG_SUCCESS);
+				$session->addFlashbag('Vos droits ont été ajoutés sur Discord. Rendez-vous là-bas.', Flashbag::TYPE_SUCCESS);
 				break;
 			case 'user register correctly (update Status)':
-				$response->flashbag->add('Vos droits ont été mis à jour sur Discord. Rendez-vous là-bas.', Response::FLASHBAG_SUCCESS);
+				$session->addFlashbag('Vos droits ont été mis à jour sur Discord. Rendez-vous là-bas.', Flashbag::TYPE_SUCCESS);
 				break;
 			case 'Wrong factionColor':
 				throw new ErrorException('Vous êtes dans une faction inexistance, cela doit être une erreur, contactez un administrateur');

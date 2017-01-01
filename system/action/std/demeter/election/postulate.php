@@ -8,6 +8,7 @@
 #ministerchoice
 
 use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Demeter\Model\Election\Candidate;
 use Asylamba\Modules\Demeter\Model\Forum\ForumTopic;
@@ -17,6 +18,7 @@ use Asylamba\Modules\Zeus\Model\Player;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $electionManager = $this->getContainer()->get('demeter.election_manager');
 $candidateManager = $this->getContainer()->get('demeter.candidate_manager');
@@ -89,10 +91,10 @@ if ($rElection !== FALSE && $program !== FALSE) {
 							}
 
 							$response->redirect('faction/view-election/candidate-' . $candidate->id);
-							$response->flashbag->add('Candidature déposée.', Response::FLASHBAG_SUCCESS);
+							$session->addFlashbag('Candidature déposée.', Flashbag::TYPE_SUCCESS);
 						} else {
 							$candidateManager->deleteById($candidateManager->get()->getId());
-							$response->flashbag->add('Candidature retirée.', Response::FLASHBAG_SUCCESS);
+							$session->addFlashbag('Candidature retirée.', Flashbag::TYPE_SUCCESS);
 						}
 					} else {
 						throw new ErrorException('Informations manquantes sur les choix.');	

@@ -1,15 +1,15 @@
 <?php
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Hermes\Model\Conversation;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
 use Asylamba\Modules\Zeus\Model\Player;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
+$database = $this->getContainer()->get('database');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $conversationManager = $this->getContainer()->get('hermes.conversation_manager');
 $conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
@@ -91,15 +91,14 @@ if ($recipients !== FALSE AND $content !== FALSE) {
 				$conversationMessageManager->add($message);
 
 				if (DATA_ANALYSIS) {
-					$db = Database::getInstance();
-					$qr = $db->prepare('INSERT INTO 
+					$qr = $database->prepare('INSERT INTO 
 						DA_SocialRelation(`from`, `to`, `type`, `message`, dAction)
 						VALUES(?, ?, ?, ?, ?)'
 					);
 					$qr->execute([$session->get('playerId'), $playerManager->get(0)->id, 2, $content, Utils::now()]);
 				}
 
-				$response->flashbag->add('La conversation a été créée.', Response::FLASHBAG_SUCCESS);
+				$session->addFlashbag('La conversation a été créée.', Flashbag::TYPE_SUCCESS);
 				$response->redirect('message/conversation-' . $conv->id);
 			} else {
 				throw new ErrorException('Le joueur n\'est pas joignable.');	

@@ -39,7 +39,7 @@ if ($rPlayer !== FALSE && $department !== FALSE) {
 								->addTxt('Vous avez été choisi pour être le ' . $statusArray[$department - 1] . ' de votre faction.');
 							$notificationManager->add($notif);
 
-							$response->flashbag->add($playerManager->get()->name . ' a rejoint votre gouvernement.');	
+							$session->addFlashbag($playerManager->get()->name . ' a rejoint votre gouvernement.');	
 						} else {
 						throw new ErrorException('Ce département est inconnu.');
 					}

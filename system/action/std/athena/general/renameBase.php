@@ -4,7 +4,7 @@
 # int baseid 		id (rPlayer) de la base orbitale
 # string name 		new name for the orbital base
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Zeus\Helper\CheckName;
@@ -45,7 +45,7 @@ if ($baseId !== FALSE AND $name !== FALSE AND in_array($baseId, $verif)) {
 					}
 				}
 
-				$response->flashbag->add('Le nom a été changé en ' . $name . ' avec succès', Response::FLASHBAG_SUCCESS);
+				$session->addFlashbag('Le nom a été changé en ' . $name . ' avec succès', Flashbag::TYPE_SUCCESS);
 			} else {
 				throw new ErrorException('modification du nom de la base orbitale impossible - le nom contient des caractères non-autorisés');
 			}

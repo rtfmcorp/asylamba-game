@@ -4,7 +4,7 @@
 # int rtransaction 		id de la transaction
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Athena\Model\Transaction;
@@ -12,7 +12,6 @@ use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $transactionManager = $this->getContainer()->get('athena.transaction_manager');
@@ -97,13 +96,13 @@ if ($rTransaction !== FALSE) {
 
 					switch ($transaction->type) {
 						case Transaction::TYP_RESOURCE :
-							$response->flashbag->add('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et vous récupérez vos ressources.', Response::FLASHBAG_MARKET_SUCCESS);
+							$session->addFlashbag('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et vous récupérez vos ressources.', Flashbag::TYPE_MARKET_SUCCESS);
 							break;
 						case Transaction::TYP_SHIP :
-							$response->flashbag->add('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et vous récupérez vos vaisseaux de combat.', Response::FLASHBAG_MARKET_SUCCESS);
+							$session->addFlashbag('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et vous récupérez vos vaisseaux de combat.', Flashbag::TYPE_MARKET_SUCCESS);
 							break;
 						case Transaction::TYP_COMMANDER :
-							$response->flashbag->add('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et votre commandant est placé à l\'école de commandement.', Response::FLASHBAG_MARKET_SUCCESS);
+							$session->addFlashbag('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et votre commandant est placé à l\'école de commandement.', Flashbag::TYPE_MARKET_SUCCESS);
 							break;
 					}
 				}

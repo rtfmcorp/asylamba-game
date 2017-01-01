@@ -3,7 +3,7 @@
 
 # int id 			id du rapport
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
@@ -22,7 +22,7 @@ if ($id) {
 
 		if ($report->rPlayer == $session->get('playerId')) {
 			$spyReportManager->deleteById($report->id);
-			$response->flashbag->add('Rapport d\'espionnage supprimé', Response::FLASHBAG_SUCCESS);
+			$session->addFlashbag('Rapport d\'espionnage supprimé', Flashbag::TYPE_SUCCESS);
 			$response->redirect('fleet/view-spyreport');
 		} else {
 			throw new ErrorException('Ce rapport ne vous appartient pas');

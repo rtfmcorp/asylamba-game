@@ -5,7 +5,7 @@
 # int placeid				id de la place attaquée
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Gaia\Model\Place;
@@ -141,7 +141,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 						if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
 							if ($commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
 								$commander->dStart = Utils::now();
-								$response->flashbag->add('Flotte envoyée.', Response::FLASHBAG_SUCCESS);
+								$session->addFlashbag('Flotte envoyée.', Flashbag::TYPE_SUCCESS);
 
 								if ($request->query->has('redirect')) {
 									$response->redirect('map/place-' . $request->query->get('redirect'));

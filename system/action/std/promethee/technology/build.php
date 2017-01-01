@@ -10,16 +10,14 @@ use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Promethee\Model\TechnologyQueue;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
-use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
 $database = $this->getContainer()->get('database');
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $technologyQueueManager = $this->getContainer()->get('promethee.technology_queue_manager');
 $technologyHelper = $this->getContainer()->get('promethee.technology_helper');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
@@ -139,7 +137,7 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 					}
 
 					// alerte
-					$response->flashbag->add('Développement de la technologie programmée', Response::FLASHBAG_SUCCESS);
+					$session->addFlashbag('Développement de la technologie programmée', Flashbag::TYPE_SUCCESS);
 					$playerManager->changeSession($S_PAM1);
 				} else {
 					throw new ErrorException('les conditions ne sont pas remplies pour développer une technologie');

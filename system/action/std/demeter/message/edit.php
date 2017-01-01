@@ -1,12 +1,11 @@
 <?php
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Library\Utils;
 
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 $topicManager = $this->getContainer()->get('demeter.forum_topic_manager');
 $forumMessageManager = $this->getContainer()->get('demeter.forum_message_manager');
@@ -32,7 +31,7 @@ if ($content && $id) {
 			$forumMessageManager->edit($m, $content);
 			$m->dLastModification = Utils::now();
 
-			$response->flashbag->add('Message édité.', Response::FLASHBAG_SUCCESS);
+			$session->addFlashbag('Message édité.', Flashbag::TYPE_SUCCESS);
 		} else {
 			throw new ErrorException('Vous ne pouvez pas éditer ce message.');
 		}

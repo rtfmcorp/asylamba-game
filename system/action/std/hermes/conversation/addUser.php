@@ -1,7 +1,7 @@
 <?php
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
@@ -83,7 +83,7 @@ if ($recipients !== FALSE AND $conversation !== FALSE) {
 					}
 				}
 
-				$response->flashbag->add('Le joueur a été ajouté.', Response::FLASHBAG_SUCCESS);
+				$session->addFlashbag('Le joueur a été ajouté.', Flashbag::TYPE_SUCCESS);
 			} else {
 				throw new ErrorException('Le joueur n\'est pas joignable.');		
 			}

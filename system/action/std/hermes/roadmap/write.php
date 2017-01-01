@@ -4,13 +4,12 @@
 # string content 	contenu du message
 # [int statement] 	état (0 = caché, 1 = affiché)
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Hermes\Model\RoadMap;
 
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 $parser = $this->getContainer()->get('parser');
 $roadmapManager = $this->getContainer()->get('hermes.roadmap_manager');
@@ -37,7 +36,7 @@ if ($session->get('playerInfo')->get('admin') == FALSE) {
 		$rm->dCreation = Utils::now();
 		$roadmapManager->add($rm);
 
-		$response->flashbag->add('Roadmap publiée', Response::FLASHBAG_SUCCESS);
+		$session->addFlashbag('Roadmap publiée', Flashbag::TYPE_SUCCESS);
 	} else {
 		throw new FormException('pas assez d\'informations pour écrire un message dans la roadmap');
 	}

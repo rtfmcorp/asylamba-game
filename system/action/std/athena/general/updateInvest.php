@@ -5,13 +5,12 @@
 # string category 	catégorie
 # int credit 		nouveau montant à investir
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
@@ -33,7 +32,7 @@ if ($baseId !== FALSE AND $credit !== FALSE AND $category !== FALSE AND in_array
 				case 'school':
 					if ($credit <= 50000) {
 						$base->setISchool($credit);
-						$response->flashbag->add('L\'investissement dans l\'école de commandement de votre base ' . $base->getName() . ' a été modifié', Response::FLASHBAG_SUCCESS);
+						$session->addFlashbag('L\'investissement dans l\'école de commandement de votre base ' . $base->getName() . ' a été modifié', Flashbag::TYPE_SUCCESS);
 					} else {
 						throw new ErrorException('La limite maximale d\'investissement dans l\'école de commandement est de 50\'000 crédits.');
 					} 
@@ -41,7 +40,7 @@ if ($baseId !== FALSE AND $credit !== FALSE AND $category !== FALSE AND in_array
 				case 'antispy':
 					if ($credit <= 100000) {
 						$base->setIAntiSpy($credit);
-						$response->flashbag->add('L\'investissement dans l\'anti-espionnage sur votre base ' . $base->getName() . ' a été modifié', Response::FLASHBAG_SUCCESS);
+						$session->addFlashbag('L\'investissement dans l\'anti-espionnage sur votre base ' . $base->getName() . ' a été modifié', Flashbag::TYPE_SUCCESS);
 					} else {
 						throw new ErrorException('La limite maximale d\'investissement dans l\'anti-espionnage est de 100\'000 crédits.');
 					} 

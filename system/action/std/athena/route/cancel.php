@@ -5,14 +5,13 @@
 # int route 		id de la route commerciale
 
 use Asylamba\Modules\Hermes\Model\Notification;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
@@ -60,7 +59,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 
 		//destruction de la route
 		$commercialRouteManager->deleteById($route);
-		$response->flashbag->add('Route commerciale annulée. Vous récupérez les ' . $routeCancelRefund * 100 . '% du montant investi.', Response::FLASHBAG_SUCCESS);
+		$session->addFlashbag('Route commerciale annulée. Vous récupérez les ' . $routeCancelRefund * 100 . '% du montant investi.', Flashbag::TYPE_SUCCESS);
 		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
 		throw new ErrorException('impossible d\'annuler une route commerciale');
