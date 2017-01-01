@@ -9,14 +9,12 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Model\RecyclingMission;
-
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
@@ -76,7 +74,7 @@ if ($rPlace !== FALSE AND $rTarget !== FALSE AND $quantity !== FALSE AND in_arra
 							$rm->statement = RecyclingMission::ST_ACTIVE;
 							$recyclingMissionManager->add($rm);
 
-							$response->flashbag->add('Votre mission a été lancée.', Response::FLASHBAG_SUCCESS);
+							$session->addFlashbag('Votre mission a été lancée.', Flashbag::TYPE_SUCCESS);
 						} else {
 							throw new ErrorException('Vous pouvez recycler uniquement dans les secteurs de votre faction ainsi que dans les secteurs neutres.');
 						}

@@ -10,7 +10,7 @@ use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Exception\ErrorException;
 
@@ -23,7 +23,6 @@ $buildingQueueManager = $this->getContainer()->get('athena.building_queue_manage
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $database = $this->getContainer()->get('database');
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 $baseMinLevelForChange = $this->getContainer()->getParameter('athena.obm.change_type_min_level');
 $baseMinLevelForCapital = $this->getContainer()->getParameter('athena.obm.capital_min_level');
@@ -73,7 +72,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 								$qr->execute([$session->get('playerId'), 4, $type, DataAnalysis::creditToStdUnit($totalPrice), Utils::now()]);
 							}
 
-							$response->flashbag->add($orbitalBase->name . ' est désormais un Centre Industriel', Response::FLASHBAG_SUCCESS);
+							$session->addFlashbag($orbitalBase->name . ' est désormais un Centre Industriel', Flashbag::TYPE_SUCCESS);
 						} else {
 							throw new ErrorException('Evolution de votre colonie impossible - vous n\'avez pas assez de crédits');
 						}
@@ -101,7 +100,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 								$qr->execute([$session->get('playerId'), 4, $type, DataAnalysis::creditToStdUnit($totalPrice), Utils::now()]);
 							}
 
-							$response->flashbag->add($orbitalBase->name . ' est désormais une Base Militaire', Response::FLASHBAG_SUCCESS);
+							$session->addFlashbag($orbitalBase->name . ' est désormais une Base Militaire', Flashbag::TYPE_SUCCESS);
 						} else {
 							throw new ErrorException('Evolution de votre colonie impossible - vous n\'avez pas assez de crédits');
 						}
@@ -148,7 +147,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 								);
 								$qr->execute([$session->get('playerId'), 4, $type, DataAnalysis::creditToStdUnit($totalPrice), Utils::now()]);
 							}
-							$response->flashbag->add($orbitalBase->name . ' est désormais une capitale.', Response::FLASHBAG_SUCCESS);
+							$session->addFlashbag($orbitalBase->name . ' est désormais une capitale.', Flashbag::TYPE_SUCCESS);
 						} else {
 							throw new ErrorException('Modification du type de la base orbitale impossible - vous n\'avez pas assez de crédits');
 						}
@@ -436,7 +435,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 									break;
 								}
 							}
-							$response->flashbag->add('Votre Base Militaire devient un Centre Commerciale. Vos bâtiments militaires superflus sont détruits.', Response::FLASHBAG_SUCCESS);
+							$session->addFlashbag('Votre Base Militaire devient un Centre Commerciale. Vos bâtiments militaires superflus sont détruits.', Flashbag::TYPE_SUCCESS);
 						} else {
 							# change base type in session
 							for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
@@ -445,7 +444,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 									break;
 								}
 							}
-							$response->flashbag->add('Votre Centre Industriel devient une Base Militaire. Vos bâtiments commerciaux superflus sont détruits.', Response::FLASHBAG_SUCCESS);
+							$session->addFlashbag('Votre Centre Industriel devient une Base Militaire. Vos bâtiments commerciaux superflus sont détruits.', Flashbag::TYPE_SUCCESS);
 						}
 					} else {
 						throw new ErrorException('modification du type de la base orbitale impossible - vous avez trop de flottes en mouvement pour changer votre base en Centre Industriel');

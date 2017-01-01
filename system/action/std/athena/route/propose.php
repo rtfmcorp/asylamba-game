@@ -12,12 +12,11 @@ use Asylamba\Modules\Athena\Model\CommercialRoute;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
@@ -157,7 +156,7 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 					$n->addEnd();
 					$notificationManager->add($n);
 
-					$response->flashbag->add('Route commerciale proposée', Response::FLASHBAG_SUCCESS);
+					$session->addFlashbag('Route commerciale proposée', Flashbag::TYPE_SUCCESS);
 				} else {
 					throw new ErrorException('impossible de proposer une route commerciale - vous n\'avez pas assez de crédits');
 				}

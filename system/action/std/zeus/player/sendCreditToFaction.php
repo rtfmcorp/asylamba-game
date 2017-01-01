@@ -4,7 +4,7 @@
 # int quantity 		quantity of credit to send
 
 use Asylamba\Modules\Zeus\Model\CreditTransaction;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
@@ -50,7 +50,7 @@ if ($quantity !== FALSE) {
 						$ct->comment = NULL;
 						$creditTransactionManager->add($ct);
 
-						$response->flashbag->add('Crédits envoyés', Response::FLASHBAG_SUCCESS);
+						$session->addFlashbag('Crédits envoyés', Flashbag::TYPE_SUCCESS);
 						$colorManager->changeSession($S_CLM1);
 					} else {
 						throw new ErrorException('envoi de crédits impossible - faction introuvable');

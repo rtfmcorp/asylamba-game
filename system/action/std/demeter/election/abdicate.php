@@ -3,7 +3,7 @@
 #department
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Demeter\Model\Color;
@@ -29,7 +29,7 @@ if ($statusArray = ColorResource::getInfo($session->get('playerInfo')->get('colo
 			$date->modify('-' . $colorManager->get()->mandateDuration . ' second');
 			$date = $date->format('Y-m-d H:i:s');
 			$colorManager->get()->dLastElection = $date;			
-			$response->flashbag->add('Des élections anticipées vont être lancées.', Response::FLASHBAG_SUCCESS);	
+			$session->addFlashbag('Des élections anticipées vont être lancées.', Flashbag::TYPE_SUCCESS);	
 		} else {
 			throw new ErrorException('Des élections sont déjà en cours.');	
 		}
@@ -71,7 +71,7 @@ if ($statusArray = ColorResource::getInfo($session->get('playerInfo')->get('colo
 								->addTxt('Vous avez été choisi par le ' . $statusArray[5] . ' de votre faction pour être son successeur, vous prenez la tête du gouvernement immédiatement.');
 							$notificationManager->add($notif);
 
-							$response->flashbag->add($playerManager->get()->name . ' est désigné comme votre successeur.', Response::FLASHBAG_SUCCESS);	
+							$session->addFlashbag($playerManager->get()->name . ' est désigné comme votre successeur.', Flashbag::TYPE_SUCCESS);	
 						} else {
 							throw new ErrorException('vous ne pouvez pas abdiquer pendant un putsch.');	
 						}

@@ -6,7 +6,7 @@
 # int dock 			numéro du dock (1, 2, ou 3)
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Athena\Resource\ShipResource;
@@ -77,7 +77,7 @@ if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($bas
 				}
 				$resourcePrice *= $shipResourceRefund;
 				$orbitalBaseManager->increaseResources($ob, $resourcePrice, TRUE);
-				$response->flashbag->add('Commande annulée, vous récupérez le ' . $shipResourceRefund * 100 . '% du montant investi pour la construction', Response::FLASHBAG_SUCCESS);
+				$session->addFlashbag('Commande annulée, vous récupérez le ' . $shipResourceRefund * 100 . '% du montant investi pour la construction', Flashbag::TYPE_SUCCESS);
 			} else {
 				throw new ErrorException('suppression de vaisseau impossible');
 			}

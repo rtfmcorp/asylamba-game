@@ -16,7 +16,7 @@ use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Hermes\Model\Notification;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
@@ -97,7 +97,7 @@ if ($program !== FALSE) {
 				}
 				$playerManager->changeSession($_PAM123);
 
-				$response->flashbag->add('Coup d\'état lancé.', Response::FLASHBAG_SUCCESS);
+				$session->addFlashbag('Coup d\'état lancé.', Flashbag::TYPE_SUCCESS);
 			} else {
 				throw new ErrorException('Vous vivez dans une faction démocratique.');
 			}

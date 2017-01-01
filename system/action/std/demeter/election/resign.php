@@ -1,7 +1,7 @@
 <?php
 #rplayer	id du joueur
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Zeus\Model\Player;
 
@@ -17,7 +17,7 @@ if ($session->get('playerInfo')->get('status') > Player::PARLIAMENT && $session-
 	if ($playerManager->size() > 0) {
 		$playerManager->get()->status = Player::PARLIAMENT;
 		$session->get('playerInfo')->add('status', Player::PARLIAMENT);
-		$response->flashbag->add('Vous n\'êtes plus membre du gouvernement.', Response::FLASHBAG_SUCCESS);
+		$session->addFlashbag('Vous n\'êtes plus membre du gouvernement.', Flashbag::TYPE_SUCCESS);
 	} else {
 		throw new ErrorException('Ce joueur n\'existe pas.');
 	}

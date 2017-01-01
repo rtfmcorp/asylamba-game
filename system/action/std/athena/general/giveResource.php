@@ -5,7 +5,7 @@
 # int otherbaseid 	id (rPlace) de la base orbitale à qui on veut envoyer des ressources
 # int quantity 		quantité de ressources à envoyer
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Library\Utils;
@@ -115,7 +115,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_
 								$qr->execute([$placeManager->get('playerId'), $otherBase->getRPlayer(), 4, DataAnalysis::resourceToStdUnit($resource), Utils::now()]);
 							}
 
-							$response->flashbag->add('Ressources envoyées', Response::FLASHBAG_SUCCESS);
+							$session->addFlashbag('Ressources envoyées', Flashbag::TYPE_SUCCESS);
 						} else {
 							throw new ErrorException('envoi de ressources impossible - erreur dans les bases orbitales');
 						}

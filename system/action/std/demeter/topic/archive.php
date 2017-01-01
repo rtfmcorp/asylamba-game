@@ -1,6 +1,6 @@
 <?php
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
@@ -23,7 +23,7 @@ if ($id !== FALSE) {
 				$topicManager->get()->isArchived = 1;
 			}
 			$response->redirect('faction/view-forum/forum-' . $topicManager->get()->rForum);
-			$response->flashbag->add('Le sujet a bien été archivé/désarchivé', Response::FLASHBAG_SUCCESS);
+			$session->addFlashbag('Le sujet a bien été archivé/désarchivé', Flashbag::TYPE_SUCCESS);
 		} else {
 			throw new FormException('Vous n\'avez pas les droits');	
 		}

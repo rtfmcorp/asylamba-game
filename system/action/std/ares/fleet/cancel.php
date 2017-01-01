@@ -5,7 +5,7 @@
 # int placeid				id de la place attaquée
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Ares\Model\Commander;
 
@@ -69,7 +69,7 @@ if ($session->exist('playerEvent') && $commander->rPlayer == $session->get('play
 
 $response = $this->getContainer()->get('app.response');
 
-$response->flashbag->add('Déplacement annulé.', Response::FLASHBAG_SUCCESS);
+$session->addFlashbag('Déplacement annulé.', Flashbag::TYPE_SUCCESS);
 
 if ($request->query->has('redirect')) {
 	$response->redirect('map/place-' . $request->query->get('redirect'));

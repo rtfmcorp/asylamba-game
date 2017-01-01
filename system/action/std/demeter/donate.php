@@ -1,5 +1,6 @@
 <?php
 
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Library\Format;
 
@@ -23,7 +24,7 @@ if ($credit) {
 	$playerManager->decreaseCredit($playerManager->get(), $credit);
 	$colorManager->get()->credits += $credit;
 
-	$this->getContainer()->get('app.response')->add('Vous venez de remplir les caisse de votre faction de ' . $credit . ' crédit' . Format::addPlural($credit) . ' :)', Response::FLASHBAG_SUCCESS);
+	$session->addFlashbag('Vous venez de remplir les caisse de votre faction de ' . $credit . ' crédit' . Format::addPlural($credit) . ' :)', Flashbag::TYPE_SUCCESS);
 	
 	$playerManager->changeSession($S_PAM);
 	$colorManager->changeSession($S_CLM);

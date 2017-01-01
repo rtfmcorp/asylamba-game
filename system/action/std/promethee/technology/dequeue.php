@@ -5,12 +5,11 @@
 # int techno 	 	id de la technologie
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $technologyHelper = $this->getContainer()->get('promethee.technology_helper');
@@ -79,11 +78,11 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 				// rends les ressources et les crédits au joueur
 				$resourcePrice = $technologyHelper->getInfo($techno, 'resource', $targetLevel);
 				$resourcePrice *= $technologyResourceRefund;
-				$ob->increaseResources($resourcePrice, TRUE);
+				$orbitalBaseManager->increaseResources($ob, $resourcePrice, TRUE);
 				$creditPrice = $technologyHelper->getInfo($techno, 'credit', $targetLevel);
 				$creditPrice *= $technologyCreditRefund;
-				$player->increaseCredit($creditPrice);
-				$response->flashbag->add('Construction annulée, vous récupérez le ' . $technologyResourceRefund * 100 . '% des ressources ainsi que le ' . $technologyCreditRefund * 100 . '% des crédits investis pour le développement', Response::FLASHBAG_SUCCESS);
+				$playerManager->increaseCredit($player, $creditPrice);
+				$session->addFlashbag('Construction annulée, vous récupérez le ' . $technologyResourceRefund * 100 . '% des ressources ainsi que le ' . $technologyCreditRefund * 100 . '% des crédits investis pour le développement', Flashbag::TYPE_SUCCESS);
 
 			} else {
 				throw new ErrorException('impossible d\'annuler la technologie');

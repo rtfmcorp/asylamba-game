@@ -7,7 +7,7 @@
 # [int identifier]	rCommander or shipId
 # int price 		price defined by the proposer
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Athena\Model\Transaction;
@@ -177,7 +177,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 							$cs->statement = CommercialShipping::ST_WAITING;
 							$commercialShippingManager->add($cs);
 
-							$response->flashbag->add('Votre proposition a été envoyée sur le marché.', Response::FLASHBAG_MARKET_SUCCESS);
+							$session->addFlashbag('Votre proposition a été envoyée sur le marché.', Flashbag::TYPE_MARKET_SUCCESS);
 						} else {
 							throw new ErrorException('Il y a un problème avec votre commandant.');
 						}

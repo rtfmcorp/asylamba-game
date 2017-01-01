@@ -5,7 +5,7 @@
 # int id 	 		id du commandant
 # string name 		nom du commandant
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
@@ -29,7 +29,7 @@ $p = $this->getContainer()->get('parser');
 $name = $p->protect($name);
 if (strlen($name) > 1 AND strlen($name) < 26) {
 	$commander->setName($name);
-	$this->getContainer()->get('app.response')->flashbag->add('le nom de votre commandant est maintenant ' . $name, Response::FLASHBAG_SUCCESS);
+	$session->addFlashbag('le nom de votre commandant est maintenant ' . $name, Flashbag::TYPE_SUCCESS);
 } else {
 	throw new ErrorException('le nom doit comporter entre 2 et 25 caractères');
 }

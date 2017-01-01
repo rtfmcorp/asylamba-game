@@ -4,11 +4,10 @@ use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Library\Parser;
 use Asylamba\Classes\Library\DataAnalysis;
 use Asylamba\Modules\Zeus\Model\CreditTransaction;
 use Asylamba\Modules\Hermes\Model\Notification;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
@@ -85,7 +84,7 @@ if ($name !== FALSE AND $quantity !== FALSE) {
 						$qr->execute([$ct->rSender, $ct->rReceiver, 5, DataAnalysis::creditToStdUnit($ct->amount), Utils::now()]);
 					}
 
-					$response->flashbag->add('Crédits envoyés', Response::FLASHBAG_SUCCESS);
+					$session->addFlashbag('Crédits envoyés', Flashbag::TYPE_SUCCESS);
 						
 				} else {
 					throw new ErrorException('envoi de crédits impossible - vous ne pouvez pas envoyer plus que ce que vous possédez');

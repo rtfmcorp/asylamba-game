@@ -8,7 +8,7 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 
 if (($commanderId = $this->getContainer()->get('app.request')->query->get('id')) === null) {
@@ -54,7 +54,7 @@ if ($commander->statement == Commander::INSCHOOL || $commander->statement == Com
 			$tutorialHelper->setStepDone();
 		}
 
-		$response->flashbag->add('Votre officier ' . $commander->getName() . ' a bien été affecté en force de réserve', Response::FLASHBAG_SUCCESS);
+		$session->addFlashbag('Votre officier ' . $commander->getName() . ' a bien été affecté en force de réserve', Flashbag::TYPE_SUCCESS);
 		$response->redirect('fleet/commander-' . $commander->id . '/sftr-2');
 	} elseif ($nbrLine1 < PlaceResource::get($orbitalBaseManager->get()->typeOfBase, 'l-line')) {
 		$commander->dAffectation =Utils::now();
@@ -66,7 +66,7 @@ if ($commander->statement == Commander::INSCHOOL || $commander->statement == Com
 			$tutorialHelper->setStepDone();
 		}
 
-		$response->flashbag->add('Votre officier ' . $commander->getName() . ' a bien été affecté en force active', Response::FLASHBAG_SUCCESS);
+		$session->addFlashbag('Votre officier ' . $commander->getName() . ' a bien été affecté en force active', Flashbag::TYPE_SUCCESS);
 		$response->redirect('fleet/commander-' . $commander->id . '/sftr-2');
 	} else {
 		throw new ErrorException('Votre base a dépassé la capacité limite de officiers en activité');			
@@ -79,11 +79,11 @@ if ($commander->statement == Commander::INSCHOOL || $commander->statement == Com
 	$commander->uCommander = Utils::now();
 	if ($commanderManager->size() < PlaceResource::get($orbitalBaseManager->get()->typeOfBase, 'school-size')) {
 		$commander->statement = Commander::INSCHOOL;
-		$response->flashbag->add('Votre officier ' . $commander->getName() . ' a été remis à l\'école', Response::FLASHBAG_SUCCESS);
+		$session->addFlashbag('Votre officier ' . $commander->getName() . ' a été remis à l\'école', Flashbag::TYPE_SUCCESS);
 		$commanderManager->emptySquadrons($commander);
 	} else {
 		$commander->statement = Commander::RESERVE;
-		$response->flashbag->add('Votre officier ' . $commander->getName() . ' a été remis dans la réserve de l\'armée', Response::FLASHBAG_SUCCESS);
+		$session->addFlashbag('Votre officier ' . $commander->getName() . ' a été remis dans la réserve de l\'armée', Flashbag::TYPE_SUCCESS);
 		$commanderManager->emptySquadrons($commander);
 	}
 	$commanderManager->changeSession($S_COM3);

@@ -4,14 +4,13 @@
 # int base 			id (rPlace) de la base orbitale qui veut supprimer la route
 # int route 		id de la route commerciale
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
@@ -75,7 +74,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 				//destruction de la route
 				$commercialRouteManager->deleteById($route);
 
-				$response->flashbag->add('Route commerciale détruite', Response::FLASHBAG_SUCCESS);
+				$session->addFlashbag('Route commerciale détruite', Flashbag::TYPE_SUCCESS);
 				$orbitalBaseManager->changeSession($S_OBM1);
 			} else {
 				throw new ErrorException('impossible de supprimer une route commerciale');

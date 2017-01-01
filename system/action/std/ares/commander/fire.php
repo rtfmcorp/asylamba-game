@@ -5,7 +5,7 @@
 # int id 	 		id du commandant
 
 use Asylamba\Classes\Exception\ErrorException;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 
 if (($commanderId = $this->getContainer()->get('app.request')->request->get('id')) === null) {
 	throw new ErrorException('manque d\'information pour le traitement de la requête');
@@ -13,7 +13,6 @@ if (($commanderId = $this->getContainer()->get('app.request')->request->get('id'
 
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $session = $this->getContainer()->get('app.session');
-$response = $this->getContainer()->get('app.response');
 
 $S_COM1 = $commanderManager->getCurrentSession();
 $commanderManager->newSession();
@@ -30,9 +29,9 @@ if ($commander->statement == 1) {
 	$commander->emptySquadrons();
 	$commander->setStatement(4);
 
-	$response->flashbag->add('Vous avez renvoyé votre commandant ' . $commander->getName() . '.', Response::FLASHBAG_SUCCESS);
+	$session->addFlashbag('Vous avez renvoyé votre commandant ' . $commander->getName() . '.', Flashbag::TYPE_SUCCESS);
 } else {
-	$response->flashbag->add('Vous ne pouvez pas renvoyer un officier en déplacement.', Response::FLASHBAG_SUCCESS);
+	$session->addFlashbag('Vous ne pouvez pas renvoyer un officier en déplacement.', Flashbag::TYPE_SUCCESS);
 }
 
 $commanderManager->changeSession($S_COM1);

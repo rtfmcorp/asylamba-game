@@ -66,7 +66,6 @@ services:
             - "@hermes.notification_manager"
             - "@athena.orbital_base_helper"
             - "@ctc"
-            - "@app.response"
             - "@app.session"
             
     athena.orbital_base_helper:

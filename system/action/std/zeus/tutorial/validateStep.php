@@ -3,9 +3,8 @@
 
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
-use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Classes\Exception\FormException;
@@ -113,12 +112,12 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 		}
 
 		$alert .= 'La prochaine étape vous attend.';
-		$response->flashbag->add($alert, Response::FLASHBAG_SUCCESS);
+		$session->addFlashbag($alert, Flashbag::TYPE_SUCCESS);
 		
 		$nextStep = $stepTutorial;
 		if (TutorialResource::isLastStep($stepTutorial)) {
 			$nextStep = 0;
-			$response->flashbag->add('Bravo, vous avez terminé le tutoriel. Bonne continuation et bon amusement sur Asylamba, vous pouvez maintenant voler de vos propres ailes !', Response::FLASHBAG_SUCCESS);
+			$session->addFlashbag('Bravo, vous avez terminé le tutoriel. Bonne continuation et bon amusement sur Asylamba, vous pouvez maintenant voler de vos propres ailes !', Flashbag::TYPE_SUCCESS);
 		} else {
 			$nextStep += 1;
 		}

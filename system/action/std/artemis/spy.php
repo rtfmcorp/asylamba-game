@@ -5,7 +5,7 @@
 # int price			credit price for spying
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Library\Game;
@@ -193,7 +193,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 				$tutorialHelper->setStepDone();
 			}
 
-			$response->flashbag->add('Espionnage effectué.', Response::FLASHBAG_SUCCESS);
+			$session->addFlashbag('Espionnage effectué.', Flashbag::TYPE_SUCCESS);
 			$response->redirect('fleet/view-spyreport/report-' . $sr->id);
 			
 			$playerManager->changeSession($S_PAM1);

@@ -6,7 +6,7 @@
 # int building 	 	id du bâtiment
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Library\DataAnalysis;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
@@ -16,6 +16,7 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
 $session = $this->getContainer()->get('app.session');
+$database = $this->getContainer()->get('database');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
@@ -141,8 +142,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 				$orbitalBaseManager->decreaseResources($ob, $orbitalBaseHelper->getBuildingInfo($building, 'level', $currentLevel + 1, 'resourcePrice'));
 
 				if (DATA_ANALYSIS) {
-					$db = Database::getInstance();
-					$qr = $db->prepare('INSERT INTO 
+					$qr = $database->prepare('INSERT INTO 
 						DA_BaseAction(`from`, type, opt1, opt2, weight, dAction)
 						VALUES(?, ?, ?, ?, ?, ?)'
 					);
@@ -152,7 +152,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 				# add the event in controller
 				$session->get('playerEvent')->add($bq->dEnd, EVENT_BASE, $baseId);
 
-				$this->getContainer()->get('app.response')->flashbag->add('Construction programmée', Response::FLASHBAG_SUCCESS);
+				$session->addFlashbag('Construction programmée', Flashbag::TYPE_SUCCESS);
 			} else {
 				throw new ErrorException('les conditions ne sont pas remplies pour construire ce bâtiment');
 			}

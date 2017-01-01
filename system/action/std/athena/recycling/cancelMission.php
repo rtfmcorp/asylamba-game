@@ -4,15 +4,13 @@
 # int id 			id de la mission
 # int place 		id de la base orbitale
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Athena\Model\RecyclingMission;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
 
@@ -39,7 +37,7 @@ if ($missionId !== FALSE AND $rPlace !== FALSE AND in_array($rPlace, $verif)) {
 
 		if ($recyclingMissionManager->size() == 1) {
 			$recyclingMissionManager->get()->statement = RecyclingMission::ST_BEING_DELETED;
-			$response->flashbag->add('Ordre de mission annulé.', Response::FLASHBAG_SUCCESS);
+			$session->addFlashbag('Ordre de mission annulé.', Flashbag::TYPE_SUCCESS);
 		} else {
 			throw new ErrorException('impossible de supprimer la mission.');
 		}

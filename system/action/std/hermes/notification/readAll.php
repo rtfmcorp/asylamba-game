@@ -1,10 +1,9 @@
 <?php
 # read all notifications
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
-$response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 
 $S_NTM1 = $notificationManager->getCurrentSession();
@@ -19,11 +18,11 @@ for ($i = 0; $i < $nbNotifications; $i++) {
 }
 
 if ($nbNotifications > 1) {
-	$response->flashbag->add($nbNotifications . ' notifications ont été marquées comme lues.', Response::FLASHBAG_SUCCESS);
+	$session->addFlashbag($nbNotifications . ' notifications ont été marquées comme lues.', Flashbag::TYPE_SUCCESS);
 } else if ($notificationManager->size() == 1) {
-	$response->flashbag->add('Une notification a été marquée comme lue.', Response::FLASHBAG_SUCCESS);
+	$session->addFlashbag('Une notification a été marquée comme lue.', Flashbag::TYPE_SUCCESS);
 } else {
-	$response->flashbag->add('Toutes vos notifications ont déjà été lues.', Response::FLASHBAG_SUCCESS);
+	$session->addFlashbag('Toutes vos notifications ont déjà été lues.', Flashbag::TYPE_SUCCESS);
 }
 
 $notificationManager->changeSession($S_NTM1);

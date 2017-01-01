@@ -1,6 +1,6 @@
 <?php
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
@@ -22,7 +22,7 @@ if ($id !== FALSE) {
 			} else {
 				$topicManager->get()->isClosed = 1;
 			}
-			$response->flashbag->add('Le sujet a bien été fermé/ouvert', Response::FLASHBAG_SUCCESS);
+			$session->addFlashbag('Le sujet a bien été fermé/ouvert', Flashbag::TYPE_SUCCESS);
 		} else {
 			throw new FormException('Vous n\'avez pas les droits');	
 		}

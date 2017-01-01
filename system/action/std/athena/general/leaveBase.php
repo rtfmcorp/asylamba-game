@@ -4,7 +4,7 @@
 
 # int id 		id (rPlace) de la base orbitale
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Format;
@@ -12,7 +12,6 @@ use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
@@ -109,7 +108,7 @@ if (count($verif) > 1) {
 							$verif = array_merge($verif);
 						}
 					}
-					$response->flashbag->add('Base abandonnée', Response::FLASHBAG_SUCCESS);
+					$session->addFlashbag('Base abandonnée', Flashbag::TYPE_SUCCESS);
 					$response->redirect(Format::actionBuilder('switchbase', $sessionToken, ['base' => $verif[0]], FALSE));
 				} else {
 					throw new ErrorException('Vous ne pouvez pas abandonner de base dans les ' . OrbitalBase::COOL_DOWN . ' premières relèves.');	

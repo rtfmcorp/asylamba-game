@@ -5,7 +5,7 @@
 # rforum
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Modules\Demeter\Model\Forum\ForumTopic;
 use Asylamba\Modules\Demeter\Model\Forum\ForumMessage;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
@@ -58,7 +58,7 @@ if ($title !== FALSE AND $content !== FALSE AND $rForum !== FALSE) {
 	}
 
 	$response->redirect('faction/view-forum/forum-' . $topic->rForum . '/topic-' . $topic->id . '/sftr-2');
-	$response->flashbag->add('Topic créé.', Response::FLASHBAG_SUCCESS);
+	$session->addFlashbag('Topic créé.', Flashbag::TYPE_SUCCESS);
 } else {
 	throw new FormException('Manque d\information.');
 }

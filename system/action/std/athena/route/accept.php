@@ -11,14 +11,13 @@ use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Demeter\Model\Color;
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
-$response = $this->getContainer()->get('app.response');
 $database = $this->getContainer()->get('database');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
@@ -125,7 +124,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 						$qr->execute([$cr->playerId1, $cr->playerId2, 6, DataAnalysis::creditToStdUnit($cr->price), Utils::now()]);
 					}
 
-					$response->flashbag->add('Route commerciale acceptée, vous gagnez ' . $exp . ' points d\'expérience', Response::FLASHBAG_SUCCESS);
+					$session->addFlashbag('Route commerciale acceptée, vous gagnez ' . $exp . ' points d\'expérience', Flashbag::TYPE_SUCCESS);
 				} else {
 					throw new ErrorException('impossible d\'accepter une route commerciale');
 				}

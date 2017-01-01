@@ -1,9 +1,8 @@
 <?php
 # delete all notifications
 
-use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Flashbag;
 
-$response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 $spyReportManager = $this->getContainer()->get('artemis.spy_report_manager');
 
@@ -14,11 +13,11 @@ $spyReportManager->load(array('rPlayer' => $session->get('playerId')));
 $nbr = $spyReportManager->deleteByRPlayer($session->get('playerId'));
 
 if ($nbr > 1) {
-	$response->flashbag->add($nbr . ' rapports ont été supprimés.', Response::FLASHBAG_SUCCESS);
+	$session->addFlashbag($nbr . ' rapports ont été supprimés.', Flashbag::TYPE_SUCCESS);
 } else if ($nbr == 1) {
-	$response->flashbag->add('Un rapport a été supprimé.', Response::FLASHBAG_SUCCESS);
+	$session->addFlashbag('Un rapport a été supprimé.', Flashbag::TYPE_SUCCESS);
 } else {
-	$response->flashbag->add('Tous vos rapports ont déjà été supprimés.', Response::FLASHBAG_SUCCESS);
+	$session->addFlashbag('Tous vos rapports ont déjà été supprimés.', Flashbag::TYPE_SUCCESS);
 }
 
 $spyReportManager->changeSession($S_SRM1);
