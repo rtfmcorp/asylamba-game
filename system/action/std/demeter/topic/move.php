@@ -5,10 +5,11 @@ use Asylamba\Modules\Demeter\Resource\ForumResources;
 use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 $topicManager = $this->getContainer()->get('demeter.forum_topic_manager');
 
-$rForum = $request->query->get('rforum');
+$rForum = $request->request->get('rforum');
 $id = $request->query->get('id');
 
 if ($rForum !== FALSE && $id !== FALSE) {
@@ -31,7 +32,7 @@ if ($rForum !== FALSE && $id !== FALSE) {
 				$topicManager->get()->rForum = $rForum;
 				$topicManager->get()->dLastModification = Utils::now();
 
-				$this->getContainer()->get('app.response')->redirect('faction/view-forum/forum-' . $rForum . '/topic-' . $topicManager->get()->id);
+				$response->redirect('faction/view-forum/forum-' . $rForum . '/topic-' . $topicManager->get()->id);
 			} else {
 				throw new FormException('Le forum de destination n\'existe pas');
 			}
