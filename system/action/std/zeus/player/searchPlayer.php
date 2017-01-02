@@ -9,7 +9,7 @@ $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
 
 # string name 	nom du joueur
-$playerid = $request->query->get('playerid');
+$playerid = $request->request->get('playerid');
 
 if ($playerid !== FALSE) {
 	$S_PAM1 = $playerManager->getCurrentSession();
