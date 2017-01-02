@@ -142,6 +142,7 @@ class Application {
 			? unserialize($_SESSION[SERVER_SESS]['data'])
 			: new Session()
 		);
+		$this->container->get('app.session')->initFlashbags();
 		$this->container->set('app.history',
 			(isset($_SESSION[SERVER_SESS]['history']))
 			? unserialize($_SESSION[SERVER_SESS]['history'])
@@ -326,6 +327,7 @@ class Application {
 		$_SESSION[SERVER_SESS]['alert'] = serialize($this->container->get('app.alert'));
 		$_SESSION[SERVER_SESS]['history'] = serialize($this->container->get('app.history'));
 
+		$this->container->get('app.session')->saveFlashbags();
 		# fin du benchmark
 		$this->getStat();
 

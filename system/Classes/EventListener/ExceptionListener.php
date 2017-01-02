@@ -38,7 +38,7 @@ class ExceptionListener {
 			$exception->getFile(),
 			$exception->getLine(),
 			Logger::LOG_LEVEL_ERROR,
-			($exception instanceof FormException) ? Flashbag::TYPE_FORM_ERROR : Flashbag::TYPE_ERROR
+			($exception instanceof FormException) ? Flashbag::TYPE_FORM_ERROR : Flashbag::TYPE_STD_ERROR
 		);
 	}
 	
@@ -67,5 +67,6 @@ class ExceptionListener {
 		$this->logger->log("$message at $file at line $line", $level);
 		
 		$this->session->addFlashbag($message, $flashbagLevel);
+		$this->session->saveFlashbags();
 	}
 }
