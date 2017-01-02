@@ -15,15 +15,15 @@ $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('app.session');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$placeManager = $this->getContainer()->get('demeter.place_manager');
+$placeManager = $this->getContainer()->get('gaia.place_manager');
 $recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
 $buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
 
 $baseId = $request->query->get('id');
 
-for ($i = 0; $i < $notificationManager->get('playerBase')->get('ob')->size(); $i++) { 
-	$verif[] = $notificationManager->get('playerBase')->get('ob')->get($i)->get('id');
+for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
+	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
 if (count($verif) > 1) {
@@ -40,7 +40,7 @@ if (count($verif) > 1) {
 		if ($baseId != FALSE && in_array($baseId, $verif)) {
 			$_OBM = $orbitalBaseManager->getCurrentSession();
 			$orbitalBaseManager->newSession();
-			$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $notificationManager->get('playerId')));
+			$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
 
 			if ($orbitalBaseManager->size() > 0) {
 				$base = $orbitalBaseManager->get();
@@ -102,7 +102,7 @@ if (count($verif) > 1) {
 
 					$placeManager->changeSession($_PLM);
 					
-					for ($i = 0; $i < $notificationManager->get('playerBase')->get('ob')->size(); $i++) { 
+					for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 						if ($verif[$i] == $baseId) {
 							unset($verif[$i]);
 							$verif = array_merge($verif);
