@@ -38,10 +38,14 @@ class Application {
 			$this->save();
 		} catch (\Exception $ex) {
 			$this->container->get('event_dispatcher')->dispatch(new ExceptionEvent($ex));
-			die("{$ex->getMessage()} in {$ex->getFile()} at {$ex->getLine()}<br><pre>" . $ex->getTraceAsString() . '</pre>');
+			$pastPath = $this->container->get('app.history')->getPastPath(1);
+			ob_end_clean();
+			header('Location: /' . (($pastPath !== null) ? $pastPath : ''));
 		} catch (\Error $err) {
 			$this->container->get('event_dispatcher')->dispatch(new ErrorEvent($err));
-			die("{$err->getMessage()} in {$err->getFile()} at {$err->getLine()}<br><pre>" . $err->getTraceAsString() . '</pre>');
+			$pastPath = $this->container->get('app.history')->getPastPath(1);
+			ob_end_clean();
+			header('Location: /' . (($pastPath !== null) ? $pastPath : ''));
 		}
     }
 	
