@@ -45,6 +45,7 @@ services:
         class: Asylamba\Classes\EventListener\ExceptionListener
         arguments:
             - "@logger"
+            - "@app.session"
         tags:
             - {type: "event_listener", event: "core.exception", method: "onCoreException"}
             - {type: "event_listener", event: "core.error", method: "onCoreError"}

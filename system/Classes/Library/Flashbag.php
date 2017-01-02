@@ -15,7 +15,7 @@ class Flashbag {
 	const TYPE_STD_INFO =		100;
 	const TYPE_STD_ERROR =		101;
 	const TYPE_SUCCESS =		102;
-	const TYPE_STD_FILLFORM =	103;	# error in form filling
+	const TYPE_FORM_ERROR =	103;	# error in form filling
 
 	const TYPE_BUG_INFO =		200;
 	const TYPE_BUG_ERROR =		201;
