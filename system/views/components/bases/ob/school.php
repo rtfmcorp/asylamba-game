@@ -146,7 +146,7 @@ echo '<div class="component">';
 			echo '<div class="queue">';
 				for ($i = 0; $i < $commanderManager->size(); $i++) {
 					$commander = $commanderManager->get($i);
-					$expToLvlUp = $commander->experienceToLevelUp();
+					$expToLvlUp = $commanderManager->experienceToLevelUp($commander);
 					echo '<div class="item">';
 						echo '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
 						echo '<strong>' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->getName() . '</strong>';
