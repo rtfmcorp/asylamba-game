@@ -9,14 +9,14 @@ class Session extends ArrayList {
 	/** @var array **/
 	public $flashbags = [];
 	
-	public function __construct()
+	public function initFlashbags()
 	{
 		if (isset($_SESSION['flashbags'])) {
 			$this->flashbags = unserialize($_SESSION['flashbags']);
 		}
 	}
 	
-	public function __destruct()
+	public function saveFlashbags()
 	{
 		if (!empty($this->flashbags)) {
 			$_SESSION['flashbags'] = serialize($this->flashbags);
