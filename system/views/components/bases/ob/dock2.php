@@ -236,44 +236,44 @@ echo '<div class="component">';
 
 			echo '<div class="component market-sell">';
 				for ($i = 6; $i < ShipResource::SHIP_QUANTITY; $i++) {
-					if ($storage[$i] !== 0) {
-						echo '<div class="queue sh" data-target="sell-ships-' . $i . '">';
-							echo '<div class="item">';
-								echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($i, 'imageLink') . '.png" alt="" />';
-									if ($i == ShipResource::PHENIX) {
-										echo '<strong><span class="big">' . $storage[$i] . '</span> ' . ShipResource::getInfo($i, 'codeName') . '</strong>';
-									} else {
-										echo '<strong><span class="big">' . $storage[$i] . '</span> ' . ShipResource::getInfo($i, 'codeName') . Format::addPlural($storage[$i]) . '</strong>';
-									}								
-								echo '<em>' . ($storage[$i] * ShipResource::getInfo($i, 'pev')) . ' PEV</em>';
-							echo '</div>';
+					echo '<div class="queue sh" data-target="sell-ships-' . $i . '">';
+						echo '<div class="item">';
+							echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($i, 'imageLink') . '.png" alt="" />';
+								if ($i == ShipResource::PHENIX) {
+									echo '<strong><span class="big">' . $storage[$i] . '</span> ' . ShipResource::getInfo($i, 'codeName') . '</strong>';
+								} else {
+									echo '<strong><span class="big">' . $storage[$i] . '</span> ' . ShipResource::getInfo($i, 'codeName') . Format::addPlural($storage[$i]) . '</strong>';
+								}								
+							echo '<em>' . ($storage[$i] * ShipResource::getInfo($i, 'pev')) . ' PEV</em>';
 						echo '</div>';
-					}
+					echo '</div>';
 					
-					echo '<form id="sell-ships-' . $i . 
-					'" class="sell-form"
-					" data-max-quantity="' . $storage[$i] .
-					'" data-min-price="' . (ShipResource::getInfo($i, 'resourcePrice') / 2) . 
-					'" action="' . Format::actionBuilder('recycleship', $sessionToken,
-						['baseid' => $ob_dock2->getId(), 	'typeofship' => $i]) . 
-					'" method="post" style="display:none;">';
-						
-						echo '<h4>recycler des vaisseaux</h4>';
-						echo '<hr />';
-						echo '<div class="label-box sf-quantity">';
-							echo '<label for="sell-market-quantity-ship" class="label">Quantité</label>';
-							echo '<input id="sell-market-quantity-ship" class="value" type="text" name="quantity" autocomplete="off" />';
-						echo '</div>';
+					if ($storage[$i] !== 0) {
+						echo '<form id="sell-ships-' . $i . 
+						'" class="sell-form"
+						" data-max-quantity="' . $storage[$i] .
+						'" data-min-price="' . (ShipResource::getInfo($i, 'resourcePrice') / 2) . 
+						'" action="' . Format::actionBuilder('recycleship', $sessionToken,
+							['baseid' => $ob_dock2->getId(), 	'typeofship' => $i]) . 
+						'" method="post" style="display:none;">';
+							
+							echo '<h4>recycler des vaisseaux</h4>';
+							echo '<hr />';
+							echo '<div class="label-box sf-quantity">';
+								echo '<label for="sell-market-quantity-ship" class="label">Quantité</label>';
+								echo '<input id="sell-market-quantity-ship" class="value" type="text" name="quantity" autocomplete="off" />';
+							echo '</div>';
 
-						echo '<div class="label-box sf-min-price">';
-							echo '<span class="label">Ressources</span>';
-							echo '<span class="value"></span>';
-							echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/resource.png">';
-						echo '</div>';
+							echo '<div class="label-box sf-min-price">';
+								echo '<span class="label">Ressources</span>';
+								echo '<span class="value"></span>';
+								echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/resource.png">';
+							echo '</div>';
 
-						echo '<hr />';
-						echo '<p><input type="submit" value="Recycler" /></p>';
-					echo '</form>';
+							echo '<hr />';
+							echo '<p><input type="submit" value="Recycler" /></p>';
+						echo '</form>';
+					}
 				}
 				echo '<div class="number-box">';
 					echo '<span class="label">capacité du hangar</span>';
