@@ -742,7 +742,7 @@ class PlaceManager extends Manager {
 						# création du rapport
 						$report = $this->createReport($place);
 
-						$this->sendNotif(Place::LOOTPLAYERWHITBATTLESUCCESS, $commander, $report->id);
+						$this->sendNotif($place, Place::LOOTPLAYERWHITBATTLESUCCESS, $commander, $report->id);
 				
 					# défaite
 					} else {
