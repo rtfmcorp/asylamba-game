@@ -40,6 +40,7 @@ use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Ares\Model\LiveReport;
 use Asylamba\Modules\Ares\Model\Report;
 use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Demeter\Model\Color;
 
 class PlaceManager extends Manager {
 	/** @var string **/
