@@ -7,7 +7,8 @@
 use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 
-if (($commanderId = $this->getContainer()->get('app.request')->request->get('id')) === null) {
+$commanderId = $this->getContainer()->get('app.request')->query->get('id');
+if ($commanderId === null) {
 	throw new ErrorException('manque d\'information pour le traitement de la requête');
 }
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
@@ -25,7 +26,7 @@ if ($commander->statement !== 1) {
 }
 
 // vider le commandant
-$commander->emptySquadrons();
+$commanderManager->emptySquadrons($commander);
 
 $this->getContainer()->get('app.session')->addFlashbag('Vous avez vidé l\'armée menée par votre commandant ' . $commander->getName() . '.', Flashbag::TYPE_SUCCESS);
 $commanderManager->changeSession($S_COM1);
