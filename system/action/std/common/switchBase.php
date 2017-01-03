@@ -26,5 +26,5 @@ if ($page !== null) {
 	}
 	$this->getContainer()->get('app.response')->redirect($page);
 } else {
-	$this->getContainer()->get('app.response')->redirect('bases/overview');
+	// otherwise no redirection
 }

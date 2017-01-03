@@ -3,7 +3,7 @@
 use Asylamba\Classes\Container\Params;
 
 $request = $this->getContainer()->get('app.request');
-$params = $request->request->get('params');
+$params = $request->query->get('params');
 
 if ($params !== FALSE) {
 	if (in_array($params, Params::getParams())) {
