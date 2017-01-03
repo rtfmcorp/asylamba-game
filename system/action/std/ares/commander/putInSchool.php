@@ -9,7 +9,8 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 
-if (($this->getContainer()->get('app.request')->request->get('id')) === null) {
+$commanderId = $this->getContainer()->get('app.request')->query->get('id');
+if ($commanderId === null) {
 	throw new ErrorException('erreur dans le traitement de la requête');
 }
 $commanderManager = $this->getContainer()->get('ares.commander_manager');

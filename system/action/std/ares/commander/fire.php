@@ -7,7 +7,10 @@
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Library\Flashbag;
 
-if (($commanderId = $this->getContainer()->get('app.request')->request->get('id')) === null) {
+$response = $this->getContainer()->get('app.response');
+
+$commanderId = $this->getContainer()->get('app.request')->query->get('id');
+if ($commanderId === null) {
 	throw new ErrorException('manque d\'information pour le traitement de la requête');
 }
 
@@ -26,7 +29,7 @@ $commander = $commanderManager->get();
 if ($commander->statement == 1) {
 
 	// vider le commandant
-	$commander->emptySquadrons();
+	$commanderManager->emptySquadrons($commander);
 	$commander->setStatement(4);
 
 	$session->addFlashbag('Vous avez renvoyé votre commandant ' . $commander->getName() . '.', Flashbag::TYPE_SUCCESS);
@@ -35,3 +38,5 @@ if ($commander->statement == 1) {
 }
 
 $commanderManager->changeSession($S_COM1);
+
+$response->redirect('fleet');

@@ -87,7 +87,7 @@ if ($commander->statement == Commander::INSCHOOL || $commander->statement == Com
 		$commanderManager->emptySquadrons($commander);
 	}
 	$commanderManager->changeSession($S_COM3);
-	$response->redirect('fleet');
+	$response->redirect('bases/view-school');
 } else {
 	throw new ErrorException('Le status de votre officier ne peut pas être modifié');
 }
