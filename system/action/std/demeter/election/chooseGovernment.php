@@ -6,6 +6,8 @@ use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Library\Flashbag;
+
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
@@ -39,7 +41,7 @@ if ($rPlayer !== FALSE && $department !== FALSE) {
 								->addTxt('Vous avez été choisi pour être le ' . $statusArray[$department - 1] . ' de votre faction.');
 							$notificationManager->add($notif);
 
-							$session->addFlashbag($playerManager->get()->name . ' a rejoint votre gouvernement.');	
+							$session->addFlashbag($playerManager->get()->name . ' a rejoint votre gouvernement.', Flashbag::TYPE_SUCCESS);	
 						} else {
 						throw new ErrorException('Ce département est inconnu.');
 					}
