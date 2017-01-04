@@ -150,27 +150,32 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 		if ($session->exist('inscription')) {
 			$check = new CheckName();
 
-			if ($request->request->has('base') && $check->checkLength($request->request->get('base')) && $check->checkChar($request->request->get('base'))) {
-				$session->get('inscription')->add('base', $request->request->get('base'));
+			if ($request->request->has('base') && $check->checkLength($request->request->get('base'))) {
+				if ($check->checkChar($request->request->get('base'))) {
+					$session->get('inscription')->add('base', $request->request->get('base'));
 
-				$sm = $this->getContainer()->get('gaia.sector_manager');
-				$sm->load();
+					$sm = $this->getContainer()->get('gaia.sector_manager');
+					$sm->load();
 
-				$factionSectors = array();
-				for ($i = 0; $i < $sm->size(); $i++) { 
-					if ($sm->get($i)->getRColor() == $session->get('inscription')->get('ally')) {
-						$factionSectors[] = $sm->get($i)->getId();
+					$factionSectors = array();
+					for ($i = 0; $i < $sm->size(); $i++) { 
+						if ($sm->get($i)->getRColor() == $session->get('inscription')->get('ally')) {
+							$factionSectors[] = $sm->get($i)->getId();
+						}
 					}
-				}
-				if (in_array($request->request->get('sector'), $factionSectors)) {
-					$session->get('inscription')->add('sector', $request->request->get('sector'));
+					if (in_array($request->request->get('sector'), $factionSectors)) {
+						$session->get('inscription')->add('sector', $request->request->get('sector'));
+					} else {
+						$response->redirect('inscription/step-3');
+						throw new FormException('il faut sélectionner un des secteurs de la couleur de votre faction');
+					}
 				} else {
 					$response->redirect('inscription/step-3');
-					throw new FormException('le secteur choisi n\'existe pas ou n\'est pas disponible pour votre faction');
+					throw new FormException('le nom de votre base ne doit pas contenir de caractères spéciaux');
 				}
 			} else {
 				$response->redirect('inscription/step-3');
-				throw new FormException('le nom de votre base est trop long, trop court ou contient des caractères non-autorisés');
+				throw new FormException('le nom de votre base doit contenir entre ' . $check->getMinLength() . ' et ' . $check->getMaxLength() . ' caractères');
 			}
 		} else {
 			header('Location: ' . GETOUT_ROOT . 'serveurs/message-forbiddenaccess');

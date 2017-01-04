@@ -3,21 +3,21 @@
 namespace Asylamba\Modules\Zeus\Helper;
 
 class CheckName {
-	public $minLenght = 2;
-	public $maxLenght = 15;
+	public $minLength = 2;
+	public $maxLength = 15;
 
-	public function getMinLenght()	{ return $this->minLenght; }
-	public function getMaxLenght()	{ return $this->maxLenght; }
+	public function getMinLength()	{ return $this->minLength; }
+	public function getMaxLength()	{ return $this->maxLength; }
 
-	public function setMinLenght($i){
+	public function setMinLength($i){
 		if (is_int($i) AND  n)
-		$this->minLenght = $i;
+		$this->minLength = $i;
 	}
-	public function setMaxLenght($i){ $this->maxLenght = $i; }
+	public function setMaxLength($i){ $this->maxLength = $i; }
 
 	public function checkLength($str) {
 		$length = strlen($str);
-		return $length >= $this->minLenght && $length <= $this->maxLenght;
+		return $length >= $this->minLength && $length <= $this->maxLength;
 	}
 
 	public function checkChar($str) {
@@ -67,8 +67,8 @@ class CheckName {
 
 			$newStr = trim($troncateStr) . ' ' . $romanNumber;
 
-			if (strlen($newStr) > $this->maxLenght) {
-				$newStr = substr($newStr, 0, $this->maxLenght);
+			if (strlen($newStr) > $this->maxLength) {
+				$newStr = substr($newStr, 0, $this->maxLength);
 			}
 		}
 
