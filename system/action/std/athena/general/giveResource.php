@@ -23,12 +23,12 @@ $commercialShippingManager = $this->getContainer()->get('athena.commercial_shipp
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 
-for ($i = 0; $i < $placeManager->get('playerBase')->get('ob')->size(); $i++) { 
-	$verif[] = $placeManager->get('playerBase')->get('ob')->get($i)->get('id');
+for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
+	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
 $baseId = $request->query->get('baseid');
-$otherBaseId = $request->query->get('otherbaseid');
+$otherBaseId = $request->request->get('otherbaseid');
 $quantity = $request->request->get('quantity');
 
 if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_array($baseId, $verif)) {
@@ -38,7 +38,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_
 
 		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
 		$orbitalBaseManager->newSession(ASM_UMODE);
-		$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $placeManager->get('playerId')));
+		$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
 
 		if ($orbitalBaseManager->size() > 0) {
 			$orbitalBase = $orbitalBaseManager->get();
@@ -81,7 +81,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_
 
 							# création du convoi
 							$cs = new CommercialShipping();
-							$cs->rPlayer = $placeManager->get('playerId');
+							$cs->rPlayer = $session->get('playerId');
 							$cs->rBase = $orbitalBase->rPlace;
 							$cs->rBaseDestination = $otherBase->rPlace;
 							$cs->resourceTransported = $resource;
@@ -98,7 +98,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_
 								$n->setRPlayer($otherBase->getRPlayer());
 								$n->setTitle('Envoi de ressources');
 								$n->addBeg()->addTxt($otherBase->getName())->addSep();
-								$n->addLnk('embassy/player-' . $placeManager->get('playerId'), $placeManager->get('playerInfo')->get('name'));
+								$n->addLnk('embassy/player-' . $placeManager->get('playerId'), $session->get('playerInfo')->get('name'));
 								$n->addTxt(' a lancé un convoi de ')->addStg(Format::numberFormat($resource))->addTxt(' ressources depuis sa base ');
 								$n->addLnk('map/place-' . $orbitalBase->getRPlace(), $orbitalBase->getName())->addTxt('. ');
 								$n->addBrk()->addTxt('Quand le convoi arrivera, les ressources seront à vous.');
