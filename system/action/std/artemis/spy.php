@@ -15,6 +15,7 @@ use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
