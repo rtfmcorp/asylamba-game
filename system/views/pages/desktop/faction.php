@@ -394,7 +394,7 @@ echo '<div id="content">';
 
 					if ($forumTopicManager->size() == 1) {
 						$topic_topic = $forumTopicManager->get(0);
-						$topic_topic->updateLastView($session->get('playerId'));
+						$forumTopicManager->updateLastView($topic_topic, $session->get('playerId'));
 
 						$S_FMM1 = $forumMessageManager->getCurrentSession();
 						$forumMessageManager->newSession();
@@ -463,7 +463,7 @@ echo '<div id="content">';
 
 					if ($forumTopicManager->size() == 1) {
 						$topic_topic = $forumTopicManager->get(0);
-						$topic_topic->updateLastView($session->get('playerId'));
+						$forumTopicManager->updateLastView($topic_topic, $session->get('playerId'));
 
 						$S_FMM1 = $forumMessageManager->getCurrentSession();
 						$forumMessageManager->newSession();

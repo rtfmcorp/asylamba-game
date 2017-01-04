@@ -91,7 +91,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_
 							$cs->statement = CommercialShipping::ST_GOING;
 							$commercialShippingManager->add($cs);
 
-							$orbitalBase->decreaseResources($resource);
+							$orbitalBaseManager->decreaseResources($orbitalBase, $resource);
 
 							if ($orbitalBase->getRPlayer() != $otherBase->getRPlayer()) {
 								$n = new Notification();

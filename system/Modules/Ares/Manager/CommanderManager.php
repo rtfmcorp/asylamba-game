@@ -567,7 +567,7 @@ class CommanderManager extends Manager {
 	}
 
 	# ENGAGE UN COMBAT ENTRE CHAQUE SQUADRON CONTRE UN COMMANDANT
-	public function engage(Commander $commander, $enemyCommander, $commanderCommander) {
+	public function engage(Commander $commander, $enemyCommander) {
 		$commander->setArmy();
 
 		for ($i = 0; $i < count($commander->squadronsIds); $i++) {
@@ -576,14 +576,14 @@ class CommanderManager extends Manager {
 		$idSquadron = 0;
 		foreach ($commander->army as $squadron) {
 			if ($squadron->getNbrShips() != 0 AND $squadron->getLineCoord() * 3 <= FightManager::getCurrentLine()) {
-				$enemyCommander = $squadron->engage($enemyCommander, $idSquadron, $commander->id, $commander->name, $commanderCommander);
+				$enemyCommander = $squadron->engage($enemyCommander, $idSquadron, $commander->id, $commander->name, $commander);
 			}
 			$idSquadron++;
 		}
 		return $enemyCommander;
 	}
 
-	public function getPosition (Commander $commander, $x1, $y1, $x2, $y2) {
+	public function getPosition(Commander $commander, $x1, $y1, $x2, $y2) {
 		$x = $x1;
 		$y = $y1;
 		if ($commander->statement == Commander::MOVING) {

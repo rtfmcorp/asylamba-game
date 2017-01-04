@@ -501,7 +501,7 @@ class PlayerManager extends Manager {
 			$ob->setLevelSpatioport(0);
 			$ob->setResourcesStorage(1000);
 
-			$ob->updatePoints();
+			$this->orbitalBaseManager->updatePoints($ob);
 
 			# initialisation des investissement
 			$ob->setISchool(500);
@@ -861,7 +861,7 @@ class PlayerManager extends Manager {
 
 						$toKill = $base->shipStorage[$j] - $possibleMaintenable;
 						if ($toKill > 0) {
-							$base->removeShipFromDock($j, $toKill);
+							$this->orbitalBaseManager->removeShipFromDock($base, $j, $toKill);
 
 							$n = new Notification();
 							$n->setRPlayer($player->id);

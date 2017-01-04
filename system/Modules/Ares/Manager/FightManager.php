@@ -335,7 +335,7 @@ class FightManager {
 
 				break;
 			} else {
-				$commanderA = $this->commanderManager->engage($commanderD, $commanderA, $commanderD);
+				$commanderA = $this->commanderManager->engage($commanderD, $commanderA);
 				LiveReport::$halfround++;
 			}
 			
@@ -358,7 +358,7 @@ class FightManager {
 
 				break;
 			} else {
-				$commanderD = $this->commanderManager->engage($commanderA, $commanderD, $commanderA);
+				$commanderD = $this->commanderManager->engage($commanderA, $commanderD);
 				LiveReport::$halfround++;
 			}
 			
