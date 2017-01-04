@@ -1073,7 +1073,7 @@ class PlaceManager extends Manager {
 		$resourcesLooted = ($storage > $resourcesToLoot) ? $resourcesToLoot : $storage;
 
 		if ($resourcesLooted > 0) {
-			$placeBase->decreaseResources($resourcesLooted);
+			$this->orbitalBaseManager->decreaseResources($placeBase, $resourcesLooted);
 			$commander->resources = $resourcesLooted;
 
 			LiveReport::$resources = $resourcesLooted;
