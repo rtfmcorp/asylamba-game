@@ -134,7 +134,7 @@ echo '<div class="component report">';
 				if ($report_report->rPlayerDefender == $session->get('playerId')) {
 					echo '<div class="commander">';
 						echo '<a href="' . APP_ROOT . 'fleet"><img src="' . MEDIA . 'commander/medium/' . $report_report->avatarD . '.png" alt="' . $report_report->nameD . '" /></a>';
-						$level = Commander::nbLevelUp($report_report->levelD, $report_report->experienceD + $report_report->expCom);
+						$level = $commanderManager->nbLevelUp($report_report->levelD, $report_report->experienceD + $report_report->expCom);
 						echo '<em>' . CommanderResources::getInfo($report_report->levelD, 'grade') . ($level > 0 ? ' <span class="bonus">a passé ' . $level . ' grade</span>' : NULL) . '</em>';
 						echo '<strong>' . $report_report->nameD . '</strong>';
 						echo '<em>expérience : ' . Format::numberFormat($report_report->experienceD);

@@ -53,7 +53,7 @@ if (Utils::interval($session->get('lastUpdate')->get('event'), Utils::now(), 's'
 		$times = Game::getAntiSpyEntryTime($startPlace, $destinationPlace, $commanderManager->get($i)->getArrivalDate());
 
 		if (strtotime(Utils::now()) >= strtotime($times[0])) {
-			$info = $commanderManager->get($i)->getEventInfo();
+			$info = $commanderManager->getEventInfo($commanderManager->get($i));
 			$info->add('inCircle', $times);
 
 			# ajout de l'événement
