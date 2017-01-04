@@ -33,7 +33,7 @@ if ($baseId !== FALSE AND $name !== FALSE AND in_array($baseId, $verif)) {
 		$orbitalBase = $orbitalBaseManager->get();
 
 		$check = new CheckName();
-		$check->setMaxLenght(20); 
+		$check->setMaxLength(20); 
 
 		if ($check->checkLength($name)) {
 			if ($check->checkChar($name)) {
