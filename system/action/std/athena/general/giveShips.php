@@ -31,7 +31,7 @@ for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
 }
 
 $baseId = $request->query->get('baseid');
-$otherBaseId = $request->query->get('otherbaseid');
+$otherBaseId = $request->request->get('otherbaseid');
 
 if ($baseId !== FALSE AND $otherBaseId !== FALSE AND in_array($baseId, $verif)) {
 	if ($baseId != $otherBaseId) {
@@ -78,7 +78,6 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND in_array($baseId, $verif)) 
 
 							if ($remainingShips >= $commercialShipQuantity) {
 								$orbitalBaseManager->load(array('rPlace' => $otherBaseId));
-								
 								if ($orbitalBaseManager->size() == 2) {
 									$otherBase = $orbitalBaseManager->get(1);
 
