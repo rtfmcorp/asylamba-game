@@ -1,5 +1,7 @@
 <?php
 
+use Asylamba\Classes\Library\Format;
+
 $sessionToken = $this->getContainer()->get('app.session')->get('token');
 $factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
 $request = $this->getContainer()->get('app.request');
