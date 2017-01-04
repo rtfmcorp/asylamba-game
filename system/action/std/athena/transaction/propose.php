@@ -77,9 +77,9 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 		$maxPrice = Game::getMaxPriceRelativeToRate($type, $quantity, $identifier);
 
 		if ($price < $minPrice) {
-			throw new ErrorException('Le prix que vous avez fixé est trop bas. Une limite inférieure est fixée selon la catégorie de la vente.', ALERT_STD_ERROR);
+			throw new ErrorException('Le prix que vous avez fixé est trop bas. Une limite inférieure est fixée selon la catégorie de la vente.');
 		} elseif ($price > $maxPrice) {
-			throw new ErrorException('Le prix que vous avez fixé est trop haut. Une limite supérieure est fixée selon la catégorie de la vente.', ALERT_STD_ERROR);
+			throw new ErrorException('Le prix que vous avez fixé est trop haut. Une limite supérieure est fixée selon la catégorie de la vente.');
 		} else {
 			$valid = TRUE;
 
