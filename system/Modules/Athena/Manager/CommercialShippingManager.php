@@ -319,7 +319,7 @@ class CommercialShippingManager extends Manager {
 						echo '</div>';
 					}
 
-					if ($commercialShipping->resourceTransported == NULL) {
+					if ($commercialShipping->resourceTransported === NULL) {
 						# transaction
 						echo '<div class="for">';
 							echo '<span>pour</span>';
