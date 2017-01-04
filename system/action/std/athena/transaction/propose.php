@@ -141,7 +141,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 								if ($commanderManager->size() == 1 AND $commanderManager->get()->getRPlayer() == $session->get('playerId') AND $commanderManager->get()->statement !== Commander::ONSALE) {
 									$commander = $commanderManager->get();
 									$commander->statement = Commander::ONSALE;
-									$commander->emptySquadrons();
+									$commanderManager->emptySquadrons($commander);
 								} else {
 									$valid = FALSE;
 								}
