@@ -226,7 +226,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 										} else {
 											# move to the mess
 											$commanderManager->get($i)->statement = Commander::RESERVE;
-											$commanderManager->get($i)->emptySquadrons();
+											$commanderManager->emptySquadrons($commanderManager->get($i));
 										}
 									}
 									$commanderManager->changeSession($S_COM_Sess2);
@@ -243,7 +243,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 										} else {
 											# move to the mess
 											$commanderManager->get($i)->statement = Commander::RESERVE;
-											$commanderManager->get($i)->emptySquadrons();
+											$commanderManager->emptySquadrons($commanderManager->get($i));
 										}
 									}
 									break;
@@ -256,7 +256,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 												if ($commanderManager->get($i)->statement != Commander::MOVING) {
 													# move to the mess
 													$commanderManager->get($i)->statement = Commander::RESERVE;
-													$commanderManager->get($i)->emptySquadrons();
+													$commanderManager->emptySquadrons($commanderManager->get($i));
 												}
 											}
 											$commanderManager->changeSession($S_COM_Sess2);
@@ -267,7 +267,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 												} else {
 													# move to the mess
 													$commanderManager->get($i)->statement = Commander::RESERVE;
-													$commanderManager->get($i)->emptySquadrons();
+													$commanderManager->emptySquadrons($commanderManager->get($i));
 												}
 											}
 										} else {
@@ -281,7 +281,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 													} else {
 														# move to the mess
 														$commanderManager->get($i)->statement = Commander::RESERVE;
-														$commanderManager->get($i)->emptySquadrons();
+														$commanderManager->emptySquadrons($commanderManager->get($i));
 													}
 												}
 											}
@@ -294,7 +294,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 												if ($commanderManager->get($i)->statement != Commander::MOVING) {
 													# move to the mess
 													$commanderManager->get($i)->statement = Commander::RESERVE;
-													$commanderManager->get($i)->emptySquadrons();
+													$commanderManager->emptySquadrons($commanderManager->get($i));
 												}
 											}
 											$commanderManager->changeSession($S_COM_Sess1);
@@ -305,7 +305,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 												} else {
 													# move to the mess
 													$commanderManager->get($i)->statement = Commander::RESERVE;
-													$commanderManager->get($i)->emptySquadrons();
+													$commanderManager->emptySquadrons($commanderManager->get($i));
 												}
 											}
 										} else {
@@ -319,7 +319,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 													} else {
 														# move to the mess
 														$commanderManager->get($i)->statement = Commander::RESERVE;
-														$commanderManager->get($i)->emptySquadrons();
+														$commanderManager->emptySquadrons($commanderManager->get($i));
 													}
 												}
 											}
@@ -342,7 +342,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 											} else {
 												# move to the mess
 												$commanderManager->get($i)->statement = Commander::RESERVE;
-												$commanderManager->get($i)->emptySquadrons();
+												$commanderManager->emptySquadrons($commanderManager->get($i));
 											}
 										}
 									} else if ($totalQtyLine2 == 0) {
@@ -360,7 +360,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 											} else {
 												# move to the mess
 												$commanderManager->get($i)->statement = Commander::RESERVE;
-												$commanderManager->get($i)->emptySquadrons();
+												$commanderManager->emptySquadrons($commanderManager->get($i));
 											}
 										}
 									} else {
@@ -373,7 +373,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 											} else {
 												# move to the mess
 												$commanderManager->get($i)->statement = Commander::RESERVE;
-												$commanderManager->get($i)->emptySquadrons();
+												$commanderManager->emptySquadrons($commanderManager->get($i));
 											}
 										}
 										$commanderManager->changeSession($S_COM_Sess2);
@@ -384,7 +384,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 											} else {
 												# move to the mess
 												$commanderManager->get($i)->statement = Commander::RESERVE;
-												$commanderManager->get($i)->emptySquadrons();
+												$commanderManager->emptySquadrons($commanderManager->get($i));
 											}
 										}
 									}

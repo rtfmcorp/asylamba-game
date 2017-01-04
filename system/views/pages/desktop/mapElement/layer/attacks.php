@@ -46,7 +46,7 @@ echo '<div id="attacks" ' . ($request->cookies->get('p' . Params::SHOW_MAP_FLEET
 					$x2 = $placeManager->getById($commander->rDestinationPlace)->getXSystem() * $galaxyConfiguration->scale;
 					$y1 = $placeManager->getById($commander->rStartPlace)->getYSystem() * $galaxyConfiguration->scale;
 					$y2 = $placeManager->getById($commander->rDestinationPlace)->getYSystem() * $galaxyConfiguration->scale;
-					list($x3, $y3) = $commander->getPosition($x1, $y1, $x2, $y2);
+					list($x3, $y3) = $commanderManager->getPosition($commander, $x1, $y1, $x2, $y2);
 					$rt = Utils::interval($commander->dArrival, Utils::now(), 's');
 
 					echo '<line class="color' . $commander->playerColor . '" x1="' . $x1 . '" x2="' . $x2 . '" y1="' . $y1 . '" y2="' . $y2 . '" />';

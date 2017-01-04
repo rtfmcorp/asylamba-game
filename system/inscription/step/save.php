@@ -93,7 +93,7 @@ try {
 		$playerManager->newSession();
 		$playerManager->load(array('id' => $player->rGodfather));
 		if ($playerManager->size() == 1) {
-			$playerManager->get()->increaseCredit(1000);
+			$playerManager->increaseCredit($playerManager->get(), 1000);
 		} 
 		$playerManager->changeSession($S_PAM1);
 

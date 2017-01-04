@@ -872,7 +872,7 @@ class ColorManager extends Manager {
 		if ($player->credit < $law->options['credits']) {
 			$toPay = $player->credit;
 		}
-		$player->decreaseCredit($toPay);
+		$this->playerManager->decreaseCredit($player, $toPay);
 		$color->credits += $toPay;
 		$law->statement = Law::OBSOLETE;
 	}
