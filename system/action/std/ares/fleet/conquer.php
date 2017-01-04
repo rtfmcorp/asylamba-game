@@ -10,7 +10,6 @@ use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
-use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
 
