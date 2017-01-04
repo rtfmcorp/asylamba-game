@@ -13,7 +13,7 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 $request = $this->getContainer()->get('app.request');
 
-if (($commanderId = $request->request->get('commanderid')) === null || ($placeId = $requeest->request->get('placeid')) === null) {
+if (($commanderId = $request->query->get('commanderid')) === null || ($placeId = $request->query->get('placeid')) === null) {
 	throw new ErrorException('Manque de précision sur le commandant ou la position.');
 }
 
@@ -23,6 +23,7 @@ $playerManager = $this->getContainer()->get('zeus.player_manager');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $sectorManager = $this->getContainer()->get('gaia.sector_manager');
+$technologyManager = $this->getContainer()->get('promethee.technology_manager');
 $session = $this->getContainer()->get('app.session');
 $conquestCost = $this->getContainer()->getParameter('ares.coeff.conquest_cost');
 
