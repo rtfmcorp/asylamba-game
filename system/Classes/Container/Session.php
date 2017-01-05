@@ -123,7 +123,7 @@ class Session extends ArrayList {
     public function removeBase($key, $id) {
         if ($this->exist('playerBase')) {
             $size = $this->get('playerBase')->get($key)->size();
-            for ($i = $size-1; $i >= 0; $i++) {
+            for ($i = $size-1; $i >= 0; $i--) {
                 if ($this->get('playerBase')->get($key)->get($i)->get('id') == $id) {
                     $this->get('playerBase')->get($key)->remove($i);
                 }
