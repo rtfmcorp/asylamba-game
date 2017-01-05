@@ -1,5 +1,13 @@
 <?php
-$parser = new Parser();
+
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
+$voteManager = $this->getContainer()->get('demeter.vote_manager');
+$parser = $this->getContainer()->get('parser');
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
+
 $status = ColorResource::getInfo($faction->id, 'status');
 
 echo '<div class="component player profil size1">';
@@ -7,18 +15,18 @@ echo '<div class="component player profil size1">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			if ($faction->electionStatement == Color::ELECTION) {
-				$S_VOM1 = ASM::$vom->getCurrentSession();
-				ASM::$vom->changeSession($VOM_ELC_TOKEN);
+				$S_VOM1 = $voteManager->getCurrentSession();
+				$voteManager->changeSession($VOM_ELC_TOKEN);
 
 				$hasVoted = FALSE;
-				if (ASM::$vom->size() == 1) {
+				if ($voteManager->size() == 1) {
 					$hasVoted = TRUE;
 				}
 
 				if ($faction->regime != Color::ROYALISTIC) {
 					echo '<div class="build-item">';
 						if ($hasVoted) {
-							if (ASM::$vom->get()->rCandidate == $candidat->rPlayer) {
+							if ($voteManager->get()->rCandidate == $candidat->rPlayer) {
 								echo '<span class="button disable" style="text-align: center;">';
 									echo '<span class="text" style="line-height: 35px;">Vous avez voté pour lui</span>';
 								echo '</span>';
@@ -28,7 +36,7 @@ echo '<div class="component player profil size1">';
 								echo '</span>';
 							}
 						} else {
-							echo '<a class="button" href="' . Format::actionBuilder('vote', ['relection' => $rElection, 'rcandidate' => $candidat->rPlayer]) . '" style="text-align: center;">';
+							echo '<a class="button" href="' . Format::actionBuilder('vote', $sessionToken, ['relection' => $rElection, 'rcandidate' => $candidat->rPlayer]) . '" style="text-align: center;">';
 								echo '<span class="text" style="line-height: 35px;">Voter</span>';
 							echo '</a>';
 						}
@@ -36,7 +44,7 @@ echo '<div class="component player profil size1">';
 				} else {					
 					echo '<div class="build-item">';
 						if ($hasVoted) {
-							if (ASM::$vom->get()->rCandidate == $candidat->rPlayer) {
+							if ($voteManager->get()->rCandidate == $candidat->rPlayer) {
 								echo '<span class="button disable" style="text-align: center;">';
 									echo '<span class="text" style="line-height: 35px;">Vous avez soutenu le coup d\'état</span>';
 								echo '</span>';
@@ -46,17 +54,17 @@ echo '<div class="component player profil size1">';
 								echo '</span>';
 							}
 						} else {
-							echo '<a class="button" href="' . Format::actionBuilder('vote', ['relection' => $rElection, 'rcandidate' => $candidat->rPlayer]) . '" style="text-align: center;">';
+							echo '<a class="button" href="' . Format::actionBuilder('vote', $sessionToken,  ['relection' => $rElection, 'rcandidate' => $candidat->rPlayer]) . '" style="text-align: center;">';
 								echo '<span class="text" style="line-height: 35px;">Soutenir le coup d\'état</span>';
 							echo '</a>';
-							echo '<a class="button" href="' . Format::actionBuilder('vote', ['relection' => $rElection, 'rcandidate' => 0]) . '" style="text-align: center;">';
+							echo '<a class="button" href="' . Format::actionBuilder('vote', $sessionToken, ['relection' => $rElection, 'rcandidate' => 0]) . '" style="text-align: center;">';
 								echo '<span class="text" style="line-height: 35px;">Rejeter le coup d\'état</span>';
 							echo '</a>';
 						}
 					echo '</div>';
 				}
 
-				ASM::$vom->changeSession($S_VOM1);
+				$voteManager->changeSession($S_VOM1);
 			}
 
 			echo '<div class="center-box">';
@@ -82,4 +90,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

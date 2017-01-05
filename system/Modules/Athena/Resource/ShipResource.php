@@ -2,12 +2,6 @@
 
 namespace Asylamba\Modules\Athena\Resource;
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
-
-use Asylamba\Modules\Demeter\Resource\ColorResource;
-use Asylamba\Modules\Promethee\Resource\TechnologyResource;
-
 class ShipResource {
 
 	const PEGASE = 0;
@@ -42,19 +36,19 @@ class ShipResource {
 	private static $femaleShipNames = array(2, 3, 4, 5, 9);
 
 	public static function isAShip($ship) {
-		return (in_array($ship, self::$ships)) ? TRUE : FALSE;
+		return in_array($ship, self::$ships);
 	}
 
 	public static function isAShipFromDock1($ship) {
-		return (in_array($ship, self::$dock1Ships)) ? TRUE : FALSE;
+		return in_array($ship, self::$dock1Ships);
 	}
 
 	public static function isAShipFromDock2($ship) {
-		return (in_array($ship, self::$dock2Ships)) ? TRUE : FALSE;
+		return in_array($ship, self::$dock2Ships);
 	}
 
 	public static function isAFemaleShipName($ship) {
-		return (in_array($ship, self::$femaleShipNames)) ? TRUE : FALSE;
+		return in_array($ship, self::$femaleShipNames);
 	}
 
 	public static function getInfo($shipNumber, $info) {
@@ -62,144 +56,10 @@ class ShipResource {
 			if(in_array($info, array('codeName', 'name', 'class', 'pev', 'life', 'speed', 'defense', 'attack', 'cost', 'time', 'resourcePrice', 'points', 'imageLink', 'techno', 'description'))) {
 				return self::$ship[$shipNumber][$info];
 			} else {
-				CTR::$alert->add('info inconnue dans getInfo de ShipResource', ALT_BUG_ERROR);
-				return FALSE;
+				throw new ErrorException('info inconnue dans getInfo de ShipResource');
 			}
 		} else {
-			CTR::$alert->add('shipId inconnu (entre 0 et 14) dans getInfo de ShipResource', ALT_BUG_ERROR);
-			return FALSE;
-		}
-	}
-
-	public static function haveRights($shipId, $type, $sup, $quantity = 1) {
-		if (self::isAShip($shipId)) {
-			switch ($type) {
-				// assez de ressources pour construire ?
-				case 'resource' : 
-					$price = self::getInfo($shipId, 'resourcePrice') * $quantity;
-					if ($shipId == self::CERBERE || $shipId == self::PHENIX) {
-						if (CTR::$data->get('playerInfo')->get('color') == ColorResource::EMPIRE) {
-							# bonus if the player is from the Empire
-							$price -= round($price * ColorResource::BONUS_EMPIRE_CRUISER / 100);
-						}
-					}
-					return ($sup < $price) ? FALSE : TRUE;
-					break;
-				// assez de points d'action pour construire ?
-				case 'pa' : return ($sup < self::getInfo($shipId, 'pa')) ? FALSE : TRUE;
-					break;
-				// encore de la place dans la queue ?
-				// $sup est un objet de type OrbitalBase
-				// $quantity est le nombre de batiments dans la queue
-				case 'queue' :
-					if (OrbitalBaseResource::isAShipFromDock1($shipId)) {
-						$maxQueue = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::DOCK1, 'level', $sup->levelDock1, 'nbQueues');
-					} elseif (OrbitalBaseResource::isAShipFromDock2($shipId)) {
-						$maxQueue = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::DOCK2, 'level', $sup->levelDock2, 'nbQueues');
-					} else {
-						$maxQueue = 0;
-					}
-					return ($quantity < $maxQueue) ? TRUE : FALSE; 
-					break;
-				// droit de construire le vaisseau ?
-				// $sup est un objet de type OrbitalBase
-				case 'shipTree' :
-					if (self::isAShipFromDock1($shipId)) {
-						$level = $sup->getLevelDock1();
-						return ($shipId < OrbitalBaseResource::getBuildingInfo(2, 'level', $level, 'releasedShip')) ? TRUE : FALSE;
-					} else if (self::isAShipFromDock2($shipId)) {
-						$level = $sup->getLevelDock2();
-						return (($shipId - 6) < OrbitalBaseResource::getBuildingInfo(3, 'level', $level, 'releasedShip')) ? TRUE : FALSE;
-					} else {
-						$level = $sup->getLevelDock3();
-						return (($shipId - 12) < OrbitalBaseResource::getBuildingInfo(4, 'level', $level, 'releasedShip')) ? TRUE : FALSE;
-					}
-					break;
-				// assez de pev dans le storage et dans la queue ?
-				// $sup est un objet de type OrbitalBase
-				case 'pev' :
-					if (self::isAShipFromDock1($shipId)) {
-						//place dans le hangar
-						$totalSpace = OrbitalBaseResource::getBuildingInfo(2, 'level', $sup->getLevelDock1(), 'storageSpace');
-						//ce qu'il y a dans le hangar
-						$storage = $sup->getShipStorage();
-						$inStorage = 0;
-						for ($i = 0; $i < 6; $i++) {
-							$inStorage += self::getInfo($i, 'pev') * $storage[$i];
-						}
-						//ce qu'il y a dans la queue
-						$inQueue = 0;
-						$S_SQM1 = ASM::$sqm->getCurrentSession();
-						ASM::$sqm->changeSession($sup->dock1Manager);
-						if (ASM::$sqm->size() > 0) {
-							for ($i = 0; $i < ASM::$sqm->size(); $i++) {
-								$inQueue += ShipResource::getInfo(ASM::$sqm->get($i)->shipNumber, 'pev') * ASM::$sqm->get($i)->quantity;
-							}
-						}
-						ASM::$sqm->changeSession($S_SQM1);
-						//ce qu'on veut rajouter
-						$wanted = self::getInfo($shipId, 'pev') * $quantity;
-						//comparaison
-						return ($wanted + $inQueue + $inStorage <= $totalSpace) ? TRUE : FALSE;
-					} elseif (self::isAShipFromDock2($shipId)) {
-						//place dans le hangar
-						$totalSpace = OrbitalBaseResource::getBuildingInfo(3, 'level', $sup->getLevelDock2(), 'storageSpace');
-						//ce qu'il y a dans le hangar
-						$storage = $sup->getShipStorage();
-						$inStorage = 0;
-						for ($i = 6; $i < 12; $i++) {
-							$inStorage += self::getInfo($i, 'pev') * $storage[$i];
-						}
-						//ce qu'il y a dans la queue
-						$inQueue = 0;
-						$S_SQM2 = ASM::$sqm->getCurrentSession();
-						ASM::$sqm->changeSession($sup->dock2Manager);
-						if (ASM::$sqm->size() > 0) {
-							for ($i = 0; $i < ASM::$sqm->size(); $i++) {
-								$inQueue += self::getInfo(ASM::$sqm->get($i)->shipNumber, 'pev') * 1;
-							}
-						}
-						ASM::$sqm->changeSession($S_SQM2);
-						//ce qu'on veut rajouter
-						$wanted = self::getInfo($shipId, 'pev') * $quantity;
-						//comparaison
-						return ($wanted + $inQueue + $inStorage <= $totalSpace) ? TRUE : FALSE;
-					} else {
-						return TRUE;
-					}
-					break;
-				// a la technologie nécessaire pour constuire ce vaisseau ?
-				// $sup est un objet de type Technology
-				case 'techno' :
-					if ($sup->getTechnology(self::getInfo($shipId, 'techno')) == 1) {
-						return TRUE;
-					} else {
-						return 'il vous faut développer la technologie ' . TechnologyResource::getInfo(self::getInfo($shipId, 'techno'), 'name');
-					}
-					break;
-				default :
-					CTR::$alert->add('type invalide dans haveRights de ShipResource', ALT_BUG_ERROR);
-					return FALSE;
-			}
-		} else {
-			CTR::$alert->add('shipId invalide (entre 0 et 14) dans haveRights de ShipResource', ALT_BUG_ERROR);
-			return FALSE;
-		}
-	}
-
-	public static function dockLevelNeededFor($shipId) {
-		if (self::isAShipFromDock1($shipId)) { 
-			$building = OrbitalBaseResource::DOCK1; $size = 40; $shipId++;
-		} elseif (self::isAShipFromDock2($shipId)) {
-			$building = OrbitalBaseResource::DOCK2; $size = 20; $shipId -= 5;
-		} else {
-			$building = OrbitalBaseResource::DOCK3; $size = 10; $shipId -= 11;
-		}
-		for ($i = 0; $i <= $size; $i++) { 
-			$relasedShip = OrbitalBaseResource::getBuildingInfo($building, 'level', $i, 'releasedShip');
-			if ($relasedShip == $shipId) {
-				return $i;
-			}
+			throw new ErrorException('shipId inconnu (entre 0 et 14) dans getInfo de ShipResource');
 		}
 	}
 

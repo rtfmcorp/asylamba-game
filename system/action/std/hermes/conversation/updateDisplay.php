@@ -1,43 +1,46 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 
-$conversation 	= Utils::getHTTPData('conversation');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
+
+$conversation 	= $request->query->get('conversation');
 
 if ($conversation !== FALSE) {
 	# vérifier que c'est l'utilisateur courant
 
-	$S_CVM = ASM::$cvm->getCurrentSession();
-	ASM::$cvm->newSession();
-	ASM::$cvm->load(
-		array('c.id' => $conversation, 'cu.rPlayer' => CTR::$data->get('playerId'))
+	$S_CVM = $conversationManager->getCurrentSession();
+	$conversationManager->newSession();
+	$conversationManager->load(
+		array('c.id' => $conversation, 'cu.rPlayer' => $session->get('playerId'))
 	);
-
-	if (ASM::$cvm->size() == 1) {
-		$conv  = ASM::$cvm->get();
+	
+	if ($conversationManager->size() == 1) {
+		$conv  = $conversationManager->get();
 		$users = $conv->players;
 
 		foreach ($users as $user) {
-			if ($user->rPlayer == CTR::$data->get('playerId')) {
+			if ($user->rPlayer == $session->get('playerId')) {
 				if ($user->convStatement == ConversationUser::CS_DISPLAY) {
 					$user->convStatement = ConversationUser::CS_ARCHIVED;
-					CTR::$alert->add('La conversation a été archivée.', ALERT_STD_SUCCESS);
+					$session->addFlashbag('La conversation a été archivée.', Flashbag::TYPE_SUCCESS);
 				} else {
 					$user->convStatement = ConversationUser::CS_DISPLAY;
-					CTR::$alert->add('La conversation a été désarchivée.', ALERT_STD_SUCCESS);
+					$session->addFlashbag('La conversation a été désarchivée.', Flashbag::TYPE_SUCCESS);
 				}
 				break;
 			}
 		}
 
 	} else {
-		CTR::$alert->add('La conversation n\'existe pas ou ne vous appartient pas.', ALERT_STD_ERROR);
+		throw new ErrorException('La conversation n\'existe pas ou ne vous appartient pas.');
 	}
 
-	ASM::$cvm->changeSession($S_CVM);
+	$conversationManager->changeSession($S_CVM);
 } else {
-	CTR::$alert->add('Informations manquantes pour quitter la conversation.', ALERT_STD_ERROR);
+	throw new ErrorException('Informations manquantes pour quitter la conversation.');
 }

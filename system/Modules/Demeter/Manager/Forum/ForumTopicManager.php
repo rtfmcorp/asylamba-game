@@ -19,13 +19,19 @@ use Asylamba\Modules\Demeter\Model\Forum\ForumTopic;
 class ForumTopicManager extends Manager {
 	protected $managerType ='_ForumTopic';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array(), $playerId = FALSE) {
 		$formatWhere = Utils::arrayToWhere($where, 't.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT t.*,
+		$qr = $this->database->prepare('SELECT t.*,
 				(SELECT lv.dView FROM forumLastView AS lv WHERE rTopic = t.id AND rPlayer = ?) AS lastView,
 				COUNT(m.id) AS nbMessage
 			FROM forumTopic AS t
@@ -78,11 +84,10 @@ class ForumTopicManager extends Manager {
 	}
 
 	public function save() {
-		$db = Database::getInstance();
 		$topics = $this->_Save();
 
 		foreach ($topics AS $topic) {
-			$qr = $db->prepare('UPDATE forumTopic
+			$qr = $this->database->prepare('UPDATE forumTopic
 			SET
 				title = ?,
 				rPlayer = ?,
@@ -110,9 +115,7 @@ class ForumTopicManager extends Manager {
 	}
 
 	public function add($newTopic) {
-		$db = Database::getInstance();
-
-		$qr = $db->prepare('INSERT INTO forumTopic
+		$qr = $this->database->prepare('INSERT INTO forumTopic
 			SET
 				title = ?,
 				rPlayer = ?,
@@ -136,7 +139,7 @@ class ForumTopicManager extends Manager {
 				)
 		);
 
-		$newTopic->id = $db->lastInsertId();
+		$newTopic->id = $this->database->lastInsertId();
 
 		$this->_Add($newTopic);
 
@@ -144,11 +147,36 @@ class ForumTopicManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM forumTopic WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM forumTopic WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);
 		return TRUE;
+	}
+
+	public function updateLastView(ForumTopic $topic, $playerId) {
+		if ($topic->lastView == NULL) {
+			$qr = $this->database->prepare('INSERT INTO forumLastView 
+				SET
+					rPlayer = ?,
+					rTopic = ?,
+					dView = ?');
+			$aw = $qr->execute(array(
+					$playerId,
+					$topic->id,
+					Utils::now()
+				)
+			);
+		} else {
+			$qr = $this->database->prepare('UPDATE forumLastView
+				SET
+					dView = ?
+				WHERE rPlayer = ? AND rTopic = ?');
+			$aw = $qr->execute(array(
+				Utils::now(),
+				$playerId,
+				$topic->id
+			));
+		}
 	}
 }

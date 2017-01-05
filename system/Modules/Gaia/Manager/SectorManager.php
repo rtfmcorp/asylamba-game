@@ -20,6 +20,13 @@ class SectorManager extends Manager {
 	protected $managerType = '_Sector';
 
 	private $sectors = array();
+	
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
 
 	public function get($position = 0) {
 		if (isset($this->sectors[$position][0])) {
@@ -45,8 +52,7 @@ class SectorManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT *
+		$qr = $this->database->prepare('SELECT *
 			FROM sector
 			' . $formatWhere . '
 			' . $formatOrder . '
@@ -99,8 +105,7 @@ class SectorManager extends Manager {
 		foreach ($list as $v) { $query .= $module . ' = ? OR '; }
 		$query = trim($query, 'OR ');
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT 
+		$qr = $this->database->prepare('SELECT 
 			DISTINCT(se.id),
 			se.*
 			FROM sector AS se
@@ -145,8 +150,7 @@ class SectorManager extends Manager {
 	public function save() {
 		$sectors = $this->_Save();
 		foreach ($sectors AS $s) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE sector
+			$qr = $this->database->prepare('UPDATE sector
 				SET
 					rSurrender = ?,
 					tax = ?,

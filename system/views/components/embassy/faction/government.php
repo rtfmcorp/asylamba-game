@@ -1,11 +1,12 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Classes\Library\Format;
 
-$S_PAM_DGG = ASM::$pam->getCurrentSession();
-ASM::$pam->changeSession($FACTION_GOV_TOKEN);
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+
+$S_PAM_DGG = $playerManager->getCurrentSession();
+$playerManager->changeSession($FACTION_GOV_TOKEN);
 
 $status = ColorResource::getInfo($faction->id, 'status');
 
@@ -14,17 +15,17 @@ echo '<div class="component player rank">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<h4>Gouvernement</h4>';
-			for ($i = 0; $i < ASM::$pam->size(); $i++) { 
+			for ($i = 0; $i < $playerManager->size(); $i++) { 
 				echo '<div class="player color' . $faction->id . '">';
-					echo '<a href="' . APP_ROOT . 'embassy/player-' .  ASM::$pam->get($i)->id . '">';
-						echo '<img src="' . MEDIA . 'avatar/small/' .  ASM::$pam->get($i)->avatar . '.png" alt="' .  ASM::$pam->get($i)->name . '" class="picto" />';
+					echo '<a href="' . APP_ROOT . 'embassy/player-' .  $playerManager->get($i)->id . '">';
+						echo '<img src="' . MEDIA . 'avatar/small/' .  $playerManager->get($i)->avatar . '.png" alt="' .  $playerManager->get($i)->name . '" class="picto" />';
 					echo '</a>';
-					echo '<span class="title">' . $status[ ASM::$pam->get($i)->status - 1] . '</span>';
-					echo '<strong class="name">' .  ASM::$pam->get($i)->name . '</strong>';
+					echo '<span class="title">' . $status[ $playerManager->get($i)->status - 1] . '</span>';
+					echo '<strong class="name">' .  $playerManager->get($i)->name . '</strong>';
 				echo '</div>';
 			}
 
-			if (ASM::$pam->size() == 0) {
+			if ($playerManager->size() == 0) {
 				echo '<p>Aucun gouvernement formé</p>';
 			}
 
@@ -49,4 +50,4 @@ echo '<div class="component player rank">';
 	echo '</div>';
 echo '</div>';
 
-ASM::$pam->changeSession($S_PAM_DGG);
+$playerManager->changeSession($S_PAM_DGG);

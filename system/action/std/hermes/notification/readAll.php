@@ -1,26 +1,28 @@
 <?php
 # read all notifications
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Flashbag;
 
-$S_NTM1 = ASM::$ntm->getCurrentSession();
-ASM::$ntm->newSession(ASM_UMODE);
-ASM::$ntm->load(array('rPlayer' => CTR::$data->get('playerId'), 'readed' => 0));
+$notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$session = $this->getContainer()->get('app.session');
 
-$nbNotifications = ASM::$ntm->size();
+$S_NTM1 = $notificationManager->getCurrentSession();
+$notificationManager->newSession(ASM_UMODE);
+$notificationManager->load(array('rPlayer' => $session->get('playerId'), 'readed' => 0));
+
+$nbNotifications = $notificationManager->size();
 
 for ($i = 0; $i < $nbNotifications; $i++) {
-	$notif = ASM::$ntm->get($i);
+	$notif = $notificationManager->get($i);
 	$notif->setReaded(1);
 }
 
 if ($nbNotifications > 1) {
-	CTR::$alert->add($nbNotifications . ' notifications ont été marquées comme lues.', ALERT_STD_SUCCESS);
-} else if (ASM::$ntm->size() == 1) {
-	CTR::$alert->add('Une notification a été marquée comme lue.', ALERT_STD_SUCCESS);
+	$session->addFlashbag($nbNotifications . ' notifications ont été marquées comme lues.', Flashbag::TYPE_SUCCESS);
+} else if ($notificationManager->size() == 1) {
+	$session->addFlashbag('Une notification a été marquée comme lue.', Flashbag::TYPE_SUCCESS);
 } else {
-	CTR::$alert->add('Toutes vos notifications ont déjà été lues.', ALERT_STD_SUCCESS);
+	$session->addFlashbag('Toutes vos notifications ont déjà été lues.', Flashbag::TYPE_SUCCESS);
 }
 
-ASM::$ntm->changeSession($S_NTM1);
+$notificationManager->changeSession($S_NTM1);

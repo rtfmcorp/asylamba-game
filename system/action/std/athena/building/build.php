@@ -5,111 +5,119 @@
 # int baseid 		id de la base orbitale
 # int building 	 	id du bâtiment
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Library\DataAnalysis;
-use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
-use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Athena\Model\BuildingQueue;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 
-for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
+$session = $this->getContainer()->get('app.session');
+$database = $this->getContainer()->get('database');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
+$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$technologyManager = $this->getContainer()->get('promethee.technology_manager');
+$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
+$request = $this->getContainer()->get('app.request');
+
+for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
+	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-$baseId = Utils::getHTTPData('baseid');
-$building = Utils::getHTTPData('building');
+$baseId = $request->query->get('baseid');
+$building = $request->query->get('building');
 
 
 if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
-	if (OrbitalBaseResource::isABuilding($building)) {
-		$S_OBM1 = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession(ASM_UMODE);
-		ASM::$obm->load(array('rPlace' => $baseId, 'rPlayer' => CTR::$data->get('playerId')));
+	if ($orbitalBaseHelper->isABuilding($building)) {
+		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
+		$orbitalBaseManager->newSession(ASM_UMODE);
+		$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
 
-		if (ASM::$obm->size() > 0) {
-			$ob = ASM::$obm->get();
+		if ($orbitalBaseManager->size() > 0) {
+			$ob = $orbitalBaseManager->get();
 
-			$S_BQM1 = ASM::$bqm->getCurrentSession();
-			ASM::$bqm->newSession(ASM_UMODE);
-			ASM::$bqm->load(array('rOrbitalBase' => $baseId), array('dEnd'));
+			$S_BQM1 = $buildingQueueManager->getCurrentSession();
+			$buildingQueueManager->newSession(ASM_UMODE);
+			$buildingQueueManager->load(array('rOrbitalBase' => $baseId), array('dEnd'));
 
-			$currentLevel = call_user_func(array($ob, 'getReal' . ucfirst(OrbitalBaseResource::getBuildingInfo($building, 'name')) . 'Level'));
-			$technos = new Technology(CTR::$data->get('playerId'));
-			if (OrbitalBaseResource::haveRights($building, $currentLevel + 1, 'resource', $ob->getResourcesStorage())
-				AND OrbitalBaseResource::haveRights(OrbitalBaseResource::GENERATOR, $ob->getLevelGenerator(), 'queue', ASM::$bqm->size()) 
-				AND (OrbitalBaseResource::haveRights($building, $currentLevel + 1, 'buildingTree', $ob) === TRUE)
-				AND OrbitalBaseResource::haveRights($building, $currentLevel + 1, 'techno', $technos)) {
+			$currentLevel = call_user_func(array($ob, 'getReal' . ucfirst($orbitalBaseHelper->getBuildingInfo($building, 'name')) . 'Level'));
+			$technos = $technologyManager->getPlayerTechnology($session->get('playerId'));
+			if ($orbitalBaseHelper->haveRights($building, $currentLevel + 1, 'resource', $ob->getResourcesStorage())
+				AND $orbitalBaseHelper->haveRights(OrbitalBaseResource::GENERATOR, $ob->getLevelGenerator(), 'queue', $buildingQueueManager->size()) 
+				AND ($orbitalBaseHelper->haveRights($building, $currentLevel + 1, 'buildingTree', $ob) === TRUE)
+				AND $orbitalBaseHelper->haveRights($building, $currentLevel + 1, 'techno', $technos)) {
 
 				# tutorial
-				if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-					switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
+				if ($session->get('playerInfo')->get('stepDone') == FALSE) {
+					switch ($session->get('playerInfo')->get('stepTutorial')) {
 						case TutorialResource::GENERATOR_LEVEL_2:
 							if ($building == OrbitalBaseResource::GENERATOR AND $currentLevel + 1 >= 2) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::REFINERY_LEVEL_3:
 							if ($building == OrbitalBaseResource::REFINERY AND $currentLevel + 1 >= 3) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::STORAGE_LEVEL_3:
 							if ($building == OrbitalBaseResource::STORAGE AND $currentLevel + 1 >= 3) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::DOCK1_LEVEL_1:
 							if ($building == OrbitalBaseResource::DOCK1 AND $currentLevel + 1 >= 1) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::TECHNOSPHERE_LEVEL_1:
 							if ($building == OrbitalBaseResource::TECHNOSPHERE AND $currentLevel + 1 >= 1) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::REFINERY_LEVEL_10:
 							if ($building == OrbitalBaseResource::REFINERY AND $currentLevel + 1 >= 10) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::STORAGE_LEVEL_8:
 							if ($building == OrbitalBaseResource::STORAGE AND $currentLevel + 1 >= 8) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::DOCK1_LEVEL_6:
 							if ($building == OrbitalBaseResource::DOCK1 AND $currentLevel + 1 >= 6) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::REFINERY_LEVEL_16:
 							if ($building == OrbitalBaseResource::REFINERY AND $currentLevel + 1 >= 16) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::STORAGE_LEVEL_12:
 							if ($building == OrbitalBaseResource::STORAGE AND $currentLevel + 1 >= 12) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::TECHNOSPHERE_LEVEL_6:
 							if ($building == OrbitalBaseResource::TECHNOSPHERE AND $currentLevel + 1 >= 6) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::DOCK1_LEVEL_15:
 							if ($building == OrbitalBaseResource::DOCK1 AND $currentLevel + 1 >= 15) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 						case TutorialResource::REFINERY_LEVEL_20:
 							if ($building == OrbitalBaseResource::REFINERY AND $currentLevel + 1 >= 20) {
-								TutorialHelper::setStepDone();
+								$tutorialHelper->setStepDone();
 							}
 							break;
 					}
@@ -120,44 +128,43 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 				$bq->rOrbitalBase = $baseId;
 				$bq->buildingNumber = $building;
 				$bq->targetLevel = $currentLevel + 1;
-				$time = OrbitalBaseResource::getBuildingInfo($building, 'level', $currentLevel + 1, 'time');
-				$bonus = $time * CTR::$data->get('playerBonus')->get(PlayerBonus::GENERATOR_SPEED) / 100;
-				if (ASM::$bqm->size() == 0) {
+				$time = $orbitalBaseHelper->getBuildingInfo($building, 'level', $currentLevel + 1, 'time');
+				$bonus = $time * $session->get('playerBonus')->get(PlayerBonus::GENERATOR_SPEED) / 100;
+				if ($buildingQueueManager->size() == 0) {
 					$bq->dStart = Utils::now();
 				} else {
-					$bq->dStart = ASM::$bqm->get(ASM::$bqm->size() - 1)->dEnd;
+					$bq->dStart = $buildingQueueManager->get($buildingQueueManager->size() - 1)->dEnd;
 				}
 				$bq->dEnd = Utils::addSecondsToDate($bq->dStart, round($time - $bonus));
-				ASM::$bqm->add($bq);
+				$buildingQueueManager->add($bq);
 
 				# debit resources
-				$ob->decreaseResources(OrbitalBaseResource::getBuildingInfo($building, 'level', $currentLevel + 1, 'resourcePrice'));
+				$orbitalBaseManager->decreaseResources($ob, $orbitalBaseHelper->getBuildingInfo($building, 'level', $currentLevel + 1, 'resourcePrice'));
 
 				if (DATA_ANALYSIS) {
-					$db = Database::getInstance();
-					$qr = $db->prepare('INSERT INTO 
+					$qr = $database->prepare('INSERT INTO 
 						DA_BaseAction(`from`, type, opt1, opt2, weight, dAction)
 						VALUES(?, ?, ?, ?, ?, ?)'
 					);
-					$qr->execute([CTR::$data->get('playerId'), 1, $building, $currentLevel + 1, DataAnalysis::resourceToStdUnit(OrbitalBaseResource::getBuildingInfo($building, 'level', $currentLevel + 1, 'resourcePrice')), Utils::now()]);
+					$qr->execute([$session->get('playerId'), 1, $building, $currentLevel + 1, DataAnalysis::resourceToStdUnit($orbitalBaseHelper->getBuildingInfo($building, 'level', $currentLevel + 1, 'resourcePrice')), Utils::now()]);
 				}
 
 				# add the event in controller
-				CTR::$data->get('playerEvent')->add($bq->dEnd, EVENT_BASE, $baseId);
+				$session->get('playerEvent')->add($bq->dEnd, EVENT_BASE, $baseId);
 
-				CTR::$alert->add('Construction programmée', ALERT_STD_SUCCESS);
+				$session->addFlashbag('Construction programmée', Flashbag::TYPE_SUCCESS);
 			} else {
-				CTR::$alert->add('les conditions ne sont pas remplies pour construire ce bâtiment', ALERT_STD_ERROR);
+				throw new ErrorException('les conditions ne sont pas remplies pour construire ce bâtiment');
 			}
-			ASM::$bqm->changeSession($S_BQM1);
+			$buildingQueueManager->changeSession($S_BQM1);
 		} else {
-			CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);
+			throw new ErrorException('cette base ne vous appartient pas');
 		}
 
-		ASM::$obm->changeSession($S_OBM1);
+		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
-		CTR::$alert->add('le bâtiment indiqué n\'est pas valide', ALERT_STD_ERROR);
+		throw new ErrorException('le bâtiment indiqué n\'est pas valide');
 	}
 } else {
-	CTR::$alert->add('pas assez d\'informations pour construire un bâtiment', ALERT_STD_FILLFORM);
+	throw new FormException('pas assez d\'informations pour construire un bâtiment');
 }

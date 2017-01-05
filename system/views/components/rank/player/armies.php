@@ -7,9 +7,10 @@
 # require
 	# _T PRM 		PLAYER_RANKING_ARMIES
 
-use Asylamba\Classes\Worker\ASM;
+$playerRankingManager = $this->getContainer()->get('atlas.player_ranking_manager');
+$session = $this->getContainer()->get('app.session');
 
-ASM::$prm->changeSession($PLAYER_RANKING_ARMIES);
+$playerRankingManager->changeSession($PLAYER_RANKING_ARMIES);
 
 echo '<div class="component player rank">';
 	echo '<div class="head skin-4">';
@@ -19,8 +20,8 @@ echo '<div class="component player rank">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			for ($i = 0; $i < ASM::$prm->size(); $i++) {
-				$p = ASM::$prm->get($i);
+			for ($i = 0; $i < $playerRankingManager->size(); $i++) {
+				$p = $playerRankingManager->get($i);
 
 				if ($i == 0 && $p->armiesPosition != 1) {
 					echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-morerank/dir-next/type-armies/current-' . $p->armiesPosition . '" data-dir="top">';
@@ -28,9 +29,9 @@ echo '<div class="component player rank">';
 					echo '</a>';
 				}
 
-				echo $p->commonRender('armies');
+				echo $p->commonRender($session->get('playerId'), 'armies');
 
-				if ($i == ASM::$prm->size() - 1) {
+				if ($i == $playerRankingManager->size() - 1) {
 					echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-morerank/dir-prev/type-armies/current-' . $p->armiesPosition . '">';
 						echo 'afficher les joueurs suivants';
 					echo '</a>';

@@ -8,9 +8,10 @@
         }
     },
     "require": {
-        "php": ">=5.5.9",
+        "php": "~7.0",
         "phpunit/phpunit": "4.8",
 		"symfony/config": "~2.6",
-		"symfony/yaml": "~2.6"
+		"symfony/yaml": "~2.6",
+        "ocramius/proxy-manager": "^2.0"
     }
 }

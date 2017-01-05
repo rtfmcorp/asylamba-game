@@ -1,4 +1,3 @@
-index.php
 system/config/app.config.local.php
 
 *.log

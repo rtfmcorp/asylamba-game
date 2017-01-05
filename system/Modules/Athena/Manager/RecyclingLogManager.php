@@ -20,13 +20,19 @@ use Asylamba\Modules\Athena\Model\RecyclingLog;
 class RecyclingLogManager extends Manager {
 	protected $managerType = '_RecyclingLog';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'rl.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT rl.*
+		$qr = $this->database->prepare('SELECT rl.*
 			FROM recyclingLog AS rl
 			' . $formatWhere . '
 			' . $formatOrder . '
@@ -79,8 +85,7 @@ class RecyclingLogManager extends Manager {
 	}
 
 	public function add(RecyclingLog $rl) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
+		$qr = $this->database->prepare('INSERT INTO
 			recyclingLog(rRecycling, resources, credits, ship0, ship1, ship2, ship3, ship4, ship5, ship6, ship7,
 				ship8, ship9, ship10, ship11, dLog)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
@@ -103,7 +108,7 @@ class RecyclingLogManager extends Manager {
 			$rl->dLog
 		));
 
-		$rl->id = $db->lastInsertId();
+		$rl->id = $this->database->lastInsertId();
 
 		$this->_Add($rl);
 	}
@@ -112,8 +117,7 @@ class RecyclingLogManager extends Manager {
 		$recyclingLogs = $this->_Save();
 
 		foreach ($recyclingLogs AS $rl) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE recyclingLog
+			$qr = $this->database->prepare('UPDATE recyclingLog
 				SET	id = ?,
 					rRecycling = ?,
 					resources = ?,
@@ -156,8 +160,7 @@ class RecyclingLogManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM recyclingLog WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM recyclingLog WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);
@@ -166,8 +169,7 @@ class RecyclingLogManager extends Manager {
 	}
 
 	public function deleteAllFromMission($missionId) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT id FROM recyclingLog WHERE rRecycling = ?');
+		$qr = $this->database->prepare('SELECT id FROM recyclingLog WHERE rRecycling = ?');
 		$qr->execute(array($missionId));
 
 		while ($aw = $qr->fetch()) {

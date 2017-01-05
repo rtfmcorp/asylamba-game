@@ -1,34 +1,34 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Worker\API;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Modules\Zeus\Model\Player;
 
-$S_PAM1 = ASM::$pam->getCurrentSession();
-ASM::$pam->newSession();
-ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$session = $this->getContainer()->get('app.session');
+$response = $this->getContainer()->get('app.response');
 
-if (ASM::$pam->size() == 1) {
+$S_PAM1 = $playerManager->getCurrentSession();
+$playerManager->newSession();
+$playerManager->load(array('id' => $session->get('playerId')));
 
+if ($playerManager->size() == 1) {
 	# sending API call to delete account link to server
 	$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
-	$success = $api->abandonServer(ASM::$pam->get()->bind, APP_ID);
+	$success = $api->abandonServer($playerManager->get()->bind, APP_ID);
 
 	if ($success) {
-
-		ASM::$pam->get()->bind = ASM::$pam->get()->bind . 'ABANDON';
-		ASM::$pam->get()->statement = PAM_DELETED;
+		$playerManager->get()->bind = $playerManager->get()->bind . 'ABANDON';
+		$playerManager->get()->statement = Player::DELETED;
 		
 		# clean session
-		CTR::$data->destroy();
-		CTR::redirect(GETOUT_ROOT . 'serveurs', TRUE);
-
+		$session->destroy();
+		$response->redirect(GETOUT_ROOT . 'serveurs', TRUE);
 	} else {
-		CTR::$alert->add('Une erreur s\'est produite sur le portail. Contactez un administrateur pour résoudre ce problème.', ALERT_STD_ERROR);
+		throw new ErrorException('Une erreur s\'est produite sur le portail. Contactez un administrateur pour résoudre ce problème.');
 	}
-
 } else {
-	CTR::$alert->add('Une erreur s\'est produite. Contactez un administrateur pour résoudre ce problème.', ALERT_STD_ERROR);
+	throw new ErrorException('Une erreur s\'est produite. Contactez un administrateur pour résoudre ce problème.');
 }
 
-ASM::$pam->changeSession($S_PAM1);
+$playerManager->changeSession($S_PAM1);

@@ -22,6 +22,7 @@ nbr victoires
 namespace Asylamba\Modules\Ares\Model;
 
 use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Ares\Model\Commander;
 
 class Report {
 	const STANDARD = 0;

@@ -1,29 +1,33 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Library\Format;
 
+$colorManager = $this->getContainer()->get('demeter.color_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+
 #credit
-$credit = Utils::getHTTPData('credit');
+$credit = $request->request->get('credit');
 
 if ($credit) {
-	$S_CLM = ASM::$clm->getCurrentSession();
-	ASM::$clm->newSession();
-	ASM::$clm->load(array('id' => CTR::$data->get('playerInfo')->get('color')));
-	$S_PAM = ASM::$pam->getCurrentSession();
-	ASM::$pam->newSession();
-	ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+	$S_CLM = $colorManager->getCurrentSession();
+	$colorManager->newSession();
+	$colorManager->load(array('id' => $session->get('playerInfo')->get('color')));
+	$S_PAM = $playerManager->getCurrentSession();
+	$playerManager->newSession();
+	$playerManager->load(array('id' => $session->get('playerId')));
 
-	$credit = ($credit > ASM::$pam->get()->credit) ? ASM::$pam->get()->credit : $credit;
-	ASM::$pam->get()->decreaseCredit($credit);
-	ASM::$clm->get()->credits += $credit;
+	$credit = ($credit > $playerManager->get()->credit) ? $playerManager->get()->credit : $credit;
+	$playerManager->decreaseCredit($playerManager->get(), $credit);
+	$colorManager->get()->credits += $credit;
 
-	CTR::$alert->add('Vous venez de remplir les caisse de votre faction de ' . $credit . ' crédit' . Format::addPlural($credit) . ' :)', ALERT_STD_SUCCESS);
+	$session->addFlashbag('Vous venez de remplir les caisse de votre faction de ' . $credit . ' crédit' . Format::addPlural($credit) . ' :)', Flashbag::TYPE_SUCCESS);
 	
-	ASM::$pam->changeSession($S_PAM);
-	ASM::$clm->changeSession($S_CLM);
+	$playerManager->changeSession($S_PAM);
+	$colorManager->changeSession($S_CLM);
 } else {
-	CTR::$alert->add('Manque d\'information.', ALERT_STD_FILLFORM);
+	throw new FormException('Manque d\'information.');
 }

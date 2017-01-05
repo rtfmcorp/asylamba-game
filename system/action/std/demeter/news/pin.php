@@ -1,36 +1,39 @@
 <?php
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Exception\FormException;
+use Asylamba\Classes\Exception\ErrorException;
 
-$id = Utils::getHTTPData('id');
+$factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+
+$id = $request->query->get('id');
 
 if ($id !== FALSE) {
-	$S_FNM_1 = ASM::$fnm->getCurrentSession();
-	ASM::$fnm->newSession();
-	ASM::$fnm->load(array('id' => $id));
+	$S_FNM_1 = $factionNewsManager->getCurrentSession();
+	$factionNewsManager->newSession();
+	$factionNewsManager->load(array('id' => $id));
 
-	if (ASM::$fnm->size() == 1) {
+	if ($factionNewsManager->size() == 1) {
 		# chargement de toutes les factions
-		$S_FNM_2 = ASM::$fnm->getCurrentSession();
-		ASM::$fnm->newSession();
-		ASM::$fnm->load(['rFaction' => CTR::$data->get('playerInfo')->get('color')]);
+		$S_FNM_2 = $factionNewsManager->getCurrentSession();
+		$factionNewsManager->newSession();
+		$factionNewsManager->load(['rFaction' => $session->get('playerInfo')->get('color')]);
 
-		for ($i = 0; $i < ASM::$fnm->size(); $i++) { 
-			if (ASM::$fnm->get($i)->id == $id) {
-				ASM::$fnm->get($i)->pinned = 1;
+		for ($i = 0; $i < $factionNewsManager->size(); $i++) { 
+			if ($factionNewsManager->get($i)->id == $id) {
+				$factionNewsManager->get($i)->pinned = 1;
 			} else {
-				ASM::$fnm->get($i)->pinned = 0;
+				$factionNewsManager->get($i)->pinned = 0;
 			}
 		}
 
-		ASM::$fnm->changeSession($S_FNM_2);
+		$factionNewsManager->changeSession($S_FNM_2);
 	} else {
-		CTR::$alert->add('Cette annonce n\'existe pas.', ALERT_STD_FILLFORM);	
+		throw new FormException('Cette annonce n\'existe pas.');	
 	}
 
-	ASM::$fnm->changeSession($S_FNM_1);
+	$factionNewsManager->changeSession($S_FNM_1);
 } else {
-	CTR::$alert->add('Manque d\'information.', ALERT_STD_FILLFORM);
+	throw new FormException('Manque d\'information.');
 }

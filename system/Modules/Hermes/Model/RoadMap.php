@@ -12,8 +12,6 @@
 
 namespace Asylamba\Modules\Hermes\Model;
 
-use Asylamba\Classes\Library\Parser;
-
 class RoadMap {
 	// ATTRIBUTES
 	public $id 			 = 0;
@@ -39,10 +37,9 @@ class RoadMap {
 
 	public function setContent($content) {
 		$this->oContent = $content;
-
-		$parser = new Parser();
-		$content = $parser->parse($content);
-		
+	}
+	
+	public function setParsedContent($content) {
 		$this->pContent = $content;
 	}
 

@@ -11,17 +11,58 @@
  */
 namespace Asylamba\Modules\Zeus\Helper;
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Container\Session;
 
-use Asylamba\Modules\Promethee\Model\Technology;
+use Asylamba\Modules\Zeus\Manager\PlayerManager;
+use Asylamba\Modules\Athena\Manager\OrbitalBaseManager;
+use Asylamba\Modules\Athena\Manager\BuildingQueueManager;
+use Asylamba\Modules\Promethee\Manager\TechnologyQueueManager;
+use Asylamba\Modules\Promethee\Manager\TechnologyManager;
 
 class TutorialHelper {
-	public static function checkTutorial() {
+	/** @var PlayerManager **/
+	protected $playerManager;
+	/** @var OrbitalBaseManager **/
+	protected $orbitalBaseManager;
+	/** @var BuildingQueueManager **/
+	protected $buildingQueueManager;
+	/** @var TechnologyQueueManager **/
+	protected $technologyQueueManager;
+	/** @var TechnologyManager **/
+	protected $technologyManager;
+	/** @var Session **/
+	protected $session;
+	
+	/**
+	 * @param PlayerManager $playerManager
+	 * @param OrbitalBaseManager $orbitalBaseManager
+	 * @param BuildingQueueManager $buildingQueueManager
+	 * @param TechnologyQueueManager $technologyQueueManager
+	 * @param TechnologyManager $technologyManager
+	 * @param Session $session
+	 */
+	public function __construct(
+		PlayerManager $playerManager,
+		OrbitalBaseManager $orbitalBaseManager,
+		BuildingQueueManager $buildingQueueManager,
+		TechnologyQueueManager $technologyQueueManager,
+		TechnologyManager $technologyManager,
+		Session $session
+	)
+	{
+		$this->playerManager = $playerManager;
+		$this->orbitalBaseManager = $orbitalBaseManager;
+		$this->buildingQueueManager = $buildingQueueManager;
+		$this->technologyQueueManager = $technologyQueueManager;
+		$this->technologyManager = $technologyManager;
+		$this->session = $session;
+	}
+	
+	public function checkTutorial() {
 		# PAS UTILISEE POUR L'INSTANT (le sera quand il y aura une étape passive dans le tutoriel)
-		$player = CTR::$data->get('playerId');
-		$stepTutorial = CTR::$data->get('playerInfo')->get('stepTutorial');
-		$stepDone = CTR::$data->get('playerInfo')->get('stepDone');
+		$player = $this->session->get('playerId');
+		$stepTutorial = $this->session->get('playerInfo')->get('stepTutorial');
+		$stepDone = $this->session->get('playerInfo')->get('stepDone');
 
 		if ($stepTutorial > 0) {
 			if ($stepDone == FALSE) {
@@ -40,80 +81,80 @@ class TutorialHelper {
 		}
 	}
 
-	public static function setStepDone() {
+	public function setStepDone() {
 
-		$S_PAM1 = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession();
-		ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-		ASM::$pam->get()->stepDone = TRUE;
+		$S_PAM1 = $this->playerManager->getCurrentSession();
+		$this->playerManager->newSession();
+		$this->playerManager->load(array('id' => $this->session->get('playerId')));
+		$this->playerManager->get()->stepDone = TRUE;
 
-		CTR::$data->get('playerInfo')->add('stepDone', TRUE);
+		$this->session->get('playerInfo')->add('stepDone', TRUE);
 
-		ASM::$pam->changeSession($S_PAM1);
+		$this->playerManager->changeSession($S_PAM1);
 	}
 
-	public static function clearStepDone() {
+	public function clearStepDone() {
 
-		$S_PAM1 = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession();
-		ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-		ASM::$pam->get()->stepDone = FALSE;
+		$S_PAM1 = $this->playerManager->getCurrentSession();
+		$this->playerManager->newSession();
+		$this->playerManager->load(array('id' => $this->session->get('playerId')));
+		$this->playerManager->get()->stepDone = FALSE;
 
-		CTR::$data->get('playerInfo')->add('stepDone', FALSE);
+		$this->session->get('playerInfo')->add('stepDone', FALSE);
 
-		ASM::$pam->changeSession($S_PAM1);
+		$this->playerManager->changeSession($S_PAM1);
 	}
 
-	public static function isNextBuildingStepAlreadyDone($playerId, $buildingId, $level) {
+	public function isNextBuildingStepAlreadyDone($playerId, $buildingId, $level) {
 		$nextStepAlreadyDone = FALSE;
 
-		$S_OBM2 = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession();
-		ASM::$obm->load(array('rPlayer' => $playerId));
-		for ($i = 0; $i < ASM::$obm->size() ; $i++) { 
-			$ob = ASM::$obm->get($i);
-			if ($ob->getBuildingLevel($buildingId) >= $level) {
+		$S_OBM2 = $this->orbitalBaseManager->getCurrentSession();
+		$this->orbitalBaseManager->newSession();
+		$this->orbitalBaseManager->load(array('rPlayer' => $playerId));
+		for ($i = 0; $i < $this->orbitalBaseManager->size() ; $i++) { 
+			$orbitalBase = $this->orbitalBaseManager->get($i);
+			if ($orbitalBase->getBuildingLevel($buildingId) >= $level) {
 				$nextStepAlreadyDone = TRUE;
 				break;
 			} else {
 				# verify in the queue
-				$S_BQM2 = ASM::$bqm->getCurrentSession();
-				ASM::$bqm->newSession();
-				ASM::$bqm->load(array('rOrbitalBase' => $ob->rPlace));
-				for ($i = 0; $i < ASM::$bqm->size() ; $i++) { 
-					$bq = ASM::$bqm->get($i);
-					if ($bq->buildingNumber == $buildingId AND $bq->targetLevel >= $level) {
+				$S_BQM2 = $this->buildingQueueManager->getCurrentSession();
+				$this->buildingQueueManager->newSession();
+				$this->buildingQueueManager->load(array('rOrbitalBase' => $orbitalBase->rPlace));
+				for ($i = 0; $i < $this->buildingQueueManager->size() ; $i++) { 
+					$buildingQueue = $this->buildingQueueManager->get($i);
+					if ($buildingQueue->buildingNumber == $buildingId AND $buildingQueue->targetLevel >= $level) {
 						$nextStepAlreadyDone = TRUE;
 						break;
 					} 
 				}
-				ASM::$bqm->changeSession($S_BQM2);
+				$this->buildingQueueManager->changeSession($S_BQM2);
 			}
 		}
-		ASM::$obm->changeSession($S_OBM2);
+		$this->orbitalBaseManager->changeSession($S_OBM2);
 
 		return $nextStepAlreadyDone;
 	}
 
-	public static function isNextTechnoStepAlreadyDone($playerId, $technoId, $level = 1) {
+	public function isNextTechnoStepAlreadyDone($playerId, $technoId, $level = 1) {
 		$nextStepAlreadyDone = FALSE;
 
-		$tech = new Technology($playerId);
-		if ($tech->getTechnology($technoId) >= $level) {
+		$technology = $this->technologyManager->getPlayerTechnology($playerId);
+		if ($technology->getTechnology($technoId) >= $level) {
 			$nextStepAlreadyDone = TRUE;
 		} else {
 			# verify in the queue
-			$S_TQM2 = ASM::$tqm->getCurrentSession();
-			ASM::$tqm->newSession();
-			ASM::$tqm->load(array('rPlayer' => $playerId));
-			for ($i = 0; $i < ASM::$tqm->size() ; $i++) { 
-				$tq = ASM::$tqm->get($i);
-				if ($tq->technology == $technoId) {
+			$S_TQM2 = $this->technologyQueueManager->getCurrentSession();
+			$this->technologyQueueManager->newSession();
+			$this->technologyQueueManager->load(array('rPlayer' => $playerId));
+			for ($i = 0; $i < $this->technologyQueueManager->size() ; $i++) { 
+				$technologyQueue = $this->technologyQueueManager->get($i);
+				if ($technologyQueue->technology == $technoId) {
 					$nextStepAlreadyDone = TRUE;
 					break;
 				} 
 			}
-			ASM::$tqm->changeSession($S_TQM2);
+			$this->technologyQueueManager->changeSession($S_TQM2);
 		}
 
 		return $nextStepAlreadyDone;

@@ -6,43 +6,49 @@
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Library\Parser;
+use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 
-$content = Utils::getHTTPData('message');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$parser = $this->getContainer()->get('parser');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
+$conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
 
 # protection des inputs
-$p = new Parser();
-$content = $p->parse($content);
+$content = $parser->parse($request->request->get('message'));
 
 if ($content !== FALSE) {
-	$S_PAM1 = ASM::$pam->getCurrentSession();
-	ASM::$pam->newSession(FALSE);
-	ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+	$S_PAM1 = $playerManager->getCurrentSession();
+	$playerManager->newSession(FALSE);
+	$playerManager->load(array('id' => $session->get('playerId')));
 
-	if (ASM::$pam->size() == 1) {
-		if (ASM::$pam->get()->status > PAM_PARLIAMENT) {
-			$senderID = ASM::$pam->get()->id;
-			$senderColor = ASM::$pam->get()->rColor;
+	if ($playerManager->size() == 1) {
+		if ($playerManager->get()->status > Player::PARLIAMENT) {
+			$senderID = $playerManager->get()->id;
+			$senderColor = $playerManager->get()->rColor;
 
 			if ($content !== '' && strlen($content) < 25000) {
-				ASM::$pam->newSession(FALSE);
-				ASM::$pam->load(
-					['statement' => PAM_DEAD, 'rColor' => $senderColor],
+				$playerManager->newSession(FALSE);
+				$playerManager->load(
+					['statement' => Player::DEAD, 'rColor' => $senderColor],
 					['id', 'ASC'],
 					[0, 1]
 				);
 
-				if (ASM::$pam->size() == 1) {
-					$S_CVM = ASM::$cvm->getCurrentSession();
-					ASM::$cvm->newSession();
-					ASM::$cvm->load(
-						['cu.rPlayer' => ASM::$pam->get()->id]
+				if ($playerManager->size() == 1) {
+					$S_CVM = $conversationManager->getCurrentSession();
+					$conversationManager->newSession();
+					$conversationManager->load(
+						['cu.rPlayer' => $playerManager->get()->id]
 					);
 
-					if (ASM::$cvm->size() == 1) {
-						$conv = ASM::$cvm->get();
+					if ($conversationManager->size() == 1) {
+						$conv = $conversationManager->get();
 
 						$conv->messages++;
 						$conv->dLastMessage = Utils::now();
@@ -63,24 +69,24 @@ if ($content !== FALSE) {
 						$message->dCreation = Utils::now();
 						$message->dLastModification = NULL;
 
-						ASM::$cme->add($message);
+						$conversationMessageManager->add($message);
 					} else {
-						CTR::$alert->add('La conversation n\'existe pas ou ne vous appartient pas.', ALERT_STD_ERROR);
+						throw new ErrorException('La conversation n\'existe pas ou ne vous appartient pas.');
 					}
 					
-					ASM::$cvm->changeSession($S_CVM);
+					$conversationManager->changeSession($S_CVM);
 				}
 			} else {
-				CTR::$alert->add('Le message est vide ou trop long', ALERT_STD_FILLFORM);
+				throw new FormException('Le message est vide ou trop long');
 			}
 		} else {
-			CTR::$alert->add('Vizs n\'avez pas les droits pour poster un message officiel', ALERT_STD_FILLFORM);
+			throw new FormException('Vizs n\'avez pas les droits pour poster un message officiel');
 		}
 	} else {
-		CTR::$alert->add('Ce joueur n\'existe pas', ALERT_STD_FILLFORM);
+		throw new FormException('Ce joueur n\'existe pas');
 	}
 
-	ASM::$pam->changeSession($S_PAM1);
+	$playerManager->changeSession($S_PAM1);
 } else {
-	CTR::$alert->add('Pas assez d\'informations pour écrire un message officiel', ALERT_STD_FILLFORM);
+	throw new FormException('Pas assez d\'informations pour écrire un message officiel');
 }

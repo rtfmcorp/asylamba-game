@@ -1,47 +1,51 @@
 <?php
 #rplayer	id du joueur
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Classes\Exception\ErrorException;
 
-$rPlayer = Utils::getHTTPData('rplayer');
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$colorManager = $this->getContainer()->get('demeter.color_manager');
+$notificationManager = $this->getContainer()->get('hermes.notification_manager');
+
+$rPlayer = $request->query->get('rplayer');
 
 if ($rPlayer !== FALSE) {
-	if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
-		$_PAM = ASM::$pam->getCurrentsession();
-		ASM::$pam->newSession();
-		ASM::$pam->load(array('id' => $rPlayer));
+	if ($session->get('playerInfo')->get('status') == Player::CHIEF) {
+		$_PAM = $playerManager->getCurrentsession();
+		$playerManager->newSession();
+		$playerManager->load(array('id' => $rPlayer));
 
-		if (ASM::$pam->size() > 0) {
-			if (ASM::$pam->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
-				if (ASM::$pam->get()->status > PAM_PARLIAMENT) {
-					$statusArray = ColorResource::getInfo(ASM::$pam->get()->rColor, 'status');
+		if ($playerManager->size() > 0) {
+			if ($playerManager->get()->rColor == $session->get('playerInfo')->get('color')) {
+				if ($playerManager->get()->status > Player::PARLIAMENT) {
+					$statusArray = ColorResource::getInfo($playerManager->get()->rColor, 'status');
 					$notif = new Notification();
 					$notif->setRPlayer($rPlayer);
 					$notif->setTitle('Eviction du gouvernement');
 					$notif->addBeg()
-						->addTxt('Vous avez été renvoyé du poste de ' . $statusArray[ASM::$pam->get()->status - 1] . ' de votre faction.');
-					ASM::$ntm->add($notif);
+						->addTxt('Vous avez été renvoyé du poste de ' . $statusArray[$playerManager->get()->status - 1] . ' de votre faction.');
+					$notificationManager->add($notif);
 
-					ASM::$pam->get()->status = PAM_PARLIAMENT;
+					$playerManager->get()->status = Player::PARLIAMENT;
 
 				} else {
-					CTR::$alert->add('Vous ne pouvez choisir qu\'un membre du gouvernement.', ALERT_STD_ERROR);
+					throw new ErrorException('Vous ne pouvez choisir qu\'un membre du gouvernement.');
 				}
 			} else {
-				CTR::$alert->add('Vous ne pouvez pas virer un joueur d\'une autre faction.', ALERT_STD_ERROR);
+				throw new ErrorException('Vous ne pouvez pas virer un joueur d\'une autre faction.');
 			}
 		} else {
-			CTR::$alert->add('Ce joueur n\'existe pas.', ALERT_STD_ERROR);
+			throw new ErrorException('Ce joueur n\'existe pas.');
 		}
-
-		ASM::$pam->changeSession($_PAM);
+		$playerManager->changeSession($_PAM);
 	} else {
-		CTR::$alert->add('Vous n\'êtes pas le chef de votre faction.', ALERT_STD_ERROR);	
+		throw new ErrorException('Vous n\'êtes pas le chef de votre faction.');	
 	}
 } else {
-	CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
+	throw new ErrorException('Informations manquantes.');
 }

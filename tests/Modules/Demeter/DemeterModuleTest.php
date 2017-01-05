@@ -4,7 +4,7 @@ namespace Tests\Asylamba\Modules\Demeter;
 
 use Asylamba\Modules\Demeter\DemeterModule;
 use Asylamba\Classes\Worker\Application;
-use Asylamba\Classes\Worker\Container;
+use Asylamba\Classes\DependencyInjection\Container;
 
 class DemeterModuleTest extends \PHPUnit_Framework_TestCase
 {

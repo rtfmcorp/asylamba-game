@@ -20,13 +20,16 @@ use Asylamba\Modules\Demeter\Model\Election\Candidate;
 class CandidateManager extends Manager {
 	protected $managerType ='_Candidate';
 
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'c.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT c.*,
+		$qr = $this->database->prepare('SELECT c.*,
 			p.name AS pName,
 			p.avatar AS pAvatar,
 			p.factionPoint AS pFactionPoint,
@@ -82,13 +85,11 @@ class CandidateManager extends Manager {
 	}
 
 	public function save() {
-		$db = Database::getInstance();
-
 		$candidates = $this->_Save();
 
 		foreach ($candidates AS $candidate) {
 
-			$qr = $db->prepare('UPDATE candidate
+			$qr = $this->database->prepare('UPDATE candidate
 				SET
 					rElection = ?,
 					rPlayer = ?,
@@ -112,9 +113,7 @@ class CandidateManager extends Manager {
 	}
 
 	public function add($newCandidate) {
-		$db = Database::getInstance();
-
-		$qr = $db->prepare('INSERT INTO candidate
+		$qr = $this->database->prepare('INSERT INTO candidate
 			SET
 				rElection = ?,
 				rPlayer = ?,
@@ -136,7 +135,7 @@ class CandidateManager extends Manager {
 			$newCandidate->dPresentation
 		));
 
-		$newCandidate->id = $db->lastInsertId();
+		$newCandidate->id = $this->database->lastInsertId();
 
 		$this->_Add($newCandidate);
 
@@ -144,8 +143,7 @@ class CandidateManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM candidate WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM candidate WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);

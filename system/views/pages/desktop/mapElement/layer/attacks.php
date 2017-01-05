@@ -1,48 +1,52 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Container\Params;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Ares\Model\Commander;
 
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
+$placeManager = $this->getContainer()->get('gaia.place_manager');
+$galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
+
 # chargement des id des commandants attaquants
 $commandersId = array(0);
-for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
-	if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
-		if (CTR::$data->get('playerEvent')->get($i)->get('eventInfo')->size() > 0) {
-			$commandersId[] = CTR::$data->get('playerEvent')->get($i)->get('eventId');
+for ($i = 0; $i < $session->get('playerEvent')->size(); $i++) {
+	if ($session->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
+		if ($session->get('playerEvent')->get($i)->get('eventInfo')->size() > 0) {
+			$commandersId[] = $session->get('playerEvent')->get($i)->get('eventId');
 		}
 	}
 }
 
 # chargement des commandants attaquants
-$S_COM_ATT = ASM::$com->getCurrentSession();
-ASM::$com->newSession();
-ASM::$com->load(array('c.id' => $commandersId));
+$S_COM_ATT = $commanderManager->getCurrentSession();
+$commanderManager->newSession();
+$commanderManager->load(array('c.id' => $commandersId));
 
 # chargement des places relatives aux commandants attaquants
 $placesId = array(0);
-for ($i = 0; $i < ASM::$com->size(); $i++) {
-	$placesId[] = ASM::$com->get($i)->rStartPlace;
-	$placesId[] = ASM::$com->get($i)->rDestinationPlace;
+for ($i = 0; $i < $commanderManager->size(); $i++) {
+	$placesId[] = $commanderManager->get($i)->rStartPlace;
+	$placesId[] = $commanderManager->get($i)->rDestinationPlace;
 }
 
-$S_PLM_MAPLAYER = ASM::$plm->getCurrentSession();
-ASM::$plm->newSession();
-ASM::$plm->load(array('id' => $placesId));
+$S_PLM_MAPLAYER = $placeManager->getCurrentSession();
+$placeManager->newSession();
+$placeManager->load(array('id' => $placesId));
 
-echo '<div id="attacks" ' . (Params::check(Params::SHOW_MAP_FLEETIN) ? NULL : 'style="display:none;"') . '>';
-	echo '<svg viewBox="0, 0, ' . (GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size']) . ', ' . (GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';
-			for ($i = 0; $i < ASM::$com->size(); $i++) {
-				$commander = ASM::$com->get($i);
+echo '<div id="attacks" ' . ($request->cookies->get('p' . Params::SHOW_MAP_FLEETIN, Params::SHOW_MAP_FLEETIN) ? NULL : 'style="display:none;"') . '>';
+	echo '<svg viewBox="0, 0, ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . ', ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';
+			for ($i = 0; $i < $commanderManager->size(); $i++) {
+				$commander = $commanderManager->get($i);
 
 				if ($commander->travelType != Commander::BACK) {
-					$x1 = ASM::$plm->getById($commander->rStartPlace)->getXSystem() * GalaxyConfiguration::$scale;
-					$x2 = ASM::$plm->getById($commander->rDestinationPlace)->getXSystem() * GalaxyConfiguration::$scale;
-					$y1 = ASM::$plm->getById($commander->rStartPlace)->getYSystem() * GalaxyConfiguration::$scale;
-					$y2 = ASM::$plm->getById($commander->rDestinationPlace)->getYSystem() * GalaxyConfiguration::$scale;
-					list($x3, $y3) = $commander->getPosition($x1, $y1, $x2, $y2);
+					$x1 = $placeManager->getById($commander->rStartPlace)->getXSystem() * $galaxyConfiguration->scale;
+					$x2 = $placeManager->getById($commander->rDestinationPlace)->getXSystem() * $galaxyConfiguration->scale;
+					$y1 = $placeManager->getById($commander->rStartPlace)->getYSystem() * $galaxyConfiguration->scale;
+					$y2 = $placeManager->getById($commander->rDestinationPlace)->getYSystem() * $galaxyConfiguration->scale;
+					list($x3, $y3) = $commanderManager->getPosition($commander, $x1, $y1, $x2, $y2);
 					$rt = Utils::interval($commander->dArrival, Utils::now(), 's');
 
 					echo '<line class="color' . $commander->playerColor . '" x1="' . $x1 . '" x2="' . $x2 . '" y1="' . $y1 . '" y2="' . $y2 . '" />';
@@ -55,5 +59,5 @@ echo '<div id="attacks" ' . (Params::check(Params::SHOW_MAP_FLEETIN) ? NULL : 's
 	echo '</svg>';
 echo '</div>';
 
-ASM::$plm->changeSession($S_PLM_MAPLAYER);
-ASM::$com->changeSession($S_COM_ATT);
+$placeManager->changeSession($S_PLM_MAPLAYER);
+$commanderManager->changeSession($S_COM_ATT);

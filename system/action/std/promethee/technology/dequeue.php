@@ -4,41 +4,50 @@
 # int baseid 		id de la base orbitale
 # int techno 	 	id de la technologie
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Modules\Promethee\Resource\TechnologyResource;
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 
-for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$technologyHelper = $this->getContainer()->get('promethee.technology_helper');
+$technologyQueueManager = $this->getContainer()->get('promethee.technology_queue_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$technologyResourceRefund = $this->getContainer()->getParameter('promethee.technology_queue.resource_refund');
+$technologyCreditRefund = $this->getContainer()->getParameter('promethee.technology_queue.credit_refund');
+
+for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
+	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-$baseId = Utils::getHTTPData('baseid');
-$techno = Utils::getHTTPData('techno');
+$baseId = $request->query->get('baseid');
+$techno = $request->query->get('techno');
 
 
 if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
-	if (TechnologyResource::isATechnology($techno)) {
-		$S_OBM1 = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession(ASM_UMODE);
-		ASM::$obm->load(array('rPlace' => $baseId, 'rPlayer' => CTR::$data->get('playerId')));
+	if ($technologyHelper->isATechnology($techno)) {
+		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
+		$orbitalBaseManager->newSession(ASM_UMODE);
+		$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
 
-		if (ASM::$obm->size() > 0) {
-			$ob = ASM::$obm->get();
+		if ($orbitalBaseManager->size() > 0) {
+			$ob = $orbitalBaseManager->get();
 
-			$S_TQM1 = ASM::$tqm->getCurrentSession();
-			ASM::$tqm->newSession(ASM_UMODE);
-			ASM::$tqm->load(array('rPlace' => $baseId), array('dEnd'));
+			$S_TQM1 = $technologyQueueManager->getCurrentSession();
+			$technologyQueueManager->newSession(ASM_UMODE);
+			$technologyQueueManager->load(array('rPlace' => $baseId), array('dEnd'));
 
-			$S_PAM1 = ASM::$pam->getCurrentSession();
-			ASM::$pam->newSession(ASM_UMODE);
-			ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-			$player = ASM::$pam->get();
+			$S_PAM1 = $playerManager->getCurrentSession();
+			$playerManager->newSession(ASM_UMODE);
+			$playerManager->load(array('id' => $session->get('playerId')));
+			$player = $playerManager->get();
 
 			$index = NULL;
 			$targetLevel = 0;
-			for ($i = 0; $i < ASM::$tqm->size(); $i++) {
-				$queue = ASM::$tqm->get($i); 
+			for ($i = 0; $i < $technologyQueueManager->size(); $i++) {
+				$queue = $technologyQueueManager->get($i); 
 				# get the queue to delete
 				if ($queue->technology == $techno AND $queue->targetLevel > $targetLevel) {
 					$index = $i;
@@ -55,8 +64,8 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 
 			if ($index !== NULL) {
 				# shift
-				for ($i = $index + 1; $i < ASM::$tqm->size(); $i++) {
-					$queue = ASM::$tqm->get($i);
+				for ($i = $index + 1; $i < $technologyQueueManager->size(); $i++) {
+					$queue = $technologyQueueManager->get($i);
 
 					$queue->dEnd = Utils::addSecondsToDate($dStart, Utils::interval($queue->dStart, $queue->dEnd, 's'));
 					$queue->dStart = $dStart;
@@ -64,29 +73,29 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 					$dStart = $queue->dEnd;
 				}
 
-				ASM::$tqm->deleteById($idToRemove);
+				$technologyQueueManager->deleteById($idToRemove);
 
 				// rends les ressources et les crédits au joueur
-				$resourcePrice = TechnologyResource::getInfo($techno, 'resource', $targetLevel);
-				$resourcePrice *= TQM_RESOURCERETURN;
-				$ob->increaseResources($resourcePrice, TRUE);
-				$creditPrice = TechnologyResource::getInfo($techno, 'credit', $targetLevel);
-				$creditPrice *= TQM_CREDITRETURN;
-				$player->increaseCredit($creditPrice);
-				CTR::$alert->add('Construction annulée, vous récupérez le ' . TQM_RESOURCERETURN * 100 . '% des ressources ainsi que le ' . TQM_CREDITRETURN * 100 . '% des crédits investis pour le développement', ALERT_STD_SUCCESS);
+				$resourcePrice = $technologyHelper->getInfo($techno, 'resource', $targetLevel);
+				$resourcePrice *= $technologyResourceRefund;
+				$orbitalBaseManager->increaseResources($ob, $resourcePrice, TRUE);
+				$creditPrice = $technologyHelper->getInfo($techno, 'credit', $targetLevel);
+				$creditPrice *= $technologyCreditRefund;
+				$playerManager->increaseCredit($player, $creditPrice);
+				$session->addFlashbag('Construction annulée, vous récupérez le ' . $technologyResourceRefund * 100 . '% des ressources ainsi que le ' . $technologyCreditRefund * 100 . '% des crédits investis pour le développement', Flashbag::TYPE_SUCCESS);
 
 			} else {
-				CTR::$alert->add('impossible d\'annuler la technologie', ALERT_STD_ERROR);
+				throw new ErrorException('impossible d\'annuler la technologie');
 			}
-			ASM::$pam->changeSession($S_PAM1);
-			ASM::$tqm->changeSession($S_TQM1);
+			$playerManager->changeSession($S_PAM1);
+			$technologyQueueManager->changeSession($S_TQM1);
 		} else {
-			CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);
+			throw new ErrorException('cette base ne vous appartient pas');
 		}
-		ASM::$obm->changeSession($S_OBM1);
+		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
-		CTR::$alert->add('la technologie indiquée n\'est pas valide', ALERT_STD_ERROR);
+		throw new ErrorException('la technologie indiquée n\'est pas valide');
 	}
 } else {
-	CTR::$alert->add('pas assez d\'informations pour annuler le développement d\'une technologie', ALERT_STD_FILLFORM);
+	throw new FormException('pas assez d\'informations pour annuler le développement d\'une technologie');
 }

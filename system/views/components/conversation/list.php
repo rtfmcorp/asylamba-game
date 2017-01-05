@@ -1,11 +1,11 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Hermes\Model\Conversation;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
-use Asylamba\Modules\Hermes\Manager\ConversationManager;
+
+$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
+$session = $this->getContainer()->get('app.session');
 
 if (!$conversation_listmode) {
 	echo '<div class="component">';
@@ -22,8 +22,8 @@ if (!$conversation_listmode) {
 				echo '</div>';
 }
 
-for ($i = 0; $i < ASM::$cvm->size(); $i++) {
-	$conv = ASM::$cvm->get($i);
+for ($i = 0; $i < $conversationManager->size(); $i++) {
+	$conv = $conversationManager->get($i);
 
 	$convAvatar = NULL;
 	$convName = array();
@@ -42,7 +42,7 @@ for ($i = 0; $i < ASM::$cvm->size(); $i++) {
 	}
 
 	foreach ($conv->players as $player) {
-		if (CTR::$data->get('playerId') !== $player->rPlayer) {
+		if ($session->get('playerId') !== $player->rPlayer) {
 			if ($counter < 5) {
 				$convName[] = '<strong>' . $player->playerName . '</strong>';
 			} else {
@@ -84,7 +84,7 @@ for ($i = 0; $i < ASM::$cvm->size(); $i++) {
 	echo '</a>';
 }
 
-if (ASM::$cvm->size() == Conversation::CONVERSATION_BY_PAGE) {
+if ($conversationManager->size() == Conversation::CONVERSATION_BY_PAGE) {
 	echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-moreconversation/mode-' . $display . '/page-' . (isset($page) ? ($page + 1) : 2) . '">';
 		echo 'Afficher plus de conversations';
 	echo '</a>';

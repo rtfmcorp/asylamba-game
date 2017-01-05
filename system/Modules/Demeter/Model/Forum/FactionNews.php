@@ -11,8 +11,6 @@
 */
 namespace Asylamba\Modules\Demeter\Model\Forum;
 
-use Asylamba\Classes\Library\Parser;
-
 class FactionNews {
 	const STANDARD 		= 0;
 	const PINNED 		= 1;
@@ -27,14 +25,4 @@ class FactionNews {
 	public $dCreation		= '';
 
 	public function getId() { return $this->id; }
-
-	public function edit($content) {
-		$this->oContent = $content;
-
-		$p = new Parser();
-		$p->parseBigTag = TRUE;
-		$content = $p->parse($content);
-
-		$this->pContent = $content;
-	}
 }

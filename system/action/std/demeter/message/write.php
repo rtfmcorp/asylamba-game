@@ -4,65 +4,68 @@
 # rtopic
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Database\Database;
-use Asylamba\Modules\Zeus\Helper\TutorialHelper;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Demeter\Model\Forum\ForumMessage;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 
-$content = Utils::getHTTPData('content');
-$rTopic  = Utils::getHTTPData('rtopic');
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
+$session = $this->getContainer()->get('app.session');
+$database = $this->getContainer()->get('database');
+$topicManager = $this->getContainer()->get('demeter.forum_topic_manager');
+$forumMessageManager = $this->getContainer()->get('demeter.forum_message_manager');
+$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
+
+$content = $request->request->get('content');
+$rTopic  = $request->query->get('rtopic');
 
 if ($rTopic AND $content) {
-	$S_TOM_1 = ASM::$tom->getCurrentSession();
-	ASM::$tom->load(array('id' => $rTopic));
+	$S_TOM_1 = $topicManager->getCurrentSession();
+	$topicManager->load(array('id' => $rTopic));
 
-	if (ASM::$tom->size() == 1) {
-		if (!ASM::$tom->get()->isClosed) {
+	if ($topicManager->size() == 1) {
+		if (!$topicManager->get()->isClosed) {
 			$message = new ForumMessage();
-			$message->rPlayer = CTR::$data->get('playerId');
+			$message->rPlayer = $session->get('playerId');
 			$message->rTopic = $rTopic;
 			$message->dCreation = Utils::now();
 			$message->dLastMessage = Utils::now();
 
-			$message->edit($content);
+			$forumMessageManager->edit($message, $content);
 			
-			ASM::$fmm->add($message);
+			$forumMessageManager->add($message);
 
-			ASM::$tom->get()->dLastMessage = Utils::now();
+			$topicManager->get()->dLastMessage = Utils::now();
 
 			# tutorial
-			if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-				switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
-					case TutorialResource::FACTION_FORUM :
-						TutorialHelper::setStepDone();						
-						break;
-				}
+			if ($session->get('playerInfo')->get('stepDone') == FALSE &&
+				$session->get('playerInfo')->get('stepTutorial') === TutorialResource::FACTION_FORUM) {
+				$tutorialHelper->setStepDone();
 			}
 
-			if (ASM::$tom->get()->rForum != 30) {
-				CTR::redirect('faction/view-forum/forum-' . ASM::$tom->get()->rForum . '/topic-' . $rTopic . '/sftr-2');
+			if ($topicManager->get()->rForum != 30) {
+				$response->redirect('faction/view-forum/forum-' . $topicManager->get()->rForum . '/topic-' . $rTopic . '/sftr-2');
 			}
 
 			if (DATA_ANALYSIS) {
-				$db = Database::getInstance();
-				$qr = $db->prepare('INSERT INTO 
+				$qr = $database->prepare('INSERT INTO 
 					DA_SocialRelation(`from`, type, message, dAction)
 					VALUES(?, ?, ?, ?)'
 				);
-				$qr->execute([CTR::$data->get('playerId'), 1, $content, Utils::now()]);
+				$qr->execute([$session->get('playerId'), 1, $content, Utils::now()]);
 			}
 
-			CTR::$alert->add('Message créé.', ALERT_STD_SUCCESS);
+			$session->addFlashbag('Message créé.', Flashbag::TYPE_SUCCESS);
 		} else {
-			CTR::$alert->add('Ce sujet est fermé.', ALERT_STD_ERROR);
+			throw new ErrorException('Ce sujet est fermé.');
 		}
 	} else {
-		CTR::$alert->add('Le topic n\'existe pas.', ALERT_STD_ERROR);
+		throw new ErrorException('Le topic n\'existe pas.');
 	}
 
-	ASM::$tom->changeSession($S_TOM_1);
+	$topicManager->changeSession($S_TOM_1);
 } else {
-	CTR::$alert->add('Manque d\'information.', ALERT_STD_FILLFORM);
+	throw new FormException('Manque d\'information.');
 }

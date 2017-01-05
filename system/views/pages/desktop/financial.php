@@ -1,10 +1,20 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Classes\Library\Game;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
+
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$transactionManager = $this->getContainer()->get('athena.transaction_manager');
+$commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
+$taxCoeff = $this->getContainer()->getParameter('zeus.player.tax_coeff');
 
 # background paralax
 echo '<div id="background-paralax" class="financial"></div>';
@@ -17,38 +27,38 @@ include 'defaultElement/movers.php';
 echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
 
-	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'invest') {
+	if (!$request->query->has('view') OR $request->query->get('view') == 'invest') {
 		# loading des objets
-		$S_PAM_FIN = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession();
-		ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+		$S_PAM_FIN = $playerManager->getCurrentSession();
+		$playerManager->newSession();
+		$playerManager->load(array('id' => $session->get('playerId')));
 
-		$S_OBM_FIN = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession();
-		ASM::$obm->load(
-			array('rPlayer' => CTR::$data->get('playerId')),
+		$S_OBM_FIN = $orbitalBaseManager->getCurrentSession();
+		$orbitalBaseManager->newSession();
+		$orbitalBaseManager->load(
+			array('rPlayer' => $session->get('playerId')),
 			array('rPlace', 'ASC')
 		);
 
-		$S_COM_FIN = ASM::$com->getCurrentSession();
-		ASM::$com->newSession();
-		ASM::$com->load(
+		$S_COM_FIN = $commanderManager->getCurrentSession();
+		$commanderManager->newSession();
+		$commanderManager->load(
 			array(
-				'c.rPlayer' => CTR::$data->get('playerId'),
-				'c.statement' => array(COM_AFFECTED, COM_MOVING)
+				'c.rPlayer' => $session->get('playerId'),
+				'c.statement' => array(Commander::AFFECTED, Commander::MOVING)
 			), 
 			array('c.rBase', 'ASC')
 		);
 
-		$S_TRM1 = ASM::$trm->getCurrentSession();
-		ASM::$trm->newSession();
-		ASM::$trm->load(array('rPlayer' => CTR::$data->get('playerId'), 'type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_PROPOSED));
+		$S_TRM1 = $transactionManager->getCurrentSession();
+		$transactionManager->newSession();
+		$transactionManager->load(array('rPlayer' => $session->get('playerId'), 'type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_PROPOSED));
 
 		# global variable
-		$taxBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::POPULATION_TAX);
-		$rcBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::COMMERCIAL_INCOME);
+		$taxBonus = $session->get('playerBonus')->get(PlayerBonus::POPULATION_TAX);
+		$rcBonus = $session->get('playerBonus')->get(PlayerBonus::COMMERCIAL_INCOME);
 		
-		$financial_credit = CTR::$data->get('playerInfo')->get('credit');
+		$financial_credit = $session->get('playerInfo')->get('credit');
 
 		$financial_totalTaxIn = 0;
 		$financial_totalTaxInBonus = 0;
@@ -63,50 +73,50 @@ echo '<div id="content">';
 		$financial_totalMSFees = 0;
 
 		# bonus
-		$financial_totalInvestUni += ASM::$pam->get(0)->iUniversity;
+		$financial_totalInvestUni += $playerManager->get(0)->iUniversity;
 
 		# general array
 		$ob_generalFinancial = array();
 		$commander_generalFinancial = array();
 
-		for ($i = 0; $i < ASM::$obm->size(); $i++) {
-			$ob_generalFinancial[] = ASM::$obm->get($i);
+		for ($i = 0; $i < $orbitalBaseManager->size(); $i++) {
+			$ob_generalFinancial[] = $orbitalBaseManager->get($i);
 			
-			$thisTaxIn = Game::getTaxFromPopulation(ASM::$obm->get($i)->getPlanetPopulation(), ASM::$obm->get($i)->typeOfBase);
+			$thisTaxIn = Game::getTaxFromPopulation($orbitalBaseManager->get($i)->getPlanetPopulation(), $orbitalBaseManager->get($i)->typeOfBase, $taxCoeff);
 			$thisTaxInBonus = $thisTaxIn * $taxBonus / 100;
 			$financial_totalTaxIn += $thisTaxIn;
 			$financial_totalTaxInBonus += $thisTaxInBonus;
 
-			$financial_totalTaxOut += ($thisTaxIn + $thisTaxInBonus) * ASM::$obm->get($i)->getTax() / 100;
+			$financial_totalTaxOut += ($thisTaxIn + $thisTaxInBonus) * $orbitalBaseManager->get($i)->getTax() / 100;
 
-			$financial_totalInvest += ASM::$obm->get($i)->getISchool();
-			$financial_totalInvest += ASM::$obm->get($i)->getIAntiSpy();
+			$financial_totalInvest += $orbitalBaseManager->get($i)->getISchool();
+			$financial_totalInvest += $orbitalBaseManager->get($i)->getIAntiSpy();
 
-			$financial_totalShipsFees += Game::getFleetCost(ASM::$obm->get($i)->shipStorage, FALSE);
+			$financial_totalShipsFees += Game::getFleetCost($orbitalBaseManager->get($i)->shipStorage, FALSE);
 
 			# TODO cout des trucs en vente
 
-			$S_CRM1 = ASM::$crm->getCurrentSession();
-			ASM::$crm->changeSession(ASM::$obm->get($i)->routeManager);
-			for ($k = 0; $k < ASM::$crm->size(); $k++) { 
-				if (ASM::$crm->get($k)->getStatement() == CRM_ACTIVE) {
-					$financial_totalRouteIncome += ASM::$crm->get($k)->getIncome();
-					$financial_totalRouteIncomeBonus += ASM::$crm->get($k)->getIncome() * $rcBonus / 100;
+			$S_CRM1 = $commercialRouteManager->getCurrentSession();
+			$commercialRouteManager->changeSession($orbitalBaseManager->get($i)->routeManager);
+			for ($k = 0; $k < $commercialRouteManager->size(); $k++) { 
+				if ($commercialRouteManager->get($k)->getStatement() == CommercialRoute::ACTIVE) {
+					$financial_totalRouteIncome += $commercialRouteManager->get($k)->getIncome();
+					$financial_totalRouteIncomeBonus += $commercialRouteManager->get($k)->getIncome() * $rcBonus / 100;
 				}
 			}
-			ASM::$crm->changeSession($S_CRM1);
+			$commercialRouteManager->changeSession($S_CRM1);
 		}
 
 		$commander_generalFinancial = [];
-		for ($i = 0; $i < ASM::$com->size(); $i++) {
-			$commander_generalFinancial[] = ASM::$com->get($i);
-			$financial_totalFleetFees += ASM::$com->get($i)->getLevel() * COM_LVLINCOMECOMMANDER;
-			$financial_totalShipsFees += Game::getFleetCost(ASM::$com->get($i)->getNbrShipByType());
+		for ($i = 0; $i < $commanderManager->size(); $i++) {
+			$commander_generalFinancial[] = $commanderManager->get($i);
+			$financial_totalFleetFees += $commanderManager->get($i)->getLevel() * Commander::LVLINCOMECOMMANDER;
+			$financial_totalShipsFees += Game::getFleetCost($commanderManager->get($i)->getNbrShipByType());
 		}
 
 		$transaction_generalFinancial = [];
-		for ($i = 0; $i < ASM::$trm->size(); $i++) {
-			$transaction = ASM::$trm->get($i);
+		for ($i = 0; $i < $transactionManager->size(); $i++) {
+			$transaction = $transactionManager->get($i);
 			$transaction_generalFinancial[] = $transaction;
 			$financial_totalShipsFees += ShipResource::getInfo($transaction->identifier, 'cost') * ShipResource::COST_REDUCTION * $transaction->quantity;
 		}
@@ -130,7 +140,7 @@ echo '<div id="content">';
 
 		# investFinancial component
 		$ob_investFinancial = $ob_generalFinancial;
-		$player_investFinancial = ASM::$pam->get(0);
+		$player_investFinancial = $playerManager->get(0);
 		include COMPONENT . 'financial/investFinancial.php';
 
 		# taxOutFinancial component
@@ -149,15 +159,14 @@ echo '<div id="content">';
 		include COMPONENT . 'financial/fleetFeesFinancial.php';
 
 		# close
-		ASM::$trm->changeSession($S_TRM1);
-		ASM::$pam->changeSession($S_PAM_FIN);
-		ASM::$obm->changeSession($S_OBM_FIN);
-		ASM::$com->changeSession($S_COM_FIN);
-	} elseif (CTR::$get->get('view') == 'send') {
+		$transactionManager->changeSession($S_TRM1);
+		$playerManager->changeSession($S_PAM_FIN);
+		$orbitalBaseManager->changeSession($S_OBM_FIN);
+		$commanderManager->changeSession($S_COM_FIN);
+	} elseif ($request->query->get('view') == 'send') {
 		include COMPONENT . 'financial/send-credit-player.php';
 		include COMPONENT . 'financial/send-credit-faction.php';
 		include COMPONENT . 'financial/last-send-credit.php';
 		include COMPONENT . 'financial/last-receive-credit.php';
 	}
 echo '</div>';
-?>

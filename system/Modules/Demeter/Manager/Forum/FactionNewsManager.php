@@ -15,17 +15,28 @@ use Asylamba\Classes\Worker\Manager;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Demeter\Model\Forum\FactionNews;
+use Asylamba\Classes\Library\Parser;
 
 class FactionNewsManager extends Manager {
 	protected $managerType ='_factionNews';
-
+	/** @var Parser **/
+	protected $parser;
+	
+	/**
+	 * @param Database $database
+	 * @param Parser $parser
+	 */
+	public function __construct(Database $database, Parser $parser) {
+		parent::__construct($database);
+		$this->parser = $parser;
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'n.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT n.* 
+		$qr = $this->database->prepare('SELECT n.* 
 			FROM factionNews AS n
 			' . $formatWhere .'
 			' . $formatOrder .'
@@ -67,8 +78,6 @@ class FactionNewsManager extends Manager {
 	}
 
 	public function save() {
-		$db = Database::getInstance();
-
 		$newsArray = $this->_Save();
 
 		foreach ($newsArray AS $news) {
@@ -84,7 +93,7 @@ class FactionNewsManager extends Manager {
 					dCreation = ?
 				WHERE id = ?';
 
-			$qr = $db->prepare($qr);
+			$qr = $this->database->prepare($qr);
 			
 			$aw = $qr->execute(array(
 					$news->rFaction,
@@ -100,9 +109,7 @@ class FactionNewsManager extends Manager {
 	}
 
 	public function add($news) {
-		$db = Database::getInstance();
-
-		$qr = $db->prepare('INSERT INTO factionNews
+		$qr = $this->database->prepare('INSERT INTO factionNews
 			SET
 				rFaction = ?,
 				title = ?,
@@ -121,7 +128,7 @@ class FactionNewsManager extends Manager {
 				Utils::now()
 				));
 
-		$news->id = $db->lastInsertId();
+		$news->id = $this->database->lastInsertId();
 
 		$this->_Add($news);
 
@@ -129,11 +136,22 @@ class FactionNewsManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM factionNews WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM factionNews WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);
 		return TRUE;
+	}
+
+	/**
+	 * @param FactionNews $factionNews
+	 * @param string $content
+	 */
+	public function edit(FactionNews $factionNews, $content) {
+		$factionNews->oContent = $content;
+
+		$this->parser->parseBigTag = TRUE;
+
+		$factionNews->pContent = $this->parser->parse($content);
 	}
 }

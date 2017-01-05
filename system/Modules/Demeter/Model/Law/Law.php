@@ -11,8 +11,6 @@
 */
 namespace Asylamba\Modules\Demeter\Model\Law;
 
-use Asylamba\Classes\Worker\ASM;
-
 class Law {
 	const VOTATION					= 0;
 	const EFFECTIVE					= 1;
@@ -47,28 +45,4 @@ class Law {
 	public $againstVote			= 0;
 
 	public function getId() { return $this->id; }
-
-	public function ballot() {
-		$_VLM213 = ASM::$vlm->getCurrentsession();
-		ASM::$vlm->newSession();
-		ASM::$vlm->load(array('rLaw' => $this->id));
-
-		$ballot = 0;
-
-		for ($i = 0; $i < ASM::$vlm->size(); $i++) {
-			if (ASM::$vlm->get($i)->vote) {
-				$ballot++;
-			} else {
-				$ballot--;
-			}
-		}
-
-		ASM::$vlm->changeSession($_VLM213);
-
-		if ($ballot >= 0) {
-			return TRUE;
-		} else {
-			return FALSE;
-		}
-	}
 }

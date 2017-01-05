@@ -12,23 +12,127 @@
 
 namespace Asylamba\Modules\Demeter\Manager;
 
+use Asylamba\Classes\Worker\CTC;
 use Asylamba\Classes\Worker\Manager;
 use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Parser;
+use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Database\Database;
+
+use Asylamba\Modules\Demeter\Manager\Election\CandidateManager;
+use Asylamba\Modules\Demeter\Manager\Election\ElectionManager;
+use Asylamba\Modules\Demeter\Manager\Law\LawManager;
+use Asylamba\Modules\Demeter\Manager\Election\VoteManager;
 use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Modules\Demeter\Model\Law\Law;
+use Asylamba\Modules\Demeter\Model\Election\Election;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
-use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Demeter\Resource\LawResources;
+use Asylamba\Modules\Hermes\Manager\ConversationManager;
+use Asylamba\Modules\Hermes\Manager\NotificationManager;
+use Asylamba\Modules\Hermes\Manager\ConversationMessageManager;
+use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Hermes\Model\ConversationMessage;
+use Asylamba\Modules\Hermes\Model\ConversationUser;
+use Asylamba\Modules\Athena\Manager\CommercialTaxManager;
+use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
+use Asylamba\Modules\Gaia\Manager\SectorManager;
+use Asylamba\Modules\Zeus\Manager\PlayerManager;
+use Asylamba\Modules\Zeus\Model\Player;
 
 class ColorManager extends Manager {
+	/** @var string **/
 	protected $managerType ='_Color';
-
+	/** @var PlayerManager **/
+	protected $playerManager;
+	/** @var VoteManager **/
+	protected $voteManager;
+	/** @var ConversationManager **/
+	protected $conversationManager;
+	/** @var CandidateManager **/
+	protected $candidateManager;
+	/** @var ElectionManager **/
+	protected $electionManager;
+	/** @var LawManager **/
+	protected $lawManager;
+	/** @var NotificationManager **/
+	protected $notificationManager;
+	/** @var ConversationMessageManager **/
+	protected $conversationMessageManager;
+	/** @var CommercialTaxManager **/
+	protected $commercialTaxManager;
+	/** @var SectorManager **/
+	protected $sectorManager;
+	/** @var CommercialRouteManager **/
+	protected $commercialRouteManager;
+	/** @var Parser **/
+	protected $parser;
+	/** @var CTC **/
+	protected $ctc;
+	
+	/**
+	 * @param Database $database
+	 * @param PlayerManager $playerManager
+	 * @param VoteManager $voteManager
+	 * @param ConversationManager $conversationManager
+	 * @param CandidateManager $candidateManager
+	 * @param ElectionManager $electionManager
+	 * @param LawManager $lawManager
+	 * @param NotificationManager $notificationManager
+	 * @param ConversationMessageManager $conversationMessageManager
+	 * @param CommercialTaxManager $commercialTaxManager
+	 * @param SectorManager $sectorManager
+	 * @param CommercialRouteManager $commercialRouteManager
+	 * @param Parser $parser
+	 * @param CTC $ctc
+	 */
+	public function __construct(
+		Database $database,
+		PlayerManager $playerManager,
+		VoteManager $voteManager,
+		ConversationManager $conversationManager,
+		CandidateManager $candidateManager,
+		ElectionManager $electionManager,
+		LawManager $lawManager,
+		NotificationManager $notificationManager,
+		ConversationMessageManager $conversationMessageManager,
+		CommercialTaxManager $commercialTaxManager,
+		SectorManager $sectorManager,
+		CommercialRouteManager $commercialRouteManager,
+		Parser $parser,
+		CTC $ctc
+	) {
+		parent::__construct($database);
+		$this->playerManager = $playerManager;
+		$this->voteManager = $voteManager;
+		$this->conversationManager = $conversationManager;
+		$this->candidateManager = $candidateManager;
+		$this->electionManager = $electionManager;
+		$this->lawManager = $lawManager;
+		$this->notificationManager = $notificationManager;
+		$this->conversationMessageManager = $conversationMessageManager;
+		$this->commercialTaxManager = $commercialTaxManager;
+		$this->sectorManager = $sectorManager;
+		$this->commercialRouteManager = $commercialRouteManager;
+		$this->parser = $parser;
+		$this->ctc = $ctc;
+	}
+	
+	/**
+	 * @param Color $color
+	 * @return string
+	 */
+	public function getParsedDescription(Color $color) {
+		$this->parser->parseBigTag = TRUE;
+		return $this->parser->parse($color->description);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'c.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
-
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT c.*
+		
+		$qr = $this->database->prepare('SELECT c.*
 			FROM color AS c
 			' . $formatWhere .'
 			' . $formatOrder .'
@@ -55,7 +159,7 @@ class ColorManager extends Manager {
 
 		$qr->closeCursor();
 
-		$qr = $db->prepare('SELECT c.*
+		$qr = $this->database->prepare('SELECT c.*
 			FROM colorLink AS c ORDER BY rColorLinked'
 		);
 
@@ -119,7 +223,7 @@ class ColorManager extends Manager {
 
 			$this->_Add($color);
 			if ($this->currentSession->getUMode()) {
-				$color->uMethod();
+				$this->uMethod($color);
 			}
 		}
 	}
@@ -128,8 +232,7 @@ class ColorManager extends Manager {
 		$colors = $this->_Save();
 
 		foreach ($colors AS $color) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE color
+			$qr = $this->database->prepare('UPDATE color
 				SET
 					alive = ?,
 					isWinner = ?,
@@ -164,7 +267,7 @@ class ColorManager extends Manager {
 					$color->id
 				));
 
-			$qr2 = $db->prepare('UPDATE colorLink SET
+			$qr2 = $this->database->prepare('UPDATE colorLink SET
 					statement = ? WHERE rColor = ? AND rColorLinked = ?
 				');
 
@@ -175,9 +278,7 @@ class ColorManager extends Manager {
 	}
 
 	public function add($newColor) {
-		$db = Database::getInstance();
-
-		$qr = $db->prepare('INSERT INTO color
+		$qr = $this->database->prepare('INSERT INTO color
 		SET
 			id = ?,
 			alive = ?,
@@ -212,7 +313,7 @@ class ColorManager extends Manager {
 				$color->dLastElection
 			));
 
-		$newColor->id = $db->lastInsertId();
+		$newColor->id = $this->database->lastInsertId();
 
 		$this->_Add($newColor);
 
@@ -220,8 +321,7 @@ class ColorManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM color WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM color WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);
@@ -229,38 +329,753 @@ class ColorManager extends Manager {
 	}
 
 	// FONCTIONS STATICS
-	public static function updateInfos($id) {
-		self::updatePlayers($id);
-		self::updateActivePlayers($id);
+	public function updateInfos($id) {
+		$this->updatePlayers($id);
+		$this->updateActivePlayers($id);
 	}
 
-	public static function updatePlayers($id) {
-		$_CLM1 = ASM::$clm->getCurrentSession();
-		ASM::$clm->newSession();
-		ASM::$clm->load(array('id' => $id));
+	public function updatePlayers($id) {
+		$_CLM1 = $this->getCurrentSession();
+		$this->newSession();
+		$this->load(array('id' => $id));
 
-		$_PAM = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession(FALSE);
-		ASM::$pam->load(array('statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY), 'rColor' => $id));
+		$_PAM = $this->playerManager->getCurrentSession();
+		$this->playerManager->newSession(FALSE);
+		$this->playerManager->load(array('statement' => array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY), 'rColor' => $id));
 
-		ASM::$clm->getById($id)->players = ASM::$pam->size();	
+		$this->getById($id)->players = $this->playerManager->size();	
 
-		ASM::$pam->changeSession($_PAM);
-		ASM::$clm->changeSession($_CLM1);
+		$this->playerManager->changeSession($_PAM);
+		$this->changeSession($_CLM1);
 	}
 
-	public static function updateActivePlayers($id) {
-		$_CLM1 = ASM::$clm->getCurrentSession();
-		ASM::$clm->newSession();
-		ASM::$clm->load(array('id' => $id));
+	public function updateActivePlayers($id) {
+		$_CLM1 = $this->getCurrentSession();
+		$this->newSession();
+		$this->load(array('id' => $id));
 
-		$_PAM = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession(FALSE);
-		ASM::$pam->load(array('statement' => PAM_ACTIVE, 'rColor' => $id));
+		$_PAM = $this->playerManager->getCurrentSession();
+		$this->playerManager->newSession(FALSE);
+		$this->playerManager->load(array('statement' => Player::ACTIVE, 'rColor' => $id));
 		
-		ASM::$clm->getById($id)->activePlayers = ASM::$pam->size();
+		$this->getById($id)->activePlayers = $this->playerManager->size();
 
-		ASM::$pam->changeSession($_PAM);
-		ASM::$clm->changeSession($_CLM1);
+		$this->playerManager->changeSession($_PAM);
+		$this->changeSession($_CLM1);
+	}
+	
+	public function sendSenateNotif(Color $color, $fromChief = FALSE) {
+		$_PAM121 = $this->playerManager->getCurrentsession();
+		$this->playerManager->newSession();
+		$this->playerManager->load(['rColor' => $color->id, 'status' => Player::PARLIAMENT]);
+
+		for ($i = 0; $i < $this->playerManager->size(); $i++) {
+			$notif = new Notification();
+			$notif->setRPlayer($this->playerManager->get($i)->id);
+			if ($fromChief == FALSE) {
+				$notif->setTitle('Loi proposée');
+				$notif->addBeg()
+					->addTxt('Votre gouvernement a proposé un projet de loi, en tant que membre du sénat, il est de votre devoir de voter pour l\'acceptation ou non de ladite loi.')
+					->addSep()
+					->addLnk('faction/view-senate', 'voir les lois en cours de vote')
+					->addEnd();
+			} else {
+				$notif->setTitle('Loi appliquée');
+				$notif->addBeg()
+					->addTxt('Votre ' . ColorResource::getInfo($color->id, 'status')[5] . ' a appliqué une loi.')
+					->addSep()
+					->addLnk('faction/view-senate', 'voir les lois appliquées')
+					->addEnd();
+			}
+			$this->notificationManager->add($notif);
+		}
+		$this->playerManager->changeSession($_PAM121);
+	}
+
+	public function updateStatus(Color $color, $token_pam) {
+		$limit = round($color->players / 4);
+		if ($limit < 10) { $limit = 10; }
+		if ($limit > 40) { $limit = 40; }
+
+		$_PAM1 = $this->playerManager->getCurrentSession();
+		$this->playerManager->changeSession($token_pam);
+
+		for ($i = 0; $i < $this->playerManager->size(); $i++) {
+			if ($this->playerManager->get($i)->status < Player::TREASURER) {
+				if ($i < $limit) {
+					if ($this->playerManager->get($i)->status != Player::PARLIAMENT) {
+						$notif = new Notification();
+						$notif->setRPlayer($this->playerManager->get($i)->id);
+						$notif->setTitle('Vous êtes sénateur');
+						$notif->dSending = Utils::now();
+						$notif->addBeg()
+							->addTxt('Vos actions vous ont fait gagner assez de prestige pour faire partie du sénat.');
+						$this->notificationManager->add($notif);
+					}
+					$this->playerManager->get($i)->status = Player::PARLIAMENT;
+				} else {
+					if ($this->playerManager->get($i)->status == Player::PARLIAMENT) {
+						$notif = new Notification();
+						$notif->setRPlayer($this->playerManager->get($i)->id);
+						$notif->setTitle('Vous n\'êtes plus sénateur');
+						$notif->dSending = Utils::now();
+						$notif->addBeg()
+							->addTxt('Vous n\'avez plus assez de prestige pour rester dans le sénat.');
+						$this->notificationManager->add($notif);
+					}
+					$this->playerManager->get($i)->status = Player::STANDARD;
+				}
+			}
+		}
+		$this->playerManager->changeSession($_PAM1);
+	}
+
+	private function ballot(Color $color, $date, $election) {
+		$_PAM_1 = $this->playerManager->getCurrentsession();
+		$this->playerManager->newSession(FALSE);
+		$this->playerManager->load(array('rColor' => $color->id, 'status' => Player::CHIEF));
+		$chiefId = ($this->playerManager->size() == 0) ? FALSE : $this->playerManager->get()->id;
+		$this->playerManager->changeSession($_PAM_1);
+
+		$_VOM = $this->voteManager->getCurrentSession();
+		$this->voteManager->newSession();
+		$this->voteManager->load(array('rElection' => $election->id));
+		
+		$ballot = [];
+		$listCandidate = [];
+
+		for ($i = 0; $i < $this->voteManager->size(); $i++) {
+			if (array_key_exists($this->voteManager->get($i)->rCandidate, $ballot)) {
+				$ballot[$this->voteManager->get($i)->rCandidate]++;
+			} else {
+				$ballot[$this->voteManager->get($i)->rCandidate] = 1;
+			}
+		}
+
+		if (!empty($ballot)) {
+			$_PAM_2 = $this->playerManager->getCurrentsession();
+			$this->playerManager->newSession(FALSE);
+			$this->playerManager->load(array('id' => array_keys($ballot)));
+
+			foreach ($ballot as $player => $vote) {
+				$listCandidate[] = [
+					'id' => $player,
+					'name' => $this->playerManager->getById($player)->name,
+					'vote' => $vote
+				];
+			}
+
+			uasort($listCandidate, function($a, $b) {
+				if ($a['vote'] == $b['vote']) {
+					return 0;
+				}
+				return $a['vote'] > $b['vote'] 
+					? -1 : 1;
+			});
+
+			$this->playerManager->changeSession($_PAM_2);		
+		}
+
+		reset($listCandidate);
+
+		$S_PAM1 = $this->playerManager->getCurrentSession();
+		$this->playerManager->newSession(FALSE);
+		$this->playerManager->load(
+			['statement' => Player::DEAD, 'rColor' => $color->id],
+			['id', 'ASC'],
+			[0, 1]
+		);
+		$convPlayerID = $this->playerManager->get()->id;
+
+		$S_CVM = $this->conversationManager->getCurrentSession();
+		$this->conversationManager->newSession();
+		$this->conversationManager->load(
+			['cu.rPlayer' => $this->playerManager->get()->id]
+		);
+		$conv = $this->conversationManager->get();
+		
+		$this->conversationManager->changeSession($S_CVM);
+		$this->playerManager->changeSession($S_PAM1);
+
+		if ($color->regime == Color::DEMOCRATIC) {
+			if (count($ballot) > 0) {
+				$_PAM1 = $this->playerManager->getCurrentsession();
+				$this->playerManager->newSession(FALSE);
+				$token_playersGovernement = $this->playerManager->getCurrentsession();
+				$this->playerManager->load(array('status' => array(Player::TREASURER, Player::WARLORD, Player::MINISTER, Player::CHIEF), 'rColor' => $color->id));
+				$this->playerManager->changeSession($_PAM1);
+
+				arsort($ballot);
+				reset($ballot);
+
+				$_PAM2 = $this->playerManager->getCurrentsession();
+				$this->playerManager->newSession(FALSE);
+				$token_newChief = $this->playerManager->getCurrentSession();
+				$this->playerManager->load(array('id' => key($ballot)));
+				$this->playerManager->changeSession($_PAM2);
+
+				$this->ctc->add($date, $this, 'uMandate', $color, array($color, $token_playersGovernement, $token_newChief, $chiefId, TRUE, $conv, $convPlayerID, $listCandidate));
+			} else {
+				$this->ctc->add($date, $this, 'uMandate', $color, array($color, 0, 0, $chiefId, FALSE, $conv, $convPlayerID, $listCandidate));
+			}
+			$this->voteManager->changeSession($_VOM);
+
+		} elseif ($color->regime == Color::ROYALISTIC) {
+			if (count($ballot) > 0) {
+				arsort($ballot);
+				reset($ballot);
+
+				if (key($ballot) == $chiefId) {
+					next($ballot);
+				}
+
+				if (((current($ballot) / ($color->activePlayers + 1)) * 100) >= Color::PUTSCHPERCENTAGE) {
+					$_PAM1 = $this->playerManager->getCurrentsession();
+					$this->playerManager->newSession(FALSE);
+					$token_playersGovernement = $this->playerManager->getCurrentsession();
+					$this->playerManager->load(array('status' => array(Player::TREASURER, Player::WARLORD, Player::MINISTER, Player::CHIEF), 'rColor' => $color->id));
+					$this->playerManager->changeSession($_PAM1);
+				
+					$_PAM2 = $this->playerManager->getCurrentsession();
+					$this->playerManager->newSession(FALSE);
+					$token_newChief = $this->playerManager->getCurrentSession();
+					$this->playerManager->load(array('id' => key($ballot)));
+					$this->playerManager->changeSession($_PAM2);
+
+					$statusArray = $color->status;
+
+					$this->ctc->add($date, $this, 'uMandate', $color, array($color, $token_playersGovernement, $token_newChief, $chiefId, TRUE, $conv, $convPlayerID, $listCandidate));
+				} else {
+					$_PAM2 = $this->playerManager->getCurrentsession();
+					$this->playerManager->newSession(FALSE);
+					$token_looser = $this->playerManager->getCurrentsession();
+					$this->playerManager->load(array('id' => key($ballot)));
+					$this->playerManager->changeSession($_PAM2);
+					
+					$this->ctc->add($date, $this, 'uMandate', $color, array($color, 0, $token_looser, $chiefId, FALSE, $conv, $convPlayerID, $listCandidate));
+					
+				}
+			}
+			$this->voteManager->changeSession($_VOM);
+		} else {
+			$_PAM4 = $this->playerManager->getCurrentsession();
+			$this->playerManager->newSession(FALSE);
+			$this->playerManager->load(array('rColor' => $color->id, 'status' => Player::CHIEF));
+			if ($this->playerManager->size() > 0) {
+				$_CAM1 = $this->playerManager->getCurrentsession();
+				$this->candidateManager->newSession();
+				$this->candidateManager->load(array('rPlayer' => $this->playerManager->get()->id, 'rElection' => $election->id));
+				if ($this->candidateManager->size() > 0) {
+					if (rand(0, 1) == 0) {
+						$ballot = array();
+					}
+				}
+				$this->candidateManager->changeSession($_CAM1);
+			}
+			$this->playerManager->changeSession($_PAM4);
+			if (count($ballot) > 0) {
+				reset($ballot);
+				$aleaNbr = rand(0, count($ballot) - 1);
+				
+				$_PAM1 = $this->playerManager->getCurrentsession();
+				$this->playerManager->newSession(FALSE);
+				$token_playersGovernement = $this->playerManager->getCurrentsession();
+				$this->playerManager->load(array('status' => array(Player::TREASURER, Player::WARLORD, Player::MINISTER, Player::CHIEF), 'rColor' => $color->id));
+				$this->playerManager->changeSession($_PAM1);
+
+				for ($i = 0; $i < $aleaNbr; $i++) {
+					next($ballot);
+				}
+				
+				$_PAM2 = $this->playerManager->getCurrentsession();
+				$this->playerManager->newSession(FALSE);
+				$token_newChief = $this->playerManager->getCurrentSession();
+				$this->playerManager->load(array('id' => key($ballot)));
+				$this->playerManager->changeSession($_PAM2);
+
+				$this->ctc->add($date, $this, 'uMandate', $color, array($color, $token_playersGovernement, $token_newChief, $chiefId, TRUE, $conv, $convPlayerID, $listCandidate));
+			} else {
+				$this->ctc->add($date, $this, 'uMandate', $color, array($color, 0, 0, $chiefId, FALSE, $conv, $convPlayerID, $listCandidate));
+			}
+		}
+	}
+
+	public function uCampaign(Color $color, $token_pam) {
+		if ($color->regime == Color::DEMOCRATIC || $color->regime == Color::THEOCRATIC) {
+			$this->updateStatus($color, $token_pam);
+			$S_ELM = $this->electionManager->getCurrentsession();
+			$this->electionManager->newSession();
+			$election = new Election();
+			$election->rColor = $color->id;
+			// @WARNING : DEFAULT VALUE
+			$election->dElection = new \DateTime();
+                            
+			/*$date = new DateTime($this->dLastElection);
+			$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
+			$election->dElection = $date->format('Y-m-d H:i:s');*/
+
+			$this->electionManager->add($election);
+			$this->electionManager->changeSession($S_ELM);
+			$this->electionStatement = Color::CAMPAIGN;
+		} else {
+			$this->updateStatus($color, $token_pam);
+
+			/*$date = new DateTime($this->dLastElection);
+			$date->modify('+' . $this->mandateDuration . ' second');
+			$date = $date->format('Y-m-d H:i:s');
+			$this->dLastElection = $date;*/
+		}
+	}
+
+	public function uElection() {
+		$this->electionStatement = Color::ELECTION;
+	}
+
+	public function uMandate(Color $color, $token_playersGovernement, $token_newChief, $idOldChief, $hadVoted, $conv, $convPlayerID, $candidate) {
+		# préparation de la conversation
+		$conv->messages++;
+		$conv->dLastMessage = Utils::now();
+
+		# désarchiver tous les users
+		$users = $conv->players;
+		foreach ($users as $user) {
+			$user->convStatement = ConversationUser::CS_DISPLAY;
+		}
+		
+		if ($hadVoted) {
+/*			$date = new DateTime($this->dLastElection);
+			$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
+			$date = $date->format('Y-m-d H:i:s');
+			$this->dLastElection = $date;*/
+
+			$_PAM = $this->playerManager->getCurrentSession();
+			$this->playerManager->changeSession($token_playersGovernement);
+			for ($i = 0; $i < $this->playerManager->size(); $i++) { 
+				$this->playerManager->get($i)->status = Player::PARLIAMENT;
+			}
+
+			$this->playerManager->changeSession($token_newChief);
+			$this->playerManager->get()->status = Player::CHIEF;
+
+			$color->electionStatement = Color::MANDATE;
+
+			$statusArray = $color->status;
+			
+			if ($color->regime == Color::DEMOCRATIC) {
+				$notif = new Notification();
+				$notif->dSending = Utils::now();
+				$notif->setRPlayer($this->playerManager->get()->id);
+				$notif->setTitle('Votre avez été élu');
+				$notif->addBeg()
+					->addTxt(' Le peuple vous a soutenu, vous avez été élu ' . $statusArray[Player::CHIEF - 1] . ' de votre faction.');
+				$this->notificationManager->add($notif);
+
+				# création du message
+				$message = new ConversationMessage();
+				$message->rConversation = $conv->id;
+				$message->rPlayer = $convPlayerID;
+				$message->type = ConversationMessage::TY_STD;
+				$message->dCreation = Utils::now();
+				$message->dLastModification = NULL;
+				$message->content = 'La période électorale est terminée. Un nouveau dirigeant a été élu pour faire valoir la force de ' . $color->popularName . ' à travers la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong>.<br /><br />Voici les résultats des élections :<br /><br />';
+				foreach ($candidate as $player) {
+					$message->content .= $player['name'] . ' a reçu ' . $player['vote'] . ' vote' . Format::plural($player['vote']) . '<br />';
+				}
+				$this->conversationMessageManager->add($message);
+			} elseif ($color->regime == Color::ROYALISTIC) {
+				$notif = new Notification();
+				$notif->dSending = Utils::now();
+				$notif->setRPlayer($this->playerManager->get()->id);
+				$notif->setTitle('Votre coup d\'état a réussi');
+				$notif->addBeg()
+					->addTxt(' Le peuple vous a soutenu, vous avez renversé le ' . $statusArray[Player::CHIEF - 1] . ' de votre faction et avez pris sa place.');
+				$this->notificationManager->add($notif);
+				
+				if ($idOldChief) {
+					$notif = new Notification();
+					$notif->dSending = Utils::now();
+					$notif->setRPlayer($idOldChief);
+					$notif->setTitle('Un coup d\'état a réussi');
+					$notif->addBeg()
+						->addTxt(' Le joueur ')
+						->addLnk('embassy/player-' . $this->playerManager->get()->id, $this->playerManager->get()->name)
+						->addTxt(' a fait un coup d\'état, vous êtes évincé du pouvoir.');
+					$this->notificationManager->add($notif);
+				}
+
+				# création du message
+				reset($candidate);
+				if (current($candidate)['id'] == $idOldChief) {
+					next($candidate);
+				}
+				$message = new ConversationMessage();
+				$message->rConversation = $conv->id;
+				$message->rPlayer = $convPlayerID;
+				$message->type = ConversationMessage::TY_STD;
+				$message->dCreation = Utils::now();
+				$message->dLastModification = NULL;
+				$message->content = 'Un putsch a réussi, un nouveau dirigeant va faire valoir la force de ' . $color->popularName . ' à travers la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong>.<br /><br />De nombreux membres de la faction ont soutenu le mouvement révolutionnaire :<br /><br />';
+				$message->content .= current($candidate)['name'] . ' a reçu le soutien de ' . Format::number((current($candidate)['vote'] / $color->activePlayers) * 100) . '% de la population.' . '<br />';
+				$this->conversationMessageManager->add($message);
+
+			} else {
+				$notif = new Notification();
+				$notif->dSending = Utils::now();
+				$notif->setRPlayer($this->playerManager->get()->id);
+				$notif->setTitle('Vous avez été nommé Guide');
+				$notif->addBeg()
+					->addTxt(' Les Oracles ont parlé, vous êtes désigné par la Grande Lumière pour guider Cardan vers la Gloire.');
+				$this->notificationManager->add($notif);
+
+				$message = new ConversationMessage();
+				$message->rConversation = $conv->id;
+				$message->rPlayer = $convPlayerID;
+				$message->type = ConversationMessage::TY_STD;
+				$message->dCreation = Utils::now();
+				$message->dLastModification = NULL;
+				$message->content = 'Les Oracles ont parlé, un nouveau dirigeant va faire valoir la force de ' . $color->popularName . ' à travers la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong>.<br /><br /><br /><br />';
+				$this->conversationMessageManager->add($message);
+			}
+
+/*			$date = new DateTime($this->dLastElection);
+			$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
+			$date = $date->format('Y-m-d H:i:s');
+			$this->dLastElection = $date;*/
+
+			if ($color->regime == Color::ROYALISTIC) {
+				$_PAM2 = $this->playerManager->getCurrentSession();
+				$this->playerManager->changeSession($token_newChief);
+
+				$notif = new Notification();
+				$notif->dSending = Utils::now();
+				$notif->setRPlayer($this->playerManager->get()->id);
+				$notif->setTitle('Votre coup d\'état a échoué');
+				$notif->addBeg()
+					->addTxt(' Le peuple ne vous a pas soutenu, l\'ancien gouvernement reste en place.');
+				$this->notificationManager->add($notif);
+				
+				if ($idOldChief) {
+					$notif = new Notification();
+					$notif->dSending = Utils::now();
+					$notif->setRPlayer($idOldChief);
+					$notif->setTitle('Un coup d\'état a échoué');
+					$notif->addBeg()
+						->addTxt(' Le joueur ')
+						->addLnk('embassy/player-' . $this->playerManager->get()->id, $this->playerManager->get()->name)
+						->addTxt(' a tenté un coup d\'état, celui-ci a échoué.');
+					$this->notificationManager->add($notif);
+				}
+				
+				$this->playerManager->newSession($_PAM2);
+			} elseif ($color->regime == Color::THEOCRATIC) {
+				if ($idOldChief) {
+					$notif = new Notification();
+					$notif->dSending = Utils::now();
+					$notif->setRPlayer($idOldChief);
+					$notif->setTitle('Vous avez été nommé Guide');
+					$notif->addBeg()
+						->addTxt(' Les Oracles ont parlé, vous êtes toujours désigné par la Grande Lumière pour guider Cardan vers la Gloire.');
+					$this->notificationManager->add($notif);
+				}
+			}
+			$this->playerManager->changeSession($_PAM);
+		}
+	}
+
+	public function uVoteLaw(Color $color, $law, $ballot) {
+		if ($ballot) {
+			//accepter la loi
+			$law->statement = Law::EFFECTIVE;
+			//envoyer un message
+		} else {
+			//refuser la loi
+			$law->statement = Law::REFUSED;
+			if (LawResources::getInfo($law->type, 'bonusLaw')) {
+				$color->credits += (LawResources::getInfo($law->type, 'price') * Utils::interval($law->dEndVotation, $law->dEnd) * $color->activePlayers * 90) / 100;
+			} else {
+				$color->credits += (LawResources::getInfo($law->type, 'price') * 90) / 100;
+			}
+			//envoyer un message
+		}
+	}
+
+	public function uFinishBonusLaw($law, $sector) {
+		$law->statement = Law::OBSOLETE;
+	}
+
+	public function uFinishSectorTaxes(Color $color, $law, $sector) {
+		if ($sector->rColor == $color->id) {
+			$sector->tax = $law->options['taxes'];
+			$law->statement = Law::OBSOLETE;
+		} else {
+			$law->statement = Law::OBSOLETE;
+		}
+	}
+
+	public function uFinishSectorName(Color $color, $law, $sector) {
+		if ($sector->rColor == $color->id) {
+			$sector->name = $law->options['name'];
+			$law->statement = Law::OBSOLETE;
+		} else {
+			$law->statement = Law::OBSOLETE;
+		}
+	}
+	
+	public function uFinishExportComercialTaxes(Color $color, $law, $tax) {
+		if ($law->options['rColor'] == $color->id) {
+			$tax->exportTax = $law->options['taxes'] / 2;
+			$tax->importTax = $law->options['taxes'] / 2;
+			$law->statement = Law::OBSOLETE;
+		} else {
+			$tax->exportTax = $law->options['taxes'];
+			$law->statement = Law::OBSOLETE;
+		}
+	}
+
+	public function uFinishImportComercialTaxes(Color $color, $law, $tax) {
+		if ($law->options['rColor'] == $color->id) {
+			$tax->exportTax = $law->options['taxes'] / 2;
+			$tax->importTax = $law->options['taxes'] / 2;
+			$law->statement = Law::OBSOLETE;
+		} else {
+			$tax->importTax = $law->options['taxes'];
+			$law->statement = Law::OBSOLETE;
+		}
+	}
+
+	public function uFinishNeutral(Color $color, $law, $enemyColor) {
+		$color->colorLink[$law->options['rColor']] = Color::NEUTRAL;
+		$law->statement = Law::OBSOLETE;
+		$this->commercialRouteManager->freezeRoute($color, $enemyColor);
+	}
+
+	public function uFinishPeace(Color $color, $law, $enemyColor) {
+		$color->colorLink[$law->options['rColor']] = Color::PEACE;
+		$law->statement = Law::OBSOLETE;
+		$this->commercialRouteManager->freezeRoute($color, $enemyColor);
+	}
+
+	public function uFinishAlly(Color $color, $law,$enemyColor) {
+		$color->colorLink[$law->options['rColor']] = Color::ALLY;
+		$law->statement = Law::OBSOLETE;
+		$this->commercialRouteManager->freezeRoute($color, $enemyColor);
+	}
+
+	public function uFinishEnemy(Color $color, $law, $enemyColor) {
+		$color->colorLink[$law->options['rColor']] = Color::ENEMY;
+		$enemyColor->colorLink[$color->id] = Color::ENEMY;
+		$law->statement = Law::OBSOLETE;
+		$this->commercialRouteManager->freezeRoute($color, $enemyColor);
+	}
+
+	public function uFinishPunition(Color $color, $law, $player) {
+		$toPay = $law->options['credits'];
+		if ($player->credit < $law->options['credits']) {
+			$toPay = $player->credit;
+		}
+		$this->playerManager->decreaseCredit($player, $toPay);
+		$color->credits += $toPay;
+		$law->statement = Law::OBSOLETE;
+	}
+
+
+	public function uMethod(Color $color) {
+		// 604800s = 7j
+		$token_ctc = $this->ctc->createContext('Color');
+
+		if ($color->regime == Color::DEMOCRATIC) {
+			if ($color->electionStatement == Color::MANDATE) {
+				if (Utils::interval($color->dLastElection, Utils::now(), 's') > $color->mandateDuration) {
+					$_PAM = $this->playerManager->getCurrentSession();
+					$this->playerManager->newSession(FALSE);
+					$this->playerManager->load(['rColor' => $color->id], ['factionPoint', 'DESC']);
+					$token_pam = $this->playerManager->getCurrentSession();
+					$this->playerManager->changeSession($_PAM);
+
+					$date = new \DateTime($color->dLastElection);
+					$date->modify('+' . $color->mandateDuration . ' second');
+					$date = $date->format('Y-m-d H:i:s');
+
+					$this->ctc->add($date, $this, 'uCampaign', $color, array($color, $token_pam));
+				}
+			} elseif ($color->electionStatement == Color::CAMPAIGN) {
+				if (Utils::interval($color->dLastElection, Utils::now(), 's') > $color->mandateDuration + Color::CAMPAIGNTIME) {
+					$date = new \DateTime($color->dLastElection);
+					$date->modify('+' . $color->mandateDuration . ' second');
+					$date = $date->format('Y-m-d H:i:s');
+
+					$this->ctc->add($date, $this, 'uElection', $color, array());
+				}
+			} else {
+				if (Utils::interval($color->dLastElection, Utils::now(), 's') > $color->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME) {
+					$date = new \DateTime($color->dLastElection);
+					$date->modify('+' . $color->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME . ' second');
+					$date = $date->format('Y-m-d H:i:s');
+
+					$_ELM = $this->electionManager->getCurrentSession();
+					$this->electionManager->newSession();
+					$this->electionManager->load(array('rColor' => $color->id), array('id', 'DESC'), array('0', '1'));
+					$color->dLastElection = $date;
+					$this->ballot($color, $date, $this->electionManager->get());
+
+					$this->electionManager->changeSession($_ELM);
+				}
+			}
+		} elseif ($color->regime == Color::ROYALISTIC) {
+			if ($color->electionStatement == Color::MANDATE) {
+				if (Utils::interval($color->dLastElection, Utils::now(), 's') > $color->mandateDuration) {
+					$_PAM = $this->playerManager->getCurrentSession();
+					$this->playerManager->newSession(FALSE);
+					$this->playerManager->load(['rColor' => $color->id], ['factionPoint', 'DESC']);
+					$token_pam = $this->playerManager->getCurrentSession();
+					$this->playerManager->changeSession($_PAM);
+
+					$date = new \DateTime($color->dLastElection);
+					$date->modify('+' . $color->mandateDuration . ' second');
+					$date = $date->format('Y-m-d H:i:s');
+
+					$this->ctc->add($date, $this, 'uCampaign', $color, array($color, $token_pam));
+				}
+			} elseif ($color->electionStatement == Color::ELECTION) {
+				if (Utils::interval($color->dLastElection, Utils::now(), 's') > Color::PUTSCHTIME) {
+					$date = new \DateTime($color->dLastElection);
+					$date->modify('+' . $color->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME . ' second');
+					$date = $date->format('Y-m-d H:i:s');
+
+					$_ELM = $this->electionManager->getCurrentSession();
+					$this->electionManager->newSession();
+					$this->electionManager->load(array('rColor' => $color->id), array('id', 'DESC'), array('0', '1'));
+					$this->dLastElection = $date;
+					$this->ballot($color, $date, $this->electionManager->get());
+
+					$this->electionManager->changeSession($_ELM);
+
+					$_PAM = $this->playerManager->getCurrentSession();
+					$this->playerManager->newSession(FALSE);
+					$this->playerManager->load(['rColor' => $color->id], ['factionPoint', 'DESC']);
+					$token_pam = $this->playerManager->getCurrentSession();
+					$this->playerManager->changeSession($_PAM);
+
+					$this->ctc->add($date, $this, 'uCampaign', $color, array($color, $token_pam));
+				}
+			}
+		} else {
+			if ($color->electionStatement == Color::MANDATE) {
+				if (Utils::interval($color->dLastElection, Utils::now(), 's') > $color->mandateDuration) {
+					$_PAM = $this->playerManager->getCurrentSession();
+					$this->playerManager->newSession(FALSE);
+					$this->playerManager->load(['rColor' => $color->id], ['factionPoint', 'DESC']);
+					$token_pam = $this->playerManager->getCurrentSession();
+					$this->playerManager->changeSession($_PAM);
+
+					$date = new \DateTime($color->dLastElection);
+					$date->modify('+' . $color->mandateDuration . ' second');
+					$date = $date->format('Y-m-d H:i:s');
+					$this->ctc->add($date, $this, 'uCampaign', $color, array($color, $token_pam));
+				}
+			} else {
+				if (Utils::interval($color->dLastElection, Utils::now(), 's') > $color->mandateDuration + Color::CAMPAIGNTIME) {
+					$date = new \DateTime($color->dLastElection);
+					$date->modify('+' . $color->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME . ' second');
+					$date = $date->format('Y-m-d H:i:s');
+
+					$_ELM = $this->electionManager->getCurrentSession();
+					$this->electionManager->newSession();
+					$this->electionManager->load(array('rColor' => $color->id), array('id', 'DESC'), array('0', '1'));
+					$color->dLastElection = $date;
+					$this->ballot($color, $date, $this->electionManager->get());
+
+					$this->electionManager->changeSession($_ELM);
+				}
+			}
+		}
+
+		$_LAM = $this->lawManager->getCurrentSession();
+		$this->lawManager->newSession();
+		$this->lawManager->load(array('rColor' => $color->id, 'statement' => array(Law::VOTATION, Law::EFFECTIVE)));
+
+		for ($i = 0; $i < $this->lawManager->size(); $i++) {
+			$law = $this->lawManager->get($i);
+			if ($law->statement == Law::VOTATION && $law->dEndVotation < Utils::now()) {
+				$this->ctc->add($law->dEndVotation, $this, 'uVoteLaw', $color, array($color, $law, $this->lawManager->ballot($law)));
+			} elseif ($law->statement == Law::EFFECTIVE && $law->dEnd < Utils::now()) {
+				if (LawResources::getInfo($law->type, 'bonusLaw')) {
+					#lois à bonus
+					$this->ctc->add($law->dEnd, $this, 'uFinishBonusLaw', $color, array($law, $this->sectorManager->get()));
+				} else {
+					#loi à upgrade
+					switch ($law->type) {
+						case Law::SECTORTAX:
+							$_SEM = $this->sectorManager->getCurrentsession();
+							$this->sectorManager->newSession();
+							$this->sectorManager->load(array('id' => $law->options['rSector']));
+							$this->ctc->add($law->dEnd, $this, 'uFinishSectorTaxes', $color, array($color, $law, $this->sectorManager->getById($law->options['rSector'])));
+							$this->sectorManager->changeSession($_SEM);
+							break;
+						case Law::SECTORNAME:
+							$_SEM = $this->sectorManager->getCurrentsession();
+							$this->sectorManager->newSession();
+							$this->sectorManager->load(array('id' => $law->options['rSector']));
+							$this->ctc->add($law->dEnd, $this, 'uFinishSectorName', $color, array($color, $law, $this->sectorManager->getById($law->options['rSector'])));
+							$this->sectorManager->changeSession($_SEM);
+							break;
+						case Law::COMTAXEXPORT:
+							$_CTM = $this->commercialTaxManager->getCurrentsession();
+							$this->commercialTaxManager->newSession();
+							$this->commercialTaxManager->load(array('faction' => $color->id, 'relatedFaction' => $law->options['rColor']));
+							$this->ctc->add($law->dEnd, $this, 'uFinishExportComercialTaxes', $color, array($color, $law, $this->commercialTaxManager->get()));
+							$this->commercialTaxManager->changeSession($_CTM);
+							break;
+						case Law::COMTAXIMPORT:
+							$_CTM = $this->commercialTaxManager->getCurrentsession();
+							$this->commercialTaxManager->newSession();
+							$this->commercialTaxManager->load(array('faction' => $color->id, 'relatedFaction' => $law->options['rColor']));
+							$this->ctc->add($law->dEnd, $this, 'uFinishImportComercialTaxes', $color, array($color, $law, $this->commercialTaxManager->get()));
+							$this->commercialTaxManager->changeSession($_CTM);
+							break;
+						case Law::PEACEPACT:
+							$S_CLM321 = $this->getCurrentsession();
+							$this->newSession();
+							$this->load(['id' => $law->options['rColor']]);
+							$this->ctc->add($law->dEnd, $this, 'uFinishPeace', $color, array($color, $law, $this->get()));
+							$this->changeSession($S_CLM321);
+							break;
+						case Law::WARDECLARATION:
+							$S_CLM322 = $this->getCurrentsession();
+							$this->newSession();
+							$this->load(['id' => $law->options['rColor']]);
+							$this->ctc->add($law->dEnd, $this, 'uFinishEnemy', $color, array($color, $law, $this->get()));
+							$this->changeSession($S_CLM322);
+							break;
+						case Law::TOTALALLIANCE:
+							$S_CLM323 = $this->getCurrentsession();
+							$this->newSession();
+							$this->load(['id' => $law->options['rColor']]);
+							$this->ctc->add($law->dEnd, $this, 'uFinishAlly', $color, array($color, $law,$this->get()));
+							$this->changeSession($S_CLM323);
+							break;
+						case Law::NEUTRALPACT:
+							$S_CLM324 = $this->getCurrentsession();
+							$this->newSession();
+							$this->load(['id' => $law->options['rColor']]);
+							$this->ctc->add($law->dEnd, $this, 'uFinishNeutral', $color, array($color, $law, $this->get()));
+							$this->changeSession($S_CLM324);
+							break;
+						case Law::PUNITION:
+							$S_PAM = $this->playerManager->getCurrentsession();
+							$this->playerManager->newSession();
+							$this->playerManager->load(array('id' => $law->options['rPlayer']));
+							$this->ctc->add($law->dEnd, $this, 'uFinishPunition', $color, array($color, $law, $this->playerManager->get()));
+							$this->playerManager->changeSession($S_PAM);
+							break;
+						
+						default:
+							break;
+					}
+				}
+			}
+		}
+		$this->lawManager->changeSession($_LAM);
+		$this->ctc->applyContext($token_ctc);
 	}
 }

@@ -1,17 +1,17 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
+$session = $this->getContainer()->get('app.session');
 
 echo '<div id="inscription-subnav">';
 	echo '<div class="bind"></div>';
 	echo '<div class="head">';
 		echo '<h2>';
-			if (CTR::$data->get('inscription')->exist('pseudo')) {
-				echo '<h2>' . CTR::$data->get('inscription')->get('pseudo') . '</h2>';
+			if ($session->get('inscription')->exist('pseudo')) {
+				echo '<h2>' . $session->get('inscription')->get('pseudo') . '</h2>';
 			}
 		echo '</h2>';
-		if (CTR::$data->get('inscription')->exist('avatar')) {
-			echo '<img src="' . MEDIA . 'avatar/big/' . CTR::$data->get('inscription')->get('avatar') . '.png" alt="" />';
+		if ($session->get('inscription')->exist('avatar')) {
+			echo '<img src="' . MEDIA . 'avatar/big/' . $session->get('inscription')->get('avatar') . '.png" alt="" />';
 		} else {
 			echo '<img src="' . MEDIA . 'avatar/big/empty.png" alt="" />';
 		}

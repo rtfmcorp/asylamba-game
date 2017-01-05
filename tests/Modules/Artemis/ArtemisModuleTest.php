@@ -4,7 +4,7 @@ namespace Tests\Asylamba\Modules\Artemis;
 
 use Asylamba\Modules\Artemis\ArtemisModule;
 use Asylamba\Classes\Worker\Application;
-use Asylamba\Classes\Worker\Container;
+use Asylamba\Classes\DependencyInjection\Container;
 
 class ArtemisModuleTest extends \PHPUnit_Framework_TestCase
 {

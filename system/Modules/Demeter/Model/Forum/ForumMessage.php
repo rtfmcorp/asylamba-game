@@ -11,8 +11,6 @@
 */
 namespace Asylamba\Modules\Demeter\Model\Forum;
 
-use Asylamba\Classes\Library\Parser;
-
 class ForumMessage {
 	const PUBLISHED 		= 1;
 	const HIDDEN 			= 2;
@@ -36,14 +34,4 @@ class ForumMessage {
 	public $playerStatus		= '';
 
 	public function getId() { return $this->id; }
-
-	public function edit($content) {
-		$this->oContent = $content;
-
-		$p = new Parser();
-		$p->parseBigTag = TRUE;
-		$content = $p->parse($content);
-
-		$this->pContent = $content;
-	}
 }

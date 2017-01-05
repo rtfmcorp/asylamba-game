@@ -1,22 +1,23 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Library\Security;
 use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Zeus\Model\Player;
 
-if (DEVMODE || CTR::$get->equal('key', KEY_BUFFER)) {
+if (DEVMODE || $this->getContainer()->get('app.request')->query->get('key') === KEY_BUFFER) {
 
-$S_PAM1 = ASM::$pam->getCurrentSession();
-ASM::$pam->newSession(FALSE);
-ASM::$pam->load(array('statement' => PAM_ACTIVE));
+	$playerManager = $this->getContainer()->get('zeus.player_manager');
+	$security = $this->getContainer()->get('security');
+	
+	$S_PAM1 = $playerManager->getCurrentSession();
+	$playerManager->newSession(FALSE);
+	$playerManager->load(array('statement' => Player::ACTIVE));
 
 ?>
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
-	<title><?php echo CTR::getTitle() ?> — <?php echo APP_SUBNAME ?> — Asylamba</title>
+	<title><?php echo $this->getContainer()->get('app.response')->getTitle() ?> — <?php echo APP_SUBNAME ?> — Asylamba</title>
 
 	<meta charset="utf-8" />
 	<meta name="description" content="<?php echo APP_DESCRIPTION ?>" />
@@ -30,14 +31,14 @@ ASM::$pam->load(array('statement' => PAM_ACTIVE));
 
 	<div class="content">
 <?php
-		echo '<a href="' . APP_ROOT . 'inscription/bindkey-' . Security::crypt(Security::buildBindkey(Utils::generateString(10)), KEY_SERVER) . '">';
+		echo '<a href="' . APP_ROOT . 'inscription/bindkey-' . $security->crypt($security->buildBindkey(Utils::generateString(10)), KEY_SERVER) . '">';
 			echo '<em>Créer un</em>';
 			echo '<strong>Personnage lvl. 1</strong>';
 			echo '<img src="' . MEDIA . 'avatar/big/empty.png" alt="" />';
 		echo '</a>';
 
 		if (HIGHMODE) {
-			echo '<a href="' . APP_ROOT . 'inscription/bindkey-' . Security::crypt(Security::buildBindkey(Utils::generateString(10)), KEY_SERVER) . '/mode-high">';
+			echo '<a href="' . APP_ROOT . 'inscription/bindkey-' . $security->crypt($security->buildBindkey(Utils::generateString(10)), KEY_SERVER) . '/mode-high">';
 				echo '<em>Créer un</em>';
 				echo '<strong>Personnage lvl. 5</strong>';
 				echo '<img src="' . MEDIA . 'avatar/big/empty.png" alt="" />';
@@ -45,10 +46,10 @@ ASM::$pam->load(array('statement' => PAM_ACTIVE));
 			echo '</a>';
 		}
 
-		for ($i = 0; $i < ASM::$pam->size(); $i++) {
-			$player = ASM::$pam->get($i);
+		for ($i = 0; $i < $playerManager->size(); $i++) {
+			$player = $playerManager->get($i);
 
-			echo '<a class="color' . $player->rColor . '" href="' . APP_ROOT . 'connection/bindkey-' . Security::crypt(Security::buildBindkey($player->bind), KEY_SERVER) . '">';
+			echo '<a class="color' . $player->rColor . '" href="' . APP_ROOT . 'connection/bindkey-' . $security->crypt($security->buildBindkey($player->bind), KEY_SERVER) . '">';
 				echo '<em>Grade ' . $player->level . '</em>';
 				echo '<strong>' . $player->name . '</strong>';
 				echo '<img src="' . MEDIA . 'avatar/big/' . $player->avatar . '.png" alt="" />';
@@ -60,5 +61,5 @@ ASM::$pam->load(array('statement' => PAM_ACTIVE));
 </body>
 
 <?php
-ASM::$pam->changeSession($S_PAM1);
+$playerManager->changeSession($S_PAM1);
 }

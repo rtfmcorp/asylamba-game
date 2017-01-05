@@ -1,38 +1,46 @@
 <?php
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Library\Parser;
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Hermes\Model\Conversation;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
+use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 
+$database = $this->getContainer()->get('database');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
+$conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
+$conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
+$response = $this->getContainer()->get('app.response');
+$request = $this->getContainer()->get('app.request');
+$parser = $this->getContainer()->get('parser');
 
-$recipients 	= Utils::getHTTPData('recipients');
-$content 		= Utils::getHTTPData('content');
+$recipients = $request->request->get('recipients');
+$content = $request->request->get('content');
 
-$p = new Parser();
-$content = $p->parse($content);
+$content = $parser->parse($content);
 
 if ($recipients !== FALSE AND $content !== FALSE) {
 	if (strlen($content) < 10000) {
 		# traitement des utilisateurs multiples
 		$recipients = explode(',', $recipients);
-		$recipients = array_filter($recipients, function($e) {
-			return $e == CTR::$data->get('playerId') ? FALSE : TRUE;
+		$plId = $session->get('playerId');
+		$recipients = array_filter($recipients, function($e) use($plId){
+			return $e == $plId ? FALSE : TRUE;
 		});
 		$recipients[] = 0;
 
 		if (count($recipients) <= ConversationUser::MAX_USERS) {
 			# chargement des utilisateurs
-			$S_PAM = ASM::$pam->getCurrentSession();
-			ASM::$pam->newSession();
+			$S_PAM = $playerManager->getCurrentSession();
+			$playerManager->newSession();
 			# player statements
-			ASM::$pam->load(array('id' => $recipients, 'statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY)));
+			$playerManager->load(array('id' => $recipients, 'statement' => array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY)));
 
-			if (ASM::$pam->size() >= 1) {
+			if ($playerManager->size() >= 1) {
 				# création de la date précédente
 				$readingDate = date('Y-m-d H:i:s', (strtotime(Utils::now()) - 20));
 
@@ -44,67 +52,65 @@ if ($recipients !== FALSE AND $content !== FALSE) {
 				$conv->dCreation = Utils::now();
 				$conv->dLastMessage = Utils::now();
 
-				ASM::$cvm->add($conv);
+				$conversationManager->add($conv);
 
 				# créer le user créateur de la conversation
 				$user = new ConversationUser();
 
 				$user->rConversation = $conv->id;
-				$user->rPlayer = CTR::$data->get('playerId');
+				$user->rPlayer = $session->get('playerId');
 				$user->convPlayerStatement = ConversationUser::US_ADMIN;
 				$user->convStatement = ConversationUser::CS_DISPLAY;
 				$user->dLastView = Utils::now();
 
-				ASM::$cum->add($user);
+				$conversationUserManager->add($user);
 
 				# créer la liste des users
-				for ($i = 0; $i < ASM::$pam->size(); $i++) {
+				for ($i = 0; $i < $playerManager->size(); $i++) {
 					$user = new ConversationUser();
 
 					$user->rConversation = $conv->id;
-					$user->rPlayer = ASM::$pam->get($i)->id;
+					$user->rPlayer = $playerManager->get($i)->id;
 					$user->convPlayerStatement = ConversationUser::US_STANDARD;
 					$user->convStatement = ConversationUser::CS_DISPLAY;
 					$user->dLastView = $readingDate;
 
-					ASM::$cum->add($user);
+					$conversationUserManager->add($user);
 				}
 
 				# créer le premier message
 				$message = new ConversationMessage();
 
 				$message->rConversation = $conv->id;
-				$message->rPlayer = CTR::$data->get('playerId');
+				$message->rPlayer = $session->get('playerId');
 				$message->type = ConversationMessage::TY_STD;
 				$message->content = $content;
 				$message->dCreation = Utils::now();
 				$message->dLastModification = NULL;
 
-				ASM::$cme->add($message);
+				$conversationMessageManager->add($message);
 
 				if (DATA_ANALYSIS) {
-					$db = Database::getInstance();
-					$qr = $db->prepare('INSERT INTO 
+					$qr = $database->prepare('INSERT INTO 
 						DA_SocialRelation(`from`, `to`, `type`, `message`, dAction)
 						VALUES(?, ?, ?, ?, ?)'
 					);
-					$qr->execute([CTR::$data->get('playerId'), ASM::$pam->get(0)->id, 2, $content, Utils::now()]);
+					$qr->execute([$session->get('playerId'), $playerManager->get(0)->id, 2, $content, Utils::now()]);
 				}
 
-				CTR::$alert->add('La conversation a été créée.', ALERT_STD_SUCCESS);
-				CTR::redirect('message/conversation-' . $conv->id);
+				$session->addFlashbag('La conversation a été créée.', Flashbag::TYPE_SUCCESS);
+				$response->redirect('message/conversation-' . $conv->id);
 			} else {
-				CTR::$alert->add('Le joueur n\'est pas joignable.', ALERT_STD_ERROR);		
+				throw new ErrorException('Le joueur n\'est pas joignable.');	
 			}
 
-			ASM::$pam->changeSession($S_PAM);
+			$playerManager->changeSession($S_PAM);
 		} else {
-			CTR::$alert->add('Nombre maximum de joueur atteint.', ALERT_STD_ERROR);
+			throw new ErrorException('Nombre maximum de joueur atteint.');
 		}
-
 	} else {
-		CTR::$alert->add('Le message est trop long.', ALERT_STD_ERROR);
+		throw new ErrorException('Le message est trop long.');
 	}
 } else {
-	CTR::$alert->add('Informations manquantes pour démarrer une nouvelle conversation.', ALERT_STD_ERROR);
+	throw new FormException('Informations manquantes pour démarrer une nouvelle conversation.');
 }

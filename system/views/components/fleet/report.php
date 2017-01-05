@@ -9,11 +9,13 @@
 	# {player}		attacker_report
 	# {player}		defender_report
 
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Athena\Resource\ShipResource;
+
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
+$session = $this->getContainer()->get('app.session');
 
 echo '<div class="component report">';
 	echo '<div class="head skin-1">';
@@ -28,10 +30,10 @@ echo '<div class="component report">';
 					echo '<span class="value">Victoire</span>';
 				echo '</div>';
 				echo '<hr />';
-				if ($report_report->rPlayerAttacker == CTR::$data->get('playerId')) {
+				if ($report_report->rPlayerAttacker == $session->get('playerId')) {
 					echo '<div class="commander">';
 						echo '<a href="' . APP_ROOT . 'fleet"><img src="' . MEDIA . 'commander/medium/' . $report_report->avatarA . '.png" alt="' . $report_report->nameA . '" /></a>';
-						$level = Commander::nbLevelUp($report_report->levelA, $report_report->experienceA + $report_report->expCom);
+						$level = $commanderManager->nbLevelUp($report_report->levelA, $report_report->experienceA + $report_report->expCom);
 						echo '<em>' . CommanderResources::getInfo($report_report->levelA, 'grade') . ($level > 0 ? ' <span class="bonus">a passé ' . $level . ' grade' . Format::addPlural($level) . '</span>' : NULL) . '</em>';
 						echo '<strong>' . $report_report->nameA . '</strong>';
 						echo '<em>expérience : ' . Format::numberFormat($report_report->experienceA);
@@ -59,7 +61,7 @@ echo '<div class="component report">';
 					echo '<img src="' . MEDIA . 'fleet/memorial.png" alt="' . $report_report->rPlayerDefender . '" />';
 					echo '<em>' . CommanderResources::getInfo($report_report->levelA, 'grade') . '</em>';
 					echo '<strong>' . $report_report->nameA . '</strong>';
-					if ($report_report->rPlayerAttacker == CTR::$data->get('playerId')) {
+					if ($report_report->rPlayerAttacker == $session->get('playerId')) {
 						echo '<em>expérience : ' . Format::numberFormat($report_report->experienceA) . '</em>';
 						echo '<em>victoire : ' . $report_report->palmaresA . '</em>';
 						echo '<em>&ensp;</em>';
@@ -129,10 +131,10 @@ echo '<div class="component report">';
 					echo '<span class="value">Victoire</span>';
 				echo '</div>';
 				echo '<hr />';
-				if ($report_report->rPlayerDefender == CTR::$data->get('playerId')) {
+				if ($report_report->rPlayerDefender == $session->get('playerId')) {
 					echo '<div class="commander">';
 						echo '<a href="' . APP_ROOT . 'fleet"><img src="' . MEDIA . 'commander/medium/' . $report_report->avatarD . '.png" alt="' . $report_report->nameD . '" /></a>';
-						$level = Commander::nbLevelUp($report_report->levelD, $report_report->experienceD + $report_report->expCom);
+						$level = $commanderManager->nbLevelUp($report_report->levelD, $report_report->experienceD + $report_report->expCom);
 						echo '<em>' . CommanderResources::getInfo($report_report->levelD, 'grade') . ($level > 0 ? ' <span class="bonus">a passé ' . $level . ' grade</span>' : NULL) . '</em>';
 						echo '<strong>' . $report_report->nameD . '</strong>';
 						echo '<em>expérience : ' . Format::numberFormat($report_report->experienceD);
@@ -161,7 +163,7 @@ echo '<div class="component report">';
 					echo '<span class="value">Défaite</span>';
 				echo '</div>';
 				echo '<hr />';
-				if ($report_report->rPlayerDefender == CTR::$data->get('playerId')) {
+				if ($report_report->rPlayerDefender == $session->get('playerId')) {
 					echo '<div class="commander">';
 						echo '<img src="' . MEDIA . 'fleet/memorial.png" alt="' . $report_report->nameD . '" />';
 						echo '<em>' . CommanderResources::getInfo($report_report->levelD, 'grade') . '</em>';

@@ -5,50 +5,47 @@
 # int id 	 		id du commandant
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 
-$commanderId = Utils::getHTTPData('id');
+$commanderId = $this->getContainer()->get('app.request')->query->get('id');
+if ($commanderId === null) {
+	throw new ErrorException('erreur dans le traitement de la requête');
+}
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$S_COM1 = $commanderManager->getCurrentSession();
+$commanderManager->newSession();
+$commanderManager->load(array('c.id' => $commanderId, 'c.rPlayer' => $this->getContainer()->get('app.session')->get('playerId')));
 
-if ($commanderId !== FALSE) {
-	$S_COM1 = ASM::$com->getCurrentSession();
-	ASM::$com->newSession();
-	ASM::$com->load(array('c.id' => $commanderId, 'c.rPlayer' => CTR::$data->get('playerId')));
+if ($commanderManager->size() !== 1) {
+	throw new ErrorException('Ce commandant n\'existe pas ou ne vous appartient pas');
+}
+$commander = $commanderManager->get();
 
-	if (ASM::$com->size() == 1) {
-		$commander = ASM::$com->get();
-		
-		$S_OBM = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession();
-		ASM::$obm->load(array('rPlace' => $commander->rBase));
+$S_OBM = $orbitalBaseManager->getCurrentSession();
+$orbitalBaseManager->newSession();
+$orbitalBaseManager->load(array('rPlace' => $commander->rBase));
 
-		if ($commander->statement == Commander::RESERVE) {
-			$S_COM2 = ASM::$com->getCurrentSession();
-			ASM::$com->newSession();
-			ASM::$com->load(array('c.rBase' => $commander->rBase, 'c.statement' => Commander::INSCHOOL));
+if ($commander->statement == Commander::RESERVE) {
+	$S_COM2 = $commanderManager->getCurrentSession();
+	$commanderManager->newSession();
+	$commanderManager->load(array('c.rBase' => $commander->rBase, 'c.statement' => Commander::INSCHOOL));
 
-			if (ASM::$com->size() < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'school-size')) {
-				$commander->statement = Commander::INSCHOOL;
-				$commander->uCommander = Utils::now();
-			} else {
-				CTR::$alert->add('Votre école est déjà pleine.', ALERT_STD_ERROR);
-			}
-
-			ASM::$com->changeSession($S_COM2);
-		} elseif ($commander->statement == Commander::INSCHOOL) {
-			$commander->statement = Commander::RESERVE;
-			$commander->uCommander = Utils::now();
-		} else {
-			CTR::$alert->add('Vous ne pouvez rien faire avec cet officier.', ALERT_STD_ERROR);
-		}
-		ASM::$obm->changeSession($S_OBM);
+	if ($commanderManager->size() < PlaceResource::get($orbitalBaseManager->get()->typeOfBase, 'school-size')) {
+		$commander->statement = Commander::INSCHOOL;
+		$commander->uCommander = Utils::now();
 	} else {
-		CTR::$alert->add('Ce commandant n\'existe pas ou ne vous appartient pas', ALERT_STD_ERROR);
+		throw new ErrorException('Votre école est déjà pleine.');
 	}
 
-	ASM::$com->changeSession($S_COM1);
+	$commanderManager->changeSession($S_COM2);
+} elseif ($commander->statement == Commander::INSCHOOL) {
+	$commander->statement = Commander::RESERVE;
+	$commander->uCommander = Utils::now();
 } else {
-	CTR::$alert->add('erreur dans le traitement de la requête', ALERT_BUG_ERROR);
+	throw new ErrorException('Vous ne pouvez rien faire avec cet officier.');
 }
+$orbitalBaseManager->changeSession($S_OBM);
+$commanderManager->changeSession($S_COM1);

@@ -14,21 +14,25 @@ namespace Asylamba\Modules\Ares\Manager;
 
 use Asylamba\Classes\Worker\Manager;
 use Asylamba\Classes\Library\Utils;
-
 use Asylamba\Classes\Database\Database;
-
 use Asylamba\Modules\Ares\Model\Report;
 
 class ReportManager extends Manager {
 	protected $managerType ='_Report';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where);
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT r.*,
+		$qr = $this->database->prepare('SELECT r.*,
 				sq.id AS sqId,
 				sq.position AS sqPosition,
 				sq.rReport AS sqRReport,
@@ -145,8 +149,7 @@ class ReportManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT r.*
+		$qr = $this->database->prepare('SELECT r.*
 			FROM report AS r
 			' . $formatWhere .'
 			' . $formatOrder .'
@@ -213,11 +216,10 @@ class ReportManager extends Manager {
 	}
 
 	public function save() {
-		$db = Database::getInstance();
 		$reports = $this->_Save();
 
 		foreach ($reports as $report) {
-			$qr = $db->prepare('UPDATE report SET
+			$qr = $this->database->prepare('UPDATE report SET
 				rPlayerAttacker = ?,
 				rPlayerDefender = ?,
 				rPlayerWinner = ?,
@@ -295,9 +297,7 @@ class ReportManager extends Manager {
 	}
 
 	public function add($newReport) {
-		$db = Database::getInstance();
-
-		$qr = $db->prepare('INSERT INTO report SET
+		$qr = $this->database->prepare('INSERT INTO report SET
 			rPlayerAttacker = ?,
 			rPlayerDefender = ?,
 			rPlayerWinner = ?,
@@ -363,7 +363,7 @@ class ReportManager extends Manager {
 			$newReport->dFight
 			));
 
-		$newReport->id = $db->lastInsertId();
+		$newReport->id = $this->database->lastInsertId();
 
 		if (count($newReport->squadrons) > 0) {
 
@@ -380,7 +380,7 @@ class ReportManager extends Manager {
 				$qr .= ($j == count($newReport->squadrons) - 1) ? ');' : '),';
 			}
 
-			$qr = $db->prepare($qr);
+			$qr = $this->database->prepare($qr);
 			$aw = $qr->execute();
 		}
 		$this->_Add($newReport);

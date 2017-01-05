@@ -1,11 +1,12 @@
 <?php
 #avance l'attaque de tous les officiers
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Ares\Model\Commander;
 
-ASM::$com->newSession();
-ASM::$com->load(['c.statement' => Commander::MOVING]);
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
 
-for ($i = 0; $i < ASM::$com->size(); $i++) {
-	ASM::$com->get($i)->dArrival = ASM::$com->get($i)->dStart;
+$commanderManager->newSession();
+$commanderManager->load(['c.statement' => Commander::MOVING]);
+
+for ($i = 0; $i < $commanderManager->size(); $i++) {
+	$commanderManager->get($i)->dArrival = $commanderManager->get($i)->dStart;
 }

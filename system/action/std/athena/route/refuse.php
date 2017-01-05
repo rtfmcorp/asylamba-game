@@ -4,59 +4,68 @@
 # int base 			id (rPlace) de la base orbitale qui refuse la route
 # int route 		id de la route commerciale
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Hermes\Model\Notification;
 
-for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$colorManager = $this->getContainer()->get('demeter.color_manager');
+
+for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
+	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-$base = Utils::getHTTPData('base');
-$route = Utils::getHTTPData('route');
+$base = $request->query->get('base');
+$route = $request->query->get('route');
 
 if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
-	$S_CRM1 = ASM::$crm->getCurrentSession();
-	ASM::$crm->newSession(ASM_UMODE);
-	ASM::$crm->load(array('id'=>$route, 'rOrbitalBaseLinked' => $base, 'statement' => CRM_PROPOSED));
-	if (ASM::$crm->get() && ASM::$crm->size() == 1) {
-		$cr = ASM::$crm->get();
+	$S_CRM1 = $commercialRouteManager->getCurrentSession();
+	$commercialRouteManager->newSession(ASM_UMODE);
+	$commercialRouteManager->load(array('id'=>$route, 'rOrbitalBaseLinked' => $base, 'statement' => CommercialRoute::PROPOSED));
+	if ($commercialRouteManager->get() && $commercialRouteManager->size() == 1) {
+		$cr = $commercialRouteManager->get();
 
-		$S_OBM1 = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession(ASM_UMODE);
-		ASM::$obm->load(array('rPlace' => $cr->getROrbitalBase()));
-		$proposerBase = ASM::$obm->get();
-		ASM::$obm->load(array('rPlace' => $cr->getROrbitalBaseLinked()));
-		$refusingBase = ASM::$obm->get(1);
+		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
+		$orbitalBaseManager->newSession(ASM_UMODE);
+		$orbitalBaseManager->load(array('rPlace' => $cr->getROrbitalBase()));
+		$proposerBase = $orbitalBaseManager->get();
+		$orbitalBaseManager->load(array('rPlace' => $cr->getROrbitalBaseLinked()));
+		$refusingBase = $orbitalBaseManager->get(1);
 
 		//rend les crédits au proposant
-		$S_PAM1 = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession(ASM_UMODE);
-		ASM::$pam->load(array('id' => $proposerBase->getRPlayer()));
-		ASM::$pam->get()->increaseCredit(intval($cr->getPrice()));
+		$S_PAM1 = $playerManager->getCurrentSession();
+		$playerManager->newSession(ASM_UMODE);
+		$playerManager->load(array('id' => $proposerBase->getRPlayer()));
+		$playerManager->increaseCredit($playerManager->get(), intval($cr->getPrice()));
 
 		//notification
 		$n = new Notification();
 		$n->setRPlayer($proposerBase->getRPlayer());
 		$n->setTitle('Route commerciale refusée');
-		$n->addBeg()->addLnk('embassy/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'))->addTxt(' a refusé la route commerciale proposée entre ');
+		$n->addBeg()->addLnk('embassy/player-' . $session->get('playerId'), $session->get('playerInfo')->get('name'))->addTxt(' a refusé la route commerciale proposée entre ');
 		$n->addLnk('map/place-' . $refusingBase->getRPlace(), $refusingBase->getName())->addTxt(' et ');
 		$n->addLnk('map/base-' . $proposerBase->getRPlace(), $proposerBase->getName())->addTxt('.');
 		$n->addSep()->addTxt('Les ' . Format::numberFormat($cr->getPrice()) . ' crédits bloqués sont à nouveau disponibles.');
 		$n->addEnd();
-		ASM::$ntm->add($n);
+		$notificationManager->add($n);
 
 		//destruction de la route
-		ASM::$crm->deleteById($route);
-		CTR::$alert->add('Route commerciale refusée', ALERT_STD_SUCCESS);
-		ASM::$obm->changeSession($S_OBM1);
-		ASM::$pam->changeSession($S_PAM1);
+		$commercialRouteManager->deleteById($route);
+		$session->addFlashbag('Route commerciale refusée', Flashbag::TYPE_SUCCESS);
+		$orbitalBaseManager->changeSession($S_OBM1);
+		$playerManager->changeSession($S_PAM1);
 	} else {
-		CTR::$alert->add('impossible de refuser une route commerciale', ALERT_STD_ERROR);
+		throw new ErrorException('impossible de refuser une route commerciale');
 	}
-	ASM::$crm->changeSession($S_CRM1);
+	$commercialRouteManager->changeSession($S_CRM1);
 } else {
-	CTR::$alert->add('pas assez d\'informations pour refuser une route commerciale', ALERT_STD_FILLFORM);
+	throw new FormException('pas assez d\'informations pour refuser une route commerciale');
 }

@@ -11,8 +11,6 @@
 
 # calcul
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Athena\Resource\ShipResource;
@@ -20,27 +18,37 @@ use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Modules\Promethee\Resource\TechnologyResource;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
+
+$session = $this->getContainer()->get('app.session');
+$commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
+$buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
+$shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
+$technologyQueueManager = $this->getContainer()->get('promethee.technology_queue_manager');
+$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$buildingResourceRefund = $this->getContainer()->getParameter('athena.building.building_queue_resource_refund');
+$sessionToken = $session->get('token');
+$technologyHelper = $this->getContainer()->get('promethee.technology_helper');
 
 if ($ob_fastView->getLevelSpatioport() > 0) {
-	$S_CRM_OFV = ASM::$crm->getCurrentSession();
-	ASM::$crm->changeSession($ob_fastView->routeManager);
+	$S_CRM_OFV = $commercialRouteManager->getCurrentSession();
+	$commercialRouteManager->changeSession($ob_fastView->routeManager);
 
-	$nMaxCR = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $ob_fastView->getLevelSpatioport(), 'nbRoutesMax');
+	$nMaxCR = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $ob_fastView->getLevelSpatioport(), 'nbRoutesMax');
 	$nCRWaitingForOther = 0; $nCRWaitingForMe = 0;
 	$nCROperational = 0; $nCRInStandBy = 0;
 	$nCRInDock = 0;
 
-	if (ASM::$crm->size() > 0) {
-		for ($j = 0; $j < ASM::$crm->size(); $j++) {
-			if (ASM::$crm->get($j)->getStatement() == CRM_PROPOSED AND ASM::$crm->get($j)->getPlayerId1() == CTR::$data->get('playerId')) {
+	if ($commercialRouteManager->size() > 0) {
+		for ($j = 0; $j < $commercialRouteManager->size(); $j++) {
+			if ($commercialRouteManager->get($j)->getStatement() == CommercialRoute::PROPOSED AND $commercialRouteManager->get($j)->getPlayerId1() == $session->get('playerId')) {
 				$nCRWaitingForOther++;
-			} elseif (ASM::$crm->get($j)->getStatement() == CRM_PROPOSED AND ASM::$crm->get($j)->getPlayerId1() != CTR::$data->get('playerId')) {
+			} elseif ($commercialRouteManager->get($j)->getStatement() == CommercialRoute::PROPOSED AND $commercialRouteManager->get($j)->getPlayerId1() != $session->get('playerId')) {
 				$nCRWaitingForMe++;
-			} elseif (ASM::$crm->get($j)->getStatement() == CRM_ACTIVE) {
+			} elseif ($commercialRouteManager->get($j)->getStatement() == CommercialRoute::ACTIVE) {
 				$nCROperational++;
-			} elseif (ASM::$crm->get($j)->getStatement() == CRM_STANDBY) {
+			} elseif ($commercialRouteManager->get($j)->getStatement() == CommercialRoute::STANDBY) {
 				$nCRInStandBy++;
 			}
 		}
@@ -67,7 +75,7 @@ echo '<div class="component">';
 		echo '<div class="body">';
 			# affichage des routes en attentes
 			if ($ob_fastView->getLevelSpatioport() > 0 && $nCRWaitingForMe != 0) {
-				echo '<a href="' . Format::actionBuilder('switchbase', ['base' => $ob_fastView->getId(), 'page' => 'spatioport']) . '" class="alert">Vous avez ' . $nCRWaitingForMe . ' proposition' . Format::plural($nCRWaitingForMe) . ' commerciale' . Format::plural($nCRWaitingForMe) . '</a>';
+				echo '<a href="' . Format::actionBuilder('switchbase', $sessionToken, ['base' => $ob_fastView->getId(), 'page' => 'spatioport']) . '" class="alert">Vous avez ' . $nCRWaitingForMe . ' proposition' . Format::plural($nCRWaitingForMe) . ' commerciale' . Format::plural($nCRWaitingForMe) . '</a>';
 			}
 
 			# affichage des ressources
@@ -78,8 +86,8 @@ echo '<div class="component">';
 					echo ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color">';
 				echo '</span>';
 
-				$storageSpace = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $ob_fastView->getLevelStorage(), 'storageSpace');
-				$storageBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::REFINERY_STORAGE);
+				$storageSpace = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $ob_fastView->getLevelStorage(), 'storageSpace');
+				$storageBonus = $session->get('playerBonus')->get(PlayerBonus::REFINERY_STORAGE);
 				if ($storageBonus > 0) {
 					$storageSpace += ($storageSpace * $storageBonus / 100);
 				}
@@ -88,32 +96,32 @@ echo '<div class="component">';
 					echo '<span style="width:' . $percent . '%;" class="content"></span>';
 				echo '</span>';
 				echo '<span class="group-link">';
-					echo '<a href="' . Format::actionBuilder('switchbase', ['base' => $ob_fastView->getId(), 'page' => 'refinery']) . '" class="link hb lt" title="vers la raffinerie">→</a>';
+					echo '<a href="' . Format::actionBuilder('switchbase', $sessionToken, ['base' => $ob_fastView->getId(), 'page' => 'refinery']) . '" class="link hb lt" title="vers la raffinerie">→</a>';
 				echo '</span>';
 			echo '</div>';
 
 			echo '<h4>Générateur</h4>';
 
-			$S_BQM_OBV = ASM::$bqm->getCurrentSession();
-			ASM::$bqm->changeSession($ob_fastView->buildingManager);
+			$S_BQM_OBV = $buildingQueueManager->getCurrentSession();
+			$buildingQueueManager->changeSession($ob_fastView->buildingManager);
 			$nextTime = 0;
 			$nextTotalTime = 0;
 			$realSizeQueue = 0;
 
 			echo '<div class="queue">';
-			for ($j = 0; $j < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::GENERATOR, 'level', $ob_fastView->levelGenerator, 'nbQueues'); $j++) {
-				if (ASM::$bqm->get($j) !== FALSE) {
-					$qe = ASM::$bqm->get($j);
+			for ($j = 0; $j < $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::GENERATOR, 'level', $ob_fastView->levelGenerator, 'nbQueues'); $j++) {
+				if ($buildingQueueManager->get($j) !== FALSE) {
+					$qe = $buildingQueueManager->get($j);
 
 					$realSizeQueue++;
 					$nextTime = Utils::interval(Utils::now(), $qe->dEnd, 's');
-					$nextTotalTime += OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time');
+					$nextTotalTime += $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time');
 
 					echo '<div class="item ' . (($realSizeQueue > 1) ? 'active' : '') . ' progress" data-progress-output="lite" data-progress-no-reload="true" data-progress-current-time="' . $nextTime . '" data-progress-total-time="' . $nextTotalTime . '">';
-							'class="button hb lt" title="annuler la construction (attention, vous ne récupérerez que ' . BQM_RESOURCERETURN * 100 . '% du montant investi)">×</a>';
-					echo '<img class="picto" src="' . MEDIA . 'orbitalbase/' . OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
+							'class="button hb lt" title="annuler la construction (attention, vous ne récupérerez que ' . $buildingResourceRefund * 100 . '% du montant investi)">×</a>';
+					echo '<img class="picto" src="' . MEDIA . 'orbitalbase/' . $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
 					echo '<strong>';
-						echo OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'frenchName');
+						echo $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'frenchName');
 						echo ' <span class="level">niv. ' . $qe->targetLevel . '</span>';
 					echo '</strong>';
 					if ($realSizeQueue > 1) {
@@ -128,7 +136,7 @@ echo '<div class="component">';
 					}
 					echo '</div>';
 				} else {
-					echo '<a href="' . Format::actionBuilder('switchbase', ['base' => $ob_fastView->getId(), 'page' => 'generator']) . '" class="item link">';
+					echo '<a href="' . Format::actionBuilder('switchbase', $sessionToken, ['base' => $ob_fastView->getId(), 'page' => 'generator']) . '" class="item link">';
 						echo 'Construire un bâtiment';
 					echo '</a>';
 
@@ -137,19 +145,19 @@ echo '<div class="component">';
 			}
 			echo '</div>';
 
-			ASM::$bqm->changeSession($S_BQM_OBV);
+			$buildingQueueManager->changeSession($S_BQM_OBV);
 
 			if ($ob_fastView->getLevelDock1() > 0) {
 				echo '<h4>Chantier Alpha</h4>';
 
-				$S_SQM_OBV = ASM::$sqm->getCurrentSession();
-				ASM::$sqm->changeSession($ob_fastView->dock1Manager);
+				$S_SQM_OBV = $shipQueueManager->getCurrentSession();
+				$shipQueueManager->changeSession($ob_fastView->dock1Manager);
 				$realSizeQueue = 0;
 
 				echo '<div class="queue">';
-					for ($j = 0; $j < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::DOCK1, 'level', $ob_fastView->levelDock1, 'nbQueues'); $j++) {
-						if (ASM::$sqm->get($j) !== FALSE) {
-							$queue = ASM::$sqm->get($j);
+					for ($j = 0; $j < $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::DOCK1, 'level', $ob_fastView->levelDock1, 'nbQueues'); $j++) {
+						if ($shipQueueManager->get($j) !== FALSE) {
+							$queue = $shipQueueManager->get($j);
 							$realSizeQueue++;
 							$totalTimeShips = $queue->quantity * ShipResource::getInfo($queue->shipNumber, 'time');
 							$remainingTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
@@ -171,7 +179,7 @@ echo '<div class="component">';
 							}
 							echo '</div>';
 						} else {
-							echo '<a href="' . Format::actionBuilder('switchbase', ['base' => $ob_fastView->getId(), 'page' => 'dock1']) . '" class="item link">';
+							echo '<a href="' . Format::actionBuilder('switchbase', $sessionToken, ['base' => $ob_fastView->getId(), 'page' => 'dock1']) . '" class="item link">';
 								echo 'Lancer la production';
 							echo '</a>';
 
@@ -180,20 +188,20 @@ echo '<div class="component">';
 					}
 				echo '</div>';
 
-				ASM::$sqm->changeSession($S_SQM_OBV);
+				$shipQueueManager->changeSession($S_SQM_OBV);
 			}
 
 			if ($ob_fastView->getLevelDock2() > 0) {
 				echo '<h4>Chantier de Ligne</h4>';
 
-				$S_SQM_OBV = ASM::$sqm->getCurrentSession();
-				ASM::$sqm->changeSession($ob_fastView->dock2Manager);
+				$S_SQM_OBV = $shipQueueManager->getCurrentSession();
+				$shipQueueManager->changeSession($ob_fastView->dock2Manager);
 				$realSizeQueue = 0;
 
 				echo '<div class="queue">';
-					for ($j = 0; $j < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::DOCK1, 'level', $ob_fastView->levelDock1, 'nbQueues'); $j++) {
-						if (ASM::$sqm->get($j) !== FALSE) {
-							$queue = ASM::$sqm->get($j);
+					for ($j = 0; $j < $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::DOCK1, 'level', $ob_fastView->levelDock1, 'nbQueues'); $j++) {
+						if ($shipQueueManager->get($j) !== FALSE) {
+							$queue = $shipQueueManager->get($j);
 							$realSizeQueue++;
 							$totalTimeShips = $queue->quantity * ShipResource::getInfo($queue->shipNumber, 'time');
 							$remainingTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
@@ -215,7 +223,7 @@ echo '<div class="component">';
 							}
 							echo '</div>';
 						} else {
-							echo '<a href="' . Format::actionBuilder('switchbase', ['base' => $ob_fastView->getId(), 'page' => 'dock2']) . '" class="item link">';
+							echo '<a href="' . Format::actionBuilder('switchbase', $sessionToken, ['base' => $ob_fastView->getId(), 'page' => 'dock2']) . '" class="item link">';
 								echo 'Lancer la production';
 							echo '</a>';
 
@@ -224,30 +232,30 @@ echo '<div class="component">';
 					}
 				echo '</div>';
 
-				ASM::$sqm->changeSession($S_SQM_OBV);
+				$shipQueueManager->changeSession($S_SQM_OBV);
 			}
 
 			if ($ob_fastView->getLevelTechnosphere() > 0) {
 				echo '<h4>Technosphère</h4>';
 
-				$S_TQM_OFV = ASM::$tqm->getCurrentSession();
-				ASM::$tqm->changeSession($ob_fastView->technoQueueManager);
+				$S_TQM_OFV = $technologyQueueManager->getCurrentSession();
+				$technologyQueueManager->changeSession($ob_fastView->technoQueueManager);
 				$realSizeQueue = 0;
 				$remainingTotalTime = 0;
 				$totalTimeTechno = 0;
 
 				echo '<div class="queue">';
-				for ($j = 0; $j < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::TECHNOSPHERE, 'level', $ob_fastView->levelTechnosphere, 'nbQueues'); $j++) {
-					if (ASM::$tqm->get($j) !== FALSE) {
-						$queue = ASM::$tqm->get($j);
+				for ($j = 0; $j < $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::TECHNOSPHERE, 'level', $ob_fastView->levelTechnosphere, 'nbQueues'); $j++) {
+					if ($technologyQueueManager->get($j) !== FALSE) {
+						$queue = $technologyQueueManager->get($j);
 						$realSizeQueue++;
-						$totalTimeTechno += TechnologyResource::getInfo($queue->technology, 'time', $queue->targetLevel);
+						$totalTimeTechno += $technologyHelper->getInfo($queue->technology, 'time', $queue->targetLevel);
 						$remainingTotalTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
 
 						echo '<div class="item active progress" data-progress-output="lite" data-progress-no-reload="true" data-progress-current-time="' . $remainingTotalTime . '" data-progress-total-time="' . $totalTimeTechno . '">';
-							echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($queue->technology, 'imageLink') . '.png" alt="" />';
-							echo '<strong>' . TechnologyResource::getInfo($queue->technology, 'name');
-							if (!TechnologyResource::isAnUnblockingTechnology($queue->technology)) {
+							echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . $technologyHelper->getInfo($queue->technology, 'imageLink') . '.png" alt="" />';
+							echo '<strong>' . $technologyHelper->getInfo($queue->technology, 'name');
+							if (!$technologyHelper->isAnUnblockingTechnology($queue->technology)) {
 								echo ' <span class="level">niv. ' . $queue->targetLevel . '</span>';
 							}
 							echo '</strong>';
@@ -264,7 +272,7 @@ echo '<div class="component">';
 							}
 						echo '</div>';
 					} else {
-						echo '<a href="' . Format::actionBuilder('switchbase', ['base' => $ob_fastView->getId(), 'page' => 'technosphere']) . '" class="item link">';
+						echo '<a href="' . Format::actionBuilder('switchbase', $sessionToken, ['base' => $ob_fastView->getId(), 'page' => 'technosphere']) . '" class="item link">';
 							echo 'Développer une technologie';
 						echo '</a>';
 
@@ -273,29 +281,29 @@ echo '<div class="component">';
 				}
 				echo '</div>';
 
-				ASM::$tqm->changeSession($S_TQM_OFV);
+				$technologyQueueManager->changeSession($S_TQM_OFV);
 			}
 
 			if ($ob_fastView->getLevelSpatioport() > 0) {
 				echo '<h4>Spatioport</h4>';
 
-				$S_CRM_OFV = ASM::$crm->getCurrentSession();
-				ASM::$crm->changeSession($ob_fastView->routeManager);
+				$S_CRM_OFV = $commercialRouteManager->getCurrentSession();
+				$commercialRouteManager->changeSession($ob_fastView->routeManager);
 
-				$nMaxCR = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $ob_fastView->getLevelSpatioport(), 'nbRoutesMax');
+				$nMaxCR = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $ob_fastView->getLevelSpatioport(), 'nbRoutesMax');
 				$nCRWaitingForOther = 0; $nCRWaitingForMe = 0;
 				$nCROperational = 0; $nCRInStandBy = 0;
 				$nCRInDock = 0;
 
-				if (ASM::$crm->size() > 0) {
-					for ($j = 0; $j < ASM::$crm->size(); $j++) {
-						if (ASM::$crm->get($j)->getStatement() == CRM_PROPOSED AND ASM::$crm->get($j)->getPlayerId1() == CTR::$data->get('playerId')) {
+				if ($commercialRouteManager->size() > 0) {
+					for ($j = 0; $j < $commercialRouteManager->size(); $j++) {
+						if ($commercialRouteManager->get($j)->getStatement() == CommercialRoute::PROPOSED AND $commercialRouteManager->get($j)->getPlayerId1() == $session->get('playerId')) {
 							$nCRWaitingForOther++;
-						} elseif (ASM::$crm->get($j)->getStatement() == CRM_PROPOSED AND ASM::$crm->get($j)->getPlayerId1() != CTR::$data->get('playerId')) {
+						} elseif ($commercialRouteManager->get($j)->getStatement() == CommercialRoute::PROPOSED AND $commercialRouteManager->get($j)->getPlayerId1() != $session->get('playerId')) {
 							$nCRWaitingForMe++;
-						} elseif (ASM::$crm->get($j)->getStatement() == CRM_ACTIVE) {
+						} elseif ($commercialRouteManager->get($j)->getStatement() == CommercialRoute::ACTIVE) {
 							$nCROperational++;
-						} elseif (ASM::$crm->get($j)->getStatement() == CRM_STANDBY) {
+						} elseif ($commercialRouteManager->get($j)->getStatement() == CommercialRoute::STANDBY) {
 							$nCRInStandBy++;
 						}
 					}
@@ -315,11 +323,11 @@ echo '<div class="component">';
 					echo '</span>';
 
 					echo '<span class="group-link">';
-						echo '<a href="' . Format::actionBuilder('switchbase', ['base' => $ob_fastView->getId(), 'page' => 'spatioport']) . '" class="link hb lt" title="vers le spatioport">→</a>';
+						echo '<a href="' . Format::actionBuilder('switchbase', $sessionToken, ['base' => $ob_fastView->getId(), 'page' => 'spatioport']) . '" class="link hb lt" title="vers le spatioport">→</a>';
 					echo '</span>';
 				echo '</div>';
 
-				ASM::$crm->changeSession($S_CRM_OFV);
+				$commercialRouteManager->changeSession($S_CRM_OFV);
 			}
 		echo '</div>';
 	echo '</div>';

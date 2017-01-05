@@ -4,34 +4,29 @@
 
 # int id 	 		id du commandant
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Exception\ErrorException;
 
-$commanderId = Utils::getHTTPData('id');
-
-
-if ($commanderId !== FALSE) {
-	$S_COM1 = ASM::$com->getCurrentSession();
-	ASM::$com->newSession();
-	ASM::$com->load(array('c.id' => $commanderId, 'c.rPlayer' => CTR::$data->get('playerId')));
-
-	if (ASM::$com->size() == 1) {
-		$commander = ASM::$com->get();
-		if ($commander->statement == 1) {
-			
-			// vider le commandant
-			$commander->emptySquadrons();
-
-			CTR::$alert->add('Vous avez vidé l\'armée menée par votre commandant ' . $commander->getName() . '.', ALERT_STD_SUCCESS);
-		} else {
-			CTR::$alert->add('Vous ne pouvez pas retirer les vaisseaux à un officier en déplacement.', ALERT_STD_ERROR);
-		}
-	} else {
-		CTR::$alert->add('Ce commandant n\'existe pas ou ne vous appartient pas.', ALERT_STD_ERROR);
-	}
-
-	ASM::$com->changeSession($S_COM1);
-} else {
-	CTR::$alert->add('manque d\'information pour le traitement de la requête', ALERT_BUG_ERROR);
+$commanderId = $this->getContainer()->get('app.request')->query->get('id');
+if ($commanderId === null) {
+	throw new ErrorException('manque d\'information pour le traitement de la requête');
 }
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
+
+$S_COM1 = $commanderManager->getCurrentSession();
+$commanderManager->newSession();
+$commanderManager->load(array('c.id' => $commanderId, 'c.rPlayer' => $this->getContainer()->get('app.session')->get('playerId')));
+
+if ($commanderManager->size() !== 1) {
+	throw new ErrorException('Ce commandant n\'existe pas ou ne vous appartient pas.');
+}
+$commander = $commanderManager->get();
+if ($commander->statement !== 1) {
+	throw new ErrorException('Vous ne pouvez pas retirer les vaisseaux à un officier en déplacement.');
+}
+
+// vider le commandant
+$commanderManager->emptySquadrons($commander);
+
+$this->getContainer()->get('app.session')->addFlashbag('Vous avez vidé l\'armée menée par votre commandant ' . $commander->getName() . '.', Flashbag::TYPE_SUCCESS);
+$commanderManager->changeSession($S_COM1);

@@ -4,36 +4,39 @@
 
 # int id 	 		id du commandant
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Library\Flashbag;
 
-$commanderId = Utils::getHTTPData('id');
+$response = $this->getContainer()->get('app.response');
 
-
-if ($commanderId !== FALSE) {
-	$S_COM1 = ASM::$com->getCurrentSession();
-	ASM::$com->newSession();
-	ASM::$com->load(array('c.id' => $commanderId, 'c.rPlayer' => CTR::$data->get('playerId')));
-
-	if (ASM::$com->size() == 1) {
-		$commander = ASM::$com->get();
-
-		if ($commander->statement == 1) {
-		
-			// vider le commandant
-			$commander->emptySquadrons();
-			$commander->setStatement(4);
-
-			CTR::$alert->add('Vous avez renvoyé votre commandant ' . $commander->getName() . '.', ALERT_STD_SUCCESS);
-		} else {
-			CTR::$alert->add('Vous ne pouvez pas renvoyer un officier en déplacement.', ALERT_STD_SUCCESS);
-		}
-	} else {
-		CTR::$alert->add('Ce commandant n\'existe pas ou ne vous appartient pas.', ALERT_STD_ERROR);
-	}
-
-	ASM::$com->changeSession($S_COM1);
-} else {
-	CTR::$alert->add('manque d\'information pour le traitement de la requête', ALERT_BUG_ERROR);
+$commanderId = $this->getContainer()->get('app.request')->query->get('id');
+if ($commanderId === null) {
+	throw new ErrorException('manque d\'information pour le traitement de la requête');
 }
+
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
+$session = $this->getContainer()->get('app.session');
+
+$S_COM1 = $commanderManager->getCurrentSession();
+$commanderManager->newSession();
+$commanderManager->load(array('c.id' => $commanderId, 'c.rPlayer' => $session->get('playerId')));
+
+if ($commanderManager->size() !== 1) {
+	throw new ErrorException('Ce commandant n\'existe pas ou ne vous appartient pas.');
+}
+$commander = $commanderManager->get();
+
+if ($commander->statement == 1) {
+
+	// vider le commandant
+	$commanderManager->emptySquadrons($commander);
+	$commander->setStatement(4);
+
+	$session->addFlashbag('Vous avez renvoyé votre commandant ' . $commander->getName() . '.', Flashbag::TYPE_SUCCESS);
+} else {
+	$session->addFlashbag('Vous ne pouvez pas renvoyer un officier en déplacement.', Flashbag::TYPE_SUCCESS);
+}
+
+$commanderManager->changeSession($S_COM1);
+
+$response->redirect('fleet');

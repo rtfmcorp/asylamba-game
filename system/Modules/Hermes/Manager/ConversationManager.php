@@ -5,16 +5,25 @@ namespace Asylamba\Modules\Hermes\Manager;
 use Asylamba\Classes\Worker\Manager;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Database\Database;
-use Asylamba\Classes\Worker\ASM;
 
 use Asylamba\Modules\Hermes\Model\Conversation;
 
 class ConversationManager extends Manager {
 	protected $managerType ='_Conversation';
-
+	/** @var ConversationUserManager **/
+	protected $conversationUserManager;
+	
+	/**
+	 * @param Database $database
+	 * @param ConversationUserManager $conversationUserManager
+	 */
+	public function __construct(Database $database, ConversationUserManager $conversationUserManager) {
+		parent::__construct($database);
+		$this->conversationUserManager = $conversationUserManager;
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT c.*
+		$qr = $this->database->prepare('SELECT c.*
 			FROM conversation AS c
 			LEFT JOIN conversationUser AS cu
 				ON cu.rConversation = c.id
@@ -49,9 +58,9 @@ class ConversationManager extends Manager {
 			$conversationIds[] = $aw['id'];
 		}
 
-		$S_CUM = ASM::$cum->getCurrentSession();
-		ASM::$cum->newSession();
-		ASM::$cum->load(array('c.rConversation' => $conversationIds));
+		$S_CUM = $this->conversationUserManager->getCurrentSession();
+		$this->conversationUserManager->newSession();
+		$this->conversationUserManager->load(array('c.rConversation' => $conversationIds));
 
 		foreach ($aws AS $aw) {
 			$conv = new Conversation();
@@ -63,25 +72,22 @@ class ConversationManager extends Manager {
 			$conv->dCreation = $aw['dCreation'];
 			$conv->dLastMessage = $aw['dLastMessage'];
 
-			for ($i = 0; $i < ASM::$cum->size(); $i++) {
-				if (ASM::$cum->get($i)->rConversation == $conv->id) {
-					$conv->players[] = ASM::$cum->get($i);
+			for ($i = 0; $i < $this->conversationUserManager->size(); $i++) {
+				if ($this->conversationUserManager->get($i)->rConversation == $conv->id) {
+					$conv->players[] = $this->conversationUserManager->get($i);
 				}
 			}
 			
 			$this->_Add($conv);
 		}
-
-		ASM::$cum->changeSession($S_CUM);
+		$this->conversationUserManager->changeSession($S_CUM);
 	}
 
 	public function save() {
-		$db = Database::getInstance();
-
 		$convs = $this->_Save();
 
 		foreach ($convs AS $conv) {
-			$qr = $db->prepare('UPDATE conversation
+			$qr = $this->database->prepare('UPDATE conversation
 				SET
 					title = ?,
 					messages = ?,
@@ -102,9 +108,7 @@ class ConversationManager extends Manager {
 	}
 
 	public function add($conv) {
-		$db = Database::getInstance();
-
-		$qr = $db->prepare('INSERT INTO conversation
+		$qr = $this->database->prepare('INSERT INTO conversation
 			SET title = ?,
 				messages = ?,
 				type = ?,
@@ -120,15 +124,14 @@ class ConversationManager extends Manager {
 				Utils::now()
 		));
 
-		$conv->id = $db->lastInsertId();
+		$conv->id = $this->database->lastInsertId();
 		$this->_Add($conv);
 
 		return $conv->id;
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM conversation WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM conversation WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);

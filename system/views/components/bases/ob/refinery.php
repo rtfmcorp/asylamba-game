@@ -10,13 +10,15 @@
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
+
+$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$session = $this->getContainer()->get('app.session');
 
 echo '<div class="component building">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'orbitalbase/refinery.png" alt="" />';
-		echo '<h2>' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::REFINERY, 'frenchName') . '</h2>';
+		echo '<h2>' . $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::REFINERY, 'frenchName') . '</h2>';
 		echo '<em>Niveau ' . $ob_refinery->getLevelRefinery() . '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
@@ -25,9 +27,9 @@ echo '<div class="component building">';
 			echo '<div class="number-box">';
 				echo '<span class="label">production par relève</span>';
 				echo '<span class="value">';
-					$production = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $ob_refinery->getLevelRefinery(), 'refiningCoefficient'), $ob_refinery->getPlanetResources());
+					$production = Game::resourceProduction($orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $ob_refinery->getLevelRefinery(), 'refiningCoefficient'), $ob_refinery->getPlanetResources());
 					echo Format::numberFormat($production);
-					$refiningBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::REFINERY_REFINING);
+					$refiningBonus = $session->get('playerBonus')->get(PlayerBonus::REFINERY_REFINING);
 
 					if ($refiningBonus > 0) {
 						echo '<span class="bonus">+' . Format::numberFormat(($production * $refiningBonus / 100)) . '</span>';
@@ -68,9 +70,9 @@ echo '<div class="component">';
 					echo ($i == $level) ? '<li class="strong">' : '<li>';
 						echo '<span class="label">niveau ' . $i . '</span>';
 						echo '<span class="value">';
-							$production = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $i, 'refiningCoefficient'), $ob_refinery->getPlanetResources());
+							$production = Game::resourceProduction($orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $i, 'refiningCoefficient'), $ob_refinery->getPlanetResources());
 							echo Format::numberFormat($production);
-							$refiningBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::REFINERY_REFINING);
+							$refiningBonus = $session->get('playerBonus')->get(PlayerBonus::REFINERY_REFINING);
 							
 							if ($refiningBonus > 0) {
 								echo '<span class="bonus">+' . Format::numberFormat(($production * $refiningBonus / 100)) . '</span>';
@@ -90,7 +92,7 @@ echo '<div class="component">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<p class="long-info">' . OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::REFINERY, 'description') . '</p>';
+			echo '<p class="long-info">' . $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::REFINERY, 'description') . '</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

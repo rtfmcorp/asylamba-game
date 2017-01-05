@@ -9,15 +9,21 @@
 
 # worker
 
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Bug;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Benchmark;
 use Asylamba\Classes\Worker\API;
-use Asylamba\Modules\Gaia\Manager\GalaxyColorManager;
+use Asylamba\Modules\Zeus\Model\Player;
 
-$S_NTM1 = ASM::$ntm->getCurrentSession();
-$S_PAM1 = ASM::$pam->getCurrentSession();
+$notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$readNotificationTimeout = $this->getContainer()->getParameter('hermes.notifications.timeout.read');
+$unreadNotificationTimeout = $this->getContainer()->getParameter('hermes.notifications.timeout.unread');
+$playerGlobalInactiveTime = $this->getContainer()->getParameter('zeus.player.global_inactive_time');
+$playerInactiveTimeLimit = $this->getContainer()->getParameter('zeus.player.inactive_time_limit');
+
+$S_NTM1 = $notificationManager->getCurrentSession();
+$S_PAM1 = $playerManager->getCurrentSession();
 
 $path = 'public/log/cron/' . date('Y') . '-' . date('m') . '.log';
 
@@ -31,13 +37,13 @@ Bug::writeLog($path, '');
 Bug::writeLog($path, '# Clean up redead notifications');
 $bench = new Benchmark();
 
-ASM::$ntm->newSession();
-ASM::$ntm->load(array('readed' => 1, 'archived' => 0));
+$notificationManager->newSession();
+$notificationManager->load(array('readed' => 1, 'archived' => 0));
 
 $deletedReadedNotifs = 0;
-for ($i = ASM::$ntm->size() - 1; $i >= 0; $i--) { 
-	if (Utils::interval(Utils::now(), ASM::$ntm->get($i)->getDSending()) >= NTM_TIMEOUT_READED) {
-		ASM::$ntm->deleteById(ASM::$ntm->get($i)->getId());
+for ($i = $notificationManager->size() - 1; $i >= 0; $i--) { 
+	if (Utils::interval(Utils::now(), $notificationManager->get($i)->getDSending()) >= $readNotificationTimeout) {
+		$notificationManager->deleteById($notificationManager->get($i)->getId());
 		$deletedReadedNotifs++;
 	}
 }
@@ -52,13 +58,13 @@ $bench->clear();
 Bug::writeLog($path, '# Clean up unreaded notifications');
 $bench->start();
 
-ASM::$ntm->newSession();
-ASM::$ntm->load(array('readed' => 0, 'archived' => 0));
+$notificationManager->newSession();
+$notificationManager->load(array('readed' => 0, 'archived' => 0));
 
 $deletedUnreadedNotifs = 0;
-for ($i = ASM::$ntm->size() - 1; $i >= 0; $i--) { 
-	if (Utils::interval(Utils::now(), ASM::$ntm->get($i)->getDSending()) >= NTM_TIMEOUT_UNREADED) {
-		ASM::$ntm->deleteById(ASM::$ntm->get($i)->getId());
+for ($i = $notificationManager->size() - 1; $i >= 0; $i--) { 
+	if (Utils::interval(Utils::now(), $notificationManager->get($i)->getDSending()) >= $unreadNotificationTimeout) {
+		$notificationManager->deleteById($notificationManager->get($i)->getId());
 		$deletedUnreadedNotifs++;
 	}
 }
@@ -73,30 +79,33 @@ $bench->clear();
 Bug::writeLog($path, '# Check unactive players');
 $bench->start();
 
-ASM::$pam->newSession(FALSE);
-ASM::$pam->load(array('statement' => array(PAM_ACTIVE, PAM_INACTIVE)));
+$playerManager->newSession(FALSE);
+$playerManager->load(array('statement' => array(Player::ACTIVE, Player::INACTIVE)));
 
 $unactivatedPlayers = 0;
 $deletedPlayers 	= 0;
-for ($i = ASM::$pam->size() - 1; $i >= 0; $i--) { 
-	if (Utils::interval(Utils::now(), ASM::$pam->get($i)->getDLastConnection()) >= PAM_TIME_LIMIT_INACTIVE) {
+for ($i = $playerManager->size() - 1; $i >= 0; $i--) { 
+	if (Utils::interval(Utils::now(), $playerManager->get($i)->getDLastConnection()) >= $playerInactiveTimeLimit) {
 
-		ASM::$pam->kill(ASM::$pam->get($i)->id);
+		$playerManager->kill($playerManager->get($i)->id);
 
 		$deletedPlayers++;
-	} elseif (Utils::interval(Utils::now(), ASM::$pam->get($i)->getDLastConnection()) >= PAM_TIME_GLOBAL_INACTIVE AND ASM::$pam->get($i)->statement == PAM_ACTIVE) {
-		ASM::$pam->get($i)->statement = PAM_INACTIVE;
+	} elseif (Utils::interval(Utils::now(), $playerManager->get($i)->getDLastConnection()) >= $playerGlobalInactiveTime AND $playerManager->get($i)->statement == Player::ACTIVE) {
+		$playerManager->get($i)->statement = Player::INACTIVE;
 
-		# sending email API call
-		$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
-		$api->sendMail(ASM::$pam->get($i)->bind, APP_ID, API::TEMPLATE_INACTIVE_PLAYER);
+		if (APIMODE) {
+			# sending email API call
+			$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
+			$api->sendMail($playerManager->get($i)->bind, APP_ID, API::TEMPLATE_INACTIVE_PLAYER);
+		}
 
 		$unactivatedPlayers++;
 	}
+
 }
 
 # applique en cascade le changement de couleur des sytèmes
-GalaxyColorManager::apply();
+$this->getContainer()->get('gaia.galaxy_color_manager')->apply();
 
 Bug::writeLog($path, '# [OK] Status');
 Bug::writeLog($path, '# [' . $bench->getTime('s', 3) . '] Execution time');
@@ -106,8 +115,8 @@ Bug::writeLog($path, '');
 $bench->clear();
 
 # close object
-ASM::$ntm->changeSession($S_NTM1);
-ASM::$pam->changeSession($S_PAM1);
+$notificationManager->changeSession($S_NTM1);
+$playerManager->changeSession($S_PAM1);
 
 Bug::writeLog($path, '');
 

@@ -6,4 +6,28 @@ parameters:
     database_password: asylamba
     database_admin_user: root
     database_admin_password: asylamba
+    
+    log_handler: Asylamba\Classes\Logger\FileLogger
+    log_rotation: 3
 
+    # s7/s11 - révolte seldarine - 1/4 of the map, 2 bridges
+    #gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV2
+    #game.available_factions: [1, 4, 8, 9]
+
+    # s8/s12 - révolution cardanienne - zoom, stars strip
+    #gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV3
+    #game.available_factions: [4, 8, 10, 11, 12]
+
+    # s9 - empire contre-attaque - 1/4 of the map, 2 bridges
+    #gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV4
+    #game.available_factions: [1, 8, 11]
+
+    # s10 - chute des archontes - full map, 7 bridges
+    #gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV1
+    #game.available_factions: [1, 2, 6, 7, 11]
+
+    # s13 - renaissance - full map, 8 bridges
+    gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV5
+    game.available_factions: [2, 3, 6, 7]
+    
+    environment: dev

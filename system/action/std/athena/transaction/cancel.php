@@ -4,70 +4,80 @@
 # int rtransaction 		id de la transaction
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
-$rTransaction = Utils::getHTTPData('rtransaction');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
+$transactionManager = $this->getContainer()->get('athena.transaction_manager');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$commercialShippingManager = $this->getContainer()->get('athena.commercial_shipping_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+
+$rTransaction = $request->query->get('rtransaction');
 
 if ($rTransaction !== FALSE) {
 
-	$S_TRM1 = ASM::$trm->getCurrentSession();
-	ASM::$trm->newSession();
-	ASM::$trm->load(array('id' => $rTransaction));
-	$transaction = ASM::$trm->get();
+	$S_TRM1 = $transactionManager->getCurrentSession();
+	$transactionManager->newSession();
+	$transactionManager->load(array('id' => $rTransaction));
+	$transaction = $transactionManager->get();
 
-	$S_CSM1 = ASM::$csm->getCurrentSession();
-	ASM::$csm->newSession();
-	ASM::$csm->load(array('rTransaction' => $rTransaction));
-	$commercialShipping = ASM::$csm->get();
+	$S_CSM1 = $commercialShippingManager->getCurrentSession();
+	$commercialShippingManager->newSession();
+	$commercialShippingManager->load(array('rTransaction' => $rTransaction));
+	$commercialShipping = $commercialShippingManager->get();
 
-	if (ASM::$trm->size() == 1 AND ASM::$csm->size() == 1 AND $transaction->statement == Transaction::ST_PROPOSED AND $transaction->rPlayer == CTR::$data->get('playerId')) {
+	if ($transactionManager->size() == 1 AND $commercialShippingManager->size() == 1 AND $transaction->statement == Transaction::ST_PROPOSED AND $transaction->rPlayer == $session->get('playerId')) {
 
-		$S_OBM1 = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession(ASM_UMODE);
-		ASM::$obm->load(array('rPlace' => $transaction->rPlace));
-		$base = ASM::$obm->get();
+		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
+		$orbitalBaseManager->newSession(ASM_UMODE);
+		$orbitalBaseManager->load(array('rPlace' => $transaction->rPlace));
+		$base = $orbitalBaseManager->get();
 
-		if (CTR::$data->get('playerInfo')->get('credit') >= $transaction->getPriceToCancelOffer()) {
+		if ($session->get('playerInfo')->get('credit') >= $transaction->getPriceToCancelOffer()) {
 
 			# chargement du joueur
-			$S_PAM1 = ASM::$pam->getCurrentSession();
-			ASM::$pam->newSession(ASM_UMODE);
-			ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+			$S_PAM1 = $playerManager->getCurrentSession();
+			$playerManager->newSession(ASM_UMODE);
+			$playerManager->load(array('id' => $session->get('playerId')));
 
-			if (ASM::$pam->size() == 1) {
+			if ($playerManager->size() == 1) {
 
 				$valid = TRUE;
 
 				switch ($transaction->type) {
 					case Transaction::TYP_RESOURCE :
-						$maxStorage = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $base->getLevelStorage(), 'storageSpace');
-						$storageBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::REFINERY_STORAGE);
+						$maxStorage = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $base->getLevelStorage(), 'storageSpace');
+						$storageBonus = $session->get('playerBonus')->get(PlayerBonus::REFINERY_STORAGE);
 						if ($storageBonus > 0) {
 							$maxStorage += ($maxStorage * $storageBonus / 100);
 						}
 						$storageSpace = $maxStorage - $base->getResourcesStorage();
 
 						if ($storageSpace >= $transaction->quantity) {
-							$base->increaseResources($transaction->quantity, TRUE);
+							$orbitalBaseManager->increaseResources($base, $transaction->quantity, TRUE);
 						} else {
 							$valid = FALSE;
-							CTR::$alert->add('Vous n\'avez pas assez de place dans votre Stockage pour stocker les ressources. Videz un peu le hangar et revenez plus tard pour annuler cette offre.', ALERT_STD_INFO);
+							throw new ErrorException('Vous n\'avez pas assez de place dans votre Stockage pour stocker les ressources. Videz un peu le hangar et revenez plus tard pour annuler cette offre.', ALERT_STD_INFO);
 						}
 						break;
 					case Transaction::TYP_SHIP :
-						$base->addShipToDock($transaction->identifier, $transaction->quantity);
+						$orbitalBaseManager->addShipToDock($base, $transaction->identifier, $transaction->quantity);
 						break;
 					case Transaction::TYP_COMMANDER :
-						$S_COM1 = ASM::$com->getCurrentSession();
-						ASM::$com->newSession(ASM_UMODE);
-						ASM::$com->load(array('c.id' => $transaction->identifier));
-						$commander = ASM::$com->get();
+						$S_COM1 = $commanderManager->getCurrentSession();
+						$commanderManager->newSession(ASM_UMODE);
+						$commanderManager->load(array('c.id' => $transaction->identifier));
+						$commander = $commanderManager->get();
 						$commander->setStatement(Commander::RESERVE);
-						ASM::$com->changeSession($S_COM1);
+						$commanderManager->changeSession($S_COM1);
 						break;
 					default :
 						$valid = FALSE;
@@ -75,10 +85,10 @@ if ($rTransaction !== FALSE) {
 
 				if ($valid) {
 					// débit des crédits au joueur
-					ASM::$pam->get()->decreaseCredit($transaction->getPriceToCancelOffer());
+					$playerManager->decreaseCredit($playerManager->get(), $transaction->getPriceToCancelOffer());
 
 					// annulation de l'envoi commercial (libération des vaisseaux de commerce)
-					ASM::$csm->deleteById($commercialShipping->id);
+					$commercialShippingManager->deleteById($commercialShipping->id);
 
 					// update transaction statement
 					$transaction->statement = Transaction::ST_CANCELED;
@@ -86,29 +96,29 @@ if ($rTransaction !== FALSE) {
 
 					switch ($transaction->type) {
 						case Transaction::TYP_RESOURCE :
-							CTR::$alert->add('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et vous récupérez vos ressources.', ALERT_GAM_MARKET);
+							$session->addFlashbag('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et vous récupérez vos ressources.', Flashbag::TYPE_MARKET_SUCCESS);
 							break;
 						case Transaction::TYP_SHIP :
-							CTR::$alert->add('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et vous récupérez vos vaisseaux de combat.', ALERT_GAM_MARKET);
+							$session->addFlashbag('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et vous récupérez vos vaisseaux de combat.', Flashbag::TYPE_MARKET_SUCCESS);
 							break;
 						case Transaction::TYP_COMMANDER :
-							CTR::$alert->add('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et votre commandant est placé à l\'école de commandement.', ALERT_GAM_MARKET);
+							$session->addFlashbag('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et votre commandant est placé à l\'école de commandement.', Flashbag::TYPE_MARKET_SUCCESS);
 							break;
 					}
 				}
 			} else {
-				CTR::$alert->add('erreur dans l\'annulation de proposition sur le marché, joueur inexistant', ALERT_STD_ERROR);
+				throw new ErrorException('erreur dans l\'annulation de proposition sur le marché, joueur inexistant');
 			}
-			ASM::$pam->changeSession($S_PAM1);
+			$playerManager->changeSession($S_PAM1);
 		} else {
-			CTR::$alert->add('vous n\'avez pas assez de crédits pour annuler la proposition', ALERT_STD_ERROR);
+			throw new ErrorException('vous n\'avez pas assez de crédits pour annuler la proposition');
 		}
-		ASM::$obm->changeSession($S_OBM1);
+		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
-		CTR::$alert->add('impossible d\'annuler une proposition sur le marché', ALERT_STD_ERROR);
+		throw new ErrorException('impossible d\'annuler une proposition sur le marché');
 	}
-	ASM::$trm->changeSession($S_TRM1);
-	ASM::$csm->changeSession($S_CSM1);
+	$transactionManager->changeSession($S_TRM1);
+	$commercialShippingManager->changeSession($S_CSM1);
 } else {
-	CTR::$alert->add('pas assez d\'informations pour annuler une proposition sur le marché', ALERT_STD_FILLFORM);
+	throw new FormException('pas assez d\'informations pour annuler une proposition sur le marché');
 }

@@ -2,10 +2,42 @@
 parameters:
     promethee.research.coeff: 1
     promethee.research.max_diff: 3
-    promethee.research._quantity: 10
+    promethee.research.quantity: 10
 
     promethee.technology_queue.resource_refund: 0.5
     promethee.technology_queue.credit_refund: 0.5    
     
 services:
+    promethee.research_helper:
+        class: Asylamba\Modules\Promethee\Helper\ResearchHelper
+        arguments:
+            - "%promethee.research.coeff"
+            - "%promethee.research.max_diff"
     
+    promethee.research_manager:
+        class: Asylamba\Modules\Promethee\Manager\ResearchManager
+        arguments:
+            - "@database"
+            - "@zeus.player_manager"
+            - "@hermes.notification_manager"
+            - "@promethee.research_helper"
+            - "%promethee.research.quantity"
+            
+    promethee.technology_helper:
+        class: Asylamba\Modules\Promethee\Helper\TechnologyHelper
+        arguments:
+            - "@athena.orbital_base_helper"
+            - "@promethee.research_helper"
+            - "%promethee.research.quantity"
+            
+    promethee.technology_manager:
+        class: Asylamba\Modules\Promethee\Manager\TechnologyManager
+        arguments:
+            - "@database"
+            - "@zeus.player_bonus_manager"
+            - "@promethee.technology_helper"
+            
+    promethee.technology_queue_manager:
+        class: Asylamba\Modules\Promethee\Manager\TechnologyQueueManager
+        arguments:
+            - "@database"

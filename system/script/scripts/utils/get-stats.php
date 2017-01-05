@@ -11,12 +11,12 @@ echo '<h2>Joueurs</h2>';
 
 echo '<p>';
 	echo 'Joueurs actifs<br />';
-	echo '<strong>' . Format::number(PlayerManager::count(array('statement' => PAM_ACTIVE))) . '</strong>';
+	echo '<strong>' . Format::number(PlayerManager::count(array('statement' => Player::ACTIVE))) . '</strong>';
 echo '</p>';
 
 echo '<p>';
 	echo 'Joueurs inscrits<br />';
-	echo '<strong>' . Format::number(PlayerManager::count(array('statement' => array(PAM_ACTIVE, PAM_INACTIVE)))) . '</strong>';
+	echo '<strong>' . Format::number(PlayerManager::count(array('statement' => array(Player::ACTIVE, Player::INACTIVE)))) . '</strong>';
 echo '</p>';
 
 $S_PAM = ASM::$pam->getCurrentSession();

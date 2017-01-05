@@ -12,20 +12,26 @@
 namespace Asylamba\Modules\Athena\Manager;
 
 use Asylamba\Classes\Worker\Manager;
-use \Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Athena\Model\BuildingQueue;
 
 class BuildingQueueManager extends Manager {
 	protected $managerType = '_BuildingQueue';
+	
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
 
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where);
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT *
+		$qr = $this->database->prepare('SELECT *
 			FROM orbitalBaseBuildingQueue
 			' . $formatWhere . '
 			' . $formatOrder . '
@@ -59,12 +65,11 @@ class BuildingQueueManager extends Manager {
 			$bq->dEnd = $aw['dEnd'];
 
 			$this->_Add($bq);
-	}
+		}
 	}
 
 	public function add(BuildingQueue $bq) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
+		$qr = $this->database->prepare('INSERT INTO
 			orbitalBaseBuildingQueue(rOrbitalBase, buildingNumber, targetLevel, dStart, dEnd)
 			VALUES(?, ?, ?, ?, ?)');
 		$qr->execute(array(
@@ -75,15 +80,14 @@ class BuildingQueueManager extends Manager {
 			$bq->dEnd
 		));
 
-		$bq->id = $db->lastInsertId();
+		$bq->id = $this->database->lastInsertId();
 		$this->_Add($bq);
 	}
 
 	public function save() {
 		$buildingQueues = $this->_Save();
 		foreach ($buildingQueues AS $bq) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE orbitalBaseBuildingQueue
+			$qr = $this->database->prepare('UPDATE orbitalBaseBuildingQueue
 				SET	id = ?,
 					rOrbitalBase = ?,
 					buildingNumber = ?,
@@ -104,8 +108,7 @@ class BuildingQueueManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM orbitalBaseBuildingQueue WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM orbitalBaseBuildingQueue WHERE id = ?');
 		$qr->execute(array($id));
 
 		// suppression de l'objet en manager

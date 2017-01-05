@@ -1,15 +1,20 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-# démarre la redirection standard vers la page précédente
-CTR::redirect();
+use Asylamba\Classes\Exception\ErrorException;
 
-if (CTR::$get->exist('sftr')) {
-	CTR::$data->add('sftr', CTR::$get->get('sftr'));
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
+$session = $this->getContainer()->get('app.session');
+
+# démarre la redirection standard vers la page précédente
+$response->redirect();
+
+if ($request->query->has('sftr')) {
+	$session->add('sftr', $request->query->get('sftr'));
 }
 
-if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('token'))) {
-	switch (CTR::$get->get('a')) {
+if ($request->query->has('token') && $session->get('token') === $request->query->get('token')) {
+	switch ($request->query->get('a')) {
 		# GENERAL
 		case 'switchbase': 				include ACTION . 'common/switchBase.php'; break;
 		case 'switchparams':			include ACTION . 'common/switchParams.php'; break;
@@ -133,12 +138,11 @@ if (CTR::$get->exist('token') AND CTR::$data->equal('token', CTR::$get->get('tok
 		case 'donate':					include ACTION . 'demeter/donate.php'; break;
 
 		default :
-			CTR::$alert->add('action inconnue ou non-référencée', ALERT_STD_ERROR);
-			break;
+			throw new ErrorException('action inconnue ou non-référencée');
 	}
-} elseif (CTR::$get->get('a') == 'switchbase') {
+} elseif ($request->query->get('a') == 'switchbase') {
 	# action sans token
 	include ACTION . 'common/switchBase.php';
 } else {
-	CTR::$alert->add('votre token CSRF a expiré', ALERT_STD_ERROR);
+	throw new ErrorException('votre token CSRF a expiré');
 }

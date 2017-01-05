@@ -1,18 +1,18 @@
 <?php
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\CTR;
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
 
-$base = Utils::getHTTPData('base');
-$page = Utils::getHTTPData('page'); # facultatif
+$base = $request->query->get('base');
+$page = $request->query->get('page'); # facultatif
 
 if ($base !== FALSE) {
-	if (CTR::$data->baseExist($base)) {
-		CTR::$data->get('playerParams')->add('base', $base);
+	if ($session->baseExist($base)) {
+		$session->get('playerParams')->add('base', $base);
 	}
 }
 
-if ($page !== FALSE) {
+if ($page !== null) {
 	switch ($page) {
 		case 'generator' : $page = 'bases/view-generator'; break;
 		case 'refinery' : $page = 'bases/view-refinery'; break;
@@ -24,5 +24,7 @@ if ($page !== FALSE) {
 		case 'school' : $page = 'bases/view-school'; break;
 		case 'spatioport' : $page = 'bases/view-spatioport'; break;
 	}
-	CTR::redirect($page);
+	$this->getContainer()->get('app.response')->redirect($page);
+} else {
+	// otherwise no redirection
 }

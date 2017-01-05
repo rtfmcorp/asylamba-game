@@ -9,47 +9,51 @@
 
 # work
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Chronos;
-use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+
+$session = $this->getContainer()->get('app.session');
+$buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
+$technologyManager = $this->getContainer()->get('promethee.technology_manager');
+$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$buildingResourceRefund = $this->getContainer()->getParameter('athena.building.building_queue_resource_refund');
+$sessionToken = $session->get('token');
 
 $q = '';
 $b = array('', '', '', '', '', '', '', '', '', '');
 $realSizeQueue = 0;
 
 for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) {
-	$name 		= ucfirst(OrbitalBaseResource::getBuildingInfo($i, 'name'));
+	$name 		= ucfirst($orbitalBaseHelper->getBuildingInfo($i, 'name'));
 	$aLevel[$i] = intval(call_user_func(array($ob_generator, 'getLevel' . $name)));
 	$rLevel[$i] = intval(call_user_func(array($ob_generator, 'getReal' . $name . 'Level')));
 }
 
 # queue
-$S_BQM1 = ASM::$bqm->getCurrentSession();
-ASM::$bqm->changeSession($ob_generator->buildingManager);
+$S_BQM1 = $buildingQueueManager->getCurrentSession();
+$buildingQueueManager->changeSession($ob_generator->buildingManager);
 
 $q .= '<div class="queue">';
 $nextTime = 0;
 $nextTotalTime = 0;
 
-for ($i = 0; $i < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::GENERATOR, 'level', $ob_generator->levelGenerator, 'nbQueues'); $i++) {
-	if (ASM::$bqm->get($i) !== FALSE) {
-		$qe = ASM::$bqm->get($i);
+for ($i = 0; $i < $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::GENERATOR, 'level', $ob_generator->levelGenerator, 'nbQueues'); $i++) {
+	if ($buildingQueueManager->get($i) !== FALSE) {
+		$qe = $buildingQueueManager->get($i);
 
 		$realSizeQueue++;
 		$nextTime = Utils::interval(Utils::now(), $qe->dEnd, 's');
-		$nextTotalTime += OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time');
+		$nextTotalTime += $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time');
 
 		$q .= '<div class="item ' . (($realSizeQueue > 1) ? 'active' : '') . ' progress" data-progress-output="lite" data-progress-current-time="' . $nextTime . '" data-progress-total-time="' . $nextTotalTime . '">';
-		$q .= '<a href="' . Format::actionBuilder('dequeuebuilding', ['baseid' => $ob_generator->getId(), 'building' => $qe->buildingNumber]) . '"' . 
-				'class="button hb lt" title="annuler la construction (attention, vous ne récupérerez que ' . BQM_RESOURCERETURN * 100 . '% du montant investi)">×</a>';
-		$q .= '<img class="picto" src="' . MEDIA . 'orbitalbase/' . OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
+		$q .= '<a href="' . Format::actionBuilder('dequeuebuilding', $sessionToken, ['baseid' => $ob_generator->getId(), 'building' => $qe->buildingNumber]) . '"' . 
+				'class="button hb lt" title="annuler la construction (attention, vous ne récupérerez que ' . $buildingResourceRefund * 100 . '% du montant investi)">×</a>';
+		$q .= '<img class="picto" src="' . MEDIA . 'orbitalbase/' . $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
 		$q .= '<strong>';
-			$q .= OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'frenchName');
+			$q .= $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'frenchName');
 			$q .= ' <span class="level">niv. ' . $qe->targetLevel . '</span>';
 		$q .= '</strong>';
 		if ($realSizeQueue > 1) {
@@ -74,29 +78,29 @@ for ($i = 0; $i < OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::GENE
 }
 $q .= '</div>';
 
-ASM::$bqm->changeSession($S_BQM1);
+$buildingQueueManager->changeSession($S_BQM1);
 
 
 # building
-$technology = new Technology(CTR::$data->get('playerId'));
+$technology = $technologyManager->getPlayerTechnology($session->get('playerId'));
 for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) {
 	$level = $aLevel[$i];
 	$nextLevel =  $rLevel[$i] + 1;
 
 	$b[$i] .= ($rLevel[$i]) ? '<div class="build-item">' : '<div class="build-item disable">';
 		$b[$i] .= '<div class="name">';
-			$b[$i] .= '<img src="' . MEDIA . 'orbitalbase/' . OrbitalBaseResource::getBuildingInfo($i, 'imageLink') . '.png" alt="" />';
-			$b[$i] .= '<strong>' . OrbitalBaseResource::getBuildingInfo($i, 'frenchName') . '</strong>';
+			$b[$i] .= '<img src="' . MEDIA . 'orbitalbase/' . $orbitalBaseHelper->getBuildingInfo($i, 'imageLink') . '.png" alt="" />';
+			$b[$i] .= '<strong>' . $orbitalBaseHelper->getBuildingInfo($i, 'frenchName') . '</strong>';
 			if ($level != 0) {
 				$b[$i] .= '<span class="level hb lt" title="niveau actuel">' . $level . '</span>';
 			}
 			$b[$i] .= '<a href="#" class="addInfoPanel info hb lt" title="plus d\'info" data-building-id="' . $i . '" data-info-type="building" data-building-current-level="' . $level . '">+</a>';
 		$b[$i] .= '</div>';
 
-		$price = Format::numberFormat(OrbitalBaseResource::getBuildingInfo($i, 'level', ($nextLevel), 'resourcePrice'), -1) . ' <img src="' .  MEDIA. 'resources/resource.png" alt="ressources" class="icon-color" />';
-		$time  = Chronos::secondToFormat(OrbitalBaseResource::getBuildingInfo($i, 'level', ($nextLevel), 'time'), 'lite') . ' <img src="' .  MEDIA. 'resources/time.png" alt="relèves" class="icon-color" />';
+		$price = Format::numberFormat($orbitalBaseHelper->getBuildingInfo($i, 'level', ($nextLevel), 'resourcePrice'), -1) . ' <img src="' .  MEDIA. 'resources/resource.png" alt="ressources" class="icon-color" />';
+		$time  = Chronos::secondToFormat($orbitalBaseHelper->getBuildingInfo($i, 'level', ($nextLevel), 'time'), 'lite') . ' <img src="' .  MEDIA. 'resources/time.png" alt="relèves" class="icon-color" />';
 
-		if (($answer = OrbitalBaseResource::haveRights($i, $nextLevel, 'buildingTree', $ob_generator)) !== TRUE) {
+		if (($answer = $orbitalBaseHelper->haveRights($i, $nextLevel, 'buildingTree', $ob_generator)) !== TRUE) {
 			if ($answer == 'niveau maximum atteint') {
 				$b[$i] .= '<span class="button disable">';
 					$b[$i] .= '<span class="text">';
@@ -112,22 +116,22 @@ for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) {
 					$b[$i] .= '</span>';
 				$b[$i] .= '</span>';
 			}
-		} elseif (($answer = OrbitalBaseResource::haveRights($i, $nextLevel, 'techno', $technology)) !== TRUE) {
+		} elseif (($answer = $orbitalBaseHelper->haveRights($i, $nextLevel, 'techno', $technology)) !== TRUE) {
 			$b[$i] .= '<span class="button disable hb lt" title="' . $answer . '">';
 				$b[$i] .= '<span class="text">';
 					$b[$i] .= 'construction impossible<br/>';
 					$b[$i] .= $price . ' | ' . $time;
 				$b[$i] .= '</span>';
 			$b[$i] .= '</span>';
-		} elseif (!OrbitalBaseResource::haveRights(OrbitalBaseResource::GENERATOR, $aLevel[OrbitalBaseResource::GENERATOR], 'queue', $realSizeQueue)) {
+		} elseif (!$orbitalBaseHelper->haveRights(OrbitalBaseResource::GENERATOR, $aLevel[OrbitalBaseResource::GENERATOR], 'queue', $realSizeQueue)) {
 			$b[$i] .= '<span class="button disable hb lt" title="file de construction pleine, revenez dans un moment">';
 				$b[$i] .= '<span class="text">';
 					$b[$i] .= 'construction impossible<br/>';
 					$b[$i] .= $price . ' | ' . $time;
 				$b[$i] .= '</span>';
 			$b[$i] .= '</span>';
-		} elseif (!OrbitalBaseResource::haveRights($i, $nextLevel, 'resource', $ob_generator->getResourcesStorage())) {
-			$missingResource = OrbitalBaseResource::getBuildingInfo($i, 'level', ($nextLevel), 'resourcePrice') - $ob_generator->getResourcesStorage();
+		} elseif (!$orbitalBaseHelper->haveRights($i, $nextLevel, 'resource', $ob_generator->getResourcesStorage())) {
+			$missingResource = $orbitalBaseHelper->getBuildingInfo($i, 'level', ($nextLevel), 'resourcePrice') - $ob_generator->getResourcesStorage();
 			$b[$i] .= '<span class="button disable hb lt" title="pas assez de ressources, il manque ' . Format::numberFormat($missingResource) . ' ressource' . Format::plural($missingResource) . '">';
 				$b[$i] .= '<span class="text">';
 					$b[$i] .= 'construction impossible<br/>';
@@ -135,7 +139,7 @@ for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) {
 				$b[$i] .= '</span>';
 			$b[$i] .= '</span>';
 		} else {
-			$b[$i] .= '<a class="button" href="' . Format::actionBuilder('buildbuilding', ['baseid' => $ob_generator->getId(), 'building' => $i]) . '">';
+			$b[$i] .= '<a class="button" href="' . Format::actionBuilder('buildbuilding', $sessionToken, ['baseid' => $ob_generator->getId(), 'building' => $i]) . '">';
 				$b[$i] .= '<span class="text">';
 					$b[$i] .= 'augmenter vers le niveau ' . $nextLevel . '<br/>';
 					$b[$i] .= $price . ' | ' . $time;
@@ -149,15 +153,15 @@ for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) {
 echo '<div class="component">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'orbitalbase/generator.png" alt="" />';
-		echo '<h2>' . OrbitalBaseResource::getBuildingInfo(0, 'frenchName') . '</h2>';
+		echo '<h2>' . $orbitalBaseHelper->getBuildingInfo(0, 'frenchName') . '</h2>';
 		echo '<em>niveau ' . $ob_generator->getLevelGenerator() . '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<div class="number-box ' . ((CTR::$data->get('playerBonus')->get(PlayerBonus::GENERATOR_SPEED) == 0) ? 'grey' : '') . '">';
+			echo '<div class="number-box ' . (($session->get('playerBonus')->get(PlayerBonus::GENERATOR_SPEED) == 0) ? 'grey' : '') . '">';
 				echo '<span class="label">bonus de vitesse de construction</span>';
 				echo '<span class="value">';
-					echo Format::numberFormat(CTR::$data->get('playerBonus')->get(PlayerBonus::GENERATOR_SPEED)) . ' %';
+					echo Format::numberFormat($session->get('playerBonus')->get(PlayerBonus::GENERATOR_SPEED)) . ' %';
 				echo '</span>';
 			echo '</div>';
 			
@@ -209,7 +213,7 @@ echo '<div class="component">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<p class="long-info">' . OrbitalBaseResource::getBuildingInfo(0, 'description') . '</p>';
+			echo '<p class="long-info">' . $orbitalBaseHelper->getBuildingInfo(0, 'description') . '</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

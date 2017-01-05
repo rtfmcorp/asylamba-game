@@ -11,9 +11,6 @@
 */
 namespace Asylamba\Modules\Demeter\Model\Forum;
 
-use Asylamba\Classes\Database\Database;
-use Asylamba\Classes\Library\Utils;
-
 class ForumTopic {
 	public $id 				= 0;
 	public $title			= '';
@@ -32,34 +29,4 @@ class ForumTopic {
 	public $nbMessage		= 0;
 
 	public function getId() { return $this->id; }
-
-	public function updateLastView($playerId) {
-		if ($this->lastView == NULL) {
-			$db = Database::getInstance();
-
-			$qr = $db->prepare('INSERT INTO forumLastView 
-				SET
-					rPlayer = ?,
-					rTopic = ?,
-					dView = ?');
-			$aw = $qr->execute(array(
-					$playerId,
-					$this->id,
-					Utils::now()
-				)
-			);
-		} else {
-			$db = Database::getInstance();
-
-			$qr = $db->prepare('UPDATE forumLastView
-				SET
-					dView = ?
-				WHERE rPlayer = ? AND rTopic = ?');
-			$aw = $qr->execute(array(
-				Utils::now(),
-				$playerId,
-				$this->id
-			));
-		}
-	}
 }

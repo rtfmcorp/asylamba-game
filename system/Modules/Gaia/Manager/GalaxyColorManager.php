@@ -2,37 +2,58 @@
 
 namespace Asylamba\Modules\Gaia\Manager;
 
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Database\Database;
 
 class GalaxyColorManager {
-	public static function apply() {
-		CTR::$applyGalaxy = TRUE;
+	/** @var Database **/
+	protected $database;
+	/** @var boolean **/
+	protected $mustApply = true;
+	/** @var array **/
+	protected $availableFactions;
+	/** @var int **/
+	protected $limitConquestSector;
+	
+	public function apply() {
+		$this->mustApply = true;
+	}
+	
+	public function mustApply()
+	{
+		return $this->mustApply;
 	}
 
-	public static function applyAndSave() {
-		$gcm = new GalaxyColorManager();
-		$gcm->loadSystem();
-		$gcm->loadSector();
-		$gcm->changeColorSystem();
-		$gcm->changeColorSector();
-		$gcm->saveSystem();
-		$gcm->saveSector();
+	/**
+	 * @param Database $database
+	 * @param array $availableFactions
+	 * @param int $limitConquestSector
+	 */
+	public function __construct(Database $database, $availableFactions, $limitConquestSector)
+	{
+		$this->database = $database;
+		$this->availableFactions = $availableFactions;
+		$this->limitConquestSector = $limitConquestSector;
+	}
+	
+	public function applyAndSave() {
+		$this->loadSystem();
+		$this->loadSector();
+		$this->changeColorSystem();
+		$this->changeColorSector();
+		$this->saveSystem();
+		$this->saveSector();
 	}
 
 	protected $system = array();
 	protected $sector = array();
 
 	public function loadSystem() {
-		include_once CONFIG . 'app.config.install.php';
-		
 		$requestPart = '';
-		foreach ($AVAILABLE_FACTIONS as $faction) {
+		foreach ($this->availableFactions as $faction) {
 			$requestPart .= '(SELECT COUNT(pa.rColor) FROM place AS pl LEFT JOIN player AS pa ON pl.rPlayer = pa.id WHERE pl.rSystem = se.id AND pa.rColor = ' . $faction . ') AS color' . $faction . ',';
 		}
 		$requestPart = rtrim($requestPart, ","); # to remove last comma
 
-		$db = Database::getInstance();
 		$query = 'SELECT
 			se.id AS id,
 			se.rSector AS sector,
@@ -41,11 +62,11 @@ class GalaxyColorManager {
 			' . $requestPart . '
 		FROM system AS se
 		ORDER BY se.id';
-		$qr = $db->query($query);
+		$qr = $this->database->query($query);
 		
 		while ($aw = $qr->fetch()) {
 			$colors = [];
-			foreach ($AVAILABLE_FACTIONS as $faction) {
+			foreach ($this->availableFactions as $faction) {
 				$colors[$faction] = $aw['color' . $faction]; 
 			}
 			$this->system[$aw['id']] = array(
@@ -59,18 +80,16 @@ class GalaxyColorManager {
 	}
 
 	public function saveSystem() {
-		$db = Database::getInstance();
 		foreach ($this->system as $k => $v) {
 			if ($v['hasChanged'] == TRUE) {
-				$qr = $db->prepare('UPDATE system SET rColor = ? WHERE id = ?');
+				$qr = $this->database->prepare('UPDATE system SET rColor = ? WHERE id = ?');
 				$qr->execute(array($v['systemColor'], $k));
 			}
 		}
 	}
 
 	public function loadSector() {
-		$db = Database::getInstance();
-		$qr = $db->query('SELECT id, rColor, prime FROM sector ORDER BY id');
+		$qr = $this->database->query('SELECT id, rColor, prime FROM sector ORDER BY id');
 		while ($aw = $qr->fetch()) {
 			$this->sector[$aw['id']] = array(
 				'color' => $aw['rColor'],
@@ -81,10 +100,9 @@ class GalaxyColorManager {
 	}
 
 	public function saveSector() {
-		$db = Database::getInstance();
 		foreach ($this->sector as $k => $v) {
 			if ($v['hasChanged'] == TRUE) {
-				$qr = $db->prepare('UPDATE sector SET rColor = ?, prime = ? WHERE id = ?');
+				$qr = $this->database->prepare('UPDATE sector SET rColor = ?, prime = ? WHERE id = ?');
 				$qr->execute(array($v['color'], $v['prime'], $k));
 			}
 		}
@@ -154,9 +172,9 @@ class GalaxyColorManager {
 				$nbrColorSector = $colorRepartition[$v['color'] - 1];
 			}
 
-			if ($nbrColor >= LIMIT_CONQUEST_SECTOR) {
+			if ($nbrColor >= $this->limitConquestSector) {
 				$maxColor = array_keys($colorRepartition, max($colorRepartition));
-				$this->sector[$k]['prime'] = FALSE;
+				$this->sector[$k]['prime'] = 0;
 				
 				if ($nbrColorSector == NULL) {
 					$sectorUpdatedColor[] = $this->sector[$k]['color'];

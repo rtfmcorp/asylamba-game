@@ -11,6 +11,8 @@
 
 use Asylamba\Classes\Library\Format;
 
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
+
 echo '<div class="component financial">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'financial/invest.png" alt="" />';
@@ -44,7 +46,7 @@ echo '<div class="component financial">';
 									echo ' <a href="#" class="button sh" data-target="school-form-base-' . $base->getId() . '">‹</a> ';
 								echo '</span>';
 
-								echo '<form action="' . Format::actionBuilder('updateinvest', ['baseid' => $base->getId(), 'category' => 'school']) . '" method="POST" id="school-form-base-' . $base->getId() . '">';
+								echo '<form action="' . Format::actionBuilder('updateinvest', $sessionToken, ['baseid' => $base->getId(), 'category' => 'school']) . '" method="POST" id="school-form-base-' . $base->getId() . '">';
 									echo '<p>';
 										echo '<input type="text" name="credit" value="' . $base->getISchool() . '" />';
 										echo '<input type="submit" value="ok" />';
@@ -59,7 +61,7 @@ echo '<div class="component financial">';
 									echo ' <a href="#" class="button sh" data-target="spying-form-base-' . $base->getId() . '">‹</a>';
 								echo '</span>';
 
-								echo '<form action="' . Format::actionBuilder('updateinvest', ['baseid' => $base->getId(), 'category' => 'antispy']) . '" method="POST" id="spying-form-base-' . $base->getId() . '">';
+								echo '<form action="' . Format::actionBuilder('updateinvest', $sessionToken, ['baseid' => $base->getId(), 'category' => 'antispy']) . '" method="POST" id="spying-form-base-' . $base->getId() . '">';
 									echo '<p>';
 										echo '<input type="text" name="credit" value="' . $base->getIAntiSpy() . '" />';
 										echo '<input type="submit" value="ok" />';
