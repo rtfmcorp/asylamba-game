@@ -22,6 +22,7 @@ $recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_
 $buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
 
+$sessionToken = $session->get('token');
 $baseId = $request->query->get('id');
 
 for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
