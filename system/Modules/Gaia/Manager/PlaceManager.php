@@ -11,17 +11,15 @@
 */
 namespace Asylamba\Modules\Gaia\Manager;
 
-use Asylamba\Classes\Worker\Manager;
-use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Worker\CTC;
+use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Container\Session;
-use Asylamba\Modules\Gaia\Resource\SquadronResource;
-
 use Asylamba\Classes\Exception\ErrorException;
 
-use Asylamba\Classes\Worker\CTC;
 use Asylamba\Modules\Ares\Manager\CommanderManager;
 use Asylamba\Modules\Ares\Manager\FightManager;
 use Asylamba\Modules\Ares\Manager\ReportManager;
@@ -41,6 +39,7 @@ use Asylamba\Modules\Ares\Model\LiveReport;
 use Asylamba\Modules\Ares\Model\Report;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Modules\Gaia\Resource\SquadronResource;
 
 class PlaceManager extends Manager {
 	/** @var string **/

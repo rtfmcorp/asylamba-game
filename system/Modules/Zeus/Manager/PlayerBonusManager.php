@@ -2,21 +2,20 @@
 
 namespace Asylamba\Modules\Zeus\Manager;
 
+use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Exception\ErrorException;
-
+use Asylamba\Classes\Container\Session;
 use Asylamba\Classes\Container\StackList;
 
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Demeter\Model\Law\Law;
 
-use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Modules\Demeter\Manager\Law\LawManager;
 use Asylamba\Modules\Demeter\Manager\ColorManager;
 use Asylamba\Modules\Promethee\Manager\TechnologyManager;
 use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
-use Asylamba\Classes\Container\Session;
 
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Promethee\Resource\TechnologyResource;

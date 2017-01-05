@@ -16,16 +16,14 @@ use Asylamba\Classes\Worker\Manager;
 use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Container\StackList;
+use Asylamba\Classes\Exception\ErrorException;
 
 use Asylamba\Modules\Promethee\Model\Research;
-
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Modules\Hermes\Manager\NotificationManager;
 use Asylamba\Modules\Promethee\Helper\ResearchHelper;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
-
-use Asylamba\Classes\Exception\ErrorException;
 
 class ResearchManager extends Manager {
 	/** @var string **/

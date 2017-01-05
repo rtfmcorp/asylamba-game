@@ -11,47 +11,45 @@
 */
 namespace Asylamba\Modules\Athena\Manager;
 
+use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Worker\CTC;
 use Asylamba\Classes\Container\Session;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
-use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Worker\CTC;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 
-use Asylamba\Modules\Gaia\Manager\GalaxyColorManager;
-use Asylamba\Modules\Athena\Model\Transaction;
-use Asylamba\Modules\Ares\Model\Commander;
-use Asylamba\Modules\Athena\Model\OrbitalBase;
-use Asylamba\Modules\Athena\Manager\BuildingQueueManager;
-use Asylamba\Modules\Athena\Manager\ShipQueueManager;
-use Asylamba\Modules\Promethee\Manager\TechnologyQueueManager;
-use Asylamba\Modules\Promethee\Manager\TechnologyManager;
 use Asylamba\Modules\Athena\Manager\CommercialShippingManager;
+use Asylamba\Modules\Athena\Manager\BuildingQueueManager;
 use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
-use Asylamba\Modules\Zeus\Manager\PlayerManager;
-use Asylamba\Modules\Zeus\Manager\PlayerBonusManager;
 use Asylamba\Modules\Athena\Manager\RecyclingMissionManager;
+use Asylamba\Modules\Athena\Manager\ShipQueueManager;
 use Asylamba\Modules\Athena\Manager\RecyclingLogManager;
-use Asylamba\Modules\Gaia\Manager\PlaceManager;
-use Asylamba\Modules\Ares\Manager\CommanderManager;
-use Asylamba\Modules\Hermes\Manager\NotificationManager;
-use Asylamba\Modules\Athena\Helper\OrbitalBaseHelper;
-use Asylamba\Modules\Demeter\Resource\ColorResource;
-
+use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Modules\Athena\Model\RecyclingMission;
 use Asylamba\Modules\Athena\Model\RecyclingLog;
-use Asylamba\Modules\Zeus\Model\PlayerBonus;
-use Asylamba\Modules\Gaia\Model\Place;
-use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Athena\Model\CommercialShipping;
-use Asylamba\Modules\Hermes\Model\Notification;
-
-use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
-use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
 use Asylamba\Modules\Athena\Resource\ShipResource;
-use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
+use Asylamba\Modules\Athena\Helper\OrbitalBaseHelper;
+use Asylamba\Modules\Gaia\Manager\GalaxyColorManager;
+use Asylamba\Modules\Gaia\Manager\PlaceManager;
+use Asylamba\Modules\Gaia\Model\Place;
+use Asylamba\Modules\Ares\Manager\CommanderManager;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Promethee\Manager\TechnologyQueueManager;
+use Asylamba\Modules\Promethee\Manager\TechnologyManager;
+use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
+use Asylamba\Modules\Zeus\Manager\PlayerManager;
+use Asylamba\Modules\Zeus\Manager\PlayerBonusManager;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Modules\Hermes\Manager\NotificationManager;
+use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 class OrbitalBaseManager extends Manager {
 	protected $managerType = '_OrbitalBase';

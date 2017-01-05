@@ -2,9 +2,8 @@
 
 namespace Asylamba\Modules\Promethee\Manager;
 
-use Asylamba\Modules\Promethee\Model\Technology;
-
 use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Zeus\Manager\PlayerBonusManager;
 use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
 

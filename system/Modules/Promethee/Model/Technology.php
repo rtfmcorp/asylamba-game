@@ -11,8 +11,6 @@
 */
 namespace Asylamba\Modules\Promethee\Model;
 
-use Asylamba\Modules\Promethee\Resource\TechnologyResource;
-
 class Technology {
 	// ATTRIBUTES
 	public $rPlayer;

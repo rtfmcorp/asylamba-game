@@ -11,14 +11,15 @@
  */
 namespace Asylamba\Modules\Athena\Model;
 
-use Asylamba\Modules\Hermes\Model\Notification;
-use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Worker\ASM;
-use Asylamba\Modules\Ares\Model\Commander;
-use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Utils;
+
+use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
 
 class CommercialShipping {
 	# statement

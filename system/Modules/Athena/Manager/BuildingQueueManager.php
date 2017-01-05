@@ -12,7 +12,7 @@
 namespace Asylamba\Modules\Athena\Manager;
 
 use Asylamba\Classes\Worker\Manager;
-use \Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Athena\Model\BuildingQueue;
 

@@ -14,9 +14,7 @@ namespace Asylamba\Modules\Ares\Manager;
 
 use Asylamba\Classes\Worker\Manager;
 use Asylamba\Classes\Library\Utils;
-
 use Asylamba\Classes\Database\Database;
-
 use Asylamba\Modules\Ares\Model\Report;
 
 class ReportManager extends Manager {

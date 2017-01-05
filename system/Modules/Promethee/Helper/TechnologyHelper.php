@@ -2,15 +2,15 @@
 
 namespace Asylamba\Modules\Promethee\Helper;
 
+use Asylamba\Classes\Container\StackList;
+use Asylamba\Classes\Container\ArrayList;
+use Asylamba\Classes\Exception\ErrorException;
+
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Helper\OrbitalBaseHelper;
-use Asylamba\Classes\Container\StackList;
-use Asylamba\Classes\Container\ArrayList;
 use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Promethee\Resource\TechnologyResource;
-
-use Asylamba\Classes\Exception\ErrorException;
 
 class TechnologyHelper {
 	/** @var OrbitalBaseHelper **/

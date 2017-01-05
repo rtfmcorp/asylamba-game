@@ -11,8 +11,6 @@
 */
 namespace Asylamba\Modules\Demeter\Model\Forum;
 
-use Asylamba\Classes\Library\Parser;
-
 class FactionNews {
 	const STANDARD 		= 0;
 	const PINNED 		= 1;

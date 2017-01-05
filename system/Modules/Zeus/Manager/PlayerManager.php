@@ -12,20 +12,23 @@
 namespace Asylamba\Modules\Zeus\Manager;
 
 use Asylamba\Classes\Worker\Manager;
-
 use Asylamba\Classes\Worker\CTC;
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Worker\API;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Container\ArrayList;
+use Asylamba\Classes\Exception\ErrorException;
 
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Promethee\Model\Technology;
-use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Athena\Model\Transaction;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 use Asylamba\Modules\Demeter\Manager\ColorManager;
 use Asylamba\Modules\Ares\Manager\CommanderManager;
@@ -39,12 +42,6 @@ use Asylamba\Modules\Athena\Manager\TransactionManager;
 use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
 use Asylamba\Modules\Promethee\Manager\TechnologyManager;
 use Asylamba\Modules\Athena\Resource\ShipResource;
-use Asylamba\Modules\Athena\Model\CommercialRoute;
-
-use Asylamba\Classes\Library\Game;
-use Asylamba\Classes\Container\ArrayList;
-
-use Asylamba\Classes\Exception\ErrorException;
 
 class PlayerManager extends Manager {
 	/** @var string */

@@ -15,29 +15,30 @@ namespace Asylamba\Modules\Demeter\Manager;
 use Asylamba\Classes\Worker\CTC;
 use Asylamba\Classes\Worker\Manager;
 use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Parser;
+use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Database\Database;
-use Asylamba\Modules\Demeter\Model\Color;
-use Asylamba\Modules\Demeter\Model\Law\Law;
-use Asylamba\Modules\Hermes\Model\Notification;
-use Asylamba\Modules\Demeter\Resource\ColorResource;
-use Asylamba\Modules\Zeus\Manager\PlayerManager;
-use Asylamba\Modules\Demeter\Manager\Election\VoteManager;
-use Asylamba\Modules\Hermes\Manager\ConversationManager;
+
 use Asylamba\Modules\Demeter\Manager\Election\CandidateManager;
 use Asylamba\Modules\Demeter\Manager\Election\ElectionManager;
 use Asylamba\Modules\Demeter\Manager\Law\LawManager;
+use Asylamba\Modules\Demeter\Manager\Election\VoteManager;
+use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Modules\Demeter\Model\Law\Law;
+use Asylamba\Modules\Demeter\Model\Election\Election;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Demeter\Resource\LawResources;
+use Asylamba\Modules\Hermes\Manager\ConversationManager;
 use Asylamba\Modules\Hermes\Manager\NotificationManager;
 use Asylamba\Modules\Hermes\Manager\ConversationMessageManager;
+use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
-use Asylamba\Modules\Athena\Manager\CommercialTaxManager;
-use Asylamba\Modules\Gaia\Manager\SectorManager;
-use Asylamba\Modules\Demeter\Resource\LawResources;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
+use Asylamba\Modules\Athena\Manager\CommercialTaxManager;
 use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
+use Asylamba\Modules\Gaia\Manager\SectorManager;
+use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Modules\Zeus\Model\Player;
-use Asylamba\Modules\Demeter\Model\Election\Election;
-use Asylamba\Classes\Library\Parser;
-use Asylamba\Classes\Library\Format;
 
 class ColorManager extends Manager {
 	/** @var string **/

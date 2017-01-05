@@ -5,7 +5,6 @@ namespace Asylamba\Modules\Hermes\Manager;
 use Asylamba\Classes\Worker\Manager;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Database\Database;
-use Asylamba\Classes\Worker\ASM;
 
 use Asylamba\Modules\Hermes\Model\Conversation;
 

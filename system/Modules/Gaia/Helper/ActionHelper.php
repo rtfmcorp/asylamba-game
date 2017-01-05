@@ -5,16 +5,14 @@ namespace Asylamba\Modules\Gaia\Helper;
 use Asylamba\Classes\Library\Chronos;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Container\Session;
 
 use Asylamba\Modules\Promethee\Model\Technology;
-
 use Asylamba\Modules\Promethee\Resource\TechnologyResource;
+use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Helper\OrbitalBaseHelper;
-
 use Asylamba\Modules\Ares\Manager\CommanderManager;
-use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
-use Asylamba\Classes\Container\Session;
 
 abstract class ActionHelper {
 	/** @var CommanderManager **/

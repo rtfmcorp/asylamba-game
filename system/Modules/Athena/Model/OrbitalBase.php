@@ -11,7 +11,7 @@
 */
 namespace Asylamba\Modules\Athena\Model;
 
-use ErrorException;
+use Asylamba\Classes\Exception\ErrorException;
 
 class OrbitalBase {
 	# type of base
