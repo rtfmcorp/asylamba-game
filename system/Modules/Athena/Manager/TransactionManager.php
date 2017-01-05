@@ -13,16 +13,17 @@
 namespace Asylamba\Modules\Athena\Manager;
 
 use Asylamba\Classes\Worker\Manager;
-use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Chronos;
 use Asylamba\Classes\Container\Session;
 use Asylamba\Modules\Athena\Manager\CommercialTaxManager;
 use Asylamba\Modules\Athena\Model\Transaction;
-use Asylamba\Classes\Library\Game;
-use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
-use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
 
 class TransactionManager extends Manager {
 	protected $managerType = '_Transaction';

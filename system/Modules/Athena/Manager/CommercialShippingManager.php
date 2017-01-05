@@ -12,16 +12,17 @@
 namespace Asylamba\Modules\Athena\Manager;
 
 use Asylamba\Classes\Worker\Manager;
-use Asylamba\Modules\Athena\Manager\OrbitalBaseManager;
-use Asylamba\Modules\Hermes\Manager\NotificationManager;
+use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Container\Session;
+use Asylamba\Modules\Athena\Manager\OrbitalBaseManager;
+use Asylamba\Modules\Hermes\Manager\NotificationManager;
 use Asylamba\Modules\Athena\Model\CommercialShipping;
 use Asylamba\Modules\Athena\Model\Transaction;
-use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Container\Session;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
 
 class CommercialShippingManager extends Manager {
 	protected $managerType = '_CommercialShipping';
