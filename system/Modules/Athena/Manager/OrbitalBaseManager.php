@@ -38,6 +38,7 @@ use Asylamba\Modules\Gaia\Manager\PlaceManager;
 use Asylamba\Modules\Ares\Manager\CommanderManager;
 use Asylamba\Modules\Hermes\Manager\NotificationManager;
 use Asylamba\Modules\Athena\Helper\OrbitalBaseHelper;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 use Asylamba\Modules\Athena\Model\RecyclingMission;
 use Asylamba\Modules\Athena\Model\RecyclingLog;
