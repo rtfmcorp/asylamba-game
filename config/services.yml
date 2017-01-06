@@ -16,6 +16,11 @@ services:
             - "%database_admin_user"
             - "%database_admin_password"
             
+    entity_manager:
+        class: Asylamba\Classes\Entity\EntityManager
+        arguments:
+            - "@database"
+            
     event_dispatcher:
         class: Asylamba\Classes\Worker\EventDispatcher
         arguments:
