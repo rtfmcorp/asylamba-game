@@ -12,6 +12,9 @@ class ReportRepository extends AbstractRepository {
 	 * @return Report
 	 */
 	public function get($id) {
+		if (($report = $this->unitOfWork->getObject(Report::class, $id)) !== null) {
+			return $report;
+		}
 		$query = $this->connection->prepare(
 			'SELECT r.*,
 				sq.id AS sqId,
@@ -84,6 +87,7 @@ class ReportRepository extends AbstractRepository {
 		$currentId = 0;
 		$data = [];
 		while ($row = $query->fetch()) {
+			// @TODO get the existing object if it is in UnitOfWork already
 			if ($currentId !== (int) $row['id']) {
 				// Set the armies of the previous report
 				if (isset($currentReport)) {
@@ -92,7 +96,9 @@ class ReportRepository extends AbstractRepository {
 				$currentReport = $this->format($row);
 				$currentId = $currentReport->id;
 				$data[] = $currentReport;
-				$this->unitOfWork->addObject($currentReport);
+				if (!$this->unitOfWork->hasObject($currentReport)) {
+					$this->unitOfWork->addObject($currentReport);
+				}
 			}
 			if (!empty($row['sqId'])) {
 				$currentReport->squadrons[] = $this->formatSquadron($row);

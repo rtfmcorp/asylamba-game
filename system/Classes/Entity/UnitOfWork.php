@@ -25,18 +25,33 @@ class UnitOfWork {
     
     public function addObject($object, $state = self::METADATA_PERSISTED)
     {
-        $this->entities[get_class($object)][spl_object_hash($object)] = [
+		$identifier = ($object->getId() !== null) ? (int) $object->getId() : spl_object_hash($object);
+		
+        $this->entities[get_class($object)][$identifier] = [
             'state' => $state,
             'instance' => $object
         ];
     }
+	
+	public function hasObject($object)
+	{
+		return isset($this->entities[get_class($object)][(int) $object->getId()]);
+	}
+	
+	public function getObject($entityClass, $id)
+	{
+		if (!isset($this->entities[$entityClass][(int) $id])) {
+			return null;
+		}
+		return $this->entities[$entityClass][(int) $id]['instance'];
+	}
     
     /**
      * @param object $object
      */
     public function removeObject($object)
     {
-        $this->entities[get_class($object)][spl_object_hash($object)]['state'] = self::METADATA_REMOVED;
+        $this->entities[get_class($object)][$object->getId()]['state'] = self::METADATA_REMOVED;
     }
     
     public function flushAll()
@@ -68,12 +83,16 @@ class UnitOfWork {
      */
     public function flushObject(AbstractRepository $repository, $className, $object)
     {
-        $entity = &$this->entities[$className][spl_object_hash($object)];
-        
+		$identifier = ($object->getId() !== null) ? $object->getId() : spl_object_hash($object);
+        $entity = &$this->entities[$className][$identifier];
         switch($entity['state']) {
             case self::METADATA_STAGED:
                 $repository->insert($object);
-                $entity['state'] = self::METADATA_PERSISTED;
+				unset($entity);
+				$this->entities[$className][(int) $object->getId()] = [
+					'state' => self::METADATA_PERSISTED,
+					'instance' => $object
+				];
                 break;
             case self::METADATA_PERSISTED: $repository->update($object); break;
             case self::METADATA_REMOVED:

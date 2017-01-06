@@ -59,6 +59,9 @@ class CommercialRouteRepository extends AbstractRepository {
 	 */
 	public function get($id)
 	{
+		if (($cr = $this->unitOfWork->getObject(CommercialRoute::class, $id)) !== null) {
+			return $cr;
+		}
 		$query = $this->select('cr.id = :id', ['id' => $id]);
 		
 		if (($row = $query->fetch()) === false) {
@@ -76,6 +79,9 @@ class CommercialRouteRepository extends AbstractRepository {
 	 */
 	public function getByIdAndBase($id, $baseId)
 	{
+		if (($cr = $this->unitOfWork->getObject(CommercialRoute::class, $id)) !== null && $cr->getOrbitalBase() === (int) $baseId) {
+			return $cr;
+		}
 		$query = $this->select(
 			'cr.id = :id AND rOrbitalBase = :base_id',
 			['id' => $id, 'base_id' => $baseId]);
@@ -95,6 +101,9 @@ class CommercialRouteRepository extends AbstractRepository {
 	 */
 	public function getByIdAndDistantBase($id, $baseId)
 	{
+		if (($cr = $this->unitOfWork->getObject(CommercialRoute::class, $id)) !== null && $cr->getROrbitalBaseLinked() === (int) $baseId) {
+			return $cr;
+		}
 		$query = $this->select(
 			'cr.id = :id AND rOrbitalBaseLinked = :distant_base_id',
 			['id' => $id, 'distant_base_id' => $baseId]);
@@ -117,6 +126,10 @@ class CommercialRouteRepository extends AbstractRepository {
 		
 		$data = [];
 		while($row = $query->fetch()) {
+			if (($cr = $this->unitOfWork->getObject(CommercialRoute::class, $row['id'])) !== null) {
+				$data[] = $cr;
+				continue;
+			}
 			$commercialRoute = $this->format($row);
 			$this->unitOfWork->addObject($commercialRoute);
 			$data[] = $commercialRoute;
@@ -134,6 +147,10 @@ class CommercialRouteRepository extends AbstractRepository {
 		
 		$data = [];
 		while($row = $query->fetch()) {
+			if (($cr = $this->unitOfWork->getObject(CommercialRoute::class, $row['id'])) !== null) {
+				$data[] = $cr;
+				continue;
+			}
 			$commercialRoute = $this->format($row);
 			$this->unitOfWork->addObject($commercialRoute);
 			$data[] = $commercialRoute;
@@ -160,6 +177,10 @@ class CommercialRouteRepository extends AbstractRepository {
 		
 		$data = [];
 		while($row = $query->fetch()) {
+			if (($cr = $this->unitOfWork->getObject(CommercialRoute::class, $row['id'])) !== null) {
+				$data[] = $cr;
+				continue;
+			}
 			$commercialRoute = $this->format($row);
 			$this->unitOfWork->addObject($commercialRoute);
 			$data[] = $commercialRoute;
