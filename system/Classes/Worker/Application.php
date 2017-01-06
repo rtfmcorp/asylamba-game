@@ -27,6 +27,7 @@ class Application {
     
     public function boot()
     {
+		$errorEvent = null;
 		try {
 			$this->container = new Container();
 			$this->container->set('app.container', $this->container);
@@ -37,16 +38,16 @@ class Application {
 			$this->getInclude();
 			$this->save();
 		} catch (\Exception $ex) {
-			$this->container->get('event_dispatcher')->dispatch(new ExceptionEvent($ex));
-			$pastPath = $this->container->get('app.history')->getPastPath(1);
-			ob_end_clean();
-			header('Location: /' . (($pastPath !== null) ? $pastPath : ''));
+			$errorEvent = new ExceptionEvent($ex);
 		} catch (\Error $err) {
-			$this->container->get('event_dispatcher')->dispatch(new ErrorEvent($err));
-			$pastPath = $this->container->get('app.history')->getPastPath(1);
-			ob_end_clean();
-			header('Location: /' . (($pastPath !== null) ? $pastPath : ''));
+			$errorEvent = new ErrorEvent($err);
 		}
+		$this->container->get('event_dispatcher')->dispatch($errorEvent);
+		$pastPath = $this->container->get('app.history')->getPastPath(1);
+		if (ob_get_level() !== 0) {
+			ob_end_clean();
+		}
+		header('Location: /' . (($pastPath !== null) ? $pastPath : ''));
     }
 	
 	public function configure()
@@ -171,6 +172,8 @@ class Application {
 			? $screenMode
 			: 'desktop'
 		);
+		$this->container->get('entity_manager')->init();
+		
 	}
 
 	private function parseRoute() {
