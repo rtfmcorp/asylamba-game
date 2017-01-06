@@ -23,10 +23,10 @@ class UnitOfWork {
         $this->entityManager = $entityManager;
     }
     
-    public function addObject($object)
+    public function addObject($object, $state = self::METADATA_PERSISTED)
     {
         $this->entities[get_class($object)][spl_object_hash($object)] = [
-            'state' => self::METADATA_STAGED,
+            'state' => $state,
             'instance' => $object
         ];
     }
@@ -55,7 +55,7 @@ class UnitOfWork {
         if (!isset($this->entities[$entityClass])) {
             return;
         }
-        $repository = $this->entityManager->getRepository($className);
+        $repository = $this->entityManager->getRepository($entityClass);
         foreach ($this->entities[$entityClass] as $entity) {
             $this->flushObject($repository, $entityClass, $entity['instance']);
         }
