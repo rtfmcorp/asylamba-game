@@ -21,13 +21,19 @@ class EntityManager {
     
     public function init()
     {
-        $this->unitOfWork = new UnitOfWork();
+        $this->unitOfWork = new UnitOfWork($this);
     }
-    
+	
+    /**
+	 * @param string $entityClass
+	 * @return AbstractRepository
+	 */
     public function getRepository($entityClass)
     {
         if (!isset($this->repositories[$entityClass])) {
-            $this->repositories[$entityClass] = new $repositoryClass($this->connection);
+			$namespace = explode('\\', $entityClass);
+			$repositoryClass = "Asylamba\\Modules\\{$namespace[2]}\\Repository\\{$namespace[4]}Repository";
+            $this->repositories[$entityClass] = new $repositoryClass($this->connection, $this->unitOfWork);
         }
         return $this->repositories[$entityClass];
     }
@@ -37,7 +43,7 @@ class EntityManager {
      */
     public function persist($entity)
     {
-        $this->unitOfWork->addObject($entity);
+        $this->unitOfWork->addObject($entity, UnitOfWork::METADATA_STAGED);
     }
     
     /**
@@ -48,6 +54,9 @@ class EntityManager {
         $this->unitOfWork->removeObject($entity);
     }
     
+	/**
+	 * @param mixed $entity
+	 */
     public function flush($entity = null)
     {
         switch(gettype($entity)) {
@@ -64,6 +73,9 @@ class EntityManager {
         }
     }
     
+	/**
+	 * @param mixed $entity
+	 */
     public function clear($entity = null)
     {
         switch(gettype($entity)) {
@@ -71,10 +83,10 @@ class EntityManager {
                 $this->unitOfWork->clearAll();
                 break;
             case 'string':
-                $this->unitOfWork->clearEntity(get_class($entity));
+                $this->unitOfWork->clearEntity($entity);
                 break;
             case 'object':
-                $this->unitOfWork->clearObject($entity);
+                $this->unitOfWork->clearObject(get_class($entity));
                 break;
         }
     }
