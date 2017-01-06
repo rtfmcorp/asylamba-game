@@ -26,6 +26,7 @@ $colorManager = $this->getContainer()->get('demeter.color_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
 $routeExperienceCoeff = $this->getContainer()->getParameter('athena.trade.experience_coeff');
+$entityManager = $this->getContainer()->get('entity_manager');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -36,13 +37,9 @@ $route 	= $request->query->get('route');
 
 
 if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
-	$S_CRM1 = $commercialRouteManager->getCurrentSession();
-	$commercialRouteManager->newSession();
-	$commercialRouteManager->load(array('id'=>$route, 'rOrbitalBaseLinked' => $base, 'statement' => CommercialRoute::PROPOSED));
+	$cr = $commercialRouteManager->getByIdAndDistantBase($route, $base);
 
-	if ($commercialRouteManager->get() && $commercialRouteManager->size() == 1) {
-		$cr = $commercialRouteManager->get();
-
+	if ($cr !== null && $cr->getStatement() == CommercialRoute::PROPOSED) {
 		$S_CLM1 = $colorManager->getCurrentSession();
 		$colorManager->newSession();
 		$colorManager->load(array('id' => array($cr->playerColor1, $cr->playerColor2)));
@@ -68,15 +65,10 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 
 			$orbitalBaseManager->load(array('rPlace' => $cr->getROrbitalBaseLinked()));
 			$acceptorBase = $orbitalBaseManager->get(1);
-
-			$commercialRouteManager->load(array('rOrbitalBase' => $acceptorBase->getId()));
-			$commercialRouteManager->load(array('rOrbitalBaseLinked' => $acceptorBase->getId(), 'statement' => CommercialRoute::ACTIVE));
-			$commercialRouteManager->load(array('rOrbitalBaseLinked' => $acceptorBase->getId(), 'statement' => CommercialRoute::STANDBY));
-
-			$nbrCommercialRoute = $commercialRouteManager->size() - 1;
+			
 			$nbrMaxCommercialRoute = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $acceptorBase->getLevelSpatioport(), 'nbRoutesMax'); 
 			
-			if ($nbrCommercialRoute < $nbrMaxCommercialRoute) {
+			if ($commercialRouteManager->countBaseActiveAndStandbyRoutes($acceptorBase->getId()) <= $nbrMaxCommercialRoute) {
 				# compute bonus if the player is from Negore
 				if ($session->get('playerInfo')->get('color') == ColorResource::NEGORA) {
 					$price = round($cr->getPrice() - ($cr->getPrice() * ColorResource::BONUS_NEGORA_ROUTE / 100));
@@ -116,6 +108,8 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 					$n->addEnd();
 					$notificationManager->add($n);
 
+					$entityManager->flush();
+					$entityManager->clear(CommercialRoute::class);
 					if (DATA_ANALYSIS) {
 						$qr = $database->prepare('INSERT INTO 
 							DA_CommercialRelation(`from`, `to`, type, weight, dAction)
@@ -139,7 +133,6 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 	} else {
 		throw new ErrorException('impossible d\'accepter une route commerciale');
 	}
-	$commercialRouteManager->changeSession($S_CRM1);
 } else {
 	throw new FormException('pas assez d\'informations pour accepter une route commerciale');
 }

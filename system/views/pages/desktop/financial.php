@@ -15,6 +15,7 @@ $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $transactionManager = $this->getContainer()->get('athena.transaction_manager');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
 $taxCoeff = $this->getContainer()->getParameter('zeus.player.tax_coeff');
+$entityManager = $this->getContainer()->get('entity_manager');
 
 # background paralax
 echo '<div id="background-paralax" class="financial"></div>';
@@ -80,31 +81,34 @@ echo '<div id="content">';
 		$commander_generalFinancial = array();
 
 		for ($i = 0; $i < $orbitalBaseManager->size(); $i++) {
-			$ob_generalFinancial[] = $orbitalBaseManager->get($i);
+			$orbitalBase = $orbitalBaseManager->get($i);
+			$ob_generalFinancial[] = $orbitalBase;
 			
-			$thisTaxIn = Game::getTaxFromPopulation($orbitalBaseManager->get($i)->getPlanetPopulation(), $orbitalBaseManager->get($i)->typeOfBase, $taxCoeff);
+			$thisTaxIn = Game::getTaxFromPopulation($orbitalBase->getPlanetPopulation(), $orbitalBase->typeOfBase, $taxCoeff);
 			$thisTaxInBonus = $thisTaxIn * $taxBonus / 100;
 			$financial_totalTaxIn += $thisTaxIn;
 			$financial_totalTaxInBonus += $thisTaxInBonus;
 
-			$financial_totalTaxOut += ($thisTaxIn + $thisTaxInBonus) * $orbitalBaseManager->get($i)->getTax() / 100;
+			$financial_totalTaxOut += ($thisTaxIn + $thisTaxInBonus) * $orbitalBase->getTax() / 100;
 
-			$financial_totalInvest += $orbitalBaseManager->get($i)->getISchool();
-			$financial_totalInvest += $orbitalBaseManager->get($i)->getIAntiSpy();
+			$financial_totalInvest += $orbitalBase->getISchool();
+			$financial_totalInvest += $orbitalBase->getIAntiSpy();
 
-			$financial_totalShipsFees += Game::getFleetCost($orbitalBaseManager->get($i)->shipStorage, FALSE);
+			$financial_totalShipsFees += Game::getFleetCost($orbitalBase->shipStorage, FALSE);
 
 			# TODO cout des trucs en vente
 
-			$S_CRM1 = $commercialRouteManager->getCurrentSession();
-			$commercialRouteManager->changeSession($orbitalBaseManager->get($i)->routeManager);
-			for ($k = 0; $k < $commercialRouteManager->size(); $k++) { 
-				if ($commercialRouteManager->get($k)->getStatement() == CommercialRoute::ACTIVE) {
-					$financial_totalRouteIncome += $commercialRouteManager->get($k)->getIncome();
-					$financial_totalRouteIncomeBonus += $commercialRouteManager->get($k)->getIncome() * $rcBonus / 100;
+			$routes = array_merge(
+				$commercialRouteManager->getByBase($orbitalBase->getId()),
+				$commercialRouteManager->getByDistantBase($orbitalBase->getId())
+			);
+			foreach ($routes as $route) { 
+				if ($route->getStatement() == CommercialRoute::ACTIVE) {
+					$financial_totalRouteIncome += $route->getIncome();
+					$financial_totalRouteIncomeBonus += $route->getIncome() * $rcBonus / 100;
 				}
 			}
-			$commercialRouteManager->changeSession($S_CRM1);
+			$entityManager->clear(CommercialRoute::class);
 		}
 
 		$commander_generalFinancial = [];

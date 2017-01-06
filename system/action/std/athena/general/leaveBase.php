@@ -78,13 +78,6 @@ if (count($verif) > 1) {
 					$placeManager->newSession();
 					$placeManager->load(array('id' => $baseId));
 
-					$S_CRM1 = $commercialRouteManager->getCurrentSession();
-					$commercialRouteManager->newSession();
-					$commercialRouteManager->load(array('rOrbitalBase' => $baseId));
-					$commercialRouteManager->load(array('rOrbitalBaseLinked' => $baseId));
-					$S_CRM2 = $commercialRouteManager->getCurrentSession();
-					$commercialRouteManager->changeSession($S_CRM1);
-
 					$S_REM1 = $recyclingMissionManager->getCurrentSession();
 					$recyclingMissionManager->newSession();
 					$recyclingMissionManager->load(array('rBase' => $baseId));
@@ -97,7 +90,7 @@ if (count($verif) > 1) {
 					$S_COM3 = $commanderManager->getCurrentSession();
 					$commanderManager->changeSession($S_COM2);
 
-					$orbitalBaseManager->changeOwnerById($baseId, $base, ID_GAIA, $S_CRM2, $S_REM2, $S_COM3);
+					$orbitalBaseManager->changeOwnerById($baseId, $base, ID_GAIA, $S_REM2, $S_COM3);
 					$placeManager->get()->rPlayer = ID_GAIA;
 
 					$placeManager->changeSession($_PLM);

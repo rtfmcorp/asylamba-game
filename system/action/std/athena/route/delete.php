@@ -26,11 +26,8 @@ $base = $request->query->get('base');
 $route = $request->query->get('route');
 
 if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
-	$S_CRM1 = $commercialRouteManager->getCurrentSession();
-	$commercialRouteManager->newSession(ASM_UMODE);
-	$commercialRouteManager->load(array('id' => $route, 'statement' => [CommercialRoute::ACTIVE, CommercialRoute::STANDBY]));
-	if ($commercialRouteManager->get() && $commercialRouteManager->size() == 1) {
-		$cr = $commercialRouteManager->get();
+	$cr = $commercialRouteManager->get($route);
+	if ($cr !== null && in_array($cr->statement, [CommercialRoute::ACTIVE, CommercialRoute::STANDBY])) {
 		if ($cr->playerId1 == $session->get('playerId') || $cr->playerId2 == $session->get('playerId')) {
 			if ($cr->getROrbitalBase() == $base OR $cr->getROrbitalBaseLinked() == $base) {
 				$S_OBM1 = $orbitalBaseManager->getCurrentSession();
@@ -72,7 +69,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 				$notificationManager->add($n);
 
 				//destruction de la route
-				$commercialRouteManager->deleteById($route);
+				$commercialRouteManager->remove($cr);
 
 				$session->addFlashbag('Route commerciale détruite', Flashbag::TYPE_SUCCESS);
 				$orbitalBaseManager->changeSession($S_OBM1);
@@ -85,7 +82,6 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 	} else {
 		throw new ErrorException('impossible de supprimer une route commerciale');
 	}
-	$commercialRouteManager->changeSession($S_CRM1);
 } else {
 	throw new FormException('pas assez d\'informations pour supprimer une route commerciale');
 }

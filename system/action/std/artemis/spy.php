@@ -107,16 +107,6 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 					$playerManager->newSession();
 					$playerManager->load(array('id' => $orbitalBase->rPlayer));
 					$enemy = $playerManager->get();
-
-					# rc
-					$S_CRM1 = $commercialRouteManager->getCurrentSession();
-					$commercialRouteManager->changeSession($orbitalBase->routeManager);
-					$RCIncome = 0;
-					for ($i = 0; $i < $commercialRouteManager->size(); $i++) {
-						if ($commercialRouteManager->get($i)->getStatement() == CommercialRoute::ACTIVE) {
-							$RCIncome += $commercialRouteManager->get($i)->getIncome();
-						} 
-					}
 					
 					$sr->resources = $orbitalBase->resourcesStorage;
 
@@ -128,7 +118,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 
 					$sr->shipsInStorage = serialize($orbitalBase->shipStorage);
 					$sr->antiSpyInvest = $orbitalBase->iAntiSpy;
-					$sr->commercialRouteIncome = $RCIncome;
+					$sr->commercialRouteIncome = $commercialRouteManager->getBaseIncome($orbitalBase);
 
 					$commandersArray = array();
 					$S_COM1 = $commanderManager->getCurrentSession();
@@ -177,7 +167,6 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 							break;
 					}
 
-					$commercialRouteManager->changeSession($S_CRM1);
 					$commanderManager->changeSession($S_COM1);
 					$orbitalBaseManager->changeSession($S_OBM1);
 

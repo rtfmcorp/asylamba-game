@@ -29,7 +29,7 @@ services:
     athena.commercial_route_manager:
         class: Asylamba\Modules\Athena\Manager\CommercialRouteManager
         arguments:
-            - "@database"
+            - "@entity_manager"
             
     athena.commercial_shipping_manager:
         class: Asylamba\Modules\Athena\Manager\CommercialShippingManager

@@ -27,12 +27,8 @@ $base = $request->query->get('base');
 $route = $request->query->get('route');
 
 if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
-	$S_CRM1 = $commercialRouteManager->getCurrentSession();
-	$commercialRouteManager->newSession(ASM_UMODE);
-	$commercialRouteManager->load(array('id'=>$route, 'rOrbitalBaseLinked' => $base, 'statement' => CommercialRoute::PROPOSED));
-	if ($commercialRouteManager->get() && $commercialRouteManager->size() == 1) {
-		$cr = $commercialRouteManager->get();
-
+	$cr = $commercialRouteManager->getByIdAndDistantBase($route, $base);
+	if ($cr !== null && $cr->getStatement() === CommercialRoute::PROPOSED) {
 		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
 		$orbitalBaseManager->newSession(ASM_UMODE);
 		$orbitalBaseManager->load(array('rPlace' => $cr->getROrbitalBase()));
@@ -58,14 +54,13 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 		$notificationManager->add($n);
 
 		//destruction de la route
-		$commercialRouteManager->deleteById($route);
+		$commercialRouteManager->remove($cr);
 		$session->addFlashbag('Route commerciale refusée', Flashbag::TYPE_SUCCESS);
 		$orbitalBaseManager->changeSession($S_OBM1);
 		$playerManager->changeSession($S_PAM1);
 	} else {
 		throw new ErrorException('impossible de refuser une route commerciale');
 	}
-	$commercialRouteManager->changeSession($S_CRM1);
 } else {
 	throw new FormException('pas assez d\'informations pour refuser une route commerciale');
 }
