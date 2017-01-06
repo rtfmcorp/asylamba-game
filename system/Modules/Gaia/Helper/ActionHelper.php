@@ -264,29 +264,13 @@ abstract class ActionHelper {
 				if ($ob->getLevelCommercialPlateforme() > 0) {
 					if ($place->getLevelCommercialPlateforme() > 0) {
 						# check si on a déjà une route avec ce joueur
-						$S_CRM1 = $this->commercialRouteManager->getCurrentSession();
-						$this->commercialRouteManager->changeSession($ob->routeManager);
-						for ($i = 0; $i < $this->commercialRouteManager->size(); $i++) { 
-							if ($this->commercialRouteManager->get($i)->getROrbitalBaseLinked() == $ob->getRPlace()) {
-								if ($this->commercialRouteManager->get($i)->getROrbitalBase() == $place->getId()) {
-									switch($this->commercialRouteManager->get($i)->getStatement()) {
-										case CommercialRoute::PROPOSED: $notAccepted = TRUE; break;
-										case CommercialRoute::ACTIVE: $sendResources = TRUE; break;
-										case CommercialRoute::STANDBY: $standby = TRUE; break;
-									}
-								}
-							}
-							if ($this->commercialRouteManager->get($i)->getROrbitalBase() == $ob->getRPlace()) {
-								if ($this->commercialRouteManager->get($i)->getROrbitalBaseLinked() == $place->getId()) {
-									switch($this->commercialRouteManager->get($i)->getStatement()) {
-										case CommercialRoute::PROPOSED: $proposed = TRUE; break;
-										case CommercialRoute::ACTIVE: $sendResources = TRUE; break;
-										case CommercialRoute::STANDBY: $standby = TRUE; break;
-									}
-								}
+						if (($cr = $this->commercialRouteManager->getExistingRoute($ob->getId(), $place->getId())) !== null) {
+							switch($cr->getStatement()) {
+								case CommercialRoute::PROPOSED: $notAccepted = TRUE; break;
+								case CommercialRoute::ACTIVE: $sendResources = TRUE; break;
+								case CommercialRoute::STANDBY: $standby = TRUE; break;
 							}
 						}
-						$this->commercialRouteManager->changeSession($S_CRM1);
 						if ($sendResources == FALSE) {
 							if ($proposed == TRUE) {
 								$box .= '<h5>Route commerciale en suspens</h5>';
@@ -307,20 +291,8 @@ abstract class ActionHelper {
 								$box .= '<a href="' . APP_ROOT . 'bases/base-' . $ob->getRPlace() . '/view-commercialplateforme">plateforme commerciale</a>';
 								$box .= '.</p>';
 							} else {
-								# check si encore des routes libres
-								$S_CRM1 = $this->commercialRouteManager->getCurrentSession();
-								$this->commercialRouteManager->changeSession($ob->routeManager);
-								$usedRoutes = $this->commercialRouteManager->size();
-								for ($i = 0; $i < $this->commercialRouteManager->size(); $i++) {
-									if ($this->commercialRouteManager->get($i)->getROrbitalBaseLinked() == $ob->getRPlace()) {
-										if ($this->commercialRouteManager->get($i)->getStatement() == CommercialRoute::PROPOSED) {
-											# on soustrait les routes qu'on nous a proposé et qu'on n'a pas encore accepté
-											$usedRoutes--;
-										}
-									}
-								}
 								$maxRoute = $this->orbitalBaseHelper->getBuildingInfo(6, 'level', $ob->getLevelCommercialPlateforme(), 'nbRoutesMax');
-								if ($usedRoutes < $maxRoute) {
+								if ($this->commercialRouteManager->countBaseActiveAndStandbyRoutes($ob->getId()) < $maxRoute) {
 									$distance = Game::getDistance($ob->getXSystem(), $place->getXSystem(), $ob->getYSystem(), $place->getYSystem());
 									$bonusA = ($ob->getSector() != $place->getRSector()) ? $this->routeSectorBonus : 1;
 									$bonusB = ($this->session->get('playerInfo')->get('color')) != $place->getPlayerColor() ? $this->routeColorBonus : 1;
@@ -350,7 +322,6 @@ abstract class ActionHelper {
 									$box .= '<h5>Proposer une route commerciale</h5>';
 									$box .= '<p class="info">Toutes vos routes commerciales sont déjà créées. Pour pouvoir proposer une nouvelle route, il faut soit augmenter le niveau de votre plateforme commerciale, soit annuler une route existante.</p>';
 								}
-								$this->commercialRouteManager->changeSession($S_CRM1);
 							}
 						}
 					} else {

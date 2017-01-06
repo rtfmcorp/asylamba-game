@@ -30,29 +30,32 @@ $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $buildingResourceRefund = $this->getContainer()->getParameter('athena.building.building_queue_resource_refund');
 $sessionToken = $session->get('token');
 $technologyHelper = $this->getContainer()->get('promethee.technology_helper');
+$entityManager = $this->getContainer()->get('entity_manager');
 
+// @TODO: move it to the using part of the code and remove useless data
 if ($ob_fastView->getLevelSpatioport() > 0) {
-	$S_CRM_OFV = $commercialRouteManager->getCurrentSession();
-	$commercialRouteManager->changeSession($ob_fastView->routeManager);
-
 	$nMaxCR = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $ob_fastView->getLevelSpatioport(), 'nbRoutesMax');
 	$nCRWaitingForOther = 0; $nCRWaitingForMe = 0;
 	$nCROperational = 0; $nCRInStandBy = 0;
 	$nCRInDock = 0;
 
-	if ($commercialRouteManager->size() > 0) {
-		for ($j = 0; $j < $commercialRouteManager->size(); $j++) {
-			if ($commercialRouteManager->get($j)->getStatement() == CommercialRoute::PROPOSED AND $commercialRouteManager->get($j)->getPlayerId1() == $session->get('playerId')) {
+	$routes = array_merge(
+		$commercialRouteManager->getByBase($ob_fastView->getId()),
+		$commercialRouteManager->getByDistantBase($ob_fastView->getId())
+	);
+	if (count($routes) > 0) {
+		foreach ($routes as $route) {
+			if ($route->getStatement() == CommercialRoute::PROPOSED AND $route->getPlayerId1() == $session->get('playerId')) {
 				$nCRWaitingForOther++;
-			} elseif ($commercialRouteManager->get($j)->getStatement() == CommercialRoute::PROPOSED AND $commercialRouteManager->get($j)->getPlayerId1() != $session->get('playerId')) {
+			} elseif ($route->getStatement() == CommercialRoute::PROPOSED AND $route->getPlayerId1() != $session->get('playerId')) {
 				$nCRWaitingForMe++;
-			} elseif ($commercialRouteManager->get($j)->getStatement() == CommercialRoute::ACTIVE) {
+			} elseif ($route->getStatement() == CommercialRoute::ACTIVE) {
 				$nCROperational++;
-			} elseif ($commercialRouteManager->get($j)->getStatement() == CommercialRoute::STANDBY) {
+			} elseif ($route->getStatement() == CommercialRoute::STANDBY) {
 				$nCRInStandBy++;
 			}
 		}
-
+		$entityManager->clear(CommercialRoute::class);
 		$nCRInDock = $nCROperational + $nCRInStandBy + $nCRWaitingForOther;
 	}
 }
@@ -287,30 +290,6 @@ echo '<div class="component">';
 			if ($ob_fastView->getLevelSpatioport() > 0) {
 				echo '<h4>Spatioport</h4>';
 
-				$S_CRM_OFV = $commercialRouteManager->getCurrentSession();
-				$commercialRouteManager->changeSession($ob_fastView->routeManager);
-
-				$nMaxCR = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $ob_fastView->getLevelSpatioport(), 'nbRoutesMax');
-				$nCRWaitingForOther = 0; $nCRWaitingForMe = 0;
-				$nCROperational = 0; $nCRInStandBy = 0;
-				$nCRInDock = 0;
-
-				if ($commercialRouteManager->size() > 0) {
-					for ($j = 0; $j < $commercialRouteManager->size(); $j++) {
-						if ($commercialRouteManager->get($j)->getStatement() == CommercialRoute::PROPOSED AND $commercialRouteManager->get($j)->getPlayerId1() == $session->get('playerId')) {
-							$nCRWaitingForOther++;
-						} elseif ($commercialRouteManager->get($j)->getStatement() == CommercialRoute::PROPOSED AND $commercialRouteManager->get($j)->getPlayerId1() != $session->get('playerId')) {
-							$nCRWaitingForMe++;
-						} elseif ($commercialRouteManager->get($j)->getStatement() == CommercialRoute::ACTIVE) {
-							$nCROperational++;
-						} elseif ($commercialRouteManager->get($j)->getStatement() == CommercialRoute::STANDBY) {
-							$nCRInStandBy++;
-						}
-					}
-
-					$nCRInDock = $nCROperational + $nCRInStandBy + $nCRWaitingForOther;
-				}
-
 				echo '<div class="number-box">';
 					echo '<span class="label">Routes commerciales</span>';
 					echo '<span class="value">';
@@ -327,7 +306,6 @@ echo '<div class="component">';
 					echo '</span>';
 				echo '</div>';
 
-				$commercialRouteManager->changeSession($S_CRM_OFV);
 			}
 		echo '</div>';
 	echo '</div>';

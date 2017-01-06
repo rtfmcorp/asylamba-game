@@ -423,12 +423,10 @@ class OrbitalBaseManager extends Manager {
 			$this->shipQueueManager->changeSession($S_SQM1);
 
 			# CommercialRouteManager
-			$S_CRM1 = $this->commercialRouteManager->getCurrentSession();
-			$this->commercialRouteManager->newSession(ASM_UMODE);
-			$this->commercialRouteManager->load(array('rOrbitalBase' => $aw['rPlace']));
-			$this->commercialRouteManager->load(array('rOrbitalBaseLinked' => $aw['rPlace']));
-			$b->routeManager = $this->commercialRouteManager->getCurrentSession();
-			$this->commercialRouteManager->changeSession($S_CRM1);
+			$baseRoutes = array_merge(
+				$this->commercialRouteManager->getByBase($aw['rPlace']),
+				$this->commercialRouteManager->getByDistantBase($aw['rPlace'])
+			);
 
 			# TechnologyQueueManager
 			$S_TQM1 = $this->technologyQueueManager->getCurrentSession();
@@ -563,7 +561,7 @@ class OrbitalBaseManager extends Manager {
 		}
 	}
 
-	public function changeOwnerById($id, $base, $newOwner, $routeSession, $recyclingSession, $commanderSession) {
+	public function changeOwnerById($id, $base, $newOwner, $recyclingSession, $commanderSession) {
 		if ($base->getId() != 0) {
 			# changement de possesseur des offres du marché
 			$S_TRM1 = $this->transactionManager->getCurrentSession();
@@ -589,14 +587,7 @@ class OrbitalBaseManager extends Manager {
 			$base->setRPlayer($newOwner);
 
 			# suppression des routes commerciales
-			$S_CRM1 = $this->commercialRouteManager->getCurrentSession();
-			$this->commercialRouteManager->changeSession($routeSession);
-			for ($i = $this->commercialRouteManager->size()-1; $i >= 0; $i--) { 
-				$this->commercialRouteManager->deleteById($this->commercialRouteManager->get($i)->getId());
-				# envoyer une notif
-			}
-
-			$this->commercialRouteManager->changeSession($S_CRM1);
+			$this->commercialRouteManager->removeBaseRoutes($base);
 
 			# suppression des technologies en cours de développement
 			$S_TQM1 = $this->technologyQueueManager->getCurrentSession();

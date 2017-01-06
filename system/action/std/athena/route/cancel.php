@@ -17,6 +17,7 @@ $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_ma
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
 $routeCancelRefund = $this->getContainer()->getParameter('athena.trade.route.cancellation_refund');
+$entityManager = $this->getContainer()->get('entity_manager');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -26,12 +27,8 @@ $base = $request->query->get('base');
 $route = $request->query->get('route');
 
 if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
-	$S_CRM1 = $commercialRouteManager->getCurrentSession();
-	$commercialRouteManager->newSession(ASM_UMODE);
-	$commercialRouteManager->load(array('id' => $route, 'rOrbitalBase' => $base, 'statement' => CommercialRoute::PROPOSED));
-	if ($commercialRouteManager->get() && $commercialRouteManager->size() == 1) {
-		$cr = $commercialRouteManager->get();
-
+	$cr = $commercialRouteManager->getByIdAndBase($route, $base);
+	if ($cr !== null && $cr->getStatement() == CommercialRoute::PROPOSED) {
 		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
 		$orbitalBaseManager->newSession(ASM_UMODE);
 		$orbitalBaseManager->load(array('rPlace' => $cr->getROrbitalBase()));
@@ -58,13 +55,13 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 		$notificationManager->add($n);
 
 		//destruction de la route
-		$commercialRouteManager->deleteById($route);
+		$commercialRouteManager->remove($cr);
 		$session->addFlashbag('Route commerciale annulée. Vous récupérez les ' . $routeCancelRefund * 100 . '% du montant investi.', Flashbag::TYPE_SUCCESS);
 		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
 		throw new ErrorException('impossible d\'annuler une route commerciale');
 	}
-	$commercialRouteManager->changeSession($S_CRM1);
 } else {
 	throw new FormException('pas assez d\'informations pour annuler une route commerciale');
 }
+$entityManager->flush();

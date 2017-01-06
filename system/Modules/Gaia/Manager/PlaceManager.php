@@ -495,12 +495,10 @@ class PlaceManager extends Manager {
 									$placeBase = $this->orbitalBaseManager->get();
 									$this->orbitalBaseManager->changeSession($S_OBM_C1);
 
-									$S_CRM_C1 = $this->commercialRouteManager->getCurrentSession();
-									$this->commercialRouteManager->newSession();
-									$this->commercialRouteManager->load(['rOrbitalBase' => $place->id]);
-									$this->commercialRouteManager->load(['rOrbitalBaseLinked' => $place->id]);
-									$S_CRM_C2 = $this->commercialRouteManager->getCurrentSession();
-									$this->commercialRouteManager->changeSession($S_CRM_C1);
+									$placeRoutes = array_merge(
+										$this->commercialRouteManager->getByBase($place->id),
+										$this->commercialRouteManager->getByDistantBase($place->id)
+									);
 
 									$S_REM_C1 = $this->recyclingMissionManager->getCurrentSession();
 									$this->recyclingMissionManager->newSession();
@@ -834,18 +832,15 @@ class PlaceManager extends Manager {
 						$reportIds[] = $report->id;
 						
 						# PATCH DEGUEU POUR LES MUTLIS-COMBATS
-						$_RPM341 = $this->reportManager->getCurrentSession();
-						$this->reportManager->newSession(TRUE);
-						$this->reportManager->load(['rPlayerAttacker' => $commander->rPlayer, 'rPlace' => $place->id, 'dFight' => $commander->dArrival]);
-						if ($this->reportManager->size() > 0) {
-							for ($i = 0; $i < $this->reportManager->size(); $i++) {
-								if ($this->reportManager->get($i)->id != $report->id) {
-									$this->reportManager->get($i)->statementAttacker = Report::DELETED;
-									$this->reportManager->get($i)->statementDefender = Report::DELETED;
-								}
+						$reports = $this->reportManager->getByAttackerAndPlace($commander->rPlayer, $place->id, $commander->dArrival);
+						foreach($reports as $r) {
+							if ($r->id == $report->id) {
+								continue;
 							}
+							$r->statementAttacker = Report::DELETED;
+							$r->statementDefender = Report::DELETED;
 						}
-						$this->reportManager->changeSession($_RPM341);
+						$this->entityManager->flush(Report::class);
 						########################################
 
 						# mettre à jour armyInBegin si prochain combat pour prochain rapport
@@ -886,7 +881,7 @@ class PlaceManager extends Manager {
 					$place->rPlayer = $commander->rPlayer;
 
 					# changer l'appartenance de la base (et de la place)
-					$this->orbitalBaseManager->changeOwnerById($place->id, $placeBase, $commander->getRPlayer(), $routeSession, $recyclingSession, $commanderSession);
+					$this->orbitalBaseManager->changeOwnerById($place->id, $placeBase, $commander->getRPlayer(), $recyclingSession, $commanderSession);
 					$place->commanders[] = $commander;
 
 					$commander->rBase = $place->id;
@@ -1125,7 +1120,7 @@ class PlaceManager extends Manager {
 		$report->setArmies();
 		$report->setPev();
 		
-		$id = $this->reportManager->add($report);
+		$this->reportManager->add($report);
 		LiveReport::clear();
 
 		return $report;

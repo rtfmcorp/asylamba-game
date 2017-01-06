@@ -187,29 +187,17 @@ echo '<div class="column act">';
 					$notAccepted = FALSE;
 					$standby 	 = FALSE;
 
-					$S_CRM3 = $commercialRouteManager->getCurrentSession();
-					$commercialRouteManager->changeSession($defaultBase->routeManager);
-					for ($j = 0; $j < $commercialRouteManager->size(); $j++) { 
-						if ($commercialRouteManager->get($j)->getROrbitalBaseLinked() == $defaultBase->getRPlace()) {
-							if ($commercialRouteManager->get($j)->getROrbitalBase() == $place->getId()) {
-								switch($commercialRouteManager->get($j)->getStatement()) {
-									case CommercialRoute::PROPOSED: $notAccepted = TRUE; break;
-									case CommercialRoute::ACTIVE: $sendResources = TRUE; break;
-									case CommercialRoute::STANDBY: $standby = TRUE; break;
-								}
-							}
-						}
-						if ($commercialRouteManager->get($j)->getROrbitalBase() == $defaultBase->getRPlace()) {
-							if ($commercialRouteManager->get($j)->getROrbitalBaseLinked() == $place->getId()) {
-								switch($commercialRouteManager->get($j)->getStatement()) {
-									case CommercialRoute::PROPOSED: $proposed = TRUE; break;
-									case CommercialRoute::ACTIVE: $sendResources = TRUE; break;
-									case CommercialRoute::STANDBY: $standby = TRUE; break;
-								}
-							}
+					$routes = array_merge(
+						$commercialRouteManager->getByBase($defaultBase->getId()),
+						$commercialRouteManager->getByDistantBase($defaultBase->getId())
+					);
+					foreach ($routes as $route) {
+						switch($route->getStatement()) {
+							case CommercialRoute::PROPOSED: $notAccepted = TRUE; break;
+							case CommercialRoute::ACTIVE: $sendResources = TRUE; break;
+							case CommercialRoute::STANDBY: $standby = TRUE; break;
 						}
 					}
-					$commercialRouteManager->changeSession($S_CRM3);
 
 					$distance = Game::getDistance($defaultBase->xSystem, $place->xSystem, $defaultBase->ySystem, $place->ySystem);
 
@@ -243,11 +231,9 @@ echo '<div class="column act">';
 						} elseif ($standby) {
 							echo '<span class="button">C\'est la guerre.</span>';
 						} else {
-							$S_CRM2 = $commercialRouteManager->getCurrentSession();
-							$commercialRouteManager->changeSession($defaultBase->routeManager);
-							$ur = $commercialRouteManager->size();
-							for ($j = 0; $j < $commercialRouteManager->size(); $j++) {
-								if ($commercialRouteManager->get($j)->getROrbitalBaseLinked() == $defaultBase->rPlace && $commercialRouteManager->get($j)->statement == CommercialRoute::PROPOSED) {
+							$ur = count($routes);
+							foreach ($routes as $route) {
+								if ($route->getROrbitalBaseLinked() == $defaultBase->rPlace && $route->statement == CommercialRoute::PROPOSED) {
 									$ur--;
 								}
 							}
@@ -259,8 +245,6 @@ echo '<div class="column act">';
 							} else {
 								echo '<span class="button">Pas assez de slots.</span>';
 							}
-
-							$commercialRouteManager->changeSession($S_CRM2);
 						}
 					echo '</div>';
 				}

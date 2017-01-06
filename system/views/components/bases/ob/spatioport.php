@@ -23,9 +23,7 @@ $colorManager = $this->getContainer()->get('demeter.color_manager');
 $database = $this->getContainer()->get('database');
 $session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
-
-$S_CRM1 = $commercialRouteManager->getCurrentSession();
-$commercialRouteManager->changeSession($ob_spatioport->routeManager);
+$entityManager = $this->getContainer()->get('entity_manager');
 
 $nMaxCR = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $ob_spatioport->getLevelSpatioport(), 'nbRoutesMax');
 $nCRWaitingForOther = 0; $nCRWaitingForMe = 0;
@@ -33,20 +31,24 @@ $nCROperational = 0; $nCRInStandBy = 0;
 $nCRInDock = 0;
 $totalIncome = 0;
 
-if ($commercialRouteManager->size() > 0) {
-	for ($i = 0; $i < $commercialRouteManager->size(); $i++) {
-		if ($commercialRouteManager->get($i)->getStatement() == CommercialRoute::PROPOSED AND $commercialRouteManager->get($i)->getPlayerId1() == $session->get('playerId')) {
+$routes = array_merge(
+	$commercialRouteManager->getByBase($ob_spatioport->getId()),
+	$commercialRouteManager->getByDistantBase($ob_spatioport->getId())
+);
+
+if (count($routes) > 0) {
+	foreach ($routes as $route) {
+		if ($route->getStatement() == CommercialRoute::PROPOSED AND $route->getPlayerId1() == $session->get('playerId')) {
 			$nCRWaitingForOther++;
-		} elseif ($commercialRouteManager->get($i)->getStatement() == CommercialRoute::PROPOSED AND $commercialRouteManager->get($i)->getPlayerId1() != $session->get('playerId')) {
+		} elseif ($route->getStatement() == CommercialRoute::PROPOSED AND $route->getPlayerId1() != $session->get('playerId')) {
 			$nCRWaitingForMe++;
-		} elseif ($commercialRouteManager->get($i)->getStatement() == CommercialRoute::ACTIVE) {
+		} elseif ($route->getStatement() == CommercialRoute::ACTIVE) {
 			$nCROperational++;
-			$totalIncome += $commercialRouteManager->get($i)->getIncome();
-		} elseif ($commercialRouteManager->get($i)->getStatement() == CommercialRoute::STANDBY) {
+			$totalIncome += $route->getIncome();
+		} elseif ($route->getStatement() == CommercialRoute::STANDBY) {
 			$nCRInStandBy++;
 		}
 	}
-
 	$nCRInDock = $nCROperational + $nCRInStandBy + $nCRWaitingForOther;
 }
 
@@ -231,9 +233,7 @@ if ($request->query->get('mode') === 'search') {
 	}
 } else {
 	$j = 0;
-	for ($i = 0; $i < $commercialRouteManager->size(); $i++) {
-		$rc = $commercialRouteManager->get($i);
-
+	foreach ($routes as $rc) {
 		if ($rc->getStatement() == CommercialRoute::PROPOSED && $rc->getPlayerId2() == $session->get('playerId')) {
 			$base1  = '<div class="base">';
 				$base1 .= '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation1()) . '.png" alt="' . $ob_spatioport->getName() . '" class="place" />';
@@ -315,9 +315,7 @@ if ($request->query->get('mode') === 'search') {
 	}
 
 	$j = 0;
-	for ($i = 0; $i < $commercialRouteManager->size(); $i++) {
-		$rc = $commercialRouteManager->get($i);
-
+	foreach ($routes as $rc) {
 		if ($rc->getStatement() != CommercialRoute::PROPOSED || $rc->getPlayerId2() != $session->get('playerId')) {
 			$base1  = '<div class="base">';
 				$base1 .= '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation1()) . '.png" class="place" />';
@@ -399,8 +397,8 @@ echo '<div class="component">';
 	echo '</div>';
 echo '</div>';
 
-if ($commercialRouteManager->size() == 0) {
+if (count($routes) == 0) {
 	include COMPONENT . 'default.php';
 }
 
-$commercialRouteManager->changeSession($S_CRM1);
+$entityManager->clear(CommercialRoute::class);

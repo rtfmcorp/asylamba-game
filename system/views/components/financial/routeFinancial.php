@@ -24,21 +24,8 @@ echo '<div class="component financial">';
 		echo '<div class="body">';
 		echo '<ul class="list-type-1">';
 			foreach ($ob_routeFinancial as $base) {
-				$S_CRM1 = $commercialRouteManager->getCurrentSession();
-				$commercialRouteManager->changeSession($base->routeManager);
-
-				$nbRoute = 0;
-				for ($k = 0; $k < $commercialRouteManager->size(); $k++) {
-					if ($commercialRouteManager->get($k)->getStatement() == CommercialRoute::ACTIVE) {
-						$nbRoute++;
-					}
-				}
-				$routeIncome = 0;
-				for ($k = 0; $k < $commercialRouteManager->size(); $k++) {
-					if ($commercialRouteManager->get($k)->getStatement() == CommercialRoute::ACTIVE) {
-						$routeIncome += $commercialRouteManager->get($k)->getIncome();
-					}
-				}
+				$nbRoute = $commercialRouteManager->countBaseActiveRoutes($base->getId());
+				$routeIncome = $commercialRouteManager->getBaseIncome($base);
 
 				echo '<li>';
 					if ($nbRoute > 0) {
@@ -56,22 +43,24 @@ echo '<div class="component financial">';
 					echo '</span>';
 
 					if ($nbRoute > 0) {
+						$routes = array_merge(
+							$commercialRouteManager->getByBase($base->getId()),
+							$commercialRouteManager->getByDistantBase($base->getId())
+						);
 						echo '<ul class="sub-list-type-1" id="rc-base-' . $base->getId() . '">';
-							for ($k = 0; $k < $commercialRouteManager->size(); $k++) {
-								$route = $commercialRouteManager->get($k);
-								if ($commercialRouteManager->get($k)->getStatement() == CommercialRoute::ACTIVE) {
-									echo '<li>';
-										$rBaseName = ($route->getBaseName1() == $base->getName()) ? $route->getBaseName2(): $route->getBaseName1();
-										echo '<span class="label">' . $rBaseName . '</span>';
-										echo '<span class="value">' . Format::numberFormat($route->getIncome()) . '</span>';
-									echo '</li>';
-								}
+						foreach ($routes as $route) {
+							if ($route->getStatement() == CommercialRoute::ACTIVE) {
+								echo '<li>';
+									$rBaseName = ($route->getBaseName1() == $base->getName()) ? $route->getBaseName2(): $route->getBaseName1();
+									echo '<span class="label">' . $rBaseName . '</span>';
+									echo '<span class="value">' . Format::numberFormat($route->getIncome()) . '</span>';
+								echo '</li>';
 							}
+						}
+						$this->getContainer()->get('entity_manager')->clear(CommercialRoute::class);
 						echo '</ul>';
 					}
 				echo '</li>';
-
-				$commercialRouteManager->changeSession($S_CRM1);
 			}
 
 			echo '<li class="strong">';

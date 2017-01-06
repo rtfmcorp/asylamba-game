@@ -648,16 +648,7 @@ class PlayerManager extends Manager {
 			$nationTax = $base->tax * $popTax / 100;
 
 			# revenu des routes commerciales
-			$routesIncome = 0;
-			$S_CRM1 =  $this->commercialRouteManager->getCurrentSession();
-			$this->commercialRouteManager->changeSession($base->routeManager);
-			for ($r = 0; $r < $this->commercialRouteManager->size(); $r++) {
-				if ($this->commercialRouteManager->get($r)->getStatement() == CommercialRoute::ACTIVE) {
-					$routesIncome += $this->commercialRouteManager->get($r)->getIncome();
-				}
-			}
-			$routesIncome += $routesIncome * $playerBonus->bonus->get(PlayerBonus::COMMERCIAL_INCOME) / 100;
-			$this->commercialRouteManager->changeSession($S_CRM1);
+			$routesIncome = $this->commercialRouteManager->getBaseIncome($base) * $playerBonus->bonus->get(PlayerBonus::COMMERCIAL_INCOME) / 100;
 
 			$credits += ($popTax - $nationTax + $routesIncome);
 			$totalGain += $popTax - $nationTax + $routesIncome;

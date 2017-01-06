@@ -26,6 +26,7 @@ $notificationManager = $this->getContainer()->get('hermes.notification_manager')
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $routeColorBonus = $this->getContainer()->getParameter('athena.trade.route.color_bonus');
 $routeSectorBonus = $this->getContainer()->getParameter('athena.trade.route.sector_bonus');
+$entityManager = $this->getContainer()->get('entity_manager');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -46,30 +47,12 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 
 	$otherBase = $orbitalBaseManager->get(1);
 
-	# check s'il y a une place de route libre
-	$S_CRM1 = $commercialRouteManager->getCurrentSession();
-	$commercialRouteManager->newSession();
-	$commercialRouteManager->load(array('rOrbitalBase' => $proposerBase->getId())); # routes avec n'importe quel statement
-	$commercialRouteManager->load(array('rOrbitalBaseLinked' => $proposerBase->getId(), 'statement' => array(CommercialRoute::ACTIVE, CommercialRoute::STANDBY)));
-
 	$nbrMaxCommercialRoute = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $proposerBase->getLevelSpatioport(), 'nbRoutesMax');
 	
-	# check si on n'a pas déjà une route avec ce joueur
-	$alreadyARoute = FALSE;
-	for ($i = 0; $i < $commercialRouteManager->size(); $i++) { 
-		if ($commercialRouteManager->get($i)->getROrbitalBaseLinked() == $proposerBase->getRPlace()) {
-			if ($commercialRouteManager->get($i)->getROrbitalBase() == $otherBase->getRPlace()) {
-				$alreadyARoute = TRUE;
-			}
-		}
-		if ($commercialRouteManager->get($i)->getROrbitalBase() == $proposerBase->getRPlace()) {
-			if ($commercialRouteManager->get($i)->getROrbitalBaseLinked() == $otherBase->getRPlace()) {
-				$alreadyARoute = TRUE;
-			}
-		}
-	}
+	// Check if a route already exists between these two bases
+	$alreadyARoute = $commercialRouteManager->isAlreadyARoute($proposerBase->getId(), $otherBase->getId());
 
-	if (($commercialRouteManager->size() < $nbrMaxCommercialRoute) && (!$alreadyARoute) && ($proposerBase->getLevelSpatioport() > 0) && ($otherBase->getLevelSpatioport() > 0)) {
+	if (($commercialRouteManager->countBaseRoutes($proposerBase->getId()) < $nbrMaxCommercialRoute) && (!$alreadyARoute) && ($proposerBase->getLevelSpatioport() > 0) && ($otherBase->getLevelSpatioport() > 0)) {
 		$S_PAM1 = $playerManager->getCurrentSession();
 		$playerManager->newSession();
 		$playerManager->load(array('id' => $otherBase->getRPlayer()));
@@ -171,7 +154,6 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 	} else {
 		throw new ErrorException('impossible de proposer une route commerciale (3)');
 	}
-	$commercialRouteManager->changeSession($S_CRM1);
 	$orbitalBaseManager->changeSession($S_OBM1);
 } else {
 	throw new FormException('pas assez d\'informations pour proposer une route commerciale');

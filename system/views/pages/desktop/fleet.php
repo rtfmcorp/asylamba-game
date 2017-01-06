@@ -243,19 +243,15 @@ echo '<div id="content">';
 
 		# report component
 		if ($request->query->has('report')) {
-			$S_RPM2 = $reportManager->getCurrentSession();
-			$reportManager->newSession();
-			$reportManager->load(array('r.id' => $request->query->get('report')));
+			$report = $reportManager->get($request->query->get('report'));
 
-			if ($reportManager->size() == 1 && ($reportManager->get()->rPlayerAttacker == $session->get('playerId') || $reportManager->get()->rPlayerDefender == $session->get('playerId'))) {
+			if (($report->rPlayerAttacker == $session->get('playerId') || $report->rPlayerDefender == $session->get('playerId'))) {
 				$S_PAM1 = $playerManager->getCurrentSession();
 				$playerManager->newSession();
 				$playerManager->load(array('id' => array($reportManager->get()->rPlayerAttacker, $reportManager->get()->rPlayerDefender)));
 
-				$report_report = $reportManager->get();
-
-				$attacker_report = $playerManager->getById($report_report->rPlayerAttacker);
-				$defender_report = $playerManager->getById($report_report->rPlayerDefender);
+				$attacker_report = $playerManager->getById($report->rPlayerAttacker);
+				$defender_report = $playerManager->getById($report->rPlayerDefender);
 
 				include COMPONENT . 'fleet/report.php';
 				include COMPONENT . 'fleet/manage-report.php';
@@ -265,8 +261,6 @@ echo '<div id="content">';
 				throw new ErrorException('Ce rapport ne vous appartient pas ou n\'existe pas');
 				//CTR::redirect('fleet/view-archive');
 			}
-
-			$reportManager->changeSession($S_RPM2);
 		} else {
 			include COMPONENT . 'default.php';
 			include COMPONENT . 'default.php';
