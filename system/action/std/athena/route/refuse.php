@@ -9,6 +9,7 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('app.session');
