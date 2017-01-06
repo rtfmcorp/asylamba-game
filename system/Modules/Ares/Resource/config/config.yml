@@ -40,4 +40,4 @@ services:
     ares.report_manager:
         class: Asylamba\Modules\Ares\Manager\ReportManager
         arguments:
-            - "@database"
+            - "@entity_manager"
