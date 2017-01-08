@@ -70,7 +70,7 @@ echo '<div class="component nav">';
 						echo '<select name="rplayer">';
 							echo '<option value="-1">Choisissez un joueur</option>';
 							foreach ($senators as $senator) {
-								echo '<option value="' . $senator->id . '">' . ColorResource::getInfo($senator->rColor, 'status')[$senator->status - 1] . ' ' . $playerManager->get($j)->name . '</option>';
+								echo '<option value="' . $senator->id . '">' . ColorResource::getInfo($senator->rColor, 'status')[$senator->status - 1] . ' ' . $senator->name . '</option>';
 							}
 						echo '</select>';
 						echo '<button type="submit">Désigner comme successeur</button>';
