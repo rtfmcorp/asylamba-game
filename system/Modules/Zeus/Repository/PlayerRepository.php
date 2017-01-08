@@ -364,6 +364,26 @@ class PlayerRepository extends AbstractRepository {
 		return $data;
 	}
 	
+	public function search($search)
+	{
+		$query = $this->connection->prepare(
+			'SELECT p.* FROM player AS p WHERE LOWER(name) LIKE LOWER(:search) ORDER BY experience DESC LIMIT 0,20'
+		);
+		$query->execute(['search' => "%$search%"]);
+		
+		$data = [];
+		while ($row = $query->fetch()) {
+			if (($p = $this->unitOfWork->getObject(Player::class, (int) $row['id'])) !== null) {
+				$data[] = $p;
+				continue;
+			}
+			$player = $this->format($row);
+			$this->unitOfWork->addObject($player);
+			$data[] = $player;
+		}
+		return $data;
+	}
+	
 	/**
 	 * @param Player $player
 	 */

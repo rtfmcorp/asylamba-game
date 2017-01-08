@@ -5,14 +5,10 @@ use Asylamba\Modules\Zeus\Model\Player;
 
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 
-$S_PAM1 = $playerManager->newSession(FALSE);
+$players = $playerManager->search($_GET['q']);
 
-$playerManager->search($_GET['q'], array('experience', 'DESC'), array(0, 20));
-
-if ($playerManager->size() != 0) {
-	for ($i = 0; $i < $playerManager->size(); $i++) {
-		$player = $playerManager->get($i);
-
+if (count($players) > 0) {
+	foreach ($players as $player) {
 		if (in_array($player->getStatement(), array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY, Player::BANNED))) {
 			if ($player->getRColor() > 0) {
 				$status = ColorResource::getInfo($player->getRColor(), 'status');
@@ -28,4 +24,3 @@ if ($playerManager->size() != 0) {
 		}
 	}
 }
-$playerManager->changeSession($S_PAM1);
