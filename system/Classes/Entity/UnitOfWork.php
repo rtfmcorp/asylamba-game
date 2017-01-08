@@ -84,11 +84,10 @@ class UnitOfWork {
     public function flushObject(AbstractRepository $repository, $className, $object)
     {
 		$identifier = ($object->getId() !== null) ? $object->getId() : spl_object_hash($object);
-        $entity = &$this->entities[$className][$identifier];
-        switch($entity['state']) {
+        switch($this->entities[$className][$identifier]['state']) {
             case self::METADATA_STAGED:
                 $repository->insert($object);
-				unset($entity);
+				unset($this->entities[$className][$identifier]);
 				$this->entities[$className][(int) $object->getId()] = [
 					'state' => self::METADATA_PERSISTED,
 					'instance' => $object
@@ -97,7 +96,7 @@ class UnitOfWork {
             case self::METADATA_PERSISTED: $repository->update($object); break;
             case self::METADATA_REMOVED:
                 $repository->remove($object);
-                unset($entity);
+                unset($this->entities[$className][$identifier]);
                 break;
         }
     }
