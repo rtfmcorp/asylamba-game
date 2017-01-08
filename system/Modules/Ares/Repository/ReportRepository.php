@@ -36,7 +36,7 @@ class ReportRepository extends AbstractRepository {
 				sq.ship11 AS sqShip11
 			FROM report AS r
 			LEFT JOIN squadronReport AS sq ON sq.rReport = r.id
-			WHERE id = :id'
+			WHERE r.id = :id'
 		);
 		$query->execute(['id' => $id]);
 		$result = $this->formatResult($query);
@@ -72,7 +72,7 @@ class ReportRepository extends AbstractRepository {
 				sq.ship11 AS sqShip11
 			FROM report AS r
 			LEFT JOIN squadronReport AS sq ON sq.rReport = r.id
-			WHERE rPlayerAttacker = :attacker_id, rPlace = :place_id, dFight = :fight'
+			WHERE r.rPlayerAttacker = :attacker_id, r.rPlace = :place_id, r.dFight = :fight'
 		);
 		$query->execute([
 			'attacker_id' => $attackerId,
@@ -86,7 +86,7 @@ class ReportRepository extends AbstractRepository {
 	{
 		$currentId = 0;
 		$data = [];
-		while ($row = $query->fetch()) {
+		while ($row = $statement->fetch()) {
 			// @TODO get the existing object if it is in UnitOfWork already
 			if ($currentId !== (int) $row['id']) {
 				// Set the armies of the previous report
