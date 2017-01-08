@@ -57,7 +57,7 @@ if ($technologies->getTechnology(Technology::CONQUEST) !== 1) {
 	}
 	$commanderManager->changeSession($S_COM2);
 	$totalBases = $obQuantity + $msQuantity + $coloQuantity;
-	if ($totalBases < $maxBasesQuantity) {
+	if ($totalBases >= $maxBasesQuantity) {
 		throw new ErrorException('Vous avez assez de conquête en cours ou un niveau d\'administration étendue trop faible.');
 	}
 
