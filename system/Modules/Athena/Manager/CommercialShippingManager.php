@@ -22,6 +22,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Container\Session;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
 
 class CommercialShippingManager extends Manager {
 	protected $managerType = '_CommercialShipping';
