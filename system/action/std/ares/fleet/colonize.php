@@ -113,11 +113,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 										$commander->destinationPlaceName = $place->baseName;
 										if ($commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
 											# debit credit
-											$S_PAM2 = $playerManager->getCurrentSession();
-											$playerManager->newSession(ASM_UMODE);
-											$playerManager->load(array('id' => $session->get('playerId')));
-											$playerManager->decreaseCredit($playerManager->get(), $price);
-											$playerManager->changeSession($S_PAM2);
+											$playerManager->decreaseCredit($playerManager->get($session->get('playerId')), $price);
 
 											if ($request->query->has('redirect')) {
 												$this->getContainer()->get('app.response')->redirect('map/place-' . $request->query->get('redirect'));

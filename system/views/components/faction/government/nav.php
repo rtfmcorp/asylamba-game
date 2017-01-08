@@ -66,20 +66,15 @@ echo '<div class="component nav">';
 				if ($faction->regime == Color::DEMOCRATIC) {
 					echo '<a href="' . Format::actionBuilder('abdicate', $sessionToken) . '" class="more-button confirm" data-confirm-label="Cette action est définitive.">Organiser des élections anticipées</a>';
 				} else {
-					$S_PAM_DGG2 = $playerManager->getCurrentSession();
-					$playerManager->changeSession($PLAYER_SENATE_TOKEN);
-
 					echo '<form action="' . Format::actionBuilder('abdicate', $sessionToken) . '" method="post" class="choose-government">';
 						echo '<select name="rplayer">';
 							echo '<option value="-1">Choisissez un joueur</option>';
-							for ($j = 0; $j < $playerManager->size(); $j++) {
-								echo '<option value="' . $playerManager->get($j)->id . '">' . ColorResource::getInfo($playerManager->get($j)->rColor, 'status')[$playerManager->get($j)->status - 1] . ' ' . $playerManager->get($j)->name . '</option>';
+							foreach ($senators as $senator) {
+								echo '<option value="' . $senator->id . '">' . ColorResource::getInfo($senator->rColor, 'status')[$senator->status - 1] . ' ' . $playerManager->get($j)->name . '</option>';
 							}
 						echo '</select>';
 						echo '<button type="submit">Désigner comme successeur</button>';
 					echo '</form>';
-					
-					$playerManager->changeSession($S_PAM_DGG2);
 				}
 			} else {
 				echo '<a href="' . Format::actionBuilder('resign', $sessionToken) . '" class="more-button confirm" data-confirm-label="Cette action est définitive.">Démissioner du gouvernement</a>';

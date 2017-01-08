@@ -44,21 +44,18 @@ if ($recipients !== FALSE AND $conversation !== FALSE) {
 
 		if ((count($recipients) + count($players)) <= ConversationUser::MAX_USERS) {
 			# chargement des utilisateurs
-			$S_PAM = $playerManager->getCurrentSession();
-			$playerManager->newSession();
-			$playerManager->load(array('id' => $recipients, 'statement' => array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY)));
-			
-			if ($playerManager->size() >= 1) {
+			$newPlayers = $playerManager->getByIdsAndStatements($recipients, [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]);
+			if (count($newPlayers) >= 1) {
 				# création de la date précédente
 				$readingDate = date('Y-m-d H:i:s', (strtotime(Utils::now()) - 20));
 
 				# créer la liste des users
-				for ($i = 0; $i < $playerManager->size(); $i++) {
-					if (!in_array($playerManager->get($i)->id, $playersId)) {
+				foreach ($newPlayers as $newPlayer) {
+					if (!in_array($newPlayer->id, $playersId)) {
 						$user = new ConversationUser();
 
 						$user->rConversation = $conv->id;
-						$user->rPlayer = $playerManager->get($i)->id;
+						$user->rPlayer = $newPlayer->id;
 						$user->convPlayerStatement = ConversationUser::US_STANDARD;
 						$user->convStatement = ConversationUser::CS_DISPLAY;
 						$user->dLastView = $readingDate;
@@ -69,9 +66,9 @@ if ($recipients !== FALSE AND $conversation !== FALSE) {
 						$message = new ConversationMessage();
 
 						$message->rConversation = $conv->id;
-						$message->rPlayer = $playerManager->get($i)->id;
+						$message->rPlayer = $newPlayer->id;
 						$message->type = ConversationMessage::TY_SYSTEM;
-						$message->content = $playerManager->get($i)->name . ' est entré dans la conversation';
+						$message->content = $newPlayer->name . ' est entré dans la conversation';
 						$message->dCreation = Utils::now();
 						$message->dLastModification = NULL;
 
@@ -87,15 +84,12 @@ if ($recipients !== FALSE AND $conversation !== FALSE) {
 			} else {
 				throw new ErrorException('Le joueur n\'est pas joignable.');		
 			}
-
-			$playerManager->changeSession($S_PAM);
 		} else {
 			throw new ErrorException('Nombre maximum de joueur atteint.');
 		}
 	} else {
 		throw new ErrorException('La conversation n\'existe pas ou ne vous appartient pas.');
 	}
-
 	$conversationManager->changeSession($S_CVM);
 } else {
 	throw new ErrorException('Informations manquantes pour ajouter un joueur à la conversation.');

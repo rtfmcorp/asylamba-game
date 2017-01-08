@@ -16,23 +16,20 @@ $rPlayer = $request->query->get('rplayer');
 
 if ($rPlayer !== FALSE) {
 	if ($session->get('playerInfo')->get('status') == Player::CHIEF) {
-		$_PAM = $playerManager->getCurrentsession();
-		$playerManager->newSession();
-		$playerManager->load(array('id' => $rPlayer));
-
-		if ($playerManager->size() > 0) {
-			if ($playerManager->get()->rColor == $session->get('playerInfo')->get('color')) {
-				if ($playerManager->get()->status > Player::PARLIAMENT) {
-					$statusArray = ColorResource::getInfo($playerManager->get()->rColor, 'status');
+		if (($minister = $playerManager->get($rPlayer)) !== null) {
+			if ($minister->rColor == $session->get('playerInfo')->get('color')) {
+				if ($minister->status > Player::PARLIAMENT) {
+					$statusArray = ColorResource::getInfo($minister->rColor, 'status');
 					$notif = new Notification();
 					$notif->setRPlayer($rPlayer);
 					$notif->setTitle('Eviction du gouvernement');
 					$notif->addBeg()
-						->addTxt('Vous avez été renvoyé du poste de ' . $statusArray[$playerManager->get()->status - 1] . ' de votre faction.');
+						->addTxt('Vous avez été renvoyé du poste de ' . $statusArray[$minister->status - 1] . ' de votre faction.');
 					$notificationManager->add($notif);
 
-					$playerManager->get()->status = Player::PARLIAMENT;
-
+					$minister->status = Player::PARLIAMENT;
+					
+					$this->getContainer()->get('entity_manager')->flush($minister);
 				} else {
 					throw new ErrorException('Vous ne pouvez choisir qu\'un membre du gouvernement.');
 				}
@@ -42,7 +39,6 @@ if ($rPlayer !== FALSE) {
 		} else {
 			throw new ErrorException('Ce joueur n\'existe pas.');
 		}
-		$playerManager->changeSession($_PAM);
 	} else {
 		throw new ErrorException('Vous n\'êtes pas le chef de votre faction.');	
 	}

@@ -116,8 +116,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `player` (
 echo '<h3>Ajout du Joueur Gaia</h3>';
 
 $playerManager = $this->getContainer()->get('zeus.player_manager');
-$S_PAM_ALL = $playerManager->getCurrentSession();
-$playerManager->newSession();
 
 $p = new Player();
 $p->status = 1;
@@ -165,11 +163,8 @@ foreach ($availableFactions as $faction) {
 	$p->avatar = ('color-' . $faction);
 	$p->rColor = $faction;
 	$p->status = 6;
-
 	$playerManager->add($p);
 }
-
-$playerManager->changeSession($S_PAM_ALL);
 
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table sector</h2>';
@@ -1024,14 +1019,8 @@ $user->dLastView = Utils::now();
 $conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
 $conversationUserManager->add($user);
 
-$S_PAM_ALL = $playerManager->getCurrentSession();
-$playerManager->newSession(FALSE);
-$playerManager->load(
-	['rColor' => $availableFactions, 'statement' => Player::DEAD]
-);
-
-for ($i = 0; $i < $playerManager->size(); $i++) {
-	$player = $playerManager->get($i);
+foreach ($availableFactions as $faction) {
+	$player = $playerManager->getFactionAccount($faction);
 
 	$conv = new Conversation();
 	$conv->messages = 0;
@@ -1049,8 +1038,6 @@ for ($i = 0; $i < $playerManager->size(); $i++) {
 	$user->dLastView = Utils::now();
 	$conversationUserManager->add($user);
 }
-
-$playerManager->changeSession($S_PAM_ALL);
 
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table notification</h2>';

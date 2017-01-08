@@ -17,10 +17,9 @@ $credit = $request->request->get('credit');
 
 if ($credit !== FALSE) { 
 	if ($credit <= 500000) {
-		$S_PAM1 = $playerManager->getCurrentSession();
-		$playerManager->newSession();
-		$playerManager->load(array('id' => $session->get('playerId')));
-		$playerManager->get()->iUniversity = $credit;
+		$player = $playerManager->get($session->get('playerId'));
+		$player->iUniversity = $credit;
+		$this->getContainer()->get('entity_manager')->flush($player);
 
 		# tutorial
 		if ($session->get('playerInfo')->get('stepDone') == FALSE &&
@@ -29,8 +28,6 @@ if ($credit !== FALSE) {
 		}
 
 		$session->addFlashbag('L\'investissement dans l\'université a été modifié', Flashbag::TYPE_SUCCESS);
-
-		$playerManager->changeSession($S_PAM1);
 	} else {
 		throw new ErrorException('La limite maximale d\'investissement dans l\'Université est de 500\'000 crédits.');
 	}

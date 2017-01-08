@@ -6,7 +6,6 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 $voteManager = $this->getContainer()->get('demeter.vote_manager');
 $electionManager = $this->getContainer()->get('demeter.election_manager');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
 $session = $this->getContainer()->get('app.session');
 
 $S_ELM_ELC = $electionManager->getCurrentSession();
@@ -15,8 +14,7 @@ $electionManager->changeSession($ELM_ELECTION_TOKEN);
 $S_VOM_ELC = $voteManager->getCurrentSession();
 $voteManager->changeSession($VOM_ELC_TOTAL_TOKEN);
 
-$S_PAM_ELC = $playerManager->getCurrentSession();
-$playerManager->changeSession($PAM_ELC_TOKEN);
+$nbFactionPlayers = count($factionPlayers);
 
 echo '<div class="component profil">';
 	echo '<div class="head skin-1">';
@@ -31,9 +29,9 @@ echo '<div class="component profil">';
 
 			echo '<div class="number-box">';
 				echo '<span class="label">taux de participation</span>';
-				echo '<span class="value">' . Format::percent($voteManager->size(), $playerManager->size()) . ' %</span>';
+				echo '<span class="value">' . Format::percent($voteManager->size(), $nbFactionPlayers) . ' %</span>';
 				echo '<span class="progress-bar">';
-					echo '<span style="width:' . Format::percent($voteManager->size(), $playerManager->size()) . '%;" class="content"></span>';
+					echo '<span style="width:' . Format::percent($voteManager->size(), $nbFactionPlayers) . '%;" class="content"></span>';
 				echo '</span>';
 			echo '</div>';
 
@@ -44,6 +42,5 @@ echo '<div class="component profil">';
 	echo '</div>';
 echo '</div>';
 
-$playerManager->changeSession($S_PAM_ELC);
 $voteManager->changeSession($S_VOM_ELC);
 $electionManager->changeSession($S_ELM_ELC);

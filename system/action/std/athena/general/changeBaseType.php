@@ -42,10 +42,8 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 
 	if ($orbitalBaseManager->size() > 0) {
 		$orbitalBase = $orbitalBaseManager->get();
-		$S_PAM1 = $playerManager->getCurrentSession();
-		$playerManager->newSession();
-		$playerManager->load(array('id' => $session->get('playerId')));
-		$player = $playerManager->get();
+		
+		$player = $playerManager->get($session->get('playerId'));
 
 		if ($orbitalBase->typeOfBase == OrbitalBase::TYP_NEUTRAL) {
 			if ($orbitalBase->levelGenerator >= $baseMinLevelForChange) {
@@ -477,7 +475,6 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 		} else {
 			throw new ErrorException('modification du type de la base orbitale impossible - type invalide');
 		}
-		$playerManager->changeSession($S_PAM1);
 	} else {
 		throw new ErrorException('cette base ne vous appartient pas');
 	}

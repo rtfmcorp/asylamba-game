@@ -18,22 +18,15 @@ $rPlayer = $request->request->get('rplayer');
 $department = $request->query->get('department');
 
 if ($rPlayer !== FALSE && $department !== FALSE) {
-	$_PAM2 = $playerManager->getCurrentsession();
-	$playerManager->newSession();
-	$playerManager->load(array('status' => $department, 'rColor' => $session->get('playerInfo')->get('color')));
-	if ($playerManager->size() == 0) {
+	if (($minister = $playerManager->getGovernmentMember($session->get('playerInfo')->get('color'), $department)) === null) {
 		if ($session->get('playerInfo')->get('status') == Player::CHIEF) {
-			$_PAM = $playerManager->getCurrentsession();
-			$playerManager->newSession();
-			$playerManager->load(array('id' => $rPlayer));
-
-			if ($playerManager->size() > 0) {
-				if ($playerManager->get()->rColor == $session->get('playerInfo')->get('color')) {
-					if ($playerManager->get()->status == Player::PARLIAMENT) {
+			if (($appointee = $playerManager->get($rPlayer)) !== null) {
+				if ($appointee->rColor == $session->get('playerInfo')->get('color')) {
+					if ($appointee->status == Player::PARLIAMENT) {
 						if ($department > Player::PARLIAMENT && $department < Player::CHIEF) {
-							$playerManager->get()->status = $department;
+							$$appointee->status = $department;
 							
-							$statusArray = ColorResource::getInfo($playerManager->get()->rColor, 'status');
+							$statusArray = ColorResource::getInfo($appointee->rColor, 'status');
 							$notif = new Notification();
 							$notif->setRPlayer($rPlayer);
 							$notif->setTitle('Nomination au gouvernement');
@@ -41,10 +34,11 @@ if ($rPlayer !== FALSE && $department !== FALSE) {
 								->addTxt('Vous avez été choisi pour être le ' . $statusArray[$department - 1] . ' de votre faction.');
 							$notificationManager->add($notif);
 
-							$session->addFlashbag($playerManager->get()->name . ' a rejoint votre gouvernement.', Flashbag::TYPE_SUCCESS);	
+							$this->getContainer()->get('entity_manager')->flush($appointee);
+							$session->addFlashbag($appointee->name . ' a rejoint votre gouvernement.', Flashbag::TYPE_SUCCESS);	
 						} else {
-						throw new ErrorException('Ce département est inconnu.');
-					}
+							throw new ErrorException('Ce département est inconnu.');
+						}
 					} else {
 						throw new ErrorException('Vous ne pouvez choisir qu\'un membre du sénat.');
 					}
@@ -54,15 +48,12 @@ if ($rPlayer !== FALSE && $department !== FALSE) {
 			} else {
 				throw new ErrorException('Ce joueur n\'existe pas.');
 			}
-
-			$playerManager->changeSession($_PAM);
 		} else {
 			throw new ErrorException('Vous n\'êtes pas le chef de votre faction.');	
 		}
 	} else {
 		throw new ErrorException('Quelqu\'un occupe déjà ce poste.');	
 	}
-	$playerManager->changeSession($_PAM2);
 } else {
 	throw new ErrorException('Informations manquantes.');
 }

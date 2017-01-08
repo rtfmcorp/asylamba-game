@@ -35,11 +35,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	$placeManager->newSession(ASM_UMODE);
 	$placeManager->load(array('id' => $placeId));
 
-	$S_PAM1 = $playerManager->getCurrentSession();
-	$playerManager->newSession(ASM_UMODE);
-	$playerManager->load(array('id' => $placeManager->get()->rPlayer));
-
-	if ($playerManager->size() == 0) {
+	if (($player = $playerManager->get($placeManager->get()->rPlayer)) === null) {
 		if ($commanderManager->size() > 0) {
 			if ($placeManager->size() > 0) {
 				$commander = $commanderManager->get();
@@ -104,7 +100,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 		} else {
 			throw new ErrorException('Ce commandant ne vous appartient pas ou n\'existe pas.');
 		}
-	} elseif ($playerManager->get()->level > 1 || $playerManager->get()->statement >= Player::DELETED) {
+	} elseif ($player->level > 1 || $player->statement >= Player::DELETED) {
 		if ($commanderManager->size() > 0) {
 			if ($placeManager->size() > 0) {
 				$commander = $commanderManager->get();
@@ -115,7 +111,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 				$colorManager->load(array('id' => $session->get('playerInfo')->get('color')));
 				$color = $colorManager->get();
 				
-				if ($session->get('playerInfo')->get('color') != $place->getPlayerColor() && $color->colorLink[$playerManager->get()->rColor] != Color::ALLY) {
+				if ($session->get('playerInfo')->get('color') != $place->getPlayerColor() && $color->colorLink[$player->rColor] != Color::ALLY) {
 					$placeManager->load(array('id' => $commander->getRBase()));
 					$home = $placeManager->getById($commander->getRBase());
 
@@ -166,7 +162,6 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	} else {
 		throw new ErrorException('Vous ne pouvez pas piller un joueur de niveau 1.');
 	}
-	$playerManager->changeSession($S_PAM1);
 	$placeManager->changeSession($S_PLM1);
 	$commanderManager->changeSession($S_COM1);
 } else {

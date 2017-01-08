@@ -17,21 +17,15 @@ echo '<div class="component size2 new-message">';
 				echo '<p>';
 					echo 'Destinataire';
 				echo '</p>';
-
-				$player = $request->request->get('sendto');
 				$name = '';
-				if ($player !== FALSE) {
-					$S_PAM = $playerManager->getCurrentSession();
-					$playerManager->newSession();
-					$playerManager->load(array('id' => $player));
-					if ($playerManager->size() == 1) {
-						$name = $playerManager->get()->name;
+				if (($playerId = $request->request->get('sendto')) !== false) {
+					if (($player = $playerManager->get($playerId))) {
+						$name = $player->name;
 					}
-					$playerManager->changeSession($S_PAM);
 				} 
 				
 				echo '<p class="input input-text">';
-					echo '<input class="autocomplete-hidden" name="recipients" type="hidden" value="' . $player . '" />';
+					echo '<input class="autocomplete-hidden" name="recipients" type="hidden" value="' . $playerId . '" />';
 					echo '<input autocomplete="off" class="autocomplete-player ac_input" name="name" placeholder="Destinataire" type="text" value="' . $name . '"/>';
 				echo '</p>';
 

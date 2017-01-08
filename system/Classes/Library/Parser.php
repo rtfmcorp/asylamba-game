@@ -110,17 +110,11 @@ class Parser {
 		return preg_replace_callback(
 			'#\[\@(.+)\]#isU',
 			function($m) {
-				$S_PAM1 = $this->playerManager->getCurrentSession();
-				$this->playerManager->newSession(FALSE);
-				$this->playerManager->load(array('name' => $m[1]));
-
-				$ret = $this->playerManager->size() > 0
-					? '<a href="' . APP_ROOT . 'embassy/player-' . $this->playerManager->get()->getId() . '" class="color' . $this->playerManager->get()->getRColor() . ' hb lt" title="voir le profil">' . $this->playerManager->get()->getName() . '</a>'
-					: $m[0];
-
-				$this->playerManager->changeSession($S_PAM1);
-
-				return $ret;
+				return
+					(($player = $this->playerManager->getByName($m[1])) !== null)
+					? '<a href="' . APP_ROOT . 'embassy/player-' . $player->getId() . '" class="color' . $player->getRColor() . ' hb lt" title="voir le profil">' . $player->getName() . '</a>'
+					: $m[0]
+				;
 			},
 			$string
 		);

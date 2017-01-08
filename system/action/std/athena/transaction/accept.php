@@ -79,15 +79,13 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 
 		if ($session->get('playerInfo')->get('credit') >= $totalPrice) {
 			# chargement des joueurs
-			$S_PAM1 = $playerManager->getCurrentSession();
-			$playerManager->newSession(ASM_UMODE);
-			$playerManager->load(array('id' => $session->get('playerId')));
-			$playerManager->load(array('id' => $transaction->rPlayer));
+			$buyer = $playerManager->get($session->get('playerId'));
+			$seller = $playerManager->get($transaction->rPlayer);
 
-			if ($playerManager->size() == 2) {
+			if ($buyer !== null && $seller !== null) {
 				# transfert des crédits entre joueurs
-				$playerManager->decreaseCredit($playerManager->get(0), $totalPrice);
-				$playerManager->increaseCredit($playerManager->get(1), $transaction->price);
+				$playerManager->decreaseCredit($buyer, $totalPrice);
+				$playerManager->increaseCredit($seller, $transaction->price);
 
 				# transfert des crédits aux alliances
 				$S_CLM1 = $colorManager->getCurrentSession();
@@ -112,7 +110,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 
 				# gain d'expérience
 				$experience = $transaction->getExperienceEarned();
-				$playerManager->increaseExperience($playerManager->get(1), $experience);
+				$playerManager->increaseExperience($seller, $experience);
 
 				# load places to compute travel time
 				$S_PLM1 = $placeManager->getCurrentSession();
@@ -162,7 +160,6 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 			} else {
 				throw new ErrorException('erreur dans les propositions sur le marché, joueur inexistant');
 			}
-			$playerManager->changeSession($S_PAM1);
 		} else {
 			throw new ErrorException('vous n\'avez pas assez de crédits pour accepter cette proposition');
 		}

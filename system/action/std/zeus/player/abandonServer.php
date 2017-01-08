@@ -8,19 +8,16 @@ $playerManager = $this->getContainer()->get('zeus.player_manager');
 $session = $this->getContainer()->get('app.session');
 $response = $this->getContainer()->get('app.response');
 
-$S_PAM1 = $playerManager->getCurrentSession();
-$playerManager->newSession();
-$playerManager->load(array('id' => $session->get('playerId')));
-
-if ($playerManager->size() == 1) {
+if (($player = $playerManager->get($session->get('playerId'))) !== null) {
 	# sending API call to delete account link to server
 	$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
-	$success = $api->abandonServer($playerManager->get()->bind, APP_ID);
+	$success = $api->abandonServer($player->bind, APP_ID);
 
 	if ($success) {
-		$playerManager->get()->bind = $playerManager->get()->bind . 'ABANDON';
-		$playerManager->get()->statement = Player::DELETED;
+		$player->bind = $player->bind . 'ABANDON';
+		$player->statement = Player::DELETED;
 		
+		$this->getContainer()->get('entity_manager')->flush($player);
 		# clean session
 		$session->destroy();
 		$response->redirect(GETOUT_ROOT . 'serveurs', TRUE);

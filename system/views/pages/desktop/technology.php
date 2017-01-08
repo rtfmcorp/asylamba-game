@@ -16,17 +16,12 @@ include 'defaultElement/movers.php';
 # contenu spécifique
 echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
-	# loading des objets
-	$S_PAM_TECH = $playerManager->getCurrentSession();
-	$playerManager->newSession();
-	$playerManager->load(array('id' => $session->get('playerId')));
-
 	$S_RSM_TECH = $researchManager->getCurrentSession();
 	$researchManager->newSession();
 	$researchManager->load(array('rPlayer' => $session->get('playerId')));
 
 	if (!$request->query->has('view') OR $request->query->get('view') == 'university') {
-		$player_university = $playerManager->get(0);
+		$player_university = $playerManager->get($session->get('playerId'));
 		$research_university = $researchManager->get(0);
 		include COMPONENT . 'tech/university.php';
 	} elseif ($request->query->get('view') == 'technos') {
@@ -36,5 +31,4 @@ echo '<div id="content">';
 	}
 
 	$researchManager->changeSession($S_RSM_TECH);
-	$playerManager->changeSession($S_PAM_TECH);
 echo '</div>';

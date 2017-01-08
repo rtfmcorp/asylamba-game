@@ -28,20 +28,11 @@ echo '<div id="content">';
 			? FALSE
 			: TRUE;
 
-		# loading des objets
-		$S_PAM1 = $playerManager->getCurrentSession();
-		$playerManager->newSession();
-		$playerManager->load(array(
-			'id' => $player,
-			'statement' => array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY, Player::BANNED)
-		));
-
 		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
 		$orbitalBaseManager->newSession();
 		$orbitalBaseManager->load(array('rPlayer' => $player), array('dCreation', 'ASC'));
 
-		if ($playerManager->size() == 1) {
-			$player_selected = $playerManager->get(0);
+		if (($player_selected = $playerManager->get($player)) && in_array($player_selected->getStatement(), [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY, Player::BANNED])) {
 			$player_ishim = $ishim;
 			$ob_selected = $orbitalBaseManager->getAll();
 			include COMPONENT . 'embassy/diary/search.php';
@@ -58,7 +49,6 @@ echo '<div id="content">';
 		include COMPONENT . 'default.php';
 
 		$orbitalBaseManager->changeSession($S_OBM1);
-		$playerManager->changeSession($S_PAM1);
 	} else {
 		$color = $request->query->has('faction')
 			? $request->query->get('faction')
@@ -82,12 +72,7 @@ echo '<div id="content">';
 			$colorManager->load(array('id' => $color));
 			$faction = $colorManager->get(0);
 
-			$S_PAM_1 = $playerManager->getCurrentSession();
-			$FACTION_GOV_TOKEN = $playerManager->newSession(FALSE);
-			$playerManager->load(
-				array('rColor' => $faction->id, 'status' => array(6, 5, 4, 3)),
-				array('status', 'DESC')
-			);
+			$governmentMembers = $playerManager->getGovernmentMembers($faction->id);
 
 			# include component
 			include COMPONENT . 'embassy/faction/nav.php';
@@ -100,7 +85,6 @@ echo '<div id="content">';
 			include COMPONENT . 'faction/data/diplomacy/main.php';
 
 			# close session
-			$playerManager->changeSession($S_PAM_1);
 			$colorManager->changeSession($S_COL_1);
 		} else {
 			$this->getContainer()->get('app.response')->redirect('embassy');

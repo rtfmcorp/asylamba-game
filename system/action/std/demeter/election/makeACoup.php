@@ -80,13 +80,14 @@ if ($program !== FALSE) {
 				$vote->dVotation = Utils::now();
 				$voteManager->add($vote);
 
-				$_PAM123 = $playerManager->getCurrentsession();
-				$playerManager->newSession(FALSE);
-				$playerManager->load(['rColor' => $colorManager->get()->id, 'statement' => Player::ACTIVE]);
+				$factionPlayers = $playerManager->getFactionPlayers($colorManager->get()->id);
 
-				for ($i = 0; $i < $playerManager->size(); $i++) {
+				foreach ($factionPlayers as $factionPlayer) {
+					if ($factionPlayer->getStatement() !== Player::ACTIVE) {
+						continue;
+					}
 					$notif = new Notification();
-					$notif->setRPlayer($playerManager->get($i)->id);
+					$notif->setRPlayer($factionPlayer->id);
 					$notif->setTitle('Coup d\'Etat.');
 					$notif->addBeg()
 						->addTxt('Un membre de votre Faction soulève une partie du peuple et tente un coup d\'état contre le gouvernement.')
@@ -95,8 +96,6 @@ if ($program !== FALSE) {
 						->addEnd();
 					$notificationManager->add($notif);
 				}
-				$playerManager->changeSession($_PAM123);
-
 				$session->addFlashbag('Coup d\'état lancé.', Flashbag::TYPE_SUCCESS);
 			} else {
 				throw new ErrorException('Vous vivez dans une faction démocratique.');

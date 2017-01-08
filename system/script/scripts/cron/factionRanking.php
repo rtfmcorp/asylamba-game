@@ -22,9 +22,6 @@ $S_PRM1 = $playerRankingManager->getCurrentSession();
 $playerRankingManager->newSession();
 $playerRankingManager->loadLastContext();
 
-$S_PAM1 = $playerManager->getCurrentSession();
-$playerManager->newSession(FALSE);
-
 $S_CLM1 = $colorManager->getCurrentSession();
 $colorManager->newSession(FALSE);
 
@@ -100,12 +97,11 @@ const COEF_RESOURCE = 0.001;
 #-------------------------------- GENERAL RANKING --------------------------------#
 # sum of general player ranking
 # load all the players
-$playerManager->load(array('statement' => array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY)));
 
 for ($i = 0; $i < $playerRankingManager->size(); $i++) {
 	$playerRank = $playerRankingManager->get($i);
 
-	$player = $playerManager->getById($playerRank->rPlayer);
+	$player = $playerManager->get($playerRank->rPlayer);
 
 	if (isset($player->rColor)) {
 		$list[$player->rColor]['general'] += $playerRank->general;
@@ -261,7 +257,6 @@ foreach ($list as $faction => $value) {
 }
 
 $colorManager->changeSession($S_CLM1);
-$playerManager->changeSession($S_PAM1);
 $playerRankingManager->changeSession($S_PRM1);
 $factionRankingManager->changeSession($S_FRM1);
 

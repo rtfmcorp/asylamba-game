@@ -12,16 +12,12 @@ $request = $this->getContainer()->get('app.request');
 $description = $request->request->get('description');
 
 if ($description !== FALSE) {
-	$S_PAM1 = $playerManager->getCurrentSession();
-	$playerManager->newSession(FALSE);
-	$playerManager->load(array('id' => $session->get('playerId')));
-
-	if ($playerManager->size() == 1) {
-		if ($playerManager->get()->status > Player::PARLIAMENT) {
+	if (($player = $playerManager->get($session->get('playerId')))) {
+		if ($player->status > Player::PARLIAMENT) {
 			if ($description !== '' && strlen($description) < 25000) {
 				$S_COL_1 = $colorManager->getCurrentSession();
 				$colorManager->newSession();
-				$colorManager->load(array('id' => $playerManager->get()->rColor));
+				$colorManager->load(array('id' => $player->rColor));
 
 				$colorManager->get()->description = $description;				
 				
@@ -35,8 +31,6 @@ if ($description !== FALSE) {
 	} else {
 		throw new FormException('Vous n\'existez pas');
 	}
-
-	$playerManager->changeSession($S_PAM1);
 } else {
 	throw new FormException('Pas assez d\'informations pour écrire une description');
 }

@@ -42,28 +42,20 @@ if ($statusArray = ColorResource::getInfo($session->get('playerInfo')->get('colo
 		$_PAM2 = $playerManager->getCurrentsession();
 		$playerManager->newSession();
 		if ($session->get('playerInfo')->get('status') == Player::CHIEF) {
-			$_PAM = $playerManager->getCurrentsession();
-			$playerManager->newSession();
-			$playerManager->load(array('id' => $rPlayer));
-
-			if ($playerManager->size() > 0) {
-				if ($playerManager->get()->rColor == $session->get('playerInfo')->get('color')) {
-					if ($playerManager->get()->status >= Player::PARLIAMENT) {
+			if (($heir = $playerManager->get($rPlayer)) !== null) {
+				if ($heir->rColor == $session->get('playerInfo')->get('color')) {
+					if ($heir->status >= Player::PARLIAMENT) {
 						$_CLM = $colorManager->getCurrentsession();
 						$colorManager->newSession();
 						$colorManager->load(['id' => $session->get('playerInfo')->get('color')]);
 
 						if ($colorManager->get()->electionStatement == Color::MANDATE) {
-							$playerManager->get()->status = Player::CHIEF;
-							
-							$_PAM23 = $playerManager->getCurrentsession();
-							$playerManager->newSession();
-							$playerManager->load(array('id' => $session->get('playerId')));
-							$playerManager->get()->status = Player::PARLIAMENT;
+							$heir->status = Player::CHIEF;
+							// The player is now a member of Parliament
+							$playerManager->get($session->get('playerId'))->status = Player::PARLIAMENT;
 							$session->get('playerInfo')->add('status', Player::PARLIAMENT);
-							$playerManager->changeSession($_PAM23);
 
-							$statusArray = ColorResource::getInfo($playerManager->get()->rColor, 'status');
+							$statusArray = ColorResource::getInfo($heir->rColor, 'status');
 							$notif = new Notification();
 							$notif->setRPlayer($rPlayer);
 							$notif->setTitle('Héritier du Trône.');
@@ -71,6 +63,7 @@ if ($statusArray = ColorResource::getInfo($session->get('playerInfo')->get('colo
 								->addTxt('Vous avez été choisi par le ' . $statusArray[5] . ' de votre faction pour être son successeur, vous prenez la tête du gouvernement immédiatement.');
 							$notificationManager->add($notif);
 
+							$this->getContainer()->get('entity_manager')->flush();
 							$session->addFlashbag($playerManager->get()->name . ' est désigné comme votre successeur.', Flashbag::TYPE_SUCCESS);	
 						} else {
 							throw new ErrorException('vous ne pouvez pas abdiquer pendant un putsch.');	

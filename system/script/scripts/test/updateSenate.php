@@ -1,18 +1,16 @@
 <?php
 
-use Asylamba\Modules\Demeter\Model\Color;
-
 echo '<h2>Mise à jour du sénat d\'Aphera</h2>';
 
 $factionColor = 6;
 
+$colorManager = $this->getContainer()->get('demeter.color_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 
-$_PAM = $playerManager->getCurrentSession();
-$playerManager->newSession(FALSE);
-$playerManager->load(['rColor' => $factionColor], ['factionPoint', 'DESC']);
-$token_pam = $playerManager->getCurrentSession();
-$playerManager->changeSession($_PAM);
+$factionPlayers = $playerManager->getFactionPlayersByRanking($factionColor);
 
-$color = new Color();
-$color->updateStatus($token_pam);
+$CLM_1 = $colorManager->getCurrentSession();
+$colorManager->newSession();
+$colorManager->load(['id' => $factionColor]);
+$colorManager->updateStatus($colorManager->get(), $factionPlayers);
+$colorManager->changeSession($CLM_1);

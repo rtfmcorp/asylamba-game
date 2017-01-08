@@ -78,18 +78,13 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 
 				if ($session->get('playerInfo')->get('credit') >= $price) {
 					# débit des crédits au joueur
-					$S_PAM1 = $playerManager->getCurrentSession();
-					$playerManager->newSession(ASM_UMODE);
-					$playerManager->load(array('id' => $session->get('playerId')));
-					$playerManager->decreaseCredit($playerManager->get(), $price);
+					$acceptor = $playerManager->get($session->get('playerId'));
+					$playerManager->decreaseCredit($acceptor, $price);
 
 					# augmentation de l'expérience des deux joueurs
 					$exp = round($cr->getIncome() * $routeExperienceCoeff);
-					$playerManager->load(array('id' => $proposerBase->getRPlayer()));
-					$playerManager->increaseExperience($playerManager->get(), $exp);
-					$playerManager->increaseExperience($playerManager->get(1), $exp);
-					
-					$playerManager->changeSession($S_PAM1);
+					$playerManager->increaseExperience($acceptor, $exp);
+					$playerManager->increaseExperience($playerManager->get($proposerBase->getRPlayer()), $exp);
 					
 					# activation de la route
 					$cr->setStatement(CommercialRoute::ACTIVE);

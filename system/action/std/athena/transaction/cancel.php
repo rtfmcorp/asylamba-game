@@ -42,13 +42,7 @@ if ($rTransaction !== FALSE) {
 		$base = $orbitalBaseManager->get();
 
 		if ($session->get('playerInfo')->get('credit') >= $transaction->getPriceToCancelOffer()) {
-
-			# chargement du joueur
-			$S_PAM1 = $playerManager->getCurrentSession();
-			$playerManager->newSession(ASM_UMODE);
-			$playerManager->load(array('id' => $session->get('playerId')));
-
-			if ($playerManager->size() == 1) {
+			if (($player = $playerManager->get($session->get('playerId'))) !== null) {
 
 				$valid = TRUE;
 
@@ -85,7 +79,7 @@ if ($rTransaction !== FALSE) {
 
 				if ($valid) {
 					// débit des crédits au joueur
-					$playerManager->decreaseCredit($playerManager->get(), $transaction->getPriceToCancelOffer());
+					$playerManager->decreaseCredit($player, $transaction->getPriceToCancelOffer());
 
 					// annulation de l'envoi commercial (libération des vaisseaux de commerce)
 					$commercialShippingManager->deleteById($commercialShipping->id);
@@ -109,7 +103,6 @@ if ($rTransaction !== FALSE) {
 			} else {
 				throw new ErrorException('erreur dans l\'annulation de proposition sur le marché, joueur inexistant');
 			}
-			$playerManager->changeSession($S_PAM1);
 		} else {
 			throw new ErrorException('vous n\'avez pas assez de crédits pour annuler la proposition');
 		}

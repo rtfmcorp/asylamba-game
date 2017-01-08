@@ -13,7 +13,7 @@ $session = $this->getContainer()->get('app.session');
 
 # extraction du bindkey
 $query  = $security->uncrypt($request->query->get('bindkey'), KEY_SERVER);
-$bindkey= $security->extractBindkey($query);
+$bindKey= $security->extractBindkey($query);
 $time 	= $security->extractTime($query);
 
 # vérification de la validité du bindkey
@@ -22,12 +22,7 @@ if (abs((int)$time - time()) > 300) {
 	exit();
 }
 
-$S_PAM1 = $playerManager->getCurrentSession();
-$playerManager->newSession();
-$playerManager->load(array('bind' => $bindkey, 'statement' => array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY)));
-
-if ($playerManager->size() == 1) {
-	$player = $playerManager->get();
+if (($player = $playerManager->getByBindKey($bindKey)) !== null && in_array($player->getStatement(), [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY])) {
 	$player->setStatement(Player::ACTIVE);
 
 	$session->initLastUpdate();
@@ -44,7 +39,7 @@ if ($playerManager->size() == 1) {
 		$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
 		$api->confirmConnection($bindkey, APP_ID);
 	}
-
+	$this->getContainer()->get('entity_manager')->flush($player);
 	// redirection vers page de départ
 	$this->getContainer()->get('app.response')->redirect(
 		($request->query->get('mode') === 'splash')
@@ -55,5 +50,3 @@ if ($playerManager->size() == 1) {
 	header('Location: ' . GETOUT_ROOT . 'profil');
 	exit();
 }
-
-$playerManager->changeSession($S_PAM1);

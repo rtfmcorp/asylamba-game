@@ -5,15 +5,10 @@ use Asylamba\Modules\Zeus\Model\Player;
 $request = $this->getContainer()->get('app.request');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 
-
 if ($request->query->exist('bindkey')) {
-	$S_PAM_1 = $playerManager->getCurrentSession();
-	$playerManager->newSession();
-	$playerManager->load(array('bind' => $request->query->get('bindkey')));
-
-	if ($playerManager->size() == 1) {
-		$playerManager->get()->setStatement(Player::BANNED);
-
+	if (($player = $playerManager->getByBindKey($request->query->get('bindkey')))) {
+		$player->setStatement(Player::BANNED);
+		$this->getContainer()->get('entity_manager')->flush($player);
 		echo serialize(array('statement' => 'success'));
 	} else {
 		echo serialize(array(
@@ -21,8 +16,6 @@ if ($request->query->exist('bindkey')) {
 			'message' => 'Joueur inconnu'
 		));
 	}
-
-	$playerManager->changeSession($S_PAM_1);
 } else {
 	echo serialize(array(
 		'statement' => 'error',

@@ -12,9 +12,9 @@ if (Utils::interval($session->get('lastUpdate')->get('game'), Utils::now(), 'h')
 	$session->get('lastUpdate')->add('game', Utils::now());
 
 	# mise à jour de tout
-	$S_PAM1 = $playerManager->getCurrentSession();
-	$playerManager->newSession(ASM_UMODE);
-	$playerManager->load(array('id' => $session->get('playerId')));
+	//$S_PAM1 = $playerManager->getCurrentSession();
+	//$playerManager->newSession(ASM_UMODE);
+	//$playerManager->load(array('id' => $session->get('playerId')));
 	# --> uActionPoint et uCredit
 		# --> instancie toutes les bases orbitales
 			# --> uBuildingQueue
@@ -26,7 +26,7 @@ if (Utils::interval($session->get('lastUpdate')->get('game'), Utils::now(), 'h')
 			# --> uTravel
 			# --> uUxperienceInSchool
 		# --> instancie les recherches et fait l'update
-	$playerManager->changeSession($S_PAM1);
+	//$playerManager->changeSession($S_PAM1);
 }
 
 # mise à jour des sessions de temps en temps

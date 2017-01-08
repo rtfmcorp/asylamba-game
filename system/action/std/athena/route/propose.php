@@ -53,11 +53,7 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 	$alreadyARoute = $commercialRouteManager->isAlreadyARoute($proposerBase->getId(), $otherBase->getId());
 
 	if (($commercialRouteManager->countBaseRoutes($proposerBase->getId()) < $nbrMaxCommercialRoute) && (!$alreadyARoute) && ($proposerBase->getLevelSpatioport() > 0) && ($otherBase->getLevelSpatioport() > 0)) {
-		$S_PAM1 = $playerManager->getCurrentSession();
-		$playerManager->newSession();
-		$playerManager->load(array('id' => $otherBase->getRPlayer()));
-
-		$player = $playerManager->get();
+		$player = $playerManager->get($otherBase->getRPlayer());
 
 		$S_CLM1 = $colorManager->getCurrentSession();
 		$colorManager->newSession();
@@ -77,7 +73,7 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 		}
 		if ($myColor->colorLink[$player->rColor] != Color::ENEMY && $otherColor->colorLink[$session->get('playerInfo')->get('color')] != Color::ENEMY) {
 
-			if ($orbitalBaseManager->size() == 2 && ($proposerBase->getRPlayer() != $otherBase->getRPlayer()) && ($playerManager->size() == 1)) {
+			if ($orbitalBaseManager->size() == 2 && ($proposerBase->getRPlayer() != $otherBase->getRPlayer()) && $player !== null) {
 				$distance = Game::getDistance($proposerBase->getXSystem(), $otherBase->getXSystem(), $proposerBase->getYSystem(), $otherBase->getYSystem());
 				$bonusA = ($proposerBase->getSector() != $otherBase->getSector()) ? $routeSectorBonus : 1;
 				$bonusB = ($session->get('playerInfo')->get('color')) != $player->getRColor() ? $routeColorBonus : 1;
@@ -121,11 +117,7 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 					$commercialRouteManager->add($cr);
 					
 					# débit des crédits au joueur
-					$S_PAM2 = $playerManager->getCurrentSession();
-					$playerManager->newSession(ASM_UMODE);
-					$playerManager->load(array('id' => $session->get('playerId')));
-					$playerManager->decreaseCredit($playerManager->get(), $priceWithBonus);
-					$playerManager->changeSession($S_PAM2);
+					$playerManager->decreaseCredit($playerManager->get($session->get('playerId')), $priceWithBonus);
 
 					$n = new Notification();
 					$n->setRPlayer($otherBase->getRPlayer());
@@ -150,7 +142,6 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 			throw new ErrorException('impossible de proposer une route commerciale à ce joueur, vos factions sont en guerre.');
 		}
 		$colorManager->changeSession($S_CLM1);
-		$playerManager->changeSession($S_PAM1);
 	} else {
 		throw new ErrorException('impossible de proposer une route commerciale (3)');
 	}

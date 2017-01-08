@@ -69,9 +69,7 @@ if (Utils::interval($session->get('lastUpdate')->get('event'), Utils::now(), 's'
 	$commanderManager->changeSession($S_COM2);
 
 	# mettre à jour dLastActivity
-	$S_PAM1 = $playerManager->getCurrentSession();
-	$playerManager->newSession();
-	$playerManager->load(array('id' => $session->get('playerId')));
-	$playerManager->get()->setDLastActivity(Utils::now());
-	$playerManager->changeSession($S_PAM1);
+	$player = $playerManager->get($session->get('playerId'));
+	$player->setDLastActivity(Utils::now());
+	$this->getContainer()->get('entity_manager')->flush($player);
 }
