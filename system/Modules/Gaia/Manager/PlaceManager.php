@@ -437,18 +437,10 @@ class PlaceManager extends Manager {
 								$commanderPlace = $this->getById($commander->rBase);
 								$bonus = $playerBonuses[$commander->rPlayer];
 
-								$S_PAM_L1 = $this->playerManager->getCurrentSession();
-								$this->playerManager->newSession();
-								$this->playerManager->load(['id' => $commander->rPlayer]);
-								$commanderPlayer = $this->playerManager->get();
-								$this->playerManager->changeSession($S_PAM_L1);
+								$commanderPlayer = $this->playerManager->get($commander->rPlayer);
 
 								if ($place->rPlayer != NULL) {
-									$S_PAM_L2 = $this->playerManager->getCurrentSession();
-									$this->playerManager->newSession();
-									$this->playerManager->load(['id' => $place->rPlayer]);
-									$placePlayer = $this->playerManager->get();
-									$this->playerManager->changeSession($S_PAM_L2);
+									$placePlayer = $this->playerManager->get($place->rPlayer);
 
 									$S_OBM_L1 = $this->orbitalBaseManager->getCurrentSession();
 									$this->orbitalBaseManager->newSession();
@@ -476,29 +468,16 @@ class PlaceManager extends Manager {
 								$commanderPlace = $this->getById($commander->rBase);
 								$bonus = $playerBonuses[$commander->rPlayer];
 
-								$S_PAM_C1 = $this->playerManager->getCurrentSession();
-								$this->playerManager->newSession();
-								$this->playerManager->load(array('id' => $commander->rPlayer));
-								$commanderPlayer = $this->playerManager->get();
-								$this->playerManager->changeSession($S_PAM_C1);
+								$commanderPlayer = $this->playerManager->get($commander->rPlayer);
 
 								if ($place->rPlayer != NULL) {
-									$S_PAM_C2 = $this->playerManager->getCurrentSession();
-									$this->playerManager->newSession();
-									$this->playerManager->load(array('id' => $place->rPlayer));
-									$placePlayer = $this->playerManager->get();
-									$this->playerManager->changeSession($S_PAM_C2);
+									$placePlayer = $this->playerManager->get($place->rPlayer);
 
 									$S_OBM_C1 = $this->orbitalBaseManager->getCurrentSession();
 									$this->orbitalBaseManager->newSession();
 									$this->orbitalBaseManager->load(array('rPlace' => $place->id));
 									$placeBase = $this->orbitalBaseManager->get();
 									$this->orbitalBaseManager->changeSession($S_OBM_C1);
-
-									$placeRoutes = array_merge(
-										$this->commercialRouteManager->getByBase($place->id),
-										$this->commercialRouteManager->getByDistantBase($place->id)
-									);
 
 									$S_REM_C1 = $this->recyclingMissionManager->getCurrentSession();
 									$this->recyclingMissionManager->newSession();

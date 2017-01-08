@@ -51,12 +51,13 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 				}
 
 				# perte du prestige pour les joueurs Négoriens
-				$S_PAM1 = $playerManager->getCurrentSession();
-				$playerManager->newSession();
-				$playerManager->load(array('id' => array($cr->playerId1, $cr->playerId2)));
-				$exp = round($cr->getIncome() * $routeExperienceCoeff);
-				
-				$playerManager->changeSession($S_PAM1);
+				# @TODO check if this code is used somewhere or not
+//				$S_PAM1 = $playerManager->getCurrentSession();
+//				$playerManager->newSession();
+//				$playerManager->load(array('id' => array($cr->playerId1, $cr->playerId2)));
+//				$exp = round($cr->getIncome() * $routeExperienceCoeff);
+//				
+//				$playerManager->changeSession($S_PAM1);
 				//notification
 				$n = new Notification();
 				$n->setRPlayer($notifReceiver);

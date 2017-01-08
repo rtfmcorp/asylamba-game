@@ -62,12 +62,7 @@ echo '<div id="content">';
 
 		$factionNewsManager->changeSession($S_FNM_OW);
 
-		$S_PAM_1 = $playerManager->getCurrentSession();
-		$PLAYER_GOV_TOKEN = $playerManager->newSession(FALSE);
-		$playerManager->load(
-			array('rColor' => $session->get('playerInfo')->get('color'), 'status' => array(6, 5, 4, 3)),
-			array('status', 'DESC')
-		);
+		$governmentMembers = $playerManager->getGovernmentMembers($session->get('playerInfo')->get('color'));
 
 		include COMPONENT . 'faction/overview/stat.php';
 
@@ -82,7 +77,6 @@ echo '<div id="content">';
 		include COMPONENT . 'faction/overview/laws.php';
 
 		$lawManager->changeSession($S_LAM_OLD);
-		$playerManager->changeSession($S_PAM_1);
 	} elseif ($request->query->get('view') == 'forum') {
 		if (!$request->query->has('forum')) {
 			# page d'accueil des forums
@@ -255,9 +249,7 @@ echo '<div id="content">';
 		}
 	} elseif ($request->query->get('view') == 'government') {
 		if (in_array($session->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER])) {
-			$S_PAM_OLD = $playerManager->getCurrentSession();
-			$PLAYER_SENATE_TOKEN = $playerManager->newSession();
-			$playerManager->load(array('rColor' => $faction->id, 'status' => Player::PARLIAMENT, 'statement' => [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]));
+			$senators = $playerManager->getParliamentMembers($faction->id);
 
 			include COMPONENT . 'faction/government/nav.php';
 
@@ -267,7 +259,7 @@ echo '<div id="content">';
 				$sectorManager->load(array('rColor' => $faction->id));
 
 				$nbLaws = 0;
-				$nbPlayer = $playerManager->count(['rColor' => $faction->id, 'statement' => [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]]);
+				$nbPlayer = count($senators);
 				
 				for ($i = 1; $i <= LawResources::size(); $i++) {
 					if (LawResources::getInfo($i, 'department') == $session->get('playerInfo')->get('status') AND LawResources::getInfo($i, 'isImplemented')) {
@@ -308,11 +300,7 @@ echo '<div id="content">';
 			} elseif ($request->query->get('mode') == 'credit') {
 				include COMPONENT . 'faction/government/credit.php';
 			} elseif ($request->query->get('mode') == 'manage') {
-				$PLAYER_GOV_TOKEN = $playerManager->newSession(FALSE);
-				$playerManager->load(
-					array('rColor' => $faction->id, 'status' => [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER]),
-					array('status', 'DESC')
-				);
+				$governmentMembers = $playerManager->getGovernmentMembers($faction->id);
 
 				include COMPONENT . 'faction/government/manage/main.php';
 				include COMPONENT . 'default.php';
@@ -320,8 +308,6 @@ echo '<div id="content">';
 			} else {
 				$response->redirect('faction');
 			}
-			
-			$playerManager->changeSession($S_PAM_OLD);
 		} else {
 			$response->redirect('faction');
 		}
@@ -423,7 +409,6 @@ echo '<div id="content">';
 			$S_ELM_1 = $electionManager->getCurrentSession();
 			$S_CAM_1 = $candidateManager->getCurrentSession();
 			$S_VOM_1 = $voteManager->getCurrentSession();
-			$S_PAM_1 = $playerManager->getCurrentSession();
 
 			$ELM_ELECTION_TOKEN = $electionManager->newSession();
 			$electionManager->load(array('rColor' => $faction->id), array('id', 'DESC'), array(0, 1));
@@ -437,8 +422,7 @@ echo '<div id="content">';
 			$VOM_ELC_TOTAL_TOKEN = $voteManager->newSession();
 			$voteManager->load(array('rElection' => $electionManager->get(0)->id));
 
-			$PAM_ELC_TOKEN = $playerManager->newSession(FALSE);
-			$playerManager->load(array('rColor' => $session->get('playerInfo')->get('color')));
+			$factionPlayers = $playerManager->getFactionPlayers($session->get('playerInfo')->get('color'));
 
 			if ($faction->regime == Color::DEMOCRATIC) {
 				$nbCandidate = $candidateManager->size();
@@ -523,23 +507,8 @@ echo '<div id="content">';
 			$candidateManager->changeSession($S_CAM_1);
 			$electionManager->changeSession($S_ELM_1);
 			$voteManager->changeSession($S_VOM_1);
-			$playerManager->changeSession($S_PAM_1);
 		}
 	} elseif ($request->query->get('view') == 'player') {
-		$S_PAM1 = $playerManager->getCurrentSession();
-
-		$PAM_LAST_TOKEN = $playerManager->newSession(FALSE);
-		$playerManager->load(
-			['rColor' => $session->get('playerInfo')->get('color')], 
-			['dInscription', 'DESC'],
-			[0, 25]
-		);
-
-		$playerManager->newSession(FALSE);
-		$playerManager->load(
-			['rColor' => $session->get('playerInfo')->get('color'), 'statement' => [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]], 
-			['status', 'DESC', 'factionPoint', 'DESC']
-		);
 
 		# statPlayer component
 		$nbPlayer_statPlayer = $colorManager->getById($session->get('playerInfo')->get('color'))->activePlayers;
@@ -554,31 +523,27 @@ echo '<div id="content">';
 		# listPlayer component
 		$players_listPlayer = array();
 
+		$factionPlayers = $playerManager->getFactionPlayersByRanking($session->get('playerInfo')->get('color'));
 		# worker
-		for ($i = 0; $i < $playerManager->size(); $i++) { 
-			$player = $playerManager->get($i);
-
-			if (Utils::interval(Utils::now(), $player->getDLastActivity(), 's') < 600) {
+		foreach ($factionPlayers as $factionPlayer) {
+			if (Utils::interval(Utils::now(), $factionPlayer->getDLastActivity(), 's') < 600) {
 				$nbOnlinePlayer_statPlayer++;
 			} else {
 				$nbOfflinePlayer_statPlayer++;
 			}
 
-			$avgVictoryPlayer_statPlayer += $player->getVictory();
-			$avgDefeatPlayer_statPlayer += $player->getDefeat();
-			$avgPointsPlayer_statPlayer += $player->getExperience();
+			$avgVictoryPlayer_statPlayer += $factionPlayer->getVictory();
+			$avgDefeatPlayer_statPlayer += $factionPlayer->getDefeat();
+			$avgPointsPlayer_statPlayer += $factionPlayer->getExperience();
 
-			$players_listPlayer[] = $player;
+			$players_listPlayer[] = $factionPlayer;
 		}
 
 		include COMPONENT . 'faction/player/statPlayer.php';
 		include COMPONENT . 'faction/player/listPlayer.php';
-
-		$playerManager->changeSession($S_PAM1);
 	} else {
 		$response->redirect('faction');
 	}
 echo '</div>';
 
 $colorManager->changeSession($S_COL1);
-?>

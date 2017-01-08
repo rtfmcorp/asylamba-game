@@ -21,10 +21,7 @@ $stepTutorial = $session->get('playerInfo')->get('stepTutorial');
 $stepDone = $session->get('playerInfo')->get('stepDone');
 
 if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
-	$S_PAM1 = $playerManager->getCurrentSession();
-	$playerManager->newSession();
-	$playerManager->load(array('id' => $playerId));
-	$player = $playerManager->get();
+	$player = $playerManager->get($playerId);
 	
 	if ($player->stepDone == $stepDone AND $player->stepTutorial == $stepTutorial) {
 
@@ -240,16 +237,13 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 		}
 		$player->stepTutorial = $nextStep;
 		$session->get('playerInfo')->add('stepTutorial', $nextStep);
-
-		$playerManager->changeSession($S_PAM1);
-
+		$this->getContainer()->get('entity_manager')->flush($player);
 		if ($redirectWithoutJeanMi) {
 			$response->redirect('profil');
 		}
 	} else {
 		$session->get('playerInfo')->add('stepDone', $player->stepDone);
 		$session->get('playerInfo')->add('stepTutorial', $player->stepTutorial);
-		$playerManager->changeSession($S_PAM1);
 
 		throw new FormException('Vous ne pouvez pas valider deux fois la même étape.');
 	}

@@ -21,9 +21,6 @@ $session = $this->getContainer()->get('app.session');
 
 $status = ColorResource::getInfo($faction->id, 'status');
 
-$S_PAM_LAST = $playerManager->getCurrentSession();
-$playerManager->changeSession($PAM_LAST_TOKEN);
-
 # work
 echo '<div class="component player rank">';
 	echo '<div class="head skin-1">';
@@ -43,9 +40,9 @@ echo '<div class="component player rank">';
 			
 			echo '<h4>Nouveaux membres</h4>';
 
-			for ($i = 0; $i < $playerManager->size(); $i++) {
-				$p = $playerManager->get($i);
-
+			$lastFactionPlayers = $playerManager->getLastFactionPlayers($faction->id);
+			
+			foreach ($lastFactionPlayers as $p) {
 				if (Utils::interval($p->dInscription, Utils::now(), 's') > 259200) {
 					if ($i == 0) {
 						echo '<p>Aucun nouveau membre ces 3 derniers jours</p>';
@@ -69,5 +66,3 @@ echo '<div class="component player rank">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-$playerManager->changeSession($S_PAM_LAST);

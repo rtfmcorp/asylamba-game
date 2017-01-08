@@ -117,21 +117,14 @@ echo '<div class="component profil player">';
 						} elseif ($governmentLaw_id == Law::PUNITION) {
 							echo '<input type="text" placeholder="Montant de l\'amende" name="credits" />';
 
-							$S_PAM_LAW = $playerManager->getCurrentSession();
-							$playerManager->newSession(FALSE);
-							$playerManager->load(
-								['rColor' => $session->get('playerInfo')->get('color'), 'statement' => [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]], 
-								['name', 'ASC']
-							);
+							$factionPlayers = $playerManager->getFactionPlayersByName($session->get('playerInfo')->get('color'));
 
 							echo '<select name="rplayer">';
 								echo '<option value="-1">Choisissez un joueur</option>';
-								for ($j = 1; $j < $playerManager->size(); $j++) {
-									echo '<option value="' . $playerManager->get($j)->id . '">' . $playerManager->get($j)->name . '</option>';
+								foreach ($factionPlayers as $factionPlayer) {
+									echo '<option value="' . $factionPlayer->id . '">' . $factionPlayer->name . '</option>';
 								}
 							echo '</select>';
-
-							$playerManager->changeSession($S_PAM_LAW);
 						}
 
 						echo '<button class="button ' . ($faction->credits >= LawResources::getInfo($governmentLaw_id, 'price') ? NULL : 'disable') . '">';

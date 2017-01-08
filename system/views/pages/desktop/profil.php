@@ -27,17 +27,12 @@ include 'defaultElement/movers.php';
 echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
 
-	# loading des objets
-	$S_PAM1 = $playerManager->getCurrentSession();
-	$playerManager->newSession();
-	$playerManager->load(array('id' => $session->get('playerId')));
-
 	$S_OBM1 = $orbitalBaseManager->getCurrentSession();
 	$orbitalBaseManager->newSession();
 	$orbitalBaseManager->load(array('rPlayer' => $session->get('playerId')), array('dCreation', 'ASC'));
 
 	# playerRoleplayProfil component
-	$player_playerRoleplayProfil = $playerManager->get(0);
+	$player_playerRoleplayProfil = $playerManager->get($session->get('playerId'));
 	include COMPONENT . 'player/playerRoleplayProfil.php';
 
 	# obFastView component
@@ -52,6 +47,5 @@ echo '<div id="content">';
 		include COMPONENT . 'default.php';
 	}
 
-	$playerManager->changeSession($S_PAM1);
 	$orbitalBaseManager->changeSession($S_OBM1);
 echo '</div>';

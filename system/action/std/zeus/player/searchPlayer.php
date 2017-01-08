@@ -12,17 +12,11 @@ $response = $this->getContainer()->get('app.response');
 $playerid = $request->request->get('playerid');
 
 if ($playerid !== FALSE) {
-	$S_PAM1 = $playerManager->getCurrentSession();
-	$playerManager->newSession();
-	$playerManager->load(array('id' => $playerid));
-	
-	if ($playerManager->size() == 1) {
-		$response->redirect('embassy/player-' . $playerManager->get()->getId());
+	if (($player = $playerManager->get($playerid)) !== null) {
+		$response->redirect('embassy/player-' . $player->getId());
 	} else {
 		throw new ErrorException('Aucun joueur ne correspond à votre recherche.');
 	}
-
-	$playerManager->changeSession($S_PAM1);
 } else {
 	throw new FormException('pas assez d\'informations pour chercher un joueur');
 }

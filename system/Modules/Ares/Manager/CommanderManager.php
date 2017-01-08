@@ -414,20 +414,14 @@ class CommanderManager extends Manager {
 		}
 		
 		if ($commander->rPlayer > 0) {
-			$S_PLM1 = $this->playerManager->getCurrentSession();
-			$this->playerManager->newSession();
-			$this->playerManager->load(array('id' => $commander->rPlayer));
-			
 			$exp = round($commander->earnedExperience / Commander::COEFFEXPPLAYER);
-			$this->playerManager->increaseExperience($this->playerManager->get(0), $exp);
+			$this->playerManager->increaseExperience($this->playerManager->get($commander->rPlayer), $exp);
 
 			if ($enemyCommander->isAttacker == TRUE) {
 				LiveReport::$expPlayerD = $exp;
 			} else {
 				LiveReport::$expPlayerA = $exp;
 			}
-			
-			$this->playerManager->changeSession($S_PLM1);
 		}
 	}
 

@@ -21,9 +21,6 @@ $S_PRM1 = $playerRankingManager->getCurrentSession();
 $playerRankingManager->newSession();
 $playerRankingManager->loadLastContext();
 
-$S_PAM1 = $playerManager->getCurrentSession();
-$playerManager->newSession(FALSE);
-
 # create a new ranking
 $qr = $database->prepare('INSERT INTO ranking(dRanking, player, faction) VALUES (?, 1, 0)');
 $qr->execute(array(Utils::now()));
@@ -81,12 +78,12 @@ function cmpTrader($a, $b) {
     return ($a['trader'] > $b['trader']) ? -1 : 1;
 }
 
-$playerManager->load(array('statement' => array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY)));
+$players = $playerManager->getByStatements([Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]);
 
 # create an array with all the players
 $list = array();
-for ($i = 0; $i < $playerManager->size(); $i++) {
-	$list[$playerManager->get($i)->id] = [
+foreach ($players as $player) {
+	$list[$player->id] = [
 		'general' => 0, 
 		'resources' => 0,
 		'experience' => 0, 
@@ -367,14 +364,13 @@ while ($aw = $qr->fetch()) {
 }
 
 #-------------------------------- FIGHT & EXPERIENCE RANKING --------------------------------#
-for ($i = 0; $i < $playerManager->size(); $i++) {
-	$pl = $playerManager->get($i);
-	if (isset($list[$pl->id])) {
+foreach ($players as $player) {
+	if (isset($list[$player->id])) {
 		# add the points to the list
-		$list[$pl->id]['experience'] += $pl->experience;
-		$list[$pl->id]['victory'] += $pl->victory;
-		$list[$pl->id]['defeat'] += $pl->defeat;
-		$list[$pl->id]['fight'] += $pl->victory - $pl->defeat;
+		$list[$player->id]['experience'] += $player->experience;
+		$list[$player->id]['victory'] += $player->victory;
+		$list[$player->id]['defeat'] += $player->defeat;
+		$list[$player->id]['fight'] += $player->victory - $player->defeat;
 	}
 }
 
@@ -434,7 +430,7 @@ foreach ($list as $player => $value) {
 	$pr->general = $listG[$player]['general'];
 	$pr->generalPosition = $listG[$player]['position'];
 	$pr->generalVariation = $firstRanking ? 0 : $oldRanking->generalPosition - $pr->generalPosition;
-	$playerManager->getById($player)->factionPoint = $pr->general;
+	$playerManager->get($player)->factionPoint = $pr->general;
 
 	$pr->resources = $listR[$player]['resources'];
 	$pr->resourcesPosition = $listR[$player]['position'];
@@ -467,7 +463,7 @@ foreach ($list as $player => $value) {
 	$playerRankingManager->add($pr);
 
 	if (DATA_ANALYSIS) {
-		$p = $playerManager->getById($player);
+		$p = $playerManager->get($player);
 
 		$qr = $database->prepare('INSERT INTO 
 			DA_PlayerDaily(rPlayer, credit, experience, level, victory, defeat, status, resources, fleetSize, nbPlanet, planetPoints, rkGeneral, rkFighter, rkProducer, rkButcher, rkTrader, dStorage)
@@ -495,5 +491,4 @@ foreach ($list as $player => $value) {
 	}
 }
 
-$playerManager->changeSession($S_PAM1);
 $playerRankingManager->changeSession($S_PRM1);

@@ -195,14 +195,11 @@ class ResearchManager extends Manager {
 		}
 	}
 
-	public function update(Research $research, $player, $naturalInvest, $lifeInvest, $socialInvest, $informaticInvest) {
+	public function update(Research $research, $playerId, $naturalInvest, $lifeInvest, $socialInvest, $informaticInvest) {
 		# prestige
-		$S_PAM = $this->playerManager->getCurrentSession();
-		$this->playerManager->newSession();
-		$this->playerManager->load(array('id' => $player));
-		$p = $this->playerManager->get();
+		$player = $this->playerManager->get($playerId);
 		$applyPrestige = FALSE;
-		if ($p->rColor == ColorResource::APHERA) {
+		if ($player->rColor == ColorResource::APHERA) {
 			$applyPrestige = TRUE;
 		}
 		// natural technologies
@@ -231,7 +228,7 @@ class ResearchManager extends Manager {
 				}
 
 				$n = new Notification();
-				$n->setRPlayer($player);
+				$n->setRPlayer($playerId);
 				$n->setTitle($this->researchHelper->getInfo($research->naturalTech, 'name') . ' niveau ' . $levelReached);
 				$n->setContent('Vos investissements dans l\'Université ont payé !<br />
 					Vos chercheurs du département des <strong>Sciences Naturelles</strong> ont fait des avancées en <strong>' 
@@ -276,7 +273,7 @@ class ResearchManager extends Manager {
 				}
 
 				$n = new Notification();
-				$n->setRPlayer($player);
+				$n->setRPlayer($playerId);
 				$n->setTitle($this->researchHelper->getInfo($research->lifeTech, 'name') . ' niveau ' . $levelReached);
 				$n->setContent('Vos investissements dans l\'Université ont payé !<br />
 					Vos chercheurs du département des <strong>Sciences Politiques</strong> ont fait des avancées en <strong>' 
@@ -320,7 +317,7 @@ class ResearchManager extends Manager {
 				}
 
 				$n = new Notification();
-				$n->setRPlayer($player);
+				$n->setRPlayer($playerId);
 				$n->setTitle($this->researchHelper->getInfo($research->socialTech, 'name') . ' niveau ' . $levelReached);
 				$n->setContent('Vos investissements dans l\'Université ont payé !<br />
 					Vos chercheurs du département des <strong>Sciences Economiques et Sociales</strong> ont fait des avancées en <strong>' 
@@ -367,7 +364,7 @@ class ResearchManager extends Manager {
 				}
 				
 				$n = new Notification();
-				$n->setRPlayer($player);
+				$n->setRPlayer($playerId);
 				$n->setTitle($this->researchHelper->getInfo($research->informaticTech, 'name') . ' niveau ' . $levelReached);
 				$n->setContent('Vos investissements dans l\'Université ont payé !<br />
 					Vos chercheurs du département de l\'<strong>Ingénierie Informatique</strong> ont fait des avancées en <strong>' 
@@ -391,7 +388,6 @@ class ResearchManager extends Manager {
 				$research->informaticToPay = $this->researchHelper->getInfo($research->informaticTech, 'level', $research->getLevel($research->informaticTech) + 1, 'price');
 			}
 		} while ($informaticInvest > 0);
-		$this->playerManager->changeSession($S_PAM);
 	}
 
 	public function getResearchList(Research $research) {

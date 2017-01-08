@@ -1,17 +1,13 @@
 <?php
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Modules\Zeus\Model\Player;
 
 if (DEVMODE || $this->getContainer()->get('app.request')->query->get('key') === KEY_BUFFER) {
 
 	$playerManager = $this->getContainer()->get('zeus.player_manager');
 	$security = $this->getContainer()->get('security');
 	
-	$S_PAM1 = $playerManager->getCurrentSession();
-	$playerManager->newSession(FALSE);
-	$playerManager->load(array('statement' => Player::ACTIVE));
-
+	$activePlayers = $playerManager->getActivePlayers();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -46,9 +42,7 @@ if (DEVMODE || $this->getContainer()->get('app.request')->query->get('key') === 
 			echo '</a>';
 		}
 
-		for ($i = 0; $i < $playerManager->size(); $i++) {
-			$player = $playerManager->get($i);
-
+		foreach ($activePlayers as $player) {
 			echo '<a class="color' . $player->rColor . '" href="' . APP_ROOT . 'connection/bindkey-' . $security->crypt($security->buildBindkey($player->bind), KEY_SERVER) . '">';
 				echo '<em>Grade ' . $player->level . '</em>';
 				echo '<strong>' . $player->name . '</strong>';
@@ -61,5 +55,4 @@ if (DEVMODE || $this->getContainer()->get('app.request')->query->get('key') === 
 </body>
 
 <?php
-$playerManager->changeSession($S_PAM1);
 }

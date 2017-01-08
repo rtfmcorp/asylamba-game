@@ -340,11 +340,9 @@ if ($type !== FALSE) {
 
 							if ($rPlayer !== FALSE && $credits !== FALSE) {
 								if ($credits > 0) {
-									$S_PAM = $playerManager->getCurrentsession();
-									$playerManager->newSession();
-									$playerManager->load(array('id' => $rPlayer));
-									if ($playerManager->get()->rColor == $session->get('playerInfo')->get('color')) {
-										$law->options = serialize(array('rPlayer' => $rPlayer, 'credits' => $credits, 'display' => array('Joueur' => $playerManager->get()->name, 'amende' => $credits)));
+									$targetPlayer = $playerManager->get($rPlayer);
+									if ($targetPlayer->rColor == $session->get('playerInfo')->get('color')) {
+										$law->options = serialize(array('rPlayer' => $rPlayer, 'credits' => $credits, 'display' => array('Joueur' => $targetPlayer->name, 'amende' => $credits)));
 										$lawManager->add($law);
 										$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
 										$colorManager->sendSenateNotif($colorManager->get());
@@ -352,7 +350,6 @@ if ($type !== FALSE) {
 									} else {
 										throw new ErrorException('Ce joueur n\'est pas de votre faction.');	
 									}
-									$playerManager->changeSession($S_PAM);
 								} else {
 									throw new ErrorException('l\'amende doit être un entier positif.');
 								}

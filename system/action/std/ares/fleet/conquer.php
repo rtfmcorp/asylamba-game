@@ -61,11 +61,9 @@ if ($technologies->getTechnology(Technology::CONQUEST) !== 1) {
 		throw new ErrorException('Vous avez assez de conquête en cours ou un niveau d\'administration étendue trop faible.');
 	}
 
-		$S_PAM1 = $playerManager->getCurrentSession();
-		$playerManager->newSession(ASM_UMODE);
-		$playerManager->load(array('id' => $placeManager->get()->rPlayer));
-
-		if ($playerManager->get()->level > 3 || $playerManager->get()->statement >= Player::DELETED) {
+		$targetPlayer = $playerManager->get($placeManager->get()->rPlayer);
+		
+		if ($targetPlayer->level > 3 || $targetPlayer->statement >= Player::DELETED) {
 			if ($commanderManager->size() > 0) {
 				if ($placeManager->size() > 0) {
 					$commander = $commanderManager->get();
@@ -76,7 +74,7 @@ if ($technologies->getTechnology(Technology::CONQUEST) !== 1) {
 					$colorManager->load(array('id' => $session->get('playerInfo')->get('color')));
 					$color = $colorManager->get();
 
-					if ($session->get('playerInfo')->get('color') != $place->getPlayerColor() && $color->colorLink[$playerManager->get()->rColor] != Color::ALLY) {
+					if ($session->get('playerInfo')->get('color') != $place->getPlayerColor() && $color->colorLink[$targetPlayer->rColor] != Color::ALLY) {
 						$placeManager->load(array('id' => $commander->getRBase()));
 						$home = $placeManager->getById($commander->getRBase());
 
@@ -118,11 +116,7 @@ if ($technologies->getTechnology(Technology::CONQUEST) !== 1) {
 
 										if ($commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
 											# debit credit
-											$S_PAM2 = $playerManager->getCurrentSession();
-											$playerManager->newSession(ASM_UMODE);
-											$playerManager->load(array('id' => $session->get('playerId')));
-											$playerManager->decreaseCredit($playerManager->get(), $price);
-											$playerManager->changeSession($S_PAM2);
+											$playerManager->decreaseCredit($playerManager->get($session->get('playerId')), $price);
 
 											#throw new ErrorException('Flotte envoyée.', ALERT_STD_SUCCESS);
 
@@ -156,6 +150,5 @@ if ($technologies->getTechnology(Technology::CONQUEST) !== 1) {
 		} else {
 			throw new ErrorException('Vous ne pouvez pas conquérir un joueur de niveau 3 ou moins.');
 		}
-		$playerManager->changeSession($S_PAM1);
 $placeManager->changeSession($S_PLM1);
 $commanderManager->changeSession($S_COM1);

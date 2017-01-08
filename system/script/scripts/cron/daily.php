@@ -23,7 +23,6 @@ $playerGlobalInactiveTime = $this->getContainer()->getParameter('zeus.player.glo
 $playerInactiveTimeLimit = $this->getContainer()->getParameter('zeus.player.inactive_time_limit');
 
 $S_NTM1 = $notificationManager->getCurrentSession();
-$S_PAM1 = $playerManager->getCurrentSession();
 
 $path = 'public/log/cron/' . date('Y') . '-' . date('m') . '.log';
 
@@ -79,24 +78,25 @@ $bench->clear();
 Bug::writeLog($path, '# Check unactive players');
 $bench->start();
 
-$playerManager->newSession(FALSE);
-$playerManager->load(array('statement' => array(Player::ACTIVE, Player::INACTIVE)));
-
+$players = $playerManager->getByStatements([Player::ACTIVE, Player::INACTIVE]);
+$nbPlayers = count($players);
 $unactivatedPlayers = 0;
 $deletedPlayers 	= 0;
-for ($i = $playerManager->size() - 1; $i >= 0; $i--) { 
-	if (Utils::interval(Utils::now(), $playerManager->get($i)->getDLastConnection()) >= $playerInactiveTimeLimit) {
+// @TODO understand this strange loop condition
+for ($i = $nbPlayers - 1; $i >= 0; $i--) {
+	$player = $players[$i];
+	if (Utils::interval(Utils::now(), $player->getDLastConnection()) >= $playerInactiveTimeLimit) {
 
-		$playerManager->kill($playerManager->get($i)->id);
+		$playerManager->kill($player->id);
 
 		$deletedPlayers++;
-	} elseif (Utils::interval(Utils::now(), $playerManager->get($i)->getDLastConnection()) >= $playerGlobalInactiveTime AND $playerManager->get($i)->statement == Player::ACTIVE) {
-		$playerManager->get($i)->statement = Player::INACTIVE;
+	} elseif (Utils::interval(Utils::now(), $player->getDLastConnection()) >= $playerGlobalInactiveTime AND $player->statement == Player::ACTIVE) {
+		$player->statement = Player::INACTIVE;
 
 		if (APIMODE) {
 			# sending email API call
 			$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
-			$api->sendMail($playerManager->get($i)->bind, APP_ID, API::TEMPLATE_INACTIVE_PLAYER);
+			$api->sendMail($player->bind, APP_ID, API::TEMPLATE_INACTIVE_PLAYER);
 		}
 
 		$unactivatedPlayers++;
@@ -116,7 +116,6 @@ $bench->clear();
 
 # close object
 $notificationManager->changeSession($S_NTM1);
-$playerManager->changeSession($S_PAM1);
 
 Bug::writeLog($path, '');
 

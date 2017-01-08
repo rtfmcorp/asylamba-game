@@ -35,12 +35,9 @@ if ($recipients !== FALSE AND $content !== FALSE) {
 
 		if (count($recipients) <= ConversationUser::MAX_USERS) {
 			# chargement des utilisateurs
-			$S_PAM = $playerManager->getCurrentSession();
-			$playerManager->newSession();
-			# player statements
-			$playerManager->load(array('id' => $recipients, 'statement' => array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY)));
+			$players = $playerManager->getByIdsAndStatements($recipients, [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]);
 
-			if ($playerManager->size() >= 1) {
+			if (count($players) >= 1) {
 				# création de la date précédente
 				$readingDate = date('Y-m-d H:i:s', (strtotime(Utils::now()) - 20));
 
@@ -66,11 +63,11 @@ if ($recipients !== FALSE AND $content !== FALSE) {
 				$conversationUserManager->add($user);
 
 				# créer la liste des users
-				for ($i = 0; $i < $playerManager->size(); $i++) {
+				foreach ($players as $player) {
 					$user = new ConversationUser();
 
 					$user->rConversation = $conv->id;
-					$user->rPlayer = $playerManager->get($i)->id;
+					$user->rPlayer = $player->id;
 					$user->convPlayerStatement = ConversationUser::US_STANDARD;
 					$user->convStatement = ConversationUser::CS_DISPLAY;
 					$user->dLastView = $readingDate;
@@ -95,7 +92,7 @@ if ($recipients !== FALSE AND $content !== FALSE) {
 						DA_SocialRelation(`from`, `to`, `type`, `message`, dAction)
 						VALUES(?, ?, ?, ?, ?)'
 					);
-					$qr->execute([$session->get('playerId'), $playerManager->get(0)->id, 2, $content, Utils::now()]);
+					$qr->execute([$session->get('playerId'), $players[0]->getId(), 2, $content, Utils::now()]);
 				}
 
 				$session->addFlashbag('La conversation a été créée.', Flashbag::TYPE_SUCCESS);
@@ -103,8 +100,6 @@ if ($recipients !== FALSE AND $content !== FALSE) {
 			} else {
 				throw new ErrorException('Le joueur n\'est pas joignable.');	
 			}
-
-			$playerManager->changeSession($S_PAM);
 		} else {
 			throw new ErrorException('Nombre maximum de joueur atteint.');
 		}

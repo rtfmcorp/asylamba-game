@@ -19,11 +19,7 @@ if (!in_array($category, array('natural', 'life', 'social', 'informatic'))) {
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $session = $this->getContainer()->get('app.session');
 
-$S_PAM1 = $playerManager->getCurrentSession();
-$playerManager->newSession();
-$playerManager->load(array('id' => $session->get('playerId')));
-
-$player = $playerManager->get();
+$player = $playerManager->get($session->get('playerId'));
 
 if ($quantity === FALSE) {
 	$quantity = 1;
@@ -62,5 +58,6 @@ if ($oldInvest != 0) {
 			$player->partInformaticEngineering = $player->partInformaticEngineering - $quantity;
 			break;
 	}
-	$playerManager->changeSession($S_PAM1);
 }
+
+$this->getContainer()->get('entity_manager')->flush($player);

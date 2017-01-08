@@ -9,14 +9,9 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Classes\Library\Chronos;
 
-$playerManager = $this->getContainer()->get('zeus.player_manager');
 $factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
 $session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
-
-# require
-$S_PAM_DGG = $playerManager->getCurrentSession();
-$playerManager->changeSession($PLAYER_GOV_TOKEN);
 
 # status list
 $status = ColorResource::getInfo($faction->id, 'status');
@@ -139,14 +134,14 @@ echo '<div class="component size2 player new-message profil">';
 
 			echo '<h4>Gouvernement actuel</h4>';
 
-			for ($i = 0; $i < $playerManager->size(); $i++) { 
+			foreach ($governmentMembers as $minister) { 
 				echo '<div class="player">';
-					echo '<a href="' . APP_ROOT . 'embassy/player-' .  $playerManager->get($i)->id . '">';
-						echo '<img src="' . MEDIA . 'avatar/small/' .  $playerManager->get($i)->avatar . '.png" alt="' .  $playerManager->get($i)->name . '" class="picto" />';
+					echo '<a href="' . APP_ROOT . 'embassy/player-' .  $minister->id . '">';
+						echo '<img src="' . MEDIA . 'avatar/small/' .  $minister->avatar . '.png" alt="' .  $minister->name . '" class="picto" />';
 					echo '</a>';
-					echo '<span class="title">' . $status[ $playerManager->get($i)->status - 1] . '</span>';
-					echo '<strong class="name">' .  $playerManager->get($i)->name . '</strong>';
-					echo '<span class="experience">' . Format::number( $playerManager->get($i)->factionPoint) . ' points</span>';
+					echo '<span class="title">' . $status[ $minister->status - 1] . '</span>';
+					echo '<strong class="name">' .  $minister->name . '</strong>';
+					echo '<span class="experience">' . Format::number( $minister->factionPoint) . ' points</span>';
 				echo '</div>';
 			}
 
@@ -175,5 +170,3 @@ echo '<div class="component size2 player new-message profil">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-$playerManager->changeSession($S_PAM_DGG);

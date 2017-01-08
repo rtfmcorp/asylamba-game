@@ -1,7 +1,6 @@
 <?php
 
 use Asylamba\Classes\Container\ArrayList;
-use Asylamba\Modules\Gaia\Manager\SectorManager;
 use Asylamba\Modules\Zeus\Helper\CheckName;
 use Asylamba\Classes\Exception\FormException;
 
@@ -40,12 +39,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 			$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
 
 			if ($api->userExist($session->get('prebindkey'))) {
-
-				$S_PAM_INSCR = $playerManager->getCurrentSession();
-				$playerManager->newSession();
-				$playerManager->load(array('bind' => $session->get('prebindkey')));
-
-				if ($playerManager->size() == 0) {
+				if ($playerManager->getByBindKey($session->get('prebindkey')) === null) {
 					$session->add('inscription', new ArrayList());
 					$session->get('inscription')->add('bindkey', $session->get('prebindkey'));
 					$session->get('inscription')->add('portalPseudo', $api->data['userInfo']['pseudo']);
@@ -62,7 +56,6 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 					header('Location: ' . GETOUT_ROOT . 'serveurs/message-useralreadysigned');
 					exit();
 				}
-				$playerManager->changeSession($S_PAM_INSCR);
 			} else {
 				header('Location: ' . GETOUT_ROOT . 'serveurs/message-unknowuser');
 				exit();
@@ -108,13 +101,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 	}
 } elseif ($request->query->get('step') == 3) {
 	if ($session->exist('inscription')) {
-
-		# check nom dejà utilisé
-		$S_PAM_INSCR2 = $playerManager->getCurrentSession();
-		$playerManager->newSession();
-		$playerManager->load(array('name' => $request->request->get('pseudo')));
-
-		if ($playerManager->size() == 0) {
+		if ($playerManager->getByName($request->request->get('pseudo')) === null) {
 			$check = new CheckName();
 
 			if ($request->request->has('pseudo') && $check->checkLength($request->request->get('pseudo')) && $check->checkChar($request->request->get('pseudo'))) {
@@ -135,18 +122,13 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 			$response->redirect('inscription/step-2');
 			throw new FormException('Ce pseudo est déjà utilisé par un autre joueur');
 		}
-		$playerManager->changeSession($S_PAM_INSCR2);
 	} else {
 			die('ok');
 		header('Location: ' . GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
 		exit();
 	}
 } elseif ($request->query->get('step') == 4) {
-	$S_PAM_INSCR = $playerManager->getCurrentSession();
-	$playerManager->newSession();
-	$playerManager->load(array('bind' => $session->get('bindkey')));
-
-	if ($playerManager->size() == 0) {
+	if ($playerManager->getByBindKey($session->get('bindkey')) === null) {
 		if ($session->exist('inscription')) {
 			$check = new CheckName();
 
@@ -185,6 +167,4 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 		header('Location: ' . GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
 		exit();
 	}
-
-	$playerManager->changeSession($S_PAM_INSCR);
 }

@@ -10,19 +10,14 @@ $request = $this->getContainer()->get('app.request');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 
 if ($session->get('playerInfo')->get('status') > Player::PARLIAMENT && $session->get('playerInfo')->get('status') < Player::CHIEF) {
-	$_PAM = $playerManager->getCurrentsession();
-	$playerManager->newSession();
-	$playerManager->load(array('id' => $session->get('playerId')));
-
-	if ($playerManager->size() > 0) {
-		$playerManager->get()->status = Player::PARLIAMENT;
+	if (($minister = $playerManager->get($session->get('playerId'))) !== null) {
+		$minister->status = Player::PARLIAMENT;
 		$session->get('playerInfo')->add('status', Player::PARLIAMENT);
 		$session->addFlashbag('Vous n\'êtes plus membre du gouvernement.', Flashbag::TYPE_SUCCESS);
+		$this->getContainer()->get('entity_manager')->flush($minister);
 	} else {
 		throw new ErrorException('Ce joueur n\'existe pas.');
 	}
-
-	$playerManager->changeSession($_PAM);
 } else {
 	throw new ErrorException('Vous n\'êtes pas dans le gouvernement de votre faction ou en êtes le chef.');
 }

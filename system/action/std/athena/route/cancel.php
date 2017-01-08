@@ -37,11 +37,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 		$linkedBase = $orbitalBaseManager->get(1);
 
 		//rend 80% des crédits investis
-		$S_PAM1 = $playerManager->getCurrentSession();
-		$playerManager->newSession(ASM_UMODE);
-		$playerManager->load(array('id' => $session->get('playerId')));
-		$playerManager->increaseCredit($playerManager->get(), round($cr->getPrice() * $routeCancelRefund));
-		$playerManager->changeSession($S_PAM1);
+		$playerManager->increaseCredit($playerManager->get($session->get('playerId')), round($cr->getPrice() * $routeCancelRefund));
 
 		//notification
 		$n = new Notification();

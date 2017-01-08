@@ -46,11 +46,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 
 		if ($place->typeOfPlace == Place::TERRESTRIAL && $place->playerColor != $session->get('playerInfo')->get('color')) {
 			# débit des crédits au joueur
-			$S_PAM1 = $playerManager->getCurrentSession();
-			$playerManager->newSession();
-			$playerManager->load(array('id' => $session->get('playerId')));
-			$playerManager->decreaseCredit($playerManager->get(), $price);
-			$playerManager->changeSession($S_PAM1);
+			$playerManager->decreaseCredit($playerManager->get($session->get('playerId')), $price);
 
 			# espionnage
 			$sr = new SpyReport();
@@ -103,10 +99,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 					$orbitalBaseManager->load(array('rPlace' => $rPlace));
 					$orbitalBase = $orbitalBaseManager->get();
 
-					# enemy
-					$playerManager->newSession();
-					$playerManager->load(array('id' => $orbitalBase->rPlayer));
-					$enemy = $playerManager->get();
+					$enemy = $playerManager->get($orbitalBase->rPlayer);
 					
 					$sr->resources = $orbitalBase->resourcesStorage;
 
@@ -185,8 +178,6 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 
 			$session->addFlashbag('Espionnage effectué.', Flashbag::TYPE_SUCCESS);
 			$response->redirect('fleet/view-spyreport/report-' . $sr->id);
-			
-			$playerManager->changeSession($S_PAM1);
 		} else {
 			throw new ErrorException('Impossible de lancer un espionnage');
 		}

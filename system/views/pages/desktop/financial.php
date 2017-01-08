@@ -29,11 +29,8 @@ echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
 
 	if (!$request->query->has('view') OR $request->query->get('view') == 'invest') {
-		# loading des objets
-		$S_PAM_FIN = $playerManager->getCurrentSession();
-		$playerManager->newSession();
-		$playerManager->load(array('id' => $session->get('playerId')));
-
+		$player = $playerManager->get($session->get('playerId'));
+		
 		$S_OBM_FIN = $orbitalBaseManager->getCurrentSession();
 		$orbitalBaseManager->newSession();
 		$orbitalBaseManager->load(
@@ -74,7 +71,7 @@ echo '<div id="content">';
 		$financial_totalMSFees = 0;
 
 		# bonus
-		$financial_totalInvestUni += $playerManager->get(0)->iUniversity;
+		$financial_totalInvestUni += $player->iUniversity;
 
 		# general array
 		$ob_generalFinancial = array();
@@ -144,7 +141,7 @@ echo '<div id="content">';
 
 		# investFinancial component
 		$ob_investFinancial = $ob_generalFinancial;
-		$player_investFinancial = $playerManager->get(0);
+		$player_investFinancial = $player;
 		include COMPONENT . 'financial/investFinancial.php';
 
 		# taxOutFinancial component
@@ -164,7 +161,6 @@ echo '<div id="content">';
 
 		# close
 		$transactionManager->changeSession($S_TRM1);
-		$playerManager->changeSession($S_PAM_FIN);
 		$orbitalBaseManager->changeSession($S_OBM_FIN);
 		$commanderManager->changeSession($S_COM_FIN);
 	} elseif ($request->query->get('view') == 'send') {

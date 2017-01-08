@@ -21,13 +21,7 @@ if ($quantity !== FALSE) {
 	$credit = intval($quantity);
 
 	if ($credit > 0) {
-
-		$S_PAM1 = $playerManager->getCurrentSession();
-		$playerManager->newSession(ASM_UMODE);
-		$playerManager->load(array('id' => $session->get('playerId')));
-
-		if ($playerManager->size() == 1) {
-			$sender = $playerManager->get();
+		if (($sender = $playerManager->get($session->get('playerId'))) !== null) {
 			if ($sender->rColor > 0) {
 				if ($sender->credit >= $credit) {
 						
@@ -64,7 +58,6 @@ if ($quantity !== FALSE) {
 		} else {
 			throw new ErrorException('envoi de crédits impossible - erreur dans le joueur');
 		}
-		$playerManager->changeSession($S_PAM1);
 	} else {
 		throw new ErrorException('envoi de crédits impossible - il faut envoyer un nombre entier positif');
 	}

@@ -23,28 +23,14 @@ $conversationMessageManager = $this->getContainer()->get('hermes.conversation_me
 $content = $parser->parse($request->request->get('message'));
 
 if ($content !== FALSE) {
-	$S_PAM1 = $playerManager->getCurrentSession();
-	$playerManager->newSession(FALSE);
-	$playerManager->load(array('id' => $session->get('playerId')));
-
-	if ($playerManager->size() == 1) {
-		if ($playerManager->get()->status > Player::PARLIAMENT) {
-			$senderID = $playerManager->get()->id;
-			$senderColor = $playerManager->get()->rColor;
-
+	if (($player = $playerManager->get($session->get('playerId')))) {
+		if ($player->status > Player::PARLIAMENT) {
 			if ($content !== '' && strlen($content) < 25000) {
-				$playerManager->newSession(FALSE);
-				$playerManager->load(
-					['statement' => Player::DEAD, 'rColor' => $senderColor],
-					['id', 'ASC'],
-					[0, 1]
-				);
-
-				if ($playerManager->size() == 1) {
+				if (($factionAccount = $playerManager->getFactionAccount($player->rColor)) !== null) {
 					$S_CVM = $conversationManager->getCurrentSession();
 					$conversationManager->newSession();
 					$conversationManager->load(
-						['cu.rPlayer' => $playerManager->get()->id]
+						['cu.rPlayer' => $factionAccount->id]
 					);
 
 					if ($conversationManager->size() == 1) {
@@ -63,7 +49,7 @@ if ($content !== FALSE) {
 						$message = new ConversationMessage();
 
 						$message->rConversation = $conv->id;
-						$message->rPlayer = $senderID;
+						$message->rPlayer = $player->id;
 						$message->type = ConversationMessage::TY_STD;
 						$message->content = $content;
 						$message->dCreation = Utils::now();
@@ -85,8 +71,6 @@ if ($content !== FALSE) {
 	} else {
 		throw new FormException('Ce joueur n\'existe pas');
 	}
-
-	$playerManager->changeSession($S_PAM1);
 } else {
 	throw new FormException('Pas assez d\'informations pour écrire un message officiel');
 }

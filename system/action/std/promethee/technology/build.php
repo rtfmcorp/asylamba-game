@@ -89,11 +89,6 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 						}
 					}
 
-					// load du joueur
-					$S_PAM1 = $playerManager->getCurrentSession();
-					$playerManager->newSession(ASM_UMODE);
-					$playerManager->load(array('id' => $session->get('playerId')));
-
 					// construit la nouvelle techno
 					$tq = new TechnologyQueue();
 					$tq->rPlayer = $session->get('playerId');
@@ -123,7 +118,7 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 					$orbitalBaseManager->decreaseResources($ob, $technologyHelper->getInfo($techno, 'resource', $targetLevel));
 					
 					// débit des crédits
-					$playerManager->decreaseCredit($playerManager->get(), $technologyHelper->getInfo($techno, 'credit', $targetLevel));
+					$playerManager->decreaseCredit($playerManager->get($session->get('playerId')), $technologyHelper->getInfo($techno, 'credit', $targetLevel));
 					
 					// ajout de l'event dans le contrôleur
 					$session->get('playerEvent')->add($tq->dEnd, EVENT_BASE, $baseId);
@@ -138,7 +133,6 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 
 					// alerte
 					$session->addFlashbag('Développement de la technologie programmée', Flashbag::TYPE_SUCCESS);
-					$playerManager->changeSession($S_PAM1);
 				} else {
 					throw new ErrorException('les conditions ne sont pas remplies pour développer une technologie');
 				}

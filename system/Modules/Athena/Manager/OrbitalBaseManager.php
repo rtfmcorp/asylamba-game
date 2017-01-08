@@ -506,7 +506,6 @@ class OrbitalBaseManager extends Manager {
 		$b->dock1Manager = $this->shipQueueManager->getFirstSession();
 		$b->dock2Manager = $this->shipQueueManager->getFirstSession();
 		$b->dock3Manager = $this->shipQueueManager->getFirstSession();
-		$b->routeManager = $this->commercialRouteManager->getFirstSession();
 		$b->technoQueueManager = $this->technologyQueueManager->getFirstSession();
 		$b->shippingManager = $this->commercialShippingManager->getFirstSession();
 
@@ -675,11 +674,7 @@ class OrbitalBaseManager extends Manager {
 			$orbitalBase->uOrbitalBase = $now;
 
 			# load the player
-			$S_PAM1 = $this->playerManager->getCurrentSession();
-			$this->playerManager->newSession();
-			$this->playerManager->load(array('id' => $orbitalBase->rPlayer));
-			$player = $this->playerManager->get();
-			$this->playerManager->changeSession($S_PAM1);
+			$player = $this->playerManager->get($orbitalBase->rPlayer);
 
 			if (count($hours)) {
 				# load the bonus

@@ -39,10 +39,7 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 			$technologyQueueManager->newSession(ASM_UMODE);
 			$technologyQueueManager->load(array('rPlace' => $baseId), array('dEnd'));
 
-			$S_PAM1 = $playerManager->getCurrentSession();
-			$playerManager->newSession(ASM_UMODE);
-			$playerManager->load(array('id' => $session->get('playerId')));
-			$player = $playerManager->get();
+			$player = $playerManager->get($session->get('playerId'));
 
 			$index = NULL;
 			$targetLevel = 0;
@@ -87,7 +84,6 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 			} else {
 				throw new ErrorException('impossible d\'annuler la technologie');
 			}
-			$playerManager->changeSession($S_PAM1);
 			$technologyQueueManager->changeSession($S_TQM1);
 		} else {
 			throw new ErrorException('cette base ne vous appartient pas');

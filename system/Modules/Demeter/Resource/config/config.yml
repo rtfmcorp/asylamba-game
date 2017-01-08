@@ -39,6 +39,7 @@ services:
         class: Asylamba\Modules\Demeter\Manager\ColorManager
         arguments:
             - "@database"
+            - "@entity_manager"
             - "@zeus.player_manager"
             - "@demeter.vote_manager"
             - "@hermes.conversation_manager"

@@ -89,13 +89,9 @@ try {
 		$notificationManager->changeSession($S_NTM1);
 
 		# add 1000 credits to the godfather
-		$S_PAM1 = $playerManager->getCurrentSession();
-		$playerManager->newSession();
-		$playerManager->load(array('id' => $player->rGodfather));
-		if ($playerManager->size() == 1) {
-			$playerManager->increaseCredit($playerManager->get(), 1000);
-		} 
-		$playerManager->changeSession($S_PAM1);
+		if (($godFather = $playerManager->get($player->rGodFather))) {
+			$playerManager->increaseCredit($godFather, 1000);
+		}
 
 		# remove godFather from session
 		$session->remove('rgodfather');
@@ -262,19 +258,11 @@ try {
 	# ajout aux conversation de faction et techniques
 	$readingDate = date('Y-m-d H:i:s', (strtotime(Utils::now()) - 20));
 	
-	$S_PAM = $playerManager->getCurrentSession();
-	$playerManager->newSession(FALSE);
-	$playerManager->load(
-		['statement' => Player::DEAD, 'rColor' => $player->rColor],
-		['id', 'ASC'],
-		[0, 1]
-	);
-
-	if ($playerManager->size() == 1) {
+	if (($factionAccount = $playerManager->getFactionAccount($player->rColor)) !== null) {
 		$S_CVM = $conversationManager->getCurrentSession();
 		$conversationManager->newSession();
 		$conversationManager->load([
-				'cu.rPlayer' => [ID_JEANMI, $playerManager->get()->id]
+				'cu.rPlayer' => [ID_JEANMI, $factionAccount->id]
 			], [], [0, 2]
 		);
 
@@ -291,9 +279,6 @@ try {
 		
 		$conversationManager->changeSession($S_CVM);
 	}
-
-	$playerManager->changeSession($S_PAM);
-
 	$security = $this->getContainer()->get('security');
 	# redirection vers connection
 	$this->getContainer()->get('app.response')->redirect('connection/bindkey-' . $security->crypt($security->buildBindkey($player->getBind()), KEY_SERVER) . '/mode-splash');

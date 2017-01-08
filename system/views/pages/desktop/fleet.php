@@ -246,17 +246,11 @@ echo '<div id="content">';
 			$report = $reportManager->get($request->query->get('report'));
 
 			if (($report->rPlayerAttacker == $session->get('playerId') || $report->rPlayerDefender == $session->get('playerId'))) {
-				$S_PAM1 = $playerManager->getCurrentSession();
-				$playerManager->newSession();
-				$playerManager->load(array('id' => array($reportManager->get()->rPlayerAttacker, $reportManager->get()->rPlayerDefender)));
-
-				$attacker_report = $playerManager->getById($report->rPlayerAttacker);
-				$defender_report = $playerManager->getById($report->rPlayerDefender);
+				$attacker_report = $playerManager->get($report->rPlayerAttacker);
+				$defender_report = $playerManager->get($report->rPlayerDefender);
 
 				include COMPONENT . 'fleet/report.php';
 				include COMPONENT . 'fleet/manage-report.php';
-
-				$playerManager->changeSession($S_PAM1);
 			} else {
 				throw new ErrorException('Ce rapport ne vous appartient pas ou n\'existe pas');
 				//CTR::redirect('fleet/view-archive');

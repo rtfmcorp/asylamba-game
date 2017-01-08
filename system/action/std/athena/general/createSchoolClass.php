@@ -63,11 +63,7 @@ if ($baseId !== FALSE AND $school !== FALSE AND $name !== FALSE AND in_array($ba
 						}
 
 						# débit des crédits au joueur
-						$S_PAM1 = $playerManager->getCurrentSession();
-						$playerManager->newSession(ASM_UMODE);
-						$playerManager->load(array('id' => $session->get('playerId')));
-						$playerManager->decreaseCredit($playerManager->get(), SchoolClassResource::getInfo($school, 'credit'));
-						$playerManager->changeSession($S_PAM1);
+						$playerManager->decreaseCredit($playerManager->get($session->get('playerId')), SchoolClassResource::getInfo($school, 'credit'));
 
 						for ($i = 0; $i < $nbrCommandersToCreate; $i++) {
 							$newCommander = new Commander();

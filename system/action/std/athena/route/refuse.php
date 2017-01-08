@@ -38,10 +38,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 		$refusingBase = $orbitalBaseManager->get(1);
 
 		//rend les crédits au proposant
-		$S_PAM1 = $playerManager->getCurrentSession();
-		$playerManager->newSession(ASM_UMODE);
-		$playerManager->load(array('id' => $proposerBase->getRPlayer()));
-		$playerManager->increaseCredit($playerManager->get(), intval($cr->getPrice()));
+		$playerManager->increaseCredit($playerManager->get($proposerBase->getRPlayer()), intval($cr->getPrice()));
 
 		//notification
 		$n = new Notification();
@@ -58,7 +55,6 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 		$commercialRouteManager->remove($cr);
 		$session->addFlashbag('Route commerciale refusée', Flashbag::TYPE_SUCCESS);
 		$orbitalBaseManager->changeSession($S_OBM1);
-		$playerManager->changeSession($S_PAM1);
 	} else {
 		throw new ErrorException('impossible de refuser une route commerciale');
 	}

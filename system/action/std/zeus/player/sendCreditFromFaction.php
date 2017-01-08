@@ -37,17 +37,11 @@ if ($name !== FALSE AND $quantity !== FALSE) {
 			$credit = intval($quantity);
 
 			if ($credit > 0) {
-
-				$S_PAM1 = $playerManager->getCurrentSession();
-				$playerManager->newSession(ASM_UMODE);
-				$playerManager->load(array('name' => $name));
-
 				$S_CLM1 = $colorManager->getCurrentSession();
 				$colorManager->newSession();
 				$colorManager->load(array('id' => $session->get('playerInfo')->get('color')));
 				if ($colorManager->size() == 1) {
-					if ($playerManager->size() == 1) {
-						$receiver = $playerManager->get();
+					if (($receiver = $playerManager->getByName($name)) !== null) {
 						$faction = $colorManager->get();
 
 						if ($faction->credits >= $credit) {
@@ -87,7 +81,6 @@ if ($name !== FALSE AND $quantity !== FALSE) {
 				} else {
 					throw new ErrorException('envoi de crédits impossible - erreur dans la faction');
 				}
-				$playerManager->changeSession($S_PAM1);
 			} else {
 				throw new ErrorException('envoi de crédits impossible - il faut envoyer un nombre entier positif');
 			}

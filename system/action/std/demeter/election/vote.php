@@ -29,15 +29,14 @@ if ($rElection !== FALSE && $rCandidate !== FALSE) {
 	$candidateManager->newSession();
 	$candidateManager->load(array('rPlayer' => $rCandidate, 'rElection' => $rElection));
 
-	$_PAM = $playerManager->getCurrentSession();
-	$playerManager->load(array('rColor' => $session->get('playerInfo')->get('color'), 'status' => Player::CHIEF));
-
+	$leader = $playerManager->getFactionLeader($session->get('playerInfo')->get('color'));
+	
 	if ($rCandidate == 0) {
-		$rCandidate = $playerManager->get()->id;
+		$rCandidate = $leader->id;
 	}
 
 	if ($electionManager->size() > 0) {
-		if ($candidateManager->size() > 0 || $playerManager->get()->id == $rCandidate) {
+		if ($candidateManager->size() > 0 || $leader->id == $rCandidate) {
 			if ($electionManager->get()->rColor == $session->get('playerInfo')->get('color')) {
 				$_VOM = $voteManager->getCurrentSession();
 				$voteManager->newSession();
@@ -77,7 +76,6 @@ if ($rElection !== FALSE && $rCandidate !== FALSE) {
 
 	$candidateManager->changeSession($_CAM);
 	$electionManager->changeSession($_ELM);
-	$playerManager->changeSession($_PAM);
 } else {
 	throw new ErrorException('Informations manquantes.');
 }
