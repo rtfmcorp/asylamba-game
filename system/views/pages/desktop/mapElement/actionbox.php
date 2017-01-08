@@ -117,7 +117,7 @@ if (isset($defaultBase)) {
 				echo '</li>';
 
 				// noAJAX
-				echo '<li class="action color' . $place->playerColor . '" id="place-' . $i . '" ' . (isset($noAJAX) && $noAJAX && $request->query->get('place') === $place->id ? 'style="width: 565px;"' : NULL) . '>';
+				echo '<li class="action color' . $place->playerColor . '" id="place-' . $i . '" ' . (isset($noAJAX) && $noAJAX && (int) $request->query->get('place') === $place->id ? 'style="width: 565px;"' : NULL) . '>';
 					echo '<div class="content">';
 						echo '<div class="column info">';
 							for ($j = 0; $j < $spyReportManager->size(); $j++) { 
