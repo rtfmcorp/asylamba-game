@@ -39,8 +39,6 @@ if ($statusArray = ColorResource::getInfo($session->get('playerInfo')->get('colo
 	}
 } else {
 	if ($rPlayer !== FALSE) {
-		$_PAM2 = $playerManager->getCurrentsession();
-		$playerManager->newSession();
 		if ($session->get('playerInfo')->get('status') == Player::CHIEF) {
 			if (($heir = $playerManager->get($rPlayer)) !== null) {
 				if ($heir->rColor == $session->get('playerInfo')->get('color')) {
@@ -64,7 +62,7 @@ if ($statusArray = ColorResource::getInfo($session->get('playerInfo')->get('colo
 							$notificationManager->add($notif);
 
 							$this->getContainer()->get('entity_manager')->flush();
-							$session->addFlashbag($playerManager->get()->name . ' est désigné comme votre successeur.', Flashbag::TYPE_SUCCESS);	
+							$session->addFlashbag($heir->name . ' est désigné comme votre successeur.', Flashbag::TYPE_SUCCESS);	
 						} else {
 							throw new ErrorException('vous ne pouvez pas abdiquer pendant un putsch.');	
 						}
@@ -79,12 +77,9 @@ if ($statusArray = ColorResource::getInfo($session->get('playerInfo')->get('colo
 			} else {
 				throw new ErrorException('Ce joueur n\'existe pas.');
 			}
-
-			$playerManager->changeSession($_PAM);
 		} else {
 			throw new ErrorException('Vous n\'êtes pas le chef de votre faction.');	
 		}
-		$playerManager->changeSession($_PAM2);
 	} else {
 		throw new ErrorException('Informations manquantes.');
 	}
