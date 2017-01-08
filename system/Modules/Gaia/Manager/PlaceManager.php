@@ -505,7 +505,7 @@ class PlaceManager extends Manager {
 								$commanderColor = $this->colorManager->get();
 								$this->colorManager->changeSession($S_CLM);
 								
-								if ($this->ctc->add($commander->dArrival, $this, 'uConquer', $place, array($place, $commander, $commanderPlace, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $S_CRM_C2, $S_REM_C2, $S_COM_C2))) {
+								if ($this->ctc->add($commander->dArrival, $this, 'uConquer', $place, array($place, $commander, $commanderPlace, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $S_REM_C2, $S_COM_C2))) {
 									$commander->uMethodCtced = TRUE;
 									$commander->lastUMethod = Utils::now();
 								}
