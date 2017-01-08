@@ -766,7 +766,7 @@ class PlaceManager extends Manager {
 	}
 
 	# conquest
-	public function uConquer(Place $place, Commander $commander, $commanderPlace, $playerBonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $routeSession, $recyclingSession, $commanderSession) {
+	public function uConquer(Place $place, Commander $commander, $commanderPlace, $playerBonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $recyclingSession, $commanderSession) {
 		
 		# conquete
 		if ($place->rPlayer != NULL) {
