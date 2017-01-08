@@ -195,6 +195,22 @@ class PlayerManager {
 	}
 	
 	/**
+	 * @return int
+	 */
+	public function countActivePlayers()
+	{
+		return $this->entityManager->getRepository(Player::class)->countActivePlayers();
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function countAllPlayers()
+	{
+		return $this->entityManager->getRepository(Player::class)->countAllPlayers();
+	}
+	
+	/**
 	 * @param int $factionId
 	 * @param array $statements
 	 * @return array

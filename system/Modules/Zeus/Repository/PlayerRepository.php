@@ -113,6 +113,26 @@ class PlayerRepository extends AbstractRepository {
 	}
 	
 	/**
+	 * @return int
+	 */
+	public function countActivePlayers()
+	{
+		$query = $this->connection->prepare('SELECT COUNT(*) as nb_players FROM player WHERE statement = :statement_active');
+		$query->execute(['statement_active' => Player::ACTIVE]);
+		return (int) $query->fetch()['nb_players'];
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function countAllPlayers()
+	{
+		$query = $this->connection->prepare('SELECT COUNT(*) as nb_players FROM player WHERE statement IN (:statement_active, :statement_inactive)');
+		$query->execute(['statement_active' => Player::ACTIVE, 'statement_inactive' => Player::INACTIVE]);
+		return (int) $query->fetch()['nb_players'];
+	}
+	
+	/**
 	 * @param int $factionId
 	 * @param array $statements
 	 * @return int
