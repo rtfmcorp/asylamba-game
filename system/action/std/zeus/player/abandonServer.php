@@ -27,5 +27,3 @@ if (($player = $playerManager->get($session->get('playerId'))) !== null) {
 } else {
 	throw new ErrorException('Une erreur s\'est produite. Contactez un administrateur pour résoudre ce problème.');
 }
-
-$playerManager->changeSession($S_PAM1);

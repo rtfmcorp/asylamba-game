@@ -59,5 +59,3 @@ echo '<div class="component profil player size1">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-$playerManager->changeSession($S_PAM_DGG);
