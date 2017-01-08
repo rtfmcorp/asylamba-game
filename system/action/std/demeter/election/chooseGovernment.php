@@ -24,7 +24,7 @@ if ($rPlayer !== FALSE && $department !== FALSE) {
 				if ($appointee->rColor == $session->get('playerInfo')->get('color')) {
 					if ($appointee->status == Player::PARLIAMENT) {
 						if ($department > Player::PARLIAMENT && $department < Player::CHIEF) {
-							$$appointee->status = $department;
+							$appointee->status = $department;
 							
 							$statusArray = ColorResource::getInfo($appointee->rColor, 'status');
 							$notif = new Notification();
