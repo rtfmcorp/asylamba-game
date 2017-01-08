@@ -577,8 +577,9 @@ class PlayerManager {
 			$nationTax = $base->tax * $popTax / 100;
 
 			# revenu des routes commerciales
-			$routesIncome = $this->commercialRouteManager->getBaseIncome($base) * $playerBonus->bonus->get(PlayerBonus::COMMERCIAL_INCOME) / 100;
-
+			$routesIncome = $this->commercialRouteManager->getBaseIncome($base);
+			$routesIncome += $routesIncome * $playerBonus->bonus->get(PlayerBonus::COMMERCIAL_INCOME) / 100;
+			
 			$credits += ($popTax - $nationTax + $routesIncome);
 			$totalGain += $popTax - $nationTax + $routesIncome;
 

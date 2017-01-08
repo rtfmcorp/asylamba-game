@@ -84,6 +84,10 @@ class CommercialRouteManager {
 		return $this->entityManager->getRepository(CommercialRoute::class)->getExistingRoute($baseId, $distantBaseId);
 	}
 	
+	/**
+	 * @param OrbitalBase $orbitalBase
+	 * @return int
+	 */
 	public function getBaseIncome(OrbitalBase $orbitalBase)
 	{
 		return $this->entityManager->getRepository(CommercialRoute::class)->getBaseIncome($orbitalBase->getId());
