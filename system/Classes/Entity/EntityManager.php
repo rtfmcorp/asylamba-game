@@ -64,7 +64,7 @@ class EntityManager {
                 $this->unitOfWork->flushAll();
                 break;
             case 'string':
-                $this->unitOfWork->flushEntity(get_class($entity));
+                $this->unitOfWork->flushEntity($entity);
                 break;
             case 'object':
                 $className = get_class($entity);
