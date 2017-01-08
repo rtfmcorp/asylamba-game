@@ -91,7 +91,7 @@ if ($type !== FALSE) {
 						if ($lawManager->size() == 0) {
 							$lawManager->add($law);
 							$colorManager->get()->credits -= LawResources::getInfo($type, 'price') * $duration * $colorManager->get()->activePlayers;
-							$colorManager->get()->sendSenateNotif();
+							$colorManager->sendSenateNotif($colorManager->get());
 							$response->redirect('faction/view-senate');	
 						} else {
 							throw new ErrorException('Cette loi est déjà proposée ou en vigueur.');
