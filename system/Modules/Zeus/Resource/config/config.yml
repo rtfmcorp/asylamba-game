@@ -15,7 +15,7 @@ services:
     zeus.player_manager:
         class: Asylamba\Modules\Zeus\Manager\PlayerManager
         arguments:
-            - "@database"
+            - "@entity_manager"
             - "@gaia.galaxy_color_manager"
             - "@gaia.sector_manager"
             - "@hermes.notification_manager"
@@ -60,6 +60,7 @@ services:
     zeus.tutorial_helper:
         class: Asylamba\Modules\Zeus\Helper\TutorialHelper
         arguments:
+            - "@entity_manager"
             - "@zeus.player_manager"
             - "@athena.orbital_base_manager"
             - "@athena.building_queue_manager"

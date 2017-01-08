@@ -13,6 +13,7 @@ namespace Asylamba\Modules\Zeus\Helper;
 
 use Asylamba\Classes\Container\Session;
 
+use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Modules\Athena\Manager\OrbitalBaseManager;
 use Asylamba\Modules\Athena\Manager\BuildingQueueManager;
@@ -20,6 +21,8 @@ use Asylamba\Modules\Promethee\Manager\TechnologyQueueManager;
 use Asylamba\Modules\Promethee\Manager\TechnologyManager;
 
 class TutorialHelper {
+	/** @var EntityManager **/
+	protected $entityManager;
 	/** @var PlayerManager **/
 	protected $playerManager;
 	/** @var OrbitalBaseManager **/
@@ -34,6 +37,7 @@ class TutorialHelper {
 	protected $session;
 	
 	/**
+	 * @param EntityManager $entityManager
 	 * @param PlayerManager $playerManager
 	 * @param OrbitalBaseManager $orbitalBaseManager
 	 * @param BuildingQueueManager $buildingQueueManager
@@ -42,6 +46,7 @@ class TutorialHelper {
 	 * @param Session $session
 	 */
 	public function __construct(
+		EntityManager $entityManager,
 		PlayerManager $playerManager,
 		OrbitalBaseManager $orbitalBaseManager,
 		BuildingQueueManager $buildingQueueManager,
@@ -50,6 +55,7 @@ class TutorialHelper {
 		Session $session
 	)
 	{
+		$this->entityManager = $entityManager;
 		$this->playerManager = $playerManager;
 		$this->orbitalBaseManager = $orbitalBaseManager;
 		$this->buildingQueueManager = $buildingQueueManager;
@@ -82,27 +88,23 @@ class TutorialHelper {
 	}
 
 	public function setStepDone() {
-
-		$S_PAM1 = $this->playerManager->getCurrentSession();
-		$this->playerManager->newSession();
-		$this->playerManager->load(array('id' => $this->session->get('playerId')));
-		$this->playerManager->get()->stepDone = TRUE;
+		$player = $this->playerManager->get($this->session->get('playerId'));
+		
+		$player->stepDone = TRUE;
 
 		$this->session->get('playerInfo')->add('stepDone', TRUE);
-
-		$this->playerManager->changeSession($S_PAM1);
+		
+		$this->entityManager->flush($player);
 	}
 
 	public function clearStepDone() {
-
-		$S_PAM1 = $this->playerManager->getCurrentSession();
-		$this->playerManager->newSession();
-		$this->playerManager->load(array('id' => $this->session->get('playerId')));
-		$this->playerManager->get()->stepDone = FALSE;
+		$player = $this->playerManager->get($this->session->get('playerId'));
+		
+		$player->stepDone = FALSE;
 
 		$this->session->get('playerInfo')->add('stepDone', FALSE);
 
-		$this->playerManager->changeSession($S_PAM1);
+		$this->entityManager->flush($player);
 	}
 
 	public function isNextBuildingStepAlreadyDone($playerId, $buildingId, $level) {

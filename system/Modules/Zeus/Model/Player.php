@@ -84,11 +84,8 @@ class Player {
 		return $this->synchronized;
 	}
 
-	public function setId($v, $playerId) { 
-		$this->id = $v; 
-		if ($v == $playerId) {
-			$this->synchronized = TRUE;
-		}
+	public function setId($v) { 
+		$this->id = $v;
 	}
 	public function setBind($v) {
 		$this->bind = $v;

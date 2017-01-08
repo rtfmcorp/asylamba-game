@@ -11,11 +11,9 @@
  **/
 namespace Asylamba\Modules\Zeus\Manager;
 
-use Asylamba\Classes\Worker\Manager;
-
 use Asylamba\Classes\Worker\CTC;
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Classes\Worker\API;
 use Asylamba\Classes\Container\Session;
 
@@ -39,16 +37,15 @@ use Asylamba\Modules\Athena\Manager\TransactionManager;
 use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
 use Asylamba\Modules\Promethee\Manager\TechnologyManager;
 use Asylamba\Modules\Athena\Resource\ShipResource;
-use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Container\ArrayList;
 
 use Asylamba\Classes\Exception\ErrorException;
 
-class PlayerManager extends Manager {
-	/** @var string */
-	protected $managerType = '_Player';
+class PlayerManager {
+	/** @var EntityManager **/
+	protected $entityManager;
 	/** @var GalaxyColorManager **/
 	protected $galaxyColorManager;
 	/** @var SectorManager */
@@ -83,7 +80,7 @@ class PlayerManager extends Manager {
 	protected $playerTaxCoeff;
 	
 	/**
-	 * @param Database $database
+	 * @param EntityManager $entityManager
 	 * @param GalaxyColorManager $galaxyColorManager
 	 * @param SectorManager $sectorManager
 	 * @param NotificationManager $notificationManager
@@ -102,7 +99,7 @@ class PlayerManager extends Manager {
 	 * @param int $playerTaxCoeff
 	 */
 	public function __construct(
-		Database $database,
+		EntityManager $entityManager,
 		GalaxyColorManager $galaxyColorManager,
 		SectorManager $sectorManager,
 		NotificationManager $notificationManager,
@@ -121,7 +118,7 @@ class PlayerManager extends Manager {
 		$playerTaxCoeff
 	)
 	{
-		parent::__construct($database);
+		$this->entityManager = $entityManager;
 		$this->galaxyColorManager = $galaxyColorManager;
 		$this->sectorManager = $sectorManager;
 		$this->notificationManager = $notificationManager;
@@ -139,62 +136,145 @@ class PlayerManager extends Manager {
 		$this->playerBaseLevel = $playerBaseLevel;
 		$this->playerTaxCoeff = $playerTaxCoeff;
 	}
-			
-	public function load($where = array(), $order = array(), $limit = array()) {
-		$formatWhere = Utils::arrayToWhere($where, 'p.');
-		$formatOrder = Utils::arrayToOrder($order);
-		$formatLimit = Utils::arrayToLimit($limit);
-
-		$qr = $this->database->prepare('SELECT p.*
-			FROM player AS p
-			' . $formatWhere . '
-			' . $formatOrder . '
-			' . $formatLimit
-		);
-
-		foreach($where AS $v) {
-			if (is_array($v)) {
-				foreach ($v as $p) {
-					$valuesArray[] = $p;
-				}
-			} else {
-				$valuesArray[] = $v;
-			}
+	
+	/**
+	 * @param int $playerId
+	 * @return Player
+	 */
+	public function get($playerId)
+	{
+		if(($player = $this->entityManager->getRepository(Player::class)->get($playerId)) !== null) {
+			$this->fill($player);
 		}
-
-		if(empty($valuesArray)) {
-			$qr->execute();
-		} else {
-			$qr->execute($valuesArray);
-		}
-
-		$this->fill($qr);
+		return $player;
+	}
+	
+	/**
+	 * @param string $name
+	 * @return Player
+	 */
+	public function getByName($name)
+	{
+		return $this->entityManager->getRepository(PLayer::class)->getByName($name);
+	}
+	
+	/**
+	 * @param string $bindKey
+	 * @return Player
+	 */
+	public function getByBindKey($bindKey)
+	{
+		return $this->entityManager->getRepository(Player::class)->getByBindKey($bindKey);
+	}
+	
+	/**
+	 * @param int $id
+	 * @return array
+	 */
+	public function getGodSons($id)
+	{
+		return $this->entityManager->getRepository(Player::class)->getGodSons($id);
+	}
+	
+	/**
+	 * @param array $ids
+	 * @param array $statements
+	 */
+	public function getByIdsAndStatements($ids, $statements)
+	{
+		return $this->entityManager->getRepository(Player::class)->getByIdsAndStatements($ids, $statements);
+	}
+	
+	/**
+	 * @param array $statements
+	 * @return array
+	 */
+	public function getByStatements($statements)
+	{
+		return $this->entityManager->getRepository(Player::class)->getByStatements($statements);
+	}
+	
+	/**
+	 * @param int $factionId
+	 * @param array $statements
+	 * @return array
+	 */
+	public function getByFactionAndStatements($factionId, $statements)
+	{
+		return $this->entityManager->getRepository(Player::class)->getByFactionAndStatements($factionId, $statements);
+	}
+	
+	/**
+	 * @param int $factionId
+	 * @return array
+	 */
+	public function getFactionPlayersByRanking($factionId)
+	{
+		return $this->entityManager->getRepository(Player::class)->getFactionPlayersByRanking($factionId);
+	}
+	
+	/**
+	 * @param int $factionId
+	 * @return array
+	 */
+	public function getFactionPlayersByName($factionId)
+	{
+		return $this->entityManager->getRepository(Player::class)->getFactionPlayersByName($factionId);
+	}
+	
+	/**
+	 * @param int $factionId
+	 * @return Player
+	 */
+	public function getFactionAccount($factionId)
+	{
+		return $this->entityManager->getRepository(Player::class)->getFactionAccount($factionId);
+	}
+	
+	/**
+	 * @param int $factionId
+	 * @return array
+	 */
+	public function getParliamentMembers($factionId)
+	{
+		return $this->entityManager->getRepository(Player::class)->getParliamentMembers($factionId);
+	}
+	
+	/**
+	 * @param int $factionId
+	 * @param int $status
+	 * @return Player
+	 */
+	public function getGovernmentMember($factionId, $status)
+	{
+		return $this->entityManager->getRepository(Player::class)->getGovernmentMember($factionId, $status);
 	}
 
-	// public function loadFromFactionByRank($factionId) {
-	// 	$order = ['generalPosition', 'ASC'];
-
-	// 	$formatOrder = Utils::arrayToOrder($order);
-	// 	$formatLimit = Utils::arrayToLimit([]);
-
-	// 	$db = Database::getInstance();
-	// 	$qr = $db->prepare('SELECT p.*
-	// 		FROM playerRanking AS pl
-	// 		LEFT JOIN player AS p 
-	// 			ON pl.rPlayer = p.id
-	// 		WHERE p.rColor = ' . $factionId . '
-	// 		' . $formatOrder . '
-	// 		' . $formatLimit
-	// 	);
-
-	// 	if(empty($valuesArray)) {
-	// 		$qr->execute();
-	// 	} else {
-	// 		$qr->execute($valuesArray);
-	// 	}
-
-	// 	$this->fill($qr);
-	// }
+	/**
+	 * @param int $factionId
+	 * @return array
+	 */
+	public function getGovernmentMembers($factionId)
+	{
+		return $this->entityManager->getRepository(PLayer::class)->getGovernmentMembers($factionId);
+	}
+	
+	/**
+	 * @param int $factionId
+	 * @return Player
+	 */
+	public function getFactionLeader($factionId)
+	{
+		if (($leader = $this->entityManager->getRepository(Player::class)->getFactionLeader($factionId)) !== null) {
+			$this->fill($leader);
+		}
+		return $leader;
+	}
+	
+	public function getActivePlayers()
+	{
+		return $this->entityManager->getRepository(Player::class)->getActivePlayers();
+	}
 
 	public function search($search, $order = array(), $limit = array()) {
 		$search = '%' . $search . '%';
@@ -214,50 +294,16 @@ class PlayerManager extends Manager {
 		$this->fill($qr);
 	}
 
-	protected function fill($qr) {
-		$playerId = $this->session->get('playerId');
-		while ($aw = $qr->fetch()) {
-			$p = new Player();
-
-			$p->setId($aw['id'], $playerId);
-			$p->setBind($aw['bind']);
-			$p->setRColor($aw['rColor']);
-			$p->setName($aw['name']);
-			$p->sex = $aw['sex'];
-			$p->description = $aw['description'];
-			$p->setAvatar($aw['avatar']);
-			$p->setStatus($aw['status']);
-			$p->rGodfather = $aw['rGodfather'];
-			$p->setCredit($aw['credit']);
-			$p->uPlayer = $aw['uPlayer'];
-			$p->setExperience($aw['experience']);
-			$p->factionPoint = $aw['factionPoint'];
-			$p->setLevel($aw['level']);
-			$p->setVictory($aw['victory']);
-			$p->setDefeat($aw['defeat']);
-			$p->setStepTutorial($aw['stepTutorial']);
-			$p->stepDone = $aw['stepDone'];
-			$p->iUniversity = $aw['iUniversity'];
-			$p->partNaturalSciences = $aw['partNaturalSciences'];
-			$p->partLifeSciences = $aw['partLifeSciences'];
-			$p->partSocialPoliticalSciences = $aw['partSocialPoliticalSciences'];
-			$p->partInformaticEngineering = $aw['partInformaticEngineering'];
-			$p->setDInscription($aw['dInscription']);
-			$p->setDLastConnection($aw['dLastConnection']);
-			$p->setDLastActivity($aw['dLastActivity']);
-			$p->setPremium($aw['premium']);
-			$p->setStatement($aw['statement']);
-
-			$currentP = $this->_Add($p);
-
-			if ($currentP->isSynchronized()) {
-				$this->saveSessionData($currentP);
-			}
-			
-			if ($this->currentSession->getUMode()) {
-				$this->uMethod($currentP);
-			}
+	protected function fill(Player $player) {
+		if ($this->isSynchronized($player)) {
+			$this->saveSessionData($player);
 		}
+		$this->uMethod($player);
+	}
+	
+	public function isSynchronized(Player $player)
+	{
+		return ($player->getId() === $this->session->get('playerId'));
 	}
 	
 	/**
@@ -276,111 +322,9 @@ class PlayerManager extends Manager {
 		$this->session->get('playerInfo')->add('level', $player->getLevel());
 	}
 
-	public function add(Player $p) {
-		$qr = $this->database->prepare('INSERT INTO
-			player(bind, rColor, name, sex, description, avatar, status, rGodfather, credit, uPlayer, experience, factionPoint, level, victory, defeat, stepTutorial, stepDone, iUniversity, partNaturalSciences, partLifeSciences, partSocialPoliticalSciences, partInformaticEngineering, dInscription, dLastConnection, dLastActivity, premium, statement)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-		$qr->execute(array(
-			$p->getBind(),
-			$p->getRColor(),
-			$p->getName(),
-			$p->sex,
-			$p->description,
-			$p->getAvatar(),
-			$p->getStatus(),
-			$p->rGodfather,
-			$p->getCredit(),
-			$p->uPlayer,
-			$p->getExperience(),
-			$p->factionPoint,
-			$p->getLevel(),
-			$p->getVictory(),
-			$p->getDefeat(),
-			$p->getStepTutorial(),
-			$p->stepDone,
-			$p->iUniversity,
-			$p->partNaturalSciences,
-			$p->partLifeSciences,
-			$p->partSocialPoliticalSciences,
-			$p->partInformaticEngineering,
-			$p->getDInscription(),
-			$p->getDLastConnection(),
-			$p->getDLastActivity(),
-			$p->getPremium(),
-			$p->getStatement()
-		));
-
-		$p->setId($this->database->lastInsertId(), $this->session->get('playerId'));
-
-		$this->_Add($p);
-	}
-
-	public function save() {
-		$players = $this->_Save();
-
-		foreach ($players AS $p) {
-			$qr = $this->database->prepare('UPDATE player
-				SET	id = ?,
-					bind = ?,
-					rColor = ?,
-					name = ?,
-					sex = ?,
-					description = ?,
-					avatar = ?,
-					status = ?,
-					rGodfather = ?,
-					credit = ?,
-					uPlayer = ?,
-					experience = ?,
-					factionPoint = ?,
-					level = ?,
-					victory = ?,
-					defeat = ?,
-					stepTutorial = ?,
-					stepDone = ?,
-					iUniversity = ?,
-					partNaturalSciences = ?,
-					partLifeSciences = ?,
-					partSocialPoliticalSciences = ?,
-					partInformaticEngineering = ?,
-					dInscription = ?,
-					dLastConnection = ?,
-					dLastActivity = ?,
-					premium = ?,
-					statement = ?
-				WHERE id = ?');
-			$qr->execute(array(
-				$p->getId(),
-				$p->getBind(),
-				$p->getRColor(),
-				$p->getName(),
-				$p->sex,
-				$p->description,
-				$p->getAvatar(),
-				$p->getStatus(),
-				$p->rGodfather,
-				$p->getCredit(),
-				$p->uPlayer,
-				$p->getExperience(),
-				$p->factionPoint,
-				$p->getLevel(),
-				$p->getVictory(),
-				$p->getDefeat(),
-				$p->getStepTutorial(),
-				$p->stepDone,
-				$p->iUniversity,
-				$p->partNaturalSciences,
-				$p->partLifeSciences,
-				$p->partSocialPoliticalSciences,
-				$p->partInformaticEngineering,
-				$p->getDInscription(),
-				$p->getDLastConnection(),
-				$p->getDLastActivity(),
-				$p->getPremium(),
-				$p->getStatement(),
-				$p->getId()
-			));
-		}
+	public function add(Player $player) {
+		$this->entityManager->persist($player);
+		$this->entityManager->flush($player);
 	}
 
 	public static function deleteById($id) {
@@ -392,47 +336,34 @@ class PlayerManager extends Manager {
 		return TRUE;
 	}
 
-	public function kill($player) {
-		$S_PAM1 = $this->getCurrentSession();
-		$this->newSession(FALSE);
-		$this->load(array('id' => $player));
-		$p = $this->get();
+	public function kill($playerId) {
+		$player = $this->get($playerId);
 
 		# API call
 		$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
-		$api->playerIsDead($p->bind, APP_ID);
+		$api->playerIsDead($player->bind, APP_ID);
 
 		# check if there is no other player with the same dead-name
-		$futureName = '&#8224; ' . $p->name . ' ';
-		$S_PAM_INSCR = $this->getCurrentSession();
+		$futureName = '&#8224; ' . $player->name . ' ';
 		while(TRUE) {
-
-			$this->newSession(FALSE);
-			$this->load(array('name' => $futureName));
-
-			if ($this->size() == 0) {
+			if (($otherPlayer = $this->getByName($futureName)) === null) {
 				break;
-			} else {
-				# on ajoute un 'I' à chaque fois
-				$futureName .= 'I';
 			}
-		};
-		$this->changeSession($S_PAM_INSCR);
-
+			# on ajoute un 'I' à chaque fois
+			$futureName .= 'I';
+			$this->entityManager->clear($otherPlayer);
+		}
 		# deadify the player
-		$p->name = $futureName;
-		$p->statement = Player::DEAD;
-		$p->bind = NULL;
-		$p->rColor = 0;
+		$player->name = $futureName;
+		$player->statement = Player::DEAD;
+		$player->bind = NULL;
+		$player->rColor = 0;
 
-		$this->changeSession($S_PAM1);
+		$this->entityManager->flush();
 	}
 
-	public function reborn($player) {
-		$S_PAM1 = $this->getCurrentSession();
-		$this->newSession(FALSE);
-		$this->load(array('id' => $player));
-		$player = $this->get();
+	public function reborn($playerId) {
+		$player = $this->get($playerId);
 
 		# sector choice 
 		$S_SEM1 = $this->sectorManager->getCurrentSession();
@@ -532,33 +463,11 @@ class PlayerManager extends Manager {
 				->addTxt('Vous vous êtes malheureusement fait prendre votre dernière planète. Une nouvelle colonie vous a été attribuée')
 				->addEnd();
 			$this->notificationManager->add($notif);
+			$this->entityManager->flush();
 		} else {
 			# si on ne trouve pas de lieu pour le faire poper ou si la faction n'a plus de secteur, le joueur meurt
 			$this->kill($player);
 		}
-		$this->playerManager->changeSession($S_PAM1);
-	}
-
-	public function count($where = array()) {
-		$formatWhere = Utils::arrayToWhere($where);
-
-		$qr = $this->database->prepare('SELECT COUNT(id) AS nbr FROM player ' . $formatWhere);
-
-		$valuesArray = array();
-		foreach($where AS $v) {
-			if (is_array($v)) {
-				foreach ($v as $p) {
-					$valuesArray[] = $p;
-				}
-			} else {
-				$valuesArray[] = $v;
-			}
-		}
-
-		$qr->execute($valuesArray);
-		$aw = $qr->fetch();
-
-		return $aw['nbr'];
 	}
 
 	public function uMethod(Player $player) {
@@ -893,10 +802,10 @@ class PlayerManager extends Manager {
 		$this->researchManager->changeSession($S_RSM1);
 
 		$player->credit = $newCredit;
-		if ($player->isSynchronized()) {
+		if ($this->isSynchronized($player)) {
 			$this->session->get('playerInfo')->add('credit', $newCredit);
 		}
-
+		$this->entityManager->flush($player);
 		$this->orbitalBaseManager->changeSession($S_OBM1);
 	}
 
@@ -904,9 +813,10 @@ class PlayerManager extends Manager {
 	public function increaseCredit(Player $player, $credit) {
 		$player->credit += abs($credit);
 
-		if ($player->isSynchronized()) {
+		if ($this->isSynchronized($player)) {
 			$this->session->get('playerInfo')->add('credit', $player->credit);
 		}
+		$this->entityManager->flush($player);
 	}
 
 	public function decreaseCredit(Player $player, $credit) {
@@ -915,9 +825,10 @@ class PlayerManager extends Manager {
 		} else {
 			$player->credit -= abs($credit);
 		}
-		if ($player->isSynchronized()) {
+		if ($this->isSynchronized($player)) {
 			$this->session->get('playerInfo')->add('credit', $player->credit);
 		}
+		$this->entityManager->flush($player);
 	}
 
 	public function increaseExperience(Player $player, $exp) {
@@ -954,11 +865,8 @@ class PlayerManager extends Manager {
 			# parrainage : au niveau 3, le parrain gagne 1M crédits
 			if ($player->level == 3 AND $player->rGodfather != NULL) {
 				# add 1'000'000 credits to the godfather
-				$S_PAM1 = $this->getCurrentSession();
-				$this->newSession();
-				$this->load(array('id' => $player->rGodfather));
-				if ($this->size() == 1) {
-					$this->increaseCredit($this->get(), 1000000);
+				if (($godFather = $this->get($player->rGodfather)) !== null) {
+					$this->increaseCredit($godFather, 1000000);
 
 					# send a message to the godfather
 					$n = new Notification();
@@ -970,13 +878,14 @@ class PlayerManager extends Manager {
 					$n->addBrk()->addTxt('Vous venez de gagner 1\'000\'000 crédits. N\'hésitez pas à parrainer d\'autres personnes pour gagner encore plus.');
 					$n->addEnd();
 
+					$this->entityManager->flush($godFather);
 					$S_NTM2 = $this->notificationManager->getCurrentSession();
 					$this->notificationManager->newSession();
 					$this->notificationManager->add($n);
 					$this->notificationManager->changeSession($S_NTM2);
 				} 
-				$this->changeSession($S_PAM1);
 			}
 		}
+		$this->entityManager->flush($player);
 	}
 }
