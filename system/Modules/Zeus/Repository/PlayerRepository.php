@@ -115,11 +115,22 @@ class PlayerRepository extends AbstractRepository {
 	/**
 	 * @param int $factionId
 	 * @param array $statements
+	 * @return int
+	 */
+	public function countByFactionAndStatements($factionId, $statements)
+	{
+		$query = $this->connection->prepare('SELECT COUNT(*) as nb_players FROM player WHERE rColor = :faction_id AND statement IN (' . implode(',', $statements) . ')');
+		$query->execute(['faction_id' => $factionId]);
+		return (int) $query->fetch()['nb_players'];
+	}
+	
+	/**
+	 * @param int $factionId
 	 * @return array
 	 */
-	public function getByFactionAndStatements($factionId, $statements)
+	public function getFactionPlayers($factionId)
 	{
-		$query = $this->connection->prepare('SELECT * FROM player WHERE rColor = :faction_id AND statement IN (' . implode(',', $statements) . ')');
+		$query = $this->connection->prepare('SELECT * FROM player WHERE rColor = :faction_id');
 		$query->execute(['faction_id' => $factionId]);
 		
 		$data = [];
@@ -135,6 +146,10 @@ class PlayerRepository extends AbstractRepository {
 		return $data;
 	}
 	
+	/**
+	 * @param int $factionId
+	 * @return array
+	 */
 	public function getFactionPlayersByRanking($factionId)
 	{
 		$query = $this->connection->prepare('SELECT * FROM player WHERE rColor = :faction_id ORDER BY factionPoint DESC');
@@ -198,6 +213,28 @@ class PlayerRepository extends AbstractRepository {
 		$player = $this->format($row);
 		$this->unitOfWork->addObject($player);
 		return $player;
+	}
+	
+	/**
+	 * @param int $factionId
+	 * @return array
+	 */
+	public function getLastFactionPlayers($factionId)
+	{
+		$query = $this->connection->prepare('SELECT * FROM player WHERE rColor = :faction_id ORDER BY dInscription DESC LIMIT 0,25');
+		$query->execute(['faction_id' => $factionId]);
+		
+		$data = [];
+		while ($row = $query->fetch()) {
+			if (($p = $this->unitOfWork->getObject(Player::class, (int) $row['id'])) !== null) {
+				$data[] = $p;
+				continue;
+			}
+			$player = $this->format($row);
+			$this->unitOfWork->addObject($player);
+			$data[] = $player;
+		}
+		return $data;
 	}
 
 	/**

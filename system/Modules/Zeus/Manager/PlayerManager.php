@@ -199,9 +199,18 @@ class PlayerManager {
 	 * @param array $statements
 	 * @return array
 	 */
-	public function getByFactionAndStatements($factionId, $statements)
+	public function countByFactionAndStatements($factionId, $statements)
 	{
-		return $this->entityManager->getRepository(Player::class)->getByFactionAndStatements($factionId, $statements);
+		return $this->entityManager->getRepository(Player::class)->countByFactionAndStatements($factionId, $statements);
+	}
+	
+	/**
+	 * @param int $factionId
+	 * @return array
+	 */
+	public function getFactionPlayers($factionId)
+	{
+		return $this->entityManager->getRepository(Player::class)->getFactionPlayers($factionId);
 	}
 	
 	/**
@@ -229,6 +238,15 @@ class PlayerManager {
 	public function getFactionAccount($factionId)
 	{
 		return $this->entityManager->getRepository(Player::class)->getFactionAccount($factionId);
+	}
+	
+	/**
+	 * @param int $factionId
+	 * @return array
+	 */
+	public function getLastFactionPlayers($factionId)
+	{
+		return $this->entityManager->getRepository(Player::class)->getLastFactionPlayers($factionId);
 	}
 	
 	/**
