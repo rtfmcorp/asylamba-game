@@ -23,6 +23,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
 
 class TransactionManager extends Manager {
 	protected $managerType = '_Transaction';
