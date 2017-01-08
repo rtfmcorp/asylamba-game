@@ -76,11 +76,7 @@ class PlayerBonusManager
 		}
 
 		# load the color (faction id) of the player
-		$S_PAM1 = $this->playerManager->getCurrentSession();
-		$this->playerManager->newSession();
-		$this->playerManager->load(array('id' => $playerId));
-		$playerBonus->playerColor = $this->playerManager->get()->rColor;
-		$this->playerManager->changeSession($S_PAM1);
+		$playerBonus->playerColor = $this->playerManager->get($playerId)->rColor;
 
 		$playerBonus->bonus = new StackList();
 		
