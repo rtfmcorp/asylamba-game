@@ -193,7 +193,13 @@ echo '<div class="column act">';
 					);
 					foreach ($routes as $route) {
 						switch($route->getStatement()) {
-							case CommercialRoute::PROPOSED: $notAccepted = TRUE; break;
+							case CommercialRoute::PROPOSED:
+								if ($defaultBase->getId() === $route->getROrbitalBase()) {
+									$proposed = true;
+								} else {
+									$notAccepted = true;
+								}
+								break;
 							case CommercialRoute::ACTIVE: $sendResources = TRUE; break;
 							case CommercialRoute::STANDBY: $standby = TRUE; break;
 						}
