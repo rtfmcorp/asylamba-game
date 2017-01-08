@@ -42,12 +42,14 @@ class Application {
 		} catch (\Error $err) {
 			$errorEvent = new ErrorEvent($err);
 		}
-		$this->container->get('event_dispatcher')->dispatch($errorEvent);
-		$pastPath = $this->container->get('app.history')->getPastPath(1);
-		if (ob_get_level() !== 0) {
-			ob_end_clean();
+		if ($errorEvent !== null) {
+			$this->container->get('event_dispatcher')->dispatch($errorEvent);
+			$pastPath = $this->container->get('app.history')->getPastPath(1);
+			if (ob_get_level() !== 0) {
+				ob_end_clean();
+			}
+			header('Location: /' . (($pastPath !== null) ? $pastPath : ''));
 		}
-		header('Location: /' . (($pastPath !== null) ? $pastPath : ''));
     }
 	
 	public function configure()
