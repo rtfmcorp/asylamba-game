@@ -16,7 +16,7 @@ $playerManager = $this->getContainer()->get('zeus.player_manager');
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
 
-$rPlayer = $request->query->get('rplayer');
+$rPlayer = $request->request->get('rplayer');
 
 if ($statusArray = ColorResource::getInfo($session->get('playerInfo')->get('color'), 'regime') == Color::DEMOCRATIC) {
 	if ($session->get('playerInfo')->get('status') == Player::CHIEF) {
