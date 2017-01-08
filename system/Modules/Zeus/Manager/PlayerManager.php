@@ -310,22 +310,8 @@ class PlayerManager {
 		return $this->entityManager->getRepository(Player::class)->getActivePlayers();
 	}
 
-	public function search($search, $order = array(), $limit = array()) {
-		$search = '%' . $search . '%';
-		
-		$formatOrder = Utils::arrayToOrder($order);
-		$formatLimit = Utils::arrayToLimit($limit);
-
-		$qr = $this->database->prepare('SELECT p.*
-			FROM player AS p
-			WHERE LOWER(name) LIKE LOWER(?)
-			' . $formatOrder . ' 
-			' . $formatLimit
-		);
-
-		$qr->execute(array($search));
-
-		$this->fill($qr);
+	public function search($search) {
+		return $this->entityManager->getRepository(Player::class)->search($search);
 	}
 
 	protected function fill(Player $player) {
