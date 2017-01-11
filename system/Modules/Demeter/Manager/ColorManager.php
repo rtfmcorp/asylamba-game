@@ -599,7 +599,7 @@ class ColorManager extends Manager {
 			if ($color->regime == Color::DEMOCRATIC) {
 				$notif = new Notification();
 				$notif->dSending = Utils::now();
-				$notif->setRPlayer($this->playerManager->get()->id);
+				$notif->setRPlayer($newChief->id);
 				$notif->setTitle('Votre avez été élu');
 				$notif->addBeg()
 					->addTxt(' Le peuple vous a soutenu, vous avez été élu ' . $statusArray[Player::CHIEF - 1] . ' de votre faction.');
@@ -620,7 +620,7 @@ class ColorManager extends Manager {
 			} elseif ($color->regime == Color::ROYALISTIC) {
 				$notif = new Notification();
 				$notif->dSending = Utils::now();
-				$notif->setRPlayer($this->playerManager->get()->id);
+				$notif->setRPlayer($newChief->id);
 				$notif->setTitle('Votre coup d\'état a réussi');
 				$notif->addBeg()
 					->addTxt(' Le peuple vous a soutenu, vous avez renversé le ' . $statusArray[Player::CHIEF - 1] . ' de votre faction et avez pris sa place.');
@@ -633,7 +633,7 @@ class ColorManager extends Manager {
 					$notif->setTitle('Un coup d\'état a réussi');
 					$notif->addBeg()
 						->addTxt(' Le joueur ')
-						->addLnk('embassy/player-' . $this->playerManager->get()->id, $this->playerManager->get()->name)
+						->addLnk('embassy/player-' . $newChief->id, $newChief->name)
 						->addTxt(' a fait un coup d\'état, vous êtes évincé du pouvoir.');
 					$this->notificationManager->add($notif);
 				}
@@ -656,7 +656,7 @@ class ColorManager extends Manager {
 			} else {
 				$notif = new Notification();
 				$notif->dSending = Utils::now();
-				$notif->setRPlayer($this->playerManager->get()->id);
+				$notif->setRPlayer($newChief->id);
 				$notif->setTitle('Vous avez été nommé Guide');
 				$notif->addBeg()
 					->addTxt(' Les Oracles ont parlé, vous êtes désigné par la Grande Lumière pour guider Cardan vers la Gloire.');
@@ -708,6 +708,7 @@ class ColorManager extends Manager {
 					$this->notificationManager->add($notif);
 				}
 			}
+			$this->entityManager->flush();
 		}
 	}
 
