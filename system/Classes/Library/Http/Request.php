@@ -3,6 +3,7 @@
 namespace Asylamba\Classes\Library\Http;
 
 use Asylamba\Classes\Library\ParameterBag;
+use Asylamba\Classes\Container\Cookie;
 
 class Request {
 	/** @var string **/
@@ -19,7 +20,7 @@ class Request {
 	public $request;
 	/** @var ParameterBag **/
 	public $query;
-	/** @var ParameterBag **/
+	/** @var Cookie **/
 	public $cookies;
 	
 	public function __construct()
@@ -27,7 +28,7 @@ class Request {
 		$this->headers = new ParameterBag();
 		$this->request = new ParameterBag();
 		$this->query = new ParameterBag();
-		$this->cookies = new ParameterBag();
+		$this->cookies = new Cookie();
 	}
 	
 	public function initialize()
@@ -44,14 +45,6 @@ class Request {
 			}
 			$this->headers->set($key, $value);
 		}
-		
-		$cookieName = APP_NAME . '_' . SERVER_SESS;
-		if (isset($_COOKIE[$cookieName])) {
-            $data = unserialize($_COOKIE[$cookieName]);
-			foreach($data as $cookie => $value) {
-				$this->cookies->set($cookie, $value);
-			}
-        }
 	}
 
 	/**
