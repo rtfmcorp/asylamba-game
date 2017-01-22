@@ -47,7 +47,7 @@ services:
     athena.orbital_base_manager:
         class: Asylamba\Modules\Athena\Manager\OrbitalBaseManager
         arguments:
-            - "@database"
+            - "@entity_manager"
             - "@athena.building_queue_manager"
             - "@athena.ship_queue_manager"
             - "@promethee.technology_queue_manager"
