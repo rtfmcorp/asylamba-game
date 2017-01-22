@@ -9,12 +9,8 @@ $systemManager = $this->getContainer()->get('gaia.system_manager');
 $galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
 $sectorManager->load();
 
-$S_OBM_MAP = $orbitalBaseManager->getCurrentSession();
-$orbitalBaseManager->newSession();
-$orbitalBaseManager->load(array('rPlayer' => $session->get('playerId')));
-
-# base choice
-$defaultBase = $orbitalBaseManager->getById($session->get('playerParams')->get('base'));
+$playerBases = $orbitalBaseManager->getPlayerBases($session->get('playerId'));
+$defaultBase = $orbitalBaseManager->get($session->get('playerParams')->get('base'));
 
 # map default position
 $x = $defaultBase->getXSystem();
@@ -113,5 +109,3 @@ echo '>';
 	include 'mapElement/layer/systems.php';
 	include 'mapElement/layer/map-info.php';
 echo '</div>';
-
-$orbitalBaseManager->changeSession($S_OBM_MAP);

@@ -18,10 +18,7 @@ $technologyQueueManager = $this->getContainer()->get('promethee.technology_queue
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $technologyHelper = $this->getContainer()->get('promethee.technology_helper');
 
-$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-$orbitalBaseManager->newSession();
-$orbitalBaseManager->load(array('rPlace' => $session->get('playerParams')->get('base')));
-$currentBase = $orbitalBaseManager->get();
+$currentBase = $orbitalBaseManager->get($session->get('playerParams')->get('base'));
 
 # préparation du nombre d'attaque entrante
 $incomingAttack = [];
@@ -356,5 +353,3 @@ echo '<div id="tools">';
 		echo '<a href="' . APP_ROOT . 'fleet" class="more-link">vers l\'amirauté</a>';
 	echo '</div>';
 echo '</div>';
-
-$orbitalBaseManager->changeSession($S_OBM1);

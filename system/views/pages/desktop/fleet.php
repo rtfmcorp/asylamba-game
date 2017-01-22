@@ -94,21 +94,18 @@ echo '<div id="content">';
 			));
 			
 			if ($commanderManager->size() == 1) {
-				$S_OBM_DOCK = $orbitalBaseManager->getCurrentSession();
-				$orbitalBaseManager->newSession();
-				$orbitalBaseManager->load(array('rPlace' => $commanderManager->get()->getRBase()));
+				$base = $orbitalBaseManager->get($commanderManager->get()->getRBase());
 
 				# commanderDetail component
 				$commander_commanderDetail = $commanderManager->get();
 				$commander_commanderFleet = $commanderManager->get();
-				$ob_commanderFleet = $orbitalBaseManager->get();
+				$ob_commanderFleet = $base;
 				
 				# commanderFleet component
 				include COMPONENT . 'fleet/commanderFleet.php';
 				include COMPONENT . 'fleet/commanderDetail.php';
 
 				$commanderManager->changeSession($S_COM_ID);
-				$orbitalBaseManager->changeSession($S_OBM_DOCK);
 			} else {
 				throw new ErrorException('Cet officier ne vous appartient pas ou n\'existe pas');
 				//CTR::redirect('fleet');
@@ -118,8 +115,6 @@ echo '<div id="content">';
 		$commanderManager->changeSession($S_COM_UKN);
 	} elseif ($request->query->get('view') == 'overview') {
 		$S_COM_UKN = $commanderManager->getCurrentSession();
-		$S_OBM_UKN = $orbitalBaseManager->getCurrentSession();
-
 		# set d'orbitale base
 		$obsets = [];
 		for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
@@ -147,20 +142,18 @@ echo '<div id="content">';
 		}
 
 		# ship in dock
-		$orbitalBaseManager->newSession();
-		$orbitalBaseManager->load(['rPlayer' => $session->get('playerId')]);
+		$playerBases = $orbitalBaseManager->getPlayerBases(['rPlayer' => $session->get('playerId')]);
 
 		for ($i = 0; $i < count($obsets); $i++) {
-			for ($j = 0; $j < $orbitalBaseManager->size(); $j++) {
-				if ($orbitalBaseManager->get($j)->rPlace == $obsets[$i]['info']['id']) {
-					$obsets[$i]['dock'] = $orbitalBaseManager->get($j)->shipStorage;
+			foreach ($playerBases as $orbitalBase) {
+				if ($orbitalBase->rPlace == $obsets[$i]['info']['id']) {
+					$obsets[$i]['dock'] = $orbitalBase->shipStorage;
 				}
 			}
 		}
 
 		include COMPONENT . 'fleet/overview.php';
 
-		$orbitalBaseManager->changeSession($S_OBM_UKN);
 		$commanderManager->changeSession($S_COM_UKN);
 	} elseif ($request->query->get('view') == 'spyreport') {
 		# loading des objets

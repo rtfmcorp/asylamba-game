@@ -38,12 +38,8 @@ if (Utils::isAdmin($player->getBind())) {
 	$session->get('playerInfo')->add('admin', FALSE);
 }
 
-# remplissage des bases
-$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-$orbitalBaseManager->newSession();
-$orbitalBaseManager->load(array('rPlayer' => $player->getId()), array('dCreation', 'ASC'));
-for ($i = 0; $i < $orbitalBaseManager->size(); $i++) {
-	$base = $orbitalBaseManager->get($i);
+$playerBases = $orbitalBaseManager->getPlayerBases($player->getId());
+foreach ($playerBases as $base) {
 	$session->addBase(
 		'ob', $base->getId(), 
 		$base->getName(), 
@@ -53,8 +49,6 @@ for ($i = 0; $i < $orbitalBaseManager->size(); $i++) {
 		$base->typeOfBase
 	);
 }
-$orbitalBaseManager->changeSession($S_OBM1);
-
 # remplissage des bonus
 $playerBonusManager = $this->getContainer()->get('zeus.player_bonus_manager');
 $bonus = $playerBonusManager->getBonusByPlayer($player->getId());
@@ -70,13 +64,10 @@ $session->get('playerParams')->add('base', $session->get('playerBase')->get('ob'
 $session->initPlayerEvent();
 
 # remplissage des events
-$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-$orbitalBaseManager->newSession();
-$orbitalBaseManager->load(array('rPlayer' => $session->get('playerId')));
+$playerBases = $orbitalBaseManager->getPlayerBases($session->get('playerId'));
 $now = Utils::now();
-for ($i = 0; $i < $orbitalBaseManager->size(); $i++) { 
-	$baseId = $orbitalBaseManager->get($i)->getRPlace();
-
+foreach ($playerBases as $orbitalBase) { 
+	$baseId = $orbitalBase->getRPlace();
 	# check the building queues
 	$S_BQM1 = $buildingQueueManager->getCurrentSession();
 	$buildingQueueManager->newSession();
@@ -127,7 +118,6 @@ for ($i = 0; $i < $orbitalBaseManager->size(); $i++) {
 	}
 	$technologyQueueManager->changeSession($S_TQM1);
 }
-$orbitalBaseManager->changeSession($S_OBM1);
 
 # check the commanders (outgoing attacks)
 $S_COM1 = $commanderManager->getCurrentSession();

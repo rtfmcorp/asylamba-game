@@ -20,17 +20,9 @@ $recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_
 $technologyManager = $this->getContainer()->get('promethee.technology_manager');
 
 if ($request->query->has('relatedplace')) {
-	$S_OBM2 = $orbitalBaseManager->getCurrentSession();
-	$orbitalBaseManager->newSession();
-	$orbitalBaseManager->load(array('rPlace' => $request->query->get('relatedplace')));
-	
-	if ($orbitalBaseManager->size() == 1) {
-		$defaultBase = $orbitalBaseManager->get();
-	} else {
+	if (($defaultBase = $orbitalBaseManager->get($request->query->get('relatedplace'))) === null) {
 		$response->redirect('404');
 	}
-	
-	$orbitalBaseManager->changeSession($S_OBM2);
 }
 
 if (isset($defaultBase)) {

@@ -20,12 +20,7 @@ $dock = $request->query->get('dock');
 
 
 if ($baseId !== FALSE AND $dock !== FALSE AND in_array($baseId, $verif)) { 
-	$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-	$orbitalBaseManager->newSession(ASM_UMODE);
-	$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
-	if ($orbitalBaseManager->size() == 1) {
-		$base = $orbitalBaseManager->get();
-	} else {
+	if (($base = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) === null) {
 		$cancel = TRUE;
 		throw new ErrorException('modification du mode du dock impossible - base inconnue');
 	}
@@ -48,7 +43,6 @@ if ($baseId !== FALSE AND $dock !== FALSE AND in_array($baseId, $verif)) {
 			throw new ErrorException('modification du mode du dock impossible - dock inconnue');
 			break;
 	}
-	$orbitalBaseManager->changeSession($S_OBM1);
 } else {
 	throw new FormException('pas assez d\'informations pour changer le mode du dock');
 }

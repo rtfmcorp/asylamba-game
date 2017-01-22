@@ -475,20 +475,15 @@ class CommanderManager extends Manager {
 	}
 
 	public function emptySquadrons(Commander $commander) {
-		$S_OBM = $this->orbitalBaseManager->getCurrentSession();
-		$this->orbitalBaseManager->newSession();
-		$this->orbitalBaseManager->load(array('rPlace' => $commander->rBase));
-
-		if ($this->orbitalBaseManager->size() > 0) {
-			for ($i = 0; $i < count($commander->squadronsIds); $i++) {
-				for ($j = 0; $j < 12; $j++) {
-					$this->orbitalBaseManager->get()->setShipStorage($j, $this->orbitalBaseManager->get()->getShipStorage($j) + $commander->getSquadron($i)->getNbrShipByType($j));
-				}
-				$commander->getSquadron($i)->emptySquadron();
-			}
+		if (($orbitalBase = $this->orbitalBaseManager->get($commander->rBase)) === null) {
+			return;
 		}
-
-		$this->orbitalBaseManager->changeSession($S_OBM);
+		foreach ($commander->squadronsIds as $squadronId) {
+			for ($j = 0; $j < 12; $j++) {
+				$orbitalBase->setShipStorage($j, $orbitalBase->getShipStorage($j) + $commander->getSquadron($squadronId)->getNbrShipByType($j));
+			}
+			$commander->getSquadron($squadronId)->emptySquadron();
+		}
 	}
 
 	public function uExperienceInSchool(Commander $commander, $ob, $playerBonus) {
@@ -620,11 +615,7 @@ class CommanderManager extends Manager {
 			$nbrHours = Utils::intervalDates($now, $commander->uCommander);
 			$commander->uCommander = $now;
 
-			$S_OBM = $this->orbitalBaseManager->getCurrentSession();
-			$this->orbitalBaseManager->newSession();
-			$this->orbitalBaseManager->load(array('rPlace' => $commander->rBase));
-			$ob = $this->orbitalBaseManager->get();
-			$this->orbitalBaseManager->changeSession($S_OBM);
+			$orbitalBase = $this->orbitalBaseManager->get($commander->rBase);
                         
 			$playerBonus = 0;
 			if ($commander->rPlayer != $this->session->get('playerId')) {
@@ -637,7 +628,7 @@ class CommanderManager extends Manager {
 			}
 
 			foreach ($nbrHours as $hour) {
-				$this->ctc->add($hour, $this, 'uExperienceInSchool', $commander, array($commander, $ob, $playerBonus));
+				$this->ctc->add($hour, $this, 'uExperienceInSchool', $commander, array($commander, $orbitalBase, $playerBonus));
 			}
 		}
 

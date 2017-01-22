@@ -58,13 +58,8 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 		}
 
 		if ($color1->colorLink[$cr->playerColor2] != Color::ENEMY && $color2->colorLink[$cr->playerColor1] != Color::ENEMY) {
-			$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-			$orbitalBaseManager->newSession();
-			$orbitalBaseManager->load(array('rPlace' => $cr->getROrbitalBase()));
-			$proposerBase = $orbitalBaseManager->get();
-
-			$orbitalBaseManager->load(array('rPlace' => $cr->getROrbitalBaseLinked()));
-			$acceptorBase = $orbitalBaseManager->get(1);
+			$proposerBase = $orbitalBaseManager->get($cr->getROrbitalBase());
+			$acceptorBase = $orbitalBaseManager->get($cr->getROrbitalBaseLinked());
 			
 			$nbrMaxCommercialRoute = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $acceptorBase->getLevelSpatioport(), 'nbRoutesMax'); 
 			
@@ -120,7 +115,6 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 			} else {
 				throw new ErrorException('impossible d\'accepter une route commerciale');
 			}
-			$orbitalBaseManager->changeSession($S_OBM1);
 		} else {
 			throw new ErrorException('Vous ne pouvez pas accepter les routes de ce joueur, vos deux factions sont en guerre');
 		}

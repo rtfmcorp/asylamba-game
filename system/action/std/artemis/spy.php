@@ -94,10 +94,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 					break;
 				case Place::TYP_ORBITALBASE:
 					# orbitalBase
-					$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-					$orbitalBaseManager->newSession();
-					$orbitalBaseManager->load(array('rPlace' => $rPlace));
-					$orbitalBase = $orbitalBaseManager->get();
+					$orbitalBase = $orbitalBaseManager->get($rPlace);
 
 					$enemy = $playerManager->get($orbitalBase->rPlayer);
 					
@@ -159,10 +156,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 						default:
 							break;
 					}
-
 					$commanderManager->changeSession($S_COM1);
-					$orbitalBaseManager->changeSession($S_OBM1);
-
 					break;
 				default:
 					throw new ErrorException('espionnage pour vaisseau-mère pas encore implémenté');

@@ -110,11 +110,8 @@ class TutorialHelper {
 	public function isNextBuildingStepAlreadyDone($playerId, $buildingId, $level) {
 		$nextStepAlreadyDone = FALSE;
 
-		$S_OBM2 = $this->orbitalBaseManager->getCurrentSession();
-		$this->orbitalBaseManager->newSession();
-		$this->orbitalBaseManager->load(array('rPlayer' => $playerId));
-		for ($i = 0; $i < $this->orbitalBaseManager->size() ; $i++) { 
-			$orbitalBase = $this->orbitalBaseManager->get($i);
+		$playerBases = $this->orbitalBaseManager->getPlayerBases($playerId);
+		foreach ($playerBases as $orbitalBase) { 
 			if ($orbitalBase->getBuildingLevel($buildingId) >= $level) {
 				$nextStepAlreadyDone = TRUE;
 				break;
@@ -133,8 +130,6 @@ class TutorialHelper {
 				$this->buildingQueueManager->changeSession($S_BQM2);
 			}
 		}
-		$this->orbitalBaseManager->changeSession($S_OBM2);
-
 		return $nextStepAlreadyDone;
 	}
 

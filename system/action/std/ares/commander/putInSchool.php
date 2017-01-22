@@ -24,16 +24,14 @@ if ($commanderManager->size() !== 1) {
 }
 $commander = $commanderManager->get();
 
-$S_OBM = $orbitalBaseManager->getCurrentSession();
-$orbitalBaseManager->newSession();
-$orbitalBaseManager->load(array('rPlace' => $commander->rBase));
+$orbitalBase = $orbitalBaseManager->get($commander->rBase);
 
 if ($commander->statement == Commander::RESERVE) {
 	$S_COM2 = $commanderManager->getCurrentSession();
 	$commanderManager->newSession();
 	$commanderManager->load(array('c.rBase' => $commander->rBase, 'c.statement' => Commander::INSCHOOL));
 
-	if ($commanderManager->size() < PlaceResource::get($orbitalBaseManager->get()->typeOfBase, 'school-size')) {
+	if ($commanderManager->size() < PlaceResource::get($orbitalBase->typeOfBase, 'school-size')) {
 		$commander->statement = Commander::INSCHOOL;
 		$commander->uCommander = Utils::now();
 	} else {
@@ -47,5 +45,4 @@ if ($commander->statement == Commander::RESERVE) {
 } else {
 	throw new ErrorException('Vous ne pouvez rien faire avec cet officier.');
 }
-$orbitalBaseManager->changeSession($S_OBM);
 $commanderManager->changeSession($S_COM1);

@@ -38,16 +38,12 @@ $cn = new CheckName();
 $cn->maxLenght = 20;
 
 if ($baseId !== FALSE AND $school !== FALSE AND $name !== FALSE AND in_array($baseId, $verif)) {
-	$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-	$orbitalBaseManager->newSession();
-	$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
-
-	if ($orbitalBaseManager->size() > 0) {
+	if (($orbitalBase = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
 		$S_COM1 = $commanderManager->getCurrentSession();
 		$commanderManager->newSession();
 		$commanderManager->load(array('c.statement' => Commander::INSCHOOL, 'c.rBase' => $baseId));
 
-		if ($commanderManager->size() < PlaceResource::get($orbitalBaseManager->get()->typeOfBase, 'school-size')) {
+		if ($commanderManager->size() < PlaceResource::get($orbitalBase->typeOfBase, 'school-size')) {
 			$commanderManager->load(array('c.statement' => Commander::RESERVE, 'c.rBase' => $baseId));
 
 			if ($commanderManager->size() < OrbitalBase::MAXCOMMANDERINMESS) {
@@ -96,5 +92,4 @@ if ($baseId !== FALSE AND $school !== FALSE AND $name !== FALSE AND in_array($ba
 	} else {
 		throw new ErrorException('cette base ne vous appartient pas');
 	}
-	$orbitalBaseManager->changeSession($S_OBM1);
 }

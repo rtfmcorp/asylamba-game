@@ -1,10 +1,10 @@
 <?php
 # assign ship action
 
-# string direction 	'ctb' = commander to base / 'btc' = base to commander
-					# [commander] envoie [quantity] [ship] depuis son [squadron] a une [base]
-					# [base] envoie [quantity] [ship] a un [commander] sur son [squadron]
-# int base 			base id
+# string direction 	'ctb' = commander to orbitalBase / 'btc' = orbitalBase to commander
+					# [commander] envoie [quantity] [ship] depuis son [squadron] a une [orbitalBase]
+					# [orbitalBase] envoie [quantity] [ship] a un [commander] sur son [squadron]
+# int orbitalBase 			orbitalBase id
 # int ship  		ship id
 # int quantity		ship quantity
 # int commander		commander id
@@ -28,11 +28,11 @@ $quantity = $request->request->get('quantity');
 
 if (
     ($direction = $request->request->get('direction')) === null ||
-    ($baseId = $request->request->get('base')) === null ||
+    ($orbitalBaseId = $request->request->get('orbitalBase')) === null ||
     ($shipId = $request->request->get('ship')) === null ||
     ($commanderId = $request->request->get('commander')) === null ||
     ($squadron = $request->request->get('squadron')) === null ||
-    !in_array($baseId, $verif)
+    !in_array($orbitalBaseId, $verif)
 ) {
     throw new FormException('Pas assez d\'informations pour assigner un vaisseau');
 }
@@ -47,46 +47,43 @@ if ($quantity === null) {
 }
 
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_orbitalBase_manager');
 
-$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-$orbitalBaseManager->newSession();
-$orbitalBaseManager->load(array('rPlace' => $baseId));
+$orbitalBase = $orbitalBaseManager->get($orbitalBaseId);
 
 $S_COM1 = $commanderManager->getCurrentSession();
 $commanderManager->newSession();
-$commanderManager->load(array('c.id' => $commanderId, 'c.rBase' => $baseId));
+$commanderManager->load(array('c.id' => $commanderId, 'c.rBase' => $orbitalBaseId));
 
-if ($orbitalBaseManager->size() !== 1 || $commanderManager->size() !== 1) {
+if ($orbitalBase === null || $commanderManager->size() !== 1) {
     throw new ErrorException('Erreur dans les commandants ou la base.');
 }
 
-$base = $orbitalBaseManager->get();
 $commander = $commanderManager->get();
 
 if ($commander->statement !== Commander::AFFECTED) {
     throw new ErrorException('Cet officier ne peut être modifié.');	
 }
 
-if ($direction == 'ctb') { // commander to base
+if ($direction == 'ctb') { // commander to orbitalBase
     // if the commander has the quantity of ships required
     if ($commander->getSquadron($squadron)->getNbrShipByType($shipId) - $quantity >= 0) {
-            $base->setShipStorage($shipId, ($base->getShipStorage($shipId) + $quantity));
+            $orbitalBase->setShipStorage($shipId, ($orbitalBase->getShipStorage($shipId) + $quantity));
             $commander->getSquadron($squadron)->updateShip($shipId, -$quantity);
-            # $alert->add('Vaisseau(x) envoyé(s) à la base.', ALERT_BUG_SUCCESS);
+            # $alert->add('Vaisseau(x) envoyé(s) à la orbitalBase.', ALERT_BUG_SUCCESS);
     } else {
             throw new ErrorException('L\'escadrille n\'a pas autant de vaisseaux !');
     }
-} else {							// base to commander
-    // if the base has the quantity of ships required
-    if ($base->getShipStorage($shipId) - $quantity < 0) {
+} else {							// orbitalBase to commander
+    // if the orbitalBase has the quantity of ships required
+    if ($orbitalBase->getShipStorage($shipId) - $quantity < 0) {
         throw new ErrorException('La base n\'a pas autant de vaisseaux !');
     }
     // if it's enough PEV space in the commander
     if (($commander->getSquadron($squadron)->getPev() + (ShipResource::getInfo($shipId, 'pev') * $quantity)) > 100) {
         throw new ErrorException('Il n\'y a pas assez de place dans l\'escadrille pour ces vaisseaux.');
     }
-    $base->setShipStorage($shipId, ($base->getShipStorage($shipId) - $quantity));
+    $orbitalBase->setShipStorage($shipId, ($orbitalBase->getShipStorage($shipId) - $quantity));
     $commander->getSquadron($squadron)->updateShip($shipId, $quantity);
     # $alert->add('Vaisseau(x) envoyé(s) dans l\'escadrille.', ALERT_BUG_SUCCESS);
 
@@ -96,4 +93,3 @@ if ($direction == 'ctb') { // commander to base
     }
 }
 $commanderManager->changeSession($S_COM1);
-$orbitalBaseManager->changeSession($S_OBM1);

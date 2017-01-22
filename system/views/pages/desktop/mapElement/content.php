@@ -3,7 +3,6 @@
 use Asylamba\Classes\Container\Params;
 
 $request = $this->getContainer()->get('app.request');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
 $sectorManager = $this->getContainer()->get('gaia.sector_manager');
 
@@ -27,8 +26,7 @@ echo '<div id="map-content" ' . ($request->cookies->get('p' . Params::SHOW_MAP_M
 			}
 		echo '</div>';
 		echo '<svg class="bases" viewBox="0, 0, 400, 400" xmlns="http://www.w3.org/2000/svg">';
-			for ($i = 0; $i < $orbitalBaseManager->size(); $i++) {
-				$base = $orbitalBaseManager->get($i);
+			foreach ($playerBases as $base) {
 				echo '<circle cx="' . ($base->getXSystem() * $rate) . '" cy="' . ($base->getYSystem() * $rate) . '" r="4" />';
 			}
 		echo '</svg>';

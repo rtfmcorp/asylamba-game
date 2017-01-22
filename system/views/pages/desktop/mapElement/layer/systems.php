@@ -3,7 +3,6 @@
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
 $sectorManager = $this->getContainer()->get('gaia.sector_manager');
 
@@ -14,8 +13,8 @@ echo '<div id="systems">';
 
 	# own bases
 	$basesId = array();
-	for ($i = 0; $i < $orbitalBaseManager->size(); $i++) { 
-		$basesId[]  = $orbitalBaseManager->get($i)->getSystem();
+	foreach ($playerBases as $base) { 
+		$basesId[]  = $base->getSystem();
 	}
 
 	foreach ($aw as $system) {

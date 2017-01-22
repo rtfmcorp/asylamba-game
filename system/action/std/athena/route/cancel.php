@@ -29,12 +29,8 @@ $route = $request->query->get('route');
 if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 	$cr = $commercialRouteManager->getByIdAndBase($route, $base);
 	if ($cr !== null && $cr->getStatement() == CommercialRoute::PROPOSED) {
-		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-		$orbitalBaseManager->newSession(ASM_UMODE);
-		$orbitalBaseManager->load(array('rPlace' => $cr->getROrbitalBase()));
-		$proposerBase = $orbitalBaseManager->get();
-		$orbitalBaseManager->load(array('rPlace' => $cr->getROrbitalBaseLinked()));
-		$linkedBase = $orbitalBaseManager->get(1);
+		$proposerBase = $orbitalBaseManager->get($cr->getROrbitalBase());
+		$linkedBase = $orbitalBaseManager->get($cr->getROrbitalBaseLinked());
 
 		//rend 80% des crédits investis
 		$playerManager->increaseCredit($playerManager->get($session->get('playerId')), round($cr->getPrice() * $routeCancelRefund));
@@ -53,7 +49,6 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 		//destruction de la route
 		$commercialRouteManager->remove($cr);
 		$session->addFlashbag('Route commerciale annulée. Vous récupérez les ' . $routeCancelRefund * 100 . '% du montant investi.', Flashbag::TYPE_SUCCESS);
-		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
 		throw new ErrorException('impossible d\'annuler une route commerciale');
 	}

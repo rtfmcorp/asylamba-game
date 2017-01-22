@@ -26,14 +26,7 @@ $building = $request->query->get('building');
 
 if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 	if ($orbitalBaseHelper->isABuilding($building)) {
-		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-		$orbitalBaseManager->newSession();
-		$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
-
-		if ($orbitalBaseManager->size() > 0) {
-
-			$ob = $orbitalBaseManager->get();
-
+		if (($ob = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
 			$S_BQM1 = $buildingQueueManager->getCurrentSession();
 			$buildingQueueManager->newSession();
 			$buildingQueueManager->load(array('rOrbitalBase' => $baseId), array('dEnd'));
@@ -80,7 +73,6 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 		} else {
 			throw new ErrorException('cette base ne vous appartient pas');
 		}
-		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
 		throw new ErrorException('le bâtiment indiqué n\'est pas valide');
 	}

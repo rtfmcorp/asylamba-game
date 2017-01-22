@@ -52,14 +52,7 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 					$targetLevel++;
 				}
 			}
-
-			$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-			$orbitalBaseManager->newSession(ASM_UMODE);
-			$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
-
-			if ($orbitalBaseManager->size() > 0) {
-				$ob = $orbitalBaseManager->get();
-
+			if (($ob = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
 				$S_RSM1 = $researchManager->getCurrentSession();
 				$researchManager->newSession(ASM_UMODE);
 				$researchManager->load(array('rPlayer' => $session->get('playerId')));
@@ -140,7 +133,6 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 			} else {
 				throw new ErrorException('cette base ne vous appartient pas');	
 			}
-			$orbitalBaseManager->changeSession($S_OBM1);
 		} else {
 			throw new ErrorException('Cette technologie est déjà en construction');
 		}
