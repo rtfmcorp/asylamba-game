@@ -24,14 +24,8 @@ $name = $request->request->get('name');
 $p = $this->getContainer()->get('parser');
 $name = $p->protect($name);
 
-if ($baseId !== FALSE AND $name !== FALSE AND in_array($baseId, $verif)) { 
-	$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-	$orbitalBaseManager->newSession(ASM_UMODE);
-	$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
-
-	if ($orbitalBaseManager->size() > 0) {
-		$orbitalBase = $orbitalBaseManager->get();
-
+if ($baseId !== FALSE AND $name !== FALSE AND in_array($baseId, $verif)) {
+	if (($orbitalBase = $orbitalBaseManager->get($baseId, $session->get('playerId'))) !== null) {
 		$check = new CheckName();
 		$check->setMaxLength(20); 
 
@@ -55,7 +49,6 @@ if ($baseId !== FALSE AND $name !== FALSE AND in_array($baseId, $verif)) {
 	} else {
 		throw new ErrorException('cette base ne vous appartient pas');
 	}
-	$orbitalBaseManager->changeSession($S_OBM1);
 } else {
 	throw new FormException('pas assez d\'informations pour changer le nom de la base orbitale');
 }

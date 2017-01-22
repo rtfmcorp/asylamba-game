@@ -35,11 +35,7 @@ if ($rTransaction !== FALSE) {
 	$commercialShipping = $commercialShippingManager->get();
 
 	if ($transactionManager->size() == 1 AND $commercialShippingManager->size() == 1 AND $transaction->statement == Transaction::ST_PROPOSED AND $transaction->rPlayer == $session->get('playerId')) {
-
-		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-		$orbitalBaseManager->newSession(ASM_UMODE);
-		$orbitalBaseManager->load(array('rPlace' => $transaction->rPlace));
-		$base = $orbitalBaseManager->get();
+		$base = $orbitalBaseManager->get($transaction->rPlace);
 
 		if ($session->get('playerInfo')->get('credit') >= $transaction->getPriceToCancelOffer()) {
 			if (($player = $playerManager->get($session->get('playerId'))) !== null) {
@@ -106,7 +102,6 @@ if ($rTransaction !== FALSE) {
 		} else {
 			throw new ErrorException('vous n\'avez pas assez de crédits pour annuler la proposition');
 		}
-		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
 		throw new ErrorException('impossible d\'annuler une proposition sur le marché');
 	}

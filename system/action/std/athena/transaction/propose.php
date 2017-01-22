@@ -82,11 +82,7 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 			throw new ErrorException('Le prix que vous avez fixé est trop haut. Une limite supérieure est fixée selon la catégorie de la vente.');
 		} else {
 			$valid = TRUE;
-
-			$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-			$orbitalBaseManager->newSession(ASM_UMODE);
-			$orbitalBaseManager->load(array('rPlace' => $rPlace));
-			$base = $orbitalBaseManager->get();
+			$base = $orbitalBaseManager->get($rPlace);
 
 			if ($valid) {
 				# verif : have we enough commercialShips
@@ -198,7 +194,6 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 			} else {
 				throw new ErrorException('impossible de faire une proposition sur le marché !');
 			}
-			$orbitalBaseManager->changeSession($S_OBM1);
 		}
 	} else {
 		throw new ErrorException('impossible de faire une proposition sur le marché');

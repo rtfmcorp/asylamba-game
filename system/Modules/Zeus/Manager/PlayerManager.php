@@ -501,9 +501,7 @@ class PlayerManager {
 				$player->uPlayer = $now;
 
 				# load orbital bases
-				$S_OBM1 = $this->orbitalBaseManager->getCurrentSession();
-				$this->orbitalBaseManager->newSession();
-				$this->orbitalBaseManager->load(array('rPlayer' => $player->id));
+				$playerBases = $this->orbitalBaseManager->getPlayerBases($player->id);
 
 				# load the bonus
 				$playerBonus = $this->playerBonusManager->getBonusByPlayer($player->id);
@@ -537,23 +535,19 @@ class PlayerManager {
 				$this->transactionManager->load(array('rPlayer' => $player->id, 'type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_PROPOSED));
 
 				foreach ($hours as $key => $hour) {
-					$this->ctc->add($hour, $this, 'uCredit', $player, array($player, $this->orbitalBaseManager->getCurrentSession(), $playerBonus, $this->commanderManager->getCurrentSession(), $this->researchManager->getCurrentSession(), $this->colorManager->getCurrentSession(), $this->transactionManager->getCurrentSession()));
+					$this->ctc->add($hour, $this, 'uCredit', $player, array($player, $playerBases, $playerBonus, $this->commanderManager->getCurrentSession(), $this->researchManager->getCurrentSession(), $this->colorManager->getCurrentSession(), $this->transactionManager->getCurrentSession()));
 				}
 				$this->transactionManager->changeSession($S_TRM1);
 				$this->colorManager->changeSession($S_CLM1);
 				$this->researchManager->changeSession($S_RSM1);
 				$this->commanderManager->changeSession($S_COM1);
-				$this->orbitalBaseManager->changeSession($S_OBM1);
 			}
 			$this->ctc->applyContext($token);
 		}
 	}
 
-	public function uCredit(Player $player, $obmSession, $playerBonus, $comSession, $rsmSession, $clmSession, $trmSession) {
+	public function uCredit(Player $player, $playerBases, $playerBonus, $comSession, $rsmSession, $clmSession, $trmSession) {
 		
-		$S_OBM1 = $this->orbitalBaseManager->getCurrentSession();
-		$this->orbitalBaseManager->changeSession($obmSession);
-
 		$popTax = 0; $nationTax = 0;
 		$credits = $player->credit;
 		$schoolInvests = 0; $antiSpyInvests = 0;
@@ -570,8 +564,7 @@ class PlayerManager {
 		$S_CLM1 = $this->colorManager->getCurrentSession();
 		$this->colorManager->changeSession($clmSession);
 		
-		for ($i = 0; $i < $this->orbitalBaseManager->size(); $i++) {
-			$base = $this->orbitalBaseManager->get($i);
+		foreach ($playerBases as $base) {
 			$popTax = Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase, $this->playerTaxCoeff);
 			$popTax += $popTax * $playerBonus->bonus->get(PlayerBonus::POPULATION_TAX) / 100;
 			$nationTax = $base->tax * $popTax / 100;
@@ -634,9 +627,7 @@ class PlayerManager {
 
 				$naturalTech = 0; $lifeTech = 0; $socialTech = 0; $informaticTech = 0;
 
-				for ($i = 0; $i < $this->orbitalBaseManager->size(); $i++) {
-					$orbitalBase = $this->orbitalBaseManager->get($i);
-
+				foreach ($playerBases as $orbitalBase) {
 					$newISchool = ceil($orbitalBase->getISchool() * $ratioDifference / 100);
 					$newIAntiSpy = ceil($orbitalBase->getIAntiSpy() * $ratioDifference / 100);
 
@@ -762,8 +753,7 @@ class PlayerManager {
 		}
 		$this->commanderManager->changeSession($S_COM1);
 		# vaisseaux sur la planète
-		for ($i = 0; $i < $this->orbitalBaseManager->size(); $i++) {
-			$base = $this->orbitalBaseManager->get($i);
+		foreach ($playerBases as $base) {
 			$cost = Game::getFleetCost($base->shipStorage, FALSE);
 
 			if ($newCredit >= $cost) {
@@ -827,7 +817,6 @@ class PlayerManager {
 			$this->session->get('playerInfo')->add('credit', $newCredit);
 		}
 		$this->entityManager->flush($player);
-		$this->orbitalBaseManager->changeSession($S_OBM1);
 	}
 
 	// OBJECT METHOD

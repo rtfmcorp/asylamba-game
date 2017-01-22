@@ -29,9 +29,7 @@ if ($commanderManager->size() !== 1) {
 }
 $commander = $commanderManager->get();
 
-$S_OBM = $orbitalBaseManager->getCurrentSession();
-$orbitalBaseManager->newSession();
-$orbitalBaseManager->load(array('rPlace' => $commander->rBase));
+$orbitalBase = $orbitalBaseManager->get($commander->rBase);
 
 # checker si on a assez de place !!!!!
 if ($commander->line == 1) {
@@ -40,7 +38,7 @@ if ($commander->line == 1) {
 	$commanderManager->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 2));
 	$nbrLine2 = $commanderManager->size();
 
-	if ($nbrLine2 < PlaceResource::get($orbitalBaseManager->get()->typeOfBase, 'r-line')) {
+	if ($nbrLine2 < PlaceResource::get($orbitalBase->typeOfBase, 'r-line')) {
 		$commander->line = 2;
 
 		$response->redirect();
@@ -63,7 +61,7 @@ if ($commander->line == 1) {
 		$tutorialHelper->setStepDone();
 	}
 
-	if ($nbrLine1 < PlaceResource::get($orbitalBaseManager->get()->typeOfBase, 'l-line')) {
+	if ($nbrLine1 < PlaceResource::get($orbitalBase->typeOfBase, 'l-line')) {
 		$commander->line = 1;
 
 		$response->redirect();
@@ -77,6 +75,4 @@ if ($commander->line == 1) {
 }
 
 $commanderManager->changeSession($S_COM2);
-$orbitalBaseManager->changeSession($S_OBM);
-
 $commanderManager->changeSession($S_COM1);

@@ -47,11 +47,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 	$commercialShipping = $commercialShippingManager->get();
 
 	if ($transactionManager->size() == 1 AND $commercialShippingManager->size() == 1 AND $transaction->statement == Transaction::ST_PROPOSED) {
-
-		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-		$orbitalBaseManager->newSession(ASM_UMODE);
-		$orbitalBaseManager->load(array('rPlace' => $rPlace));
-		$base = $orbitalBaseManager->get();
+		$base = $orbitalBaseManager->get($rPlace);
 
 		$exportTax = 0;
 		$importTax = 0;
@@ -164,7 +160,6 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 			throw new ErrorException('vous n\'avez pas assez de crédits pour accepter cette proposition');
 		}
 		$commercialTaxManager->changeSession($S_CTM1);
-		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
 		throw new ErrorException('erreur dans les propositions sur le marché');
 	}

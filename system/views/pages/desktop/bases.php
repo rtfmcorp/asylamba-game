@@ -12,10 +12,7 @@ $recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_
 $recyclingLogManager = $this->getContainer()->get('athena.recycling_log_manager');
 
 # choix de la base
-$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-$orbitalBaseManager->newSession();
-$orbitalBaseManager->load(array('rPlace' => $session->get('playerParams')->get('base')));
-$base = $orbitalBaseManager->get(0);
+$base = $orbitalBaseManager->get($session->get('playerParams')->get('base'));
 
 # background paralax
 echo '<div id="background-paralax" class="bases"></div>';
@@ -108,5 +105,3 @@ echo '<div id="content">';
 		$this->getContainer()->get('app.response')->redirect('bases');
 	}
 echo '</div>';
-
-$commanderManager->changeSession($S_OBM1);

@@ -22,15 +22,7 @@ $missionId = $request->query->get('id');
 $rPlace = $request->query->get('place');
 
 if ($missionId !== FALSE AND $rPlace !== FALSE AND in_array($rPlace, $verif)) {
-	
-	$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-	$orbitalBaseManager->newSession(ASM_UMODE);
-	$orbitalBaseManager->load(array('rPlace' => $rPlace));
-
-	if ($orbitalBaseManager->size() == 1) {
-		$base = $orbitalBaseManager->get();
-
-
+	if (($base = $orbitalBaseManager->get($rPlace)) !== null) {
 		$S_REM1 = $recyclingMissionManager->getCurrentSession();
 		$recyclingMissionManager->newSession(ASM_UMODE);
 		$recyclingMissionManager->load(array('id' => $missionId, 'rBase' => $rPlace, 'statement' => RecyclingMission::ST_ACTIVE));
@@ -45,7 +37,6 @@ if ($missionId !== FALSE AND $rPlace !== FALSE AND in_array($rPlace, $verif)) {
 	} else {
 		throw new ErrorException('cette base orbitale ne vous appartient pas');
 	}
-	$orbitalBaseManager->changeSession($S_OBM1);
 } else {
 	throw new FormException('pas assez d\'informations pour supprimer une mission de recyclage');
 }

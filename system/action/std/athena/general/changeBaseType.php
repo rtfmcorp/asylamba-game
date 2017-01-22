@@ -36,13 +36,7 @@ $type = $request->query->get('type');
 
 
 if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
- 	$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-	$orbitalBaseManager->newSession();
-	$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
-
-	if ($orbitalBaseManager->size() > 0) {
-		$orbitalBase = $orbitalBaseManager->get();
-		
+	if (($orbitalBase = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
 		$player = $playerManager->get($session->get('playerId'));
 
 		if ($orbitalBase->typeOfBase == OrbitalBase::TYP_NEUTRAL) {
@@ -112,18 +106,14 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 		} elseif ($orbitalBase->typeOfBase == OrbitalBase::TYP_COMMERCIAL OR $orbitalBase->typeOfBase == OrbitalBase::TYP_MILITARY) {
 			if ($type == OrbitalBase::TYP_CAPITAL) {
 				if ($orbitalBase->levelGenerator >= $baseMinLevelForCapital) {
-					$S_OBM2 = $orbitalBaseManager->getCurrentSession();
-					$orbitalBaseManager->newSession();
-					$orbitalBaseManager->load(array('rPlayer' => $session->get('playerId')));
+					$playerBases = $orbitalBaseManager->getPlayerBases($session->get('playerId'));
 					
 					$capitalQuantity = 0;
-					for ($i = 0; $i < $orbitalBaseManager->size(); $i++) { 
-						if ($orbitalBaseManager->get($i)->typeOfBase == OrbitalBase::TYP_CAPITAL) {
+					foreach ($playerBases as $playerBase) { 
+						if ($playerBase->typeOfBase == OrbitalBase::TYP_CAPITAL) {
 							$capitalQuantity++;
 						}
 					}
-					$orbitalBaseManager->changeSession($S_OBM2);
-
 					if ($capitalQuantity == 0) {
 						$totalPrice = PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'price');
 						if ($player->credit >= $totalPrice) {
@@ -478,7 +468,6 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 	} else {
 		throw new ErrorException('cette base ne vous appartient pas');
 	}
-	$orbitalBaseManager->changeSession($S_OBM1);
 } else {
 	throw new FormException('pas assez d\'informations pour changer le type de la base orbitale');
 }

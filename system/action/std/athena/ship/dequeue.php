@@ -27,13 +27,7 @@ $dock = $request->query->get('dock');
 
 if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($baseId, $verif)) {
 	if (intval($dock) > 0 AND intval($dock) < 4) {
-		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-		$orbitalBaseManager->newSession(ASM_UMODE);
-		$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
-
-		if ($orbitalBaseManager->size() > 0) {
-			$ob = $orbitalBaseManager->get();
-
+		if (($ob = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
 			$S_SQM1 = $shipQueueManager->getCurrentSession();
 			$shipQueueManager->newSession();
 			$shipQueueManager->load(array('rOrbitalBase' => $baseId, 'dockType' => $dock), array('dEnd'));
@@ -85,7 +79,6 @@ if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($bas
 		} else {
 			throw new ErrorException('cette base ne vous appartient pas');	
 		}
-		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
 		throw new ErrorException('suppression de vaisseau impossible - chantier invalide');
 	}

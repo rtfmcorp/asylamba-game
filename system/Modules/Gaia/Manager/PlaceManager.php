@@ -441,12 +441,7 @@ class PlaceManager extends Manager {
 
 								if ($place->rPlayer != NULL) {
 									$placePlayer = $this->playerManager->get($place->rPlayer);
-
-									$S_OBM_L1 = $this->orbitalBaseManager->getCurrentSession();
-									$this->orbitalBaseManager->newSession();
-									$this->orbitalBaseManager->load(['rPlace' => $place->id]);
-									$placeBase = $this->orbitalBaseManager->get();
-									$this->orbitalBaseManager->changeSession($S_OBM_L1);
+									$placeBase = $this->orbitalBaseManager->get($place->id);
 								} else {
 									$placePlayer = NULL;
 									$placeBase = NULL;
@@ -473,11 +468,7 @@ class PlaceManager extends Manager {
 								if ($place->rPlayer != NULL) {
 									$placePlayer = $this->playerManager->get($place->rPlayer);
 
-									$S_OBM_C1 = $this->orbitalBaseManager->getCurrentSession();
-									$this->orbitalBaseManager->newSession();
-									$this->orbitalBaseManager->load(array('rPlace' => $place->id));
-									$placeBase = $this->orbitalBaseManager->get();
-									$this->orbitalBaseManager->changeSession($S_OBM_C1);
+									$placeBase = $this->orbitalBaseManager->get($place->id);
 
 									$S_REM_C1 = $this->recyclingMissionManager->getCurrentSession();
 									$this->recyclingMissionManager->newSession();
@@ -512,12 +503,7 @@ class PlaceManager extends Manager {
 							break;
 
 							case Commander::BACK: 
-								$S_OBM_B1 = $this->orbitalBaseManager->getCurrentSession();
-
-								$this->orbitalBaseManager->newSession();
-								$this->orbitalBaseManager->load(array('rPlace' => $commander->getRBase()));
-								$base = $this->orbitalBaseManager->get();
-								$this->orbitalBaseManager->changeSession($S_OBM_B1);
+								$base = $this->orbitalBaseManager->get($commander->getRBase());
 								
 								if ($this->ctc->add($commander->dArrival, $this, 'uComeBackHome', $place, array($place, $commander, $base))) {
 									$commander->uMethodCtced = TRUE;
@@ -938,10 +924,7 @@ class PlaceManager extends Manager {
 				$ob->dCreation = Utils::now();
 				$this->orbitalBaseManager->updatePoints($ob);
 
-				$_OBM_UC1 = $this->orbitalBaseManager->getCurrentSession();
-				$this->orbitalBaseManager->newSession();
 				$this->orbitalBaseManager->add($ob);
-				$this->orbitalBaseManager->changeSession($_OBM_UC1);
 
 				# attibuer le commander à la place
 				$commander->rBase = $place->id;

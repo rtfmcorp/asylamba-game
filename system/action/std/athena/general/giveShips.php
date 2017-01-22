@@ -51,13 +51,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND in_array($baseId, $verif)) 
 		}
 
 		if (isset($shipType) AND isset($ships)) {
-			$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-			$orbitalBaseManager->newSession(ASM_UMODE);
-			$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
-
-			if ($orbitalBaseManager->size() > 0) {
-				$orbitalBase = $orbitalBaseManager->get();
-
+			if (($orbitalBase = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
 				if (ShipResource::isAShipFromDock1($shipType) OR ShipResource::isAShipFromDock2($shipType)) {
 					if ($ships > 0) {
 						if ($orbitalBase->getShipStorage($shipType) >= $ships) {
@@ -77,10 +71,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND in_array($baseId, $verif)) 
 							$remainingShips = $totalShips - $usedShips;
 
 							if ($remainingShips >= $commercialShipQuantity) {
-								$orbitalBaseManager->load(array('rPlace' => $otherBaseId));
-								if ($orbitalBaseManager->size() == 2) {
-									$otherBase = $orbitalBaseManager->get(1);
-
+								if (($otherBase = $orbitalBaseManager->get($otherBaseId)) !== null) {
 									# load places to compute travel time
 									$S_PLM1 = $placeManager->getCurrentSession();
 									$placeManager->newSession();
@@ -162,7 +153,6 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND in_array($baseId, $verif)) 
 			} else {
 				throw new ErrorException('cette base ne vous appartient pas');
 			}
-			$orbitalBaseManager->changeSession($S_OBM1);
 		} else {
 			throw new ErrorException('erreur système');
 		}

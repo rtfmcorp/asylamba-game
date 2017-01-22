@@ -36,13 +36,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_
 
 		$resource = intval($quantity);
 
-		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-		$orbitalBaseManager->newSession(ASM_UMODE);
-		$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
-
-		if ($orbitalBaseManager->size() > 0) {
-			$orbitalBase = $orbitalBaseManager->get();
-
+		if (($orbitalBase = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
 			if ($resource > 0) {
 				if ($orbitalBase->getResourcesStorage() >= $resource) {
 					//---------------------------
@@ -64,11 +58,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_
 					$commercialShipQuantity = Game::getCommercialShipQuantityNeeded(Transaction::TYP_RESOURCE, $resource);
 
 					if ($remainingShips >= $commercialShipQuantity) {
-						
-						$orbitalBaseManager->load(array('rPlace' => $otherBaseId));
-						if ($orbitalBaseManager->size() == 2) {
-							$otherBase = $orbitalBaseManager->get(1);
-
+						if (($otherBase = $orbitalBaseManager->get($otherBaseId)) !== null) {
 							# load places to compute travel time
 							$S_PLM1 = $placeManager->getCurrentSession();
 							$placeManager->newSession(ASM_UMODE);
@@ -131,7 +121,6 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_
 		} else {
 			throw new ErrorException('cette base ne vous appartient pas');
 		}
-		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
 		throw new ErrorException('envoi de ressources impossible - action inutile, vous ressources sont déjà sur cette base orbitale');
 	}

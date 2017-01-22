@@ -26,14 +26,7 @@ $quantity = $request->request->get('quantity');
 if ($rPlace !== FALSE AND $missionId !== FALSE AND $quantity !== FALSE AND in_array($rPlace, $verif)) {
 
 	if ($quantity > 0) {
-	
-		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-		$orbitalBaseManager->newSession();
-		$orbitalBaseManager->load(array('rPlace' => $rPlace));
-
-		if ($orbitalBaseManager->size() == 1) {
-			$base = $orbitalBaseManager->get();
-
+		if (($base = $orbitalBaseManager->get($rPlace)) !== null) {
 			$maxRecyclers = $orbitalBaseHelper->getInfo(OrbitalBaseResource::RECYCLING, 'level', $base->levelRecycling, 'nbRecyclers');
 			$usedRecyclers = 0;
 
@@ -67,7 +60,6 @@ if ($rPlace !== FALSE AND $missionId !== FALSE AND $quantity !== FALSE AND in_ar
 		} else {
 			throw new ErrorException('cette base orbitale ne vous appartient pas');
 		}
-		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
 		throw new FormException('Ca va être dur de recycler avec autant peu de recycleurs. Entrez un nombre plus grand que zéro.');
 	}

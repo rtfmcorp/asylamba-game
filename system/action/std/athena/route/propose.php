@@ -35,17 +35,8 @@ $baseFrom 	= $request->query->get('basefrom');
 $baseTo 	= $request->query->get('baseto');
 
 if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
-	$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-	$orbitalBaseManager->newSession();
-	$orbitalBaseManager->load(array('rPlace' => $baseFrom));
-
-	$proposerBase = $orbitalBaseManager->get();
-
-#	if ($proposerBase->getLevelSpatioport() > 0) {}
-
-	$orbitalBaseManager->load(array('rPlace' => $baseTo));
-
-	$otherBase = $orbitalBaseManager->get(1);
+	$proposerBase = $orbitalBaseManager->get($baseFrom);
+	$otherBase = $orbitalBaseManager->get($baseTo);
 
 	$nbrMaxCommercialRoute = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $proposerBase->getLevelSpatioport(), 'nbRoutesMax');
 	
@@ -73,7 +64,7 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 		}
 		if ($myColor->colorLink[$player->rColor] != Color::ENEMY && $otherColor->colorLink[$session->get('playerInfo')->get('color')] != Color::ENEMY) {
 
-			if ($orbitalBaseManager->size() == 2 && ($proposerBase->getRPlayer() != $otherBase->getRPlayer()) && $player !== null) {
+			if ($proposerBase !== null && $otherBase !== null && ($proposerBase->getRPlayer() != $otherBase->getRPlayer()) && $player !== null) {
 				$distance = Game::getDistance($proposerBase->getXSystem(), $otherBase->getXSystem(), $proposerBase->getYSystem(), $otherBase->getYSystem());
 				$bonusA = ($proposerBase->getSector() != $otherBase->getSector()) ? $routeSectorBonus : 1;
 				$bonusB = ($session->get('playerInfo')->get('color')) != $player->getRColor() ? $routeColorBonus : 1;
@@ -145,7 +136,6 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 	} else {
 		throw new ErrorException('impossible de proposer une route commerciale (3)');
 	}
-	$orbitalBaseManager->changeSession($S_OBM1);
 } else {
 	throw new FormException('pas assez d\'informations pour proposer une route commerciale');
 }

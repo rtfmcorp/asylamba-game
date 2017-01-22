@@ -2,14 +2,12 @@
 
 use Asylamba\Classes\Library\Game;
 
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $session = $this->getContainer()->get('app.session');
 $galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
 
 echo '<div id="own-base">';
 	echo '<svg viewBox="0, 0, ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . ', ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';
-		for ($i = 0; $i < $orbitalBaseManager->size(); $i++) {
-			$base = $orbitalBaseManager->get($i);
+		foreach ($playerBases as $base) {
 			echo '<circle cx="' . ($base->getXSystem() * $galaxyConfiguration->scale) . '" cy="' . ($base->getYSystem() * $galaxyConfiguration->scale) . '" r="22" />';
 			
 			if ($base->getId() == $defaultBase->getId()) {

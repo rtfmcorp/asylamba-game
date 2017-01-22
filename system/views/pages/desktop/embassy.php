@@ -28,17 +28,15 @@ echo '<div id="content">';
 			? FALSE
 			: TRUE;
 
-		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-		$orbitalBaseManager->newSession();
-		$orbitalBaseManager->load(array('rPlayer' => $player), array('dCreation', 'ASC'));
+		$playerBases = $orbitalBaseManager->getPlayerBases($player);
 
 		if (($player_selected = $playerManager->get($player)) && in_array($player_selected->getStatement(), [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY, Player::BANNED])) {
 			$player_ishim = $ishim;
-			$ob_selected = $orbitalBaseManager->getAll();
+			$ob_selected = $playerBases;
 			include COMPONENT . 'embassy/diary/search.php';
 
 			# diaryBases component
-			$ob_diaryBases = $orbitalBaseManager->getAll();
+			$ob_diaryBases = $playerBases;
 			include COMPONENT . 'embassy/diary/bases.php';
 		} else {
 			// @TODO
@@ -48,7 +46,6 @@ echo '<div id="content">';
 
 		include COMPONENT . 'default.php';
 
-		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
 		$color = $request->query->has('faction')
 			? $request->query->get('faction')

@@ -31,12 +31,7 @@ echo '<div id="content">';
 	if (!$request->query->has('view') OR $request->query->get('view') == 'invest') {
 		$player = $playerManager->get($session->get('playerId'));
 		
-		$S_OBM_FIN = $orbitalBaseManager->getCurrentSession();
-		$orbitalBaseManager->newSession();
-		$orbitalBaseManager->load(
-			array('rPlayer' => $session->get('playerId')),
-			array('rPlace', 'ASC')
-		);
+		$playerBases = $orbitalBaseManager->getPlayerBases($session->get('playerId'));
 
 		$S_COM_FIN = $commanderManager->getCurrentSession();
 		$commanderManager->newSession();
@@ -77,8 +72,7 @@ echo '<div id="content">';
 		$ob_generalFinancial = array();
 		$commander_generalFinancial = array();
 
-		for ($i = 0; $i < $orbitalBaseManager->size(); $i++) {
-			$orbitalBase = $orbitalBaseManager->get($i);
+		foreach ($playerBases as $orbitalBase) {
 			$ob_generalFinancial[] = $orbitalBase;
 			
 			$thisTaxIn = Game::getTaxFromPopulation($orbitalBase->getPlanetPopulation(), $orbitalBase->typeOfBase, $taxCoeff);
@@ -161,7 +155,6 @@ echo '<div id="content">';
 
 		# close
 		$transactionManager->changeSession($S_TRM1);
-		$orbitalBaseManager->changeSession($S_OBM_FIN);
 		$commanderManager->changeSession($S_COM_FIN);
 	} elseif ($request->query->get('view') == 'send') {
 		include COMPONENT . 'financial/send-credit-player.php';

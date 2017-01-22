@@ -30,12 +30,8 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 	if ($cr !== null && in_array($cr->statement, [CommercialRoute::ACTIVE, CommercialRoute::STANDBY])) {
 		if ($cr->playerId1 == $session->get('playerId') || $cr->playerId2 == $session->get('playerId')) {
 			if ($cr->getROrbitalBase() == $base OR $cr->getROrbitalBaseLinked() == $base) {
-				$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-				$orbitalBaseManager->newSession(ASM_UMODE);
-				$orbitalBaseManager->load(array('rPlace' => $cr->getROrbitalBase()));
-				$proposerBase = $orbitalBaseManager->get();
-				$orbitalBaseManager->load(array('rPlace' => $cr->getROrbitalBaseLinked()));
-				$linkedBase = $orbitalBaseManager->get(1);
+				$proposerBase = $orbitalBaseManager->get($cr->getROrbitalBase());
+				$linkedBase = $orbitalBaseManager->get($cr->getROrbitalBaseLinked());
 				if ($cr->getROrbitalBase() == $base) {
 					$notifReceiver = $linkedBase->getRPlayer();
 					$myBaseName = $proposerBase->getName();
@@ -73,7 +69,6 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 				$commercialRouteManager->remove($cr);
 
 				$session->addFlashbag('Route commerciale détruite', Flashbag::TYPE_SUCCESS);
-				$orbitalBaseManager->changeSession($S_OBM1);
 			} else {
 				throw new ErrorException('impossible de supprimer une route commerciale');
 			}

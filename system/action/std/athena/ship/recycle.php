@@ -18,12 +18,7 @@ $typeOfShip = $request->query->get('typeofship');
 $quantity = $request->request->get('quantity');
 
 if ($baseId !== FALSE AND $typeOfShip !== FALSE AND $quantity !== FALSE) {
-		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-		$orbitalBaseManager->newSession(ASM_UMODE);
-		$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
-
-		if ($orbitalBaseManager->size() > 0) {
-			$ob = $orbitalBaseManager->get();
+		if (($ob = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId')))) {
 			if ($quantity > 0 && $quantity <= $ob->shipStorage[$typeOfShip]) {
 				$resources = ($quantity * ShipResource::getInfo($typeOfShip, 'resourcePrice')) / 2;
 				$ob->shipStorage[$typeOfShip] -= $quantity;
@@ -34,7 +29,6 @@ if ($baseId !== FALSE AND $typeOfShip !== FALSE AND $quantity !== FALSE) {
 		} else {
 			throw new ErrorException('cette base ne vous appartient pas');	
 		}
-		$orbitalBaseManager->changeSession($S_OBM1);
 } else {
 	throw new FormException('pas assez d\'informations');
 }

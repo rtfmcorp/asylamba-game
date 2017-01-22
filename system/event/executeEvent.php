@@ -24,10 +24,7 @@ if ($pastEvents->size() > 0) {
 				# ajout de la base dans la liste des bases déjà mises à jour
 				$rPlaces->add($event->get('eventId'), $event->get('eventId'));
 				# mise à jour de la base orbitale (avec u-méthodes)
-				$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-				$orbitalBaseManager->newSession(ASM_UMODE);
-				$orbitalBaseManager->load(array('rPlace' => $event->get('eventId')));
-				$orbitalBaseManager->changeSession($S_OBM1);
+				$orbitalBaseManager->get($event->get('eventId'));
 			}
 		}
 

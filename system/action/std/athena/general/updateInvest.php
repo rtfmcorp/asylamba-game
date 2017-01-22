@@ -23,11 +23,7 @@ $category = $request->query->get('category');
 
 
 if ($baseId !== FALSE AND $credit !== FALSE AND $category !== FALSE AND in_array($baseId, $verif)) { 
-		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-		$orbitalBaseManager->newSession(ASM_UMODE);
-		$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
-		if ($orbitalBaseManager->size() == 1) {
-			$base = $orbitalBaseManager->get();
+		if (($base = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
 			switch ($category) {
 				case 'school':
 					if ($credit <= 50000) {
@@ -51,7 +47,6 @@ if ($baseId !== FALSE AND $credit !== FALSE AND $category !== FALSE AND in_array
 		} else {
 			throw new ErrorException('modification d\'investissement impossible - base inconnue');
 		}
-		$orbitalBaseManager->changeSession($S_OBM1);
 } else {
 	throw new FormException('pas assez d\'informations pour modifier un investissement');
 }

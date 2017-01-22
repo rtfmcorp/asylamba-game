@@ -28,13 +28,7 @@ $techno = $request->query->get('techno');
 
 if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 	if ($technologyHelper->isATechnology($techno)) {
-		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-		$orbitalBaseManager->newSession(ASM_UMODE);
-		$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
-
-		if ($orbitalBaseManager->size() > 0) {
-			$ob = $orbitalBaseManager->get();
-
+		if (($ob = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
 			$S_TQM1 = $technologyQueueManager->getCurrentSession();
 			$technologyQueueManager->newSession(ASM_UMODE);
 			$technologyQueueManager->load(array('rPlace' => $baseId), array('dEnd'));
@@ -88,7 +82,6 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 		} else {
 			throw new ErrorException('cette base ne vous appartient pas');
 		}
-		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
 		throw new ErrorException('la technologie indiquée n\'est pas valide');
 	}

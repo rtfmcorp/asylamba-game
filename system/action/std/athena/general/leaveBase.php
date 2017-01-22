@@ -38,13 +38,7 @@ if (count($verif) > 1) {
 	}
 	if ($areAllFleetImmobile) {
 		if ($baseId != FALSE && in_array($baseId, $verif)) {
-			$_OBM = $orbitalBaseManager->getCurrentSession();
-			$orbitalBaseManager->newSession();
-			$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
-
-			if ($orbitalBaseManager->size() > 0) {
-				$base = $orbitalBaseManager->get();
-
+			if (($base = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
 				if (Utils::interval(Utils::now(), $base->dCreation, 'h') >= OrbitalBase::COOL_DOWN) {
 
 					# delete buildings in queue
@@ -109,7 +103,6 @@ if (count($verif) > 1) {
 			} else {
 				throw new ErrorException('cette base ne vous appartient pas');	
 			}
-			$orbitalBaseManager->changeSession($_OBM);
 		} else {
 			throw new ErrorException('cette base ne vous appartient pas');
 		}

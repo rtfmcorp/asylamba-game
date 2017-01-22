@@ -40,12 +40,7 @@ $quantity = $request->query->get('quantity');
 
 if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($baseId, $verif) AND $quantity != 0) { 
 	if (ShipResource::isAShip($ship)) {
-		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-		$orbitalBaseManager->newSession(ASM_UMODE);
-		$orbitalBaseManager->load(array('rPlace' => $baseId, 'rPlayer' => $session->get('playerId')));
-
-		if ($orbitalBaseManager->size() > 0) {
-			$ob  = $orbitalBaseManager->get();
+		if (($ob  = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
 			if ($orbitalBaseHelper->isAShipFromDock1($ship)) {
 				$dockType = 1;
 			} elseif ($orbitalBaseHelper->isAShipFromDock2($ship)) {
@@ -147,7 +142,6 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 		} else {
 			throw new ErrorException('cette base ne vous appartient pas');
 		}
-		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
 		throw new ErrorException('construction de vaisseau impossible - vaisseau inconnu');
 	}

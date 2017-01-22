@@ -44,20 +44,15 @@ if (count($newSquadron) !== 12) {
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 
-# chargement de la base orbitale
-$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-$orbitalBaseManager->newSession();
-$orbitalBaseManager->load(array('rPlace' => $baseID));
-
 # chargement du commandant
 $S_COM1 = $commanderManager->getCurrentSession();
 $commanderManager->newSession();
 $commanderManager->load(array('c.id' => $commanderID, 'c.rBase' => $baseID, 'c.statement' => [Commander::AFFECTED]));
 
-if ($orbitalBaseManager->size() !== 1 || $commanderManager->size() !== 1) {
+if (($base = $orbitalBaseManager->get($baseID)) === null || $commanderManager->size() !== 1) {
 	throw new ErrorException('Erreur dans les références du commandant ou de la base.');
 }
-$base = $orbitalBaseManager->get();
+
 $commander = $commanderManager->get();
 $squadron = $commander->getSquadron($squadronID);
 
@@ -106,4 +101,3 @@ $base->shipStorage = $baseSHIP;
 $commander->getSquadron($squadronID)->arrayOfShips = $squadronSHIP;
 
 $commanderManager->changeSession($S_COM1);
-$orbitalBaseManager->changeSession($S_OBM1);

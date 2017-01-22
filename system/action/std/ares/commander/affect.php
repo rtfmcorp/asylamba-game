@@ -29,9 +29,7 @@ if ($commanderManager->size() !== 1) {
 }
 $commander = $commanderManager->get();
 
-$S_OBM = $orbitalBaseManager->getCurrentSession();
-$orbitalBaseManager->newSession();
-$orbitalBaseManager->load(array('rPlace' => $commander->rBase));
+$orbitalBase = $orbitalBaseManager->get($commander->rBase);
 
 # checker si on a assez de place !!!!!
 $S_COM2 = $commanderManager->getCurrentSession();
@@ -44,7 +42,7 @@ $commanderManager->load(array('c.rBase' => $commander->rBase, 'c.statement' => a
 $nbrLine1 = $commanderManager->size();
 
 if ($commander->statement == Commander::INSCHOOL || $commander->statement == Commander::RESERVE) {
-	if ($nbrLine2 < PlaceResource::get($orbitalBaseManager->get()->typeOfBase, 'r-line')) {
+	if ($nbrLine2 < PlaceResource::get($orbitalBase->typeOfBase, 'r-line')) {
 		$commander->dAffectation = Utils::now();
 		$commander->statement = Commander::AFFECTED;
 		$commander->line = 2;
@@ -56,7 +54,7 @@ if ($commander->statement == Commander::INSCHOOL || $commander->statement == Com
 
 		$session->addFlashbag('Votre officier ' . $commander->getName() . ' a bien été affecté en force de réserve', Flashbag::TYPE_SUCCESS);
 		$response->redirect('fleet/commander-' . $commander->id . '/sftr-2');
-	} elseif ($nbrLine1 < PlaceResource::get($orbitalBaseManager->get()->typeOfBase, 'l-line')) {
+	} elseif ($nbrLine1 < PlaceResource::get($orbitalBase->typeOfBase, 'l-line')) {
 		$commander->dAffectation =Utils::now();
 		$commander->statement = Commander::AFFECTED;
 		$commander->line = 1;
@@ -77,7 +75,7 @@ if ($commander->statement == Commander::INSCHOOL || $commander->statement == Com
 	$commanderManager->load(array('c.rBase' => $commander->rBase, 'c.statement' => Commander::INSCHOOL));
 
 	$commander->uCommander = Utils::now();
-	if ($commanderManager->size() < PlaceResource::get($orbitalBaseManager->get()->typeOfBase, 'school-size')) {
+	if ($commanderManager->size() < PlaceResource::get($orbitalBase->typeOfBase, 'school-size')) {
 		$commander->statement = Commander::INSCHOOL;
 		$session->addFlashbag('Votre officier ' . $commander->getName() . ' a été remis à l\'école', Flashbag::TYPE_SUCCESS);
 		$commanderManager->emptySquadrons($commander);
@@ -93,6 +91,4 @@ if ($commander->statement == Commander::INSCHOOL || $commander->statement == Com
 }
 
 $commanderManager->changeSession($S_COM2);
-$orbitalBaseManager->changeSession($S_OBM);
-
 $commanderManager->changeSession($S_COM1);

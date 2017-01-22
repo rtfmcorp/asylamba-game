@@ -29,7 +29,7 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 		$credit = TutorialResource::getInfo($stepTutorial, 'creditReward');
 		$resource = TutorialResource::getInfo($stepTutorial, 'resourceReward');
 		$ship = TutorialResource::getInfo($stepTutorial, 'shipReward');
-
+		$playerBases = $orbitalBaseManager->getPlayerBases($player->id);
 		$alert = 'Etape validée. ';
 
 		$firstReward = true;
@@ -50,11 +50,7 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 		}
 
 		if ($resource > 0 || $ship != array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)) {
-			# load an orbital base of the player
-			$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-			$orbitalBaseManager->newSession();
-			$orbitalBaseManager->load(array('rPlayer' => $player->id));
-			$ob = $orbitalBaseManager->get();
+			$ob = $playerBases[0];
 
 			if ($resource > 0) {
 				if ($firstReward) {
@@ -102,8 +98,6 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 				}
 				$alert .= $endOfAlert;
 			}
-
-			$orbitalBaseManager->changeSession($S_OBM1);
 		} else {
 			$alert .= '. ';
 		}
@@ -156,17 +150,10 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 				$S_SQM2 = $shipQueueManager->getCurrentSession();
 				$shipQueueManager->newSession();
 
-				$S_OBM2 = $orbitalBaseManager->getCurrentSession();
-				$orbitalBaseManager->newSession();
-				$orbitalBaseManager->load(array('rPlayer' => $playerId));
-
 				# load the queues
-				for ($i = 0; $i < $orbitalBaseManager->size() ; $i++) { 
-					$ob = $orbitalBaseManager->get($i);
+				foreach ($playerBases as $ob) { 
 					$shipQueueManager->load(array('rOrbitalBase' => $ob->rPlace));
 				}
-				$orbitalBaseManager->changeSession($S_OBM2);
-
 				for ($i = 0; $i < $shipQueueManager->size() ; $i++) { 
 					$sq = $shipQueueManager->get($i);
 					if ($sq->shipNumber == ShipResource::PEGASE) {

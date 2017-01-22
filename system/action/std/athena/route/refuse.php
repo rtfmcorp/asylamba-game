@@ -30,12 +30,8 @@ $route = $request->query->get('route');
 if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 	$cr = $commercialRouteManager->getByIdAndDistantBase($route, $base);
 	if ($cr !== null && $cr->getStatement() === CommercialRoute::PROPOSED) {
-		$S_OBM1 = $orbitalBaseManager->getCurrentSession();
-		$orbitalBaseManager->newSession(ASM_UMODE);
-		$orbitalBaseManager->load(array('rPlace' => $cr->getROrbitalBase()));
-		$proposerBase = $orbitalBaseManager->get();
-		$orbitalBaseManager->load(array('rPlace' => $cr->getROrbitalBaseLinked()));
-		$refusingBase = $orbitalBaseManager->get(1);
+		$proposerBase = $orbitalBaseManager->get($cr->getROrbitalBase());
+		$refusingBase = $orbitalBaseManager->get($cr->getROrbitalBaseLinked());
 
 		//rend les crédits au proposant
 		$playerManager->increaseCredit($playerManager->get($proposerBase->getRPlayer()), intval($cr->getPrice()));
@@ -54,7 +50,6 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 		//destruction de la route
 		$commercialRouteManager->remove($cr);
 		$session->addFlashbag('Route commerciale refusée', Flashbag::TYPE_SUCCESS);
-		$orbitalBaseManager->changeSession($S_OBM1);
 	} else {
 		throw new ErrorException('impossible de refuser une route commerciale');
 	}
