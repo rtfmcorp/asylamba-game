@@ -34,15 +34,8 @@ echo '<div class="component">';
 
 				echo '<p class="desc">' . LawResources::getInfo($law->type, 'shortDescription') . '</p>';
 
-				$hasVoted = FALSE;
-				for ($j = 0; $j < $voteLawManager->size(); $j++) { 
-					if ($voteLawManager->get($j)->rPlayer == $session->get('playerId')) {
-						$hasVoted = TRUE;
-						break;
-					}
-				}
 
-				if ($hasVoted) {
+				if ($voteLawManager->hasVoted($session->get('playerId'), $law)) {
 					echo '<span class="button disable" style="text-align: center; line-height: 35px;>';
 						echo '<span class="text">Vous avez déjà voté</span>';
 					echo '</span>';
