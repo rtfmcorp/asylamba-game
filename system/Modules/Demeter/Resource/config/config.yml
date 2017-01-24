@@ -34,7 +34,7 @@ services:
     demeter.vote_law_manager:
         class: Asylamba\Modules\Demeter\Manager\Law\VoteLawManager
         arguments:
-            - "@database"
+            - "@entity_manager"
     demeter.color_manager:
         class: Asylamba\Modules\Demeter\Manager\ColorManager
         arguments:
