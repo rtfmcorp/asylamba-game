@@ -149,21 +149,17 @@ class LawManager extends Manager {
 	 * @return bool
 	 */
 	public function ballot(Law $law) {
-		$_VLM213 = $this->voteLawManager->getCurrentsession();
-		$this->voteLawManager->newSession();
-		$this->voteLawManager->load(array('rLaw' => $law->id));
+		$votes = $this->voteLawManager->getLawVotes($law);
 
 		$ballot = 0;
 
-		for ($i = 0; $i < $this->voteLawManager->size(); $i++) {
-			if ($this->voteLawManager->get($i)->vote) {
+		foreach ($votes as $vote) {
+			if ($vote->vote) {
 				$ballot++;
 			} else {
 				$ballot--;
 			}
 		}
-		$this->voteLawManager->changeSession($_VLM213);
-
 		return $ballot >= 0;
 	}
 }
