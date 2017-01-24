@@ -16,7 +16,6 @@ $factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager')
 $forumMessageManager = $this->getContainer()->get('demeter.forum_message_manager');
 $lawManager = $this->getContainer()->get('demeter.law_manager');
 $voteManager = $this->getContainer()->get('demeter.vote_manager');
-$voteLawManager = $this->getContainer()->get('demeter.vote_law_manager');
 $electionManager = $this->getContainer()->get('demeter.election_manager');
 $candidateManager = $this->getContainer()->get('demeter.candidate_manager');
 $forumTopicManager = $this->getContainer()->get('demeter.forum_topic_manager');
@@ -313,7 +312,6 @@ echo '<div id="content">';
 		}
 	} elseif ($request->query->get('view') == 'senate') {
 		if (in_array($session->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER, Player::PARLIAMENT])) {
-			$S_VLM_OLD = $voteLawManager->getCurrentsession();
 			$S_LAM_OLD = $lawManager->getCurrentsession();
 
 			$S_LAM_TOVOTE = $lawManager->newSession();
@@ -322,9 +320,6 @@ echo '<div id="content">';
 
 			for ($i = 0; $i < $lawManager->size(); $i++) {
 				$law = $lawManager->get($i);
-
-				$S_VLM_TOVOTE = $voteLawManager->newSession();
-				$voteLawManager->load(array('rLaw' => $law->id));
 
 				include COMPONENT . 'faction/senate/law.php';
 			}
@@ -342,7 +337,6 @@ echo '<div id="content">';
 			include COMPONENT . 'faction/senate/historic.php';
 
 			$lawManager->changeSession($S_LAM_OLD);
-			$voteLawManager->changeSession($S_VLM_OLD);
 		} else {
 			$response->redirect('faction');
 		}

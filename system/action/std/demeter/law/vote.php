@@ -24,24 +24,18 @@ if ($rLaw !== FALSE && $choice !== FALSE) {
 
 		if ($lawManager->size() > 0) {
 			if ($lawManager->get()->statement == Law::VOTATION) {
-				$_VLM = $voteLawManager->getCurrentSession();
-				$voteLawManager->newSession();
-				$voteLawManager->load(array('rPlayer' => $session->get('playerId'), 'rLaw' => $rLaw));
-
-				if ($voteLawManager->size() == 0) {
-					$vote = new VoteLaw();
-					$vote->rPlayer = $session->get('playerId');
-					$vote->rLaw = $rLaw;
-					$vote->vote = $choice;
-					$vote->dVotation = Utils::now();
-					$voteLawManager->add($vote);
-				} else {
+				if ($voteLawManager->hasVoted($session->get('playerId'), $lawManager->get())) {
 					throw new ErrorException('Vous avez déjà voté.');
 				}
+				$vote = new VoteLaw();
+				$vote->rPlayer = $session->get('playerId');
+				$vote->rLaw = $rLaw;
+				$vote->vote = $choice;
+				$vote->dVotation = Utils::now();
+				$voteLawManager->add($vote);
 			} else {
 				throw new ErrorException('Cette loi est déjà votée.');
 			}
-			$voteLawManager->changeSession($_VLM);
 		} else {
 			throw new ErrorException('Cette loi n\'existe pas.');
 		}
