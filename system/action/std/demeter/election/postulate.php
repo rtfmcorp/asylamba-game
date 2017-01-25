@@ -35,12 +35,8 @@ $warlordChoice		 = $request->request->get('warlordchoice');
 $ministerChoice		 = $request->request->get('ministerchoice');
 
 if ($rElection !== FALSE && $program !== FALSE) {
-	$_ELM = $electionManager->getCurrentSession();
-	$electionManager->newSession();
-	$electionManager->load(array('id' => $rElection));
-
-	if ($electionManager->size() > 0) {
-		if ($electionManager->get()->rColor == $session->get('playerInfo')->get('color')) {
+	if (($election = $electionManager->get($rElection)) !== null) {
+		if ($election->rColor == $session->get('playerInfo')->get('color')) {
 			$chiefChoice = 1;
 			$treasurerChoice = 1;
 			$warlordChoice = 1;
@@ -53,7 +49,7 @@ if ($rElection !== FALSE && $program !== FALSE) {
 
 				if ($colorManager->get()->electionStatement == Color::CAMPAIGN) {
 					if ($chiefChoice !== NULL && $treasurerChoice !== FALSE && $warlordChoice !== FALSE && $ministerChoice !== FALSE) {
-						if (($candidate = $candidateManager->getByElectionAndPlayer($playerManager->get($session->get('playerId')), $electionManager->get())) === null) {
+						if (($candidate = $candidateManager->getByElectionAndPlayer($playerManager->get($session->get('playerId')), $election)) === null) {
 							$candidate = new Candidate();
 
 							$candidate->rElection = $rElection;
@@ -82,7 +78,7 @@ if ($rElection !== FALSE && $program !== FALSE) {
 
 								$vote->rPlayer = $session->get('playerId');
 								$vote->rCandidate = $session->get('playerId');
-								$vote->rElection = $electionManager->get()->id;
+								$vote->rElection = $election->id;
 								$vote->dVotation = Utils::now();
 
 								$voteManager->add($vote);
@@ -110,7 +106,6 @@ if ($rElection !== FALSE && $program !== FALSE) {
 	} else {
 		throw new ErrorException('Cette election n\'existe pas.');
 	}
-	$electionManager->changeSession($_ELM);
 } else {
 	throw new ErrorException('Informations manquantes.');
 }
