@@ -1,6 +1,6 @@
 <?php
 
-namespace Asylamba\Modules\Demeter\Repository;
+namespace Asylamba\Modules\Demeter\Repository\Law;
 
 use Asylamba\Classes\Entity\AbstractRepository;
 

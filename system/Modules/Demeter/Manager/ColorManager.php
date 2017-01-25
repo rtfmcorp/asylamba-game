@@ -507,14 +507,11 @@ class ColorManager extends Manager {
 			$this->voteManager->changeSession($_VOM);
 		} else {
 			if (($leader = $this->playerManager->getFactionLeader($color->id)) !== null) {
-				$this->candidateManager->newSession();
-				$this->candidateManager->load(array('rPlayer' => $leader->id, 'rElection' => $election->id));
-				if ($this->candidateManager->size() > 0) {
+				if (($candidate = $this->candidateManager->getByElectionAndPlayer($leader, $election)) !== null) {
 					if (rand(0, 1) == 0) {
 						$ballot = array();
 					}
 				}
-				$this->candidateManager->changeSession($_CAM1);
 			}
 			if (count($ballot) > 0) {
 				reset($ballot);
