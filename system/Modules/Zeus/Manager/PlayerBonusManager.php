@@ -160,28 +160,23 @@ class PlayerBonusManager
 	}
 
 	private function addLawBonus(PlayerBonus $playerBonus) {
-		$_LAM = $this->lawManager->getCurrentSession();
-		$this->lawManager->newSession();
-		$this->lawManager->load(array('rColor' => $playerBonus->playerColor, 'statement' => Law::EFFECTIVE));
-		if ($this->lawManager->size() > 0) {
-			for ($i = 0; $i < $this->lawManager->size(); $i++) {
-				switch ($this->lawManager->get($i)->type) {
-					case 5:
-						$playerBonus->bonus->increase(PlayerBonus::DOCK1_SPEED, LawResources::getInfo($this->lawManager->get($i)->type, 'bonus'));
-						$playerBonus->bonus->increase(PlayerBonus::DOCK2_SPEED, LawResources::getInfo($this->lawManager->get($i)->type, 'bonus'));
-						$playerBonus->bonus->increase(PlayerBonus::REFINERY_REFINING, -10);
-						$playerBonus->bonus->increase(PlayerBonus::REFINERY_REFINING, -10);
-						break;
-					case 6:
-						#subvention technologique
-						$playerBonus->bonus->increase(PlayerBonus::TECHNOSPHERE_SPEED, LawResources::getInfo($this->lawManager->get($i)->type, 'bonus'));
-						break;	
-					default:
-						break;
-				}
+		$laws = $this->lawManager->getByFactionAndStatements($playerBonus->playerColor, [Law::EFFECTIVE]);
+		foreach ($laws as $law) {
+			switch ($law->type) {
+				case 5:
+					$playerBonus->bonus->increase(PlayerBonus::DOCK1_SPEED, LawResources::getInfo($law->type, 'bonus'));
+					$playerBonus->bonus->increase(PlayerBonus::DOCK2_SPEED, LawResources::getInfo($law->type, 'bonus'));
+					$playerBonus->bonus->increase(PlayerBonus::REFINERY_REFINING, -10);
+					$playerBonus->bonus->increase(PlayerBonus::REFINERY_REFINING, -10);
+					break;
+				case 6:
+					#subvention technologique
+					$playerBonus->bonus->increase(PlayerBonus::TECHNOSPHERE_SPEED, LawResources::getInfo($law->type, 'bonus'));
+					break;	
+				default:
+					break;
 			}
 		}
-		$this->lawManager->changeSession($_LAM);
 	}
 	
 	private function addFactionBonus(PlayerBonus $playerBonus) {

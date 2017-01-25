@@ -18,13 +18,10 @@ $choice = $request->query->get('choice');
 
 if ($rLaw !== FALSE && $choice !== FALSE) {
 	if ($session->get('playerInfo')->get('status') == Player::PARLIAMENT) {
-		$_LAM = $lawManager->getCurrentSession();
-		$lawManager->newSession();
-		$lawManager->load(array('id' => $rLaw));
 
-		if ($lawManager->size() > 0) {
-			if ($lawManager->get()->statement == Law::VOTATION) {
-				if ($voteLawManager->hasVoted($session->get('playerId'), $lawManager->get())) {
+		if (($law = $lawManager->get($rLaw)) !== null) {
+			if ($law->statement == Law::VOTATION) {
+				if ($voteLawManager->hasVoted($session->get('playerId'), $law)) {
 					throw new ErrorException('Vous avez déjà voté.');
 				}
 				$vote = new VoteLaw();

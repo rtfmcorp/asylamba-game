@@ -14,15 +14,9 @@ $rLaw = $request->query->get('rlaw');
 
 if ($rLaw !== FALSE) {
 	if ($session->get('playerInfo')->get('status') == LawResources::getInfo($type, 'department')) {
-		$_LAM = $lawManager->getCurrentSession();
-		$lawManager->newSession();
-		$lawManager->load(array('id' => $rLaw));
-
-		if ($lawManager->size() > 0) {
-		} else {
+		if (($law = $lawManager->get($rLaw)) === null) {
 			throw new ErrorException('Cette loi n\'existe pas.');
 		}
-
 		$candidateManager->changeSession($_LAM);
 	} else {
 		throw new ErrorException('Vous n\'avez pas le droit d\'annuler cette loi.');
