@@ -65,17 +65,10 @@ echo '<div id="content">';
 
 		include COMPONENT . 'faction/overview/stat.php';
 
-		$S_LAM_OLD = $lawManager->getCurrentsession();
-
-		$S_LAM_ACT = $lawManager->newSession();
-		$lawManager->load(array('rColor' => $faction->id, 'statement' => Law::EFFECTIVE));
-
-		$S_LAM_VOT = $lawManager->newSession();
-		$lawManager->load(array('rColor' => $faction->id, 'statement' => Law::VOTATION));
+		$effectiveLaws = $lawManager->getByFactionAndStatements($faction->id, [Law::EFFECTIVE]);
+		$votingLaws = $lawManager->getByFactionAndStatements($faction->id, [Law::VOTATION]);
 
 		include COMPONENT . 'faction/overview/laws.php';
-
-		$lawManager->changeSession($S_LAM_OLD);
 	} elseif ($request->query->get('view') == 'forum') {
 		if (!$request->query->has('forum')) {
 			# page d'accueil des forums
@@ -312,31 +305,19 @@ echo '<div id="content">';
 		}
 	} elseif ($request->query->get('view') == 'senate') {
 		if (in_array($session->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER, Player::PARLIAMENT])) {
-			$S_LAM_OLD = $lawManager->getCurrentsession();
-
-			$S_LAM_TOVOTE = $lawManager->newSession();
-			$lawManager->load(array('rColor' => $faction->id, 'statement' => Law::VOTATION));
+			$laws = $lawManager->getByFactionAndStatements($faction->id, [Law::VOTATION]);
 			include COMPONENT . 'faction/senate/stats.php';
 
-			for ($i = 0; $i < $lawManager->size(); $i++) {
-				$law = $lawManager->get($i);
-
+			foreach ($laws as $law) {
 				include COMPONENT . 'faction/senate/law.php';
 			}
-			if ($lawManager->size() < 1) {
+			if (count($laws) < 1) {
 				include COMPONENT . 'default.php';
 			}
 
-			$S_LAM_HISTORIC = $lawManager->newSession();
-			$lawManager->load(
-				['rColor' => $faction->id, 'statement' => [Law::EFFECTIVE, Law::OBSOLETE, Law::REFUSED]],
-				['dCreation', 'DESC'],
-				[0, 10]
-			);
+			$laws = $lawManager->getByFactionAndStatements($faction->id, [Law::EFFECTIVE, Law::OBSOLETE, Law::REFUSED]);
 
 			include COMPONENT . 'faction/senate/historic.php';
-
-			$lawManager->changeSession($S_LAM_OLD);
 		} else {
 			$response->redirect('faction');
 		}

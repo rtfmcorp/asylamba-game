@@ -84,11 +84,8 @@ if ($type !== FALSE) {
 				if ($duration !== FALSE) {
 					if ($colorManager->get()->credits >= LawResources::getInfo($type, 'price') * $duration * $colorManager->get()->activePlayers) {
 						$law->options = serialize(array());
-						$_LAM = $lawManager->getCurrentsession();
-						$lawManager->newSession();
-						$lawManager->load(array('type' => $type, 'rColor' => $session->get('playerInfo')->get('color'), 'statement' => array(Law::EFFECTIVE, Law::VOTATION)));
 
-						if ($lawManager->size() == 0) {
+						if (!$lawManager->lawExists($session->get('playerInfo')->get('color'), $type)) {
 							$lawManager->add($law);
 							$colorManager->get()->credits -= LawResources::getInfo($type, 'price') * $duration * $colorManager->get()->activePlayers;
 							$colorManager->sendSenateNotif($colorManager->get());

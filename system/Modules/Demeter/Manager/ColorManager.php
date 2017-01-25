@@ -904,12 +904,9 @@ class ColorManager extends Manager {
 			}
 		}
 
-		$_LAM = $this->lawManager->getCurrentSession();
-		$this->lawManager->newSession();
-		$this->lawManager->load(array('rColor' => $color->id, 'statement' => array(Law::VOTATION, Law::EFFECTIVE)));
+		$laws = $this->lawManager->getByFactionAndStatements($color->id, [Law::VOTATION, Law::EFFECTIVE]);
 
-		for ($i = 0; $i < $this->lawManager->size(); $i++) {
-			$law = $this->lawManager->get($i);
+		foreach ($laws as $law) {
 			if ($law->statement == Law::VOTATION && $law->dEndVotation < Utils::now()) {
 				$this->ctc->add($law->dEndVotation, $this, 'uVoteLaw', $color, array($color, $law, $this->lawManager->ballot($law)));
 			} elseif ($law->statement == Law::EFFECTIVE && $law->dEnd < Utils::now()) {
@@ -982,7 +979,6 @@ class ColorManager extends Manager {
 				}
 			}
 		}
-		$this->lawManager->changeSession($_LAM);
 		$this->ctc->applyContext($token_ctc);
 	}
 }
