@@ -538,8 +538,6 @@ class ColorManager extends Manager {
 	public function uCampaign(Color $color, $factionPlayers) {
 		if ($color->regime == Color::DEMOCRATIC || $color->regime == Color::THEOCRATIC) {
 			$this->updateStatus($color, $factionPlayers);
-			$S_ELM = $this->electionManager->getCurrentsession();
-			$this->electionManager->newSession();
 			$election = new Election();
 			$election->rColor = $color->id;
 			// @WARNING : DEFAULT VALUE
@@ -550,7 +548,6 @@ class ColorManager extends Manager {
 			$election->dElection = $date->format('Y-m-d H:i:s');*/
 
 			$this->electionManager->add($election);
-			$this->electionManager->changeSession($S_ELM);
 			$this->electionStatement = Color::CAMPAIGN;
 		} else {
 			$this->updateStatus($color, $factionPlayers);
@@ -835,13 +832,8 @@ class ColorManager extends Manager {
 					$date->modify('+' . $color->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME . ' second');
 					$date = $date->format('Y-m-d H:i:s');
 
-					$_ELM = $this->electionManager->getCurrentSession();
-					$this->electionManager->newSession();
-					$this->electionManager->load(array('rColor' => $color->id), array('id', 'DESC'), array('0', '1'));
 					$color->dLastElection = $date;
-					$this->ballot($color, $date, $this->electionManager->get());
-
-					$this->electionManager->changeSession($_ELM);
+					$this->ballot($color, $date, $this->electionManager->getFactionLastElection($color->id));
 				}
 			}
 		} elseif ($color->regime == Color::ROYALISTIC) {
@@ -861,13 +853,8 @@ class ColorManager extends Manager {
 					$date->modify('+' . $color->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME . ' second');
 					$date = $date->format('Y-m-d H:i:s');
 
-					$_ELM = $this->electionManager->getCurrentSession();
-					$this->electionManager->newSession();
-					$this->electionManager->load(array('rColor' => $color->id), array('id', 'DESC'), array('0', '1'));
 					$this->dLastElection = $date;
-					$this->ballot($color, $date, $this->electionManager->get());
-
-					$this->electionManager->changeSession($_ELM);
+					$this->ballot($color, $date, $this->electionManager->getFactionLastElection($color->id));
 
 					$factionPlayers = $this->playerManager->getFactionPlayersByRanking($color->getId());
 
@@ -890,13 +877,8 @@ class ColorManager extends Manager {
 					$date->modify('+' . $color->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME . ' second');
 					$date = $date->format('Y-m-d H:i:s');
 
-					$_ELM = $this->electionManager->getCurrentSession();
-					$this->electionManager->newSession();
-					$this->electionManager->load(array('rColor' => $color->id), array('id', 'DESC'), array('0', '1'));
 					$color->dLastElection = $date;
-					$this->ballot($color, $date, $this->electionManager->get());
-
-					$this->electionManager->changeSession($_ELM);
+					$this->ballot($color, $date, $this->electionManager->getFactionLastElection($color->id));
 				}
 			}
 		}
