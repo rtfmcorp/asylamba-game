@@ -323,12 +323,8 @@ echo '<div id="content">';
 		}
 	} elseif ($request->query->get('view') == 'election' && in_array($faction->electionStatement, array(Color::CAMPAIGN, Color::ELECTION))) {
 		if ($faction->electionStatement == Color::CAMPAIGN) {
-			$S_ELM_1 = $electionManager->getCurrentSession();
-			$ELM_CAMPAIGN_TOKEN = $electionManager->newSession();
-			$electionManager->load(array('rColor' => $faction->id), array('id', 'DESC'), array(0, 1));
-
-			if ($electionManager->size()) {
-				$candidates = $candidateManager->getByElection($electionManager->get(0));
+			if (($election = $electionManager->getFactionLastElection($faction->id)) !== null) {
+				$candidates = $candidateManager->getByElection($election);
 				$nbCandidate = count($candidates);
 				include COMPONENT . 'faction/election/campaign.php';
 				include COMPONENT . 'faction/election/list.php';
@@ -373,22 +369,18 @@ echo '<div id="content">';
 			} else {
 				$response->redirect('faction');
 			}
-
-			$electionManager->changeSession($S_ELM_1);
 		} elseif ($faction->electionStatement == Color::ELECTION) {
-			$S_ELM_1 = $electionManager->getCurrentSession();
 			$S_VOM_1 = $voteManager->getCurrentSession();
 
-			$ELM_ELECTION_TOKEN = $electionManager->newSession();
-			$electionManager->load(array('rColor' => $faction->id), array('id', 'DESC'), array(0, 1));
+			$election = $electionManager->getFactionLastElection($faction->id);
 
-			$candidates = $candidateManager->getByElection($electionManager->get(0));
+			$candidates = $candidateManager->getByElection($election);
 
 			$VOM_ELC_TOKEN = $voteManager->newSession();
-			$voteManager->load(array('rPlayer' => $session->get('playerId'), 'rElection' => $electionManager->get(0)->id));
+			$voteManager->load(array('rPlayer' => $session->get('playerId'), 'rElection' => $election->id));
 
 			$VOM_ELC_TOTAL_TOKEN = $voteManager->newSession();
-			$voteManager->load(array('rElection' => $electionManager->get(0)->id));
+			$voteManager->load(array('rElection' => $election->id));
 
 			$factionPlayers = $playerManager->getFactionPlayers($session->get('playerInfo')->get('color'));
 
@@ -396,7 +388,7 @@ echo '<div id="content">';
 				$nbCandidate = count($candidates);
 				include COMPONENT . 'faction/election/election.php';
 
-				$rElection = $electionManager->get(0)->id;
+				$rElection = $election->id;
 				include COMPONENT . 'faction/election/list.php';
 
 				if ($request->query->has('candidate') AND ($candidat = $candidateManager->get($request->query->get('candidate'))) !== null) {
@@ -435,7 +427,7 @@ echo '<div id="content">';
 				}
 			} elseif ($faction->regime == Color::ROYALISTIC) {
 				$candidat  = $candidates[0];
-				$rElection = $electionManager->get(0)->id;
+				$rElection = $election->id;
 
 				include COMPONENT . 'faction/election/putsch.php';
 				include COMPONENT . 'faction/election/candidate.php';
@@ -471,7 +463,6 @@ echo '<div id="content">';
 				include COMPONENT . 'default.php';
 			}
 
-			$electionManager->changeSession($S_ELM_1);
 			$voteManager->changeSession($S_VOM_1);
 		}
 	} elseif ($request->query->get('view') == 'player') {
