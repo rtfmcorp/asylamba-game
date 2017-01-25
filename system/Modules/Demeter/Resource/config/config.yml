@@ -7,7 +7,7 @@ services:
     demeter.election_manager:
         class: Asylamba\Modules\Demeter\Manager\Election\ElectionManager
         arguments:
-            - "@database"
+            - "@entity_manager"
     demeter.vote_manager:
         class: Asylamba\Modules\Demeter\Manager\Election\VoteManager
         arguments:
