@@ -7,12 +7,9 @@ $electionManager = $this->getContainer()->get('demeter.election_manager');
 $session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
 
-$S_CAM_CAN = $candidateManager->getCurrentSession();
-$candidateManager->changeSession($S_CAM_CAN);
-
 $hasIPresented = FALSE;
-for ($i = 0; $i < $candidateManager->size(); $i++) { 
-	if ($candidateManager->get($i)->rPlayer == $session->get('playerId')) {
+foreach ($candidates as $candidate) { 
+	if ($candidate->rPlayer == $session->get('playerId')) {
 		$hasIPresented = TRUE;
 		break;
 	}
@@ -44,5 +41,3 @@ echo '<div class="component new-message">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-$candidateManager->changeSession($S_CAM_1);

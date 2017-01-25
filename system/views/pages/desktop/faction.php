@@ -328,19 +328,14 @@ echo '<div id="content">';
 			$electionManager->load(array('rColor' => $faction->id), array('id', 'DESC'), array(0, 1));
 
 			if ($electionManager->size()) {
-				$S_CAM_1 = $candidateManager->getCurrentSession();
-				$S_CAM_CAN = $candidateManager->newSession();
-				$candidateManager->load(array('rElection' => $electionManager->get(0)->id));
-
-				$nbCandidate = $candidateManager->size();
+				$candidates = $candidateManager->getByElection($electionManager->get(0));
+				$nbCandidate = count($candidates);
 				include COMPONENT . 'faction/election/campaign.php';
 				include COMPONENT . 'faction/election/list.php';
 
 				if ($request->query->get('candidate') === 'create') {
 					include COMPONENT . 'faction/election/postulate.php';
-				} elseif ($request->query->has('candidate') AND $candidateManager->getById($request->query->get('candidate')) !== FALSE) {
-					$candidat = $candidateManager->getById($request->query->get('candidate'));
-
+				} elseif ($request->query->has('candidate') AND ($candidat = $candidateManager->get($request->query->get('candidate'))) !== null) {
 					include COMPONENT . 'faction/election/candidate.php';
 
 					$forumTopicManager->load(
@@ -382,14 +377,12 @@ echo '<div id="content">';
 			$electionManager->changeSession($S_ELM_1);
 		} elseif ($faction->electionStatement == Color::ELECTION) {
 			$S_ELM_1 = $electionManager->getCurrentSession();
-			$S_CAM_1 = $candidateManager->getCurrentSession();
 			$S_VOM_1 = $voteManager->getCurrentSession();
 
 			$ELM_ELECTION_TOKEN = $electionManager->newSession();
 			$electionManager->load(array('rColor' => $faction->id), array('id', 'DESC'), array(0, 1));
 
-			$S_CAM_CAN = $candidateManager->newSession();
-			$candidateManager->load(array('rElection' => $electionManager->get(0)->id));
+			$candidates = $candidateManager->getByElection($electionManager->get(0));
 
 			$VOM_ELC_TOKEN = $voteManager->newSession();
 			$voteManager->load(array('rPlayer' => $session->get('playerId'), 'rElection' => $electionManager->get(0)->id));
@@ -400,14 +393,13 @@ echo '<div id="content">';
 			$factionPlayers = $playerManager->getFactionPlayers($session->get('playerInfo')->get('color'));
 
 			if ($faction->regime == Color::DEMOCRATIC) {
-				$nbCandidate = $candidateManager->size();
+				$nbCandidate = count($candidates);
 				include COMPONENT . 'faction/election/election.php';
 
 				$rElection = $electionManager->get(0)->id;
 				include COMPONENT . 'faction/election/list.php';
 
-				if ($request->query->has('candidate') AND $candidateManager->getById($request->query->get('candidate')) !== FALSE) {
-					$candidat = $candidateManager->getById($request->query->get('candidate'));
+				if ($request->query->has('candidate') AND ($candidat = $candidateManager->get($request->query->get('candidate'))) !== null) {
 					include COMPONENT . 'faction/election/candidate.php';
 
 					$forumTopicManager->load(
@@ -442,7 +434,7 @@ echo '<div id="content">';
 					include COMPONENT . 'default.php';
 				}
 			} elseif ($faction->regime == Color::ROYALISTIC) {
-				$candidat  = $candidateManager->get(0);
+				$candidat  = $candidates[0];
 				$rElection = $electionManager->get(0)->id;
 
 				include COMPONENT . 'faction/election/putsch.php';
@@ -479,7 +471,6 @@ echo '<div id="content">';
 				include COMPONENT . 'default.php';
 			}
 
-			$candidateManager->changeSession($S_CAM_1);
 			$electionManager->changeSession($S_ELM_1);
 			$voteManager->changeSession($S_VOM_1);
 		}

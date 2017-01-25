@@ -6,14 +6,10 @@ use Asylamba\Classes\Library\Format;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
-$candidateManager = $this->getContainer()->get('demeter.candidate_manager');
-
-$S_CAM_1 = $candidateManager->getCurrentSession();
-$candidateManager->changeSession($S_CAM_CAN);
 
 $hasIPresented = FALSE;
-for ($i = 0; $i < $candidateManager->size(); $i++) { 
-	if ($candidateManager->get($i)->rPlayer == $session->get('playerId')) {
+foreach ($candidates as $candidate) { 
+	if ($candidate->rPlayer == $session->get('playerId')) {
 		$hasIPresented = TRUE;
 		break;
 	}
@@ -23,7 +19,7 @@ echo '<div class="component">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<h4>Candidat' . Format::plural($candidateManager->size()) . ' à l\'élection</h4>';
+			echo '<h4>Candidat' . Format::plural($nbCandidate) . ' à l\'élection</h4>';
 
 			echo '<div class="set-item">';
 				if ($faction->electionStatement == Color::CAMPAIGN && !$hasIPresented) {
@@ -38,9 +34,8 @@ echo '<div class="component">';
 					echo '</a>';
 				}
 
-				if ($candidateManager->size() > 0) {
-					for ($i = 0; $i < $candidateManager->size(); $i++) {
-						$candidat = $candidateManager->get($i);
+				if ($nbCandidate > 0) {
+					foreach ($candidates as $candidat) {
 						$status = ColorResource::getInfo($faction->id, 'status');
 
 						echo '<div class="item">';
@@ -67,5 +62,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-$candidateManager->changeSession($S_CAM_1);

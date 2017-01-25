@@ -24,6 +24,8 @@ $electionManager = $this->getContainer()->get('demeter.election_manager');
 $candidateManager = $this->getContainer()->get('demeter.candidate_manager');
 $topicManager = $this->getContainer()->get('demeter.forum_topic_manager');
 $voteManager = $this->getContainer()->get('demeter.vote_manager');
+$entityManager = $this->getContainer()->get('entity_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
 
 $rElection			 = $request->request->get('relection');
 $program			 = $request->request->get('program');
@@ -49,13 +51,9 @@ if ($rElection !== FALSE && $program !== FALSE) {
 				$colorManager->newSession();
 				$colorManager->load(array('id' => $session->get('playerInfo')->get('color')));
 
-				$_CAM = $candidateManager->getCurrentSession();
-				$candidateManager->newSession();
-				$candidateManager->load(array('rPlayer' => $session->get('playerId'), 'rElection' => $rElection));
-
 				if ($colorManager->get()->electionStatement == Color::CAMPAIGN) {
 					if ($chiefChoice !== NULL && $treasurerChoice !== FALSE && $warlordChoice !== FALSE && $ministerChoice !== FALSE) {
-						if ($candidateManager->size() == 0) {
+						if (($candidate = $candidateManager->getByElectionAndPlayer($playerManager->get($session->get('playerId')), $electionManager->get())) === null) {
 							$candidate = new Candidate();
 
 							$candidate->rElection = $rElection;
@@ -93,7 +91,7 @@ if ($rElection !== FALSE && $program !== FALSE) {
 							$response->redirect('faction/view-election/candidate-' . $candidate->id);
 							$session->addFlashbag('Candidature déposée.', Flashbag::TYPE_SUCCESS);
 						} else {
-							$candidateManager->deleteById($candidateManager->get()->getId());
+							$entityManager->remove($candidate);
 							$session->addFlashbag('Candidature retirée.', Flashbag::TYPE_SUCCESS);
 						}
 					} else {
@@ -102,8 +100,6 @@ if ($rElection !== FALSE && $program !== FALSE) {
 				} else {
 					throw new ErrorException('Vous ne pouvez présenter ou retirer votre candidature qu\'en période de campagne.');
 				}
-
-				$candidateManager->changeSession($_CAM);
 				$colorManager->changeSession($_CLM);
 			} else {
 				throw new ErrorException('Vous ne pouvez pas vous présenter, vous ne faite pas partie de l\'élite.');

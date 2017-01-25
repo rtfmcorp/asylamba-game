@@ -7,7 +7,6 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Demeter\Model\Election\Vote;
-use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Demeter\Model\Color;
 
 $session = $this->getContainer()->get('app.session');
@@ -25,9 +24,6 @@ if ($rElection !== FALSE && $rCandidate !== FALSE) {
 	$_ELM = $electionManager->getCurrentSession();
 	$electionManager->newSession();
 	$electionManager->load(array('id' => $rElection));
-	$_CAM = $candidateManager->getCurrentSession();
-	$candidateManager->newSession();
-	$candidateManager->load(array('rPlayer' => $rCandidate, 'rElection' => $rElection));
 
 	$leader = $playerManager->getFactionLeader($session->get('playerInfo')->get('color'));
 	
@@ -36,7 +32,7 @@ if ($rElection !== FALSE && $rCandidate !== FALSE) {
 	}
 
 	if ($electionManager->size() > 0) {
-		if ($candidateManager->size() > 0 || $leader->id == $rCandidate) {
+		if (($candidateManager->getByElectionAndPlayer($playerManager->get($rCandidate), $electionManager->get())) !== null || $leader->id == $rCandidate) {
 			if ($electionManager->get()->rColor == $session->get('playerInfo')->get('color')) {
 				$_VOM = $voteManager->getCurrentSession();
 				$voteManager->newSession();
@@ -73,8 +69,6 @@ if ($rElection !== FALSE && $rCandidate !== FALSE) {
 	} else {
 		throw new ErrorException('Cette election n\'existe pas.');
 	}
-
-	$candidateManager->changeSession($_CAM);
 	$electionManager->changeSession($_ELM);
 } else {
 	throw new ErrorException('Informations manquantes.');
