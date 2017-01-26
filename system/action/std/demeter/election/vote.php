@@ -30,11 +30,7 @@ if ($rElection !== FALSE && $rCandidate !== FALSE) {
 	if (($election = $electionManager->get($rElection)) !== null) {
 		if (($candidateManager->getByElectionAndPlayer($playerManager->get($rCandidate), $election)) !== null || $leader->id == $rCandidate) {
 			if ($election->rColor == $session->get('playerInfo')->get('color')) {
-				$_VOM = $voteManager->getCurrentSession();
-				$voteManager->newSession();
-				$voteManager->load(array('rPlayer' => $session->get('playerId'), 'rElection' => $rElection));
-
-				if ($voteManager->get() == 0) {
+				if (($voteManager->getPlayerVote($playerManager->get($session->get('playerId')), $election)) === null) {
 					$_CLM = $colorManager->getCurrentSession();
 					$colorManager->newSession();
 					$colorManager->load(array('id' => $election->rColor));
@@ -55,7 +51,6 @@ if ($rElection !== FALSE && $rCandidate !== FALSE) {
 				} else {
 					throw new ErrorException('Vous avez déjà voté.');
 				}
-			$voteManager->changeSession($_VOM);
 			} else {
 				throw new ErrorException('Cette election ne se déroule pas dans votre faction.');
 			}

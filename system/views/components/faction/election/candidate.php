@@ -4,7 +4,6 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-$voteManager = $this->getContainer()->get('demeter.vote_manager');
 $parser = $this->getContainer()->get('parser');
 $sessionToken = $this->getContainer()->get('app.session')->get('token');
 
@@ -15,18 +14,15 @@ echo '<div class="component player profil size1">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			if ($faction->electionStatement == Color::ELECTION) {
-				$S_VOM1 = $voteManager->getCurrentSession();
-				$voteManager->changeSession($VOM_ELC_TOKEN);
-
 				$hasVoted = FALSE;
-				if ($voteManager->size() == 1) {
+				if ($playerVote !== null) {
 					$hasVoted = TRUE;
 				}
 
 				if ($faction->regime != Color::ROYALISTIC) {
 					echo '<div class="build-item">';
 						if ($hasVoted) {
-							if ($voteManager->get()->rCandidate == $candidat->rPlayer) {
+							if ($playerVote->rCandidate == $candidat->rPlayer) {
 								echo '<span class="button disable" style="text-align: center;">';
 									echo '<span class="text" style="line-height: 35px;">Vous avez voté pour lui</span>';
 								echo '</span>';
@@ -44,7 +40,7 @@ echo '<div class="component player profil size1">';
 				} else {					
 					echo '<div class="build-item">';
 						if ($hasVoted) {
-							if ($voteManager->get()->rCandidate == $candidat->rPlayer) {
+							if ($playerVote->rCandidate == $candidat->rPlayer) {
 								echo '<span class="button disable" style="text-align: center;">';
 									echo '<span class="text" style="line-height: 35px;">Vous avez soutenu le coup d\'état</span>';
 								echo '</span>';
@@ -63,8 +59,6 @@ echo '<div class="component player profil size1">';
 						}
 					echo '</div>';
 				}
-
-				$voteManager->changeSession($S_VOM1);
 			}
 
 			echo '<div class="center-box">';

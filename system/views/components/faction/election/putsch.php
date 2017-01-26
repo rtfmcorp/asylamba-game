@@ -6,15 +6,11 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-$voteManager = $this->getContainer()->get('demeter.vote_manager');
 $session = $this->getContainer()->get('app.session');
 
-$S_VOM_ELC = $voteManager->getCurrentSession();
-$voteManager->changeSession($VOM_ELC_TOTAL_TOKEN);
-
 $follower = 0;
-for ($i = 0; $i < $voteManager->size(); $i++) { 
-	if ($voteManager->get($i)->rCandidate == $candidat->rPlayer) {
+foreach ($votes as $vote) { 
+	if ($vote->rCandidate == $candidat->rPlayer) {
 		$follower++;
 	}
 }
@@ -52,5 +48,3 @@ echo '<div class="component profil">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-$voteManager->changeSession($S_VOM_ELC);

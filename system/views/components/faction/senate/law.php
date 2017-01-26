@@ -8,13 +8,9 @@ use Asylamba\Modules\Demeter\Resource\LawResources;
 # require
 	# LAW/Token 		S_LAM_TOVOTE
 
-$lawManager = $this->getContainer()->get('demeter.law_manager');
 $voteLawManager = $this->getContainer()->get('demeter.vote_law_manager');
 $session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
-
-$S_LAM_LAW = $lawManager->getCurrentSession();
-$lawManager->changeSession($S_LAM_TOVOTE);
 
 # durée de la loi
 $lawDuration = (strtotime($law->dEnd) - strtotime($law->dEndVotation)) / 3600;
@@ -89,5 +85,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-$lawManager->changeSession($S_LAM_LAW);

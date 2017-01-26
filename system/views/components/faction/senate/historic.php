@@ -45,5 +45,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-$lawManager->changeSession($S_LAM_LAW);
