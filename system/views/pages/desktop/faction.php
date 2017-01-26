@@ -376,11 +376,9 @@ echo '<div id="content">';
 
 			$candidates = $candidateManager->getByElection($election);
 
-			$VOM_ELC_TOKEN = $voteManager->newSession();
-			$voteManager->load(array('rPlayer' => $session->get('playerId'), 'rElection' => $election->id));
+			$playerVote = $voteManager->getPlayerVote($playerManager->get($session->get('playerId')), $election);
 
-			$VOM_ELC_TOTAL_TOKEN = $voteManager->newSession();
-			$voteManager->load(array('rElection' => $election->id));
+			$votes = $voteManager->getElectionVotes($election);
 
 			$factionPlayers = $playerManager->getFactionPlayers($session->get('playerInfo')->get('color'));
 
