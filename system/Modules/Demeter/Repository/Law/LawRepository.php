@@ -43,7 +43,7 @@ class LawRepository extends AbstractRepository {
 	 */
 	public function getByFactionAndStatements($factionId, $statements = [])
 	{
-		$statement = $this->select('l.rColor = :faction_id AND statement IN (' . implode(',', $statements) . ')', ['faction_id' => $factionId]);
+		$statement = $this->select('WHERE l.rColor = :faction_id AND l.statement IN (' . implode(',', $statements) . ')', ['faction_id' => $factionId]);
 		
 		$data = [];
 		while($row = $statement->fetch()) {

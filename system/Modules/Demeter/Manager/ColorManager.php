@@ -422,18 +422,16 @@ class ColorManager extends Manager {
 	private function ballot(Color $color, $date, $election) {
 		$chiefId = (($leader = $this->playerManager->getFactionLeader($color->id)) !== null) ? $leader->getId() : false;
 
-		$_VOM = $this->voteManager->getCurrentSession();
-		$this->voteManager->newSession();
-		$this->voteManager->load(array('rElection' => $election->id));
+		$votes = $this->voteManager->getElectionVotes($election);
 		
 		$ballot = [];
 		$listCandidate = [];
 
-		for ($i = 0; $i < $this->voteManager->size(); $i++) {
-			if (array_key_exists($this->voteManager->get($i)->rCandidate, $ballot)) {
-				$ballot[$this->voteManager->get($i)->rCandidate]++;
+		foreach ($votes as $vote) {
+			if (array_key_exists($vote->rCandidate, $ballot)) {
+				$ballot[$vote->rCandidate]++;
 			} else {
-				$ballot[$this->voteManager->get($i)->rCandidate] = 1;
+				$ballot[$vote->rCandidate] = 1;
 			}
 		}
 
@@ -480,8 +478,6 @@ class ColorManager extends Manager {
 			} else {
 				$this->ctc->add($date, $this, 'uMandate', $color, array($color, 0, 0, $chiefId, FALSE, $conv, $convPlayerID, $listCandidate));
 			}
-			$this->voteManager->changeSession($_VOM);
-
 		} elseif ($color->regime == Color::ROYALISTIC) {
 			if (count($ballot) > 0) {
 				arsort($ballot);
