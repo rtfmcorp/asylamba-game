@@ -31,8 +31,7 @@ class EntityManager {
     public function getRepository($entityClass)
     {
         if (!isset($this->repositories[$entityClass])) {
-			$namespace = explode('\\', $entityClass);
-			$repositoryClass = "Asylamba\\Modules\\{$namespace[2]}\\Repository\\{$namespace[4]}Repository";
+			$repositoryClass = str_replace('Model', 'Repository', $entityClass) . 'Repository';
             $this->repositories[$entityClass] = new $repositoryClass($this->connection, $this->unitOfWork);
         }
         return $this->repositories[$entityClass];
