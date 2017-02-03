@@ -31,8 +31,7 @@ $duration = $request->query->get('duration');
 if ($type !== FALSE) {
 	if (LawResources::size() >= $type) {
 		if ($session->get('playerInfo')->get('status') == LawResources::getInfo($type, 'department')) {
-			$_CLM = $colorManager->getCurrentsession();
-			$colorManager->load(array('id' => $session->get('playerInfo')->get('color')));
+			$faction = $colorManager->get($session->get('playerInfo')->get('color'));
 			$law = new Law();
 
 			$law->rColor = $session->get('playerInfo')->get('color');

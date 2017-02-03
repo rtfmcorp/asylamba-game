@@ -40,24 +40,10 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 	$cr = $commercialRouteManager->getByIdAndDistantBase($route, $base);
 
 	if ($cr !== null && $cr->getStatement() == CommercialRoute::PROPOSED) {
-		$S_CLM1 = $colorManager->getCurrentSession();
-		$colorManager->newSession();
-		$colorManager->load(array('id' => array($cr->playerColor1, $cr->playerColor2)));
-
-		if ($colorManager->size() == 2) {
-			if ($colorManager->get(0)->id == $cr->playerColor1) {
-				$color1 = $colorManager->get(0);
-				$color2 = $colorManager->get(1);
-			} else {
-				$color1 = $colorManager->get(1);
-				$color2 = $colorManager->get(0);
-			}
-		} else {
-			$color1 = $colorManager->get();
-			$color2 = $colorManager->get();
-		}
-
-		if ($color1->colorLink[$cr->playerColor2] != Color::ENEMY && $color2->colorLink[$cr->playerColor1] != Color::ENEMY) {
+		$proposerFaction = $colorManager->get($cr->playerColor1);
+		$acceptorFaction = $colorManager->get($cr->playerColor2);
+		
+		if ($proposerFaction->colorLink[$cr->playerColor2] != Color::ENEMY && $acceptorFaction->colorLink[$cr->playerColor1] != Color::ENEMY) {
 			$proposerBase = $orbitalBaseManager->get($cr->getROrbitalBase());
 			$acceptorBase = $orbitalBaseManager->get($cr->getROrbitalBaseLinked());
 			
@@ -118,7 +104,6 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 		} else {
 			throw new ErrorException('Vous ne pouvez pas accepter les routes de ce joueur, vos deux factions sont en guerre');
 		}
-		$colorManager->changeSession($S_CLM1);
 	} else {
 		throw new ErrorException('impossible d\'accepter une route commerciale');
 	}

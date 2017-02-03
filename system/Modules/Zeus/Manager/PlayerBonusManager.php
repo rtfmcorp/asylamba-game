@@ -19,7 +19,6 @@ use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
 use Asylamba\Classes\Container\Session;
 
 use Asylamba\Modules\Demeter\Resource\ColorResource;
-use Asylamba\Modules\Promethee\Resource\TechnologyResource;
 
 class PlayerBonusManager
 {
@@ -180,10 +179,7 @@ class PlayerBonusManager
 	}
 	
 	private function addFactionBonus(PlayerBonus $playerBonus) {
-		$_CLM = $this->colorManager->getCurrentSession();
-		$this->colorManager->newSession();
-		$this->colorManager->load(['id' => $playerBonus->playerColor]);
-		$color = $this->colorManager->get();
+		$color = $this->colorManager->get($playerBonus->playerColor);
 
 		if (in_array(ColorResource::DEFENSELITTLESHIPBONUS, $color->bonus)) {
 			$playerBonus->bonus->increase(PlayerBonus::FIGHTER_DEFENSE, 5);
@@ -244,7 +240,6 @@ class PlayerBonusManager
 			$playerBonus->bonus->increase(PlayerBonus::FRIGATE_DEFENSE, 5);
 			$playerBonus->bonus->increase(PlayerBonus::DESTROYER_DEFENSE, 5);		
 		}
-		$this->colorManager->changeSession($_CLM);
 	}
 
 	public function increment(PlayerBonus $playerBonus, $bonusId, $increment) {

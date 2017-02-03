@@ -55,15 +55,10 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 								$sectorManager->newSession();
 								$sectorManager->load(array('id' => $place->rSector));
 
-								$S_CLM2 = $colorManager->getCurrentSession();
-								$colorManager->newSession();
-								$colorManager->load(array('id' => $sectorManager->get()->rColor));
-								
-								$sectorColor = $colorManager->get();
+								$sectorColor = $colorManager->get($sectorManager->get()->rColor);
 								$isFactionSector = ($sectorManager->get()->rColor == $commander->playerColor || $sectorColor->colorLink[$session->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
 								
 								$sectorManager->changeSession($S_SEM);
-								$colorManager->changeSession($S_CLM2);
 								
 								$commander->destinationPlaceName = $place->baseName;
 								if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
@@ -106,10 +101,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 				$commander = $commanderManager->get();
 				$place = $placeManager->get();
 
-				$_CLM1 = $colorManager->getCurrentSession();
-				$colorManager->newSession();
-				$colorManager->load(array('id' => $session->get('playerInfo')->get('color')));
-				$color = $colorManager->get();
+				$color = $colorManager->get($session->get('playerInfo')->get('color'));
 				
 				if ($session->get('playerInfo')->get('color') != $place->getPlayerColor() && $color->colorLink[$player->rColor] != Color::ALLY) {
 					$placeManager->load(array('id' => $commander->getRBase()));
@@ -123,15 +115,10 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 						$sectorManager->newSession();
 						$sectorManager->load(array('id' => $place->rSector));
 
-						$_CLM3 = $colorManager->getCurrentSession();
-						$colorManager->newSession();
-						$colorManager->load(array('id' => $sectorManager->get()->rColor));
-						
-						$sectorColor = $colorManager->get();
+						$sectorColor = $colorManager->get($sectorManager->get()->rColor);
 						$isFactionSector = ($sectorManager->get()->rColor == $commander->playerColor || $sectorColor->colorLink[$session->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
 						
 						$sectorManager->changeSession($S_SEM);
-						$colorManager->changeSession($_CLM3);
 						
 						$commander->destinationPlaceName = $place->baseName;
 						if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
@@ -152,7 +139,6 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 				} else {
 					throw new ErrorException('Vous ne pouvez pas attaquer un lieu appartenant à votre Faction ou d\'une faction alliée.');
 				}
-				$colorManager->changeSession($_CLM1);
 			} else {
 				throw new ErrorException('Ce lieu n\'existe pas.');
 			}

@@ -31,11 +31,9 @@ if ($rElection !== FALSE && $rCandidate !== FALSE) {
 		if (($candidateManager->getByElectionAndPlayer($playerManager->get($rCandidate), $election)) !== null || $leader->id == $rCandidate) {
 			if ($election->rColor == $session->get('playerInfo')->get('color')) {
 				if (($voteManager->getPlayerVote($playerManager->get($session->get('playerId')), $election)) === null) {
-					$_CLM = $colorManager->getCurrentSession();
-					$colorManager->newSession();
-					$colorManager->load(array('id' => $election->rColor));
+					$faction = $colorManager->get($session->get('playerInfo')->get('color'));
 
-					if($colorManager->get()->electionStatement == Color::ELECTION) {
+					if($faction->electionStatement == Color::ELECTION) {
 						$vote = new Vote();
 						$vote->rPlayer = $session->get('playerId');
 						$vote->rCandidate = $rCandidate;
@@ -46,8 +44,6 @@ if ($rElection !== FALSE && $rCandidate !== FALSE) {
 					} else {
 						throw new ErrorException('Vous ne pouvez voter pour un candidat qu\'en période d\'élection.');
 					}
-
-					$colorManager->changeSession($_CLM);
 				} else {
 					throw new ErrorException('Vous avez déjà voté.');
 				}

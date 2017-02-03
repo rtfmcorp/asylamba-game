@@ -43,11 +43,9 @@ if ($rElection !== FALSE && $program !== FALSE) {
 			$ministerChoice = 1;
 
 			if ($session->get('playerInfo')->get('status') > Player::STANDARD) {
-				$_CLM = $colorManager->getCurrentSession();
-				$colorManager->newSession();
-				$colorManager->load(array('id' => $session->get('playerInfo')->get('color')));
+				$faction = $colorManager->get($session->get('playerInfo')->get('color'));
 
-				if ($colorManager->get()->electionStatement == Color::CAMPAIGN) {
+				if ($faction->electionStatement == Color::CAMPAIGN) {
 					if ($chiefChoice !== NULL && $treasurerChoice !== FALSE && $warlordChoice !== FALSE && $ministerChoice !== FALSE) {
 						if (($candidate = $candidateManager->getByElectionAndPlayer($playerManager->get($session->get('playerId')), $election)) === null) {
 							$candidate = new Candidate();
@@ -96,7 +94,6 @@ if ($rElection !== FALSE && $program !== FALSE) {
 				} else {
 					throw new ErrorException('Vous ne pouvez présenter ou retirer votre candidature qu\'en période de campagne.');
 				}
-				$colorManager->changeSession($_CLM);
 			} else {
 				throw new ErrorException('Vous ne pouvez pas vous présenter, vous ne faite pas partie de l\'élite.');
 			}

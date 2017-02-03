@@ -524,10 +524,7 @@ class PlayerManager {
 				$this->researchManager->newSession();
 				$this->researchManager->load(array('rPlayer' => $player->id));
 
-				# load the colors (faction)
-				$S_CLM1 = $this->colorManager->getCurrentSession();
-				$this->colorManager->newSession();
-				$this->colorManager->load(array());
+				$factions = $this->colorManager->getAll();
 
 				# load the transactions
 				$S_TRM1 = $this->transactionManager->getCurrentSession();
@@ -535,10 +532,9 @@ class PlayerManager {
 				$this->transactionManager->load(array('rPlayer' => $player->id, 'type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_PROPOSED));
 
 				foreach ($hours as $key => $hour) {
-					$this->ctc->add($hour, $this, 'uCredit', $player, array($player, $playerBases, $playerBonus, $this->commanderManager->getCurrentSession(), $this->researchManager->getCurrentSession(), $this->colorManager->getCurrentSession(), $this->transactionManager->getCurrentSession()));
+					$this->ctc->add($hour, $this, 'uCredit', $player, array($player, $playerBases, $playerBonus, $this->commanderManager->getCurrentSession(), $this->researchManager->getCurrentSession(), $factions, $this->transactionManager->getCurrentSession()));
 				}
 				$this->transactionManager->changeSession($S_TRM1);
-				$this->colorManager->changeSession($S_CLM1);
 				$this->researchManager->changeSession($S_RSM1);
 				$this->commanderManager->changeSession($S_COM1);
 			}
@@ -546,7 +542,7 @@ class PlayerManager {
 		}
 	}
 
-	public function uCredit(Player $player, $playerBases, $playerBonus, $comSession, $rsmSession, $clmSession, $trmSession) {
+	public function uCredit(Player $player, $playerBases, $playerBonus, $comSession, $rsmSession, $factions, $trmSession) {
 		
 		$popTax = 0; $nationTax = 0;
 		$credits = $player->credit;
@@ -561,9 +557,6 @@ class PlayerManager {
 		$socialTech = ($player->iUniversity * $player->partSocialPoliticalSciences / 100);
 		$informaticTech = ($player->iUniversity * $player->partInformaticEngineering / 100);
 
-		$S_CLM1 = $this->colorManager->getCurrentSession();
-		$this->colorManager->changeSession($clmSession);
-		
 		foreach ($playerBases as $base) {
 			$popTax = Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase, $this->playerTaxCoeff);
 			$popTax += $popTax * $playerBonus->bonus->get(PlayerBonus::POPULATION_TAX) / 100;
@@ -582,16 +575,14 @@ class PlayerManager {
 
 			# paiement à l'alliance
 			if ($player->rColor != 0) {
-				for ($j = 0; $j < $this->colorManager->size(); $j++) { 
-					if ($this->colorManager->get($j)->id == $base->sectorColor) {
-						$this->colorManager->get($j)->increaseCredit($nationTax);
+				foreach ($factions as $faction) { 
+					if ($faction->id == $base->sectorColor) {
+						$faction->increaseCredit($nationTax);
 						break;
 					}
 				}
 			}
 		}
-		$this->colorManager->changeSession($S_CLM1);
-
 		# si la balance de crédit est positive
 		$totalInvests = $uniInvests + $schoolInvests + $antiSpyInvests;
 		if ($credits >= $totalInvests) {

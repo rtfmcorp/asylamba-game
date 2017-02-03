@@ -37,13 +37,8 @@ if ($name !== FALSE AND $quantity !== FALSE) {
 			$credit = intval($quantity);
 
 			if ($credit > 0) {
-				$S_CLM1 = $colorManager->getCurrentSession();
-				$colorManager->newSession();
-				$colorManager->load(array('id' => $session->get('playerInfo')->get('color')));
-				if ($colorManager->size() == 1) {
+				if (($faction = $colorManager->get($session->get('playerInfo')->get('color'))) !== null) {
 					if (($receiver = $playerManager->getByName($name)) !== null) {
-						$faction = $colorManager->get();
-
 						if ($faction->credits >= $credit) {
 							$faction->decreaseCredit($credit);
 							$playerManager->increaseCredit($receiver, $credit);
@@ -72,6 +67,7 @@ if ($name !== FALSE AND $quantity !== FALSE) {
 							$n->addEnd();
 							$notificationManager->add($n);
 							$session->addFlashbag('Crédits envoyés', Flashbag::TYPE_SUCCESS);
+							$this->getContainer()->get('entity_manager')->flush();
 						} else {
 							throw new ErrorException('envoi de crédits impossible - vous ne pouvez pas envoyer plus que ce que vous possédez');
 						}

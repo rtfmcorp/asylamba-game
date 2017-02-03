@@ -1,16 +1,15 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Demeter\Model\Color;
 
 echo '<h2>Ajout de isInGame dans color</h2>';
 
 $this->getContainer()->get('database_admin')->query("ALTER TABLE `color` ADD `isInGame` TINYINT NULL DEFAULT 0 AFTER `isClosed`;");
 
-$colorManager = $this->getContainer()->get('demeter.color_manager');
+$factions = $this->getContainer()->get('demeter.color_manager')->getAll();
 
-$colorManager->newSession();
-$colorManager->load();
-
-for ($i = 1; $i <= 7; $i++) {
-	$colorManager->get($i)->isInGame = 1;
+foreach ($factions as $faction) {
+	$faction->isInGame = 1;
 }
+
+$this->getContainer()->get('entity_manager')->flush(Color::class);

@@ -107,14 +107,9 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 				// débit des ressources au joueur
 				$resourcePrice = ShipResource::getInfo($ship, 'resourcePrice') * $quantity;
 				if ($ship == ShipResource::CERBERE || $ship == ShipResource::PHENIX) {
-
-					$_CLM1 = $colorManager->getCurrentSession();
-					$colorManager->newSession();
-					$colorManager->load(['id' => $session->get('playerInfo')->get('color')]);
-					if (in_array(ColorResource::PRICEBIGSHIPBONUS, $colorManager->get()->bonus)) {
+					if (in_array(ColorResource::PRICEBIGSHIPBONUS, $colorManager->get($session->get('playerInfo')->get('color'))->bonus)) {
 						$resourcePrice -= round($resourcePrice * ColorResource::BONUS_EMPIRE_CRUISER / 100);
 					}
-					$colorManager->changeSession($_CLM1);
 				}
 				$orbitalBaseManager->decreaseResources($ob, $resourcePrice);
 

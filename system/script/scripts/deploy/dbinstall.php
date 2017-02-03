@@ -1213,16 +1213,17 @@ $db->query("CREATE TABLE IF NOT EXISTS `colorLink` (
 
 $values = '';
 $colorManager = $this->getContainer()->get('demeter.color_manager');
-$colorManager->load();
-for ($i = 1; $i < $colorManager->size(); $i++) {
-	for ($j = 1; $j < $colorManager->size(); $j++) {
-		if (!(($i == $colorManager->size() - 1) && ($j == $colorManager->size() - 1))) {
-			$values .= '(' . $colorManager->get($i)->id . ',' . $colorManager->get($j)->id . ',' . 0 .'),';
+$factions = $colorManager->getAll();
+$nbFactions = count($factions);
+for ($i = 1; $i < $nbFactions; $i++) {
+	for ($j = 1; $j < $nbFactions; $j++) {
+		if (!(($i == $nbFactions - 1) && ($j == $nbFactions - 1))) {
+			$values .= '(' . $factions[$i]->id . ',' . $factions[$j]->id . ',' . 0 .'),';
 		}
 	}
 }
 
-$values .= '(' . $colorManager->get($colorManager->size() - 1)->id . ',' . $colorManager->get($colorManager->size() - 1)->id . ',' . 0 .');';
+$values .= '(' . $factions[$nbFactions - 1]->id . ',' . $factions[$nbFactions - 1]->id . ',' . 0 .');';
 
 echo '<h3>Remplissage de la table colorLink</h3>';
 $qr = $db->prepare("INSERT INTO `colorLink` (`rColor`, `rColorLinked`, `statement`) VALUES" . $values);

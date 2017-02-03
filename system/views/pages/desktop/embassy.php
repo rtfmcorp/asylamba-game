@@ -51,24 +51,7 @@ echo '<div id="content">';
 			? $request->query->get('faction')
 			: $session->get('playerInfo')->get('color');
 
-		$S_COL_1 = $colorManager->getCurrentSession();
-		$colorManager->newSession();
-		$colorManager->load(array('isInGame' => TRUE));
-
-		$factions = [];
-		for ($i = 0; $i < $colorManager->size(); $i++) { 
-			$factions[] = $colorManager->get($i)->id;
-		}
-
-		$colorManager->changeSession($S_COL_1);
-
-		if (in_array($color, $factions)) {
-			# load data
-			$S_COL_1 = $colorManager->getCurrentSession();
-			$colorManager->newSession();
-			$colorManager->load(array('id' => $color));
-			$faction = $colorManager->get(0);
-
+		if (($faction = $colorManager->get($color)) !== null && $faction->isInGame === true) {
 			$governmentMembers = $playerManager->getGovernmentMembers($faction->id);
 
 			# include component
@@ -80,9 +63,6 @@ echo '<div id="content">';
 
 			$eraseColor = $faction->id;
 			include COMPONENT . 'faction/data/diplomacy/main.php';
-
-			# close session
-			$colorManager->changeSession($S_COL_1);
 		} else {
 			$this->getContainer()->get('app.response')->redirect('embassy');
 		}

@@ -447,11 +447,7 @@ class PlaceManager extends Manager {
 									$placeBase = NULL;
 								}
 
-								$S_CLM_L1 = $this->colorManager->getCurrentSession();
-								$this->colorManager->newSession();
-								$this->colorManager->load(['id' => $commander->playerColor]);
-								$commanderColor = $this->colorManager->get();
-								$this->colorManager->changeSession($S_CLM_L1);
+								$commanderColor = $this->colorManager->get($commander->playerColor);
 
 								if ($this->ctc->add($commander->dArrival, $this, 'uLoot', $place, array($place, $commander, $commanderPlace, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor))) {
 									$commander->uMethodCtced = TRUE;
@@ -490,11 +486,7 @@ class PlaceManager extends Manager {
 									$S_COM_C2 = NULL;
 								}
 
-								$S_CLM = $this->colorManager->getCurrentSession();
-								$this->colorManager->newSession();
-								$this->colorManager->load(array('id' => $commander->playerColor));
-								$commanderColor = $this->colorManager->get();
-								$this->colorManager->changeSession($S_CLM);
+								$commanderColor = $this->colorManager->get($commander->playerColor);
 								
 								if ($this->ctc->add($commander->dArrival, $this, 'uConquer', $place, array($place, $commander, $commanderPlace, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $S_REM_C2, $S_COM_C2))) {
 									$commander->uMethodCtced = TRUE;

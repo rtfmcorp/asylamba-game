@@ -276,14 +276,12 @@ if ($gameover == FALSE) {
 	}
 	if ($winRanking !== NULL) {
 		# there is a winner !!!
-		$S_CLM2 = $colorManager->getCurrentSession();
-		$colorManager->newSession(FALSE);
-		$colorManager->load(array('id' => $winRanking->rFaction));
+		$faction = $colorManager->get($winRanking->rFaction);
 
-		$colorManager->get()->isWinner = Color::WIN;
+		$faction->isWinner = Color::WIN;
 
 		# envoyer un message de Jean-Mi
-		$winnerName = ColorResource::getInfo($colorManager->get()->id, 'officialName');
+		$winnerName = ColorResource::getInfo($faction->id, 'officialName');
 		$content = 'Salut,<br /><br />La victoire vient d\'être remportée par : <br /><strong>' . $winnerName . '</strong><br />';
 		$content .= 'Cette faction a atteint les ' . POINTS_TO_WIN . ' points, la partie est donc terminée.<br /><br />Bravo et un grand merci à tous les participants !';
 
@@ -319,8 +317,6 @@ if ($gameover == FALSE) {
 		} else {
 			throw new ErrorException('La conversation n\'existe pas ou ne vous appartient pas.');
 		}
-
-		$colorManager->changeSession($S_CLM2);
 		$conversationManager->changeSession($S_CVM1);
 	}
 }
