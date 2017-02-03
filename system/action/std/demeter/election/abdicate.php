@@ -20,20 +20,17 @@ $rPlayer = $request->request->get('rplayer');
 
 if ($statusArray = ColorResource::getInfo($session->get('playerInfo')->get('color'), 'regime') == Color::DEMOCRATIC) {
 	if ($session->get('playerInfo')->get('status') == Player::CHIEF) {
-		$_CLM = $colorManager->getCurrentsession();
-		$colorManager->newSession();
-		$colorManager->load(['id' => $session->get('playerInfo')->get('color')]);
-
-		if ($colorManager->get()->electionStatement == Color::MANDATE) {
+		$faction = $colorManager->get($session->get('playerInfo')->get('color'));
+		
+		if ($faction->electionStatement == Color::MANDATE) {
 			$date = new \DateTime(Utils::now());
-			$date->modify('-' . $colorManager->get()->mandateDuration . ' second');
+			$date->modify('-' . $faction->mandateDuration . ' second');
 			$date = $date->format('Y-m-d H:i:s');
-			$colorManager->get()->dLastElection = $date;			
+			$faction->dLastElection = $date;			
 			$session->addFlashbag('Des élections anticipées vont être lancées.', Flashbag::TYPE_SUCCESS);	
 		} else {
 			throw new ErrorException('Des élections sont déjà en cours.');	
 		}
-		$colorManager->changeSession($_CLM);
 	} else {
 		throw new ErrorException('Vous n\'êtes pas le chef de votre faction.');
 	}
@@ -43,11 +40,9 @@ if ($statusArray = ColorResource::getInfo($session->get('playerInfo')->get('colo
 			if (($heir = $playerManager->get($rPlayer)) !== null) {
 				if ($heir->rColor == $session->get('playerInfo')->get('color')) {
 					if ($heir->status >= Player::PARLIAMENT) {
-						$_CLM = $colorManager->getCurrentsession();
-						$colorManager->newSession();
-						$colorManager->load(['id' => $session->get('playerInfo')->get('color')]);
+						$faction = $colorManager->get($session->get('playerInfo')->get('color'));
 
-						if ($colorManager->get()->electionStatement == Color::MANDATE) {
+						if ($faction->electionStatement == Color::MANDATE) {
 							$heir->status = Player::CHIEF;
 							// The player is now a member of Parliament
 							$playerManager->get($session->get('playerId'))->status = Player::PARLIAMENT;
@@ -66,8 +61,6 @@ if ($statusArray = ColorResource::getInfo($session->get('playerInfo')->get('colo
 						} else {
 							throw new ErrorException('vous ne pouvez pas abdiquer pendant un putsch.');	
 						}
-						$colorManager->changeSession($_CLM);
-						
 					} else {
 						throw new ErrorException('Vous ne pouvez choisir qu\'un membre du sénat ou du gouvernement.');
 					}

@@ -46,23 +46,10 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 	if (($commercialRouteManager->countBaseRoutes($proposerBase->getId()) < $nbrMaxCommercialRoute) && (!$alreadyARoute) && ($proposerBase->getLevelSpatioport() > 0) && ($otherBase->getLevelSpatioport() > 0)) {
 		$player = $playerManager->get($otherBase->getRPlayer());
 
-		$S_CLM1 = $colorManager->getCurrentSession();
-		$colorManager->newSession();
-		$colorManager->load(array('id' => array($session->get('playerInfo')->get('color'), $player->rColor)));
-
-		if ($colorManager->size() == 2) {
-			if ($colorManager->get(0)->id == $session->get('playerInfo')->get('color')) {
-				$myColor = $colorManager->get(0);
-				$otherColor = $colorManager->get(1);
-			} else {
-				$myColor = $colorManager->get(1);
-				$otherColor = $colorManager->get(0);
-			}
-		} else {
-			$myColor = $colorManager->get();
-			$otherColor = $colorManager->get();
-		}
-		if ($myColor->colorLink[$player->rColor] != Color::ENEMY && $otherColor->colorLink[$session->get('playerInfo')->get('color')] != Color::ENEMY) {
+		$playerFaction = $colorManager->get($session->get('playerInfo')->get('color'));
+		$otherFaction = $colorManager->get($player->rColor);
+		
+		if ($playerFaction->colorLink[$player->rColor] != Color::ENEMY && $otherFaction->colorLink[$session->get('playerInfo')->get('color')] != Color::ENEMY) {
 
 			if ($proposerBase !== null && $otherBase !== null && ($proposerBase->getRPlayer() != $otherBase->getRPlayer()) && $player !== null) {
 				$distance = Game::getDistance($proposerBase->getXSystem(), $otherBase->getXSystem(), $proposerBase->getYSystem(), $otherBase->getYSystem());
@@ -82,16 +69,11 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 				}
 
 				# compute bonus
-				$_CLM23 = $colorManager->getCurrentSession();
-				$colorManager->newSession();
-				$colorManager->load(['id' => $session->get('playerInfo')->get('color')]);
-				if (in_array(ColorResource::COMMERCIALROUTEPRICEBONUS, $colorManager->get()->bonus)) {
+				if (in_array(ColorResource::COMMERCIALROUTEPRICEBONUS, $playerFaction->bonus)) {
 					$priceWithBonus = round($price - ($price * ColorResource::BONUS_NEGORA_ROUTE / 100));
 				} else {
 					$priceWithBonus = $price;
 				}
-
-				$colorManager->changeSession($_CLM23);
 
 				if ($session->get('playerInfo')->get('credit') >= $priceWithBonus) {
 					# création de la route
@@ -132,7 +114,6 @@ if ($baseFrom !== FALSE AND $baseTo !== FALSE AND in_array($baseFrom, $verif)) {
 		} else {
 			throw new ErrorException('impossible de proposer une route commerciale à ce joueur, vos factions sont en guerre.');
 		}
-		$colorManager->changeSession($S_CLM1);
 	} else {
 		throw new ErrorException('impossible de proposer une route commerciale (3)');
 	}

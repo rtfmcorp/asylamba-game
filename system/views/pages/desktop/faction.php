@@ -21,16 +21,7 @@ $candidateManager = $this->getContainer()->get('demeter.candidate_manager');
 $forumTopicManager = $this->getContainer()->get('demeter.forum_topic_manager');
 $sectorManager = $this->getContainer()->get('gaia.sector_manager');
 
-# factionNav component
-$color_factionNav = $session->get('playerInfo')->get('color');
-
-$S_COL1 = $colorManager->getCurrentSession();
-$colorManager->newSession();
-$colorManager->load(array('id' => $color_factionNav));
-
-if ($colorManager->size() == 1) {
-	$faction = $colorManager->get(0);
-} else {
+if (($faction = $colorManager->get($session->get('playerInfo')->get('color'))) === null) {
 	$response->redirect('profil');
 }
 
@@ -466,7 +457,7 @@ echo '<div id="content">';
 	} elseif ($request->query->get('view') == 'player') {
 
 		# statPlayer component
-		$nbPlayer_statPlayer = $colorManager->getById($session->get('playerInfo')->get('color'))->activePlayers;
+		$nbPlayer_statPlayer = $faction->activePlayers;
 
 		$nbOnlinePlayer_statPlayer = 0;
 		$nbOfflinePlayer_statPlayer = 0;
@@ -500,5 +491,3 @@ echo '<div id="content">';
 		$response->redirect('faction');
 	}
 echo '</div>';
-
-$colorManager->changeSession($S_COL1);

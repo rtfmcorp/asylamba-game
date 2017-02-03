@@ -84,25 +84,15 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				$playerManager->increaseCredit($seller, $transaction->price);
 
 				# transfert des crédits aux alliances
-				$S_CLM1 = $colorManager->getCurrentSession();
-
 				if ($transaction->sectorColor != 0) {
-					$colorManager->newSession();
-					$colorManager->load(array('id' => $transaction->sectorColor));
-
-					$exportFaction = $colorManager->get();
+					$exportFaction = $colorManager->get($transaction->sectorColor);
 					$exportFaction->increaseCredit($exportTax);
 				}
 
 				if ($base->sectorColor != 0) {
-					$colorManager->newSession();
-					$colorManager->load(array('id' => $base->sectorColor));
-
-					$importFaction = $colorManager->get();
+					$importFaction = $colorManager->get($base->sectorColor);
 					$importFaction->increaseCredit($importTax);
 				}
-
-				$colorManager->changeSession($S_CLM1);
 
 				# gain d'expérience
 				$experience = $transaction->getExperienceEarned();

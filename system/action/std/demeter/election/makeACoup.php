@@ -36,15 +36,13 @@ $ministerChoice = $request->request->get('ministerchoice');
 
 if ($program !== FALSE) {
 	if ($session->get('playerInfo')->get('status') > Player::STANDARD && $session->get('playerInfo')->get('status') < Player::CHIEF) {
-		$_CLM = $colorManager->getCurrentSession();
-		$colorManager->newSession();
-		$colorManager->load(array('id' => $session->get('playerInfo')->get('color')));
+		$faction = $colorManager->get($session->get('playerInfo')->get('color'));
 
-		if($colorManager->get()->electionStatement == Color::MANDATE) {
-			if ($colorManager->get()->regime == Color::ROYALISTIC) {
+		if($faction->electionStatement == Color::MANDATE) {
+			if ($faction->regime == Color::ROYALISTIC) {
 
 				$election = new Election();
-				$election->rColor = $colorManager->get()->id;
+				$election->rColor = $faction->id;
 				$election->dElection = new \DateTime('+' . Color::PUTSCHTIME . ' second');
 
 				$electionManager->add($election);
@@ -69,9 +67,8 @@ if ($program !== FALSE) {
 				$topic->dLastMessage = Utils::now();
 				$topicManager->add($topic);
 
-				$colorManager->get()->electionStatement = Color::ELECTION;
-
-				$colorManager->get()->dLastElection = Utils::now();
+				$faction->electionStatement = Color::ELECTION;
+				$faction->dLastElection = Utils::now();
 
 				$vote = new Vote();
 				$vote->rPlayer = $session->get('playerId');
@@ -103,8 +100,6 @@ if ($program !== FALSE) {
 		} else {
 			throw new ErrorException('Un coup d\'état est défà en cours.');
 		}
-
-		$colorManager->changeSession($_CLM);
 	} else {
 		throw new ErrorException('Vous ne pouvez pas vous présenter, vous ne faite pas partie de l\'élite ou vous êtes déjà le hef de la faction.');
 	}

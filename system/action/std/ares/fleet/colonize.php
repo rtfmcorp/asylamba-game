@@ -82,14 +82,9 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 						$price = $totalBases * $colonizationCost;
 
 						# calcul du bonus
-						$_CLM46 = $colorManager->getCurrentSession();
-						$colorManager->newSession();
-						$colorManager->load(['id' => $session->get('playerInfo')->get('color')]);
-						
-						if (in_array(ColorResource::COLOPRICEBONUS, $colorManager->get()->bonus)) {
+						if (in_array(ColorResource::COLOPRICEBONUS, $colorManager->get($session->get('playerInfo')->get('color'))->bonus)) {
 							$price -= round($price * ColorResource::BONUS_CARDAN_COLO / 100);
 						}
-						$colorManager->changeSession($_CLM46);
 
 						if ($session->get('playerInfo')->get('credit') >= $price) {
 							if ($commander->getPev() > 0) {
@@ -99,15 +94,10 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 									$sectorManager->newSession();
 									$sectorManager->load(array('id' => $place->rSector));
 
-									$_CLM2 = $colorManager->getCurrentSession();
-									$colorManager->newSession();
-									$colorManager->load(array('id' => $sectorManager->get()->rColor));
-									
-									$sectorColor = $colorManager->get();
+									$sectorColor = $colorManager->get($sectorManager->get()->rColor);
 									$isFactionSector = ($sectorManager->get()->rColor == $commander->playerColor || $sectorColor->colorLink[$session->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
 									
 									$sectorManager->changeSession($S_SEM);
-									$colorManager->changeSession($_CLM2);
 
 									if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
 										$commander->destinationPlaceName = $place->baseName;

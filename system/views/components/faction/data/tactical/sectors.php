@@ -1,14 +1,9 @@
 <?php
 
-use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\Format;
 
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $database = $this->getContainer()->get('database');
-
-$_CLM = $colorManager->getCurrentSession();
-$colorManager->newSession();
-$colorManager->load();
 
 $qr = 'SELECT
 		se.id AS id,
@@ -17,15 +12,12 @@ $qr = 'SELECT
 		se.points AS points,
 		(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rSector = se.id) AS nbc0,';
 
-for ($i = 1; $i < $colorManager->size(); $i++) {
-	if ($i < $colorManager->size() - 1) {
-		$qr .= '(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = ' . $colorManager->get($i)->id . ' AND sy.rSector = se.id) AS nbc' . $colorManager->get($i)->id .',';
-	} else {
-		$qr .= '(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = ' . $colorManager->get($i)->id . ' AND sy.rSector = se.id) AS nbc' . $colorManager->get($i)->id;
-	}
+$factions = $colorManager->getAll();
+foreach ($factions as $f) {
+	$qr .= '(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = ' . $f->id . ' AND sy.rSector = se.id) AS nbc' . $f->id .',';
 }
 
-$qr .= '	FROM sector AS se ORDER BY (nbc' . $faction->id . ' / nbc0) DESC';
+$qr = substr($qr, 0, -1) . ' FROM sector AS se ORDER BY (nbc' . $faction->id . ' / nbc0) DESC';
 
 $qr = $database->prepare($qr);
 $qr->execute();
@@ -60,8 +52,8 @@ echo '<div class="component">';
 				foreach ($sectors as $sector) {
 					$percents = array();
 					
-					for ($j = 1; $j < $colorManager->size(); $j++) {
-						$percents['color' . $colorManager->get($j)->id] = Format::percent($sector['nbc' . $colorManager->get($j)->id], $sector['nbc0']);
+					foreach ($factions as $f) {
+						$percents['color' . $f->id] = Format::percent($sector['nbc' . $f->id], $sector['nbc0']);
 					}
 
 					arsort($percents);
@@ -91,4 +83,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-$colorManager->changeSession($_CLM);

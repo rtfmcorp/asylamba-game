@@ -24,15 +24,10 @@ if ($quantity !== FALSE) {
 		if (($sender = $playerManager->get($session->get('playerId'))) !== null) {
 			if ($sender->rColor > 0) {
 				if ($sender->credit >= $credit) {
-						
-					$S_CLM1 = $colorManager->getCurrentSession();
-					$colorManager->newSession();
-					$colorManager->load(array('id' => $sender->rColor));	
-					
-					if ($colorManager->size() == 1) {
+					if (($faction = $colorManager->get($sender->rColor)) !== null) {
 						# make the transaction
 						$playerManager->decreaseCredit($sender, $credit);
-						$colorManager->get()->increaseCredit($credit);
+						$faction->increaseCredit($credit);
 
 						# create the transaction
 						$ct = new CreditTransaction();
@@ -45,7 +40,7 @@ if ($quantity !== FALSE) {
 						$creditTransactionManager->add($ct);
 
 						$session->addFlashbag('Crédits envoyés', Flashbag::TYPE_SUCCESS);
-						$colorManager->changeSession($S_CLM1);
+						$this->getContainer()->get('entity_manager')->flush();
 					} else {
 						throw new ErrorException('envoi de crédits impossible - faction introuvable');
 					}	
