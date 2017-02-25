@@ -81,13 +81,13 @@ if ($type !== FALSE) {
 			}
 			if (LawResources::getInfo($type, 'bonusLaw')) {
 				if ($duration !== FALSE) {
-					if ($colorManager->get()->credits >= LawResources::getInfo($type, 'price') * $duration * $colorManager->get()->activePlayers) {
+					if ($faction->credits >= LawResources::getInfo($type, 'price') * $duration * $faction->activePlayers) {
 						$law->options = serialize(array());
 
 						if (!$lawManager->lawExists($session->get('playerInfo')->get('color'), $type)) {
 							$lawManager->add($law);
-							$colorManager->get()->credits -= LawResources::getInfo($type, 'price') * $duration * $colorManager->get()->activePlayers;
-							$colorManager->sendSenateNotif($colorManager->get());
+							$faction->credits -= LawResources::getInfo($type, 'price') * $duration * $faction->activePlayers;
+							$colorManager->sendSenateNotif($faction);
 							$response->redirect('faction/view-senate');	
 						} else {
 							throw new ErrorException('Cette loi est déjà proposée ou en vigueur.');
@@ -97,7 +97,7 @@ if ($type !== FALSE) {
 					}
 				}
 			} else {
-				if ($colorManager->get()->credits >= LawResources::getInfo($type, 'price')) {
+				if ($faction->credits >= LawResources::getInfo($type, 'price')) {
 					switch ($type) {
 						case Law::SECTORTAX:
 							$taxes = intval($request->request->get('taxes'));
@@ -110,8 +110,8 @@ if ($type !== FALSE) {
 										if ($sectorManager->get()->rColor == $session->get('playerInfo')->get('color')) {
 											$law->options = serialize(array('taxes' => $taxes, 'rSector' => $rSector, 'display' => array('Secteur' => $sectorManager->get()->name, 'Taxe actuelle' => $sectorManager->get()->tax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											$lawManager->add($law);
-											$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-											$colorManager->sendSenateNotif($colorManager->get());
+											$faction->credits -= LawResources::getInfo($type, 'price');
+											$colorManager->sendSenateNotif($faction);
 											$response->redirect('faction/view-senate');
 										} else {
 											throw new ErrorException('Ce secteur n\'est pas sous votre contrôle.');
@@ -139,8 +139,8 @@ if ($type !== FALSE) {
 										if ($sectorManager->get()->rColor == $session->get('playerInfo')->get('color')) {
 											$law->options = serialize(array('name' => $name, 'rSector' => $rSector));
 											$lawManager->add($law);
-											$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-											$colorManager->sendSenateNotif($colorManager->get(), TRUE);
+											$faction->credits -= LawResources::getInfo($type, 'price');
+											$colorManager->sendSenateNotif($faction, TRUE);
 											$response->redirect('faction/view-senate');
 										} else {
 											throw new ErrorException('Ce secteur n\'est pas sous votre contrôle.');
@@ -167,8 +167,8 @@ if ($type !== FALSE) {
 										if ($taxes <= 15) {
 											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'), 'Taxe actuelle' => $commercialTaxManager->get()->exportTax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											$lawManager->add($law);
-											$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-											$colorManager->sendSenateNotif($colorManager->get());
+											$faction->credits -= LawResources::getInfo($type, 'price');
+											$colorManager->sendSenateNotif($faction);
 											$response->redirect('faction/view-senate');
 										} else {
 											throw new ErrorException('Pas plus que 15.');
@@ -177,8 +177,8 @@ if ($type !== FALSE) {
 										if ($taxes <= 15 && $taxes >= 2) {
 											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'), 'Taxe actuelle' => $commercialTaxManager->get()->exportTax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											$lawManager->add($law);
-											$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-											$colorManager->sendSenateNotif($colorManager->get());
+											$faction->credits -= LawResources::getInfo($type, 'price');
+											$colorManager->sendSenateNotif($faction);
 											$response->redirect('faction/view-senate');
 										} else {
 											throw new ErrorException('Entre 2 et 15.');
@@ -203,8 +203,8 @@ if ($type !== FALSE) {
 										if ($taxes <= 15) {
 											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'), 'Taxe actuelle' => $commercialTaxManager->get()->importTax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											$lawManager->add($law);
-											$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-											$colorManager->sendSenateNotif($colorManager->get());
+											$faction->credits -= LawResources::getInfo($type, 'price');
+											$colorManager->sendSenateNotif($faction);
 											$response->redirect('faction/view-senate');
 										} else {
 											throw new ErrorException('Pas plus que 15.');
@@ -213,8 +213,8 @@ if ($type !== FALSE) {
 										if ($taxes <= 15 && $taxes >= 2) {
 											$law->options = serialize(array('taxes' => $taxes, 'rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'), 'Taxe actuelle' => $commercialTaxManager->get()->importTax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											$lawManager->add($law);
-											$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-											$colorManager->sendSenateNotif($colorManager->get());
+											$faction->credits -= LawResources::getInfo($type, 'price');
+											$colorManager->sendSenateNotif($faction);
 											$response->redirect('faction/view-senate');
 										} else {
 											throw new ErrorException('Entre 2 et 15.');
@@ -231,13 +231,13 @@ if ($type !== FALSE) {
 						case Law::NEUTRALPACT:
 							$rColor = $request->request->get('rcolor');
 							if ($rColor !== FALSE) {
-								if ($rColor >= 1 && $rColor <= (ColorResource::size() - 1) && $rColor != $colorManager->get()->id) {
+								if ($rColor >= 1 && $rColor <= (ColorResource::size() - 1) && $rColor != $faction->id) {
 
-									if ($colorManager->get()->colorLink[$rColor] != Color::NEUTRAL) {
+									if ($faction->colorLink[$rColor] != Color::NEUTRAL) {
 										$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
 										$lawManager->add($law);
-										$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-										$colorManager->sendSenateNotif($colorManager->get(), TRUE);
+										$faction->credits -= LawResources::getInfo($type, 'price');
+										$colorManager->sendSenateNotif($faction, TRUE);
 										$response->redirect('faction/view-senate');
 									} else {
 										throw new ErrorException('Vous considérez déjà cette faction comme votre alliée.');
@@ -252,19 +252,19 @@ if ($type !== FALSE) {
 						case Law::PEACEPACT:
 							$rColor = $request->request->get('rcolor');
 							if ($rColor !== FALSE) {
-								if ($rColor >= 1 && $rColor <= (ColorResource::size() - 1) && $rColor != $colorManager->get()->id) {
+								if ($rColor >= 1 && $rColor <= (ColorResource::size() - 1) && $rColor != $faction->id) {
 									$nbrPact = 0;
-									foreach ($colorManager->get()->colorLink as $relation) {
+									foreach ($faction->colorLink as $relation) {
 										if($relation == Color::PEACE) {
 											$nbrPact++;
 										}
 									}
 									if ($nbrPact < 2) {
-										if ($colorManager->get()->colorLink[$rColor] != Color::PEACE) {
+										if ($faction->colorLink[$rColor] != Color::PEACE) {
 											$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
 											$lawManager->add($law);
-											$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-											$colorManager->sendSenateNotif($colorManager->get(), TRUE);
+											$faction->credits -= LawResources::getInfo($type, 'price');
+											$colorManager->sendSenateNotif($faction, TRUE);
 											$response->redirect('faction/view-senate');
 										} else {
 											throw new ErrorException('Vous considérez déjà cette faction comme votre alliée.');
@@ -282,19 +282,19 @@ if ($type !== FALSE) {
 						case Law::TOTALALLIANCE:
 							$rColor = $request->request->get('rcolor');
 							if ($rColor !== FALSE) {
-								if ($rColor >= 1 && $rColor <= (ColorResource::size() - 1) && $rColor != $colorManager->get()->id) {
+								if ($rColor >= 1 && $rColor <= (ColorResource::size() - 1) && $rColor != $faction->id) {
 									$allyYet = FALSE;
-									foreach ($colorManager->get()->colorLink as $relation) {
+									foreach ($faction->colorLink as $relation) {
 										if($relation == Color::ALLY) {
 											$allyYet = TRUE;
 										}
 									}
 									if (!$allyYet) {
-										if ($colorManager->get()->colorLink[$rColor] != Color::ALLY) {
+										if ($faction->colorLink[$rColor] != Color::ALLY) {
 											$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
 											$lawManager->add($law);
-											$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-											$colorManager->sendSenateNotif($colorManager->get(), TRUE);
+											$faction->credits -= LawResources::getInfo($type, 'price');
+											$colorManager->sendSenateNotif($faction, TRUE);
 											$response->redirect('faction/view-senate');
 										} else {
 											throw new ErrorException('Vous considérez déjà cette faction comme votre alliée.');
@@ -312,13 +312,13 @@ if ($type !== FALSE) {
 						case Law::WARDECLARATION:
 							$rColor = $request->request->get('rcolor');
 							if ($rColor !== FALSE) {
-								if ($rColor >= 1 && $rColor <= (ColorResource::size() - 1) && $rColor != $colorManager->get()->id) {
+								if ($rColor >= 1 && $rColor <= (ColorResource::size() - 1) && $rColor != $faction->id) {
 
-									if ($colorManager->get()->colorLink[$rColor] != Color::ENEMY) {
+									if ($faction->colorLink[$rColor] != Color::ENEMY) {
 										$law->options = serialize(array('rColor' => $rColor, 'display' => array('Faction' => ColorResource::getInfo($rColor, 'officialName'))));
 										$lawManager->add($law);
-										$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-										$colorManager->sendSenateNotif($colorManager->get(), TRUE);
+										$faction->credits -= LawResources::getInfo($type, 'price');
+										$colorManager->sendSenateNotif($faction, TRUE);
 										$response->redirect('faction/view-senate');
 									} else {
 										throw new ErrorException('Vous considérez déjà cette faction comme votre ennemmi.');
@@ -340,8 +340,8 @@ if ($type !== FALSE) {
 									if ($targetPlayer->rColor == $session->get('playerInfo')->get('color')) {
 										$law->options = serialize(array('rPlayer' => $rPlayer, 'credits' => $credits, 'display' => array('Joueur' => $targetPlayer->name, 'amende' => $credits)));
 										$lawManager->add($law);
-										$colorManager->get()->credits -= LawResources::getInfo($type, 'price');
-										$colorManager->sendSenateNotif($colorManager->get());
+										$faction->credits -= LawResources::getInfo($type, 'price');
+										$colorManager->sendSenateNotif($faction);
 										$response->redirect('faction/view-senate');	
 									} else {
 										throw new ErrorException('Ce joueur n\'est pas de votre faction.');	
@@ -355,13 +355,12 @@ if ($type !== FALSE) {
 							break;
 						default:
 							throw new ErrorException('Cette loi n\'existe pas.');
-							break;
 					}
 				} else {
 					throw new ErrorException('Il n\'y assez pas a de crédits dans les caisses de l\'Etat.');
 				}
 			}
-			$colorManager->changeSession($_CLM);
+			$this->getContainer()->get('entity_manager')->flush($faction);
 		} else {
 			throw new ErrorException('Vous n\' avez pas le droit de proposer cette loi.');
 		}

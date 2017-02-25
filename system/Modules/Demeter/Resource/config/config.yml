@@ -11,11 +11,11 @@ services:
     demeter.vote_manager:
         class: Asylamba\Modules\Demeter\Manager\Election\VoteManager
         arguments:
-            - "@database"
+            - "@entity_manager"
     demeter.faction_news_manager:
         class: Asylamba\Modules\Demeter\Manager\Forum\FactionNewsManager
         arguments:
-            - "@database"
+            - "@entity_manager"
             - "@parser"
     demeter.forum_message_manager:
         class: Asylamba\Modules\Demeter\Manager\Forum\ForumMessageManager
@@ -38,7 +38,6 @@ services:
     demeter.color_manager:
         class: Asylamba\Modules\Demeter\Manager\ColorManager
         arguments:
-            - "@database"
             - "@entity_manager"
             - "@zeus.player_manager"
             - "@demeter.vote_manager"

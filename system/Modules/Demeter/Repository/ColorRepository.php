@@ -4,6 +4,7 @@ namespace Asylamba\Modules\Demeter\Repository;
 
 use Asylamba\Classes\Entity\AbstractRepository;
 
+use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Demeter\Model\Color;
 
 class ColorRepository extends AbstractRepository {
@@ -39,7 +40,7 @@ class ColorRepository extends AbstractRepository {
 		
 		$data = [];
 		while ($row = $statement->fetch()) {
-			if (($f = $this->unitOfWork->getObject(Color::class, $id)) !== null) {
+			if (($f = $this->unitOfWork->getObject(Color::class, $row['id'])) !== null) {
 				$data[] = $f;
 				continue;
 			}
@@ -55,7 +56,7 @@ class ColorRepository extends AbstractRepository {
 	 */
 	public function getInGameFactions()
 	{
-		$statement = $this->connection->prepare('SELECT * FROM color WHERE inGame = 1');
+		$statement = $this->connection->prepare('SELECT * FROM color WHERE isInGame = 1');
 		$statement->execute();
 		
 		$data = [];

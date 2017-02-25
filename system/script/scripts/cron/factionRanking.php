@@ -77,7 +77,7 @@ function setPositions($list, $attribute) {
 }
 
 # load the factions (colors)
-$colorManager->load(array('isInGame' => 1));
+$inGameFactions = $colorManager->load(array('isInGame' => 1));
 
 # create an array with all the factions
 $gameover = FALSE;
@@ -247,16 +247,17 @@ foreach ($list as $faction => $value) {
 	}
 
 	# update faction infos
-	$colorManager->getById($faction)->rankingPoints = $listP[$faction]['points'];
-	$colorManager->getById($faction)->points = $listG[$faction]['general'];
-	$colorManager->getById($faction)->sectors = $listT[$faction]['territorial'];
-	$colorManager->updateInfos($faction);
+	$f = $colorManager->getById($faction);
+	$f->rankingPoints = $listP[$faction]['points'];
+	$f->points = $listG[$faction]['general'];
+	$f->sectors = $listT[$faction]['territorial'];
+	$colorManager->updateInfos($f);
+	$this->getContainer()->get('entity_manager')->flush($f);
 
 	$rankings[] = $fr;
 	$factionRankingManager->add($fr);
 }
 
-$colorManager->changeSession($S_CLM1);
 $playerRankingManager->changeSession($S_PRM1);
 $factionRankingManager->changeSession($S_FRM1);
 

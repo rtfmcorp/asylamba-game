@@ -37,20 +37,15 @@ echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
 
 	if (!$request->query->has('view') OR $request->query->get('view') == 'overview') {
-		$S_FNM_OW = $factionNewsManager->getCurrentSession();
-		$TOKEN_NEWS = $factionNewsManager->newSession();
-		
 		if ($request->query->get('news') === 'list') {
-			$factionNewsManager->load(['rFaction' => $faction->id, 'pinned' => FALSE], ['dCreation', 'DESC']);
+			$factionNews = $factionNewsManager->getFactionBasicNews($faction->id);
 			$mode = 'all';
 		} else {
-			$factionNewsManager->load(['rFaction' => $faction->id, 'pinned' => TRUE]);
+			$factionNews = $factionNewsManager->getFactionPinnedNew($faction->id);
 			$mode = 'pin';
 		}
 
 		include COMPONENT . 'faction/overview/news.php';
-
-		$factionNewsManager->changeSession($S_FNM_OW);
 
 		$governmentMembers = $playerManager->getGovernmentMembers($session->get('playerInfo')->get('color'));
 
@@ -259,14 +254,12 @@ echo '<div id="content">';
 				}
 				$sectorManager->changeSession($S_SEM_OLD);
 			} elseif ($request->query->get('mode') == 'news') {
-				$S_FNM_1 = $factionNewsManager->getCurrentSession();
-				$TOKEN_NEWS_LIST = $factionNewsManager->newSession();
-				$factionNewsManager->load(['rFaction' => $faction->id], ['dCreation', 'DESC']);
+				$factionNews = $factionNewsManager->getFactionNews($faction->id);
 				
 				include COMPONENT . 'faction/news/list.php';
 
 				if ($request->query->has('news')) {
-					if ($factionNewsManager->getById($request->query->get('news')) !== FALSE) {
+					if ($factionNewsManager->get($request->query->get('news')) !== null) {
 						include COMPONENT . 'faction/news/edit.php';
 					} else {
 						$response->redirect('faction/view-government/mode-news');
@@ -274,8 +267,6 @@ echo '<div id="content">';
 				} else {
 					include COMPONENT . 'faction/news/create.php';
 				}
-
-				$factionNewsManager->changeSession($S_FNM_1);
 			} elseif ($request->query->get('mode') == 'message') {
 				include COMPONENT . 'faction/government/message.php';
 			} elseif ($request->query->get('mode') == 'description') {
