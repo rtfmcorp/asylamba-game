@@ -1,39 +1,27 @@
 <?php
 
 use Asylamba\Classes\Exception\FormException;
-use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Modules\Demeter\Model\Forum\FactionNews;
 
-$factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('app.session');
 
-$id = $request->query->get('id');
-
-if ($id !== FALSE) {
-	$S_FNM_1 = $factionNewsManager->getCurrentSession();
-	$factionNewsManager->newSession();
-	$factionNewsManager->load(array('id' => $id));
-
-	if ($factionNewsManager->size() == 1) {
-		# chargement de toutes les factions
-		$S_FNM_2 = $factionNewsManager->getCurrentSession();
-		$factionNewsManager->newSession();
-		$factionNewsManager->load(['rFaction' => $session->get('playerInfo')->get('color')]);
-
-		for ($i = 0; $i < $factionNewsManager->size(); $i++) { 
-			if ($factionNewsManager->get($i)->id == $id) {
-				$factionNewsManager->get($i)->pinned = 1;
-			} else {
-				$factionNewsManager->get($i)->pinned = 0;
-			}
-		}
-
-		$factionNewsManager->changeSession($S_FNM_2);
-	} else {
-		throw new FormException('Cette annonce n\'existe pas.');	
-	}
-
-	$factionNewsManager->changeSession($S_FNM_1);
-} else {
+if (($id = $request->query->get('id')) === FALSE) {
 	throw new FormException('Manque d\'information.');
 }
+
+$factionNews = $this->getContainer()->get('demeter.faction_news_manager')->getFactionNews($session->get('playerInfo')->get('color'));
+$newExists = false;
+// This way of doing things remove all previous pins
+foreach ($factionNews as $factionNew) { 
+	if ($factionNew->id == $id) {
+		$newExists = true;
+		$factionNew->pinned = 1;
+	} else {
+		$factionNew->pinned = 0;
+	}
+}
+if ($newExists !== true) {
+	throw new FormException('Cette annonce n\'existe pas.');	
+}
+$this->getContainer()->get('entity_manager')->flush(FactionNews::class);

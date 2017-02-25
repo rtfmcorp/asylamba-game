@@ -19,7 +19,6 @@ use Asylamba\Modules\Athena\Model\CommercialRoute;
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $request = $this->getContainer()->get('app.request');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
-$colorManager = $this->getContainer()->get('demeter.color_manager');
 $database = $this->getContainer()->get('database');
 $session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
@@ -51,18 +50,12 @@ if (count($routes) > 0) {
 	}
 	$nCRInDock = $nCROperational + $nCRInStandBy + $nCRWaitingForOther;
 }
-
-# faction
-$S_COL_1 = $colorManager->getCurrentSession();
-$colorManager->newSession();
-$colorManager->load(array('isInGame' => TRUE));
+$inGameFactions = $this->getContainer()->get('demeter.color_manager')->getInGameFactions();
 
 $factions = [];
-for ($i = 0; $i < $colorManager->size(); $i++) { 
-	$factions[] = $colorManager->get($i)->id;
+foreach ($inGameFactions as $inGameFaction) { 
+	$factions[] = $inGameFaction->id;
 }
-
-$colorManager->changeSession($S_COL_1);
 
 # view
 echo '<div class="component building rc">';

@@ -178,29 +178,15 @@ class ColorManager {
 	}
 
 	// FONCTIONS STATICS
-	public function updateInfos($id) {
-		$this->updatePlayers($id);
-		$this->updateActivePlayers($id);
-	}
-
-	public function updatePlayers($id) {
-		$_CLM1 = $this->getCurrentSession();
-		$this->newSession();
-		$this->load(array('id' => $id));
-
-		$this->getById($id)->players = $this->playerManager->countByFactionAndStatements($id, [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]);	
-
-		$this->changeSession($_CLM1);
-	}
-
-	public function updateActivePlayers($id) {
-		$_CLM1 = $this->getCurrentSession();
-		$this->newSession();
-		$this->load(array('id' => $id));
-
-		$this->getById($id)->activePlayers = $this->playerManager->countByFactionAndStatements($id, [Player::ACTIVE]);
-
-		$this->changeSession($_CLM1);
+	public function updateInfos(Color $faction) {
+		$faction->players = $this
+			->playerManager
+			->countByFactionAndStatements($faction->id, [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY])
+		;
+		$faction->activePlayers = $this
+			->playerManager
+			->countByFactionAndStatements($faction->id, [Player::ACTIVE])
+		;
 	}
 	
 	public function sendSenateNotif(Color $color, $fromChief = FALSE) {
@@ -764,32 +750,16 @@ class ColorManager {
 							$this->commercialTaxManager->changeSession($_CTM);
 							break;
 						case Law::PEACEPACT:
-							$S_CLM321 = $this->getCurrentsession();
-							$this->newSession();
-							$this->load(['id' => $law->options['rColor']]);
-							$this->ctc->add($law->dEnd, $this, 'uFinishPeace', $color, array($color, $law, $this->get()));
-							$this->changeSession($S_CLM321);
+							$this->ctc->add($law->dEnd, $this, 'uFinishPeace', $color, array($color, $law, $this->get($law->options['rColor'])));
 							break;
 						case Law::WARDECLARATION:
-							$S_CLM322 = $this->getCurrentsession();
-							$this->newSession();
-							$this->load(['id' => $law->options['rColor']]);
-							$this->ctc->add($law->dEnd, $this, 'uFinishEnemy', $color, array($color, $law, $this->get()));
-							$this->changeSession($S_CLM322);
+							$this->ctc->add($law->dEnd, $this, 'uFinishEnemy', $color, array($color, $law, $this->get($law->options['rColor'])));
 							break;
 						case Law::TOTALALLIANCE:
-							$S_CLM323 = $this->getCurrentsession();
-							$this->newSession();
-							$this->load(['id' => $law->options['rColor']]);
-							$this->ctc->add($law->dEnd, $this, 'uFinishAlly', $color, array($color, $law,$this->get()));
-							$this->changeSession($S_CLM323);
+							$this->ctc->add($law->dEnd, $this, 'uFinishAlly', $color, array($color, $law,$this->get($law->options['rColor'])));
 							break;
 						case Law::NEUTRALPACT:
-							$S_CLM324 = $this->getCurrentsession();
-							$this->newSession();
-							$this->load(['id' => $law->options['rColor']]);
-							$this->ctc->add($law->dEnd, $this, 'uFinishNeutral', $color, array($color, $law, $this->get()));
-							$this->changeSession($S_CLM324);
+							$this->ctc->add($law->dEnd, $this, 'uFinishNeutral', $color, array($color, $law, $this->get($law->options['rColor'])));
 							break;
 						case Law::PUNITION:
 							$this->ctc->add($law->dEnd, $this, 'uFinishPunition', $color, array($color, $law, $this->playerManager->get($law->options['rPlayer'])));

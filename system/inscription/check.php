@@ -71,24 +71,18 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 	}
 } elseif ($request->query->get('step') == 2) {
 	if ($session->exist('inscription')) {
-		$colorManager = $this->getContainer()->get('demeter.color_manager');
 		# création du tableau des alliances actives
 			# entre 1 et 7
 			# alliance pas défaites
 			# algorythme de fermeture automatique des alliances (auto-balancing)
-		$_CLM = $colorManager->getCurrentSession();
-		$colorManager->newSession(FALSE);
-		$colorManager->load(['isClosed' => FALSE]);
+		$openFactions = $this->getContainer()->get('demeter.color_manager')->getOpenFactions();
 
 		$ally = [];
 
-		for ($i = 0; $i < $colorManager->size(); $i++) {
-			if (!$colorManager->get($i)->isClosed) {
-				$ally[] = $colorManager->get($i)->id;
-			}
+		foreach ($openFactions as $openFaction) {
+			$ally[] = $openFaction->id;
 		}
 
-		$colorManager->changeSession($_CLM);
 		if ($request->query->has('ally') && in_array($request->query->get('ally'), $ally)) {
 			$session->get('inscription')->add('ally', $request->query->get('ally'));
 		} elseif (!$session->get('inscription')->exist('ally')) {

@@ -30,14 +30,10 @@ echo '<div id="content">';
 		echo '</div>';
 	echo '</div>';
 
-	$_CLM = $colorManager->getCurrentSession();
-	$colorManager->newSession(FALSE);
-	$colorManager->load([], ['activePlayers', 'ASC']);
+	$sortedFactions = $colorManager->getAllByActivePlayersNumber();
 
 	$firstAlly = TRUE;
-	for ($i = 0; $i < $colorManager->size(); $i++) {
-		$ally = $colorManager->get($i);
-
+	foreach ($sortedFactions as $ally) {
 		if ($ally->id != 0) {
 			echo '<div class="component inscription color' . $ally->id . '">';
 				echo '<div class="head skin-1">';
@@ -96,6 +92,4 @@ echo '<div id="content">';
 			echo '</div>';
 		}
 	}
-
-	$colorManager->changeSession($_CLM);
 echo '</div>';

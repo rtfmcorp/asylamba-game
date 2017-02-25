@@ -32,13 +32,13 @@ class ElectionRepository extends AbstractRepository {
 	 */
 	public function getFactionLastElection($factionId)
 	{
-		if (($e = $this->unitOfWork->getObject(Election::class, $id)) !== null) {
-			return $e;
-		}
 		$statement = $this->connection->prepare('SELECT * FROM election WHERE rColor = :faction_id ORDER BY id DESC LIMIT 1');
 		$statement->execute(['faction_id' => $factionId]);
 		if (($row = $statement->fetch()) === false) {
 			return null;
+		}
+		if (($e = $this->unitOfWork->getObject(Election::class, $row['id'])) !== null) {
+			return $e;
 		}
 		$election = $this->format($row);
 		$this->unitOfWork->addObject($election);
