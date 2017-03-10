@@ -370,7 +370,7 @@ class OrbitalBaseManager {
 		$orbitalBase->shippingManager = $this->commercialShippingManager->getFirstSession();
 	}
 
-	public function changeOwnerById($id, $base, $newOwner, $recyclingSession, $commanderSession) {
+	public function changeOwnerById($id, $base, $newOwner, $recyclingSession, $baseCommanders) {
 		if ($base->getId() == 0) {
 			throw new ErrorException('Cette base orbitale n\'existe pas !');
 		}
@@ -432,18 +432,15 @@ class OrbitalBaseManager {
 		}
 
 		# rendre déserteuses les flottes en voyage
-		$S_COM4 = $this->commanderManager->getCurrentSession();
-		$this->commanderManager->changeSession($commanderSession);
-		for ($i = 0; $i < $this->commanderManager->size(); $i++) {
-			if (in_array($this->commanderManager->get($i)->statement, [Commander::INSCHOOL, Commander::ONSALE, Commander::RESERVE])) {
-				$this->commanderManager->get($i)->rPlayer = $newOwner;
-			} else if ($this->commanderManager->get($i)->statement == Commander::MOVING) {
-				$this->commanderManager->get($i)->statement = Commander::RETIRED;
+		foreach ($baseCommanders as $commander) {
+			if (in_array($commander->statement, [Commander::INSCHOOL, Commander::ONSALE, Commander::RESERVE])) {
+				$commander->rPlayer = $newOwner;
+			} else if ($commander->statement == Commander::MOVING) {
+				$commander->statement = Commander::RETIRED;
 			} else {
-				$this->commanderManager->get($i)->statement = Commander::DEAD;		
+				$commander->statement = Commander::DEAD;		
 			}
 		}
-		$this->commanderManager->changeSession($S_COM4);
 
 		# vérifie si le joueur n'a plus de planète, si c'est le cas, il est mort, on lui redonne une planète
 		$oldPlayerBases = $this->getPlayerBases($oldOwner);
@@ -575,14 +572,7 @@ class OrbitalBaseManager {
 
 						# load commander if it's a commander shipping
 						if ($transaction->type == Transaction::TYP_COMMANDER) {
-							$S_COM1 = $this->commanderManager->getCurrentSession();
-							$this->commanderManager->newSession();
-							$this->commanderManager->load(array('c.id' => $transaction->identifier));
-
-							if ($this->commanderManager->size() == 1) {
-								$commander = $this->commanderManager->get();
-							}
-							$this->commanderManager->changeSession($S_COM1);
+							$commander = $this->commanderManager->get($transaction->identifier);
 						}
 					} else {
 						$transaction = NULL;

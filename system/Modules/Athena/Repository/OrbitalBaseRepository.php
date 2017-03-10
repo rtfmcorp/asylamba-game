@@ -101,7 +101,7 @@ class OrbitalBaseRepository extends AbstractRepository {
 				griffonStorage, cyclopeStorage, minotaureStorage, hydreStorage, cerbereStorage, phenixStorage,
 				resourcesStorage, uOrbitalBase, dCreation)
 			VALUES(:id, :player_id, :name, :type, :generator_level, :refinery_level, :dock1_level, :dock2_level, :dock3_level,
-				:technosphere_level, :commercial_platform_level, :storage_level, :spatioport_level, :points, :school_investments,  
+				:technosphere_level, :commercial_platform_level, :storage_level, :recycling_level, :spatioport_level, :points, :school_investments,  
 				:anti_spy_investments, :anti_spy_average, :pegase_storage, :satyre_storage, :sirene_storage, :dryade_storage, 
 				:chimere_storage, :meduse_storage, :griffon_storage, :cyclope_storage, :minotaure_storage, :hydre_storage, :cerbere_storage,
 				:phenix_storage, :resources, :u_orbital_base, :created_at)'

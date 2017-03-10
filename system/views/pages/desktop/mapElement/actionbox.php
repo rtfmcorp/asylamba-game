@@ -27,17 +27,10 @@ if ($request->query->has('relatedplace')) {
 
 if (isset($defaultBase)) {
 	# load the commanders of the default base in a session
-	$S_COM1 = $commanderManager->getCurrentSession();
-	$commanderManager->newSession();
-	$commanderManager->load(array('c.rBase' => $defaultBase->getRPlace(), 'c.statement' => array(Commander::AFFECTED, Commander::MOVING)));
-	$localCommandersSession = $commanderManager->getCurrentSession();
-
+	$localCommanders = $commanderManager->getBaseCommanders($defaultBase->getRPlace(), [Commander::AFFECTED, Commander::MOVING]);
 	# load all the commanders moving in a session
-	$commanderManager->newSession();
-	$commanderManager->load(array('c.rPlayer' => $session->get('playerId'), 'c.statement' => Commander::MOVING));
-	$movingCommandersSession = $commanderManager->getCurrentSession();
-	$commanderManager->changeSession($S_COM1);
-
+	$movingCommanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::MOVING]);
+	
 	# load last report
 	$placesId = array();
 	foreach ($places as $place) {

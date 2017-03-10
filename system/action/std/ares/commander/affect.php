@@ -20,26 +20,15 @@ $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 $session  = $this->getContainer()->get('app.session');
 $response = $this->getContainer()->get('app.response');
 
-$S_COM1 = $commanderManager->getCurrentSession();
-$commanderManager->newSession();
-$commanderManager->load(array('c.id' => $commanderId, 'c.rPlayer' => $session->get('playerId')));
-
-if ($commanderManager->size() !== 1) {
-	throw new ErrorException('Ce officier n\'existe pas ou ne vous appartient pas');
+if (($commander = $commanderManager->get($commanderId)) === null) {
+	throw new ErrorException('Cet officier n\'existe pas ou ne vous appartient pas');
 }
-$commander = $commanderManager->get();
 
 $orbitalBase = $orbitalBaseManager->get($commander->rBase);
 
 # checker si on a assez de place !!!!!
-$S_COM2 = $commanderManager->getCurrentSession();
-$commanderManager->newSession();
-$commanderManager->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 2));
-$nbrLine2 = $commanderManager->size();
-
-$commanderManager->newSession();
-$commanderManager->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 1));
-$nbrLine1 = $commanderManager->size();
+$nbrLine1 = $commanderManager->countCommandersByLine($commander->rBase, 1);
+$nbrLine2 = $commanderManager->countCommandersByLine($commander->rBase, 2);
 
 if ($commander->statement == Commander::INSCHOOL || $commander->statement == Commander::RESERVE) {
 	if ($nbrLine2 < PlaceResource::get($orbitalBase->typeOfBase, 'r-line')) {
@@ -70,12 +59,10 @@ if ($commander->statement == Commander::INSCHOOL || $commander->statement == Com
 		throw new ErrorException('Votre base a dépassé la capacité limite de officiers en activité');			
 	}
 } elseif ($commander->statement == Commander::AFFECTED) {
-	$S_COM3 = $commanderManager->getCurrentSession();
-	$commanderManager->newSession();
-	$commanderManager->load(array('c.rBase' => $commander->rBase, 'c.statement' => Commander::INSCHOOL));
+	$baseCommanders = $commanderManager->getBaseCommanders($commander->rBase, [Commander::INSCHOOL]);
 
 	$commander->uCommander = Utils::now();
-	if ($commanderManager->size() < PlaceResource::get($orbitalBase->typeOfBase, 'school-size')) {
+	if (count($baseCommanders) < PlaceResource::get($orbitalBase->typeOfBase, 'school-size')) {
 		$commander->statement = Commander::INSCHOOL;
 		$session->addFlashbag('Votre officier ' . $commander->getName() . ' a été remis à l\'école', Flashbag::TYPE_SUCCESS);
 		$commanderManager->emptySquadrons($commander);
@@ -84,11 +71,8 @@ if ($commander->statement == Commander::INSCHOOL || $commander->statement == Com
 		$session->addFlashbag('Votre officier ' . $commander->getName() . ' a été remis dans la réserve de l\'armée', Flashbag::TYPE_SUCCESS);
 		$commanderManager->emptySquadrons($commander);
 	}
-	$commanderManager->changeSession($S_COM3);
 	$response->redirect('bases/view-school');
 } else {
 	throw new ErrorException('Le status de votre officier ne peut pas être modifié');
 }
-
-$commanderManager->changeSession($S_COM2);
-$commanderManager->changeSession($S_COM1);
+$this->getContainer()->get('entity_manager')->flush();

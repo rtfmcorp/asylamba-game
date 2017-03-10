@@ -27,12 +27,11 @@ for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
 }
 
 if (count($verif) > 1) {
-	$_COM = $commanderManager->getCurrentSession();
-	$commanderManager->newSession();
-	$commanderManager->load(array('rBase' => $baseId));
+	$baseCommanders = $commanderManager->getBaseCommanders($baseId);
 	$areAllFleetImmobile = TRUE;
-	for ($i = 0; $i < $commanderManager->size(); $i++) {
-		if ($commanderManager->get($i)->statement == Commander::MOVING) {
+	// @TODO Break when expected result is found in the loop
+	foreach ($commanders as $commander) {
+		if ($commander->statement == Commander::MOVING) {
 			$areAllFleetImmobile = FALSE;
 		}
 	}
@@ -78,13 +77,7 @@ if (count($verif) > 1) {
 					$S_REM2 = $recyclingMissionManager->getCurrentSession();
 					$recyclingMissionManager->changeSession($S_REM1);
 
-					$S_COM2 = $commanderManager->getCurrentSession();
-					$commanderManager->newSession(FALSE); # FALSE obligatory, else the umethod make shit
-					$commanderManager->load(array('c.rBase' => $baseId));
-					$S_COM3 = $commanderManager->getCurrentSession();
-					$commanderManager->changeSession($S_COM2);
-
-					$orbitalBaseManager->changeOwnerById($baseId, $base, ID_GAIA, $S_REM2, $S_COM3);
+					$orbitalBaseManager->changeOwnerById($baseId, $base, ID_GAIA, $S_REM2, $baseCommanders);
 					$placeManager->get()->rPlayer = ID_GAIA;
 
 					$placeManager->changeSession($_PLM);
@@ -109,7 +102,6 @@ if (count($verif) > 1) {
 	} else {
 		throw new ErrorException('toute les flottes de cette base doivent être immobiles');
 	}
-	$commanderManager->changeSession($_COM);
 } else {
 	throw new ErrorException('vous ne pouvez pas abandonner votre unique planète');
 }

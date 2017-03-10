@@ -23,9 +23,9 @@ for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
 }
 
 if (
-	($baseID = $request->query->get('base')) === null	||
-	($commanderID = $request->query->get('commander')) === null	||
-	($squadronID = $request->query->get('squadron')) === null	||
+	($baseID = (int) $request->query->get('base')) === null	||
+	($commanderID = (int) $request->query->get('commander')) === null	||
+	($squadronID = (int) $request->query->get('squadron')) === null	||
 	($newSquadron = $request->query->get('army')) === null	||
 	!in_array($baseID, $verif)
 ) {
@@ -42,18 +42,12 @@ if (count($newSquadron) !== 12) {
 }
 
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
 
-# chargement du commandant
-$S_COM1 = $commanderManager->getCurrentSession();
-$commanderManager->newSession();
-$commanderManager->load(array('c.id' => $commanderID, 'c.rBase' => $baseID, 'c.statement' => [Commander::AFFECTED]));
+$commander = $this->getContainer()->get('ares.commander_manager')->get($commanderID);
 
-if (($base = $orbitalBaseManager->get($baseID)) === null || $commanderManager->size() !== 1) {
+if (($base = $orbitalBaseManager->get($baseID)) === null || $commander === null || $commander->rBase !== $baseID || $commander->statement !== Commander::AFFECTED) {
 	throw new ErrorException('Erreur dans les références du commandant ou de la base.');
 }
-
-$commander = $commanderManager->get();
 $squadron = $commander->getSquadron($squadronID);
 
 if ($squadron === false) {
@@ -100,4 +94,4 @@ if ($session->get('playerInfo')->get('stepDone') === false && $session->get('pla
 $base->shipStorage = $baseSHIP;
 $commander->getSquadron($squadronID)->arrayOfShips = $squadronSHIP;
 
-$commanderManager->changeSession($S_COM1);
+$this->getContainer()->get('entity_manager')->flush();

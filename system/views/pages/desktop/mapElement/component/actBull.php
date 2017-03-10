@@ -12,7 +12,6 @@ use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $session = $this->getContainer()->get('app.session');
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
 $recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
@@ -79,14 +78,11 @@ echo '<div class="column act">';
 		$msQuantity = $session->get('playerBase')->get('ms')->size();
 		$coloQuantity = 0;
 
-		$S_COM3 = $commanderManager->getCurrentSession();
-		$commanderManager->changeSession($movingCommandersSession);
-		for ($j = 0; $j < $commanderManager->size(); $j++) { 
-			if ($commanderManager->get($j)->getTypeOfMove() == Commander::COLO) {
+		foreach ($movingCommanders as $commander) { 
+			if ($commander->getTypeOfMove() == Commander::COLO) {
 				$coloQuantity++;
 			}
 		}
-		$commanderManager->changeSession($S_COM3);
 
 		$totalBases = $obQuantity + $msQuantity + $coloQuantity;
 

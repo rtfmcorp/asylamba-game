@@ -19,9 +19,7 @@ $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
 
-$S_COM1 = $commanderManager->getCurrentSession();
-$commanderManager->newSession();
-$commanderManager->load(array('c.statement' => Commander::INSCHOOL, 'c.rBase' => $ob_school->getId()), array('c.experience', 'DESC'));
+$commanders = $commanderManager->getBaseCommanders($ob_school->getId(), [Commander::INSCHOOL], ['c.experience' => 'DESC']);
 
 # max commander
 $maxCommanderInSchool = PlaceResource::get($ob_school->typeOfBase, 'school-size');
@@ -70,7 +68,7 @@ echo '<div class="component school">';
 					echo '<strong>Former un nouvel officier</strong>';
 				echo '</div>';
 					echo '<input type="text" class="name-commander" name="name" value="' . CheckName::randomize() . '" />';
-				if ($commanderManager->size() >= $maxCommanderInSchool) {
+				if (count($commanders) >= $maxCommanderInSchool) {
 					echo '<span class="button disable">';
 						echo '<span class="text">';
 							echo 'trop d\'officiers dans l\'école<br/>';
@@ -105,8 +103,8 @@ echo '<div class="component">';
 		echo '<div class="body">';
 			echo '<div class="queue">';
 				for ($i = 0; $i < $maxCommanderInSchool; $i++) {
-					if ($commanderManager->get($i) !== FALSE) {
-						$commander = $commanderManager->get($i);
+					if (isset($commanders[$i])) {
+						$commander = $commanders[$i];
 						$expToLvlUp = $commanderManager->experienceToLevelUp($commander);
 						echo '<div class="item">';
 							echo '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
@@ -134,8 +132,7 @@ echo '<div class="component">';
 	echo '</div>';
 echo '</div>';
 
-$commanderManager->newSession();
-$commanderManager->load(array('c.statement' => Commander::RESERVE, 'c.rBase' => $ob_school->getId()), array('c.experience', 'DESC'));
+$reserveCommanders = $commanderManager->getBaseCommanders($ob_school->getId(), ['c.statement' => Commander::RESERVE], ['c.experience' => 'DESC']);
 
 echo '<div class="component">';
 	echo '<div class="head skin-5">';
@@ -144,8 +141,7 @@ echo '<div class="component">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="queue">';
-				for ($i = 0; $i < $commanderManager->size(); $i++) {
-					$commander = $commanderManager->get($i);
+				foreach ($reserveCommanders as $commander) {
 					$expToLvlUp = $commanderManager->experienceToLevelUp($commander);
 					echo '<div class="item">';
 						echo '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
@@ -170,8 +166,6 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-$commanderManager->changeSession($S_COM1);
 
 echo '<div class="component">';
 	echo '<div class="head skin-2">';

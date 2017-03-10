@@ -120,19 +120,19 @@ foreach ($playerBases as $orbitalBase) {
 }
 
 # check the commanders (outgoing attacks)
-$S_COM1 = $commanderManager->getCurrentSession();
-$commanderManager->newSession();
-$commanderManager->load(array('c.rPlayer' => $session->get('playerId'), 'c.statement' => Commander::MOVING, 'c.travelType' => array(Commander::LOOT, Commander::COLO, Commander::BACK)));
+$commanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::MOVING]);
 
-for ($i = 0; $i < $commanderManager->size(); $i++) { 
+foreach ($commanders as $commander) { 
+	if ($commander->getTravelType() === Commander::MOVE) {
+		continue;
+	}
 	$session->get('playerEvent')->add(
-		$commanderManager->get($i)->getArrivalDate(),
+		$commander->getArrivalDate(),
 		EVENT_OUTGOING_ATTACK,
-		$commanderManager->get($i)->getId(),
-		$commanderManager->getEventInfo($commanderManager->get($i))
+		$commander->getId(),
+		$commanderManager->getEventInfo($commander)
 	);
 }
-$commanderManager->changeSession($S_COM1);
 
 # check the incoming attacks
 $places = array();
@@ -143,28 +143,26 @@ for ($i = 0; $i < $session->get('playerBase')->get('ms')->size(); $i++) {
 	$places[] = $session->get('playerBase')->get('ms')->get($i)->get('id');
 }
 
-$S_COM2 = $commanderManager->getCurrentSession();
-$commanderManager->newSession();
-$commanderManager->load(array('c.rDestinationPlace' => $places, 'c.statement' => Commander::MOVING, 'c.TravelType' => array(Commander::LOOT, Commander::COLO)));
+$incomingCommanders = $commanderManager->getIncomingAttacks($places);
 
 # ajout des bases des ennemis dans le tableau
-for ($i = 0; $i < $commanderManager->size(); $i++) {
-	$places[] = $commanderManager->get($i)->getRBase();
+foreach ($incomingCommanders as $commander) {
+	$places[] = $commander->getRBase();
 }
 
 $S_PLM1 = $placeManager->getCurrentSession();
 $placeManager->newSession();
 $placeManager->load(array('id' => $places));
 
-for ($i = 0; $i < $commanderManager->size(); $i++) { 
-	if (in_array($commanderManager->get($i)->getTypeOfMove(), array(Commander::COLO, Commander::LOOT))) {
+foreach ($incomingCommanders as $commander) { 
+	if (in_array($commander->getTypeOfMove(), array(Commander::COLO, Commander::LOOT))) {
 		# va chercher les heures auxquelles il rentre dans les cercles d'espionnage
-		$startPlace = $placeManager->getById($commanderManager->get($i)->getRBase());
-		$destinationPlace = $placeManager->getById($commanderManager->get($i)->getRPlaceDestination());
-		$times = Game::getAntiSpyEntryTime($startPlace, $destinationPlace, $commanderManager->get($i)->getArrivalDate());
+		$startPlace = $placeManager->getById($commander->getRBase());
+		$destinationPlace = $placeManager->getById($commander->getRPlaceDestination());
+		$times = Game::getAntiSpyEntryTime($startPlace, $destinationPlace, $commander->getArrivalDate());
 
 		if (strtotime(Utils::now()) >= strtotime($times[0])) {
-			$info = $commanderManager->getEventInfo($commanderManager->get($i));
+			$info = $commanderManager->getEventInfo($commander);
 			$info->add('inCircle', $times);
 
 			# ajout de l'événement
@@ -178,4 +176,3 @@ for ($i = 0; $i < $commanderManager->size(); $i++) {
 	}
 }
 $placeManager->changeSession($S_PLM1);
-$commanderManager->changeSession($S_COM2);

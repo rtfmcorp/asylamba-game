@@ -168,29 +168,22 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 
 						# verify if fleets are moving or not
 						# transfer to the mess the extra commanders and change line if needed
-						$S_COM2 = $commanderManager->getCurrentSession();
-
-						$commanderManager->newSession();
-						$commanderManager->load(array('c.rBase' => $orbitalBase->rPlace, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 1));
-						$totalQtyLine1 = $commanderManager->size();
+						$firstLineCommanders = $commanderManager->getCommandersByLine($orbitalBase->rPlace, 1);
+						$totalQtyLine1 = count($firstLineCommanders);
 						$movingQtyLine1 = 0;
-						for ($i = 0; $i < $commanderManager->size(); $i++) { 
-							if ($commanderManager->get($i)->statement == Commander::MOVING) {
+						foreach ($firstLineCommanders as $commander) { 
+							if ($commander->statement == Commander::MOVING) {
 								$movingQtyLine1++;
 							}
 						}
-						$S_COM_Sess1 = $commanderManager->getCurrentSession();
-
-						$commanderManager->newSession();
-						$commanderManager->load(array('c.rBase' => $orbitalBase->rPlace, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 2));
-						$totalQtyLine2 = $commanderManager->size();
+						$secondLineCommanders = $commanderManager->getCommandersByLine($orbitalBase->rPlace, 2);
+						$totalQtyLine2 = count($secondLineCommanders);
 						$movingQtyLine2 = 0;
-						for ($i = 0; $i < $commanderManager->size(); $i++) { 
-							if ($commanderManager->get($i)->statement == Commander::MOVING) {
+						foreach ($secondLineCommanders as $commander) { 
+							if ($commander->statement == Commander::MOVING) {
 								$movingQtyLine2++;
 							}
 						}
-						$S_COM_Sess2 = $commanderManager->getCurrentSession();
 
 						$totalQty = $totalQtyLine1 + $totalQtyLine2;
 						$movingQty = $movingQtyLine1 + $movingQtyLine2;
@@ -200,76 +193,71 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 								case 2 :
 									$line1 = FALSE;
 									$line2 = FALSE;
-									$commanderManager->changeSession($S_COM_Sess1);
-									for ($i = 0; $i < $commanderManager->size(); $i++) { 
-										if ($commanderManager->get($i)->statement == Commander::MOVING) {
+									foreach ($firstLineCommanders as $commander) { 
+										if ($commander->statement == Commander::MOVING) {
 											if ($line1) {
 												# move to line 2
-												$commanderManager->get($i)->line = 2;
+												$commander->line = 2;
 												$line2 = TRUE;
-											} else {
-												# stay on line 1
-												$line1 = TRUE;
+												continue;
 											}
-										} else {
-											# move to the mess
-											$commanderManager->get($i)->statement = Commander::RESERVE;
-											$commanderManager->emptySquadrons($commanderManager->get($i));
+											# stay on line 1
+											$line1 = TRUE;
+											continue;
 										}
+										# move to the mess
+										$commander->statement = Commander::RESERVE;
+										$commanderManager->emptySquadrons($commander);
 									}
-									$commanderManager->changeSession($S_COM_Sess2);
-									for ($i = 0; $i < $commanderManager->size(); $i++) { 
-										if ($commanderManager->get($i)->statement == Commander::MOVING) {
+									foreach ($secondLineCommanders as $commander) { 
+										if ($commander->statement == Commander::MOVING) {
 											if ($line2) {
 												# move to line 1
-												$commanderManager->get($i)->line = 1;
+												$commander->line = 1;
 												$line1 = TRUE;
-											} else {
-												# stay on line 2
-												$line2 = TRUE;
+												continue;
 											}
-										} else {
-											# move to the mess
-											$commanderManager->get($i)->statement = Commander::RESERVE;
-											$commanderManager->emptySquadrons($commanderManager->get($i));
+											# stay on line 2
+											$line2 = TRUE;
+											continue;
 										}
+										# move to the mess
+										$commander->statement = Commander::RESERVE;
+										$commanderManager->emptySquadrons($commander);
 									}
 									break;
 								case 1 :
 									if ($movingQtyLine1 == 1) {
 										if ($totalQtyLine1 >= 1 && $totalQtyLine2 >= 1) {
 											// let stay one cmder on each line
-											$commanderManager->changeSession($S_COM_Sess1);
-											for ($i = 0; $i < $commanderManager->size(); $i++) { 
-												if ($commanderManager->get($i)->statement != Commander::MOVING) {
+											foreach ($firstLineCommanders as $commander) { 
+												if ($commander->statement != Commander::MOVING) {
 													# move to the mess
-													$commanderManager->get($i)->statement = Commander::RESERVE;
-													$commanderManager->emptySquadrons($commanderManager->get($i));
+													$commander->statement = Commander::RESERVE;
+													$commanderManager->emptySquadrons($commander);
 												}
 											}
-											$commanderManager->changeSession($S_COM_Sess2);
 											$line2 = FALSE;
-											for ($i = 0; $i < $commanderManager->size(); $i++) { 
+											foreach ($secondLineCommanders as $commander) { 
 												if (!$line2) {
 													$line2 = TRUE;
 												} else {
 													# move to the mess
-													$commanderManager->get($i)->statement = Commander::RESERVE;
-													$commanderManager->emptySquadrons($commanderManager->get($i));
+													$commander->statement = Commander::RESERVE;
+													$commanderManager->emptySquadrons($commander);
 												}
 											}
 										} else {
 											// change line of one from line 1 to 2
-											$commanderManager->changeSession($S_COM_Sess1);
 											$line2 = FALSE;
-											for ($i = 0; $i < $commanderManager->size(); $i++) { 
-												if ($commanderManager->get($i)->statement != Commander::MOVING) {
+											foreach ($firstLineCommanders as $commander) { 
+												if ($commander->statement != Commander::MOVING) {
 													if (!$line2) {
 														$line2 = TRUE;
 													} else {
 														# move to the mess
-														$commanderManager->get($i)->statement = Commander::RESERVE;
-														$commanderManager->emptySquadrons($commanderManager->get($i));
+														$commander->statement = Commander::RESERVE;
+														$commanderManager->emptySquadrons($commander);
 													}
 												}
 											}
@@ -277,37 +265,34 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 									} else { # $movingQtyLine2 == 1
 										if ($totalQtyLine1 >= 1 && $totalQtyLine2 >= 1) {
 											// let stay one cmder on each line
-											$commanderManager->changeSession($S_COM_Sess2);
-											for ($i = 0; $i < $commanderManager->size(); $i++) { 
-												if ($commanderManager->get($i)->statement != Commander::MOVING) {
+											foreach ($secondLineCommanders as $commander) { 
+												if ($commander->statement != Commander::MOVING) {
 													# move to the mess
-													$commanderManager->get($i)->statement = Commander::RESERVE;
-													$commanderManager->emptySquadrons($commanderManager->get($i));
+													$commander->statement = Commander::RESERVE;
+													$commanderManager->emptySquadrons($commander);
 												}
 											}
-											$commanderManager->changeSession($S_COM_Sess1);
 											$line1 = FALSE;
-											for ($i = 0; $i < $commanderManager->size(); $i++) { 
+											foreach ($firstLineCommanders as $commander) { 
 												if (!$line1) {
 													$line1 = TRUE;
 												} else {
 													# move to the mess
-													$commanderManager->get($i)->statement = Commander::RESERVE;
-													$commanderManager->emptySquadrons($commanderManager->get($i));
+													$commander->statement = Commander::RESERVE;
+													$commanderManager->emptySquadrons($commander);
 												}
 											}
 										} else {
 											// change line of one from line 2 to 1
-											$commanderManager->changeSession($S_COM_Sess2);
 											$line1 = FALSE;
-											for ($i = 0; $i < $commanderManager->size(); $i++) { 
-												if ($commanderManager->get($i)->statement != Commander::MOVING) {
+											foreach ($firstLineCommanders as $commander) { 
+												if ($commander->statement != Commander::MOVING) {
 													if (!$line1) {
 														$line1 = TRUE;
 													} else {
 														# move to the mess
-														$commanderManager->get($i)->statement = Commander::RESERVE;
-														$commanderManager->emptySquadrons($commanderManager->get($i));
+														$commander->statement = Commander::RESERVE;
+														$commanderManager->emptySquadrons($commander);
 													}
 												}
 											}
@@ -317,62 +302,58 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 								case 0 :
 									if ($totalQtyLine1 == 0) {
 										# one from line 2 to line 1
-										$commanderManager->changeSession($S_COM_Sess1);
 										$line1 = FALSE;
 										$line2 = FALSE;
-										for ($i = 0; $i < $commanderManager->size(); $i++) { 
+										foreach ($firstLineCommanders as $commander) { 
 											if (!$line1) {
 												$line1 = TRUE;
 											} else if (!$line2) {
 												# move one to line 2
-												$commanderManager->get($i)->line = 2;
+												$commander->line = 2;
 												$line2 = TRUE;
 											} else {
 												# move to the mess
-												$commanderManager->get($i)->statement = Commander::RESERVE;
-												$commanderManager->emptySquadrons($commanderManager->get($i));
+												$commander->statement = Commander::RESERVE;
+												$commanderManager->emptySquadrons($commander);
 											}
 										}
 									} else if ($totalQtyLine2 == 0) {
 										# one from line 1 to line 2
-										$commanderManager->changeSession($S_COM_Sess2);
 										$line1 = FALSE;
 										$line2 = FALSE;
-										for ($i = 0; $i < $commanderManager->size(); $i++) { 
+										foreach ($secondLineCommanders as $commander) { 
 											if (!$line2) {
 												$line2 = TRUE;
 											} else if (!$line1) {
 												# move one to line 1
-												$commanderManager->get($i)->line = 1;
+												$commander->line = 1;
 												$line1 = TRUE;
 											} else {
 												# move to the mess
-												$commanderManager->get($i)->statement = Commander::RESERVE;
-												$commanderManager->emptySquadrons($commanderManager->get($i));
+												$commander->statement = Commander::RESERVE;
+												$commanderManager->emptySquadrons($commander);
 											}
 										}
 									} else {
 										# one on each line
-										$commanderManager->changeSession($S_COM_Sess1);
 										$line1 = FALSE;
-										for ($i = 0; $i < $commanderManager->size(); $i++) { 
+										foreach ($firstLineCommanders as $commander) { 
 											if (!$line1) {
 												$line1 = TRUE;
 											} else {
 												# move to the mess
-												$commanderManager->get($i)->statement = Commander::RESERVE;
-												$commanderManager->emptySquadrons($commanderManager->get($i));
+												$commander->statement = Commander::RESERVE;
+												$commanderManager->emptySquadrons($commander);
 											}
 										}
-										$commanderManager->changeSession($S_COM_Sess2);
 										$line2 = FALSE;
-										for ($i = 0; $i < $commanderManager->size(); $i++) { 
+										foreach ($secondLineCommanders as $commander) { 
 											if (!$line2) {
 												$line2 = TRUE;
 											} else {
 												# move to the mess
-												$commanderManager->get($i)->statement = Commander::RESERVE;
-												$commanderManager->emptySquadrons($commanderManager->get($i));
+												$commander->statement = Commander::RESERVE;
+												$commanderManager->emptySquadrons($commander);
 											}
 										}
 									}
@@ -384,17 +365,13 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 						} else {
 							if ($totalQtyLine1 == 2) {
 								# switch one from line 1 to line 2
-								$commanderManager->changeSession($S_COM_Sess1);
-								$commanderManager->get()->line = 2;
+								$firstLineCommanders[0]->line = 2;
 							}
 							if ($totalQtyLine2 == 2) {
 								# switch one from line 2 to line 1
-								$commanderManager->changeSession($S_COM_Sess2);
-								$commanderManager->get()->line = 1;
+								$secondLineCommanders[1]->line = 1;
 							}
 						}
-
-						$commanderManager->changeSession($S_COM2);
 					}
 					if ($canChangeBaseType) {
 						$playerManager->decreaseCredit($player, $totalPrice);
@@ -471,3 +448,4 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 } else {
 	throw new FormException('pas assez d\'informations pour changer le type de la base orbitale');
 }
+$this->getContainer()->get('entity_manager')->flush();

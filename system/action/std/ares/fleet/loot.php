@@ -27,18 +27,14 @@ $commanderId = $request->query->get('commanderid');
 $placeId = $request->query->get('placeid');
 
 if ($commanderId !== FALSE AND $placeId !== FALSE) {
-	$S_COM1 = $commanderManager->getCurrentSession();
-	$commanderManager->newSession(ASM_UMODE);
-	$commanderManager->load(array('c.id' => $commanderId, 'c.rPlayer' => $session->get('playerId')));
 	
 	$S_PLM1 = $placeManager->getCurrentSession();
 	$placeManager->newSession(ASM_UMODE);
 	$placeManager->load(array('id' => $placeId));
 
 	if (($player = $playerManager->get($placeManager->get()->rPlayer)) === null) {
-		if ($commanderManager->size() > 0) {
+		if (($commander = $commanderManager->get($commanderId)) !== null && $commander->rPlayer === $session->get('playerId')) {
 			if ($placeManager->size() > 0) {
-				$commander = $commanderManager->get();
 				$place = $placeManager->get();
 				if ($place->typeOfPlace == Place::TERRESTRIAL) {
 					if ($session->get('playerInfo')->get('color') != $place->getPlayerColor()) {
@@ -96,9 +92,8 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 			throw new ErrorException('Ce commandant ne vous appartient pas ou n\'existe pas.');
 		}
 	} elseif ($player->level > 1 || $player->statement >= Player::DELETED) {
-		if ($commanderManager->size() > 0) {
+		if (($commander = $commanderManager->get($commanderId)) !== null && $commander->rPlayer === $session->get('playerId')) {
 			if ($placeManager->size() > 0) {
-				$commander = $commanderManager->get();
 				$place = $placeManager->get();
 
 				$color = $colorManager->get($session->get('playerInfo')->get('color'));
@@ -149,7 +144,8 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 		throw new ErrorException('Vous ne pouvez pas piller un joueur de niveau 1.');
 	}
 	$placeManager->changeSession($S_PLM1);
-	$commanderManager->changeSession($S_COM1);
 } else {
 	throw new ErrorException('Manque de précision sur le commandant ou la position.');
 }
+
+$this->getContainer()->get('entity_manager')->flush();

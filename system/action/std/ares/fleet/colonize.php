@@ -30,10 +30,6 @@ $placeId = $request->query->get('placeid');
 
 
 if ($commanderId !== FALSE AND $placeId !== FALSE) {
-	$S_COM1 = $commanderManager->getCurrentSession();
-	$commanderManager->newSession(ASM_UMODE);
-	$commanderManager->load(array('c.id' => $commanderId, 'c.rPlayer' => $session->get('playerId')));
-	
 	$S_PLM1 = $placeManager->getCurrentSession();
 	$placeManager->newSession(ASM_UMODE);
 	$placeManager->load(array('id' => $placeId));
@@ -54,20 +50,16 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 		$obQuantity = $aw['count'];
 
 		$coloQuantity = 0;
-		$S_COM2 = $commanderManager->getCurrentSession();
-		$commanderManager->newSession();
-		$commanderManager->load(array('c.rPlayer' => $session->get('playerId'), 'c.statement' => Commander::MOVING));
-		for ($i = 0; $i < $commanderManager->size(); $i++) { 
-			if ($commanderManager->get($i)->travelType == Commander::COLO) {
+		$commanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::MOVING]);
+		foreach ($commanders as $commander) { 
+			if ($commander->travelType == Commander::COLO) {
 				$coloQuantity++;
 			}
 		}
-		$commanderManager->changeSession($S_COM2);
 		$totalBases = $obQuantity + $coloQuantity;
 		if ($totalBases < $maxBasesQuantity) {
-			if ($commanderManager->size() > 0) {
+			if (($commander = $commanderManager->get($commanderId)) !== null && $commander->rPlayer = $session->get('playerId')) {
 				if ($placeManager->size() > 0) {
-					$commander = $commanderManager->get();
 					$place = $placeManager->get();
 
 					if ($place->typeOfPlace == Place::TERRESTRIAL) {
@@ -136,8 +128,9 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	} else {
 		throw new ErrorException('Vous devez développer votre technologie colonisation.');
 	}
-	$commanderManager->changeSession($S_COM1);
 	$placeManager->changeSession($S_PLM1);
 } else {
 	throw new ErrorException('Manque de précision sur le commandant ou la position.');
 }
+
+$this->getContainer()->get('entity_manager')->flush();

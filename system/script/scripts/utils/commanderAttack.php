@@ -1,12 +1,12 @@
 <?php
-#avance l'attaque de tous les officiers
+
 use Asylamba\Modules\Ares\Model\Commander;
 
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
+#avance l'attaque de tous les officiers
+$commanders = $this->getContainer()->get('ares.commander_manager')->getMovingCommanders();
 
-$commanderManager->newSession();
-$commanderManager->load(['c.statement' => Commander::MOVING]);
-
-for ($i = 0; $i < $commanderManager->size(); $i++) {
-	$commanderManager->get($i)->dArrival = $commanderManager->get($i)->dStart;
+foreach ($commanders as $commander) {
+	$commander->dArrival = $commander->dStart;
 }
+
+$this->getContainer()->get('entity_manager')->flush(Commander::class);

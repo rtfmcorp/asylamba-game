@@ -15,34 +15,25 @@ if ($commanderId === null) {
 }
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$S_COM1 = $commanderManager->getCurrentSession();
-$commanderManager->newSession();
-$commanderManager->load(array('c.id' => $commanderId, 'c.rPlayer' => $this->getContainer()->get('app.session')->get('playerId')));
 
-if ($commanderManager->size() !== 1) {
+if (($commander = $commanderManager->get($commanderId)) === null || $commander->rPlayer !== $this->getContainer()->get('app.session')->get('playerId')) {
 	throw new ErrorException('Ce commandant n\'existe pas ou ne vous appartient pas');
 }
-$commander = $commanderManager->get();
-
 $orbitalBase = $orbitalBaseManager->get($commander->rBase);
 
 if ($commander->statement == Commander::RESERVE) {
-	$S_COM2 = $commanderManager->getCurrentSession();
-	$commanderManager->newSession();
-	$commanderManager->load(array('c.rBase' => $commander->rBase, 'c.statement' => Commander::INSCHOOL));
+	$commanders = $commanderManager->getBaseCommanders($commander->rBase, [Commander::INSCHOOL]);
 
-	if ($commanderManager->size() < PlaceResource::get($orbitalBase->typeOfBase, 'school-size')) {
+	if (count($commanders) < PlaceResource::get($orbitalBase->typeOfBase, 'school-size')) {
 		$commander->statement = Commander::INSCHOOL;
 		$commander->uCommander = Utils::now();
 	} else {
 		throw new ErrorException('Votre école est déjà pleine.');
 	}
-
-	$commanderManager->changeSession($S_COM2);
 } elseif ($commander->statement == Commander::INSCHOOL) {
 	$commander->statement = Commander::RESERVE;
 	$commander->uCommander = Utils::now();
 } else {
 	throw new ErrorException('Vous ne pouvez rien faire avec cet officier.');
 }
-$commanderManager->changeSession($S_COM1);
+$this->getContainer()->get('entity_manager')->flush();

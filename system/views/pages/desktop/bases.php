@@ -27,15 +27,8 @@ echo '<div id="content">';
 	# obNav component
 	if (!$request->query->has('view') || $request->query->get('view') === 'main') {
 		$ob_obSituation = $base;
-		$commanders_obSituation = array();
 
-		$S_COM1 = $commanderManager->getCurrentSession();
-		$commanderManager->newSession();
-		$commanderManager->load(array('c.rBase' => $base->getId(), 'c.statement' => array(Commander::AFFECTED, Commander::MOVING)));
-		for ($i = 0; $i < $commanderManager->size(); $i++) { 
-			$commanders_obSituation[] = $commanderManager->get($i);
-		}
-		$commanderManager->changeSession($S_COM1);
+		$commanders_obSituation = $commanderManager->getBaseCommanders($base->getId(), [Commander::AFFECTED, Commander::MOVING]);
 
 		$ob_index = 0;
 		$ob_fastView = $base;

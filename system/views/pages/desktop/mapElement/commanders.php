@@ -5,28 +5,20 @@ use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Game;
 
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
-$session = $this->getContainer()->get('app.session');
-
-$S_COM_MAP_COM = $commanderManager->getCurrentSession();
-$commanderManager->newSession();
-$commanderManager->load(
-	array(
-		'c.rBase' => $session->get('playerParams')->get('base'),
-		'c.statement' => array(Commander::AFFECTED, Commander::MOVING)
-	),
-	array(
-		'c.line', 'DESC'
+$commanders = $this
+	->getContainer()
+	->get('ares.commander_manager')
+	->getBaseCommanders(
+		$this->getContainer()->get('app.session')->get('playerParams')->get('base'),
+		[Commander::AFFECTED, Commander::MOVING],
+		['c.line' => 'DESC']
 	)
-);
-
+;
 $break = FALSE;
 
 echo '<div id="subnav">';
 	echo '<div class="overflow">';
-		for ($i = 0; $i < $commanderManager->size(); $i++) {
-			$commander = $commanderManager->get($i);
-
+		foreach ($commanders as $commander) {
 			if ($commander->line == 1 && $break == FALSE) {
 				echo '<hr />';
 				$break = TRUE;
@@ -67,5 +59,3 @@ echo '<div id="subnav">';
 		}
 	echo '</div>';
 echo '</div>';
-
-$commanderManager->changeSession($S_COM_MAP_COM);

@@ -22,9 +22,6 @@ $S_PRM1 = $playerRankingManager->getCurrentSession();
 $playerRankingManager->newSession();
 $playerRankingManager->loadLastContext();
 
-$S_CLM1 = $colorManager->getCurrentSession();
-$colorManager->newSession(FALSE);
-
 # create a new ranking
 $qr = $database->prepare('INSERT INTO ranking(dRanking, player, faction) VALUES (?, 0, 1)');
 $qr->execute(array(Utils::now()));
@@ -77,18 +74,18 @@ function setPositions($list, $attribute) {
 }
 
 # load the factions (colors)
-$inGameFactions = $colorManager->load(array('isInGame' => 1));
+$inGameFactions = $colorManager->getInGameFactions();
 
 # create an array with all the factions
 $gameover = FALSE;
 $list = [];
-for ($i = 0; $i < $colorManager->size(); $i++) {
-	$list[$colorManager->get($i)->id] = array(
+foreach ($inGameFactions as $faction) {
+	$list[$faction->getId()] = array(
 		'general' => 0, 
 		'wealth' => 0, 
 		'territorial' => 0,
-		'points' => $colorManager->get($i)->rankingPoints);
-	if ($colorManager->get($i)->isWinner == 1) {
+		'points' => $faction->rankingPoints);
+	if ($faction->isWinner == 1) {
 		$gameover = TRUE;
 	}
 }
@@ -109,8 +106,8 @@ for ($i = 0; $i < $playerRankingManager->size(); $i++) {
 }
 
 #-------------------------------- WEALTH RANKING ----------------------------------#
-for ($i = 0; $i < $colorManager->size(); $i++) { 
-	$color = $colorManager->get($i)->id;
+foreach ($inGameFactions as $faction) { 
+	$color = $faction->id;
 	$qr = $database->prepare('SELECT
 		COUNT(cr.id) AS nb,
 		SUM(cr.income) AS income
@@ -178,20 +175,20 @@ if (Utils::interval(SERVER_START_TIME, Utils::now(), 'h') > HOURS_BEFORE_START_O
 	$coefW = 0.4; # 16 12 8 4 0 ...
 	$coefT = 0.5; # 20 15 10 5 0 ...
 
-	for ($i = 0; $i < $colorManager->size(); $i++) {
-		$faction = $colorManager->get($i)->id;
+	foreach ($inGameFactions as $faction) {
+		$factionId = $faction->id;
 		$additionalPoints = 0;
 
 		# general
-		$additionalPoints += intval($pointsToEarn[$listG[$faction]['position'] - 1] * $coefG);
+		$additionalPoints += intval($pointsToEarn[$listG[$factionId]['position'] - 1] * $coefG);
 
 		# wealth
-		$additionalPoints += intval($pointsToEarn[$listW[$faction]['position'] - 1] * $coefW);
+		$additionalPoints += intval($pointsToEarn[$listW[$factionId]['position'] - 1] * $coefW);
 
 		# territorial
-		$additionalPoints += intval($pointsToEarn[$listT[$faction]['position'] - 1] * $coefT);
+		$additionalPoints += intval($pointsToEarn[$listT[$factionId]['position'] - 1] * $coefT);
 
-		$list[$faction]['points'] += $additionalPoints;
+		$list[$factionId]['points'] += $additionalPoints;
 	}
 }
 
@@ -247,7 +244,7 @@ foreach ($list as $faction => $value) {
 	}
 
 	# update faction infos
-	$f = $colorManager->getById($faction);
+	$f = $colorManager->get($faction);
 	$f->rankingPoints = $listP[$faction]['points'];
 	$f->points = $listG[$faction]['general'];
 	$f->sectors = $listT[$faction]['territorial'];

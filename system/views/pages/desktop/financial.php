@@ -33,15 +33,7 @@ echo '<div id="content">';
 		
 		$playerBases = $orbitalBaseManager->getPlayerBases($session->get('playerId'));
 
-		$S_COM_FIN = $commanderManager->getCurrentSession();
-		$commanderManager->newSession();
-		$commanderManager->load(
-			array(
-				'c.rPlayer' => $session->get('playerId'),
-				'c.statement' => array(Commander::AFFECTED, Commander::MOVING)
-			), 
-			array('c.rBase', 'ASC')
-		);
+		$commanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::AFFECTED, Commander::MOVING], ['c.rBase' => 'ASC']);
 
 		$S_TRM1 = $transactionManager->getCurrentSession();
 		$transactionManager->newSession();
@@ -103,10 +95,10 @@ echo '<div id="content">';
 		}
 
 		$commander_generalFinancial = [];
-		for ($i = 0; $i < $commanderManager->size(); $i++) {
-			$commander_generalFinancial[] = $commanderManager->get($i);
-			$financial_totalFleetFees += $commanderManager->get($i)->getLevel() * Commander::LVLINCOMECOMMANDER;
-			$financial_totalShipsFees += Game::getFleetCost($commanderManager->get($i)->getNbrShipByType());
+		foreach ($commanders as $commander) {
+			$commander_generalFinancial[] = $commander;
+			$financial_totalFleetFees += $commander->getLevel() * Commander::LVLINCOMECOMMANDER;
+			$financial_totalShipsFees += Game::getFleetCost($commander->getNbrShipByType());
 		}
 
 		$transaction_generalFinancial = [];
@@ -155,7 +147,6 @@ echo '<div id="content">';
 
 		# close
 		$transactionManager->changeSession($S_TRM1);
-		$commanderManager->changeSession($S_COM_FIN);
 	} elseif ($request->query->get('view') == 'send') {
 		include COMPONENT . 'financial/send-credit-player.php';
 		include COMPONENT . 'financial/send-credit-faction.php';

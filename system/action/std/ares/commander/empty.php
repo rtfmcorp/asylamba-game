@@ -13,14 +13,9 @@ if ($commanderId === null) {
 }
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 
-$S_COM1 = $commanderManager->getCurrentSession();
-$commanderManager->newSession();
-$commanderManager->load(array('c.id' => $commanderId, 'c.rPlayer' => $this->getContainer()->get('app.session')->get('playerId')));
-
-if ($commanderManager->size() !== 1) {
+if (($commander = $commanderManager->get($commanderId)) === null || $commander->rPlayer !== $this->getContainer()->get('app.session')->get('playerId')) {
 	throw new ErrorException('Ce commandant n\'existe pas ou ne vous appartient pas.');
 }
-$commander = $commanderManager->get();
 if ($commander->statement !== 1) {
 	throw new ErrorException('Vous ne pouvez pas retirer les vaisseaux à un officier en déplacement.');
 }
@@ -29,4 +24,5 @@ if ($commander->statement !== 1) {
 $commanderManager->emptySquadrons($commander);
 
 $this->getContainer()->get('app.session')->addFlashbag('Vous avez vidé l\'armée menée par votre commandant ' . $commander->getName() . '.', Flashbag::TYPE_SUCCESS);
-$commanderManager->changeSession($S_COM1);
+
+$this->getContainer()->get('entity_manager')->flush();

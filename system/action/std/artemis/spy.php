@@ -111,18 +111,16 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 					$sr->commercialRouteIncome = $commercialRouteManager->getBaseIncome($orbitalBase);
 
 					$commandersArray = array();
-					$S_COM1 = $commanderManager->getCurrentSession();
-					$commanderManager->newSession();
-					$commanderManager->load(array('rBase' => $rPlace, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING)));
+					$commanders = $commanderManager->getBaseCommanders($rPlace, [Commander::AFFECTED, Commander::MOVING]);
 
-					for ($i = 0; $i < $commanderManager->size(); $i++) { 
-						$commandersArray[$i]['name'] = $commanderManager->get($i)->name;
-						$commandersArray[$i]['avatar'] = $commanderManager->get($i)->avatar;
-						$commandersArray[$i]['level'] = $commanderManager->get($i)->level;
-						$commandersArray[$i]['line'] = $commanderManager->get($i)->line;
-						$commandersArray[$i]['statement'] = $commanderManager->get($i)->statement;
-						$commandersArray[$i]['pev'] = $commanderManager->get($i)->getPev();
-						$commandersArray[$i]['army'] = $commanderManager->get($i)->getNbrShipByType();
+					foreach ($commanders as $commander) { 
+						$commandersArray[$i]['name'] = $commander->name;
+						$commandersArray[$i]['avatar'] = $commander->avatar;
+						$commandersArray[$i]['level'] = $commander->level;
+						$commandersArray[$i]['line'] = $commander->line;
+						$commandersArray[$i]['statement'] = $commander->statement;
+						$commandersArray[$i]['pev'] = $commander->getPev();
+						$commandersArray[$i]['army'] = $commander->getNbrShipByType();
 					}
 					$sr->commanders = serialize($commandersArray);
 					
@@ -156,7 +154,6 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 						default:
 							break;
 					}
-					$commanderManager->changeSession($S_COM1);
 					break;
 				default:
 					throw new ErrorException('espionnage pour vaisseau-mère pas encore implémenté');

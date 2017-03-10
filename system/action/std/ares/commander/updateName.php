@@ -18,13 +18,9 @@ if (($commanderId = $request->request->get('id')) === null || ($name = $request-
 
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 
-$S_COM1 = $commanderManager->getCurrentSession();
-$commanderManager->newSession();
-$commanderManager->load(array('c.id' => $commandantId, 'c.rPlayer' => $session->get('playerId')));
-if ($commanderManager->size() !== 1) {
+if (($commander = $commanderManager->get($commanderId)) === null || $commander->rPlayer !== $session->get('playerId')) {
 	throw new ErrorException('Ce commandant n\'existe pas ou ne vous appartient pas');
 }
-$commander = $commanderManager->get();
 $p = $this->getContainer()->get('parser');
 $name = $p->protect($name);
 if (strlen($name) > 1 AND strlen($name) < 26) {
@@ -33,5 +29,3 @@ if (strlen($name) > 1 AND strlen($name) < 26) {
 } else {
 	throw new ErrorException('le nom doit comporter entre 2 et 25 caractères');
 }
-
-$commanderManager->changeSession($S_COM1);

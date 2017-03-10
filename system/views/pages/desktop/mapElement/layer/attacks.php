@@ -21,15 +21,13 @@ for ($i = 0; $i < $session->get('playerEvent')->size(); $i++) {
 }
 
 # chargement des commandants attaquants
-$S_COM_ATT = $commanderManager->getCurrentSession();
-$commanderManager->newSession();
-$commanderManager->load(array('c.id' => $commandersId));
+$attackingCommanders = $commanderManager->getCommandersByIds($commandersId);
 
 # chargement des places relatives aux commandants attaquants
 $placesId = array(0);
-for ($i = 0; $i < $commanderManager->size(); $i++) {
-	$placesId[] = $commanderManager->get($i)->rStartPlace;
-	$placesId[] = $commanderManager->get($i)->rDestinationPlace;
+foreach ($attackingCommanders as $commander) {
+	$placesId[] = $commander->rStartPlace;
+	$placesId[] = $commander->rDestinationPlace;
 }
 
 $S_PLM_MAPLAYER = $placeManager->getCurrentSession();
@@ -38,8 +36,7 @@ $placeManager->load(array('id' => $placesId));
 
 echo '<div id="attacks" ' . ($request->cookies->get('p' . Params::SHOW_MAP_FLEETIN, Params::SHOW_MAP_FLEETIN) ? NULL : 'style="display:none;"') . '>';
 	echo '<svg viewBox="0, 0, ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . ', ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';
-			for ($i = 0; $i < $commanderManager->size(); $i++) {
-				$commander = $commanderManager->get($i);
+			foreach ($attackingCommanders as $commander) {
 
 				if ($commander->travelType != Commander::BACK) {
 					$x1 = $placeManager->getById($commander->rStartPlace)->getXSystem() * $galaxyConfiguration->scale;
@@ -60,4 +57,3 @@ echo '<div id="attacks" ' . ($request->cookies->get('p' . Params::SHOW_MAP_FLEET
 echo '</div>';
 
 $placeManager->changeSession($S_PLM_MAPLAYER);
-$commanderManager->changeSession($S_COM_ATT);
