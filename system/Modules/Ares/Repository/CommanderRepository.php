@@ -83,7 +83,8 @@ class CommanderRepository extends AbstractRepository {
 	 */
 	public function getBaseCommanders($baseId, $statements = [], $orderBy = [])
 	{
-		$statement = $this->select('WHERE c.rBase = :base_id AND c.statement IN (' . implode(',', $statements) . ') ' . $this->getOrderByClause($orderBy), ['base_id' => $baseId]);
+		$statementClause = (!empty($statements)) ? ' AND c.statement IN (' . implode(',', $statements) . ') ' : '';
+		$statement = $this->select('WHERE c.rBase = :base_id ' . $statementClause . $this->getOrderByClause($orderBy), ['base_id' => $baseId]);
 		$commanders = [];
 		$currentId = 0;
 		$persisted = [];
@@ -162,7 +163,8 @@ class CommanderRepository extends AbstractRepository {
 	 */
 	public function getPlayerCommanders($playerId, $statements = [], $orderBy = [])
 	{
-		$statement = $this->select('WHERE c.rPlayer = :player_id AND c.statement IN (' . implode(',', $statements) . ') ' . $this->getOrderByClause($orderBy), ['player_id' => $playerId]);
+		$statementClause = (!empty($statements)) ? ' AND c.statement IN (' . implode(',', $statements) . ') ' : '';
+		$statement = $this->select('WHERE c.rPlayer = :player_id ' . $statementClause . $this->getOrderByClause($orderBy), ['player_id' => $playerId]);
 		$commanders = [];
 		$currentId = 0;
 		$persisted = [];
