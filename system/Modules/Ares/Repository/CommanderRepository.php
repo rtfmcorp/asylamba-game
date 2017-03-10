@@ -3,11 +3,17 @@
 namespace Asylamba\Modules\Ares\Repository;
 
 use Asylamba\Classes\Entity\AbstractRepository;
+use Asylamba\Classes\Library\Utils;
 
 use Asylamba\Modules\Ares\Model\Commander;
 
 class CommanderRepository extends AbstractRepository {
-	public function select($clause, $params)
+	/**
+	 * @param string $clause
+	 * @param array $params
+	 * @return \PDOStatement
+	 */
+	public function select($clause, $params = [])
 	{
 		$statement = $this->connection->prepare(
 			'SELECT c.*,
@@ -47,6 +53,204 @@ class CommanderRepository extends AbstractRepository {
 		return $statement;
 	}
 	
+	/**
+	 * 
+	 * @param int $id
+	 * @return Commander
+	 */
+	public function get($id)
+	{
+		if (($c = $this->unitOfWork->getObject(Commander::class, $id)) !== null) {
+			return $c;
+		}
+		$statement = $this->select('WHERE c.id = :id', ['id' => $id]);
+		if ($statement->rowCount() === 0) {
+			return null;
+		}
+		$commanders = [];
+		$currentId = 0;
+		while ($row = $statement->fetch()) {
+			$this->format($row, $commanders, $currentId);
+		}
+		return $commanders[$currentId];
+	}
+	
+	/**
+	 * @param int $baseId
+	 * @param array $statements
+	 * @param array $orderBy
+	 * @return array
+	 */
+	public function getBaseCommanders($baseId, $statements = [], $orderBy = [])
+	{
+		$statement = $this->select('WHERE c.rBase = :base_id AND c.statement IN (' . implode(',', $statements) . ') ' . $this->getOrderByClause($orderBy), ['base_id' => $baseId]);
+		$commanders = [];
+		$currentId = 0;
+		$persisted = [];
+		$unPersisted = [];
+		while ($row = $statement->fetch()) {
+			if (in_array($row['id'], $persisted)) {
+				continue;
+			}
+			if (!in_array($row['id'], $unPersisted) && ($c = $this->unitOfWork->getObject(Commander::class, $row['id'])) !== null) {
+				$currentId = $row['id'];
+				$commanders[$row['id']] = $c;
+				$persisted[] = $row['id'];
+				continue;
+			}
+			$this->format($row, $commanders, $currentId, $unPersisted);
+		}
+		return array_values($commanders);
+	}
+	
+	/**
+	 * @param array $ids
+	 * @return array
+	 */
+	public function getCommandersByIds($ids = [])
+	{
+		$statement = $this->select('WHERE c.id IN (' . implode(',', $ids) . ')');
+		$commanders = [];
+		$currentId = 0;
+		$persisted = [];
+		$unPersisted = [];
+		while ($row = $statement->fetch()) {
+			if (in_array($row['id'], $persisted)) {
+				continue;
+			}
+			if (!in_array($row['id'], $unPersisted) && ($c = $this->unitOfWork->getObject(Commander::class, $row['id'])) !== null) {
+				$currentId = $row['id'];
+				$commanders[$row['id']] = $c;
+				$persisted[] = $row['id'];
+				continue;
+			}
+			$this->format($row, $commanders, $currentId, $unPersisted);
+		}
+		return array_values($commanders);
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getMovingCommanders()
+	{
+		$statement = $this->select('WHERE c.statement = ' . Commander::MOVING);
+		$commanders = [];
+		$currentId = 0;
+		$persisted = [];
+		$unPersisted = [];
+		while ($row = $statement->fetch()) {
+			if (in_array($row['id'], $persisted)) {
+				continue;
+			}
+			if (!in_array($row['id'], $unPersisted) && ($c = $this->unitOfWork->getObject(Commander::class, $row['id'])) !== null) {
+				$currentId = $row['id'];
+				$commanders[$row['id']] = $c;
+				$persisted[] = $row['id'];
+				continue;
+			}
+			$this->format($row, $commanders, $currentId, $unPersisted);
+		}
+		return array_values($commanders);
+	}
+	
+	/**
+	 * @param int $playerId
+	 * @param array $statements
+	 * @param array $orderBy
+	 * @return array
+	 */
+	public function getPlayerCommanders($playerId, $statements = [], $orderBy = [])
+	{
+		$statement = $this->select('WHERE c.rPlayer = :player_id AND c.statement IN (' . implode(',', $statements) . ') ' . $this->getOrderByClause($orderBy), ['player_id' => $playerId]);
+		$commanders = [];
+		$currentId = 0;
+		$persisted = [];
+		$unPersisted = [];
+		while ($row = $statement->fetch()) {
+			if (in_array($row['id'], $persisted)) {
+				continue;
+			}
+			if (!in_array($row['id'], $unPersisted) && ($c = $this->unitOfWork->getObject(Commander::class, $row['id'])) !== null) {
+				$currentId = $row['id'];
+				$commanders[$row['id']] = $c;
+				$persisted[] = $row['id'];
+				continue;
+			}
+			$this->format($row, $commanders, $currentId, $unPersisted);
+		}
+		return array_values($commanders);
+	}
+	
+	/**
+	 * @param int $orbitalBaseId
+	 * @param int $line
+	 * @return array
+	 */
+	public function getCommandersByLine($orbitalBaseId, $line)
+	{
+		$statement = $this->select('WHERE c.rBase = :base_id AND c.line = :line', ['base_id' => $orbitalBaseId, 'line' => $line]);
+		$commanders = [];
+		$currentId = 0;
+		$persisted = [];
+		$unPersisted = [];
+		while ($row = $statement->fetch()) {
+			if (in_array($row['id'], $persisted)) {
+				continue;
+			}
+			if (!in_array($row['id'], $unPersisted) && ($c = $this->unitOfWork->getObject(Commander::class, $row['id'])) !== null) {
+				$currentId = $row['id'];
+				$commanders[$row['id']] = $c;
+				$persisted[] = $row['id'];
+				continue;
+			}
+			$this->format($row, $commanders, $currentId, $unPersisted);
+		}
+		return array_values($commanders);
+	}
+	
+	/**
+	 * @param array $placeIds
+	 * @return array
+	 */
+	public function getIncomingAttacks($placeIds)
+	{
+		$statement = $this->select(
+			'WHERE c.rDestinationPlace IN (' . implode(',', $placeIds) . ') '.
+			'AND c.statement = ' . Commander::MOVING . ' ' .
+			'AND c.travelType IN (' . Commander::COLO . ', ' . Commander::LOOT. ')'
+		);
+		$commanders = [];
+		$currentId = 0;
+		$persisted = [];
+		$unPersisted = [];
+		while ($row = $statement->fetch()) {
+			if (in_array($row['id'], $persisted)) {
+				continue;
+			}
+			if (!in_array($row['id'], $unPersisted) && ($c = $this->unitOfWork->getObject(Commander::class, $row['id'])) !== null) {
+				$currentId = $row['id'];
+				$commanders[$row['id']] = $c;
+				$persisted[] = $row['id'];
+				continue;
+			}
+			$this->format($row, $commanders, $currentId, $unPersisted);
+		}
+		return array_values($commanders);
+	}
+	
+	/**
+	 * @param int $orbitalBaseId
+	 * @param int $line
+	 * @return int
+	 */
+	public function countCommandersByLine($orbitalBaseId, $line)
+	{
+		$statement = $this->connection->prepare('SELECT COUNT(*) AS nb_commanders FROM commander WHERE statement IN (' . Commander::AFFECTED . ', ' . Commander::MOVING . ') AND rBase = :orbital_base_id AND line = :line');
+		$statement->execute(['orbital_base_id' => $orbitalBaseId, 'line' => $line]);
+		return (int) $statement->fetch()['nb_commanders'];
+	}
+	
 	public function insert($commander)
 	{
 		$statement = $this->connection->prepare(
@@ -77,11 +281,25 @@ class CommanderRepository extends AbstractRepository {
 			'created_at' => $commander->dCreation,
 		]);
 		$commander->setId($this->connection->lastInsertId());
+		$nbrSquadrons = $commander->getLevel();
+		
+		$squadronStatement = $this->connection->prepare('INSERT INTO squadron(rCommander, dCreation) VALUES(:commander_id, NOW())');
+
+		for ($i = 0; $i < $nbrSquadrons; $i++) {
+			$squadronStatement->execute(['commander_id' => $commander->getId()]);
+		}
+
+		$lastSquadronId = $this->connection->lastInsertId();
+		$armySize = count($commander->getArmy());
+		for ($i = 0; $i < $armySize; $i++) {
+			$commander->getSquadron[$i]->setId($lastSquadronId);
+			$lastSquadronId--;
+		}
 	}
 	
 	public function update($commander)
 	{
-		$qr = $this->connection->prepare(
+		$statement = $this->connection->prepare(
 			'UPDATE commander SET				
 				name = :name,
 				avatar = :avatar,
@@ -108,7 +326,7 @@ class CommanderRepository extends AbstractRepository {
 				dDeath = :died_at
 			WHERE id = :id'
 		);
-		$qr->execute([				
+		$statement->execute([				
 			'name' => $commander->name,
 			'avatar' => $commander->avatar,
 			'player_id' => $commander->rPlayer,
@@ -134,54 +352,106 @@ class CommanderRepository extends AbstractRepository {
 			'died_at' => $commander->dDeath,
 			'id' => $commander->id
 		]);
+		$squadronStatement = $this->connection->prepare(
+			'UPDATE squadron SET
+				rCommander = :commander_id,
+				ship0 = :ship_0,
+				ship1 = :ship_1,
+				ship2 = :ship_2,
+				ship3 = :ship_3,
+				ship4 = :ship_4,
+				ship5 = :ship_5,
+				ship6 = :ship_6,
+				ship7 = :ship_7,
+				ship8 = :ship_8,
+				ship9 = :ship_9,
+				ship10 = :ship_10,
+				ship11 = :ship_11,
+				DLAstModification = NOW()
+			WHERE id = :id'
+		);
+		foreach($commander->getArmy() as $squadron) {
+			$squadronStatement->execute([
+				'commander_id' => $squadron->getRCommander(),
+				'ship_0' => $squadron->getNbrShipByType(0),
+				'ship_1' => $squadron->getNbrShipByType(1),
+				'ship_2' => $squadron->getNbrShipByType(2),
+				'ship_3' => $squadron->getNbrShipByType(3),
+				'ship_4' => $squadron->getNbrShipByType(4),
+				'ship_5' => $squadron->getNbrShipByType(5),
+				'ship_6' => $squadron->getNbrShipByType(6),
+				'ship_7' => $squadron->getNbrShipByType(7),
+				'ship_8' => $squadron->getNbrShipByType(8),
+				'ship_9' => $squadron->getNbrShipByType(9),
+				'ship_10' => $squadron->getNbrShipByType(10),
+				'ship_11' => $squadron->getNbrShipByType(11),
+				'id' => $squadron->getId()
+			]);
+		}
+		if ($commander->getLevel() > $commander->getSizeArmy()) {
+			//on créé un nouveau squadron avec rCommander correspondant
+			$nbrSquadronToCreate = $commander->getLevel() - $commander->getSizeArmy();
+			$qr = 'INSERT INTO squadron (rCommander, dCreation) VALUES (' . $commander->getId() . ', NOW())';
+			$i = 1;
+			for ($i = 1; $i < $nbrSquadronToCreate; $i++) {
+				$qr .= ',(' . $commander->getId() . ', NOW())';
+			}
+			$qr = $this->connection->prepare($qr);
+			$qr->execute();
+		}
 	}
 	
 	public function remove($commander)
 	{
-		
+		$statement = $this->connection->prepare('DELETE FROM commander WHERE id = :id');
+		$statement->execute(['id' => $commander->getId()]);
 	}
 	
-	public function format($data, &$currentCommander = null)
+	public function format($data, &$commanders, &$currentId = null, &$unPersisted = [])
 	{
-		if ($i == 0 || (int) $data['id'] !== $currentCommander->id) {
-			$currentCommander = new Commander();
+		if ($currentId === null || (int) $data['id'] !== $currentId) {
+			$currentId = $data['id'];
+			$commanders[$currentId] = new Commander();
 
-			$currentCommander->id = (int) $data['id'];
-			$currentCommander->name = $data['name'];
-			$currentCommander->avatar = $data['avatar'];
-			$currentCommander->rPlayer = (int) $data['rPlayer'];
-			$currentCommander->playerName = $data['pName'];
-			$currentCommander->playerColor = $data['pColor'];
-			$currentCommander->rBase = (int) $data['rBase'];
-			$currentCommander->comment = $data['comment'];
-			$currentCommander->sexe = $data['sexe'];
-			$currentCommander->age = (int) $data['age'];
-			$currentCommander->level = (int) $data['level'];
-			$currentCommander->experience = (int) $data['experience'];
-			$currentCommander->uCommander = $data['uCommander'];
-			$currentCommander->palmares = $data['palmares'];
-			$currentCommander->statement = $data['statement'];
-			$currentCommander->line = (int) $data['line'];
-			$currentCommander->dCreation = $data['dCreation'];
-			$currentCommander->dAffectation = $data['dAffectation'];
-			$currentCommander->dDeath = $data['dDeath'];
-			$currentCommander->oBName = $data['oName'];
+			$commanders[$currentId]->id = (int) $data['id'];
+			$commanders[$currentId]->name = $data['name'];
+			$commanders[$currentId]->avatar = $data['avatar'];
+			$commanders[$currentId]->rPlayer = (int) $data['rPlayer'];
+			$commanders[$currentId]->playerName = $data['pName'];
+			$commanders[$currentId]->playerColor = $data['pColor'];
+			$commanders[$currentId]->rBase = (int) $data['rBase'];
+			$commanders[$currentId]->comment = $data['comment'];
+			$commanders[$currentId]->sexe = $data['sexe'];
+			$commanders[$currentId]->age = (int) $data['age'];
+			$commanders[$currentId]->level = (int) $data['level'];
+			$commanders[$currentId]->experience = (int) $data['experience'];
+			$commanders[$currentId]->uCommander = $data['uCommander'];
+			$commanders[$currentId]->palmares = $data['palmares'];
+			$commanders[$currentId]->statement = $data['statement'];
+			$commanders[$currentId]->line = (int) $data['line'];
+			$commanders[$currentId]->dCreation = $data['dCreation'];
+			$commanders[$currentId]->dAffectation = $data['dAffectation'];
+			$commanders[$currentId]->dDeath = $data['dDeath'];
+			$commanders[$currentId]->oBName = $data['oName'];
 
-			$currentCommander->dStart = $data['dStart'];
-			$currentCommander->dArrival = $data['dArrival'];
-			$currentCommander->resources = (int) $data['resources'];
-			$currentCommander->travelType = $data['travelType'];
-			$currentCommander->travelLength = $data['travelLength'];
-			$currentCommander->rStartPlace = $data['rStartPlace'];
-			$currentCommander->rDestinationPlace = $data['rDestinationPlace'];
+			$commanders[$currentId]->dStart = $data['dStart'];
+			$commanders[$currentId]->dArrival = $data['dArrival'];
+			$commanders[$currentId]->resources = (int) $data['resources'];
+			$commanders[$currentId]->travelType = $data['travelType'];
+			$commanders[$currentId]->travelLength = $data['travelLength'];
+			$commanders[$currentId]->rStartPlace = $data['rStartPlace'];
+			$commanders[$currentId]->rDestinationPlace = $data['rDestinationPlace'];
 
-			$currentCommander->startPlaceName = ($data['spName'] == '') ? 'planète rebelle' : $data['spName'];
-			$currentCommander->destinationPlaceName = ($data['dpName'] == '') ? 'planète rebelle' : $data['dpName'];
-			$currentCommander->destinationPlacePop = $data['destinationPlacePop'];
-			$currentCommander->startPlacePop = $data['startPlacePop'];
+			$commanders[$currentId]->startPlaceName = ($data['spName'] == '') ? 'planète rebelle' : $data['spName'];
+			$commanders[$currentId]->destinationPlaceName = ($data['dpName'] == '') ? 'planète rebelle' : $data['dpName'];
+			$commanders[$currentId]->destinationPlacePop = $data['destinationPlacePop'];
+			$commanders[$currentId]->startPlacePop = $data['startPlacePop'];
+			
+			$this->unitOfWork->addObject($commanders[$currentId]);
+			$unPersisted[] = $currentId;
 		}
-		$currentCommander->squadronsIds[] = (int) $data['sqId'];
-		$currentCommander->armyInBegin[] = [
+		$commanders[$currentId]->squadronsIds[] = (int) $data['sqId'];
+		$commanders[$currentId]->armyInBegin[] = [
 			$data['sqShip0'], 
 			$data['sqShip1'], 
 			$data['sqShip2'], 

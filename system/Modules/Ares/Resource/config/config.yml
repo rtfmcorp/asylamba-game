@@ -17,7 +17,7 @@ services:
     ares.commander_manager:
         class: Asylamba\Modules\Ares\Manager\CommanderManager
         arguments:
-            - "@database"
+            - "@entity_manager"
             - "@ares.fight_manager"
             - "@athena.orbital_base_manager"
             - "@zeus.player_manager"
