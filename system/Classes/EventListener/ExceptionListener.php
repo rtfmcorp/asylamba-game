@@ -32,7 +32,6 @@ class ExceptionListener {
 	public function onCoreException(ExceptionEvent $event)
 	{
 		$exception = $event->getException();
-		
 		$this->process(
 			$exception->getMessage(),
 			$exception->getFile(),
@@ -40,12 +39,12 @@ class ExceptionListener {
 			Logger::LOG_LEVEL_ERROR,
 			($exception instanceof FormException) ? Flashbag::TYPE_FORM_ERROR : Flashbag::TYPE_STD_ERROR
 		);
+		var_dump($exception->getMessage(), $exception->getTrace());die;
 	}
 	
 	public function onCoreError(ErrorEvent $event)
 	{
 		$error = $event->getError();
-		
 		$this->process(
 			$error->getMessage(),
 			$error->getFile(),
@@ -53,6 +52,7 @@ class ExceptionListener {
 			Logger::LOG_LEVEL_CRITICAL,
 			Flashbag::TYPE_BUG_ERROR
 		);
+		var_dump($error->getMessage(), $error->getTrace());die;
 	}
 	
 	/**
