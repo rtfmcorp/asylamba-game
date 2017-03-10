@@ -84,6 +84,9 @@ class UnitOfWork {
     public function flushObject(AbstractRepository $repository, $className, $object)
     {
 		$identifier = ($object->getId() !== null) ? $object->getId() : spl_object_hash($object);
+		if (!isset($this->entities[$className][$identifier])) {
+			return false;
+		}
         switch($this->entities[$className][$identifier]['state']) {
             case self::METADATA_STAGED:
                 $repository->insert($object);
