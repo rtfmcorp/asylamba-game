@@ -6,7 +6,6 @@
 # int school 		not used anymore
 # string name 		name of the officer
 
-use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Zeus\Helper\CheckName;
@@ -25,6 +24,7 @@ $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
+$entityManager = $this->getContainer()->get('entity_manager');
 
 for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -39,14 +39,12 @@ $cn->maxLenght = 20;
 
 if ($baseId !== FALSE AND $school !== FALSE AND $name !== FALSE AND in_array($baseId, $verif)) {
 	if (($orbitalBase = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
-		$S_COM1 = $commanderManager->getCurrentSession();
-		$commanderManager->newSession();
-		$commanderManager->load(array('c.statement' => Commander::INSCHOOL, 'c.rBase' => $baseId));
+		$schoolCommanders = $commanderManager->getBaseCommanders($baseId, [Commander::INSCHOOL]);
 
-		if ($commanderManager->size() < PlaceResource::get($orbitalBase->typeOfBase, 'school-size')) {
-			$commanderManager->load(array('c.statement' => Commander::RESERVE, 'c.rBase' => $baseId));
+		if (count($schoolCommanders) < PlaceResource::get($orbitalBase->typeOfBase, 'school-size')) {
+			$reserveCommanders = $commanderManager->getBaseCommanders($baseId, [Commander::RESERVE]);
 
-			if ($commanderManager->size() < OrbitalBase::MAXCOMMANDERINMESS) {
+			if (count($reserveCommanders) < OrbitalBase::MAXCOMMANDERINMESS) {
 				$school = intval($school);
 				$nbrCommandersToCreate = rand(SchoolClassResource::getInfo($school, 'minSize'), SchoolClassResource::getInfo($school, 'maxSize'));
 
@@ -74,7 +72,8 @@ if ($baseId !== FALSE AND $school !== FALSE AND $name !== FALSE AND in_array($ba
 							$newCommander->uCommander = Utils::now();
 							$newCommander->setSexe(1);
 							$newCommander->setAge(rand(40, 70));
-							$commanderManager->add($newCommander);
+							$entityManager->persist($newCommander);
+							$entityManager->flush($newCommander);
 						}
 						$session->addFlashbag($nbrCommandersToCreate . ' commandant' . Format::addPlural($nbrCommandersToCreate) . ' inscrit' . Format::addPlural($nbrCommandersToCreate) . ' au programme d\'entraînement.', Flashbag::TYPE_SUCCESS);
 					} else {

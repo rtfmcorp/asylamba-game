@@ -131,18 +131,12 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 								$base->setShipStorage($identifier, $inStorage - $quantity);
 								break;
 							case Transaction::TYP_COMMANDER :
-								$S_COM1 = $commanderManager->getCurrentSession();
-								$commanderManager->newSession();
-								$commanderManager->load(array('c.id' => $identifier));
-								if ($commanderManager->size() == 1 AND $commanderManager->get()->getRPlayer() == $session->get('playerId') AND $commanderManager->get()->statement !== Commander::ONSALE) {
-									$commander = $commanderManager->get();
+								if (($commander = $commanderManager->get($identifier)) !== null AND $commander->getRPlayer() == $session->get('playerId') AND $commander->statement !== Commander::ONSALE) {
 									$commander->statement = Commander::ONSALE;
 									$commanderManager->emptySquadrons($commander);
 								} else {
 									$valid = FALSE;
 								}
-								$commanderManager->changeSession($S_COM1);
-								
 								break;
 						}
 

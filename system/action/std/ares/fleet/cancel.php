@@ -19,14 +19,9 @@ $commanderId = $request->query->get('commanderid');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $session = $this->getContainer()->get('app.session');
 
-$S_COM1 = $commanderManager->getCurrentSession();
-$commanderManager->newSession(ASM_UMODE);
-$commanderManager->load(array('c.id' => $commanderId, 'c.rPlayer' => $session->get('playerId')));
-
-if ($commanderManager->size() === 0) {
+if (($commander = $commanderManager->get($commanderId)) === null || $commander->rPlayer !== $session->get('playerId')) {
 	throw new ErrorException('Ce commandant ne vous appartient pas ou n\'existe pas.');
 }
-$commander = $commanderManager->get();
 if ($commander->travelType == Commander::BACK) {
 	throw new ErrorException('Vous ne pouvez pas annuler un retour.');
 }
@@ -50,7 +45,7 @@ $commander->dStart = $dStart->format('Y-m-d H:i:s');
 $commander->dArrival = $dArrival->format('Y-m-d H:i:s');
 $commander->travelType = Commander::BACK;
 
-if ($session->exist('playerEvent') && $commander->rPlayer == $session->get('playerId')) {
+if ($session->exist('playerEvent')) {
 	for ($i = 0; $i < $session->get('playerEvent')->size(); $i++) {
 		if ($session->get('playerEvent')->get($i)->get('eventInfo') != NULL) {
 			if ($session->get('playerEvent')->get($i)->get('eventInfo')->get('id') == $commander->id) {
@@ -74,4 +69,5 @@ $session->addFlashbag('Déplacement annulé.', Flashbag::TYPE_SUCCESS);
 if ($request->query->has('redirect')) {
 	$response->redirect('map/place-' . $request->query->get('redirect'));
 }
-$commanderManager->changeSession($S_COM1);
+
+$this->getContainer()->get('entity_manager')->flush();

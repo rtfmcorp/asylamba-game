@@ -24,13 +24,11 @@ if (Utils::interval($session->get('lastUpdate')->get('event'), Utils::now(), 's'
 		$places[] = $session->get('playerBase')->get('ms')->get($i)->get('id');
 	}
 
-	$S_COM2 = $commanderManager->getCurrentSession();
-	$commanderManager->newSession();
-	$commanderManager->load(array('c.rDestinationPlace' => $places, 'c.statement' => Commander::MOVING, 'c.travelType' => array(Commander::LOOT, Commander::COLO)));
+	$commanders = $commanderManager->getIncomingAttacks($places);
 
 	# ajout des bases des ennemis dans le tableau
-	for ($i = 0; $i < $commanderManager->size(); $i++) {
-		$places[] = $commanderManager->get($i)->getRBase();
+	foreach ($commanders as $commander) {
+		$places[] = $commander->getRBase();
 	}
 	$S_PLM1 = $placeManager->getCurrentSession();
 	$placeManager->newSession();
@@ -46,27 +44,26 @@ if (Utils::interval($session->get('lastUpdate')->get('event'), Utils::now(), 's'
 		}
 	}
 	
-	for ($i = 0; $i < $commanderManager->size(); $i++) { 
+	foreach ($commanders as $commander) { 
 		# va chercher les heures auxquelles il rentre dans les cercles d'espionnage
-		$startPlace = $placeManager->getById($commanderManager->get($i)->getRBase());
-		$destinationPlace = $placeManager->getById($commanderManager->get($i)->getRPlaceDestination());
-		$times = Game::getAntiSpyEntryTime($startPlace, $destinationPlace, $commanderManager->get($i)->getArrivalDate());
+		$startPlace = $placeManager->getById($commander->getRBase());
+		$destinationPlace = $placeManager->getById($commander->getRPlaceDestination());
+		$times = Game::getAntiSpyEntryTime($startPlace, $destinationPlace, $commander->getArrivalDate());
 
 		if (strtotime(Utils::now()) >= strtotime($times[0])) {
-			$info = $commanderManager->getEventInfo($commanderManager->get($i));
+			$info = $commanderManager->getEventInfo($commander);
 			$info->add('inCircle', $times);
 
 			# ajout de l'événement
 			$session->get('playerEvent')->add(
-				$commanderManager->get($i)->getArrivalDate(), 
+				$commander->getArrivalDate(), 
 				EVENT_INCOMING_ATTACK, 
-				$commanderManager->get($i)->getId(),
+				$commander->getId(),
 				$info
 			);
 		}
 	}
 	$placeManager->changeSession($S_PLM1);
-	$commanderManager->changeSession($S_COM2);
 
 	# mettre à jour dLastActivity
 	$player = $playerManager->get($session->get('playerId'));

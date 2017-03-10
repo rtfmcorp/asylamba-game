@@ -23,17 +23,12 @@ $placeId = $request->query->get('placeid');
 
 
 if ($commanderId !== FALSE AND $placeId !== FALSE) {
-	$S_COM1 = $commanderManager->getCurrentSession();
-	$commanderManager->newSession();
-	$commanderManager->load(array('c.id' => $commanderId, 'c.rPlayer' => $session->get('playerId')));
-	$commander = $commanderManager->get();
-	
 	$S_PLM1 = $placeManager->getCurrentSession();
 	$placeManager->newSession();
 	$placeManager->load(array('id' => $placeId));
 	$place = $placeManager->get();
 
-	if ($commanderManager->size() > 0) {
+	if (($commander = $commanderManager->get($commanderId)) !== null && $commander->rPlayer === $session->get('playerId')) {
 		if ($placeManager->size() > 0) {
 			if ($commander->playerColor == $place->playerColor) {
 				$placeManager->load(array('id' => $commander->getRBase()));
@@ -83,8 +78,9 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	} else {
 		throw new ErrorException('Ce commandant ne vous appartient pas ou n\'existe pas.');
 	}
-	$commanderManager->changeSession($S_COM1);
 	$placeManager->changeSession($S_PLM1);
 } else {
 	throw new ErrorException('Manque de précision sur le commandant ou la position.');
 }
+
+$this->getContainer()->get('entity_manager')->flush();

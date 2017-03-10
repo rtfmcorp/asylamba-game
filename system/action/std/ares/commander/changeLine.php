@@ -2,7 +2,6 @@
 
 use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
-use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Classes\Exception\ErrorException;
 
@@ -20,59 +19,43 @@ $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 $session = $this->getContainer()->get('app.session');
 $response = $this->getContainer()->get('app.response');
 
-$S_COM1 = $commanderManager->getCurrentSession();
-$commanderManager->newSession();
-$commanderManager->load(array('c.id' => $commanderId, 'c.rPlayer' => $session->get('playerId')));
-
-if ($commanderManager->size() !== 1) {
+if (($commander = $commanderManager->get($commanderId)) === null || $commander->rPlayer !== $session->get('playerId')) {
 	throw new ErrorException('Ce commandant n\'existe pas ou ne vous appartient pas');
 }
-$commander = $commanderManager->get();
-
 $orbitalBase = $orbitalBaseManager->get($commander->rBase);
 
 # checker si on a assez de place !!!!!
 if ($commander->line == 1) {
-	$S_COM2 = $commanderManager->getCurrentSession();
-	$commanderManager->newSession();
-	$commanderManager->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 2));
-	$nbrLine2 = $commanderManager->size();
+	$secondLineCommanders = $commanderManager->getCommandersByLine($commander->rBase, 2);
 
-	if ($nbrLine2 < PlaceResource::get($orbitalBase->typeOfBase, 'r-line')) {
+	if (count($secondLineCommanders) < PlaceResource::get($orbitalBase->typeOfBase, 'r-line')) {
 		$commander->line = 2;
 
 		$response->redirect();
 
 	} else {
 		$commander->line = 2;
-		$commanderManager->get()->line = 1;
+		$secondLineCommanders[0]->line = 1;
 		$response->redirect();
 		$session->addFlashbag('Votre commandant ' . $commander->getName() . ' a échangé sa place avec ' . $commanderManager->get()->name . '.', Flashbag::TYPE_SUCCESS);
 	}
-	$commanderManager->changeSession($S_COM2);
 } else {
-	$S_COM2 = $commanderManager->getCurrentSession();
-	$commanderManager->newSession();
-	$commanderManager->load(array('c.rBase' => $commander->rBase, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING), 'c.line' => 1));
-	$nbrLine1 = $commanderManager->size();
+	$firstLineCommanders = $commanderManager->getCommandersByLine($commander->rBase, 1);
 
 	# tutorial
 	if ($session->get('playerInfo')->get('stepDone') !== true && $session->get('playerInfo')->get('stepTutorial') === TutorialResource::MOVE_FLEET_LINE) {
 		$tutorialHelper->setStepDone();
 	}
 
-	if ($nbrLine1 < PlaceResource::get($orbitalBase->typeOfBase, 'l-line')) {
+	if (count($firstLineCommanders) < PlaceResource::get($orbitalBase->typeOfBase, 'l-line')) {
 		$commander->line = 1;
 
 		$response->redirect();
 	} else {
 		$commander->line = 1;
-		$commanderManager->get()->line = 2;
+		$firstLineCommanders[0]->line = 2;
 		$response->redirect();
 		$session->addFlashbag('Votre commandant ' . $commander->getName() . ' a échangé sa place avec ' . $commanderManager->get()->name . '.', Flashbag::TYPE_SUCCESS);
 	}
-	$commanderManager->changeSession($S_COM2);
 }
-
-$commanderManager->changeSession($S_COM2);
-$commanderManager->changeSession($S_COM1);
+$this->getContainer()->get('entity_manager')->flush();

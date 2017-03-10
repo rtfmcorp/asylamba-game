@@ -61,7 +61,7 @@ class ColorRepository extends AbstractRepository {
 		
 		$data = [];
 		while ($row = $statement->fetch()) {
-			if (($f = $this->unitOfWork->getObject(Color::class, $id)) !== null) {
+			if (($f = $this->unitOfWork->getObject(Color::class, $row['id'])) !== null) {
 				$data[] = $f;
 				continue;
 			}
@@ -82,7 +82,7 @@ class ColorRepository extends AbstractRepository {
 		
 		$data = [];
 		while ($row = $statement->fetch()) {
-			if (($f = $this->unitOfWork->getObject(Color::class, $id)) !== null) {
+			if (($f = $this->unitOfWork->getObject(Color::class, $row['id'])) !== null) {
 				$data[] = $f;
 				continue;
 			}
@@ -103,7 +103,7 @@ class ColorRepository extends AbstractRepository {
 		
 		$data = [];
 		while ($row = $statement->fetch()) {
-			if (($f = $this->unitOfWork->getObject(Color::class, $id)) !== null) {
+			if (($f = $this->unitOfWork->getObject(Color::class, $row['id'])) !== null) {
 				$data[] = $f;
 				continue;
 			}
@@ -156,7 +156,7 @@ class ColorRepository extends AbstractRepository {
 	
 	public function update($faction)
 	{
-		$statement = $this->database->prepare(
+		$statement = $this->connection->prepare(
 			'UPDATE color SET
 				alive = :alive,
 				isWinner = :is_winner,
@@ -190,7 +190,7 @@ class ColorRepository extends AbstractRepository {
 			'last_election_at' => $faction->dLastElection,
 			'id' => $faction->id
 		));
-		$factionLinkStatement = $this->database->prepare('UPDATE colorLink SET
+		$factionLinkStatement = $this->connection->prepare('UPDATE colorLink SET
 			statement = :statement WHERE rColor = :faction_id AND rColorLinked = :color_linked
 		');
 		foreach ($faction->colorLink as $key => $value) {

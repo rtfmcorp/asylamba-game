@@ -10,14 +10,12 @@ $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
 
-$S_COM_MAPLAYER = $commanderManager->getCurrentSession();
-$commanderManager->newSession();
-$commanderManager->load(array('c.statement' => Commander::MOVING, 'c.rPlayer' => $session->get('playerId')));
+$commanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::MOVING]);
 
 $placesId = array(0);
-for ($i = 0; $i < $commanderManager->size(); $i++) {
-	$placesId[] = $commanderManager->get($i)->rStartPlace;
-	$placesId[] = $commanderManager->get($i)->rDestinationPlace;
+foreach ($commanders as $commander) {
+	$placesId[] = $commander->rStartPlace;
+	$placesId[] = $commander->rDestinationPlace;
 }
 
 $S_PLM_MAPLAYER = $placeManager->getCurrentSession();
@@ -26,9 +24,7 @@ $placeManager->load(array('id' => $placesId));
 
 echo '<div id="fleet-movements" ' . ($request->cookies->get('p' . Params::SHOW_MAP_FLEETOUT, Params::SHOW_MAP_FLEETOUT) ? NULL : 'style="display:none;"') . '>';
 	echo '<svg viewBox="0, 0, ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . ', ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';
-			for ($i = 0; $i < $commanderManager->size(); $i++) {
-				$commander = $commanderManager->get($i);
-
+			foreach ($commanders as $commander) {
 				if ($commander->rDestinationPlace !== NULL) {
 					$x1 = $placeManager->getById($commander->rStartPlace)->getXSystem() * $galaxyConfiguration->scale;
 					$x2 = $placeManager->getById($commander->rDestinationPlace)->getXSystem() * $galaxyConfiguration->scale;
@@ -48,4 +44,3 @@ echo '<div id="fleet-movements" ' . ($request->cookies->get('p' . Params::SHOW_M
 echo '</div>';
 
 $placeManager->changeSession($S_PLM_MAPLAYER);
-$commanderManager->changeSession($S_COM_MAPLAYER);

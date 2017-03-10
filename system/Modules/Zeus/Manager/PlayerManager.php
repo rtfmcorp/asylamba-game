@@ -508,15 +508,10 @@ class PlayerManager {
 				$this->playerBonusManager->load($playerBonus);
 
 				# load the commanders
-				$S_COM1 = $this->commanderManager->getCurrentSession();
-				$this->commanderManager->newSession();
-				$this->commanderManager->load(
-					array(
-						'c.rPlayer' => $player->id,
-						'c.statement' => array(Commander::AFFECTED, Commander::MOVING)), 
-					array(
-						'c.experience', 'DESC',
-						'c.statement', 'ASC')
+				$commanders = $this->commanderManager->getPlayerCommanders(
+					$player->id,
+					[Commander::AFFECTED, Commander::MOVING], 
+					['c.experience' => 'DESC', 'c.statement' => 'ASC']
 				);
 
 				# load the researches
@@ -532,17 +527,16 @@ class PlayerManager {
 				$this->transactionManager->load(array('rPlayer' => $player->id, 'type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_PROPOSED));
 
 				foreach ($hours as $key => $hour) {
-					$this->ctc->add($hour, $this, 'uCredit', $player, array($player, $playerBases, $playerBonus, $this->commanderManager->getCurrentSession(), $this->researchManager->getCurrentSession(), $factions, $this->transactionManager->getCurrentSession()));
+					$this->ctc->add($hour, $this, 'uCredit', $player, array($player, $playerBases, $playerBonus, $commanders, $this->researchManager->getCurrentSession(), $factions, $this->transactionManager->getCurrentSession()));
 				}
 				$this->transactionManager->changeSession($S_TRM1);
 				$this->researchManager->changeSession($S_RSM1);
-				$this->commanderManager->changeSession($S_COM1);
 			}
 			$this->ctc->applyContext($token);
 		}
 	}
 
-	public function uCredit(Player $player, $playerBases, $playerBonus, $comSession, $rsmSession, $factions, $trmSession) {
+	public function uCredit(Player $player, $playerBases, $playerBonus, $commanders, $rsmSession, $factions, $trmSession) {
 		
 		$popTax = 0; $nationTax = 0;
 		$credits = $player->credit;
@@ -650,30 +644,27 @@ class PlayerManager {
 		# payer les commandants
 		$nbOfComNotPaid = 0;
 		$comList = new ArrayList();
-		$S_COM1 = $this->commanderManager->getCurrentSession();
-		$this->commanderManager->changeSession($comSession);
-		for ($i = ($this->commanderManager->size() - 1); $i >= 0; $i--) {
-			$commander = $this->commanderManager->get($i);
-			if ($commander->getStatement() == 1 OR $commander->getStatement() == 2) {
-				if ($newCredit >= (Commander::LVLINCOMECOMMANDER * $commander->getLevel())) {
-					$newCredit -= (Commander::LVLINCOMECOMMANDER * $commander->getLevel());
-				} else {
-					# on remet les vaisseaux dans les hangars
-					$this->commanderManager->emptySquadrons($commander);
-					
-					# on vend le commandant
-					$commander->setStatement(Commander::ONSALE);
-					$commander->setRPlayer(ID_GAIA);
-
-					# TODO : vendre le commandant au marché 
-					#			(ou alors le mettre en statement COM_DESERT et supprimer ses escadrilles)
-
-					$comList->add($nbOfComNotPaid, $commander->getName());
-					$nbOfComNotPaid++;
-				}
+		foreach ($commanders as $commander) {
+			if (!in_array($commander->getStatement(), [Commander::AFFECTED, Commander::MOVING])) {
+				continue;
 			}
+			if ($newCredit >= (Commander::LVLINCOMECOMMANDER * $commander->getLevel())) {
+				$newCredit -= (Commander::LVLINCOMECOMMANDER * $commander->getLevel());
+				continue;
+			}
+			# on remet les vaisseaux dans les hangars
+			$this->commanderManager->emptySquadrons($commander);
+
+			# on vend le commandant
+			$commander->setStatement(Commander::ONSALE);
+			$commander->setRPlayer(ID_GAIA);
+
+			# TODO : vendre le commandant au marché 
+			#			(ou alors le mettre en statement COM_DESERT et supprimer ses escadrilles)
+
+			$comList->add($nbOfComNotPaid, $commander->getName());
+			$nbOfComNotPaid++;
 		}
-		$this->commanderManager->changeSession($S_COM1);
 		# si au moins un commandant n'a pas pu être payé --> envoyer une notif
 		if ($nbOfComNotPaid) {	
 			$n = new Notification();
@@ -714,35 +705,31 @@ class PlayerManager {
 		} else {
 			$newCredit = 0;
 		}
-		$this->commanderManager->changeSession($S_TRM1);
+		$this->transactionManager->changeSession($S_TRM1);
 		# vaisseaux affectés
-		$S_COM1 = $this->commanderManager->getCurrentSession();
-		$this->commanderManager->changeSession($comSession);
-		for ($i = ($this->commanderManager->size() - 1); $i >= 0; $i--) {
-			$commander = $this->commanderManager->get($i);
+		foreach ($commanders as $commander) {
 			$ships = $commander->getNbrShipByType();
 			$cost = Game::getFleetCost($ships, TRUE);
 
 			if ($newCredit >= $cost) {
 				$newCredit -= $cost;
-			} else {
-				# on vend le commandant car on n'arrive pas à payer la flotte (trash hein)
-				$commander->setStatement(Commander::ONSALE);
-				$commander->setRPlayer(ID_GAIA);
-
-				$n = new Notification();
-				$n->setRPlayer($this->id);
-				$n->setTitle('Flotte impayée');
-				$n->addBeg()->addTxt('Domaine')->addSep();
-				$n->addTxt('Vous n\'avez pas assez de crédits pour payer l\'entretien de la flotte de votre officier ' . $commander->name . '. Celui-ci a donc déserté ! ... avec la flotte, désolé.');
-				$n->addEnd();
-				$S_NTM1 = $this->notificationManager->getCurrentSession();
-				$this->notificationManager->newSession();
-				$this->notificationManager->add($n);
-				$this->notificationManager->changeSession($S_NTM1);
+				continue;
 			}
+			# on vend le commandant car on n'arrive pas à payer la flotte (trash hein)
+			$commander->setStatement(Commander::ONSALE);
+			$commander->setRPlayer(ID_GAIA);
+
+			$n = new Notification();
+			$n->setRPlayer($this->id);
+			$n->setTitle('Flotte impayée');
+			$n->addBeg()->addTxt('Domaine')->addSep();
+			$n->addTxt('Vous n\'avez pas assez de crédits pour payer l\'entretien de la flotte de votre officier ' . $commander->name . '. Celui-ci a donc déserté ! ... avec la flotte, désolé.');
+			$n->addEnd();
+			$S_NTM1 = $this->notificationManager->getCurrentSession();
+			$this->notificationManager->newSession();
+			$this->notificationManager->add($n);
+			$this->notificationManager->changeSession($S_NTM1);
 		}
-		$this->commanderManager->changeSession($S_COM1);
 		# vaisseaux sur la planète
 		foreach ($playerBases as $base) {
 			$cost = Game::getFleetCost($base->shipStorage, FALSE);

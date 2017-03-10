@@ -28,8 +28,6 @@ echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
 
 	if (!$request->query->has('view') OR $request->query->get('view') == 'movement' OR $request->query->get('view') == 'main') {
-		$S_COM_UKN = $commanderManager->getCurrentSession();
-
 		# set d'orbitale base
 		$obsets = array(); $j = 0;
 		for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
@@ -58,25 +56,21 @@ echo '<div id="content">';
 			}
 		}
 
-		$S_COM_ATK = $commanderManager->newSession();
-		$commanderManager->load(array('c.id' => $commandersId));
+		$attackingCommanders = $commanderManager->getCommandersByIds($commandersId);
 
 		for ($i = 0; $i < count($obsets); $i++) {
-			for ($j = 0; $j < $commanderManager->size(); $j++) {
-				if ($commanderManager->get($j)->rDestinationPlace == $obsets[$i]['info']['id']) {
-					$obsets[$i]['fleets'][] = $commanderManager->get($j);
+			foreach ($attackingCommanders as $commander) {
+				if ($commander->rDestinationPlace == $obsets[$i]['info']['id']) {
+					$obsets[$i]['fleets'][] = $commander;
 				}
 			}
 		}
-		
-		# commander manager : yours
-		$S_COM_BSE = $commanderManager->newSession();
-		$commanderManager->load(array('c.rPlayer' => $session->get('playerId'), 'c.statement' => array(Commander::AFFECTED, Commander::MOVING)), array('c.rBase', 'DESC'));
+		$commanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::AFFECTED, Commander::MOVING], ['c.rBase' => 'DESC']);
 
 		for ($i = 0; $i < count($obsets); $i++) {
-			for ($j = 0; $j < $commanderManager->size(); $j++) {
-				if ($commanderManager->get($j)->rBase == $obsets[$i]['info']['id']) {
-					$obsets[$i]['fleets'][] = $commanderManager->get($j);
+			foreach ($commanders as $commander) {
+				if ($commander->rBase == $obsets[$i]['info']['id']) {
+					$obsets[$i]['fleets'][] = $commander;
 				}
 			}
 		}
@@ -85,36 +79,23 @@ echo '<div id="content">';
 
 		# commander id
 		if ($request->query->has('commander')) {
-			$S_COM_ID = $commanderManager->getCurrentSession();
-			$commanderManager->newSession();
-			$commanderManager->load(array(
-				'c.rPlayer' => $session->get('playerId'),
-				'c.id' => $request->query->get('commander'),
-				'c.statement' => array(Commander::AFFECTED, Commander::MOVING)
-			));
-			
-			if ($commanderManager->size() == 1) {
-				$base = $orbitalBaseManager->get($commanderManager->get()->getRBase());
+			if (($commander = $commanderManager->get($request->query->get('commander'))) !== null && $commander->rPlayer === $session->get('playerId') && in_array($commander->getStatement(), [Commander::AFFECTED, Commander::MOVING])) {
+				$base = $orbitalBaseManager->get($commander->getRBase());
 
 				# commanderDetail component
-				$commander_commanderDetail = $commanderManager->get();
-				$commander_commanderFleet = $commanderManager->get();
+				$commander_commanderDetail = $commander;
+				$commander_commanderFleet = $commander;
 				$ob_commanderFleet = $base;
 				
 				# commanderFleet component
 				include COMPONENT . 'fleet/commanderFleet.php';
 				include COMPONENT . 'fleet/commanderDetail.php';
-
-				$commanderManager->changeSession($S_COM_ID);
 			} else {
 				throw new ErrorException('Cet officier ne vous appartient pas ou n\'existe pas');
 				//CTR::redirect('fleet');
 			}
 		}
-
-		$commanderManager->changeSession($S_COM_UKN);
 	} elseif ($request->query->get('view') == 'overview') {
-		$S_COM_UKN = $commanderManager->getCurrentSession();
 		# set d'orbitale base
 		$obsets = [];
 		for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
@@ -130,19 +111,17 @@ echo '<div id="content">';
 		}
 
 		# commander manager : yours
-		$commanderManager->newSession();
-		$commanderManager->load(['c.rPlayer' => $session->get('playerId'), 'c.statement' => [Commander::AFFECTED, Commander::MOVING]], ['c.rBase', 'DESC']);
+		$commanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::AFFECTED, Commander::MOVING], ['c.rBase' => 'DESC']);
 
 		for ($i = 0; $i < count($obsets); $i++) {
-			for ($j = 0; $j < $commanderManager->size(); $j++) {
-				if ($commanderManager->get($j)->rBase == $obsets[$i]['info']['id']) {
-					$obsets[$i]['fleets'][] = $commanderManager->get($j);
+			foreach ($commanders as $commander) {
+				if ($commander->rBase == $obsets[$i]['info']['id']) {
+					$obsets[$i]['fleets'][] = $commander;
 				}
 			}
 		}
-
 		# ship in dock
-		$playerBases = $orbitalBaseManager->getPlayerBases(['rPlayer' => $session->get('playerId')]);
+		$playerBases = $orbitalBaseManager->getPlayerBases($session->get('playerId'));
 
 		for ($i = 0; $i < count($obsets); $i++) {
 			foreach ($playerBases as $orbitalBase) {
@@ -151,10 +130,7 @@ echo '<div id="content">';
 				}
 			}
 		}
-
 		include COMPONENT . 'fleet/overview.php';
-
-		$commanderManager->changeSession($S_COM_UKN);
 	} elseif ($request->query->get('view') == 'spyreport') {
 		# loading des objets
 		$S_SRM1 = $spyReportManager->getCurrentSession();
@@ -256,19 +232,17 @@ echo '<div id="content">';
 		$littleReportManager->changeSession($S_LRM1);
 	} elseif ($request->query->get('view') == 'memorial') {
 		# loading des objets
-		$S_COM1 = $commanderManager->getCurrentSession();
-		$commanderManager->newSession();
-		$commanderManager->load(array('c.rPlayer' => $session->get('playerId'), 'c.statement' => Commander::DEAD), array('c.palmares', 'DESC'));
+		$commanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::DEAD], ['c.palmares' => 'DESC']);
 
 		# memorialTxt component
 		include COMPONENT . 'fleet/memorialTxt.php';
 
-		for ($i = 0; $i < $commanderManager->size(); $i++) {
+		foreach ($commanders as $commander) {
 			if ($i < 6) {
-				$commander_commanderDetail = $commanderManager->get($i);
+				$commander_commanderDetail = $commander;
 				include COMPONENT . 'fleet/commanderDetail.php';
 			} else {
-				$commander_shortMemorial = $commanderManager->get($i);
+				$commander_shortMemorial = $commander;
 				include COMPONENT . 'default.php';
 			}
 		}
@@ -281,8 +255,6 @@ echo '<div id="content">';
 
 		if (isset($commander_shortMemorial) && count($commander_shortMemorial) > 0) {
 		}
-
-		$commanderManager->changeSession($S_COM1);
 	} else {
 		$response->redirect('404');
 	}

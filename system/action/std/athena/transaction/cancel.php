@@ -62,12 +62,8 @@ if ($rTransaction !== FALSE) {
 						$orbitalBaseManager->addShipToDock($base, $transaction->identifier, $transaction->quantity);
 						break;
 					case Transaction::TYP_COMMANDER :
-						$S_COM1 = $commanderManager->getCurrentSession();
-						$commanderManager->newSession(ASM_UMODE);
-						$commanderManager->load(array('c.id' => $transaction->identifier));
-						$commander = $commanderManager->get();
+						$commander = $commanderManager->get($transaction->identifier);
 						$commander->setStatement(Commander::RESERVE);
-						$commanderManager->changeSession($S_COM1);
 						break;
 					default :
 						$valid = FALSE;

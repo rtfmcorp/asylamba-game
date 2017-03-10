@@ -271,15 +271,7 @@ class PlaceManager extends Manager {
 				$p->setPoints(0);
 			}
 
-			$S_COM3 = $this->commanderManager->getCurrentSession();
-			$this->commanderManager->newSession();
-			$this->commanderManager->load(array('c.rBase' => $aw['id'], 'c.statement' => array(1, 2)));
-
-			for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
-				$p->commanders[] = $this->commanderManager->get($i);
-			}
-			
-			$this->commanderManager->changeSession($S_COM3);
+			$p->commanders = $this->commanderManager->getBaseCommanders($aw['id'], [Commander::AFFECTED, Commander::MOVING]);
 
 			$currentP = $this->_Add($p);
 
@@ -377,29 +369,22 @@ class PlaceManager extends Manager {
 					$this->ctc->add($hour, $this, 'uDanger', $place, array($place));
 				}
 			}
-			$S_COM_OUT = $this->commanderManager->getCurrentSession();
-			$this->commanderManager->newSession();
-			$this->commanderManager->load([
-					'c.rDestinationPlace' => $place->id,
-					'c.statement' => Commander::MOVING
-				], ['c.dArrival', 'ASC']
-			);
+			$commanders = $this->commanderManager->getBaseCommanders($place->id, [Commander::MOVING], ['c.dArrival' => 'ASC']);
 
-			if ($this->commanderManager->size() > 0) {
+			if (count($commanders) > 0) {
 				$places = array();
 				$playerBonuses = array();
 
-				for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
-					$c = $this->commanderManager->get($i);
+				foreach ($commanders as $commander) { 
 					# fill the places
-					$places[] = $c->getRBase();
+					$places[] = $commander->getRBase();
 
 					# fill & load the bonuses if needed
-					if (!array_key_exists($c->rPlayer, $playerBonuses)) {
+					if (!array_key_exists($commander->rPlayer, $playerBonuses)) {
 						
-						$bonus = $this->playerBonusManager->getBonusByPlayer($c->rPlayer);
+						$bonus = $this->playerBonusManager->getBonusByPlayer($commander->rPlayer);
 						$this->playerBonusManager->load($bonus);
-						$playerBonuses[$c->rPlayer] = $bonus;
+						$playerBonuses[$commander->rPlayer] = $bonus;
 					}
 				}
 
@@ -409,9 +394,7 @@ class PlaceManager extends Manager {
 				$this->load(['id' => $places]);
 
 				# load annexes components
-				for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
-					$commander = $this->commanderManager->get($i);
-
+				foreach ($commanders as $commander) { 
 					# only if the commander isn't in travel
 					$hasntU = TRUE;
 					if ($commander->uMethodCtced) {
@@ -472,23 +455,18 @@ class PlaceManager extends Manager {
 									$S_REM_C2 = $this->recyclingMissionManager->getCurrentSession();
 									$this->recyclingMissionManager->changeSession($S_REM_C1);
 
-									$S_COM_C1 = $this->commanderManager->getCurrentSession();
-									$this->commanderManager->newSession(); # CRASH
-									$this->commanderManager->load(array('c.rBase' => $place->id));
-									$S_COM_C2 = $this->commanderManager->getCurrentSession();
-									$this->commanderManager->changeSession($S_COM_C1);
+									$baseCommanders = $this->commanderManager->getBaseCommanders($place->id);
 
 								} else {
 									$placePlayer = NULL;
 									$placeBase = NULL;
-									$S_CRM_C2 = NULL;
 									$S_REM_C2 = NULL;
-									$S_COM_C2 = NULL;
+									$baseCommanders = [];
 								}
 
 								$commanderColor = $this->colorManager->get($commander->playerColor);
 								
-								if ($this->ctc->add($commander->dArrival, $this, 'uConquer', $place, array($place, $commander, $commanderPlace, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $S_REM_C2, $S_COM_C2))) {
+								if ($this->ctc->add($commander->dArrival, $this, 'uConquer', $place, array($place, $commander, $commanderPlace, $bonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $S_REM_C2, $baseCommanders))) {
 									$commander->uMethodCtced = TRUE;
 									$commander->lastUMethod = Utils::now();
 								}
@@ -509,7 +487,6 @@ class PlaceManager extends Manager {
 				}
 				$this->changeSession($S_PLM_OUT);
 			}
-			$this->commanderManager->changeSession($S_COM_OUT);
 		}
 		$this->ctc->applyContext($token);
 	}
@@ -744,7 +721,7 @@ class PlaceManager extends Manager {
 	}
 
 	# conquest
-	public function uConquer(Place $place, Commander $commander, $commanderPlace, $playerBonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $recyclingSession, $commanderSession) {
+	public function uConquer(Place $place, Commander $commander, $commanderPlace, $playerBonus, $commanderPlayer, $placePlayer, $placeBase, $commanderColor, $recyclingSession, $baseCommanders) {
 		
 		# conquete
 		if ($place->rPlayer != NULL) {
@@ -838,7 +815,7 @@ class PlaceManager extends Manager {
 					$place->rPlayer = $commander->rPlayer;
 
 					# changer l'appartenance de la base (et de la place)
-					$this->orbitalBaseManager->changeOwnerById($place->id, $placeBase, $commander->getRPlayer(), $recyclingSession, $commanderSession);
+					$this->orbitalBaseManager->changeOwnerById($place->id, $placeBase, $commander->getRPlayer(), $recyclingSession, $baseCommanders);
 					$place->commanders[] = $commander;
 
 					$commander->rBase = $place->id;

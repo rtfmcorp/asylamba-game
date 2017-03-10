@@ -27,10 +27,6 @@ $technologyManager = $this->getContainer()->get('promethee.technology_manager');
 $session = $this->getContainer()->get('app.session');
 $conquestCost = $this->getContainer()->getParameter('ares.coeff.conquest_cost');
 
-$S_COM1 = $commanderManager->getCurrentSession();
-$commanderManager->newSession(ASM_UMODE);
-$commanderManager->load(array('c.id' => $commanderId, 'c.rPlayer' => $session->get('playerId')));
-
 $S_PLM1 = $placeManager->getCurrentSession();
 $placeManager->newSession(ASM_UMODE);
 $placeManager->load(array('id' => $placeId));
@@ -47,15 +43,12 @@ if ($technologies->getTechnology(Technology::CONQUEST) !== 1) {
 	$obQuantity = $session->get('playerBase')->get('ob')->size();
 	$msQuantity = $session->get('playerBase')->get('ms')->size();
 	$coloQuantity = 0;
-	$S_COM2 = $commanderManager->getCurrentSession();
-	$commanderManager->newSession();
-	$commanderManager->load(array('c.rPlayer' => $session->get('playerId'), 'c.statement' => Commander::MOVING));
-	for ($i = 0; $i < $commanderManager->size(); $i++) { 
-		if ($commanderManager->get($i)->travelType == Commander::COLO) {
+	$commanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::MOVING]);
+	foreach ($commanders as $commander) { 
+		if ($commander->travelType == Commander::COLO) {
 			$coloQuantity++;
 		}
 	}
-	$commanderManager->changeSession($S_COM2);
 	$totalBases = $obQuantity + $msQuantity + $coloQuantity;
 	if ($totalBases >= $maxBasesQuantity) {
 		throw new ErrorException('Vous avez assez de conquête en cours ou un niveau d\'administration étendue trop faible.');
@@ -64,9 +57,8 @@ if ($technologies->getTechnology(Technology::CONQUEST) !== 1) {
 		$targetPlayer = $playerManager->get($placeManager->get()->rPlayer);
 		
 		if ($targetPlayer->level > 3 || $targetPlayer->statement >= Player::DELETED) {
-			if ($commanderManager->size() > 0) {
+			if (($commander = $commanderManager->get($commanderId)) !== null && $commander->rPlayer = $session->get('playerId')) {
 				if ($placeManager->size() > 0) {
-					$commander = $commanderManager->get();
 					$place = $placeManager->get();
 
 					$color = $colorManager->get($session->get('playerInfo')->get('color'));
@@ -136,4 +128,5 @@ if ($technologies->getTechnology(Technology::CONQUEST) !== 1) {
 			throw new ErrorException('Vous ne pouvez pas conquérir un joueur de niveau 3 ou moins.');
 		}
 $placeManager->changeSession($S_PLM1);
-$commanderManager->changeSession($S_COM1);
+
+$this->getContainer()->get('entity_manager')->flush();

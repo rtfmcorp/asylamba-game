@@ -70,9 +70,7 @@ echo '<div class="component market-sell">';
 	echo '</div>';
 echo '</div>';
 
-$S_COM1 = $commanderManager->getCurrentSession();
-$commanderManager->newSession();
-$commanderManager->load(array('c.statement' => array(Commander::INSCHOOL, Commander::RESERVE), 'c.rBase' => $ob_compPlat->getId()), array('c.experience', 'DESC'));
+$commanders = $commanderManager->getBaseCommanders($ob_compPlat->getId(), [Commander::INSCHOOL, Commander::RESERVE], ['c.experience', 'DESC']);
 
 # commander current rate
 $transactionManager->newSession();
@@ -87,9 +85,7 @@ echo '<div class="component market-sell">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			for ($i = 0; $i < $commanderManager->size(); $i++) {
-				$commander = $commanderManager->get($i);
-
+			foreach ($commanders as $commander) {
 				echo '<div class="queue">';
 					echo '<div class="item sh" data-target="sell-commander-' . $i . '">';
 						echo '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
@@ -132,8 +128,6 @@ echo '<div class="component market-sell">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-$commanderManager->changeSession($S_COM1);
 
 # ship current rate
 $transactionManager->newSession();

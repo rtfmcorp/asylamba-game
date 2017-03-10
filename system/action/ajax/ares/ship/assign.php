@@ -49,17 +49,13 @@ if ($quantity === null) {
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_orbitalBase_manager');
 
-$orbitalBase = $orbitalBaseManager->get($orbitalBaseId);
-
-$S_COM1 = $commanderManager->getCurrentSession();
-$commanderManager->newSession();
-$commanderManager->load(array('c.id' => $commanderId, 'c.rBase' => $orbitalBaseId));
-
-if ($orbitalBase === null || $commanderManager->size() !== 1) {
+if (
+	($orbitalBase = $orbitalBaseManager->get($orbitalBaseId)) === null ||
+	($commander = $commanderManager->get($commanderId)) === null ||
+	$commander->rBase !== $orbitalBaseId
+) {
     throw new ErrorException('Erreur dans les commandants ou la base.');
 }
-
-$commander = $commanderManager->get();
 
 if ($commander->statement !== Commander::AFFECTED) {
     throw new ErrorException('Cet officier ne peut être modifié.');	
@@ -92,4 +88,3 @@ if ($direction == 'ctb') { // commander to orbitalBase
         $tutorialHelper->setStepDone();
     }
 }
-$commanderManager->changeSession($S_COM1);

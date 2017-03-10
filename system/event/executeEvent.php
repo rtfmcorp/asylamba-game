@@ -27,16 +27,11 @@ if ($pastEvents->size() > 0) {
 				$orbitalBaseManager->get($event->get('eventId'));
 			}
 		}
-
 		# événements concernant les attaques sortantes et entrantes
 		if ($event->get('eventType') == EVENT_OUTGOING_ATTACK OR $event->get('eventType') == EVENT_INCOMING_ATTACK) {
 			# mise à jour du commandant qui fait l'attaque 
-			$S_COM1 = $commanderManager->getCurrentSession();
-			$commanderManager->newSession(ASM_UMODE);
-			$commanderManager->load(array('c.id' => $event->get('eventId')));
-			$commanderManager->changeSession($S_COM1);
+			$commanderManager->get($event->get('eventId'));
 		}
-
 	}
 	$session->get('playerEvent')->clearPastEvents($now);
 }
