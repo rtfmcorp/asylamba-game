@@ -35,4 +35,20 @@ abstract class AbstractRepository {
      * @param object $entity
      */
     abstract public function remove($entity);
+	
+	/**
+	 * @param array $orderBy
+	 * @return string
+	 */
+	protected function getOrderByClause($orderBy = [])
+	{
+		if(empty($orderBy)) {
+			return;
+		}
+		$clause = 'ORDER BY ';
+		foreach ($orderBy as $column => $order) {
+			$clause .= "$column $order,";
+		}
+		return substr($clause, 0, -1);
+	}
 }
