@@ -40,6 +40,8 @@ services:
 
     security:
         class: Asylamba\Classes\Library\Security
+        arguments:
+            - "@app.session"
         
     ctc:
         class: Asylamba\Classes\Worker\CTC

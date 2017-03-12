@@ -2,21 +2,29 @@
 
 namespace Asylamba\Classes\Library;
 
+use Asylamba\Classes\Container\Session;
+
 class Security {
+	/** @var Session **/
+	protected $session;
+	
+	public function __construct(Session $session)
+	{
+		$this->session = $session;
+	}
+	
 	public function crypt($query, $key) {
-		$iv = openssl_random_pseudo_bytes(16);
-
-		$cipher = openssl_encrypt($query,  'AES-128-CBC', $key, OPENSSL_RAW_DATA, $iv);
-
-		return rtrim(strtr(base64_encode($cipher), '+/', '~_'), '=');
+		if (!$this->session->exist('security_iv')) {
+			$this->session->add('security_iv', openssl_random_pseudo_bytes(16));
+		}
+		return urlencode(openssl_encrypt($query,  'AES-128-CBC', $key, null, $this->session->get('security_iv')));
 	}
 
-	public function uncrypt($query, $key) {
-		$iv = openssl_random_pseudo_bytes(16);
-		
-		$cipher = base64_decode(str_pad(strtr($query, '~_', '+/'), strlen($query) % 4, '=', STR_PAD_RIGHT));
-		
-		return trim(openssl_decrypt($cipher, 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $iv));
+	public function uncrypt($cipher, $key) {
+		if (($iv =  $this->session->get('security_iv')) === null) {
+			return false;
+		}
+		return openssl_decrypt(urldecode($cipher), 'AES-128-CBC', $key, null, $iv);
 	}
 
 	public function buildBindkey($bindkey) {
