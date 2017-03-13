@@ -53,7 +53,7 @@ echo '<div id="content">';
 
 		if (($faction = $colorManager->get($color)) !== null && $faction->isInGame === true) {
 			$governmentMembers = $playerManager->getGovernmentMembers($faction->id);
-
+			$factions = $colorManager->getInGameFactions();
 			# include component
 			include COMPONENT . 'embassy/faction/nav.php';
 			
@@ -64,6 +64,7 @@ echo '<div id="content">';
 			$eraseColor = $faction->id;
 			include COMPONENT . 'faction/data/diplomacy/main.php';
 		} else {
+			die('nok');
 			$this->getContainer()->get('app.response')->redirect('embassy');
 		}
 	}
