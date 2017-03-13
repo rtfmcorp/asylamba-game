@@ -212,7 +212,7 @@ class ColorRepository extends AbstractRepository {
 		$faction = new Color();
 		$faction->id = $data['id'];
 		$faction->alive = $data['alive'];
-		$faction->isWinner = $data['isWinner'];
+		$faction->isWinner = (bool) $data['isWinner'];
 		$faction->credits = $data['credits'];
 		$faction->players = $data['players'];
 		$faction->activePlayers = $data['activePlayers'];
@@ -220,11 +220,11 @@ class ColorRepository extends AbstractRepository {
 		$faction->points = $data['points'];
 		$faction->sectors = $data['sectors'];
 		$faction->electionStatement = $data['electionStatement'];
-		$faction->isClosed = $data['isClosed'];
+		$faction->isClosed = (bool) $data['isClosed'];
 		$faction->description = $data['description'];
 		$faction->dClaimVictory = $data['dClaimVictory'];
 		$faction->dLastElection = $data['dLastElection'];
-		$faction->isInGame = $data['isInGame'];
+		$faction->isInGame = (bool) $data['isInGame'];
 		$faction->colorLink[0] = Color::NEUTRAL;
 
 		$faction->officialName = ColorResource::getInfo($faction->id, 'officialName');
