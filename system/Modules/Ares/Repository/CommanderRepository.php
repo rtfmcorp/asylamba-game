@@ -429,7 +429,7 @@ class CommanderRepository extends AbstractRepository {
 			$commanders[$currentId]->experience = (int) $data['experience'];
 			$commanders[$currentId]->uCommander = $data['uCommander'];
 			$commanders[$currentId]->palmares = $data['palmares'];
-			$commanders[$currentId]->statement = $data['statement'];
+			$commanders[$currentId]->statement = (int) $data['statement'];
 			$commanders[$currentId]->line = (int) $data['line'];
 			$commanders[$currentId]->dCreation = $data['dCreation'];
 			$commanders[$currentId]->dAffectation = $data['dAffectation'];
