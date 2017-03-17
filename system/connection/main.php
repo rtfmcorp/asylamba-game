@@ -46,7 +46,6 @@ if (($player = $playerManager->getByBindKey($bindKey)) !== null && in_array($pla
 		? 'profil/mode-splash'
 		: 'profil'
 	);
-} else { 
-	header('Location: ' . GETOUT_ROOT . 'profil');
-	exit();
+} else {
+	$this->getContainer()->get('app.response')->redirect('profil');
 }
