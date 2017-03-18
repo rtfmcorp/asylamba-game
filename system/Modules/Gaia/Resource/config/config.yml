@@ -29,7 +29,7 @@ services:
     gaia.place_manager:
         class: Asylamba\Modules\Gaia\Manager\PlaceManager
         arguments:
-            - "@database"
+            - "@entity_manager"
             - "@ares.commander_manager"
             - "@ares.fight_manager"
             - "@ares.report_manager"

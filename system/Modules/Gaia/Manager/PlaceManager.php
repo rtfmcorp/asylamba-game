@@ -11,9 +11,8 @@
 */
 namespace Asylamba\Modules\Gaia\Manager;
 
-use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Container\Session;
@@ -41,10 +40,11 @@ use Asylamba\Modules\Ares\Model\LiveReport;
 use Asylamba\Modules\Ares\Model\Report;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Modules\Gaia\Model\System;
 
-class PlaceManager extends Manager {
-	/** @var string **/
-	protected $managerType = '_Place';
+class PlaceManager {
+	/** @var EntityManager **/
+	protected $entityManager;
 	/** @var CommanderManager **/
 	protected $commanderManager;
 	/** @var FightManager **/
@@ -71,7 +71,7 @@ class PlaceManager extends Manager {
 	protected $session;
 	
 	/**
-	 * @param Database $database
+	 * @param EntityManager $entityManager
 	 * @param CommanderManager $commanderManager
 	 * @param FightManager $fightManager
 	 * @param ReportManager $reportManager
@@ -86,7 +86,7 @@ class PlaceManager extends Manager {
 	 * @param Session $session
 	 */
 	public function __construct(
-		Database $database,
+		EntityManager $entityManager,
 		CommanderManager $commanderManager,
 		FightManager $fightManager,
 		ReportManager $reportManager,
@@ -100,7 +100,7 @@ class PlaceManager extends Manager {
 		CTC $ctc,
 		Session $session
 	) {
-		parent::__construct($database);
+		$this->entityManager = $entityManager;
 		$this->commanderManager = $commanderManager;
 		$this->fightManager = $fightManager;
 		$this->reportManager = $reportManager;
@@ -115,237 +115,59 @@ class PlaceManager extends Manager {
 		$this->session = $session;
 	}
 	
-	public function load($where = array(), $order = array(), $limit = array()) {
-		$formatWhere = Utils::arrayToWhere($where, 'p.');
-		$formatOrder = Utils::arrayToOrder($order, 'p.');
-		$formatLimit = Utils::arrayToLimit($limit);
-
-		$qr = $this->database->prepare('SELECT p.*,
-			s.rSector AS rSector,
-			s.xPosition AS xPosition,
-			s.yPosition AS yPosition,
-			s.typeOfSystem AS typeOfSystem,
-			se.tax AS tax,
-			se.rColor AS sectorColor,
-			pl.rColor AS playerColor,
-			pl.name AS playerName,
-			pl.avatar AS playerAvatar,
-			pl.status AS playerStatus,
-			pl.level AS playerLevel,
-			ob.rPlace AS obId,
-			ob.name AS obName,
-			ob.points AS points,
-			ob.levelCommercialPlateforme AS levelCommercialPlateforme,
-			ob.levelSpatioport AS levelSpatioport,
-			ob.resourcesStorage AS obResources,
-			ob.antiSpyAverage AS antiSpyAverage,
-			ob.typeOfBase AS obTypeOfBase
-			FROM place AS p
-			LEFT JOIN system AS s
-				ON p.rSystem = s.id
-				LEFT JOIN sector AS se
-					ON s.rSector = se.id
-					LEFT JOIN player AS pl
-						ON p.rPlayer = pl.id
-						LEFT JOIN orbitalBase AS ob
-							ON p.id = ob.rPlace
-		' . $formatWhere . '
-		' . $formatOrder . '
-		' . $formatLimit);
-
-		foreach($where AS $v) {
-			if (is_array($v)) {
-				foreach ($v as $p) {
-					$valuesArray[] = $p;
-				}
-			} else {
-				$valuesArray[] = $v;
-			}
+	/**
+	 * @param int $id
+	 * @return Place
+	 */
+	public function get($id)
+	{
+		$place = $this->entityManager->getRepository(Place::class)->get($id);
+		
+		if($place === null) {
+			return null;
 		}
 		
-		if (empty($valuesArray)) {
-			$qr->execute();
-		} else {
-			$qr->execute($valuesArray);
+		$this->uMethod($place);
+		
+		return $place;
+	}
+	
+	/**
+	 * @param int $ids
+	 */
+	public function getByIds($ids = [])
+	{
+		$places = $this->entityManager->getRepository(Place::class)->getByIds($ids);
+		
+		foreach ($places as $place) {
+			$this->uMethod($place);
 		}
-
-		$this->fill($qr);
+		
+		return $places;
+	}
+	
+	public function getSystemPlaces(System $system)
+	{
+		$places = $this->entityManager->getRepository(Place::class)->getSystemPlaces($system->getId());
+		
+		foreach ($places as $place) {
+			$this->uMethod($place);
+		}
+		
+		return $places;
 	}
 
 	public function search($search, $order = array(), $limit = array()) {
-		$search = '%' . $search . '%';
-		
-		$formatOrder = Utils::arrayToOrder($order);
-		$formatLimit = Utils::arrayToLimit($limit);
-
-		$qr = $this->database->prepare('SELECT p.*,
-			s.rSector AS rSector,
-			s.xPosition AS xPosition,
-			s.yPosition AS yPosition,
-			s.typeOfSystem AS typeOfSystem,
-			se.tax AS tax,
-			se.rColor AS sectorColor,
-			pl.rColor AS playerColor,
-			pl.name AS playerName,
-			pl.avatar AS playerAvatar,
-			pl.status AS playerStatus,
-			pl.level AS playerLevel,
-			ob.rPlace AS obId,
-			ob.name AS obName,
-			ob.points AS points,
-			ob.levelCommercialPlateforme AS levelCommercialPlateforme,
-			ob.levelSpatioport AS levelSpatioport,
-			ob.resourcesStorage AS obResources,
-			ob.antiSpyAverage AS antiSpyAverage,
-			ob.typeOfBase AS obTypeOfBase
-			FROM place AS p
-			LEFT JOIN system AS s
-				ON p.rSystem = s.id
-				LEFT JOIN sector AS se
-					ON s.rSector = se.id
-					LEFT JOIN player AS pl
-						ON p.rPlayer = pl.id
-						LEFT JOIN orbitalBase AS ob
-							ON p.id = ob.rPlace
-			WHERE (pl.statement = 1 OR pl.statement = 2 OR pl.statement = 3)
-			AND (LOWER(pl.name) LIKE LOWER(?)
-			OR   LOWER(ob.name) LIKE LOWER(?))			
-			' . $formatOrder . '
-			' . $formatLimit
-		);
-
-		$qr->execute(array($search, $search));
-
-		$this->fill($qr);
+//		$search = '%' . $search . '%';
+//			WHERE (pl.statement = 1 OR pl.statement = 2 OR pl.statement = 3)
+//			AND (LOWER(pl.name) LIKE LOWER(?)
+//			OR   LOWER(ob.name) LIKE LOWER(?))
 	}
 
-	protected function fill($qr) {
-		while ($aw = $qr->fetch()) {
-			$p = new Place();
+	protected function fill(Place $place) {
+		$place->commanders = $this->commanderManager->getBaseCommanders($place->getId(), [Commander::AFFECTED, Commander::MOVING]);
 
-			$p->setId($aw['id']);
-			$p->setRSystem($aw['rSystem']);
-			$p->setTypeOfPlace($aw['typeOfPlace']);
-			$p->setPosition($aw['position']);
-			$p->setPopulation($aw['population']);
-			$p->setCoefResources($aw['coefResources']);
-			$p->setCoefHistory($aw['coefHistory']);
-			$p->setResources($aw['resources']);
-			$p->danger = $aw['danger'];
-			$p->maxDanger = $aw['maxDanger'];
-			$p->uPlace = $aw['uPlace'];
-
-			$p->setRSector($aw['rSector']);
-			$p->setXSystem($aw['xPosition']);
-			$p->setYSystem($aw['yPosition']);
-			$p->setTypeOfSystem($aw['typeOfSystem']);
-			$p->setTax($aw['tax']);
-			$p->setSectorColor($aw['sectorColor']);
-
-			if ($aw['rPlayer'] != 0) {
-				$p->setRPlayer($aw['rPlayer']);
-				$p->setPlayerColor($aw['playerColor']);
-				$p->setPlayerName($aw['playerName']);
-				$p->setPlayerAvatar($aw['playerAvatar']);
-				$p->setPlayerStatus($aw['playerStatus']);
-				$p->playerLevel = $aw['playerLevel'];
-				if (isset($aw['msId'])) {
-					$p->setTypeOfBase($aw['msType']);
-					$p->setBaseName($aw['msName']);
-					$p->setResources($aw['msResources']);
-				} elseif (isset($aw['obId'])) {
-					$p->setTypeOfBase(Place::TYP_ORBITALBASE);
-					$p->typeOfOrbitalBase = $aw['obTypeOfBase'];
-					$p->setBaseName($aw['obName']);
-					$p->setLevelCommercialPlateforme($aw['levelCommercialPlateforme']);
-					$p->setLevelSpatioport($aw['levelSpatioport']);
-					$p->setResources($aw['obResources']);
-					$p->setAntiSpyInvest($aw['antiSpyAverage']);
-					$p->setPoints($aw['points']);
-				} else {
-					throw new ErrorException('Problèmes d\'appartenance du lieu !');
-				}
-			} else {
-				$p->setTypeOfBase(Place::TYP_EMPTY);
-				$p->setBaseName('Planète rebelle');
-				$p->setPoints(0);
-			}
-
-			$p->commanders = $this->commanderManager->getBaseCommanders($aw['id'], [Commander::AFFECTED, Commander::MOVING]);
-
-			$currentP = $this->_Add($p);
-
-			if ($this->currentSession->getUMode()) {
-				$this->uMethod($currentP);
-			}
-		}
-	}
-
-	public function add(Place $p) {
-		$qr = $this->database->prepare('INSERT INTO
-			place(rPlayer, rSystem, typeOfPlace, position, population, coefResources, coefHistory, resources, danger, maxDanger, uPlace)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-		$qr->execute(array(
-			$p->getRPlayer(),
-			$p->getRSystem(),
-			$p->getTypeOfPlace(),
-			$p->getPosition(),
-			$p->getPopulation(),
-			$p->getCoefResources(),
-			$p->getCoefHistory(),
-			$p->getResources(),
-			$p->danger,
-			$p->maxDanger,
-			$p->uPlace
-		));
-
-		$p->setId($this->database->lastInsertId());
-
-		$this->_Add($p);
-	}
-
-	public function save() {
-		$places = $this->_Save();
-
-		foreach ($places AS $p) {
-			$qr = $this->database->prepare('UPDATE place
-				SET	id = ?,
-					rPlayer = ?,
-					rSystem = ?,
-					typeOfPlace = ?,
-					position = ?,
-					population = ?,
-					coefResources = ?,
-					coefHistory = ?,
-					resources = ?,
-					danger = ?,
-					maxDanger = ?,
-					uPlace = ?
-				WHERE id = ?');
-			$qr->execute(array(
-				$p->getId(),
-				$p->getRPlayer(),
-				$p->getRSystem(),
-				$p->getTypeOfPlace(),
-				$p->getPosition(),
-				$p->getPopulation(),
-				$p->getCoefResources(),
-				$p->getCoefHistory(),
-				$p->getResources(),
-				$p->danger,
-				$p->maxDanger,
-				$p->uPlace,
-				$p->getId()
-			));
-		}
-	}
-
-	public function deleteById($id) {
-		$qr = $this->database->prepare('DELETE FROM place WHERE id = ?');
-		$qr->execute(array($id));
-		$this->_Remove($id);
-
-		return TRUE;
+		$this->uMethod($place);
 	}
 	
 	public function uMethod(Place $place) {
@@ -372,12 +194,12 @@ class PlaceManager extends Manager {
 			$commanders = $this->commanderManager->getBaseCommanders($place->id, [Commander::MOVING], ['c.dArrival' => 'ASC']);
 
 			if (count($commanders) > 0) {
-				$places = array();
+				$placeIds = array();
 				$playerBonuses = array();
 
 				foreach ($commanders as $commander) { 
 					# fill the places
-					$places[] = $commander->getRBase();
+					$placeIds[] = $commander->getRBase();
 
 					# fill & load the bonuses if needed
 					if (!array_key_exists($commander->rPlayer, $playerBonuses)) {
@@ -389,9 +211,7 @@ class PlaceManager extends Manager {
 				}
 
 				# load all the places at the same time
-				$S_PLM_OUT = $this->getCurrentSession();
-				$this->newSession();
-				$this->load(['id' => $places]);
+				$places = $this->getByIds($placeIds);
 
 				# load annexes components
 				foreach ($commanders as $commander) { 
@@ -407,7 +227,7 @@ class PlaceManager extends Manager {
 					if ($commander->dArrival <= $now and $hasntU) {
 						switch ($commander->travelType) {
 							case Commander::MOVE: 
-								$commanderPlace = $this->getById($commander->rBase);
+								$commanderPlace = $this->get($commander->rBase);
 								$bonus = $playerBonuses[$commander->rPlayer];
 								
 								if ($this->ctc->add($commander->dArrival, $this, 'uChangeBase', $place, [$place, $commander, $commanderPlace, $bonus])) {
@@ -417,7 +237,7 @@ class PlaceManager extends Manager {
 							break;
 
 							case Commander::LOOT: 
-								$commanderPlace = $this->getById($commander->rBase);
+								$commanderPlace = $this->get($commander->rBase);
 								$bonus = $playerBonuses[$commander->rPlayer];
 
 								$commanderPlayer = $this->playerManager->get($commander->rPlayer);
@@ -439,7 +259,7 @@ class PlaceManager extends Manager {
 							break;
 
 							case Commander::COLO: 
-								$commanderPlace = $this->getById($commander->rBase);
+								$commanderPlace = $this->get($commander->rBase);
 								$bonus = $playerBonuses[$commander->rPlayer];
 
 								$commanderPlayer = $this->playerManager->get($commander->rPlayer);
@@ -485,9 +305,9 @@ class PlaceManager extends Manager {
 						}
 					}
 				}
-				$this->changeSession($S_PLM_OUT);
 			}
 		}
+		$this->entityManager->flush();
 		$this->ctc->applyContext($token);
 	}
 
