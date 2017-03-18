@@ -2,7 +2,6 @@
 
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
-use Asylamba\Modules\Ares\Model\Commander;
 
 $session = $this->getContainer()->get('app.session');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
@@ -30,9 +29,7 @@ if (Utils::interval($session->get('lastUpdate')->get('event'), Utils::now(), 's'
 	foreach ($commanders as $commander) {
 		$places[] = $commander->getRBase();
 	}
-	$S_PLM1 = $placeManager->getCurrentSession();
-	$placeManager->newSession();
-	$placeManager->load(array('id' => $places));
+	$placeManager->getByIds($places);
 
 	# enlève du controller tous les évents d'attaques entrantes avant de mettre les nouvelles
 	$size = $session->get('playerEvent')->size();
@@ -46,8 +43,8 @@ if (Utils::interval($session->get('lastUpdate')->get('event'), Utils::now(), 's'
 	
 	foreach ($commanders as $commander) { 
 		# va chercher les heures auxquelles il rentre dans les cercles d'espionnage
-		$startPlace = $placeManager->getById($commander->getRBase());
-		$destinationPlace = $placeManager->getById($commander->getRPlaceDestination());
+		$startPlace = $placeManager->get($commander->getRBase());
+		$destinationPlace = $placeManager->get($commander->getRPlaceDestination());
 		$times = Game::getAntiSpyEntryTime($startPlace, $destinationPlace, $commander->getArrivalDate());
 
 		if (strtotime(Utils::now()) >= strtotime($times[0])) {
@@ -63,8 +60,6 @@ if (Utils::interval($session->get('lastUpdate')->get('event'), Utils::now(), 's'
 			);
 		}
 	}
-	$placeManager->changeSession($S_PLM1);
-
 	# mettre à jour dLastActivity
 	$player = $playerManager->get($session->get('playerId'));
 	$player->setDLastActivity(Utils::now());

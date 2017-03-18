@@ -19,6 +19,7 @@ try {
 	$placeManager = $this->getContainer()->get('gaia.place_manager');
 	$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 	$galaxyColorManager = $this->getContainer()->get('gaia.galaxy_color_manager');
+	$entityManager = $this->getContainer()->get('entity_manager');
 	
 	$faction = $session->get('inscription')->get('ally');
 	# AJOUT DU JOUEUR EN BASE DE DONNEE
@@ -69,7 +70,6 @@ try {
 		$player->setLevel(1);
 	}
 	
-
 	$playerManager->add($player);
 
 	if ($session->exist('rgodfather')) {
@@ -142,9 +142,9 @@ try {
 	$qr->execute(array($session->get('inscription')->get('sector')));
 	$aw = $qr->fetchAll();
 
-	$place = $aw[rand(0, (count($aw) - 1))][0];
+	$placeId = $aw[rand(0, (count($aw) - 1))][0];
 
-	$ob->setRPlace($place);
+	$ob->setRPlace($placeId);
 
 	$ob->setRPlayer($player->getId());
 	$ob->setName($session->get('inscription')->get('base'));
@@ -228,11 +228,12 @@ try {
 	}
 
 	# modification de la place
-	$placeManager->load(array('id' => $place));
-	$placeManager->get()->setRPlayer($player->getId());
-	$placeManager->get()->population = 50;
-	$placeManager->get()->coefResources = 60;
-	$placeManager->get()->coefHistory = 20;
+	$place = $placeManager->get($placeId);
+	$place->setRPlayer($player->getId());
+	$place->population = 50;
+	$place->coefResources = 60;
+	$place->coefHistory = 20;
+	$entityManager->flush($place);
 
 	# confirmation au portail
 	if (APIMODE) {

@@ -45,14 +45,7 @@ if ($rPlace !== FALSE AND $rTarget !== FALSE AND $quantity !== FALSE AND in_arra
 			}
 
 			if ($maxRecyclers - $usedRecyclers >= $quantity) {
-				$S_PLM1 = $placeManager->getCurrentSession();
-				$placeManager->newSession();
-				$placeManager->load(array('id' => [$rPlace, $rTarget]));
-
-				if ($placeManager->size() == 2) {
-					$startPlace 		= $placeManager->getById($rPlace);
-					$destinationPlace 	= $placeManager->getById($rTarget);
-
+				if (($startPlace = $placeManager->get($rPlace)) !== null && ($destinationPlace = $placeManager->get($rTarget)) !== null) {
 					if ($destinationPlace->rPlayer == NULL AND in_array($destinationPlace->typeOfPlace, [2, 3, 4 ,5])) {
 						$travelTime = Game::getTimeToTravel($startPlace, $destinationPlace);
 

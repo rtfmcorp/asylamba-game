@@ -76,11 +76,9 @@ if (isset($defaultBase)) {
 			echo '<ul>';
 				echo '<li class="star"></li>';
 
-			for ($i = 0; $i < count($places); $i++) {
-				$place = $places[$i];
-
+			foreach ($places as $place) {
 				echo '<li class="place color' . $place->playerColor . '">';
-					echo '<a href="#" class="openplace" data-target="' . $i . '">';
+					echo '<a href="#" class="openplace" data-target="' . $place->position . '">';
 						echo '<strong>' . $place->position . '</strong>';
 						if ($place->typeOfPlace == 1) {
 							echo '<img class="land" src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '-' . Game::getSizeOfPlanet($place->population) . '.png" />';
@@ -102,7 +100,7 @@ if (isset($defaultBase)) {
 				echo '</li>';
 
 				// noAJAX
-				echo '<li class="action color' . $place->playerColor . '" id="place-' . $i . '" ' . (isset($noAJAX) && $noAJAX && (int) $request->query->get('place') === $place->id ? 'style="width: 565px;"' : NULL) . '>';
+				echo '<li class="action color' . $place->playerColor . '" id="place-' . $place->position . '" ' . (isset($noAJAX) && $noAJAX && (int) $request->query->get('place') === $place->id ? 'style="width: 565px;"' : NULL) . '>';
 					echo '<div class="content">';
 						echo '<div class="column info">';
 							for ($j = 0; $j < $spyReportManager->size(); $j++) { 

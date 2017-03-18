@@ -30,10 +30,6 @@ $placeId = $request->query->get('placeid');
 
 
 if ($commanderId !== FALSE AND $placeId !== FALSE) {
-	$S_PLM1 = $placeManager->getCurrentSession();
-	$placeManager->newSession(ASM_UMODE);
-	$placeManager->load(array('id' => $placeId));
-
 	# load the technologies
 	$technologies = $technologyManager->getPlayerTechnology($session->get('playerId'));
 
@@ -59,13 +55,10 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 		$totalBases = $obQuantity + $coloQuantity;
 		if ($totalBases < $maxBasesQuantity) {
 			if (($commander = $commanderManager->get($commanderId)) !== null && $commander->rPlayer = $session->get('playerId')) {
-				if ($placeManager->size() > 0) {
-					$place = $placeManager->get();
-
+				if (($place = $placeManager->get($placeId)) !== null) {
 					if ($place->typeOfPlace == Place::TERRESTRIAL) {
 
-						$placeManager->load(array('id' => $commander->getRBase()));
-						$home = $placeManager->getById($commander->getRBase());
+						$home = $placeManager->get($commander->getRBase());
 
 						$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
 						$duration = Game::getTimeToTravel($home, $place, $session->get('playerBonus'));
@@ -128,7 +121,6 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	} else {
 		throw new ErrorException('Vous devez développer votre technologie colonisation.');
 	}
-	$placeManager->changeSession($S_PLM1);
 } else {
 	throw new ErrorException('Manque de précision sur le commandant ou la position.');
 }

@@ -124,22 +124,14 @@ class Parser {
 		return preg_replace_callback(
 			'#\[\#(.+)\]#isU',
 			function($m) {
-				$S_PLM1 = $this->placeManager->getCurrentSession();
-				$this->placeManager->newSession(FALSE);
-
-				$this->placeManager->load(array('id' => $m[1]));
-
-				if ($this->placeManager->size() > 0) {
-					$place = $this->placeManager->get();
+				if (($place = $this->placeManager->get($m[1]))) {
 					if ($place->getTypeOfBase() > 0) {
 						return '<a href="' . APP_ROOT . 'map/place-' . $place->getId() . '" class="color' . $place->getPlayerColor() . ' hb lt" title="voir la planète">' . $place->getBaseName() . '</a>';
 					} else {
 						return '<a href="' . APP_ROOT . 'map/place-' . $place->getId() . '" class="hb lt" title="voir la planète">planète rebelle</a>';
 					}
-				} else {
-					return $m[0];
 				}
-				$this->placeManager->changeSession($S_PLM1);
+				return $m[0];
 			},
 			$string
 		);

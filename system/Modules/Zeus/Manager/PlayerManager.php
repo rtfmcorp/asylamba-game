@@ -391,7 +391,7 @@ class PlayerManager {
 		$this->sectorManager->load(array('rColor' => $player->rColor), array('id', 'DESC'));
 
 		$placeFound = FALSE;
-		$place = NULL;
+		$placeId = NULL;
 		for ($i = 0; $i < $this->sectorManager->size(); $i++) { 
 			$sector = $this->sectorManager->get($i);
 
@@ -409,7 +409,7 @@ class PlayerManager {
 			$aw = $qr->fetchAll();
 			if ($aw !== NULL) {
 				$placeFound = TRUE;
-				$place = $aw[rand(0, (count($aw) - 1))][0];
+				$placeId = $aw[rand(0, (count($aw) - 1))][0];
 				break;
 			}
 		}
@@ -435,7 +435,7 @@ class PlayerManager {
 			# attribute new base and place to player
 			$ob = new OrbitalBase();
 
-			$ob->setRPlace($place);
+			$ob->setRPlace($placeId);
 
 			$ob->setRPlayer($player->id);
 			$ob->setName("Colonie");
@@ -464,14 +464,13 @@ class PlayerManager {
 			$this->orbitalBaseManager->add($ob);
 
 			# modification de la place
-			$_PLM8761 = $this->placeManager->getCurrentSession();
-			$this->placeManager->newSession();
-			$this->placeManager->load(array('id' => $place));
-			$this->placeManager->get()->rPlayer = $player->id;
-			$this->placeManager->get()->population = 50;
-			$this->placeManager->get()->coefResources = 60;
-			$this->placeManager->get()->coefHistory = 20;
-			$this->placeManager->changeSession($_PLM8761);
+			$place = $this->placeManager->get($placeId);
+			$place->rPlayer = $player->id;
+			$place->population = 50;
+			$place->coefResources = 60;
+			$place->coefHistory = 20;
+			
+			$this->entityManager->flush($place);
 
 			$this->galaxyColorManager->apply();
 
@@ -794,7 +793,7 @@ class PlayerManager {
 		if ($this->isSynchronized($player)) {
 			$this->session->get('playerInfo')->add('credit', $newCredit);
 		}
-		$this->entityManager->flush($player);
+		$this->entityManager->flush();
 	}
 
 	// OBJECT METHOD

@@ -27,19 +27,13 @@ $commanderId = $request->query->get('commanderid');
 $placeId = $request->query->get('placeid');
 
 if ($commanderId !== FALSE AND $placeId !== FALSE) {
-	
-	$S_PLM1 = $placeManager->getCurrentSession();
-	$placeManager->newSession(ASM_UMODE);
-	$placeManager->load(array('id' => $placeId));
-
-	if (($player = $playerManager->get($placeManager->get()->rPlayer)) === null) {
+	$place = $placeManager->get($placeId);
+	if (($player = $playerManager->get($place->rPlayer)) === null) {
 		if (($commander = $commanderManager->get($commanderId)) !== null && $commander->rPlayer === $session->get('playerId')) {
-			if ($placeManager->size() > 0) {
-				$place = $placeManager->get();
+			if ($place !== null) {
 				if ($place->typeOfPlace == Place::TERRESTRIAL) {
 					if ($session->get('playerInfo')->get('color') != $place->getPlayerColor()) {
-						$placeManager->load(array('id' => $commander->getRBase()));
-						$home = $placeManager->getById($commander->getRBase());
+						$home = $placeManager->get($commander->getRBase());
 
 						$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
 						$duration = Game::getTimeToTravel($home, $place, $session->get('playerBonus'));
@@ -93,14 +87,11 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 		}
 	} elseif ($player->level > 1 || $player->statement >= Player::DELETED) {
 		if (($commander = $commanderManager->get($commanderId)) !== null && $commander->rPlayer === $session->get('playerId')) {
-			if ($placeManager->size() > 0) {
-				$place = $placeManager->get();
-
+			if ($place !== null) {
 				$color = $colorManager->get($session->get('playerInfo')->get('color'));
 				
 				if ($session->get('playerInfo')->get('color') != $place->getPlayerColor() && $color->colorLink[$player->rColor] != Color::ALLY) {
-					$placeManager->load(array('id' => $commander->getRBase()));
-					$home = $placeManager->getById($commander->getRBase());
+					$home = $placeManager->get($commander->getRBase());
 
 					$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
 					$duration = Game::getTimeToTravel($home, $place, $session->get('playerBonus'));
@@ -143,7 +134,6 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	} else {
 		throw new ErrorException('Vous ne pouvez pas piller un joueur de niveau 1.');
 	}
-	$placeManager->changeSession($S_PLM1);
 } else {
 	throw new ErrorException('Manque de précision sur le commandant ou la position.');
 }

@@ -27,9 +27,7 @@ $technologyManager = $this->getContainer()->get('promethee.technology_manager');
 $session = $this->getContainer()->get('app.session');
 $conquestCost = $this->getContainer()->getParameter('ares.coeff.conquest_cost');
 
-$S_PLM1 = $placeManager->getCurrentSession();
-$placeManager->newSession(ASM_UMODE);
-$placeManager->load(array('id' => $placeId));
+$place = $placeManager->get($placeId);
 
 	// load the technologies
 $technologies = $technologyManager->getPlayerTechnology($session->get('playerId'));
@@ -54,18 +52,16 @@ if ($technologies->getTechnology(Technology::CONQUEST) !== 1) {
 		throw new ErrorException('Vous avez assez de conquête en cours ou un niveau d\'administration étendue trop faible.');
 	}
 
-		$targetPlayer = $playerManager->get($placeManager->get()->rPlayer);
+		$targetPlayer = $playerManager->get($place->rPlayer);
 		
 		if ($targetPlayer->level > 3 || $targetPlayer->statement >= Player::DELETED) {
 			if (($commander = $commanderManager->get($commanderId)) !== null && $commander->rPlayer = $session->get('playerId')) {
-				if ($placeManager->size() > 0) {
-					$place = $placeManager->get();
+				if ($place !== null) {
 
 					$color = $colorManager->get($session->get('playerInfo')->get('color'));
 
 					if ($session->get('playerInfo')->get('color') != $place->getPlayerColor() && $color->colorLink[$targetPlayer->rColor] != Color::ALLY) {
-						$placeManager->load(array('id' => $commander->getRBase()));
-						$home = $placeManager->getById($commander->getRBase());
+						$home = $placeManager->get($commander->getRBase());
 
 						$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
 						$duration = Game::getTimeToTravel($home, $place, $session->get('playerBonus'));
@@ -127,6 +123,4 @@ if ($technologies->getTechnology(Technology::CONQUEST) !== 1) {
 		} else {
 			throw new ErrorException('Vous ne pouvez pas conquérir un joueur de niveau 3 ou moins.');
 		}
-$placeManager->changeSession($S_PLM1);
-
 $this->getContainer()->get('entity_manager')->flush();

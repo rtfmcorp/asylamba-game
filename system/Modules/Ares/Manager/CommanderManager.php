@@ -89,6 +89,10 @@ class CommanderManager
 	{
 		$commander =  $this->entityManager->getRepository(Commander::class)->get($id);
 		
+		if($commander === null) {
+			return null;
+		}
+		
 		$this->uCommander($commander);
 		
 		return $commander;
@@ -437,16 +441,11 @@ class CommanderManager
 				$this->ctc->add($hour, $this, 'uExperienceInSchool', $commander, array($commander, $orbitalBase, $playerBonus));
 			}
 		}
-
 		# test si il y a des combats
 		if ($commander->dArrival <= Utils::now() AND $commander->statement == Commander::MOVING AND $commander->hasToU) {
 			$commander->hasToU = FALSE;
-
-			$S_PLM = $this->placeManager->getCurrentSession();
-			$this->placeManager->newSession();
-			$this->placeManager->load(array('id' => $commander->rDestinationPlace));
-			$pl = $this->placeManager->get();
-			$this->placeManager->changeSession($S_PLM);
+			$commander->uCommander = $now;
+			$place = $this->placeManager->get($commander->rDestinationPlace);
 		}
 		$this->entityManager->flush($commander);
 		$this->ctc->applyContext($token);

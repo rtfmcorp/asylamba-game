@@ -99,14 +99,11 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				$playerManager->increaseExperience($seller, $experience);
 
 				# load places to compute travel time
-				$S_PLM1 = $placeManager->getCurrentSession();
-				$placeManager->newSession(ASM_UMODE);
-				$placeManager->load(array('id' => $commercialShipping->rBase));
-				$placeManager->load(array('id' => $rPlace));
-				$timeToTravel = Game::getTimeToTravelCommercial($placeManager->get(0), $placeManager->get(1));
+				$startPlace = $placeManager->get($commercialShipping->rBase);
+				$destinationPlace = $placeManager->get($rPlace);
+				$timeToTravel = Game::getTimeToTravelCommercial($startPlace, $placeManager->get(1));
 				$departure = Utils::now();
 				$arrival = Utils::addSecondsToDate($departure, $timeToTravel);
-				$placeManager->changeSession($S_PLM1);
 
 				# update commercialShipping
 				$commercialShipping->rBaseDestination = $rPlace;
