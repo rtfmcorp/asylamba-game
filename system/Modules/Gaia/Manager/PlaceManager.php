@@ -351,7 +351,7 @@ class PlaceManager extends Manager {
 	public function uMethod(Place $place) {
 		$token = $this->ctc->createContext('place');
 		$now   = Utils::now();
-
+		
 		if (Utils::interval($place->uPlace, $now, 's') > 0) {
 			# update time
 			$hours = Utils::intervalDates($now, $place->uPlace);
