@@ -72,7 +72,7 @@ class ReportRepository extends AbstractRepository {
 				sq.ship11 AS sqShip11
 			FROM report AS r
 			LEFT JOIN squadronReport AS sq ON sq.rReport = r.id
-			WHERE r.rPlayerAttacker = :attacker_id, r.rPlace = :place_id, r.dFight = :fight'
+			WHERE r.rPlayerAttacker = :attacker_id AND r.rPlace = :place_id AND r.dFight = :fight'
 		);
 		$query->execute([
 			'attacker_id' => $attackerId,

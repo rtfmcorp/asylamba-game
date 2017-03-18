@@ -599,11 +599,7 @@ class OrbitalBaseManager {
 					$recyclingQuantity = floor($interval / $mission->cycleTime);
 
 					# Place
-					$S_PLM = $this->placeManager->getCurrentSession();
-					$this->placeManager->newSession(ASM_UMODE);
-					$this->placeManager->load(array('id' => $mission->rTarget));
-					$place = $this->placeManager->get();
-					$this->placeManager->changeSession($S_PLM);
+					$place = $this->placeManager->get($mission->rTarget);
 
 					for ($j = 0; $j < $recyclingQuantity; $j++) { 
 						$dateOfUpdate = Utils::addSecondsToDate($mission->uRecycling, ($j + 1) * $mission->cycleTime);

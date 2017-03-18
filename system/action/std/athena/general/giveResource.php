@@ -60,14 +60,11 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_
 					if ($remainingShips >= $commercialShipQuantity) {
 						if (($otherBase = $orbitalBaseManager->get($otherBaseId)) !== null) {
 							# load places to compute travel time
-							$S_PLM1 = $placeManager->getCurrentSession();
-							$placeManager->newSession(ASM_UMODE);
-							$placeManager->load(array('id' => $orbitalBase->rPlace));
-							$placeManager->load(array('id' => $otherBase->rPlace));
-							$timeToTravel = Game::getTimeToTravelCommercial($placeManager->get(0), $placeManager->get(1));
+							$startPlace = $placeManager->get($orbitalBase->rPlace);
+							$destinationPlace = $placeManager->get($otherBase->rPlace);
+							$timeToTravel = Game::getTimeToTravelCommercial($startPlace, $destinationPlace);
 							$departure = Utils::now();
 							$arrival = Utils::addSecondsToDate($departure, $timeToTravel);
-							$placeManager->changeSession($S_PLM1);
 
 							# création du convoi
 							$cs = new CommercialShipping();

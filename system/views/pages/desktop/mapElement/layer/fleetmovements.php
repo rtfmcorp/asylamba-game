@@ -12,24 +12,16 @@ $galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
 
 $commanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::MOVING]);
 
-$placesId = array(0);
-foreach ($commanders as $commander) {
-	$placesId[] = $commander->rStartPlace;
-	$placesId[] = $commander->rDestinationPlace;
-}
-
-$S_PLM_MAPLAYER = $placeManager->getCurrentSession();
-$placeManager->newSession();
-$placeManager->load(array('id' => $placesId));
-
 echo '<div id="fleet-movements" ' . ($request->cookies->get('p' . Params::SHOW_MAP_FLEETOUT, Params::SHOW_MAP_FLEETOUT) ? NULL : 'style="display:none;"') . '>';
 	echo '<svg viewBox="0, 0, ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . ', ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';
 			foreach ($commanders as $commander) {
 				if ($commander->rDestinationPlace !== NULL) {
-					$x1 = $placeManager->getById($commander->rStartPlace)->getXSystem() * $galaxyConfiguration->scale;
-					$x2 = $placeManager->getById($commander->rDestinationPlace)->getXSystem() * $galaxyConfiguration->scale;
-					$y1 = $placeManager->getById($commander->rStartPlace)->getYSystem() * $galaxyConfiguration->scale;
-					$y2 = $placeManager->getById($commander->rDestinationPlace)->getYSystem() * $galaxyConfiguration->scale;
+					$startPlace = $placeManager->get($commander->rStartPlace);
+					$destinationPlace = $placeManager->get($commander->rDestinationPlace);
+					$x1 = $startPlace->getXSystem() * $galaxyConfiguration->scale;
+					$x2 = $destinationPlace->getXSystem() * $galaxyConfiguration->scale;
+					$y1 = $startPlace->getYSystem() * $galaxyConfiguration->scale;
+					$y2 = $destinationPlace->getYSystem() * $galaxyConfiguration->scale;
 					list($x3, $y3) = $commanderManager->getPosition($commander, $x1, $y1, $x2, $y2);
 					$rt = Utils::interval($commander->dArrival, Utils::now(), 's');
 
@@ -42,5 +34,3 @@ echo '<div id="fleet-movements" ' . ($request->cookies->get('p' . Params::SHOW_M
 			}
 	echo '</svg>';
 echo '</div>';
-
-$placeManager->changeSession($S_PLM_MAPLAYER);

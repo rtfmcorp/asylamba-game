@@ -156,14 +156,9 @@ echo '<div id="content">';
 		if ($spyReportManager->size() == 1) {
 			$spyreport = $spyReportManager->get(0);
 
-			$S_PLM_SPY = $placeManager->getCurrentSession();
-			$placeManager->newSession();
-			$placeManager->load(array('id' => $spyreport->rPlace));
-			$place_spy = $placeManager->get(0);
+			$place_spy = $placeManager->get($spyreport->rPlace);
 
 			include COMPONENT . 'fleet/spyReport.php';
-
-			$placeManager->changeSession($S_PLM_SPY);
 		} else {
 			if ($request->query->has('report')) {
 				throw new ErrorException('Ce rapport ne vous appartient pas ou n\'existe pas');

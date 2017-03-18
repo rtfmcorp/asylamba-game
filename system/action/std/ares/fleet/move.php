@@ -23,21 +23,15 @@ $placeId = $request->query->get('placeid');
 
 
 if ($commanderId !== FALSE AND $placeId !== FALSE) {
-	$S_PLM1 = $placeManager->getCurrentSession();
-	$placeManager->newSession();
-	$placeManager->load(array('id' => $placeId));
-	$place = $placeManager->get();
-
 	if (($commander = $commanderManager->get($commanderId)) !== null && $commander->rPlayer === $session->get('playerId')) {
-		if ($placeManager->size() > 0) {
+		if (($place = $placeManager->get($placeId)) !== null) {
 			if ($commander->playerColor == $place->playerColor) {
-				$placeManager->load(array('id' => $commander->getRBase()));
-				$home = $placeManager->getById($commander->getRBase());
+				$home = $placeManager->get($commander->getRBase());
 
 				$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
 				$duration = Game::getTimeToTravel($home, $place, $session->get('playerBonus'));
 			
-				if ($commander->statement == Commander::AFFECTED) {
+				if ($commander->statement === Commander::AFFECTED) {
 					$S_SEM = $sectorManager->getCurrentSession();
 					$sectorManager->newSession();
 					$sectorManager->load(array('id' => $place->rSector));
@@ -78,7 +72,6 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	} else {
 		throw new ErrorException('Ce commandant ne vous appartient pas ou n\'existe pas.');
 	}
-	$placeManager->changeSession($S_PLM1);
 } else {
 	throw new ErrorException('Manque de précision sur le commandant ou la position.');
 }

@@ -20,17 +20,11 @@ $systemId = 0;
 # other default location
 # par place
 if ($request->query->has('place')) {
-	$S_PLM_MAP = $placeManager->getCurrentSession();
-	$placeManager->newSession();
-	$placeManager->load(array('id' => $request->query->get('place')));
-
-	if ($placeManager->size() == 1) {
-		$x = $placeManager->get(0)->getXSystem();
-		$y = $placeManager->get(0)->getYSystem();
-		$systemId = $placeManager->get(0)->getRSystem();
+	if (($place = $placeManager->get($request->query->get('place'))) !== null) {
+		$x = $place->getXSystem();
+		$y = $place->getYSystem();
+		$systemId = $place->getRSystem();
 	}
-	
-	$placeManager->changeSession($S_PLM_MAP);
 # par system
 } elseif ($request->query->has('system')) {
 	$_SYS_MAP = $systemManager->getCurrentSession();
@@ -66,14 +60,7 @@ if ($systemId != 0) {
 		$system = $systemManager->get();
 
 		# objet place
-		$places = array();
-		$S_PLM1 = $placeManager->getCurrentSession();
-		$placeManager->newSession();
-		$placeManager->load(array('rSystem' => $systemId), array('position'));
-		for ($i = 0; $i < $placeManager->size(); $i++) {
-			$places[] = $placeManager->get($i);
-		}
-		$placeManager->changeSession($S_PLM1);
+		$places = $placeManager->getSystemPlaces($system);
 
 		$noAJAX = TRUE;
 

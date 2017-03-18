@@ -23,26 +23,17 @@ for ($i = 0; $i < $session->get('playerEvent')->size(); $i++) {
 # chargement des commandants attaquants
 $attackingCommanders = $commanderManager->getCommandersByIds($commandersId);
 
-# chargement des places relatives aux commandants attaquants
-$placesId = array(0);
-foreach ($attackingCommanders as $commander) {
-	$placesId[] = $commander->rStartPlace;
-	$placesId[] = $commander->rDestinationPlace;
-}
-
-$S_PLM_MAPLAYER = $placeManager->getCurrentSession();
-$placeManager->newSession();
-$placeManager->load(array('id' => $placesId));
-
 echo '<div id="attacks" ' . ($request->cookies->get('p' . Params::SHOW_MAP_FLEETIN, Params::SHOW_MAP_FLEETIN) ? NULL : 'style="display:none;"') . '>';
 	echo '<svg viewBox="0, 0, ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . ', ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';
 			foreach ($attackingCommanders as $commander) {
 
 				if ($commander->travelType != Commander::BACK) {
-					$x1 = $placeManager->getById($commander->rStartPlace)->getXSystem() * $galaxyConfiguration->scale;
-					$x2 = $placeManager->getById($commander->rDestinationPlace)->getXSystem() * $galaxyConfiguration->scale;
-					$y1 = $placeManager->getById($commander->rStartPlace)->getYSystem() * $galaxyConfiguration->scale;
-					$y2 = $placeManager->getById($commander->rDestinationPlace)->getYSystem() * $galaxyConfiguration->scale;
+					$startPlace = $placeManager->get($commander->rStartPlace);
+					$destinationPlace = $placeManager->get($commander->rDestinationPlace);
+					$x1 = $startPlace->getXSystem() * $galaxyConfiguration->scale;
+					$x2 = $destinationPlace->getXSystem() * $galaxyConfiguration->scale;
+					$y1 = $startPlace->getYSystem() * $galaxyConfiguration->scale;
+					$y2 = $destinationPlace->getYSystem() * $galaxyConfiguration->scale;
 					list($x3, $y3) = $commanderManager->getPosition($commander, $x1, $y1, $x2, $y2);
 					$rt = Utils::interval($commander->dArrival, Utils::now(), 's');
 
@@ -55,5 +46,3 @@ echo '<div id="attacks" ' . ($request->cookies->get('p' . Params::SHOW_MAP_FLEET
 			}
 	echo '</svg>';
 echo '</div>';
-
-$placeManager->changeSession($S_PLM_MAPLAYER);

@@ -21,14 +21,7 @@ if ($systemManager->size() == 1) {
 	$system = $systemManager->get();
 
 	# objet place
-	$places = array();
-	$S_PLM1 = $placeManager->getCurrentSession();
-	$placeManager->newSession();
-	$placeManager->load(array('rSystem' => $systemId), array('position'));
-	for ($i = 0; $i < $placeManager->size(); $i++) {
-		$places[] = $placeManager->get($i);
-	}
-	$placeManager->changeSession($S_PLM1);
+	$places = $placeManager->getSystemPlaces($system);
 
 	# inclusion du "composant"
 	include PAGES . 'desktop/mapElement/actionbox.php';

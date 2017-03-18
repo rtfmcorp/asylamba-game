@@ -73,16 +73,11 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND in_array($baseId, $verif)) 
 							if ($remainingShips >= $commercialShipQuantity) {
 								if (($otherBase = $orbitalBaseManager->get($otherBaseId)) !== null) {
 									# load places to compute travel time
-									$S_PLM1 = $placeManager->getCurrentSession();
-									$placeManager->newSession();
-									$placeManager->load(array('id' => $orbitalBase->rPlace));
-									$placeManager->load(array('id' => $otherBase->rPlace));
-									
-									$timeToTravel = Game::getTimeToTravelCommercial($placeManager->get(0), $placeManager->get(1));
+									$startPlace = $placeManager->get($orbitalBase->rPlace);
+									$destinationPlace = $placeManager->get($otherBase->rPlace);
+									$timeToTravel = Game::getTimeToTravelCommercial($startPlace, $destinationPlace);
 									$departure = Utils::now();
 									$arrival = Utils::addSecondsToDate($departure, $timeToTravel);
-									
-									$placeManager->changeSession($S_PLM1);
 
 									# création de la transaction
 									$tr = new Transaction();

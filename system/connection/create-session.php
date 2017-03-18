@@ -145,20 +145,11 @@ for ($i = 0; $i < $session->get('playerBase')->get('ms')->size(); $i++) {
 
 $incomingCommanders = $commanderManager->getIncomingAttacks($places);
 
-# ajout des bases des ennemis dans le tableau
-foreach ($incomingCommanders as $commander) {
-	$places[] = $commander->getRBase();
-}
-
-$S_PLM1 = $placeManager->getCurrentSession();
-$placeManager->newSession();
-$placeManager->load(array('id' => $places));
-
 foreach ($incomingCommanders as $commander) { 
 	if (in_array($commander->getTypeOfMove(), array(Commander::COLO, Commander::LOOT))) {
 		# va chercher les heures auxquelles il rentre dans les cercles d'espionnage
-		$startPlace = $placeManager->getById($commander->getRBase());
-		$destinationPlace = $placeManager->getById($commander->getRPlaceDestination());
+		$startPlace = $placeManager->get($commander->getRBase());
+		$destinationPlace = $placeManager->get($commander->getRPlaceDestination());
 		$times = Game::getAntiSpyEntryTime($startPlace, $destinationPlace, $commander->getArrivalDate());
 
 		if (strtotime(Utils::now()) >= strtotime($times[0])) {
@@ -175,4 +166,3 @@ foreach ($incomingCommanders as $commander) {
 		}
 	}
 }
-$placeManager->changeSession($S_PLM1);

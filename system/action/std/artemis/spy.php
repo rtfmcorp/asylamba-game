@@ -39,10 +39,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 	
 	if ($session->get('playerInfo')->get('credit') >= $price && $price > 0) {
 		# place
-		$S_PLM1 = $placeManager->getCurrentSession();
-		$placeManager->newSession();
-		$placeManager->load(array('id' => $rPlace));
-		$place = $placeManager->get();
+		$place = $placeManager->get($rPlace);
 
 		if ($place->typeOfPlace == Place::TERRESTRIAL && $place->playerColor != $session->get('playerInfo')->get('color')) {
 			# débit des crédits au joueur
@@ -172,8 +169,6 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 		} else {
 			throw new ErrorException('Impossible de lancer un espionnage');
 		}
-
-		$placeManager->changeSession($S_PLM1);
 	} else {
 		throw new ErrorException('Impossible de lancer un espionnage avec le montant proposé');
 	}
