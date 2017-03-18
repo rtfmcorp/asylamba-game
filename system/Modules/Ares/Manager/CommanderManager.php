@@ -87,7 +87,11 @@ class CommanderManager
 	 */
 	public function get($id)
 	{
-		return $this->entityManager->getRepository(Commander::class)->get($id);
+		$commander =  $this->entityManager->getRepository(Commander::class)->get($id);
+		
+		$this->uCommander($commander);
+		
+		return $commander;
 	}
 	
 	/**
@@ -97,7 +101,13 @@ class CommanderManager
 	 */
 	public function getBaseCommanders($orbitalBaseId, $statements = [], $orderBy = [])
 	{
-		return $this->entityManager->getRepository(Commander::class)->getBaseCommanders($orbitalBaseId, $statements, $orderBy);
+		$commanders = $this->entityManager->getRepository(Commander::class)->getBaseCommanders($orbitalBaseId, $statements, $orderBy);
+		
+		foreach($commanders as $commander) {
+			$this->uCommander($commander);
+		}
+		
+		return $commanders;
 	}
 	
 	/**
@@ -107,7 +117,13 @@ class CommanderManager
 	 */
 	public function getPlayerCommanders($playerId, $statements = [], $orderBy = [])
 	{
-		return $this->entityManager->getRepository(Commander::class)->getPlayerCommanders($playerId, $statements, $orderBy);
+		$commanders = $this->entityManager->getRepository(Commander::class)->getPlayerCommanders($playerId, $statements, $orderBy);
+		
+		foreach($commanders as $commander) {
+			$this->uCommander($commander);
+		}
+		
+		return $commanders;
 	}
 	
 	/**
@@ -115,7 +131,13 @@ class CommanderManager
 	 */
 	public function getMovingCommanders()
 	{
-		return $this->entityManager->getRepository(Commander::class)->getMovingCommanders();
+		$commanders = $this->entityManager->getRepository(Commander::class)->getMovingCommanders();
+		
+		foreach($commanders as $commander) {
+			$this->uCommander($commander);
+		}
+		
+		return $commanders;
 	}
 	
 	/**
@@ -124,7 +146,13 @@ class CommanderManager
 	 */
 	public function getCommandersByIds($ids)
 	{
-		return $this->entityManager->getRepository(Commander::class)->getCommandersByIds($ids);
+		$commanders = $this->entityManager->getRepository(Commander::class)->getCommandersByIds($ids);
+		
+		foreach($commanders as $commander) {
+			$this->uCommander($commander);
+		}
+		
+		return $commanders;
 	}
 	
 	/**
@@ -134,7 +162,13 @@ class CommanderManager
 	 */
 	public function getCommandersByLine($orbitalBaseId, $line)
 	{
-		return $this->entityManager->getRepository(Commander::class)->getCommandersByLine($orbitalBaseId, $line);
+		$commanders = $this->entityManager->getRepository(Commander::class)->getCommandersByLine($orbitalBaseId, $line);
+		
+		foreach($commanders as $commander) {
+			$this->uCommander($commander);
+		}
+		
+		return $commanders;
 	}
 	
 	/**
@@ -143,7 +177,13 @@ class CommanderManager
 	 */
 	public function getIncomingAttacks($places)
 	{
-		return $this->entityManager->getRepository(Commander::class)->getIncomingAttacks($places);
+		$commanders = $this->entityManager->getRepository(Commander::class)->getIncomingAttacks($places);
+		
+		foreach($commanders as $commander) {
+			$this->uCommander($commander);
+		}
+		
+		return $commanders;
 	}
 	
 	/**
@@ -408,7 +448,7 @@ class CommanderManager
 			$pl = $this->placeManager->get();
 			$this->placeManager->changeSession($S_PLM);
 		}
-
+		$this->entityManager->flush($commander);
 		$this->ctc->applyContext($token);
 	}
 }
