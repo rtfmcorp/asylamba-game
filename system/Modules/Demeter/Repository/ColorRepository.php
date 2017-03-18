@@ -175,7 +175,7 @@ class ColorRepository extends AbstractRepository {
 				WHERE id = :id');
 		$statement->execute(array(
 			'alive' => $faction->alive,
-			'is_winner' => $faction->isWinner,
+			'is_winner' => (int) $faction->isWinner,
 			'credits' => $faction->credits,
 			'nb_players' => $faction->players,
 			'nb_active_players' => $faction->activePlayers,
@@ -183,8 +183,8 @@ class ColorRepository extends AbstractRepository {
 			'points' => $faction->points,
 			'sectors' => $faction->sectors,
 			'election_statement' => $faction->electionStatement,
-			'is_closed' => $faction->isClosed,
-			'is_in_game' => $faction->isInGame,
+			'is_closed' => (int) $faction->isClosed,
+			'is_in_game' => (int) $faction->isInGame,
 			'description' => $faction->description,
 			'victory_claimed_at' => $faction->dClaimVictory,
 			'last_election_at' => $faction->dLastElection,
