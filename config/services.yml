@@ -16,6 +16,14 @@ services:
             - "%database_admin_user"
             - "%database_admin_password"
             
+    router:
+        class: Asylamba\Classes\Router\Router
+        
+    templating.renderer:
+        class: Asylamba\Classes\Templating\Renderer
+        arguments:
+            - "@app.container"
+            
     entity_manager:
         class: Asylamba\Classes\Entity\EntityManager
         arguments:
