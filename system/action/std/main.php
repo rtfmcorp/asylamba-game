@@ -7,7 +7,7 @@ $response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 
 # démarre la redirection standard vers la page précédente
-$response->redirect();
+$response->redirect($session->getLastHistory());
 
 if ($request->query->has('sftr')) {
 	$session->add('sftr', $request->query->get('sftr'));

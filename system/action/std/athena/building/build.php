@@ -31,7 +31,6 @@ for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
 $baseId = $request->query->get('baseid');
 $building = $request->query->get('building');
 
-
 if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 	if ($orbitalBaseHelper->isABuilding($building)) {
 		if (($ob = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {

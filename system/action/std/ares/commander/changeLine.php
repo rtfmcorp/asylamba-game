@@ -31,12 +31,12 @@ if ($commander->line == 1) {
 	if (count($secondLineCommanders) < PlaceResource::get($orbitalBase->typeOfBase, 'r-line')) {
 		$commander->line = 2;
 
-		$response->redirect();
+		$response->redirect($session->getLastHistory());
 
 	} else {
 		$commander->line = 2;
 		$secondLineCommanders[0]->line = 1;
-		$response->redirect();
+		$response->redirect($session->getLastHistory());
 		$session->addFlashbag('Votre commandant ' . $commander->getName() . ' a échangé sa place avec ' . $commanderManager->get()->name . '.', Flashbag::TYPE_SUCCESS);
 	}
 } else {
@@ -50,11 +50,11 @@ if ($commander->line == 1) {
 	if (count($firstLineCommanders) < PlaceResource::get($orbitalBase->typeOfBase, 'l-line')) {
 		$commander->line = 1;
 
-		$response->redirect();
+		$response->redirect($session->getLastHistory());
 	} else {
 		$commander->line = 1;
 		$firstLineCommanders[0]->line = 2;
-		$response->redirect();
+		$response->redirect($session->getLastHistory());
 		$session->addFlashbag('Votre commandant ' . $commander->getName() . ' a échangé sa place avec ' . $commanderManager->get()->name . '.', Flashbag::TYPE_SUCCESS);
 	}
 }
