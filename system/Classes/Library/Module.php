@@ -2,7 +2,7 @@
 
 namespace Asylamba\Classes\Library;
 
-use Asylamba\Classes\Worker\Application;
+use Asylamba\Classes\Worker\ApplicationInterface;
 use Asylamba\Classes\Worker\Container;
 use Asylamba\Classes\Configuration\Configuration;
 use Symfony\Component\Config\FileLocator;
@@ -13,9 +13,9 @@ abstract class Module
 	protected $container;
 	
 	/**
-	 * @param Application $application
+	 * @param ApplicationInterface $application
 	 */
-	public function __construct(Application $application)
+	public function __construct(ApplicationInterface $application)
 	{
 		$this->container = $application->getContainer();
 		$this->configure();
