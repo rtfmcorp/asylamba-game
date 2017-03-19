@@ -8,6 +8,7 @@
 	# [{commander}]			commander_fleetFeesFinancial
 
 use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 
 $commanderByBase = array();
@@ -33,7 +34,7 @@ echo '<div class="component financial">';
 			foreach ($commanderByBase as $base => $commanders) {
 				$commanderFees = 0;
 				foreach ($commanders as $commander) {
-					$commanderFees += $commander->getLevel() * COM_LVLINCOMECOMMANDER;
+					$commanderFees += $commander->getLevel() * Commander::LVLINCOMECOMMANDER;
 				}
 
 				echo '<li>';
@@ -58,7 +59,7 @@ echo '<div class="component financial">';
 							echo '<li>';
 								echo '<span class="label">' . CommanderResources::getInfo($commander->getLevel(), 'grade') . ' ' . $commander->getName() . '</span>';
 								echo '<span class="value">';
-									echo Format::numberFormat($commander->getLevel() * COM_LVLINCOMECOMMANDER);
+									echo Format::numberFormat($commander->getLevel() * Commander::LVLINCOMECOMMANDER);
 								echo '</span>';
 							echo '</li>';
 						}
@@ -76,7 +77,7 @@ echo '<div class="component financial">';
 		echo '</ul>';
 
 		echo '<p class="info">La rubrique commandant ne correspond pas à l’investissement fait dans l’école de commandement, mais au salaire de vos 
-		commandants. Plus un commandant a un niveau élevé, plus son salaire sera important. Chaque niveau de commandant coûte ' . COM_LVLINCOMECOMMANDER . ' crédits par relève.</p>';
+		commandants. Plus un commandant a un niveau élevé, plus son salaire sera important. Chaque niveau de commandant coûte ' . Commander::LVLINCOMECOMMANDER . ' crédits par relève.</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

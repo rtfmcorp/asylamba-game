@@ -4,58 +4,55 @@
 # int base 			id (rPlace) de la base orbitale qui a proposé la route mais qui l'annule
 # int route 		id de la route commerciale
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
 
-for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$routeCancelRefund = $this->getContainer()->getParameter('athena.trade.route.cancellation_refund');
+$entityManager = $this->getContainer()->get('entity_manager');
+
+for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
+	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-$base = Utils::getHTTPData('base');
-$route = Utils::getHTTPData('route');
+$base = $request->query->get('base');
+$route = $request->query->get('route');
 
 if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
-	$S_CRM1 = ASM::$crm->getCurrentSession();
-	ASM::$crm->newSession(ASM_UMODE);
-	ASM::$crm->load(array('id' => $route, 'rOrbitalBase' => $base, 'statement' => CRM_PROPOSED));
-	if (ASM::$crm->get() && ASM::$crm->size() == 1) {
-		$cr = ASM::$crm->get();
-
-		$S_OBM1 = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession(ASM_UMODE);
-		ASM::$obm->load(array('rPlace' => $cr->getROrbitalBase()));
-		$proposerBase = ASM::$obm->get();
-		ASM::$obm->load(array('rPlace' => $cr->getROrbitalBaseLinked()));
-		$linkedBase = ASM::$obm->get(1);
+	$cr = $commercialRouteManager->getByIdAndBase($route, $base);
+	if ($cr !== null && $cr->getStatement() == CommercialRoute::PROPOSED) {
+		$proposerBase = $orbitalBaseManager->get($cr->getROrbitalBase());
+		$linkedBase = $orbitalBaseManager->get($cr->getROrbitalBaseLinked());
 
 		//rend 80% des crédits investis
-		$S_PAM1 = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession(ASM_UMODE);
-		ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-		ASM::$pam->get()->increaseCredit(round($cr->getPrice() * CRM_CANCELROUTE));
-		ASM::$pam->changeSession($S_PAM1);
+		$playerManager->increaseCredit($playerManager->get($session->get('playerId')), round($cr->getPrice() * $routeCancelRefund));
 
 		//notification
 		$n = new Notification();
 		$n->setRPlayer($linkedBase->getRPlayer());
 		$n->setTitle('Route commerciale annulée');
 
-		$n->addBeg()->addLnk('embassy/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'))->addTxt(' a finalement retiré la proposition de route commerciale qu\'il avait faite entre ');
+		$n->addBeg()->addLnk('embassy/player-' . $session->get('playerId'), $session->get('playerInfo')->get('name'))->addTxt(' a finalement retiré la proposition de route commerciale qu\'il avait faite entre ');
 		$n->addLnk('map/base-' . $linkedBase->getRPlace(), $linkedBase->getName())->addTxt(' et ');
 		$n->addLnk('map/place-' . $proposerBase->getRPlace(), $proposerBase->getName());
 		$n->addEnd();
-		ASM::$ntm->add($n);
+		$notificationManager->add($n);
 
 		//destruction de la route
-		ASM::$crm->deleteById($route);
-		CTR::$alert->add('Route commerciale annulée. Vous récupérez les ' . CRM_CANCELROUTE * 100 . '% du montant investi.', ALERT_STD_SUCCESS);
-		ASM::$obm->changeSession($S_OBM1);
+		$commercialRouteManager->remove($cr);
+		$session->addFlashbag('Route commerciale annulée. Vous récupérez les ' . $routeCancelRefund * 100 . '% du montant investi.', Flashbag::TYPE_SUCCESS);
 	} else {
-		CTR::$alert->add('impossible d\'annuler une route commerciale', ALERT_STD_ERROR);
+		throw new ErrorException('impossible d\'annuler une route commerciale');
 	}
-	ASM::$crm->changeSession($S_CRM1);
 } else {
-	CTR::$alert->add('pas assez d\'informations pour annuler une route commerciale', ALERT_STD_FILLFORM);
+	throw new FormException('pas assez d\'informations pour annuler une route commerciale');
 }
+$entityManager->flush();

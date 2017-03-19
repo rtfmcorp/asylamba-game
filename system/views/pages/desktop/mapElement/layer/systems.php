@@ -1,20 +1,20 @@
 <?php
 
-use Asylamba\Classes\Database\Database;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
+$galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
+$sectorManager = $this->getContainer()->get('gaia.sector_manager');
+
 echo '<div id="systems">';
-	$db = Database::getInstance();
-	$qr = $db->prepare('SELECT * FROM system');
+	$qr = $this->getContainer()->get('database')->prepare('SELECT * FROM system');
 	$qr->execute();
 	$aw = $qr->fetchAll();
 
 	# own bases
 	$basesId = array();
-	for ($i = 0; $i < ASM::$obm->size(); $i++) { 
-		$basesId[]  = ASM::$obm->get($i)->getSystem();
+	foreach ($playerBases as $base) { 
+		$basesId[]  = $base->getSystem();
 	}
 
 	foreach ($aw as $system) {
@@ -24,22 +24,22 @@ echo '<div id="systems">';
 			echo 'class="loadSystem ' . $systemId . ' ' . ($system['id'] == $systemId ? 'active' : NULL) . '" ';
 			echo 'data-system-id="' . $system['id'] . '" ';
 			echo 'data-x-position="' . $system['xPosition'] . '" data-y-position="' . $system['yPosition'] . '" ';
-			echo 'style="top: ' . ($system['yPosition'] * GalaxyConfiguration::$scale - 10) . 'px; left: ' . ($system['xPosition'] * GalaxyConfiguration::$scale - 10) . 'px">';
+			echo 'style="top: ' . ($system['yPosition'] * $galaxyConfiguration->scale - 10) . 'px; left: ' . ($system['xPosition'] * $galaxyConfiguration->scale - 10) . 'px">';
 			echo '<img src="' . MEDIA . 'map/systems/t' . $system['typeOfSystem'] . 'c' . $system['rColor'] . '.png" ' . $owner . ' />';
 		echo '</a>';
 	}
 
-	for ($i = 0; $i < $sm->size(); $i++) {
-		$sector = $sm->get($i);
+	for ($i = 0; $i < $sectorManager->size(); $i++) {
+		$sector = $sectorManager->get($i);
 
 		echo '<span ';
 			echo 'class="sector-number color' . $sector->getRColor() . ' sh" ';
 			echo 'data-target="sector-info-' . $sector->getId() . '" ';
-			echo 'style="left: ' . $sector->getXBarycentric() * GalaxyConfiguration::$scale . 'px; top: ' . $sector->getYBarycentric() * GalaxyConfiguration::$scale . 'px">';
+			echo 'style="left: ' . $sector->getXBarycentric() * $galaxyConfiguration->scale . 'px; top: ' . $sector->getYBarycentric() * $galaxyConfiguration->scale . 'px">';
 			echo ($i + 1);
 		echo '</span>';
 
-		echo '<div id="sector-info-' . ($i + 1) . '" class="sector-info color' . $sector->getRColor() . '" style="left: ' . ($sector->getXBarycentric() * GalaxyConfiguration::$scale + 55) . 'px; top: ' . ($sector->getYBarycentric() * GalaxyConfiguration::$scale - 10) . 'px">';
+		echo '<div id="sector-info-' . ($i + 1) . '" class="sector-info color' . $sector->getRColor() . '" style="left: ' . ($sector->getXBarycentric() * $galaxyConfiguration->scale + 55) . 'px; top: ' . ($sector->getYBarycentric() * $galaxyConfiguration->scale - 10) . 'px">';
 			echo '<h2>' . $sector->getName() . '</h2>';
 			echo '<p><a href="#">+</a> ';
 				if ($sector->getRColor() != 0) {

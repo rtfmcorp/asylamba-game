@@ -3,8 +3,11 @@
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Worker\CTR;
 
+$session = $this->getContainer()->get('app.session');
+$sessionToken = $session->get('token');
+$minimalBaseChangeLevel = $this->getContainer()->getParameter('athena.obm.change_type_min_level');
+$capitalChangeLevel = $this->getContainer()->getParameter('athena.obm.capital_min_level');
 # affichage du type de base
 
 # require
@@ -51,14 +54,14 @@ echo '<div class="component generator">';
 					echo '</div>';
 
 					echo '<div class="desc-choice">';
-						if ($ob_obSituation->typeOfBase == OrbitalBase::TYP_NEUTRAL && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price') && $ob_obSituation->levelGenerator >= OBM_LEVEL_MIN_TO_CHANGE_TYPE) {
-							echo '<a href="' . Format::actionBuilder('changebasetype', ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_COMMERCIAL]) . '" class="button">';
+						if ($ob_obSituation->typeOfBase == OrbitalBase::TYP_NEUTRAL && $session->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price') && $ob_obSituation->levelGenerator >= $minimalBaseChangeLevel) {
+							echo '<a href="' . Format::actionBuilder('changebasetype',  $sessionToken, ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_COMMERCIAL]) . '" class="button">';
 								echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'name') . '<br />';
 								echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price'));
 								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
 							echo '</a>';
-						} elseif (($ob_obSituation->typeOfBase == OrbitalBase::TYP_MILITARY) && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price')) {
-							echo '<a href="' . Format::actionBuilder('changebasetype', ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_COMMERCIAL]) . '" class="button confirm" data-confirm-label="Transformer cette base supprimera toute la file de construction. Vos missions de recyclage seront également annulées.">';
+						} elseif (($ob_obSituation->typeOfBase == OrbitalBase::TYP_MILITARY) && $session->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price')) {
+							echo '<a href="' . Format::actionBuilder('changebasetype',  $sessionToken, ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_COMMERCIAL]) . '" class="button confirm" data-confirm-label="Transformer cette base supprimera toute la file de construction. Vos missions de recyclage seront également annulées.">';
 								echo '<span class="text">Transformer en ' . PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'name') . '<br />';
 								echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price'));
 								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
@@ -79,18 +82,18 @@ echo '<div class="component generator">';
 						echo '<p><strong>Technologies</strong>Orienté commerce et production</p>';
 						echo '<p><strong>Bâtiments</strong>Plateforme Commerciale et Spatioport au niveau maximum</p>';
 						echo '<hr />';
-						echo '<p><strong>Nécessite</strong>Générateur niveau ' . OBM_LEVEL_MIN_TO_CHANGE_TYPE . '</p>';
+						echo '<p><strong>Nécessite</strong>Générateur niveau ' . $minimalBaseChangeLevel . '</p>';
 					echo '</div>';
 
 					echo '<div class="desc-choice">';
-						if ($ob_obSituation->typeOfBase == OrbitalBase::TYP_NEUTRAL && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price') && $ob_obSituation->levelGenerator >= OBM_LEVEL_MIN_TO_CHANGE_TYPE) {
-							echo '<a href="' . Format::actionBuilder('changebasetype', ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_MILITARY]) . '" class="button">';
+						if ($ob_obSituation->typeOfBase == OrbitalBase::TYP_NEUTRAL && $session->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price') && $ob_obSituation->levelGenerator >= $minimalBaseChangeLevel) {
+							echo '<a href="' . Format::actionBuilder('changebasetype',  $sessionToken, ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_MILITARY]) . '" class="button">';
 								echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_MILITARY, 'name') . '<br />';
 								echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price'));
 								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
 							echo '</a>';
-						} elseif (($ob_obSituation->typeOfBase == OrbitalBase::TYP_COMMERCIAL) && CTR::$data->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price')) {
-							echo '<a href="' . Format::actionBuilder('changebasetype', ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_MILITARY]) . '" class="button confirm" data-confirm-label="Transformer cette base supprimera toute la file de construction.">';
+						} elseif (($ob_obSituation->typeOfBase == OrbitalBase::TYP_COMMERCIAL) && $session->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price')) {
+							echo '<a href="' . Format::actionBuilder('changebasetype',  $sessionToken, ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_MILITARY]) . '" class="button confirm" data-confirm-label="Transformer cette base supprimera toute la file de construction.">';
 								echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_MILITARY, 'name') . '<br />';
 								echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price'));
 								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
@@ -111,20 +114,20 @@ echo '<div class="component generator">';
 						echo '<p><strong>Technologies</strong>Orienté militaire</p>';
 						echo '<p><strong>Bâtiments</strong>Centre de Recyclage et Chantier de Ligne au niveau maximum</p>';
 						echo '<hr />';
-						echo '<p><strong>Nécessite</strong>Générateur niveau ' . OBM_LEVEL_MIN_TO_CHANGE_TYPE . '</p>';
+						echo '<p><strong>Nécessite</strong>Générateur niveau ' . $minimalBaseChangeLevel . '</p>';
 					echo '</div>';
 
 					echo '<div class="desc-choice">';
 						$capitalQuantity = 0;
-						for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) {
-							if (CTR::$data->get('playerBase')->get('ob')->get($i)->get('type') == OrbitalBase::TYP_CAPITAL) {
+						for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
+							if ($session->get('playerBase')->get('ob')->get($i)->get('type') == OrbitalBase::TYP_CAPITAL) {
 								$capitalQuantity++;
 							}
 						}
 						$totalPrice = PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'price');
-						if ((($ob_obSituation->typeOfBase == OrbitalBase::TYP_COMMERCIAL || $ob_obSituation->typeOfBase == OrbitalBase::TYP_MILITARY) && CTR::$data->get('playerInfo')->get('credit') >= $totalPrice && $ob_obSituation->levelGenerator >= OBM_LEVEL_MIN_FOR_CAPITAL)) {
+						if ((($ob_obSituation->typeOfBase == OrbitalBase::TYP_COMMERCIAL || $ob_obSituation->typeOfBase == OrbitalBase::TYP_MILITARY) && $session->get('playerInfo')->get('credit') >= $totalPrice && $ob_obSituation->levelGenerator >= $capitalChangeLevel)) {
 							if ($capitalQuantity == 0) {
-								echo '<a href="' . Format::actionBuilder('changebasetype', ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_CAPITAL]) . '" class="button">';
+								echo '<a href="' . Format::actionBuilder('changebasetype',  $sessionToken, ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_CAPITAL]) . '" class="button">';
 									echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'name') . '<br />';
 									echo  Format::numberFormat($totalPrice);
 									echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
@@ -157,7 +160,7 @@ echo '<div class="component generator">';
 						echo '<p><strong>Technologies</strong>Toutes disponibles</p>';
 						echo '<p><strong>Bâtiments</strong>Tous au niveau maximum</p>';
 						echo '<hr />';
-						echo '<p><strong>Nécessite</strong>Générateur niveau ' . OBM_LEVEL_MIN_FOR_CAPITAL . '</p>';
+						echo '<p><strong>Nécessite</strong>Générateur niveau ' . $capitalChangeLevel . '</p>';
 					echo '</div>';
 				echo '</div>';
 			echo '</div>';

@@ -1,5 +1,9 @@
 <?php
-$player = CTR::$get->exist('player')
-	? CTR::$get->get('player')
-	: CTR::$data->get('playerId');
-CTR::redirect('embassy/player-' . $player);
+
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+
+$player = $request->query->has('player')
+	? $request->query->get('player')
+	: $session->get('playerId');
+$this->getContainer()->get('app.response')->redirect('embassy/player-' . $player);

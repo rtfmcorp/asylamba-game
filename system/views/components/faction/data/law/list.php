@@ -2,13 +2,14 @@
 
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Demeter\Resource\LawResources;
+use Asylamba\Modules\Zeus\Model\Player;
 
 # status list
 $status = ColorResource::getInfo($faction->id, 'status');
 
 echo '<div class="component profil">';
 	echo '<div class="head skin-2">';
-		if ($listlaw_status == PAM_CHIEF) {
+		if ($listlaw_status == Player::CHIEF) {
 			echo '<h2>Lois</h2>';
 		}
 	echo '</div>';

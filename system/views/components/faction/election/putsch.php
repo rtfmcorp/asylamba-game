@@ -1,13 +1,16 @@
 <?php
-$S_VOM_ELC = ASM::$vom->getCurrentSession();
-ASM::$vom->changeSession($VOM_ELC_TOTAL_TOKEN);
 
-$S_PAM_ELC = ASM::$pam->getCurrentSession();
-ASM::$pam->changeSession($PAM_ELC_TOKEN);
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
+$session = $this->getContainer()->get('app.session');
 
 $follower = 0;
-for ($i = 0; $i < ASM::$vom->size(); $i++) { 
-	if (ASM::$vom->get($i)->rCandidate == $candidat->rPlayer) {
+foreach ($votes as $vote) { 
+	if ($vote->rCandidate == $candidat->rPlayer) {
 		$follower++;
 	}
 }
@@ -31,7 +34,7 @@ echo '<div class="component profil">';
 				echo '<span class="label">Nombre de soutiens pour réussir</span>';
 				echo '<span class="value">' . $follower . '</span>';
 				echo '<span class="progress-bar">';
-					echo '<span style="width:' . Format::percent($follower, ASM::$pam->size()) . '%;" class="content"></span>';
+					echo '<span style="width:' . Format::percent($follower, count($factionPlayers)) . '%;" class="content"></span>';
 					echo '<span class="step" style="left: ' . (Color::PUTSCHPERCENTAGE + 2) . '%;">';
 						echo '<span class="label bottom">soutiens nécessaires</span>';
 					echo '</span>';
@@ -41,11 +44,7 @@ echo '<div class="component profil">';
 
 			echo '<hr / style="margin-top: 25px;">';
 
-			echo '<p class="info">' . ColorResource::getInfo(CTR::$data->get('playerInfo')->get('color'), 'campaignDesc') . '</p>';
+			echo '<p class="info">' . ColorResource::getInfo($session->get('playerInfo')->get('color'), 'campaignDesc') . '</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-ASM::$pam->changeSession($S_PAM_ELC);
-ASM::$vom->changeSession($S_VOM_ELC);
-?>

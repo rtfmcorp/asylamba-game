@@ -1,17 +1,15 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Zeus\Model\Player;
 
-$S_PAM1 = ASM::$pam->newSession(FALSE);
+$playerManager = $this->getContainer()->get('zeus.player_manager');
 
-ASM::$pam->search($_GET['q'], array('experience', 'DESC'), array(0, 20));
+$players = $playerManager->search($_GET['q']);
 
-if (ASM::$pam->size() != 0) {
-	for ($i = 0; $i < ASM::$pam->size(); $i++) {
-		$player = ASM::$pam->get($i);
-
-		if (in_array($player->getStatement(), array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY, PAM_BANNED))) {
+if (count($players) > 0) {
+	foreach ($players as $player) {
+		if (in_array($player->getStatement(), array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY, Player::BANNED))) {
 			if ($player->getRColor() > 0) {
 				$status = ColorResource::getInfo($player->getRColor(), 'status');
 				$status = $status[$player->getStatus() - 1];
@@ -26,4 +24,3 @@ if (ASM::$pam->size() != 0) {
 		}
 	}
 }
-ASM::$pam->changeSession($S_PAM1);

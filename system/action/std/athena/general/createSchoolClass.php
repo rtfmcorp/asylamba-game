@@ -6,8 +6,6 @@
 # int school 		not used anymore
 # string name 		name of the officer
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Zeus\Helper\CheckName;
@@ -16,85 +14,81 @@ use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Modules\Athena\Resource\SchoolClassResource;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
-use Asylamba\Modules\Zeus\Helper\TutorialHelper;
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 
-for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
+$entityManager = $this->getContainer()->get('entity_manager');
+
+for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
+	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-$baseId = Utils::getHTTPData('baseid');
-$school = Utils::getHTTPData('school');
-$name   = Utils::getHTTPData('name');
+$baseId = $request->query->get('baseid');
+$school = $request->query->get('school');
+$name   = $request->request->get('name');
 
 $cn = new CheckName();
 $cn->maxLenght = 20;
 
 if ($baseId !== FALSE AND $school !== FALSE AND $name !== FALSE AND in_array($baseId, $verif)) {
-	$S_OBM1 = ASM::$obm->getCurrentSession();
-	ASM::$obm->newSession();
-	ASM::$obm->load(array('rPlace' => $baseId, 'rPlayer' => CTR::$data->get('playerId')));
+	if (($orbitalBase = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
+		$schoolCommanders = $commanderManager->getBaseCommanders($baseId, [Commander::INSCHOOL]);
 
-	if (ASM::$obm->size() > 0) {
-		$S_COM1 = ASM::$com->getCurrentSession();
-		ASM::$com->newSession();
-		ASM::$com->load(array('c.statement' => Commander::INSCHOOL, 'c.rBase' => $baseId));
+		if (count($schoolCommanders) < PlaceResource::get($orbitalBase->typeOfBase, 'school-size')) {
+			$reserveCommanders = $commanderManager->getBaseCommanders($baseId, [Commander::RESERVE]);
 
-		if (ASM::$com->size() < PlaceResource::get(ASM::$obm->get()->typeOfBase, 'school-size')) {
-			ASM::$com->load(array('c.statement' => Commander::RESERVE, 'c.rBase' => $baseId));
-
-			if (ASM::$com->size() < OrbitalBase::MAXCOMMANDERINMESS) {
+			if (count($reserveCommanders) < OrbitalBase::MAXCOMMANDERINMESS) {
 				$school = intval($school);
 				$nbrCommandersToCreate = rand(SchoolClassResource::getInfo($school, 'minSize'), SchoolClassResource::getInfo($school, 'maxSize'));
 
 				if ($cn->checkLength($name) && $cn->checkChar($name)) {
-					if (SchoolClassResource::getInfo($school, 'credit') <= CTR::$data->get('playerInfo')->get('credit')) {
+					if (SchoolClassResource::getInfo($school, 'credit') <= $session->get('playerInfo')->get('credit')) {
 						# tutorial
-						if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-							switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
-								case TutorialResource::CREATE_COMMANDER:
-									TutorialHelper::setStepDone();
-									break;
-							}
+						if ($session->get('playerInfo')->get('stepDone') == FALSE &&
+							$session->get('playerInfo')->get('stepTutorial') === TutorialResource::CREATE_COMMANDER) {
+							$tutorialHelper->setStepDone();
 						}
 
 						# débit des crédits au joueur
-						$S_PAM1 = ASM::$pam->getCurrentSession();
-						ASM::$pam->newSession(ASM_UMODE);
-						ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-						ASM::$pam->get()->decreaseCredit(SchoolClassResource::getInfo($school, 'credit'));
-						ASM::$pam->changeSession($S_PAM1);
+						$playerManager->decreaseCredit($playerManager->get($session->get('playerId')), SchoolClassResource::getInfo($school, 'credit'));
 
 						for ($i = 0; $i < $nbrCommandersToCreate; $i++) {
 							$newCommander = new Commander();
-							$newCommander->upExperience(rand(SchoolClassResource::getInfo($school, 'minExp'), SchoolClassResource::getInfo($school, 'maxExp')));
-							$newCommander->rPlayer = CTR::$data->get('playerId');
+							$commanderManager->upExperience($newCommander, rand(SchoolClassResource::getInfo($school, 'minExp'), SchoolClassResource::getInfo($school, 'maxExp')));
+							$newCommander->rPlayer = $session->get('playerId');
 							$newCommander->rBase = $baseId;
 							$newCommander->palmares = 0;
 							$newCommander->statement = 0;
 							$newCommander->name = $name;
-							$newCommander->avatar = 't' . rand(1, 21) . '-c' . CTR::$data->get('playerInfo')->get('color');
+							$newCommander->avatar = 't' . rand(1, 21) . '-c' . $session->get('playerInfo')->get('color');
 							$newCommander->dCreation = Utils::now();
 							$newCommander->uCommander = Utils::now();
 							$newCommander->setSexe(1);
 							$newCommander->setAge(rand(40, 70));
-
-							ASM::$com->add($newCommander);
+							$entityManager->persist($newCommander);
+							$entityManager->flush($newCommander);
 						}
-						CTR::$alert->add($nbrCommandersToCreate . ' commandant' . Format::addPlural($nbrCommandersToCreate) . ' inscrit' . Format::addPlural($nbrCommandersToCreate) . ' au programme d\'entraînement.', ALERT_STD_SUCCESS);
+						$session->addFlashbag($nbrCommandersToCreate . ' commandant' . Format::addPlural($nbrCommandersToCreate) . ' inscrit' . Format::addPlural($nbrCommandersToCreate) . ' au programme d\'entraînement.', Flashbag::TYPE_SUCCESS);
 					} else {
-						CTR::$alert->add('vous n\'avez pas assez de crédit.', ALERT_STD_FILLFORM);
+						throw new FormException('vous n\'avez pas assez de crédit.');
 					}
 				} else {
-					CTR::$alert->add('le nom contient des caractères non autorisé ou trop de caractères.', ALERT_STD_FILLFORM);
+					throw new FormException('le nom contient des caractères non autorisé ou trop de caractères.');
 				}
 			} else {
-				CTR::$alert->add('Vous ne pouvez pas créer de nouveaux officiers si vous en avez déjà ' . Orbitalbase::MAXCOMMANDERINMESS . ' ou plus.', ALERT_STD_ERROR);
+				throw new ErrorException('Vous ne pouvez pas créer de nouveaux officiers si vous en avez déjà ' . Orbitalbase::MAXCOMMANDERINMESS . ' ou plus.');
 			}
 		} else {
-			CTR::$alert->add('Trop d\'officiers en formation. Déplacez des officiers dans le mess pour libérer de la place.', ALERT_STD_ERROR);
+			throw new ErrorException('Trop d\'officiers en formation. Déplacez des officiers dans le mess pour libérer de la place.');
 		}
 	} else {
-		CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);
+		throw new ErrorException('cette base ne vous appartient pas');
 	}
-	ASM::$obm->changeSession($S_OBM1);
 }

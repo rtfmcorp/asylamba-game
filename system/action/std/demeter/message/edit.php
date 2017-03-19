@@ -1,41 +1,47 @@
 <?php
 
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 
-$content = Utils::getHTTPData('content');
-$id = Utils::getHTTPData('id');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$topicManager = $this->getContainer()->get('demeter.forum_topic_manager');
+$forumMessageManager = $this->getContainer()->get('demeter.forum_message_manager');
+
+$content = $request->request->get('content');
+$id = $request->query->get('id');
 
 if ($content && $id) {
-	$_FMM = ASM::$fmm->getCurrentSession();
-	ASM::$fmm->newSession();
-	ASM::$fmm->load(array('id' => $id));
+	$_FMM = $forumMessageManager->getCurrentSession();
+	$forumMessageManager->newSession();
+	$forumMessageManager->load(array('id' => $id));
 
-	if (ASM::$fmm->size() > 0) {
-		$m = ASM::$fmm->get();
+	if ($forumMessageManager->size() > 0) {
+		$m = $forumMessageManager->get();
 
-		$_TOM = ASM::$tom->getCurrentSession();
-		ASM::$tom->newSession();
-		ASM::$tom->load(array('id' => $m->rTopic));
+		$_TOM = $topicManager->getCurrentSession();
+		$topicManager->newSession();
+		$topicManager->load(array('id' => $m->rTopic));
 
-		$t = ASM::$tom->get();
+		$t = $topicManager->get();
 
-		if (CTR::$data->get('playerId') == $m->rPlayer || (CTR::$data->get('playerInfo')->get('status') > 2 && $t->rForum != 20)) {
-			$m->edit($content);
+		if ($session->get('playerId') == $m->rPlayer || ($session->get('playerInfo')->get('status') > 2 && $t->rForum != 20)) {
+			$forumMessageManager->edit($m, $content);
 			$m->dLastModification = Utils::now();
 
-			CTR::$alert->add('Message édité.', ALERT_STD_SUCCESS);
+			$session->addFlashbag('Message édité.', Flashbag::TYPE_SUCCESS);
 		} else {
-			CTR::$alert->add('Vous ne pouvez pas éditer ce message.', ALERT_STD_FILLFORM);
+			throw new ErrorException('Vous ne pouvez pas éditer ce message.');
 		}
 
-		ASM::$tom->changeSession($_TOM);
+		$topicManager->changeSession($_TOM);
 	} else {
-		CTR::$alert->add('Le message n\'existe pas.', ALERT_STD_FILLFORM);
+		throw new ErrorException('Le message n\'existe pas.');
 	}
 
-	ASM::$fmm->changeSession($_FMM);
+	$forumMessageManager->changeSession($_FMM);
 } else {
-	CTR::$alert->add('Manque d\'information.', ALERT_STD_FILLFORM);
+	throw new FormException('Manque d\'information.');
 }

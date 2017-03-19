@@ -1,37 +1,30 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Game;
 
-$S_COM_MAP_COM = ASM::$com->getCurrentSession();
-ASM::$com->newSession();
-ASM::$com->load(
-	array(
-		'c.rBase' => CTR::$data->get('playerParams')->get('base'),
-		'c.statement' => array(Commander::AFFECTED, Commander::MOVING)
-	),
-	array(
-		'c.line', 'DESC'
+$commanders = $this
+	->getContainer()
+	->get('ares.commander_manager')
+	->getBaseCommanders(
+		$this->getContainer()->get('app.session')->get('playerParams')->get('base'),
+		[Commander::AFFECTED, Commander::MOVING],
+		['c.line' => 'DESC']
 	)
-);
-
+;
 $break = FALSE;
 
 echo '<div id="subnav">';
 	echo '<div class="overflow">';
-		for ($i = 0; $i < ASM::$com->size(); $i++) {
-			$commander = ASM::$com->get($i);
-
+		foreach ($commanders as $commander) {
 			if ($commander->line == 1 && $break == FALSE) {
 				echo '<hr />';
 				$break = TRUE;
 			}
 
-			echo '<a href="#" class="item ' . ($commander->statement == COM_MOVING ? 'striped' : NULL) . ' map-commander" data-id="' . $commander->id . '" data-color="' .CTR::$data->get('playerInfo')->get('color') . '" data-max-jump="' . Game::getMaxTravelDistance(CTR::$data->get('playerBonus')) . '" data-available="' . ($commander->statement == COM_MOVING ? 'false' : 'true') . '" data-name="' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->name . '" data-wedge="' . Format::numberFormat(Commander::COEFFLOOT * $commander->getPev()) . '">';
+			echo '<a href="#" class="item ' . ($commander->statement == Commander::MOVING ? 'striped' : NULL) . ' map-commander" data-id="' . $commander->id . '" data-color="' .$session->get('playerInfo')->get('color') . '" data-max-jump="' . Game::getMaxTravelDistance($session->get('playerBonus')) . '" data-available="' . ($commander->statement == Commander::MOVING ? 'false' : 'true') . '" data-name="' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->name . '" data-wedge="' . Format::numberFormat(Commander::COEFFLOOT * $commander->getPev()) . '">';
 				echo '<span class="picto">';
 					echo '<img src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
 					echo '<span class="number">' . $commander->level . '</span>';
@@ -41,12 +34,12 @@ echo '<div id="subnav">';
 						echo CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->name . '<br />';
 						echo Format::numberFormat($commander->getPev()) . ' pev';
 						echo '<hr />';
-						if ($commander->statement == COM_MOVING) {
+						if ($commander->statement == Commander::MOVING) {
 							switch ($commander->travelType) {
-								case COM_MOVE: echo 'Déplacement'; break;
-								case COM_LOOT: echo 'Pillage'; break;
-								case COM_COLO: echo 'Colonisation'; break;
-								case COM_BACK: echo 'Retour'; break;
+								case Commander::MOVE: echo 'Déplacement'; break;
+								case Commander::LOOT: echo 'Pillage'; break;
+								case Commander::COLO: echo 'Colonisation'; break;
+								case Commander::BACK: echo 'Retour'; break;
 								default: break;
 							}
 						} else {
@@ -66,5 +59,3 @@ echo '<div id="subnav">';
 		}
 	echo '</div>';
 echo '</div>';
-
-ASM::$com->changeSession($S_COM_MAP_COM);

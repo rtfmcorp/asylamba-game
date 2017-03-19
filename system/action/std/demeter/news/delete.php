@@ -1,25 +1,20 @@
 <?php
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Exception\FormException;
+use Asylamba\Classes\Library\Flashbag;
 
-$id 		= Utils::getHTTPData('id');
+$factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
+$request = $this->getContainer()->get('app.request');
+
+$id = $request->query->get('id');
 
 if ($id !== FALSE) {	
-	$S_FNM_1 = ASM::$fnm->getCurrentSession();
-	ASM::$fnm->newSession();
-	ASM::$fnm->load(array('id' => $id));
-
-	if (ASM::$fnm->size() == 1) {
-		ASM::$fnm->deleteById($id);
-
-		CTR::$alert->add('L\'annonce a bien été supprimée.', ALERT_STD_SUCCESS);
+	if (($factionNew = $factionNewsManager->get($id)) !== null) {
+		$this->getContainer('entity_manager')->remove($factionNew);
+		$this->getContainer()->get('app.session')->addFlashbag('L\'annonce a bien été supprimée.', Flashbag::TYPE_SUCCESS);
 	} else {
-		CTR::$alert->add('Cette annonce n\'existe pas.', ALERT_STD_FILLFORM);
+		throw new FormException('Cette annonce n\'existe pas.');
 	}
-
-	ASM::$fnm->changeSession($S_FNM_1);
 } else {
-	CTR::$alert->add('Manque d\'information.', ALERT_STD_FILLFORM);
+	throw new FormException('Manque d\'information.');
 }

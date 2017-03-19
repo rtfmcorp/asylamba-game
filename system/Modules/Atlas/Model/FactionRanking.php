@@ -41,7 +41,7 @@ class FactionRanking {
 
 	public function getId() { return $this->id; }
 
-	public function commonRender($type = 'general') {
+	public function commonRender($playerInfo, $type = 'general') {
 		$r = '';
 
 		switch ($type) {
@@ -60,7 +60,7 @@ class FactionRanking {
 			default: $var = ''; $pos = ''; break;
 		}
 
-		$r .= '<div class="player faction color' . $this->rFaction . ' ' . (CTR::$data->get('playerInfo')->get('color') == $this->rFaction ? 'active' : NULL) . '">';
+		$r .= '<div class="player faction color' . $this->rFaction . ' ' . ($playerInfo->get('color') == $this->rFaction ? 'active' : NULL) . '">';
 			$r .= '<img src="' . MEDIA . 'faction/flag/flag-' . $this->rFaction . '.png" alt="' . $this->rFaction . '" class="picto" />';
 
 			$r .= '<span class="title">' . ColorResource::getInfo($this->rFaction, 'government') . '</span>';

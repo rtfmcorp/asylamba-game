@@ -18,6 +18,10 @@ class CommercialRoute {
 	const COEF_INCOME_1 = 300;
 	const COEF_INCOME_2 = 17;
 
+	const PROPOSED = 0;
+	const ACTIVE = 1;
+	const STANDBY = 2;
+	
 	//ATTRIBUTES
 	public $id = 0;
 	public $rOrbitalBase = 0;
@@ -28,7 +32,7 @@ class CommercialRoute {
 	public $income = 0;
 	public $dProposition = '';
 	public $dCreation = '';
-	public $statement = CRM_PROPOSED;
+	public $statement = self::PROPOSED;
 
 	public $baseName1;
 	public $baseType1;

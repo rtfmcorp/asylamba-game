@@ -11,111 +11,51 @@
 */
 namespace Asylamba\Modules\Demeter\Manager\Election;
 
-use Asylamba\Classes\Worker\Manager;
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Entity\EntityManager;
+
+use Asylamba\Modules\Demeter\Model\Election\Election;
 use Asylamba\Modules\Demeter\Model\Election\Vote;
 
-class VoteManager extends Manager {
-	protected $managerType ='_Vote';
+use Asylamba\Modules\Zeus\Model\Player;
 
-	public function load($where = array(), $order = array(), $limit = array()) {
-		$formatWhere = Utils::arrayToWhere($where, 'v.');
-		$formatOrder = Utils::arrayToOrder($order);
-		$formatLimit = Utils::arrayToLimit($limit);
+class VoteManager {
+	/** @var EntityManager **/
+	protected $entityManager;
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT v.*
-			FROM vote AS v
-			' . $formatWhere .'
-			' . $formatOrder .'
-			' . $formatLimit
-		);
-
-		foreach($where AS $v) {
-			if (is_array($v)) {
-				foreach ($v as $p) {
-					$valuesArray[] = $p;
-				}
-			} else {
-				$valuesArray[] = $v;
-			}
-		}
-
-		if (empty($valuesArray)) {
-			$qr->execute();
-		} else {
-			$qr->execute($valuesArray);
-		}
-
-		$aw = $qr->fetchAll();
-		$qr->closeCursor();
-
-		foreach($aw AS $awVote) {
-			$vote = new Vote();
-
-			$vote->id = $awVote['id'];
-			$vote->rCandidate = $awVote['rCandidate'];
-			$vote->rPlayer = $awVote['rPlayer'];
-			$vote->relection = $awVote['rElection'];
-			$vote->dVotation = $awVote['dVotation'];
-
-			$this->_Add($vote);
-		}
+	/**
+	 * @param EntityManager $entityManager
+	 */
+	public function __construct(EntityManager $entityManager) {
+		$this->entityManager = $entityManager;
+	}
+	
+	/**
+	 * @param Election $election
+	 * @return array
+	 */
+	public function getElectionVotes(Election $election)
+	{
+		return $this->entityManager->getRepository(Vote::class)->getElectionVotes($election->id);
+	}
+	
+	/**
+	 * @param Player $player
+	 * @param Election $election
+	 * @return Vote
+	 */
+	public function getPlayerVote(Player $player, Election $election)
+	{
+		return $this->entityManager->getRepository(Vote::class)->getPlayerVote($player->id, $election->id);
 	}
 
-	public function save() {
-		$db = Database::getInstance();
+	/**
+	 * @param Vote $vote
+	 * @return int
+	 */
+	public function add(Vote $vote) {
+		$this->entityManager->persist($vote);
+		$this->entityManager->flush($vote);
 
-		$votes = $this->_Save();
-
-		foreach ($votes AS $vote) {
-
-			$qr = $db->prepare('UPDATE vote
-				SET
-					rCandidate = ?,
-					rPlayer = ?,
-					dVotation = ?
-				WHERE id = ?');
-			$aw = $qr->execute(array(
-				$vote->rCandidate,
-				$vote->rPlayer,
-				$vote->dVotation,
-				$vote->id
-			));
-		}
-	}
-
-	public function add($newVote) {
-		$db = Database::getInstance();
-
-		$qr = $db->prepare('INSERT INTO vote
-			SET
-				rCandidate = ?,
-				rPlayer = ?,
-				rElection = ?,
-				dVotation = ?');
-
-		$aw = $qr->execute(array(
-			$newVote->rCandidate,
-			$newVote->rPlayer,
-			$newVote->rElection,
-			$newVote->dVotation
-		));
-
-		$newVote->id = $db->lastInsertId();
-
-		$this->_Add($newVote);
-
-		return $newVote->id;
-	}
-
-	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM vote WHERE id = ?');
-		$qr->execute(array($id));
-
-		$this->_Remove($id);
-		return TRUE;
+		return $vote->id;
 	}
 }

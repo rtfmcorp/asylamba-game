@@ -1,15 +1,8 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Demeter\Resource\LawResources;
 use Asylamba\Modules\Demeter\Model\Law\Law;
-
-# require
-	# LAM/Token 		S_LAM_HISTORIC
-
-$S_LAM_LAW = ASM::$lam->getCurrentSession();
-ASM::$lam->changeSession($S_LAM_HISTORIC);
 
 echo '<div class="component">';
 	echo '<div class="head"></div>';
@@ -17,9 +10,7 @@ echo '<div class="component">';
 		echo '<div class="body">';
 			echo '<h4>Historique des votations</h4>';
 
-			for ($i = 0; $i < ASM::$lam->size(); $i++) { 
-				$law = ASM::$lam->get($i);
-
+			foreach ($laws as $law) { 
 				echo '<div class="build-item base-type">';
 					echo '<div class="name">';
 						echo '<img src="' . MEDIA . 'faction/law/common.png" alt="">';
@@ -48,11 +39,9 @@ echo '<div class="component">';
 				echo '</div>';
 			}
 
-			if (ASM::$lam->size() == 0) {
+			if (count($laws) === 0) {
 				echo '<p><em>Aucune loi n\'a été votée pour le moment.</em></p>';
 			}
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-ASM::$lam->changeSession($S_LAM_LAW);

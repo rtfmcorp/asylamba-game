@@ -23,6 +23,7 @@ class API {
 		$this->path = $path;
 		$this->server = $server;
 		$this->key  = $key;
+		$this->security = new Security();
 	}
 
 	private function query($api, $args) {
@@ -33,7 +34,7 @@ class API {
 			$targ .= $k . '-' . $v . '/';
 		}
 
-		$this->query = $this->path . 'api/s-' . $this->server . '/a-' . Security::crypt('a-' . $api . '/' . $targ, $this->key);
+		$this->query = $this->path . 'api/s-' . $this->server . '/a-' . $this->security->crypt('a-' . $api . '/' . $targ, $this->key);
 
 		curl_setopt($ch, CURLOPT_URL, $this->query);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER , TRUE);
@@ -139,4 +140,3 @@ class API {
 		return $this->query('getplayerstatement', array('bindkey' => $bindkey));
 	}
 }
-?>

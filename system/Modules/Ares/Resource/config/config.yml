@@ -13,19 +13,31 @@ parameters:
     ares.loot_limit: 5000
     ares.coeff.loot: 275
     
-    ares.commander.school: 0
-    ares.commander.affected: 1
-    ares.commander.moving: 2
-    ares.commander.dead: 3
-    ares.commander.desert: 4
-    ares.commander.retired: 5
-    ares.commander.on_sale: 6
-    
-    ares.commander.move: 0
-    ares.commander.loot: 1
-    ares.commander.colonize: 2
-    ares.commander.returning: 3
-    
-    
 services:
-    
+    ares.commander_manager:
+        class: Asylamba\Modules\Ares\Manager\CommanderManager
+        arguments:
+            - "@entity_manager"
+            - "@ares.fight_manager"
+            - "@athena.orbital_base_manager"
+            - "@zeus.player_manager"
+            - "@zeus.player_bonus_manager"
+            - "@gaia.place_manager"
+            - "@app.session"
+            - "@ctc"
+            - "%ares.commander.base_level"
+           
+    ares.fight_manager:
+        class: Asylamba\Modules\Ares\Manager\FightManager
+        arguments:
+            - "@ares.commander_manager"
+            
+    ares.little_report_manager:
+        class: Asylamba\Modules\Ares\Manager\LittleReportManager
+        arguments:
+            - "@database"
+            
+    ares.report_manager:
+        class: Asylamba\Modules\Ares\Manager\ReportManager
+        arguments:
+            - "@entity_manager"

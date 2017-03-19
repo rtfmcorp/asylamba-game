@@ -11,131 +11,80 @@
 */
 namespace Asylamba\Modules\Demeter\Manager\Law;
 
-use Asylamba\Classes\Worker\Manager;
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Modules\Demeter\Model\Law\Law;
 
-class LawManager extends Manager {
-	protected $managerType ='_Law';
+class LawManager {
+	/** @var EntityManager **/
+	protected $entityManager;
+	/** @var VoteLawManager **/
+	protected $voteLawManager;
 
-	public function load($where = array(), $order = array(), $limit = array()) {
-		$formatWhere = Utils::arrayToWhere($where, 'l.');
-		$formatOrder = Utils::arrayToOrder($order);
-		$formatLimit = Utils::arrayToLimit($limit);
+	/**
+	 * @param EntityManager $entityManager
+	 * @param VoteLawManager $voteLawManager
+	 */
+	public function __construct(EntityManager $entityManager, VoteLawManager $voteLawManager) {
+		$this->entityManager = $entityManager;
+		$this->voteLawManager = $voteLawManager;
+	}
+	
+	/**
+	 * @param int $id
+	 * @return Law
+	 */
+	public function get($id)
+	{
+		return $this->entityManager->getRepository(Law::class)->get($id);
+	}
+	
+	/**
+	 * @param int $factionId
+	 * @param array $statements
+	 * @return array
+	 */
+	public function getByFactionAndStatements($factionId, $statements = [])
+	{
+		return $this->entityManager->getRepository(Law::class)->getByFactionAndStatements($factionId, $statements);
+	}
+	
+	/**
+	 * @param int $factionId
+	 * @param string $type
+	 * @return bool
+	 */
+	public function lawExists($factionId, $type)
+	{
+		return $this->entityManager->getRepository(Law::class)->lawExists($factionId, $type);
+	}
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT l.*,
-				(SELECT COUNT(v.id) FROM voteLaw AS v WHERE rLaw = l.id AND vote = 1) AS forVote,
-				(SELECT COUNT(v.id) FROM voteLaw AS v WHERE rLaw = l.id AND vote = 0) AS againstVote
-			FROM law AS l
-			' . $formatWhere .'
-			' . $formatOrder .'
-			' . $formatLimit
-		);
+	/**
+	 * @param Law $law
+	 * @return int
+	 */
+	public function add(Law $law) {
+		$this->entityManager->persist($law);
+		$this->entityManager->flush($law);
 
-		foreach($where AS $v) {
-			if (is_array($v)) {
-				foreach ($v as $p) {
-					$valuesArray[] = $p;
-				}
+		return $law->id;
+	}
+
+	/**
+	 * @param Law $law
+	 * @return bool
+	 */
+	public function ballot(Law $law) {
+		$votes = $this->voteLawManager->getLawVotes($law);
+
+		$ballot = 0;
+
+		foreach ($votes as $vote) {
+			if ($vote->vote) {
+				$ballot++;
 			} else {
-				$valuesArray[] = $v;
+				$ballot--;
 			}
 		}
-
-		if (empty($valuesArray)) {
-			$qr->execute();
-		} else {
-			$qr->execute($valuesArray);
-		}
-
-		$aw = $qr->fetchAll();
-		$qr->closeCursor();
-
-		foreach($aw AS $awLaw) {
-			$law = new Law();
-
-			$law->id = $awLaw['id'];
-			$law->rColor = $awLaw['rColor'];
-			$law->type = $awLaw['type'];
-			$law->options = unserialize($awLaw['options']);
-			$law->statement = $awLaw['statement'];
-			$law->dEndVotation = $awLaw['dEndVotation'];
-			$law->dEnd = $awLaw['dEnd'];
-			$law->dCreation = $awLaw['dCreation'];
-
-			$law->forVote = $awLaw['forVote'];
-			$law->againstVote = $awLaw['againstVote'];
-			
-			$this->_Add($law);
-		}
-	}
-
-	public function save() {
-		$db = Database::getInstance();
-
-		$laws = $this->_Save();
-
-		foreach ($laws AS $law) {
-
-			$qr = $db->prepare('UPDATE law
-				SET
-					rColor = ?,
-					type = ?,
-					statement = ?,
-					dEnd = ?,
-					dEndVotation = ?,
-					dCreation = ?
-				WHERE id = ?');
-			$aw = $qr->execute(array(
-				$law->rColor,
-				$law->type,
-				$law->statement,
-				$law->dEnd,
-				$law->dEndVotation,
-				$law->dCreation,
-				$law->id
-			));
-		}
-	}
-
-	public function add($newLaw) {
-		$db = Database::getInstance();
-
-		$qr = $db->prepare('INSERT INTO law
-			SET
-				rColor = ?,
-				type = ?,
-				statement = ?,
-				options = ?,
-				dEnd = ?,
-				dEndVotation = ?,
-				dCreation = ?');
-
-			$aw = $qr->execute(array(
-				$newLaw->rColor,
-				$newLaw->type,
-				$newLaw->statement,
-				$newLaw->options,
-				$newLaw->dEnd,
-				$newLaw->dEndVotation,
-				$newLaw->dCreation
-				));
-
-		$newLaw->id = $db->lastInsertId();
-
-		$this->_Add($newLaw);
-
-		return $newLaw->id;
-	}
-
-	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM law WHERE id = ?');
-		$qr->execute(array($id));
-
-		$this->_Remove($id);
-		return TRUE;
+		return $ballot >= 0;
 	}
 }

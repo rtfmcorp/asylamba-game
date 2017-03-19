@@ -1,38 +1,40 @@
 <?php
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Library\Parser;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
+use Asylamba\Classes\Exception\ErrorException;
 
-$conversation 	= Utils::getHTTPData('conversation');
-$title 			= Utils::getHTTPData('title');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$parser = $this->getContainer()->get('parser');
+$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
 
-$title 			= (new Parser())->parse($title);
+$conversation 	= $request->query->get('conversation');
+$title 			= $request->request->get('title');
+
+$title 			= $parser->parse($title);
 
 if ($conversation !== FALSE) {
-	$S_CVM = ASM::$cvm->getCurrentSession();
-	ASM::$cvm->newSession();
-	ASM::$cvm->load(
+	$S_CVM = $conversationManager->getCurrentSession();
+	$conversationManager->newSession();
+	$conversationManager->load(
 		array(
 			'c.id' => $conversation,
-			'cu.rPlayer' => CTR::$data->get('playerId'),
+			'cu.rPlayer' => $session->get('playerId'),
 			'cu.playerStatement' => ConversationUser::US_ADMIN
 		)
 	);
 
-	if (ASM::$cvm->size() == 1) {
+	if ($conversationManager->size() == 1) {
 		if (strlen($title) < 255) {
-			$conv = ASM::$cvm->get()->title = $title;
+			$conv = $conversationManager->get()->title = $title;
 		} else {
-			CTR::$alert->add('Le titre est trop long.', ALERT_STD_ERROR);
+			throw new ErrorException('Le titre est trop long.');
 		}
 	} else {
-		CTR::$alert->add('La conversation n\'existe pas ou ne vous appartient pas.', ALERT_STD_ERROR);
+		throw new ErrorException('La conversation n\'existe pas ou ne vous appartient pas.');
 	}
 
-	ASM::$cvm->changeSession($S_CVM);
+	$conversationManager->changeSession($S_CVM);
 } else {
-	CTR::$alert->add('Informations manquantes pour ajouter un joueur à la conversation.', ALERT_STD_ERROR);
+	throw new ErrorException('Informations manquantes pour ajouter un joueur à la conversation.');
 }

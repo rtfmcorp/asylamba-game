@@ -1,104 +1,108 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Promethee\Model\Research;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
-use Asylamba\Modules\Promethee\Resource\ResearchResource;
 use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Classes\Worker\API;
-use Asylamba\Classes\Database\Database;
-use Asylamba\Classes\Library\Security;
-use Asylamba\Modules\Gaia\Manager\GalaxyColorManager;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 
 try {
-	$faction = CTR::$data->get('inscription')->get('ally');
+	$session = $this->getContainer()->get('app.session');
+	$playerManager = $this->getContainer()->get('zeus.player_manager');
+	$notificationManager = $this->getContainer()->get('hermes.notification_manager');
+	$researchManager = $this->getContainer()->get('promethee.research_manager');
+	$researchHelper = $this->getContainer()->get('promethee.research_helper');
+	$database = $this->getContainer()->get('database');
+	$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
+	$placeManager = $this->getContainer()->get('gaia.place_manager');
+	$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+	$galaxyColorManager = $this->getContainer()->get('gaia.galaxy_color_manager');
+	$entityManager = $this->getContainer()->get('entity_manager');
+	
+	$faction = $session->get('inscription')->get('ally');
 	# AJOUT DU JOUEUR EN BASE DE DONNEE
-	$pl = new Player();
+	$player = new Player();
 
 	# ajout des variables inchangées
-	$pl->setBind(CTR::$data->get('inscription')->get('bindkey'));
-	$pl->setRColor(CTR::$data->get('inscription')->get('ally'));
-	$pl->setName(trim(CTR::$data->get('inscription')->get('pseudo')));
-	$pl->setAvatar(CTR::$data->get('inscription')->get('avatar'));
+	$player->setBind($session->get('inscription')->get('bindkey'));
+	$player->setRColor($session->get('inscription')->get('ally'));
+	$player->setName(trim($session->get('inscription')->get('pseudo')));
+	$player->setAvatar($session->get('inscription')->get('avatar'));
 
-	if (CTR::$data->exist('rgodfather')) {
-		$pl->rGodfather = CTR::$data->get('rgodfather');
+	$playerManager->saveSessionData($player);
+	
+	if ($session->exist('rgodfather')) {
+		$player->rGodfather = $session->get('rgodfather');
 	}
 
-	$pl->setStatus(1);
-	$pl->uPlayer = Utils::now();
+	$player->setStatus(1);
+	$player->uPlayer = Utils::now();
 
-	$pl->victory = 0;
-	$pl->defeat = 0;
+	$player->victory = 0;
+	$player->defeat = 0;
 
-	$pl->stepTutorial = 1;
-	$pl->stepDone = TRUE;
+	$player->stepTutorial = 1;
+	$player->stepDone = TRUE;
 
-	$pl->iUniversity = 1000;
-	$pl->partNaturalSciences = 25;
-	$pl->partLifeSciences = 25;
-	$pl->partSocialPoliticalSciences = 25;
-	$pl->partInformaticEngineering = 25;
+	$player->iUniversity = 1000;
+	$player->partNaturalSciences = 25;
+	$player->partLifeSciences = 25;
+	$player->partSocialPoliticalSciences = 25;
+	$player->partInformaticEngineering = 25;
 	
-	$pl->setDInscription(Utils::now());
-	$pl->setDLastConnection(Utils::now());
-	$pl->setDLastActivity(Utils::now());
+	$player->setDInscription(Utils::now());
+	$player->setDLastConnection(Utils::now());
+	$player->setDLastActivity(Utils::now());
 
-	$pl->setPremium(0);
-	$pl->setStatement(1);
+	$player->setPremium(0);
+	$player->setStatement(1);
 
 	# ajout des variables dépendantes
-	if (CTR::$data->get('high-mode')) {
-		$pl->credit = 10000000;
-		$pl->setExperience(18000);
-		$pl->setLevel(5);
+	if ($session->get('high-mode')) {
+		$player->credit = 10000000;
+		$player->setExperience(18000);
+		$player->setLevel(5);
 	} else {
-		$pl->credit = 5000;
-		$pl->setExperience(630);
-		$pl->setLevel(1);
+		$player->credit = 5000;
+		$player->setExperience(630);
+		$player->setLevel(1);
 	}
+	
+	$playerManager->add($player);
 
-	ASM::$pam->add($pl);
-
-	if (CTR::$data->exist('rgodfather')) {
+	if ($session->exist('rgodfather')) {
 		# send a message to the godfather
 		$n = new Notification();
-		$n->setRPlayer($pl->rGodfather);
+		$n->setRPlayer($player->rGodfather);
 		$n->setTitle('Votre filleul s\'est inscrit');
 		$n->addBeg()->addTxt('Un de vos amis a créé un compte.')->addSep();
 		$n->addTxt('Vous pouvez le contacter, son nom de joueur est ');
-		$n->addLnk('embassy/player-' . $pl->getId(), '"' . $pl->name . '"')->addTxt('.');
+		$n->addLnk('embassy/player-' . $player->getId(), '"' . $player->name . '"')->addTxt('.');
 		$n->addBrk()->addTxt('Vous venez de gagner 1000 crédits. Vous en gagnerez 1 million de plus lorsqu\'il atteindra le niveau 3.');
 		$n->addEnd();
 
-		$S_NTM1 = ASM::$ntm->getCurrentSession();
-		ASM::$ntm->newSession();
-		ASM::$ntm->add($n);
-		ASM::$ntm->changeSession($S_NTM1);
+		$S_NTM1 = $notificationManager->getCurrentSession();
+		$notificationManager->newSession();
+		$notificationManager->add($n);
+		$notificationManager->changeSession($S_NTM1);
 
 		# add 1000 credits to the godfather
-		$S_PAM1 = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession();
-		ASM::$pam->load(array('id' => $pl->rGodfather));
-		if (ASM::$pam->size() == 1) {
-			ASM::$pam->get()->increaseCredit(1000);
-		} 
-		ASM::$pam->changeSession($S_PAM1);
+		if (($godFather = $playerManager->get($player->rGodFather))) {
+			$playerManager->increaseCredit($godFather, 1000);
+		}
 
 		# remove godFather from session
-		CTR::$data->remove('rgodfather');
+		$session->remove('rgodfather');
 	}
 
 	# INITIALISATION DES RECHERCHES
 		# rendre aléatoire
 	$rs = new Research();
-	$rs->rPlayer = $pl->getId();
+	$rs->rPlayer = $player->getId();
 
-	if (CTR::$data->get('high-mode')) {
+	if ($session->get('high-mode')) {
 		$rs->mathLevel = 15;
 		$rs->physLevel = 15;
 		$rs->chemLevel = 15;
@@ -116,18 +120,17 @@ try {
 	$rs->socialTech = Research::ECONO;
 	$rs->informaticTech = Research::NETWORK;
 
-	$rs->naturalToPay = ResearchResource::getInfo($rs->naturalTech, 'level', 1, 'price');
-	$rs->lifeToPay = ResearchResource::getInfo($rs->lifeTech, 'level', 1, 'price');
-	$rs->socialToPay = ResearchResource::getInfo($rs->socialTech, 'level', 1, 'price');
-	$rs->informaticToPay = ResearchResource::getInfo($rs->informaticTech, 'level', 1, 'price');
-	ASM::$rsm->add($rs);
+	$rs->naturalToPay = $researchHelper->getInfo($rs->naturalTech, 'level', 1, 'price');
+	$rs->lifeToPay = $researchHelper->getInfo($rs->lifeTech, 'level', 1, 'price');
+	$rs->socialToPay = $researchHelper->getInfo($rs->socialTech, 'level', 1, 'price');
+	$rs->informaticToPay = $researchHelper->getInfo($rs->informaticTech, 'level', 1, 'price');
+	$researchManager->add($rs);
 
 	# CREATION DE LA BASE ORBITALE
 	$ob = new OrbitalBase();
 
 	# choix de la place
-	$db = Database::getInstance();
-	$qr = $db->prepare('SELECT * FROM place AS p
+	$qr = $database->prepare('SELECT * FROM place AS p
 		INNER JOIN system AS sy ON p.rSystem = sy.id
 			INNER JOIN sector AS se ON sy.rSector = se.id
 		WHERE p.typeOfPlace = 1
@@ -136,18 +139,18 @@ try {
 		ORDER BY p.population ASC
 		LIMIT 0, 30'
 	);
-	$qr->execute(array(CTR::$data->get('inscription')->get('sector')));
+	$qr->execute(array($session->get('inscription')->get('sector')));
 	$aw = $qr->fetchAll();
 
-	$place = $aw[rand(0, (count($aw) - 1))][0];
+	$placeId = $aw[rand(0, (count($aw) - 1))][0];
 
-	$ob->setRPlace($place);
+	$ob->setRPlace($placeId);
 
-	$ob->setRPlayer($pl->getId());
-	$ob->setName(CTR::$data->get('inscription')->get('base'));
-
+	$ob->setRPlayer($player->getId());
+	$ob->setName($session->get('inscription')->get('base'));
+	
 	# création des premiers bâtiments
-	if (CTR::$data->get('high-mode')) {
+	if ($session->get('high-mode')) {
 		# batiments haut-level
 		$ob->setLevelGenerator(35);
 		$ob->setLevelRefinery(35);
@@ -162,18 +165,18 @@ try {
 		$ob->setResourcesStorage(3000000);
 
 		# remplir le dock
-		$ob->addShipToDock(1, 50);
-		$ob->addShipToDock(2, 50);
-		$ob->addShipToDock(3, 10);
-		$ob->addShipToDock(4, 10);
-		$ob->addShipToDock(5, 5);
-		$ob->addShipToDock(6, 5);
-		$ob->addShipToDock(7, 2);
-		$ob->addShipToDock(8, 2);
-		$ob->addShipToDock(9, 1);
-		$ob->addShipToDock(10, 1);
-		$ob->addShipToDock(11, 0);
-		$ob->addShipToDock(12, 0);
+		$orbitalBaseManager->addShipToDock($ob, 1, 50);
+		$orbitalBaseManager->addShipToDock($ob, 2, 50);
+		$orbitalBaseManager->addShipToDock($ob, 3, 10);
+		$orbitalBaseManager->addShipToDock($ob, 4, 10);
+		$orbitalBaseManager->addShipToDock($ob, 5, 5);
+		$orbitalBaseManager->addShipToDock($ob, 6, 5);
+		$orbitalBaseManager->addShipToDock($ob, 7, 2);
+		$orbitalBaseManager->addShipToDock($ob, 8, 2);
+		$orbitalBaseManager->addShipToDock($ob, 9, 1);
+		$orbitalBaseManager->addShipToDock($ob, 10, 1);
+		$orbitalBaseManager->addShipToDock($ob, 11, 0);
+		$orbitalBaseManager->addShipToDock($ob, 12, 0);
 	} else {
 		$ob->setLevelGenerator(1);
 		$ob->setLevelRefinery(1);
@@ -188,7 +191,7 @@ try {
 		$ob->setResourcesStorage(1000);
 	}
 	
-	$ob->updatePoints();
+	$orbitalBaseManager->updatePoints($ob);
 
 	# initialisation des investissement
 	$ob->setISchool(500);
@@ -197,101 +200,92 @@ try {
 	# ajout de la base
 	$ob->uOrbitalBase = Utils::now();
 	$ob->setDCreation(Utils::now());
-	ASM::$obm->add($ob);
+	$orbitalBaseManager->add($ob);
 
 	# ajout des techs haut-level
-	if (CTR::$data->get('high-mode')) {
-		Technology::addTech($pl->id, Technology::COM_PLAT_UNBLOCK, 1);
-		Technology::addTech($pl->id, Technology::DOCK2_UNBLOCK, 1);
-		Technology::addTech($pl->id, Technology::DOCK3_UNBLOCK, 1);
-		Technology::addTech($pl->id, Technology::RECYCLING_UNBLOCK, 1);
-		Technology::addTech($pl->id, Technology::SPATIOPORT_UNBLOCK, 1);
+	if ($session->get('high-mode')) {
+		$technologyManager = $this->getContainer()->get('promethee.technology_manager');
+		$technologyManager->addTech($player->id, Technology::COM_PLAT_UNBLOCK, 1);
+		$technologyManager->addTech($player->id, Technology::DOCK2_UNBLOCK, 1);
+		$technologyManager->addTech($player->id, Technology::DOCK3_UNBLOCK, 1);
+		$technologyManager->addTech($player->id, Technology::RECYCLING_UNBLOCK, 1);
+		$technologyManager->addTech($player->id, Technology::SPATIOPORT_UNBLOCK, 1);
 
-		Technology::addTech($pl->id, Technology::SHIP0_UNBLOCK, 1);
-		Technology::addTech($pl->id, Technology::SHIP1_UNBLOCK, 1);
-		Technology::addTech($pl->id, Technology::SHIP2_UNBLOCK, 1);
-		Technology::addTech($pl->id, Technology::SHIP3_UNBLOCK, 1);
-		Technology::addTech($pl->id, Technology::SHIP4_UNBLOCK, 1);
-		Technology::addTech($pl->id, Technology::SHIP5_UNBLOCK, 1);
-		Technology::addTech($pl->id, Technology::SHIP6_UNBLOCK, 1);
-		Technology::addTech($pl->id, Technology::SHIP7_UNBLOCK, 1);
-		Technology::addTech($pl->id, Technology::SHIP8_UNBLOCK, 1);
-		Technology::addTech($pl->id, Technology::SHIP9_UNBLOCK, 1);
+		$technologyManager->addTech($player->id, Technology::SHIP0_UNBLOCK, 1);
+		$technologyManager->addTech($player->id, Technology::SHIP1_UNBLOCK, 1);
+		$technologyManager->addTech($player->id, Technology::SHIP2_UNBLOCK, 1);
+		$technologyManager->addTech($player->id, Technology::SHIP3_UNBLOCK, 1);
+		$technologyManager->addTech($player->id, Technology::SHIP4_UNBLOCK, 1);
+		$technologyManager->addTech($player->id, Technology::SHIP5_UNBLOCK, 1);
+		$technologyManager->addTech($player->id, Technology::SHIP6_UNBLOCK, 1);
+		$technologyManager->addTech($player->id, Technology::SHIP7_UNBLOCK, 1);
+		$technologyManager->addTech($player->id, Technology::SHIP8_UNBLOCK, 1);
+		$technologyManager->addTech($player->id, Technology::SHIP9_UNBLOCK, 1);
 
-		Technology::addTech($pl->id, Technology::COLONIZATION, 1);
-		Technology::addTech($pl->id, Technology::CONQUEST, 1);
-		Technology::addTech($pl->id, Technology::BASE_QUANTITY, 4);
+		$technologyManager->addTech($player->id, Technology::COLONIZATION, 1);
+		$technologyManager->addTech($player->id, Technology::CONQUEST, 1);
+		$technologyManager->addTech($player->id, Technology::BASE_QUANTITY, 4);
 	}
 
 	# modification de la place
-	ASM::$plm->load(array('id' => $place));
-	ASM::$plm->get()->setRPlayer($pl->getId());
-	ASM::$plm->get()->population = 50;
-	ASM::$plm->get()->coefResources = 60;
-	ASM::$plm->get()->coefHistory = 20;
+	$place = $placeManager->get($placeId);
+	$place->setRPlayer($player->getId());
+	$place->population = 50;
+	$place->coefResources = 60;
+	$place->coefHistory = 20;
+	$entityManager->flush($place);
 
 	# confirmation au portail
 	if (APIMODE) {
 		$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
-		$api->confirmInscription(CTR::$data->get('inscription')->get('bindkey'), APP_ID);
+		$api->confirmInscription($session->get('inscription')->get('bindkey'), APP_ID);
 	}
 
 	# enregistrement DA
 	if (DATA_ANALYSIS) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO 
+		$qr = $database->prepare('INSERT INTO 
 			DA_Player(id, color, dInscription)
 			VALUES(?, ?, ?)'
 		);
-		$qr->execute([$pl->getId(), $pl->rColor, Utils::now()]);
+		$qr->execute([$player->getId(), $player->rColor, Utils::now()]);
 	}
 
 	# clear les sessions
-	CTR::$data->remove('inscription');
-	CTR::$data->remove('prebindkey');
+	$session->remove('inscription');
+	$session->remove('prebindkey');
 
-	GalaxyColorManager::apply();
+	$galaxyColorManager->apply();
 
 	# ajout aux conversation de faction et techniques
 	$readingDate = date('Y-m-d H:i:s', (strtotime(Utils::now()) - 20));
 	
-	$S_PAM = ASM::$pam->getCurrentSession();
-	ASM::$pam->newSession(FALSE);
-	ASM::$pam->load(
-		['statement' => PAM_DEAD, 'rColor' => $pl->rColor],
-		['id', 'ASC'],
-		[0, 1]
-	);
-
-	if (ASM::$pam->size() == 1) {
-		$S_CVM = ASM::$cvm->getCurrentSession();
-		ASM::$cvm->newSession();
-		ASM::$cvm->load([
-				'cu.rPlayer' => [ID_JEANMI, ASM::$pam->get()->id]
+	if (($factionAccount = $playerManager->getFactionAccount($player->rColor)) !== null) {
+		$S_CVM = $conversationManager->getCurrentSession();
+		$conversationManager->newSession();
+		$conversationManager->load([
+				'cu.rPlayer' => [ID_JEANMI, $factionAccount->id]
 			], [], [0, 2]
 		);
 
-		for ($i = 0; $i < ASM::$cvm->size(); $i++) { 
+		for ($i = 0; $i < $conversationManager->size(); $i++) { 
 			$user = new ConversationUser();
-			$user->rConversation = ASM::$cvm->get($i)->id;
-			$user->rPlayer = $pl->getId();
+			$user->rConversation = $conversationManager->get($i)->id;
+			$user->rPlayer = $player->getId();
 			$user->convPlayerStatement = ConversationUser::US_STANDARD;
 			$user->convStatement = ConversationUser::CS_ARCHIVED;
 			$user->dLastView = $readingDate;
 
-			ASM::$cum->add($user);
+			$this->getContainer()->get('hermes.conversation_user_manager')->add($user);
 		}
 		
-		ASM::$cvm->changeSession($S_CVM);
+		$conversationManager->changeSession($S_CVM);
 	}
-
-	ASM::$pam->changeSession($S_PAM);
-
+	$security = $this->getContainer()->get('security');
 	# redirection vers connection
-	CTR::redirect('connection/bindkey-' . Security::crypt(Security::buildBindkey($pl->getBind()), KEY_SERVER) . '/mode-splash');
+	$this->getContainer()->get('app.response')->redirect('connection/bindkey-' . $security->crypt($security->buildBindkey($player->getBind()), KEY_SERVER) . '/mode-splash');
 } catch (Exception $e) {
 	# tentative de réparation de l'erreur
-
-	CTR::$alert->add('erreur' . $e->getMessage());
-	CTR::redirect('inscription/step-3');
+	$this->getContainer()->get('app.response')->redirect('inscription/step-3');
+	// Transmit the exception to the error handler
+	throw $e;
 }

@@ -7,11 +7,12 @@
 # require
 	# _T PRM 		PLAYER_RANKING_FRONT
 
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-ASM::$prm->changeSession($PLAYER_RANKING_FRONT);
-$p = ASM::$prm->get(0);
+$playerRankingManager = $this->getContainer()->get('atlas.player_ranking_manager');
+
+$playerRankingManager->changeSession($PLAYER_RANKING_FRONT);
+$p = $playerRankingManager->get(0);
 $status = ColorResource::getInfo($p->color, 'status');
 
 # display

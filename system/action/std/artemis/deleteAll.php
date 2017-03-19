@@ -1,21 +1,23 @@
 <?php
 # delete all notifications
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Flashbag;
 
-$S_SRM1 = ASM::$srm->getCurrentSession();
-ASM::$srm->newSession(ASM_UMODE);
-ASM::$srm->load(array('rPlayer' => CTR::$data->get('playerId')));
+$session = $this->getContainer()->get('app.session');
+$spyReportManager = $this->getContainer()->get('artemis.spy_report_manager');
 
-$nbr = ASM::$srm->deleteByRPlayer(CTR::$data->get('playerId'));
+$S_SRM1 = $spyReportManager->getCurrentSession();
+$spyReportManager->newSession(ASM_UMODE);
+$spyReportManager->load(array('rPlayer' => $session->get('playerId')));
+
+$nbr = $spyReportManager->deleteByRPlayer($session->get('playerId'));
 
 if ($nbr > 1) {
-	CTR::$alert->add($nbr . ' rapports ont été supprimés.', ALERT_STD_SUCCESS);
+	$session->addFlashbag($nbr . ' rapports ont été supprimés.', Flashbag::TYPE_SUCCESS);
 } else if ($nbr == 1) {
-	CTR::$alert->add('Un rapport a été supprimé.', ALERT_STD_SUCCESS);
+	$session->addFlashbag('Un rapport a été supprimé.', Flashbag::TYPE_SUCCESS);
 } else {
-	CTR::$alert->add('Tous vos rapports ont déjà été supprimés.', ALERT_STD_SUCCESS);
+	$session->addFlashbag('Tous vos rapports ont déjà été supprimés.', Flashbag::TYPE_SUCCESS);
 }
 
-ASM::$srm->changeSession($S_SRM1);
+$spyReportManager->changeSession($S_SRM1);

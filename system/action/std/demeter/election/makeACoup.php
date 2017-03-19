@@ -8,97 +8,101 @@
 #ministerchoice
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Demeter\Model\Election\Election;
 use Asylamba\Modules\Demeter\Model\Election\Candidate;
 use Asylamba\Modules\Demeter\Model\Forum\ForumTopic;
 use Asylamba\Modules\Demeter\Model\Election\Vote;
+use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Classes\Library\Flashbag;
 
-$program = Utils::getHTTPData('program');
-$chiefChoice = Utils::getHTTPData('chiefchoice');
-$treasurerChoice = Utils::getHTTPData('treasurerchoice');
-$warlordChoice = Utils::getHTTPData('warlordchoice');
-$ministerChoice = Utils::getHTTPData('ministerchoice');
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$colorManager = $this->getContainer()->get('demeter.color_manager');
+$notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$electionManager = $this->getContainer()->get('demeter.election_manager');
+$candidateManager = $this->getContainer()->get('demeter.candidate_manager');
+$topicManager = $this->getContainer()->get('demeter.forum_topic_manager');
+$voteManager = $this->getContainer()->get('demeter.vote_manager');
+
+$program = $request->request->get('program');
+$chiefChoice = $request->request->get('chiefchoice');
+$treasurerChoice = $request->request->get('treasurerchoice');
+$warlordChoice = $request->request->get('warlordchoice');
+$ministerChoice = $request->request->get('ministerchoice');
 
 if ($program !== FALSE) {
-	if (CTR::$data->get('playerInfo')->get('status') > PAM_STANDARD && CTR::$data->get('playerInfo')->get('status') < PAM_CHIEF) {
-		$_CLM = ASM::$clm->getCurrentSession();
-		ASM::$clm->newSession();
-		ASM::$clm->load(array('id' => CTR::$data->get('playerInfo')->get('color')));
+	if ($session->get('playerInfo')->get('status') > Player::STANDARD && $session->get('playerInfo')->get('status') < Player::CHIEF) {
+		$faction = $colorManager->get($session->get('playerInfo')->get('color'));
 
-		if(ASM::$clm->get()->electionStatement == Color::MANDATE) {
-			if (ASM::$clm->get()->regime == COLOR::ROYALISTIC) {
+		if($faction->electionStatement == Color::MANDATE) {
+			if ($faction->regime == Color::ROYALISTIC) {
 
 				$election = new Election();
-				$election->rColor = ASM::$clm->get()->id;
+				$election->rColor = $faction->id;
+				$election->dElection = new \DateTime('+' . Color::PUTSCHTIME . ' second');
 
-				$date = new \DateTime(Utils::now());
-				$date->modify('+' . COLOR::PUTSCHTIME . ' second');
-				$election->dElection = $date->format('Y-m-d H:i:s');
-
-				ASM::$elm->add($election);
+				$electionManager->add($election);
 
 				$candidate = new Candidate();
 				$candidate->rElection = $election->id;
-				$candidate->rPlayer = CTR::$data->get('playerId');
+				$candidate->rPlayer = $session->get('playerId');
 				$candidate->chiefChoice = $chiefChoice;
 				$candidate->treasurerChoice = $treasurerChoice;
 				$candidate->warlordChoice = $warlordChoice;
 				$candidate->ministerChoice = $ministerChoice;
 				$candidate->dPresentation = Utils::now();
 				$candidate->program = $program; 
-				ASM::$cam->add($candidate);
+				$candidateManager->add($candidate);
 
 				$topic = new ForumTopic();
-				$topic->title = 'Candidat ' . CTR::$data->get('playerInfo')->get('name');
+				$topic->title = 'Candidat ' . $session->get('playerInfo')->get('name');
 				$topic->rForum = 30;
 				$topic->rPlayer = $candidate->rPlayer;
-				$topic->rColor = CTR::$data->get('playerInfo')->get('color');
+				$topic->rColor = $session->get('playerInfo')->get('color');
 				$topic->dCreation = Utils::now();
 				$topic->dLastMessage = Utils::now();
-				ASM::$tom->add($topic);
+				$topicManager->add($topic);
 
-				ASM::$clm->get()->electionStatement = COLOR::ELECTION;
-
-				ASM::$clm->get()->dLastElection = Utils::now();
+				$faction->electionStatement = Color::ELECTION;
+				$faction->dLastElection = Utils::now();
 
 				$vote = new Vote();
-				$vote->rPlayer = CTR::$data->get('playerId');
-				$vote->rCandidate = CTR::$data->get('playerId');
+				$vote->rPlayer = $session->get('playerId');
+				$vote->rCandidate = $session->get('playerId');
 				$vote->rElection = $election->id;
 				$vote->dVotation = Utils::now();
-				ASM::$vom->add($vote);
+				$voteManager->add($vote);
 
-				$_PAM123 = ASM::$pam->getCurrentsession();
-				ASM::$pam->newSession(FALSE);
-				ASM::$pam->load(['rColor' => ASM::$clm->get()->id, 'statement' => PAM_ACTIVE]);
+				$factionPlayers = $playerManager->getFactionPlayers($colorManager->get()->id);
 
-				for ($i = 0; $i < ASM::$pam->size(); $i++) {
+				foreach ($factionPlayers as $factionPlayer) {
+					if ($factionPlayer->getStatement() !== Player::ACTIVE) {
+						continue;
+					}
 					$notif = new Notification();
-					$notif->setRPlayer(ASM::$pam->get($i)->id);
+					$notif->setRPlayer($factionPlayer->id);
 					$notif->setTitle('Coup d\'Etat.');
 					$notif->addBeg()
 						->addTxt('Un membre de votre Faction soulève une partie du peuple et tente un coup d\'état contre le gouvernement.')
 						->addSep()
 						->addLnk('faction/view-election', 'prendre parti sur le coup d\'état.')
 						->addEnd();
-					ASM::$ntm->add($notif);
+					$notificationManager->add($notif);
 				}
-				ASM::$pam->changeSession($_PAM123);
-
-				CTR::$alert->add('Coup d\'état lancé.', ALERT_STD_SUCCESS);
+				$session->addFlashbag('Coup d\'état lancé.', Flashbag::TYPE_SUCCESS);
 			} else {
-				CTR::$alert->add('Vous vivez dans une faction démocratique.', ALERT_STD_ERROR);
+				throw new ErrorException('Vous vivez dans une faction démocratique.');
 			}
 		} else {
-			CTR::$alert->add('Un coup d\'état est défà en cours.', ALERT_STD_ERROR);
+			throw new ErrorException('Un coup d\'état est défà en cours.');
 		}
-
-		ASM::$clm->changeSession($_CLM);
 	} else {
-		CTR::$alert->add('Vous ne pouvez pas vous présenter, vous ne faite pas partie de l\'élite ou vous êtes déjà le hef de la faction.', ALERT_STD_ERROR);
+		throw new ErrorException('Vous ne pouvez pas vous présenter, vous ne faite pas partie de l\'élite ou vous êtes déjà le hef de la faction.');
 	}
 } else {
-	CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
+	throw new ErrorException('Informations manquantes.');
 }

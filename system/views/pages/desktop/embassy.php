@@ -1,7 +1,13 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Classes\Exception\ErrorException;
+
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$colorManager = $this->getContainer()->get('demeter.color_manager');
 
 # background paralax
 echo '<div id="background-paralax" class="embassy"></div>';
@@ -14,74 +20,40 @@ include 'defaultElement/movers.php';
 echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
 
-	if (CTR::$get->exist('player')) {
-		$player = CTR::$get->exist('player')
-			? CTR::$get->get('player')
-			: CTR::$data->get('playerId');
-		$ishim = CTR::$get->exist('player') || CTR::$get->get('player') !== CTR::$data->get('playerId')
+	if ($request->query->has('player')) {
+		$player = $request->query->has('player')
+			? $request->query->get('player')
+			: $session->get('playerId');
+		$ishim = $request->query->has('player') || $request->query->get('player') !== $session->get('playerId')
 			? FALSE
 			: TRUE;
 
-		# loading des objets
-		$S_PAM1 = ASM::$pam->getCurrentSession();
-		ASM::$pam->newSession();
-		ASM::$pam->load(array(
-			'id' => $player,
-			'statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY, PAM_BANNED)
-		));
+		$playerBases = $orbitalBaseManager->getPlayerBases($player);
 
-		$S_OBM1 = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession();
-		ASM::$obm->load(array('rPlayer' => $player), array('dCreation', 'ASC'));
-
-		if (ASM::$pam->size() == 1) {
-			$player_selected = ASM::$pam->get(0);
+		if (($player_selected = $playerManager->get($player)) && in_array($player_selected->getStatement(), [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY, Player::BANNED])) {
 			$player_ishim = $ishim;
-			$ob_selected = ASM::$obm->getAll();
+			$ob_selected = $playerBases;
 			include COMPONENT . 'embassy/diary/search.php';
 
 			# diaryBases component
-			$ob_diaryBases = ASM::$obm->getAll();
+			$ob_diaryBases = $playerBases;
 			include COMPONENT . 'embassy/diary/bases.php';
 		} else {
-			CTR::$alert->add('Le joueur a supprimé son compte ou a été défait.');
-			CTR::redirect('profil');
+			// @TODO
+			throw new ErrorException('Le joueur a supprimé son compte ou a été défait.');
+			//$response->redirect('profil');
 		}
 
 		include COMPONENT . 'default.php';
 
-		ASM::$obm->changeSession($S_OBM1);
-		ASM::$pam->changeSession($S_PAM1);
 	} else {
-		$color = CTR::$get->exist('faction')
-			? CTR::$get->get('faction')
-			: CTR::$data->get('playerInfo')->get('color');
+		$color = $request->query->has('faction')
+			? $request->query->get('faction')
+			: $session->get('playerInfo')->get('color');
 
-		$S_COL_1 = ASM::$clm->getCurrentSession();
-		ASM::$clm->newSession();
-		ASM::$clm->load(array('isInGame' => TRUE));
-
-		$factions = [];
-		for ($i = 0; $i < ASM::$clm->size(); $i++) { 
-			$factions[] = ASM::$clm->get($i)->id;
-		}
-
-		ASM::$clm->changeSession($S_COL_1);
-
-		if (in_array($color, $factions)) {
-			# load data
-			$S_COL_1 = ASM::$clm->getCurrentSession();
-			ASM::$clm->newSession();
-			ASM::$clm->load(array('id' => $color));
-			$faction = ASM::$clm->get(0);
-
-			$S_PAM_1 = ASM::$pam->getCurrentSession();
-			$FACTION_GOV_TOKEN = ASM::$pam->newSession(FALSE);
-			ASM::$pam->load(
-				array('rColor' => $faction->id, 'status' => array(6, 5, 4, 3)),
-				array('status', 'DESC')
-			);
-
+		if (($faction = $colorManager->get($color)) !== null && $faction->isInGame === true) {
+			$governmentMembers = $playerManager->getGovernmentMembers($faction->id);
+			$factions = $colorManager->getInGameFactions();
 			# include component
 			include COMPONENT . 'embassy/faction/nav.php';
 			
@@ -91,12 +63,9 @@ echo '<div id="content">';
 
 			$eraseColor = $faction->id;
 			include COMPONENT . 'faction/data/diplomacy/main.php';
-
-			# close session
-			ASM::$pam->changeSession($S_PAM_1);
-			ASM::$clm->changeSession($S_COL_1);
 		} else {
-			CTR::redirect('embassy');
+			die('nok');
+			$this->getContainer()->get('app.response')->redirect('embassy');
 		}
 	}
 echo '</div>';

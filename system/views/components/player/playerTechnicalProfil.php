@@ -9,6 +9,8 @@
 
 use Asylamba\Classes\Library\Format;
 
+$playerBaseLevel = $this->getContainer()->getParameter('zeus.player.base_level');
+
 echo '<div class="component">';
 	echo '<div class="head">';
 	echo '</div>';
@@ -24,8 +26,8 @@ echo '<div class="component">';
 			echo '</div>';
 
 			$exp = $player_playerTechnicalProfil->getExperience();
-			$nlv = PAM_BASELVLPLAYER * (pow(2, ($player_playerTechnicalProfil->getLevel() - 1)));
-			$clv = PAM_BASELVLPLAYER * (pow(2, ($player_playerTechnicalProfil->getLevel() - 2)));
+			$nlv = $playerBaseLevel * (pow(2, ($player_playerTechnicalProfil->getLevel() - 1)));
+			$clv = $playerBaseLevel * (pow(2, ($player_playerTechnicalProfil->getLevel() - 2)));
 			$prc = ((($exp - $clv) * 200) / $nlv);
 
 			echo '<div class="number-box">';

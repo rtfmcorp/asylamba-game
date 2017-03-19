@@ -1,10 +1,10 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
+$sectorManager = $this->getContainer()->get('gaia.sector_manager');
 
-$S_SEM_T = ASM::$sem->getCurrentSession();
-ASM::$sem->newSession();
-ASM::$sem->load(array('rColor' => $faction->id));
+$S_SEM_T = $sectorManager->getCurrentSession();
+$sectorManager->newSession();
+$sectorManager->load(array('rColor' => $faction->id));
 
 echo '<div class="component profil">';
 	echo '<div class="head skin-2">';
@@ -15,8 +15,8 @@ echo '<div class="component profil">';
 			echo '<h4>Impôts courants</h4>';
 
 			echo '<ul class="list-type-1">';
-				for ($i = 0; $i < ASM::$sem->size(); $i++) {
-					$sector = ASM::$sem->get($i);
+				for ($i = 0; $i < $sectorManager->size(); $i++) {
+					$sector = $sectorManager->get($i);
 
 					echo '<li>';
 						echo '<a href="#" class="picto color' . $sector->rColor . '">' . $sector->id . '</a>';
@@ -29,4 +29,4 @@ echo '<div class="component profil">';
 	echo '</div>';
 echo '</div>';
 
-ASM::$sem->changeSession($S_SEM_T);
+$sectorManager->changeSession($S_SEM_T);

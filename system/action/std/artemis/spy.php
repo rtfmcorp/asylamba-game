@@ -5,43 +5,49 @@
 # int price			credit price for spying
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Artemis\Model\SpyReport;
 use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Modules\Hermes\Model\Notification;
-use Asylamba\Modules\Zeus\Helper\TutorialHelper;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
 
-$rPlace = Utils::getHTTPData('rplace');
-$price 	= Utils::getHTTPData('price');
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
+$session = $this->getContainer()->get('app.session');
+$placeManager = $this->getContainer()->get('gaia.place_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
+$spyReportManager = $this->getContainer()->get('artemis.spy_report_manager');
+$notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
+
+$rPlace = $request->query->get('rplace');
+$price 	= $request->query->has('price') ? $request->query->get('price') : $request->request->get('price');
 
 if ($rPlace !== FALSE AND $price !== FALSE) {
 	$price = intval($price);
 	$price = $price > 0 ? $price : 0;
 	$price = $price < 1000000 ? $price : 0;
 	
-	if (CTR::$data->get('playerInfo')->get('credit') >= $price && $price > 0) {
+	if ($session->get('playerInfo')->get('credit') >= $price && $price > 0) {
 		# place
-		$S_PLM1 = ASM::$plm->getCurrentSession();
-		ASM::$plm->newSession();
-		ASM::$plm->load(array('id' => $rPlace));
-		$place = ASM::$plm->get();
+		$place = $placeManager->get($rPlace);
 
-		if ($place->typeOfPlace == Place::TERRESTRIAL && $place->playerColor != CTR::$data->get('playerInfo')->get('color')) {
+		if ($place->typeOfPlace == Place::TERRESTRIAL && $place->playerColor != $session->get('playerInfo')->get('color')) {
 			# débit des crédits au joueur
-			$S_PAM1 = ASM::$pam->getCurrentSession();
-			ASM::$pam->newSession();
-			ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-			ASM::$pam->get()->decreaseCredit($price);
-			ASM::$pam->changeSession($S_PAM1);
+			$playerManager->decreaseCredit($playerManager->get($session->get('playerId')), $price);
 
 			# espionnage
 			$sr = new SpyReport();
-			$sr->rPlayer = CTR::$data->get('playerId');
+			$sr->rPlayer = $session->get('playerId');
 			$sr->rPlace = $rPlace;
 			$sr->price = $price;
 			$sr->placeColor = $place->playerColor;
@@ -65,7 +71,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 					$sr->enemyLevel = 1;
 
 					# generate a commander for the place
-					$commander = $place->createVirtualCommander();
+					$commander = $placeManager->createVirtualCommander($place);
 
 					$commandersArray = array();
 					$commandersArray[0]['name'] = $commander->name;
@@ -85,25 +91,9 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 					break;
 				case Place::TYP_ORBITALBASE:
 					# orbitalBase
-					$S_OBM1 = ASM::$obm->getCurrentSession();
-					ASM::$obm->newSession();
-					ASM::$obm->load(array('rPlace' => $rPlace));
-					$orbitalBase = ASM::$obm->get();
+					$orbitalBase = $orbitalBaseManager->get($rPlace);
 
-					# enemy
-					ASM::$pam->newSession();
-					ASM::$pam->load(array('id' => $orbitalBase->rPlayer));
-					$enemy = ASM::$pam->get();
-
-					# rc
-					$S_CRM1 = ASM::$crm->getCurrentSession();
-					ASM::$crm->changeSession($orbitalBase->routeManager);
-					$RCIncome = 0;
-					for ($i = 0; $i < ASM::$crm->size(); $i++) {
-						if (ASM::$crm->get($i)->getStatement() == CRM_ACTIVE) {
-							$RCIncome += ASM::$crm->get($i)->getIncome();
-						} 
-					}
+					$enemy = $playerManager->get($orbitalBase->rPlayer);
 					
 					$sr->resources = $orbitalBase->resourcesStorage;
 
@@ -115,21 +105,19 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 
 					$sr->shipsInStorage = serialize($orbitalBase->shipStorage);
 					$sr->antiSpyInvest = $orbitalBase->iAntiSpy;
-					$sr->commercialRouteIncome = $RCIncome;
+					$sr->commercialRouteIncome = $commercialRouteManager->getBaseIncome($orbitalBase);
 
 					$commandersArray = array();
-					$S_COM1 = ASM::$com->getCurrentSession();
-					ASM::$com->newSession();
-					ASM::$com->load(array('rBase' => $rPlace, 'c.statement' => array(Commander::AFFECTED, Commander::MOVING)));
+					$commanders = $commanderManager->getBaseCommanders($rPlace, [Commander::AFFECTED, Commander::MOVING]);
 
-					for ($i = 0; $i < ASM::$com->size(); $i++) { 
-						$commandersArray[$i]['name'] = ASM::$com->get($i)->name;
-						$commandersArray[$i]['avatar'] = ASM::$com->get($i)->avatar;
-						$commandersArray[$i]['level'] = ASM::$com->get($i)->level;
-						$commandersArray[$i]['line'] = ASM::$com->get($i)->line;
-						$commandersArray[$i]['statement'] = ASM::$com->get($i)->statement;
-						$commandersArray[$i]['pev'] = ASM::$com->get($i)->getPev();
-						$commandersArray[$i]['army'] = ASM::$com->get($i)->getNbrShipByType();
+					foreach ($commanders as $commander) { 
+						$commandersArray[$i]['name'] = $commander->name;
+						$commandersArray[$i]['avatar'] = $commander->avatar;
+						$commandersArray[$i]['level'] = $commander->level;
+						$commandersArray[$i]['line'] = $commander->line;
+						$commandersArray[$i]['statement'] = $commander->statement;
+						$commandersArray[$i]['pev'] = $commander->getPev();
+						$commandersArray[$i]['army'] = $commander->getNbrShipByType();
 					}
 					$sr->commanders = serialize($commandersArray);
 					
@@ -147,55 +135,43 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 							$n->addLnk('map/base-' . $orbitalBase->rPlace, $orbitalBase->name)->addTxt('.');
 							$n->addBrk()->addTxt('Malheureusement, nous n\'avons pas pu connaître l\'identité de l\'espion.');
 							$n->addEnd();
-							ASM::$ntm->add($n);
+							$notificationManager->add($n);
 							break;
 						case SpyReport::TYP_CAUGHT:
 							$n = new Notification();
 							$n->setRPlayer($orbitalBase->rPlayer);
 							$n->setTitle('Espionnage intercepté');
 							$n->addBeg();
-							$n->addLnk('embassy/player-' . CTR::$data->get('playerId'), CTR::$data->get('playerInfo')->get('name'))->addTxt(' a espionné votre base ');
+							$n->addLnk('embassy/player-' . $session->get('playerId'), $session->get('playerInfo')->get('name'))->addTxt(' a espionné votre base ');
 							$n->addLnk('map/base-' . $orbitalBase->rPlace, $orbitalBase->name)->addTxt('.');
 							$n->addBrk()->addTxt('L\'espion s\'est fait attrapé en train de fouiller dans vos affaires.');
 							$n->addEnd();
-							ASM::$ntm->add($n);
+							$notificationManager->add($n);
 							break;
 						default:
 							break;
 					}
-
-					ASM::$crm->changeSession($S_CRM1);
-					ASM::$com->changeSession($S_COM1);
-					ASM::$obm->changeSession($S_OBM1);
-
 					break;
 				default:
-					CTR::$alert->add('espionnage pour vaisseau-mère pas encore implémenté', ALERT_STD_ERROR);
+					throw new ErrorException('espionnage pour vaisseau-mère pas encore implémenté');
 			}
 
-			ASM::$srm->add($sr);
+			$spyReportManager->add($sr);
 
 			# tutorial
-			if (CTR::$data->get('playerInfo')->get('stepDone') == FALSE) {
-				switch (CTR::$data->get('playerInfo')->get('stepTutorial')) {
-					case TutorialResource::SPY_PLANET:
-						TutorialHelper::setStepDone();
-						break;
-				}
+			if ($session->get('playerInfo')->get('stepDone') == FALSE &&
+				$session->get('playerInfo')->get('stepTutorial') === TutorialResource::SPY_PLANET) {
+				$tutorialHelper->setStepDone();
 			}
 
-			CTR::$alert->add('Espionnage effectué.', ALERT_STD_SUCCESS);
-			CTR::redirect('fleet/view-spyreport/report-' . $sr->id);
-			
-			ASM::$pam->changeSession($S_PAM1);
+			$session->addFlashbag('Espionnage effectué.', Flashbag::TYPE_SUCCESS);
+			$response->redirect('fleet/view-spyreport/report-' . $sr->id);
 		} else {
-			CTR::$alert->add('Impossible de lancer un espionnage', ALERT_STD_ERROR);
+			throw new ErrorException('Impossible de lancer un espionnage');
 		}
-
-		ASM::$plm->changeSession($S_PLM1);
 	} else {
-		CTR::$alert->add('Impossible de lancer un espionnage avec le montant proposé', ALERT_STD_ERROR);
+		throw new ErrorException('Impossible de lancer un espionnage avec le montant proposé');
 	}
 } else {
-	CTR::$alert->add('Pas assez d\'informations pour espionner', ALERT_STD_FILLFORM);
+	throw new FormException('Pas assez d\'informations pour espionner');
 }

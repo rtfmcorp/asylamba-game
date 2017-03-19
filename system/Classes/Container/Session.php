@@ -3,10 +3,52 @@
 namespace Asylamba\Classes\Container;
 
 use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Flashbag;
 
 class Session extends ArrayList {
+	/** @var array **/
+	public $flashbags = [];
+	
+	public function initFlashbags()
+	{
+		if (isset($_SESSION['flashbags'])) {
+			$this->flashbags = unserialize($_SESSION['flashbags']);
+		}
+	}
+	
+	public function saveFlashbags()
+	{
+		if (!empty($this->flashbags)) {
+			$_SESSION['flashbags'] = serialize($this->flashbags);
+		}
+	}
+	
+	/**
+	 * @param string $message
+	 * @param string $type
+	 */ 
+	public function addFlashbag($message, $type)
+	{
+		$this->flashbags[] = new Flashbag($message, $type);
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getFlashbags()
+	{
+		return $this->flashbags;
+	}
+	
+	public function flushFlashbags()
+	{
+		$this->flashbags = [];
+		unset($_SESSION['flashbags']);
+	}
+	
     public function destroy() {
-            $this->elements = NULL;
+		$this->elements = NULL;
+		unset($_SESSION['flashbags']);
     }
 
     public function clear() {

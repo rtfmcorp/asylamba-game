@@ -4,43 +4,39 @@
 # int id 			id de la mission
 # int place 		id de la base orbitale
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Athena\Model\RecyclingMission;
 
-for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
+
+for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
+	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-$missionId = Utils::getHTTPData('id');
-$rPlace = Utils::getHTTPData('place');
+$missionId = $request->query->get('id');
+$rPlace = $request->query->get('place');
 
 if ($missionId !== FALSE AND $rPlace !== FALSE AND in_array($rPlace, $verif)) {
-	
-	$S_OBM1 = ASM::$obm->getCurrentSession();
-	ASM::$obm->newSession(ASM_UMODE);
-	ASM::$obm->load(array('rPlace' => $rPlace));
+	if (($base = $orbitalBaseManager->get($rPlace)) !== null) {
+		$S_REM1 = $recyclingMissionManager->getCurrentSession();
+		$recyclingMissionManager->newSession(ASM_UMODE);
+		$recyclingMissionManager->load(array('id' => $missionId, 'rBase' => $rPlace, 'statement' => RecyclingMission::ST_ACTIVE));
 
-	if (ASM::$obm->size() == 1) {
-		$base = ASM::$obm->get();
-
-
-		$S_REM1 = ASM::$rem->getCurrentSession();
-		ASM::$rem->newSession(ASM_UMODE);
-		ASM::$rem->load(array('id' => $missionId, 'rBase' => $rPlace, 'statement' => RecyclingMission::ST_ACTIVE));
-
-		if (ASM::$rem->size() == 1) {
-			ASM::$rem->get()->statement = RecyclingMission::ST_BEING_DELETED;
-			CTR::$alert->add('Ordre de mission annulé.', ALERT_STD_SUCCESS);
+		if ($recyclingMissionManager->size() == 1) {
+			$recyclingMissionManager->get()->statement = RecyclingMission::ST_BEING_DELETED;
+			$session->addFlashbag('Ordre de mission annulé.', Flashbag::TYPE_SUCCESS);
 		} else {
-			CTR::$alert->add('impossible de supprimer la mission.', ALERT_STD_ERROR);
+			throw new ErrorException('impossible de supprimer la mission.');
 		}
-		ASM::$rem->changeSession($S_REM1);
+		$recyclingMissionManager->changeSession($S_REM1);
 	} else {
-		CTR::$alert->add('cette base orbitale ne vous appartient pas', ALERT_STD_ERROR);
+		throw new ErrorException('cette base orbitale ne vous appartient pas');
 	}
-	ASM::$obm->changeSession($S_OBM1);
 } else {
-	CTR::$alert->add('pas assez d\'informations pour supprimer une mission de recyclage', ALERT_STD_FILLFORM);
+	throw new FormException('pas assez d\'informations pour supprimer une mission de recyclage');
 }

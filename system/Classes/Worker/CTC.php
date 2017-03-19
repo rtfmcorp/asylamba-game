@@ -4,20 +4,33 @@ namespace Asylamba\Classes\Worker;
 
 use Asylamba\Classes\Library\Bug;
 use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Container\Session;
 
-abstract class CTC {
-	private static $running = FALSE;
-	private static $currentDate = NULL;
+class CTC {
+	/** @var boolean **/
+	private $running = FALSE;
+	
+	private $currentDate;
+	/** @var array **/
+	public $events  = array();
+	/** @var $session **/
+	protected $session;
+	
+	/**
+	 * @param Session $session
+	 */
+	public function __construct(Session $session)
+	{
+		$this->session = $session;
+	}
 
-	public static $events  = array();
+	public function createContext($creator = NULL) {
+		$this->create++;
 
-	public static function createContext($creator = NULL) {
-		self::$create++;
-
-		if (!self::$running) {
-			self::$running = TRUE;
-			self::$context++;
-			self::$creator = $creator;
+		if (!$this->running) {
+			$this->running = TRUE;
+			$this->context++;
+			$this->creator = $creator;
 
 			return TRUE;
 		} else {
@@ -25,38 +38,38 @@ abstract class CTC {
 		}
 	}
 
-	public static function applyContext($token) {
-		self::$apply++;
+	public function applyContext($token) {
+		$this->apply++;
 
 		if ($token) {
-			if (count(self::$events) > 0) {
-				$beforeUsort = count(self::$events);
+			if (count($this->events) > 0) {
+				$beforeUsort = count($this->events);
 
-				self::$events = CTC::insertion(self::$events);
+				$this->events = $this->insertion($this->events);
 
-				$afterUsort = count(self::$events);
+				$afterUsort = count($this->events);
 
 				$logt  = '> ' . date('H:i:s') . ', start to apply context';
-				$logt .= (CTR::$data->exist('playerId')) ? ' [Player ' . CTR::$data->get('playerId') . ']' : NULL;
+				$logt .= ($this->session->exist('playerId')) ? ' [Player ' . $this->session->get('playerId') . ']' : NULL;
 				$logt .= "\n";
 
 				$logt .= '> Page : ' . $_SERVER['REQUEST_URI'] . "\n";
 
 				$j = 0;
-				foreach (self::$events as $k => $event) {
+				foreach ($this->events as $k => $event) {
 					$j++;
-					self::$currentDate = $event['date'];
+					$this->currentDate = $event['date'];
 					call_user_func_array(array($event['object'], $event['method']), $event['args']);
 
-					$logt .= '> [' . $event['date'] . '] ' . get_class($event['object']) . '(' . $event['object']->getId() . ')::' . $event['method'] . "\n";
+					$logt .= '> [' . $event['date'] . '] ' . $event['model_class'] . '(' . $event['model_id'] . ')::' . $event['method'] . "\n";
 				}
 
 				$logt .= '> ';
-				$logt .= 'create/apply : ' . self::$create . '/' . self::$apply . ' | ';
-				$logt .= 'add/iter : ' . self::$add . '/' . $j . ' | ';
+				$logt .= 'create/apply : ' . $this->create . '/' . $this->apply . ' | ';
+				$logt .= 'add/iter : ' . $this->add . '/' . $j . ' | ';
 				$logt .= 'before/after-usort : ' . $beforeUsort . '/' . $afterUsort . ' | ';
-				$logt .= 'context : ' . self::$context . ' | ';
-				$logt .= 'creator : ' . self::$creator . "\n";
+				$logt .= 'context : ' . $this->context . ' | ';
+				$logt .= 'creator : ' . $this->creator . "\n";
 
 				$logt .= "> \n";
 
@@ -66,47 +79,58 @@ abstract class CTC {
 				Bug::writeLog($path, $logt);
 			}
 
-			//self::$add = 0;
-			self::$running = FALSE;
-			self::$events  = array();
+			//$this->add = 0;
+			$this->running = FALSE;
+			$this->events  = array();
 		}
 	}
 
-	public static function add($date, $object, $method, $args = array()) {
-		if (!self::$running) {
+	/**
+	 * @param string $date
+	 * @param object $object
+	 * @param string $method
+	 * @param object $model
+	 * @param array $args
+	 * @return boolean
+	 * @throws \Exception
+	 */
+	public function add($date, $object, $method, $model = null, $args = array()) {
+		if (!$this->running) {
 			throw new \Exception('CTC isn\'t running actually', 1);
 		} else {
-			self::$add++;
+			$this->add++;
 			$event = array(
 				'timest' => strtotime($date),
 				'date' 	 => $date,
 				'object' => $object,
+				'model_class'  => ($model !== null) ? get_class($model) : '',
+				'model_id' => ($model !== null) ? $model->getId() : '',
 				'method' => $method,
 				'args'   => $args,
 				'random' => rand()
 			);
-			self::$events[] = $event;
+			$this->events[] = $event;
 			return TRUE;
 		}
 	}
 
-	public static function now() {
-		if (self::$running) {
-			if (self::$currentDate == NULL) {
+	public function now() {
+		if ($this->running) {
+			if ($this->currentDate == NULL) {
 				return Utils::now();
 			} else {
-				return self::$currentDate;
+				return $this->currentDate;
 			}
 		} else {
 			return Utils::now();
 		}
 	}
 
-	public static function size() {
-		return count(self::$events);
+	public function size() {
+		return count($this->events);
 	}
 
-	public static function insertion(array $array) {
+	public function insertion(array $array) {
         $length = count($array);
 
         for ($i = 1; $i < $length; $i++) {
@@ -124,13 +148,13 @@ abstract class CTC {
         return $array;
     }
 
-	private static $add     = 0;
-	private static $create  = 0;
-	private static $apply   = 0;
-	private static $context = 0;
-	private static $creator = NULL;
+	private $add     = 0;
+	private $create  = 0;
+	private $apply   = 0;
+	private $context = 0;
+	private $creator = NULL;
 
-	public static function get() {
-		return self::$events;
+	public function get() {
+		return $this->events;
 	}
 }

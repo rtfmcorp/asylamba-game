@@ -5,13 +5,16 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Zeus\Model\CreditTransaction;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
+$creditTransactionManager = $this->getContainer()->get('zeus.credit_transaction_manager');
+
 echo '<div class="component new-message">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<h4>Envoi de crédits</h4>';
 			echo '<p>Seul le trésorier du gouvernement peut faire des versements à des membres.</p>';
-			echo '<form action="' . Format::actionBuilder('sendcreditfromfaction') . '" method="post" />';
+			echo '<form action="' . Format::actionBuilder('sendcreditfromfaction', $sessionToken) . '" method="post" />';
 				echo '<p><label for="send-credit-target">Destinataire</label></p>';
 				echo '<p class="input input-text">';
 					echo '<input type="hidden" class="autocomplete-hidden" name="playerid" />';
@@ -31,9 +34,9 @@ echo '<div class="component new-message">';
 echo '</div>';
 
 
-$S_CRT_1 = ASM::$crt->getCurrentSession();
-ASM::$crt->newSession();
-ASM::$crt->load(
+$S_CRT_1 = $creditTransactionManager->getCurrentSession();
+$creditTransactionManager->newSession();
+$creditTransactionManager->load(
 	['rSender' => $faction->id, 'type' => CreditTransaction::TYP_F_TO_P],
 	['dTransaction', 'DESC'],
 	[0, 20]
@@ -44,8 +47,8 @@ echo '<div class="component player rank">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<h4>Dernières transactions</h4>';
-			for ($i = 0; $i < ASM::$crt->size(); $i++) {
-				$transaction = ASM::$crt->get($i);
+			for ($i = 0; $i < $creditTransactionManager->size(); $i++) {
+				$transaction = $creditTransactionManager->get($i);
 
 				echo '<div class="player color' . $transaction->receiverColor . '">';
 					echo '<a href="' . APP_ROOT . 'embassy/player-' . $transaction->rReceiver . '">';
@@ -59,10 +62,9 @@ echo '<div class="component player rank">';
 				echo '</div>';
 			}
 
-			if (ASM::$crt->size() == 0) {
+			if ($creditTransactionManager->size() == 0) {
 				echo '<p>Aucune transaction n\'a encore été effectuée.</p>';
 			}
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

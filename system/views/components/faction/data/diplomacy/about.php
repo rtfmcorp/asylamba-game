@@ -1,11 +1,12 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Demeter\Model\Color;
+
+$session = $this->getContainer()->get('app.session');
 
 $eraseColor = isset($eraseColor)
 	? $eraseColor
-	: CTR::$data->get('playerInfo')->get('color');
+	: $session->get('playerInfo')->get('color');
 
 $statements = [
 	Color::ENEMY => 'En guerre',

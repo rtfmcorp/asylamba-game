@@ -4,8 +4,11 @@
 
 # affichage de la liste des topics
 
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Demeter\Resource\ForumResources;
+use Asylamba\Modules\Zeus\Model\Player;
+
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
 
 # require
 	# int 			forum_topics
@@ -51,10 +54,10 @@ echo '<div class="component report topic nav">';
 			
 				if (count($topic_topics) > 0) {
 					foreach ($topic_topics as $t) {
-						if ($t->id == CTR::$get->get('topic')) {
+						if ($t->id == $request->query->get('topic')) {
 							$isNew = '';
 						} elseif ($t->lastView == NULL || strtotime($t->lastView) < strtotime($t->dLastMessage)) {
-							$isNew = ' round-color' . CTR::$data->get('playerInfo')->get('color');
+							$isNew = ' round-color' . $session->get('playerInfo')->get('color');
 						} else {
 							$isNew = '';
 						}
@@ -74,7 +77,7 @@ echo '<div class="component report topic nav">';
 							echo '</div>';
 
 							echo '<div class="right">';
-								echo '<a class="' . (CTR::$get->equal('topic', $t->id)  ? 'active' : NULL) . '" href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '/topic-' . $t->id . '/' . ($archivedMode ? 'mode-archived/' : NULL) . 'sftr-2"></a>';
+								echo '<a class="' . (($request->query->get('topic') === $t->id)  ? 'active' : NULL) . '" href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '/topic-' . $t->id . '/' . ($archivedMode ? 'mode-archived/' : NULL) . 'sftr-2"></a>';
 							echo '</div>';
 						echo '</div>';
 					}
@@ -85,7 +88,7 @@ echo '<div class="component report topic nav">';
 				echo '<p>Aucun sujet n\'a encore été créé dans cette section du forum.</p>';
 			}
 
-			if ($isStandard_topics && !$archivedMode && in_array(CTR::$data->get('playerInfo')->get('status'), [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER])) {
+			if ($isStandard_topics && !$archivedMode && in_array($session->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER])) {
 				echo '<a class="more-button" href="' . APP_ROOT . 'faction/view-forum/forum-' . $forum_topics . '/mode-archived">Voir les messages archivés</a>';
 			}
 		echo '</div>';

@@ -4,7 +4,7 @@ namespace Tests\Asylamba\Modules\Athena;
 
 use Asylamba\Modules\Athena\AthenaModule;
 use Asylamba\Classes\Worker\Application;
-use Asylamba\Classes\Worker\Container;
+use Asylamba\Classes\DependencyInjection\Container;
 
 class AthenaModuleTest extends \PHPUnit_Framework_TestCase
 {

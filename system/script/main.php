@@ -1,7 +1,5 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-
 $scripts = [
 	'Déploiment' => [
 		['deploy_dbinstall', '/deploy/dbinstall.php'],
@@ -41,8 +39,10 @@ ini_set('display_errors', TRUE);
 
 include SCRIPT . 'template/open.php';
 
-if (DEVMODE || CTR::$get->equal('key', KEY_SCRIPT)) {
-	if (!CTR::$get->exist('a')) {
+$request = $this->getContainer()->get('app.request');
+
+if (DEVMODE || $request->query->get('key') === KEY_SCRIPT) {
+	if (!$request->query->has('a')) {
 		echo '<div class="list-script">';
 			echo '<div class="return">';
 				echo '<a href="' . APP_ROOT . 'buffer/key-' . KEY_BUFFER . '/">&#8801;</a> ';
@@ -63,7 +63,7 @@ if (DEVMODE || CTR::$get->equal('key', KEY_SCRIPT)) {
 			echo '</div>';
 		echo '</div>';
 	} else {
-                $requestedScript = CTR::$get->get('a');
+		$requestedScript = $request->query->get('a');
 		foreach ($scripts as $typeScripts) {
 			foreach ($typeScripts as $i => $script) {
 				if ($requestedScript === $script[0]) {

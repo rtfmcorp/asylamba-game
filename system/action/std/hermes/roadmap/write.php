@@ -4,22 +4,28 @@
 # string content 	contenu du message
 # [int statement] 	état (0 = caché, 1 = affiché)
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Hermes\Model\RoadMap;
 
-if (CTR::$data->get('playerInfo')->get('admin') == FALSE) {
-	CTR::redirect('profil');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$parser = $this->getContainer()->get('parser');
+$roadmapManager = $this->getContainer()->get('hermes.roadmap_manager');
+
+if ($session->get('playerInfo')->get('admin') == FALSE) {
+	$response->redirect('profil');
 } else {
-	$content = Utils::getHTTPData('content');
-	$statement = Utils::getHTTPData('statement');
+	$content = $request->request->get('content');
+	$statement = $request->query->get('statement');
 
 	if ($content !== FALSE AND $content !== '') { 
 
 		$rm = new RoadMap();
-		$rm->rPlayer = CTR::$data->get('playerId');
+		$rm->rPlayer = $session->get('playerId');
 		$rm->setContent($content);
+		$rm->setParsedContent($parser->parse($content));
 		if ($statement !== FALSE) {
 			if ($statement == 0 OR $statement == 1) {
 				$rm->statement = $statement;
@@ -28,10 +34,10 @@ if (CTR::$data->get('playerInfo')->get('admin') == FALSE) {
 			$rm->statement = RoadMap::DISPLAYED;
 		}
 		$rm->dCreation = Utils::now();
-		ASM::$rmm->add($rm);
+		$roadmapManager->add($rm);
 
-		CTR::$alert->add('Roadmap publiée', ALERT_STD_SUCCESS);
+		$session->addFlashbag('Roadmap publiée', Flashbag::TYPE_SUCCESS);
 	} else {
-		CTR::$alert->add('pas assez d\'informations pour écrire un message dans la roadmap', ALERT_STD_FILLFORM);
+		throw new FormException('pas assez d\'informations pour écrire un message dans la roadmap');
 	}
 }

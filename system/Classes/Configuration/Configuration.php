@@ -3,7 +3,7 @@
 namespace Asylamba\Classes\Configuration;
 
 use Asylamba\Classes\Configuration\Loader\YamlLoader;
-use Asylamba\Classes\Worker\Container;
+use Asylamba\Classes\DependencyInjection\Container;
 use Symfony\Component\Config\FileLocatorInterface;
 
 class Configuration {
@@ -60,5 +60,35 @@ class Configuration {
 		foreach($config['services'] as $key => $definition) {
 			$container->setServiceDefinition($key, $definition);
 		}
-	} 
+	}
+	
+	public function defineOldConstants()
+	{
+		# définition des ROOT
+		define('SYSTEMR',		__DIR__ . '/../../');
+		define('CLASSES',       SYSTEMR . 'Classes/');
+
+		define('MODULES', 		SYSTEMR . 'Modules/');
+		define('LIB', 			CLASSES . 'lib/');
+		define('CONFIG', 		SYSTEMR . 'config/');
+		define('EVENT', 		SYSTEMR . 'event/');
+
+		define('INSCRIPTION', 	SYSTEMR . 'inscription/');
+		define('CONNECTION', 	SYSTEMR . 'connection/');
+
+		define('ACTION', 		SYSTEMR . 'action/std/');
+		define('AJAX', 			SYSTEMR . 'action/ajax/');
+
+		define('API', 			SYSTEMR . 'api/');
+		define('SCRIPT',		SYSTEMR . 'script/');
+		define('BUFFER',		SYSTEMR . 'buffer/');
+
+		define('TEMPLATE', 		SYSTEMR . 'views/templates/');
+		define('PAGES', 		SYSTEMR . 'views/pages/');
+		define('COMPONENT', 	SYSTEMR . 'views/components/');
+
+		# inclusion des fichiers de configurations
+		include CONFIG . 'app.config.local.php';
+		include CONFIG . 'app.config.global.php';
+	}
 }

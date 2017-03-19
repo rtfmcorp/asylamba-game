@@ -11,129 +11,83 @@
 */
 namespace Asylamba\Modules\Demeter\Manager\Forum;
 
-use Asylamba\Classes\Worker\Manager;
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Modules\Demeter\Model\Forum\FactionNews;
+use Asylamba\Classes\Library\Parser;
 
-class FactionNewsManager extends Manager {
-	protected $managerType ='_factionNews';
-
-	public function load($where = array(), $order = array(), $limit = array()) {
-		$formatWhere = Utils::arrayToWhere($where, 'n.');
-		$formatOrder = Utils::arrayToOrder($order);
-		$formatLimit = Utils::arrayToLimit($limit);
-
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT n.* 
-			FROM factionNews AS n
-			' . $formatWhere .'
-			' . $formatOrder .'
-			' . $formatLimit
-		);
-
-		foreach($where AS $v) {
-			if (is_array($v)) {
-				foreach ($v as $p) {
-					$valuesArray[] = $p;
-				}
-			} else {
-				$valuesArray[] = $v;
-			}
-		}
-
-		if (empty($valuesArray)) {
-			$qr->execute();
-		} else {
-			$qr->execute($valuesArray);
-		}
-
-		$aw = $qr->fetchAll();
-		$qr->closeCursor();
-
-		foreach($aw AS $awNews) {
-			$news = new FactionNews();
-			$news->id = $awNews['id'];
-			$news->rFaction = $awNews['rFaction'];
-			$news->title = $awNews['title'];
-			$news->oContent = $awNews['oContent'];
-			$news->pContent = $awNews['pContent'];
-			$news->pinned = $awNews['pinned'];
-			$news->statement = $awNews['statement'];
-			$news->dCreation = $awNews['dCreation'];
-
-			$this->_Add($news);
-		}
+class FactionNewsManager {
+	/** @var EntityManager **/
+	protected $entityManager;
+	/** @var Parser **/
+	protected $parser;
+	
+	/**
+	 * @param EntityManager $entityManager
+	 * @param Parser $parser
+	 */
+	public function __construct(EntityManager $entityManager, Parser $parser) {
+		$this->entityManager = $entityManager;
+		$this->parser = $parser;
+	}
+	
+	/**
+	 * @param int $id
+	 * @return FacionNews
+	 */
+	public function get($id)
+	{
+		return $this->entityManager->getRepository(FactionNews::class)->get($id);
+	}
+	
+	/**
+	 * @param int $factionId
+	 * @return FacionNews
+	 */
+	public function getFactionNews($factionId)
+	{
+		return $this->entityManager->getRepository(FactionNews::class)->getFactionNews($factionId);
+	}
+	
+	/**
+	 * @param int $factionId
+	 * @return FacionNews
+	 */
+	public function getFactionBasicNews($factionId)
+	{
+		return $this->entityManager->getRepository(FactionNews::class)->getFactionBasicNews($factionId);
+	}
+	
+	/**
+	 * @param int $factionId
+	 * @return FacionNews
+	 */
+	public function getFactionPinnedNew($factionId)
+	{
+		return $this->entityManager->getRepository(FactionNews::class)->getPinnedNew($factionId);
 	}
 
-	public function save() {
-		$db = Database::getInstance();
+	/**
+	 * @param FactionNews $factionNew
+	 * @return int
+	 */
+	public function add(FactionNews $factionNew) {
+		$this->entityManager->persist($factionNew);
+		$this->entityManager->flush($factionNew);
 
-		$newsArray = $this->_Save();
-
-		foreach ($newsArray AS $news) {
-			
-			$qr = 'UPDATE factionNews
-				SET
-					rFaction = ?,
-					title = ?,
-					oContent = ?,
-					pContent = ?,
-					pinned = ?,
-					statement = ?,
-					dCreation = ?
-				WHERE id = ?';
-
-			$qr = $db->prepare($qr);
-			
-			$aw = $qr->execute(array(
-					$news->rFaction,
-					$news->title,
-					$news->oContent,
-					$news->pContent,
-					$news->pinned,
-					$news->statement,
-					$news->dCreation,
-					$news->id
-				));
-		}
+		return $factionNew->id;
 	}
 
-	public function add($news) {
-		$db = Database::getInstance();
+	/**
+	 * @param FactionNews $factionNews
+	 * @param string $content
+	 */
+	public function edit(FactionNews $factionNews, $content) {
+		$factionNews->oContent = $content;
 
-		$qr = $db->prepare('INSERT INTO factionNews
-			SET
-				rFaction = ?,
-				title = ?,
-				oContent = ?,
-				pContent = ?,
-				pinned = ?,
-				statement = ?,
-				dCreation = ?');
-		$aw = $qr->execute(array(
-				$news->rFaction,
-				$news->title,
-				$news->oContent,
-				$news->pContent,
-				$news->pinned,
-				$news->statement,
-				Utils::now()
-				));
+		$this->parser->parseBigTag = TRUE;
 
-		$news->id = $db->lastInsertId();
-
-		$this->_Add($news);
-
-		return $news->id;
-	}
-
-	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM factionNews WHERE id = ?');
-		$qr->execute(array($id));
-
-		$this->_Remove($id);
-		return TRUE;
+		$factionNews->pContent = $this->parser->parse($content);
+		
+		$this->entityManager->flush($factionNews);
 	}
 }

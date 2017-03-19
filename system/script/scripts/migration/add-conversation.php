@@ -1,13 +1,12 @@
 <?php
 
-use Asylamba\Classes\Database\Database;
-
 echo '<h1>Ajout du module de Conversation</h1>';
 
 echo '<h2>Ajout de la table Conversation</h2>';
 
-$db = Database::getInstance();
-$qr = $db->prepare("CREATE TABLE IF NOT EXISTS `conversation` (
+$database = $this->getContainer()->get('database');
+
+$qr = $database->prepare("CREATE TABLE IF NOT EXISTS `conversation` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`title` VARCHAR(255) NULL,
 	`messages` INT(5) NOT NULL DEFAULT 0,
@@ -20,8 +19,7 @@ $qr->execute();
 
 echo '<h2>Ajout de la table userConversation</h2>';
 
-$db = Database::getInstance();
-$qr = $db->prepare("CREATE TABLE IF NOT EXISTS `conversationUser` (
+$qr = $database->prepare("CREATE TABLE IF NOT EXISTS `conversationUser` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`rConversation` INT(11) NOT NULL,
 	`rPlayer` INT(11) NOT NULL,
@@ -34,8 +32,7 @@ $qr->execute();
 
 echo '<h2>Ajout de la table messageConversation</h2>';
 
-$db = Database::getInstance();
-$qr = $db->prepare("CREATE TABLE IF NOT EXISTS `conversationMessage` (
+$qr = $database->prepare("CREATE TABLE IF NOT EXISTS `conversationMessage` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`rConversation` INT(11) NOT NULL,
 	`rPlayer` INT(11) NOT NULL,

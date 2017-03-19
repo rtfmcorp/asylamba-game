@@ -1,28 +1,30 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Chronos;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Resource\ShipResource;
-use Asylamba\Modules\Promethee\Resource\TechnologyResource;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Ares\Model\Commander;
 
-$S_OBM1 = ASM::$obm->getCurrentSession();
-ASM::$obm->newSession();
-ASM::$obm->load(array('rPlace' => CTR::$data->get('playerParams')->get('base')));
-$currentBase = ASM::$obm->get();
+$session = $this->getContainer()->get('app.session');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
+$shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
+$technologyQueueManager = $this->getContainer()->get('promethee.technology_queue_manager');
+$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$technologyHelper = $this->getContainer()->get('promethee.technology_helper');
+
+$currentBase = $orbitalBaseManager->get($session->get('playerParams')->get('base'));
 
 # préparation du nombre d'attaque entrante
 $incomingAttack = [];
-for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
-	if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
-		$incomingAttack[] = CTR::$data->get('playerEvent')->get($i);
+for ($i = 0; $i < $session->get('playerEvent')->size(); $i++) {
+	if ($session->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
+		$incomingAttack[] = $session->get('playerEvent')->get($i);
 	}
 }
 
@@ -42,41 +44,41 @@ echo '<div id="tools">';
 			echo ' <img class="icon-color" src="' . MEDIA . 'resources/resource.png" alt="ressources" />';
 		echo '</a>';
 		
-		$S_BQM1 = ASM::$bqm->getCurrentSession();
-		ASM::$bqm->changeSession($currentBase->buildingManager);
+		$S_BQM1 = $buildingQueueManager->getCurrentSession();
+		$buildingQueueManager->changeSession($currentBase->buildingManager);
 		echo '<a href="#" class="square sh" data-target="tools-generator"><img src="' . MEDIA . 'orbitalbase/generator.png" alt="" />';
-			echo (ASM::$bqm->size()) ? '<span class="number">' . ASM::$bqm->size() . '</span>' : NULL;
+			echo ($buildingQueueManager->size()) ? '<span class="number">' . $buildingQueueManager->size() . '</span>' : NULL;
 		echo '</a>';
-		ASM::$bqm->changeSession($S_BQM1);
+		$buildingQueueManager->changeSession($S_BQM1);
 
-		$S_TQM1 = ASM::$tqm->getCurrentSession();
-		ASM::$tqm->changeSession($currentBase->technoQueueManager);
+		$S_TQM1 = $technologyQueueManager->getCurrentSession();
+		$technologyQueueManager->changeSession($currentBase->technoQueueManager);
 		echo '<a href="#" class="square sh" data-target="tools-technosphere"><img src="' . MEDIA . 'orbitalbase/technosphere.png" alt="" />';
-			echo (ASM::$tqm->size()) ? '<span class="number">' . ASM::$tqm->size() . '</span>' : NULL;
+			echo ($technologyQueueManager->size()) ? '<span class="number">' . $technologyQueueManager->size() . '</span>' : NULL;
 		echo '</a>';
-		ASM::$tqm->changeSession($S_TQM1);
+		$technologyQueueManager->changeSession($S_TQM1);
 
-		$S_SQM1 = ASM::$sqm->getCurrentSession();
-		ASM::$sqm->changeSession($currentBase->dock1Manager);
+		$S_SQM1 = $shipQueueManager->getCurrentSession();
+		$shipQueueManager->changeSession($currentBase->dock1Manager);
 		echo '<a href="#" class="square sh" data-target="tools-dock1"><img src="' . MEDIA . 'orbitalbase/dock1.png" alt="" />';
-			echo (ASM::$sqm->size()) ? '<span class="number">' . ASM::$sqm->size() . '</span>' : NULL;
+			echo ($shipQueueManager->size()) ? '<span class="number">' . $shipQueueManager->size() . '</span>' : NULL;
 		echo '</a>';
-		ASM::$sqm->changeSession($S_SQM1);
+		$shipQueueManager->changeSession($S_SQM1);
 
-		$S_SQM2 = ASM::$sqm->getCurrentSession();
-		ASM::$sqm->changeSession($currentBase->dock2Manager);
+		$S_SQM2 = $shipQueueManager->getCurrentSession();
+		$shipQueueManager->changeSession($currentBase->dock2Manager);
 		echo '<a href="#" class="square sh" data-target="tools-dock2"><img src="' . MEDIA . 'orbitalbase/dock2.png" alt="" />';
-			echo (ASM::$sqm->size()) ? '<span class="number">' . ASM::$sqm->size() . '</span>' : NULL;
+			echo ($shipQueueManager->size()) ? '<span class="number">' . $shipQueueManager->size() . '</span>' : NULL;
 		echo '</a>';
-		ASM::$sqm->changeSession($S_SQM2);
+		$shipQueueManager->changeSession($S_SQM2);
 	echo '</div>';
 
 	# right
 	echo '<div class="box right">';
 		$outgoingAttack = 0;
 
-		for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
-			if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_OUTGOING_ATTACK) {
+		for ($i = 0; $i < $session->get('playerEvent')->size(); $i++) {
+			if ($session->get('playerEvent')->get($i)->get('eventType') == EVENT_OUTGOING_ATTACK) {
 				$outgoingAttack++;
 			}
 		}
@@ -90,7 +92,7 @@ echo '<div id="tools">';
 		echo '</a>';
 
 		echo '<span class="resource-link" style="width: 120px;">';
-				echo Format::numberFormat(CTR::$data->get('playerInfo')->get('credit'));
+				echo Format::numberFormat($session->get('playerInfo')->get('credit'));
 				echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
 		echo '</span>';
 	echo '</div>';
@@ -109,9 +111,9 @@ echo '<div id="tools">';
 			echo '<div class="number-box">';
 				echo '<span class="label">production par relève</span>';
 				echo '<span class="value">';
-					$production = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(1, 'level', $currentBase->getLevelRefinery(), 'refiningCoefficient'), $currentBase->getPlanetResources());
+					$production = Game::resourceProduction($orbitalBaseHelper->getBuildingInfo(1, 'level', $currentBase->getLevelRefinery(), 'refiningCoefficient'), $currentBase->getPlanetResources());
 					echo Format::numberFormat($production);
-					$refiningBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::REFINERY_REFINING);
+					$refiningBonus = $session->get('playerBonus')->get(PlayerBonus::REFINERY_REFINING);
 					if ($refiningBonus > 0) {
 						echo '<span class="bonus">+' . Format::numberFormat(($production * $refiningBonus / 100)) . '</span>';
 					}
@@ -125,8 +127,8 @@ echo '<div id="tools">';
 					echo Format::numberFormat($currentBase->getResourcesStorage());
 					echo ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color">';
 				echo '</span>';
-				$storageSpace = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $currentBase->getLevelStorage(), 'storageSpace');
-				$storageBonus = CTR::$data->get('playerBonus')->get(PlayerBonus::REFINERY_STORAGE);
+				$storageSpace = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $currentBase->getLevelStorage(), 'storageSpace');
+				$storageBonus = $session->get('playerBonus')->get(PlayerBonus::REFINERY_STORAGE);
 				if ($storageBonus > 0) {
 					$storageSpace += ($storageSpace * $storageBonus / 100);
 				}
@@ -143,23 +145,23 @@ echo '<div id="tools">';
 	echo '<div class="overbox left-pic" id="tools-generator">';
 		echo '<h2>Générateur</h2>';
 		echo '<div class="overflow">';
-			$S_BQM1 = ASM::$bqm->getCurrentSession();
-			ASM::$bqm->changeSession($currentBase->buildingManager);
+			$S_BQM1 = $buildingQueueManager->getCurrentSession();
+			$buildingQueueManager->changeSession($currentBase->buildingManager);
 			
-			if (ASM::$bqm->size() > 0) {
-				$qe = ASM::$bqm->get(0);
+			if ($buildingQueueManager->size() > 0) {
+				$qe = $buildingQueueManager->get(0);
 				echo '<div class="queue">';
-					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time') . '">';
-						echo '<img class="picto" src="' . MEDIA . 'orbitalbase/' . OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
+					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time') . '">';
+						echo '<img class="picto" src="' . MEDIA . 'orbitalbase/' . $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
 						echo '<strong>';
-							echo OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'frenchName');
+							echo $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'frenchName');
 							echo ' <span class="level">niv. ' . $qe->targetLevel . '</span>';
 						echo '</strong>';
 						
 						echo '<em><span class="progress-text">' . Chronos::secondToFormat(Utils::interval(Utils::now(), $qe->dEnd, 's'), 'lite') . '</span></em>';
 
 						echo '<span class="progress-container">';
-							echo '<span style="width: ' . Format::percent(OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time') - Utils::interval(Utils::now(), $qe->dEnd, 's'), OrbitalBaseResource::getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time')) . '%;" class="progress-bar">';
+							echo '<span style="width: ' . Format::percent($orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time') - Utils::interval(Utils::now(), $qe->dEnd, 's'), $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time')) . '%;" class="progress-bar">';
 							echo'</span>';
 						echo '</span>';
 					echo '</div>';
@@ -169,18 +171,18 @@ echo '<div id="tools">';
 			}
 
 			echo '<a href="' . APP_ROOT . 'bases/view-generator" class="more-link">vers le générateur</a>';
-			ASM::$bqm->changeSession($S_BQM1);
+			$buildingQueueManager->changeSession($S_BQM1);
 		echo '</div>';
 	echo '</div>';
 
 	echo '<div class="overbox left-pic" id="tools-dock1">';
 		echo '<h2>Chantier Alpha</h2>';
 		echo '<div class="overflow">';
-			$S_SQM1 = ASM::$sqm->getCurrentSession();
-			ASM::$sqm->changeSession($currentBase->dock1Manager);
+			$S_SQM1 = $shipQueueManager->getCurrentSession();
+			$shipQueueManager->changeSession($currentBase->dock1Manager);
 			
-			if (ASM::$sqm->size() > 0) {
-				$qe = ASM::$sqm->get(0);
+			if ($shipQueueManager->size() > 0) {
+				$qe = $shipQueueManager->get(0);
 				echo '<div class="queue">';
 					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $qe->quantity * ShipResource::getInfo($qe->shipNumber, 'time') . '">';
 						echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($qe->shipNumber, 'imageLink') . '.png" alt="" />';
@@ -201,18 +203,18 @@ echo '<div id="tools">';
 			}
 
 			echo '<a href="' . APP_ROOT . 'bases/view-dock1" class="more-link">vers le chantier alpha</a>';
-			ASM::$sqm->changeSession($S_SQM1);
+			$shipQueueManager->changeSession($S_SQM1);
 		echo '</div>';
 	echo '</div>';
 
 	echo '<div class="overbox left-pic" id="tools-dock2">';
 		echo '<h2>Chantier de ligne</h2>';
 		echo '<div class="overflow">';
-			$S_SQM1 = ASM::$sqm->getCurrentSession();
-			ASM::$sqm->changeSession($currentBase->dock2Manager);
+			$S_SQM1 = $shipQueueManager->getCurrentSession();
+			$shipQueueManager->changeSession($currentBase->dock2Manager);
 			
-			if (ASM::$sqm->size() > 0) {
-				$qe = ASM::$sqm->get(0);
+			if ($shipQueueManager->size() > 0) {
+				$qe = $shipQueueManager->get(0);
 				echo '<div class="queue">';
 					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $qe->quantity * ShipResource::getInfo($qe->shipNumber, 'time') . '">';
 						echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($qe->shipNumber, 'imageLink') . '.png" alt="" />';
@@ -233,30 +235,30 @@ echo '<div id="tools">';
 			}
 
 			echo '<a href="' . APP_ROOT . 'bases/view-dock2" class="more-link">vers le chantier de ligne</a>';
-			ASM::$sqm->changeSession($S_SQM1);
+			$shipQueueManager->changeSession($S_SQM1);
 		echo '</div>';
 	echo '</div>';
 
 	echo '<div class="overbox left-pic" id="tools-technosphere">';
 		echo '<h2>Technosphère</h2>';
 		echo '<div class="overflow">';
-			$S_TQM1 = ASM::$tqm->getCurrentSession();
-			ASM::$tqm->changeSession($currentBase->technoQueueManager);
+			$S_TQM1 = $technologyQueueManager->getCurrentSession();
+			$technologyQueueManager->changeSession($currentBase->technoQueueManager);
 			
-			if (ASM::$tqm->size() > 0) {
-				$qe = ASM::$tqm->get(0);
+			if ($technologyQueueManager->size() > 0) {
+				$qe = $technologyQueueManager->get(0);
 				echo '<div class="queue">';
-					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel) . '">';
-						echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . TechnologyResource::getInfo($qe->technology, 'imageLink') . '.png" alt="" />';
-						echo '<strong>' . TechnologyResource::getInfo($qe->technology, 'name');
-						if (!TechnologyResource::isAnUnblockingTechnology($qe->technology)) {
+					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $technologyHelper->getInfo($qe->technology, 'time', $qe->targetLevel) . '">';
+						echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . $technologyHelper->getInfo($qe->technology, 'imageLink') . '.png" alt="" />';
+						echo '<strong>' . $technologyHelper->getInfo($qe->technology, 'name');
+						if (!$technologyHelper->isAnUnblockingTechnology($qe->technology)) {
 							echo ' <span class="level">niv. ' . $qe->targetLevel . '</span>';
 						}
 						echo '</strong>';
 						
 						echo '<em><span class="progress-text">' . Chronos::secondToFormat(Utils::interval(Utils::now(), $qe->dEnd, 's'), 'lite') . '</span></em>';
 						echo '<span class="progress-container">';
-							echo '<span style="width: ' . Format::percent(TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel) - Utils::interval(Utils::now(), $qe->dEnd, 's'), TechnologyResource::getInfo($qe->technology, 'time', $qe->targetLevel)) . '%;" class="progress-bar">';
+							echo '<span style="width: ' . Format::percent($technologyHelper->getInfo($qe->technology, 'time', $qe->targetLevel) - Utils::interval(Utils::now(), $qe->dEnd, 's'), $technologyHelper->getInfo($qe->technology, 'time', $qe->targetLevel)) . '%;" class="progress-bar">';
 							echo '</span>';
 						echo '</span>';
 					echo '</div>';
@@ -266,7 +268,7 @@ echo '<div id="tools">';
 			}
 
 			echo '<a href="' . APP_ROOT . 'bases/view-technosphere" class="more-link">vers la technosphère</a>';
-			ASM::$tqm->changeSession($S_TQM1);
+			$technologyQueueManager->changeSession($S_TQM1);
 		echo '</div>';
 	echo '</div>';
 
@@ -315,9 +317,9 @@ echo '<div id="tools">';
 			if ($outgoingAttack > 0) {
 				echo '<div class="queue">';
 
-				for ($i = 0; $i < CTR::$data->get('playerEvent')->size(); $i++) {
-					if (CTR::$data->get('playerEvent')->get($i)->get('eventType') == EVENT_OUTGOING_ATTACK) {
-						$commander = CTR::$data->get('playerEvent')->get($i);
+				for ($i = 0; $i < $session->get('playerEvent')->size(); $i++) {
+					if ($session->get('playerEvent')->get($i)->get('eventType') == EVENT_OUTGOING_ATTACK) {
+						$commander = $session->get('playerEvent')->get($i);
 
 						echo '<div class="item active progress" ';
 							echo 'data-progress-no-reload="true" ';
@@ -351,5 +353,3 @@ echo '<div id="tools">';
 		echo '<a href="' . APP_ROOT . 'fleet" class="more-link">vers l\'amirauté</a>';
 	echo '</div>';
 echo '</div>';
-
-ASM::$obm->changeSession($S_OBM1);

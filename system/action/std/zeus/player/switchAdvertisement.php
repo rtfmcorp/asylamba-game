@@ -1,29 +1,23 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Exception\ErrorException;
 
 # switch advertisement action
+$session = $this->getContainer()->get('app.session');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
 
-$S_PAM1 = ASM::$pam->getCurrentSession();
-ASM::$pam->newSession(ASM_UMODE);
-ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-
-if (ASM::$pam->size() == 1) {
-	$p = ASM::$pam->get();
-
-	if ($p->premium == 0) {
-		$p->premium = 1;
-		CTR::$data->get('playerInfo')->add('premium', 1);
-		CTR::$alert->add('Publicité déactivée. Vous êtes vraiment sûr ? Allez, re-cliquez un coup, c\'est cool les pubs.', ALERT_STD_SUCCESS);
+if (($player = $playerManager->get($session->get('playerId'))) !== null) {
+	if ($player->premium == 0) {
+		$player->premium = 1;
+		$session->get('playerInfo')->add('premium', 1);
+		$session->addFlashbag('Publicité déactivée. Vous êtes vraiment sûr ? Allez, re-cliquez un coup, c\'est cool les pubs.', Flashbag::TYPE_SUCCESS);
 	} else {
-		$p->premium = 0;
-		CTR::$data->get('playerInfo')->add('premium', 0);
-		CTR::$alert->add('Publicitées activées. Merci beaucoup pour votre soutien. Je vous aime.', ALERT_STD_SUCCESS);
+		$player->premium = 0;
+		$session->get('playerInfo')->add('premium', 0);
+		$session->addFlashbag('Publicitées activées. Merci beaucoup pour votre soutien. Je vous aime.', Flashbag::TYPE_SUCCESS);
 	}
+	$this->getContainer()->get('entity_manager')->flush($player);
 } else {
-	CTR::$alert->add('petit bug là, contactez un administrateur rapidement sous risque que votre ordinateur explose', ALERT_STD_ERROR);
+	throw new ErrorException('petit bug là, contactez un administrateur rapidement sous risque que votre ordinateur explose');
 }
-ASM::$pam->changeSession($S_PAM1);
-	
-

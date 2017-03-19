@@ -2,32 +2,31 @@
 # daily cron
 # call at x am. every day
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Modules\Gaia\Manager\SectorManager;
 use Asylamba\Modules\Atlas\Model\FactionRanking;
+use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
 
-$S_FRM1 = ASM::$frm->getCurrentSession();
-ASM::$frm->newSession();
-ASM::$frm->loadLastContext();
+$factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
+$playerRankingManager = $this->getContainer()->get('atlas.player_ranking_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$colorManager = $this->getContainer()->get('demeter.color_manager');
+$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
+$database = $this->getContainer()->get('database');
 
-$S_PRM1 = ASM::$prm->getCurrentSession();
-ASM::$prm->newSession();
-ASM::$prm->loadLastContext();
+$S_FRM1 = $factionRankingManager->getCurrentSession();
+$factionRankingManager->newSession();
+$factionRankingManager->loadLastContext();
 
-$S_PAM1 = ASM::$pam->getCurrentSession();
-ASM::$pam->newSession(FALSE);
-
-$S_CLM1 = ASM::$clm->getCurrentSession();
-ASM::$clm->newSession(FALSE);
+$S_PRM1 = $playerRankingManager->getCurrentSession();
+$playerRankingManager->newSession();
+$playerRankingManager->loadLastContext();
 
 # create a new ranking
-$db = Database::getInstance();
-$qr = $db->prepare('INSERT INTO ranking(dRanking, player, faction) VALUES (?, 0, 1)');
+$qr = $database->prepare('INSERT INTO ranking(dRanking, player, faction) VALUES (?, 0, 1)');
 $qr->execute(array(Utils::now()));
 
-$rRanking = $db->lastInsertId();
+$rRanking = $database->lastInsertId();
 
 echo 'Numéro du ranking : ' . $rRanking . '<br /><br />';
 
@@ -75,18 +74,18 @@ function setPositions($list, $attribute) {
 }
 
 # load the factions (colors)
-ASM::$clm->load(array('isInGame' => 1));
+$inGameFactions = $colorManager->getInGameFactions();
 
 # create an array with all the factions
 $gameover = FALSE;
 $list = [];
-for ($i = 0; $i < ASM::$clm->size(); $i++) {
-	$list[ASM::$clm->get($i)->id] = array(
+foreach ($inGameFactions as $faction) {
+	$list[$faction->getId()] = array(
 		'general' => 0, 
 		'wealth' => 0, 
 		'territorial' => 0,
-		'points' => ASM::$clm->get($i)->rankingPoints);
-	if (ASM::$clm->get($i)->isWinner == 1) {
+		'points' => $faction->rankingPoints);
+	if ($faction->isWinner == 1) {
 		$gameover = TRUE;
 	}
 }
@@ -95,12 +94,11 @@ const COEF_RESOURCE = 0.001;
 #-------------------------------- GENERAL RANKING --------------------------------#
 # sum of general player ranking
 # load all the players
-ASM::$pam->load(array('statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY)));
 
-for ($i = 0; $i < ASM::$prm->size(); $i++) {
-	$playerRank = ASM::$prm->get($i);
+for ($i = 0; $i < $playerRankingManager->size(); $i++) {
+	$playerRank = $playerRankingManager->get($i);
 
-	$player = ASM::$pam->getById($playerRank->rPlayer);
+	$player = $playerManager->get($playerRank->rPlayer);
 
 	if (isset($player->rColor)) {
 		$list[$player->rColor]['general'] += $playerRank->general;
@@ -108,11 +106,9 @@ for ($i = 0; $i < ASM::$prm->size(); $i++) {
 }
 
 #-------------------------------- WEALTH RANKING ----------------------------------#
-$db = Database::getInstance();
-
-for ($i = 0; $i < ASM::$clm->size(); $i++) { 
-	$color = ASM::$clm->get($i)->id;
-	$qr = $db->prepare('SELECT
+foreach ($inGameFactions as $faction) { 
+	$color = $faction->id;
+	$qr = $database->prepare('SELECT
 		COUNT(cr.id) AS nb,
 		SUM(cr.income) AS income
 		FROM commercialRoute AS cr
@@ -127,7 +123,7 @@ for ($i = 0; $i < ASM::$clm->size(); $i++) {
 		WHERE (pl1.rColor = ? OR pl2.rColor = ?) AND cr.statement = ?
 	');
 	# hint : en fait ça compte qu'une fois une route interfaction, mais chut
-	$qr->execute([$color, $color, CRM_ACTIVE]);
+	$qr->execute([$color, $color, CommercialRoute::ACTIVE]);
 	$aw = $qr->fetch();
 	if ($aw['income'] == NULL) {
 		$income = 0;
@@ -139,7 +135,7 @@ for ($i = 0; $i < ASM::$clm->size(); $i++) {
 
 #-------------------------------- TERRITORIAL RANKING -----------------------------#
 
-$sectorManager = new SectorManager();
+$sectorManager = $this->getContainer()->get('gaia.sector_manager');
 $sectorManager->load();
 for ($i = 0; $i < $sectorManager->size(); $i++) {
 	$sector = $sectorManager->get($i);
@@ -179,20 +175,20 @@ if (Utils::interval(SERVER_START_TIME, Utils::now(), 'h') > HOURS_BEFORE_START_O
 	$coefW = 0.4; # 16 12 8 4 0 ...
 	$coefT = 0.5; # 20 15 10 5 0 ...
 
-	for ($i = 0; $i < ASM::$clm->size(); $i++) {
-		$faction = ASM::$clm->get($i)->id;
+	foreach ($inGameFactions as $faction) {
+		$factionId = $faction->id;
 		$additionalPoints = 0;
 
 		# general
-		$additionalPoints += intval($pointsToEarn[$listG[$faction]['position'] - 1] * $coefG);
+		$additionalPoints += intval($pointsToEarn[$listG[$factionId]['position'] - 1] * $coefG);
 
 		# wealth
-		$additionalPoints += intval($pointsToEarn[$listW[$faction]['position'] - 1] * $coefW);
+		$additionalPoints += intval($pointsToEarn[$listW[$factionId]['position'] - 1] * $coefW);
 
 		# territorial
-		$additionalPoints += intval($pointsToEarn[$listT[$faction]['position'] - 1] * $coefT);
+		$additionalPoints += intval($pointsToEarn[$listT[$factionId]['position'] - 1] * $coefT);
 
-		$list[$faction]['points'] += $additionalPoints;
+		$list[$factionId]['points'] += $additionalPoints;
 	}
 }
 
@@ -215,9 +211,9 @@ foreach ($list as $faction => $value) {
 	$fr->rFaction = $faction; 
 
 	$firstRanking = true;
-	for ($i = 0; $i < ASM::$frm->size(); $i++) {
-		if (ASM::$frm->get($i)->rFaction == $faction) {
-			$oldRanking = ASM::$frm->get($i);
+	for ($i = 0; $i < $factionRankingManager->size(); $i++) {
+		if ($factionRankingManager->get($i)->rFaction == $faction) {
+			$oldRanking = $factionRankingManager->get($i);
 			$firstRanking = false;
 			break;
 		}
@@ -248,19 +244,19 @@ foreach ($list as $faction => $value) {
 	}
 
 	# update faction infos
-	ASM::$clm->getById($faction)->rankingPoints = $listP[$faction]['points'];
-	ASM::$clm->getById($faction)->points = $listG[$faction]['general'];
-	ASM::$clm->getById($faction)->sectors = $listT[$faction]['territorial'];
-	ASM::$clm->updateInfos($faction);
+	$f = $colorManager->get($faction);
+	$f->rankingPoints = $listP[$faction]['points'];
+	$f->points = $listG[$faction]['general'];
+	$f->sectors = $listT[$faction]['territorial'];
+	$colorManager->updateInfos($f);
+	$this->getContainer()->get('entity_manager')->flush($f);
 
 	$rankings[] = $fr;
-	ASM::$frm->add($fr);
+	$factionRankingManager->add($fr);
 }
 
-ASM::$clm->changeSession($S_CLM1);
-ASM::$pam->changeSession($S_PAM1);
-ASM::$prm->changeSession($S_PRM1);
-ASM::$frm->changeSession($S_FRM1);
+$playerRankingManager->changeSession($S_PRM1);
+$factionRankingManager->changeSession($S_FRM1);
 
 if ($gameover == FALSE) {
 	# check if a faction wins the game
@@ -278,25 +274,23 @@ if ($gameover == FALSE) {
 	}
 	if ($winRanking !== NULL) {
 		# there is a winner !!!
-		$S_CLM2 = ASM::$clm->getCurrentSession();
-		ASM::$clm->newSession(FALSE);
-		ASM::$clm->load(array('id' => $winRanking->rFaction));
+		$faction = $colorManager->get($winRanking->rFaction);
 
-		ASM::$clm->get()->isWinner = Color::WIN;
+		$faction->isWinner = Color::WIN;
 
 		# envoyer un message de Jean-Mi
-		$winnerName = ColorResource::getInfo(ASM::$clm->get()->id, 'officialName');
+		$winnerName = ColorResource::getInfo($faction->id, 'officialName');
 		$content = 'Salut,<br /><br />La victoire vient d\'être remportée par : <br /><strong>' . $winnerName . '</strong><br />';
 		$content .= 'Cette faction a atteint les ' . POINTS_TO_WIN . ' points, la partie est donc terminée.<br /><br />Bravo et un grand merci à tous les participants !';
 
-		$S_CVM1 = ASM::$cvm->getCurrentSession();
-		ASM::$cvm->newSession();
-		ASM::$cvm->load(
+		$S_CVM1 = $conversationManager->getCurrentSession();
+		$conversationManager->newSession();
+		$conversationManager->load(
 			['cu.rPlayer' => ID_JEANMI]
 		);
 
-		if (ASM::$cvm->size() == 1) {
-			$conv = ASM::$cvm->get();
+		if ($conversationManager->size() == 1) {
+			$conv = $conversationManager->get();
 
 			$conv->messages++;
 			$conv->dLastMessage = Utils::now();
@@ -317,14 +311,10 @@ if ($gameover == FALSE) {
 			$message->dCreation = Utils::now();
 			$message->dLastModification = NULL;
 
-			ASM::$cme->add($message);
+			$this->getContainer()->get('hermes.conversation_message_manager')->add($message);
 		} else {
-			CTR::$alert->add('La conversation n\'existe pas ou ne vous appartient pas.', ALERT_STD_ERROR);
+			throw new ErrorException('La conversation n\'existe pas ou ne vous appartient pas.');
 		}
-
-		ASM::$clm->changeSession($S_CLM2);
-		ASM::$cvm->changeSession($S_CVM1);
+		$conversationManager->changeSession($S_CVM1);
 	}
 }
-
-?>

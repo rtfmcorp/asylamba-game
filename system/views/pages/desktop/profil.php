@@ -1,12 +1,15 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 
-if (CTR::$get->equal('mode', 'splash')) {
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+
+if ($request->query->get('mode') === 'splash') {
 	echo '<div class="splash-screen">';
 		echo '<div class="modal">';
-			echo '<img src="' . MEDIA . 'avatar/big/jm-' . CTR::$data->get('playerInfo')->get('color') . '.png" alt="" />';
+			echo '<img src="' . MEDIA . 'avatar/big/jm-' . $session->get('playerInfo')->get('color') . '.png" alt="" />';
 			echo '<h1>Bienvenue sur Asylamba</h1>';
 			echo '<h2>Afin de bien commencer le jeu, cliquez sur l\'icône du tutoriel. Celui-ci vous guidera dans les premières étapes du jeu.</h2>';
 		echo '</div>';
@@ -24,31 +27,20 @@ include 'defaultElement/movers.php';
 echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
 
-	# loading des objets
-	$S_PAM1 = ASM::$pam->getCurrentSession();
-	ASM::$pam->newSession();
-	ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
-
-	$S_OBM1 = ASM::$obm->getCurrentSession();
-	ASM::$obm->newSession();
-	ASM::$obm->load(array('rPlayer' => CTR::$data->get('playerId')), array('dCreation', 'ASC'));
+	$playerBases = $orbitalBaseManager->getPlayerBases($session->get('playerId'));
 
 	# playerRoleplayProfil component
-	$player_playerRoleplayProfil = ASM::$pam->get(0);
+	$player_playerRoleplayProfil = $playerManager->get($session->get('playerId'));
 	include COMPONENT . 'player/playerRoleplayProfil.php';
 
 	# obFastView component
-	for ($i = 0; $i < ASM::$obm->size(); $i++) {
+	foreach ($playerBases as $ob_fastView) {
 		$ob_index = ($i + 1);
-		$ob_fastView = ASM::$obm->get($i);
 		$fastView_profil = TRUE;
 		include COMPONENT . 'bases/fastView.php';
 	}
 
-	if (ASM::$obm->size() == 1) {
+	if (count($playerBases) === 1) {
 		include COMPONENT . 'default.php';
 	}
-
-	ASM::$pam->changeSession($S_PAM1);
-	ASM::$obm->changeSession($S_OBM1);
 echo '</div>';

@@ -1,20 +1,11 @@
 <?php
 
-use Asylamba\Classes\Database\DatabaseAdmin;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Modules\Demeter\Model\Color;
-
-$db = DatabaseAdmin::getInstance();
-
 echo '<h2>Mise à jour du sénat d\'Aphera</h2>';
 
 $factionColor = 6;
 
-$_PAM = ASM::$pam->getCurrentSession();
-ASM::$pam->newSession(FALSE);
-ASM::$pam->load(['rColor' => $factionColor], ['factionPoint', 'DESC']);
-$token_pam = ASM::$pam->getCurrentSession();
-ASM::$pam->changeSession($_PAM);
+$colorManager = $this->getContainer()->get('demeter.color_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
 
-$color = new Color();
-$color->updateStatus($token_pam);
+$factionPlayers = $playerManager->getFactionPlayersByRanking($factionColor);
+$colorManager->updateStatus($colorManager->get($factionColor), $factionPlayers);

@@ -72,7 +72,7 @@ class PlayerRanking {
 
 	public function getId() { return $this->id; }
 
-	public function commonRender($type) {
+	public function commonRender($playerId, $type) {
 		$r = '';
 		$status = ColorResource::getInfo($this->color, 'status');
 
@@ -108,7 +108,7 @@ class PlayerRanking {
 			default: $var = ''; $pos = ''; break;
 		}
 
-		$r .= '<div class="player color' . $this->color . ' ' . (CTR::$data->get('playerId') == $this->rPlayer ? 'active' : NULL) . '">';
+		$r .= '<div class="player color' . $this->color . ' ' . ($playerId == $this->rPlayer ? 'active' : NULL) . '">';
 			$r .= '<a href="' . APP_ROOT . 'embassy/player-' . $this->rPlayer . '">';
 				$r .= '<img src="' . MEDIA . 'avatar/small/' . $this->avatar . '.png" alt="' . $this->name . '" class="picto" />';
 			$r .= '</a>';

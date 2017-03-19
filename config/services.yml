@@ -16,16 +16,43 @@ services:
             - "%database_admin_user"
             - "%database_admin_password"
             
+    entity_manager:
+        class: Asylamba\Classes\Entity\EntityManager
+        arguments:
+            - "@database"
+            
+    event_dispatcher:
+        class: Asylamba\Classes\Worker\EventDispatcher
+        arguments:
+            - "@app.container"
+            
+    logger:
+        class: "%log_handler"
+        arguments:
+            - "%root_path"
+            - "%log_rotation"
+            
     parser:
         class: Asylamba\Classes\Library\Parser
         arguments:
-            - "@database"
-            - "@player_manager"
-            - "@place_manager"
-            
-    player_manager:
-        class: Asylamba\Modules\Zeus\Manager\PlayerManager
-        
-    place_manager:
-        class: Asylamba\Modules\Gaia\Manager\PlaceManager
+            - "@gaia.place_manager"
+            - "@zeus.player_manager"
 
+    security:
+        class: Asylamba\Classes\Library\Security
+        arguments:
+            - "@app.session"
+        
+    ctc:
+        class: Asylamba\Classes\Worker\CTC
+        arguments:
+            - "@app.session"
+        
+    exception_listener:
+        class: Asylamba\Classes\EventListener\ExceptionListener
+        arguments:
+            - "@logger"
+            - "@app.session"
+        tags:
+            - {type: "event_listener", event: "core.exception", method: "onCoreException"}
+            - {type: "event_listener", event: "core.error", method: "onCoreError"}

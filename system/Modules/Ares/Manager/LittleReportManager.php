@@ -21,13 +21,19 @@ use Asylamba\Modules\Ares\Model\Report;
 class LittleReportManager extends Manager {
 	protected $managerType ='_LittleReport';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where);
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT r.*,
+		$qr = $this->database->prepare('SELECT r.*,
 				p1.rColor AS colorA,
 				p2.rColor AS colorD,
 				p1.name AS playerNameA,
@@ -63,8 +69,7 @@ class LittleReportManager extends Manager {
 	}
 
 	public function loadByRequest($request, $params) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT r.*,
+		$qr = $this->database->prepare('SELECT r.*,
 				p1.rColor AS colorA,
 				p2.rColor AS colorD,
 				p1.name AS playerNameA,
@@ -129,11 +134,10 @@ class LittleReportManager extends Manager {
 	}
 
 	public function save() {
-		$db = Database::getInstance();
 		$reports = $this->_Save();
 
 		foreach ($reports as $report) {
-			$qr = $db->prepare('UPDATE report SET
+			$qr = $this->database->prepare('UPDATE report SET
 				rPlayerAttacker = ?,
 				rPlayerDefender = ?,
 				rPlayerWinner = ?,

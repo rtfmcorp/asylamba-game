@@ -1,11 +1,12 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Container\Params;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
 
-$db = Database::getInstance();
-$qr = $db->query('SELECT
+$session = $this->getContainer()->get('app.session');
+$galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
+
+$qr = $this->getContainer()->get('database')->query('SELECT
 		sy1.xPosition AS sy1x,
 		sy1.yPosition AS sy1y,
 		sy2.xPosition AS sy2x,
@@ -25,15 +26,15 @@ $qr = $db->query('SELECT
 			LEFT JOIN orbitalBase AS ob2
 				ON cr.rOrbitalBaseLinked = ob2.rPlace
 	WHERE
-		ob1.rPlayer = ' . CTR::$data->get('playerId') . ' OR
-		ob2.rPlayer = ' . CTR::$data->get('playerId'));
+		ob1.rPlayer = ' . $session->get('playerId') . ' OR
+		ob2.rPlayer = ' . $session->get('playerId'));
 $aw = $qr->fetchAll();
 
-echo '<div id="commercial-routes" ' . (Params::check(Params::SHOW_MAP_RC) ? NULL : 'style="display:none;"') . '>';
-	echo '<svg viewBox="0, 0, ' . (GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size']) . ', ' . (GalaxyConfiguration::$scale * GalaxyConfiguration::$galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';
+echo '<div id="commercial-routes" ' . ($request->cookies->get('p' . Params::SHOW_MAP_RC, Params::SHOW_MAP_RC) ? NULL : 'style="display:none;"') . '>';
+	echo '<svg viewBox="0, 0, ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . ', ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';
 			foreach ($aw as $route) {
-				$class = ($route['statement'] == CRM_ACTIVE) ? 'active' : 'standBy';
-				echo '<line class="commercialRoute ' . $class . '" x1="' . ($route['sy1x'] * GalaxyConfiguration::$scale) . '" x2="' . ($route['sy2x'] * GalaxyConfiguration::$scale) . '" y1="' . ($route['sy1y'] * GalaxyConfiguration::$scale) . '" y2="' . ($route['sy2y'] * GalaxyConfiguration::$scale) . '" />';
+				$class = ($route['statement'] == CommercialRoute::ACTIVE) ? 'active' : 'standBy';
+				echo '<line class="commercialRoute ' . $class . '" x1="' . ($route['sy1x'] * $galaxyConfiguration->scale) . '" x2="' . ($route['sy2x'] * $galaxyConfiguration->scale) . '" y1="' . ($route['sy1y'] * $galaxyConfiguration->scale) . '" y2="' . ($route['sy2y'] * $galaxyConfiguration->scale) . '" />';
 			}
 	echo '</svg>';
 echo '</div>';

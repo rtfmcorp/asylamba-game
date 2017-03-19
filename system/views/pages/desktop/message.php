@@ -1,11 +1,16 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Hermes\Model\Conversation;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
+
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
+$conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
+$conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
+$notificationManager = $this->getContainer()->get('hermes.notification_manager');
 
 # background paralax
 echo '<div id="background-paralax" class="message"></div>';
@@ -18,14 +23,15 @@ include 'defaultElement/movers.php';
 echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
         # liste des conv's
-	$display = CTR::$get->equal('mode', ConversationUser::CS_ARCHIVED)
+	$display = 
+		($request->query->get('mode') === ConversationUser::CS_ARCHIVED)
 		? ConversationUser::CS_ARCHIVED
-		: ConversationUser::CS_DISPLAY;
-
+		: ConversationUser::CS_DISPLAY
+	;
 	# chargement de toutes les conversations
-	ASM::$cvm->newSession();
-	ASM::$cvm->load(
-		['cu.rPlayer' => CTR::$data->get('playerId'), 'cu.convStatement' => $display],
+	$conversationManager->newSession();
+	$conversationManager->load(
+		['cu.rPlayer' => $session->get('playerId'), 'cu.convStatement' => $display],
 		['c.dLastMessage', 'DESC'],
 		[0, Conversation::CONVERSATION_BY_PAGE]
 	);
@@ -34,35 +40,35 @@ echo '<div id="content">';
 
 	include COMPONENT . 'conversation/list.php';
 
-	if (CTR::$get->exist('conversation')) {
-		if (CTR::$get->equal('conversation', 'new')) {
+	if ($request->query->has('conversation')) {
+		if ($request->query->get('conversation') === 'new') {
 			include COMPONENT . 'conversation/create.php';
 		} else {
 			# chargement d'une conversation
-			ASM::$cvm->newSession();
-			ASM::$cvm->load(
-				['c.id' => CTR::$get->get('conversation'), 'cu.rPlayer' => CTR::$data->get('playerId')]
+			$conversationManager->newSession();
+			$conversationManager->load(
+				['c.id' => $request->query->get('conversation'), 'cu.rPlayer' => $session->get('playerId')]
 			);
 
-			if (ASM::$cvm->size() == 1) {
+			if ($conversationManager->size() == 1) {
 				# chargement des infos d'une conversation
-				ASM::$cum->newSession();
-				ASM::$cum->load(['c.rConversation' => CTR::$get->get('conversation')]);
+				$conversationUserManager->newSession();
+				$conversationUserManager->load(['c.rConversation' => $request->query->get('conversation')]);
 
 				# mis à jour de l'heure de la dernière vue
-				for ($i = 0; $i < ASM::$cum->size(); $i++) { 
-					if (ASM::$cum->get($i)->rPlayer == CTR::$data->get('playerId')) {
-						$dPlayerLastMessage = ASM::$cum->get($i)->dLastView;
-						$currentUser = ASM::$cum->get($i);
+				for ($i = 0; $i < $conversationUserManager->size(); $i++) { 
+					if ($conversationUserManager->get($i)->rPlayer == $session->get('playerId')) {
+						$dPlayerLastMessage = $conversationUserManager->get($i)->dLastView;
+						$currentUser = $conversationUserManager->get($i);
 
-						ASM::$cum->get($i)->dLastView = Utils::now();
+						$conversationUserManager->get($i)->dLastView = Utils::now();
 					}
 				}
 
 				# chargement des messages
-				ASM::$cme->newSession();
-				ASM::$cme->load(
-					['c.rConversation' => CTR::$get->get('conversation')],
+				$conversationMessageManager->newSession();
+				$conversationMessageManager->load(
+					['c.rConversation' => $request->query->get('conversation')],
 					['c.dCreation', 'DESC'],
 					[0, ConversationMessage::MESSAGE_BY_PAGE]
 				);
@@ -72,7 +78,7 @@ echo '<div id="content">';
 				include COMPONENT . 'conversation/messages.php';
 				include COMPONENT . 'conversation/manage.php';
 			} else {
-				CTR::redirect('message');
+				$this->getContainer()->get('app.response')->redirect('message');
 			}
 		}
 	} else {
@@ -80,26 +86,26 @@ echo '<div id="content">';
 	}
 
 	# NOTIFICATION
-	$S_NTM1 = ASM::$ntm->getCurrentSession();
+	$S_NTM1 = $notificationManager->getCurrentSession();
 
-	$C_NTM1 = ASM::$ntm->newSession();
-	ASM::$ntm->load(
-		array('rPlayer' => CTR::$data->get('playerId'), 'archived' => 0),
+	$C_NTM1 = $notificationManager->newSession();
+	$notificationManager->load(
+		array('rPlayer' => $session->get('playerId'), 'archived' => 0),
 		array('dSending', 'DESC'),
 		array(0, 50)
 	);
 	include COMPONENT . 'notif/last.php';
 
-	$C_NTM2 = ASM::$ntm->newSession();
-	ASM::$ntm->load(
-		array('rPlayer' => CTR::$data->get('playerId'), 'archived' => 1),
+	$C_NTM2 = $notificationManager->newSession();
+	$notificationManager->load(
+		array('rPlayer' => $session->get('playerId'), 'archived' => 1),
 		array('dSending', 'DESC'),
 		array(0, 50)
 	);
 
-	if (ASM::$ntm->size() > 0) {
+	if ($notificationManager->size() > 0) {
 		include COMPONENT . 'notif/archived.php';
 	}
 
-	ASM::$ntm->changeSession($S_NTM1);
+	$notificationManager->changeSession($S_NTM1);
 echo '</div>';

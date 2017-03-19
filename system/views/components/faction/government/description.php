@@ -2,11 +2,14 @@
 
 use Asylamba\Classes\Library\Format;
 
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
+$colorManager = $this->getContainer()->get('demeter.color_manager');
+
 echo '<div class="component new-message">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<form action="' . Format::actionBuilder('updatefactiondesc') . '" method="POST" />';
+			echo '<form action="' . Format::actionBuilder('updatefactiondesc', $sessionToken) . '" method="POST" />';
 				echo '<h4>Editer la description</h4>';
 
 				echo '<p class="input input-area"><textarea name="description" required style="height: 400px;">' . $faction->description . '</textarea></p>';
@@ -21,8 +24,7 @@ echo '<div class="component">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<h4>Aperçu</h4>';
-			echo '<p class="long-info text-bloc">' . $faction->getParsedDescription() . '</p>';
+			echo '<p class="long-info text-bloc">' . $colorManager->getParsedDescription($faction) . '</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-?>

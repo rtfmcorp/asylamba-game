@@ -1,16 +1,13 @@
 <?php
 
-use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Container\Params;
 
-$params = Utils::getHTTPData('params');
+$request = $this->getContainer()->get('app.request');
+
+$params = $request->query->get('params');
 
 if ($params !== FALSE) {
 	if (in_array($params, Params::getParams())) {
-		if (Params::check($params)) {
-			Params::update($params, FALSE);
-		} else {
-			Params::update($params, TRUE);
-		}
+		$request->cookies->add('p' . $params, !$request->cookies->get('p' . $params, $params));
 	}
 }

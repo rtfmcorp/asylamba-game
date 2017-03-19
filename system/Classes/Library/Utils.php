@@ -2,8 +2,6 @@
 
 namespace Asylamba\Classes\Library;
 
-use Asylamba\Classes\Worker\CTR;
-
 class Utils {
 	private static $autorizedChar = array(
 		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -209,16 +207,6 @@ class Utils {
 
 	public static function hashAndSalt($string) {
 		return sha1($string . 'abdelazer');
-	}
-
-	public static function getHTTPData($dataName) {
-		if (CTR::$get->exist($dataName)) {
-			return CTR::$get->get($dataName);
-		} elseif (CTR::$post->exist($dataName)) {
-			return CTR::$post->get($dataName);
-		} else {
-			return FALSE;
-		}
 	}
 
 	public static function shuffle(&$array) {

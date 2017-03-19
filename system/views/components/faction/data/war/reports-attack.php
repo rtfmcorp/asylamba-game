@@ -1,14 +1,14 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+$session = $this->getContainer()->get('app.session');
+$littleReportManager = $this->getContainer()->get('ares.little_report_manager');
 
 # loading des objets
-$S_LRM1 = ASM::$lrm->getCurrentSession();
-ASM::$lrm->newSession();
-ASM::$lrm->loadByRequest(
+$S_LRM1 = $littleReportManager->getCurrentSession();
+$littleReportManager->newSession();
+$littleReportManager->loadByRequest(
 	'WHERE p1.rColor = ? AND p2.rColor != 0 ORDER BY dFight DESC LIMIT 0, 30',
-	[CTR::$data->get('playerInfo')->get('color')]
+	[$session->get('playerInfo')->get('color')]
 );
 
 # work
@@ -20,10 +20,10 @@ echo '<div class="component">';
 		echo '<div class="body">';
 			echo '<h4>Attaques</h4>';
 				echo '<div class="set-item">';
-					for ($i = 0; $i < ASM::$lrm->size(); $i++) {
-						$r = ASM::$lrm->get($i);
+					for ($i = 0; $i < $littleReportManager->size(); $i++) {
+						$r = $littleReportManager->get($i);
 
-						list($title, $img) = $r->getTypeOfReport(CTR::$data->get('playerInfo')->get('color'));
+						list($title, $img) = $r->getTypeOfReport($session->get('playerInfo')->get('color'));
 
 						echo '<div class="item">';
 							echo '<div class="left">';
@@ -43,4 +43,4 @@ echo '<div class="component">';
 	echo '</div>';
 echo '</div>';
 
-ASM::$lrm->changeSession($S_LRM1);
+$littleReportManager->changeSession($S_LRM1);
