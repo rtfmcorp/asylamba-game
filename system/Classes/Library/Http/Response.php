@@ -2,8 +2,6 @@
 
 namespace Asylamba\Classes\Library\Http;
 
-use Asylamba\Classes\Container\History;
-
 class Response
 {
 	/** @var string **/
@@ -12,18 +10,16 @@ class Response
 	protected $page;
 	/** @var Request **/
 	protected $request;
-	/** @var History **/
-	protected $history;
 	/** @var string **/
 	protected $redirect;
+	/** @var array **/
+	protected $templates = [];
 	
 	/**
 	 * @param \Asylamba\Classes\Library\Http\Request $request
-	 * @param History $history
 	 */
-	public function __construct(Request $request, History $history) {
+	public function __construct(Request $request) {
 		$this->request = $request;
-		$this->history = $history;
 	}
 	
 	/**
@@ -59,16 +55,12 @@ class Response
 	}
 	
 	/**
-	 * @param int $v
+	 * @param int $path
 	 * @param boolean $externalDomain
 	 */
-	public function redirect($v = 0, $externalDomain = FALSE) {
+	public function redirect($path, $externalDomain = FALSE) {
+		$this->redirect = $path;
 		$this->request->setCrossDomain($externalDomain);
-		$this->redirect = 
-			($v === 0)
-			? $this->history->getPastPath()
-			: $v
-		;
 	}
 	
 	/**
@@ -82,5 +74,21 @@ class Response
 	public function rewriteCookies()
 	{
 		
+	}
+	
+	/**
+	 * @param string $template
+	 */
+	public function addTemplate($template)
+	{
+		$this->templates[] = $template;
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getTemplates()
+	{
+		return $this->templates;
 	}
 }
