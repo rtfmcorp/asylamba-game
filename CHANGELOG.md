@@ -6,6 +6,13 @@
 - Tests shortcut command
 - Services and parameters configuration files
 - Module main class with specific configuration file
+- Unit of work pattern
+- Entity Manager
+- Routing component
+- Templating component
+
+### Changed
+- Many managers are now free of the session pattern
 
 ### Removed
 - Support of HHVM

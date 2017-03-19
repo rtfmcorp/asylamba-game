@@ -40,10 +40,10 @@ class Request {
 			$this->request->set($key, $value);
 		}
 		foreach ($_SERVER as $key => $value) {
-			if (!strpos($key, 'HTTP_')) {
+			if (strpos($key, 'HTTP_') === false) {
 				continue;
 			}
-			$this->headers->set($key, $value);
+			$this->headers->set(str_replace('_', '-', strtolower(substr($key, 5))), $value);
 		}
 	}
 

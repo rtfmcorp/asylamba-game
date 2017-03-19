@@ -9,6 +9,8 @@ class Session extends ArrayList {
 	/** @var array **/
 	public $flashbags = [];
 	
+	protected $history = [];
+	
 	public function initFlashbags()
 	{
 		if (isset($_SESSION['flashbags'])) {
@@ -150,4 +152,28 @@ class Session extends ArrayList {
         }
         return FALSE;
     }
+	
+	/**
+	 * @param string $path
+	 */
+	public function addHistory($path)
+	{
+		$this->history[] = $path;
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getHistory()
+	{
+		return $this->history;
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getLastHistory()
+	{
+		return $this->history[count($this->history) - 1];
+	}
 }
