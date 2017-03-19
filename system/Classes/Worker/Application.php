@@ -12,14 +12,13 @@ use Asylamba\Classes\Container\Alert;
 use Asylamba\Classes\Library\Bug;
 
 use Asylamba\Classes\Library\Http\Request;
-use Asylamba\Classes\Library\Http\Response;
 
 use Asylamba\Classes\Event\ExceptionEvent;
 use Asylamba\Classes\Event\ErrorEvent;
 
 use Asylamba\Classes\DependencyInjection\Container;
 
-class Application {
+class Application implements ApplicationInterface {
     /** @var Container **/
     protected $container;
 	/** @var array **/
@@ -27,6 +26,7 @@ class Application {
     
     public function boot()
     {
+		ob_start();
 		$errorEvent = null;
 		try {
 			$this->container = new Container();
@@ -34,8 +34,7 @@ class Application {
 			$this->configure();
 			$this->registerModules();
 			$this->init();
-			$this->checkPermission();
-			$this->getInclude();
+			$this->render();
 			$this->save();
 		} catch (\Exception $ex) {
 			$errorEvent = new ExceptionEvent($ex);
@@ -104,48 +103,16 @@ class Application {
 	{
 		return $this->modules[$name];
 	}
-
-	private $pageResources = array(
-		'profil' => array('profil', 'Profil'),
-		'message' => array('message', 'Messagerie'),
-		'fleet' => array('fleet', 'Flottes'),
-		'financial' => array('financial', 'Finances'),
-		'technology' => array('technology', 'Technologie'),
-		'spying' => array('spying', 'Espionnage'),
-
-		'diary' => array('diary', 'Journal'),
-		'embassy' => array('embassy', 'Ambassades'),
-
-		'bases' => array('bases', 'Vos Bases'),
-
-		'map' => array('map', 'Carte'),
-
-		'faction' => array('faction', 'Votre Faction'),
-		'params' => array('params', 'Paramètres'),
-		'sponsorship' => array('sponsorship', 'Parrainage'),
-		'rank' => array('rank', 'Classements'),
-
-		'admin' => array('admin', 'Administration'),
-
-		'404' => array('notfound', '404'),
-
-		'action' => array('action', 'Action'),
-		'ajax' => array('ajax', 'Ajax'),
-		'inscription' => array('inscription', 'Inscription'),
-		'connection' => array('connection', 'Connexion'),
-		'api' => array('api', 'API'),
-		'script' => array('script', 'Script'),
-		'buffer' => array('buffer', 'Bienvenue')
-	);
 	
 	public function init() {
 		$this->container->set('app.benchmark', new Benchmark());
-		$this->container->set('app.session', 
+		$session =
 			(isset($_SESSION[SERVER_SESS]['data']))
 			? unserialize($_SESSION[SERVER_SESS]['data'])
 			: new Session()
-		);
-		$this->container->get('app.session')->initFlashbags();
+		;
+		$this->container->set('app.session', $session);
+		$session->initFlashbags();
 		$this->container->set('app.history',
 			(isset($_SESSION[SERVER_SESS]['history']))
 			? unserialize($_SESSION[SERVER_SESS]['history'])
@@ -162,147 +129,22 @@ class Application {
 		$request->initialize();
 		$this->container->set('app.request', $request);
 		
-		self::parseRoute();
+		$this->container->set('app.response',
+			$this->container->get('router')->processRequest($request, $session)
+		);
 
 		$this->container->set('app.alert', 
 			(isset($_SESSION[SERVER_SESS]['alert']))
 			? unserialize($_SESSION[SERVER_SESS]['alert'])
 			: new Alert()
 		);
-		$this->container->get('app.session')->add('screenmode',
+		$session->add('screenmode',
 			(($screenMode = $request->query->get('screenmode')) && in_array($screenMode, ['desktop', 'mobile']))
 			? $screenMode
 			: 'desktop'
 		);
 		$this->container->get('entity_manager')->init();
 		
-	}
-
-	private function parseRoute() {
-		$request = $this->container->get('app.request');
-		$request->setUrl($_SERVER['REQUEST_URI']);
-		
-		$response = new Response($request, $this->container->get('app.history'));
-		$this->container->set('app.response', $response);
-
-		$requestURI = array_values(array_diff(
-			explode('/', $_SERVER['REQUEST_URI']),
-			explode('/', $_SERVER['SCRIPT_NAME'])
-		));
-
-		$temp = array_keys($this->pageResources);
-		$page = (count($requestURI) == 0) ? $temp[0] : $requestURI[0];
-		if (in_array($page, array_keys($this->pageResources))) {
-			$this->title = $this->pageResources[$page][1];
-		} else {
-			$this->title = 'Page non trouvée';
-			$page = '404';
-		}
-		$response->setPage($page);
-		// Fill the history
-		if (!in_array($page, array('404', 'action', 'ajax', 'connection', 'api', 'script'))) {
-			$newURI = 
-				(implode('/', $requestURI) == '')
-				? 'profil'
-				: implode('/', $requestURI)
-			;
-			$this->container->get('app.history')->add($newURI);
-		}
-
-		$nbParams = count($requestURI);
-		// remplir les paramètres depuis le routing
-		for ($i = 1; $i < $nbParams; ++$i) {
-			$param = explode('-', $requestURI[$i]);
-			if (count($param) === 2) {
-				$request->query->set($param[0], $param[1]);
-			}
-		}
-	}
-
-	public function checkPermission() {
-		$page = $this->container->get('app.response')->getPage();
-		$session = $this->container->get('app.session');
-		
-		if ($page === 'inscription') {
-			if (!$session->exist('playerId')) {
-				# do nothing
-			} else {
-				header('Location: ' . APP_ROOT);
-				exit();
-			}
-		} elseif ($page === 'connection') {
-			if (!$session->exist('playerId')) {
-				if (!$this->container->get('app.request')->query->has('bindkey')) {
-					header('Location: ' . GETOUT_ROOT . 'accueil/speak-wrongargument');
-					exit();
-				} else {
-					# do nothing
-				}
-			} else {
-				header('Location: ' . APP_ROOT);
-				exit();
-			}
-		} elseif (in_array($page, array('api', 'script', 'buffer'))) {
-			# doing nothing
-		} else {
-			if (!$session->exist('playerId')) {
-				header('Location: ' . GETOUT_ROOT . 'accueil/speak-loginrequired');
-				exit();
-			}
-		}
-	}
-
-	public function getInclude() {
-		ob_start();
-		$page = $this->container->get('app.response')->getPage();
-		$screenMode = $this->container->get('app.session')->get('screenmode');
-		
-		switch($page) {
-			case 'action':
-				include ACTION . 'main.php';
-				break;
-			case 'ajax':
-				include AJAX . 'main.php';
-				break;
-			case 'api':
-				include API . 'main.php';
-				break;
-			case 'buffer':
-				include BUFFER . 'main.php';
-				break;
-			case 'script':
-				include SCRIPT . 'main.php';
-				break;
-			case 'connection':
-				include CONNECTION . 'main.php';
-				break;
-			case '404':
-				header('HTTP/1.0 404 Not Found');
-				include TEMPLATE . 'notfound.php';
-				break;
-			case 'inscription':
-				include INSCRIPTION . 'check.php';
-				if (!$this->container->get('app.response')->getRedirect()) {
-					include TEMPLATE . $screenMode . '/open.php';
-					include TEMPLATE . $screenMode . '/stepbar.php';
-					include INSCRIPTION . 'content.php';
-					include TEMPLATE . $screenMode . '/btmbar.php';
-					include TEMPLATE . $screenMode . '/alert.php';
-					include TEMPLATE . $screenMode . '/close.php';
-				}
-				break;
-			default:
-				include EVENT . 'loadEvent.php';
-				include EVENT . 'executeEvent.php';
-				include EVENT . 'updateGame.php';
-				include TEMPLATE . $screenMode . '/open.php';
-				include TEMPLATE . $screenMode . '/navbar.php';
-				include PAGES . $screenMode . '/' . $page . '.php';
-				include TEMPLATE . $screenMode . '/toolbar.php';
-				include TEMPLATE . $screenMode . '/alert.php';
-				include TEMPLATE . $screenMode . '/close.php';
-				break;
-		}
 	}
 
 	public function getStat() {
@@ -315,6 +157,19 @@ class Application {
 			$ctn .= "# query : " . $this->container->get('database')->getNbrOfQuery() . "\r";
 
 			Bug::writeLog($path, $ctn);
+		}
+	}
+	
+	public function render()
+	{
+		$response = $this->container->get('app.response');
+		# redirection, si spécifié
+		if (($redirect = $response->getRedirect())) {
+			header('Location: ' . $redirect);
+			exit();
+		} else {
+			$this->container->get('templating.renderer')->render($response);
+			ob_end_flush();
 		}
 	}
 
@@ -335,18 +190,5 @@ class Application {
 		$this->container->get('app.session')->saveFlashbags();
 		# fin du benchmark
 		$this->getStat();
-
-		$response = $this->container->get('app.response');
-		# redirection, si spécifié
-		if (($redirect = $response->getRedirect())) {
-			if ($this->container->get('app.request')->getCrossDomain() == TRUE) {
-				header('Location: /' . $redirect);
-			} else {
-				header('Location: ' . APP_ROOT . $redirect);
-			}
-			exit();
-		} else {
-			ob_end_flush();
-		}
 	}
 }
