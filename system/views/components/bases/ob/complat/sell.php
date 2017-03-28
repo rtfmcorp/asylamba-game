@@ -70,7 +70,7 @@ echo '<div class="component market-sell">';
 	echo '</div>';
 echo '</div>';
 
-$commanders = $commanderManager->getBaseCommanders($ob_compPlat->getId(), [Commander::INSCHOOL, Commander::RESERVE], ['c.experience', 'DESC']);
+$commanders = $commanderManager->getBaseCommanders($ob_compPlat->getId(), [Commander::INSCHOOL, Commander::RESERVE], ['c.experience' => 'DESC']);
 
 # commander current rate
 $transactionManager->newSession();
@@ -122,7 +122,7 @@ echo '<div class="component market-sell">';
 				echo '</form>';
 			}
 
-			if ($commanderManager->size() == 0) {
+			if (count($commanders) === 0) {
 				echo '<p><em>Vous n\'avez aucun commandant dans l\'école.</em></p>';
 			}
 		echo '</div>';
