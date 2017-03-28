@@ -44,7 +44,7 @@ class TransactionRepository extends AbstractRepository
 		if (($t = $this->unitOfWork->getObject(Transaction::class, $id)) !== null) {
 			return $t;
 		}
-		$query = $this->select('t.id = :id', ['id' => $id]);
+		$query = $this->select('WHERE t.id = :id', ['id' => $id]);
 		
 		if (($row = $query->fetch()) === false) {
 			return null;
@@ -62,7 +62,7 @@ class TransactionRepository extends AbstractRepository
      */
     public function getLastCompletedTransaction($type)
     {
-		$query = $this->select('t.type = :type AND t.statement = ' . Transaction::ST_COMPLETED . ' ORDER BY t.dValidation DESC LIMIT 1', [
+		$query = $this->select('WHERE t.type = :type AND t.statement = ' . Transaction::ST_COMPLETED . ' ORDER BY t.dValidation DESC LIMIT 1', [
             'type' => $type
         ]);
 		if (($row = $query->fetch()) === false) {
@@ -82,7 +82,7 @@ class TransactionRepository extends AbstractRepository
 	 */
 	public function getProposedTransactions($type)
 	{
-		$query = $this->select('t.type = :type AND t.statement = ' . Transaction::ST_PROPOSED . ' ORDER BY t.dPublication DESC LIMIT 20', [
+		$query = $this->select('WHERE t.type = :type AND t.statement = ' . Transaction::ST_PROPOSED . ' ORDER BY t.dPublication DESC LIMIT 20', [
             'type' => $type
         ]);
 		
@@ -106,7 +106,7 @@ class TransactionRepository extends AbstractRepository
 	 */
 	public function getPlayerPropositions($playerId, $type)
 	{
-		$query = $this->select('t.rPlayer = :player_id AND t.type = :type AND t.statement = ' . Transaction::ST_PROPOSED, [
+		$query = $this->select('WHERE t.rPlayer = :player_id AND t.type = :type AND t.statement = ' . Transaction::ST_PROPOSED, [
             'player_id' => $playerId,
             'type' => $type
         ]);
@@ -130,7 +130,7 @@ class TransactionRepository extends AbstractRepository
 	 */
 	public function getBasePropositions($placeId)
 	{
-		$query = $this->select('t.rPlace = :place_id AND t.statement = ' . Transaction::ST_PROPOSED, [
+		$query = $this->select('WHERE t.rPlace = :place_id AND t.statement = ' . Transaction::ST_PROPOSED, [
             'place_id' => $placeId
         ]);
 		
