@@ -38,6 +38,14 @@ class Cookie extends ArrayList {
         $this->elements = array();
         $this->rewrite();
     }
+	
+	/**
+	 * @return array
+	 */
+	public function all()
+	{
+		return $this->elements;
+	}
 
     public function rewrite() {
         setcookie($this->name, serialize($this->elements), time() + 3000000, '/');
