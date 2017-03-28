@@ -7,6 +7,9 @@ parameters:
     database_admin_user: root
     database_admin_password: asylamba
     
+    server_port: 8000
+    server_cycle_timeout: 20
+    
     log_handler: Asylamba\Classes\Logger\FileLogger
     log_rotation: 3
 
