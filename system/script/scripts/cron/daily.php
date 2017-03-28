@@ -24,7 +24,7 @@ $playerInactiveTimeLimit = $this->getContainer()->getParameter('zeus.player.inac
 
 $S_NTM1 = $notificationManager->getCurrentSession();
 
-$path = 'public/log/cron/' . date('Y') . '-' . date('m') . '.log';
+$path = $this->getContainer()->getParameter('root_path') . '/public/log/cron/' . date('Y') . '-' . date('m') . '.log';
 
 Bug::writeLog($path, '# ###################');
 Bug::writeLog($path, '# Cron trace');
