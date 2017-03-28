@@ -4,7 +4,9 @@ namespace Asylamba\Classes\Router;
 
 use Asylamba\Classes\Library\Http\Request;
 use Asylamba\Classes\Library\Http\Response;
+
 use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Daemon\Client;
 
 class Router
 {
@@ -43,12 +45,13 @@ class Router
 	
 	/**
 	 * @param Request $request
-	 * @param Session $session
+	 * @param Client $client
 	 * @return Response
 	 */
-	public function processRequest(Request $request, Session $session)
+	public function processRequest(Request $request, Client $client)
 	{
-		$response = new Response($request);
+		$response = new Response();
+        $session = $client->getSession();
 		$this->parseRoute($request, $response, $session);
 		$this->checkPermission($request, $response, $session);
 		
@@ -67,12 +70,13 @@ class Router
 	 */
 	protected function parseRoute(Request $request, Response $response, Session $session) {
 		$requestURI = array_values(array_diff(
-			explode('/', $_SERVER['REQUEST_URI']),
+			explode('/', $request->getPath()),
 			explode('/', $_SERVER['SCRIPT_NAME'])
 		));
 
 		$temp = array_keys($this->pageResources);
-		$page = (count($requestURI) == 0) ? $temp[0] : $requestURI[0];
+		$page = (empty($requestURI)) ? $temp[0] : ((empty($requestURI[0])) ? $requestURI[1] : $requestURI[0]);
+		
 		if (in_array($page, array_keys($this->pageResources))) {
 			$response->setTitle($this->pageResources[$page][1]);
 		} else {
@@ -98,6 +102,11 @@ class Router
 				$request->query->set($param[0], $param[1]);
 			}
 		}
+		$session->add('screenmode',
+			(($screenMode = $request->query->get('screenmode')) && in_array($screenMode, ['desktop', 'mobile']))
+			? $screenMode
+			: 'desktop'
+		);
 	}
 
 	/**
@@ -107,7 +116,7 @@ class Router
 	 */
 	public function checkPermission(Request $request, Response $response, Session $session) {
 		$page = $response->getPage();
-		
+        
 		if ($page === 'inscription') {
 			if ($session->exist('playerId')) {
 				$response->redirect(APP_ROOT);
@@ -153,15 +162,15 @@ class Router
 				$response->addTemplate(CONNECTION . 'main.php');
 				break;
 			case '404':
-				header('HTTP/1.0 404 Not Found');
+                $response->setStatusCode(404);
 				$response->addTemplate(TEMPLATE . 'notfound.php');
 				break;
 			case 'inscription':
 				$response->addTemplate(INSCRIPTION . 'check.php');
-				if (!$this->container->get('app.response')->getRedirect()) {
+				if (!$response->getRedirect()) {
 					$response->addTemplate(TEMPLATE . $screenMode . '/open.php');
 					$response->addTemplate(TEMPLATE . $screenMode . '/stepbar.php');
-					$response->addTemplate(INSCRIPTION . 'content.php');
+					$response->addTemplate(INSCRIPTION . '/content.php');
 					$response->addTemplate(TEMPLATE . $screenMode . '/btmbar.php');
 					$response->addTemplate(TEMPLATE . $screenMode . '/alert.php');
 					$response->addTemplate(TEMPLATE . $screenMode . '/close.php');
