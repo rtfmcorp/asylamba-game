@@ -124,13 +124,12 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 				if ($check->checkChar($request->request->get('base'))) {
 					$session->get('inscription')->add('base', $request->request->get('base'));
 
-					$sm = $this->getContainer()->get('gaia.sector_manager');
-					$sm->load();
+					$sectors = $this->getContainer()->get('gaia.sector_manager')->getAll();
 
 					$factionSectors = array();
-					for ($i = 0; $i < $sm->size(); $i++) { 
-						if ($sm->get($i)->getRColor() == $session->get('inscription')->get('ally')) {
-							$factionSectors[] = $sm->get($i)->getId();
+					foreach ($sectors as $sector) { 
+						if ($sector->getRColor() == $session->get('inscription')->get('ally')) {
+							$factionSectors[] = $sector->getId();
 						}
 					}
 					if (in_array($request->request->get('sector'), $factionSectors)) {

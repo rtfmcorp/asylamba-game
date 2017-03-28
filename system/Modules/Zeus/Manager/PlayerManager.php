@@ -386,15 +386,11 @@ class PlayerManager {
 		$player = $this->get($playerId);
 
 		# sector choice 
-		$S_SEM1 = $this->sectorManager->getCurrentSession();
-		$this->sectorManager->newSession(FALSE);
-		$this->sectorManager->load(array('rColor' => $player->rColor), array('id', 'DESC'));
+		$sectors = $this->sectorManager->getFactionSectors($player->rColor);
 
 		$placeFound = FALSE;
 		$placeId = NULL;
-		for ($i = 0; $i < $this->sectorManager->size(); $i++) { 
-			$sector = $this->sectorManager->get($i);
-
+		foreach ($sectors as $sector) {
 			# place choice
 			$qr = $this->database->prepare('SELECT * FROM place AS p
 				INNER JOIN system AS sy ON p.rSystem = sy.id
@@ -413,7 +409,6 @@ class PlayerManager {
 				break;
 			}
 		}
-		$this->sectorManager->changeSession($S_SEM1);
 
 		if ($placeFound) {
 
