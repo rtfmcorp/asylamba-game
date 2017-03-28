@@ -5,6 +5,9 @@ $scripts = [
 		['deploy_dbinstall', '/deploy/dbinstall.php'],
 		['deploy_newgalaxy', '/deploy/newgalaxy.php'],
 	],
+	'Serveur' => [
+		['monitoring', '/server/monitoring.php']
+	],
 	'Tâches Cron' => [
 		['cron_daily', '/cron/daily.php'],
 		['cron_playerranking', '/cron/playerRanking.php'],
