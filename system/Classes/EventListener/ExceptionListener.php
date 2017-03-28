@@ -65,5 +65,9 @@ class ExceptionListener {
 		$this->logger->log("$message at $file at line $line", $level);
 		
 		$this->session->addFlashbag($message, $flashbagLevel);
+		
+		if (ob_get_level() > 0) {
+			ob_end_clean();
+		}
 	}
 }
