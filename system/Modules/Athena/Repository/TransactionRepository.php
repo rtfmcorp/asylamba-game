@@ -53,7 +53,104 @@ class TransactionRepository extends AbstractRepository
 		$this->unitOfWork->addObject($transaction);
 		return $transaction;
     }
+    
+    /**
+     * @param int $type
+     * @param int $statement
+     * @param int $limit
+     * @return array
+     */
+    public function getLastCompletedTransaction($type)
+    {
+		$query = $this->select('t.type = :type AND t.statement = ' . Transaction::ST_COMPLETED . ' ORDER BY t.dValidation DESC LIMIT 1', [
+            'type' => $type
+        ]);
+		if (($row = $query->fetch()) === false) {
+            return null;
+        }
+        if (($t = $this->unitOfWork->getObject(Transaction::class, $row['id'])) !== null) {
+            return $t;
+        }
+        $transaction = $this->format($row);
+        $this->unitOfWork->addObject($transaction);
+        return $transaction;
+    }
+    
+	/**
+	 * @param int $type
+	 * @return array
+	 */
+	public function getProposedTransactions($type)
+	{
+		$query = $this->select('t.type = :type AND t.statement = ' . Transaction::ST_PROPOSED . ' ORDER BY t.dPublication DESC LIMIT 20', [
+            'type' => $type
+        ]);
+		
+		$data = [];
+		while($row = $query->fetch()) {
+			if (($t = $this->unitOfWork->getObject(Transaction::class, $row['id'])) !== null) {
+				$data[] = $t;
+				continue;
+			}
+			$transaction = $this->format($row);
+			$this->unitOfWork->addObject($transaction);
+			$data[] = $transaction;
+		}
+		return $data;
+	}
+    
+	/**
+     * @param int $playerId
+	 * @param int $type
+	 * @return array
+	 */
+	public function getPlayerPropositions($playerId, $type)
+	{
+		$query = $this->select('t.rPlayer = :player_id AND t.type = :type AND t.statement = ' . Transaction::ST_PROPOSED, [
+            'player_id' => $playerId,
+            'type' => $type
+        ]);
+		
+		$data = [];
+		while($row = $query->fetch()) {
+			if (($t = $this->unitOfWork->getObject(Transaction::class, $row['id'])) !== null) {
+				$data[] = $t;
+				continue;
+			}
+			$transaction = $this->format($row);
+			$this->unitOfWork->addObject($transaction);
+			$data[] = $transaction;
+		}
+		return $data;
+	}
+    
+	/**
+     * @param int $placeId
+	 * @return array
+	 */
+	public function getBasePropositions($placeId)
+	{
+		$query = $this->select('t.rPlace = :place_id AND t.statement = ' . Transaction::ST_PROPOSED, [
+            'place_id' => $placeId
+        ]);
+		
+		$data = [];
+		while($row = $query->fetch()) {
+			if (($t = $this->unitOfWork->getObject(Transaction::class, $row['id'])) !== null) {
+				$data[] = $t;
+				continue;
+			}
+			$transaction = $this->format($row);
+			$this->unitOfWork->addObject($transaction);
+			$data[] = $transaction;
+		}
+		return $data;
+	}
 
+    /**
+     * @param int $transactionType
+     * @return mixed
+     */
 	public function getExchangeRate($transactionType) {
 		$statement = $this->connection->prepare(
             'SELECT currentRate

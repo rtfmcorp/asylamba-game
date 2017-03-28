@@ -23,18 +23,14 @@ $playerManager = $this->getContainer()->get('zeus.player_manager');
 $rTransaction = $request->query->get('rtransaction');
 
 if ($rTransaction !== FALSE) {
-
-	$S_TRM1 = $transactionManager->getCurrentSession();
-	$transactionManager->newSession();
-	$transactionManager->load(array('id' => $rTransaction));
-	$transaction = $transactionManager->get();
+	$transaction = $transactionManager->get($rTransaction);
 
 	$S_CSM1 = $commercialShippingManager->getCurrentSession();
 	$commercialShippingManager->newSession();
 	$commercialShippingManager->load(array('rTransaction' => $rTransaction));
 	$commercialShipping = $commercialShippingManager->get();
 
-	if ($transactionManager->size() == 1 AND $commercialShippingManager->size() == 1 AND $transaction->statement == Transaction::ST_PROPOSED AND $transaction->rPlayer == $session->get('playerId')) {
+	if ($transaction !== null AND $commercialShippingManager->size() == 1 AND $transaction->statement == Transaction::ST_PROPOSED AND $transaction->rPlayer == $session->get('playerId')) {
 		$base = $orbitalBaseManager->get($transaction->rPlace);
 
 		if ($session->get('playerInfo')->get('credit') >= $transaction->getPriceToCancelOffer()) {
@@ -101,7 +97,6 @@ if ($rTransaction !== FALSE) {
 	} else {
 		throw new ErrorException('impossible d\'annuler une proposition sur le marché');
 	}
-	$transactionManager->changeSession($S_TRM1);
 	$commercialShippingManager->changeSession($S_CSM1);
 } else {
 	throw new FormException('pas assez d\'informations pour annuler une proposition sur le marché');

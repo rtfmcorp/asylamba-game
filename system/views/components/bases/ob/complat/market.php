@@ -9,7 +9,6 @@ $commercialShippingManager = $this->getContainer()->get('athena.commercial_shipp
 $commercialTradeManager = $this->getContainer()->get('athena.commercial_tax_manager');
 $session = $this->getContainer()->get('app.session');
 
-$S_TRM1 = $transactionManager->getCurrentSession();
 $S_CSM1 = $commercialShippingManager->getCurrentSession();
 $commercialShippingManager->changeSession($ob_compPlat->shippingManager);
 
@@ -43,12 +42,10 @@ if ($comingCommercialShipping > 0) {
 	echo '</div>';
 }
 
-$transactionManager->newSession();
-$transactionManager->load(array('type' => Transaction::TYP_RESOURCE, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
-$ressourceCurrentRate = $transactionManager->get()->currentRate;
+$transaction = $transactionManager->getLastCompletedTransaction(Transaction::TYP_RESOURCE)[0];
+$ressourceCurrentRate = $transaction->currentRate;
 
-$transactionManager->newSession();
-$transactionManager->load(array('type' => Transaction::TYP_RESOURCE, 'statement' => Transaction::ST_PROPOSED), array('dPublication', 'DESC'), array(0, 20));
+$resourceTransactions = $transactionManager->getProposedTransactions(Transaction::TYP_RESOURCE);
 
 echo '<div class="component transaction">';
 	echo '<div class="head skin-4">';
@@ -67,9 +64,9 @@ echo '<div class="component transaction">';
 			echo '</div>';
 
 			echo '<div class="sort-content">';
-				for ($i = 0; $i < $transactionManager->size(); $i++) {
-					if ($session->get('playerId') != $transactionManager->get($i)->rPlayer) {
-						$transactionManager->render($transactionManager->get($i), $ressourceCurrentRate, $S_CTM2, $ob_compPlat);
+				foreach ($resourceTransactions as $transaction) {
+					if ($session->get('playerId') != $transaction->rPlayer) {
+						$transactionManager->render($transaction, $ressourceCurrentRate, $S_CTM2, $ob_compPlat);
 					}
 				}
 			echo '</div>';
@@ -77,16 +74,9 @@ echo '<div class="component transaction">';
 	echo '</div>';
 echo '</div>';
 
-$transactionManager->newSession();
-$transactionManager->load(array('type' => Transaction::TYP_COMMANDER, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
-$commanderCurrentRate = $transactionManager->get()->currentRate;
+$commanderCurrentRate = $transactionManager->getLastCompletedTransaction(Transaction::TYP_COMMANDER)->currentRate;
 
-$transactionManager->newSession();
-$transactionManager->load(
-	array('type' => Transaction::TYP_COMMANDER, 'statement' => Transaction::ST_PROPOSED),
-	array('dPublication', 'DESC'),
-	array(0, 20)
-);
+$commanderTransactions = $transactionManager->getProposedTransactions(Transaction::TYP_COMMANDER);
 
 echo '<div class="component transaction">';
 	echo '<div class="head skin-4">';
@@ -105,9 +95,9 @@ echo '<div class="component transaction">';
 			echo '</div>';
 
 			echo '<div class="sort-content">';
-				for ($i = 0; $i < $transactionManager->size(); $i++) {
-					if ($session->get('playerId') != $transactionManager->get($i)->rPlayer) {
-						$transactionManager->render($transactionManager->get($i), $commanderCurrentRate, $S_CTM2, $ob_compPlat);
+				foreach ($commanderTransactions as $transaction) {
+					if ($session->get('playerId') != $transaction->rPlayer) {
+						$transactionManager->render($transaction, $commanderCurrentRate, $S_CTM2, $ob_compPlat);
 					}
 				}
 			echo '</div>';
@@ -115,12 +105,9 @@ echo '<div class="component transaction">';
 	echo '</div>';
 echo '</div>';
 
-$transactionManager->newSession();
-$transactionManager->load(array('type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
-$shipCurrentRate = $transactionManager->get()->currentRate;
+$shipCurrentRate = $transactionManager->getLastCompletedTransaction(Transaction::TYP_SHIP)->currentRate;
 
-$transactionManager->newSession();
-$transactionManager->load(array('type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_PROPOSED), array('dPublication', 'DESC'), array(0, 20));
+$shipTransactions = $transactionManager->egtProposedTransactions(Transaction::TYP_SHIP);
 
 echo '<div class="component transaction">';
 	echo '<div class="head skin-4">';
@@ -139,9 +126,9 @@ echo '<div class="component transaction">';
 			echo '</div>';
 
 			echo '<div class="sort-content">';
-				for ($i = 0; $i < $transactionManager->size(); $i++) {
-					if ($session->get('playerId') != $transactionManager->get($i)->rPlayer) {
-						$transactionManager->render($transactionManager->get($i), $shipCurrentRate, $S_CTM2, $ob_compPlat);
+				foreach ($shipTransactions as $transaction) {
+					if ($session->get('playerId') != $transaction) {
+						$transactionManager->render($transaction, $shipCurrentRate, $S_CTM2, $ob_compPlat);
 					}
 				}
 			echo '</div>';
@@ -149,6 +136,5 @@ echo '<div class="component transaction">';
 	echo '</div>';
 echo '</div>';
 
-$transactionManager->changeSession($S_TRM1);
 $commercialShippingManager->changeSession($S_CSM1);
 $commercialTradeManager->changeSession($S_CTM1);
