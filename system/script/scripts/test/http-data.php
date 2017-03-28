@@ -1,10 +1,13 @@
 <?php
-var_dump($_SERVER['HTTP_USER_AGENT']);
-var_dump($_SERVER['HTTP_ACCEPT']);
-var_dump($_SERVER['HTTP_ACCEPT_ENCODING']);
-var_dump($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+
+$request = $this->getContainer()->get('app.request');
+
+var_dump($request->headers->get('user-agent'));
+var_dump($request->headers->get('accept'));
+var_dump($request->headers->get('accept-encoding'));
+var_dump($request->headers->get('accept-language'));
 
 var_dump('____________________________________________________');
 
-var_dump(md5($_SERVER['HTTP_USER_AGENT'] . $_SERVER['HTTP_ACCEPT_LANGUAGE']));
-var_dump(md5($_SERVER["REMOTE_ADDR"] . $_SERVER['HTTP_USER_AGENT'] . $_SERVER['HTTP_ACCEPT_LANGUAGE']));
+var_dump(md5($request->headers->get('user-agent') . $request->headers->get('accept-language')));
+var_dump(md5($request->headers->get('x-real-ip') . $request->headers->get('user-agent') . $request->headers->get('accept-language')));
