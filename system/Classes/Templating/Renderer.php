@@ -29,11 +29,6 @@ class Renderer
 		{
 			include $template;
 		}
-		if ($redirect = $response->getRedirect()) {
-			ob_end_clean();
-			header('Location: /' . $redirect);
-			exit();
-		}
 	}
 	
 	/**

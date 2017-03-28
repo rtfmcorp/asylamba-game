@@ -15,13 +15,17 @@ class CTC {
 	public $events  = array();
 	/** @var $session **/
 	protected $session;
+	/** @var string **/
+	protected $rootPath;
 	
 	/**
 	 * @param Session $session
+	 * @param string $rootPath
 	 */
-	public function __construct(Session $session)
+	public function __construct(Session $session, $rootPath)
 	{
 		$this->session = $session;
+		$this->rootPath = $rootPath;
 	}
 
 	public function createContext($creator = NULL) {
@@ -53,7 +57,7 @@ class CTC {
 				$logt .= ($this->session->exist('playerId')) ? ' [Player ' . $this->session->get('playerId') . ']' : NULL;
 				$logt .= "\n";
 
-				$logt .= '> Page : ' . $_SERVER['REQUEST_URI'] . "\n";
+				//$logt .= '> Page : ' . $_SERVER['REQUEST_URI'] . "\n";
 
 				$j = 0;
 				foreach ($this->events as $k => $event) {
@@ -75,7 +79,7 @@ class CTC {
 
 				$logt .= "\n";
 
-				$path  = 'public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
+				$path  = $this->rootPath . '/public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
 				Bug::writeLog($path, $logt);
 			}
 

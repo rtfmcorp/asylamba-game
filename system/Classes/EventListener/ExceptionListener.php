@@ -38,8 +38,7 @@ class ExceptionListener {
 			$exception->getLine(),
 			Logger::LOG_LEVEL_ERROR,
 			($exception instanceof FormException) ? Flashbag::TYPE_FORM_ERROR : Flashbag::TYPE_STD_ERROR
-		);echo('<pre>');
-		var_dump($exception->getMessage(), $exception->getTrace());die('</pre>');
+		);
 	}
 	
 	public function onCoreError(ErrorEvent $event)
@@ -51,8 +50,7 @@ class ExceptionListener {
 			$error->getLine(),
 			Logger::LOG_LEVEL_CRITICAL,
 			Flashbag::TYPE_BUG_ERROR
-		);echo('<pre>');
-		var_dump($error->getMessage(), $error->getTrace());die('</pre>');
+		);
 	}
 	
 	/**
@@ -67,6 +65,5 @@ class ExceptionListener {
 		$this->logger->log("$message at $file at line $line", $level);
 		
 		$this->session->addFlashbag($message, $flashbagLevel);
-		$this->session->saveFlashbags();
 	}
 }
