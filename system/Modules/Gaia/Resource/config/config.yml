@@ -46,7 +46,7 @@ services:
     gaia.sector_manager:
         class: Asylamba\Modules\Gaia\Manager\SectorManager
         arguments:
-            - "@database"
+            - "@entity_manager"
             
     gaia.system_manager:
         class: Asylamba\Modules\Gaia\Manager\SystemManager
