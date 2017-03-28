@@ -41,6 +41,52 @@ class TransactionManager{
 		$this->commercialTaxManager = $commercialTaxManager;
 		$this->sessionToken = $session->get('token');
 	}
+    
+    /**
+     * @param int $id
+     * @return Transaction
+     */
+    public function get($id)
+    {
+        return $this->entityManager->getRepository(Transaction::class)->get($id);
+    }
+    
+    /**
+     * @param int $type
+     * @return Transaction
+     */
+    public function getLastCompletedTransaction($type)
+    {
+        return $this->entityManager->getRepository(Transaction::class)->getByTypeAndStatement($type);
+    }
+    
+    /**
+     * @param int $type
+     * @return array
+     */
+    public function getProposedTransactions($type)
+    {
+        return $this->entityManager->getRepository(Transaction::class)->getByTypeAndStatement($type);
+    }
+    
+    /**
+     * @param int $playerId
+     * @param int $type
+     * @return array
+     */
+    public function getPlayerPropositions($playerId, $type)
+    {
+        return $this->entityManager->getRepository(Transaction::class)->getPlayerPropositions($playerId, $type);
+    }
+    
+    /**
+     * @param int $placeId
+     * @return array
+     */
+    public function getBasePropositions($placeId)
+    {
+        return $this->entityManager->getRepository(Transaction::class)->getBasePropositions($placeId);
+    }
 	
 
 	public function getExchangeRate($transactionType) {
