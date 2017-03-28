@@ -7,7 +7,7 @@ $placeManager = $this->getContainer()->get('gaia.place_manager');
 $sectorManager = $this->getContainer()->get('gaia.sector_manager');
 $systemManager = $this->getContainer()->get('gaia.system_manager');
 $galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
-$sectorManager->load();
+$sectors = $sectorManager->getAll();
 
 $playerBases = $orbitalBaseManager->getPlayerBases($session->get('playerId'));
 $defaultBase = $orbitalBaseManager->get($session->get('playerParams')->get('base'));

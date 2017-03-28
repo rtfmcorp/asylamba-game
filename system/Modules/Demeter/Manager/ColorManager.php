@@ -549,7 +549,7 @@ class ColorManager {
 		}
 	}
 
-	public function uFinishBonusLaw($law, $sector) {
+	public function uFinishBonusLaw($law) {
 		$law->statement = Law::OBSOLETE;
 	}
 
@@ -717,23 +717,15 @@ class ColorManager {
 			} elseif ($law->statement == Law::EFFECTIVE && $law->dEnd < Utils::now()) {
 				if (LawResources::getInfo($law->type, 'bonusLaw')) {
 					#lois à bonus
-					$this->ctc->add($law->dEnd, $this, 'uFinishBonusLaw', $color, array($law, $this->sectorManager->get()));
+					$this->ctc->add($law->dEnd, $this, 'uFinishBonusLaw', $color, array($law));
 				} else {
 					#loi à upgrade
 					switch ($law->type) {
 						case Law::SECTORTAX:
-							$_SEM = $this->sectorManager->getCurrentsession();
-							$this->sectorManager->newSession();
-							$this->sectorManager->load(array('id' => $law->options['rSector']));
-							$this->ctc->add($law->dEnd, $this, 'uFinishSectorTaxes', $color, array($color, $law, $this->sectorManager->getById($law->options['rSector'])));
-							$this->sectorManager->changeSession($_SEM);
+							$this->ctc->add($law->dEnd, $this, 'uFinishSectorTaxes', $color, array($color, $law, $this->sectorManager->get($law->options['rSector'])));
 							break;
 						case Law::SECTORNAME:
-							$_SEM = $this->sectorManager->getCurrentsession();
-							$this->sectorManager->newSession();
-							$this->sectorManager->load(array('id' => $law->options['rSector']));
-							$this->ctc->add($law->dEnd, $this, 'uFinishSectorName', $color, array($color, $law, $this->sectorManager->getById($law->options['rSector'])));
-							$this->sectorManager->changeSession($_SEM);
+							$this->ctc->add($law->dEnd, $this, 'uFinishSectorName', $color, array($color, $law, $this->sectorManager->get($law->options['rSector'])));
 							break;
 						case Law::COMTAXEXPORT:
 							$_CTM = $this->commercialTaxManager->getCurrentsession();

@@ -32,11 +32,8 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 				$duration = Game::getTimeToTravel($home, $place, $session->get('playerBonus'));
 			
 				if ($commander->statement === Commander::AFFECTED) {
-					$S_SEM = $sectorManager->getCurrentSession();
-					$sectorManager->newSession();
-					$sectorManager->load(array('id' => $place->rSector));
-					$isFactionSector = ($sectorManager->get()->rColor == $commander->playerColor) ? TRUE : FALSE;
-					$sectorManager->changeSession($S_SEM);
+					$sector = $sectorManager->get($place->rSector);
+					$isFactionSector = ($sector->rColor == $commander->playerColor) ? TRUE : FALSE;
 					
 					$commander->destinationPlaceName = $place->baseName;
 

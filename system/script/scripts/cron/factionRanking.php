@@ -135,9 +135,8 @@ foreach ($inGameFactions as $faction) {
 #-------------------------------- TERRITORIAL RANKING -----------------------------#
 
 $sectorManager = $this->getContainer()->get('gaia.sector_manager');
-$sectorManager->load();
-for ($i = 0; $i < $sectorManager->size(); $i++) {
-	$sector = $sectorManager->get($i);
+$sectors = $sectorManager->getAll();
+foreach ($sectors as $sector) {
 	if ($sector->rColor != 0) {
 		$list[$sector->rColor]['territorial'] += $sector->points;
 	}

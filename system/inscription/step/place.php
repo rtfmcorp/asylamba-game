@@ -35,27 +35,26 @@ echo '<div id="content">';
 				echo '<div class="body">';
 
 					$galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
-					$sm = $this->getContainer()->get('gaia.sector_manager');
-					$sm->load();
+					$sectors = $this->getContainer()->get('gaia.sector_manager')->getAll();
 					$rate = 750 / $galaxyConfiguration->galaxy['size'];
 
 					echo '<div class="tactical-map reactive">';
 						echo '<input type="hidden" id="input-sector-id" name="sector" />';
 						echo '<svg class="sectors" viewBox="0, 0, 750, 750" xmlns="http://www.w3.org/2000/svg" style="width: 580px; height: 580px;">';
-							for ($i = 0; $i < $sm->size(); $i++) {
-								$s = $sm->get($i);
-								echo '<polygon data-id="' . $s->getId() . '"';
-									echo 'class="ally' . $s->getRColor() . ' ' . ($s->getRColor() == $session->get('inscription')->get('ally') ? 'enabled' : 'disabled') . '" ';
-									echo 'points="' . $galaxyConfiguration->getSectorCoord($s->getId(), $rate, 0) . '" ';
+							foreach ($sectors as $sector) {
+								echo '<polygon data-id="' . $sector->getId() . '"';
+									echo 'class="ally' . $sector->getRColor() . ' ' . ($sector->getRColor() == $session->get('inscription')->get('ally') ? 'enabled' : 'disabled') . '" ';
+									echo 'points="' . $galaxyConfiguration->getSectorCoord($sector->getId(), $rate, 0) . '" ';
 								echo '/>';
 							}
 
 						echo '</svg>';
 						echo '<div class="number">';
-							for ($i = 0; $i < $sm->size(); $i++) {
-								$s = $sm->get($i);
-								echo '<span id="sector' . $s->getId() . '" class="ally' . ($s->getRColor() == $session->get('inscription')->get('ally') ? $s->getRColor() : 0) . '" style="top: ' . ($galaxyConfiguration->sectors[$i]['display'][1] * $rate / 1.35) . 'px; left: ' . ($galaxyConfiguration->sectors[$i]['display'][0] * $rate / 1.35) . 'px;">';
-									echo $s->getId();
+							$nbSectors = count($sectors);
+							for ($i = 0; $i < $nbSectors; ++$i) {
+								$sector = $sectors[$i];
+								echo '<span id="sector' . $sector->getId() . '" class="ally' . ($sector->getRColor() == $session->get('inscription')->get('ally') ? $sector->getRColor() : 0) . '" style="top: ' . ($galaxyConfiguration->sectors[$i]['display'][1] * $rate / 1.35) . 'px; left: ' . ($galaxyConfiguration->sectors[$i]['display'][0] * $rate / 1.35) . 'px;">';
+									echo $sector->getId();
 								echo '</span>';
 							}
 						echo '</div>';
