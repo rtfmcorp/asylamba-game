@@ -62,10 +62,8 @@ class ResponseFactory
 	 */
 	protected function createCookies(Request $request, Response $response, Client $client)
 	{
-		if (!$request->cookies->exist('session_id')) {
-			$response->headers->set('Set-Cookie', 'session_id=' . $client->getId() . '; path=/; expires=' . gmdate('D, d M Y H:i:s T', time() + $this->sessionLifetime));
-		} elseif ($request->cookies->get('session_id') !== $client->getId()) {
-			$response->headers->set('Set-Cookie', 'session_id=deleted; path=/; expires=' . gmdate('D, d M Y H:i:s T', time() - 1000));
+		if (!$request->cookies->exist('session_id') || $request->cookies->get('session_id') !== $client->getId()) {
+			$response->headers->set('Set-Cookie', 'session_id=' . $client->getId() . '; path=/; expires=' . gmdate('D, d M Y H:i:s T', time() + $this->sessionLifetime) . '; HttpOnly');
 		}
 	}
 }
