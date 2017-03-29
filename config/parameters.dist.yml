@@ -9,6 +9,7 @@ parameters:
     
     server_port: 8000
     server_cycle_timeout: 20
+    server_collection_cycles_number: 25
     
     log_handler: Asylamba\Classes\Logger\FileLogger
     log_rotation: 3

@@ -35,6 +35,10 @@ class Server
     protected $inputs = [];
     /** @var array **/
     protected $outputs = [];
+    /** @var int **/
+    protected $nbUncollectedCycles = 0;
+    /** @var int **/
+    protected $collectionCyclesNumber;
 
     /**
      * @param Container $container
@@ -50,6 +54,7 @@ class Server
         $this->clientManager = $container->get('client_manager');
         $this->serverCycleTimeout = $container->getParameter('server_cycle_timeout');
         $this->port = $container->getParameter('server_port');
+        $this->collectionCyclesNumber = $container->getParameter('server_collection_cycles_number');
     }
 	
     public function shutdown()
@@ -77,6 +82,7 @@ class Server
         $inputs = $this->inputs;
         $outputs = $this->outputs;
         $errors = null;
+        gc_disable();
 		
         while ($this->shutdown === false && ($nbUpgradedStreams = stream_select($inputs, $outputs, $errors, $this->serverCycleTimeout)) !== false) {
             if ($nbUpgradedStreams === 0) {
@@ -101,6 +107,7 @@ class Server
                 $this->responseFactory->processResponse($request, $response, $client);
                 fputs ($input, $response->send());
                 fclose($input);
+                $this->nbUncollectedCycles++;
             }
             $this->prepareStreamsState($inputs, $outputs, $errors);
         }
@@ -113,6 +120,11 @@ class Server
         $inputs = $this->inputs;
         $outputs = $this->outputs;
         $errors = null;
+        
+        if ($this->nbUncollectedCycles > $this->collectionCyclesNumber) {
+            gc_collect_cycles();
+            $this->nbUncollectedCycles = 0;
+        }
     }
     
     public static function debug($debug)
