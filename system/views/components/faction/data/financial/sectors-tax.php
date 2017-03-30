@@ -1,6 +1,6 @@
 <?php
 
-$sectors = $this->getContainer()->get('gaia.sector_manager')->getFactionSectors(array('rColor' => $faction->id));
+$sectors = $this->getContainer()->get('gaia.sector_manager')->getFactionSectors($faction->id);
 
 echo '<div class="component profil">';
 	echo '<div class="head skin-2">';
