@@ -5,7 +5,11 @@ namespace Asylamba\Classes\Daemon;
 use Asylamba\Classes\Router\Router;
 use Asylamba\Classes\Library\Http\RequestFactory;
 use Asylamba\Classes\Library\Http\ResponseFactory;
+use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Classes\Daemon\ClientManager;
+
+use Asylamba\Classes\Event\ExceptionEvent;
+use Asylamba\Classes\Event\ErrorEvent;
 
 use Asylamba\Classes\DependencyInjection\Container;
 
@@ -90,28 +94,44 @@ class Server
                 continue;
             }
             foreach ($inputs as $stream) {
-                $input = stream_socket_accept($stream);
-                $data = fread($input, 2048);
-				if (empty($data)) {
-					fclose($input);
-					continue;
-				}
-                $request = $this->requestFactory->createRequestFromInput($data);
-                $this->container->set('app.request', $request);
-                if (($client = $this->clientManager->getClient($request)) === null) {
-                    $client = $this->clientManager->createClient($request);
-                }
-                $this->container->set('app.session', $client->getSession());
-                $response = $this->router->processRequest($request, $client);
-                $this->container->set('app.response', $response);
-                $this->responseFactory->processResponse($request, $response, $client);
-                fputs ($input, $response->send());
-                fclose($input);
-                $this->nbUncollectedCycles++;
+				$this->treatInput(stream_socket_accept($stream));
             }
             $this->prepareStreamsState($inputs, $outputs, $errors);
         }
     }
+	
+	protected function treatInput($input)
+	{
+		$client = $request = $response = null;
+		try {
+			$data = fread($input, 2048);
+			if (empty($data)) {
+				fclose($input);
+				return;
+			}
+			$request = $this->requestFactory->createRequestFromInput($data);
+			$this->container->set('app.request', $request);
+			if (($client = $this->clientManager->getClient($request)) === null) {
+				$client = $this->clientManager->createClient($request);
+			}
+			$this->container->set('app.session', $client->getSession());
+			$response = $this->router->processRequest($request, $client);
+			$this->container->set('app.response', $response);
+			$this->responseFactory->processResponse($request, $response, $client);
+		} catch (\Exception $ex) {
+			$this->container->get('event_dispatcher')->dispatch($event = new ExceptionEvent($request, $ex));
+			$response = $event->getResponse();
+			$this->responseFactory->processResponse($request, $response, $client);
+		} catch (\Error $err) {
+			$this->container->get('event_dispatcher')->dispatch($event = new ErrorEvent($request, $err));
+			$response = $event->getResponse();
+			$this->responseFactory->processResponse($request, $response, $client);
+		} finally {
+			$this->nbUncollectedCycles++;
+			fputs ($input, $response->send());
+			fclose($input);
+		}
+	}
     
     protected function prepareStreamsState(&$inputs, &$outputs, &$errors)
     {
