@@ -36,7 +36,7 @@ class ResponseFactory
 		if ($response->getStatusCode() !== 302) {
 			$response->setBody(ob_get_clean());
 		} else {
-			ob_get_clean();
+			ob_end_clean();
 		}
     }
     
@@ -50,8 +50,8 @@ class ResponseFactory
         $response->headers->set('Date', gmdate('D, d M Y H:i:s T'));
         $response->headers->set('Status', $response->getStatusCode() . ' ' . $response->getStatus());
 		
-		if (($redirect = $response->getRedirect()) !== null) {
-			$response->headers->set('Location', 'http://' . $request->headers->get('host') . '/' . $redirect);
+		if ($response->getStatusCode() === 302) {
+			$response->headers->set('Location', 'http://' . $request->headers->get('host') . '/' . $response->getRedirect());
 		}
     }
 	
