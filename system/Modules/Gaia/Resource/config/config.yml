@@ -51,7 +51,7 @@ services:
     gaia.system_manager:
         class: Asylamba\Modules\Gaia\Manager\SystemManager
         arguments:
-            - "@database"
+            - "@entity_manager"
             
     gaia.galaxy_configuration:
         class: "%gaia.galaxy_configuration.class"
