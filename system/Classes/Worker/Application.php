@@ -18,17 +18,11 @@ class Application implements ApplicationInterface {
     
     public function boot()
     {
-        try {
-            $this->container = new Container();
-            $this->container->set('app.container', $this->container);
-            $this->configure();
-            $this->registerModules();
-            $this->init();
-        } catch (\Exception $ex) {
-            $this->container->get('event_dispatcher')->dispatch(new ExceptionEvent($ex));
-        } catch (\Error $err) {
-            $this->container->get('event_dispatcher')->dispatch($errorEvent = new ErrorEvent($err));
-        }
+		$this->container = new Container();
+		$this->container->set('app.container', $this->container);
+		$this->configure();
+		$this->registerModules();
+		$this->init();
     }
 	
 	public function configure()
