@@ -10,6 +10,7 @@
 - Entity Manager
 - Routing component
 - Templating component
+- Daemon server to handle the game in real-time
 
 ### Changed
 - Many managers are now free of the session pattern
