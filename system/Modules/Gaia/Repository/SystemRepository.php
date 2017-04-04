@@ -51,11 +51,11 @@ class SystemRepository extends AbstractRepository
 	
 	public function update($system)
 	{
-		$statement = $this->connection->prepare('UPDATE system SET rColor = ? WHERE id = ?');
-		$statement->execute(array(
-			$system->rColor,
-			$system->id
-		));
+		$statement = $this->connection->prepare('UPDATE system SET rColor = :faction_id WHERE id = :id');
+		$statement->execute([
+			'faction_id' => $system->rColor,
+			'id' => $system->id
+		]);
 	}
 	
 	public function remove($system)
