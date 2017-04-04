@@ -57,7 +57,7 @@ class TransactionManager{
      */
     public function getLastCompletedTransaction($type)
     {
-        return $this->entityManager->getRepository(Transaction::class)->getByTypeAndStatement($type);
+        return $this->entityManager->getRepository(Transaction::class)->getLastCompletedTransaction($type);
     }
     
     /**
@@ -66,7 +66,7 @@ class TransactionManager{
      */
     public function getProposedTransactions($type)
     {
-        return $this->entityManager->getRepository(Transaction::class)->getByTypeAndStatement($type);
+        return $this->entityManager->getRepository(Transaction::class)->getProposedTransactions($type);
     }
     
     /**
