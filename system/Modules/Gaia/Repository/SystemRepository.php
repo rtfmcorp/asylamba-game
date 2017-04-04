@@ -24,6 +24,26 @@ class SystemRepository extends AbstractRepository
 		return $system;
 	}
 	
+	/**
+	 * @return array
+	 */
+	public function getAll()
+	{
+		$statement = $this->connection->query('SELECT * FROM system');
+		
+		$data = [];
+		while ($row = $statement->fetch()) {
+			if (($s = $this->unitOfWork->getObject(System::class, $row['id'])) !== null) {
+				$data[] = $s;
+				continue;
+			}
+			$system = $this->format($row);
+			$this->unitOfWork->addObject($system);
+			$data[] = $system;
+		}
+		return $data;
+	}
+	
 	public function insert($system)
 	{
 		
