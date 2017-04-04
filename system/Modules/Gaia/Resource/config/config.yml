@@ -1,6 +1,7 @@
 ---
 parameters:
     gaia.limit_conquest_sector: 4
+    gaia.scores: [1, 3, 5, 10]
     
 services:
     gaia.action_helper:
@@ -55,3 +56,26 @@ services:
             
     gaia.galaxy_configuration:
         class: "%gaia.galaxy_configuration.class"
+        
+    gaia.sector_listener:
+        class: Asylamba\Modules\Gaia\EventListener\SectorListener
+        arguments:
+            - "@gaia.sector_manager"
+            - "@gaia.system_manager"
+            - "@athena.orbital_base_manager"
+            - "@zeus.player_manager"
+            - "@entity_manager"
+            - "%gaia.scores"
+        tags:
+            - {type: "event_listener", event: "gaia.place_owner_change", method: "onPlaceOwnerChange"}
+            
+    gaia.system_listener:
+        class: Asylamba\Modules\Gaia\EventListener\SystemListener
+        arguments:
+            - "@gaia.system_manager"
+            - "@athena.orbital_base_manager"
+            - "@zeus.player_manager"
+            - "@entity_manager"
+            - "%gaia.scores"
+        tags:
+            - {type: "event_listener", event: "gaia.place_owner_change", method: "onPlaceOwnerChange"}
