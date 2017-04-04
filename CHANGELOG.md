@@ -11,9 +11,11 @@
 - Routing component
 - Templating component
 - Daemon server to handle the game in real-time
+- Event and listeners for system and sector seizing
 
 ### Changed
 - Many managers are now free of the session pattern
+- Sector and system seizing program
 
 ### Removed
 - Support of HHVM
