@@ -23,6 +23,7 @@ use Asylamba\Modules\Gaia\Manager\GalaxyColorManager;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
+use Asylamba\Modules\Gaia\Model\System;
 use Asylamba\Modules\Athena\Manager\BuildingQueueManager;
 use Asylamba\Modules\Athena\Manager\ShipQueueManager;
 use Asylamba\Modules\Promethee\Manager\TechnologyQueueManager;
@@ -189,6 +190,32 @@ class OrbitalBaseManager {
 	public function getPlayerBases($playerId)
 	{
 		$bases = $this->entityManager->getRepository(OrbitalBase::class)->getPlayerBases($playerId);
+		foreach($bases as $base) {
+			$this->fill($base);
+		}
+		return $bases;
+	}
+	
+	/**
+	 * @param int $sectorId
+	 * @return array
+	 */
+	public function getSectorBases($sectorId)
+	{
+		$bases = $this->entityManager->getRepository(OrbitalBase::class)->getSectorBases($sectorId);
+		foreach($bases as $base) {
+			$this->fill($base);
+		}
+		return $bases;
+	}
+	
+	/**
+	 * @param System $system
+	 * @return array
+	 */
+	public function getSystemBases(System $system)
+	{
+		$bases = $this->entityManager->getRepository(OrbitalBase::class)->getSystemBases($system->getId());
 		foreach($bases as $base) {
 			$this->fill($base);
 		}
