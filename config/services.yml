@@ -19,6 +19,16 @@ services:
     app.session:
         class: Asylamba\Classes\Container\Session
             
+    cyclic_action_scheduler:
+        class: Asylamba\Classes\Scheduler\CyclicActionScheduler
+        arguments:
+            - "@app.container"
+            
+    realtime_action_scheduler:
+        class: Asylamba\Classes\Scheduler\RealTimeActionScheduler
+        arguments:
+            - "@app.container"
+            
     router:
         class: Asylamba\Classes\Router\Router
         
