@@ -87,6 +87,8 @@ class Application implements ApplicationInterface {
 			});
 		}
 		$this->container->get('entity_manager')->init();
+		$this->container->get('realtime_action_scheduler')->init();
+		$this->container->get('cyclic_action_scheduler')->init();
 		$server = $this->container->get('server');
 		$server->createHttpServer();
 		$server->listen();
