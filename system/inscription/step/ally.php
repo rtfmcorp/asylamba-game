@@ -31,7 +31,7 @@ echo '<div id="content">';
 	echo '</div>';
 
 	$sortedFactions = $colorManager->getAllByActivePlayersNumber();
-
+	
 	$firstAlly = TRUE;
 	foreach ($sortedFactions as $ally) {
 		if ($ally->id != 0) {

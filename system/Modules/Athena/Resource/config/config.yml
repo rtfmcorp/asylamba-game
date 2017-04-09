@@ -99,6 +99,6 @@ services:
     athena.transaction_manager:
         class: Asylamba\Modules\Athena\Manager\TransactionManager
         arguments:
-            - "@database"
+            - "@entity_manager"
             - "@athena.commercial_tax_manager"
             - "@app.session"

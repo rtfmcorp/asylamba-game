@@ -8,6 +8,7 @@ use Asylamba\Classes\Worker\API;
 
 $security = $this->getContainer()->get('security');
 $request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $session = $this->getContainer()->get('app.session');
 
@@ -18,8 +19,7 @@ $time 	= $security->extractTime($query);
 
 # vérification de la validité du bindkey
 if (abs((int)$time - time()) > 300) {
-	header('Location: ' . GETOUT_ROOT . 'profil');
-	exit();
+	$response->redirect(GETOUT_ROOT . 'profil');
 }
 
 if (($player = $playerManager->getByBindKey($bindKey)) !== null && in_array($player->getStatement(), [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY])) {
@@ -28,7 +28,7 @@ if (($player = $playerManager->getByBindKey($bindKey)) !== null && in_array($pla
 	$session->initLastUpdate();
 	$session->add('token', Utils::generateString(5));
 
-	include_once CONNECTION . '/create-session.php';
+	include CONNECTION . '/create-session.php';
 
 	# mise de dLastConnection + dLastActivity
 	$player->setDLastConnection(Utils::now());
@@ -41,11 +41,11 @@ if (($player = $playerManager->getByBindKey($bindKey)) !== null && in_array($pla
 	}
 	$this->getContainer()->get('entity_manager')->flush($player);
 	// redirection vers page de départ
-	$this->getContainer()->get('app.response')->redirect(
+	$response->redirect(
 		($request->query->get('mode') === 'splash')
 		? 'profil/mode-splash'
 		: 'profil'
 	);
 } else {
-	$this->getContainer()->get('app.response')->redirect('profil');
+	$response->redirect('profil');
 }

@@ -77,14 +77,10 @@ if ($technologies->getTechnology(Technology::CONQUEST) !== 1) {
 						if ($session->get('playerInfo')->get('credit') >= $price) {
 							if ($commander->getPev() > 0) {
 								if ($commander->statement == Commander::AFFECTED) {
-									$S_SEM = $sectorManager->getCurrentSession();
-									$sectorManager->newSession();
-									$sectorManager->load(array('id' => $place->rSector));
+									$sector = $sectorManager->get($place->rSector);
 
-									$sectorColor = $colorManager->get($sectorManager->get()->rColor);
-									$isFactionSector = ($sectorManager->get()->rColor == $commander->playerColor || $sectorColor->colorLink[$session->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
-
-									$sectorManager->changeSession($S_SEM);
+									$sectorColor = $colorManager->get($sector->rColor);
+									$isFactionSector = ($sector->rColor == $commander->playerColor || $sectorColor->colorLink[$session->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
 
 									if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
 										$commander->destinationPlaceName = $place->baseName;

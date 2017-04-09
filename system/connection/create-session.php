@@ -64,7 +64,6 @@ $session->get('playerParams')->add('base', $session->get('playerBase')->get('ob'
 $session->initPlayerEvent();
 
 # remplissage des events
-$playerBases = $orbitalBaseManager->getPlayerBases($session->get('playerId'));
 $now = Utils::now();
 foreach ($playerBases as $orbitalBase) { 
 	$baseId = $orbitalBase->getRPlace();

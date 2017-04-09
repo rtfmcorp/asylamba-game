@@ -386,15 +386,11 @@ class PlayerManager {
 		$player = $this->get($playerId);
 
 		# sector choice 
-		$S_SEM1 = $this->sectorManager->getCurrentSession();
-		$this->sectorManager->newSession(FALSE);
-		$this->sectorManager->load(array('rColor' => $player->rColor), array('id', 'DESC'));
+		$sectors = $this->sectorManager->getFactionSectors($player->rColor);
 
 		$placeFound = FALSE;
 		$placeId = NULL;
-		for ($i = 0; $i < $this->sectorManager->size(); $i++) { 
-			$sector = $this->sectorManager->get($i);
-
+		foreach ($sectors as $sector) {
 			# place choice
 			$qr = $this->database->prepare('SELECT * FROM place AS p
 				INNER JOIN system AS sy ON p.rSystem = sy.id
@@ -413,7 +409,6 @@ class PlayerManager {
 				break;
 			}
 		}
-		$this->sectorManager->changeSession($S_SEM1);
 
 		if ($placeFound) {
 
@@ -521,21 +516,18 @@ class PlayerManager {
 				$factions = $this->colorManager->getAll();
 
 				# load the transactions
-				$S_TRM1 = $this->transactionManager->getCurrentSession();
-				$this->transactionManager->newSession();
-				$this->transactionManager->load(array('rPlayer' => $player->id, 'type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_PROPOSED));
+				$transactions = $this->transactionManager->getPlayerPropositions($player->id, Transaction::TYP_SHIP);
 
 				foreach ($hours as $key => $hour) {
-					$this->ctc->add($hour, $this, 'uCredit', $player, array($player, $playerBases, $playerBonus, $commanders, $this->researchManager->getCurrentSession(), $factions, $this->transactionManager->getCurrentSession()));
+					$this->ctc->add($hour, $this, 'uCredit', $player, array($player, $playerBases, $playerBonus, $commanders, $this->researchManager->getCurrentSession(), $factions, $transactions));
 				}
-				$this->transactionManager->changeSession($S_TRM1);
 				$this->researchManager->changeSession($S_RSM1);
 			}
 			$this->ctc->applyContext($token);
 		}
 	}
 
-	public function uCredit(Player $player, $playerBases, $playerBonus, $commanders, $rsmSession, $factions, $trmSession) {
+	public function uCredit(Player $player, $playerBases, $playerBonus, $commanders, $rsmSession, $factions, $transactions) {
 		
 		$popTax = 0; $nationTax = 0;
 		$credits = $player->credit;
@@ -692,11 +684,10 @@ class PlayerManager {
 
 		# payer l'entretien des vaisseaux
 		# vaisseaux en vente
-		$S_TRM1 = $this->transactionManager->getCurrentSession();
-		$this->transactionManager->changeSession($trmSession);
 		$transactionTotalCost = 0;
-		for ($i = ($this->transactionManager->size() - 1); $i >= 0; $i--) {
-			$transaction = $this->transactionManager->get($i);
+        $nbTransactions = count($transactions);
+		for ($i = ($nbTransactions - 1); $i >= 0; $i--) {
+			$transaction = $transactions[$i];
 			$transactionTotalCost += ShipResource::getInfo($transaction->identifier, 'cost') * ShipResource::COST_REDUCTION * $transaction->quantity;
 		}
 		if ($newCredit >= $transactionTotalCost) {
@@ -704,7 +695,6 @@ class PlayerManager {
 		} else {
 			$newCredit = 0;
 		}
-		$this->transactionManager->changeSession($S_TRM1);
 		# vaisseaux affectés
 		foreach ($commanders as $commander) {
 			$ships = $commander->getNbrShipByType();

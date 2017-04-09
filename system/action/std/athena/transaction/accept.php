@@ -35,18 +35,14 @@ $rPlace = $request->query->get('rplace');
 $rTransaction = $request->query->get('rtransaction');
 
 if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif)) {
-
-	$S_TRM1 = $transactionManager->getCurrentSession();
-	$transactionManager->newSession();
-	$transactionManager->load(array('id' => $rTransaction));
-	$transaction = $transactionManager->get();
+	$transaction = $transactionManager->get($rTransaction);
 
 	$S_CSM1 = $commercialShippingManager->getCurrentSession();
 	$commercialShippingManager->newSession();
 	$commercialShippingManager->load(array('rTransaction' => $rTransaction));
 	$commercialShipping = $commercialShippingManager->get();
 
-	if ($transactionManager->size() == 1 AND $commercialShippingManager->size() == 1 AND $transaction->statement == Transaction::ST_PROPOSED) {
+	if ($transaction !== null AND $commercialShippingManager->size() == 1 AND $transaction->statement == Transaction::ST_PROPOSED) {
 		$base = $orbitalBaseManager->get($rPlace);
 
 		$exportTax = 0;
@@ -150,7 +146,6 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 	} else {
 		throw new ErrorException('erreur dans les propositions sur le marché');
 	}
-	$transactionManager->changeSession($S_TRM1);
 	$commercialShippingManager->changeSession($S_CSM1);
 } else {
 	throw new FormException('pas assez d\'informations pour accepter une proposition sur le marché');

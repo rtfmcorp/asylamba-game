@@ -12,14 +12,7 @@ if ($request->query->has('systemid')) {
 	$systemId = FALSE;
 }
 
-$S_SYS1 = $systemManager->getCurrentSession();
-$systemManager->newSession();
-$systemManager->load(array('id' => $systemId));
-
-if ($systemManager->size() == 1) {
-	# objet système
-	$system = $systemManager->get();
-
+if (($system = $systemManager->get($systemId)) !== null) {
 	# objet place
 	$places = $placeManager->getSystemPlaces($system);
 
@@ -28,5 +21,3 @@ if ($systemManager->size() == 1) {
 } else {
 	return FALSE;
 }
-
-$systemManager->changeSession($S_SYS1);

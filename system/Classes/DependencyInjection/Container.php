@@ -17,6 +17,18 @@ class Container {
 		$this->serviceInjector = new ServiceInjector($this);
 	}
 	
+	public function cleanApplication()
+	{
+		$this->get('entity_manager')->clear();
+		
+		foreach($this->services as $service) {
+			if ($service['instance'] instanceof Manager) {
+				$service['instance']->save();
+				$service['instance']->clean();
+			}
+		}
+	}
+	
     /**
      * @param string $key
      * @param array $definition

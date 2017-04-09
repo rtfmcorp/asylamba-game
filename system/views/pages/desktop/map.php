@@ -7,7 +7,7 @@ $placeManager = $this->getContainer()->get('gaia.place_manager');
 $sectorManager = $this->getContainer()->get('gaia.sector_manager');
 $systemManager = $this->getContainer()->get('gaia.system_manager');
 $galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
-$sectorManager->load();
+$sectors = $sectorManager->getAll();
 
 $playerBases = $orbitalBaseManager->getPlayerBases($session->get('playerId'));
 $defaultBase = $orbitalBaseManager->get($session->get('playerParams')->get('base'));
@@ -26,18 +26,12 @@ if ($request->query->has('place')) {
 		$systemId = $place->getRSystem();
 	}
 # par system
-} elseif ($request->query->has('system')) {
-	$_SYS_MAP = $systemManager->getCurrentSession();
-	$systemManager->newSession();
-	$systemManager->load(array('id' => $request->query->get('system')));
-
-	if ($systemManager->size() == 1) {
-		$x = $systemManager->get(0)->xPosition;
-		$y = $systemManager->get(0)->yPosition;
-		$systemId = $request->query->get('system');
+} elseif ($request->query->has('systemid')) {
+	if (($system = $systemManager->get($request->query->get('systemid'))) !== null) {
+		$x = $system->xPosition;
+		$y = $system->yPosition;
+		$systemId = $request->query->get('systemid');
 	}
-	
-	$systemManager->changeSession($_SYS_MAP);
 # par coordonnée
 } elseif ($request->query->has('x') && $request->query->has('y')) {
 	$x = $request->query->get('x');
@@ -50,26 +44,16 @@ include 'mapElement/content.php';
 include 'mapElement/commanders.php';
 include 'mapElement/coordbox.php';
 
-if ($systemId != 0) {
-	$S_SYS1 = $systemManager->getCurrentSession();
-	$systemManager->newSession();
-	$systemManager->load(array('id' => $systemId));
+if (isset($system) && $system !== null) {
+	# objet place
+	$places = $placeManager->getSystemPlaces($system);
 
-	if ($systemManager->size() == 1) {
-		# objet système
-		$system = $systemManager->get();
+	$noAJAX = TRUE;
 
-		# objet place
-		$places = $placeManager->getSystemPlaces($system);
-
-		$noAJAX = TRUE;
-
-		# inclusion du "composant"
-		echo '<div id="action-box" style="bottom: 0px;">';
-			include PAGES . 'desktop/mapElement/actionbox.php';
-		echo '</div>';
-	}
-	$systemManager->changeSession($S_SYS1);
+	# inclusion du "composant"
+	echo '<div id="action-box" style="bottom: 0px;">';
+		include PAGES . 'desktop/mapElement/actionbox.php';
+	echo '</div>';
 } else {
 	echo '<div id="action-box"></div>';
 }

@@ -232,9 +232,7 @@ echo '<div id="content">';
 			include COMPONENT . 'faction/government/nav.php';
 
 			if (!$request->query->has('mode') OR $request->query->get('mode') == 'law') {
-				$S_SEM_OLD = $sectorManager->getCurrentsession();
-				$S_SEM_LAW = $sectorManager->newSession();
-				$sectorManager->load(array('rColor' => $faction->id));
+				$factionSectors = $sectorManager->getFactionsSectors($faction->id);
 
 				$nbLaws = 0;
 				$nbPlayer = count($senators);
@@ -252,7 +250,6 @@ echo '<div id="content">';
 						include COMPONENT . 'default.php';
 					}
 				}
-				$sectorManager->changeSession($S_SEM_OLD);
 			} elseif ($request->query->get('mode') == 'news') {
 				$factionNews = $factionNewsManager->getFactionNews($faction->id);
 				

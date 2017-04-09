@@ -12,12 +12,8 @@ $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $transactionManager = $this->getContainer()->get('athena.transaction_manager');
 $sessionToken = $this->getContainer()->get('app.session')->get('token');
 
-$S_TRM1 = $transactionManager->getCurrentSession();
-
 # resources current rate
-$transactionManager->newSession();
-$transactionManager->load(array('type' => Transaction::TYP_RESOURCE, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
-$resourcesCurrentRate = $transactionManager->get()->currentRate;
+$resourcesCurrentRate = $transactionManager->getLastCompletedTransaction(Transaction::TYP_RESOURCE)->currentRate;
 
 echo '<div class="component market-sell">';
 	echo '<div class="head skin-4 sh">';
@@ -70,12 +66,10 @@ echo '<div class="component market-sell">';
 	echo '</div>';
 echo '</div>';
 
-$commanders = $commanderManager->getBaseCommanders($ob_compPlat->getId(), [Commander::INSCHOOL, Commander::RESERVE], ['c.experience', 'DESC']);
+$commanders = $commanderManager->getBaseCommanders($ob_compPlat->getId(), [Commander::INSCHOOL, Commander::RESERVE], ['c.experience' => 'DESC']);
 
 # commander current rate
-$transactionManager->newSession();
-$transactionManager->load(array('type' => Transaction::TYP_COMMANDER, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
-$commanderCurrentRate = $transactionManager->get()->currentRate;
+$commanderCurrentRate = $transactionManager->getLastCompletedTransaction(Transaction::TYP_COMMANDER)->currentRate;
 
 echo '<div class="component market-sell">';
 	echo '<div class="head skin-4">';
@@ -122,7 +116,7 @@ echo '<div class="component market-sell">';
 				echo '</form>';
 			}
 
-			if ($commanderManager->size() == 0) {
+			if (count($commanders) === 0) {
 				echo '<p><em>Vous n\'avez aucun commandant dans l\'école.</em></p>';
 			}
 		echo '</div>';
@@ -130,9 +124,7 @@ echo '<div class="component market-sell">';
 echo '</div>';
 
 # ship current rate
-$transactionManager->newSession();
-$transactionManager->load(array('type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
-$shipCurrentRate = $transactionManager->get()->currentRate;
+$shipCurrentRate = $transactionManager->getLastCompletedTransaction(Transaction::TYP_SHIP)->currentRate;
 
 echo '<div class="component market-sell">';
 	echo '<div class="head skin-4">';
@@ -195,5 +187,3 @@ echo '<div class="component market-sell">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-$transactionManager->changeSession($S_TRM1);

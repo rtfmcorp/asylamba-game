@@ -156,6 +156,15 @@ abstract class Manager {
         }
         return $savingList;
     }
+	
+	public function clean()
+	{
+		$this->sessions = [];
+		$this->objects = [];
+		$this->origin = [];
+		
+		$this->newSession();
+	}
 
     public function _EmptyCurrentSession() {
         $currentSessionId = $this->currentSession->getId();

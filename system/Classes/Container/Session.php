@@ -5,25 +5,13 @@ namespace Asylamba\Classes\Container;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Flashbag;
 
-class Session extends ArrayList {
+class Session {
 	/** @var array **/
 	public $flashbags = [];
-	
+    /** @var array **/
+    protected $items = [];
+	/** @var array **/
 	protected $history = [];
-	
-	public function initFlashbags()
-	{
-		if (isset($_SESSION['flashbags'])) {
-			$this->flashbags = unserialize($_SESSION['flashbags']);
-		}
-	}
-	
-	public function saveFlashbags()
-	{
-		if (!empty($this->flashbags)) {
-			$_SESSION['flashbags'] = serialize($this->flashbags);
-		}
-	}
 	
 	/**
 	 * @param string $message
@@ -45,18 +33,64 @@ class Session extends ArrayList {
 	public function flushFlashbags()
 	{
 		$this->flashbags = [];
-		unset($_SESSION['flashbags']);
 	}
 	
+	/**
+	 * @param string $key
+	 * @param string $value
+	 */ 
+	public function add($key, $value)
+	{
+		$this->items[$key] = $value;
+	}
+    
+    /**
+     * @param string $key
+     * @return boolean
+     */
+    public function exist($key)
+    {
+        return isset($this->items[$key]);
+    }
+	
+	/**
+     * @param string $key
+	 * @return mixed
+	 */
+	public function get($key)
+	{
+		return $this->exist($key) ? $this->items[$key] : null;
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function all()
+	{
+		return $this->items;
+	}
+	
+    /**
+     * @param string $key
+     * @return boolean
+     */
+    public function remove($key) {
+        if (isset($this->items[$key])) {
+            unset($this->items[$key]);
+        }
+        return false;
+    }
+	
     public function destroy() {
-		$this->elements = NULL;
-		unset($_SESSION['flashbags']);
+		$this->items = [];
+		$this->flashbags = [];
+		$this->history = [];
     }
 
     public function clear() {
-            $this->remove('playerInfo', new ArrayList());
-            $this->remove('playerBase', new ArrayList());
-            $this->remove('playerEvent', new ArrayList());
+        $this->remove('playerInfo', new ArrayList());
+        $this->remove('playerBase', new ArrayList());
+        $this->remove('playerEvent', new ArrayList());
     }
 
     ##
@@ -175,5 +209,13 @@ class Session extends ArrayList {
 	public function getLastHistory()
 	{
 		return $this->history[count($this->history) - 1];
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getLifetime()
+	{
+		return $this->lifetime;
 	}
 }

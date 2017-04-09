@@ -17,7 +17,6 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 		$query  = $security->uncrypt($request->query->get('bindkey'), KEY_SERVER);
 		$bindkey= $security->extractBindkey($query);
 		$time 	= $security->extractTime($query);
-
 		# vérification de la validité du bindkey
 		if (abs((int)$time - time()) <= 300) {
 			$session->add('prebindkey', $bindkey);
@@ -30,8 +29,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 			}
 			$response->redirect('inscription');
 		} else {
-			header('Location: ' . GETOUT_ROOT . 'serveurs');
-			exit();
+			$response->redirect(GETOUT_ROOT . 'serveurs');
 		}
 	} elseif ($session->exist('prebindkey')) {
 		if (APIMODE) {
@@ -53,11 +51,11 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 						}
 					}
 				} else {
-					header('Location: ' . GETOUT_ROOT . 'serveurs/message-useralreadysigned');
+					$response->redirect(GETOUT_ROOT . 'serveurs/message-useralreadysigned');
 					exit();
 				}
 			} else {
-				header('Location: ' . GETOUT_ROOT . 'serveurs/message-unknowuser');
+				$response->redirect(GETOUT_ROOT . 'serveurs/message-unknowuser');
 				exit();
 			}
 		} else {
@@ -66,8 +64,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 			$session->get('inscription')->add('portalPseudo', NULL);
 		}
 	} else {
-		header('Location: ' . GETOUT_ROOT . 'serveurs/message-nobindkey');
-		exit();
+		$response->redirect(GETOUT_ROOT . 'serveurs/message-nobindkey');
 	}
 } elseif ($request->query->get('step') == 2) {
 	if ($session->exist('inscription')) {
@@ -90,8 +87,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 			throw new FormException('faction inconnues ou non-sélectionnable');
 		}
 	} else {
-		header('Location: ' . GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
-		exit();
+		$response->redirect(GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
 	}
 } elseif ($request->query->get('step') == 3) {
 	if ($session->exist('inscription')) {
@@ -117,9 +113,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 			throw new FormException('Ce pseudo est déjà utilisé par un autre joueur');
 		}
 	} else {
-			die('ok');
-		header('Location: ' . GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
-		exit();
+		$response->redirect(GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
 	}
 } elseif ($request->query->get('step') == 4) {
 	if ($playerManager->getByBindKey($session->get('bindkey')) === null) {
@@ -130,13 +124,12 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 				if ($check->checkChar($request->request->get('base'))) {
 					$session->get('inscription')->add('base', $request->request->get('base'));
 
-					$sm = $this->getContainer()->get('gaia.sector_manager');
-					$sm->load();
+					$sectors = $this->getContainer()->get('gaia.sector_manager')->getAll();
 
 					$factionSectors = array();
-					for ($i = 0; $i < $sm->size(); $i++) { 
-						if ($sm->get($i)->getRColor() == $session->get('inscription')->get('ally')) {
-							$factionSectors[] = $sm->get($i)->getId();
+					foreach ($sectors as $sector) { 
+						if ($sector->getRColor() == $session->get('inscription')->get('ally')) {
+							$factionSectors[] = $sector->getId();
 						}
 					}
 					if (in_array($request->request->get('sector'), $factionSectors)) {
@@ -154,11 +147,9 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 				throw new FormException('le nom de votre base doit contenir entre ' . $check->getMinLength() . ' et ' . $check->getMaxLength() . ' caractères');
 			}
 		} else {
-			header('Location: ' . GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
-			exit();
+			$response->redirect(GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
 		}
 	} else {
-		header('Location: ' . GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
-		exit();
+		$response->redirect(GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
 	}
 }

@@ -4,7 +4,6 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 $galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
-$sectorManager = $this->getContainer()->get('gaia.sector_manager');
 
 echo '<div id="systems">';
 	$qr = $this->getContainer()->get('database')->prepare('SELECT * FROM system');
@@ -29,9 +28,7 @@ echo '<div id="systems">';
 		echo '</a>';
 	}
 
-	for ($i = 0; $i < $sectorManager->size(); $i++) {
-		$sector = $sectorManager->get($i);
-
+	foreach ($sectors as $sector) {
 		echo '<span ';
 			echo 'class="sector-number color' . $sector->getRColor() . ' sh" ';
 			echo 'data-target="sector-info-' . $sector->getId() . '" ';

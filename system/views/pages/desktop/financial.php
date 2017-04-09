@@ -35,9 +35,7 @@ echo '<div id="content">';
 
 		$commanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::AFFECTED, Commander::MOVING], ['c.rBase' => 'ASC']);
 
-		$S_TRM1 = $transactionManager->getCurrentSession();
-		$transactionManager->newSession();
-		$transactionManager->load(array('rPlayer' => $session->get('playerId'), 'type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_PROPOSED));
+		$transactions = $transactionManager->getPlayerPropositions($session->get('playerId'), Transaction::TYP_SHIP);
 
 		# global variable
 		$taxBonus = $session->get('playerBonus')->get(PlayerBonus::POPULATION_TAX);
@@ -101,9 +99,8 @@ echo '<div id="content">';
 			$financial_totalShipsFees += Game::getFleetCost($commander->getNbrShipByType());
 		}
 
-		$transaction_generalFinancial = [];
-		for ($i = 0; $i < $transactionManager->size(); $i++) {
-			$transaction = $transactionManager->get($i);
+        $transaction_generalFinancial = [];
+		foreach ($transactions as $transaction) {
 			$transaction_generalFinancial[] = $transaction;
 			$financial_totalShipsFees += ShipResource::getInfo($transaction->identifier, 'cost') * ShipResource::COST_REDUCTION * $transaction->quantity;
 		}
@@ -144,9 +141,6 @@ echo '<div id="content">';
 		$commander_fleetFeesFinancial = $commander_generalFinancial;
 		$ob_fleetFeesFinancial = $ob_generalFinancial;
 		include COMPONENT . 'financial/fleetFeesFinancial.php';
-
-		# close
-		$transactionManager->changeSession($S_TRM1);
 	} elseif ($request->query->get('view') == 'send') {
 		include COMPONENT . 'financial/send-credit-player.php';
 		include COMPONENT . 'financial/send-credit-faction.php';

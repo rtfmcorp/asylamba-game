@@ -375,23 +375,19 @@ class OrbitalBaseManager {
 			throw new ErrorException('Cette base orbitale n\'existe pas !');
 		}
 		# changement de possesseur des offres du marché
-		$S_TRM1 = $this->transactionManager->getCurrentSession();
-		$this->transactionManager->newSession(FALSE);
-		$this->transactionManager->load(array('rPlayer' => $base->rPlayer, 'rPlace' => $base->rPlace, 'statement' => Transaction::ST_PROPOSED));
+		$transactions = $this->transactionManager->getBasePropositions($base->rPlace);
 
-		for ($i = 0; $i < $this->transactionManager->size(); $i++) {
+		foreach ($transactions as $transaction) {
 			# change owner of transaction
-			$this->transactionManager->get($i)->rPlayer = $newOwner;
+			$transaction->rPlayer = $newOwner;
 
 			$S_CSM1 = $this->commercialShippingManager->getCurrentSession();
 			$this->commercialShippingManager->newSession(FALSE);
-			$this->commercialShippingManager->load(array('rTransaction' => $this->transactionManager->get($i)->id, 'rPlayer' => $base->rPlayer));
+			$this->commercialShippingManager->load(array('rTransaction' => $transaction->id, 'rPlayer' => $base->rPlayer));
 			# change owner of commercial shipping
 			$this->commercialShippingManager->get()->rPlayer = $newOwner;
 			$this->commercialShippingManager->changeSession($S_CSM1);
 		}
-
-		$this->transactionManager->changeSession($S_TRM1);
 
 		# attribuer le rPlayer à la Base
 		$oldOwner = $base->rPlayer;
@@ -450,6 +446,7 @@ class OrbitalBaseManager {
 		}
 		# applique en cascade le changement de couleur des sytèmes
 		$this->galaxyColorManager->apply();
+        $this->entityManager->flush();
 	}
 	
 
@@ -560,28 +557,18 @@ class OrbitalBaseManager {
 				$cs = $this->commercialShippingManager->get($i);
 
 				if ($cs->dArrival < $now AND $cs->dArrival !== '0000-00-00 00:00:00') {
-
 					$commander = NULL;
 
 					# load transaction (if it's not a resource shipping)
-					$S_TRM1 = $this->transactionManager->getCurrentSession();
-					$this->transactionManager->newSession();
-					$this->transactionManager->load(array('id' => $cs->rTransaction));
-					if ($this->transactionManager->size() == 1) {
-						$transaction = $this->transactionManager->get();
-
+					if (($transaction = $this->transactionManager->get($cs->rTransaction)) !== null) {
 						# load commander if it's a commander shipping
 						if ($transaction->type == Transaction::TYP_COMMANDER) {
 							$commander = $this->commanderManager->get($transaction->identifier);
 						}
-					} else {
-						$transaction = NULL;
 					}
 					$destOB = $this->get($cs->rBaseDestination);
 
 					$this->ctc->add($cs->dArrival, $this, 'uCommercialShipping', $orbitalBase, array($orbitalBase, $cs, $transaction, $destOB, $commander));
-
-					$this->transactionManager->changeSession($S_TRM1);
 				}
 			}
 			$this->commercialShippingManager->changeSession($S_CSM1);

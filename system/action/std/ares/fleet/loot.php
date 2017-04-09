@@ -41,14 +41,10 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 						if ($commander->getPev() > 0) {
 							if ($commander->statement == Commander::AFFECTED) {
 
-								$S_SEM = $sectorManager->getCurrentSession();
-								$sectorManager->newSession();
-								$sectorManager->load(array('id' => $place->rSector));
+								$sector = $sectorManager->get($place->rSector);
 
-								$sectorColor = $colorManager->get($sectorManager->get()->rColor);
-								$isFactionSector = ($sectorManager->get()->rColor == $commander->playerColor || $sectorColor->colorLink[$session->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
-								
-								$sectorManager->changeSession($S_SEM);
+								$sectorColor = $colorManager->get($sector->rColor);
+								$isFactionSector = ($sector->rColor == $commander->playerColor || $sectorColor->colorLink[$session->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
 								
 								$commander->destinationPlaceName = $place->baseName;
 								if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
@@ -97,14 +93,9 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 					$duration = Game::getTimeToTravel($home, $place, $session->get('playerBonus'));
 
 					if ($commander->getPev() > 0) {
-						$S_SEM = $sectorManager->getCurrentSession();
-						$sectorManager->newSession();
-						$sectorManager->load(array('id' => $place->rSector));
+						$sector = $sectorManager->get($place->rSector);
 
-						$sectorColor = $colorManager->get($sectorManager->get()->rColor);
-						$isFactionSector = ($sectorManager->get()->rColor == $commander->playerColor || $sectorColor->colorLink[$session->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
-						
-						$sectorManager->changeSession($S_SEM);
+						$isFactionSector = ($sector->rColor == $commander->playerColor || $sectorColor->colorLink[$session->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
 						
 						$commander->destinationPlaceName = $place->baseName;
 						if ($length <= Commander::DISTANCEMAX || $isFactionSector) {

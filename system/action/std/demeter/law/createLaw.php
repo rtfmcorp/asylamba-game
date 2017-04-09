@@ -104,11 +104,9 @@ if ($type !== FALSE) {
 							$rSector = $request->request->get('rsector');
 							if ($taxes !== FALSE && $rSector !== FALSE) {
 								if ($taxes >= 2 && $taxes <= 15) {
-									$_SEM = $sectorManager->getCurrentsession();
-									$sectorManager->load(array('id' => $rSector)); 
-									if ($sectorManager->size() > 0) {
-										if ($sectorManager->get()->rColor == $session->get('playerInfo')->get('color')) {
-											$law->options = serialize(array('taxes' => $taxes, 'rSector' => $rSector, 'display' => array('Secteur' => $sectorManager->get()->name, 'Taxe actuelle' => $sectorManager->get()->tax . ' %', 'Taxe proposée' => $taxes . ' %')));
+									if (($sector = $sectorManager->get($rSector)) !== null) {
+										if ($sector->rColor == $session->get('playerInfo')->get('color')) {
+											$law->options = serialize(array('taxes' => $taxes, 'rSector' => $rSector, 'display' => array('Secteur' => $sector->name, 'Taxe actuelle' => $sector->tax . ' %', 'Taxe proposée' => $taxes . ' %')));
 											$lawManager->add($law);
 											$faction->credits -= LawResources::getInfo($type, 'price');
 											$colorManager->sendSenateNotif($faction);
@@ -119,7 +117,6 @@ if ($type !== FALSE) {
 									} else {
 										throw new ErrorException('Ce secteur n\'existe pas.');
 									}
-									$sectorManager->changeSession($_SEM);
 								} else {
 									throw new ErrorException('La taxe doit être entre 2 et 15 %.');
 								}
@@ -133,10 +130,8 @@ if ($type !== FALSE) {
 							if ($rSector !== FALSE && $name !== FALSE) {
 								if (strlen($name) >= 1 AND strlen($name) <= 50) {
 									$name = $parser->protect($name);
-									$_SEM = $sectorManager->getCurrentsession();
-									$sectorManager->load(array('id' => $rSector)); 
-									if ($sectorManager->size() > 0) {
-										if ($sectorManager->get()->rColor == $session->get('playerInfo')->get('color')) {
+									if (($sector = $sectorManager->get($rSector)) !== null) {
+										if ($sector->rColor == $session->get('playerInfo')->get('color')) {
 											$law->options = serialize(array('name' => $name, 'rSector' => $rSector));
 											$lawManager->add($law);
 											$faction->credits -= LawResources::getInfo($type, 'price');
@@ -148,7 +143,6 @@ if ($type !== FALSE) {
 									} else {
 										throw new ErrorException('Ce secteur n\'existe pas.');
 									}
-									$sectorManager->changeSession($_SEM);
 								} else {
 									throw new ErrorException('Le nom doit faire entre 1 et 50 caractères.');
 								}
@@ -187,7 +181,6 @@ if ($type !== FALSE) {
 								} else {
 									throw new ErrorException('Cette faction n\'existe pas.');
 								}
-								$sectorManager->changeSession($_CTM);
 							} else {
 								throw new ErrorException('Informations manquantes.');
 							}
@@ -223,7 +216,6 @@ if ($type !== FALSE) {
 								} else {
 									throw new ErrorException('Cette faction n\'existe pas.');
 								}
-								$sectorManager->changeSession($_CTM);
 							} else {
 								throw new ErrorException('Informations manquantes.');
 							}
@@ -360,7 +352,7 @@ if ($type !== FALSE) {
 					throw new ErrorException('Il n\'y assez pas a de crédits dans les caisses de l\'Etat.');
 				}
 			}
-			$this->getContainer()->get('entity_manager')->flush($faction);
+			$this->getContainer()->get('entity_manager')->flush();
 		} else {
 			throw new ErrorException('Vous n\' avez pas le droit de proposer cette loi.');
 		}

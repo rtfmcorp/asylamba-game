@@ -4,9 +4,7 @@ use Asylamba\Modules\Demeter\Resource\LawResources;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Model\Law\Law;
-use Asylamba\Modules\Zeus\Model\Player;
 
-$sectorManager = $this->getContainer()->get('gaia.sector_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
@@ -38,32 +36,24 @@ echo '<div class="component profil player">';
 					echo '<form action="' . Format::actionBuilder('createlaw', $sessionToken, ['type' => $governmentLaw_id]) . '" method="post">';
 						if ($governmentLaw_id == Law::SECTORTAX) {
 							echo '<input type="text" placeholder="Nouvel impôt en pourcent" name="taxes" />';
-							
-							$S_SEM_T = $sectorManager->getCurrentSession();
-							$sectorManager->changeSession($S_SEM_LAW);
 
 							echo '<select name="rsector">';
 								echo '<option value="-1">Choisissez un secteur</option>';
-								for ($j = 0; $j <$sectorManager->size(); $j++) {
-									echo '<option value="' . $sectorManager->get($j)->id . '">' . $sectorManager->get($j)->name . ' (taxe ' . $sectorManager->get($j)->tax . '%)</option>';
+								foreach ($factionSectors as $sector) {
+									echo '<option value="' . $sector->id . '">' . $sector->name . ' (taxe ' . $sector->tax . '%)</option>';
 								}
 							echo '</select>';
 
-							$sectorManager->changeSession($S_SEM_T);
 						} elseif ($governmentLaw_id == Law::SECTORNAME) {
 							echo '<input type="text" placeholder="Nouveau nom du secteur" name="name" />';
-							
-							$S_SEM_T = $sectorManager->getCurrentSession();
-							$sectorManager->changeSession($S_SEM_LAW);
 
 							echo '<select name="rsector">';
 								echo '<option value="-1">Choisissez un secteur</option>';
-								for ($j = 0; $j < $sectorManager->size(); $j++) {
-									echo '<option value="' . $sectorManager->get($j)->id . '">' . $sectorManager->get($j)->name . ' (#' . $sectorManager->get($j)->id . ')</option>';
+								foreach ($factionSectors as $sector) {
+									echo '<option value="' . $sector->id . '">' . $sector->name . ' (#' . $sector->id . ')</option>';
 								}
 							echo '</select>';
 
-							$sectorManager->changeSession($S_SEM_T);
 						} elseif ($governmentLaw_id == Law::NEUTRALPACT) {
 
 							echo '<select name="rcolor">';

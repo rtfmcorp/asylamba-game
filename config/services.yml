@@ -16,11 +16,33 @@ services:
             - "%database_admin_user"
             - "%database_admin_password"
             
+    app.session:
+        class: Asylamba\Classes\Container\Session
+            
     router:
         class: Asylamba\Classes\Router\Router
         
+    request_factory:
+        class: Asylamba\Classes\Library\Http\RequestFactory
+        
+    response_factory:
+        class: Asylamba\Classes\Library\Http\ResponseFactory
+        arguments:
+            - "@templating.renderer"
+            - "@app.session"
+        
+    client_manager:
+        class: Asylamba\Classes\Daemon\ClientManager
+        arguments:
+            - "@app.session"
+        
     templating.renderer:
         class: Asylamba\Classes\Templating\Renderer
+        arguments:
+            - "@app.container"
+            
+    server:
+        class: Asylamba\Classes\Daemon\Server
         arguments:
             - "@app.container"
             
@@ -55,6 +77,7 @@ services:
         class: Asylamba\Classes\Worker\CTC
         arguments:
             - "@app.session"
+            - "%root_path"
         
     exception_listener:
         class: Asylamba\Classes\EventListener\ExceptionListener
