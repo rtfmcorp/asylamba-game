@@ -12,6 +12,8 @@
 - Templating component
 - Daemon server to handle the game in real-time
 - Event and listeners for system and sector seizing
+- Realtime action scheduler
+- Cyclic action scheduler
 
 ### Changed
 - Many managers are now free of the session pattern
