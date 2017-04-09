@@ -70,7 +70,6 @@ if ($rPlace !== FALSE AND $rTarget !== FALSE AND $quantity !== FALSE AND in_arra
 				} else {
 					throw new ErrorException('Il y a un problème avec le lieu de départ ou d\'arrivée. Veuillez contacter un administrateur.');
 				}
-				$placeManager->changeSession($S_PLM1);
 			} else {
 				throw new ErrorException('Vous n\'avez pas assez de recycleurs libres pour lancer cette mission.');
 			}

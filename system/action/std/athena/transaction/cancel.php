@@ -51,7 +51,7 @@ if ($rTransaction !== FALSE) {
 							$orbitalBaseManager->increaseResources($base, $transaction->quantity, TRUE);
 						} else {
 							$valid = FALSE;
-							throw new ErrorException('Vous n\'avez pas assez de place dans votre Stockage pour stocker les ressources. Videz un peu le hangar et revenez plus tard pour annuler cette offre.', ALERT_STD_INFO);
+							throw new ErrorException('Vous n\'avez pas assez de place dans votre Stockage pour stocker les ressources. Videz un peu le hangar et revenez plus tard pour annuler cette offre.');
 						}
 						break;
 					case Transaction::TYP_SHIP :

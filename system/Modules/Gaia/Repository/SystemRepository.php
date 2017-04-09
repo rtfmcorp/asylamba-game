@@ -24,6 +24,26 @@ class SystemRepository extends AbstractRepository
 		return $system;
 	}
 	
+	/**
+	 * @return array
+	 */
+	public function getAll()
+	{
+		$statement = $this->connection->query('SELECT * FROM system');
+		
+		$data = [];
+		while ($row = $statement->fetch()) {
+			if (($s = $this->unitOfWork->getObject(System::class, $row['id'])) !== null) {
+				$data[] = $s;
+				continue;
+			}
+			$system = $this->format($row);
+			$this->unitOfWork->addObject($system);
+			$data[] = $system;
+		}
+		return $data;
+	}
+	
 	public function insert($system)
 	{
 		
@@ -31,11 +51,11 @@ class SystemRepository extends AbstractRepository
 	
 	public function update($system)
 	{
-		$statement = $this->connection->prepare('UPDATE system SET rColor = ? WHERE id = ?');
-		$statement->execute(array(
-			$system->rColor,
-			$system->id
-		));
+		$statement = $this->connection->prepare('UPDATE system SET rColor = :faction_id WHERE id = :id');
+		$statement->execute([
+			'faction_id' => $system->rColor,
+			'id' => $system->id
+		]);
 	}
 	
 	public function remove($system)

@@ -42,7 +42,7 @@ if ($comingCommercialShipping > 0) {
 	echo '</div>';
 }
 
-$transaction = $transactionManager->getLastCompletedTransaction(Transaction::TYP_RESOURCE)[0];
+$transaction = $transactionManager->getLastCompletedTransaction(Transaction::TYP_RESOURCE);
 $ressourceCurrentRate = $transaction->currentRate;
 
 $resourceTransactions = $transactionManager->getProposedTransactions(Transaction::TYP_RESOURCE);
@@ -107,7 +107,7 @@ echo '</div>';
 
 $shipCurrentRate = $transactionManager->getLastCompletedTransaction(Transaction::TYP_SHIP)->currentRate;
 
-$shipTransactions = $transactionManager->egtProposedTransactions(Transaction::TYP_SHIP);
+$shipTransactions = $transactionManager->getProposedTransactions(Transaction::TYP_SHIP);
 
 echo '<div class="component transaction">';
 	echo '<div class="head skin-4">';
@@ -127,7 +127,7 @@ echo '<div class="component transaction">';
 
 			echo '<div class="sort-content">';
 				foreach ($shipTransactions as $transaction) {
-					if ($session->get('playerId') != $transaction) {
+					if ($session->get('playerId') != $transaction->rPlayer) {
 						$transactionManager->render($transaction, $shipCurrentRate, $S_CTM2, $ob_compPlat);
 					}
 				}

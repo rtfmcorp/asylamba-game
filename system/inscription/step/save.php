@@ -7,6 +7,7 @@ use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Classes\Worker\API;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
+use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 
 try {
 	$session = $this->getContainer()->get('app.session');
@@ -18,8 +19,8 @@ try {
 	$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
 	$placeManager = $this->getContainer()->get('gaia.place_manager');
 	$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-	$galaxyColorManager = $this->getContainer()->get('gaia.galaxy_color_manager');
 	$entityManager = $this->getContainer()->get('entity_manager');
+	$eventDispatcher = $this->getContainer()->get('event_dispatcher');
 	
 	$faction = $session->get('inscription')->get('ally');
 	# AJOUT DU JOUEUR EN BASE DE DONNEE
@@ -234,6 +235,8 @@ try {
 	$place->coefResources = 60;
 	$place->coefHistory = 20;
 	$entityManager->flush($place);
+	
+	$eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place));
 
 	# confirmation au portail
 	if (APIMODE) {
@@ -253,8 +256,6 @@ try {
 	# clear les sessions
 	$session->remove('inscription');
 	$session->remove('prebindkey');
-
-	$galaxyColorManager->apply();
 
 	# ajout aux conversation de faction et techniques
 	$readingDate = date('Y-m-d H:i:s', (strtotime(Utils::now()) - 20));

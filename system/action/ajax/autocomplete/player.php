@@ -5,7 +5,7 @@ use Asylamba\Modules\Zeus\Model\Player;
 
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 
-$players = $playerManager->search($_GET['q']);
+$players = $playerManager->search($this->getContainer()->get('app.request')->query->get('q'));
 
 if (count($players) > 0) {
 	foreach ($players as $player) {

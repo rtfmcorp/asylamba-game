@@ -34,4 +34,12 @@ class SystemManager {
 	{
 		return $this->entityManager->getRepository(System::class)->get($id);
 	}
+	
+	/**
+	 * @return array
+	 */
+	public function getAll()
+	{
+		return $this->entityManager->getRepository(System::class)->getAll();
+	}
 }

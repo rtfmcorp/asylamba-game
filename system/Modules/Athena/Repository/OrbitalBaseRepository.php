@@ -73,6 +73,46 @@ class OrbitalBaseRepository extends AbstractRepository {
 	}
 	
 	/**
+	 * @param int $sectorId
+	 * @return array
+	 */
+	public function getSectorBases($sectorId)
+	{
+		$statement = $this->select('WHERE se.id = :sector_id', ['sector_id' => $sectorId]);
+		$data = [];
+		while ($row = $statement->fetch()) {
+			if (($ob = $this->unitOfWork->getObject(OrbitalBase::class, $row['rPlace'])) !== null) {
+				$data[] = $ob;
+				continue;
+			}
+			$orbitalBase = $this->format($row);
+			$this->unitOfWork->addObject($orbitalBase);
+			$data[] = $orbitalBase;
+		}
+		return $data;
+	}
+	
+	/**
+	 * @param int $systemId
+	 * @return array
+	 */
+	public function getSystemBases($systemId)
+	{
+		$statement = $this->select('WHERE s.id = :system_id', ['system_id' => $systemId]);
+		$data = [];
+		while ($row = $statement->fetch()) {
+			if (($ob = $this->unitOfWork->getObject(OrbitalBase::class, $row['rPlace'])) !== null) {
+				$data[] = $ob;
+				continue;
+			}
+			$orbitalBase = $this->format($row);
+			$this->unitOfWork->addObject($orbitalBase);
+			$data[] = $orbitalBase;
+		}
+		return $data;
+	}
+	
+	/**
 	 * @param int $baseId
 	 * @param int $playerId
 	 * @return OrbitalBase
