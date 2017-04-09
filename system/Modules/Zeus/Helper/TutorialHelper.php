@@ -117,17 +117,13 @@ class TutorialHelper {
 				break;
 			} else {
 				# verify in the queue
-				$S_BQM2 = $this->buildingQueueManager->getCurrentSession();
-				$this->buildingQueueManager->newSession();
-				$this->buildingQueueManager->load(array('rOrbitalBase' => $orbitalBase->rPlace));
-				for ($i = 0; $i < $this->buildingQueueManager->size() ; $i++) { 
-					$buildingQueue = $this->buildingQueueManager->get($i);
+				$buildingQueues = $this->buildingQueueManager->getBaseQueues($orbitalBase->rPlace);
+				foreach ($buildingQueues as $buildingQueue) {
 					if ($buildingQueue->buildingNumber == $buildingId AND $buildingQueue->targetLevel >= $level) {
 						$nextStepAlreadyDone = TRUE;
 						break;
 					} 
 				}
-				$this->buildingQueueManager->changeSession($S_BQM2);
 			}
 		}
 		return $nextStepAlreadyDone;

@@ -33,16 +33,14 @@ for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) {
 }
 
 # queue
-$S_BQM1 = $buildingQueueManager->getCurrentSession();
-$buildingQueueManager->changeSession($ob_generator->buildingManager);
 
 $q .= '<div class="queue">';
 $nextTime = 0;
 $nextTotalTime = 0;
 
 for ($i = 0; $i < $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::GENERATOR, 'level', $ob_generator->levelGenerator, 'nbQueues'); $i++) {
-	if ($buildingQueueManager->get($i) !== FALSE) {
-		$qe = $buildingQueueManager->get($i);
+	if (isset($ob_generator->buildingQueues[$i])) {
+		$qe = $ob_generator->buildingQueues[$i];
 
 		$realSizeQueue++;
 		$nextTime = Utils::interval(Utils::now(), $qe->dEnd, 's');
@@ -77,8 +75,6 @@ for ($i = 0; $i < $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::GENER
 	}
 }
 $q .= '</div>';
-
-$buildingQueueManager->changeSession($S_BQM1);
 
 
 # building

@@ -68,14 +68,11 @@ $now = Utils::now();
 foreach ($playerBases as $orbitalBase) { 
 	$baseId = $orbitalBase->getRPlace();
 	# check the building queues
-	$S_BQM1 = $buildingQueueManager->getCurrentSession();
-	$buildingQueueManager->newSession();
-	$buildingQueueManager->load(array('rOrbitalBase' => $baseId), array('dEnd'));
-	for ($j = 0; $j < $buildingQueueManager->size(); $j++) { 
-		$date = $buildingQueueManager->get($j)->dEnd;
+	$buildingQueues = $buildingQueueManager->getBaseQueues($baseId);
+	foreach ($buildingQueues as $buildingQueue) { 
+		$date = $buildingQueue->dEnd;
 		$session->get('playerEvent')->add($date, EVENT_BASE, $baseId);
 	}
-	$buildingQueueManager->changeSession($S_BQM1);
 
 	# check the ship queues of dock 1
 	$S_SQM1 = $shipQueueManager->getCurrentSession();

@@ -24,7 +24,8 @@ services:
     athena.building_queue_manager:
         class: Asylamba\Modules\Athena\Manager\BuildingQueueManager
         arguments:
-            - "@database"
+            - "@entity_manager"
+            - "@realtime_action_scheduler"
             
     athena.commercial_route_manager:
         class: Asylamba\Modules\Athena\Manager\CommercialRouteManager
@@ -48,6 +49,7 @@ services:
         class: Asylamba\Modules\Athena\Manager\OrbitalBaseManager
         arguments:
             - "@entity_manager"
+            - "@realtime_action_scheduler"
             - "@athena.building_queue_manager"
             - "@athena.ship_queue_manager"
             - "@promethee.technology_queue_manager"
