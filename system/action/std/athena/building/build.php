@@ -34,14 +34,12 @@ $building = $request->query->get('building');
 if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 	if ($orbitalBaseHelper->isABuilding($building)) {
 		if (($ob = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
-			$S_BQM1 = $buildingQueueManager->getCurrentSession();
-			$buildingQueueManager->newSession(ASM_UMODE);
-			$buildingQueueManager->load(array('rOrbitalBase' => $baseId), array('dEnd'));
+			$buildingQueues = $buildingQueueManager->getBaseQueues($baseId);
 
 			$currentLevel = call_user_func(array($ob, 'getReal' . ucfirst($orbitalBaseHelper->getBuildingInfo($building, 'name')) . 'Level'));
 			$technos = $technologyManager->getPlayerTechnology($session->get('playerId'));
 			if ($orbitalBaseHelper->haveRights($building, $currentLevel + 1, 'resource', $ob->getResourcesStorage())
-				AND $orbitalBaseHelper->haveRights(OrbitalBaseResource::GENERATOR, $ob->getLevelGenerator(), 'queue', $buildingQueueManager->size()) 
+				AND $orbitalBaseHelper->haveRights(OrbitalBaseResource::GENERATOR, $ob->getLevelGenerator(), 'queue', count($buildingQueues)) 
 				AND ($orbitalBaseHelper->haveRights($building, $currentLevel + 1, 'buildingTree', $ob) === TRUE)
 				AND $orbitalBaseHelper->haveRights($building, $currentLevel + 1, 'techno', $technos)) {
 
@@ -123,10 +121,11 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 				$bq->targetLevel = $currentLevel + 1;
 				$time = $orbitalBaseHelper->getBuildingInfo($building, 'level', $currentLevel + 1, 'time');
 				$bonus = $time * $session->get('playerBonus')->get(PlayerBonus::GENERATOR_SPEED) / 100;
-				if ($buildingQueueManager->size() == 0) {
+				$nbBuildingQueues = count($buildingQueues);
+				if ($nbBuildingQueues === 0) {
 					$bq->dStart = Utils::now();
 				} else {
-					$bq->dStart = $buildingQueueManager->get($buildingQueueManager->size() - 1)->dEnd;
+					$bq->dStart = $buildingQueues[$nbBuildingQueues - 1]->dEnd;
 				}
 				$bq->dEnd = Utils::addSecondsToDate($bq->dStart, round($time - $bonus));
 				$buildingQueueManager->add($bq);
@@ -149,7 +148,6 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 			} else {
 				throw new ErrorException('les conditions ne sont pas remplies pour construire ce bâtiment');
 			}
-			$buildingQueueManager->changeSession($S_BQM1);
 		} else {
 			throw new ErrorException('cette base ne vous appartient pas');
 		}

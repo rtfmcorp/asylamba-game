@@ -53,9 +53,13 @@ use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Classes\Library\Flashbag;
 
+use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
+
 class OrbitalBaseManager {
 	/** @var EntityManager **/
 	protected $entityManager;
+	/** @var RealTimeActionScheduler **/
+	protected $scheduler;
 	/** @var BuildingQueueManager **/
 	protected $buildingQueueManager;
 	/** @var ShipQueueManager **/
@@ -97,6 +101,7 @@ class OrbitalBaseManager {
 	
 	/**
 	 * @param EntityManager $entityManager
+	 * @param RealTimeActionScheduler $scheduler
 	 * @param BuildingQueueManager $buildingQueueManager
 	 * @param ShipQueueManager $shipQueueManager
 	 * @param TechnologyQueueManager $technologyQueueManager
@@ -117,6 +122,7 @@ class OrbitalBaseManager {
 	 */
 	public function __construct(
 		EntityManager $entityManager,
+		RealTimeActionScheduler $scheduler,
 		BuildingQueueManager $buildingQueueManager,
 		ShipQueueManager $shipQueueManager,
 		TechnologyQueueManager $technologyQueueManager,
@@ -138,6 +144,7 @@ class OrbitalBaseManager {
 		Session $session
 	) {
 		$this->entityManager = $entityManager;
+		$this->scheduler = $scheduler;
 		$this->buildingQueueManager = $buildingQueueManager;
 		$this->shipQueueManager = $shipQueueManager;
 		$this->technologyQueueManager = $technologyQueueManager;
@@ -288,12 +295,7 @@ class OrbitalBaseManager {
 	 * @throws ErrorException
 	 */
 	protected function fill(OrbitalBase $orbitalBase) {
-		# BuildingQueueManager
-		$oldBQMSess = $this->buildingQueueManager->getCurrentSession();
-		$this->buildingQueueManager->newSession(ASM_UMODE);
-		$this->buildingQueueManager->load(array('rOrbitalBase' => $orbitalBase->getRPlace()), array('dEnd', 'ASC'));
-		$orbitalBase->buildingManager = $this->buildingQueueManager->getCurrentSession();
-		$size = $this->buildingQueueManager->size();
+		$buildingQueues = $this->buildingQueueManager->getBaseQueues($orbitalBase->getRPlace());
 
 		$realGeneratorLevel = $orbitalBase->getLevelGenerator();
 		$realRefineryLevel = $orbitalBase->getLevelRefinery();
@@ -306,8 +308,8 @@ class OrbitalBaseManager {
 		$realRecyclingLevel = $orbitalBase->getLevelRecycling();
 		$realSpatioportLevel = $orbitalBase->getLevelSpatioport();
 
-		for ($i = 0; $i < $size; $i++) {
-			switch ($this->buildingQueueManager->get($i)->buildingNumber) {
+		foreach ($buildingQueues as $buildingQueue) {
+			switch ($buildingQueue->buildingNumber) {
 				case 0 :
 					$realGeneratorLevel++;
 					break;
@@ -353,8 +355,8 @@ class OrbitalBaseManager {
 		$orbitalBase->setRealStorageLevel($realStorageLevel);
 		$orbitalBase->setRealRecyclingLevel($realRecyclingLevel);
 		$orbitalBase->setRealSpatioportLevel($realSpatioportLevel);
-		$this->buildingQueueManager->changeSession($oldBQMSess);
 
+		$orbitalBase->buildingQueues = $buildingQueues;
 		# ShipQueueManager
 		$S_SQM1 = $this->shipQueueManager->getCurrentSession();
 		$this->shipQueueManager->newSession(ASM_UMODE);
@@ -389,7 +391,6 @@ class OrbitalBaseManager {
 		$this->entityManager->persist($orbitalBase);
 		$this->entityManager->flush($orbitalBase);
 		
-		$orbitalBase->buildingManager = $this->buildingQueueManager->getFirstSession();
 		$orbitalBase->dock1Manager = $this->shipQueueManager->getFirstSession();
 		$orbitalBase->dock2Manager = $this->shipQueueManager->getFirstSession();
 		$orbitalBase->dock3Manager = $this->shipQueueManager->getFirstSession();
@@ -520,20 +521,18 @@ class OrbitalBaseManager {
 					$this->ctc->add($hour, $this, 'uAntiSpy', $orbitalBase, array($orbitalBase));
 				}
 			}
-
-			# BUILDING QUEUE
-			$S_BQM2 = $this->buildingQueueManager->getCurrentSession();
-			$this->buildingQueueManager->changeSession($orbitalBase->buildingManager);
-			for ($i = 0; $i < $this->buildingQueueManager->size(); $i++) { 
-				$queue = $this->buildingQueueManager->get($i);
-
-				if ($queue->dEnd < $now) {
-					$this->ctc->add($queue->dEnd, $this, 'uBuildingQueue', $orbitalBase, array($orbitalBase, $queue, $player));
-				} else {
-					break;
-				}
-			}
-			$this->buildingQueueManager->changeSession($S_BQM2);
+//
+//			# BUILDING QUEUE
+//			$this->buildingQueueManager->changeSession($orbitalBase->buildingManager);
+//			for ($i = 0; $i < $this->buildingQueueManager->size(); $i++) { 
+//				$queue = $this->buildingQueueManager->get($i);
+//
+//				if ($queue->dEnd < $now) {
+//					$this->ctc->add($queue->dEnd, $this, 'uBuildingQueue', $orbitalBase, array($orbitalBase, $queue, $player));
+//				} else {
+//					break;
+//				}
+//			}
 
 			# SHIP QUEUE DOCK 1
 			$S_SQM1 = $this->shipQueueManager->getCurrentSession();
@@ -648,7 +647,10 @@ class OrbitalBaseManager {
 		$orbitalBase->antiSpyAverage = round((($orbitalBase->antiSpyAverage * (24 - 1)) + ($orbitalBase->iAntiSpy)) / 24);
 	}
 
-	public function uBuildingQueue(OrbitalBase $orbitalBase, $queue, $player) {
+	public function uBuildingQueue($queueId) {
+		$queue = $this->buildingQueueManager->get($queueId);
+		$orbitalBase = $this->get($queue->rOrbitalBase);
+		$player = $this->playerManager->get($orbitalBase->rPlayer);
 		# update builded building
 		$orbitalBase->setBuildingLevel($queue->buildingNumber, ($orbitalBase->getBuildingLevel($queue->buildingNumber) + 1));
 		# update the points of the orbitalBase
@@ -662,7 +664,8 @@ class OrbitalBaseManager {
 			$this->session->addFlashbag('Construction de votre <strong>' . $this->orbitalBaseHelper->getBuildingInfo($queue->buildingNumber, 'frenchName') . ' niveau ' . $queue->targetLevel . '</strong> sur <strong>' . $orbitalBase->name . '</strong> terminée. Vous gagnez ' . $experience . ' point' . Format::addPlural($experience) . ' d\'expérience.', Flashbag::TYPE_GENERATOR_SUCCESS);
 		}
 		# delete queue in database
-		$this->buildingQueueManager->deleteById($queue->id);
+		$this->entityManager->remove($queue);
+		$this->entityManager->flush($queue);
 	}
 
 	public function uShipQueue1(OrbitalBase $orbitalBase, $sq, $player) {
