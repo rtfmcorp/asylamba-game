@@ -44,12 +44,10 @@ echo '<div id="tools">';
 			echo ' <img class="icon-color" src="' . MEDIA . 'resources/resource.png" alt="ressources" />';
 		echo '</a>';
 		
-		$S_BQM1 = $buildingQueueManager->getCurrentSession();
-		$buildingQueueManager->changeSession($currentBase->buildingManager);
+		$nbBuildingQueues = count($currentBase->buildingQueues);
 		echo '<a href="#" class="square sh" data-target="tools-generator"><img src="' . MEDIA . 'orbitalbase/generator.png" alt="" />';
-			echo ($buildingQueueManager->size()) ? '<span class="number">' . $buildingQueueManager->size() . '</span>' : NULL;
+			echo ($nbBuildingQueues !== 0) ? '<span class="number">' . $nbBuildingQueues . '</span>' : NULL;
 		echo '</a>';
-		$buildingQueueManager->changeSession($S_BQM1);
 
 		$S_TQM1 = $technologyQueueManager->getCurrentSession();
 		$technologyQueueManager->changeSession($currentBase->technoQueueManager);
@@ -145,11 +143,8 @@ echo '<div id="tools">';
 	echo '<div class="overbox left-pic" id="tools-generator">';
 		echo '<h2>Générateur</h2>';
 		echo '<div class="overflow">';
-			$S_BQM1 = $buildingQueueManager->getCurrentSession();
-			$buildingQueueManager->changeSession($currentBase->buildingManager);
-			
-			if ($buildingQueueManager->size() > 0) {
-				$qe = $buildingQueueManager->get(0);
+			if ($nbBuildingQueues > 0) {
+				$qe = $currentBase->buildingQueues[0];
 				echo '<div class="queue">';
 					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time') . '">';
 						echo '<img class="picto" src="' . MEDIA . 'orbitalbase/' . $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
@@ -171,7 +166,6 @@ echo '<div id="tools">';
 			}
 
 			echo '<a href="' . APP_ROOT . 'bases/view-generator" class="more-link">vers le générateur</a>';
-			$buildingQueueManager->changeSession($S_BQM1);
 		echo '</div>';
 	echo '</div>';
 

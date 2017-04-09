@@ -80,7 +80,7 @@ class OrbitalBase {
 	public $realRecyclingLevel;
 	public $realSpatioportLevel;
 	// PUBLIC ATTRIBUTES
-	public $buildingManager;
+	public $buildingQueues;
 	public $dock1Manager;
 	public $dock2Manager;
 	public $dock3Manager;

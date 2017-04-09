@@ -15,6 +15,7 @@ $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
 $buildingResourceRefund = $this->getContainer()->getParameter('athena.building.building_queue_resource_refund');
+$entityManager = $this->getContainer()->get('entity_manager');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -27,19 +28,17 @@ $building = $request->query->get('building');
 if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 	if ($orbitalBaseHelper->isABuilding($building)) {
 		if (($ob = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
-			$S_BQM1 = $buildingQueueManager->getCurrentSession();
-			$buildingQueueManager->newSession();
-			$buildingQueueManager->load(array('rOrbitalBase' => $baseId), array('dEnd'));
+			$buildingQueues = $buildingQueueManager->getBaseQueues($baseId);
 
 			$index = NULL;
-			for ($i = 0; $i < $buildingQueueManager->size(); $i++) {
-				$queue = $buildingQueueManager->get($i); 
+			$nbBuildingQueues = count($buildingQueues);
+			for ($i = 0; $i < $nbBuildingQueues; $i++) {
+				$queue = $buildingQueues[$i]; 
 				# get the last element from the correct building
 				if ($queue->buildingNumber == $building) {
 					$index = $i;
 					$targetLevel = $queue->targetLevel;
 					$dStart = $queue->dStart;
-					$idToRemove = $queue->id;
 				}
 			}
 
@@ -50,8 +49,8 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 
 			if ($index !== NULL) {
 				# shift
-				for ($i = $index + 1; $i < $buildingQueueManager->size(); $i++) {
-					$queue = $buildingQueueManager->get($i);
+				for ($i = $index + 1; $i < $nbBuildingQueues; $i++) {
+					$queue = $buildingQueues[$i];
 
 					$queue->dEnd = Utils::addSecondsToDate($dStart, Utils::interval($queue->dStart, $queue->dEnd, 's'));
 					$queue->dStart = $dStart;
@@ -59,7 +58,8 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 					$dStart = $queue->dEnd;
 				}
 
-				$buildingQueueManager->deleteById($idToRemove);
+				$entityManager->remove($buildingQueues[$i]);
+				$entityManager->flush(BuildingQueue::class);
 
 				// give the resources back
 				$resourcePrice = $orbitalBaseHelper->getBuildingInfo($building, 'level', $targetLevel, 'resourcePrice');
@@ -69,7 +69,6 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 			} else {
 				throw new ErrorException('suppression de bâtiment impossible');
 			}
-			$buildingQueueManager->changeSession($S_BQM1);
 		} else {
 			throw new ErrorException('cette base ne vous appartient pas');
 		}

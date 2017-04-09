@@ -105,16 +105,14 @@ echo '<div class="component">';
 
 			echo '<h4>Générateur</h4>';
 
-			$S_BQM_OBV = $buildingQueueManager->getCurrentSession();
-			$buildingQueueManager->changeSession($ob_fastView->buildingManager);
 			$nextTime = 0;
 			$nextTotalTime = 0;
 			$realSizeQueue = 0;
 
 			echo '<div class="queue">';
 			for ($j = 0; $j < $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::GENERATOR, 'level', $ob_fastView->levelGenerator, 'nbQueues'); $j++) {
-				if ($buildingQueueManager->get($j) !== FALSE) {
-					$qe = $buildingQueueManager->get($j);
+				if (isset($ob_fastView->buildingQueues[$j])) {
+					$qe = $ob_fastView->buildingQueues[$j];
 
 					$realSizeQueue++;
 					$nextTime = Utils::interval(Utils::now(), $qe->dEnd, 's');
@@ -147,8 +145,6 @@ echo '<div class="component">';
 				}
 			}
 			echo '</div>';
-
-			$buildingQueueManager->changeSession($S_BQM_OBV);
 
 			if ($ob_fastView->getLevelDock1() > 0) {
 				echo '<h4>Chantier Alpha</h4>';

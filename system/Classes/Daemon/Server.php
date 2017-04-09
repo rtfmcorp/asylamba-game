@@ -8,6 +8,9 @@ use Asylamba\Classes\Library\Http\ResponseFactory;
 use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Classes\Daemon\ClientManager;
 
+use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
+use Asylamba\Classes\Scheduler\CyclicActionScheduler;
+
 use Asylamba\Classes\Event\ExceptionEvent;
 use Asylamba\Classes\Event\ErrorEvent;
 
@@ -27,6 +30,10 @@ class Server
     protected $responseFactory;
     /** @var ClientManager **/
     protected $clientManager;
+	/** @var RealTimeActionScheduler **/
+	protected $realTimeActionScheduler;
+	/** @var CyclicActionScheduler **/
+	protected $cyclicActionScheduler;
     /** @var int **/
     protected $serverCycleTimeout;
     /** @var int **/
@@ -56,6 +63,8 @@ class Server
         $this->requestFactory = $container->get('request_factory');
         $this->responseFactory = $container->get('response_factory');
         $this->clientManager = $container->get('client_manager');
+		$this->realTimeActionScheduler = $container->get('realtime_action_scheduler');
+		$this->cyclicActionScheduler = $container->get('cyclic_action_scheduler');
         $this->serverCycleTimeout = $container->getParameter('server_cycle_timeout');
         $this->port = $container->getParameter('server_port');
         $this->collectionCyclesNumber = $container->getParameter('server_collection_cycles_number');
@@ -140,6 +149,9 @@ class Server
         $inputs = $this->inputs;
         $outputs = $this->outputs;
         $errors = null;
+		
+		$this->realTimeActionScheduler->execute();
+		$this->cyclicActionScheduler->execute();
         
         if ($this->nbUncollectedCycles > $this->collectionCyclesNumber) {
             gc_collect_cycles();

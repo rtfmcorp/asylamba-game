@@ -26,6 +26,7 @@ $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('app.session');
 $baseMinLevelForChange = $this->getContainer()->getParameter('athena.obm.change_type_min_level');
 $baseMinLevelForCapital = $this->getContainer()->getParameter('athena.obm.capital_min_level');
+$entityManager = $this->getContainer()->get('entity_manager');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -384,13 +385,11 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 							}
 						}
 						# delete buildings in queue
-						$S_BQM1 = $buildingQueueManager->getCurrentSession();
-						$buildingQueueManager->newSession(ASM_UMODE);
-						$buildingQueueManager->load(array('rOrbitalBase' => $baseId), array('dEnd'));
-						for ($i = $buildingQueueManager->size() - 1; $i >= 0; $i--) {
-							$buildingQueueManager->deleteById($buildingQueueManager->get($i)->id);
+						$buildingQueues = $buildingQueueManager->getBaseQueues($baseId);
+						foreach ($buildingQueues as $buildingQueue) {
+							$entityManager->remove($buildingQueue);
 						}
-						$buildingQueueManager->changeSession($S_BQM1);
+						$entityManager->flush();
 						# send the right alert
 						if ($type == OrbitalBase::TYP_COMMERCIAL) {
 							# change base type in session
