@@ -23,7 +23,7 @@ class CyclicActionScheduler implements SchedulerInterface
 	
 	public function init()
 	{
-		$this->schedule('zeus.player_manager', 'uCredit');
+		//$this->schedule('zeus.player_manager', 'uCredit');
 	}
 	
 	/**
@@ -47,8 +47,16 @@ class CyclicActionScheduler implements SchedulerInterface
 		}
 		foreach ($this->queue as $action) {
 			// Get the manager from the container and then execute the given method with its arguments
-			call_user_method_array($action['method'], $this->container->get($action['manager']), $action['arguments']);
+			call_user_func_array([$this->container->get($action['manager']), $action['method']], $action['arguments']);
 		}
 		$this->lastExecutedHour = $currentHour;
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getQueue()
+	{
+		return $this->queue;
 	}
 }
