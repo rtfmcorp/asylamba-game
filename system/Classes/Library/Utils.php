@@ -27,12 +27,8 @@ class Utils {
 		}
 	}
 
-	private static $now = FALSE;
 	public static function now() {
-		if (self::$now === FALSE) {
-			self::$now = date('Y-m-d H:i:s');
-		}
-		return self::$now;
+		return date('Y-m-d H:i:s');
 	}
 
 	public static function interval($date1, $date2, $precision = 'h') {
