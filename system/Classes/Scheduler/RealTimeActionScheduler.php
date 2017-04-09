@@ -56,9 +56,17 @@ class RealTimeActionScheduler
 			}
 			foreach ($actions as $action) {
 				// Get the manager from the container and then execute the given method with its arguments
-				call_user_method_array($action['method'], $this->container->get($action['manager']), $action['arguments']);
+				call_user_func_array([$this->container->get($action['manager']), $action['method']], $action['arguments']);
 			}
 			unset($this->queue[$date]);
 		}
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getQueue()
+	{
+		return $this->queue;
 	}
 }
