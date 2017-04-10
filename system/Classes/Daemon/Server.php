@@ -154,6 +154,7 @@ class Server
 		$this->cyclicActionScheduler->execute();
         
         if ($this->nbUncollectedCycles > $this->collectionCyclesNumber) {
+			$this->clientManager->clear();
             gc_collect_cycles();
             $this->nbUncollectedCycles = 0;
         }

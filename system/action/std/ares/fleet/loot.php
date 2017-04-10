@@ -42,7 +42,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 							if ($commander->statement == Commander::AFFECTED) {
 
 								$sector = $sectorManager->get($place->rSector);
-
+								
 								$sectorColor = $colorManager->get($sector->rColor);
 								$isFactionSector = ($sector->rColor == $commander->playerColor || $sectorColor->colorLink[$session->get('playerInfo')->get('color')] == Color::ALLY) ? TRUE : FALSE;
 								

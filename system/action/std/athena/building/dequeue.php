@@ -58,7 +58,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 					$dStart = $queue->dEnd;
 				}
 
-				$entityManager->remove($buildingQueues[$i]);
+				$entityManager->remove($buildingQueues[$index]);
 				$entityManager->flush(BuildingQueue::class);
 
 				// give the resources back

@@ -191,6 +191,21 @@ class CommanderManager
 	}
 	
 	/**
+	 * @param array $place
+	 * @return array
+	 */
+	public function getIncomingCommanders($place)
+	{
+		$commanders = $this->entityManager->getRepository(Commander::class)->getIncomingCommanders($place);
+		
+		foreach($commanders as $commander) {
+			$this->uCommander($commander);
+		}
+		
+		return $commanders;
+	}
+	
+	/**
 	 * @param int $orbitalBaseId
 	 * @param int $line
 	 * @return int
@@ -320,7 +335,7 @@ class CommanderManager
 		$commander->rStartPlace = $rStartPlace;
 		$commander->travelType = $travelType;
 		$commander->travelLength = $travelLength;
-		$commander->statement = 2;
+		$commander->statement = Commander::MOVING;
 
 		$commander->dStart = ($travelType != 3) ? Utils::now() : $commander->dArrival;
 		$commander->startPlaceName = ($travelType != 3) ? $commander->oBName : $commander->destinationPlaceName;

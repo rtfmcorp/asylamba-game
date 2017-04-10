@@ -242,6 +242,34 @@ class CommanderRepository extends AbstractRepository {
 	}
 	
 	/**
+	 * @param array $placeId
+	 * @return array
+	 */
+	public function getIncomingCommanders($placeId)
+	{
+		$statement = $this->select(
+			'WHERE c.rDestinationPlace = :place_id AND c.statement = ' . Commander::MOVING . ' ORDER BY c.dArrival ASC'
+		, ['place_id' => $placeId]);
+		$commanders = [];
+		$currentId = 0;
+		$persisted = [];
+		$unPersisted = [];
+		while ($row = $statement->fetch()) {
+			if (in_array($row['id'], $persisted)) {
+				continue;
+			}
+			if (!in_array($row['id'], $unPersisted) && ($c = $this->unitOfWork->getObject(Commander::class, $row['id'])) !== null) {
+				$currentId = $row['id'];
+				$commanders[$row['id']] = $c;
+				$persisted[] = $row['id'];
+				continue;
+			}
+			$this->format($row, $commanders, $currentId, $unPersisted);
+		}
+		return array_values($commanders);
+	}
+	
+	/**
 	 * @param int $orbitalBaseId
 	 * @param int $line
 	 * @return int

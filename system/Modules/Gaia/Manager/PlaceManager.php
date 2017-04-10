@@ -42,6 +42,10 @@ use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Gaia\Model\System;
 
+use Asylamba\Classes\Worker\EventDispatcher;
+
+use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
+
 class PlaceManager {
 	/** @var EntityManager **/
 	protected $entityManager;
@@ -69,6 +73,8 @@ class PlaceManager {
 	protected $ctc;
 	/** @var Session **/
 	protected $session;
+	/** @var EventDispatcher **/
+	protected $eventDispatcher;
 	
 	/**
 	 * @param EntityManager $entityManager
@@ -84,6 +90,7 @@ class PlaceManager {
 	 * @param NotificationManager $notificationManager
 	 * @param CTC $ctc
 	 * @param Session $session
+	 * @param EventDispatcher $eventDispatcher
 	 */
 	public function __construct(
 		EntityManager $entityManager,
@@ -98,7 +105,8 @@ class PlaceManager {
 		RecyclingMissionManager $recyclingMissionManager,
 		NotificationManager $notificationManager,
 		CTC $ctc,
-		Session $session
+		Session $session,
+		EventDispatcher $eventDispatcher
 	) {
 		$this->entityManager = $entityManager;
 		$this->commanderManager = $commanderManager;
@@ -113,6 +121,7 @@ class PlaceManager {
 		$this->notificationManager = $notificationManager;
 		$this->ctc = $ctc;
 		$this->session = $session;
+		$this->eventDispatcher = $eventDispatcher;
 	}
 	
 	/**
@@ -191,7 +200,7 @@ class PlaceManager {
 					$this->ctc->add($hour, $this, 'uDanger', $place, array($place));
 				}
 			}
-			$commanders = $this->commanderManager->getBaseCommanders($place->id, [Commander::MOVING], ['c.dArrival' => 'ASC']);
+			$commanders = $this->commanderManager->getIncomingCommanders($place->id);
 
 			if (count($commanders) > 0) {
 				$placeIds = array();
@@ -220,7 +229,7 @@ class PlaceManager {
 					if ($commander->uMethodCtced) {
 						$hasntU = FALSE;
 
-						if (Utils::interval($commander->lasrUMethod, Utils::now(), 's') > 10) {
+						if (Utils::interval($commander->lastUMethod, Utils::now(), 's') > 10) {
 							$hasntU = TRUE;
 						}
 					}
@@ -641,6 +650,8 @@ class PlaceManager {
 					$commander->rBase = $place->id;
 					$commander->statement = Commander::AFFECTED;
 					$commander->line = 2;
+					
+					$this->eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place));
 
 					# PATCH DEGUEU POUR LES MUTLIS-COMBATS
 					$_NTM465 = $this->notificationManager->getCurrentSession();

@@ -11,6 +11,9 @@ parameters:
     server_cycle_timeout: 20
     server_collection_cycles_number: 25
     
+    # half an hour
+    session_lifetime: 1800 
+    
     log_handler: Asylamba\Classes\Logger\FileLogger
     log_rotation: 3
 
