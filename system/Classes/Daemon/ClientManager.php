@@ -12,7 +12,17 @@ class ClientManager
 {
     /** @var array **/
     public $clients = [];
-    
+    /** @var int **/
+	protected $sessionLifetime;
+	
+	/**
+	 * @param int $sessionLifetime
+	 */
+	public function __construct($sessionLifetime)
+	{
+		$this->sessionLifetime = $sessionLifetime;
+	}
+	
     /**
      * @param Request $request
      * @return Client
@@ -28,6 +38,7 @@ class ClientManager
         }
         $client = $this->clients[$sessionId];
         $client->setIsFirstConnection(false);
+        $client->setLastConnectedAt(new \DateTime());
         return $client;
     }
     
@@ -41,6 +52,7 @@ class ClientManager
             (new Client())
             ->setId($this->generateClientId())
             ->setIsFirstConnection(true)
+			->setLastConnectedAt(new \DateTime())
         ;
 		$session = new Session();
 		$session->add('session_id', $client->getId());
@@ -73,5 +85,17 @@ class ClientManager
 		}
 		unset($this->clients[$clientId]);
 		return true;
+	}
+	
+	public function clear()
+	{
+		$limitDatetime = (new DateTime("-{$this->sessionLifetime} seconds"));
+		
+		foreach ($this->clients as $client)
+		{
+			if ($client->getLastConnectedAt() > $limitDatetime) {
+				$this->removeClient($client->getId());
+			}
+		}
 	}
 }
