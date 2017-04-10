@@ -200,7 +200,7 @@ class PlaceManager {
 					$this->ctc->add($hour, $this, 'uDanger', $place, array($place));
 				}
 			}
-			$commanders = $this->commanderManager->getINcomingCommanders($place->id);
+			$commanders = $this->commanderManager->getIncomingCommanders($place->id);
 
 			if (count($commanders) > 0) {
 				$placeIds = array();
