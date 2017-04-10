@@ -229,7 +229,7 @@ class PlaceManager {
 					if ($commander->uMethodCtced) {
 						$hasntU = FALSE;
 
-						if (Utils::interval($commander->lasrUMethod, Utils::now(), 's') > 10) {
+						if (Utils::interval($commander->lastUMethod, Utils::now(), 's') > 10) {
 							$hasntU = TRUE;
 						}
 					}
