@@ -17,7 +17,9 @@ class SectorRepository extends AbstractRepository
 		if (($s = $this->unitOfWork->getObject(Sector::class, $id)) !== null) {
 			return $s;
 		}
-		$statement = $this->connection->prepare('SELECT * FROM sector WHERE id = :id', ['id' => $id]);
+		
+		$statement = $this->connection->prepare('SELECT * FROM sector WHERE id = :id');
+		$statement->execute(['id' => $id]);
 		
 		if (($row = $statement->fetch()) === false) {
 			return null;
