@@ -8,6 +8,8 @@ class Client
 {
     /** @var string **/
     protected $id;
+	/** @var \DateTime **/
+	protected $lastConnectedAt;
     /** @var boolean **/
     protected $isFirstConnection;
     /** @var boolean **/
@@ -33,7 +35,26 @@ class Client
     {
         return $this->id;
     }
-    
+	
+	/**
+	 * @param \DateTime $lastConnectedAt
+	 * @return \Asylamba\Classes\Daemon\Client
+	 */
+	public function setLastConnectedAt(\DateTime $lastConnectedAt)
+	{
+		$this->lastConnectedAt = $lastConnectedAt;
+		
+		return $this;
+	}
+
+	/**
+	 * @return \DateTime
+	 */
+	public function getLastConnectedAt()
+	{
+		return $this->lastConnectedAt;
+	}
+	
     /**
      * @param boolean $isFirstConnection
      * @return $this
