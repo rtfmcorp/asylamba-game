@@ -44,7 +44,7 @@ services:
     client_manager:
         class: Asylamba\Classes\Daemon\ClientManager
         arguments:
-            - "@app.session"
+            - "%session_lifetime"
         
     templating.renderer:
         class: Asylamba\Classes\Templating\Renderer
