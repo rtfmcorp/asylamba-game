@@ -15,6 +15,7 @@ parameters:
     session_lifetime: 1800 
     
     log_handler: Asylamba\Classes\Logger\FileLogger
+    log_directory: /srv/logs
     log_rotation: 3
 
     # s7/s11 - révolte seldarine - 1/4 of the map, 2 bridges

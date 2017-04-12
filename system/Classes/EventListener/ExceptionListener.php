@@ -2,7 +2,7 @@
 
 namespace Asylamba\Classes\EventListener;
 
-use Asylamba\Classes\Worker\Logger;
+use Asylamba\Classes\Logger\AbstractLogger;
 use Asylamba\Classes\Container\Session;
 use Asylamba\Classes\Library\Flashbag;
 
@@ -14,16 +14,16 @@ use Asylamba\Classes\Event\ErrorEvent;
 use Asylamba\Classes\Exception\FormException;
 
 class ExceptionListener {
-	/** @var Logger **/
+	/** @var AbstractLogger **/
 	protected $logger;
 	/** @var Session **/
 	protected $session;
 	
 	/**
-	 * @param Logger $logger
+	 * @param AbstractLogger $logger
 	 * @param Session $session
 	 */
-	public function __construct(Logger $logger, Session $session)
+	public function __construct(AbstractLogger $logger, Session $session)
 	{
 		$this->logger = $logger;
 		$this->session = $session;
@@ -40,7 +40,7 @@ class ExceptionListener {
 			$exception->getMessage(),
 			$exception->getFile(),
 			$exception->getLine(),
-			Logger::LOG_LEVEL_ERROR,
+			AbstractLogger::LOG_LEVEL_ERROR,
 			($exception instanceof FormException) ? Flashbag::TYPE_FORM_ERROR : Flashbag::TYPE_STD_ERROR
 		);
 	}
@@ -56,7 +56,7 @@ class ExceptionListener {
 			$error->getMessage(),
 			$error->getFile(),
 			$error->getLine(),
-			Logger::LOG_LEVEL_CRITICAL,
+			AbstractLogger::LOG_LEVEL_CRITICAL,
 			Flashbag::TYPE_BUG_ERROR
 		);
 	}
