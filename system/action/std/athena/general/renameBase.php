@@ -38,6 +38,8 @@ if ($baseId !== FALSE AND $name !== FALSE AND in_array($baseId, $verif)) {
 						$session->get('playerBase')->get('ob')->get($i)->add('name', $name);
 					}
 				}
+				
+				$this->getContainer()->get('entity_manager')->flush($orbitalBase);
 
 				$session->addFlashbag('Le nom a été changé en ' . $name . ' avec succès', Flashbag::TYPE_SUCCESS);
 			} else {
