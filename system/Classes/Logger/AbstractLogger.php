@@ -1,12 +1,8 @@
 <?php
 
-namespace Asylamba\Classes\Worker;
+namespace Asylamba\Classes\Logger;
 
-abstract class Logger {
-	/** @var string **/
-	protected $rootPath;
-	/** @var int **/
-	protected $rotation;
+abstract class AbstractLogger {
 	
 	const LOG_TYPE_PHP = 'php';
 	const LOG_TYPE_CRON = 'cron';
@@ -20,16 +16,6 @@ abstract class Logger {
 	const LOG_LEVEL_DEBUG = 'debug';
 	const LOG_LEVEL_ERROR = 'error';
 	const LOG_LEVEL_CRITICAL = 'critical';
-	
-	/**
-	 * @param string $rootPath
-	 * @param int $rotation
-	 */
-	public function __construct($rootPath, $rotation = null)
-	{
-		$this->rootPath = $rootPath;
-		$this->rotation = $rotation;
-	}
 	
 	/**
 	 * @param string $message
