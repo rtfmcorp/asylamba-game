@@ -89,7 +89,7 @@ class ClientManager
 	
 	public function clear()
 	{
-		$limitDatetime = (new DateTime("-{$this->sessionLifetime} seconds"));
+		$limitDatetime = (new \DateTime("-{$this->sessionLifetime} seconds"));
 		
 		foreach ($this->clients as $client)
 		{
