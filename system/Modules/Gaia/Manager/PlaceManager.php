@@ -166,11 +166,18 @@ class PlaceManager {
 		return $places;
 	}
 
-	public function search($search, $order = array(), $limit = array()) {
-//		$search = '%' . $search . '%';
-//			WHERE (pl.statement = 1 OR pl.statement = 2 OR pl.statement = 3)
-//			AND (LOWER(pl.name) LIKE LOWER(?)
-//			OR   LOWER(ob.name) LIKE LOWER(?))
+	/**
+	 * @param string $search
+	 * @return array
+	 */
+	public function search($search) {
+		$places = $this->entityManager->getRepository(Place::class)->search($search);
+		
+		foreach ($places as $place) {
+			$this->uMethod($place);
+		}
+		
+		return $places;
 	}
 
 	protected function fill(Place $place) {

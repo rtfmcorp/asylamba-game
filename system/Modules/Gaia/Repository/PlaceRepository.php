@@ -104,6 +104,32 @@ class PlaceRepository extends AbstractRepository
 		return $data;
 	}
 	
+	/**
+	 * @param string $search
+	 * @return array
+	 */
+	public function search($search)
+	{
+		$statement = $this->select(
+			'WHERE (pl.statement = 1 OR pl.statement = 2 OR pl.statement = 3)
+			AND (LOWER(pl.name) LIKE LOWER(:place_name)
+			OR LOWER(ob.name) LIKE LOWER(:base_name)) ' . $this->getOrderByClause(['pl.id' => 'DESC']) . ' LIMIT 20',
+			['place_name' => "%$search%", 'base_name' => "%$search%"]
+		);
+		
+		$data = [];
+		while ($row = $statement->fetch()) {
+			if (($p = $this->unitOfWork->getObject(Place::class, $row['id'])) !== null) {
+				$data[] = $p;
+				continue;
+			}
+			$place = $this->format($row);
+			$this->unitOfWork->addObject($place);
+			$data[] = $place;
+		}
+		return $data;
+	}
+	
 	public function insert($place)
 	{
 		$qr = $this->connection->prepare(
