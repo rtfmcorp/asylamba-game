@@ -244,7 +244,7 @@ echo '<div id="nav">';
 		echo '<h2>Bug tracker</h2>';
 		echo '<p>Si vous trouvez des bugs ou avez des idées d\'améliorations, nous vous invitons à les poster sur le forum principal.</p>';
 		echo '<a class="outside-button" target="_blank" href="' . GETOUT_ROOT . 'forum/categorie-bug" target="_blank">Reporter un bug</a>';
-		echo '<a class="outside-button" target="_blank" href="' . GETOUT_ROOT . 'forum/categorie-ideas" target="_blank">Proposer une amélioration</a>';
+		echo '<a class="outside-button" target="_blank" href="' . GETOUT_ROOT . 'forum/categorie-opensource" target="_blank">Proposer une amélioration</a>';
 		echo '<p>Pour les bugs que vous pensez critiques, vous pouvez envoyer un email directement à support@asylamba.com.</p>';
 		echo '<a class="outside-button" href="mailto:support@asylamba.com">Envoyer un email</a>';
 	echo '</div>';
