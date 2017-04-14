@@ -21,7 +21,7 @@ echo '<div class="component player rank">';
 							echo '<img src="' . MEDIA . 'faction/flag/flag-' . $id . '.png" alt="" class="picto">';
 						echo '</a>';
 						echo '<span class="title">produits ' . ColorResource::getInfo($id, 'demonym') . '</span>';
-						echo '<strong class="name">' . $commercialTaxManager->get($i)->importTax . ' %</strong>';
+						echo '<strong class="name">' . $commercialTaxManager->get($i)->exportTax . ' %</strong>';
 					echo '</div>';
 				}
 		echo '</div>';
