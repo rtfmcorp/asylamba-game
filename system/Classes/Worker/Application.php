@@ -5,9 +5,6 @@ namespace Asylamba\Classes\Worker;
 use Asylamba\Classes\Configuration\Configuration;
 use Symfony\Component\Config\FileLocator;
 
-use Asylamba\Classes\Event\ExceptionEvent;
-use Asylamba\Classes\Event\ErrorEvent;
-
 use Asylamba\Classes\DependencyInjection\Container;
 
 class Application implements ApplicationInterface {
@@ -86,6 +83,7 @@ class Application implements ApplicationInterface {
 				throw new \ErrorException($errstr, $errno, 1, $errfile, $errline);
 			});
 		}
+		$this->container->get('database')->init($this->container->getParameter('root_path') . '/build/database/structure.sql');
 		$this->container->get('entity_manager')->init();
 		$this->container->get('realtime_action_scheduler')->init();
 		$this->container->get('cyclic_action_scheduler')->init();
