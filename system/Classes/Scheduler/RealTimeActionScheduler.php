@@ -72,6 +72,17 @@ class RealTimeActionScheduler
 	/**
 	 * @param object $object
 	 * @param string $date
+	 * @param string $oldDate
+	 */
+	public function reschedule($object, $date, $oldDate) {
+		$this->queue[$date][get_class($object) . '-' . $object->id] = $this->queue[$oldDate][get_class($object) . '-' . $object->id];
+		
+		$this->cancel($object, $oldDate);
+	}
+	
+	/**
+	 * @param object $object
+	 * @param string $date
 	 */
 	public function cancel($object, $date)
 	{
