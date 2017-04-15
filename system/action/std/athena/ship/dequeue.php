@@ -58,9 +58,12 @@ if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($bas
 				for ($i = $index + 1; $i < $nbShipQueues; $i++) {
 					$shipQueue = $shipQueues[$i];
 
+					$oldDate = $shipQueue->dEnd;
 					$shipQueue->dEnd = Utils::addSecondsToDate($dStart, Utils::interval($shipQueue->dStart, $shipQueue->dEnd, 's'));
 					$shipQueue->dStart = $dStart;
 
+					$scheduler->reschedule($shipQueue, $shipQueue->dEnd, $oldDate);
+					
 					$dStart = $shipQueue->dEnd;
 				}
 

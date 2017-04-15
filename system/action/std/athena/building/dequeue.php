@@ -54,8 +54,11 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 				for ($i = $index + 1; $i < $nbBuildingQueues; $i++) {
 					$queue = $buildingQueues[$i];
 
+					$oldDate = $queue->dEnd;
 					$queue->dEnd = Utils::addSecondsToDate($dStart, Utils::interval($queue->dStart, $queue->dEnd, 's'));
 					$queue->dStart = $dStart;
+					
+					$scheduler->reschedule($queue, $queue->dEnd, $oldDate);
 
 					$dStart = $queue->dEnd;
 				}
