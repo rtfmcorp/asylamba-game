@@ -8,6 +8,7 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Modules\Athena\Model\BuildingQueue;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
@@ -16,6 +17,7 @@ $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
 $buildingResourceRefund = $this->getContainer()->getParameter('athena.building.building_queue_resource_refund');
 $entityManager = $this->getContainer()->get('entity_manager');
+$scheduler = $this->getContainer()->get('realtime_action_scheduler');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -58,6 +60,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 					$dStart = $queue->dEnd;
 				}
 
+				$scheduler->cancel($buildingQueues[$index], $buildingQueues[$index]->dEnd);
 				$entityManager->remove($buildingQueues[$index]);
 				$entityManager->flush(BuildingQueue::class);
 

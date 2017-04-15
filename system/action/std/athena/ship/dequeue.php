@@ -10,12 +10,15 @@ use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Athena\Model\ShipQueue;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
 $shipResourceRefund = $this->getContainer()->getParameter('athena.building.ship_queue_resource_refund');
+$scheduler = $this->getContainer()->get('realtime_action_scheduler');
+$entityManager = $this->getContainer()->get('entity_manager');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -32,7 +35,8 @@ if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($bas
 			$nbShipQueues = count($shipQueues);
 
 			$index = NULL;
-			foreach ($shipQueues as $shipQueue) {
+			for ($i = 0; $i < $nbShipQueues; ++$i) {
+				$shipQueue = $shipQueues[$i];
 				# get the index of the queue
 				if ($shipQueue->id == $queue) {
 					$index = $i;
@@ -60,8 +64,9 @@ if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($bas
 					$dStart = $shipQueue->dEnd;
 				}
 
-				$entityManager->remove($shipQueue);
-				$entityManager->flush($shipQueue);
+				$scheduler->cancel($shipQueues[$index], $shipQueues[$index]->dEnd);
+				$entityManager->remove($shipQueues[$index]);
+				$entityManager->flush(ShipQueue::class);
 				// give a part of the resources back
 				$resourcePrice = ShipResource::getInfo($shipNumber, 'resourcePrice');
 				if ($dockType == 1) {
