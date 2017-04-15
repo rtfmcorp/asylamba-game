@@ -9,6 +9,8 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Classes\Library\Chronos;
 
+use Asylamba\Classes\Exception\ErrorException;
+
 $factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
 $session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
@@ -20,6 +22,11 @@ $status = ColorResource::getInfo($faction->id, 'status');
 $S_FRM1 = $factionRankingManager->getCurrentSession();
 $factionRankingManager->newSession();
 $factionRankingManager->loadLastContext();
+
+if ($factionRankingManager->size() == 0) {
+	throw new ErrorException('L\'espace faction n\'est pas disponible pour le moment');
+}
+
 for ($i = 0; $i < $factionRankingManager->size(); $i++) { 
 	if ($factionRankingManager->get($i)->rFaction == $faction->id) {
 		$factionRanking = $factionRankingManager->get($i)->generalPosition;
