@@ -38,10 +38,10 @@ class RealTimeActionScheduler
 	 */
 	public function schedule($manager, $method, $object, $date)
 	{
-		$this->queue[$date][get_class($object)][$object->id] = [
+		$this->queue[$date][get_class($object) . '-' . $object->id] = [
 			'manager' => $manager,
 			'method' => $method,
-			'object' => $object
+			'object_id' => $object->id
 		];
 		// Sort the queue by date
 		ksort($this->queue);
@@ -63,7 +63,7 @@ class RealTimeActionScheduler
 			}
 			foreach ($actions as $action) {
 				// Get the manager from the container and then execute the given method with its arguments
-				call_user_func_array([$this->container->get($action['manager']), $action['method']], [$action['object']]);
+				call_user_func_array([$this->container->get($action['manager']), $action['method']], [$action['object_id']]);
 			}
 			unset($this->queue[$date]);
 		}
@@ -75,7 +75,7 @@ class RealTimeActionScheduler
 	 */
 	public function cancel($object, $date)
 	{
-		unset($this->queue[$date][get_class($object)][$object->id]);
+		unset($this->queue[$date][get_class($object) . '-' . $object->id]);
 	}
 	
 	/**
