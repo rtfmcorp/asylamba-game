@@ -50,12 +50,11 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 				$dockType = 3;
 				$quantity = 1;
 			}
-			$S_SQM1 = $shipQueueManager->getCurrentSession();
-			$shipQueueManager->newSession(ASM_UMODE);
-			$shipQueueManager->load(array('rOrbitalBase' => $baseId, 'dockType' => $dockType), array('dEnd'));
+			$shipQueues = $shipQueueManager->getByBaseAndDockType($baseId, $dockType);
+			$nbShipQueues = count($shipQueues);
 			$technos = $technologyManager->getPlayerTechnology($session->get('playerId'));
 			if ($shipHelper->haveRights($ship, 'resource', $ob->getResourcesStorage(), $quantity)
-				AND $shipHelper->haveRights($ship, 'queue', $ob, $shipQueueManager->size())
+				AND $shipHelper->haveRights($ship, 'queue', $ob, $nbShipQueues)
 				AND $shipHelper->haveRights($ship, 'shipTree', $ob)
 				AND $shipHelper->haveRights($ship, 'pev', $ob, $quantity)
 				AND $shipHelper->haveRights($ship, 'techno', $technos)) {
@@ -96,12 +95,10 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 						break;
 				}
 				$bonus = $time * $session->get('playerBonus')->get($playerBonus) / 100;
-				if ($shipQueueManager->size() == 0) {
-					$sq->dStart = Utils::now();
-				} else {
-					$sq->dStart = $shipQueueManager->get($shipQueueManager->size() - 1)->dEnd;
-				}
+				
+				$sq->dStart = ($nbShipQueues === 0) ? Utils::now() : $shipQueues[$nbShipQueues - 1]->dEnd;
 				$sq->dEnd = Utils::addSecondsToDate($sq->dStart, round($time - $bonus));
+				
 				$shipQueueManager->add($sq);
 				
 				// débit des ressources au joueur
@@ -133,7 +130,6 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 			} else {
 				throw new ErrorException('les conditions ne sont pas remplies pour construire ce vaisseau');
 			}
-			$shipQueueManager->changeSession($S_SQM1);
 		} else {
 			throw new ErrorException('cette base ne vous appartient pas');
 		}

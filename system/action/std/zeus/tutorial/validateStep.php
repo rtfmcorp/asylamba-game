@@ -147,21 +147,16 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 				break;
 			case TutorialResource::BUILD_SHIP0 :
 				# verify in the queue
-				$S_SQM2 = $shipQueueManager->getCurrentSession();
-				$shipQueueManager->newSession();
-
 				# load the queues
 				foreach ($playerBases as $ob) { 
-					$shipQueueManager->load(array('rOrbitalBase' => $ob->rPlace));
+					$shipQueues = $shipQueueManager->getBaseQueues($ob->rPlace);
+					foreach ($shipQueues as $shipQueue) { 
+						if ($shipQueue->shipNumber == ShipResource::PEGASE) {
+							$nextStepAlreadyDone = TRUE;
+							break;
+						} 
+					}
 				}
-				for ($i = 0; $i < $shipQueueManager->size() ; $i++) { 
-					$sq = $shipQueueManager->get($i);
-					if ($sq->shipNumber == ShipResource::PEGASE) {
-						$nextStepAlreadyDone = TRUE;
-						break;
-					} 
-				}
-				$shipQueueManager->changeSession($S_SQM2);
 				break;
 			case TutorialResource::AFFECT_COMMANDER:
 				# asdf

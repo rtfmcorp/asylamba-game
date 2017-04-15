@@ -357,15 +357,6 @@ class OrbitalBaseManager {
 		$orbitalBase->setRealSpatioportLevel($realSpatioportLevel);
 
 		$orbitalBase->buildingQueues = $buildingQueues;
-		# ShipQueueManager
-		$S_SQM1 = $this->shipQueueManager->getCurrentSession();
-		$this->shipQueueManager->newSession(ASM_UMODE);
-		$this->shipQueueManager->load(array('rOrbitalBase' => $orbitalBase->getRPlace(), 'dockType' => 1), array('dEnd'));
-		$orbitalBase->dock1Manager = $this->shipQueueManager->getCurrentSession();
-		$this->shipQueueManager->newSession(ASM_UMODE);
-		$this->shipQueueManager->load(array('rOrbitalBase' => $orbitalBase->getRPlace(), 'dockType' => 2), array('dEnd'));
-		$orbitalBase->dock2Manager = $this->shipQueueManager->getCurrentSession();
-		$this->shipQueueManager->changeSession($S_SQM1);
 		# TechnologyQueueManager
 		$S_TQM1 = $this->technologyQueueManager->getCurrentSession();
 		$this->technologyQueueManager->newSession(ASM_UMODE);
@@ -521,46 +512,6 @@ class OrbitalBaseManager {
 					$this->ctc->add($hour, $this, 'uAntiSpy', $orbitalBase, array($orbitalBase));
 				}
 			}
-//
-//			# BUILDING QUEUE
-//			$this->buildingQueueManager->changeSession($orbitalBase->buildingManager);
-//			for ($i = 0; $i < $this->buildingQueueManager->size(); $i++) { 
-//				$queue = $this->buildingQueueManager->get($i);
-//
-//				if ($queue->dEnd < $now) {
-//					$this->ctc->add($queue->dEnd, $this, 'uBuildingQueue', $orbitalBase, array($orbitalBase, $queue, $player));
-//				} else {
-//					break;
-//				}
-//			}
-
-			# SHIP QUEUE DOCK 1
-			$S_SQM1 = $this->shipQueueManager->getCurrentSession();
-			$this->shipQueueManager->changeSession($orbitalBase->dock1Manager);
-			for ($i = 0; $i < $this->shipQueueManager->size(); $i++) { 
-				$sq = $this->shipQueueManager->get($i);
-
-				if ($sq->dEnd < $now) {
-					$this->ctc->add($sq->dEnd, $this, 'uShipQueue1', $orbitalBase, array($orbitalBase, $sq, $player));
-				} else {
-					break;
-				}
-			} 
-			$this->shipQueueManager->changeSession($S_SQM1);
-
-			# SHIP QUEUE DOCK 2
-			$S_SQM1 = $this->shipQueueManager->getCurrentSession();
-			$this->shipQueueManager->changeSession($orbitalBase->dock2Manager);
-			for ($i = 0; $i < $this->shipQueueManager->size(); $i++) { 
-				$sq = $this->shipQueueManager->get($i);
-
-				if ($sq->dEnd < $now) {
-					$this->ctc->add($sq->dEnd, $this, 'uShipQueue2', $orbitalBase, array($orbitalBase, $sq, $player));
-				} else {
-					break;
-				}
-			} 
-			$this->shipQueueManager->changeSession($S_SQM1);
 
 			# TECHNOLOGY QUEUE
 			$S_TQM1 = $this->technologyQueueManager->getCurrentSession();
@@ -668,43 +619,47 @@ class OrbitalBaseManager {
 		$this->entityManager->flush($queue);
 	}
 
-	public function uShipQueue1(OrbitalBase $orbitalBase, $sq, $player) {
+	public function uShipQueue1($shipQueueId) {
+		$queue = $this->buildingQueueManager->get($shipQueueId);
+		$orbitalBase = $this->get($queue->rOrbitalBase);
+		$player = $this->playerManager->get($orbitalBase->rPlayer);
 		# vaisseau construit
-		$orbitalBase->setShipStorage($sq->shipNumber, $orbitalBase->getShipStorage($sq->shipNumber) + $sq->quantity);
+		$orbitalBase->setShipStorage($queue->shipNumber, $orbitalBase->getShipStorage($queue->shipNumber) + $queue->quantity);
 		# increase player experience
-		$experience = $sq->quantity * ShipResource::getInfo($sq->shipNumber, 'points');
+		$experience = $queue->quantity * ShipResource::getInfo($queue->shipNumber, 'points');
 		$this->playerManager->increaseExperience($player, $experience);
 
 		# alert
 		if ($this->session->get('playerId') == $orbitalBase->rPlayer) {
 			$alt = 'Construction de ';
-			if ($sq->quantity > 1) {
-				$alt .= 'vos <strong>' . $sq->quantity . ' ' . ShipResource::getInfo($sq->shipNumber, 'codeName') . 's</strong>';
+			if ($queue->quantity > 1) {
+				$alt .= 'vos <strong>' . $queue->quantity . ' ' . ShipResource::getInfo($queue->shipNumber, 'codeName') . 's</strong>';
 			} else {
-				$alt .= 'votre <strong>' . ShipResource::getInfo($sq->shipNumber, 'codeName') . '</strong>';
+				$alt .= 'votre <strong>' . ShipResource::getInfo($queue->shipNumber, 'codeName') . '</strong>';
 			}
 			$alt .= ' sur <strong>' . $orbitalBase->name . '</strong> terminée. Vous gagnez ' . $experience . ' point' . Format::addPlural($experience) . ' d\'expérience.';
 			$this->session->addFlashbag($alt, Flashbag::TYPE_DOCK1_SUCCESS);
 		}
-
-		# delete queue in database
-		$this->shipQueueManager->deleteById($sq->id);
+		$this->entityManager->remove($queue);
+		$this->entityManager->flush();
 	}
 
-	public function uShipQueue2(OrbitalBase $orbitalBase, $sq, $player) {
+	public function uShipQueue2($shipQueueId) {
+		$queue = $this->buildingQueueManager->get($shipQueueId);
+		$orbitalBase = $this->get($queue->rOrbitalBase);
+		$player = $this->playerManager->get($orbitalBase->rPlayer);
 		# vaisseau construit
-		$orbitalBase->setShipStorage($sq->shipNumber, $orbitalBase->getShipStorage($sq->shipNumber) + 1);
+		$orbitalBase->setShipStorage($queue->shipNumber, $orbitalBase->getShipStorage($queue->shipNumber) + 1);
 		# increase player experience
-		$experience = ShipResource::getInfo($sq->shipNumber, 'points');
+		$experience = ShipResource::getInfo($queue->shipNumber, 'points');
 		$this->playerManager->increaseExperience($player, $experience);
 
 		# alert
 		if ($this->session->get('playerId') == $orbitalBase->rPlayer) {
-			$this->session->addFlashbag('Construction de votre ' . ShipResource::getInfo($sq->shipNumber, 'codeName') . ' sur ' . $orbitalBase->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.', Flashbag::TYPE_DOCK2_SUCCESS);
+			$this->session->addFlashbag('Construction de votre ' . ShipResource::getInfo($queue->shipNumber, 'codeName') . ' sur ' . $orbitalBase->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.', Flashbag::TYPE_DOCK2_SUCCESS);
 		}
-
-		# delete queue in database
-		$this->shipQueueManager->deleteById($sq->id);
+		$this->entityManager->remove($queue);
+		$this->entityManager->flush();
 	}
 
 	public function uTechnologyQueue(OrbitalBase $orbitalBase, $tq, $player) {

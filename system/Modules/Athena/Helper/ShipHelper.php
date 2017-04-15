@@ -95,14 +95,10 @@ class ShipHelper {
 						}
 						//ce qu'il y a dans la queue
 						$inQueue = 0;
-						$S_SQM1 = $this->shipQueueManager->getCurrentSession();
-						$this->shipQueueManager->changeSession($sup->dock1Manager);
-						if ($this->shipQueueManager->size() > 0) {
-							for ($i = 0; $i < $this->shipQueueManager->size(); $i++) {
-								$inQueue += ShipResource::getInfo($this->shipQueueManager->get($i)->shipNumber, 'pev') * $this->shipQueueManager->get($i)->quantity;
-							}
+						$shipQueues = $this->shipQueueManager->getByBaseAndDockType($sup->rPlace, 1);
+						foreach ($shipQueues as $shipQueue) {
+							$inQueue += ShipResource::getInfo($shipQueue->shipNumber, 'pev') * $shipQueue->quantity;
 						}
-						$this->shipQueueManager->changeSession($S_SQM1);
 						//ce qu'on veut rajouter
 						$wanted = ShipResource::getInfo($shipId, 'pev') * $quantity;
 						//comparaison
@@ -118,14 +114,10 @@ class ShipHelper {
 						}
 						//ce qu'il y a dans la queue
 						$inQueue = 0;
-						$S_SQM2 = $this->shipQueueManager->getCurrentSession();
-						$this->shipQueueManager->changeSession($sup->dock2Manager);
-						if ($this->shipQueueManager->size() > 0) {
-							for ($i = 0; $i < $this->shipQueueManager->size(); $i++) {
-								$inQueue += ShipResource::getInfo($this->shipQueueManager->get($i)->shipNumber, 'pev') * 1;
-							}
+						$shipQueues = $this->shipQueueManager->getByBaseAndDockType($sup->rPlace, 2);
+						foreach ($shipQueues as $shipQueue) {
+							$inQueue += ShipResource::getInfo($shipQueue->shipNumber, 'pev') * 1;
 						}
-						$this->shipQueueManager->changeSession($S_SQM2);
 						//ce qu'on veut rajouter
 						$wanted = ShipResource::getInfo($shipId, 'pev') * $quantity;
 						//comparaison
