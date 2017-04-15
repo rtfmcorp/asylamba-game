@@ -88,7 +88,8 @@ services:
     athena.ship_queue_manager:
         class: Asylamba\Modules\Athena\Manager\ShipQueueManager
         arguments:
-            - "@database"
+            - "@entity_manager"
+            - "@realtime_action_scheduler"
             
     athena.ship_helper:
         class: Asylamba\Modules\Athena\Helper\ShipHelper
