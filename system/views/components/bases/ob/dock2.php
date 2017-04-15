@@ -25,8 +25,8 @@ $session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
 $shipResourceRefund = $this->getContainer()->getParameter('athena.building.ship_queue_resource_refund');
 
-$S_SQM1 = $shipQueueManager->getCurrentSession();
-$shipQueueManager->changeSession($ob_dock2->dock2Manager);
+$shipQueues = $shipQueueManager->getByBaseAndDockType($ob_dock2->rPlace, 2);
+$nbShipQueues = count($shipQueues);
 $s = array('', '', '', '', '', '');
 $technology = $technologyManager->getPlayerTechnology($session->get('playerId'));
 
@@ -41,10 +41,8 @@ for ($m = 6; $m < ShipResource::SHIP_QUANTITY; $m++) {
 
 $inQueue = 0;
 
-if ($shipQueueManager->size() > 0) {
-	for ($j = 0; $j < $shipQueueManager->size(); $j++) {
-		$inQueue += ShipResource::getInfo($shipQueueManager->get($j)->shipNumber, 'pev') * $shipQueueManager->get($j)->quantity;
-	}
+foreach ($shipQueues as $shipQueue) {
+	$inQueue += ShipResource::getInfo($shipQueue->shipNumber, 'pev') * $shipQueue->quantity;
 }
 
 for ($i = 6; $i < ShipResource::SHIP_QUANTITY; $i++) {
@@ -90,7 +88,7 @@ for ($i = 6; $i < ShipResource::SHIP_QUANTITY; $i++) {
 				$resourcePrice -= round($resourcePrice * ColorResource::BONUS_EMPIRE_CRUISER / 100);
 			}
 		}
-		if (!$shipHelper->haveRights($i, 'queue', $ob_dock2, $shipQueueManager->size())) {
+		if (!$shipHelper->haveRights($i, 'queue', $ob_dock2, $nbShipQueues)) {
 			# queue size
 			$but = '<span class="button disable">';
 				$but .= 'file de construction pleine<br />';
@@ -151,8 +149,8 @@ echo '<div class="component">';
 				$realSizeQueue = 0;
 
 				for ($i = 0; $i < $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::DOCK2, 'level', $ob_dock2->levelDock2, 'nbQueues'); $i++) {
-					if ($shipQueueManager->get($i) !== FALSE) {
-						$queue = $shipQueueManager->get($i);
+					if (isset($shipQueues[$i])) {
+						$queue = $shipQueues[$i];
 						$realSizeQueue++;
 						$totalTimeShips = ShipResource::getInfo($queue->shipNumber, 'time');
 						$remainingTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
@@ -303,5 +301,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-$shipQueueManager->changeSession($S_SQM1);

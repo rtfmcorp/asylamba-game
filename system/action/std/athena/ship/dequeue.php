@@ -28,13 +28,11 @@ $dock = $request->query->get('dock');
 if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($baseId, $verif)) {
 	if (intval($dock) > 0 AND intval($dock) < 4) {
 		if (($ob = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
-			$S_SQM1 = $shipQueueManager->getCurrentSession();
-			$shipQueueManager->newSession();
-			$shipQueueManager->load(array('rOrbitalBase' => $baseId, 'dockType' => $dock), array('dEnd'));
+			$shipQueues = $shipQueueManager->getByBaseAndDockType($baseId, $dock);
+			$nbShipQueues = count($shipQueues);
 
 			$index = NULL;
-			for ($i = 0; $i < $shipQueueManager->size(); $i++) {
-				$shipQueue = $shipQueueManager->get($i); 
+			foreach ($shipQueues as $shipQueue) {
 				# get the index of the queue
 				if ($shipQueue->id == $queue) {
 					$index = $i;
@@ -53,8 +51,8 @@ if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($bas
 
 			if ($index !== NULL) {
 				# shift
-				for ($i = $index + 1; $i < $shipQueueManager->size(); $i++) {
-					$shipQueue = $shipQueueManager->get($i);
+				for ($i = $index + 1; $i < $nbShipQueues; $i++) {
+					$shipQueue = $shipQueues[$i];
 
 					$shipQueue->dEnd = Utils::addSecondsToDate($dStart, Utils::interval($shipQueue->dStart, $shipQueue->dEnd, 's'));
 					$shipQueue->dStart = $dStart;
@@ -62,8 +60,8 @@ if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($bas
 					$dStart = $shipQueue->dEnd;
 				}
 
-				$shipQueueManager->deleteById($queue);
-
+				$entityManager->remove($shipQueue);
+				$entityManager->flush($shipQueue);
 				// give a part of the resources back
 				$resourcePrice = ShipResource::getInfo($shipNumber, 'resourcePrice');
 				if ($dockType == 1) {
@@ -75,7 +73,6 @@ if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($bas
 			} else {
 				throw new ErrorException('suppression de vaisseau impossible');
 			}
-			$shipQueueManager->changeSession($S_SQM1);
 		} else {
 			throw new ErrorException('cette base ne vous appartient pas');	
 		}

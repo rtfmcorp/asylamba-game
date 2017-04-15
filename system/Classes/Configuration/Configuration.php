@@ -19,7 +19,13 @@ class Configuration {
     public function __construct(FileLocatorInterface $locator) {
         $this->locator = $locator;
         $this->loader = new YamlLoader($locator);
+		$this->initializeTimezone();
     }
+	
+	public function initializeTimezone()
+	{
+		date_default_timezone_set('Europe/Paris');
+	}
     
     /**
      * @param array $configurationFiles

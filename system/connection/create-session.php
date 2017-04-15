@@ -75,34 +75,10 @@ foreach ($playerBases as $orbitalBase) {
 	}
 
 	# check the ship queues of dock 1
-	$S_SQM1 = $shipQueueManager->getCurrentSession();
-	$shipQueueManager->newSession();
-	$shipQueueManager->load(array('rOrbitalBase' => $baseId, 'dockType' => 1), array('dEnd'));
-	for ($j = 0; $j < $shipQueueManager->size(); $j++) { 
-		$date = $shipQueueManager->get($j)->dEnd;
-		$session->get('playerEvent')->add($date, EVENT_BASE, $baseId);
+	$shipQueues = $shipQueueManager->getBaseQueues($baseId);
+	foreach ($shipQueues as $shipQueue) { 
+		$session->get('playerEvent')->add($shipQueue->dEnd, EVENT_BASE, $baseId);
 	}
-	$shipQueueManager->changeSession($S_SQM1);
-
-	# check the ship queues of dock 2
-	$S_SQM2 = $shipQueueManager->getCurrentSession();
-	$shipQueueManager->newSession();
-	$shipQueueManager->load(array('rOrbitalBase' => $baseId, 'dockType' => 2), array('dEnd'));
-	for ($j = 0; $j < $shipQueueManager->size(); $j++) { 
-		$date = $shipQueueManager->get($j)->dEnd;
-		$session->get('playerEvent')->add($date, EVENT_BASE, $baseId);
-	}
-	$shipQueueManager->changeSession($S_SQM2);
-
-	# check the ship queues of dock 3
-	$S_SQM3 = $shipQueueManager->getCurrentSession();
-	$shipQueueManager->newSession();
-	$shipQueueManager->load(array('rOrbitalBase' => $baseId, 'dockType' => 3), array('dEnd'));
-	for ($j = 0; $j < $shipQueueManager->size(); $j++) { 
-		$date = $shipQueueManager->get($j)->dEnd;
-		$session->get('playerEvent')->add($date, EVENT_BASE, $baseId);
-	}
-	$shipQueueManager->changeSession($S_SQM3);
 
 	# check the technology queues
 	$S_TQM1 = $technologyQueueManager->getCurrentSession();

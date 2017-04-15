@@ -149,14 +149,13 @@ echo '<div class="component">';
 			if ($ob_fastView->getLevelDock1() > 0) {
 				echo '<h4>Chantier Alpha</h4>';
 
-				$S_SQM_OBV = $shipQueueManager->getCurrentSession();
-				$shipQueueManager->changeSession($ob_fastView->dock1Manager);
+				$shipQueues = $shipQueueManager->getByBaseAndDockType($ob_fastView->rPlace, 1);
 				$realSizeQueue = 0;
 
 				echo '<div class="queue">';
 					for ($j = 0; $j < $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::DOCK1, 'level', $ob_fastView->levelDock1, 'nbQueues'); $j++) {
-						if ($shipQueueManager->get($j) !== FALSE) {
-							$queue = $shipQueueManager->get($j);
+						if (isset($shipQueues[$j])) {
+							$queue = $shipQueues[$j];
 							$realSizeQueue++;
 							$totalTimeShips = $queue->quantity * ShipResource::getInfo($queue->shipNumber, 'time');
 							$remainingTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
@@ -186,21 +185,18 @@ echo '<div class="component">';
 						}
 					}
 				echo '</div>';
-
-				$shipQueueManager->changeSession($S_SQM_OBV);
 			}
 
 			if ($ob_fastView->getLevelDock2() > 0) {
 				echo '<h4>Chantier de Ligne</h4>';
 
-				$S_SQM_OBV = $shipQueueManager->getCurrentSession();
-				$shipQueueManager->changeSession($ob_fastView->dock2Manager);
+				$shipQueues = $shipQueueManager->getByBaseAndDockType($ob_fastView->rPlace, 2);
 				$realSizeQueue = 0;
 
 				echo '<div class="queue">';
 					for ($j = 0; $j < $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::DOCK1, 'level', $ob_fastView->levelDock1, 'nbQueues'); $j++) {
-						if ($shipQueueManager->get($j) !== FALSE) {
-							$queue = $shipQueueManager->get($j);
+						if (isset($shipQueues[$j])) {
+							$queue = $shipQueues[$j];
 							$realSizeQueue++;
 							$totalTimeShips = $queue->quantity * ShipResource::getInfo($queue->shipNumber, 'time');
 							$remainingTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
@@ -230,8 +226,6 @@ echo '<div class="component">';
 						}
 					}
 				echo '</div>';
-
-				$shipQueueManager->changeSession($S_SQM_OBV);
 			}
 
 			if ($ob_fastView->getLevelTechnosphere() > 0) {

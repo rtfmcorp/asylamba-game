@@ -56,19 +56,17 @@ echo '<div id="tools">';
 		echo '</a>';
 		$technologyQueueManager->changeSession($S_TQM1);
 
-		$S_SQM1 = $shipQueueManager->getCurrentSession();
-		$shipQueueManager->changeSession($currentBase->dock1Manager);
+		$dock1ShipQueues = $shipQueueManager->getByBaseAndDockType($currentBase->rPlace, 1);
+		$nbDock1ShipQueues = count($dock1ShipQueues);
 		echo '<a href="#" class="square sh" data-target="tools-dock1"><img src="' . MEDIA . 'orbitalbase/dock1.png" alt="" />';
-			echo ($shipQueueManager->size()) ? '<span class="number">' . $shipQueueManager->size() . '</span>' : NULL;
+			echo ($nbDock1ShipQueues > 0) ? '<span class="number">' . $nbDock1ShipQueues . '</span>' : NULL;
 		echo '</a>';
-		$shipQueueManager->changeSession($S_SQM1);
 
-		$S_SQM2 = $shipQueueManager->getCurrentSession();
-		$shipQueueManager->changeSession($currentBase->dock2Manager);
+		$dock2ShipQueues = $shipQueueManager->getByBaseAndDockType($currentBase->rPlace, 2);
+		$nbDock2ShipQueues = count($dock2ShipQueues);
 		echo '<a href="#" class="square sh" data-target="tools-dock2"><img src="' . MEDIA . 'orbitalbase/dock2.png" alt="" />';
-			echo ($shipQueueManager->size()) ? '<span class="number">' . $shipQueueManager->size() . '</span>' : NULL;
+			echo ($nbDock2ShipQueues > 0) ? '<span class="number">' . $nbDock2ShipQueues . '</span>' : NULL;
 		echo '</a>';
-		$shipQueueManager->changeSession($S_SQM2);
 	echo '</div>';
 
 	# right
@@ -172,11 +170,8 @@ echo '<div id="tools">';
 	echo '<div class="overbox left-pic" id="tools-dock1">';
 		echo '<h2>Chantier Alpha</h2>';
 		echo '<div class="overflow">';
-			$S_SQM1 = $shipQueueManager->getCurrentSession();
-			$shipQueueManager->changeSession($currentBase->dock1Manager);
-			
-			if ($shipQueueManager->size() > 0) {
-				$qe = $shipQueueManager->get(0);
+			if ($nbDock1ShipQueues > 0) {
+				$qe = $dock1ShipQueues[0];
 				echo '<div class="queue">';
 					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $qe->quantity * ShipResource::getInfo($qe->shipNumber, 'time') . '">';
 						echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($qe->shipNumber, 'imageLink') . '.png" alt="" />';
@@ -197,18 +192,14 @@ echo '<div id="tools">';
 			}
 
 			echo '<a href="' . APP_ROOT . 'bases/view-dock1" class="more-link">vers le chantier alpha</a>';
-			$shipQueueManager->changeSession($S_SQM1);
 		echo '</div>';
 	echo '</div>';
 
 	echo '<div class="overbox left-pic" id="tools-dock2">';
 		echo '<h2>Chantier de ligne</h2>';
 		echo '<div class="overflow">';
-			$S_SQM1 = $shipQueueManager->getCurrentSession();
-			$shipQueueManager->changeSession($currentBase->dock2Manager);
-			
-			if ($shipQueueManager->size() > 0) {
-				$qe = $shipQueueManager->get(0);
+			if ($nbDock2ShipQueues > 0) {
+				$qe = $dock2ShipQueues[0];
 				echo '<div class="queue">';
 					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $qe->quantity * ShipResource::getInfo($qe->shipNumber, 'time') . '">';
 						echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($qe->shipNumber, 'imageLink') . '.png" alt="" />';
@@ -229,7 +220,6 @@ echo '<div id="tools">';
 			}
 
 			echo '<a href="' . APP_ROOT . 'bases/view-dock2" class="more-link">vers le chantier de ligne</a>';
-			$shipQueueManager->changeSession($S_SQM1);
 		echo '</div>';
 	echo '</div>';
 

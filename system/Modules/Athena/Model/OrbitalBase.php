@@ -81,9 +81,6 @@ class OrbitalBase {
 	public $realSpatioportLevel;
 	// PUBLIC ATTRIBUTES
 	public $buildingQueues;
-	public $dock1Manager;
-	public $dock2Manager;
-	public $dock3Manager;
 	public $routeManager;
 	public $technoQueueManager;
 	public $shippingManager;
