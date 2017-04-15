@@ -5,7 +5,7 @@
 
 
 # définition des ROOT
-define('PUBLICR',		'http://game.asylamba.local/public/');
+define('PUBLICR',		'/public/');
 define('CSS', 			PUBLICR . 'css/');
 define('JS', 		 	PUBLICR . 'js/');
 define('MEDIA', 		PUBLICR . 'media/');
@@ -50,7 +50,7 @@ define('APP_DESCRIPTION',		'Asylamba, jeu par navigateur');
 
 # défini le chemin de base du serveur
 # note : de préférance un chemin relatif
-define('APP_ROOT',				'/asylamba/game/');
+define('APP_ROOT',				'/');
 # défini l'URL de sortie
 # note : très important pour l'utilisation de l'API
 # note : en règle général une URL absolue
