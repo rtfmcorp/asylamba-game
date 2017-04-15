@@ -4,7 +4,7 @@ namespace Asylamba\Classes\Scheduler;
 
 use Asylamba\Classes\DependencyInjection\Container;
 
-class CyclicActionScheduler implements SchedulerInterface
+class CyclicActionScheduler
 {
 	/** @var Container **/
 	protected $container;
