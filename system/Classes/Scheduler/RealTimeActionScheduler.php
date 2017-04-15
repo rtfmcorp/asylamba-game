@@ -76,6 +76,10 @@ class RealTimeActionScheduler
 	public function cancel($object, $date)
 	{
 		unset($this->queue[$date][get_class($object) . '-' . $object->id]);
+		
+		if (empty($this->queue[$date])) {
+			unset($this->queue[$date]);
+		}
 	}
 	
 	/**
