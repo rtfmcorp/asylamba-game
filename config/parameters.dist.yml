@@ -7,7 +7,7 @@ parameters:
     database_admin_user: root
     database_admin_password: asylamba
     
-    server_port: 8000
+    server_port: 9999
     server_cycle_timeout: 20
     server_collection_cycles_number: 25
     
