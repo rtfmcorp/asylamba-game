@@ -32,7 +32,7 @@ class Application implements ApplicationInterface {
 		$this->container->setParameter('root_path', $rootPath);
 		$configuration = new Configuration(new FileLocator($configurationFiles));
 		$configuration->buildContainer($this->container, $configurationFiles);
-		$configuration->defineOldConstants();
+		$configuration->defineOldConstants($rootPath);
 		
 	}
 	

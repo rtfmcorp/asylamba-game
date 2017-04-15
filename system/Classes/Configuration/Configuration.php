@@ -62,10 +62,10 @@ class Configuration {
 		}
 	}
 	
-	public function defineOldConstants()
+	public function defineOldConstants($rootPath)
 	{
 		# définition des ROOT
-		define('SYSTEMR',		__DIR__ . '/../../');
+		define('SYSTEMR',		$rootPath . '/system/');
 		define('CLASSES',       SYSTEMR . 'Classes/');
 
 		define('MODULES', 		SYSTEMR . 'Modules/');
@@ -88,7 +88,7 @@ class Configuration {
 		define('COMPONENT', 	SYSTEMR . 'views/components/');
 
 		# inclusion des fichiers de configurations
-		include CONFIG . 'app.config.local.php';
-		include CONFIG . 'app.config.global.php';
+		require_once(CONFIG . 'app.config.local.php');
+		require_once(CONFIG . 'app.config.global.php');
 	}
 }
