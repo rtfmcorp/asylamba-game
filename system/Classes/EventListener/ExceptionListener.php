@@ -41,7 +41,8 @@ class ExceptionListener {
 			$exception->getFile(),
 			$exception->getLine(),
 			AbstractLogger::LOG_LEVEL_ERROR,
-			($exception instanceof FormException) ? Flashbag::TYPE_FORM_ERROR : Flashbag::TYPE_STD_ERROR
+			($exception instanceof FormException) ? Flashbag::TYPE_FORM_ERROR : Flashbag::TYPE_STD_ERROR,
+			($exception instanceof FormException) ? $exception->getRedirect() : null
 		);
 	}
 	
@@ -69,14 +70,14 @@ class ExceptionListener {
 	 * @param string $level
 	 * @param int $flashbagLevel
 	 */
-	public function process($event, $message, $file, $line, $level, $flashbagLevel)
+	public function process($event, $message, $file, $line, $level, $flashbagLevel, $redirect = null)
 	{
 		$this->logger->log("$message at $file at line $line", $level);
 		
 		$this->session->addFlashbag($message, $flashbagLevel);
 		
 		$response = new Response();
-		$response->redirect($this->getRedirection($event->getRequest()));
+		$response->redirect($this->getRedirection($event->getRequest(), $redirect));
 		$event->setResponse($response);
 	}
 	
@@ -84,8 +85,12 @@ class ExceptionListener {
 	 * @param Request $request
 	 * @return string
 	 */
-	public function getRedirection(Request $request)
+	public function getRedirection(Request $request, $redirect = null)
 	{
+		if ($redirect !== null) {
+			return $redirect;
+		}
+		
 		$history = $this->session->getHistory();
 
 		if (($nbPaths = count($history)) === 0) {
