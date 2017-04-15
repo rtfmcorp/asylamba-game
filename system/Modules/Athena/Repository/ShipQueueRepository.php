@@ -145,7 +145,7 @@ class ShipQueueRepository extends AbstractRepository
 	public function remove($shipQueue)
 	{
 		$statement = $this->connection->prepare('DELETE FROM orbitalBaseShipQueue WHERE id = ?');
-		$statement->execute(array($shipQueue));
+		$statement->execute(array($shipQueue->id));
 	}
 	
 	/**
