@@ -620,7 +620,7 @@ class OrbitalBaseManager {
 	}
 
 	public function uShipQueue1($shipQueueId) {
-		$queue = $this->buildingQueueManager->get($shipQueueId);
+		$queue = $this->shipQueueManager->get($shipQueueId);
 		$orbitalBase = $this->get($queue->rOrbitalBase);
 		$player = $this->playerManager->get($orbitalBase->rPlayer);
 		# vaisseau construit
@@ -645,7 +645,7 @@ class OrbitalBaseManager {
 	}
 
 	public function uShipQueue2($shipQueueId) {
-		$queue = $this->buildingQueueManager->get($shipQueueId);
+		$queue = $this->shipQueueManager->get($shipQueueId);
 		$orbitalBase = $this->get($queue->rOrbitalBase);
 		$player = $this->playerManager->get($orbitalBase->rPlayer);
 		# vaisseau construit

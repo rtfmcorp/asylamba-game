@@ -54,7 +54,7 @@ class BuildingQueueManager {
 		$buildingQueues = $this->entityManager->getRepository(BuildingQueue::class)->getAll();
 		
 		foreach ($buildingQueues as $buildingQueue) {
-			$this->scheduler->schedule('athena.orbital_base_manager', 'uBuildingQueue', $buildingQueue->dEnd, [$buildingQueue->id]);
+			$this->scheduler->schedule('athena.orbital_base_manager', 'uBuildingQueue', $buildingQueue, $buildingQueue->dEnd);
 		}
 	}
 
@@ -64,16 +64,6 @@ class BuildingQueueManager {
 	public function add(BuildingQueue $buildingQueue) {
 		$this->entityManager->persist($buildingQueue);
 		$this->entityManager->flush($buildingQueue);
-		$this->scheduler->schedule('athena.orbital_base_manager', 'uBuildingQueue', $buildingQueue->dEnd, [$buildingQueue->id]);
-	}
-	
-	/**
-	 * @param int $id
-	 */
-	public function finishConstruction($id)
-	{
-		$buildingQueue = $this->get($id);
-		
-		$this->entityManager->remove($buildingQueue);
+		$this->scheduler->schedule('athena.orbital_base_manager', 'uBuildingQueue', $buildingQueue, $buildingQueue->dEnd);
 	}
 }

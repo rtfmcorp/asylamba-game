@@ -64,7 +64,7 @@ class ShipQueueManager {
 		$this->entityManager->persist($shipQueue);
 		$this->entityManager->flush($shipQueue);
 		
-		$this->scheduler->schedule('athena.orbital_base_manager', 'uShipQueue' . $shipQueue->dockType, $shipQueue->dEnd, [$shipQueue->id]);
+		$this->scheduler->schedule('athena.orbital_base_manager', 'uShipQueue' . $shipQueue->dockType, $shipQueue, $shipQueue->dEnd);
 	}
 	
 	public function scheduleActions()
@@ -73,7 +73,7 @@ class ShipQueueManager {
 		
 		foreach ($queues as $queue)
 		{
-			$this->scheduler->schedule('athena.orbital_base_manager', 'uShipQueue' . $queue->dockType, $queue->dEnd, [$queue->id]);
+			$this->scheduler->schedule('athena.orbital_base_manager', 'uShipQueue' . $queue->dockType, $queue, $queue->dEnd);
 		}
 	}
 }

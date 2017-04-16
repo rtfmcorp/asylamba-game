@@ -28,21 +28,28 @@ class RealTimeActionScheduler
 	}
 	
 	/**
-	 * {@inheritdoc}
+	 * This method is meant to register a new action to schedule
+	 * The action is put in the queue to be executed
+	 * 
+	 * @param string $manager
+	 * @param string $method
+	 * @param array $object
+	 * @param string $date
 	 */
-	public function schedule($manager, $method, $date, $arguments = [])
+	public function schedule($manager, $method, $object, $date)
 	{
-		$this->queue[$date][] = [
+		$this->queue[$date][get_class($object) . '-' . $object->id] = [
 			'manager' => $manager,
 			'method' => $method,
-			'arguments' => $arguments
+			'object_id' => $object->id
 		];
 		// Sort the queue by date
 		ksort($this->queue);
 	}
 	
 	/**
-	 * {@inheritdoc}
+	 * This method is meant to executed the scheduled data if their date is passed
+	 * In case of cyclic actions, the scheduler will check the current hour and compare it to the last executed hour
 	 */
 	public function execute()
 	{
@@ -56,8 +63,32 @@ class RealTimeActionScheduler
 			}
 			foreach ($actions as $action) {
 				// Get the manager from the container and then execute the given method with its arguments
-				call_user_func_array([$this->container->get($action['manager']), $action['method']], $action['arguments']);
+				call_user_func_array([$this->container->get($action['manager']), $action['method']], [$action['object_id']]);
 			}
+			unset($this->queue[$date]);
+		}
+	}
+	
+	/**
+	 * @param object $object
+	 * @param string $date
+	 * @param string $oldDate
+	 */
+	public function reschedule($object, $date, $oldDate) {
+		$this->queue[$date][get_class($object) . '-' . $object->id] = $this->queue[$oldDate][get_class($object) . '-' . $object->id];
+		
+		$this->cancel($object, $oldDate);
+	}
+	
+	/**
+	 * @param object $object
+	 * @param string $date
+	 */
+	public function cancel($object, $date)
+	{
+		unset($this->queue[$date][get_class($object) . '-' . $object->id]);
+		
+		if (empty($this->queue[$date])) {
 			unset($this->queue[$date]);
 		}
 	}
