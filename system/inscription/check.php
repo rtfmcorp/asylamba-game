@@ -52,11 +52,9 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 					}
 				} else {
 					$response->redirect(GETOUT_ROOT . 'serveurs/message-useralreadysigned');
-					exit();
 				}
 			} else {
 				$response->redirect(GETOUT_ROOT . 'serveurs/message-unknowuser');
-				exit();
 			}
 		} else {
 			$session->add('inscription', new ArrayList());
@@ -83,8 +81,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 		if ($request->query->has('ally') && in_array($request->query->get('ally'), $ally)) {
 			$session->get('inscription')->add('ally', $request->query->get('ally'));
 		} elseif (!$session->get('inscription')->exist('ally')) {
-			$response->redirect('inscription/');
-			throw new FormException('faction inconnues ou non-sélectionnable');
+			throw new FormException('faction inconnues ou non-sélectionnable', 'inscription/');
 		}
 	} else {
 		$response->redirect(GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
@@ -101,16 +98,13 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 				if ((int)$request->request->get('avatar') > 0 && (int)$request->request->get('avatar') <= NB_AVATAR) {
 					$session->get('inscription')->add('avatar', $request->request->get('avatar'));
 				} elseif (!$session->get('inscription')->exist('avatar')) {
-					$response->redirect('inscription/step-2');
-					throw new FormException('Cet avatar n\'existe pas ou est invalide');
+					throw new FormException('Cet avatar n\'existe pas ou est invalide', 'inscription/step-2');
 				}
 			} elseif (!$session->get('inscription')->exist('pseudo')) {
-				$response->redirect('inscription/step-2');
-				throw new FormException('Votre pseudo est trop long, trop court ou contient des caractères non-autorisés');
+				throw new FormException('Votre pseudo est trop long, trop court ou contient des caractères non-autorisés', 'inscription/step-2');
 			}
 		} elseif (!$session->get('inscription')->exist('pseudo')) {
-			$response->redirect('inscription/step-2');
-			throw new FormException('Ce pseudo est déjà utilisé par un autre joueur');
+			throw new FormException('Ce pseudo est déjà utilisé par un autre joueur', 'inscription/step-2');
 		}
 	} else {
 		$response->redirect(GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
@@ -135,16 +129,13 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 					if (in_array($request->request->get('sector'), $factionSectors)) {
 						$session->get('inscription')->add('sector', $request->request->get('sector'));
 					} else {
-						$response->redirect('inscription/step-3');
-						throw new FormException('il faut sélectionner un des secteurs de la couleur de votre faction');
+						throw new FormException('il faut sélectionner un des secteurs de la couleur de votre faction', 'inscription/step-3');
 					}
 				} else {
-					$response->redirect('inscription/step-3');
-					throw new FormException('le nom de votre base ne doit pas contenir de caractères spéciaux');
+					throw new FormException('le nom de votre base ne doit pas contenir de caractères spéciaux', 'inscription/step-3');
 				}
 			} else {
-				$response->redirect('inscription/step-3');
-				throw new FormException('le nom de votre base doit contenir entre ' . $check->getMinLength() . ' et ' . $check->getMaxLength() . ' caractères');
+				throw new FormException('le nom de votre base doit contenir entre ' . $check->getMinLength() . ' et ' . $check->getMaxLength() . ' caractères', 'inscription/step-3');
 			}
 		} else {
 			$response->redirect(GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
