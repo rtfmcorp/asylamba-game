@@ -95,7 +95,7 @@ class PlayerBonusManager
 
 		if ($playerBonus->synchronized) {
 			for ($i = 0; $i < PlayerBonus::BONUS_QUANTITY; $i++) { 
-				$this->session->get('playerBonus')->add($i, $playerBonus->bonus->get($i));
+				$this->session->get('playerBonus')->add($i, ($playerBonus->bonus->exist($i)) ? $playerBonus->bonus->get($i) : 0);
 			}
 		}
 	}
