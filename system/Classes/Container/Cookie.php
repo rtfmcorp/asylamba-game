@@ -5,21 +5,19 @@
 namespace Asylamba\Classes\Container;
 
 class Cookie extends ArrayList {
-    /** @var string **/
-    protected $name;
-
-    public function __construct() {
-        $this->name = APP_NAME . '_' . SERVER_SESS;
-        $this->init();
-    }
+	/** @var array **/
+	protected $newElements = [];
 
     /**
      * @param string $key
      * @param mixed $value
      */
-    public function add($key, $value) {
+    public function add($key, $value, $new = false) {
         $this->elements[$key] = $value;
-        $this->rewrite();
+		
+		if ($new === true) {
+			$this->newElements[$key] = $value;
+		}
     }
 
     /**
@@ -31,12 +29,10 @@ class Cookie extends ArrayList {
             return false;
         }
         unset($this->elements[$key]);
-        $this->rewrite();
     }
 
     public function clear() {
         $this->elements = array();
-        $this->rewrite();
     }
 	
 	/**
@@ -46,14 +42,12 @@ class Cookie extends ArrayList {
 	{
 		return $this->elements;
 	}
-
-    public function rewrite() {
-        setcookie($this->name, serialize($this->elements), time() + 3000000, '/');
-    }
-
-    public function init() {
-        if (isset($_COOKIE[$this->name])) {
-            $this->elements = unserialize($_COOKIE[$this->name]);
-        }
-    }
+	
+	/**
+	 * @return array
+	 */
+	public function getNewElements()
+	{
+		return $this->newElements;
+	}
 }
