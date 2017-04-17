@@ -8,6 +8,6 @@ $params = $request->query->get('params');
 
 if ($params !== FALSE) {
 	if (in_array($params, Params::getParams())) {
-		$request->cookies->add('p' . $params, !$request->cookies->get('p' . $params, $params));
+		$request->cookies->add('p' . $params, !$request->cookies->get('p' . $params, $params), true);
 	}
 }

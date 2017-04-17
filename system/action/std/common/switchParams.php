@@ -8,9 +8,9 @@ $params = $request->query->get('params');
 if ($params !== FALSE) {
 	if (in_array($params, Params::getParams())) {
 		if ($request->cookies->get('p' . $params, $params)) {
-			$request->cookies->add('p' . $params, false);
+			$request->cookies->add('p' . $params, false, true);
 		} else {
-			$request->cookies->add('p' . $params, true);
+			$request->cookies->add('p' . $params, true, true);
 		}
 	}
 }
