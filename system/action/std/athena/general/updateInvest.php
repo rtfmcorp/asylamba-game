@@ -44,6 +44,7 @@ if ($baseId !== FALSE AND $credit !== FALSE AND $category !== FALSE AND in_array
 				default:
 					throw new ErrorException('modification d\'investissement impossible');
 			}
+			$this->getContainer()->get('entity_manager')->flush($base);
 		} else {
 			throw new ErrorException('modification d\'investissement impossible - base inconnue');
 		}
