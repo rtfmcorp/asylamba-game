@@ -23,7 +23,7 @@ echo '<div class="component space size3">';
 		echo '<div class="body">';
 			echo '<div class="situation-content place1">';
 				echo '<div class="toolbar">';
-					echo '<a href="' . APP_ROOT . '/map/base-' . $ob_obSituation->getId() . '">Centrer sur la carte</a>';
+					echo '<a href="' . APP_ROOT . 'map/place-' . $ob_obSituation->getId() . '">Centrer sur la carte</a>';
 					echo '<form action="' . Format::actionBuilder('renamebase', $sessionToken, ['baseid' => $ob_obSituation->getId()]) . '" method="POST">';
 						echo '<input type="text" name="name" value="' . $ob_obSituation->getName() . '" />';
 						echo '<input type="submit" class="button" value=" " />';

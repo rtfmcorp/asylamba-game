@@ -382,9 +382,6 @@ class OrbitalBaseManager {
 		$this->entityManager->persist($orbitalBase);
 		$this->entityManager->flush($orbitalBase);
 		
-		$orbitalBase->dock1Manager = $this->shipQueueManager->getFirstSession();
-		$orbitalBase->dock2Manager = $this->shipQueueManager->getFirstSession();
-		$orbitalBase->dock3Manager = $this->shipQueueManager->getFirstSession();
 		$orbitalBase->technoQueueManager = $this->technologyQueueManager->getFirstSession();
 		$orbitalBase->shippingManager = $this->commercialShippingManager->getFirstSession();
 	}

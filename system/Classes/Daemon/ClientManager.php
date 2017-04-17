@@ -93,7 +93,7 @@ class ClientManager
 		
 		foreach ($this->clients as $client)
 		{
-			if ($client->getLastConnectedAt() > $limitDatetime) {
+			if ($client->getLastConnectedAt() < $limitDatetime) {
 				$this->removeClient($client->getId());
 			}
 		}

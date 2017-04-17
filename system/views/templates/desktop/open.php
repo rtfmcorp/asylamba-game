@@ -6,7 +6,7 @@ $session = $this->getContainer()->get('app.session');
 
 if ($response->getPage() == 'inscription' && ($request->query->get('step') == 1 || !$request->query->has('step'))) {
 	$color = 'color0';
-} elseif ($response->getPage() == 'inscription') {
+} elseif ($response->getPage() == 'inscription' && $session->exist('inscription')) {
 	$color = 'color' . $session->get('inscription')->get('ally');
 } else {
 	$color = 'color' . $session->get('playerInfo')->get('color');

@@ -152,7 +152,7 @@ class Server
 		
 		$this->realTimeActionScheduler->execute();
 		$this->cyclicActionScheduler->execute();
-        
+		
         if ($this->nbUncollectedCycles > $this->collectionCyclesNumber) {
 			$this->clientManager->clear();
             gc_collect_cycles();

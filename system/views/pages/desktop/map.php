@@ -24,6 +24,7 @@ if ($request->query->has('place')) {
 		$x = $place->getXSystem();
 		$y = $place->getYSystem();
 		$systemId = $place->getRSystem();
+		$system = $systemManager->get($systemId);
 	}
 # par system
 } elseif ($request->query->has('systemid')) {
@@ -44,7 +45,7 @@ include 'mapElement/content.php';
 include 'mapElement/commanders.php';
 include 'mapElement/coordbox.php';
 
-if (isset($system) && $system !== null) {
+if (!empty($system)) {
 	# objet place
 	$places = $placeManager->getSystemPlaces($system);
 
