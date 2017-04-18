@@ -37,7 +37,7 @@ if ($commander->line == 1) {
 		$commander->line = 2;
 		$secondLineCommanders[0]->line = 1;
 		$response->redirect($session->getLastHistory());
-		$session->addFlashbag('Votre commandant ' . $commander->getName() . ' a échangé sa place avec ' . $commanderManager->get()->name . '.', Flashbag::TYPE_SUCCESS);
+		$session->addFlashbag('Votre commandant ' . $commander->getName() . ' a échangé sa place avec ' . $commander->name . '.', Flashbag::TYPE_SUCCESS);
 	}
 } else {
 	$firstLineCommanders = $commanderManager->getCommandersByLine($commander->rBase, 1);
@@ -55,7 +55,7 @@ if ($commander->line == 1) {
 		$commander->line = 1;
 		$firstLineCommanders[0]->line = 2;
 		$response->redirect($session->getLastHistory());
-		$session->addFlashbag('Votre commandant ' . $commander->getName() . ' a échangé sa place avec ' . $commanderManager->get()->name . '.', Flashbag::TYPE_SUCCESS);
+		$session->addFlashbag('Votre commandant ' . $commander->getName() . ' a échangé sa place avec ' . $commander->name . '.', Flashbag::TYPE_SUCCESS);
 	}
 }
 $this->getContainer()->get('entity_manager')->flush();
