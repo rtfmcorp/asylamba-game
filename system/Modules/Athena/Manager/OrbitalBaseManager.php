@@ -11,7 +11,7 @@
 */
 namespace Asylamba\Modules\Athena\Manager;
 
-use Asylamba\Classes\Library\Session\Session;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Format;
@@ -96,7 +96,7 @@ class OrbitalBaseManager {
 	protected $orbitalBaseHelper;
 	/** @var CTC **/
 	protected $ctc;
-	/** @var Session **/
+	/** @var SessionWrapper **/
 	protected $session;
 	
 	/**
@@ -118,7 +118,7 @@ class OrbitalBaseManager {
 	 * @param NotificationManager $notificationManager
 	 * @param OrbitalBaseHelper $orbitalBaseHelper
 	 * @param CTC $ctc
-	 * @param Session $session
+	 * @param SessionWrapper $session
 	 */
 	public function __construct(
 		EntityManager $entityManager,
@@ -141,7 +141,7 @@ class OrbitalBaseManager {
 		NotificationManager $notificationManager,
 		OrbitalBaseHelper $orbitalBaseHelper,
 		CTC $ctc,
-		Session $session
+		SessionWrapper $session
 	) {
 		$this->entityManager = $entityManager;
 		$this->scheduler = $scheduler;

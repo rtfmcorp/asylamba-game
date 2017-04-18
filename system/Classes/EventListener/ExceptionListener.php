@@ -3,7 +3,7 @@
 namespace Asylamba\Classes\EventListener;
 
 use Asylamba\Classes\Logger\AbstractLogger;
-use Asylamba\Classes\Library\Session\Session;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 use Asylamba\Classes\Library\Flashbag;
 
 use Asylamba\Classes\Library\Http\Request;
@@ -16,14 +16,14 @@ use Asylamba\Classes\Exception\FormException;
 class ExceptionListener {
 	/** @var AbstractLogger **/
 	protected $logger;
-	/** @var Session **/
+	/** @var SessionWrapper **/
 	protected $session;
 	
 	/**
 	 * @param AbstractLogger $logger
 	 * @param Session $session
 	 */
-	public function __construct(AbstractLogger $logger, Session $session)
+	public function __construct(AbstractLogger $logger, SessionWrapper $session)
 	{
 		$this->logger = $logger;
 		$this->session = $session;

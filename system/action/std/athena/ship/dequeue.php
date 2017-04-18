@@ -12,7 +12,7 @@ use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Athena\Model\ShipQueue;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');

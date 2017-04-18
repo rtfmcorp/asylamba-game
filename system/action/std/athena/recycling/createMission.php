@@ -14,7 +14,7 @@ use Asylamba\Modules\Athena\Model\RecyclingMission;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');

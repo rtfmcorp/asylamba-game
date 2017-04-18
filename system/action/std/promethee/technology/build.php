@@ -16,7 +16,7 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
 $database = $this->getContainer()->get('database');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $technologyQueueManager = $this->getContainer()->get('promethee.technology_queue_manager');
 $technologyHelper = $this->getContainer()->get('promethee.technology_helper');

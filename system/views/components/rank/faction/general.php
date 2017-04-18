@@ -8,7 +8,7 @@
 	# _T PRM 		FACTION_RANKING_GENERAL
 
 $factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 $factionRankingManager->changeSession($FACTION_RANKING_GENERAL);
 

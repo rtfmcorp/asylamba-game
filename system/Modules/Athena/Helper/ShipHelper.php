@@ -2,7 +2,7 @@
 
 namespace Asylamba\Modules\Athena\Helper;
 
-use Asylamba\Classes\Library\Session\Session;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 use Asylamba\Modules\Athena\Helper\OrbitalBaseHelper;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Resource\ShipResource;
@@ -11,7 +11,7 @@ use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
 use Asylamba\Modules\Athena\Manager\ShipQueueManager;
 
 class ShipHelper {
-	/** @var Session **/
+	/** @var SessionWrapper **/
 	protected $session;
 	/** @var OrbitalBaseHelper **/
 	protected $orbitalBaseHelper;
@@ -21,13 +21,13 @@ class ShipHelper {
 	protected $shipQueueManager;
 	
 	/**
-	 * @param Session $session
+	 * @param SessionWrapper $session
 	 * @param OrbitalBaseHelper $orbitalBaseHelper
 	 * @param TechnologyHelper $technologyHelper
 	 * @param ShipQueueManager $shipQueueManager
 	 */
 	public function __construct(
-		Session $session,
+		SessionWrapper $session,
 		OrbitalBaseHelper $orbitalBaseHelper,
 		TechnologyHelper $technologyHelper,
 		ShipQueueManager $shipQueueManager

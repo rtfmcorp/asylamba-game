@@ -16,8 +16,8 @@ services:
             - "%database_admin_user"
             - "%database_admin_password"
             
-    app.session:
-        class: Asylamba\Classes\Container\Session
+    session_wrapper:
+        class: Asylamba\Classes\Library\Session\SessionWrapper
             
     cyclic_action_scheduler:
         class: Asylamba\Classes\Scheduler\CyclicActionScheduler
@@ -31,6 +31,8 @@ services:
             
     router:
         class: Asylamba\Classes\Router\Router
+        arguments:
+            - "@session_wrapper"
         
     request_factory:
         class: Asylamba\Classes\Library\Http\RequestFactory
@@ -39,7 +41,7 @@ services:
         class: Asylamba\Classes\Library\Http\ResponseFactory
         arguments:
             - "@templating.renderer"
-            - "@app.session"
+            - "@session_wrapper"
         
     client_manager:
         class: Asylamba\Classes\Daemon\ClientManager
@@ -81,19 +83,19 @@ services:
     security:
         class: Asylamba\Classes\Library\Security
         arguments:
-            - "@app.session"
+            - "@session_wrapper"
         
     ctc:
         class: Asylamba\Classes\Worker\CTC
         arguments:
-            - "@app.session"
+            - "@session_wrapper"
             - "%root_path"
         
     exception_listener:
         class: Asylamba\Classes\EventListener\ExceptionListener
         arguments:
             - "@logger"
-            - "@app.session"
+            - "@session_wrapper"
         tags:
             - {type: "event_listener", event: "core.exception", method: "onCoreException"}
             - {type: "event_listener", event: "core.error", method: "onCoreError"}

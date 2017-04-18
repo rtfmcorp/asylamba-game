@@ -9,7 +9,7 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Library\Flashbag;
 
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');

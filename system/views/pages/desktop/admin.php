@@ -1,7 +1,7 @@
 <?php
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 # bases loading
 if ($session->get('playerInfo')->get('admin') == FALSE) {

@@ -4,7 +4,7 @@ use Asylamba\Classes\Library\Format;
 
 $candidateManager = $this->getContainer()->get('demeter.candidate_manager');
 $electionManager = $this->getContainer()->get('demeter.election_manager');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $sessionToken = $session->get('token');
 
 $hasIPresented = FALSE;

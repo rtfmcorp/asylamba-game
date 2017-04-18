@@ -11,7 +11,7 @@ use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');

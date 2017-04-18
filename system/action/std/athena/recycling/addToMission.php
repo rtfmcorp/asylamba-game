@@ -10,7 +10,7 @@ use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');

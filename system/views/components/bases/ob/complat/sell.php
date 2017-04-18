@@ -10,7 +10,7 @@ use Asylamba\Modules\Athena\Resource\ShipResource;
 
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $transactionManager = $this->getContainer()->get('athena.transaction_manager');
-$sessionToken = $this->getContainer()->get('app.session')->get('token');
+$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
 
 # resources current rate
 $resourcesCurrentRate = $transactionManager->getLastCompletedTransaction(Transaction::TYP_RESOURCE)->currentRate;

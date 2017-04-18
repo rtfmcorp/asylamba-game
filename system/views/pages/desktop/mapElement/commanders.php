@@ -9,7 +9,7 @@ $commanders = $this
 	->getContainer()
 	->get('ares.commander_manager')
 	->getBaseCommanders(
-		$this->getContainer()->get('app.session')->get('playerParams')->get('base'),
+		$this->getContainer()->get('session_wrapper')->get('playerParams')->get('base'),
 		[Commander::AFFECTED, Commander::MOVING],
 		['c.line' => 'DESC']
 	)

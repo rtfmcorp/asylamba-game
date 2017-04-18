@@ -5,7 +5,7 @@ use Asylamba\Modules\Zeus\Helper\CheckName;
 use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $response = $this->getContainer()->get('app.response');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 

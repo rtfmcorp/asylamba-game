@@ -16,7 +16,7 @@ if ($commanderId === null) {
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 
-if (($commander = $commanderManager->get($commanderId)) === null || $commander->rPlayer !== $this->getContainer()->get('app.session')->get('playerId')) {
+if (($commander = $commanderManager->get($commanderId)) === null || $commander->rPlayer !== $this->getContainer()->get('session_wrapper')->get('playerId')) {
 	throw new ErrorException('Ce commandant n\'existe pas ou ne vous appartient pas');
 }
 $orbitalBase = $orbitalBaseManager->get($commander->rBase);

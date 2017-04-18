@@ -11,7 +11,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Chronos;
 
 $request = $this->getContainer()->get('app.request');
-$sessionToken = $this->getContainer()->get('app.session')->get('token');
+$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
 
 $i = 0;
 

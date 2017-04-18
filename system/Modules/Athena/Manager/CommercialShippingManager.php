@@ -19,7 +19,7 @@ use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Athena\Model\CommercialShipping;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Library\Session\Session;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
@@ -38,9 +38,9 @@ class CommercialShippingManager extends Manager {
 	 * @param Database $database
 	 * @param OrbitalBaseManager $orbitalBaseManager
 	 * @param NotificationManager $notificationManager
-	 * @param Session $session
+	 * @param SessionWrapper $session
 	 */
-	public function __construct(Database $database, OrbitalBaseManager $orbitalBaseManager, NotificationManager $notificationManager, Session $session) {
+	public function __construct(Database $database, OrbitalBaseManager $orbitalBaseManager, NotificationManager $notificationManager, SessionWrapper $session) {
 		parent::__construct($database);
 		$this->orbitalBaseManager = $orbitalBaseManager;
 		$this->notificationManager = $notificationManager;

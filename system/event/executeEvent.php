@@ -4,7 +4,7 @@
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Container\StackList;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 

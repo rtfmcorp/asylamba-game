@@ -1,7 +1,7 @@
 <?php
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 $base = $request->query->get('base');
 $page = $request->query->get('page'); # facultatif

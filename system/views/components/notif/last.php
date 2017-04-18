@@ -11,7 +11,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Chronos;
 
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
-$sessionToken = $this->getContainer()->get('app.session')->get('token');
+$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
 
 $S_NTM_SCOPE = $notificationManager->getCurrentSession();
 $notificationManager->changeSession($C_NTM1);

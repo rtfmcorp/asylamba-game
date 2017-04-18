@@ -11,7 +11,7 @@ $notif = $this->getContainer()->get('app.request')->query->get('notif');
 if ($notif === null) {
 	throw new FormException('Erreur dans la requête AJAX');
 }
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
 $S_NTM1 = $notificationManager->getCurrentSession();
 $notificationManager->newSession();

@@ -7,7 +7,7 @@ use Asylamba\Modules\Demeter\Resource\LawResources;
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Demeter\Model\Color;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
 $playerManager = $this->getContainer()->get('zeus.player_manager');

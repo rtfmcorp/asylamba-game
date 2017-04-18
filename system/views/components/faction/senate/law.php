@@ -9,7 +9,7 @@ use Asylamba\Modules\Demeter\Resource\LawResources;
 	# LAW/Token 		S_LAM_TOVOTE
 
 $voteLawManager = $this->getContainer()->get('demeter.vote_law_manager');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $sessionToken = $session->get('token');
 
 # durée de la loi

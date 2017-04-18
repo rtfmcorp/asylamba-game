@@ -15,7 +15,7 @@ use Asylamba\Classes\Worker\CTC;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Classes\Worker\API;
-use Asylamba\Classes\Library\Session\Session;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
@@ -72,7 +72,7 @@ class PlayerManager {
 	protected $playerBonusManager;
 	/** @var CTC **/
 	protected $ctc;
-	/** @var Session **/
+	/** @var SessionWrapper **/
 	protected $session;
 	/** @var int **/
 	protected $playerBaseLevel;
@@ -94,7 +94,7 @@ class PlayerManager {
 	 * @param TechnologyManager $technologyManager
 	 * @param PlayerBonusManager $playerBonusManager
 	 * @param CTC $ctc
-	 * @param Session $session
+	 * @param SessionWrapper $session
 	 * @param int $playerBaseLevel
 	 * @param int $playerTaxCoeff
 	 */
@@ -113,7 +113,7 @@ class PlayerManager {
 		TechnologyManager $technologyManager,
 		PlayerBonusManager $playerBonusManager,
 		CTC $ctc,
-		Session $session,
+		SessionWrapper $session,
 		$playerBaseLevel,
 		$playerTaxCoeff
 	)

@@ -24,7 +24,7 @@ $placeManager = $this->getContainer()->get('gaia.place_manager');
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $sectorManager = $this->getContainer()->get('gaia.sector_manager');
 $technologyManager = $this->getContainer()->get('promethee.technology_manager');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $conquestCost = $this->getContainer()->getParameter('ares.coeff.conquest_cost');
 
 $place = $placeManager->get($placeId);

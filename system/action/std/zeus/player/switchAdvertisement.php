@@ -4,7 +4,7 @@ use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 
 # switch advertisement action
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 
 if (($player = $playerManager->get($session->get('playerId'))) !== null) {

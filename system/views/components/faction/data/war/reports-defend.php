@@ -1,6 +1,6 @@
 <?php
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $littleReportManager = $this->getContainer()->get('ares.little_report_manager');
 
 # loading des objets

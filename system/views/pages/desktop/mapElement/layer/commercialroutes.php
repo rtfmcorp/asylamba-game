@@ -3,7 +3,7 @@
 use Asylamba\Classes\Container\Params;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
 
 $qr = $this->getContainer()->get('database')->query('SELECT

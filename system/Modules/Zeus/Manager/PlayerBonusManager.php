@@ -16,7 +16,7 @@ use Asylamba\Modules\Demeter\Manager\Law\LawManager;
 use Asylamba\Modules\Demeter\Manager\ColorManager;
 use Asylamba\Modules\Promethee\Manager\TechnologyManager;
 use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
-use Asylamba\Classes\Library\Session\Session;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
@@ -34,7 +34,7 @@ class PlayerBonusManager
 	protected $technologyManager;
 	/** @var TechnologyHelper **/
 	protected $technologyHelper;
-	/** @var Session **/
+	/** @var SessionWrapper **/
 	protected $session;
 	
 	/**
@@ -44,7 +44,7 @@ class PlayerBonusManager
 	 * @param ColorManager $colorManager
 	 * @param TechnologyManager $technologyManager
 	 * @param TechnologyHelper $technologyHelper
-	 * @param Session $session
+	 * @param SessionWrapper $session
 	 */
 	public function __construct(
 		Database $database,
@@ -53,7 +53,7 @@ class PlayerBonusManager
 		ColorManager $colorManager,
 		TechnologyManager $technologyManager,
 		TechnologyHelper $technologyHelper,
-		Session $session
+		SessionWrapper $session
 	)
 	{
 		$this->database = $database;

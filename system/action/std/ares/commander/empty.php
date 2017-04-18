@@ -13,7 +13,7 @@ if ($commanderId === null) {
 }
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 
-if (($commander = $commanderManager->get($commanderId)) === null || $commander->rPlayer !== $this->getContainer()->get('app.session')->get('playerId')) {
+if (($commander = $commanderManager->get($commanderId)) === null || $commander->rPlayer !== $this->getContainer()->get('session_wrapper')->get('playerId')) {
 	throw new ErrorException('Ce commandant n\'existe pas ou ne vous appartient pas.');
 }
 if ($commander->statement !== 1) {
@@ -23,6 +23,6 @@ if ($commander->statement !== 1) {
 // vider le commandant
 $commanderManager->emptySquadrons($commander);
 
-$this->getContainer()->get('app.session')->addFlashbag('Vous avez vidé l\'armée menée par votre commandant ' . $commander->getName() . '.', Flashbag::TYPE_SUCCESS);
+$this->getContainer()->get('session_wrapper')->addFlashbag('Vous avez vidé l\'armée menée par votre commandant ' . $commander->getName() . '.', Flashbag::TYPE_SUCCESS);
 
 $this->getContainer()->get('entity_manager')->flush();

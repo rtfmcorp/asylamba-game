@@ -5,7 +5,7 @@ use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Container\ArrayList;
 use Asylamba\Modules\Ares\Model\Commander;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');

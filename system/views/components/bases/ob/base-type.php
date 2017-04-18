@@ -4,7 +4,7 @@ use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Classes\Library\Format;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $sessionToken = $session->get('token');
 $minimalBaseChangeLevel = $this->getContainer()->getParameter('athena.obm.change_type_min_level');
 $capitalChangeLevel = $this->getContainer()->getParameter('athena.obm.capital_min_level');

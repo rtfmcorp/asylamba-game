@@ -15,7 +15,7 @@ use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Zeus\Model\Player;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
 $lawManager = $this->getContainer()->get('demeter.law_manager');

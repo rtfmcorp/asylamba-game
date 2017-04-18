@@ -6,7 +6,7 @@ use Asylamba\Modules\Ares\Model\Report;
 use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $littleReportManager = $this->getContainer()->get('ares.little_report_manager');
 
 $id = $request->query->get('id');

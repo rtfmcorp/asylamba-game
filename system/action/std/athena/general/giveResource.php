@@ -15,7 +15,7 @@ use Asylamba\Modules\Athena\Model\CommercialShipping;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Modules\Hermes\Model\Notification;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
