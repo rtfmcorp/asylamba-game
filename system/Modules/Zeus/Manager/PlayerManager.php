@@ -15,7 +15,7 @@ use Asylamba\Classes\Worker\CTC;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Classes\Worker\API;
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\Session;
 
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
@@ -144,6 +144,11 @@ class PlayerManager {
 	public function get($playerId)
 	{
 		if(($player = $this->entityManager->getRepository(Player::class)->get($playerId)) !== null) {
+			\Asylamba\Classes\Daemon\Server::debug($player->id);
+			\Asylamba\Classes\Daemon\Server::debug($this->session->get('playerId'));
+			if ($this->session->get('playerId') === $player->id) {
+				$player->synchronized = true;
+			}
 			$this->fill($player);
 		}
 		return $player;
@@ -790,7 +795,7 @@ class PlayerManager {
 	public function increaseCredit(Player $player, $credit) {
 		$player->credit += abs($credit);
 
-		if ($this->isSynchronized($player)) {
+		if ($player->isSynchronized()) {
 			$this->session->get('playerInfo')->add('credit', $player->credit);
 		}
 		$this->entityManager->flush($player);
@@ -802,7 +807,7 @@ class PlayerManager {
 		} else {
 			$player->credit -= abs($credit);
 		}
-		if ($this->isSynchronized($player)) {
+		if ($player->isSynchronized()) {
 			$this->session->get('playerInfo')->add('credit', $player->credit);
 		}
 		$this->entityManager->flush($player);

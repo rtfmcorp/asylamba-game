@@ -14,7 +14,7 @@ use Asylamba\Modules\Athena\Helper\OrbitalBaseHelper;
 
 use Asylamba\Modules\Ares\Manager\CommanderManager;
 use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\Session;
 
 abstract class ActionHelper {
 	/** @var CommanderManager **/

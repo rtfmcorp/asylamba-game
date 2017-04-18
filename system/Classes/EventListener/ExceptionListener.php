@@ -3,7 +3,7 @@
 namespace Asylamba\Classes\EventListener;
 
 use Asylamba\Classes\Logger\AbstractLogger;
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\Session;
 use Asylamba\Classes\Library\Flashbag;
 
 use Asylamba\Classes\Library\Http\Request;

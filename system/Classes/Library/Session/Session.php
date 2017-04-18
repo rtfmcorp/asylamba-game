@@ -1,6 +1,6 @@
 <?php
 
-namespace Asylamba\Classes\Container;
+namespace Asylamba\Classes\Library\Session;
 
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Flashbag;

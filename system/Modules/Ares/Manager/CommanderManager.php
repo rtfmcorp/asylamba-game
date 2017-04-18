@@ -19,7 +19,7 @@ use Asylamba\Modules\Athena\Manager\OrbitalBaseManager;
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Modules\Zeus\Manager\PlayerBonusManager;
 use Asylamba\Modules\Gaia\Manager\PlaceManager;
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\Session;
 use Asylamba\Classes\Container\ArrayList;
 use Asylamba\Classes\Worker\CTC;
 

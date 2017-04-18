@@ -11,7 +11,7 @@
 */
 namespace Asylamba\Modules\Athena\Manager;
 
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\Session;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Format;

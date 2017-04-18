@@ -19,7 +19,7 @@ use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Athena\Model\CommercialShipping;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\Session;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Ares\Resource\CommanderResources;

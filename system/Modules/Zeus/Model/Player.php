@@ -42,7 +42,7 @@ class Player {
 	public $premium = 0; 	# 0 = publicité, 1 = pas de publicité
 	public $statement = 0;
 
-	protected $synchronized = FALSE;
+	public $synchronized = FALSE;
 	
 	const ACTIVE = 1;
     const INACTIVE =  2;

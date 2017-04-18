@@ -2,7 +2,7 @@
 
 namespace Asylamba\Classes\Library;
 
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\Session;
 
 class Security {
 	/** @var Session **/

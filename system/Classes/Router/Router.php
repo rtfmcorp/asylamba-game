@@ -5,7 +5,7 @@ namespace Asylamba\Classes\Router;
 use Asylamba\Classes\Library\Http\Request;
 use Asylamba\Classes\Library\Http\Response;
 
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\Session;
 use Asylamba\Classes\Daemon\Client;
 
 class Router

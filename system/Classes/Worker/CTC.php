@@ -4,7 +4,7 @@ namespace Asylamba\Classes\Worker;
 
 use Asylamba\Classes\Library\Bug;
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\Session;
 
 class CTC {
 	/** @var boolean **/

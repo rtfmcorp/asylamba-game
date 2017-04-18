@@ -16,7 +16,7 @@ use Asylamba\Modules\Demeter\Manager\Law\LawManager;
 use Asylamba\Modules\Demeter\Manager\ColorManager;
 use Asylamba\Modules\Promethee\Manager\TechnologyManager;
 use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\Session;
 
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 

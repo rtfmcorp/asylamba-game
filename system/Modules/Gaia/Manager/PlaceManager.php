@@ -15,7 +15,7 @@ use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\Session;
 use Asylamba\Modules\Gaia\Resource\SquadronResource;
 
 use Asylamba\Classes\Exception\ErrorException;

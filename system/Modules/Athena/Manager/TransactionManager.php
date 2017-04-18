@@ -13,7 +13,7 @@
 namespace Asylamba\Modules\Athena\Manager;
 
 use Asylamba\Classes\Entity\EntityManager;
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\Session;
 use Asylamba\Modules\Athena\Manager\CommercialTaxManager;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Classes\Library\Game;

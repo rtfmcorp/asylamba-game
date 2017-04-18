@@ -2,7 +2,7 @@
 
 namespace Asylamba\Classes\Daemon;
 
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\Session;
 
 class Client
 {

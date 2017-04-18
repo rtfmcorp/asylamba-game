@@ -2,7 +2,7 @@
 
 namespace Asylamba\Modules\Athena\Helper;
 
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\Session;
 use Asylamba\Modules\Athena\Helper\OrbitalBaseHelper;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Resource\ShipResource;

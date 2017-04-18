@@ -11,7 +11,7 @@
  */
 namespace Asylamba\Modules\Zeus\Helper;
 
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\Session;
 
 use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
