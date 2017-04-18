@@ -4,7 +4,7 @@ use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Classes\Library\Format;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
 
 $hasIPresented = FALSE;

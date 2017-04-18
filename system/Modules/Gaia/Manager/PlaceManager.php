@@ -220,7 +220,7 @@ class PlaceManager {
 					# fill & load the bonuses if needed
 					if (!array_key_exists($commander->rPlayer, $playerBonuses)) {
 						
-						$bonus = $this->playerBonusManager->getBonusByPlayer($commander->rPlayer);
+						$bonus = $this->playerBonusManager->getBonusByPlayer($this->playerManager->get($commander->rPlayer));
 						$this->playerBonusManager->load($bonus);
 						$playerBonuses[$commander->rPlayer] = $bonus;
 					}
@@ -255,7 +255,7 @@ class PlaceManager {
 							case Commander::LOOT: 
 								$commanderPlace = $this->get($commander->rBase);
 								$bonus = $playerBonuses[$commander->rPlayer];
-
+				
 								$commanderPlayer = $this->playerManager->get($commander->rPlayer);
 
 								if ($place->rPlayer != NULL) {

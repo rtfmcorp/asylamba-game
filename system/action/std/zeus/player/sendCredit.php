@@ -18,7 +18,7 @@ use Asylamba\Classes\Exception\FormException;
 # [string text] 	facultative text
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $creditTransactionManager = $this->getContainer()->get('zeus.credit_transaction_manager');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');

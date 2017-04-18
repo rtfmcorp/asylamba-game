@@ -5,7 +5,7 @@ use Asylamba\Modules\Hermes\Model\Conversation;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 
 $conversationManager = $this->getContainer()->get('hermes.conversation_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 
 if (!$conversation_listmode) {
 	echo '<div class="component">';

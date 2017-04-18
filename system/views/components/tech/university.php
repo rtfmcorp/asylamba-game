@@ -14,7 +14,7 @@ use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Promethee\Resource\ResearchResource;
 use Asylamba\Modules\Promethee\Model\Research;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $researchHelper = $this->getContainer()->get('promethee.research_helper');
 
 echo '<div class="component">';

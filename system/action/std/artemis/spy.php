@@ -19,7 +19,7 @@ use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');

@@ -5,7 +5,7 @@ use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Athena\Model\RecyclingMission;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');

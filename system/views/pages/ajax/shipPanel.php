@@ -7,7 +7,7 @@ use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 
 $ship = $request->query->get('ship');
 

@@ -6,7 +6,7 @@ use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $topicManager = $this->getContainer()->get('demeter.forum_topic_manager');
 
 $rForum = $request->request->get('rforum');

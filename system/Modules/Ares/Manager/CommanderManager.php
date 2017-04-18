@@ -444,7 +444,7 @@ class CommanderManager
                         
 			$playerBonus = 0;
 			if ($commander->rPlayer != $this->session->get('playerId')) {
-				$playerBonus = $this->playerBonusManager->getBonusByPlayer($commander->rPlayer);
+				$playerBonus = $this->playerBonusManager->getBonusByPlayer($this->playerManager->get($commander->rPlayer));
 				/** @TOVERIFY **/
 				$this->playerBonusManager->load($playerBonus);
 				$playerBonus = $playerBonus->bonus;

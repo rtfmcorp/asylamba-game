@@ -4,7 +4,7 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 $playerManager = $this->getContainer()->get('zeus.player_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 
 # statPlayer component
 # in player.demeter package

@@ -5,7 +5,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Zeus\Model\CreditTransaction;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
 $creditTransactionManager = $this->getContainer()->get('zeus.credit_transaction_manager');
 
 echo '<div class="component new-message">';

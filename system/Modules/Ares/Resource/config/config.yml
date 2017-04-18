@@ -23,7 +23,7 @@ services:
             - "@zeus.player_manager"
             - "@zeus.player_bonus_manager"
             - "@gaia.place_manager"
-            - "@session_wrapper"
+            - "@app.session"
             - "@ctc"
             - "%ares.commander.base_level"
            

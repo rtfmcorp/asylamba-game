@@ -38,7 +38,7 @@ services:
             - "@database"
             - "@athena.orbital_base_manager"
             - "@hermes.notification_manager"
-            - "@session_wrapper"
+            - "@app.session"
             
     athena.commercial_tax_manager:
         class: Asylamba\Modules\Athena\Manager\CommercialTaxManager
@@ -68,7 +68,7 @@ services:
             - "@hermes.notification_manager"
             - "@athena.orbital_base_helper"
             - "@ctc"
-            - "@session_wrapper"
+            - "@app.session"
             
     athena.orbital_base_helper:
         class: Asylamba\Modules\Athena\Helper\OrbitalBaseHelper
@@ -94,7 +94,7 @@ services:
     athena.ship_helper:
         class: Asylamba\Modules\Athena\Helper\ShipHelper
         arguments:
-            - "@session_wrapper"
+            - "@app.session"
             - "@athena.orbital_base_helper"
             - "@promethee.technology_helper"
             - "@athena.ship_queue_manager"
@@ -104,4 +104,4 @@ services:
         arguments:
             - "@entity_manager"
             - "@athena.commercial_tax_manager"
-            - "@session_wrapper"
+            - "@app.session"

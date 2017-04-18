@@ -3,7 +3,7 @@
 
 use Asylamba\Classes\Library\Utils;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 
 # mise à jour chaque heure

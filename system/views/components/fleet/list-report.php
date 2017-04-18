@@ -12,7 +12,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Container\Params;
 use Asylamba\Classes\Library\Chronos;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
 $sessionToken = $session->get('token');
 

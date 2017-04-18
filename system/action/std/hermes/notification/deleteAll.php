@@ -4,7 +4,7 @@
 use Asylamba\Classes\Library\Flashbag;
 
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 
 $S_NTM1 = $notificationManager->getCurrentSession();
 $notificationManager->newSession(ASM_UMODE);

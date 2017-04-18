@@ -12,7 +12,7 @@ use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $database = $this->getContainer()->get('database');
 $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 $topicManager = $this->getContainer()->get('demeter.forum_topic_manager');

@@ -19,7 +19,7 @@ use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
 $recyclingLogManager = $this->getContainer()->get('athena.recycling_log_manager');
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
 
 $S_REM2 = $recyclingMissionManager->getCurrentSession();
 $recyclingMissionManager->changeSession($recyclingSession);

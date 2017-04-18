@@ -5,7 +5,7 @@ use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Zeus\Model\Player;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 

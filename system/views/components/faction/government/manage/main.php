@@ -4,7 +4,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Zeus\Model\Player;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
 
 $status = ColorResource::getInfo($faction->id, 'status');

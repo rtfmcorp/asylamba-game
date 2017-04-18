@@ -16,7 +16,7 @@ if(($commanderId = $this->getContainer()->get('app.request')->query->get('id')) 
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $response = $this->getContainer()->get('app.response');
 
 if (($commander = $commanderManager->get($commanderId)) === null || $commander->rPlayer !== $session->get('playerId')) {

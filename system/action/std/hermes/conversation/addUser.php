@@ -8,7 +8,7 @@ use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $conversationManager = $this->getContainer()->get('hermes.conversation_manager');
 $conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
 $conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');

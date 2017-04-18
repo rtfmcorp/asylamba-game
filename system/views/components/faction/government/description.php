@@ -2,7 +2,7 @@
 
 use Asylamba\Classes\Library\Format;
 
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 
 echo '<div class="component new-message">';

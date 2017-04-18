@@ -9,7 +9,7 @@ use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 
 
 if (($commanderId = $request->request->get('id')) === null || ($name = $request->request->get('name')) === null) {

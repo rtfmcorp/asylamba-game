@@ -9,7 +9,7 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Athena\Model\RecyclingMission;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');

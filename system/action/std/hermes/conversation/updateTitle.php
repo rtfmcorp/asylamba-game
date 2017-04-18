@@ -4,7 +4,7 @@ use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $parser = $this->getContainer()->get('parser');
 $conversationManager = $this->getContainer()->get('hermes.conversation_manager');
 

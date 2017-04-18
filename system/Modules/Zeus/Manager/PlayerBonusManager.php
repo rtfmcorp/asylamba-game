@@ -6,11 +6,11 @@ use Asylamba\Classes\Exception\ErrorException;
 
 use Asylamba\Classes\Container\StackList;
 
+use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Demeter\Model\Law\Law;
 
-use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Modules\Demeter\Manager\Law\LawManager;
 use Asylamba\Modules\Demeter\Manager\ColorManager;
@@ -22,10 +22,6 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 class PlayerBonusManager
 {
-	/** @var Database **/
-	protected $database;
-	/** @var PlayerManager **/
-	protected $playerManager;
 	/** @var LawManager **/
 	protected $lawManager;
 	/** @var ColorManager **/
@@ -36,10 +32,10 @@ class PlayerBonusManager
 	protected $technologyHelper;
 	/** @var SessionWrapper **/
 	protected $session;
+	/** @var boolean **/
+	protected $isInitialized = false;
 	
 	/**
-	 * @param Database $database
-	 * @param PlayerManager $playerManager
 	 * @param LawManager $lawManager
 	 * @param ColorManager $colorManager
 	 * @param TechnologyManager $technologyManager
@@ -47,8 +43,6 @@ class PlayerBonusManager
 	 * @param SessionWrapper $session
 	 */
 	public function __construct(
-		Database $database,
-		PlayerManager $playerManager,
 		LawManager $lawManager,
 		ColorManager $colorManager,
 		TechnologyManager $technologyManager,
@@ -56,8 +50,6 @@ class PlayerBonusManager
 		SessionWrapper $session
 	)
 	{
-		$this->database = $database;
-		$this->playerManager = $playerManager;
 		$this->lawManager = $lawManager;
 		$this->colorManager = $colorManager;
 		$this->technologyManager = $technologyManager;
@@ -65,24 +57,22 @@ class PlayerBonusManager
 		$this->session = $session;
 	}
 	
-	public function getBonusByPlayer($playerId)
+	/**
+	 * @param Player $player
+	 * @return PlayerBonus
+	 */
+	public function getBonusByPlayer($player)
 	{
 		$playerBonus = new PlayerBonus();
-		$playerBonus->rPlayer = $playerId;
-		
-		if ($playerId == $this->session->get('playerId')) {
-			$playerBonus->synchronized = TRUE;
-		}
-
-		# load the color (faction id) of the player
-		$playerBonus->playerColor = $this->playerManager->get($playerId)->rColor;
-
+		$playerBonus->rPlayer = $player->id;
+		$playerBonus->synchronized = $player->isSynchronized();
+		$playerBonus->playerColor = $player->rColor;
 		$playerBonus->bonus = new StackList();
-		
 		return $playerBonus;
 	}
 
 	public function initialize(PlayerBonus $playerBonus) {		// à faire à la connexion seulement
+		$this->isInitialized = true;
 		# remplissage des bonus avec les technologies
 		$playerBonus->technology = $this->technologyManager->getPlayerTechnology($playerBonus->rPlayer);
 		

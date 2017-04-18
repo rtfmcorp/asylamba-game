@@ -8,7 +8,7 @@ use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $spyReportManager = $this->getContainer()->get('artemis.spy_report_manager');
 
 $id = $request->query->get('id');

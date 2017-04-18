@@ -13,7 +13,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 
 echo '<div class="component building">';
 	echo '<div class="head skin-1">';

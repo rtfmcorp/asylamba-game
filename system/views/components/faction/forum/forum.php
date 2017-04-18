@@ -7,7 +7,7 @@
 use Asylamba\Modules\Demeter\Resource\ForumResources;
 use Asylamba\Modules\Zeus\Model\Player;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 # require
 
 echo '<div class="component nav">';

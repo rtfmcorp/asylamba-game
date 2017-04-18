@@ -5,7 +5,7 @@ use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Library\Flashbag;
 
 $request = $this->getContainer()->get('app.request');
-$session =  $this->getContainer()->get('session_wrapper');
+$session =  $this->getContainer()->get('app.session');
 
 $discordId = $request->query->get('discord-id');
 

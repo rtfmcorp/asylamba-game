@@ -144,8 +144,6 @@ class PlayerManager {
 	public function get($playerId)
 	{
 		if(($player = $this->entityManager->getRepository(Player::class)->get($playerId)) !== null) {
-			\Asylamba\Classes\Daemon\Server::debug($player->id);
-			\Asylamba\Classes\Daemon\Server::debug($this->session->get('playerId'));
 			if ($this->session->get('playerId') === $player->id) {
 				$player->synchronized = true;
 			}
@@ -503,7 +501,7 @@ class PlayerManager {
 				$playerBases = $this->orbitalBaseManager->getPlayerBases($player->id);
 
 				# load the bonus
-				$playerBonus = $this->playerBonusManager->getBonusByPlayer($player->id);
+				$playerBonus = $this->playerBonusManager->getBonusByPlayer($player);
 				$this->playerBonusManager->load($playerBonus);
 
 				# load the commanders

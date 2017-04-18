@@ -5,7 +5,7 @@ use Asylamba\Classes\Exception\FormException;
 
 $factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 
 $id 		= $request->query->get('id');
 $content	= $request->request->get('content');

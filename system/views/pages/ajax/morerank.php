@@ -3,7 +3,7 @@
 use Asylamba\Modules\Atlas\Model\PlayerRanking;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $playerRankingManager = $this->getContainer()->get('atlas.player_ranking_manager');
 
 $direction		= $request->query->get('dir');

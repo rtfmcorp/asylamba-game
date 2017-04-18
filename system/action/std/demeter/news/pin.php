@@ -4,7 +4,7 @@ use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Demeter\Model\Forum\FactionNews;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 
 if (($id = $request->query->get('id')) === FALSE) {
 	throw new FormException('Manque d\'information.');

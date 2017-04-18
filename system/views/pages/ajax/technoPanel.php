@@ -1,7 +1,7 @@
 <?php
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $technologyManager = $this->getContainer()->get('promethee.technology_manager');
 $technologyHelper = $this->getContainer()->get('promethee.technology_helper');
 $researchHelper = $this->getContainer()->get('promethee.research_helper');

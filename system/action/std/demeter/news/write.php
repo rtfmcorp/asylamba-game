@@ -10,7 +10,7 @@ use Asylamba\Modules\Demeter\Model\Forum\FactionNews;
 
 $factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 
 $content = $request->request->get('content');
 $title = $request->request->get('title');

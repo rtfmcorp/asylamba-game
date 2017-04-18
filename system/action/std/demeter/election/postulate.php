@@ -16,7 +16,7 @@ use Asylamba\Modules\Demeter\Model\Election\Vote;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Zeus\Model\Player;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
 $colorManager = $this->getContainer()->get('demeter.color_manager');

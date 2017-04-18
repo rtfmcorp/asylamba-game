@@ -7,7 +7,7 @@
 use Asylamba\Classes\Library\Format;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $parser = $this->getContainer()->get('parser');
 $sessionToken = $session->get('token');
 # require

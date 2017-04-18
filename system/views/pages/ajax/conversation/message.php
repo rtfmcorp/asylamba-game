@@ -4,7 +4,7 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $conversationManager = $this->getContainer()->get('hermes.conversation_manager');
 
 $page = $request->query->has('page') 

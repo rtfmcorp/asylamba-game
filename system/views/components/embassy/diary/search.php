@@ -12,7 +12,7 @@
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Classes\Library\Format;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 
 $status = ColorResource::getInfo($player_selected->rColor, 'status');
 

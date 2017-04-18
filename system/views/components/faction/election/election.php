@@ -5,7 +5,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 $electionManager = $this->getContainer()->get('demeter.election_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 
 $S_ELM_ELC = $electionManager->getCurrentSession();
 $electionManager->changeSession($ELM_ELECTION_TOKEN);

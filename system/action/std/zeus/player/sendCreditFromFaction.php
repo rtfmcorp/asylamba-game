@@ -10,7 +10,7 @@ use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Library\Flashbag;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $creditTransactionManager = $this->getContainer()->get('zeus.credit_transaction_manager');

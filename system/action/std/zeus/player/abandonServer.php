@@ -5,7 +5,7 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Zeus\Model\Player;
 
 $playerManager = $this->getContainer()->get('zeus.player_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $response = $this->getContainer()->get('app.response');
 
 if (($player = $playerManager->get($session->get('playerId'))) !== null) {

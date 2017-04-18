@@ -22,7 +22,7 @@ $technologyManager = $this->getContainer()->get('promethee.technology_manager');
 $technologyQueueManager = $this->getContainer()->get('promethee.technology_queue_manager');
 $technologyHelper = $this->getContainer()->get('promethee.technology_helper');
 $researchManager = $this->getContainer()->get('promethee.research_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
 $technologyResourceRefund = $this->getContainer()->getParameter('promethee.technology_queue.resource_refund');
 

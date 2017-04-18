@@ -12,7 +12,7 @@ services:
             - "@athena.orbital_base_manager"
             - "%athena.route.sector_bonus"
             - "%athena.route.color_bonus"
-            - "@session_wrapper"
+            - "@app.session"
             
     gaia.galaxy_generator:
         class: Asylamba\Modules\Gaia\Helper\GalaxyGenerator
@@ -42,7 +42,7 @@ services:
             - "@athena.recycling_mission_manager"
             - "@hermes.notification_manager"
             - "@ctc"
-            - "@session_wrapper"
+            - "@app.session"
             
     gaia.sector_manager:
         class: Asylamba\Modules\Gaia\Manager\SectorManager

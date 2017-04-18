@@ -6,7 +6,7 @@ use Asylamba\Classes\Library\Format;
 
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
 
 #credit

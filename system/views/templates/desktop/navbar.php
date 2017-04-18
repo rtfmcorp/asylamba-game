@@ -8,7 +8,7 @@ use Asylamba\Modules\Hermes\Model\RoadMap;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
 $roadmapManager = $this->getContainer()->get('hermes.roadmap_manager');
 $database = $this->getContainer()->get('database');

@@ -13,7 +13,7 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $parser = $this->getContainer()->get('parser');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $conversationManager = $this->getContainer()->get('hermes.conversation_manager');

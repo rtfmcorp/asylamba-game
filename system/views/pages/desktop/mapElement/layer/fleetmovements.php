@@ -5,7 +5,7 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Ares\Model\Commander;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');

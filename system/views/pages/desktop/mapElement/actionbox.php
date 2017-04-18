@@ -11,7 +11,7 @@ use Asylamba\Modules\Ares\Model\Commander;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $littleReportManager = $this->getContainer()->get('ares.little_report_manager');

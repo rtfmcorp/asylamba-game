@@ -29,20 +29,18 @@ services:
             - "@promethee.technology_manager"
             - "@zeus.player_bonus_manager"
             - "@ctc"
-            - "@session_wrapper"
+            - "@app.session"
             - "%zeus.player.base_level"
             - "%zeus.player.tax_coeff"
             
     zeus.player_bonus_manager:
         class: Asylamba\Modules\Zeus\Manager\PlayerBonusManager
         arguments:
-            - "@database"
-            - "@zeus.player_manager"
             - "@demeter.law_manager"
             - "@demeter.color_manager"
             - "@promethee.technology_manager"
             - "@promethee.technology_helper"
-            - "@session_wrapper"
+            - "@app.session"
     
     zeus.credit_transaction_manager:
         class: Asylamba\Modules\Zeus\Manager\CreditTransactionManager
@@ -66,5 +64,5 @@ services:
             - "@athena.building_queue_manager"
             - "@promethee.technology_queue_manager"
             - "@promethee.technology_manager"
-            - "@session_wrapper"
+            - "@app.session"
          

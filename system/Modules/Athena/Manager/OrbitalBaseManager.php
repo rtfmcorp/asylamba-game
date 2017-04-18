@@ -496,7 +496,7 @@ class OrbitalBaseManager {
 
 			if (count($hours)) {
 				# load the bonus
-				$playerBonus = $this->playerBonusManager->getBonusByPlayer($orbitalBase->rPlayer);
+				$playerBonus = $this->playerBonusManager->getBonusByPlayer($player);
 				$this->playerBonusManager->load($playerBonus);
 
 				# RESOURCES
@@ -662,7 +662,7 @@ class OrbitalBaseManager {
 	public function uTechnologyQueue(OrbitalBase $orbitalBase, $tq, $player) {
 		# technologie construite
 		$technology = $this->technologyManager->getPlayerTechnology($player->getId());
-		$this->technologyManager->affectTechnology($technology, $tq->technology, $tq->targetLevel);
+		$this->technologyManager->affectTechnology($technology, $tq->technology, $tq->targetLevel, $player);
 		# increase player experience
 		$experience = $this->technologyHelper->getInfo($tq->technology, 'points', $tq->targetLevel);
 		$this->playerManager->increaseExperience($player, $experience);
@@ -896,7 +896,7 @@ class OrbitalBaseManager {
 	public function increaseResources(OrbitalBase $orbitalBase, $resources, $canGoHigher = FALSE) {
 		if (intval($resources) >= 0) {
 			# load the bonus
-			$playerBonus = $this->playerBonusManager->getBonusByPlayer($orbitalBase->rPlayer);
+			$playerBonus = $this->playerBonusManager->getBonusByPlayer($this->playerManager->get($orbitalBase->rPlayer));
 			$this->playerBonusManager->load($playerBonus);
 			$bonus = $playerBonus->bonus->get(PlayerBonus::REFINERY_STORAGE);
 

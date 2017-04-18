@@ -123,7 +123,7 @@ class Server
 			if (($client = $this->clientManager->getClient($request)) === null) {
 				$client = $this->clientManager->createClient($request);
 			}
-			$this->container->set('session_wrapper', $client->getSession());
+			$this->container->get('app.session')->setCurrentSession($client->getSession());
 			$response = $this->router->processRequest($request, $client);
 			$this->container->set('app.response', $response);
 			$this->responseFactory->processResponse($request, $response, $client);

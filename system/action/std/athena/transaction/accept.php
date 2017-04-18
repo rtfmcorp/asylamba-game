@@ -16,7 +16,7 @@ use Asylamba\Modules\Athena\Model\CommercialShipping;
 use Asylamba\Modules\Hermes\Model\Notification;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $database = $this->getContainer()->get('database');
 $transactionManager = $this->getContainer()->get('athena.transaction_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');

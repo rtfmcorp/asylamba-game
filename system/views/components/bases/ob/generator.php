@@ -15,7 +15,7 @@ use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
 $technologyManager = $this->getContainer()->get('promethee.technology_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');

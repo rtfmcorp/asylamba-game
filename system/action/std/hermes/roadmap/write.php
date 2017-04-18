@@ -10,7 +10,7 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Hermes\Model\RoadMap;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $parser = $this->getContainer()->get('parser');
 $roadmapManager = $this->getContainer()->get('hermes.roadmap_manager');
 

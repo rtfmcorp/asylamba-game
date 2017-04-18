@@ -3,7 +3,7 @@
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Container\Params;
 
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
 
 echo '<div class="component new-message">';
 	echo '<div class="head skin-5">';

@@ -4,7 +4,7 @@ use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Hermes\Model\Conversation;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $conversationManager = $this->getContainer()->get('hermes.conversation_manager');
 
 # liste des conv's

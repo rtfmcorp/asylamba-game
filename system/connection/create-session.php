@@ -5,7 +5,7 @@ use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Container\ArrayList;
 use Asylamba\Modules\Ares\Model\Commander;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
@@ -51,7 +51,7 @@ foreach ($playerBases as $base) {
 }
 # remplissage des bonus
 $playerBonusManager = $this->getContainer()->get('zeus.player_bonus_manager');
-$bonus = $playerBonusManager->getBonusByPlayer($player->getId());
+$bonus = $playerBonusManager->getBonusByPlayer($player);
 $playerBonusManager->initialize($bonus);
 
 # création des paramètres utilisateur

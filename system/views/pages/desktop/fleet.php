@@ -7,7 +7,7 @@ use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $reportManager = $this->getContainer()->get('ares.report_manager');
 $littleReportManager = $this->getContainer()->get('ares.little_report_manager');

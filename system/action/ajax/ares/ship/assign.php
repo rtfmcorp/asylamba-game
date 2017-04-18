@@ -16,7 +16,7 @@ use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Exception\ErrorException;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
 $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 

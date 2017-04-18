@@ -5,6 +5,10 @@ namespace Asylamba\Classes\Library\Session;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Flashbag;
 
+use Asylamba\Classes\Container\ArrayList;
+use Asylamba\Classes\Container\StackList;
+use Asylamba\Classes\Container\EventList;
+
 class Session {
 	/** @var array **/
 	public $flashbags = [];

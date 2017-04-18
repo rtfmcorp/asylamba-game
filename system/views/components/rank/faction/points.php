@@ -10,7 +10,7 @@
 use Asylamba\Classes\Library\Utils;
 
 $factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 
 $factionRankingManager->changeSession($FACTION_RANKING_POINTS);
 

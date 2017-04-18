@@ -8,7 +8,7 @@ use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');

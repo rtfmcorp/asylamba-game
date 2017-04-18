@@ -3,7 +3,7 @@
 use Asylamba\Classes\Worker\CTR;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 
 echo '<div id="subnav">';
 	echo '<button class="move-side-bar top" data-dir="up"> </button>';

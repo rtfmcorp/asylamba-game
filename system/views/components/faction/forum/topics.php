@@ -8,7 +8,7 @@ use Asylamba\Modules\Demeter\Resource\ForumResources;
 use Asylamba\Modules\Zeus\Model\Player;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 
 # require
 	# int 			forum_topics

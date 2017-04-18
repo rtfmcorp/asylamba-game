@@ -7,7 +7,7 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 $conversationManager = $this->getContainer()->get('hermes.conversation_manager');
 $conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
 
 echo '<div class="component player rank new-message">';

@@ -125,7 +125,6 @@ class ServiceInjector {
 			&$initializer,
 			array $properties
 		) use ($key, &$dependency) {
-			
 			// Disable the proxy initialization. It prevents it from executing the closure again
 			$initializer = null;
 			// For each property of the proxy class, we check if it matchs with the service arguments

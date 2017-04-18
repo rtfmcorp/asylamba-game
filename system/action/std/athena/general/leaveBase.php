@@ -12,7 +12,7 @@ use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $placeManager = $this->getContainer()->get('gaia.place_manager');

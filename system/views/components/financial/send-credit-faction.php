@@ -11,7 +11,7 @@
 
 use Asylamba\Classes\Library\Format;
 
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
 
 echo '<div class="component new-message">';
 	echo '<div class="head"></div>';

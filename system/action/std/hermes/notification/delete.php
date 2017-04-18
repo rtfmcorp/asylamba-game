@@ -9,7 +9,7 @@ use Asylamba\Classes\Exception\ErrorException;
 $id = $this->getContainer()->get('app.request')->query->get('id');
 
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 
 if ($id) {
 	$S_NTM1 = $notificationManager->getCurrentSession();

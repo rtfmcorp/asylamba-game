@@ -4,7 +4,7 @@ use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $colorManager = $this->getContainer()->get('demeter.color_manager');

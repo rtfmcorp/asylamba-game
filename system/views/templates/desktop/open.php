@@ -2,7 +2,7 @@
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 
 if ($response->getPage() == 'inscription' && ($request->query->get('step') == 1 || !$request->query->has('step'))) {
 	$color = 'color0';

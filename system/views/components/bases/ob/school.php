@@ -16,7 +16,7 @@ use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
 
 $commanders = $commanderManager->getBaseCommanders($ob_school->getId(), [Commander::INSCHOOL], ['c.experience' => 'DESC']);

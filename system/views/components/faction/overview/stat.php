@@ -12,7 +12,7 @@ use Asylamba\Classes\Library\Chronos;
 use Asylamba\Classes\Exception\ErrorException;
 
 $factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
 
 # status list

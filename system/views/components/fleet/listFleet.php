@@ -18,7 +18,7 @@ use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Chronos;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
 
 echo '<div class="component size3 list-fleet">';

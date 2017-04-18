@@ -4,7 +4,7 @@ use Asylamba\Classes\Library\Flashbag;
 
 echo '<ul id="alert"></ul>';
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 
 echo '<ul id="alert-content">';
 foreach ($session->getFlashbags() as $flashbag) {

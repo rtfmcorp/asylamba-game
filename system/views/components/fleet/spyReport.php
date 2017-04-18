@@ -16,7 +16,7 @@ use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Ares\Model\Commander;
 
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
 
 echo '<div class="component size3 space">';
 	echo '<div class="head skin-1">';

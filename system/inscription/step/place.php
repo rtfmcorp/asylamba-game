@@ -1,6 +1,6 @@
 <?php
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get('app.session');
 
 # background paralax
 echo '<div id="background-paralax" class="profil"></div>';
