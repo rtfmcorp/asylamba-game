@@ -126,7 +126,7 @@ class Squadron {
 		return $enemyCommander;
 	}
 	
-	private function chooseEnemy($enemyCommander) {
+	private function chooseEnemy(Commander $enemyCommander) {
 		$nbrShipsInLine = 0;
 		foreach ($enemyCommander->getArmy() as $enemySquadron) {
 			if ($enemySquadron->getLineCoord() * 3 <= FightManager::getCurrentLine()) {

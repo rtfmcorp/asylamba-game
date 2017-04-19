@@ -383,7 +383,7 @@ class CommanderManager
 	# ENGAGE UN COMBAT ENTRE CHAQUE SQUADRON CONTRE UN COMMANDANT
 	public function engage(Commander $commander, $enemyCommander) {
 		$commander->setArmy();
-
+		
 		for ($i = 0; $i < count($commander->squadronsIds); $i++) {
 			$commander->getSquadron($i)->relId = 0;
 		}
