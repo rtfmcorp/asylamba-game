@@ -36,8 +36,6 @@ services:
     zeus.player_bonus_manager:
         class: Asylamba\Modules\Zeus\Manager\PlayerBonusManager
         arguments:
-            - "@database"
-            - "@zeus.player_manager"
             - "@demeter.law_manager"
             - "@demeter.color_manager"
             - "@promethee.technology_manager"

@@ -17,7 +17,7 @@ services:
             - "%database_admin_password"
             
     app.session:
-        class: Asylamba\Classes\Container\Session
+        class: Asylamba\Classes\Library\Session\SessionWrapper
             
     cyclic_action_scheduler:
         class: Asylamba\Classes\Scheduler\CyclicActionScheduler
@@ -31,6 +31,8 @@ services:
             
     router:
         class: Asylamba\Classes\Router\Router
+        arguments:
+            - "@app.session"
         
     request_factory:
         class: Asylamba\Classes\Library\Http\RequestFactory

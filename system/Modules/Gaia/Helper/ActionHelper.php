@@ -14,7 +14,7 @@ use Asylamba\Modules\Athena\Helper\OrbitalBaseHelper;
 
 use Asylamba\Modules\Ares\Manager\CommanderManager;
 use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 
 abstract class ActionHelper {
 	/** @var CommanderManager **/
@@ -27,7 +27,7 @@ abstract class ActionHelper {
 	protected $routeSectorBonus;
 	/** @var int **/
 	protected $routeColorBonus;
-	/** @var Session **/
+	/** @var SessionWrapper **/
 	protected $session;
 	/** @var string **/
 	protected $sessionToken;
@@ -38,7 +38,7 @@ abstract class ActionHelper {
 	 * @param OrbitalBaseHelper $orbitalBaseHelper
 	 * @param int $routeSectorBonus
 	 * @param int $routeColorBonus
-	 * @param Session $session
+	 * @param SessionWrapper $session
 	 */
 	public function __construct(
 		CommanderManager $commanderManager,
@@ -46,7 +46,7 @@ abstract class ActionHelper {
 		OrbitalBaseHelper $orbitalBaseHelper,
 		$routeSectorBonus,
 		$routeColorBonus,
-		Session $session
+		SessionWrapper $session
 	) {
 		$this->commanderManager = $commanderManager;
 		$this->commercialRouteManager = $commercialRouteManager;

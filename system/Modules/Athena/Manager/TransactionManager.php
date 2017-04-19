@@ -13,7 +13,7 @@
 namespace Asylamba\Modules\Athena\Manager;
 
 use Asylamba\Classes\Entity\EntityManager;
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 use Asylamba\Modules\Athena\Manager\CommercialTaxManager;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Classes\Library\Game;
@@ -34,9 +34,9 @@ class TransactionManager{
 	/**
 	 * @param EntityManager $entityManager
 	 * @param CommercialTaxManaer $commercialTaxManager
-	 * @param Session $session
+	 * @param SessionWrapper $session
 	 */
-	public function __construct(EntityManager $entityManager, CommercialTaxManager $commercialTaxManager, Session $session) {
+	public function __construct(EntityManager $entityManager, CommercialTaxManager $commercialTaxManager, SessionWrapper $session) {
 		$this->entityManager = $entityManager;
 		$this->commercialTaxManager = $commercialTaxManager;
 		$this->sessionToken = $session->get('token');

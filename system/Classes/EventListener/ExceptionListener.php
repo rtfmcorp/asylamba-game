@@ -3,7 +3,7 @@
 namespace Asylamba\Classes\EventListener;
 
 use Asylamba\Classes\Logger\AbstractLogger;
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 use Asylamba\Classes\Library\Flashbag;
 
 use Asylamba\Classes\Library\Http\Request;
@@ -16,14 +16,14 @@ use Asylamba\Classes\Exception\FormException;
 class ExceptionListener {
 	/** @var AbstractLogger **/
 	protected $logger;
-	/** @var Session **/
+	/** @var SessionWrapper **/
 	protected $session;
 	
 	/**
 	 * @param AbstractLogger $logger
 	 * @param Session $session
 	 */
-	public function __construct(AbstractLogger $logger, Session $session)
+	public function __construct(AbstractLogger $logger, SessionWrapper $session)
 	{
 		$this->logger = $logger;
 		$this->session = $session;
@@ -40,6 +40,7 @@ class ExceptionListener {
 			$exception->getMessage(),
 			$exception->getFile(),
 			$exception->getLine(),
+			$exception->getTraceAsString(),
 			AbstractLogger::LOG_LEVEL_ERROR,
 			($exception instanceof FormException) ? Flashbag::TYPE_FORM_ERROR : Flashbag::TYPE_STD_ERROR,
 			($exception instanceof FormException) ? $exception->getRedirect() : null
@@ -57,6 +58,7 @@ class ExceptionListener {
 			$error->getMessage(),
 			$error->getFile(),
 			$error->getLine(),
+			$error->getTraceAsString(),
 			AbstractLogger::LOG_LEVEL_CRITICAL,
 			Flashbag::TYPE_BUG_ERROR
 		);
@@ -67,12 +69,13 @@ class ExceptionListener {
 	 * @param string $message
 	 * @param string $file
 	 * @param int $line
+	 * @param string $trace
 	 * @param string $level
 	 * @param int $flashbagLevel
 	 */
-	public function process($event, $message, $file, $line, $level, $flashbagLevel, $redirect = null)
+	public function process($event, $message, $file, $line, $trace, $level, $flashbagLevel, $redirect = null)
 	{
-		$this->logger->log("$message at $file at line $line", $level);
+		$this->logger->log("$message at $file at line $line\n$trace", $level);
 		
 		$this->session->addFlashbag($message, $flashbagLevel);
 		

@@ -51,7 +51,7 @@ foreach ($playerBases as $base) {
 }
 # remplissage des bonus
 $playerBonusManager = $this->getContainer()->get('zeus.player_bonus_manager');
-$bonus = $playerBonusManager->getBonusByPlayer($player->getId());
+$bonus = $playerBonusManager->getBonusByPlayer($player);
 $playerBonusManager->initialize($bonus);
 
 # création des paramètres utilisateur

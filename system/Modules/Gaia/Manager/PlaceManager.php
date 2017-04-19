@@ -15,7 +15,7 @@ use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 use Asylamba\Modules\Gaia\Resource\SquadronResource;
 
 use Asylamba\Classes\Exception\ErrorException;
@@ -71,7 +71,7 @@ class PlaceManager {
 	protected $notificationManager;
 	/** @var CTC **/
 	protected $ctc;
-	/** @var Session **/
+	/** @var SessionWrapper **/
 	protected $session;
 	/** @var EventDispatcher **/
 	protected $eventDispatcher;
@@ -89,7 +89,7 @@ class PlaceManager {
 	 * @param RecyclingMissionManager $recyclingMissionManager
 	 * @param NotificationManager $notificationManager
 	 * @param CTC $ctc
-	 * @param Session $session
+	 * @param SessionWrapper $session
 	 * @param EventDispatcher $eventDispatcher
 	 */
 	public function __construct(
@@ -105,7 +105,7 @@ class PlaceManager {
 		RecyclingMissionManager $recyclingMissionManager,
 		NotificationManager $notificationManager,
 		CTC $ctc,
-		Session $session,
+		SessionWrapper $session,
 		EventDispatcher $eventDispatcher
 	) {
 		$this->entityManager = $entityManager;
@@ -220,7 +220,7 @@ class PlaceManager {
 					# fill & load the bonuses if needed
 					if (!array_key_exists($commander->rPlayer, $playerBonuses)) {
 						
-						$bonus = $this->playerBonusManager->getBonusByPlayer($commander->rPlayer);
+						$bonus = $this->playerBonusManager->getBonusByPlayer($this->playerManager->get($commander->rPlayer));
 						$this->playerBonusManager->load($bonus);
 						$playerBonuses[$commander->rPlayer] = $bonus;
 					}
@@ -255,7 +255,7 @@ class PlaceManager {
 							case Commander::LOOT: 
 								$commanderPlace = $this->get($commander->rBase);
 								$bonus = $playerBonuses[$commander->rPlayer];
-
+				
 								$commanderPlayer = $this->playerManager->get($commander->rPlayer);
 
 								if ($place->rPlayer != NULL) {

@@ -4,7 +4,7 @@ namespace Asylamba\Classes\Worker;
 
 use Asylamba\Classes\Library\Bug;
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 
 class CTC {
 	/** @var boolean **/
@@ -13,16 +13,16 @@ class CTC {
 	private $currentDate;
 	/** @var array **/
 	public $events  = array();
-	/** @var $session **/
+	/** @var SessionWrapper **/
 	protected $session;
 	/** @var string **/
 	protected $rootPath;
 	
 	/**
-	 * @param Session $session
+	 * @param SessionWrapper $session
 	 * @param string $rootPath
 	 */
-	public function __construct(Session $session, $rootPath)
+	public function __construct(SessionWrapper $session, $rootPath)
 	{
 		$this->session = $session;
 		$this->rootPath = $rootPath;

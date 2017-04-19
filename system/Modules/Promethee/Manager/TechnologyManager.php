@@ -8,6 +8,8 @@ use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Zeus\Manager\PlayerBonusManager;
 use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
 
+use Asylamba\Modules\Zeus\Model\Player;
+
 class TechnologyManager {
 	/** @var Database **/
 	protected $database;
@@ -51,10 +53,11 @@ class TechnologyManager {
 	 * @param Technology $technology
 	 * @param int $id
 	 * @param string $value
+	 * @param Player $player
 	 * @param boolean $load
 	 * @return boolean
 	 */
-	public function affectTechnology(Technology $technology, $id, $value, $load = FALSE) { // ajouter une entrée bdd ou modifier ligne !!!
+	public function affectTechnology(Technology $technology, $id, $value, Player $player, $load = FALSE) { // ajouter une entrée bdd ou modifier ligne !!!
 		if($technology->setTechnology($id, $value) === false) {
 			return false;
 		}
@@ -70,7 +73,7 @@ class TechnologyManager {
 					$this->updateTech($technology->rPlayer, $id, $value);
 				}
 				if (!$this->technologyHelper->isAnUnblockingTechnology($id)) {
-					$bonus = $this->playerBonusManager->getBonusByPlayer($technology->rPlayer);
+					$bonus = $this->playerBonusManager->getBonusByPlayer($player);
 					$this->playerBonusManager->load($bonus);
 					$this->playerBonusManager->updateTechnoBonus($bonus, $id, $value);
 				}

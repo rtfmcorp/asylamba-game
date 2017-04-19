@@ -4,12 +4,13 @@ namespace Asylamba\Classes\Router;
 
 use Asylamba\Classes\Library\Http\Request;
 use Asylamba\Classes\Library\Http\Response;
-
-use Asylamba\Classes\Container\Session;
-use Asylamba\Classes\Daemon\Client;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 
 class Router
 {
+	/** @var SessionWrapper **/
+	protected $session;
+	
 	private $pageResources = array(
 		'profil' => array('profil', 'Profil'),
 		'message' => array('message', 'Messagerie'),
@@ -44,31 +45,37 @@ class Router
 	);
 	
 	/**
+	 * @param SessionWrapper $session
+	 */
+	public function __construct(SessionWrapper $session)
+	{
+		$this->session = $session;
+	}
+	
+	/**
 	 * @param Request $request
 	 * @param Client $client
 	 * @return Response
 	 */
-	public function processRequest(Request $request, Client $client)
+	public function processRequest(Request $request)
 	{
 		$response = new Response();
-        $session = $client->getSession();
-		$this->parseRoute($request, $response, $session);
-		$this->checkPermission($request, $response, $session);
+		$this->parseRoute($request, $response);
+		$this->checkPermission($request, $response);
 		
 		if (!empty($response->getRedirect())) {
 			return $response;
 		}
 		
-		$this->getInclude($response, $session);
+		$this->getInclude($response);
 		return $response;
 	}
 
 	/**
 	 * @param Request $request
 	 * @param Response $response
-	 * @param Session $session
 	 */
-	protected function parseRoute(Request $request, Response $response, Session $session) {
+	protected function parseRoute(Request $request, Response $response) {
 		$requestURI = array_values(array_diff(
 			explode('/', $request->getPath()),
 			explode('/', $_SERVER['SCRIPT_NAME'])
@@ -91,7 +98,7 @@ class Router
 				? 'profil'
 				: implode('/', $requestURI)
 			;
-			$session->addHistory($newURI);
+			$this->session->addHistory($newURI);
 		}
 
 		$nbParams = count($requestURI);
@@ -102,7 +109,7 @@ class Router
 				$request->query->set($param[0], $param[1]);
 			}
 		}
-		$session->add('screenmode',
+		$this->session->add('screenmode',
 			(($screenMode = $request->query->get('screenmode')) && in_array($screenMode, ['desktop', 'mobile']))
 			? $screenMode
 			: 'desktop'
@@ -112,17 +119,16 @@ class Router
 	/**
 	 * @param Request $request
 	 * @param Response $response
-	 * @param Session $session
 	 */
-	public function checkPermission(Request $request, Response $response, Session $session) {
+	public function checkPermission(Request $request, Response $response) {
 		$page = $response->getPage();
         
 		if ($page === 'inscription') {
-			if ($session->exist('playerId')) {
+			if ($this->session->exist('playerId')) {
 				$response->redirect(APP_ROOT);
 			}
 		} elseif ($page === 'connection') {
-			if (!$session->exist('playerId')) {
+			if (!$this->session->exist('playerId')) {
 				if (!$request->query->has('bindkey')) {
 					$response->redirect(GETOUT_ROOT . 'accueil/speak-wrongargument');
 				}
@@ -132,15 +138,15 @@ class Router
 		} elseif (in_array($page, array('api', 'script', 'buffer'))) {
 			# doing nothing
 		} else {
-			if (!$session->exist('playerId')) {
+			if (!$this->session->exist('playerId')) {
 				$response->redirect(GETOUT_ROOT . 'accueil/speak-loginrequired');
 			}
 		}
 	}
 
-	public function getInclude(Response $response, Session $session) {
+	public function getInclude(Response $response) {
 		$page = $response->getPage();
-		$screenMode = $session->get('screenmode');
+		$screenMode = $this->session->get('screenmode');
 		
 		switch($page) {
 			case 'action':

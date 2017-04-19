@@ -11,7 +11,7 @@
  */
 namespace Asylamba\Modules\Zeus\Helper;
 
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 
 use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
@@ -33,7 +33,7 @@ class TutorialHelper {
 	protected $technologyQueueManager;
 	/** @var TechnologyManager **/
 	protected $technologyManager;
-	/** @var Session **/
+	/** @var SessionWrapper **/
 	protected $session;
 	
 	/**
@@ -43,7 +43,7 @@ class TutorialHelper {
 	 * @param BuildingQueueManager $buildingQueueManager
 	 * @param TechnologyQueueManager $technologyQueueManager
 	 * @param TechnologyManager $technologyManager
-	 * @param Session $session
+	 * @param SessionWrapper $session
 	 */
 	public function __construct(
 		EntityManager $entityManager,
@@ -52,7 +52,7 @@ class TutorialHelper {
 		BuildingQueueManager $buildingQueueManager,
 		TechnologyQueueManager $technologyQueueManager,
 		TechnologyManager $technologyManager,
-		Session $session
+		SessionWrapper $session
 	)
 	{
 		$this->entityManager = $entityManager;

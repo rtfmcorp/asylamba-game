@@ -19,7 +19,7 @@ use Asylamba\Modules\Athena\Manager\OrbitalBaseManager;
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Modules\Zeus\Manager\PlayerBonusManager;
 use Asylamba\Modules\Gaia\Manager\PlaceManager;
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 use Asylamba\Classes\Container\ArrayList;
 use Asylamba\Classes\Worker\CTC;
 
@@ -55,7 +55,7 @@ class CommanderManager
 	 * @param PlayerManager $playerManager
 	 * @param PlayerBonusManager $playerBonusManager
 	 * @param PlaceManager $placeManager
-	 * @param Session $session
+	 * @param SessionWrapper $session
 	 * @param CTC $ctc
 	 * @param int $commanderBaseLevel
 	 */
@@ -66,7 +66,7 @@ class CommanderManager
 		PlayerManager $playerManager,
 		PlayerBonusManager $playerBonusManager,
 		PlaceManager $placeManager,
-		Session $session,
+		SessionWrapper $session,
 		CTC $ctc,
 		$commanderBaseLevel
 	) {
@@ -444,7 +444,7 @@ class CommanderManager
                         
 			$playerBonus = 0;
 			if ($commander->rPlayer != $this->session->get('playerId')) {
-				$playerBonus = $this->playerBonusManager->getBonusByPlayer($commander->rPlayer);
+				$playerBonus = $this->playerBonusManager->getBonusByPlayer($this->playerManager->get($commander->rPlayer));
 				/** @TOVERIFY **/
 				$this->playerBonusManager->load($playerBonus);
 				$playerBonus = $playerBonus->bonus;

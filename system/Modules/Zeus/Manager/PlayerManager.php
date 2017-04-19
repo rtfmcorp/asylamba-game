@@ -15,7 +15,7 @@ use Asylamba\Classes\Worker\CTC;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Classes\Worker\API;
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
@@ -72,7 +72,7 @@ class PlayerManager {
 	protected $playerBonusManager;
 	/** @var CTC **/
 	protected $ctc;
-	/** @var Session **/
+	/** @var SessionWrapper **/
 	protected $session;
 	/** @var int **/
 	protected $playerBaseLevel;
@@ -94,7 +94,7 @@ class PlayerManager {
 	 * @param TechnologyManager $technologyManager
 	 * @param PlayerBonusManager $playerBonusManager
 	 * @param CTC $ctc
-	 * @param Session $session
+	 * @param SessionWrapper $session
 	 * @param int $playerBaseLevel
 	 * @param int $playerTaxCoeff
 	 */
@@ -113,7 +113,7 @@ class PlayerManager {
 		TechnologyManager $technologyManager,
 		PlayerBonusManager $playerBonusManager,
 		CTC $ctc,
-		Session $session,
+		SessionWrapper $session,
 		$playerBaseLevel,
 		$playerTaxCoeff
 	)
@@ -144,6 +144,9 @@ class PlayerManager {
 	public function get($playerId)
 	{
 		if(($player = $this->entityManager->getRepository(Player::class)->get($playerId)) !== null) {
+			if ($this->session->get('playerId') === $player->id) {
+				$player->synchronized = true;
+			}
 			$this->fill($player);
 		}
 		return $player;
@@ -498,7 +501,7 @@ class PlayerManager {
 				$playerBases = $this->orbitalBaseManager->getPlayerBases($player->id);
 
 				# load the bonus
-				$playerBonus = $this->playerBonusManager->getBonusByPlayer($player->id);
+				$playerBonus = $this->playerBonusManager->getBonusByPlayer($player);
 				$this->playerBonusManager->load($playerBonus);
 
 				# load the commanders
@@ -790,7 +793,7 @@ class PlayerManager {
 	public function increaseCredit(Player $player, $credit) {
 		$player->credit += abs($credit);
 
-		if ($this->isSynchronized($player)) {
+		if ($player->isSynchronized()) {
 			$this->session->get('playerInfo')->add('credit', $player->credit);
 		}
 		$this->entityManager->flush($player);
@@ -802,7 +805,7 @@ class PlayerManager {
 		} else {
 			$player->credit -= abs($credit);
 		}
-		if ($this->isSynchronized($player)) {
+		if ($player->isSynchronized()) {
 			$this->session->get('playerInfo')->add('credit', $player->credit);
 		}
 		$this->entityManager->flush($player);

@@ -4,7 +4,7 @@ namespace Asylamba\Classes\Daemon;
 
 use Asylamba\Classes\Daemon\Client;
 
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\Session;
 
 use Asylamba\Classes\Library\Http\Request;
 

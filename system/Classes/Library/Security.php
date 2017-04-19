@@ -2,13 +2,13 @@
 
 namespace Asylamba\Classes\Library;
 
-use Asylamba\Classes\Container\Session;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 
 class Security {
 	/** @var Session **/
 	protected $session;
 	
-	public function __construct(Session $session)
+	public function __construct(SessionWrapper $session)
 	{
 		$this->session = $session;
 	}
