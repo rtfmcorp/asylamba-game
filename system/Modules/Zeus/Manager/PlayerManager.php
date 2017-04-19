@@ -497,7 +497,6 @@ class PlayerManager {
 			# update time
 			$hours = Utils::intervalDates($now, $player->uPlayer);
 			$nbHours = count($hours);
-			\Asylamba\Classes\Daemon\Server::debug($hours);
 			if ($nbHours === 0) {
 				continue;
 			}
@@ -521,7 +520,6 @@ class PlayerManager {
 			$transactions = $this->transactionManager->getPlayerPropositions($player->id, Transaction::TYP_SHIP);
 			
 			for ($i = 0; $i < $nbHours; $i++) {
-				\Asylamba\Classes\Daemon\Server::debug('credits');
 				$this->uCredit(
 					$player,
 					$bases,

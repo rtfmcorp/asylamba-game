@@ -17,6 +17,11 @@ class SessionWrapper
 		return $this->currentSession;
 	}
 	
+	public function clearWrapper()
+	{
+		$this->currentSession = null;
+	}
+	
 	public function add($key, $value)
 	{
 		if ($this->currentSession === null) {
