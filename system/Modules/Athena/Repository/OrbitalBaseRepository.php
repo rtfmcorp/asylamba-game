@@ -58,7 +58,7 @@ class OrbitalBaseRepository extends AbstractRepository {
 	 */
 	public function getPlayerBases($playerId)
 	{
-		$statement = $this->select('WHERE ob.rPlayer = :player_id', ['player_id' => $playerId]);
+		$statement = $this->select('WHERE ob.rPlayer = :player_id ORDER BY ob.dCreation', ['player_id' => $playerId]);
 		$data = [];
 		while ($row = $statement->fetch()) {
 			if (($ob = $this->unitOfWork->getObject(OrbitalBase::class, $row['rPlace'])) !== null) {
