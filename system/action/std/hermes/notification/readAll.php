@@ -19,7 +19,7 @@ $this->getContainer()->get('entity_manager')->flush(Notification::class);
 
 if ($nbNotifications > 1) {
 	$session->addFlashbag($nbNotifications . ' notifications ont été marquées comme lues.', Flashbag::TYPE_SUCCESS);
-} else if ($notificationManager->size() == 1) {
+} else if ($nbNotifications == 1) {
 	$session->addFlashbag('Une notification a été marquée comme lue.', Flashbag::TYPE_SUCCESS);
 } else {
 	$session->addFlashbag('Toutes vos notifications ont déjà été lues.', Flashbag::TYPE_SUCCESS);

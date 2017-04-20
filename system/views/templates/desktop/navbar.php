@@ -109,7 +109,7 @@ echo '<div id="nav">';
 		echo '</a>';
 
 		echo '<a href="' . APP_ROOT . 'message" id="general-notif-container" class="square sh" data-target="new-notifications"><img src="' . MEDIA . 'common/nav-notif.png" alt="" />';
-			echo ($notificationManager->size() > 0) ? '<span class="number">' . $notificationManager->size() . '</span>' : NULL;
+			echo ($nbNotifications > 0) ? '<span class="number">' . $nbNotifications . '</span>' : NULL;
 		echo '</a>';
 	echo '</div>';
 
