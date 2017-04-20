@@ -25,7 +25,38 @@ class NotificationManager {
     {
         $this->entityManager = $entityManager;
 	}
+	
+	public function get($id)
+	{
+		return $this->entityManager->getRepository(Notification::class)->get($id);
+	}
+	
+	public function getUnreadNotifications($playerId)
+	{
+		return $this->entityManager->getRepository(Notification::class)->getUnreadNotifications($playerId);
+	}
+	
+	public function getPlayerNotificationsByArchive($playerId, $isArchived)
+	{
+		return $this->entityManager->getRepository(Notification::class)->getPlayerNotificationsByArchive($playerId, $isArchived);
+	}
 
+	public function patchForMultiCombats($commanderPlayerId, $placePlayerId, $arrivedAt)
+	{
+		$notifications = $this
+			->entityManager
+			->getRepository(Notification::class)
+			->getMultiCombatNotifications($commanderPlayerId, $placePlayerId, $arrivedAt)
+		;
+		$nbNotifications = count($notifications);
+		if ($nbNotifications > 2) {
+			for ($i = 0; $i < $nbNotifications - 2; $i++) {
+				$this->entityManager->remove($notifications[$i]);
+			}
+		}
+		$this->entityManager->flush(Notification::class);
+	}
+	
 	public function add(Notification $notification)
     {
         $this->entityManager->persist($notification);

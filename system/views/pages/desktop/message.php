@@ -85,27 +85,11 @@ echo '<div id="content">';
 		include COMPONENT . 'conversation/new.php';
 	}
 
-	# NOTIFICATION
-	$S_NTM1 = $notificationManager->getCurrentSession();
-
-	$C_NTM1 = $notificationManager->newSession();
-	$notificationManager->load(
-		array('rPlayer' => $session->get('playerId'), 'archived' => 0),
-		array('dSending', 'DESC'),
-		array(0, 50)
-	);
+	$unarchivedNotifications = $notificationManager->getPlayerNotificationsByArchive($session->get('playerId'), 0);
 	include COMPONENT . 'notif/last.php';
 
-	$C_NTM2 = $notificationManager->newSession();
-	$notificationManager->load(
-		array('rPlayer' => $session->get('playerId'), 'archived' => 1),
-		array('dSending', 'DESC'),
-		array(0, 50)
-	);
-
-	if ($notificationManager->size() > 0) {
+	$archivedNotifications = $notificationManager->getPlayerNotificationsByArchive($session->get('playerId'), 0);
+	if (count($archivedNotifications) > 0) {
 		include COMPONENT . 'notif/archived.php';
 	}
-
-	$notificationManager->changeSession($S_NTM1);
 echo '</div>';

@@ -10,11 +10,7 @@
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Chronos;
 
-$notificationManager = $this->getContainer()->get('hermes.notification_manager');
 $sessionToken = $this->getContainer()->get('app.session')->get('token');
-
-$S_NTM_SCOPE = $notificationManager->getCurrentSession();
-$notificationManager->changeSession($C_NTM2);
 
 echo '<div class="component">';
 	echo '<div class="head"></div>';
@@ -22,9 +18,7 @@ echo '<div class="component">';
 		echo '<div class="body">';
 			echo '<h3>Archive des notifications</h3>';
 
-			for ($i = 0; $i < $notificationManager->size(); $i++) {
-				$n = $notificationManager->get($i);
-
+			foreach ($archivedNotifications as $n) {
 				$readed = ($n->getReaded()) ? '' : 'unreaded';
 				echo '<div class="notif ' . $readed . '" data-notif-id="' . $n->getId() . '">';
 					echo '<h4 class="read-notif switch-class-parent" data-class="open">' . $n->getTitle() . '</h4>';
@@ -39,5 +33,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-$notificationManager->changeSession($S_NTM_SCOPE);

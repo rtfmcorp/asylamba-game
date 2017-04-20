@@ -661,18 +661,7 @@ class PlaceManager {
 					$this->eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place));
 
 					# PATCH DEGUEU POUR LES MUTLIS-COMBATS
-					$_NTM465 = $this->notificationManager->getCurrentSession();
-					$this->notificationManager->newSession(TRUE);
-					$this->notificationManager->load(['rPlayer' => $commander->rPlayer, 'dSending' => $commander->dArrival]);
-					$this->notificationManager->load(['rPlayer' => $place->rPlayer, 'dSending' => $commander->dArrival]);
-					if ($this->notificationManager->size() > 2) {
-						for ($i = 0; $i < $this->notificationManager->size() - 2; $i++) {
-							$this->notificationManager->deleteById($this->notificationManager->get($i)->id);
-						}
-					}
-					$this->notificationManager->changeSession($_NTM465);
-					######################################33
-
+					$this->notificationManager->patchForMultiCombats($commander->rPlayer, $place->rPlayer, $commander->dArrival);
 				# défaite
 				} else {
 					for ($i = 0; $i < count($place->commanders); $i++) {
@@ -737,6 +726,7 @@ class PlaceManager {
 				$commander->rBase = $place->id;
 				$commander->statement = Commander::AFFECTED;
 				$commander->line = 2;
+				\Asylamba\Classes\Daemon\Server::debug('Id - '. $ob->getId());
 
 				# ajout de la place en session
 				if ($this->session->get('playerId') == $commander->getRPlayer()) {

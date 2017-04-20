@@ -8,6 +8,61 @@ use Asylamba\Modules\Hermes\Model\Notification;
 
 class NotificationRepository extends AbstractRepository
 {
+	/**
+	 * @param int $id
+	 * @return Notification
+	 */
+	public function get($id)
+	{
+		if (($n = $this->unitOfWork->getObject(Notification::class, $id)) !== null) {
+			return $n;
+		}
+		$statement = $this->connection->prepare('SELECT * FROM notification WHERE id = :id');
+		$statement->execute(['id' => $id]);
+		
+		if (($row = $statement->fetch()) === false) {
+			return null;
+		}
+		$notification = $this->format($row);
+		$this->unitOfWork->addObject($notification);
+		return $notification;
+	}
+	
+	public function getUnreadNotifications($playerId)
+	{
+		$statement = $this->connection->prepare('SELECT * FROM notification WHERE rPlayer = :player_id AND readed = 0 ORDER BY dSending DESC');
+		$statement->execute(['player_id' => $playerId]);
+		$data = [];
+		while ($row = $statement->fetch()) {
+			if (($n = $this->unitOfWork->getObject(Notification::class, $row['id'])) !== null) {
+				$data[] = $n;
+				continue;
+			}
+			$notification = $this->format($row);
+			$this->unitOfWork->addObject($notification);
+			$data[] = $notification;
+		}
+		return $data;
+	}
+	
+	public function getPlayerNotificationsByArchive($playerId, $isArchived)
+	{
+		$statement = $this->connection->prepare(
+			'SELECT * FROM notification WHERE rPlayer = :player_id AND archived = :is_archived ORDER BY dSending DESC LIMIT 50');
+		$statement->execute(['player_id' => $playerId, 'is_archived' => $isArchived]);
+		$data = [];
+		while ($row = $statement->fetch()) {
+			if (($n = $this->unitOfWork->getObject(Notification::class, $row['id'])) !== null) {
+				$data[] = $n;
+				continue;
+			}
+			$notification = $this->format($row);
+			$this->unitOfWork->addObject($notification);
+			$data[] = $notification;
+		}
+		return $data;
+	}
+	
     public function insert($notification)
     {
 		$qr = $this->connection->prepare('INSERT INTO

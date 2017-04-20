@@ -631,10 +631,7 @@ class PlayerManager {
 			$n->addSep()->addLnk('financial', 'vers les finances →');
 			$n->addEnd();
 			
-			$S_NTM1 = $this->notificationManager->getCurrentSession();
-			$this->notificationManager->newSession();
 			$this->notificationManager->add($n);
-			$this->notificationManager->changeSession($S_NTM1);
 
 			$newCredit = $credits;
 		}
@@ -683,10 +680,7 @@ class PlayerManager {
 				$n->addBrk()->addTxt('Ils sont tous allés proposer leurs services sur le marché. Si vous voulez les récupérer, vous pouvez vous y rendre et les racheter.');
 			}
 			$n->addEnd();
-			$S_NTM1 = $this->notificationManager->getCurrentSession();
-			$this->notificationManager->newSession();
 			$this->notificationManager->add($n);
-			$this->notificationManager->changeSession($S_NTM1);
 		}
 
 		# payer l'entretien des vaisseaux
@@ -721,10 +715,7 @@ class PlayerManager {
 			$n->addBeg()->addTxt('Domaine')->addSep();
 			$n->addTxt('Vous n\'avez pas assez de crédits pour payer l\'entretien de la flotte de votre officier ' . $commander->name . '. Celui-ci a donc déserté ! ... avec la flotte, désolé.');
 			$n->addEnd();
-			$S_NTM1 = $this->notificationManager->getCurrentSession();
-			$this->notificationManager->newSession();
 			$this->notificationManager->add($n);
-			$this->notificationManager->changeSession($S_NTM1);
 		}
 		# vaisseaux sur la planète
 		foreach ($playerBases as $base) {
@@ -759,10 +750,7 @@ class PlayerManager {
 								$n->addTxt('Vous n\'avez pas assez de crédits pour payer l\'entretien de ' . $toKill . ' ' . ShipResource::getInfo($j, 'codeName') . 's sur ' . $base->name . '. Ces vaisseaux partent donc à la casse ! ');
 							}
 							$n->addEnd();
-							$S_NTM1 = $this->notificationManager->getCurrentSession();
-							$this->notificationManager->newSession();
 							$this->notificationManager->add($n);
-							$this->notificationManager->changeSession($S_NTM1);
 						}
 					}
 				}
@@ -841,10 +829,7 @@ class PlayerManager {
 			}
 			$n->addEnd();
 
-			$S_NTM1 = $this->notificationManager->getCurrentSession();
-			$this->notificationManager->newSession();
 			$this->notificationManager->add($n);
-			$this->notificationManager->changeSession($S_NTM1);
 
 			# parrainage : au niveau 3, le parrain gagne 1M crédits
 			if ($player->level == 3 AND $player->rGodfather != NULL) {
@@ -863,10 +848,7 @@ class PlayerManager {
 					$n->addEnd();
 
 					$this->entityManager->flush($godFather);
-					$S_NTM2 = $this->notificationManager->getCurrentSession();
-					$this->notificationManager->newSession();
 					$this->notificationManager->add($n);
-					$this->notificationManager->changeSession($S_NTM2);
 				} 
 			}
 		}

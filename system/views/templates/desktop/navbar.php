@@ -16,10 +16,8 @@ $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
 $sessionToken = $session->get('token');
 
-$S_NTM1 = $notificationManager->getCurrentSession();
-$notificationManager->newSession();
-$notificationManager->load(array('rPlayer' => $session->get('playerId'), 'readed' => 0), array('dSending', 'DESC'));
-
+$notifications = $notificationManager->getUnreadNotifications($session->get('playerId'));
+$nbNotifications = count($notifications);
 # load message
 $qr = $database->prepare('SELECT COUNT(c.id) AS count
 	FROM `conversation` AS c
@@ -156,13 +154,12 @@ echo '<div id="nav">';
 	# NOTIFICATION
 	echo '<div class="overbox" id="new-notifications">';
 		echo '<h2>Notifications</h2>';
-		if ($notificationManager->size() > 1) {
+		if ($nbNotifications > 1) {
 			echo '<a class="link-title" href="' . Format::actionBuilder('readallnotif', $sessionToken) . '">tout marquer comme lu</a>';
 		}
 		echo '<div class="overflow">';
-			if ($notificationManager->size() > 0) {
-				for ($i = 0; $i < $notificationManager->size(); $i++) {
-					$n = $notificationManager->get($i);
+			if ($nbNotifications > 0) {
+				foreach ($notifications as $n) {
 					echo '<div class="notif unreaded" data-notif-id="' . $n->getId() . '">';
 						echo '<h4 class="read-notif switch-class-parent" data-class="open">' . $n->getTitle() . '</h4>';
 						echo '<div class="content">' . $n->getContent() . '</div>';
@@ -263,9 +260,6 @@ echo '<div id="nav">';
 		echo '<a target="_blank" href="' . TWITTER_LINK . '">Nous suivre sur Twitter</a>';
 	echo '</div>';
 echo '</div>';
-
-# close session
-$notificationManager->changeSession($S_NTM1);
 
 # open general container
 echo '<div id="container">';
