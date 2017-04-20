@@ -16,16 +16,16 @@ class CTC {
 	/** @var SessionWrapper **/
 	protected $session;
 	/** @var string **/
-	protected $rootPath;
+	protected $logDirectory;
 	
 	/**
 	 * @param SessionWrapper $session
-	 * @param string $rootPath
+	 * @param string $logDirectory
 	 */
-	public function __construct(SessionWrapper $session, $rootPath)
+	public function __construct(SessionWrapper $session, $logDirectory)
 	{
 		$this->session = $session;
-		$this->rootPath = $rootPath;
+		$this->logDirectory = $logDirectory;
 	}
 
 	public function createContext($creator = NULL) {
@@ -79,7 +79,7 @@ class CTC {
 
 				$logt .= "\n";
 
-				$path  = $this->rootPath . '/public/log/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
+				$path  = $this->logDirectory . '/ctc/' . date('Y') . '-' . date('m') . '-' . date('d') . '.log';
 				Bug::writeLog($path, $logt);
 			}
 

@@ -23,7 +23,7 @@ $playerGlobalInactiveTime = $this->getContainer()->getParameter('zeus.player.glo
 $playerInactiveTimeLimit = $this->getContainer()->getParameter('zeus.player.inactive_time_limit');
 $entityManager = $this->getContainer()->get('entity_manager');
 
-$path = $this->getContainer()->getParameter('root_path') . '/public/log/cron/' . date('Y') . '-' . date('m') . '.log';
+$path = $this->getContainer()->getParameter('log_directory') . '/cron/' . date('Y') . '-' . date('m') . '.log';
 
 Bug::writeLog($path, '# ###################');
 Bug::writeLog($path, '# Cron trace');
