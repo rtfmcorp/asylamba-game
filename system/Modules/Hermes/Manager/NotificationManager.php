@@ -40,6 +40,11 @@ class NotificationManager {
 	{
 		return $this->entityManager->getRepository(Notification::class)->getPlayerNotificationsByArchive($playerId, $isArchived);
 	}
+	
+	public function getAllByReadState($isReaded)
+	{
+		return $this->entityManager->getRepository(Notification::class)->getAllByReadState($isReaded);
+	}
 
 	public function patchForMultiCombats($commanderPlayerId, $placePlayerId, $arrivedAt)
 	{

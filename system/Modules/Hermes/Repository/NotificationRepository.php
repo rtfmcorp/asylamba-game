@@ -63,6 +63,24 @@ class NotificationRepository extends AbstractRepository
 		return $data;
 	}
 	
+	public function getAllByReadState($isReaded)
+	{
+		$statement = $this->connection->prepare(
+			'SELECT * FROM notification WHERE readed = :is_readed');
+		$statement->execute(['is_readed' => $isReaded]);
+		$data = [];
+		while ($row = $statement->fetch()) {
+			if (($n = $this->unitOfWork->getObject(Notification::class, $row['id'])) !== null) {
+				$data[] = $n;
+				continue;
+			}
+			$notification = $this->format($row);
+			$this->unitOfWork->addObject($notification);
+			$data[] = $notification;
+		}
+		return $data;
+	}
+	
     public function insert($notification)
     {
 		$qr = $this->connection->prepare('INSERT INTO
@@ -73,14 +91,15 @@ class NotificationRepository extends AbstractRepository
 			$notification->getTitle(),
 			$notification->getContent(),
 			$notification->getDSending(),
-			$notification->getReaded(),
-			$notification->getArchived()
+			(int) $notification->getReaded(),
+			(int) $notification->getArchived()
 		));
 		$notification->setId($this->connection->lastInsertId());
     }
     
     public function update($notification)
     {
+		\Asylamba\Classes\Daemon\Server::debug($notification);
         $statement = $this->connection->prepare(
             'UPDATE notification SET id = ?,
                 rPlayer = ?,
@@ -97,8 +116,8 @@ class NotificationRepository extends AbstractRepository
             $notification->getTitle(),
             $notification->getContent(),
             $notification->getDSending(),
-            $notification->getReaded(),
-            $notification->getArchived(),
+            (int) $notification->getReaded(),
+            (int) $notification->getArchived(),
             $notification->getId()
         ));
     }
