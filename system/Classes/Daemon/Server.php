@@ -112,6 +112,7 @@ class Server
 	protected function treatInput($input)
 	{
 		$client = $request = $response = null;
+		$sessionWrapper = $this->container->get('app.session');
 		try {
 			$data = fread($input, 2048);
 			if (empty($data)) {
@@ -123,7 +124,7 @@ class Server
 			if (($client = $this->clientManager->getClient($request)) === null) {
 				$client = $this->clientManager->createClient($request);
 			}
-			$this->container->get('app.session')->setCurrentSession($client->getSession());
+			$sessionWrapper->setCurrentSession($client->getSession());
 			$response = $this->router->processRequest($request, $client);
 			$this->container->set('app.response', $response);
 			$this->responseFactory->processResponse($request, $response, $client);
@@ -136,9 +137,10 @@ class Server
 			$response = $event->getResponse();
 			$this->responseFactory->processResponse($request, $response, $client);
 		} finally {
-			$this->nbUncollectedCycles++;
 			fputs ($input, $response->send());
 			fclose($input);
+			$this->nbUncollectedCycles++;
+			$sessionWrapper->clearWrapper();
 		}
 	}
     

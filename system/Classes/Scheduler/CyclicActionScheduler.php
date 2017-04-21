@@ -23,7 +23,7 @@ class CyclicActionScheduler
 	
 	public function init()
 	{
-		//$this->schedule('zeus.player_manager', 'uCredit');
+		$this->schedule('zeus.player_manager', 'updatePlayersCredits');
 	}
 	
 	/**

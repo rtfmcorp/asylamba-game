@@ -84,10 +84,7 @@ try {
 		$n->addBrk()->addTxt('Vous venez de gagner 1000 crédits. Vous en gagnerez 1 million de plus lorsqu\'il atteindra le niveau 3.');
 		$n->addEnd();
 
-		$S_NTM1 = $notificationManager->getCurrentSession();
-		$notificationManager->newSession();
 		$notificationManager->add($n);
-		$notificationManager->changeSession($S_NTM1);
 
 		# add 1000 credits to the godfather
 		if (($godFather = $playerManager->get($player->rGodFather))) {

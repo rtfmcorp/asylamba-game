@@ -35,7 +35,7 @@ services:
     hermes.notification_manager:
         class: Asylamba\Modules\Hermes\Manager\NotificationManager
         arguments:
-            - "@database"
+            - "@entity_manager"
             
     hermes.roadmap_manager:
         class: Asylamba\Modules\Hermes\Manager\RoadMapManager

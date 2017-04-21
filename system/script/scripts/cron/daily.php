@@ -21,10 +21,9 @@ $readNotificationTimeout = $this->getContainer()->getParameter('hermes.notificat
 $unreadNotificationTimeout = $this->getContainer()->getParameter('hermes.notifications.timeout.unread');
 $playerGlobalInactiveTime = $this->getContainer()->getParameter('zeus.player.global_inactive_time');
 $playerInactiveTimeLimit = $this->getContainer()->getParameter('zeus.player.inactive_time_limit');
+$entityManager = $this->getContainer()->get('entity_manager');
 
-$S_NTM1 = $notificationManager->getCurrentSession();
-
-$path = $this->getContainer()->getParameter('root_path') . '/public/log/cron/' . date('Y') . '-' . date('m') . '.log';
+$path = $this->getContainer()->getParameter('log_directory') . '/cron/' . date('Y') . '-' . date('m') . '.log';
 
 Bug::writeLog($path, '# ###################');
 Bug::writeLog($path, '# Cron trace');
@@ -36,13 +35,12 @@ Bug::writeLog($path, '');
 Bug::writeLog($path, '# Clean up redead notifications');
 $bench = new Benchmark();
 
-$notificationManager->newSession();
-$notificationManager->load(array('readed' => 1, 'archived' => 0));
+$readedNotifications = $notificationManager->getAllByReadState(1);
 
 $deletedReadedNotifs = 0;
-for ($i = $notificationManager->size() - 1; $i >= 0; $i--) { 
-	if (Utils::interval(Utils::now(), $notificationManager->get($i)->getDSending()) >= $readNotificationTimeout) {
-		$notificationManager->deleteById($notificationManager->get($i)->getId());
+foreach ($readedNotifications as $notification) { 
+	if (Utils::interval(Utils::now(), $notification->getDSending()) >= $readNotificationTimeout) {
+		$entityManager->remove($notification);
 		$deletedReadedNotifs++;
 	}
 }
@@ -57,13 +55,11 @@ $bench->clear();
 Bug::writeLog($path, '# Clean up unreaded notifications');
 $bench->start();
 
-$notificationManager->newSession();
-$notificationManager->load(array('readed' => 0, 'archived' => 0));
-
+$unreadedNotifications = $notificationManager->getAllByReadState(0);
 $deletedUnreadedNotifs = 0;
-for ($i = $notificationManager->size() - 1; $i >= 0; $i--) { 
-	if (Utils::interval(Utils::now(), $notificationManager->get($i)->getDSending()) >= $unreadNotificationTimeout) {
-		$notificationManager->deleteById($notificationManager->get($i)->getId());
+foreach ($unreadedNotifications as $notification) { 
+	if (Utils::interval(Utils::now(), $notification->getDSending()) >= $unreadNotificationTimeout) {
+		$entityManager->remove($notification);
 		$deletedUnreadedNotifs++;
 	}
 }
@@ -114,8 +110,7 @@ Bug::writeLog($path, '# [' . $deletedPlayers . '] Players deleted');
 Bug::writeLog($path, '');
 $bench->clear();
 
-# close object
-$notificationManager->changeSession($S_NTM1);
+$entityManager->flush();
 
 Bug::writeLog($path, '');
 

@@ -6,10 +6,6 @@ use Asylamba\Classes\Library\Flashbag;
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
 $session = $this->getContainer()->get('app.session');
 
-$S_NTM1 = $notificationManager->getCurrentSession();
-$notificationManager->newSession(ASM_UMODE);
-$notificationManager->load(array('rPlayer' => $session->get('playerId')));
-
 $nbr = $notificationManager->deleteByRPlayer($session->get('playerId'));
 
 if ($nbr > 1) {
@@ -19,5 +15,3 @@ if ($nbr > 1) {
 } else {
 	$session->addFlashbag('Toutes vos notifications ont déjà été supprimées.', Flashbag::TYPE_SUCCESS);
 }
-
-$notificationManager->changeSession($S_NTM1);

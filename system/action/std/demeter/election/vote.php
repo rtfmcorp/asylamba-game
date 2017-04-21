@@ -28,7 +28,7 @@ if ($rElection !== FALSE && $rCandidate !== FALSE) {
 	}
 
 	if (($election = $electionManager->get($rElection)) !== null) {
-		if (($candidateManager->getByElectionAndPlayer($playerManager->get($rCandidate), $election)) !== null || $leader->id == $rCandidate) {
+		if (($candidateManager->getByElectionAndPlayer($election, $playerManager->get($rCandidate))) !== null || $leader->id == $rCandidate) {
 			if ($election->rColor == $session->get('playerInfo')->get('color')) {
 				if (($voteManager->getPlayerVote($playerManager->get($session->get('playerId')), $election)) === null) {
 					$faction = $colorManager->get($session->get('playerInfo')->get('color'));

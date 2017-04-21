@@ -27,7 +27,7 @@ $voteManager = $this->getContainer()->get('demeter.vote_manager');
 $entityManager = $this->getContainer()->get('entity_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 
-$rElection			 = $request->request->get('relection');
+$rElection			 = $request->query->get('relection');
 $program			 = $request->request->get('program');
 $chiefChoice		 = $request->request->get('chiefchoice');
 $treasurerChoice	 = $request->request->get('treasurerchoice');
@@ -47,7 +47,7 @@ if ($rElection !== FALSE && $program !== FALSE) {
 
 				if ($faction->electionStatement == Color::CAMPAIGN) {
 					if ($chiefChoice !== NULL && $treasurerChoice !== FALSE && $warlordChoice !== FALSE && $ministerChoice !== FALSE) {
-						if (($candidate = $candidateManager->getByElectionAndPlayer($playerManager->get($session->get('playerId')), $election)) === null) {
+						if (($candidate = $candidateManager->getByElectionAndPlayer($election, $playerManager->get($session->get('playerId')))) === null) {
 							$candidate = new Candidate();
 
 							$candidate->rElection = $rElection;

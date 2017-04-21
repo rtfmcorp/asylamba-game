@@ -89,7 +89,7 @@ services:
         class: Asylamba\Classes\Worker\CTC
         arguments:
             - "@app.session"
-            - "%root_path"
+            - "%log_directory"
         
     exception_listener:
         class: Asylamba\Classes\EventListener\ExceptionListener

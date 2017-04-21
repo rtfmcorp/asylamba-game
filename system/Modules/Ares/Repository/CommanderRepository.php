@@ -423,8 +423,9 @@ class CommanderRepository extends AbstractRepository {
 			$nbrSquadronToCreate = $commander->getLevel() - $commander->getSizeArmy();
 			$qr = 'INSERT INTO squadron (rCommander, dCreation) VALUES (' . $commander->getId() . ', NOW())';
 			$i = 1;
-			for ($i = 1; $i < $nbrSquadronToCreate; $i++) {
-				$qr .= ',(' . $commander->getId() . ', NOW())';
+			while ($i < $nbrSquadronToCreate) {
+					$qr .= ',(' . $commander->getId() . ', NOW())';
+					$i++;
 			}
 			$qr = $this->connection->prepare($qr);
 			$qr->execute();

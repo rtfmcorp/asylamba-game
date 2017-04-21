@@ -7,13 +7,12 @@ use Asylamba\Classes\Exception\ErrorException;
 
 $id = $this->getContainer()->get('app.request')->request->get('id');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$entityManager = $this->getContainer()->get('entity_manager');
 
 if ($id) {
-	$S_NTM1 = $notificationManager->getCurrentSession();
-	$notificationManager->newSession(ASM_UMODE);
-	$notificationManager->load(array('id' => $id));
-	$notificationManager->deleteById($id);	
-	$notificationManager->changeSession($S_NTM1);
+	$notification = $notificationManager->get($id);
+	$entityManager->remove($notification);
+	$entityManager->flush($notification);
 } else {
 	throw new ErrorException('Cette notification n\'existe pas');
 }

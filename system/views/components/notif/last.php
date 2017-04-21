@@ -10,11 +10,7 @@
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Chronos;
 
-$notificationManager = $this->getContainer()->get('hermes.notification_manager');
 $sessionToken = $this->getContainer()->get('app.session')->get('token');
-
-$S_NTM_SCOPE = $notificationManager->getCurrentSession();
-$notificationManager->changeSession($C_NTM1);
 
 echo '<div class="component">';
 	echo '<div class="head skin-2">';
@@ -34,10 +30,8 @@ echo '<div class="component">';
 				Elles vous permettent d’avoir un compte rendu de toutes vos activités sur Asylamba.<br/>Au bout d\'un certain temps, elles seront automatiquement supprimées, sauf si vous les archivez.';
 			echo '</p>'; 
 			
-			if ($notificationManager->size() > 0) {
-				for ($i = 0; $i < $notificationManager->size(); $i++) {
-					$n = $notificationManager->get($i);
-
+			if (count($unarchivedNotifications) > 0) {
+				foreach ($unarchivedNotifications as $n) {
 					$readed = ($n->getReaded()) ? '' : 'unreaded';
 					echo '<div class="notif ' . $readed . '" data-notif-id="' . $n->getId() . '">';
 						echo '<h4 class="read-notif switch-class-parent" data-class="open">' . $n->getTitle() . '</h4>';
@@ -55,5 +49,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-$notificationManager->changeSession($S_NTM_SCOPE);

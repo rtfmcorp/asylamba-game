@@ -114,6 +114,27 @@ class ColorRepository extends AbstractRepository {
 		return $data;
 	}
 	
+	/**
+	 * @return array
+	 */
+	public function getByRegimeAndElectionStatement($regimes, $electionStatements)
+	{
+		$statement = $this->connection->query(
+			'SELECT * FROM color WHERE regime IN (' . implode(',', $regimes) . ') AND electionStatement IN (' . implode(',', $electionStatements) . ')'
+		);
+		$data = [];
+		while ($row = $statement->fetch()) {
+			if (($f = $this->unitOfWork->getObject(Color::class, $row['id'])) !== null) {
+				$data[] = $f;
+				continue;
+			}
+			$faction = $this->format($row);
+			$this->unitOfWork->addObject($faction);
+			$data[] = $faction;
+		}
+		return $data;
+	}
+	
 	public function insert($faction)
 	{
 		$qr = $this->connection->prepare(

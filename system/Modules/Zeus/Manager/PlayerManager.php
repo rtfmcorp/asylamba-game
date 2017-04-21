@@ -321,7 +321,6 @@ class PlayerManager {
 		if ($this->isSynchronized($player)) {
 			$this->saveSessionData($player);
 		}
-		$this->uMethod($player);
 	}
 	
 	public function isSynchronized(Player $player)
@@ -486,48 +485,53 @@ class PlayerManager {
 			$this->kill($player);
 		}
 	}
-
-	public function uMethod(Player $player) {
-		if ($player->statement != Player::DEAD) {
-			$token = $this->ctc->createContext('player');
-			$now   = Utils::now();
-
-			if (Utils::interval($player->uPlayer, $now, 'h') > 0) {
-				# update time
-				$hours = Utils::intervalDates($now, $player->uPlayer);
-				$player->uPlayer = $now;
-
-				# load orbital bases
-				$playerBases = $this->orbitalBaseManager->getPlayerBases($player->id);
-
-				# load the bonus
-				$playerBonus = $this->playerBonusManager->getBonusByPlayer($player);
-				$this->playerBonusManager->load($playerBonus);
-
-				# load the commanders
-				$commanders = $this->commanderManager->getPlayerCommanders(
-					$player->id,
-					[Commander::AFFECTED, Commander::MOVING], 
-					['c.experience' => 'DESC', 'c.statement' => 'ASC']
-				);
-
-				# load the researches
-				$S_RSM1 = $this->researchManager->getCurrentSession();
-				$this->researchManager->newSession();
-				$this->researchManager->load(array('rPlayer' => $player->id));
-
-				$factions = $this->colorManager->getAll();
-
-				# load the transactions
-				$transactions = $this->transactionManager->getPlayerPropositions($player->id, Transaction::TYP_SHIP);
-
-				foreach ($hours as $key => $hour) {
-					$this->ctc->add($hour, $this, 'uCredit', $player, array($player, $playerBases, $playerBonus, $commanders, $this->researchManager->getCurrentSession(), $factions, $transactions));
-				}
-				$this->researchManager->changeSession($S_RSM1);
+	
+	public function updatePlayersCredits()
+	{
+		$players = $this->getActivePlayers();
+		$factions = $this->colorManager->getAll();
+		$S_RSM1 = $this->researchManager->getCurrentSession();
+		$now   = Utils::now();
+		
+		foreach ($players as $player) {
+			# update time
+			$hours = Utils::intervalDates($now, $player->uPlayer);
+			$nbHours = count($hours);
+			if ($nbHours === 0) {
+				continue;
 			}
-			$this->ctc->applyContext($token);
+			$player->uPlayer = $now;
+			# load the bonus
+			$playerBonus = $this->playerBonusManager->getBonusByPlayer($player);
+			$this->playerBonusManager->load($playerBonus);
+
+			# load the researches
+			$S_RSM1 = $this->researchManager->getCurrentSession();
+			$this->researchManager->newSession();
+			$this->researchManager->load(array('rPlayer' => $player->id));
+
+			$bases = $this->orbitalBaseManager->getPlayerBases($player->id);
+			$commanders = $this->commanderManager->getPlayerCommanders(
+				$player->id,
+				[Commander::AFFECTED, Commander::MOVING], 
+				['c.experience' => 'DESC', 'c.statement' => 'ASC']
+			);
+			$researchSession = $this->researchManager->getCurrentSession();
+			$transactions = $this->transactionManager->getPlayerPropositions($player->id, Transaction::TYP_SHIP);
+			
+			for ($i = 0; $i < $nbHours; $i++) {
+				$this->uCredit(
+					$player,
+					$bases,
+					$playerBonus,
+					$commanders,
+					$researchSession,
+					$factions,
+					$transactions
+				);
+			}
 		}
+		$this->researchManager->changeSession($S_RSM1);
 	}
 
 	public function uCredit(Player $player, $playerBases, $playerBonus, $commanders, $rsmSession, $factions, $transactions) {
@@ -627,10 +631,7 @@ class PlayerManager {
 			$n->addSep()->addLnk('financial', 'vers les finances →');
 			$n->addEnd();
 			
-			$S_NTM1 = $this->notificationManager->getCurrentSession();
-			$this->notificationManager->newSession();
 			$this->notificationManager->add($n);
-			$this->notificationManager->changeSession($S_NTM1);
 
 			$newCredit = $credits;
 		}
@@ -679,10 +680,7 @@ class PlayerManager {
 				$n->addBrk()->addTxt('Ils sont tous allés proposer leurs services sur le marché. Si vous voulez les récupérer, vous pouvez vous y rendre et les racheter.');
 			}
 			$n->addEnd();
-			$S_NTM1 = $this->notificationManager->getCurrentSession();
-			$this->notificationManager->newSession();
 			$this->notificationManager->add($n);
-			$this->notificationManager->changeSession($S_NTM1);
 		}
 
 		# payer l'entretien des vaisseaux
@@ -717,10 +715,7 @@ class PlayerManager {
 			$n->addBeg()->addTxt('Domaine')->addSep();
 			$n->addTxt('Vous n\'avez pas assez de crédits pour payer l\'entretien de la flotte de votre officier ' . $commander->name . '. Celui-ci a donc déserté ! ... avec la flotte, désolé.');
 			$n->addEnd();
-			$S_NTM1 = $this->notificationManager->getCurrentSession();
-			$this->notificationManager->newSession();
 			$this->notificationManager->add($n);
-			$this->notificationManager->changeSession($S_NTM1);
 		}
 		# vaisseaux sur la planète
 		foreach ($playerBases as $base) {
@@ -755,10 +750,7 @@ class PlayerManager {
 								$n->addTxt('Vous n\'avez pas assez de crédits pour payer l\'entretien de ' . $toKill . ' ' . ShipResource::getInfo($j, 'codeName') . 's sur ' . $base->name . '. Ces vaisseaux partent donc à la casse ! ');
 							}
 							$n->addEnd();
-							$S_NTM1 = $this->notificationManager->getCurrentSession();
-							$this->notificationManager->newSession();
 							$this->notificationManager->add($n);
-							$this->notificationManager->changeSession($S_NTM1);
 						}
 					}
 				}
@@ -837,10 +829,7 @@ class PlayerManager {
 			}
 			$n->addEnd();
 
-			$S_NTM1 = $this->notificationManager->getCurrentSession();
-			$this->notificationManager->newSession();
 			$this->notificationManager->add($n);
-			$this->notificationManager->changeSession($S_NTM1);
 
 			# parrainage : au niveau 3, le parrain gagne 1M crédits
 			if ($player->level == 3 AND $player->rGodfather != NULL) {
@@ -859,10 +848,7 @@ class PlayerManager {
 					$n->addEnd();
 
 					$this->entityManager->flush($godFather);
-					$S_NTM2 = $this->notificationManager->getCurrentSession();
-					$this->notificationManager->newSession();
 					$this->notificationManager->add($n);
-					$this->notificationManager->changeSession($S_NTM2);
 				} 
 			}
 		}

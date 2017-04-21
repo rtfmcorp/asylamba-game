@@ -6,21 +6,17 @@
 
 use Asylamba\Classes\Exception\FormException;
 
-$notif = $this->getContainer()->get('app.request')->query->get('notif');
+$id = $this->getContainer()->get('app.request')->query->get('notif');
 
-if ($notif === null) {
+if ($id === null) {
 	throw new FormException('Erreur dans la requête AJAX');
 }
 $session = $this->getContainer()->get('app.session');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
-$S_NTM1 = $notificationManager->getCurrentSession();
-$notificationManager->newSession();
-$notificationManager->load(array('id' => $notif, 'rPlayer' => $session->get('playerId')));
 
-if ($notificationManager->size() == 1) {
-	$notificationManager->get()->setReaded(1);
+if (($notification = $notificationManager->get($id)) !== null && $notification->rPlayer === $session->get('playerId')) {
+	$notification->setReaded(1);
+	$this->getContainer()->get('entity_manager')->flush($notification);
 } else {
 	throw new FormException('Cette notification ne vous appartient pas');
 }
-
-$notificationManager->changeSession($S_NTM1);
