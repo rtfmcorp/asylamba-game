@@ -27,6 +27,8 @@ use Asylamba\Modules\Ares\Model\LiveReport;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Ares\Model\Commander;
 
+use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
+
 class CommanderManager
 {
 	/** @var EntityManager **/
@@ -43,8 +45,6 @@ class CommanderManager
 	protected $placeManager;
 	/** @var Session **/
 	protected $session;
-	/** @var CTC **/
-	protected $ctc;
 	/** @var int **/
 	protected $commanderBaseLevel;
 
@@ -56,7 +56,6 @@ class CommanderManager
 	 * @param PlayerBonusManager $playerBonusManager
 	 * @param PlaceManager $placeManager
 	 * @param SessionWrapper $session
-	 * @param CTC $ctc
 	 * @param int $commanderBaseLevel
 	 */
 	public function __construct(
@@ -67,7 +66,6 @@ class CommanderManager
 		PlayerBonusManager $playerBonusManager,
 		PlaceManager $placeManager,
 		SessionWrapper $session,
-		CTC $ctc,
 		$commanderBaseLevel
 	) {
 		$this->entityManager = $entityManager;
@@ -77,7 +75,6 @@ class CommanderManager
 		$this->playerBonusManager = $playerBonusManager;
 		$this->placeManager = $placeManager;
 		$this->session = $session;
-		$this->ctc = $ctc;
 		$this->commanderBaseLevel = $commanderBaseLevel;
 	}
 	
@@ -311,23 +308,45 @@ class CommanderManager
 		}
 	}
 
-	public function uExperienceInSchool(Commander $commander, $ob, $playerBonus) {
-		if ($commander->statement == Commander::INSCHOOL) {
-			# investissement
-			$invest  = $ob->iSchool;
-			$invest += $invest * $playerBonus->get(PlayerBonus::COMMANDER_INVEST) / 100;
+	public function uExperienceInSchool(Commander $commander, $orbitalBase, $playerBonus) {
+		
+		$now = Utils::now();
+		$commanders = $this->entityManager->getRepository(Commander::class)->getAllByStatements(Commander::INSCHOOL);
+
+		foreach ($commanders as $commander) {
+			// If the commander was updated recently, we skip him
+			if (Utils::interval($commander->uCommander, $now, 'h') === 0) {
+				continue;
+			}
 			
-			# xp gagnée
-			$earnedExperience  = $invest / Commander::COEFFSCHOOL;
-			$earnedExperience += (rand(0, 1) == 1) 
-				? rand(0, $earnedExperience / 20)
-				: -(rand(0, $earnedExperience / 20));
-			$earnedExperience  = round($earnedExperience);
-			$earnedExperience  = ($earnedExperience < 0)
-				? 0 : $earnedExperience;
+			$nbrHours = Utils::intervalDates($now, $commander->uCommander);
+			$commander->uCommander = $now;
+			$orbitalBase = $this->orbitalBaseManager->get($commander->rBase);
 			
-			$this->upExperience($commander, $earnedExperience);
+			if ($commander->rPlayer != $this->session->get('playerId')) {
+				$playerBonus = $this->playerBonusManager->getBonusByPlayer($this->playerManager->get($commander->rPlayer));
+				$this->playerBonusManager->load($playerBonus);
+				$playerBonus = $playerBonus->bonus;
+			} else {
+				$playerBonus = $this->session->get('playerBonus');
+			}
+			foreach ($nbrHours as $hour) {
+				$invest  = $orbitalBase->iSchool;
+				$invest += $invest * $playerBonus->get(PlayerBonus::COMMANDER_INVEST) / 100;
+
+				# xp gagnée
+				$earnedExperience  = $invest / Commander::COEFFSCHOOL;
+				$earnedExperience += (rand(0, 1) == 1) 
+					? rand(0, $earnedExperience / 20)
+					: -(rand(0, $earnedExperience / 20));
+				$earnedExperience  = round($earnedExperience);
+				$earnedExperience  = ($earnedExperience < 0)
+					? 0 : $earnedExperience;
+
+				$this->upExperience($commander, $earnedExperience);
+			}
 		}
+		$this->entityManager->flush(Commander::class);
 	}
 
 	public function move(Commander $commander, $rDestinationPlace, $rStartPlace, $travelType, $travelLength, $duration) {
@@ -429,40 +448,5 @@ class CommanderManager
 		$info->add('resources', $commander->resources);
 
 		return $info;
-	}
-
-	public function uCommander(Commander $commander) {
-		$token = $this->ctc->createContext();
-		$now = Utils::now();
-
-		# check s'il gagne de l'exp à l'école
-		if (Utils::interval($commander->uCommander, $now, 'h') > 0 AND $commander->statement == Commander::INSCHOOL) {
-			$nbrHours = Utils::intervalDates($now, $commander->uCommander);
-			$commander->uCommander = $now;
-
-			$orbitalBase = $this->orbitalBaseManager->get($commander->rBase);
-                        
-			$playerBonus = 0;
-			if ($commander->rPlayer != $this->session->get('playerId')) {
-				$playerBonus = $this->playerBonusManager->getBonusByPlayer($this->playerManager->get($commander->rPlayer));
-				/** @TOVERIFY **/
-				$this->playerBonusManager->load($playerBonus);
-				$playerBonus = $playerBonus->bonus;
-			} else {
-				$playerBonus = $this->session->get('playerBonus');
-			}
-
-			foreach ($nbrHours as $hour) {
-				$this->ctc->add($hour, $this, 'uExperienceInSchool', $commander, array($commander, $orbitalBase, $playerBonus));
-			}
-		}
-		# test si il y a des combats
-		if ($commander->dArrival <= Utils::now() AND $commander->statement == Commander::MOVING AND $commander->hasToU) {
-			$commander->hasToU = FALSE;
-			$commander->uCommander = $now;
-			$place = $this->placeManager->get($commander->rDestinationPlace);
-		}
-		$this->entityManager->flush($commander);
-		$this->ctc->applyContext($token);
 	}
 }

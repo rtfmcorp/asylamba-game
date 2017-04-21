@@ -105,6 +105,32 @@ class CommanderRepository extends AbstractRepository {
 	}
 	
 	/**
+	 * @param array $statements
+	 * @return array
+	 */
+	public function getAllByStatements($statements)
+	{
+		$statement = $this->select('WHERE c.statement IN (' . implode(',', $statements) . ')');
+		$commanders = [];
+		$currentId = 0;
+		$persisted = [];
+		$unPersisted = [];
+		while ($row = $statement->fetch()) {
+			if (in_array($row['id'], $persisted)) {
+				continue;
+			}
+			if (!in_array($row['id'], $unPersisted) && ($c = $this->unitOfWork->getObject(Commander::class, $row['id'])) !== null) {
+				$currentId = $row['id'];
+				$commanders[$row['id']] = $c;
+				$persisted[] = $row['id'];
+				continue;
+			}
+			$this->format($row, $commanders, $currentId, $unPersisted);
+		}
+		return array_values($commanders);
+	}
+	
+	/**
 	 * @param array $ids
 	 * @return array
 	 */

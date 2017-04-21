@@ -23,6 +23,7 @@ class CyclicActionScheduler
 	
 	public function init()
 	{
+		$this->schedule('ares.commander_manager', 'uExperienceInSchool');
 		$this->schedule('zeus.player_manager', 'updatePlayersCredits');
 	}
 	
