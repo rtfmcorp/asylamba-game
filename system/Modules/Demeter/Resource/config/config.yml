@@ -52,3 +52,4 @@ services:
             - "@athena.commercial_route_manager"
             - "@parser"
             - "@ctc"
+            - "@realtime_action_scheduler"

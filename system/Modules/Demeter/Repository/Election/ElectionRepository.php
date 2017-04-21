@@ -55,7 +55,7 @@ class ElectionRepository extends AbstractRepository {
 		);
 		$statement->execute(array(
 			'faction_id' => $election->rColor,
-			'date' => $election->dElection->format('Y-m-d H:i:s')
+			'date' => $election->dElection
 		));
 		$election->id = $this->connection->lastInsertId();
 	}

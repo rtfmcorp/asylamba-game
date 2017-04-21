@@ -3,7 +3,6 @@
 use Asylamba\Classes\Library\Format;
 
 $candidateManager = $this->getContainer()->get('demeter.candidate_manager');
-$electionManager = $this->getContainer()->get('demeter.election_manager');
 $session = $this->getContainer()->get('app.session');
 $sessionToken = $session->get('token');
 
@@ -22,7 +21,7 @@ echo '<div class="component new-message">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			if ($session->get('playerInfo')->get('status') >= 2) {
-				echo '<form action="' . Format::actionBuilder('postulate', $sessionToken, ['relection' => $electionManager->get(0)->id]) . '" method="post">';
+				echo '<form action="' . Format::actionBuilder('postulate', $sessionToken, ['relection' => $election->id]) . '" method="post">';
 					echo '<p><label for="program">Votre message politique</label></p>';
 					echo '<p class="input input-area"><textarea id="program" name="program" required style="height: 300px;"></textarea></p>';
 

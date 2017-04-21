@@ -413,7 +413,6 @@ class ColorManager {
 					
 				}
 			}
-			$this->voteManager->changeSession($_VOM);
 		} else {
 			if (($leader = $this->playerManager->getFactionLeader($color->id)) !== null) {
 				if (($candidate = $this->candidateManager->getByElectionAndPlayer($leader, $election)) !== null) {

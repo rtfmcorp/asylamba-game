@@ -17,7 +17,6 @@ if ($rLaw !== FALSE) {
 		if (($law = $lawManager->get($rLaw)) === null) {
 			throw new ErrorException('Cette loi n\'existe pas.');
 		}
-		$candidateManager->changeSession($_LAM);
 	} else {
 		throw new ErrorException('Vous n\'avez pas le droit d\'annuler cette loi.');
 	}

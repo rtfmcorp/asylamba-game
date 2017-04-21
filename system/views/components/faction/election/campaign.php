@@ -2,11 +2,7 @@
 # require
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-$electionManager = $this->getContainer()->get('demeter.election_manager');
 $session = $this->getContainer()->get('app.session');
-
-$S_ELM_ELC = $electionManager->getCurrentSession();
-$electionManager->changeSession($ELM_CAMPAIGN_TOKEN);
 
 echo '<div class="component profil">';
 	echo '<div class="head skin-1">';
@@ -25,5 +21,3 @@ echo '<div class="component profil">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-$electionManager->changeSession($S_ELM_ELC);

@@ -11,7 +11,6 @@ $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');
 $lawManager = $this->getContainer()->get('demeter.law_manager');
 $voteLawManager = $this->getContainer()->get('demeter.vote_law_manager');
-$candidateManager = $this->getContainer()->get('demeter.candidate_manager');
 
 $rLaw = $request->query->get('rlaw');
 $choice = $request->query->get('choice');
@@ -36,8 +35,6 @@ if ($rLaw !== FALSE && $choice !== FALSE) {
 		} else {
 			throw new ErrorException('Cette loi n\'existe pas.');
 		}
-
-		$candidateManager->changeSession($_LAM);
 	} else {
 		throw new ErrorException('Vous n\'avez pas le droit de voter.');
 	}

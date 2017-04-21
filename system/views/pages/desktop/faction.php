@@ -343,14 +343,10 @@ echo '<div id="content">';
 				} else {
 					include COMPONENT . 'default.php';
 				}
-
-				$candidateManager->changeSession($S_CAM_1);
 			} else {
 				$response->redirect('faction');
 			}
 		} elseif ($faction->electionStatement == Color::ELECTION) {
-			$S_VOM_1 = $voteManager->getCurrentSession();
-
 			$election = $electionManager->getFactionLastElection($faction->id);
 
 			$candidates = $candidateManager->getByElection($election);
@@ -439,8 +435,6 @@ echo '<div id="content">';
 			} else {
 				include COMPONENT . 'default.php';
 			}
-
-			$voteManager->changeSession($S_VOM_1);
 		}
 	} elseif ($request->query->get('view') == 'player') {
 
