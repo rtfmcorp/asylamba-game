@@ -381,6 +381,7 @@ class OrbitalBaseManager {
 
 		$this->entityManager->persist($orbitalBase);
 		$this->entityManager->flush($orbitalBase);
+		\Asylamba\Classes\Daemon\Server::debug('After repo - '. $orbitalBase->getId());
 		
 		$orbitalBase->technoQueueManager = $this->technologyQueueManager->getFirstSession();
 		$orbitalBase->shippingManager = $this->commercialShippingManager->getFirstSession();
@@ -499,13 +500,8 @@ class OrbitalBaseManager {
 				$playerBonus = $this->playerBonusManager->getBonusByPlayer($player);
 				$this->playerBonusManager->load($playerBonus);
 
-				# RESOURCES
 				foreach ($hours as $key => $hour) {
 					$this->ctc->add($hour, $this, 'uResources', $orbitalBase, array($orbitalBase, $playerBonus));
-				}
-
-				# ANTI-SPY
-				foreach ($hours as $key => $hour) {
 					$this->ctc->add($hour, $this, 'uAntiSpy', $orbitalBase, array($orbitalBase));
 				}
 			}

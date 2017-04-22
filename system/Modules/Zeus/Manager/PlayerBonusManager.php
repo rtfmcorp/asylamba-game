@@ -61,7 +61,7 @@ class PlayerBonusManager
 	 * @param Player $player
 	 * @return PlayerBonus
 	 */
-	public function getBonusByPlayer($player)
+	public function getBonusByPlayer(Player $player)
 	{
 		$playerBonus = new PlayerBonus();
 		$playerBonus->rPlayer = $player->id;

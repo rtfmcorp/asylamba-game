@@ -105,6 +105,46 @@ class PlaceRepository extends AbstractRepository
 	}
 	
 	/**
+	 * @return array
+	 */
+	public function getPlayerPlaces()
+	{
+		$statement = $this->select('WHERE p.rPlayer IS NOT NULL AND p.typeOfPlace = ' . Place::TERRESTRIAL);
+		
+		$data = [];
+		while ($row = $statement->fetch()) {
+			if (($p = $this->unitOfWork->getObject(Place::class, $row['id'])) !== null) {
+				$data[] = $p;
+				continue;
+			}
+			$place = $this->format($row);
+			$this->unitOfWork->addObject($place);
+			$data[] = $place;
+		}
+		return $data;
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getNpcPlaces()
+	{
+		$statement = $this->select('WHERE p.rPlayer IS NULL AND typeOfPlace = ' . Place::TERRESTRIAL);
+		
+		$data = [];
+		while ($row = $statement->fetch()) {
+			if (($p = $this->unitOfWork->getObject(Place::class, $row['id'])) !== null) {
+				$data[] = $p;
+				continue;
+			}
+			$place = $this->format($row);
+			$this->unitOfWork->addObject($place);
+			$data[] = $place;
+		}
+		return $data;
+	}
+	
+	/**
 	 * @param string $search
 	 * @return array
 	 */

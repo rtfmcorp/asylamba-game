@@ -21,6 +21,7 @@ class RealTimeActionScheduler
 	
 	public function init()
 	{
+		$this->container->get('ares.commander_manager')->scheduleMovements();
 		$this->container->get('athena.building_queue_manager')->scheduleActions();
 		//$this->container->get('athena.recycling_mission_manager')->scheduleActions();
 		$this->container->get('athena.ship_queue_manager')->scheduleActions();
