@@ -91,7 +91,7 @@ class PlaceManager {
 		return $this->entityManager->getRepository(Place::class)->getNpcPlaces();
 	}
 
-	public function uDanger() {
+	public function updateNpcPlaces() {
 		$places = $this->getNpcPlaces();
 		$now   = Utils::now();
 		
@@ -104,17 +104,15 @@ class PlaceManager {
 			$place->uPlace = $now;
 
 			foreach ($hours as $hour) {
-				$place->danger += Place::REPOPDANGER;
-
-				if ($place->danger > $place->maxDanger) {
-					$place->danger = $place->maxDanger;
-				}
+				$this->updateDanger($place);
+				$this->updateResources($place);
 			}
 		}
 		$this->entityManager->flush(Place::class);
+		$this->entityManager->clear(Place::class);
 	}
 
-	public function uResources() {
+	public function updatePlayerPlaces() {
 		$places = $this->getPlayerPlaces();
 		$now   = Utils::now();
 		
@@ -127,15 +125,36 @@ class PlaceManager {
 			$place->uPlace = $now;
 			
 			foreach ($hours as $hour) {
-				$maxResources = ceil($place->population / Place::COEFFPOPRESOURCE) * Place::COEFFMAXRESOURCE * ($place->maxDanger + 1);
-				$place->resources += floor(Place::COEFFRESOURCE * $place->population);
-
-				if ($place->resources > $maxResources) {
-					$place->resources = $maxResources;
-				}
+				$this->updateResources($place);
 			}
 		}
 		$this->entityManager->flush(Place::class);
+		$this->entityManager->clear(Place::class);
+	}
+	
+	/**
+	 * @param Place $place
+	 */
+	protected function updateDanger(Place $place)
+	{
+		$place->danger += Place::REPOPDANGER;
+
+		if ($place->danger > $place->maxDanger) {
+			$place->danger = $place->maxDanger;
+		}
+	}
+	
+	/**
+	 * @param Place $place
+	 */
+	protected function updateResources(Place $place)
+	{
+		$maxResources = ceil($place->population / Place::COEFFPOPRESOURCE) * Place::COEFFMAXRESOURCE * ($place->maxDanger + 1);
+		$place->resources += floor(Place::COEFFRESOURCE * $place->population);
+
+		if ($place->resources > $maxResources) {
+			$place->resources = $maxResources;
+		}
 	}
 
 	/**
