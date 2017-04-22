@@ -45,6 +45,7 @@ CREATE TABLE `color` (
   `rankingPoints` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `points` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `sectors` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
+  `regime` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
   `electionStatement` tinyint(4) NOT NULL DEFAULT '0',
   `isClosed` tinyint(4) NOT NULL DEFAULT '1',
   `isInGame` tinyint(4) NOT NULL DEFAULT '0',

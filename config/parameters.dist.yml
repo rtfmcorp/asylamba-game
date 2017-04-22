@@ -1,8 +1,10 @@
 ---
 parameters:
     database_host: 127.0.0.1
+    # database_host: asylamba_mysql     # with docker
     database_name: asylamba_game
     database_user: asylamba
+    # database_user: root               # with docker (temporary)
     database_password: asylamba
     database_admin_user: root
     database_admin_password: asylamba
