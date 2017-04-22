@@ -709,7 +709,7 @@ class CommanderManager
 		$commanderPlace = $this->placeManager->get($commander->rBase);
 		$commanderPlayer = $this->playerManager->get($commander->rPlayer);
 		$commanderColor = $this->colorManager->get($commanderPlayer->rColor);
-		$baseCommanders = $this->getBaseCommanders($placeBase->getId());
+		$baseCommanders = $this->getBaseCommanders($place->getId());
 		$playerBonus = $this->playerBonusManager->getBonusByPlayer($commanderPlayer);
 		$this->playerBonusManager->load($playerBonus);
 		# conquete
