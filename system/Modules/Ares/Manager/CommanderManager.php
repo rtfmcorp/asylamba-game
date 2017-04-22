@@ -65,6 +65,13 @@ class CommanderManager
 	protected $eventDispatcher;
 	/** @var int **/
 	protected $commanderBaseLevel;
+	
+	protected $actions = [
+		Commander::MOVE => 'uChangeBase',
+		Commander::LOOT => 'uLoot',
+		Commander::COLO => 'uConquer',
+		Commander::BACK => 'uReturnBase'
+	];
 
 	/**
 	 * @param EntityManager $entityManager
@@ -200,16 +207,10 @@ class CommanderManager
 	public function scheduleMovements()
 	{
 		$commanders = $this->getMovingCommanders();
-		$actions = [
-			Commander::MOVE => 'uChangeBase',
-			Commander::LOOT => 'uLoot',
-			Commander::COLO => 'uConquer',
-			Commander::BACK => 'uReturnBase'
-		];
 		foreach ($commanders as $commander) {
 			$this->scheduler->schedule(
 				'ares.commander_manager',
-				$actions[$commander->getTravelType()],
+				$this->actions[$commander->getTravelType()],
 				$commander,
 				$commander->dArrival
 			);
@@ -386,7 +387,12 @@ class CommanderManager
 				$this->getEventInfo($commander)
 			);
 		}
-
+		$this->scheduler->schedule(
+			'ares.commander_manager',
+			$this->actions[$travelType],
+			$commander,
+			$commander->dArrival
+		);
 		return TRUE;
 	}
 	
