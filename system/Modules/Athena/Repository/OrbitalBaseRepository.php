@@ -181,7 +181,9 @@ class OrbitalBaseRepository extends AbstractRepository {
 			'u_orbital_base' => $orbitalBase->uOrbitalBase,
 			'created_at' => $orbitalBase->getDCreation()
 		]);
+		\Asylamba\Classes\Daemon\Server::debug('Inserted - '. $this->connection->lastInsertId());
 		$orbitalBase->setRPlace($this->connection->lastInsertId());
+		\Asylamba\Classes\Daemon\Server::debug('After insert - '. $orbitalBase->getId());
 	}
 	
 	public function update($orbitalBase)

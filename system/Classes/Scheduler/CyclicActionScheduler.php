@@ -23,6 +23,9 @@ class CyclicActionScheduler
 	
 	public function init()
 	{
+		$this->schedule('ares.commander_manager', 'uExperienceInSchool');
+		$this->schedule('gaia.place_manager', 'updatePlayerPlaces');
+		$this->schedule('gaia.place_manager', 'updateNpcPlaces');
 		$this->schedule('zeus.player_manager', 'updatePlayersCredits');
 	}
 	

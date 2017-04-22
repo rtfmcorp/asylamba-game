@@ -31,18 +31,7 @@ services:
         class: Asylamba\Modules\Gaia\Manager\PlaceManager
         arguments:
             - "@entity_manager"
-            - "@ares.commander_manager"
-            - "@ares.fight_manager"
-            - "@ares.report_manager"
-            - "@zeus.player_manager"
-            - "@zeus.player_bonus_manager"
-            - "@athena.orbital_base_manager"
-            - "@athena.commercial_route_manager"
-            - "@demeter.color_manager"
-            - "@athena.recycling_mission_manager"
             - "@hermes.notification_manager"
-            - "@ctc"
-            - "@app.session"
             
     gaia.sector_manager:
         class: Asylamba\Modules\Gaia\Manager\SectorManager

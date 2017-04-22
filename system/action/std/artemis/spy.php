@@ -71,7 +71,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 					$sr->enemyLevel = 1;
 
 					# generate a commander for the place
-					$commander = $placeManager->createVirtualCommander($place);
+					$commander = $commanderManager->createVirtualCommander($place);
 
 					$commandersArray = array();
 					$commandersArray[0]['name'] = $commander->name;

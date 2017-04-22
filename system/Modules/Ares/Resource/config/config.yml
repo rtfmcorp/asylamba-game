@@ -19,12 +19,16 @@ services:
         arguments:
             - "@entity_manager"
             - "@ares.fight_manager"
+            - "@ares.report_manager"
             - "@athena.orbital_base_manager"
             - "@zeus.player_manager"
             - "@zeus.player_bonus_manager"
             - "@gaia.place_manager"
+            - "@demeter.color_manager"
+            - "@athena.recycling_mission_manager"
             - "@app.session"
-            - "@ctc"
+            - "@realtime_action_scheduler"
+            - "@event_dispatcher"
             - "%ares.commander.base_level"
            
     ares.fight_manager:
