@@ -43,7 +43,7 @@ if ($program !== FALSE) {
 
 				$election = new Election();
 				$election->rColor = $faction->id;
-				$election->dElection = new \DateTime('+' . Color::PUTSCHTIME . ' second');
+				$election->dElection = (new \DateTime('+' . Color::PUTSCHTIME . ' second'))->format('Y-m-d H:i:s');
 
 				$electionManager->add($election);
 
@@ -77,7 +77,7 @@ if ($program !== FALSE) {
 				$vote->dVotation = Utils::now();
 				$voteManager->add($vote);
 
-				$factionPlayers = $playerManager->getFactionPlayers($colorManager->get()->id);
+				$factionPlayers = $playerManager->getFactionPlayers($faction->id);
 
 				foreach ($factionPlayers as $factionPlayer) {
 					if ($factionPlayer->getStatement() !== Player::ACTIVE) {
@@ -94,6 +94,7 @@ if ($program !== FALSE) {
 					$notificationManager->add($notif);
 				}
 				$session->addFlashbag('Coup d\'état lancé.', Flashbag::TYPE_SUCCESS);
+				$this->getContainer()->get('entity_manager')->flush();
 			} else {
 				throw new ErrorException('Vous vivez dans une faction démocratique.');
 			}
