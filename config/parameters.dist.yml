@@ -36,8 +36,12 @@ parameters:
     #gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV1
     #game.available_factions: [1, 2, 6, 7, 11]
 
-    # s13 - renaissance - full map, 8 bridges
+    # s13 - renaissance - full map, 8 bridges (Falmala version)
     gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV5
     game.available_factions: [2, 3, 6, 7]
+
+    # s14 - [name] - 1/4 of the map, 2 bridges (Falmala version)
+    #gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV6
+    #game.available_factions: [1, 2, 3, 4, 7]
     
     environment: dev
