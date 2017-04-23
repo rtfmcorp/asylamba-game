@@ -1,4 +1,5 @@
 <?php
-# find des trucs
+# Print sectors data (and generates barycentres)
 
-GalaxyConfiguration::fillSectorsData();
+$galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
+$galaxyConfiguration->fillSectorsData();

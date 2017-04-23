@@ -1,10 +1,6 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
-
-$S_PLM_1 = ASM::$sys->getCurrentSession();
-ASM::$sys->newSession(FALSE);
-ASM::$sys->load([], [], []);
+$systems = $this->getContainer()->get('gaia.system_manager')->getAll();
 
 # functions
 function getPosition($type, $x, $y, $multiply = 4) {
@@ -73,8 +69,7 @@ function getPosition($type, $x, $y, $multiply = 4) {
 
 <?php
 echo '<div id="lieux">';
-	for ($i = 0; $i < ASM::$sys->size(); $i++) {
-		$system = ASM::$sys->get($i);
+	foreach ($systems as $system) {
 
 		switch($system->typeOfSystem) {
 			case 1: echo '<div class="lieu l1" ' . getPosition($system->typeOfSystem, $system->xPosition, $system->yPosition) . '></div>'; break;
