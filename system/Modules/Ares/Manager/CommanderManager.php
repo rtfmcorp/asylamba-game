@@ -37,6 +37,8 @@ use Asylamba\Modules\Gaia\Resource\SquadronResource;
 
 use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
+use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
+
 class CommanderManager
 {
 	/** @var EntityManager **/
@@ -696,8 +698,8 @@ class CommanderManager
 					$this->placeManager->sendNotif($place, Place::CHANGELOST, $commander);
 				}
 			}
-			$this->entityManager->flush();
 		}
+		$this->entityManager->flush();
 	}
 
 	# conquest
