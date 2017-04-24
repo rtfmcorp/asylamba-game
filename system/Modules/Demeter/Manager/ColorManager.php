@@ -207,8 +207,7 @@ class ColorManager {
 				$datetime->modify('+' . $faction->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME . ' second');
 				$date = $datetime->format('Y-m-d H:i:s');
 				$this->dLastElection = $date;
-				$this->ballot($faction, $date, $this->electionManager->getFactionLastElection($faction->id));
-				$this->scheduler->schedule('demeter.color_manager', 'uCampaign', $faction, $date);
+				$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $date);
 			}
 		}
 		$this->entityManager->flush(Color::class);
@@ -240,7 +239,7 @@ class ColorManager {
 				$date = $datetime->format('Y-m-d H:i:s');
 
 				$faction->dLastElection = $date;
-				$this->ballot($faction, $date, $this->electionManager->getFactionLastElection($faction->id));
+				$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $date);
 			}
 		}
 		$factions = $this->entityManager->getRepository(Color::class)->getByRegimeAndElectionStatement(
@@ -253,7 +252,7 @@ class ColorManager {
 				$date = $datetime->format('Y-m-d H:i:s');
 
 				$faction->dLastElection = $date;
-				$this->ballot($faction, $date, $this->electionManager->getFactionLastElection($faction->id));
+				$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $date);
 			}
 		}
 		$this->entityManager->flush(Color::class);
@@ -331,9 +330,10 @@ class ColorManager {
 		$this->entityManager->flush(Player::class);
 	}
 
-	private function ballot(Color $color, $date, $election) {
-		$token_ctc = $this->ctc->createContext('Color');
-		$chiefId = (($leader = $this->playerManager->getFactionLeader($color->id)) !== null) ? $leader->getId() : false;
+	private function ballot($factionId) {
+		$faction = $this->get($factionId);
+		$election = $this->electionManager->getFactionLastElection($faction->id);
+		$chiefId = (($leader = $this->playerManager->getFactionLeader($faction->id)) !== null) ? $leader->getId() : false;
 
 		$votes = $this->voteManager->getElectionVotes($election);
 		
@@ -368,7 +368,7 @@ class ColorManager {
 		}
 		reset($listCandidate);
 
-		$convPlayerID = $this->playerManager->getFactionAccount($color->id)->id;
+		$convPlayerID = $this->playerManager->getFactionAccount($faction->id)->id;
 
 		$S_CVM = $this->conversationManager->getCurrentSession();
 		$this->conversationManager->newSession();
@@ -379,19 +379,19 @@ class ColorManager {
 		
 		$this->conversationManager->changeSession($S_CVM);
 
-		if ($color->regime == Color::DEMOCRATIC) {
+		if ($faction->regime == Color::DEMOCRATIC) {
 			if (count($ballot) > 0) {
 				arsort($ballot);
 				reset($ballot);
 				
-				$governmentMembers = $this->playerManager->getGovernmentMembers($color->getId());
+				$governmentMembers = $this->playerManager->getGovernmentMembers($faction->getId());
 				$newChief = $this->playerManager->get(key($ballot));
 
-				$this->ctc->add($date, $this, 'uMandate', $color, array($color, $governmentMembers, $newChief, $chiefId, TRUE, $conv, $convPlayerID, $listCandidate));
+				$this->uMandate($faction, $governmentMembers, $newChief, $chiefId, TRUE, $conv, $convPlayerID, $listCandidate);
 			} else {
-				$this->ctc->add($date, $this, 'uMandate', $color, array($color, 0, 0, $chiefId, FALSE, $conv, $convPlayerID, $listCandidate));
+				$this->uMandate($faction, 0, 0, $chiefId, FALSE, $conv, $convPlayerID, $listCandidate);
 			}
-		} elseif ($color->regime == Color::ROYALISTIC) {
+		} elseif ($faction->regime == Color::ROYALISTIC) {
 			if (count($ballot) > 0) {
 				arsort($ballot);
 				reset($ballot);
@@ -400,21 +400,21 @@ class ColorManager {
 					next($ballot);
 				}
 
-				if (((current($ballot) / ($color->activePlayers + 1)) * 100) >= Color::PUTSCHPERCENTAGE) {
+				if (((current($ballot) / ($faction->activePlayers + 1)) * 100) >= Color::PUTSCHPERCENTAGE) {
 				
-					$governmentMembers = $this->playerManager->getGovernmentMembers($color->getId());
+					$governmentMembers = $this->playerManager->getGovernmentMembers($faction->getId());
 					$newChief = $this->playerManager->get(key($ballot));
 
-					$this->ctc->add($date, $this, 'uMandate', $color, array($color, $governmentMembers, $newChief, $chiefId, TRUE, $conv, $convPlayerID, $listCandidate));
+					$this->uMandate($faction, $governmentMembers, $newChief, $chiefId, TRUE, $conv, $convPlayerID, $listCandidate);
 				} else {
 					$looser = $this->playerManager->get(key($ballot));
 					
-					$this->ctc->add($date, $this, 'uMandate', $color, array($color, 0, $looser, $chiefId, FALSE, $conv, $convPlayerID, $listCandidate));
+					$this->uMandate($faction, 0, $looser, $chiefId, FALSE, $conv, $convPlayerID, $listCandidate);
 					
 				}
 			}
 		} else {
-			if (($leader = $this->playerManager->getFactionLeader($color->id)) !== null) {
+			if (($leader = $this->playerManager->getFactionLeader($faction->id)) !== null) {
 				if (($candidate = $this->candidateManager->getByElectionAndPlayer($leader, $election)) !== null) {
 					if (rand(0, 1) == 0) {
 						$ballot = array();
@@ -429,15 +429,14 @@ class ColorManager {
 					next($ballot);
 				}
 				
-				$governmentMembers = $this->playerManager->getGovernmentMembers($color->getId());
+				$governmentMembers = $this->playerManager->getGovernmentMembers($faction->getId());
 				$newChief = $this->playerManager->get(key($ballot));
 
-				$this->ctc->add($date, $this, 'uMandate', $color, array($color, $governmentMembers, $newChief, $chiefId, TRUE, $conv, $convPlayerID, $listCandidate));
+				$this->uMandate($faction, $governmentMembers, $newChief, $chiefId, TRUE, $conv, $convPlayerID, $listCandidate);
 			} else {
-				$this->ctc->add($date, $this, 'uMandate', $color, array($color, 0, 0, $chiefId, FALSE, $conv, $convPlayerID, $listCandidate));
+				$this->uMandate($faction, 0, 0, $chiefId, FALSE, $conv, $convPlayerID, $listCandidate);
 			}
 		}
-		$this->ctc->applyContext($token_ctc);
 	}
 
 	/**
@@ -448,14 +447,6 @@ class ColorManager {
 		$factionPlayers = $this->playerManager->getFactionPlayers($faction->getId());
 		$this->updateStatus($faction, $factionPlayers);
 		
-		if ($faction->regime === Color::ROYALISTIC) {
-			/*$date = new DateTime($this->dLastElection);
-			$date->modify('+' . $this->mandateDuration . ' second');
-			$date = $date->format('Y-m-d H:i:s');
-			$this->dLastElection = $date;*/
-			$this->entityManager->flush($faction);
-			return;
-		}
 		$election = new Election();
 		$election->rColor = $faction->id;
 		// @WARNING : DEFAULT VALUE
@@ -470,7 +461,7 @@ class ColorManager {
 		if ($faction->regime === Color::DEMOCRATIC) {
 			$this->scheduler->schedule('demeter.color_manager', 'uElection', $faction, $election->dElection);
 		} elseif ($faction->regime === Color::THEOCRATIC) {
-			$this->ballot($faction, $election->dElection, $election);
+			$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $election->dElection);
 		}
 		$this->entityManager->flush($election);
 		$this->entityManager->flush($faction);
@@ -482,6 +473,8 @@ class ColorManager {
 	public function uElection($factionId) {
 		$faction = $this->get($factionId);
 		$faction->electionStatement = Color::ELECTION;
+		$election = $this->electionManager->getFactionLastElection($factionId);
+		$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $election->dElection);
 		$this->entityManager->flush($faction);
 	}
 
@@ -624,8 +617,8 @@ class ColorManager {
 					$this->notificationManager->add($notif);
 				}
 			}
-			$this->entityManager->flush();
 		}
+		$this->entityManager->flush();
 	}
 
 	public function uVoteLaw(Color $color, $law, $ballot) {
