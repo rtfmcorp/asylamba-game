@@ -691,7 +691,7 @@ class CommanderManager
 				if ($place->rPlayer == $commander->rPlayer) {
 					# si c'est une de nos planètes
 					# on tente de se poser
-					$this->uChangeBase($place, $commander, $commanderPlace, $playerBonus);
+					$this->uChangeBase($commander->id);
 				} else {
 					# si c'est une base alliée
 					# on repart
@@ -840,7 +840,7 @@ class CommanderManager
 				if ($place->rPlayer == $commander->rPlayer) {
 					# si c'est une de nos planètes
 					# on tente de se poser
-					$this->uChangeBase($place, $commander, $commanderPlace, $playerBonus);
+					$this->uChangeBase($commander->id);
 				} else {
 					# si c'est une base alliée
 					# on repart
