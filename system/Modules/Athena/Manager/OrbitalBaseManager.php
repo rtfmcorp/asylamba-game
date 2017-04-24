@@ -381,7 +381,6 @@ class OrbitalBaseManager {
 
 		$this->entityManager->persist($orbitalBase);
 		$this->entityManager->flush($orbitalBase);
-		\Asylamba\Classes\Daemon\Server::debug('After repo - '. $orbitalBase->getId());
 		
 		$orbitalBase->technoQueueManager = $this->technologyQueueManager->getFirstSession();
 		$orbitalBase->shippingManager = $this->commercialShippingManager->getFirstSession();

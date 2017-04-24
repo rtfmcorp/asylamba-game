@@ -34,8 +34,11 @@ use Asylamba\Modules\Ares\Model\LiveReport;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Gaia\Resource\SquadronResource;
+use Asylamba\Modules\Demeter\Model\Color;
 
 use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
+
+use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 
 class CommanderManager
 {
@@ -688,7 +691,7 @@ class CommanderManager
 				if ($place->rPlayer == $commander->rPlayer) {
 					# si c'est une de nos planètes
 					# on tente de se poser
-					$this->uChangeBase($place, $commander, $commanderPlace, $playerBonus);
+					$this->uChangeBase($commander->id);
 				} else {
 					# si c'est une base alliée
 					# on repart
@@ -696,8 +699,8 @@ class CommanderManager
 					$this->placeManager->sendNotif($place, Place::CHANGELOST, $commander);
 				}
 			}
-			$this->entityManager->flush();
 		}
+		$this->entityManager->flush();
 	}
 
 	# conquest
@@ -709,7 +712,7 @@ class CommanderManager
 		$commanderPlace = $this->placeManager->get($commander->rBase);
 		$commanderPlayer = $this->playerManager->get($commander->rPlayer);
 		$commanderColor = $this->colorManager->get($commanderPlayer->rColor);
-		$baseCommanders = $this->getBaseCommanders($placeBase->getId());
+		$baseCommanders = $this->getBaseCommanders($place->getId());
 		$playerBonus = $this->playerBonusManager->getBonusByPlayer($commanderPlayer);
 		$this->playerBonusManager->load($playerBonus);
 		# conquete
@@ -837,7 +840,7 @@ class CommanderManager
 				if ($place->rPlayer == $commander->rPlayer) {
 					# si c'est une de nos planètes
 					# on tente de se poser
-					$this->uChangeBase($place, $commander, $commanderPlace, $playerBonus);
+					$this->uChangeBase($commander->id);
 				} else {
 					# si c'est une base alliée
 					# on repart
@@ -884,7 +887,6 @@ class CommanderManager
 				$commander->rBase = $place->id;
 				$commander->statement = Commander::AFFECTED;
 				$commander->line = 2;
-				\Asylamba\Classes\Daemon\Server::debug('Id - '. $ob->getId());
 
 				# ajout de la place en session
 				if ($this->session->get('playerId') == $commander->getRPlayer()) {
@@ -935,10 +937,12 @@ class CommanderManager
 		$commander = $this->get($commanderId);
 		$place = $this->placeManager->get($commander->rDestinationPlace);
 		$commanderBase = $this->orbitalBaseManager->get($commander->rBase);
-		$commander->travelType = NULL;
-		$commander->travelLength = NULL;
-		$commander->dArrival = NULL;
-
+		$commander->travelType = null;
+		$commander->travelLength = null;
+		$commander->dStart = null;
+		$commander->dArrival = null;
+		$commander->rStartPlace = null;
+		$commander->rDestinationPlace = null;
 		$commander->statement = Commander::AFFECTED;
 
 		$this->placeManager->sendNotif($place, Place::COMEBACK, $commander);

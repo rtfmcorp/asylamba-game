@@ -42,7 +42,10 @@ class Squadron {
 	public function getDLastModification()	{ return $this->dLAstModification; } 
 
 	public function getShip($key)			{ return $this->squadron[$key]; }
-	public function getNbrShipByType($i)	{ return $this->arrayOfShips[$i]; }
+	public function getNbrShipByType($i)
+	{
+		return $this->arrayOfShips[$i];
+	}
 
 	public function getPev() {
 		$pev = 0;

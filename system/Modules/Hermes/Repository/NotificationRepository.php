@@ -99,7 +99,6 @@ class NotificationRepository extends AbstractRepository
     
     public function update($notification)
     {
-		\Asylamba\Classes\Daemon\Server::debug($notification);
         $statement = $this->connection->prepare(
             'UPDATE notification SET id = ?,
                 rPlayer = ?,

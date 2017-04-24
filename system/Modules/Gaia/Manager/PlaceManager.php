@@ -163,7 +163,7 @@ class PlaceManager {
 	 * @param Commander $commander
 	 * @param Report $report
 	 */
-	private function sendNotif(Place $place, $case, Commander $commander, $report = NULL) {
+	public function sendNotif(Place $place, $case, Commander $commander, $report = NULL) {
 		switch ($case) {
 			case Place::CHANGESUCCESS:
 				$notif = new Notification();
@@ -472,7 +472,7 @@ class PlaceManager {
 	 * @param Commander $commander
 	 * @param array $reports
 	 */
-	private function sendNotifForConquest(Place $place, $case, $commander, $reports = array()) {
+	public function sendNotifForConquest(Place $place, $case, $commander, $reports = array()) {
 		$nbrBattle = count($reports);
 		switch($case) {
 			case Place::CONQUERPLAYERWHITBATTLESUCCESS:
