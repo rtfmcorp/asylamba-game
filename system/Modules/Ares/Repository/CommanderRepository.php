@@ -427,6 +427,9 @@ class CommanderRepository extends AbstractRepository {
 			WHERE id = :id'
 		);
 		foreach($commander->getArmy() as $squadron) {
+			if ($squadron->getId() === 0) {
+				continue;
+			}
 			$squadronStatement->execute([
 				'commander_id' => $squadron->getRCommander(),
 				'ship_0' => $squadron->getNbrShipByType(0),
@@ -447,14 +450,11 @@ class CommanderRepository extends AbstractRepository {
 		if ($commander->getLevel() > $commander->getSizeArmy()) {
 			//on créé un nouveau squadron avec rCommander correspondant
 			$nbrSquadronToCreate = $commander->getLevel() - $commander->getSizeArmy();
-			$qr = 'INSERT INTO squadron (rCommander, dCreation) VALUES (' . $commander->getId() . ', NOW())';
-			$i = 1;
-			while ($i < $nbrSquadronToCreate) {
-					$qr .= ',(' . $commander->getId() . ', NOW())';
-					$i++;
+			$qr = $this->connection->prepare('INSERT INTO squadron (rCommander, dCreation) VALUES (?, NOW())');
+			for ($i = 0; $i < $nbrSquadronToCreate; $i++) {
+				$qr->execute([$commander->getId()]);
+				$commander->squadronsIds[] = $this->connection->lastInsertId();
 			}
-			$qr = $this->connection->prepare($qr);
-			$qr->execute();
 		}
 	}
 	
