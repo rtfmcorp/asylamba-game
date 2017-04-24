@@ -34,6 +34,7 @@ use Asylamba\Modules\Ares\Model\LiveReport;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Gaia\Resource\SquadronResource;
+use Asylamba\Modules\Demeter\Model\Color;
 
 use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
