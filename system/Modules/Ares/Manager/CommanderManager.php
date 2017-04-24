@@ -886,7 +886,6 @@ class CommanderManager
 				$commander->rBase = $place->id;
 				$commander->statement = Commander::AFFECTED;
 				$commander->line = 2;
-				\Asylamba\Classes\Daemon\Server::debug('Id - '. $ob->getId());
 
 				# ajout de la place en session
 				if ($this->session->get('playerId') == $commander->getRPlayer()) {
@@ -937,10 +936,12 @@ class CommanderManager
 		$commander = $this->get($commanderId);
 		$place = $this->placeManager->get($commander->rDestinationPlace);
 		$commanderBase = $this->orbitalBaseManager->get($commander->rBase);
-		$commander->travelType = NULL;
-		$commander->travelLength = NULL;
-		$commander->dArrival = NULL;
-
+		$commander->travelType = null;
+		$commander->travelLength = null;
+		$commander->dStart = null;
+		$commander->dArrival = null;
+		$commander->rStartPlace = null;
+		$commander->rDestinationPlace = null;
 		$commander->statement = Commander::AFFECTED;
 
 		$this->placeManager->sendNotif($place, Place::COMEBACK, $commander);
