@@ -84,7 +84,7 @@ if ($name !== FALSE AND $quantity !== FALSE) {
 					throw new ErrorException('envoi de crédits impossible - vous ne pouvez pas envoyer plus que ce que vous possédez');
 				}
 			} else {
-				if ($player !== null) {
+				if ($sender !== null) {
 					throw new ErrorException('envoi de crédits impossible - aucun intérêt d\'envoyer des crédits à vous-même !?');
 				} else {
 					throw new ErrorException('envoi de crédits impossible - erreur dans les joueurs');
