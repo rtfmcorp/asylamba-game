@@ -386,7 +386,7 @@ class OrbitalBaseManager {
 		$orbitalBase->shippingManager = $this->commercialShippingManager->getFirstSession();
 	}
 
-	public function changeOwnerById($id, $base, $newOwner, $recyclingSession, $baseCommanders) {
+	public function changeOwnerById($id, $base, $newOwner, $baseCommanders) {
 		if ($base->getId() == 0) {
 			throw new ErrorException('Cette base orbitale n\'existe pas !');
 		}
@@ -422,7 +422,8 @@ class OrbitalBaseManager {
 
 		# suppression des missions de recyclages ainsi que des logs de recyclages
 		$S_REM1 = $this->recyclingMissionManager->getCurrentSession();
-		$this->recyclingMissionManager->changeSession($recyclingSession);
+		$this->recyclingMissionManager->newSession();
+		$this->recyclingMissionManager->load(array('rBase' => $base->getId()));
 		for ($i = $this->recyclingMissionManager->size() - 1; $i >= 0; $i--) {
 			$this->recyclingLogManager->deleteAllFromMission($this->recyclingMissionManager->get($i)->id);
 			$this->recyclingMissionManager->deleteById($this->recyclingMissionManager->get($i)->id);

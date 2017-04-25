@@ -58,8 +58,6 @@ class CommanderManager
 	protected $placeManager;
 	/** @var ColorManager **/
 	protected $colorManager;
-	/** @var RecyclingMissionManager **/
-	protected $recyclingMissionManager;
 	/** @var Session **/
 	protected $session;
 	/** @var RealTimeActionScheduler **/
@@ -85,7 +83,6 @@ class CommanderManager
 	 * @param PlayerBonusManager $playerBonusManager
 	 * @param PlaceManager $placeManager
 	 * @param ColorManager $colorManager
-	 * @param RecyclingMissionManager $recyclingMissionManager
 	 * @param SessionWrapper $session
 	 * @param RealTimeActionScheduler $scheduler
 	 * @param EventDispatcher $eventDispatcher
@@ -100,7 +97,6 @@ class CommanderManager
 		PlayerBonusManager $playerBonusManager,
 		PlaceManager $placeManager,
 		ColorManager $colorManager,
-		RecyclingMissionManager $recyclingMissionManager,
 		SessionWrapper $session,
 		RealTimeActionScheduler $scheduler,
 		EventDispatcher $eventDispatcher,
@@ -114,7 +110,6 @@ class CommanderManager
 		$this->playerBonusManager = $playerBonusManager;
 		$this->placeManager = $placeManager;
 		$this->colorManager = $colorManager;
-		$this->recyclingMissionManager = $recyclingMissionManager;
 		$this->session = $session;
 		$this->scheduler = $scheduler;
 		$this->eventDispatcher = $eventDispatcher;
@@ -806,13 +801,8 @@ class CommanderManager
 					$place->playerColor = $commander->playerColor;
 					$place->rPlayer = $commander->rPlayer;
 
-					$S_REM_C1 = $this->recyclingMissionManager->getCurrentSession();
-					$this->recyclingMissionManager->newSession();
-					$this->recyclingMissionManager->load(array('rBase' => $place->id));
-					$S_REM_C2 = $this->recyclingMissionManager->getCurrentSession();
-					$this->recyclingMissionManager->changeSession($S_REM_C1);
 					# changer l'appartenance de la base (et de la place)
-					$this->orbitalBaseManager->changeOwnerById($place->id, $placeBase, $commander->getRPlayer(), $recyclingSession, $baseCommanders);
+					$this->orbitalBaseManager->changeOwnerById($place->id, $placeBase, $commander->getRPlayer(), $baseCommanders);
 					$place->commanders[] = $commander;
 
 					$commander->rBase = $place->id;
