@@ -12,8 +12,7 @@ $email = $request->request->get('email');
 $sponsorLink = GETOUT_ROOT . 'action/a-invitation/i-' . $session->get('playerId') . '/s-' . APP_ID;
 
 # sending email API call
-$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
-$ok = $api->sendMail2($email, APP_ID, API::TEMPLATE_SPONSORSHIP, $session->get('playerId'));
+$ok = $this->getContainer()->get('api')->sendMail2($email, APP_ID, API::TEMPLATE_SPONSORSHIP, $session->get('playerId'));
 
 if ($ok) {
 	$session->addFlashbag('Un e-mail va être envoyé dans quelques minutes à ' . $email, Flashbag::TYPE_SUCCESS);

@@ -80,6 +80,11 @@ services:
             - "@gaia.place_manager"
             - "@zeus.player_manager"
 
+    api:
+        class: Asylamba\Classes\Worker\API
+        arguments:
+            - "@security"
+
     security:
         class: Asylamba\Classes\Library\Security
         arguments:
