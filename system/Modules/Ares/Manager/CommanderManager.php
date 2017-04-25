@@ -178,13 +178,7 @@ class CommanderManager
 	 */
 	public function getIncomingAttacks($places)
 	{
-		$commanders = $this->entityManager->getRepository(Commander::class)->getIncomingAttacks($places);
-		
-		foreach($commanders as $commander) {
-			$this->uCommander($commander);
-		}
-		
-		return $commanders;
+		return $this->entityManager->getRepository(Commander::class)->getIncomingAttacks($places);
 	}
 	
 	/**
@@ -193,13 +187,7 @@ class CommanderManager
 	 */
 	public function getIncomingCommanders($place)
 	{
-		$commanders = $this->entityManager->getRepository(Commander::class)->getIncomingCommanders($place);
-		
-		foreach($commanders as $commander) {
-			$this->uCommander($commander);
-		}
-		
-		return $commanders;
+		return $this->entityManager->getRepository(Commander::class)->getIncomingCommanders($place);
 	}
 	
 	public function scheduleMovements()
