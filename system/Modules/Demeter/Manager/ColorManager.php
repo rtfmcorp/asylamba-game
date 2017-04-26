@@ -192,25 +192,18 @@ class ColorManager {
 			[Color::MANDATE]
 		);
 		foreach ($factions as $faction) {
-			if (Utils::interval($faction->dLastElection, Utils::now(), 's') > $faction->mandateDuration) {
-				$date = new \DateTime($faction->dLastElection);
-				$date->modify('+' . $faction->mandateDuration . ' second');
-				$this->scheduler->schedule('demeter.color_manager', 'uCampaign', $faction, $date->format('Y-m-d H:i:s'));
-			}
+			$date = new \DateTime($faction->dLastElection);
+			$date->modify('+' . $faction->mandateDuration . ' second');
+			$this->scheduler->schedule('demeter.color_manager', 'uCampaign', $faction, $date->format('Y-m-d H:i:s'));
 		}
 		$factions = $this->entityManager->getRepository(Color::class)->getByRegimeAndElectionStatement(
 			[Color::ROYALISTIC], [Color::ELECTION]
 		);
 		foreach ($factions as $faction) {
-			if (Utils::interval($faction->dLastElection, Utils::now(), 's') > Color::PUTSCHTIME) {
-				$datetime = new \DateTime($faction->dLastElection);
-				$datetime->modify('+' . $faction->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME . ' second');
-				$date = $datetime->format('Y-m-d H:i:s');
-				$this->dLastElection = $date;
-				$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $date);
-			}
+			$datetime = new \DateTime($faction->dLastElection);
+			$datetime->modify('+' . Color::PUTSCHTIME . ' second');
+			$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $datetime->format('Y-m-d H:i:s'));
 		}
-		$this->entityManager->flush(Color::class);
 	}
 	
 	public function scheduleElections()
@@ -219,11 +212,9 @@ class ColorManager {
 			[Color::DEMOCRATIC], [Color::CAMPAIGN]
 		);
 		foreach ($factions as $faction) {
-			if (Utils::interval($faction->dLastElection, Utils::now(), 's') > $faction->mandateDuration + Color::CAMPAIGNTIME) {
-				$date = new \DateTime($faction->dLastElection);
-				$date->modify('+' . $faction->mandateDuration . ' second');
-				$this->scheduler->schedule('demeter.color_manager', 'uElection', $faction, $date->format('Y-m-d H:i:s'));
-			}
+			$date = new \DateTime($faction->dLastElection);
+			$date->modify('+' . $faction->mandateDuration + Color::CAMPAIGNTIME . ' second');
+			$this->scheduler->schedule('demeter.color_manager', 'uElection', $faction, $date->format('Y-m-d H:i:s'));
 		}
 	}
 	
@@ -233,27 +224,23 @@ class ColorManager {
 			[Color::DEMOCRATIC], [Color::ELECTION]
 		);
 		foreach ($factions as $faction) {
-			if (Utils::interval($faction->dLastElection, Utils::now(), 's') > $faction->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME) {
-				$datetime = new \DateTime($faction->dLastElection);
-				$datetime->modify('+' . $faction->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME . ' second');
-				$date = $datetime->format('Y-m-d H:i:s');
+			$datetime = new \DateTime($faction->dLastElection);
+			$datetime->modify('+' . $faction->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME . ' second');
+			$date = $datetime->format('Y-m-d H:i:s');
 
-				$faction->dLastElection = $date;
-				$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $date);
-			}
+			$faction->dLastElection = $date;
+			$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $date);
 		}
 		$factions = $this->entityManager->getRepository(Color::class)->getByRegimeAndElectionStatement(
 			[Color::THEOCRATIC], [Color::CAMPAIGN, Color::ELECTION]
 		);
 		foreach ($factions as $faction) {
-			if (Utils::interval($faction->dLastElection, Utils::now(), 's') > $faction->mandateDuration + Color::CAMPAIGNTIME) {
-				$datetime = new \DateTime($faction->dLastElection);
-				$datetime->modify('+' . $faction->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME . ' second');
-				$date = $datetime->format('Y-m-d H:i:s');
+			$datetime = new \DateTime($faction->dLastElection);
+			$datetime->modify('+' . $faction->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME . ' second');
+			$date = $datetime->format('Y-m-d H:i:s');
 
-				$faction->dLastElection = $date;
-				$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $date);
-			}
+			$faction->dLastElection = $date;
+			$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $date);
 		}
 		$this->entityManager->flush(Color::class);
 	}

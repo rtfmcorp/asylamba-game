@@ -94,6 +94,7 @@ if ($program !== FALSE) {
 					$notificationManager->add($notif);
 				}
 				$session->addFlashbag('Coup d\'état lancé.', Flashbag::TYPE_SUCCESS);
+				$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $election->dElection);
 				$this->getContainer()->get('entity_manager')->flush();
 			} else {
 				throw new ErrorException('Vous vivez dans une faction démocratique.');
