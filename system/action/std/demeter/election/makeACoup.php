@@ -38,7 +38,7 @@ if ($program !== FALSE) {
 	if ($session->get('playerInfo')->get('status') > Player::STANDARD && $session->get('playerInfo')->get('status') < Player::CHIEF) {
 		$faction = $colorManager->get($session->get('playerInfo')->get('color'));
 
-		if($faction->electionStatement == Color::MANDATE) {
+		if($faction->electionStatement == Color::ELECTION) {
 			if ($faction->regime == Color::ROYALISTIC) {
 
 				$election = new Election();
