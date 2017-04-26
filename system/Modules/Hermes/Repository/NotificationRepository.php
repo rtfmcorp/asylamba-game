@@ -81,6 +81,35 @@ class NotificationRepository extends AbstractRepository
 		return $data;
 	}
 	
+	/**
+	 * @param int $commanderPlayerId
+	 * @param int $placePlayerId
+	 * @param string $arrivedAt
+	 * @return array
+	 */
+	public function getMultiCombatNotifications($commanderPlayerId, $placePlayerId, $arrivedAt)
+	{
+		
+		$statement = $this->connection->prepare(
+			'SELECT * FROM notification WHERE (rPlayer = :commander_player_id OR rPlayer = :place_player_id) AND dSending = :arrived_at');
+		$statement->execute([
+			'commander_player_id' => $commanderPlayerId,
+			'place_player_id' => $placePlayerId,
+			'arrived_at' => $arrivedAt
+		]);
+		$data = [];
+		while ($row = $statement->fetch()) {
+			if (($n = $this->unitOfWork->getObject(Notification::class, $row['id'])) !== null) {
+				$data[] = $n;
+				continue;
+			}
+			$notification = $this->format($row);
+			$this->unitOfWork->addObject($notification);
+			$data[] = $notification;
+		}
+		return $data;
+	}
+	
     public function insert($notification)
     {
 		$qr = $this->connection->prepare('INSERT INTO
