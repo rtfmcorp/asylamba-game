@@ -21,7 +21,7 @@ use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Modules\Zeus\Manager\PlayerBonusManager;
 use Asylamba\Modules\Gaia\Manager\PlaceManager;
 use Asylamba\Modules\Demeter\Manager\ColorManager;
-use Asylamba\Modules\Athena\Manager\RecyclingMissionManager;
+use Asylamba\Modules\Hermes\Manager\NotificationManager;
 use Asylamba\Classes\Library\Session\SessionWrapper;
 use Asylamba\Classes\Container\ArrayList;
 
@@ -58,6 +58,8 @@ class CommanderManager
 	protected $placeManager;
 	/** @var ColorManager **/
 	protected $colorManager;
+	/** @var NotificationManager **/
+	protected $notificationManager;
 	/** @var Session **/
 	protected $session;
 	/** @var RealTimeActionScheduler **/
@@ -83,6 +85,7 @@ class CommanderManager
 	 * @param PlayerBonusManager $playerBonusManager
 	 * @param PlaceManager $placeManager
 	 * @param ColorManager $colorManager
+	 * @param NotificationManager $notificationManager
 	 * @param SessionWrapper $session
 	 * @param RealTimeActionScheduler $scheduler
 	 * @param EventDispatcher $eventDispatcher
@@ -97,6 +100,7 @@ class CommanderManager
 		PlayerBonusManager $playerBonusManager,
 		PlaceManager $placeManager,
 		ColorManager $colorManager,
+		NotificationManager $notificationManager,
 		SessionWrapper $session,
 		RealTimeActionScheduler $scheduler,
 		EventDispatcher $eventDispatcher,
@@ -110,6 +114,7 @@ class CommanderManager
 		$this->playerBonusManager = $playerBonusManager;
 		$this->placeManager = $placeManager;
 		$this->colorManager = $colorManager;
+		$this->notificationManager = $notificationManager;
 		$this->session = $session;
 		$this->scheduler = $scheduler;
 		$this->eventDispatcher = $eventDispatcher;

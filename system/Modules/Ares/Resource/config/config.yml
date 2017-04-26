@@ -25,6 +25,7 @@ services:
             - "@zeus.player_bonus_manager"
             - "@gaia.place_manager"
             - "@demeter.color_manager"
+            - "@hermes.notification_manager"
             - "@app.session"
             - "@realtime_action_scheduler"
             - "@event_dispatcher"
