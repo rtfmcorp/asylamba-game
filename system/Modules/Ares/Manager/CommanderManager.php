@@ -514,8 +514,7 @@ class CommanderManager
 
 			# changer rBase commander
 			$commander->rBase = $place->id;
-			$commander->travelType = NULL;
-			$commander->statement = Commander::AFFECTED;
+			$this->endTravel($commander, Commander::AFFECTED);
 
 			# ajouter à la place le commandant
 			$place->commanders[] = $commander;
@@ -525,8 +524,7 @@ class CommanderManager
 		} else {
 			# changer rBase commander
 			$commander->rBase = $place->id;
-			$commander->travelType = NULL;
-			$commander->statement = Commander::RESERVE;
+			$this->endTravel($commander, Commander::RESERVE);
 
 			$this->emptySquadrons($commander);
 
@@ -567,9 +565,6 @@ class CommanderManager
 		# si la planète est vide
 		if ($place->rPlayer == NULL) {
 			LiveReport::$isLegal = Report::LEGAL;
-
-			$commander->travelType = NULL;
-			$commander->travelLength = NULL;
 
 			# planète vide : faire un combat
 			$this->startFight($place, $commander, $commanderPlayer);
@@ -616,9 +611,6 @@ class CommanderManager
 			# planète à joueur : si $this->rColor != commandant->rColor
 			# si il peut l'attaquer
 			if (($place->playerColor != $commander->getPlayerColor() && $place->playerLevel > 1 && $commanderColor->colorLink[$place->playerColor] != Color::ALLY) || ($place->playerColor == 0)) {
-				$commander->travelType = NULL;
-				$commander->travelLength = NULL;
-
 				$dCommanders = array();
 				foreach ($place->commanders AS $dCommander) {
 					if ($dCommander->statement == Commander::AFFECTED && $dCommander->line == 1) {
@@ -705,9 +697,6 @@ class CommanderManager
 		$this->playerBonusManager->load($playerBonus);
 		# conquete
 		if ($place->rPlayer != NULL) {
-			$commander->travelType = NULL;
-			$commander->travelLength = NULL;
-
 			if (($place->playerColor != $commander->getPlayerColor() && $place->playerLevel > 3 && $commanderColor->colorLink[$place->playerColor] != Color::ALLY) || ($place->playerColor == 0)) {
 				$tempCom = array();
 
@@ -799,7 +788,7 @@ class CommanderManager
 					$place->commanders[] = $commander;
 
 					$commander->rBase = $place->id;
-					$commander->statement = Commander::AFFECTED;
+					$this->endTravel($commander, Commander::AFFECTED);
 					$commander->line = 2;
 					
 					$this->eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place));
@@ -834,9 +823,6 @@ class CommanderManager
 
 		# colonisation
 		} else {
-			$commander->travelType = NULL;
-			$commander->travelLength = NULL;
-
 			# faire un combat
 			LiveReport::$type = Commander::COLO;
 			LiveReport::$dFight = $commander->dArrival;
@@ -868,7 +854,7 @@ class CommanderManager
 
 				# attibuer le commander à la place
 				$commander->rBase = $place->id;
-				$commander->statement = Commander::AFFECTED;
+				$this->endTravel($commander, Commander::AFFECTED);
 				$commander->line = 2;
 
 				# ajout de la place en session
@@ -920,13 +906,8 @@ class CommanderManager
 		$commander = $this->get($commanderId);
 		$place = $this->placeManager->get($commander->rDestinationPlace);
 		$commanderBase = $this->orbitalBaseManager->get($commander->rBase);
-		$commander->travelType = null;
-		$commander->travelLength = null;
-		$commander->dStart = null;
-		$commander->dArrival = null;
-		$commander->rStartPlace = null;
-		$commander->rDestinationPlace = null;
-		$commander->statement = Commander::AFFECTED;
+		
+		$this->endTravel($commander, Commander::AFFECTED);
 
 		$this->placeManager->sendNotif($place, Place::COMEBACK, $commander);
 
@@ -935,6 +916,21 @@ class CommanderManager
 			$commander->resources = 0;
 		}
 		$this->entityManager->flush($commander);
+	}
+	
+	/**
+	 * @param Commander $commander
+	 * @param string $statement
+	 */
+	public function endTravel(Commander $commander, $statement)
+	{
+		$commander->travelType = null;
+		$commander->travelLength = null;
+		$commander->dStart = null;
+		$commander->dArrival = null;
+		$commander->rStartPlace = null;
+		$commander->rDestinationPlace = null;
+		$commander->statement = $statement;
 	}
 
 	# HELPER
