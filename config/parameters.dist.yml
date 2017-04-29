@@ -19,6 +19,11 @@ parameters:
     log_handler: Asylamba\Classes\Logger\FileLogger
     log_directory: /srv/logs
     log_rotation: 3
+    
+    worker_scale: 1
+    worker_cycle_timeout: 60
+    worker_collection_cycles_number: 5
+    worker_stats_volume: 15
 
     # s7/s11 - révolte seldarine - 1/4 of the map, 2 bridges
     #gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV2
