@@ -85,6 +85,7 @@ class Application implements ApplicationInterface {
 		}
 		$this->container->get('database')->init($this->container->getParameter('root_path') . '/build/database/structure.sql');
 		$this->container->get('entity_manager')->init();
+        $this->container->get('process_manager')->launchProcesses();
 		$this->container->get('realtime_action_scheduler')->init();
 		$this->container->get('cyclic_action_scheduler')->init();
 		$server = $this->container->get('server');
