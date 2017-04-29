@@ -5,7 +5,6 @@ namespace Asylamba\Classes\Daemon;
 use Asylamba\Classes\Router\Router;
 use Asylamba\Classes\Library\Http\RequestFactory;
 use Asylamba\Classes\Library\Http\ResponseFactory;
-use Asylamba\Classes\Library\Http\Response;
 use Asylamba\Classes\Daemon\ClientManager;
 
 use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
@@ -17,6 +16,9 @@ use Asylamba\Classes\Event\ErrorEvent;
 use Asylamba\Classes\DependencyInjection\Container;
 
 use Asylamba\Classes\Exception\ErrorException;
+
+use Asylamba\Classes\Process\ProcessManager;
+use Asylamba\Classes\Task\TaskManager;
 
 class Server
 {
@@ -34,6 +36,10 @@ class Server
 	protected $realTimeActionScheduler;
 	/** @var CyclicActionScheduler **/
 	protected $cyclicActionScheduler;
+	/** @var ProcessManager **/
+	protected $processManager;
+	/** @var TaskManager **/
+	protected $taskManager;
     /** @var int **/
     protected $serverCycleTimeout;
     /** @var int **/
@@ -87,29 +93,35 @@ class Server
         if (!$stream) {
             throw new ErrorException("$errstr ($errno)");
         }
-        $this->inputs[] = $stream;
+        $this->inputs['http_server'] = $stream;
     }
 
     public function listen()
     {
+		$this->processManager = $this->container->get('process_manager');
+		$this->taskManager = $this->container->get('task_manager');
         $inputs = $this->inputs;
         $outputs = $this->outputs;
         $errors = null;
         gc_disable();
-		
         while ($this->shutdown === false && ($nbUpgradedStreams = stream_select($inputs, $outputs, $errors, $this->serverCycleTimeout)) !== false) {
             if ($nbUpgradedStreams === 0) {
                 $this->prepareStreamsState($inputs, $outputs, $errors);
                 continue;
             }
             foreach ($inputs as $stream) {
-				$this->treatInput(stream_socket_accept($stream));
+				$name = array_search($stream, $this->inputs);
+				if ($name === 'http_server') {
+					$this->treatHttpInput(stream_socket_accept($stream));
+				} else {
+					$this->treatProcessInput($name);
+				}
             }
             $this->prepareStreamsState($inputs, $outputs, $errors);
         }
     }
 	
-	protected function treatInput($input)
+	protected function treatHttpInput($input)
 	{
 		$client = $request = $response = null;
 		$sessionWrapper = $this->container->get('app.session');
@@ -143,6 +155,24 @@ class Server
 			$sessionWrapper->clearWrapper();
 		}
 	}
+	
+	protected function treatProcessInput($name)
+	{
+		$process = $this->processManager->getByName($name);
+		$content = fgets($process->getInput(), 1024);
+		if ($content === false) {
+			$this->processManager->removeProcess($name, 'The process failed');
+			return;
+		}
+		if (empty($content)) {
+			return;
+		}
+		$data = json_decode($content, true);
+		
+		if (isset($data['task'])) {
+			$this->taskManager->validateTask($process, $data);
+		}
+	}
     
     protected function prepareStreamsState(&$inputs, &$outputs, &$errors)
     {
@@ -160,6 +190,40 @@ class Server
             gc_collect_cycles();
             $this->nbUncollectedCycles = 0;
         }
+    }
+    
+	/**
+	 * @param string $name
+	 * @param resource $input
+	 */
+    public function addInput($name, $input)
+    {
+        $this->inputs[$name] = $input;
+    }
+    
+	/**
+	 * @param string $name
+	 * @param resource $output
+	 */
+    public function addOutput($name, $output)
+    {
+        $this->outputs[$name] = $output;
+    }
+    
+	/**
+	 * @param string $name
+	 */
+    public function removeInput($name)
+    {
+		unset($this->inputs[$name]);
+    }
+    
+	/**
+	 * @param string $name
+	 */
+    public function removeOutput($name)
+    {
+		unset($this->outputs[$name]);
     }
     
     public static function debug($debug)
