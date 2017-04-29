@@ -2,23 +2,28 @@
 
 namespace Asylamba\Classes\Scheduler;
 
-use Asylamba\Classes\DependencyInjection\Container;
+use Asylamba\Classes\Task\TaskManager;
+use Asylamba\Classes\Process\LoadBalancer;
 
 class CyclicActionScheduler
 {
-	/** @var Container **/
-	protected $container;
+    /** @var TaskManager **/
+    protected $taskManager;
+	/** @var LoadBalancer **/
+	protected $loadBalancer;
 	/** @var int **/
 	protected $lastExecutedHour;
 	/** @var array **/
 	protected $queue = [];
 	
 	/**
-	 * @param Container $container
+	 * @param TaskManager $taskManager
+	 * @param LoadBalancer $loadBalancer
 	 */
-	public function __construct(Container $container)
+	public function __construct(TaskManager $taskManager, LoadBalancer $loadBalancer)
 	{
-		$this->container = $container;
+        $this->taskManager = $taskManager;
+        $this->loadBalancer = $loadBalancer;
 	}
 	
 	public function init()
@@ -29,15 +34,12 @@ class CyclicActionScheduler
 		$this->schedule('zeus.player_manager', 'updatePlayersCredits');
 	}
 	
-	/**
-	 * {@inheritdoc}
-	 */
-	public function schedule($manager, $method, $arguments = []) {
-		$this->queue[] = [
-			'manager' => $manager,
-			'method' => $method,
-			'arguments' => $arguments
-		];
+    /**
+     * @param string $manager
+     * @param string $method
+     */
+	public function schedule($manager, $method) {
+		$this->queue[] = $this->taskManager->createCyclicTask($manager, $method);
 	}
 	
 	/**
@@ -48,9 +50,8 @@ class CyclicActionScheduler
 		if (($currentHour = date('H')) === $this->lastExecutedHour) {
 			return;
 		}
-		foreach ($this->queue as $action) {
-			// Get the manager from the container and then execute the given method with its arguments
-			call_user_func_array([$this->container->get($action['manager']), $action['method']], $action['arguments']);
+		foreach ($this->queue as $task) {
+            $this->loadBalancer->affectTask($task);
 		}
 		$this->lastExecutedHour = $currentHour;
 	}
