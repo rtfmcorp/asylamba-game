@@ -91,8 +91,7 @@ for ($i = $nbPlayers - 1; $i >= 0; $i--) {
 
 		if (APIMODE) {
 			# sending email API call
-			$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
-			$api->sendMail($player->bind, APP_ID, API::TEMPLATE_INACTIVE_PLAYER);
+			$this->getContainer()->get('api')->sendMail($player->bind, APP_ID, API::TEMPLATE_INACTIVE_PLAYER);
 		}
 
 		$unactivatedPlayers++;

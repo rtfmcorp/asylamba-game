@@ -7,11 +7,21 @@ use Symfony\Component\Config\FileLocator;
 
 use Asylamba\Classes\DependencyInjection\Container;
 
-class Application implements ApplicationInterface {
+class Worker implements ApplicationInterface {
     /** @var Container **/
     protected $container;
     /** @var array **/
     protected $modules;
+    /** @var string **/
+    protected $name;
+    
+    /**
+     * @param string $name
+     */
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
     
     public function boot()
     {
@@ -83,13 +93,9 @@ class Application implements ApplicationInterface {
 				throw new \ErrorException($errstr, $errno, 1, $errfile, $errline);
 			});
 		}
+		$this->container->setParameter('app.name', $this->name);
 		$this->container->get('database')->init($this->container->getParameter('root_path') . '/build/database/structure.sql');
 		$this->container->get('entity_manager')->init();
-        $this->container->get('process_manager')->launchProcesses();
-		$this->container->get('realtime_action_scheduler')->init();
-		$this->container->get('cyclic_action_scheduler')->init();
-		$server = $this->container->get('server');
-		$server->createHttpServer();
-		$server->listen();
+		$this->container->get('worker_server')->listen();
 	}
 }

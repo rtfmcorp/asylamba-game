@@ -4,10 +4,17 @@ namespace Asylamba\Classes\Scheduler;
 
 use Asylamba\Classes\DependencyInjection\Container;
 
+use Asylamba\Classes\Task\TaskManager;
+use Asylamba\Classes\Process\LoadBalancer;
+
 class RealTimeActionScheduler
 {
 	/** @var Container **/
 	protected $container;
+    /** @var TaskManager **/
+    protected $taskManager;
+	/** @var LoadBalancer **/
+	protected $loadBalancer;
 	/** @var array **/
 	protected $queue = [];
 	
@@ -17,6 +24,8 @@ class RealTimeActionScheduler
 	public function __construct(Container $container)
 	{
 		$this->container = $container;
+        $this->taskManager = $container->get('task_manager');
+        $this->loadBalancer = $container->get('load_balancer');
 	}
 	
 	public function init()
@@ -43,11 +52,7 @@ class RealTimeActionScheduler
 	 */
 	public function schedule($manager, $method, $object, $date)
 	{
-		$this->queue[$date][get_class($object) . '-' . $object->id] = [
-			'manager' => $manager,
-			'method' => $method,
-			'object_id' => $object->id
-		];
+		$this->queue[$date][get_class($object) . '-' . $object->id] = $this->taskManager->createRealTimeTask($manager, $method, $object->id, $date);
 		// Sort the queue by date
 		ksort($this->queue);
 	}
@@ -66,9 +71,8 @@ class RealTimeActionScheduler
 			if ($now < new \DateTime($date)) {
 				break;
 			}
-			foreach ($actions as $action) {
-				// Get the manager from the container and then execute the given method with its arguments
-				call_user_func_array([$this->container->get($action['manager']), $action['method']], [$action['object_id']]);
+			foreach ($actions as $task) {
+				$this->loadBalancer->affectTask($task);
 			}
 			unset($this->queue[$date]);
 		}

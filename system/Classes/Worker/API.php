@@ -19,11 +19,11 @@ class API {
 	const TEMPLATE_INACTIVE_PLAYER = 51;
 	const TEMPLATE_SPONSORSHIP = 52;
 
-	public function __construct($path, $server, $key) {
-		$this->path = $path;
-		$this->server = $server;
-		$this->key  = $key;
-		$this->security = new Security();
+	public function __construct(Security $security) {
+		$this->path = GETOUT_ROOT;
+		$this->server = APP_ID;
+		$this->key  = KEY_API;
+		$this->security = $security;
 	}
 
 	private function query($api, $args) {

@@ -111,13 +111,15 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 					$commanders = $commanderManager->getBaseCommanders($rPlace, [Commander::AFFECTED, Commander::MOVING]);
 
 					foreach ($commanders as $commander) { 
-						$commandersArray[$i]['name'] = $commander->name;
-						$commandersArray[$i]['avatar'] = $commander->avatar;
-						$commandersArray[$i]['level'] = $commander->level;
-						$commandersArray[$i]['line'] = $commander->line;
-						$commandersArray[$i]['statement'] = $commander->statement;
-						$commandersArray[$i]['pev'] = $commander->getPev();
-						$commandersArray[$i]['army'] = $commander->getNbrShipByType();
+						$commandersArray[] = [
+							'name' => $commander->name,
+							'avatar' => $commander->avatar,
+							'level' => $commander->level,
+							'line' => $commander->line,
+							'statement' => $commander->statement,
+							'pev' => $commander->getPev(),
+							'army' => $commander->getNbrShipByType()
+						];
 					}
 					$sr->commanders = serialize($commandersArray);
 					

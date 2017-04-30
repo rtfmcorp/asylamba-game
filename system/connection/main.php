@@ -4,7 +4,6 @@
 
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\API;
 
 $security = $this->getContainer()->get('security');
 $request = $this->getContainer()->get('app.request');
@@ -36,8 +35,7 @@ if (($player = $playerManager->getByBindKey($bindKey)) !== null && in_array($pla
 
 	# confirmation au portail
 	if (APIMODE) {
-		$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
-		$api->confirmConnection($bindkey, APP_ID);
+		$this->getContainer()->get('api')->confirmConnection($bindkey, APP_ID);
 	}
 	$this->getContainer()->get('entity_manager')->flush($player);
 	// redirection vers page de départ

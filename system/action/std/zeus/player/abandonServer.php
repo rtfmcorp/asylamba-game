@@ -1,6 +1,5 @@
 <?php
 
-use Asylamba\Classes\Worker\API;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Zeus\Model\Player;
 
@@ -10,8 +9,7 @@ $response = $this->getContainer()->get('app.response');
 
 if (($player = $playerManager->get($session->get('playerId'))) !== null) {
 	# sending API call to delete account link to server
-	$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
-	$success = $api->abandonServer($player->bind, APP_ID);
+	$success = $this->getContainer()->get('api')->abandonServer($player->bind, APP_ID);
 
 	if ($success) {
 		$player->bind = $player->bind . 'ABANDON';

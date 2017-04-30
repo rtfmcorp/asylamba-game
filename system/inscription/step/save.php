@@ -237,8 +237,7 @@ try {
 
 	# confirmation au portail
 	if (APIMODE) {
-		$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
-		$api->confirmInscription($session->get('inscription')->get('bindkey'), APP_ID);
+		$this->getContainer()->get('api')->confirmInscription($session->get('inscription')->get('bindkey'), APP_ID);
 	}
 
 	# enregistrement DA

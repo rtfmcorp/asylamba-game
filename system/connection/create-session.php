@@ -130,9 +130,9 @@ foreach ($incomingCommanders as $commander) {
 
 			# ajout de l'événement
 			$session->get('playerEvent')->add(
-				$commanderManager->get($i)->getArrivalDate(), 
+				$commander->getArrivalDate(), 
 				EVENT_INCOMING_ATTACK, 
-				$commanderManager->get($i)->getId(),
+				$commander->getId(),
 				$info
 			);
 		}

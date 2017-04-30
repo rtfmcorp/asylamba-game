@@ -14,6 +14,9 @@
 - Event and listeners for system and sector seizing
 - Realtime action scheduler
 - Cyclic action scheduler
+- Process manager
+- Task manager
+- Load balancer for processes
 
 ### Changed
 - Many managers are now free of the session pattern

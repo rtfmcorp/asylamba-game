@@ -362,8 +362,7 @@ class PlayerManager {
 		$player = $this->get($playerId);
 
 		# API call
-		$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
-		$api->playerIsDead($player->bind, APP_ID);
+		$this->api->playerIsDead($player->bind, APP_ID);
 
 		# check if there is no other player with the same dead-name
 		$futureName = '&#8224; ' . $player->name . ' ';
