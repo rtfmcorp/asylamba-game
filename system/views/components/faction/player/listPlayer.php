@@ -21,9 +21,7 @@ $fplayers = array(
 	'Peuple' => array()
 );
 
-for ($i = 0; $i < count($players_listPlayer); $i++) {
-	$p = $players_listPlayer[$i];
-
+foreach ($players_listPlayer as $p) {
 	if ($p->status == 1) {
 		$fplayers['Peuple'][] = $p;
 	} elseif ($p->status == 2) {
