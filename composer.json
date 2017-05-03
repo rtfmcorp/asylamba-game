@@ -7,11 +7,30 @@
             "Tests\\Asylamba\\": "tests/"
         }
     },
+
     "require": {
         "php": "~7.0",
         "phpunit/phpunit": "4.8",
-		"symfony/config": "~2.6",
-		"symfony/yaml": "~2.6",
-        "ocramius/proxy-manager": "^2.0"
+		  "symfony/config": "~2.6",
+	   	"symfony/yaml": "~2.6",
+        "ocramius/proxy-manager": "^2.0",
+        "incenteev/composer-parameter-handler": "~2.0"
+    },
+
+    "scripts": {
+        "post-install-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+        ],
+        "post-update-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+        ]
+    },
+
+    "extra": {
+        "incenteev-parameters": {
+            "file": "config/parameters.yml",
+            "dist-file": "config/parameters.dist.yml"
+        }
     }
+
 }
