@@ -17,18 +17,13 @@ $title = $request->request->get('title');
 
 if ($title !== FALSE AND $content !== FALSE) {
 	if ($session->get('playerInfo')->get('status') >= 3) {
-		$S_FNM_1 = $factionNewsManager->getCurrentSession();
-		$factionNewsManager->newSession();
-
 		$news = new FactionNews();
-
 		$news->rFaction = $session->get('playerInfo')->get('color');
 		$news->title = $title;
 		$factionNewsManager->edit($news, $content);
 		$news->dCreation = Utils::now();
 		
 		$factionNewsManager->add($news);
-		$factionNewsManager->changeSession($S_FNM_1);
 	} else {
 		throw new ErrorException('Vous n\'avez pas le droit pour créer une annonce.');
 	}
