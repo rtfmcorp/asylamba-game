@@ -241,8 +241,8 @@ class PlayerRepository extends AbstractRepository {
 	 */
 	public function getLastFactionPlayers($factionId)
 	{
-		$query = $this->connection->prepare('SELECT * FROM player WHERE rColor = :faction_id ORDER BY dInscription DESC LIMIT 0,25');
-		$query->execute(['faction_id' => $factionId]);
+		$query = $this->connection->prepare('SELECT * FROM player WHERE rColor = :faction_id AND statement != :dead_statement ORDER BY dInscription DESC LIMIT 0,25');
+		$query->execute(['faction_id' => $factionId, 'dead_statement' => Player::DEAD]);
 		
 		$data = [];
 		while ($row = $query->fetch()) {
