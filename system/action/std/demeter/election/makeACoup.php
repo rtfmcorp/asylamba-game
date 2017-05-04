@@ -38,7 +38,7 @@ if ($program !== FALSE) {
 	if ($session->get('playerInfo')->get('status') > Player::STANDARD && $session->get('playerInfo')->get('status') < Player::CHIEF) {
 		$faction = $colorManager->get($session->get('playerInfo')->get('color'));
 
-		if($faction->electionStatement == Color::ELECTION) {
+		if($faction->electionStatement === Color::MANDATE) {
 			if ($faction->regime == Color::ROYALISTIC) {
 
 				$election = new Election();
@@ -94,7 +94,7 @@ if ($program !== FALSE) {
 					$notificationManager->add($notif);
 				}
 				$session->addFlashbag('Coup d\'état lancé.', Flashbag::TYPE_SUCCESS);
-				$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $election->dElection);
+				$this->getContainer()->get('realtime_action_scheduler')->schedule('demeter.color_manager', 'ballot', $faction, $election->dElection);
 				$this->getContainer()->get('entity_manager')->flush();
 			} else {
 				throw new ErrorException('Vous vivez dans une faction démocratique.');

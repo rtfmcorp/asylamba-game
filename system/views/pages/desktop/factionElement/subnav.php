@@ -19,7 +19,7 @@ echo '<div id="subnav">';
 			echo '</span>';
 		echo '</a>';
 
-		if (in_array($faction->electionStatement, array(Color::CAMPAIGN, Color::ELECTION)) && $faction->regime !== Color::ROYALISTIC) {
+		if (in_array($faction->electionStatement, array(Color::CAMPAIGN, Color::ELECTION))) {
 			$active = ($request->query->get('view') == 'election') ? 'active' : '';
 			echo '<a href="' . APP_ROOT . 'faction/view-election" class="item ' . $active . '">';
 				echo '<span class="picto">';

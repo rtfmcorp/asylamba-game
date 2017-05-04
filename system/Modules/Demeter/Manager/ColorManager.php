@@ -185,10 +185,22 @@ class ColorManager {
 		return $this->parser->parse($color->description);
 	}
 	
+	public function scheduleSenateUpdate()
+	{
+		$factions = $this->entityManager->getRepository(Color::class)->getByRegimeAndElectionStatement(
+			[Color::ROYALISTIC], [Color::MANDATE]
+		);
+		foreach ($factions as $faction) {
+			$date = new \DateTime($faction->dLastElection);
+			$date->modify('+' . $faction->mandateDuration . ' second');
+			$this->scheduler->schedule('demeter.color_manager', 'updateSenate', $faction, $date->format('Y-m-d H:i:s'));
+		}
+	}
+	
 	public function scheduleCampaigns()
 	{
 		$factions = $this->entityManager->getRepository(Color::class)->getByRegimeAndElectionStatement(
-			[Color::DEMOCRATIC, Color::ROYALISTIC, Color::THEOCRATIC],
+			[Color::DEMOCRATIC, Color::THEOCRATIC],
 			[Color::MANDATE]
 		);
 		foreach ($factions as $faction) {
@@ -281,6 +293,22 @@ class ColorManager {
 			$this->notificationManager->add($notif);
 		}
 	}
+	
+	/**
+	 * @param int $factionId
+	 */
+	public function updateSenate($factionId)
+	{
+		$faction = $this->get($factionId);
+		$this->updateStatus($faction, $this->playerManager->getFactionPlayers($factionId));
+		
+		if ($faction->regime === Color::ROYALISTIC && $faction->electionStatement === Color::MANDATE) {
+			$date = date('Y-m-d H:i:s', time() + $faction->mandateDuration);
+			$faction->dLastElection = $date;
+			$this->scheduler->schedule('demeter.color_manager', 'updateSenate', $faction, $date);
+			$this->entityManager->flush($faction);
+		}
+	}
 
 	public function updateStatus(Color $color, $factionPlayers) {
 		$limit = round($color->players / 4);
@@ -317,7 +345,7 @@ class ColorManager {
 		$this->entityManager->flush(Player::class);
 	}
 
-	private function ballot($factionId) {
+	public function ballot($factionId) {
 		$faction = $this->get($factionId);
 		$election = $this->electionManager->getFactionLastElection($faction->id);
 		$chiefId = (($leader = $this->playerManager->getFactionLeader($faction->id)) !== null) ? $leader->getId() : false;
@@ -391,11 +419,9 @@ class ColorManager {
 				
 					$governmentMembers = $this->playerManager->getGovernmentMembers($faction->getId());
 					$newChief = $this->playerManager->get(key($ballot));
-
 					$this->uMandate($faction, $governmentMembers, $newChief, $chiefId, TRUE, $conv, $convPlayerID, $listCandidate);
 				} else {
 					$looser = $this->playerManager->get(key($ballot));
-					
 					$this->uMandate($faction, 0, $looser, $chiefId, FALSE, $conv, $convPlayerID, $listCandidate);
 					
 				}
@@ -475,7 +501,6 @@ class ColorManager {
 		foreach ($users as $user) {
 			$user->convStatement = ConversationUser::CS_DISPLAY;
 		}
-		
 		if ($hadVoted) {
 /*			$date = new DateTime($this->dLastElection);
 			$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
@@ -488,11 +513,11 @@ class ColorManager {
 
 			$newChief->status = Player::CHIEF;
 
+			$color->dLastElection = Utils::now();
 			$color->electionStatement = Color::MANDATE;
 
 			$statusArray = $color->status;
-			
-			if ($color->regime == Color::DEMOCRATIC) {
+			if ($color->regime === Color::DEMOCRATIC) {
 				$notif = new Notification();
 				$notif->dSending = Utils::now();
 				$notif->setRPlayer($newChief->id);
@@ -513,7 +538,8 @@ class ColorManager {
 					$message->content .= $player['name'] . ' a reçu ' . $player['vote'] . ' vote' . Format::plural($player['vote']) . '<br />';
 				}
 				$this->conversationMessageManager->add($message);
-			} elseif ($color->regime == Color::ROYALISTIC) {
+			} elseif ($color->regime === Color::ROYALISTIC) {
+				$this->scheduler->schedule('demeter.color_manager', 'updateSenate', $color, date('Y-m-d H:i:s', (time() + $color->mandateDuration)));
 				$notif = new Notification();
 				$notif->dSending = Utils::now();
 				$notif->setRPlayer($newChief->id);
@@ -567,7 +593,7 @@ class ColorManager {
 				$message->content = 'Les Oracles ont parlé, un nouveau dirigeant va faire valoir la force de ' . $color->popularName . ' à travers la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong>.<br /><br /><br /><br />';
 				$this->conversationMessageManager->add($message);
 			}
-
+		} else {
 /*			$date = new DateTime($this->dLastElection);
 			$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
 			$date = $date->format('Y-m-d H:i:s');

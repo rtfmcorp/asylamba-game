@@ -140,6 +140,7 @@ services:
         class: Asylamba\Classes\EventListener\ProcessExceptionListener
         arguments:
             - "@logger"
+            - "@process_gateway"
             - "%app.name"
         tags:
             - {type: "event_listener", event: "core.process_exception", method: "onCoreException"}
