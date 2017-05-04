@@ -232,7 +232,7 @@ echo '<div id="content">';
 			include COMPONENT . 'faction/government/nav.php';
 
 			if (!$request->query->has('mode') OR $request->query->get('mode') == 'law') {
-				$factionSectors = $sectorManager->getFactionsSectors($faction->id);
+				$factionSectors = $sectorManager->getFactionSectors($faction->id);
 
 				$nbLaws = 0;
 				$nbPlayer = count($senators);
