@@ -49,6 +49,8 @@ class Database {
 	public function refresh()
 	{
 		try {
+			// Close previous connection
+			$this->connection = null;
 			$this->connection = new \PDO(
 				"mysql:dbname={$this->name};host={$this->host};charset=utf8",
 				$this->user,

@@ -32,6 +32,7 @@ class CyclicActionScheduler
 		$this->schedule('gaia.place_manager', 'updatePlayerPlaces');
 		$this->schedule('gaia.place_manager', 'updateNpcPlaces');
 		$this->schedule('zeus.player_manager', 'updatePlayersCredits');
+		$this->execute();
 	}
 	
     /**

@@ -92,7 +92,7 @@ class TaskManager
     {
         try {
             // Get the manager from the container and then execute the given method with its arguments
-            call_user_func_array(
+            $return = call_user_func_array(
                 [$this->container->get($task->getManager()), $task->getMethod()],
                 ($task instanceof RealTimeTask) ? [$task->getObjectId()] : []
             );
@@ -125,7 +125,7 @@ class TaskManager
 	public function validateTask(Process $process, $data)
 	{
 		if ($data['success'] === false) {
-			return;
+			\Asylamba\Classes\Daemon\Server::debug('The task failed : ' . $data['task']['manager'] . '.' . $data['task']['method']);
 		}
 		$task = $this->createTaskFromData($data['task']);
 		
@@ -134,6 +134,11 @@ class TaskManager
 		$process->removeTask($task);
 		
 		$this->container->get('load_balancer')->storeStats($task);
+	}
+	
+	public function scheduleFromProcess()
+	{
+		
 	}
     
     public function generateId()
