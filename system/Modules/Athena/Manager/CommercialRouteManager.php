@@ -162,33 +162,15 @@ class CommercialRouteManager {
 		$this->entityManager->flush();
 	}
 
-	// @TODO
-	public function freezeRoute($color1, $color2) {
+	/**
+	 * @param Color $faction
+	 * @param Color $otherFaction
+	 */
+	public function freezeRoute(Color $faction, Color $otherFaction) {
 		$freeze = TRUE;
-		if (!($color1->colorLink[$color2->id] == Color::ENEMY || $color2->colorLink[$color1->id] == Color::ENEMY)) {
+		if (!($faction->colorLink[$otherFaction->id] == Color::ENEMY || $otherFaction->colorLink[$faction->id] == Color::ENEMY)) {
 			$freeze = FALSE;
 		}
-		$qr = $this->database->prepare(
-			'UPDATE commercialRoute AS cr
-				LEFT JOIN orbitalBase AS ob1
-					ON cr.rOrbitalBase = ob1.rPlace
-				LEFT JOIN player AS pl1
-					ON ob1.rPlayer = pl1.id
-				LEFT JOIN orbitalBase AS ob2
-					ON cr.rOrbitalBaseLinked = ob2.rPlace
-				LEFT JOIN player AS pl2
-					ON ob2.rPlayer = pl2.id
-			SET cr.statement = ?
-				WHERE
-					((pl1.rColor = ? AND pl2.rColor = ?) OR
-					(pl1.rColor = ? AND pl2.rColor = ?)) AND
-					cr.statement = ?'
-		);
-
-		if ($freeze) {
-			$qr->execute(array(CommercialRoute::STANDBY, $color1->id, $color2->id, $color2->id, $color1->id, CommercialRoute::ACTIVE));
-		} else {
-			$qr->execute(array(CommercialRoute::ACTIVE, $color1->id, $color2->id, $color2->id, $color1->id, CommercialRoute::STANDBY));
-		}
+		$this->entityManager->getRepository(CommercialRoute::class)->freezeRoutes($faction, $otherFaction, $freeze);
 	} 
 }
