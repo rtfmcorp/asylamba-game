@@ -339,7 +339,7 @@ class CommercialRouteRepository extends AbstractRepository {
 	 */
 	public function freezeRoutes(Color $faction, Color $otherFaction, $freeze)
 	{
-		$statement = $this->database->prepare(
+		$statement = $this->connection->prepare(
 			'UPDATE commercialRoute AS cr
 				LEFT JOIN orbitalBase AS ob1
 					ON cr.rOrbitalBase = ob1.rPlace

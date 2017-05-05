@@ -51,6 +51,6 @@ class ReportManager {
 	 */
 	public function add(Report $report) {
 		$this->entityManager->persist($report);
-		$this->entityManager->flush();
+		$this->entityManager->flush($report);
 	}
 }
