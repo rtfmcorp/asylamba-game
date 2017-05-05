@@ -5,6 +5,7 @@ namespace Asylamba\Modules\Demeter\Repository\Forum;
 use Asylamba\Modules\Demeter\Model\Forum\FactionNews;
 
 use Asylamba\Classes\Entity\AbstractRepository;
+use Asylamba\Classes\Library\Utils;
 
 class FactionNewsRepository extends AbstractRepository
 {
