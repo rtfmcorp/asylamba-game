@@ -16,7 +16,7 @@ class Params {
     const REDIRECT_CHAT = 9;
 
     /** @var array **/
-    private static $params = [
+    public static $params = [
         self::LIST_ALL_FLEET 	=> TRUE,
         self::SHOW_MAP_MINIMAP 	=> TRUE,
         self::SHOW_MAP_RC 		=> FALSE,
