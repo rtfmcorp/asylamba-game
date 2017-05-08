@@ -67,7 +67,7 @@ echo '<div class="component market-sell">';
 echo '</div>';
 
 $commanders = $commanderManager->getBaseCommanders($ob_compPlat->getId(), [Commander::INSCHOOL, Commander::RESERVE], ['c.experience' => 'DESC']);
-
+$nbCommanders = count($commanders);
 # commander current rate
 $commanderCurrentRate = $transactionManager->getLastCompletedTransaction(Transaction::TYP_COMMANDER)->currentRate;
 
@@ -79,7 +79,8 @@ echo '<div class="component market-sell">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			foreach ($commanders as $commander) {
+			for ($i = 0; $i < $nbCommanders; ++$i) {
+				$commander = $commanders[$i];
 				echo '<div class="queue">';
 					echo '<div class="item sh" data-target="sell-commander-' . $i . '">';
 						echo '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
@@ -116,7 +117,7 @@ echo '<div class="component market-sell">';
 				echo '</form>';
 			}
 
-			if (count($commanders) === 0) {
+			if ($nbCommanders === 0) {
 				echo '<p><em>Vous n\'avez aucun commandant dans l\'école.</em></p>';
 			}
 		echo '</div>';

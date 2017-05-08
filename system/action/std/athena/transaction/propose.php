@@ -25,6 +25,7 @@ $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $commercialShippingManager = $this->getContainer()->get('athena.commercial_shipping_manager');
 $transactionManager = $this->getContainer()->get('athena.transaction_manager');
+$entityManager = $this->getContainer()->get('entity_manager');
 
 for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -89,11 +90,9 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 				$totalShips = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::COMMERCIAL_PLATEFORME, 'level', $base->getLevelCommercialPlateforme(), 'nbCommercialShip');
 				$usedShips = 0;
 
-				$S_CSM1 = $commercialShippingManager->getCurrentSession();
-				$commercialShippingManager->changeSession($base->shippingManager);
-				for ($i = 0; $i < $commercialShippingManager->size(); $i++) { 
-					if ($commercialShippingManager->get($i)->rBase == $rPlace) {
-						$usedShips += $commercialShippingManager->get($i)->shipQuantity;
+				foreach ($base->commercialShippings as $commercialShipping) { 
+					if ($commercialShipping->rBase == $rPlace) {
+						$usedShips += $commercialShipping->shipQuantity;
 					}
 				}
 
@@ -184,7 +183,6 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 							throw new ErrorException('Erreur pour une raison étrange, contactez un administrateur.');
 					}
 				}
-				$commercialShippingManager->changeSession($S_CSM1);
 			} else {
 				throw new ErrorException('impossible de faire une proposition sur le marché !');
 			}
@@ -195,3 +193,4 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 } else {
 	throw new FormException('pas assez d\'informations pour faire une proposition sur le marché');
 }
+$entityManager->flush();

@@ -9,17 +9,14 @@ $commercialShippingManager = $this->getContainer()->get('athena.commercial_shipp
 $commercialTradeManager = $this->getContainer()->get('athena.commercial_tax_manager');
 $session = $this->getContainer()->get('app.session');
 
-$S_CSM1 = $commercialShippingManager->getCurrentSession();
-$commercialShippingManager->changeSession($ob_compPlat->shippingManager);
-
 $S_CTM1 = $commercialTradeManager->getCurrentSession();
 $S_CTM2 = $commercialTradeManager->newSession();
 $commercialTradeManager->load(array());
 
 # work
 $comingCommercialShipping = 0;
-for ($i = 0; $i < $commercialShippingManager->size(); $i++) { 
-	if ($commercialShippingManager->get($i)->statement == CommercialShipping::ST_GOING && $commercialShippingManager->get($i)->rBaseDestination == $ob_compPlat->getId()) {
+foreach ($ob_compPlat->commercialShippings as $commercialShipping) { 
+	if ($commercialShipping->statement === CommercialShipping::ST_GOING && $commercialShipping->rBaseDestination == $ob_compPlat->getId()) {
 		$comingCommercialShipping++;
 	}
 }
@@ -32,9 +29,9 @@ if ($comingCommercialShipping > 0) {
 		echo '<div class="fix-body">';
 			echo '<div class="body">';
 				echo '<h4>Convoi en approche</h4>';
-				for ($i = 0; $i < $commercialShippingManager->size(); $i++) { 
-					if ($commercialShippingManager->get($i)->statement == CommercialShipping::ST_GOING && $commercialShippingManager->get($i)->rBaseDestination == $ob_compPlat->getId()) {
-						$commercialShippingManager->render($commercialShippingManager->get($i));
+				foreach ($ob_compPlat->commercialShippings as $commercialShipping) { 
+					if ($commercialShipping->statement == CommercialShipping::ST_GOING && $commercialShipping->rBaseDestination == $ob_compPlat->getId()) {
+						$commercialShippingManager->render($commercialShipping);
 					}
 				}
 			echo '</div>';
@@ -136,5 +133,4 @@ echo '<div class="component transaction">';
 	echo '</div>';
 echo '</div>';
 
-$commercialShippingManager->changeSession($S_CSM1);
 $commercialTradeManager->changeSession($S_CTM1);

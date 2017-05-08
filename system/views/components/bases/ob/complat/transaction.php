@@ -6,14 +6,12 @@ use Asylamba\Modules\Athena\Model\CommercialShipping;
 $commercialShippingManager = $this->getContainer()->get('athena.commercial_shipping_manager');
 $commercialTradeManager = $this->getContainer()->get('athena.commercial_tax_manager');
 
-$S_CSM1 = $commercialShippingManager->getCurrentSession();
 $S_CTM1 = $commercialTradeManager->getCurrentSession();
 
-$commercialShippingManager->changeSession($ob_compPlat->shippingManager);
 $usedShips = 0;
-for ($i = 0; $i < $commercialShippingManager->size(); $i++) { 
-	if ($commercialShippingManager->get($i)->rBase == $ob_compPlat->getId()) {
-		$usedShips += $commercialShippingManager->get($i)->shipQuantity;
+foreach ($ob_compPlat->commercialShippings as $commercialShipping) { 
+	if ($commercialShipping->rBase == $ob_compPlat->getId()) {
+		$usedShips += $commercialShipping->shipQuantity;
 	}
 }
 
@@ -42,28 +40,27 @@ echo '<div class="component transaction">';
 			echo '</div>';
 
 			echo '<h4>Convoi en route</h4>';
-			for ($i = 0; $i < $commercialShippingManager->size(); $i++) { 
-				if ($commercialShippingManager->get($i)->statement == CommercialShipping::ST_GOING && $commercialShippingManager->get($i)->rBase == $ob_compPlat->getId()) {
-					$commercialShippingManager->render($commercialShippingManager->get($i));
+			foreach ($ob_compPlat->commercialShippings as $commercialShipping) { 
+				if ($commercialShipping->statement == CommercialShipping::ST_GOING && $commercialShipping->rBase == $ob_compPlat->getId()) {
+					$commercialShippingManager->render($commercialShipping);
 				}
 			}
 			echo '<hr />';
 			echo '<h4>Retour de convoi</h4>';
-			for ($i = 0; $i < $commercialShippingManager->size(); $i++) { 
-				if ($commercialShippingManager->get($i)->statement == CommercialShipping::ST_MOVING_BACK && $commercialShippingManager->get($i)->rBase == $ob_compPlat->getId()) {
-					$commercialShippingManager->render($commercialShippingManager->get($i));
+			foreach ($ob_compPlat->commercialShippings as $commercialShipping) { 
+				if ($commercialShipping->statement == CommercialShipping::ST_MOVING_BACK && $commercialShipping->rBase == $ob_compPlat->getId()) {
+					$commercialShippingManager->render($commercialShipping);
 				}
 			}
 			echo '<hr />';
 			echo '<h4>Convoi à quai</h4>';
-			for ($i = 0; $i < $commercialShippingManager->size(); $i++) { 
-				if ($commercialShippingManager->get($i)->statement == CommercialShipping::ST_WAITING && $commercialShippingManager->get($i)->rBase == $ob_compPlat->getId()) {
-					$commercialShippingManager->render($commercialShippingManager->get($i));
+			foreach ($ob_compPlat->commercialShippings as $commercialShipping) { 
+				if ($commercialShipping->statement == CommercialShipping::ST_WAITING && $commercialShipping->rBase == $ob_compPlat->getId()) {
+					$commercialShippingManager->render($commercialShipping);
 				}
 			}
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
 
-$commercialShippingManager->changeSession($S_CSM1);
 $commercialTradeManager->changeSession($S_CTM1);

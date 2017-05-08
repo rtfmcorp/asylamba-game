@@ -45,14 +45,11 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_
 					$totalShips = $orbitalBaseHelper->getBuildingInfo(6, 'level', $orbitalBase->getLevelCommercialPlateforme(), 'nbCommercialShip');
 					$usedShips = 0;
 
-					$S_CSM1 = $commercialShippingManager->getCurrentSession();
-					$commercialShippingManager->changeSession($orbitalBase->shippingManager);
-					for ($i = 0; $i < $commercialShippingManager->size(); $i++) { 
-						if ($commercialShippingManager->get($i)->rBase == $orbitalBase->rPlace) {
-							$usedShips += $commercialShippingManager->get($i)->shipQuantity;
+					foreach ($orbitalBase->commercialShippings as $commercialShipping) { 
+						if ($commercialShipping->rBase == $orbitalBase->rPlace) {
+							$usedShips += $commercialShipping->shipQuantity;
 						}
 					}
-					$commercialShippingManager->changeSession($S_CSM1);
 
 					$remainingShips = $totalShips - $usedShips;
 					$commercialShipQuantity = Game::getCommercialShipQuantityNeeded(Transaction::TYP_RESOURCE, $resource);

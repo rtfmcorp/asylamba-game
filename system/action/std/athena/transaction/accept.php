@@ -26,6 +26,7 @@ $placeManager = $this->getContainer()->get('gaia.place_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$entityManager = $this->getContainer()->get('entity_manager');
 
 for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -37,12 +38,9 @@ $rTransaction = $request->query->get('rtransaction');
 if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif)) {
 	$transaction = $transactionManager->get($rTransaction);
 
-	$S_CSM1 = $commercialShippingManager->getCurrentSession();
-	$commercialShippingManager->newSession();
-	$commercialShippingManager->load(array('rTransaction' => $rTransaction));
-	$commercialShipping = $commercialShippingManager->get();
+	$commercialShipping = $commercialShippingManager->getByTransactionId($rTransaction);
 
-	if ($transaction !== null AND $commercialShippingManager->size() == 1 AND $transaction->statement == Transaction::ST_PROPOSED) {
+	if ($transaction !== null AND $commercialShipping !== null AND $transaction->statement == Transaction::ST_PROPOSED) {
 		$base = $orbitalBaseManager->get($rPlace);
 
 		$exportTax = 0;
@@ -146,7 +144,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 	} else {
 		throw new ErrorException('erreur dans les propositions sur le marché');
 	}
-	$commercialShippingManager->changeSession($S_CSM1);
 } else {
 	throw new FormException('pas assez d\'informations pour accepter une proposition sur le marché');
 }
+$entityManager->flush();
