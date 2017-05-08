@@ -18,7 +18,7 @@ echo '<div class="component size2 new-message">';
 					echo 'Destinataire';
 				echo '</p>';
 				$name = '';
-				if (($playerId = $request->request->get('sendto')) !== false) {
+				if (($playerId = $request->query->get('sendto')) !== false) {
 					if (($player = $playerManager->get($playerId))) {
 						$name = $player->name;
 					}

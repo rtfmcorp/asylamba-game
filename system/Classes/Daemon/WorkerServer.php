@@ -130,6 +130,7 @@ class WorkerServer
         $errors = null;
 		
         if ($this->nbUncollectedCycles > $this->collectionCyclesNumber) {
+			$this->container->get('database')->refresh();
             gc_collect_cycles();
             $this->nbUncollectedCycles = 0;
         }

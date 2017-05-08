@@ -6,10 +6,7 @@ $sessionToken = $this->getContainer()->get('app.session')->get('token');
 $factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
 $request = $this->getContainer()->get('app.request');
 
-$S_FNM_C = $factionNewsManager->getCurrentSession();
-$factionNewsManager->changeSession($TOKEN_NEWS_LIST);
-
-$news = $factionNewsManager->getById($request->query->get('news'));
+$news = $factionNewsManager->get($request->query->get('news'));
 
 echo '<div class="component new-message">';
 	echo '<div class="head skin-2">';
@@ -29,5 +26,3 @@ echo '<div class="component new-message">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-$factionNewsManager->changeSession($S_FNM_C);

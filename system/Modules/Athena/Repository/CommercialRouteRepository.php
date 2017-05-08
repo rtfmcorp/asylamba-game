@@ -5,6 +5,7 @@ namespace Asylamba\Modules\Athena\Repository;
 use Asylamba\Classes\Entity\AbstractRepository;
 
 use Asylamba\Modules\Athena\Model\CommercialRoute;
+use Asylamba\Modules\Demeter\Model\Color;
 
 class CommercialRouteRepository extends AbstractRepository {
 	
@@ -329,6 +330,39 @@ class CommercialRouteRepository extends AbstractRepository {
 			'statement' => $commercialRoute->getStatement(),
 			'id' => $commercialRoute->getId()
 		));
+	}
+	
+	/**
+	 * @param Color $faction
+	 * @param Color $otherFaction
+	 * @param boolean $freeze
+	 */
+	public function freezeRoutes(Color $faction, Color $otherFaction, $freeze)
+	{
+		$statement = $this->connection->prepare(
+			'UPDATE commercialRoute AS cr
+				LEFT JOIN orbitalBase AS ob1
+					ON cr.rOrbitalBase = ob1.rPlace
+				LEFT JOIN player AS pl1
+					ON ob1.rPlayer = pl1.id
+				LEFT JOIN orbitalBase AS ob2
+					ON cr.rOrbitalBaseLinked = ob2.rPlace
+				LEFT JOIN player AS pl2
+					ON ob2.rPlayer = pl2.id
+			SET cr.statement = ?
+				WHERE
+					((pl1.rColor = ? AND pl2.rColor = ?) OR
+					(pl1.rColor = ? AND pl2.rColor = ?)) AND
+					cr.statement = ?'
+		);
+		$statement->execute([
+			($freeze === true) ? CommercialRoute::STANDBY : CommercialRoute::ACTIVE,
+			$faction->id,
+			$otherFaction->id,
+			$otherFaction->id,
+			$faction->id,
+			($freeze === true) ? CommercialRoute::ACTIVE : CommercialRoute::STANDBY,
+		]);
 	}
 	
 	/**

@@ -19,18 +19,16 @@ $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $commercialShippingManager = $this->getContainer()->get('athena.commercial_shipping_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
+$entityManager = $this->getContainer()->get('entity_manager');
 
 $rTransaction = $request->query->get('rtransaction');
 
 if ($rTransaction !== FALSE) {
 	$transaction = $transactionManager->get($rTransaction);
 
-	$S_CSM1 = $commercialShippingManager->getCurrentSession();
-	$commercialShippingManager->newSession();
-	$commercialShippingManager->load(array('rTransaction' => $rTransaction));
-	$commercialShipping = $commercialShippingManager->get();
+	$commercialShipping = $commercialShippingManager->getByTransactionId($rTransaction);
 
-	if ($transaction !== null AND $commercialShippingManager->size() == 1 AND $transaction->statement == Transaction::ST_PROPOSED AND $transaction->rPlayer == $session->get('playerId')) {
+	if ($transaction !== null AND $commercialShipping !== null AND $transaction->statement == Transaction::ST_PROPOSED AND $transaction->rPlayer == $session->get('playerId')) {
 		$base = $orbitalBaseManager->get($transaction->rPlace);
 
 		if ($session->get('playerInfo')->get('credit') >= $transaction->getPriceToCancelOffer()) {
@@ -70,7 +68,7 @@ if ($rTransaction !== FALSE) {
 					$playerManager->decreaseCredit($player, $transaction->getPriceToCancelOffer());
 
 					// annulation de l'envoi commercial (libération des vaisseaux de commerce)
-					$commercialShippingManager->deleteById($commercialShipping->id);
+					$entityManager->remove($commercialShipping);
 
 					// update transaction statement
 					$transaction->statement = Transaction::ST_CANCELED;
@@ -97,7 +95,7 @@ if ($rTransaction !== FALSE) {
 	} else {
 		throw new ErrorException('impossible d\'annuler une proposition sur le marché');
 	}
-	$commercialShippingManager->changeSession($S_CSM1);
 } else {
 	throw new FormException('pas assez d\'informations pour annuler une proposition sur le marché');
 }
+$entityManager->flush();

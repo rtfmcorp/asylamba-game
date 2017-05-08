@@ -12,16 +12,20 @@ use Asylamba\Classes\Process\ProcessGateway;
 class ProcessExceptionListener {
 	/** @var AbstractLogger **/
 	protected $logger;
+	/** @var ProcessGateway **/
+	protected $processGateway;
 	/** @var string **/
 	protected $processName;
 	
 	/**
 	 * @param AbstractLogger $logger
+	 * @param ProcessGateway $gateway
 	 * @param string $processName
 	 */
-	public function __construct(AbstractLogger $logger, $processName)
+	public function __construct(AbstractLogger $logger, ProcessGateway $gateway, $processName)
 	{
 		$this->logger = $logger;
+		$this->processGateway = $gateway;
 		$this->processName = $processName;
 	}
 	

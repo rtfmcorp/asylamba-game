@@ -5,6 +5,12 @@ namespace Asylamba\Classes\Database;
 class Database {
 	/** @var string **/
 	protected $name;
+	/** @var string **/
+	protected $host;
+	/** @var string **/
+	protected $user;
+	/** @var string **/
+	protected $password;
 	/** @var \PDO **/
 	private $connection;
 	/** @var int **/
@@ -24,15 +30,11 @@ class Database {
 	 * @param string $password
 	 */
 	public function __construct($host, $name, $user, $password) {
-		try {
-			$this->name = $name;
-			$this->connection = new \PDO("mysql:dbname=$name;host=$host;charset=utf8", $user, $password, [
-				\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-				\PDO::ATTR_EMULATE_PREPARES => false
-			]);
-		} catch (\PDOException $e) {
-			die('Erreur de connection à la base de données : ' . $e->getMessage());
-		}
+		$this->host = $host;
+		$this->name = $name;
+		$this->user = $user;
+		$this->password = $password;
+		$this->refresh();
 	}
 	
 	public function init($dumpFile)
@@ -42,6 +44,25 @@ class Database {
 			return;
 		}
 		$this->execute(file_get_contents($dumpFile));
+	}
+	
+	public function refresh()
+	{
+		try {
+			// Close previous connection
+			$this->connection = null;
+			$this->connection = new \PDO(
+				"mysql:dbname={$this->name};host={$this->host};charset=utf8",
+				$this->user,
+				$this->password,
+				[
+					\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+					\PDO::ATTR_EMULATE_PREPARES => false
+				]
+			);
+		} catch (\PDOException $e) {
+			die('Erreur de connection à la base de données : ' . $e->getMessage());
+		}
 	}
 
 	public function query($query) {

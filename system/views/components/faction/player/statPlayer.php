@@ -58,7 +58,7 @@ echo '<div class="component player rank">';
 					echo '<strong class="name">' . $p->name . '</strong>';
 
 					if ($p->id != $session->get('playerId')) {
-						echo '<span class="experience"><a href="' . APP_ROOT . 'message/mode-create/sendto-' . $p->id . '">Souhaiter la bienvenue</a></span>';
+						echo '<span class="experience"><a href="' . APP_ROOT . 'message/conversation-new/sendto-' . $p->id . '">Souhaiter la bienvenue</a></span>';
 					}
 				echo '</div>';
 			}

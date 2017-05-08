@@ -72,7 +72,7 @@ for ($i = 0; $i < 6; $i++) {
 		# usable ship
 		$disability = '';
 
-		if (!$shipHelper->haveRights($i, 'queue', $ob_dock1, count($nbShipQueues))) {
+		if (!$shipHelper->haveRights($i, 'queue', $ob_dock1, $nbShipQueues)) {
 			# queue size
 			$but = '<span class="button disable">';
 				$but .= 'file de construction pleine<br />';

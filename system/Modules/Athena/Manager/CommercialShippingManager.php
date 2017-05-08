@@ -11,11 +11,10 @@
  **/
 namespace Asylamba\Modules\Athena\Manager;
 
-use Asylamba\Classes\Worker\Manager;
 use Asylamba\Modules\Athena\Manager\OrbitalBaseManager;
 use Asylamba\Modules\Hermes\Manager\NotificationManager;
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Modules\Athena\Model\CommercialShipping;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Classes\Library\Format;
@@ -24,176 +23,62 @@ use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Classes\Exception\ErrorException;
 
-class CommercialShippingManager extends Manager {
-	protected $managerType = '_CommercialShipping';
+class CommercialShippingManager {
+	/** @var EntityManager **/
+	protected $entityManager;
 	/** @var OrbitalBaseManager **/
 	protected $orbitalBaseManager;
 	/** @var NotificationManager **/
 	protected $notificationManager;
-	/** @var string **/
-	protected $sessionToken;
+	/** @var SessionWrapper **/
+	protected $session;
 	
 	/**
-	 * @param Database $database
+	 * @param EntityManager $entityManager
 	 * @param OrbitalBaseManager $orbitalBaseManager
 	 * @param NotificationManager $notificationManager
 	 * @param SessionWrapper $session
 	 */
-	public function __construct(Database $database, OrbitalBaseManager $orbitalBaseManager, NotificationManager $notificationManager, SessionWrapper $session) {
-		parent::__construct($database);
+	public function __construct(EntityManager $entityManager, OrbitalBaseManager $orbitalBaseManager, NotificationManager $notificationManager, SessionWrapper $session) {
+		$this->entityManager = $entityManager;
 		$this->orbitalBaseManager = $orbitalBaseManager;
 		$this->notificationManager = $notificationManager;
-		$this->sessionToken = $session->get('token');
+		$this->session = $session;
 	}
 	
-	public function load($where = array(), $order = array(), $limit = array()) {
-		$formatWhere = Utils::arrayToWhere($where, 'cs.');
-		$formatOrder = Utils::arrayToOrder($order);
-		$formatLimit = Utils::arrayToLimit($limit);
-
-		$qr = $this->database->prepare('SELECT cs.*, 
-			p1.rSystem AS rSystem1, p1.position AS position1, s1.xPosition AS xSystem1, s1.yPosition AS ySystem1,
-			p2.rSystem AS rSystem2, p2.position AS position2, s2.xPosition AS xSystem2, s2.yPosition AS ySystem2,
-			t.type AS typeOfTransaction, t.quantity AS quantity, t.identifier AS identifier, t.price AS price,
-			c.avatar AS commanderAvatar, c.name AS commanderName, c.level AS commanderLevel, c.palmares AS commanderVictory, c.experience AS commanderExperience
-			FROM commercialShipping AS cs
-			LEFT JOIN place AS p1 
-				ON cs.rBase = p1.id
-			LEFT JOIN system AS s1 
-				ON p1.rSystem = s1.id
-			LEFT JOIN place AS p2 
-				ON cs.rBaseDestination = p2.id 
-			LEFT JOIN system AS s2 
-				ON p2.rSystem = s2.id 
-			LEFT JOIN transaction AS t 
-				ON cs.rTransaction = t.id
-			LEFT JOIN commander AS c 
-				ON t.identifier = c.id
-			' . $formatWhere . '
-			' . $formatOrder . '
-			' . $formatLimit
-		);
-
-		foreach($where AS $v) {
-			if (is_array($v)) {
-				foreach ($v as $p) {
-					$valuesArray[] = $p;
-				}
-			} else {
-				$valuesArray[] = $v;
-			}
-		}
-
-		if (empty($valuesArray)) {
-			$qr->execute();
-		} else {
-			$qr->execute($valuesArray);
-		}
-
-		while ($aw = $qr->fetch()) {
-			$cs = new CommercialShipping();
-
-			$cs->id = $aw['id'];
-			$cs->rPlayer = $aw['rPlayer'];
-			$cs->rBase = $aw['rBase'];
-			$cs->rBaseDestination = $aw['rBaseDestination'];
-			$cs->rTransaction = $aw['rTransaction'];
-			$cs->resourceTransported = $aw['resourceTransported'];
-			$cs->shipQuantity = $aw['shipQuantity'];
-			$cs->dDeparture = $aw['dDeparture'];
-			$cs->dArrival = $aw['dArrival'];
-			$cs->statement = $aw['statement'];
-
-			$cs->price = $aw['price'];
-
-			$cs->baseRSystem = $aw['rSystem1'];
-			$cs->basePosition = $aw['position1'];
-			$cs->baseXSystem = $aw['xSystem1'];
-			$cs->baseYSystem = $aw['ySystem1'];
-
-			$cs->destinationRSystem = $aw['rSystem2'];
-			$cs->destinationPosition = $aw['position2'];
-			$cs->destinationXSystem = $aw['xSystem2'];
-			$cs->destinationYSystem = $aw['ySystem2'];
-
-			$cs->typeOfTransaction = $aw['typeOfTransaction'];
-			$cs->quantity = $aw['quantity'];
-			$cs->identifier = $aw['identifier'];
-			$cs->commanderAvatar = $aw['commanderAvatar'];
-			$cs->commanderName = $aw['commanderName'];
-			$cs->commanderLevel = $aw['commanderLevel'];
-			$cs->commanderVictory = $aw['commanderVictory'];
-			$cs->commanderExperience = $aw['commanderExperience'];
-
-			$currentCS = $this->_Add($cs);
-		}
+	/**
+	 * @param int $id
+	 * @return CommercialShipping
+	 */
+	public function getByTransactionId($id)
+	{
+		return $this->entityManager->getRepository(CommercialShipping::class)->getByTransactionId($id);
+	}
+	
+	/**
+	 * @param type $orbitalBaseId
+	 * @return array
+	 */
+	public function getByBase($orbitalBaseId)
+	{
+		return $this->entityManager->getRepository(CommercialShipping::class)->getByBase($orbitalBaseId);
 	}
 
-	public function add(CommercialShipping $cs) {
-		$qr = $this->database->prepare('INSERT INTO
-			commercialShipping(rPlayer, rBase, rBaseDestination, rTransaction, resourceTransported, shipQuantity, dDeparture, dArrival, statement)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)');
-		$qr->execute(array(
-			$cs->rPlayer,
-			$cs->rBase,
-			$cs->rBaseDestination,
-			$cs->rTransaction,
-			$cs->resourceTransported,
-			$cs->shipQuantity,
-			$cs->dDeparture,
-			$cs->dArrival,
-			$cs->statement
-		));
-
-		$cs->id = $this->database->lastInsertId();
-
-		$this->_Add($cs);
-	}
-
-	public function save() {
-		$commercialShippings = $this->_Save();
-
-		foreach ($commercialShippings AS $cs) {
-			$qr = $this->database->prepare('UPDATE commercialShipping
-				SET	id = ?,
-					rPlayer = ?,
-					rBase = ?,
-					rBaseDestination = ?,
-					rTransaction = ?,
-					resourceTransported = ?,
-					shipQuantity = ?,
-					dDeparture = ?,
-					dArrival = ?,
-					statement = ?
-				WHERE id = ?');
-			$qr->execute(array(
-				$cs->id,
-				$cs->rPlayer,
-				$cs->rBase,
-				$cs->rBaseDestination,
-				$cs->rTransaction,
-				$cs->resourceTransported,
-				$cs->shipQuantity,
-				$cs->dDeparture,
-				$cs->dArrival,
-				$cs->statement,
-				$cs->id
-			));
-		}
-	}
-
-	public function deleteById($id) {
-		$qr = $this->database->prepare('DELETE FROM commercialShipping WHERE id = ?');
-		$qr->execute(array($id));
-
-		$this->_Remove($id);
-		
-		return TRUE;
+	/**
+	 * @param CommercialShipping $commercialShipping
+	 */
+	public function add(CommercialShipping $commercialShipping) {
+		$this->entityManager->persist($commercialShipping);
+		$this->entityManager->flush($commercialShipping);
 	}
 
 	public function deliver(CommercialShipping $commercialShipping, $transaction, $destOB, $commander) {
 
+		\Asylamba\Classes\Daemon\Server::debug($commercialShipping);
+		\Asylamba\Classes\Daemon\Server::debug($transaction);
+		
 		if ($transaction !== NULL AND $transaction->statement == Transaction::ST_COMPLETED) {
 
 			switch ($transaction->type) {
@@ -278,6 +163,7 @@ class CommercialShippingManager extends Manager {
 		} else {
 			throw new ErrorException('impossible de délivrer ce chargement');
 		}
+		$this->entityManager->flush();
 	}
 
 	public function render(CommercialShipping $commercialShipping) {
@@ -294,7 +180,7 @@ class CommercialShippingManager extends Manager {
 			if ($commercialShipping->statement != CommercialShipping::ST_MOVING_BACK) {
 				echo '<div class="product">';
 					if ($commercialShipping->statement == CommercialShipping::ST_WAITING) {
-						echo '<a href="' . Format::actionBuilder('canceltransaction', $this->sessionToken, ['rtransaction' => $commercialShipping->rTransaction]) . '" class="hb lt right-link" title="supprimer cette offre coûtera ' . Format::number(floor($commercialShipping->price * Transaction::PERCENTAGE_TO_CANCEL / 100)) . ' crédits">×</a>';
+						echo '<a href="' . Format::actionBuilder('canceltransaction', $this->session->get('token'), ['rtransaction' => $commercialShipping->rTransaction]) . '" class="hb lt right-link" title="supprimer cette offre coûtera ' . Format::number(floor($commercialShipping->price * Transaction::PERCENTAGE_TO_CANCEL / 100)) . ' crédits">×</a>';
 					}
 					if ($commercialShipping->typeOfTransaction == Transaction::TYP_RESOURCE) {
 						echo '<img src="' . MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($commercialShipping->quantity) . '.png" alt="" class="picto" />';

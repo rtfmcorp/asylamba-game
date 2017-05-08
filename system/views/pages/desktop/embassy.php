@@ -64,7 +64,6 @@ echo '<div id="content">';
 			$eraseColor = $faction->id;
 			include COMPONENT . 'faction/data/diplomacy/main.php';
 		} else {
-			die('nok');
 			$this->getContainer()->get('app.response')->redirect('embassy');
 		}
 	}

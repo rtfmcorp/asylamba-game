@@ -168,12 +168,37 @@ class Server
 			return;
 		}
 		$data = json_decode($content, true);
-		
+		if (isset($data['command'])) {
+			return $this->treatCommand($data);
+		}
 		if (isset($data['task'])) {
-			$this->taskManager->validateTask($process, $data);
+			return $this->taskManager->validateTask($process, $data);
+		}
+	}
+	
+	/**
+	 * @param array $data
+	 */
+	public function treatCommand($data)
+	{
+		switch ($data['command']) {
+			case 'schedule':
+				$this->realTimeActionScheduler->scheduleFromProcess(
+					$data['data']['manager'],
+					$data['data']['method'],
+					$data['data']['object_class'],
+					$data['data']['object_id'],
+					$data['data']['date']
+				);
+				break;
 		}
 	}
     
+	/**
+	 * @param array $inputs
+	 * @param array $outputs
+	 * @param array $errors
+	 */
     protected function prepareStreamsState(&$inputs, &$outputs, &$errors)
     {
 		$this->container->cleanApplication();
@@ -186,6 +211,7 @@ class Server
 		$this->cyclicActionScheduler->execute();
 		
         if ($this->nbUncollectedCycles > $this->collectionCyclesNumber) {
+			$this->container->get('database')->refresh();
 			$this->clientManager->clear();
             gc_collect_cycles();
             $this->nbUncollectedCycles = 0;

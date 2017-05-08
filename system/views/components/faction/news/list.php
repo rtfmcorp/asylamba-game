@@ -3,11 +3,7 @@
 use Asylamba\Classes\Library\Format;
 
 $sessionToken = $this->getContainer()->get('app.session')->get('token');
-$factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
 $request = $this->getContainer()->get('app.request');
-
-$S_FNM_C = $factionNewsManager->getCurrentSession();
-$factionNewsManager->changeSession($TOKEN_NEWS_LIST);
 
 echo '<div class="component">';
 	echo '<div class="head skin-2">';
@@ -15,9 +11,7 @@ echo '<div class="component">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			for ($i = 0; $i < $factionNewsManager->size(); $i++) {
-				$news = $factionNewsManager->get($i);
-
+			foreach ($factionNews as $news) {
 				echo '<div class="number-box text">';
 					echo '<span class="label"><a href="' . APP_ROOT . 'faction/view-government/mode-news/news-' . $news->id . '">' . $news->title . '</a></span>';
 					echo '<span class="group-link">';
@@ -29,5 +23,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-$factionNewsManager->changeSession($S_FNM_C);

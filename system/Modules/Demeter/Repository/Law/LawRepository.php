@@ -66,7 +66,7 @@ class LawRepository extends AbstractRepository {
 	public function lawExists($factionId, $type)
 	{
 		$statement = $this->connection->prepare(
-			'SELECT COUNT(*) AS nb_laws FROM law WHERE rColor = :faction_id AND type = :type statement IN (' . implode(',', [Law::EFFECTIVE, Law::VOTATION]) . ')'
+			'SELECT COUNT(*) AS nb_laws FROM law WHERE rColor = :faction_id AND type = :type AND statement IN (' . implode(',', [Law::EFFECTIVE, Law::VOTATION]) . ')'
 		);
 		$statement->execute(['faction_id' => $factionId, 'type' => $type]);
 		return ($statement->fetch()['nb_laws'] > 0);

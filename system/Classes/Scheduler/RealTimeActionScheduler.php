@@ -6,6 +6,7 @@ use Asylamba\Classes\DependencyInjection\Container;
 
 use Asylamba\Classes\Task\TaskManager;
 use Asylamba\Classes\Process\LoadBalancer;
+use Asylamba\Classes\Process\ProcessGateway;
 
 class RealTimeActionScheduler
 {
@@ -15,6 +16,8 @@ class RealTimeActionScheduler
     protected $taskManager;
 	/** @var LoadBalancer **/
 	protected $loadBalancer;
+	/** @var ProcessGateway **/
+	protected $processGateway;
 	/** @var array **/
 	protected $queue = [];
 	
@@ -26,6 +29,7 @@ class RealTimeActionScheduler
 		$this->container = $container;
         $this->taskManager = $container->get('task_manager');
         $this->loadBalancer = $container->get('load_balancer');
+        $this->processGateway = $container->get('process_gateway');
 	}
 	
 	public function init()
@@ -36,9 +40,11 @@ class RealTimeActionScheduler
 		$this->container->get('athena.ship_queue_manager')->scheduleActions();
 		//$this->container->get('promethee.technology_queue_manager')->scheduleActions();
 		$factionManager = $this->container->get('demeter.color_manager');
+		$factionManager->scheduleSenateUpdate();
 		$factionManager->scheduleCampaigns();
 		$factionManager->scheduleElections();
 		$factionManager->scheduleBallot();
+		$this->execute();
 	}
 	
 	/**
@@ -52,7 +58,33 @@ class RealTimeActionScheduler
 	 */
 	public function schedule($manager, $method, $object, $date)
 	{
+		if (P_TYPE === 'worker') {
+			return $this->processGateway->writeToMaster([
+				'command' => 'schedule',
+				'data' => [
+					'manager' => $manager,
+					'method' => $method,
+					'object_class' => get_class($object),
+					'object_id' => $object->id,
+					'date' => $date
+				]
+			]);
+		}
 		$this->queue[$date][get_class($object) . '-' . $object->id] = $this->taskManager->createRealTimeTask($manager, $method, $object->id, $date);
+		// Sort the queue by date
+		ksort($this->queue);
+	}
+	
+	/**
+	 * @param string $manager
+	 * @param string $method
+	 * @param string $objectClass
+	 * @param int $objectId
+	 * @param string $date
+	 */
+	public function scheduleFromProcess($manager, $method, $objectClass, $objectId, $date)
+	{
+		$this->queue[$date][$objectClass . '-' . $objectId] = $this->taskManager->createRealTimeTask($manager, $method, $objectId, $date);
 		// Sort the queue by date
 		ksort($this->queue);
 	}

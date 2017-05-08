@@ -80,10 +80,10 @@ class OrbitalBase {
 	public $realRecyclingLevel;
 	public $realSpatioportLevel;
 	// PUBLIC ATTRIBUTES
-	public $buildingQueues;
+	public $buildingQueues = [];
 	public $routeManager;
 	public $technoQueueManager;
-	public $shippingManager;
+	public $commercialShippings = [];
 
 	//GETTERS
 	public function getId() { return $this->rPlace; }

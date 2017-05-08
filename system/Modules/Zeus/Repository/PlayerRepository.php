@@ -172,8 +172,8 @@ class PlayerRepository extends AbstractRepository {
 	 */
 	public function getFactionPlayersByRanking($factionId)
 	{
-		$query = $this->connection->prepare('SELECT * FROM player WHERE rColor = :faction_id ORDER BY factionPoint DESC');
-		$query->execute(['faction_id' => $factionId]);
+		$query = $this->connection->prepare('SELECT * FROM player WHERE rColor = :faction_id AND statement != :dead_statement ORDER BY factionPoint DESC');
+		$query->execute(['faction_id' => $factionId, 'dead_statement' => Player::DEAD]);
 		
 		$data = [];
 		while ($row = $query->fetch()) {
@@ -241,8 +241,8 @@ class PlayerRepository extends AbstractRepository {
 	 */
 	public function getLastFactionPlayers($factionId)
 	{
-		$query = $this->connection->prepare('SELECT * FROM player WHERE rColor = :faction_id ORDER BY dInscription DESC LIMIT 0,25');
-		$query->execute(['faction_id' => $factionId]);
+		$query = $this->connection->prepare('SELECT * FROM player WHERE rColor = :faction_id AND statement != :dead_statement ORDER BY dInscription DESC LIMIT 0,25');
+		$query->execute(['faction_id' => $factionId, 'dead_statement' => Player::DEAD]);
 		
 		$data = [];
 		while ($row = $query->fetch()) {
@@ -286,8 +286,8 @@ class PlayerRepository extends AbstractRepository {
 	 */
 	public function getGovernmentMember($factionId, $status)
 	{
-		$query = $this->connection->prepare('SELECT * FROM player WHERE rColor = :faction_id AND status = :status');
-		$query->execute(['faction_id' => $factionId, 'status' => $status]);
+		$query = $this->connection->prepare('SELECT * FROM player WHERE rColor = :faction_id AND status = :status AND statement != :dead_statement');
+		$query->execute(['faction_id' => $factionId, 'status' => $status, 'dead_statement' => Player::DEAD]);
 		
 		if (($row = $query->fetch()) === false) {
 			return null;
@@ -307,9 +307,9 @@ class PlayerRepository extends AbstractRepository {
 	public function getGovernmentMembers($factionId)
 	{
 		$query = $this->connection->prepare(
-			'SELECT * FROM player WHERE rColor = :faction_id AND status IN (' . implode(',', [Player::TREASURER, Player::WARLORD, Player::MINISTER, Player::CHIEF]) . ')'
+			'SELECT * FROM player WHERE rColor = :faction_id AND statement != :dead_statement AND status IN (' . implode(',', [Player::TREASURER, Player::WARLORD, Player::MINISTER, Player::CHIEF]) . ')'
 		);
-		$query->execute(['faction_id' => $factionId]);
+		$query->execute(['faction_id' => $factionId, 'dead_statement' => Player::DEAD]);
 		
 		$data = [];
 		while ($row = $query->fetch()) {
@@ -330,8 +330,8 @@ class PlayerRepository extends AbstractRepository {
 	 */
 	public function getFactionLeader($factionId)
 	{
-		$query = $this->connection->prepare('SELECT * FROM player WHERE rColor = :faction_id AND status = :status');
-		$query->execute(['faction_id' => $factionId, 'status' => Player::CHIEF]);
+		$query = $this->connection->prepare('SELECT * FROM player WHERE rColor = :faction_id AND status = :status AND statement != :dead_statement');
+		$query->execute(['faction_id' => $factionId, 'status' => Player::CHIEF, 'dead_statement' => Player::DEAD]);
 		
 		if (($row = $query->fetch()) === false) {
 			return null;
