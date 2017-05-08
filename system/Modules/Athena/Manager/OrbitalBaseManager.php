@@ -364,14 +364,6 @@ class OrbitalBaseManager {
 		$orbitalBase->technoQueueManager = $this->technologyQueueManager->getCurrentSession();
 		$this->technologyQueueManager->changeSession($S_TQM1);
 
-		# CommercialShippingManager
-		$S_CSM1 = $this->commercialShippingManager->getCurrentSession();
-		$this->commercialShippingManager->newSession(ASM_UMODE);
-		$this->commercialShippingManager->load(array('rBase' => $orbitalBase->getRPlace()));
-		$this->commercialShippingManager->load(array('rBaseDestination' => $orbitalBase->getRPlace()));
-		$orbitalBase->shippingManager = $this->commercialShippingManager->getCurrentSession();
-		$this->commercialShippingManager->changeSession($S_CSM1);
-
 		$this->uMethod($orbitalBase);
 	}
 
@@ -397,12 +389,9 @@ class OrbitalBaseManager {
 			# change owner of transaction
 			$transaction->rPlayer = $newOwner;
 
-			$S_CSM1 = $this->commercialShippingManager->getCurrentSession();
-			$this->commercialShippingManager->newSession(FALSE);
-			$this->commercialShippingManager->load(array('rTransaction' => $transaction->id, 'rPlayer' => $base->rPlayer));
+			$commercialShipping = $this->commercialShippingManager->getByTransactionId($transaction->id);
 			# change owner of commercial shipping
-			$this->commercialShippingManager->get()->rPlayer = $newOwner;
-			$this->commercialShippingManager->changeSession($S_CSM1);
+			$commercialShipping->rPlayer = $newOwner;
 		}
 
 		# attribuer le rPlayer à la Base
@@ -520,12 +509,9 @@ class OrbitalBaseManager {
 			}
 			$this->technologyQueueManager->changeSession($S_TQM1);
 
-			# COMMERCIAL SHIPPING
-			$S_CSM1 = $this->commercialShippingManager->getCurrentSession();
-			$this->commercialShippingManager->changeSession($orbitalBase->shippingManager);
-			for ($i = 0; $i < $this->commercialShippingManager->size(); $i++) { 
-				$cs = $this->commercialShippingManager->get($i);
-
+			# CommercialShippingManager
+			$orbitalBase->commercialShippings = $this->commercialShippingManager->getByBase($orbitalBase->getRPlace());
+			foreach ($orbitalBase->commercialShippings as $cs) { 
 				if ($cs->dArrival < $now AND $cs->dArrival !== '0000-00-00 00:00:00') {
 					$commander = NULL;
 
@@ -541,7 +527,6 @@ class OrbitalBaseManager {
 					$this->ctc->add($cs->dArrival, $this, 'uCommercialShipping', $orbitalBase, array($orbitalBase, $cs, $transaction, $destOB, $commander));
 				}
 			}
-			$this->commercialShippingManager->changeSession($S_CSM1);
 
 			# RECYCLING MISSION
 			$S_REM1 = $this->recyclingMissionManager->getCurrentSession();
@@ -709,10 +694,11 @@ class OrbitalBaseManager {
 				$n->addEnd();
 				$this->notificationManager->add($n);
 				# delete commercialShipping
-				$this->commercialShippingManager->deleteById($cs->id);
+				$this->entityManager->remove($cs);
 				break;
 			default :break;
 		}
+		$this->entityManager->flush();
 	}
 
 	public function uRecycling(OrbitalBase $orbitalBase, RecyclingMission $mission, Place $targetPlace, Player $player, $dateOfUpdate) {

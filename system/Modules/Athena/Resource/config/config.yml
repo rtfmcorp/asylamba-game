@@ -35,7 +35,7 @@ services:
     athena.commercial_shipping_manager:
         class: Asylamba\Modules\Athena\Manager\CommercialShippingManager
         arguments:
-            - "@database"
+            - "@entity_manager"
             - "@athena.orbital_base_manager"
             - "@hermes.notification_manager"
             - "@app.session"
