@@ -53,7 +53,7 @@ class LiveReportManager
 	 */
 	public function getAttackReportsByPlaces($playerId, $places)
 	{
-		return $this->entityManager->getRepository(LiveReport::class)->geAttackReportsByPlaces($playerId, $places);
+		return $this->entityManager->getRepository(LiveReport::class)->getAttackReportsByPlaces($playerId, $places);
 	}
 	
 	/**
