@@ -188,6 +188,9 @@ echo '<div class="column act">';
 						$commercialRouteManager->getByDistantBase($defaultBase->getId())
 					);
 					foreach ($routes as $route) {
+						if ($place->getId() !== $route->getROrbitalBase() && $place->getId() !== $route->getROrbitalBaseLinked()) {
+							continue;
+						}
 						switch($route->getStatement()) {
 							case CommercialRoute::PROPOSED:
 								if ($defaultBase->getId() === $route->getROrbitalBase()) {
