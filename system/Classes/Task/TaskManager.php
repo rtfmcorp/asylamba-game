@@ -100,6 +100,7 @@ class TaskManager
         } catch (\Exception $ex) {
             return [
                 'success' => false,
+				'task' => $task,
                 'error' => [
                     'message' => $ex->getMessage(),
                     'file' => $ex->getFile(),
@@ -109,6 +110,7 @@ class TaskManager
         } catch (\Error $err) {
             return [
                 'success' => false,
+				'task' => $task,
                 'error' => [
                     'message' => $err->getMessage(),
                     'file' => $err->getFile(),
