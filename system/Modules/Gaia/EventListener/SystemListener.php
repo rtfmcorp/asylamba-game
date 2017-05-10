@@ -52,6 +52,8 @@ class SystemListener
 	{
 		$system = $this->systemManager->get($event->getPlace()->rSystem);
 		$bases = $this->orbitalBaseManager->getSystemBases($system);
+		// Initialize the value in case no base is available (after leaving the last one)
+		$scores[$system->rColor] = 0;
 		
 		foreach ($bases as $base)
 		{
@@ -68,8 +70,11 @@ class SystemListener
 		$newColor = key($scores);
 		// NPC faction has no points
 		$scores[0] = 0;
-		if ($system->rColor !== $newColor && $scores[$newColor] > $scores[$system->rColor]) {
+		if ($scores[$newColor] > 0 && $system->rColor !== $newColor && $scores[$newColor] > $scores[$system->rColor]) {
 			$system->rColor = $newColor;
+			$this->entityManager->flush($system);
+		} elseif ($scores[$newColor] === 0) {
+			$system->rColor = 0;
 			$this->entityManager->flush($system);
 		}
 	}
