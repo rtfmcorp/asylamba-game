@@ -10,6 +10,8 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('app.session');
@@ -19,6 +21,7 @@ $placeManager = $this->getContainer()->get('gaia.place_manager');
 $recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
 $entityManager = $this->getContainer()->get('entity_manager');
+$eventDispatcher = $this->getContainer()->get('event_dispatcher');
 
 $baseId = $request->query->get('id');
 
@@ -30,7 +33,7 @@ if (count($verif) > 1) {
 	$baseCommanders = $commanderManager->getBaseCommanders($baseId);
 	$areAllFleetImmobile = TRUE;
 	// @TODO Break when expected result is found in the loop
-	foreach ($commanders as $commander) {
+	foreach ($baseCommanders as $commander) {
 		if ($commander->statement == Commander::MOVING) {
 			$areAllFleetImmobile = FALSE;
 		}
@@ -73,6 +76,7 @@ if (count($verif) > 1) {
 					$orbitalBaseManager->changeOwnerById($baseId, $base, ID_GAIA, $S_REM2, $baseCommanders);
 					$place->rPlayer = ID_GAIA;
 					$entityManager->flush();
+					$eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place));
 					
 					for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 						if ($verif[$i] == $baseId) {
@@ -81,7 +85,7 @@ if (count($verif) > 1) {
 						}
 					}
 					$session->addFlashbag('Base abandonnée', Flashbag::TYPE_SUCCESS);
-					$response->redirect(Format::actionBuilder('switchbase', $sessionToken, ['base' => $verif[0]], FALSE));
+					$response->redirect(Format::actionBuilder('switchbase', $session->get('token'), ['base' => $verif[0]], FALSE));
 				} else {
 					throw new ErrorException('Vous ne pouvez pas abandonner de base dans les ' . OrbitalBase::COOL_DOWN . ' premières relèves.');	
 				}

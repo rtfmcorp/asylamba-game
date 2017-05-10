@@ -13,6 +13,7 @@ use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
@@ -21,12 +22,14 @@ $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
+$placeManager = $this->getContainer()->get('gaia.place_manager');
 $database = $this->getContainer()->get('database');
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('app.session');
 $baseMinLevelForChange = $this->getContainer()->getParameter('athena.obm.change_type_min_level');
 $baseMinLevelForCapital = $this->getContainer()->getParameter('athena.obm.capital_min_level');
 $entityManager = $this->getContainer()->get('entity_manager');
+$eventDispatcher = $this->getContainer()->get('event_dispatcher');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -447,4 +450,5 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 } else {
 	throw new FormException('pas assez d\'informations pour changer le type de la base orbitale');
 }
-$this->getContainer()->get('entity_manager')->flush();
+$entityManager->flush();
+$eventDispatcher->dispatch(new PlaceOwnerChangeEvent($placeManager->get($orbitalBase->getId())));
