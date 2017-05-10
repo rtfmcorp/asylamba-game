@@ -896,6 +896,7 @@ class CommanderManager
 					}
 				}
 			}
+			$this->entityManager->flush();
 		}
 	}
 
