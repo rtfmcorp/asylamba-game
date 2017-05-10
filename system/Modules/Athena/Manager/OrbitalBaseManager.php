@@ -375,7 +375,6 @@ class OrbitalBaseManager {
 		$this->entityManager->flush($orbitalBase);
 		
 		$orbitalBase->technoQueueManager = $this->technologyQueueManager->getFirstSession();
-		$orbitalBase->shippingManager = $this->commercialShippingManager->getFirstSession();
 	}
 
 	public function changeOwnerById($id, $base, $newOwner, $baseCommanders) {
