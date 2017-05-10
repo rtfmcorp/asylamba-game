@@ -476,10 +476,11 @@ class CommanderManager
 		# si la place et la flotte ont la même couleur
 		# on pose la flotte si il y a assez de place
 		# sinon on met la flotte dans les hangars
-		if ($place->playerColor == $commander->playerColor AND $place->typeOfBase == 4) {
+		if ($place->playerColor !== $commander->playerColor OR $place->typeOfBase !== Place::TYP_ORBITALBASE) {
 			# retour forcé
 			$this->comeBack($place, $commander, $commanderPlace, $playerBonus);
 			$this->placeManager->sendNotif($place, Place::CHANGELOST, $commander);
+			$this->entityManager->flush();
 			return;
 		}
 		$maxCom =
@@ -543,9 +544,7 @@ class CommanderManager
 				$commanderPlace->commanders = array_merge($commanderPlace->commanders);
 			}
 		}
-		$this->entityManager->flush($commander);
-		$this->entityManager->flush($place);
-		$this->entityManager->flush($commanderPlace);
+		$this->entityManager->flush();
 	}
 
 	# pillage
