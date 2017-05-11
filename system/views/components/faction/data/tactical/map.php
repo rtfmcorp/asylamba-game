@@ -24,6 +24,7 @@ echo '<div class="component size2">';
 				echo '</svg>';
 				echo '<div class="number">';
 					foreach ($sectors as $sector) {
+						$i = $sector->getId() - 1;
 						echo '<span id="sector' . $sector->getId() . '" class="ally' . $sector->getRColor() . '" style="top: ' . ($galaxyConfiguration->sectors[$i]['display'][1] * $rate / 1.35) . 'px; left: ' . ($galaxyConfiguration->sectors[$i]['display'][0] * $rate / 1.35) . 'px;">';
 							echo $sector->getId();
 						echo '</span>';
