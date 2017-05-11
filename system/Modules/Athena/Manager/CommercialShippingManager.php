@@ -75,10 +75,6 @@ class CommercialShippingManager {
 	}
 
 	public function deliver(CommercialShipping $commercialShipping, $transaction, $destOB, $commander) {
-
-		\Asylamba\Classes\Daemon\Server::debug($commercialShipping);
-		\Asylamba\Classes\Daemon\Server::debug($transaction);
-		
 		if ($transaction !== NULL AND $transaction->statement == Transaction::ST_COMPLETED) {
 
 			switch ($transaction->type) {

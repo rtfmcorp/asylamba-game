@@ -14,7 +14,6 @@ $response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
-$littleReportManager = $this->getContainer()->get('ares.little_report_manager');
 $spyReportManager = $this->getContainer()->get('artemis.spy_report_manager');
 $recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
 $technologyManager = $this->getContainer()->get('promethee.technology_manager');
@@ -36,10 +35,6 @@ if (isset($defaultBase)) {
 	foreach ($places as $place) {
 		$placesId[] = $place->id;
 	}
-
-	$S_LRM_MAP = $littleReportManager->getCurrentSession();
-	$littleReportManager->newSession();
-	$littleReportManager->load(array('rPlayerAttacker' => $session->get('playerId'), 'r.rPlace' => $placesId), array('r.dFight', 'DESC'), array(0, 30));
 
 	$S_SRM_MAP = $spyReportManager->getCurrentSession();
 	$spyReportManager->newSession();
@@ -230,10 +225,12 @@ if (isset($defaultBase)) {
 							echo '</p>';
 
 							if ($place->typeOfPlace == 1) {
-								for ($j = 0; $j < $littleReportManager->size(); $j++) { 
-									if ($littleReportManager->get($j)->rPlace == $place->id) {
+								$reports = $this->getContainer()->get('ares.live_report_manager')->getAttackReportsByPlaces($session->get('playerId'), $placesId);
+
+								foreach ($reports as $report) { 
+									if ($report->rPlace == $place->id) {
 										echo '<hr />';
-										echo '<p><em>Dernier pillage ' . Chronos::transform($littleReportManager->get($j)->dFight) . '.</em></p>';
+										echo '<p><em>Dernier pillage ' . Chronos::transform($report->dFight) . '.</em></p>';
 										break;
 									}
 								}
@@ -251,5 +248,4 @@ if (isset($defaultBase)) {
 }
 
 $spyReportManager->changeSession($S_SRM_MAP);
-$littleReportManager->changeSession($S_LRM_MAP);
 $recyclingMissionManager->changeSession($S_REM1);

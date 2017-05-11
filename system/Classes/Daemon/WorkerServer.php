@@ -10,7 +10,6 @@ use Asylamba\Classes\DependencyInjection\Container;
 use Asylamba\Classes\Process\ProcessManager;
 use Asylamba\Classes\Process\ProcessGateway;
 use Asylamba\Classes\Task\TaskManager;
-use Asylamba\Classes\Task\Task;
 
 class WorkerServer
 {
@@ -93,6 +92,7 @@ class WorkerServer
 	protected function treatMasterInput($input)
 	{
         $responseData = [];
+		$task = null;
         $startTime = microtime(true);
 		try {
 			$content = fgets($input, 2048);
@@ -102,9 +102,9 @@ class WorkerServer
 			$task = $this->taskManager->createTaskFromData(json_decode($content, true));
             $responseData = $this->taskManager->perform($task);
 		} catch (\Exception $ex) {
-			$this->container->get('event_dispatcher')->dispatch($event = new ProcessExceptionEvent($ex));
+			$this->container->get('event_dispatcher')->dispatch($event = new ProcessExceptionEvent($ex, $task));
 		} catch (\Error $err) {
-			$this->container->get('event_dispatcher')->dispatch($event = new ProcessErrorEvent($err));
+			$this->container->get('event_dispatcher')->dispatch($event = new ProcessErrorEvent($err, $task));
 		} finally {
 			if (!empty($responseData)) {
 				$responseData['time'] = microtime(true) - $startTime;

@@ -75,6 +75,7 @@ class ProcessExceptionListener {
 		
 		$this->processGateway->writeToMaster([
 			'success' => false,
+			'task' => $event->getTask(),
 			'error' => [
 				'message' => $message,
 				'file' => $file,

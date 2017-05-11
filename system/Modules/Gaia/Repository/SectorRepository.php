@@ -73,11 +73,13 @@ class SectorRepository extends AbstractRepository
 	{
 		$statement = $this->connection->prepare(
 			'UPDATE sector SET
+				rColor = :faction_id,
 				rSurrender = :surrender_id,
 				tax = :tax,
 				name = :name
 			WHERE id = :id');
 		$statement->execute(array(
+			'faction_id' => $sector->rColor, 
 			'surrender_id' => $sector->rSurrender,
 			'tax' => $sector->tax,
 			'name' => $sector->name,
@@ -105,6 +107,7 @@ class SectorRepository extends AbstractRepository
 		$sector->setPoints($data['points']);
 		$sector->setPopulation($data['population']);
 		$sector->setLifePlanet($data['lifePlanet']);
+		$sector->setPrime((bool) $data['prime']);
 		return $sector;
 	}
 }

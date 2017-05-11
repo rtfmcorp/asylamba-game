@@ -61,7 +61,7 @@ echo '<div class="component report">';
 				echo '<p>Il n\'y a aucun rapport de combat dans vos archives militaires.</p>';
 			}
 
-			if ($request->query->get('mode', 'archived')) {
+			if ($request->query->get('mode') === 'archived') {
 				echo '<a class="more-button" href="' . APP_ROOT . 'fleet/view-archive">Voir tous les rapports</a>';
 			} else {
 				echo '<a class="more-button" href="' . APP_ROOT . 'fleet/view-archive/mode-archived">Voir les archives des rapports</a>';

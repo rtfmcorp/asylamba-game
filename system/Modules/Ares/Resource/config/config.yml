@@ -36,10 +36,10 @@ services:
         arguments:
             - "@ares.commander_manager"
             
-    ares.little_report_manager:
-        class: Asylamba\Modules\Ares\Manager\LittleReportManager
+    ares.live_report_manager:
+        class: Asylamba\Modules\Ares\Manager\LiveReportManager
         arguments:
-            - "@database"
+            - "@entity_manager"
             
     ares.report_manager:
         class: Asylamba\Modules\Ares\Manager\ReportManager

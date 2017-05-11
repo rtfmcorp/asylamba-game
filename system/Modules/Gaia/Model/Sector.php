@@ -26,6 +26,8 @@ class Sector {
 
 	public $population;
 	public $lifePlanet;
+	/** @var boolean **/
+	public $prime;
 
 	# public $prime
 
@@ -45,6 +47,14 @@ class Sector {
 	public function getPoints() 		{ return $this->points; }
 	public function getPopulation() 	{ return $this->population; }
 	public function getLifePlanet() 	{ return $this->lifePlanet; }
+	
+	/**
+	 * @return boolean
+	 */
+	public function getPrime()
+	{
+		return $this->prime;
+	}
 
 	// SETTER
 	public function setId($v)			{ $this->id = $v; }
@@ -58,6 +68,17 @@ class Sector {
 	public function setPoints($v) 		{ $this->points = $v; }
 	public function setPopulation($v) 	{ $this->population = $v; }
 	public function setLifePlanet($v) 	{ $this->lifePlanet = $v; }
+	
+	/**
+	 * @param boolean $isPrime
+	 * @return \Asylamba\Modules\Gaia\Model\Sector
+	 */
+	public function setPrime($isPrime)
+	{
+		$this->prime = $isPrime;
+		
+		return $this;
+	}
 
 	public function getSystemsByPosition($i) {
 		return $this->systems[$i];

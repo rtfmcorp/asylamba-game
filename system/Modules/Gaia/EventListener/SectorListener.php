@@ -24,6 +24,8 @@ class SectorListener
 	protected $entityManager;
 	/** @var array **/
 	protected $scores;
+	/** @var int **/
+	protected $minimalScore;
 	
 	/**
 	 * @param SectorManager $sectorManager
@@ -32,6 +34,7 @@ class SectorListener
 	 * @param PlayerManager $playerManager
 	 * @param EntityManager $entityManager
 	 * @param array $scores
+	 * @param int $minimalScore
 	 */
 	public function __construct(
 		SectorManager $sectorManager,
@@ -39,7 +42,8 @@ class SectorListener
 		OrbitalBaseManager $orbitalBaseManager,
 		PlayerManager $playerManager,
 		EntityManager $entityManager,
-		$scores
+		$scores,
+		$minimalScore
 	)
 	{
 		$this->sectorManager = $sectorManager;
@@ -48,6 +52,7 @@ class SectorListener
 		$this->playerManager = $playerManager;
 		$this->entityManager = $entityManager;
 		$this->scores = $scores;
+		$this->minimalScore = $minimalScore;
 	}
 	
 	/**
@@ -73,9 +78,21 @@ class SectorListener
 		arsort($scores);
 		reset($scores);
 		$newColor = key($scores);
-		if ($sector->rColor !== $newColor) {
-			$sector->rColor = $newColor;
-			$this->entityManager->flush($sector);
+		$scores[0] = 0;
+		$hasEnoughPoints = false;
+		foreach ($scores as $factionId => $score) {
+			if ($factionId !== 0 && $score > $this->minimalScore) {
+				$hasEnoughPoints = true;
+				break;
+			}
 		}
+		// If the faction has more points than the minimal score and the current owner of the sector, he claims it
+		if ($hasEnoughPoints === true && $sector->rColor !== $newColor && $scores[$newColor] > $scores[$sector->rColor]) {
+			$sector->rColor = $newColor;
+		// If this is a prime sector, we do not pull back the color from the sector
+		} elseif ($hasEnoughPoints === false && $sector->getPrime() === false) {
+			$sector->rColor = 0;
+		}
+		$this->entityManager->flush($sector);
 	}
 }

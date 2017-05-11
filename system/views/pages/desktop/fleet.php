@@ -10,7 +10,7 @@ $response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $reportManager = $this->getContainer()->get('ares.report_manager');
-$littleReportManager = $this->getContainer()->get('ares.little_report_manager');
+$liveReportManager = $this->getContainer()->get('ares.live_report_manager');
 $spyReportManager = $this->getContainer()->get('artemis.spy_report_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
@@ -172,36 +172,19 @@ echo '<div id="content">';
 		$spyReportManager->changeSession($S_SRM1);
 	} elseif ($request->query->get('view') == 'archive') {
 		# loading des objets
-		$S_LRM1 = $littleReportManager->getCurrentSession();
-		$littleReportManager->newSession();
-
-		if ($request->query->get('mode', 'archived')) {
+		if ($request->query->get('mode') === 'archived') {
 			$archived = Report::ARCHIVED;
 		} else {
 			$archived = Report::STANDARD;
 		}
 
-		$rebels = $request->cookies->get('p'. Params::SHOW_REBEL_REPORT, Params::SHOW_REBEL_REPORT)
-			? NULL
-			: 'AND p2.rColor != 0';
+		$rebels = (bool) $request->cookies->get('p'. Params::SHOW_REBEL_REPORT, Params::$params[Params::SHOW_REBEL_REPORT]);
 
-		if ($request->cookies->get('p'. Params::SHOW_ATTACK_REPORT, Params::SHOW_ATTACK_REPORT)) {
-			$littleReportManager->loadByRequest(
-				'WHERE rPlayerAttacker = ? AND statementAttacker = ? ' . $rebels . ' ORDER BY dFight DESC LIMIT 0, 50',
-				[$session->get('playerId'), $archived]
-			);
-		} else {
-			$littleReportManager->loadByRequest(
-				'WHERE rPlayerDefender = ? AND statementDefender = ? ' . $rebels . ' ORDER BY dFight DESC LIMIT 0, 50',
-				[$session->get('playerId'), $archived]
-			);
-		}
-
-		# listReport component
-		$report_listReport = array();
-		for ($i = 0; $i < $littleReportManager->size(); $i++) { 
-			$report_listReport[$i] = $littleReportManager->get($i);
-		}
+		$report_listReport =
+			($request->cookies->get('p'. Params::SHOW_ATTACK_REPORT, Params::$params[Params::SHOW_ATTACK_REPORT]))
+			? $liveReportManager->getAttackReportsByMode($session->get('playerId'), $rebels, $archived)
+			: $liveReportManager->getDefenseReportsByMode($session->get('playerId'), $rebels, $archived)
+		;
 		$type_listReport = 1;
 		include COMPONENT . 'fleet/list-report.php';
 
@@ -217,14 +200,11 @@ echo '<div id="content">';
 				include COMPONENT . 'fleet/manage-report.php';
 			} else {
 				throw new ErrorException('Ce rapport ne vous appartient pas ou n\'existe pas');
-				//CTR::redirect('fleet/view-archive');
 			}
 		} else {
 			include COMPONENT . 'default.php';
 			include COMPONENT . 'default.php';
 		}
-
-		$littleReportManager->changeSession($S_LRM1);
 	} elseif ($request->query->get('view') == 'memorial') {
 		# loading des objets
 		$commanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::DEAD], ['c.palmares' => 'DESC']);
