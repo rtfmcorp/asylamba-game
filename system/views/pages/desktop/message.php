@@ -88,7 +88,7 @@ echo '<div id="content">';
 	$unarchivedNotifications = $notificationManager->getPlayerNotificationsByArchive($session->get('playerId'), 0);
 	include COMPONENT . 'notif/last.php';
 
-	$archivedNotifications = $notificationManager->getPlayerNotificationsByArchive($session->get('playerId'), 0);
+	$archivedNotifications = $notificationManager->getPlayerNotificationsByArchive($session->get('playerId'), 1);
 	if (count($archivedNotifications) > 0) {
 		include COMPONENT . 'notif/archived.php';
 	}
