@@ -61,6 +61,7 @@ class SectorListener
 	public function onPlaceOwnerChange(PlaceOwnerChangeEvent $event)
 	{
 		$system = $this->systemManager->get($event->getPlace()->rSystem);
+		$systems = $this->systemManager->getSectorSystems($system->rSector);
 		$sector = $this->sectorManager->get($system->rSector);
 		$bases = $this->orbitalBaseManager->getSectorBases($system->rSector);
 		$scores = [];
@@ -75,10 +76,17 @@ class SectorListener
 				: $this->scores[$base->typeOfBase]
 			;
 		}
+		// For each system, the owning faction gains two points
+		foreach ($systems as $system) {
+			if ($system->rColor === 0) {
+				continue;
+			}
+			$scores[$system->rColor] = (!empty($scores[$system->rColor])) ? $scores[$system->rColor] + 2 : 2;
+		}
+		$scores[0] = 0;
 		arsort($scores);
 		reset($scores);
 		$newColor = key($scores);
-		$scores[0] = 0;
 		$hasEnoughPoints = false;
 		foreach ($scores as $factionId => $score) {
 			if ($factionId !== 0 && $score > $this->minimalScore) {
