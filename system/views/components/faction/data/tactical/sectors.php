@@ -53,6 +53,9 @@ echo '<div class="component">';
 					$percents = array();
 					
 					foreach ($factions as $f) {
+						if ($f->id === 0) {
+							continue;
+						}
 						$percents['color' . $f->id] = Format::percent($sector['nbc' . $f->id], $sector['nbc0']);
 					}
 
