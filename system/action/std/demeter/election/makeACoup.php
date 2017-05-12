@@ -100,7 +100,7 @@ if ($program !== FALSE) {
 				throw new ErrorException('Vous vivez dans une faction démocratique.');
 			}
 		} else {
-			throw new ErrorException('Un coup d\'état est défà en cours.');
+			throw new ErrorException('Un coup d\'état est déjà en cours.');
 		}
 	} else {
 		throw new ErrorException('Vous ne pouvez pas vous présenter, vous ne faite pas partie de l\'élite ou vous êtes déjà le hef de la faction.');
