@@ -166,6 +166,7 @@ class Session {
             for ($i = 0; $i < $size; $i++) {
                 if ($this->get('playerBase')->get($key)->get($i)->get('id') == $id) {
                     $this->get('playerBase')->get($key)->remove($i);
+					return;
                 }
             }
         }
