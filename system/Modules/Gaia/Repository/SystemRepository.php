@@ -44,6 +44,27 @@ class SystemRepository extends AbstractRepository
 		return $data;
 	}
 	
+	/**
+	 * @param int $sectorId
+	 * @return array
+	 */
+	public function getSectorSystems($sectorId)
+	{
+		$statement = $this->connection->prepare('SELECT * FROM system WHERE rSector = :sector_id');
+		$statement->execute(['sector_id' => $sectorId]);
+		$data = [];
+		while ($row = $statement->fetch()) {
+			if (($s = $this->unitOfWork->getObject(System::class, $row['id'])) !== null) {
+				$data[] = $s;
+				continue;
+			}
+			$system = $this->format($row);
+			$this->unitOfWork->addObject($system);
+			$data[] = $system;
+		}
+		return $data;
+	}
+	
 	public function insert($system)
 	{
 		
