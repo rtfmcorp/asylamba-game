@@ -178,12 +178,21 @@ class CommanderManager
 	}
 	
 	/**
-	 * @param array $places
+	 * @param int $playerId
 	 * @return array
 	 */
-	public function getIncomingAttacks($places)
+	public function getIncomingAttacks($playerId)
 	{
-		return $this->entityManager->getRepository(Commander::class)->getIncomingAttacks($places);
+		return $this->entityManager->getRepository(Commander::class)->getIncomingAttacks($playerId);
+	}
+	
+	/**
+	 * @param int $playerId
+	 * @return array
+	 */
+	public function getOutcomingAttacks($playerId)
+	{
+		return $this->entityManager->getRepository(Commander::class)->getOutcomingAttacks($playerId);
 	}
 	
 	/**

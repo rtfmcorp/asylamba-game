@@ -238,16 +238,45 @@ class CommanderRepository extends AbstractRepository {
 	}
 	
 	/**
-	 * @param array $placeIds
+	 * @param int $playerId
 	 * @return array
 	 */
-	public function getIncomingAttacks($placeIds)
+	public function getIncomingAttacks($playerId)
 	{
 		$statement = $this->select(
-			'WHERE c.rDestinationPlace IN (' . implode(',', $placeIds) . ') '.
+			'WHERE dp.rPlayer = :player_id '.
 			'AND c.statement = ' . Commander::MOVING . ' ' .
 			'AND c.travelType IN (' . Commander::COLO . ', ' . Commander::LOOT. ')'
-		);
+		, ['player_id' => $playerId]);
+		$commanders = [];
+		$currentId = 0;
+		$persisted = [];
+		$unPersisted = [];
+		while ($row = $statement->fetch()) {
+			if (in_array($row['id'], $persisted)) {
+				continue;
+			}
+			if (!in_array($row['id'], $unPersisted) && ($c = $this->unitOfWork->getObject(Commander::class, $row['id'])) !== null) {
+				$currentId = $row['id'];
+				$commanders[$row['id']] = $c;
+				$persisted[] = $row['id'];
+				continue;
+			}
+			$this->format($row, $commanders, $currentId, $unPersisted);
+		}
+		return array_values($commanders);
+	}
+	
+	/**
+	 * @param int $playerId
+	 * @return array
+	 */
+	public function getOutcomingAttacks($playerId)
+	{
+		$statement = $this->select(
+			'WHERE o.rPlayer = :player_id '.
+			'AND c.statement = ' . Commander::MOVING
+		, ['player_id' => $playerId]);
 		$commanders = [];
 		$currentId = 0;
 		$persisted = [];
