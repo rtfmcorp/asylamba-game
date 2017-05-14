@@ -184,8 +184,6 @@ class Router
 				break;
 			default:
 				$response->addTemplate(EVENT . 'loadEvent.php');
-				$response->addTemplate(EVENT . 'executeEvent.php');
-				$response->addTemplate(EVENT . 'updateGame.php');
 				$response->addTemplate(TEMPLATE . $screenMode . '/open.php');
 				$response->addTemplate(TEMPLATE . $screenMode . '/navbar.php');
 				$response->addTemplate(PAGES . $screenMode . '/' . $page . '.php');
