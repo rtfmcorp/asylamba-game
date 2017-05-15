@@ -10,18 +10,11 @@ $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
 
-# chargement des id des commandants attaquants
-$commandersId = array(0);
-for ($i = 0; $i < $session->get('playerEvent')->size(); $i++) {
-	if ($session->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
-		if ($session->get('playerEvent')->get($i)->get('eventInfo')->size() > 0) {
-			$commandersId[] = $session->get('playerEvent')->get($i)->get('eventId');
-		}
-	}
-}
-
 # chargement des commandants attaquants
-$attackingCommanders = $commanderManager->getCommandersByIds($commandersId);
+$attackingCommanders = array_merge(
+	$commanderManager->getIncomingAttacks($session->get('playerId')),
+	$commanderManager->getOutcomingAttacks($session->get('playerId'))
+);
 
 echo '<div id="attacks" ' . ($request->cookies->get('p' . Params::SHOW_MAP_FLEETIN, Params::SHOW_MAP_FLEETIN) ? NULL : 'style="display:none;"') . '>';
 	echo '<svg viewBox="0, 0, ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . ', ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';

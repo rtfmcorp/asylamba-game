@@ -19,6 +19,7 @@ echo '<div id="map-content" ' . ($request->cookies->get('p' . Params::SHOW_MAP_M
 		echo '</svg>';
 		echo '<div class="number">';
 			foreach ($sectors as $sector) {
+				$i = $sector->getId() - 1;
 				echo '<span style="top: ' . ($galaxyConfiguration->sectors[$i]['display'][1] * $rate / 1.35) . 'px; left: ' . ($galaxyConfiguration->sectors[$i]['display'][0] * $rate / 1.35) . 'px;">';
 					echo $sector->getId();
 				echo '</span>';

@@ -224,9 +224,8 @@ class ColorManager {
 			[Color::DEMOCRATIC], [Color::CAMPAIGN]
 		);
 		foreach ($factions as $faction) {
-			$date = new \DateTime($faction->dLastElection);
-			$date->modify('+' . $faction->mandateDuration + Color::CAMPAIGNTIME . ' second');
-			$this->scheduler->schedule('demeter.color_manager', 'uElection', $faction, $date->format('Y-m-d H:i:s'));
+			$election = $this->electionManager->getFactionLastElection($faction->id);
+			$this->scheduler->schedule('demeter.color_manager', 'uElection', $faction, $election->dElection);
 		}
 	}
 	
@@ -238,10 +237,8 @@ class ColorManager {
 		foreach ($factions as $faction) {
 			$datetime = new \DateTime($faction->dLastElection);
 			$datetime->modify('+' . $faction->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME . ' second');
-			$date = $datetime->format('Y-m-d H:i:s');
 
-			$faction->dLastElection = $date;
-			$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $date);
+			$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $datetime->format('Y-m-d H:i:s'));
 		}
 		$factions = $this->entityManager->getRepository(Color::class)->getByRegimeAndElectionStatement(
 			[Color::THEOCRATIC], [Color::CAMPAIGN, Color::ELECTION]
@@ -249,10 +246,8 @@ class ColorManager {
 		foreach ($factions as $faction) {
 			$datetime = new \DateTime($faction->dLastElection);
 			$datetime->modify('+' . $faction->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME . ' second');
-			$date = $datetime->format('Y-m-d H:i:s');
 
-			$faction->dLastElection = $date;
-			$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $date);
+			$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $datetime->format('Y-m-d H:i:s'));
 		}
 		$this->entityManager->flush(Color::class);
 	}
@@ -460,14 +455,12 @@ class ColorManager {
 		$factionPlayers = $this->playerManager->getFactionPlayers($faction->getId());
 		$this->updateStatus($faction, $factionPlayers);
 		
+		$date = new \DateTime($faction->dLastElection);
+		$date->modify('+' . $faction->mandateDuration + Color::CAMPAIGNTIME . ' second');
+		
 		$election = new Election();
 		$election->rColor = $faction->id;
-		// @WARNING : DEFAULT VALUE
-		$election->dElection = (new \DateTime())->format('Y-m-d H:i:s');
-
-		/*$date = new DateTime($this->dLastElection);
-		$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
-		$election->dElection = $date->format('Y-m-d H:i:s');*/
+		$election->dElection = $date->format('Y-m-d H:i:s');
 
 		$this->electionManager->add($election);
 		$faction->electionStatement = Color::CAMPAIGN;
@@ -487,7 +480,12 @@ class ColorManager {
 		$faction = $this->get($factionId);
 		$faction->electionStatement = Color::ELECTION;
 		$election = $this->electionManager->getFactionLastElection($factionId);
-		$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $election->dElection);
+		
+		$date = new \DateTime($election->dElection);
+		$date->modify('+' . Color::ELECTIONTIME . ' second');
+		
+		$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $date->format('Y-m-d H:i:s'));
+		
 		$this->entityManager->flush($faction);
 	}
 

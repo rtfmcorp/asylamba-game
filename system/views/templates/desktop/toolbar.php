@@ -17,14 +17,26 @@ $shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
 $technologyQueueManager = $this->getContainer()->get('promethee.technology_queue_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $technologyHelper = $this->getContainer()->get('promethee.technology_helper');
+$place = $this->getContainer()->get('gaia.place_manager');
 
 $currentBase = $orbitalBaseManager->get($session->get('playerParams')->get('base'));
 
-# préparation du nombre d'attaque entrante
-$incomingAttack = [];
-for ($i = 0; $i < $session->get('playerEvent')->size(); $i++) {
-	if ($session->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
-		$incomingAttack[] = $session->get('playerEvent')->get($i);
+
+$commanders = $commanderManager->getIncomingAttacks($session->get('playerId'));
+$incomingCommanders = [];
+
+foreach ($commanders as $commander) { 
+	# va chercher les heures auxquelles il rentre dans les cercles d'espionnage
+	$startPlace = $placeManager->get($commander->getRBase());
+	$destinationPlace = $placeManager->get($commander->getRPlaceDestination());
+	$times = Game::getAntiSpyEntryTime($startPlace, $destinationPlace, $commander->getArrivalDate());
+
+	if (strtotime(Utils::now()) >= strtotime($times[0])) {
+		//$info = $commanderManager->getEventInfo($commander);
+		//$info->add('inCircle', $times);
+
+		# ajout de l'événement
+		$incomingCommanders[] = $commander;
 	}
 }
 
@@ -80,7 +92,7 @@ echo '<div id="tools">';
 		}
 
 		echo '<a href="#" class="square sh" data-target="tools-incoming-attack"><img src="' . MEDIA . 'common/nav-fleet-defense.png" alt="" />';
-			echo (count($incomingAttack) > 0) ? '<span class="number">' . count($incomingAttack) . '</span>' : NULL;
+			echo (count($incomingCommanders) > 0) ? '<span class="number">' . count($incomingCommanders) . '</span>' : NULL;
 		echo '</a>';
 
 		echo '<a href="#" class="square sh" data-target="tools-outgoing-attack"><img src="' . MEDIA . 'common/nav-fleet-attack.png" alt="" />';
@@ -259,23 +271,23 @@ echo '<div id="tools">';
 	echo '<div class="overbox right-pic" id="tools-incoming-attack">';
 		echo '<h2>Attaques entrantes</h2>';
 		echo '<div class="overflow">';
-			if (count($incomingAttack) > 0) {
+			if (count($incomingCommanders) > 0) {
 				echo '<div class="queue">';
 
-				foreach ($incomingAttack as $commander) {
+				foreach ($incomingCommanders as $commander) {
 					echo '<div class="item active progress" ';
 						echo 'data-progress-no-reload="true" ';
 						echo 'data-progress-output="lite" ';
-						echo 'data-progress-current-time="' . Utils::interval(Utils::now(), $commander->get('eventInfo')->get('dArrival'), 's') . '" ';
-						echo 'data-progress-total-time="' . Utils::interval($commander->get('eventInfo')->get('dStart'), $commander->get('eventInfo')->get('dArrival'), 's') . '">';
-						echo  '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->get('eventInfo')->get('avatar') . '.png" alt="" />';
-						echo '<strong>' . CommanderResources::getInfo($commander->get('eventInfo')->get('level'), 'grade') . ' ' . $commander->get('eventInfo')->get('name') . '</strong>';
+						echo 'data-progress-current-time="' . Utils::interval(Utils::now(), $commander->dArrival, 's') . '" ';
+						echo 'data-progress-total-time="' . Utils::interval($commander->dStart, $commander->dArrival, 's') . '">';
+						echo  '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
+						echo '<strong>' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->name . '</strong>';
 						echo '<em>';
-							switch ($commander->get('eventInfo')->get('travelType')) {
-								case Commander::MOVE: echo 'déplacement vers ' . $commander->get('eventInfo')->get('nArrival'); break;
-								case Commander::LOOT: echo 'pillage de ' . $commander->get('eventInfo')->get('nArrival'); break;
-								case Commander::COLO: echo 'colonisation de ' . $commander->get('eventInfo')->get('nArrival'); break;
-								case Commander::BACK: echo 'retour vers ' . $commander->get('eventInfo')->get('nArrival'); break;
+							switch ($commander->travelType) {
+								case Commander::MOVE: echo 'déplacement vers ' . $commander->destinationPlaceName; break;
+								case Commander::LOOT: echo 'pillage de ' . $commander->destinationPlaceName;; break;
+								case Commander::COLO: echo 'colonisation de ' . $commander->destinationPlaceName;; break;
+								case Commander::BACK: echo 'retour vers ' . $commander->destinationPlaceName;; break;
 								default: echo 'autre'; break;
 							}
 						echo '</em>';

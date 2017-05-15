@@ -36,6 +36,15 @@ class SystemManager {
 	}
 	
 	/**
+	 * @param int $sectorId
+	 * @return array
+	 */
+	public function getSectorSystems($sectorId)
+	{
+		return $this->entityManager->getRepository(System::class)->getSectorSystems($sectorId);
+	}
+	
+	/**
 	 * @return array
 	 */
 	public function getAll()

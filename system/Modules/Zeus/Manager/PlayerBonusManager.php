@@ -10,8 +10,8 @@ use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Demeter\Model\Law\Law;
+use Asylamba\Modules\Demeter\Resource\LawResources;
 
-use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Modules\Demeter\Manager\Law\LawManager;
 use Asylamba\Modules\Demeter\Manager\ColorManager;
 use Asylamba\Modules\Promethee\Manager\TechnologyManager;

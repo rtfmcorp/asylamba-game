@@ -363,6 +363,7 @@ class OrbitalBaseManager {
 		$this->technologyQueueManager->load(array('rPlace' => $orbitalBase->getRPlace()), array('dEnd'));
 		$orbitalBase->technoQueueManager = $this->technologyQueueManager->getCurrentSession();
 		$this->technologyQueueManager->changeSession($S_TQM1);
+		$orbitalBase->commercialShippings = $this->commercialShippingManager->getByBase($orbitalBase->getRPlace());
 
 		$this->uMethod($orbitalBase);
 	}
@@ -509,7 +510,6 @@ class OrbitalBaseManager {
 			$this->technologyQueueManager->changeSession($S_TQM1);
 
 			# CommercialShippingManager
-			$orbitalBase->commercialShippings = $this->commercialShippingManager->getByBase($orbitalBase->getRPlace());
 			foreach ($orbitalBase->commercialShippings as $cs) { 
 				if ($cs->dArrival < $now AND $cs->dArrival !== '0000-00-00 00:00:00') {
 					$commander = NULL;

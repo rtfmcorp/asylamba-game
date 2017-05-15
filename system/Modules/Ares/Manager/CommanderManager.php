@@ -178,12 +178,21 @@ class CommanderManager
 	}
 	
 	/**
-	 * @param array $places
+	 * @param int $playerId
 	 * @return array
 	 */
-	public function getIncomingAttacks($places)
+	public function getIncomingAttacks($playerId)
 	{
-		return $this->entityManager->getRepository(Commander::class)->getIncomingAttacks($places);
+		return $this->entityManager->getRepository(Commander::class)->getIncomingAttacks($playerId);
+	}
+	
+	/**
+	 * @param int $playerId
+	 * @return array
+	 */
+	public function getOutcomingAttacks($playerId)
+	{
+		return $this->entityManager->getRepository(Commander::class)->getOutcomingAttacks($playerId);
 	}
 	
 	/**
@@ -469,6 +478,7 @@ class CommanderManager
 	public function uChangeBase($commanderId) {
 		$commander = $this->get($commanderId);
 		$place = $this->placeManager->get($commander->rDestinationPlace);
+		$place->commanders = $this->getBaseCommanders($place->id);
 		$commanderPlace = $this->placeManager->get($commander->rBase);
 		$player = $this->playerManager->get($commander->rPlayer);
 		$playerBonus = $this->playerBonusManager->getBonusByPlayer($player);
@@ -551,6 +561,7 @@ class CommanderManager
 	public function uLoot($commanderId) {
 		$commander = $this->get($commanderId);
 		$place = $this->placeManager->get($commander->rDestinationPlace);
+		$place->commanders = $this->getBaseCommanders($place->id);
 		$placePlayer = $this->playerManager->get($place->rPlayer);
 		$placeBase = $this->orbitalBaseManager->get($place->id);
 		$commanderPlace = $this->placeManager->get($commander->rBase);
@@ -686,6 +697,7 @@ class CommanderManager
 	public function uConquer($commanderId) {
 		$commander = $this->get($commanderId);
 		$place = $this->placeManager->get($commander->rDestinationPlace);
+		$place->commanders = $this->getBaseCommanders($place->id);
 		$placePlayer = $this->playerManager->get($place->rPlayer);
 		$placeBase = $this->orbitalBaseManager->get($place->id);
 		$commanderPlace = $this->placeManager->get($commander->rBase);
