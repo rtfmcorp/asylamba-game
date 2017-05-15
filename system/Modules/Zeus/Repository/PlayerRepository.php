@@ -499,6 +499,19 @@ class PlayerRepository extends AbstractRepository {
 		));
 	}
 	
+	/**
+	 * @param int $playerId
+	 * @param int $credits
+	 * @param string $operator
+	 */
+	public function updatePlayerCredits($playerId, $credits, $operator)
+	{
+		$query = $this->connection->prepare("UPDATE player SET credit = credit $operator $credits WHERE id = :id");
+		$query->execute(array(
+			'id' => $playerId,
+		));
+	}
+	
 	public function remove($entity)
 	{
 		
