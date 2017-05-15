@@ -94,6 +94,7 @@ class PlaceManager {
 	public function updateNpcPlaces() {
 		$places = $this->getNpcPlaces();
 		$now   = Utils::now();
+		$repository = $this->entityManager->getRepository(Place::class);
 		
 		foreach ($places as $place) {
 			if (Utils::interval($place->uPlace, $now, 's') === 0) {
@@ -102,19 +103,27 @@ class PlaceManager {
 			# update time
 			$hours = Utils::intervalDates($now, $place->uPlace);
 			$place->uPlace = $now;
+			$initialResources = $place->resources;
+			$initialDanger = $place->danger;
 
 			foreach ($hours as $hour) {
 				$this->updateDanger($place);
 				$this->updateResources($place);
+				
 			}
+			$repository->updatePlace(
+				$place,
+				abs($place->resources - $initialResources),
+				abs($place->danger - $initialDanger)
+			);
 		}
-		$this->entityManager->flush(Place::class);
 		$this->entityManager->clear(Place::class);
 	}
 
 	public function updatePlayerPlaces() {
 		$places = $this->getPlayerPlaces();
 		$now   = Utils::now();
+		$repository = $this->entityManager->getRepository(Place::class);
 		
 		foreach ($places as $place) {
 			if (Utils::interval($place->uPlace, $now, 's') === 0) {
@@ -123,12 +132,15 @@ class PlaceManager {
 			# update time
 			$hours = Utils::intervalDates($now, $place->uPlace);
 			$place->uPlace = $now;
-			
+			$initialResources = $place->resources;
 			foreach ($hours as $hour) {
 				$this->updateResources($place);
 			}
+			$repository->updatePlace(
+				$place,
+				abs($place->resources - $initialResources)
+			);
 		}
-		$this->entityManager->flush(Place::class);
 		$this->entityManager->clear(Place::class);
 	}
 	
