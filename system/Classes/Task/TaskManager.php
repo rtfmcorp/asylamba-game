@@ -109,6 +109,9 @@ class TaskManager
 		}
 		$task = $this->createTaskFromData($data['task']);
 		
+		if (!isset($data['time'])) {
+			$data['time'] = 0.0;
+		}
 		$task->setTime((float) $data['time']);
 		
 		$process->removeTask($task);
