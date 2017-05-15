@@ -231,11 +231,13 @@ class PlaceRepository extends AbstractRepository
 		$statement = $this->connection->prepare(
 			'UPDATE place SET
 				resources = resources + :resources,
-				danger = danger + :danger
+				danger = danger + :danger,
+				uPlace = :updated_at
 			WHERE id = :id');
 		$statement->execute([
 			'resources' => $resources,
 			'danger' => $danger,
+			'updated_at' => $place->uPlace, 
 			'id' => $place->getId()
 		]);
 	}

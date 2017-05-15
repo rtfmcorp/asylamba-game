@@ -500,15 +500,16 @@ class PlayerRepository extends AbstractRepository {
 	}
 	
 	/**
-	 * @param int $playerId
+	 * @param Player $playerId
 	 * @param int $credits
 	 * @param string $operator
 	 */
-	public function updatePlayerCredits($playerId, $credits, $operator)
+	public function updatePlayerCredits(Player $player, $credits, $operator)
 	{
-		$query = $this->connection->prepare("UPDATE player SET credit = credit $operator $credits WHERE id = :id");
+		$query = $this->connection->prepare("UPDATE player SET credit = credit $operator $credits, uPlayer = :updated_at WHERE id = :id");
 		$query->execute(array(
-			'id' => $playerId,
+			'updated_at' => $player->uPlayer,
+			'id' => $playerId
 		));
 	}
 	

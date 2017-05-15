@@ -533,7 +533,7 @@ class PlayerManager {
 				);
 			}
 			$repository->updatePlayerCredits(
-				$player->getId(),
+				$player,
 				abs($initialCredits - $player->credit),
 				($initialCredits > $player->credit) ? '-' : '+'
 			);
