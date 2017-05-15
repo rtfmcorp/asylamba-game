@@ -509,7 +509,7 @@ class PlayerRepository extends AbstractRepository {
 		$query = $this->connection->prepare("UPDATE player SET credit = credit $operator $credits, uPlayer = :updated_at WHERE id = :id");
 		$query->execute(array(
 			'updated_at' => $player->uPlayer,
-			'id' => $playerId
+			'id' => $player->getId()
 		));
 	}
 	
