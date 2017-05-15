@@ -90,34 +90,12 @@ class TaskManager
 	 */
     public function perform(Task $task)
     {
-        try {
-            // Get the manager from the container and then execute the given method with its arguments
-            $return = call_user_func_array(
-                [$this->container->get($task->getManager()), $task->getMethod()],
-                ($task instanceof RealTimeTask) ? [$task->getObjectId()] : []
-            );
-            return ['success' => true, 'task' => $task];
-        } catch (\Exception $ex) {
-            return [
-                'success' => false,
-				'task' => $task,
-                'error' => [
-                    'message' => $ex->getMessage(),
-                    'file' => $ex->getFile(),
-                    'line' => $ex->getLine()
-                ]
-            ];
-        } catch (\Error $err) {
-            return [
-                'success' => false,
-				'task' => $task,
-                'error' => [
-                    'message' => $err->getMessage(),
-                    'file' => $err->getFile(),
-                    'line' => $err->getLine()
-                ]
-            ];
-        }
+		// Get the manager from the container and then execute the given method with its arguments
+		call_user_func_array(
+			[$this->container->get($task->getManager()), $task->getMethod()],
+			($task instanceof RealTimeTask) ? [$task->getObjectId()] : []
+		);
+		return ['success' => true, 'task' => $task];
     }
 	
 	/**
