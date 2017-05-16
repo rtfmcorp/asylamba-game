@@ -226,6 +226,22 @@ class PlaceRepository extends AbstractRepository
 		));
 	}
 	
+	public function updatePlace($place, $resources, $danger = 0)
+	{
+		$statement = $this->connection->prepare(
+			'UPDATE place SET
+				resources = resources + :resources,
+				danger = danger + :danger,
+				uPlace = :updated_at
+			WHERE id = :id');
+		$statement->execute([
+			'resources' => $resources,
+			'danger' => $danger,
+			'updated_at' => $place->uPlace, 
+			'id' => $place->getId()
+		]);
+	}
+	
 	public function remove($place)
 	{
 		$statement = $this->connection->prepare('DELETE FROM place FROM id = :id');

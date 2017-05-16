@@ -490,7 +490,8 @@ class PlayerManager {
 		$players = $this->getActivePlayers();
 		$factions = $this->colorManager->getAll();
 		$S_RSM1 = $this->researchManager->getCurrentSession();
-		$now   = Utils::now();
+		$now = Utils::now();
+		$repository = $this->entityManager->getRepository(Player::class);
 		
 		foreach ($players as $player) {
 			# update time
@@ -518,6 +519,8 @@ class PlayerManager {
 			$researchSession = $this->researchManager->getCurrentSession();
 			$transactions = $this->transactionManager->getPlayerPropositions($player->id, Transaction::TYP_SHIP);
 			
+			$initialCredits = $player->credit;
+			
 			for ($i = 0; $i < $nbHours; $i++) {
 				$this->uCredit(
 					$player,
@@ -529,6 +532,12 @@ class PlayerManager {
 					$transactions
 				);
 			}
+			$repository->updatePlayerCredits(
+				$player,
+				abs($initialCredits - $player->credit),
+				($initialCredits > $player->credit) ? '-' : '+'
+			);
+			$this->entityManager->clear($player);
 		}
 		$this->researchManager->changeSession($S_RSM1);
 	}
@@ -774,9 +783,6 @@ class PlayerManager {
 		$this->researchManager->changeSession($S_RSM1);
 
 		$player->credit = $newCredit;
-		if ($this->isSynchronized($player)) {
-			$this->session->get('playerInfo')->add('credit', $newCredit);
-		}
 		$this->entityManager->flush();
 	}
 

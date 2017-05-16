@@ -51,6 +51,10 @@ class UnitOfWork {
      */
     public function removeObject($object)
     {
+		if (!isset($this->entities[get_class($object)][$object->getId()]['instance'])) {
+			\Asylamba\Classes\Daemon\Server::debug(get_class($object));
+			\Asylamba\Classes\Daemon\Server::debug($object->getId());
+		}
         $this->entities[get_class($object)][$object->getId()]['state'] = self::METADATA_REMOVED;
     }
     
@@ -72,6 +76,10 @@ class UnitOfWork {
         }
         $repository = $this->entityManager->getRepository($entityClass);
         foreach ($this->entities[$entityClass] as $entity) {
+			if (!isset($entity['instance'])) {
+				\Asylamba\Classes\Daemon\Server::debug($entityClass);
+				\Asylamba\Classes\Daemon\Server::debug($entity);
+			}
             $this->flushObject($repository, $entityClass, $entity['instance']);
         }
     }

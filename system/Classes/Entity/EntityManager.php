@@ -85,7 +85,7 @@ class EntityManager {
                 $this->unitOfWork->clearEntity($entity);
                 break;
             case 'object':
-                $this->unitOfWork->clearObject(get_class($entity));
+                $this->unitOfWork->clearObject($entity);
                 break;
         }
     }
