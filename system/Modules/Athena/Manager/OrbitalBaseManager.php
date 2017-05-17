@@ -683,7 +683,7 @@ class OrbitalBaseManager {
 				} else {
 					$n->addBeg()->addTxt('Vos vaisseaux commerciaux sont de retour sur votre ');
 				}
-				$n->addLnk('map/base-' . $cs->rBase, 'base orbitale')->addTxt(' après avoir livré du matériel sur une autre ');
+				$n->addLnk('map/place-' . $cs->rBase, 'base orbitale')->addTxt(' après avoir livré du matériel sur une autre ');
 				$n->addLnk('map/place-' . $cs->rBaseDestination, 'base')->addTxt(' . ');
 				if ($cs->shipQuantity == 1) {
 					$n->addSep()->addTxt('Votre vaisseau de commerce est à nouveau disponible pour faire d\'autres transactions ou routes commerciales.');
@@ -722,7 +722,7 @@ class OrbitalBaseManager {
 				$n->addLnk('map/place-' . $mission->rTarget, 'lieu');
 				$n->addTxt(' que vous recycliez est désormais totalement dépourvu de ressources et s\'est donc transformé en lieu vide.');
 				$n->addSep()->addTxt('Vos recycleurs restent donc stationnés sur votre ');
-				$n->addLnk('map/base-' . $orbitalBase->rPlace, 'base orbitale')->addTxt(' le temps que vous programmiez une autre mission.');
+				$n->addLnk('map/place-' . $orbitalBase->rPlace, 'base orbitale')->addTxt(' le temps que vous programmiez une autre mission.');
 				$n->addEnd();
 				$this->notificationManager->add($n);
 			}
@@ -740,7 +740,7 @@ class OrbitalBaseManager {
 				$n->addLnk('map/place-' . $mission->rTarget, 'lieu');
 				$n->addTxt(' que vous recycliez est passé à l\'ennemi, vous ne pouvez donc plus y envoyer vos recycleurs. La mission est annulée.');
 				$n->addSep()->addTxt('Vos recycleurs restent donc stationnés sur votre ');
-				$n->addLnk('map/base-' . $orbitalBase->rPlace, 'base orbitale')->addTxt(' le temps que vous programmiez une autre mission.');
+				$n->addLnk('map/place-' . $orbitalBase->rPlace, 'base orbitale')->addTxt(' le temps que vous programmiez une autre mission.');
 				$n->addEnd();
 				$this->notificationManager->add($n);
 			}
@@ -867,7 +867,7 @@ class OrbitalBaseManager {
 			$n->addLnk('map/place-' . $mission->rTarget, 'lieu');
 			$n->addTxt(' que vous recycliez est désormais totalement dépourvu de ressources et s\'est donc transformé en lieu vide.');
 			$n->addSep()->addTxt('Vos recycleurs restent donc stationnés sur votre ');
-			$n->addLnk('map/base-' . $orbitalBase->rPlace, 'base orbitale')->addTxt(' le temps que vous programmiez une autre mission.');
+			$n->addLnk('map/place-' . $orbitalBase->rPlace, 'base orbitale')->addTxt(' le temps que vous programmiez une autre mission.');
 			$n->addEnd();
 			$this->notificationManager->add($n);
 		}

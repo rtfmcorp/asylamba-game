@@ -185,7 +185,7 @@ class PlaceManager {
 					->addTxt('Votre officier ')
 					->addLnk('fleet/commander-' . $commander->getId(), $commander->getName())
 					->addTxt(' est arrivé sur ')
-					->addLnk('map/base-' . $place->id, $place->baseName)
+					->addLnk('map/place-' . $place->id, $place->baseName)
 					->addTxt('.')
 					->addEnd();
 				$this->notificationManager->add($notif);
@@ -199,7 +199,7 @@ class PlaceManager {
 					->addTxt('Votre officier ')
 					->addLnk('fleet/commander-' . $commander->getId(), $commander->getName())
 					->addTxt(' s\'est posé sur ')
-					->addLnk('map/base-' . $place->id, $place->baseName)
+					->addLnk('map/place-' . $place->id, $place->baseName)
 					->addTxt('. Il est en garnison car il n\'y avait pas assez de place en orbite.')
 					->addEnd();
 				$this->notificationManager->add($notif);
@@ -212,7 +212,7 @@ class PlaceManager {
 					->addTxt('Votre officier ')
 					->addLnk('fleet/commander-' . $commander->getId(), $commander->getName())
 					->addTxt(' n\'est pas arrivé sur ')
-					->addLnk('map/base-' . $place->id, $place->baseName)
+					->addLnk('map/place-' . $place->id, $place->baseName)
 					->addTxt('. Cette base ne vous appartient pas. Elle a pu être conquise entre temps.')
 					->addEnd();
 				$this->notificationManager->add($notif);

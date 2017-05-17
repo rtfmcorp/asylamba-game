@@ -134,7 +134,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 							$n->setTitle('Espionnage détecté');
 							$n->addBeg();
 							$n->addTxt('Un joueur a espionné votre base ');
-							$n->addLnk('map/base-' . $orbitalBase->rPlace, $orbitalBase->name)->addTxt('.');
+							$n->addLnk('map/place-' . $orbitalBase->rPlace, $orbitalBase->name)->addTxt('.');
 							$n->addBrk()->addTxt('Malheureusement, nous n\'avons pas pu connaître l\'identité de l\'espion.');
 							$n->addEnd();
 							$notificationManager->add($n);
@@ -145,7 +145,7 @@ if ($rPlace !== FALSE AND $price !== FALSE) {
 							$n->setTitle('Espionnage intercepté');
 							$n->addBeg();
 							$n->addLnk('embassy/player-' . $session->get('playerId'), $session->get('playerInfo')->get('name'))->addTxt(' a espionné votre base ');
-							$n->addLnk('map/base-' . $orbitalBase->rPlace, $orbitalBase->name)->addTxt('.');
+							$n->addLnk('map/place-' . $orbitalBase->rPlace, $orbitalBase->name)->addTxt('.');
 							$n->addBrk()->addTxt('L\'espion s\'est fait attrapé en train de fouiller dans vos affaires.');
 							$n->addEnd();
 							$notificationManager->add($n);

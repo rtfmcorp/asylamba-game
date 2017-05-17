@@ -77,7 +77,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 					$n->addBeg();
 					$n->addLnk('embassy/player-' . $session->get('playerId'), $session->get('playerInfo')->get('name'))->addTxt(' a accepté la route commerciale proposée entre ');
 					$n->addLnk('map/place-' . $acceptorBase->getRPlace(), $acceptorBase->getName())->addTxt(' et ');
-					$n->addLnk('map/base-' . $proposerBase->getRPlace(), $proposerBase->getName());
+					$n->addLnk('map/place-' . $proposerBase->getRPlace(), $proposerBase->getName());
 					$n->addSep()->addTxt('Cette route vous rapporte ' . Format::numberFormat($cr->getIncome()) . ' crédits par relève.');
 					$n->addBrk()->addBoxResource('xp', $exp, 'expérience gagnée');
 					$n->addSep()->addLnk('action/a-switchbase/base-' . $proposerBase->getRPlace() . '/page-spatioport', 'En savoir plus ?');
