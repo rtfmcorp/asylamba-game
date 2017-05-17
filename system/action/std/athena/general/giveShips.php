@@ -25,6 +25,7 @@ $commercialShippingManager = $this->getContainer()->get('athena.commercial_shipp
 $transactionManager = $this->getContainer()->get('athena.transaction_manager');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$entityManager = $this->getContainer()->get('entity_manager');
 
 for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -154,3 +155,4 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND in_array($baseId, $verif)) 
 } else {
 	throw new FormException('pas assez d\'informations pour envoyer des vaisseaux');
 }
+$entityManager->flush();
