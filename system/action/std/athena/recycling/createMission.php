@@ -37,7 +37,7 @@ if ($rPlace !== FALSE AND $rTarget !== FALSE AND $quantity !== FALSE AND in_arra
 
 			$S_REM1 = $recyclingMissionManager->getCurrentSession();
 			$recyclingMissionManager->newSession();
-			$recyclingMissionManager->load(array('rBase' => $rPlace, 'statement' => RecyclingMission::ST_ACTIVE));
+			$recyclingMissionManager->load(array('rBase' => $rPlace, 'statement' => [RecyclingMission::ST_BEING_DELETED, RecyclingMission::ST_ACTIVE]));
 
 			for ($i = 0; $i < $recyclingMissionManager->size(); $i++) { 
 				$usedRecyclers += $recyclingMissionManager->get($i)->recyclerQuantity;
