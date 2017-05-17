@@ -274,3 +274,4 @@ if ($gameover == FALSE) {
 		$conversationManager->changeSession($S_CVM1);
 	}
 }
+$this->getContainer()->get('entity_manager')->flush();

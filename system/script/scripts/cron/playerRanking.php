@@ -443,3 +443,4 @@ foreach ($list as $player => $value) {
 }
 
 $playerRankingManager->changeSession($S_PRM1);
+$this->getContainer()->get('entity_manager')->flush();
