@@ -289,6 +289,8 @@ class Commander
 	public function setAge($age)
     {
         $this->age = $age;
+		
+		return $this;
     }
     
     /**
@@ -413,12 +415,12 @@ class Commander
     }
     
     /**
-     * @param int $rPlaceDestination
+     * @param int $rDestinationPlace
      * @return $this
      */
-	public function setRPlaceDestination($rPlaceDestination)
+	public function setRPlaceDestination($rDestinationPlace)
     {
-        $this->rPlaceDestination = $rPlaceDestination;
+        $this->rDestinationPlace = $rDestinationPlace;
         
         return $this;
     }
