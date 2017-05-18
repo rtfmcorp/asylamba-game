@@ -51,6 +51,7 @@ define('APP_DESCRIPTION',		'Asylamba, jeu par navigateur');
 # défini le chemin de base du serveur
 # note : de préférance un chemin relatif
 define('APP_ROOT',				'/');
+define('APP_HOST',				'http://game.asylamba.local/');
 # défini l'URL de sortie
 # note : très important pour l'utilisation de l'API
 # note : en règle général une URL absolue
