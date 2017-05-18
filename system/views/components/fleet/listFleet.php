@@ -76,7 +76,7 @@ echo '<div class="component size3 list-fleet">';
 
 									if ($commander->rPlayer != $session->get('playerId')) {
 										if ($step >= 2) {
-											switch ($commander->getTypeOfMove()) {
+											switch ($commander->getTravelType()) {
 												case Commander::LOOT: $type = 'tente de vous piller'; break;
 												case Commander::COLO: $type = 'tente de vous conquérir'; break;
 												default: $type = 'erreur'; break;

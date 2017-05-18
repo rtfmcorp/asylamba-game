@@ -43,7 +43,7 @@ echo '<div class="component">';
 			if ($commander_commanderDetail->statement == Commander::MOVING) {
 				echo '<div class="number-box">';
 					echo '<span class="label">Mission</span>';
-						switch ($commander_commanderDetail->getTypeOfMove()) {
+						switch ($commander_commanderDetail->getTravelType()) {
 							case Commander::MOVE: 
 									echo '<span class="value">Déplacement</span>';
 								echo '</div>';
@@ -70,7 +70,7 @@ echo '<div class="component">';
 								echo '</div>';
 								echo '<div class="number-box">';
 									echo '<span class="label">Ressources transportées</span>';
-									echo '<span class="value">' . Format::numberFormat($commander_commanderDetail->getResourcesTransported()) . '</span>';
+									echo '<span class="value">' . Format::numberFormat($commander_commanderDetail->getResources()) . '</span>';
 								break;
 							default: break;
 						}

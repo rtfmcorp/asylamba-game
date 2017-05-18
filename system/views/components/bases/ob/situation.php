@@ -45,7 +45,7 @@ echo '<div class="component space size3">';
 								echo $commander->getPev() . ' Pev';
 								if ($commander->getStatement() == Commander::MOVING) {
 									echo '<br />&#8594;	';
-									switch ($commander->getTypeOfMove()) {
+									switch ($commander->getTravelType()) {
 										case Commander::MOVE: echo 'déplacement'; break;
 										case Commander::LOOT: echo 'pillage'; break;
 										case Commander::COLO: echo 'colonisation'; break;

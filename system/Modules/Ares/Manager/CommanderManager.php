@@ -227,11 +227,7 @@ class CommanderManager
 		return $this->entityManager->getRepository(Commander::class)->countCommandersByLine($orbitalBaseId, $line);
 	}
 
-    public function setCommander($commander) {
-        $this->objects['' . $commander->getId() .''] = $commander;
-    }
-
-	public function setEarnedExperience(Commander $commander, $enemyCommander) {
+	public function setEarnedExperience(Commander $commander, Commander $enemyCommander) {
 		$commander->setArmy();
 		$finalOwnPev = 0;
 
