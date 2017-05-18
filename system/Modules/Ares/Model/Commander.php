@@ -719,6 +719,16 @@ class Commander
     {
         return $this->pevInBegin;
     }
+	
+	public function getPev() {
+		$pev = 0;
+		foreach ($this->armyInBegin as $squadron) {
+			for ($i = 0; $i < 12; $i++) {
+				$pev += $squadron[$i] * ShipResource::getInfo($i, 'pev');
+			}
+		}
+		return $pev;
+	}
 
 	public function setArmyAtEnd()
     {
