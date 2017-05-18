@@ -30,7 +30,7 @@ $qr = $this->getContainer()->get('database')->query('SELECT
 		ob2.rPlayer = ' . $session->get('playerId'));
 $aw = $qr->fetchAll();
 
-echo '<div id="commercial-routes" ' . ($request->cookies->get('p' . Params::SHOW_MAP_RC, Params::SHOW_MAP_RC) ? NULL : 'style="display:none;"') . '>';
+echo '<div id="commercial-routes" ' . ($request->cookies->get('p' . Params::SHOW_MAP_RC, Params::$params[Params::SHOW_MAP_RC]) ? NULL : 'style="display:none;"') . '>';
 	echo '<svg viewBox="0, 0, ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . ', ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';
 			foreach ($aw as $route) {
 				$class = ($route['statement'] == CommercialRoute::ACTIVE) ? 'active' : 'standBy';
