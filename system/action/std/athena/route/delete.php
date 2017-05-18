@@ -60,7 +60,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 				$n->setTitle('Route commerciale détruite');
 				$n->addBeg()->addLnk('embassy/player-' . $session->get('playerId'), $session->get('playerInfo')->get('name'))->addTxt(' annule les accords commerciaux entre ');
 				$n->addLnk('map/place-' . $myBaseId, $myBaseName)->addTxt(' et ');
-				$n->addLnk('map/base-' . $otherBaseId, $otherBaseName)->addTxt('.');
+				$n->addLnk('map/place-' . $otherBaseId, $otherBaseName)->addTxt('.');
 				$n->addSep()->addTxt('La route commerciale qui liait les deux bases orbitales est détruite, elle ne vous rapporte donc plus rien !');
 				$n->addEnd();
 				$notificationManager->add($n);

@@ -41,7 +41,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 		$n->setTitle('Route commerciale annulée');
 
 		$n->addBeg()->addLnk('embassy/player-' . $session->get('playerId'), $session->get('playerInfo')->get('name'))->addTxt(' a finalement retiré la proposition de route commerciale qu\'il avait faite entre ');
-		$n->addLnk('map/base-' . $linkedBase->getRPlace(), $linkedBase->getName())->addTxt(' et ');
+		$n->addLnk('map/place-' . $linkedBase->getRPlace(), $linkedBase->getName())->addTxt(' et ');
 		$n->addLnk('map/place-' . $proposerBase->getRPlace(), $proposerBase->getName());
 		$n->addEnd();
 		$notificationManager->add($n);

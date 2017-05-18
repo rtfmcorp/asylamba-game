@@ -54,6 +54,9 @@ class UnitOfWork {
 		if (!isset($this->entities[get_class($object)][$object->getId()]['instance'])) {
 			\Asylamba\Classes\Daemon\Server::debug(get_class($object));
 			\Asylamba\Classes\Daemon\Server::debug($object->getId());
+			\Asylamba\Classes\Daemon\Server::debug(spl_object_hash($object));
+			\Asylamba\Classes\Daemon\Server::debug($this->entities[get_class($object)]);
+			return;
 		}
         $this->entities[get_class($object)][$object->getId()]['state'] = self::METADATA_REMOVED;
     }
@@ -76,10 +79,6 @@ class UnitOfWork {
         }
         $repository = $this->entityManager->getRepository($entityClass);
         foreach ($this->entities[$entityClass] as $entity) {
-			if (!isset($entity['instance'])) {
-				\Asylamba\Classes\Daemon\Server::debug($entityClass);
-				\Asylamba\Classes\Daemon\Server::debug($entity);
-			}
             $this->flushObject($repository, $entityClass, $entity['instance']);
         }
     }

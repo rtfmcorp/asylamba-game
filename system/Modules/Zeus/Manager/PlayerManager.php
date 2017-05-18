@@ -667,6 +667,7 @@ class PlayerManager {
 
 			$comList->add($nbOfComNotPaid, $commander->getName());
 			$nbOfComNotPaid++;
+			$this->entityManager->flush($commander);
 		}
 		# si au moins un commandant n'a pas pu être payé --> envoyer une notif
 		if ($nbOfComNotPaid) {	
@@ -724,6 +725,7 @@ class PlayerManager {
 			$n->addTxt('Vous n\'avez pas assez de crédits pour payer l\'entretien de la flotte de votre officier ' . $commander->name . '. Celui-ci a donc déserté ! ... avec la flotte, désolé.');
 			$n->addEnd();
 			$this->notificationManager->add($n);
+			$this->entityManager->flush($commander);
 		}
 		# vaisseaux sur la planète
 		foreach ($playerBases as $base) {
@@ -783,7 +785,6 @@ class PlayerManager {
 		$this->researchManager->changeSession($S_RSM1);
 
 		$player->credit = $newCredit;
-		$this->entityManager->flush();
 	}
 
 	// OBJECT METHOD
