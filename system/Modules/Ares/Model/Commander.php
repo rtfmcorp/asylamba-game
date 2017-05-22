@@ -508,6 +508,25 @@ class Commander
     {
         return $this->dAffectation;
     }
+	
+	/**
+	 * @param string $startedAt
+	 * @return \Asylamba\Modules\Ares\Model\Commander
+	 */
+	public function setStartedAt($startedAt)
+	{
+		$this->dStart = $startedAt;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getStartedAt()
+	{
+		return $this->dStart;
+	}
     
     /**
      * @param string $arrivalDate

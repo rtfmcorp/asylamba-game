@@ -14,7 +14,6 @@ namespace Asylamba\Modules\Zeus\Manager;
 use Asylamba\Classes\Worker\CTC;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Entity\EntityManager;
-use Asylamba\Classes\Worker\API;
 use Asylamba\Classes\Library\Session\SessionWrapper;
 
 use Asylamba\Modules\Zeus\Model\Player;
@@ -349,15 +348,6 @@ class PlayerManager {
 		$this->entityManager->flush($player);
 	}
 
-	public static function deleteById($id) {
-		$qr = $this->database->prepare('DELETE FROM player WHERE id = ?');
-		$qr->execute(array($id));
-
-		$this->_Remove($id);
-		
-		return TRUE;
-	}
-
 	public function kill($playerId) {
 		$player = $this->get($playerId);
 
@@ -393,7 +383,7 @@ class PlayerManager {
 		$placeId = NULL;
 		foreach ($sectors as $sector) {
 			# place choice
-			$qr = $this->database->prepare('SELECT * FROM place AS p
+			$qr = $this->entityManager->getConnection()->prepare('SELECT * FROM place AS p
 				INNER JOIN system AS sy ON p.rSystem = sy.id
 					INNER JOIN sector AS se ON sy.rSector = se.id
 				WHERE p.typeOfPlace = 1
@@ -540,6 +530,7 @@ class PlayerManager {
 			$this->entityManager->clear($player);
 		}
 		$this->researchManager->changeSession($S_RSM1);
+		$this->entityManager->flush(Color::class);
 	}
 
 	public function uCredit(Player $player, $playerBases, $playerBonus, $commanders, $rsmSession, $factions, $transactions) {

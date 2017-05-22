@@ -39,7 +39,10 @@ foreach ($commanders as $commander) {
 		$incomingCommanders[] = $commander;
 	}
 }
+$nbIncomingCommanders = count($incomingCommanders);
 
+$outcomingCommanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::MOVING]);
+$nbOutcomingCommanders = count($outcomingCommanders);
 echo '</div>';
 
 echo '<div id="tools">';
@@ -83,20 +86,12 @@ echo '<div id="tools">';
 
 	# right
 	echo '<div class="box right">';
-		$outgoingAttack = 0;
-
-		for ($i = 0; $i < $session->get('playerEvent')->size(); $i++) {
-			if ($session->get('playerEvent')->get($i)->get('eventType') == EVENT_OUTGOING_ATTACK) {
-				$outgoingAttack++;
-			}
-		}
-
 		echo '<a href="#" class="square sh" data-target="tools-incoming-attack"><img src="' . MEDIA . 'common/nav-fleet-defense.png" alt="" />';
-			echo (count($incomingCommanders) > 0) ? '<span class="number">' . count($incomingCommanders) . '</span>' : NULL;
+			echo ($nbIncomingCommanders > 0) ? '<span class="number">' . $nbIncomingCommanders . '</span>' : NULL;
 		echo '</a>';
 
 		echo '<a href="#" class="square sh" data-target="tools-outgoing-attack"><img src="' . MEDIA . 'common/nav-fleet-attack.png" alt="" />';
-			echo ($outgoingAttack > 0) ? '<span class="number">' . $outgoingAttack . '</span>' : NULL;
+			echo ($nbOutcomingCommanders > 0) ? '<span class="number">' . $nbOutcomingCommanders . '</span>' : NULL;
 		echo '</a>';
 
 		echo '<span class="resource-link" style="width: 120px;">';
@@ -310,35 +305,31 @@ echo '<div id="tools">';
 	echo '<div class="overbox right-pic" id="tools-outgoing-attack">';
 		echo '<h2>Déplacement de vos flottes</h2>';
 		echo '<div class="overflow">';
-			if ($outgoingAttack > 0) {
+			if ($nbOutcomingCommanders > 0) {
 				echo '<div class="queue">';
 
-				for ($i = 0; $i < $session->get('playerEvent')->size(); $i++) {
-					if ($session->get('playerEvent')->get($i)->get('eventType') == EVENT_OUTGOING_ATTACK) {
-						$commander = $session->get('playerEvent')->get($i);
-
-						echo '<div class="item active progress" ';
-							echo 'data-progress-no-reload="true" ';
-							echo 'data-progress-output="lite" ';
-							echo 'data-progress-current-time="' . Utils::interval(Utils::now(), $commander->get('eventInfo')->get('dArrival'), 's') . '" ';
-							echo 'data-progress-total-time="' . Utils::interval($commander->get('eventInfo')->get('dStart'), $commander->get('eventInfo')->get('dArrival'), 's') . '">';
-							echo  '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->get('eventInfo')->get('avatar') . '.png" alt="" />';
-							echo '<strong>' . CommanderResources::getInfo($commander->get('eventInfo')->get('level'), 'grade') . ' ' . $commander->get('eventInfo')->get('name') . '</strong>';
-							echo '<em>';
-								switch ($commander->get('eventInfo')->get('travelType')) {
-									case Commander::MOVE: echo 'déplacement vers ' . $commander->get('eventInfo')->get('nArrival'); break;
-									case Commander::LOOT: echo 'pillage de ' . $commander->get('eventInfo')->get('nArrival'); break;
-									case Commander::COLO: echo 'colonisation de ' . $commander->get('eventInfo')->get('nArrival'); break;
-									case Commander::BACK: echo 'retour vers ' . $commander->get('eventInfo')->get('nArrival'); break;
-									default: echo 'autre'; break;
-								}
-							echo '</em>';
-							echo '<em><span class="progress-text"></span></em>';
-							echo '<span class="progress-container">';
-								echo '<span class="progress-bar"></span>';
-							echo '</span>';
-						echo '</div>';
-					}
+				foreach ($outcomingCommanders as $commander) {
+					echo '<div class="item active progress" ';
+						echo 'data-progress-no-reload="true" ';
+						echo 'data-progress-output="lite" ';
+						echo 'data-progress-current-time="' . Utils::interval(Utils::now(), $commander->getArrivalDate(), 's') . '" ';
+						echo 'data-progress-total-time="' . Utils::interval($commander->getStartedAt(), $commander->getArrivalDate(), 's') . '">';
+						echo  '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->getAvatar() . '.png" alt="" />';
+						echo '<strong>' . CommanderResources::getInfo($commander->getLevel(), 'grade') . ' ' . $commander->getName() . '</strong>';
+						echo '<em>';
+							switch ($commander->getTravelType()) {
+								case Commander::MOVE: echo 'déplacement vers ' . $commander->getDestinationPlaceName(); break;
+								case Commander::LOOT: echo 'pillage de ' . $commander->getDestinationPlaceName(); break;
+								case Commander::COLO: echo 'colonisation de ' . $commander->getDestinationPlaceName(); break;
+								case Commander::BACK: echo 'retour vers ' . $commander->getDestinationPlaceName(); break;
+								default: echo 'autre'; break;
+							}
+						echo '</em>';
+						echo '<em><span class="progress-text"></span></em>';
+						echo '<span class="progress-container">';
+							echo '<span class="progress-bar"></span>';
+						echo '</span>';
+					echo '</div>';
 				}
 
 				echo '</div>';

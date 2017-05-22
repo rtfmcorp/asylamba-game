@@ -90,18 +90,3 @@ foreach ($playerBases as $orbitalBase) {
 	}
 	$technologyQueueManager->changeSession($S_TQM1);
 }
-
-# check the commanders (outgoing attacks)
-$commanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::MOVING]);
-
-foreach ($commanders as $commander) { 
-	if ($commander->getTravelType() === Commander::MOVE) {
-		continue;
-	}
-	$session->get('playerEvent')->add(
-		$commander->getArrivalDate(),
-		EVENT_OUTGOING_ATTACK,
-		$commander->getId(),
-		$commanderManager->getEventInfo($commander)
-	);
-}
