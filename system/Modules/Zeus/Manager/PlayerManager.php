@@ -348,15 +348,6 @@ class PlayerManager {
 		$this->entityManager->flush($player);
 	}
 
-	public static function deleteById($id) {
-		$qr = $this->database->prepare('DELETE FROM player WHERE id = ?');
-		$qr->execute(array($id));
-
-		$this->_Remove($id);
-		
-		return TRUE;
-	}
-
 	public function kill($playerId) {
 		$player = $this->get($playerId);
 
@@ -392,7 +383,7 @@ class PlayerManager {
 		$placeId = NULL;
 		foreach ($sectors as $sector) {
 			# place choice
-			$qr = $this->database->prepare('SELECT * FROM place AS p
+			$qr = $this->entityManager->getConnection()->prepare('SELECT * FROM place AS p
 				INNER JOIN system AS sy ON p.rSystem = sy.id
 					INNER JOIN sector AS se ON sy.rSector = se.id
 				WHERE p.typeOfPlace = 1
