@@ -60,8 +60,6 @@ class CommanderManager
 	protected $colorManager;
 	/** @var NotificationManager **/
 	protected $notificationManager;
-	/** @var Session **/
-	protected $session;
 	/** @var RealTimeActionScheduler **/
 	protected $scheduler;
 	/** @var EventDispatcher **/
@@ -86,7 +84,6 @@ class CommanderManager
 	 * @param PlaceManager $placeManager
 	 * @param ColorManager $colorManager
 	 * @param NotificationManager $notificationManager
-	 * @param SessionWrapper $session
 	 * @param RealTimeActionScheduler $scheduler
 	 * @param EventDispatcher $eventDispatcher
 	 * @param int $commanderBaseLevel
@@ -101,7 +98,6 @@ class CommanderManager
 		PlaceManager $placeManager,
 		ColorManager $colorManager,
 		NotificationManager $notificationManager,
-		SessionWrapper $session,
 		RealTimeActionScheduler $scheduler,
 		EventDispatcher $eventDispatcher,
 		$commanderBaseLevel
@@ -115,7 +111,8 @@ class CommanderManager
 		$this->placeManager = $placeManager;
 		$this->colorManager = $colorManager;
 		$this->notificationManager = $notificationManager;
-		$this->session = $session;
+		\Asylamba\Classes\Daemon\Server::debug('constructor');
+		\Asylamba\Classes\Daemon\Server::debug(gettype($scheduler));
 		$this->scheduler = $scheduler;
 		$this->eventDispatcher = $eventDispatcher;
 		$this->commanderBaseLevel = $commanderBaseLevel;
@@ -259,20 +256,12 @@ class CommanderManager
 
 	public function setBonus(Commander $commander) {
 		$commander->setArmy();
-		if ($commander->rPlayer != $this->session->get('playerId')) {
-			$playerBonus = new PlayerBonus($commander->rPlayer);
-			$playerBonus->load();
-			
-			foreach ($commander->army AS $squadron) {
-				foreach ($squadron->squadron AS $ship) {
-					$ship->setBonus($playerBonus->bonus);
-				}
-			}
-		} else {
-			foreach ($commander->army AS $squadron) {
-				foreach ($squadron->squadron AS $ship) {
-					$ship->setBonus($this->session->get('playerBonus'));
-				}
+		$playerBonus = new PlayerBonus($commander->rPlayer);
+		$playerBonus->load();
+
+		foreach ($commander->army AS $squadron) {
+			foreach ($squadron->squadron AS $ship) {
+				$ship->setBonus($playerBonus->bonus);
 			}
 		}
 	}
@@ -334,13 +323,9 @@ class CommanderManager
 			$commander->uCommander = $now;
 			$orbitalBase = $this->orbitalBaseManager->get($commander->rBase);
 			
-			if ($commander->rPlayer != $this->session->get('playerId')) {
-				$playerBonus = $this->playerBonusManager->getBonusByPlayer($this->playerManager->get($commander->rPlayer));
-				$this->playerBonusManager->load($playerBonus);
-				$playerBonus = $playerBonus->bonus;
-			} else {
-				$playerBonus = $this->session->get('playerBonus');
-			}
+			$playerBonus = $this->playerBonusManager->getBonusByPlayer($this->playerManager->get($commander->rPlayer));
+			$this->playerBonusManager->load($playerBonus);
+			$playerBonus = $playerBonus->bonus;
 			foreach ($nbrHours as $hour) {
 				$invest  = $orbitalBase->iSchool;
 				$invest += $invest * $playerBonus->get(PlayerBonus::COMMANDER_INVEST) / 100;
@@ -361,6 +346,8 @@ class CommanderManager
 	}
 
 	public function move(Commander $commander, $rDestinationPlace, $rStartPlace, $travelType, $travelLength, $duration) {
+		\Asylamba\Classes\Daemon\Server::debug('Move');
+		\Asylamba\Classes\Daemon\Server::debug(gettype($this->scheduler));
 		$commander->rDestinationPlace = $rDestinationPlace;
 		$commander->rStartPlace = $rStartPlace;
 		$commander->travelType = $travelType;
@@ -374,15 +361,6 @@ class CommanderManager
 		$date->modify('+' . $duration . 'second');
 		$commander->dArrival = $date->format('Y-m-d H:i:s');
 
-		// ajout de l'event dans le contrôleur
-		if ($this->session->exist('playerEvent') && $commander->rPlayer == $this->session->get('playerId')) {
-			$this->session->get('playerEvent')->add(
-				$commander->dArrival,
-				EVENT_OUTGOING_ATTACK,
-				$commander->id,
-				$this->getEventInfo($commander)
-			);
-		}
 		$this->scheduler->schedule(
 			'ares.commander_manager',
 			$this->actions[$travelType],
@@ -567,6 +545,8 @@ class CommanderManager
 		$this->playerBonusManager->load($playerBonus);
 		LiveReport::$type   = Commander::LOOT;
 		LiveReport::$dFight = $commander->dArrival;
+		\Asylamba\Classes\Daemon\Server::debug('uLoot');
+		\Asylamba\Classes\Daemon\Server::debug(gettype($this->scheduler));
 
 		# si la planète est vide
 		if ($place->rPlayer == NULL) {
@@ -863,17 +843,6 @@ class CommanderManager
 				$commander->rBase = $place->id;
 				$this->endTravel($commander, Commander::AFFECTED);
 				$commander->line = 2;
-
-				# ajout de la place en session
-				if ($this->session->get('playerId') == $commander->getRPlayer()) {
-					$this->session->addBase('ob', 
-						$ob->getId(), 
-						$ob->getName(), 
-						$place->rSector, 
-						$place->rSystem,
-						'1-' . Game::getSizeOfPlanet($place->population),
-						OrbitalBase::TYP_NEUTRAL);
-				}
 				
 				# création du rapport
 				$report = $this->createReport($place);
@@ -945,6 +914,8 @@ class CommanderManager
 
 	# comeBack
 	public function comeBack(Place $place, $commander, $commanderPlace, $playerBonus) {
+		\Asylamba\Classes\Daemon\Server::debug('comeBack');
+		\Asylamba\Classes\Daemon\Server::debug(gettype($this->scheduler));
 		$length   = Game::getDistance($place->getXSystem(), $commanderPlace->getXSystem(), $place->getYSystem(), $commanderPlace->getYSystem());
 		$duration = Game::getTimeToTravel($commanderPlace, $place, $playerBonus->bonus);
 
@@ -954,9 +925,7 @@ class CommanderManager
 	}
 
 	private function lootAnEmptyPlace(Place $place, $commander, $playerBonus) {
-		$bonus = ($commander->rPlayer != $this->session->get('playerId'))
-			? $playerBonus->bonus->get(PlayerBonus::SHIP_CONTAINER)
-			: $this->session->get('playerBonus')->get(PlayerBonus::SHIP_CONTAINER);
+		$bonus = $playerBonus->bonus->get(PlayerBonus::SHIP_CONTAINER);
 	
 		$storage = $commander->getPevToLoot() * Commander::COEFFLOOT;
 		$storage += round($storage * ((2 * $bonus) / 100));
@@ -971,9 +940,7 @@ class CommanderManager
 	}
 
 	private function lootAPlayerPlace($commander, $playerBonus, $placeBase) {
-		$bonus = ($commander->rPlayer != $this->session->get('playerId'))
-			? $playerBonus->bonus->get(PlayerBonus::SHIP_CONTAINER)
-			: $this->session->get('playerBonus')->get(PlayerBonus::SHIP_CONTAINER);
+		$bonus = $playerBonus->bonus->get(PlayerBonus::SHIP_CONTAINER);
 
 		$resourcesToLoot = $placeBase->getResourcesStorage() - Commander::LIMITTOLOOT;
 
