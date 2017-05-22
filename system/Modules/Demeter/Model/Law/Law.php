@@ -11,8 +11,6 @@
 */
 namespace Asylamba\Modules\Demeter\Model\Law;
 
-use Asylamba\Classes\Worker\ASM;
-
 class Law {
 	const VOTATION					= 0;
 	const EFFECTIVE					= 1;

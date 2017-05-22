@@ -516,6 +516,9 @@ class ColorManager {
 
 			$statusArray = $color->status;
 			if ($color->regime === Color::DEMOCRATIC) {
+				$date = new \DateTime($color->dLastElection);
+				$date->modify('+' . $color->mandateDuration . ' second');
+				$this->scheduler->schedule('demeter.color_manager', 'uCampaign', $color, $date->format('Y-m-d H:i:s'));
 				$notif = new Notification();
 				$notif->dSending = Utils::now();
 				$notif->setRPlayer($newChief->id);
@@ -688,7 +691,7 @@ class ColorManager {
 			$law->statement = Law::OBSOLETE;
 		}
 		$this->entityManager->flush($law);
-		$this->entityManager->flush($tax);
+		//$this->entityManager->flush($tax);
 	}
 
 	public function uFinishImportComercialTaxes(Color $color, $law, $tax) {
@@ -701,7 +704,7 @@ class ColorManager {
 			$law->statement = Law::OBSOLETE;
 		}
 		$this->entityManager->flush($law);
-		$this->entityManager->flush($tax);
+		//$this->entityManager->flush($tax);
 	}
 
 	public function uFinishNeutral(Color $color, $law, $enemyColor) {
