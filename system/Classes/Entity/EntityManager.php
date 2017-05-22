@@ -97,4 +97,12 @@ class EntityManager {
     {
         return $this->unitOfWork;
     }
+	
+	/**
+	 * @return Connection
+	 */
+	public function getConnection()
+	{
+		return $this->connection;
+	}
 }
