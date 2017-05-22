@@ -14,7 +14,6 @@ namespace Asylamba\Modules\Zeus\Manager;
 use Asylamba\Classes\Worker\CTC;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Entity\EntityManager;
-use Asylamba\Classes\Worker\API;
 use Asylamba\Classes\Library\Session\SessionWrapper;
 
 use Asylamba\Modules\Zeus\Model\Player;
@@ -540,6 +539,7 @@ class PlayerManager {
 			$this->entityManager->clear($player);
 		}
 		$this->researchManager->changeSession($S_RSM1);
+		$this->entityManager->flush(Color::class);
 	}
 
 	public function uCredit(Player $player, $playerBases, $playerBonus, $commanders, $rsmSession, $factions, $transactions) {
