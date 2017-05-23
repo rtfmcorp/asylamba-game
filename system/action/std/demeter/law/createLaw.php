@@ -26,7 +26,7 @@ $playerManager = $this->getContainer()->get('zeus.player_manager');
 $parser = $this->getContainer()->get('parser');
 
 $type = $request->query->get('type');
-$duration = $request->query->get('duration');
+$duration = (int) $request->request->get('duration');
 
 if ($type !== FALSE) {
 	if (LawResources::size() >= $type) {

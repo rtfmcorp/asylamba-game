@@ -228,7 +228,7 @@ class PlaceManager {
 					->addLnk('map/place-' . $place->id, Game::formatCoord($place->xSystem, $place->ySystem, $place->position, $place->rSector))
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
+					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées')
 					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
 					->addSep()
 					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
@@ -265,7 +265,7 @@ class PlaceManager {
 					->addLnk('embassy/player-' . $place->rPlayer, $place->playerName)
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
+					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées')
 					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
 					->addSep()
 					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
@@ -284,7 +284,7 @@ class PlaceManager {
 					->addLnk('map/place-' . $place->id, $place->baseName)
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
+					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées')
 					->addSep()
 					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
 					->addEnd();
@@ -340,7 +340,7 @@ class PlaceManager {
 					->addLnk('embassy/player-' . $place->rPlayer, $place->playerName)
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
+					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées')
 					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
 					->addEnd();
 				$this->notificationManager->add($notif);
@@ -357,7 +357,7 @@ class PlaceManager {
 					->addLnk('map/place-' . $place->id, $place->baseName)
 					->addTxt('. Aucune flotte n\'était en position pour la défendre. ')
 					->addSep()
-					->addBoxResource('resource', Format::number($commander->getResourcesTransported()), 'ressources pillées')
+					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées')
 					->addEnd();
 				$this->notificationManager->add($notif);
 				break;
@@ -468,7 +468,7 @@ class PlaceManager {
 					->addTxt(' est de retour sur votre base ')
 					->addLnk('map/place-' . $commander->getRBase(), $commander->getBaseName())
 					->addTxt(' et rapporte ')
-					->addStg(Format::number($commander->getResourcesTransported()))
+					->addStg(Format::number($commander->getResources()))
 					->addTxt(' ressources à vos entrepôts.')
 					->addEnd();
 				$this->notificationManager->add($notif);

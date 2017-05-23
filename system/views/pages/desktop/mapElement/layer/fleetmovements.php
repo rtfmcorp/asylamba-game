@@ -12,7 +12,7 @@ $galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
 
 $commanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::MOVING]);
 
-echo '<div id="fleet-movements" ' . ($request->cookies->get('p' . Params::SHOW_MAP_FLEETOUT, Params::SHOW_MAP_FLEETOUT) ? NULL : 'style="display:none;"') . '>';
+echo '<div id="fleet-movements" ' . ($request->cookies->get('p' . Params::SHOW_MAP_FLEETOUT, Params::$params[Params::SHOW_MAP_FLEETOUT]) ? NULL : 'style="display:none;"') . '>';
 	echo '<svg viewBox="0, 0, ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . ', ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';
 			foreach ($commanders as $commander) {
 				if ($commander->rDestinationPlace !== NULL) {

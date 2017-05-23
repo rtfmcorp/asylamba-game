@@ -31,7 +31,7 @@ echo '<div id="content">';
 		# set d'orbitale base
 		$obsets = array(); $j = 0;
 		for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
-			if ($request->cookies->get('p' . Params::LIST_ALL_FLEET, Params::LIST_ALL_FLEET) || $session->get('playerBase')->get('ob')->get($i)->get('id') == $session->get('playerParams')->get('base')) {
+			if ($request->cookies->get('p' . Params::LIST_ALL_FLEET, Params::$params[Params::LIST_ALL_FLEET]) || $session->get('playerBase')->get('ob')->get($i)->get('id') == $session->get('playerParams')->get('base')) {
 				$obsets[$j] = array();
 
 				$obsets[$j]['info'] = array();

@@ -1,15 +1,17 @@
 ---
 parameters:
-    database_host: 127.0.0.1
-    # database_host: asylamba_mysql     # with docker
-    database_name: asylamba_game
-    database_user: asylamba
-    # database_user: root               # with docker (temporary)
-    database_password: asylamba
-    database_admin_user: root
-    database_admin_password: asylamba
-    
-    server_port: 9999
+#	 These are defined by the environment variables of the Docker container
+#	 Uncomment it if you don't use Docker
+#    database_host: 127.0.0.1
+#    # database_host: asylamba_mysql     # with docker
+#    database_name: asylamba_game
+#    database_user: asylamba
+#    # database_user: root               # with docker (temporary)
+#    database_password: asylamba
+#    database_admin_user: root
+#    database_admin_password: asylamba
+#    
+#    server_port: 9999
     server_cycle_timeout: 20
     server_collection_cycles_number: 25
     
@@ -49,4 +51,5 @@ parameters:
     #gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV6
     #game.available_factions: [1, 2, 3, 4, 7]
     
-    environment: dev
+# Also defined in Docker container environment variables
+#    environment: dev

@@ -97,4 +97,13 @@ class Configuration {
 		require_once(CONFIG . 'app.config.local.php');
 		require_once(CONFIG . 'app.config.global.php');
 	}
+	
+	public function loadEnvironment(Container $container)
+	{
+		foreach($_ENV as $key => $value) {
+			if (substr($key, 0, 9) === 'ASYLAMBA_') {
+				$container->setParameter(strtolower(substr($key, 9)), $value);
+			}
+		}
+	}
 }

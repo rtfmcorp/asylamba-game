@@ -27,7 +27,7 @@ echo '<div class="component size3 list-fleet">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<a class="top-right-button" href="' . Format::actionBuilder('switchparams', $sessionToken, ['params' => Params::LIST_ALL_FLEET]) . '">' . ($request->cookies->get('p' . Params::LIST_ALL_FLEET, Params::LIST_ALL_FLEET) ? 'Afficher uniquement la base courante' : 'Afficher toutes les bases') . '</a>';
+			echo '<a class="top-right-button" href="' . Format::actionBuilder('switchparams', $sessionToken, ['params' => Params::LIST_ALL_FLEET]) . '">' . ($request->cookies->get('p' . Params::LIST_ALL_FLEET, Params::$params[Params::LIST_ALL_FLEET]) ? 'Afficher uniquement la base courante' : 'Afficher toutes les bases') . '</a>';
 
 			foreach ($obsets as $base) {
 				echo '<div class="set-fleet">';
@@ -76,7 +76,7 @@ echo '<div class="component size3 list-fleet">';
 
 									if ($commander->rPlayer != $session->get('playerId')) {
 										if ($step >= 2) {
-											switch ($commander->getTypeOfMove()) {
+											switch ($commander->getTravelType()) {
 												case Commander::LOOT: $type = 'tente de vous piller'; break;
 												case Commander::COLO: $type = 'tente de vous conquérir'; break;
 												default: $type = 'erreur'; break;

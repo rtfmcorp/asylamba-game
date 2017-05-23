@@ -79,7 +79,7 @@ echo '<div class="column act">';
 		$coloQuantity = 0;
 
 		foreach ($movingCommanders as $commander) { 
-			if ($commander->getTypeOfMove() == Commander::COLO) {
+			if ($commander->getTravelType() == Commander::COLO) {
 				$coloQuantity++;
 			}
 		}

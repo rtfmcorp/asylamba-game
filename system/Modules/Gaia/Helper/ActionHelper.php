@@ -116,7 +116,7 @@ abstract class ActionHelper {
 				$S_COM2 = $this->commanderManager->getCurrentSession();
 				$this->commanderManager->changeSession($movingCommandersSession);
 				for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
-					if ($this->commanderManager->get($i)->getTypeOfMove() == Commander::COLO) {
+					if ($this->commanderManager->get($i)->getTravelType() == Commander::COLO) {
 						$coloQuantity++;
 					}
 				}
@@ -189,7 +189,7 @@ abstract class ActionHelper {
 				$S_COM2 = $this->commanderManager->getCurrentSession();
 				$this->commanderManager->changeSession($movingCommandersSession);
 				for ($i = 0; $i < $this->commanderManager->size(); $i++) { 
-					if ($this->commanderManager->get($i)->getTypeOfMove() == Commander::COLO) {
+					if ($this->commanderManager->get($i)->getTravelType() == Commander::COLO) {
 						$coloQuantity++;
 					}
 				}

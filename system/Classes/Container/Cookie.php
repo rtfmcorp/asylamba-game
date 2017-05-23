@@ -22,6 +22,17 @@ class Cookie extends ArrayList {
 
     /**
      * @param string $key
+     * @return mixed
+     */
+    public function get($key, $default = null) {
+        if (isset($this->elements[$key])) {
+            return $this->elements[$key];
+        }
+        return $default;
+    }
+
+    /**
+     * @param string $key
      * @return boolean
      */
     public function remove($key) {

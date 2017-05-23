@@ -41,6 +41,7 @@ class Worker implements ApplicationInterface {
 		];
 		$this->container->setParameter('root_path', $rootPath);
 		$configuration = new Configuration(new FileLocator($configurationFiles));
+		$configuration->loadEnvironment($this->container);
 		$configuration->buildContainer($this->container, $configurationFiles);
 		$configuration->defineOldConstants($rootPath);
 		

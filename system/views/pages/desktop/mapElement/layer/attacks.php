@@ -16,7 +16,7 @@ $attackingCommanders = array_merge(
 	$commanderManager->getOutcomingAttacks($session->get('playerId'))
 );
 
-echo '<div id="attacks" ' . ($request->cookies->get('p' . Params::SHOW_MAP_FLEETIN, Params::SHOW_MAP_FLEETIN) ? NULL : 'style="display:none;"') . '>';
+echo '<div id="attacks" ' . ($request->cookies->get('p' . Params::SHOW_MAP_FLEETIN, Params::$params[Params::SHOW_MAP_FLEETIN]) ? NULL : 'style="display:none;"') . '>';
 	echo '<svg viewBox="0, 0, ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . ', ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';
 			foreach ($attackingCommanders as $commander) {
 

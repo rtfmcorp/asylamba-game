@@ -11,7 +11,7 @@ echo '<div class="component new-message">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<a href="' . Format::actionBuilder('switchparams', $sessionToken, ['params' => Params::REDIRECT_CHAT]) . '" class="on-off-button ' . ($request->cookies->get('p' . Params::REDIRECT_CHAT, Params::REDIRECT_CHAT) ? NULL : 'disabled') . '">';
+			echo '<a href="' . Format::actionBuilder('switchparams', $sessionToken, ['params' => Params::REDIRECT_CHAT]) . '" class="on-off-button ' . ($request->cookies->get('p' . Params::REDIRECT_CHAT, Params::$params[Params::REDIRECT_CHAT]) ? NULL : 'disabled') . '">';
 				echo 'Ouvrir le chat directement';
 			echo '</a>';
 
