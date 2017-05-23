@@ -720,8 +720,8 @@ class CommanderManager
 						$report = $this->createReport($place);
 						$reportArray[] = $report;
 						$reportIds[] = $report->id;
-						
 						# PATCH DEGUEU POUR LES MUTLIS-COMBATS
+						$this->entityManager->clear($report);
 						$reports = $this->reportManager->getByAttackerAndPlace($commander->rPlayer, $place->id, $commander->dArrival);
 						foreach($reports as $r) {
 							if ($r->id == $report->id) {
@@ -731,6 +731,7 @@ class CommanderManager
 							$r->statementDefender = Report::DELETED;
 						}
 						$this->entityManager->flush(Report::class);
+						$this->entityManager->clear(Report::class);
 						########################################
 
 						# mettre à jour armyInBegin si prochain combat pour prochain rapport
@@ -872,8 +873,8 @@ class CommanderManager
 					}
 				}
 			}
-			$this->entityManager->flush();
 		}
+		$this->entityManager->flush();
 	}
 
 	/**

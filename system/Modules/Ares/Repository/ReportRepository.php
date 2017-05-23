@@ -231,7 +231,7 @@ class ReportRepository extends AbstractRepository {
 			'place_name' => $report->placeName,
 			'type' => $report->type,
 			'is_legal' => $report->isLegal,
-			'has_been_punished' => $report->hasBeenPunished,
+			'has_been_punished' => (int) $report->hasBeenPunished,
 			'round' => $report->round,
 			'importance' => $report->importance,
 			'attacker_pev_in_begin' => $report->pevInBeginA,
