@@ -21,6 +21,7 @@ class Worker implements ApplicationInterface {
     public function __construct($name)
     {
         $this->name = $name;
+		define('PROCESS_NAME', $name);
     }
     
     public function boot()

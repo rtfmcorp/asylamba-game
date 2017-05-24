@@ -15,6 +15,7 @@ class Application implements ApplicationInterface {
     
     public function boot()
     {
+		define('PROCESS_NAME', 'application');
 		$this->container = new Container();
 		$this->container->set('app.container', $this->container);
 		$this->configure();

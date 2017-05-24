@@ -14,6 +14,8 @@ class ServiceInjector {
 	protected $serviceFactory;
 	/** @var array **/
 	protected $pile = [];
+	/** @var array **/
+	protected $proxies = [];
 
 	public function __construct(Container $container)
 	{
@@ -96,14 +98,18 @@ class ServiceInjector {
 		$key = ltrim($argument, '@');
 		$injectedService = &$this->container->getServiceDefinition($key);
 			
-		if(!isset($injectedService['arguments'])) {
+		if(($this->container->hasService($key) && !in_array("@$key", $this->pile)) || !isset($injectedService['arguments'])) {
 			return $this->container->get($key);
 		}
 		// This part of the code ensures that there is no circular dependency between two services
 		// If one is found, 
 		foreach($injectedService['arguments'] as $argument) {
+			// In this case, a circular dependency is found in the dependency arguments.
+			// We proxify the whole dependency and break the loop
 			if (in_array($argument, $this->pile)) {
+				$this->proxies[] = $key;
 				$this->handleCircularDependency($key, $injectedService);
+				break;
 			}
 		}
 		return $this->container->get($key);

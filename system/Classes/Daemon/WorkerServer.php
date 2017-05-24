@@ -171,11 +171,4 @@ class WorkerServer
         fclose($this->outputs[$name]);
 		unset($this->outputs[$name]);
     }
-    
-    public static function debug($debug)
-    {
-        ob_start();
-        var_dump($debug);
-        file_put_contents('/srv/logs/php/test.log', ob_get_clean() . "\n\n", FILE_APPEND);
-    }
 }

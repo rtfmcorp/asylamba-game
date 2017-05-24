@@ -256,6 +256,6 @@ class Server
     {
         ob_start();
         var_dump($debug);
-        file_put_contents('/srv/logs/php/test.log', ob_get_clean() . "\n\n", FILE_APPEND);
+        file_put_contents('/srv/logs/php/test.log', PROCESS_NAME . ': ' . ob_get_clean() . "\n\n", FILE_APPEND);
     }
 }
