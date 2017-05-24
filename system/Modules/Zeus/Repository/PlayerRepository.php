@@ -307,7 +307,7 @@ class PlayerRepository extends AbstractRepository {
 	public function getGovernmentMembers($factionId)
 	{
 		$query = $this->connection->prepare(
-			'SELECT * FROM player WHERE rColor = :faction_id AND statement != :dead_statement AND status IN (' . implode(',', [Player::TREASURER, Player::WARLORD, Player::MINISTER, Player::CHIEF]) . ')'
+			'SELECT * FROM player WHERE rColor = :faction_id AND statement != :dead_statement AND status IN (' . implode(',', [Player::TREASURER, Player::WARLORD, Player::MINISTER, Player::CHIEF]) . ') ORDER BY status DESC'
 		);
 		$query->execute(['faction_id' => $factionId, 'dead_statement' => Player::DEAD]);
 		
