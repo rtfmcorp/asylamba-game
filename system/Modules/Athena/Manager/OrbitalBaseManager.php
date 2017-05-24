@@ -59,7 +59,7 @@ class OrbitalBaseManager {
 	/** @var EntityManager **/
 	protected $entityManager;
 	/** @var RealTimeActionScheduler **/
-	protected $scheduler;
+	protected $realtimeActionScheduler;
 	/** @var BuildingQueueManager **/
 	protected $buildingQueueManager;
 	/** @var ShipQueueManager **/
@@ -101,7 +101,7 @@ class OrbitalBaseManager {
 	
 	/**
 	 * @param EntityManager $entityManager
-	 * @param RealTimeActionScheduler $scheduler
+	 * @param RealTimeActionScheduler $realtimeActionScheduler
 	 * @param BuildingQueueManager $buildingQueueManager
 	 * @param ShipQueueManager $shipQueueManager
 	 * @param TechnologyQueueManager $technologyQueueManager
@@ -122,7 +122,7 @@ class OrbitalBaseManager {
 	 */
 	public function __construct(
 		EntityManager $entityManager,
-		RealTimeActionScheduler $scheduler,
+		RealTimeActionScheduler $realtimeActionScheduler,
 		BuildingQueueManager $buildingQueueManager,
 		ShipQueueManager $shipQueueManager,
 		TechnologyQueueManager $technologyQueueManager,
@@ -144,7 +144,7 @@ class OrbitalBaseManager {
 		SessionWrapper $session
 	) {
 		$this->entityManager = $entityManager;
-		$this->scheduler = $scheduler;
+		$this->realtimeActionScheduler = $realtimeActionScheduler;
 		$this->buildingQueueManager = $buildingQueueManager;
 		$this->shipQueueManager = $shipQueueManager;
 		$this->technologyQueueManager = $technologyQueueManager;

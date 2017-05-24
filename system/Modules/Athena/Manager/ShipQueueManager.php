@@ -21,15 +21,15 @@ class ShipQueueManager {
 	/** @var EntityManager **/
 	protected $entityManager;
 	/** @var RealTimeActionScheduler **/
-	protected $scheduler;
+	protected $realtimeActionScheduler;
 
 	/**
 	 * @param EntityManager $entityManager
-	 * @param RealTimeActionScheduler $scheduler
+	 * @param RealTimeActionScheduler $realtimeActionScheduler
 	 */
-	public function __construct(EntityManager $entityManager, RealTimeActionScheduler $scheduler) {
+	public function __construct(EntityManager $entityManager, RealTimeActionScheduler $realtimeActionScheduler) {
 		$this->entityManager = $entityManager;
-		$this->scheduler = $scheduler;
+		$this->realtimeActionScheduler = $realtimeActionScheduler;
 	}
 	
 	public function get($id)
@@ -64,7 +64,7 @@ class ShipQueueManager {
 		$this->entityManager->persist($shipQueue);
 		$this->entityManager->flush($shipQueue);
 		
-		$this->scheduler->schedule('athena.orbital_base_manager', 'uShipQueue' . $shipQueue->dockType, $shipQueue, $shipQueue->dEnd);
+		$this->realtimeActionScheduler->schedule('athena.orbital_base_manager', 'uShipQueue' . $shipQueue->dockType, $shipQueue, $shipQueue->dEnd);
 	}
 	
 	public function scheduleActions()
@@ -73,7 +73,7 @@ class ShipQueueManager {
 		
 		foreach ($queues as $queue)
 		{
-			$this->scheduler->schedule('athena.orbital_base_manager', 'uShipQueue' . $queue->dockType, $queue, $queue->dEnd);
+			$this->realtimeActionScheduler->schedule('athena.orbital_base_manager', 'uShipQueue' . $queue->dockType, $queue, $queue->dEnd);
 		}
 	}
 }
