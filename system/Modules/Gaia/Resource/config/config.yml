@@ -2,7 +2,7 @@
 parameters:
     gaia.limit_conquest_sector: 4
     gaia.scores: [1, 3, 5, 10]
-    gaia.sector_minimal_score: 8
+    gaia.sector_minimal_score: 10
     
 services:
     gaia.action_helper:
