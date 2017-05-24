@@ -24,7 +24,7 @@ echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
         # liste des conv's
 	$display = 
-		($request->query->get('mode') === ConversationUser::CS_ARCHIVED)
+		((int) $request->query->get('mode') === ConversationUser::CS_ARCHIVED)
 		? ConversationUser::CS_ARCHIVED
 		: ConversationUser::CS_DISPLAY
 	;
