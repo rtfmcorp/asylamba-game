@@ -149,7 +149,8 @@ class PlayerRankingManager extends Manager {
 		}
 	}
 
-	public function add(playerRanking $pl) {
+	public function add(playerRanking $pl)
+	{
 		$qr = $this->database->prepare('INSERT INTO
 			playerRanking(rRanking, rPlayer, 
 				general, generalPosition, generalVariation, 

@@ -401,7 +401,7 @@ foreach ($list as $player => $value) {
 	$pr->armiesPosition = $listA[$player]['position'];
 	$pr->armiesVariation = $firstRanking ? 0 : $oldRanking->armiesPosition - $pr->armiesPosition;
 
-	$pr->butcher = $listB[$player]['butcher'];
+	$pr->butcher = ($listB[$player]['butcher'] >= 0) ? $listB[$player]['butcher'] : 0;
 	$pr->butcherDestroyedPEV = $listB[$player]['butcherDestroyedPEV'];
 	$pr->butcherLostPEV = $listB[$player]['butcherLostPEV'];
 	$pr->butcherPosition = $listB[$player]['position'];
