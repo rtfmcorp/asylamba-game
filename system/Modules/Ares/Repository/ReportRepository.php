@@ -84,22 +84,26 @@ class ReportRepository extends AbstractRepository {
 	
 	public function formatResult($statement)
 	{
-		$currentId = 0;
+		$currentId = null;
 		$data = [];
 		while ($row = $statement->fetch()) {
 			// @TODO get the existing object if it is in UnitOfWork already
+			// This code block is executed one time only, when the current row concerns the next report
 			if ($currentId !== (int) $row['id']) {
-				// Set the armies of the previous report
+				// $currentReport is the previous report here
+				// We set the army with the squadron data and set it to the results
 				if (isset($currentReport)) {
 					$currentReport->setArmies();
+					$data[] = $currentReport;
+					if (!$this->unitOfWork->hasObject($currentReport)) {
+						$this->unitOfWork->addObject($currentReport);
+					}
 				}
+				// Now the variable represents the new report
 				$currentReport = $this->format($row);
 				$currentId = $currentReport->id;
-				$data[] = $currentReport;
-				if (!$this->unitOfWork->hasObject($currentReport)) {
-					$this->unitOfWork->addObject($currentReport);
-				}
 			}
+			// Here, $currentReport is the right report
 			if (!empty($row['sqId'])) {
 				$currentReport->squadrons[] = $this->formatSquadron($row);
 			}
@@ -108,6 +112,10 @@ class ReportRepository extends AbstractRepository {
 		// The isset ensures that at least one report was fetched
 		if (isset($currentReport)) {
 			$currentReport->setArmies();
+			$data[] = $currentReport;
+			if (!$this->unitOfWork->hasObject($currentReport)) {
+				$this->unitOfWork->addObject($currentReport);
+			}
 		}
 		return $data;
 	}
@@ -231,7 +239,7 @@ class ReportRepository extends AbstractRepository {
 			'place_name' => $report->placeName,
 			'type' => $report->type,
 			'is_legal' => $report->isLegal,
-			'has_been_punished' => $report->hasBeenPunished,
+			'has_been_punished' => (int) $report->hasBeenPunished,
 			'round' => $report->round,
 			'importance' => $report->importance,
 			'attacker_pev_in_begin' => $report->pevInBeginA,

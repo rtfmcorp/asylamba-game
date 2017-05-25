@@ -235,7 +235,7 @@ echo '<div id="content">';
 				$factionSectors = $sectorManager->getFactionSectors($faction->id);
 
 				$nbLaws = 0;
-				$nbPlayer = count($senators);
+				$nbPlayer = $playerManager->countByFactionAndStatements($faction->id, [Player::ACTIVE]);
 				
 				for ($i = 1; $i <= LawResources::size(); $i++) {
 					if (LawResources::getInfo($i, 'department') == $session->get('playerInfo')->get('status') AND LawResources::getInfo($i, 'isImplemented')) {

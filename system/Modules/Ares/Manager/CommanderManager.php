@@ -61,7 +61,7 @@ class CommanderManager
 	/** @var NotificationManager **/
 	protected $notificationManager;
 	/** @var RealTimeActionScheduler **/
-	protected $scheduler;
+	protected $realtimeActionScheduler;
 	/** @var EventDispatcher **/
 	protected $eventDispatcher;
 	/** @var int **/
@@ -84,7 +84,7 @@ class CommanderManager
 	 * @param PlaceManager $placeManager
 	 * @param ColorManager $colorManager
 	 * @param NotificationManager $notificationManager
-	 * @param RealTimeActionScheduler $scheduler
+	 * @param RealTimeActionScheduler $realtimeActionScheduler
 	 * @param EventDispatcher $eventDispatcher
 	 * @param int $commanderBaseLevel
 	 */
@@ -98,7 +98,7 @@ class CommanderManager
 		PlaceManager $placeManager,
 		ColorManager $colorManager,
 		NotificationManager $notificationManager,
-		RealTimeActionScheduler $scheduler,
+		RealTimeActionScheduler $realtimeActionScheduler,
 		EventDispatcher $eventDispatcher,
 		$commanderBaseLevel
 	) {
@@ -111,9 +111,7 @@ class CommanderManager
 		$this->placeManager = $placeManager;
 		$this->colorManager = $colorManager;
 		$this->notificationManager = $notificationManager;
-		\Asylamba\Classes\Daemon\Server::debug('constructor');
-		\Asylamba\Classes\Daemon\Server::debug(gettype($scheduler));
-		$this->scheduler = $scheduler;
+		$this->realtimeActionScheduler = $realtimeActionScheduler;
 		$this->eventDispatcher = $eventDispatcher;
 		$this->commanderBaseLevel = $commanderBaseLevel;
 	}
@@ -205,7 +203,7 @@ class CommanderManager
 	{
 		$commanders = $this->getMovingCommanders();
 		foreach ($commanders as $commander) {
-			$this->scheduler->schedule(
+			$this->realtimeActionScheduler->schedule(
 				'ares.commander_manager',
 				$this->actions[$commander->getTravelType()],
 				$commander,
@@ -346,8 +344,6 @@ class CommanderManager
 	}
 
 	public function move(Commander $commander, $rDestinationPlace, $rStartPlace, $travelType, $travelLength, $duration) {
-		\Asylamba\Classes\Daemon\Server::debug('Move');
-		\Asylamba\Classes\Daemon\Server::debug(gettype($this->scheduler));
 		$commander->rDestinationPlace = $rDestinationPlace;
 		$commander->rStartPlace = $rStartPlace;
 		$commander->travelType = $travelType;
@@ -360,8 +356,8 @@ class CommanderManager
 		$date = new \DateTime($commander->dStart);
 		$date->modify('+' . $duration . 'second');
 		$commander->dArrival = $date->format('Y-m-d H:i:s');
-
-		$this->scheduler->schedule(
+		
+		$this->realtimeActionScheduler->schedule(
 			'ares.commander_manager',
 			$this->actions[$travelType],
 			$commander,
@@ -545,8 +541,6 @@ class CommanderManager
 		$this->playerBonusManager->load($playerBonus);
 		LiveReport::$type   = Commander::LOOT;
 		LiveReport::$dFight = $commander->dArrival;
-		\Asylamba\Classes\Daemon\Server::debug('uLoot');
-		\Asylamba\Classes\Daemon\Server::debug(gettype($this->scheduler));
 
 		# si la planète est vide
 		if ($place->rPlayer == NULL) {
@@ -720,8 +714,8 @@ class CommanderManager
 						$report = $this->createReport($place);
 						$reportArray[] = $report;
 						$reportIds[] = $report->id;
-						
 						# PATCH DEGUEU POUR LES MUTLIS-COMBATS
+						$this->entityManager->clear($report);
 						$reports = $this->reportManager->getByAttackerAndPlace($commander->rPlayer, $place->id, $commander->dArrival);
 						foreach($reports as $r) {
 							if ($r->id == $report->id) {
@@ -731,6 +725,7 @@ class CommanderManager
 							$r->statementDefender = Report::DELETED;
 						}
 						$this->entityManager->flush(Report::class);
+						$this->entityManager->clear(Report::class);
 						########################################
 
 						# mettre à jour armyInBegin si prochain combat pour prochain rapport
@@ -872,8 +867,8 @@ class CommanderManager
 					}
 				}
 			}
-			$this->entityManager->flush();
 		}
+		$this->entityManager->flush();
 	}
 
 	/**
@@ -914,8 +909,6 @@ class CommanderManager
 
 	# comeBack
 	public function comeBack(Place $place, $commander, $commanderPlace, $playerBonus) {
-		\Asylamba\Classes\Daemon\Server::debug('comeBack');
-		\Asylamba\Classes\Daemon\Server::debug(gettype($this->scheduler));
 		$length   = Game::getDistance($place->getXSystem(), $commanderPlace->getXSystem(), $place->getYSystem(), $commanderPlace->getYSystem());
 		$duration = Game::getTimeToTravel($commanderPlace, $place, $playerBonus->bonus);
 

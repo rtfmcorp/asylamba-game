@@ -69,7 +69,7 @@ class ColorManager {
 	/** @var CTC **/
 	protected $ctc;
 	/** @var RealTimeActionScheduler **/
-	protected $scheduler;
+	protected $realtimeActionScheduler;
 	
 	/**
 	 * @param EntityManager $entityManager
@@ -86,7 +86,7 @@ class ColorManager {
 	 * @param CommercialRouteManager $commercialRouteManager
 	 * @param Parser $parser
 	 * @param CTC $ctc
-	 * @param RealTimeActionScheduler $scheduler
+	 * @param RealTimeActionScheduler $realtimeActionScheduler
 	 */
 	public function __construct(
 		EntityManager $entityManager,
@@ -103,7 +103,7 @@ class ColorManager {
 		CommercialRouteManager $commercialRouteManager,
 		Parser $parser,
 		CTC $ctc,
-		RealTimeActionScheduler $scheduler
+		RealTimeActionScheduler $realtimeActionScheduler
 	) {
 		$this->entityManager = $entityManager;
 		$this->playerManager = $playerManager;
@@ -119,7 +119,7 @@ class ColorManager {
 		$this->commercialRouteManager = $commercialRouteManager;
 		$this->parser = $parser;
 		$this->ctc = $ctc;
-		$this->scheduler = $scheduler;
+		$this->realtimeActionScheduler = $realtimeActionScheduler;
 	}
 	
 	/**
@@ -193,7 +193,7 @@ class ColorManager {
 		foreach ($factions as $faction) {
 			$date = new \DateTime($faction->dLastElection);
 			$date->modify('+' . $faction->mandateDuration . ' second');
-			$this->scheduler->schedule('demeter.color_manager', 'updateSenate', $faction, $date->format('Y-m-d H:i:s'));
+			$this->realtimeActionScheduler->schedule('demeter.color_manager', 'updateSenate', $faction, $date->format('Y-m-d H:i:s'));
 		}
 	}
 	
@@ -206,7 +206,7 @@ class ColorManager {
 		foreach ($factions as $faction) {
 			$date = new \DateTime($faction->dLastElection);
 			$date->modify('+' . $faction->mandateDuration . ' second');
-			$this->scheduler->schedule('demeter.color_manager', 'uCampaign', $faction, $date->format('Y-m-d H:i:s'));
+			$this->realtimeActionScheduler->schedule('demeter.color_manager', 'uCampaign', $faction, $date->format('Y-m-d H:i:s'));
 		}
 		$factions = $this->entityManager->getRepository(Color::class)->getByRegimeAndElectionStatement(
 			[Color::ROYALISTIC], [Color::ELECTION]
@@ -214,7 +214,7 @@ class ColorManager {
 		foreach ($factions as $faction) {
 			$datetime = new \DateTime($faction->dLastElection);
 			$datetime->modify('+' . Color::PUTSCHTIME . ' second');
-			$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $datetime->format('Y-m-d H:i:s'));
+			$this->realtimeActionScheduler->schedule('demeter.color_manager', 'ballot', $faction, $datetime->format('Y-m-d H:i:s'));
 		}
 	}
 	
@@ -225,7 +225,7 @@ class ColorManager {
 		);
 		foreach ($factions as $faction) {
 			$election = $this->electionManager->getFactionLastElection($faction->id);
-			$this->scheduler->schedule('demeter.color_manager', 'uElection', $faction, $election->dElection);
+			$this->realtimeActionScheduler->schedule('demeter.color_manager', 'uElection', $faction, $election->dElection);
 		}
 	}
 	
@@ -238,7 +238,7 @@ class ColorManager {
 			$datetime = new \DateTime($faction->dLastElection);
 			$datetime->modify('+' . $faction->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME . ' second');
 
-			$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $datetime->format('Y-m-d H:i:s'));
+			$this->realtimeActionScheduler->schedule('demeter.color_manager', 'ballot', $faction, $datetime->format('Y-m-d H:i:s'));
 		}
 		$factions = $this->entityManager->getRepository(Color::class)->getByRegimeAndElectionStatement(
 			[Color::THEOCRATIC], [Color::CAMPAIGN, Color::ELECTION]
@@ -247,7 +247,7 @@ class ColorManager {
 			$datetime = new \DateTime($faction->dLastElection);
 			$datetime->modify('+' . $faction->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME . ' second');
 
-			$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $datetime->format('Y-m-d H:i:s'));
+			$this->realtimeActionScheduler->schedule('demeter.color_manager', 'ballot', $faction, $datetime->format('Y-m-d H:i:s'));
 		}
 		$this->entityManager->flush(Color::class);
 	}
@@ -300,7 +300,7 @@ class ColorManager {
 		if ($faction->regime === Color::ROYALISTIC && $faction->electionStatement === Color::MANDATE) {
 			$date = date('Y-m-d H:i:s', time() + $faction->mandateDuration);
 			$faction->dLastElection = $date;
-			$this->scheduler->schedule('demeter.color_manager', 'updateSenate', $faction, $date);
+			$this->realtimeActionScheduler->schedule('demeter.color_manager', 'updateSenate', $faction, $date);
 			$this->entityManager->flush($faction);
 		}
 	}
@@ -465,9 +465,9 @@ class ColorManager {
 		$this->electionManager->add($election);
 		$faction->electionStatement = Color::CAMPAIGN;
 		if ($faction->regime === Color::DEMOCRATIC) {
-			$this->scheduler->schedule('demeter.color_manager', 'uElection', $faction, $election->dElection);
+			$this->realtimeActionScheduler->schedule('demeter.color_manager', 'uElection', $faction, $election->dElection);
 		} elseif ($faction->regime === Color::THEOCRATIC) {
-			$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $election->dElection);
+			$this->realtimeActionScheduler->schedule('demeter.color_manager', 'ballot', $faction, $election->dElection);
 		}
 		$this->entityManager->flush($election);
 		$this->entityManager->flush($faction);
@@ -484,7 +484,7 @@ class ColorManager {
 		$date = new \DateTime($election->dElection);
 		$date->modify('+' . Color::ELECTIONTIME . ' second');
 		
-		$this->scheduler->schedule('demeter.color_manager', 'ballot', $faction, $date->format('Y-m-d H:i:s'));
+		$this->realtimeActionScheduler->schedule('demeter.color_manager', 'ballot', $faction, $date->format('Y-m-d H:i:s'));
 		
 		$this->entityManager->flush($faction);
 	}
@@ -518,7 +518,7 @@ class ColorManager {
 			if ($color->regime === Color::DEMOCRATIC) {
 				$date = new \DateTime($color->dLastElection);
 				$date->modify('+' . $color->mandateDuration . ' second');
-				$this->scheduler->schedule('demeter.color_manager', 'uCampaign', $color, $date->format('Y-m-d H:i:s'));
+				$this->realtimeActionScheduler->schedule('demeter.color_manager', 'uCampaign', $color, $date->format('Y-m-d H:i:s'));
 				$notif = new Notification();
 				$notif->dSending = Utils::now();
 				$notif->setRPlayer($newChief->id);
@@ -540,7 +540,7 @@ class ColorManager {
 				}
 				$this->conversationMessageManager->add($message);
 			} elseif ($color->regime === Color::ROYALISTIC) {
-				$this->scheduler->schedule('demeter.color_manager', 'updateSenate', $color, date('Y-m-d H:i:s', (time() + $color->mandateDuration)));
+				$this->realtimeActionScheduler->schedule('demeter.color_manager', 'updateSenate', $color, date('Y-m-d H:i:s', (time() + $color->mandateDuration)));
 				$notif = new Notification();
 				$notif->dSending = Utils::now();
 				$notif->setRPlayer($newChief->id);

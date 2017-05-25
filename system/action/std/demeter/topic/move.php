@@ -9,7 +9,7 @@ $response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 $topicManager = $this->getContainer()->get('demeter.forum_topic_manager');
 
-$rForum = $request->query->get('rforum');
+$rForum = $request->request->get('rforum');
 $id = $request->query->get('id');
 
 if ($rForum !== FALSE && $id !== FALSE) {

@@ -11,7 +11,6 @@
 */
 namespace Asylamba\Modules\Athena\Manager;
 
-use \Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Athena\Model\BuildingQueue;
 use Asylamba\Classes\Entity\EntityManager;
 
@@ -21,15 +20,15 @@ class BuildingQueueManager {
 	/** @var EntityManager **/
 	protected $entityManager;
 	/** @var RealTimeActionScheduler **/
-	protected $scheduler;
+	protected $realtimeActionScheduler;
 	
 	/**
 	 * @param EntityManager $entityManager
-	 * @param RealTimeActionScheduler $scheduler
+	 * @param RealTimeActionScheduler $realtimeActionScheduler
 	 */
-	public function __construct(EntityManager $entityManager, RealTimeActionScheduler $scheduler) {
+	public function __construct(EntityManager $entityManager, RealTimeActionScheduler $realtimeActionScheduler) {
 		$this->entityManager = $entityManager;
-		$this->scheduler = $scheduler;
+		$this->realtimeActionScheduler = $realtimeActionScheduler;
 	}
 	
 	/**
@@ -54,7 +53,7 @@ class BuildingQueueManager {
 		$buildingQueues = $this->entityManager->getRepository(BuildingQueue::class)->getAll();
 		
 		foreach ($buildingQueues as $buildingQueue) {
-			$this->scheduler->schedule('athena.orbital_base_manager', 'uBuildingQueue', $buildingQueue, $buildingQueue->dEnd);
+			$this->realtimeActionScheduler->schedule('athena.orbital_base_manager', 'uBuildingQueue', $buildingQueue, $buildingQueue->dEnd);
 		}
 	}
 
@@ -64,6 +63,6 @@ class BuildingQueueManager {
 	public function add(BuildingQueue $buildingQueue) {
 		$this->entityManager->persist($buildingQueue);
 		$this->entityManager->flush($buildingQueue);
-		$this->scheduler->schedule('athena.orbital_base_manager', 'uBuildingQueue', $buildingQueue, $buildingQueue->dEnd);
+		$this->realtimeActionScheduler->schedule('athena.orbital_base_manager', 'uBuildingQueue', $buildingQueue, $buildingQueue->dEnd);
 	}
 }
