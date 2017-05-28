@@ -16,7 +16,7 @@ echo '<div class="component new-message">';
 
 			echo '<p>Copiez ce lien</p>';
 			echo '<p class="input input-area">';
-				echo '<textarea style="height: 60px;">' . (GETOUT_ROOT . 'action/a-invitation/i-' . $session->get('playerId') . '/s-' . $this->getContainer()->getParameter('server_id')) . '</textarea>';
+				echo '<textarea style="height: 60px;">' . ($this->getContainer()->getParameter('getout_root') . 'action/a-invitation/i-' . $session->get('playerId') . '/s-' . $this->getContainer()->getParameter('server_id')) . '</textarea>';
 			echo '</p>';
 
 

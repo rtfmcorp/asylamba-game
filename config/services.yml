@@ -34,6 +34,7 @@ services:
         class: Asylamba\Classes\Router\Router
         arguments:
             - "@app.session"
+            - "%getout_root"
         
     request_factory:
         class: Asylamba\Classes\Library\Http\RequestFactory
@@ -92,6 +93,7 @@ services:
             - "@security"
             - "%server_id"
             - "%security_api_key"
+            - "%getout_root"
 
     security:
         class: Asylamba\Classes\Library\Security

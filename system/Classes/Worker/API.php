@@ -19,8 +19,14 @@ class API {
 	const TEMPLATE_INACTIVE_PLAYER = 51;
 	const TEMPLATE_SPONSORSHIP = 52;
 
-	public function __construct(Security $security, $serverId, $apiKey) {
-		$this->path = GETOUT_ROOT;
+	/**
+	 * @param Security $security
+	 * @param string $serverId
+	 * @param string $apiKey
+	 * @param string $getOutRoot
+	 */
+	public function __construct(Security $security, $serverId, $apiKey, $getOutRoot) {
+		$this->path = $getOutRoot;
 		$this->serverId = $serverId;
 		$this->key  = $apiKey;
 		$this->security = $security;

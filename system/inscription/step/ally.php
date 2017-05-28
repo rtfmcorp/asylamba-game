@@ -25,7 +25,7 @@ echo '<div id="content">';
 				echo '<p>Il vous faut choisir entre l\'une des factions disponibles.</p>';
 				echo '<p>Chaque faction a ses forces et ses faiblesses. Certaines sont plus belliqueuses, certaines sont plus sages. De plus, le système politique change en fonction de la faction.</p>';
 				echo '<hr />';
-				//echo '<a class="more-button" href="' . GETOUT_ROOT . 'wiki/page-163" target="_blank">Vous ne savez pas quoi choisir ?</a>';	
+				//echo '<a class="more-button" href="' . $this->getContainer()->getParameter('getout_root') . 'wiki/page-163" target="_blank">Vous ne savez pas quoi choisir ?</a>';	
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';

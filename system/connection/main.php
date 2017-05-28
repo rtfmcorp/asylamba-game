@@ -18,7 +18,7 @@ $time 	= $security->extractTime($query);
 
 # vérification de la validité du bindkey
 if (abs((int)$time - time()) > 300) {
-	$response->redirect(GETOUT_ROOT . 'profil');
+	$response->redirect($this->getContainer()->getParameter('getout_root') . 'profil');
 }
 
 if (($player = $playerManager->getByBindKey($bindKey)) !== null && in_array($player->getStatement(), [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY])) {

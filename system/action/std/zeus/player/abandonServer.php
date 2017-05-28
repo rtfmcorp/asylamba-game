@@ -18,7 +18,7 @@ if (($player = $playerManager->get($session->get('playerId'))) !== null) {
 		$this->getContainer()->get('entity_manager')->flush($player);
 		# clean session
 		$session->destroy();
-		$response->redirect(GETOUT_ROOT . 'serveurs', TRUE);
+		$response->redirect($this->getContainer()->getParameter('getout_root') . 'serveurs', TRUE);
 	} else {
 		throw new ErrorException('Une erreur s\'est produite sur le portail. Contactez un administrateur pour résoudre ce problème.');
 	}

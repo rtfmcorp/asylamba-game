@@ -29,7 +29,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 			}
 			$response->redirect('inscription');
 		} else {
-			$response->redirect(GETOUT_ROOT . 'serveurs');
+			$response->redirect($this->getContainer()->getParameter('getout_root') . 'serveurs');
 		}
 	} elseif ($session->exist('prebindkey')) {
 		if ($this->getContainer()->getParameter('apimode') === 'enabled') {
@@ -51,10 +51,10 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 						}
 					}
 				} else {
-					$response->redirect(GETOUT_ROOT . 'serveurs/message-useralreadysigned');
+					$response->redirect($this->getContainer()->getParameter('getout_root') . 'serveurs/message-useralreadysigned');
 				}
 			} else {
-				$response->redirect(GETOUT_ROOT . 'serveurs/message-unknowuser');
+				$response->redirect($this->getContainer()->getParameter('getout_root') . 'serveurs/message-unknowuser');
 			}
 		} else {
 			$session->add('inscription', new ArrayList());
@@ -62,7 +62,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 			$session->get('inscription')->add('portalPseudo', NULL);
 		}
 	} else {
-		$response->redirect(GETOUT_ROOT . 'serveurs/message-nobindkey');
+		$response->redirect($this->getContainer()->getParameter('getout_root') . 'serveurs/message-nobindkey');
 	}
 } elseif ($request->query->get('step') == 2) {
 	if ($session->exist('inscription')) {
@@ -84,7 +84,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 			throw new FormException('faction inconnues ou non-sélectionnable', 'inscription/');
 		}
 	} else {
-		$response->redirect(GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
+		$response->redirect($this->getContainer()->getParameter('getout_root') . 'serveurs/message-forbiddenaccess');
 	}
 } elseif ($request->query->get('step') == 3) {
 	if ($session->exist('inscription')) {
@@ -107,7 +107,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 			throw new FormException('Ce pseudo est déjà utilisé par un autre joueur', 'inscription/step-2');
 		}
 	} else {
-		$response->redirect(GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
+		$response->redirect($this->getContainer()->getParameter('getout_root') . 'serveurs/message-forbiddenaccess');
 	}
 } elseif ($request->query->get('step') == 4) {
 	if ($playerManager->getByBindKey($session->get('bindkey')) === null) {
@@ -138,9 +138,9 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 				throw new FormException('le nom de votre base doit contenir entre ' . $check->getMinLength() . ' et ' . $check->getMaxLength() . ' caractères', 'inscription/step-3');
 			}
 		} else {
-			$response->redirect(GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
+			$response->redirect($this->getContainer()->getParameter('getout_root') . 'serveurs/message-forbiddenaccess');
 		}
 	} else {
-		$response->redirect(GETOUT_ROOT . 'serveurs/message-forbiddenaccess');
+		$response->redirect($this->getContainer()->getParameter('getout_root') . 'serveurs/message-forbiddenaccess');
 	}
 }

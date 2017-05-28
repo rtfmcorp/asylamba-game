@@ -10,6 +10,8 @@ class Router
 {
 	/** @var SessionWrapper **/
 	protected $session;
+	/** @var string **/
+	protected $getOutRoot;
 	
 	private $pageResources = array(
 		'profil' => array('profil', 'Profil'),
@@ -46,10 +48,12 @@ class Router
 	
 	/**
 	 * @param SessionWrapper $session
+	 * @param string $getOutRoot
 	 */
-	public function __construct(SessionWrapper $session)
+	public function __construct(SessionWrapper $session, $getOutRoot)
 	{
 		$this->session = $session;
+		$this->getOutRoot = $getOutRoot;
 	}
 	
 	/**
@@ -130,7 +134,7 @@ class Router
 		} elseif ($page === 'connection') {
 			if (!$this->session->exist('playerId')) {
 				if (!$request->query->has('bindkey')) {
-					$response->redirect(GETOUT_ROOT . 'accueil/speak-wrongargument');
+					$response->redirect($this->getOutRoot . 'accueil/speak-wrongargument');
 				}
 			} else {
 				$response->redirect(APP_ROOT);
@@ -139,7 +143,7 @@ class Router
 			# doing nothing
 		} else {
 			if (!$this->session->exist('playerId')) {
-				$response->redirect(GETOUT_ROOT . 'accueil/speak-loginrequired');
+				$response->redirect($this->getOutRoot . 'accueil/speak-loginrequired');
 			}
 		}
 	}

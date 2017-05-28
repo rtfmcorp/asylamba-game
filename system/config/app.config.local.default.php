@@ -40,17 +40,7 @@ define('APP_CREATOR',			'Gil Clavien, Jacky Casas, Noé Zufferey');
 # défini la description du serveur (affichée dans la page)
 define('APP_DESCRIPTION',		'Asylamba, jeu par navigateur');
 
-########
-# PATH #
-########
-
-# défini le chemin de base du serveur
-# note : de préférance un chemin relatif
-define('APP_ROOT',				'/');
-# défini l'URL de sortie
-# note : très important pour l'utilisation de l'API
-# note : en règle général une URL absolue
-define('GETOUT_ROOT',			APP_ROOT . 'buffer/');
+define('APP_ROOT', $container->getParameter('app_root'));
 
 #################
 # MISCELLANEOUS #
