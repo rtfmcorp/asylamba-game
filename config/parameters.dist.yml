@@ -12,8 +12,8 @@ parameters:
 #    database_admin_password: asylamba
 #    
 #    server_port: 9999
-    server_cycle_timeout: 20
-    server_collection_cycles_number: 25
+#    server_cycle_timeout: 20
+#    server_collection_cycles_number: 25
     
     # half an hour
     session_lifetime: 1800 
@@ -21,10 +21,10 @@ parameters:
     log_handler: Asylamba\Classes\Logger\FileLogger
     log_directory: /srv/logs
     log_rotation: 3
-    
-    worker_scale: 1
-    worker_cycle_timeout: 60
-    worker_collection_cycles_number: 5
+#    
+#    worker_scale: 1
+#    worker_cycle_timeout: 60
+#    worker_collection_cycles_number: 5
     worker_stats_volume: 15
 
     # s7/s11 - révolte seldarine - 1/4 of the map, 2 bridges
