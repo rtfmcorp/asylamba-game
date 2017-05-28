@@ -51,7 +51,11 @@ class ResponseFactory
         $response->headers->set('Status', $response->getStatusCode() . ' ' . $response->getStatus());
 		
 		if ($response->getStatusCode() === 302) {
-			$response->headers->set('Location', 'http://' . $request->headers->get('host') . '/' . $response->getRedirect());
+			$response->headers->set('Location',
+				(substr($response->getRedirect(), 0, 4) !== 'http')
+				? 'http://' . $request->headers->get('host') . '/' . $response->getRedirect()
+				: $response->getRedirect()
+			);
 		}
     }
 	
