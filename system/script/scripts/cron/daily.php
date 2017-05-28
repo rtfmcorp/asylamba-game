@@ -89,9 +89,9 @@ for ($i = $nbPlayers - 1; $i >= 0; $i--) {
 	} elseif (Utils::interval(Utils::now(), $player->getDLastConnection()) >= $playerGlobalInactiveTime AND $player->statement == Player::ACTIVE) {
 		$player->statement = Player::INACTIVE;
 
-		if (APIMODE) {
+		if ($this->getContainer()->getParameter('apimode') === 'enabled') {
 			# sending email API call
-			$this->getContainer()->get('api')->sendMail($player->bind, APP_ID, API::TEMPLATE_INACTIVE_PLAYER);
+			$this->getContainer()->get('api')->sendMail($player->bind, API::TEMPLATE_INACTIVE_PLAYER);
 		}
 
 		$unactivatedPlayers++;

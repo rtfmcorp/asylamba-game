@@ -32,6 +32,7 @@ services:
             - "@app.session"
             - "%zeus.player.base_level"
             - "%zeus.player.tax_coeff"
+            - "%server_id"
             
     zeus.player_bonus_manager:
         class: Asylamba\Modules\Zeus\Manager\PlayerBonusManager

@@ -9,10 +9,10 @@ $request = $this->getContainer()->get('app.request');
 
 $email = $request->request->get('email');
 
-$sponsorLink = GETOUT_ROOT . 'action/a-invitation/i-' . $session->get('playerId') . '/s-' . APP_ID;
+$sponsorLink = GETOUT_ROOT . 'action/a-invitation/i-' . $session->get('playerId') . '/s-' . $this->getContainer()->getParameter('server_id');
 
 # sending email API call
-$ok = $this->getContainer()->get('api')->sendMail2($email, APP_ID, API::TEMPLATE_SPONSORSHIP, $session->get('playerId'));
+$ok = $this->getContainer()->get('api')->sendMail2($email, $this->getContainer()->getParameter('server_id'), API::TEMPLATE_SPONSORSHIP, $session->get('playerId'));
 
 if ($ok) {
 	$session->addFlashbag('Un e-mail va être envoyé dans quelques minutes à ' . $email, Flashbag::TYPE_SUCCESS);

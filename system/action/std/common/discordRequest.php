@@ -13,7 +13,7 @@ if ($discordId !== FALSE AND $discordId !== '') {
 
 	$chickenBot = 'http://chickenbot.cloudapp.net:8080/register';
 
-	$data = array("discordId" => $discordId, "server" => "s" . APP_ID, "username" => $session->get('playerInfo')->get('name'), "factionColor" => $session->get('playerInfo')->get('color')); 
+	$data = array("discordId" => $discordId, "server" => "s" . $this->getContainer()->getParameter('server_id'), "username" => $session->get('playerInfo')->get('name'), "factionColor" => $session->get('playerInfo')->get('color')); 
 	$data_string = json_encode($data);
 	$ch = curl_init($chickenBot);
 	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");

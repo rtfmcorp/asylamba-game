@@ -5,7 +5,6 @@
 # ajout dans le add
 
 use Asylamba\Classes\Worker\API;
-use Asylamba\Classes\Worker\CTR;
 
 $request = $this->getContainer()->get('app.request');
 
@@ -23,7 +22,7 @@ foreach ($query as $q) {
 # réglage de l'encodage
 header('Content-type: text/html; charset=utf-8');
 
-if (DEVMODE || $request->query->has('password')) {
+if ($this->getContainer()->getParameter('environment') === 'dev' || $request->query->has('password')) {
 	switch ($request->query->get('a')) {
 		# case 'ban': 				include API . 'apis/ban.php'; break;
 

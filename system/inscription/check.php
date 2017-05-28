@@ -14,7 +14,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 	if ($request->query->has('bindkey')) {
 		# extraction du bindkey
 		$security = $this->container->get('security');
-		$query  = $security->uncrypt($request->query->get('bindkey'), KEY_SERVER);
+		$query  = $security->uncrypt($request->query->get('bindkey'));
 		$bindkey= $security->extractBindkey($query);
 		$time 	= $security->extractTime($query);
 		# vérification de la validité du bindkey
@@ -32,9 +32,9 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 			$response->redirect(GETOUT_ROOT . 'serveurs');
 		}
 	} elseif ($session->exist('prebindkey')) {
-		if (APIMODE) {
+		if ($this->getContainer()->getParameter('apimode') === 'enabled') {
 			# utilisation de l'API
-			$api = new API(GETOUT_ROOT, APP_ID, KEY_API);
+			$api = $this->getContainer()->get('api');
 
 			if ($api->userExist($session->get('prebindkey'))) {
 				if ($playerManager->getByBindKey($session->get('prebindkey')) === null) {
@@ -46,7 +46,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 					if (!empty($api->data['userInfo']['sponsorship'])) {
 						list($server, $player) = explode('#', $api->data['userInfo']['sponsorship']);
 
-						if ($server == APP_ID) {
+						if ($server == $this->getContainer()->getParameter('server_id')) {
 							$session->add('rgodfather', $player);
 						}
 					}

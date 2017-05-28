@@ -14,7 +14,7 @@ for ($i = 0; $i < 12; $i++) {
 }
 $shipsPev = implode(', ', $shipsPev);
 
-	if (DEVMODE) {
+	if ($this->getContainer()->getParameter('environment') === 'dev') {
 		echo '<script type="text/javascript" src="' . JS . 'jquery1.8.2.min.js"></script>';
 	} else {
 		echo '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>';

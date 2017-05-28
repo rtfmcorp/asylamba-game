@@ -43,12 +43,13 @@ ini_set('display_errors', TRUE);
 include SCRIPT . 'template/open.php';
 
 $request = $this->getContainer()->get('app.request');
+$scriptKey = $this->getContainer()->getParameter('security_script_key');
 
-if (DEVMODE || $request->query->get('key') === KEY_SCRIPT) {
+if ($this->getContainer()->getParameter('environment') === 'dev' || $request->query->get('key') === $scriptKey) {
 	if (!$request->query->has('a')) {
 		echo '<div class="list-script">';
 			echo '<div class="return">';
-				echo '<a href="' . APP_ROOT . 'buffer/key-' . KEY_BUFFER . '/">&#8801;</a> ';
+				echo '<a href="' . APP_ROOT . 'buffer/key-' . $this->getContainer()->getParameter('security_buffer_key') . '/">&#8801;</a> ';
 				echo 'Liste des scripts';
 			echo '</div>';
 
@@ -57,7 +58,7 @@ if (DEVMODE || $request->query->get('key') === KEY_SCRIPT) {
 					echo '<h2>' . $type . '</h2>';
 
 					foreach ($typeScripts as $i => $script) {
-						echo '<a href="' . APP_ROOT . 'script/key-' . KEY_SCRIPT . '/a-' . $script[0] . '">';
+						echo '<a href="' . APP_ROOT . 'script/key-' . $scriptKey . '/a-' . $script[0] . '">';
 							echo '<strong>' . $script[0] . '</strong>';
 							echo $script[1];
 						echo '</a>';
@@ -78,7 +79,7 @@ if (DEVMODE || $request->query->get('key') === KEY_SCRIPT) {
 
 		echo '<div class="content-script">';
 			echo '<div class="return">';
-				echo '<a href="' . APP_ROOT . 'script/key-' . KEY_SCRIPT . '/">&#8801;</a> ';
+				echo '<a href="' . APP_ROOT . 'script/key-' . $scriptKey . '/">&#8801;</a> ';
 				echo $name;
 			echo '</div>';
 

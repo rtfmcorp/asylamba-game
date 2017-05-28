@@ -90,11 +90,14 @@ services:
         class: Asylamba\Classes\Worker\API
         arguments:
             - "@security"
+            - "%server_id"
+            - "%security_api_key"
 
     security:
         class: Asylamba\Classes\Library\Security
         arguments:
             - "@app.session"
+            - "%security_server_key"
         
     ctc:
         class: Asylamba\Classes\Worker\CTC

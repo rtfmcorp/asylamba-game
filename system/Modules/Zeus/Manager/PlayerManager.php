@@ -77,6 +77,8 @@ class PlayerManager {
 	protected $playerBaseLevel;
 	/** @var int **/
 	protected $playerTaxCoeff;
+	/** @var string **/
+	protected $serverId;
 	
 	/**
 	 * @param EntityManager $entityManager
@@ -96,6 +98,7 @@ class PlayerManager {
 	 * @param SessionWrapper $session
 	 * @param int $playerBaseLevel
 	 * @param int $playerTaxCoeff
+	 * @param string $serverId
 	 */
 	public function __construct(
 		EntityManager $entityManager,
@@ -114,7 +117,8 @@ class PlayerManager {
 		CTC $ctc,
 		SessionWrapper $session,
 		$playerBaseLevel,
-		$playerTaxCoeff
+		$playerTaxCoeff,
+		$serverId
 	)
 	{
 		$this->entityManager = $entityManager;
@@ -134,6 +138,7 @@ class PlayerManager {
 		$this->session = $session;
 		$this->playerBaseLevel = $playerBaseLevel;
 		$this->playerTaxCoeff = $playerTaxCoeff;
+		$this->serverId = $serverId;
 	}
 	
 	/**
@@ -352,7 +357,7 @@ class PlayerManager {
 		$player = $this->get($playerId);
 
 		# API call
-		$this->api->playerIsDead($player->bind, APP_ID);
+		$this->api->playerIsDead($player->bind, $this->serverId);
 
 		# check if there is no other player with the same dead-name
 		$futureName = '&#8224; ' . $player->name . ' ';

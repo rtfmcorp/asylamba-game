@@ -9,7 +9,7 @@ $response = $this->getContainer()->get('app.response');
 
 if (($player = $playerManager->get($session->get('playerId'))) !== null) {
 	# sending API call to delete account link to server
-	$success = $this->getContainer()->get('api')->abandonServer($player->bind, APP_ID);
+	$success = $this->getContainer()->get('api')->abandonServer($player->bind);
 
 	if ($success) {
 		$player->bind = $player->bind . 'ABANDON';
