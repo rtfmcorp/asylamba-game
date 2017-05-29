@@ -9,29 +9,27 @@ class Security {
 	protected $session;
 	/** @var string **/
 	protected $serverKey;
+	/** @var string **/
+	protected $iv;
 	
 	/**
 	 * @param SessionWrapper $session
 	 * @param string $serverKey
+	 * @param string $iv
 	 */
-	public function __construct(SessionWrapper $session, $serverKey)
+	public function __construct(SessionWrapper $session, $serverKey, $iv)
 	{
 		$this->session = $session;
 		$this->serverKey = $serverKey;
+		$this->iv = $iv;
 	}
 	
 	public function crypt($query, $key = null) {
-		if (!$this->session->exist('security_iv')) {
-			$this->session->add('security_iv', openssl_random_pseudo_bytes(16));
-		}
-		return urlencode(openssl_encrypt($query,  'AES-128-CBC', ($key !== null) ? $key : $this->serverKey, null, $this->session->get('security_iv')));
+		return urlencode(openssl_encrypt($query,  'AES-128-CBC', ($key !== null) ? $key : $this->serverKey, null, $this->iv));
 	}
 
 	public function uncrypt($cipher) {
-		if (($iv =  $this->session->get('security_iv')) === null) {
-			return false;
-		}
-		return openssl_decrypt(urldecode($cipher), 'AES-128-CBC', $this->serverKey, null, $iv);
+		return openssl_decrypt(urldecode($cipher), 'AES-128-CBC', $this->serverKey, null, $this->iv);
 	}
 
 	public function buildBindkey($bindkey) {
