@@ -75,7 +75,7 @@ class GalaxyConfigurationV6 extends GalaxyConfiguration {
 		], 
 		[
 			'id' => 5,
-			'beginColor' => 7,
+			'beginColor' => 3,
 			'vertices' => [20, 80, 30, 70, 30, 60, 70, 70, 80, 70, 50, 90, 40, 80],
 			'barycentre' => [46, 74],
 			'display' => [46, 74],
@@ -85,7 +85,7 @@ class GalaxyConfigurationV6 extends GalaxyConfiguration {
 		], 
 		[
 			'id' => 6,
-			'beginColor' => 2,
+			'beginColor' => 7,
 			'vertices' => [30, 60, 30, 50, 40, 50, 30, 30, 50, 40, 80, 60, 80, 70, 70, 70],
 			'barycentre' => [51, 54],
 			'display' => [51, 54],
@@ -95,7 +95,7 @@ class GalaxyConfigurationV6 extends GalaxyConfiguration {
 		], 
 		[
 			'id' => 7,
-			'beginColor' => 1,
+			'beginColor' => 4,
 			'vertices' => [30, 30, 60, 30, 60, 10, 70, 20, 70, 30, 80, 40, 90, 30, 100, 30, 90, 50, 80, 60, 50, 40],
 			'barycentre' => [71, 34],
 			'display' => [71, 34],
@@ -105,7 +105,7 @@ class GalaxyConfigurationV6 extends GalaxyConfiguration {
 		], 
 		[
 			'id' => 8,
-			'beginColor' => 4,
+			'beginColor' => 1,
 			'vertices' => [90, 0, 130, 0, 100, 20, 90, 30, 80, 40, 70, 30, 70, 20],
 			'barycentre' => [90, 20],
 			'display' => [90, 20],
@@ -115,7 +115,7 @@ class GalaxyConfigurationV6 extends GalaxyConfiguration {
 		], 
 		[
 			'id' => 9,
-			'beginColor' => 7,
+			'beginColor' => 3,
 			'vertices' => [130, 0, 160, 0, 140, 20, 130, 20, 100, 30, 90, 30, 100, 20],
 			'barycentre' => [121, 17],
 			'display' => [121, 17],
@@ -125,7 +125,7 @@ class GalaxyConfigurationV6 extends GalaxyConfiguration {
 		], 
 		[
 			'id' => 10,
-			'beginColor' => 3,
+			'beginColor' => 2,
 			'vertices' => [100, 30, 130, 20, 130, 60, 110, 50, 90, 50],
 			'barycentre' => [112, 42],
 			'display' => [112, 42],
@@ -135,7 +135,7 @@ class GalaxyConfigurationV6 extends GalaxyConfiguration {
 		], 
 		[
 			'id' => 11,
-			'beginColor' => 4,
+			'beginColor' => 1,
 			'vertices' => [90, 50, 110, 50, 130, 60, 100, 70, 80, 100, 70, 90, 80, 80, 80, 70, 80, 60],
 			'barycentre' => [91, 70],
 			'display' => [91, 70],
@@ -145,7 +145,7 @@ class GalaxyConfigurationV6 extends GalaxyConfiguration {
 		], 
 		[
 			'id' => 12,
-			'beginColor' => 3,
+			'beginColor' => 2,
 			'vertices' => [20, 80, 40, 80, 50, 90, 80, 70, 80, 80, 70, 90, 30, 110, 30, 90],
 			'barycentre' => [50, 94],
 			'display' => [50, 94],
@@ -155,7 +155,7 @@ class GalaxyConfigurationV6 extends GalaxyConfiguration {
 		], 
 		[
 			'id' => 13,
-			'beginColor' => 1,
+			'beginColor' => 4,
 			'vertices' => [0, 110, 30, 90, 30, 110, 20, 120, 20, 140, 0, 140],
 			'barycentre' => [10, 118],
 			'display' => [10, 118],
@@ -185,7 +185,7 @@ class GalaxyConfigurationV6 extends GalaxyConfiguration {
 		], 
 		[
 			'id' => 16,
-			'beginColor' => 2,
+			'beginColor' => 7,
 			'vertices' => [20, 120, 30, 110, 70, 90, 80, 100, 60, 110, 50, 120, 40, 130],
 			'barycentre' => [50, 111],
 			'display' => [50, 111],
