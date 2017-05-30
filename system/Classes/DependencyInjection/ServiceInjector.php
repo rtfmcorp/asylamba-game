@@ -63,7 +63,7 @@ class ServiceInjector {
 				$this->container->get('event_dispatcher')->registerListener([
 					'key' => $serviceKey,
 					'method' => $tag['method']
-				], $tag['event']);
+				], $tag['event'], $tag['order'] ?: 0);
 			}
 		}
 	}
