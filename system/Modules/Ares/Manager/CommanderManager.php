@@ -22,7 +22,6 @@ use Asylamba\Modules\Zeus\Manager\PlayerBonusManager;
 use Asylamba\Modules\Gaia\Manager\PlaceManager;
 use Asylamba\Modules\Demeter\Manager\ColorManager;
 use Asylamba\Modules\Hermes\Manager\NotificationManager;
-use Asylamba\Classes\Library\Session\SessionWrapper;
 use Asylamba\Classes\Container\ArrayList;
 
 use Asylamba\Classes\Worker\EventDispatcher;
@@ -868,7 +867,8 @@ class CommanderManager
 				}
 			}
 		}
-		$this->entityManager->flush();
+		$this->entityManager->flush($commander);
+		$this->entityManager->flush($place);
 	}
 
 	/**
