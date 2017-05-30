@@ -58,7 +58,7 @@ services:
             - "%gaia.scores"
             - "%gaia.sector_minimal_score"
         tags:
-            - {type: "event_listener", event: "gaia.place_owner_change", method: "onPlaceOwnerChange"}
+            - {type: "event_listener", event: "gaia.place_owner_change", method: "onPlaceOwnerChange", order: 2}
             
     gaia.system_listener:
         class: Asylamba\Modules\Gaia\EventListener\SystemListener
@@ -69,4 +69,4 @@ services:
             - "@entity_manager"
             - "%gaia.scores"
         tags:
-            - {type: "event_listener", event: "gaia.place_owner_change", method: "onPlaceOwnerChange"}
+            - {type: "event_listener", event: "gaia.place_owner_change", method: "onPlaceOwnerChange", order: 1}
