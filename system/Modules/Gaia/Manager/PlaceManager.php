@@ -105,17 +105,21 @@ class PlaceManager {
 			$place->uPlace = $now;
 			$initialResources = $place->resources;
 			$initialDanger = $place->danger;
+			$maxResources = ceil($place->population / Place::COEFFPOPRESOURCE) * Place::COEFFMAXRESOURCE * ($place->maxDanger + 1);
 
 			foreach ($hours as $hour) {
-				$this->updateDanger($place);
-				$this->updateResources($place);
-				
+				$place->danger += Place::REPOPDANGER;
+				$place->resources += floor(Place::COEFFRESOURCE * $place->population);
 			}
-			$repository->updatePlace(
-				$place,
-				abs($place->resources - $initialResources),
-				abs($place->danger - $initialDanger)
-			);
+			$place->resources = abs($place->resources - $initialResources);
+			if ($place->resources > $maxResources) {
+				$place->resources = $maxResources;
+			}
+			$place->danger = abs($place->danger - $initialDanger);
+			if ($place->danger > $place->maxDanger) {
+				$place->danger = $place->maxDanger;
+			}
+			$repository->updatePlace($place, true);
 		}
 		$this->entityManager->clear(Place::class);
 	}
@@ -133,13 +137,15 @@ class PlaceManager {
 			$hours = Utils::intervalDates($now, $place->uPlace);
 			$place->uPlace = $now;
 			$initialResources = $place->resources;
+			$maxResources = ceil($place->population / Place::COEFFPOPRESOURCE) * Place::COEFFMAXRESOURCE * ($place->maxDanger + 1);
 			foreach ($hours as $hour) {
-				$this->updateResources($place);
+				$place->resources += floor(Place::COEFFRESOURCE * $place->population);
 			}
-			$repository->updatePlace(
-				$place,
-				abs($place->resources - $initialResources)
-			);
+			$place->resources = abs($place->resources - $initialResources);
+			if ($place->resources > $maxResources) {
+				$place->resources = $maxResources;
+			}
+			$repository->updatePlace($place);
 		}
 		$this->entityManager->clear(Place::class);
 	}
@@ -147,26 +153,8 @@ class PlaceManager {
 	/**
 	 * @param Place $place
 	 */
-	protected function updateDanger(Place $place)
-	{
-		$place->danger += Place::REPOPDANGER;
-
-		if ($place->danger > $place->maxDanger) {
-			$place->danger = $place->maxDanger;
-		}
-	}
-	
-	/**
-	 * @param Place $place
-	 */
 	protected function updateResources(Place $place)
 	{
-		$maxResources = ceil($place->population / Place::COEFFPOPRESOURCE) * Place::COEFFMAXRESOURCE * ($place->maxDanger + 1);
-		$place->resources += floor(Place::COEFFRESOURCE * $place->population);
-
-		if ($place->resources > $maxResources) {
-			$place->resources = $maxResources;
-		}
 	}
 
 	/**
