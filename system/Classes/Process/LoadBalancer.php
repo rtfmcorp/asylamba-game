@@ -3,6 +3,7 @@
 namespace Asylamba\Classes\Process;
 
 use Asylamba\Classes\Task\Task;
+use Asylamba\Classes\Task\RealTimeTask;
 use Asylamba\Classes\DependencyInjection\Container;
 
 class LoadBalancer
@@ -30,17 +31,22 @@ class LoadBalancer
     {
         $this->estimateTime($task);
         
-        $laziestProcess = $minTime = null;
+        $selectedProcess = $minTime = null;
 		
         $processManager = $this->container->get('process_manager');
         
         foreach ($processManager->getProcesses() as $process) {
+			// If the process has a task of the same context than the current one, we affect it to the process queue
+			if ($task instanceof RealTimeTask && $task->getContext() !== null && $process->hasContext($task->getContext())) {
+				$selectedProcess = $process;
+				break;
+			}
 			if ($process->getExpectedWorkTime() < $minTime || $minTime === null) {
-				$laziestProcess = $process;
+				$selectedProcess = $process;
 				$minTime = $process->getExpectedWorkTime();
 			}
         }
-        $processManager->affectTask($laziestProcess, $task);
+        $processManager->affectTask($selectedProcess, $task);
     }
     
 	/**

@@ -55,8 +55,9 @@ class RealTimeActionScheduler
 	 * @param string $method
 	 * @param array $object
 	 * @param string $date
+	 * @param array $context
 	 */
-	public function schedule($manager, $method, $object, $date)
+	public function schedule($manager, $method, $object, $date, $context = null)
 	{
 		if (P_TYPE === 'worker') {
 			return $this->processGateway->writeToMaster([
@@ -66,11 +67,18 @@ class RealTimeActionScheduler
 					'method' => $method,
 					'object_class' => get_class($object),
 					'object_id' => $object->id,
-					'date' => $date
+					'date' => $date,
+					'context' => $context 
 				]
 			]);
 		}
-		$this->queue[$date][get_class($object) . '-' . $object->id] = $this->taskManager->createRealTimeTask($manager, $method, $object->id, $date);
+		$this->queue[$date][get_class($object) . '-' . $object->id] = $this->taskManager->createRealTimeTask(
+			$manager,
+			$method,
+			$object->id,
+			$date,
+			$context
+		);
 		// Sort the queue by date
 		ksort($this->queue);
 	}
@@ -81,10 +89,11 @@ class RealTimeActionScheduler
 	 * @param string $objectClass
 	 * @param int $objectId
 	 * @param string $date
+	 * @param array $context
 	 */
-	public function scheduleFromProcess($manager, $method, $objectClass, $objectId, $date)
+	public function scheduleFromProcess($manager, $method, $objectClass, $objectId, $date, $context = null)
 	{
-		$this->queue[$date][$objectClass . '-' . $objectId] = $this->taskManager->createRealTimeTask($manager, $method, $objectId, $date);
+		$this->queue[$date][$objectClass . '-' . $objectId] = $this->taskManager->createRealTimeTask($manager, $method, $objectId, $date, $context);
 		// Sort the queue by date
 		ksort($this->queue);
 	}

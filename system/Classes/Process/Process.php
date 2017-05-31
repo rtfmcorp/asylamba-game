@@ -22,6 +22,8 @@ class Process
     protected $process;
     /** @var Tasks **/
     protected $tasks;
+	/** @var array **/
+	protected $contexts;
 	/** @var float **/
 	protected $expectedWorkTime = 0.0;
     
@@ -29,6 +31,7 @@ class Process
     {
         $this->startTime = new \DateTime();
         $this->tasks = [];
+        $this->contexts = [];
     }
     
     /**
@@ -161,6 +164,10 @@ class Process
         return $this->process;
     }
     
+	/**
+	 * @param Task $task
+	 * @return \Asylamba\Classes\Process\Process
+	 */
     public function addTask(Task $task)
     {
         $this->tasks[$task->getId()] = $task;
@@ -170,12 +177,15 @@ class Process
     
     /**
      * @param Task $task
+	 * @return \Asylamba\Classes\Process\Process
      */
     public function removeTask(Task $task)
     {
         unset($this->tasks[$task->getId()]);
 		
 		$this->expectedWorkTime -= $task->getEstimatedTime();
+		
+		return $this;
     }
     
 	/**
@@ -185,6 +195,41 @@ class Process
     {
         return $this->tasks;
     }
+	
+	/**
+	 * @param array $context
+	 * @return \Asylamba\Classes\Process\Process
+	 */
+	public function addContext($context)
+	{
+		if (!$this->hasContext($context)) {
+			$this->contexts[$context['class'] . '-' . $context['id']] = 0;
+		}
+		$this->contexts[$context['class'] . '-' . $context['id']]++;
+		return $this;
+	}
+	
+	/**
+	 * @param array $context
+	 * @return boolean
+	 */
+	public function hasContext($context)
+	{
+		return isset($this->contexts[$context['class'] . '-' . $context['id']]);
+	}
+	
+	/**
+	 * @param array $context
+	 * @return \Asylamba\Classes\Process\Process
+	 */
+	public function removeContext($context)
+	{
+		$this->contexts[$context['class'] . '-' . $context['id']]--;
+		if ($this->contexts[$context['class'] . '-' . $context['id']] === 0) {
+			unset($this->contexts[$context['class'] . '-' . $context['id']]);
+		}
+		return $this;
+	}
 	
 	/**
 	 * @param float $expectedWorkTime
