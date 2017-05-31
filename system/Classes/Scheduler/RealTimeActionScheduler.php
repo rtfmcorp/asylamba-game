@@ -77,6 +77,7 @@ class RealTimeActionScheduler
 			$method,
 			$object->id,
 			$date,
+			null,
 			$context
 		);
 		// Sort the queue by date
@@ -93,7 +94,7 @@ class RealTimeActionScheduler
 	 */
 	public function scheduleFromProcess($manager, $method, $objectClass, $objectId, $date, $context = null)
 	{
-		$this->queue[$date][$objectClass . '-' . $objectId] = $this->taskManager->createRealTimeTask($manager, $method, $objectId, $date, $context);
+		$this->queue[$date][$objectClass . '-' . $objectId] = $this->taskManager->createRealTimeTask($manager, $method, $objectId, $date, null, $context);
 		// Sort the queue by date
 		ksort($this->queue);
 	}

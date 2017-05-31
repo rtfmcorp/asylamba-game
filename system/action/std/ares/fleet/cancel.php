@@ -71,5 +71,14 @@ $session->addFlashbag('Déplacement annulé.', Flashbag::TYPE_SUCCESS);
 if ($request->query->has('redirect')) {
 	$response->redirect('map/place-' . $request->query->get('redirect'));
 }
-$scheduler->schedule('ares.commander_manager', 'uReturnBase', $commander, $commander->dArrival);
+$scheduler->schedule(
+	'ares.commander_manager',
+	'uReturnBase',
+	$commander,
+	$commander->dArrival, 
+	[
+		'class' => Place::class,
+		'id' => $commander->getRPlaceDestination()
+	]
+);
 $this->getContainer()->get('entity_manager')->flush();

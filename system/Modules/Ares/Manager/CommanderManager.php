@@ -206,7 +206,11 @@ class CommanderManager
 				'ares.commander_manager',
 				$this->actions[$commander->getTravelType()],
 				$commander,
-				$commander->dArrival
+				$commander->dArrival,
+				[
+					'class' => Place::class,
+					'id' => $commander->getRPlaceDestination()
+				]
 			);
 		}
 	}
@@ -360,7 +364,11 @@ class CommanderManager
 			'ares.commander_manager',
 			$this->actions[$travelType],
 			$commander,
-			$commander->dArrival
+			$commander->dArrival,
+			[
+				'class' => Place::class,
+				'id' => $commander->getRPlaceDestination()
+			]
 		);
 		return TRUE;
 	}
