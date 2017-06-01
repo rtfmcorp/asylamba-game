@@ -52,10 +52,6 @@ class UnitOfWork {
     public function removeObject($object)
     {
 		if (!isset($this->entities[get_class($object)][$object->getId()]['instance'])) {
-			\Asylamba\Classes\Daemon\Server::debug(get_class($object));
-			\Asylamba\Classes\Daemon\Server::debug($object->getId());
-			\Asylamba\Classes\Daemon\Server::debug(spl_object_hash($object));
-			\Asylamba\Classes\Daemon\Server::debug($this->entities[get_class($object)]);
 			return;
 		}
         $this->entities[get_class($object)][$object->getId()]['state'] = self::METADATA_REMOVED;

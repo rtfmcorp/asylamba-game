@@ -107,9 +107,6 @@ class TaskManager
 	 */
 	public function validateTask(Process $process, $data)
 	{
-		if ($data['success'] === false) {
-			\Asylamba\Classes\Daemon\Server::debug('The task failed : ' . $data['task']['manager'] . '.' . $data['task']['method']);
-		}
 		$task = $this->createTaskFromData($data['task']);
 		
 		if (!isset($data['time'])) {
@@ -122,12 +119,9 @@ class TaskManager
 			$process->removeContext($task->getContext());
 		}
 		
-		$this->container->get('load_balancer')->storeStats($task);
-	}
-	
-	public function scheduleFromProcess()
-	{
-		
+		if ($data['success'] === true) {
+			$this->container->get('load_balancer')->storeStats($task);
+		}
 	}
     
     public function generateId()
