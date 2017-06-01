@@ -40,7 +40,7 @@ class ExceptionListener {
 			$exception->getMessage(),
 			$exception->getFile(),
 			$exception->getLine(),
-			$exception->getTraceAsString(),
+			($exception instanceof FormException) ? '' : $exception->getTraceAsString(),
 			AbstractLogger::LOG_LEVEL_ERROR,
 			($exception instanceof FormException) ? Flashbag::TYPE_FORM_ERROR : Flashbag::TYPE_STD_ERROR,
 			($exception instanceof FormException) ? $exception->getRedirect() : null

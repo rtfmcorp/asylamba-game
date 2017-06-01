@@ -30,7 +30,7 @@ if ($baseId !== FALSE AND $credit !== FALSE AND $category !== FALSE AND in_array
 						$base->setISchool($credit);
 						$session->addFlashbag('L\'investissement dans l\'école de commandement de votre base ' . $base->getName() . ' a été modifié', Flashbag::TYPE_SUCCESS);
 					} else {
-						throw new ErrorException('La limite maximale d\'investissement dans l\'école de commandement est de 50\'000 crédits.');
+						throw new FormException('La limite maximale d\'investissement dans l\'école de commandement est de 50\'000 crédits.');
 					} 
 					break;
 				case 'antispy':
@@ -38,7 +38,7 @@ if ($baseId !== FALSE AND $credit !== FALSE AND $category !== FALSE AND in_array
 						$base->setIAntiSpy($credit);
 						$session->addFlashbag('L\'investissement dans l\'anti-espionnage sur votre base ' . $base->getName() . ' a été modifié', Flashbag::TYPE_SUCCESS);
 					} else {
-						throw new ErrorException('La limite maximale d\'investissement dans l\'anti-espionnage est de 100\'000 crédits.');
+						throw new FormException('La limite maximale d\'investissement dans l\'anti-espionnage est de 100\'000 crédits.');
 					} 
 					break;
 				default:
