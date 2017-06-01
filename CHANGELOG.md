@@ -1,4 +1,4 @@
-## [Unreleased]
+## [2.1.0] - 2017-06-01
 ### Added
 - Container class for services and parameters
 - Application core class
