@@ -109,55 +109,516 @@ class Place {
 	//uMode
 	public $uMode = TRUE;
 
-	public function getId() 							{ return $this->id; }
-	public function getRPlayer() 						{ return $this->rPlayer; }
-	public function getRSystem() 						{ return $this->rSystem; }
-	public function getTypeOfPlace() 					{ return $this->typeOfPlace; }
-	public function getPosition() 						{ return $this->position; }
-	public function getPopulation() 					{ return $this->population; }
-	public function getCoefResources() 					{ return $this->coefResources; }
-	public function getCoefHistory() 					{ return $this->coefHistory; }
-	public function getResources() 						{ return $this->resources; }
-	public function getRSector() 						{ return $this->rSector; }
-	public function getXSystem() 						{ return $this->xSystem; }
-	public function getYSystem() 						{ return $this->ySystem; }
-	public function getTypeOfSystem() 					{ return $this->typeOfSystem; }
-	public function getTax() 							{ return $this->tax; }
-	public function getSectorColor() 					{ return $this->sectorColor; }
-	public function getPlayerColor() 					{ return $this->playerColor; }
-	public function getPlayerName() 					{ return $this->playerName; }
-	public function getPlayerAvatar() 					{ return $this->playerAvatar; }
-	public function getPlayerStatus() 					{ return $this->playerStatus; }
-	public function getTypeOfBase() 					{ return $this->typeOfBase; }
-	public function getBaseName() 						{ return $this->baseName; }
-	public function getPoints() 						{ return $this->points; }
-	public function getLevelCommercialPlateforme() 		{ return $this->levelCommercialPlateforme; }
-	public function getLevelSpatioport() 				{ return $this->levelSpatioport; }
-	public function getAntiSpyInvest()					{ return $this->antiSpyInvest; }
-
-	public function setId($v) 							{ $this->id = $v; }
-	public function setRPlayer($v) 						{ $this->rPlayer = $v; }
-	public function setRSystem($v) 						{ $this->rSystem = $v; }
-	public function setTypeOfPlace($v) 					{ $this->typeOfPlace = $v; }
-	public function setPosition($v) 					{ $this->position = $v; }
-	public function setPopulation($v) 					{ $this->population = $v; }
-	public function setCoefResources($v) 				{ $this->coefResources = $v; }
-	public function setCoefHistory($v) 					{ $this->coefHistory = $v; }
-	public function setResources($v) 					{ $this->resources = $v; }
-	public function setRSector($v) 						{ $this->rSector = $v; }
-	public function setXSystem($v) 						{ $this->xSystem = $v; }
-	public function setYSystem($v) 						{ $this->ySystem = $v; }
-	public function setTypeOfSystem($v) 				{ $this->typeOfSystem = $v; }
-	public function setTax($v) 							{ $this->tax = $v; }
-	public function setSectorColor($v) 					{ $this->sectorColor = $v; }
-	public function setPlayerColor($v) 					{ $this->playerColor = $v; }
-	public function setPlayerName($v) 					{ $this->playerName = $v; }
-	public function setPlayerAvatar($v) 				{ $this->playerAvatar = $v; }
-	public function setPlayerStatus($v) 				{ $this->playerStatus = $v; }
-	public function setTypeOfBase($v) 					{ $this->typeOfBase = $v; }
-	public function setBaseName($v) 					{ $this->baseName = $v; }
-	public function setPoints($v) 						{ $this->points = $v; }
-	public function setLevelCommercialPlateforme($v) 	{ $this->levelCommercialPlateforme = $v; }
-	public function setLevelSpatioport($v) 				{ $this->levelSpatioport = $v; }
-	public function setAntiSpyInvest($v)				{ $this->antiSpyInvest = $v; }
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setId($v)
+    {
+        $this->id = $v;
+    
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getId()
+    {
+        return $this->id;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setRPlayer($v)
+    {
+        $this->rPlayer = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getRPlayer()
+    {
+        return $this->rPlayer;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setRSystem($v)
+    {
+        $this->rSystem = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getRSystem()
+    {
+        return $this->rSystem;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setTypeOfPlace($v)
+    {
+        $this->typeOfPlace = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getTypeOfPlace()
+    {
+        return $this->typeOfPlace;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setPosition($v)
+    {
+        $this->position = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getPosition()
+    {
+        return $this->position;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setPopulation($v)
+    {
+        $this->population = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getPopulation()
+    {
+        return $this->population;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setCoefResources($v)
+    {
+        $this->coefResources = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getCoefResources()
+    {
+        return $this->coefResources;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setCoefHistory($v)
+    {
+        $this->coefHistory = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getCoefHistory()
+    {
+        return $this->coefHistory;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setResources($v)
+    {
+        $this->resources = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getResources()
+    {
+        return $this->resources;
+    }
+    
+    /**
+     * @param int $danger
+     * @return $this
+     */
+    public function setDanger($danger)
+    {
+        $this->danger = $danger;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+    public function getDanger()
+    {
+        return $this->danger;
+    }
+    
+    /**
+     * @param int $maxDanger
+     * @return $this
+     */
+    public function setMaxDanger($maxDanger)
+    {
+        $this->maxDanger = $maxDanger;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+    public function getMaxDanger()
+    {
+        return $this->maxDanger;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setRSector($v)
+    {
+        $this->rSector = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getRSector()
+    {
+        return $this->rSector;
+    }
+    
+    /**
+     * @param float $v
+     * @return $this
+     */
+	public function setXSystem($v)
+    {
+        $this->xSystem = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return float
+     */
+	public function getXSystem()
+    {
+        return $this->xSystem;
+    }
+    
+    /**
+     * @param float $v
+     * @return $this
+     */
+	public function setYSystem($v)
+    {
+        $this->ySystem = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return float
+     */
+	public function getYSystem()
+    {
+        return $this->ySystem;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setTypeOfSystem($v)
+    {
+        $this->typeOfSystem = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getTypeOfSystem()
+    {
+        return $this->typeOfSystem;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setTax($v)
+    {
+        $this->tax = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getTax()
+    {
+        return $this->tax;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setSectorColor($v)
+    {
+        $this->sectorColor = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getSectorColor()
+    {
+        return $this->sectorColor;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setPlayerColor($v)
+    {
+        $this->playerColor = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getPlayerColor()
+    {
+        return $this->playerColor;
+    }
+    
+    /**
+     * @param string $v
+     * @return $this
+     */
+	public function setPlayerName($v)
+    {
+        $this->playerName = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return string
+     */
+	public function getPlayerName()
+    {
+        return $this->playerName;
+    }
+    
+    /**
+     * @param string $v
+     * @return $this
+     */
+	public function setPlayerAvatar($v)
+    {
+        $this->playerAvatar = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return string
+     */
+	public function getPlayerAvatar()
+    {
+        return $this->playerAvatar;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setPlayerStatus($v)
+    {
+        $this->playerStatus = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getPlayerStatus()
+    {
+        return $this->playerStatus;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setTypeOfBase($v)
+    {
+        $this->typeOfBase = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getTypeOfBase()
+    {
+        return $this->typeOfBase;
+    }
+    
+    /**
+     * @param string $v
+     * @return $this
+     */
+	public function setBaseName($v)
+    {
+        $this->baseName = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return string
+     */
+	public function getBaseName()
+    {
+        return $this->baseName;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setPoints($v)
+    {
+        $this->points = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getPoints()
+    {
+        return $this->points;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setLevelCommercialPlateforme($v)
+    {
+        $this->levelCommercialPlateforme = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getLevelCommercialPlateforme()
+    {
+        return $this->levelCommercialPlateforme;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setLevelSpatioport($v)
+    {
+        $this->levelSpatioport = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getLevelSpatioport()
+    {
+        return $this->levelSpatioport;
+    }
+    
+    /**
+     * @param int $v
+     * @return $this
+     */
+	public function setAntiSpyInvest($v)
+    {
+        $this->antiSpyInvest = $v;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+	public function getAntiSpyInvest()
+    {
+        return $this->antiSpyInvest;
+    }
 }
