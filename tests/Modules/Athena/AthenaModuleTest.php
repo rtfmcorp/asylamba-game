@@ -6,7 +6,7 @@ use Asylamba\Modules\Athena\AthenaModule;
 use Asylamba\Classes\Worker\Application;
 use Asylamba\Classes\DependencyInjection\Container;
 
-class AthenaModuleTest extends \PHPUnit_Framework_TestCase
+class AthenaModuleTest extends \PHPUnit\Framework\TestCase
 {
 	/** @var AthenaModule **/
 	protected $module;

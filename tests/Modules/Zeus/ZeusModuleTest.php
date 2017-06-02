@@ -6,7 +6,7 @@ use Asylamba\Modules\Zeus\ZeusModule;
 use Asylamba\Classes\Worker\Application;
 use Asylamba\Classes\DependencyInjection\Container;
 
-class ZeusModuleTest extends \PHPUnit_Framework_TestCase
+class ZeusModuleTest extends \PHPUnit\Framework\TestCase
 {
 	/** @var ZeusModule **/
 	protected $module;

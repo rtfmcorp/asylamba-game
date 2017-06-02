@@ -6,7 +6,7 @@ use Asylamba\Modules\Artemis\ArtemisModule;
 use Asylamba\Classes\Worker\Application;
 use Asylamba\Classes\DependencyInjection\Container;
 
-class ArtemisModuleTest extends \PHPUnit_Framework_TestCase
+class ArtemisModuleTest extends \PHPUnit\Framework\TestCase
 {
 	/** @var ArtemisModule **/
 	protected $module;

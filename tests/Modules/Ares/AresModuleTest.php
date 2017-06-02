@@ -6,7 +6,7 @@ use Asylamba\Modules\Ares\AresModule;
 use Asylamba\Classes\Worker\Application;
 use Asylamba\Classes\DependencyInjection\Container;
 
-class AresModuleTest extends \PHPUnit_Framework_TestCase
+class AresModuleTest extends \PHPUnit\Framework\TestCase
 {
 	/** @var AresModule **/
 	protected $module;

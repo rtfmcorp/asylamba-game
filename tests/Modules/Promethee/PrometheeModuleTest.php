@@ -6,7 +6,7 @@ use Asylamba\Modules\Promethee\PrometheeModule;
 use Asylamba\Classes\Worker\Application;
 use Asylamba\Classes\DependencyInjection\Container;
 
-class PrometheeModuleTest extends \PHPUnit_Framework_TestCase
+class PrometheeModuleTest extends \PHPUnit\Framework\TestCase
 {
 	/** @var PrometheeModule **/
 	protected $module;

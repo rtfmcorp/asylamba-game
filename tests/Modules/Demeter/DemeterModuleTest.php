@@ -6,7 +6,7 @@ use Asylamba\Modules\Demeter\DemeterModule;
 use Asylamba\Classes\Worker\Application;
 use Asylamba\Classes\DependencyInjection\Container;
 
-class DemeterModuleTest extends \PHPUnit_Framework_TestCase
+class DemeterModuleTest extends \PHPUnit\Framework\TestCase
 {
 	/** @var DemeterModule **/
 	protected $module;

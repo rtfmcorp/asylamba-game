@@ -4,7 +4,7 @@ namespace Tests\Asylamba\Modules\Ares\Model;
 
 use Asylamba\Modules\Ares\Model\Commander;
 
-class CommanderTest extends \PHPUnit_Framework_TestCase
+class CommanderTest extends \PHPUnit\Framework\TestCase
 {
     public function testEntity()
     {
