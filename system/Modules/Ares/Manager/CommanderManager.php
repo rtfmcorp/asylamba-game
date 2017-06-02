@@ -1015,7 +1015,6 @@ class CommanderManager
 	 * @return Commander
 	 */
 	public function createVirtualCommander(Place $place) {
-		$population = $place->population;
 		$vCommander = new Commander();
 		$vCommander->id = 'Null';
 		$vCommander->rPlayer = ID_GAIA;
