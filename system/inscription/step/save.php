@@ -237,7 +237,7 @@ try {
 
 	# confirmation au portail
 	if ($this->getContainer()->getParameter('apimode') === 'enabled') {
-		$this->getContainer()->get('api')->confirmInscription($session->get('inscription')->get('bindkey'));
+		$return = $this->getContainer()->get('api')->confirmInscription($session->get('inscription')->get('bindkey'));
 	}
 
 	# enregistrement DA

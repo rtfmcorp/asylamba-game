@@ -41,12 +41,12 @@ class API {
 		}
 
 		$this->query = $this->path . 'api/s-' . $this->serverId . '/a-' . $this->security->crypt('a-' . $api . '/' . $targ, $this->key);
-
+		
 		curl_setopt($ch, CURLOPT_URL, $this->query);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER , TRUE);
 		$answer = curl_exec($ch);
 		curl_close($ch);
-
+		
 		if ($answer !== FALSE) {
 			$this->data = unserialize($answer);
 			return TRUE;

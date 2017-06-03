@@ -35,7 +35,7 @@ if (($player = $playerManager->getByBindKey($bindKey)) !== null && in_array($pla
 
 	# confirmation au portail
 	if ($this->getContainer()->getParameter('apimode') === 'enabled') {
-		$this->getContainer()->get('api')->confirmConnection($bindkey);
+		$this->getContainer()->get('api')->confirmConnection($bindKey);
 	}
 	$this->getContainer()->get('entity_manager')->flush($player);
 	// redirection vers page de départ
