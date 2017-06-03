@@ -111,13 +111,16 @@ class PlaceManager {
 				$place->danger += Place::REPOPDANGER;
 				$place->resources += floor(Place::COEFFRESOURCE * $place->population);
 			}
+			// The repository method will add the new resources. We have to calculate how many resources have been added
 			$place->resources = abs($place->resources - $initialResources);
+			// If the max is reached, we have to add just the difference between the max and init value
 			if ($place->resources > $maxResources) {
-				$place->resources = $maxResources;
+				$place->resources = $maxResources - $initialResources;
 			}
 			$place->danger = abs($place->danger - $initialDanger);
+			// Same thing here
 			if ($place->danger > $place->maxDanger) {
-				$place->danger = $place->maxDanger;
+				$place->danger = $place->maxDanger - $initialDanger;
 			}
 			$repository->updatePlace($place, true);
 		}
