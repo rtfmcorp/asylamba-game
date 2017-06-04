@@ -7,7 +7,7 @@ use Asylamba\Classes\Library\Flashbag;
 $request = $this->getContainer()->get('app.request');
 $session =  $this->getContainer()->get('app.session');
 
-$discordId = $request->query->get('discord-id');
+$discordId = $request->request->get('discord-id');
 
 if ($discordId !== FALSE AND $discordId !== '') {
 
