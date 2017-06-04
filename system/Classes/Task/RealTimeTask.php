@@ -8,6 +8,8 @@ class RealTimeTask extends Task
     protected $objectId;
     /** @var string **/
     protected $date;
+	/** @var array **/
+	protected $context;
 	
 	/**
 	 * {@inheritdoc}
@@ -54,6 +56,25 @@ class RealTimeTask extends Task
     {
         return $this->date;
     }
+	
+	/**
+	 * @param array $context
+	 * @return \Asylamba\Classes\Task\RealTimeTask
+	 */
+	public function setContext($context)
+	{
+		$this->context = $context;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getContext()
+	{
+		return $this->context;
+	}
 	
 	public function jsonSerialize() {
 		return array_merge(parent::jsonSerialize(), [

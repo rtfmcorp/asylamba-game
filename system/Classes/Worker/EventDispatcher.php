@@ -29,10 +29,13 @@ class EventDispatcher {
 	/**
 	 * @param array $listener
 	 * @param string $event
+	 * @param int $order
 	 */
-	public function registerListener($listener, $event)
+	public function registerListener($listener, $event, $order = 0)
 	{
-		$this->events[$event][] = $listener;
+		$this->events[$event][$order][] = $listener;
+		// Sort the event listeners by order
+		ksort($this->events[$event]);
 	}
 	
 	/**
@@ -43,12 +46,12 @@ class EventDispatcher {
 		if (!isset($this->events[$event::NAME])) {
 			return;
 		}
-		$listeners = $this->events[$event::NAME];
-		
-		foreach($listeners as $listenerData) {
-			$listener = $this->container->get($listenerData['key']);
-			
-			$listener->{$listenerData['method']}($event);
+		foreach($this->events[$event::NAME] as $listeners) {
+			foreach($listeners as $listenerData) {
+				$listener = $this->container->get($listenerData['key']);
+
+				$listener->{$listenerData['method']}($event);
+			}
 		}
 	}
 }

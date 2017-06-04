@@ -236,8 +236,8 @@ try {
 	$eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place));
 
 	# confirmation au portail
-	if (APIMODE) {
-		$this->getContainer()->get('api')->confirmInscription($session->get('inscription')->get('bindkey'), APP_ID);
+	if ($this->getContainer()->getParameter('apimode') === 'enabled') {
+		$return = $this->getContainer()->get('api')->confirmInscription($session->get('inscription')->get('bindkey'));
 	}
 
 	# enregistrement DA
@@ -279,7 +279,7 @@ try {
 	}
 	$security = $this->getContainer()->get('security');
 	# redirection vers connection
-	$this->getContainer()->get('app.response')->redirect('connection/bindkey-' . $security->crypt($security->buildBindkey($player->getBind()), KEY_SERVER) . '/mode-splash');
+	$this->getContainer()->get('app.response')->redirect('connection/bindkey-' . $security->crypt($security->buildBindkey($player->getBind())) . '/mode-splash');
 } catch (Exception $e) {
 	# tentative de réparation de l'erreur
 	$this->getContainer()->get('app.response')->redirect('inscription/step-3');

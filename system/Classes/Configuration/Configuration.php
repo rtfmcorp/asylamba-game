@@ -68,10 +68,10 @@ class Configuration {
 		}
 	}
 	
-	public function defineOldConstants($rootPath)
+	public function defineOldConstants(Container $container)
 	{
 		# définition des ROOT
-		define('SYSTEMR',		$rootPath . '/system/');
+		define('SYSTEMR',		$container->getParameter('root_path') . '/system/');
 		define('CLASSES',       SYSTEMR . 'Classes/');
 
 		define('MODULES', 		SYSTEMR . 'Modules/');

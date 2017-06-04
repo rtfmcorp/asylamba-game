@@ -7,24 +7,33 @@ use Asylamba\Classes\Library\Session\SessionWrapper;
 class Security {
 	/** @var Session **/
 	protected $session;
+	/** @var string **/
+	protected $serverKey;
+	/** @var string **/
+	protected $iv;
 	
-	public function __construct(SessionWrapper $session)
+	/**
+	 * @param SessionWrapper $session
+	 * @param string $serverKey
+	 * @param string $iv
+	 */
+	public function __construct(SessionWrapper $session, $serverKey, $iv)
 	{
 		$this->session = $session;
+		$this->serverKey = $serverKey;
+		$this->iv = $iv;
 	}
 	
-	public function crypt($query, $key) {
-		if (!$this->session->exist('security_iv')) {
-			$this->session->add('security_iv', openssl_random_pseudo_bytes(16));
-		}
-		return urlencode(openssl_encrypt($query,  'AES-128-CBC', $key, null, $this->session->get('security_iv')));
+	public function crypt($query, $key = null) {
+		$data = urlencode(openssl_encrypt($query,  'AES-128-CBC', ($key !== null) ? $key : $this->serverKey, null, $this->iv));
+        $data = rtrim(strtr(base64_encode($data), '+/', '~_'), '=');
+		return $data;
 	}
 
-	public function uncrypt($cipher, $key) {
-		if (($iv =  $this->session->get('security_iv')) === null) {
-			return false;
-		}
-		return openssl_decrypt(urldecode($cipher), 'AES-128-CBC', $key, null, $iv);
+	public function uncrypt($cipher) {
+		
+        $data = base64_decode(str_pad(strtr($cipher, '~_', '+/'), strlen($cipher) % 4, '=', STR_PAD_RIGHT));
+		return openssl_decrypt(urldecode($data), 'AES-128-CBC', $this->serverKey, null, $this->iv);
 	}
 
 	public function buildBindkey($bindkey) {
@@ -33,8 +42,7 @@ class Security {
 		$key .= $bindkey;
 		$key .= '-';
 		$key .= time();
-
-		return $key;
+		return str_replace('%', '___', $key);
 	}
 
 	public function extractBindkey($key) {

@@ -34,7 +34,7 @@ class Application implements ApplicationInterface {
 		$configuration = new Configuration(new FileLocator($configurationFiles));
 		$configuration->loadEnvironment($this->container);
 		$configuration->buildContainer($this->container, $configurationFiles);
-		$configuration->defineOldConstants($rootPath);
+		$configuration->defineOldConstants($this->container);
 	}
 	
 	public function registerModules()

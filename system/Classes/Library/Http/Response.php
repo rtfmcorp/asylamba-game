@@ -28,12 +28,14 @@ class Response
     protected $statuses = [
         200 => 'OK',
 		302 => 'Found',
-		404 => 'Not Found'
+		404 => 'Not Found',
+		500 => 'Internal Server Error'
     ];
 	
 	const STATUS_OK = 200;
 	const STATUS_REDIRECT = 302;
 	const STATUS_NOT_FOUND = 404;
+	const STATUS_INTERNAL_SERVER_ERROR = 500;
 
     public function __construct() {
         $this->headers = new ParameterBag();

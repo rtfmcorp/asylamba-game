@@ -22,7 +22,6 @@ use Asylamba\Modules\Zeus\Manager\PlayerBonusManager;
 use Asylamba\Modules\Gaia\Manager\PlaceManager;
 use Asylamba\Modules\Demeter\Manager\ColorManager;
 use Asylamba\Modules\Hermes\Manager\NotificationManager;
-use Asylamba\Classes\Library\Session\SessionWrapper;
 use Asylamba\Classes\Container\ArrayList;
 
 use Asylamba\Classes\Worker\EventDispatcher;
@@ -207,7 +206,11 @@ class CommanderManager
 				'ares.commander_manager',
 				$this->actions[$commander->getTravelType()],
 				$commander,
-				$commander->dArrival
+				$commander->dArrival,
+				[
+					'class' => Place::class,
+					'id' => $commander->getRPlaceDestination()
+				]
 			);
 		}
 	}
@@ -361,7 +364,11 @@ class CommanderManager
 			'ares.commander_manager',
 			$this->actions[$travelType],
 			$commander,
-			$commander->dArrival
+			$commander->dArrival,
+			[
+				'class' => Place::class,
+				'id' => $commander->getRPlaceDestination()
+			]
 		);
 		return TRUE;
 	}
@@ -868,7 +875,8 @@ class CommanderManager
 				}
 			}
 		}
-		$this->entityManager->flush();
+		$this->entityManager->flush($commander);
+		$this->entityManager->flush($place);
 	}
 
 	/**
@@ -1007,7 +1015,6 @@ class CommanderManager
 	 * @return Commander
 	 */
 	public function createVirtualCommander(Place $place) {
-		$population = $place->population;
 		$vCommander = new Commander();
 		$vCommander->id = 'Null';
 		$vCommander->rPlayer = ID_GAIA;

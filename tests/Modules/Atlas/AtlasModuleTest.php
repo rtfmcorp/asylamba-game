@@ -6,7 +6,7 @@ use Asylamba\Modules\Atlas\AtlasModule;
 use Asylamba\Classes\Worker\Application;
 use Asylamba\Classes\DependencyInjection\Container;
 
-class AtlasModuleTest extends \PHPUnit_Framework_TestCase
+class AtlasModuleTest extends \PHPUnit\Framework\TestCase
 {
 	/** @var AtlasModule **/
 	protected $module;

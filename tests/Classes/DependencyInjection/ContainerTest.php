@@ -4,7 +4,7 @@ namespace Tests\Asylamba\Classes\DependencyInjection;
 
 use Asylamba\Classes\DependencyInjection\Container;
 
-class ContainerTest extends \PHPUnit_Framework_TestCase {
+class ContainerTest extends \PHPUnit\Framework\TestCase {
     /** @var Container **/
     protected $container;
     

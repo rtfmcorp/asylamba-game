@@ -40,7 +40,7 @@ class ExceptionListener {
 			$exception->getMessage(),
 			$exception->getFile(),
 			$exception->getLine(),
-			$exception->getTraceAsString(),
+			($exception instanceof FormException) ? '' : $exception->getTraceAsString(),
 			AbstractLogger::LOG_LEVEL_ERROR,
 			($exception instanceof FormException) ? Flashbag::TYPE_FORM_ERROR : Flashbag::TYPE_STD_ERROR,
 			($exception instanceof FormException) ? $exception->getRedirect() : null
@@ -80,7 +80,13 @@ class ExceptionListener {
 		$this->session->addFlashbag($message, $flashbagLevel);
 		
 		$response = new Response();
-		$response->redirect($this->getRedirection($event->getRequest(), $redirect));
+		$redirectionData = $this->getRedirection($event->getRequest(), $redirect);
+		if (isset($redirectionData['redirect'])) {
+			$response->redirect($redirectionData['redirect']);
+		} else {
+			$response->setStatusCode(Response::STATUS_INTERNAL_SERVER_ERROR);
+			$response->addTemplate($redirectionData['template']);
+		}
 		$event->setResponse($response);
 	}
 	
@@ -91,18 +97,24 @@ class ExceptionListener {
 	public function getRedirection(Request $request, $redirect = null)
 	{
 		if ($redirect !== null) {
-			return $redirect;
+			return ['redirect' => $redirect];
 		}
 		
 		$history = $this->session->getHistory();
 
 		if (($nbPaths = count($history)) === 0) {
-			return '/';
+			return ['redirect' => '/'];
 		}
 		if (($redirect = '/' . $this->session->getLastHistory()) === $request->getPath()) {
 			// We get the path before the last one if available
-			return ($nbPaths > 1) ? $history[$nbPaths - 2] : '/';
+			$redirect = ($nbPaths > 1) ? $history[$nbPaths - 2] : '/';
 		}
-		return $redirect;
+		// In this case, it means the user is in an error loop
+		if ($nbPaths > 3 && $redirect === $history[$nbPaths - 4]) {
+			return [
+				'template' => TEMPLATE . 'fatal.php'
+			];
+		}
+		return ['redirect' => $redirect];
 	}
 }

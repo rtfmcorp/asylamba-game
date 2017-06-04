@@ -29,7 +29,7 @@ class TaskManager
 			case Task::TYPE_TECHNICAL:
 				return $this->createTechnicalTask($data['manager'], $data['method'], $data['id']);
 			case Task::TYPE_REALTIME:
-				return $this->createRealTimeTask($data['manager'], $data['method'], $data['object_id'], $data['date'], $data['id']);
+				return $this->createRealTimeTask($data['manager'], $data['method'], $data['object_id'], $data['date'], $data['id'], ($data['context'] ?? null));
 			case Task::TYPE_CYCLIC:
 				return $this->createCyclicTask($data['manager'], $data['method'], $data['id']);
 		}
@@ -40,9 +40,11 @@ class TaskManager
      * @param string $method
      * @param int $objectId
      * @param string $date
+	 * @param int $id
+	 * @param array $context
      * @return Task
      */
-    public function createRealTimeTask($manager, $method, $objectId, $date, $id = null)
+    public function createRealTimeTask($manager, $method, $objectId, $date, $id = null, $context = null)
     {
         return
             (new RealTimeTask())
@@ -51,6 +53,7 @@ class TaskManager
             ->setMethod($method)
             ->setObjectId($objectId)
             ->setDate($date)
+			->setContext($context)
         ;
     }
     
@@ -104,9 +107,6 @@ class TaskManager
 	 */
 	public function validateTask(Process $process, $data)
 	{
-		if ($data['success'] === false) {
-			\Asylamba\Classes\Daemon\Server::debug('The task failed : ' . $data['task']['manager'] . '.' . $data['task']['method']);
-		}
 		$task = $this->createTaskFromData($data['task']);
 		
 		if (!isset($data['time'])) {
@@ -115,13 +115,13 @@ class TaskManager
 		$task->setTime((float) $data['time']);
 		
 		$process->removeTask($task);
+		if ($task instanceof RealTimeTask && $task->getContext() !== null) {
+			$process->removeContext($task->getContext());
+		}
 		
-		$this->container->get('load_balancer')->storeStats($task);
-	}
-	
-	public function scheduleFromProcess()
-	{
-		
+		if ($data['success'] === true) {
+			$this->container->get('load_balancer')->storeStats($task);
+		}
 	}
     
     public function generateId()

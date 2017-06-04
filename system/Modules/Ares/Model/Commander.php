@@ -75,7 +75,7 @@ class Commander
 	const CMDBASELVL 				= 100;
 	
 	const FLEETSPEED 				= 35;
-
+    
 	const COEFFMOVEINSYSTEM 		= 584;
 	const COEFFMOVEOUTOFSYSTEM 		= 600;
 	const COEFFMOVEINTERSYSTEM 		= 50000;

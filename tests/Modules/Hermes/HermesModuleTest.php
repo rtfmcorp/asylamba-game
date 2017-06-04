@@ -6,7 +6,7 @@ use Asylamba\Modules\Hermes\HermesModule;
 use Asylamba\Classes\Worker\Application;
 use Asylamba\Classes\DependencyInjection\Container;
 
-class HermesModuleTest extends \PHPUnit_Framework_TestCase
+class HermesModuleTest extends \PHPUnit\Framework\TestCase
 {
 	/** @var HermesModule **/
 	protected $module;

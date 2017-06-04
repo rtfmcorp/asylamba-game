@@ -3,6 +3,7 @@
 namespace Asylamba\Classes\Process;
 
 use Asylamba\Classes\Task\Task;
+use Asylamba\Classes\Task\RealTimeTask;
 use Asylamba\Classes\Daemon\Server;
 use Asylamba\Classes\Memory\MemoryManager;
 
@@ -60,6 +61,10 @@ class ProcessManager
 	{
 		$process->addTask($task);
 		$process->setExpectedWorkTime($process->getExpectedWorkTime() + (float) $task->getEstimatedTime());
+		
+		if ($task instanceof RealTimeTask && $task->getContext() !== null) {
+			$process->addContext($task->getContext());
+		}
 		
 		$this->gateway->writeTo($process, $task);
 	}

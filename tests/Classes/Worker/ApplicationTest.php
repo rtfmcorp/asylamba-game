@@ -7,7 +7,7 @@ use Asylamba\Classes\Worker\Container;
 
 use Asylamba\Modules\Ares\AresModule;
 
-class ApplicationTest extends \PHPUnit_Framework_TestCase {
+class ApplicationTest extends \PHPUnit\Framework\TestCase {
 	protected $application;
 	
 	public function setUp()

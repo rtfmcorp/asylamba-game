@@ -12,13 +12,13 @@ $playerManager = $this->getContainer()->get('zeus.player_manager');
 $session = $this->getContainer()->get('app.session');
 
 # extraction du bindkey
-$query  = $security->uncrypt($request->query->get('bindkey'), KEY_SERVER);
+$query  = $security->uncrypt($request->query->get('bindkey'));
 $bindKey= $security->extractBindkey($query);
 $time 	= $security->extractTime($query);
 
 # vérification de la validité du bindkey
 if (abs((int)$time - time()) > 300) {
-	$response->redirect(GETOUT_ROOT . 'profil');
+	$response->redirect($this->getContainer()->getParameter('getout_root') . 'profil');
 }
 
 if (($player = $playerManager->getByBindKey($bindKey)) !== null && in_array($player->getStatement(), [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY])) {
@@ -34,8 +34,8 @@ if (($player = $playerManager->getByBindKey($bindKey)) !== null && in_array($pla
 	$player->setDLastActivity(Utils::now());
 
 	# confirmation au portail
-	if (APIMODE) {
-		$this->getContainer()->get('api')->confirmConnection($bindkey, APP_ID);
+	if ($this->getContainer()->getParameter('apimode') === 'enabled') {
+		$this->getContainer()->get('api')->confirmConnection($bindKey);
 	}
 	$this->getContainer()->get('entity_manager')->flush($player);
 	// redirection vers page de départ

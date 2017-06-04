@@ -22,7 +22,6 @@ class ProcessGateway
 	 */
 	public function writeToMaster($data)
 	{
-		\Asylamba\Classes\Daemon\Server::debug(json_encode($data));
         fwrite(STDOUT, json_encode($data) . "\n");
 	}
     

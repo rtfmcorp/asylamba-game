@@ -10,6 +10,7 @@ use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Ares\Model\Commander;
 
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('app.session');

@@ -226,7 +226,11 @@ class PlaceRepository extends AbstractRepository
 		));
 	}
 	
-	public function updatePlace($place, $resources, $danger = 0)
+	/**
+	 * @param Place $place
+	 * @param boolean $updateDanger
+	 */
+	public function updatePlace($place, $updateDanger = false)
 	{
 		$statement = $this->connection->prepare(
 			'UPDATE place SET
@@ -235,8 +239,8 @@ class PlaceRepository extends AbstractRepository
 				uPlace = :updated_at
 			WHERE id = :id');
 		$statement->execute([
-			'resources' => $resources,
-			'danger' => $danger,
+			'resources' => $place->resources,
+			'danger' => ($updateDanger === true) ? $place->danger : 0,
 			'updated_at' => $place->uPlace, 
 			'id' => $place->getId()
 		]);

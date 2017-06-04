@@ -11,7 +11,6 @@
  **/
 namespace Asylamba\Modules\Zeus\Manager;
 
-use Asylamba\Classes\Worker\CTC;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Classes\Library\Session\SessionWrapper;
@@ -36,6 +35,7 @@ use Asylamba\Modules\Athena\Manager\TransactionManager;
 use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
 use Asylamba\Modules\Promethee\Manager\TechnologyManager;
 use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Demeter\Model\Color;
 
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Container\ArrayList;
@@ -69,14 +69,14 @@ class PlayerManager {
 	protected $technologyManager;
 	/** @var PlayerBonusManager **/
 	protected $playerBonusManager;
-	/** @var CTC **/
-	protected $ctc;
 	/** @var SessionWrapper **/
 	protected $session;
 	/** @var int **/
 	protected $playerBaseLevel;
 	/** @var int **/
 	protected $playerTaxCoeff;
+	/** @var string **/
+	protected $serverId;
 	
 	/**
 	 * @param EntityManager $entityManager
@@ -92,10 +92,10 @@ class PlayerManager {
 	 * @param CommercialRouteManager $commercialRouteManager
 	 * @param TechnologyManager $technologyManager
 	 * @param PlayerBonusManager $playerBonusManager
-	 * @param CTC $ctc
 	 * @param SessionWrapper $session
 	 * @param int $playerBaseLevel
 	 * @param int $playerTaxCoeff
+	 * @param string $serverId
 	 */
 	public function __construct(
 		EntityManager $entityManager,
@@ -111,10 +111,10 @@ class PlayerManager {
 		CommercialRouteManager $commercialRouteManager,
 		TechnologyManager $technologyManager,
 		PlayerBonusManager $playerBonusManager,
-		CTC $ctc,
 		SessionWrapper $session,
 		$playerBaseLevel,
-		$playerTaxCoeff
+		$playerTaxCoeff,
+		$serverId
 	)
 	{
 		$this->entityManager = $entityManager;
@@ -130,10 +130,10 @@ class PlayerManager {
 		$this->commercialRouteManager = $commercialRouteManager;
 		$this->technologyManager = $technologyManager;
 		$this->playerBonusManager = $playerBonusManager;
-		$this->ctc = $ctc;
 		$this->session = $session;
 		$this->playerBaseLevel = $playerBaseLevel;
 		$this->playerTaxCoeff = $playerTaxCoeff;
+		$this->serverId = $serverId;
 	}
 	
 	/**
@@ -352,7 +352,7 @@ class PlayerManager {
 		$player = $this->get($playerId);
 
 		# API call
-		$this->api->playerIsDead($player->bind, APP_ID);
+		$this->api->playerIsDead($player->bind, $this->serverId);
 
 		# check if there is no other player with the same dead-name
 		$futureName = '&#8224; ' . $player->name . ' ';
@@ -533,7 +533,7 @@ class PlayerManager {
 		$this->entityManager->flush(Color::class);
 	}
 
-	public function uCredit(Player $player, $playerBases, $playerBonus, $commanders, $rsmSession, $factions, $transactions) {
+	public function uCredit(Player $player, $playerBases, $playerBonus, $commanders, $rsmSession, &$factions, $transactions) {
 		
 		$popTax = 0; $nationTax = 0;
 		$credits = $player->credit;
