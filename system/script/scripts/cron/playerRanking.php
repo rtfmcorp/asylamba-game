@@ -391,7 +391,7 @@ foreach ($list as $player => $value) {
 	$pr->experiencePosition = $listE[$player]['position'];
 	$pr->experienceVariation = $firstRanking ? 0 : $oldRanking->experiencePosition - $pr->experiencePosition;
 
-	$pr->fight = $listF[$player]['fight'];
+	$pr->fight = ($listF[$player]['fight'] >= 0) ? $listF[$player]['fight'] : 0;
 	$pr->victories = $listF[$player]['victory'];
 	$pr->defeat = $listF[$player]['defeat'];
 	$pr->fightPosition = $listF[$player]['position'];
