@@ -35,6 +35,7 @@ use Asylamba\Modules\Athena\Manager\TransactionManager;
 use Asylamba\Modules\Athena\Manager\CommercialRouteManager;
 use Asylamba\Modules\Promethee\Manager\TechnologyManager;
 use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Demeter\Model\Color;
 
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Container\ArrayList;
@@ -532,7 +533,7 @@ class PlayerManager {
 		$this->entityManager->flush(Color::class);
 	}
 
-	public function uCredit(Player $player, $playerBases, $playerBonus, $commanders, $rsmSession, $factions, $transactions) {
+	public function uCredit(Player $player, $playerBases, $playerBonus, $commanders, $rsmSession, &$factions, $transactions) {
 		
 		$popTax = 0; $nationTax = 0;
 		$credits = $player->credit;
