@@ -246,6 +246,11 @@ class PlaceRepository extends AbstractRepository
 		]);
 	}
 	
+	public function npcQuickfix()
+	{
+		$this->connection->exec('UPDATE place SET danger = maxDanger WHERE danger > maxDanger');
+	}
+	
 	public function remove($place)
 	{
 		$statement = $this->connection->prepare('DELETE FROM place FROM id = :id');
