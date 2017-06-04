@@ -11,7 +11,6 @@
  **/
 namespace Asylamba\Modules\Zeus\Manager;
 
-use Asylamba\Classes\Worker\CTC;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Classes\Library\Session\SessionWrapper;
@@ -69,8 +68,6 @@ class PlayerManager {
 	protected $technologyManager;
 	/** @var PlayerBonusManager **/
 	protected $playerBonusManager;
-	/** @var CTC **/
-	protected $ctc;
 	/** @var SessionWrapper **/
 	protected $session;
 	/** @var int **/
@@ -94,7 +91,6 @@ class PlayerManager {
 	 * @param CommercialRouteManager $commercialRouteManager
 	 * @param TechnologyManager $technologyManager
 	 * @param PlayerBonusManager $playerBonusManager
-	 * @param CTC $ctc
 	 * @param SessionWrapper $session
 	 * @param int $playerBaseLevel
 	 * @param int $playerTaxCoeff
@@ -114,7 +110,6 @@ class PlayerManager {
 		CommercialRouteManager $commercialRouteManager,
 		TechnologyManager $technologyManager,
 		PlayerBonusManager $playerBonusManager,
-		CTC $ctc,
 		SessionWrapper $session,
 		$playerBaseLevel,
 		$playerTaxCoeff,
@@ -134,7 +129,6 @@ class PlayerManager {
 		$this->commercialRouteManager = $commercialRouteManager;
 		$this->technologyManager = $technologyManager;
 		$this->playerBonusManager = $playerBonusManager;
-		$this->ctc = $ctc;
 		$this->session = $session;
 		$this->playerBaseLevel = $playerBaseLevel;
 		$this->playerTaxCoeff = $playerTaxCoeff;

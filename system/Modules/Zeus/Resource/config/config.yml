@@ -28,7 +28,6 @@ services:
             - "@athena.commercial_route_manager"
             - "@promethee.technology_manager"
             - "@zeus.player_bonus_manager"
-            - "@ctc"
             - "@app.session"
             - "%zeus.player.base_level"
             - "%zeus.player.tax_coeff"
