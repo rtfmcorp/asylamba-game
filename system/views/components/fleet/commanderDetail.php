@@ -12,15 +12,18 @@ use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Game;
 
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
+
 echo '<div class="component">';
 	echo '<div class="head skin-1"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			if ($commander_commanderDetail->statement == Commander::AFFECTED) {
 				echo '<div class="tool">';
-					echo '<span><a href="' . Format::actionBuilder('emptycommander', ['id' => $commander_commanderDetail->id]) . '">Retirer tous les vaisseaux</a></span>';
-					echo '<span><a href="' . Format::actionBuilder('firecommander', ['id' => $commander_commanderDetail->id]) . '" class="hb lt" title="licencier l\'officier">&#215;</a></span>';
-					echo '<span><a href="' . Format::actionBuilder('affectcommander', ['id' => $commander_commanderDetail->id]) . '" class="hb lt" title="remettre dans l\'école">E</a></span>';
+					echo '<span><a href="' . Format::actionBuilder('emptycommander', $sessionToken, ['id' => $commander_commanderDetail->id]) . '">Retirer tous les vaisseaux</a></span>';
+					echo '<span><a href="' . Format::actionBuilder('firecommander', $sessionToken, ['id' => $commander_commanderDetail->id]) . '" class="hb lt" title="licencier l\'officier">&#215;</a></span>';
+					echo '<span><a href="' . Format::actionBuilder('affectcommander', $sessionToken, ['id' => $commander_commanderDetail->id]) . '" class="hb lt" title="remettre dans l\'école">E</a></span>';
 				echo '</div>';
 			}
 
@@ -40,7 +43,7 @@ echo '<div class="component">';
 			if ($commander_commanderDetail->statement == Commander::MOVING) {
 				echo '<div class="number-box">';
 					echo '<span class="label">Mission</span>';
-						switch ($commander_commanderDetail->getTypeOfMove()) {
+						switch ($commander_commanderDetail->getTravelType()) {
 							case Commander::MOVE: 
 									echo '<span class="value">Déplacement</span>';
 								echo '</div>';
@@ -67,7 +70,7 @@ echo '<div class="component">';
 								echo '</div>';
 								echo '<div class="number-box">';
 									echo '<span class="label">Ressources transportées</span>';
-									echo '<span class="value">' . Format::numberFormat($commander_commanderDetail->getResourcesTransported()) . '</span>';
+									echo '<span class="value">' . Format::numberFormat($commander_commanderDetail->getResources()) . '</span>';
 								break;
 							default: break;
 						}
@@ -92,9 +95,9 @@ echo '<div class="component">';
 			if (in_array($commander_commanderDetail->getStatement(), [Commander::AFFECTED, Commander::MOVING, Commander::INSCHOOL])) {
 				echo '<div class="number-box grey">';
 					echo '<span class="label">Expérience</span>';
-					$expToLvlUp = $commander_commanderDetail->experienceToLevelUp();
+					$expToLvlUp = $commanderManager->experienceToLevelUp($commander_commanderDetail);
 					$percent = Format::percent($commander_commanderDetail->getExperience() - ($expToLvlUp / 2), $expToLvlUp - ($expToLvlUp / 2));
-					echo '<span class="value">' . Format::numberFormat($commander_commanderDetail->getExperience()) . ' / ' . Format::numberFormat($commander_commanderDetail->experienceToLevelUp()) . '</span>';
+					echo '<span class="value">' . Format::numberFormat($commander_commanderDetail->getExperience()) . ' / ' . Format::numberFormat($commanderManager->experienceToLevelUp($commander_commanderDetail)) . '</span>';
 					echo '<span title="' . $percent . ' %" class="progress-bar hb bl">';
 						echo '<span class="content" style="width: ' . $percent . '%;"></span>';
 					echo '</span>';

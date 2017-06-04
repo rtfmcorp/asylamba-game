@@ -7,9 +7,10 @@
 # require
 	# _T PRM 		FACTION_RANKING_GENERAL
 
-use Asylamba\Classes\Worker\ASM;
+$factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
+$session = $this->getContainer()->get('app.session');
 
-ASM::$frm->changeSession($FACTION_RANKING_GENERAL);
+$factionRankingManager->changeSession($FACTION_RANKING_GENERAL);
 
 echo '<div class="component player rank">';
 	echo '<div class="head skin-4">';
@@ -19,8 +20,8 @@ echo '<div class="component player rank">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			for ($i = 0; $i < ASM::$frm->size(); $i++) {
-				echo ASM::$frm->get($i)->commonRender('general');
+			for ($i = 0; $i < $factionRankingManager->size(); $i++) {
+				echo $factionRankingManager->get($i)->commonRender($session->get('playerInfo'), 'general');
 			}
 		echo '</div>';
 	echo '</div>';

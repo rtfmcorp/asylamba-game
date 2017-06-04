@@ -2,31 +2,38 @@
 # createTopic component
 # in demeter.forum package
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Utils;
+use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Classes\Library\Chronos;
 
-# require
-$S_PAM_DGG = ASM::$pam->getCurrentSession();
-ASM::$pam->changeSession($PLAYER_GOV_TOKEN);
+use Asylamba\Classes\Exception\ErrorException;
+
+$factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
+$session = $this->getContainer()->get('app.session');
+$sessionToken = $session->get('token');
 
 # status list
 $status = ColorResource::getInfo($faction->id, 'status');
 
 # ranking
-$S_FRM1 = ASM::$frm->getCurrentSession();
-ASM::$frm->newSession();
-ASM::$frm->loadLastContext();
-for ($i = 0; $i < ASM::$frm->size(); $i++) { 
-	if (ASM::$frm->get($i)->rFaction == $faction->id) {
-		$factionRanking = ASM::$frm->get($i)->generalPosition;
+$S_FRM1 = $factionRankingManager->getCurrentSession();
+$factionRankingManager->newSession();
+$factionRankingManager->loadLastContext();
+
+if ($factionRankingManager->size() == 0) {
+	throw new ErrorException('L\'espace faction n\'est pas disponible pour le moment');
+}
+
+for ($i = 0; $i < $factionRankingManager->size(); $i++) { 
+	if ($factionRankingManager->get($i)->rFaction == $faction->id) {
+		$factionRanking = $factionRankingManager->get($i)->generalPosition;
 		break;
 	}
 }
-ASM::$frm->changeSession($S_FRM1);
+$factionRankingManager->changeSession($S_FRM1);
 
 echo '<div class="component size2 player new-message profil">';
 	echo '<div class="head">';
@@ -116,10 +123,10 @@ echo '<div class="component size2 player new-message profil">';
 						echo '</div>';
 						echo '<a class="centred-link" href="' . APP_ROOT . 'faction/view-election">Prendre position sur le coup d\'état</a>';
 					} else {
-						if (in_array(CTR::$data->get('playerInfo')->get('status'), array(PAM_WARLORD, PAM_TREASURER, PAM_MINISTER, PAM_PARLIAMENT))) {
+						if (in_array($session->get('playerInfo')->get('status'), array(Player::WARLORD, Player::TREASURER, Player::MINISTER, Player::PARLIAMENT))) {
 							echo '<a class="centred-link sh" href="#" data-target="makeacoup">Tenter un coup d\'état</a>';
 
-							echo '<form action="' . Format::actionBuilder('makeacoup') . '" method="post" id="makeacoup" style="display: none;">';
+							echo '<form action="' . Format::actionBuilder('makeacoup', $sessionToken) . '" method="post" id="makeacoup" style="display: none;">';
 								echo '<p><label for="program">Votre message politique</label></p>';
 								echo '<p class="input input-area"><textarea id="program" name="program" required style="height: 200px;"></textarea></p>';
 
@@ -134,14 +141,14 @@ echo '<div class="component size2 player new-message profil">';
 
 			echo '<h4>Gouvernement actuel</h4>';
 
-			for ($i = 0; $i < ASM::$pam->size(); $i++) { 
+			foreach ($governmentMembers as $minister) { 
 				echo '<div class="player">';
-					echo '<a href="' . APP_ROOT . 'embassy/player-' .  ASM::$pam->get($i)->id . '">';
-						echo '<img src="' . MEDIA . 'avatar/small/' .  ASM::$pam->get($i)->avatar . '.png" alt="' .  ASM::$pam->get($i)->name . '" class="picto" />';
+					echo '<a href="' . APP_ROOT . 'embassy/player-' .  $minister->id . '">';
+						echo '<img src="' . MEDIA . 'avatar/small/' .  $minister->avatar . '.png" alt="' .  $minister->name . '" class="picto" />';
 					echo '</a>';
-					echo '<span class="title">' . $status[ ASM::$pam->get($i)->status - 1] . '</span>';
-					echo '<strong class="name">' .  ASM::$pam->get($i)->name . '</strong>';
-					echo '<span class="experience">' . Format::number( ASM::$pam->get($i)->factionPoint) . ' points</span>';
+					echo '<span class="title">' . $status[ $minister->status - 1] . '</span>';
+					echo '<strong class="name">' .  $minister->name . '</strong>';
+					echo '<span class="experience">' . Format::number( $minister->factionPoint) . ' points</span>';
 				echo '</div>';
 			}
 
@@ -170,5 +177,3 @@ echo '<div class="component size2 player new-message profil">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-ASM::$pam->changeSession($S_PAM_DGG);

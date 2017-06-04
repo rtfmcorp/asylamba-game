@@ -868,7 +868,7 @@ jQuery(document).ready(function($) {
 				wswBox.container = container;
 				wswBox.type = type;
 
-				$.get(game.path + '/ajax/a-wsw' + wswBox.type + '/')
+				$.get(game.path + 'ajax/a-wsw' + wswBox.type + '/')
 				 .done(function(data) {
 					wswBox.container.append(data);
 					wswBox.box = container.find('.modal');

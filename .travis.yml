@@ -3,16 +3,10 @@ language: php
 sudo: false
 
 php:
-    - 5.5
-    - 5.6
-    - hhvm
     - 7.0
 
-matrix:
-    allow_failures:
-        - php: [hhvm, 7.0]
-
 before_script:
+    - cp config/parameters.dist.yml config/parameters.yml
     - curl -s http://getcomposer.org/installer | php
     - php composer.phar install --dev --no-interaction
 

@@ -1,0 +1,55 @@
+---
+parameters:
+#	 These are defined by the environment variables of the Docker container
+#	 Uncomment it if you don't use Docker
+#    database_host: 127.0.0.1
+#    # database_host: asylamba_mysql     # with docker
+#    database_name: asylamba_game
+#    database_user: asylamba
+#    # database_user: root               # with docker (temporary)
+#    database_password: asylamba
+#    database_admin_user: root
+#    database_admin_password: asylamba
+#    
+#    server_port: 9999
+#    server_cycle_timeout: 20
+#    server_collection_cycles_number: 25
+    
+    # half an hour
+    session_lifetime: 1800 
+    
+    log_handler: Asylamba\Classes\Logger\FileLogger
+    log_directory: /srv/logs
+    log_rotation: 3
+#    
+#    worker_scale: 1
+#    worker_cycle_timeout: 60
+#    worker_collection_cycles_number: 5
+    worker_stats_volume: 15
+
+    # s7/s11 - révolte seldarine - 1/4 of the map, 2 bridges
+    #gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV2
+    #game.available_factions: [1, 4, 8, 9]
+
+    # s8/s12 - révolution cardanienne - zoom, stars strip
+    #gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV3
+    #game.available_factions: [4, 8, 10, 11, 12]
+
+    # s9 - empire contre-attaque - 1/4 of the map, 2 bridges
+    #gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV4
+    #game.available_factions: [1, 8, 11]
+
+    # s10 - chute des archontes - full map, 7 bridges
+    #gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV1
+    #game.available_factions: [1, 2, 6, 7, 11]
+
+    # s13 - renaissance - full map, 8 bridges (Falmala version)
+    #gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV5
+    #game.available_factions: [2, 3, 6, 7]
+
+    # s14 - croisée des destinées - 1/4 of the map, 2 bridges (Falmala version)
+    gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV6
+    game.available_factions: [1, 2, 3, 4, 7]
+    
+# Also defined in Docker container environment variables
+#    environment: dev

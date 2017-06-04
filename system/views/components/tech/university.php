@@ -10,10 +10,12 @@
 # work
 
 use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Promethee\Resource\ResearchResource;
 use Asylamba\Modules\Promethee\Model\Research;
+
+$session = $this->getContainer()->get('app.session');
+$researchHelper = $this->getContainer()->get('promethee.research_helper');
 
 echo '<div class="component">';
 	echo '<div class="head skin-1">';
@@ -32,12 +34,12 @@ echo '<div class="component">';
 				echo '<span class="group-link"><a title="modifier" class="hb lt" href="' . APP_ROOT . 'financial/">→</a></span>';
 			echo '</div>';
 
-			echo CTR::$data->get('playerBonus')->get(PlayerBonus::UNI_INVEST) == 0
+			echo $session->get('playerBonus')->get(PlayerBonus::UNI_INVEST) == 0
 				? '<div class="number-box grey">'
 				: '<div class="number-box">';
 				echo '<span class="label">bonus d\'efficacité d\'investissement</span>';
 				echo '<span class="value">';
-					echo CTR::$data->get('playerBonus')->get(PlayerBonus::UNI_INVEST) . ' %';
+					echo $session->get('playerBonus')->get(PlayerBonus::UNI_INVEST) . ' %';
 				echo '</span>';
 			echo '</div>';
 
@@ -127,21 +129,21 @@ echo '<div class="component uni">';
 			echo '<div class="build-item">';
 				echo '<div class="name">';
 					echo '<img src="' . MEDIA . 'university/mathematics.png" alt="" />';
-					echo '<strong>' . ResearchResource::getInfo(Research::MATH, 'name') . '</strong>';
+					echo '<strong>' . $researchHelper->getInfo(Research::MATH, 'name') . '</strong>';
 					echo '<em>niveau ' . $research_university->mathLevel . '</em>';
 				echo '</div>';
 			echo '</div>';
 			echo '<div class="build-item">';
 				echo '<div class="name">';
 					echo '<img src="' . MEDIA . 'university/chemistry.png" alt="" />';
-					echo '<strong>' . ResearchResource::getInfo(Research::CHEM, 'name') . '</strong>';
+					echo '<strong>' . $researchHelper->getInfo(Research::CHEM, 'name') . '</strong>';
 					echo '<em>niveau ' . $research_university->chemLevel . '</em>';
 				echo '</div>';
 			echo '</div>';
 			echo '<div class="build-item">';
 				echo '<div class="name">';
 					echo '<img src="' . MEDIA . 'university/physics.png" alt="" />';
-					echo '<strong>' . ResearchResource::getInfo(Research::PHYS, 'name') . '</strong>';
+					echo '<strong>' . $researchHelper->getInfo(Research::PHYS, 'name') . '</strong>';
 					echo '<em>niveau ' . $research_university->physLevel . '</em>';
 				echo '</div>';
 			echo '</div>';
@@ -159,14 +161,14 @@ echo '<div class="component uni">';
 			echo '<div class="build-item">';
 				echo '<div class="name">';
 					echo '<img src="' . MEDIA . 'university/law.png" alt="" />';
-					echo '<strong>' . ResearchResource::getInfo(Research::LAW, 'name') . '</strong>';
+					echo '<strong>' . $researchHelper->getInfo(Research::LAW, 'name') . '</strong>';
 					echo '<em>niveau ' . $research_university->bioLevel . '</em>';
 				echo '</div>';
 			echo '</div>';
 			echo '<div class="build-item">';
 				echo '<div class="name">';
 					echo '<img src="' . MEDIA . 'university/communication.png" alt="" />';
-					echo '<strong>' . ResearchResource::getInfo(Research::COMM, 'name') . '</strong>';
+					echo '<strong>' . $researchHelper->getInfo(Research::COMM, 'name') . '</strong>';
 					echo '<em>niveau ' . $research_university->mediLevel . '</em>';
 				echo '</div>';
 			echo '</div>';
@@ -190,21 +192,21 @@ echo '<div class="component uni">';
 			echo '<div class="build-item">';
 				echo '<div class="name">';
 					echo '<img src="' . MEDIA . 'university/networks.png" alt="" />';
-					echo '<strong>' . ResearchResource::getInfo(Research::NETWORK, 'name') . '</strong>';
+					echo '<strong>' . $researchHelper->getInfo(Research::NETWORK, 'name') . '</strong>';
 					echo '<em>niveau ' . $research_university->networkLevel . '</em>';
 				echo '</div>';
 			echo '</div>';
 			echo '<div class="build-item">';
 				echo '<div class="name">';
 					echo '<img src="' . MEDIA . 'university/algorithmic.png" alt="" />';
-					echo '<strong>' . ResearchResource::getInfo(Research::ALGO, 'name') . '</strong>';
+					echo '<strong>' . $researchHelper->getInfo(Research::ALGO, 'name') . '</strong>';
 					echo '<em>niveau ' . $research_university->algoLevel . '</em>';
 				echo '</div>';
 			echo '</div>';
 			echo '<div class="build-item">';
 				echo '<div class="name">';
 					echo '<img src="' . MEDIA . 'university/statistics.png" alt="" />';
-					echo '<strong>' . ResearchResource::getInfo(Research::STAT, 'name') . '</strong>';
+					echo '<strong>' . $researchHelper->getInfo(Research::STAT, 'name') . '</strong>';
 					echo '<em>niveau ' . $research_university->statLevel . '</em>';
 				echo '</div>';
 			echo '</div>';

@@ -2,8 +2,6 @@
 # daily cron
 # call at x am. every day
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\DataAnalysis;
@@ -11,79 +9,34 @@ use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Atlas\Model\PlayerRanking;
+use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
 
-$S_PRM1 = ASM::$prm->getCurrentSession();
-ASM::$prm->newSession();
-ASM::$prm->loadLastContext();
+$playerRankingManager = $this->getContainer()->get('atlas.player_ranking_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$database = $this->getContainer()->get('database');
 
-$S_PAM1 = ASM::$pam->getCurrentSession();
-ASM::$pam->newSession(FALSE);
-
+$S_PRM1 = $playerRankingManager->getCurrentSession();
+$playerRankingManager->newSession();
+$playerRankingManager->loadLastContext();
 
 # create a new ranking
-$db = Database::getInstance();
-$qr = $db->prepare('INSERT INTO ranking(dRanking, player, faction) VALUES (?, 1, 0)');
+$qr = $database->prepare('INSERT INTO ranking(dRanking, player, faction) VALUES (?, 1, 0)');
 $qr->execute(array(Utils::now()));
 
-$rRanking = $db->lastInsertId();
+$rRanking = $database->lastInsertId();
 
 echo 'Numéro du ranking : ' . $rRanking . '<br /><br />';
 
-function cmpGeneral($a, $b) {
-    if($a['general'] == $b['general']) {
-        return 0;
-    }
-    return ($a['general'] > $b['general']) ? -1 : 1;
-}
+require_once ('pr_functions.php');
 
-function cmpResources($a, $b) {
-    if($a['resources'] == $b['resources']) {
-        return 0;
-    }
-    return ($a['resources'] > $b['resources']) ? -1 : 1;
-}
-
-function cmpExperience($a, $b) {
-    if($a['experience'] == $b['experience']) {
-        return 0;
-    }
-    return ($a['experience'] > $b['experience']) ? -1 : 1;
-}
-
-function cmpFight($a, $b) {
-    if($a['fight'] == $b['fight']) {
-        return 0;
-    }
-    return ($a['fight'] > $b['fight']) ? -1 : 1;
-}
-
-function cmpArmies($a, $b) {
-    if($a['armies'] == $b['armies']) {
-        return 0;
-    }
-    return ($a['armies'] > $b['armies']) ? -1 : 1;
-}
-
-function cmpButcher($a, $b) {
-    if($a['butcher'] == $b['butcher']) {
-        return 0;
-    }
-    return ($a['butcher'] > $b['butcher']) ? -1 : 1;
-}
-
-function cmpTrader($a, $b) {
-    if($a['trader'] == $b['trader']) {
-        return 0;
-    }
-    return ($a['trader'] > $b['trader']) ? -1 : 1;
-}
-
-ASM::$pam->load(array('statement' => array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY)));
+$players = $playerManager->getByStatements([Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]);
 
 # create an array with all the players
 $list = array();
-for ($i = 0; $i < ASM::$pam->size(); $i++) {
-	$list[ASM::$pam->get($i)->id] = [
+foreach ($players as $player) {
+	$list[$player->id] = [
 		'general' => 0, 
 		'resources' => 0,
 		'experience' => 0, 
@@ -101,10 +54,8 @@ for ($i = 0; $i < ASM::$pam->size(); $i++) {
 	];
 }
 
-const COEF_RESOURCE = 0.001;
-
 #-------------------------------- RESOURCES --------------------------------#
-$qr = $db->prepare('SELECT 
+$qr = $database->prepare('SELECT 
 		p.id AS player,
 		ob.levelRefinery AS levelRefinery,
 		pl.coefResources AS coefResources
@@ -114,17 +65,17 @@ $qr = $db->prepare('SELECT
 	LEFT JOIN player AS p
 		on p.id = ob.rPlayer
 	WHERE p.statement = ? OR p.statement = ? OR p.statement = ?');
-$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY));
+$qr->execute(array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY));
 
 while ($aw = $qr->fetch()) {
 	if (isset($list[$aw['player']])) {
-		$resourcesProd = Game::resourceProduction(OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $aw['levelRefinery'], 'refiningCoefficient'), $aw['coefResources']);
+		$resourcesProd = Game::resourceProduction($orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $aw['levelRefinery'], 'refiningCoefficient'), $aw['coefResources']);
 		$list[$aw['player']]['resources'] += $resourcesProd;
 	}
 }
 
 #-------------------------------- DA_Resources --------------------------------#
-$qr = $db->prepare('SELECT 
+$qr = $database->prepare('SELECT 
 		p.id AS player,
 		SUM(ob.resourcesStorage) AS sumResources
 	FROM orbitalBase AS ob 
@@ -132,7 +83,7 @@ $qr = $db->prepare('SELECT
 		on p.id = ob.rPlayer
 	WHERE p.statement = ? OR p.statement = ? OR p.statement = ?
 	GROUP BY ob.rPlace');
-$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY));
+$qr->execute(array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY));
 
 while ($aw = $qr->fetch()) {
 	if (isset($list[$aw['player']])) {
@@ -141,7 +92,7 @@ while ($aw = $qr->fetch()) {
 }
 
 #-------------------------------- DA_PlanetNumber --------------------------------#
-$qr = $db->prepare('SELECT 
+$qr = $database->prepare('SELECT 
 		p.id AS player,
 		COUNT(ob.rPlace) AS sumPlanets
 	FROM orbitalBase AS ob
@@ -149,7 +100,7 @@ $qr = $db->prepare('SELECT
 		on p.id = ob.rPlayer
 	WHERE p.statement = ? OR p.statement = ? OR p.statement = ?
 	GROUP BY ob.rPlace');
-$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY));
+$qr->execute(array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY));
 
 while ($aw = $qr->fetch()) {
 	if (isset($list[$aw['player']])) {
@@ -160,7 +111,7 @@ while ($aw = $qr->fetch()) {
 
 #-------------------------------- GENERAL & ARMIES RANKING --------------------------------#
 # load the bases
-$qr = $db->prepare('SELECT 
+$qr = $database->prepare('SELECT 
 		p.id AS player,
 		SUM(ob.points) AS points,
 		SUM(ob.resourcesStorage) AS resources,
@@ -182,7 +133,7 @@ $qr = $db->prepare('SELECT
 
 	WHERE p.statement = ? OR p.statement = ? OR p.statement = ?
 	GROUP BY p.id');
-$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY));
+$qr->execute(array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY));
 
 while ($aw = $qr->fetch()) {
 	if (isset($list[$aw['player']])) {
@@ -222,7 +173,7 @@ while ($aw = $qr->fetch()) {
 }
 
 # load the commanders
-$qr = $db->prepare('SELECT 
+$qr = $database->prepare('SELECT 
 		p.id AS player,
 		SUM(sq.ship0) as s0,
 		SUM(sq.ship1) as s1,
@@ -282,7 +233,7 @@ while ($aw = $qr->fetch()) {
 
 #-------------------------------- BUTCHER RANKING --------------------------------#
 # load the reports
-$qr = $db->prepare('SELECT
+$qr = $database->prepare('SELECT
 		p.id AS player,
 		(SUM(pevInBeginA) - SUM(`pevAtEndA`)) AS lostPEV,
 		(SUM(pevInBeginD) - SUM(`pevAtEndD`)) AS destroyedPEV
@@ -292,7 +243,7 @@ $qr = $db->prepare('SELECT
 	WHERE p.statement = ? OR p.statement = ? OR p.statement = ?
 	GROUP BY p.id
 	ORDER BY p.id');
-$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY));
+$qr->execute(array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY));
 
 while ($aw = $qr->fetch()) {
 	if (isset($list[$aw['player']])) {
@@ -302,7 +253,7 @@ while ($aw = $qr->fetch()) {
 	}
 }
 
-$qr = $db->prepare('SELECT
+$qr = $database->prepare('SELECT
 		p.id AS player,
 		(SUM(pevInBeginD) - SUM(`pevAtEndD`)) AS lostPEV,
 		(SUM(pevInBeginA) - SUM(`pevAtEndA`)) AS destroyedPEV,
@@ -313,7 +264,7 @@ $qr = $db->prepare('SELECT
 	WHERE p.statement = ? OR p.statement = ? OR p.statement = ?
 	GROUP BY p.id
 	ORDER BY p.id');
-$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY));
+$qr->execute(array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY));
 
 while ($aw = $qr->fetch()) {
 	if (isset($list[$aw['player']])) {
@@ -325,7 +276,7 @@ while ($aw = $qr->fetch()) {
 
 #-------------------------------- TRADER RANKING --------------------------------#
 # load the commercial routes
-$qr = $db->prepare('SELECT 
+$qr = $database->prepare('SELECT 
 		p.id AS player,
 		SUM(income) AS income
 	FROM commercialRoute AS c
@@ -336,7 +287,7 @@ $qr = $db->prepare('SELECT
 	WHERE (p.statement = ? OR p.statement = ? OR p.statement = ?) AND c.statement = ?
 	GROUP BY p.id
 	ORDER BY p.id');
-$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY, CRM_ACTIVE));
+$qr->execute(array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY, CommercialRoute::ACTIVE));
 
 while ($aw = $qr->fetch()) {
 	if (isset($list[$aw['player']])) {
@@ -344,7 +295,7 @@ while ($aw = $qr->fetch()) {
 	}
 }
 
-$qr = $db->prepare('SELECT 
+$qr = $database->prepare('SELECT 
 		p.id AS player,
 		SUM(income) AS income
 	FROM `commercialRoute` AS c
@@ -355,7 +306,7 @@ $qr = $db->prepare('SELECT
 	WHERE (p.statement = ? OR p.statement = ? OR p.statement = ?) AND c.statement = ?
 	GROUP BY p.id
 	ORDER BY p.id');
-$qr->execute(array(PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY, CRM_ACTIVE));
+$qr->execute(array(Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY, CommercialRoute::ACTIVE));
 
 while ($aw = $qr->fetch()) {
 	if (isset($list[$aw['player']])) {
@@ -364,14 +315,13 @@ while ($aw = $qr->fetch()) {
 }
 
 #-------------------------------- FIGHT & EXPERIENCE RANKING --------------------------------#
-for ($i = 0; $i < ASM::$pam->size(); $i++) {
-	$pl = ASM::$pam->get($i);
-	if (isset($list[$pl->id])) {
+foreach ($players as $player) {
+	if (isset($list[$player->id])) {
 		# add the points to the list
-		$list[$pl->id]['experience'] += $pl->experience;
-		$list[$pl->id]['victory'] += $pl->victory;
-		$list[$pl->id]['defeat'] += $pl->defeat;
-		$list[$pl->id]['fight'] += $pl->victory - $pl->defeat;
+		$list[$player->id]['experience'] += $player->experience;
+		$list[$player->id]['victory'] += $player->victory;
+		$list[$player->id]['defeat'] += $player->defeat;
+		$list[$player->id]['fight'] += $player->victory - $player->defeat;
 	}
 }
 
@@ -420,10 +370,10 @@ foreach ($list as $player => $value) {
 
 	# voir s'il faut améliorer (p.ex. : stocker le tableau des objets et supprimer chaque objet utilisé pour que la liste se rapetisse)
 	$firstRanking = true;
-	for ($i = 0; $i < ASM::$prm->size(); $i++) {
-		if (ASM::$prm->get($i)->rPlayer == $player) {
+	for ($i = 0; $i < $playerRankingManager->size(); $i++) {
+		if ($playerRankingManager->get($i)->rPlayer == $player) {
 			$firstRanking = false;
-			$oldRanking = ASM::$prm->get($i);
+			$oldRanking = $playerRankingManager->get($i);
 			break;
 		}
 	}
@@ -431,7 +381,7 @@ foreach ($list as $player => $value) {
 	$pr->general = $listG[$player]['general'];
 	$pr->generalPosition = $listG[$player]['position'];
 	$pr->generalVariation = $firstRanking ? 0 : $oldRanking->generalPosition - $pr->generalPosition;
-	ASM::$pam->getById($player)->factionPoint = $pr->general;
+	$playerManager->get($player)->factionPoint = $pr->general;
 
 	$pr->resources = $listR[$player]['resources'];
 	$pr->resourcesPosition = $listR[$player]['position'];
@@ -441,7 +391,7 @@ foreach ($list as $player => $value) {
 	$pr->experiencePosition = $listE[$player]['position'];
 	$pr->experienceVariation = $firstRanking ? 0 : $oldRanking->experiencePosition - $pr->experiencePosition;
 
-	$pr->fight = $listF[$player]['fight'];
+	$pr->fight = ($listF[$player]['fight'] >= 0) ? $listF[$player]['fight'] : 0;
 	$pr->victories = $listF[$player]['victory'];
 	$pr->defeat = $listF[$player]['defeat'];
 	$pr->fightPosition = $listF[$player]['position'];
@@ -451,7 +401,7 @@ foreach ($list as $player => $value) {
 	$pr->armiesPosition = $listA[$player]['position'];
 	$pr->armiesVariation = $firstRanking ? 0 : $oldRanking->armiesPosition - $pr->armiesPosition;
 
-	$pr->butcher = $listB[$player]['butcher'];
+	$pr->butcher = ($listB[$player]['butcher'] >= 0) ? $listB[$player]['butcher'] : 0;
 	$pr->butcherDestroyedPEV = $listB[$player]['butcherDestroyedPEV'];
 	$pr->butcherLostPEV = $listB[$player]['butcherLostPEV'];
 	$pr->butcherPosition = $listB[$player]['position'];
@@ -461,13 +411,12 @@ foreach ($list as $player => $value) {
 	$pr->traderPosition = $listT[$player]['position'];
 	$pr->traderVariation = $firstRanking ? 0 : $oldRanking->traderPosition - $pr->traderPosition;
 
-	ASM::$prm->add($pr);
+	$playerRankingManager->add($pr);
 
 	if (DATA_ANALYSIS) {
-		$p = ASM::$pam->getById($player);
+		$p = $playerManager->get($player);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO 
+		$qr = $database->prepare('INSERT INTO 
 			DA_PlayerDaily(rPlayer, credit, experience, level, victory, defeat, status, resources, fleetSize, nbPlanet, planetPoints, rkGeneral, rkFighter, rkProducer, rkButcher, rkTrader, dStorage)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
 		);
@@ -493,5 +442,5 @@ foreach ($list as $player => $value) {
 	}
 }
 
-ASM::$pam->changeSession($S_PAM1);
-ASM::$prm->changeSession($S_PRM1);
+$playerRankingManager->changeSession($S_PRM1);
+$this->getContainer()->get('entity_manager')->flush();

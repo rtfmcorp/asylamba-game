@@ -1,4 +1,3 @@
-index.php
 system/config/app.config.local.php
 
 *.log
@@ -7,3 +6,5 @@ system/config/app.config.local.php
 /nbproject/
 /vendor/
 /node_modules/
+
+config/parameters.yml

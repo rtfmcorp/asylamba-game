@@ -11,13 +11,19 @@ use Asylamba\Modules\Hermes\Model\ConversationMessage;
 class ConversationMessageManager extends Manager {
 	protected $managerType ='_ConversationMessage';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where);
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT c.*,
+		$qr = $this->database->prepare('SELECT c.*,
 				p.rColor AS playerColor,
 				p.name AS playerName,
 				p.avatar AS playerAvatar,
@@ -70,12 +76,10 @@ class ConversationMessageManager extends Manager {
 	}
 
 	public function save() {
-		$db = Database::getInstance();
-
 		$messages = $this->_Save();
 
 		foreach ($messages AS $message) {
-			$qr = $db->prepare('UPDATE conversationMessage
+			$qr = $this->database->prepare('UPDATE conversationMessage
 				SET
 					rConversation = ?,
 					rPlayer = ?,
@@ -98,9 +102,7 @@ class ConversationMessageManager extends Manager {
 	}
 
 	public function add($message) {
-		$db = Database::getInstance();
-
-		$qr = $db->prepare('INSERT INTO conversationMessage
+		$qr = $this->database->prepare('INSERT INTO conversationMessage
 			SET rConversation = ?,
 				rPlayer = ?,
 				type = ?,
@@ -118,15 +120,14 @@ class ConversationMessageManager extends Manager {
 				$message->dLastModification
 		));
 
-		$message->id = $db->lastInsertId();
+		$message->id = $this->database->lastInsertId();
 		$this->_Add($message);
 
 		return $message->id;
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM conversationMessage WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM conversationMessage WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);

@@ -1,6 +1,7 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-
-CTR::$data->destroy();
-CTR::redirect(GETOUT_ROOT . 'profil', TRUE);
+$session = $this->getContainer()->get('app.session');
+$sessionId = $session->get('session_id');
+$session->destroy();
+$this->getContainer()->get('client_manager')->removeClient($sessionId);
+$this->getContainer()->get('app.response')->redirect('profil', TRUE);

@@ -11,106 +11,76 @@
 */
 namespace Asylamba\Modules\Athena\Manager;
 
-use Asylamba\Classes\Worker\Manager;
-use \Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Database\Database;
 use Asylamba\Modules\Athena\Model\BuildingQueue;
+use Asylamba\Classes\Entity\EntityManager;
 
-class BuildingQueueManager extends Manager {
-	protected $managerType = '_BuildingQueue';
+use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
-	public function load($where = array(), $order = array(), $limit = array()) {
-		$formatWhere = Utils::arrayToWhere($where);
-		$formatOrder = Utils::arrayToOrder($order);
-		$formatLimit = Utils::arrayToLimit($limit);
+class BuildingQueueManager {
+	/** @var EntityManager **/
+	protected $entityManager;
+	/** @var RealTimeActionScheduler **/
+	protected $realtimeActionScheduler;
+	
+	/**
+	 * @param EntityManager $entityManager
+	 * @param RealTimeActionScheduler $realtimeActionScheduler
+	 */
+	public function __construct(EntityManager $entityManager, RealTimeActionScheduler $realtimeActionScheduler) {
+		$this->entityManager = $entityManager;
+		$this->realtimeActionScheduler = $realtimeActionScheduler;
+	}
+	
+	/**
+	 * @param int $id
+	 * @return BuildingQueue
+	 */
+	public function get($id)
+	{
+		return $this->entityManager->getRepository(BuildingQueue::class)->get($id);
+	}
+	
+	public function getBaseQueues($baseId)
+	{
+		return $this->entityManager->getRepository(BuildingQueue::class)->getBaseQueues($baseId);
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function scheduleActions()
+	{
+		$buildingQueues = $this->entityManager->getRepository(BuildingQueue::class)->getAll();
+		
+		foreach ($buildingQueues as $buildingQueue) {
+			$this->realtimeActionScheduler->schedule(
+				'athena.orbital_base_manager',
+				'uBuildingQueue',
+				$buildingQueue,
+				$buildingQueue->dEnd,
+				[
+					'class' => Place::class,
+					'id' => $buildingQueue->rOrbitalBase
+				]
+			);
+		}
+	}
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT *
-			FROM orbitalBaseBuildingQueue
-			' . $formatWhere . '
-			' . $formatOrder . '
-			' . $formatLimit
+	/**
+	 * @param BuildingQueue $buildingQueue
+	 */
+	public function add(BuildingQueue $buildingQueue) {
+		$this->entityManager->persist($buildingQueue);
+		$this->entityManager->flush($buildingQueue);
+		$this->realtimeActionScheduler->schedule(
+			'athena.orbital_base_manager',
+			'uBuildingQueue',
+			$buildingQueue,
+			$buildingQueue->dEnd,
+			[
+				'class' => Place::class,
+				'id' => $buildingQueue->rOrbitalBase
+			]
 		);
-
-		foreach($where AS $v) {
-			if (is_array($v)) {
-				foreach ($v as $p) {
-					$valuesArray[] = $p;
-				}
-			} else {
-				$valuesArray[] = $v;
-			}
-		}
-
-		if(empty($valuesArray)) {
-			$qr->execute();
-		} else {
-			$qr->execute($valuesArray);
-		}
-
-		while($aw = $qr->fetch()) {
-			$bq = new BuildingQueue();
-
-			$bq->id = $aw['id'];
-			$bq->rOrbitalBase = $aw['rOrbitalBase'];
-			$bq->buildingNumber = $aw['buildingNumber'];
-			$bq->targetLevel = $aw['targetLevel'];
-			$bq->dStart = $aw['dStart'];
-			$bq->dEnd = $aw['dEnd'];
-
-			$this->_Add($bq);
-	}
-	}
-
-	public function add(BuildingQueue $bq) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
-			orbitalBaseBuildingQueue(rOrbitalBase, buildingNumber, targetLevel, dStart, dEnd)
-			VALUES(?, ?, ?, ?, ?)');
-		$qr->execute(array(
-			$bq->rOrbitalBase,
-			$bq->buildingNumber,
-			$bq->targetLevel,
-			$bq->dStart,
-			$bq->dEnd
-		));
-
-		$bq->id = $db->lastInsertId();
-		$this->_Add($bq);
-	}
-
-	public function save() {
-		$buildingQueues = $this->_Save();
-		foreach ($buildingQueues AS $bq) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE orbitalBaseBuildingQueue
-				SET	id = ?,
-					rOrbitalBase = ?,
-					buildingNumber = ?,
-					targetlevel = ?,
-					dStart = ?,
-					dEnd = ?
-				WHERE id = ?');
-			$qr->execute(array(
-				$bq->id,
-				$bq->rOrbitalBase,
-				$bq->buildingNumber,
-				$bq->targetLevel,
-				$bq->dStart,
-				$bq->dEnd,
-				$bq->id
-			));
-		}
-	}
-
-	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM orbitalBaseBuildingQueue WHERE id = ?');
-		$qr->execute(array($id));
-
-		// suppression de l'objet en manager
-		$this->_Remove($id);
-
-		return TRUE;
 	}
 }

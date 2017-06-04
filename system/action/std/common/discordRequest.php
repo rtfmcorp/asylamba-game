@@ -1,15 +1,19 @@
 <?php
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
+use Asylamba\Classes\Library\Flashbag;
 
-$discordId = Utils::getHTTPData('discord-id');
+$request = $this->getContainer()->get('app.request');
+$session =  $this->getContainer()->get('app.session');
+
+$discordId = $request->request->get('discord-id');
 
 if ($discordId !== FALSE AND $discordId !== '') {
 
 	$chickenBot = 'http://chickenbot.cloudapp.net:8080/register';
 
-	$data = array("discordId" => $discordId, "server" => "s" . APP_ID, "username" => CTR::$data->get('playerInfo')->get('name'), "factionColor" => CTR::$data->get('playerInfo')->get('color')); 
+	$data = array("discordId" => $discordId, "server" => "s" . $this->getContainer()->getParameter('server_id'), "username" => $session->get('playerInfo')->get('name'), "factionColor" => $session->get('playerInfo')->get('color')); 
 	$data_string = json_encode($data);
 	$ch = curl_init($chickenBot);
 	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -29,28 +33,24 @@ if ($discordId !== FALSE AND $discordId !== '') {
 		#$rep = unserialize($answer);
 		switch($answer) {
 			case 'user register correctly':
-				CTR::$alert->add('Vos droits ont été ajoutés sur Discord. Rendez-vous là-bas.', ALERT_STD_SUCCESS);
+				$session->addFlashbag('Vos droits ont été ajoutés sur Discord. Rendez-vous là-bas.', Flashbag::TYPE_SUCCESS);
 				break;
 			case 'user register correctly (update Status)':
-				CTR::$alert->add('Vos droits ont été mis à jour sur Discord. Rendez-vous là-bas.', ALERT_STD_SUCCESS);
+				$session->addFlashbag('Vos droits ont été mis à jour sur Discord. Rendez-vous là-bas.', Flashbag::TYPE_SUCCESS);
 				break;
 			case 'Wrong factionColor':
-				CTR::$alert->add('Vous êtes dans une faction inexistance, cela doit être une erreur, contactez un administrateur', ALERT_STD_ERROR);
-				break;
+				throw new ErrorException('Vous êtes dans une faction inexistance, cela doit être une erreur, contactez un administrateur');
 			case 'disord user already register':
-				CTR::$alert->add('Vous avez déjà vos droits sur Discord, le faire une seconde fois ne sert à rien. S\'il s\'agit d\'une erreur, contactez un administrateur.', ALERT_STD_ERROR);
-				break;
+				throw new ErrorException('Vous avez déjà vos droits sur Discord, le faire une seconde fois ne sert à rien. S\'il s\'agit d\'une erreur, contactez un administrateur.');
 			case 'userID not found in Aslymaba 2.0 server':
-				CTR::$alert->add('Cet identifiant n\'existe pas. Créez un compte sur Discord et entrez votre identifiant dans le champ', ALERT_STD_ERROR);
-				break;
+				throw new ErrorException('Cet identifiant n\'existe pas. Créez un compte sur Discord et entrez votre identifiant dans le champ');
 			default:
-				CTR::$alert->add('Erreur, contactez un administrateur', ALERT_STD_ERROR);
+				throw new ErrorException('Erreur, contactez un administrateur');
 		}
-		#CTR::$alert->add('message de retour : ' . $answer, ALERT_STD_SUCCESS);
+		#throw new ErrorException('message de retour : ' . $answer, ALERT_STD_SUCCESS);
 	} else {
-		CTR::$alert->add('Le Chicken Bot ne répond pas. Ré-essayez plus tard et/ou contactez un admin.', ALERT_STD_ERROR);
+		throw new ErrorException('Le Chicken Bot ne répond pas. Ré-essayez plus tard et/ou contactez un admin.');
 	}
-
 } else {
-	CTR::$alert->add('il faut entrer votre identifiant Discord dans le champ de texte', ALERT_STD_FILLFORM);
+	throw new FormException('il faut entrer votre identifiant Discord dans le champ de texte');
 }

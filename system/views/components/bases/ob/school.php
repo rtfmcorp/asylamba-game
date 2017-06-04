@@ -7,8 +7,6 @@
 # require
 	# {orbitalBase}		ob_school
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Zeus\Helper\CheckName;
 use Asylamba\Modules\Ares\Model\Commander;
@@ -17,16 +15,18 @@ use Asylamba\Modules\Athena\Resource\SchoolClassResource;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 
-$S_COM1 = ASM::$com->getCurrentSession();
-ASM::$com->newSession();
-ASM::$com->load(array('c.statement' => Commander::INSCHOOL, 'c.rBase' => $ob_school->getId()), array('c.experience', 'DESC'));
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
+$session = $this->getContainer()->get('app.session');
+$sessionToken = $session->get('token');
+
+$commanders = $commanderManager->getBaseCommanders($ob_school->getId(), [Commander::INSCHOOL], ['c.experience' => 'DESC']);
 
 # max commander
 $maxCommanderInSchool = PlaceResource::get($ob_school->typeOfBase, 'school-size');
 
 # gain en crédit
 $invest  = $ob_school->iSchool;
-$invest += $invest * CTR::$data->get('playerBonus')->get(PlayerBonus::COMMANDER_INVEST) / 100;
+$invest += $invest * $session->get('playerBonus')->get(PlayerBonus::COMMANDER_INVEST) / 100;
 $earnedExperience  = $invest / Commander::COEFFSCHOOL;
 $earnedExperience  = round($earnedExperience);
 $earnedExperience  = ($earnedExperience < 0)
@@ -51,31 +51,31 @@ echo '<div class="component school">';
 				echo '</span>';
 			echo '</div>';
 
-			echo CTR::$data->get('playerBonus')->get(PlayerBonus::COMMANDER_INVEST) == 0
+			echo $session->get('playerBonus')->get(PlayerBonus::COMMANDER_INVEST) == 0
 				? '<div class="number-box grey">'
 				: '<div class="number-box">';
 				echo '<span class="label">bonus de formation</span>';
 				echo '<span class="value">';
-					echo CTR::$data->get('playerBonus')->get(PlayerBonus::COMMANDER_INVEST) . ' %';
+					echo $session->get('playerBonus')->get(PlayerBonus::COMMANDER_INVEST) . ' %';
 				echo '</span>';
 			echo '</div>';
 
 			echo '<hr />';
 
-			echo '<form action="' . Format::actionBuilder('createschoolclass', ['baseid' => $ob_school->getId(), 'school' => '0']) . '" method="post" class="build-item">';
+			echo '<form action="' . Format::actionBuilder('createschoolclass', $sessionToken, ['baseid' => $ob_school->getId(), 'school' => '0']) . '" method="post" class="build-item">';
 				echo '<div class="name">';
 					echo '<img src="' . MEDIA . 'school/school-1.png" alt="" />';
 					echo '<strong>Former un nouvel officier</strong>';
 				echo '</div>';
 					echo '<input type="text" class="name-commander" name="name" value="' . CheckName::randomize() . '" />';
-				if (ASM::$com->size() >= $maxCommanderInSchool) {
+				if (count($commanders) >= $maxCommanderInSchool) {
 					echo '<span class="button disable">';
 						echo '<span class="text">';
 							echo 'trop d\'officiers dans l\'école<br/>';
 							echo Format::numberFormat(SchoolClassResource::getInfo(0, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
 						echo '</span>';
 					echo '</span>';
-				} elseif (SchoolClassResource::getInfo(0, 'credit') > CTR::$data->get('playerInfo')->get('credit')) {
+				} elseif (SchoolClassResource::getInfo(0, 'credit') > $session->get('playerInfo')->get('credit')) {
 					echo '<span class="button disable">';
 						echo '<span class="text">';
 							echo 'vous ne disposez pas d\'assez de crédit<br/>';
@@ -103,17 +103,17 @@ echo '<div class="component">';
 		echo '<div class="body">';
 			echo '<div class="queue">';
 				for ($i = 0; $i < $maxCommanderInSchool; $i++) {
-					if (ASM::$com->get($i) !== FALSE) {
-						$commander = ASM::$com->get($i);
-						$expToLvlUp = $commander->experienceToLevelUp();
+					if (isset($commanders[$i])) {
+						$commander = $commanders[$i];
+						$expToLvlUp = $commanderManager->experienceToLevelUp($commander);
 						echo '<div class="item">';
 							echo '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
 							echo '<strong>' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->getName() . '</strong>';
 							echo '<em>' . Format::numberFormat($commander->getExperience()) . ' points d\'expérience</em>';
 							echo '<em>~ ' . Format::number($earnedExperience) . 'xp/relève</em>';
 							echo '<span class="group-link">';
-								echo '<a class="hb lt" title="affecter l\'officier" href="' . Format::actionBuilder('affectcommander', ['id' => $commander->getId()]) . '">&#8593;</a>';
-								echo '<a class="hb lt" title="placer l\'officier dans le mess" href="' . Format::actionBuilder('putcommanderinschool', ['id' => $commander->getId()]) . '">&#8594;</a>';
+								echo '<a class="hb lt" title="affecter l\'officier" href="' . Format::actionBuilder('affectcommander', $sessionToken, ['id' => $commander->getId()]) . '">&#8593;</a>';
+								echo '<a class="hb lt" title="placer l\'officier dans le mess" href="' . Format::actionBuilder('putcommanderinschool', $sessionToken, ['id' => $commander->getId()]) . '">&#8594;</a>';
 							echo '</span>';
 							echo '<span class="progress-container">';
 								echo '<span style="width: ' . Format::percent($commander->getExperience() - ($expToLvlUp / 2), $expToLvlUp - ($expToLvlUp / 2)) . '%;" class="progress-bar"></span>';
@@ -132,8 +132,7 @@ echo '<div class="component">';
 	echo '</div>';
 echo '</div>';
 
-ASM::$com->newSession();
-ASM::$com->load(array('c.statement' => Commander::RESERVE, 'c.rBase' => $ob_school->getId()), array('c.experience', 'DESC'));
+$reserveCommanders = $commanderManager->getBaseCommanders($ob_school->getId(), ['c.statement' => Commander::RESERVE], ['c.experience' => 'DESC']);
 
 echo '<div class="component">';
 	echo '<div class="head skin-5">';
@@ -142,16 +141,15 @@ echo '<div class="component">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="queue">';
-				for ($i = 0; $i < ASM::$com->size(); $i++) {
-					$commander = ASM::$com->get($i);
-					$expToLvlUp = $commander->experienceToLevelUp();
+				foreach ($reserveCommanders as $commander) {
+					$expToLvlUp = $commanderManager->experienceToLevelUp($commander);
 					echo '<div class="item">';
 						echo '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
 						echo '<strong>' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->getName() . '</strong>';
 						echo '<em>' . Format::numberFormat($commander->getExperience()) . ' points d\'expérience</em>';
 						echo '<span class="group-link">';
-							echo '<a class="hb lt" title="affecter l\'officier" href="' . Format::actionBuilder('affectcommander', ['id' => $commander->getId()]) . '">&#8593;</a>';
-							echo '<a class="hb lt" title="placer l\'officier dans l\'école" href="' . Format::actionBuilder('putcommanderinschool', ['id' => $commander->getId()]) . '">&#8592;</a>';
+							echo '<a class="hb lt" title="affecter l\'officier" href="' . Format::actionBuilder('affectcommander', $sessionToken, ['id' => $commander->getId()]) . '">&#8593;</a>';
+							echo '<a class="hb lt" title="placer l\'officier dans l\'école" href="' . Format::actionBuilder('putcommanderinschool', $sessionToken, ['id' => $commander->getId()]) . '">&#8592;</a>';
 						echo '</span>';
 						echo '<span class="progress-container">';
 							echo '<span style="width: ' . Format::percent($commander->getExperience() - ($expToLvlUp / 2), $expToLvlUp - ($expToLvlUp / 2)) . '%;" class="progress-bar"></span>';
@@ -168,8 +166,6 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-ASM::$com->changeSession($S_COM1);
 
 echo '<div class="component">';
 	echo '<div class="head skin-2">';

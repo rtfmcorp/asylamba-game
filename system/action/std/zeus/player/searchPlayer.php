@@ -1,26 +1,22 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 
 # search player profile
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
 
 # string name 	nom du joueur
-$playerid = Utils::getHTTPData('playerid');
+$playerid = $request->request->get('playerid');
 
 if ($playerid !== FALSE) {
-	$S_PAM1 = ASM::$pam->getCurrentSession();
-	ASM::$pam->newSession();
-	ASM::$pam->load(array('id' => $playerid));
-	
-	if (ASM::$pam->size() == 1) {
-		CTR::redirect('embassy/player-' . ASM::$pam->get()->getId());
+	if (($player = $playerManager->get($playerid)) !== null) {
+		$response->redirect('embassy/player-' . $player->getId());
 	} else {
-		CTR::$alert->add('Aucun joueur ne correspond à votre recherche.', ALERT_STD_ERROR);
+		throw new ErrorException('Aucun joueur ne correspond à votre recherche.');
 	}
-
-	ASM::$pam->changeSession($S_PAM1);
 } else {
-	CTR::$alert->add('pas assez d\'informations pour chercher un joueur', ALERT_STD_FILLFORM);
+	throw new FormException('pas assez d\'informations pour chercher un joueur');
 }

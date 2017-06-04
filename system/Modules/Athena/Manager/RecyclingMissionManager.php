@@ -20,13 +20,19 @@ use Asylamba\Modules\Athena\Model\RecyclingMission;
 class RecyclingMissionManager extends Manager {
 	protected $managerType = '_RecyclingMission';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'rm.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT rm.*,
+		$qr = $this->database->prepare('SELECT rm.*,
 				p.typeOfPlace AS typeOfPlace,
 				p.position AS position,
 				p.population AS population,
@@ -97,8 +103,7 @@ class RecyclingMissionManager extends Manager {
 	}
 
 	public function add(RecyclingMission $rm) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
+		$qr = $this->database->prepare('INSERT INTO
 			recyclingMission(rBase, rTarget, cycleTime, recyclerQuantity, addToNextMission, uRecycling, statement)
 			VALUES(?, ?, ?, ?, ?, ?, ?)');
 		$qr->execute(array(
@@ -111,7 +116,7 @@ class RecyclingMissionManager extends Manager {
 			$rm->statement
 		));
 
-		$rm->id = $db->lastInsertId();
+		$rm->id = $this->database->lastInsertId();
 
 		$this->_Add($rm);
 	}
@@ -120,8 +125,7 @@ class RecyclingMissionManager extends Manager {
 		$recyclingMissions = $this->_Save();
 
 		foreach ($recyclingMissions AS $rm) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE recyclingMission
+			$qr = $this->database->prepare('UPDATE recyclingMission
 				SET	id = ?,
 					rBase = ?,
 					rTarget = ?,
@@ -146,8 +150,7 @@ class RecyclingMissionManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM recyclingMission WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM recyclingMission WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);

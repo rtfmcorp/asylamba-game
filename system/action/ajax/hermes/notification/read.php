@@ -3,25 +3,20 @@
 
 # int notif 		notif id
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 
-$notif = Utils::getHTTPData('notif');
+use Asylamba\Classes\Exception\FormException;
 
+$id = $this->getContainer()->get('app.request')->query->get('notif');
 
-if ($notif !== FALSE) {
-	$S_NTM1 = ASM::$ntm->getCurrentSession();
-	ASM::$ntm->newSession();
-	ASM::$ntm->load(array('id' => $notif, 'rPlayer' => CTR::$data->get('playerId')));
+if ($id === null) {
+	throw new FormException('Erreur dans la requête AJAX');
+}
+$session = $this->getContainer()->get('app.session');
+$notificationManager = $this->getContainer()->get('hermes.notification_manager');
 
-	if (ASM::$ntm->size() == 1) {
-		ASM::$ntm->get()->setReaded(1);
-	} else {
-		CTR::$alert->add('Cette notification ne vous appartient pas', ALERT_STD_FILLFORM);
-	}
-
-	ASM::$ntm->changeSession($S_NTM1);
+if (($notification = $notificationManager->get($id)) !== null && $notification->rPlayer === $session->get('playerId')) {
+	$notification->setReaded(1);
+	$this->getContainer()->get('entity_manager')->flush($notification);
 } else {
-	CTR::$alert->add('Erreur dans la requête AJAX', ALERT_STD_FILLFORM);
+	throw new FormException('Cette notification ne vous appartient pas');
 }

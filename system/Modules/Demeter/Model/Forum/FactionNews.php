@@ -27,14 +27,4 @@ class FactionNews {
 	public $dCreation		= '';
 
 	public function getId() { return $this->id; }
-
-	public function edit($content) {
-		$this->oContent = $content;
-
-		$p = new Parser();
-		$p->parseBigTag = TRUE;
-		$content = $p->parse($content);
-
-		$this->pContent = $content;
-	}
 }

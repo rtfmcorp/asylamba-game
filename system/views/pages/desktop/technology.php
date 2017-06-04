@@ -1,7 +1,9 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$researchManager = $this->getContainer()->get('promethee.research_manager');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
 
 # background paralax
 echo '<div id="background-paralax" class="technology"></div>';
@@ -14,26 +16,19 @@ include 'defaultElement/movers.php';
 # contenu spécifique
 echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
-	# loading des objets
-	$S_PAM_TECH = ASM::$pam->getCurrentSession();
-	ASM::$pam->newSession();
-	ASM::$pam->load(array('id' => CTR::$data->get('playerId')));
+	$S_RSM_TECH = $researchManager->getCurrentSession();
+	$researchManager->newSession();
+	$researchManager->load(array('rPlayer' => $session->get('playerId')));
 
-	$S_RSM_TECH = ASM::$rsm->getCurrentSession();
-	ASM::$rsm->newSession();
-	ASM::$rsm->load(array('rPlayer' => CTR::$data->get('playerId')));
-
-	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'university') {
-		$player_university = ASM::$pam->get(0);
-		$research_university = ASM::$rsm->get(0);
+	if (!$request->query->has('view') OR $request->query->get('view') == 'university') {
+		$player_university = $playerManager->get($session->get('playerId'));
+		$research_university = $researchManager->get(0);
 		include COMPONENT . 'tech/university.php';
-	} elseif (CTR::$get->get('view') == 'technos') {
+	} elseif ($request->query->get('view') == 'technos') {
 		include COMPONENT . 'tech/infoTech.php';
 	} else {
-		CTR::redirect('404');
+		$this->getContainer()->redirect('404');
 	}
 
-	ASM::$rsm->changeSession($S_RSM_TECH);
-	ASM::$pam->changeSession($S_PAM_TECH);
+	$researchManager->changeSession($S_RSM_TECH);
 echo '</div>';
-?>

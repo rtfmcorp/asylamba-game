@@ -1,0 +1,153 @@
+---
+services:
+    database:
+        class: Asylamba\Classes\Database\Database
+        arguments:
+            - "%database_host"
+            - "%database_name"
+            - "%database_user"
+            - "%database_password"
+            
+    database_admin:
+        class: Asylamba\Classes\Database\DatabaseAdmin
+        arguments:
+            - "%database_host"
+            - "%database_name"
+            - "%database_admin_user"
+            - "%database_admin_password"
+            
+    app.session:
+        class: Asylamba\Classes\Library\Session\SessionWrapper
+            
+    cyclic_action_scheduler:
+        class: Asylamba\Classes\Scheduler\CyclicActionScheduler
+        arguments:
+            - "@task_manager"
+            - "@load_balancer"
+            
+    realtime_action_scheduler:
+        class: Asylamba\Classes\Scheduler\RealTimeActionScheduler
+        arguments:
+            - "@app.container"
+            
+    router:
+        class: Asylamba\Classes\Router\Router
+        arguments:
+            - "@app.session"
+            - "%getout_root"
+        
+    request_factory:
+        class: Asylamba\Classes\Library\Http\RequestFactory
+        
+    response_factory:
+        class: Asylamba\Classes\Library\Http\ResponseFactory
+        arguments:
+            - "@templating.renderer"
+            - "@app.session"
+        
+    client_manager:
+        class: Asylamba\Classes\Daemon\ClientManager
+        arguments:
+            - "%session_lifetime"
+        
+    templating.renderer:
+        class: Asylamba\Classes\Templating\Renderer
+        arguments:
+            - "@app.container"
+            
+    server:
+        class: Asylamba\Classes\Daemon\Server
+        arguments:
+            - "@app.container"
+            
+    worker_server:
+        class: Asylamba\Classes\Daemon\WorkerServer
+        arguments:
+            - "@app.container"
+            
+    entity_manager:
+        class: Asylamba\Classes\Entity\EntityManager
+        arguments:
+            - "@database"
+            
+    event_dispatcher:
+        class: Asylamba\Classes\Worker\EventDispatcher
+        arguments:
+            - "@app.container"
+            
+    logger:
+        class: "%log_handler"
+        arguments:
+            - "%log_directory"
+            - "%log_rotation"
+            
+    parser:
+        class: Asylamba\Classes\Library\Parser
+        arguments:
+            - "@gaia.place_manager"
+            - "@zeus.player_manager"
+
+    api:
+        class: Asylamba\Classes\Worker\API
+        arguments:
+            - "@security"
+            - "%server_id"
+            - "%security_api_key"
+            - "%getout_root"
+
+    security:
+        class: Asylamba\Classes\Library\Security
+        arguments:
+            - "@app.session"
+            - "%security_server_key"
+            - "%security_iv"
+        
+    ctc:
+        class: Asylamba\Classes\Worker\CTC
+        arguments:
+            - "@app.session"
+            - "%log_directory"
+            
+    memory_manager:
+        class: Asylamba\Classes\Memory\MemoryManager
+            
+    process_manager:
+        class: Asylamba\Classes\Process\ProcessManager
+        arguments:
+            - "@server"
+            - "@memory_manager"
+            - "@process_gateway"
+            - "%root_path"
+            - "%worker_scale"
+            
+    process_gateway:
+        class: Asylamba\Classes\Process\ProcessGateway
+            
+    load_balancer:
+        class: Asylamba\Classes\Process\LoadBalancer
+        arguments:
+            - "@app.container"
+        
+    task_manager:
+        class: Asylamba\Classes\Task\TaskManager
+        arguments:
+            - "@app.container"
+        
+    exception_listener:
+        class: Asylamba\Classes\EventListener\ExceptionListener
+        arguments:
+            - "@logger"
+            - "@app.session"
+        tags:
+            - {type: "event_listener", event: "core.exception", method: "onCoreException"}
+            - {type: "event_listener", event: "core.error", method: "onCoreError"}
+            
+    process_exception_listener:
+        class: Asylamba\Classes\EventListener\ProcessExceptionListener
+        arguments:
+            - "@logger"
+            - "@process_gateway"
+            - "%app.name"
+        tags:
+            - {type: "event_listener", event: "core.process_exception", method: "onCoreException"}
+            - {type: "event_listener", event: "core.process_error", method: "onCoreError"}

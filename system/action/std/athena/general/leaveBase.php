@@ -4,48 +4,49 @@
 
 # int id 		id (rPlace) de la base orbitale
 
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 
-$baseId = Utils::getHTTPData('id');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$placeManager = $this->getContainer()->get('gaia.place_manager');
+$recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
+$commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
+$entityManager = $this->getContainer()->get('entity_manager');
+$eventDispatcher = $this->getContainer()->get('event_dispatcher');
 
-for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
+$baseId = $request->query->get('id');
+
+for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
+	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
 if (count($verif) > 1) {
-	$_COM = ASM::$com->getCurrentSession();
-	ASM::$com->newSession();
-	ASM::$com->load(array('rBase' => $baseId));
+	$baseCommanders = $commanderManager->getBaseCommanders($baseId);
 	$areAllFleetImmobile = TRUE;
-	for ($i = 0; $i < ASM::$com->size(); $i++) {
-		if (ASM::$com->get($i)->statement == Commander::MOVING) {
+	// @TODO Break when expected result is found in the loop
+	foreach ($baseCommanders as $commander) {
+		if ($commander->statement == Commander::MOVING) {
 			$areAllFleetImmobile = FALSE;
 		}
 	}
 	if ($areAllFleetImmobile) {
 		if ($baseId != FALSE && in_array($baseId, $verif)) {
-			$_OBM = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession();
-			ASM::$obm->load(array('rPlace' => $baseId, 'rPlayer' => CTR::$data->get('playerId')));
-
-			if (ASM::$obm->size() > 0) {
-				$base = ASM::$obm->get();
-
+			if (($base = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
 				if (Utils::interval(Utils::now(), $base->dCreation, 'h') >= OrbitalBase::COOL_DOWN) {
 
 					# delete buildings in queue
-					$S_BQM1 = ASM::$bqm->getCurrentSession();
-					ASM::$bqm->newSession(ASM_UMODE);
-					ASM::$bqm->load(array('rOrbitalBase' => $baseId), array('dEnd'));
-					for ($i = ASM::$bqm->size() - 1; $i >= 0; $i--) {
-						ASM::$bqm->deleteById(ASM::$bqm->get($i)->id);
+					foreach ($base->buildingQueues as $buildingQueue) {
+						$entityManager->remove($buildingQueue);
 					}
-					ASM::$bqm->changeSession($S_BQM1);
 
 					# change base type if it is a capital
 					if ($base->typeOfBase == OrbitalBase::TYP_CAPITAL) {
@@ -56,7 +57,7 @@ if (count($verif) > 1) {
 						}
 						# delete extra buildings
 						for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) { 
-							$maxLevel = OrbitalBaseResource::getBuildingInfo($i, 'maxLevel', $newType);
+							$maxLevel = $orbitalBaseHelper->getBuildingInfo($i, 'maxLevel', $newType);
 							if ($base->getBuildingLevel($i) > $maxLevel) {
 								$base->setBuildingLevel($i, $maxLevel);
 							}
@@ -64,57 +65,39 @@ if (count($verif) > 1) {
 						# change base type
 						$base->typeOfBase = $newType;
 					}
+					$place = $placeManager->get($baseId);
 
-					$_PLM = ASM::$plm->getCurrentSession();
-					ASM::$plm->newSession();
-					ASM::$plm->load(array('id' => $baseId));
+					$S_REM1 = $recyclingMissionManager->getCurrentSession();
+					$recyclingMissionManager->newSession();
+					$recyclingMissionManager->load(array('rBase' => $baseId));
+					$S_REM2 = $recyclingMissionManager->getCurrentSession();
+					$recyclingMissionManager->changeSession($S_REM1);
 
-					$S_CRM1 = ASM::$crm->getCurrentSession();
-					ASM::$crm->newSession();
-					ASM::$crm->load(array('rOrbitalBase' => $baseId));
-					ASM::$crm->load(array('rOrbitalBaseLinked' => $baseId));
-					$S_CRM2 = ASM::$crm->getCurrentSession();
-					ASM::$crm->changeSession($S_CRM1);
-
-					$S_REM1 = ASM::$rem->getCurrentSession();
-					ASM::$rem->newSession();
-					ASM::$rem->load(array('rBase' => $baseId));
-					$S_REM2 = ASM::$rem->getCurrentSession();
-					ASM::$rem->changeSession($S_REM1);
-
-					$S_COM2 = ASM::$com->getCurrentSession();
-					ASM::$com->newSession(FALSE); # FALSE obligatory, else the umethod make shit
-					ASM::$com->load(array('c.rBase' => $baseId));
-					$S_COM3 = ASM::$com->getCurrentSession();
-					ASM::$com->changeSession($S_COM2);
-
-					ASM::$obm->changeOwnerById($baseId, $base, ID_GAIA, $S_CRM2, $S_REM2, $S_COM3);
-					ASM::$plm->get()->rPlayer = ID_GAIA;
-
-					ASM::$plm->changeSession($_PLM);
+					$orbitalBaseManager->changeOwnerById($baseId, $base, ID_GAIA, $S_REM2, $baseCommanders);
+					$place->rPlayer = ID_GAIA;
+					$entityManager->flush();
+					$eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place));
 					
-					for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
+					for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 						if ($verif[$i] == $baseId) {
 							unset($verif[$i]);
 							$verif = array_merge($verif);
 						}
 					}
-					CTR::$alert->add('Base abandonnée', ALERT_STD_SUCCESS);
-					CTR::redirect(Format::actionBuilder('switchbase', ['base' => $verif[0]], FALSE));
+					$session->addFlashbag('Base abandonnée', Flashbag::TYPE_SUCCESS);
+					$response->redirect(Format::actionBuilder('switchbase', $session->get('token'), ['base' => $verif[0]], FALSE));
 				} else {
-					CTR::$alert->add('Vous ne pouvez pas abandonner de base dans les ' . OrbitalBase::COOL_DOWN . ' premières relèves.', ALERT_STD_ERROR);	
+					throw new ErrorException('Vous ne pouvez pas abandonner de base dans les ' . OrbitalBase::COOL_DOWN . ' premières relèves.');	
 				}
 			} else {
-				CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);	
+				throw new ErrorException('cette base ne vous appartient pas');	
 			}
-			ASM::$obm->changeSession($_OBM);
 		} else {
-			CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);
+			throw new ErrorException('cette base ne vous appartient pas');
 		}
 	} else {
-		CTR::$alert->add('toute les flottes de cette base doivent être immobiles', ALERT_STD_ERROR);
+		throw new ErrorException('toute les flottes de cette base doivent être immobiles');
 	}
-	ASM::$com->changeSession($_COM);
 } else {
-	CTR::$alert->add('vous ne pouvez pas abandonner votre unique planète', ALERT_STD_ERROR);
+	throw new ErrorException('vous ne pouvez pas abandonner votre unique planète');
 }

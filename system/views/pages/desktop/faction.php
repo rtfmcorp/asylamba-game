@@ -1,24 +1,28 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Demeter\Model\Law\Law;
 use Asylamba\Modules\Demeter\Resource\ForumResources;
-use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Modules\Demeter\Resource\LawResources;
+use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Modules\Demeter\Model\Color;
 
-# factionNav component
-$color_factionNav = CTR::$data->get('playerInfo')->get('color');
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$colorManager = $this->getContainer()->get('demeter.color_manager');
+$factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
+$forumMessageManager = $this->getContainer()->get('demeter.forum_message_manager');
+$lawManager = $this->getContainer()->get('demeter.law_manager');
+$voteManager = $this->getContainer()->get('demeter.vote_manager');
+$electionManager = $this->getContainer()->get('demeter.election_manager');
+$candidateManager = $this->getContainer()->get('demeter.candidate_manager');
+$forumTopicManager = $this->getContainer()->get('demeter.forum_topic_manager');
+$sectorManager = $this->getContainer()->get('gaia.sector_manager');
 
-$S_COL1 = ASM::$clm->getCurrentSession();
-ASM::$clm->newSession();
-ASM::$clm->load(array('id' => $color_factionNav));
-
-if (ASM::$clm->size() == 1) {
-	$faction = ASM::$clm->get(0);
-} else {
-	CTR::redirect('profil');
+if (($faction = $colorManager->get($session->get('playerInfo')->get('color'))) === null) {
+	$response->redirect('profil');
 }
 
 # background paralax
@@ -32,56 +36,38 @@ include 'defaultElement/movers.php';
 echo '<div id="content">';
 	include COMPONENT . 'publicity.php';
 
-	if (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'overview') {
-		$S_FNM_OW = ASM::$fnm->getCurrentSession();
-		$TOKEN_NEWS = ASM::$fnm->newSession();
-		
-		if (CTR::$get->equal('news', 'list')) {
-			ASM::$fnm->load(['rFaction' => $faction->id, 'pinned' => FALSE], ['dCreation', 'DESC']);
+	if (!$request->query->has('view') OR $request->query->get('view') == 'overview') {
+		if ($request->query->get('news') === 'list') {
+			$factionNews = $factionNewsManager->getFactionBasicNews($faction->id);
 			$mode = 'all';
 		} else {
-			ASM::$fnm->load(['rFaction' => $faction->id, 'pinned' => TRUE]);
+			$factionNews = $factionNewsManager->getFactionPinnedNew($faction->id);
 			$mode = 'pin';
 		}
 
 		include COMPONENT . 'faction/overview/news.php';
 
-		ASM::$fnm->changeSession($S_FNM_OW);
-
-		$S_PAM_1 = ASM::$pam->getCurrentSession();
-		$PLAYER_GOV_TOKEN = ASM::$pam->newSession(FALSE);
-		ASM::$pam->load(
-			array('rColor' => CTR::$data->get('playerInfo')->get('color'), 'status' => array(6, 5, 4, 3)),
-			array('status', 'DESC')
-		);
+		$governmentMembers = $playerManager->getGovernmentMembers($session->get('playerInfo')->get('color'));
 
 		include COMPONENT . 'faction/overview/stat.php';
 
-		$S_LAM_OLD = ASM::$lam->getCurrentsession();
-
-		$S_LAM_ACT = ASM::$lam->newSession();
-		ASM::$lam->load(array('rColor' => $faction->id, 'statement' => Law::EFFECTIVE));
-
-		$S_LAM_VOT = ASM::$lam->newSession();
-		ASM::$lam->load(array('rColor' => $faction->id, 'statement' => Law::VOTATION));
+		$effectiveLaws = $lawManager->getByFactionAndStatements($faction->id, [Law::EFFECTIVE]);
+		$votingLaws = $lawManager->getByFactionAndStatements($faction->id, [Law::VOTATION]);
 
 		include COMPONENT . 'faction/overview/laws.php';
-
-		ASM::$lam->changeSession($S_LAM_OLD);
-		ASM::$pam->changeSession($S_PAM_1);
-	} elseif (CTR::$get->get('view') == 'forum') {
-		if (!CTR::$get->exist('forum')) {
+	} elseif ($request->query->get('view') == 'forum') {
+		if (!$request->query->has('forum')) {
 			# page d'accueil des forums
 			# charge les x premiers sujets de chaque forum
 
-			$S_TOM1 = ASM::$tom->getCurrentSession();
+			$S_TOM1 = $forumTopicManager->getCurrentSession();
 
 			$archivedMode = FALSE;
 
 			for ($i = 1; $i <= ForumResources::size(); $i++) {
 				$forum_topics = ForumResources::getInfo($i, 'id');
 				
-				if ($forum_topics < 10 || ($forum_topics >= 10 && $forum_topics < 20 && CTR::$data->get('playerInfo')->get('status') > 2) || ($forum_topics >= 20 && $forum_topics < 30 && CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF)) {
+				if ($forum_topics < 10 || ($forum_topics >= 10 && $forum_topics < 20 && $session->get('playerInfo')->get('status') > 2) || ($forum_topics >= 20 && $forum_topics < 30 && $session->get('playerInfo')->get('status') == Player::CHIEF)) {
 					
 					$where = [
 						'rForum' => $forum_topics,
@@ -89,21 +75,21 @@ echo '<div id="content">';
 					];
 
 					if ($forum_topics < 20) {
-						$where['rColor'] = CTR::$data->get('playerInfo')->get('color');
+						$where['rColor'] = $session->get('playerInfo')->get('color');
 					}
 
-					ASM::$tom->newSession();
-					ASM::$tom->load(
+					$forumTopicManager->newSession();
+					$forumTopicManager->load(
 						$where,
 						['isUp', 'DESC', 'dLastMessage', 'DESC'],
 						[0, 10],
-						CTR::$data->get('playerId')
+						$session->get('playerId')
 					);
 
 					$topic_topics = [];
 
-					for ($j = 0; $j < ASM::$tom->size(); $j++) { 
-						$topic_topics[$j] = ASM::$tom->get($j);
+					for ($j = 0; $j < $forumTopicManager->size(); $j++) { 
+						$topic_topics[$j] = $forumTopicManager->get($j);
 					}
 
 					$isStandard_topics = FALSE;
@@ -113,13 +99,13 @@ echo '<div id="content">';
 				}
 			}
 
-			ASM::$tom->changeSession($S_TOM1);
+			$forumTopicManager->changeSession($S_TOM1);
 		} else {
-			$forumId = !CTR::$get->exist('forum') ? 1 : CTR::$get->get('forum');
-			$archivedMode = CTR::$get->equal('mode', 'archived') && in_array(CTR::$data->get('playerInfo')->get('status'), [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER])
+			$forumId = !$request->query->has('forum') ? 1 : $request->query->get('forum');
+			$archivedMode = $request->query->get('mode') === 'archived' && in_array($session->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER])
 				? TRUE : FALSE;
 				
-			if ($forumId < 10 || ($forumId >= 10 && $forumId < 20 && CTR::$data->get('playerInfo')->get('status') > 2) || ($forumId >= 20 && $forumId < 30 && CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF)) {
+			if ($forumId < 10 || ($forumId >= 10 && $forumId < 20 && $session->get('playerInfo')->get('status') > 2) || ($forumId >= 20 && $forumId < 30 && $session->get('playerInfo')->get('status') == Player::CHIEF)) {
 				# forum component
 				include COMPONENT . 'faction/forum/forum.php';
 
@@ -129,21 +115,21 @@ echo '<div id="content">';
 				];
 
 				if ($forumId < 20) {
-					$where['rColor'] = CTR::$data->get('playerInfo')->get('color');
+					$where['rColor'] = $session->get('playerInfo')->get('color');
 				}
 
-				$S_TOM1 = ASM::$tom->getCurrentSession();
-				ASM::$tom->newSession();
-				ASM::$tom->load(
+				$S_TOM1 = $forumTopicManager->getCurrentSession();
+				$forumTopicManager->newSession();
+				$forumTopicManager->load(
 					$where,
 					['isUp', 'DESC', 'dLastMessage', 'DESC'],
 					[0, 10],
-					CTR::$data->get('playerId')
+					$session->get('playerId')
 				);
 
 				$topic_topics = array();
-				for ($i = 0; $i < ASM::$tom->size(); $i++) { 
-					$topic_topics[$i] = ASM::$tom->get($i);
+				for ($i = 0; $i < $forumTopicManager->size(); $i++) { 
+					$topic_topics[$i] = $forumTopicManager->get($i);
 				}
 				
 				$isStandard_topics = TRUE;
@@ -151,85 +137,85 @@ echo '<div id="content">';
 
 				include COMPONENT . 'faction/forum/topics.php';
 
-				ASM::$tom->changeSession($S_TOM1);
+				$forumTopicManager->changeSession($S_TOM1);
 			} else {
-				CTR::redirect('faction/view-forum');
+				$response->redirect('faction/view-forum');
 			}
 
-			if (CTR::$get->exist('topic')) {
+			if ($request->query->has('topic')) {
 				# topic component
-				$S_TOM2 = ASM::$tom->getCurrentSession();
-				ASM::$tom->newSession();
+				$S_TOM2 = $forumTopicManager->getCurrentSession();
+				$forumTopicManager->newSession();
 
-				if ($forumId < 10 || ($forumId >= 10 && $forumId < 20 && CTR::$data->get('playerInfo')->get('status') > 2)) {
-					ASM::$tom->load(
-						['id' => CTR::$get->get('topic'), 'rColor' => CTR::$data->get('playerInfo')->get('color'), 'rForum' => $forumId],
+				if ($forumId < 10 || ($forumId >= 10 && $forumId < 20 && $session->get('playerInfo')->get('status') > 2)) {
+					$forumTopicManager->load(
+						['id' => $request->query->get('topic'), 'rColor' => $session->get('playerInfo')->get('color'), 'rForum' => $forumId],
 						[], [],
-						CTR::$data->get('playerId')
+						$session->get('playerId')
 					);
-				} else if ($forumId >= 20 && $forumId < 30 && CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
-					ASM::$tom->load(
-						['id' => CTR::$get->get('topic'), 'rForum' => $forumId],
+				} else if ($forumId >= 20 && $forumId < 30 && $session->get('playerInfo')->get('status') == Player::CHIEF) {
+					$forumTopicManager->load(
+						['id' => $request->query->get('topic'), 'rForum' => $forumId],
 						[], [],
-						CTR::$data->get('playerId')
+						$session->get('playerId')
 					);
 				}
 
-				if (ASM::$tom->size() == 0) {
-					CTR::$alert->add('Les données sont illisibles, les messages doivent sûrement être cryptés !', ALERT_STD_ERROR);
+				if ($forumTopicManager->size() == 0) {
+					throw new ErrorException('Les données sont illisibles, les messages doivent sûrement être cryptés !');
 				} else {
-					$topic_topic = ASM::$tom->get(0);
-					$topic_topic->updateLastView(CTR::$data->get('playerId'));
+					$topic_topic = $forumTopicManager->get(0);
+					$forumTopicManager->updateLastView($topic_topic, $session->get('playerId'));
 
-					$S_FMM1 = ASM::$fmm->getCurrentSession();
-					ASM::$fmm->newSession();
-					ASM::$fmm->load(array('rTopic' => $topic_topic->id), array('dCreation', 'DESC', 'id', 'DESC'));
+					$S_FMM1 = $forumMessageManager->getCurrentSession();
+					$forumMessageManager->newSession();
+					$forumMessageManager->load(array('rTopic' => $topic_topic->id), array('dCreation', 'DESC', 'id', 'DESC'));
 
 					$message_topic = array();
-					for ($i = 0; $i < ASM::$fmm->size(); $i++) { 
-						$message_topic[$i] = ASM::$fmm->get($i);
+					for ($i = 0; $i < $forumMessageManager->size(); $i++) { 
+						$message_topic[$i] = $forumMessageManager->get($i);
 					}
 
 					include COMPONENT . 'faction/forum/topic.php';
 
-					if (in_array(CTR::$data->get('playerInfo')->get('status'), [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER])) {
+					if (in_array($session->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER])) {
 						include COMPONENT . 'faction/forum/manage-topic.php';
 					}
-					ASM::$fmm->changeSession($S_FMM1);
+					$forumMessageManager->changeSession($S_FMM1);
 				}
-				ASM::$tom->changeSession($S_TOM2);
-			} elseif (CTR::$get->exist('mode') && CTR::$get->get('mode') == 'create') {
+				$forumTopicManager->changeSession($S_TOM2);
+			} elseif ($request->query->has('mode') && $request->query->get('mode') == 'create') {
 				# créer un topic
 				include COMPONENT . 'faction/forum/createTopic.php';
 			} else {
 				include COMPONENT . 'default.php';
 			}
 		}
-	} elseif (CTR::$get->get('view') == 'data') {
+	} elseif ($request->query->get('view') == 'data') {
 		include COMPONENT . 'faction/data/nav.php';
 
-		if (!CTR::$get->exist('mode') OR CTR::$get->get('mode') == 'financial') {
+		if (!$request->query->has('mode') OR $request->query->get('mode') == 'financial') {
 			include COMPONENT . 'faction/data/financial/stats.php';
 			include COMPONENT . 'faction/data/financial/sectors-tax.php';
 			include COMPONENT . 'faction/data/financial/donations.php';
-		} elseif (CTR::$get->get('mode') == 'trade') {
+		} elseif ($request->query->get('mode') == 'trade') {
 			include COMPONENT . 'faction/data/trade/rc-stats.php';
 			include COMPONENT . 'faction/data/trade/tax-out.php';
 			include COMPONENT . 'faction/data/trade/tax-in.php';
-		} elseif (CTR::$get->get('mode') == 'war') {
+		} elseif ($request->query->get('mode') == 'war') {
 			include COMPONENT . 'faction/data/war/stats.php';
 			include COMPONENT . 'faction/data/war/reports-attack.php';
 			include COMPONENT . 'faction/data/war/reports-defend.php';
 			include COMPONENT . 'faction/data/war/levels.php';
-		} elseif (CTR::$get->get('mode') == 'tactical') {
+		} elseif ($request->query->get('mode') == 'tactical') {
 			include COMPONENT . 'faction/data/tactical/map.php';
 			include COMPONENT . 'faction/data/tactical/sectors.php';
 			include COMPONENT . 'faction/data/tactical/targets.php';
-		} elseif (CTR::$get->get('mode') == 'diplomacy') {
+		} elseif ($request->query->get('mode') == 'diplomacy') {
 			include COMPONENT . 'faction/data/diplomacy/main.php';
 			include COMPONENT . 'faction/data/diplomacy/about.php';
 			include COMPONENT . 'default.php';
-		} elseif (CTR::$get->get('mode') == 'law') {
+		} elseif ($request->query->get('mode') == 'law') {
 			$listlaw_status = 6;
 			include COMPONENT . 'faction/data/law/list.php';
 			$listlaw_status = 3;
@@ -239,24 +225,20 @@ echo '<div id="content">';
 			$listlaw_status = 5;
 			include COMPONENT . 'faction/data/law/list.php';
 		}
-	} elseif (CTR::$get->get('view') == 'government') {
-		if (in_array(CTR::$data->get('playerInfo')->get('status'), [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER])) {
-			$S_PAM_OLD = ASM::$pam->getCurrentSession();
-			$PLAYER_SENATE_TOKEN = ASM::$pam->newSession();
-			ASM::$pam->load(array('rColor' => $faction->id, 'status' => PAM_PARLIAMENT, 'statement' => [PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY]));
+	} elseif ($request->query->get('view') == 'government') {
+		if (in_array($session->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER])) {
+			$senators = $playerManager->getParliamentMembers($faction->id);
 
 			include COMPONENT . 'faction/government/nav.php';
 
-			if (!CTR::$get->exist('mode') OR CTR::$get->get('mode') == 'law') {
-				$S_SEM_OLD = ASM::$sem->getCurrentsession();
-				$S_SEM_LAW = ASM::$sem->newSession();
-				ASM::$sem->load(array('rColor' => $faction->id));
+			if (!$request->query->has('mode') OR $request->query->get('mode') == 'law') {
+				$factionSectors = $sectorManager->getFactionSectors($faction->id);
 
 				$nbLaws = 0;
-				$nbPlayer = PlayerManager::count(['rColor' => $faction->id, 'statement' => [PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY]]);
+				$nbPlayer = $playerManager->countByFactionAndStatements($faction->id, [Player::ACTIVE]);
 				
 				for ($i = 1; $i <= LawResources::size(); $i++) {
-					if (LawResources::getInfo($i, 'department') == CTR::$data->get('playerInfo')->get('status') AND LawResources::getInfo($i, 'isImplemented')) {
+					if (LawResources::getInfo($i, 'department') == $session->get('playerInfo')->get('status') AND LawResources::getInfo($i, 'isImplemented')) {
 						$governmentLaw_id = $i;
 						$nbLaws++;
 						include COMPONENT . 'faction/government/law.php';
@@ -268,267 +250,196 @@ echo '<div id="content">';
 						include COMPONENT . 'default.php';
 					}
 				}
-				ASM::$sem->changeSession($S_SEM_OLD);
-			} elseif (CTR::$get->get('mode') == 'news') {
-				$S_FNM_1 = ASM::$fnm->getCurrentSession();
-				$TOKEN_NEWS_LIST = ASM::$fnm->newSession();
-				ASM::$fnm->load(['rFaction' => $faction->id], ['dCreation', 'DESC']);
+			} elseif ($request->query->get('mode') == 'news') {
+				$factionNews = $factionNewsManager->getFactionNews($faction->id);
 				
 				include COMPONENT . 'faction/news/list.php';
 
-				if (CTR::$get->exist('news')) {
-					if (ASM::$fnm->getById(CTR::$get->get('news')) !== FALSE) {
+				if ($request->query->has('news')) {
+					if ($factionNewsManager->get($request->query->get('news')) !== null) {
 						include COMPONENT . 'faction/news/edit.php';
 					} else {
-						CTR::redirect('faction/view-government/mode-news');
+						$response->redirect('faction/view-government/mode-news');
 					}
 				} else {
 					include COMPONENT . 'faction/news/create.php';
 				}
-
-				ASM::$fnm->changeSession($S_FNM_1);
-			} elseif (CTR::$get->get('mode') == 'message') {
+			} elseif ($request->query->get('mode') == 'message') {
 				include COMPONENT . 'faction/government/message.php';
-			} elseif (CTR::$get->get('mode') == 'description') {
+			} elseif ($request->query->get('mode') == 'description') {
 				include COMPONENT . 'faction/government/description.php';
-			} elseif (CTR::$get->get('mode') == 'credit') {
+			} elseif ($request->query->get('mode') == 'credit') {
 				include COMPONENT . 'faction/government/credit.php';
-			} elseif (CTR::$get->get('mode') == 'manage') {
-				$PLAYER_GOV_TOKEN = ASM::$pam->newSession(FALSE);
-				ASM::$pam->load(
-					array('rColor' => $faction->id, 'status' => [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER]),
-					array('status', 'DESC')
-				);
+			} elseif ($request->query->get('mode') == 'manage') {
+				$governmentMembers = $playerManager->getGovernmentMembers($faction->id);
 
 				include COMPONENT . 'faction/government/manage/main.php';
 				include COMPONENT . 'default.php';
 
 			} else {
-				CTR::redirect('faction');
+				$response->redirect('faction');
 			}
-			
-			ASM::$pam->changeSession($S_PAM_OLD);
 		} else {
-			CTR::redirect('faction');
+			$response->redirect('faction');
 		}
-	} elseif (CTR::$get->get('view') == 'senate') {
-		if (in_array(CTR::$data->get('playerInfo')->get('status'), [PAM_CHIEF, PAM_WARLORD, PAM_TREASURER, PAM_MINISTER, PAM_PARLIAMENT])) {
-			$S_VLM_OLD = ASM::$vlm->getCurrentsession();
-			$S_LAM_OLD = ASM::$lam->getCurrentsession();
-
-			$S_LAM_TOVOTE = ASM::$lam->newSession();
-			ASM::$lam->load(array('rColor' => $faction->id, 'statement' => Law::VOTATION));
+	} elseif ($request->query->get('view') == 'senate') {
+		if (in_array($session->get('playerInfo')->get('status'), [Player::CHIEF, Player::WARLORD, Player::TREASURER, Player::MINISTER, Player::PARLIAMENT])) {
+			$laws = $lawManager->getByFactionAndStatements($faction->id, [Law::VOTATION]);
 			include COMPONENT . 'faction/senate/stats.php';
 
-			for ($i = 0; $i < ASM::$lam->size(); $i++) {
-				$law = ASM::$lam->get($i);
-
-				$S_VLM_TOVOTE = ASM::$vlm->newSession();
-				ASM::$vlm->load(array('rLaw' => $law->id));
-
+			foreach ($laws as $law) {
 				include COMPONENT . 'faction/senate/law.php';
 			}
-			if (ASM::$lam->size() < 1) {
+			if (count($laws) < 1) {
 				include COMPONENT . 'default.php';
 			}
 
-			$S_LAM_HISTORIC = ASM::$lam->newSession();
-			ASM::$lam->load(
-				['rColor' => $faction->id, 'statement' => [Law::EFFECTIVE, Law::OBSOLETE, Law::REFUSED]],
-				['dCreation', 'DESC'],
-				[0, 10]
-			);
+			$laws = $lawManager->getByFactionAndStatements($faction->id, [Law::EFFECTIVE, Law::OBSOLETE, Law::REFUSED]);
 
 			include COMPONENT . 'faction/senate/historic.php';
-
-			ASM::$lam->changeSession($S_LAM_OLD);
-			ASM::$vlm->changeSession($S_VLM_OLD);
 		} else {
-			CTR::redirect('faction');
+			$response->redirect('faction');
 		}
-	} elseif (CTR::$get->get('view') == 'election' && in_array($faction->electionStatement, array(Color::CAMPAIGN, Color::ELECTION))) {
+	} elseif ($request->query->get('view') == 'election' && in_array($faction->electionStatement, array(Color::CAMPAIGN, Color::ELECTION))) {
 		if ($faction->electionStatement == Color::CAMPAIGN) {
-			$S_ELM_1 = ASM::$elm->getCurrentSession();
-			$ELM_CAMPAIGN_TOKEN = ASM::$elm->newSession();
-			ASM::$elm->load(array('rColor' => $faction->id), array('id', 'DESC'), array(0, 1));
-
-			if (ASM::$elm->size()) {
-				$S_CAM_1 = ASM::$cam->getCurrentSession();
-				$S_CAM_CAN = ASM::$cam->newSession();
-				ASM::$cam->load(array('rElection' => ASM::$elm->get(0)->id));
-
-				$nbCandidate = ASM::$cam->size();
+			if (($election = $electionManager->getFactionLastElection($faction->id)) !== null) {
+				$candidates = $candidateManager->getByElection($election);
+				$nbCandidate = count($candidates);
 				include COMPONENT . 'faction/election/campaign.php';
 				include COMPONENT . 'faction/election/list.php';
 
-				if (CTR::$get->equal('candidate', 'create')) {
+				if ($request->query->get('candidate') === 'create') {
 					include COMPONENT . 'faction/election/postulate.php';
-				} elseif (CTR::$get->exist('candidate') AND ASM::$cam->getById(CTR::$get->get('candidate')) !== FALSE) {
-					$candidat = ASM::$cam->getById(CTR::$get->get('candidate'));
-
+				} elseif ($request->query->has('candidate') AND ($candidat = $candidateManager->get($request->query->get('candidate'))) !== null) {
 					include COMPONENT . 'faction/election/candidate.php';
 
-					ASM::$tom->load(
+					$forumTopicManager->load(
 						array(
 							'rForum' => 30, 
 							'rPlayer' => $candidat->rPlayer
 						),
 						array('id', 'DESC'),
 						array(0, 1),
-						CTR::$data->get('playerId')
+						$session->get('playerId')
 					);
 
-					if (ASM::$tom->size() == 1) {
-						$topic_topic = ASM::$tom->get(0);
-						$topic_topic->updateLastView(CTR::$data->get('playerId'));
+					if ($forumTopicManager->size() == 1) {
+						$topic_topic = $forumTopicManager->get(0);
+						$forumTopicManager->updateLastView($topic_topic, $session->get('playerId'));
 
-						$S_FMM1 = ASM::$fmm->getCurrentSession();
-						ASM::$fmm->newSession();
-						ASM::$fmm->load(array('rTopic' => $topic_topic->id), array('dCreation', 'DESC', 'id', 'DESC'));
+						$S_FMM1 = $forumMessageManager->getCurrentSession();
+						$forumMessageManager->newSession();
+						$forumMessageManager->load(array('rTopic' => $topic_topic->id), array('dCreation', 'DESC', 'id', 'DESC'));
 
 						$message_topic = array();
-						for ($i = 0; $i < ASM::$fmm->size(); $i++) { 
-							$message_topic[$i] = ASM::$fmm->get($i);
+						for ($i = 0; $i < $forumMessageManager->size(); $i++) { 
+							$message_topic[$i] = $forumMessageManager->get($i);
 						}
 
 						include COMPONENT . 'faction/forum/topic.php';
 
-						ASM::$fmm->changeSession($S_FMM1);
+						$forumMessageManager->changeSession($S_FMM1);
 					}
 				} else {
 					include COMPONENT . 'default.php';
 				}
-
-				ASM::$cam->changeSession($S_CAM_1);
 			} else {
-				CTR::redirect('faction');
+				$response->redirect('faction');
 			}
-
-			ASM::$elm->changeSession($S_ELM_1);
 		} elseif ($faction->electionStatement == Color::ELECTION) {
-			$S_ELM_1 = ASM::$elm->getCurrentSession();
-			$S_CAM_1 = ASM::$cam->getCurrentSession();
-			$S_VOM_1 = ASM::$vom->getCurrentSession();
-			$S_PAM_1 = ASM::$pam->getCurrentSession();
+			$election = $electionManager->getFactionLastElection($faction->id);
 
-			$ELM_ELECTION_TOKEN = ASM::$elm->newSession();
-			ASM::$elm->load(array('rColor' => $faction->id), array('id', 'DESC'), array(0, 1));
+			$candidates = $candidateManager->getByElection($election);
 
-			$S_CAM_CAN = ASM::$cam->newSession();
-			ASM::$cam->load(array('rElection' => ASM::$elm->get(0)->id));
+			$playerVote = $voteManager->getPlayerVote($playerManager->get($session->get('playerId')), $election);
 
-			$VOM_ELC_TOKEN = ASM::$vom->newSession();
-			ASM::$vom->load(array('rPlayer' => CTR::$data->get('playerId'), 'rElection' => ASM::$elm->get(0)->id));
+			$votes = $voteManager->getElectionVotes($election);
 
-			$VOM_ELC_TOTAL_TOKEN = ASM::$vom->newSession();
-			ASM::$vom->load(array('rElection' => ASM::$elm->get(0)->id));
-
-			$PAM_ELC_TOKEN = ASM::$pam->newSession(FALSE);
-			ASM::$pam->load(array('rColor' => CTR::$data->get('playerInfo')->get('color')));
+			$factionPlayers = $playerManager->getFactionPlayers($session->get('playerInfo')->get('color'));
 
 			if ($faction->regime == Color::DEMOCRATIC) {
-				$nbCandidate = ASM::$cam->size();
+				$nbCandidate = count($candidates);
 				include COMPONENT . 'faction/election/election.php';
 
-				$rElection = ASM::$elm->get(0)->id;
+				$rElection = $election->id;
 				include COMPONENT . 'faction/election/list.php';
 
-				if (CTR::$get->exist('candidate') AND ASM::$cam->getById(CTR::$get->get('candidate')) !== FALSE) {
-					$candidat = ASM::$cam->getById(CTR::$get->get('candidate'));
+				if ($request->query->has('candidate') AND ($candidat = $candidateManager->get($request->query->get('candidate'))) !== null) {
 					include COMPONENT . 'faction/election/candidate.php';
 
-					ASM::$tom->load(
+					$forumTopicManager->load(
 						array(
 							'rForum' => 30, 
 							'rPlayer' => $candidat->rPlayer
 						),
 						array('id', 'DESC'),
 						array(0, 1),
-						CTR::$data->get('playerId')
+						$session->get('playerId')
 					);
 
-					if (ASM::$tom->size() == 1) {
-						$topic_topic = ASM::$tom->get(0);
-						$topic_topic->updateLastView(CTR::$data->get('playerId'));
+					if ($forumTopicManager->size() == 1) {
+						$topic_topic = $forumTopicManager->get(0);
+						$forumTopicManager->updateLastView($topic_topic, $session->get('playerId'));
 
-						$S_FMM1 = ASM::$fmm->getCurrentSession();
-						ASM::$fmm->newSession();
-						ASM::$fmm->load(array('rTopic' => $topic_topic->id), array('dCreation', 'DESC', 'id', 'DESC'));
+						$S_FMM1 = $forumMessageManager->getCurrentSession();
+						$forumMessageManager->newSession();
+						$forumMessageManager->load(array('rTopic' => $topic_topic->id), array('dCreation', 'DESC', 'id', 'DESC'));
 
 						$message_topic = array();
-						for ($i = 0; $i < ASM::$fmm->size(); $i++) { 
-							$message_topic[$i] = ASM::$fmm->get($i);
+						for ($i = 0; $i < $forumMessageManager->size(); $i++) { 
+							$message_topic[$i] = $forumMessageManager->get($i);
 						}
 
 						$election_topic = TRUE;
 						include COMPONENT . 'faction/forum/topic.php';
 
-						ASM::$fmm->changeSession($S_FMM1);
+						$forumMessageManager->changeSession($S_FMM1);
 					}
 				} else {
 					include COMPONENT . 'default.php';
 				}
 			} elseif ($faction->regime == Color::ROYALISTIC) {
-				$candidat  = ASM::$cam->get(0);
-				$rElection = ASM::$elm->get(0)->id;
+				$candidat  = $candidates[0];
+				$rElection = $election->id;
 
 				include COMPONENT . 'faction/election/putsch.php';
 				include COMPONENT . 'faction/election/candidate.php';
 
-				ASM::$tom->load(
+				$forumTopicManager->load(
 					array(
 						'rForum' => 30, 
 						'rPlayer' => $candidat->rPlayer
 					),
 					array('id', 'DESC'),
 					array(0, 1),
-					CTR::$data->get('playerId')
+					$session->get('playerId')
 				);
 
-				if (ASM::$tom->size() == 1) {
-					$topic_topic = ASM::$tom->get(0);
-					$topic_topic->updateLastView(CTR::$data->get('playerId'));
+				if ($forumTopicManager->size() == 1) {
+					$topic_topic = $forumTopicManager->get(0);
+					$forumTopicManager->updateLastView($topic_topic, $session->get('playerId'));
 
-					$S_FMM1 = ASM::$fmm->getCurrentSession();
-					ASM::$fmm->newSession();
-					ASM::$fmm->load(array('rTopic' => $topic_topic->id), array('dCreation', 'DESC', 'id', 'DESC'));
+					$S_FMM1 = $forumMessageManager->getCurrentSession();
+					$forumMessageManager->newSession();
+					$forumMessageManager->load(array('rTopic' => $topic_topic->id), array('dCreation', 'DESC', 'id', 'DESC'));
 
 					$message_topic = array();
-					for ($i = 0; $i < ASM::$fmm->size(); $i++) { 
-						$message_topic[$i] = ASM::$fmm->get($i);
+					for ($i = 0; $i < $forumMessageManager->size(); $i++) { 
+						$message_topic[$i] = $forumMessageManager->get($i);
 					}
 					$election_topic = TRUE;
 					include COMPONENT . 'faction/forum/topic.php';
 
-					ASM::$fmm->changeSession($S_FMM1);
+					$forumMessageManager->changeSession($S_FMM1);
 				}
 			} else {
 				include COMPONENT . 'default.php';
 			}
-
-			ASM::$cam->changeSession($S_CAM_1);
-			ASM::$elm->changeSession($S_ELM_1);
-			ASM::$vom->changeSession($S_VOM_1);
-			ASM::$pam->changeSession($S_PAM_1);
 		}
-	} elseif (CTR::$get->get('view') == 'player') {
-		$S_PAM1 = ASM::$pam->getCurrentSession();
-
-		$PAM_LAST_TOKEN = ASM::$pam->newSession(FALSE);
-		ASM::$pam->load(
-			['rColor' => CTR::$data->get('playerInfo')->get('color')], 
-			['dInscription', 'DESC'],
-			[0, 25]
-		);
-
-		ASM::$pam->newSession(FALSE);
-		ASM::$pam->load(
-			['rColor' => CTR::$data->get('playerInfo')->get('color'), 'statement' => [PAM_ACTIVE, PAM_INACTIVE, PAM_HOLIDAY]], 
-			['status', 'DESC', 'factionPoint', 'DESC']
-		);
+	} elseif ($request->query->get('view') == 'player') {
 
 		# statPlayer component
-		$nbPlayer_statPlayer = ASM::$clm->getById(CTR::$data->get('playerInfo')->get('color'))->activePlayers;
+		$nbPlayer_statPlayer = $faction->activePlayers;
 
 		$nbOnlinePlayer_statPlayer = 0;
 		$nbOfflinePlayer_statPlayer = 0;
@@ -540,31 +451,25 @@ echo '<div id="content">';
 		# listPlayer component
 		$players_listPlayer = array();
 
+		$factionPlayers = $playerManager->getFactionPlayersByRanking($session->get('playerInfo')->get('color'));
 		# worker
-		for ($i = 0; $i < ASM::$pam->size(); $i++) { 
-			$player = ASM::$pam->get($i);
-
-			if (Utils::interval(Utils::now(), $player->getDLastActivity(), 's') < 600) {
+		foreach ($factionPlayers as $factionPlayer) {
+			if (Utils::interval(Utils::now(), $factionPlayer->getDLastActivity(), 's') < 600) {
 				$nbOnlinePlayer_statPlayer++;
 			} else {
 				$nbOfflinePlayer_statPlayer++;
 			}
 
-			$avgVictoryPlayer_statPlayer += $player->getVictory();
-			$avgDefeatPlayer_statPlayer += $player->getDefeat();
-			$avgPointsPlayer_statPlayer += $player->getExperience();
+			$avgVictoryPlayer_statPlayer += $factionPlayer->getVictory();
+			$avgDefeatPlayer_statPlayer += $factionPlayer->getDefeat();
+			$avgPointsPlayer_statPlayer += $factionPlayer->getExperience();
 
-			$players_listPlayer[] = $player;
+			$players_listPlayer[] = $factionPlayer;
 		}
 
 		include COMPONENT . 'faction/player/statPlayer.php';
 		include COMPONENT . 'faction/player/listPlayer.php';
-
-		ASM::$pam->changeSession($S_PAM1);
 	} else {
-		CTR::redirect('faction');
+		$response->redirect('faction');
 	}
 echo '</div>';
-
-ASM::$clm->changeSession($S_COL1);
-?>

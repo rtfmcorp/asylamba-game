@@ -12,111 +12,86 @@
 
 namespace Asylamba\Modules\Athena\Manager;
 
-use Asylamba\Classes\Worker\Manager;
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Entity\EntityManager;
+use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
 use Asylamba\Modules\Athena\Model\ShipQueue;
 
-class ShipQueueManager extends Manager {
-	protected $managerType = '_ShipQueue';
+class ShipQueueManager {
+	/** @var EntityManager **/
+	protected $entityManager;
+	/** @var RealTimeActionScheduler **/
+	protected $realtimeActionScheduler;
 
-	public function load($where = array(), $order = array(), $limit = array()) {
-		$formatWhere = Utils::arrayToWhere($where);
-		$formatOrder = Utils::arrayToOrder($order);
-		$formatLimit = Utils::arrayToLimit($limit);
-
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT *
-			FROM orbitalBaseShipQueue
-			' . $formatWhere . '
-			' . $formatOrder . '
-			' . $formatLimit
+	/**
+	 * @param EntityManager $entityManager
+	 * @param RealTimeActionScheduler $realtimeActionScheduler
+	 */
+	public function __construct(EntityManager $entityManager, RealTimeActionScheduler $realtimeActionScheduler) {
+		$this->entityManager = $entityManager;
+		$this->realtimeActionScheduler = $realtimeActionScheduler;
+	}
+	
+	public function get($id)
+	{
+		return $this->entityManager->getRepository(ShipQueue::class)->get($id);
+	}
+	
+	/**
+	 * @param int $orbitalBaseId
+	 * @return array
+	 */
+	public function getBaseQueues($orbitalBaseId)
+	{
+		return $this->entityManager->getRepository(ShipQueue::class)->getBaseQueues($orbitalBaseId);
+	}
+	
+	/**
+	 * @param int $orbitalBaseId
+	 * @param int $dockType
+	 * @return array
+	 */
+	public function getByBaseAndDockType($orbitalBaseId, $dockType)
+	{
+		return $this->entityManager->getRepository(ShipQueue::class)->getByBaseAndDockType($orbitalBaseId, $dockType);
+	}
+	
+	/**
+	 * @param ShipQueue $shipQueue
+	 */
+	public function add(ShipQueue $shipQueue)
+	{
+		$this->entityManager->persist($shipQueue);
+		$this->entityManager->flush($shipQueue);
+		
+		$this->realtimeActionScheduler->schedule(
+			'athena.orbital_base_manager',
+			'uShipQueue' . $shipQueue->dockType,
+			$shipQueue,
+			$shipQueue->dEnd,
+			[
+				'class' => Place::class,
+				'id' => $shipQueue->rOrbitalBase
+			]
 		);
-
-		foreach($where AS $v) {
-			if (is_array($v)) {
-				foreach ($v as $p) {
-					$valuesArray[] = $p;
-				}
-			} else {
-				$valuesArray[] = $v;
-			}
-		}
-
-		if(empty($valuesArray)) {
-			$qr->execute();
-		} else {
-			$qr->execute($valuesArray);
-		}
-
-		while($aw = $qr->fetch()) {
-			$sq = new ShipQueue();
-
-			$sq->id = $aw['id'];
-			$sq->rOrbitalBase = $aw['rOrbitalBase'];
-			$sq->dockType = $aw['dockType'];
-			$sq->shipNumber = $aw['shipNumber'];
-			$sq->quantity = $aw['quantity'];
-			$sq->dStart = $aw['dStart'];
-			$sq->dEnd = $aw['dEnd'];
-
-			$this->_Add($sq);
-		}
 	}
-
-	public function add(ShipQueue $sq) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
-			orbitalBaseShipQueue(rOrbitalBase, dockType, shipNumber, quantity, dStart, dEnd)
-			VALUES(?, ?, ?, ?, ?, ?)');
-		$qr->execute(array(
-			$sq->rOrbitalBase,
-			$sq->dockType,
-			$sq->shipNumber,
-			$sq->quantity,
-			$sq->dStart,
-			$sq->dEnd
-		));
-
-		$sq->id = $db->lastInsertId();
-		$this->_Add($sq);
-	}
-
-	public function save() {
-		$shipQueues = $this->_Save();
-		foreach ($shipQueues AS $k => $sq) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE orbitalBaseShipQueue
-				SET	id = ?,
-					rOrbitalBase = ?,
-					dockType = ?,
-					shipNumber = ?,
-					quantity = ?,
-					dStart = ?,
-					dEnd = ?
-				WHERE id = ?');
-			$qr->execute(array(
-				$sq->id,
-				$sq->rOrbitalBase,
-				$sq->dockType,
-				$sq->shipNumber,
-				$sq->quantity,
-				$sq->dStart,
-				$sq->dEnd,
-				$sq->id
-			));
+	
+	public function scheduleActions()
+	{
+		$queues = $this->entityManager->getRepository(ShipQueue::class)->getAll();
+		
+		foreach ($queues as $queue)
+		{
+			$this->realtimeActionScheduler->schedule(
+				'athena.orbital_base_manager',
+				'uShipQueue' . $queue->dockType,
+				$queue,
+				$queue->dEnd,
+				[
+					'class' => Place::class,
+					'id' => $queue->rOrbitalBase
+				]
+			);
 		}
-	}
-
-	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM orbitalBaseShipQueue WHERE id = ?');
-		$qr->execute(array($id));
-
-		// suppression de l'objet en manager
-		$this->_Remove($id);
-
-		return TRUE;
 	}
 }

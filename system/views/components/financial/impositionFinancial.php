@@ -12,6 +12,8 @@
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Game;
 
+$taxCoeff = $this->getContainer()->getParameter('zeus.player.tax_coeff');
+
 echo '<div class="component financial">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'financial/taxin.png" alt="" />';
@@ -22,7 +24,7 @@ echo '<div class="component financial">';
 		echo '<div class="body">';
 			echo '<ul class="list-type-1">';
 				foreach ($ob_impositionFinancial as $base) {
-					$baseImpot = Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase);
+					$baseImpot = Game::getTaxFromPopulation($base->getPlanetPopulation(), $base->typeOfBase, $taxCoeff);
 
 					echo '<li>';
 						echo '<span class="label">' . $base->getName() . ' [' . Format::numberFormat($base->getPlanetPopulation()) . ' Mio hab.]</span>';

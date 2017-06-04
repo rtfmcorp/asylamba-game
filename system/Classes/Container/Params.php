@@ -2,8 +2,6 @@
 
 namespace Asylamba\Classes\Container;
 
-use Asylamba\Classes\Worker\CTR;
-
 class Params {
     const LIST_ALL_FLEET = 1;
     const SHOW_MAP_MINIMAP = 2;
@@ -16,37 +14,17 @@ class Params {
     const REDIRECT_CHAT = 9;
 
     /** @var array **/
-    private static $params = [
-        self::LIST_ALL_FLEET 	=> TRUE,
-        self::SHOW_MAP_MINIMAP 	=> TRUE,
-        self::SHOW_MAP_RC 		=> FALSE,
-        self::SHOW_MAP_ANTISPY 	=> TRUE,
-        self::SHOW_MAP_FLEETOUT => TRUE,
-        self::SHOW_MAP_FLEETIN 	=> TRUE,
-        self::SHOW_ATTACK_REPORT=> TRUE,
-        self::SHOW_REBEL_REPORT => TRUE,
-        self::REDIRECT_CHAT 	=> FALSE,
+    public static $params = [
+        self::LIST_ALL_FLEET 	=> true,
+        self::SHOW_MAP_MINIMAP 	=> true,
+        self::SHOW_MAP_RC 		=> true,
+        self::SHOW_MAP_ANTISPY 	=> true,
+        self::SHOW_MAP_FLEETOUT => true,
+        self::SHOW_MAP_FLEETIN 	=> true,
+        self::SHOW_ATTACK_REPORT=> true,
+        self::SHOW_REBEL_REPORT => true,
+        self::REDIRECT_CHAT 	=> false,
     ];
-
-    /**
-     * @param string $params
-     * @return boolean
-     */
-    public static function check($params) {
-        return CTR::$cookie->exist('p' . $params)
-                ? (bool)CTR::$cookie->get('p' . $params)
-                : self::$params[$params];
-    }
-
-    /**
-     * @param string $params
-     * @param mixed $value
-     */
-    public static function update($params, $value) {
-        if (in_array($params, self::$params)) {
-            CTR::$cookie->add('p' . $params, $value);
-        }
-    }
 
     /**
      * @return array

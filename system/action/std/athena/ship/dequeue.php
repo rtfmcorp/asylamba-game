@@ -6,34 +6,37 @@
 # int dock 			numéro du dock (1, 2, ou 3)
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Athena\Resource\ShipResource;
+use Asylamba\Modules\Athena\Model\ShipQueue;
 
-for ($i=0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
+$shipResourceRefund = $this->getContainer()->getParameter('athena.building.ship_queue_resource_refund');
+$scheduler = $this->getContainer()->get('realtime_action_scheduler');
+$entityManager = $this->getContainer()->get('entity_manager');
+
+for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
+	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-$baseId = Utils::getHTTPData('baseid');
-$queue = Utils::getHTTPData('queue');
-$dock = Utils::getHTTPData('dock');
+$baseId = $request->query->get('baseid');
+$queue = $request->query->get('queue');
+$dock = $request->query->get('dock');
 
 if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($baseId, $verif)) {
 	if (intval($dock) > 0 AND intval($dock) < 4) {
-		$S_OBM1 = ASM::$obm->getCurrentSession();
-		ASM::$obm->newSession(ASM_UMODE);
-		ASM::$obm->load(array('rPlace' => $baseId, 'rPlayer' => CTR::$data->get('playerId')));
-
-		if (ASM::$obm->size() > 0) {
-			$ob = ASM::$obm->get();
-
-			$S_SQM1 = ASM::$sqm->getCurrentSession();
-			ASM::$sqm->newSession();
-			ASM::$sqm->load(array('rOrbitalBase' => $baseId, 'dockType' => $dock), array('dEnd'));
+		if (($ob = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
+			$shipQueues = $shipQueueManager->getByBaseAndDockType($baseId, $dock);
+			$nbShipQueues = count($shipQueues);
 
 			$index = NULL;
-			for ($i = 0; $i < ASM::$sqm->size(); $i++) {
-				$shipQueue = ASM::$sqm->get($i); 
+			for ($i = 0; $i < $nbShipQueues; ++$i) {
+				$shipQueue = $shipQueues[$i];
 				# get the index of the queue
 				if ($shipQueue->id == $queue) {
 					$index = $i;
@@ -52,36 +55,38 @@ if ($baseId !== FALSE AND $queue !== FALSE AND $dock !== FALSE AND in_array($bas
 
 			if ($index !== NULL) {
 				# shift
-				for ($i = $index + 1; $i < ASM::$sqm->size(); $i++) {
-					$shipQueue = ASM::$sqm->get($i);
+				for ($i = $index + 1; $i < $nbShipQueues; $i++) {
+					$shipQueue = $shipQueues[$i];
 
+					$oldDate = $shipQueue->dEnd;
 					$shipQueue->dEnd = Utils::addSecondsToDate($dStart, Utils::interval($shipQueue->dStart, $shipQueue->dEnd, 's'));
 					$shipQueue->dStart = $dStart;
 
+					$scheduler->reschedule($shipQueue, $shipQueue->dEnd, $oldDate);
+					
 					$dStart = $shipQueue->dEnd;
 				}
 
-				ASM::$sqm->deleteById($queue);
-
+				$scheduler->cancel($shipQueues[$index], $shipQueues[$index]->dEnd);
+				$entityManager->remove($shipQueues[$index]);
+				$entityManager->flush(ShipQueue::class);
 				// give a part of the resources back
 				$resourcePrice = ShipResource::getInfo($shipNumber, 'resourcePrice');
 				if ($dockType == 1) {
 					$resourcePrice *= $quantity;
 				}
-				$resourcePrice *= SQM_RESOURCERETURN;
-				$ob->increaseResources($resourcePrice, TRUE);
-				CTR::$alert->add('Commande annulée, vous récupérez le ' . SQM_RESOURCERETURN * 100 . '% du montant investi pour la construction', ALERT_STD_SUCCESS);
+				$resourcePrice *= $shipResourceRefund;
+				$orbitalBaseManager->increaseResources($ob, $resourcePrice, TRUE);
+				$session->addFlashbag('Commande annulée, vous récupérez le ' . $shipResourceRefund * 100 . '% du montant investi pour la construction', Flashbag::TYPE_SUCCESS);
 			} else {
-				CTR::$alert->add('suppression de vaisseau impossible', ALERT_STD_ERROR);
+				throw new ErrorException('suppression de vaisseau impossible');
 			}
-			ASM::$sqm->changeSession($S_SQM1);
 		} else {
-			CTR::$alert->add('cette base ne vous appartient pas', ALERT_STD_ERROR);	
+			throw new ErrorException('cette base ne vous appartient pas');	
 		}
-		ASM::$obm->changeSession($S_OBM1);
 	} else {
-		CTR::$alert->add('suppression de vaisseau impossible - chantier invalide', ALERT_STD_ERROR);
+		throw new ErrorException('suppression de vaisseau impossible - chantier invalide');
 	}
 } else {
-	CTR::$alert->add('pas assez d\'informations pour enlever un vaisseau de la file d\'attente', ALERT_STD_FILLFORM);
+	throw new FormException('pas assez d\'informations pour enlever un vaisseau de la file d\'attente');
 }

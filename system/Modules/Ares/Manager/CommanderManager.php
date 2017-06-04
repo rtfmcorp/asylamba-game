@@ -13,330 +13,1039 @@
 
 namespace Asylamba\Modules\Ares\Manager;
 
-use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Modules\Athena\Manager\OrbitalBaseManager;
+use Asylamba\Modules\Zeus\Manager\PlayerManager;
+use Asylamba\Modules\Zeus\Manager\PlayerBonusManager;
+use Asylamba\Modules\Gaia\Manager\PlaceManager;
+use Asylamba\Modules\Demeter\Manager\ColorManager;
+use Asylamba\Modules\Hermes\Manager\NotificationManager;
+use Asylamba\Classes\Container\ArrayList;
 
+use Asylamba\Classes\Worker\EventDispatcher;
+
+use Asylamba\Modules\Athena\Model\OrbitalBase;
+use Asylamba\Modules\Gaia\Model\Place;
+use Asylamba\Modules\Ares\Model\Report;
+use Asylamba\Modules\Ares\Model\LiveReport;
+use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Gaia\Resource\SquadronResource;
+use Asylamba\Modules\Demeter\Model\Color;
 
-class CommanderManager extends Manager {
-    protected $managerType = '_Commander';
+use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
-    //charge depuis la base de donnée avec ce qu'on veut
-    public function load($where = array(), $order = array(), $limit = array()) {
-            $formatWhere = Utils::arrayToWhere($where);
-            $formatOrder = Utils::arrayToOrder($order);
-            $formatLimit = Utils::arrayToLimit($limit);
+use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 
-            $db = Database::getInstance();
-            $qr = $db->prepare('SELECT c.*,
-                            o.iSchool, o.name AS oName,
-                            p.name AS pName,
-                            p.rColor AS pColor,
-                            pd.population AS destinationPlacePop,
-                            ps.population AS startPlacePop,
-                            dp.name AS dpName,
-                            sp.name AS spName,
-                            sq.id AS sqId,
-                            sq.ship0 AS sqShip0,
-                            sq.ship1 AS sqShip1,
-                            sq.ship2 AS sqShip2,
-                            sq.ship3 AS sqShip3,
-                            sq.ship4 AS sqShip4,
-                            sq.ship5 AS sqShip5,
-                            sq.ship6 AS sqShip6,
-                            sq.ship7 AS sqShip7,
-                            sq.ship8 AS sqShip8,
-                            sq.ship9 AS sqShip9,
-                            sq.ship10 AS sqShip10,
-                            sq.ship11 AS sqShip11,
-                            sq.dCreation AS sqDCreation,
-                            sq.DLastModification AS sqDLastModification
-                    FROM commander AS c
-                    LEFT JOIN orbitalBase AS o
-                            ON o.rPlace = c.rBase
-                    LEFT JOIN player AS p
-                            ON p.id = c.rPlayer
-                    LEFT JOIN orbitalBase AS dp
-                            ON dp.rPlace = c.rDestinationPlace
-                            LEFT JOIN place AS pd
-                                    ON pd.id = c.rDestinationPlace
-                    LEFT JOIN orbitalBase AS sp
-                            ON sp.rPlace = c.rStartPlace
-                            LEFT JOIN place AS ps
-                                    ON ps.id = c.rStartPlace
-                    LEFT JOIN squadron AS sq
-                            ON sq.rCommander = c.id
-                    ' . $formatWhere .'
-                    ' . $formatOrder .'
-                    ' . $formatLimit
-            );
+class CommanderManager
+{
+	/** @var EntityManager **/
+	protected $entityManager;
+	/** @var FightManager **/
+	protected $fightManager;
+	/** @var ReportManager **/
+	protected $reportManager;
+	/** @var OrbitalBaseManager **/
+	protected $orbitalBaseManager;
+	/** @var PlayerManager **/
+	protected $playerManager;
+	/** @var PlayerBonusManager **/
+	protected $playerBonusManager;
+	/** @var PlaceManager **/
+	protected $placeManager;
+	/** @var ColorManager **/
+	protected $colorManager;
+	/** @var NotificationManager **/
+	protected $notificationManager;
+	/** @var RealTimeActionScheduler **/
+	protected $realtimeActionScheduler;
+	/** @var EventDispatcher **/
+	protected $eventDispatcher;
+	/** @var int **/
+	protected $commanderBaseLevel;
+	
+	protected $actions = [
+		Commander::MOVE => 'uChangeBase',
+		Commander::LOOT => 'uLoot',
+		Commander::COLO => 'uConquer',
+		Commander::BACK => 'uReturnBase'
+	];
 
-            foreach($where AS $v) {
-                    if (is_array($v)) {
-                            foreach ($v as $p) {
-                                    $valuesArray[] = $p;
-                            }
-                    } else {
-                            $valuesArray[] = $v;
-                    }
-            }
+	/**
+	 * @param EntityManager $entityManager
+	 * @param FightManager $fightManager
+	 * @param ReportManager $reportManager
+	 * @param OrbitalBaseManager $orbitalBaseManager
+	 * @param PlayerManager $playerManager
+	 * @param PlayerBonusManager $playerBonusManager
+	 * @param PlaceManager $placeManager
+	 * @param ColorManager $colorManager
+	 * @param NotificationManager $notificationManager
+	 * @param RealTimeActionScheduler $realtimeActionScheduler
+	 * @param EventDispatcher $eventDispatcher
+	 * @param int $commanderBaseLevel
+	 */
+	public function __construct(
+		EntityManager $entityManager,
+		FightManager $fightManager,
+		ReportManager $reportManager,
+		OrbitalBaseManager $orbitalBaseManager,
+		PlayerManager $playerManager,
+		PlayerBonusManager $playerBonusManager,
+		PlaceManager $placeManager,
+		ColorManager $colorManager,
+		NotificationManager $notificationManager,
+		RealTimeActionScheduler $realtimeActionScheduler,
+		EventDispatcher $eventDispatcher,
+		$commanderBaseLevel
+	) {
+		$this->entityManager = $entityManager;
+		$this->fightManager = $fightManager;
+		$this->reportManager = $reportManager;
+		$this->orbitalBaseManager = $orbitalBaseManager;
+		$this->playerManager = $playerManager;
+		$this->playerBonusManager = $playerBonusManager;
+		$this->placeManager = $placeManager;
+		$this->colorManager = $colorManager;
+		$this->notificationManager = $notificationManager;
+		$this->realtimeActionScheduler = $realtimeActionScheduler;
+		$this->eventDispatcher = $eventDispatcher;
+		$this->commanderBaseLevel = $commanderBaseLevel;
+	}
+	
+	/**
+	 * @param integer $id
+	 * @return Commander
+	 */
+	public function get($id)
+	{
+		return $this->entityManager->getRepository(Commander::class)->get($id);
+	}
+	
+	/**
+	 * @param integer $orbitalBaseId
+	 * @param array $statements
+	 * @return array
+	 */
+	public function getBaseCommanders($orbitalBaseId, $statements = [], $orderBy = [])
+	{
+		return $this->entityManager->getRepository(Commander::class)->getBaseCommanders($orbitalBaseId, $statements, $orderBy);
+	}
+	
+	/**
+	 * @param int $playerId
+	 * @param array $statements
+	 * @return array
+	 */
+	public function getPlayerCommanders($playerId, $statements = [], $orderBy = [])
+	{
+		return $this->entityManager->getRepository(Commander::class)->getPlayerCommanders($playerId, $statements, $orderBy);
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getMovingCommanders()
+	{
+		return $this->entityManager->getRepository(Commander::class)->getMovingCommanders();
+	}
+	
+	/**
+	 * @param array $ids
+	 * @return array
+	 */
+	public function getCommandersByIds($ids)
+	{
+		return $this->entityManager->getRepository(Commander::class)->getCommandersByIds($ids);
+	}
+	
+	/**
+	 * @param int $orbitalBaseId
+	 * @param int $line
+	 * @return array
+	 */
+	public function getCommandersByLine($orbitalBaseId, $line)
+	{
+		return $this->entityManager->getRepository(Commander::class)->getCommandersByLine($orbitalBaseId, $line);
+	}
+	
+	/**
+	 * @param int $playerId
+	 * @return array
+	 */
+	public function getIncomingAttacks($playerId)
+	{
+		return $this->entityManager->getRepository(Commander::class)->getIncomingAttacks($playerId);
+	}
+	
+	/**
+	 * @param int $playerId
+	 * @return array
+	 */
+	public function getOutcomingAttacks($playerId)
+	{
+		return $this->entityManager->getRepository(Commander::class)->getOutcomingAttacks($playerId);
+	}
+	
+	/**
+	 * @param array $place
+	 * @return array
+	 */
+	public function getIncomingCommanders($place)
+	{
+		return $this->entityManager->getRepository(Commander::class)->getIncomingCommanders($place);
+	}
+	
+	public function scheduleMovements()
+	{
+		$commanders = $this->getMovingCommanders();
+		foreach ($commanders as $commander) {
+			$this->realtimeActionScheduler->schedule(
+				'ares.commander_manager',
+				$this->actions[$commander->getTravelType()],
+				$commander,
+				$commander->dArrival,
+				[
+					'class' => Place::class,
+					'id' => $commander->getRPlaceDestination()
+				]
+			);
+		}
+	}
+	
+	/**
+	 * @param int $orbitalBaseId
+	 * @param int $line
+	 * @return int
+	 */
+	public function countCommandersByLine($orbitalBaseId, $line)
+	{
+		return $this->entityManager->getRepository(Commander::class)->countCommandersByLine($orbitalBaseId, $line);
+	}
 
-            if (empty($valuesArray)) {
-                    $qr->execute();
-            } else {
-                    $qr->execute($valuesArray);
-            }
+	public function setEarnedExperience(Commander $commander, Commander $enemyCommander) {
+		$commander->setArmy();
+		$finalOwnPev = 0;
 
-            $awCommanders = $qr->fetchAll();
-            $qr->closeCursor();
+		foreach ($commander->army AS $squadron) {
+			foreach ($squadron->getSquadron() AS $ship) {
+				$finalOwnPev += $ship->getPev();
+			}
+		}
+		$importance = (($finalOwnPev + 1) * ($enemyCommander->getPevInBegin())) / 
+			((($commander->pevInBegin + 1) * (($enemyCommander->getLevel() + 1) / 
+				($commander->level + 1))));
 
-            if (count($awCommanders) > 0) {
-                    for ($i = 0; $i < count($awCommanders); $i++) {
-                            if ($i == 0 || $awCommanders[$i]['id'] != $awCommanders[$i - 1]['id']) {
-                                    $commander = new Commander();
+		$commander->earnedExperience = $importance * Commander::COEFFEARNEDEXP;
+		if($commander->winner) {
+			LiveReport::$importance = $importance;
+		}
+		
+		if ($commander->rPlayer > 0) {
+			$exp = round($commander->earnedExperience / Commander::COEFFEXPPLAYER);
+			$this->playerManager->increaseExperience($this->playerManager->get($commander->rPlayer), $exp);
 
-                                    $commander->id = $awCommanders[$i]['id'];
-                                    $commander->name = $awCommanders[$i]['name'];
-                                    $commander->avatar = $awCommanders[$i]['avatar'];
-                                    $commander->rPlayer = $awCommanders[$i]['rPlayer'];
-                                    $commander->playerName = $awCommanders[$i]['pName'];
-                                    $commander->playerColor = $awCommanders[$i]['pColor'];
-                                    $commander->rBase = $awCommanders[$i]['rBase'];
-                                    $commander->comment = $awCommanders[$i]['comment'];
-                                    $commander->sexe = $awCommanders[$i]['sexe'];
-                                    $commander->age = $awCommanders[$i]['age'];
-                                    $commander->level = $awCommanders[$i]['level'];
-                                    $commander->experience = $awCommanders[$i]['experience'];
-                                    $commander->uCommander = $awCommanders[$i]['uCommander'];
-                                    $commander->palmares = $awCommanders[$i]['palmares'];
-                                    $commander->statement = $awCommanders[$i]['statement'];
-                                    $commander->line = $awCommanders[$i]['line'];
-                                    $commander->dCreation = $awCommanders[$i]['dCreation'];
-                                    $commander->dAffectation = $awCommanders[$i]['dAffectation'];
-                                    $commander->dDeath = $awCommanders[$i]['dDeath'];
-                                    $commander->oBName = $awCommanders[$i]['oName'];
+			if ($enemyCommander->isAttacker == TRUE) {
+				LiveReport::$expPlayerD = $exp;
+			} else {
+				LiveReport::$expPlayerA = $exp;
+			}
+		}
+	}
 
-                                    $commander->dStart = $awCommanders[$i]['dStart'];
-                                    $commander->dArrival = $awCommanders[$i]['dArrival'];
-                                    $commander->resources = $awCommanders[$i]['resources'];
-                                    $commander->travelType = $awCommanders[$i]['travelType'];
-                                    $commander->travelLength = $awCommanders[$i]['travelLength'];
-                                    $commander->rStartPlace = $awCommanders[$i]['rStartPlace'];
-                                    $commander->rDestinationPlace = $awCommanders[$i]['rDestinationPlace'];
+	public function setBonus(Commander $commander) {
+		$commander->setArmy();
+		$playerBonus = new PlayerBonus($commander->rPlayer);
+		$playerBonus->load();
 
-                                    $commander->startPlaceName = ($awCommanders[$i]['spName'] == '') ? 'planète rebelle' : $awCommanders[$i]['spName'];
-                                    $commander->destinationPlaceName = ($awCommanders[$i]['dpName'] == '') ? 'planète rebelle' : $awCommanders[$i]['dpName'];
-                                    $commander->destinationPlacePop = $awCommanders[$i]['destinationPlacePop'];
-                                    $commander->startPlacePop = $awCommanders[$i]['startPlacePop'];
-                            }
+		foreach ($commander->army AS $squadron) {
+			foreach ($squadron->squadron AS $ship) {
+				$ship->setBonus($playerBonus->bonus);
+			}
+		}
+	}
 
-                            $commander->squadronsIds[] = $awCommanders[$i]['sqId'];
+	public function upExperience(Commander $commander, $earnedExperience) {
+		$commander->experience += $earnedExperience;
 
-                            $commander->armyInBegin[] = array(
-                                    $awCommanders[$i]['sqShip0'], 
-                                    $awCommanders[$i]['sqShip1'], 
-                                    $awCommanders[$i]['sqShip2'], 
-                                    $awCommanders[$i]['sqShip3'], 
-                                    $awCommanders[$i]['sqShip4'], 
-                                    $awCommanders[$i]['sqShip5'], 
-                                    $awCommanders[$i]['sqShip6'], 
-                                    $awCommanders[$i]['sqShip7'],
-                                    $awCommanders[$i]['sqShip8'], 
-                                    $awCommanders[$i]['sqShip9'], 
-                                    $awCommanders[$i]['sqShip10'], 
-                                    $awCommanders[$i]['sqShip11'], 
-                                    $awCommanders[$i]['sqDCreation'], 
-                                    $awCommanders[$i]['sqDLastModification']);
+		while (1) {
+			if ($commander->experience >= $this->experienceToLevelUp($commander)) {
+				$commander->level++;
+			} else {
+				break;
+			}
+		}
+	}
 
-                            if ($i == count($awCommanders) - 1 || $awCommanders[$i]['id'] != $awCommanders[$i + 1]['id']) {
-                                    $currentCommander = $this->_Add($commander);
+	public function nbLevelUp($level, $newExperience) {
+		$oLevel = $level;
+		$nLevel = $level;
+		while (1) {
+			if ($newExperience >= (pow(2, $nLevel) * $this->commanderBaseLevel)) {
+				$nLevel++;
+			} else {
+				break;
+			}
+		}
+		return $nLevel - $oLevel;
+	}
 
-                                    if ($this->currentSession->getUMode()) {
-                                            $currentCommander->uCommander();
-                                    }
-                            }
-                    }
-            }
-    }
+	public function experienceToLevelUp(Commander $commander) {
+		return pow(2, $commander->level) * $this->commanderBaseLevel;
+	}
 
-    public function emptySession() {
-            # empty the session, for player rankings
-            $this->_EmptyCurrentSession();
-            $this->newSession(FALSE);
-    }
+	public function emptySquadrons(Commander $commander) {
+		if (($orbitalBase = $this->orbitalBaseManager->get($commander->rBase)) === null) {
+			return;
+		}
+		$nbSquadrons = count($commander->squadronsIds);
+		for ($i = 0; $i < $nbSquadrons; ++$i) {
+			for ($j = 0; $j < 12; $j++) {
+				$orbitalBase->setShipStorage($j, $orbitalBase->getShipStorage($j) + $commander->getSquadron($i)->getNbrShipByType($j));
+			}
+			$commander->getSquadron($i)->emptySquadron();
+		}
+	}
 
-    //inscrit un nouveau commandant en bdd
-    public function add($newCommander) {
-            $db = Database::getInstance();
-            $qr = 'INSERT INTO commander
-            SET 
-                    name = ?,
-                    avatar = ?,
-                    rPlayer = ?,
-                    rBase = ?,
-                    sexe = ?,
-                    age = ?,
-                    level = ?,
-                    experience = ?,
-                    uCommander = ?,
-                    statement = ?,
-                    dCreation = ?';
-            $qr = $db->prepare($qr);
-            $aw = $qr->execute(array(
-                    $newCommander->name,
-                    $newCommander->avatar,
-                    $newCommander->rPlayer,
-                    $newCommander->rBase,
-                    $newCommander->sexe,
-                    $newCommander->age,
-                    $newCommander->level,
-                    $newCommander->experience,
-                    Utils::now(),
-                    $newCommander->statement,
-                    $newCommander->dCreation,
-                    ));
-            $newCommander->setId($db->lastInsertId());
+	public function uExperienceInSchool()
+	{
+		$now = Utils::now();
+		$commanders = $this->entityManager->getRepository(Commander::class)->getAllByStatements([Commander::INSCHOOL]);
 
-            $nbrSquadrons = $newCommander->getLevel();
-            $maxId = $db->lastInsertId();
-            $qr2 = 'INSERT INTO 
-                    squadron(rCommander, dCreation)
-                    VALUES(?, NOW())';
-            $qr2 = $db->prepare($qr2);
+		foreach ($commanders as $commander) {
+			// If the commander was updated recently, we skip him
+			if (Utils::interval($commander->uCommander, $now, 'h') === 0) {
+				continue;
+			}
+			
+			$nbrHours = Utils::intervalDates($now, $commander->uCommander);
+			$commander->uCommander = $now;
+			$orbitalBase = $this->orbitalBaseManager->get($commander->rBase);
+			
+			$playerBonus = $this->playerBonusManager->getBonusByPlayer($this->playerManager->get($commander->rPlayer));
+			$this->playerBonusManager->load($playerBonus);
+			$playerBonus = $playerBonus->bonus;
+			foreach ($nbrHours as $hour) {
+				$invest  = $orbitalBase->iSchool;
+				$invest += $invest * $playerBonus->get(PlayerBonus::COMMANDER_INVEST) / 100;
 
-            for ($i = 0; $i < $nbrSquadrons; $i++) {
-                    $aw2 = $qr2->execute(array($maxId));
-            }
+				# xp gagnée
+				$earnedExperience  = $invest / Commander::COEFFSCHOOL;
+				$earnedExperience += (rand(0, 1) == 1) 
+					? rand(0, $earnedExperience / 20)
+					: -(rand(0, $earnedExperience / 20));
+				$earnedExperience  = round($earnedExperience);
+				$earnedExperience  = ($earnedExperience < 0)
+					? 0 : $earnedExperience;
 
-            $lastSquadronId = $db->lastInsertId();
-            for ($i = 0; $i < count($newCommander->getArmy()); $i++) {
-                    $newCommander->getSquadron[$i]->setId($lastSquadronId);
-                    $lastSquadronId--;
-            }
+				$this->upExperience($commander, $earnedExperience);
+			}
+		}
+		$this->entityManager->flush(Commander::class);
+	}
 
-            $this->_Add($newCommander);
-    }
+	public function move(Commander $commander, $rDestinationPlace, $rStartPlace, $travelType, $travelLength, $duration) {
+		$commander->rDestinationPlace = $rDestinationPlace;
+		$commander->rStartPlace = $rStartPlace;
+		$commander->travelType = $travelType;
+		$commander->travelLength = $travelLength;
+		$commander->statement = Commander::MOVING;
 
-    //réécrit la base de donnée (à l'issue d'un combat par exemple)
-    public function save() {
-            $commanders = $this->_Save();
-            foreach ($commanders AS $k => $commander) {
-                    $db = Database::getInstance();
-                    $qr = 'UPDATE commander
-                            SET				
-                                    name = ?,
-                                    avatar = ?,
-                                    rPlayer = ?,
-                                    rBase = ?,
-                                    comment = ?,
-                                    sexe = ?,
-                                    age = ?,
-                                    level = ?,
-                                    experience = ?,
-                                    uCommander = ?,
-                                    palmares = ?,
-                                    statement = ?,
-                                    `line` = ?,
-                                    dStart = ?,
-                                    dArrival = ?,
-                                    resources = ?,
-                                    travelType = ?,
-                                    travelLength = ?,
-                                    rStartPlace	= ?,
-                                    rDestinationPlace = ?,
-                                    dCreation = ?,
-                                    dAffectation = ?,
-                                    dDeath = ?
+		$commander->dStart = ($travelType != 3) ? Utils::now() : $commander->dArrival;
+		$commander->startPlaceName = ($travelType != 3) ? $commander->oBName : $commander->destinationPlaceName;
+		$commander->destinationPlaceName = ($travelType != 3) ? $commander->destinationPlaceName : $commander->startPlaceName;
+		$date = new \DateTime($commander->dStart);
+		$date->modify('+' . $duration . 'second');
+		$commander->dArrival = $date->format('Y-m-d H:i:s');
+		
+		$this->realtimeActionScheduler->schedule(
+			'ares.commander_manager',
+			$this->actions[$travelType],
+			$commander,
+			$commander->dArrival,
+			[
+				'class' => Place::class,
+				'id' => $commander->getRPlaceDestination()
+			]
+		);
+		return TRUE;
+	}
+	
+	public function resultOfFight(Commander $commander, $isWinner, $enemyCommander) {
+		if ($isWinner == TRUE) {
+			$this->setEarnedExperience($commander, $enemyCommander);
+			$commander->earnedExperience = round($commander->earnedExperience);
+			LiveReport::$expCom = $commander->earnedExperience;
 
-                            WHERE id = ?';
+			$commander->winner = TRUE;
+			$commander->palmares++;
+			$commander->setArmyAtEnd();
+			$this->upExperience($commander, $commander->earnedExperience);
+			$commander->hasChanged = TRUE;
+		} else {
+			/** @TOVERIFY **/
+			$this->setEarnedExperience($commander, $commander, $enemyCommander);
+			$commander->earnedExperience = round($commander->earnedExperience);
 
-                    $qr = $db->prepare($qr);
-                    //uper les commandants
-                    $qr->execute(array( 				
-                            $commander->name,
-                            $commander->avatar,
-                            $commander->rPlayer,
-                            $commander->rBase,
-                            $commander->comment,
-                            $commander->sexe,
-                            $commander->age,
-                            $commander->level,
-                            $commander->experience,
-                            $commander->uCommander,
-                            $commander->palmares,
-                            $commander->statement,
-                            $commander->line,
-                            $commander->dStart,
-                            $commander->dArrival,
-                            $commander->resources,
-                            $commander->travelType,
-                            $commander->travelLength,
-                            $commander->rStartPlace,
-                            $commander->rDestinationPlace,
-                            $commander->dCreation,
-                            $commander->dAffectation,
-                            $commander->dDeath,
-                            $commander->id));
+			$commander->winner = FALSE;
+			$commander->setArmyAtEnd();
+			$this->upExperience($commander, $commander->earnedExperience);
+			$commander->hasChanged = TRUE;
+		}
+	}
 
-                    $qr = 'UPDATE squadron SET
-                            rCommander = ?,
-                            ship0 = ?,
-                            ship1 = ?,
-                            ship2 = ?,
-                            ship3 = ?,
-                            ship4 = ?,
-                            ship5 = ?,
-                            ship6 = ?,
-                            ship7 = ?,
-                            ship8 = ?,
-                            ship9 = ?,
-                            ship10 = ?,
-                            ship11 = ?,
-                            DLAstModification = NOW()
-                    WHERE id = ?';
+	# ENGAGE UN COMBAT ENTRE CHAQUE SQUADRON CONTRE UN COMMANDANT
+	public function engage(Commander $commander, $enemyCommander) {
+		$commander->setArmy();
+		
+		for ($i = 0; $i < count($commander->squadronsIds); $i++) {
+			$commander->getSquadron($i)->relId = 0;
+		}
+		$idSquadron = 0;
+		foreach ($commander->army as $squadron) {
+			if ($squadron->getNbrShips() != 0 AND $squadron->getLineCoord() * 3 <= FightManager::getCurrentLine()) {
+				$enemyCommander = $squadron->engage($enemyCommander, $idSquadron, $commander->id, $commander->name, $commander);
+			}
+			$idSquadron++;
+		}
+		return $enemyCommander;
+	}
 
-                    $qr = $db->prepare($qr);
-                    $army = $commander->getArmy();
+	public function getPosition(Commander $commander, $x1, $y1, $x2, $y2) {
+		$x = $x1;
+		$y = $y1;
+		if ($commander->statement == Commander::MOVING) {
+			$parcouredTime = Utils::interval($commander->dStart, Utils::now(), 's');
+			$totalTime = Utils::interval($commander->dStart, $commander->dArrival, 's');
+			$progression = $parcouredTime / $totalTime;
 
-                    foreach ($army AS $squadron) {
-                            //uper les escadrilles
-                            $qr->execute(array(
-                                    $squadron->getRCommander(),
-                                    $squadron->getNbrShipByType(0),
-                                    $squadron->getNbrShipByType(1),
-                                    $squadron->getNbrShipByType(2),
-                                    $squadron->getNbrShipByType(3),
-                                    $squadron->getNbrShipByType(4),
-                                    $squadron->getNbrShipByType(5),
-                                    $squadron->getNbrShipByType(6),
-                                    $squadron->getNbrShipByType(7),
-                                    $squadron->getNbrShipByType(8),
-                                    $squadron->getNbrShipByType(9),
-                                    $squadron->getNbrShipByType(10),
-                                    $squadron->getNbrShipByType(11),
-                                    $squadron->getId()
-                            ));
-                    }
-                    if ($commander->getLevel() > $commander->getSizeArmy()) {
-                            //on créé une nouvelle squadron avec rCommander correspondant
-                            $nbrSquadronToCreate = $commander->getLevel() - $commander->getSizeArmy();
-                            $qr = 'INSERT INTO 
-                            squadron (rCommander, dCreation)	
-                            VALUES (' . $commander->getId() . ', NOW())';
-                            $i = 1;
-                            while ($i < $nbrSquadronToCreate) {
-                                    $qr .= ',(' . $commander->getId() . ', NOW())';
-                                    $i++;
-                            }
-                            $qr = $db->prepare($qr);
-                            $qr->execute();
-                    }
-            }
-            $this->isUpdate = TRUE;
-    }
+			$x = $x1 + $progression * ($x2-$x1);
+			$y = $y1 + $progression * ($y2-$y1);
+		}
+		return array($x, $y);
+	}
 
-    public function setCommander($commander) {
-        $this->objects['' . $commander->getId() .''] = $commander;
-    }
+	public function getEventInfo(Commander $commander) {
+		$info = new ArrayList();
+		$info->add('id', $commander->id);
+		$info->add('name', $commander->name);
+		$info->add('avatar', $commander->avatar);
+		$info->add('level', $commander->level);
+
+		$info->add('dStart', $commander->dStart);
+		$info->add('rStart', $commander->rStartPlace);
+		$info->add('nStart', $commander->startPlaceName);
+		$info->add('dArrival', $commander->dArrival);
+		$info->add('rArrival', $commander->rDestinationPlace);
+		$info->add('nArrival', $commander->destinationPlaceName);
+
+		$info->add('travelType', $commander->travelType);
+		$info->add('resources', $commander->resources);
+
+		return $info;
+	}
+
+	/**
+	 * Fleet moving
+	 * 
+	 * @param int $commanderId
+	 */
+	public function uChangeBase($commanderId) {
+		$commander = $this->get($commanderId);
+		$place = $this->placeManager->get($commander->rDestinationPlace);
+		$place->commanders = $this->getBaseCommanders($place->id);
+		$commanderPlace = $this->placeManager->get($commander->rBase);
+		$player = $this->playerManager->get($commander->rPlayer);
+		$playerBonus = $this->playerBonusManager->getBonusByPlayer($player);
+		$this->playerBonusManager->load($playerBonus);
+		# si la place et la flotte ont la même couleur
+		# on pose la flotte si il y a assez de place
+		# sinon on met la flotte dans les hangars
+		if ($place->playerColor !== $commander->playerColor OR $place->typeOfBase !== Place::TYP_ORBITALBASE) {
+			# retour forcé
+			$this->comeBack($place, $commander, $commanderPlace, $playerBonus);
+			$this->placeManager->sendNotif($place, Place::CHANGELOST, $commander);
+			$this->entityManager->flush();
+			return;
+		}
+		$maxCom =
+			($place->typeOfOrbitalBase == OrbitalBase::TYP_MILITARY || $place->typeOfOrbitalBase == OrbitalBase::TYP_CAPITAL)
+			? OrbitalBase::MAXCOMMANDERMILITARY
+			: OrbitalBase::MAXCOMMANDERSTANDARD
+		;
+
+		# si place a assez de case libre :
+		if (count($place->commanders) < $maxCom) {
+			$comLine2 = 0;
+
+			foreach ($place->commanders as $com) {
+				if ($com->line == 2) {
+					$comLine2++;
+				}
+			}
+
+			if ($maxCom == OrbitalBase::MAXCOMMANDERMILITARY) {
+				if ($comLine2 < 2) {
+					$commander->line = 2;
+				} else {
+					$commander->line = 1;
+				}
+			} else {
+				if ($comLine2 < 1) {
+					$commander->line = 2;
+				} else {
+					$commander->line = 1;
+				}
+			}
+
+			# changer rBase commander
+			$commander->rBase = $place->id;
+			$this->endTravel($commander, Commander::AFFECTED);
+
+			# ajouter à la place le commandant
+			$place->commanders[] = $commander;
+
+			# envoi de notif
+			$this->placeManager->sendNotif($place, Place::CHANGESUCCESS, $commander);
+		} else {
+			# changer rBase commander
+			$commander->rBase = $place->id;
+			$this->endTravel($commander, Commander::RESERVE);
+
+			$this->emptySquadrons($commander);
+
+			# envoi de notif
+			$this->placeManager->sendNotif($place, Place::CHANGEFAIL, $commander);
+		}
+
+		# modifier le rPlayer (ne se modifie pas si c'est le même)
+		$commander->rPlayer = $place->rPlayer;
+
+		# instance de la place d'envoie + suppr commandant de ses flottes
+		# enlever à rBase le commandant
+		for ($i = 0; $i < count($commanderPlace->commanders); $i++) {
+			if ($commanderPlace->commanders[$i]->id == $commander->id) {
+				unset($commanderPlace->commanders[$i]);
+				$commanderPlace->commanders = array_merge($commanderPlace->commanders);
+			}
+		}
+		$this->entityManager->flush();
+	}
+
+	# pillage
+	public function uLoot($commanderId) {
+		$commander = $this->get($commanderId);
+		$place = $this->placeManager->get($commander->rDestinationPlace);
+		$place->commanders = $this->getBaseCommanders($place->id);
+		$placePlayer = $this->playerManager->get($place->rPlayer);
+		$placeBase = $this->orbitalBaseManager->get($place->id);
+		$commanderPlace = $this->placeManager->get($commander->rBase);
+		$commanderPlayer = $this->playerManager->get($commander->rPlayer);
+		$commanderColor = $this->colorManager->get($commanderPlayer->rColor);
+		$playerBonus = $this->playerBonusManager->getBonusByPlayer($commanderPlayer);
+		$this->playerBonusManager->load($playerBonus);
+		LiveReport::$type   = Commander::LOOT;
+		LiveReport::$dFight = $commander->dArrival;
+
+		# si la planète est vide
+		if ($place->rPlayer == NULL) {
+			LiveReport::$isLegal = Report::LEGAL;
+
+			# planète vide : faire un combat
+			$this->startFight($place, $commander, $commanderPlayer);
+
+			# victoire
+			if ($commander->getStatement() != Commander::DEAD) {
+				# piller la planète
+				$this->lootAnEmptyPlace($place, $commander, $playerBonus);
+				# création du rapport de combat
+				$report = $this->createReport($place);
+
+				# réduction de la force de la planète
+				$percentage = (($report->pevAtEndD + 1) / ($report->pevInBeginD + 1)) * 100;
+				$place->danger = round(($percentage * $place->danger) / 100);
+
+				$this->comeBack($place, $commander, $commanderPlace, $playerBonus);
+				$this->placeManager->sendNotif($place, Place::LOOTEMPTYSSUCCESS, $commander, $report->id);
+			} else {
+				# si il est mort
+				# enlever le commandant de la session
+				for ($i = 0; $i < count($commanderPlace->commanders); $i++) {
+					if ($commanderPlace->commanders[$i]->getId() == $commander->getId()) {
+						unset($commanderPlace->commanders[$i]);
+						$commanderPlace->commanders = array_merge($commanderPlace->commanders);
+					}
+				}
+
+				# création du rapport de combat
+				$report = $this->createReport($place);
+				$this->placeManager->sendNotif($place, Place::LOOTEMPTYFAIL, $commander, $report->id);
+
+				# réduction de la force de la planète
+				$percentage = (($report->pevAtEndD + 1) / ($report->pevInBeginD + 1)) * 100;
+				$place->danger = round(($percentage * $place->danger) / 100);
+			}
+		# si il y a une base d'un joueur
+		} else {
+			if ($commanderColor->colorLink[$place->playerColor] == Color::ALLY || $commanderColor->colorLink[$place->playerColor] == Color::PEACE) {
+				LiveReport::$isLegal = Report::ILLEGAL;
+			} else {
+				LiveReport::$isLegal = Report::LEGAL;
+			}
+
+			# planète à joueur : si $this->rColor != commandant->rColor
+			# si il peut l'attaquer
+			if (($place->playerColor != $commander->getPlayerColor() && $place->playerLevel > 1 && $commanderColor->colorLink[$place->playerColor] != Color::ALLY) || ($place->playerColor == 0)) {
+				$dCommanders = array();
+				foreach ($place->commanders AS $dCommander) {
+					if ($dCommander->statement == Commander::AFFECTED && $dCommander->line == 1) {
+						$dCommanders[] = $dCommander;
+					}
+				}
+
+				# il y a des commandants en défense : faire un combat avec un des commandants
+				if (count($dCommanders) != 0) {
+					$aleaNbr = rand(0, count($dCommanders) - 1);
+					$this->startFight($place, $commander, $commanderPlayer, $dCommanders[$aleaNbr], $placePlayer, TRUE);
+
+					# victoire
+					if ($commander->getStatement() != Commander::DEAD) {
+						# piller la planète
+						$this->lootAPlayerPlace($commander, $playerBonus, $placeBase);
+						$this->comeBack($place, $commander, $commanderPlace, $playerBonus);
+	
+						# suppression des commandants						
+						unset($place->commanders[$aleaNbr]);
+						$place->commanders = array_merge($place->commanders);
+
+						# création du rapport
+						$report = $this->createReport($place);
+
+						$this->placeManager->sendNotif($place, Place::LOOTPLAYERWHITBATTLESUCCESS, $commander, $report->id);
+				
+					# défaite
+					} else {
+						# enlever le commandant de la session
+						for ($i = 0; $i < count($commanderPlace->commanders); $i++) {
+							if ($commanderPlace->commanders[$i]->getId() == $commander->getId()) {
+								unset($commanderPlace->commanders[$i]);
+								$commanderPlace->commanders = array_merge($commanderPlace->commanders);
+							}
+						}
+
+						# création du rapport
+						$report = $this->createReport($place);
+
+						# mise à jour des flottes du commandant défenseur
+						for ($j = 0; $j < count($dCommanders[$aleaNbr]->armyAtEnd); $j++) {
+							for ($i = 0; $i < 12; $i++) { 
+								$dCommanders[$aleaNbr]->armyInBegin[$j][$i] = $dCommanders[$aleaNbr]->armyAtEnd[$j][$i];
+							}
+						}
+
+						$this->placeManager->sendNotif($place, Place::LOOTPLAYERWHITBATTLEFAIL, $commander, $report->id);
+					}
+				} else {
+					$this->lootAPlayerPlace($commander, $playerBonus, $placeBase);
+					$this->comeBack($place, $commander, $commanderPlace, $playerBonus);
+					$this->placeManager->sendNotif($place, Place::LOOTPLAYERWHITOUTBATTLESUCCESS, $commander);
+				}
+
+			} else {
+				# si c'est la même couleur
+				if ($place->rPlayer == $commander->rPlayer) {
+					# si c'est une de nos planètes
+					# on tente de se poser
+					$this->uChangeBase($commander->id);
+				} else {
+					# si c'est une base alliée
+					# on repart
+					$this->comeBack($place, $commander, $commanderPlace, $playerBonus);
+					$this->placeManager->sendNotif($place, Place::CHANGELOST, $commander);
+				}
+			}
+		}
+		$this->entityManager->flush();
+	}
+
+	# conquest
+	public function uConquer($commanderId) {
+		$commander = $this->get($commanderId);
+		$place = $this->placeManager->get($commander->rDestinationPlace);
+		$place->commanders = $this->getBaseCommanders($place->id);
+		$placePlayer = $this->playerManager->get($place->rPlayer);
+		$placeBase = $this->orbitalBaseManager->get($place->id);
+		$commanderPlace = $this->placeManager->get($commander->rBase);
+		$commanderPlayer = $this->playerManager->get($commander->rPlayer);
+		$commanderColor = $this->colorManager->get($commanderPlayer->rColor);
+		$baseCommanders = $this->getBaseCommanders($place->getId());
+		$playerBonus = $this->playerBonusManager->getBonusByPlayer($commanderPlayer);
+		$this->playerBonusManager->load($playerBonus);
+		# conquete
+		if ($place->rPlayer != NULL) {
+			if (($place->playerColor != $commander->getPlayerColor() && $place->playerLevel > 3 && $commanderColor->colorLink[$place->playerColor] != Color::ALLY) || ($place->playerColor == 0)) {
+				$tempCom = array();
+
+				for ($i = 0; $i < count($place->commanders); $i++) {
+					if ($place->commanders[$i]->line <= 1) {
+						$tempCom[] = $place->commanders[$i];
+					}
+				}
+				for ($i = 0; $i < count($place->commanders); $i++) {
+					if ($place->commanders[$i]->line >= 2) {
+						$tempCom[] = $place->commanders[$i];
+					}
+				}
+
+				$place->commanders = $tempCom;
+
+				$nbrBattle = 0;
+				$reportIds   = array();
+				$reportArray = array();
+
+				while ($nbrBattle < count($place->commanders)) {
+					if ($place->commanders[$nbrBattle]->statement == Commander::AFFECTED) {
+						LiveReport::$type = Commander::COLO;
+						LiveReport::$dFight = $commander->dArrival;
+
+						if ($commanderColor->colorLink[$place->playerColor] == Color::ALLY || $commanderColor->colorLink[$place->playerColor] == Color::PEACE) {
+							LiveReport::$isLegal = Report::ILLEGAL;
+						} else {
+							LiveReport::$isLegal = Report::LEGAL;
+						}
+
+						$this->startFight($place, $commander, $commanderPlayer, $place->commanders[$nbrBattle], $placePlayer, TRUE);
+
+						$report = $this->createReport($place);
+						$reportArray[] = $report;
+						$reportIds[] = $report->id;
+						# PATCH DEGUEU POUR LES MUTLIS-COMBATS
+						$this->entityManager->clear($report);
+						$reports = $this->reportManager->getByAttackerAndPlace($commander->rPlayer, $place->id, $commander->dArrival);
+						foreach($reports as $r) {
+							if ($r->id == $report->id) {
+								continue;
+							}
+							$r->statementAttacker = Report::DELETED;
+							$r->statementDefender = Report::DELETED;
+						}
+						$this->entityManager->flush(Report::class);
+						$this->entityManager->clear(Report::class);
+						########################################
+
+						# mettre à jour armyInBegin si prochain combat pour prochain rapport
+						for ($j = 0; $j < count($commander->armyAtEnd); $j++) {
+							for ($i = 0; $i < 12; $i++) { 
+								$commander->armyInBegin[$j][$i] = $commander->armyAtEnd[$j][$i];
+							}
+						}
+						for ($j = 0; $j < count($place->commanders[$nbrBattle]->armyAtEnd); $j++) {
+							for ($i = 0; $i < 12; $i++) {
+								$place->commanders[$nbrBattle]->armyInBegin[$j][$i] = $place->commanders[$nbrBattle]->armyAtEnd[$j][$i];
+							}
+						}
+						
+						$nbrBattle++;
+						# mort du commandant
+						# arrêt des combats
+						if ($commander->getStatement() == Commander::DEAD) {
+							break;
+						}
+					} else {
+						$nbrBattle++;
+					}
+				}
+
+				# victoire
+				if ($commander->getStatement() != Commander::DEAD) {
+					if ($nbrBattle == 0) {
+						$this->placeManager->sendNotif($place, Place::CONQUERPLAYERWHITOUTBATTLESUCCESS, $commander, NULL);
+					} else {
+						$this->placeManager->sendNotifForConquest($place, Place::CONQUERPLAYERWHITBATTLESUCCESS, $commander, $reportIds);
+					}
+
+
+					#attribuer le joueur à la place
+					$place->commanders = array();
+					$place->playerColor = $commander->playerColor;
+					$place->rPlayer = $commander->rPlayer;
+
+					# changer l'appartenance de la base (et de la place)
+					$this->orbitalBaseManager->changeOwnerById($place->id, $placeBase, $commander->getRPlayer(), $baseCommanders);
+					$place->commanders[] = $commander;
+
+					$commander->rBase = $place->id;
+					$this->endTravel($commander, Commander::AFFECTED);
+					$commander->line = 2;
+					
+					$this->eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place));
+
+					# PATCH DEGUEU POUR LES MUTLIS-COMBATS
+					$this->notificationManager->patchForMultiCombats($commander->rPlayer, $place->rPlayer, $commander->dArrival);
+				# défaite
+				} else {
+					for ($i = 0; $i < count($place->commanders); $i++) {
+						if ($place->commanders[$i]->statement == Commander::DEAD) {
+							unset($place->commanders[$i]);
+							$place->commanders = array_merge($place->commanders);
+						}
+					}
+
+					$this->placeManager->sendNotifForConquest($place, Place::CONQUERPLAYERWHITBATTLEFAIL, $commander, $reportIds);
+				}
+
+			} else {
+				# si c'est la même couleur
+				if ($place->rPlayer == $commander->rPlayer) {
+					# si c'est une de nos planètes
+					# on tente de se poser
+					$this->uChangeBase($commander->id);
+				} else {
+					# si c'est une base alliée
+					# on repart
+					$this->comeBack($place, $commander, $commanderPlace, $playerBonus);
+					$this->placeManager->sendNotif($place, Place::CHANGELOST, $commander);
+				}
+			}
+
+		# colonisation
+		} else {
+			# faire un combat
+			LiveReport::$type = Commander::COLO;
+			LiveReport::$dFight = $commander->dArrival;
+			LiveReport::$isLegal = Report::LEGAL;
+
+			$this->startFight($place, $commander, $commanderPlayer);
+
+			# victoire
+			if ($commander->getStatement() !== Commander::DEAD) {
+				# attribuer le rPlayer à la Place !
+				$place->rPlayer = $commander->rPlayer;
+				$place->commanders[] = $commander;
+				$place->playerColor = $commander->playerColor;
+				$place->typeOfBase = 4; 
+
+				# créer une base
+				$ob = new OrbitalBase();
+				$ob->rPlace = $place->id;
+				$ob->setRPlayer($commander->getRPlayer());
+				$ob->setName('colonie');
+				$ob->iSchool = 500;
+				$ob->iAntiSpy = 500;
+				$ob->resourcesStorage = 2000;
+				$ob->uOrbitalBase = Utils::now();
+				$ob->dCreation = Utils::now();
+				$this->orbitalBaseManager->updatePoints($ob);
+
+				$this->orbitalBaseManager->add($ob);
+
+				# attibuer le commander à la place
+				$commander->rBase = $place->id;
+				$this->endTravel($commander, Commander::AFFECTED);
+				$commander->line = 2;
+				
+				# création du rapport
+				$report = $this->createReport($place);
+
+				$place->danger = 0;
+
+				$this->placeManager->sendNotif($place, Place::CONQUEREMPTYSSUCCESS, $commander, $report->id);
+				
+				$this->eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place));
+			
+			# défaite
+			} else {
+				# création du rapport
+				$report = $this->createReport($place);
+
+				# mise à jour du danger
+				$percentage = (($report->pevAtEndD + 1) / ($report->pevInBeginD + 1)) * 100;
+				$place->danger = round(($percentage * $place->danger) / 100);
+
+				$this->placeManager->sendNotif($place, Place::CONQUEREMPTYFAIL, $commander);
+
+				# enlever le commandant de la place
+				foreach ($commanderPlace->commanders as $placeCommander) {
+					if ($placeCommander->getId() == $commander->getId()) {
+						unset($placeCommander);
+						$commanderPlace->commanders = array_merge($commanderPlace->commanders);
+					}
+				}
+			}
+		}
+		$this->entityManager->flush($commander);
+		$this->entityManager->flush($place);
+	}
+
+	/**
+	 * @param int $commanderId
+	 */
+	public function uReturnBase($commanderId) {
+		$commander = $this->get($commanderId);
+		$place = $this->placeManager->get($commander->rDestinationPlace);
+		$commanderBase = $this->orbitalBaseManager->get($commander->rBase);
+		
+		$this->endTravel($commander, Commander::AFFECTED);
+
+		$this->placeManager->sendNotif($place, Place::COMEBACK, $commander);
+
+		if ($commander->resources > 0) {
+			$this->orbitalBaseManager->increaseResources($commanderBase, $commander->resources, TRUE);
+			$commander->resources = 0;
+		}
+		$this->entityManager->flush($commander);
+	}
+	
+	/**
+	 * @param Commander $commander
+	 * @param string $statement
+	 */
+	public function endTravel(Commander $commander, $statement)
+	{
+		$commander->travelType = null;
+		$commander->travelLength = null;
+		$commander->dStart = null;
+		$commander->dArrival = null;
+		$commander->rStartPlace = null;
+		$commander->rDestinationPlace = null;
+		$commander->statement = $statement;
+	}
+
+	# HELPER
+
+	# comeBack
+	public function comeBack(Place $place, $commander, $commanderPlace, $playerBonus) {
+		$length   = Game::getDistance($place->getXSystem(), $commanderPlace->getXSystem(), $place->getYSystem(), $commanderPlace->getYSystem());
+		$duration = Game::getTimeToTravel($commanderPlace, $place, $playerBonus->bonus);
+
+		$commander->startPlaceName = $place->baseName;
+		$commander->destinationPlaceName = $commander->oBName;
+		$this->move($commander, $commander->rBase, $place->id, Commander::BACK, $length, $duration);
+	}
+
+	private function lootAnEmptyPlace(Place $place, $commander, $playerBonus) {
+		$bonus = $playerBonus->bonus->get(PlayerBonus::SHIP_CONTAINER);
+	
+		$storage = $commander->getPevToLoot() * Commander::COEFFLOOT;
+		$storage += round($storage * ((2 * $bonus) / 100));
+
+		$resourcesLooted = 0;
+		$resourcesLooted = ($storage > $place->resources) ? $place->resources : $storage;
+
+		$place->resources -= $resourcesLooted;
+		$commander->resources = $resourcesLooted;
+
+		LiveReport::$resources = $resourcesLooted;
+	}
+
+	private function lootAPlayerPlace($commander, $playerBonus, $placeBase) {
+		$bonus = $playerBonus->bonus->get(PlayerBonus::SHIP_CONTAINER);
+
+		$resourcesToLoot = $placeBase->getResourcesStorage() - Commander::LIMITTOLOOT;
+
+		$storage = $commander->getPevToLoot() * Commander::COEFFLOOT;
+		$storage += round($storage * ((2 * $bonus) / 100));
+
+		$resourcesLooted = 0;
+		$resourcesLooted = ($storage > $resourcesToLoot) ? $resourcesToLoot : $storage;
+
+		if ($resourcesLooted > 0) {
+			$this->orbitalBaseManager->decreaseResources($placeBase, $resourcesLooted);
+			$commander->resources = $resourcesLooted;
+
+			LiveReport::$resources = $resourcesLooted;
+		}
+	}
+
+	private function startFight(Place $place, $commander, $player, $enemyCommander = NULL, $enemyPlayer = NULL, $pvp = FALSE) {
+		if ($pvp == TRUE) {
+			$commander->setArmy();
+			$enemyCommander->setArmy();
+
+			$this->fightManager->startFight($commander, $player, $enemyCommander, $enemyPlayer);
+		} else {
+			$commander->setArmy();
+			$computerCommander = $this->createVirtualCommander($place);
+
+			$this->fightManager->startFight($commander, $player, $computerCommander);
+		}
+	}
+
+	private function createReport(Place $place) {
+		$report = new Report();
+
+		$report->rPlayerAttacker = LiveReport::$rPlayerAttacker;
+		$report->rPlayerDefender =  LiveReport::$rPlayerDefender;
+		$report->rPlayerWinner = LiveReport::$rPlayerWinner;
+		$report->avatarA = LiveReport::$avatarA;
+		$report->avatarD = LiveReport::$avatarD;
+		$report->nameA = LiveReport::$nameA;
+		$report->nameD = LiveReport::$nameD;
+		$report->levelA = LiveReport::$levelA;
+		$report->levelD = LiveReport::$levelD;
+		$report->experienceA = LiveReport::$experienceA;
+		$report->experienceD = LiveReport::$experienceD;
+		$report->palmaresA = LiveReport::$palmaresA;
+		$report->palmaresD = LiveReport::$palmaresD;
+		$report->resources = LiveReport::$resources;
+		$report->expCom = LiveReport::$expCom;
+		$report->expPlayerA = LiveReport::$expPlayerA;
+		$report->expPlayerD = LiveReport::$expPlayerD;
+		$report->rPlace = $place->id;
+		$report->type = LiveReport::$type;
+		$report->round = LiveReport::$round;
+		$report->importance = LiveReport::$importance;
+		$report->squadrons = LiveReport::$squadrons;
+		$report->dFight = LiveReport::$dFight;
+		$report->isLegal = LiveReport::$isLegal;
+		$report->placeName = ($place->baseName == '') ? 'planète rebelle' : $place->baseName;
+		$report->setArmies();
+		$report->setPev();
+		
+		$this->reportManager->add($report);
+		LiveReport::clear();
+
+		return $report;
+	}
+
+	/**
+	 * @param Place $place
+	 * @return Commander
+	 */
+	public function createVirtualCommander(Place $place) {
+		$vCommander = new Commander();
+		$vCommander->id = 'Null';
+		$vCommander->rPlayer = ID_GAIA;
+		$vCommander->name = 'rebelle';
+		$vCommander->avatar = 't3-c4';
+		$vCommander->sexe = 1;
+		$vCommander->age = 42;
+		$vCommander->statement = 1;
+		$vCommander->level = ceil((((($place->maxDanger / (Place::DANGERMAX / Place::LEVELMAXVCOMMANDER))) * 9) + ($place->population / (Place::POPMAX / Place::LEVELMAXVCOMMANDER))) / 10);
+
+		$nbrsquadron = ceil($vCommander->level * (($place->danger + 1) / ($place->maxDanger + 1)));
+
+		$army = array();
+		$squadronsIds = array();
+
+		for ($i = 0; $i < $nbrsquadron; $i++) {
+			$aleaNbr = ($place->coefHistory * $place->coefResources * $place->position * $i) % SquadronResource::size();
+			$army[] = SquadronResource::get($vCommander->level, $aleaNbr);
+			$squadronsIds[] = 0;
+		}
+
+		for ($i = $vCommander->level - 1; $i >= $nbrsquadron; $i--) {
+			$army[$i] = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, Utils::now());
+			$squadronsIds[] = 0;
+		}
+
+		$vCommander->setSquadronsIds($squadronsIds);
+		$vCommander->setArmyInBegin($army);
+		$vCommander->setArmy();
+		$vCommander->setPevInBegin();
+
+		return $vCommander;
+	}
 }

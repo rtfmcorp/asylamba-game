@@ -1,35 +1,31 @@
 <?php
 # int id 			id du rapport
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Ares\Model\Report;
+use Asylamba\Classes\Exception\ErrorException;
 
-$id = Utils::getHTTPData('id');
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
+$session = $this->getContainer()->get('app.session');
+$liveReportManager = $this->getContainer()->get('ares.live_report_manager');
+
+$id = $request->query->get('id');
 
 if ($id) {
-	$S_LRM = ASM::$lrm->getCurrentSession();
-	ASM::$lrm->newSession();
-	ASM::$lrm->load(array('r.id' => $id));
-
-	if (ASM::$lrm->size() > 0) {
-		$report = ASM::$lrm->get();
-
-		if ($report->rPlayerAttacker == CTR::$data->get('playerId')) {
-			ASM::$lrm->get()->statementAttacker = Report::DELETED;
-			CTR::redirect('fleet/view-archive');
-		} elseif ($report->rPlayerDefender == CTR::$data->get('playerId')) {
-			ASM::$lrm->get()->statementDefender = Report::DELETED;
-			CTR::redirect('fleet/view-archive');
+	if (($report = $liveReportManager->get($id)) !== null) {
+		if ($report->rPlayerAttacker == $session->get('playerId')) {
+			$report->statementAttacker = Report::DELETED;
+			$response->redirect('fleet/view-archive');
+		} elseif ($report->rPlayerDefender == $session->get('playerId')) {
+			$report->statementDefender = Report::DELETED;
+			$response->redirect('fleet/view-archive');
 		} else {
-			CTR::$alert->add('Ce rapport ne vous appartient pas', ALERT_STD_ERROR);
+			throw new ErrorException('Ce rapport ne vous appartient pas');
 		}
 	} else {
-		CTR::$alert->add('Ce rapport n\'existe pas', ALERT_STD_ERROR);
+		throw new ErrorException('Ce rapport n\'existe pas');
 	}
-
-	ASM::$lrm->changeSession($S_LRM);	
 } else {
-	CTR::$alert->add('veuillez indiquer le numéro du rapport', ALERT_STD_ERROR);
+	throw new ErrorException('veuillez indiquer le numéro du rapport');
 }
+$this->getContainer()->get('entity_manager')->flush();

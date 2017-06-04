@@ -1,8 +1,8 @@
 <?php
 
-use Asylamba\Classes\Database\Database;
+use Asylamba\Modules\Ares\Model\Commander;
 
-$db = Database::getInstance();
+$database = $this->getContainer()->get('database');
 
 $qr = $db->prepare('SELECT
 		COUNT(c.id) AS nb

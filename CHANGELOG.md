@@ -1,3 +1,31 @@
+## [2.1.0] - 2017-06-01
+### Added
+- Container class for services and parameters
+- Application core class
+- Tests PSR-4 autoload
+- Tests shortcut command
+- Services and parameters configuration files
+- Module main class with specific configuration file
+- Unit of work pattern
+- Entity Manager
+- Routing component
+- Templating component
+- Daemon server to handle the game in real-time
+- Event and listeners for system and sector seizing
+- Realtime action scheduler
+- Cyclic action scheduler
+- Process manager
+- Task manager
+- Load balancer for processes
+
+### Changed
+- Many managers are now free of the session pattern
+- Sector and system seizing program
+
+### Removed
+- Support of HHVM
+- Support of PHP 5.5
+
 ## [2.0.0] - 2016-11-01
 ### Added
 * Composer project file

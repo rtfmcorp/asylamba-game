@@ -1,0 +1,11 @@
+---
+services:
+    atlas.faction_ranking_manager:
+        class: Asylamba\Modules\Atlas\Manager\FactionRankingManager
+        arguments:
+            - "@database"
+            
+    atlas.player_ranking_manager:
+        class: Asylamba\Modules\Atlas\Manager\PlayerRankingManager
+        arguments:
+            - "@database"

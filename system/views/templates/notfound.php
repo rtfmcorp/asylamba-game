@@ -19,7 +19,7 @@ echo '<body>';
 
 	echo '<div class="boxlink">';
 		echo '<a href="' . APP_ROOT . 'profil">revenir vers la page principale</a>';
-		echo '<a href="' . GETOUT_ROOT . '">où allez jeter un oeil au site</a>';
-		echo '<a href="' . GETOUT_ROOT . 'blog">où peut-être au blog</a>';
+		echo '<a href="' . $this->getContainer()->getParameter('getout_root') . '">où allez jeter un oeil au site</a>';
+		echo '<a href="' . $this->getContainer()->getParameter('getout_root') . 'blog">où peut-être au blog</a>';
 	echo '</div>';
 echo '</body>';

@@ -1,8 +1,10 @@
 <?php
 
-use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Athena\Model\CommercialRoute;
+
+$database = $this->getContainer()->get('database');
 
 $join = 'FROM commercialRoute AS cr
 LEFT JOIN orbitalBase AS ob1
@@ -14,20 +16,18 @@ ON cr.rOrbitalBaseLinked = ob2.rPlace
 	LEFT JOIN player AS pl2
 	ON ob2.rPlayer = pl2.id';
 
-$db = Database::getInstance();
-
-$qr = $db->prepare('SELECT
+$qr = $database->prepare('SELECT
 		COUNT(cr.id) AS nb,
 		SUM(cr.income) AS income
 		' . $join . '
 	WHERE (pl1.rColor = ? OR pl2.rColor = ?)
 		AND cr.statement = ?
 ');
-$qr->execute(array($faction->id, $faction->id, CRM_ACTIVE));
+$qr->execute(array($faction->id, $faction->id, CommercialRoute::ACTIVE));
 $aw1 = $qr->fetch(); $qr->closeCursor();
 
-$qr = $db->prepare('SELECT COUNT(cr.id) AS nb ' . $join . ' WHERE pl1.rColor = ? AND pl2.rColor = ? AND cr.statement = ?');
-$qr->execute(array($faction->id, $faction->id, CRM_ACTIVE));
+$qr = $database->prepare('SELECT COUNT(cr.id) AS nb ' . $join . ' WHERE pl1.rColor = ? AND pl2.rColor = ? AND cr.statement = ?');
+$qr->execute(array($faction->id, $faction->id, CommercialRoute::ACTIVE));
 $aw2 = $qr->fetch(); $qr->closeCursor();
 
 echo '<div class="component profil">';
@@ -64,11 +64,11 @@ echo '<div class="component profil">';
 
 			foreach ($faction->colorLink as $i => $k) {
 				if ($i != 0 && $i != $faction->id) {
-					$qr = $db->prepare('SELECT
+					$qr = $database->prepare('SELECT
 						COUNT(cr.id) AS nb ' . $join . '
 						WHERE ((pl1.rColor = ? AND pl2.rColor = ?) OR (pl1.rColor = ? AND pl2.rColor = ?)) AND cr.statement = ?'
 					);
-					$qr->execute(array($faction->id, ColorResource::getInfo($i, 'id'), ColorResource::getInfo($i, 'id'), $faction->id, CRM_ACTIVE));
+					$qr->execute(array($faction->id, ColorResource::getInfo($i, 'id'), ColorResource::getInfo($i, 'id'), $faction->id, CommercialRoute::ACTIVE));
 					$aw3 = $qr->fetch(); $qr->closeCursor();
 
 					echo '<div class="number-box grey">';

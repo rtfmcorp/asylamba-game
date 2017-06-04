@@ -19,9 +19,15 @@ use Asylamba\Modules\Atlas\Model\FactionRanking;
 class FactionRankingManager extends Manager {
 	protected $managerType = '_FactionRanking';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function loadLastContext($where = array(), $order = array(), $limit = array()) {	
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT * FROM ranking WHERE faction = 1 ORDER BY dRanking DESC LIMIT 1');
+		$qr = $this->database->prepare('SELECT * FROM ranking WHERE faction = 1 ORDER BY dRanking DESC LIMIT 1');
 		$qr->execute();
 		$aw = $qr->fetch();
 		$rRanking = $aw['id'];
@@ -33,7 +39,7 @@ class FactionRankingManager extends Manager {
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$qr = $db->prepare('SELECT *
+		$qr = $this->database->prepare('SELECT *
 			FROM factionRanking AS fr
 			' . $formatWhere . '
 			' . $formatOrder . '
@@ -81,8 +87,7 @@ class FactionRankingManager extends Manager {
 	}
 
 	public function loadByRequest($request, $args = array()) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT *
+		$qr = $this->database->prepare('SELECT *
 			FROM factionRanking AS fr
 			' . $request
 		);
@@ -114,8 +119,7 @@ class FactionRankingManager extends Manager {
 	}
 
 	public function add(FactionRanking $fr) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
+		$qr = $this->database->prepare('INSERT INTO
 			factionRanking(rRanking, rFaction, points, pointsPosition, pointsVariation, newPoints, general, generalPosition, generalVariation, 
 				wealth, wealthPosition, wealthVariation, territorial, territorialPosition, territorialVariation)
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
@@ -137,7 +141,7 @@ class FactionRankingManager extends Manager {
 			$fr->territorialVariation
 		));
 
-		$fr->id = $db->lastInsertId();
+		$fr->id = $this->database->lastInsertId();
 
 		$this->_Add($fr);
 	}
@@ -146,8 +150,7 @@ class FactionRankingManager extends Manager {
 		$rankings = $this->_Save();
 
 		foreach ($rankings AS $fr) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE factionRanking
+			$qr = $this->database->prepare('UPDATE factionRanking
 				SET	id = ?,
 					rRanking = ?,
 					rFaction = ?,

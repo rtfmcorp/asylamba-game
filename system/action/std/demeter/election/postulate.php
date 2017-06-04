@@ -8,49 +8,50 @@
 #ministerchoice
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Demeter\Model\Election\Candidate;
 use Asylamba\Modules\Demeter\Model\Forum\ForumTopic;
 use Asylamba\Modules\Demeter\Model\Election\Vote;
 use Asylamba\Modules\Demeter\Model\Color;
-use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Zeus\Model\Player;
 
-$rElection			 = Utils::getHTTPData('relection');
-$program			 = Utils::getHTTPData('program');
-$chiefChoice		 = Utils::getHTTPData('chiefchoice');
-$treasurerChoice	 = Utils::getHTTPData('treasurerchoice');
-$warlordChoice		 = Utils::getHTTPData('warlordchoice');
-$ministerChoice		 = Utils::getHTTPData('ministerchoice');
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
+$colorManager = $this->getContainer()->get('demeter.color_manager');
+$electionManager = $this->getContainer()->get('demeter.election_manager');
+$candidateManager = $this->getContainer()->get('demeter.candidate_manager');
+$topicManager = $this->getContainer()->get('demeter.forum_topic_manager');
+$voteManager = $this->getContainer()->get('demeter.vote_manager');
+$entityManager = $this->getContainer()->get('entity_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+
+$rElection			 = $request->query->get('relection');
+$program			 = $request->request->get('program');
+$chiefChoice		 = $request->request->get('chiefchoice');
+$treasurerChoice	 = $request->request->get('treasurerchoice');
+$warlordChoice		 = $request->request->get('warlordchoice');
+$ministerChoice		 = $request->request->get('ministerchoice');
 
 if ($rElection !== FALSE && $program !== FALSE) {
-	$_ELM = ASM::$elm->getCurrentSession();
-	ASM::$elm->newSession();
-	ASM::$elm->load(array('id' => $rElection));
-
-	if (ASM::$elm->size() > 0) {
-		if (ASM::$elm->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
+	if (($election = $electionManager->get($rElection)) !== null) {
+		if ($election->rColor == $session->get('playerInfo')->get('color')) {
 			$chiefChoice = 1;
 			$treasurerChoice = 1;
 			$warlordChoice = 1;
 			$ministerChoice = 1;
 
-			if (CTR::$data->get('playerInfo')->get('status') > PAM_STANDARD) {
-				$_CLM = ASM::$clm->getCurrentSession();
-				ASM::$clm->newSession();
-				ASM::$clm->load(array('id' => CTR::$data->get('playerInfo')->get('color')));
+			if ($session->get('playerInfo')->get('status') > Player::STANDARD) {
+				$faction = $colorManager->get($session->get('playerInfo')->get('color'));
 
-				$_CAM = ASM::$cam->getCurrentSession();
-				ASM::$cam->newSession();
-				ASM::$cam->load(array('rPlayer' => CTR::$data->get('playerId'), 'rElection' => $rElection));
-
-				if (ASM::$clm->get()->electionStatement == Color::CAMPAIGN) {
+				if ($faction->electionStatement == Color::CAMPAIGN) {
 					if ($chiefChoice !== NULL && $treasurerChoice !== FALSE && $warlordChoice !== FALSE && $ministerChoice !== FALSE) {
-						if (ASM::$cam->size() == 0) {
+						if (($candidate = $candidateManager->getByElectionAndPlayer($election, $playerManager->get($session->get('playerId')))) === null) {
 							$candidate = new Candidate();
 
 							$candidate->rElection = $rElection;
-							$candidate->rPlayer = CTR::$data->get('playerId');
+							$candidate->rPlayer = $session->get('playerId');
 							$candidate->chiefChoice = $chiefChoice;
 							$candidate->treasurerChoice = $treasurerChoice;
 							$candidate->warlordChoice = $warlordChoice;
@@ -58,54 +59,50 @@ if ($rElection !== FALSE && $program !== FALSE) {
 							$candidate->dPresentation = Utils::now();
 							$candidate->program = $program;
 
-							ASM::$cam->add($candidate);
+							$candidateManager->add($candidate);
 
 							$topic = new ForumTopic();
-							$topic->title = 'Candidat ' . CTR::$data->get('playerInfo')->get('name');
+							$topic->title = 'Candidat ' . $session->get('playerInfo')->get('name');
 							$topic->rForum = 30;
 							$topic->rPlayer = $candidate->rPlayer;
-							$topic->rColor = CTR::$data->get('playerInfo')->get('color');
+							$topic->rColor = $session->get('playerInfo')->get('color');
 							$topic->dCreation = Utils::now();
 							$topic->dLastMessage = Utils::now();
 
-							ASM::$tom->add($topic);
+							$topicManager->add($topic);
 
-							if (CTR::$data->get('playerInfo')->get('color') == 4) {
+							if ($session->get('playerInfo')->get('color') == 4) {
 								$vote = new Vote();
 
-								$vote->rPlayer = CTR::$data->get('playerId');
-								$vote->rCandidate = CTR::$data->get('playerId');
-								$vote->rElection = ASM::$elm->get()->id;
+								$vote->rPlayer = $session->get('playerId');
+								$vote->rCandidate = $session->get('playerId');
+								$vote->rElection = $election->id;
 								$vote->dVotation = Utils::now();
 
-								ASM::$vom->add($vote);
+								$voteManager->add($vote);
 							}
 
-							CTR::redirect('faction/view-election/candidate-' . $candidate->id);
-							CTR::$alert->add('Candidature déposée.', ALERT_STD_SUCCESS);
+							$response->redirect('faction/view-election/candidate-' . $candidate->id);
+							$session->addFlashbag('Candidature déposée.', Flashbag::TYPE_SUCCESS);
 						} else {
-							ASM::$cam->deleteById(ASM::$cam->get()->getId());
-							CTR::$alert->add('Candidature retirée.', ALERT_STD_SUCCESS);
+							$entityManager->remove($candidate);
+							$session->addFlashbag('Candidature retirée.', Flashbag::TYPE_SUCCESS);
 						}
 					} else {
-						CTR::$alert->add('Informations manquantes sur les choix.', ALERT_STD_ERROR);	
+						throw new ErrorException('Informations manquantes sur les choix.');	
 					}
 				} else {
-					CTR::$alert->add('Vous ne pouvez présenter ou retirer votre candidature qu\'en période de campagne.', ALERT_STD_ERROR);
+					throw new ErrorException('Vous ne pouvez présenter ou retirer votre candidature qu\'en période de campagne.');
 				}
-
-				ASM::$cam->changeSession($_CAM);
-				ASM::$clm->changeSession($_CLM);
 			} else {
-				CTR::$alert->add('Vous ne pouvez pas vous présenter, vous ne faite pas partie de l\'élite.', ALERT_STD_ERROR);
+				throw new ErrorException('Vous ne pouvez pas vous présenter, vous ne faite pas partie de l\'élite.');
 			}
 		} else {
-			CTR::$alert->add('Cette election ne se déroule pas dans la faction du joueur.', ALERT_STD_ERROR);
+			throw new ErrorException('Cette election ne se déroule pas dans la faction du joueur.');
 		}
 	} else {
-		CTR::$alert->add('Cette election n\'existe pas.', ALERT_STD_ERROR);
+		throw new ErrorException('Cette election n\'existe pas.');
 	}
-	ASM::$elm->changeSession($_ELM);
 } else {
-	CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
+	throw new ErrorException('Informations manquantes.');
 }

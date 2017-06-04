@@ -1,7 +1,5 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Chronos;
@@ -10,56 +8,45 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Athena\Model\RecyclingMission;
 use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Modules\Ares\Model\Commander;
-use Asylamba\Modules\Promethee\Model\Technology;
 
-if (CTR::$get->exist('relatedplace')) {
-	$S_OBM2 = ASM::$obm->getCurrentSession();
-	ASM::$obm->newSession();
-	ASM::$obm->load(array('rPlace' => CTR::$get->get('relatedplace')));
-	
-	if (ASM::$obm->size() == 1) {
-		$defaultBase = ASM::$obm->get();
-	} else {
-		CTR::redirect('404');
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
+$session = $this->getContainer()->get('app.session');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
+$spyReportManager = $this->getContainer()->get('artemis.spy_report_manager');
+$recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
+$technologyManager = $this->getContainer()->get('promethee.technology_manager');
+
+if ($request->query->has('relatedplace')) {
+	if (($defaultBase = $orbitalBaseManager->get($request->query->get('relatedplace'))) === null) {
+		$response->redirect('404');
 	}
-	
-	ASM::$obm->changeSession($S_OBM2);
 }
 
 if (isset($defaultBase)) {
 	# load the commanders of the default base in a session
-	$S_COM1 = ASM::$com->getCurrentSession();
-	ASM::$com->newSession();
-	ASM::$com->load(array('c.rBase' => $defaultBase->getRPlace(), 'c.statement' => array(Commander::AFFECTED, Commander::MOVING)));
-	$localCommandersSession = ASM::$com->getCurrentSession();
-
+	$localCommanders = $commanderManager->getBaseCommanders($defaultBase->getRPlace(), [Commander::AFFECTED, Commander::MOVING]);
 	# load all the commanders moving in a session
-	ASM::$com->newSession();
-	ASM::$com->load(array('c.rPlayer' => CTR::$data->get('playerId'), 'c.statement' => Commander::MOVING));
-	$movingCommandersSession = ASM::$com->getCurrentSession();
-	ASM::$com->changeSession($S_COM1);
-
+	$movingCommanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::MOVING]);
+	
 	# load last report
 	$placesId = array();
 	foreach ($places as $place) {
 		$placesId[] = $place->id;
 	}
 
-	$S_LRM_MAP = ASM::$lrm->getCurrentSession();
-	ASM::$lrm->newSession();
-	ASM::$lrm->load(array('rPlayerAttacker' => CTR::$data->get('playerId'), 'r.rPlace' => $placesId), array('r.dFight', 'DESC'), array(0, 30));
-
-	$S_SRM_MAP = ASM::$srm->getCurrentSession();
-	ASM::$srm->newSession();
-	ASM::$srm->load(array('rPlayer' => CTR::$data->get('playerId'), 'rPlace' => $placesId), array('dSpying', 'DESC'), array(0, 30));
+	$S_SRM_MAP = $spyReportManager->getCurrentSession();
+	$spyReportManager->newSession();
+	$spyReportManager->load(array('rPlayer' => $session->get('playerId'), 'rPlace' => $placesId), array('dSpying', 'DESC'), array(0, 30));
 
 	# load the technologies
-	$technologies = new Technology(CTR::$data->get('playerId'));
+	$technologies = $technologyManager->getPlayerTechnology($session->get('playerId'));
 
 	# load recycling missions
-	$S_REM1 = ASM::$rem->getCurrentSession();
-	ASM::$rem->newSession();
-	ASM::$rem->load(array('rBase' => $defaultBase->rPlace, 'statement' => array(RecyclingMission::ST_BEING_DELETED, RecyclingMission::ST_ACTIVE)));
+	$S_REM1 = $recyclingMissionManager->getCurrentSession();
+	$recyclingMissionManager->newSession();
+	$recyclingMissionManager->load(array('rBase' => $defaultBase->rPlace, 'statement' => array(RecyclingMission::ST_BEING_DELETED, RecyclingMission::ST_ACTIVE)));
 
 	# header part
 	echo '<div class="header" data-sector-color="' . $places[0]->sectorColor . '" data-distance="' . Format::numberFormat(Game::getDistance($defaultBase->xSystem, $places[0]->xSystem, $defaultBase->ySystem, $places[0]->ySystem)) . '">';
@@ -83,13 +70,12 @@ if (isset($defaultBase)) {
 		echo '<div class="system">';
 			echo '<ul>';
 				echo '<li class="star"></li>';
-
-			for ($i = 0; $i < count($places); $i++) {
-				$place = $places[$i];
-
+				
+			foreach ($places as $place) {
+				$position = $place->position - 1;
 				echo '<li class="place color' . $place->playerColor . '">';
-					echo '<a href="#" class="openplace" data-target="' . $i . '">';
-						echo '<strong>' . $place->position . '</strong>';
+					echo '<a href="#" class="openplace" data-target="' . $position . '">';
+						echo '<strong>' . $position . '</strong>';
 						if ($place->typeOfPlace == 1) {
 							echo '<img class="land" src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '-' . Game::getSizeOfPlanet($place->population) . '.png" />';
 						} else {
@@ -110,12 +96,12 @@ if (isset($defaultBase)) {
 				echo '</li>';
 
 				// noAJAX
-				echo '<li class="action color' . $place->playerColor . '" id="place-' . $i . '" ' . (isset($noAJAX) && $noAJAX && CTR::$get->equal('place', $place->id) ? 'style="width: 565px;"' : NULL) . '>';
+				echo '<li class="action color' . $place->playerColor . '" id="place-' . $position . '" ' . (isset($noAJAX) && $noAJAX && (int) $request->query->get('place') === $place->id ? 'style="width: 565px;"' : NULL) . '>';
 					echo '<div class="content">';
 						echo '<div class="column info">';
-							for ($j = 0; $j < ASM::$srm->size(); $j++) { 
-								if (ASM::$srm->get($j)->rPlace == $place->id) {
-									echo '<a href="' . APP_ROOT . 'fleet/view-spyreport/report-' . ASM::$srm->get($j)->id . '" class="last-spy-link hb" title="voir le rapport d\'espionnage le plus récent"><img src="' . MEDIA . 'map/spy/last-spy.png" alt="" /></a>';
+							for ($j = 0; $j < $spyReportManager->size(); $j++) { 
+								if ($spyReportManager->get($j)->rPlace == $place->id) {
+									echo '<a href="' . APP_ROOT . 'fleet/view-spyreport/report-' . $spyReportManager->get($j)->id . '" class="last-spy-link hb" title="voir le rapport d\'espionnage le plus récent"><img src="' . MEDIA . 'map/spy/last-spy.png" alt="" /></a>';
 									break;
 								}
 							}
@@ -239,10 +225,12 @@ if (isset($defaultBase)) {
 							echo '</p>';
 
 							if ($place->typeOfPlace == 1) {
-								for ($j = 0; $j < ASM::$lrm->size(); $j++) { 
-									if (ASM::$lrm->get($j)->rPlace == $place->id) {
+								$reports = $this->getContainer()->get('ares.live_report_manager')->getAttackReportsByPlaces($session->get('playerId'), $placesId);
+
+								foreach ($reports as $report) { 
+									if ($report->rPlace == $place->id) {
 										echo '<hr />';
-										echo '<p><em>Dernier pillage ' . Chronos::transform(ASM::$lrm->get($j)->dFight) . '.</em></p>';
+										echo '<p><em>Dernier pillage ' . Chronos::transform($report->dFight) . '.</em></p>';
 										break;
 									}
 								}
@@ -259,6 +247,5 @@ if (isset($defaultBase)) {
 	echo '</div>';
 }
 
-ASM::$srm->changeSession($S_SRM_MAP);
-ASM::$lrm->changeSession($S_LRM_MAP);
-ASM::$rem->changeSession($S_REM1);
+$spyReportManager->changeSession($S_SRM_MAP);
+$recyclingMissionManager->changeSession($S_REM1);

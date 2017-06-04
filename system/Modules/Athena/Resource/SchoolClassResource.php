@@ -1,7 +1,7 @@
 <?php
 namespace Asylamba\Modules\Athena\Resource;
 
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Exception\ErrorException;
 
 class SchoolClassResource {
 	private static $classes = array(
@@ -39,8 +39,7 @@ class SchoolClassResource {
 				return FALSE;
 			}
 		} else {
-			CTR::$alert->add('info inconnue dans getInfo de SchoolClassResource', ALT_BUG_ERROR);
-			return FALSE;
+			throw new ErrorException('info inconnue dans getInfo de SchoolClassResource');
 		}
 	}
 

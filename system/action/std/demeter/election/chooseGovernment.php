@@ -2,61 +2,58 @@
 #rplayer	id du joueur
 #department
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Library\Flashbag;
 
-$rPlayer = Utils::getHTTPData('rplayer');
-$department = Utils::getHTTPData('department');
+
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$notificationManager = $this->getContainer()->get('hermes.notification_manager');
+
+$rPlayer = $request->request->get('rplayer');
+$department = $request->query->get('department');
 
 if ($rPlayer !== FALSE && $department !== FALSE) {
-	$_PAM2 = ASM::$pam->getCurrentsession();
-	ASM::$pam->newSession();
-	ASM::$pam->load(array('status' => $department, 'rColor' => CTR::$data->get('playerInfo')->get('color')));
-	if (ASM::$pam->size() == 0) {
-		if (CTR::$data->get('playerInfo')->get('status') == PAM_CHIEF) {
-			$_PAM = ASM::$pam->getCurrentsession();
-			ASM::$pam->newSession();
-			ASM::$pam->load(array('id' => $rPlayer));
-
-			if (ASM::$pam->size() > 0) {
-				if (ASM::$pam->get()->rColor == CTR::$data->get('playerInfo')->get('color')) {
-					if (ASM::$pam->get()->status == PAM_PARLIAMENT) {
-						if ($department > PAM_PARLIAMENT && $department < PAM_CHIEF) {
-							ASM::$pam->get()->status = $department;
+	if (($minister = $playerManager->getGovernmentMember($session->get('playerInfo')->get('color'), $department)) === null) {
+		if ($session->get('playerInfo')->get('status') == Player::CHIEF) {
+			if (($appointee = $playerManager->get($rPlayer)) !== null) {
+				if ($appointee->rColor == $session->get('playerInfo')->get('color')) {
+					if ($appointee->status == Player::PARLIAMENT) {
+						if ($department > Player::PARLIAMENT && $department < Player::CHIEF) {
+							$appointee->status = $department;
 							
-							$statusArray = ColorResource::getInfo(ASM::$pam->get()->rColor, 'status');
+							$statusArray = ColorResource::getInfo($appointee->rColor, 'status');
 							$notif = new Notification();
 							$notif->setRPlayer($rPlayer);
 							$notif->setTitle('Nomination au gouvernement');
 							$notif->addBeg()
 								->addTxt('Vous avez été choisi pour être le ' . $statusArray[$department - 1] . ' de votre faction.');
-							ASM::$ntm->add($notif);
+							$notificationManager->add($notif);
 
-							CTR::$alert->add(ASM::$pam->get()->name . ' a rejoint votre gouvernement.', ALERT_STD_SUCCESS);	
+							$this->getContainer()->get('entity_manager')->flush($appointee);
+							$session->addFlashbag($appointee->name . ' a rejoint votre gouvernement.', Flashbag::TYPE_SUCCESS);	
 						} else {
-						CTR::$alert->add('Ce département est inconnu.', ALERT_STD_ERROR);
-					}
+							throw new ErrorException('Ce département est inconnu.');
+						}
 					} else {
-						CTR::$alert->add('Vous ne pouvez choisir qu\'un membre du sénat.', ALERT_STD_ERROR);
+						throw new ErrorException('Vous ne pouvez choisir qu\'un membre du sénat.');
 					}
 				} else {
-					CTR::$alert->add('Vous ne pouvez pas choisir un joueur d\'une autre faction.', ALERT_STD_ERROR);
+					throw new ErrorException('Vous ne pouvez pas choisir un joueur d\'une autre faction.');
 				}
 			} else {
-				CTR::$alert->add('Ce joueur n\'existe pas.', ALERT_STD_ERROR);
+				throw new ErrorException('Ce joueur n\'existe pas.');
 			}
-
-			ASM::$pam->changeSession($_PAM);
 		} else {
-			CTR::$alert->add('Vous n\'êtes pas le chef de votre faction.', ALERT_STD_ERROR);	
+			throw new ErrorException('Vous n\'êtes pas le chef de votre faction.');	
 		}
 	} else {
-		CTR::$alert->add('Quelqu\'un occupe déjà ce poste.', ALERT_STD_ERROR);	
+		throw new ErrorException('Quelqu\'un occupe déjà ce poste.');	
 	}
-	ASM::$pam->changeSession($_PAM2);
 } else {
-	CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
+	throw new ErrorException('Informations manquantes.');
 }

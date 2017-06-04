@@ -1,13 +1,15 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
+$session = $this->getContainer()->get('app.session');
 
-if (CTR::getPage() == 'inscription' && (CTR::$get->get('step') == 1 || !CTR::$get->exist('step'))) {
+if ($response->getPage() == 'inscription' && ($request->query->get('step') == 1 || !$request->query->has('step'))) {
 	$color = 'color0';
-} elseif (CTR::getPage() == 'inscription') {
-	$color = 'color' . CTR::$data->get('inscription')->get('ally');
+} elseif ($response->getPage() == 'inscription' && $session->exist('inscription')) {
+	$color = 'color' . $session->get('inscription')->get('ally');
 } else {
-	$color = 'color' . CTR::$data->get('playerInfo')->get('color');
+	$color = 'color' . $session->get('playerInfo')->get('color');
 }
 
 echo '<!DOCTYPE html>';
@@ -15,9 +17,9 @@ echo '<html lang="fr">';
 
 echo '<head>';
 	echo '<title>';
-		echo (CTR::getPage() == 'inscription') 
-			? CTR::getTitle()
-			: CTR::getTitle() . ' — ' . CTR::$data->get('playerInfo')->get('name');
+		echo ($response->getPage() == 'inscription') 
+			? $response->getTitle()
+			: $response->getTitle() . ' — ' . $session->get('playerInfo')->get('name');
 		echo ' — ' . APP_SUBNAME;
 		echo ' — ' . APP_NAME;
 	echo '</title>';
@@ -28,7 +30,7 @@ echo '<head>';
 	echo '<link href="http://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic" rel="stylesheet" type="text/css">';
 
 	if (COLORSTYLE) {
-		echo (CTR::getPage() == 'inscription' && (CTR::$get->get('step') == 1 || !CTR::$get->exist('step')))
+		echo ($response->getPage() == 'inscription' && !$request->query->has('step') || ($request->query->get('step') == 1))
 			? '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.v3.color1.css" />'
 			: '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.v3.' . $color . '.css" />';
 	} else {
@@ -46,7 +48,7 @@ if (ANALYTICS) {
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-42636532-11', 'auto');
+  ga('create', 'UA-42636532-13', 'auto');
   ga('send', 'pageview');
 
 </script>
@@ -57,13 +59,13 @@ echo '<body ';
 	echo 'class="';
 		echo $color;
 		echo ' no-scrolling';
-		echo (CTR::getPage() == 'inscription') ? ' inscription' : '';
+		echo ($response->getPage() == 'inscription') ? ' inscription' : '';
 	echo '" ';
-	if (CTR::$data->exist('sftr')) {
-		echo 'data-init-sftr="' . CTR::$data->get('sftr') . '"';
-		CTR::$data->remove('sftr');
-	} elseif (CTR::$get->exist('sftr')) {
-		echo 'data-init-sftr="' . CTR::$get->get('sftr') . '"';
+	if ($session->exist('sftr')) {
+		echo 'data-init-sftr="' . $session->get('sftr') . '"';
+		$session->remove('sftr');
+	} elseif ($request->query->has('sftr')) {
+		echo 'data-init-sftr="' . $request->query->get('sftr') . '"';
 	} else {
 		echo 'data-init-sftr="2"';
 	}

@@ -9,7 +9,9 @@
 
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Chronos;
-use Asylamba\Classes\Worker\CTR;
+
+$request = $this->getContainer()->get('app.request');
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
 
 $i = 0;
 
@@ -20,7 +22,7 @@ echo '<div class="component report">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="tool">';
-				echo '<span><a href="' . Format::actionBuilder('deleteallspyreport') . '">tout supprimer</a></span>';
+				echo '<span><a href="' . Format::actionBuilder('deleteallspyreport', $sessionToken) . '">tout supprimer</a></span>';
 			echo '</div>';
 			if (count($spyreport_listSpy) > 0) {
 				echo '<div class="set-item">';
@@ -36,7 +38,7 @@ echo '<div class="component report">';
 							echo '</div>';
 
 							echo '<div class="right">';
-								echo '<a class="' . ((CTR::$get->equal('report', $r->id) OR (!CTR::$get->exist('report') AND $i == 0))  ? 'active' : NULL) . '" href="' . APP_ROOT . 'fleet/view-spyreport/report-' . $r->id . '"></a>';
+								echo '<a class="' . (($request->query->get('report') === $r->id OR (!$request->query->has('report') AND $i == 0))  ? 'active' : NULL) . '" href="' . APP_ROOT . 'fleet/view-spyreport/report-' . $r->id . '"></a>';
 							echo '</div>';
 						echo '</div>';
 

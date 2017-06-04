@@ -6,25 +6,28 @@ use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
-$ship = CTR::$get->get('ship');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+
+$ship = $request->query->get('ship');
 
 switch(ShipResource::getInfo($ship, 'class')) {
 	case 0:
-		$bonusSPE = CTR::$data->get('playerBonus')->get(PlayerBonus::FIGHTER_SPEED);
-		$bonusATT = CTR::$data->get('playerBonus')->get(PlayerBonus::FIGHTER_ATTACK);
-		$bonusDEF = CTR::$data->get('playerBonus')->get(PlayerBonus::FIGHTER_DEFENSE); break;
+		$bonusSPE = $session->get('playerBonus')->get(PlayerBonus::FIGHTER_SPEED);
+		$bonusATT = $session->get('playerBonus')->get(PlayerBonus::FIGHTER_ATTACK);
+		$bonusDEF = $session->get('playerBonus')->get(PlayerBonus::FIGHTER_DEFENSE); break;
 	case 1:
-		$bonusSPE = CTR::$data->get('playerBonus')->get(PlayerBonus::CORVETTE_SPEED);
-		$bonusATT = CTR::$data->get('playerBonus')->get(PlayerBonus::CORVETTE_ATTACK);
-		$bonusDEF = CTR::$data->get('playerBonus')->get(PlayerBonus::CORVETTE_DEFENSE); break;
+		$bonusSPE = $session->get('playerBonus')->get(PlayerBonus::CORVETTE_SPEED);
+		$bonusATT = $session->get('playerBonus')->get(PlayerBonus::CORVETTE_ATTACK);
+		$bonusDEF = $session->get('playerBonus')->get(PlayerBonus::CORVETTE_DEFENSE); break;
 	case 2:
-		$bonusSPE = CTR::$data->get('playerBonus')->get(PlayerBonus::FRIGATE_SPEED);
-		$bonusATT = CTR::$data->get('playerBonus')->get(PlayerBonus::FRIGATE_ATTACK);
-		$bonusDEF = CTR::$data->get('playerBonus')->get(PlayerBonus::FRIGATE_DEFENSE); break;
+		$bonusSPE = $session->get('playerBonus')->get(PlayerBonus::FRIGATE_SPEED);
+		$bonusATT = $session->get('playerBonus')->get(PlayerBonus::FRIGATE_ATTACK);
+		$bonusDEF = $session->get('playerBonus')->get(PlayerBonus::FRIGATE_DEFENSE); break;
 	case 3:
-		$bonusSPE = CTR::$data->get('playerBonus')->get(PlayerBonus::DESTROYER_SPEED);
-		$bonusATT = CTR::$data->get('playerBonus')->get(PlayerBonus::DESTROYER_ATTACK);
-		$bonusDEF = CTR::$data->get('playerBonus')->get(PlayerBonus::DESTROYER_DEFENSE); break;
+		$bonusSPE = $session->get('playerBonus')->get(PlayerBonus::DESTROYER_SPEED);
+		$bonusATT = $session->get('playerBonus')->get(PlayerBonus::DESTROYER_ATTACK);
+		$bonusDEF = $session->get('playerBonus')->get(PlayerBonus::DESTROYER_DEFENSE); break;
 	default:
 		$bonusSPE = 0;
 		$bonusATT = 0;

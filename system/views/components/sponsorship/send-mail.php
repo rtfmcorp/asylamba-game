@@ -1,7 +1,9 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Format;
+
+$session = $this->getContainer()->get('app.session');
+$sessionToken = $session->get('token');
 
 # display
 echo '<div class="component new-message">';
@@ -14,13 +16,13 @@ echo '<div class="component new-message">';
 
 			echo '<p>Copiez ce lien</p>';
 			echo '<p class="input input-area">';
-				echo '<textarea style="height: 60px;">' . (GETOUT_ROOT . 'action/a-invitation/i-' . CTR::$data->get('playerId') . '/s-' . APP_ID) . '</textarea>';
+				echo '<textarea style="height: 60px;">' . ($this->getContainer()->getParameter('getout_root') . 'action/a-invitation/i-' . $session->get('playerId') . '/s-' . $this->getContainer()->getParameter('server_id')) . '</textarea>';
 			echo '</p>';
 
 
 			echo '<h4>Envoyez un email</h4>';
 		
-			echo '<form action="' . Format::actionBuilder('sendsponsorshipemail') . '" method="post">';
+			echo '<form action="' . Format::actionBuilder('sendsponsorshipemail', $sessionToken) . '" method="post">';
 				echo '<p>Adresse e-mail du filleul</p>';
 				echo '<p class="input input-text">';
 					echo '<input type="email" name="email" placeholder="e-mail" required />';

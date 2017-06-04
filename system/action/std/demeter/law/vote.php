@@ -3,48 +3,41 @@
 #choice le vote du joueur
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Demeter\Model\Law\VoteLaw;
 use Asylamba\Modules\Demeter\Model\Law\Law;
+use Asylamba\Modules\Zeus\Model\Player;
 
-$rLaw = Utils::getHTTPData('rlaw');
-$choice = Utils::getHTTPData('choice');
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+$lawManager = $this->getContainer()->get('demeter.law_manager');
+$voteLawManager = $this->getContainer()->get('demeter.vote_law_manager');
+
+$rLaw = $request->query->get('rlaw');
+$choice = $request->query->get('choice');
 
 if ($rLaw !== FALSE && $choice !== FALSE) {
-	if (CTR::$data->get('playerInfo')->get('status') == PAM_PARLIAMENT) {
-		$_LAM = ASM::$lam->getCurrentSession();
-		ASM::$lam->newSession();
-		ASM::$lam->load(array('id' => $rLaw));
+	if ($session->get('playerInfo')->get('status') == Player::PARLIAMENT) {
 
-		if (ASM::$lam->size() > 0) {
-			if (ASM::$lam->get()->statement == Law::VOTATION) {
-				$_VLM = ASM::$vlm->getCurrentSession();
-				ASM::$vlm->newSession();
-				ASM::$vlm->load(array('rPlayer' => CTR::$data->get('playerId'), 'rLaw' => $rLaw));
-
-				if (ASM::$vlm->size() == 0) {
-					$vote = new VoteLaw();
-					$vote->rPlayer = CTR::$data->get('playerId');
-					$vote->rLaw = $rLaw;
-					$vote->vote = $choice;
-					$vote->dVotation = Utils::now();
-					ASM::$vlm->add($vote);
-				} else {
-					CTR::$alert->add('Vous avez déjà voté.', ALERT_STD_ERROR);
+		if (($law = $lawManager->get($rLaw)) !== null) {
+			if ($law->statement == Law::VOTATION) {
+				if ($voteLawManager->hasVoted($session->get('playerId'), $law)) {
+					throw new ErrorException('Vous avez déjà voté.');
 				}
+				$vote = new VoteLaw();
+				$vote->rPlayer = $session->get('playerId');
+				$vote->rLaw = $rLaw;
+				$vote->vote = $choice;
+				$vote->dVotation = Utils::now();
+				$voteLawManager->add($vote);
 			} else {
-				CTR::$alert->add('Cette loi est déjà votée.', ALERT_STD_ERROR);
+				throw new ErrorException('Cette loi est déjà votée.');
 			}
-			ASM::$vlm->changeSession($_VLM);
 		} else {
-			CTR::$alert->add('Cette loi n\'existe pas.', ALERT_STD_ERROR);
+			throw new ErrorException('Cette loi n\'existe pas.');
 		}
-
-		ASM::$cam->changeSession($_LAM);
 	} else {
-		CTR::$alert->add('Vous n\'avez pas le droit de voter.', ALERT_STD_ERROR);
+		throw new ErrorException('Vous n\'avez pas le droit de voter.');
 	}
 } else {
-	CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
+	throw new ErrorException('Informations manquantes.');
 }

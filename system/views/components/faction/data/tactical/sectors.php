@@ -1,12 +1,9 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\Format;
 
-$_CLM = ASM::$clm->getCurrentSession();
-ASM::$clm->newSession();
-ASM::$clm->load();
+$colorManager = $this->getContainer()->get('demeter.color_manager');
+$database = $this->getContainer()->get('database');
 
 $qr = 'SELECT
 		se.id AS id,
@@ -15,18 +12,14 @@ $qr = 'SELECT
 		se.points AS points,
 		(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rSector = se.id) AS nbc0,';
 
-for ($i = 1; $i < ASM::$clm->size(); $i++) {
-	if ($i < ASM::$clm->size() - 1) {
-		$qr .= '(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = ' . ASM::$clm->get($i)->id . ' AND sy.rSector = se.id) AS nbc' . ASM::$clm->get($i)->id .',';
-	} else {
-		$qr .= '(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = ' . ASM::$clm->get($i)->id . ' AND sy.rSector = se.id) AS nbc' . ASM::$clm->get($i)->id;
-	}
+$factions = $colorManager->getAll();
+foreach ($factions as $f) {
+	$qr .= '(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = ' . $f->id . ' AND sy.rSector = se.id) AS nbc' . $f->id .',';
 }
 
-$qr .= '	FROM sector AS se ORDER BY (nbc' . $faction->id . ' / nbc0) DESC';
+$qr = substr($qr, 0, -1) . ' FROM sector AS se ORDER BY (nbc' . $faction->id . ' / nbc0) DESC';
 
-$db = Database::getInstance();
-$qr = $db->prepare($qr);
+$qr = $database->prepare($qr);
 $qr->execute();
 $aw = $qr->fetchAll(); $qr->closeCursor();
 
@@ -59,8 +52,11 @@ echo '<div class="component">';
 				foreach ($sectors as $sector) {
 					$percents = array();
 					
-					for ($j = 1; $j < ASM::$clm->size(); $j++) {
-						$percents['color' . ASM::$clm->get($j)->id] = Format::percent($sector['nbc' . ASM::$clm->get($j)->id], $sector['nbc0']);
+					foreach ($factions as $f) {
+						if ($f->id === 0) {
+							continue;
+						}
+						$percents['color' . $f->id] = Format::percent($sector['nbc' . $f->id], $sector['nbc0']);
 					}
 
 					arsort($percents);
@@ -90,4 +86,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-ASM::$clm->changeSession($_CLM);

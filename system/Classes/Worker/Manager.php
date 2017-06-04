@@ -4,6 +4,8 @@ namespace Asylamba\Classes\Worker;
 
 use Asylamba\Classes\Library\Bug;
 
+use Asylamba\Classes\Database\Database;
+
 abstract class Manager {
     // SESSION MANAGER CORE
     /** @var string **/
@@ -11,8 +13,15 @@ abstract class Manager {
     protected $currentSession;
     /** @var array **/
     protected $sessions = array();
-
-    public function __construct() {
+	/** @var Database **/
+	protected $database;
+	
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database)
+	{
+		$this->database = $database;
         $this->newSession();
     }
 
@@ -25,7 +34,6 @@ abstract class Manager {
         } else {
             $session = new ManagerSession('_' . (count($this->sessions) + 1), $this->managerType, $uMode);
         }
-
         $this->currentSession = $session;
         $this->sessions[] = $session;
 
@@ -148,6 +156,15 @@ abstract class Manager {
         }
         return $savingList;
     }
+	
+	public function clean()
+	{
+		$this->sessions = [];
+		$this->objects = [];
+		$this->origin = [];
+		
+		$this->newSession();
+	}
 
     public function _EmptyCurrentSession() {
         $currentSessionId = $this->currentSession->getId();

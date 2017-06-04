@@ -3,31 +3,30 @@
 # content
 # title
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Demeter\Model\Forum\FactionNews;
 
-$content = Utils::getHTTPData('content');
-$title = Utils::getHTTPData('title');
+$factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+
+$content = $request->request->get('content');
+$title = $request->request->get('title');
 
 if ($title !== FALSE AND $content !== FALSE) {
-	if (CTR::$data->get('playerInfo')->get('status') >= 3) {
-		$S_FNM_1 = ASM::$fnm->getCurrentSession();
-		ASM::$fnm->newSession();
-
+	if ($session->get('playerInfo')->get('status') >= 3) {
 		$news = new FactionNews();
-
-		$news->rFaction = CTR::$data->get('playerInfo')->get('color');
+		$news->rFaction = $session->get('playerInfo')->get('color');
 		$news->title = $title;
-		$news->edit($content);
+		$factionNewsManager->edit($news, $content);
 		$news->dCreation = Utils::now();
 		
-		ASM::$fnm->add($news);
-		ASM::$fnm->changeSession($S_FNM_1);
+		$factionNewsManager->add($news);
 	} else {
-		CTR::$alert->add('Vous n\'avez pas le droit pour créer une annonce.', ALERT_STD_ERROR);
+		throw new ErrorException('Vous n\'avez pas le droit pour créer une annonce.');
 	}
 } else {
-	CTR::$alert->add('Manque d\'information.', ALERT_STD_FILLFORM);
+	throw new FormException('Manque d\'information.');
 }

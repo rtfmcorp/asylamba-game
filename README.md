@@ -9,7 +9,7 @@ Jeu de stragégie en ligne multi-joueur. Visitez [asylamba.com](http://asylamba.
 
 ![logo Asylamba](http://asylamba.com/public/media/files/sources/asylambacom.png)
 
-For the english version, follow this link : [English version](README.en.md) 
+For the english version, follow this link : [English version](README.en.md)
 
 Dépendances
 -----------
@@ -24,7 +24,7 @@ Installation
 
 Si vous le souhaitez, vous pouvez utiliser le [dépôt Docker](https://github.com/rtfmcorp/asylamba-docker) du projet pour installer votre environnement.
 
-Cette seciton traite uniquement de l'installation du jeu et suppose que votre environnement est prêt.
+Cette section traite uniquement de l'installation du jeu et suppose que votre environnement est prêt.
 
 Tout d'abord, vous devez cloner le dépôt du jeu. Pour ce faire, ouvrez une invite de commandes, et entrez la commande suivante :
 
@@ -41,8 +41,8 @@ composer install
 
 Vous pouvez ensuite suivre la procédure suivante :
 
-- copier `index.default.php` et le renommer en `index.php`, y modifier la constante `PUBLICR` avec votre chemin
-- copier `system/config/app.config.local.default.php` et le renommer `app.config.local.php`, y modifier la constante `APP_ROOT` et d'autres infos (connexion à la base de données, etc.)
+- copier `config/parameters.dist.yml` et le renommer en `parameters.yml`
+- copier `system/config/app.config.local.default.php` et le renommer `app.config.local.php`, y modifier la constante `APP_ROOT` et d'autres infos (connexion à la base de données, etc.) ainsi que la constante `PUBLICR` avec votre chemin
 - créer une base de données (nom correspondant à la constante `DEFAULT_SQL_DTB` du fichier du point précédent)
 
 A partir de là, vous pouvez accéder à une interface qui permet de créer toutes les tables de la base de données : `http://localhost/[votre chemin]/script`. Pour faire l'installation, cliquez sur le premier bouton "deploy.dbinstall". 

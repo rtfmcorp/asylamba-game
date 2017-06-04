@@ -39,7 +39,7 @@ echo '<div class="component profil thread">';
 				echo 'class="diary-avatar color' . $player_diaryRoplay->getRColor() . '" ';
 			echo '/>';
 
-			echo '<form method="POST" action="' . Format::actionBuilder('writemessage') . '">';
+			echo '<form method="POST" action="' . Format::actionBuilder('writemessage', $this->getContainer()->get('app.session')->get('token')) . '">';
 				echo '<input type="hidden" name="name" value="' . $player_diaryRoplay->getName() . '" />';
 
 				echo '<p class="input input-area">';

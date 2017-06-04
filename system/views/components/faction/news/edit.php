@@ -1,8 +1,12 @@
 <?php
-$S_FNM_C = ASM::$fnm->getCurrentSession();
-ASM::$fnm->changeSession($TOKEN_NEWS_LIST);
 
-$news = ASM::$fnm->getById(CTR::$get->get('news'));
+use Asylamba\Classes\Library\Format;
+
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
+$factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
+$request = $this->getContainer()->get('app.request');
+
+$news = $factionNewsManager->get($request->query->get('news'));
 
 echo '<div class="component new-message">';
 	echo '<div class="head skin-2">';
@@ -10,7 +14,7 @@ echo '<div class="component new-message">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<form action="' . Format::actionBuilder('editnews', ['id' => $news->id]) . '" method="POST" />';
+			echo '<form action="' . Format::actionBuilder('editnews', $sessionToken, ['id' => $news->id]) . '" method="POST" />';
 				echo '<p>Titre de l\'annonce</p>';
 				echo '<p class="input input-text"><input name="title" required value="' . $news->title . '"/></p>';
 
@@ -22,5 +26,3 @@ echo '<div class="component new-message">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-ASM::$fnm->changeSession($S_FNM_C);

@@ -11,143 +11,65 @@
 */
 namespace Asylamba\Modules\Hermes\Manager;
 
-use Asylamba\Classes\Worker\Manager;
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Modules\Hermes\Model\Notification;
 
-class NotificationManager extends Manager {
-	protected $managerType = '_Notification';
+class NotificationManager {
+    /** @var EntityManager **/
+    protected $entityManager;
+    
+    /**
+     * @param EntityManager $entityManager
+     */
+	public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+	}
+	
+	public function get($id)
+	{
+		return $this->entityManager->getRepository(Notification::class)->get($id);
+	}
+	
+	public function getUnreadNotifications($playerId)
+	{
+		return $this->entityManager->getRepository(Notification::class)->getUnreadNotifications($playerId);
+	}
+	
+	public function getPlayerNotificationsByArchive($playerId, $isArchived)
+	{
+		return $this->entityManager->getRepository(Notification::class)->getPlayerNotificationsByArchive($playerId, $isArchived);
+	}
+	
+	public function getAllByReadState($isReaded)
+	{
+		return $this->entityManager->getRepository(Notification::class)->getAllByReadState($isReaded);
+	}
 
-	public function load($where = array(), $order = array(), $limit = array()) {
-		$formatWhere = Utils::arrayToWhere($where);
-		$formatOrder = Utils::arrayToOrder($order);
-		$formatLimit = Utils::arrayToLimit($limit);
-
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT *
-			FROM notification
-			' . $formatWhere . '
-			' . $formatOrder . '
-			' . $formatLimit
-		);
-
-		foreach($where AS $v) {
-			if (is_array($v)) {
-				foreach ($v as $p) {
-					$valuesArray[] = $p;
-				}
-			} else {
-				$valuesArray[] = $v;
+	public function patchForMultiCombats($commanderPlayerId, $placePlayerId, $arrivedAt)
+	{
+		$notifications = $this
+			->entityManager
+			->getRepository(Notification::class)
+			->getMultiCombatNotifications($commanderPlayerId, $placePlayerId, $arrivedAt)
+		;
+		$nbNotifications = count($notifications);
+		if ($nbNotifications > 2) {
+			for ($i = 0; $i < $nbNotifications - 2; $i++) {
+				$this->entityManager->remove($notifications[$i]);
 			}
 		}
-
-		if(empty($valuesArray)) {
-			$qr->execute();
-		} else {
-			$qr->execute($valuesArray);
-		}
-
-		while($aw = $qr->fetch()) {
-			$n = new Notification();
-
-			$n->setId($aw['id']);
-			$n->setRPlayer($aw['rPlayer']);
-			$n->setTitle($aw['title']);
-			$n->setContent($aw['content']);
-			$n->setDSending($aw['dSending']);
-			$n->setReaded($aw['readed']);
-			$n->setArchived($aw['archived']);
-
-			$this->_Add($n);
-		}
+		$this->entityManager->flush(Notification::class);
+	}
+	
+	public function add(Notification $notification)
+    {
+        $this->entityManager->persist($notification);
+        $this->entityManager->flush($notification);
 	}
 
-	public function add(Notification $n) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
-			notification(rPlayer, title, content, dSending, readed, archived)
-			VALUES(?, ?, ?, ?, ?, ?)');
-		$qr->execute(array(
-			$n->getRPlayer(),
-			$n->getTitle(),
-			$n->getContent(),
-			$n->getDSending(),
-			$n->getReaded(),
-			$n->getArchived()
-		));
-
-		$n->setId($db->lastInsertId());
-
-		$this->_Add($n);
-	}
-
-	public function save() {
-		$notifications = $this->_Save();
-
-		foreach ($notifications AS $n) {
-			$db = Database::getInstance();
-			$qr = $db->prepare('UPDATE notification
-				SET	id = ?,
-					rPlayer = ?,
-					title = ?,
-					content = ?,
-					dSending = ?,
-					readed = ?,
-					archived = ?
-				WHERE id = ?');
-			$qr->execute(array(
-				$n->getId(),
-				$n->getRPlayer(),
-				$n->getTitle(),
-				$n->getContent(),
-				$n->getDSending(),
-				$n->getReaded(),
-				$n->getArchived(),
-				$n->getId()
-			));
-		}
-	}
-
-	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM notification WHERE id = ?');
-		$qr->execute(array($id));
-
-		$this->_Remove($id);
-		return TRUE;
-	}
-
-	public function deleteByRPlayer($rPlayer) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM notification WHERE rPlayer = ? AND archived = 0');
-		$qr->execute(array($rPlayer));
-
-		$nbrDeleted = 0;
-		for ($i = 0; $i < $this->size(); $i++) { 
-			if ($this->get($i)->getRPlayer() == $rPlayer) {
-				$nbrDeleted++;
-			}
-
-			$this->_Remove($this->get($i)->getId());
-		}
-
-		return $nbrDeleted;
-	}
-
-	public static function countAll($where = array()) {
-		$formatWhere = Utils::arrayToWhere($where);
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT 
-				COUNT(id) AS nbr
-			FROM notification
-			' . $formatWhere
-		);
-		foreach($where AS $v) {
-			$valuesArray[] = $v;
-		}
-		$qr->execute($valuesArray);
-		$aw = $qr->fetch();
-		return $aw['nbr'];
+	public function deleteByRPlayer($rPlayer)
+    {
+        return $this->entityManager->getRepository(Notification::class)->removePlayerNotifications($rPlayer);
 	}
 }

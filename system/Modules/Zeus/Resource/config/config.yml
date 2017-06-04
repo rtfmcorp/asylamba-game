@@ -1,0 +1,68 @@
+---
+parameters:
+    zeus.player.base_level: 1250
+    zeus.player.base_commander_level: 100
+    zeus.player.base_ap: 10
+    zeus.player.coeff_ap: 5
+
+    zeus.player.tax_coeff: 1
+
+    zeus.player.ally_inactive_time: 168     # 7 days
+    zeus.player.global_inactive_time: 360   # 15 days
+    zeus.player.inactive_time_limit: 600    # 25 days
+
+services:
+    zeus.player_manager:
+        class: Asylamba\Modules\Zeus\Manager\PlayerManager
+        arguments:
+            - "@entity_manager"
+            - "@gaia.galaxy_color_manager"
+            - "@gaia.sector_manager"
+            - "@hermes.notification_manager"
+            - "@athena.orbital_base_manager"
+            - "@gaia.place_manager"
+            - "@ares.commander_manager"
+            - "@demeter.color_manager"
+            - "@promethee.research_manager"
+            - "@athena.transaction_manager"
+            - "@athena.commercial_route_manager"
+            - "@promethee.technology_manager"
+            - "@zeus.player_bonus_manager"
+            - "@app.session"
+            - "%zeus.player.base_level"
+            - "%zeus.player.tax_coeff"
+            - "%server_id"
+            
+    zeus.player_bonus_manager:
+        class: Asylamba\Modules\Zeus\Manager\PlayerBonusManager
+        arguments:
+            - "@demeter.law_manager"
+            - "@demeter.color_manager"
+            - "@promethee.technology_manager"
+            - "@promethee.technology_helper"
+            - "@app.session"
+    
+    zeus.credit_transaction_manager:
+        class: Asylamba\Modules\Zeus\Manager\CreditTransactionManager
+        arguments:
+            - "@database"
+            
+    zeus.check_name_helper:
+        class: Asylamba\Modules\Zeus\Helper\CheckName
+        
+    zeus.player_helper:
+        class: Asylamba\Modules\Zeus\Helper\PlayerHelper
+        arguments:
+            - "@database"
+            
+    zeus.tutorial_helper:
+        class: Asylamba\Modules\Zeus\Helper\TutorialHelper
+        arguments:
+            - "@entity_manager"
+            - "@zeus.player_manager"
+            - "@athena.orbital_base_manager"
+            - "@athena.building_queue_manager"
+            - "@promethee.technology_queue_manager"
+            - "@promethee.technology_manager"
+            - "@app.session"
+         

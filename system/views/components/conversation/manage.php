@@ -3,17 +3,21 @@
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Hermes\Model\Conversation;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
+
+$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
+$conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
+$session = $this->getContainer()->get('app.session');
+$sessionToken = $session->get('token');
 
 echo '<div class="component player rank new-message">';
 	echo '<div class="head skin-2"></div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			if ($currentUser->convPlayerStatement == ConversationUser::US_ADMIN && ASM::$cvm->get()->type != Conversation::TY_SYSTEM) {
+			if ($currentUser->convPlayerStatement == ConversationUser::US_ADMIN && $conversationManager->get()->type != Conversation::TY_SYSTEM) {
 				echo '<h4>Ajouter un utilisateur</h4>';
 
-				echo '<form action="' . Format::actionBuilder('adduserconversation', ['conversation' => ASM::$cvm->get()->id]) . '" method="post">';
+				echo '<form action="' . Format::actionBuilder('adduserconversation', $sessionToken, ['conversation' => $conversationManager->get()->id]) . '" method="post">';
 					echo '<p class="input input-text">';
 						echo '<input class="autocomplete-hidden" name="recipients" type="hidden" />';
 						echo '<input autocomplete="off" class="autocomplete-player ac_input" name="name" type="text" />';
@@ -24,20 +28,20 @@ echo '<div class="component player rank new-message">';
 
 				echo '<h4>Modifier le titre</h4>';
 
-				echo '<form action="' . Format::actionBuilder('updatetitleconversation', ['conversation' => ASM::$cvm->get()->id]) . '" method="post">';
+				echo '<form action="' . Format::actionBuilder('updatetitleconversation', $sessionToken, ['conversation' => $conversationManager->get()->id]) . '" method="post">';
 					echo '<p class="input input-text">';
-						echo '<input name="title" type="text" value="' . ASM::$cvm->get()->title . '" />';
+						echo '<input name="title" type="text" value="' . $conversationManager->get()->title . '" />';
 					echo '</p>';
 
 					echo '<p><button type="submit">Enregistrer</button></p>';
 				echo '</form>';
 			}
 
-			if (ASM::$cvm->get()->type != Conversation::TY_SYSTEM) {
-				echo '<h4>' . ASM::$cum->size() . ' participants</h4>';
+			if ($conversationManager->get()->type != Conversation::TY_SYSTEM) {
+				echo '<h4>' . $conversationUserManager->size() . ' participants</h4>';
 
-				for ($i = 0; $i < ASM::$cum->size(); $i++) {
-					$player = ASM::$cum->get($i);
+				for ($i = 0; $i < $conversationUserManager->size(); $i++) {
+					$player = $conversationUserManager->get($i);
 					$status = ColorResource::getInfo($player->playerColor, 'status');
 					$status = $status[$player->playerStatus - 1];
 
@@ -59,14 +63,14 @@ echo '<div class="component player rank new-message">';
 
 			echo '<h4>Action</h4>';
 
-			echo '<a href="' . Format::actionBuilder('updatedisplayconversation', ['conversation' => ASM::$cvm->get()->id]) . '" class="more-button">';
+			echo '<a href="' . Format::actionBuilder('updatedisplayconversation', $sessionToken, ['conversation' => $conversationManager->get()->id]) . '" class="more-button">';
 				echo $currentUser->convStatement == ConversationUser::CS_DISPLAY
 					? 'Archiver la conversation'
 					: 'Désarchiver la conversation';
 			echo '</a>';
 
-			if (ASM::$cum->size() > 2 && ASM::$cvm->get()->type != Conversation::TY_SYSTEM) {
-				echo '<a href="' . Format::actionBuilder('leaveconversation', ['conversation' => ASM::$cvm->get()->id]) . '" class="more-button">';
+			if ($conversationUserManager->size() > 2 && $conversationManager->get()->type != Conversation::TY_SYSTEM) {
+				echo '<a href="' . Format::actionBuilder('leaveconversation', $sessionToken, ['conversation' => $conversationManager->get()->id]) . '" class="more-button">';
 					echo 'Quitter la conversation';
 				echo '</a>';
 			}

@@ -1,6 +1,6 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
+$session = $this->getContainer()->get('app.session');
 
 # background paralax
 echo '<div id="background-paralax" class="profil"></div>';
@@ -14,7 +14,7 @@ echo '<div id="content">';
 
 	echo '<form action="' . APP_ROOT . 'inscription/step-3" method="post" >';
 		include COMPONENT . 'invisible.php';
-		echo '<div class="component inscription color' . CTR::$data->get('inscription')->get('ally') . '">';
+		echo '<div class="component inscription color' . $session->get('inscription')->get('ally') . '">';
 			echo '<div class="head">';
 				echo '<h1>Profil</h1>';
 			echo '</div>';
@@ -22,10 +22,10 @@ echo '<div id="content">';
 				echo '<div class="body">';
 					echo '<h4>Choisissez votre nom dans le jeu</h4>';
 
-					if (CTR::$data->get('inscription')->exist('pseudo')) {
-						echo '<p><input type="text" name="pseudo" id="pseudo" maxlength="15" required disabled value="' . CTR::$data->get('inscription')->get('pseudo') . '" /></p>';
-					} elseif (CTR::$data->get('inscription')->get('portalPseudo') !== '') {
-						echo '<p><input type="text" name="pseudo" id="pseudo" maxlength="15" required placeholder="pseudo" value="' . CTR::$data->get('inscription')->get('portalPseudo') . '" /></p>';
+					if ($session->get('inscription')->exist('pseudo')) {
+						echo '<p><input type="text" name="pseudo" id="pseudo" maxlength="15" required disabled value="' . $session->get('inscription')->get('pseudo') . '" /></p>';
+					} elseif ($session->get('inscription')->get('portalPseudo') !== '') {
+						echo '<p><input type="text" name="pseudo" id="pseudo" maxlength="15" required placeholder="pseudo" value="' . $session->get('inscription')->get('portalPseudo') . '" /></p>';
 					} else {
 						echo '<p><input type="text" name="pseudo" id="pseudo" maxlength="15" required placeholder="pseudo" /></p>';
 					}
@@ -43,7 +43,7 @@ echo '<div id="content">';
 			echo '</div>';
 		echo '</div>';
 
-		echo '<div class="component inscription size3 color' . CTR::$data->get('inscription')->get('ally') . '">';
+		echo '<div class="component inscription size3 color' . $session->get('inscription')->get('ally') . '">';
 			echo '<div class="head skin-2">';
 				echo '<h2>Choisissez un avatar</h2>';
 			echo '</div>';
@@ -53,7 +53,7 @@ echo '<div id="content">';
 						for ($i = 1; $i <= NB_AVATAR; $i++) {
 							if (!in_array($i, array(77, 19))) {
 								$avatar    = $i < 10 ? '00' : '0';
-								$avatar   .= $i . '-' . CTR::$data->get('inscription')->get('ally');
+								$avatar   .= $i . '-' . $session->get('inscription')->get('ally');
 								$avatars[] = $avatar;
 							}
 						}

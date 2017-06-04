@@ -2,9 +2,15 @@
 
 namespace Asylamba\Classes\Library;
 
-use Asylamba\Classes\Worker\ASM;
+use Asylamba\Modules\Zeus\Manager\PlayerManager;
+use Asylamba\Modules\Gaia\Manager\PlaceManager;
 
 class Parser {
+	/** @var PlaceManager **/
+	protected $placeManager;
+	/** @var PlayerManager **/
+	protected $playerManager;
+	
 	public $parseIcon	= TRUE;
 	public $parseLink	= TRUE;
 	public $parseSmile	= TRUE;
@@ -15,6 +21,16 @@ class Parser {
 	public $parseTag 	= TRUE;
 	public $parseBigTag = FALSE;
 
+	/**
+	 * @param PlaceManager $placeManager
+	 * @param PlayerManager $playerManager
+	 */
+	public function __construct(PlaceManager $placeManager, PlayerManager $playerManager)
+	{
+		$this->playerManager = $playerManager;
+		$this->placeManager = $placeManager;
+	}
+	
 	public function parse($string) {
 		$string = $this->protect($string);
 
@@ -94,17 +110,11 @@ class Parser {
 		return preg_replace_callback(
 			'#\[\@(.+)\]#isU',
 			function($m) {
-				$S_PAM1 = ASM::$pam->getCurrentSession();
-				ASM::$pam->newSession(FALSE);
-				ASM::$pam->load(array('name' => $m[1]));
-
-				$ret = ASM::$pam->size() > 0
-					? '<a href="' . APP_ROOT . 'embassy/player-' . ASM::$pam->get()->getId() . '" class="color' . ASM::$pam->get()->getRColor() . ' hb lt" title="voir le profil">' . ASM::$pam->get()->getName() . '</a>'
-					: $m[0];
-
-				ASM::$pam->changeSession($S_PAM1);
-
-				return $ret;
+				return
+					(($player = $this->playerManager->getByName($m[1])) !== null)
+					? '<a href="' . APP_ROOT . 'embassy/player-' . $player->getId() . '" class="color' . $player->getRColor() . ' hb lt" title="voir le profil">' . $player->getName() . '</a>'
+					: $m[0]
+				;
 			},
 			$string
 		);
@@ -114,23 +124,14 @@ class Parser {
 		return preg_replace_callback(
 			'#\[\#(.+)\]#isU',
 			function($m) {
-				$S_PLM1 = ASM::$plm->getCurrentSession();
-				ASM::$plm->newSession(FALSE);
-
-				ASM::$plm->load(array('id' => $m[1]));
-
-				if (ASM::$plm->size() > 0) {
-					$place = ASM::$plm->get();
+				if (($place = $this->placeManager->get($m[1]))) {
 					if ($place->getTypeOfBase() > 0) {
 						return '<a href="' . APP_ROOT . 'map/place-' . $place->getId() . '" class="color' . $place->getPlayerColor() . ' hb lt" title="voir la planète">' . $place->getBaseName() . '</a>';
 					} else {
 						return '<a href="' . APP_ROOT . 'map/place-' . $place->getId() . '" class="hb lt" title="voir la planète">planète rebelle</a>';
 					}
-				} else {
-					return $m[0];
 				}
-
-				ASM::$plm->changeSession($S_PLM1);
+				return $m[0];
 			},
 			$string
 		);

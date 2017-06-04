@@ -14,6 +14,9 @@ use Asylamba\Modules\Artemis\Model\SpyReport;
 use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
+use Asylamba\Modules\Ares\Model\Commander;
+
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
 
 echo '<div class="component size3 space">';
 	echo '<div class="head skin-1">';
@@ -37,7 +40,7 @@ echo '<div class="component size3 space">';
 						}
 					echo '</span>';
 					echo '<span>' . $spyreport->success . ' % de réussite de l\'espionnage</span>';
-					echo '<a href="' . Format::actionBuilder('deletespyreport', ['id' => $spyreport->id]) . '" class="hb" title="supprimer le rapport">&#215;</a>';
+					echo '<a href="' . Format::actionBuilder('deletespyreport', $sessionToken, ['id' => $spyreport->id]) . '" class="hb" title="supprimer le rapport">&#215;</a>';
 				echo '</div>';
 
 				echo '<span class="line-help line-1">I</span>';
@@ -57,7 +60,7 @@ echo '<div class="component size3 space">';
 						$data .= '"';
 
 						echo '<span class="commander full show-army position-' . $commander['line'] . '-' . ($commander['line'] == 1 ? $llp[$lLine] : $rlp[$rLine]) . '" ' . $data . '>';
-							echo ($spyreport->success > SpyReport::STEP_MOVEMENT && $commander['statement'] != COM_AFFECTED)
+							echo ($spyreport->success > SpyReport::STEP_MOVEMENT && $commander['statement'] != Commander::AFFECTED)
 								? '<img src="' . MEDIA . 'map/fleet/army-away.png" alt="plein" />'
 								: '<img src="' . MEDIA . 'map/fleet/army.png" alt="plein" />';
 							echo '<span class="info">';
@@ -67,7 +70,7 @@ echo '<div class="component size3 space">';
 								echo $spyreport->success > SpyReport::STEP_PEV
 									? $commander['pev'] . ' Pev'
 									: '??? Pev';
-								echo ($spyreport->success > SpyReport::STEP_MOVEMENT && $commander['statement'] != COM_AFFECTED)
+								echo ($spyreport->success > SpyReport::STEP_MOVEMENT && $commander['statement'] != Commander::AFFECTED)
 									? '<br />&#8594; déplacement'
 									: NULL;
 							echo '</span>';

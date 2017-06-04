@@ -15,17 +15,28 @@ use Asylamba\Classes\Worker\Manager;
 use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Demeter\Model\Forum\ForumMessage;
+use Asylamba\Classes\Library\Parser;
 
 class ForumMessageManager extends Manager {
 	protected $managerType ='_ForumMessage';
+	/** @var Parser **/
+	protected $parser;
 
+	/**
+	 * @param Database $database
+	 * @param Parser $parser
+	 */
+	public function __construct(Database $database, Parser $parser) {
+		parent::__construct($database);
+		$this->parser = $parser;
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
 		$formatWhere = Utils::arrayToWhere($where, 'm.');
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);
 
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT m.*,
+		$qr = $this->database->prepare('SELECT m.*,
 				p.name AS playerName,
 				p.rColor AS playerColor,
 				p.avatar AS playerAvatar,
@@ -78,13 +89,11 @@ class ForumMessageManager extends Manager {
 	}
 
 	public function save() {
-		$db = Database::getInstance();
-
 		$messages = $this->_Save();
 
 		foreach ($messages AS $message) {
 			
-			$qr = $db->prepare('UPDATE forumMessage
+			$qr = $this->database->prepare('UPDATE forumMessage
 				SET
 					rPlayer = ?,
 					rTopic = ?,
@@ -108,9 +117,7 @@ class ForumMessageManager extends Manager {
 	}
 
 	public function add($newMessage) {
-		$db = Database::getInstance();
-
-		$qr = $db->prepare('INSERT INTO forumMessage
+		$qr = $this->database->prepare('INSERT INTO forumMessage
 			SET
 				rPlayer = ?,
 				rTopic = ?,
@@ -125,7 +132,7 @@ class ForumMessageManager extends Manager {
 				Utils::now()
 				));
 
-		$newMessage->id = $db->lastInsertId();
+		$newMessage->id = $this->database->lastInsertId();
 
 		$this->_Add($newMessage);
 
@@ -133,11 +140,18 @@ class ForumMessageManager extends Manager {
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM forumMessage WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM forumMessage WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);
 		return TRUE;
+	}
+
+	public function edit(ForumMessage $message, $content) {
+		$message->oContent = $content;
+
+		$this->parser->parseBigTag = TRUE;
+
+		$message->pContent = $this->parser->parse($content);
 	}
 }

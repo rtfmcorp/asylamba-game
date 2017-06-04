@@ -9,7 +9,7 @@ class API {
 	/** @var string **/
 	private $path;
 	/** @var string **/
-	private $server;
+	private $serverId;
 	/** @var string **/
 	private $key;
 
@@ -19,10 +19,17 @@ class API {
 	const TEMPLATE_INACTIVE_PLAYER = 51;
 	const TEMPLATE_SPONSORSHIP = 52;
 
-	public function __construct($path, $server, $key) {
-		$this->path = $path;
-		$this->server = $server;
-		$this->key  = $key;
+	/**
+	 * @param Security $security
+	 * @param string $serverId
+	 * @param string $apiKey
+	 * @param string $getOutRoot
+	 */
+	public function __construct(Security $security, $serverId, $apiKey, $getOutRoot) {
+		$this->path = $getOutRoot;
+		$this->serverId = $serverId;
+		$this->key  = $apiKey;
+		$this->security = $security;
 	}
 
 	private function query($api, $args) {
@@ -33,13 +40,13 @@ class API {
 			$targ .= $k . '-' . $v . '/';
 		}
 
-		$this->query = $this->path . 'api/s-' . $this->server . '/a-' . Security::crypt('a-' . $api . '/' . $targ, $this->key);
-
+		$this->query = $this->path . 'api/s-' . $this->serverId . '/a-' . $this->security->crypt('a-' . $api . '/' . $targ, $this->key);
+		
 		curl_setopt($ch, CURLOPT_URL, $this->query);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER , TRUE);
 		$answer = curl_exec($ch);
 		curl_close($ch);
-
+		
 		if ($answer !== FALSE) {
 			$this->data = unserialize($answer);
 			return TRUE;
@@ -60,8 +67,8 @@ class API {
 		}
 	}
 
-	public function confirmInscription($bindkey, $serverId) {
-		if ($this->query('confirminscription', array('bindkey' => $bindkey, 'serverid' => $serverId))) {
+	public function confirmInscription($bindkey) {
+		if ($this->query('confirminscription', array('bindkey' => $bindkey, 'serverid' => $this->serverId))) {
 			if ($this->data['statement'] == 'success') {
 				return TRUE;
 			} else {
@@ -72,8 +79,8 @@ class API {
 		}
 	}
 
-	public function confirmConnection($bindkey, $serverId) {
-		if ($this->query('confirmconnection', array('bindkey' => $bindkey, 'serverid' => $serverId))) {
+	public function confirmConnection($bindkey) {
+		if ($this->query('confirmconnection', array('bindkey' => $bindkey, 'serverid' => $this->serverId))) {
 			if ($this->data['statement'] == 'success') {
 				return TRUE;
 			} else {
@@ -96,8 +103,8 @@ class API {
 		}
 	}
 
-	public function sendMail($bindkey, $serverId, $template) {
-		if ($this->query('sendmail', array('bindkey' => $bindkey, 'serverid' => $serverId, 'template' => $template))) {
+	public function sendMail($bindkey, $template) {
+		if ($this->query('sendmail', array('bindkey' => $bindkey, 'serverid' => $this->serverId, 'template' => $template))) {
 			if ($this->data['statement'] == 'success') {
 				return TRUE;
 			} else {
@@ -120,8 +127,8 @@ class API {
 		}
 	}
 
-	public function abandonServer($bindkey, $serverId) {
-		if ($this->query('abandonserver', array('bindkey' => $bindkey, 'serverid' => $serverId))) {
+	public function abandonServer($bindkey) {
+		if ($this->query('abandonserver', array('bindkey' => $bindkey, 'serverid' => $this->serverId))) {
 			if ($this->data['statement'] == 'success') {
 				return TRUE;
 			} else {
@@ -139,4 +146,3 @@ class API {
 		return $this->query('getplayerstatement', array('bindkey' => $bindkey));
 	}
 }
-?>

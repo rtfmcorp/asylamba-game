@@ -2,28 +2,24 @@
 
 #rlaw	id de la loi
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Demeter\Resource\LawResources;
 
-$rLaw = Utils::getHTTPData('rlaw');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$lawManager = $this->getContainer()->get('demeter.law_manager');
+$candidateManager = $this->getContainer()->get('demeter.candidate_manager');
+
+$rLaw = $request->query->get('rlaw');
 
 if ($rLaw !== FALSE) {
-	if (CTR::$data->get('playerInfo')->get('status') == LawResources::getInfo($type, 'department')) {
-		$_LAM = ASM::$lam->getCurrentSession();
-		ASM::$lam->newSession();
-		ASM::$lam->load(array('id' => $rLaw));
-
-		if (ASM::$lam->size() > 0) {
-		} else {
-			CTR::$alert->add('Cette loi n\'existe pas.', ALERT_STD_ERROR);
+	if ($session->get('playerInfo')->get('status') == LawResources::getInfo($type, 'department')) {
+		if (($law = $lawManager->get($rLaw)) === null) {
+			throw new ErrorException('Cette loi n\'existe pas.');
 		}
-
-		ASM::$cam->changeSession($_LAM);
 	} else {
-		CTR::$alert->add('Vous n\'avez pas le droit d\'annuler cette loi.', ALERT_STD_ERROR);
+		throw new ErrorException('Vous n\'avez pas le droit d\'annuler cette loi.');
 	}
 } else {
-	CTR::$alert->add('Informations manquantes.', ALERT_STD_ERROR);
+	throw new ErrorException('Informations manquantes.');
 }

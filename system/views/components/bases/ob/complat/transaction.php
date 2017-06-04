@@ -1,24 +1,22 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Model\CommercialShipping;
 
+$commercialShippingManager = $this->getContainer()->get('athena.commercial_shipping_manager');
+$commercialTradeManager = $this->getContainer()->get('athena.commercial_tax_manager');
 
-$S_CSM1 = ASM::$csm->getCurrentSession();
-$S_CTM1 = ASM::$ctm->getCurrentSession();
+$S_CTM1 = $commercialTradeManager->getCurrentSession();
 
-ASM::$csm->changeSession($ob_compPlat->shippingManager);
 $usedShips = 0;
-for ($i = 0; $i < ASM::$csm->size(); $i++) { 
-	if (ASM::$csm->get($i)->rBase == $ob_compPlat->getId()) {
-		$usedShips += ASM::$csm->get($i)->shipQuantity;
+foreach ($ob_compPlat->commercialShippings as $commercialShipping) { 
+	if ($commercialShipping->rBase == $ob_compPlat->getId()) {
+		$usedShips += $commercialShipping->shipQuantity;
 	}
 }
 
-ASM::$ctm->newSession();
-ASM::$ctm->load(array());
+$commercialTradeManager->newSession();
+$commercialTradeManager->load(array());
 
 echo '<div class="component transaction">';
 	echo '<div class="head skin-2">';
@@ -26,7 +24,7 @@ echo '<div class="component transaction">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			$maxShip = OrbitalBaseResource::getBuildingInfo(6, 'level', $ob_compPlat->getLevelCommercialPlateforme(),  'nbCommercialShip');
+			$maxShip = $orbitalBaseHelper->getBuildingInfo(6, 'level', $ob_compPlat->getLevelCommercialPlateforme(),  'nbCommercialShip');
 
 			echo '<div class="number-box">';
 				echo '<span class="label">Vaisseaux de commerce disponibles</span>';
@@ -42,28 +40,27 @@ echo '<div class="component transaction">';
 			echo '</div>';
 
 			echo '<h4>Convoi en route</h4>';
-			for ($i = 0; $i < ASM::$csm->size(); $i++) { 
-				if (ASM::$csm->get($i)->statement == CommercialShipping::ST_GOING && ASM::$csm->get($i)->rBase == $ob_compPlat->getId()) {
-					ASM::$csm->get($i)->render();
+			foreach ($ob_compPlat->commercialShippings as $commercialShipping) { 
+				if ($commercialShipping->statement == CommercialShipping::ST_GOING && $commercialShipping->rBase == $ob_compPlat->getId()) {
+					$commercialShippingManager->render($commercialShipping);
 				}
 			}
 			echo '<hr />';
 			echo '<h4>Retour de convoi</h4>';
-			for ($i = 0; $i < ASM::$csm->size(); $i++) { 
-				if (ASM::$csm->get($i)->statement == CommercialShipping::ST_MOVING_BACK && ASM::$csm->get($i)->rBase == $ob_compPlat->getId()) {
-					ASM::$csm->get($i)->render();
+			foreach ($ob_compPlat->commercialShippings as $commercialShipping) { 
+				if ($commercialShipping->statement == CommercialShipping::ST_MOVING_BACK && $commercialShipping->rBase == $ob_compPlat->getId()) {
+					$commercialShippingManager->render($commercialShipping);
 				}
 			}
 			echo '<hr />';
 			echo '<h4>Convoi à quai</h4>';
-			for ($i = 0; $i < ASM::$csm->size(); $i++) { 
-				if (ASM::$csm->get($i)->statement == CommercialShipping::ST_WAITING && ASM::$csm->get($i)->rBase == $ob_compPlat->getId()) {
-					ASM::$csm->get($i)->render();
+			foreach ($ob_compPlat->commercialShippings as $commercialShipping) { 
+				if ($commercialShipping->statement == CommercialShipping::ST_WAITING && $commercialShipping->rBase == $ob_compPlat->getId()) {
+					$commercialShippingManager->render($commercialShipping);
 				}
 			}
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
 
-ASM::$csm->changeSession($S_CSM1);
-ASM::$ctm->changeSession($S_CTM1);
+$commercialTradeManager->changeSession($S_CTM1);

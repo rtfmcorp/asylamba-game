@@ -1,30 +1,33 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Library\Parser;
 use Asylamba\Modules\Hermes\Model\Conversation;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
 
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$database = $this->getContainer()->get('database');
+$parser = $this->getContainer()->get('parser');
+$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
+$conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
 
-$conversation 	= Utils::getHTTPData('conversation');
-$content 		= Utils::getHTTPData('content');
+$conversation 	= $request->query->get('conversation');
+$content 		= $request->request->get('content');
 
-$p = new Parser();
-$content = $p->parse($content);
+$content = $parser->parse($content);
 
 if ($conversation !== FALSE AND $content !== FALSE) {
 	if (strlen($content) < 10000) {
-		$S_CVM = ASM::$cvm->getCurrentSession();
-		ASM::$cvm->newSession();
-		ASM::$cvm->load(
-			array('c.id' => $conversation, 'cu.rPlayer' => CTR::$data->get('playerId'))
+		$S_CVM = $conversationManager->getCurrentSession();
+		$conversationManager->newSession();
+		$conversationManager->load(
+			array('c.id' => $conversation, 'cu.rPlayer' => $session->get('playerId'))
 		);
 
-		if (ASM::$cvm->size() == 1) {
-			$conv = ASM::$cvm->get();
+		if ($conversationManager->size() == 1) {
+			$conv = $conversationManager->get();
 
 			if ($conv->type != Conversation::TY_SYSTEM) {
 				$DA_recipient;
@@ -37,7 +40,7 @@ if ($conversation !== FALSE AND $content !== FALSE) {
 				foreach ($users as $user) {
 					$user->convStatement = ConversationUser::CS_DISPLAY;
 
-					if ($user->rPlayer == CTR::$data->get('playerId')) {
+					if ($user->rPlayer == $session->get('playerId')) {
 						$user->dLastView = Utils::now();
 					} else {
 						$DA_recipient = $user->rPlayer;
@@ -48,31 +51,30 @@ if ($conversation !== FALSE AND $content !== FALSE) {
 				$message = new ConversationMessage();
 
 				$message->rConversation = $conv->id;
-				$message->rPlayer = CTR::$data->get('playerId');
+				$message->rPlayer = $session->get('playerId');
 				$message->type = ConversationMessage::TY_STD;
 				$message->content = $content;
 				$message->dCreation = Utils::now();
 				$message->dLastModification = NULL;
 
-				ASM::$cme->add($message);
+				$conversationMessageManager->add($message);
 
 				if (DATA_ANALYSIS) {
-					$db = Database::getInstance();
-					$qr = $db->prepare('INSERT INTO 
+					$qr = $database->prepare('INSERT INTO 
 						DA_SocialRelation(`from`, `to`, `type`, `message`, dAction)
 						VALUES(?, ?, ?, ?, ?)'
 					);
-					$qr->execute([CTR::$data->get('playerId'), $DA_recipient, 2, $content, Utils::now()]);
+					$qr->execute([$session->get('playerId'), $DA_recipient, 2, $content, Utils::now()]);
 				}
 			}
 		} else {
-			CTR::$alert->add('La conversation n\'existe pas ou ne vous appartient pas.', ALERT_STD_ERROR);
+			throw new ErrorException('La conversation n\'existe pas ou ne vous appartient pas.');
 		}
 		
-		ASM::$cvm->changeSession($S_CVM);
+		$conversationManager->changeSession($S_CVM);
 	} else {
-		CTR::$alert->add('Le message est trop long.', ALERT_STD_ERROR);
+		throw new ErrorException('Le message est trop long.');
 	}
 } else {
-	CTR::$alert->add('Informations manquantes pour démarrer une nouvelle conversation.', ALERT_STD_ERROR);
+	throw new ErrorException('Informations manquantes pour démarrer une nouvelle conversation.');
 }

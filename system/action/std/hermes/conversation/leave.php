@@ -1,27 +1,32 @@
 <?php
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Modules\Hermes\Model\Conversation;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
+use Asylamba\Classes\Exception\ErrorException;
 
-$conversation 	= Utils::getHTTPData('conversation');
+$request = $this->getContainer()->get('app.request');
+$session = $this->getContainer()->get('app.session');
+$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
+$conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
+$conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
+
+$conversation 	= $request->query->get('conversation');
 
 if ($conversation !== FALSE) {
 	# vérifier que c'est l'utilisateur courant
 
-	$S_CVM = ASM::$cvm->getCurrentSession();
-	ASM::$cvm->newSession();
-	ASM::$cvm->load(
-		array('c.id' => $conversation, 'cu.rPlayer' => CTR::$data->get('playerId'))
+	$S_CVM = $conversationManager->getCurrentSession();
+	$conversationManager->newSession();
+	$conversationManager->load(
+		array('c.id' => $conversation, 'cu.rPlayer' => $session->get('playerId'))
 	);
 
-	if (ASM::$cvm->size() == 1) {
+	if ($conversationManager->size() == 1) {
 		# vérifier qu'il y a plus de 2 personnes
 
-		$conv  = ASM::$cvm->get();
+		$conv  = $conversationManager->get();
 
 		if ($conv->type != Conversation::TY_SYSTEM) {
 			$players = $conv->players;
@@ -31,7 +36,7 @@ if ($conversation !== FALSE) {
 				$playerConv = NULL;
 
 				foreach ($players as $player) {
-					if ($player->rPlayer == CTR::$data->get('playerId')) {
+					if ($player->rPlayer == $session->get('playerId')) {
 						$playerConv = $player;
 					} elseif ($player->convPlayerStatement == ConversationUser::US_ADMIN) {
 						$admin++;
@@ -41,7 +46,7 @@ if ($conversation !== FALSE) {
 				# vérifier qu'il y a encore un admin
 				if ($admin < 1) {
 					foreach ($players as $player) {
-						if ($player->rPlayer != CTR::$data->get('playerId')) {
+						if ($player->rPlayer != $session->get('playerId')) {
 							$player->convPlayerStatement = ConversationUser::US_ADMIN;
 							break;
 						}
@@ -62,21 +67,21 @@ if ($conversation !== FALSE) {
 				$message->dCreation = Utils::now();
 				$message->dLastModification = NULL;
 
-				ASM::$cme->add($message);
+				$conversationMessageManager->add($message);
 
 				# suppresion de l'utilisateur
-				ASM::$cum->deleteById($playerConv->id);
+				$conversationUserManager->deleteById($playerConv->id);
 
-				CTR::redirect('message');
+				$this->getContainer()->get('app.response')->redirect('message');
 			} else {
-				CTR::$alert->add('Impossible de quitter une conversation entre deux personnes.', ALERT_STD_ERROR);
+				throw new ErrorException('Impossible de quitter une conversation entre deux personnes.');
 			}
 		}
 	} else {
-		CTR::$alert->add('La conversation n\'existe pas ou ne vous appartient pas.', ALERT_STD_ERROR);
+		throw new ErrorException('La conversation n\'existe pas ou ne vous appartient pas.');
 	}
 
-	ASM::$cvm->changeSession($S_CVM);
+	$conversationManager->changeSession($S_CVM);
 } else {
-	CTR::$alert->add('Informations manquantes pour quitter la conversation.', ALERT_STD_ERROR);
+	throw new ErrorException('Informations manquantes pour quitter la conversation.');
 }

@@ -10,9 +10,15 @@ use Asylamba\Modules\Hermes\Model\ConversationUser;
 class ConversationUserManager extends Manager {
 	protected $managerType ='_ConversationUser';
 
+	/**
+	 * @param Database $database
+	 */
+	public function __construct(Database $database) {
+		parent::__construct($database);
+	}
+	
 	public function load($where = array(), $order = array(), $limit = array()) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT c.*,
+		$qr = $this->database->prepare('SELECT c.*,
 				p.id AS playerId,
 				p.rColor AS playerColor,
 				p.name AS playerName,
@@ -65,11 +71,10 @@ class ConversationUserManager extends Manager {
 	}
 
 	public function save() {
-		$db = Database::getInstance();
 		$userConvs = $this->_Save();
 
 		foreach ($userConvs AS $userConv) {
-			$qr = $db->prepare('UPDATE conversationUser
+			$qr = $this->database->prepare('UPDATE conversationUser
 				SET
 					rConversation = ?,
 					rPlayer = ?,
@@ -90,9 +95,7 @@ class ConversationUserManager extends Manager {
 	}
 
 	public function add($userConv) {
-		$db = Database::getInstance();
-
-		$qr = $db->prepare('INSERT INTO conversationUser
+		$qr = $this->database->prepare('INSERT INTO conversationUser
 			SET rConversation = ?,
 				rPlayer = ?,
 				playerStatement = ?,
@@ -108,15 +111,14 @@ class ConversationUserManager extends Manager {
 				$userConv->dLastView
 		));
 
-		$userConv->id = $db->lastInsertId();
+		$userConv->id = $this->database->lastInsertId();
 		$this->_Add($userConv);
 
 		return $userConv->id;
 	}
 
 	public function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM conversationUser WHERE id = ?');
+		$qr = $this->database->prepare('DELETE FROM conversationUser WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);

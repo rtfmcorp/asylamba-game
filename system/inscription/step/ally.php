@@ -1,7 +1,8 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
+
+$colorManager = $this->getContainer()->get('demeter.color_manager');
 
 # background paralax
 echo '<div id="background-paralax" class="profil"></div>';
@@ -24,19 +25,15 @@ echo '<div id="content">';
 				echo '<p>Il vous faut choisir entre l\'une des factions disponibles.</p>';
 				echo '<p>Chaque faction a ses forces et ses faiblesses. Certaines sont plus belliqueuses, certaines sont plus sages. De plus, le système politique change en fonction de la faction.</p>';
 				echo '<hr />';
-				//echo '<a class="more-button" href="' . GETOUT_ROOT . 'wiki/page-163" target="_blank">Vous ne savez pas quoi choisir ?</a>';	
+				//echo '<a class="more-button" href="' . $this->getContainer()->getParameter('getout_root') . 'wiki/page-163" target="_blank">Vous ne savez pas quoi choisir ?</a>';	
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';
 
-	$_CLM = ASM::$clm->getCurrentSession();
-	ASM::$clm->newSession(FALSE);
-	ASM::$clm->load([], ['activePlayers', 'ASC']);
-
+	$sortedFactions = $colorManager->getAllByActivePlayersNumber();
+	
 	$firstAlly = TRUE;
-	for ($i = 0; $i < ASM::$clm->size(); $i++) {
-		$ally = ASM::$clm->get($i);
-
+	foreach ($sortedFactions as $ally) {
 		if ($ally->id != 0) {
 			echo '<div class="component inscription color' . $ally->id . '">';
 				echo '<div class="head skin-1">';
@@ -95,6 +92,4 @@ echo '<div id="content">';
 			echo '</div>';
 		}
 	}
-
-	ASM::$clm->changeSession($_CLM);
 echo '</div>';

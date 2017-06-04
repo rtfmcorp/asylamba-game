@@ -2,10 +2,12 @@
 
 use Asylamba\Classes\Worker\CTR;
 
+$request = $this->getContainer()->get('app.request');
+
 echo '<div id="subnav">';
 	echo '<button class="move-side-bar top" data-dir="up"> </button>';
 	echo '<div class="overflow">';
-		$active = (!CTR::$get->exist('view') OR CTR::$get->get('view') == 'message') ? 'active' : '';
+		$active = (!$request->query->exist('view') OR $request->query->get('view') == 'message') ? 'active' : '';
 		echo '<a href="' . APP_ROOT . 'admin/view-message" class="item ' . $active . '">';
 			echo '<span class="picto">';
 				echo '<img src="' . MEDIA . 'admin/main.png" alt="" />';
@@ -15,7 +17,7 @@ echo '<div id="subnav">';
 			echo '</span>';
 		echo '</a>';
 
-		$active = (CTR::$get->get('view') == 'roadmap') ? 'active' : '';
+		$active = ($request->query->get('view') == 'roadmap') ? 'active' : '';
 		echo '<a href="' . APP_ROOT . 'admin/view-roadmap" class="item ' . $active . '">';
 			echo '<span class="picto">';
 				echo '<img src="' . MEDIA . 'admin/roadmap.png" alt="" />';

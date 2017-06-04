@@ -11,261 +11,569 @@
 */
 namespace Asylamba\Modules\Gaia\Manager;
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\Manager;
+use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Library\Game;
+use Asylamba\Classes\Library\Format;
+
+use Asylamba\Modules\Hermes\Manager\NotificationManager;
 
 use Asylamba\Modules\Gaia\Model\Place;
+use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Modules\Ares\Model\Report;
+use Asylamba\Modules\Hermes\Model\Notification;
+use Asylamba\Modules\Gaia\Model\System;
 
-class PlaceManager extends Manager {
-	protected $managerType = '_Place';
+use Asylamba\Classes\Worker\EventDispatcher;
+
+class PlaceManager {
+	/** @var EntityManager **/
+	protected $entityManager;
+	/** @var EventDispatcher **/
+	protected $eventDispatcher;
 	
-	public function load($where = array(), $order = array(), $limit = array()) {
-		$formatWhere = Utils::arrayToWhere($where, 'p.');
-		$formatOrder = Utils::arrayToOrder($order, 'p.');
-		$formatLimit = Utils::arrayToLimit($limit);
-
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT p.*,
-			s.rSector AS rSector,
-			s.xPosition AS xPosition,
-			s.yPosition AS yPosition,
-			s.typeOfSystem AS typeOfSystem,
-			se.tax AS tax,
-			se.rColor AS sectorColor,
-			pl.rColor AS playerColor,
-			pl.name AS playerName,
-			pl.avatar AS playerAvatar,
-			pl.status AS playerStatus,
-			pl.level AS playerLevel,
-			ob.rPlace AS obId,
-			ob.name AS obName,
-			ob.points AS points,
-			ob.levelCommercialPlateforme AS levelCommercialPlateforme,
-			ob.levelSpatioport AS levelSpatioport,
-			ob.resourcesStorage AS obResources,
-			ob.antiSpyAverage AS antiSpyAverage,
-			ob.typeOfBase AS obTypeOfBase
-			FROM place AS p
-			LEFT JOIN system AS s
-				ON p.rSystem = s.id
-				LEFT JOIN sector AS se
-					ON s.rSector = se.id
-					LEFT JOIN player AS pl
-						ON p.rPlayer = pl.id
-						LEFT JOIN orbitalBase AS ob
-							ON p.id = ob.rPlace
-		' . $formatWhere . '
-		' . $formatOrder . '
-		' . $formatLimit);
-
-		foreach($where AS $v) {
-			if (is_array($v)) {
-				foreach ($v as $p) {
-					$valuesArray[] = $p;
-				}
-			} else {
-				$valuesArray[] = $v;
-			}
+	/**
+	 * @param EntityManager $entityManager
+	 * @param NotificationManager $notificationManager
+	 */
+	public function __construct(EntityManager $entityManager, NotificationManager $notificationManager)
+	{
+		$this->entityManager = $entityManager;
+		$this->notificationManager = $notificationManager;
+	}
+	
+	/**
+	 * @param int $id
+	 * @return Place
+	 */
+	public function get($id)
+	{
+		if(($place = $this->entityManager->getRepository(Place::class)->get($id)) !== null) {
+			return $place;
 		}
-		
-		if (empty($valuesArray)) {
-			$qr->execute();
-		} else {
-			$qr->execute($valuesArray);
-		}
-
-		$this->fill($qr);
+		return null;
+	}
+	
+	/**
+	 * @param int $ids
+	 */
+	public function getByIds($ids = [])
+	{
+		return $this->entityManager->getRepository(Place::class)->getByIds($ids);
+	}
+	
+	public function getSystemPlaces(System $system)
+	{
+		return $this->entityManager->getRepository(Place::class)->getSystemPlaces($system->getId());
 	}
 
-	public function search($search, $order = array(), $limit = array()) {
-		$search = '%' . $search . '%';
-		
-		$formatOrder = Utils::arrayToOrder($order);
-		$formatLimit = Utils::arrayToLimit($limit);
-
-		$db = Database::getInstance();
-		$qr = $db->prepare('SELECT p.*,
-			s.rSector AS rSector,
-			s.xPosition AS xPosition,
-			s.yPosition AS yPosition,
-			s.typeOfSystem AS typeOfSystem,
-			se.tax AS tax,
-			se.rColor AS sectorColor,
-			pl.rColor AS playerColor,
-			pl.name AS playerName,
-			pl.avatar AS playerAvatar,
-			pl.status AS playerStatus,
-			pl.level AS playerLevel,
-			ob.rPlace AS obId,
-			ob.name AS obName,
-			ob.points AS points,
-			ob.levelCommercialPlateforme AS levelCommercialPlateforme,
-			ob.levelSpatioport AS levelSpatioport,
-			ob.resourcesStorage AS obResources,
-			ob.antiSpyAverage AS antiSpyAverage,
-			ob.typeOfBase AS obTypeOfBase
-			FROM place AS p
-			LEFT JOIN system AS s
-				ON p.rSystem = s.id
-				LEFT JOIN sector AS se
-					ON s.rSector = se.id
-					LEFT JOIN player AS pl
-						ON p.rPlayer = pl.id
-						LEFT JOIN orbitalBase AS ob
-							ON p.id = ob.rPlace
-			WHERE (pl.statement = 1 OR pl.statement = 2 OR pl.statement = 3)
-			AND (LOWER(pl.name) LIKE LOWER(?)
-			OR   LOWER(ob.name) LIKE LOWER(?))			
-			' . $formatOrder . '
-			' . $formatLimit
-		);
-
-		$qr->execute(array($search, $search));
-
-		$this->fill($qr);
+	/**
+	 * @param string $search
+	 * @return array
+	 */
+	public function search($search) {
+		return $this->entityManager->getRepository(Place::class)->search($search);
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getPlayerPlaces()
+	{
+		return $this->entityManager->getRepository(Place::class)->getPlayerPlaces();
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getNpcPlaces()
+	{
+		return $this->entityManager->getRepository(Place::class)->getNpcPlaces();
 	}
 
-	protected function fill($qr) {
-		while ($aw = $qr->fetch()) {
-			$p = new Place();
-
-			$p->setId($aw['id']);
-			$p->setRSystem($aw['rSystem']);
-			$p->setTypeOfPlace($aw['typeOfPlace']);
-			$p->setPosition($aw['position']);
-			$p->setPopulation($aw['population']);
-			$p->setCoefResources($aw['coefResources']);
-			$p->setCoefHistory($aw['coefHistory']);
-			$p->setResources($aw['resources']);
-			$p->danger = $aw['danger'];
-			$p->maxDanger = $aw['maxDanger'];
-			$p->uPlace = $aw['uPlace'];
-
-			$p->setRSector($aw['rSector']);
-			$p->setXSystem($aw['xPosition']);
-			$p->setYSystem($aw['yPosition']);
-			$p->setTypeOfSystem($aw['typeOfSystem']);
-			$p->setTax($aw['tax']);
-			$p->setSectorColor($aw['sectorColor']);
-
-			if ($aw['rPlayer'] != 0) {
-				$p->setRPlayer($aw['rPlayer']);
-				$p->setPlayerColor($aw['playerColor']);
-				$p->setPlayerName($aw['playerName']);
-				$p->setPlayerAvatar($aw['playerAvatar']);
-				$p->setPlayerStatus($aw['playerStatus']);
-				$p->playerLevel = $aw['playerLevel'];
-				if (isset($aw['msId'])) {
-					$p->setTypeOfBase($aw['msType']);
-					$p->setBaseName($aw['msName']);
-					$p->setResources($aw['msResources']);
-				} elseif (isset($aw['obId'])) {
-					$p->setTypeOfBase(Place::TYP_ORBITALBASE);
-					$p->typeOfOrbitalBase = $aw['obTypeOfBase'];
-					$p->setBaseName($aw['obName']);
-					$p->setLevelCommercialPlateforme($aw['levelCommercialPlateforme']);
-					$p->setLevelSpatioport($aw['levelSpatioport']);
-					$p->setResources($aw['obResources']);
-					$p->setAntiSpyInvest($aw['antiSpyAverage']);
-					$p->setPoints($aw['points']);
-				} else {
-					CTR::$alert->add('Problèmes d\'appartenance du lieu !');
-				}
-			} else {
-				$p->setTypeOfBase(Place::TYP_EMPTY);
-				$p->setBaseName('Planète rebelle');
-				$p->setPoints(0);
+	public function updateNpcPlaces() {
+		$places = $this->getNpcPlaces();
+		$now   = Utils::now();
+		$repository = $this->entityManager->getRepository(Place::class);
+		
+		foreach ($places as $place) {
+			if (Utils::interval($place->uPlace, $now, 's') === 0) {
+				continue;
 			}
+			# update time
+			$hours = Utils::intervalDates($now, $place->uPlace);
+			$place->uPlace = $now;
+			$initialResources = $place->resources;
+			$initialDanger = $place->danger;
+			$maxResources = ceil($place->population / Place::COEFFPOPRESOURCE) * Place::COEFFMAXRESOURCE * ($place->maxDanger + 1);
 
-			$S_COM3 = ASM::$com->getCurrentSession();
-			ASM::$com->newSession();
-			ASM::$com->load(array('c.rBase' => $aw['id'], 'c.statement' => array(1, 2)));
-
-			for ($i = 0; $i < ASM::$com->size(); $i++) { 
-				$p->commanders[] = ASM::$com->get($i);
+			foreach ($hours as $hour) {
+				$place->danger += Place::REPOPDANGER;
+				$place->resources += floor(Place::COEFFRESOURCE * $place->population);
 			}
+			// The repository method will add the new resources. We have to calculate how many resources have been added
+			$place->resources = abs($place->resources - $initialResources);
+			// If the max is reached, we have to add just the difference between the max and init value
+			if ($place->resources > $maxResources) {
+				$place->resources = $maxResources - $initialResources;
+			}
+			$place->danger = abs($place->danger - $initialDanger);
+			// Same thing here
+			if ($place->danger > $place->maxDanger) {
+				$place->danger = $place->maxDanger - $initialDanger;
+			}
+			$repository->updatePlace($place, true);
+		}
+		$this->entityManager->clear(Place::class);
+	}
+
+	public function updatePlayerPlaces() {
+		$places = $this->getPlayerPlaces();
+		$now   = Utils::now();
+		$repository = $this->entityManager->getRepository(Place::class);
+		
+		foreach ($places as $place) {
+			if (Utils::interval($place->uPlace, $now, 's') === 0) {
+				continue;
+			}
+			# update time
+			$hours = Utils::intervalDates($now, $place->uPlace);
+			$place->uPlace = $now;
+			$initialResources = $place->resources;
+			$maxResources = ceil($place->population / Place::COEFFPOPRESOURCE) * Place::COEFFMAXRESOURCE * ($place->maxDanger + 1);
+			foreach ($hours as $hour) {
+				$place->resources += floor(Place::COEFFRESOURCE * $place->population);
+			}
+			$place->resources = abs($place->resources - $initialResources);
+			if ($place->resources > $maxResources) {
+				$place->resources = $maxResources;
+			}
+			$repository->updatePlace($place);
+		}
+		$this->entityManager->clear(Place::class);
+	}
+	
+	/**
+	 * @param Place $place
+	 */
+	protected function updateResources(Place $place)
+	{
+	}
+
+	/**
+	 * @param Place $place
+	 * @param string $case
+	 * @param Commander $commander
+	 * @param Report $report
+	 */
+	public function sendNotif(Place $place, $case, Commander $commander, $report = NULL) {
+		switch ($case) {
+			case Place::CHANGESUCCESS:
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Déplacement réussi');
+				$notif->addBeg()
+					->addTxt('Votre officier ')
+					->addLnk('fleet/commander-' . $commander->getId(), $commander->getName())
+					->addTxt(' est arrivé sur ')
+					->addLnk('map/place-' . $place->id, $place->baseName)
+					->addTxt('.')
+					->addEnd();
+				$this->notificationManager->add($notif);
+				break;
+
+			case Place::CHANGEFAIL:
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Déplacement réussi');
+				$notif->addBeg()
+					->addTxt('Votre officier ')
+					->addLnk('fleet/commander-' . $commander->getId(), $commander->getName())
+					->addTxt(' s\'est posé sur ')
+					->addLnk('map/place-' . $place->id, $place->baseName)
+					->addTxt('. Il est en garnison car il n\'y avait pas assez de place en orbite.')
+					->addEnd();
+				$this->notificationManager->add($notif);
+				break;
+			case Place::CHANGELOST:
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Déplacement raté');
+				$notif->addBeg()
+					->addTxt('Votre officier ')
+					->addLnk('fleet/commander-' . $commander->getId(), $commander->getName())
+					->addTxt(' n\'est pas arrivé sur ')
+					->addLnk('map/place-' . $place->id, $place->baseName)
+					->addTxt('. Cette base ne vous appartient pas. Elle a pu être conquise entre temps.')
+					->addEnd();
+				$this->notificationManager->add($notif);
+				break;
+			case Place::LOOTEMPTYSSUCCESS:
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Pillage réussi');
+				$notif->addBeg()
+					->addTxt('Votre officier ')
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addTxt(' a pillé la planète rebelle située aux coordonnées ')
+					->addLnk('map/place-' . $place->id, Game::formatCoord($place->xSystem, $place->ySystem, $place->position, $place->rSector))
+					->addTxt('.')
+					->addSep()
+					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées')
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
+					->addEnd();
+				$this->notificationManager->add($notif);
+				break;
+			case Place::LOOTEMPTYFAIL:
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Pillage raté');
+				$notif->addBeg()
+					->addTxt('Votre officier ')
+					->addLnk('fleet/view-memorial', $commander->getName())
+					->addTxt(' est tombé lors de l\'attaque de la planète rebelle située aux coordonnées ')
+					->addLnk('map/place-' . $place->id, Game::formatCoord($place->xSystem, $place->ySystem, $place->position, $place->rSector))
+					->addTxt('.')
+					->addSep()
+					->addTxt('Il a désormais rejoint le Mémorial. Que son âme traverse l\'Univers dans la paix.')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
+					->addEnd();
+				$this->notificationManager->add($notif);
+				break;
+			case Place::LOOTPLAYERWHITBATTLESUCCESS:
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Pillage réussi');
+				$notif->addBeg()
+					->addTxt('Votre officier ')
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addTxt(' a pillé la planète ')
+					->addLnk('map/place-' . $place->id, $place->baseName)
+					->addTxt(' appartenant au joueur ')
+					->addLnk('embassy/player-' . $place->rPlayer, $place->playerName)
+					->addTxt('.')
+					->addSep()
+					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées')
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
+					->addEnd();
+				$this->notificationManager->add($notif);
+
+				$notif = new Notification();
+				$notif->setRPlayer($place->rPlayer);
+				$notif->setTitle('Rapport de pillage');
+				$notif->addBeg()
+					->addTxt('L\'officier ')
+					->addStg($commander->getName())
+					->addTxt(' appartenant au joueur ')
+					->addLnk('embassy/player-' . $commander->getRPlayer(), $commander->getPlayerName())
+					->addTxt(' a pillé votre planète ')
+					->addLnk('map/place-' . $place->id, $place->baseName)
+					->addTxt('.')
+					->addSep()
+					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
+					->addEnd();
+				$this->notificationManager->add($notif);
+				break;
+			case Place::LOOTPLAYERWHITBATTLEFAIL:
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Pillage raté');
+				$notif->addBeg()
+					->addTxt('Votre officier ')
+					->addLnk('fleet/view-memorial', $commander->getName())
+					->addTxt(' est tombé lors du pillage de la planète ')
+					->addLnk('map/place-' . $place->id, $place->baseName)
+					->addTxt(' appartenant au joueur ')
+					->addLnk('embassy/player-' . $place->rPlayer, $place->playerName)
+					->addTxt('.')
+					->addSep()
+					->addTxt('Il a désormais rejoint le Mémorial. Que son âme traverse l\'Univers dans la paix.')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
+					->addEnd();
+				$this->notificationManager->add($notif);
+
+				$notif = new Notification();
+				$notif->setRPlayer($place->rPlayer);
+				$notif->setTitle('Rapport de combat');
+				$notif->addBeg()
+					->addTxt('L\'officier ')
+					->addStg($commander->getName())
+					->addTxt(' appartenant au joueur ')
+					->addLnk('embassy/player-' . $commander->getRPlayer(), $commander->getPlayerName())
+					->addTxt(' a attaqué votre planète ')
+					->addLnk('map/place-' . $place->id, $place->baseName)
+					->addTxt('.')
+					->addSep()
+					->addTxt('Vous avez repoussé l\'ennemi avec succès.')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
+					->addEnd();
+				$this->notificationManager->add($notif);
+				break;
+			case Place::LOOTPLAYERWHITOUTBATTLESUCCESS:
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Pillage réussi');
+				$notif->addBeg()
+					->addTxt('Votre officier ')
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addTxt(' a pillé la planète non défendue ')
+					->addLnk('map/place-' . $place->id, $place->baseName)
+					->addTxt(' appartenant au joueur ')
+					->addLnk('embassy/player-' . $place->rPlayer, $place->playerName)
+					->addTxt('.')
+					->addSep()
+					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées')
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addEnd();
+				$this->notificationManager->add($notif);
+
+				$notif = new Notification();
+				$notif->setRPlayer($place->rPlayer);
+				$notif->setTitle('Rapport de pillage');
+				$notif->addBeg()
+					->addTxt('L\'officier ')
+					->addStg($commander->getName())
+					->addTxt(' appartenant au joueur ')
+					->addLnk('embassy/player-' . $commander->getRPlayer(), $commander->getPlayerName())
+					->addTxt(' a pillé votre planète ')
+					->addLnk('map/place-' . $place->id, $place->baseName)
+					->addTxt('. Aucune flotte n\'était en position pour la défendre. ')
+					->addSep()
+					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées')
+					->addEnd();
+				$this->notificationManager->add($notif);
+				break;
+			case Place::LOOTLOST:
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Erreur de coordonnées');
+				$notif->addBeg()
+					->addTxt('Votre officier ')
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addTxt(' n\'a pas attaqué la planète ')
+					->addLnk('map/place-' . $place->id, $place->baseName)
+					->addTxt(' car son joueur est de votre faction, sous la protection débutant ou un allié.')
+					->addEnd();
+				$this->notificationManager->add($notif);
+				break;
+			case Place::CONQUEREMPTYSSUCCESS:
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Colonisation réussie');
+				$notif->addBeg()
+					->addTxt('Votre officier ')
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addTxt(' a colonisé la planète rebelle située aux coordonnées ')  
+					->addLnk('map/place-' . $place->id , Game::formatCoord($place->xSystem, $place->ySystem, $place->position, $place->rSector) . '.')
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addTxt('Votre empire s\'étend, administrez votre ')
+					->addLnk('bases/base-' . $place->id, 'nouvelle planète')
+					->addTxt('.')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
+					->addEnd();
+				$this->notificationManager->add($notif);
+				break;
+			case Place::CONQUEREMPTYFAIL:
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Colonisation ratée');
+				$notif->addBeg()
+					->addTxt('Votre officier ')
+					->addLnk('fleet/view-memorial', $commander->getName())
+					->addTxt(' est tombé lors de l\'attaque de la planète rebelle située aux coordonnées ')
+					->addLnk('map/place-' . $place->id, Game::formatCoord($place->xSystem, $place->ySystem, $place->position, $place->rSector))
+					->addTxt('.')
+					->addSep()
+					->addTxt('Il a désormais rejoint le Mémorial. Que son âme traverse l\'Univers dans la paix.')
+					->addSep()
+					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
+					->addEnd();
+				$this->notificationManager->add($notif);
+				break;
+			case Place::CONQUERPLAYERWHITOUTBATTLESUCCESS:
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Conquête réussie');
+				$notif->addBeg()
+					->addTxt('Votre officier ')
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addTxt(' a conquis la planète non défendue ')
+					->addLnk('map/place-' . $place->id, $place->baseName)
+					->addTxt(' appartenant au joueur ')
+					->addLnk('embassy/player-' . $place->rPlayer, $place->playerName)
+					->addTxt('.')
+					->addSep()
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addTxt('Elle est désormais votre, vous pouvez l\'administrer ')
+					->addLnk('bases/base-' . $place->id, 'ici')
+					->addTxt('.')
+					->addEnd();
+				$this->notificationManager->add($notif);
+
+				$notif = new Notification();
+				$notif->setRPlayer($place->rPlayer);
+				$notif->setTitle('Planète conquise');
+				$notif->addBeg()
+					->addTxt('L\'officier ')
+					->addStg($commander->getName())
+					->addTxt(' appartenant au joueur ')
+					->addLnk('embassy/player-' . $commander->getRPlayer(), $commander->getPlayerName())
+					->addTxt(' a conquis votre planète non défendue ')
+					->addLnk('map/place-' . $place->id, $place->baseName)
+					->addTxt('.')
+					->addSep()
+					->addTxt('Impliquez votre faction dans une action punitive envers votre assaillant.')
+					->addEnd();
+				$this->notificationManager->add($notif);
+				break;
+			case Place::CONQUERLOST:
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Erreur de coordonnées');
+				$notif->addBeg()
+					->addTxt('Votre officier ')
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addTxt(' n\'a pas attaqué la planète ')
+					->addLnk('map/place-' . $place->id, $place->baseName)
+					->addTxt(' car le joueur est dans votre faction, sous la protection débutant ou votre allié.')
+					->addEnd();
+				$this->notificationManager->add($notif);
+				break;
+			case Place::COMEBACK:
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Rapport de retour');
+				$notif->addBeg()
+					->addTxt('Votre officier ')
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addTxt(' est de retour sur votre base ')
+					->addLnk('map/place-' . $commander->getRBase(), $commander->getBaseName())
+					->addTxt(' et rapporte ')
+					->addStg(Format::number($commander->getResources()))
+					->addTxt(' ressources à vos entrepôts.')
+					->addEnd();
+				$this->notificationManager->add($notif);
+				break;
 			
-			ASM::$com->changeSession($S_COM3);
-
-			$currentP = $this->_Add($p);
-
-			if ($this->currentSession->getUMode()) {
-				$currentP->uMethod();
-			}
+			default: break;
 		}
 	}
 
-	public static function add(Place $p) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('INSERT INTO
-			place(rPlayer, rSystem, typeOfPlace, position, population, coefResources, coefHistory, resources, danger, maxDanger, uPlace)
-			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-		$qr->execute(array(
-			$p->getRPlayer(),
-			$p->getRSystem(),
-			$p->getTypeOfPlace(),
-			$p->getPosition(),
-			$p->getPopulation(),
-			$p->getCoefResources(),
-			$p->getCoefHistory(),
-			$p->getResources(),
-			$p->danger,
-			$p->maxDanger,
-			$p->uPlace
-		));
+	/**
+	 * @param Place $place
+	 * @param string $case
+	 * @param Commander $commander
+	 * @param array $reports
+	 */
+	public function sendNotifForConquest(Place $place, $case, $commander, $reports = array()) {
+		$nbrBattle = count($reports);
+		switch($case) {
+			case Place::CONQUERPLAYERWHITBATTLESUCCESS:
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Conquête réussie');
+				$notif->addBeg()
+					->addTxt('Votre officier ')
+					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
+					->addTxt(' a conquis la planète ')
+					->addLnk('map/place-' . $place->id, $place->baseName)
+					->addTxt(' appartenant au joueur ')
+					->addLnk('embassy/player-' . $place->rPlayer, $place->playerName)
+					->addTxt('.')
+					->addSep()
+					->addTxt($nbrBattle . Format::addPlural($nbrBattle, ' combats ont eu lieu.', ' seul combat a eu lieu'))
+					->addSep()
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addSep()
+					->addTxt('Elle est désormais vôtre, vous pouvez l\'administrer ')
+					->addLnk('bases/base-' . $place->id, 'ici')
+					->addTxt('.');
+				for ($i = 0; $i < $nbrBattle; $i++) {
+					$notif->addSep();
+					$notif->addLnk('fleet/view-archive/report-' . $reports[$i], 'voir le ' . Format::ordinalNumber($i + 1) . ' rapport');
+				}
+				$notif->addEnd();
+				$this->notificationManager->add($notif);
 
-		$p->setId($db->lastInsertId());
+				$notif = new Notification();
+				$notif->setRPlayer($place->rPlayer);
+				$notif->setTitle('Planète conquise');
+				$notif->addBeg()
+					->addTxt('L\'officier ')
+					->addStg($commander->getName())
+					->addTxt(' appartenant au joueur ')
+					->addLnk('embassy/player-' . $commander->getRPlayer(), $commander->getPlayerName())
+					->addTxt(' a conquis votre planète ')
+					->addLnk('map/place-' . $place->id, $place->baseName)
+					->addTxt('.')
+					->addSep()
+					->addTxt($nbrBattle . Format::addPlural($nbrBattle, ' combats ont eu lieu.', ' seul combat a eu lieu'))
+					->addSep()
+					->addTxt('Impliquez votre faction dans une action punitive envers votre assaillant.');
+				for ($i = 0; $i < $nbrBattle; $i++) {
+					$notif->addSep();
+					$notif->addLnk('fleet/view-archive/report-' . $reports[$i], 'voir le ' . Format::ordinalNumber($i + 1) . ' rapport');
+				}
+				$notif->addEnd();
+				$this->notificationManager->add($notif);
+				break;
+			case Place::CONQUERPLAYERWHITBATTLEFAIL:
+				$notif = new Notification();
+				$notif->setRPlayer($commander->getRPlayer());
+				$notif->setTitle('Conquête ratée');
+				$notif->addBeg()
+					->addTxt('Votre officier ')
+					->addLnk('fleet/view-memorial/', $commander->getName())
+					->addTxt(' est tombé lors de la tentive de conquête de la planète ')
+					->addLnk('map/place-' . $place->id, $place->baseName)
+					->addTxt(' appartenant au joueur ')
+					->addLnk('embassy/player-' . $place->rPlayer, $place->playerName)
+					->addTxt('.')
+					->addSep()
+					->addTxt($nbrBattle . Format::addPlural($nbrBattle, ' combats ont eu lieu.', ' seul combat a eu lieu'))
+					->addSep()
+					->addTxt('Il a désormais rejoint de Mémorial. Que son âme traverse l\'Univers dans la paix.');
+				for ($i = 0; $i < $nbrBattle; $i++) {
+					$notif->addSep();
+					$notif->addLnk('fleet/view-archive/report-' . $reports[$i], 'voir le ' . Format::ordinalNumber($i + 1) . ' rapport');
+				}
+				$notif->addEnd();
+				$this->notificationManager->add($notif);
 
-		$this->_Add($p);
-	}
+				$notif = new Notification();
+				$notif->setRPlayer($place->rPlayer);
+				$notif->setTitle('Rapport de combat');
+				$notif->addBeg()
+					->addTxt('L\'officier ')
+					->addStg($commander->getName())
+					->addTxt(' appartenant au joueur ')
+					->addLnk('embassy/player-' . $commander->getRPlayer(), $commander->getPlayerName())
+					->addTxt(' a tenté de conquérir votre planète ')
+					->addLnk('map/place-' . $place->id, $place->baseName)
+					->addTxt('.')
+					->addSep()
+					->addTxt($nbrBattle . Format::addPlural($nbrBattle, ' combats ont eu lieu.', ' seul combat a eu lieu'))
+					->addSep()
+					->addTxt('Vous avez repoussé l\'ennemi avec succès. Bravo !');
+				for ($i = 0; $i < $nbrBattle; $i++) {
+					$notif->addSep();
+					$notif->addLnk('fleet/view-archive/report-' . $reports[$i], 'voir le ' . Format::ordinalNumber($i + 1) . ' rapport');
+				}
+				$notif->addEnd();
+				$this->notificationManager->add($notif);
+				break;
 
-	public function save() {
-		$places = $this->_Save();
-
-		foreach ($places AS $p) {
-			$db = Database::getInstance();
-
-			$qr = $db->prepare('UPDATE place
-				SET	id = ?,
-					rPlayer = ?,
-					rSystem = ?,
-					typeOfPlace = ?,
-					position = ?,
-					population = ?,
-					coefResources = ?,
-					coefHistory = ?,
-					resources = ?,
-					danger = ?,
-					maxDanger = ?,
-					uPlace = ?
-				WHERE id = ?');
-			$qr->execute(array(
-				$p->getId(),
-				$p->getRPlayer(),
-				$p->getRSystem(),
-				$p->getTypeOfPlace(),
-				$p->getPosition(),
-				$p->getPopulation(),
-				$p->getCoefResources(),
-				$p->getCoefHistory(),
-				$p->getResources(),
-				$p->danger,
-				$p->maxDanger,
-				$p->uPlace,
-				$p->getId()
-			));
+			default: break;
 		}
 	}
-
-	public static function deleteById($id) {
-		$db = Database::getInstance();
-		$qr = $db->prepare('DELETE FROM place WHERE id = ?');
-		$qr->execute(array($id));
-		$this->_Remove($id);
-
-		return TRUE;
-	}	
 }

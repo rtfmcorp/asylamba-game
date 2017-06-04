@@ -1,23 +1,22 @@
 <?php
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Modules\Athena\Model\CommercialShipping;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Classes\Library\Format;
 
-$S_TRM1 = ASM::$trm->getCurrentSession();
-$S_CSM1 = ASM::$csm->getCurrentSession();
-ASM::$csm->changeSession($ob_compPlat->shippingManager);
+$transactionManager = $this->getContainer()->get('athena.transaction_manager');
+$commercialShippingManager = $this->getContainer()->get('athena.commercial_shipping_manager');
+$commercialTradeManager = $this->getContainer()->get('athena.commercial_tax_manager');
+$session = $this->getContainer()->get('app.session');
 
-$S_CTM1 = ASM::$ctm->getCurrentSession();
-$S_CTM2 = ASM::$ctm->newSession();
-ASM::$ctm->load(array());
+$S_CTM1 = $commercialTradeManager->getCurrentSession();
+$S_CTM2 = $commercialTradeManager->newSession();
+$commercialTradeManager->load(array());
 
 # work
 $comingCommercialShipping = 0;
-for ($i = 0; $i < ASM::$csm->size(); $i++) { 
-	if (ASM::$csm->get($i)->statement == CommercialShipping::ST_GOING && ASM::$csm->get($i)->rBaseDestination == $ob_compPlat->getId()) {
+foreach ($ob_compPlat->commercialShippings as $commercialShipping) { 
+	if ($commercialShipping->statement === CommercialShipping::ST_GOING && $commercialShipping->rBaseDestination == $ob_compPlat->getId()) {
 		$comingCommercialShipping++;
 	}
 }
@@ -30,9 +29,9 @@ if ($comingCommercialShipping > 0) {
 		echo '<div class="fix-body">';
 			echo '<div class="body">';
 				echo '<h4>Convoi en approche</h4>';
-				for ($i = 0; $i < ASM::$csm->size(); $i++) { 
-					if (ASM::$csm->get($i)->statement == CommercialShipping::ST_GOING && ASM::$csm->get($i)->rBaseDestination == $ob_compPlat->getId()) {
-						ASM::$csm->get($i)->render();
+				foreach ($ob_compPlat->commercialShippings as $commercialShipping) { 
+					if ($commercialShipping->statement == CommercialShipping::ST_GOING && $commercialShipping->rBaseDestination == $ob_compPlat->getId()) {
+						$commercialShippingManager->render($commercialShipping);
 					}
 				}
 			echo '</div>';
@@ -40,12 +39,10 @@ if ($comingCommercialShipping > 0) {
 	echo '</div>';
 }
 
-ASM::$trm->newSession();
-ASM::$trm->load(array('type' => Transaction::TYP_RESOURCE, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
-$ressourceCurrentRate = ASM::$trm->get()->currentRate;
+$transaction = $transactionManager->getLastCompletedTransaction(Transaction::TYP_RESOURCE);
+$ressourceCurrentRate = $transaction->currentRate;
 
-ASM::$trm->newSession();
-ASM::$trm->load(array('type' => Transaction::TYP_RESOURCE, 'statement' => Transaction::ST_PROPOSED), array('dPublication', 'DESC'), array(0, 20));
+$resourceTransactions = $transactionManager->getProposedTransactions(Transaction::TYP_RESOURCE);
 
 echo '<div class="component transaction">';
 	echo '<div class="head skin-4">';
@@ -64,9 +61,9 @@ echo '<div class="component transaction">';
 			echo '</div>';
 
 			echo '<div class="sort-content">';
-				for ($i = 0; $i < ASM::$trm->size(); $i++) {
-					if (CTR::$data->get('playerId') != ASM::$trm->get($i)->rPlayer) {
-						ASM::$trm->get($i)->render($ressourceCurrentRate, $S_CTM2, $ob_compPlat);
+				foreach ($resourceTransactions as $transaction) {
+					if ($session->get('playerId') != $transaction->rPlayer) {
+						$transactionManager->render($transaction, $ressourceCurrentRate, $S_CTM2, $ob_compPlat);
 					}
 				}
 			echo '</div>';
@@ -74,16 +71,9 @@ echo '<div class="component transaction">';
 	echo '</div>';
 echo '</div>';
 
-ASM::$trm->newSession();
-ASM::$trm->load(array('type' => Transaction::TYP_COMMANDER, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
-$commanderCurrentRate = ASM::$trm->get()->currentRate;
+$commanderCurrentRate = $transactionManager->getLastCompletedTransaction(Transaction::TYP_COMMANDER)->currentRate;
 
-ASM::$trm->newSession();
-ASM::$trm->load(
-	array('type' => Transaction::TYP_COMMANDER, 'statement' => Transaction::ST_PROPOSED),
-	array('dPublication', 'DESC'),
-	array(0, 20)
-);
+$commanderTransactions = $transactionManager->getProposedTransactions(Transaction::TYP_COMMANDER);
 
 echo '<div class="component transaction">';
 	echo '<div class="head skin-4">';
@@ -102,9 +92,9 @@ echo '<div class="component transaction">';
 			echo '</div>';
 
 			echo '<div class="sort-content">';
-				for ($i = 0; $i < ASM::$trm->size(); $i++) {
-					if (CTR::$data->get('playerId') != ASM::$trm->get($i)->rPlayer) {
-						ASM::$trm->get($i)->render($commanderCurrentRate, $S_CTM2, $ob_compPlat);
+				foreach ($commanderTransactions as $transaction) {
+					if ($session->get('playerId') != $transaction->rPlayer) {
+						$transactionManager->render($transaction, $commanderCurrentRate, $S_CTM2, $ob_compPlat);
 					}
 				}
 			echo '</div>';
@@ -112,12 +102,9 @@ echo '<div class="component transaction">';
 	echo '</div>';
 echo '</div>';
 
-ASM::$trm->newSession();
-ASM::$trm->load(array('type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_COMPLETED), array('dValidation', 'DESC'), array(0, 1));
-$shipCurrentRate = ASM::$trm->get()->currentRate;
+$shipCurrentRate = $transactionManager->getLastCompletedTransaction(Transaction::TYP_SHIP)->currentRate;
 
-ASM::$trm->newSession();
-ASM::$trm->load(array('type' => Transaction::TYP_SHIP, 'statement' => Transaction::ST_PROPOSED), array('dPublication', 'DESC'), array(0, 20));
+$shipTransactions = $transactionManager->getProposedTransactions(Transaction::TYP_SHIP);
 
 echo '<div class="component transaction">';
 	echo '<div class="head skin-4">';
@@ -136,9 +123,9 @@ echo '<div class="component transaction">';
 			echo '</div>';
 
 			echo '<div class="sort-content">';
-				for ($i = 0; $i < ASM::$trm->size(); $i++) {
-					if (CTR::$data->get('playerId') != ASM::$trm->get($i)->rPlayer) {
-						ASM::$trm->get($i)->render($shipCurrentRate, $S_CTM2, $ob_compPlat);
+				foreach ($shipTransactions as $transaction) {
+					if ($session->get('playerId') != $transaction->rPlayer) {
+						$transactionManager->render($transaction, $shipCurrentRate, $S_CTM2, $ob_compPlat);
 					}
 				}
 			echo '</div>';
@@ -146,6 +133,4 @@ echo '<div class="component transaction">';
 	echo '</div>';
 echo '</div>';
 
-ASM::$trm->changeSession($S_TRM1);
-ASM::$csm->changeSession($S_CSM1);
-ASM::$ctm->changeSession($S_CTM1);
+$commercialTradeManager->changeSession($S_CTM1);

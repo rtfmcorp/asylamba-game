@@ -1,21 +1,17 @@
 <?php
 # delete all notifications
 
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Flashbag;
 
-$S_NTM1 = ASM::$ntm->getCurrentSession();
-ASM::$ntm->newSession(ASM_UMODE);
-ASM::$ntm->load(array('rPlayer' => CTR::$data->get('playerId')));
+$notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$session = $this->getContainer()->get('app.session');
 
-$nbr = ASM::$ntm->deleteByRPlayer(CTR::$data->get('playerId'));
+$nbr = $notificationManager->deleteByRPlayer($session->get('playerId'));
 
 if ($nbr > 1) {
-	CTR::$alert->add($nbr . ' notifications ont été supprimées.', ALERT_STD_SUCCESS);
+	$session->addFlashbag($nbr . ' notifications ont été supprimées.', Flashbag::TYPE_SUCCESS);
 } else if ($nbr == 1) {
-	CTR::$alert->add('Une notification a été supprimée.', ALERT_STD_SUCCESS);
+	$session->addFlashbag('Une notification a été supprimée.', Flashbag::TYPE_SUCCESS);
 } else {
-	CTR::$alert->add('Toutes vos notifications ont déjà été supprimées.', ALERT_STD_SUCCESS);
+	$session->addFlashbag('Toutes vos notifications ont déjà été supprimées.', Flashbag::TYPE_SUCCESS);
 }
-
-ASM::$ntm->changeSession($S_NTM1);

@@ -2,10 +2,12 @@
 
 use Asylamba\Classes\Container\Params;
 
+$request = $this->getContainer()->get('app.request');
+
 echo '<div id="map-option">';
 	echo '<a ';
 		echo 'href="#" ';
-		echo 'class="sh switch-class ajax-switch-params hb lb ' . (Params::check(Params::SHOW_MAP_MINIMAP) ? 'active' : NULL) . '" ';
+		echo 'class="sh switch-class ajax-switch-params hb lb ' . ($request->cookies->get('p' . Params::SHOW_MAP_MINIMAP, Params::$params[Params::SHOW_MAP_MINIMAP]) ? 'active' : NULL) . '" ';
 		echo 'data-class="active" ';
 		echo 'data-target="map-content" ';
 		echo 'data-switch-params="' . Params::SHOW_MAP_MINIMAP . '" ';
@@ -16,7 +18,7 @@ echo '<div id="map-option">';
 	
 	echo '<a ';
 		echo 'href="#" ';
-		echo 'class="sh switch-class ajax-switch-params hb lb ' . (Params::check(Params::SHOW_MAP_RC) ? 'active' : NULL) . '" ';
+		echo 'class="sh switch-class ajax-switch-params hb lb ' . ($request->cookies->get('p' . Params::SHOW_MAP_RC, Params::$params[Params::SHOW_MAP_RC]) ? 'active' : NULL) . '" ';
 		echo 'data-class="active" ';
 		echo 'data-target="commercial-routes" ';
 		echo 'data-switch-params="' . Params::SHOW_MAP_RC . '" ';
@@ -27,7 +29,7 @@ echo '<div id="map-option">';
 
 	echo '<a ';
 		echo 'href="#" ';
-		echo 'class="sh switch-class ajax-switch-params hb lb ' . (Params::check(Params::SHOW_MAP_ANTISPY) ? 'active' : NULL) . '" ';
+		echo 'class="sh switch-class ajax-switch-params hb lb ' . ($request->cookies->get('p' . Params::SHOW_MAP_ANTISPY, Params::$params[Params::SHOW_MAP_ANTISPY]) ? 'active' : NULL) . '" ';
 		echo 'data-class="active" ';
 		echo 'data-target="spying" ';
 		echo 'data-switch-params="' . Params::SHOW_MAP_ANTISPY . '" ';
@@ -38,7 +40,7 @@ echo '<div id="map-option">';
 
 	echo '<a ';
 		echo 'href="#" ';
-		echo 'class="sh switch-class ajax-switch-params hb lb ' . (Params::check(Params::SHOW_MAP_FLEETOUT) ? 'active' : NULL) . '" ';
+		echo 'class="sh switch-class ajax-switch-params hb lb ' . ($request->cookies->get('p' . Params::SHOW_MAP_FLEETOUT, Params::$params[Params::SHOW_MAP_FLEETOUT]) ? 'active' : NULL) . '" ';
 		echo 'data-class="active" ';
 		echo 'data-target="fleet-movements" ';
 		echo 'data-switch-params="' . Params::SHOW_MAP_FLEETOUT . '" ';
@@ -49,7 +51,7 @@ echo '<div id="map-option">';
 
 	echo '<a ';
 		echo 'href="#" ';
-		echo 'class="sh switch-class ajax-switch-params hb lb ' . (Params::check(Params::SHOW_MAP_FLEETIN) ? 'active' : NULL) . '" ';
+		echo 'class="sh switch-class ajax-switch-params hb lb ' . ($request->cookies->get('p' . Params::SHOW_MAP_FLEETIN, Params::$params[Params::SHOW_MAP_FLEETIN]) ? 'active' : NULL) . '" ';
 		echo 'data-class="active" ';
 		echo 'data-target="attacks" ';
 		echo 'data-switch-params="' . Params::SHOW_MAP_FLEETIN . '" ';

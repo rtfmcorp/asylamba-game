@@ -3,24 +3,23 @@
 
 # int id 			id de la notif
 
-use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Worker\ASM;
-use Asylamba\Classes\Worker\CTR;
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Exception\ErrorException;
 
-$id = Utils::getHTTPData('id');
+$id = $this->getContainer()->get('app.request')->query->get('id');
 
+$notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$session = $this->getContainer()->get('app.session');
+$entityManager = $this->getContainer()->get('entity_manager');
 
 if ($id) {
-	$S_NTM1 = ASM::$ntm->getCurrentSession();
-	ASM::$ntm->newSession(ASM_UMODE);
-	ASM::$ntm->load(array('id' => $id));
-	if (ASM::$ntm->size() == 1 && ASM::$ntm->get()->rPlayer == CTR::$data->get('playerId')) {
-		ASM::$ntm->deleteById($id);	
-		CTR::$alert->add('Notification supprimée', ALERT_STD_SUCCESS);
+	if (($notification = $notificationManager->get($id)) !== null && $notification->rPlayer === $session->get('playerId')) {
+		$entityManager->remove($notification);
+		$entityManager->flush($notification);
+		$session->addFlashbag('Notification supprimée', Flashbag::TYPE_SUCCESS);
 	} else {
-		CTR::$alert->add('C\'est pas très bien de supprimer les notifications des autres.', ALERT_STD_ERROR);
+		throw new ErrorException('C\'est pas très bien de supprimer les notifications des autres.');
 	}
-	ASM::$ntm->changeSession($S_NTM1);
 } else {
-	CTR::$alert->add('Cette notification n\'existe pas', ALERT_STD_ERROR);
+	throw new ErrorException('Cette notification n\'existe pas');
 }

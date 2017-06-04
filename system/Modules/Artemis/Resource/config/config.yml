@@ -1,0 +1,6 @@
+---
+services:
+    artemis.spy_report_manager:
+        class: Asylamba\Modules\Artemis\Manager\SpyReportManager
+        arguments:
+            - "@database"

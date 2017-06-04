@@ -1,10 +1,14 @@
 <?php
-$S_CAM_CAN = ASM::$cam->getCurrentSession();
-ASM::$cam->changeSession($S_CAM_CAN);
+
+use Asylamba\Classes\Library\Format;
+
+$candidateManager = $this->getContainer()->get('demeter.candidate_manager');
+$session = $this->getContainer()->get('app.session');
+$sessionToken = $session->get('token');
 
 $hasIPresented = FALSE;
-for ($i = 0; $i < ASM::$cam->size(); $i++) { 
-	if (ASM::$cam->get($i)->rPlayer == CTR::$data->get('playerId')) {
+foreach ($candidates as $candidate) { 
+	if ($candidate->rPlayer == $session->get('playerId')) {
 		$hasIPresented = TRUE;
 		break;
 	}
@@ -16,8 +20,8 @@ echo '<div class="component new-message">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			if (CTR::$data->get('playerInfo')->get('status') >= 2) {
-				echo '<form action="' . Format::actionBuilder('postulate', ['relection' => ASM::$elm->get(0)->id]) . '" method="post">';
+			if ($session->get('playerInfo')->get('status') >= 2) {
+				echo '<form action="' . Format::actionBuilder('postulate', $sessionToken, ['relection' => $election->id]) . '" method="post">';
 					echo '<p><label for="program">Votre message politique</label></p>';
 					echo '<p class="input input-area"><textarea id="program" name="program" required style="height: 300px;"></textarea></p>';
 
@@ -36,5 +40,3 @@ echo '<div class="component new-message">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-ASM::$cam->changeSession($S_CAM_1);

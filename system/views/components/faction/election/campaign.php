@@ -1,7 +1,8 @@
 <?php
 # require
-$S_ELM_ELC = ASM::$elm->getCurrentSession();
-ASM::$elm->changeSession($ELM_CAMPAIGN_TOKEN);
+use Asylamba\Modules\Demeter\Resource\ColorResource;
+
+$session = $this->getContainer()->get('app.session');
 
 echo '<div class="component profil">';
 	echo '<div class="head skin-1">';
@@ -16,10 +17,7 @@ echo '<div class="component profil">';
 
 			echo '<hr / style="margin-top: 25px;">';
 
-			echo '<p class="info">' . ColorResource::getInfo(CTR::$data->get('playerInfo')->get('color'), 'campaignDesc') . '</p>';
+			echo '<p class="info">' . ColorResource::getInfo($session->get('playerInfo')->get('color'), 'campaignDesc') . '</p>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-ASM::$elm->changeSession($S_ELM_ELC);
-?>

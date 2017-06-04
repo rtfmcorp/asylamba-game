@@ -7,8 +7,7 @@
 # [int identifier]	rCommander or shipId
 # int price 		price defined by the proposer
 
-use Asylamba\Classes\Worker\CTR;
-use Asylamba\Classes\Worker\ASM;
+use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Athena\Model\Transaction;
@@ -16,16 +15,27 @@ use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 use Asylamba\Modules\Athena\Model\CommercialShipping;
 use Asylamba\Modules\Ares\Model\Commander;
+use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Exception\FormException;
 
-for ($i = 0; $i < CTR::$data->get('playerBase')->get('ob')->size(); $i++) { 
-	$verif[] = CTR::$data->get('playerBase')->get('ob')->get($i)->get('id');
+$session = $this->getContainer()->get('app.session');
+$request = $this->getContainer()->get('app.request');
+$commanderManager = $this->getContainer()->get('ares.commander_manager');
+$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$commercialShippingManager = $this->getContainer()->get('athena.commercial_shipping_manager');
+$transactionManager = $this->getContainer()->get('athena.transaction_manager');
+$entityManager = $this->getContainer()->get('entity_manager');
+
+for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
+	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-$rPlace = Utils::getHTTPData('rplace');
-$type = Utils::getHTTPData('type');
-$quantity = Utils::getHTTPData('quantity');
-$identifier = Utils::getHTTPData('identifier');
-$price = Utils::getHTTPData('price');
+$rPlace = $request->query->get('rplace');
+$type = $request->query->get('type');
+$quantity = $request->request->get('quantity');
+$identifier = $request->query->get('identifier');
+$price = $request->request->get('price');
 
 if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPlace, $verif)) {
 	$valid = TRUE;
@@ -68,27 +78,21 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 		$maxPrice = Game::getMaxPriceRelativeToRate($type, $quantity, $identifier);
 
 		if ($price < $minPrice) {
-			CTR::$alert->add('Le prix que vous avez fixé est trop bas. Une limite inférieure est fixée selon la catégorie de la vente.', ALERT_STD_ERROR);
+			throw new ErrorException('Le prix que vous avez fixé est trop bas. Une limite inférieure est fixée selon la catégorie de la vente.');
 		} elseif ($price > $maxPrice) {
-			CTR::$alert->add('Le prix que vous avez fixé est trop haut. Une limite supérieure est fixée selon la catégorie de la vente.', ALERT_STD_ERROR);
+			throw new ErrorException('Le prix que vous avez fixé est trop haut. Une limite supérieure est fixée selon la catégorie de la vente.');
 		} else {
 			$valid = TRUE;
-
-			$S_OBM1 = ASM::$obm->getCurrentSession();
-			ASM::$obm->newSession(ASM_UMODE);
-			ASM::$obm->load(array('rPlace' => $rPlace));
-			$base = ASM::$obm->get();
+			$base = $orbitalBaseManager->get($rPlace);
 
 			if ($valid) {
 				# verif : have we enough commercialShips
-				$totalShips = OrbitalBaseResource::getBuildingInfo(OrbitalBaseResource::COMMERCIAL_PLATEFORME, 'level', $base->getLevelCommercialPlateforme(), 'nbCommercialShip');
+				$totalShips = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::COMMERCIAL_PLATEFORME, 'level', $base->getLevelCommercialPlateforme(), 'nbCommercialShip');
 				$usedShips = 0;
 
-				$S_CSM1 = ASM::$csm->getCurrentSession();
-				ASM::$csm->changeSession($base->shippingManager);
-				for ($i = 0; $i < ASM::$csm->size(); $i++) { 
-					if (ASM::$csm->get($i)->rBase == $rPlace) {
-						$usedShips += ASM::$csm->get($i)->shipQuantity;
+				foreach ($base->commercialShippings as $commercialShipping) { 
+					if ($commercialShipping->rBase == $rPlace) {
+						$usedShips += $commercialShipping->shipQuantity;
 					}
 				}
 
@@ -119,32 +123,26 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 					if ($remainingShips >= $commercialShipQuantity) {
 						switch ($type) {
 							case Transaction::TYP_RESOURCE :
-								$base->decreaseResources($quantity);
+								$orbitalBaseManager->decreaseResources($base, $quantity);
 								break;
 							case Transaction::TYP_SHIP :
 								$inStorage = $base->getShipStorage($identifier);
 								$base->setShipStorage($identifier, $inStorage - $quantity);
 								break;
 							case Transaction::TYP_COMMANDER :
-								$S_COM1 = ASM::$com->getCurrentSession();
-								ASM::$com->newSession();
-								ASM::$com->load(array('c.id' => $identifier));
-								if (ASM::$com->size() == 1 AND ASM::$com->get()->getRPlayer() == CTR::$data->get('playerId') AND ASM::$com->get()->statement !== Commander::ONSALE) {
-									$commander = ASM::$com->get();
+								if (($commander = $commanderManager->get($identifier)) !== null AND $commander->getRPlayer() == $session->get('playerId') AND $commander->statement !== Commander::ONSALE) {
 									$commander->statement = Commander::ONSALE;
-									$commander->emptySquadrons();
+									$commanderManager->emptySquadrons($commander);
 								} else {
 									$valid = FALSE;
 								}
-								ASM::$com->changeSession($S_COM1);
-								
 								break;
 						}
 
 						if ($valid) {
 							# création de la transaction
 							$tr = new Transaction();
-							$tr->rPlayer = CTR::$data->get('playerId');
+							$tr->rPlayer = $session->get('playerId');
 							$tr->rPlace = $rPlace;
 							$tr->type = $type; 
 							$tr->quantity = $quantity;
@@ -153,11 +151,11 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 							$tr->commercialShipQuantity = $commercialShipQuantity;
 							$tr->statement = Transaction::ST_PROPOSED;
 							$tr->dPublication = Utils::now();
-							ASM::$trm->add($tr);
+							$transactionManager->add($tr);
 
 							# création du convoi
 							$cs = new CommercialShipping();
-							$cs->rPlayer = CTR::$data->get('playerId');
+							$cs->rPlayer = $session->get('playerId');
 							$cs->rBase = $rPlace;
 							$cs->rBaseDestination = 0;
 							$cs->rTransaction = $tr->id;
@@ -166,36 +164,33 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 							$cs->dDeparture = NULL;
 							$cs->dArrival = NULL;
 							$cs->statement = CommercialShipping::ST_WAITING;
-							ASM::$csm->add($cs);
+							$commercialShippingManager->add($cs);
 
-							CTR::$alert->add('Votre proposition a été envoyée sur le marché.', ALERT_GAM_MARKET);
+							$session->addFlashbag('Votre proposition a été envoyée sur le marché.', Flashbag::TYPE_MARKET_SUCCESS);
 						} else {
-							CTR::$alert->add('Il y a un problème avec votre commandant.', ALERT_STD_ERROR);
+							throw new ErrorException('Il y a un problème avec votre commandant.');
 						}
 					} else {
-						CTR::$alert->add('Vous n\'avez pas assez de vaisseaux de transport disponibles.', ALERT_STD_ERROR);
+						throw new ErrorException('Vous n\'avez pas assez de vaisseaux de transport disponibles.');
 					}
 				} else {
 					switch ($type) {
 						case Transaction::TYP_RESOURCE :
-							CTR::$alert->add('Vous n\'avez pas assez de ressources en stock.', ALERT_STD_ERROR);
-							break;
+							throw new ErrorException('Vous n\'avez pas assez de ressources en stock.');
 						case Transaction::TYP_SHIP :
-							CTR::$alert->add('Vous n\'avez pas assez de vaisseaux.', ALERT_STD_ERROR);
-							break;
+							throw new ErrorException('Vous n\'avez pas assez de vaisseaux.');
 						default:
-							CTR::$alert->add('Erreur pour une raison étrange, contactez un administrateur.', ALERT_STD_ERROR);
+							throw new ErrorException('Erreur pour une raison étrange, contactez un administrateur.');
 					}
 				}
-				ASM::$csm->changeSession($S_CSM1);
 			} else {
-				CTR::$alert->add('impossible de faire une proposition sur le marché !', ALERT_STD_ERROR);
+				throw new ErrorException('impossible de faire une proposition sur le marché !');
 			}
-			ASM::$obm->changeSession($S_OBM1);
 		}
 	} else {
-		CTR::$alert->add('impossible de faire une proposition sur le marché', ALERT_STD_ERROR);
+		throw new ErrorException('impossible de faire une proposition sur le marché');
 	}
 } else {
-	CTR::$alert->add('pas assez d\'informations pour faire une proposition sur le marché', ALERT_STD_FILLFORM);
+	throw new FormException('pas assez d\'informations pour faire une proposition sur le marché');
 }
+$entityManager->flush();

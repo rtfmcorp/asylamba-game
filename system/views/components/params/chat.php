@@ -3,13 +3,15 @@
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Container\Params;
 
+$sessionToken = $this->getContainer()->get('app.session')->get('token');
+
 echo '<div class="component new-message">';
 	echo '<div class="head skin-5">';
 		echo '<h2>Paramètres du chat</h2>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<a href="' . Format::actionBuilder('switchparams', ['params' => Params::REDIRECT_CHAT]) . '" class="on-off-button ' . (Params::check(Params::REDIRECT_CHAT) ? NULL : 'disabled') . '">';
+			echo '<a href="' . Format::actionBuilder('switchparams', $sessionToken, ['params' => Params::REDIRECT_CHAT]) . '" class="on-off-button ' . ($request->cookies->get('p' . Params::REDIRECT_CHAT, Params::$params[Params::REDIRECT_CHAT]) ? NULL : 'disabled') . '">';
 				echo 'Ouvrir le chat directement';
 			echo '</a>';
 
@@ -36,7 +38,7 @@ echo '<div class="component new-message">';
 			echo '<p>Une fois la discussion ouverte, écrivez "!me" à Chicken Bot. Il vous répondra alors avec un identifiant (longue suite de chiffres).</p>';
 			echo '<p>Copiez cet identifiant dans le champ de texte ci-dessous et cliquez sur le bouton.</p>';
 			
-			echo '<form action="' . Format::actionBuilder('discordrequest', []) . '" method="post">';
+			echo '<form action="' . Format::actionBuilder('discordrequest', $sessionToken, []) . '" method="post">';
 				echo '<p class="input input-text">';
 					echo '<input name="discord-id" type="text" placeholder="votre ID Discord" />';
 				echo '</p>';

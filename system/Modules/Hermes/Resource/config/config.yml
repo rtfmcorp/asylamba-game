@@ -1,0 +1,43 @@
+---
+parameters:
+    hermes.notifications.list_limit: 25
+    hermes.notifications.archive_limit: 5
+    hermes.notifications.premium_archive_limit: 50
+
+    hermes.notifications.display_tool: 5
+
+    hermes.notifications.timeout.read: 72       # 3 days
+    hermes.notifications.timeout.unread: 240    # 10 days
+
+    hermes.notifications.mrm.message_display: 50
+
+    hermes.notifications.msm.step_thread: 6
+    hermes.notifications.msm.step_next_thread: 3
+    hermes.notifications.msm.step_message: 10
+    
+services:
+    hermes.conversation_manager:
+        class: Asylamba\Modules\Hermes\Manager\ConversationManager
+        arguments:
+            - "@database"
+            - "@hermes.conversation_user_manager"
+            
+    hermes.conversation_message_manager:
+        class: Asylamba\Modules\Hermes\Manager\ConversationMessageManager
+        arguments:
+            - "@database"
+            
+    hermes.conversation_user_manager:
+        class: Asylamba\Modules\Hermes\Manager\ConversationUserManager
+        arguments:
+            - "@database"
+            
+    hermes.notification_manager:
+        class: Asylamba\Modules\Hermes\Manager\NotificationManager
+        arguments:
+            - "@entity_manager"
+            
+    hermes.roadmap_manager:
+        class: Asylamba\Modules\Hermes\Manager\RoadMapManager
+        arguments:
+            - "@database"

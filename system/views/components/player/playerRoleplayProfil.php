@@ -9,8 +9,9 @@
 
 
 use Asylamba\Modules\Demeter\Resource\ColorResource;
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Format;
+
+$session = $this->getContainer()->get('app.session');
 
 echo '<div class="component profil">';
 	echo '<div class="head">';
@@ -18,10 +19,10 @@ echo '<div class="component profil">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			$status = ColorResource::getInfo(CTR::$data->get('playerInfo')->get('color'), 'status');
+			$status = ColorResource::getInfo($session->get('playerInfo')->get('color'), 'status');
 
 			echo '<div class="center-box">';
-				echo '<span class="label">' . $status[$player_playerRoleplayProfil->status - 1] . ' de ' . ColorResource::getInfo(CTR::$data->get('playerInfo')->get('color'), 'popularName') . '</span>';
+				echo '<span class="label">' . $status[$player_playerRoleplayProfil->status - 1] . ' de ' . ColorResource::getInfo($session->get('playerInfo')->get('color'), 'popularName') . '</span>';
 				echo '<span class="value">' . $player_playerRoleplayProfil->name . '</span>';
 			echo '</div>';
 
@@ -33,9 +34,10 @@ echo '<div class="component profil">';
 				echo '<span class="level">' . $player_playerRoleplayProfil->level . '</span>';
 			echo '</div>';
 
+			$baseLevelPlayer = $this->getContainer()->getParameter('zeus.player.base_level');
 			$exp = $player_playerRoleplayProfil->getExperience();
-			$nlv = PAM_BASELVLPLAYER * (pow(2, ($player_playerRoleplayProfil->getLevel() - 1)));
-			$clv = PAM_BASELVLPLAYER * (pow(2, ($player_playerRoleplayProfil->getLevel() - 2)));
+			$nlv = $baseLevelPlayer * (pow(2, ($player_playerRoleplayProfil->getLevel() - 1)));
+			$clv = $baseLevelPlayer * (pow(2, ($player_playerRoleplayProfil->getLevel() - 2)));
 			$prc = ((($exp - $clv) * 200) / $nlv);
 
 			echo '<div class="number-box">';
