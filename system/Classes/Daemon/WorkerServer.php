@@ -72,6 +72,7 @@ class WorkerServer
         gc_disable();
 		
         while ($this->shutdown === false && ($nbUpgradedStreams = stream_select($inputs, $outputs, $errors, $this->workerCycleTimeout)) !== false) {
+			$this->nbUncollectedCycles++;
 			if ($nbUpgradedStreams === 0) {
                 $this->prepareStreamsState($inputs, $outputs, $errors);
                 continue;
@@ -110,7 +111,6 @@ class WorkerServer
 				$responseData['time'] = microtime(true) - $startTime;
 				$this->processGateway->writeToMaster($responseData);
 			}
-			$this->nbUncollectedCycles++;
 		}
 	}
 	
