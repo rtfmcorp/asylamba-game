@@ -75,6 +75,16 @@ class Database {
 		return $this->connection->prepare($query);
 	}
 	
+	/**
+	 * @param string $query
+	 * @return \PDOStatement
+	 */
+	public function exec($query)
+	{
+		self::$nbrOfQuery++;
+		return $this->connection->exec($query);
+	}
+	
 	public function execute($query) {
 		return $this->connection->exec($query);
 	}
