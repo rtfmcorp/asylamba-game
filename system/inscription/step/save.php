@@ -5,7 +5,7 @@ use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Promethee\Model\Research;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Promethee\Model\Technology;
-use Asylamba\Classes\Worker\API;
+use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 
