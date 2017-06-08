@@ -774,17 +774,7 @@ class Color {
 
 	  return $this;
 	}
-
-
-
-
-
-
-
-
-
-
-
+	
 	/**
 	 * @param int $credit
 	 */
