@@ -136,7 +136,6 @@ class Color {
 		return $this;
 	}
 
-//Kern je suis pas sur du type bool pour alive et isWinner
 	/**
 	 * @return bool
 	 */
@@ -193,10 +192,9 @@ class Color {
 
 	  return $this;
 	}
-	
-	//Kern je connais pas le format pour Players
+
 	/**
-	 * @return int
+	 * @return array
 	 */
 	public function getPlayers()
 	{
@@ -204,7 +202,7 @@ class Color {
 	}
 
 	/**
-	 * @param int $players
+	 * @param array $players
 	 * @return $this
 	 */
 	public function setPlayers($players)
@@ -219,6 +217,7 @@ class Color {
 	 */
 	public function addPlayer($idPlayer)
 	{
+		//Kern je sais pas s'il le faut, et je sais pas comment l'écrire mais j'hésite avec le setPplayers je sais pas si on set tout d'un coup ou si c'est plutot par ajout
 		$this->players = players;
 
 		return $this;
@@ -226,7 +225,7 @@ class Color {
 
 //Kern je connais pas le type non plus, je suppose que c'est un tableau d'int avec les id
 	/**
-	 * @return int
+	 * @return array
 	 */
 	public function getActivePlayers()
 	{
@@ -234,7 +233,7 @@ class Color {
 	}
 
 	/**
-	 * @param int $activePlayers
+	 * @param array $activePlayers
 	 * @return $this
 	 */
 	public function setActivePlayers($activePlayers)
@@ -244,16 +243,557 @@ class Color {
 	  return $this;
 	}
 
+	/**
+	 * @return int
+	 */
+	public function getRankingPoints()
+	{
+	  return $this->rankingPoints;
+	}
 
 	/**
-	 * @param int $credits
+	 * @param int $rankingPoints
+	 * @return $this
+	 */
+	public function setId($rankingPoints)
+	{
+	  $this->rankingPoints = $rankingPoints;
+
+	  return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPoints()
+	{
+	  return $this->points;
+	}
+
+	/**
+	 * @param int $points
+	 * @return $this
+	 */
+	public function setPoints($points)
+	{
+	  $this->points = $points;
+
+	  return $this;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getSectors()
+	{
+	  return $this->id;
+	}
+
+	/**
+	 * @param array $sectors
+	 * @return $this
+	 */
+	public function setSectors($sectors)
+	{
+	  $this->sectors = $sectors;
+
+	  return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getElectionStatement()
+	{
+	  return $this->electionStatement;
+	}
+
+	/**
+	 * @param int $electionStatement
+	 * @return $this
+	 */
+	public function setElectionStatement($electionStatement)
+	{
+	  $this->electionStatement = $electionStatement;
+
+	  return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsClosed()
+	{
+	  return $this->isClosed;
+	}
+
+	/**
+	 * @param bool $isClosed
+	 * @return $this
+	 */
+	public function setIsClosed($isClosed)
+	{
+	  $this->isClosed = $isClosed;
+
+	  return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDescription()
+	{
+	  return $this->description;
+	}
+	//Kern je me base sur les valeurs par défaut mais ça me semble bizarre : public $description= 0;
+	/**
+	 * @param int $description
+	 * @return $this
+	 */
+	public function setDescription($description)
+	{
+	  $this->description = $description;
+
+	  return $this;
+	}
+	//Kern Pareil ici : public $dClaimVictory			= '';
+	/**
+	 * @return string
+	 */
+	public function getDClaimVictory()
+	{
+	  return $this->dClaimVictory;
+	}
+
+	/**
+	 * @param string $dClaimVictory
+	 * @return $this
+	 */
+	public function setDClaimVictory($dClaimVictory)
+	{
+	  $this->dClaimVictory = $dClaimVictory;
+
+	  return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDLastElection()
+	{
+	  return $this->dLastElection;
+	}
+
+	/**
+	 * @param string $dLastElection
+	 * @return $this
+	 */
+	public function setDLastElection($dLastElection)
+	{
+	  $this->dLastElection = $dLastElection;
+
+	  return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getIsInGame()
+	{
+	  return $this->isInGame;
+	}
+
+	/**
+	 * @param int $isInGame
+	 * @return $this
+	 */
+	public function setIsInGame($isInGame)
+	{
+	  $this->isInGame = $isInGame;
+
+	  return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getOfficialName()
+	{
+	  return $this->officialName;
+	}
+
+	/**
+	 * @param string $officialName
+	 * @return $this
+	 */
+	public function getOfficialName($officialName)
+	{
+	  $this->officialName = $officialName;
+
+	  return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPopularName()
+	{
+	  return $this->popularName;
+	}
+
+	/**
+	 * @param string $popularName
+	 * @return $this
+	 */
+	public function setPopularName($popularName)
+	{
+	  $this->popularName = $popularName;
+
+	  return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getGovernment()
+	{
+	  return $this->government;
+	}
+
+	/**
+	 * @param string $government
+	 * @return $this
+	 */
+	public function setGovernment($government)
+	{
+	  $this->government = $government;
+
+	  return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDemonym()
+	{
+	  return $this->demonym;
+	}
+
+	/**
+	 * @param string $demonym
+	 * @return $this
+	 */
+	public function setDemonym($demonym)
+	{
+	  $this->demonym = $demonym;
+
+	  return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getFactionPoint()
+	{
+	  return $this->factionPoint;
+	}
+
+	/**
+	 * @param string $factionPoint
+	 * @return $this
+	 */
+	public function setFactionPoint($factionPoint)
+	{
+	  $this->factionPoint = $factionPoint;
+
+	  return $this;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getStatus()
+	{
+	  return $this->status;
+	}
+
+	/**
+	 * @param array $status
+	 * @return $this
+	 */
+	public function setStatus($status)
+	{
+	  $this->status = $status;
+
+	  return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getRegime()
+	{
+	  return $this->regime;
+	}
+
+	/**
+	 * @param int $regime
+	 * @return $this
+	 */
+	public function setRegime($regime)
+	{
+	  $this->regime = $regime;
+
+	  return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDevise()
+	{
+	  return $this->devise;
+	}
+
+	/**
+	 * @param string $devise
+	 * @return $this
+	 */
+	public function setDevise($devise )
+	{
+	  $this->devise = $devise ;
+
+	  return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDesc1()
+	{
+	  return $this->desc1;
+	}
+
+	/**
+	 * @param string $desc1
+	 * @return $this
+	 */
+	public function setDesc1($desc1)
+	{
+	  $this->desc1 = $desc1;
+
+	  return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDesc2()
+	{
+	  return $this->desc2;
+	}
+
+	/**
+	 * @param string $desc2
+	 * @return $this
+	 */
+	public function setDesc2($desc2)
+	{
+	  $this->desc2 = $desc2;
+
+	  return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDesc3()
+	{
+	  return $this->desc3;
+	}
+
+	/**
+	 * @param string $desc3
+	 * @return $this
+	 */
+	public function setDesc3($desc3)
+	{
+	  $this->desc3 = $desc3;
+
+	  return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDesc4()
+	{
+	  return $this->desc4;
+	}
+
+	/**
+	 * @param string $desc4
+	 * @return $this
+	 */
+	public function setDesc4($desc4)
+	{
+	  $this->desc4 = $desc4;
+
+	  return $this;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getBonus()
+	{
+	  return $this->bonus;
+	}
+
+	/**
+	 * @param array $bonus
+	 * @return $this
+	 */
+	public function setBonus($bonus)
+	{
+	  $this->bonus = $bonus;
+
+	  return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getMandateDuration()
+	{
+	  return $this->mandateDuration;
+	}
+
+	/**
+	 * @param int $mandateDuration
+	 * @return $this
+	 */
+	public function setMandateDuration($mandateDuration)
+	{
+	  $this->mandateDuration = $mandateDuration;
+
+	  return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSenateDesc()
+	{
+	  return $this->senateDesc;
+	}
+
+	/**
+	 * @param string $senateDesc
+	 * @return $this
+	 */
+	public function setSenateDesc($senateDesc)
+	{
+	  $this->senateDesc = $senateDesc;
+
+	  return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getCampaignDesc()
+	{
+	  return $this->campaignDesc;
+	}
+
+	/**
+	 * @param int $campaignDesc
+	 * @return $this
+	 */
+	public function setCampaignDesc($campaignDesc)
+	{
+	  $this->campaignDesc = $campaignDesc;
+
+	  return $this;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getBonusText()
+	{
+	  return $this->bonusText;
+	}
+
+	/**
+	 * @param array $bonusText
+	 * @return $this
+	 */
+	public function SetBonusText($bonusText )
+	{
+	  $this->bonusText = $bonusText ;
+
+	  return $this;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getColorLink()
+	{
+	  return $this->colorLink;
+	}
+
+	/**
+	 * @param array $colorLink
+	 * @return $this
+	 */
+	public function setColorLink($colorLink)
+	{
+	  $this->colorLink = $colorLink;
+
+	  return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getChiefId()
+	{
+	  return $this->chiefId;
+	}
+
+	/**
+	 * @param int $chiefId
+	 * @return $this
+	 */
+	public function setChiefId($chiefId)
+	{
+	  $this->chiefId = $chiefId;
+
+	  return $this;
+	}
+
+
+
+
+
+
+
+
+
+
+
+	/**
+	 * @param int $credit
 	 */
 	public function increaseCredit($credit) {
 		$this->credits += $credit;
 	}
 
 	/**
-	 * @param int $credits
+	 * @param int $credit
 	 */
 	public function decreaseCredit($credit) {
 		$this->credits -= $credit;
