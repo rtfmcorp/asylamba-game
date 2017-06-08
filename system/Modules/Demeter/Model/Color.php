@@ -117,12 +117,144 @@ class Color {
 
 	public $chiefId					= 0;
 
-	public function getId() { return $this->id; }
+	/**
+	 * @return int
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
 
+	/**
+	 * @param int $id
+	 * @return $this
+	 */
+	public function setId($id)
+	{
+		$this->id = $id;
+
+		return $this;
+	}
+
+//Kern je suis pas sur du type bool pour alive et isWinner
+	/**
+	 * @return bool
+	 */
+	public function getAlive()
+	{
+		return $this->alive;
+	}
+
+	/**
+	 * @param bool $alive
+	 * @return $this
+	 */
+	public function setAlive($alive)
+	{
+		$this->alive = $alive;
+
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsWinner()
+	{
+		return $this->isWinner;
+	}
+
+	/**
+	 * @param bool $isWinner
+	 * @return $this
+	 */
+	public function setIsWinner($isWinner)
+	{
+		$this->isWinner = $isWinner;
+
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getCredits()
+	{
+	  return $this->credits;
+	}
+
+	/**
+	 * @param int $credits
+	 * @return $this
+	 */
+	public function setCredits($credits)
+	{
+	  $this->credits = $credits;
+
+	  return $this;
+	}
+	
+	//Kern je connais pas le format pour Players
+	/**
+	 * @return int
+	 */
+	public function getPlayers()
+	{
+	  return $this->players;
+	}
+
+	/**
+	 * @param int $players
+	 * @return $this
+	 */
+	public function setPlayers($players)
+	{
+	  $this->players = $players;
+
+	  return $this;
+	}
+	/**
+	 * @param int $idPlayer
+	 * @return $this
+	 */
+	public function addPlayer($idPlayer)
+	{
+		$this->players = players;
+
+		return $this;
+	}
+
+//Kern je connais pas le type non plus, je suppose que c'est un tableau d'int avec les id
+	/**
+	 * @return int
+	 */
+	public function getActivePlayers()
+	{
+	  return $this->activePlayers;
+	}
+
+	/**
+	 * @param int $activePlayers
+	 * @return $this
+	 */
+	public function setActivePlayers($activePlayers)
+	{
+	  $this->activePlayers = $activePlayers;
+
+	  return $this;
+	}
+
+
+	/**
+	 * @param int $credits
+	 */
 	public function increaseCredit($credit) {
 		$this->credits += $credit;
 	}
 
+	/**
+	 * @param int $credits
+	 */
 	public function decreaseCredit($credit) {
 		$this->credits -= $credit;
 	}
