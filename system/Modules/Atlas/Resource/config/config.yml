@@ -9,3 +9,12 @@ services:
         class: Asylamba\Modules\Atlas\Manager\PlayerRankingManager
         arguments:
             - "@database"
+
+    atlas.ranking_manager:
+        class: Asylamba\Modules\Atlas\Manager\RankingManager
+        arguments:
+            - "@entity_manager"
+            - "@atlas.faction_ranking_manager"
+            - "@demeter.color_manager"
+            - "@hermes.conversation_manager"
+            - "@hermes.conversation_message_manager"
