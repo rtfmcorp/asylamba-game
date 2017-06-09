@@ -12,6 +12,8 @@
 
 use Asylamba\Classes\Library\Format;
 
+$token = $this->getContainer()->get('app.session')->get('token');
+
 echo '<div class="component size3 dock1 admin bugtracker">';
 	echo '<div class="head skin-1">';
 		echo '<img src="' . MEDIA . 'alert/bug.png" alt="" />';
@@ -44,8 +46,8 @@ echo '<div class="component size3 dock1 admin bugtracker">';
 							echo '<td>' . $bug->dSending . '</td>';
 							echo '<td>' . $bug->url . '<br /><br />' . $bug->message . '</td>';
 							echo '<td>';
-								echo '<a href="' . Format::actionBuilder('archivebugreport', ['id' => $bug->id]) . '" class="button hb lt" title="archiver">A</a>';
-								echo ' <a href="' . Format::actionBuilder('deletebugreport', ['id' => $bug->id]) . '" class="button hb lt" title="supprimer">X</a>';
+								echo '<a href="' . Format::actionBuilder('archivebugreport', $token, ['id' => $bug->id]) . '" class="button hb lt" title="archiver">A</a>';
+								echo ' <a href="' . Format::actionBuilder('deletebugreport', $token, ['id' => $bug->id]) . '" class="button hb lt" title="supprimer">X</a>';
 							echo '</td>';
 						echo '</tr>';
 					}
@@ -67,7 +69,7 @@ echo '<div class="component size3 dock1 admin bugtracker">';
 							echo '<td>' . $bug->dSending . '</td>';
 							echo '<td>' . $bug->url . '<br /><br />' . $bug->message . '</td>';
 							echo '<td>';
-								echo '<a href="' . Format::actionBuilder('deletebugreport', ['id' => $bug->id]) . '" class="button hb lt" title="supprimer">X</a>';
+								echo '<a href="' . Format::actionBuilder('deletebugreport', $token, ['id' => $bug->id]) . '" class="button hb lt" title="supprimer">X</a>';
 							echo '</td>';
 						echo '</tr>';
 					}
