@@ -44,7 +44,7 @@ class ShipTest extends \PHPUnit\Framework\TestCase
 
     public function getSquadronMock()
     {
-        return
+        return [
 				'id' => 1,
 				'data' => [
 					2,
@@ -62,4 +62,5 @@ class ShipTest extends \PHPUnit\Framework\TestCase
 					'2017-05-16 20:00:00',
 					'2017-05-16 20:00:00'
 				]
+      ];
 }
