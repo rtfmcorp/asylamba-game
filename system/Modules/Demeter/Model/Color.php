@@ -426,7 +426,7 @@ class Color {
 	 * @param string $officialName
 	 * @return $this
 	 */
-	public function getOfficialName($officialName)
+	public function setOfficialName($officialName)
 	{
 	  $this->officialName = $officialName;
 
