@@ -6,11 +6,11 @@ $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('app.session');
 # bases loading
-//if ($session->get('playerInfo')->get('admin') == FALSE) {
-//	$session->addFlashbag('Accès non-autorisé', Flashbag::TYPE_BUG_ERROR);
-//	$response->redirect('profil');
-//	return;
-//}
+if ($session->get('playerInfo')->get('admin') == FALSE) {
+	$session->addFlashbag('Accès non-autorisé', Flashbag::TYPE_BUG_ERROR);
+	$response->redirect('profil');
+	return;
+}
 
 # background paralax
 echo '<div id="background-paralax" class="profil"></div>';

@@ -12,9 +12,7 @@ $parser = $this->getContainer()->get('parser');
 $conversationManager = $this->getContainer()->get('hermes.conversation_manager');
 $conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
 
-$content 	= $query->request->get('message');
-
-$content 	= $parser->parse($content);
+$content = $parser->parse($request->request->get('message'));
 
 if ($session->get('playerInfo')->get('admin') == FALSE) {
 	$response->redirect('profil');
