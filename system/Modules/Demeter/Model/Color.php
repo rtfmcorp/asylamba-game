@@ -255,7 +255,7 @@ class Color {
 	 * @param int $rankingPoints
 	 * @return $this
 	 */
-	public function setId($rankingPoints)
+	public function setRankingPoints($rankingPoints)
 	{
 	  $this->rankingPoints = $rankingPoints;
 
@@ -774,7 +774,7 @@ class Color {
 
 	  return $this;
 	}
-	
+
 	/**
 	 * @param int $credit
 	 */
