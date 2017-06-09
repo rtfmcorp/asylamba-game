@@ -84,7 +84,7 @@ class ProcessManager
     }
     
     /**
-     * @return string
+     * @return Process
      */
     public function addProcess()
     {
