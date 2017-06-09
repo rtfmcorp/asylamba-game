@@ -21,6 +21,8 @@ parameters:
     log_handler: Asylamba\Classes\Logger\FileLogger
     log_directory: /srv/logs
     log_rotation: 3
+    
+    daily_script_hour: 3
 #    
 #    worker_scale: 1
 #    worker_cycle_timeout: 60
