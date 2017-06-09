@@ -4,7 +4,7 @@ namespace Tests\Asylamba\Modules\Demeter\Model;
 
 use Asylamba\Modules\Demeter\Model\Color;
 
-class CommanderTest extends \PHPUnit\Framework\TestCase
+class ColorTest extends \PHPUnit\Framework\TestCase
 {
     public function testEntity()
     {
@@ -15,7 +15,7 @@ class CommanderTest extends \PHPUnit\Framework\TestCase
 
     }
 
-    public function testIncreseCredit()
+    public function testIncreaseCredit()
     {
       $color = new color();
       $color->credits=1000;
