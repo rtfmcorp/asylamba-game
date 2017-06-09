@@ -18,7 +18,7 @@ $credit = $request->request->get('credit');
 if ($credit !== FALSE) { 
 	if ($credit <= 500000) {
 		$player = $playerManager->get($session->get('playerId'));
-		$player->iUniversity = $credit;
+		$player->iUniversity = (int) $credit;
 		$this->getContainer()->get('entity_manager')->flush($player);
 
 		# tutorial
