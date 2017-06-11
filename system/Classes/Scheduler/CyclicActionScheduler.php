@@ -41,6 +41,7 @@ class CyclicActionScheduler
 		$this->schedule('gaia.place_manager', 'updatePlayerPlaces', self::TYPE_HOURLY);
 		$this->schedule('gaia.place_manager', 'updateNpcPlaces', self::TYPE_HOURLY);
 		$this->schedule('zeus.player_manager', 'updatePlayersCredits', self::TYPE_HOURLY);
+		$this->schedule('atlas.ranking_manager', 'processPlayersRanking', self::TYPE_DAILY);
 		$this->schedule('atlas.ranking_manager', 'processFactionsRanking', self::TYPE_DAILY);
 		$this->execute();
 	}
