@@ -15,7 +15,10 @@ use Asylamba\Modules\Atlas\Routine\FactionRoutine;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
+use Asylamba\Modules\Athena\Helper\OrbitalBaseHelper;
+use Asylamba\Modules\Zeus\Manager\PlayerManager;
 
+use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Atlas\Model\PlayerRanking;
 use Asylamba\Modules\Atlas\Model\FactionRanking;
 use Asylamba\Modules\Atlas\Model\Ranking;
@@ -29,6 +32,8 @@ class RankingManager
 {
 	/** @var EntityManager **/
 	protected $entityManager;
+	/** @var PlayerRankingManager **/
+	protected $playerRankingManager;
 	/** @var FactionRankingManager **/
 	protected $factionRankingManager;
 	/** @var ColorManager **/
@@ -37,6 +42,10 @@ class RankingManager
 	protected $conversationManager;
 	/** @var ConversationMessageManager **/
 	protected $conversationMessageManager;
+	/** @var PlayerManager **/
+	protected $playerManager;
+	/** @var OrbitalBaseHelper **/
+	protected $orbitalBaseHelper;
 	/** @var FactionRoutine **/
 	protected $factionRoutine;
 	/** @var PlayerRoutine **/
@@ -46,28 +55,74 @@ class RankingManager
 	
 	/**
 	 * @param EntityManager $entityManager
+	 * @param PlayerRankingManager $playerRankingManager
 	 * @param FactionRankingManager $factionRankingManager
 	 * @param ColorManager $colorManager
 	 * @param ConversationManager $conversationManager
 	 * @param ConversationMessageManager $conversationMessageManager
+	 * @param PlayerManager $playerManager
+	 * @param OrbitalBaseHelper $orbitalBaseHelper
 	 */
 	public function __construct(
 		EntityManager $entityManager,
+		PlayerRankingManager $playerRankingManager,
 		FactionRankingManager $factionRankingManager,
 		ColorManager $colorManager,
 		ConversationManager $conversationManager,
-		ConversationMessageManager $conversationMessageManager
+		ConversationMessageManager $conversationMessageManager,
+		PlayerManager $playerManager,
+		OrbitalBaseHelper $orbitalBaseHelper
 	)
 	{
 		$this->entityManager = $entityManager;
+		$this->playerRankingManager = $playerRankingManager;
 		$this->factionRankingManager = $factionRankingManager;
 		$this->colorManager = $colorManager;
 		$this->conversationManager = $conversationManager;
 		$this->conversationMessageManager = $conversationMessageManager;
+		$this->playerManager = $playerManager;
+		$this->orbitalBaseHelper = $orbitalBaseHelper;
 		
 		$this->dailyRoutine = new DailyRoutine();
 		$this->playerRoutine = new PlayerRoutine();
 		$this->factionRoutine = new FactionRoutine();
+	}
+	
+	public function processPlayersRanking()
+	{
+		if ($this->entityManager->getRepository(Ranking::class)->hasBeenAlreadyProcessed(true, false) === true) {
+			return;
+		}
+		
+		$players = $this->playerManager->getByStatements([Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]);
+		
+		$playerRankingRepository = $this->entityManager->getRepository(PlayerRanking::class);
+		
+		$ranking = $this->createRanking(true, false);
+		
+		$this->playerRoutine->execute(
+			$players,
+			$playerRankingRepository->getPlayersResources(),
+			$playerRankingRepository->getPlayersResourcesData(),
+			$playerRankingRepository->getPlayersGeneralData(),
+			$playerRankingRepository->getPlayersArmiesData(),
+			$playerRankingRepository->getPlayersPlanetData(),
+			$playerRankingRepository->getPlayersTradeRoutes(),
+			$playerRankingRepository->getPlayersLinkedTradeRoutes(),
+			$playerRankingRepository->getAttackersButcherRanking(),
+			$playerRankingRepository->getDefendersButcherRanking(),
+			$this->orbitalBaseHelper
+		);
+		
+		$S_PRM1 = $this->playerRankingManager->getCurrentSession();
+		$this->playerRankingManager->newSession();
+		$this->playerRankingManager->loadLastContext();
+
+		$this->playerRoutine->processResults($ranking, $players, $this->playerRankingManager, $playerRankingRepository);
+		
+		$this->playerRankingManager->changeSession($S_PRM1);
+		
+		$this->entityManager->flush();
 	}
 	
 	public function processFactionsRanking()
