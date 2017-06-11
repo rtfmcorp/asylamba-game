@@ -49,6 +49,7 @@ class OrbitalBaseResource {
 	public static $building = array(
 		array(
 			'name' => 'generator',
+			'column' => 'levelGenerator',
 			'frenchName' => 'Générateur',
 			'imageLink' => 'generator',
 			'level' => array(
@@ -99,6 +100,7 @@ class OrbitalBaseResource {
 		),
 		array(
 			'name' => 'refinery',
+			'column' => 'levelRefinery',
 			'frenchName' => 'Raffinerie',
 			'imageLink' => 'refinery',
 			'level' => array(
@@ -149,6 +151,7 @@ class OrbitalBaseResource {
 		),
 		array(
 			'name' => 'dock1',
+			'column' => 'levelDock1',
 			'frenchName' => 'Chantier Alpha',
 			'imageLink' => 'dock1',
 			'level' => array(
@@ -199,6 +202,7 @@ class OrbitalBaseResource {
 		),
 		array(
 			'name' => 'dock2',
+			'column' => 'levelDock2',
 			'frenchName' => 'Chantier de Ligne',
 			'imageLink' => 'dock2',
 			'level' => array(
@@ -230,6 +234,7 @@ class OrbitalBaseResource {
 		),
 		array(
 			'name' => 'dock3',
+			'column' => 'levelDock3',
 			'frenchName' => 'Colonne d\'Assemblage',
 			'imageLink' => 'dock3',
 			'level' => array(
@@ -251,6 +256,7 @@ class OrbitalBaseResource {
 		),
 		array(
 			'name' => 'technosphere',
+			'column' => 'levelTechnosphere',
 			'frenchName' => 'Technosphère',
 			'imageLink' => 'technosphere',
 			'level' => array(
@@ -301,6 +307,7 @@ class OrbitalBaseResource {
 		),
 		array(
 			'name' => 'commercialPlateforme',
+			'column' => 'levelCommercialPlateforme',
 			'frenchName' => 'Plateforme Commerciale',
 			'imageLink' => 'commercialplateforme',
 			'level' => array(
@@ -342,6 +349,7 @@ class OrbitalBaseResource {
 		),
 		array(
 			'name' => 'storage',
+			'column' => 'levelStockage',
 			'frenchName' => 'Stockage',
 			'imageLink' => 'storage',
 			'level' => array(
@@ -393,6 +401,7 @@ class OrbitalBaseResource {
 		),
 		array(
 			'name' => 'recycling',
+			'column' => 'levelRecycling',
 			'frenchName' => 'Centre de Recyclage',
 			'imageLink' => 'recycling',
 			'level' => array(
@@ -436,6 +445,7 @@ class OrbitalBaseResource {
 		),
 		array(
 			'name' => 'spatioport',
+			'column' => 'levelSpatioport',
 			'frenchName' => 'Spatioport',
 			'imageLink' => 'spatioport',
 			'level' => array(
