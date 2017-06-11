@@ -269,13 +269,16 @@ class CommanderManager
 
 	public function upExperience(Commander $commander, $earnedExperience) {
 		$commander->experience += $earnedExperience;
-		$earnedLevels = 0;
+		$initialLevel = $commander->getLevel();
 		
 		while ($commander->experience >= $this->experienceToLevelUp($commander)) {
-			$earnedLevels++;
+			$commander->setLevel($commander->getLevel() + 1);
 		}
-		$commander->level += $earnedLevels;
-		$this->entityManager->getRepository(Commander::class)->updateExperience($commander, $earnedExperience, $earnedLevels);
+		$this->entityManager->getRepository(Commander::class)->updateExperience(
+			$commander,
+			$earnedExperience,
+			$commander->getLevel() - $initialLevel
+		);
 	}
 
 	public function nbLevelUp($level, $newExperience) {

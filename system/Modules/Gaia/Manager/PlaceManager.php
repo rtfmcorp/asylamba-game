@@ -95,6 +95,7 @@ class PlaceManager {
 		$places = $this->getNpcPlaces();
 		$now   = Utils::now();
 		$repository = $this->entityManager->getRepository(Place::class);
+		$this->entityManager->beginTransaction();
 		
 		foreach ($places as $place) {
 			if (Utils::interval($place->uPlace, $now, 's') === 0) {
@@ -125,6 +126,7 @@ class PlaceManager {
 			$repository->updatePlace($place, true);
 		}
 		$repository->npcQuickfix();
+		$this->entityManager->commit();
 		$this->entityManager->clear(Place::class);
 	}
 
@@ -132,6 +134,7 @@ class PlaceManager {
 		$places = $this->getPlayerPlaces();
 		$now   = Utils::now();
 		$repository = $this->entityManager->getRepository(Place::class);
+		$this->entityManager->beginTransaction();
 		
 		foreach ($places as $place) {
 			if (Utils::interval($place->uPlace, $now, 's') === 0) {
@@ -151,14 +154,8 @@ class PlaceManager {
 			}
 			$repository->updatePlace($place);
 		}
+		$this->entityManager->commit();
 		$this->entityManager->clear(Place::class);
-	}
-	
-	/**
-	 * @param Place $place
-	 */
-	protected function updateResources(Place $place)
-	{
 	}
 
 	/**
