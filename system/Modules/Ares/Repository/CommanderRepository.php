@@ -487,6 +487,21 @@ class CommanderRepository extends AbstractRepository {
 		}
 	}
 	
+	/**
+	 * @param Commander $commander
+	 */
+	public function updateExperience(Commander $commander, $earnedExperience, $earnedLevel)
+	{
+		$statement = $this->connection->prepare(
+			'UPATE commander SET experience = experience + :experience, level = level + :level WHERE id = :id'
+		);
+		$statement->execute([
+			'experience' => $earnedExperience,
+			'level' => $earnedLevel,
+			'id' => $commander->getId()
+		]);
+	}
+	
 	public function remove($commander)
 	{
 		$statement = $this->connection->prepare('DELETE FROM commander WHERE id = :id');
