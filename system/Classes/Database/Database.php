@@ -65,6 +65,38 @@ class Database {
 			die('Erreur de connection à la base de données : ' . $e->getMessage());
 		}
 	}
+	
+	/**
+	 * @return bool
+	 */
+	public function beginTransaction()
+	{
+		return $this->connection->beginTransaction();
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function inTransaction()
+	{
+		return $this->connection->inTransaction();
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function commit()
+	{
+		return $this->connection->commit();
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function rollBack()
+	{
+		return $this->connection->rollBack();
+	}
 
 	public function query($query) {
 		self::$nbrOfQuery++;
