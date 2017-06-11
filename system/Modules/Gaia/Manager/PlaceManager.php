@@ -124,6 +124,7 @@ class PlaceManager {
 			}
 			$repository->updatePlace($place, true);
 		}
+		$repository->npcQuickfix();
 		$this->entityManager->clear(Place::class);
 	}
 

@@ -24,6 +24,7 @@ services:
         arguments:
             - "@task_manager"
             - "@load_balancer"
+            - "%daily_script_hour"
             
     realtime_action_scheduler:
         class: Asylamba\Classes\Scheduler\RealTimeActionScheduler

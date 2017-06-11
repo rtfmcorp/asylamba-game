@@ -57,7 +57,8 @@ class Database {
 				$this->password,
 				[
 					\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-					\PDO::ATTR_EMULATE_PREPARES => false
+					\PDO::ATTR_EMULATE_PREPARES => false,
+					\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
 				]
 			);
 		} catch (\PDOException $e) {
@@ -73,6 +74,16 @@ class Database {
 	public function prepare($query) {
 		self::$nbrOfQuery++;
 		return $this->connection->prepare($query);
+	}
+	
+	/**
+	 * @param string $query
+	 * @return \PDOStatement
+	 */
+	public function exec($query)
+	{
+		self::$nbrOfQuery++;
+		return $this->connection->exec($query);
 	}
 	
 	public function execute($query) {

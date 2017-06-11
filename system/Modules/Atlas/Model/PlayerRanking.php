@@ -12,9 +12,10 @@
 
 namespace Asylamba\Modules\Atlas\Model;
 
-use Asylamba\Classes\Worker\CTR;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
+
+use Asylamba\Modules\Zeus\Model\Player;
 
 class PlayerRanking {
 	# set number of player before you (remove 1) in rank view
@@ -30,6 +31,9 @@ class PlayerRanking {
 	public $id; 
 	public $rRanking;
 	public $rPlayer; 
+	
+	/** @var Player **/
+	protected $player;
 
 	public $general;			# pts des bases + flottes + commandants
 	public $generalPosition;
@@ -69,9 +73,57 @@ class PlayerRanking {
 	public $avatar;
 	public $status;
 	
+	/**
+	 * @param int $id
+	 * @return PlayerRanking
+	 */
+	public function setId($id)
+	{
+		$this->id = $id;
+		
+		return $this;
+	}
 
 	public function getId() { return $this->id; }
 
+	/**
+	 * @param Player $player
+	 * @return PlayerRanking
+	 */
+	public function setPlayer(Player $player)
+	{
+		$this->player = $player;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return Player
+	 */
+	public function getPlayer()
+	{
+		return $this->player;
+	}
+	
+	/**
+	 * @param int $general
+	 * @return PlayerRanking
+	 */
+	public function setGeneral($general)
+	{
+		$this->general = $general;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getGeneral()
+	{
+		return $this->general;
+	}
+	
 	public function commonRender($playerId, $type) {
 		$r = '';
 		$status = ColorResource::getInfo($this->color, 'status');
