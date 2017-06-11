@@ -188,9 +188,6 @@ class OrbitalBaseRepository extends AbstractRepository {
 	{
 		$statement = $this->connection->prepare(
 			'UPDATE orbitalBase SET rPlayer = :player_id, name = :name, typeOfBase = :type,
-			levelGenerator = :generator_level, levelRefinery = :refinery_level, levelDock1 = :dock1_level, levelDock2 = :dock2_level,
-			levelDock3 = :dock3_level, levelTechnosphere = :technosphere_level, levelCommercialPlateforme = :commercial_platform_level,
-			levelStorage = :storage_level, levelRecycling = :recycling_level, levelSpatioport = :spatioport_level, points = :points,
 			iSchool = :school_investments, iAntiSpy = :anti_spy_investments, antiSpyAverage = :anti_spy_average,
 			pegaseStorage = :pegase_storage, satyreStorage = :satyre_storage, sireneStorage = :sirene_storage, dryadeStorage = :dryade_storage,
 			chimereStorage = :chimere_storage, meduseStorage = :meduse_storage, griffonStorage = :griffon_storage,
@@ -203,17 +200,6 @@ class OrbitalBaseRepository extends AbstractRepository {
 			'player_id' => $orbitalBase->getRPlayer(),
 			'name' => $orbitalBase->getName(),
 			'type' => $orbitalBase->typeOfBase,
-			'generator_level' => $orbitalBase->getLevelGenerator(),
-			'refinery_level' => $orbitalBase->getLevelRefinery(),
-			'dock1_level' => $orbitalBase->getLevelDock1(),
-			'dock2_level' => $orbitalBase->getLevelDock2(),
-			'dock3_level' => $orbitalBase->getLevelDock3(),
-			'technosphere_level' => $orbitalBase->getLevelTechnosphere(),
-			'commercial_platform_level' => $orbitalBase->getLevelCommercialPlateforme(),
-			'storage_level' => $orbitalBase->getLevelStorage(),
-			'recycling_level' => $orbitalBase->getLevelRecycling(),
-			'spatioport_level' => $orbitalBase->getLevelSpatioport(),
-			'points' => $orbitalBase->getPoints(),
 			'school_investments' => $orbitalBase->getISchool(),
 			'anti_spy_investments' => $orbitalBase->getIAntiSpy(),
 			'anti_spy_average' => $orbitalBase->getAntiSpyAverage(),
@@ -234,6 +220,17 @@ class OrbitalBaseRepository extends AbstractRepository {
 			'created_at' => $orbitalBase->getDCreation(),
 			'id' => $orbitalBase->getRPlace(),
 		));
+	}
+	
+	public function increaseBuildingLevel(OrbitalBase $orbitalBase, $buildingColumn, $earnedPoints)
+	{
+		$statement = $this->connection->prepare(
+			"UPDATE orbitalBase SET {$buildingColumn} = {$buildingColumn} + 1, points = points + :points WHERE rPlace = :id"
+		);
+		$statement->execute([
+			'points' => $earnedPoints,
+			'id' => $orbitalBase->getId()
+		]);
 	}
 	
 	public function remove($orbitalBase)
