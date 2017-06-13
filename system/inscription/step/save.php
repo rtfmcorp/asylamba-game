@@ -22,6 +22,8 @@ try {
 	$entityManager = $this->getContainer()->get('entity_manager');
 	$eventDispatcher = $this->getContainer()->get('event_dispatcher');
 	
+	$entityManager->beginTransaction();
+	
 	$faction = $session->get('inscription')->get('ally');
 	# AJOUT DU JOUEUR EN BASE DE DONNEE
 	$player = new Player();
@@ -140,7 +142,7 @@ try {
 	$qr->execute(array($session->get('inscription')->get('sector')));
 	$aw = $qr->fetchAll();
 
-	$placeId = $aw[rand(0, (count($aw) - 1))][0];
+	$placeId = $aw[rand(0, (count($aw) - 1))]['id'];
 
 	$ob->setRPlace($placeId);
 
@@ -277,6 +279,7 @@ try {
 		
 		$conversationManager->changeSession($S_CVM);
 	}
+	$entityManager->commit();
 	$security = $this->getContainer()->get('security');
 	# redirection vers connection
 	$this->getContainer()->get('app.response')->redirect('connection/bindkey-' . $security->crypt($security->buildBindkey($player->getBind())) . '/mode-splash');
