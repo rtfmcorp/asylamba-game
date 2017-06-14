@@ -130,7 +130,7 @@ try {
 	$ob = new OrbitalBase();
 
 	# choix de la place
-	$qr = $database->prepare('SELECT * FROM place AS p
+	$qr = $database->prepare('SELECT p.id FROM place AS p
 		INNER JOIN system AS sy ON p.rSystem = sy.id
 			INNER JOIN sector AS se ON sy.rSector = se.id
 		WHERE p.typeOfPlace = 1
