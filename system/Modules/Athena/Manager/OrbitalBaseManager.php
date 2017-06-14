@@ -455,8 +455,12 @@ class OrbitalBaseManager {
         $this->entityManager->flush();
 	}
 	
-
+	/**
+	 * @param OrbitalBase $orbitalBase
+	 * @return int
+	 */
 	public function updatePoints(OrbitalBase $orbitalBase) {
+		$initialPoints = $orbitalBase->getPoints();
 		$points = 0;
 
 		for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) { 
@@ -467,8 +471,7 @@ class OrbitalBaseManager {
 
 		$points = round($points);
 		$orbitalBase->setPoints($points);
-		
-		$this->entityManager->flush($orbitalBase);
+		return $points - $initialPoints;
 	}
 
 	// UPDATE METHODS
@@ -582,7 +585,12 @@ class OrbitalBaseManager {
 		# update builded building
 		$orbitalBase->setBuildingLevel($queue->buildingNumber, ($orbitalBase->getBuildingLevel($queue->buildingNumber) + 1));
 		# update the points of the orbitalBase
-		$this->updatePoints($orbitalBase);
+		$earnedPoints = $this->updatePoints($orbitalBase);
+		$this->entityManager->getRepository(OrbitalBase::class)->increaseBuildingLevel(
+			$orbitalBase,
+			$this->orbitalBaseHelper->getBuildingInfo($queue->buildingNumber, 'column'),
+			$earnedPoints
+		);
 		# increase player experience
 		$experience = $this->orbitalBaseHelper->getBuildingInfo($queue->buildingNumber, 'level', $queue->targetLevel, 'points');
 		$this->playerManager->increaseExperience($player, $experience);

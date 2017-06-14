@@ -22,12 +22,12 @@ $credit = $request->request->get('credit');
 $category = $request->query->get('category');
 
 
-if ($baseId !== FALSE AND $credit !== FALSE AND $category !== FALSE AND in_array($baseId, $verif)) { 
+if ($baseId !== FALSE AND $credit !== FALSE AND $category !== FALSE AND in_array($baseId, $verif)) {
 		if (($base = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
 			switch ($category) {
 				case 'school':
 					if ($credit <= 50000) {
-						$base->setISchool($credit);
+						$base->setISchool((int) $credit);
 						$session->addFlashbag('L\'investissement dans l\'école de commandement de votre base ' . $base->getName() . ' a été modifié', Flashbag::TYPE_SUCCESS);
 					} else {
 						throw new FormException('La limite maximale d\'investissement dans l\'école de commandement est de 50\'000 crédits.');
@@ -35,7 +35,7 @@ if ($baseId !== FALSE AND $credit !== FALSE AND $category !== FALSE AND in_array
 					break;
 				case 'antispy':
 					if ($credit <= 100000) {
-						$base->setIAntiSpy($credit);
+						$base->setIAntiSpy((int) $credit);
 						$session->addFlashbag('L\'investissement dans l\'anti-espionnage sur votre base ' . $base->getName() . ' a été modifié', Flashbag::TYPE_SUCCESS);
 					} else {
 						throw new FormException('La limite maximale d\'investissement dans l\'anti-espionnage est de 100\'000 crédits.');

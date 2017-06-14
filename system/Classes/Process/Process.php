@@ -237,6 +237,8 @@ class Process
 	public function setExpectedWorkTime($expectedWorkTime)
 	{
 		$this->expectedWorkTime = $expectedWorkTime;
+        
+        return $this;
 	}
 	
 	/**

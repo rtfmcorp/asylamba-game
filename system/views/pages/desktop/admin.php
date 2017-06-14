@@ -1,12 +1,15 @@
 <?php
 
-$request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('app.session');
+use Asylamba\Classes\Library\Flashbag;
 
+$request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
+$session = $this->getContainer()->get('app.session');
 # bases loading
 if ($session->get('playerInfo')->get('admin') == FALSE) {
-	header('Location: ' . APP_ROOT . 'profil');
-	exit();
+	$session->addFlashbag('Accès non-autorisé', Flashbag::TYPE_BUG_ERROR);
+	$response->redirect('profil');
+	return;
 }
 
 # background paralax

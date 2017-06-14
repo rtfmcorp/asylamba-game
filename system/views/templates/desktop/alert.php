@@ -1,6 +1,9 @@
 <?php
 
-use Asylamba\Classes\Library\Flashbag;
+// Avoid flashbags flush
+if ($this->getContainer()->get('app.response')->getRedirect() !== null) {
+	return;
+}
 
 echo '<ul id="alert"></ul>';
 

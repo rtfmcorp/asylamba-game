@@ -24,6 +24,38 @@ class EntityManager {
         $this->unitOfWork = new UnitOfWork($this);
     }
 	
+	/**
+	 * @return bool
+	 */
+	public function beginTransaction()
+	{
+		return $this->connection->beginTransaction();
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function inTransaction()
+	{
+		return $this->connection->inTransaction();
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function commit()
+	{
+		return $this->connection->commit();
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function rollBack()
+	{
+		return $this->connection->rollBack();
+	}
+	
     /**
 	 * @param string $entityClass
 	 * @return AbstractRepository

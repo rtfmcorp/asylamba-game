@@ -63,6 +63,14 @@ class LoadBalancer
     }
     
     /**
+     * @return array
+     */
+    public function getStats()
+    {
+        return $this->stats;
+    }
+    
+    /**
      * @param Task $task
      */
     public function estimateTime(Task $task)

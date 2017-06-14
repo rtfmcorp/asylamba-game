@@ -65,8 +65,7 @@ class ProcessManager
 		if ($task instanceof RealTimeTask && $task->getContext() !== null) {
 			$process->addContext($task->getContext());
 		}
-		
-		$this->gateway->writeTo($process, $task);
+		$this->getGateway()->writeTo($process, $task);
 	}
     
     public function launchProcesses()
@@ -85,7 +84,7 @@ class ProcessManager
     }
     
     /**
-     * @return string
+     * @return Process
      */
     public function addProcess()
     {
@@ -150,8 +149,18 @@ class ProcessManager
      */
     public function shutdownProcess(Process $process)
     {
-        $this->gateway->writeTo($process, [
+        $this->getGateway()->writeTo($process, [
             'command' => 'shutdown'
         ]);
+    }
+    
+    /**
+     * The purpose of this method is to ease tests
+     * 
+     * @return ProcessGateway
+     */
+    public function getGateway()
+    {
+        return $this->gateway;
     }
 }

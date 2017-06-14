@@ -269,14 +269,16 @@ class CommanderManager
 
 	public function upExperience(Commander $commander, $earnedExperience) {
 		$commander->experience += $earnedExperience;
-
-		while (1) {
-			if ($commander->experience >= $this->experienceToLevelUp($commander)) {
-				$commander->level++;
-			} else {
-				break;
-			}
+		$initialLevel = $commander->getLevel();
+		
+		while ($commander->experience >= $this->experienceToLevelUp($commander)) {
+			$commander->setLevel($commander->getLevel() + 1);
 		}
+		$this->entityManager->getRepository(Commander::class)->updateExperience(
+			$commander,
+			$earnedExperience,
+			$commander->getLevel() - $initialLevel
+		);
 	}
 
 	public function nbLevelUp($level, $newExperience) {
@@ -313,7 +315,8 @@ class CommanderManager
 	{
 		$now = Utils::now();
 		$commanders = $this->entityManager->getRepository(Commander::class)->getAllByStatements([Commander::INSCHOOL]);
-
+		$this->entityManager->beginTransaction();
+		
 		foreach ($commanders as $commander) {
 			// If the commander was updated recently, we skip him
 			if (Utils::interval($commander->uCommander, $now, 'h') === 0) {
@@ -343,7 +346,7 @@ class CommanderManager
 				$this->upExperience($commander, $earnedExperience);
 			}
 		}
-		$this->entityManager->flush(Commander::class);
+		$this->entityManager->commit();
 	}
 
 	public function move(Commander $commander, $rDestinationPlace, $rStartPlace, $travelType, $travelLength, $duration) {
