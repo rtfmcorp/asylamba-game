@@ -199,28 +199,14 @@ class PlaceRepository extends AbstractRepository
 		$statement = $this->connection->prepare(
 			'UPDATE place SET
 				rPlayer = :player_id,
-				rSystem = :system_id,
-				typeOfPlace = :place_type,
-				position = :position,
-				population = :population,
-				coefResources = :resources_coeff,
-				coefHistory = :history_coeff,
 				resources = :resources,
 				danger = :danger,
-				maxDanger = :max_danger,
 				uPlace = :u_place
 			WHERE id = :id');
 		$statement->execute(array(
 			'player_id' => $place->getRPlayer(),
-			'system_id' => $place->getRSystem(),
-			'place_type' => $place->getTypeOfPlace(),
-			'position' => $place->getPosition(),
-			'population' => $place->getPopulation(),
-			'resources_coeff' => $place->getCoefResources(),
-			'history_coeff' => $place->getCoefHistory(),
 			'resources' => $place->getResources(),
 			'danger' => $place->danger,
-			'max_danger' => $place->maxDanger,
 			'u_place' => $place->uPlace,
 			'id' => $place->getId()
 		));
