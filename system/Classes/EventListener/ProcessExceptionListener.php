@@ -9,9 +9,13 @@ use Asylamba\Classes\Event\ProcessErrorEvent;
 
 use Asylamba\Classes\Process\ProcessGateway;
 
+use Asylamba\Classes\Database\Database;
+
 class ProcessExceptionListener {
 	/** @var AbstractLogger **/
 	protected $logger;
+	/** @var Database **/
+	protected $database;
 	/** @var ProcessGateway **/
 	protected $processGateway;
 	/** @var string **/
@@ -19,12 +23,14 @@ class ProcessExceptionListener {
 	
 	/**
 	 * @param AbstractLogger $logger
+	 * @param Database $database
 	 * @param ProcessGateway $gateway
 	 * @param string $processName
 	 */
-	public function __construct(AbstractLogger $logger, ProcessGateway $gateway, $processName)
+	public function __construct(AbstractLogger $logger, Database $database, ProcessGateway $gateway, $processName)
 	{
 		$this->logger = $logger;
+		$this->database = $database;
 		$this->processGateway = $gateway;
 		$this->processName = $processName;
 	}
@@ -72,6 +78,10 @@ class ProcessExceptionListener {
 	public function process($event, $message, $file, $line, $trace, $level)
 	{
 		$this->logger->log("{$this->processName} : $message at $file at line $line\n$trace", $level);
+		
+		if ($this->database->inTransaction()) {
+			$this->database->rollBack();
+		}
 		
 		$this->processGateway->writeToMaster([
 			'success' => false,
