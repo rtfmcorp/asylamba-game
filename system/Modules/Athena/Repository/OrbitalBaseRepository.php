@@ -192,7 +192,7 @@ class OrbitalBaseRepository extends AbstractRepository {
 			pegaseStorage = :pegase_storage, satyreStorage = :satyre_storage, sireneStorage = :sirene_storage, dryadeStorage = :dryade_storage,
 			chimereStorage = :chimere_storage, meduseStorage = :meduse_storage, griffonStorage = :griffon_storage,
 			cyclopeStorage = :cyclope_storage, minotaureStorage = :minotaure_storage, hydreStorage = :hydre_storage,
-			cerbereStorage = :cerbere_storage, phenixStorage = :phenix_storage, resourcesStorage = :resources,
+			cerbereStorage = :cerbere_storage, phenixStorage = :phenix_storage,
 			uOrbitalBase = :u_orbital_base, dCreation = :created_at
 			WHERE rPlace = :id'
 		);
@@ -215,7 +215,6 @@ class OrbitalBaseRepository extends AbstractRepository {
 			'hydre_storage' => $orbitalBase->getShipStorage(9),
 			'cerbere_storage' => $orbitalBase->getShipStorage(10),
 			'phenix_storage' => $orbitalBase->getShipStorage(11),
-			'resources' => $orbitalBase->getResourcesStorage(),
 			'u_orbital_base' => $orbitalBase->uOrbitalBase,
 			'created_at' => $orbitalBase->getDCreation(),
 			'id' => $orbitalBase->getRPlace(),
@@ -229,6 +228,28 @@ class OrbitalBaseRepository extends AbstractRepository {
 		);
 		$statement->execute([
 			'points' => $earnedPoints,
+			'id' => $orbitalBase->getId()
+		]);
+	}
+	
+	public function increaseResources(OrbitalBase $orbitalBase, $resources)
+	{
+		$statement = $this->connection->prepare(
+			"UPDATE orbitalBase SET resourcesStorage = resourcesStorage + :resources WHERE rPlace = :id"
+		);
+		$statement->execute([
+			'resources' => $resources,
+			'id' => $orbitalBase->getId()
+		]);
+	}
+	
+	public function decreaseResources(OrbitalBase $orbitalBase, $resources)
+	{
+		$statement = $this->connection->prepare(
+			"UPDATE orbitalBase SET resourcesStorage = resourcesStorage - :resources WHERE rPlace = :id"
+		);
+		$statement->execute([
+			'resources' => $resources,
 			'id' => $orbitalBase->getId()
 		]);
 	}
