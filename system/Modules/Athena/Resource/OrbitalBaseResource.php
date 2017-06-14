@@ -349,7 +349,7 @@ class OrbitalBaseResource {
 		),
 		array(
 			'name' => 'storage',
-			'column' => 'levelStockage',
+			'column' => 'levelStorage',
 			'frenchName' => 'Stockage',
 			'imageLink' => 'storage',
 			'level' => array(
