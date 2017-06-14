@@ -851,4 +851,13 @@ class PlayerManager {
 		}
 		$this->entityManager->flush($player);
 	}
+	
+	/**
+	 * @param int $playerId
+	 * @param int $investment
+	 */
+	public function updateUniversityInvestment($playerId, $investment)
+	{
+		$this->entityManager->getRepository(Player::class)->updateUniversityInvestment($playerId, $investment);
+	}
 }

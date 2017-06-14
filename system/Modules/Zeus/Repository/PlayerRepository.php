@@ -455,7 +455,6 @@ class PlayerRepository extends AbstractRepository {
 			defeat = :nb_defeats,
 			stepTutorial = :tutorial_step,
 			stepDone = :tutorial_step_is_done,
-			iUniversity = :university_investment,
 			partNaturalSciences = :natural_science_investment,
 			partLifeSciences = :life_science_investment,
 			partSocialPoliticalSciences = :social_political_investment,
@@ -485,7 +484,6 @@ class PlayerRepository extends AbstractRepository {
 			'nb_defeats' => $player->getDefeat(),
 			'tutorial_step' => $player->getStepTutorial(),
 			'tutorial_step_is_done' => $player->stepDone,
-			'university_investment' => $player->iUniversity,
 			'natural_science_investment' => $player->partNaturalSciences,
 			'life_science_investment' => $player->partLifeSciences,
 			'social_political_investment' => $player->partSocialPoliticalSciences,
@@ -510,6 +508,19 @@ class PlayerRepository extends AbstractRepository {
 		$query->execute(array(
 			'updated_at' => $player->uPlayer,
 			'id' => $player->getId()
+		));
+	}
+	
+	/**
+	 * @param int $playerId
+	 * @param int $investment
+	 */
+	public function updateUniversityInvestment($playerId, $investment)
+	{
+		$query = $this->connection->prepare("UPDATE player SET iUniversity = :investment WHERE id = :id");
+		$query->execute(array(
+			'investment' => $investment,
+			'id' => $playerId
 		));
 	}
 	

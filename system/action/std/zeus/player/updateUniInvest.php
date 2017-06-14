@@ -13,13 +13,11 @@ $session = $this->getContainer()->get('app.session');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 
-$credit = $request->request->get('credit');
+$investment = $request->request->get('credit');
 
-if ($credit !== FALSE) { 
-	if ($credit <= 500000) {
-		$player = $playerManager->get($session->get('playerId'));
-		$player->iUniversity = (int) $credit;
-		$this->getContainer()->get('entity_manager')->flush($player);
+if ($investment !== FALSE) { 
+	if ($investment <= 500000) {
+		$playerManager->updateUniversityInvestment($session->get('playerId'), (int) $investment);
 
 		# tutorial
 		if ($session->get('playerInfo')->get('stepDone') == FALSE &&
