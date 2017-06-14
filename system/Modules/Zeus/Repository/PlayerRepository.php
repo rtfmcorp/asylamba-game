@@ -437,16 +437,8 @@ class PlayerRepository extends AbstractRepository {
 	public function update($player)
 	{
 		$query = $this->connection->prepare('UPDATE player SET 
-			id = :id,
-			bind = :bind,
-			rColor = :faction_id,
-			name = :name,
-			sex = :gender,
 			description = :description,
-			avatar = :avatar,
 			status = :status,
-			rGodfather = :god_father_id,
-			credit = :credits,
 			uPlayer = :u_player,
 			experience = :experience,
 			factionPoint = :faction_points,
@@ -459,23 +451,13 @@ class PlayerRepository extends AbstractRepository {
 			partLifeSciences = :life_science_investment,
 			partSocialPoliticalSciences = :social_political_investment,
 			partInformaticEngineering = :informatic_engineering_investment,
-			dInscription = :created_at,
 			dLastConnection = :last_connected_at,
 			dLastActivity = :last_acted_at,
-			premium = :is_premium,
 			statement = :statement
-		WHERE id = :identifier');
+		WHERE id = :id');
 		$query->execute(array(
-			'id' => $player->getId(),
-			'bind' => $player->getBind(),
-			'faction_id' => $player->getRColor(),
-			'name' => $player->getName(),
-			'gender' => $player->sex,
 			'description' => $player->description,
-			'avatar' => $player->getAvatar(),
 			'status' => $player->getStatus(),
-			'god_father_id' => $player->rGodfather,
-			'credits' => $player->getCredit(),
 			'u_player' => $player->uPlayer,
 			'experience' => $player->getExperience(),
 			'faction_points' => $player->factionPoint,
@@ -488,17 +470,15 @@ class PlayerRepository extends AbstractRepository {
 			'life_science_investment' => $player->partLifeSciences,
 			'social_political_investment' => $player->partSocialPoliticalSciences,
 			'informatic_engineering_investment' => $player->partInformaticEngineering,
-			'created_at' => $player->getDInscription(),
 			'last_connected_at' => $player->getDLastConnection(),
 			'last_acted_at' => $player->getDLastActivity(),
-			'is_premium' => $player->getPremium(),
 			'statement' => $player->getStatement(),
-			'identifier' => $player->getId()
+			'id' => $player->getId()
 		));
 	}
 	
 	/**
-	 * @param Player $playerId
+	 * @param Player $player
 	 * @param int $credits
 	 * @param string $operator
 	 */
