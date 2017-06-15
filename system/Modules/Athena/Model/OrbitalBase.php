@@ -147,61 +147,196 @@ class OrbitalBase {
 			case 7 : return $this->levelStorage;
 			case 8 : return $this->levelRecycling;
 			case 9 : return $this->levelSpatioport;
-			default : 
+			default :
 				throw new ErrorException('Bâtiment invalide dans getBuildingLevel de OrbitalBase');
 				return FALSE;
 		}
 	}
 
 	//SETTERS
-	public function setId($var) { $this->rPlace = $var; }
-	public function setRPlace($var) { $this->rPlace = $var; }
-	public function setRPlayer($var) { $this->rPlayer = $var; }
-	public function setName($var) { $this->name = $var; }
-	public function setLevelGenerator($var) { $this->levelGenerator = $var; }
-	public function setLevelRefinery($var) { $this->levelRefinery = $var; }
-	public function setLevelDock1($var) { $this->levelDock1 = $var; }
-	public function setLevelDock2($var) { $this->levelDock2 = $var; }
-	public function setLevelDock3($var) { $this->levelDock3 = $var; }
-	public function setLevelTechnosphere($var) { $this->levelTechnosphere = $var; }
-	public function setLevelCommercialPlateforme($var) { $this->levelCommercialPlateforme = $var; }
-	public function setLevelStorage($var) { $this->levelStorage = $var; }
-	public function setLevelRecycling($var) { $this->levelRecycling = $var; }
-	public function setLevelSpatioport($var) { $this->levelSpatioport = $var; }
-	public function setPoints($var) { $this->points = $var; }
-	public function setISchool($var) { $this->iSchool = $var; }
-	public function setIAntiSpy($var) { $this->iAntiSpy = $var; }
-	public function setAntiSpyAverage($var) { $this->antiSpyAverage = $var; }
-	public function setShipStorage($k, $v) { $this->shipStorage[$k] = $v; }
-	public function setResourcesStorage($var) { $this->resourcesStorage = $var; }
-	public function setDCreation($var) { $this->dCreation = $var; }
+	public function setId($var) {
+		$this->rPlace = $var;
+		return $this;
+	 }
+	public function setRPlace($var) {
+		$this->rPlace = $var;
+		return $this;
+	 }
+	public function setRPlayer($var) {
+		$this->rPlayer = $var;
+		return $this;
+	 }
+	public function setName($var) {
+		$this->name = $var;
+		return $this;
+	 }
+	public function setLevelGenerator($var) {
+		$this->levelGenerator = $var;
+		return $this;
+	 }
+	public function setLevelRefinery($var) {
+		$this->levelRefinery = $var;
+		return $this;
+	 }
+	public function setLevelDock1($var) {
+		$this->levelDock1 = $var;
+		return $this;
+	 }
+	public function setLevelDock2($var) {
+		$this->levelDock2 = $var;
+		return $this;
+	 }
+	public function setLevelDock3($var) {
+		$this->levelDock3 = $var;
+		return $this;
+	 }
+	public function setLevelTechnosphere($var) {
+		$this->levelTechnosphere = $var;
+		return $this;
+	 }
+	public function setLevelCommercialPlateforme($var) {
+		$this->levelCommercialPlateforme = $var;
+		return $this;
+	 }
+	public function setLevelStorage($var) {
+		$this->levelStorage = $var;
+		return $this;
+	 }
+	public function setLevelRecycling($var) {
+		$this->levelRecycling = $var;
+		return $this;
+	 }
+	public function setLevelSpatioport($var) {
+		$this->levelSpatioport = $var;
+		return $this;
+	 }
+	public function setPoints($var) {
+		$this->points = $var;
+		return $this;
+	 }
+	public function setISchool($var) {
+		$this->iSchool = $var;
+		return $this;
+	 }
+	public function setIAntiSpy($var) {
+		$this->iAntiSpy = $var;
+		return $this;
+	 }
+	public function setAntiSpyAverage($var) {
+		$this->antiSpyAverage = $var;
+		return $this;
+	 }
+	public function setShipStorage($k, $v) {
+		$this->shipStorage[$k] = $v;
+		return $this;
+	 }
+	public function setResourcesStorage($var) {
+		$this->resourcesStorage = $var;
+		return $this;
+	 }
+	public function setDCreation($var) {
+		$this->dCreation = $var;
+		return $this;
+	 }
 
-	public function setPosition($var) { $this->position = $var; }
-	public function setSystem($var) { $this->system = $var; }
-	public function setXSystem($var) { $this->xSystem = $var; }
-	public function setYSystem($var) { $this->ySystem = $var; }
-	public function setSector($var) { $this->sector = $var; }
-	public function setTax($var) { $this->tax = $var; }
-	public function setPlanetPopulation($var) { $this->planetPopulation = $var; }
-	public function setPlanetResources($var) { $this->planetResources = $var; }
-	public function setPlanetHistory($var) { $this->planetHistory = $var; }
+	public function setPosition($var) {
+		$this->position = $var;
+		return $this;
+	 }
+	public function setSystem($var) {
+		$this->system = $var;
+		return $this;
+	 }
+	public function setXSystem($var) {
+		$this->xSystem = $var;
+		return $this;
+	 }
+	public function setYSystem($var) {
+		$this->ySystem = $var;
+		return $this;
+	 }
+	public function setSector($var) {
+		$this->sector = $var;
+		return $this;
+	 }
+	public function setTax($var) {
+		$this->tax = $var;
+		return $this;
+	 }
+	public function setPlanetPopulation($var) {
+		$this->planetPopulation = $var;
+		return $this;
+	 }
+	public function setPlanetResources($var) {
+		$this->planetResources = $var;
+		return $this;
+	 }
+	public function setPlanetHistory($var) {
+		$this->planetHistory = $var;
+		return $this;
+	 }
 
-	public function setRemainingTimeGenerator($var) { $this->remainingTimeGenerator = $var; }
-	public function setRemainingTimeDock1($var) { $this->remainingTimeDock1 = $var; }
-	public function setRemainingTimeDock2($var) { $this->remainingTimeDock2 = $var; }
-	public function setRemainingTimeDock3($var) { $this->remainingTimeDock3 = $var; }
-	public function setRoutesNumber($var) { $this->routesNumber = $var; }
-	
-	public function setRealGeneratorLevel($var) { $this->realGeneratorLevel = $var; }
-	public function setRealRefineryLevel($var) { $this->realRefineryLevel = $var; }
-	public function setRealDock1Level($var) { $this->realDock1Level = $var; }
-	public function setRealDock2Level($var) { $this->realDock2Level = $var; }
-	public function setRealDock3Level($var) { $this->realDock3Level = $var; }
-	public function setRealTechnosphereLevel($var) { $this->realTechnosphereLevel = $var; }
-	public function setRealCommercialPlateformeLevel($var) { $this->realCommercialPlateformeLevel = $var; }
-	public function setRealStorageLevel($var) { $this->realStorageLevel = $var; }
-	public function setRealRecyclingLevel($var) { $this->realRecyclingLevel = $var; }
-	public function setRealSpatioportLevel($var) { $this->realSpatioportLevel = $var; }
+	public function setRemainingTimeGenerator($var) {
+		$this->remainingTimeGenerator = $var;
+		return $this;
+	 }
+	public function setRemainingTimeDock1($var) {
+		$this->remainingTimeDock1 = $var;
+		return $this;
+	 }
+	public function setRemainingTimeDock2($var) {
+		$this->remainingTimeDock2 = $var;
+		return $this;
+	 }
+	public function setRemainingTimeDock3($var) {
+		$this->remainingTimeDock3 = $var;
+		return $this;
+	 }
+	public function setRoutesNumber($var) {
+		$this->routesNumber = $var;
+		return $this;
+	 }
+
+	public function setRealGeneratorLevel($var) {
+		$this->realGeneratorLevel = $var;
+		return $this;
+	 }
+	public function setRealRefineryLevel($var) {
+		$this->realRefineryLevel = $var;
+		return $this;
+	 }
+	public function setRealDock1Level($var) {
+		$this->realDock1Level = $var;
+		return $this;
+	 }
+	public function setRealDock2Level($var) {
+		$this->realDock2Level = $var;
+		return $this;
+	 }
+	public function setRealDock3Level($var) {
+		$this->realDock3Level = $var;
+		return $this;
+	 }
+	public function setRealTechnosphereLevel($var) {
+		$this->realTechnosphereLevel = $var;
+		return $this;
+	 }
+	public function setRealCommercialPlateformeLevel($var) {
+		$this->realCommercialPlateformeLevel = $var;
+		return $this;
+	 }
+	public function setRealStorageLevel($var) {
+		$this->realStorageLevel = $var;
+		return $this;
+	 }
+	public function setRealRecyclingLevel($var) {
+		$this->realRecyclingLevel = $var;
+		return $this;
+	 }
+	public function setRealSpatioportLevel($var) {
+		$this->realSpatioportLevel = $var;
+		return $this;
+	 }
 
 	public function setBuildingLevel($buildingNumber, $level) {
 		switch ($buildingNumber) {
@@ -215,9 +350,10 @@ class OrbitalBase {
 			case 7 : $this->levelStorage = $level; break;
 			case 8 : $this->levelRecycling = $level; break;
 			case 9 : $this->levelSpatioport = $level; break;
-			default : 
+			default :
 				throw new ErrorException('Bâtiment invalide dans setBuildingLevel de OrbitalBase');
 		}
+		return $this;
 	}
 	
 	/**
