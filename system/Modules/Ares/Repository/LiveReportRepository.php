@@ -29,17 +29,12 @@ class LiveReportRepository extends AbstractRepository
 	
 	public function get($id)
 	{
-		if (($report = $this->unitOfWork->getObject(Report::class, $id)) !== null) {
-			return $report;
-		}
 		$query = $this->select('r.id = :id', ['id' => $id]);
 		
 		if (($row = $query->fetch()) === false) {
 			return null;
 		}
-		$report = $this->format($row);
-		
-		return $report;
+		return $this->format($row);
 	}
 	
 	public function getPlayerReports($playerId)
@@ -54,13 +49,7 @@ class LiveReportRepository extends AbstractRepository
 		]);
 		$data = [];
 		while ($row = $statement->fetch()) {
-			if (($report = $this->unitOfWork->getObject(Report::class, (int) $row['id'])) !== null) {
-				$data[] = $report;
-				continue;
-			}
-			$report = $this->format($row);
-			$this->unitOfWork->addObject($report);
-			$data[] = $report;
+			$data[] = $this->format($row);
 		}
 		return $data;
 	}
@@ -72,13 +61,7 @@ class LiveReportRepository extends AbstractRepository
 		, [$playerId]);
 		$data = [];
 		while ($row = $statement->fetch()) {
-			if (($report = $this->unitOfWork->getObject(Report::class, (int) $row['id'])) !== null) {
-				$data[] = $report;
-				continue;
-			}
-			$report = $this->format($row);
-			$this->unitOfWork->addObject($report);
-			$data[] = $report;
+			$data[] = $this->format($row);
 		}
 		return $data;
 	}
@@ -90,13 +73,7 @@ class LiveReportRepository extends AbstractRepository
 		, [$playerId, $isArchived]);
 		$data = [];
 		while ($row = $statement->fetch()) {
-			if (($report = $this->unitOfWork->getObject(Report::class, (int) $row['id'])) !== null) {
-				$data[] = $report;
-				continue;
-			}
-			$report = $this->format($row);
-			$this->unitOfWork->addObject($report);
-			$data[] = $report;
+			$data[] = $this->format($row);
 		}
 		return $data;
 	}
@@ -108,13 +85,7 @@ class LiveReportRepository extends AbstractRepository
 		, [$playerId, $isArchived]);
 		$data = [];
 		while ($row = $statement->fetch()) {
-			if (($report = $this->unitOfWork->getObject(Report::class, (int) $row['id'])) !== null) {
-				$data[] = $report;
-				continue;
-			}
-			$report = $this->format($row);
-			$this->unitOfWork->addObject($report);
-			$data[] = $report;
+			$data[] = $this->format($row);
 		}
 		return $data;
 	}
@@ -126,13 +97,7 @@ class LiveReportRepository extends AbstractRepository
 		, [$factionId]);
 		$data = [];
 		while ($row = $statement->fetch()) {
-			if (($report = $this->unitOfWork->getObject(Report::class, (int) $row['id'])) !== null) {
-				$data[] = $report;
-				continue;
-			}
-			$report = $this->format($row);
-			$this->unitOfWork->addObject($report);
-			$data[] = $report;
+			$data[] = $this->format($row);
 		}
 		return $data;
 	}
@@ -144,13 +109,7 @@ class LiveReportRepository extends AbstractRepository
 		, [$factionId]);
 		$data = [];
 		while ($row = $statement->fetch()) {
-			if (($report = $this->unitOfWork->getObject(Report::class, (int) $row['id'])) !== null) {
-				$data[] = $report;
-				continue;
-			}
-			$report = $this->format($row);
-			$this->unitOfWork->addObject($report);
-			$data[] = $report;
+			$data[] = $this->format($row);
 		}
 		return $data;
 	}

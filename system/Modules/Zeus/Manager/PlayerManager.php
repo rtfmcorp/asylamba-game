@@ -482,6 +482,7 @@ class PlayerManager {
 		$S_RSM1 = $this->researchManager->getCurrentSession();
 		$now = Utils::now();
 		$repository = $this->entityManager->getRepository(Player::class);
+		$this->entityManager->beginTransaction();
 		
 		foreach ($players as $player) {
 			# update time
@@ -531,6 +532,7 @@ class PlayerManager {
 		}
 		$this->researchManager->changeSession($S_RSM1);
 		$this->entityManager->flush(Color::class);
+		$this->entityManager->commit();
 	}
 
 	public function uCredit(Player $player, $playerBases, $playerBonus, $commanders, $rsmSession, &$factions, $transactions) {
@@ -782,22 +784,17 @@ class PlayerManager {
 	public function increaseCredit(Player $player, $credit) {
 		$player->credit += abs($credit);
 
-		if ($player->isSynchronized()) {
-			$this->session->get('playerInfo')->add('credit', $player->credit);
-		}
-		$this->entityManager->flush($player);
+		$this->entityManager->getRepository(Player::class)->updatePlayerCredits($player, abs($credit), '+');
 	}
 
 	public function decreaseCredit(Player $player, $credit) {
-		if (abs($credit) > $player->credit) {
-			$player->credit = 0;
-		} else {
-			$player->credit -= abs($credit);
-		}
-		if ($player->isSynchronized()) {
-			$this->session->get('playerInfo')->add('credit', $player->credit);
-		}
-		$this->entityManager->flush($player);
+		$credits =
+			(abs($credit) > $player->credit)
+			? 0
+			: abs($credit)
+		;
+		$player->credit += $credits;
+		$this->entityManager->getRepository(Player::class)->updatePlayerCredits($player, $credits, '-');
 	}
 
 	public function increaseExperience(Player $player, $exp) {
@@ -850,5 +847,14 @@ class PlayerManager {
 			}
 		}
 		$this->entityManager->flush($player);
+	}
+	
+	/**
+	 * @param int $playerId
+	 * @param int $investment
+	 */
+	public function updateUniversityInvestment($playerId, $investment)
+	{
+		$this->entityManager->getRepository(Player::class)->updateUniversityInvestment($playerId, $investment);
 	}
 }

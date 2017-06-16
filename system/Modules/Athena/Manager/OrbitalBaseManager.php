@@ -450,8 +450,6 @@ class OrbitalBaseManager {
 		if ($nbOldPlayerBases === 0 || ($nbOldPlayerBases === 1 && $oldPlayerBases[0]->rPlace === $id)) {
 			$this->playerManager->reborn($oldOwner);
 		}
-		# applique en cascade le changement de couleur des sytèmes
-		$this->galaxyColorManager->apply();
         $this->entityManager->flush();
 	}
 	
@@ -558,20 +556,61 @@ class OrbitalBaseManager {
 		$this->entityManager->flush($orbitalBase);
 	}
 
-	public function uResources(OrbitalBase $orbitalBase, PlayerBonus $playerBonus) {
+	/**
+	 * @param OrbitalBase $orbitalBase
+	 * @param PlayerBonus $playerBonus
+	 */
+	public function uResources(OrbitalBase $orbitalBase, PlayerBonus $playerBonus)
+	{
 		$addResources = Game::resourceProduction($this->orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $orbitalBase->levelRefinery, 'refiningCoefficient'), $orbitalBase->planetResources);
 		$addResources += $addResources * $playerBonus->bonus->get(PlayerBonus::REFINERY_REFINING) / 100;
-		$newResources = $orbitalBase->resourcesStorage + (int) $addResources;
+		
+		$this->increaseResources($orbitalBase, (int) $addResources);
+	}
+	
+	/**
+	 * @param OrbitalBase $orbitalBase
+	 * @param int $resources
+	 * @param bool $offLimits
+	 */
+	public function increaseResources(OrbitalBase $orbitalBase, $resources, $offLimits = false)
+	{
+		$playerBonus = $this->playerBonusManager->getBonusByPlayer($this->playerManager->get($orbitalBase->rPlayer));
+		$this->playerBonusManager->load($playerBonus);
 		$maxStorage = $this->orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $orbitalBase->levelStorage, 'storageSpace');
 		$maxStorage += $maxStorage * $playerBonus->bonus->get(PlayerBonus::REFINERY_STORAGE) / 100;
 
-		if ($orbitalBase->resourcesStorage < $maxStorage) {
-			if ($newResources > $maxStorage) {
-				$orbitalBase->resourcesStorage = $maxStorage;
-			} else {
-				$orbitalBase->resourcesStorage = $newResources;
-			}
+		if ($offLimits === true) {
+			$maxStorage += OrbitalBase::EXTRA_STOCK;
 		}
+		$addedResources = 
+			(($orbitalBase->resourcesStorage + $resources) > $maxStorage)
+			? $maxStorage - $orbitalBase->resourcesStorage
+			: $resources
+		;
+		$orbitalBase->resourcesStorage += $addedResources;
+		$this->entityManager->getRepository(OrbitalBase::class)->increaseResources(
+			$orbitalBase,
+			$addedResources
+		);
+	}
+	
+	/**
+	 * @param OrbitalBase $orbitalBase
+	 * @param int $resources
+	 */
+	public function decreaseResources(OrbitalBase $orbitalBase, $resources)
+	{
+		$substractedResources = 
+			(($orbitalBase->resourcesStorage - $resources) < 0)
+			? abs(0 - $orbitalBase->resourcesStorage)
+			: $resources
+		;
+		$orbitalBase->resourcesStorage -= $substractedResources;
+		$this->entityManager->getRepository(OrbitalBase::class)->decreaseResources(
+			$orbitalBase,
+			$substractedResources
+		);
 	}
 
 	public function uAntiSpy(OrbitalBase $orbitalBase) {
@@ -878,45 +917,6 @@ class OrbitalBaseManager {
 			$n->addLnk('map/place-' . $orbitalBase->rPlace, 'base orbitale')->addTxt(' le temps que vous programmiez une autre mission.');
 			$n->addEnd();
 			$this->notificationManager->add($n);
-		}
-	}
-
-	// OBJECT METHODS
-	public function increaseResources(OrbitalBase $orbitalBase, $resources, $canGoHigher = FALSE) {
-		if (intval($resources) >= 0) {
-			# load the bonus
-			$playerBonus = $this->playerBonusManager->getBonusByPlayer($this->playerManager->get($orbitalBase->rPlayer));
-			$this->playerBonusManager->load($playerBonus);
-			$bonus = $playerBonus->bonus->get(PlayerBonus::REFINERY_STORAGE);
-
-			$newResources = $orbitalBase->resourcesStorage + (int) $resources;
-			
-			$maxStorage = $this->orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $orbitalBase->levelStorage, 'storageSpace');
-			$maxStorage += $maxStorage * $bonus / 100;
-
-			if ($canGoHigher) {
-				$maxStorage += OrbitalBase::EXTRA_STOCK;
-			}
-
-			if ($orbitalBase->resourcesStorage < $maxStorage || $canGoHigher) {
-				if ($newResources > $maxStorage) {
-					$orbitalBase->resourcesStorage = $maxStorage;
-				} else {
-					$orbitalBase->resourcesStorage = $newResources;
-				}
-			}
-			$this->entityManager->flush($orbitalBase);
-		} else {
-			throw new ErrorException('Problème dans increaseResources de OrbitalBase');
-		}
-	}
-
-	public function decreaseResources(OrbitalBase $orbitalBase, $resources) {
-		if (intval($resources)) {
-			$orbitalBase->resourcesStorage -= abs($resources);
-			$this->entityManager->flush($orbitalBase);
-		} else {
-			throw new ErrorException('Problème dans decreaseResources de OrbitalBase');
 		}
 	}
 

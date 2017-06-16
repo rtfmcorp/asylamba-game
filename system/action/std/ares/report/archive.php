@@ -7,12 +7,12 @@ use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('app.session');
-$liveReportManager = $this->getContainer()->get('ares.live_report_manager');
+$reportManager = $this->getContainer()->get('ares.report_manager');
 
 $id = $request->query->get('id');
 
 if ($id) {
-	if (($report = $liveReportManager->get($id)) !== null) {
+	if (($report = $reportManager->get($id)) !== null) {
 		if ($session->get('playerId') == $report->rPlayerAttacker) {
 			if ($report->statementAttacker == Report::STANDARD) {
 				$report->statementAttacker = Report::ARCHIVED;

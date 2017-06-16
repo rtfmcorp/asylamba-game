@@ -18,6 +18,7 @@ $technologyQueueManager = $this->getContainer()->get('promethee.technology_queue
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $technologyHelper = $this->getContainer()->get('promethee.technology_helper');
 $place = $this->getContainer()->get('gaia.place_manager');
+$player = $this->getContainer()->get('zeus.player_manager')->get($session->get('playerId'));
 
 $currentBase = $orbitalBaseManager->get($session->get('playerParams')->get('base'));
 
@@ -95,7 +96,7 @@ echo '<div id="tools">';
 		echo '</a>';
 
 		echo '<span class="resource-link" style="width: 120px;">';
-				echo Format::numberFormat($session->get('playerInfo')->get('credit'));
+				echo Format::numberFormat($player->getCredit());
 				echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
 		echo '</span>';
 	echo '</div>';

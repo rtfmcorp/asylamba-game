@@ -266,6 +266,31 @@ class ReportRepository extends AbstractRepository {
 	}
 	
 	/**
+	 * @param int $playerId
+	 */
+	public function removePlayerReports($playerId)
+	{
+		$this->connection->beginTransaction();
+		$attackReportsStatement = $this->connection->prepare(
+			'UPDATE report SET statementAttacker = :statement WHERE rPlayerAttacker = :player_id AND statementAttacker = :standard_statement'
+		);
+		$attackReportsStatement->execute([
+			'player_id' => $playerId,
+			'statement' => Report::DELETED,
+			'standard_statement' => Report::STANDARD
+		]);
+		$defenseReportsStatement = $this->connection->prepare(
+			'UPDATE report SET statementDefender = :statement WHERE rPlayerDefender = :player_id AND statementDefender = :standard_statement'
+		);
+		$defenseReportsStatement->execute([
+			'player_id' => $playerId,
+			'statement' => Report::DELETED,
+			'standard_statement' => Report::STANDARD
+		]);
+		$this->connection->commit();
+	}
+	
+	/**
 	 * @param array $data
 	 * @return Report
 	 */
