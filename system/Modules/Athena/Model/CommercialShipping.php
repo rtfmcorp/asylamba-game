@@ -20,7 +20,7 @@ class CommercialShipping {
 	const WEDGE = 1000;	# soute
 
 	# attributes
-	public $id = 0; 
+	public $id = 0;
 	public $rPlayer = 0;
 	public $rBase = 0;
 	public $rBaseDestination = 0;
@@ -58,10 +58,10 @@ class CommercialShipping {
 	public function setId($id)
 	{
 		$this->id = $id;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -69,7 +69,7 @@ class CommercialShipping {
 	{
 		return $this->id;
 	}
-	
+
 	/**
 	 * @param int $playerId
 	 * @return CommercialShipping
@@ -77,10 +77,10 @@ class CommercialShipping {
 	public function setPlayerId($playerId)
 	{
 		$this->rPlayer = $playerId;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -88,7 +88,7 @@ class CommercialShipping {
 	{
 		return $this->rPlayer;
 	}
-	
+
 	/**
 	 * @param int $baseId
 	 * @return CommercialShipping
@@ -96,10 +96,10 @@ class CommercialShipping {
 	public function setBaseId($baseId)
 	{
 		$this->rBase = $baseId;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -107,7 +107,7 @@ class CommercialShipping {
 	{
 		return $this->rBase;
 	}
-	
+
 	/**
 	 * @param int $destinationId
 	 * @return CommercialShipping
@@ -115,10 +115,10 @@ class CommercialShipping {
 	public function setDestinationBaseId($destinationId)
 	{
 		$this->rBaseDestination = $destinationId;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -126,7 +126,7 @@ class CommercialShipping {
 	{
 		return $this->rBaseDestination;
 	}
-	
+
 	/**
 	 * @param int $transactionId
 	 * @return CommercialShipping
@@ -134,10 +134,10 @@ class CommercialShipping {
 	public function setTransactionId($transactionId)
 	{
 		$this->rTransaction = $transactionId;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -145,7 +145,7 @@ class CommercialShipping {
 	{
 		return $this->rTransaction;
 	}
-	
+
 	/**
 	 * @param int $resources
 	 * @return CommercialShipping
@@ -153,10 +153,10 @@ class CommercialShipping {
 	public function setResources($resources)
 	{
 		$this->resourceTransported = $resources;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -164,7 +164,7 @@ class CommercialShipping {
 	{
 		return $this->resourceTransported;
 	}
-	
+
 	/**
 	 * @param int $shipQuantity
 	 * @return CommercialShipping
@@ -172,10 +172,10 @@ class CommercialShipping {
 	public function setShipQuantity($shipQuantity)
 	{
 		$this->shipQuantity = $shipQuantity;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -183,7 +183,7 @@ class CommercialShipping {
 	{
 		return $this->shipQuantity;
 	}
-	
+
 	/**
 	 * @param string $departedAt
 	 * @return CommercialShipping
@@ -191,10 +191,10 @@ class CommercialShipping {
 	public function setDepartedAt($departedAt)
 	{
 		$this->dDeparture = $departedAt;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return string
 	 */
@@ -202,7 +202,7 @@ class CommercialShipping {
 	{
 		return $this->dDeparture;
 	}
-	
+
 	/**
 	 * @param string $arrivedAt
 	 * @return CommercialShipping
@@ -210,10 +210,10 @@ class CommercialShipping {
 	public function setArrivedAt($arrivedAt)
 	{
 		$this->dArrival = $arrivedAt;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return string
 	 */
@@ -221,7 +221,7 @@ class CommercialShipping {
 	{
 		return $this->dArrival;
 	}
-	
+
 	/**
 	 * @param int $statement
 	 * @return CommercialShipping
@@ -229,10 +229,10 @@ class CommercialShipping {
 	public function setStatement($statement)
 	{
 		$this->statement = $statement;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -240,7 +240,7 @@ class CommercialShipping {
 	{
 		return $this->statement;
 	}
-	
+
 	/**
 	 * @param int $systemId
 	 * @return CommercialShipping
@@ -248,10 +248,10 @@ class CommercialShipping {
 	public function setBaseSystemId($systemId)
 	{
 		$this->baseRSystem = $systemId;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -259,7 +259,7 @@ class CommercialShipping {
 	{
 		return $this->baseRSystem;
 	}
-	
+
 	/**
 	 * @param int $position
 	 * @return CommercialShipping
@@ -267,10 +267,10 @@ class CommercialShipping {
 	public function setBasePosition($position)
 	{
 		$this->basePosition = $position;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -278,7 +278,7 @@ class CommercialShipping {
 	{
 		return $this->basePosition;
 	}
-	
+
 	/**
 	 * @param int $xPosition
 	 * @return CommercialShipping
@@ -286,10 +286,10 @@ class CommercialShipping {
 	public function setBaseSystemXPosition($xPosition)
 	{
 		$this->baseXSystem = $xPosition;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -297,7 +297,7 @@ class CommercialShipping {
 	{
 		return $this->baseXSystem;
 	}
-	
+
 	/**
 	 * @param int $yPosition
 	 * @return CommercialShipping
@@ -305,10 +305,10 @@ class CommercialShipping {
 	public function setBaseSystemYPosition($yPosition)
 	{
 		$this->baseYSystem = $yPosition;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -316,7 +316,7 @@ class CommercialShipping {
 	{
 		return $this->baseYSystem;
 	}
-	
+
 	/**
 	 * @param int $systemId
 	 * @return CommercialShipping
@@ -324,10 +324,10 @@ class CommercialShipping {
 	public function setDestinationBaseSystemId($systemId)
 	{
 		$this->destinationRSystem = $systemId;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -335,7 +335,7 @@ class CommercialShipping {
 	{
 		return $this->destinationRSystem;
 	}
-	
+
 	/**
 	 * @param int $position
 	 * @return CommercialShipping
@@ -343,10 +343,10 @@ class CommercialShipping {
 	public function setDestinationBasePosition($position)
 	{
 		$this->destinationPosition = $position;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -354,7 +354,7 @@ class CommercialShipping {
 	{
 		return $this->destinationPosition;
 	}
-	
+
 	/**
 	 * @param int $xPosition
 	 * @return CommercialShipping
@@ -362,10 +362,10 @@ class CommercialShipping {
 	public function setDestinationBaseSystemXPosition($xPosition)
 	{
 		$this->destinationXSystem = $xPosition;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -373,7 +373,7 @@ class CommercialShipping {
 	{
 		return $this->destinationXSystem;
 	}
-	
+
 	/**
 	 * @param int $yPosition
 	 * @return CommercialShipping
@@ -381,10 +381,10 @@ class CommercialShipping {
 	public function setDestinationBaseSystemYPosition($yPosition)
 	{
 		$this->destinationYSystem = $yPosition;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -392,7 +392,7 @@ class CommercialShipping {
 	{
 		return $this->destinationYSystem;
 	}
-	
+
 	/**
 	 * @param int $price
 	 * @return CommercialShipping
@@ -400,10 +400,10 @@ class CommercialShipping {
 	public function setPrice($price)
 	{
 		$this->price = $price;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -411,7 +411,7 @@ class CommercialShipping {
 	{
 		return $this->price;
 	}
-	
+
 	/**
 	 * @param int $transactionType
 	 * @return CommercialShipping
@@ -419,10 +419,10 @@ class CommercialShipping {
 	public function setTransactionType($transactionType)
 	{
 		$this->typeOfTransaction = $transactionType;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -430,7 +430,7 @@ class CommercialShipping {
 	{
 		return $this->typeOfTransaction;
 	}
-	
+
 	/**
 	 * @param int $quantity
 	 * @return CommercialShipping
@@ -438,10 +438,10 @@ class CommercialShipping {
 	public function setQuantity($quantity)
 	{
 		$this->quantity = $quantity;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -449,7 +449,7 @@ class CommercialShipping {
 	{
 		return $this->quantity;
 	}
-	
+
 	/**
 	 * @param int $identifier
 	 * @return CommercialShipping
@@ -457,10 +457,10 @@ class CommercialShipping {
 	public function setIdentifier($identifier)
 	{
 		$this->identifier = $identifier;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -468,7 +468,7 @@ class CommercialShipping {
 	{
 		return $this->identifier;
 	}
-	
+
 	/**
 	 * @param string $avatar
 	 * @return CommercialShipping
@@ -476,10 +476,10 @@ class CommercialShipping {
 	public function setCommanderAvatar($avatar)
 	{
 		$this->commanderAvatar = $avatar;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return string
 	 */
@@ -487,7 +487,7 @@ class CommercialShipping {
 	{
 		return $this->commanderAvatar;
 	}
-	
+
 	/**
 	 * @param string $name
 	 * @return CommercialShipping
@@ -495,10 +495,10 @@ class CommercialShipping {
 	public function setCommanderName($name)
 	{
 		$this->commanderName = $name;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return string
 	 */
@@ -506,7 +506,7 @@ class CommercialShipping {
 	{
 		return $this->commanderName;
 	}
-	
+
 	/**
 	 * @param int $level
 	 * @return CommercialShipping
@@ -514,10 +514,10 @@ class CommercialShipping {
 	public function setCommanderLevel($level)
 	{
 		$this->commanderLevel = $level;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -525,7 +525,7 @@ class CommercialShipping {
 	{
 		return $this->commanderLevel;
 	}
-	
+
 	/**
 	 * @param int $nbVictories
 	 * @return CommercialShipping
@@ -533,10 +533,10 @@ class CommercialShipping {
 	public function setCommanderVictory($nbVictories)
 	{
 		$this->commanderVictory = $nbVictories;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
@@ -544,7 +544,7 @@ class CommercialShipping {
 	{
 		return $this->commanderVictory;
 	}
-	
+
 	/**
 	 * @param int $experience
 	 * @return CommercialShipping
@@ -552,10 +552,10 @@ class CommercialShipping {
 	public function setCommanderExperience($experience)
 	{
 		$this->commanderExperience = $experience;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * @return int
 	 */
