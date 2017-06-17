@@ -833,7 +833,7 @@ class PlayerManager {
 
 					# send a message to the godfather
 					$n = new Notification();
-					$n->setRPlayer($this->rGodfather);
+					$n->setRPlayer($player->rGodfather);
 					$n->setTitle('Récompense de parrainage');
 					$n->addBeg()->addTxt('Un de vos filleuls a atteint le niveau 3. ');
 					$n->addTxt('Il s\'agit de ');
