@@ -712,7 +712,7 @@ class PlayerManager {
 			$commander->setRPlayer(ID_GAIA);
 
 			$n = new Notification();
-			$n->setRPlayer($this->id);
+			$n->setRPlayer($player->id);
 			$n->setTitle('Flotte impayée');
 			$n->addBeg()->addTxt('Domaine')->addSep();
 			$n->addTxt('Vous n\'avez pas assez de crédits pour payer l\'entretien de la flotte de votre officier ' . $commander->name . '. Celui-ci a donc déserté ! ... avec la flotte, désolé.');
