@@ -19,6 +19,8 @@ abstract class Task implements \JsonSerializable
     const TYPE_REALTIME = 'realtime';
     const TYPE_CYCLIC = 'cyclic';
     
+	const DEFAULT_ESTIMATED_TIME = 1.0;
+	
 	/**
 	 * @return string
 	 */
