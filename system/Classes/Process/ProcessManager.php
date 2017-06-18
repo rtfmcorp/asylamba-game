@@ -141,6 +141,14 @@ class ProcessManager
         proc_close($this->processes[$name]->getProcess());
         unset($this->processes[$name]);
     }
+	
+	public function updateTechnicalData(Process $process, $data)
+	{
+		$process->setMemory($data['memory']);
+		$process->setAllocatedMemory($data['allocated_memory']);
+		
+		$this->memoryManager->refreshPoolMemory($this->processes);
+	}
     
     /**
      * Shutdown a running process

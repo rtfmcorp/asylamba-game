@@ -181,9 +181,9 @@ class Process
      */
     public function removeTask(Task $task)
     {
-        unset($this->tasks[$task->getId()]);
-		
 		$this->expectedWorkTime -= $task->getEstimatedTime();
+
+		unset($this->tasks[$task->getId()]);
 		
 		return $this;
     }
