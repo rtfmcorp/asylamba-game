@@ -71,7 +71,7 @@ class Database {
 	 */
 	public function beginTransaction()
 	{
-		return $this->connection->beginTransaction();
+		//return $this->connection->beginTransaction();
 	}
 	
 	/**
@@ -87,7 +87,7 @@ class Database {
 	 */
 	public function commit()
 	{
-		return $this->connection->commit();
+		// return $this->connection->commit();
 	}
 	
 	/**
@@ -95,7 +95,7 @@ class Database {
 	 */
 	public function rollBack()
 	{
-		return $this->connection->rollBack();
+		//return $this->connection->rollBack();
 	}
 
 	public function query($query) {
