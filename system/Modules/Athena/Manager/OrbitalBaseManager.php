@@ -522,7 +522,11 @@ class OrbitalBaseManager {
 							$commander = $this->commanderManager->get($transaction->identifier);
 						}
 					}
-					$destOB = $this->get($cs->rBaseDestination);
+					$destOB = 
+						($cs->rBaseDestination === $orbitalBase->getId())
+						? $orbitalBase
+						: $this->get($cs->rBaseDestination)
+					;
 
 					$this->ctc->add($cs->dArrival, $this, 'uCommercialShipping', $orbitalBase, array($orbitalBase, $cs, $transaction, $destOB, $commander));
 				}
