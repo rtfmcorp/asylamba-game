@@ -24,22 +24,27 @@ use Asylamba\Modules\Ares\Model\Report;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Gaia\Model\System;
 
+use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 use Asylamba\Classes\Worker\EventDispatcher;
 
 class PlaceManager {
 	/** @var EntityManager **/
 	protected $entityManager;
+	/** @var NotificationManager **/
+	protected $notificationManager;
 	/** @var EventDispatcher **/
 	protected $eventDispatcher;
 	
 	/**
 	 * @param EntityManager $entityManager
 	 * @param NotificationManager $notificationManager
+	 * @param EventDispatcher $eventDispatcher
 	 */
-	public function __construct(EntityManager $entityManager, NotificationManager $notificationManager)
+	public function __construct(EntityManager $entityManager, NotificationManager $notificationManager, EventDispatcher $eventDispatcher)
 	{
 		$this->entityManager = $entityManager;
 		$this->notificationManager = $notificationManager;
+		$this->eventDispatcher = $eventDispatcher;
 	}
 	
 	/**
@@ -156,6 +161,13 @@ class PlaceManager {
 		}
 		$this->entityManager->commit();
 		$this->entityManager->clear(Place::class);
+	}
+	
+	public function turnAsSpawnPlace($placeId, $playerId)
+	{
+		$this->eventDispatcher->dispatch(new PlaceOwnerChangeEvent($this->get($placeId)));
+		
+		return $this->entityManager->getRepository(Place::class)->turnAsSpawnPlace($placeId, $playerId);
 	}
 
 	/**

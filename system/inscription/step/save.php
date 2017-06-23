@@ -7,7 +7,6 @@ use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
-use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 
 try {
 	$session = $this->getContainer()->get('app.session');
@@ -20,7 +19,6 @@ try {
 	$placeManager = $this->getContainer()->get('gaia.place_manager');
 	$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 	$entityManager = $this->getContainer()->get('entity_manager');
-	$eventDispatcher = $this->getContainer()->get('event_dispatcher');
 	
 	$entityManager->beginTransaction();
 	
@@ -228,14 +226,7 @@ try {
 	}
 
 	# modification de la place
-	$place = $placeManager->get($placeId);
-	$place->setRPlayer($player->getId());
-	$place->population = 50;
-	$place->coefResources = 60;
-	$place->coefHistory = 20;
-	$entityManager->flush($place);
-	
-	$eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place));
+	$place = $placeManager->turnAsSpawnPlace($placeId, $player->getId());
 
 	# confirmation au portail
 	if ($this->getContainer()->getParameter('apimode') === 'enabled') {

@@ -33,6 +33,7 @@ services:
         arguments:
             - "@entity_manager"
             - "@hermes.notification_manager"
+            - "@event_dispatcher"
             
     gaia.sector_manager:
         class: Asylamba\Modules\Gaia\Manager\SectorManager

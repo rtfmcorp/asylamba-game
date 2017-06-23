@@ -449,17 +449,8 @@ class PlayerManager {
 			$ob->dCreation = Utils::now();
 			$this->orbitalBaseManager->add($ob);
 
-			# modification de la place
-			$place = $this->placeManager->get($placeId);
-			$place->rPlayer = $player->id;
-			$place->population = 50;
-			$place->coefResources = 60;
-			$place->coefHistory = 20;
+			$this->placeManager->turnAsSpawnPlace($placeId, $player->getId());
 			
-			$this->entityManager->flush($place);
-
-			$this->galaxyColorManager->apply();
-
 			# envoi d'une notif
 			$notif = new Notification();
 			$notif->setRPlayer($player->id);
