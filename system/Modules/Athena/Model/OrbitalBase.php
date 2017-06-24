@@ -219,4 +219,23 @@ class OrbitalBase {
 				throw new ErrorException('Bâtiment invalide dans setBuildingLevel de OrbitalBase');
 		}
 	}
+	
+	/**
+	 * @param string $updatedAt
+	 * @return OrbitalBase
+	 */
+	public function setUpdatedAt($updatedAt)
+	{
+		$this->uOrbitalBase = $updatedAt;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getUpdatedAt()
+	{
+		return $this->uOrbitalBase;
+	}
 }
