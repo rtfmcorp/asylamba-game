@@ -73,18 +73,30 @@ class SectorRepository extends AbstractRepository
 	{
 		$statement = $this->connection->prepare(
 			'UPDATE sector SET
-				rColor = :faction_id,
 				rSurrender = :surrender_id,
 				tax = :tax,
 				name = :name
 			WHERE id = :id');
 		$statement->execute(array(
-			'faction_id' => $sector->rColor, 
 			'surrender_id' => $sector->rSurrender,
 			'tax' => $sector->tax,
 			'name' => $sector->name,
 			'id' => $sector->id
 		));
+	}
+	
+	/**
+	 * @param Sector $sector
+	 */
+	public function changeOwnership(Sector $sector)
+	{
+		$statement = $this->connection->prepare(
+			'UPDATE sector SET rColor = :faction_id WHERE id = :id'
+		);
+		$statement->execute([
+			'id' => $sector->getId(),
+			'faction_id' => $sector->getRColor()
+		]);
 	}
 	
 	public function remove($sector)

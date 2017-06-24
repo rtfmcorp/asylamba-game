@@ -51,4 +51,12 @@ class SectorManager {
 	{
 		return $this->entityManager->getRepository(Sector::class)->getAll();
 	}
+	
+	/**
+	 * @param Sector $sector
+	 */
+	public function changeOwnership(Sector $sector)
+	{
+		$this->entityManager->getRepository(Sector::class)->changeOwnership($sector);
+	}
 }
