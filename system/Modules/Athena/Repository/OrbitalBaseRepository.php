@@ -53,6 +53,25 @@ class OrbitalBaseRepository extends AbstractRepository {
 	}
 	
 	/**
+	 * @return array
+	 */
+	public function getAll()
+	{
+		$statement = $this->select();
+		$data = [];
+		while ($row = $statement->fetch()) {
+			if (($ob = $this->unitOfWork->getObject(OrbitalBase::class, $row['rPlace'])) !== null) {
+				$data[] = $ob;
+				continue;
+			}
+			$orbitalBase = $this->format($row);
+			$this->unitOfWork->addObject($orbitalBase);
+			$data[] = $orbitalBase;
+		}
+		return $data;
+	}
+	
+	/**
 	 * @param int $playerId
 	 * @return array
 	 */
@@ -188,12 +207,11 @@ class OrbitalBaseRepository extends AbstractRepository {
 	{
 		$statement = $this->connection->prepare(
 			'UPDATE orbitalBase SET rPlayer = :player_id, name = :name, typeOfBase = :type,
-			iSchool = :school_investments, iAntiSpy = :anti_spy_investments, antiSpyAverage = :anti_spy_average,
+			iSchool = :school_investments, iAntiSpy = :anti_spy_investments,
 			pegaseStorage = :pegase_storage, satyreStorage = :satyre_storage, sireneStorage = :sirene_storage, dryadeStorage = :dryade_storage,
 			chimereStorage = :chimere_storage, meduseStorage = :meduse_storage, griffonStorage = :griffon_storage,
 			cyclopeStorage = :cyclope_storage, minotaureStorage = :minotaure_storage, hydreStorage = :hydre_storage,
-			cerbereStorage = :cerbere_storage, phenixStorage = :phenix_storage,
-			uOrbitalBase = :u_orbital_base, dCreation = :created_at
+			cerbereStorage = :cerbere_storage, phenixStorage = :phenix_storage, dCreation = :created_at
 			WHERE rPlace = :id'
 		);
 		$statement->execute(array(
@@ -202,7 +220,6 @@ class OrbitalBaseRepository extends AbstractRepository {
 			'type' => $orbitalBase->typeOfBase,
 			'school_investments' => $orbitalBase->getISchool(),
 			'anti_spy_investments' => $orbitalBase->getIAntiSpy(),
-			'anti_spy_average' => $orbitalBase->getAntiSpyAverage(),
 			'pegase_storage' => $orbitalBase->getShipStorage(0),
 			'satyre_storage' => $orbitalBase->getShipStorage(1),
 			'sirene_storage' => $orbitalBase->getShipStorage(2),
@@ -215,10 +232,29 @@ class OrbitalBaseRepository extends AbstractRepository {
 			'hydre_storage' => $orbitalBase->getShipStorage(9),
 			'cerbere_storage' => $orbitalBase->getShipStorage(10),
 			'phenix_storage' => $orbitalBase->getShipStorage(11),
-			'u_orbital_base' => $orbitalBase->uOrbitalBase,
 			'created_at' => $orbitalBase->getDCreation(),
 			'id' => $orbitalBase->getRPlace(),
 		));
+	}
+	
+	/**
+	 * @param OrbitalBase $orbitalBase
+	 * @param int $resources
+	 * @param int $antiSpyAverage
+	 */
+	public function updateBase(OrbitalBase $orbitalBase, $resources, $antiSpyAverage)
+	{
+		$operator = ($antiSpyAverage > 0) ? '+' : '-';
+		$statement = $this->connection->prepare(
+			"UPDATE orbitalBase SET resourcesStorage = resourcesStorage + :resources,
+			antiSpyAverage = antiSpyAverage $operator :anti_spy_average, uOrbitalBase = :updated_at WHERE rPlace = :id"
+		);
+		$statement->execute([
+			'id' => $orbitalBase->getId(),
+			'resources' => $resources,
+			'anti_spy_average' => abs($antiSpyAverage),
+			'updated_at' => $orbitalBase->getUpdatedAt()
+		]);
 	}
 	
 	public function increaseBuildingLevel(OrbitalBase $orbitalBase, $buildingColumn, $earnedPoints)
