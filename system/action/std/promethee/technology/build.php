@@ -36,19 +36,15 @@ $techno = $request->query->get('techno');
 
 if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 	if ($technologyHelper->isATechnology($techno) && !$technologyHelper->isATechnologyNotDisplayed($techno)) {
-		
-		$S_TQM1 = $technologyQueueManager->getCurrentSession();
-		$technologyQueueManager->newSession(ASM_UMODE);
-		$technologyQueueManager->load(array('rPlayer' => $session->get('playerId'), 'technology' => $techno));
-
-		if ($technologyQueueManager->size() == 0) {
+		if (($technologyQueueManager->getPlayerTechnologyQueue($session->get('playerId'), $techno)) === null) {
 
 			$technos = $technologyManager->getPlayerTechnology($session->get('playerId'));
 			$targetLevel = $technos->getTechnology($techno) + 1;
-			$technologyQueueManager->newSession(ASM_UMODE);
-			$technologyQueueManager->load(array('rPlace' => $baseId), array('dEnd'));
-			for ($i = 0; $i < $technologyQueueManager->size(); $i++) { 
-				if ($technologyQueueManager->get($i)->technology == $techno) {
+			// @TODO I think this piece of code is dead
+			$technologyQueues = $technologyQueueManager->getPlaceQueues($baseId);
+			$nbTechnologyQueues = count($technologyQueues);
+			foreach ($technologyQueues as $technologyQueue) { 
+				if ($technologyQueue->technology == $techno) {
 					$targetLevel++;
 				}
 			}
@@ -59,7 +55,7 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 
 				if ($technologyHelper->haveRights($techno, 'resource', $targetLevel, $ob->getResourcesStorage())
 					AND $technologyHelper->haveRights($techno, 'credit', $targetLevel, $session->get('playerInfo')->get('credit'))
-					AND $technologyHelper->haveRights($techno, 'queue', $ob, $technologyQueueManager->size())
+					AND $technologyHelper->haveRights($techno, 'queue', $ob, $nbTechnologyQueues)
 					AND $technologyHelper->haveRights($techno, 'levelPermit', $targetLevel)
 					AND $technologyHelper->haveRights($techno, 'technosphereLevel', $ob->getLevelTechnosphere())
 					AND ($technologyHelper->haveRights($techno, 'research', $targetLevel, $researchManager->getResearchList($researchManager->get())) === TRUE)
@@ -83,11 +79,6 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 					}
 
 					// construit la nouvelle techno
-					$tq = new TechnologyQueue();
-					$tq->rPlayer = $session->get('playerId');
-					$tq->rPlace = $baseId;
-					$tq->technology = $techno;
-					$tq->targetLevel = $targetLevel;
 					$time = $technologyHelper->getInfo($techno, 'time', $targetLevel);
 					$bonusPercent = $session->get('playerBonus')->get(PlayerBonus::TECHNOSPHERE_SPEED);
 					if ($session->get('playerInfo')->get('color') == ColorResource::APHERA) {
@@ -97,14 +88,22 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 
 					# ajout du bonus du lieu
 					$bonusPercent += Game::getImprovementFromScientificCoef($ob->planetHistory);
-					
 					$bonus = round($time * $bonusPercent / 100);
-					if ($technologyQueueManager->size() == 0) {
-						$tq->dStart = Utils::now();
-					} else {
-						$tq->dStart = $technologyQueueManager->get($technologyQueueManager->size() - 1)->dEnd;
-					}
-					$tq->dEnd = Utils::addSecondsToDate($tq->dStart, round($time - $bonus));
+					
+					$createdAt = 
+						($nbTechnologyQueues === 0)
+						? Utils::now()
+						: $technologyQueues[$nbTechnologyQueues - 1]->getEndedAt()
+					;
+					$tq = 
+						(new TechnologyQueue())
+						->setPlayerId($session->get('playerId'))
+						->setPlaceId($baseId)
+						->setTechnology($techno)
+						->setTargetLevel($targetLevel)
+						->setCreatedAt($createdAt)
+						->setEndedAt(Utils::addSecondsToDate($createdAt, round($time - $bonus)))
+					;
 					$technologyQueueManager->add($tq);
 
 					// débit resources
@@ -112,9 +111,6 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 					
 					// débit des crédits
 					$playerManager->decreaseCredit($playerManager->get($session->get('playerId')), $technologyHelper->getInfo($techno, 'credit', $targetLevel));
-					
-					// ajout de l'event dans le contrôleur
-					$session->get('playerEvent')->add($tq->dEnd, EVENT_BASE, $baseId);
 
 					if (DATA_ANALYSIS) {
 						$qr = $database->prepare('INSERT INTO 
@@ -136,7 +132,6 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 		} else {
 			throw new ErrorException('Cette technologie est déjà en construction');
 		}
-		$technologyQueueManager->changeSession($S_TQM1);
 	} else {
 		throw new ErrorException('la technologie indiquée n\'est pas valide');
 	}

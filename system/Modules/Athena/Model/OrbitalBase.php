@@ -82,7 +82,7 @@ class OrbitalBase {
 	// PUBLIC ATTRIBUTES
 	public $buildingQueues = [];
 	public $routeManager;
-	public $technoQueueManager;
+	public $technoQueues = [];
 	public $commercialShippings = [];
 
 	//GETTERS

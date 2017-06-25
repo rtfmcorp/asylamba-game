@@ -65,28 +65,3 @@ $session->initPlayerEvent();
 
 # remplissage des events
 $now = Utils::now();
-foreach ($playerBases as $orbitalBase) { 
-	$baseId = $orbitalBase->getRPlace();
-	# check the building queues
-	$buildingQueues = $buildingQueueManager->getBaseQueues($baseId);
-	foreach ($buildingQueues as $buildingQueue) { 
-		$date = $buildingQueue->dEnd;
-		$session->get('playerEvent')->add($date, EVENT_BASE, $baseId);
-	}
-
-	# check the ship queues of dock 1
-	$shipQueues = $shipQueueManager->getBaseQueues($baseId);
-	foreach ($shipQueues as $shipQueue) { 
-		$session->get('playerEvent')->add($shipQueue->dEnd, EVENT_BASE, $baseId);
-	}
-
-	# check the technology queues
-	$S_TQM1 = $technologyQueueManager->getCurrentSession();
-	$technologyQueueManager->newSession();
-	$technologyQueueManager->load(array('rPlace' => $baseId), array('dEnd'));
-	for ($j = 0; $j < $technologyQueueManager->size(); $j++) { 
-		$date = $technologyQueueManager->get($j)->dEnd;
-		$session->get('playerEvent')->add($date, EVENT_BASE, $baseId);
-	}
-	$technologyQueueManager->changeSession($S_TQM1);
-}

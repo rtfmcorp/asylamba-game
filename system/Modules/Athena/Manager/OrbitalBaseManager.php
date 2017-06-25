@@ -357,12 +357,7 @@ class OrbitalBaseManager {
 		$orbitalBase->setRealSpatioportLevel($realSpatioportLevel);
 
 		$orbitalBase->buildingQueues = $buildingQueues;
-		# TechnologyQueueManager
-		$S_TQM1 = $this->technologyQueueManager->getCurrentSession();
-		$this->technologyQueueManager->newSession(ASM_UMODE);
-		$this->technologyQueueManager->load(array('rPlace' => $orbitalBase->getRPlace()), array('dEnd'));
-		$orbitalBase->technoQueueManager = $this->technologyQueueManager->getCurrentSession();
-		$this->technologyQueueManager->changeSession($S_TQM1);
+		$orbitalBase->technoQueues = $this->technologyQueueManager->getPlaceQueues($orbitalBase->getRPlace());
 		$orbitalBase->commercialShippings = $this->commercialShippingManager->getByBase($orbitalBase->getRPlace());
 
 		$this->uMethod($orbitalBase);
@@ -371,8 +366,6 @@ class OrbitalBaseManager {
 	public function add(OrbitalBase $orbitalBase) {
 		$this->entityManager->persist($orbitalBase);
 		$this->entityManager->flush($orbitalBase);
-		
-		$orbitalBase->technoQueueManager = $this->technologyQueueManager->getFirstSession();
 	}
 
 	public function changeOwnerById($id, $base, $newOwner, $baseCommanders) {
@@ -399,12 +392,10 @@ class OrbitalBaseManager {
 		$this->commercialRouteManager->removeBaseRoutes($base);
 
 		# suppression des technologies en cours de développement
-		$S_TQM1 = $this->technologyQueueManager->getCurrentSession();
-		$this->technologyQueueManager->changeSession($base->technoQueueManager);
-		for ($i = $this->technologyQueueManager->size()-1; $i >= 0; $i--) { 
-			$this->technologyQueueManager->deleteById($this->technologyQueueManager->get($i)->getId());
+		foreach ($base->technoQueues as $queue) { 
+			$this->entityManager->remove($queue);
 		}
-		$this->technologyQueueManager->changeSession($S_TQM1);
+		$this->entityManager->flush(TechnologyQueue::class);
 
 		# suppression des missions de recyclages ainsi que des logs de recyclages
 		$S_REM1 = $this->recyclingMissionManager->getCurrentSession();
@@ -475,20 +466,6 @@ class OrbitalBaseManager {
 		$now   = Utils::now();
 
 		if (Utils::interval($orbitalBase->uOrbitalBase, $now, 's') > 0) {
-			# TECHNOLOGY QUEUE
-			$S_TQM1 = $this->technologyQueueManager->getCurrentSession();
-			$this->technologyQueueManager->changeSession($orbitalBase->technoQueueManager);
-			for ($i = 0; $i < $this->technologyQueueManager->size(); $i++) { 
-				$tq = $this->technologyQueueManager->get($i);
-
-				if ($tq->dEnd < $now) {
-					$this->ctc->add($tq->dEnd, $this, 'uTechnologyQueue', $orbitalBase, array($orbitalBase, $tq, $player));
-				} else {
-					break;
-				}
-			}
-			$this->technologyQueueManager->changeSession($S_TQM1);
-
 			# CommercialShippingManager
 			foreach ($orbitalBase->commercialShippings as $cs) { 
 				if ($cs->dArrival < $now AND $cs->dArrival !== '0000-00-00 00:00:00') {
@@ -708,26 +685,28 @@ class OrbitalBaseManager {
 		$this->entityManager->flush();
 	}
 
-	public function uTechnologyQueue(OrbitalBase $orbitalBase, $tq, $player) {
+	public function uTechnologyQueue($technologyQueueId) {
+		$technologyQueue = $this->technologyQueueManager->get($technologyQueueId);
+		$orbitalBase = $this->get($technologyQueue->getPlaceId());
+		$player = $this->playerManager->get($technologyQueue->getPlayerId());
 		# technologie construite
 		$technology = $this->technologyManager->getPlayerTechnology($player->getId());
-		$this->technologyManager->affectTechnology($technology, $tq->technology, $tq->targetLevel, $player);
+		$this->technologyManager->affectTechnology($technology, $technologyQueue->getTechnology(), $technologyQueue->getTargetLevel(), $player);
 		# increase player experience
-		$experience = $this->technologyHelper->getInfo($tq->technology, 'points', $tq->targetLevel);
+		$experience = $this->technologyHelper->getInfo($technologyQueue->getTechnology(), 'points', $technologyQueue->getTargetLevel());
 		$this->playerManager->increaseExperience($player, $experience);
 
 		# alert
-		if ($this->session->get('playerId') == $orbitalBase->rPlayer) {
-			$alt = 'Développement de votre technologie ' . $this->technologyHelper->getInfo($tq->technology, 'name');
-			if ($tq->targetLevel > 1) {
-				$alt .= ' niveau ' . $tq->targetLevel;
-			} 
-			$alt .= ' terminée. Vous gagnez ' . $experience . ' d\'expérience.';
-			$this->session->addFlashbag($alt, Flashbag::TYPE_TECHNOLOGY_SUCCESS);
-		}
-
-		# delete queue in database
-		$this->technologyQueueManager->deleteById($tq->id);
+//		if ($this->session->get('playerId') == $orbitalBase->rPlayer) {
+//			$alt = 'Développement de votre technologie ' . $this->technologyHelper->getInfo($technologyQueue->getTechnology(), 'name');
+//			if ($technologyQueue->getTargetLevel() > 1) {
+//				$alt .= ' niveau ' . $technologyQueue->getTargetLevel();
+//			} 
+//			$alt .= ' terminée. Vous gagnez ' . $experience . ' d\'expérience.';
+//			$this->session->addFlashbag($alt, Flashbag::TYPE_TECHNOLOGY_SUCCESS);
+//		}
+		$this->entityManager->remove($technologyQueue);
+		$this->entityManager->flush($technologyQueue);
 	}
 
 	public function uCommercialShipping(OrbitalBase $orbitalBase, $cs, $transaction, $destOB, $commander) {
