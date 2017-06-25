@@ -38,7 +38,7 @@ class RealTimeActionScheduler
 		$this->container->get('athena.building_queue_manager')->scheduleActions();
 		//$this->container->get('athena.recycling_mission_manager')->scheduleActions();
 		$this->container->get('athena.ship_queue_manager')->scheduleActions();
-		//$this->container->get('promethee.technology_queue_manager')->scheduleActions();
+		$this->container->get('promethee.technology_queue_manager')->scheduleQueues();
 		$factionManager = $this->container->get('demeter.color_manager');
 		$factionManager->scheduleSenateUpdate();
 		$factionManager->scheduleCampaigns();

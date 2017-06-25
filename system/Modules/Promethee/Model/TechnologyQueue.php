@@ -66,6 +66,25 @@ class TechnologyQueue {
 	}
 	
 	/**
+	 * @param int $placeId
+	 * @return TechnologyQueue
+	 */
+	public function setPlaceId($placeId)
+	{
+		$this->rPlace = $placeId;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getPlaceId()
+	{
+		return $this->rPlace;
+	}
+	
+	/**
 	 * @param int $technology
 	 * @return TechnologyQueue
 	 */
