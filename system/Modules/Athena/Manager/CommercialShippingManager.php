@@ -24,6 +24,7 @@ use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
 class CommercialShippingManager {
 	/** @var EntityManager **/
@@ -32,6 +33,8 @@ class CommercialShippingManager {
 	protected $orbitalBaseManager;
 	/** @var NotificationManager **/
 	protected $notificationManager;
+	/** @var RealTimeActionScheduler **/
+	protected $realtimeActionScheduler;
 	/** @var SessionWrapper **/
 	protected $session;
 	
@@ -39,13 +42,44 @@ class CommercialShippingManager {
 	 * @param EntityManager $entityManager
 	 * @param OrbitalBaseManager $orbitalBaseManager
 	 * @param NotificationManager $notificationManager
+	 * @param RealTimeActionScheduler $realtimeActionScheduler
 	 * @param SessionWrapper $session
 	 */
-	public function __construct(EntityManager $entityManager, OrbitalBaseManager $orbitalBaseManager, NotificationManager $notificationManager, SessionWrapper $session) {
+	public function __construct(
+		EntityManager $entityManager,
+		OrbitalBaseManager $orbitalBaseManager,
+		NotificationManager $notificationManager,
+		RealTimeActionScheduler $realtimeActionScheduler,
+		SessionWrapper $session
+	) {
 		$this->entityManager = $entityManager;
 		$this->orbitalBaseManager = $orbitalBaseManager;
 		$this->notificationManager = $notificationManager;
+		$this->realtimeActionScheduler = $realtimeActionScheduler;
 		$this->session = $session;
+	}
+	
+	public function scheduleShippings()
+	{
+		$shippings = $this->entityManager->getRepository(CommercialShipping::class)->getAll();
+		
+		foreach ($shippings as $commercialShipping) {
+			$this->realtimeActionScheduler->schedule(
+				'athena.orbital_base_manager',
+				'uCommercialShipping',
+				$commercialShipping,
+				$commercialShipping->getArrivedAt()
+			);
+		}
+	}
+	
+	/**
+	 * @param int $id
+	 * @return CommercialShipping
+	 */
+	public function get($id)
+	{
+		return $this->entityManager->getRepository(CommercialShipping::class)->get($id);
 	}
 	
 	/**
@@ -72,6 +106,13 @@ class CommercialShippingManager {
 	public function add(CommercialShipping $commercialShipping) {
 		$this->entityManager->persist($commercialShipping);
 		$this->entityManager->flush($commercialShipping);
+		
+		$this->realtimeActionScheduler->schedule(
+			'athena.orbital_base_manager',
+			'uCommercialShipping',
+			$commercialShipping,
+			$commercialShipping->getArrivedAt()
+		);
 	}
 
 	public function deliver(CommercialShipping $commercialShipping, $transaction, $destOB, $commander) {

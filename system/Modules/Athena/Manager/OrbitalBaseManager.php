@@ -466,28 +466,6 @@ class OrbitalBaseManager {
 		$now   = Utils::now();
 
 		if (Utils::interval($orbitalBase->uOrbitalBase, $now, 's') > 0) {
-			# CommercialShippingManager
-			foreach ($orbitalBase->commercialShippings as $cs) { 
-				if ($cs->dArrival < $now AND $cs->dArrival !== '0000-00-00 00:00:00') {
-					$commander = NULL;
-
-					# load transaction (if it's not a resource shipping)
-					if (($transaction = $this->transactionManager->get($cs->rTransaction)) !== null) {
-						# load commander if it's a commander shipping
-						if ($transaction->type == Transaction::TYP_COMMANDER) {
-							$commander = $this->commanderManager->get($transaction->identifier);
-						}
-					}
-					$destOB = 
-						($cs->rBaseDestination === $orbitalBase->getId())
-						? $orbitalBase
-						: $this->get($cs->rBaseDestination)
-					;
-
-					$this->ctc->add($cs->dArrival, $this, 'uCommercialShipping', $orbitalBase, array($orbitalBase, $cs, $transaction, $destOB, $commander));
-				}
-			}
-
 			# RECYCLING MISSION
 			$S_REM1 = $this->recyclingMissionManager->getCurrentSession();
 			$this->recyclingMissionManager->newSession(ASM_UMODE);
@@ -709,7 +687,18 @@ class OrbitalBaseManager {
 		$this->entityManager->flush($technologyQueue);
 	}
 
-	public function uCommercialShipping(OrbitalBase $orbitalBase, $cs, $transaction, $destOB, $commander) {
+	public function uCommercialShipping($id) {
+
+		$cs = $this->commercialShippingManager->get($id);
+		$transaction = $this->transactionManager->get($cs->getTransactionId());
+		$orbitalBase = $this->get($cs->getBaseId());
+		$destOB = $this->get($cs->getDestinationBaseId());
+		$commander =
+			($transaction !== null && $transaction->type === Transaction::TYP_COMMANDER)
+			? $this->commanderManager->get($transaction->identifier)
+			: null
+		;
+
 		switch ($cs->statement) {
 			case CommercialShipping::ST_GOING :
 				# shipping arrived, delivery of items to rBaseDestination

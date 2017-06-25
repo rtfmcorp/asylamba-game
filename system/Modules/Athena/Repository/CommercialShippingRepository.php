@@ -27,7 +27,7 @@ class CommercialShippingRepository extends AbstractRepository
 			LEFT JOIN transaction AS t 
 				ON cs.rTransaction = t.id
 			LEFT JOIN commander AS c 
-				ON t.identifier = c.id WHERE ' . $clause
+				ON t.identifier = c.id ' . $clause
 		);
 		$statement->execute($params);
 		
@@ -38,12 +38,12 @@ class CommercialShippingRepository extends AbstractRepository
 	 * @param int $id
 	 * @return CommercialShipping
 	 */
-	public function getByTransactionId($id)
+	public function get($id)
 	{
 		if (($cs = $this->unitOfWork->getObject(CommercialShipping::class, $id)) !== null) {
 			return $cs;
 		}
-		$query = $this->select('cs.rTransaction = :transaction_id', ['transaction_id' => $id]);
+		$query = $this->select('WHERE cs.id = :id', ['id' => $id]);
 		
 		if (($row = $query->fetch()) === false) {
 			return null;
@@ -54,12 +54,51 @@ class CommercialShippingRepository extends AbstractRepository
 	}
 	
 	/**
+	 * @param int $id
+	 * @return CommercialShipping
+	 */
+	public function getByTransactionId($id)
+	{
+		$query = $this->select('WHERE cs.rTransaction = :transaction_id', ['transaction_id' => $id]);
+		
+		if (($row = $query->fetch()) === false) {
+			return null;
+		}
+		if (($cs = $this->unitOfWork->getObject(CommercialShipping::class, (int) $row['id'])) !== null) {
+			return $cs;
+		}
+		$commercialShipping = $this->format($row);
+		$this->unitOfWork->addObject($commercialShipping);
+		return $commercialShipping;
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getAll()
+	{
+		$query = $this->select();
+		
+		$data = [];
+		while($row = $query->fetch()) {
+			if (($cs = $this->unitOfWork->getObject(CommercialShipping::class, $row['id'])) !== null) {
+				$data[] = $cs;
+				continue;
+			}
+			$commercialShipping = $this->format($row);
+			$this->unitOfWork->addObject($commercialShipping);
+			$data[] = $commercialShipping;
+		}
+		return $data;
+	}
+	
+	/**
 	 * @param int $orbitalBaseId
 	 * @return array
 	 */
 	public function getByBase($orbitalBaseId)
 	{
-		$query = $this->select('cs.rBase = :base_id OR cs.rBaseDestination = :destination_base_id', [
+		$query = $this->select('WHERE cs.rBase = :base_id OR cs.rBaseDestination = :destination_base_id', [
 			'base_id' => $orbitalBaseId,
 			'destination_base_id' => $orbitalBaseId
 		]);

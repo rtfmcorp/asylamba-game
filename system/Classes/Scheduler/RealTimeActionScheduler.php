@@ -36,6 +36,7 @@ class RealTimeActionScheduler
 	{
 		$this->container->get('ares.commander_manager')->scheduleMovements();
 		$this->container->get('athena.building_queue_manager')->scheduleActions();
+		$this->container->get('athena.commercial_shipping_manager')->scheduleShippings();
 		//$this->container->get('athena.recycling_mission_manager')->scheduleActions();
 		$this->container->get('athena.ship_queue_manager')->scheduleActions();
 		$this->container->get('promethee.technology_queue_manager')->scheduleQueues();
