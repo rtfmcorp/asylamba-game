@@ -449,17 +449,8 @@ class PlayerManager {
 			$ob->dCreation = Utils::now();
 			$this->orbitalBaseManager->add($ob);
 
-			# modification de la place
-			$place = $this->placeManager->get($placeId);
-			$place->rPlayer = $player->id;
-			$place->population = 50;
-			$place->coefResources = 60;
-			$place->coefHistory = 20;
+			$this->placeManager->turnAsSpawnPlace($placeId, $player->getId());
 			
-			$this->entityManager->flush($place);
-
-			$this->galaxyColorManager->apply();
-
 			# envoi d'une notif
 			$notif = new Notification();
 			$notif->setRPlayer($player->id);
@@ -712,7 +703,7 @@ class PlayerManager {
 			$commander->setRPlayer(ID_GAIA);
 
 			$n = new Notification();
-			$n->setRPlayer($this->id);
+			$n->setRPlayer($player->id);
 			$n->setTitle('Flotte impayée');
 			$n->addBeg()->addTxt('Domaine')->addSep();
 			$n->addTxt('Vous n\'avez pas assez de crédits pour payer l\'entretien de la flotte de votre officier ' . $commander->name . '. Celui-ci a donc déserté ! ... avec la flotte, désolé.');
@@ -833,7 +824,7 @@ class PlayerManager {
 
 					# send a message to the godfather
 					$n = new Notification();
-					$n->setRPlayer($this->rGodfather);
+					$n->setRPlayer($player->rGodfather);
 					$n->setTitle('Récompense de parrainage');
 					$n->addBeg()->addTxt('Un de vos filleuls a atteint le niveau 3. ');
 					$n->addTxt('Il s\'agit de ');

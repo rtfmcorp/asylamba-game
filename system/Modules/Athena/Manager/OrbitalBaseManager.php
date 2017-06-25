@@ -369,9 +369,6 @@ class OrbitalBaseManager {
 	}
 
 	public function add(OrbitalBase $orbitalBase) {
-		# prépare le rechargement de la map
-		$this->galaxyColorManager->apply();
-
 		$this->entityManager->persist($orbitalBase);
 		$this->entityManager->flush($orbitalBase);
 		
@@ -478,24 +475,6 @@ class OrbitalBaseManager {
 		$now   = Utils::now();
 
 		if (Utils::interval($orbitalBase->uOrbitalBase, $now, 's') > 0) {
-			# update time
-			$hours = Utils::intervalDates($now, $orbitalBase->uOrbitalBase);
-			$orbitalBase->uOrbitalBase = $now;
-
-			# load the player
-			$player = $this->playerManager->get($orbitalBase->rPlayer);
-
-			if (count($hours)) {
-				# load the bonus
-				$playerBonus = $this->playerBonusManager->getBonusByPlayer($player);
-				$this->playerBonusManager->load($playerBonus);
-
-				foreach ($hours as $key => $hour) {
-					$this->ctc->add($hour, $this, 'uResources', $orbitalBase, array($orbitalBase, $playerBonus));
-					$this->ctc->add($hour, $this, 'uAntiSpy', $orbitalBase, array($orbitalBase));
-				}
-			}
-
 			# TECHNOLOGY QUEUE
 			$S_TQM1 = $this->technologyQueueManager->getCurrentSession();
 			$this->technologyQueueManager->changeSession($orbitalBase->technoQueueManager);
@@ -522,7 +501,11 @@ class OrbitalBaseManager {
 							$commander = $this->commanderManager->get($transaction->identifier);
 						}
 					}
-					$destOB = $this->get($cs->rBaseDestination);
+					$destOB = 
+						($cs->rBaseDestination === $orbitalBase->getId())
+						? $orbitalBase
+						: $this->get($cs->rBaseDestination)
+					;
 
 					$this->ctc->add($cs->dArrival, $this, 'uCommercialShipping', $orbitalBase, array($orbitalBase, $cs, $transaction, $destOB, $commander));
 				}
@@ -545,7 +528,7 @@ class OrbitalBaseManager {
 
 					for ($j = 0; $j < $recyclingQuantity; $j++) { 
 						$dateOfUpdate = Utils::addSecondsToDate($mission->uRecycling, ($j + 1) * $mission->cycleTime);
-						$this->ctc->add($dateOfUpdate, $this, 'uRecycling', $mission, array($orbitalBase, $mission, $place, $player, $dateOfUpdate));
+						$this->ctc->add($dateOfUpdate, $this, 'uRecycling', $mission, array($orbitalBase, $mission, $place, $dateOfUpdate));
 					}
 				}
 			}
@@ -555,25 +538,66 @@ class OrbitalBaseManager {
 		$this->ctc->applyContext($token);
 		$this->entityManager->flush($orbitalBase);
 	}
+	
+	public function updateBases()
+	{
+		$repository = $this->entityManager->getRepository(OrbitalBase::class);
+		$bases = $repository->getAll();
+		$this->entityManager->beginTransaction();
+		$now = Utils::now();
+		
+		foreach ($bases as $base) {
+			# update time
+			$hours = Utils::intervalDates($now, $base->uOrbitalBase);
 
+			if (count($hours) === 0) {
+				continue;
+			}
+			$player = $this->playerManager->get($base->rPlayer);
+			$playerBonus = $this->playerBonusManager->getBonusByPlayer($player);
+			$this->playerBonusManager->load($playerBonus);
+			$base->setUpdatedAt($now);
+			$initialResources = $base->resourcesStorage;
+			$initialAntiSpyAverage = $base->antiSpyAverage;
+			
+			foreach ($hours as $hour) {
+				$this->updateResources($base, $playerBonus);
+				$this->updateAntiSpy($base);
+			}
+			
+			$repository->updateBase(
+				$base,
+				$base->resourcesStorage - $initialResources,
+				$base->antiSpyAverage - $initialAntiSpyAverage
+			);
+		}
+		$this->entityManager->commit();
+	}
+	
 	/**
 	 * @param OrbitalBase $orbitalBase
 	 * @param PlayerBonus $playerBonus
 	 */
-	public function uResources(OrbitalBase $orbitalBase, PlayerBonus $playerBonus)
+	protected function updateResources(OrbitalBase $orbitalBase, PlayerBonus $playerBonus)
 	{
 		$addResources = Game::resourceProduction($this->orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $orbitalBase->levelRefinery, 'refiningCoefficient'), $orbitalBase->planetResources);
 		$addResources += $addResources * $playerBonus->bonus->get(PlayerBonus::REFINERY_REFINING) / 100;
-		
-		$this->increaseResources($orbitalBase, (int) $addResources);
+
+		$this->increaseResources($orbitalBase, (int) $addResources, false, false);
+	}
+	
+	protected function updateAntiSpy(OrbitalBase $orbitalBase)
+	{
+		$orbitalBase->antiSpyAverage = round((($orbitalBase->antiSpyAverage * (24 - 1)) + ($orbitalBase->iAntiSpy)) / 24);
 	}
 	
 	/**
 	 * @param OrbitalBase $orbitalBase
 	 * @param int $resources
 	 * @param bool $offLimits
+	 * @param bool $persist
 	 */
-	public function increaseResources(OrbitalBase $orbitalBase, $resources, $offLimits = false)
+	public function increaseResources(OrbitalBase $orbitalBase, $resources, $offLimits = false, $persist = true)
 	{
 		$playerBonus = $this->playerBonusManager->getBonusByPlayer($this->playerManager->get($orbitalBase->rPlayer));
 		$this->playerBonusManager->load($playerBonus);
@@ -589,10 +613,12 @@ class OrbitalBaseManager {
 			: $resources
 		;
 		$orbitalBase->resourcesStorage += $addedResources;
-		$this->entityManager->getRepository(OrbitalBase::class)->increaseResources(
-			$orbitalBase,
-			$addedResources
-		);
+		if ($persist === true) {
+			$this->entityManager->getRepository(OrbitalBase::class)->increaseResources(
+				$orbitalBase,
+				$addedResources
+			);
+		}
 	}
 	
 	/**
@@ -611,10 +637,6 @@ class OrbitalBaseManager {
 			$orbitalBase,
 			$substractedResources
 		);
-	}
-
-	public function uAntiSpy(OrbitalBase $orbitalBase) {
-		$orbitalBase->antiSpyAverage = round((($orbitalBase->antiSpyAverage * (24 - 1)) + ($orbitalBase->iAntiSpy)) / 24);
 	}
 
 	public function uBuildingQueue($queueId) {
@@ -747,7 +769,8 @@ class OrbitalBaseManager {
 		$this->entityManager->flush();
 	}
 
-	public function uRecycling(OrbitalBase $orbitalBase, RecyclingMission $mission, Place $targetPlace, Player $player, $dateOfUpdate) {
+	public function uRecycling(OrbitalBase $orbitalBase, RecyclingMission $mission, Place $targetPlace, $dateOfUpdate) {
+		$player = $this->playerManager->get($orbitalBase->getRPlayer());
 		if ($targetPlace->typeOfPlace != Place::EMPTYZONE) {
 			# make the recycling : decrease resources on the target place
 			$totalRecycled = $mission->recyclerQuantity * RecyclingMission::RECYCLER_CAPACTIY;

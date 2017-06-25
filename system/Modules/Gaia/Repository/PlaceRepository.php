@@ -232,6 +232,26 @@ class PlaceRepository extends AbstractRepository
 		]);
 	}
 	
+	/**
+	 * @param int $placeId
+	 * @param int $playerId
+	 * @return bool
+	 */
+	public function turnAsSpawnPlace($placeId, $playerId)
+	{
+		$statement = $this->connection->prepare(
+			'UPDATE place SET rPlayer = :player_id, coefResources = :resources_coeff,
+			coefHistory = :history_coeff, population = :population WHERE id = :id'
+		);
+		return $statement->execute([
+			'player_id' => $playerId,
+			'resources_coeff' => 60,
+			'history_coeff' => 20,
+			'population' => 50,
+			'id' => $placeId
+		]);
+	}
+	
 	public function npcQuickfix()
 	{
 		$this->connection->exec('UPDATE place SET danger = maxDanger WHERE danger > maxDanger');

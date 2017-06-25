@@ -70,12 +70,31 @@ class SystemRepository extends AbstractRepository
 		
 	}
 	
+	/**
+	 * For the moment it's the same method as the one below but new fields shall be implemented soon
+	 * 
+	 * @param System $system
+	 */
 	public function update($system)
 	{
 		$statement = $this->connection->prepare('UPDATE system SET rColor = :faction_id WHERE id = :id');
 		$statement->execute([
 			'faction_id' => $system->rColor,
 			'id' => $system->id
+		]);
+	}
+	
+	/**
+	 * @param System $system
+	 */
+	public function changeOwnership(System $system)
+	{
+		$statement = $this->connection->prepare(
+			'UPDATE system SET rColor = :faction_id WHERE id = :id'
+		);
+		$statement->execute([
+			'id' => $system->getId(),
+			'faction_id' => $system->getFactionId()
 		]);
 	}
 	

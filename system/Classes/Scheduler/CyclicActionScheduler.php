@@ -38,6 +38,7 @@ class CyclicActionScheduler
 	public function init()
 	{
 		$this->schedule('ares.commander_manager', 'uExperienceInSchool', self::TYPE_HOURLY);
+		$this->schedule('athena.orbital_base_manager', 'updateBases', self::TYPE_HOURLY);
 		$this->schedule('gaia.place_manager', 'updatePlayerPlaces', self::TYPE_HOURLY);
 		$this->schedule('gaia.place_manager', 'updateNpcPlaces', self::TYPE_HOURLY);
 		$this->schedule('zeus.player_manager', 'updatePlayersCredits', self::TYPE_HOURLY);

@@ -51,4 +51,12 @@ class SystemManager {
 	{
 		return $this->entityManager->getRepository(System::class)->getAll();
 	}
+	
+	/**
+	 * @param System $system
+	 */
+	public function changeOwnership(System $system)
+	{
+		$this->entityManager->getRepository(System::class)->changeOwnership($system);
+	}
 }

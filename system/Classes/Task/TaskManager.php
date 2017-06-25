@@ -27,12 +27,19 @@ class TaskManager
 	{
 		switch ($data['type']) {
 			case Task::TYPE_TECHNICAL:
-				return $this->createTechnicalTask($data['manager'], $data['method'], $data['id']);
+				$task = $this->createTechnicalTask($data['manager'], $data['method'], $data['id']);
+				break;
 			case Task::TYPE_REALTIME:
-				return $this->createRealTimeTask($data['manager'], $data['method'], $data['object_id'], $data['date'], $data['id'], ($data['context'] ?? null));
+				$task = $this->createRealTimeTask($data['manager'], $data['method'], $data['object_id'], $data['date'], $data['id'], ($data['context'] ?? null));
+				break;
 			case Task::TYPE_CYCLIC:
-				return $this->createCyclicTask($data['manager'], $data['method'], $data['id']);
+				$task = $this->createCyclicTask($data['manager'], $data['method'], $data['id']);
+				break;
 		}
+		if (isset($data['estimated_time'])) {
+			$task->setEstimatedTime($data['estimated_time']);
+		}
+		return $task;
 	}
     
     /**

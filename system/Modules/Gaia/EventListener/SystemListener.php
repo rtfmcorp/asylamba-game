@@ -72,10 +72,9 @@ class SystemListener
 		$scores[0] = 0;
 		if ($scores[$newColor] > 0 && $system->rColor !== $newColor && $scores[$newColor] > $scores[$system->rColor]) {
 			$system->rColor = $newColor;
-			$this->entityManager->flush($system);
 		} elseif ($scores[$newColor] === 0) {
 			$system->rColor = 0;
-			$this->entityManager->flush($system);
 		}
+		$this->systemManager->changeOwnership($system);
 	}
 }
