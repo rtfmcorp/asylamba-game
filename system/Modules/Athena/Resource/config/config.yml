@@ -38,6 +38,7 @@ services:
             - "@entity_manager"
             - "@athena.orbital_base_manager"
             - "@hermes.notification_manager"
+            - "@realtime_action_scheduler"
             - "@app.session"
             
     athena.commercial_tax_manager:
