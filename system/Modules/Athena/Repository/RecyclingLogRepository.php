@@ -9,15 +9,19 @@ use Asylamba\Modules\Athena\Model\RecyclingLog;
 class RecyclingLogRepository extends AbstractRepository
 {
 	/**
-	 * @param array $missionsIds
+	 * @param int $baseId
 	 * @return array
 	 */
-	public function getMissionsLogs($missionsIds)
+	public function getBaseActiveMissionsLogs($baseId)
 	{
-		$statement = $this->connection->query(
-			'SELECT * FROM recyclingLog WHERE rRecycling IN (' . implode(',', $missionsIds) . ')
-			ORDER BY dLog DESC OFFSET 0 LIMIT ' . (10 * count($missionsIds))
+		$statement = $this->connection->prepare(
+			'SELECT rl.* FROM recyclingLog rl
+			INNER JOIN recyclingMission rm ON rm.id = rl.rRecycling
+			INNER JOIN place p ON p.id = rm.rBase
+			WHERE p.id = :base_id
+			ORDER BY rl.dLog DESC'
 		);
+		$statement->execute(['base_id' => $baseId]);
 		$data = [];
 		while ($row = $statement->fetch()) {
 			$data[] = $this->format($row);

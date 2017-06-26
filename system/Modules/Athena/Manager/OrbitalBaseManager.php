@@ -359,8 +359,6 @@ class OrbitalBaseManager {
 		$orbitalBase->buildingQueues = $buildingQueues;
 		$orbitalBase->technoQueues = $this->technologyQueueManager->getPlaceQueues($orbitalBase->getRPlace());
 		$orbitalBase->commercialShippings = $this->commercialShippingManager->getByBase($orbitalBase->getRPlace());
-
-		$this->uMethod($orbitalBase);
 	}
 
 	public function add(OrbitalBase $orbitalBase) {
@@ -398,14 +396,7 @@ class OrbitalBaseManager {
 		$this->entityManager->flush(TechnologyQueue::class);
 
 		# suppression des missions de recyclages ainsi que des logs de recyclages
-		$S_REM1 = $this->recyclingMissionManager->getCurrentSession();
-		$this->recyclingMissionManager->newSession();
-		$this->recyclingMissionManager->load(array('rBase' => $base->getId()));
-		for ($i = $this->recyclingMissionManager->size() - 1; $i >= 0; $i--) {
-			$this->recyclingLogManager->deleteAllFromMission($this->recyclingMissionManager->get($i)->id);
-			$this->recyclingMissionManager->deleteById($this->recyclingMissionManager->get($i)->id);
-		}
-		$this->recyclingMissionManager->changeSession($S_REM1);
+		$this->recyclingMissionManager->removeBaseMissions($base->getId());
 
 		# mise des investissements à 0
 		$base->iSchool = 0;
@@ -458,40 +449,6 @@ class OrbitalBaseManager {
 		$points = round($points);
 		$orbitalBase->setPoints($points);
 		return $points - $initialPoints;
-	}
-
-	// UPDATE METHODS
-	public function uMethod(OrbitalBase $orbitalBase) {
-		$token = $this->ctc->createContext('orbitalbase');
-		$now   = Utils::now();
-
-		if (Utils::interval($orbitalBase->uOrbitalBase, $now, 's') > 0) {
-			# RECYCLING MISSION
-			$S_REM1 = $this->recyclingMissionManager->getCurrentSession();
-			$this->recyclingMissionManager->newSession(ASM_UMODE);
-			$this->recyclingMissionManager->load(array('rBase' => $orbitalBase->rPlace, 'statement' => array(RecyclingMission::ST_ACTIVE, RecyclingMission::ST_BEING_DELETED)));
-			for ($i = 0; $i < $this->recyclingMissionManager->size(); $i++) { 
-				$mission = $this->recyclingMissionManager->get($i);
-
-				$interval = Utils::interval($mission->uRecycling, $now, 's');
-				if ($interval > $mission->cycleTime) {
-					# update time
-					$recyclingQuantity = floor($interval / $mission->cycleTime);
-
-					# Place
-					$place = $this->placeManager->get($mission->rTarget);
-
-					for ($j = 0; $j < $recyclingQuantity; $j++) { 
-						$dateOfUpdate = Utils::addSecondsToDate($mission->uRecycling, ($j + 1) * $mission->cycleTime);
-						$this->ctc->add($dateOfUpdate, $this, 'uRecycling', $mission, array($orbitalBase, $mission, $place, $dateOfUpdate));
-					}
-				}
-			}
-			$this->recyclingMissionManager->changeSession($S_REM1);
-		}
-
-		$this->ctc->applyContext($token);
-		$this->entityManager->flush($orbitalBase);
 	}
 	
 	public function updateBases()
@@ -737,7 +694,11 @@ class OrbitalBaseManager {
 		$this->entityManager->flush();
 	}
 
-	public function uRecycling(OrbitalBase $orbitalBase, RecyclingMission $mission, Place $targetPlace, $dateOfUpdate) {
+	public function uRecycling($missionId) {
+		$mission = $this->recyclingMissionManager->get($missionId);
+		$orbitalBase = $this->get($mission->rBase);
+		$targetPlace = $this->placeManager->get($mission->rTarget);
+		
 		$player = $this->playerManager->get($orbitalBase->getRPlayer());
 		if ($targetPlace->typeOfPlace != Place::EMPTYZONE) {
 			# make the recycling : decrease resources on the target place
@@ -889,7 +850,9 @@ class OrbitalBaseManager {
 			}
 
 			# update u
-			$mission->uRecycling = $dateOfUpdate;
+			$mission->uRecycling = Utils::addSecondsToDate($mission->uRecycling, $mission->cycleTime);
+			// Schedule the next mission
+			$this->realtimeActionScheduler->schedule('athena.orbital_base_manager', 'uRecycling', $mission, $mission->uRecycling);
 		} else {
 			# the place become an empty place
 			$targetPlace->resources = 0;
@@ -909,6 +872,7 @@ class OrbitalBaseManager {
 			$n->addEnd();
 			$this->notificationManager->add($n);
 		}
+		$this->entityManager->flush();
 	}
 
 	public function addShipToDock(OrbitalBase $orbitalBase, $shipId, $quantity) {
