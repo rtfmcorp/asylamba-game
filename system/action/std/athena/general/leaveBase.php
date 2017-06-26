@@ -18,7 +18,6 @@ $session = $this->getContainer()->get('app.session');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
-$recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
 $entityManager = $this->getContainer()->get('entity_manager');
 $eventDispatcher = $this->getContainer()->get('event_dispatcher');
@@ -67,13 +66,7 @@ if (count($verif) > 1) {
 					}
 					$place = $placeManager->get($baseId);
 
-					$S_REM1 = $recyclingMissionManager->getCurrentSession();
-					$recyclingMissionManager->newSession();
-					$recyclingMissionManager->load(array('rBase' => $baseId));
-					$S_REM2 = $recyclingMissionManager->getCurrentSession();
-					$recyclingMissionManager->changeSession($S_REM1);
-
-					$orbitalBaseManager->changeOwnerById($baseId, $base, ID_GAIA, $S_REM2, $baseCommanders);
+					$orbitalBaseManager->changeOwnerById($baseId, $base, ID_GAIA, $baseCommanders);
 					$place->rPlayer = ID_GAIA;
 					$entityManager->flush();
 					$eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place));

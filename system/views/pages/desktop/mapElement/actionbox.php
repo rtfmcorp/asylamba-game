@@ -5,7 +5,6 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Gaia\Resource\SystemResource;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
-use Asylamba\Modules\Athena\Model\RecyclingMission;
 use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Modules\Ares\Model\Commander;
 
@@ -44,9 +43,7 @@ if (isset($defaultBase)) {
 	$technologies = $technologyManager->getPlayerTechnology($session->get('playerId'));
 
 	# load recycling missions
-	$S_REM1 = $recyclingMissionManager->getCurrentSession();
-	$recyclingMissionManager->newSession();
-	$recyclingMissionManager->load(array('rBase' => $defaultBase->rPlace, 'statement' => array(RecyclingMission::ST_BEING_DELETED, RecyclingMission::ST_ACTIVE)));
+	$baseMissions = $recyclingMissionManager->getBaseActiveMissions($defaultBase->rPlace);
 
 	# header part
 	echo '<div class="header" data-sector-color="' . $places[0]->sectorColor . '" data-distance="' . Format::numberFormat(Game::getDistance($defaultBase->xSystem, $places[0]->xSystem, $defaultBase->ySystem, $places[0]->ySystem)) . '">';
@@ -248,4 +245,3 @@ if (isset($defaultBase)) {
 }
 
 $spyReportManager->changeSession($S_SRM_MAP);
-$recyclingMissionManager->changeSession($S_REM1);

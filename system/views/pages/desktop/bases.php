@@ -2,7 +2,6 @@
 # bases loading
 
 use Asylamba\Modules\Ares\Model\Commander;
-use Asylamba\Modules\Athena\Model\RecyclingMission;
 
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('app.session');
@@ -66,28 +65,14 @@ echo '<div id="content">';
 		$ob_recycling = $base;
 
 		# load recycling missions
-		$S_REM1 = $recyclingMissionManager->getCurrentSession();
-		$recyclingMissionManager->newSession();
-		$recyclingMissionManager->load(array('rBase' => $ob_recycling->rPlace, 'statement' => array(RecyclingMission::ST_BEING_DELETED, RecyclingMission::ST_ACTIVE)));
-		$recyclingSession = $recyclingMissionManager->getCurrentSession();
-
-		$recyclingIds = [0];
-		for ($i = 0; $i < $recyclingMissionManager->size(); $i++) { 
-			$recyclingIds[] = $recyclingMissionManager->get($i)->id;
-		}
-
-		$S_RLM1 = $recyclingLogManager->getCurrentSession();
-		$recyclingLogManager->newSession();
-		$recyclingLogManager->load(['rRecycling' => $recyclingIds], ['dLog', 'DESC'], [0, 10 * count($recyclingIds)]);
-		$missionLogSessions = $recyclingLogManager->getCurrentSession();
-
+		$baseMissions = $recyclingMissionManager->getBaseActiveMissions($ob_recycling->rPlace);
+		$missionsLogs = $recyclingLogManager->getBaseActiveMissionsLogs($ob_recycling->rPlace);
+		$missionQuantity = count($baseMissions);
+		
 		include COMPONENT . 'bases/ob/recycling.php';
-		if ($recyclingMissionManager->size() == 0) {
+		if ($missionQuantity === 0) {
 			include COMPONENT . 'default.php';
 		}
-
-		$recyclingLogManager->changeSession($S_RLM1);
-		$recyclingMissionManager->changeSession($S_REM1);
 	} elseif ($request->query->get('view') == 'spatioport' && $base->levelSpatioport > 0) {
 		$ob_spatioport = $base;
 		include COMPONENT . 'bases/ob/spatioport.php';

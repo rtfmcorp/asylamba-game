@@ -35,13 +35,11 @@ if ($rPlace !== FALSE AND $rTarget !== FALSE AND $quantity !== FALSE AND in_arra
 			$maxRecyclers = $orbitalBaseHelper->getInfo(OrbitalBaseResource::RECYCLING, 'level', $base->levelRecycling, 'nbRecyclers');
 			$usedRecyclers = 0;
 
-			$S_REM1 = $recyclingMissionManager->getCurrentSession();
-			$recyclingMissionManager->newSession();
-			$recyclingMissionManager->load(array('rBase' => $rPlace, 'statement' => [RecyclingMission::ST_BEING_DELETED, RecyclingMission::ST_ACTIVE]));
+			$baseMissions = $recyclingMissionManager->getBaseActiveMissions($rPlace);
 
-			for ($i = 0; $i < $recyclingMissionManager->size(); $i++) { 
-				$usedRecyclers += $recyclingMissionManager->get($i)->recyclerQuantity;
-				$usedRecyclers += $recyclingMissionManager->get($i)->addToNextMission;
+			foreach ($baseMissions as $mission) { 
+				$usedRecyclers += $mission->recyclerQuantity;
+				$usedRecyclers += $mission->addToNextMission;
 			}
 
 			if ($maxRecyclers - $usedRecyclers >= $quantity) {
@@ -73,7 +71,6 @@ if ($rPlace !== FALSE AND $rTarget !== FALSE AND $quantity !== FALSE AND in_arra
 			} else {
 				throw new ErrorException('Vous n\'avez pas assez de recycleurs libres pour lancer cette mission.');
 			}
-			$recyclingMissionManager->changeSession($S_REM1);
 		} else {
 			throw new ErrorException('cette base orbitale ne vous appartient pas');
 		}

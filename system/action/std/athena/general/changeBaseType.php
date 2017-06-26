@@ -161,14 +161,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 					$canChangeBaseType = TRUE;
 					if ($type == OrbitalBase::TYP_COMMERCIAL) {
 						# delete all recycling missions and logs
-						$S_REM1 = $recyclingMissionManager->getCurrentSession();
-						$recyclingMissionManager->newSession();
-						$recyclingMissionManager->load(array('rBase' => $orbitalBase->rPlace));
-						for ($i = $recyclingMissionManager->size() - 1; $i >= 0; $i--) {
-							$recyclingLogManager->deleteAllFromMission($recyclingMissionManager->get($i)->id);
-							$recyclingMissionManager->deleteById($recyclingMissionManager->get($i)->id);
-						}
-						$recyclingMissionManager->changeSession($S_REM1);
+						$recyclingMissionManager->removeBaseMissions($orbitalBase->rPlace);
 
 						# verify if fleets are moving or not
 						# transfer to the mess the extra commanders and change line if needed
