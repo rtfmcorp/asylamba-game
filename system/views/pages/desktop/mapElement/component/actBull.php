@@ -299,9 +299,9 @@ echo '<div class="column act">';
 					$activeShip = 0;
 					$travelTime = Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, $session->get('playerBonus'));
 
-					for ($j = 0; $j < $recyclingMissionManager->size(); $j++) { 
-						$activeShip += $recyclingMissionManager->get($j)->recyclerQuantity;
-						$activeShip += $recyclingMissionManager->get($j)->addToNextMission;
+					foreach ($baseMissions as $mission) { 
+						$activeShip += $mission->recyclerQuantity;
+						$activeShip += $mission->addToNextMission;
 					}
 
 					echo '<span class="label-box">';
