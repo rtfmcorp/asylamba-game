@@ -34,4 +34,13 @@ class RecyclingLogManager {
 		$this->entityManager->persist($recyclingLog);
 		$this->entityManager->flush($recyclingLog);
 	}
+	
+	/**
+	 * @param int $baseId
+	 * @return array
+	 */
+	public function getBaseActiveMissionsLogs($baseId)
+	{
+		return $this->entityManager->getRepository(RecyclingLog::class)->getBaseActiveMissionsLogs($baseId);
+	}
 }
