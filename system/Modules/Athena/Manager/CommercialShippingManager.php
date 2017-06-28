@@ -200,7 +200,6 @@ class CommercialShippingManager {
 		} else {
 			throw new ErrorException('impossible de délivrer ce chargement');
 		}
-		$this->entityManager->flush();
 	}
 
 	public function render(CommercialShipping $commercialShipping) {
