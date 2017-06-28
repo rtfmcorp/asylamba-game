@@ -83,7 +83,8 @@ foreach ($baseMissions as $mission) {
 				$missionID = md5($mission->id . $mission->recyclerQuantity);
 				$missionID = strtoupper(substr($missionID, 0, 3) . '-' . substr($missionID, 3, 6) . '-' . substr($missionID, 10, 2));
 
-				$percent   = Utils::interval(Utils::now(), $mission->uRecycling, 's') / $mission->cycleTime * 100;
+				// @TODO Infamous patch
+				$percent   = Utils::interval(Utils::now(), date("Y-m-d H:i:s", strtotime($mission->uRecycling) - $mission->cycleTime), 's') / $mission->cycleTime * 100;
 				$travelTime= ($mission->cycleTime - RecyclingMission::RECYCLING_TIME) / 2;
 				$beginRECY = Format::percent($travelTime, $mission->cycleTime);
 				$endRECY   = Format::percent($travelTime + RecyclingMission::RECYCLING_TIME, $mission->cycleTime);
@@ -97,7 +98,7 @@ foreach ($baseMissions as $mission) {
 					echo '<p class="desc">La mission recycle la <strong>' . Game::convertPlaceType($mission->typeOfPlace) . '</strong> située aux coordonnées <strong><a href="'. APP_ROOT . 'map/place-' . $mission->rTarget . '">' . Game::formatCoord($mission->xSystem, $mission->ySystem, $mission->position, $mission->sectorId) . '</a></strong>.<br /><br />
 					Il reste <strong>' . Format::number($mission->resources * $mission->coefResources / 100) . '</strong> ressources, <strong>' . Format::number($mission->resources * $mission->coefHistory / 100) . '</strong> débris et <strong>' . Format::number($mission->resources * $mission->population / 100) . '</strong> gaz nobles.</p>';
 
-					echo '<p>Retour ' . Chronos::transform(Utils::addSecondsToDate($mission->uRecycling, $mission->cycleTime)) . '</p>';
+					echo '<p>Retour ' . Chronos::transform($mission->uRecycling) . '</p>';
 					echo '<p><span class="progress-bar">';
 						echo '<span style="width:' . $percent . '%;" class="content"></span>';
 						echo '<span class="step hb lt" title="début du recyclage" style="left: ' . $beginRECY . '%;"></span>';
