@@ -29,7 +29,6 @@ if ($missionId !== FALSE AND !empty($rPlace) AND in_array($rPlace, $verif)) {
 			$mission->statement = RecyclingMission::ST_BEING_DELETED;
 			$session->addFlashbag('Ordre de mission annulé.', Flashbag::TYPE_SUCCESS);
 			$this->getContainer()->get('entity_manager')->flush($mission);
-			$this->getContainer()->get('realtime_action_scheduler')->cancel($mission, $mission->uRecycling);
 		} else {
 			throw new ErrorException('impossible de supprimer la mission.');
 		}
