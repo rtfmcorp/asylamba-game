@@ -95,6 +95,9 @@ class RecyclingMissionManager
 	 */
 	public function removeBaseMissions($baseId)
 	{
+		foreach ($this->getBaseActiveMissions($baseId) as $mission) {
+			$this->realtimeActionScheduler->cancel($mission, $mission->uRecycling);
+		}
 		$this->entityManager->getRepository(RecyclingMission::class)->removeBaseMissions($baseId);
 	}
 }
