@@ -47,6 +47,7 @@ if ($rPlace !== FALSE AND !empty($missionId) AND $quantity !== FALSE AND in_arra
 				}
 				if ($mission !== NULL) {
 					$mission->addToNextMission += $quantity;
+					$this->getContainer()->get('entity_manager')->flush($mission);
 					$session->addFlashbag('Vos recycleurs ont bien été affectés, ils seront ajoutés à la prochaine mission.', Flashbag::TYPE_SUCCESS);
 				} else {
 					throw new ErrorException('Il y a un problème, la mission est introuvable. Veuillez contacter un administrateur.');
