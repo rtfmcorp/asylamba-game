@@ -54,7 +54,7 @@ if ($rPlace !== FALSE AND $rTarget !== FALSE AND $quantity !== FALSE AND in_arra
 							$rm->rTarget = $rTarget;
 							$rm->cycleTime = (2 * $travelTime) + RecyclingMission::RECYCLING_TIME;
 							$rm->recyclerQuantity = $quantity;
-							$rm->uRecycling = Utils::now();
+							$rm->uRecycling = Utils::addSecondsToDate(Utils::now(), $rm->cycleTime);
 							$rm->statement = RecyclingMission::ST_ACTIVE;
 							$recyclingMissionManager->add($rm);
 
