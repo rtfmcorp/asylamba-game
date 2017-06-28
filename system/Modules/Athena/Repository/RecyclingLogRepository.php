@@ -60,44 +60,44 @@ class RecyclingLogRepository extends AbstractRepository
 	
 	public function update($recyclingLog)
 	{
-		$statement = $this->database->prepare(
-			'UPDATE recyclingLog SET
-				rRecycling = ?,
-				resources = ?,
-				credits = ?,
-				ship0 = ?,
-				ship1 = ?,
-				ship2 = ?,
-				ship3 = ?,
-				ship4 = ?,
-				ship5 = ?,
-				ship6 = ?,
-				ship7 = ?,
-				ship8 = ?,
-				ship9 = ?,
-				ship10 = ?,
-				ship11 = ?,
-				dLog = ?
-			WHERE id = ?');
-		$statement->execute(array(
-			$recyclingLog->rRecycling,
-			$recyclingLog->resources,
-			$recyclingLog->credits,
-			$recyclingLog->ship0,
-			$recyclingLog->ship1,
-			$recyclingLog->ship2,
-			$recyclingLog->ship3,
-			$recyclingLog->ship4,
-			$recyclingLog->ship5,
-			$recyclingLog->ship6,
-			$recyclingLog->ship7,
-			$recyclingLog->ship8,
-			$recyclingLog->ship9,
-			$recyclingLog->ship10,
-			$recyclingLog->ship11,
-			$recyclingLog->dLog,
-			$recyclingLog->id
-		));
+//		$statement = $this->connection->prepare(
+//			'UPDATE recyclingLog SET
+//				rRecycling = ?,
+//				resources = ?,
+//				credits = ?,
+//				ship0 = ?,
+//				ship1 = ?,
+//				ship2 = ?,
+//				ship3 = ?,
+//				ship4 = ?,
+//				ship5 = ?,
+//				ship6 = ?,
+//				ship7 = ?,
+//				ship8 = ?,
+//				ship9 = ?,
+//				ship10 = ?,
+//				ship11 = ?,
+//				dLog = ?
+//			WHERE id = ?');
+//		$statement->execute(array(
+//			$recyclingLog->rRecycling,
+//			$recyclingLog->resources,
+//			$recyclingLog->credits,
+//			$recyclingLog->ship0,
+//			$recyclingLog->ship1,
+//			$recyclingLog->ship2,
+//			$recyclingLog->ship3,
+//			$recyclingLog->ship4,
+//			$recyclingLog->ship5,
+//			$recyclingLog->ship6,
+//			$recyclingLog->ship7,
+//			$recyclingLog->ship8,
+//			$recyclingLog->ship9,
+//			$recyclingLog->ship10,
+//			$recyclingLog->ship11,
+//			$recyclingLog->dLog,
+//			$recyclingLog->id
+//		));
 	}
 	
 	public function remove($recyclingLog)
