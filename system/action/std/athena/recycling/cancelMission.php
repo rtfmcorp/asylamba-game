@@ -23,8 +23,6 @@ $rPlace = (int) $request->query->get('place');
 
 if ($missionId !== FALSE AND !empty($rPlace) AND in_array($rPlace, $verif)) {
 	if (($base = $orbitalBaseManager->get($rPlace)) !== null) {
-		$recyclingMissionManager->load(array('id' => $missionId, 'rBase' => $rPlace, 'statement' => RecyclingMission::ST_ACTIVE));
-
 		if (($mission = $recyclingMissionManager->get($missionId)) !== null && $mission->statement = RecyclingMission::ST_ACTIVE && $mission->rBase === $rPlace) {
 			$mission->statement = RecyclingMission::ST_BEING_DELETED;
 			$session->addFlashbag('Ordre de mission annulé.', Flashbag::TYPE_SUCCESS);
