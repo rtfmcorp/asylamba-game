@@ -665,6 +665,7 @@ class OrbitalBaseManager {
 				$timeToTravel = strtotime($cs->dArrival) - strtotime($cs->dDeparture);
 				$cs->dDeparture = $cs->dArrival;
 				$cs->dArrival = Utils::addSecondsToDate($cs->dArrival, $timeToTravel);
+				$this->realtimeActionScheduler->schedule('athena.orbital_base_manager', 'uCommercialShipping', $cs, $cs->dArrival);
 				break;
 			case CommercialShipping::ST_MOVING_BACK :
 				# shipping arrived, release of the commercial ships
