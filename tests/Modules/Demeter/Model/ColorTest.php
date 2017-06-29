@@ -12,7 +12,7 @@ class ColorTest extends \PHPUnit\Framework\TestCase
         $color =
             (new Color())
             ->setId(1)
-            -setAlive(TRUE)
+            ->setAlive(TRUE)
             ->setisWinner(FALSE)
             ->setCredits(1000)
             //->setPlayers()
