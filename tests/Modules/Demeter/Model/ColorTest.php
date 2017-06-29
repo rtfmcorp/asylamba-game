@@ -21,7 +21,7 @@ class ColorTest extends \PHPUnit\Framework\TestCase
             ->setPoints(1200)
             //->setSectors()
             //->setElectionStatement()
-            ->setIsClosed(TRUE);
+            ->setIsClosed(TRUE)
             ->setDescription("Descrip")
             ->setDClaimVictory(TRUE)
             ->setDLastElection('2017-05-06 21:20:30')
