@@ -48,12 +48,14 @@ class ColorTest extends \PHPUnit\Framework\TestCase
     public function testIncreaseCredit()
     {
       $color = new color();
+      $color->setCredits(1000);
       $this->assertEquals(2234, $color->increaseCredit(1324));
     }
 
     public function testDecreaseCredit()
     {
       $color = new color();
+      $color->setCredits(1000);
       $this->assertEquals(505, $color->decreaseCredit(495));
     }
 }
