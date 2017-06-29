@@ -14,6 +14,7 @@ class ShipTest extends \PHPUnit\Framework\TestCase
         $updatedAt = '2017-05-06 20:20:30';
 
         $ship =new Ship(8,FALSE);
+        $ship->setId(1);
 
         $this->assertEquals(1, $ship->getId());
         $this->assertEquals('Destroyer', $ship->getName());
