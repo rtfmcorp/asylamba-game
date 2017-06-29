@@ -135,7 +135,4 @@ class RecyclingLog {
 		$this->dLog = $dLog;
 		return $this;
 	}
-
-
-
 }
