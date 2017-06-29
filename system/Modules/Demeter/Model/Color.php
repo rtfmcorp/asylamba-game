@@ -780,6 +780,7 @@ class Color {
 	 */
 	public function increaseCredit($credit) {
 		$this->credits += $credit;
+		return $this->credits;
 	}
 
 	/**
@@ -787,5 +788,6 @@ class Color {
 	 */
 	public function decreaseCredit($credit) {
 		$this->credits -= $credit;
+		return $this->credits;
 	}
 }
