@@ -14,10 +14,10 @@ $session = $this->getContainer()->get('app.session');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
 $shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
-$technologyQueueManager = $this->getContainer()->get('promethee.technology_queue_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $technologyHelper = $this->getContainer()->get('promethee.technology_helper');
 $place = $this->getContainer()->get('gaia.place_manager');
+$player = $this->getContainer()->get('zeus.player_manager')->get($session->get('playerId'));
 
 $currentBase = $orbitalBaseManager->get($session->get('playerParams')->get('base'));
 
@@ -64,12 +64,10 @@ echo '<div id="tools">';
 			echo ($nbBuildingQueues !== 0) ? '<span class="number">' . $nbBuildingQueues . '</span>' : NULL;
 		echo '</a>';
 
-		$S_TQM1 = $technologyQueueManager->getCurrentSession();
-		$technologyQueueManager->changeSession($currentBase->technoQueueManager);
+		$nbTechnos = count($currentBase->technoQueues);
 		echo '<a href="#" class="square sh" data-target="tools-technosphere"><img src="' . MEDIA . 'orbitalbase/technosphere.png" alt="" />';
-			echo ($technologyQueueManager->size()) ? '<span class="number">' . $technologyQueueManager->size() . '</span>' : NULL;
+			echo ($nbTechnos > 0) ? '<span class="number">' . $nbTechnos . '</span>' : NULL;
 		echo '</a>';
-		$technologyQueueManager->changeSession($S_TQM1);
 
 		$dock1ShipQueues = $shipQueueManager->getByBaseAndDockType($currentBase->rPlace, 1);
 		$nbDock1ShipQueues = count($dock1ShipQueues);
@@ -95,7 +93,7 @@ echo '<div id="tools">';
 		echo '</a>';
 
 		echo '<span class="resource-link" style="width: 120px;">';
-				echo Format::numberFormat($session->get('playerInfo')->get('credit'));
+				echo Format::numberFormat($player->getCredit());
 				echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
 		echo '</span>';
 	echo '</div>';
@@ -233,11 +231,8 @@ echo '<div id="tools">';
 	echo '<div class="overbox left-pic" id="tools-technosphere">';
 		echo '<h2>Technosphère</h2>';
 		echo '<div class="overflow">';
-			$S_TQM1 = $technologyQueueManager->getCurrentSession();
-			$technologyQueueManager->changeSession($currentBase->technoQueueManager);
-			
-			if ($technologyQueueManager->size() > 0) {
-				$qe = $technologyQueueManager->get(0);
+			if ($nbTechnos > 0) {
+				$qe = $currentBase->technoQueues[0];
 				echo '<div class="queue">';
 					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $technologyHelper->getInfo($qe->technology, 'time', $qe->targetLevel) . '">';
 						echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . $technologyHelper->getInfo($qe->technology, 'imageLink') . '.png" alt="" />';
@@ -259,7 +254,6 @@ echo '<div id="tools">';
 			}
 
 			echo '<a href="' . APP_ROOT . 'bases/view-technosphere" class="more-link">vers la technosphère</a>';
-			$technologyQueueManager->changeSession($S_TQM1);
 		echo '</div>';
 	echo '</div>';
 

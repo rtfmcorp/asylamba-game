@@ -89,7 +89,7 @@ class SectorListener
 		$newColor = key($scores);
 		$hasEnoughPoints = false;
 		foreach ($scores as $factionId => $score) {
-			if ($factionId !== 0 && $score > $this->minimalScore) {
+			if ($factionId !== 0 && $score >= $this->minimalScore) {
 				$hasEnoughPoints = true;
 				break;
 			}
@@ -101,6 +101,6 @@ class SectorListener
 		} elseif ($hasEnoughPoints === false && $sector->getPrime() === false) {
 			$sector->rColor = 0;
 		}
-		$this->entityManager->flush($sector);
+		$this->sectorManager->changeOwnership($sector);
 	}
 }

@@ -13,20 +13,26 @@ use Asylamba\Classes\Event\ExceptionEvent;
 use Asylamba\Classes\Event\ErrorEvent;
 use Asylamba\Classes\Exception\FormException;
 
+use Asylamba\Classes\Database\Database;
+
 class ExceptionListener {
 	/** @var AbstractLogger **/
 	protected $logger;
 	/** @var SessionWrapper **/
 	protected $session;
+	/** @var Database **/
+	protected $connection;
 	
 	/**
 	 * @param AbstractLogger $logger
 	 * @param Session $session
+	 * @param Database $database
 	 */
-	public function __construct(AbstractLogger $logger, SessionWrapper $session)
+	public function __construct(AbstractLogger $logger, SessionWrapper $session, Database $database)
 	{
 		$this->logger = $logger;
 		$this->session = $session;
+		$this->database = $database;
 	}
 	
 	/**
@@ -78,6 +84,10 @@ class ExceptionListener {
 		$this->logger->log("$message at $file at line $line\n$trace", $level);
 		
 		$this->session->addFlashbag($message, $flashbagLevel);
+		
+		if ($this->database->inTransaction()) {
+			$this->database->rollBack();
+		}
 		
 		$response = new Response();
 		$redirectionData = $this->getRedirection($event->getRequest(), $redirect);

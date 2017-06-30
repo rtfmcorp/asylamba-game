@@ -24,22 +24,27 @@ use Asylamba\Modules\Ares\Model\Report;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Gaia\Model\System;
 
+use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 use Asylamba\Classes\Worker\EventDispatcher;
 
 class PlaceManager {
 	/** @var EntityManager **/
 	protected $entityManager;
+	/** @var NotificationManager **/
+	protected $notificationManager;
 	/** @var EventDispatcher **/
 	protected $eventDispatcher;
 	
 	/**
 	 * @param EntityManager $entityManager
 	 * @param NotificationManager $notificationManager
+	 * @param EventDispatcher $eventDispatcher
 	 */
-	public function __construct(EntityManager $entityManager, NotificationManager $notificationManager)
+	public function __construct(EntityManager $entityManager, NotificationManager $notificationManager, EventDispatcher $eventDispatcher)
 	{
 		$this->entityManager = $entityManager;
 		$this->notificationManager = $notificationManager;
+		$this->eventDispatcher = $eventDispatcher;
 	}
 	
 	/**
@@ -95,6 +100,7 @@ class PlaceManager {
 		$places = $this->getNpcPlaces();
 		$now   = Utils::now();
 		$repository = $this->entityManager->getRepository(Place::class);
+		$this->entityManager->beginTransaction();
 		
 		foreach ($places as $place) {
 			if (Utils::interval($place->uPlace, $now, 's') === 0) {
@@ -124,6 +130,8 @@ class PlaceManager {
 			}
 			$repository->updatePlace($place, true);
 		}
+		$repository->npcQuickfix();
+		$this->entityManager->commit();
 		$this->entityManager->clear(Place::class);
 	}
 
@@ -131,6 +139,7 @@ class PlaceManager {
 		$places = $this->getPlayerPlaces();
 		$now   = Utils::now();
 		$repository = $this->entityManager->getRepository(Place::class);
+		$this->entityManager->beginTransaction();
 		
 		foreach ($places as $place) {
 			if (Utils::interval($place->uPlace, $now, 's') === 0) {
@@ -150,14 +159,15 @@ class PlaceManager {
 			}
 			$repository->updatePlace($place);
 		}
+		$this->entityManager->commit();
 		$this->entityManager->clear(Place::class);
 	}
 	
-	/**
-	 * @param Place $place
-	 */
-	protected function updateResources(Place $place)
+	public function turnAsSpawnPlace($placeId, $playerId)
 	{
+		$this->eventDispatcher->dispatch(new PlaceOwnerChangeEvent($this->get($placeId)));
+		
+		return $this->entityManager->getRepository(Place::class)->turnAsSpawnPlace($placeId, $playerId);
 	}
 
 	/**

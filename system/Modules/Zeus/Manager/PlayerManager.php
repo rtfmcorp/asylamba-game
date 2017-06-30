@@ -449,17 +449,8 @@ class PlayerManager {
 			$ob->dCreation = Utils::now();
 			$this->orbitalBaseManager->add($ob);
 
-			# modification de la place
-			$place = $this->placeManager->get($placeId);
-			$place->rPlayer = $player->id;
-			$place->population = 50;
-			$place->coefResources = 60;
-			$place->coefHistory = 20;
+			$this->placeManager->turnAsSpawnPlace($placeId, $player->getId());
 			
-			$this->entityManager->flush($place);
-
-			$this->galaxyColorManager->apply();
-
 			# envoi d'une notif
 			$notif = new Notification();
 			$notif->setRPlayer($player->id);
@@ -482,6 +473,7 @@ class PlayerManager {
 		$S_RSM1 = $this->researchManager->getCurrentSession();
 		$now = Utils::now();
 		$repository = $this->entityManager->getRepository(Player::class);
+		$this->entityManager->beginTransaction();
 		
 		foreach ($players as $player) {
 			# update time
@@ -531,6 +523,7 @@ class PlayerManager {
 		}
 		$this->researchManager->changeSession($S_RSM1);
 		$this->entityManager->flush(Color::class);
+		$this->entityManager->commit();
 	}
 
 	public function uCredit(Player $player, $playerBases, $playerBonus, $commanders, $rsmSession, &$factions, $transactions) {
@@ -710,7 +703,7 @@ class PlayerManager {
 			$commander->setRPlayer(ID_GAIA);
 
 			$n = new Notification();
-			$n->setRPlayer($this->id);
+			$n->setRPlayer($player->id);
 			$n->setTitle('Flotte impayée');
 			$n->addBeg()->addTxt('Domaine')->addSep();
 			$n->addTxt('Vous n\'avez pas assez de crédits pour payer l\'entretien de la flotte de votre officier ' . $commander->name . '. Celui-ci a donc déserté ! ... avec la flotte, désolé.');
@@ -782,22 +775,17 @@ class PlayerManager {
 	public function increaseCredit(Player $player, $credit) {
 		$player->credit += abs($credit);
 
-		if ($player->isSynchronized()) {
-			$this->session->get('playerInfo')->add('credit', $player->credit);
-		}
-		$this->entityManager->flush($player);
+		$this->entityManager->getRepository(Player::class)->updatePlayerCredits($player, abs($credit), '+');
 	}
 
 	public function decreaseCredit(Player $player, $credit) {
-		if (abs($credit) > $player->credit) {
-			$player->credit = 0;
-		} else {
-			$player->credit -= abs($credit);
-		}
-		if ($player->isSynchronized()) {
-			$this->session->get('playerInfo')->add('credit', $player->credit);
-		}
-		$this->entityManager->flush($player);
+		$credits =
+			(abs($credit) > $player->credit)
+			? 0
+			: abs($credit)
+		;
+		$player->credit += $credits;
+		$this->entityManager->getRepository(Player::class)->updatePlayerCredits($player, $credits, '-');
 	}
 
 	public function increaseExperience(Player $player, $exp) {
@@ -836,7 +824,7 @@ class PlayerManager {
 
 					# send a message to the godfather
 					$n = new Notification();
-					$n->setRPlayer($this->rGodfather);
+					$n->setRPlayer($player->rGodfather);
 					$n->setTitle('Récompense de parrainage');
 					$n->addBeg()->addTxt('Un de vos filleuls a atteint le niveau 3. ');
 					$n->addTxt('Il s\'agit de ');
@@ -850,5 +838,14 @@ class PlayerManager {
 			}
 		}
 		$this->entityManager->flush($player);
+	}
+	
+	/**
+	 * @param int $playerId
+	 * @param int $investment
+	 */
+	public function updateUniversityInvestment($playerId, $investment)
+	{
+		$this->entityManager->getRepository(Player::class)->updateUniversityInvestment($playerId, $investment);
 	}
 }

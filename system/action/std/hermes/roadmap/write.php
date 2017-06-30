@@ -18,15 +18,15 @@ if ($session->get('playerInfo')->get('admin') == FALSE) {
 	$response->redirect('profil');
 } else {
 	$content = $request->request->get('content');
-	$statement = $request->query->get('statement');
+	$statement = $request->query->get('statement', false);
 
-	if ($content !== FALSE AND $content !== '') { 
+	if (!empty($content)) { 
 
 		$rm = new RoadMap();
 		$rm->rPlayer = $session->get('playerId');
 		$rm->setContent($content);
 		$rm->setParsedContent($parser->parse($content));
-		if ($statement !== FALSE) {
+		if ($statement !== false) {
 			if ($statement == 0 OR $statement == 1) {
 				$rm->statement = $statement;
 			}

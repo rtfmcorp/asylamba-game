@@ -24,6 +24,7 @@ services:
         arguments:
             - "@task_manager"
             - "@load_balancer"
+            - "%daily_script_hour"
             
     realtime_action_scheduler:
         class: Asylamba\Classes\Scheduler\RealTimeActionScheduler
@@ -138,6 +139,7 @@ services:
         arguments:
             - "@logger"
             - "@app.session"
+            - "@database"
         tags:
             - {type: "event_listener", event: "core.exception", method: "onCoreException"}
             - {type: "event_listener", event: "core.error", method: "onCoreError"}
@@ -146,6 +148,7 @@ services:
         class: Asylamba\Classes\EventListener\ProcessExceptionListener
         arguments:
             - "@logger"
+            - "@database"
             - "@process_gateway"
             - "%app.name"
         tags:

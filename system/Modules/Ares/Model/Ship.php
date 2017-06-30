@@ -16,7 +16,7 @@ use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
 class Ship {
-	
+
 	public $id = 0;
 	public $nbrName = 0;
 	public $name = '';
@@ -48,7 +48,7 @@ class Ship {
 		switch(ShipResource::getInfo($nbrName, 'class')) {
 			case 0:
 				if ($isAttacker == TRUE) {
-					$this->speed += round($this->speed * $bonus->get(PlayerBonus::FIGHTER_SPEED) / 100);	
+					$this->speed += round($this->speed * $bonus->get(PlayerBonus::FIGHTER_SPEED) / 100);
 					for ($i = 0; $i < $this->nbrAttack; $i++) {
 						$this->attack[$i] += round($this->attack[$i] * $bonus->get(PlayerBonus::FIGHTER_ATTACK) / 100);
 					}
@@ -68,7 +68,7 @@ class Ship {
 
 			case 2:
 				if ($isAttacker == TRUE) {
-					$this->speed += round($this->speed * $bonus->get(PlayerBonus::FRIGATE_SPEED) / 100);	
+					$this->speed += round($this->speed * $bonus->get(PlayerBonus::FRIGATE_SPEED) / 100);
 					for ($i = 0; $i < $this->nbrAttack; $i++) {
 						$this->attack[$i] += round($this->attack[$i] * $bonus->get(PlayerBonus::FRIGATE_ATTACK) / 100);
 					}
@@ -87,7 +87,7 @@ class Ship {
 			break;
 		}
 	}
-	
+
 	public function engage ($enemySquadron) {
 		for ($i = 0; $i < $this->nbrAttack; $i++) {
 			if ($enemySquadron->getNbrShips() == 0) {
@@ -100,26 +100,26 @@ class Ship {
 		}
 		return $enemySquadron;
 	}
-	
+
 	protected function chooseEnemy($enemySquadron) {
 		$aleaNbr = rand(0, $enemySquadron->getNbrShips() - 1);
 		return $aleaNbr;
 	}
-		
+
 	protected function attack($key, $i, $enemySquadron) {
 		$damages = ceil(log(($this->attack[$i] / $enemySquadron->getShip($key)->getDefense()) + 1) * 4 * $this->attack[$i]);
 		$enemySquadron->getShip($key)->receiveDamages($damages, $enemySquadron, $key);
 	}
-	
+
 	protected function avoidance($enemyShip) {
 		$avoidance = rand(0, $enemyShip->getSpeed());
 		if ($avoidance > 80) {
-			return 0;	
+			return 0;
 		} else {
 			return 1;
 		}
 	}
-	
+
 	public function receiveDamages ($damages, $squadron, $key) {
 		$this->life -= $damages;
 		if($this->life <= 0) {
@@ -127,13 +127,13 @@ class Ship {
 			$squadron->destructShip($key);
 		}
 	}
-	
+
 	public function affectId ($id) {
 		$this->id = $id + 1;
 	}
-	
+
 	//-----------------Getters------------------------
-	
+
 	public function getId()
 	{ return $this->id;}
 	public function getName()
@@ -152,5 +152,13 @@ class Ship {
 	{ return $this->defense;}
 	public function getPev()
 	{ return $this->pev;}
+
+//--------------Setters--------------
+
+	public function setId($id)
+	{
+		$this->id = $id;
+		return $this;
+	}
 }
 ?>

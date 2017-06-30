@@ -55,7 +55,7 @@ class OrbitalBaseHelper {
 	
 	public function getBuildingInfo($buildingNumber, $info, $level = 0, $sup = 'default') {
 		if($this->isABuilding($buildingNumber)) {
-			if ($info == 'name' OR $info == 'frenchName' OR $info == 'imageLink' OR $info == 'description') {
+			if (in_array($info, ['name', 'column', 'frenchName', 'imageLink', 'description'])) {
 				return OrbitalBaseResource::$building[$buildingNumber][$info];
 			} elseif ($info == 'techno') {
 				if (in_array($buildingNumber, array(3,4,6,8,9))) {

@@ -5,9 +5,8 @@ use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Promethee\Model\Research;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Promethee\Model\Technology;
-use Asylamba\Classes\Worker\API;
+use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
-use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 
 try {
 	$session = $this->getContainer()->get('app.session');
@@ -20,7 +19,8 @@ try {
 	$placeManager = $this->getContainer()->get('gaia.place_manager');
 	$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 	$entityManager = $this->getContainer()->get('entity_manager');
-	$eventDispatcher = $this->getContainer()->get('event_dispatcher');
+	
+	$entityManager->beginTransaction();
 	
 	$faction = $session->get('inscription')->get('ally');
 	# AJOUT DU JOUEUR EN BASE DE DONNEE
@@ -128,7 +128,7 @@ try {
 	$ob = new OrbitalBase();
 
 	# choix de la place
-	$qr = $database->prepare('SELECT * FROM place AS p
+	$qr = $database->prepare('SELECT p.id FROM place AS p
 		INNER JOIN system AS sy ON p.rSystem = sy.id
 			INNER JOIN sector AS se ON sy.rSector = se.id
 		WHERE p.typeOfPlace = 1
@@ -140,7 +140,7 @@ try {
 	$qr->execute(array($session->get('inscription')->get('sector')));
 	$aw = $qr->fetchAll();
 
-	$placeId = $aw[rand(0, (count($aw) - 1))][0];
+	$placeId = $aw[rand(0, (count($aw) - 1))]['id'];
 
 	$ob->setRPlace($placeId);
 
@@ -226,14 +226,7 @@ try {
 	}
 
 	# modification de la place
-	$place = $placeManager->get($placeId);
-	$place->setRPlayer($player->getId());
-	$place->population = 50;
-	$place->coefResources = 60;
-	$place->coefHistory = 20;
-	$entityManager->flush($place);
-	
-	$eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place));
+	$place = $placeManager->turnAsSpawnPlace($placeId, $player->getId());
 
 	# confirmation au portail
 	if ($this->getContainer()->getParameter('apimode') === 'enabled') {
@@ -277,6 +270,7 @@ try {
 		
 		$conversationManager->changeSession($S_CVM);
 	}
+	$entityManager->commit();
 	$security = $this->getContainer()->get('security');
 	# redirection vers connection
 	$this->getContainer()->get('app.response')->redirect('connection/bindkey-' . $security->crypt($security->buildBindkey($player->getBind())) . '/mode-splash');

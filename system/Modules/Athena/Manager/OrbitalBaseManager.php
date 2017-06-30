@@ -357,25 +357,15 @@ class OrbitalBaseManager {
 		$orbitalBase->setRealSpatioportLevel($realSpatioportLevel);
 
 		$orbitalBase->buildingQueues = $buildingQueues;
-		# TechnologyQueueManager
-		$S_TQM1 = $this->technologyQueueManager->getCurrentSession();
-		$this->technologyQueueManager->newSession(ASM_UMODE);
-		$this->technologyQueueManager->load(array('rPlace' => $orbitalBase->getRPlace()), array('dEnd'));
-		$orbitalBase->technoQueueManager = $this->technologyQueueManager->getCurrentSession();
-		$this->technologyQueueManager->changeSession($S_TQM1);
+		$orbitalBase->technoQueues = $this->technologyQueueManager->getPlaceQueues($orbitalBase->getRPlace());
 		$orbitalBase->commercialShippings = $this->commercialShippingManager->getByBase($orbitalBase->getRPlace());
 
 		$this->uMethod($orbitalBase);
 	}
 
 	public function add(OrbitalBase $orbitalBase) {
-		# prépare le rechargement de la map
-		$this->galaxyColorManager->apply();
-
 		$this->entityManager->persist($orbitalBase);
 		$this->entityManager->flush($orbitalBase);
-		
-		$orbitalBase->technoQueueManager = $this->technologyQueueManager->getFirstSession();
 	}
 
 	public function changeOwnerById($id, $base, $newOwner, $baseCommanders) {
@@ -402,12 +392,10 @@ class OrbitalBaseManager {
 		$this->commercialRouteManager->removeBaseRoutes($base);
 
 		# suppression des technologies en cours de développement
-		$S_TQM1 = $this->technologyQueueManager->getCurrentSession();
-		$this->technologyQueueManager->changeSession($base->technoQueueManager);
-		for ($i = $this->technologyQueueManager->size()-1; $i >= 0; $i--) { 
-			$this->technologyQueueManager->deleteById($this->technologyQueueManager->get($i)->getId());
+		foreach ($base->technoQueues as $queue) { 
+			$this->entityManager->remove($queue);
 		}
-		$this->technologyQueueManager->changeSession($S_TQM1);
+		$this->entityManager->flush(TechnologyQueue::class);
 
 		# suppression des missions de recyclages ainsi que des logs de recyclages
 		$S_REM1 = $this->recyclingMissionManager->getCurrentSession();
@@ -450,13 +438,15 @@ class OrbitalBaseManager {
 		if ($nbOldPlayerBases === 0 || ($nbOldPlayerBases === 1 && $oldPlayerBases[0]->rPlace === $id)) {
 			$this->playerManager->reborn($oldOwner);
 		}
-		# applique en cascade le changement de couleur des sytèmes
-		$this->galaxyColorManager->apply();
         $this->entityManager->flush();
 	}
 	
-
+	/**
+	 * @param OrbitalBase $orbitalBase
+	 * @return int
+	 */
 	public function updatePoints(OrbitalBase $orbitalBase) {
+		$initialPoints = $orbitalBase->getPoints();
 		$points = 0;
 
 		for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) { 
@@ -467,8 +457,7 @@ class OrbitalBaseManager {
 
 		$points = round($points);
 		$orbitalBase->setPoints($points);
-		
-		$this->entityManager->flush($orbitalBase);
+		return $points - $initialPoints;
 	}
 
 	// UPDATE METHODS
@@ -477,56 +466,6 @@ class OrbitalBaseManager {
 		$now   = Utils::now();
 
 		if (Utils::interval($orbitalBase->uOrbitalBase, $now, 's') > 0) {
-			# update time
-			$hours = Utils::intervalDates($now, $orbitalBase->uOrbitalBase);
-			$orbitalBase->uOrbitalBase = $now;
-
-			# load the player
-			$player = $this->playerManager->get($orbitalBase->rPlayer);
-
-			if (count($hours)) {
-				# load the bonus
-				$playerBonus = $this->playerBonusManager->getBonusByPlayer($player);
-				$this->playerBonusManager->load($playerBonus);
-
-				foreach ($hours as $key => $hour) {
-					$this->ctc->add($hour, $this, 'uResources', $orbitalBase, array($orbitalBase, $playerBonus));
-					$this->ctc->add($hour, $this, 'uAntiSpy', $orbitalBase, array($orbitalBase));
-				}
-			}
-
-			# TECHNOLOGY QUEUE
-			$S_TQM1 = $this->technologyQueueManager->getCurrentSession();
-			$this->technologyQueueManager->changeSession($orbitalBase->technoQueueManager);
-			for ($i = 0; $i < $this->technologyQueueManager->size(); $i++) { 
-				$tq = $this->technologyQueueManager->get($i);
-
-				if ($tq->dEnd < $now) {
-					$this->ctc->add($tq->dEnd, $this, 'uTechnologyQueue', $orbitalBase, array($orbitalBase, $tq, $player));
-				} else {
-					break;
-				}
-			}
-			$this->technologyQueueManager->changeSession($S_TQM1);
-
-			# CommercialShippingManager
-			foreach ($orbitalBase->commercialShippings as $cs) { 
-				if ($cs->dArrival < $now AND $cs->dArrival !== '0000-00-00 00:00:00') {
-					$commander = NULL;
-
-					# load transaction (if it's not a resource shipping)
-					if (($transaction = $this->transactionManager->get($cs->rTransaction)) !== null) {
-						# load commander if it's a commander shipping
-						if ($transaction->type == Transaction::TYP_COMMANDER) {
-							$commander = $this->commanderManager->get($transaction->identifier);
-						}
-					}
-					$destOB = $this->get($cs->rBaseDestination);
-
-					$this->ctc->add($cs->dArrival, $this, 'uCommercialShipping', $orbitalBase, array($orbitalBase, $cs, $transaction, $destOB, $commander));
-				}
-			}
-
 			# RECYCLING MISSION
 			$S_REM1 = $this->recyclingMissionManager->getCurrentSession();
 			$this->recyclingMissionManager->newSession(ASM_UMODE);
@@ -544,7 +483,7 @@ class OrbitalBaseManager {
 
 					for ($j = 0; $j < $recyclingQuantity; $j++) { 
 						$dateOfUpdate = Utils::addSecondsToDate($mission->uRecycling, ($j + 1) * $mission->cycleTime);
-						$this->ctc->add($dateOfUpdate, $this, 'uRecycling', $mission, array($orbitalBase, $mission, $place, $player, $dateOfUpdate));
+						$this->ctc->add($dateOfUpdate, $this, 'uRecycling', $mission, array($orbitalBase, $mission, $place, $dateOfUpdate));
 					}
 				}
 			}
@@ -554,25 +493,105 @@ class OrbitalBaseManager {
 		$this->ctc->applyContext($token);
 		$this->entityManager->flush($orbitalBase);
 	}
+	
+	public function updateBases()
+	{
+		$repository = $this->entityManager->getRepository(OrbitalBase::class);
+		$bases = $repository->getAll();
+		$this->entityManager->beginTransaction();
+		$now = Utils::now();
+		
+		foreach ($bases as $base) {
+			# update time
+			$hours = Utils::intervalDates($now, $base->uOrbitalBase);
 
-	public function uResources(OrbitalBase $orbitalBase, PlayerBonus $playerBonus) {
+			if (count($hours) === 0) {
+				continue;
+			}
+			$player = $this->playerManager->get($base->rPlayer);
+			$playerBonus = $this->playerBonusManager->getBonusByPlayer($player);
+			$this->playerBonusManager->load($playerBonus);
+			$base->setUpdatedAt($now);
+			$initialResources = $base->resourcesStorage;
+			$initialAntiSpyAverage = $base->antiSpyAverage;
+			
+			foreach ($hours as $hour) {
+				$this->updateResources($base, $playerBonus);
+				$this->updateAntiSpy($base);
+			}
+			
+			$repository->updateBase(
+				$base,
+				$base->resourcesStorage - $initialResources,
+				$base->antiSpyAverage - $initialAntiSpyAverage
+			);
+		}
+		$this->entityManager->commit();
+	}
+	
+	/**
+	 * @param OrbitalBase $orbitalBase
+	 * @param PlayerBonus $playerBonus
+	 */
+	protected function updateResources(OrbitalBase $orbitalBase, PlayerBonus $playerBonus)
+	{
 		$addResources = Game::resourceProduction($this->orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $orbitalBase->levelRefinery, 'refiningCoefficient'), $orbitalBase->planetResources);
 		$addResources += $addResources * $playerBonus->bonus->get(PlayerBonus::REFINERY_REFINING) / 100;
-		$newResources = $orbitalBase->resourcesStorage + (int) $addResources;
+
+		$this->increaseResources($orbitalBase, (int) $addResources, false, false);
+	}
+	
+	protected function updateAntiSpy(OrbitalBase $orbitalBase)
+	{
+		$orbitalBase->antiSpyAverage = round((($orbitalBase->antiSpyAverage * (24 - 1)) + ($orbitalBase->iAntiSpy)) / 24);
+	}
+	
+	/**
+	 * @param OrbitalBase $orbitalBase
+	 * @param int $resources
+	 * @param bool $offLimits
+	 * @param bool $persist
+	 */
+	public function increaseResources(OrbitalBase $orbitalBase, $resources, $offLimits = false, $persist = true)
+	{
+		$playerBonus = $this->playerBonusManager->getBonusByPlayer($this->playerManager->get($orbitalBase->rPlayer));
+		$this->playerBonusManager->load($playerBonus);
 		$maxStorage = $this->orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $orbitalBase->levelStorage, 'storageSpace');
 		$maxStorage += $maxStorage * $playerBonus->bonus->get(PlayerBonus::REFINERY_STORAGE) / 100;
 
-		if ($orbitalBase->resourcesStorage < $maxStorage) {
-			if ($newResources > $maxStorage) {
-				$orbitalBase->resourcesStorage = $maxStorage;
-			} else {
-				$orbitalBase->resourcesStorage = $newResources;
-			}
+		if ($offLimits === true) {
+			$maxStorage += OrbitalBase::EXTRA_STOCK;
+		}
+		$addedResources = 
+			(($orbitalBase->resourcesStorage + $resources) > $maxStorage)
+			? $maxStorage - $orbitalBase->resourcesStorage
+			: $resources
+		;
+		$orbitalBase->resourcesStorage += $addedResources;
+		if ($persist === true) {
+			$this->entityManager->getRepository(OrbitalBase::class)->increaseResources(
+				$orbitalBase,
+				$addedResources
+			);
 		}
 	}
-
-	public function uAntiSpy(OrbitalBase $orbitalBase) {
-		$orbitalBase->antiSpyAverage = round((($orbitalBase->antiSpyAverage * (24 - 1)) + ($orbitalBase->iAntiSpy)) / 24);
+	
+	/**
+	 * @param OrbitalBase $orbitalBase
+	 * @param int $resources
+	 */
+	public function decreaseResources(OrbitalBase $orbitalBase, $resources)
+	{
+		$substractedResources = 
+			(($orbitalBase->resourcesStorage - $resources) < 0)
+			? abs(0 - $orbitalBase->resourcesStorage)
+			: $resources
+		;
+		$orbitalBase->resourcesStorage -= $substractedResources;
+		$this->entityManager->getRepository(OrbitalBase::class)->decreaseResources(
+			$orbitalBase,
+			$substractedResources
+		);
 	}
 
 	public function uBuildingQueue($queueId) {
@@ -582,7 +601,12 @@ class OrbitalBaseManager {
 		# update builded building
 		$orbitalBase->setBuildingLevel($queue->buildingNumber, ($orbitalBase->getBuildingLevel($queue->buildingNumber) + 1));
 		# update the points of the orbitalBase
-		$this->updatePoints($orbitalBase);
+		$earnedPoints = $this->updatePoints($orbitalBase);
+		$this->entityManager->getRepository(OrbitalBase::class)->increaseBuildingLevel(
+			$orbitalBase,
+			$this->orbitalBaseHelper->getBuildingInfo($queue->buildingNumber, 'column'),
+			$earnedPoints
+		);
 		# increase player experience
 		$experience = $this->orbitalBaseHelper->getBuildingInfo($queue->buildingNumber, 'level', $queue->targetLevel, 'points');
 		$this->playerManager->increaseExperience($player, $experience);
@@ -639,29 +663,42 @@ class OrbitalBaseManager {
 		$this->entityManager->flush();
 	}
 
-	public function uTechnologyQueue(OrbitalBase $orbitalBase, $tq, $player) {
+	public function uTechnologyQueue($technologyQueueId) {
+		$technologyQueue = $this->technologyQueueManager->get($technologyQueueId);
+		$orbitalBase = $this->get($technologyQueue->getPlaceId());
+		$player = $this->playerManager->get($technologyQueue->getPlayerId());
 		# technologie construite
 		$technology = $this->technologyManager->getPlayerTechnology($player->getId());
-		$this->technologyManager->affectTechnology($technology, $tq->technology, $tq->targetLevel, $player);
+		$this->technologyManager->affectTechnology($technology, $technologyQueue->getTechnology(), $technologyQueue->getTargetLevel(), $player);
 		# increase player experience
-		$experience = $this->technologyHelper->getInfo($tq->technology, 'points', $tq->targetLevel);
+		$experience = $this->technologyHelper->getInfo($technologyQueue->getTechnology(), 'points', $technologyQueue->getTargetLevel());
 		$this->playerManager->increaseExperience($player, $experience);
 
 		# alert
-		if ($this->session->get('playerId') == $orbitalBase->rPlayer) {
-			$alt = 'Développement de votre technologie ' . $this->technologyHelper->getInfo($tq->technology, 'name');
-			if ($tq->targetLevel > 1) {
-				$alt .= ' niveau ' . $tq->targetLevel;
-			} 
-			$alt .= ' terminée. Vous gagnez ' . $experience . ' d\'expérience.';
-			$this->session->addFlashbag($alt, Flashbag::TYPE_TECHNOLOGY_SUCCESS);
-		}
-
-		# delete queue in database
-		$this->technologyQueueManager->deleteById($tq->id);
+//		if ($this->session->get('playerId') == $orbitalBase->rPlayer) {
+//			$alt = 'Développement de votre technologie ' . $this->technologyHelper->getInfo($technologyQueue->getTechnology(), 'name');
+//			if ($technologyQueue->getTargetLevel() > 1) {
+//				$alt .= ' niveau ' . $technologyQueue->getTargetLevel();
+//			} 
+//			$alt .= ' terminée. Vous gagnez ' . $experience . ' d\'expérience.';
+//			$this->session->addFlashbag($alt, Flashbag::TYPE_TECHNOLOGY_SUCCESS);
+//		}
+		$this->entityManager->remove($technologyQueue);
+		$this->entityManager->flush($technologyQueue);
 	}
 
-	public function uCommercialShipping(OrbitalBase $orbitalBase, $cs, $transaction, $destOB, $commander) {
+	public function uCommercialShipping($id) {
+
+		$cs = $this->commercialShippingManager->get($id);
+		$transaction = $this->transactionManager->get($cs->getTransactionId());
+		$orbitalBase = $this->get($cs->getBaseId());
+		$destOB = $this->get($cs->getDestinationBaseId());
+		$commander =
+			($transaction !== null && $transaction->type === Transaction::TYP_COMMANDER)
+			? $this->commanderManager->get($transaction->identifier)
+			: null
+		;
+
 		switch ($cs->statement) {
 			case CommercialShipping::ST_GOING :
 				# shipping arrived, delivery of items to rBaseDestination
@@ -700,7 +737,8 @@ class OrbitalBaseManager {
 		$this->entityManager->flush();
 	}
 
-	public function uRecycling(OrbitalBase $orbitalBase, RecyclingMission $mission, Place $targetPlace, Player $player, $dateOfUpdate) {
+	public function uRecycling(OrbitalBase $orbitalBase, RecyclingMission $mission, Place $targetPlace, $dateOfUpdate) {
+		$player = $this->playerManager->get($orbitalBase->getRPlayer());
 		if ($targetPlace->typeOfPlace != Place::EMPTYZONE) {
 			# make the recycling : decrease resources on the target place
 			$totalRecycled = $mission->recyclerQuantity * RecyclingMission::RECYCLER_CAPACTIY;
@@ -870,45 +908,6 @@ class OrbitalBaseManager {
 			$n->addLnk('map/place-' . $orbitalBase->rPlace, 'base orbitale')->addTxt(' le temps que vous programmiez une autre mission.');
 			$n->addEnd();
 			$this->notificationManager->add($n);
-		}
-	}
-
-	// OBJECT METHODS
-	public function increaseResources(OrbitalBase $orbitalBase, $resources, $canGoHigher = FALSE) {
-		if (intval($resources) >= 0) {
-			# load the bonus
-			$playerBonus = $this->playerBonusManager->getBonusByPlayer($this->playerManager->get($orbitalBase->rPlayer));
-			$this->playerBonusManager->load($playerBonus);
-			$bonus = $playerBonus->bonus->get(PlayerBonus::REFINERY_STORAGE);
-
-			$newResources = $orbitalBase->resourcesStorage + (int) $resources;
-			
-			$maxStorage = $this->orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $orbitalBase->levelStorage, 'storageSpace');
-			$maxStorage += $maxStorage * $bonus / 100;
-
-			if ($canGoHigher) {
-				$maxStorage += OrbitalBase::EXTRA_STOCK;
-			}
-
-			if ($orbitalBase->resourcesStorage < $maxStorage || $canGoHigher) {
-				if ($newResources > $maxStorage) {
-					$orbitalBase->resourcesStorage = $maxStorage;
-				} else {
-					$orbitalBase->resourcesStorage = $newResources;
-				}
-			}
-			$this->entityManager->flush($orbitalBase);
-		} else {
-			throw new ErrorException('Problème dans increaseResources de OrbitalBase');
-		}
-	}
-
-	public function decreaseResources(OrbitalBase $orbitalBase, $resources) {
-		if (intval($resources)) {
-			$orbitalBase->resourcesStorage -= abs($resources);
-			$this->entityManager->flush($orbitalBase);
-		} else {
-			throw new ErrorException('Problème dans decreaseResources de OrbitalBase');
 		}
 	}
 

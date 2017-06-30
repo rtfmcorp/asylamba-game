@@ -40,4 +40,5 @@ services:
     promethee.technology_queue_manager:
         class: Asylamba\Modules\Promethee\Manager\TechnologyQueueManager
         arguments:
-            - "@database"
+            - "@entity_manager"
+            - "@realtime_action_scheduler"

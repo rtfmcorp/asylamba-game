@@ -53,4 +53,12 @@ class ReportManager {
 		$this->entityManager->persist($report);
 		$this->entityManager->flush($report);
 	}
+	
+	/**
+	 * @param int $playerId
+	 */
+	public function removePlayerReports($playerId)
+	{
+		$this->entityManager->getRepository(Report::class)->removePlayerReports($playerId);
+	}
 }

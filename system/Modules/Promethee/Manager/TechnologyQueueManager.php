@@ -10,112 +10,80 @@
 */
 namespace Asylamba\Modules\Promethee\Manager;
 
-use Asylamba\Classes\Worker\Manager;
-use Asylamba\Classes\Database\Database;
-use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Modules\Promethee\Model\TechnologyQueue;
+use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
-class TechnologyQueueManager extends Manager {
-	protected $managerType = '_TechnologyQueue';
+class TechnologyQueueManager
+{
+	/** @var EntityManager **/
+	protected $entityManager;
+	/** @var RealTimeActionScheduler **/
+	protected $realtimeActionScheduler;
 
 	/**
-	 * @param Database $database
+	 * @param EntityManager $entityManager
+	 * @param RealTimeActionScheduler $realtimeActionScheduler
 	 */
-	public function __construct(Database $database)
+	public function __construct(EntityManager $entityManager, RealTimeActionScheduler $realtimeActionScheduler)
 	{
-		parent::__construct($database);
+		$this->entityManager = $entityManager;
+		$this->realtimeActionScheduler = $realtimeActionScheduler;
 	}
 	
-	public function load($where = array(), $order = array(), $limit = array()) {
-		$formatWhere = Utils::arrayToWhere($where);
-		$formatOrder = Utils::arrayToOrder($order);
-		$formatLimit = Utils::arrayToLimit($limit);
-
-		$qr = $this->database->prepare('SELECT *
-			FROM technologyQueue
-			' . $formatWhere . '
-			' . $formatOrder . '
-			' . $formatLimit
-		);
-
-		foreach($where AS $v) {
-			if (is_array($v)) {
-				foreach ($v as $p) {
-					$valuesArray[] = $p;
-				}
-			} else {
-				$valuesArray[] = $v;
-			}
-		}
-
-		if(empty($valuesArray)) {
-			$qr->execute();
-		} else {
-			$qr->execute($valuesArray);
-		}
-
-		while($aw = $qr->fetch()) {
-			$t = new TechnologyQueue();
-
-			$t->id = $aw['id'];
-			$t->rPlayer = $aw['rPlayer'];
-			$t->rPlace = $aw['rPlace'];
-			$t->technology = $aw['technology'];
-			$t->targetLevel = $aw['targetLevel'];
-			$t->dStart = $aw['dStart'];
-			$t->dEnd = $aw['dEnd'];
-
-			$this->_Add($t);
+	public function scheduleQueues()
+	{
+		$queues = $this->entityManager->getRepository(TechnologyQueue::class)->getAll();
+		
+		foreach ($queues as $queue) {
+			$this->realtimeActionScheduler->schedule('athena.orbital_base_manager', 'uTechnologyQueue', $queue, $queue->getEndedAt());
 		}
 	}
-
-	public function add(TechnologyQueue $t) {
-		$qr = $this->database->prepare('INSERT INTO
-			technologyQueue(rPlayer, rPlace, technology, targetLevel, dStart, dEnd)
-			VALUES(?, ?, ?, ?, ?, ?)');
-		$qr->execute(array(
-			$t->rPlayer,
-			$t->rPlace,
-			$t->technology,
-			$t->targetLevel,
-			$t->dStart,
-			$t->dEnd
-		));
-		$t->id = $this->database->lastInsertId();
-		$this->_Add($t);
+	
+	/**
+	 * @param int $id
+	 * @return TechnologyQueue
+	 */
+	public function get($id)
+	{
+		return $this->entityManager->getRepository(TechnologyQueue::class)->get($id);
+	}
+	
+	/**
+	 * @param int $playerId
+	 * @param int $technology
+	 * @return TechnologyQueue
+	 */
+	public function getPlayerTechnologyQueue($playerId, $technology)
+	{
+		return $this->entityManager->getRepository(TechnologyQueue::class)->getPlayerTechnologyQueue($playerId, $technology);
+	}
+	
+	/**
+	 * @param int $placeId
+	 * @return array
+	 */
+	public function getPlaceQueues($placeId)
+	{
+		return $this->entityManager->getRepository(TechnologyQueue::class)->getPlaceQueues($placeId);
+	}
+	
+	/**
+	 * @param int $playerId
+	 * @return array
+	 */
+	public function getPlayerQueues($playerId)
+	{
+		return $this->entityManager->getRepository(TechnologyQueue::class)->getPlayerQueues($playerId);
 	}
 
-	public function save() {
-		$technologyQueues = $this->_Save();
-		foreach ($technologyQueues AS $k => $t) {
-			$qr = $this->database->prepare('UPDATE technologyQueue
-				SET	id = ?,
-					rPlayer = ?,
-					rPlace = ?,
-					technology = ?,
-					targetlevel = ?,
-					dStart = ?,
-					dEnd = ?
-				WHERE id = ?');
-			$qr->execute(array(
-				$t->id,
-				$t->rPlayer,
-				$t->rPlace,
-				$t->technology,
-				$t->targetLevel,
-				$t->dStart,
-				$t->dEnd,
-				$t->id
-			));
-		}
-	}
-
-	public function deleteById($id) {
-		$qr = $this->database->prepare('DELETE FROM technologyQueue WHERE id = ?');
-		$qr->execute(array($id));
-
-		$this->_Remove($id);
-
-		return TRUE;
+	/**
+	 * @param TechnologyQueue $technologyQueue
+	 */
+	public function add(TechnologyQueue $technologyQueue) {
+		$this->entityManager->persist($technologyQueue);
+		$this->entityManager->flush($technologyQueue);
+		
+		$this->realtimeActionScheduler->schedule('athena.orbital_base_manager', 'uTechnologyQueue', $technologyQueue, $technologyQueue->getEndedAt());
 	}
 }

@@ -168,6 +168,9 @@ class Server
 			return;
 		}
 		$data = json_decode($content, true);
+		if (isset($data['technical'])) {
+			$this->processManager->updateTechnicalData($process, $data['technical']);
+		}
 		if (isset($data['command'])) {
 			return $this->treatCommand($data);
 		}

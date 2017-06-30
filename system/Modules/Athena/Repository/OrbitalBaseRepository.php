@@ -53,6 +53,25 @@ class OrbitalBaseRepository extends AbstractRepository {
 	}
 	
 	/**
+	 * @return array
+	 */
+	public function getAll()
+	{
+		$statement = $this->select();
+		$data = [];
+		while ($row = $statement->fetch()) {
+			if (($ob = $this->unitOfWork->getObject(OrbitalBase::class, $row['rPlace'])) !== null) {
+				$data[] = $ob;
+				continue;
+			}
+			$orbitalBase = $this->format($row);
+			$this->unitOfWork->addObject($orbitalBase);
+			$data[] = $orbitalBase;
+		}
+		return $data;
+	}
+	
+	/**
 	 * @param int $playerId
 	 * @return array
 	 */
@@ -188,35 +207,19 @@ class OrbitalBaseRepository extends AbstractRepository {
 	{
 		$statement = $this->connection->prepare(
 			'UPDATE orbitalBase SET rPlayer = :player_id, name = :name, typeOfBase = :type,
-			levelGenerator = :generator_level, levelRefinery = :refinery_level, levelDock1 = :dock1_level, levelDock2 = :dock2_level,
-			levelDock3 = :dock3_level, levelTechnosphere = :technosphere_level, levelCommercialPlateforme = :commercial_platform_level,
-			levelStorage = :storage_level, levelRecycling = :recycling_level, levelSpatioport = :spatioport_level, points = :points,
-			iSchool = :school_investments, iAntiSpy = :anti_spy_investments, antiSpyAverage = :anti_spy_average,
+			iSchool = :school_investments, iAntiSpy = :anti_spy_investments,
 			pegaseStorage = :pegase_storage, satyreStorage = :satyre_storage, sireneStorage = :sirene_storage, dryadeStorage = :dryade_storage,
 			chimereStorage = :chimere_storage, meduseStorage = :meduse_storage, griffonStorage = :griffon_storage,
 			cyclopeStorage = :cyclope_storage, minotaureStorage = :minotaure_storage, hydreStorage = :hydre_storage,
-			cerbereStorage = :cerbere_storage, phenixStorage = :phenix_storage, resourcesStorage = :resources,
-			uOrbitalBase = :u_orbital_base, dCreation = :created_at
+			cerbereStorage = :cerbere_storage, phenixStorage = :phenix_storage, dCreation = :created_at
 			WHERE rPlace = :id'
 		);
 		$statement->execute(array(
 			'player_id' => $orbitalBase->getRPlayer(),
 			'name' => $orbitalBase->getName(),
 			'type' => $orbitalBase->typeOfBase,
-			'generator_level' => $orbitalBase->getLevelGenerator(),
-			'refinery_level' => $orbitalBase->getLevelRefinery(),
-			'dock1_level' => $orbitalBase->getLevelDock1(),
-			'dock2_level' => $orbitalBase->getLevelDock2(),
-			'dock3_level' => $orbitalBase->getLevelDock3(),
-			'technosphere_level' => $orbitalBase->getLevelTechnosphere(),
-			'commercial_platform_level' => $orbitalBase->getLevelCommercialPlateforme(),
-			'storage_level' => $orbitalBase->getLevelStorage(),
-			'recycling_level' => $orbitalBase->getLevelRecycling(),
-			'spatioport_level' => $orbitalBase->getLevelSpatioport(),
-			'points' => $orbitalBase->getPoints(),
 			'school_investments' => $orbitalBase->getISchool(),
 			'anti_spy_investments' => $orbitalBase->getIAntiSpy(),
-			'anti_spy_average' => $orbitalBase->getAntiSpyAverage(),
 			'pegase_storage' => $orbitalBase->getShipStorage(0),
 			'satyre_storage' => $orbitalBase->getShipStorage(1),
 			'sirene_storage' => $orbitalBase->getShipStorage(2),
@@ -229,11 +232,62 @@ class OrbitalBaseRepository extends AbstractRepository {
 			'hydre_storage' => $orbitalBase->getShipStorage(9),
 			'cerbere_storage' => $orbitalBase->getShipStorage(10),
 			'phenix_storage' => $orbitalBase->getShipStorage(11),
-			'resources' => $orbitalBase->getResourcesStorage(),
-			'u_orbital_base' => $orbitalBase->uOrbitalBase,
 			'created_at' => $orbitalBase->getDCreation(),
 			'id' => $orbitalBase->getRPlace(),
 		));
+	}
+	
+	/**
+	 * @param OrbitalBase $orbitalBase
+	 * @param int $resources
+	 * @param int $antiSpyAverage
+	 */
+	public function updateBase(OrbitalBase $orbitalBase, $resources, $antiSpyAverage)
+	{
+		$operator = ($antiSpyAverage > 0) ? '+' : '-';
+		$statement = $this->connection->prepare(
+			"UPDATE orbitalBase SET resourcesStorage = resourcesStorage + :resources,
+			antiSpyAverage = antiSpyAverage $operator :anti_spy_average, uOrbitalBase = :updated_at WHERE rPlace = :id"
+		);
+		$statement->execute([
+			'id' => $orbitalBase->getId(),
+			'resources' => $resources,
+			'anti_spy_average' => abs($antiSpyAverage),
+			'updated_at' => $orbitalBase->getUpdatedAt()
+		]);
+	}
+	
+	public function increaseBuildingLevel(OrbitalBase $orbitalBase, $buildingColumn, $earnedPoints)
+	{
+		$statement = $this->connection->prepare(
+			"UPDATE orbitalBase SET {$buildingColumn} = {$buildingColumn} + 1, points = points + :points WHERE rPlace = :id"
+		);
+		$statement->execute([
+			'points' => $earnedPoints,
+			'id' => $orbitalBase->getId()
+		]);
+	}
+	
+	public function increaseResources(OrbitalBase $orbitalBase, $resources)
+	{
+		$statement = $this->connection->prepare(
+			"UPDATE orbitalBase SET resourcesStorage = resourcesStorage + :resources WHERE rPlace = :id"
+		);
+		$statement->execute([
+			'resources' => $resources,
+			'id' => $orbitalBase->getId()
+		]);
+	}
+	
+	public function decreaseResources(OrbitalBase $orbitalBase, $resources)
+	{
+		$statement = $this->connection->prepare(
+			"UPDATE orbitalBase SET resourcesStorage = resourcesStorage - :resources WHERE rPlace = :id"
+		);
+		$statement->execute([
+			'resources' => $resources,
+			'id' => $orbitalBase->getId()
+		]);
 	}
 	
 	public function remove($orbitalBase)
@@ -244,37 +298,37 @@ class OrbitalBaseRepository extends AbstractRepository {
 	public function format($data)
 	{
 		$orbitalBase = new OrbitalBase();
-		$orbitalBase->setRPlace($data['rPlace']);
-		$orbitalBase->setRPlayer($data['rPlayer']);
+		$orbitalBase->setRPlace((int) $data['rPlace']);
+		$orbitalBase->setRPlayer((int) $data['rPlayer']);
 		$orbitalBase->setName($data['name']);
-		$orbitalBase->typeOfBase = $data['typeOfBase'];
-		$orbitalBase->setLevelGenerator($data['levelGenerator']);
-		$orbitalBase->setLevelRefinery($data['levelRefinery']);
-		$orbitalBase->setLevelDock1($data['levelDock1']);
-		$orbitalBase->setLevelDock2($data['levelDock2']);
-		$orbitalBase->setLevelDock3($data['levelDock3']);
-		$orbitalBase->setLevelTechnosphere($data['levelTechnosphere']);
-		$orbitalBase->setLevelCommercialPlateforme($data['levelCommercialPlateforme']);
-		$orbitalBase->setLevelStorage($data['levelStorage']);
-		$orbitalBase->setLevelRecycling($data['levelRecycling']);
-		$orbitalBase->setLevelSpatioport($data['levelSpatioport']);
-		$orbitalBase->setPoints($data['points']);
-		$orbitalBase->setISchool($data['iSchool']);
-		$orbitalBase->setIAntiSpy($data['iAntiSpy']);
-		$orbitalBase->setAntiSpyAverage($data['antiSpyAverage']);
-		$orbitalBase->setShipStorage(0 ,$data['pegaseStorage']);
-		$orbitalBase->setShipStorage(1 ,$data['satyreStorage']);
-		$orbitalBase->setShipStorage(2 ,$data['sireneStorage']);
-		$orbitalBase->setShipStorage(3 ,$data['dryadeStorage']);
-		$orbitalBase->setShipStorage(4 ,$data['chimereStorage']);
-		$orbitalBase->setShipStorage(5 ,$data['meduseStorage']);
-		$orbitalBase->setShipStorage(6 ,$data['griffonStorage']);
-		$orbitalBase->setShipStorage(7 ,$data['cyclopeStorage']);
-		$orbitalBase->setShipStorage(8 ,$data['minotaureStorage']);
-		$orbitalBase->setShipStorage(9 ,$data['hydreStorage']);
-		$orbitalBase->setShipStorage(10 ,$data['cerbereStorage']);
-		$orbitalBase->setShipStorage(11 ,$data['phenixStorage']);
-		$orbitalBase->setResourcesStorage($data['resourcesStorage']);
+		$orbitalBase->typeOfBase = (int) $data['typeOfBase'];
+		$orbitalBase->setLevelGenerator((int) $data['levelGenerator']);
+		$orbitalBase->setLevelRefinery((int) $data['levelRefinery']);
+		$orbitalBase->setLevelDock1((int) $data['levelDock1']);
+		$orbitalBase->setLevelDock2((int) $data['levelDock2']);
+		$orbitalBase->setLevelDock3((int) $data['levelDock3']);
+		$orbitalBase->setLevelTechnosphere((int) $data['levelTechnosphere']);
+		$orbitalBase->setLevelCommercialPlateforme((int) $data['levelCommercialPlateforme']);
+		$orbitalBase->setLevelStorage((int) $data['levelStorage']);
+		$orbitalBase->setLevelRecycling((int) $data['levelRecycling']);
+		$orbitalBase->setLevelSpatioport((int) $data['levelSpatioport']);
+		$orbitalBase->setPoints((int) $data['points']);
+		$orbitalBase->setISchool((int) $data['iSchool']);
+		$orbitalBase->setIAntiSpy((int) $data['iAntiSpy']);
+		$orbitalBase->setAntiSpyAverage((int) $data['antiSpyAverage']);
+		$orbitalBase->setShipStorage(0 , (int) $data['pegaseStorage']);
+		$orbitalBase->setShipStorage(1 , (int) $data['satyreStorage']);
+		$orbitalBase->setShipStorage(2 , (int) $data['sireneStorage']);
+		$orbitalBase->setShipStorage(3 , (int) $data['dryadeStorage']);
+		$orbitalBase->setShipStorage(4 , (int) $data['chimereStorage']);
+		$orbitalBase->setShipStorage(5 , (int) $data['meduseStorage']);
+		$orbitalBase->setShipStorage(6 , (int) $data['griffonStorage']);
+		$orbitalBase->setShipStorage(7 , (int) $data['cyclopeStorage']);
+		$orbitalBase->setShipStorage(8 , (int) $data['minotaureStorage']);
+		$orbitalBase->setShipStorage(9 , (int) $data['hydreStorage']);
+		$orbitalBase->setShipStorage(10 , (int) $data['cerbereStorage']);
+		$orbitalBase->setShipStorage(11 , (int) $data['phenixStorage']);
+		$orbitalBase->setResourcesStorage((int) $data['resourcesStorage']);
 		$orbitalBase->uOrbitalBase = $data['uOrbitalBase'];
 		$orbitalBase->setDCreation($data['dCreation']);
 
@@ -283,9 +337,9 @@ class OrbitalBaseRepository extends AbstractRepository {
 		$orbitalBase->setXSystem($data['xSystem']);
 		$orbitalBase->setYSystem($data['ySystem']);
 		$orbitalBase->setSector($data['sector']);
-		$orbitalBase->sectorColor = $data['sectorColor'];
+		$orbitalBase->sectorColor = (int) $data['sectorColor'];
 		$orbitalBase->setTax($data['tax']);
-		$orbitalBase->setPlanetPopulation($data['planetPopulation']);
+		$orbitalBase->setPlanetPopulation((float) $data['planetPopulation']);
 		$orbitalBase->setPlanetResources($data['planetResources']);
 		$orbitalBase->setPlanetHistory($data['planetHistory']);
 

@@ -151,7 +151,6 @@ class Router
 	public function getInclude(Response $response) {
 		$page = $response->getPage();
 		$screenMode = $this->session->get('screenmode');
-		
 		switch($page) {
 			case 'action':
 				$response->addTemplate(ACTION . 'main.php');

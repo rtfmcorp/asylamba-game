@@ -1,7 +1,6 @@
 <?php
 
 use Asylamba\Classes\Library\Utils;
-use Asylamba\Classes\Library\Game;
 
 $session = $this->getContainer()->get('app.session');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');

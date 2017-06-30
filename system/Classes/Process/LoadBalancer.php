@@ -63,6 +63,14 @@ class LoadBalancer
     }
     
     /**
+     * @return array
+     */
+    public function getStats()
+    {
+        return $this->stats;
+    }
+    
+    /**
      * @param Task $task
      */
     public function estimateTime(Task $task)
@@ -70,7 +78,7 @@ class LoadBalancer
 		$key = $task->getManager() . '.' . $task->getMethod();
 		
 		if (!isset($this->stats[$key])) {
-			$task->setEstimatedTime(1.0);
+			$task->setEstimatedTime($task::DEFAULT_ESTIMATED_TIME);
 			return;
 		}
 		

@@ -29,14 +29,8 @@ $technologyResourceRefund = $this->getContainer()->getParameter('promethee.techn
 $technology = $technologyManager->getPlayerTechnology($session->get('playerId'));
 
 # session avec les technos de cette base
-$S_TQM1 = $technologyQueueManager->getCurrentSession();
-$technologyQueueManager->changeSession($ob_tech->technoQueueManager);
-$S_TQM2 = $technologyQueueManager->getCurrentSession();
-
-# session avec les technos de toutes les bases
-$technologyQueueManager->newSession();
-$technologyQueueManager->load(array('rPlayer' => $session->get('playerId')));
-$S_TQM3 = $technologyQueueManager->getCurrentSession();
+$baseTechnologyQueues = $technologyQueueManager->getPlaceQueues($ob_tech->getId());
+$playerTechnologyQueues = $technologyQueueManager->getPlayerQueues($session->get('playerId'));
 
 $S_RSM1 = $researchManager->getCurrentSession();
 $researchManager->newSession();
@@ -73,8 +67,6 @@ echo '<div class="component techno">';
 				echo '</span>';
 			echo '</div>';
 
-			$technologyQueueManager->changeSession($S_TQM2);
-
 			echo '<h4>File de construction</h4>';
 			echo '<div class="queue">';
 				$realSizeQueue = 0;
@@ -82,8 +74,8 @@ echo '<div class="component techno">';
 				$totalTimeTechno = 0;
 
 				for ($i = 0; $i < $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::TECHNOSPHERE, 'level', $ob_tech->levelTechnosphere, 'nbQueues'); $i++) {
-					if ($technologyQueueManager->get($i) !== FALSE) {
-						$queue = $technologyQueueManager->get($i);
+					if (isset($baseTechnologyQueues[$i])) {
+						$queue = $baseTechnologyQueues[$i];
 						$realSizeQueue++;
 						$totalTimeTechno += $technologyHelper->getInfo($queue->technology, 'time', $queue->targetLevel);
 						$remainingTotalTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
@@ -129,20 +121,18 @@ for ($i = 0; $i < Technology::QUANTITY; $i++) {
 		$inQueue = FALSE;
 		$inALocalQueue = FALSE;
 
-		$technologyQueueManager->changeSession($S_TQM3);
-		for ($j = 0; $j < $technologyQueueManager->size(); $j++) {
-			if ($technologyQueueManager->get($j)->technology == $i) {
+		foreach ($playerTechnologyQueues as $playerQueue) {
+			if ($playerQueue->getTechnology() === $i) {
 				$inQueue = TRUE;
-				$technologyQueueManager->changeSession($S_TQM2);
-				for ($k = 0; $k < $technologyQueueManager->size(); $k++) {
-					if ($technologyQueueManager->get($k)->technology == $i) {
+				foreach ($baseTechnologyQueues as $baseQueue) {
+					if ($baseQueue->getTechnology() === $i) {
 						$inALocalQueue = TRUE;
+						break;
 					}
 				}
-				$technologyQueueManager->changeSession($S_TQM3);
+				break;
 			}
 		}
-		$technologyQueueManager->changeSession($S_TQM2);
 		
 		$title = $technologyHelper->getInfo($i, 'name');
 		if (!$technologyHelper->isAnUnblockingTechnology($i) && $technology->getTechnology($i) != 0) {
@@ -198,7 +188,7 @@ for ($i = 0; $i < Technology::QUANTITY; $i++) {
 				$but .= '<span class="button disable">';
 					$but .= 'niveau maximum atteint<br />';
 				$but .= '</span>';
-			} elseif (!$technologyHelper->haveRights($i, 'queue', $ob_tech, $technologyQueueManager->size())) {
+			} elseif (!$technologyHelper->haveRights($i, 'queue', $ob_tech, count($baseTechnologyQueues))) {
 				# queue size
 				$but .= '<span class="button disable">';
 					$but .= 'file de recherche pleine<br />';
@@ -402,5 +392,4 @@ echo '<div class="component">';
 	echo '</div>';
 echo '</div>';
 
-$technologyQueueManager->changeSession($S_TQM1);
 $researchManager->changeSession($S_RSM1);

@@ -70,8 +70,10 @@ class WorkerServer
         $outputs = $this->outputs;
         $errors = null;
         gc_disable();
+		$this->container->get('memory_manager')->refreshNodeMemory();
 		
         while ($this->shutdown === false && ($nbUpgradedStreams = stream_select($inputs, $outputs, $errors, $this->workerCycleTimeout)) !== false) {
+			$this->nbUncollectedCycles++;
 			if ($nbUpgradedStreams === 0) {
                 $this->prepareStreamsState($inputs, $outputs, $errors);
                 continue;
@@ -108,9 +110,9 @@ class WorkerServer
 		} finally {
 			if (!empty($responseData)) {
 				$responseData['time'] = microtime(true) - $startTime;
+				$responseData['technical'] = $this->container->get('memory_manager')->getNodeMemory();
 				$this->processGateway->writeToMaster($responseData);
 			}
-			$this->nbUncollectedCycles++;
 		}
 	}
 	
@@ -124,6 +126,7 @@ class WorkerServer
     protected function prepareStreamsState(&$inputs, &$outputs, &$errors)
     {
 		$this->container->cleanApplication();
+		$this->container->get('memory_manager')->refreshNodeMemory();
 		
         $inputs = $this->inputs;
         $outputs = $this->outputs;

@@ -130,26 +130,14 @@ class TutorialHelper {
 	}
 
 	public function isNextTechnoStepAlreadyDone($playerId, $technoId, $level = 1) {
-		$nextStepAlreadyDone = FALSE;
-
 		$technology = $this->technologyManager->getPlayerTechnology($playerId);
 		if ($technology->getTechnology($technoId) >= $level) {
-			$nextStepAlreadyDone = TRUE;
-		} else {
-			# verify in the queue
-			$S_TQM2 = $this->technologyQueueManager->getCurrentSession();
-			$this->technologyQueueManager->newSession();
-			$this->technologyQueueManager->load(array('rPlayer' => $playerId));
-			for ($i = 0; $i < $this->technologyQueueManager->size() ; $i++) { 
-				$technologyQueue = $this->technologyQueueManager->get($i);
-				if ($technologyQueue->technology == $technoId) {
-					$nextStepAlreadyDone = TRUE;
-					break;
-				} 
-			}
-			$this->technologyQueueManager->changeSession($S_TQM2);
+			return true;
 		}
-
-		return $nextStepAlreadyDone;
+		// verify in the queue
+		if (($this->technologyQueueManager->getPlayerTechnologyQueue($playerId, $technoId)) !== null) {
+			return true;
+		}
+		return false;
 	}
 }

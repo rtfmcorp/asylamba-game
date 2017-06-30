@@ -199,28 +199,14 @@ class PlaceRepository extends AbstractRepository
 		$statement = $this->connection->prepare(
 			'UPDATE place SET
 				rPlayer = :player_id,
-				rSystem = :system_id,
-				typeOfPlace = :place_type,
-				position = :position,
-				population = :population,
-				coefResources = :resources_coeff,
-				coefHistory = :history_coeff,
 				resources = :resources,
 				danger = :danger,
-				maxDanger = :max_danger,
 				uPlace = :u_place
 			WHERE id = :id');
 		$statement->execute(array(
 			'player_id' => $place->getRPlayer(),
-			'system_id' => $place->getRSystem(),
-			'place_type' => $place->getTypeOfPlace(),
-			'position' => $place->getPosition(),
-			'population' => $place->getPopulation(),
-			'resources_coeff' => $place->getCoefResources(),
-			'history_coeff' => $place->getCoefHistory(),
 			'resources' => $place->getResources(),
 			'danger' => $place->danger,
-			'max_danger' => $place->maxDanger,
 			'u_place' => $place->uPlace,
 			'id' => $place->getId()
 		));
@@ -246,6 +232,31 @@ class PlaceRepository extends AbstractRepository
 		]);
 	}
 	
+	/**
+	 * @param int $placeId
+	 * @param int $playerId
+	 * @return bool
+	 */
+	public function turnAsSpawnPlace($placeId, $playerId)
+	{
+		$statement = $this->connection->prepare(
+			'UPDATE place SET rPlayer = :player_id, coefResources = :resources_coeff,
+			coefHistory = :history_coeff, population = :population WHERE id = :id'
+		);
+		return $statement->execute([
+			'player_id' => $playerId,
+			'resources_coeff' => 60,
+			'history_coeff' => 20,
+			'population' => 50,
+			'id' => $placeId
+		]);
+	}
+	
+	public function npcQuickfix()
+	{
+		$this->connection->exec('UPDATE place SET danger = maxDanger WHERE danger > maxDanger');
+	}
+	
 	public function remove($place)
 	{
 		$statement = $this->connection->prepare('DELETE FROM place FROM id = :id');
@@ -256,16 +267,16 @@ class PlaceRepository extends AbstractRepository
 	{
 		$place = new Place();
 
-		$place->setId($data['id']);
-		$place->setRSystem($data['rSystem']);
-		$place->setTypeOfPlace($data['typeOfPlace']);
+		$place->setId((int) $data['id']);
+		$place->setRSystem((int) $data['rSystem']);
+		$place->setTypeOfPlace((int) $data['typeOfPlace']);
 		$place->setPosition($data['position']);
-		$place->setPopulation($data['population']);
+		$place->setPopulation((float) $data['population']);
 		$place->setCoefResources($data['coefResources']);
 		$place->setCoefHistory($data['coefHistory']);
-		$place->setResources($data['resources']);
-		$place->danger = $data['danger'];
-		$place->maxDanger = $data['maxDanger'];
+		$place->setResources((int) $data['resources']);
+		$place->danger = (int) $data['danger'];
+		$place->maxDanger = (int) $data['maxDanger'];
 		$place->uPlace = $data['uPlace'];
 
 		$place->setRSector($data['rSector']);
@@ -273,28 +284,28 @@ class PlaceRepository extends AbstractRepository
 		$place->setYSystem($data['yPosition']);
 		$place->setTypeOfSystem($data['typeOfSystem']);
 		$place->setTax($data['tax']);
-		$place->setSectorColor($data['sectorColor']);
+		$place->setSectorColor((int) $data['sectorColor']);
 
 		if ($data['rPlayer'] != 0) {
-			$place->setRPlayer($data['rPlayer']);
-			$place->setPlayerColor($data['playerColor']);
+			$place->setRPlayer((int) $data['rPlayer']);
+			$place->setPlayerColor((int) $data['playerColor']);
 			$place->setPlayerName($data['playerName']);
 			$place->setPlayerAvatar($data['playerAvatar']);
-			$place->setPlayerStatus($data['playerStatus']);
-			$place->playerLevel = $data['playerLevel'];
+			$place->setPlayerStatus((int) $data['playerStatus']);
+			$place->playerLevel = (int) $data['playerLevel'];
 			if (isset($data['msId'])) {
-				$place->setTypeOfBase($data['msType']);
+				$place->setTypeOfBase((int) $data['msType']);
 				$place->setBaseName($data['msName']);
-				$place->setResources($data['msResources']);
+				$place->setResources((int) $data['msResources']);
 			} elseif (isset($data['obId'])) {
 				$place->setTypeOfBase(Place::TYP_ORBITALBASE);
-				$place->typeOfOrbitalBase = $data['obTypeOfBase'];
+				$place->typeOfOrbitalBase = (int) $data['obTypeOfBase'];
 				$place->setBaseName($data['obName']);
-				$place->setLevelCommercialPlateforme($data['levelCommercialPlateforme']);
-				$place->setLevelSpatioport($data['levelSpatioport']);
-				$place->setResources($data['obResources']);
-				$place->setAntiSpyInvest($data['antiSpyAverage']);
-				$place->setPoints($data['points']);
+				$place->setLevelCommercialPlateforme((int) $data['levelCommercialPlateforme']);
+				$place->setLevelSpatioport((int) $data['levelSpatioport']);
+				$place->setResources((int) $data['obResources']);
+				$place->setAntiSpyInvest((int) $data['antiSpyAverage']);
+				$place->setPoints((int) $data['points']);
 			} else {
 				throw new ErrorException('Problèmes d\'appartenance du lieu !');
 			}

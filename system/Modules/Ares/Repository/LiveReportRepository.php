@@ -5,7 +5,6 @@ namespace Asylamba\Modules\Ares\Repository;
 use Asylamba\Classes\Entity\AbstractRepository;
 
 use Asylamba\Modules\Ares\Model\Report;
-use Asylamba\Modules\Ares\Model\LiveReport;
 
 class LiveReportRepository extends AbstractRepository
 {

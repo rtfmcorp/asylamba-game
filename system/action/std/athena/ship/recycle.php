@@ -32,3 +32,4 @@ if ($baseId !== FALSE AND $typeOfShip !== FALSE AND $quantity !== FALSE) {
 } else {
 	throw new FormException('pas assez d\'informations');
 }
+$this->getContainer()->get('entity_manager')->flush($ob);

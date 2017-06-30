@@ -1,21 +1,16 @@
 <?php
 
-use Asylamba\Modules\Ares\Model\Report;
-use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Library\Flashbag;
 
 $session = $this->getContainer()->get('app.session');
-$liveReportManager = $this->getContainer()->get('ares.live_report_manager');
 
-$reports = $liveReportManager->getPlayerReports($session->get('playerId'));
+$this
+	->getContainer()
+	->get('ares.report_manager')
+	->removePlayerReports(
+		$session->get('playerId')
+	)
+;
+$session->addFlashbag('Vos rapports ont été correctement supprimés', Flashbag::TYPE_SUCCESS);
 
-foreach ($reports as $report) {
-	if ($report->rPlayerAttacker == $session->get('playerId')) {
-		$report->statementAttacker = Report::DELETED;
-	} elseif ($report->rPlayerDefender == $session->get('playerId')) {
-		$report->statementDefender = Report::DELETED;
-	} else {
-		throw new ErrorException('Ces rapport ne vous appartient pas');
-	}
-}
-
-$this->getContainer()->get('entity_manager')->flush();
+$this->getContainer()->get('app.response')->redirect('fleet/view-archive');
