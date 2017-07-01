@@ -37,7 +37,7 @@ class CommanderTest extends \PHPUnit\Framework\TestCase
             ->setIsAttacker(true)
             ->setPalmares(1)
             ->setStatement(Commander::MOVING)
-            ->setUCommander($updatedAt)
+            ->setUpdatedAt($updatedAt)
         ;
         $this->assertEquals(1, $commander->getId());
         $this->assertEquals('Theodorus', $commander->getName());

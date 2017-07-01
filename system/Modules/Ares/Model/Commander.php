@@ -359,12 +359,12 @@ class Commander
     }
     
     /**
-     * @param string $uCommander
+     * @param string $updatedAt
      * @return $this
      */
-	public function setUCommander($uCommander)
+	public function setUpdatedAt($updatedAt)
     {
-        $this->uMethod = $uCommander;
+        $this->uCommander = $updatedAt;
         
         return $this;
     }
@@ -372,9 +372,9 @@ class Commander
     /**
      * @return string
      */
-	public function getUMethod()
+	public function getUpdatedAt()
     {
-        return $this->uMethod;
+        return $this->uCommander;
     }
     
     /**
