@@ -61,7 +61,7 @@ class CommanderTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($commander->getIsAttacker());
         $this->assertEquals(1, $commander->getPalmares());
         $this->assertEquals(Commander::MOVING, $commander->getStatement());
-        $this->assertEquals($updatedAt, $commander->getUMethod());
+        $this->assertEquals($updatedAt, $commander->getUpdatedAt());
     }
     
     public function testArmy()
