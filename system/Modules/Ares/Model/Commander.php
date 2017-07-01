@@ -413,6 +413,44 @@ class Commander
     {
         return $this->travelType;
     }
+	
+	/**
+	 * @param int $travelLength
+	 * @return Commander
+	 */
+	public function setTravelLength($travelLength)
+	{
+		$this->travelLength = $travelLength;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getTravelLength()
+	{
+		return $this->travelLength;
+	}
+	
+	/**
+	 * @param int $startPlaceId
+	 * @return Commander
+	 */
+	public function setStartPlaceId($startPlaceId)
+	{
+		$this->rStartPlace = $startPlaceId;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getStartPlaceId()
+	{
+		return $this->rStartPlace;
+	}
     
     /**
      * @param int $rDestinationPlace
