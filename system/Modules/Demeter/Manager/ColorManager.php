@@ -295,7 +295,7 @@ class ColorManager {
 	public function updateSenate($factionId)
 	{
 		$faction = $this->get($factionId);
-		$this->updateStatus($faction, $this->playerManager->getFactionPlayers($factionId));
+		$this->updateStatus($faction, $this->playerManager->getFactionPlayersByRanking($factionId));
 		
 		if ($faction->regime === Color::ROYALISTIC && $faction->electionStatement === Color::MANDATE) {
 			$date = date('Y-m-d H:i:s', time() + $faction->mandateDuration);
@@ -305,9 +305,15 @@ class ColorManager {
 		}
 	}
 
+	/**
+	 * @param Color $color
+	 * @param array $factionPlayers
+	 */
 	public function updateStatus(Color $color, $factionPlayers) {
 		$limit = round($color->players / 4);
+		// If there is less than 40 players in a faction, the limit is up to 10 senators
 		if ($limit < 10) { $limit = 10; }
+		// If there is more than 120 players in a faction, the limit is up to 40 senators
 		if ($limit > 40) { $limit = 40; }
 
 		foreach ($factionPlayers as $key => $factionPlayer) {

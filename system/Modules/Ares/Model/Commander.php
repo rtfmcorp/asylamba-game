@@ -359,12 +359,12 @@ class Commander
     }
     
     /**
-     * @param string $uCommander
+     * @param string $updatedAt
      * @return $this
      */
-	public function setUCommander($uCommander)
+	public function setUpdatedAt($updatedAt)
     {
-        $this->uMethod = $uCommander;
+        $this->uCommander = $updatedAt;
         
         return $this;
     }
@@ -372,9 +372,9 @@ class Commander
     /**
      * @return string
      */
-	public function getUMethod()
+	public function getUpdatedAt()
     {
-        return $this->uMethod;
+        return $this->uCommander;
     }
     
     /**
@@ -413,6 +413,44 @@ class Commander
     {
         return $this->travelType;
     }
+	
+	/**
+	 * @param int $travelLength
+	 * @return Commander
+	 */
+	public function setTravelLength($travelLength)
+	{
+		$this->travelLength = $travelLength;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getTravelLength()
+	{
+		return $this->travelLength;
+	}
+	
+	/**
+	 * @param int $startPlaceId
+	 * @return Commander
+	 */
+	public function setStartPlaceId($startPlaceId)
+	{
+		$this->rStartPlace = $startPlaceId;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getStartPlaceId()
+	{
+		return $this->rStartPlace;
+	}
     
     /**
      * @param int $rDestinationPlace

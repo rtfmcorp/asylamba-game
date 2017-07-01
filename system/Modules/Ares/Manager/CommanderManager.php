@@ -357,8 +357,8 @@ class CommanderManager
 		$commander->statement = Commander::MOVING;
 
 		$commander->dStart = ($travelType != 3) ? Utils::now() : $commander->dArrival;
-		$commander->startPlaceName = ($travelType != 3) ? $commander->oBName : $commander->destinationPlaceName;
 		$commander->destinationPlaceName = ($travelType != 3) ? $commander->destinationPlaceName : $commander->startPlaceName;
+		$commander->startPlaceName = ($travelType != 3) ? $commander->oBName : $commander->destinationPlaceName;
 		$date = new \DateTime($commander->dStart);
 		$date->modify('+' . $duration . 'second');
 		$commander->dArrival = $date->format('Y-m-d H:i:s');
@@ -373,7 +373,6 @@ class CommanderManager
 				'id' => $commander->getRPlaceDestination()
 			]
 		);
-		return TRUE;
 	}
 	
 	public function resultOfFight(Commander $commander, $isWinner, $enemyCommander) {
@@ -923,8 +922,6 @@ class CommanderManager
 		$length   = Game::getDistance($place->getXSystem(), $commanderPlace->getXSystem(), $place->getYSystem(), $commanderPlace->getYSystem());
 		$duration = Game::getTimeToTravel($commanderPlace, $place, $playerBonus->bonus);
 
-		$commander->startPlaceName = $place->baseName;
-		$commander->destinationPlaceName = $commander->oBName;
 		$this->move($commander, $commander->rBase, $place->id, Commander::BACK, $length, $duration);
 	}
 

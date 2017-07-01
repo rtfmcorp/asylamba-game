@@ -10,6 +10,8 @@
     <php>
         <ini name="error_reporting" value="-1" />
         <const name="ID_GAIA" value="1" />
+        <const name="ASM_UMODE" value="true" />
+        <const name="APP_ROOT" value="/" />
     </php>
 
     <testsuites>
