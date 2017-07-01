@@ -119,6 +119,7 @@ services:
             - "@memory_manager"
             - "@process_gateway"
             - "%root_path"
+            - "%log_directory"
             - "%worker_scale"
             
     process_gateway:
