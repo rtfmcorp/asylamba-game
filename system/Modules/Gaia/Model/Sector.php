@@ -57,17 +57,17 @@ class Sector {
 	}
 
 	// SETTER
-	public function setId($v)			{ $this->id = $v; }
-	public function setRColor($v)		{ $this->rColor = $v; }
-	public function setXPosition($v) 	{ $this->xPosition = $v; }
-	public function setYPosition($v) 	{ $this->yPosition = $v; }
-	public function setXBarycentric($v) { $this->xBarycentric = $v; }
-	public function setYBarycentric($v) { $this->yBarycentric = $v; }
-	public function setTax($v) 			{ $this->tax = $v; }
-	public function setName($v) 		{ $this->name = $v; }
-	public function setPoints($v) 		{ $this->points = $v; }
-	public function setPopulation($v) 	{ $this->population = $v; }
-	public function setLifePlanet($v) 	{ $this->lifePlanet = $v; }
+	public function setId($v)			{ $this->id = $v; return $this; }
+	public function setRColor($v)		{ $this->rColor = $v; return $this; }
+	public function setXPosition($v) 	{ $this->xPosition = $v; return $this; }
+	public function setYPosition($v) 	{ $this->yPosition = $v; return $this; }
+	public function setXBarycentric($v) { $this->xBarycentric = $v; return $this; }
+	public function setYBarycentric($v) { $this->yBarycentric = $v; return $this; }
+	public function setTax($v) 			{ $this->tax = $v; return $this; }
+	public function setName($v) 		{ $this->name = $v; return $this; }
+	public function setPoints($v) 		{ $this->points = $v; return $this; }
+	public function setPopulation($v) 	{ $this->population = $v; return $this; }
+	public function setLifePlanet($v) 	{ $this->lifePlanet = $v; return $this; }
 	
 	/**
 	 * @param boolean $isPrime
