@@ -86,7 +86,6 @@ class Benchmark {
 			case 'h'  : $formatTime = $this->rTime / 360;
 				break;
 			default   : throw new \Exception('Unknow return time format', 1);
-				break;
 		}
 
 		if ($precision < -10 OR $precision > 10) {

@@ -138,11 +138,4 @@ class API {
 			return FALSE;
 		}
 	}
-
-	# TODO
-	public function getPlayerStatement($bindkey) {
-		# a faire
-		return FALSE;
-		return $this->query('getplayerstatement', array('bindkey' => $bindkey));
-	}
 }

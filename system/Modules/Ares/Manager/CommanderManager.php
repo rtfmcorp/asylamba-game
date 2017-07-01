@@ -229,8 +229,8 @@ class CommanderManager
 		$commander->setArmy();
 		$finalOwnPev = 0;
 
-		foreach ($commander->army AS $squadron) {
-			foreach ($squadron->getSquadron() AS $ship) {
+		foreach ($commander->army as $squadron) {
+			foreach ($squadron->getSquadron() as $ship) {
 				$finalOwnPev += $ship->getPev();
 			}
 		}
@@ -260,8 +260,8 @@ class CommanderManager
 		$playerBonus = new PlayerBonus($commander->rPlayer);
 		$playerBonus->load();
 
-		foreach ($commander->army AS $squadron) {
-			foreach ($squadron->squadron AS $ship) {
+		foreach ($commander->army as $squadron) {
+			foreach ($squadron->squadron as $ship) {
 				$ship->setBonus($playerBonus->bonus);
 			}
 		}
@@ -466,7 +466,7 @@ class CommanderManager
 		# si la place et la flotte ont la même couleur
 		# on pose la flotte si il y a assez de place
 		# sinon on met la flotte dans les hangars
-		if ($place->playerColor !== $commander->playerColor OR $place->typeOfBase !== Place::TYP_ORBITALBASE) {
+		if ($place->playerColor !== $commander->playerColor or $place->typeOfBase !== Place::TYP_ORBITALBASE) {
 			# retour forcé
 			$this->comeBack($place, $commander, $commanderPlace, $playerBonus);
 			$this->placeManager->sendNotif($place, Place::CHANGELOST, $commander);
@@ -602,7 +602,7 @@ class CommanderManager
 			# si il peut l'attaquer
 			if (($place->playerColor != $commander->getPlayerColor() && $place->playerLevel > 1 && $commanderColor->colorLink[$place->playerColor] != Color::ALLY) || ($place->playerColor == 0)) {
 				$dCommanders = array();
-				foreach ($place->commanders AS $dCommander) {
+				foreach ($place->commanders as $dCommander) {
 					if ($dCommander->statement == Commander::AFFECTED && $dCommander->line == 1) {
 						$dCommanders[] = $dCommander;
 					}

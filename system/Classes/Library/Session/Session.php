@@ -92,9 +92,9 @@ class Session {
     }
 
     public function clear() {
-        $this->remove('playerInfo', new ArrayList());
-        $this->remove('playerBase', new ArrayList());
-        $this->remove('playerEvent', new ArrayList());
+        $this->remove('playerInfo');
+        $this->remove('playerBase');
+        $this->remove('playerEvent');
     }
 
     ##

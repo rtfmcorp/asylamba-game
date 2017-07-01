@@ -137,7 +137,7 @@ class Server
 				$client = $this->clientManager->createClient($request);
 			}
 			$sessionWrapper->setCurrentSession($client->getSession());
-			$response = $this->router->processRequest($request, $client);
+			$response = $this->router->processRequest($request);
 			$this->container->set('app.response', $response);
 			$this->responseFactory->processResponse($request, $response, $client);
 		} catch (\Exception $ex) {
