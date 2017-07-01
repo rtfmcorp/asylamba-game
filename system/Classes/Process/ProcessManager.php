@@ -16,27 +16,31 @@ class ProcessManager
     /** @var ProcessGateway **/
     protected $gateway;
     /** @var array **/
-    private $processes = [];
+    protected $processes = [];
     /** @var string **/
-    private $rootPath;
+    protected $rootPath;
+	/** @var string **/
+	protected $logDirectory;
     /** @var int **/
     protected $scale;
     /** @var int **/
-    private $instanciedProcesses = 0;
+    protected $instanciedProcesses = 0;
     
     /**
      * @param Server $server
      * @param MemoryManager $memoryManager
      * @param ProcessGateway $gateway
      * @param string $rootPath
+	 * @param string $logDirectory
      * @param int $scale
      */
-    public function __construct(Server $server, MemoryManager $memoryManager, ProcessGateway $gateway, $rootPath, $scale)
+    public function __construct(Server $server, MemoryManager $memoryManager, ProcessGateway $gateway, $rootPath, $logDirectory, $scale)
     {
         $this->server = $server;
         $this->memoryManager = $memoryManager;
         $this->gateway = $gateway;
         $this->rootPath = $rootPath;
+		$this->logDirectory = $logDirectory;
         $this->scale = $scale;
     }
     
@@ -96,7 +100,7 @@ class ProcessManager
             1 => ['pipe', 'w'],
             2 => [
                 'file',
-                "/srv/logs/proc/$name.error.log",
+                "{$this->logDirectory}/proc/$name.error.log",
                 'a+'
             ]
         ], $pipes);

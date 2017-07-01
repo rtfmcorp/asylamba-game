@@ -17,6 +17,7 @@ class ProcessManagerTest extends \PHPUnit\Framework\TestCase
 			$this->getMemoryManagerMock(),
 			$this->getGatewayMock(),
 			'/',
+			'tests/logs',
 			3
 		);
 	}
