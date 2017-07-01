@@ -305,6 +305,10 @@ class ColorManager {
 		}
 	}
 
+	/**
+	 * @param Color $color
+	 * @param array $factionPlayers
+	 */
 	public function updateStatus(Color $color, $factionPlayers) {
 		$limit = round($color->players / 4);
 		// If there is less than 40 players in a faction, the limit is up to 10 senators
