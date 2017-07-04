@@ -877,7 +877,7 @@ class CommanderManager
 				}
 			}
 		}
-		$this->entityManager->flush($commander);
+		$this->entityManager->flush(Commander::class);
 		$this->entityManager->flush($place);
 	}
 
