@@ -184,7 +184,6 @@ class FactionRoutine extends AbstractRoutine
 	
 	protected function calculateWealthRanking(Color $faction, $routesIncome)
 	{
-		
 		if ($routesIncome['income'] == NULL) {
 			$income = 0;
 		} else {
@@ -243,5 +242,10 @@ class FactionRoutine extends AbstractRoutine
 			$previous = $list[$key][$attribute];
 		}
 		return $list;
+	}
+	
+	public function getResults()
+	{
+		return $this->results;
 	}
 }
