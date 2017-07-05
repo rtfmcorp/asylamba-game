@@ -3,15 +3,10 @@
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Container\ArrayList;
-use Asylamba\Modules\Ares\Model\Commander;
 
 $session = $this->getContainer()->get('app.session');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$placeManager = $this->getContainer()->get('gaia.place_manager');
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
-$buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
-$shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
-$technologyQueueManager = $this->getContainer()->get('promethee.technology_queue_manager');
+$playerBonusManager = $this->getContainer()->get('zeus.player_bonus_manager');
 
 # création des tableaux de données dans le contrôler
 $session->initPlayerInfo();
@@ -50,7 +45,6 @@ foreach ($playerBases as $base) {
 	);
 }
 # remplissage des bonus
-$playerBonusManager = $this->getContainer()->get('zeus.player_bonus_manager');
 $bonus = $playerBonusManager->getBonusByPlayer($player);
 $playerBonusManager->initialize($bonus);
 

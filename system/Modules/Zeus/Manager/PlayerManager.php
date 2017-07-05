@@ -166,7 +166,13 @@ class PlayerManager {
 	 */
 	public function getByBindKey($bindKey)
 	{
-		return $this->entityManager->getRepository(Player::class)->getByBindKey($bindKey);
+		if(($player = $this->entityManager->getRepository(Player::class)->getByBindKey($bindKey)) !== null) {
+			if ($this->session->get('playerId') === $player->id) {
+				$player->synchronized = true;
+			}
+			$this->fill($player);
+		}
+		return $player;
 	}
 	
 	/**

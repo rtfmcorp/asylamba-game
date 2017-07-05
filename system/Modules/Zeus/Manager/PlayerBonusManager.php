@@ -32,8 +32,6 @@ class PlayerBonusManager
 	protected $technologyHelper;
 	/** @var SessionWrapper **/
 	protected $session;
-	/** @var boolean **/
-	protected $isInitialized = false;
 	
 	/**
 	 * @param LawManager $lawManager
@@ -71,17 +69,13 @@ class PlayerBonusManager
 		return $playerBonus;
 	}
 
-	public function initialize(PlayerBonus $playerBonus) {		// à faire à la connexion seulement
-		$this->isInitialized = true;
+	public function initialize(PlayerBonus $playerBonus) {
 		# remplissage des bonus avec les technologies
 		$playerBonus->technology = $this->technologyManager->getPlayerTechnology($playerBonus->rPlayer);
 		
 		$this->fillFromTechnology($playerBonus);
 		$this->addFactionBonus($playerBonus);
 		$this->addLawBonus($playerBonus);
-
-		# remplissage des bonus avec les cartes
-		// ...
 
 		if ($playerBonus->synchronized) {
 			for ($i = 0; $i < PlayerBonus::BONUS_QUANTITY; $i++) { 
