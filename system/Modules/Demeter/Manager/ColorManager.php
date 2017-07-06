@@ -262,6 +262,7 @@ class ColorManager {
 			->playerManager
 			->countByFactionAndStatements($faction->id, [Player::ACTIVE])
 		;
+		$this->entityManager->flush($faction);
 	}
 	
 	public function sendSenateNotif(Color $color, $fromChief = FALSE) {

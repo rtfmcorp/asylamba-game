@@ -147,7 +147,7 @@ class FactionRoutine extends AbstractRoutine
 			$faction->points = $listG[$factionId]['general'];
 			$faction->sectors = $listT[$factionId]['territorial'];
 			
-			//$this->colorManager->updateInfos($faction);
+			$this->colorManager->updateInfos($faction);
 
 			$rankings[] = $fr;
 			$factionRankingManager->add($fr);
