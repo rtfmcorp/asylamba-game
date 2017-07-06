@@ -574,7 +574,7 @@ class ColorManager {
 				$message->dCreation = Utils::now();
 				$message->dLastModification = NULL;
 				$message->content = 'Un putsch a réussi, un nouveau dirigeant va faire valoir la force de ' . $color->popularName . ' à travers la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong>.<br /><br />De nombreux membres de la faction ont soutenu le mouvement révolutionnaire :<br /><br />';
-				$message->content .= current($candidate)['name'] . ' a reçu le soutien de ' . Format::number((current($candidate)['vote'] / $color->activePlayers) * 100) . '% de la population.' . '<br />';
+				$message->content .= current($candidate)['name'] . ' a reçu le soutien de ' . Format::number((current($candidate)['vote'] / ($color->activePlayers + 1)) * 100) . '% de la population.' . '<br />';
 				$this->conversationMessageManager->add($message);
 
 			} else {
@@ -645,7 +645,7 @@ class ColorManager {
 			//refuser la loi
 			$law->statement = Law::REFUSED;
 			if (LawResources::getInfo($law->type, 'bonusLaw')) {
-				$color->credits += (LawResources::getInfo($law->type, 'price') * Utils::interval($law->dEndVotation, $law->dEnd) * $color->activePlayers * 90) / 100;
+				$color->credits += (LawResources::getInfo($law->type, 'price') * Utils::interval($law->dEndVotation, $law->dEnd) * ($color->activePlayers + 1) * 90) / 100;
 			} else {
 				$color->credits += (LawResources::getInfo($law->type, 'price') * 90) / 100;
 			}
