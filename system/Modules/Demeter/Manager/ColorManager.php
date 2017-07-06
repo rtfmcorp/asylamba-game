@@ -231,17 +231,13 @@ class ColorManager {
 	
 	public function scheduleBallot()
 	{
-		$factions = $this->entityManager->getRepository(Color::class)->getByRegimeAndElectionStatement(
-			[Color::DEMOCRATIC], [Color::ELECTION]
-		);
-		foreach ($factions as $faction) {
-			$datetime = new \DateTime($faction->dLastElection);
-			$datetime->modify('+' . $faction->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME . ' second');
-
-			$this->realtimeActionScheduler->schedule('demeter.color_manager', 'ballot', $faction, $datetime->format('Y-m-d H:i:s'));
-		}
-		$factions = $this->entityManager->getRepository(Color::class)->getByRegimeAndElectionStatement(
-			[Color::THEOCRATIC], [Color::CAMPAIGN, Color::ELECTION]
+		$factions = array_merge(
+			$this->entityManager->getRepository(Color::class)->getByRegimeAndElectionStatement(
+				[Color::DEMOCRATIC], [Color::ELECTION]
+			),
+			$this->entityManager->getRepository(Color::class)->getByRegimeAndElectionStatement(
+				[Color::THEOCRATIC], [Color::CAMPAIGN, Color::ELECTION]
+			)
 		);
 		foreach ($factions as $faction) {
 			$datetime = new \DateTime($faction->dLastElection);
