@@ -424,7 +424,7 @@ class ColorManager {
 			}
 		} else {
 			if (($leader = $this->playerManager->getFactionLeader($faction->id)) !== null) {
-				if (($candidate = $this->candidateManager->getByElectionAndPlayer($leader, $election)) !== null) {
+				if (($candidate = $this->candidateManager->getByElectionAndPlayer($election, $leader)) !== null) {
 					if (rand(0, 1) == 0) {
 						$ballot = array();
 					}
