@@ -453,7 +453,7 @@ class ColorManager {
 	 */
 	public function uCampaign($factionId) {
 		$faction = $this->get($factionId);
-		$factionPlayers = $this->playerManager->getFactionPlayers($faction->getId());
+		$factionPlayers = $this->playerManager->getFactionPlayersByRanking($faction->getId());
 		$this->updateStatus($faction, $factionPlayers);
 		
 		$date = new \DateTime($faction->dLastElection);
