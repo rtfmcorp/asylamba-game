@@ -21,13 +21,13 @@ class Game {
 
 	public static function convertPlaceType($type) {
 		switch ($type) {
-			case 1 : return 'planète tellurique'; break;
-			case 2 : return 'géante gazeuse'; break;
-			case 3 : return 'ruine'; break;
-			case 4 : return 'poche de gaz'; break;
-			case 5 : return 'ceinture d\'astéroïdes'; break;
-			case 6 : return 'zone vide'; break;
-			default: return 'rien'; break;
+			case 1 : return 'planète tellurique';
+			case 2 : return 'géante gazeuse';
+			case 3 : return 'ruine';
+			case 4 : return 'poche de gaz';
+			case 5 : return 'ceinture d\'astéroïdes';
+			case 6 : return 'zone vide';
+			default: return 'rien';
 		}
 	}
 

@@ -80,12 +80,21 @@ Contribute
 If you want to contribute to the project, it's possible ! Thanks to read the [instructions](CONTRIBUTING.en.md) before starting.
 
 
-Contributors
-------------
+Team
+----
+
+Game creators:
 
 * [abdelaz3r](https://github.com/abdelaz3r)
 * [acknowledge](https://github.com/acknowledge)
 * [N03](https://github.com/N03)
+
+Contributors:
+
+* [Kern046](https://github.com/Kern046)
+* [PapyRusky](https://github.com/PapyRuski)
+* [Liador](https://github.com/Liador)
+* You ? :)
 
 
 License

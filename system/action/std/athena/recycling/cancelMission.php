@@ -19,21 +19,17 @@ for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
 }
 
 $missionId = $request->query->get('id');
-$rPlace = $request->query->get('place');
+$rPlace = (int) $request->query->get('place');
 
-if ($missionId !== FALSE AND $rPlace !== FALSE AND in_array($rPlace, $verif)) {
+if ($missionId !== FALSE AND !empty($rPlace) AND in_array($rPlace, $verif)) {
 	if (($base = $orbitalBaseManager->get($rPlace)) !== null) {
-		$S_REM1 = $recyclingMissionManager->getCurrentSession();
-		$recyclingMissionManager->newSession(ASM_UMODE);
-		$recyclingMissionManager->load(array('id' => $missionId, 'rBase' => $rPlace, 'statement' => RecyclingMission::ST_ACTIVE));
-
-		if ($recyclingMissionManager->size() == 1) {
-			$recyclingMissionManager->get()->statement = RecyclingMission::ST_BEING_DELETED;
+		if (($mission = $recyclingMissionManager->get($missionId)) !== null && $mission->statement = RecyclingMission::ST_ACTIVE && $mission->rBase === $rPlace) {
+			$mission->statement = RecyclingMission::ST_BEING_DELETED;
 			$session->addFlashbag('Ordre de mission annulé.', Flashbag::TYPE_SUCCESS);
+			$this->getContainer()->get('entity_manager')->flush($mission);
 		} else {
 			throw new ErrorException('impossible de supprimer la mission.');
 		}
-		$recyclingMissionManager->changeSession($S_REM1);
 	} else {
 		throw new ErrorException('cette base orbitale ne vous appartient pas');
 	}

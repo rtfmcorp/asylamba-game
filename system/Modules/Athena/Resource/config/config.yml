@@ -38,6 +38,7 @@ services:
             - "@entity_manager"
             - "@athena.orbital_base_manager"
             - "@hermes.notification_manager"
+            - "@realtime_action_scheduler"
             - "@app.session"
             
     athena.commercial_tax_manager:
@@ -78,12 +79,13 @@ services:
     athena.recycling_log_manager:
         class: Asylamba\Modules\Athena\Manager\RecyclingLogManager
         arguments:
-            - "@database"
+            - "@entity_manager"
             
     athena.recycling_mission_manager:
         class: Asylamba\Modules\Athena\Manager\RecyclingMissionManager
         arguments:
-            - "@database"
+            - "@entity_manager"
+            - "@realtime_action_scheduler"
             
     athena.ship_queue_manager:
         class: Asylamba\Modules\Athena\Manager\ShipQueueManager

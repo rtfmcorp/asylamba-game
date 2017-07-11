@@ -25,7 +25,6 @@ $session = $this->getContainer()->get('app.session');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
 $buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
 $shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
-$technologyQueueManager = $this->getContainer()->get('promethee.technology_queue_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $buildingResourceRefund = $this->getContainer()->getParameter('athena.building.building_queue_resource_refund');
 $sessionToken = $session->get('token');
@@ -231,16 +230,14 @@ echo '<div class="component">';
 			if ($ob_fastView->getLevelTechnosphere() > 0) {
 				echo '<h4>Technosphère</h4>';
 
-				$S_TQM_OFV = $technologyQueueManager->getCurrentSession();
-				$technologyQueueManager->changeSession($ob_fastView->technoQueueManager);
 				$realSizeQueue = 0;
 				$remainingTotalTime = 0;
 				$totalTimeTechno = 0;
 
 				echo '<div class="queue">';
 				for ($j = 0; $j < $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::TECHNOSPHERE, 'level', $ob_fastView->levelTechnosphere, 'nbQueues'); $j++) {
-					if ($technologyQueueManager->get($j) !== FALSE) {
-						$queue = $technologyQueueManager->get($j);
+					if (isset($ob_fastView->technoQueues[$j])) {
+						$queue = $ob_fastView->technoQueues[$j];
 						$realSizeQueue++;
 						$totalTimeTechno += $technologyHelper->getInfo($queue->technology, 'time', $queue->targetLevel);
 						$remainingTotalTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
@@ -273,8 +270,6 @@ echo '<div class="component">';
 					}
 				}
 				echo '</div>';
-
-				$technologyQueueManager->changeSession($S_TQM_OFV);
 			}
 
 			if ($ob_fastView->getLevelSpatioport() > 0) {

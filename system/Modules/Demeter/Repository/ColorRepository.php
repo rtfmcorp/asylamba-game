@@ -266,7 +266,7 @@ class ColorRepository extends AbstractRepository {
 		$faction->campaignDesc = ColorResource::getInfo($faction->id, 'campaignDesc');
 
 		$faction->bonusText = [];
-		foreach (ColorResource::getInfo($faction->id, 'bonus') AS $k) {
+		foreach (ColorResource::getInfo($faction->id, 'bonus') as $k) {
 			$faction->bonusText[] = ColorResource::getBonus($k);
 		}
 

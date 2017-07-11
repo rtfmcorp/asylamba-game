@@ -18,14 +18,7 @@ use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
-$recyclingLogManager = $this->getContainer()->get('athena.recycling_log_manager');
 $sessionToken = $this->getContainer()->get('app.session')->get('token');
-
-$S_REM2 = $recyclingMissionManager->getCurrentSession();
-$recyclingMissionManager->changeSession($recyclingSession);
-
-$S_RLM2 = $recyclingLogManager->getCurrentSession();
-$recyclingLogManager->changeSession($missionLogSessions);
 
 echo '<div class="component building">';
 	echo '<div class="head skin-1">';
@@ -38,9 +31,9 @@ echo '<div class="component building">';
 			$totalRecyclers = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::RECYCLING, 'level', $ob_recycling->levelRecycling, 'nbRecyclers');
 			$busyRecyclers  = 0;
 
-			for ($i = 0; $i < $recyclingMissionManager->size(); $i++) { 
-				$busyRecyclers += $recyclingMissionManager->get($i)->recyclerQuantity;
-				$busyRecyclers += $recyclingMissionManager->get($i)->addToNextMission;
+			foreach ($baseMissions as $mission) { 
+				$busyRecyclers += $mission->recyclerQuantity;
+				$busyRecyclers += $mission->addToNextMission;
 			}
 
 			$freeRecyclers  = $totalRecyclers - $busyRecyclers;
@@ -69,8 +62,6 @@ echo '<div class="component building">';
 
 			echo '<hr />';
 
-			$missionQuantity = $recyclingMissionManager->size();
-
 			echo '<div class="number-box ' . ($missionQuantity == 0 ? 'grey' : '') . '">';
 				echo '<span class="label">missions actives</span>';
 				echo '<span class="value">' .  $missionQuantity . '</span>';
@@ -79,13 +70,11 @@ echo '<div class="component building">';
 	echo '</div>';
 echo '</div>';
 
-for ($i = 0; $i < $recyclingMissionManager->size(); $i++) { 
-	$mission = $recyclingMissionManager->get($i);
-
+foreach ($baseMissions as $mission) {
 	echo '<div class="component">';
 		echo '<div class="head skin-5">';
 			if ($i == 0) {
-				echo '<h2>Mission' . Format::plural($recyclingMissionManager->size()) . ' en cours</h2>';
+				echo '<h2>Mission' . Format::plural($missionQuantity) . ' en cours</h2>';
 			}
 		echo '</div>';
 		echo '<div class="fix-body">';
@@ -94,7 +83,8 @@ for ($i = 0; $i < $recyclingMissionManager->size(); $i++) {
 				$missionID = md5($mission->id . $mission->recyclerQuantity);
 				$missionID = strtoupper(substr($missionID, 0, 3) . '-' . substr($missionID, 3, 6) . '-' . substr($missionID, 10, 2));
 
-				$percent   = Utils::interval(Utils::now(), $mission->uRecycling, 's') / $mission->cycleTime * 100;
+				// @TODO Infamous patch
+				$percent   = Utils::interval(Utils::now(), date("Y-m-d H:i:s", strtotime($mission->uRecycling) - $mission->cycleTime), 's') / $mission->cycleTime * 100;
 				$travelTime= ($mission->cycleTime - RecyclingMission::RECYCLING_TIME) / 2;
 				$beginRECY = Format::percent($travelTime, $mission->cycleTime);
 				$endRECY   = Format::percent($travelTime + RecyclingMission::RECYCLING_TIME, $mission->cycleTime);
@@ -108,7 +98,7 @@ for ($i = 0; $i < $recyclingMissionManager->size(); $i++) {
 					echo '<p class="desc">La mission recycle la <strong>' . Game::convertPlaceType($mission->typeOfPlace) . '</strong> située aux coordonnées <strong><a href="'. APP_ROOT . 'map/place-' . $mission->rTarget . '">' . Game::formatCoord($mission->xSystem, $mission->ySystem, $mission->position, $mission->sectorId) . '</a></strong>.<br /><br />
 					Il reste <strong>' . Format::number($mission->resources * $mission->coefResources / 100) . '</strong> ressources, <strong>' . Format::number($mission->resources * $mission->coefHistory / 100) . '</strong> débris et <strong>' . Format::number($mission->resources * $mission->population / 100) . '</strong> gaz nobles.</p>';
 
-					echo '<p>Retour ' . Chronos::transform(Utils::addSecondsToDate($mission->uRecycling, $mission->cycleTime)) . '</p>';
+					echo '<p>Retour ' . Chronos::transform($mission->uRecycling) . '</p>';
 					echo '<p><span class="progress-bar">';
 						echo '<span style="width:' . $percent . '%;" class="content"></span>';
 						echo '<span class="step hb lt" title="début du recyclage" style="left: ' . $beginRECY . '%;"></span>';
@@ -146,10 +136,8 @@ for ($i = 0; $i < $recyclingMissionManager->size(); $i++) {
 
 				echo '<h4>Dernières livraisons</h4>';
 				$nb = 0;
-				for ($j = 0; $j < $recyclingLogManager->size(); $j++) {
-					if ($recyclingLogManager->get($j)->rRecycling == $mission->id) {
-						$log = $recyclingLogManager->get($j);
-
+				foreach ($missionsLogs as $log) {
+					if ($log->rRecycling == $mission->id) {
 						$wedge['ressource'] = $log->resources;
 						$wedge['crédit'] = $log->credits;
 						$wedge['pégase'] = $log->ship0;
@@ -200,6 +188,3 @@ echo '<div class="component">';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
-
-$recyclingLogManager->changeSession($S_RLM2);
-$recyclingMissionManager->changeSession($S_REM2);

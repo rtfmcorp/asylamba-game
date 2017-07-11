@@ -107,9 +107,8 @@ class Response
 
     /**
      * @param int $path
-     * @param boolean $externalDomain
      */
-    public function redirect($path, $externalDomain = FALSE) {
+    public function redirect($path) {
         $this->redirect = $path;
 		$this->statusCode = self::STATUS_REDIRECT;
     }

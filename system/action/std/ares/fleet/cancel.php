@@ -47,23 +47,6 @@ $commander->dStart = $dStart->format('Y-m-d H:i:s');
 $commander->dArrival = $dArrival->format('Y-m-d H:i:s');
 $commander->travelType = Commander::BACK;
 
-if ($session->exist('playerEvent')) {
-	for ($i = 0; $i < $session->get('playerEvent')->size(); $i++) {
-		if ($session->get('playerEvent')->get($i)->get('eventInfo') != NULL) {
-			if ($session->get('playerEvent')->get($i)->get('eventInfo')->get('id') == $commander->id) {
-				$session->get('playerEvent')->remove($i);
-			}
-		}
-	}
-
-	$session->get('playerEvent')->add(
-		$commander->dArrival,
-		EVENT_OUTGOING_ATTACK,
-		$commander->id,
-		$commanderManager->getEventInfo($commander)
-	);
-}
-
 $response = $this->getContainer()->get('app.response');
 
 $session->addFlashbag('Déplacement annulé.', Flashbag::TYPE_SUCCESS);

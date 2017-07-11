@@ -411,14 +411,12 @@ class ColorManager {
 				}
 
 				if (((current($ballot) / ($faction->activePlayers + 1)) * 100) >= Color::PUTSCHPERCENTAGE) {
-				
 					$governmentMembers = $this->playerManager->getGovernmentMembers($faction->getId());
 					$newChief = $this->playerManager->get(key($ballot));
 					$this->uMandate($faction, $governmentMembers, $newChief, $chiefId, TRUE, $conv, $convPlayerID, $listCandidate);
 				} else {
 					$looser = $this->playerManager->get(key($ballot));
 					$this->uMandate($faction, 0, $looser, $chiefId, FALSE, $conv, $convPlayerID, $listCandidate);
-					
 				}
 			}
 		} else {

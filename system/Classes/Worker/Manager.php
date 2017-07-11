@@ -70,7 +70,7 @@ abstract class Manager {
     }
 
     public function getById($id) {
-        foreach ($this->objects[$this->currentSession->getId()] AS $o) {
+        foreach ($this->objects[$this->currentSession->getId()] as $o) {
             if ($o->getId() == $id) {
                 return $o;
             }
@@ -87,7 +87,7 @@ abstract class Manager {
     }
 
     protected function _ObjectExist($object) {
-        foreach ($this->sessions AS $s) {
+        foreach ($this->sessions as $s) {
             foreach ($this->origin[$s->getId()] as $k => $o) {
                 if ($o->getId() == $object->getId()) {
                     if ($s->getId() == $this->currentSession->getId()) {
@@ -131,7 +131,7 @@ abstract class Manager {
 
     protected function _Remove($id) {
         foreach ($this->sessions as $session) {
-            foreach ($this->objects[$session->getId()] AS $k => $o) {
+            foreach ($this->objects[$session->getId()] as $k => $o) {
                 if ($o->getId() == $id) {
                     unset($this->objects[$session->getId()][$k]);
                     unset($this->origin[$session->getId()][$k]);
@@ -146,8 +146,8 @@ abstract class Manager {
     public function _Save() { 
         $savingList = array();
         if (!empty($this->objects)) {
-            foreach ($this->sessions AS $s) {
-                foreach ($this->objects[$s->getId()] AS $k => $o) {
+            foreach ($this->sessions as $s) {
+                foreach ($this->objects[$s->getId()] as $k => $o) {
                     if ($this->objects[$s->getId()][$k] != $this->origin[$s->getId()][$k]) {
                         $savingList[] = $o;
                     }

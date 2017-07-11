@@ -35,7 +35,7 @@ $school = $request->query->get('school');
 $name   = $request->request->get('name');
 
 $cn = new CheckName();
-$cn->maxLenght = 20;
+$cn->maxLength = 20;
 
 if ($baseId !== FALSE AND $school !== FALSE AND $name !== FALSE AND in_array($baseId, $verif)) {
 	if (($orbitalBase = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {

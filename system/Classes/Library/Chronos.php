@@ -72,14 +72,8 @@ class Chronos {
 	 * transforme une date en temps de jeu
 	 * arg : $date
 	 *     : str => date au format sql (2012-08-01 18:30:00)
-	 * arg : $reference *
-	 *     : bol TRUE  => date puis le début de serveur
-	 *     : bol FALSE => date par rapport à NOW()
-	 * arg : $collapse *
-	 *     : bol TRUE  => la date retournée est à la seconde près
-	 *     : bol FALSE => la date est collée à la relève précédente
 	 */
-	public static function transform($date, $reference = FALSE, $collapse = FALSE) {
+	public static function transform($date) {
 		$date = new \DateTime($date);
 
 		$releve  = self::getRel($date->format('Y-m-d H:i:s'));

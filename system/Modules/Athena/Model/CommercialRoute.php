@@ -21,7 +21,7 @@ class CommercialRoute {
 	const PROPOSED = 0;
 	const ACTIVE = 1;
 	const STANDBY = 2;
-	
+
 	//ATTRIBUTES
 	public $id = 0;
 	public $rOrbitalBase = 0;
@@ -76,26 +76,86 @@ class CommercialRoute {
 
 
 	//SETTERS
-	public function setId($v) { $this->id = $v; }
-	public function setROrbitalBase($v) { $this->rOrbitalBase = $v; }
-	public function setROrbitalBaseLinked($v) { $this->rOrbitalBaseLinked = $v; }
-	public function setImageLink($v) { $this->imageLink = $v; }
-	public function setDistance($v) { $this->distance = $v; }
-	public function setPrice($v) { $this->price = $v; }
-	public function setIncome($v) { $this->income = $v; }
-	public function setDProposition($v) { $this->dProposition = $v; }
-	public function setDCreation($v) { $this->dCreation = $v; }
-	public function setStatement($v) { $this->statement = $v; }
+	public function setId($v) {
+		$this->id = $v;
+		return $this;
+	 }
+	public function setROrbitalBase($v) {
+		$this->rOrbitalBase = $v;
+		return $this;
+	 }
+	public function setROrbitalBaseLinked($v) {
+		$this->rOrbitalBaseLinked = $v;
+		return $this;
+	 }
+	public function setImageLink($v) {
+		$this->imageLink = $v;
+		return $this;
+	 }
+	public function setDistance($v) {
+		$this->distance = $v;
+		return $this;
+	 }
+	public function setPrice($v) {
+		$this->price = $v;
+		return $this;
+	 }
+	public function setIncome($v) {
+		$this->income = $v;
+		return $this;
+	 }
+	public function setDProposition($v) {
+		$this->dProposition = $v;
+		return $this;
+	 }
+	public function setDCreation($v) {
+		$this->dCreation = $v;
+		return $this;
+	 }
+	public function setStatement($v) {
+		$this->statement = $v;
+		return $this;
+	 }
 
-	public function setBaseName1($var) { $this->baseName1 = $var; }
-	public function setPlayerId1($var) { $this->playerId1 = $var; }
-	public function setPlayerName1($var) { $this->playerName1 = $var; }
-	public function setAvatar1($var) { $this->avatar1 = $var; }
-	public function setPopulation1($var) { $this->population1 = $var; }
+	public function setBaseName1($var) {
+		$this->baseName1 = $var;
+		return $this;
+	 }
+	public function setPlayerId1($var) {
+		$this->playerId1 = $var;
+		return $this;
+	 }
+	public function setPlayerName1($var) {
+		$this->playerName1 = $var;
+		return $this;
+	 }
+	public function setAvatar1($var) {
+		$this->avatar1 = $var;
+		return $this;
+	 }
+	public function setPopulation1($var) {
+		$this->population1 = $var;
+		return $this;
+	 }
 
-	public function setBaseName2($var) { $this->baseName2 = $var; }
-	public function setPlayerId2($var) { $this->playerId2 = $var; }
-	public function setPlayerName2($var) { $this->playerName2 = $var; }
-	public function setAvatar2($var) { $this->avatar2 = $var; }
-	public function setPopulation2($var) { $this->population2 = $var; }
+	public function setBaseName2($var) {
+		$this->baseName2 = $var;
+		return $this;
+	 }
+	public function setPlayerId2($var) {
+		$this->playerId2 = $var;
+		return $this;
+	 }
+	public function setPlayerName2($var) {
+		$this->playerName2 = $var;
+		return $this;
+	 }
+	public function setAvatar2($var) {
+		$this->avatar2 = $var;
+		return $this;
+	 }
+	public function setPopulation2($var) {
+		$this->population2 = $var;
+		return $this;
+	 }
 }
