@@ -231,17 +231,13 @@ class ColorManager {
 	
 	public function scheduleBallot()
 	{
-		$factions = $this->entityManager->getRepository(Color::class)->getByRegimeAndElectionStatement(
-			[Color::DEMOCRATIC], [Color::ELECTION]
-		);
-		foreach ($factions as $faction) {
-			$datetime = new \DateTime($faction->dLastElection);
-			$datetime->modify('+' . $faction->mandateDuration + Color::ELECTIONTIME + Color::CAMPAIGNTIME . ' second');
-
-			$this->realtimeActionScheduler->schedule('demeter.color_manager', 'ballot', $faction, $datetime->format('Y-m-d H:i:s'));
-		}
-		$factions = $this->entityManager->getRepository(Color::class)->getByRegimeAndElectionStatement(
-			[Color::THEOCRATIC], [Color::CAMPAIGN, Color::ELECTION]
+		$factions = array_merge(
+			$this->entityManager->getRepository(Color::class)->getByRegimeAndElectionStatement(
+				[Color::DEMOCRATIC], [Color::ELECTION]
+			),
+			$this->entityManager->getRepository(Color::class)->getByRegimeAndElectionStatement(
+				[Color::THEOCRATIC], [Color::CAMPAIGN, Color::ELECTION]
+			)
 		);
 		foreach ($factions as $faction) {
 			$datetime = new \DateTime($faction->dLastElection);
@@ -262,6 +258,7 @@ class ColorManager {
 			->playerManager
 			->countByFactionAndStatements($faction->id, [Player::ACTIVE])
 		;
+		$this->entityManager->flush($faction);
 	}
 	
 	public function sendSenateNotif(Color $color, $fromChief = FALSE) {
@@ -427,7 +424,7 @@ class ColorManager {
 			}
 		} else {
 			if (($leader = $this->playerManager->getFactionLeader($faction->id)) !== null) {
-				if (($candidate = $this->candidateManager->getByElectionAndPlayer($leader, $election)) !== null) {
+				if (($candidate = $this->candidateManager->getByElectionAndPlayer($election, $leader)) !== null) {
 					if (rand(0, 1) == 0) {
 						$ballot = array();
 					}
@@ -456,7 +453,7 @@ class ColorManager {
 	 */
 	public function uCampaign($factionId) {
 		$faction = $this->get($factionId);
-		$factionPlayers = $this->playerManager->getFactionPlayers($faction->getId());
+		$factionPlayers = $this->playerManager->getFactionPlayersByRanking($faction->getId());
 		$this->updateStatus($faction, $factionPlayers);
 		
 		$date = new \DateTime($faction->dLastElection);
@@ -577,7 +574,7 @@ class ColorManager {
 				$message->dCreation = Utils::now();
 				$message->dLastModification = NULL;
 				$message->content = 'Un putsch a réussi, un nouveau dirigeant va faire valoir la force de ' . $color->popularName . ' à travers la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong>.<br /><br />De nombreux membres de la faction ont soutenu le mouvement révolutionnaire :<br /><br />';
-				$message->content .= current($candidate)['name'] . ' a reçu le soutien de ' . Format::number((current($candidate)['vote'] / $color->activePlayers) * 100) . '% de la population.' . '<br />';
+				$message->content .= current($candidate)['name'] . ' a reçu le soutien de ' . Format::number((current($candidate)['vote'] / ($color->activePlayers + 1)) * 100) . '% de la population.' . '<br />';
 				$this->conversationMessageManager->add($message);
 
 			} else {
@@ -648,7 +645,7 @@ class ColorManager {
 			//refuser la loi
 			$law->statement = Law::REFUSED;
 			if (LawResources::getInfo($law->type, 'bonusLaw')) {
-				$color->credits += (LawResources::getInfo($law->type, 'price') * Utils::interval($law->dEndVotation, $law->dEnd) * $color->activePlayers * 90) / 100;
+				$color->credits += (LawResources::getInfo($law->type, 'price') * Utils::interval($law->dEndVotation, $law->dEnd) * ($color->activePlayers + 1) * 90) / 100;
 			} else {
 				$color->credits += (LawResources::getInfo($law->type, 'price') * 90) / 100;
 			}

@@ -18,6 +18,7 @@ use Asylamba\Modules\Athena\Model\ShipQueue;
 
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 $session = $this->getContainer()->get('app.session');
 $request = $this->getContainer()->get('app.request');

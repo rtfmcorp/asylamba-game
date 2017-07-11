@@ -139,6 +139,8 @@ class RankingManager
 		$ranking = $this->createRanking(false, true);
 		
 		foreach ($factions as $faction) {
+			$this->colorManager->updateInfos($faction);
+			
 			$routesIncome = $factionRankingRepository->getRoutesIncome($faction);
 			$playerRankings = $playerRankingRepository->getFactionPlayerRankings($faction);
 			
