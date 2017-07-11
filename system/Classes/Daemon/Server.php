@@ -149,10 +149,14 @@ class Server
 			$response = $event->getResponse();
 			$this->responseFactory->processResponse($request, $response, $client);
 		} finally {
-			fputs ($input, $response->send());
-			fclose($input);
-			$this->nbUncollectedCycles++;
-			$sessionWrapper->clearWrapper();
+                    
+                        if ($response != null)
+                        {
+                            fputs ($input, $response->send());
+                            fclose($input);
+                            $this->nbUncollectedCycles++;
+                        }
+                        $sessionWrapper->clearWrapper();
 		}
 	}
 	
