@@ -38,7 +38,7 @@ echo '<div class="component report">';
 							echo '</div>';
 
 							echo '<div class="right">';
-								echo '<a class="' . (($request->query->get('report') === $r->id OR (!$request->query->has('report') AND $i == 0))  ? 'active' : NULL) . '" href="' . APP_ROOT . 'fleet/view-spyreport/report-' . $r->id . '"></a>';
+								echo '<a class="' . (($request->query->get('report') == $r->id OR (!$request->query->has('report') AND $i == 0))  ? 'active' : NULL) . '" href="' . APP_ROOT . 'fleet/view-spyreport/report-' . $r->id . '"></a>';
 							echo '</div>';
 						echo '</div>';
 
