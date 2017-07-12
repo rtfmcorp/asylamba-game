@@ -8,7 +8,6 @@ use Asylamba\Modules\Demeter\Manager\ColorManager;
 use Asylamba\Modules\Hermes\Manager\ConversationManager;
 use Asylamba\Modules\Hermes\Manager\ConversationMessageManager;
 
-use Asylamba\Modules\Atlas\Routine\DailyRoutine;
 use Asylamba\Modules\Atlas\Routine\PlayerRoutine;
 use Asylamba\Modules\Atlas\Routine\FactionRoutine;
 
@@ -46,12 +45,6 @@ class RankingManager
 	protected $playerManager;
 	/** @var OrbitalBaseHelper **/
 	protected $orbitalBaseHelper;
-	/** @var FactionRoutine **/
-	protected $factionRoutine;
-	/** @var PlayerRoutine **/
-	protected $playerRoutine;
-	/** @var DailyRoutine **/
-	protected $dailyRoutine;
 	
 	/**
 	 * @param EntityManager $entityManager
@@ -82,10 +75,6 @@ class RankingManager
 		$this->conversationMessageManager = $conversationMessageManager;
 		$this->playerManager = $playerManager;
 		$this->orbitalBaseHelper = $orbitalBaseHelper;
-		
-		$this->dailyRoutine = new DailyRoutine();
-		$this->playerRoutine = new PlayerRoutine();
-		$this->factionRoutine = new FactionRoutine();
 	}
 	
 	public function processPlayersRanking()
@@ -93,6 +82,7 @@ class RankingManager
 		if ($this->entityManager->getRepository(Ranking::class)->hasBeenAlreadyProcessed(true, false) === true) {
 			return;
 		}
+		$playerRoutine = new PlayerRoutine();
 		
 		$players = $this->playerManager->getByStatements([Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]);
 		
@@ -100,7 +90,7 @@ class RankingManager
 		
 		$ranking = $this->createRanking(true, false);
 		
-		$this->playerRoutine->execute(
+		$playerRoutine->execute(
 			$players,
 			$playerRankingRepository->getPlayersResources(),
 			$playerRankingRepository->getPlayersResourcesData(),
@@ -118,7 +108,7 @@ class RankingManager
 		$this->playerRankingManager->newSession();
 		$this->playerRankingManager->loadLastContext();
 
-		$this->playerRoutine->processResults($ranking, $players, $this->playerRankingManager, $playerRankingRepository);
+		$playerRoutine->processResults($ranking, $players, $this->playerRankingManager, $playerRankingRepository);
 		
 		$this->playerRankingManager->changeSession($S_PRM1);
 		
@@ -130,6 +120,7 @@ class RankingManager
 		if ($this->entityManager->getRepository(Ranking::class)->hasBeenAlreadyProcessed(false, true) === true) {
 			return;
 		}
+		$factionRoutine = new FactionRoutine();
 		
 		$factions = $this->colorManager->getInGameFactions();
 		$playerRankingRepository = $this->entityManager->getRepository(PlayerRanking::class);
@@ -144,14 +135,14 @@ class RankingManager
 			$routesIncome = $factionRankingRepository->getRoutesIncome($faction);
 			$playerRankings = $playerRankingRepository->getFactionPlayerRankings($faction);
 			
-			$this->factionRoutine->execute($faction, $playerRankings, $routesIncome, $sectors);
+			$factionRoutine->execute($faction, $playerRankings, $routesIncome, $sectors);
 		}
 		
 		$S_FRM1 = $this->factionRankingManager->getCurrentSession();
 		$this->factionRankingManager->newSession();
 		$this->factionRankingManager->loadLastContext();
 		
-		$winningFactionId = $this->factionRoutine->processResults($ranking, $factions, $this->factionRankingManager);
+		$winningFactionId = $factionRoutine->processResults($ranking, $factions, $this->factionRankingManager);
 
 		$this->factionRankingManager->changeSession($S_FRM1);
 		
