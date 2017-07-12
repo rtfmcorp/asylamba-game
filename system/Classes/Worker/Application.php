@@ -46,6 +46,7 @@ class Application implements ApplicationInterface {
 			'atlas' => new \Asylamba\Modules\Atlas\AtlasModule($this),
 			'demeter' => new \Asylamba\Modules\Demeter\DemeterModule($this),
 			'gaia' => new \Asylamba\Modules\Gaia\GaiaModule($this),
+			'hephaistos' => new \Asylamba\Modules\Hephaistos\HephaistosModule($this),
 			'hermes' => new \Asylamba\Modules\Hermes\HermesModule($this),
 			'promethee' => new \Asylamba\Modules\Promethee\PrometheeModule($this),
 			'zeus' => new \Asylamba\Modules\Zeus\ZeusModule($this)
