@@ -22,6 +22,7 @@ if (abs((int)$time - time()) > 300) {
 }
 
 if (($player = $playerManager->getByBindKey($bindKey)) !== null && in_array($player->getStatement(), [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY])) {
+	$player->synchronized = true;
 	$player->setStatement(Player::ACTIVE);
 
 	$session->initLastUpdate();

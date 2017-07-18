@@ -44,5 +44,193 @@ class Law {
 	public $forVote 			= 0;
 	public $againstVote			= 0;
 
-	public function getId() { return $this->id; }
+	/**
+	 * @param int $id
+	 * @return Law
+	 */
+	public function setId($id)
+	{
+		$this->id = $id;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
+
+	/**
+	 * @param int $factionId
+	 * @return Law
+	 */
+	public function setFactionId($factionId)
+	{
+		$this->rColor = $factionId;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getFactionId()
+	{
+		return $this->rColor;
+	}
+	
+	/**
+	 * @param int $type
+	 * @return Law
+	 */
+	public function setType($type)
+	{
+		$this->type = $type;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getType()
+	{
+		return $this->type;
+	}
+	
+	/**
+	 * @param array $options
+	 * @return Law
+	 */
+	public function setOptions($options)
+	{
+		$this->options = $options;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getOptions()
+	{
+		return $this->options;
+	}
+	
+	/**
+	 * @param int $statement
+	 * @return Law
+	 */
+	public function setStatement($statement)
+	{
+		$this->statement = $statement;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getStatement()
+	{
+		return $this->statement;
+	}
+	
+	/**
+	 * @param string $createdAt
+	 * @return Law
+	 */
+	public function setCreatedAt($createdAt)
+	{
+		$this->dCreation = $createdAt;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getCreatedAt()
+	{
+		return $this->dCreation;
+	}
+	
+	/**
+	 * @param string $votedAt
+	 * @return Law
+	 */
+	public function setVotedAt($votedAt)
+	{
+		$this->dEndVotation = $votedAt;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getVotedAt()
+	{
+		return $this->dEndVotation;
+	}
+	
+	/**
+	 * @param string $endedAt
+	 * @return Law
+	 */
+	public function setEndedAt($endedAt)
+	{
+		$this->dEnd = $endedAt;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getEndedAt()
+	{
+		return $this->dEnd;
+	}
+	
+	/**
+	 * @param int $nbPositiveVotes
+	 * @return Law
+	 */
+	public function setNbPositiveVotes($nbPositiveVotes)
+	{
+		$this->forVote = $nbPositiveVotes;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getNbPositiveVotes()
+	{
+		return $this->forVote;
+	}
+	
+	/**
+	 * @param int $nbNegativeVotes
+	 * @return Law
+	 */
+	public function setNbNegativeVotes($nbNegativeVotes)
+	{
+		$this->againstVote = $nbNegativeVotes;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getNbNegativeVotes()
+	{
+		return $this->againstVote;
+	}
 }

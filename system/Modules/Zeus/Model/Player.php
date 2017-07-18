@@ -154,6 +154,13 @@ class Player {
 		$this->statement = $v;
 		return $this;
 	 }
+	 
+	public function setFactionPoints($factionPoints)
+	{
+		$this->factionPoints = $factionPoints;
+		
+		return $this;
+	}
 
 	public function increaseVictory($i) {
 		$this->victory += $i;
