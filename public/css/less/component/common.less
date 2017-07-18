@@ -772,9 +772,13 @@
 				width: 29px; height: 60px;
 				background: url('src/desktop/mover/small-right.png') no-repeat center #0A0A0A;
 
-				&:hover, &:focus, &.active {
+				&:hover, &:focus {
 					background-color: #202020;
 				}
+                                &.active {
+					background-color: @medium;
+				}
+                                
 			}
 		}
 
