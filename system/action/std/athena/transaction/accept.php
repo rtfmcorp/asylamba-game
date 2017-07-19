@@ -95,7 +95,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				# load places to compute travel time
 				$startPlace = $placeManager->get($commercialShipping->rBase);
 				$destinationPlace = $placeManager->get($rPlace);
-				$timeToTravel = Game::getTimeToTravelCommercial($startPlace, $placeManager->get(1));
+				$timeToTravel = Game::getTimeToTravelCommercial($startPlace, $destinationPlace);
 				$departure = Utils::now();
 				$arrival = Utils::addSecondsToDate($departure, $timeToTravel);
 
