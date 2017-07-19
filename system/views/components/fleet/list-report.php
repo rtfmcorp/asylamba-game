@@ -52,7 +52,9 @@ echo '<div class="component report">';
 							echo '</div>';
 
 							echo '<div class="right">';
-								echo '<a class="' . ($request->query->get('report') === $r->id  ? 'active' : NULL) . '" href="' . APP_ROOT . 'fleet/view-archive/report-' . $r->id . '"></a>';
+								echo '<a class="' . ($request->query->get('report') == $r->id  ? 'active ' : NULL) . '" href="' . APP_ROOT . 'fleet/view-archive/report-' . $r->id . '"></a>';
+                                                              
+                                                               
 							echo '</div>';
 						echo '</div>';
 					}

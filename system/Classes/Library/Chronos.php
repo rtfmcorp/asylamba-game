@@ -56,7 +56,7 @@ class Chronos {
 		} elseif ($type == 'rel') {
 			$str = floor($rel / Chronos::CO_STR);
 			$seg = floor(($rel - ($str * Chronos::CO_STR)) / Chronos::CO_SEG);
-			return $rel - ($str * Chronos::CO_STR) - ($seg * Chronos::CO_SEG) + 1;
+			return $rel - ($str * Chronos::CO_STR) - ($seg * Chronos::CO_SEG) ;
 		}
 	}
 

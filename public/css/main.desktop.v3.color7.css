@@ -1988,9 +1988,11 @@ body {
   background: url('src/desktop/mover/small-right.png') no-repeat center #0A0A0A;
 }
 .component .set-item .item .right a:hover,
-.component .set-item .item .right a:focus,
-.component .set-item .item .right a.active {
+.component .set-item .item .right a:focus {
   background-color: #202020;
+}
+.component .set-item .item .right a.active {
+  background-color: #67331d;
 }
 .component .set-item .item .group-link {
   position: absolute;
@@ -3781,9 +3783,11 @@ span.centred-link:focus {
   border: solid 1px #202020;
 }
 .component.list-fleet .set-fleet .item .show-commander:hover,
-.component.list-fleet .set-fleet .item .show-commander:focus,
-.component.list-fleet .set-fleet .item .show-commander.active {
+.component.list-fleet .set-fleet .item .show-commander:focus {
   background-color: #202020;
+}
+.component.list-fleet .set-fleet .item .show-commander.active {
+  background-color: #67331d;
 }
 .component.table-fleet table {
   margin: 10px;
