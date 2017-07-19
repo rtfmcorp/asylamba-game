@@ -29,6 +29,7 @@ services:
             - "@promethee.technology_manager"
             - "@zeus.player_bonus_manager"
             - "@app.session"
+            - "@api"
             - "%zeus.player.base_level"
             - "%zeus.player.tax_coeff"
             - "%server_id"

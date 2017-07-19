@@ -37,6 +37,8 @@ use Asylamba\Modules\Promethee\Manager\TechnologyManager;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Demeter\Model\Color;
 
+use Asylamba\Classes\Worker\API;
+
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Container\ArrayList;
 
@@ -71,6 +73,8 @@ class PlayerManager {
 	protected $playerBonusManager;
 	/** @var SessionWrapper **/
 	protected $session;
+	/** @var API **/
+	protected $api;
 	/** @var int **/
 	protected $playerBaseLevel;
 	/** @var int **/
@@ -93,6 +97,7 @@ class PlayerManager {
 	 * @param TechnologyManager $technologyManager
 	 * @param PlayerBonusManager $playerBonusManager
 	 * @param SessionWrapper $session
+	 * @param API $api
 	 * @param int $playerBaseLevel
 	 * @param int $playerTaxCoeff
 	 * @param string $serverId
@@ -112,6 +117,7 @@ class PlayerManager {
 		TechnologyManager $technologyManager,
 		PlayerBonusManager $playerBonusManager,
 		SessionWrapper $session,
+		API $api,
 		$playerBaseLevel,
 		$playerTaxCoeff,
 		$serverId
@@ -131,6 +137,7 @@ class PlayerManager {
 		$this->technologyManager = $technologyManager;
 		$this->playerBonusManager = $playerBonusManager;
 		$this->session = $session;
+		$this->api = $api;
 		$this->playerBaseLevel = $playerBaseLevel;
 		$this->playerTaxCoeff = $playerTaxCoeff;
 		$this->serverId = $serverId;
