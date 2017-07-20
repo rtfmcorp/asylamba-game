@@ -50,6 +50,7 @@ services:
         class: Asylamba\Modules\Athena\Manager\OrbitalBaseManager
         arguments:
             - "@entity_manager"
+            - "@client_manager"
             - "@realtime_action_scheduler"
             - "@athena.building_queue_manager"
             - "@athena.ship_queue_manager"
@@ -59,7 +60,6 @@ services:
             - "@athena.commercial_shipping_manager"
             - "@athena.commercial_route_manager"
             - "@athena.transaction_manager"
-            - "@gaia.galaxy_color_manager"
             - "@zeus.player_manager"
             - "@zeus.player_bonus_manager"
             - "@athena.recycling_mission_manager"
