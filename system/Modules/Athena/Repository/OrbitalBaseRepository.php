@@ -211,10 +211,7 @@ class OrbitalBaseRepository extends AbstractRepository {
 			pegaseStorage = :pegase_storage, satyreStorage = :satyre_storage, sireneStorage = :sirene_storage, dryadeStorage = :dryade_storage,
 			chimereStorage = :chimere_storage, meduseStorage = :meduse_storage, griffonStorage = :griffon_storage,
 			cyclopeStorage = :cyclope_storage, minotaureStorage = :minotaure_storage, hydreStorage = :hydre_storage,
-			cerbereStorage = :cerbere_storage, phenixStorage = :phenix_storage, dCreation = :created_at,
-                        levelRefinery = :levelRefinery,levelDock1 = :levelDock1, levelDock2 = :levelDock2, levelDock3 = :levelDock3,
-                        levelTechnosphere = :levelTechnosphere, levelCommercialPlateforme = :levelCommercialPlateforme, 
-                        levelStorage = :levelStorage, levelRecycling = :levelRecycling , levelSpatioport = :levelSpatioport 
+			cerbereStorage = :cerbere_storage, phenixStorage = :phenix_storage, dCreation = :created_at                        
 			WHERE rPlace = :id'
 		);
 		$statement->execute(array(
@@ -234,7 +231,26 @@ class OrbitalBaseRepository extends AbstractRepository {
 			'minotaure_storage' => $orbitalBase->getShipStorage(8),
 			'hydre_storage' => $orbitalBase->getShipStorage(9),
 			'cerbere_storage' => $orbitalBase->getShipStorage(10),
-			'phenix_storage' => $orbitalBase->getShipStorage(11),
+			'phenix_storage' => $orbitalBase->getShipStorage(11),                        
+			'created_at' => $orbitalBase->getDCreation(),
+			'id' => $orbitalBase->getRPlace(),
+		));
+	}
+	
+        
+        /**
+         *  @param OrbitalBase $orbitalBase
+         */
+        public function updateBuildingLevels(OrbitalBase $orbitalBase)
+        {
+            $statement = $this->connection->prepare(
+			'UPDATE orbitalBase SET
+                        levelRefinery = :levelRefinery,levelDock1 = :levelDock1, levelDock2 = :levelDock2, levelDock3 = :levelDock3,
+                        levelTechnosphere = :levelTechnosphere, levelCommercialPlateforme = :levelCommercialPlateforme, 
+                        levelStorage = :levelStorage, levelRecycling = :levelRecycling , levelSpatioport = :levelSpatioport
+                        WHERE rPlace = :id'
+		);
+		$statement->execute(array(
                         'levelRefinery' => $orbitalBase->getLevelRefinery(), 
                         'levelDock1' => $orbitalBase->getlevelDock1(),
                         'levelDock2' => $orbitalBase->getlevelDock2(),
@@ -244,11 +260,10 @@ class OrbitalBaseRepository extends AbstractRepository {
                         'levelStorage' => $orbitalBase->getlevelStorage(),
                         'levelRecycling' => $orbitalBase->getlevelRecycling(),
                         'levelSpatioport' => $orbitalBase->getlevelSpatioport(),
-			'created_at' => $orbitalBase->getDCreation(),
-			'id' => $orbitalBase->getRPlace(),
+                        'id' => $orbitalBase->getRPlace(),
 		));
-	}
-	
+        }
+        
 	/**
 	 * @param OrbitalBase $orbitalBase
 	 * @param int $resources

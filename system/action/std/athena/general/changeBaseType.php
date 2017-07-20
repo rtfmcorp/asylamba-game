@@ -401,7 +401,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 							for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
 								if ($session->get('playerBase')->get('ob')->get($i)->get('id') == $baseId) {
 									$session->get('playerBase')->get('ob')->get($i)->add('type', OrbitalBase::TYP_MILITARY);
-									break;
+									break;                                                                        
 								}
 							}
 							$session->addFlashbag('Votre Centre Industriel devient une Base Militaire. Vos bâtiments commerciaux superflus sont détruits.', Flashbag::TYPE_SUCCESS);
@@ -444,4 +444,5 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 	throw new FormException('pas assez d\'informations pour changer le type de la base orbitale');
 }
 $entityManager->flush();
+$entityManager->getRepository(OrbitalBase::class)->updateBuildingLevels($orbitalBase);
 $eventDispatcher->dispatch(new PlaceOwnerChangeEvent($placeManager->get($orbitalBase->getId())));
