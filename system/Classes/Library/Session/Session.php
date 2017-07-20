@@ -223,4 +223,20 @@ class Session {
 	{
 		return $this->lifetime;
 	}
+	
+	public function setData($data)
+	{
+		$this->history = $data['history'];
+		$this->flashbags = $data['flashbags'];
+		$this->items = $data['items'];
+	}
+	
+	public function getData()
+	{
+		return [
+			'history' => $this->history,
+			'flashbags' => $this->flashbags,
+			'items' => $this->items
+		];
+	}
 }
