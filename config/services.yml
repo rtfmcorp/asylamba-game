@@ -18,6 +18,8 @@ services:
             
     app.session:
         class: Asylamba\Classes\Library\Session\SessionWrapper
+        arguments:
+            - "@redis_manager"
             
     cyclic_action_scheduler:
         class: Asylamba\Classes\Scheduler\CyclicActionScheduler
@@ -49,6 +51,8 @@ services:
     client_manager:
         class: Asylamba\Classes\Daemon\ClientManager
         arguments:
+            - "@redis_manager"
+            - "@app.session"
             - "%session_lifetime"
         
     templating.renderer:
@@ -134,6 +138,13 @@ services:
         class: Asylamba\Classes\Task\TaskManager
         arguments:
             - "@app.container"
+            
+    redis_manager:
+        class: Asylamba\Classes\Redis\RedisManager
+        arguments:
+            - "%redis_host"
+            - "%redis_port"
+            - "%redis_timeout"
         
     exception_listener:
         class: Asylamba\Classes\EventListener\ExceptionListener
