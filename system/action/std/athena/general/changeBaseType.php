@@ -444,4 +444,5 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 	throw new FormException('pas assez d\'informations pour changer le type de la base orbitale');
 }
 $entityManager->flush();
+$entityManager->getRepository(OrbitalBase::class)->updateBuildingLevels($orbitalBase);
 $eventDispatcher->dispatch(new PlaceOwnerChangeEvent($placeManager->get($orbitalBase->getId())));
