@@ -211,8 +211,8 @@ class OrbitalBaseRepository extends AbstractRepository {
 			pegaseStorage = :pegase_storage, satyreStorage = :satyre_storage, sireneStorage = :sirene_storage, dryadeStorage = :dryade_storage,
 			chimereStorage = :chimere_storage, meduseStorage = :meduse_storage, griffonStorage = :griffon_storage,
 			cyclopeStorage = :cyclope_storage, minotaureStorage = :minotaure_storage, hydreStorage = :hydre_storage,
-			cerbereStorage = :cerbere_storage, phenixStorage = :phenix_storage, dCreation = :created_at                        
-			WHERE rPlace = :id'
+			cerbereStorage = :cerbere_storage, phenixStorage = :phenix_storage, dCreation = :created_at
+                        WHERE rPlace = :id'
 		);
 		$statement->execute(array(
 			'player_id' => $orbitalBase->getRPlayer(),
@@ -231,7 +231,7 @@ class OrbitalBaseRepository extends AbstractRepository {
 			'minotaure_storage' => $orbitalBase->getShipStorage(8),
 			'hydre_storage' => $orbitalBase->getShipStorage(9),
 			'cerbere_storage' => $orbitalBase->getShipStorage(10),
-			'phenix_storage' => $orbitalBase->getShipStorage(11),                        
+			'phenix_storage' => $orbitalBase->getShipStorage(11),
 			'created_at' => $orbitalBase->getDCreation(),
 			'id' => $orbitalBase->getRPlace(),
 		));
@@ -241,7 +241,7 @@ class OrbitalBaseRepository extends AbstractRepository {
         /**
          *  @param OrbitalBase $orbitalBase
          */
-        public function updateBuildingLevels(OrbitalBase $orbitalBase)
+	public function updateBuildingLevels(OrbitalBase $orbitalBase)
         {
             $statement = $this->connection->prepare(
 			'UPDATE orbitalBase SET
