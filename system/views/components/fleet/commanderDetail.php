@@ -13,7 +13,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Game;
 
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
-$sessionToken = $this->getContainer()->get('app.session')->get('token');
+$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
 
 echo '<div class="component">';
 	echo '<div class="head skin-1"></div>';

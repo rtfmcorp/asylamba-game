@@ -1,0 +1,13 @@
+---
+services:
+    hephaistos.technical_manager:
+        class: Asylamba\Modules\Hephaistos\Manager\TechnicalManager
+        arguments:
+            - "@entity_manager"
+            - "@api"
+            - "%apimode"
+            - "@zeus.player_manager"
+            - "%zeus.player.inactive_time_limit"
+            - "%zeus.player.global_inactive_time"
+            - "%hermes.notifications.timeout.read"
+            - "%hermes.notifications.timeout.unread"

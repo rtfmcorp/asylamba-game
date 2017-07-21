@@ -1,6 +1,6 @@
 <?php
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 echo '<div id="inscription-subnav">';
 	echo '<div class="bind"></div>';

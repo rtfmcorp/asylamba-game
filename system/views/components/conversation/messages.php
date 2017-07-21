@@ -9,7 +9,7 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 $conversationManager = $this->getContainer()->get('hermes.conversation_manager');
 $conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
 $parser = $this->getContainer()->get('parser');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $sessionToken = $session->get('token');
 
 if (!$message_listmode) {

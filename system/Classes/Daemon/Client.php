@@ -2,8 +2,6 @@
 
 namespace Asylamba\Classes\Daemon;
 
-use Asylamba\Classes\Library\Session\Session;
-
 class Client
 {
     /** @var string **/
@@ -12,10 +10,8 @@ class Client
 	protected $lastConnectedAt;
     /** @var boolean **/
     protected $isFirstConnection;
-    /** @var boolean **/
-    protected $isAuthenticated;
-    /** @var Session **/
-    protected $session;
+	/** @var int **/
+	protected $playerId;
     
     /**
      * @param int $id
@@ -73,23 +69,23 @@ class Client
     {
         return $this->isFirstConnection;
     }
-    
-    /**
-     * @param Session $session
-     * @return $this
-     */
-    public function setSession(Session $session)
-    {
-        $this->session = $session;
-        
-        return $this;
-    }
-    
-    /**
-     * @return Session
-     */
-    public function getSession()
-    {
-        return $this->session;
-    }
+	
+	/**
+	 * @param int $playerId
+	 * @return Client
+	 */
+	public function setPlayerId($playerId)
+	{
+		$this->playerId = $playerId;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getPlayerId()
+	{
+		return $this->playerId;
+	}
 }

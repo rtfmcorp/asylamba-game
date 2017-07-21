@@ -29,7 +29,7 @@ class TransactionManager{
 	/** @var CommercialTaxManager **/
 	protected $commercialTaxManager;
 	/** @var SessionWrapper **/
-	protected $session;
+	protected $sessionWrapper;
 
 	/**
 	 * @param EntityManager $entityManager
@@ -39,7 +39,7 @@ class TransactionManager{
 	public function __construct(EntityManager $entityManager, CommercialTaxManager $commercialTaxManager, SessionWrapper $session) {
 		$this->entityManager = $entityManager;
 		$this->commercialTaxManager = $commercialTaxManager;
-		$this->session = $session;
+		$this->sessionWrapper = $session;
 	}
     
     /**
@@ -190,7 +190,7 @@ class TransactionManager{
 				echo '</div>';
 
 				echo '<div class="button">';
-					echo '<a href="' . Format::actionBuilder('accepttransaction', $this->session->get('token'), ['rplace' => $ob->getId(), 'rtransaction' => $transaction->id]) . '">';
+					echo '<a href="' . Format::actionBuilder('accepttransaction', $this->sessionWrapper->get('token'), ['rplace' => $ob->getId(), 'rtransaction' => $transaction->id]) . '">';
 						echo 'acheter pour ' . Format::numberFormat($totalPrice) . ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"><br /> ';
 						echo 'durée du transit ' . Chronos::secondToFormat($time, 'lite') . ' <img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
 					echo '</a>';

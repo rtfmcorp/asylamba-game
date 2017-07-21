@@ -13,7 +13,7 @@ services:
             - "@athena.orbital_base_manager"
             - "%athena.route.sector_bonus"
             - "%athena.route.color_bonus"
-            - "@app.session"
+            - "@session_wrapper"
             
     gaia.galaxy_generator:
         class: Asylamba\Modules\Gaia\Helper\GalaxyGenerator

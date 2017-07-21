@@ -21,7 +21,7 @@ $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
 $technologyManager = $this->getContainer()->get('promethee.technology_manager');
 $shipHelper = $this->getContainer()->get('athena.ship_helper');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $sessionToken = $session->get('token');
 $shipResourceRefund = $this->getContainer()->getParameter('athena.building.ship_queue_resource_refund');
 

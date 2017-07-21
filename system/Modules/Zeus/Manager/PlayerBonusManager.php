@@ -31,7 +31,7 @@ class PlayerBonusManager
 	/** @var TechnologyHelper **/
 	protected $technologyHelper;
 	/** @var SessionWrapper **/
-	protected $session;
+	protected $sessionWrapper;
 	
 	/**
 	 * @param LawManager $lawManager
@@ -52,7 +52,7 @@ class PlayerBonusManager
 		$this->colorManager = $colorManager;
 		$this->technologyManager = $technologyManager;
 		$this->technologyHelper = $technologyHelper;
-		$this->session = $session;
+		$this->sessionWrapper = $session;
 	}
 	
 	/**
@@ -79,7 +79,7 @@ class PlayerBonusManager
 
 		if ($playerBonus->synchronized) {
 			for ($i = 0; $i < PlayerBonus::BONUS_QUANTITY; $i++) { 
-				$this->session->get('playerBonus')->add($i, ($playerBonus->bonus->exist($i)) ? $playerBonus->bonus->get($i) : 0);
+				$this->sessionWrapper->get('playerBonus')->add($i, ($playerBonus->bonus->exist($i)) ? $playerBonus->bonus->get($i) : 0);
 			}
 		}
 	}
@@ -89,7 +89,7 @@ class PlayerBonusManager
 		if ($playerBonus->synchronized) {
 			// chargement de l'objet avec le contrôleur
 			for ($i = 0; $i < PlayerBonus::BONUS_QUANTITY; $i++) { 
-				$playerBonus->bonus->add($i, $this->session->get('playerBonus')->get($i));
+				$playerBonus->bonus->add($i, $this->sessionWrapper->get('playerBonus')->get($i));
 			}
 		} else {				
 			// remplissage de l'objet normalement
@@ -231,7 +231,7 @@ class PlayerBonusManager
 			if ($increment > 0) {
 				$playerBonus->bonus->add($bonusId, $playerBonus->bonus->get($bonusId) + $increment);
 				if ($playerBonus->synchronized) {
-					$this->session->get('playerBonus')->add($bonusId, $playerBonus->bonus->get($bonusId));
+					$this->sessionWrapper->get('playerBonus')->add($bonusId, $playerBonus->bonus->get($bonusId));
 				}
 			} else {
 				throw new ErrorException('incrémentation de bonus impossible - l\'incrément doit être positif');
@@ -247,7 +247,7 @@ class PlayerBonusManager
 				if ($increment <= $playerBonus->bonus->get($bonusId)) {
 					$playerBonus->bonus->add($bonusId, $playerBonus->bonus->get($bonusId) - $decrement);
 					if ($playerBonus->synchronized) {
-						$this->session->get('playerBonus')->add($bonusId, $playerBonus->bonus->get($bonusId));
+						$this->sessionWrapper->get('playerBonus')->add($bonusId, $playerBonus->bonus->get($bonusId));
 					}
 				} else {
 					throw new ErrorException('décrémentation de bonus impossible - le décrément est plus grand que le bonus');
@@ -300,7 +300,7 @@ class PlayerBonusManager
 			for ($i = 0; $i <= $playerBonus->technology->getTechnology($techno); $i++) { 
 				$totalBonus += $this->technologyHelper->getImprovementPercentage($techno, $i);
 			}
-			$this->session->get('playerBonus')->add($bonusId, $totalBonus);
+			$this->sessionWrapper->get('playerBonus')->add($bonusId, $totalBonus);
 		}
 	}
 }

@@ -15,7 +15,7 @@ use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $database = $this->getContainer()->get('database');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');

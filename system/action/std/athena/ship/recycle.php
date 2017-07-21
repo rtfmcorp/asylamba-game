@@ -10,7 +10,7 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 
 $baseId = $request->query->get('baseid');
