@@ -20,7 +20,7 @@ $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $request = $this->getContainer()->get('app.request');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
 $database = $this->getContainer()->get('database');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $sessionToken = $session->get('token');
 $entityManager = $this->getContainer()->get('entity_manager');
 

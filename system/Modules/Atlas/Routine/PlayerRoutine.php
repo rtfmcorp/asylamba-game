@@ -16,7 +16,7 @@ use Asylamba\Modules\Atlas\Repository\PlayerRankingRepository;
 use Asylamba\Modules\Atlas\Model\Ranking;
 use Asylamba\Modules\Atlas\Model\PlayerRanking;
 
-class PlayerRoutine extends AbstractRoutine
+class PlayerRoutine
 {
 	/** @var array **/
 	protected $results;

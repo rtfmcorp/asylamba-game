@@ -5,7 +5,7 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Zeus\Model\CreditTransaction;
 
 $creditTransactionManager = $this->getContainer()->get('zeus.credit_transaction_manager');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 # load
 $S_CRT_1 = $creditTransactionManager->getCurrentSession();

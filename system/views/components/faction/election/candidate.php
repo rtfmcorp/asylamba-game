@@ -5,7 +5,7 @@ use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 $parser = $this->getContainer()->get('parser');
-$sessionToken = $this->getContainer()->get('app.session')->get('token');
+$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
 
 $status = ColorResource::getInfo($faction->id, 'status');
 

@@ -9,7 +9,7 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Demeter\Model\Election\Vote;
 use Asylamba\Modules\Demeter\Model\Color;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $electionManager = $this->getContainer()->get('demeter.election_manager');

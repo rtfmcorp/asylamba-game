@@ -6,7 +6,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 $follower = 0;
 foreach ($votes as $vote) { 

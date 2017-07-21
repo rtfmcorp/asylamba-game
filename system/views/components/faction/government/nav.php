@@ -6,7 +6,7 @@ use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Zeus\Model\Player;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $sessionToken = $session->get('token');
 
 echo '<div class="component nav">';

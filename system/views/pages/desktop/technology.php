@@ -3,7 +3,7 @@
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $researchManager = $this->getContainer()->get('promethee.research_manager');
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 # background paralax
 echo '<div id="background-paralax" class="technology"></div>';

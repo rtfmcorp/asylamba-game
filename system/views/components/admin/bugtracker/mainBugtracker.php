@@ -12,7 +12,7 @@
 
 use Asylamba\Classes\Library\Format;
 
-$token = $this->getContainer()->get('app.session')->get('token');
+$token = $this->getContainer()->get('session_wrapper')->get('token');
 
 echo '<div class="component size3 dock1 admin bugtracker">';
 	echo '<div class="head skin-1">';

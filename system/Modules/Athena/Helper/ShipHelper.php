@@ -12,7 +12,7 @@ use Asylamba\Modules\Athena\Manager\ShipQueueManager;
 
 class ShipHelper {
 	/** @var SessionWrapper **/
-	protected $session;
+	protected $sessionWrapper;
 	/** @var OrbitalBaseHelper **/
 	protected $orbitalBaseHelper;
 	/** @var TechnologyHelper **/
@@ -33,7 +33,7 @@ class ShipHelper {
 		ShipQueueManager $shipQueueManager
 	)
 	{
-		$this->session = $session;
+		$this->sessionWrapper = $session;
 		$this->orbitalBaseHelper = $orbitalBaseHelper;
 		$this->technologyHelper = $technologyHelper;
 		$this->shipQueueManager = $shipQueueManager;
@@ -46,7 +46,7 @@ class ShipHelper {
 				case 'resource' : 
 					$price = ShipResource::getInfo($shipId, 'resourcePrice') * $quantity;
 					if ($shipId == ShipResource::CERBERE || $shipId == ShipResource::PHENIX) {
-						if ($this->session->get('playerInfo')->get('color') == ColorResource::EMPIRE) {
+						if ($this->sessionWrapper->get('playerInfo')->get('color') == ColorResource::EMPIRE) {
 							# bonus if the player is from the Empire
 							$price -= round($price * ColorResource::BONUS_EMPIRE_CRUISER / 100);
 						}

@@ -1,7 +1,7 @@
 <?php
 
 $playerManager = $this->getContainer()->get('zeus.player_manager');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 $godSons = $playerManager->getGodSons($session->get('playerId'));
 

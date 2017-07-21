@@ -11,7 +11,7 @@ use Asylamba\Modules\Athena\Model\RecyclingMission;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
 $recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');

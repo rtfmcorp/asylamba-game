@@ -6,7 +6,7 @@
 
 use Asylamba\Classes\Library\Format;
 
-$sessionToken = $this->getContainer()->get('app.session')->get('token');
+$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
 
 echo '<div class="component report">';
 	echo '<div class="head skin-2"></div>';

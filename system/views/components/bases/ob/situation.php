@@ -15,7 +15,7 @@ use Asylamba\Modules\Ares\Model\Commander;
 	# {orbitalBase}		ob_obSituation
 	# [{commander}]		commanders_obSituation
 
-$sessionToken = $this->getContainer()->get('app.session')->get('token');
+$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
 
 echo '<div class="component space size3">';
 	echo '<div class="head"></div>';

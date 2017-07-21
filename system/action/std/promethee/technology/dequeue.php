@@ -11,7 +11,7 @@ use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Promethee\Model\TechnologyQueue;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $technologyHelper = $this->getContainer()->get('promethee.technology_helper');
 $technologyQueueManager = $this->getContainer()->get('promethee.technology_queue_manager');

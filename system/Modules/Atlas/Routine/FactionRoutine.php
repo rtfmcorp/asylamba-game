@@ -8,7 +8,7 @@ use Asylamba\Modules\Demeter\Model\Color;
 
 use Asylamba\Classes\Library\Utils;
 
-class FactionRoutine extends AbstractRoutine
+class FactionRoutine
 {
 	/**
 	 * Contains results of all alive factions

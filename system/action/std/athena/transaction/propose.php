@@ -18,7 +18,7 @@ use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');

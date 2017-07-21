@@ -10,7 +10,7 @@ use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Zeus\Model\Player;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $colorManager = $this->getContainer()->get('demeter.color_manager');

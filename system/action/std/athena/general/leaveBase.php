@@ -14,7 +14,7 @@ use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');

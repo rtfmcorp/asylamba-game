@@ -17,7 +17,7 @@ if (!in_array($category, array('natural', 'life', 'social', 'informatic'))) {
 }
 
 $playerManager = $this->getContainer()->get('zeus.player_manager');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 $player = $playerManager->get($session->get('playerId'));
 

@@ -16,7 +16,7 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $database = $this->getContainer()->get('database');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');

@@ -4,7 +4,7 @@
 use Asylamba\Classes\Library\Flashbag;
 
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 $nbr = $notificationManager->deleteByRPlayer($session->get('playerId'));
 

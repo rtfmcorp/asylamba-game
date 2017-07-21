@@ -5,7 +5,7 @@ use Asylamba\Modules\Zeus\Model\Player;
 
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 
 if (($description = $request->request->get('description')) !== FALSE) {
