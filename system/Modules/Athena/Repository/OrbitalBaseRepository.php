@@ -212,7 +212,7 @@ class OrbitalBaseRepository extends AbstractRepository {
 			chimereStorage = :chimere_storage, meduseStorage = :meduse_storage, griffonStorage = :griffon_storage,
 			cyclopeStorage = :cyclope_storage, minotaureStorage = :minotaure_storage, hydreStorage = :hydre_storage,
 			cerbereStorage = :cerbere_storage, phenixStorage = :phenix_storage, dCreation = :created_at
-                        WHERE rPlace = :id'
+			WHERE rPlace = :id'
 		);
 		$statement->execute(array(
 			'player_id' => $orbitalBase->getRPlayer(),
