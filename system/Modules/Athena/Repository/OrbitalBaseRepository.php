@@ -236,34 +236,33 @@ class OrbitalBaseRepository extends AbstractRepository {
 			'id' => $orbitalBase->getRPlace(),
 		));
 	}
-	
-        
-        /**
-         *  @param OrbitalBase $orbitalBase
-         */
+
+	/**
+     *  @param OrbitalBase $orbitalBase
+     */
 	public function updateBuildingLevels(OrbitalBase $orbitalBase)
-        {
-            $statement = $this->connection->prepare(
+	{
+		$statement = $this->connection->prepare(
 			'UPDATE orbitalBase SET
-                        levelRefinery = :levelRefinery,levelDock1 = :levelDock1, levelDock2 = :levelDock2, levelDock3 = :levelDock3,
-                        levelTechnosphere = :levelTechnosphere, levelCommercialPlateforme = :levelCommercialPlateforme, 
-                        levelStorage = :levelStorage, levelRecycling = :levelRecycling , levelSpatioport = :levelSpatioport
-                        WHERE rPlace = :id'
+				levelRefinery = :levelRefinery,levelDock1 = :levelDock1, levelDock2 = :levelDock2, levelDock3 = :levelDock3,
+				levelTechnosphere = :levelTechnosphere, levelCommercialPlateforme = :levelCommercialPlateforme, 
+				levelStorage = :levelStorage, levelRecycling = :levelRecycling , levelSpatioport = :levelSpatioport
+				WHERE rPlace = :id'
 		);
 		$statement->execute(array(
-                        'levelRefinery' => $orbitalBase->getLevelRefinery(), 
-                        'levelDock1' => $orbitalBase->getlevelDock1(),
-                        'levelDock2' => $orbitalBase->getlevelDock2(),
-                        'levelDock3' => $orbitalBase->getlevelDock3(),
-                        'levelTechnosphere' => $orbitalBase->getlevelTechnosphere(),
-                        'levelCommercialPlateforme' => $orbitalBase->getlevelCommercialPlateforme(),
-                        'levelStorage' => $orbitalBase->getlevelStorage(),
-                        'levelRecycling' => $orbitalBase->getlevelRecycling(),
-                        'levelSpatioport' => $orbitalBase->getlevelSpatioport(),
-                        'id' => $orbitalBase->getRPlace(),
+				'levelRefinery' => $orbitalBase->getLevelRefinery(),
+				'levelDock1' => $orbitalBase->getlevelDock1(),
+				'levelDock2' => $orbitalBase->getlevelDock2(),
+				'levelDock3' => $orbitalBase->getlevelDock3(),
+				'levelTechnosphere' => $orbitalBase->getlevelTechnosphere(),
+				'levelCommercialPlateforme' => $orbitalBase->getlevelCommercialPlateforme(),
+				'levelStorage' => $orbitalBase->getlevelStorage(),
+				'levelRecycling' => $orbitalBase->getlevelRecycling(),
+				'levelSpatioport' => $orbitalBase->getlevelSpatioport(),
+				'id' => $orbitalBase->getRPlace(),
 		));
-        }
-        
+	}
+
 	/**
 	 * @param OrbitalBase $orbitalBase
 	 * @param int $resources
