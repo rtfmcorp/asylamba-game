@@ -150,7 +150,7 @@ class OrbitalBaseRepository extends AbstractRepository {
 		return $orbitalBase;
 	}
 	
-	public function insert($orbitalBase)
+        public function insert($orbitalBase)
 	{
 		$statement = $this->connection->prepare(
 			'INSERT INTO orbitalBase(rPlace, rPlayer, name, typeOfBase, levelGenerator,
