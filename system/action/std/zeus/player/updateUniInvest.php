@@ -9,7 +9,7 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 

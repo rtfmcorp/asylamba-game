@@ -36,7 +36,7 @@ class CommercialShippingManager {
 	/** @var RealTimeActionScheduler **/
 	protected $realtimeActionScheduler;
 	/** @var SessionWrapper **/
-	protected $session;
+	protected $sessionWrapper;
 	
 	/**
 	 * @param EntityManager $entityManager
@@ -56,7 +56,7 @@ class CommercialShippingManager {
 		$this->orbitalBaseManager = $orbitalBaseManager;
 		$this->notificationManager = $notificationManager;
 		$this->realtimeActionScheduler = $realtimeActionScheduler;
-		$this->session = $session;
+		$this->sessionWrapper = $session;
 	}
 	
 	public function scheduleShippings()
@@ -216,7 +216,7 @@ class CommercialShippingManager {
 			if ($commercialShipping->statement != CommercialShipping::ST_MOVING_BACK) {
 				echo '<div class="product">';
 					if ($commercialShipping->statement == CommercialShipping::ST_WAITING) {
-						echo '<a href="' . Format::actionBuilder('canceltransaction', $this->session->get('token'), ['rtransaction' => $commercialShipping->rTransaction]) . '" class="hb lt right-link" title="supprimer cette offre coûtera ' . Format::number(floor($commercialShipping->price * Transaction::PERCENTAGE_TO_CANCEL / 100)) . ' crédits">×</a>';
+						echo '<a href="' . Format::actionBuilder('canceltransaction', $this->sessionWrapper->get('token'), ['rtransaction' => $commercialShipping->rTransaction]) . '" class="hb lt right-link" title="supprimer cette offre coûtera ' . Format::number(floor($commercialShipping->price * Transaction::PERCENTAGE_TO_CANCEL / 100)) . ' crédits">×</a>';
 					}
 					if ($commercialShipping->typeOfTransaction == Transaction::TYP_RESOURCE) {
 						echo '<img src="' . MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($commercialShipping->quantity) . '.png" alt="" class="picto" />';

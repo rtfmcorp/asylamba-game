@@ -14,7 +14,7 @@ use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 echo '<div class="component report">';
 	echo '<div class="head skin-1">';

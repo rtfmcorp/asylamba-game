@@ -14,7 +14,7 @@ class CTC {
 	/** @var array **/
 	public $events  = array();
 	/** @var SessionWrapper **/
-	protected $session;
+	protected $sessionWrapper;
 	/** @var string **/
 	protected $logDirectory;
 	
@@ -24,7 +24,7 @@ class CTC {
 	 */
 	public function __construct(SessionWrapper $session, $logDirectory)
 	{
-		$this->session = $session;
+		$this->sessionWrapper = $session;
 		$this->logDirectory = $logDirectory;
 	}
 
@@ -54,7 +54,7 @@ class CTC {
 				$afterUsort = count($this->events);
 
 				$logt  = '> ' . date('H:i:s') . ', start to apply context';
-				$logt .= ($this->session->exist('playerId')) ? ' [Player ' . $this->session->get('playerId') . ']' : NULL;
+				$logt .= ($this->sessionWrapper->exist('playerId')) ? ' [Player ' . $this->sessionWrapper->get('playerId') . ']' : NULL;
 				$logt .= "\n";
 
 				//$logt .= '> Page : ' . $_SERVER['REQUEST_URI'] . "\n";

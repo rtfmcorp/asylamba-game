@@ -19,7 +19,7 @@ class ExceptionListener {
 	/** @var AbstractLogger **/
 	protected $logger;
 	/** @var SessionWrapper **/
-	protected $session;
+	protected $sessionWrapper;
 	/** @var Database **/
 	protected $connection;
 	
@@ -31,7 +31,7 @@ class ExceptionListener {
 	public function __construct(AbstractLogger $logger, SessionWrapper $session, Database $database)
 	{
 		$this->logger = $logger;
-		$this->session = $session;
+		$this->sessionWrapper = $session;
 		$this->database = $database;
 	}
 	
@@ -83,7 +83,7 @@ class ExceptionListener {
 	{
 		$this->logger->log("$message at $file at line $line\n$trace", $level);
 		
-		$this->session->addFlashbag($message, $flashbagLevel);
+		$this->sessionWrapper->addFlashbag($message, $flashbagLevel);
 		
 		if ($this->database->inTransaction()) {
 			$this->database->rollBack();
@@ -110,12 +110,12 @@ class ExceptionListener {
 			return ['redirect' => $redirect];
 		}
 		
-		$history = $this->session->getHistory();
+		$history = $this->sessionWrapper->getHistory();
 
 		if (($nbPaths = count($history)) === 0) {
 			return ['redirect' => '/'];
 		}
-		if (($redirect = '/' . $this->session->getLastHistory()) === $request->getPath()) {
+		if (($redirect = '/' . $this->sessionWrapper->getLastHistory()) === $request->getPath()) {
 			// We get the path before the last one if available
 			$redirect = ($nbPaths > 1) ? $history[$nbPaths - 2] : '/';
 		}

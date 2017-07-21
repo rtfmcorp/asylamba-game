@@ -3,7 +3,7 @@
 
 use Asylamba\Classes\Library\Flashbag;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $spyReportManager = $this->getContainer()->get('artemis.spy_report_manager');
 
 $S_SRM1 = $spyReportManager->getCurrentSession();

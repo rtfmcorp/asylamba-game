@@ -167,6 +167,22 @@ class NotificationRepository extends AbstractRepository
         
         return $statement->rowCount();
     }
+	
+	/**
+	 * @param string $readTimeout
+	 * @param string $unreadTimeout
+	 * @return int
+	 */
+	public function cleanNotifications($readTimeout, $unreadTimeout)
+	{
+		$statement = $this->connection->prepare(
+			'DELETE FROM notification WHERE
+			(readed = 0 AND TIMESTAMPDIFF(HOUR, dSending, NOW()) < :unread_timeout) OR
+			(readed = 1 AND TIMESTAMPDIFF(HOUR, dSending, NOW()) < :read_timeout)'
+		);
+		$statement->execute(['read_timeout' => $readTimeout, 'unread_timeout' => $unreadTimeout]);
+		return $statement->rowCount();
+	}
     
     /**
      * @param array $data

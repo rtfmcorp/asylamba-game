@@ -45,7 +45,7 @@ foreach ($rtc->getQueue() as $date => $elements)
 echo '</ul></div>';
 
 echo '<div><h3>Clients</h3><ul id="clients">';
-foreach ($clientManager->clients as $id => $client) {
+foreach ($clientManager->getClients() as $id => $client) {
 	echo("<li><pre>");var_dump($client);echo('</pre></li>');
 }
 echo '</ul></div></div>';

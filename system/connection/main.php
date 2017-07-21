@@ -9,7 +9,7 @@ $security = $this->getContainer()->get('security');
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 # extraction du bindkey
 $query  = $security->uncrypt($request->query->get('bindkey'));

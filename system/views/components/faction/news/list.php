@@ -2,7 +2,7 @@
 
 use Asylamba\Classes\Library\Format;
 
-$sessionToken = $this->getContainer()->get('app.session')->get('token');
+$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
 $request = $this->getContainer()->get('app.request');
 
 echo '<div class="component">';

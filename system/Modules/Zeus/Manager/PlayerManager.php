@@ -37,6 +37,8 @@ use Asylamba\Modules\Promethee\Manager\TechnologyManager;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Demeter\Model\Color;
 
+use Asylamba\Classes\Worker\API;
+
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Container\ArrayList;
 
@@ -70,7 +72,9 @@ class PlayerManager {
 	/** @var PlayerBonusManager **/
 	protected $playerBonusManager;
 	/** @var SessionWrapper **/
-	protected $session;
+	protected $sessionWrapper;
+	/** @var API **/
+	protected $api;
 	/** @var int **/
 	protected $playerBaseLevel;
 	/** @var int **/
@@ -93,6 +97,7 @@ class PlayerManager {
 	 * @param TechnologyManager $technologyManager
 	 * @param PlayerBonusManager $playerBonusManager
 	 * @param SessionWrapper $session
+	 * @param API $api
 	 * @param int $playerBaseLevel
 	 * @param int $playerTaxCoeff
 	 * @param string $serverId
@@ -112,6 +117,7 @@ class PlayerManager {
 		TechnologyManager $technologyManager,
 		PlayerBonusManager $playerBonusManager,
 		SessionWrapper $session,
+		API $api,
 		$playerBaseLevel,
 		$playerTaxCoeff,
 		$serverId
@@ -130,7 +136,8 @@ class PlayerManager {
 		$this->commercialRouteManager = $commercialRouteManager;
 		$this->technologyManager = $technologyManager;
 		$this->playerBonusManager = $playerBonusManager;
-		$this->session = $session;
+		$this->sessionWrapper = $session;
+		$this->api = $api;
 		$this->playerBaseLevel = $playerBaseLevel;
 		$this->playerTaxCoeff = $playerTaxCoeff;
 		$this->serverId = $serverId;
@@ -143,7 +150,7 @@ class PlayerManager {
 	public function get($playerId)
 	{
 		if(($player = $this->entityManager->getRepository(Player::class)->get($playerId)) !== null) {
-			if ($this->session->get('playerId') === $player->id) {
+			if ($this->sessionWrapper->get('playerId') === $player->id) {
 				$player->synchronized = true;
 			}
 			$this->fill($player);
@@ -167,7 +174,7 @@ class PlayerManager {
 	public function getByBindKey($bindKey)
 	{
 		if(($player = $this->entityManager->getRepository(Player::class)->getByBindKey($bindKey)) !== null) {
-			if ($this->session->get('playerId') === $player->id) {
+			if ($this->sessionWrapper->get('playerId') === $player->id) {
 				$player->synchronized = true;
 			}
 			$this->fill($player);
@@ -330,7 +337,7 @@ class PlayerManager {
 	
 	public function isSynchronized(Player $player)
 	{
-		return ($player->getId() === $this->session->get('playerId'));
+		return ($player->getId() === $this->sessionWrapper->get('playerId'));
 	}
 	
 	/**
@@ -338,15 +345,15 @@ class PlayerManager {
 	 */
 	public function saveSessionData(Player $player)
 	{
-		if(!$this->session->exist('playerInfo')) {
-			$this->session->add('playerInfo', new ArrayList());
+		if(!$this->sessionWrapper->exist('playerInfo')) {
+			$this->sessionWrapper->add('playerInfo', new ArrayList());
 		}
-		$this->session->get('playerInfo')->add('color', $player->getRColor());
-		$this->session->get('playerInfo')->add('name', $player->getName());
-		$this->session->get('playerInfo')->add('avatar', $player->getAvatar());
-		$this->session->get('playerInfo')->add('credit', $player->getCredit());
-		$this->session->get('playerInfo')->add('experience', $player->getExperience());
-		$this->session->get('playerInfo')->add('level', $player->getLevel());
+		$this->sessionWrapper->get('playerInfo')->add('color', $player->getRColor());
+		$this->sessionWrapper->get('playerInfo')->add('name', $player->getName());
+		$this->sessionWrapper->get('playerInfo')->add('avatar', $player->getAvatar());
+		$this->sessionWrapper->get('playerInfo')->add('credit', $player->getCredit());
+		$this->sessionWrapper->get('playerInfo')->add('experience', $player->getExperience());
+		$this->sessionWrapper->get('playerInfo')->add('level', $player->getLevel());
 	}
 
 	public function add(Player $player) {
@@ -798,13 +805,13 @@ class PlayerManager {
 		$exp = round($exp);
 		$player->experience += $exp;
 		if ($player->isSynchronized()) {
-			$this->session->get('playerInfo')->add('experience', $player->experience);
+			$this->sessionWrapper->get('playerInfo')->add('experience', $player->experience);
 		}
 		$nextLevel =  $this->playerBaseLevel * pow(2, ($player->level - 1));
 		if ($player->experience >= $nextLevel) {
 			$player->level++;
 			if ($player->isSynchronized()) {
-				$this->session->get('playerInfo')->add('level', $player->level);
+				$this->sessionWrapper->get('playerInfo')->add('level', $player->level);
 			}
 			$n = new Notification();
 			$n->setTitle('Niveau supérieur');

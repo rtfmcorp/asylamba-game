@@ -16,7 +16,7 @@ use Asylamba\Modules\Athena\Model\CommercialShipping;
 use Asylamba\Modules\Hermes\Model\Notification;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $database = $this->getContainer()->get('database');
 $transactionManager = $this->getContainer()->get('athena.transaction_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
@@ -95,7 +95,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				# load places to compute travel time
 				$startPlace = $placeManager->get($commercialShipping->rBase);
 				$destinationPlace = $placeManager->get($rPlace);
-				$timeToTravel = Game::getTimeToTravelCommercial($startPlace, $placeManager->get(1));
+				$timeToTravel = Game::getTimeToTravelCommercial($startPlace, $destinationPlace);
 				$departure = Utils::now();
 				$arrival = Utils::addSecondsToDate($departure, $timeToTravel);
 

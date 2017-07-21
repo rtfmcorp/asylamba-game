@@ -4,23 +4,40 @@ namespace Asylamba\Classes\Daemon;
 
 use Asylamba\Classes\Daemon\Client;
 
-use Asylamba\Classes\Library\Session\Session;
+use Asylamba\Classes\Redis\RedisManager;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 
 use Asylamba\Classes\Library\Http\Request;
 
 class ClientManager
 {
     /** @var array **/
-    public $clients = [];
+    protected $clients = [];
+	/** @var RedisManager **/
+	protected $redisManager;
+	/** @var SessionWrapper **/
+	protected $sessionWrapper;
     /** @var int **/
 	protected $sessionLifetime;
 	
 	/**
+	 * @param RedisManager $redisManager
+	 * @param SessionWrapper $sessionWrapper
 	 * @param int $sessionLifetime
 	 */
-	public function __construct($sessionLifetime)
+	public function __construct(RedisManager $redisManager, SessionWrapper $sessionWrapper, $sessionLifetime)
 	{
+		$this->redisManager = $redisManager;
+		$this->sessionWrapper = $sessionWrapper;
 		$this->sessionLifetime = $sessionLifetime;
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getClients()
+	{
+		return $this->clients;
 	}
 	
     /**
@@ -39,6 +56,10 @@ class ClientManager
         $client = $this->clients[$sessionId];
         $client->setIsFirstConnection(false);
         $client->setLastConnectedAt(new \DateTime());
+		if (($session = $this->sessionWrapper->fetchSession($sessionId)) === null) {
+			return null;
+		}
+		$this->sessionWrapper->setCurrentSession($session);
         return $client;
     }
     
@@ -54,13 +75,33 @@ class ClientManager
             ->setIsFirstConnection(true)
 			->setLastConnectedAt(new \DateTime())
         ;
-		$session = new Session();
-		$session->add('session_id', $client->getId());
-        $client->setSession($session);
-        
         $this->clients[$client->getId()] = $client;
+		$this->sessionWrapper->setCurrentSession($this->sessionWrapper->createSession($client->getId()));
         return $client;
     }
+	
+	/**
+	 * @param string $sessionId
+	 * @param int $playerId
+	 */
+	public function bindPlayerId($sessionId, $playerId)
+	{
+		$this->clients[$sessionId]->setPlayerId($playerId);
+		
+		$this->redisManager->getConnection()->set('player:' . $playerId, $sessionId);
+	}
+	
+	/**
+	 * @param int $playerId
+	 * @return Session
+	 */
+	public function getSessionByPlayerId($playerId)
+	{
+		if (($sessionId = $this->redisManager->getConnection()->get('player:' . $playerId)) === false) {
+			return null;
+		}
+		return $this->sessionWrapper->fetchSession($sessionId);
+	}
 	
 	/**
 	 * @return string
@@ -83,6 +124,7 @@ class ClientManager
 		if (!isset($this->clients[$clientId])) {
 			return false;
 		}
+		$this->redisManager->getConnection()->delete('player:' . $this->clients[$clientId]->getPlayerId());
 		unset($this->clients[$clientId]);
 		return true;
 	}
