@@ -2,7 +2,7 @@
 
 use Asylamba\Classes\Library\Game;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
 
 echo '<div id="own-base">';

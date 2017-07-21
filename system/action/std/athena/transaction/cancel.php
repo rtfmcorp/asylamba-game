@@ -13,7 +13,7 @@ use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Ares\Model\Commander;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $transactionManager = $this->getContainer()->get('athena.transaction_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');

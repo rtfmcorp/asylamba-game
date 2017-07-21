@@ -2,7 +2,7 @@
 
 use Asylamba\Classes\Library\Format;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $sessionToken = $session->get('token');
 
 # display

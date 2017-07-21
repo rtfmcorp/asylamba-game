@@ -2,7 +2,7 @@
 
 use Asylamba\Classes\Library\Utils;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $playerManager = $this->getContainer()->get('zeus.player_manager');

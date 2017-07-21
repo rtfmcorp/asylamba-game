@@ -2,7 +2,7 @@
 
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 

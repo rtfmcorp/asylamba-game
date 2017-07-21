@@ -15,7 +15,7 @@ if ($commanderId === null) {
 }
 
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 if (($commander = $commanderManager->get($commanderId)) === null || $commander->rPlayer !== $session->get('playerId')) {
 	throw new ErrorException('Ce commandant n\'existe pas ou ne vous appartient pas.');

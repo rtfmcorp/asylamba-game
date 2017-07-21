@@ -6,7 +6,7 @@
 
 //
 //$request = $this->getContainer()->get('app.request');
-//$session = $this->getContainer()->get('app.session');
+//$session = $this->getContainer()->get('session_wrapper');
 //$parser = $this->getContainer()->get('parser');
 //
 //for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 

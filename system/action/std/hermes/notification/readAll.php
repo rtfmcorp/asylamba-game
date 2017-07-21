@@ -6,7 +6,7 @@ use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Modules\Hermes\Model\Notification;
 
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 $notifications = $notificationManager->getUnreadNotifications($session->get('playerId'));
 $nbNotifications = count($notifications);

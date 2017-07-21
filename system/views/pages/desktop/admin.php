@@ -4,7 +4,7 @@ use Asylamba\Classes\Library\Flashbag;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 # bases loading
 if ($session->get('playerInfo')->get('admin') == FALSE) {
 	$session->addFlashbag('Accès non-autorisé', Flashbag::TYPE_BUG_ERROR);

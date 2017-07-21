@@ -4,7 +4,7 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Container\ArrayList;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $playerBonusManager = $this->getContainer()->get('zeus.player_bonus_manager');
 $clientManager = $this->getContainer()->get('client_manager');

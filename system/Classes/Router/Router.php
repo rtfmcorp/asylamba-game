@@ -9,7 +9,7 @@ use Asylamba\Classes\Library\Session\SessionWrapper;
 class Router
 {
 	/** @var SessionWrapper **/
-	protected $session;
+	protected $sessionWrapper;
 	/** @var string **/
 	protected $getOutRoot;
 	
@@ -52,7 +52,7 @@ class Router
 	 */
 	public function __construct(SessionWrapper $session, $getOutRoot)
 	{
-		$this->session = $session;
+		$this->sessionWrapper = $session;
 		$this->getOutRoot = $getOutRoot;
 	}
 	
@@ -102,7 +102,7 @@ class Router
 				? 'profil'
 				: implode('/', $requestURI)
 			;
-			$this->session->addHistory($newURI);
+			$this->sessionWrapper->addHistory($newURI);
 		}
 
 		$nbParams = count($requestURI);
@@ -113,7 +113,7 @@ class Router
 				$request->query->set($param[0], $param[1]);
 			}
 		}
-		$this->session->add('screenmode',
+		$this->sessionWrapper->add('screenmode',
 			(($screenMode = $request->query->get('screenmode')) && in_array($screenMode, ['desktop', 'mobile']))
 			? $screenMode
 			: 'desktop'
@@ -128,11 +128,11 @@ class Router
 		$page = $response->getPage();
         
 		if ($page === 'inscription') {
-			if ($this->session->exist('playerId')) {
+			if ($this->sessionWrapper->exist('playerId')) {
 				$response->redirect(APP_ROOT);
 			}
 		} elseif ($page === 'connection') {
-			if (!$this->session->exist('playerId')) {
+			if (!$this->sessionWrapper->exist('playerId')) {
 				if (!$request->query->has('bindkey')) {
 					$response->redirect($this->getOutRoot . 'accueil/speak-wrongargument');
 				}
@@ -142,7 +142,7 @@ class Router
 		} elseif (in_array($page, array('api', 'script', 'buffer'))) {
 			# doing nothing
 		} else {
-			if (!$this->session->exist('playerId')) {
+			if (!$this->sessionWrapper->exist('playerId')) {
 				$response->redirect($this->getOutRoot . 'accueil/speak-loginrequired');
 			}
 		}
@@ -150,7 +150,7 @@ class Router
 
 	public function getInclude(Response $response) {
 		$page = $response->getPage();
-		$screenMode = $this->session->get('screenmode');
+		$screenMode = $this->sessionWrapper->get('screenmode');
 		switch($page) {
 			case 'action':
 				$response->addTemplate(ACTION . 'main.php');

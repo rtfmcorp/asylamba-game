@@ -10,7 +10,7 @@ use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Ares\Model\Commander;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
 $shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');

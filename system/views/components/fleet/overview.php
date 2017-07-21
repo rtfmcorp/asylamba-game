@@ -12,7 +12,7 @@ use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 
-$sessionToken = $this->getContainer()->get('app.session')->get('token');
+$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
 
 echo '<div class="component size3 table-fleet">';
 	echo '<div class="head skin-1">';

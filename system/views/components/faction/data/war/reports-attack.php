@@ -1,6 +1,6 @@
 <?php
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 $reports = $this->getContainer()->get('ares.live_report_manager')->getFactionAttackReports($session->get('playerInfo')->get('color'));
 

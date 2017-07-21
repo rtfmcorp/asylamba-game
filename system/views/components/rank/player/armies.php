@@ -8,7 +8,7 @@
 	# _T PRM 		PLAYER_RANKING_ARMIES
 
 $playerRankingManager = $this->getContainer()->get('atlas.player_ranking_manager');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 $playerRankingManager->changeSession($PLAYER_RANKING_ARMIES);
 

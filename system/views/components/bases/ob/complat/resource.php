@@ -4,7 +4,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Athena\Model\CommercialShipping;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 
-$sessionToken = $this->getContainer()->get('app.session')->get('token');
+$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
 
 echo '<div class="component new-message market-sell">';
 	echo '<div class="head skin-4 sh">';

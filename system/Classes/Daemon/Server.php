@@ -153,7 +153,7 @@ class Server
 				fclose($input);
 			}
 			$this->nbUncollectedCycles++;
-			$this->container->get('app.session')->clearWrapper();
+			$this->container->get('session_wrapper')->clearWrapper();
 		}
 	}
 	

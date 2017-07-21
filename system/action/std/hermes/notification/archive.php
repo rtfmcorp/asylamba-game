@@ -7,7 +7,7 @@ use Asylamba\Classes\Exception\ErrorException;
 $id = $this->getContainer()->get('app.request')->query->get('id');
 
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 if ($id) {
 	if (($notification = $notificationManager->get($id)) !== null && $notification->rPlayer === $session->get('playerId')) {

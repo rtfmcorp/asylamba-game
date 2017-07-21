@@ -6,7 +6,7 @@ use Asylamba\Classes\Library\Session\SessionWrapper;
 
 class Security {
 	/** @var Session **/
-	protected $session;
+	protected $sessionWrapper;
 	/** @var string **/
 	protected $serverKey;
 	/** @var string **/
@@ -19,7 +19,7 @@ class Security {
 	 */
 	public function __construct(SessionWrapper $session, $serverKey, $iv)
 	{
-		$this->session = $session;
+		$this->sessionWrapper = $session;
 		$this->serverKey = $serverKey;
 		$this->iv = $iv;
 	}

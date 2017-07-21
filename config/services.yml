@@ -16,7 +16,7 @@ services:
             - "%database_admin_user"
             - "%database_admin_password"
             
-    app.session:
+    session_wrapper:
         class: Asylamba\Classes\Library\Session\SessionWrapper
         arguments:
             - "@redis_manager"
@@ -36,7 +36,7 @@ services:
     router:
         class: Asylamba\Classes\Router\Router
         arguments:
-            - "@app.session"
+            - "@session_wrapper"
             - "%getout_root"
         
     request_factory:
@@ -46,13 +46,13 @@ services:
         class: Asylamba\Classes\Library\Http\ResponseFactory
         arguments:
             - "@templating.renderer"
-            - "@app.session"
+            - "@session_wrapper"
         
     client_manager:
         class: Asylamba\Classes\Daemon\ClientManager
         arguments:
             - "@redis_manager"
-            - "@app.session"
+            - "@session_wrapper"
             - "%session_lifetime"
         
     templating.renderer:
@@ -103,14 +103,14 @@ services:
     security:
         class: Asylamba\Classes\Library\Security
         arguments:
-            - "@app.session"
+            - "@session_wrapper"
             - "%security_server_key"
             - "%security_iv"
         
     ctc:
         class: Asylamba\Classes\Worker\CTC
         arguments:
-            - "@app.session"
+            - "@session_wrapper"
             - "%log_directory"
             
     memory_manager:
@@ -150,7 +150,7 @@ services:
         class: Asylamba\Classes\EventListener\ExceptionListener
         arguments:
             - "@logger"
-            - "@app.session"
+            - "@session_wrapper"
             - "@database"
         tags:
             - {type: "event_listener", event: "core.exception", method: "onCoreException"}
