@@ -23,7 +23,7 @@ $content = $request->request->get('content');
 
 $content = $parser->parse($content);
 
-if ($recipients !== FALSE AND $content !== FALSE) {
+if (!empty($recipients) AND !empty($content)) {
 	if (strlen($content) < 10000) {
 		# traitement des utilisateurs multiples
 		$recipients = explode(',', $recipients);
