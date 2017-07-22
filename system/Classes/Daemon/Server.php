@@ -125,7 +125,7 @@ class Server
 	{
 		$client = $request = $response = null;
 		try {
-			$data = fread($input, 2048);
+			$data = fread($input, 8192);
 			if (empty($data)) {
 				fclose($input);
 				return;
