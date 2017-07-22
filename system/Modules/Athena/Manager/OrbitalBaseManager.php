@@ -390,10 +390,9 @@ class OrbitalBaseManager {
 		$this->commercialRouteManager->removeBaseRoutes($base);
 
 		# suppression des technologies en cours de développement
-		foreach ($base->technoQueues as $queue) { 
-			$this->entityManager->remove($queue);
+		foreach ($base->technoQueues as $queue) {
+			$this->technologyQueueManager->remove($queue);
 		}
-		$this->entityManager->flush(TechnologyQueue::class);
 
 		# suppression des missions de recyclages ainsi que des logs de recyclages
 		$this->recyclingMissionManager->removeBaseMissions($base->getId());
@@ -405,11 +404,15 @@ class OrbitalBaseManager {
 		# mise à jour de la date de création pour qu'elle soit dans l'ordre
 		$base->dCreation = Utils::now();
 
-		# ajouter/enlever la base dans le controller
-		if ($this->sessionWrapper->get('playerId') == $newOwner) {
-			$this->sessionWrapper->addBase('ob', $base->getId(), $base->getName(), $base->getSector(), $base->getSystem(), '1-' . Game::getSizeOfPlanet($base->getPlanetPopulation()), $base->typeOfBase);
-		} else {
-			$this->sessionWrapper->removeBase('ob', $base->getId());
+		// If the new owner is connected, we add the base to his session
+		if (($session = $this->clientManager->getSessionByPlayerId($newOwner)) !== null) {
+			$session->addBase('ob', $base->getId(), $base->getName(), $base->getSector(), $base->getSystem(), '1-' . Game::getSizeOfPlanet($base->getPlanetPopulation()), $base->typeOfBase);
+			$this->sessionWrapper->save($session);
+		}
+		// If the  previous owner is connected, we remove the base from his session
+		if (($session = $this->clientManager->getSessionByPlayerId($oldOwner)) !== null) {
+			$session->removeBase('ob', $base->getId());
+			$this->sessionWrapper->save($session);
 		}
 
 		# rendre déserteuses les flottes en voyage
@@ -418,6 +421,7 @@ class OrbitalBaseManager {
 				$commander->rPlayer = $newOwner;
 			} else if ($commander->statement == Commander::MOVING) {
 				$commander->statement = Commander::RETIRED;
+				$this->realtimeActionScheduler->cancel($commander, $commander->getArrivalDate());
 			} else {
 				$commander->statement = Commander::DEAD;		
 			}
