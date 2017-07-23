@@ -48,18 +48,18 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 								
 								$commander->destinationPlaceName = $place->baseName;
 								if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
-									if ($commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
-
-										# tutorial
-										if ($session->get('playerInfo')->get('stepDone') == FALSE &&
+									$commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::LOOT, $length, $duration) ;
+ 									$session->addFlashbag('Flotte envoyée.', Flashbag::TYPE_SUCCESS);
+									# tutorial
+									if ($session->get('playerInfo')->get('stepDone') == FALSE &&
 											$session->get('playerInfo')->get('stepTutorial') === TutorialResource::LOOT_PLANET) {
-												$tutorialHelper->setStepDone();
-										}
-										
-										if ($request->query->has('redirect')) {
-											$response->redirect('map/place-' . $request->query->get('redirect'));
-										}
+											$tutorialHelper->setStepDone();
 									}
+										
+									if ($request->query->has('redirect')) {
+										$response->redirect('map/place-' . $request->query->get('redirect'));
+									}
+									
 								} else {
 									throw new ErrorException('Cet emplacement est trop éloigné.');
 								}
@@ -100,14 +100,12 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 						
 						$commander->destinationPlaceName = $place->baseName;
 						if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
-							if ($commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::LOOT, $length, $duration)) {
-								$commander->dStart = Utils::now();
-								$session->addFlashbag('Flotte envoyée.', Flashbag::TYPE_SUCCESS);
+							$commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::LOOT, $length, $duration) ;								
+							$session->addFlashbag('Flotte envoyée.', Flashbag::TYPE_SUCCESS);
 
-								if ($request->query->has('redirect')) {
-									$response->redirect('map/place-' . $request->query->get('redirect'));
-								}
-							}
+							if ($request->query->has('redirect')) {
+								$response->redirect('map/place-' . $request->query->get('redirect'));
+							}							
 						} else {
 							throw new ErrorException('Ce lieu est trop éloigné.');		
 						}

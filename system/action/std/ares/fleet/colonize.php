@@ -12,6 +12,7 @@ use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Library\Flashbag;
 
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
@@ -28,6 +29,7 @@ $conquestCost = $this->getContainer()->getParameter('ares.coeff.conquest_cost');
 $commanderId = $request->query->get('commanderid');
 $placeId = $request->query->get('placeid');
 
+$session->addFlashbag('Start :'. $playerManager->get($session->get('playerId'))->getCredit(), Flashbag::TYPE_SUCCESS);
 
 if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	# load the technologies
@@ -82,14 +84,13 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 									
 									if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
 										$commander->destinationPlaceName = $place->baseName;
-										if ($commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
+										$commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::COLO, $length, $duration) ;                                        
 											# debit credit
 											$playerManager->decreaseCredit($playerManager->get($session->get('playerId')), $price);
-
+                                            
 											if ($request->query->has('redirect')) {
 												$this->getContainer()->get('app.response')->redirect('map/place-' . $request->query->get('redirect'));
-											}
-										}
+											}                                      
 									} else {
 										throw new ErrorException('Cet emplacement est trop éloigné.');	
 									}
@@ -121,4 +122,5 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	throw new ErrorException('Manque de précision sur le commandant ou la position.');
 }
 
+$session->addFlashbag('End :'. $playerManager->get($session->get('playerId'))->getCredit(), Flashbag::TYPE_SUCCESS);
 $this->getContainer()->get('entity_manager')->flush();

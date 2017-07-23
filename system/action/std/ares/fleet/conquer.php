@@ -85,15 +85,14 @@ if ($technologies->getTechnology(Technology::CONQUEST) !== 1) {
 									if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
 										$commander->destinationPlaceName = $place->baseName;
 
-										if ($commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
-											# debit credit
-											$playerManager->decreaseCredit($playerManager->get($session->get('playerId')), $price);
+										$commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::COLO, $length, $duration) ;
+										# debit credit
+										$playerManager->decreaseCredit($playerManager->get($session->get('playerId')), $price);
 
-											#throw new ErrorException('Flotte envoyée.', ALERT_STD_SUCCESS);
+										#throw new ErrorException('Flotte envoyée.', ALERT_STD_SUCCESS);
 
-											if ($request->query->has('redirect')) {
-												$response->redirect('map/place-' . $request->query->get('redirect'));
-											}
+										if ($request->query->has('redirect')) {
+											$response->redirect('map/place-' . $request->query->get('redirect'));
 										}
 									} else {
 										throw new ErrorException('Cet emplacement est trop éloigné.');	
