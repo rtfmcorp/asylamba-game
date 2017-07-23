@@ -120,5 +120,4 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	throw new ErrorException('Manque de précision sur le commandant ou la position.');
 }
 
-$session->addFlashbag('End :'. $playerManager->get($session->get('playerId'))->getCredit(), Flashbag::TYPE_SUCCESS);
 $this->getContainer()->get('entity_manager')->flush();
