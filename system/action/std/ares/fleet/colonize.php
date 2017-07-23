@@ -82,14 +82,13 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 									
 									if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
 										$commander->destinationPlaceName = $place->baseName;
-										if ($commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
+										$commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::COLO, $length, $duration) ;                                        
 											# debit credit
 											$playerManager->decreaseCredit($playerManager->get($session->get('playerId')), $price);
-
+                                            
 											if ($request->query->has('redirect')) {
 												$this->getContainer()->get('app.response')->redirect('map/place-' . $request->query->get('redirect'));
-											}
-										}
+											}                                      
 									} else {
 										throw new ErrorException('Cet emplacement est trop éloigné.');	
 									}
