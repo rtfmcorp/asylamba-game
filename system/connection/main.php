@@ -9,7 +9,7 @@ $security = $this->getContainer()->get('security');
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 # extraction du bindkey
 $query  = $security->uncrypt($request->query->get('bindkey'));
@@ -22,6 +22,7 @@ if (abs((int)$time - time()) > 300) {
 }
 
 if (($player = $playerManager->getByBindKey($bindKey)) !== null && in_array($player->getStatement(), [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY])) {
+	$player->synchronized = true;
 	$player->setStatement(Player::ACTIVE);
 
 	$session->initLastUpdate();

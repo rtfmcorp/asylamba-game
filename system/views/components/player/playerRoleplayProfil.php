@@ -11,7 +11,7 @@
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Classes\Library\Format;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 echo '<div class="component profil">';
 	echo '<div class="head">';

@@ -25,7 +25,7 @@ $playerManager = $this->getContainer()->get('zeus.player_manager');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $database = $this->getContainer()->get('database');
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $baseMinLevelForChange = $this->getContainer()->getParameter('athena.obm.change_type_min_level');
 $baseMinLevelForCapital = $this->getContainer()->getParameter('athena.obm.capital_min_level');
 $entityManager = $this->getContainer()->get('entity_manager');
@@ -444,4 +444,5 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 	throw new FormException('pas assez d\'informations pour changer le type de la base orbitale');
 }
 $entityManager->flush();
+$entityManager->getRepository(OrbitalBase::class)->updateBuildingLevels($orbitalBase);
 $eventDispatcher->dispatch(new PlaceOwnerChangeEvent($placeManager->get($orbitalBase->getId())));

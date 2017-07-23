@@ -9,7 +9,7 @@ use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Classes\Exception\FormException;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $response = $this->getContainer()->get('app.response');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');

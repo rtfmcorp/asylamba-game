@@ -20,7 +20,7 @@ $playerManager = $this->getContainer()->get('zeus.player_manager');
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $sectorManager = $this->getContainer()->get('gaia.sector_manager');
 $database = $this->getContainer()->get('database');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $colonizationCost = $this->getContainer()->getParameter('ares.coeff.colonization_cost');
 $conquestCost = $this->getContainer()->getParameter('ares.coeff.conquest_cost');
@@ -82,14 +82,13 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 									
 									if ($length <= Commander::DISTANCEMAX || $isFactionSector) {
 										$commander->destinationPlaceName = $place->baseName;
-										if ($commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::COLO, $length, $duration)) {
+										$commanderManager->move($commander, $place->getId(), $commander->rBase, Commander::COLO, $length, $duration) ;                                        
 											# debit credit
 											$playerManager->decreaseCredit($playerManager->get($session->get('playerId')), $price);
-
+                                            
 											if ($request->query->has('redirect')) {
 												$this->getContainer()->get('app.response')->redirect('map/place-' . $request->query->get('redirect'));
-											}
-										}
+											}                                      
 									} else {
 										throw new ErrorException('Cet emplacement est trop éloigné.');	
 									}

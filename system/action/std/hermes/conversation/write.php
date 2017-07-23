@@ -7,7 +7,7 @@ use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $database = $this->getContainer()->get('database');
 $parser = $this->getContainer()->get('parser');
 $conversationManager = $this->getContainer()->get('hermes.conversation_manager');
@@ -18,7 +18,7 @@ $content 		= $request->request->get('content');
 
 $content = $parser->parse($content);
 
-if ($conversation !== FALSE AND $content !== FALSE) {
+if (!empty($conversation) && !empty($content)) {
 	if (strlen($content) < 10000) {
 		$S_CVM = $conversationManager->getCurrentSession();
 		$conversationManager->newSession();

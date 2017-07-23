@@ -18,8 +18,9 @@ use Asylamba\Modules\Athena\Model\ShipQueue;
 
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');

@@ -4,7 +4,7 @@ use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Format;
 
 $creditTransactionManager = $this->getContainer()->get('zeus.credit_transaction_manager');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 # load
 $S_CRT_1 = $creditTransactionManager->getCurrentSession();
 $creditTransactionManager->newSession();

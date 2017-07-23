@@ -8,7 +8,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $sessionToken = $session->get('token');
 # require
 	# {topic}				topic_topic

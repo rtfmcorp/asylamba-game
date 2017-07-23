@@ -2,10 +2,22 @@
 
 namespace Asylamba\Classes\Library\Session;
 
+use Asylamba\Classes\Redis\RedisManager;
+
 class SessionWrapper
 {
 	/** @var Session **/
 	protected $currentSession;
+	/** @var RedisManager **/
+	protected $redisManager;
+	
+	/**
+	 * @param RedisManager $redisManager
+	 */
+	public function __construct(RedisManager $redisManager)
+	{
+		$this->redisManager = $redisManager;
+	}
 	
 	public function setCurrentSession(Session $session)
 	{
@@ -17,8 +29,45 @@ class SessionWrapper
 		return $this->currentSession;
 	}
 	
+	/**
+	 * @param int $sessionId
+	 * @return Session
+	 */
+	public function createSession($sessionId)
+	{
+		$session = new Session();
+		$session->add('session_id', $sessionId);
+		
+		$this->save($session);
+		
+		return $session;
+	}
+	
+	public function save(Session $session)
+	{
+		$redisConnection = $this->redisManager->getConnection();
+		$redisConnection->set('session:' . $session->get('session_id'), serialize($session->getData()));
+	}
+	
+	/**
+	 * @param string $sessionId
+	 * @return \Asylamba\Classes\Library\Session\Session
+	 */
+	public function fetchSession($sessionId)
+	{
+		if (($data = $this->redisManager->getConnection()->get('session:' . $sessionId)) === false) {
+			return null;
+		}
+		$session = new Session();
+		$session->setData(unserialize($data));
+		return $session;
+	}
+	
 	public function clearWrapper()
 	{
+		if ($this->currentSession !== null) {
+			$this->save($this->currentSession);
+		}
 		$this->currentSession = null;
 	}
 	

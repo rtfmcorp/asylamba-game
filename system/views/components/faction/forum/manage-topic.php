@@ -5,7 +5,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Resource\ForumResources;
 
 # affichage du menu des forums
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $sessionToken = $session->get('token');
 # require
 

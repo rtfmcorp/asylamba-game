@@ -21,7 +21,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
 $buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
 $shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');

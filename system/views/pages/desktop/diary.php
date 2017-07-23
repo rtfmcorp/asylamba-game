@@ -1,6 +1,6 @@
 <?php
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 
 $player = $request->query->has('player')

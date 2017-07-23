@@ -8,7 +8,7 @@ use Asylamba\Modules\Demeter\Model\Color;
 
 use Asylamba\Classes\Library\Utils;
 
-class FactionRoutine extends AbstractRoutine
+class FactionRoutine
 {
 	/**
 	 * Contains results of all alive factions
@@ -146,8 +146,6 @@ class FactionRoutine extends AbstractRoutine
 			$faction->rankingPoints = $listP[$factionId]['points'];
 			$faction->points = $listG[$factionId]['general'];
 			$faction->sectors = $listT[$factionId]['territorial'];
-			
-			//$this->colorManager->updateInfos($faction);
 
 			$rankings[] = $fr;
 			$factionRankingManager->add($fr);
@@ -184,7 +182,6 @@ class FactionRoutine extends AbstractRoutine
 	
 	protected function calculateWealthRanking(Color $faction, $routesIncome)
 	{
-		
 		if ($routesIncome['income'] == NULL) {
 			$income = 0;
 		} else {
@@ -243,5 +240,10 @@ class FactionRoutine extends AbstractRoutine
 			$previous = $list[$key][$attribute];
 		}
 		return $list;
+	}
+	
+	public function getResults()
+	{
+		return $this->results;
 	}
 }

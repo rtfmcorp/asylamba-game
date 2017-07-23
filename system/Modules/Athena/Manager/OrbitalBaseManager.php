@@ -19,7 +19,6 @@ use Asylamba\Classes\Worker\CTC;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Entity\EntityManager;
 
-use Asylamba\Modules\Gaia\Manager\GalaxyColorManager;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
@@ -53,11 +52,14 @@ use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Classes\Library\Flashbag;
 
+use Asylamba\Classes\Daemon\ClientManager;
 use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
 class OrbitalBaseManager {
 	/** @var EntityManager **/
 	protected $entityManager;
+	/** @var ClientManager **/
+	protected $clientManager;
 	/** @var RealTimeActionScheduler **/
 	protected $realtimeActionScheduler;
 	/** @var BuildingQueueManager **/
@@ -76,8 +78,6 @@ class OrbitalBaseManager {
 	protected $commercialRouteManager;
 	/** @var TransactionManager **/
 	protected $transactionManager;
-	/** @var GalaxyColorManager **/
-	protected $galaxyColorManager;
 	/** @var PlayerManager **/
 	protected $playerManager;
 	/** @var PlayerBonusManager **/
@@ -97,10 +97,11 @@ class OrbitalBaseManager {
 	/** @var CTC **/
 	protected $ctc;
 	/** @var SessionWrapper **/
-	protected $session;
+	protected $sessionWrapper;
 	
 	/**
 	 * @param EntityManager $entityManager
+	 * @param ClientManager $clientManager
 	 * @param RealTimeActionScheduler $realtimeActionScheduler
 	 * @param BuildingQueueManager $buildingQueueManager
 	 * @param ShipQueueManager $shipQueueManager
@@ -109,7 +110,6 @@ class OrbitalBaseManager {
 	 * @param CommercialShippingManager $commercialShippingManager
 	 * @param CommercialRouteManager $commercialRouteManager
 	 * @param TransactionManager $transactionManager
-	 * @param GalaxyColorManager $galaxyColorManager
 	 * @param PlayerManager $playerManager
 	 * @param PlayerBonusManager $playerBonusManager
 	 * @param RecyclingMissionManager $recyclingMissionManager
@@ -118,10 +118,11 @@ class OrbitalBaseManager {
 	 * @param NotificationManager $notificationManager
 	 * @param OrbitalBaseHelper $orbitalBaseHelper
 	 * @param CTC $ctc
-	 * @param SessionWrapper $session
+	 * @param SessionWrapper $sessionWrapper
 	 */
 	public function __construct(
 		EntityManager $entityManager,
+		ClientManager $clientManager,
 		RealTimeActionScheduler $realtimeActionScheduler,
 		BuildingQueueManager $buildingQueueManager,
 		ShipQueueManager $shipQueueManager,
@@ -131,7 +132,6 @@ class OrbitalBaseManager {
 		CommercialShippingManager $commercialShippingManager,
 		CommercialRouteManager $commercialRouteManager,
 		TransactionManager $transactionManager,
-		GalaxyColorManager $galaxyColorManager,
 		PlayerManager $playerManager,
 		PlayerBonusManager $playerBonusManager,
 		RecyclingMissionManager $recyclingMissionManager,
@@ -141,9 +141,10 @@ class OrbitalBaseManager {
 		NotificationManager $notificationManager,
 		OrbitalBaseHelper $orbitalBaseHelper,
 		CTC $ctc,
-		SessionWrapper $session
+		SessionWrapper $sessionWrapper
 	) {
 		$this->entityManager = $entityManager;
+		$this->clientManager = $clientManager;
 		$this->realtimeActionScheduler = $realtimeActionScheduler;
 		$this->buildingQueueManager = $buildingQueueManager;
 		$this->shipQueueManager = $shipQueueManager;
@@ -153,7 +154,6 @@ class OrbitalBaseManager {
 		$this->commercialShippingManager = $commercialShippingManager;
 		$this->commercialRouteManager = $commercialRouteManager;
 		$this->transactionManager = $transactionManager;
-		$this->galaxyColorManager = $galaxyColorManager;
 		$this->playerManager = $playerManager;
 		$this->playerBonusManager = $playerBonusManager;
 		$this->recyclingMissionManager = $recyclingMissionManager;
@@ -163,7 +163,7 @@ class OrbitalBaseManager {
 		$this->notificationManager = $notificationManager;
 		$this->orbitalBaseHelper = $orbitalBaseHelper;
 		$this->ctc = $ctc;
-		$this->session = $session;
+		$this->sessionWrapper = $sessionWrapper;
 	}
 	
 	/**
@@ -390,10 +390,9 @@ class OrbitalBaseManager {
 		$this->commercialRouteManager->removeBaseRoutes($base);
 
 		# suppression des technologies en cours de développement
-		foreach ($base->technoQueues as $queue) { 
-			$this->entityManager->remove($queue);
+		foreach ($base->technoQueues as $queue) {
+			$this->technologyQueueManager->remove($queue);
 		}
-		$this->entityManager->flush(TechnologyQueue::class);
 
 		# suppression des missions de recyclages ainsi que des logs de recyclages
 		$this->recyclingMissionManager->removeBaseMissions($base->getId());
@@ -405,11 +404,15 @@ class OrbitalBaseManager {
 		# mise à jour de la date de création pour qu'elle soit dans l'ordre
 		$base->dCreation = Utils::now();
 
-		# ajouter/enlever la base dans le controller
-		if ($this->session->get('playerId') == $newOwner) {
-			$this->session->addBase('ob', $base->getId(), $base->getName(), $base->getSector(), $base->getSystem(), '1-' . Game::getSizeOfPlanet($base->getPlanetPopulation()), $base->typeOfBase);
-		} else {
-			$this->session->removeBase('ob', $base->getId());
+		// If the new owner is connected, we add the base to his session
+		if (($session = $this->clientManager->getSessionByPlayerId($newOwner)) !== null) {
+			$session->addBase('ob', $base->getId(), $base->getName(), $base->getSector(), $base->getSystem(), '1-' . Game::getSizeOfPlanet($base->getPlanetPopulation()), $base->typeOfBase);
+			$this->sessionWrapper->save($session);
+		}
+		// If the  previous owner is connected, we remove the base from his session
+		if (($session = $this->clientManager->getSessionByPlayerId($oldOwner)) !== null) {
+			$session->removeBase('ob', $base->getId());
+			$this->sessionWrapper->save($session);
 		}
 
 		# rendre déserteuses les flottes en voyage
@@ -418,6 +421,7 @@ class OrbitalBaseManager {
 				$commander->rPlayer = $newOwner;
 			} else if ($commander->statement == Commander::MOVING) {
 				$commander->statement = Commander::RETIRED;
+				$this->realtimeActionScheduler->cancel($commander, $commander->getArrivalDate());
 			} else {
 				$commander->statement = Commander::DEAD;		
 			}
@@ -569,8 +573,9 @@ class OrbitalBaseManager {
 		$this->playerManager->increaseExperience($player, $experience);
 		
 		# alert
-		if ($this->session->get('playerId') == $orbitalBase->rPlayer) {
-			$this->session->addFlashbag('Construction de votre <strong>' . $this->orbitalBaseHelper->getBuildingInfo($queue->buildingNumber, 'frenchName') . ' niveau ' . $queue->targetLevel . '</strong> sur <strong>' . $orbitalBase->name . '</strong> terminée. Vous gagnez ' . $experience . ' point' . Format::addPlural($experience) . ' d\'expérience.', Flashbag::TYPE_GENERATOR_SUCCESS);
+		if (($session = $this->clientManager->getSessionByPlayerId($player->getId())) !== null) {
+			$session->addFlashbag('Construction de votre <strong>' . $this->orbitalBaseHelper->getBuildingInfo($queue->buildingNumber, 'frenchName') . ' niveau ' . $queue->targetLevel . '</strong> sur <strong>' . $orbitalBase->name . '</strong> terminée. Vous gagnez ' . $experience . ' point' . Format::addPlural($experience) . ' d\'expérience.', Flashbag::TYPE_GENERATOR_SUCCESS);
+			$this->sessionWrapper->save($session);
 		}
 		# delete queue in database
 		$this->entityManager->remove($queue);
@@ -588,7 +593,7 @@ class OrbitalBaseManager {
 		$this->playerManager->increaseExperience($player, $experience);
 
 		# alert
-		if ($this->session->get('playerId') == $orbitalBase->rPlayer) {
+		if (($session = $this->clientManager->getSessionByPlayerId($player->getId())) !== null) {
 			$alt = 'Construction de ';
 			if ($queue->quantity > 1) {
 				$alt .= 'vos <strong>' . $queue->quantity . ' ' . ShipResource::getInfo($queue->shipNumber, 'codeName') . 's</strong>';
@@ -596,7 +601,8 @@ class OrbitalBaseManager {
 				$alt .= 'votre <strong>' . ShipResource::getInfo($queue->shipNumber, 'codeName') . '</strong>';
 			}
 			$alt .= ' sur <strong>' . $orbitalBase->name . '</strong> terminée. Vous gagnez ' . $experience . ' point' . Format::addPlural($experience) . ' d\'expérience.';
-			$this->session->addFlashbag($alt, Flashbag::TYPE_DOCK1_SUCCESS);
+			$session->addFlashbag($alt, Flashbag::TYPE_DOCK1_SUCCESS);
+			$this->sessionWrapper->save($session);
 		}
 		$this->entityManager->remove($queue);
 		$this->entityManager->flush();
@@ -613,8 +619,9 @@ class OrbitalBaseManager {
 		$this->playerManager->increaseExperience($player, $experience);
 
 		# alert
-		if ($this->session->get('playerId') == $orbitalBase->rPlayer) {
-			$this->session->addFlashbag('Construction de votre ' . ShipResource::getInfo($queue->shipNumber, 'codeName') . ' sur ' . $orbitalBase->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.', Flashbag::TYPE_DOCK2_SUCCESS);
+		if (($session = $this->clientManager->getSessionByPlayerId($player->getId())) !== null) {
+			$session->addFlashbag('Construction de votre ' . ShipResource::getInfo($queue->shipNumber, 'codeName') . ' sur ' . $orbitalBase->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.', Flashbag::TYPE_DOCK2_SUCCESS);
+			$this->sessionWrapper->save($session);
 		}
 		$this->entityManager->remove($queue);
 		$this->entityManager->flush();
@@ -632,14 +639,15 @@ class OrbitalBaseManager {
 		$this->playerManager->increaseExperience($player, $experience);
 
 		# alert
-//		if ($this->session->get('playerId') == $orbitalBase->rPlayer) {
-//			$alt = 'Développement de votre technologie ' . $this->technologyHelper->getInfo($technologyQueue->getTechnology(), 'name');
-//			if ($technologyQueue->getTargetLevel() > 1) {
-//				$alt .= ' niveau ' . $technologyQueue->getTargetLevel();
-//			} 
-//			$alt .= ' terminée. Vous gagnez ' . $experience . ' d\'expérience.';
-//			$this->session->addFlashbag($alt, Flashbag::TYPE_TECHNOLOGY_SUCCESS);
-//		}
+		if (($session = $this->clientManager->getSessionByPlayerId($player->getId())) !== null) {
+			$alt = 'Développement de votre technologie ' . $this->technologyHelper->getInfo($technologyQueue->getTechnology(), 'name');
+			if ($technologyQueue->getTargetLevel() > 1) {
+				$alt .= ' niveau ' . $technologyQueue->getTargetLevel();
+			} 
+			$alt .= ' terminée. Vous gagnez ' . $experience . ' d\'expérience.';
+			$session->addFlashbag($alt, Flashbag::TYPE_TECHNOLOGY_SUCCESS);
+			$this->sessionWrapper->save($session);
+		}
 		$this->entityManager->remove($technologyQueue);
 		$this->entityManager->flush($technologyQueue);
 	}

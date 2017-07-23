@@ -2,8 +2,6 @@
 ########
 # MODE #
 ########
-
-
 # définition des ROOT
 define('PUBLICR',		'/public/');
 define('CSS', 			PUBLICR . 'css/');
@@ -21,11 +19,9 @@ define('COLORSTYLE', 			TRUE);
 define('ANALYTICS', 			FALSE);
 # active la captation des données d'analyse (TB)
 define('DATA_ANALYSIS', 		FALSE);
-
 #########
 # INFOS #
 #########
-
 # défini le nom du tableau de session
 # note : utile si plusieurs instances cohabitent sur la même machine
 define('SERVER_SESS',	 		'server');
@@ -39,18 +35,14 @@ define('APP_VERSION',			'2.0.0');
 define('APP_CREATOR',			'Gil Clavien, Jacky Casas, Noé Zufferey');
 # défini la description du serveur (affichée dans la page)
 define('APP_DESCRIPTION',		'Asylamba, jeu par navigateur');
-
 define('APP_ROOT', $container->getParameter('app_root'));
-
 #################
 # MISCELLANEOUS #
 #################
-
 # définition des ids des différants joueurs systèmes
 define('ID_GAIA', 				1);
 define('ID_JEANMI', 			2);
 define('SHIFT_FACTION', 		2);
-
 # date de début du serveur
 // @TODO inject the value in Chronos properly
 define('SERVER_START_TIME', $container->getParameter('server_start_time'));

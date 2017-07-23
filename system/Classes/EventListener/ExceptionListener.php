@@ -19,7 +19,7 @@ class ExceptionListener {
 	/** @var AbstractLogger **/
 	protected $logger;
 	/** @var SessionWrapper **/
-	protected $session;
+	protected $sessionWrapper;
 	/** @var Database **/
 	protected $connection;
 	
@@ -31,7 +31,7 @@ class ExceptionListener {
 	public function __construct(AbstractLogger $logger, SessionWrapper $session, Database $database)
 	{
 		$this->logger = $logger;
-		$this->session = $session;
+		$this->sessionWrapper = $session;
 		$this->database = $database;
 	}
 	
@@ -81,16 +81,29 @@ class ExceptionListener {
 	 */
 	public function process($event, $message, $file, $line, $trace, $level, $flashbagLevel, $redirect = null)
 	{
-		$this->logger->log("$message at $file at line $line\n$trace", $level);
+		$request = $event->getRequest();
+		$this->logger->log(json_encode([
+			'request' => [
+				'method' => $request->getMethod(),
+				'path' => $request->getPath(),
+				'body' => $request->body
+			],
+			'session' => [
+				'player_id' => $this->sessionWrapper->get('playerId')
+			],
+			'message' => $message,
+			'file' => $file,
+			'line' => $line
+		]), $level);
 		
-		$this->session->addFlashbag($message, $flashbagLevel);
+		$this->sessionWrapper->addFlashbag($message, $flashbagLevel);
 		
 		if ($this->database->inTransaction()) {
 			$this->database->rollBack();
 		}
 		
 		$response = new Response();
-		$redirectionData = $this->getRedirection($event->getRequest(), $redirect);
+		$redirectionData = $this->getRedirection($request, $redirect);
 		if (isset($redirectionData['redirect'])) {
 			$response->redirect($redirectionData['redirect']);
 		} else {
@@ -110,12 +123,12 @@ class ExceptionListener {
 			return ['redirect' => $redirect];
 		}
 		
-		$history = $this->session->getHistory();
+		$history = $this->sessionWrapper->getHistory();
 
 		if (($nbPaths = count($history)) === 0) {
 			return ['redirect' => '/'];
 		}
-		if (($redirect = '/' . $this->session->getLastHistory()) === $request->getPath()) {
+		if (($redirect = '/' . $this->sessionWrapper->getLastHistory()) === $request->getPath()) {
 			// We get the path before the last one if available
 			$redirect = ($nbPaths > 1) ? $history[$nbPaths - 2] : '/';
 		}

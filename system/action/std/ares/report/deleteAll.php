@@ -2,7 +2,7 @@
 
 use Asylamba\Classes\Library\Flashbag;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 
 $this
 	->getContainer()

@@ -9,7 +9,7 @@ use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 
 try {
-	$session = $this->getContainer()->get('app.session');
+	$session = $this->getContainer()->get('session_wrapper');
 	$playerManager = $this->getContainer()->get('zeus.player_manager');
 	$notificationManager = $this->getContainer()->get('hermes.notification_manager');
 	$researchManager = $this->getContainer()->get('promethee.research_manager');

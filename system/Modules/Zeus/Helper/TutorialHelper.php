@@ -34,7 +34,7 @@ class TutorialHelper {
 	/** @var TechnologyManager **/
 	protected $technologyManager;
 	/** @var SessionWrapper **/
-	protected $session;
+	protected $sessionWrapper;
 	
 	/**
 	 * @param EntityManager $entityManager
@@ -61,14 +61,14 @@ class TutorialHelper {
 		$this->buildingQueueManager = $buildingQueueManager;
 		$this->technologyQueueManager = $technologyQueueManager;
 		$this->technologyManager = $technologyManager;
-		$this->session = $session;
+		$this->sessionWrapper = $session;
 	}
 	
 	public function checkTutorial() {
 		# PAS UTILISEE POUR L'INSTANT (le sera quand il y aura une étape passive dans le tutoriel)
-		$player = $this->session->get('playerId');
-		$stepTutorial = $this->session->get('playerInfo')->get('stepTutorial');
-		$stepDone = $this->session->get('playerInfo')->get('stepDone');
+		$player = $this->sessionWrapper->get('playerId');
+		$stepTutorial = $this->sessionWrapper->get('playerInfo')->get('stepTutorial');
+		$stepDone = $this->sessionWrapper->get('playerInfo')->get('stepDone');
 
 		if ($stepTutorial > 0) {
 			if ($stepDone == FALSE) {
@@ -88,21 +88,21 @@ class TutorialHelper {
 	}
 
 	public function setStepDone() {
-		$player = $this->playerManager->get($this->session->get('playerId'));
+		$player = $this->playerManager->get($this->sessionWrapper->get('playerId'));
 		
 		$player->stepDone = TRUE;
 
-		$this->session->get('playerInfo')->add('stepDone', TRUE);
+		$this->sessionWrapper->get('playerInfo')->add('stepDone', TRUE);
 		
 		$this->entityManager->flush($player);
 	}
 
 	public function clearStepDone() {
-		$player = $this->playerManager->get($this->session->get('playerId'));
+		$player = $this->playerManager->get($this->sessionWrapper->get('playerId'));
 		
 		$player->stepDone = FALSE;
 
-		$this->session->get('playerInfo')->add('stepDone', FALSE);
+		$this->sessionWrapper->get('playerInfo')->add('stepDone', FALSE);
 
 		$this->entityManager->flush($player);
 	}

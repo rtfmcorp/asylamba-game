@@ -3,7 +3,7 @@
 use Asylamba\Classes\Library\Format;
 
 $playerManager = $this->getContainer()->get('zeus.player_manager');
-$sessionToken = $this->getContainer()->get('app.session')->get('token');
+$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
 $request = $this->getContainer()->get('app.request');
 $parser = $this->getContainer()->get('parser');
 

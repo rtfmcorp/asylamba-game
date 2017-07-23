@@ -15,7 +15,7 @@ $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $sectorManager = $this->getContainer()->get('gaia.sector_manager');
 $database = $this->getContainer()->get('database');
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 
 $commanderId = $request->query->get('commanderid');

@@ -12,7 +12,7 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Container\Params;
 use Asylamba\Classes\Library\Chronos;
 
-$session = $this->getContainer()->get('app.session');
+$session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $sessionToken = $session->get('token');
 
@@ -52,7 +52,9 @@ echo '<div class="component report">';
 							echo '</div>';
 
 							echo '<div class="right">';
-								echo '<a class="' . ($request->query->get('report') === $r->id  ? 'active' : NULL) . '" href="' . APP_ROOT . 'fleet/view-archive/report-' . $r->id . '"></a>';
+								echo '<a class="' . ($request->query->get('report') == $r->id  ? 'active ' : NULL) . '" href="' . APP_ROOT . 'fleet/view-archive/report-' . $r->id . '"></a>';
+                                                              
+                                                               
 							echo '</div>';
 						echo '</div>';
 					}

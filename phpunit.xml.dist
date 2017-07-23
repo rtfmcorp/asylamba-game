@@ -10,6 +10,11 @@
     <php>
         <ini name="error_reporting" value="-1" />
         <const name="ID_GAIA" value="1" />
+        <const name="ASM_UMODE" value="true" />
+        <const name="APP_ROOT" value="/" />
+        <const name="SERVER_START_TIME" value="2017-07-02 14:00:00" />
+        <const name="HOURS_BEFORE_START_OF_RANKING" value="3" />
+        <const name="POINTS_TO_WIN" value="2000" />
     </php>
 
     <testsuites>

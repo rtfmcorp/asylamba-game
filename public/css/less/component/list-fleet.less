@@ -171,8 +171,12 @@
 			background: url('src/desktop/mover/small-right.png') no-repeat center #0A0A0A;
 			border: solid 1px #202020;
 
-			&:hover, &:focus, &.active {
+			&:hover, &:focus{
 				background-color: #202020;
+			}
+                        
+                        &.active {
+				background-color: @medium;
 			}
 		}
 	}

@@ -493,11 +493,16 @@ class CommanderRepository extends AbstractRepository {
 	public function updateExperience(Commander $commander, $earnedExperience, $earnedLevel)
 	{
 		$statement = $this->connection->prepare(
-			'UPDATE commander SET experience = experience + :experience, level = level + :level WHERE id = :id'
+			'UPDATE commander SET
+				experience = experience + :experience,
+				level = level + :level,
+				uCommander = :updated_at
+			WHERE id = :id'
 		);
 		$statement->execute([
 			'experience' => $earnedExperience,
 			'level' => $earnedLevel,
+			'updated_at' => $commander->getUpdatedAt(),
 			'id' => $commander->getId()
 		]);
 	}

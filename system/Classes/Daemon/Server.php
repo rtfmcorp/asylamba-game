@@ -124,9 +124,8 @@ class Server
 	protected function treatHttpInput($input)
 	{
 		$client = $request = $response = null;
-		$sessionWrapper = $this->container->get('app.session');
 		try {
-			$data = fread($input, 2048);
+			$data = fread($input, 8192);
 			if (empty($data)) {
 				fclose($input);
 				return;
@@ -136,7 +135,6 @@ class Server
 			if (($client = $this->clientManager->getClient($request)) === null) {
 				$client = $this->clientManager->createClient($request);
 			}
-			$sessionWrapper->setCurrentSession($client->getSession());
 			$response = $this->router->processRequest($request);
 			$this->container->set('app.response', $response);
 			$this->responseFactory->processResponse($request, $response, $client);
@@ -149,10 +147,13 @@ class Server
 			$response = $event->getResponse();
 			$this->responseFactory->processResponse($request, $response, $client);
 		} finally {
-			fputs ($input, $response->send());
-			fclose($input);
+			// @TODO Needs further investigation
+			if ($response !== null) {
+				fputs ($input, $response->send());
+				fclose($input);
+			}
 			$this->nbUncollectedCycles++;
-			$sessionWrapper->clearWrapper();
+			$this->container->get('session_wrapper')->clearWrapper();
 		}
 	}
 	
