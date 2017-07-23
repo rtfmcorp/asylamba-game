@@ -77,7 +77,13 @@ class ProcessExceptionListener {
 	 */
 	public function process($event, $message, $file, $line, $trace, $level)
 	{
-		$this->logger->log("{$this->processName} : $message at $file at line $line\n$trace", $level);
+		$this->logger->log(json_encode([
+			'process' => $this->processName,
+			'message' => $message,
+			'file' => $file,
+			'line' => $line,
+			'task' => $event->getTask()
+		]), $level);
 		
 		if ($this->database->inTransaction()) {
 			$this->database->rollBack();

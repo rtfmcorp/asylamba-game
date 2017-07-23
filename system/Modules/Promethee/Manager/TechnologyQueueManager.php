@@ -40,6 +40,8 @@ class TechnologyQueueManager
 		}
 	}
 	
+	
+	
 	/**
 	 * @param int $id
 	 * @return TechnologyQueue
@@ -85,5 +87,16 @@ class TechnologyQueueManager
 		$this->entityManager->flush($technologyQueue);
 		
 		$this->realtimeActionScheduler->schedule('athena.orbital_base_manager', 'uTechnologyQueue', $technologyQueue, $technologyQueue->getEndedAt());
+	}
+	
+	/**
+	 * @param TechnologyQueue $queue
+	 */
+	public function remove(TechnologyQueue $queue)
+	{
+		$this->realtimeActionScheduler->cancel($queue, $queue->getEndedAt());
+		
+		$this->entityManager->remove($queue);
+		$this->entityManager->flush($queue);
 	}
 }
