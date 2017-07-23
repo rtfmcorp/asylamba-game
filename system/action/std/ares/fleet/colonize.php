@@ -12,7 +12,6 @@ use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Classes\Exception\ErrorException;
-use Asylamba\Classes\Library\Flashbag;
 
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
@@ -29,7 +28,6 @@ $conquestCost = $this->getContainer()->getParameter('ares.coeff.conquest_cost');
 $commanderId = $request->query->get('commanderid');
 $placeId = $request->query->get('placeid');
 
-$session->addFlashbag('Start :'. $playerManager->get($session->get('playerId'))->getCredit(), Flashbag::TYPE_SUCCESS);
 
 if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	# load the technologies
