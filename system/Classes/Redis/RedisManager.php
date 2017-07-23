@@ -10,12 +10,14 @@ class RedisManager
 	/**
 	 * @param string $host
 	 * @param int $port
+	 * @param string $password
 	 * @param float $timeout
 	 */
-	public function __construct($host, $port, $timeout)
+	public function __construct($host, $port, $password, $timeout)
 	{
 		$this->connection = new \Redis();
 		$this->connection->connect($host, $port, $timeout);
+		$this->connection->auth($password);
 	}
 	
 	public function __destruct()
