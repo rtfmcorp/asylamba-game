@@ -184,6 +184,29 @@ class CommanderManager
 	 * @param int $playerId
 	 * @return array
 	 */
+	public function getVisibleIncomingAttacks($playerId)
+	{
+		$attackingCommanders = $this->getIncomingAttacks($playerId) ;
+		$incomingCommanders = [] ;
+		
+		foreach ($attackingCommanders as $commander) { 
+			# va chercher les heures auxquelles il rentre dans les cercles d'espionnage
+			$startPlace = $this->placeManager->get($commander->getRBase());
+			$destinationPlace = $this->placeManager->get($commander->getRPlaceDestination());
+			$times = Game::getAntiSpyEntryTime($startPlace, $destinationPlace, $commander->getArrivalDate());
+
+			if (strtotime(Utils::now()) >= strtotime($times[0])) {
+				# ajout de l'événement
+				$incomingCommanders[] = $commander;
+			}
+		}		
+		return $incomingCommanders;
+	}
+	
+	/**
+	 * @param int $playerId
+	 * @return array
+	 */
 	public function getOutcomingAttacks($playerId)
 	{
 		return $this->entityManager->getRepository(Commander::class)->getOutcomingAttacks($playerId);
