@@ -12,7 +12,7 @@ $galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
 
 # chargement des commandants attaquants
 $attackingCommanders = array_merge(
-	$commanderManager->getIncomingAttacks($session->get('playerId')),
+	$commanderManager->getVisibleIncomingAttacks($session->get('playerId')),
 	$commanderManager->getOutcomingAttacks($session->get('playerId'))
 );
 

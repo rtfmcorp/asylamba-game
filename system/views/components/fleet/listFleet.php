@@ -38,22 +38,12 @@ echo '<div class="component size3 list-fleet">';
 						echo $base['info']['name'];
 						echo ' <a href="' . Format::actionBuilder('switchbase', $sessionToken, ['base' => $base['info']['id'], 'page' => 'school']) . '">(affecter un officier)</a>';
 					echo '</h2>';
-
+                    
 					foreach ($base['fleets'] as $commander) {
-						$step = 0;
+
 						$reversed = $commander->rPlayer != $session->get('playerId') || $commander->travelType == Commander::BACK;
 
-						if ($commander->rPlayer != $session->get('playerId')) {
-							for ($i = 0; $i < $session->get('playerEvent')->size(); $i++) {
-								$event = $session->get('playerEvent')->get($i);
-								if ($event->get('eventId') == $commander->getId() && $event->exist('eventInfo')) {
-									foreach ($event->get('eventInfo')->get('inCircle') as $date) {
-										if (strtotime(Utils::now()) >= strtotime($date)) { $step++; } else { break; }
-									}
-								}
-							}
-						}
-
+						
 						echo '<div class="item color' . $commander->playerColor . '">';
 							echo '<div class="left">';
 								if ($commander->rPlayer != $session->get('playerId')) {
@@ -70,20 +60,16 @@ echo '<div class="component size3 list-fleet">';
 									}
 								}
 								echo '<span class="top">';
-									echo (($commander->rPlayer == $session->get('playerId')) || ($commander->rPlayer != $session->get('playerId') && $step >= 2))
-										? CommanderResources::getInfo($commander->level, 'grade') . ' <strong>' . $commander->name . '</strong>, '
-										: 'Officier inconnu, ';
+									echo  CommanderResources::getInfo($commander->level, 'grade') . ' <strong>' . $commander->name . '</strong>, ' ;										
 
 									if ($commander->rPlayer != $session->get('playerId')) {
-										if ($step >= 2) {
-											switch ($commander->getTravelType()) {
+										
+											switch ($commander->travelType) {
 												case Commander::LOOT: $type = 'tente de vous piller'; break;
 												case Commander::COLO: $type = 'tente de vous conquérir'; break;
 												default: $type = 'erreur'; break;
 											}
-										} else {
-											echo 's\'approche de vous';
-										}
+											echo $type;
 									} elseif ($commander->statement == Commander::AFFECTED) {
 										echo 'à quai';
 									} elseif ($commander->statement == Commander::MOVING) {
@@ -96,9 +82,9 @@ echo '<div class="component size3 list-fleet">';
 										}
 									}
 
-									echo (($commander->rPlayer == $session->get('playerId')) || ($commander->rPlayer != $session->get('playerId') && $step >= 3))
+									echo (($commander->rPlayer == $session->get('playerId')) )
 										? '&#8194;|&#8194;' . Format::number($commander->getPev()) . ' pev'
-										: '&#8194;|&#8194;??? pev';
+										: '&#8194;';
 
 									if ($commander->rPlayer == $session->get('playerId') && $commander->statement == Commander::MOVING && $commander->travelType != Commander::BACK) {
 										echo '&#8195;<a class="confirm" href="' . Format::actionBuilder('cancelmove', $sessionToken, ['commanderid' => $commander->id]) . '">annuler la mission</a>';
