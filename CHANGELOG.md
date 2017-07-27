@@ -1,3 +1,26 @@
+## [2.1.1] - 2017-17-23
+### Added
+- Spy and combat active report highlighting in the list
+- Daily scheduling for notifications cleaning and inactive accounts management
+- Daily scheduling for rankings
+- Set an INI parameter for max execution time
+- Redis session handling
+
+### Fixed
+- External invitations for registration
+- School experience for commanders
+- Access to admin interface
+- Empty investments
+- Conversation with no recipients error message
+- Storage building informations
+- Flashbags for queue's ending notification
+- Ship recycling
+- Parrainage reward
+- Commercial shipping travel time
+- Capital leaving
+- Defenders losses after a successful defense
+- Workers access to the session data
+
 ## [2.1.0] - 2017-06-01
 ### Added
 - Container class for services and parameters
