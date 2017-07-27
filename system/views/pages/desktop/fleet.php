@@ -4,6 +4,10 @@ use Asylamba\Classes\Container\Params;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Ares\Model\Report;
 use Asylamba\Classes\Exception\ErrorException;
+use Asylamba\Classes\Library\Utils;
+use Asylamba\Classes\Library\Chronos;
+use Asylamba\Classes\Library\Format;
+use Asylamba\Classes\Library\Game;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
