@@ -81,7 +81,20 @@ class ExceptionListener {
 	 */
 	public function process($event, $message, $file, $line, $trace, $level, $flashbagLevel, $redirect = null)
 	{
-		$this->logger->log("$message at $file at line $line\n$trace", $level);
+		$request = $event->getRequest();
+		$this->logger->log(json_encode([
+			'request' => [
+				'method' => $request->getMethod(),
+				'path' => $request->getPath(),
+				'body' => $request->body
+			],
+			'session' => [
+				'player_id' => $this->sessionWrapper->get('playerId')
+			],
+			'message' => $message,
+			'file' => $file,
+			'line' => $line
+		]), $level);
 		
 		$this->sessionWrapper->addFlashbag($message, $flashbagLevel);
 		
@@ -90,7 +103,7 @@ class ExceptionListener {
 		}
 		
 		$response = new Response();
-		$redirectionData = $this->getRedirection($event->getRequest(), $redirect);
+		$redirectionData = $this->getRedirection($request, $redirect);
 		if (isset($redirectionData['redirect'])) {
 			$response->redirect($redirectionData['redirect']);
 		} else {
