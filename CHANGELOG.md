@@ -1,4 +1,15 @@
-## [2.1.1] - 2017-17-23
+## [2.1.2] - 2017-08-09
+### Added
+- Storage of the sectors ownership data in Redis
+
+### Fixed
+- Commanders defection when their base is taken
+- Display of the incoming attacks in the admiralty
+- Sectors ownership data in faction tactical registry
+- Ending of recycling missions
+- Conversion of the recycling places when there is no resources left
+
+## [2.1.1] - 2017-07-23
 ### Added
 - Spy and combat active report highlighting in the list
 - Daily scheduling for notifications cleaning and inactive accounts management
