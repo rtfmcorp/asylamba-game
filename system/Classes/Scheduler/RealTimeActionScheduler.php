@@ -138,12 +138,36 @@ class RealTimeActionScheduler
 	 */
 	public function cancel($object, $date)
 	{
+		if (P_TYPE === 'worker') {
+			return $this->processGateway->writeToMaster([
+				'command' => 'cancel',
+				'data' => [
+					'object_class' => get_class($object),
+					'object_id' => $object->id,
+					'date' => $date
+				]
+			]);
+		}
 		unset($this->queue[$date][get_class($object) . '-' . $object->id]);
 		
 		if (empty($this->queue[$date])) {
 			unset($this->queue[$date]);
 		}
 	}
+    
+    /**
+     * @param string $class
+     * @param int $id
+     * @param string $date
+     */
+    public function cancelFromProcess($class, $id, $date)
+    {
+		unset($this->queue[$date][$class . '-' . $id]);
+		
+		if (empty($this->queue[$date])) {
+			unset($this->queue[$date]);
+		}
+    }
 	
 	/**
 	 * @return array

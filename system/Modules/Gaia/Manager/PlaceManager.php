@@ -162,6 +162,15 @@ class PlaceManager {
 		$this->entityManager->commit();
 		$this->entityManager->clear(Place::class);
 	}
+    
+    /**
+     * @param Place $place
+     * @return bool
+     */
+    public function turnAsEmptyPlace(Place $place)
+    {
+        return $this->entityManager->getRepository(Place::class)->turnAsEmptyPlace($place->getId());
+    }
 	
 	public function turnAsSpawnPlace($placeId, $playerId)
 	{

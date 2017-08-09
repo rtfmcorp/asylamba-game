@@ -195,6 +195,13 @@ class Server
 					$data['data']['date']
 				);
 				break;
+			case 'cancel':
+				$this->realTimeActionScheduler->cancelFromProcess(
+					$data['data']['object_class'],
+					$data['data']['object_id'],
+					$data['data']['date']
+				);
+				break;
 		}
 	}
     
