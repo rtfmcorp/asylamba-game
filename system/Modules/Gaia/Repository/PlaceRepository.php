@@ -234,6 +234,21 @@ class PlaceRepository extends AbstractRepository
 	
 	/**
 	 * @param int $placeId
+	 * @return bool
+	 */
+	public function turnAsEmptyPlace($placeId)
+	{
+		$statement = $this->connection->prepare(
+			'UPDATE place SET typeOfPlace = :place_type WHERE id = :id'
+		);
+		return $statement->execute([
+			'place_type' => Place::EMPTYZONE,
+			'id' => $placeId
+		]);
+	}
+	
+	/**
+	 * @param int $placeId
 	 * @param int $playerId
 	 * @return bool
 	 */
