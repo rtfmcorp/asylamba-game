@@ -55,9 +55,8 @@ echo '<div id="content">';
 				}
 			}
 		}
-
-		$attackingCommanders = $commanderManager->getCommandersByIds($commandersId);
-
+		
+		$attackingCommanders =  $commanderManager->getVisibleIncomingAttacks($session->get('playerId'));
 		for ($i = 0; $i < count($obsets); $i++) {
 			foreach ($attackingCommanders as $commander) {
 				if ($commander->rDestinationPlace == $obsets[$i]['info']['id']) {

@@ -21,24 +21,7 @@ $player = $this->getContainer()->get('zeus.player_manager')->get($session->get('
 
 $currentBase = $orbitalBaseManager->get($session->get('playerParams')->get('base'));
 
-
-$commanders = $commanderManager->getIncomingAttacks($session->get('playerId'));
-$incomingCommanders = [];
-
-foreach ($commanders as $commander) { 
-	# va chercher les heures auxquelles il rentre dans les cercles d'espionnage
-	$startPlace = $placeManager->get($commander->getRBase());
-	$destinationPlace = $placeManager->get($commander->getRPlaceDestination());
-	$times = Game::getAntiSpyEntryTime($startPlace, $destinationPlace, $commander->getArrivalDate());
-
-	if (strtotime(Utils::now()) >= strtotime($times[0])) {
-		//$info = $commanderManager->getEventInfo($commander);
-		//$info->add('inCircle', $times);
-
-		# ajout de l'événement
-		$incomingCommanders[] = $commander;
-	}
-}
+$incomingCommanders = $commanderManager->getVisibleIncomingAttacks($session->get('playerId'));;
 $nbIncomingCommanders = count($incomingCommanders);
 
 $outcomingCommanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::MOVING]);
