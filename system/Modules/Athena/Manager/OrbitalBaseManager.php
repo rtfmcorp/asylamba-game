@@ -420,7 +420,7 @@ class OrbitalBaseManager {
 			if (in_array($commander->statement, [Commander::INSCHOOL, Commander::ONSALE, Commander::RESERVE])) {
 				$commander->rPlayer = $newOwner;
 			} else if ($commander->statement == Commander::MOVING) {
-				$commander->statement = Commander::RETIRED;
+                $this->commanderManager->endTravel($commander, Commander::RETIRED);
 				$this->realtimeActionScheduler->cancel($commander, $commander->getArrivalDate());
 			} else {
 				$commander->statement = Commander::DEAD;		
