@@ -12,6 +12,7 @@ class Utils {
 	public static function isAdmin($bindkey) {
 		$bindkeys = array(
 			'player1', 'player2', 'gil', 'noe', 'jacky',
+			'YNbrdEaJpDw8mLZ2u6jYqgt6a',
 			'jq2Bjf0uKzzE0aMErO6rpBxcg',
 			'E6GatZvhO1W9seBHU7mgQe49c',
 			'FaDcTV3lWokXHZO8tXH4divWZ',

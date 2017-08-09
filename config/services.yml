@@ -144,6 +144,7 @@ services:
         arguments:
             - "%redis_host"
             - "%redis_port"
+            - "%redis_password"
             - "%redis_timeout"
         
     exception_listener:

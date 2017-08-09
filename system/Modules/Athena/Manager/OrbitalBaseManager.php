@@ -420,7 +420,7 @@ class OrbitalBaseManager {
 			if (in_array($commander->statement, [Commander::INSCHOOL, Commander::ONSALE, Commander::RESERVE])) {
 				$commander->rPlayer = $newOwner;
 			} else if ($commander->statement == Commander::MOVING) {
-				$commander->statement = Commander::RETIRED;
+                $this->commanderManager->endTravel($commander, Commander::RETIRED);
 				$this->realtimeActionScheduler->cancel($commander, $commander->getArrivalDate());
 			} else {
 				$commander->statement = Commander::DEAD;		
@@ -716,8 +716,7 @@ class OrbitalBaseManager {
 			# if there is no more resource
 			if ($targetPlace->resources <= 0) {
 				# the place become an empty place
-				$targetPlace->resources = 0;
-				$targetPlace->typeOfPlace = Place::EMPTYZONE;
+				$this->placeManager->turnAsEmptyPlace($targetPlace);
 
 				# stop the mission
 				$mission->statement = RecyclingMission::ST_DELETED;
@@ -860,8 +859,10 @@ class OrbitalBaseManager {
 
 			# update u
 			$mission->uRecycling = Utils::addSecondsToDate($mission->uRecycling, $mission->cycleTime);
-			// Schedule the next mission
-			$this->realtimeActionScheduler->schedule('athena.orbital_base_manager', 'uRecycling', $mission, $mission->uRecycling);
+			// Schedule the next mission if there is still resources
+            if ($mission->getStatement() !== RecyclingMission::ST_DELETED) {
+                $this->realtimeActionScheduler->schedule('athena.orbital_base_manager', 'uRecycling', $mission, $mission->uRecycling);
+            }
 		} else {
 			# the place become an empty place
 			$targetPlace->resources = 0;

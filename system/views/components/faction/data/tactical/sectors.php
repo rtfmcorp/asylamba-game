@@ -1,41 +1,14 @@
 <?php
 
 use Asylamba\Classes\Library\Format;
+use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 $colorManager = $this->getContainer()->get('demeter.color_manager');
-$database = $this->getContainer()->get('database');
+$sectorManager = $this->getContainer()->get('gaia.sector_manager');
+$redisManager = $this->getContainer()->get('redis_manager');
 
-$qr = 'SELECT
-		se.id AS id,
-		se.rColor AS color,
-		se.name AS name,
-		se.points AS points,
-		(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rSector = se.id) AS nbc0,';
-
+$sectors = $sectorManager->getAll();
 $factions = $colorManager->getAll();
-foreach ($factions as $f) {
-	$qr .= '(SELECT COUNT(sy.id) FROM system AS sy WHERE sy.rColor = ' . $f->id . ' AND sy.rSector = se.id) AS nbc' . $f->id .',';
-}
-
-$qr = substr($qr, 0, -1) . ' FROM sector AS se ORDER BY (nbc' . $faction->id . ' / nbc0) DESC';
-
-$qr = $database->prepare($qr);
-$qr->execute();
-$aw = $qr->fetchAll(); $qr->closeCursor();
-
-
-$sectort = array(
-	'Secteurs conquis' => array(),
-	'Secteurs en balance' => array()
-);
-
-for ($i = 0; $i < count($aw); $i++) {
-	if ($aw[$i]['color'] == $faction->id) {
-		$sectort['Secteurs conquis'][] = $aw[$i];
-	} else {
-		$sectort['Secteurs en balance'][] = $aw[$i];
-	}
-}
 
 echo '<div class="component">';
 	echo '<div class="head skin-2">';
@@ -43,29 +16,50 @@ echo '<div class="component">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			foreach ($sectort as $type => $sectors) {
+			foreach (['Secteurs conquis', 'Secteurs en balance'] as $type) {
 				$displayed = 0;
 
 				echo '<h4>' . $type . '</h4>';
 				echo '<ul class="list-type-1">';
 
-				foreach ($sectors as $sector) {
-					$percents = array();
+				foreach ($sectors as $key => $sector) {
+                    $treated = false;
+					$percents = ['color' . $faction->getId() => 0];
+                    $scores = unserialize($redisManager->getConnection()->get('sector:' . $sector->getId()));
+
+                    if (!isset($scores[$faction->getId()]) && $sector->getRColor() !== $faction->getId()) {
+                        unset($sectors[$key]);
+                        continue;
+                    }
+                    if ($type === 'Secteurs conquis' && $sector->getRColor() !== $faction->getId()) {
+                        continue;
+                    }
 					
 					foreach ($factions as $f) {
-						if ($f->id === 0) {
+						if ($f->id === 0 || !isset($scores[$f->id])) {
 							continue;
 						}
-						$percents['color' . $f->id] = Format::percent($sector['nbc' . $f->id], $sector['nbc0']);
+						$percents['color' . $f->id] = round(Format::percent($scores[$f->id], array_sum($scores), false));
 					}
 
 					arsort($percents);
 
-					if ($sector['color'] == $faction->id || ($sector['nbc' . $faction->id] > 0)) {
+					if ($sector->getRColor() == $faction->getId() || ($scores[$faction->getId()] > 0)) {
 						echo '<li>';
-							echo '<a href="#" class="picto color' . $sector['color'] . '">' . $sector['id'] . '</a>';
-							echo '<span class="label">' . $sector['name'] . ' (' . $sector['points'] . ' point' . Format::plural($sector['points']). ')</span>';
-							echo '<span class="value">' . Format::percent($sector['nbc' . $faction->id], $sector['nbc0']) . ' %</span>';
+							echo '<a href="#" class="picto color' . $sector->getRColor() . '">' . $sector->getId() . '</a>';
+							echo '<span class="label">' .
+                                    $sector->getName() . 
+                                    ' (' . $sector->getPoints() . ' point' . Format::plural($sector->getPoints()). ')' .
+                                '</span>';
+                            foreach ($scores as $factionId => $points) {
+                                if ($points === 0) {
+                                    continue;
+                                }
+                                echo '<span class="label color' . $factionId . '">' .
+                                    ColorResource::getInfo($factionId, 'popularName') . ' : ' . $points . ' point' . Format::plural($points) . ' de contrôle' .
+                                 '</span>';
+                            }
+							echo '<span class="value">' . $percents['color' . $faction->getId()] . ' %</span>';
 							echo '<span class="progress-bar hb bl" title="partage des systèmes entre les factions">';
 							foreach ($percents as $color => $percent) {
 								echo '<span style="width:' . $percent . '%;" class="content ' . $color . '"></span>';
@@ -74,7 +68,12 @@ echo '<div class="component">';
 						echo '</li>';
 
 						$displayed++;
+                        $treated = true;
 					}
+                    // If the sector has been displayed, we remove it for the second loop round
+                    if ($treated === true) {
+                        unset($sectors[$key]);
+                    }
 				}
 
 				echo '</ul>';

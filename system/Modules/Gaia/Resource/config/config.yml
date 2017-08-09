@@ -39,6 +39,13 @@ services:
         class: Asylamba\Modules\Gaia\Manager\SectorManager
         arguments:
             - "@entity_manager"
+            - "@redis_manager"
+            - "@load_balancer"
+            - "@task_manager"
+            - "@athena.orbital_base_manager"
+            - "@zeus.player_manager"
+            - "@gaia.system_manager"
+            - "%gaia.scores"
             
     gaia.system_manager:
         class: Asylamba\Modules\Gaia\Manager\SystemManager
@@ -53,10 +60,7 @@ services:
         arguments:
             - "@gaia.sector_manager"
             - "@gaia.system_manager"
-            - "@athena.orbital_base_manager"
-            - "@zeus.player_manager"
             - "@entity_manager"
-            - "%gaia.scores"
             - "%gaia.sector_minimal_score"
         tags:
             - {type: "event_listener", event: "gaia.place_owner_change", method: "onPlaceOwnerChange", order: 2}

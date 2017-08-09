@@ -396,7 +396,7 @@ class PlayerManager {
 		$placeId = NULL;
 		foreach ($sectors as $sector) {
 			# place choice
-			$qr = $this->entityManager->getConnection()->prepare('SELECT * FROM place AS p
+			$qr = $this->entityManager->getConnection()->prepare('SELECT p.id FROM place AS p
 				INNER JOIN system AS sy ON p.rSystem = sy.id
 					INNER JOIN sector AS se ON sy.rSector = se.id
 				WHERE p.typeOfPlace = 1
@@ -409,7 +409,7 @@ class PlayerManager {
 			$aw = $qr->fetchAll();
 			if ($aw !== NULL) {
 				$placeFound = TRUE;
-				$placeId = $aw[rand(0, (count($aw) - 1))][0];
+				$placeId = $aw[rand(0, (count($aw) - 1))]['id'];
 				break;
 			}
 		}
