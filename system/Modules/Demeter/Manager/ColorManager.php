@@ -379,7 +379,6 @@ class ColorManager {
 					? -1 : 1;
 			});	
 		}
-        \Asylamba\Classes\Daemon\Server::debug('logique');
 		reset($listCandidate);
 
 		$convPlayerID = $this->playerManager->getFactionAccount($faction->id)->id;
@@ -403,7 +402,6 @@ class ColorManager {
 
 				$this->uMandate($faction, $governmentMembers, $newChief, $chiefId, TRUE, $conv, $convPlayerID, $listCandidate);
 			} else {
-                \Asylamba\Classes\Daemon\Server::debug("t'es trop fort");
 				$this->uMandate($faction, 0, 0, $chiefId, FALSE, $conv, $convPlayerID, $listCandidate);
 			}
 		} elseif ($faction->regime == Color::ROYALISTIC) {

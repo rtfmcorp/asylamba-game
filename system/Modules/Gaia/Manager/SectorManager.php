@@ -113,7 +113,6 @@ class SectorManager {
     
     public function calculateAllOwnerships()
     {
-        \Asylamba\Classes\Daemon\Server::debug('sectors');
         foreach ($this->getAll() as $sector) {
             $this->calculateOwnership($sector);
         }
