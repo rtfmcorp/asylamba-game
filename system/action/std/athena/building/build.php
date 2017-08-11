@@ -146,7 +146,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 
 				$session->addFlashbag('Construction programmée', Flashbag::TYPE_SUCCESS);
 			} else {
-				throw new ErrorException('les conditions ne sont pas remplies pour construire ce bâtiment');
+				throw new FormException('les conditions ne sont pas remplies pour construire ce bâtiment');
 			}
 		} else {
 			throw new ErrorException('cette base ne vous appartient pas');
