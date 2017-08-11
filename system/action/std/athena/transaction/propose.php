@@ -171,14 +171,14 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 							throw new ErrorException('Il y a un problème avec votre commandant.');
 						}
 					} else {
-						throw new ErrorException('Vous n\'avez pas assez de vaisseaux de transport disponibles.');
+						throw new FormException('Vous n\'avez pas assez de vaisseaux de transport disponibles.');
 					}
 				} else {
 					switch ($type) {
 						case Transaction::TYP_RESOURCE :
-							throw new ErrorException('Vous n\'avez pas assez de ressources en stock.');
+							throw new FormException('Vous n\'avez pas assez de ressources en stock.');
 						case Transaction::TYP_SHIP :
-							throw new ErrorException('Vous n\'avez pas assez de vaisseaux.');
+							throw new FormException('Vous n\'avez pas assez de vaisseaux.');
 						default:
 							throw new ErrorException('Erreur pour une raison étrange, contactez un administrateur.');
 					}

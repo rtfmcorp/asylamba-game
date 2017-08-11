@@ -715,6 +715,8 @@ class OrbitalBaseManager {
 			$targetPlace->resources -= $totalRecycled;
 			# if there is no more resource
 			if ($targetPlace->resources <= 0) {
+                // Avoid out of range errors
+                $targetPlace->resources = 0;
 				# the place become an empty place
 				$this->placeManager->turnAsEmptyPlace($targetPlace);
 
