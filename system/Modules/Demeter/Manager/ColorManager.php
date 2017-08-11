@@ -578,6 +578,10 @@ class ColorManager {
 				$this->conversationMessageManager->add($message);
 
 			} else {
+                $date = new \DateTime($color->dLastElection);
+				$date->modify('+' . $color->mandateDuration . ' second');
+				$this->realtimeActionScheduler->schedule('demeter.color_manager', 'uCampaign', $color, $date->format('Y-m-d H:i:s'));
+				
 				$notif = new Notification();
 				$notif->dSending = Utils::now();
 				$notif->setRPlayer($newChief->id);
@@ -668,6 +672,10 @@ class ColorManager {
                     $this->conversationMessageManager->add($message);
                     break;
                 case Color::THEOCRATIC:
+                    $date = new \DateTime($color->dLastElection);
+                    $date->modify('+' . $color->mandateDuration . ' second');
+                    $this->realtimeActionScheduler->schedule('demeter.color_manager', 'uCampaign', $color, $date->format('Y-m-d H:i:s'));
+				
                     if ($idOldChief) {
                         $notif = new Notification();
                         $notif->dSending = Utils::now();
