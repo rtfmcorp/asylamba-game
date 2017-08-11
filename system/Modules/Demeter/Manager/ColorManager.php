@@ -379,6 +379,7 @@ class ColorManager {
 					? -1 : 1;
 			});	
 		}
+        \Asylamba\Classes\Daemon\Server::debug('logique');
 		reset($listCandidate);
 
 		$convPlayerID = $this->playerManager->getFactionAccount($faction->id)->id;
@@ -402,6 +403,7 @@ class ColorManager {
 
 				$this->uMandate($faction, $governmentMembers, $newChief, $chiefId, TRUE, $conv, $convPlayerID, $listCandidate);
 			} else {
+                \Asylamba\Classes\Daemon\Server::debug("t'es trop fort");
 				$this->uMandate($faction, 0, 0, $chiefId, FALSE, $conv, $convPlayerID, $listCandidate);
 			}
 		} elseif ($faction->regime == Color::ROYALISTIC) {
@@ -596,41 +598,101 @@ class ColorManager {
 				$this->conversationMessageManager->add($message);
 			}
 		} else {
+            $noChief = false;
+            if (($oldChief = $this->playerManager->get($idOldChief)) === null) {
+                $noChief = true;
+                $oldChief = $this->playerManager->getByName($color->officialName);
+            }
 /*			$date = new DateTime($this->dLastElection);
 			$date->modify('+' . $this->mandateDuration + self::ELECTIONTIME + self::CAMPAIGNTIME . ' second');
 			$date = $date->format('Y-m-d H:i:s');
 			$this->dLastElection = $date;*/
+			$color->dLastElection = Utils::now();
+			$color->electionStatement = Color::MANDATE;
 
-			if ($color->regime == Color::ROYALISTIC) {
-				$notif = new Notification();
-				$notif->dSending = Utils::now();
-				$notif->setRPlayer($newChief->id);
-				$notif->setTitle('Votre coup d\'état a échoué');
-				$notif->addBeg()
-					->addTxt(' Le peuple ne vous a pas soutenu, l\'ancien gouvernement reste en place.');
-				$this->notificationManager->add($notif);
+			switch ($color->regime) {
+                case Color::DEMOCRATIC:
+                    $date = new \DateTime($color->dLastElection);
+                    $date->modify('+' . $color->mandateDuration . ' second');
+                    $this->realtimeActionScheduler->schedule('demeter.color_manager', 'uCampaign', $color, $date->format('Y-m-d H:i:s'));
 				
-				if ($idOldChief) {
-					$notif = new Notification();
-					$notif->dSending = Utils::now();
-					$notif->setRPlayer($idOldChief);
-					$notif->setTitle('Un coup d\'état a échoué');
-					$notif->addBeg()
-						->addTxt(' Le joueur ')
-						->addLnk('embassy/player-' . $newChief->id, $newChief->name)
-						->addTxt(' a tenté un coup d\'état, celui-ci a échoué.');
-					$this->notificationManager->add($notif);
-				}
-			} elseif ($color->regime == Color::THEOCRATIC) {
-				if ($idOldChief) {
-					$notif = new Notification();
-					$notif->dSending = Utils::now();
-					$notif->setRPlayer($idOldChief);
-					$notif->setTitle('Vous avez été nommé Guide');
-					$notif->addBeg()
-						->addTxt(' Les Oracles ont parlé, vous êtes toujours désigné par la Grande Lumière pour guider Cardan vers la Gloire.');
-					$this->notificationManager->add($notif);
-				}
+                    if ($idOldChief) {
+                        $notif = new Notification();
+                        $notif->dSending = Utils::now();
+                        $notif->setRPlayer($idOldChief);
+                        $notif->setTitle('Vous demeurez ' . ColorResource::getInfo($color->getId(), 'status')[Player::CHIEF - 1]);
+                        $notif->addBeg()
+                            ->addTxt(' Aucun candidat ne s\'est présenté oour vous remplacer lors des dernières élections. Par conséquent, vous êtes toujours à la tête de ' . $color->popularName);
+                        $this->notificationManager->add($notif);
+                    }
+                    # création du message
+                    $message = new ConversationMessage();
+                    $message->rConversation = $conv->id;
+                    $message->rPlayer = $convPlayerID;
+                    $message->type = ConversationMessage::TY_STD;
+                    $message->dCreation = Utils::now();
+                    $message->dLastModification = NULL;
+                    $message->content = ' La période électorale est terminée. Aucun candidat ne s\'est présenté pour prendre la tête de ' . $color->popularName . '.';
+                    $message->content .=
+                        ($noChief === false)
+                        ? '<br>Par conséquent, ' . $oldChief->getName() . ' est toujours au pouvoir.'
+                        : '<br>Par conséquent, le siège du pouvoir demeure vacant.'
+                    ;
+                    $this->conversationMessageManager->add($message);
+                    break;
+                case Color::ROYALISTIC:
+                    $notif = new Notification();
+                    $notif->dSending = Utils::now();
+                    $notif->setRPlayer($newChief->id);
+                    $notif->setTitle('Votre coup d\'état a échoué');
+                    $notif->addBeg()
+                        ->addTxt(' Le peuple ne vous a pas soutenu, l\'ancien gouvernement reste en place.');
+                    $this->notificationManager->add($notif);
+
+                    if ($idOldChief) {
+                        $notif = new Notification();
+                        $notif->dSending = Utils::now();
+                        $notif->setRPlayer($idOldChief);
+                        $notif->setTitle('Un coup d\'état a échoué');
+                        $notif->addBeg()
+                            ->addTxt(' Le joueur ')
+                            ->addLnk('embassy/player-' . $newChief->id, $newChief->name)
+                            ->addTxt(' a tenté un coup d\'état, celui-ci a échoué.');
+                        $this->notificationManager->add($notif);
+                    }
+                    $message = new ConversationMessage();
+                    $message->rConversation = $conv->id;
+                    $message->rPlayer = $convPlayerID;
+                    $message->type = ConversationMessage::TY_STD;
+                    $message->dCreation = Utils::now();
+                    $message->dLastModification = NULL;
+                    $message->content = 'Un coup d\'état a échoué. ' . $oldChief->getName(). ' demeure le dirigeant de ' . $color->popularName . '.';
+                    $this->conversationMessageManager->add($message);
+                    break;
+                case Color::THEOCRATIC:
+                    if ($idOldChief) {
+                        $notif = new Notification();
+                        $notif->dSending = Utils::now();
+                        $notif->setRPlayer($idOldChief);
+                        $notif->setTitle('Vous avez été nommé Guide');
+                        $notif->addBeg()
+                            ->addTxt(' Les Oracles ont parlé, vous êtes toujours désigné par la Grande Lumière pour guider Cardan vers la Gloire.');
+                        $this->notificationManager->add($notif);
+                    }
+                    $message = new ConversationMessage();
+                    $message->rConversation = $conv->id;
+                    $message->rPlayer = $convPlayerID;
+                    $message->type = ConversationMessage::TY_STD;
+                    $message->dCreation = Utils::now();
+                    $message->dLastModification = NULL;
+                    $message->content = 'Nul ne s\'est soumis au regard des dieux pour conduire ' . $color->popularName . ' vers sa gloire.';
+                    $message->content .=
+                        ($noChief === false)
+                        ? $oldChief->getName(). ' demeure l\'élu des dieux pour accomplir leurs desseins dans la galaxie.'
+                        : 'Par conséquent, le siège du pouvoir demeure vacant.'
+                    ;
+                    $this->conversationMessageManager->add($message);
+                    break;
 			}
 		}
 		$this->entityManager->flush();
