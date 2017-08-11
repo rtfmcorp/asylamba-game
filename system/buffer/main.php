@@ -2,12 +2,14 @@
 
 use Asylamba\Classes\Library\Utils;
 
+use Asylamba\Modules\Zeus\Model\Player;
+
 if ($this->getContainer()->getParameter('environment') === 'dev' || $this->getContainer()->get('app.request')->query->get('key') === $this->getContainer()->getParameter('security_buffer_key')) {
 
 	$playerManager = $this->getContainer()->get('zeus.player_manager');
 	$security = $this->getContainer()->get('security');
 	
-	$activePlayers = $playerManager->getActivePlayers();
+	$activePlayers = $playerManager->getByStatements([Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]);
 ?>
 <!DOCTYPE html>
 <html lang="fr">

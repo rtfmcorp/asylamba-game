@@ -88,6 +88,10 @@ class RankingManager
 		
 		$playerRankingRepository = $this->entityManager->getRepository(PlayerRanking::class);
 		
+		$S_PRM1 = $this->playerRankingManager->getCurrentSession();
+		$this->playerRankingManager->newSession();
+		$this->playerRankingManager->loadLastContext();
+		
 		$ranking = $this->createRanking(true, false);
 		
 		$playerRoutine->execute(
@@ -103,10 +107,6 @@ class RankingManager
 			$playerRankingRepository->getDefendersButcherRanking(),
 			$this->orbitalBaseHelper
 		);
-		
-		$S_PRM1 = $this->playerRankingManager->getCurrentSession();
-		$this->playerRankingManager->newSession();
-		$this->playerRankingManager->loadLastContext();
 
 		$playerRoutine->processResults($ranking, $players, $this->playerRankingManager, $playerRankingRepository);
 		
@@ -127,6 +127,10 @@ class RankingManager
 		$factionRankingRepository = $this->entityManager->getRepository(FactionRanking::class);
 		$sectors = $this->entityManager->getRepository(Sector::class)->getAll();
 		
+		$S_FRM1 = $this->factionRankingManager->getCurrentSession();
+		$this->factionRankingManager->newSession();
+		$this->factionRankingManager->loadLastContext();
+		
 		$ranking = $this->createRanking(false, true);
 		
 		foreach ($factions as $faction) {
@@ -137,10 +141,6 @@ class RankingManager
 			
 			$factionRoutine->execute($faction, $playerRankings, $routesIncome, $sectors);
 		}
-		
-		$S_FRM1 = $this->factionRankingManager->getCurrentSession();
-		$this->factionRankingManager->newSession();
-		$this->factionRankingManager->loadLastContext();
 		
 		$winningFactionId = $factionRoutine->processResults($ranking, $factions, $this->factionRankingManager);
 

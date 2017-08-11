@@ -1,3 +1,19 @@
+## [2.1.3] - 2017-08-11
+### Added
+- Messages when a ruler keeps his role due to election without candidates
+- Handling of elections without candidates when the previous chief is dead
+
+### Changed
+- Inactive accounts in dev mode are now displayed
+
+### Fixed
+- Elections without candidates (empty messages and cycle blocking)
+- Empty places resources value out of range
+- Ranking diff
+
+### Removed
+- Some recurrent user error logging
+
 ## [2.1.2] - 2017-08-09
 ### Added
 - Storage of the sectors ownership data in Redis
