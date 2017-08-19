@@ -512,6 +512,7 @@ class OrbitalBaseManager {
 	 * @param int $resources
 	 * @param bool $offLimits
 	 * @param bool $persist
+     * @return bool
 	 */
 	public function increaseResources(OrbitalBase $orbitalBase, $resources, $offLimits = false, $persist = true)
 	{
@@ -522,7 +523,10 @@ class OrbitalBaseManager {
 
 		if ($offLimits === true) {
 			$maxStorage += OrbitalBase::EXTRA_STOCK;
-		}
+		} elseif ($orbitalBase->resourcesStorage > $maxStorage) {
+            // In this case, we do not remove the extra resources, we just keep the current quantity
+            return false;
+        }
 		$addedResources = 
 			(($orbitalBase->resourcesStorage + $resources) > $maxStorage)
 			? $maxStorage - $orbitalBase->resourcesStorage
@@ -535,6 +539,7 @@ class OrbitalBaseManager {
 				$addedResources
 			);
 		}
+        return true;
 	}
 	
 	/**
