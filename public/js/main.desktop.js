@@ -341,7 +341,10 @@ jQuery(document).ready(function($) {
 				});
 
 				$('#content form').each(function() {
-					$(this).attr('action', panelController.rewriteLink($(this).attr('action')));
+                    var link = $(this).attr('action');
+                    if (typeof link != 'undefined') {
+                        $(this).attr('action', panelController.rewriteLink($(this).attr('action')));
+                    }
 				});
 			}
 		},
@@ -413,6 +416,54 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		sbController.move($(this).data('dir'));
 	});
+    
+    tradeController = {
+        search: function(event) {
+            $("#rc-search-results").remove();
+            $.ajax({
+                type: 'POST',
+                url: '/ajax/a-searchroutes/',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({
+                    factions: $('#rc-search-form input[type=checkbox]:checked').map(function() {
+                        return parseInt(this.name.split('-')[1]);
+                    }).get(),
+                    min: $('input[name="min-dist"]').val(),
+                    max: $('input[name="max-dist"]').val()
+                }),
+                success: tradeController.renderSearchResults,
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+            event.preventDefault();
+        },
+        
+        renderSearchResults: function(bases) {
+            var buffer = '<div id="rc-search-results" class="component player rank">';
+			buffer += '<div class="head skin-2">';
+            buffer += '<h2>Résultats</h2>';
+			buffer += '</div>';
+			buffer += '<div class="fix-body">';
+            buffer += '<div class="body">';
+            $.each(bases, function(index, base) {
+                buffer += '<a href="/map/place-' + base.rPlace + '" class="player color' + base.playerColor + '">';
+                    buffer += '<img src="/public/media/avatar/small/' + base.playerAvatar + '.png" alt="" class="picto">';
+                    buffer += '<span class="title">' + base.playerName + '</span>';
+                    buffer += '<strong class="name">' + base.baseName + '</strong>';
+                    buffer += '<span class="experience">' + base.distance + ' al.</span>';
+                buffer += '</a>';
+            });
+
+            if (bases.length === 0) {
+                buffer += '<p><em>Aucun partenaire commercial trouvé selon les critères de recherche fournis.</em></p>';
+            }
+            buffer += '</div></div></div>';
+            
+            $('.component.new-message').after(buffer);
+        }
+    };
 	
 // ################################# //
 // ####### MAP MOVER MODULE ######## //
