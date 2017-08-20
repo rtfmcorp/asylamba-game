@@ -130,6 +130,20 @@ class CommercialRouteManager {
 	{
 		return $this->entityManager->getRepository(CommercialRoute::class)->countBaseActiveRoutes($baseId);
 	}
+    
+    /**
+     * 
+     * @param OrbitalBase $base
+     * @param int $playerId
+     * @param array $factions
+     * @param int $min
+     * @param int $max
+     * @return array
+     */
+    public function searchRoutes(OrbitalBase $base, $playerId, $factions, $min, $max)
+    {
+        return $this->entityManager->getRepository(CommercialRoute::class)->searchRoutes($base, $playerId, $factions, $min, $max);
+    }
 	
 	/**
 	 * @param CommercialRoute $commercialRoute
