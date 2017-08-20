@@ -85,13 +85,13 @@ class PlayerBonusManager
 	}
 
 	public function load(PlayerBonus $playerBonus) {
-		$playerBonus->technology = new Technology($playerBonus->rPlayer);
+		$playerBonus->technology = $this->technologyManager->getPlayerTechnology($playerBonus->rPlayer);
 		if ($playerBonus->synchronized) {
 			// chargement de l'objet avec le contrôleur
 			for ($i = 0; $i < PlayerBonus::BONUS_QUANTITY; $i++) { 
 				$playerBonus->bonus->add($i, $this->sessionWrapper->get('playerBonus')->get($i));
 			}
-		} else {				
+		} else {
 			// remplissage de l'objet normalement
 			// remplissage avec les technologies
 			$this->fillFromTechnology($playerBonus);
