@@ -40,14 +40,9 @@ echo '<div class="component profil">';
 			$clv = $baseLevelPlayer * (pow(2, ($player_playerRoleplayProfil->getLevel() - 2)));
 			$prc = ((($exp - $clv) * 200) / $nlv);
 
-			echo '<div class="number-box">';
-				echo '<span class="label">expérience</span>';
-				echo '<span class="value">' . Format::numberFormat($exp) . '</span>';
-			echo '</div>';
-
 			echo '<div class="number-box grey">';
-				echo '<span class="label">expérience nécessaire pour le prochain niveau</span>';
-				echo '<span class="value">' . Format::numberFormat($nlv) . '</span>';
+				echo '<span class="label">Expérience / Expérience nécessaire pour le prochain niveau</span>';
+				echo '<span class="value">'. Format::numberFormat($exp) . ' / ' . Format::numberFormat($nlv) . '</span>';
 				echo '<span class="progress-bar">';
 					echo '<span style="width:' . $prc . '%;" class="content"></span>';
 				echo '</span>';
