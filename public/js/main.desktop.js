@@ -417,38 +417,62 @@ jQuery(document).ready(function($) {
 		sbController.move($(this).data('dir'));
 	});
     
+    var tradeSearchLock = false;
+    
     tradeController = {
         search: function(event) {
-            $("#rc-search-results").remove();
-            $.ajax({
-                type: 'POST',
-                url: '/ajax/a-searchroutes/',
-                contentType: 'application/json',
-                dataType: 'json',
-                data: JSON.stringify({
-                    factions: $('#rc-search-form input[type=checkbox]:checked').map(function() {
-                        return parseInt(this.name.split('-')[1]);
-                    }).get(),
-                    min: $('input[name="min-dist"]').val(),
-                    max: $('input[name="max-dist"]').val()
-                }),
-                success: tradeController.renderSearchResults,
-                error: function (error) {
-                    console.log(error);
-                }
-            });
             event.preventDefault();
+            if (tradeSearchLock === true) {
+                return false;
+            }
+            console.log('lock');
+            tradeSearchLock = true;
+            $("#rc-search-form button").prepend(
+                '<div class="sk-circle">' +
+                    '<div class="sk-circle1 sk-child"></div>' +
+                    '<div class="sk-circle2 sk-child"></div>' +
+                    '<div class="sk-circle3 sk-child"></div>' +
+                    '<div class="sk-circle4 sk-child"></div>' +
+                    '<div class="sk-circle5 sk-child"></div>' +
+                    '<div class="sk-circle6 sk-child"></div>' +
+                    '<div class="sk-circle7 sk-child"></div>' +
+                    '<div class="sk-circle8 sk-child"></div>' +
+                    '<div class="sk-circle9 sk-child"></div>' +
+                    '<div class="sk-circle10 sk-child"></div>' +
+                    '<div class="sk-circle11 sk-child"></div>' +
+                    '<div class="sk-circle12 sk-child"></div>' +
+                '</div>'
+            );
+            this.removePreviousResults().then(function() {
+                $.ajax({
+                    type: 'POST',
+                    url: '/ajax/a-searchroutes/',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify({
+                        factions: $('#rc-search-form input[type=checkbox]:checked').map(function() {
+                            return parseInt(this.name.split('-')[1]);
+                        }).get(),
+                        min: $('input[name="min-dist"]').val(),
+                        max: $('input[name="max-dist"]').val()
+                    }),
+                    success: tradeController.renderSearchResults,
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
         },
         
         renderSearchResults: function(bases) {
-            var buffer = '<div id="rc-search-results" class="component player rank">';
+            var buffer = '<div id="rc-search-results" style="width:0px;overflow:hidden;" class="component player rank">';
 			buffer += '<div class="head skin-2">';
             buffer += '<h2>Résultats</h2>';
 			buffer += '</div>';
 			buffer += '<div class="fix-body">';
             buffer += '<div class="body">';
             $.each(bases, function(index, base) {
-                buffer += '<a href="/map/place-' + base.rPlace + '" class="player color' + base.playerColor + '">';
+                buffer += '<a style="display:block;width:0px;padding-left:0px;padding-right:0;overflow:hidden;" href="/map/place-' + base.rPlace + '" class="player color' + base.playerColor + '">';
                     buffer += '<img src="/public/media/avatar/small/' + base.playerAvatar + '.png" alt="" class="picto">';
                     buffer += '<span class="title">' + base.playerName + '</span>';
                     buffer += '<strong class="name">' + base.baseName + '</strong>';
@@ -461,7 +485,43 @@ jQuery(document).ready(function($) {
             }
             buffer += '</div></div></div>';
             
-            $('.component.new-message').after(buffer);
+            component = $(buffer);
+            $('.component.new-message').after(component);
+            $(component).animate({width: '300px'}, 200).find('.player').animate({
+                width: '215px',
+                "padding-left": '70px',
+                "padding-right": '5px'
+            }, 400).promise().done(function() {
+                console.log('unlock');
+                tradeSearchLock = false;
+                $("#rc-search-form button > .sk-circle").remove();
+            });
+        },
+        
+        removePreviousResults: function() {
+            return new Promise(function(resolve, reject) {
+                var results = $("#rc-search-results");
+                results
+                    .animate({width: '0px'}, 200)
+                    .find('.player')
+                    .animate({
+                        width: '0px',
+                        "padding-left": '0px',
+                        "padding-right": '0px',
+                    }, 200)
+                    .promise()
+                    .done(function() {
+                        results.remove().promise().done(function() {
+                            console.log('remove');
+                            resolve();
+                        });
+                    })
+                ;
+            });
+        },
+        
+        deployPanel: function() {
+            
         }
     };
 	
