@@ -465,14 +465,14 @@ jQuery(document).ready(function($) {
         },
         
         renderSearchResults: function(bases) {
-            var buffer = '<div id="rc-search-results" style="width:0px;overflow:hidden;" class="component player rank">';
+            var buffer = '<div id="rc-search-results" class="component player rank">';
 			buffer += '<div class="head skin-2">';
             buffer += '<h2>Résultats</h2>';
 			buffer += '</div>';
 			buffer += '<div class="fix-body">';
             buffer += '<div class="body">';
             $.each(bases, function(index, base) {
-                buffer += '<a style="display:block;width:0px;padding-left:0px;padding-right:0;overflow:hidden;" href="/map/place-' + base.rPlace + '" class="player color' + base.playerColor + '">';
+                buffer += '<a href="/map/place-' + base.rPlace + '" class="player color' + base.playerColor + '">';
                     buffer += '<img src="/public/media/avatar/small/' + base.playerAvatar + '.png" alt="" class="picto">';
                     buffer += '<span class="title">' + base.playerName + '</span>';
                     buffer += '<strong class="name">' + base.baseName + '</strong>';
@@ -487,12 +487,11 @@ jQuery(document).ready(function($) {
             
             component = $(buffer);
             $('.component.new-message').after(component);
-            $(component).animate({width: '300px'}, 200).find('.player').animate({
+            $(component).animate({width: '300px'}, 400).find('.player').animate({
                 width: '215px',
                 "padding-left": '70px',
                 "padding-right": '5px'
             }, 400).promise().done(function() {
-                console.log('unlock');
                 tradeSearchLock = false;
                 $("#rc-search-form button > .sk-circle").remove();
             });
@@ -502,17 +501,16 @@ jQuery(document).ready(function($) {
             return new Promise(function(resolve, reject) {
                 var results = $("#rc-search-results");
                 results
-                    .animate({width: '0px'}, 200)
+                    .animate({width: '0px'}, 400)
                     .find('.player')
                     .animate({
                         width: '0px',
                         "padding-left": '0px',
                         "padding-right": '0px',
-                    }, 200)
+                    }, 400)
                     .promise()
                     .done(function() {
                         results.remove().promise().done(function() {
-                            console.log('remove');
                             resolve();
                         });
                     })
@@ -520,8 +518,8 @@ jQuery(document).ready(function($) {
             });
         },
         
-        deployPanel: function() {
-            
+        deployPanel: function(event, baseId) {
+            event.preventDefault();
         }
     };
 	

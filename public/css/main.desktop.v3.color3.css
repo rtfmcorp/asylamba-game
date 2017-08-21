@@ -6369,6 +6369,25 @@ span.centred-link:focus {
   background: #202020;
   border-color: #4F4F4F;
 }
+#rc-search-form button {
+  float: left;
+  display: flex;
+  align-items: center;
+}
+#rc-search-form button span {
+  padding: 0px 10px;
+}
+#rc-search-results {
+  width: 0px;
+  overflow: hidden;
+}
+#rc-search-results .player {
+  display: block;
+  width: 0px;
+  padding-left: 0px;
+  padding-right: 0;
+  overflow: hidden;
+}
 .inscription {
   /* SUBNAV */
   /* ALLY */
