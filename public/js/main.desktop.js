@@ -457,7 +457,8 @@ jQuery(document).ready(function($) {
                     }),
                     success: tradeController.renderSearchResults,
                     error: function (error) {
-                        console.log(error);
+                        var response = $.parseJSON(error.responseText);
+                        alertController.add(101, response.error.message);
                     }
                 });
             });
@@ -478,13 +479,13 @@ jQuery(document).ready(function($) {
                     buffer += '<span class="experience">' + base.distance + ' al.</span>';
                     
                     buffer += '<div class="proposal-panel">';
-                    buffer += '<div class="proposal-data"><div><span class="title">Revenu</span>';
+                    buffer += '<div class="proposal-data"><div><span class="title">Revenu par relève</span>';
                     buffer += '<strong class="name">' + base.income + ' <img src="/public/media/resources/credit.png" alt="" class="icon-color">';
                     buffer += '</strong></div>'; 
-                    buffer += '<div><span class="title">Prix</span>';
+                    buffer += '<div><span class="title">Coût de construction</span>';
                     buffer += '<strong class="name"> ' + base.price + ' <img src="/public/media/resources/credit.png" alt="" class="icon-color">';
                     buffer += '</strong></div>'; 
-                    buffer += '</div><div class="proposal-button"><button type="submit">Envoyer la proposition</button></div></div>';
+                    buffer += '</div><div class="proposal-button"><button onclick="tradeController.sendProposal(event, ' + base.rPlace + ');">Envoyer la proposition</button></div></div>';
                 buffer += '</div>';
             });
 
@@ -537,6 +538,46 @@ jQuery(document).ready(function($) {
             }
             $(".player[data-deployed=true]").attr('data-deployed', false);
             panel.attr('data-deployed', true);
+        },
+        
+        sendProposal: function(event, baseId) {
+            event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/ajax/a-proposeroute/',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({
+                    base_id: baseId
+                }),
+                success: function(response) {
+                    var waitingDataValue = $("#rc-data-waiting").removeClass('grey').find('.value');
+                    waitingDataValue.text((parseInt(waitingDataValue.text()) + 1));
+                    
+                    var countDataValue = $("#rc-data-count .value");
+                    var countData = countDataValue.text().split('/');
+                    countDataValue.text((parseInt(countData[0]) + 1) + '/' + countData[1]);
+                    
+                    $("#rc-data-count .progress-bar .content").animate({
+                        width: Math.ceil(((parseInt(countData[0]) + 1) / parseInt(countData[1])) * 100) + "%"
+                    }, 200);
+                    
+                    alertController.add(102, response.message);
+                    $('#base-' + response.route.linked_base_id)
+                        .animate({
+                            width: '0px',
+                            "padding-left": '0px',
+                            "padding-right": '0px',
+                        }, 400, function() {
+                            $(this).remove();
+                        })
+                    ;
+                },
+                error: function (error) {
+                    var response = $.parseJSON(error.responseText);
+                    alertController.add(101, response.error.message);
+                }
+            });
         }
     };
 	
