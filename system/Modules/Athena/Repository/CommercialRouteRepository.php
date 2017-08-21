@@ -292,6 +292,7 @@ class CommercialRouteRepository extends AbstractRepository {
 				pa.name AS playerName,
 				ob.name AS baseName,
 				ob.rPlace AS rPlace,
+                s.rSector AS rSector,
 				(FLOOR(SQRT(POW(? - s.xPosition, 2) + POW(? - s.yPosition, 2)))) AS distance
 			FROM orbitalBase AS ob
 			LEFT JOIN player AS pa
