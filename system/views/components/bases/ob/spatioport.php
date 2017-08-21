@@ -82,7 +82,7 @@ echo '<div class="component building rc">';
 
 			echo '<hr />';
 
-			echo '<div class="number-box">';
+			echo '<div id="rc-data-count" class="number-box">';
 				echo '<span class="label">routes commerciales</span>';
 				echo '<span class="value">' . $nCRInDock . ' / ' . $nMaxCR . '</span>';
 
@@ -90,23 +90,23 @@ echo '<div class="component building rc">';
 				echo '<span style="width:' . Format::percent($nCRInDock, $nMaxCR) . '%;" class="content"></span>';
 			echo '</div>';
 
-			echo '<div class="number-box ' . (($nCROperational == 0) ? 'grey' : '') . '">';
+			echo '<div id="rc-data-active" class="number-box ' . (($nCROperational == 0) ? 'grey' : '') . '">';
 				echo '<span class="label">routes commerciales actives</span>';
 				echo '<span class="value">' . $nCROperational . '</span>';
 			echo '</div>';
 
-			echo '<div class="number-box ' . (($nCRWaitingForOther == 0) ? 'grey' : '') . '">';
+			echo '<div id="rc-data-waiting" class="number-box ' . (($nCRWaitingForOther == 0) ? 'grey' : '') . '">';
 				echo '<span class="label">routes commerciales en attente</span>';
 				echo '<span class="value">' . $nCRWaitingForOther . '</span>';
 			echo '</div>';
 
-			echo '<div class="number-box ' . (($nCRWaitingForMe == 0) ? 'grey' : '') . '">';
+			echo '<div id="rc-data-proposed" class="number-box ' . (($nCRWaitingForMe == 0) ? 'grey' : '') . '">';
 				echo '<span class="label">propositions commerciales</span>';
 				echo '<span class="value">' . $nCRWaitingForMe . '</span>';
 			echo '</div>';
 
 			if ($nCRInStandBy > 0) {
-				echo '<div class="number-box">';
+				echo '<div id="rc-data-standby" class="number-box">';
 					echo '<span class="label">routes commerciales bloquées</span>';
 					echo '<span class="value">' . $nCRInStandBy . '</span>';
 				echo '</div>';
@@ -114,7 +114,7 @@ echo '<div class="component building rc">';
 
 			echo '<hr />';
 
-			echo '<div class="number-box">';
+			echo '<div id="rc-data-income" class="number-box">';
 				echo '<span class="label">revenu total de cette base</span>';
 				echo '<span class="value">';
 					echo Format::numberFormat($totalIncome);
