@@ -10,6 +10,7 @@ $response->headers->add('Content-Type', 'application/json');
 echo(json_encode($commercialRouteManager->searchRoutes(
     $orbitalBaseManager->get($session->get('playerParams')->get('base')),
     $session->get('playerId'),
+    $session->get('playerInfo')->get('color'),
     $request->request->has('factions') ? $request->request->get('factions') : [],
     $request->request->has('min') ? abs(intval($request->request->get('min'))) : 75,
     $request->request->has('max') ? abs(intval($request->request->get('max'))) : 125
