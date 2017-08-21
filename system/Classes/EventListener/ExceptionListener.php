@@ -8,6 +8,7 @@ use Asylamba\Classes\Library\Flashbag;
 
 use Asylamba\Classes\Library\Http\Request;
 use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Http\JsonResponse;
 
 use Asylamba\Classes\Event\ExceptionEvent;
 use Asylamba\Classes\Event\ErrorEvent;
@@ -96,11 +97,23 @@ class ExceptionListener {
 			'line' => $line
 		]), $level);
 		
-		$this->sessionWrapper->addFlashbag($message, $flashbagLevel);
-		
 		if ($this->database->inTransaction()) {
 			$this->database->rollBack();
 		}
+        
+        if ($request->headers->get('content-type') === 'application/json') {
+            $response = new JsonResponse();
+            $response->setStatusCode(($flashbagLevel === Flashbag::TYPE_FORM_ERROR) ? 400 : 500);
+            $response->setBody(json_encode([
+                'error' => [
+                    'message' => $message
+                ]
+            ]));
+            $event->setResponse($response);
+            return;
+        }
+		
+		$this->sessionWrapper->addFlashbag($message, $flashbagLevel);
 		
 		$response = new Response();
 		$redirectionData = $this->getRedirection($request, $redirect);

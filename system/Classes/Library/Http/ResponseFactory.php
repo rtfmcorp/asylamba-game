@@ -33,7 +33,7 @@ class ResponseFactory
         $this->templating->render($response);
         $this->createHeaders($request, $response);
 		$this->createCookies($request, $response, $client);
-		if ($response->getStatusCode() !== 302) {
+		if ($response->getStatusCode() !== 302 && !$response instanceof JsonResponse) {
 			$response->setBody(ob_get_clean());
 		} else {
 			ob_end_clean();
