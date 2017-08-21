@@ -11,7 +11,7 @@
 */
 namespace Asylamba\Modules\Athena\Model;
 
-class CommercialRoute {
+class CommercialRoute implements \JsonSerializable {
 
 	//CONSTANTS
 	const COEF_PRICE = 8000;
@@ -158,4 +158,20 @@ class CommercialRoute {
 		$this->population2 = $var;
 		return $this;
 	 }
+     
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'base_id' => $this->rOrbitalBase,
+            'linked_base_id' => $this->rOrbitalBaseLinked,
+            'distance' => $this->distance,
+            'price' => $this->price,
+            'income' => $this->income,
+            'link_image' => $this->imageLink,
+            'proposed_at' => $this->dProposition,
+            'created_at' => $this->dCreation,
+            'statement' => $this->statement
+        ];
+    }
 }
