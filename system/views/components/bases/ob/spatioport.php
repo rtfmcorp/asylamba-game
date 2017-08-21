@@ -152,7 +152,7 @@ if ($request->query->get('mode') === 'search') {
 					echo '<p><label for="search-rc-max-dist">Maximum</label></p>';
 					echo '<p class="input input-text"><input type="number" id="search-rc-max-dist" name="max-dist" value="' . ($request->request->has('max-dist') ? $request->request->get('max-dist') : 125) . '" /></p>';
 
-					echo '<p><button style="float:left;display:flex;align-items:center;" type="submit"><span style="padding:0px 10px">Rechercher</span></button></p>';
+					echo '<p><button type="submit"><span>Rechercher</span></button></p>';
 				echo '</form>';
 			echo '</div>';
 		echo '</div>';
