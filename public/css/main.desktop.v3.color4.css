@@ -6383,10 +6383,45 @@ span.centred-link:focus {
 }
 #rc-search-results .player {
   display: block;
+  cursor: pointer;
   width: 0px;
   padding-left: 0px;
   padding-right: 0;
   overflow: hidden;
+  transition: height 0.2s ease-out;
+}
+#rc-search-results .player .proposal-panel {
+  margin-left: -55px;
+  margin-top: 10px;
+  padding-left: 10px;
+  height: 90px;
+  background: #202020;
+}
+#rc-search-results .player .proposal-panel .proposal-data {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+#rc-search-results .player .proposal-panel .proposal-button {
+  margin-top: 10px;
+  text-align: center;
+}
+#rc-search-results .player .proposal-panel .proposal-button button {
+  display: inline-block;
+  margin: 0 0 0 auto;
+  border: solid 1px #0A0A0A;
+  padding: 6px 15px;
+  color: white;
+  cursor: pointer;
+  overflow: hidden;
+  background: #a935c7;
+}
+#rc-search-results .player .proposal-panel .proposal-button button:hover,
+#rc-search-results .player .proposal-panel .proposal-button button:focus {
+  background: #310948;
+}
+#rc-search-results .player[data-deployed=true] {
+  height: 160px;
 }
 .inscription {
   /* SUBNAV */
