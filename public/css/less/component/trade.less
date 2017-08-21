@@ -14,9 +14,44 @@
     overflow:hidden;
     .player {
         display:block;
+        cursor:pointer;
         width:0px;
         padding-left:0px;
         padding-right:0;
         overflow:hidden;
+        transition: height 0.2s ease-out;
+        .proposal-panel {
+            margin-left:-55px;
+            margin-top:10px;
+            padding-left:10px;
+            height:90px;
+            background: #202020;
+            .proposal-data {
+                display:flex;
+                justify-content: space-around;
+                text-align:center;
+            }
+            .proposal-button {
+                margin-top:10px;
+                text-align:center;
+                button {
+                    display: inline-block;
+                    margin: 0 0 0 auto;
+                    border: solid 1px #0A0A0A;
+                    padding: 6px 15px;
+                    color: white;
+                    cursor: pointer;
+                    overflow: hidden;
+                    background: @light;
+
+                    &:hover, &:focus {
+                        background: @dark;
+                    }
+                }
+            }
+        }
+    }
+    .player[data-deployed=true] {
+        height:160px;
     }
 }

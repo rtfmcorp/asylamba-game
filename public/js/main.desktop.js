@@ -425,7 +425,6 @@ jQuery(document).ready(function($) {
             if (tradeSearchLock === true) {
                 return false;
             }
-            console.log('lock');
             tradeSearchLock = true;
             $("#rc-search-form button").prepend(
                 '<div class="sk-circle">' +
@@ -472,12 +471,21 @@ jQuery(document).ready(function($) {
 			buffer += '<div class="fix-body">';
             buffer += '<div class="body">';
             $.each(bases, function(index, base) {
-                buffer += '<a href="/map/place-' + base.rPlace + '" class="player color' + base.playerColor + '">';
+                buffer += '<div id="base-' + base.rPlace + '" onclick="tradeController.deployPanel(event, ' + base.rPlace + ')" data-deployed="false" class="player color' + base.playerColor + '">';
                     buffer += '<img src="/public/media/avatar/small/' + base.playerAvatar + '.png" alt="" class="picto">';
                     buffer += '<span class="title">' + base.playerName + '</span>';
                     buffer += '<strong class="name">' + base.baseName + '</strong>';
                     buffer += '<span class="experience">' + base.distance + ' al.</span>';
-                buffer += '</a>';
+                    
+                    buffer += '<div class="proposal-panel">';
+                    buffer += '<div class="proposal-data"><div><span class="title">Revenu</span>';
+                    buffer += '<strong class="name">' + base.income + ' <img src="/public/media/resources/credit.png" alt="" class="icon-color">';
+                    buffer += '</strong></div>'; 
+                    buffer += '<div><span class="title">Prix</span>';
+                    buffer += '<strong class="name"> ' + base.price + ' <img src="/public/media/resources/credit.png" alt="" class="icon-color">';
+                    buffer += '</strong></div>'; 
+                    buffer += '</div><div class="proposal-button"><button type="submit">Envoyer la proposition</button></div></div>';
+                buffer += '</div>';
             });
 
             if (bases.length === 0) {
@@ -520,6 +528,15 @@ jQuery(document).ready(function($) {
         
         deployPanel: function(event, baseId) {
             event.preventDefault();
+
+            var panel = $("#base-" + baseId + '');
+            
+            if(panel.attr('data-deployed') === 'true') {
+                panel.attr("data-deployed", false);
+                return false;
+            }
+            $(".player[data-deployed=true]").attr('data-deployed', false);
+            panel.attr('data-deployed', true);
         }
     };
 	
