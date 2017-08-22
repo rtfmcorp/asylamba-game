@@ -6394,13 +6394,23 @@ span.centred-link:focus {
   margin-left: -55px;
   margin-top: 10px;
   padding-left: 10px;
-  height: 90px;
+  height: 140px;
   background: #202020;
 }
 #rc-search-results .player .proposal-panel .proposal-data {
   display: flex;
   justify-content: space-around;
   text-align: center;
+}
+#rc-search-results .player .proposal-panel .proposal-message {
+  width: 100%;
+  margin-top: 10px;
+}
+#rc-search-results .player .proposal-panel .proposal-message textarea {
+  display: block;
+  width: 90%;
+  margin: auto;
+  resize: none;
 }
 #rc-search-results .player .proposal-panel .proposal-button {
   margin-top: 10px;
@@ -6421,7 +6431,7 @@ span.centred-link:focus {
   background: #24500a;
 }
 #rc-search-results .player[data-deployed=true] {
-  height: 160px;
+  height: 200px;
 }
 .inscription {
   /* SUBNAV */
