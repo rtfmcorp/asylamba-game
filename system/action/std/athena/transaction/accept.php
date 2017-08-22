@@ -132,6 +132,13 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 					);
 					$qr->execute([$transaction->rPlayer, $session->get('playerId'), $transaction->type, DataAnalysis::creditToStdUnit($transaction->price), Utils::now()]);
 				}
+                
+                $this->getContainer()->get('realtime_action_scheduler')->schedule(
+                    'athena.orbital_base_manager',
+                    'uCommercialShipping',
+                    $commercialShipping,
+                    $commercialShipping->getArrivedAt()
+                );
 
 				$session->addFlashbag('Proposition acceptée. Les vaisseaux commerciaux sont en route vers votre base orbitale.', Flashbag::TYPE_MARKET_SUCCESS);
 			} else {
