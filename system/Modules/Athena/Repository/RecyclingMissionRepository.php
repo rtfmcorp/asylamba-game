@@ -49,7 +49,7 @@ class RecyclingMissionRepository extends AbstractRepository
 	
 	public function getAll()
 	{
-		$statement = $this->select();
+		$statement = $this->select('WHERE rm.statement != ' . RecyclingMission::ST_DELETED);
 		
 		$data = [];
 		while ($row = $statement->fetch()) {
