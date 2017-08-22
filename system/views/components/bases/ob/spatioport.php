@@ -15,6 +15,7 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
+use Asylamba\Classes\Container\Params;
 
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $request = $this->getContainer()->get('app.request');
@@ -137,9 +138,10 @@ if ($request->query->get('mode') === 'search') {
 			echo '<div class="body">';
 				echo '<form id="rc-search-form" onsubmit="tradeController.search(event)">';
 					echo '<h4>Chercher des partenaires commerciaux...</h4>';
+                    $configuredFactions = json_decode($request->cookies->get('p' . Params::CR_FACTIONS, json_encode(Params::$params[Params::CR_FACTIONS])), true);
 					foreach ($factions as $i) {
 						echo '<p><label for="ckb-faction-' . $i . '">';
-							echo '<input type="checkbox" name="faction-' . $i . '" id="ckb-faction-' . $i . '" ' . (!$request->query->has('show') || $request->request->has('faction-' . $i) ? 'checked' : NULL) . ' /> ';
+							echo '<input type="checkbox" name="faction-' . $i . '" id="ckb-faction-' . $i . '" ' . (in_array($i, $configuredFactions) ? 'checked' : NULL) . ' /> ';
 							echo ColorResource::getInfo($i, 'demonym');
 						echo '</label></p>';
 					}
@@ -147,10 +149,10 @@ if ($request->query->get('mode') === 'search') {
 					echo '<h4>A une distance...</h4>';
 
 					echo '<p><label for="search-rc-min-dist">Minimum</label></p>';
-					echo '<p class="input input-text"><input type="number" id="search-rc-min-dist" name="min-dist" value="' . ($request->request->has('min-dist') ? $request->request->get('min-dist') : 75) . '" /></p>';
+					echo '<p class="input input-text"><input type="number" id="search-rc-min-dist" name="min-dist" value="' . $request->cookies->get('p' . Params::CR_MIN, Params::$params[Params::CR_MIN]) . '" /></p>';
 
 					echo '<p><label for="search-rc-max-dist">Maximum</label></p>';
-					echo '<p class="input input-text"><input type="number" id="search-rc-max-dist" name="max-dist" value="' . ($request->request->has('max-dist') ? $request->request->get('max-dist') : 125) . '" /></p>';
+					echo '<p class="input input-text"><input type="number" id="search-rc-max-dist" name="max-dist" value="' . $request->cookies->get('p' . Params::CR_MAX, Params::$params[Params::CR_MAX]) . '" /></p>';
 
 					echo '<p><button type="submit"><span>Rechercher</span></button></p>';
 				echo '</form>';
