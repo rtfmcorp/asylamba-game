@@ -138,7 +138,7 @@ if ($request->query->get('mode') === 'search') {
 			echo '<div class="body">';
 				echo '<form id="rc-search-form" onsubmit="tradeController.search(event)">';
 					echo '<h4>Chercher des partenaires commerciaux...</h4>';
-                    $configuredFactions = json_decode($request->cookies->get('p' . Params::CR_FACTIONS, json_encode(Params::$params[Params::CR_FACTIONS])), true);
+                    $configuredFactions = json_decode($request->cookies->get('p' . Params::CR_FACTIONS, json_encode($this->getContainer()->getParameter('game.available_factions'))), true);
 					foreach ($factions as $i) {
 						echo '<p><label for="ckb-faction-' . $i . '">';
 							echo '<input type="checkbox" name="faction-' . $i . '" id="ckb-faction-' . $i . '" ' . (in_array($i, $configuredFactions) ? 'checked' : NULL) . ' /> ';
