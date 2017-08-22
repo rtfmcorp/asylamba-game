@@ -11,6 +11,10 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
+use Asylamba\Modules\Hermes\Model\Conversation;
+use Asylamba\Modules\Hermes\Model\ConversationUser;
+use Asylamba\Modules\Hermes\Model\ConversationMessage;
+
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('session_wrapper');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
@@ -122,3 +126,51 @@ echo(json_encode([
     'route' => $cr,
     'message' => 'Route commerciale proposée'
 ]));
+
+if (empty($content = $request->request->get('content'))) {
+    return;
+}
+$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
+$conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
+$conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
+
+$content = $this->getContainer()->get('parser')->parse($content);
+
+if (strlen($content) > 10000) {
+    throw new FormException('votre message est trop long');
+}
+
+$conv = new Conversation();
+$conv->messages = 1;
+$conv->type = Conversation::TY_USER;
+$conv->dCreation = Utils::now();
+$conv->dLastMessage = Utils::now();
+$conversationManager->add($conv);
+
+$user = new ConversationUser();
+$user->rConversation = $conv->id;
+$user->rPlayer = $session->get('playerId');
+$user->convPlayerStatement = ConversationUser::US_ADMIN;
+$user->convStatement = ConversationUser::CS_DISPLAY;
+$user->dLastView = Utils::now();
+$conversationUserManager->add($user);
+
+$otherUser = new ConversationUser();
+$otherUser->rConversation = $conv->id;
+$otherUser->rPlayer = $otherBase->getRPlayer();
+$otherUser->convPlayerStatement = ConversationUser::US_STANDARD;
+$otherUser->convStatement = ConversationUser::CS_DISPLAY;
+// From conversation start.php. To be refactored
+$otherUser->dLastView = date('Y-m-d H:i:s', (strtotime(Utils::now()) - 20));
+$conversationUserManager->add($otherUser);
+
+$message = new ConversationMessage();
+
+$message->rConversation = $conv->id;
+$message->rPlayer = $session->get('playerId');
+$message->type = ConversationMessage::TY_STD;
+$message->content = $content;
+$message->dCreation = Utils::now();
+$message->dLastModification = NULL;
+
+$conversationMessageManager->add($message);
