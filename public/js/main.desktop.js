@@ -459,6 +459,9 @@ jQuery(document).ready(function($) {
                     error: function (error) {
                         var response = $.parseJSON(error.responseText);
                         alertController.add(101, response.error.message);
+                        
+                        tradeSearchLock = false;
+                        $("#rc-search-form button > .sk-circle").remove();
                     }
                 });
             });
