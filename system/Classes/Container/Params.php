@@ -12,6 +12,9 @@ class Params {
     const SHOW_ATTACK_REPORT = 7;
     const SHOW_REBEL_REPORT = 8;
     const REDIRECT_CHAT = 9;
+    const CR_FACTIONS = 10;
+    const CR_MIN = 11;
+    const CR_MAX = 12;
 
     /** @var array **/
     public static $params = [
@@ -24,6 +27,9 @@ class Params {
         self::SHOW_ATTACK_REPORT=> true,
         self::SHOW_REBEL_REPORT => true,
         self::REDIRECT_CHAT 	=> false,
+        self::CR_FACTIONS       => [],
+        self::CR_MIN            => 75,
+        self::CR_MAX            => 125
     ];
 
     /**
