@@ -66,15 +66,11 @@ class ResponseFactory
 	 */
 	protected function createCookies(Request $request, Response $response, Client $client)
 	{
-		$cookies = [];
 		if (!$request->cookies->exist('session_id') || $request->cookies->get('session_id') !== $client->getId()) {
-			$cookies[] = 'session_id=' . $client->getId() . '; path=/; expires=' . gmdate('D, d M Y H:i:s T', time() + $this->sessionLifetime) . '; HttpOnly;';
+			$response->cookies[] = 'session_id=' . $client->getId() . '; path=/; expires=' . gmdate('D, d M Y H:i:s T', time() + $this->sessionLifetime) . '; HttpOnly;';
 		}
 		foreach ($request->cookies->getNewElements() as $key => $value) {
-			$cookies[] = $key . '=' . $value . '; path=/; expires=' . gmdate('D, d M Y H:i:s T', time() + 3000000000) . '; HttpOnly;';
-		}
-		if (!empty($cookies)) {
-			$response->headers->set('Set-Cookie', implode(',', $cookies));
+			$response->cookies[] = $key . '=' . $value . '; path=/; expires=' . gmdate('D, d M Y H:i:s T', time() + 3000000000) . '; HttpOnly;';
 		}
 	}
 }
