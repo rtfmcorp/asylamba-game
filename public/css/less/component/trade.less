@@ -24,12 +24,22 @@
             margin-left:-55px;
             margin-top:10px;
             padding-left:10px;
-            height:90px;
+            height:140px;
             background: #202020;
             .proposal-data {
                 display:flex;
                 justify-content: space-around;
                 text-align:center;
+            }
+            .proposal-message {
+                width:100%;
+                margin-top:10px;
+                textarea {
+                    display:block;
+                    width:90%;
+                    margin:auto;
+                    resize:none;
+                }
             }
             .proposal-button {
                 margin-top:10px;
@@ -52,6 +62,6 @@
         }
     }
     .player[data-deployed=true] {
-        height:160px;
+        height:200px;
     }
 }
