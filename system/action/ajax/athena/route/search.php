@@ -1,5 +1,6 @@
 <?php
 
+use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Container\Params;
 
 $request = $this->getContainer()->get('app.request');
@@ -15,6 +16,10 @@ $max = $request->request->has('max') ? abs(intval($request->request->get('max'))
 $request->cookies->add('p' . Params::CR_FACTIONS, json_encode($factions), true);
 $request->cookies->add('p' . Params::CR_MIN, $min, true);
 $request->cookies->add('p' . Params::CR_MAX, $max, true);
+
+if (empty($factions)) {
+    throw new FormException('aucune faction n\'a été sélectionnée');
+}
 
 $response->headers->add('Content-Type', 'application/json');
 echo(json_encode($commercialRouteManager->searchRoutes(
