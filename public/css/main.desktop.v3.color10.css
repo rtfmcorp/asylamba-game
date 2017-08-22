@@ -6394,7 +6394,7 @@ span.centred-link:focus {
   margin-left: -55px;
   margin-top: 10px;
   padding-left: 10px;
-  height: 140px;
+  height: 150px;
   background: #202020;
 }
 #rc-search-results .player .proposal-panel .proposal-data {
@@ -6431,7 +6431,7 @@ span.centred-link:focus {
   background: #4d0621;
 }
 #rc-search-results .player[data-deployed=true] {
-  height: 200px;
+  height: 210px;
 }
 .inscription {
   /* SUBNAV */
