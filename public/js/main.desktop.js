@@ -564,7 +564,7 @@ jQuery(document).ready(function($) {
                     
                     var countDataValue = $("#rc-data-count .value");
                     var countData = countDataValue.text().split('/');
-                    countDataValue.text((parseInt(countData[0]) + 1) + '/' + countData[1]);
+                    countDataValue.text((parseInt(countData[0]) + 1) + ' / ' + parseInt(countData[1]));
                     
                     $("#rc-data-count .progress-bar .content").animate({
                         width: Math.ceil(((parseInt(countData[0]) + 1) / parseInt(countData[1])) * 100) + "%"
