@@ -6381,12 +6381,12 @@ span.centred-link:focus {
   width: 0px;
   overflow: hidden;
 }
+#rc-search-results .body {
+  padding-bottom: 500px;
+}
 #rc-search-results .player {
   display: block;
   cursor: pointer;
-  width: 0px;
-  padding-left: 0px;
-  padding-right: 0;
   overflow: hidden;
   transition: height 0.2s ease-out;
 }

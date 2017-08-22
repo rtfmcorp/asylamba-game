@@ -479,7 +479,7 @@ jQuery(document).ready(function($) {
                     buffer += '<img src="/public/media/avatar/small/' + base.playerAvatar + '.png" alt="" class="picto">';
                     buffer += '<span class="title">' + base.playerName + '</span>';
                     buffer += '<strong class="name">' + base.baseName + '</strong>';
-                    buffer += '<span class="experience">' + base.distance + ' al.</span>';
+                    buffer += '<span class="experience">' + base.distance + ' al. (<a onclick="event.stopPropagation();" href="/map/place-' + base.rPlace + '" alt ="Map" target="_blank">Secteur ' + base.rSector + '</a>)</span>';
                     
                     buffer += '<div class="proposal-panel">';
                     buffer += '<div class="proposal-data"><div><span class="title">Revenu par relève</span>';
@@ -501,13 +501,7 @@ jQuery(document).ready(function($) {
             }
             buffer += '</div></div></div>';
             
-            component = $(buffer);
-            $('.component.new-message').after(component);
-            $(component).animate({width: '300px'}, 400).find('.player').animate({
-                width: '215px',
-                "padding-left": '70px',
-                "padding-right": '5px'
-            }, 400).promise().done(function() {
+            render.addComponent(3, buffer, 400, function() {
                 tradeSearchLock = false;
                 $("#rc-search-form button > .sk-circle").remove();
             });
@@ -515,22 +509,13 @@ jQuery(document).ready(function($) {
         
         removePreviousResults: function() {
             return new Promise(function(resolve, reject) {
-                var results = $("#rc-search-results");
-                results
-                    .animate({width: '0px'}, 400)
-                    .find('.player')
-                    .animate({
-                        width: '0px',
-                        "padding-left": '0px',
-                        "padding-right": '0px',
-                    }, 400)
-                    .promise()
-                    .done(function() {
-                        results.remove().promise().done(function() {
-                            resolve();
-                        });
-                    })
-                ;
+                if (document.getElementById('rc-search-results') === null) {
+                    resolve();
+                    return;
+                }
+                render.removeComponent(3, 400, function() {
+                    resolve();
+                });
             });
         },
         
