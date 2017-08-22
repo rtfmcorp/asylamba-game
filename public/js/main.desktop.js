@@ -484,8 +484,12 @@ jQuery(document).ready(function($) {
                     buffer += '</strong></div>'; 
                     buffer += '<div><span class="title">Coût de construction</span>';
                     buffer += '<strong class="name"> ' + base.price + ' <img src="/public/media/resources/credit.png" alt="" class="icon-color">';
-                    buffer += '</strong></div>'; 
-                    buffer += '</div><div class="proposal-button"><button onclick="tradeController.sendProposal(event, ' + base.rPlace + ');">Envoyer la proposition</button></div></div>';
+                    buffer += '</strong></div></div>'; 
+                    buffer += '<div class="proposal-message">\n\
+                        <textarea onclick="event.stopPropagation();" placeholder="Envoyez un message à votre futur partenaire !*"></textarea>\n\
+                        </div>'
+                    ;
+                    buffer += '<div class="proposal-button"><button onclick="tradeController.sendProposal(event, ' + base.rPlace + ');">Envoyer la proposition</button></div></div>';
                 buffer += '</div>';
             });
 
@@ -548,7 +552,8 @@ jQuery(document).ready(function($) {
                 contentType: 'application/json',
                 dataType: 'json',
                 data: JSON.stringify({
-                    base_id: baseId
+                    base_id: baseId,
+                    content: $("#base-" + baseId + ' .proposal-message textarea').val()
                 }),
                 success: function(response) {
                     var waitingDataValue = $("#rc-data-waiting").removeClass('grey').find('.value');
