@@ -113,4 +113,12 @@ class MilitaryNews extends News
     {
         return $this->isVictory;
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    protected function getNewsType()
+    {
+        return self::NEWS_TYPE_MILITARY;
+    }
 }

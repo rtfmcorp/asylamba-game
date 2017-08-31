@@ -27,4 +27,12 @@ class TradeNews extends News
     {
         return $this->transaction;
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    protected function getNewsType()
+    {
+        return self::NEWS_TYPE_TRADE;
+    }
 }

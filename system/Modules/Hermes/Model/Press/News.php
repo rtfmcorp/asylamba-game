@@ -2,7 +2,7 @@
 
 namespace Asylamba\Modules\Hermes\Model\Press;
 
-class News
+abstract class News
 {
     /** @var int **/
     protected $id;
@@ -10,8 +10,14 @@ class News
     protected $title;
     /** @var string **/
     protected $content;
+    /** @var string **/
+    protected $type;
     /** @var \DateTime **/
     protected $createdAt;
+    
+    const NEWS_TYPE_MILITARY = 'military';
+    const NEWS_TYPE_POLITICS = 'politics';
+    const NEWS_TYPE_TRADE = 'trade';
     
     /**
      * @param int $id
@@ -88,4 +94,9 @@ class News
     {
         return $this->createdAt;
     }
+    
+    /**
+     * @return string
+     */
+    protected abstract function getNewsType();
 }

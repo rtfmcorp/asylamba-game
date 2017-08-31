@@ -56,4 +56,12 @@ class PoliticNews extends News
     {
         return $this->type;
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    protected function getNewsType()
+    {
+        return self::NEWS_TYPE_POLITICS;
+    }
 }
