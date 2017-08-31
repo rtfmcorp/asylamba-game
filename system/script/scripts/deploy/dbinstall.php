@@ -502,6 +502,57 @@ $qr->execute(array(Transaction::TYP_RESOURCE, Transaction::ST_COMPLETED, Utils::
 	Transaction::TYP_SHIP, Transaction::ST_COMPLETED, Utils::now(), Utils::now(), 1.875));
 
 #--------------------------------------------------------------------------------------------
+echo '<h2>Ajout de la table news</h2>';
+
+$db->query("DROP TABLE IF EXISTS `news`");
+$db->query("CREATE TABLE IF NOT EXISTS `news` (
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+    `title` VARCHAR(255) NOT NULL,
+    `content` TEXT,
+	`created_at` datetime DEFAULT NULL,
+
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
+
+echo '<h2>Ajout de la table news__military</h2>';
+
+$db->query("DROP TABLE IF EXISTS `news__military`");
+$db->query("CREATE TABLE IF NOT EXISTS `news__military` (
+	`news_id` INT unsigned NOT NULL,
+	`attacker_id` INT unsigned NOT NULL,
+	`defender_id` INT unsigned NOT NULL,
+	`place_id` INT unsigned NOT NULL,
+
+	CONSTRAINT fkMilitaryNews FOREIGN KEY (news_id) REFERENCES news(id),
+	CONSTRAINT fkAttacker FOREIGN KEY (attacker_id) REFERENCES player(id),
+	CONSTRAINT fkDefender FOREIGN KEY (defender_id) REFERENCES player(id),
+	CONSTRAINT fkPlace FOREIGN KEY (place_id) REFERENCES place(id)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;");
+
+echo '<h2>Ajout de la table news__politics</h2>';
+
+$db->query("DROP TABLE IF EXISTS `news__politics`");
+$db->query("CREATE TABLE IF NOT EXISTS `news__politics` (
+	`news_id` INT unsigned NOT NULL,
+	`faction_id` INT unsigned NOT NULL,
+    `type` VARCHAR(15) NOT NULL,
+
+	CONSTRAINT fkPoliticsNews FOREIGN KEY (news_id) REFERENCES news(id),
+	CONSTRAINT fkFaction FOREIGN KEY (faction_id) REFERENCES color(id)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;");
+
+echo '<h2>Ajout de la table news__trade</h2>';
+
+$db->query("DROP TABLE IF EXISTS `news__trade`");
+$db->query("CREATE TABLE IF NOT EXISTS `news__trade` (
+	`news_id` INT unsigned NOT NULL,
+	`transaction_id` INT unsigned NOT NULL,
+
+	CONSTRAINT fkTradeNews FOREIGN KEY (news_id) REFERENCES news(id),
+	CONSTRAINT fkTransaction FOREIGN KEY (transaction_id) REFERENCES transaction(id)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;");
+
+#--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table commercialShipping</h2>';
 
 $db->query("DROP TABLE IF EXISTS `commercialShipping`");

@@ -247,6 +247,33 @@ CREATE TABLE `law` (
   `dCreation` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `news` (
+   `id` int(10) UNSIGNED NOT NULL,
+   `title` varchar(255) NOT NULL,
+   `content` text,
+   `created_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `news__military` (
+   `news_id` int(10) UNSIGNED NOT NULL,
+   `attacker_id` int(10) UNSIGNED NOT NULL,
+   `defender_id` int(10) UNSIGNED NOT NULL,
+   `place_id`  int(10) UNSIGNED NOT NULL,
+   `type` varchar(15) NOT NULL,
+   `isVictory` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `news__politics` (
+    `news_id` int(10) UNSIGNED NOT NULL,
+    `faction_id` int(10) UNSIGNED NOT NULL,
+    `type` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `news__trade` (
+    `news_id` int(10) UNSIGNED NOT NULL,
+    `transaction_id` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `notification` (
   `id` int(10) UNSIGNED NOT NULL,
   `rPlayer` int(10) UNSIGNED NOT NULL,
@@ -808,6 +835,23 @@ ALTER TABLE `notification`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fkNotificationPlayer` (`rPlayer`);
 
+ALTER TABLE `news`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `news__military`
+  ADD KEY `fkMilitaryNews` (`news_id`),
+  ADD KEY `fkAttacker` (`attacker_id`),
+  ADD KEY `fkDefender` (`defender_id`),
+  ADD KEY `fkPlace` (`place_id`);
+
+ALTER TABLE `news__politics`
+  ADD KEY `fkPoliticsNews` (`news_id`),
+  ADD KEY `fkFaction` (`faction_id`);
+
+ALTER TABLE `news__trade`
+  ADD KEY `fkTradeNews` (`news_id`),
+  ADD KEY `fkTransaction` (`transaction_id`);
+
 ALTER TABLE `orbitalBase`
   ADD PRIMARY KEY (`rPlace`),
   ADD KEY `fkOrbitalBasePlayer` (`rPlayer`);
@@ -950,6 +994,8 @@ ALTER TABLE `forumTopic`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `law`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `news`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `notification`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 ALTER TABLE `orbitalBaseBuildingQueue`
@@ -1035,6 +1081,20 @@ ALTER TABLE `law`
 
 ALTER TABLE `notification`
   ADD CONSTRAINT `fkNotificationPlayer` FOREIGN KEY (`rPlayer`) REFERENCES `player` (`id`);
+
+ALTER TABLE `news__military`
+  ADD CONSTRAINT `fkMilitaryNews` FOREIGN KEY (`news_id`) REFERENCES `news` (`id`),
+  ADD CONSTRAINT `fkAttacker` FOREIGN KEY (`attacker_id`) REFERENCES `player` (`id`),
+  ADD CONSTRAINT `fkDefender` FOREIGN KEY (`defender_id`) REFERENCES `player` (`id`),
+  ADD CONSTRAINT `fkPlace` FOREIGN KEY (`place_id`) REFERENCES `place` (`id`);
+
+ALTER TABLE `news__politics`
+  ADD CONSTRAINT `fkPoliticsNews` FOREIGN KEY (`news_id`) REFERENCES `news` (`id`),
+  ADD CONSTRAINT `fkFaction` FOREIGN KEY (`faction_id`) REFERENCES `color` (`id`);
+
+ALTER TABLE `news__trade`
+  ADD CONSTRAINT `fkTradeNews` FOREIGN KEY (`news_id`) REFERENCES `news` (`id`),
+  ADD CONSTRAINT `fkTransaction` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`id`);
 
 ALTER TABLE `orbitalBase`
   ADD CONSTRAINT `fkOrbitalBasePlace` FOREIGN KEY (`rPlace`) REFERENCES `place` (`id`),
