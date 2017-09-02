@@ -100,6 +100,9 @@ echo '<div id="nav">';
 		$isActive = (in_array($response->getPage(), array('rank'))) ? 'active' : NULL;
 		echo '<a href="' . APP_ROOT . 'rank" class="square hb rb ' . $isActive . '" title="classements"><img src="' . MEDIA . 'common/nav-rank.png" alt="" /></a>';
 
+		$isActive = (in_array($response->getPage(), array('press'))) ? 'active' : NULL;
+		echo '<a href="' . APP_ROOT . 'press" class="square hb rb custom ' . $isActive . '" title="gazette"><img src="' . MEDIA . 'common/nav-press.svg" alt="" /></a>';
+
 		$isActive = (in_array($response->getPage(), array('embassy'))) ? 'active' : NULL;
 		echo '<a href="' . APP_ROOT . 'embassy" class="square hb rb ' . $isActive . '" title="ambassades"><img src="' . MEDIA . 'common/nav-embassy.png" alt="" /></a>';
 
