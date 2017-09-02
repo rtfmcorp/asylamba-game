@@ -53,3 +53,5 @@ services:
             - "@hermes.news_manager"
         tags:
             - {type: "event_listener", event: "athena.transaction_proposal", method: "onTransactionProposal"}
+            - {type: "event_listener", event: "ares.conquest", method: "onConquest"}
+            - {type: "event_listener", event: "ares.loot", method: "onLoot"}

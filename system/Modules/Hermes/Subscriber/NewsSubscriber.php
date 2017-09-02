@@ -15,6 +15,9 @@ use Asylamba\Modules\Athena\Model\Transaction;
 
 use Asylamba\Modules\Athena\Event\TransactionProposalEvent;
 
+use Asylamba\Modules\Ares\Event\ConquestEvent;
+use Asylamba\Modules\Ares\Event\LootEvent;
+
 use Asylamba\Classes\Library\Format;
 
 class NewsSubscriber
@@ -62,6 +65,54 @@ class NewsSubscriber
             ->setTitle($title)
             ->setContent($content)
             ->setTransaction($transaction)
+        );
+    }
+    
+    /**
+     * @param ConquestEvent $event
+     */
+    public function onConquest(ConquestEvent $event)
+    {
+        if ($event->getIsVictory()) {
+            $title = "La planète {$event->getPlace()->getBaseName()} est tombée aux mains de {$event->getAttacker()->getName()} !";
+            $content = "";
+        } else {
+            $title = "{$event->getDefender()->getName()} a repoussé une conquête sur la planète {$event->getPlace()->getBaseName()}";
+            $content = "";
+        }
+        $this->newsManager->create(
+            (new MilitaryNews())
+            ->setTitle($title)
+            ->setContent($content)
+            ->setType(MilitaryNews::TYPE_LOOT)
+            ->setPlace($event->getPlace())
+            ->setAttacker($event->getAttacker())
+            ->setDefender($event->getDefender())
+            ->setIsVictory($event->getIsVictory())
+        );
+    }
+    
+    /**
+     * @param LootEvent $event
+     */
+    public function onLoot(LootEvent $event)
+    {
+        if ($event->getIsVictory()) {
+            $title = "La planète {$event->getPlace()->getBaseName()} a subi un pillage de {$event->getAttacker()->getName()} !";
+            $content = "";
+        } else {
+            $title = "{$event->getDefender()->getName()} a repoussé un pillage sur la planète {$event->getPlace()->getBaseName()}";
+            $content = "";
+        }
+        $this->newsManager->create(
+            (new MilitaryNews())
+            ->setTitle($title)
+            ->setContent($content)
+            ->setType(MilitaryNews::TYPE_LOOT)
+            ->setPlace($event->getPlace())
+            ->setAttacker($event->getAttacker())
+            ->setDefender($event->getDefender())
+            ->setIsVictory($event->getIsVictory())
         );
     }
 }

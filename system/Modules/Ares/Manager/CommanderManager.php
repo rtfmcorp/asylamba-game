@@ -38,6 +38,8 @@ use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
 use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
+use Asylamba\Modules\Ares\Event\ConquestEvent;
+use Asylamba\Modules\Ares\Event\LootEvent;
 
 class CommanderManager
 {
@@ -649,7 +651,8 @@ class CommanderManager
 						$report = $this->createReport($place);
 
 						$this->placeManager->sendNotif($place, Place::LOOTPLAYERWHITBATTLESUCCESS, $commander, $report->id);
-				
+                        
+                        $this->eventDispatcher->dispatch(new LootEvent($commander, $commanderPlayer, $placePlayer, $place, true));
 					# défaite
 					} else {
 						# enlever le commandant de la session
@@ -671,11 +674,14 @@ class CommanderManager
 						}
 
 						$this->placeManager->sendNotif($place, Place::LOOTPLAYERWHITBATTLEFAIL, $commander, $report->id);
+                        
+                        $this->eventDispatcher->dispatch(new LootEvent($commander, $commanderPlayer, $placePlayer, $place, false));
 					}
 				} else {
 					$this->lootAPlayerPlace($commander, $playerBonus, $placeBase);
 					$this->comeBack($place, $commander, $commanderPlace, $playerBonus);
 					$this->placeManager->sendNotif($place, Place::LOOTPLAYERWHITOUTBATTLESUCCESS, $commander);
+                    $this->eventDispatcher->dispatch(new LootEvent($commander, $commanderPlayer, $placePlayer, $place, true));
 				}
 
 			} else {
@@ -806,6 +812,7 @@ class CommanderManager
 					$commander->line = 2;
 					
 					$this->eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place));
+                    $this->eventDispatcher->dispatch(new ConquestEvent($commander, $commanderPlayer, $placePlayer, $place, true));
 
 					# PATCH DEGUEU POUR LES MUTLIS-COMBATS
 					$this->notificationManager->patchForMultiCombats($commander->rPlayer, $place->rPlayer, $commander->dArrival);
@@ -817,7 +824,7 @@ class CommanderManager
 							$place->commanders = array_merge($place->commanders);
 						}
 					}
-
+                    $this->eventDispatcher->dispatch(new ConquestEvent($commander, $commanderPlayer, $placePlayer, $place, false));
 					$this->placeManager->sendNotifForConquest($place, Place::CONQUERPLAYERWHITBATTLEFAIL, $commander, $reportIds);
 				}
 
