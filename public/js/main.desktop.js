@@ -742,6 +742,28 @@ jQuery(document).ready(function($) {
 				.css('left', -(parseInt(mapController.map.obj.css('left'))) * (mapController.minimap.size / mapController.map.size));
 		}
 	};
+    
+    newsController = {
+        currentNews: null,
+        
+        deployNews: function(newsId) {
+            $(".news .deployed").slideUp('fast', function() {
+                $(this).removeClass('deployed');
+            });
+            var panel = $("#news-" + newsId + ' .hidden')
+            if (panel.hasClass('deployed')) {
+                panel.slideUp('fast', function() {
+                    panel.removeClass('deployed');
+                    currentNews = null;
+                })
+                return false;
+            }
+            panel.slideDown('fast', function() {
+                currentNews = newsId;
+                panel.addClass('deployed');
+            });
+        },
+    };
 
 	// évènement sur les movers
 	$('#mapToLeft').live('click', function(e) 	{ mapController.move(mapController.params.cMovingSpeed, 0, mapController.params.animationSpeed); });

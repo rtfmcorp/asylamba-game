@@ -4,8 +4,6 @@ namespace Asylamba\Modules\Gaia\EventListener;
 
 use Asylamba\Modules\Gaia\Manager\SectorManager;
 use Asylamba\Modules\Gaia\Manager\SystemManager;
-use Asylamba\Modules\Athena\Manager\OrbitalBaseManager;
-use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Classes\Entity\EntityManager;
 
 use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
