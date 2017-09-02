@@ -72,10 +72,12 @@ class Chronos {
 	 * transforme une date en temps de jeu
 	 * arg : $date
 	 *     : str => date au format sql (2012-08-01 18:30:00)
+     * @param string|DateTime $date
 	 */
 	public static function transform($date) {
-		$date = new \DateTime($date);
-
+        if (!$date instanceof \DateTime) {
+            $date = new \DateTime($date);
+        }
 		$releve  = self::getRel($date->format('Y-m-d H:i:s'));
 		$segment = floor($releve / Chronos::CO_SEG);
 		$releve -= $segment * Chronos::CO_SEG;
