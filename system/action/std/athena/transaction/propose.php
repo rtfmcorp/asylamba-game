@@ -144,6 +144,8 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 							$tr = new Transaction();
 							$tr->rPlayer = $session->get('playerId');
 							$tr->rPlace = $rPlace;
+                            $tr->placeName = $base->getName();
+                            $tr->playerName = $session->get('playerInfo')->get('name');
 							$tr->type = $type; 
 							$tr->quantity = $quantity;
 							$tr->identifier = $identifier;

@@ -81,6 +81,8 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND in_array($baseId, $verif)) 
 									$tr = new Transaction();
 									$tr->rPlayer = $session->get('playerId');
 									$tr->rPlace = $orbitalBase->rPlace;
+                                    $tr->placeName = $orbitalBase->getName();
+                                    $tr->playerName = $session->get('playerInfo')->get('name');
 									$tr->type = Transaction::TYP_SHIP; 
 									$tr->quantity = $ships;
 									$tr->identifier = $shipType;
