@@ -2,6 +2,8 @@
 
 namespace Asylamba\Classes\Entity;
 
+use Asylamba\Classes\Entity\AbstractRepository;
+
 class UnitOfWork {
     /** @var array **/
     protected $entities = [];
@@ -131,5 +133,14 @@ class UnitOfWork {
         if(isset($this->entities[$className])) {
             unset($this->entities[$className][spl_object_hash($object)]);
         }
+    }
+    
+    /**
+     * @param string $repository
+     * @return AbstractRepository
+     */
+    public function getRepository($repository)
+    {
+        return $this->entityManager->getRepository($repository);
     }
 }
