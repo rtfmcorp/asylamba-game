@@ -261,7 +261,7 @@ CREATE TABLE `news__military` (
    `defender_id` int(10) UNSIGNED NOT NULL,
    `place_id`  int(10) UNSIGNED NOT NULL,
    `type` varchar(15) NOT NULL,
-   `isVictory` tinyint(4) NOT NULL
+   `is_victory` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `news__politics` (

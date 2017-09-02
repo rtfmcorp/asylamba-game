@@ -523,6 +523,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `news__military` (
 	`attacker_id` INT unsigned NOT NULL,
 	`defender_id` INT unsigned NOT NULL,
 	`place_id` INT unsigned NOT NULL,
+    `type` VARCHAR(15) NOT NULL,
+    `is_victory` TINYINT(4) UNSIGNED NOT NULL,
 
 	CONSTRAINT fkMilitaryNews FOREIGN KEY (news_id) REFERENCES news(id),
 	CONSTRAINT fkAttacker FOREIGN KEY (attacker_id) REFERENCES player(id),
