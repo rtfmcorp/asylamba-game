@@ -22,10 +22,15 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
+use Asylamba\Classes\Worker\EventDispatcher;
+
+use Asylamba\Modules\Athena\Event\TransactionProposalEvent;
 
 class TransactionManager{
     /** @var EntityManager **/
     protected $entityManager;
+    /** @var EventDispatcher **/
+    protected $eventDispatcher;
 	/** @var CommercialTaxManager **/
 	protected $commercialTaxManager;
 	/** @var SessionWrapper **/
@@ -33,11 +38,13 @@ class TransactionManager{
 
 	/**
 	 * @param EntityManager $entityManager
+     * @param EventDispatcher $eventDispatcher
 	 * @param CommercialTaxManaer $commercialTaxManager
 	 * @param SessionWrapper $session
 	 */
-	public function __construct(EntityManager $entityManager, CommercialTaxManager $commercialTaxManager, SessionWrapper $session) {
+	public function __construct(EntityManager $entityManager, EventDispatcher $eventDispatcher, CommercialTaxManager $commercialTaxManager, SessionWrapper $session) {
 		$this->entityManager = $entityManager;
+        $this->eventDispatcher = $eventDispatcher;
 		$this->commercialTaxManager = $commercialTaxManager;
 		$this->sessionWrapper = $session;
 	}
@@ -99,6 +106,10 @@ class TransactionManager{
 	public function add(Transaction $transaction) {
         $this->entityManager->persist($transaction);
         $this->entityManager->flush($transaction);
+        
+        if ($transaction->statement === Transaction::ST_PROPOSED) {
+            $this->eventDispatcher->dispatch(new TransactionProposalEvent($transaction));
+        }
 	}
 	
 	public function render(Transaction $transaction, $currentRate, $token, $ob) {

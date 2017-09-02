@@ -107,5 +107,6 @@ services:
         class: Asylamba\Modules\Athena\Manager\TransactionManager
         arguments:
             - "@entity_manager"
+            - "@event_dispatcher"
             - "@athena.commercial_tax_manager"
             - "@session_wrapper"
