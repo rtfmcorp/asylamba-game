@@ -32,6 +32,11 @@ services:
         arguments:
             - "@database"
             
+    hermes.news_manager:
+        class: Asylamba\Modules\Hermes\Manager\NewsManager
+        arguments:
+            - "@entity_manager"
+            
     hermes.notification_manager:
         class: Asylamba\Modules\Hermes\Manager\NotificationManager
         arguments:
@@ -41,3 +46,10 @@ services:
         class: Asylamba\Modules\Hermes\Manager\RoadMapManager
         arguments:
             - "@database"
+            
+    hermes.news_subscriber:
+        class: Asylamba\Modules\Hermes\Subscriber\NewsSubscriber
+        arguments:
+            - "@hermes.news_manager"
+        tags:
+            - {type: "event_listener", event: "athena.transaction_proposal", method: "onTransactionProposal"}
