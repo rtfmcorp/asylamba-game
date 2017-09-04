@@ -1,0 +1,47 @@
+<?php
+
+namespace Asylamba\Classes\Library\WS;
+
+use Wrench\Frame\HybiFrame;
+
+class Connection
+{
+    /** @var resource **/
+    protected $socket;
+
+    const DEFAULT_BUFFER_LENGTH = 1400;
+    
+    /**
+     * @param resource $socket
+     */
+    public function __construct($socket)
+    {
+        $this->socket = $socket;
+    }
+    
+    public function send($payload)
+    {
+        $frame = new HybiFrame();
+        $frame->encode($payload);
+        $buffer = $frame->getFrameBuffer();
+        fputs($this->socket, $buffer);
+    }
+    
+    public function receive()
+    {
+		$buffer = fread($this->socket, self::DEFAULT_BUFFER_LENGTH);
+        if (empty($buffer)) {
+            return false;
+        }
+        
+        $frame = new HybiFrame();
+        $frame->receiveData($buffer);
+        
+        return $frame->getFramePayload();
+    }
+    
+    public function getSocket()
+    {
+        return $this->socket;
+    }
+}

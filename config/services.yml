@@ -146,6 +146,11 @@ services:
             - "%redis_port"
             - "%redis_password"
             - "%redis_timeout"
+            
+    ws_connection_handler:
+        class: Asylamba\Classes\Library\WS\ConnectionHandler
+        arguments:
+            - "%server_host"
         
     exception_listener:
         class: Asylamba\Classes\EventListener\ExceptionListener
