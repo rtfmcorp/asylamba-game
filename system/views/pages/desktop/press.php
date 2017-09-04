@@ -1,6 +1,7 @@
 <?php
 
 use Asylamba\Modules\Hermes\Model\Press\News;
+use Asylamba\Modules\Hermes\Model\Press\MilitaryNews;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Classes\Library\Chronos;
 
@@ -55,13 +56,41 @@ $tradeNews = $newsManager->getList(News::NEWS_TYPE_TRADE, 30, 0);
             </div>
         </div>
     </div>
-    <div class="component player">
+    <div class="component news">
         <div class="head skin-2">
             <h2>Militaire</h2>
         </div>
         <div class="fix-body">
             <div class="body">
-                
+                <?php foreach ($militaryNews as $militaryNew) {
+                    switch (true) {
+                        case $militaryNew->getIsVictory() && $militaryNew->getType() === MilitaryNews::TYPE_CONQUEST:
+                            $picto = 'colo';
+                            break;
+                        case $militaryNew->getIsVictory() && $militaryNew->getType() === MilitaryNews::TYPE_LOOT:
+                            $picto = 'loot';
+                            break;
+                        case !$militaryNew->getIsVictory() && $militaryNew->getType() === MilitaryNews::TYPE_CONQUEST:
+                            $picto = 'shield-colo';
+                            break;
+                        case !$militaryNew->getIsVictory() && $militaryNew->getType() === MilitaryNews::TYPE_LOOT:
+                            $picto = 'shield';
+                            break;
+                    }
+                ?>
+                    <div id="news-<?= $militaryNew->getId() ?>" class="news">
+                        <div class="news-head color<?= ($militaryNew->getIsVictory()) ? $militaryNew->getAttacker()->getRColor() : $militaryNew->getDefender()->getRColor() ?>" onclick="newsController.deployNews(<?= $militaryNew->getId(); ?>);">
+                            <img class="picto" src="<?= MEDIA . 'map/action/' . $picto . '.png' ?>"/> 
+                            <div class="info">
+                                <span class="title"><?= $militaryNew->getTitle(); ?></span>
+                                <span class="date"><?= Chronos::transform($militaryNew->getCreatedAt()); ?></span>
+                            </div>
+                        </div>
+                        <div class="hidden">
+                            <?= $militaryNew->getContent(); ?>
+                        </div>
+                    </div>
+                <?php } ?>
             </div>
         </div>
     </div>

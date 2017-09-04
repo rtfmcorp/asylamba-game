@@ -84,7 +84,7 @@ class NewsSubscriber
             (new MilitaryNews())
             ->setTitle($title)
             ->setContent($content)
-            ->setType(MilitaryNews::TYPE_LOOT)
+            ->setType(MilitaryNews::TYPE_CONQUEST)
             ->setPlace($event->getPlace())
             ->setAttacker($event->getAttacker())
             ->setDefender($event->getDefender())
