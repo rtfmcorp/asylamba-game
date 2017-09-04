@@ -56,6 +56,8 @@ class Server
     protected $nbUncollectedCycles = 0;
     /** @var int **/
     protected $collectionCyclesNumber;
+    /** @var array **/
+    protected $ws = [];
 
     /**
      * @param Container $container
@@ -69,6 +71,7 @@ class Server
         $this->requestFactory = $container->get('request_factory');
         $this->responseFactory = $container->get('response_factory');
         $this->clientManager = $container->get('client_manager');
+        $this->connectionHandler = $container->get('ws_connection_handler');
 		$this->realTimeActionScheduler = $container->get('realtime_action_scheduler');
 		$this->cyclicActionScheduler = $container->get('cyclic_action_scheduler');
         $this->serverCycleTimeout = $container->getParameter('server_cycle_timeout');
@@ -100,7 +103,7 @@ class Server
     {
 		$this->processManager = $this->container->get('process_manager');
 		$this->taskManager = $this->container->get('task_manager');
-        $inputs = $this->inputs;
+        $inputs = array_merge($this->inputs, $this->ws);
         $outputs = $this->outputs;
         $errors = null;
         gc_disable();
@@ -110,10 +113,17 @@ class Server
                 continue;
             }
             foreach ($inputs as $stream) {
-				$name = array_search($stream, $this->inputs);
+				$name = array_search($stream, $inputs);
 				if ($name === 'http_server') {
 					$this->treatHttpInput(stream_socket_accept($stream));
-				} else {
+                } elseif (($parts = explode('-', $name))[0] === 'client') {
+                    if (($client = $this->clientManager->getClientById($parts[1])) === null) {
+                        $this->connectionHandler->close($stream);
+                        unset($this->ws[$name]);
+                    } elseif (!$this->connectionHandler->handle($client)) {
+                        unset($this->ws[$name]);
+                    }
+                } else {
 					$this->treatProcessInput($name);
 				}
             }
@@ -132,9 +142,19 @@ class Server
 			}
 			$request = $this->requestFactory->createRequestFromInput($data);
 			$this->container->set('app.request', $request);
+            
 			if (($client = $this->clientManager->getClient($request)) === null) {
 				$client = $this->clientManager->createClient($request);
 			}
+            if (($wsKey = $request->headers->get('sec-websocket-key')) !== null) {
+                $this->connectionHandler->handshake($input, $wsKey);
+        
+                $this->ws['client-' . $client->getId()] = $input;
+
+                $this->clientManager->assignWsConnection($client, $input);
+                
+                return;
+            }
 			$response = $this->router->processRequest($request);
 			$this->container->set('app.response', $response);
 			$this->responseFactory->processResponse($request, $response, $client);
@@ -214,7 +234,7 @@ class Server
     {
 		$this->container->cleanApplication();
 		
-        $inputs = $this->inputs;
+        $inputs = array_merge($this->inputs, $this->ws);
         $outputs = $this->outputs;
         $errors = null;
 		

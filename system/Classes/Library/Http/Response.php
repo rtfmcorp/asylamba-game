@@ -28,6 +28,7 @@ class Response
     public $cookies = [];
     /** @var array **/
     protected $statuses = [
+        101 => 'Switching Protocols',
         200 => 'OK',
 		302 => 'Found',
         400 => 'Bad Request',
@@ -35,6 +36,7 @@ class Response
 		500 => 'Internal Server Error'
     ];
 	
+    const STATUS_SWITCHING_PROTOCOLS = 101;
 	const STATUS_OK = 200;
 	const STATUS_REDIRECT = 302;
 	const STATUS_NOT_FOUND = 404;

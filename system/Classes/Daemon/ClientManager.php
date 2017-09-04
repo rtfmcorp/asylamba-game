@@ -9,6 +9,8 @@ use Asylamba\Classes\Library\Session\SessionWrapper;
 
 use Asylamba\Classes\Library\Http\Request;
 
+use Asylamba\Classes\Library\WS\Connection;
+
 class ClientManager
 {
     /** @var array **/
@@ -63,6 +65,14 @@ class ClientManager
         return $client;
     }
     
+    public function getClientById($clientId)
+    {
+        if (!isset($this->clients[$clientId])) {
+            return null;
+        }
+        return $this->clients[$clientId];
+    }
+    
     /**
      * @param Request $request
      * @return Client
@@ -78,6 +88,20 @@ class ClientManager
         $this->clients[$client->getId()] = $client;
 		$this->sessionWrapper->setCurrentSession($this->sessionWrapper->createSession($client->getId()));
         return $client;
+    }
+    
+    public function broadcast($payload)
+    {
+        foreach($this->clients as $client) {
+            if (($connection = $client->getWsConnection()) !== null) {
+                $connection->send($payload);
+            }
+        }
+    }
+    
+    public function assignWsConnection(Client $client, $input)
+    {
+        $client->setWsConnection(new Connection($input));
     }
 	
 	/**

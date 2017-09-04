@@ -2,6 +2,8 @@
 
 namespace Asylamba\Classes\Daemon;
 
+use Asylamba\Classes\Library\WS\Connection;
+
 class Client
 {
     /** @var string **/
@@ -12,6 +14,8 @@ class Client
     protected $isFirstConnection;
 	/** @var int **/
 	protected $playerId;
+    /** @var Connection **/
+    protected $wsConnection;
     
     /**
      * @param int $id
@@ -88,4 +92,23 @@ class Client
 	{
 		return $this->playerId;
 	}
+    
+    /**
+     * @param Connection $connection
+     * @return $this
+     */
+    public function setWsConnection(Connection $connection)
+    {
+        $this->wsConnection = $connection;
+        
+        return $this;
+    }
+    
+    /**
+     * @return Connection
+     */
+    public function getWsConnection()
+    {
+        return $this->wsConnection;
+    }
 }
