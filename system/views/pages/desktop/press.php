@@ -62,7 +62,7 @@ $tradeNews = $newsManager->getList(News::NEWS_TYPE_TRADE, 30, 0);
             <div class="body">
                 <?php foreach ($militaryNews as $militaryNew) { ?>
                     <div id="news-<?= $militaryNew->getId() ?>" class="news">
-                        <div class="news-head color<?= ($militaryNew->getIsVictory()) ? $militaryNew->getAttacker()->getRColor() : $militaryNew->getDefender()->getRColor() ?>" onclick="newsController.deployNews(<?= $militaryNew->getId(); ?>);">
+                        <div class="news-head color<?= ($militaryNew->getIsVictory()) ? $militaryNew->getAttacker()->getRColor() : $militaryNew->getDefender()->getRColor() ?>" onclick="pressController.deployNews(<?= $militaryNew->getId(); ?>);">
                             <img class="picto" src="<?= $militaryNew->getNewsPicto(); ?>"/> 
                             <div class="info">
                                 <span class="title"><?= $militaryNew->getTitle(); ?></span>
@@ -95,7 +95,7 @@ $tradeNews = $newsManager->getList(News::NEWS_TYPE_TRADE, 30, 0);
             <div class="body">
                 <?php foreach ($tradeNews as $tradeNew) { ?>
                     <div id="news-<?= $tradeNew->getId() ?>" class="news">
-                        <div class="news-head color<?= $tradeNew->getTransaction()->playerColor ?>" onclick="newsController.deployNews(<?= $tradeNew->getId(); ?>);">
+                        <div class="news-head color<?= $tradeNew->getTransaction()->playerColor ?>" onclick="pressController.deployNews(<?= $tradeNew->getId(); ?>);">
                             <img class="picto" src="<?= $tradeNew->getNewsPicto(); ?>"/> 
                             <div class="info">
                                 <span class="title"><?= $tradeNew->getTitle(); ?></span>
