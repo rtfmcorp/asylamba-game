@@ -21,10 +21,15 @@ class Connection
     
     public function send($payload)
     {
+        if (get_resource_type($this->socket) === 'Unknown') {
+            $this->socket = null;
+            return false;
+        }
         $frame = new HybiFrame();
         $frame->encode($payload);
         $buffer = $frame->getFrameBuffer();
         fputs($this->socket, $buffer);
+        return true;
     }
     
     public function receive()

@@ -104,6 +104,11 @@ class Client
         return $this;
     }
     
+    public function removeWsConnection()
+    {
+        $this->wsConnection = null;
+    }
+    
     /**
      * @return Connection
      */

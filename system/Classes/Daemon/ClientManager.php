@@ -94,7 +94,9 @@ class ClientManager
     {
         foreach($this->clients as $client) {
             if (($connection = $client->getWsConnection()) !== null) {
-                $connection->send($payload);
+                if (!$connection->send($payload)) {
+                    $client->removeWsConnection();
+                }
             }
         }
     }
