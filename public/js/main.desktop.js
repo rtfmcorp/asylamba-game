@@ -743,7 +743,7 @@ jQuery(document).ready(function($) {
 		}
 	};
     
-    newsController = {
+    pressController = {
         currentNews: null,
         
         deployNews: function(newsId) {
@@ -762,6 +762,31 @@ jQuery(document).ready(function($) {
                 currentNews = newsId;
                 panel.addClass('deployed');
             });
+        },
+    };
+    
+    newsController = {
+        
+        add: function(news) {
+            $("#news-container").append(
+                "<div id='news-alert-" + news.id + "' class='news-alert'>" +
+                "<img class='picto' src='" + news.news_picto + "' alt='news'>" +
+                "<h4 class='title'>" + news.title + "</h4></div>"
+            );
+    
+            setTimeout(function() {
+               $("#news-alert-" + news.id).fadeTo('fast', 0).slideUp('fast', function() {
+                   $(this).remove();
+               }) 
+            }, 7000);
+    
+            var menuItem = $("#menu-press-item");
+            var badge = menuItem.find('.number');
+            if (badge.length === 0) {
+                menuItem.append('<span class="number">1</span>');
+            } else {
+                badge.text(parseInt(badge.text()) + 1);
+            }
         },
     };
 
@@ -1281,4 +1306,21 @@ jQuery(document).ready(function($) {
 			$('.army-bull').remove();
 		});
 	});
+    
+    var ws = new WebSocket("ws://game.asylamba.local");
+    ws.onmessage = function(event) {
+        var data = JSON.parse(event.data);
+        
+        switch (data.type) {
+            case 'news_creation': newsController.add(data.news); break;
+        };
+    };
+    ws.onclose = function(event) {
+        console.log('close');
+        console.log(event);
+    };
+    ws.onerror = function(event) {
+        console.log('error');
+        console.log(event);
+    };
 });

@@ -1,8 +1,6 @@
 <?php
 
 use Asylamba\Modules\Hermes\Model\Press\News;
-use Asylamba\Modules\Hermes\Model\Press\MilitaryNews;
-use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Classes\Library\Chronos;
 
 $request = $this->getContainer()->get('app.request');
@@ -62,25 +60,10 @@ $tradeNews = $newsManager->getList(News::NEWS_TYPE_TRADE, 30, 0);
         </div>
         <div class="fix-body">
             <div class="body">
-                <?php foreach ($militaryNews as $militaryNew) {
-                    switch (true) {
-                        case $militaryNew->getIsVictory() && $militaryNew->getType() === MilitaryNews::TYPE_CONQUEST:
-                            $picto = 'colo';
-                            break;
-                        case $militaryNew->getIsVictory() && $militaryNew->getType() === MilitaryNews::TYPE_LOOT:
-                            $picto = 'loot';
-                            break;
-                        case !$militaryNew->getIsVictory() && $militaryNew->getType() === MilitaryNews::TYPE_CONQUEST:
-                            $picto = 'shield-colo';
-                            break;
-                        case !$militaryNew->getIsVictory() && $militaryNew->getType() === MilitaryNews::TYPE_LOOT:
-                            $picto = 'shield';
-                            break;
-                    }
-                ?>
+                <?php foreach ($militaryNews as $militaryNew) { ?>
                     <div id="news-<?= $militaryNew->getId() ?>" class="news">
                         <div class="news-head color<?= ($militaryNew->getIsVictory()) ? $militaryNew->getAttacker()->getRColor() : $militaryNew->getDefender()->getRColor() ?>" onclick="newsController.deployNews(<?= $militaryNew->getId(); ?>);">
-                            <img class="picto" src="<?= MEDIA . 'map/action/' . $picto . '.png' ?>"/> 
+                            <img class="picto" src="<?= $militaryNew->getNewsPicto(); ?>"/> 
                             <div class="info">
                                 <span class="title"><?= $militaryNew->getTitle(); ?></span>
                                 <span class="date"><?= Chronos::transform($militaryNew->getCreatedAt()); ?></span>
@@ -110,24 +93,10 @@ $tradeNews = $newsManager->getList(News::NEWS_TYPE_TRADE, 30, 0);
         </div>
         <div class="fix-body">
             <div class="body">
-                <?php foreach ($tradeNews as $tradeNew) {
-                    
-                    $transaction = $tradeNew->getTransaction();
-                    switch($transaction->type) {
-                        case Transaction::TYP_RESOURCE:
-                            $picto = MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($transaction->quantity) . '.png'; 
-                            break;
-                        case Transaction::TYP_SHIP:
-                            $picto = MEDIA . 'ship/picto/ship' . $transaction->identifier . '.png';
-                            break;
-                        case Transaction::TYP_COMMANDER:
-                            $picto = MEDIA . 'commander/small/' . $transaction->commanderAvatar . '.png';
-                            break;
-                    }
-                ?>
+                <?php foreach ($tradeNews as $tradeNew) { ?>
                     <div id="news-<?= $tradeNew->getId() ?>" class="news">
-                        <div class="news-head color<?= $transaction->playerColor ?>" onclick="newsController.deployNews(<?= $tradeNew->getId(); ?>);">
-                            <img class="picto" src="<?= $picto ?>"/> 
+                        <div class="news-head color<?= $tradeNew->getTransaction()->playerColor ?>" onclick="newsController.deployNews(<?= $tradeNew->getId(); ?>);">
+                            <img class="picto" src="<?= $tradeNew->getNewsPicto(); ?>"/> 
                             <div class="info">
                                 <span class="title"><?= $tradeNew->getTitle(); ?></span>
                                 <span class="date"><?= Chronos::transform($tradeNew->getCreatedAt()); ?></span>

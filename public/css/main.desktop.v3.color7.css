@@ -2915,6 +2915,31 @@ span.centred-link:focus {
 .component.new-message button:focus {
   background: #401b13;
 }
+#news-container {
+  position: absolute;
+  width: 250px;
+  z-index: 1001;
+  right: 15px;
+}
+#news-container .news-alert {
+  margin-top: 15px;
+  background: #000;
+  border: 5px solid #202020;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#news-container .news-alert .picto img {
+  width: 48px;
+  height: 48px;
+}
+#news-container .news-alert .title h4 {
+  padding-left: 10px;
+  margin: 10px 0px;
+}
 .component.news .news {
   margin: 10px;
 }
