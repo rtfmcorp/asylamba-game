@@ -31,11 +31,11 @@ for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
-$rPlace = $request->query->get('rplace');
-$type = $request->query->get('type');
-$quantity = $request->request->get('quantity');
+$rPlace = (int) $request->query->get('rplace');
+$type = (int) $request->query->get('type');
+$quantity = (int) $request->request->get('quantity');
 $identifier = $request->query->get('identifier');
-$price = $request->request->get('price');
+$price = (int) $request->request->get('price');
 
 if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPlace, $verif)) {
 	$valid = TRUE;
@@ -153,6 +153,9 @@ if ($rPlace !== FALSE AND $type !== FALSE AND $price !== FALSE AND in_array($rPl
 							$tr->commercialShipQuantity = $commercialShipQuantity;
 							$tr->statement = Transaction::ST_PROPOSED;
 							$tr->dPublication = Utils::now();
+                            if ($type === Transaction::TYP_COMMANDER) {
+                                $tr->commanderAvatar = $commander->avatar;
+                            }
 							$transactionManager->add($tr);
 
 							# création du convoi
