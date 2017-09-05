@@ -13,6 +13,8 @@ class ConnectionHandler
     
     const CLOSE_FRAME = "\x03\xe9";
     
+    const EVENT_NEWS_CREATION = 'news_creation';
+    
     /**
      * @param string $serverHost
      */

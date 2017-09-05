@@ -11,6 +11,8 @@ class MilitaryNews extends News
     protected $attacker;
     /** @var Player **/
     protected $defender;
+    /** @var Place **/
+    protected $place;
     /** @var string **/
     protected $type;
     /** @var boolean **/
@@ -120,5 +122,16 @@ class MilitaryNews extends News
     protected function getNewsType()
     {
         return self::NEWS_TYPE_MILITARY;
+    }
+    
+    public function jsonSerialize()
+    {
+        return array_merge(parent::jsonSerialize(), [
+            'type' => $this->type,
+            'attacker' => $this->attacker,
+            'defender' => $this->defender,
+            'place' => $this->place,
+            'is_victory' => $this->isVictory
+        ]);
     }
 }

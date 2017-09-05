@@ -64,4 +64,12 @@ class PoliticNews extends News
     {
         return self::NEWS_TYPE_POLITICS;
     }
+    
+    public function jsonSerialize()
+    {
+        return array_merge(parent::jsonSerialize(), [
+            'type' => $this->type,
+            'faction' => $this->faction
+        ]);
+    }
 }

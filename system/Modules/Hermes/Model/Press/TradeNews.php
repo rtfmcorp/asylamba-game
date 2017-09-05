@@ -35,4 +35,11 @@ class TradeNews extends News
     {
         return self::NEWS_TYPE_TRADE;
     }
+    
+    public function jsonSerialize()
+    {
+        return array_merge(parent::jsonSerialize(), [
+            'transaction' => $this->transaction
+        ]);
+    }
 }

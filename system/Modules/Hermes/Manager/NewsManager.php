@@ -3,6 +3,9 @@
 namespace Asylamba\Modules\Hermes\Manager;
 
 use Asylamba\Classes\Entity\EntityManager;
+use Asylamba\Classes\Daemon\ClientManager;
+
+use Asylamba\Classes\Library\WS\ConnectionHandler;
 
 use Asylamba\Modules\Hermes\Model\Press\News;
 use Asylamba\Modules\Hermes\Model\Press\MilitaryNews;
@@ -13,6 +16,8 @@ class NewsManager
 {
     /** @var EntityManager **/
     protected $entityManager;
+    /** @var ClientManager **/
+    protected $clientManager;
     /** @var array **/
     protected $classes = [
         News::NEWS_TYPE_MILITARY => MilitaryNews::class,
@@ -22,10 +27,12 @@ class NewsManager
     
     /**
      * @param EntityManager $entityManager
+     * @param ClientManager $clientManager
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, ClientManager $clientManager)
     {
         $this->entityManager = $entityManager;
+        $this->clientManager = $clientManager;
     }
     
     /**
@@ -62,5 +69,10 @@ class NewsManager
         
         $this->entityManager->persist($news);
         $this->entityManager->flush($news);
+        
+        $this->clientManager->broadcast(json_encode([
+            'type' => ConnectionHandler::EVENT_NEWS_CREATION,
+            'news' => $news
+        ]));
     }
 }

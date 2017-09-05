@@ -2,7 +2,7 @@
 
 namespace Asylamba\Modules\Hermes\Model\Press;
 
-abstract class News
+abstract class News implements \JsonSerializable
 {
     /** @var int **/
     protected $id;
@@ -99,4 +99,15 @@ abstract class News
      * @return string
      */
     protected abstract function getNewsType();
+    
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'content' => $this->content,
+            'created_at' => $this->createdAt,
+            'news_type' => $this->getNewsType()
+        ];
+    }
 }
