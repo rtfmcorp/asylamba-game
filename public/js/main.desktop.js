@@ -1307,7 +1307,7 @@ jQuery(document).ready(function($) {
 		});
 	});
     
-    var ws = new WebSocket("ws://game.asylamba.local");
+    var ws = new WebSocket("ws://" + game.host);
     ws.onmessage = function(event) {
         var data = JSON.parse(event.data);
         
