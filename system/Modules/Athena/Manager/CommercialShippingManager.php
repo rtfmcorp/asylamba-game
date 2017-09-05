@@ -64,6 +64,9 @@ class CommercialShippingManager {
 		$shippings = $this->entityManager->getRepository(CommercialShipping::class)->getAll();
 		
 		foreach ($shippings as $commercialShipping) {
+            if ($commercialShipping->statement === CommercialShipping::ST_WAITING) {
+                continue;
+            }
 			$this->realtimeActionScheduler->schedule(
 				'athena.orbital_base_manager',
 				'uCommercialShipping',
