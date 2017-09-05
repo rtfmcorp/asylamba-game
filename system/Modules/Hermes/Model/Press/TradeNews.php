@@ -28,6 +28,18 @@ class TradeNews extends News
         return $this->transaction;
     }
     
+    public function getNewsPicto()
+    {
+        switch($this->transaction->type) {
+            case Transaction::TYP_RESOURCE:
+                return MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($this->transaction->quantity) . '.png'; 
+            case Transaction::TYP_SHIP:
+                return MEDIA . 'ship/picto/ship' . $this->transaction->identifier . '.png';
+            case Transaction::TYP_COMMANDER:
+                return MEDIA . 'commander/small/' . $this->transaction->commanderAvatar . '.png';
+        }
+    }
+    
     /**
      * {@inheritdoc}
      */

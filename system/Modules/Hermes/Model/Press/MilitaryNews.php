@@ -119,6 +119,28 @@ class MilitaryNews extends News
     /**
      * {@inheritdoc}
      */
+    public function getNewsPicto()
+    {
+        switch (true) {
+            case $this->isVictory && $this->type === MilitaryNews::TYPE_CONQUEST:
+                $picto = 'colo';
+                break;
+            case $this->isVictory && $this->type === MilitaryNews::TYPE_LOOT:
+                $picto = 'loot';
+                break;
+            case !$this->isVictory && $this->type === MilitaryNews::TYPE_CONQUEST:
+                $picto = 'shield-colo';
+                break;
+            case !$this->isVictory && $this->type === MilitaryNews::TYPE_LOOT:
+                $picto = 'shield';
+                break;
+        }
+        return MEDIA . 'map/action/' . $picto . '.png';
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
     protected function getNewsType()
     {
         return self::NEWS_TYPE_MILITARY;

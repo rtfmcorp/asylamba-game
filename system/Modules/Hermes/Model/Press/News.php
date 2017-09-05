@@ -98,6 +98,11 @@ abstract class News implements \JsonSerializable
     /**
      * @return string
      */
+    public abstract function getNewsPicto();
+    
+    /**
+     * @return string
+     */
     protected abstract function getNewsType();
     
     public function jsonSerialize()
@@ -107,6 +112,7 @@ abstract class News implements \JsonSerializable
             'title' => $this->title,
             'content' => $this->content,
             'created_at' => $this->createdAt,
+            'news_picto' => $this->getNewsPicto(),
             'news_type' => $this->getNewsType()
         ];
     }

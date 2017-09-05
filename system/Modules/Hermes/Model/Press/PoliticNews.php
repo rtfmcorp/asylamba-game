@@ -60,6 +60,14 @@ class PoliticNews extends News
     /**
      * {@inheritdoc}
      */
+    public function getNewsPicto()
+    {
+        return MEDIA . 'notfound.png';
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
     protected function getNewsType()
     {
         return self::NEWS_TYPE_POLITICS;
