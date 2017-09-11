@@ -13,7 +13,7 @@ class ShipTest extends \PHPUnit\Framework\TestCase
         $arrivedAt = '2017-05-06 21:20:30';
         $updatedAt = '2017-05-06 20:20:30';
 
-        $ship =new Ship(8,FALSE);
+        $ship =new Ship(8, false);
         $ship->setId(1);
 
         $this->assertEquals(1, $ship->getId());
@@ -25,7 +25,6 @@ class ShipTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(array(35, 35, 35, 35, 25, 10, 10), $ship->getAttack());
         $this->assertEquals(120, $ship->getDefense());
         $this->assertEquals(75, $ship->getPev());
-
     }
 
     public function testFight()
@@ -36,33 +35,33 @@ class ShipTest extends \PHPUnit\Framework\TestCase
 
     public function testBonus()
     {
-
     }
 
-    protected function chooseEnemyMock($enemySquadron) {
-  		return 0;
-  	}
+    protected function chooseEnemyMock($enemySquadron)
+    {
+        return 0;
+    }
 
     public function getSquadronMock()
     {
         return [
-				'id' => 1,
-				'data' => [
-					2,
-					0,
-					17,
-					0,
-					0,
-					0,
-					0,
-					1,
-					0,
-					0,
-					0,
-					0,
-					'2017-05-16 20:00:00',
-					'2017-05-16 20:00:00'
-				]
+                'id' => 1,
+                'data' => [
+                    2,
+                    0,
+                    17,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0,
+                    0,
+                    '2017-05-16 20:00:00',
+                    '2017-05-16 20:00:00'
+                ]
       ];
     }
 }

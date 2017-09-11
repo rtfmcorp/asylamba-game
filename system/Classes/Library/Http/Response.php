@@ -35,14 +35,15 @@ class Response
 		404 => 'Not Found',
 		500 => 'Internal Server Error'
     ];
-	
+    
     const STATUS_SWITCHING_PROTOCOLS = 101;
-	const STATUS_OK = 200;
-	const STATUS_REDIRECT = 302;
-	const STATUS_NOT_FOUND = 404;
-	const STATUS_INTERNAL_SERVER_ERROR = 500;
+    const STATUS_OK = 200;
+    const STATUS_REDIRECT = 302;
+    const STATUS_NOT_FOUND = 404;
+    const STATUS_INTERNAL_SERVER_ERROR = 500;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->headers = new ParameterBag();
     }
     
@@ -113,9 +114,10 @@ class Response
     /**
      * @param int $path
      */
-    public function redirect($path) {
+    public function redirect($path)
+    {
         $this->redirect = $path;
-		$this->statusCode = self::STATUS_REDIRECT;
+        $this->statusCode = self::STATUS_REDIRECT;
     }
 
     /**
@@ -165,9 +167,9 @@ class Response
     {
         return $this->statuses[$this->statusCode];
     }
-	
-	public function send()
-	{
+    
+    public function send()
+    {
         $this->headers->set('Content-Length', strlen($this->body));
 		$message = "{$this->protocol} {$this->statusCode} {$this->statuses[$this->statusCode]}\n";
 		

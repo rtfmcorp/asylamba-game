@@ -2,7 +2,8 @@
 
 namespace Asylamba\Classes\Container;
 
-class Params {
+class Params
+{
     const LIST_ALL_FLEET = 1;
     const SHOW_MAP_MINIMAP = 2;
     const SHOW_MAP_RC = 3;
@@ -18,12 +19,12 @@ class Params {
 
     /** @var array **/
     public static $params = [
-        self::LIST_ALL_FLEET 	=> true,
-        self::SHOW_MAP_MINIMAP 	=> true,
-        self::SHOW_MAP_RC 		=> true,
-        self::SHOW_MAP_ANTISPY 	=> true,
+        self::LIST_ALL_FLEET    => true,
+        self::SHOW_MAP_MINIMAP    => true,
+        self::SHOW_MAP_RC        => true,
+        self::SHOW_MAP_ANTISPY    => true,
         self::SHOW_MAP_FLEETOUT => true,
-        self::SHOW_MAP_FLEETIN 	=> true,
+        self::SHOW_MAP_FLEETIN    => true,
         self::SHOW_ATTACK_REPORT=> true,
         self::SHOW_REBEL_REPORT => true,
         self::REDIRECT_CHAT 	=> false,
@@ -35,7 +36,8 @@ class Params {
     /**
      * @return array
      */
-    public static function getParams() {
+    public static function getParams()
+    {
         return self::$params;
     }
 }

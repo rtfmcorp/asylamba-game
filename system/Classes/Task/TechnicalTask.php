@@ -6,11 +6,11 @@ class TechnicalTask extends Task
 {
     const DEFAULT_ESTIMATED_TIME = 10.00;
     
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
     public function getType()
-	{
-		return self::TYPE_TECHNICAL;
-	}
+    {
+        return self::TYPE_TECHNICAL;
+    }
 }

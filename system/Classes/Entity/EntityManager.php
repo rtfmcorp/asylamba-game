@@ -4,7 +4,8 @@ namespace Asylamba\Classes\Entity;
 
 use Asylamba\Classes\Database\Database as Connection;
 
-class EntityManager {
+class EntityManager
+{
     /** @var Connection **/
     protected $connection;
     /** @var UnitOfWork **/
@@ -15,7 +16,8 @@ class EntityManager {
     /**
      * @param Connection $connection
      */
-    public function __construct(Connection $connection) {
+    public function __construct(Connection $connection)
+    {
         $this->connection = $connection;
     }
     
@@ -23,47 +25,47 @@ class EntityManager {
     {
         $this->unitOfWork = new UnitOfWork($this);
     }
-	
-	/**
-	 * @return bool
-	 */
-	public function beginTransaction()
-	{
-		return $this->connection->beginTransaction();
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function inTransaction()
-	{
-		return $this->connection->inTransaction();
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function commit()
-	{
-		return $this->connection->commit();
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function rollBack()
-	{
-		return $this->connection->rollBack();
-	}
-	
+    
     /**
-	 * @param string $entityClass
-	 * @return AbstractRepository
-	 */
+     * @return bool
+     */
+    public function beginTransaction()
+    {
+        return $this->connection->beginTransaction();
+    }
+    
+    /**
+     * @return bool
+     */
+    public function inTransaction()
+    {
+        return $this->connection->inTransaction();
+    }
+    
+    /**
+     * @return bool
+     */
+    public function commit()
+    {
+        return $this->connection->commit();
+    }
+    
+    /**
+     * @return bool
+     */
+    public function rollBack()
+    {
+        return $this->connection->rollBack();
+    }
+    
+    /**
+     * @param string $entityClass
+     * @return AbstractRepository
+     */
     public function getRepository($entityClass)
     {
         if (!isset($this->repositories[$entityClass])) {
-			$repositoryClass = str_replace('Model', 'Repository', $entityClass) . 'Repository';
+            $repositoryClass = str_replace('Model', 'Repository', $entityClass) . 'Repository';
             $this->repositories[$entityClass] = new $repositoryClass($this->connection, $this->unitOfWork);
         }
         return $this->repositories[$entityClass];
@@ -85,12 +87,12 @@ class EntityManager {
         $this->unitOfWork->removeObject($entity);
     }
     
-	/**
-	 * @param mixed $entity
-	 */
+    /**
+     * @param mixed $entity
+     */
     public function flush($entity = null)
     {
-        switch(gettype($entity)) {
+        switch (gettype($entity)) {
             case 'NULL':
                 $this->unitOfWork->flushAll();
                 break;
@@ -104,12 +106,12 @@ class EntityManager {
         }
     }
     
-	/**
-	 * @param mixed $entity
-	 */
+    /**
+     * @param mixed $entity
+     */
     public function clear($entity = null)
     {
-        switch(gettype($entity)) {
+        switch (gettype($entity)) {
             case 'NULL':
                 $this->unitOfWork->clearAll();
                 break;
@@ -129,12 +131,12 @@ class EntityManager {
     {
         return $this->unitOfWork;
     }
-	
-	/**
-	 * @return Connection
-	 */
-	public function getConnection()
-	{
-		return $this->connection;
-	}
+    
+    /**
+     * @return Connection
+     */
+    public function getConnection()
+    {
+        return $this->connection;
+    }
 }

@@ -10,8 +10,8 @@ class ResponseFactory
 {
     /** @var Renderer **/
     protected $templating;
-	/** @var int **/
-	protected $sessionLifetime;
+    /** @var int **/
+    protected $sessionLifetime;
     
     /**
      * @param Renderer $renderer
@@ -19,13 +19,13 @@ class ResponseFactory
     public function __construct(Renderer $renderer)
     {
         $this->templating = $renderer;
-		$this->sessionLifetime = ini_get("session.gc_maxlifetime");
+        $this->sessionLifetime = ini_get("session.gc_maxlifetime");
     }
     
     /**
      * @param \Asylamba\Classes\Library\Http\Request $request
      * @param \Asylamba\Classes\Library\Http\Response $response
-	 * @param Client $client
+     * @param Client $client
      */
     public function processResponse(Request $request, Response $response, Client $client)
     {
@@ -41,7 +41,7 @@ class ResponseFactory
     }
     
     /**
-	 * @param Request $request
+     * @param Request $request
      * @param \Asylamba\Classes\Library\Http\Response $response
      */
     protected function createHeaders(Request $request, Response $response)
@@ -49,14 +49,15 @@ class ResponseFactory
         $response->headers->set('Content-Type', ($response instanceof JsonResponse) ? 'application/json' : 'text/html');
         $response->headers->set('Date', gmdate('D, d M Y H:i:s T'));
         $response->headers->set('Status', $response->getStatusCode() . ' ' . $response->getStatus());
-		
-		if ($response->getStatusCode() === 302) {
-			$response->headers->set('Location',
-				(substr($response->getRedirect(), 0, 4) !== 'http')
-				? 'http://' . $request->headers->get('host') . '/' . $response->getRedirect()
-				: $response->getRedirect()
-			);
-		}
+        
+        if ($response->getStatusCode() === 302) {
+            $response->headers->set(
+                'Location',
+                (substr($response->getRedirect(), 0, 4) !== 'http')
+                ? 'http://' . $request->headers->get('host') . '/' . $response->getRedirect()
+                : $response->getRedirect()
+            );
+        }
     }
 	
 	/**

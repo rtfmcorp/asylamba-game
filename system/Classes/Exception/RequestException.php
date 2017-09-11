@@ -2,6 +2,6 @@
 
 namespace Asylamba\Classes\Exception;
 
-class RequestException extends \Exception {
-	
+class RequestException extends \Exception
+{
 }

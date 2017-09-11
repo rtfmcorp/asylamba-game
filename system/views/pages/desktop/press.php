@@ -60,7 +60,8 @@ $tradeNews = $newsManager->getList(News::NEWS_TYPE_TRADE, 30, 0);
         </div>
         <div class="fix-body">
             <div class="body">
-                <?php foreach ($militaryNews as $militaryNew) { ?>
+                <?php foreach ($militaryNews as $militaryNew) {
+    ?>
                     <div id="news-<?= $militaryNew->getId() ?>" class="news">
                         <div class="news-head color<?= ($militaryNew->getIsVictory()) ? $militaryNew->getAttacker()->getRColor() : $militaryNew->getDefender()->getRColor() ?>" onclick="pressController.deployNews(<?= $militaryNew->getId(); ?>);">
                             <img class="picto" src="<?= $militaryNew->getNewsPicto(); ?>"/> 
@@ -73,7 +74,8 @@ $tradeNews = $newsManager->getList(News::NEWS_TYPE_TRADE, 30, 0);
                             <?= $militaryNew->getContent(); ?>
                         </div>
                     </div>
-                <?php } ?>
+                <?php
+} ?>
             </div>
         </div>
     </div>
@@ -93,7 +95,8 @@ $tradeNews = $newsManager->getList(News::NEWS_TYPE_TRADE, 30, 0);
         </div>
         <div class="fix-body">
             <div class="body">
-                <?php foreach ($tradeNews as $tradeNew) { ?>
+                <?php foreach ($tradeNews as $tradeNew) {
+        ?>
                     <div id="news-<?= $tradeNew->getId() ?>" class="news">
                         <div class="news-head color<?= $tradeNew->getTransaction()->playerColor ?>" onclick="pressController.deployNews(<?= $tradeNew->getId(); ?>);">
                             <img class="picto" src="<?= $tradeNew->getNewsPicto(); ?>"/> 
@@ -106,7 +109,8 @@ $tradeNews = $newsManager->getList(News::NEWS_TYPE_TRADE, 30, 0);
                             <?= $tradeNew->getContent(); ?>
                         </div>
                     </div>
-                <?php } ?>
+                <?php
+    } ?>
             </div>
         </div>
     </div>

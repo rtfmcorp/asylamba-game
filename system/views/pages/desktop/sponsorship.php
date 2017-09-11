@@ -8,8 +8,8 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
-	include COMPONENT . 'publicity.php';
-	include COMPONENT . 'sponsorship/infos.php';
-	include COMPONENT . 'sponsorship/send-mail.php';
-	include COMPONENT . 'sponsorship/list-godson.php';
+    include COMPONENT . 'publicity.php';
+    include COMPONENT . 'sponsorship/infos.php';
+    include COMPONENT . 'sponsorship/send-mail.php';
+    include COMPONENT . 'sponsorship/list-godson.php';
 echo '</div>';

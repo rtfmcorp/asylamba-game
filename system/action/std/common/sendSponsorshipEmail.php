@@ -15,8 +15,7 @@ $sponsorLink = $this->getContainer()->getParameter('getout_root') . 'action/a-in
 $ok = $this->getContainer()->get('api')->sendMail2($email, $this->getContainer()->getParameter('server_id'), API::TEMPLATE_SPONSORSHIP, $session->get('playerId'));
 
 if ($ok) {
-	$session->addFlashbag('Un e-mail va être envoyé dans quelques minutes à ' . $email, Flashbag::TYPE_SUCCESS);
+    $session->addFlashbag('Un e-mail va être envoyé dans quelques minutes à ' . $email, Flashbag::TYPE_SUCCESS);
 } else {
-	throw new ErrorException('L\'e-mail n\'a pas pu être envoyé, veuillez ré-essayer. Si cela persiste, contactez un administrateur.');
+    throw new ErrorException('L\'e-mail n\'a pas pu être envoyé, veuillez ré-essayer. Si cela persiste, contactez un administrateur.');
 }
-

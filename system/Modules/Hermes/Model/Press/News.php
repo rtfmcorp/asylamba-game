@@ -98,12 +98,12 @@ abstract class News implements \JsonSerializable
     /**
      * @return string
      */
-    public abstract function getNewsPicto();
+    abstract public function getNewsPicto();
     
     /**
      * @return string
      */
-    protected abstract function getNewsType();
+    abstract protected function getNewsType();
     
     public function jsonSerialize()
     {

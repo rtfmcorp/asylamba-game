@@ -4,31 +4,32 @@ namespace Asylamba\Classes\DependencyInjection;
 
 use Asylamba\Classes\Worker\Manager;
 
-class Container {
-	/** @var ServiceInjector **/
-	protected $serviceInjector;
+class Container
+{
+    /** @var ServiceInjector **/
+    protected $serviceInjector;
     /** @var array **/
     protected $services = [];
     /** @var array **/
     protected $parameters = [];
 
-	public function __construct()
-	{
-		$this->serviceInjector = new ServiceInjector($this);
-	}
-	
-	public function cleanApplication()
-	{
-		$this->get('entity_manager')->clear();
-		
-		foreach($this->services as $service) {
-			if ($service['instance'] instanceof Manager) {
-				$service['instance']->save();
-				$service['instance']->clean();
-			}
-		}
-	}
-	
+    public function __construct()
+    {
+        $this->serviceInjector = new ServiceInjector($this);
+    }
+    
+    public function cleanApplication()
+    {
+        $this->get('entity_manager')->clear();
+        
+        foreach ($this->services as $service) {
+            if ($service['instance'] instanceof Manager) {
+                $service['instance']->save();
+                $service['instance']->clean();
+            }
+        }
+    }
+    
     /**
      * @param string $key
      * @param array $definition
@@ -40,25 +41,26 @@ class Container {
             throw new \InvalidArgumentException("Service $key is already defined");
         }
         $this->services[$key] = [
-			'class' => ($definition['class']{0} === '%') ? $this->getParameter(ltrim($definition['class'], '%')) : $definition['class'],
+            'class' => ($definition['class']{0} === '%') ? $this->getParameter(ltrim($definition['class'], '%')) : $definition['class'],
             'arguments' => (isset($definition['arguments'])) ? $definition['arguments'] : [],
-			'tags' => [],
+            'tags' => [],
             'instance' => null
         ];
-		if (isset($definition['tags'])) {
-			$this->services[$key]['tags'] = $definition['tags'];
-			$this->serviceInjector->parseTags($key, $definition['tags']);
-		}
+        if (isset($definition['tags'])) {
+            $this->services[$key]['tags'] = $definition['tags'];
+            $this->serviceInjector->parseTags($key, $definition['tags']);
+        }
     }
-	
-	/**
-	 * @param string $key
-	 * @return array
-	 */
-	public function &getServiceDefinition($key) {
-		return $this->services[$key];
-	}
-	
+    
+    /**
+     * @param string $key
+     * @return array
+     */
+    public function &getServiceDefinition($key)
+    {
+        return $this->services[$key];
+    }
+    
     /**
      * @param string $key
      * @param object $service
@@ -66,9 +68,9 @@ class Container {
      */
     public function set($key, $service)
     {
-		// This way of doing things ensures that we do not erase service previous data
+        // This way of doing things ensures that we do not erase service previous data
         $this->services[$key]['class'] = get_class($service);
-		$this->services[$key]['instance'] = $service;
+        $this->services[$key]['instance'] = $service;
         
         return $this;
     }
@@ -126,7 +128,7 @@ class Container {
      */
     public function getParameter($key)
     {
-        if(!$this->hasParameter($key)) {
+        if (!$this->hasParameter($key)) {
             throw new \InvalidArgumentException("Parameter $key not found");
         }
         return $this->parameters[$key];
@@ -139,25 +141,24 @@ class Container {
     {
         return $this->parameters;
     }
-	
-	public function save()
-	{
-		foreach($this->services as $service)
-		{
-			if(!$service['instance'] instanceof Manager) {
-				continue;
-			}
-			$service['instance']->save();
-		}
-	}
-	
-	function formatToSnakeCase($property) {
-		preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $property, $matches);
-		$ret = $matches[0];
-		foreach ($ret as &$match) {
-			$match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
-		}
-		return implode('_', $ret);
-	}
+    
+    public function save()
+    {
+        foreach ($this->services as $service) {
+            if (!$service['instance'] instanceof Manager) {
+                continue;
+            }
+            $service['instance']->save();
+        }
+    }
+    
+    public function formatToSnakeCase($property)
+    {
+        preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $property, $matches);
+        $ret = $matches[0];
+        foreach ($ret as &$match) {
+            $match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
+        }
+        return implode('_', $ret);
+    }
 }
-

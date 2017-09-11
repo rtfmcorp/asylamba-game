@@ -2,13 +2,16 @@
 
 namespace Asylamba\Classes\Library;
 
-class DataAnalysis {
-	// AFFICHE $DATA
-	public static function creditToStdUnit($credit) {
-		return round($credit / 10);
-	}
+class DataAnalysis
+{
+    // AFFICHE $DATA
+    public static function creditToStdUnit($credit)
+    {
+        return round($credit / 10);
+    }
 
-	public static function resourceToStdUnit($resource) {
-		return $resource;
-	}
+    public static function resourceToStdUnit($resource)
+    {
+        return $resource;
+    }
 }

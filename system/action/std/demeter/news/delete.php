@@ -8,13 +8,13 @@ $request = $this->getContainer()->get('app.request');
 
 $id = $request->query->get('id');
 
-if ($id !== FALSE) {	
-	if (($factionNew = $factionNewsManager->get($id)) !== null) {
-		$this->getContainer()->get('entity_manager')->remove($factionNew);
-		$this->getContainer()->get('session_wrapper')->addFlashbag('L\'annonce a bien été supprimée.', Flashbag::TYPE_SUCCESS);
-	} else {
-		throw new FormException('Cette annonce n\'existe pas.');
-	}
+if ($id !== false) {
+    if (($factionNew = $factionNewsManager->get($id)) !== null) {
+        $this->getContainer()->get('entity_manager')->remove($factionNew);
+        $this->getContainer()->get('session_wrapper')->addFlashbag('L\'annonce a bien été supprimée.', Flashbag::TYPE_SUCCESS);
+    } else {
+        throw new FormException('Cette annonce n\'existe pas.');
+    }
 } else {
-	throw new FormException('Manque d\'information.');
+    throw new FormException('Manque d\'information.');
 }

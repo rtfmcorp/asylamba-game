@@ -9,10 +9,10 @@
 //$session = $this->getContainer()->get('session_wrapper');
 //$parser = $this->getContainer()->get('parser');
 //
-//for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
+//for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
 //	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('sector');
 //}
-//for ($i = 0; $i < $session->get('playerBase')->get('ms')->size(); $i++) { 
+//for ($i = 0; $i < $session->get('playerBase')->get('ms')->size(); $i++) {
 //	$verif[] = $session->get('playerBase')->get('ms')->get($i)->get('sector');
 //}
 //$verif = array_unique($verif);
@@ -24,7 +24,7 @@
 //// protection des inputs
 //$content = $parser->protect($content);
 //
-//if ($sector !== FALSE AND $content !== FALSE AND in_array($sector, $verif) AND $content !== '') { 
+//if ($sector !== FALSE AND $content !== FALSE AND in_array($sector, $verif) AND $content !== '') {
 //	$sector = intval($sector);
 //
 //	$message = new MessageRadio();

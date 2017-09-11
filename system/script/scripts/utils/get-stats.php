@@ -10,28 +10,28 @@ echo '<h1>Création automatisée de statistiques</h1>';
 echo '<h2>Joueurs</h2>';
 
 echo '<p>';
-	echo 'Joueurs actifs<br />';
-	echo '<strong>' . Format::number(PlayerManager::count(array('statement' => Player::ACTIVE))) . '</strong>';
+    echo 'Joueurs actifs<br />';
+    echo '<strong>' . Format::number(PlayerManager::count(array('statement' => Player::ACTIVE))) . '</strong>';
 echo '</p>';
 
 echo '<p>';
-	echo 'Joueurs inscrits<br />';
-	echo '<strong>' . Format::number(PlayerManager::count(array('statement' => array(Player::ACTIVE, Player::INACTIVE)))) . '</strong>';
+    echo 'Joueurs inscrits<br />';
+    echo '<strong>' . Format::number(PlayerManager::count(array('statement' => array(Player::ACTIVE, Player::INACTIVE)))) . '</strong>';
 echo '</p>';
 
 $S_PAM = ASM::$pam->getCurrentSession();
-ASM::$pam->newSession(FALSE);
+ASM::$pam->newSession(false);
 ASM::$pam->load([], ['credit', 'DESC'], [0, 3]);
 
 echo '<p>';
-	echo 'Joueurs les plus riches';
-	for ($i = 0; $i < ASM::$pam->size(); $i++) {
-		$p = ASM::$pam->get($i);
+    echo 'Joueurs les plus riches';
+    for ($i = 0; $i < ASM::$pam->size(); $i++) {
+        $p = ASM::$pam->get($i);
 
-		echo '<br />';
-		echo '<strong>' . ColorResource::getInfo($p->rColor, 'status')[$p->status] . ' ' . $p->name . ' de ' . ColorResource::getInfo($p->rColor, 'popularName') . '</strong>';
-		echo ' (' . Format::number($p->credit) . ' crédits)';
-	}
+        echo '<br />';
+        echo '<strong>' . ColorResource::getInfo($p->rColor, 'status')[$p->status] . ' ' . $p->name . ' de ' . ColorResource::getInfo($p->rColor, 'popularName') . '</strong>';
+        echo ' (' . Format::number($p->credit) . ' crédits)';
+    }
 echo '</p>';
 
 ASM::$pam->changeSession($S_PAM);

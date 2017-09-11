@@ -28,110 +28,111 @@ $colorManager = $this->getContainer()->get('demeter.color_manager');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
 $entityManager = $this->getContainer()->get('entity_manager');
 
-for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
-	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
+for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
+    $verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
 $rPlace = $request->query->get('rplace');
 $rTransaction = $request->query->get('rtransaction');
 
-if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif)) {
-	$transaction = $transactionManager->get($rTransaction);
+if ($rPlace !== false and $rTransaction !== false and in_array($rPlace, $verif)) {
+    $transaction = $transactionManager->get($rTransaction);
 
-	$commercialShipping = $commercialShippingManager->getByTransactionId($rTransaction);
+    $commercialShipping = $commercialShippingManager->getByTransactionId($rTransaction);
 
-	if ($transaction !== null AND $commercialShipping !== null AND $transaction->statement == Transaction::ST_PROPOSED) {
-		$base = $orbitalBaseManager->get($rPlace);
+    if ($transaction !== null and $commercialShipping !== null and $transaction->statement == Transaction::ST_PROPOSED) {
+        $base = $orbitalBaseManager->get($rPlace);
 
-		$exportTax = 0;
-		$importTax = 0;
+        $exportTax = 0;
+        $importTax = 0;
 
-		#compute total price
-		$S_CTM1 = $commercialTaxManager->getCurrentSession();
-		$commercialTaxManager->newSession();
-		$commercialTaxManager->load(array());
+        #compute total price
+        $S_CTM1 = $commercialTaxManager->getCurrentSession();
+        $commercialTaxManager->newSession();
+        $commercialTaxManager->load(array());
 
-		for ($i = 0; $i < $commercialTaxManager->size(); $i++) { 
-			$comTax = $commercialTaxManager->get($i);
+        for ($i = 0; $i < $commercialTaxManager->size(); $i++) {
+            $comTax = $commercialTaxManager->get($i);
 
-			if ($comTax->faction == $transaction->sectorColor AND $comTax->relatedFaction == $base->sectorColor) {
-				$exportTax = $comTax->exportTax;
-			}
-			if ($comTax->faction == $base->sectorColor AND $comTax->relatedFaction == $transaction->sectorColor) {
-				$importTax = $comTax->importTax;
-			}
-		}
+            if ($comTax->faction == $transaction->sectorColor and $comTax->relatedFaction == $base->sectorColor) {
+                $exportTax = $comTax->exportTax;
+            }
+            if ($comTax->faction == $base->sectorColor and $comTax->relatedFaction == $transaction->sectorColor) {
+                $importTax = $comTax->importTax;
+            }
+        }
 
-		$exportTax = round($transaction->price * $exportTax / 100);
-		$importTax = round($transaction->price * $importTax / 100);
+        $exportTax = round($transaction->price * $exportTax / 100);
+        $importTax = round($transaction->price * $importTax / 100);
 
-		$totalPrice = $transaction->price + $exportTax + $importTax;
+        $totalPrice = $transaction->price + $exportTax + $importTax;
 
-		if ($session->get('playerInfo')->get('credit') >= $totalPrice) {
-			# chargement des joueurs
-			$buyer = $playerManager->get($session->get('playerId'));
-			$seller = $playerManager->get($transaction->rPlayer);
+        if ($session->get('playerInfo')->get('credit') >= $totalPrice) {
+            # chargement des joueurs
+            $buyer = $playerManager->get($session->get('playerId'));
+            $seller = $playerManager->get($transaction->rPlayer);
 
-			if ($buyer !== null && $seller !== null) {
-				# transfert des crédits entre joueurs
-				$playerManager->decreaseCredit($buyer, $totalPrice);
-				$playerManager->increaseCredit($seller, $transaction->price);
+            if ($buyer !== null && $seller !== null) {
+                # transfert des crédits entre joueurs
+                $playerManager->decreaseCredit($buyer, $totalPrice);
+                $playerManager->increaseCredit($seller, $transaction->price);
 
-				# transfert des crédits aux alliances
-				if ($transaction->sectorColor != 0) {
-					$exportFaction = $colorManager->get($transaction->sectorColor);
-					$exportFaction->increaseCredit($exportTax);
-				}
+                # transfert des crédits aux alliances
+                if ($transaction->sectorColor != 0) {
+                    $exportFaction = $colorManager->get($transaction->sectorColor);
+                    $exportFaction->increaseCredit($exportTax);
+                }
 
-				if ($base->sectorColor != 0) {
-					$importFaction = $colorManager->get($base->sectorColor);
-					$importFaction->increaseCredit($importTax);
-				}
+                if ($base->sectorColor != 0) {
+                    $importFaction = $colorManager->get($base->sectorColor);
+                    $importFaction->increaseCredit($importTax);
+                }
 
-				# gain d'expérience
-				$experience = $transaction->getExperienceEarned();
-				$playerManager->increaseExperience($seller, $experience);
+                # gain d'expérience
+                $experience = $transaction->getExperienceEarned();
+                $playerManager->increaseExperience($seller, $experience);
 
-				# load places to compute travel time
-				$startPlace = $placeManager->get($commercialShipping->rBase);
-				$destinationPlace = $placeManager->get($rPlace);
-				$timeToTravel = Game::getTimeToTravelCommercial($startPlace, $destinationPlace);
-				$departure = Utils::now();
-				$arrival = Utils::addSecondsToDate($departure, $timeToTravel);
+                # load places to compute travel time
+                $startPlace = $placeManager->get($commercialShipping->rBase);
+                $destinationPlace = $placeManager->get($rPlace);
+                $timeToTravel = Game::getTimeToTravelCommercial($startPlace, $destinationPlace);
+                $departure = Utils::now();
+                $arrival = Utils::addSecondsToDate($departure, $timeToTravel);
 
-				# update commercialShipping
-				$commercialShipping->rBaseDestination = $rPlace;
-				$commercialShipping->dDeparture = $departure;
-				$commercialShipping->dArrival = $arrival;
-				$commercialShipping->statement = CommercialShipping::ST_GOING;
+                # update commercialShipping
+                $commercialShipping->rBaseDestination = $rPlace;
+                $commercialShipping->dDeparture = $departure;
+                $commercialShipping->dArrival = $arrival;
+                $commercialShipping->statement = CommercialShipping::ST_GOING;
 
-				# update transaction statement
-				$transaction->statement = Transaction::ST_COMPLETED;
-				$transaction->dValidation = Utils::now();
+                # update transaction statement
+                $transaction->statement = Transaction::ST_COMPLETED;
+                $transaction->dValidation = Utils::now();
 
-				# update exchange rate
-				$transaction->currentRate = Game::calculateCurrentRate($transactionManager->getExchangeRate($transaction->type), $transaction->type, $transaction->quantity, $transaction->identifier, $transaction->price);
-				
-				# notif pour le proposeur
-				$n = new Notification();
-				$n->setRPlayer($transaction->rPlayer);
-				$n->setTitle('Transaction validée');
-				$n->addBeg()->addLnk('embassy/player-' . $session->get('playerId'), $session->get('playerInfo')->get('name'));
-				$n->addTxt(' a accepté une de vos propositions dans le marché. Des vaisseaux commerciaux viennent de partir de votre ');
-				$n->addLnk('map/place-' . $commercialShipping->rBase, 'base')->addTxt(' et se dirigent vers ');
-				$n->addLnk('map/place-' . $base->getRPlace(), $base->getName())->addTxt(' pour acheminer la marchandise. ');
-				$n->addSep()->addTxt('Vous gagnez ' . Format::numberFormat($transaction->price) . ' crédits et ' . Format::numberFormat($experience) . ' points d\'expérience.');
-				$n->addSep()->addLnk('action/a-switchbase/base-' . $commercialShipping->rBase . '/page-sell', 'En savoir plus ?');
-				$n->addEnd();
-				$notificationManager->add($n);
+                # update exchange rate
+                $transaction->currentRate = Game::calculateCurrentRate($transactionManager->getExchangeRate($transaction->type), $transaction->type, $transaction->quantity, $transaction->identifier, $transaction->price);
+                
+                # notif pour le proposeur
+                $n = new Notification();
+                $n->setRPlayer($transaction->rPlayer);
+                $n->setTitle('Transaction validée');
+                $n->addBeg()->addLnk('embassy/player-' . $session->get('playerId'), $session->get('playerInfo')->get('name'));
+                $n->addTxt(' a accepté une de vos propositions dans le marché. Des vaisseaux commerciaux viennent de partir de votre ');
+                $n->addLnk('map/place-' . $commercialShipping->rBase, 'base')->addTxt(' et se dirigent vers ');
+                $n->addLnk('map/place-' . $base->getRPlace(), $base->getName())->addTxt(' pour acheminer la marchandise. ');
+                $n->addSep()->addTxt('Vous gagnez ' . Format::numberFormat($transaction->price) . ' crédits et ' . Format::numberFormat($experience) . ' points d\'expérience.');
+                $n->addSep()->addLnk('action/a-switchbase/base-' . $commercialShipping->rBase . '/page-sell', 'En savoir plus ?');
+                $n->addEnd();
+                $notificationManager->add($n);
 
-				if (DATA_ANALYSIS) {
-					$qr = $database->prepare('INSERT INTO 
+                if (DATA_ANALYSIS) {
+                    $qr = $database->prepare(
+                        'INSERT INTO 
 						DA_CommercialRelation(`from`, `to`, type, weight, dAction)
 						VALUES(?, ?, ?, ?, ?)'
-					);
-					$qr->execute([$transaction->rPlayer, $session->get('playerId'), $transaction->type, DataAnalysis::creditToStdUnit($transaction->price), Utils::now()]);
-				}
+                    );
+                    $qr->execute([$transaction->rPlayer, $session->get('playerId'), $transaction->type, DataAnalysis::creditToStdUnit($transaction->price), Utils::now()]);
+                }
                 
                 $this->getContainer()->get('realtime_action_scheduler')->schedule(
                     'athena.orbital_base_manager',
@@ -140,18 +141,18 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
                     $commercialShipping->getArrivedAt()
                 );
 
-				$session->addFlashbag('Proposition acceptée. Les vaisseaux commerciaux sont en route vers votre base orbitale.', Flashbag::TYPE_MARKET_SUCCESS);
-			} else {
-				throw new ErrorException('erreur dans les propositions sur le marché, joueur inexistant');
-			}
-		} else {
-			throw new ErrorException('vous n\'avez pas assez de crédits pour accepter cette proposition');
-		}
-		$commercialTaxManager->changeSession($S_CTM1);
-	} else {
-		throw new ErrorException('erreur dans les propositions sur le marché');
-	}
+                $session->addFlashbag('Proposition acceptée. Les vaisseaux commerciaux sont en route vers votre base orbitale.', Flashbag::TYPE_MARKET_SUCCESS);
+            } else {
+                throw new ErrorException('erreur dans les propositions sur le marché, joueur inexistant');
+            }
+        } else {
+            throw new ErrorException('vous n\'avez pas assez de crédits pour accepter cette proposition');
+        }
+        $commercialTaxManager->changeSession($S_CTM1);
+    } else {
+        throw new ErrorException('erreur dans les propositions sur le marché');
+    }
 } else {
-	throw new FormException('pas assez d\'informations pour accepter une proposition sur le marché');
+    throw new FormException('pas assez d\'informations pour accepter une proposition sur le marché');
 }
 $entityManager->flush();

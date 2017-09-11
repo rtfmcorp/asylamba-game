@@ -11,10 +11,14 @@
 */
 namespace Asylamba\Modules\Demeter\Model\Election;
 
-class Election {
-	public $id 					= 0;
-	public $rColor 				= 0;
-	public $dElection			= 0;
+class Election
+{
+    public $id                    = 0;
+    public $rColor                = 0;
+    public $dElection            = 0;
 
-	public function getId() { return $this->id; }
+    public function getId()
+    {
+        return $this->id;
+    }
 }

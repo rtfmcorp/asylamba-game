@@ -10,10 +10,10 @@ use Asylamba\Classes\Exception\ErrorException;
 $request = $this->getContainer()->get('app.request');
 
 if (($category = $request->query->get('category')) === null || ($quantity = $request->query->get('quantity')) === null) {
-	throw new FormException('Pas assez d\'informations pour augmenter l\'investissement');
+    throw new FormException('Pas assez d\'informations pour augmenter l\'investissement');
 }
 if (!in_array($category, array('natural', 'life', 'social', 'informatic'))) {
-	throw new ErrorException('Changement d\'investissement impossible - faculté inconnue');
+    throw new ErrorException('Changement d\'investissement impossible - faculté inconnue');
 }
 
 $playerManager = $this->getContainer()->get('zeus.player_manager');
@@ -21,43 +21,43 @@ $session = $this->getContainer()->get('session_wrapper');
 
 $player = $playerManager->get($session->get('playerId'));
 
-if ($quantity === FALSE) {
-	$quantity = 1;
+if ($quantity === false) {
+    $quantity = 1;
 }
 
 switch ($category) {
-	case 'natural' :
-		$oldInvest = $player->partNaturalSciences;
-		break;
-	case 'life' : 
-		$oldInvest = $player->partLifeSciences;
-		break;
-	case 'social' :
-		$oldInvest = $player->partSocialPoliticalSciences;
-		break;
-	case 'informatic' : 
-		$oldInvest = $player->partInformaticEngineering;
-		break;
+    case 'natural':
+        $oldInvest = $player->partNaturalSciences;
+        break;
+    case 'life':
+        $oldInvest = $player->partLifeSciences;
+        break;
+    case 'social':
+        $oldInvest = $player->partSocialPoliticalSciences;
+        break;
+    case 'informatic':
+        $oldInvest = $player->partInformaticEngineering;
+        break;
 }
 
 if ($oldInvest != 0) {
-	if ($oldInvest < $quantity) {
-		$quantity = $oldInvest;
-	}
-	switch ($category) {
-		case 'natural' :
-			$player->partNaturalSciences = $player->partNaturalSciences - $quantity;
-			break;
-		case 'life' : 
-			$player->partLifeSciences = $player->partLifeSciences - $quantity;
-			break;
-		case 'social' : 
-			$player->partSocialPoliticalSciences = $player->partSocialPoliticalSciences - $quantity;
-			break;
-		case 'informatic' : 
-			$player->partInformaticEngineering = $player->partInformaticEngineering - $quantity;
-			break;
-	}
+    if ($oldInvest < $quantity) {
+        $quantity = $oldInvest;
+    }
+    switch ($category) {
+        case 'natural':
+            $player->partNaturalSciences = $player->partNaturalSciences - $quantity;
+            break;
+        case 'life':
+            $player->partLifeSciences = $player->partLifeSciences - $quantity;
+            break;
+        case 'social':
+            $player->partSocialPoliticalSciences = $player->partSocialPoliticalSciences - $quantity;
+            break;
+        case 'informatic':
+            $player->partInformaticEngineering = $player->partInformaticEngineering - $quantity;
+            break;
+    }
 }
 
 $this->getContainer()->get('entity_manager')->flush($player);

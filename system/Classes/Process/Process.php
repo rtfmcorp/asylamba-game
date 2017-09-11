@@ -22,10 +22,10 @@ class Process
     protected $process;
     /** @var Tasks **/
     protected $tasks;
-	/** @var array **/
-	protected $contexts;
-	/** @var float **/
-	protected $expectedWorkTime = 0.0;
+    /** @var array **/
+    protected $contexts;
+    /** @var float **/
+    protected $expectedWorkTime = 0.0;
     
     public function __construct()
     {
@@ -82,7 +82,7 @@ class Process
     
     /**
      * Set the Process input
-     * 
+     *
      * @param resource $input
      * @return Process
      */
@@ -103,7 +103,7 @@ class Process
     
     /**
      * Set the Process output
-     * 
+     *
      * @param resource $output
      * @return Process
      */
@@ -124,7 +124,7 @@ class Process
     
     /**
      * Set name
-     * 
+     *
      * @param string $name
      * @return Process
      */
@@ -145,7 +145,7 @@ class Process
     
     /**
      * Set process
-     * 
+     *
      * @param resource $process
      * @return Process
      */
@@ -164,10 +164,10 @@ class Process
         return $this->process;
     }
     
-	/**
-	 * @param Task $task
-	 * @return \Asylamba\Classes\Process\Process
-	 */
+    /**
+     * @param Task $task
+     * @return \Asylamba\Classes\Process\Process
+     */
     public function addTask(Task $task)
     {
         $this->tasks[$task->getId()] = $task;
@@ -177,78 +177,78 @@ class Process
     
     /**
      * @param Task $task
-	 * @return \Asylamba\Classes\Process\Process
+     * @return \Asylamba\Classes\Process\Process
      */
     public function removeTask(Task $task)
     {
-		$this->expectedWorkTime -= $task->getEstimatedTime();
-		if ($this->expectedWorkTime < 0) {
-			$this->expectedWorkTime = 0.0;
-		}
+        $this->expectedWorkTime -= $task->getEstimatedTime();
+        if ($this->expectedWorkTime < 0) {
+            $this->expectedWorkTime = 0.0;
+        }
 
-		unset($this->tasks[$task->getId()]);
-		
-		return $this;
+        unset($this->tasks[$task->getId()]);
+        
+        return $this;
     }
     
-	/**
-	 * @return array
-	 */
+    /**
+     * @return array
+     */
     public function getTasks()
     {
         return $this->tasks;
     }
-	
-	/**
-	 * @param array $context
-	 * @return \Asylamba\Classes\Process\Process
-	 */
-	public function addContext($context)
-	{
-		if (!$this->hasContext($context)) {
-			$this->contexts[$context['class'] . '-' . $context['id']] = 0;
-		}
-		$this->contexts[$context['class'] . '-' . $context['id']]++;
-		return $this;
-	}
-	
-	/**
-	 * @param array $context
-	 * @return boolean
-	 */
-	public function hasContext($context)
-	{
-		return isset($this->contexts[$context['class'] . '-' . $context['id']]);
-	}
-	
-	/**
-	 * @param array $context
-	 * @return \Asylamba\Classes\Process\Process
-	 */
-	public function removeContext($context)
-	{
-		$this->contexts[$context['class'] . '-' . $context['id']]--;
-		if ($this->contexts[$context['class'] . '-' . $context['id']] === 0) {
-			unset($this->contexts[$context['class'] . '-' . $context['id']]);
-		}
-		return $this;
-	}
-	
-	/**
-	 * @param float $expectedWorkTime
-	 */
-	public function setExpectedWorkTime($expectedWorkTime)
-	{
-		$this->expectedWorkTime = $expectedWorkTime;
+    
+    /**
+     * @param array $context
+     * @return \Asylamba\Classes\Process\Process
+     */
+    public function addContext($context)
+    {
+        if (!$this->hasContext($context)) {
+            $this->contexts[$context['class'] . '-' . $context['id']] = 0;
+        }
+        $this->contexts[$context['class'] . '-' . $context['id']]++;
+        return $this;
+    }
+    
+    /**
+     * @param array $context
+     * @return boolean
+     */
+    public function hasContext($context)
+    {
+        return isset($this->contexts[$context['class'] . '-' . $context['id']]);
+    }
+    
+    /**
+     * @param array $context
+     * @return \Asylamba\Classes\Process\Process
+     */
+    public function removeContext($context)
+    {
+        $this->contexts[$context['class'] . '-' . $context['id']]--;
+        if ($this->contexts[$context['class'] . '-' . $context['id']] === 0) {
+            unset($this->contexts[$context['class'] . '-' . $context['id']]);
+        }
+        return $this;
+    }
+    
+    /**
+     * @param float $expectedWorkTime
+     */
+    public function setExpectedWorkTime($expectedWorkTime)
+    {
+        $this->expectedWorkTime = $expectedWorkTime;
         
         return $this;
-	}
-	
-	/**
-	 * @return float
-	 */
-	public function getExpectedWorkTime()
-	{
-		return $this->expectedWorkTime;
-	}
+    }
+    
+    /**
+     * @return float
+     */
+    public function getExpectedWorkTime()
+    {
+        return $this->expectedWorkTime;
+    }
 }

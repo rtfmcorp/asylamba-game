@@ -12,15 +12,15 @@ $notifications = $notificationManager->getUnreadNotifications($session->get('pla
 $nbNotifications = count($notifications);
 
 foreach ($notifications as $notification) {
-	$notification->setReaded(1);
+    $notification->setReaded(1);
 }
 
 $this->getContainer()->get('entity_manager')->flush(Notification::class);
 
 if ($nbNotifications > 1) {
-	$session->addFlashbag($nbNotifications . ' notifications ont été marquées comme lues.', Flashbag::TYPE_SUCCESS);
-} else if ($nbNotifications == 1) {
-	$session->addFlashbag('Une notification a été marquée comme lue.', Flashbag::TYPE_SUCCESS);
+    $session->addFlashbag($nbNotifications . ' notifications ont été marquées comme lues.', Flashbag::TYPE_SUCCESS);
+} elseif ($nbNotifications == 1) {
+    $session->addFlashbag('Une notification a été marquée comme lue.', Flashbag::TYPE_SUCCESS);
 } else {
-	$session->addFlashbag('Toutes vos notifications ont déjà été lues.', Flashbag::TYPE_SUCCESS);
+    $session->addFlashbag('Toutes vos notifications ont déjà été lues.', Flashbag::TYPE_SUCCESS);
 }

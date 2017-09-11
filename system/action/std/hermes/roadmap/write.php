@@ -14,30 +14,29 @@ $session = $this->getContainer()->get('session_wrapper');
 $parser = $this->getContainer()->get('parser');
 $roadmapManager = $this->getContainer()->get('hermes.roadmap_manager');
 
-if ($session->get('playerInfo')->get('admin') == FALSE) {
-	$response->redirect('profil');
+if ($session->get('playerInfo')->get('admin') == false) {
+    $response->redirect('profil');
 } else {
-	$content = $request->request->get('content');
-	$statement = $request->query->get('statement', false);
+    $content = $request->request->get('content');
+    $statement = $request->query->get('statement', false);
 
-	if (!empty($content)) { 
+    if (!empty($content)) {
+        $rm = new RoadMap();
+        $rm->rPlayer = $session->get('playerId');
+        $rm->setContent($content);
+        $rm->setParsedContent($parser->parse($content));
+        if ($statement !== false) {
+            if ($statement == 0 or $statement == 1) {
+                $rm->statement = $statement;
+            }
+        } else {
+            $rm->statement = RoadMap::DISPLAYED;
+        }
+        $rm->dCreation = Utils::now();
+        $roadmapManager->add($rm);
 
-		$rm = new RoadMap();
-		$rm->rPlayer = $session->get('playerId');
-		$rm->setContent($content);
-		$rm->setParsedContent($parser->parse($content));
-		if ($statement !== false) {
-			if ($statement == 0 OR $statement == 1) {
-				$rm->statement = $statement;
-			}
-		} else {
-			$rm->statement = RoadMap::DISPLAYED;
-		}
-		$rm->dCreation = Utils::now();
-		$roadmapManager->add($rm);
-
-		$session->addFlashbag('Roadmap publiée', Flashbag::TYPE_SUCCESS);
-	} else {
-		throw new FormException('pas assez d\'informations pour écrire un message dans la roadmap');
-	}
+        $session->addFlashbag('Roadmap publiée', Flashbag::TYPE_SUCCESS);
+    } else {
+        throw new FormException('pas assez d\'informations pour écrire un message dans la roadmap');
+    }
 }

@@ -47,7 +47,7 @@ $qr->execute(array(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, $date));
 
 # génération des factions disponibles
 foreach ($availableFactions as $faction) {
-	$qr->execute(array($faction, 1, 0, 0, 0, 0, 0, ColorResource::getInfo($faction, 'regime'), 1, 0, 1, $date));
+    $qr->execute(array($faction, 1, 0, 0, 0, 0, 0, ColorResource::getInfo($faction, 'regime'), 1, 0, 1, $date));
 }
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table factionNews</h2>';
@@ -159,13 +159,13 @@ $playerManager->add($p);
 
 # Joueurs de factions
 foreach ($availableFactions as $faction) {
-	$p = clone($p);
-	$p->bind = Utils::generateString(25);
-	$p->name = ColorResource::getInfo($faction, 'officialName');
-	$p->avatar = ('color-' . $faction);
-	$p->rColor = $faction;
-	$p->status = 6;
-	$playerManager->add($p);
+    $p = clone($p);
+    $p->bind = Utils::generateString(25);
+    $p->name = ColorResource::getInfo($faction, 'officialName');
+    $p->avatar = ('color-' . $faction);
+    $p->rColor = $faction;
+    $p->status = 6;
+    $playerManager->add($p);
 }
 
 #--------------------------------------------------------------------------------------------
@@ -498,8 +498,8 @@ $qr = $db->prepare("INSERT INTO `transaction` (`rPlayer`, `rPlace`, `type`, `qua
 (1, 0, ?, 1, NULL, 12, 0, ?, ?, ?, ?),
 (1, 0, ?, 8, NULL, 15, 0, ?, ?, ?, ?);");
 $qr->execute(array(Transaction::TYP_RESOURCE, Transaction::ST_COMPLETED, Utils::now(), Utils::now(), 1.26,
-	Transaction::TYP_COMMANDER, Transaction::ST_COMPLETED, Utils::now(), Utils::now(), 12,
-	Transaction::TYP_SHIP, Transaction::ST_COMPLETED, Utils::now(), Utils::now(), 1.875));
+    Transaction::TYP_COMMANDER, Transaction::ST_COMPLETED, Utils::now(), Utils::now(), 12,
+    Transaction::TYP_SHIP, Transaction::ST_COMPLETED, Utils::now(), Utils::now(), 1.875));
 
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table news</h2>';
@@ -594,9 +594,9 @@ $qr = $db->prepare("INSERT INTO `commercialTax` (`faction`, `relatedFaction`, `e
 
 # génération des taxes
 foreach ($availableFactions as $faction) {
-	foreach ($availableFactions as $rfaction) {
-		$qr->execute(array($faction, $rfaction));
-	}
+    foreach ($availableFactions as $rfaction) {
+        $qr->execute(array($faction, $rfaction));
+    }
 }
 
 #--------------------------------------------------------------------------------------------
@@ -1091,23 +1091,23 @@ $conversationUserManager = $this->getContainer()->get('hermes.conversation_user_
 $conversationUserManager->add($user);
 
 foreach ($availableFactions as $faction) {
-	$player = $playerManager->getFactionAccount($faction);
+    $player = $playerManager->getFactionAccount($faction);
 
-	$conv = new Conversation();
-	$conv->messages = 0;
-	$conv->type = Conversation::TY_SYSTEM;
-	$conv->title = 'Communication de ' . ColorResource::getInfo($player->rColor, 'popularName');
-	$conv->dCreation = Utils::now();
-	$conv->dLastMessage = Utils::now();
-	$conversationManager->add($conv);
+    $conv = new Conversation();
+    $conv->messages = 0;
+    $conv->type = Conversation::TY_SYSTEM;
+    $conv->title = 'Communication de ' . ColorResource::getInfo($player->rColor, 'popularName');
+    $conv->dCreation = Utils::now();
+    $conv->dLastMessage = Utils::now();
+    $conversationManager->add($conv);
 
-	$user = new ConversationUser();
-	$user->rConversation = $conv->id;
-	$user->rPlayer = $player->id;
-	$user->convPlayerStatement = ConversationUser::US_ADMIN;
-	$user->convStatement = ConversationUser::CS_DISPLAY;
-	$user->dLastView = Utils::now();
-	$conversationUserManager->add($user);
+    $user = new ConversationUser();
+    $user->rConversation = $conv->id;
+    $user->rPlayer = $player->id;
+    $user->convPlayerStatement = ConversationUser::US_ADMIN;
+    $user->convStatement = ConversationUser::CS_DISPLAY;
+    $user->dLastView = Utils::now();
+    $conversationUserManager->add($user);
 }
 
 #--------------------------------------------------------------------------------------------
@@ -1287,11 +1287,11 @@ $colorManager = $this->getContainer()->get('demeter.color_manager');
 $factions = $colorManager->getAll();
 $nbFactions = count($factions);
 for ($i = 1; $i < $nbFactions; $i++) {
-	for ($j = 1; $j < $nbFactions; $j++) {
-		if (!(($i == $nbFactions - 1) && ($j == $nbFactions - 1))) {
-			$values .= '(' . $factions[$i]->id . ',' . $factions[$j]->id . ',' . 0 .'),';
-		}
-	}
+    for ($j = 1; $j < $nbFactions; $j++) {
+        if (!(($i == $nbFactions - 1) && ($j == $nbFactions - 1))) {
+            $values .= '(' . $factions[$i]->id . ',' . $factions[$j]->id . ',' . 0 .'),';
+        }
+    }
 }
 
 $values .= '(' . $factions[$nbFactions - 1]->id . ',' . $factions[$nbFactions - 1]->id . ',' . 0 .');';
@@ -1303,14 +1303,14 @@ $qr->execute();
 $db->query('SET FOREIGN_KEY_CHECKS = 1;');
 
 if (DATA_ANALYSIS) {
-	echo '<h1>Création des tables du module d\'analyse</h1>';
+    echo '<h1>Création des tables du module d\'analyse</h1>';
 
-	include 'data-analysis/player.php';
-	include 'data-analysis/playerDaily.php';
-//	include 'data-analysis/fleetMovement.php';
-	include 'data-analysis/commercialRelation.php';
-	include 'data-analysis/socialRelation.php';
-	include 'data-analysis/baseAction.php';
+    include 'data-analysis/player.php';
+    include 'data-analysis/playerDaily.php';
+    //	include 'data-analysis/fleetMovement.php';
+    include 'data-analysis/commercialRelation.php';
+    include 'data-analysis/socialRelation.php';
+    include 'data-analysis/baseAction.php';
 }
 
 echo '<h1>Génération de la galaxie</h1>';

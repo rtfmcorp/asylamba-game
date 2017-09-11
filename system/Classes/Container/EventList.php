@@ -2,15 +2,17 @@
 
 namespace Asylamba\Classes\Container;
 
-class EventList {
+class EventList
+{
     # contient des ArrayList('date', 'eventType', 'eventId')
     # format de la date : 'AAAA-MM-JJ HH:MM:SS' - SQL FORMAT
-    private $events = array(); 
+    private $events = array();
 
     /**
      * @return int
      */
-    public function size() {
+    public function size()
+    {
         return count($this->events);
     }
 
@@ -18,7 +20,8 @@ class EventList {
      * @param int $index
      * @return ArrayList
      */
-    public function get($index = 0) {
+    public function get($index = 0)
+    {
         if (isset($this->events[$index])) {
             return $this->events[$index];
         }
@@ -29,9 +32,10 @@ class EventList {
      * @param string $date
      * @return \Asylamba\Classes\Container\StackList
      */
-    public function getPastEvents($date) {
+    public function getPastEvents($date)
+    {
         $past = new StackList();
-        foreach($this->events AS $e) {
+        foreach ($this->events as $e) {
             if ($e->get('date') <= $date) {
                 $past->append($e);
             }
@@ -42,7 +46,8 @@ class EventList {
     /**
      * @param string $date
      */
-    public function clearPastEvents($date) {
+    public function clearPastEvents($date)
+    {
         $size = $this->size() - 1;
         for ($i = $size; $i >= 0; $i--) {
             if ($this->events[$i]->get('date') <= $date) {
@@ -58,7 +63,8 @@ class EventList {
      * @param string $eventId
      * @param string $eventInfo
      */
-    public function add($date, $eventType, $eventId, $eventInfo = NULL) {
+    public function add($date, $eventType, $eventId, $eventInfo = null)
+    {
         $event = new ArrayList();
         $event->add('date', $date);
         $event->add('eventType', $eventType);
@@ -66,19 +72,19 @@ class EventList {
         $event->add('eventInfo', $eventInfo);
 
         $index = 0;
-        $found = FALSE;
-        foreach($this->events AS $e) {
+        $found = false;
+        foreach ($this->events as $e) {
             if ($e->get('date') > $date) {
-                $found = TRUE;
+                $found = true;
                 break;
             }
             $index++;
         }
         if ($found) {
-                $begin = array_slice($this->events, 0, $index);
-                $begin[] = $event;
-                $end = array_slice($this->events, $index);
-                $this->events = array_merge($begin, $end);
+            $begin = array_slice($this->events, 0, $index);
+            $begin[] = $event;
+            $end = array_slice($this->events, $index);
+            $this->events = array_merge($begin, $end);
         } else {
             $this->events[] = $event;
         }
@@ -88,7 +94,8 @@ class EventList {
      * @param int $index
      * @return boolean
      */
-    public function remove($index) {
+    public function remove($index)
+    {
         if ($index < 0) {
             $index = count($this->events) + $index;
         }
@@ -100,7 +107,8 @@ class EventList {
         $this->events = array_merge($begin, $end);
     }
 
-    public function clear() {
+    public function clear()
+    {
         $this->events = array();
     }
 }

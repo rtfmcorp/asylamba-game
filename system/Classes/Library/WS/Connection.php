@@ -34,7 +34,7 @@ class Connection
     
     public function receive()
     {
-		$buffer = fread($this->socket, self::DEFAULT_BUFFER_LENGTH);
+        $buffer = fread($this->socket, self::DEFAULT_BUFFER_LENGTH);
         if (empty($buffer)) {
             return false;
         }

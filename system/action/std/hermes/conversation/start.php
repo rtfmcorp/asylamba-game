@@ -24,88 +24,89 @@ $content = $request->request->get('content');
 $content = $parser->parse($content);
 
 if (!empty($recipients) && !empty($content)) {
-	if (strlen($content) < 10000) {
-		# traitement des utilisateurs multiples
-		$recipients = explode(',', $recipients);
-		$plId = $session->get('playerId');
-		$recipients = array_filter($recipients, function($e) use($plId){
-			return $e == $plId ? FALSE : TRUE;
-		});
-		$recipients[] = 0;
+    if (strlen($content) < 10000) {
+        # traitement des utilisateurs multiples
+        $recipients = explode(',', $recipients);
+        $plId = $session->get('playerId');
+        $recipients = array_filter($recipients, function ($e) use ($plId) {
+            return $e == $plId ? false : true;
+        });
+        $recipients[] = 0;
 
-		if (count($recipients) <= ConversationUser::MAX_USERS) {
-			# chargement des utilisateurs
-			$players = $playerManager->getByIdsAndStatements($recipients, [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]);
+        if (count($recipients) <= ConversationUser::MAX_USERS) {
+            # chargement des utilisateurs
+            $players = $playerManager->getByIdsAndStatements($recipients, [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]);
 
-			if (count($players) >= 1) {
-				# création de la date précédente
-				$readingDate = date('Y-m-d H:i:s', (strtotime(Utils::now()) - 20));
+            if (count($players) >= 1) {
+                # création de la date précédente
+                $readingDate = date('Y-m-d H:i:s', (strtotime(Utils::now()) - 20));
 
-				# créer la conversation
-				$conv = new Conversation();
+                # créer la conversation
+                $conv = new Conversation();
 
-				$conv->messages = 1;
-				$conv->type = Conversation::TY_USER;
-				$conv->dCreation = Utils::now();
-				$conv->dLastMessage = Utils::now();
+                $conv->messages = 1;
+                $conv->type = Conversation::TY_USER;
+                $conv->dCreation = Utils::now();
+                $conv->dLastMessage = Utils::now();
 
-				$conversationManager->add($conv);
+                $conversationManager->add($conv);
 
-				# créer le user créateur de la conversation
-				$user = new ConversationUser();
+                # créer le user créateur de la conversation
+                $user = new ConversationUser();
 
-				$user->rConversation = $conv->id;
-				$user->rPlayer = $session->get('playerId');
-				$user->convPlayerStatement = ConversationUser::US_ADMIN;
-				$user->convStatement = ConversationUser::CS_DISPLAY;
-				$user->dLastView = Utils::now();
+                $user->rConversation = $conv->id;
+                $user->rPlayer = $session->get('playerId');
+                $user->convPlayerStatement = ConversationUser::US_ADMIN;
+                $user->convStatement = ConversationUser::CS_DISPLAY;
+                $user->dLastView = Utils::now();
 
-				$conversationUserManager->add($user);
+                $conversationUserManager->add($user);
 
-				# créer la liste des users
-				foreach ($players as $player) {
-					$user = new ConversationUser();
+                # créer la liste des users
+                foreach ($players as $player) {
+                    $user = new ConversationUser();
 
-					$user->rConversation = $conv->id;
-					$user->rPlayer = $player->id;
-					$user->convPlayerStatement = ConversationUser::US_STANDARD;
-					$user->convStatement = ConversationUser::CS_DISPLAY;
-					$user->dLastView = $readingDate;
+                    $user->rConversation = $conv->id;
+                    $user->rPlayer = $player->id;
+                    $user->convPlayerStatement = ConversationUser::US_STANDARD;
+                    $user->convStatement = ConversationUser::CS_DISPLAY;
+                    $user->dLastView = $readingDate;
 
-					$conversationUserManager->add($user);
-				}
+                    $conversationUserManager->add($user);
+                }
 
-				# créer le premier message
-				$message = new ConversationMessage();
+                # créer le premier message
+                $message = new ConversationMessage();
 
-				$message->rConversation = $conv->id;
-				$message->rPlayer = $session->get('playerId');
-				$message->type = ConversationMessage::TY_STD;
-				$message->content = $content;
-				$message->dCreation = Utils::now();
-				$message->dLastModification = NULL;
+                $message->rConversation = $conv->id;
+                $message->rPlayer = $session->get('playerId');
+                $message->type = ConversationMessage::TY_STD;
+                $message->content = $content;
+                $message->dCreation = Utils::now();
+                $message->dLastModification = null;
 
-				$conversationMessageManager->add($message);
+                $conversationMessageManager->add($message);
 
-				if (DATA_ANALYSIS) {
-					$qr = $database->prepare('INSERT INTO 
+                if (DATA_ANALYSIS) {
+                    $qr = $database->prepare(
+                        'INSERT INTO 
 						DA_SocialRelation(`from`, `to`, `type`, `message`, dAction)
 						VALUES(?, ?, ?, ?, ?)'
-					);
-					$qr->execute([$session->get('playerId'), $players[0]->getId(), 2, $content, Utils::now()]);
-				}
+                    );
+                    $qr->execute([$session->get('playerId'), $players[0]->getId(), 2, $content, Utils::now()]);
+                }
 
-				$session->addFlashbag('La conversation a été créée.', Flashbag::TYPE_SUCCESS);
-				$response->redirect('message/conversation-' . $conv->id);
-			} else {
-				throw new ErrorException('Le joueur n\'est pas joignable.');	
-			}
-		} else {
-			throw new ErrorException('Nombre maximum de joueur atteint.');
-		}
-	} else {
-		throw new ErrorException('Le message est trop long.');
-	}
+                $session->addFlashbag('La conversation a été créée.', Flashbag::TYPE_SUCCESS);
+                $response->redirect('message/conversation-' . $conv->id);
+            } else {
+                throw new ErrorException('Le joueur n\'est pas joignable.');
+            }
+        } else {
+            throw new ErrorException('Nombre maximum de joueur atteint.');
+        }
+    } else {
+        throw new ErrorException('Le message est trop long.');
+    }
 } else {
-	throw new FormException('Informations manquantes pour démarrer une nouvelle conversation.');
+    throw new FormException('Informations manquantes pour démarrer une nouvelle conversation.');
 }

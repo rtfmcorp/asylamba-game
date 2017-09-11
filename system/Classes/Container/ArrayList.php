@@ -2,14 +2,16 @@
 
 namespace Asylamba\Classes\Container;
 
-class ArrayList {
+class ArrayList
+{
     /** @var array **/
     protected $elements = array();
 
     /**
      * @return int
      */
-    public function size() {
+    public function size()
+    {
         return count($this->elements);
     }
 
@@ -17,7 +19,8 @@ class ArrayList {
      * @param string $key
      * @return mixed
      */
-    public function get($key) {
+    public function get($key)
+    {
         if (isset($this->elements[$key])) {
             return $this->elements[$key];
         }
@@ -28,7 +31,8 @@ class ArrayList {
      * @param string $key
      * @return boolean
      */
-    public function exist($key) {
+    public function exist($key)
+    {
         return isset($this->elements[$key]);
     }
 
@@ -37,7 +41,8 @@ class ArrayList {
      * @param mixed $value
      * @return boolean
      */
-    public function equal($key, $value) {
+    public function equal($key, $value)
+    {
         return (($this->exist($key) && $this->get($key) == $value));
     }
 
@@ -45,7 +50,8 @@ class ArrayList {
      * @param string $key
      * @param mixed $value
      */
-    public function add($key, $value) {
+    public function add($key, $value)
+    {
         $this->elements[$key] = $value;
     }
 
@@ -53,14 +59,16 @@ class ArrayList {
      * @param string $key
      * @return boolean
      */
-    public function remove($key) {
+    public function remove($key)
+    {
         if (isset($this->elements[$key])) {
             unset($this->elements[$key]);
         }
         return false;
     }
 
-    public function clear() {
+    public function clear()
+    {
         $this->elements = array();
     }
 }

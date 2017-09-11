@@ -9,10 +9,10 @@ use Asylamba\Modules\Demeter\Model\Color;
 
 class FactionRankingRepository extends AbstractRepository
 {
-	public function getRoutesIncome(Color $faction)
-	{
-		$qr = $this->connection->prepare(
-			'SELECT COUNT(cr.id) AS nb,
+    public function getRoutesIncome(Color $faction)
+    {
+        $qr = $this->connection->prepare(
+            'SELECT COUNT(cr.id) AS nb,
 				SUM(cr.income) AS income
 			FROM commercialRoute AS cr
 			LEFT JOIN orbitalBase AS ob1
@@ -24,24 +24,21 @@ class FactionRankingRepository extends AbstractRepository
 				LEFT JOIN player AS pl2
 					ON ob2.rPlayer = pl2.id
 			WHERE (pl1.rColor = ? OR pl2.rColor = ?) AND cr.statement = ?'
-		);
-		# hint : en fait ça compte qu'une fois une route interfaction, mais chut
-		$qr->execute([$faction->getId(), $faction->getId(), CommercialRoute::ACTIVE]);
-		return $qr->fetch();
-	}
-	
-	public function insert($ranking)
-	{
-		
-	}
-	
-	public function update($ranking)
-	{
-		
-	}
-	
-	public function remove($ranking)
-	{
-		
-	}
+        );
+        # hint : en fait ça compte qu'une fois une route interfaction, mais chut
+        $qr->execute([$faction->getId(), $faction->getId(), CommercialRoute::ACTIVE]);
+        return $qr->fetch();
+    }
+    
+    public function insert($ranking)
+    {
+    }
+    
+    public function update($ranking)
+    {
+    }
+    
+    public function remove($ranking)
+    {
+    }
 }

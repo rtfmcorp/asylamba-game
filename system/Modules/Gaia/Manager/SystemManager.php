@@ -15,48 +15,50 @@ use Asylamba\Classes\Entity\EntityManager;
 
 use Asylamba\Modules\Gaia\Model\System;
 
-class SystemManager {
-	/** @var EntityManager **/
-	protected $entityManager;
+class SystemManager
+{
+    /** @var EntityManager **/
+    protected $entityManager;
 
-	/**
-	 * @param EntityManager $entityManager
-	 */
-	public function __construct(EntityManager $entityManager) {
-		$this->entityManager = $entityManager;
-	}
-	
-	/**
-	 * @param int $id
-	 * @return System
-	 */
-	public function get($id)
-	{
-		return $this->entityManager->getRepository(System::class)->get($id);
-	}
-	
-	/**
-	 * @param int $sectorId
-	 * @return array
-	 */
-	public function getSectorSystems($sectorId)
-	{
-		return $this->entityManager->getRepository(System::class)->getSectorSystems($sectorId);
-	}
-	
-	/**
-	 * @return array
-	 */
-	public function getAll()
-	{
-		return $this->entityManager->getRepository(System::class)->getAll();
-	}
-	
-	/**
-	 * @param System $system
-	 */
-	public function changeOwnership(System $system)
-	{
-		$this->entityManager->getRepository(System::class)->changeOwnership($system);
-	}
+    /**
+     * @param EntityManager $entityManager
+     */
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+    
+    /**
+     * @param int $id
+     * @return System
+     */
+    public function get($id)
+    {
+        return $this->entityManager->getRepository(System::class)->get($id);
+    }
+    
+    /**
+     * @param int $sectorId
+     * @return array
+     */
+    public function getSectorSystems($sectorId)
+    {
+        return $this->entityManager->getRepository(System::class)->getSectorSystems($sectorId);
+    }
+    
+    /**
+     * @return array
+     */
+    public function getAll()
+    {
+        return $this->entityManager->getRepository(System::class)->getAll();
+    }
+    
+    /**
+     * @param System $system
+     */
+    public function changeOwnership(System $system)
+    {
+        $this->entityManager->getRepository(System::class)->changeOwnership($system);
+    }
 }

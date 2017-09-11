@@ -44,22 +44,19 @@ class NewsRepository extends AbstractRepository
     
     public function insert($news)
     {
-        
     }
     
     public function update($news)
     {
-        
     }
     
     public function remove($news)
     {
-        
     }
     
     public function format($data)
     {
-        switch($data['type']) {
+        switch ($data['type']) {
             case News::NEWS_TYPE_MILITARY: return $this->unitOfWork->getRepository(MilitaryNews::class)->get($data['id']);
             case News::NEWS_TYPE_POLITICS: return $this->unitOfWork->getRepository(PoliticNews::class)->get($data['id']);
             case News::NEWS_TYPE_TRADE: return $this->unitOfWork->getRepository(TradeNews::class)->get($data['id']);

@@ -5,7 +5,8 @@ namespace Asylamba\Classes\Library\Http;
 use Asylamba\Classes\Library\ParameterBag;
 use Asylamba\Classes\Container\Cookie;
 
-class Request {
+class Request
+{
     /** @var string **/
     protected $method;
     /** @var string **/
@@ -16,8 +17,8 @@ class Request {
     protected $externalDomain;
     /** @var string **/
     protected $redirect;
-	/** @var string **/
-	protected $path;
+    /** @var string **/
+    protected $path;
     /** @var ParameterBag **/
     public $headers;
     /** @var ParameterBag **/

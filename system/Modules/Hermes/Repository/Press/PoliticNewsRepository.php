@@ -71,12 +71,10 @@ class PoliticNewsRepository extends AbstractRepository
     
     public function update($news)
     {
-        
     }
     
     public function remove($news)
     {
-        
     }
     
     public function format($data)

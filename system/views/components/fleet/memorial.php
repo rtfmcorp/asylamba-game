@@ -5,14 +5,14 @@
 # affichage ...
 
 # require
-	# NULL
+    # NULL
 
 echo '<div class="component">';
-	echo '<div class="head">';
-	echo '</div>';
-	echo '<div class="fix-body">';
-		echo '<div class="body">';
-			var_dump($commander_memorial);
-		echo '</div>';
-	echo '</div>';
+    echo '<div class="head">';
+    echo '</div>';
+    echo '<div class="fix-body">';
+        echo '<div class="body">';
+            var_dump($commander_memorial);
+        echo '</div>';
+    echo '</div>';
 echo '</div>';

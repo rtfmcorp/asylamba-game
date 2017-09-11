@@ -15,20 +15,20 @@ $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 
 $investment = $request->request->get('credit');
 
-if ($investment !== FALSE) { 
-	if ($investment <= 500000) {
-		$playerManager->updateUniversityInvestment($session->get('playerId'), (int) $investment);
+if ($investment !== false) {
+    if ($investment <= 500000) {
+        $playerManager->updateUniversityInvestment($session->get('playerId'), (int) $investment);
 
-		# tutorial
-		if ($session->get('playerInfo')->get('stepDone') == FALSE &&
-			$session->get('playerInfo')->get('stepTutorial') === TutorialResource::MODIFY_UNI_INVEST) {
-			$tutorialHelper->setStepDone();
-		}
+        # tutorial
+        if ($session->get('playerInfo')->get('stepDone') == false &&
+            $session->get('playerInfo')->get('stepTutorial') === TutorialResource::MODIFY_UNI_INVEST) {
+            $tutorialHelper->setStepDone();
+        }
 
-		$session->addFlashbag('L\'investissement dans l\'université a été modifié', Flashbag::TYPE_SUCCESS);
-	} else {
-		throw new ErrorException('La limite maximale d\'investissement dans l\'Université est de 500\'000 crédits.');
-	}
+        $session->addFlashbag('L\'investissement dans l\'université a été modifié', Flashbag::TYPE_SUCCESS);
+    } else {
+        throw new ErrorException('La limite maximale d\'investissement dans l\'Université est de 500\'000 crédits.');
+    }
 } else {
-	throw new FormException('pas assez d\'informations pour modifier cet investissement');
+    throw new FormException('pas assez d\'informations pour modifier cet investissement');
 }

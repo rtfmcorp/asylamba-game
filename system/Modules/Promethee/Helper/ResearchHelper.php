@@ -7,139 +7,145 @@ use Asylamba\Classes\Exception\ErrorException;
 
 class ResearchHelper
 {
-	/** @var int **/
-	protected $coeff;
-	/** @var int **/
-	protected $maxDiff;
-	
-	/**
-	 * @param int $coeff
-	 * @param int $maxDiff
-	 */
-	public function __construct($coeff, $maxDiff)
-	{
-		$this->coeff = $coeff;
-		$this->maxDiff = $maxDiff;
-	}
-	
-	public function isAResearch($research) {
-		return in_array($research, ResearchResource::$availableResearch);
-	}
+    /** @var int **/
+    protected $coeff;
+    /** @var int **/
+    protected $maxDiff;
+    
+    /**
+     * @param int $coeff
+     * @param int $maxDiff
+     */
+    public function __construct($coeff, $maxDiff)
+    {
+        $this->coeff = $coeff;
+        $this->maxDiff = $maxDiff;
+    }
+    
+    public function isAResearch($research)
+    {
+        return in_array($research, ResearchResource::$availableResearch);
+    }
 
-	public function getInfo($research, $info, $level = 0, $sup = 'delfault') {
-		if ($this->isAResearch($research)) {
-			if ($info == 'name' || $info == 'codeName') {
-				return ResearchResource::$research[$research][$info];
-			} elseif ($info == 'level') {
-				if ($level <= 0) {
-					return FALSE;
-				}
-				if ($sup == 'price') {
-					return $this->researchPrice($research, $level) * $this->coeff;
-				}
-			} else {
-				throw new ErrorException('Wrong second argument for method getInfo() from ResearchResource');
-			}
-		} else {
-			throw new ErrorException('This research doesn\'t exist !');
-		}
-		return FALSE;
-	}
+    public function getInfo($research, $info, $level = 0, $sup = 'delfault')
+    {
+        if ($this->isAResearch($research)) {
+            if ($info == 'name' || $info == 'codeName') {
+                return ResearchResource::$research[$research][$info];
+            } elseif ($info == 'level') {
+                if ($level <= 0) {
+                    return false;
+                }
+                if ($sup == 'price') {
+                    return $this->researchPrice($research, $level) * $this->coeff;
+                }
+            } else {
+                throw new ErrorException('Wrong second argument for method getInfo() from ResearchResource');
+            }
+        } else {
+            throw new ErrorException('This research doesn\'t exist !');
+        }
+        return false;
+    }
 
-	public function isResearchPermit($firstLevel, $secondLevel, $thirdLevel = -1) {
-		// compare the levels of technos and say if you can research such techno
-		if ($thirdLevel == -1) {
-			if (abs($firstLevel - $secondLevel) > $this->maxDiff) { 
-				return FALSE;
-			} else { return TRUE; }
-		} else {
-			if (abs($firstLevel - $secondLevel) > $this->maxDiff) {
-				return FALSE;
-			} elseif (abs($firstLevel - $thirdLevel) > $this->maxDiff) {
-				return FALSE;
-			} elseif (abs($secondLevel - $thirdLevel) > $this->maxDiff) {
-				return FALSE;
-			} else {
-				return TRUE;
-			}
-		}
-	}
+    public function isResearchPermit($firstLevel, $secondLevel, $thirdLevel = -1)
+    {
+        // compare the levels of technos and say if you can research such techno
+        if ($thirdLevel == -1) {
+            if (abs($firstLevel - $secondLevel) > $this->maxDiff) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            if (abs($firstLevel - $secondLevel) > $this->maxDiff) {
+                return false;
+            } elseif (abs($firstLevel - $thirdLevel) > $this->maxDiff) {
+                return false;
+            } elseif (abs($secondLevel - $thirdLevel) > $this->maxDiff) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
 
-	private function researchPrice($research, $level) {
-		switch ($research) {
-			case 0 :
-				if ($level == 1) {
-					return 100;
-				} else {
-					return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
-					# ancienne : return round((-4451.2 * pow($level, 3)) + (138360 * pow($level, 2)) - (526711 * $level) + 589669);
-				}
-				break;
-			case 1 :
-				if ($level == 1) {
-					return 3000;
-				} else {
-					return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
-				}
-				break;
-			case 2 :
-				if ($level == 1) {
-					return 7000;
-				} else {
-					return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
-				}
-				break;
-			case 3 :
-				if ($level == 1) {
-					return 200;
-				} else {
-					return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
-				}
-				break;
-			case 4 :
-				if ($level == 1) {
-					return 9000;
-				} else {
-					return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
-				}
-				break;
-			case 5 :
-				if ($level == 1) {
-					return 200;
-				} else {
-					return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
-				}
-				break;
-			case 6 :
-				if ($level == 1) {
-					return 9000;
-				} else {
-					return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
-				}
-				break;
-			case 7 :
-				if ($level == 1) {
-					return 200;
-				} else {
-					return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
-				}
-				break;
-			case 8 :
-				if ($level == 1) {
-					return 4000;
-				} else {
-					return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
-				}
-				break;
-			case 9 :
-				if ($level == 1) {
-					return 6000;
-				} else {
-					return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
-				}
-				break;
-			default:
-				return FALSE;
-		}
-	}
+    private function researchPrice($research, $level)
+    {
+        switch ($research) {
+            case 0:
+                if ($level == 1) {
+                    return 100;
+                } else {
+                    return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
+                    # ancienne : return round((-4451.2 * pow($level, 3)) + (138360 * pow($level, 2)) - (526711 * $level) + 589669);
+                }
+                break;
+            case 1:
+                if ($level == 1) {
+                    return 3000;
+                } else {
+                    return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
+                }
+                break;
+            case 2:
+                if ($level == 1) {
+                    return 7000;
+                } else {
+                    return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
+                }
+                break;
+            case 3:
+                if ($level == 1) {
+                    return 200;
+                } else {
+                    return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
+                }
+                break;
+            case 4:
+                if ($level == 1) {
+                    return 9000;
+                } else {
+                    return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
+                }
+                break;
+            case 5:
+                if ($level == 1) {
+                    return 200;
+                } else {
+                    return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
+                }
+                break;
+            case 6:
+                if ($level == 1) {
+                    return 9000;
+                } else {
+                    return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
+                }
+                break;
+            case 7:
+                if ($level == 1) {
+                    return 200;
+                } else {
+                    return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
+                }
+                break;
+            case 8:
+                if ($level == 1) {
+                    return 4000;
+                } else {
+                    return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
+                }
+                break;
+            case 9:
+                if ($level == 1) {
+                    return 6000;
+                } else {
+                    return round((0.0901 * pow($level, 5)) - (12.988 * pow($level, 4)) + (579.8 * pow($level, 3)) - (5735.8 * pow($level, 2)) + (28259 * $level) - 25426);
+                }
+                break;
+            default:
+                return false;
+        }
+    }
 }

@@ -4,22 +4,22 @@ use Asylamba\Modules\Athena\Resource\ShipResource;
 
 $shipsName;
 for ($i = 0; $i < 12; $i++) {
-	$shipsName[] = "'" . ShipResource::getInfo($i, 'codeName') . "'";
+    $shipsName[] = "'" . ShipResource::getInfo($i, 'codeName') . "'";
 }
 $shipsName = implode(', ', $shipsName);
 
 $shipsPev;
 for ($i = 0; $i < 12; $i++) {
-	$shipsPev[] = ShipResource::getInfo($i, 'pev');
+    $shipsPev[] = ShipResource::getInfo($i, 'pev');
 }
 $shipsPev = implode(', ', $shipsPev);
 
-    echo ('<div id="news-container"></div>');
-	if ($this->getContainer()->getParameter('environment') === 'dev') {
-		echo '<script type="text/javascript" src="' . JS . 'jquery1.8.2.min.js"></script>';
-	} else {
-		echo '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>';
-	}
+    echo('<div id="news-container"></div>');
+    if ($this->getContainer()->getParameter('environment') === 'dev') {
+        echo '<script type="text/javascript" src="' . JS . 'jquery1.8.2.min.js"></script>';
+    } else {
+        echo '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>';
+    }
 ?>
 <script type="text/javascript">
     jQuery(document).ready(function($) {

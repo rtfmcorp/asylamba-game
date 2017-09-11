@@ -138,19 +138,19 @@ class ExceptionListener {
 		
 		$history = $this->sessionWrapper->getHistory();
 
-		if (($nbPaths = count($history)) === 0) {
-			return ['redirect' => '/'];
-		}
-		if (($redirect = '/' . $this->sessionWrapper->getLastHistory()) === $request->getPath()) {
-			// We get the path before the last one if available
-			$redirect = ($nbPaths > 1) ? $history[$nbPaths - 2] : '/';
-		}
-		// In this case, it means the user is in an error loop
-		if ($nbPaths > 3 && $redirect === $history[$nbPaths - 4]) {
-			return [
-				'template' => TEMPLATE . 'fatal.php'
-			];
-		}
-		return ['redirect' => $redirect];
-	}
+        if (($nbPaths = count($history)) === 0) {
+            return ['redirect' => '/'];
+        }
+        if (($redirect = '/' . $this->sessionWrapper->getLastHistory()) === $request->getPath()) {
+            // We get the path before the last one if available
+            $redirect = ($nbPaths > 1) ? $history[$nbPaths - 2] : '/';
+        }
+        // In this case, it means the user is in an error loop
+        if ($nbPaths > 3 && $redirect === $history[$nbPaths - 4]) {
+            return [
+                'template' => TEMPLATE . 'fatal.php'
+            ];
+        }
+        return ['redirect' => $redirect];
+    }
 }

@@ -6,11 +6,11 @@ use Asylamba\Classes\Library\Module;
 
 class HephaistosModule extends Module
 {
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getName()
-	{
-		return 'Hephaistos';
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'Hephaistos';
+    }
 }

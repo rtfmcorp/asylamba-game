@@ -4,7 +4,8 @@ namespace Tests\Asylamba\Classes\DependencyInjection;
 
 use Asylamba\Classes\DependencyInjection\Container;
 
-class ContainerTest extends \PHPUnit\Framework\TestCase {
+class ContainerTest extends \PHPUnit\Framework\TestCase
+{
     /** @var Container **/
     protected $container;
     
@@ -24,54 +25,56 @@ class ContainerTest extends \PHPUnit\Framework\TestCase {
         
         $this->assertTrue($this->container->hasService('test_service'));
     }
-	
-	/**
-	 * @expectedException \InvalidArgumentException
-	 * @expectedExceptionMessage Service test_service is already defined
-	 */
-	public function testSetServiceDefinitionTwice()
-	{
-		$this->container->setServiceDefinition('test_service', [
-            'class' => Container::class,
-            'arguments' => []
-        ]);
-		$this->container->setServiceDefinition('test_service', [
-            'class' => Container::class,
-            'arguments' => []
-        ]);
-	}
     
-    public function testGet() {
-		$this->container->setParameter('test_parameter', 'value1');
-		$this->container->setServiceDefinition('child_container', [
-			'class' => Container::class,
-			'arguments' => []
-		]);
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Service test_service is already defined
+     */
+    public function testSetServiceDefinitionTwice()
+    {
+        $this->container->setServiceDefinition('test_service', [
+            'class' => Container::class,
+            'arguments' => []
+        ]);
+        $this->container->setServiceDefinition('test_service', [
+            'class' => Container::class,
+            'arguments' => []
+        ]);
+    }
+    
+    public function testGet()
+    {
+        $this->container->setParameter('test_parameter', 'value1');
+        $this->container->setServiceDefinition('child_container', [
+            'class' => Container::class,
+            'arguments' => []
+        ]);
         $this->container->setServiceDefinition('test_service', [
             'class' => Container::class,
             'arguments' => [
-				'%test_parameter',
-				'@child_container'
-			]
+                '%test_parameter',
+                '@child_container'
+            ]
         ]);
         $this->assertInstanceOf(Container::class, $this->container->get('test_service'));
     }
-	
+    
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Service child_container not found
      */
-	public function testGetWithMissingArguments() {
-		$this->container->setParameter('test_parameter', 'value1');
+    public function testGetWithMissingArguments()
+    {
+        $this->container->setParameter('test_parameter', 'value1');
         $this->container->setServiceDefinition('test_service', [
             'class' => Container::class,
             'arguments' => [
-				'%test_parameter',
-				'@child_container'
-			]
+                '%test_parameter',
+                '@child_container'
+            ]
         ]);
-		$this->container->get('test_service');
-	}
+        $this->container->get('test_service');
+    }
     
     /**
      * @expectedException \InvalidArgumentException

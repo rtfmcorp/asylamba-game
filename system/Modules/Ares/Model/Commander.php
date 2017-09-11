@@ -16,106 +16,106 @@ use Asylamba\Modules\Athena\Resource\ShipResource;
 
 class Commander
 {
-	public $id 						= 0;
-	public $name 					= '';
-	public $experience 				= 0;
-	public $avatar 					= '';
-	public $rPlayer 				= 0;
-	public $rBase 					= 0;
-	public $comment 				= '';
-	public $sexe 					= 0;
-	public $age 					= 0;
-	public $level 					= 0;
-	public $uExperience 			= 0;
-	public $palmares 				= 0;
-	public $statement 				= Commander::INSCHOOL;
-	public $line 					= 1;
-	public $dCreation 				= '';
-	public $dAffectation 			= '';
-	public $dDeath 					= '';
+    public $id                        = 0;
+    public $name                    = '';
+    public $experience                = 0;
+    public $avatar                    = '';
+    public $rPlayer                = 0;
+    public $rBase                    = 0;
+    public $comment                = '';
+    public $sexe                    = 0;
+    public $age                    = 0;
+    public $level                    = 0;
+    public $uExperience            = 0;
+    public $palmares                = 0;
+    public $statement                = Commander::INSCHOOL;
+    public $line                    = 1;
+    public $dCreation                = '';
+    public $dAffectation            = '';
+    public $dDeath                    = '';
 
-	# variables de jointure quelconque
-	public $oBName					= '';
-	public $playerName				= '';
-	public $playerColor				= 0;
+    # variables de jointure quelconque
+    public $oBName                    = '';
+    public $playerName                = '';
+    public $playerColor                = 0;
 
-	# variables de combat
-	public $squadronsIds			= array();
-	public $armyInBegin 			= array();
-	public $armyAtEnd 				= array();
-	public $pevInBegin 				= 0;
-	public $earnedExperience 		= 0;
-	public $winner					= FALSE;
-	public $isAttacker 				= NULL;
+    # variables de combat
+    public $squadronsIds            = array();
+    public $armyInBegin            = array();
+    public $armyAtEnd                = array();
+    public $pevInBegin                = 0;
+    public $earnedExperience        = 0;
+    public $winner                    = false;
+    public $isAttacker                = null;
 
-	# variables de déplacement
-	public $dStart					= '';
-	public $dArrival				= '';
-	public $resources 				= 0;
-	public $travelType				= 0;
-	public $travelLength			= 0;
-	public $rStartPlace				= 0;
-	public $rDestinationPlace		= 0;
-	public $startPlaceName			= '';
-	public $startPlacePop			= 0;
-	public $destinationPlaceName	= '';
-	public $destinationPlacePop		= 0;
-	# Tableau d'objets squadron       
-	public $army = array();
+    # variables de déplacement
+    public $dStart                    = '';
+    public $dArrival                = '';
+    public $resources                = 0;
+    public $travelType                = 0;
+    public $travelLength            = 0;
+    public $rStartPlace                = 0;
+    public $rDestinationPlace        = 0;
+    public $startPlaceName            = '';
+    public $startPlacePop            = 0;
+    public $destinationPlaceName    = '';
+    public $destinationPlacePop        = 0;
+    # Tableau d'objets squadron
+    public $army = array();
 
-	public $uCommander				= '';
-	public $hasToU					= TRUE;
-	public $hasArmySetted			= FALSE;
-	public $uMethodCtced			= FALSE;
-	public $lastUMethod				= NULL;
+    public $uCommander                = '';
+    public $hasToU                    = true;
+    public $hasArmySetted            = false;
+    public $uMethodCtced            = false;
+    public $lastUMethod                = null;
     
-	const COEFFSCHOOL 				= 100;
-	const COEFFEARNEDEXP 			= 50;
-	const COEFFEXPPLAYER			= 100;
-	const CMDBASELVL 				= 100;
-	
-	const FLEETSPEED 				= 35;
+    const COEFFSCHOOL                = 100;
+    const COEFFEARNEDEXP            = 50;
+    const COEFFEXPPLAYER            = 100;
+    const CMDBASELVL                = 100;
     
-	const COEFFMOVEINSYSTEM 		= 584;
-	const COEFFMOVEOUTOFSYSTEM 		= 600;
-	const COEFFMOVEINTERSYSTEM 		= 50000;
+    const FLEETSPEED                = 35;
+    
+    const COEFFMOVEINSYSTEM        = 584;
+    const COEFFMOVEOUTOFSYSTEM        = 600;
+    const COEFFMOVEINTERSYSTEM        = 50000;
 
-	const LVLINCOMECOMMANDER 		= 200;
+    const LVLINCOMECOMMANDER        = 200;
 
-	const CREDITCOEFFTOCOLONIZE		= 80000;
-	const CREDITCOEFFTOCONQUER		= 150000;
+    const CREDITCOEFFTOCOLONIZE        = 80000;
+    const CREDITCOEFFTOCONQUER        = 150000;
 
-	# loot const
-	const LIMITTOLOOT 				= 5000;
-	const COEFFLOOT 				= 275;
+    # loot const
+    const LIMITTOLOOT                = 5000;
+    const COEFFLOOT                = 275;
 
-	# Commander statements
-	const INSCHOOL 					= 0; # dans l'école
-	const AFFECTED 					= 1; # autour de la base
-	const MOVING 					= 2; # en déplacement
-	const DEAD 						= 3; # mort
-	const DESERT 					= 4; # déserté
-	const RETIRED 					= 5; # à la retraite
-	const ONSALE 					= 6; # dans le marché
-	const RESERVE 					= 7; # dans la réserve (comme à l'école mais n'apprend pas)
+    # Commander statements
+    const INSCHOOL                    = 0; # dans l'école
+    const AFFECTED                    = 1; # autour de la base
+    const MOVING                    = 2; # en déplacement
+    const DEAD                        = 3; # mort
+    const DESERT                    = 4; # déserté
+    const RETIRED                    = 5; # à la retraite
+    const ONSALE                    = 6; # dans le marché
+    const RESERVE                    = 7; # dans la réserve (comme à l'école mais n'apprend pas)
 
-	# types of travel
-	const MOVE						= 0; # déplacement
-	const LOOT						= 1; # pillage
-	const COLO						= 2; # colo ou conquete
-	const BACK						= 3; # retour après une action
+    # types of travel
+    const MOVE                        = 0; # déplacement
+    const LOOT                        = 1; # pillage
+    const COLO                        = 2; # colo ou conquete
+    const BACK                        = 3; # retour après une action
 
-	const MAXTRAVELTIME				= 57600;
-	const DISTANCEMAX				= 30;
+    const MAXTRAVELTIME                = 57600;
+    const DISTANCEMAX                = 30;
 
-	# Const de lineCoord
-	public static $LINECOORD = array(1, 1, 1, 2, 2, 1, 2, 3, 3, 1, 2, 3, 4, 4, 2, 3, 4, 5, 5, 3, 4, 5, 6, 6, 4, 5, 6, 7, 7, 5, 6, 7);
+    # Const de lineCoord
+    public static $LINECOORD = array(1, 1, 1, 2, 2, 1, 2, 3, 3, 1, 2, 3, 4, 4, 2, 3, 4, 5, 5, 3, 4, 5, 6, 6, 4, 5, 6, 7, 7, 5, 6, 7);
 
-	/**
+    /**
      * @param int $id
      * @return $this
      */
-	public function setId($id)
+    public function setId($id)
     {
         $this->id = $id;
         
@@ -125,7 +125,7 @@ class Commander
     /**
      * @return int
      */
-	public function getId()
+    public function getId()
     {
         return $this->id;
     }
@@ -134,7 +134,7 @@ class Commander
      * @param string $name
      * @return $this
      */
-	public function setName($name)
+    public function setName($name)
     {
         $this->name = $name;
         
@@ -144,7 +144,7 @@ class Commander
     /**
      * @return string
      */
-	public function getName()
+    public function getName()
     {
         return $this->name;
     }
@@ -153,7 +153,7 @@ class Commander
      * @param string $avatar
      * @return $this
      */
-	public function setAvatar($avatar)
+    public function setAvatar($avatar)
     {
         $this->avatar = $avatar;
         
@@ -163,7 +163,7 @@ class Commander
     /**
      * @return string
      */
-	public function getAvatar()
+    public function getAvatar()
     {
         return $this->avatar;
     }
@@ -172,7 +172,7 @@ class Commander
      * @param int $rPlayer
      * @return $this
      */
-	public function setRPlayer($rPlayer)
+    public function setRPlayer($rPlayer)
     {
         $this->rPlayer = $rPlayer;
         
@@ -182,7 +182,7 @@ class Commander
     /**
      * @return int
      */
-	public function getRPlayer()
+    public function getRPlayer()
     {
         return $this->rPlayer;
     }
@@ -191,7 +191,7 @@ class Commander
      * @param string $playerName
      * @return $this
      */
-	public function setPlayerName($playerName)
+    public function setPlayerName($playerName)
     {
         $this->playerName = $playerName;
         
@@ -201,7 +201,7 @@ class Commander
     /**
      * @return string
      */
-	public function getPlayerName()
+    public function getPlayerName()
     {
         return $this->playerName;
     }
@@ -210,7 +210,7 @@ class Commander
      * @param int $playerColor
      * @return $this
      */
-	public function setPlayerColor($playerColor)
+    public function setPlayerColor($playerColor)
     {
         $this->playerColor = $playerColor;
         
@@ -220,7 +220,7 @@ class Commander
     /**
      * @return int
      */
-	public function getPlayerColor()
+    public function getPlayerColor()
     {
         return $this->playerColor;
     }
@@ -229,7 +229,7 @@ class Commander
      * @param int $rBase
      * @return $this
      */
-	public function setRBase($rBase)
+    public function setRBase($rBase)
     {
         $this->rBase = $rBase;
         
@@ -239,7 +239,7 @@ class Commander
     /**
      * @return int
      */
-	public function getRBase()
+    public function getRBase()
     {
         return $this->rBase;
     }
@@ -248,7 +248,7 @@ class Commander
      * @param string $comment
      * @return $this
      */
-	public function setComment($comment)
+    public function setComment($comment)
     {
         $this->comment = $comment;
         
@@ -258,7 +258,7 @@ class Commander
     /**
      * @return string
      */
-	public function getComment()
+    public function getComment()
     {
         return $this->comment;
     }
@@ -267,7 +267,7 @@ class Commander
      * @param int $sexe
      * @return $this
      */
-	public function setSexe($sexe)
+    public function setSexe($sexe)
     {
         $this->sexe = $sexe;
         
@@ -277,7 +277,7 @@ class Commander
     /**
      * @return int
      */
-	public function getSexe()
+    public function getSexe()
     {
         return $this->sexe;
     }
@@ -286,17 +286,17 @@ class Commander
      * @param int $age
      * @return $this
      */
-	public function setAge($age)
+    public function setAge($age)
     {
         $this->age = $age;
-		
-		return $this;
+        
+        return $this;
     }
     
     /**
      * @return int
      */
-	public function getAge()
+    public function getAge()
     {
         return $this->age;
     }
@@ -305,17 +305,17 @@ class Commander
      * @param int $level
      * @return $this
      */
-	public function setLevel($level)
+    public function setLevel($level)
     {
         $this->level = $level;
         
         return $this;
-    } 	
+    }
     
     /**
      * @return int
      */
-	public function getLevel()
+    public function getLevel()
     {
         return $this->level;
     }
@@ -324,7 +324,7 @@ class Commander
      * @param int $experience
      * @return $this
      */
-	public function setExperience($experience)
+    public function setExperience($experience)
     {
         $this->experience = $experience;
         
@@ -334,7 +334,7 @@ class Commander
     /**
      * @return int
      */
-	public function getExperience()
+    public function getExperience()
     {
         return $this->experience;
     }
@@ -353,7 +353,7 @@ class Commander
     /**
      * @return int
      */
-	public function getEarnedExperience()
+    public function getEarnedExperience()
     {
         return $this->earnedExperience;
     }
@@ -362,7 +362,7 @@ class Commander
      * @param string $updatedAt
      * @return $this
      */
-	public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updatedAt)
     {
         $this->uCommander = $updatedAt;
         
@@ -372,7 +372,7 @@ class Commander
     /**
      * @return string
      */
-	public function getUpdatedAt()
+    public function getUpdatedAt()
     {
         return $this->uCommander;
     }
@@ -381,7 +381,7 @@ class Commander
      * @param int $palmares
      * @return $this
      */
-	public function setPalmares($palmares)
+    public function setPalmares($palmares)
     {
         $this->palmares = $palmares;
         
@@ -391,7 +391,7 @@ class Commander
     /**
      * @return int
      */
-	public function getPalmares()
+    public function getPalmares()
     {
         return $this->palmares;
     }
@@ -399,7 +399,7 @@ class Commander
     /**
      * @param int $travelType
      */
-	public function setTravelType($travelType)
+    public function setTravelType($travelType)
     {
         $this->travelType = $travelType;
         
@@ -409,54 +409,54 @@ class Commander
     /**
      * @return int
      */
-	public function getTravelType()
+    public function getTravelType()
     {
         return $this->travelType;
     }
-	
-	/**
-	 * @param int $travelLength
-	 * @return Commander
-	 */
-	public function setTravelLength($travelLength)
-	{
-		$this->travelLength = $travelLength;
-		
-		return $this;
-	}
-	
-	/**
-	 * @return int
-	 */
-	public function getTravelLength()
-	{
-		return $this->travelLength;
-	}
-	
-	/**
-	 * @param int $startPlaceId
-	 * @return Commander
-	 */
-	public function setStartPlaceId($startPlaceId)
-	{
-		$this->rStartPlace = $startPlaceId;
-		
-		return $this;
-	}
-	
-	/**
-	 * @return int
-	 */
-	public function getStartPlaceId()
-	{
-		return $this->rStartPlace;
-	}
+    
+    /**
+     * @param int $travelLength
+     * @return Commander
+     */
+    public function setTravelLength($travelLength)
+    {
+        $this->travelLength = $travelLength;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+    public function getTravelLength()
+    {
+        return $this->travelLength;
+    }
+    
+    /**
+     * @param int $startPlaceId
+     * @return Commander
+     */
+    public function setStartPlaceId($startPlaceId)
+    {
+        $this->rStartPlace = $startPlaceId;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+    public function getStartPlaceId()
+    {
+        return $this->rStartPlace;
+    }
     
     /**
      * @param int $rDestinationPlace
      * @return $this
      */
-	public function setRPlaceDestination($rDestinationPlace)
+    public function setRPlaceDestination($rDestinationPlace)
     {
         $this->rDestinationPlace = $rDestinationPlace;
         
@@ -466,7 +466,7 @@ class Commander
     /**
      * @return int
      */
-	public function getRPlaceDestination()
+    public function getRPlaceDestination()
     {
         return $this->rDestinationPlace;
     }
@@ -475,7 +475,7 @@ class Commander
      * @param int $resources
      * @return $this
      */
-	public function setResources($resources)
+    public function setResources($resources)
     {
         $this->resources = $resources;
         
@@ -485,7 +485,7 @@ class Commander
     /**
      * @return int
      */
-	public function getResources()
+    public function getResources()
     {
         return $this->resources;
     }
@@ -494,7 +494,7 @@ class Commander
      * @param int $statement
      * @return $this
      */
-	public function setStatement($statement)
+    public function setStatement($statement)
     {
         $this->statement = $statement;
         
@@ -504,7 +504,7 @@ class Commander
     /**
      * @return int
      */
-	public function getStatement()
+    public function getStatement()
     {
         return $this->statement;
     }
@@ -513,7 +513,7 @@ class Commander
      * @param string $dCreation
      * @return $this
      */
-	public function setDCreation($dCreation)
+    public function setDCreation($dCreation)
     {
         $this->dCreation = $dCreation;
         
@@ -523,7 +523,7 @@ class Commander
     /**
      * @return string
      */
-	public function getDCreation()
+    public function getDCreation()
     {
         return $this->dCreation;
     }
@@ -532,7 +532,7 @@ class Commander
      * @param string $dAffectation
      * @return $this
      */
-	public function setDAffectation($dAffectation)
+    public function setDAffectation($dAffectation)
     {
         $this->dAffectation = $dAffectation;
         
@@ -542,29 +542,29 @@ class Commander
     /**
      * @return string
      */
-	public function getDAffectation()
+    public function getDAffectation()
     {
         return $this->dAffectation;
     }
-	
-	/**
-	 * @param string $startedAt
-	 * @return \Asylamba\Modules\Ares\Model\Commander
-	 */
-	public function setStartedAt($startedAt)
-	{
-		$this->dStart = $startedAt;
-		
-		return $this;
-	}
-	
-	/**
-	 * @return string
-	 */
-	public function getStartedAt()
-	{
-		return $this->dStart;
-	}
+    
+    /**
+     * @param string $startedAt
+     * @return \Asylamba\Modules\Ares\Model\Commander
+     */
+    public function setStartedAt($startedAt)
+    {
+        $this->dStart = $startedAt;
+        
+        return $this;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getStartedAt()
+    {
+        return $this->dStart;
+    }
     
     /**
      * @param string $arrivalDate
@@ -580,7 +580,7 @@ class Commander
     /**
      * @return string
      */
-	public function getArrivalDate()
+    public function getArrivalDate()
     {
         return $this->dArrival;
     }
@@ -589,7 +589,7 @@ class Commander
      * @param string $dDeath
      * @return $this
      */
-	public function setDDeath($dDeath)
+    public function setDDeath($dDeath)
     {
         $this->dDeath = $dDeath;
         
@@ -599,7 +599,7 @@ class Commander
     /**
      * @return string
      */
-	public function getDDeath()
+    public function getDDeath()
     {
         return $this->dDeath;
     }
@@ -608,7 +608,7 @@ class Commander
      * @param int $lengthTravel
      * @return $this
      */
-	public function setLengthTravel($lengthTravel)
+    public function setLengthTravel($lengthTravel)
     {
         $this->lengthTravel = $lengthTravel;
         
@@ -618,7 +618,7 @@ class Commander
     /**
      * @return int
      */
-	public function getLengthTravel()
+    public function getLengthTravel()
     {
         return $this->lengthTravel;
     }
@@ -627,7 +627,7 @@ class Commander
      * @param string $oBName
      * @return $this
      */
-	public function setBaseName($oBName)
+    public function setBaseName($oBName)
     {
         $this->oBName = $oBName;
         
@@ -637,7 +637,7 @@ class Commander
     /**
      * @return string
      */
-	public function getBaseName()
+    public function getBaseName()
     {
         return $this->oBName;
     }
@@ -646,7 +646,7 @@ class Commander
      * @param string $doName
      * @return $this
      */
-	public function setDestinationPlaceName($doName)
+    public function setDestinationPlaceName($doName)
     {
         $this->destinationPlaceName = $doName;
         
@@ -656,7 +656,7 @@ class Commander
     /**
      * @return string
      */
-	public function getDestinationPlaceName()
+    public function getDestinationPlaceName()
     {
         return $this->destinationPlaceName;
     }
@@ -665,7 +665,7 @@ class Commander
      * @param array $squadronsIds
      * @return $this
      */
-	public function setSquadronsIds($squadronsIds)
+    public function setSquadronsIds($squadronsIds)
     {
         $this->squadronsIds = $squadronsIds;
         
@@ -686,7 +686,7 @@ class Commander
     /**
      * @return array
      */
-	public function getSquadronsIds()
+    public function getSquadronsIds()
     {
         return $this->squadronsIds;
     }
@@ -695,7 +695,7 @@ class Commander
      * @param array $armyInBegin
      * @return $this
      */
-	public function setArmyInBegin($armyInBegin)
+    public function setArmyInBegin($armyInBegin)
     {
         $this->armyInBegin = $armyInBegin;
         
@@ -716,7 +716,7 @@ class Commander
     /**
      * @return array
      */
-	public function getArmyInBegin()
+    public function getArmyInBegin()
     {
         return $this->armyInBegin;
     }
@@ -725,7 +725,7 @@ class Commander
      * @param bool $isAttacker
      * @return $this
      */
-	public function setIsAttacker($isAttacker)
+    public function setIsAttacker($isAttacker)
     {
         $this->isAttacker = $isAttacker;
         
@@ -735,123 +735,126 @@ class Commander
     /**
      * @return bool
      */
-	public function getIsAttacker()
+    public function getIsAttacker()
     {
         return $this->isAttacker;
     }
 
-	public function setArmy()
+    public function setArmy()
     {
-		if (!$this->hasArmySetted) {
-			for( $i = 0; $i < count($this->squadronsIds) AND $i < 25; $i++) {
-				$this->army[$i] = new Squadron(
-					$this->armyInBegin[$i], 
-					$this->squadronsIds[$i], 
-					self::$LINECOORD[$i], 
-					$i, 
-					$this->id);
-			}
-			$this->setPevInBegin();
-			$this->hasArmySetted = TRUE;
-		}
-	}
+        if (!$this->hasArmySetted) {
+            for ($i = 0; $i < count($this->squadronsIds) and $i < 25; $i++) {
+                $this->army[$i] = new Squadron(
+                    $this->armyInBegin[$i],
+                    $this->squadronsIds[$i],
+                    self::$LINECOORD[$i],
+                    $i,
+                    $this->id
+                );
+            }
+            $this->setPevInBegin();
+            $this->hasArmySetted = true;
+        }
+    }
     
-	public function getArmy()
+    public function getArmy()
     {
         $this->setArmy();
         return $this->army;
     }
 
-	public function setPevInBegin() {
-		$pev = 0;
-		foreach ($this->armyInBegin as $squadron) {
-			for ($i = 0; $i < 12; $i++) {
-				$pev += $squadron[$i] * ShipResource::getInfo($i, 'pev');
-			}
-		}
-		$this->pevInBegin = $pev;
-	}
+    public function setPevInBegin()
+    {
+        $pev = 0;
+        foreach ($this->armyInBegin as $squadron) {
+            for ($i = 0; $i < 12; $i++) {
+                $pev += $squadron[$i] * ShipResource::getInfo($i, 'pev');
+            }
+        }
+        $this->pevInBegin = $pev;
+    }
     
-	public function getPevInBegin()
+    public function getPevInBegin()
     {
         return $this->pevInBegin;
     }
-	
-	public function getPev() {
-		$pev = 0;
-		foreach ($this->armyInBegin as $squadron) {
-			for ($i = 0; $i < 12; $i++) {
-				$pev += $squadron[$i] * ShipResource::getInfo($i, 'pev');
-			}
-		}
-		return $pev;
-	}
-
-	public function setArmyAtEnd()
-    {
-		$this->setArmy();
-		$i = 0;
-		foreach ($this->army AS $squadron) {
-			$this->armyAtEnd[$i] = $squadron->getArrayOfShips();
-			$i++;
-		}
-	}
     
-	public function getArmyAtEnd()
+    public function getPev()
+    {
+        $pev = 0;
+        foreach ($this->armyInBegin as $squadron) {
+            for ($i = 0; $i < 12; $i++) {
+                $pev += $squadron[$i] * ShipResource::getInfo($i, 'pev');
+            }
+        }
+        return $pev;
+    }
+
+    public function setArmyAtEnd()
+    {
+        $this->setArmy();
+        $i = 0;
+        foreach ($this->army as $squadron) {
+            $this->armyAtEnd[$i] = $squadron->getArrayOfShips();
+            $i++;
+        }
+    }
+    
+    public function getArmyAtEnd()
     {
         return $this->armyAtEnd;
     }
 
-	public function getFormatLineCoord()
+    public function getFormatLineCoord()
     {
-		$return = array();
+        $return = array();
 
-		for ($i = 0; $i < ($this->level + 1); $i++) { 
-			$return[] = self::$LINECOORD[$i];
-		}
-		return $return;
-	}
+        for ($i = 0; $i < ($this->level + 1); $i++) {
+            $return[] = self::$LINECOORD[$i];
+        }
+        return $return;
+    }
     
-	public function getSizeArmy()
+    public function getSizeArmy()
     {
         return count($this->squadronsIds);
     }
 
-	public function getPevToLoot()
+    public function getPevToLoot()
     {
-		$pev = 0;
-		foreach ($this->armyAtEnd as $squadron) {
-			for ($i = 0; $i < 12; $i++) {
-				$pev += $squadron[$i] * ShipResource::getInfo($i, 'pev');
-			}
-		}
+        $pev = 0;
+        foreach ($this->armyAtEnd as $squadron) {
+            for ($i = 0; $i < 12; $i++) {
+                $pev += $squadron[$i] * ShipResource::getInfo($i, 'pev');
+            }
+        }
 
-		if ($pev != 0) {
-			return $pev;
-		} else {
-			return $this->getPev();
-		}
-	}
-	
-	public function getSquadron($i)	
+        if ($pev != 0) {
+            return $pev;
+        } else {
+            return $this->getPev();
+        }
+    }
+    
+    public function getSquadron($i)
     {
-		$this->setArmy();
-		if (!empty($this->army[$i])) {
-			return $this->army[$i]; 
-		} else {
-			return FALSE;
-		}
-	}
+        $this->setArmy();
+        if (!empty($this->army[$i])) {
+            return $this->army[$i];
+        } else {
+            return false;
+        }
+    }
 
-	# renvoie un tableau de nombre de vaisseaux
-	public function getNbrShipByType()
+    # renvoie un tableau de nombre de vaisseaux
+    public function getNbrShipByType()
     {
-		$array = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-		foreach ($this->armyInBegin as $squadron) {
-			for ($i = 0; $i < 12; $i++) {
-				$array[$i] += $squadron[$i];
-			}
-		}
-		return $array;
-	}
+        $array = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        foreach ($this->armyInBegin as $squadron) {
+            for ($i = 0; $i < 12; $i++) {
+                $array[$i] += $squadron[$i];
+            }
+        }
+        return $array;
+    }
 }

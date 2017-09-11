@@ -13,15 +13,15 @@ $request = $this->getContainer()->get('app.request');
 $credit = $request->request->get('credit');
 
 if ($credit) {
-	$player = $playerManager->get($session->get('playerId'));
-	
-	$credit = ($credit > $player->credit) ? $player->credit : $credit;
-	$playerManager->decreaseCredit($player, $credit);
-	$colorManager->get($session->get('playerInfo')->get('color'))->credits += $credit;
+    $player = $playerManager->get($session->get('playerId'));
+    
+    $credit = ($credit > $player->credit) ? $player->credit : $credit;
+    $playerManager->decreaseCredit($player, $credit);
+    $colorManager->get($session->get('playerInfo')->get('color'))->credits += $credit;
 
-	$this->getContainer()->get('entity_manager')->flush();
-	
-	$session->addFlashbag('Vous venez de remplir les caisse de votre faction de ' . $credit . ' crédit' . Format::addPlural($credit) . ' :)', Flashbag::TYPE_SUCCESS);
+    $this->getContainer()->get('entity_manager')->flush();
+    
+    $session->addFlashbag('Vous venez de remplir les caisse de votre faction de ' . $credit . ' crédit' . Format::addPlural($credit) . ' :)', Flashbag::TYPE_SUCCESS);
 } else {
-	throw new FormException('Manque d\'information.');
+    throw new FormException('Manque d\'information.');
 }

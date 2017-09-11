@@ -9,7 +9,7 @@ $this->getContainer()->get('database_admin')->query("ALTER TABLE `color` ADD `is
 $factions = $this->getContainer()->get('demeter.color_manager')->getAll();
 
 foreach ($factions as $faction) {
-	$faction->isInGame = 1;
+    $faction->isInGame = 1;
 }
 
 $this->getContainer()->get('entity_manager')->flush(Color::class);

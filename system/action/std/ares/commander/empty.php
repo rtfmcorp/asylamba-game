@@ -9,15 +9,15 @@ use Asylamba\Classes\Exception\ErrorException;
 
 $commanderId = $this->getContainer()->get('app.request')->query->get('id');
 if ($commanderId === null) {
-	throw new ErrorException('manque d\'information pour le traitement de la requête');
+    throw new ErrorException('manque d\'information pour le traitement de la requête');
 }
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 
 if (($commander = $commanderManager->get($commanderId)) === null || $commander->rPlayer !== $this->getContainer()->get('session_wrapper')->get('playerId')) {
-	throw new ErrorException('Ce commandant n\'existe pas ou ne vous appartient pas.');
+    throw new ErrorException('Ce commandant n\'existe pas ou ne vous appartient pas.');
 }
 if ($commander->statement !== 1) {
-	throw new ErrorException('Vous ne pouvez pas retirer les vaisseaux à un officier en déplacement.');
+    throw new ErrorException('Vous ne pouvez pas retirer les vaisseaux à un officier en déplacement.');
 }
 
 // vider le commandant

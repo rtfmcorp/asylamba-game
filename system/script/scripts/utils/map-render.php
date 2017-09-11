@@ -3,22 +3,23 @@
 $systems = $this->getContainer()->get('gaia.system_manager')->getAll();
 
 # functions
-function getPosition($type, $x, $y, $multiply = 4) {
-	$_return  = 'style="';
-	switch($type) {
-		case 1 : $_return .= 'top: ' . ceil($y * $multiply) . 'px; left: ' . ($x * $multiply) . 'px;';
-			break;
-		case 2 : $_return .= 'top: ' . ceil($y * $multiply) . 'px; left: ' . ($x * $multiply) . 'px;';
-			break;
-		case 3 : $_return .= 'top: ' . ceil(($y * $multiply) - 1) . 'px; left: ' . (($x * $multiply) - 1) . 'px;';
-			break;
-		case 4 : $_return .= 'top: ' . ceil(($y * $multiply) - 1) . 'px; left: ' . (($x * $multiply) - 1) . 'px;';
-			break;
-		case 5 : $_return .= 'top: ' . ceil($y * $multiply) . 'px; left: ' . ($x * $multiply) . 'px;';
-			break;
-	}
-	$_return .= '"';
-	return $_return;
+function getPosition($type, $x, $y, $multiply = 4)
+{
+    $_return  = 'style="';
+    switch ($type) {
+        case 1: $_return .= 'top: ' . ceil($y * $multiply) . 'px; left: ' . ($x * $multiply) . 'px;';
+            break;
+        case 2: $_return .= 'top: ' . ceil($y * $multiply) . 'px; left: ' . ($x * $multiply) . 'px;';
+            break;
+        case 3: $_return .= 'top: ' . ceil(($y * $multiply) - 1) . 'px; left: ' . (($x * $multiply) - 1) . 'px;';
+            break;
+        case 4: $_return .= 'top: ' . ceil(($y * $multiply) - 1) . 'px; left: ' . (($x * $multiply) - 1) . 'px;';
+            break;
+        case 5: $_return .= 'top: ' . ceil($y * $multiply) . 'px; left: ' . ($x * $multiply) . 'px;';
+            break;
+    }
+    $_return .= '"';
+    return $_return;
 }
 
 ?>
@@ -69,16 +70,15 @@ function getPosition($type, $x, $y, $multiply = 4) {
 
 <?php
 echo '<div id="lieux">';
-	foreach ($systems as $system) {
-
-		switch($system->typeOfSystem) {
-			case 1: echo '<div class="lieu l1" ' . getPosition($system->typeOfSystem, $system->xPosition, $system->yPosition) . '></div>'; break;
-			case 2: echo '<div class="lieu l2" ' . getPosition($system->typeOfSystem, $system->xPosition, $system->yPosition) . '></div>'; break;
-			case 3: echo '<div class="lieu l3" ' . getPosition($system->typeOfSystem, $system->xPosition, $system->yPosition) . '></div>'; break;
-			case 4: echo '<div class="lieu l4" ' . getPosition($system->typeOfSystem, $system->xPosition, $system->yPosition) . '></div>'; break;
-			case 5: echo '<div class="lieu l5" ' . getPosition($system->typeOfSystem, $system->xPosition, $system->yPosition) . '></div>'; break;
-			default:
-					break;
-		}
-	}
+    foreach ($systems as $system) {
+        switch ($system->typeOfSystem) {
+            case 1: echo '<div class="lieu l1" ' . getPosition($system->typeOfSystem, $system->xPosition, $system->yPosition) . '></div>'; break;
+            case 2: echo '<div class="lieu l2" ' . getPosition($system->typeOfSystem, $system->xPosition, $system->yPosition) . '></div>'; break;
+            case 3: echo '<div class="lieu l3" ' . getPosition($system->typeOfSystem, $system->xPosition, $system->yPosition) . '></div>'; break;
+            case 4: echo '<div class="lieu l4" ' . getPosition($system->typeOfSystem, $system->xPosition, $system->yPosition) . '></div>'; break;
+            case 5: echo '<div class="lieu l5" ' . getPosition($system->typeOfSystem, $system->xPosition, $system->yPosition) . '></div>'; break;
+            default:
+                    break;
+        }
+    }
 echo '</div>';

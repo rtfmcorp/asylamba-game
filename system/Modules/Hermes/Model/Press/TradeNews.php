@@ -30,9 +30,9 @@ class TradeNews extends News
     
     public function getNewsPicto()
     {
-        switch($this->transaction->type) {
+        switch ($this->transaction->type) {
             case Transaction::TYP_RESOURCE:
-                return MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($this->transaction->quantity) . '.png'; 
+                return MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($this->transaction->quantity) . '.png';
             case Transaction::TYP_SHIP:
                 return MEDIA . 'ship/picto/ship' . $this->transaction->identifier . '.png';
             case Transaction::TYP_COMMANDER:

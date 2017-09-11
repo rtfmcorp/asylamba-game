@@ -27,134 +27,135 @@ $placeManager = $this->getContainer()->get('gaia.place_manager');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
 $entityManager = $this->getContainer()->get('entity_manager');
 
-for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
-	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
+for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
+    $verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
 $baseId = $request->query->get('baseid');
 $otherBaseId = $request->request->get('otherbaseid');
 
-if ($baseId !== FALSE AND $otherBaseId !== FALSE AND in_array($baseId, $verif)) {
-	if ($baseId != $otherBaseId) {
-		for ($i = 0; $i < ShipResource::SHIP_QUANTITY; $i++) { 
-			if ($request->request->has('identifier-' . $i)) {
-				$shipType = $i;
-				$shipName = ShipResource::getInfo($i, 'codeName');
+if ($baseId !== false and $otherBaseId !== false and in_array($baseId, $verif)) {
+    if ($baseId != $otherBaseId) {
+        for ($i = 0; $i < ShipResource::SHIP_QUANTITY; $i++) {
+            if ($request->request->has('identifier-' . $i)) {
+                $shipType = $i;
+                $shipName = ShipResource::getInfo($i, 'codeName');
 
-				if ($request->request->has('quantity-' . $i)) {
-					$ships = $request->request->get('quantity-' . $i) > 0
-						? $request->request->get('quantity-' . $i) : 1;
-					$ships = intval($ships);
-				}
+                if ($request->request->has('quantity-' . $i)) {
+                    $ships = $request->request->get('quantity-' . $i) > 0
+                        ? $request->request->get('quantity-' . $i) : 1;
+                    $ships = intval($ships);
+                }
 
-				break;
-			}
-		}
+                break;
+            }
+        }
 
-		if (isset($shipType) AND isset($ships)) {
-			if (($orbitalBase = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
-				if (ShipResource::isAShipFromDock1($shipType) OR ShipResource::isAShipFromDock2($shipType)) {
-					if ($ships > 0) {
-						if ($orbitalBase->getShipStorage($shipType) >= $ships) {
-							$commercialShipQuantity = Game::getCommercialShipQuantityNeeded(Transaction::TYP_SHIP, $ships, $shipType);
-							$totalShips = $orbitalBaseHelper->getBuildingInfo(6, 'level', $orbitalBase->getLevelCommercialPlateforme(), 'nbCommercialShip');
-							$usedShips = 0;
+        if (isset($shipType) and isset($ships)) {
+            if (($orbitalBase = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId'))) !== null) {
+                if (ShipResource::isAShipFromDock1($shipType) or ShipResource::isAShipFromDock2($shipType)) {
+                    if ($ships > 0) {
+                        if ($orbitalBase->getShipStorage($shipType) >= $ships) {
+                            $commercialShipQuantity = Game::getCommercialShipQuantityNeeded(Transaction::TYP_SHIP, $ships, $shipType);
+                            $totalShips = $orbitalBaseHelper->getBuildingInfo(6, 'level', $orbitalBase->getLevelCommercialPlateforme(), 'nbCommercialShip');
+                            $usedShips = 0;
 
-							foreach ($orbitalBase->commercialShippings as $commercialShipping) { 
-								if ($commercialShipping->rBase == $orbitalBase->rPlace) {
-									$usedShips += $commercialShipping->shipQuantity;
-								}
-							}
+                            foreach ($orbitalBase->commercialShippings as $commercialShipping) {
+                                if ($commercialShipping->rBase == $orbitalBase->rPlace) {
+                                    $usedShips += $commercialShipping->shipQuantity;
+                                }
+                            }
 
-							$remainingShips = $totalShips - $usedShips;
+                            $remainingShips = $totalShips - $usedShips;
 
-							if ($remainingShips >= $commercialShipQuantity) {
-								if (($otherBase = $orbitalBaseManager->get($otherBaseId)) !== null) {
-									# load places to compute travel time
-									$startPlace = $placeManager->get($orbitalBase->rPlace);
-									$destinationPlace = $placeManager->get($otherBase->rPlace);
-									$timeToTravel = Game::getTimeToTravelCommercial($startPlace, $destinationPlace);
-									$departure = Utils::now();
-									$arrival = Utils::addSecondsToDate($departure, $timeToTravel);
+                            if ($remainingShips >= $commercialShipQuantity) {
+                                if (($otherBase = $orbitalBaseManager->get($otherBaseId)) !== null) {
+                                    # load places to compute travel time
+                                    $startPlace = $placeManager->get($orbitalBase->rPlace);
+                                    $destinationPlace = $placeManager->get($otherBase->rPlace);
+                                    $timeToTravel = Game::getTimeToTravelCommercial($startPlace, $destinationPlace);
+                                    $departure = Utils::now();
+                                    $arrival = Utils::addSecondsToDate($departure, $timeToTravel);
 
-									# création de la transaction
-									$tr = new Transaction();
-									$tr->rPlayer = $session->get('playerId');
-									$tr->rPlace = $orbitalBase->rPlace;
+                                    # création de la transaction
+                                    $tr = new Transaction();
+                                    $tr->rPlayer = $session->get('playerId');
+                                    $tr->rPlace = $orbitalBase->rPlace;
                                     $tr->placeName = $orbitalBase->getName();
                                     $tr->playerName = $session->get('playerInfo')->get('name');
-									$tr->type = Transaction::TYP_SHIP; 
-									$tr->quantity = $ships;
-									$tr->identifier = $shipType;
-									$tr->price = 0;
-									$tr->commercialShipQuantity = $commercialShipQuantity;
-									$tr->statement = Transaction::ST_COMPLETED;
-									$tr->dPublication = Utils::now();
-									$transactionManager->add($tr);
+                                    $tr->type = Transaction::TYP_SHIP;
+                                    $tr->quantity = $ships;
+                                    $tr->identifier = $shipType;
+                                    $tr->price = 0;
+                                    $tr->commercialShipQuantity = $commercialShipQuantity;
+                                    $tr->statement = Transaction::ST_COMPLETED;
+                                    $tr->dPublication = Utils::now();
+                                    $transactionManager->add($tr);
 
-									# création du convoi
-									$cs = new CommercialShipping();
-									$cs->rPlayer = $session->get('playerId');
-									$cs->rBase = $orbitalBase->rPlace;
-									$cs->rBaseDestination = $otherBase->rPlace;
-									$cs->rTransaction = $tr->id;
-									$cs->resourceTransported = 0;
-									$cs->shipQuantity = $commercialShipQuantity;
-									$cs->dDeparture = $departure;
-									$cs->dArrival = $arrival;
-									$cs->statement = CommercialShipping::ST_GOING;
-									$commercialShippingManager->add($cs);
+                                    # création du convoi
+                                    $cs = new CommercialShipping();
+                                    $cs->rPlayer = $session->get('playerId');
+                                    $cs->rBase = $orbitalBase->rPlace;
+                                    $cs->rBaseDestination = $otherBase->rPlace;
+                                    $cs->rTransaction = $tr->id;
+                                    $cs->resourceTransported = 0;
+                                    $cs->shipQuantity = $commercialShipQuantity;
+                                    $cs->dDeparture = $departure;
+                                    $cs->dArrival = $arrival;
+                                    $cs->statement = CommercialShipping::ST_GOING;
+                                    $commercialShippingManager->add($cs);
 
-									$orbitalBase->setShipStorage($shipType, $orbitalBase->getShipStorage($shipType) - $ships);
+                                    $orbitalBase->setShipStorage($shipType, $orbitalBase->getShipStorage($shipType) - $ships);
 
-									if ($orbitalBase->getRPlayer() != $otherBase->getRPlayer()) {
-										$n = new Notification();
-										$n->setRPlayer($otherBase->getRPlayer());
-										$n->setTitle('Envoi de vaisseaux');
-										$n->addBeg()->addTxt($otherBase->getName())->addSep();
-										$n->addLnk('embassy/player-' . $session->get('playerId'), $session->get('playerInfo')->get('name'));
-										$n->addTxt(' a lancé un convoi de ')->addStg(Format::numberFormat($ships))->addTxt(' ' . $shipName . ' depuis sa base ');
-										$n->addLnk('map/place-' . $orbitalBase->getRPlace(), $orbitalBase->getName())->addTxt('. ');
-										$n->addBrk()->addTxt('Quand le convoi arrivera, les vaisseaux seront placés dans votre hangar.');
-										$n->addSep()->addLnk('bases/base-' . $otherBase->getId()  . '/view-commercialplateforme/mode-market', 'vers la place du commerce →');
-										$n->addEnd();
-										
-										$notificationManager->add($n);
-									}
+                                    if ($orbitalBase->getRPlayer() != $otherBase->getRPlayer()) {
+                                        $n = new Notification();
+                                        $n->setRPlayer($otherBase->getRPlayer());
+                                        $n->setTitle('Envoi de vaisseaux');
+                                        $n->addBeg()->addTxt($otherBase->getName())->addSep();
+                                        $n->addLnk('embassy/player-' . $session->get('playerId'), $session->get('playerInfo')->get('name'));
+                                        $n->addTxt(' a lancé un convoi de ')->addStg(Format::numberFormat($ships))->addTxt(' ' . $shipName . ' depuis sa base ');
+                                        $n->addLnk('map/place-' . $orbitalBase->getRPlace(), $orbitalBase->getName())->addTxt('. ');
+                                        $n->addBrk()->addTxt('Quand le convoi arrivera, les vaisseaux seront placés dans votre hangar.');
+                                        $n->addSep()->addLnk('bases/base-' . $otherBase->getId()  . '/view-commercialplateforme/mode-market', 'vers la place du commerce →');
+                                        $n->addEnd();
+                                        
+                                        $notificationManager->add($n);
+                                    }
 
-									if (DATA_ANALYSIS) {
-										$qr = $this->getContainer()->get('database')->prepare('INSERT INTO 
+                                    if (DATA_ANALYSIS) {
+                                        $qr = $this->getContainer()->get('database')->prepare(
+                                            'INSERT INTO 
 											DA_CommercialRelation(`from`, `to`, type, weight, dAction)
 											VALUES(?, ?, ?, ?, ?)'
-										);
-										$qr->execute([$session->get('playerId'), $otherBase->getRPlayer(), 3, DataAnalysis::resourceToStdUnit(ShipResource::getInfo($shipType, 'resourcePrice') * $ships), Utils::now()]);
-									}
-									$session->addFlashbag('Vaisseaux envoyés', Flashbag::TYPE_SUCCESS);
-								} else {
-									throw new ErrorException('Erreur dans les bases orbitales');
-								}
-							} else {
-								throw new ErrorException('Vous n\'avez pas assez de vaisseaux de transport');
-							}
-						} else {
-							throw new ErrorException('Vous n\'avez pas assez de vaisseaux de ce type');
-						}
-					} else {
-						throw new ErrorException('Envoi de vaisseaux impossible');
-					}
-				} else {
-					throw new ErrorException('Vaisseau inconnu');
-				}
-			} else {
-				throw new ErrorException('cette base ne vous appartient pas');
-			}
-		} else {
-			throw new ErrorException('erreur système');
-		}
-	} else {
-		throw new ErrorException('envoi de vaisseau impossible');
-	}
+                                        );
+                                        $qr->execute([$session->get('playerId'), $otherBase->getRPlayer(), 3, DataAnalysis::resourceToStdUnit(ShipResource::getInfo($shipType, 'resourcePrice') * $ships), Utils::now()]);
+                                    }
+                                    $session->addFlashbag('Vaisseaux envoyés', Flashbag::TYPE_SUCCESS);
+                                } else {
+                                    throw new ErrorException('Erreur dans les bases orbitales');
+                                }
+                            } else {
+                                throw new ErrorException('Vous n\'avez pas assez de vaisseaux de transport');
+                            }
+                        } else {
+                            throw new ErrorException('Vous n\'avez pas assez de vaisseaux de ce type');
+                        }
+                    } else {
+                        throw new ErrorException('Envoi de vaisseaux impossible');
+                    }
+                } else {
+                    throw new ErrorException('Vaisseau inconnu');
+                }
+            } else {
+                throw new ErrorException('cette base ne vous appartient pas');
+            }
+        } else {
+            throw new ErrorException('erreur système');
+        }
+    } else {
+        throw new ErrorException('envoi de vaisseau impossible');
+    }
 } else {
-	throw new FormException('pas assez d\'informations pour envoyer des vaisseaux');
+    throw new FormException('pas assez d\'informations pour envoyer des vaisseaux');
 }
 $entityManager->flush();

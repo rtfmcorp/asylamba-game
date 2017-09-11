@@ -6,11 +6,11 @@ use Asylamba\Classes\Library\Module;
 
 class AtlasModule extends Module
 {
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getName()
-	{
-		return 'Atlas';
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'Atlas';
+    }
 }
