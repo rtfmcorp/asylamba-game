@@ -6,6 +6,7 @@ use Asylamba\Classes\Daemon\Client;
 
 use Asylamba\Classes\Redis\RedisManager;
 use Asylamba\Classes\Library\Session\SessionWrapper;
+use Asylamba\Classes\Process\ProcessGateway;
 
 use Asylamba\Classes\Library\Http\Request;
 
@@ -19,18 +20,22 @@ class ClientManager
 	protected $redisManager;
 	/** @var SessionWrapper **/
 	protected $sessionWrapper;
+    /** @var ProcessGateway **/
+    protected $processGateway;
     /** @var int **/
 	protected $sessionLifetime;
 	
 	/**
 	 * @param RedisManager $redisManager
 	 * @param SessionWrapper $sessionWrapper
+     * @param ProcessGateway $processGateway
 	 * @param int $sessionLifetime
 	 */
-	public function __construct(RedisManager $redisManager, SessionWrapper $sessionWrapper, $sessionLifetime)
+	public function __construct(RedisManager $redisManager, SessionWrapper $sessionWrapper, ProcessGateway $processGateway, $sessionLifetime)
 	{
 		$this->redisManager = $redisManager;
 		$this->sessionWrapper = $sessionWrapper;
+        $this->processGateway = $processGateway;
 		$this->sessionLifetime = $sessionLifetime;
 	}
 	
@@ -92,6 +97,12 @@ class ClientManager
     
     public function broadcast($payload)
     {
+		if (P_TYPE === 'worker') {
+			return $this->processGateway->writeToMaster([
+				'command' => 'broadcast',
+				'data' => ['payload' => $payload]
+			]);
+		}
         foreach($this->clients as $client) {
             if (($connection = $client->getWsConnection()) !== null) {
                 if (!$connection->send($payload)) {

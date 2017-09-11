@@ -180,7 +180,7 @@ class Server
 	protected function treatProcessInput($name)
 	{
 		$process = $this->processManager->getByName($name);
-		$content = fgets($process->getInput(), 1024);
+		$content = fgets($process->getInput());
 		if ($content === false) {
 			$this->processManager->removeProcess($name, 'The process failed');
 			return;
@@ -222,6 +222,9 @@ class Server
 					$data['data']['date']
 				);
 				break;
+            case 'broadcast':
+                $this->clientManager->broadcast($data['data']['payload']);
+                break;
 		}
 	}
     

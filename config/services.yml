@@ -53,6 +53,7 @@ services:
         arguments:
             - "@redis_manager"
             - "@session_wrapper"
+            - "@process_gateway"
             - "%session_lifetime"
         
     templating.renderer:
