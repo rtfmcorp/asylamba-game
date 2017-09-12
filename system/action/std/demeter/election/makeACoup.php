@@ -17,6 +17,7 @@ use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Modules\Demeter\Event\PutschAttemptEvent;
 
 $session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
@@ -49,6 +50,7 @@ if ($program !== false) {
                 $candidate = new Candidate();
                 $candidate->rElection = $election->id;
                 $candidate->rPlayer = $session->get('playerId');
+                $candidate->name = $session->get('playerInfo')->get('name');
                 $candidate->chiefChoice = $chiefChoice;
                 $candidate->treasurerChoice = $treasurerChoice;
                 $candidate->warlordChoice = $warlordChoice;
@@ -76,6 +78,7 @@ if ($program !== false) {
                 $vote->dVotation = Utils::now();
                 $voteManager->add($vote);
 
+                $factionLeader = $playerManager->getFactionLeader($faction->getId());
                 $factionPlayers = $playerManager->getFactionPlayers($faction->id);
 
                 foreach ($factionPlayers as $factionPlayer) {
@@ -92,6 +95,7 @@ if ($program !== false) {
                         ->addEnd();
                     $notificationManager->add($notif);
                 }
+                $this->getContainer()->get('event_dispatcher')->dispatch(new PutschAttemptEvent($faction, $factionLeader, $candidate));
                 $session->addFlashbag('Coup d\'état lancé.', Flashbag::TYPE_SUCCESS);
                 $this->getContainer()->get('realtime_action_scheduler')->schedule('demeter.color_manager', 'ballot', $faction, $election->dElection);
                 $this->getContainer()->get('entity_manager')->flush();

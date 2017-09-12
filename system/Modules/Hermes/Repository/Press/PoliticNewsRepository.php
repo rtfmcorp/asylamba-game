@@ -56,7 +56,7 @@ class PoliticNewsRepository extends AbstractRepository
             'title' => $news->getTitle(),
             'content' => $news->getContent(),
             'created_at' => $news->getCreatedAt()->format('Y-m-d H:i:s'),
-            'type' => MilitaryNews::NEWS_TYPE_MILITARY
+            'type' => PoliticNews::NEWS_TYPE_POLITICS
         ]);
         
         $news->setId($this->connection->lastInsertId());

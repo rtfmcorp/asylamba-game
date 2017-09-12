@@ -22,6 +22,7 @@ use Asylamba\Modules\Atlas\Model\PlayerRanking;
 use Asylamba\Modules\Atlas\Model\FactionRanking;
 use Asylamba\Modules\Atlas\Model\Ranking;
 use Asylamba\Modules\Gaia\Model\Sector;
+use Asylamba\Modules\Demeter\Model\Color;
 
 use Asylamba\Classes\Exception\ErrorException;
 

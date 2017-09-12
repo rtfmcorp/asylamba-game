@@ -15,6 +15,7 @@ use Asylamba\Modules\Demeter\Model\Forum\ForumTopic;
 use Asylamba\Modules\Demeter\Model\Election\Vote;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Zeus\Model\Player;
+use Asylamba\Modules\Demeter\Event\CandidateEvent;
 
 $session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
@@ -52,6 +53,7 @@ if ($rElection !== false && $program !== false) {
 
                             $candidate->rElection = $rElection;
                             $candidate->rPlayer = $session->get('playerId');
+                            $candidate->name = $session->get('playerInfo')->get('name');
                             $candidate->chiefChoice = $chiefChoice;
                             $candidate->treasurerChoice = $treasurerChoice;
                             $candidate->warlordChoice = $warlordChoice;
@@ -81,6 +83,7 @@ if ($rElection !== false && $program !== false) {
 
                                 $voteManager->add($vote);
                             }
+                            $this->getContainer()->get('event_dispatcher')->dispatch(new CandidateEvent($faction, $candidate));
 
                             $response->redirect('faction/view-election/candidate-' . $candidate->id);
                             $session->addFlashbag('Candidature déposée.', Flashbag::TYPE_SUCCESS);

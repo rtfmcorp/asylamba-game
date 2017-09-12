@@ -13,6 +13,7 @@
 namespace Asylamba\Modules\Demeter\Manager;
 
 use Asylamba\Classes\Entity\EntityManager;
+use Asylamba\Classes\Worker\EventDispatcher;
 use Asylamba\Classes\Worker\CTC;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Demeter\Model\Color;
@@ -38,11 +39,19 @@ use Asylamba\Modules\Demeter\Model\Election\Election;
 use Asylamba\Classes\Library\Parser;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
+use Asylamba\Modules\Demeter\Event\CampaignEvent;
+use Asylamba\Modules\Demeter\Event\ElectionEvent;
+use Asylamba\Modules\Demeter\Event\ElectionResultsEvent;
+use Asylamba\Modules\Demeter\Event\PutschFailureEvent;
+use Asylamba\Modules\Demeter\Event\PutschSuccessEvent;
+use Asylamba\Modules\Demeter\Event\SenateElectionEvent;
 
 class ColorManager
 {
     /** @var EntityManager **/
     protected $entityManager;
+    /** @var EventDispatcher **/
+    protected $eventDispatcher;
     /** @var PlayerManager **/
     protected $playerManager;
     /** @var VoteManager **/
@@ -74,6 +83,7 @@ class ColorManager
     
     /**
      * @param EntityManager $entityManager
+     * @param EventDispatcher $eventDispatcher
      * @param PlayerManager $playerManager
      * @param VoteManager $voteManager
      * @param ConversationManager $conversationManager
@@ -91,6 +101,7 @@ class ColorManager
      */
     public function __construct(
         EntityManager $entityManager,
+        EventDispatcher $eventDispatcher,
         PlayerManager $playerManager,
         VoteManager $voteManager,
         ConversationManager $conversationManager,
@@ -107,6 +118,7 @@ class ColorManager
         RealTimeActionScheduler $realtimeActionScheduler
     ) {
         $this->entityManager = $entityManager;
+        $this->eventDispatcher = $eventDispatcher;
         $this->playerManager = $playerManager;
         $this->voteManager = $voteManager;
         $this->conversationManager = $conversationManager;
@@ -310,6 +322,7 @@ class ColorManager
             $this->realtimeActionScheduler->schedule('demeter.color_manager', 'updateSenate', $faction, $date);
             $this->entityManager->flush($faction);
         }
+        $this->eventDispatcher->dispatch(new SenateElectionEvent($faction));
     }
 
     /**
@@ -489,6 +502,7 @@ class ColorManager
         }
         $this->entityManager->flush($election);
         $this->entityManager->flush($faction);
+        $this->eventDispatcher->dispatch(new CampaignEvent($faction));
     }
 
     /**
@@ -506,6 +520,8 @@ class ColorManager
         $this->realtimeActionScheduler->schedule('demeter.color_manager', 'ballot', $faction, $date->format('Y-m-d H:i:s'));
         
         $this->entityManager->flush($faction);
+        
+        $this->eventDispatcher->dispatch(new ElectionEvent($faction));
     }
 
     public function uMandate(Color $color, $governmentMembers, $newChief, $idOldChief, $hadVoted, $conv, $convPlayerID, $candidate)
@@ -559,6 +575,7 @@ class ColorManager
                     $message->content .= $player['name'] . ' a reçu ' . $player['vote'] . ' vote' . Format::plural($player['vote']) . '<br />';
                 }
                 $this->conversationMessageManager->add($message);
+                $this->eventDispatcher->dispatch(new ElectionResultsEvent($color, $newChief));
             } elseif ($color->regime === Color::ROYALISTIC) {
                 $this->realtimeActionScheduler->schedule('demeter.color_manager', 'updateSenate', $color, date('Y-m-d H:i:s', (time() + $color->mandateDuration)));
                 $notif = new Notification();
@@ -595,6 +612,7 @@ class ColorManager
                 $message->content = 'Un putsch a réussi, un nouveau dirigeant va faire valoir la force de ' . $color->popularName . ' à travers la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong>.<br /><br />De nombreux membres de la faction ont soutenu le mouvement révolutionnaire :<br /><br />';
                 $message->content .= current($candidate)['name'] . ' a reçu le soutien de ' . Format::number((current($candidate)['vote'] / ($color->activePlayers + 1)) * 100) . '% de la population.' . '<br />';
                 $this->conversationMessageManager->add($message);
+                $this->eventDispatcher->dispatch(new PutschSuccessEvent($color, $newChief, $this->playerManager->get($idOldChief)));
             } else {
                 $date = new \DateTime($color->dLastElection);
                 $date->modify('+' . $color->mandateDuration . ' second');
@@ -616,6 +634,7 @@ class ColorManager
                 $message->dLastModification = null;
                 $message->content = 'Les Oracles ont parlé, un nouveau dirigeant va faire valoir la force de ' . $color->popularName . ' à travers la galaxie. Longue vie à <strong>' . (current($candidate)['name']) . '</strong>.<br /><br /><br /><br />';
                 $this->conversationMessageManager->add($message);
+                $this->eventDispatcher->dispatch(new ElectionResultsEvent($color, $newChief));
             }
         } else {
             $noChief = false;
@@ -688,6 +707,7 @@ class ColorManager
                     $message->dLastModification = null;
                     $message->content = 'Un coup d\'état a échoué. ' . $oldChief->getName(). ' demeure le dirigeant de ' . $color->popularName . '.';
                     $this->conversationMessageManager->add($message);
+                    $this->eventDispatcher->dispatch(new PutschFailureEvent($color, $newChief, $oldChief));
                     break;
                 case Color::THEOCRATIC:
                     $date = new \DateTime($color->dLastElection);

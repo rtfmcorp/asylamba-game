@@ -56,3 +56,11 @@ services:
             - {type: "event_listener", event: "athena.transaction_proposal", method: "onTransactionProposal"}
             - {type: "event_listener", event: "ares.conquest", method: "onConquest"}
             - {type: "event_listener", event: "ares.loot", method: "onLoot"}
+            - {type: "event_listener", event: "demeter.campaign", method: "onCampaign"}
+            - {type: "event_listener", event: "demeter.candidate", method: "onCandidate"}
+            - {type: "event_listener", event: "demeter.election", method: "onElection"}
+            - {type: "event_listener", event: "demeter.election_results", method: "onElectionResults"}
+            - {type: "event_listener", event: "demeter.putsch_attempt", method: "onPutschAttempt"}
+            - {type: "event_listener", event: "demeter.putsch_failure", method: "onPutschFailure"}
+            - {type: "event_listener", event: "demeter.putsch_success", method: "onPutschSuccess"}
+            - {type: "event_listener", event: "demeter.senate_election", method: "onSenateElection"}
