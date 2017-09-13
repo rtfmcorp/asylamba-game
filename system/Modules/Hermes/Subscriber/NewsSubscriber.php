@@ -179,7 +179,7 @@ class NewsSubscriber
             ->setTitle("Les élections débutent pour " . ColorResource::getInfo($faction->getId(), 'popularName'))
             ->setContent("Les " . ColorResource::getInfo($faction->getId(), 'demonym') . " sont tous appelés aux urnes, pour élire leur prochain dirigeant.")
             ->setFaction($faction)
-            ->setType(PoliticNews::TYPE_SENATE)
+            ->setType(PoliticNews::TYPE_ELECTION)
         );
     }
     
