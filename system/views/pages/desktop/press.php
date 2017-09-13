@@ -60,8 +60,7 @@ $tradeNews = $newsManager->getList(News::NEWS_TYPE_TRADE, 30, 0);
         </div>
         <div class="fix-body">
             <div class="body">
-                <?php foreach ($militaryNews as $militaryNew) {
-    ?>
+                <?php foreach ($militaryNews as $militaryNew) { ?>
                     <div id="news-<?= $militaryNew->getId() ?>" class="news">
                         <div class="news-head color<?= ($militaryNew->getIsVictory()) ? $militaryNew->getAttacker()->getRColor() : $militaryNew->getDefender()->getRColor() ?>" onclick="pressController.deployNews(<?= $militaryNew->getId(); ?>);">
                             <img class="picto" src="<?= $militaryNew->getNewsPicto(); ?>"/> 
@@ -74,18 +73,30 @@ $tradeNews = $newsManager->getList(News::NEWS_TYPE_TRADE, 30, 0);
                             <?= $militaryNew->getContent(); ?>
                         </div>
                     </div>
-                <?php
-} ?>
+                <?php } ?>
             </div>
         </div>
     </div>
-    <div class="component player">
+    <div class="component news">
         <div class="head skin-2">
             <h2>Politique</h2>
         </div>
         <div class="fix-body">
             <div class="body">
-                
+                <?php foreach ($politicNews as $politicNew) { ?>
+                    <div id="news-<?= $politicNew->getId() ?>" class="news">
+                        <div class="news-head color<?= $politicNew->getFaction()->getId(); ?>" onclick="pressController.deployNews(<?= $politicNew->getId(); ?>);">
+                            <img class="picto" src="<?= $politicNew->getNewsPicto(); ?>"/> 
+                            <div class="info">
+                                <span class="title"><?= $politicNew->getTitle(); ?></span>
+                                <span class="date"><?= Chronos::transform($politicNew->getCreatedAt()); ?></span>
+                            </div>
+                        </div>
+                        <div class="hidden">
+                            <?= $politicNew->getContent(); ?>
+                        </div>
+                    </div>
+                <?php } ?>
             </div>
         </div>
     </div>
