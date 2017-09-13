@@ -21,8 +21,8 @@ class Connection
     
     public function send($payload)
     {
-        if (get_resource_type($this->socket) === 'Unknown') {
-            $this->socket = null;
+        if (!$this->isAlive()) {
+            $this->close();
             return false;
         }
         $frame = new HybiFrame();
@@ -48,5 +48,18 @@ class Connection
     public function getSocket()
     {
         return $this->socket;
+    }
+    
+    public function close()
+    {
+        $this->socket = null;
+    }
+    
+    /**
+     * @return bool
+     */
+    public function isAlive()
+    {
+        return (get_resource_type($this->socket) !== 'Unknown');
     }
 }

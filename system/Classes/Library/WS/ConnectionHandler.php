@@ -25,6 +25,10 @@ class ConnectionHandler
     
     const WEBSOCKET_KEY_SUFIX = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11';
     
+    /**
+     * @param Client $client
+     * @return boolean
+     */
     public function handle(Client $client)
     {
         if (($payload = $client->getWsConnection()->receive()) === false || $payload === 'PING') {
@@ -33,10 +37,13 @@ class ConnectionHandler
         if ($payload === self::CLOSE_FRAME) {
             return $this->close($client->getWsConnection()->getSocket());
         }
-        \Asylamba\Classes\Daemon\Server::debug($payload);
         return true;
     }
     
+    /**
+     * @param resource $input
+     * @param string $wsKey
+     */
     public function handshake($input, $wsKey)
     {
         $response = new Response();
@@ -51,12 +58,24 @@ class ConnectionHandler
         fputs($input, $response->send());
     }
     
+    /**
+     * @param Client $client
+     * @return boolean
+     */
     public function pong(Client $client)
     {
+        if (!$client->getWsConnection()->isAlive()) {
+            $client->getWsConnection()->close();
+            return false;
+        }
         fputs($client->getWsConnection()->getSocket(), 'PONG', 4);
         return true;
     }
     
+    /**
+     * @param resource $stream
+     * @return boolean
+     */
     public function close($stream)
     {
         fputs($stream, self::CLOSE_FRAME);
