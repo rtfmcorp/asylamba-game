@@ -252,7 +252,8 @@ CREATE TABLE `news` (
    `title` varchar(255) NOT NULL,
    `content` text,
    `type` varchar(15) NOT NULL,
-   `created_at` datetime NOT NULL
+   `weight` tinyint(4) NOT NULL,
+   `created_at` datetime NOT NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `news__military` (

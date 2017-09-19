@@ -510,6 +510,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `news` (
     `title` VARCHAR(255) NOT NULL,
     `content` TEXT,
     `type` VARCHAR(15) NOT NULL,
+    `weight` TINYINT(4) NOT NULL,
 	`created_at` datetime DEFAULT NULL,
 
 	PRIMARY KEY (`id`)
