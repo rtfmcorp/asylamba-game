@@ -154,7 +154,9 @@ if ($rPlace !== false and $type !== false and $price !== false and in_array($rPl
                             $tr->statement = Transaction::ST_PROPOSED;
                             $tr->dPublication = Utils::now();
                             if ($type === Transaction::TYP_COMMANDER) {
-                                $tr->commanderAvatar = $commander->avatar;
+                                $tr->commanderAvatar = $commander->getAvatar();
+                                $tr->commanderLevel = $commander->getLevel();
+                                $tr->commanderExperience = $commander->getExperience();
                             }
                             $transactionManager->add($tr);
 
