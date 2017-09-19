@@ -5,6 +5,8 @@ namespace Asylamba\Modules\Hermes\Subscriber;
 use Asylamba\Modules\Hermes\Manager\NewsManager;
 
 use Asylamba\Modules\Demeter\Model\Color;
+use Asylamba\Modules\Athena\Model\OrbitalBase;
+use Asylamba\Modules\Ares\Resource\CommanderResources;
 
 use Asylamba\Modules\Hermes\Model\Press\News;
 use Asylamba\Modules\Hermes\Model\Press\MilitaryNews;
@@ -45,6 +47,9 @@ class NewsSubscriber
         $this->newsManager = $newsManager;
     }
     
+    /**
+     * @param TransactionProposalEvent $event
+     */
     public function onTransactionProposal(TransactionProposalEvent $event)
     {
         $transaction = $event->getTransaction();
@@ -56,6 +61,7 @@ class NewsSubscriber
                     "{$transaction->playerName} organise sur sa planète {$transaction->placeName} " .
                     "la vente de {$transaction->quantity} ressources pour la somme de {$transaction->price} crédits !"
                 ;
+                $weight = $this->getResourceTransactionWeight($transaction->commercialShipQuantity);
                 break;
             case Transaction::TYP_SHIP:
                 $title = "Vente de {$transaction->quantity} " . ShipResource::getInfo($transaction->identifier, 'codeName') . Format::addPlural($transaction->quantity) . " !";
@@ -63,13 +69,15 @@ class NewsSubscriber
                     "{$transaction->playerName} vend depuis sa planète {$transaction->placeName} " .
                     "{$transaction->quantity} vaisseaux pour la somme de {$transaction->price} crédits !"
                 ;
+                $weight = $this->getShipTransactionWeight($transaction->commercialShipQuantity);
                 break;
             case Transaction::TYP_COMMANDER:
-                $title = "Un {$transaction->commanderLevel} mercenaire propose ses services !";
+                $title = "Un " . CommanderResources::getInfo('grade', $transaction->commanderLevel) . " mercenaire propose ses services !";
                 $content =
                     "{$transaction->playerName} loue depuis sa planète {$transaction->placeName} " .
                     "les services de son officier {$transaction->commanderName} pour la somme de {$transaction->price} crédits !"
                 ;
+                $weight = $this->getCommanderTransactionWeight($transaction->commanderExperience, $transaction->commanderLevel);
                 break;
         }
         $this->newsManager->create(
@@ -77,6 +85,7 @@ class NewsSubscriber
             ->setTitle($title)
             ->setContent($content)
             ->setTransaction($transaction)
+            ->setWeight($weight)
         );
     }
     
@@ -101,6 +110,7 @@ class NewsSubscriber
             ->setAttacker($event->getAttacker())
             ->setDefender($event->getDefender())
             ->setIsVictory($event->getIsVictory())
+            ->setWeight($this->getMilitaryNewsWeight($event->getPlace()->typeOfBase))
         );
     }
     
@@ -125,6 +135,7 @@ class NewsSubscriber
             ->setAttacker($event->getAttacker())
             ->setDefender($event->getDefender())
             ->setIsVictory($event->getIsVictory())
+            ->setWeight($this->getMilitaryNewsWeight($event->getPlace()->typeOfBase))
         );
     }
     
@@ -140,6 +151,7 @@ class NewsSubscriber
             ->setContent("Les sénateurs " . ColorResource::getInfo($faction->getId(), 'demonym') . ' vont pouvoir se présenter pour accéder au pouvoir.')
             ->setFaction($faction)
             ->setType(PoliticNews::TYPE_CAMPAIGN)
+            ->setWeight(News::WEIGHT_NORMAL)
         );
     }
     
@@ -165,6 +177,7 @@ class NewsSubscriber
             ->setContent($content)
             ->setFaction($faction)
             ->setType(PoliticNews::TYPE_CANDIDATE)
+            ->setWeight(News::WEIGHT_NORMAL)
         );
     }
     
@@ -180,6 +193,7 @@ class NewsSubscriber
             ->setContent("Les " . ColorResource::getInfo($faction->getId(), 'demonym') . " sont tous appelés aux urnes, pour élire leur prochain dirigeant.")
             ->setFaction($faction)
             ->setType(PoliticNews::TYPE_ELECTION)
+            ->setWeight(News::WEIGHT_IMPORTANT)
         );
     }
     
@@ -205,6 +219,7 @@ class NewsSubscriber
             ->setContent($content)
             ->setFaction($faction)
             ->setType(PoliticNews::TYPE_RESULTS)
+            ->setWeight(News::WEIGHT_CRITICAL)
         );
     }
     
@@ -227,6 +242,7 @@ class NewsSubscriber
             ->setContent($content)
             ->setFaction($faction)
             ->setType(PoliticNews::TYPE_PUTSCH_ATTEMPT)
+            ->setWeight(News::WEIGHT_CRITICAL)
         );
     }
     
@@ -251,6 +267,7 @@ class NewsSubscriber
             ->setContent($content)
             ->setFaction($faction)
             ->setType(PoliticNews::TYPE_PUTSCH_FAILURE)
+            ->setWeight(News::WEIGHT_CRITICAL)
         );
     }
     
@@ -274,6 +291,7 @@ class NewsSubscriber
             ->setContent("Les " . ColorResource::getInfo($faction->getId(), 'demonym') . " ont un nouveau dirigeant à leur tête.")
             ->setFaction($faction)
             ->setType(PoliticNews::TYPE_PUTSCH_SUCCESS)
+            ->setWeight(News::WEIGHT_CRITICAL)
         );
     }
 
@@ -289,6 +307,66 @@ class NewsSubscriber
             ->setContent("Les nouveaux sénateurs " . ColorResource::getInfo($faction->getId(), 'demonym'))
             ->setFaction($faction)
             ->setType(PoliticNews::TYPE_SENATE)
+            ->setWeight(News::WEIGHT_IMPORTANT)
         );
+    }
+    
+    /**
+     * @param int $typeOfBase
+     * @return int
+     */
+    protected function getMilitaryNewsWeight($typeOfBase)
+    {
+        switch(--$typeOfBase) {
+            case OrbitalBase::TYP_NEUTRAL: return News::WEIGHT_NORMAL;
+            case OrbitalBase::TYP_COMMERCIAL: return News::WEIGHT_IMPORTANT;
+            case OrbitalBase::TYP_MILITARY: return News::WEIGHT_IMPORTANT;
+            case OrbitalBase::TYP_CAPITAL: return News::WEIGHT_CRITICAL;
+            default: return News::WEIGHT_NORMAL;
+        }
+    }
+    
+    /**
+     * @param int $nbShips
+     * @return int
+     */
+    protected function getResourceTransactionWeight($nbShips)
+    {
+        if ($nbShips < 250) {
+            return News::WEIGHT_LIGHT;
+        } elseif ($nbShips < 500) {
+            return News::WEIGHT_NORMAL;
+        } elseif ($nbShips < 1000) {
+            return News::WEIGHT_IMPORTANT;
+        }
+        return News::WEIGHT_CRITICAL;
+    }
+    
+    /**
+     * @param int $nbShips
+     * @return int
+     */
+    protected function getShipTransactionWeight($nbShips)
+    {
+        if ($nbShips < 100) {
+            return News::WEIGHT_LIGHT;
+        } elseif ($nbShips < 250) {
+            return News::WEIGHT_NORMAL;
+        } elseif ($nbShips < 500) {
+            return News::WEIGHT_IMPORTANT;
+        }
+        return News::WEIGHT_CRITICAL;
+    }
+    
+    protected function getCommanderTransactionWeight($commanderLevel)
+    {
+        if ($commanderLevel < 5) {
+            return News::WEIGHT_LIGHT;
+        } elseif ($commanderLevel < 12) {
+            return News::WEIGHT_NORMAL;
+        } elseif ($commanderLevel < 16) {
+            return News::WEIGHT_IMPORTANT;
+        }
+        return News::WEIGHT_CRITICAL;
     }
 }

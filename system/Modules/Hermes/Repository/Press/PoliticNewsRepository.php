@@ -51,12 +51,13 @@ class PoliticNewsRepository extends AbstractRepository
     
     public function insert($news)
     {
-        $statement = $this->connection->prepare('INSERT INTO news(title, content, created_at, type) VALUES(:title, :content, :created_at, :type)');
+        $statement = $this->connection->prepare('INSERT INTO news(title, content, created_at, type, weight) VALUES(:title, :content, :created_at, :type, :weight)');
         $statement->execute([
             'title' => $news->getTitle(),
             'content' => $news->getContent(),
             'created_at' => $news->getCreatedAt()->format('Y-m-d H:i:s'),
-            'type' => PoliticNews::NEWS_TYPE_POLITICS
+            'type' => PoliticNews::NEWS_TYPE_POLITICS,
+            'weight' => $news->getWeight()
         ]);
         
         $news->setId($this->connection->lastInsertId());

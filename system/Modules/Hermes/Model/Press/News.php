@@ -12,12 +12,19 @@ abstract class News implements \JsonSerializable
     protected $content;
     /** @var string **/
     protected $type;
+    /** @var int **/
+    protected $weight;
     /** @var \DateTime **/
     protected $createdAt;
     
     const NEWS_TYPE_MILITARY = 'military';
     const NEWS_TYPE_POLITICS = 'politics';
     const NEWS_TYPE_TRADE = 'trade';
+   
+    const WEIGHT_LIGHT = 1;
+    const WEIGHT_NORMAL = 2;
+    const WEIGHT_IMPORTANT = 3;
+    const WEIGHT_CRITICAL = 4;
     
     /**
      * @param int $id
@@ -74,6 +81,25 @@ abstract class News implements \JsonSerializable
     public function getContent()
     {
         return $this->content;
+    }
+    
+    /**
+     * @param int $weight
+     * @return $this
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+    public function getWeight()
+    {
+        return $this->weight;
     }
     
     /**

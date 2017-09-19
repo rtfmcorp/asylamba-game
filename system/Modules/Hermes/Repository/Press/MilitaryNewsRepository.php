@@ -52,12 +52,13 @@ class MilitaryNewsRepository extends AbstractRepository
     
     public function insert($news)
     {
-        $statement = $this->connection->prepare('INSERT INTO news(title, content, created_at, type) VALUES(:title, :content, :created_at, :type)');
+        $statement = $this->connection->prepare('INSERT INTO news(title, content, created_at, type, weight) VALUES(:title, :content, :created_at, :type, :weight)');
         $statement->execute([
             'title' => $news->getTitle(),
             'content' => $news->getContent(),
             'created_at' => $news->getCreatedAt()->format('Y-m-d H:i:s'),
-            'type' => MilitaryNews::NEWS_TYPE_MILITARY
+            'type' => MilitaryNews::NEWS_TYPE_MILITARY,
+            'weight' => $news->getWeight()
         ]);
         
         $news->setId($this->connection->lastInsertId());
