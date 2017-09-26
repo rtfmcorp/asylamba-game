@@ -14,7 +14,8 @@
         "symfony/config": "~2.6",
         "symfony/yaml": "~2.6",
         "ocramius/proxy-manager": "^2.0",
-        "incenteev/composer-parameter-handler": "~2.0"
+        "incenteev/composer-parameter-handler": "~2.0",
+        "stripe/stripe-php": "^5.2"
     },
 
     "scripts": {
