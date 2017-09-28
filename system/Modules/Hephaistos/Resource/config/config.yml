@@ -11,3 +11,11 @@ services:
             - "%zeus.player.global_inactive_time"
             - "%hermes.notifications.timeout.read"
             - "%hermes.notifications.timeout.unread"
+            
+    hephaistos.donation_manager:
+        class: Asylamba\Modules\Hephaistos\Manager\DonationManager
+        arguments:
+            - "@entity_manager"
+            - "@zeus.player_manager"
+            - "@session_wrapper"
+            - "%stripe_api_key"
