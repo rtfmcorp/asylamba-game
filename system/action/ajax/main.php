@@ -25,6 +25,9 @@ switch ($this->getContainer()->get('app.request')->query->get('a')) {
 	# AUTOCOMPLETE
 	case 'autocompleteplayer':		include AJAX . 'autocomplete/player.php'; break;
 	case 'autocompleteorbitalbase': include AJAX . 'autocomplete/orbitalBase.php'; break;
+    
+    // Hephaistos
+    case 'donate':                  include AJAX . 'hephaistos/donate.php'; break;
 
 	# XHR RETURN MAPPING
 	case 'loadsystem': 				include PAGES . 'ajax/loadSystem.php'; break;
