@@ -30,6 +30,7 @@ class Router
 
 		'faction' => array('faction', 'Votre Faction'),
 		'params' => array('params', 'Paramètres'),
+		'budget' => array('budget', 'Financement'),
 		'sponsorship' => array('sponsorship', 'Parrainage'),
 		'rank' => array('rank', 'Classements'),
 

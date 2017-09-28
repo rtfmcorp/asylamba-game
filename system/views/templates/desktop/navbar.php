@@ -250,6 +250,7 @@ echo '<div id="nav">';
 		echo '<a href="' . Format::actionBuilder('disconnect', $sessionToken) . '">Se déconnecter</a>';
 		echo '<hr />';
 		echo '<a href="#" class="sh" data-target="roadmap">Dernières mises à jour</a>';
+		echo '<a href="' . APP_ROOT . 'budget">Financement</a>';
 		echo '<a href="' . APP_ROOT . 'sponsorship">Parrainage</a>';
 		echo '<hr />';
 		echo '<a target="_blank" href="' . $this->getContainer()->getParameter('getout_root') . 'forum">Discuter sur le forum</a>';

@@ -23,7 +23,7 @@ $shipsPev = implode(', ', $shipsPev);
 	echo '<script type="text/javascript">';
 		echo 'jQuery(document).ready(function($) {';
 			echo 'game = {';
-				echo 'path: \'http://' . $this->getContainer()->getParameter('server_host') . '/\',';
+				echo 'path: \'https://' . $this->getContainer()->getParameter('server_host') . '/\',';
 				echo 'shipsName: [' . ($shipsName) . '],';
 				echo 'shipsPev: [' . $shipsPev . '],';
 			echo '};';

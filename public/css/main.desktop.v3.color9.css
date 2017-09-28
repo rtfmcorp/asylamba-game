@@ -6389,6 +6389,121 @@ span.centred-link:focus {
 #rc-search-form button span {
   padding: 0px 10px;
 }
+#stripe-donation-form {
+  width: 480px;
+  padding: 20px;
+  /* IE doesn't show placeholders when empty+focused */
+}
+#stripe-donation-form label {
+  height: 35px;
+  position: relative;
+  color: #8798AB;
+  display: block;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+#stripe-donation-form label > span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-weight: 300;
+  line-height: 32px;
+  color: #8798AB;
+  border-bottom: 1px solid #586A82;
+  transition: border-bottom-color 200ms ease-in-out;
+  cursor: text;
+  pointer-events: none;
+}
+#stripe-donation-form label > span span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0% 50%;
+  transition: transform 200ms ease-in-out;
+  cursor: text;
+}
+#stripe-donation-form label .field.is-focused + span span,
+#stripe-donation-form label .field:not(.is-empty) + span span {
+  transform: scale(0.68) translateY(-36px);
+  cursor: default;
+}
+#stripe-donation-form label .field.is-focused + span {
+  border-bottom-color: #34D08C;
+}
+#stripe-donation-form .field {
+  background: transparent;
+  font-weight: 300;
+  border: 0;
+  color: white;
+  outline: none;
+  cursor: text;
+  display: block;
+  width: 100%;
+  line-height: 32px;
+  padding-bottom: 3px;
+  transition: opacity 200ms ease-in-out;
+}
+#stripe-donation-form .field::-webkit-input-placeholder {
+  color: #8898AA;
+}
+#stripe-donation-form .field::-moz-placeholder {
+  color: #8898AA;
+}
+#stripe-donation-form .field:-ms-input-placeholder {
+  color: #424770;
+}
+#stripe-donation-form .field.is-empty:not(.is-focused) {
+  opacity: 0;
+}
+#stripe-donation-form button {
+  float: left;
+  display: block;
+  background: #34D08C;
+  color: white;
+  border-radius: 2px;
+  border: 0;
+  margin-top: 20px;
+  font-size: 19px;
+  font-weight: 400;
+  width: 100%;
+  height: 47px;
+  line-height: 45px;
+  outline: none;
+}
+#stripe-donation-form button:focus {
+  background: #24B47E;
+}
+#stripe-donation-form button:active {
+  background: #159570;
+}
+#stripe-donation-form .outcome {
+  float: left;
+  width: 100%;
+  padding-top: 8px;
+  min-height: 20px;
+  text-align: center;
+}
+#stripe-donation-form .success,
+#stripe-donation-form .error {
+  display: none;
+  font-size: 15px;
+}
+#stripe-donation-form .success.visible,
+#stripe-donation-form .error.visible {
+  display: inline;
+}
+#stripe-donation-form .error {
+  color: #E4584C;
+}
+#stripe-donation-form .success {
+  color: #34D08C;
+}
+#stripe-donation-form .success .token {
+  font-weight: 500;
+  font-size: 15px;
+}
 .inscription {
   /* SUBNAV */
   /* ALLY */
