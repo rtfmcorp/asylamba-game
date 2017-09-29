@@ -7,6 +7,7 @@ use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Classes\Library\Session\SessionWrapper;
 
 use Asylamba\Modules\Hephaistos\Model\Donation;
+use Asylamba\Modules\Zeus\Model\Player;
 
 use Stripe\Stripe;
 use Stripe\Charge;
@@ -73,18 +74,27 @@ class DonationManager
     
     /**
      * @param Player $player
+     * @return int
+     */
+    public function getPlayerSum(Player $player)
+    {
+        return $this->entityManager->getRepository(Donation::class)->getPlayerSum($player);
+    }
+    
+    /**
+     * @param Player $player
      * @return array
      */
-    public function getPlayerCharges(Player $player)
+    public function getPlayerDonations(Player $player)
     {
-        return $this->entityManager->getRepository(Donation::class)->getPlayerCharges($player);
+        return $this->entityManager->getRepository(Donation::class)->getPlayerDonations($player);
     }
     
     /**
      * @return array
      */
-    public function getAllCharges()
+    public function getAllDonations()
     {
-        return $this->entityManager->getRepository(Donation::class)->getAllCharges();
+        return $this->entityManager->getRepository(Donation::class)->getAllDonations();
     }
 }

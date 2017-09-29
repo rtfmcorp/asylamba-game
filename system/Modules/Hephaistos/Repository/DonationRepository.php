@@ -11,12 +11,24 @@ class DonationRepository extends AbstractRepository
 {
     /**
      * @param Player $player
+     * @return int
+     */
+    public function getPlayerSum(Player $player)
+    {
+        $statement = $this->connection->prepare('SELECT SUM(amount) AS player_sum FROM budget__donations WHERE player_bind_key = :player_bind_key');
+        $statement->execute(['player_bind_key' => $player->getBind()]);
+        
+        return (int) $statement->fetch()['player_sum'];
+    }
+    
+    /**
+     * @param Player $player
      * @return array
      */
-    public function getPlayerCharges(Player $player)
+    public function getPlayerDonations(Player $player)
     {
-        $statement = $this->connection->prepare('SELECT * FROM budget__donations ORDER BY created_at DESC WHERE player_id = :player_id');
-        $statement->execute(['player_id' => $player->getId()]);
+        $statement = $this->connection->prepare('SELECT * FROM budget__donations ORDER BY created_at DESC WHERE player_bind_key = :player_bind_key');
+        $statement->execute(['player_bind_key' => $player->getBind()]);
         
         $data = [];
         while ($row = $statement->fetch()) {
@@ -34,9 +46,9 @@ class DonationRepository extends AbstractRepository
     /**
      * @return array
      */
-    public function getAllCharges()
+    public function getAllDonations()
     {
-        $statement = $this->connection->exec('SELECT * FROM budget__donations ORDER BY created_at DESC');
+        $statement = $this->connection->query('SELECT * FROM budget__donations ORDER BY created_at DESC');
         
         $data = [];
         while ($row = $statement->fetch()) {
@@ -54,10 +66,10 @@ class DonationRepository extends AbstractRepository
     public function insert($donation)
     {
         $statement = $this->connection->prepare(
-            'INSERT INTO budget__donations(player_id, token, amount, created_at) VALUES(:player_id, :token, :amount, :created_at)'
+            'INSERT INTO budget__donations(player_bind_key, token, amount, created_at) VALUES(:player_bind_key, :token, :amount, :created_at)'
         );
         $statement->execute([
-            'player_id' => $donation->getPlayer()->getId(),
+            'player_bind_key' => $donation->getPlayer()->getBind(),
             'token' => $donation->getToken(),
             'amount' => $donation->getAmount(),
             'created_at' => $donation->getCreatedAt()->format('Y-m-d H:i:s')
@@ -79,6 +91,7 @@ class DonationRepository extends AbstractRepository
     {
         return
             (new Donation())
+            ->setId((int) $data['id'])
             ->setToken($data['token'])
             ->setAmount((int) $data['amount'])
             ->setCreatedAt(new \DateTime($data['created_at']))
