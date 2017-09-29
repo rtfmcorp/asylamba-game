@@ -468,32 +468,27 @@ jQuery(document).ready(function($) {
         },
         
         renderSearchResults: function(bases) {
-            var buffer = '<div id="rc-search-results" class="component player rank">';
+            var buffer = '<div id="rc-search-results" class="component transaction">';
 			buffer += '<div class="head skin-2">';
             buffer += '<h2>Résultats</h2>';
 			buffer += '</div>';
 			buffer += '<div class="fix-body">';
             buffer += '<div class="body">';
             $.each(bases, function(index, base) {
-                buffer += '<div id="base-' + base.rPlace + '" onclick="tradeController.deployPanel(event, ' + base.rPlace + ')" data-deployed="false" class="player color' + base.playerColor + '">';
+                buffer += '<div class="transaction commander">';
+                buffer += '<div class="product sh" onclick="displayModule(event)" data-target="base-' + base.rPlace + '">';
                     buffer += '<img src="/public/media/avatar/small/' + base.playerAvatar + '.png" alt="" class="picto">';
-                    buffer += '<span class="title">' + base.playerName + '</span>';
-                    buffer += '<strong class="name">' + base.baseName + '</strong>';
-                    buffer += '<span class="experience">' + base.distance + ' al. (<a onclick="event.stopPropagation();" href="/map/place-' + base.rPlace + '" alt ="Map" target="_blank">Secteur ' + base.rSector + '</a>)</span>';
-                    
-                    buffer += '<div class="proposal-panel">';
-                    buffer += '<div class="proposal-data"><div><span class="title">Revenu par relève</span>';
-                    buffer += '<strong class="name">' + base.income + ' <img src="/public/media/resources/credit.png" alt="" class="icon-color">';
-                    buffer += '</strong></div>'; 
-                    buffer += '<div><span class="title">Coût de construction</span>';
-                    buffer += '<strong class="name"> ' + base.price + ' <img src="/public/media/resources/credit.png" alt="" class="icon-color">';
-                    buffer += '</strong></div></div>'; 
-                    buffer += '<div class="proposal-message">\n\
-                        <textarea onclick="event.stopPropagation();" placeholder="Envoyez un message à votre futur partenaire !*"></textarea>\n\
-                        </div>'
-                    ;
-                    buffer += '<div class="proposal-button"><button onclick="tradeController.sendProposal(event, ' + base.rPlace + ');">Envoyer la proposition</button></div></div>';
-                buffer += '</div>';
+                    buffer += '<div class="offer"><strong>' + base.playerName + '</strong>';
+                    buffer += '<em>' + base.baseName + '</em></div>';
+                    buffer += '<span class="rate">' + base.distance + ' al. (<a onclick="event.stopPropagation();" href="/map/place-' + base.rPlace + '" alt ="Map" target="_blank">Secteur ' + base.rSector + '</a>)</span>';
+                    buffer += '<div class="for"><span>pour</span></div>';
+                    buffer += '<div class="price">' + base.income.toLocaleString() + ' <img src="/public/media/resources/credit.png" alt="" class="icon-color" /></div></div>';
+                buffer += '<div id="base-' + base.rPlace + '" class="hidden">';
+                    buffer += '<div class="info">';
+                    buffer += '<div class="text-block"><textarea onclick="event.stopPropagation();" placeholder="Envoyez un message à votre futur partenaire !*"></textarea></div>';
+                    buffer += '<div class="button" onclick="tradeController.sendProposal(event, ' + base.rPlace + ');">';
+                    buffer += '<a href="#">Proposer pour ' + base.price.toLocaleString() + ' <img src="/public/media/resources/credit.png" alt="" class="icon-color" /></a></div></div>';
+                buffer += '</div></div>';
             });
 
             if (bases.length === 0) {
@@ -556,7 +551,8 @@ jQuery(document).ready(function($) {
                     }, 200);
                     
                     alertController.add(102, response.message);
-                    $('#base-' + response.route.linked_base_id)
+                    $('div[data-target=base-' + response.route.linked_base_id + ']')
+                        .parent()
                         .animate({
                             width: '0px',
                             "padding-left": '0px',
@@ -565,6 +561,7 @@ jQuery(document).ready(function($) {
                             $(this).remove();
                         })
                     ;
+                    creditController.update(-response.route.price);
                 },
                 error: function (error) {
                     var response = $.parseJSON(error.responseText);
@@ -573,6 +570,21 @@ jQuery(document).ready(function($) {
             });
         }
     };
+    
+    creditController = {
+        update: function(amount) {
+            $("#player-credits").fadeTo('fast', 0, function() {
+                $(this)
+                    .text((creditController.toInt($(this).text()) + amount).toLocaleString())
+                    .fadeTo('fast', 1)
+                ;
+            });
+        },
+        
+        toInt: function(text) {
+            return parseInt(text.replace(/ /g, ''));
+        }
+    }
 	
 // ################################# //
 // ####### MAP MOVER MODULE ######## //
