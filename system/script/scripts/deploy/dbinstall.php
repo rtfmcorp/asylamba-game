@@ -109,6 +109,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `player` (
 
 	PRIMARY KEY (`id`),
 	UNIQUE KEY `name_UNIQUE` (`name`),
+    INDEX `fkBindKey` (`bind`),
 	CONSTRAINT fkPlayerColor FOREIGN KEY (rColor) REFERENCES color(id),
 	CONSTRAINT fkPlayerPlayer FOREIGN KEY (rGodfather) REFERENCES player(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 1;");
@@ -166,6 +167,21 @@ foreach ($availableFactions as $faction) {
 	$p->status = 6;
 	$playerManager->add($p);
 }
+
+#--------------------------------------------------------------------------------------------
+echo '<h2>Ajout de la table budget__donations</h2>';
+
+$db->query("DROP TABLE IF EXISTS `budget__donations`");
+$db->query("CREATE TABLE IF NOT EXISTS `budget__donations` (
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`player_bind_key` varchar(50) NOT NULL,
+    `token` varchar(30) NOT NULL,
+	`amount` INT UNSIGNED NOT NULL,
+	`created_at` datetime NOT NULL,
+
+	PRIMARY KEY (`id`),
+	CONSTRAINT fkPlayerBindKey FOREIGN KEY (player_bind_key) REFERENCES player(bind)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 1;");
 
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table sector</h2>';

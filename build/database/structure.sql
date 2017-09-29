@@ -1,4 +1,13 @@
 START TRANSACTION;
+
+CREATE TABLE `budget__donations` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `player_bind_key` varchar(50) NOT NULL,
+  `token` varchar(30) NOT NULL,
+  `amount` int(10) UNSIGNED NOT NULL,
+  `created_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `candidate` (
   `id` int(10) UNSIGNED NOT NULL,
   `rElection` int(10) UNSIGNED NOT NULL,
@@ -711,6 +720,10 @@ DROP TABLE IF EXISTS `vSystemDiary`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `vSystemDiary`  AS  select `h`.`id` AS `id`,`h`.`rPlace` AS `place`,`h`.`oldPlayer` AS `oldPlayer`,`p1`.`name` AS `oldName`,`c1`.`id` AS `oldColor`,`h`.`newPlayer` AS `newPlayer`,`p2`.`name` AS `newName`,`c2`.`id` AS `newColor`,`h`.`dChangement` AS `dChangement`,`p`.`position` AS `position`,`p`.`rSystem` AS `system` from (((((`changeColorPlace` `h` left join `place` `p` on((`p`.`id` = `h`.`rPlace`))) left join `player` `p1` on((`h`.`oldPlayer` = `p1`.`id`))) left join `color` `c1` on((`p1`.`rColor` = `c1`.`id`))) left join `player` `p2` on((`h`.`newPlayer` = `p2`.`id`))) left join `color` `c2` on((`p2`.`rColor` = `c2`.`id`))) order by `h`.`dChangement` desc limit 0,5000 ;
 
 
+ALTER TABLE `budget__donations`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fkPlayerBindKey` (`player_bind_key`);
+
 ALTER TABLE `candidate`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fkCandidateElection` (`rElection`),
@@ -815,6 +828,7 @@ ALTER TABLE `place`
 ALTER TABLE `player`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name_UNIQUE` (`name`),
+  ADD KEY `fkBindKey` (`bind`),
   ADD KEY `fkPlayerColor` (`rColor`),
   ADD KEY `fkPlayerPlayer` (`rGodfather`);
 
@@ -894,6 +908,8 @@ ALTER TABLE `voteLaw`
   ADD KEY `fkVoteLawPlayer` (`rPlayer`);
 
 
+ALTER TABLE `budget__donations`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `candidate`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `changeColorPlace`
@@ -976,6 +992,9 @@ ALTER TABLE `vote`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `voteLaw`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `budget__donations`
+  ADD CONSTRAINT `fkPlayerBindKey` FOREIGN KEY (`player_bind_key`) REFERENCES `player` (`bind`);
 
 ALTER TABLE `candidate`
   ADD CONSTRAINT `fkCandidateElection` FOREIGN KEY (`rElection`) REFERENCES `election` (`id`),
