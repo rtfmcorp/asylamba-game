@@ -2,8 +2,6 @@
 
 namespace Asylamba\Classes\Library;
 
-use Asylamba\Classes\Worker\CTR;
-
 class Format {
 
 	/*

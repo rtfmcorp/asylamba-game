@@ -1,4 +1,13 @@
 <?php
+
+$donationManager = $this->getContainer()->get('hephaistos.donation_manager');
+$playerManager = $this->getContainer()->get('zeus.player_manager');
+$session = $this->getContainer()->get('session_wrapper');
+
+$player = $playerManager->get($session->get('playerId'));
+$playerSum = $donationManager->getPlayerSum($player);
+$donations = $donationManager->getAllDonations();
+
 # background paralax
 echo '<div id="background-paralax" class="sponsorship"></div>';
 
