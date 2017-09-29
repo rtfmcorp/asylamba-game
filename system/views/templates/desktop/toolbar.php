@@ -76,7 +76,7 @@ echo '<div id="tools">';
 		echo '</a>';
 
 		echo '<span class="resource-link" style="width: 120px;">';
-				echo Format::numberFormat($player->getCredit());
+				echo '<span id="player-credits">' . Format::numberFormat($player->getCredit()) . '</span>';
 				echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
 		echo '</span>';
 	echo '</div>';
