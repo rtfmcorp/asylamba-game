@@ -4631,6 +4631,11 @@ span.centred-link:focus {
   bottom: 5px;
   right: 8px;
 }
+.component.transaction .transaction .product .rate a {
+  text-decoration: none;
+  color: #EFEFEF;
+  font-weight: bold;
+}
 .component.transaction .transaction .product .offer {
   overflow: hidden;
   height: 32px;
@@ -4755,6 +4760,13 @@ span.centred-link:focus {
 }
 .component.transaction .transaction .info .price-detail p span {
   color: #4F4F4F;
+}
+.component.transaction .transaction .info .text-block {
+  padding: 5px;
+}
+.component.transaction .transaction .info .text-block textarea {
+  width: 100%;
+  resize: none;
 }
 .component.transaction .transaction .button {
   border-top: solid 1px #202020;
@@ -6376,62 +6388,6 @@ span.centred-link:focus {
 }
 #rc-search-form button span {
   padding: 0px 10px;
-}
-#rc-search-results {
-  width: 0px;
-  overflow: hidden;
-}
-#rc-search-results .body {
-  padding-bottom: 500px;
-}
-#rc-search-results .player {
-  display: block;
-  cursor: pointer;
-  overflow: hidden;
-  transition: height 0.2s ease-out;
-}
-#rc-search-results .player .proposal-panel {
-  margin-left: -55px;
-  margin-top: 10px;
-  padding-left: 10px;
-  height: 150px;
-  background: #202020;
-}
-#rc-search-results .player .proposal-panel .proposal-data {
-  display: flex;
-  justify-content: space-around;
-  text-align: center;
-}
-#rc-search-results .player .proposal-panel .proposal-message {
-  width: 100%;
-  margin-top: 10px;
-}
-#rc-search-results .player .proposal-panel .proposal-message textarea {
-  display: block;
-  width: 90%;
-  margin: auto;
-  resize: none;
-}
-#rc-search-results .player .proposal-panel .proposal-button {
-  margin-top: 10px;
-  text-align: center;
-}
-#rc-search-results .player .proposal-panel .proposal-button button {
-  display: inline-block;
-  margin: 0 0 0 auto;
-  border: solid 1px #0A0A0A;
-  padding: 6px 15px;
-  color: white;
-  cursor: pointer;
-  overflow: hidden;
-  background: #57c632;
-}
-#rc-search-results .player .proposal-panel .proposal-button button:hover,
-#rc-search-results .player .proposal-panel .proposal-button button:focus {
-  background: #24500a;
-}
-#rc-search-results .player[data-deployed=true] {
-  height: 210px;
 }
 .inscription {
   /* SUBNAV */
