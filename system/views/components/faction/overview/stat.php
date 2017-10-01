@@ -23,15 +23,15 @@ $S_FRM1 = $factionRankingManager->getCurrentSession();
 $factionRankingManager->newSession();
 $factionRankingManager->loadLastContext();
 
-if ($factionRankingManager->size() == 0) {
-    throw new ErrorException('L\'espace faction n\'est pas disponible pour le moment');
-}
-
-for ($i = 0; $i < $factionRankingManager->size(); $i++) {
-    if ($factionRankingManager->get($i)->rFaction == $faction->id) {
-        $factionRanking = $factionRankingManager->get($i)->generalPosition;
-        break;
+if ($factionRankingManager->size() !== 0) {
+    for ($i = 0; $i < $factionRankingManager->size(); $i++) {
+        if ($factionRankingManager->get($i)->rFaction == $faction->id) {
+            $factionRanking = $factionRankingManager->get($i)->generalPosition;
+            break;
+        }
     }
+} else {
+    $factionRanking = null;
 }
 $factionRankingManager->changeSession($S_FRM1);
 
@@ -154,10 +154,12 @@ echo '<div class="component size2 player new-message profil">';
 
             echo '<h4>Statistiques générales</h4>';
 
-            echo '<div class="number-box half">';
-                echo '<span class="label">Classement général de la faction</span>';
-                echo '<span class="value">' . Format::rankingFormat($factionRanking) . '</span>';
-            echo '</div>';
+            if ($factionRanking !== null) {
+                echo '<div class="number-box half">';
+                    echo '<span class="label">Classement général de la faction</span>';
+                    echo '<span class="value">' . Format::rankingFormat($factionRanking) . '</span>';
+                echo '</div>';
+            }
             echo '<div class="number-box half grey">';
                 echo '<span class="label">Nombre de points de la faction</span>';
                 echo '<span class="value">' . Format::number($faction->points) . '</span>';
