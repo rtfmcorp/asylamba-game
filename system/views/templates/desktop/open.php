@@ -27,7 +27,7 @@ echo '<head>';
     echo '<meta charset="utf-8" />';
     echo '<meta name="description" content="' . APP_DESCRIPTION . '" />';
 
-    echo '<link href="http://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic" rel="stylesheet" type="text/css">';
+    echo '<link href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic" rel="stylesheet" type="text/css">';
 
     if (COLORSTYLE) {
         echo ($response->getPage() == 'inscription' && !$request->query->has('step') || ($request->query->get('step') == 1))

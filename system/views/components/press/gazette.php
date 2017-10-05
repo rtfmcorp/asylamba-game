@@ -46,7 +46,7 @@ $tradeNews = $newsManager->getList(News::NEWS_TYPE_TRADE, 30, 0);
         <div class="body">
             <?php foreach ($militaryNews as $militaryNew) { ?>
                 <div id="news-<?= $militaryNew->getId() ?>" class="news">
-                    <div class="news-head color<?= ($militaryNew->getIsVictory()) ? $militaryNew->getAttacker()->getRColor() : $militaryNew->getDefender()->getRColor() ?>" onclick="pressController.deployNews(<?= $militaryNew->getId(); ?>);">
+                    <div class="news-head color<?= $militaryNew->getNewsFaction(); ?>" onclick="pressController.deployNews(<?= $militaryNew->getId(); ?>);">
                         <img class="picto" src="<?= $militaryNew->getNewsPicto(); ?>"/> 
                         <div class="info">
                             <span class="title"><?= $militaryNew->getTitle(); ?></span>
@@ -69,7 +69,7 @@ $tradeNews = $newsManager->getList(News::NEWS_TYPE_TRADE, 30, 0);
         <div class="body">
             <?php foreach ($politicNews as $politicNew) { ?>
                 <div id="news-<?= $politicNew->getId() ?>" class="news">
-                    <div class="news-head color<?= $politicNew->getFaction()->getId(); ?>" onclick="pressController.deployNews(<?= $politicNew->getId(); ?>);">
+                    <div class="news-head color<?= $politicNew->getNewsFaction(); ?>" onclick="pressController.deployNews(<?= $politicNew->getId(); ?>);">
                         <img class="picto" src="<?= $politicNew->getNewsPicto(); ?>"/> 
                         <div class="info">
                             <span class="title"><?= $politicNew->getTitle(); ?></span>
@@ -93,7 +93,7 @@ $tradeNews = $newsManager->getList(News::NEWS_TYPE_TRADE, 30, 0);
             <?php foreach ($tradeNews as $tradeNew) {
     ?>
                 <div id="news-<?= $tradeNew->getId() ?>" class="news">
-                    <div class="news-head color<?= $tradeNew->getTransaction()->playerColor ?>" onclick="pressController.deployNews(<?= $tradeNew->getId(); ?>);">
+                    <div class="news-head color<?= $tradeNew->getNewsFaction(); ?>" onclick="pressController.deployNews(<?= $tradeNew->getId(); ?>);">
                         <img class="picto" src="<?= $tradeNew->getNewsPicto(); ?>"/> 
                         <div class="info">
                             <span class="title"><?= $tradeNew->getTitle(); ?></span>

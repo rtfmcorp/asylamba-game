@@ -468,7 +468,7 @@ jQuery(document).ready(function($) {
         },
         
         renderSearchResults: function(bases) {
-            var buffer = '<div id="rc-search-results" class="component transaction">';
+            var buffer = '<div id="rc-search-results" class="component transaction new-message">';
 			buffer += '<div class="head skin-2">';
             buffer += '<h2>Résultats</h2>';
 			buffer += '</div>';
@@ -485,9 +485,9 @@ jQuery(document).ready(function($) {
                     buffer += '<div class="price">' + base.income.toLocaleString() + ' <img src="/public/media/resources/credit.png" alt="" class="icon-color" /></div></div>';
                 buffer += '<div id="base-' + base.rPlace + '" class="hidden">';
                     buffer += '<div class="info">';
-                    buffer += '<div class="text-block"><textarea onclick="event.stopPropagation();" placeholder="Envoyez un message à votre futur partenaire !*"></textarea></div>';
+                    buffer += '<div class="text-block"><p class="input input-area"><textarea onclick="event.stopPropagation();" placeholder="Envoyez un message à votre futur partenaire !*"></textarea></p></div>';
                     buffer += '<div class="button" onclick="tradeController.sendProposal(event, ' + base.rPlace + ');">';
-                    buffer += '<a href="#">Proposer pour ' + base.price.toLocaleString() + ' <img src="/public/media/resources/credit.png" alt="" class="icon-color" /></a></div></div>';
+                    buffer += '<a href="#" class="trade-search-button">Proposer pour ' + base.price.toLocaleString() + ' <img src="/public/media/resources/credit.png" alt="" class="icon-color" /></a></div></div>';
                 buffer += '</div></div>';
             });
 
@@ -512,19 +512,6 @@ jQuery(document).ready(function($) {
                     resolve();
                 });
             });
-        },
-        
-        deployPanel: function(event, baseId) {
-            event.preventDefault();
-
-            var panel = $("#base-" + baseId + '');
-            
-            if(panel.attr('data-deployed') === 'true') {
-                panel.attr("data-deployed", false);
-                return false;
-            }
-            $(".player[data-deployed=true]").attr('data-deployed', false);
-            panel.attr('data-deployed', true);
         },
         
         sendProposal: function(event, baseId) {
@@ -763,7 +750,49 @@ jQuery(document).ready(function($) {
                 panel.addClass('deployed');
             });
         },
+        
+        slide: {
+            fps: 30,
+            now: 0,
+            then: Date.now(),
+            interval: 1000/0.3,
+            delta: 0,
+            
+            animate: function() {
+                requestAnimationFrame(pressController.slide.animate);
+                
+                pressController.slide.now = Date.now();
+                pressController.slide.delta = pressController.slide.now - pressController.slide.then;
+
+                if (pressController.slide.delta > pressController.slide.interval) {
+                    // update time stuffs
+
+                    // Just `then = now` is not enough.
+                    // Lets say we set fps at 10 which means
+                    // each frame must take 100ms
+                    // Now frame executes in 16ms (60fps) so
+                    // the loop iterates 7 times (16*7 = 112ms) until
+                    // delta > interval === true
+                    // Eventually this lowers down the FPS as
+                    // 112*10 = 1120ms (NOT 1000ms).
+                    // So we have to get rid of that extra 12ms
+                    // by subtracting delta (112) % interval (100).
+                    // Hope that makes sense.
+
+                    pressController.slide.then = pressController.slide.now - (pressController.slide.delta % pressController.slide.interval);
+                    
+                    var nextItem = $(".top-new.current").removeClass('current').next('.top-new');
+                    
+                    if (nextItem.length === 0) {
+                        nextItem = $(".top-new:first-child");
+                    }
+                    nextItem.addClass('current');
+                }
+            }
+        }
     };
+    
+    pressController.slide.animate();
     
     newsController = {
         
@@ -1307,7 +1336,7 @@ jQuery(document).ready(function($) {
 		});
 	});
     
-    var ws = new WebSocket("ws://" + game.host);
+    var ws = new WebSocket("wss://" + game.host);
     ws.onmessage = function(event) {
         var data = JSON.parse(event.data);
         

@@ -1019,6 +1019,17 @@ body {
   left: 24px;
   border-color: #4F4F4F transparent transparent transparent;
 }
+#budget-ratios {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+#budget-ratios canvas {
+  margin-top: 10px;
+}
+#treasury {
+  margin-top: 10px;
+}
 #content {
   position: absolute;
   width: 8000px;
@@ -3006,6 +3017,87 @@ span.centred-link:focus {
   padding: 10px;
   border: 1px solid #202020;
   border-top: none;
+}
+.component.news .top-new {
+  display: none;
+}
+.component.news .top-new.current {
+  display: block;
+}
+.component.news .top-new header {
+  height: 200px;
+  background-size: 100%;
+  background-position: bottom;
+  background-repeat: no-repeat;
+}
+.component.news .top-new header .label {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.component.news .top-new header .label h4 {
+  color: white;
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.component.news .top-new header .label img {
+  border: 1px solid white;
+  border-radius: 96px;
+}
+.component.news .top-new header.header-fleet {
+  background-image: url('src/desktop/screen/fleet.jpg');
+}
+.component.news .top-new header.header-financial {
+  background-image: url('src/desktop/screen/financial.jpg');
+}
+.component.news .top-new header.header-profil {
+  background-image: url('src/desktop/screen/profil.jpg');
+}
+.component.news .top-new header .flag {
+  width: 80px;
+  height: 120px;
+  margin-left: 20px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.component.news .top-new header .flag.color-1 {
+  background-image: url('src/desktop/faction/flag/flag-1.png');
+}
+.component.news .top-new header .flag.color-2 {
+  background-image: url('src/desktop/faction/flag/flag-2.png');
+}
+.component.news .top-new header .flag.color-3 {
+  background-image: url('src/desktop/faction/flag/flag-3.png');
+}
+.component.news .top-new header .flag.color-4 {
+  background-image: url('src/desktop/faction/flag/flag-4.png');
+}
+.component.news .top-new header .flag.color-5 {
+  background-image: url('src/desktop/faction/flag/flag-5.png');
+}
+.component.news .top-new header .flag.color-6 {
+  background-image: url('src/desktop/faction/flag/flag-6.png');
+}
+.component.news .top-new header .flag.color-7 {
+  background-image: url('src/desktop/faction/flag/flag-7.png');
+}
+.component.news .top-new header .flag.color-8 {
+  background-image: url('src/desktop/faction/flag/flag-8.png');
+}
+.component.news .top-new header .flag.color-9 {
+  background-image: url('src/desktop/faction/flag/flag-9.png');
+}
+.component.news .top-new header .flag.color-10 {
+  background-image: url('src/desktop/faction/flag/flag-10.png');
+}
+.component.news .top-new header .flag.color-11 {
+  background-image: url('src/desktop/faction/flag/flag-11.png');
+}
+.component.news .top-new header .flag.color-12 {
+  background-image: url('src/desktop/faction/flag/flag-12.png');
+}
+.component.news .top-new.show {
+  display: block;
 }
 .notif {
   position: relative;
@@ -6479,12 +6571,12 @@ span.centred-link:focus {
   background: #202020;
   border-color: #4F4F4F;
 }
-#rc-search-form button {
+.trade-search-button {
   float: left;
   display: flex;
   align-items: center;
 }
-#rc-search-form button span {
+.trade-search-button span {
   padding: 0px 10px;
 }
 #stripe-donation-form {
@@ -6557,7 +6649,9 @@ span.centred-link:focus {
 }
 #stripe-donation-form button {
   float: left;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: #34D08C;
   color: white;
   border-radius: 2px;
@@ -6569,6 +6663,16 @@ span.centred-link:focus {
   height: 47px;
   line-height: 45px;
   outline: none;
+}
+#stripe-donation-form button span {
+  padding-left: 10px;
+}
+#stripe-donation-form button img {
+  width: 24px;
+  height: 24px;
+}
+#stripe-donation-form button.locked {
+  background-color: #14B06C;
 }
 #stripe-donation-form button:focus {
   background: #24B47E;

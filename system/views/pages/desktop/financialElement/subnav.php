@@ -11,7 +11,7 @@ echo '<div id="subnav">';
                 echo '<img src="' . MEDIA . 'financial/invest.png" alt="" />';
             echo '</span>';
             echo '<span class="content skin-1">';
-                echo '<span>Investissement';
+                echo '<span>Investissement</span>';
             echo '</span>';
         echo '</a>';
 
@@ -21,7 +21,7 @@ echo '<div id="subnav">';
                 echo '<img src="' . MEDIA . 'financial/send-credit.png" alt="" />';
             echo '</span>';
             echo '<span class="content skin-1">';
-                echo '<span>Envoi de crédit';
+                echo '<span>Envoi de crédit</span>';
             echo '</span>';
         echo '</a>';
     echo '</div>';

@@ -73,4 +73,62 @@
             border-top: none;
         }
     }
+    .top-new {
+        display: none;
+        &.current {
+            display:block;
+        }
+        header {
+            height:200px;
+            background-size: 100%;
+            background-position: bottom;
+            background-repeat: no-repeat;
+            .label {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                h4 {
+                    color: white;
+                    font-weight: bold;
+                    background-color: rgba(0,0,0,0.4);
+                }
+                img {
+                    border: 1px solid white;
+                    border-radius: 96px;
+                }
+            }
+            &.header-fleet {
+                background-image: url('src/desktop/screen/fleet.jpg');
+            }
+            &.header-financial {
+                background-image: url('src/desktop/screen/financial.jpg');
+            }
+            &.header-profil {
+                background-image: url('src/desktop/screen/profil.jpg');
+            }
+            
+            .flag {
+                width:80px;
+                height:120px;
+                margin-left: 20px;
+                background-repeat: no-repeat;
+                background-size: cover;
+                &.color-1 { background-image: url('src/desktop/faction/flag/flag-1.png'); }
+                &.color-2 { background-image: url('src/desktop/faction/flag/flag-2.png'); }
+                &.color-3 { background-image: url('src/desktop/faction/flag/flag-3.png'); }
+                &.color-4 { background-image: url('src/desktop/faction/flag/flag-4.png'); }
+                &.color-5 { background-image: url('src/desktop/faction/flag/flag-5.png'); }
+                &.color-6 { background-image: url('src/desktop/faction/flag/flag-6.png'); }
+                &.color-7 { background-image: url('src/desktop/faction/flag/flag-7.png'); }
+                &.color-8 { background-image: url('src/desktop/faction/flag/flag-8.png'); }
+                &.color-9 { background-image: url('src/desktop/faction/flag/flag-9.png'); }
+                &.color-10 { background-image: url('src/desktop/faction/flag/flag-10.png'); }
+                &.color-11 { background-image: url('src/desktop/faction/flag/flag-11.png'); }
+                &.color-12 { background-image: url('src/desktop/faction/flag/flag-12.png'); }
+            }
+        }
+    }
+    .top-new.show {
+        display: block;
+    }
 }
