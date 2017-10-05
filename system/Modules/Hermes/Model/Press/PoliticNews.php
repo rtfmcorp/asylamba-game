@@ -78,6 +78,22 @@ class PoliticNews extends News
     /**
      * {@inheritdoc}
      */
+    public function getNewsBanner()
+    {
+        return 'financial';
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getNewsFaction()
+    {
+        return $this->faction->getId();
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
     protected function getNewsType()
     {
         return self::NEWS_TYPE_POLITICS;

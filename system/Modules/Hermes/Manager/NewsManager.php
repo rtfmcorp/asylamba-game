@@ -50,6 +50,15 @@ class NewsManager
         ;
     }
     
+    public function getTopNews()
+    {
+        return $this
+            ->entityManager
+            ->getRepository(News::class)
+            ->getTopNews()
+        ;
+    }
+    
     /**
      * @param string $type
      * @return int

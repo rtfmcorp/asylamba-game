@@ -28,6 +28,9 @@ class TradeNews extends News
         return $this->transaction;
     }
     
+    /**
+     * {@inheritdoc}
+     */
     public function getNewsPicto()
     {
         switch ($this->transaction->type) {
@@ -38,6 +41,22 @@ class TradeNews extends News
             case Transaction::TYP_COMMANDER:
                 return MEDIA . 'commander/small/' . $this->transaction->commanderAvatar . '.png';
         }
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getNewsBanner()
+    {
+        return 'profil';
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getNewsFaction()
+    {
+        return $this->transaction->playerColor;
     }
     
     /**

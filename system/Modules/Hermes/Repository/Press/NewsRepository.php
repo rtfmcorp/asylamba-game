@@ -32,6 +32,23 @@ class NewsRepository extends AbstractRepository
         return $data;
     }
     
+    public function getTopNews()
+    {
+        $statement = $this->connection->query('SELECT * FROM news ORDER BY created_at DESC, weight LIMIT 10');
+        
+        $data = [];
+        while ($row = $statement->fetch()) {
+            if (($n = $this->unitOfWork->getObject(News::class, $row['id'])) !== null) {
+                $data[] = $n;
+                continue;
+            }
+            $news = $this->format($row);
+            $this->unitOfWork->addObject($news);
+            $data[] = $news;
+        }
+        return $data;
+    }
+    
     public function countTodaysNews($type)
     {
         $statement = $this->connection->prepare('SELECT COUNT(*) AS nb_news FROM news WHERE created_at >= :today_datetime' . (($type !== null) ? ' AND type = :type' : ''));

@@ -141,6 +141,22 @@ class MilitaryNews extends News
     /**
      * {@inheritdoc}
      */
+    public function getNewsFaction()
+    {
+        return ($this->isVictory) ? $this->attacker->getRColor() : $this->defender->getRColor();
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getNewsBanner()
+    {
+        return 'fleet';
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
     protected function getNewsType()
     {
         return self::NEWS_TYPE_MILITARY;

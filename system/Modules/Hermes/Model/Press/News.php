@@ -127,6 +127,16 @@ abstract class News implements \JsonSerializable
     abstract public function getNewsPicto();
     
     /**
+     * @return int
+     */
+    abstract public function getNewsFaction();
+    
+    /**
+     * @return string
+     */
+    abstract protected function getNewsBanner();
+    
+    /**
      * @return string
      */
     abstract protected function getNewsType();
