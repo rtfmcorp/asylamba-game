@@ -19,7 +19,7 @@ use Asylamba\Classes\Library\Format;
 			<p>Dans un soucis d\'équité, il nous apparaît naturel que les personnes effectuant un don ne seront pas avantagées par rapport aux autres. 
             Le don doit être totalement désintéressé et n\'apporte aucun pouvoir supplémentaire au sein de la communauté.</p>
             <p>En retour, nous offrons toute notre gratitude, et faisons au mieux pour faire évoluer le jeu, pour le rendre de plus en plus passionnant !</p>
-            <div class="number-box <?= ($playerSum === 0) ? 'grey' : '' ?>">
+            <div id="donations-amount" class="number-box <?= ($playerSum === 0) ? 'grey' : '' ?>">
                 <span class="label">Total de vos donations</span>
                 <span class="value"> <?= Format::number($playerSum / 100, 2); ?> €</span>
             </div>
