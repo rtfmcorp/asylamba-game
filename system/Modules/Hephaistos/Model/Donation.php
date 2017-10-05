@@ -4,37 +4,12 @@ namespace Asylamba\Modules\Hephaistos\Model;
 
 use Asylamba\Modules\Zeus\Model\Player;
 
-class Donation
+class Donation extends Transaction
 {
-    /** @var int **/
-    protected $id;
     /** @var Player **/
     protected $player;
     /** @var string **/
     protected $token;
-    /** @var int **/
-    protected $amount;
-    /** @var \DateTime **/
-    protected $createdAt;
-    
-    /**
-     * @param int $id
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-        
-        return $this;
-    }
-    
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
     
     /**
      * @param Player $player
@@ -74,41 +49,23 @@ class Donation
         return $this->token;
     }
     
-    /**
-     * @param int $amount
-     * @return $this
-     */
-    public function setAmount($amount)
+    public function getTransactionType()
     {
-        $this->amount = $amount;
-        
-        return $this;
+        return self::TYPE_DONATION;
     }
     
     /**
-     * @return int
+     * @return array
      */
-    public function getAmount()
+    public function jsonSerialize()
     {
-        return $this->amount;
-    }
-    
-    /**
-     * @param \DateTime $createdAt
-     * @return $this
-     */
-    public function setCreatedAt(\DateTime $createdAt)
-    {
-        $this->createdAt = $createdAt;
-        
-        return $this;
-    }
-    
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
+        return [
+            'id' => $this->id,
+            'amount' => $this->amount,
+            'transaction_type' => $this->getTransactionType(),
+            'player' => $this->player,
+            'created_at' => $this->createdAt
+            
+        ];
     }
 }

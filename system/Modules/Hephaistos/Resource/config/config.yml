@@ -12,6 +12,11 @@ services:
             - "%hermes.notifications.timeout.read"
             - "%hermes.notifications.timeout.unread"
             
+    hephaistos.charge_manager:
+        class: Asylamba\Modules\Hephaistos\Manager\ChargeManager
+        arguments:
+            - "@entity_manager"
+            
     hephaistos.donation_manager:
         class: Asylamba\Modules\Hephaistos\Manager\DonationManager
         arguments:
@@ -19,3 +24,8 @@ services:
             - "@zeus.player_manager"
             - "@session_wrapper"
             - "%stripe_api_key"
+            
+    hephaistos.transaction_manager:
+        class: Asylamba\Modules\Hephaistos\Manager\TransactionManager
+        arguments:
+            - "@entity_manager"

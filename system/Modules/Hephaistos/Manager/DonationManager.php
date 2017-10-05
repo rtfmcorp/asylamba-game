@@ -6,11 +6,13 @@ use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Classes\Library\Session\SessionWrapper;
 
+use Asylamba\Modules\Hephaistos\Model\Charge;
 use Asylamba\Modules\Hephaistos\Model\Donation;
 use Asylamba\Modules\Zeus\Model\Player;
 
 use Stripe\Stripe;
-use Stripe\Charge;
+use Stripe\Charge as StripeCharge;
+use Stripe\BalanceTransaction;
 
 class DonationManager
 {
@@ -47,15 +49,15 @@ class DonationManager
      * @param string $token
      * @param string $amount
      */
-    public function createCharge($token, $amount)
+    public function createDonation($token, $amount)
     {
-        $charge = Charge::create(array(
+        $charge = StripeCharge::create(array(
             "amount" => $amount,
             "currency" => "eur",
             "description" => "Donation de {$this->sessionWrapper->get('playerInfo')->get('name')}",
             "source" => $token,
         ));
-        
+            
         $player = $this->playerManager->get($this->sessionWrapper->get('playerId'));
         
         $donation =
@@ -66,10 +68,31 @@ class DonationManager
             ->setCreatedAt(new \DateTime())
         ;
         
+        $balanceTransaction = BalanceTransaction::retrieve($charge->balance_transaction);
+        
+        $charge =
+            (new Charge())
+            ->setCategory(Charge::CATEGORY_STRIPE)
+            ->setAmount(-$balanceTransaction->fee)
+            ->setCreatedAt((new \DateTime()))
+        ;
+        
+        $this->entityManager->persist($charge);
         $this->entityManager->persist($donation);
+        $this->entityManager->flush($charge);
         $this->entityManager->flush($donation);
         
-        return $charge;
+        return $donation;
+    }
+    
+    public function getMonthlyIncome()
+    {
+        return $this->entityManager->getRepository(Donation::class)->getMonthlyIncome();
+    }
+    
+    public function getGlobalIncome()
+    {
+        return $this->entityManager->getRepository(Donation::class)->getGlobalIncome();
     }
     
     /**
