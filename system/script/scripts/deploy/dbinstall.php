@@ -169,19 +169,41 @@ foreach ($availableFactions as $faction) {
 }
 
 #--------------------------------------------------------------------------------------------
+echo '<h2>Ajout de la table budget__transactions</h2>';
+
+$db->query("DROP TABLE IF EXISTS `budget__transactions`");
+$db->query("CREATE TABLE IF NOT EXISTS `budget__transactions` (
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`transaction_type` varchar(12) NOT NULL,
+	`amount` INT NOT NULL,
+	`created_at` datetime NOT NULL,
+
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 1;");
+
+#--------------------------------------------------------------------------------------------
+echo '<h2>Ajout de la table budget__charges</h2>';
+
+$db->query("DROP TABLE IF EXISTS `budget__charges`");
+$db->query("CREATE TABLE IF NOT EXISTS `budget__charges` (
+	`transaction_id` INT unsigned NOT NULL,
+	`category` varchar(15) NOT NULL,
+
+	CONSTRAINT fkChargeId FOREIGN KEY (transaction_id) REFERENCES budget__transactions(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+
+#--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table budget__donations</h2>';
 
 $db->query("DROP TABLE IF EXISTS `budget__donations`");
 $db->query("CREATE TABLE IF NOT EXISTS `budget__donations` (
-	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`transaction_id` INT unsigned NOT NULL,
 	`player_bind_key` varchar(50) NOT NULL,
     `token` varchar(30) NOT NULL,
-	`amount` INT UNSIGNED NOT NULL,
-	`created_at` datetime NOT NULL,
 
-	PRIMARY KEY (`id`),
+	CONSTRAINT fkDonationId FOREIGN KEY (transaction_id) REFERENCES budget__transactions(id),
 	CONSTRAINT fkPlayerBindKey FOREIGN KEY (player_bind_key) REFERENCES player(bind)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 1;");
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table sector</h2>';

@@ -1,10 +1,20 @@
 START TRANSACTION;
 
+CREATE TABLE `budget__charges` (
+  `transaction_id` int(10) UNSIGNED NOT NULL,
+  `category` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `budget__donations` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `transaction_id` int(10) UNSIGNED NOT NULL,
   `player_bind_key` varchar(50) NOT NULL,
-  `token` varchar(30) NOT NULL,
-  `amount` int(10) UNSIGNED NOT NULL,
+  `token` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `budget__transactions` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `transaction_type` varchar(12) NOT NULL,
+  `amount` int(10) NOT NULL,
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -748,10 +758,15 @@ DROP TABLE IF EXISTS `vSystemDiary`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `vSystemDiary`  AS  select `h`.`id` AS `id`,`h`.`rPlace` AS `place`,`h`.`oldPlayer` AS `oldPlayer`,`p1`.`name` AS `oldName`,`c1`.`id` AS `oldColor`,`h`.`newPlayer` AS `newPlayer`,`p2`.`name` AS `newName`,`c2`.`id` AS `newColor`,`h`.`dChangement` AS `dChangement`,`p`.`position` AS `position`,`p`.`rSystem` AS `system` from (((((`changeColorPlace` `h` left join `place` `p` on((`p`.`id` = `h`.`rPlace`))) left join `player` `p1` on((`h`.`oldPlayer` = `p1`.`id`))) left join `color` `c1` on((`p1`.`rColor` = `c1`.`id`))) left join `player` `p2` on((`h`.`newPlayer` = `p2`.`id`))) left join `color` `c2` on((`p2`.`rColor` = `c2`.`id`))) order by `h`.`dChangement` desc limit 0,5000 ;
 
+ALTER TABLE `budget__charges`
+  ADD KEY fkChargeId (`transaction_id`);
 
 ALTER TABLE `budget__donations`
-  ADD PRIMARY KEY (`id`),
+  ADD KEY fkDonationId (`transaction_id`),
   ADD KEY `fkPlayerBindKey` (`player_bind_key`);
+
+ALTER TABLE `budget__transactions`
+  ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `candidate`
   ADD PRIMARY KEY (`id`),
@@ -1041,7 +1056,11 @@ ALTER TABLE `vote`
 ALTER TABLE `voteLaw`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `budget__charges`
+  ADD CONSTRAINT `fkChargeId` FOREIGN KEY (`transaction_id`) REFERENCES `budget__transactions` (`id`);
+
 ALTER TABLE `budget__donations`
+  ADD CONSTRAINT `fkDonationId` FOREIGN KEY (`transaction_id`) REFERENCES `budget__transactions` (`id`),
   ADD CONSTRAINT `fkPlayerBindKey` FOREIGN KEY (`player_bind_key`) REFERENCES `player` (`bind`);
 
 ALTER TABLE `candidate`
