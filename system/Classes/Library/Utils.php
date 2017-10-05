@@ -156,7 +156,7 @@ class Utils
         $string = htmlspecialchars($string);
         if ($mode == 'complex') {
             $string = nl2br($string);
-            $string = preg_replace('`http://[a-z0-9._,;/?!&=#-]+`i', '<a href="$0" target="blank">$0</a>', $string);
+            $string = preg_replace('`https://[a-z0-9._,;/?!&=#-]+`i', '<a href="$0" target="blank">$0</a>', $string);
         }
         return $string;
     }

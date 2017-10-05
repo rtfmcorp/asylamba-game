@@ -19,6 +19,9 @@ switch ($this->getContainer()->get('app.request')->query->get('a')) {
     case 'increaseinvestuni':        include AJAX . 'zeus/university/increaseInvest.php'; break;
     case 'decreaseinvestuni':        include AJAX . 'zeus/university/decreaseInvest.php'; break;
     
+	case 'searchroutes':			include AJAX . 'athena/route/search.php'; break;
+	case 'proposeroute':			include AJAX . 'athena/route/propose.php'; break;
+    
     // Hephaistos
     case 'donate':                  include AJAX . 'hephaistos/donate.php'; break;
 

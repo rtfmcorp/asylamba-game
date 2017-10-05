@@ -54,7 +54,7 @@ class ResponseFactory
             $response->headers->set(
                 'Location',
                 (substr($response->getRedirect(), 0, 4) !== 'http')
-                ? 'http://' . $request->headers->get('host') . '/' . $response->getRedirect()
+                ? 'https://' . $request->headers->get('host') . '/' . $response->getRedirect()
                 : $response->getRedirect()
             );
         }

@@ -169,7 +169,11 @@ class Server
         } finally {
             // @TODO Needs further investigation
             if ($response !== null) {
-                fputs($input, $response->send());
+                try {
+                    fputs($input, $response->send());
+                } catch (\ErrorException $ex) {
+                    // Connection is reset
+                }
                 fclose($input);
             }
             $this->nbUncollectedCycles++;

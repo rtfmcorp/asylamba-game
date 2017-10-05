@@ -68,7 +68,12 @@ class ConnectionHandler
             $client->getWsConnection()->close();
             return false;
         }
-        fputs($client->getWsConnection()->getSocket(), 'PONG', 4);
+        try {
+            fputs($client->getWsConnection()->getSocket(), 'PONG', 4);
+        } catch (\ErrorException $ex) {
+            $client->getWsConnection()->close();
+            return false;
+        }
         return true;
     }
     
