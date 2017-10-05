@@ -2,17 +2,15 @@
 
 use Asylamba\Modules\Athena\Resource\ShipResource;
 
-$shipsName;
+$shipsName = [];
 for ($i = 0; $i < 12; $i++) {
-    $shipsName[] = "'" . ShipResource::getInfo($i, 'codeName') . "'";
+    $shipsName[] = ShipResource::getInfo($i, 'codeName');
 }
-$shipsName = implode(', ', $shipsName);
 
-$shipsPev;
+$shipsPev = [];
 for ($i = 0; $i < 12; $i++) {
     $shipsPev[] = ShipResource::getInfo($i, 'pev');
 }
-$shipsPev = implode(', ', $shipsPev);
 
     echo('<div id="news-container"></div>');
     if ($this->getContainer()->getParameter('environment') === 'dev') {
@@ -26,8 +24,8 @@ $shipsPev = implode(', ', $shipsPev);
         game = {
             host: '<?= $this->getContainer()->getParameter('server_host') ?>',
             path: 'https://<?= $this->getContainer()->getParameter('server_host'); ?>/',
-			shipsName: [(<?= $shipsName; ?>)],
-			shipsPev: [<?= $shipsPev ?>],
+			shipsName: <?= json_encode($shipsName); ?>,
+			shipsPev: <?= json_encode($shipsPev) ?>,
         };
     });
 </script>
