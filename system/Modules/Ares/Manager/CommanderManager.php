@@ -480,7 +480,7 @@ class CommanderManager
 	public function uChangeBase($commanderId) {
 		$commander = $this->get($commanderId);
 		$place = $this->placeManager->get($commander->rDestinationPlace);
-		$place->commanders = $this->getBaseCommanders($place->id);
+		$place->commanders = $this->getBaseCommanders($place->id,[Commander::AFFECTED,Commander::MOVING]);
 		$commanderPlace = $this->placeManager->get($commander->rBase);
 		$player = $this->playerManager->get($commander->rPlayer);
 		$playerBonus = $this->playerBonusManager->getBonusByPlayer($player);

@@ -36,19 +36,14 @@ echo '<div class="component profil">';
 
 			$baseLevelPlayer = $this->getContainer()->getParameter('zeus.player.base_level');
 			$exp = $player_playerRoleplayProfil->getExperience();
-			$nlv = $baseLevelPlayer * (pow(2, ($player_playerRoleplayProfil->getLevel() - 1)));
-			$clv = $baseLevelPlayer * (pow(2, ($player_playerRoleplayProfil->getLevel() - 2)));
-			$prc = ((($exp - $clv) * 200) / $nlv);
-
-			echo '<div class="number-box">';
-				echo '<span class="label">expérience</span>';
-				echo '<span class="value">' . Format::numberFormat($exp) . '</span>';
-			echo '</div>';
+			$nextlvl = $baseLevelPlayer * (pow(2, ($player_playerRoleplayProfil->getLevel() - 1)));
+			$currentlvl = $baseLevelPlayer * (pow(2, ($player_playerRoleplayProfil->getLevel() - 2)));
+			$prc = round(($exp -$currentlvl) / ($nextlvl -$currentlvl) * 100)  ;
 
 			echo '<div class="number-box grey">';
-				echo '<span class="label">expérience nécessaire pour le prochain niveau</span>';
-				echo '<span class="value">' . Format::numberFormat($nlv) . '</span>';
-				echo '<span class="progress-bar">';
+				echo '<span class="label">Expérience</span>';
+				echo '<span class="value">'. Format::numberFormat($exp).' / ' . Format::numberFormat($nextlvl) . '</span>';
+				echo '<span title="' . $prc . ' %" class="progress-bar hb bl">';
 					echo '<span style="width:' . $prc . '%;" class="content"></span>';
 				echo '</span>';
 			echo '</div>';
