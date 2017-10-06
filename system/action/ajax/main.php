@@ -14,6 +14,9 @@ switch ($this->getContainer()->get('app.request')->query->get('a')) {
 	# ARES
 	case 'assignship':				include AJAX . 'ares/ship/assign.php'; break;
 	case 'updatesquadron':			include AJAX . 'ares/squadron/update.php'; break;
+    
+	case 'searchroutes':			include AJAX . 'athena/route/search.php'; break;
+	case 'proposeroute':			include AJAX . 'athena/route/propose.php'; break;
 
 	# ATHENA
 	case 'increaseinvestuni':		include AJAX . 'zeus/university/increaseInvest.php'; break;

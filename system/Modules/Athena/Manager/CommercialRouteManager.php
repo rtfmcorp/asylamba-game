@@ -15,16 +15,25 @@ use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
+use Asylamba\Classes\Library\Game;
 
 class CommercialRouteManager {
 	/** @var EntityManager **/
 	protected $entityManager;
+    /** @var float **/
+    protected $sectorBonus;
+    /** @var float **/
+    protected $factionBonus;
 	
 	/**
 	 * @param EntityManager $entityManager
+     * @param float $sectorBonus
+     * @param float $factionBonus
 	 */
-	public function __construct(EntityManager $entityManager) {
+	public function __construct(EntityManager $entityManager, $sectorBonus, $factionBonus) {
 		$this->entityManager = $entityManager;
+        $this->sectorBonus = $sectorBonus;
+        $this->factionBonus = $factionBonus;
 	}
 	
 	/**
@@ -130,6 +139,32 @@ class CommercialRouteManager {
 	{
 		return $this->entityManager->getRepository(CommercialRoute::class)->countBaseActiveRoutes($baseId);
 	}
+    
+    /**
+     * @param OrbitalBase $base
+     * @param int $playerId
+     * @param int $playerFactionId
+     * @param array $factions
+     * @param int $min
+     * @param int $max
+     * @return array
+     */
+    public function searchRoutes(OrbitalBase $base, $playerId, $playerFactionId, $factions, $min, $max)
+    {
+        $results = $this
+            ->entityManager
+            ->getRepository(CommercialRoute::class)
+            ->searchRoutes($base, $playerId, $factions, $min, $max)
+        ;
+        array_walk($results, function(&$route) use ($base, $playerFactionId) {
+            $bonusA = ($base->getSector() != $route['rSector']) ? $this->sectorBonus : 1;
+            $bonusB = ($playerFactionId) != $route['playerColor'] ? $this->factionBonus : 1;
+            
+            $route['price'] = Game::getRCPrice($route['distance']);
+            $route['income'] = Game::getRCIncome($route['distance'], $bonusA, $bonusB);
+        });
+        return $results;
+    }
 	
 	/**
 	 * @param CommercialRoute $commercialRoute

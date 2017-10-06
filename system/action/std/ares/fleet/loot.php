@@ -34,7 +34,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 				if ($place->typeOfPlace == Place::TERRESTRIAL) {
 					if ($session->get('playerInfo')->get('color') != $place->getPlayerColor()) {
 						$home = $placeManager->get($commander->getRBase());
-
+                        
 						$length = Game::getDistance($home->getXSystem(), $place->getXSystem(), $home->getYSystem(), $place->getYSystem());
 						$duration = Game::getTimeToTravel($home, $place, $session->get('playerBonus'));
 

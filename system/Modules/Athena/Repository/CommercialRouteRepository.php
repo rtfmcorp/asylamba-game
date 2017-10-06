@@ -283,6 +283,43 @@ class CommercialRouteRepository extends AbstractRepository {
 		$query->execute(['base_id' => $baseId, 'distant_base_id' => $baseId]);
 		return (int) $query->fetch()['nb_routes'];
 	}
+    
+    public function searchRoutes($base, $playerId, $factions, $min, $max)
+    {
+        $statement = $this->connection->prepare('SELECT 
+				pa.rColor AS playerColor,
+				pa.avatar AS playerAvatar,
+				pa.name AS playerName,
+				ob.name AS baseName,
+				ob.rPlace AS rPlace,
+                s.rSector AS rSector,
+				(FLOOR(SQRT(POW(? - s.xPosition, 2) + POW(? - s.yPosition, 2)))) AS distance
+			FROM orbitalBase AS ob
+			LEFT JOIN player AS pa
+				ON ob.rPlayer = pa.id
+			LEFT JOIN place AS p
+				ON ob.rPlace = p.id
+			LEFT JOIN system AS s
+				ON p.rSystem = s.id
+			LEFT JOIN sector AS se
+				ON s.rSector = se.id
+			WHERE
+				pa.id != ?
+				AND ob.levelSpatioport > 0
+				AND (FLOOR(SQRT(POW(? - s.xPosition, 2) + POW(? - s.yPosition, 2)))) >= ?
+				AND (FLOOR(SQRT(POW(? - s.xPosition, 2) + POW(? - s.yPosition, 2)))) <= ?
+				AND pa.rColor in (' . implode(',', $factions) . ')
+			ORDER BY distance DESC
+			LIMIT 0, 40'
+		);
+		$statement->execute([
+			$base->xSystem, $base->ySystem,
+			$playerId,
+			$base->xSystem, $base->ySystem, $min,
+			$base->xSystem, $base->ySystem, $max
+		]);
+		return $statement->fetchAll();
+    }
 	
 	/**
 	 * @param CommercialRoute $commercialRoute

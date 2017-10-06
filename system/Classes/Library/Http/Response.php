@@ -25,9 +25,12 @@ class Response
     /** @var ParameterBag **/
     public $headers;
     /** @var array **/
+    public $cookies = [];
+    /** @var array **/
     protected $statuses = [
         200 => 'OK',
 		302 => 'Found',
+        400 => 'Bad Request',
 		404 => 'Not Found',
 		500 => 'Internal Server Error'
     ];
@@ -169,6 +172,9 @@ class Response
 		foreach ($this->headers->all() as $header => $value) {
 			$message .= "$header: $value\n";
 		}
+        foreach ($this->cookies as $cookie) {
+            $message .= "Set-Cookie:$cookie\n";
+        }
 		$message .= "\n";
 		$message .= $this->body;
 		return $message;

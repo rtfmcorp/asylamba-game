@@ -626,17 +626,18 @@ jQuery(document).ready(function($) {
 
 	// GENERAL SHOW/HIDE FUNCTION
 	// --------------------------
-	$('.sh').live('click', function(e) {
+    window.displayModule = function(e) {
 		e.preventDefault();
 		var target = $('#' + $(this).data('target'));
-
-		if (target.css('display') == 'none') {
-			$('.overbox').css('display', 'none');
-			target.css('display', 'block');
+		if (target.css('display') === 'none') {
+			$('.overbox').slideUp('fast').promise().done(function() {
+                target.slideDown('fast');
+            });
 		} else {
-			target.css('display', 'none');
+            target.slideUp('fast');
 		}
-	});
+	};
+	$('.sh').live('click', displayModule);
 
 	$('#container').live('click' ,function(e) {
 		$('.overbox').css('display', 'none');
