@@ -44,6 +44,9 @@ class RequestFactory
         }
         $this->parseCookies($request);
         $this->parseBody($request);
+        // If the request scheme is https://, we consider the request secured
+        $request->setIsSecure($request->headers->get('x-scheme', 'http') === 'https');
+        
         return $request;
     }
     

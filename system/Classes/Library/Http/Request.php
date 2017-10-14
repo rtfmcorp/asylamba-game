@@ -19,6 +19,8 @@ class Request
     protected $redirect;
     /** @var string **/
     protected $path;
+    /** @var boolean **/
+    protected $isSecure = false;
     /** @var ParameterBag **/
     public $headers;
     /** @var ParameterBag **/
@@ -104,5 +106,29 @@ class Request
     public function getCrossDomain()
     {
         return $this->isCrossDomain;
+    }
+    
+    /**
+     * @param boolean $isSecure
+     * @return $this
+     */
+    public function setIsSecure($isSecure)
+    {
+        $this->isSecure = $isSecure;
+        
+        return $this;
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function getIsSecure()
+    {
+        return $this->isSecure;
+    }
+    
+    public function getUrlProtocol()
+    {
+        return $this->isSecure ? 'https' : 'http';
     }
 }
