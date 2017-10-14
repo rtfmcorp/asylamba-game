@@ -23,7 +23,7 @@ for ($i = 0; $i < 12; $i++) {
     jQuery(document).ready(function($) {
         game = {
             host: '<?= $this->getContainer()->getParameter('server_host') ?>',
-            path: 'https://<?= $this->getContainer()->getParameter('server_host'); ?>/',
+            path: '<?= $this->getContainer()->get('app.request')->getUrlProtocol() ?>://<?= $this->getContainer()->getParameter('server_host'); ?>/',
 			shipsName: <?= json_encode($shipsName); ?>,
 			shipsPev: <?= json_encode($shipsPev) ?>,
         };

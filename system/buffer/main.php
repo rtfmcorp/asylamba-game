@@ -23,7 +23,7 @@ if ($this->getContainer()->getParameter('environment') === 'dev' || $this->getCo
 </head>
 
 <body>
-	<h1><img src="http://asylamba.com/public/media/asylamba.png" alt="test" /></h1>
+	<h1><img src="https://asylamba.com/public/media/asylamba.png" alt="test" /></h1>
 
 	<div class="content">
 <?php
