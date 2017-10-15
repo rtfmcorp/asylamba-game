@@ -209,7 +209,7 @@ class NewsSubscriber
             $title = "Les élections du dirigeant de " . ColorResource::getInfo($faction->getId(), 'popularName'). ' sont désormais closes';
             $content = "{$winner->getName()} a été choisi par le peuple pour mener les " . ColorResource::getInfo($faction->getId(), 'popularName');
         } else {
-            $title = "Les dieux ont choisi {$winner->getName()} pour guider " . ColorResource::get($faction->getId(), 'popularName');
+            $title = "Les dieux ont choisi {$winner->getName()} pour guider " . ColorResource::getInfo($faction->getId(), 'popularName');
             $content = 'Les oracles ont fait connaître la volonté divine. Un nouveau Grand Maître a été désigné.';
         }
         
