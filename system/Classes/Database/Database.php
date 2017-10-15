@@ -104,13 +104,29 @@ class Database
     public function query($query)
     {
         self::$nbrOfQuery++;
-        return $this->connection->query($query);
+        try {
+            return $this->connection->query($query);
+        } catch (\PDOException $ex) {
+            if ($ex->getCode() === 2006) {
+                $this->refresh();
+                return $this->connection->prepare($query);
+            }
+            \Asylamba\Classes\Daemon\Server::debug('MySQL error code : ' . $ex->getCode());
+        }
     }
     
     public function prepare($query)
     {
         self::$nbrOfQuery++;
-        return $this->connection->prepare($query);
+        try {
+            return $this->connection->prepare($query);
+        } catch (\PDOException $ex) {
+            if ($ex->getCode() === 2006) {
+                $this->refresh();
+                return $this->connection->prepare($query);
+            }
+            \Asylamba\Classes\Daemon\Server::debug('MySQL error code : ' . $ex->getCode());
+        }
     }
     
     /**
@@ -120,7 +136,15 @@ class Database
     public function exec($query)
     {
         self::$nbrOfQuery++;
-        return $this->connection->exec($query);
+        try {
+            return $this->connection->exec($query);
+        } catch (\PDOException $ex) {
+            if ($ex->getCode() === 2006) {
+                $this->refresh();
+                return $this->connection->prepare($query);
+            }
+            \Asylamba\Classes\Daemon\Server::debug('MySQL error code : ' . $ex->getCode());
+        }
     }
     
     public function execute($query)
