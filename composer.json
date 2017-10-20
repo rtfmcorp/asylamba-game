@@ -16,7 +16,8 @@
         "ocramius/proxy-manager": "^2.0",
         "incenteev/composer-parameter-handler": "~2.0",
         "stripe/stripe-php": "^5.2",
-        "wrench/wrench": "^3.0-dev"
+        "wrench/wrench": "^3.0-dev",
+        "guzzlehttp/guzzle": "^6.3"
     },
 
     "scripts": {
