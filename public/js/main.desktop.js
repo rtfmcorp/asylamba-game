@@ -58,7 +58,6 @@ jQuery(document).ready(function($) {
 			
 			panelController.move(0, 'left', 0);
 			sbController.move('up');
-			
 			if ($('#map').length == 1) {
 				mapController.init();
 			}
@@ -134,13 +133,13 @@ jQuery(document).ready(function($) {
 		}
 	};
 
-	// lancer le render lors du chargement et du resize
-	$(window).on('load resize', function() {
+	// lancer le render lors du resize
+	$(window).on('resize', function() {
 		render.make();
 	});
 
-	$('input, textarea').live('focusin',  function(e) { render.inInput = true;  });
-	$('input, textarea').live('focusout', function(e) { render.inInput = false; });
+	$('input, textarea').on('focusin',  function(e) { render.inInput = true;  });
+	$('input, textarea').on('focusout', function(e) { render.inInput = false; });
 
 	// ADD INFOPANEL COMPONENT
 	// ##########################
@@ -177,17 +176,17 @@ jQuery(document).ready(function($) {
 		});
 	});
 
-	$('.removeInfoPanel').live('click', function() {
+	$('.removeInfoPanel').on('click', function() {
 		if (infoPanel.addedColumn != undefined) {
 			render.removeComponent(parseInt($(this).parents('.component').index()));
 		 	infoPanel.addedColumn = undefined;
 	 	}
 	});
 
-	$('.build-item').live('mouseover', function() {
+	$('.build-item').on('mouseover', function() {
 		$(this).find('.info').css('display', 'block');
 	});
-	$('.build-item').live('mouseleave', function() {
+	$('.build-item').on('mouseleave', function() {
 		$(this).find('.info').css('display', 'none');
 	});
 
@@ -252,7 +251,7 @@ jQuery(document).ready(function($) {
 	};
 
 	// affiche/cache les flèches directionelles
-	$('.no-scrolling .component .fix-body').live('mouseover', function(e) {
+	$('.no-scrolling .component .fix-body').on('mouseover', function(e) {
 		if (!$(this).hasClass('hover')) { 
 			$('.component .fix-body').removeClass('hover');
 			$(this).addClass('hover');
@@ -260,10 +259,10 @@ jQuery(document).ready(function($) {
 	});
 
 	// movers button event
-	$('.no-scrolling .component a.toTop').live('click', function(e) {
+	$('.no-scrolling').on('click', '.component a.toTop', function(e) {
 		columnController.move($(this).parent(), 'top');
 	});
-	$('.no-scrolling .component a.toBottom').live('click', function(e) {
+	$('.no-scrolling').on('click', '.component a.toBottom', function(e) {
 		columnController.move($(this).parent(), 'bottom');
 	});
 
@@ -476,7 +475,7 @@ jQuery(document).ready(function($) {
             buffer += '<div class="body">';
             $.each(bases, function(index, base) {
                 buffer += '<div class="transaction commander">';
-                buffer += '<div class="product sh" onclick="displayModule(event)" data-target="base-' + base.rPlace + '">';
+                buffer += '<div class="product sh" data-target="base-' + base.rPlace + '">';
                     buffer += '<img src="/public/media/avatar/small/' + base.playerAvatar + '.png" alt="" class="picto">';
                     buffer += '<div class="offer"><strong>' + base.playerName + '</strong>';
                     buffer += '<em>' + base.baseName + '</em></div>';
@@ -496,9 +495,10 @@ jQuery(document).ready(function($) {
             }
             buffer += '</div></div></div>';
             
-            render.addComponent(3, buffer, 400, function() {
+            render.addComponent(3, buffer, 400, () => {
                 tradeSearchLock = false;
                 $("#rc-search-form button > .sk-circle").remove();
+                $("#rc-search-results").on('click', '.sh', displayModule);
             });
         },
         
@@ -820,10 +820,10 @@ jQuery(document).ready(function($) {
     };
 
 	// évènement sur les movers
-	$('#mapToLeft').live('click', function(e) 	{ mapController.move(mapController.params.cMovingSpeed, 0, mapController.params.animationSpeed); });
-	$('#mapToRight').live('click', function(e) 	{ mapController.move(-mapController.params.cMovingSpeed, 0, mapController.params.animationSpeed); });
-	$('#mapToTop').live('click', function(e) 	{ mapController.move(0, mapController.params.cMovingSpeed, mapController.params.animationSpeed); });
-	$('#mapToBottom').live('click', function(e) { mapController.move(0, -mapController.params.cMovingSpeed, mapController.params.animationSpeed); });
+	$('#mapToLeft').on('click', function(e) 	{ mapController.move(mapController.params.cMovingSpeed, 0, mapController.params.animationSpeed); });
+	$('#mapToRight').on('click', function(e) 	{ mapController.move(-mapController.params.cMovingSpeed, 0, mapController.params.animationSpeed); });
+	$('#mapToTop').on('click', function(e) 	{ mapController.move(0, mapController.params.cMovingSpeed, mapController.params.animationSpeed); });
+	$('#mapToBottom').on('click', function(e) { mapController.move(0, -mapController.params.cMovingSpeed, mapController.params.animationSpeed); });
 
 	// évènement du clavier sur les movers
 	$(document).keydown(function(e) {
@@ -919,6 +919,7 @@ jQuery(document).ready(function($) {
 
 		// affiche la box
 		open: function() {
+            console.log('action box opened');
 			actionbox.opened = true;
 			actionbox.obj.animate({
 				bottom: 0
@@ -937,6 +938,7 @@ jQuery(document).ready(function($) {
 
 		// masque la box, charge le contenu et affiche la box
 		load: function(systemid) {
+            console.log('action box load');
 			actionbox.close();
 			$.get(game.path + 'ajax/a-loadsystem/systemid-' + systemid + '/relatedplace-' + actionbox.relatedPlace)
 			 .done(function(data) {
@@ -952,6 +954,7 @@ jQuery(document).ready(function($) {
 
 		// ouvre une place
 		openPlace: function(placeid) {
+            console.log('open place');
 			$('#place-' + placeid).animate({
 				width: parseInt($('#place-' + placeid).find('.content').css('width')) + 20
 			}, 200);
@@ -1005,49 +1008,42 @@ jQuery(document).ready(function($) {
 		}
 	};
 
-	$('.loadSystem').live('click', function() {
-		actionbox.load($(this).data('system-id'));
-	});
+	$('.loadSystem').on('click', () => actionbox.load($(this).data('system-id')));
 
-	$('#map, .closeactionbox').live('click', function() {
-		actionbox.close();
-	});
+	$('#map').on('click', actionbox.close);
+    
+	$('#action-box')
+        .on('click', '.closeactionbox', () => actionbox.close())
+        .on('click', '.place', () => {
+        
+            console.log('action box click');
+            let place = $(this);
+            let target = place.find('a').data('target');
+            
+            $(this).removeClass('active');
 
-	$('#action-box .place').live('click', function() {
-		var place = $(this);
-		var target = place.find('a').data('target');
-		$('#action-box .place').removeClass('active');
+            $('#action-box .action').each((i) => {
+                if (i == target) {
+                    place.addClass('active');
+                    actionbox.openPlace(i);
+                } else {
+                    actionbox.closePlace(i);
+                }
+            });
+        })
+        .on('click', '.place.active', () => {
+            $('#action-box .action').each((i) => {
+                    actionbox.closePlace(i);
+            });
+            $(this).removeClass('active');
+        })
+        .on('click', '#actboxToLeft', actionbox.moveToLeft)
+        .on('click', '#actboxToRight', actionbox.moveToRight)
+    ;
 
-		$('#action-box .action').each(function(i) {
-			if (i == target) {
-				place.addClass('active');
-				actionbox.openPlace(i);
-			} else {
-				actionbox.closePlace(i);
-			}
-		});
-	});
+	$('.actionbox-sh').on('click', () => actionbox.swtichAction($(this)));
 
-	$('#action-box .place.active').live('click', function() {
-		$('#action-box .action').each(function(i) {
-				actionbox.closePlace(i);
-		});
-		$('#action-box .place').removeClass('active');
-	});
-
-	$('#action-box #actboxToLeft').live('click', function() {
-		actionbox.moveToLeft();
-	});
-
-	$('#action-box #actboxToRight').live('click', function() {
-		actionbox.moveToRight();
-	});
-
-	$('.actionbox-sh').live('click', function() {
-		actionbox.swtichAction($(this));
-	});
-
-	$('.moveTo').live('click', function(e) {
+	$('.moveTo').on('click', function(e) {
 		mapController.moveTo(
 			$(this).data('x-position'),
 			$(this).data('y-position')
@@ -1156,27 +1152,29 @@ jQuery(document).ready(function($) {
 		}
 	}
 
-	$(document).on('click', '.wsw-box-submit', function(e) {
-		e.preventDefault();
-		wswBox.write();
-	});
-	$(document).on('click', '.wsw-box-cancel', function(e) {
-		e.preventDefault();
-		wswBox.close();
-	});
-	$(document).live('keydown', function(e) {
-		if (wswBox.run) {
-			switch(e.keyCode) {
-				case 13: e.preventDefault(); wswBox.write(); break;
-				case 27: e.preventDefault(); wswBox.close(); break;
-				default: break;
-			}
-		}
-	});
+	$(document)
+        .on('click', '.wsw-box-submit', function(e) {
+            e.preventDefault();
+            wswBox.write();
+        })
+        .on('click', '.wsw-box-cancel', function(e) {
+            e.preventDefault();
+            wswBox.close();
+        })
+        .on('keydown', function(e) {
+            if (wswBox.run) {
+                switch(e.keyCode) {
+                    case 13: e.preventDefault(); wswBox.write(); break;
+                    case 27: e.preventDefault(); wswBox.close(); break;
+                    default: break;
+                }
+            }
+        })
+    ;
 
 
 	/* DIVERS */
-	$('.new-transaction.resources #resources-quantity').live('keyup', function() {
+	$('.new-transaction.resources #resources-quantity').on('keyup', function() {
 		var quantity  = $(this).val();
 		var rate 	  = $(this).data('rate');
 		var price 	  = quantity * rate;
@@ -1187,7 +1185,7 @@ jQuery(document).ready(function($) {
 		$('.new-transaction.resources .max-price').text(utils.numberFormat(Math.floor(price + variation)));
 	});
 
-	$('.base-type .list-choice button').live('click', function() {
+	$('.base-type .list-choice button').on('click', function() {
 		var index = $('.base-type .list-choice button').index(this);
 
 		$('.base-type .desc-choice').hide();
@@ -1197,7 +1195,7 @@ jQuery(document).ready(function($) {
 // ###########################
 // #### MARKET MECHANISME ####
 // ###########################
-	$('.sell-form input[name="quantity"], .sell-form .val-quantity').live('keyup', function() {
+	$('.sell-form input[name="quantity"], .sell-form .val-quantity').on('keyup', function() {
 		var box  = $(this).parents('.sell-form'),
 			maxQ = box.data('max-quantity'),
 			minP = box.data('min-price'),
@@ -1237,7 +1235,7 @@ jQuery(document).ready(function($) {
 	})();
 
 	/* HIDE SPLASH-SCREEN */
-	$('.hide-slpash').live('click', function(e) {
+	$('.hide-slpash').on('click', function(e) {
 		var dom = $('.splash-screen');
 		var mod = dom.find('.modal');
 
@@ -1264,7 +1262,7 @@ jQuery(document).ready(function($) {
 	})();
 
 	/* SORTING STUFF */
-	$('.sort-button a').live('click', function(e) {
+	$('.sort-button a').on('click', function(e) {
 		e.preventDefault();
 
 		var parent = $(this).closest('.body');
@@ -1331,7 +1329,7 @@ jQuery(document).ready(function($) {
 		});
 		bull.fadeToggle(50);
 
-		$('.show-army').live('mouseout', function(e) {
+		$('.show-army').on('mouseout', function(e) {
 			$('.army-bull').remove();
 		});
 	});
@@ -1352,4 +1350,6 @@ jQuery(document).ready(function($) {
         console.log('error');
         console.log(event);
     };
+    
+    render.make();
 });

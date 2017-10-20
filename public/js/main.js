@@ -108,12 +108,12 @@ jQuery(document).ready(function($) {
 	}, 500);
 
 	// suppression d'une alert
-	$('#alert li').live('click', function(e) {
+	$('#alert li').on('click', function(e) {
 		alertController.hide($(this));
 	});
 
 	// affichage de l'info box
-	$('#alert li').live('mouseover', function() {
+	$('#alert li').on('mouseover', function() {
 		var title 	= $(this).data('title');
 		var content = $(this).data('content');
 
@@ -122,7 +122,7 @@ jQuery(document).ready(function($) {
 		bull.css('left', $(this).offset().left + 'px');
 		bull.css('top', ($(this).offset().top - bull.height() - 18) + 'px');
 
-		$('#alert li').live('mouseout', function() {
+		$('#alert li').on('mouseout', function() {
 			$('.alert-bull').remove();
 		});
 	});
@@ -207,12 +207,12 @@ jQuery(document).ready(function($) {
 		}
 	};
 
-	$('.uni-invest-button.increase').live('click', function(e) {
+	$('.uni-invest-button.increase').on('click', function(e) {
 		e.preventDefault();
 		var step = (e.ctrlKey || e.metaKey) ? 10 : 1;
 		uniInvest.update($(this).data('type'), step);
 	});
-	$('.uni-invest-button.decrease').live('click', function(e) {
+	$('.uni-invest-button.decrease').on('click', function(e) {
 		e.preventDefault();
 		var step = (e.ctrlKey || e.metaKey) ? -10 : -1;
 		uniInvest.update($(this).data('type'), step);
@@ -448,7 +448,7 @@ jQuery(document).ready(function($) {
 
 	squadronTransfer.init();
 
-	$('.commanderTransfer .squadron').live('click', function(e) {
+	$('.commanderTransfer .squadron').on('click', function(e) {
 		if ($(this).hasClass('active')) {
 			squadronTransfer.changeSquadron(undefined);
 		} else {
@@ -456,13 +456,13 @@ jQuery(document).ready(function($) {
 		}
 	});
 
-	$('.baseTransfer .squadron a').live('click', function(e) {
+	$('.baseTransfer .squadron a').on('click', function(e) {
 		e.preventDefault();
 		var step = (e.ctrlKey || e.metaKey) ? undefined : 1;
 		squadronTransfer.move('ctb', $(this).data('ship-id'), step);
 	});
 
-	$('.baseTransfer .dock a').live('click', function(e) {
+	$('.baseTransfer .dock a').on('click', function(e) {
 		e.preventDefault();
 		var step = (e.ctrlKey || e.metaKey) ? undefined : 1;
 		squadronTransfer.move('btc', $(this).data('ship-id'), step);
@@ -623,35 +623,22 @@ jQuery(document).ready(function($) {
 			}, 1000);
 		});
 	});
+    
+	$('.sh').on('click', displayModule);
 
-	// GENERAL SHOW/HIDE FUNCTION
-	// --------------------------
-    window.displayModule = function(e) {
-		e.preventDefault();
-		var target = $('#' + $(this).data('target'));
-		if (target.css('display') === 'none') {
-			$('.overbox').slideUp('fast').promise().done(function() {
-                target.slideDown('fast');
-            });
-		} else {
-            target.slideUp('fast');
-		}
-	};
-	$('.sh').live('click', displayModule);
-
-	$('#container').live('click' ,function(e) {
+	$('#container').on('click' ,function(e) {
 		$('.overbox').css('display', 'none');
 	});
 
-	$('.switch-class').live('click', function(e) {
+	$('.switch-class').on('click', function(e) {
 		$(this).toggleClass($(this).data('class'));
 	});
 
-	$('.switch-class-parent').live('click', function(e) {
+	$('.switch-class-parent').on('click', function(e) {
 		$(this).parent().toggleClass($(this).data('class'));
 	});
 
-	$('.notif.unreaded .read-notif').live('click', function(e) {
+	$('.notif.unreaded').on('click', '.read-notif', function(e) {
 		var notif  = $(this).parent();
 		var notifs = $('#general-notif-container');
 		var count  = parseInt(notifs.find('span.number').text()) - 1;
@@ -665,7 +652,7 @@ jQuery(document).ready(function($) {
 	});
 
 	// STD AJAX ACTION LINK
-	$('.notif a.ajax-action').live('click', function(e) {
+	$('.notif').on('click', 'a.ajax-action', function(e) {
 		e.preventDefault();
 
 		var notif = $(this).parent().parent();
@@ -713,14 +700,14 @@ jQuery(document).ready(function($) {
 			});
 			bull.fadeToggle(50);
 
-			$('.hb').live('mouseout', function(e) {
+			$('.hb').on('mouseout', function(e) {
 				target.attr('title', content);
 				$('.bull').remove();
 			});
 		}
 	}
 
-	$('.hb').live('mouseover', function(e) {
+	$('.hb').on('mouseover', function(e) {
 		if ($(this).hasClass('lt')) {
 			drawBull($(this), 'left', 'top');
 		} else if ($(this).hasClass('lb')) {
@@ -757,7 +744,7 @@ jQuery(document).ready(function($) {
 	});
 
 	// dynamic ships box
-	$('.dynamic-ship-box .ship-pack').live('keyup', function(e) {
+	$('.dynamic-ship-box .ship-pack').on('keyup', function(e) {
 		var container	= $(this).parent();
 		var input    	= $(this).val(); if (isNaN(input) || input < 1 || input > 99) { input = 0; }
 		var maxShip  	= container.data('maxship');
@@ -799,14 +786,14 @@ jQuery(document).ready(function($) {
 		container.find('.button').attr('href', target);
 	});
 
-	$('.dynamic-ship-box .button').live('click', function(e) {
+	$('.dynamic-ship-box .button').on('click', function(e) {
 		if ($(this).hasClass('disable')) {
 			e.preventDefault();
 		}
 	});
 
 	/* MORE-MESSAGE */
-	$('.more-item').live('click', function(e) {
+	$('.more-item').on('click', function(e) {
 		e.preventDefault();
 		var link = $(this);
 		var dir  = link.data('dir');
@@ -826,7 +813,7 @@ jQuery(document).ready(function($) {
 		});
 	});
 
-	$('.more-thread').live('click', function(e) {
+	$('.more-thread').on('click', function(e) {
 		e.preventDefault();
 		var link = $(this);
 		var data;
@@ -857,7 +844,7 @@ jQuery(document).ready(function($) {
 	$('.autocomplete-orbitalbase').autocomplete(game.path + 'ajax/a-autocompleteorbitalbase/');
 
 	// confirm box
-	$('.confirm').live('click', function(e) {
+	$('.confirm').on('click', function(e) {
 		var label = $(this).data('confirm-label');
 			label = label == undefined
 				? 'Êtes-vous sûr de vouloir faire cette action ?'
@@ -867,4 +854,18 @@ jQuery(document).ready(function($) {
 			e.preventDefault();
 		}
 	});
-});	
+});
+
+// GENERAL SHOW/HIDE FUNCTION
+// --------------------------
+const displayModule = e => {
+    e.preventDefault();
+    var target = $('#' + e.currentTarget.getAttribute('data-target'));
+    if (target.css('display') === 'none') {
+        $('.overbox').slideUp('fast').promise().done(() => {
+            target.slideDown('fast');
+        });
+    } else {
+        target.slideUp('fast');
+    }
+};
