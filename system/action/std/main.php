@@ -136,6 +136,9 @@ if ($request->query->has('token') && $session->get('token') === $request->query-
         case 'updatefactiondesc':        include ACTION . 'demeter/updateFactionDesc.php'; break;
 
         case 'donate':                    include ACTION . 'demeter/donate.php'; break;
+        
+        case 'createbug': include ACTION . 'hephaistos/create-bug.php'; break;
+        case 'createevo': include ACTION . 'hephaistos/create-evolution.php'; break;
 
         default:
             throw new ErrorException('action inconnue ou non-référencée');
