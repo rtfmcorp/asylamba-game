@@ -424,9 +424,9 @@ class GalaxyGenerator
                 $systemToDelete[] = $v[0];
             }
         }
-        
+        $nbSystems = count($this->listSystem);
         # suppression des systemes sur des lignes ou des angles
-        for ($i = count($this->listSystem) - 1; $i >= 0; $i--) {
+        for ($i = 0; $i < $nbSystems; $i++) {
             if (in_array($this->listSystem[$i][0], $systemToDelete)) {
                 unset($this->listSystem[$i]);
             }
