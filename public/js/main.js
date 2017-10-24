@@ -108,12 +108,12 @@ jQuery(document).ready(function($) {
 	}, 500);
 
 	// suppression d'une alert
-	$('#alert li').on('click', function(e) {
+	$('#alert').on('click', 'li', function(e) {
 		alertController.hide($(this));
 	});
 
 	// affichage de l'info box
-	$('#alert li').on('mouseover', function() {
+	$('#alert').on('mouseover', 'li', function() {
 		var title 	= $(this).data('title');
 		var content = $(this).data('content');
 

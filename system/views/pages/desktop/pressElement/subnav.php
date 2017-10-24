@@ -22,7 +22,7 @@ echo '<div id="subnav">';
                 echo '<img src="' . MEDIA . 'faction/nav/register.png" alt="" />';
             echo '</span>';
             echo '<span class="content skin-1">';
-                echo '<span>Depêches';
+                echo '<span>Depêches</span>';
             echo '</span>';
         echo '</a>';
     echo '</div>';

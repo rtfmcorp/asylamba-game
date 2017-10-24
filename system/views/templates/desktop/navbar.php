@@ -123,7 +123,7 @@ echo '<div id="nav">';
             echo '<a href="' . APP_ROOT . 'admin" class="square ' . $isActive . '"><img src="' . MEDIA . 'common/tool-admin.png" alt="" /></a>';
         }
 
-        echo '<a ' . ((bool)$request->cookies->get('p' . Params::REDIRECT_CHAT, Params::$params[Params::REDIRECT_CHAT]) ? 'href="https://discordapp.com/channels/132106417703354378/132106417703354378" target="_blank"' : 'href="' . APP_ROOT . 'params"') . '" class="square"><img src="' . MEDIA . 'common/nav-chat.png" alt="" /></a>';
+        echo '<a ' . ((bool)$request->cookies->get('p' . Params::REDIRECT_CHAT, Params::$params[Params::REDIRECT_CHAT]) ? 'href="https://discordapp.com/channels/132106417703354378/132106417703354378" target="_blank"' : 'href="' . APP_ROOT . 'params') . '" class="square"><img src="' . MEDIA . 'common/nav-chat.png" alt="" /></a>';
 
         if ($session->get('playerInfo')->get('stepTutorial') > 0) {
             echo '<a href="#" class="hide-slpash square sh ' . ($session->get('playerInfo')->get('stepDone') ? 'active flashy' : '') . '" data-target="tutorial">';
@@ -244,8 +244,8 @@ echo '<div id="nav">';
     echo '<div class="overbox" id="bug-tracker">';
         echo '<h2>Bug tracker</h2>';
         echo '<p>Si vous trouvez des bugs ou avez des idées d\'améliorations, nous vous invitons à les poster sur le forum principal.</p>';
-        echo '<a class="outside-button" target="_blank" href="' . $this->getContainer()->getParameter('getout_root') . 'forum/categorie-bug" target="_blank">Reporter un bug</a>';
-        echo '<a class="outside-button" target="_blank" href="' . $this->getContainer()->getParameter('getout_root') . 'forum/categorie-opensource" target="_blank">Proposer une amélioration</a>';
+        echo '<a class="outside-button" target="_blank" href="' . $this->getContainer()->getParameter('getout_root') . 'forum/categorie-bug">Reporter un bug</a>';
+        echo '<a class="outside-button" target="_blank" href="' . $this->getContainer()->getParameter('getout_root') . 'forum/categorie-opensource">Proposer une amélioration</a>';
         echo '<p>Pour les bugs que vous pensez critiques, vous pouvez envoyer un email directement à support@asylamba.com.</p>';
         echo '<a class="outside-button" href="mailto:support@asylamba.com">Envoyer un email</a>';
     echo '</div>';
@@ -253,7 +253,7 @@ echo '<div id="nav">';
     echo '<div class="overbox" id="disconnect-box">';
         echo '<a href="' . Format::actionBuilder('disconnect', $sessionToken) . '">Se déconnecter</a>';
         echo '<hr />';
-        echo '<a href="#" class="sh" data-target="roadmap">Dernières mises à jour</a>';
+        echo '<a href="' . APP_ROOT . 'project">Gestionnaire de projet</a>';
         echo '<a href="' . APP_ROOT . 'budget">Financement</a>';
         echo '<a href="' . APP_ROOT . 'sponsorship">Parrainage</a>';
         echo '<hr />';

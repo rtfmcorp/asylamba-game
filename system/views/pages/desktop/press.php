@@ -16,8 +16,6 @@ include 'defaultElement/movers.php';
 # contenu spécifique
 ?>
 <div id="content">
-    <div class="component invisible">
-        
-    </div>
+    <?php include COMPONENT . 'publicity.php'; ?>
     <?php include COMPONENT . '/press/' . (($mode === 'gazette') ? 'gazette' : 'newspaper') . '.php'; ?>
 </div>
