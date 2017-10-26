@@ -918,8 +918,7 @@ jQuery(document).ready(function($) {
 		},
 
 		// affiche la box
-		open: function() {
-            console.log('action box opened');
+		open: () => {
 			actionbox.opened = true;
 			actionbox.obj.animate({
 				bottom: 0
@@ -927,7 +926,7 @@ jQuery(document).ready(function($) {
 		},
 
 		// masque la box
-		close: function() {
+		close: () => {
 			actionbox.opened = false;
 			actionbox.obj.animate({
 				bottom: -300
@@ -937,38 +936,34 @@ jQuery(document).ready(function($) {
 		},
 
 		// masque la box, charge le contenu et affiche la box
-		load: function(systemid) {
-            console.log('action box load');
+		load: systemid => {
 			actionbox.close();
 			$.get(game.path + 'ajax/a-loadsystem/systemid-' + systemid + '/relatedplace-' + actionbox.relatedPlace)
-			 .done(function(data) {
+			 .done(data => {
 				actionbox.obj.html(data);
 				actionbox.open();
 				actionbox.applyCommander();
 
 				$('.loadSystem[data-system-id="' + systemid + '"]').addClass('active');
-			}).fail(function() {
-				alertController.add(101, 'chargement des données interrompu');
-			});
+			}).fail(() => alertController.add(101, 'chargement des données interrompu'));
 		},
 
 		// ouvre une place
-		openPlace: function(placeid) {
-            console.log('open place');
+		openPlace: placeid => {
 			$('#place-' + placeid).animate({
 				width: parseInt($('#place-' + placeid).find('.content').css('width')) + 20
 			}, 200);
 		},
 
 		// ferme une place
-		closePlace: function(placeid) {
+		closePlace: placeid => {
 			$('#place-' + placeid).animate({
 				width: 0
 			}, 200);
 		},
 
 		// bouge à gauche si possible
-		moveToLeft: function() {
+		moveToLeft: () => {
 			var position = parseInt(actionbox.obj.find('.system, .rank').css('left'));
 
 			if (position + 300 > 0) {
@@ -983,7 +978,7 @@ jQuery(document).ready(function($) {
 		},
 
 		// bouge à droite si possible
-		moveToRight: function() {
+		moveToRight: () => {
 			var position = parseInt(actionbox.obj.find('.system, .rank').css('left'));
 
 			if (parseInt(actionbox.obj.find('.system ul, .rank ul').css('width')) + position >= render.viewport.w) {
@@ -994,54 +989,51 @@ jQuery(document).ready(function($) {
 		},
 
 		// affiche les box d'actions
-		swtichAction: function(elem) {
-			var id = elem.data('target');
-
+		switchAction: event => {
+			var id = event.currentTarget.getAttribute('data-target');
 			//elem.parent().parent().find('p .subcontext').text(' / ' + elem.find('img').attr('alt'));
-			elem.parent().parent().find('.bottom > div').each(function() {
-				if ($(this).data('id') == id) {
-					$(this).css('display', 'block');
+			for (let box of event.currentTarget.parentNode.nextSibling.children) {
+				if (box.getAttribute('data-id') == id) {
+					box.style.display = 'block';
 				} else {
-					$(this).css('display', 'none');
+					box.style.display = 'none';
 				}
-			});
+			}
 		}
 	};
 
-	$('.loadSystem').on('click', () => actionbox.load($(this).data('system-id')));
-
-	$('#map').on('click', actionbox.close);
+	$('#map')
+        .on('click', '.loadSystem', event => actionbox.load(event.currentTarget.getAttribute('data-system-id')))
+        .on('click', actionbox.close)
+    ;
     
 	$('#action-box')
-        .on('click', '.closeactionbox', () => actionbox.close())
-        .on('click', '.place', () => {
-        
-            console.log('action box click');
-            let place = $(this);
-            let target = place.find('a').data('target');
+        .on('click', '.closeactionbox', actionbox.close)
+        .on('click', '.place', event => {
+            let place = event.currentTarget;
+            let target = place.firstElementChild.getAttribute('data-target');
             
-            $(this).removeClass('active');
+            place.classList.remove('active');
 
             $('#action-box .action').each((i) => {
                 if (i == target) {
-                    place.addClass('active');
+                    place.classList.add('active');
                     actionbox.openPlace(i);
                 } else {
                     actionbox.closePlace(i);
                 }
             });
         })
-        .on('click', '.place.active', () => {
+        .on('click', '.place.active', event => {
             $('#action-box .action').each((i) => {
-                    actionbox.closePlace(i);
+                actionbox.closePlace(i);
             });
-            $(this).removeClass('active');
+            event.currentTarget.classList.remove('active');
         })
         .on('click', '#actboxToLeft', actionbox.moveToLeft)
         .on('click', '#actboxToRight', actionbox.moveToRight)
+        .on('click', '.actionbox-sh', actionbox.switchAction)
     ;
-
-	$('.actionbox-sh').on('click', () => actionbox.swtichAction($(this)));
 
 	$('.moveTo').on('click', function(e) {
 		mapController.moveTo(
