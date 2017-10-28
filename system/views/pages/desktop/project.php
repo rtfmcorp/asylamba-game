@@ -5,8 +5,8 @@ $session = $this->getContainer()->get('session_wrapper');
 $bugManager = $this->getContainer()->get('hephaistos.bug_manager');
 $evolutionManager = $this->getContainer()->get('hephaistos.evolution_manager');
 
-$bugs = $bugManager->getBugs();
-$evolutions = $evolutionManager->getEvolutions();
+$bugs = $bugManager->getAll();
+$evolutions = $evolutionManager->getAll();
 
 $nbTasks = 0;
 $nbProposedEvolutions = count($evolutions);

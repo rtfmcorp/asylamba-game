@@ -20,21 +20,21 @@
                     <div class="center">Proposer une évolution</div>
                 </a>
             </div>
-            <div class="number-box <?php echo ($nbBugs === 0) ? 'grey' : '' ?>">
+            <div class="number-box <?= ($nbBugs === 0) ? 'grey' : '' ?>">
                 <span class="label">Bugs actifs</span>
-                <span class="value"><?php echo $nbBugs ?></span>
+                <span class="value"><?= $nbBugs ?></span>
             </div>
-            <div class="number-box <?php echo ($nbProposedEvolutions === 0) ? 'grey' : '' ?>">
+            <div class="number-box <?= ($nbProposedEvolutions === 0) ? 'grey' : '' ?>">
                 <span class="label">Evolutions proposées</span>
-                <span class="value"><?php echo $nbProposedEvolutions ?></span>
+                <span class="value"><?= $nbProposedEvolutions ?></span>
             </div>
-            <div class="number-box <?php echo ($nbAcceptedEvolutions === 0) ? 'grey' : '' ?>">
+            <div class="number-box <?= ($nbAcceptedEvolutions === 0) ? 'grey' : '' ?>">
                 <span class="label">Evolutions acceptées</span>
-                <span class="value"><?php echo $nbAcceptedEvolutions ?></span>
+                <span class="value"><?= $nbAcceptedEvolutions ?></span>
             </div>
-            <div class="number-box <?php echo ($nbTasks === 0) ? 'grey' : '' ?>">
+            <div class="number-box <?= ($nbTasks === 0) ? 'grey' : '' ?>">
                 <span class="label">Tâches en cours</span>
-                <span class="value"><?php echo $nbTasks ?></span>
+                <span class="value"><?= $nbTasks ?></span>
             </div>
             
         </div>

@@ -6,7 +6,7 @@ $session = $this->getContainer()->get('session_wrapper');
 echo '<div id="subnav">';
     echo '<button class="move-side-bar top" data-dir="up"> </button>';
     echo '<div class="overflow">';
-        $active = ($mode === 'overview') ? 'active' : null;
+        $active = (isset($mode) && $mode === 'overview') ? 'active' : null;
         echo '<a href="' . APP_ROOT . 'project/mode-overview" class="item ' . $active . '">';
             echo '<span class="picto">';
                 echo '<img src="' . MEDIA . 'profil/diary.png" alt="" />';
@@ -16,7 +16,7 @@ echo '<div id="subnav">';
             echo '</span>';
         echo '</a>';
 
-        $active = ($mode === 'board') ? 'active' : null;
+        $active = (isset($mode) && $mode === 'board') ? 'active' : null;
         echo '<a href="' . APP_ROOT . 'project/mode-board" class="item ' . $active . '">';
             echo '<span class="picto">';
                 echo '<img src="' . MEDIA . 'faction/nav/register.png" alt="" />';

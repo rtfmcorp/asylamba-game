@@ -4,6 +4,8 @@ namespace Asylamba\Modules\Hephaistos\Manager;
 
 use Asylamba\Modules\Hephaistos\Gateway\FeedbackGateway;
 
+use Asylamba\Modules\Zeus\Manager\PlayerManager;
+
 use Asylamba\Modules\Hephaistos\Model\Evolution;
 use Asylamba\Modules\Zeus\Model\Player;
 
@@ -11,15 +13,25 @@ class EvolutionManager
 {
     /** @var FeedbackGateway **/
     protected $gateway;
+    /** @var PlayerManager **/
+    protected $playerManager;
     
     /**
      * @param FeedbackGateway $gateway
+     * @param PlayerManager $playerManager
      */
-    public function __construct(FeedbackGateway $gateway)
+    public function __construct(FeedbackGateway $gateway, PlayerManager $playerManager)
     {
         $this->gateway = $gateway;
+        $this->playerManager = $playerManager;
     }
     
+    /**
+     * @param string $title
+     * @param string $description
+     * @param Player $player
+     * @return Response
+     */
     public function create($title, $description, Player $player)
     {
         return $this->gateway->createEvolution(
@@ -31,7 +43,10 @@ class EvolutionManager
         );
     }
     
-    public function getEvolutions()
+    /**
+     * @return array
+     */
+    public function getAll()
     {
         $result = json_decode($this->gateway->getEvolutions()->getBody(), true);
         foreach ($result as &$data) {
@@ -40,12 +55,21 @@ class EvolutionManager
         return $result;
     }
     
-    public function getEvolution($id)
+    /**
+     * @param string $id
+     * @return Evolution
+     */
+    public function get($id)
     {
-        return $this->format($this->gateway->getEvolution($id)->getBody());
+        return $this->format(json_decode($this->gateway->getEvolution($id)->getBody(), true), true);
     }
     
-    protected function format($data)
+    /**
+     * @param array $data
+     * @param boolean $getAuthor
+     * @return Evolution
+     */
+    protected function format($data, $getAuthor = false)
     {
         $evolution =
             (new Evolution())
@@ -53,7 +77,7 @@ class EvolutionManager
             ->setTitle($data['title'])
             ->setDescription($data['description'])
             ->setStatus($data['status'])
-            ->setAuthor($data['author'])
+            ->setAuthor(($getAuthor) ? $this->playerManager->getByName($data['author']['username']) : $data['author'])
             ->setCreatedAt(new \DateTime($data['created_at']))
             ->setUpdatedAt(new \DateTime($data['updated_at']))
         ;

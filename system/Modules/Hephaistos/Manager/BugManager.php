@@ -3,6 +3,7 @@
 namespace Asylamba\Modules\Hephaistos\Manager;
 
 use Asylamba\Modules\Hephaistos\Gateway\FeedbackGateway;
+use Asylamba\Modules\Zeus\Manager\PlayerManager;
 
 use Asylamba\Modules\Hephaistos\Model\Bug;
 use Asylamba\Modules\Zeus\Model\Player;
@@ -11,13 +12,17 @@ class BugManager
 {
     /** @var FeedbackGateway **/
     protected $gateway;
+    /** @var PlayerManager **/
+    protected $playerManager;
     
     /**
      * @param FeedbackGateway $gateway
+     * @param PlayerManager $playerManager
      */
-    public function __construct(FeedbackGateway $gateway)
+    public function __construct(FeedbackGateway $gateway, PlayerManager $playerManager)
     {
         $this->gateway = $gateway;
+        $this->playerManager = $playerManager;
     }
     
     /**
@@ -37,7 +42,10 @@ class BugManager
         );
     }
     
-    public function getBugs()
+    /**
+     * @return array
+     */
+    public function getAll()
     {
         $result = json_decode($this->gateway->getBugs()->getBody(), true);
         foreach ($result as &$data) {
@@ -46,12 +54,22 @@ class BugManager
         return $result;
     }
     
-    public function getBug($id)
+    /**
+     * @param string $id
+     * @return Bug
+     */
+    public function get($id)
     {
-        return $this->format($this->gateway->getBug($id)->getBody());
+        
+        return $this->format(json_decode($this->gateway->getBug($id)->getBody(), true), true);
     }
     
-    protected function format($data)
+    /**
+     * @param array $data
+     * @param boolean $getAuthor
+     * @return Bug
+     */
+    protected function format($data, $getAuthor = false)
     {
         $bug =
             (new Bug())
@@ -59,7 +77,7 @@ class BugManager
             ->setTitle($data['title'])
             ->setDescription($data['description'])
             ->setStatus($data['status'])
-            ->setAuthor($data['author'])
+            ->setAuthor(($getAuthor) ? $this->playerManager->getByName($data['author']['username']) : $data['author'])
             ->setCreatedAt(new \DateTime($data['created_at']))
             ->setUpdatedAt(new \DateTime($data['updated_at']))
         ;

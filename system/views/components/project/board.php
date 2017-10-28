@@ -43,7 +43,7 @@ foreach ($board as $column) {
         <div class="body">
             <?php foreach ($column['feedbacks'] as $feedback) { ?>
                 <div class="player">
-                    <a href="#">
+                    <a href="<?= "/feedback/id-{$feedback->getId()}/type-{$feedback->getType()}" ?>">
                         <img src="/public/media/<?= $feedback->getType() === Feedback::TYPE_BUG ? 'admin/bugtracker' : 'orbitalbase/technosphere' ?>.png" alt="<?= $feedback->getType(); ?>" class="picto" />
                     </a>
                     <span class="title"><?= $feedback->getCreatedAt()->format('d/m/Y à H:i'); ?></span>

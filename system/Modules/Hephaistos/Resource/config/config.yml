@@ -42,8 +42,10 @@ services:
         class: Asylamba\Modules\Hephaistos\Manager\BugManager
         arguments:
             - "@hephaistos.feedback_gateway"
+            - "@zeus.player_manager"
             
     hephaistos.evolution_manager:
         class: Asylamba\Modules\Hephaistos\Manager\EvolutionManager
         arguments:
             - "@hephaistos.feedback_gateway"
+            - "@zeus.player_manager"

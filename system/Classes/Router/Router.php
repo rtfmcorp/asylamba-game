@@ -25,6 +25,7 @@ class Router
         'embassy' => array('embassy', 'Ambassades'),
         'press' => ['press', 'Gazette'],
         'project' => ['project', 'Projet'],
+        'feedback' => ['feedback', 'Feedback'],
 
         'bases' => array('bases', 'Vos Bases'),
 
