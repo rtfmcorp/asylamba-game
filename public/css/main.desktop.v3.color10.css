@@ -5717,7 +5717,7 @@ span.centred-link:focus {
   height: 300px;
   overflow: hidden;
   border: solid 1px #202020;
-  background: url('src/desktop/map/common/galaxy.jpg') no-repeat #0A0A0A;
+  background: url('src/desktop/map/common/galaxy.png') no-repeat #0A0A0A;
 }
 #map-content .mini-map polygon {
   stroke: white;
@@ -5825,7 +5825,7 @@ span.centred-link:focus {
 .tactical-map {
   margin: 10px;
   position: relative;
-  background: url('src/desktop/map/common/galaxy-large.jpg') repeat #0A0A0A;
+  background: url('src/desktop/map/common/galaxy-large.png') repeat #0A0A0A;
 }
 .tactical-map polygon {
   stroke: white;
