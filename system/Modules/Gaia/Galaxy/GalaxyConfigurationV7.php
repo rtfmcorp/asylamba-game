@@ -3,24 +3,32 @@
 namespace Asylamba\Modules\Gaia\Galaxy;
 
 class GalaxyConfigurationV7 extends GalaxyConfiguration {
-        public $galaxy = [
-                'size' => 250,
-                'diag' => 177,
-                'mask' => 15,
-                'systemProportion'        => [3, 8, 9, 25, 55],
-                'systemPosition'        => NULL,
-                'lineSystemPosition' => [
-                #        [[pA], [pB], EPAISSEUR, INTENSITE],
-                        [[85, 165], [125, 210], 20, 8],
-                        [[170, 90], [215, 125], 20, 8]
-                ],
-                'circleSystemPosition' => [
-                #        [[X1], RAYON, EPAISSEUR, INTENSITE],
-                        [[-100,-100], 250, 100, 8],
-                        [[-100,-100], 430, 70, 8]
-                ],
-                'population' => [700, 25000],
-        ];
+    public $galaxy = [
+        'size' => 250,
+        'diag' => 177,
+        'mask' => 15,
+        'systemProportion'        => [3, 8, 9, 25, 55],
+        'systemPosition'        => NULL,
+        'lineSystemPosition' => [
+            #    [[pA], [pB], EPAISSEUR, INTENSITE],
+            [[15, 45], [15, 250], 40, 8],
+            [[230, 215], [230, 0], 40, 8],
+            [[215, 15], [0, 15], 40, 8],
+            [[35, 235], [250, 235], 40, 8],
+            [[50, 125], [200, 125], 12, 6],
+            [[125, 50], [125, 200], 12, 6],
+            [[50, 80], [80, 50], 10, 8], # soit les 4 ici en dessous pour les losanges
+            [[200, 80], [170, 50], 10, 8],
+            [[50, 170], [80, 200], 10, 8],
+            [[200, 170], [170, 200], 10, 8]
+        ],
+        'circleSystemPosition' => [
+        #    [[X1], RAYON, EPAISSEUR, INTENSITE],
+            [[ 125, 125], 25, 15, 8],
+            //[[ 125, 125], 82, 15, 8] #soit celui ci pour les losanges
+        ],
+        'population' => [700, 25000],
+    ];
 
         public $sectors = [
                 /*[
