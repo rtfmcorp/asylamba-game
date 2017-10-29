@@ -10,6 +10,7 @@ $bugManager = $this->getContainer()->get('hephaistos.bug_manager');
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('session_wrapper');
+$parser = $this->getContainer()->get('parser');
 
 if (empty($title = $request->request->get('title'))) {
     throw new FormException('Titre non renseigné');
@@ -21,7 +22,7 @@ if (empty($authorId = $session->get('playerId'))) {
     throw new ErrorException('Vous devez être connecté');
 }
 
-$result = $bugManager->create($title, $description, $playerManager->get($authorId));
+$result = $bugManager->create($title, $parser->parse($description), $playerManager->get($authorId));
 
 $session->addFlashbag('Le bug a bien été reporté', Flashbag::TYPE_SUCCESS);
 

@@ -10,6 +10,7 @@ $evolutionManager = $this->getContainer()->get('hephaistos.evolution_manager');
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('session_wrapper');
+$parser = $this->getContainer()->get('parser');
 
 if (empty($title = $request->request->get('title'))) {
     throw new FormException('Titre non renseigné');
@@ -21,7 +22,7 @@ if (empty($authorId = $session->get('playerId'))) {
     throw new ErrorException('Vous devez être connecté');
 }
 
-$result = $evolutionManager->create($title, $description, $playerManager->get($authorId));
+$result = $evolutionManager->create($title, $parser->parse($description), $playerManager->get($authorId));
 
 $session->addFlashbag('La proposition a bien été envoyée', Flashbag::TYPE_SUCCESS);
 
