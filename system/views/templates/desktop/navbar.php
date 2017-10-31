@@ -243,9 +243,9 @@ echo '<div id="nav">';
 
     echo '<div class="overbox" id="bug-tracker">';
         echo '<h2>Bug tracker</h2>';
-        echo '<p>Si vous trouvez des bugs ou avez des idées d\'améliorations, nous vous invitons à les poster sur le forum principal.</p>';
-        echo '<a class="outside-button" target="_blank" href="' . $this->getContainer()->getParameter('getout_root') . 'forum/categorie-bug">Reporter un bug</a>';
-        echo '<a class="outside-button" target="_blank" href="' . $this->getContainer()->getParameter('getout_root') . 'forum/categorie-opensource">Proposer une amélioration</a>';
+        echo '<p>Si vous trouvez des bugs ou avez des idées d\'améliorations, nous vous invitons à les poster sur le gestionnaire de projet.</p>';
+        echo '<a class="outside-button" href="/project/mode-createbug">Reporter un bug</a>';
+        echo '<a class="outside-button" href="/project/mode-createevo">Proposer une amélioration</a>';
         echo '<p>Pour les bugs que vous pensez critiques, vous pouvez envoyer un email directement à support@asylamba.com.</p>';
         echo '<a class="outside-button" href="mailto:support@asylamba.com">Envoyer un email</a>';
     echo '</div>';

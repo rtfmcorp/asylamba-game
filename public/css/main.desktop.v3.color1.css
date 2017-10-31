@@ -1433,14 +1433,16 @@ body {
   border-radius: 3px;
   background: #b01e2d;
 }
-.component .list-type-1 form {
+.component .list-type-1 form,
+.component.player form {
   z-index: 1;
   position: absolute;
   display: none;
   bottom: -40px;
   right: 3px;
 }
-.component .list-type-1 form p {
+.component .list-type-1 form p,
+.component.player form p {
   position: relative;
   background: white;
   border-radius: 3px;
@@ -1449,7 +1451,8 @@ body {
   width: 200px;
   height: 35px;
 }
-.component .list-type-1 form p:before {
+.component .list-type-1 form p:before,
+.component.player form p:before {
   content: '';
   position: absolute;
   top: -12px;
@@ -1458,18 +1461,31 @@ body {
   border-width: 6px;
   border-color: transparent transparent white transparent;
 }
-.component .list-type-1 form input {
+.component .list-type-1 form input,
+.component.player form input,
+.component .list-type-1 form select,
+.component.player form select {
   border: none;
   background: none;
   line-height: 35px;
   height: 35px;
   padding: 0 10px;
 }
-.component .list-type-1 form input[type='text'] {
+.component .list-type-1 form input[type='text'],
+.component.player form input[type='text'],
+.component .list-type-1 form select[type='text'],
+.component.player form select[type='text'] {
   width: 140px;
 }
-.component .list-type-1 form input[type='submit'] {
+.component .list-type-1 form input[type='submit'],
+.component.player form input[type='submit'],
+.component .list-type-1 form select[type='submit'],
+.component.player form select[type='submit'] {
   width: 40px;
+}
+.component .list-type-1 form select,
+.component.player form select {
+  width: 140px;
 }
 .component .sub-list-type-1 form {
   right: -6px;

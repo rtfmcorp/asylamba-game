@@ -38,14 +38,22 @@ services:
         arguments:
             - "%hephaistos.feedback.api_url"
             
+    hephaistos.commentary_manager:
+        class: Asylamba\Modules\Hephaistos\Manager\CommentaryManager
+        arguments:
+            - "@hephaistos.feedback_gateway"
+            - "@zeus.player_manager"
+            
     hephaistos.bug_manager:
         class: Asylamba\Modules\Hephaistos\Manager\BugManager
         arguments:
             - "@hephaistos.feedback_gateway"
+            - "@hephaistos.commentary_manager"
             - "@zeus.player_manager"
             
     hephaistos.evolution_manager:
         class: Asylamba\Modules\Hephaistos\Manager\EvolutionManager
         arguments:
             - "@hephaistos.feedback_gateway"
+            - "@hephaistos.commentary_manager"
             - "@zeus.player_manager"

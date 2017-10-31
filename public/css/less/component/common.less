@@ -290,7 +290,8 @@
 	}
 }
 
-.component .list-type-1 form {
+.component .list-type-1 form,
+.component.player form{
 	z-index: 1;
 	position: absolute;
 	display: none;
@@ -313,7 +314,7 @@
 		}
 	}
 
-	input {
+	input, select {
 		border: none; background: none;
 		line-height: 35px; height: 35px;
 		padding: 0 10px;
@@ -325,6 +326,9 @@
 			width: 40px;
 		}
 	}
+    select {
+        width: 140px;
+    }
 }
 
 .component .sub-list-type-1 form {

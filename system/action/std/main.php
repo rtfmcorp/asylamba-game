@@ -139,6 +139,8 @@ if ($request->query->has('token') && $session->get('token') === $request->query-
         
         case 'createbug': include ACTION . 'hephaistos/create-bug.php'; break;
         case 'createevo': include ACTION . 'hephaistos/create-evolution.php'; break;
+        case 'updatefeedbackstatus': include ACTION . 'hephaistos/update-feedback-status.php'; break;
+        case 'createfeedbackcommentary': include ACTION . 'hephaistos/create-comment.php'; break;
 
         default:
             throw new ErrorException('action inconnue ou non-référencée');

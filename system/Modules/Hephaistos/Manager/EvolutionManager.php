@@ -13,6 +13,8 @@ class EvolutionManager
 {
     /** @var FeedbackGateway **/
     protected $gateway;
+    /** @var CommentaryManager **/
+    protected $commentaryManager;
     /** @var PlayerManager **/
     protected $playerManager;
     
@@ -20,9 +22,10 @@ class EvolutionManager
      * @param FeedbackGateway $gateway
      * @param PlayerManager $playerManager
      */
-    public function __construct(FeedbackGateway $gateway, PlayerManager $playerManager)
+    public function __construct(FeedbackGateway $gateway, CommentaryManager $commentaryManager, PlayerManager $playerManager)
     {
         $this->gateway = $gateway;
+        $this->commentaryManager = $commentaryManager;
         $this->playerManager = $playerManager;
     }
     
@@ -41,6 +44,15 @@ class EvolutionManager
             $player->getName(),
             $player->getBind()
         );
+    }
+    
+    /**
+     * @param Evolution $evolution
+     * @return Response
+     */
+    public function update(Evolution $evolution)
+    {
+        return $this->gateway->updateEvolution($evolution);
     }
     
     /**
@@ -82,7 +94,7 @@ class EvolutionManager
             ->setUpdatedAt(new \DateTime($data['updated_at']))
         ;
         foreach ($data['commentaries'] as $commentary) {
-            $evolution->addCommentary($commentary);
+            $evolution->addCommentary($this->commentaryManager->format($commentary, true));
         }
         return $evolution;
     }

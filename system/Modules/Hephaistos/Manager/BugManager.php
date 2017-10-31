@@ -12,6 +12,8 @@ class BugManager
 {
     /** @var FeedbackGateway **/
     protected $gateway;
+    /** @var CommentaryManager **/
+    protected $commentaryManager;
     /** @var PlayerManager **/
     protected $playerManager;
     
@@ -19,9 +21,10 @@ class BugManager
      * @param FeedbackGateway $gateway
      * @param PlayerManager $playerManager
      */
-    public function __construct(FeedbackGateway $gateway, PlayerManager $playerManager)
+    public function __construct(FeedbackGateway $gateway, CommentaryManager $commentaryManager, PlayerManager $playerManager)
     {
         $this->gateway = $gateway;
+        $this->commentaryManager = $commentaryManager;
         $this->playerManager = $playerManager;
     }
     
@@ -40,6 +43,15 @@ class BugManager
             $player->getName(),
             $player->getBind()
         );
+    }
+    
+    /**
+     * @param Bug $bug
+     * @return Response
+     */
+    public function update(Bug $bug)
+    {
+        return $this->gateway->updateBug($bug);
     }
     
     /**
@@ -82,7 +94,7 @@ class BugManager
             ->setUpdatedAt(new \DateTime($data['updated_at']))
         ;
         foreach ($data['commentaries'] as $commentary) {
-            $bug->addCommentary($commentary);
+            $bug->addCommentary($this->commentaryManager->format($commentary, true));
         }
         return $bug;
     }
