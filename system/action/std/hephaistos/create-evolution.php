@@ -22,8 +22,12 @@ if (empty($authorId = $session->get('playerId'))) {
     throw new ErrorException('Vous devez être connecté');
 }
 
-$result = $evolutionManager->create($title, $parser->parse($description), $playerManager->get($authorId));
+$result = json_decode($evolutionManager->create(
+    $title,
+    $parser->parse($description),
+    $playerManager->get($authorId)
+)->getBody(), true);
 
 $session->addFlashbag('La proposition a bien été envoyée', Flashbag::TYPE_SUCCESS);
 
-$response->redirect('project');
+$response->redirect("feedback/id-{$result['id']}/type-evo");

@@ -22,8 +22,12 @@ if (empty($authorId = $session->get('playerId'))) {
     throw new ErrorException('Vous devez être connecté');
 }
 
-$result = $bugManager->create($title, $parser->parse($description), $playerManager->get($authorId));
+$result = json_decode($bugManager->create(
+    $title,
+    $parser->parse($description),
+    $playerManager->get($authorId)
+)->getbody(), true);
 
 $session->addFlashbag('Le bug a bien été reporté', Flashbag::TYPE_SUCCESS);
 
-$response->redirect('project');
+$response->redirect("feedback/id-{$result['id']}/type-bug");
