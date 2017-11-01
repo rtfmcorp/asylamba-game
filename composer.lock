@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e4a738bae7cc1f7aa8eee11ff8a76646",
+    "content-hash": "1ab4e9048321686d25dbfc77e77f832b",
     "packages": [
         {
             "name": "doctrine/instantiator",
@@ -291,6 +291,47 @@
                 "parameters management"
             ],
             "time": "2015-11-10T17:04:01+00:00"
+        },
+        {
+            "name": "kern046/changelog-parser",
+            "version": "v0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Kern046/changelog-parser.git",
+                "reference": "02dba57b18c583a2ba6a1db6b5bd1bb1877d442b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Kern046/changelog-parser/zipball/02dba57b18c583a2ba6a1db6b5bd1bb1877d442b",
+                "reference": "02dba57b18c583a2ba6a1db6b5bd1bb1877d442b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ChangelogParser\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Axel Venet",
+                    "email": "kern046@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP library used to parse a CHANGELOG.md file and return JSON output",
+            "keywords": [
+                "changelog",
+                "version"
+            ],
+            "time": "2016-03-01T18:35:13+00:00"
         },
         {
             "name": "myclabs/deep-copy",
