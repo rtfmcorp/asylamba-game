@@ -173,7 +173,7 @@ if ($rPlace !== false and $type !== false and $price !== false and in_array($rPl
                             $cs->statement = CommercialShipping::ST_WAITING;
                             $commercialShippingManager->add($cs);
 
-                            $session->addFlashbag('Votre proposition a été envoyée sur le marché.', Flashbag::TYPE_MARKET_SUCCESS);
+                            $session->addFlashbag('Votre proposition a été envoyée sur le marché.', Flashbag::TYPE_GAM_MARKET);
                         } else {
                             throw new ErrorException('Il y a un problème avec votre commandant.');
                         }
