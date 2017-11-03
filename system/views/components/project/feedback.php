@@ -58,7 +58,7 @@ $statuses = [
             <div class="number-box grey">
                 <span class="label">Statut</span>
                 <span class="value"><?= $statuses[$feedback->getStatus()] ?></span>
-                <?php if (Utils::isAdmin($session->get('playerInfo')->get('bind'))) { ?>
+                <?php if ($session->get('playerInfo')->get('admin') === true) { ?>
                     <span class="group-link">
                         <a href="#" class="link hb it sh" data-target="update-status-form">↓</a>
                     </span>
