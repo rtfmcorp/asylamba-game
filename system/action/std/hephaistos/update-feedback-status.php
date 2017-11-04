@@ -45,7 +45,7 @@ if (($feedback = $manager->get($id)) === null) {
 
 $feedback->setStatus($status);
 
-$result = $manager->update($feedback);
+$result = $manager->update($feedback, $player);
 
 $session->addFlashbag('Le statut a bien été mis à jour', Flashbag::TYPE_SUCCESS);
 

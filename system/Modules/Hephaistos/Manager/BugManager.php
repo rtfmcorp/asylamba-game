@@ -54,11 +54,43 @@ class BugManager
     
     /**
      * @param Bug $bug
+     * @param Player $player
      * @return Response
      */
-    public function update(Bug $bug)
+    public function update(Bug $bug, Player $player)
     {
-        return $this->gateway->updateBug($bug);
+        $updatedBug = $this->format(json_decode($this->gateway->updateBug($bug)->getBody(), true));
+        
+        $notif =
+            (new Notification())
+            ->setTitle('Bug mis à jour')
+            ->addBeg()
+            ->addLnk("embassy/player-{$player->getId()}", $player->getName())
+            ->addTxt(' a mis à jour le bug ')
+            ->addLnk("feedback/id-{$bug->getId()}/type-{$bug->getType()}", "\"{$bug->getTitle()}\"")
+            ->addTxt('.')
+            ->addEnd()
+        ;
+        // We avoid sending notification to the updater, whether he is the feedback author or not
+        $players = [$player->getId()];
+        if ($bug->getAuthor()->getId() !== $player->getId()) {
+            $players[] = $bug->getAuthor()->getId();
+            $authorNotif = clone $notif;
+            $authorNotif->setRPlayer($bug->getAuthor()->getId());
+            $this->notificationManager->add($authorNotif);
+        }
+        foreach ($bug->getCommentaries() as $comment) {
+            $commentAuthor = $comment->getAuthor();
+            
+            if (in_array($commentAuthor->getId(), $players) || $commentAuthor->getId() === null) {
+                continue;
+            }
+            $players[] = $commentAuthor->getId();
+            $authorNotif = clone $notif;
+            $authorNotif->setRPlayer($commentAuthor->getId());
+            $this->notificationManager->add($authorNotif);
+        }
+        return $updatedBug;
     }
     
     /**

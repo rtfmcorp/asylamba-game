@@ -55,11 +55,43 @@ class EvolutionManager
     
     /**
      * @param Evolution $evolution
+     * @param Player $player
      * @return Response
      */
-    public function update(Evolution $evolution)
+    public function update(Evolution $evolution, Player $player)
     {
-        return $this->gateway->updateEvolution($evolution);
+        $updatedEvolution = $this->gateway->updateEvolution($evolution);
+        
+        $notif =
+            (new Notification())
+            ->setTitle('Evolution mise à jour')
+            ->addBeg()
+            ->addLnk("embassy/player-{$player->getId()}", $player->getName())
+            ->addTxt(' a mis à jour l\'évolution ')
+            ->addLnk("feedback/id-{$evolution->getId()}/type-{$evolution->getType()}", "\"{$evolution->getTitle()}\"")
+            ->addTxt('.')
+            ->addEnd()
+        ;
+        // We avoid sending notification to the updater, whether he is the feedback author or not
+        $players = [$player->getId()];
+        if ($evolution->getAuthor()->getId() !== $player->getId()) {
+            $players[] = $evolution->getAuthor()->getId();
+            $authorNotif = clone $notif;
+            $authorNotif->setRPlayer($evolution->getAuthor()->getId());
+            $this->notificationManager->add($authorNotif);
+        }
+        foreach ($evolution->getCommentaries() as $comment) {
+            $commentAuthor = $comment->getAuthor();
+            
+            if (in_array($commentAuthor->getId(), $players) || $commentAuthor->getId() === null) {
+                continue;
+            }
+            $players[] = $commentAuthor->getId();
+            $authorNotif = clone $notif;
+            $authorNotif->setRPlayer($commentAuthor->getId());
+            $this->notificationManager->add($authorNotif);
+        }
+        return $updatedEvolution;
     }
     
     /**
