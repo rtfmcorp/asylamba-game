@@ -5,6 +5,8 @@ use Asylamba\Classes\Exception\ErrorException;
 
 use Asylamba\Classes\Library\Flashbag;
 
+use Asylamba\Modules\Hephaistos\Model\Feedback;
+
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 $commentaryManager = $this->getContainer()->get('hephaistos.commentary_manager');
 $request = $this->getContainer()->get('app.request');
@@ -25,7 +27,13 @@ if (empty($authorId = $session->get('playerId'))) {
     throw new ErrorException('Vous devez être connecté');
 }
 
-$result = $commentaryManager->create($feedbackId, $type, $parser->parse($content), $playerManager->get($authorId));
+$manager = $this->getContainer()->get(($type === Feedback::TYPE_BUG) ? 'hephaistos.bug_manager' : 'hephaistos.evolution_manager');
+
+if (($feedback = $manager->get($feedbackId)) === null) {
+    throw new ErrorException('Le feedback renseigné n\'existe pas');
+}
+
+$result = $commentaryManager->create($feedback, $parser->parse($content), $playerManager->get($authorId));
 
 $session->addFlashbag('Votre commentaire a bien été créé', Flashbag::TYPE_SUCCESS);
 

@@ -69,20 +69,24 @@ class Notification
     public function setRPlayer($v)
     {
         $this->rPlayer = $v;
+        
+        return $this;
     }
 
     public function setTitle($v)
     {
-        if (strlen($v) <= 100) {
-            $this->title = $v;
-        } else {
+        if (strlen($v) > 100) {
             throw new ErrorException('Le titre de la notification est trop long.');
         }
+        $this->title = $v;
+        return $this;
     }
 
     public function setContent($v)
     {
         $this->content = $v;
+        
+        return $this;
     }
 
     public function addContent($t)

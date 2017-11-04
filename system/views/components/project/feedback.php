@@ -2,7 +2,6 @@
 
 use Asylamba\Classes\Library\Chronos;
 use Asylamba\Classes\Library\Format;
-use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Hephaistos\Model\Feedback;
     
 $session = $this->getContainer()->get('session_wrapper');

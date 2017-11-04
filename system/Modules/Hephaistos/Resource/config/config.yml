@@ -42,6 +42,7 @@ services:
         class: Asylamba\Modules\Hephaistos\Manager\CommentaryManager
         arguments:
             - "@hephaistos.feedback_gateway"
+            - "@hermes.notification_manager"
             - "@zeus.player_manager"
             
     hephaistos.bug_manager:
@@ -49,6 +50,7 @@ services:
         arguments:
             - "@hephaistos.feedback_gateway"
             - "@hephaistos.commentary_manager"
+            - "@hermes.notification_manager"
             - "@zeus.player_manager"
             
     hephaistos.evolution_manager:
@@ -56,4 +58,5 @@ services:
         arguments:
             - "@hephaistos.feedback_gateway"
             - "@hephaistos.commentary_manager"
+            - "@hermes.notification_manager"
             - "@zeus.player_manager"

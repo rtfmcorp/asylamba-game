@@ -4,9 +4,11 @@ namespace Asylamba\Modules\Hephaistos\Manager;
 
 use Asylamba\Modules\Hephaistos\Gateway\FeedbackGateway;
 
+use Asylamba\Modules\Hermes\Manager\NotificationManager;
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
 
 use Asylamba\Modules\Hephaistos\Model\Evolution;
+use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Zeus\Model\Player;
 
 class EvolutionManager
@@ -15,17 +17,22 @@ class EvolutionManager
     protected $gateway;
     /** @var CommentaryManager **/
     protected $commentaryManager;
+    /** @var NotificationManager **/
+    protected $notificationManager;
     /** @var PlayerManager **/
     protected $playerManager;
     
     /**
      * @param FeedbackGateway $gateway
+     * @param CommentaryManager $commentaryManager
+     * @param NotificationManager $notificationManager
      * @param PlayerManager $playerManager
      */
-    public function __construct(FeedbackGateway $gateway, CommentaryManager $commentaryManager, PlayerManager $playerManager)
+    public function __construct(FeedbackGateway $gateway, CommentaryManager $commentaryManager, NotificationManager $notificationManager, PlayerManager $playerManager)
     {
         $this->gateway = $gateway;
         $this->commentaryManager = $commentaryManager;
+        $this->notificationManager = $notificationManager;
         $this->playerManager = $playerManager;
     }
     
