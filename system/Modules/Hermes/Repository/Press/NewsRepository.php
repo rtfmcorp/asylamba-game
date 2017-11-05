@@ -59,6 +59,25 @@ class NewsRepository extends AbstractRepository
         return (int) $statement->fetch()['nb_news'];
     }
     
+    public function get($id)
+    {
+        if (
+            ($n = $this->unitOfWork->getObject(MilitaryNews::class, $id)) !== null ||
+            ($n = $this->unitOfWork->getObject(PoliticNews::class, $id)) !== null ||
+            ($n = $this->unitOfWork->getObject(TradeNews::class, $id)) !== null
+        ) {
+            return $n;
+        }
+        $statement = $this->connection->prepare('SELECT * FROM news WHERE id = :id');
+        $statement->execute(['id' => $id]);
+        if (($row = $statement->fetch()) === false) {
+            return null;
+        }
+        $news = $this->format($row);
+        $this->unitOfWork->addObject($news);
+        return $news;
+    }
+    
     public function insert($news)
     {
     }

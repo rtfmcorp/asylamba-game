@@ -72,9 +72,19 @@ class NewsManager
         ;
     }
     
+    public function get($id)
+    {
+        return $this
+            ->entityManager
+            ->getRepository(News::class)
+            ->get($id)
+        ;
+    }
+    
     public function create(News $news)
     {
         $news->setCreatedAt(new \DateTime());
+        $news->setUpdatedAt(new \DateTime());
         
         $this->entityManager->persist($news);
         $this->entityManager->flush($news);

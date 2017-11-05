@@ -16,6 +16,8 @@ abstract class News implements \JsonSerializable
     protected $weight;
     /** @var \DateTime **/
     protected $createdAt;
+    /** @var \DateTime **/
+    protected $updatedAt;
     
     const NEWS_TYPE_MILITARY = 'military';
     const NEWS_TYPE_POLITICS = 'politics';
@@ -119,6 +121,25 @@ abstract class News implements \JsonSerializable
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+    
+    /**
+     * @param \DateTime $updatedAt
+     * @return $this
+     */
+    public function setUpdatedAt(\DateTime $updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+        
+        return $this;
+    }
+    
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
     
     /**

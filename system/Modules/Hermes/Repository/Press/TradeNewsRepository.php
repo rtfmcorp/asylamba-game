@@ -13,7 +13,7 @@ class TradeNewsRepository extends AbstractRepository
     public function getAll($limit, $offset)
     {
         $statement = $this->connection->prepare(
-            'SELECT nt.*, n.title, n.content, n.created_at FROM news__trade nt INNER JOIN news n ON n.id = nt.news_id ORDER BY n.created_at DESC LIMIT :limit OFFSET :offset'
+            'SELECT nt.*, n.title, n.content, n.created_at, n.updated_at FROM news__trade nt INNER JOIN news n ON n.id = nt.news_id ORDER BY n.created_at DESC LIMIT :limit OFFSET :offset'
         );
         $statement->execute([
             'limit' => $limit,
@@ -38,7 +38,7 @@ class TradeNewsRepository extends AbstractRepository
         if (($n = $this->unitOfWork->getObject(TradeNews::class, $id)) !== null) {
             return $n;
         }
-        $statement = $this->connection->prepare('SELECT nt.*, n.title, n.content, n.created_at FROM news__trade nt INNER JOIN news n ON n.id = nt.news_id WHERE nt.news_id = :id');
+        $statement = $this->connection->prepare('SELECT nt.*, n.title, n.content, n.created_at, n.updated_at FROM news__trade nt INNER JOIN news n ON n.id = nt.news_id WHERE nt.news_id = :id');
         $statement->execute(['id' => $id]);
         
         if (($row = $statement->fetch()) === false) {
@@ -51,11 +51,12 @@ class TradeNewsRepository extends AbstractRepository
     
     public function insert($news)
     {
-        $statement = $this->connection->prepare('INSERT INTO news(title, content, created_at, type, weight) VALUES(:title, :content, :created_at, :type, :weight)');
+        $statement = $this->connection->prepare('INSERT INTO news(title, content, created_at, updated_at, type, weight) VALUES(:title, :content, :created_at, :updated_at, :type, :weight)');
         $statement->execute([
             'title' => $news->getTitle(),
             'content' => $news->getContent(),
             'created_at' => $news->getCreatedAt()->format('Y-m-d H:i:s'),
+            'updated_at' => $news->getUpdatedAt()->format('Y-m-d H:i:s'),
             'type' => TradeNews::NEWS_TYPE_TRADE,
             'weight' => $news->getWeight()
         ]);
@@ -85,6 +86,7 @@ class TradeNewsRepository extends AbstractRepository
             ->setTitle($data['title'])
             ->setContent($data['content'])
             ->setCreatedAt(new \DateTime($data['created_at']))
+            ->setUpdatedAt(new \DateTime($data['updated_at']))
             ->setTransaction($this->unitOfWork->getRepository(Transaction::class)->get($data['transaction_id']))
         ;
     }

@@ -14,7 +14,7 @@ class MilitaryNewsRepository extends AbstractRepository
     public function getAll($limit, $offset)
     {
         $statement = $this->connection->prepare(
-            'SELECT nm.*, n.title, n.content, n.created_at FROM news__military nm INNER JOIN news n ON n.id = nm.news_id ORDER BY n.created_at DESC LIMIT :limit OFFSET :offset'
+            'SELECT nm.*, n.title, n.content, n.created_at, n.updated_at FROM news__military nm INNER JOIN news n ON n.id = nm.news_id ORDER BY n.created_at DESC LIMIT :limit OFFSET :offset'
         );
         $statement->execute([
             'limit' => $limit,
@@ -39,7 +39,7 @@ class MilitaryNewsRepository extends AbstractRepository
         if (($n = $this->unitOfWork->getObject(MilitaryNews::class, $id)) !== null) {
             return $n;
         }
-        $statement = $this->connection->prepare('SELECT nm.*, n.title, n.content, n.created_at FROM news__military nm INNER JOIN news n ON n.id = nm.news_id WHERE nm.news_id = :id');
+        $statement = $this->connection->prepare('SELECT nm.*, n.title, n.content, n.created_at, n.updated_at FROM news__military nm INNER JOIN news n ON n.id = nm.news_id WHERE nm.news_id = :id');
         $statement->execute(['id' => $id]);
         
         if (($row = $statement->fetch()) === false) {
@@ -52,11 +52,12 @@ class MilitaryNewsRepository extends AbstractRepository
     
     public function insert($news)
     {
-        $statement = $this->connection->prepare('INSERT INTO news(title, content, created_at, type, weight) VALUES(:title, :content, :created_at, :type, :weight)');
+        $statement = $this->connection->prepare('INSERT INTO news(title, content, created_at, updated_at, type, weight) VALUES(:title, :content, :created_at, :updated_at, :type, :weight)');
         $statement->execute([
             'title' => $news->getTitle(),
             'content' => $news->getContent(),
             'created_at' => $news->getCreatedAt()->format('Y-m-d H:i:s'),
+            'updated_at' => $news->getCreatedAt()->format('Y-m-d H:i:s'),
             'type' => MilitaryNews::NEWS_TYPE_MILITARY,
             'weight' => $news->getWeight()
         ]);
@@ -90,6 +91,7 @@ class MilitaryNewsRepository extends AbstractRepository
             ->setTitle($data['title'])
             ->setContent($data['content'])
             ->setCreatedAt(new \DateTime($data['created_at']))
+            ->setUpdatedAt(new \DateTime($data['updated_at']))
             ->setAttacker($this->unitOfWork->getRepository(Player::class)->get($data['attacker_id']))
             ->setDefender($this->unitOfWork->getRepository(Player::class)->get($data['defender_id']))
             ->setPlace($this->unitOfWork->getRepository(Place::class)->get($data['place_id']))
