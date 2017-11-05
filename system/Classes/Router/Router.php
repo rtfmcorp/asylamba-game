@@ -23,7 +23,9 @@ class Router
 
         'diary' => array('diary', 'Journal'),
         'embassy' => array('embassy', 'Ambassades'),
+        
         'press' => ['press', 'Gazette'],
+        
         'project' => ['project', 'Projet'],
         'feedback' => ['feedback', 'Feedback'],
 

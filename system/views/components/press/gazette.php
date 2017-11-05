@@ -45,15 +45,19 @@ $tradeNews = $newsManager->getList(News::NEWS_TYPE_TRADE, 30, 0);
     <div class="fix-body">
         <div class="body">
             <?php foreach ($militaryNews as $militaryNew) { ?>
-                <div id="news-<?= $militaryNew->getId() ?>" class="news">
-                    <div class="news-head color<?= $militaryNew->getNewsFaction(); ?>" onclick="pressController.deployNews(<?= $militaryNew->getId(); ?>);">
+                <div
+                    id="news-<?= $militaryNew->getId() ?>"
+                    class="news sh"
+                    data-target="news-<?= $militaryNew->getId() ?>-content"
+                    ondblclick="window.location.href = '/press/mode-article/id-<?= $militaryNew->getId() ?>'">
+                    <div class="news-head color<?= $militaryNew->getNewsFaction(); ?>">
                         <img class="picto" src="<?= $militaryNew->getNewsPicto(); ?>"/> 
                         <div class="info">
                             <span class="title"><?= $militaryNew->getTitle(); ?></span>
                             <span class="date"><?= Chronos::transform($militaryNew->getCreatedAt()); ?></span>
                         </div>
                     </div>
-                    <div class="hidden">
+                    <div id="news-<?= $militaryNew->getId() ?>-content" class="hidden">
                         <?= $militaryNew->getContent(); ?>
                     </div>
                 </div>
@@ -68,15 +72,19 @@ $tradeNews = $newsManager->getList(News::NEWS_TYPE_TRADE, 30, 0);
     <div class="fix-body">
         <div class="body">
             <?php foreach ($politicNews as $politicNew) { ?>
-                <div id="news-<?= $politicNew->getId() ?>" class="news">
-                    <div class="news-head color<?= $politicNew->getNewsFaction(); ?>" onclick="pressController.deployNews(<?= $politicNew->getId(); ?>);">
+                <div
+                    id="news-<?= $politicNew->getId() ?>"
+                    class="news sh"
+                    data-target="news-<?= $politicNew->getId() ?>-content"
+                    ondblclick="window.location.href = '/press/mode-article/id-<?= $politicNew->getId() ?>'">
+                    <div class="news-head color<?= $politicNew->getNewsFaction(); ?>">
                         <img class="picto" src="<?= $politicNew->getNewsPicto(); ?>"/> 
                         <div class="info">
                             <span class="title"><?= $politicNew->getTitle(); ?></span>
                             <span class="date"><?= Chronos::transform($politicNew->getCreatedAt()); ?></span>
                         </div>
                     </div>
-                    <div class="hidden">
+                    <div id="news-<?= $politicNew->getId() ?>-content" class="hidden">
                         <?= $politicNew->getContent(); ?>
                     </div>
                 </div>
@@ -92,15 +100,19 @@ $tradeNews = $newsManager->getList(News::NEWS_TYPE_TRADE, 30, 0);
         <div class="body">
             <?php foreach ($tradeNews as $tradeNew) {
     ?>
-                <div id="news-<?= $tradeNew->getId() ?>" class="news">
-                    <div class="news-head color<?= $tradeNew->getNewsFaction(); ?>" onclick="pressController.deployNews(<?= $tradeNew->getId(); ?>);">
+                <div
+                    id="news-<?= $tradeNew->getId() ?>"
+                    class="news sh"
+                    data-target="news-<?= $tradeNew->getId() ?>-content"
+                    ondblclick="window.location.href = '/press/mode-article/id-<?= $tradeNew->getId() ?>'">
+                    <div class="news-head color<?= $tradeNew->getNewsFaction(); ?>">
                         <img class="picto" src="<?= $tradeNew->getNewsPicto(); ?>"/> 
                         <div class="info">
                             <span class="title"><?= $tradeNew->getTitle(); ?></span>
                             <span class="date"><?= Chronos::transform($tradeNew->getCreatedAt()); ?></span>
                         </div>
                     </div>
-                    <div class="hidden">
+                    <div id="news-<?= $tradeNew->getId() ?>-content" class="hidden">
                         <?= $tradeNew->getContent(); ?>
                     </div>
                 </div>

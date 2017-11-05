@@ -731,26 +731,6 @@ jQuery(document).ready(function($) {
 	};
     
     pressController = {
-        currentNews: null,
-        
-        deployNews: function(newsId) {
-            $(".news .deployed").slideUp('fast', function() {
-                $(this).removeClass('deployed');
-            });
-            var panel = $("#news-" + newsId + ' .hidden')
-            if (panel.hasClass('deployed')) {
-                panel.slideUp('fast', function() {
-                    panel.removeClass('deployed');
-                    currentNews = null;
-                })
-                return false;
-            }
-            panel.slideDown('fast', function() {
-                currentNews = newsId;
-                panel.addClass('deployed');
-            });
-        },
-        
         slide: {
             fps: 30,
             now: 0,
@@ -799,7 +779,7 @@ jQuery(document).ready(function($) {
         add: function(news) {
             $("#news-container").append(
                 "<div id='news-alert-" + news.id + "' class='news-alert'>" +
-                "<img class='picto' src='" + news.news_picto + "' alt='news'>" +
+                "<a href='/press/mode-article/id-" + news.id + "'><img class='picto' src='" + news.news_picto + "' alt='news'></a>" +
                 "<h4 class='title'>" + news.title + "</h4></div>"
             );
     

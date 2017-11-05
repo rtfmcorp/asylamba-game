@@ -2959,7 +2959,7 @@ span.centred-link:focus {
   justify-content: space-between;
   align-items: center;
 }
-#news-container .news-alert .picto img {
+#news-container .news-alert .picto {
   width: 48px;
   height: 48px;
 }

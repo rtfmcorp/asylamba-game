@@ -17,5 +17,5 @@ include 'defaultElement/movers.php';
 ?>
 <div id="content">
     <?php include COMPONENT . 'publicity.php'; ?>
-    <?php include COMPONENT . '/press/' . (($mode === 'gazette') ? 'gazette' : 'newspaper') . '.php'; ?>
+    <?php include COMPONENT . "/press/$mode.php"; ?>
 </div>
