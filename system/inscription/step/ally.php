@@ -43,6 +43,8 @@ echo '<div id="content">';
             echo '</div>';
             echo '<div class="fix-body">';
             echo '<div class="body">';
+            echo '<h4>Situation</h4>';
+            echo '<p>' . ColorResource::getInfo($ally->id, 'situation') . '</p>';
             echo '<h4>A propos</h4>';
             echo '<p>' . ColorResource::getInfo($ally->id, 'desc1') . '</p>';
             echo '<h4>Moeurs & autres</h4>';
