@@ -74,7 +74,7 @@ class EvolutionManager
         ;
         // We avoid sending notification to the updater, whether he is the feedback author or not
         $players = [$player->getId()];
-        if ($evolution->getAuthor()->getId() !== $player->getId()) {
+        if ($evolution->getAuthor()->getId() !== $player->getId() && $evolution->getAuthor()->getId() !== null) {
             $players[] = $evolution->getAuthor()->getId();
             $authorNotif = clone $notif;
             $authorNotif->setRPlayer($evolution->getAuthor()->getId());
@@ -128,7 +128,7 @@ class EvolutionManager
             ->setTitle($data['title'])
             ->setDescription($data['description'])
             ->setStatus($data['status'])
-            ->setAuthor(($getAuthor) ? $this->playerManager->getByName($data['author']['username']) : $data['author'])
+            ->setAuthor($this->getAuthor($data['author']['username'], $getAuthor))
             ->setCreatedAt(new \DateTime($data['created_at']))
             ->setUpdatedAt(new \DateTime($data['updated_at']))
         ;
@@ -136,5 +136,20 @@ class EvolutionManager
             $evolution->addCommentary($this->commentaryManager->format($commentary, true));
         }
         return $evolution;
+    }
+    
+    protected function getAuthor($name, $getAuthorData = false)
+    {
+        if ($getAuthorData === false) {
+            return $name;
+        }
+        if (($author = $this->playerManager->getByName($name)) === null) {
+            return
+                (new Player())
+                ->setName($name)
+                ->setAvatar('rebel')
+            ;
+        }
+        return $author;
     }
 }

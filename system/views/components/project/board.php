@@ -48,7 +48,7 @@ foreach ($board as $column) {
                     </a>
                     <span class="title"><?= $feedback->getCreatedAt()->format('d/m/Y à H:i'); ?></span>
                     <strong class="name"><?= $feedback->getTitle(); ?></strong>
-                    <span class="experience">Par <?= $feedback->getAuthor()['username']; ?></span>
+                    <span class="experience">Par <?= $feedback->getAuthor(); ?></span>
                 </div>
             <?php } ?>
         </div>

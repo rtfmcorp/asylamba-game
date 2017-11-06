@@ -61,7 +61,7 @@ class CommentaryManager
         ;
         // We avoid sending notification to the comment author, whether he is the feedback author or not
         $players = [$author->getId()];
-        if ($feedback->getAuthor()->getId() !== $author->getId()) {
+        if ($feedback->getAuthor()->getId() !== $author->getId() && $feedback->getAuthor()->getId() !== null) {
             $players[] = $feedback->getAuthor()->getId();
             $authorNotif = clone $notif;
             $authorNotif->setRPlayer($feedback->getAuthor()->getId());
@@ -92,9 +92,24 @@ class CommentaryManager
             (new Commentary())
             ->setId($data['id'])
             ->setContent($data['content'])
-            ->setAuthor(($getAuthor) ? $this->playerManager->getByName($data['author']['username']) : $data['author']['username'])
+            ->setAuthor($this->getAuthor($data['author']['username'], $getAuthor))
             ->setCreatedAt(new \DateTime($data['created_at']))
             ->setUpdatedAt(new \DateTime($data['updated_at']))
         ;
+    }
+    
+    protected function getAuthor($name, $getAuthorData = false)
+    {
+        if ($getAuthorData === false) {
+            return $name;
+        }
+        if (($author = $this->playerManager->getByName($name)) === null) {
+            return
+                (new Player())
+                ->setName($name)
+                ->setAvatar('rebel')
+            ;
+        }
+        return $author;
     }
 }
