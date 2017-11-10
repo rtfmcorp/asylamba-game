@@ -72,9 +72,10 @@ echo '<div id="nav">';
             echo '<img src="' . MEDIA . 'map/place/place' . $currentBaseImg . '.png" alt="' . $currentBaseName . '" /> ';
             echo $currentBaseName;
         echo '</a>';
-        echo '<a href="' . Format::actionBuilder('switchbase', $sessionToken, ['base' => $nextBaseId]) . '" class="square">';
+        echo '<a id="next-base-button" href="' . Format::actionBuilder('switchbase', $sessionToken, ['base' => $nextBaseId]) . '" class="square">';
             echo '<img src="' . MEDIA . 'common/next-base.png" alt="base suivante" />';
         echo '</a>';
+        echo '<div class="navTrigger" onclick="menuController.handle();"><i></i><i></i><i></i></div>';
     echo '</div>';
 
     echo '<div class="box left-2">';
