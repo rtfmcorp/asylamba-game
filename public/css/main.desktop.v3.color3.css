@@ -40,6 +40,11 @@ body {
 .bull.right:before {
   left: 12px;
 }
+@media (max-width: 1024px) {
+  .component.invisible {
+    display: none !important;
+  }
+}
 body {
   width: 100%;
   height: 100%;
@@ -252,9 +257,11 @@ body {
   height: 32px;
   background: url('src/desktop/button/bButtonRight.png') no-repeat;
 }
-#tools .box a.current-base,
-#nav .box a.current-base {
-  margin-left: 56px;
+@media (min-width: 350px) {
+  #tools .box a.current-base,
+  #nav .box a.current-base {
+    margin-left: 56px;
+  }
 }
 #tools .box a.current-base img,
 #nav .box a.current-base img {
@@ -268,6 +275,18 @@ body {
   border-radius: 100%;
   border: solid 2px #4F4F4F;
   width: 60px;
+}
+@media (max-width: 350px) {
+  #tools .box a.current-base img,
+  #nav .box a.current-base img {
+    display: none;
+  }
+}
+@media (max-width: 350px) {
+  #tools .box #next-base-button,
+  #nav .box #next-base-button {
+    display: none;
+  }
 }
 #tools .box a:hover:before,
 #nav .box a:hover:before,
@@ -349,6 +368,12 @@ body {
   border-radius: 100%;
   background: #b17a00;
 }
+@media (max-width: 1024px) and (min-width: 350px) {
+  #tools .box a.square,
+  #nav .box a.square {
+    margin: 5px 10px;
+  }
+}
 #tools .box a.custom img,
 #nav .box a.custom img {
   top: 7px;
@@ -399,6 +424,30 @@ body {
 #nav .box a.square span.number {
   bottom: -5px;
   top: auto;
+}
+@media (max-width: 1024px) {
+  #nav .box.left {
+    left: 0px;
+    padding-right: 30px;
+  }
+  #nav .box.left-2 {
+    top: 45px;
+    left: -100%;
+  }
+  #nav .box.left-3 {
+    top: 88px;
+    left: -100%;
+  }
+  #nav .box.right {
+    top: 133px;
+    left: -100%;
+    right: auto;
+  }
+}
+@media (min-width: 1024px) {
+  #nav .box .navTrigger {
+    display: none;
+  }
 }
 #tools .box {
   position: absolute;
@@ -614,6 +663,17 @@ body {
   color: white;
   background: #202020;
 }
+@media (max-width: 1024px) {
+  #nav .overbox#disconnect-box {
+    left: 30px;
+    top: 177px;
+  }
+}
+@media (min-width: 350px) and (max-width: 1024px) {
+  #nav .overbox#disconnect-box {
+    left: 100px;
+  }
+}
 #nav .overbox#bug-tracker {
   width: 250px;
   top: 50px;
@@ -646,6 +706,21 @@ body {
 #nav .overbox#bug-tracker .button {
   display: block;
   margin: 0 10px 2px 10px;
+}
+@media (max-width: 1024px) {
+  #nav .overbox#bug-tracker {
+    left: 30px;
+    top: 177px;
+  }
+  #nav .overbox#bug-tracker:before {
+    left: 70px;
+    right: auto;
+  }
+}
+@media (min-width: 350px) {
+  #nav .overbox#bug-tracker {
+    left: 70px;
+  }
 }
 #nav .overbox#roadmap {
   width: 350px;
@@ -709,10 +784,22 @@ body {
   font-size: 12px;
   color: #CCC;
 }
+@media (max-width: 1024px) {
+  #nav .overbox#tutorial {
+    top: 177px;
+    left: 0px;
+  }
+}
 #nav .overbox#new-notifications {
   top: 50px;
-  left: 627px;
+  left: 672px;
   width: 300px;
+}
+@media (max-width: 1024px) {
+  #nav .overbox#new-notifications {
+    top: 177px;
+    left: 0px;
+  }
 }
 #tools .overbox {
   display: none;
@@ -3266,6 +3353,174 @@ span.centred-link:focus {
   display: block;
   font-size: 20px;
   font-weight: bold;
+}
+.navTrigger {
+  cursor: pointer;
+  width: 30px;
+  height: 25px;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 10px;
+}
+.navTrigger i {
+  background-color: #fff;
+  border-radius: 2px;
+  content: '';
+  display: block;
+  width: 100%;
+  height: 4px;
+}
+.navTrigger i:nth-child(1) {
+  -webkit-animation: outT 0.8s backwards;
+  animation: outT 0.8s backwards;
+  -webkit-animation-direction: reverse;
+  animation-direction: reverse;
+}
+.navTrigger i:nth-child(2) {
+  margin: 5px 0;
+  -webkit-animation: outM 0.8s backwards;
+  animation: outM 0.8s backwards;
+  -webkit-animation-direction: reverse;
+  animation-direction: reverse;
+}
+.navTrigger i:nth-child(3) {
+  -webkit-animation: outBtm 0.8s backwards;
+  animation: outBtm 0.8s backwards;
+  -webkit-animation-direction: reverse;
+  animation-direction: reverse;
+}
+.navTrigger.active i:nth-child(1) {
+  -webkit-animation: inT 0.8s forwards;
+  animation: inT 0.8s forwards;
+}
+.navTrigger.active i:nth-child(2) {
+  -webkit-animation: inM 0.8s forwards;
+  animation: inM 0.8s forwards;
+}
+.navTrigger.active i:nth-child(3) {
+  -webkit-animation: inBtm 0.8s forwards;
+  animation: inBtm 0.8s forwards;
+}
+@-webkit-keyframes inM {
+  50% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(45deg);
+  }
+}
+@keyframes inM {
+  50% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(45deg);
+  }
+}
+@-webkit-keyframes outM {
+  50% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(45deg);
+  }
+}
+@keyframes outM {
+  50% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(45deg);
+  }
+}
+@-webkit-keyframes inT {
+  0% {
+    -webkit-transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    -webkit-transform: translateY(9px) rotate(0deg);
+  }
+  100% {
+    -webkit-transform: translateY(9px) rotate(135deg);
+  }
+}
+@keyframes inT {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(9px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(9px) rotate(135deg);
+  }
+}
+@-webkit-keyframes outT {
+  0% {
+    -webkit-transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    -webkit-transform: translateY(9px) rotate(0deg);
+  }
+  100% {
+    -webkit-transform: translateY(9px) rotate(135deg);
+  }
+}
+@keyframes outT {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(9px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(9px) rotate(135deg);
+  }
+}
+@-webkit-keyframes inBtm {
+  0% {
+    -webkit-transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    -webkit-transform: translateY(-9px) rotate(0deg);
+  }
+  100% {
+    -webkit-transform: translateY(-9px) rotate(135deg);
+  }
+}
+@keyframes inBtm {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-9px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-9px) rotate(135deg);
+  }
+}
+@-webkit-keyframes outBtm {
+  0% {
+    -webkit-transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    -webkit-transform: translateY(-9px) rotate(0deg);
+  }
+  100% {
+    -webkit-transform: translateY(-9px) rotate(135deg);
+  }
+}
+@keyframes outBtm {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-9px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-9px) rotate(135deg);
+  }
 }
 .component .situation-content {
   position: relative;

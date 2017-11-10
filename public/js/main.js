@@ -126,6 +126,27 @@ jQuery(document).ready(function($) {
 			$('.alert-bull').remove();
 		});
 	});
+    
+    menuController = {
+        handle: () => {
+            if ($(".navTrigger").hasClass('active')) {
+                return menuController.close();
+            }
+            return menuController.deploy();
+        },
+        deploy: () => {
+            $(".navTrigger").addClass('active');
+            $("#nav .left-2").animate({left: "0px"}, 500);
+            $("#nav .left-3").animate({left: "0px"}, 500);
+            $("#nav .right").animate({left: "0px"}, 500);
+        },
+        close: () => {
+            $(".navTrigger").removeClass('active');
+            $("#nav .left-2").animate({left: "-100%"}, 500);
+            $("#nav .left-3").animate({left: "-100%"}, 500);
+            $("#nav .right").animate({left: "-100%"}, 500);
+        }
+    };
 
 // ################################# //
 // ####### UNI INVEST MODULE ####### //
