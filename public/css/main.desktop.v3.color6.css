@@ -3300,6 +3300,9 @@ span.centred-link:focus {
 .notif.open .footer {
   display: block;
 }
+.component.feedback .player {
+  height: auto !important;
+}
 .component.rc .rc {
   position: relative;
   margin: 20px 10px 20px 30px;
