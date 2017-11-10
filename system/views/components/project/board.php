@@ -35,7 +35,7 @@ include COMPONENT . 'project/infos.php';
 
 foreach ($board as $column) {
 ?>
-<div class="component size1 player rank">
+<div class="component size1 player rank feedback">
     <div class="head skin-2">
         <h2><?= $column['title']; ?></h2>
     </div>

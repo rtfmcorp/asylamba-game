@@ -61,7 +61,7 @@ class CommentaryManager
         ;
         // We avoid sending notification to the comment author, whether he is the feedback author or not
         $players = [$author->getId()];
-        if ($feedback->getAuthor()->getId() !== $author->getId() && $feedback->getAuthor()->getId() !== null) {
+        if ($feedback->getAuthor()->getId() !== $author->getId() && $feedback->getAuthor()->getId() !== 0) {
             $players[] = $feedback->getAuthor()->getId();
             $authorNotif = clone $notif;
             $authorNotif->setRPlayer($feedback->getAuthor()->getId());
@@ -70,7 +70,7 @@ class CommentaryManager
         foreach ($feedback->getCommentaries() as $comment) {
             $commentAuthor = $comment->getAuthor();
             
-            if (in_array($commentAuthor->getId(), $players) || $commentAuthor->getId() === null) {
+            if (in_array($commentAuthor->getId(), $players) || $commentAuthor->getId() === 0) {
                 continue;
             }
             $players[] = $commentAuthor->getId();

@@ -73,7 +73,7 @@ class BugManager
         ;
         // We avoid sending notification to the updater, whether he is the feedback author or not
         $players = [$player->getId()];
-        if ($bug->getAuthor()->getId() !== $player->getId() && $bug->getAuthor()->getId() !== null) {
+        if ($bug->getAuthor()->getId() !== $player->getId() && $bug->getAuthor()->getId() !== 0) {
             $players[] = $bug->getAuthor()->getId();
             $authorNotif = clone $notif;
             $authorNotif->setRPlayer($bug->getAuthor()->getId());
@@ -82,7 +82,7 @@ class BugManager
         foreach ($bug->getCommentaries() as $comment) {
             $commentAuthor = $comment->getAuthor();
             
-            if (in_array($commentAuthor->getId(), $players) || $commentAuthor->getId() === null) {
+            if (in_array($commentAuthor->getId(), $players) || $commentAuthor->getId() === 0) {
                 continue;
             }
             $players[] = $commentAuthor->getId();

@@ -74,7 +74,7 @@ class EvolutionManager
         ;
         // We avoid sending notification to the updater, whether he is the feedback author or not
         $players = [$player->getId()];
-        if ($evolution->getAuthor()->getId() !== $player->getId() && $evolution->getAuthor()->getId() !== null) {
+        if ($evolution->getAuthor()->getId() !== $player->getId() && $evolution->getAuthor()->getId() !== 0) {
             $players[] = $evolution->getAuthor()->getId();
             $authorNotif = clone $notif;
             $authorNotif->setRPlayer($evolution->getAuthor()->getId());
@@ -83,7 +83,7 @@ class EvolutionManager
         foreach ($evolution->getCommentaries() as $comment) {
             $commentAuthor = $comment->getAuthor();
             
-            if (in_array($commentAuthor->getId(), $players) || $commentAuthor->getId() === null) {
+            if (in_array($commentAuthor->getId(), $players) || $commentAuthor->getId() === 0) {
                 continue;
             }
             $players[] = $commentAuthor->getId();
