@@ -560,9 +560,11 @@ jQuery(document).ready(function($) {
     
     creditController = {
         update: function(amount) {
+            console.log('ok');
             $("#player-credits").fadeTo('fast', 0, function() {
+                console.log($(this));
                 $(this)
-                    .text((creditController.toInt($(this).text()) + amount).toLocaleString('fr-FR'))
+                    .html((creditController.toInt($(this).text()) + amount).toLocaleString('fr-FR') + ' <img class="icon-color" src="/public/media/resources/credit.png" alt="crédits" />')
                     .fadeTo('fast', 1)
                 ;
             });

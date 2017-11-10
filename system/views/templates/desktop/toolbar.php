@@ -75,7 +75,7 @@ echo '<div id="tools">';
             echo ($nbOutcomingCommanders > 0) ? '<span class="number">' . $nbOutcomingCommanders . '</span>' : null;
         echo '</a>';
 
-        echo '<span class="resource-link" style="width: 120px;">';
+        echo '<span id="player-credits" class="resource-link" style="width: 120px;">';
                 echo Format::numberFormat($player->getCredit());
                 echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
         echo '</span>';
