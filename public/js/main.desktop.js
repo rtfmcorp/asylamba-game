@@ -481,12 +481,12 @@ jQuery(document).ready(function($) {
                     buffer += '<em>' + base.baseName + '</em></div>';
                     buffer += '<span class="rate">' + base.distance + ' al. (<a onclick="event.stopPropagation();" href="/map/place-' + base.rPlace + '" alt ="Map" target="_blank">Secteur ' + base.rSector + '</a>)</span>';
                     buffer += '<div class="for"><span>pour</span></div>';
-                    buffer += '<div class="price">' + base.income.toLocaleString() + ' <img src="/public/media/resources/credit.png" alt="" class="icon-color" /></div></div>';
+                    buffer += '<div class="price">' + base.income.toLocaleString('fr-FR') + ' <img src="/public/media/resources/credit.png" alt="" class="icon-color" /></div></div>';
                 buffer += '<div id="base-' + base.rPlace + '" class="hidden">';
                     buffer += '<div class="info">';
-                    buffer += '<div class="text-block"><p class="input input-area"><textarea onclick="event.stopPropagation();" placeholder="Envoyez un message à votre futur partenaire !*"></textarea></p></div>';
+                    buffer += '<div class="text-block"><p class="input input-area"><textarea onclick="event.stopPropagation();" placeholder="Envoyez un message à votre futur partenaire ! (facultatif)"></textarea></p></div>';
                     buffer += '<div class="button" onclick="tradeController.sendProposal(event, ' + base.rPlace + ');">';
-                    buffer += '<a href="#" class="trade-search-button">Proposer pour ' + base.price.toLocaleString() + ' <img src="/public/media/resources/credit.png" alt="" class="icon-color" /></a></div></div>';
+                    buffer += '<a href="#" class="trade-search-button">Proposer pour ' + base.price.toLocaleString('fr-FR') + ' <img src="/public/media/resources/credit.png" alt="" class="icon-color" /></a></div></div>';
                 buffer += '</div></div>';
             });
 
@@ -562,7 +562,7 @@ jQuery(document).ready(function($) {
         update: function(amount) {
             $("#player-credits").fadeTo('fast', 0, function() {
                 $(this)
-                    .text((creditController.toInt($(this).text()) + amount).toLocaleString())
+                    .text((creditController.toInt($(this).text()) + amount).toLocaleString('fr-FR'))
                     .fadeTo('fast', 1)
                 ;
             });
