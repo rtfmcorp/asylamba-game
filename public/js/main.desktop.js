@@ -931,18 +931,14 @@ jQuery(document).ready(function($) {
 		},
 
 		// ouvre une place
-		openPlace: placeid => {
-			$('#place-' + placeid).animate({
-				width: parseInt($('#place-' + placeid).find('.content').css('width')) + 20
-			}, 200);
-		},
+		openPlace: placeid => $('#place-' + placeid).animate({
+            width: parseInt($('#place-' + placeid).find('.content').css('width')) + 20
+        }, 200),
 
 		// ferme une place
-		closePlace: placeid => {
-			$('#place-' + placeid).animate({
-				width: 0
-			}, 200);
-		},
+		closePlace: placeid => $('#place-' + placeid).animate({
+            width: 0
+        }, 200),
 
 		// bouge à gauche si possible
 		moveToLeft: () => {
@@ -993,18 +989,16 @@ jQuery(document).ready(function($) {
         .on('click', '.closeactionbox', actionbox.close)
         .on('click', '.place', event => {
             let place = event.currentTarget;
-            let target = place.firstElementChild.getAttribute('data-target');
+            let target = Number(place.firstElementChild.getAttribute('data-target'));
             
-            place.classList.remove('active');
-
-            $('#action-box .action').each((i) => {
-                if (i == target) {
-                    place.classList.add('active');
-                    actionbox.openPlace(i);
-                } else {
-                    actionbox.closePlace(i);
-                }
-            });
+            $("#action-box .place.active").removeClass('active');
+            place.classList.add('active');
+            
+            $('#action-box .action').each(i => 
+                (i === target)
+                ? actionbox.openPlace(i)
+                : actionbox.closePlace(i)
+            );
         })
         .on('click', '.place.active', event => {
             $('#action-box .action').each((i) => {

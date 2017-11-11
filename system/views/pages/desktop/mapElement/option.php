@@ -55,7 +55,7 @@ echo '<div id="map-option">';
         echo 'data-class="active" ';
         echo 'data-target="attacks" ';
         echo 'data-switch-params="' . Params::SHOW_MAP_FLEETIN . '" ';
-        echo 'title="afficher/cacher les attaques entrantes""';
+        echo 'title="afficher/cacher les attaques entrantes"';
     echo '>';
         echo '<img src="' . MEDIA . 'fleet/movement.png" alt="" />';
     echo '</a>';
