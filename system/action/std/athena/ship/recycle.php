@@ -15,9 +15,13 @@ $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 
 $baseId = $request->query->get('baseid');
 $typeOfShip = $request->query->get('typeofship');
-$quantity = $request->request->get('quantity');
+$quantity = floatval($request->request->get('quantity'));
 
 if ($baseId !== false and $typeOfShip !== false and $quantity !== false) {
+    
+    if (intval($quantity) != $quantity) {
+        throw new ErrorException('la quantité doit être un nombre entier');
+    }
     if (($ob = $orbitalBaseManager->getPlayerBase($baseId, $session->get('playerId')))) {
         if ($quantity > 0 && $quantity <= $ob->shipStorage[$typeOfShip]) {
             $resources = ($quantity * ShipResource::getInfo($typeOfShip, 'resourcePrice')) / 2;
