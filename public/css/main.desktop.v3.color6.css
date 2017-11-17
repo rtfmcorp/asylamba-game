@@ -717,7 +717,7 @@ body {
     right: auto;
   }
 }
-@media (min-width: 350px) {
+@media (min-width: 350px) and (max-width: 1024px) {
   #nav .overbox#bug-tracker {
     left: 70px;
   }
