@@ -647,45 +647,40 @@ jQuery(document).ready(function($) {
     
 	$('.sh').on('click', displayModule);
 
-	$('#container').on('click' ,function(e) {
-		$('.overbox').css('display', 'none');
-	});
+	$('#container').on('click', e => $('.overbox').css('display', 'none'));
 
-	$('.switch-class').on('click', function(e) {
-		$(this).toggleClass($(this).data('class'));
-	});
-
-	$('.switch-class-parent').on('click', function(e) {
-		$(this).parent().toggleClass($(this).data('class'));
-	});
-
-	$('.notif.unreaded').on('click', '.read-notif', function(e) {
-		var notif  = $(this).parent();
+	$('.switch-class').on('click', e => e.currentTarget.classList.toggle(
+        e.currentTarget.getAttribute('data-class'))
+    );
+	$('.switch-class-parent').on('click', e => e.currentTarget.parentNode.classList.toggle(
+        e.currentTarget.getAttribute('data-class'))
+    );
+	$('.notif.unreaded').on('click', '.read-notif', event => {
+		var notif  = event.currentTarget.parentNode;
 		var notifs = $('#general-notif-container');
 		var count  = parseInt(notifs.find('span.number').text()) - 1;
 
-		notif.removeClass('unreaded');
+        if (!notif.classList.contains('unreaded')) return;
+		notif.classList.remove('unreaded');
 		notifs.find('span.number').text(count);
 		if (count == 0) {
 			notifs.removeClass('active');
 		}
-		$.get(game.path + 'ajax/a-readnotif/notif-' + notif.data('notif-id'));
+		$.get(game.path + 'ajax/a-readnotif/notif-' + notif.getAttribute('data-notif-id'));
 	});
 
 	// STD AJAX ACTION LINK
 	$('.notif').on('click', 'a.ajax-action', function(e) {
 		e.preventDefault();
 
-		var notif = $(this).parent().parent();
-		var ajaxTarget = $(this).data('ajax-target');
+		var notif = e.currentTarget.parentNode.parentNode;
+		var ajaxTarget = e.currentTarget.getAttribute('data-ajax-target');
 
 		if (ajaxTarget !== undefined) {
 			$.get(ajaxTarget)
-			 .done(function(data) {
-			 	notif.css('display', 'none');
-			}).fail(function() {
-				alertController.add(101, 'Une erreur réseaux est survenue');
-			});
+                .done(data => { notif.style.display = 'none'; })
+                .fail(() => alertController.add(101, 'Une erreur réseaux est survenue'))
+            ;
 		} else {
 			alertController.add(101, 'Une erreur réseaux est survenue');
 		}
