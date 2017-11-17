@@ -18,6 +18,7 @@ class ColorManagerTest extends \PHPUnit\Framework\TestCase
     {
         $this->manager = new ColorManager(
             $this->getEntityManagerMock(),
+            $this->getEventDispatcherMock(),
             $this->getPlayerManagerMock(),
             $this->getVoteManagerMock(),
             $this->getConversationManagerMock(),
@@ -195,6 +196,21 @@ class ColorManagerTest extends \PHPUnit\Framework\TestCase
     public function getByRegimeAndElectionStatus()
     {
         return [];
+    }
+    
+    public function getEventDispatcherMock()
+    {
+        $eventDispatcherMock = $this
+            ->getMockBuilder('Asylamba\Classes\Worker\EventDispatcher')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+        $eventDispatcherMock
+            ->expects($this->any())
+            ->method('dispatch')
+            ->willReturn(true)
+        ;
+        return $eventDispatcherMock;
     }
     
     public function getPlayerManagerMock()
