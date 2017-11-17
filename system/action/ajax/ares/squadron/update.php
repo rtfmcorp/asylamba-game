@@ -18,27 +18,27 @@ $session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 
-for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
-	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
+for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
+    $verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
 if (
-	($baseID = (int) $request->query->get('base')) === null	||
-	($commanderID = (int) $request->query->get('commander')) === null	||
-	($squadronID = (int) $request->query->get('squadron')) === null	||
-	($newSquadron = $request->query->get('army')) === null	||
-	!in_array($baseID, $verif)
+    ($baseID = (int) $request->query->get('base')) === null    ||
+    ($commanderID = (int) $request->query->get('commander')) === null    ||
+    ($squadronID = (int) $request->query->get('squadron')) === null    ||
+    ($newSquadron = $request->query->get('army')) === null    ||
+    !in_array($baseID, $verif)
 ) {
-	throw new FormException('Pas assez d\'informations pour assigner un vaisseau.');	
+    throw new FormException('Pas assez d\'informations pour assigner un vaisseau.');
 }
 
 $newSquadron = explode('_', $newSquadron);
-$newSquadron = array_map(function($el) {
-	return $el < 0 ? 0 : (int)$el;
+$newSquadron = array_map(function ($el) {
+    return $el < 0 ? 0 : (int)$el;
 }, $newSquadron);
 
 if (count($newSquadron) !== 12) {
-	throw new FormException('Pas assez d\'informations pour assigner un vaisseau.');
+    throw new FormException('Pas assez d\'informations pour assigner un vaisseau.');
 }
 
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
@@ -46,49 +46,49 @@ $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $commander = $this->getContainer()->get('ares.commander_manager')->get($commanderID);
 
 if (($base = $orbitalBaseManager->get($baseID)) === null || $commander === null || $commander->rBase !== $baseID || $commander->statement !== Commander::AFFECTED) {
-	throw new ErrorException('Erreur dans les références du commandant ou de la base.');
+    throw new ErrorException('Erreur dans les références du commandant ou de la base.');
 }
 $squadron = $commander->getSquadron($squadronID);
 
 if ($squadron === false) {
-	throw new ErrorException('Erreur dans les références du commandant ou de la base.');
+    throw new ErrorException('Erreur dans les références du commandant ou de la base.');
 }
 
 $squadronSHIP = $squadron->arrayOfShips;
 $baseSHIP = $base->shipStorage;
 
 foreach ($newSquadron as $i => $v) {
-	$baseSHIP[$i] -= ($v - $squadronSHIP[$i]);
-	$squadronSHIP[$i] = $v;
+    $baseSHIP[$i] -= ($v - $squadronSHIP[$i]);
+    $squadronSHIP[$i] = $v;
 }
 
 # token de vérification
-$baseOK = TRUE;
-$squadronOK = TRUE;
+$baseOK = true;
+$squadronOK = true;
 $totalPEV = 0;
 # vérif shipStorage (pas de nombre négatif)
 foreach ($baseSHIP as $i => $v) {
-	if ($v < 0) {
-		$baseOK = FALSE;
-		break;
-	}
+    if ($v < 0) {
+        $baseOK = false;
+        break;
+    }
 }
 
 # vérif de squadron (pas plus de 100 PEV, pas de nombre négatif)
 foreach ($squadronSHIP as $i => $v) {
-	$totalPEV += $v * ShipResource::getInfo($i, 'pev');
-	if ($v < 0) {
-		$squadronOK = FALSE;
-		break;
-	}
+    $totalPEV += $v * ShipResource::getInfo($i, 'pev');
+    if ($v < 0) {
+        $squadronOK = false;
+        break;
+    }
 }
 
 if (!$baseOK || !$squadronOK || $totalPEV > 100) {
-	throw new ErrorException('Erreur dans la répartition des vaisseaux.');
+    throw new ErrorException('Erreur dans la répartition des vaisseaux.');
 }
 # tutorial
 if ($session->get('playerInfo')->get('stepDone') === false && $session->get('playerInfo')->get('stepTutorial') === TutorialResource::FILL_SQUADRON) {
-	$tutorialHelper->setStepDone();
+    $tutorialHelper->setStepDone();
 }
 
 $base->shipStorage = $baseSHIP;

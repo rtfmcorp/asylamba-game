@@ -4,27 +4,30 @@
  **/
 namespace Asylamba\Classes\Container;
 
-class Cookie extends ArrayList {
-	/** @var array **/
-	protected $newElements = [];
+class Cookie extends ArrayList
+{
+    /** @var array **/
+    protected $newElements = [];
 
     /**
      * @param string $key
      * @param mixed $value
      */
-    public function add($key, $value, $new = false) {
+    public function add($key, $value, $new = false)
+    {
         $this->elements[$key] = $value;
-		
-		if ($new === true) {
-			$this->newElements[$key] = $value;
-		}
+        
+        if ($new === true) {
+            $this->newElements[$key] = $value;
+        }
     }
 
     /**
      * @param string $key
      * @return mixed
      */
-    public function get($key, $default = null) {
+    public function get($key, $default = null)
+    {
         if (isset($this->elements[$key])) {
             return $this->elements[$key];
         }
@@ -35,30 +38,32 @@ class Cookie extends ArrayList {
      * @param string $key
      * @return boolean
      */
-    public function remove($key) {
+    public function remove($key)
+    {
         if (!isset($this->elements[$key])) {
             return false;
         }
         unset($this->elements[$key]);
     }
 
-    public function clear() {
+    public function clear()
+    {
         $this->elements = array();
     }
-	
-	/**
-	 * @return array
-	 */
-	public function all()
-	{
-		return $this->elements;
-	}
-	
-	/**
-	 * @return array
-	 */
-	public function getNewElements()
-	{
-		return $this->newElements;
-	}
+    
+    /**
+     * @return array
+     */
+    public function all()
+    {
+        return $this->elements;
+    }
+    
+    /**
+     * @return array
+     */
+    public function getNewElements()
+    {
+        return $this->newElements;
+    }
 }

@@ -2,6 +2,6 @@
 
 namespace Asylamba\Classes\Exception;
 
-class ErrorException extends \Exception {
-	
+class ErrorException extends \Exception
+{
 }

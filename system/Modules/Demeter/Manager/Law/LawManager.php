@@ -14,77 +14,81 @@ namespace Asylamba\Modules\Demeter\Manager\Law;
 use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Modules\Demeter\Model\Law\Law;
 
-class LawManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var VoteLawManager **/
-	protected $voteLawManager;
+class LawManager
+{
+    /** @var EntityManager **/
+    protected $entityManager;
+    /** @var VoteLawManager **/
+    protected $voteLawManager;
 
-	/**
-	 * @param EntityManager $entityManager
-	 * @param VoteLawManager $voteLawManager
-	 */
-	public function __construct(EntityManager $entityManager, VoteLawManager $voteLawManager) {
-		$this->entityManager = $entityManager;
-		$this->voteLawManager = $voteLawManager;
-	}
-	
-	/**
-	 * @param int $id
-	 * @return Law
-	 */
-	public function get($id)
-	{
-		return $this->entityManager->getRepository(Law::class)->get($id);
-	}
-	
-	/**
-	 * @param int $factionId
-	 * @param array $statements
-	 * @return array
-	 */
-	public function getByFactionAndStatements($factionId, $statements = [])
-	{
-		return $this->entityManager->getRepository(Law::class)->getByFactionAndStatements($factionId, $statements);
-	}
-	
-	/**
-	 * @param int $factionId
-	 * @param string $type
-	 * @return bool
-	 */
-	public function lawExists($factionId, $type)
-	{
-		return $this->entityManager->getRepository(Law::class)->lawExists($factionId, $type);
-	}
+    /**
+     * @param EntityManager $entityManager
+     * @param VoteLawManager $voteLawManager
+     */
+    public function __construct(EntityManager $entityManager, VoteLawManager $voteLawManager)
+    {
+        $this->entityManager = $entityManager;
+        $this->voteLawManager = $voteLawManager;
+    }
+    
+    /**
+     * @param int $id
+     * @return Law
+     */
+    public function get($id)
+    {
+        return $this->entityManager->getRepository(Law::class)->get($id);
+    }
+    
+    /**
+     * @param int $factionId
+     * @param array $statements
+     * @return array
+     */
+    public function getByFactionAndStatements($factionId, $statements = [])
+    {
+        return $this->entityManager->getRepository(Law::class)->getByFactionAndStatements($factionId, $statements);
+    }
+    
+    /**
+     * @param int $factionId
+     * @param string $type
+     * @return bool
+     */
+    public function lawExists($factionId, $type)
+    {
+        return $this->entityManager->getRepository(Law::class)->lawExists($factionId, $type);
+    }
 
-	/**
-	 * @param Law $law
-	 * @return int
-	 */
-	public function add(Law $law) {
-		$this->entityManager->persist($law);
-		$this->entityManager->flush($law);
+    /**
+     * @param Law $law
+     * @return int
+     */
+    public function add(Law $law)
+    {
+        $this->entityManager->persist($law);
+        $this->entityManager->flush($law);
 
-		return $law->id;
-	}
+        return $law->id;
+    }
 
-	/**
-	 * @param Law $law
-	 * @return bool
-	 */
-	public function ballot(Law $law) {
-		$votes = $this->voteLawManager->getLawVotes($law);
+    /**
+     * @param Law $law
+     * @return bool
+     */
+    public function ballot(Law $law)
+    {
+        $votes = $this->voteLawManager->getLawVotes($law);
 
-		$ballot = 0;
+        $ballot = 0;
 
-		foreach ($votes as $vote) {
-			if ($vote->vote) {
-				$ballot++;
-			} else {
-				$ballot--;
-			}
-		}
-		return $ballot >= 0;
-	}
+        foreach ($votes as $vote) {
+            if ($vote->vote) {
+                $ballot++;
+            } else {
+                $ballot--;
+            }
+        }
+        return $ballot >= 0;
+    }
 }

@@ -43,58 +43,58 @@ $aw2 = $qr->fetch(); $qr->closeCursor();
 
 $totalPEV = 0;
 for ($i = 0; $i < 12; $i++) {
-	$totalPEV += $aw2['nbs' . $i] * ShipResource::getInfo($i, 'pev');
+    $totalPEV += $aw2['nbs' . $i] * ShipResource::getInfo($i, 'pev');
 }
 
 echo '<div class="component profil">';
-	echo '<div class="head skin-2">';
-		echo '<h2>Etat des armées</h2>';
-	echo '</div>';
-	echo '<div class="fix-body">';
-		echo '<div class="body">';
-			echo '<h4>Statistiques générales</h4>';
+    echo '<div class="head skin-2">';
+        echo '<h2>Etat des armées</h2>';
+    echo '</div>';
+    echo '<div class="fix-body">';
+        echo '<div class="body">';
+            echo '<h4>Statistiques générales</h4>';
 
-			echo '<div class="number-box">';
-				echo '<span class="label">officiers actifs</span>';
-				echo '<span class="value">' . Format::number($aw1['nb']) . '</span>';
-				echo '<span class="group-link"><a href="#" title="officiers affectés en première ou deuxième ligne sur des planètes de la faction" class="hb lt">?</a></span>';
-			echo '</div>';
+            echo '<div class="number-box">';
+                echo '<span class="label">officiers actifs</span>';
+                echo '<span class="value">' . Format::number($aw1['nb']) . '</span>';
+                echo '<span class="group-link"><a href="#" title="officiers affectés en première ou deuxième ligne sur des planètes de la faction" class="hb lt">?</a></span>';
+            echo '</div>';
 
-			echo '<div class="number-box grey">';
-				echo '<span class="label">grade moyen des officiers actifs</span>';
-				echo '<span class="value">' . (isset($aw1['avgLevel']) ? CommanderResources::getInfo(Format::number($aw1['avgLevel']), 'grade') : 'Inconnu') . '</span>';
+            echo '<div class="number-box grey">';
+                echo '<span class="label">grade moyen des officiers actifs</span>';
+                echo '<span class="value">' . (isset($aw1['avgLevel']) ? CommanderResources::getInfo(Format::number($aw1['avgLevel']), 'grade') : 'Inconnu') . '</span>';
 
-			echo '</div>';
+            echo '</div>';
 
-			echo '<div class="number-box grey">';
-				echo '<span class="label">PEV totaux</span>';
-				echo '<span class="value">';
-					echo Format::number($totalPEV);
-					echo ' <img class="icon-color" src="' . MEDIA . 'resources/pev.png" alt="pev">';
-				echo '</span>';
-				echo '<span class="group-link"><a href="#" title="PEV affectés à des commandants actifs" class="hb lt">?</a></span>';
-			echo '</div>';
+            echo '<div class="number-box grey">';
+                echo '<span class="label">PEV totaux</span>';
+                echo '<span class="value">';
+                    echo Format::number($totalPEV);
+                    echo ' <img class="icon-color" src="' . MEDIA . 'resources/pev.png" alt="pev">';
+                echo '</span>';
+                echo '<span class="group-link"><a href="#" title="PEV affectés à des commandants actifs" class="hb lt">?</a></span>';
+            echo '</div>';
 
-			echo '<div class="number-box grey">';
-				echo '<span class="label">PEV moyens par officier</span>';
-				echo '<span class="value">';
-					echo (isset($aw1['nb']) AND $aw1['nb'] != 0)
-						? Format::number($totalPEV / $aw1['nb'])
-						: 0;
-					echo ' <img class="icon-color" src="' . MEDIA . 'resources/pev.png" alt="pev">';
-				echo '</span>';
-			echo '</div>';
+            echo '<div class="number-box grey">';
+                echo '<span class="label">PEV moyens par officier</span>';
+                echo '<span class="value">';
+                    echo (isset($aw1['nb']) and $aw1['nb'] != 0)
+                        ? Format::number($totalPEV / $aw1['nb'])
+                        : 0;
+                    echo ' <img class="icon-color" src="' . MEDIA . 'resources/pev.png" alt="pev">';
+                echo '</span>';
+            echo '</div>';
 
-			echo '<h4>Nombre d\'appareils par type</h4>';
-			echo '<ul class="list-type-1">';
-			for ($i = 0; $i < 12; $i++) {
-				echo '<li>';
-					echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($i, 'imageLink') . '.png" alt="" />';
-					echo '<span class="label">' . ShipResource::getInfo($i, 'name') . ' &laquo;' . ShipResource::getInfo($i, 'codeName') . '&raquo;</span>';
-					echo '<span class="value">' . Format::number($aw2['nbs' . $i]) . '</span>';
-				echo '</li>';
-			}
-			echo '</ul>';
-		echo '</div>';
-	echo '</div>';
+            echo '<h4>Nombre d\'appareils par type</h4>';
+            echo '<ul class="list-type-1">';
+            for ($i = 0; $i < 12; $i++) {
+                echo '<li>';
+                echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($i, 'imageLink') . '.png" alt="" />';
+                echo '<span class="label">' . ShipResource::getInfo($i, 'name') . ' &laquo;' . ShipResource::getInfo($i, 'codeName') . '&raquo;</span>';
+                echo '<span class="value">' . Format::number($aw2['nbs' . $i]) . '</span>';
+                echo '</li>';
+            }
+            echo '</ul>';
+        echo '</div>';
+    echo '</div>';
 echo '</div>';

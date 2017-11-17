@@ -1,4 +1,23 @@
 START TRANSACTION;
+
+CREATE TABLE `budget__charges` (
+  `transaction_id` int(10) UNSIGNED NOT NULL,
+  `category` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `budget__donations` (
+  `transaction_id` int(10) UNSIGNED NOT NULL,
+  `player_bind_key` varchar(50) NOT NULL,
+  `token` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `budget__transactions` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `transaction_type` varchar(12) NOT NULL,
+  `amount` int(10) NOT NULL,
+  `created_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `candidate` (
   `id` int(10) UNSIGNED NOT NULL,
   `rElection` int(10) UNSIGNED NOT NULL,
@@ -236,6 +255,36 @@ CREATE TABLE `law` (
   `dEnd` datetime DEFAULT NULL,
   `dEndVotation` datetime DEFAULT NULL,
   `dCreation` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `news` (
+   `id` int(10) UNSIGNED NOT NULL,
+   `title` varchar(255) NOT NULL,
+   `content` text,
+   `type` varchar(15) NOT NULL,
+   `weight` tinyint(4) NOT NULL,
+   `created_at` datetime NOT NULL,
+   `updated_at` datetime NOT NULL,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `news__military` (
+   `news_id` int(10) UNSIGNED NOT NULL,
+   `attacker_id` int(10) UNSIGNED NOT NULL,
+   `defender_id` int(10) UNSIGNED NOT NULL,
+   `place_id`  int(10) UNSIGNED NOT NULL,
+   `type` varchar(15) NOT NULL,
+   `is_victory` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `news__politics` (
+    `news_id` int(10) UNSIGNED NOT NULL,
+    `faction_id` int(10) UNSIGNED NOT NULL,
+    `type` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `news__trade` (
+    `news_id` int(10) UNSIGNED NOT NULL,
+    `transaction_id` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `notification` (
@@ -710,6 +759,15 @@ DROP TABLE IF EXISTS `vSystemDiary`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `vSystemDiary`  AS  select `h`.`id` AS `id`,`h`.`rPlace` AS `place`,`h`.`oldPlayer` AS `oldPlayer`,`p1`.`name` AS `oldName`,`c1`.`id` AS `oldColor`,`h`.`newPlayer` AS `newPlayer`,`p2`.`name` AS `newName`,`c2`.`id` AS `newColor`,`h`.`dChangement` AS `dChangement`,`p`.`position` AS `position`,`p`.`rSystem` AS `system` from (((((`changeColorPlace` `h` left join `place` `p` on((`p`.`id` = `h`.`rPlace`))) left join `player` `p1` on((`h`.`oldPlayer` = `p1`.`id`))) left join `color` `c1` on((`p1`.`rColor` = `c1`.`id`))) left join `player` `p2` on((`h`.`newPlayer` = `p2`.`id`))) left join `color` `c2` on((`p2`.`rColor` = `c2`.`id`))) order by `h`.`dChangement` desc limit 0,5000 ;
 
+ALTER TABLE `budget__charges`
+  ADD KEY fkChargeId (`transaction_id`);
+
+ALTER TABLE `budget__donations`
+  ADD KEY fkDonationId (`transaction_id`),
+  ADD KEY `fkPlayerBindKey` (`player_bind_key`);
+
+ALTER TABLE `budget__transactions`
+  ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `candidate`
   ADD PRIMARY KEY (`id`),
@@ -795,6 +853,23 @@ ALTER TABLE `notification`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fkNotificationPlayer` (`rPlayer`);
 
+ALTER TABLE `news`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `news__military`
+  ADD KEY `fkMilitaryNews` (`news_id`),
+  ADD KEY `fkAttacker` (`attacker_id`),
+  ADD KEY `fkDefender` (`defender_id`),
+  ADD KEY `fkPlace` (`place_id`);
+
+ALTER TABLE `news__politics`
+  ADD KEY `fkPoliticsNews` (`news_id`),
+  ADD KEY `fkFaction` (`faction_id`);
+
+ALTER TABLE `news__trade`
+  ADD KEY `fkTradeNews` (`news_id`),
+  ADD KEY `fkTransaction` (`transaction_id`);
+
 ALTER TABLE `orbitalBase`
   ADD PRIMARY KEY (`rPlace`),
   ADD KEY `fkOrbitalBasePlayer` (`rPlayer`);
@@ -815,6 +890,7 @@ ALTER TABLE `place`
 ALTER TABLE `player`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name_UNIQUE` (`name`),
+  ADD KEY `fkBindKey` (`bind`),
   ADD KEY `fkPlayerColor` (`rColor`),
   ADD KEY `fkPlayerPlayer` (`rGodfather`);
 
@@ -894,6 +970,8 @@ ALTER TABLE `voteLaw`
   ADD KEY `fkVoteLawPlayer` (`rPlayer`);
 
 
+ALTER TABLE `budget__donations`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `candidate`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `changeColorPlace`
@@ -933,6 +1011,8 @@ ALTER TABLE `forumMessage`
 ALTER TABLE `forumTopic`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `law`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `news`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE `notification`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
@@ -977,6 +1057,13 @@ ALTER TABLE `vote`
 ALTER TABLE `voteLaw`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `budget__charges`
+  ADD CONSTRAINT `fkChargeId` FOREIGN KEY (`transaction_id`) REFERENCES `budget__transactions` (`id`);
+
+ALTER TABLE `budget__donations`
+  ADD CONSTRAINT `fkDonationId` FOREIGN KEY (`transaction_id`) REFERENCES `budget__transactions` (`id`),
+  ADD CONSTRAINT `fkPlayerBindKey` FOREIGN KEY (`player_bind_key`) REFERENCES `player` (`bind`);
+
 ALTER TABLE `candidate`
   ADD CONSTRAINT `fkCandidateElection` FOREIGN KEY (`rElection`) REFERENCES `election` (`id`),
   ADD CONSTRAINT `fkCandidatePlayer` FOREIGN KEY (`rPlayer`) REFERENCES `player` (`id`);
@@ -1016,6 +1103,20 @@ ALTER TABLE `law`
 
 ALTER TABLE `notification`
   ADD CONSTRAINT `fkNotificationPlayer` FOREIGN KEY (`rPlayer`) REFERENCES `player` (`id`);
+
+ALTER TABLE `news__military`
+  ADD CONSTRAINT `fkMilitaryNews` FOREIGN KEY (`news_id`) REFERENCES `news` (`id`),
+  ADD CONSTRAINT `fkAttacker` FOREIGN KEY (`attacker_id`) REFERENCES `player` (`id`),
+  ADD CONSTRAINT `fkDefender` FOREIGN KEY (`defender_id`) REFERENCES `player` (`id`),
+  ADD CONSTRAINT `fkPlace` FOREIGN KEY (`place_id`) REFERENCES `place` (`id`);
+
+ALTER TABLE `news__politics`
+  ADD CONSTRAINT `fkPoliticsNews` FOREIGN KEY (`news_id`) REFERENCES `news` (`id`),
+  ADD CONSTRAINT `fkFaction` FOREIGN KEY (`faction_id`) REFERENCES `color` (`id`);
+
+ALTER TABLE `news__trade`
+  ADD CONSTRAINT `fkTradeNews` FOREIGN KEY (`news_id`) REFERENCES `news` (`id`),
+  ADD CONSTRAINT `fkTransaction` FOREIGN KEY (`transaction_id`) REFERENCES `transaction` (`id`);
 
 ALTER TABLE `orbitalBase`
   ADD CONSTRAINT `fkOrbitalBasePlace` FOREIGN KEY (`rPlace`) REFERENCES `place` (`id`),

@@ -2,7 +2,8 @@
 
 namespace Asylamba\Classes\Container;
 
-class History {
+class History
+{
     /** @var array **/
     private $events = array();
     
@@ -11,17 +12,19 @@ class History {
     /**
      * @param string $path
      */
-    public function add($path) {
+    public function add($path)
+    {
         array_unshift($this->events, $path);
         if (count($this->events) > self::MAX_SIZE) {
             $this->events = array_slice($this->events, 0, self::MAX_SIZE);
-        } 
+        }
     }
 
     /**
      * @return string
      */
-    public function getCurrentPath() {
+    public function getCurrentPath()
+    {
         return $this->events[0];
     }
 
@@ -29,13 +32,15 @@ class History {
      * @param int $larger
      * @return string
      */
-    public function getPastPath($larger = 0) {
+    public function getPastPath($larger = 0)
+    {
         if (isset($this->events[$larger])) {
             return $this->events[$larger];
         }
     }
 
-    public function clear() {
+    public function clear()
+    {
         $this->events = array();
     }
 }

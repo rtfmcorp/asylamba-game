@@ -44,13 +44,16 @@ class RequestFactory
         }
         $this->parseCookies($request);
         $this->parseBody($request);
+        // If the request scheme is https://, we consider the request secured
+        $request->setIsSecure($request->headers->get('x-scheme', 'http') === 'https');
+        
         return $request;
     }
     
     /**
      * This method checks if a stream pipe has read all of the current content
      * The rule is, if two empty lines are following one another, we consider the stream as fully read
-     * 
+     *
      * @param string $row
      * @param boolean $checkForEnding
      * @return boolean
@@ -97,7 +100,7 @@ class RequestFactory
     {
         $parameters = explode('&', $query);
         
-        foreach($parameters as $parameter) {
+        foreach ($parameters as $parameter) {
             $data = explode('=', $parameter);
             
             $request->query->set($data[0], urldecode($data[1]));
@@ -128,12 +131,12 @@ class RequestFactory
             return;
         }
         switch ($request->headers->get('content-type')) {
-			case 'application/json':
-				$this->processJsonBody($request);
-				break;
-			case 'application/x-www-form-urlencoded':
-				$this->processFormBody($request);
-				break;
+            case 'application/json':
+                $this->processJsonBody($request);
+                break;
+            case 'application/x-www-form-urlencoded':
+                $this->processFormBody($request);
+                break;
         }
     }
     
@@ -141,20 +144,20 @@ class RequestFactory
     {
         $data = json_decode($request->body);
         
-        foreach($data as $key => $element) {
+        foreach ($data as $key => $element) {
             $request->request->set($key, $element);
         }
     }
-	
-	protected function processFormBody(Request $request)
-	{
-		$data = explode('&', $request->body);
-		
-		foreach($data as $parameter) {
-			$parsedParameter = explode('=', $parameter);
-			$request->request->set(htmlspecialchars($parsedParameter[0]), htmlspecialchars(urldecode($parsedParameter[1])));
-		}
-	}
+    
+    protected function processFormBody(Request $request)
+    {
+        $data = explode('&', $request->body);
+        
+        foreach ($data as $parameter) {
+            $parsedParameter = explode('=', $parameter);
+            $request->request->set(htmlspecialchars($parsedParameter[0]), htmlspecialchars(urldecode($parsedParameter[1])));
+        }
+    }
     
     /**
      * @param Request $request

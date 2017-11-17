@@ -14,37 +14,37 @@ $session = $this->getContainer()->get('session_wrapper');
 # extraction du bindkey
 $query  = $security->uncrypt($request->query->get('bindkey'));
 $bindKey= $security->extractBindkey($query);
-$time 	= $security->extractTime($query);
+$time    = $security->extractTime($query);
 
 # vérification de la validité du bindkey
 if (abs((int)$time - time()) > 300) {
-	$response->redirect($this->getContainer()->getParameter('getout_root') . 'profil');
+    $response->redirect($this->getContainer()->getParameter('getout_root') . 'profil');
 }
 
 if (($player = $playerManager->getByBindKey($bindKey)) !== null && in_array($player->getStatement(), [Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY])) {
-	$player->synchronized = true;
-	$player->setStatement(Player::ACTIVE);
+    $player->synchronized = true;
+    $player->setStatement(Player::ACTIVE);
 
-	$session->initLastUpdate();
-	$session->add('token', Utils::generateString(5));
+    $session->initLastUpdate();
+    $session->add('token', Utils::generateString(5));
 
-	include CONNECTION . '/create-session.php';
+    include CONNECTION . '/create-session.php';
 
-	# mise de dLastConnection + dLastActivity
-	$player->setDLastConnection(Utils::now());
-	$player->setDLastActivity(Utils::now());
+    # mise de dLastConnection + dLastActivity
+    $player->setDLastConnection(Utils::now());
+    $player->setDLastActivity(Utils::now());
 
-	# confirmation au portail
-	if ($this->getContainer()->getParameter('apimode') === 'enabled') {
-		$this->getContainer()->get('api')->confirmConnection($bindKey);
-	}
-	$this->getContainer()->get('entity_manager')->flush($player);
-	// redirection vers page de départ
-	$response->redirect(
-		($request->query->get('mode') === 'splash')
-		? 'profil/mode-splash'
-		: 'profil'
-	);
+    # confirmation au portail
+    if ($this->getContainer()->getParameter('apimode') === 'enabled') {
+        $this->getContainer()->get('api')->confirmConnection($bindKey);
+    }
+    $this->getContainer()->get('entity_manager')->flush($player);
+    // redirection vers page de départ
+    $response->redirect(
+        ($request->query->get('mode') === 'splash')
+        ? 'profil/mode-splash'
+        : 'profil'
+    );
 } else {
-	$response->redirect('profil');
+    $response->redirect('profil');
 }

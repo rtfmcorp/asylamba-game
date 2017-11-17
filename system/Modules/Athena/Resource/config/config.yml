@@ -31,6 +31,8 @@ services:
         class: Asylamba\Modules\Athena\Manager\CommercialRouteManager
         arguments:
             - "@entity_manager"
+            - "%athena.trade.route.sector_bonus"
+            - "%athena.trade.route.color_bonus"
             
     athena.commercial_shipping_manager:
         class: Asylamba\Modules\Athena\Manager\CommercialShippingManager
@@ -105,5 +107,6 @@ services:
         class: Asylamba\Modules\Athena\Manager\TransactionManager
         arguments:
             - "@entity_manager"
+            - "@event_dispatcher"
             - "@athena.commercial_tax_manager"
             - "@session_wrapper"

@@ -128,7 +128,8 @@
 	}
 
 	&#disconnect-box {
-		top: 50px; right: 10px;
+		top: 50px;
+        right: 10px;
 		width: 205px;
 		padding: 8px 0;
 
@@ -151,11 +152,20 @@
 				background: #202020;
 			}
 		}
+        
+        @media (max-width: 1024px) {
+            left: 30px;
+            top: 177px;
+        }
+        @media (min-width: 350px) and (max-width: 1024px) {
+            left:100px;
+        }
 	}
 
 	&#bug-tracker {
 		width: 250px;
-		top: 50px; right: 98px;
+		top: 50px;
+        right: 98px;
 		padding: 0 0 8px 0;
 
 		p {
@@ -186,6 +196,19 @@
 			display: block;
 			margin: 0 10px 2px 10px;
 		}
+        
+        @media (max-width: 1024px) {
+            left: 30px;
+            top: 177px;
+            
+            &:before {
+                left:70px;
+                right: auto;
+            }
+        }
+        @media (min-width: 350px) and (max-width: 1024px) {
+            left:70px;
+        }
 	}
 
 	&#roadmap {
@@ -218,7 +241,8 @@
 
 	&#tutorial {
 		width: 350px;
-		top: 50px; right: 143px;
+		top: 50px;
+        right: 143px;
 		color: white;
 
 		form {
@@ -250,12 +274,20 @@
 				color: #CCC;
 			}
 		}
+        @media (max-width: 1024px) {
+            top: 177px;
+            left: 0px;
+        }
 	}
 
 	&#new-notifications {
 		top: 50px;
-		left: 627px;
+		left: 672px;
 		width: 300px;
+        @media (max-width: 1024px) {
+            top: 177px;
+            left: 0px;
+        }
 	}	
 }
 

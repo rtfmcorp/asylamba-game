@@ -18,12 +18,12 @@
   "homepage": "https://github.com/rtfmcorp/asylamba-game#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
-    "gulp-imagemin": "^3.1.1",
+    "gulp-imagemin": "^3.3.0",
     "gulp-jshint": "^2.0.4",
-    "gulp-less": "^3.1.0",
+    "gulp-less": "^3.3.2",
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",
     "gulp-util": "^3.0.7",
-    "jshint": "^2.9.4"
+    "jshint": "^2.9.5"
   }
 }

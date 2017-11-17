@@ -29,8 +29,9 @@
 	}
 
 	a.current-base {
-		margin-left: 56px;
-
+        @media (min-width: 350px) {
+            margin-left: 56px;
+        }
 		img {
 			position: absolute;
 			top: -16px; left: -54px;
@@ -38,8 +39,17 @@
 			.border-radius(100%);
 			border: solid 2px #4F4F4F;
 			width: 60px;
+            @media (max-width: 350px) {
+                display: none;
+            }
 		}
 	}
+    
+    @media (max-width: 350px) {
+        #next-base-button {
+            display:none;
+        }
+    }
 
 	a:hover:before, a:focus:before {
 		background: url('src/desktop/button/bButtonLeftHover.png') repeat;
@@ -55,8 +65,10 @@
 
 	a.square {
 		position: relative;
-		padding: 0 5px; margin: 5px 2px;
-		height: 32px; width: 30px;
+		padding: 0 5px;
+        margin: 5px 2px;
+		height: 32px;
+        width: 30px;
 		background: url('src/desktop/button/bLittleButton.png') no-repeat;
 		vertical-align: top;
 
@@ -84,40 +96,67 @@
 			.border-radius(100%);
 			background: @dark;
 		}
+        
+        @media (max-width: 1024px) and (min-width: 350px) {
+            margin: 5px 10px;
+        }
 	}
+    
+    a.custom {
+        img {
+            top: 7px;
+            left: 12px;
+            width:16px;
+        }
+    }
 }
 
-#nav .box {
-	position: absolute;
-	display: inline-block;
-	height: 46px;
-	padding: 0 3px;
-	background: url('src/desktop/nav/bNavBox.png') repeat-x;
+#nav {
+    .box {
+        position: absolute;
+        display: inline-block;
+        height: 46px;
+        padding: 0 3px;
+        background: url('src/desktop/nav/bNavBox.png') repeat-x;
 
-	&:before {
-		content: '';
-		position: absolute;
-		top: 0; left: -15px;
-		width: 15px; height: 46px;
-		background: url('src/desktop/nav/bNavBoxLeft.png') no-repeat;
-	}
+        &:before {
+            content: '';
+            position: absolute;
+            top: 0; left: -15px;
+            width: 15px; height: 46px;
+            background: url('src/desktop/nav/bNavBoxLeft.png') no-repeat;
+        }
 
-	&:after {
-		content: '';
-		position: absolute;
-		top: 0; right: -15px;
-		width: 15px; height: 46px;
-		background: url('src/desktop/nav/bNavBoxRight.png') no-repeat;
-	}
+        &:after {
+            content: '';
+            position: absolute;
+            top: 0; right: -15px;
+            width: 15px; height: 46px;
+            background: url('src/desktop/nav/bNavBoxRight.png') no-repeat;
+        }
 
-	&.left 	 { top: 0; left: 25px; }
-	&.left-2 { top: 0; left: 420px; }
-	&.left-3 { top: 0; left: 732px; }
-	&.right  { top: 0; right: 25px; }
+        &.left 	 { top: 0; left: 25px; }
+        &.left-2 { top: 0; left: 420px; }
+        &.left-3 { top: 0; left: 732px; }
+        &.right  { top: 0; right: 25px; }
 
-	a.square span.number {
-		bottom: -5px; top: auto;
-	}
+        a.square span.number {
+            bottom: -5px; top: auto;
+        }
+
+        @media (max-width: 1024px) {
+            &.left { left: 0px; padding-right: 30px; }
+            &.left-2 { top: 45px; left: -100%; }
+            &.left-3 { top: 88px; left: -100%; }
+            &.right  { top: 133px; left: -100%; right: auto; }
+        }
+
+        .navTrigger {
+            @media (min-width: 1024px) {
+                display:none;
+            }
+        }
+    }
 }
 
 #tools .box {

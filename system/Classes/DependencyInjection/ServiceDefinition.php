@@ -2,6 +2,6 @@
 
 namespace Asylamba\Classes\DependencyInjection;
 
-class ServiceDefinition {
-	
+class ServiceDefinition
+{
 }

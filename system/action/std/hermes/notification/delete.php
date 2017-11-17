@@ -13,13 +13,13 @@ $session = $this->getContainer()->get('session_wrapper');
 $entityManager = $this->getContainer()->get('entity_manager');
 
 if ($id) {
-	if (($notification = $notificationManager->get($id)) !== null && $notification->rPlayer === $session->get('playerId')) {
-		$entityManager->remove($notification);
-		$entityManager->flush($notification);
-		$session->addFlashbag('Notification supprimée', Flashbag::TYPE_SUCCESS);
-	} else {
-		throw new ErrorException('C\'est pas très bien de supprimer les notifications des autres.');
-	}
+    if (($notification = $notificationManager->get($id)) !== null && $notification->rPlayer === $session->get('playerId')) {
+        $entityManager->remove($notification);
+        $entityManager->flush($notification);
+        $session->addFlashbag('Notification supprimée', Flashbag::TYPE_SUCCESS);
+    } else {
+        throw new ErrorException('C\'est pas très bien de supprimer les notifications des autres.');
+    }
 } else {
-	throw new ErrorException('Cette notification n\'existe pas');
+    throw new ErrorException('Cette notification n\'existe pas');
 }

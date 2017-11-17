@@ -58,7 +58,6 @@ jQuery(document).ready(function($) {
 			
 			panelController.move(0, 'left', 0);
 			sbController.move('up');
-			
 			if ($('#map').length == 1) {
 				mapController.init();
 			}
@@ -134,13 +133,13 @@ jQuery(document).ready(function($) {
 		}
 	};
 
-	// lancer le render lors du chargement et du resize
-	$(window).on('load resize', function() {
+	// lancer le render lors du resize
+	$(window).on('resize', function() {
 		render.make();
 	});
 
-	$('input, textarea').live('focusin',  function(e) { render.inInput = true;  });
-	$('input, textarea').live('focusout', function(e) { render.inInput = false; });
+	$('input, textarea').on('focusin',  function(e) { render.inInput = true;  });
+	$('input, textarea').on('focusout', function(e) { render.inInput = false; });
 
 	// ADD INFOPANEL COMPONENT
 	// ##########################
@@ -177,17 +176,17 @@ jQuery(document).ready(function($) {
 		});
 	});
 
-	$('.removeInfoPanel').live('click', function() {
+	$('.removeInfoPanel').on('click', function() {
 		if (infoPanel.addedColumn != undefined) {
 			render.removeComponent(parseInt($(this).parents('.component').index()));
 		 	infoPanel.addedColumn = undefined;
 	 	}
 	});
 
-	$('.build-item').live('mouseover', function() {
+	$('.build-item').on('mouseover', function() {
 		$(this).find('.info').css('display', 'block');
 	});
-	$('.build-item').live('mouseleave', function() {
+	$('.build-item').on('mouseleave', function() {
 		$(this).find('.info').css('display', 'none');
 	});
 
@@ -252,7 +251,7 @@ jQuery(document).ready(function($) {
 	};
 
 	// affiche/cache les flèches directionelles
-	$('.no-scrolling .component .fix-body').live('mouseover', function(e) {
+	$('.no-scrolling .component .fix-body').on('mouseover', function(e) {
 		if (!$(this).hasClass('hover')) { 
 			$('.component .fix-body').removeClass('hover');
 			$(this).addClass('hover');
@@ -260,10 +259,10 @@ jQuery(document).ready(function($) {
 	});
 
 	// movers button event
-	$('.no-scrolling .component a.toTop').live('click', function(e) {
+	$('.no-scrolling').on('click', '.component a.toTop', function(e) {
 		columnController.move($(this).parent(), 'top');
 	});
-	$('.no-scrolling .component a.toBottom').live('click', function(e) {
+	$('.no-scrolling').on('click', '.component a.toBottom', function(e) {
 		columnController.move($(this).parent(), 'bottom');
 	});
 
@@ -341,7 +340,10 @@ jQuery(document).ready(function($) {
 				});
 
 				$('#content form').each(function() {
-					$(this).attr('action', panelController.rewriteLink($(this).attr('action')));
+                    var link = $(this).attr('action');
+                    if (typeof link != 'undefined') {
+                        $(this).attr('action', panelController.rewriteLink($(this).attr('action')));
+                    }
 				});
 			}
 		},
@@ -413,6 +415,165 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		sbController.move($(this).data('dir'));
 	});
+    
+    var tradeSearchLock = false;
+    
+    tradeController = {
+        search: function(event) {
+            event.preventDefault();
+            if (tradeSearchLock === true) {
+                return false;
+            }
+            tradeSearchLock = true;
+            $("#rc-search-form button").prepend(
+                '<div class="sk-circle">' +
+                    '<div class="sk-circle1 sk-child"></div>' +
+                    '<div class="sk-circle2 sk-child"></div>' +
+                    '<div class="sk-circle3 sk-child"></div>' +
+                    '<div class="sk-circle4 sk-child"></div>' +
+                    '<div class="sk-circle5 sk-child"></div>' +
+                    '<div class="sk-circle6 sk-child"></div>' +
+                    '<div class="sk-circle7 sk-child"></div>' +
+                    '<div class="sk-circle8 sk-child"></div>' +
+                    '<div class="sk-circle9 sk-child"></div>' +
+                    '<div class="sk-circle10 sk-child"></div>' +
+                    '<div class="sk-circle11 sk-child"></div>' +
+                    '<div class="sk-circle12 sk-child"></div>' +
+                '</div>'
+            );
+            this.removePreviousResults().then(function() {
+                $.ajax({
+                    type: 'POST',
+                    url: '/ajax/a-searchroutes/',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify({
+                        factions: $('#rc-search-form input[type=checkbox]:checked').map(function() {
+                            return parseInt(this.name.split('-')[1]);
+                        }).get(),
+                        min: $('input[name="min-dist"]').val(),
+                        max: $('input[name="max-dist"]').val()
+                    }),
+                    success: tradeController.renderSearchResults,
+                    error: function (error) {
+                        var response = $.parseJSON(error.responseText);
+                        alertController.add(101, response.error.message);
+                        
+                        tradeSearchLock = false;
+                        $("#rc-search-form button > .sk-circle").remove();
+                    }
+                });
+            });
+        },
+        
+        renderSearchResults: function(bases) {
+            var buffer = '<div id="rc-search-results" class="component transaction new-message">';
+			buffer += '<div class="head skin-2">';
+            buffer += '<h2>Résultats</h2>';
+			buffer += '</div>';
+			buffer += '<div class="fix-body">';
+            buffer += '<div class="body">';
+            $.each(bases, function(index, base) {
+                buffer += '<div class="transaction commander">';
+                buffer += '<div class="product sh" data-target="base-' + base.rPlace + '">';
+                    buffer += '<img src="/public/media/avatar/small/' + base.playerAvatar + '.png" alt="" class="picto">';
+                    buffer += '<div class="offer"><strong>' + base.playerName + '</strong>';
+                    buffer += '<em>' + base.baseName + '</em></div>';
+                    buffer += '<span class="rate">' + base.distance + ' al. (<a onclick="event.stopPropagation();" href="/map/place-' + base.rPlace + '" alt ="Map" target="_blank">Secteur ' + base.rSector + '</a>)</span>';
+                    buffer += '<div class="for"><span>pour</span></div>';
+                    buffer += '<div class="price">' + base.income.toLocaleString('fr-FR') + ' <img src="/public/media/resources/credit.png" alt="" class="icon-color" /></div></div>';
+                buffer += '<div id="base-' + base.rPlace + '" class="hidden">';
+                    buffer += '<div class="info">';
+                    buffer += '<div class="text-block"><p class="input input-area"><textarea onclick="event.stopPropagation();" placeholder="Envoyez un message à votre futur partenaire ! (facultatif)"></textarea></p></div>';
+                    buffer += '<div class="button" onclick="tradeController.sendProposal(event, ' + base.rPlace + ');">';
+                    buffer += '<a href="#" class="trade-search-button">Proposer pour ' + base.price.toLocaleString('fr-FR') + ' <img src="/public/media/resources/credit.png" alt="" class="icon-color" /></a></div></div>';
+                buffer += '</div></div>';
+            });
+
+            if (bases.length === 0) {
+                buffer += '<p><em>Aucun partenaire commercial trouvé selon les critères de recherche fournis.</em></p>';
+            }
+            buffer += '</div></div></div>';
+            
+            render.addComponent(3, buffer, 400, () => {
+                tradeSearchLock = false;
+                $("#rc-search-form button > .sk-circle").remove();
+                $("#rc-search-results").on('click', '.sh', displayModule);
+            });
+        },
+        
+        removePreviousResults: function() {
+            return new Promise(function(resolve, reject) {
+                if (document.getElementById('rc-search-results') === null) {
+                    resolve();
+                    return;
+                }
+                render.removeComponent(3, 400, function() {
+                    resolve();
+                });
+            });
+        },
+        
+        sendProposal: function(event, baseId) {
+            event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/ajax/a-proposeroute/',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({
+                    base_id: baseId,
+                    content: $("#base-" + baseId + ' .proposal-message textarea').val()
+                }),
+                success: function(response) {
+                    var waitingDataValue = $("#rc-data-waiting").removeClass('grey').find('.value');
+                    waitingDataValue.text((parseInt(waitingDataValue.text()) + 1));
+                    
+                    var countDataValue = $("#rc-data-count .value");
+                    var countData = countDataValue.text().split('/');
+                    countDataValue.text((parseInt(countData[0]) + 1) + ' / ' + parseInt(countData[1]));
+                    
+                    $("#rc-data-count .progress-bar .content").animate({
+                        width: Math.ceil(((parseInt(countData[0]) + 1) / parseInt(countData[1])) * 100) + "%"
+                    }, 200);
+                    
+                    alertController.add(102, response.message);
+                    $('div[data-target=base-' + response.route.linked_base_id + ']')
+                        .parent()
+                        .animate({
+                            width: '0px',
+                            "padding-left": '0px',
+                            "padding-right": '0px',
+                        }, 400, function() {
+                            $(this).remove();
+                        })
+                    ;
+                    creditController.update(-response.route.price);
+                },
+                error: function (error) {
+                    var response = $.parseJSON(error.responseText);
+                    alertController.add(101, response.error.message);
+                }
+            });
+        }
+    };
+    
+    creditController = {
+        update: function(amount) {
+            console.log('ok');
+            $("#player-credits").fadeTo('fast', 0, function() {
+                console.log($(this));
+                $(this)
+                    .html((creditController.toInt($(this).text()) + amount).toLocaleString('fr-FR') + ' <img class="icon-color" src="/public/media/resources/credit.png" alt="crédits" />')
+                    .fadeTo('fast', 1)
+                ;
+            });
+        },
+        
+        toInt: function(text) {
+            return parseInt(text.replace(/ /g, ''));
+        }
+    }
 	
 // ################################# //
 // ####### MAP MOVER MODULE ######## //
@@ -570,12 +731,81 @@ jQuery(document).ready(function($) {
 				.css('left', -(parseInt(mapController.map.obj.css('left'))) * (mapController.minimap.size / mapController.map.size));
 		}
 	};
+    
+    pressController = {
+        slide: {
+            fps: 30,
+            now: 0,
+            then: Date.now(),
+            interval: 1000/0.3,
+            delta: 0,
+            
+            animate: function() {
+                requestAnimationFrame(pressController.slide.animate);
+                
+                pressController.slide.now = Date.now();
+                pressController.slide.delta = pressController.slide.now - pressController.slide.then;
+
+                if (pressController.slide.delta > pressController.slide.interval) {
+                    // update time stuffs
+
+                    // Just `then = now` is not enough.
+                    // Lets say we set fps at 10 which means
+                    // each frame must take 100ms
+                    // Now frame executes in 16ms (60fps) so
+                    // the loop iterates 7 times (16*7 = 112ms) until
+                    // delta > interval === true
+                    // Eventually this lowers down the FPS as
+                    // 112*10 = 1120ms (NOT 1000ms).
+                    // So we have to get rid of that extra 12ms
+                    // by subtracting delta (112) % interval (100).
+                    // Hope that makes sense.
+
+                    pressController.slide.then = pressController.slide.now - (pressController.slide.delta % pressController.slide.interval);
+                    
+                    var nextItem = $(".top-new.current").removeClass('current').next('.top-new');
+                    
+                    if (nextItem.length === 0) {
+                        nextItem = $(".top-new:first-child");
+                    }
+                    nextItem.addClass('current');
+                }
+            }
+        }
+    };
+    
+    pressController.slide.animate();
+    
+    newsController = {
+        
+        add: function(news) {
+            $("#news-container").append(
+                "<div id='news-alert-" + news.id + "' class='news-alert'>" +
+                "<a href='/press/mode-article/id-" + news.id + "'><img class='picto' src='" + news.news_picto + "' alt='news'></a>" +
+                "<h4 class='title'>" + news.title + "</h4></div>"
+            );
+    
+            setTimeout(function() {
+               $("#news-alert-" + news.id).fadeTo('fast', 0).slideUp('fast', function() {
+                   $(this).remove();
+               }) 
+            }, 7000);
+    
+            var menuItem = $("#menu-press-item");
+            var badge = menuItem.find('.number');
+            if (badge.length === 0) {
+                menuItem.append('<span class="number">1</span>');
+            } else {
+                badge.text(parseInt(badge.text()) + 1);
+            }
+        },
+    };
 
 	// évènement sur les movers
-	$('#mapToLeft').live('click', function(e) 	{ mapController.move(mapController.params.cMovingSpeed, 0, mapController.params.animationSpeed); });
-	$('#mapToRight').live('click', function(e) 	{ mapController.move(-mapController.params.cMovingSpeed, 0, mapController.params.animationSpeed); });
-	$('#mapToTop').live('click', function(e) 	{ mapController.move(0, mapController.params.cMovingSpeed, mapController.params.animationSpeed); });
-	$('#mapToBottom').live('click', function(e) { mapController.move(0, -mapController.params.cMovingSpeed, mapController.params.animationSpeed); });
+	$('#mapToLeft').on('click', function(e) 	{ mapController.move(mapController.params.cMovingSpeed, 0, mapController.params.animationSpeed); });
+	$('#mapToRight').on('click', function(e) 	{ mapController.move(-mapController.params.cMovingSpeed, 0, mapController.params.animationSpeed); });
+	$('#mapToTop').on('click', function(e) 	{ mapController.move(0, mapController.params.cMovingSpeed, mapController.params.animationSpeed); });
+	$('#mapToBottom').on('click', function(e) { mapController.move(0, -mapController.params.cMovingSpeed, mapController.params.animationSpeed); });
 
 	// évènement du clavier sur les movers
 	$(document).keydown(function(e) {
@@ -670,7 +900,7 @@ jQuery(document).ready(function($) {
 		},
 
 		// affiche la box
-		open: function() {
+		open: () => {
 			actionbox.opened = true;
 			actionbox.obj.animate({
 				bottom: 0
@@ -678,7 +908,7 @@ jQuery(document).ready(function($) {
 		},
 
 		// masque la box
-		close: function() {
+		close: () => {
 			actionbox.opened = false;
 			actionbox.obj.animate({
 				bottom: -300
@@ -688,36 +918,30 @@ jQuery(document).ready(function($) {
 		},
 
 		// masque la box, charge le contenu et affiche la box
-		load: function(systemid) {
+		load: systemid => {
 			actionbox.close();
 			$.get(game.path + 'ajax/a-loadsystem/systemid-' + systemid + '/relatedplace-' + actionbox.relatedPlace)
-			 .done(function(data) {
+			 .done(data => {
 				actionbox.obj.html(data);
 				actionbox.open();
 				actionbox.applyCommander();
 
 				$('.loadSystem[data-system-id="' + systemid + '"]').addClass('active');
-			}).fail(function() {
-				alertController.add(101, 'chargement des données interrompu');
-			});
+			}).fail(() => alertController.add(101, 'chargement des données interrompu'));
 		},
 
 		// ouvre une place
-		openPlace: function(placeid) {
-			$('#place-' + placeid).animate({
-				width: parseInt($('#place-' + placeid).find('.content').css('width')) + 20
-			}, 200);
-		},
+		openPlace: placeid => $('#place-' + placeid).animate({
+            width: parseInt($('#place-' + placeid).find('.content').css('width')) + 20
+        }, 200),
 
 		// ferme une place
-		closePlace: function(placeid) {
-			$('#place-' + placeid).animate({
-				width: 0
-			}, 200);
-		},
+		closePlace: placeid => $('#place-' + placeid).animate({
+            width: 0
+        }, 200),
 
 		// bouge à gauche si possible
-		moveToLeft: function() {
+		moveToLeft: () => {
 			var position = parseInt(actionbox.obj.find('.system, .rank').css('left'));
 
 			if (position + 300 > 0) {
@@ -732,7 +956,7 @@ jQuery(document).ready(function($) {
 		},
 
 		// bouge à droite si possible
-		moveToRight: function() {
+		moveToRight: () => {
 			var position = parseInt(actionbox.obj.find('.system, .rank').css('left'));
 
 			if (parseInt(actionbox.obj.find('.system ul, .rank ul').css('width')) + position >= render.viewport.w) {
@@ -743,63 +967,51 @@ jQuery(document).ready(function($) {
 		},
 
 		// affiche les box d'actions
-		swtichAction: function(elem) {
-			var id = elem.data('target');
-
+		switchAction: event => {
+			var id = event.currentTarget.getAttribute('data-target');
 			//elem.parent().parent().find('p .subcontext').text(' / ' + elem.find('img').attr('alt'));
-			elem.parent().parent().find('.bottom > div').each(function() {
-				if ($(this).data('id') == id) {
-					$(this).css('display', 'block');
+			for (let box of event.currentTarget.parentNode.nextSibling.children) {
+				if (box.getAttribute('data-id') == id) {
+					box.style.display = 'block';
 				} else {
-					$(this).css('display', 'none');
+					box.style.display = 'none';
 				}
-			});
+			}
 		}
 	};
 
-	$('.loadSystem').live('click', function() {
-		actionbox.load($(this).data('system-id'));
-	});
+	$('#map')
+        .on('click', '.loadSystem', event => actionbox.load(event.currentTarget.getAttribute('data-system-id')))
+        .on('click', actionbox.close)
+    ;
+    
+	$('#action-box')
+        .on('click', '.closeactionbox', actionbox.close)
+        .on('click', '.place', event => {
+            let place = event.currentTarget;
+            let target = Number(place.firstElementChild.getAttribute('data-target'));
+            
+            $("#action-box .place.active").removeClass('active');
+            place.classList.add('active');
+            
+            $('#action-box .action').each(i => 
+                (i === target)
+                ? actionbox.openPlace(i)
+                : actionbox.closePlace(i)
+            );
+        })
+        .on('click', '.place.active', event => {
+            $('#action-box .action').each((i) => {
+                actionbox.closePlace(i);
+            });
+            event.currentTarget.classList.remove('active');
+        })
+        .on('click', '#actboxToLeft', actionbox.moveToLeft)
+        .on('click', '#actboxToRight', actionbox.moveToRight)
+        .on('click', '.actionbox-sh', actionbox.switchAction)
+    ;
 
-	$('#map, .closeactionbox').live('click', function() {
-		actionbox.close();
-	});
-
-	$('#action-box .place').live('click', function() {
-		var place = $(this);
-		var target = place.find('a').data('target');
-		$('#action-box .place').removeClass('active');
-
-		$('#action-box .action').each(function(i) {
-			if (i == target) {
-				place.addClass('active');
-				actionbox.openPlace(i);
-			} else {
-				actionbox.closePlace(i);
-			}
-		});
-	});
-
-	$('#action-box .place.active').live('click', function() {
-		$('#action-box .action').each(function(i) {
-				actionbox.closePlace(i);
-		});
-		$('#action-box .place').removeClass('active');
-	});
-
-	$('#action-box #actboxToLeft').live('click', function() {
-		actionbox.moveToLeft();
-	});
-
-	$('#action-box #actboxToRight').live('click', function() {
-		actionbox.moveToRight();
-	});
-
-	$('.actionbox-sh').live('click', function() {
-		actionbox.swtichAction($(this));
-	});
-
-	$('.moveTo').live('click', function(e) {
+	$('.moveTo').on('click', function(e) {
 		mapController.moveTo(
 			$(this).data('x-position'),
 			$(this).data('y-position')
@@ -908,27 +1120,29 @@ jQuery(document).ready(function($) {
 		}
 	}
 
-	$(document).on('click', '.wsw-box-submit', function(e) {
-		e.preventDefault();
-		wswBox.write();
-	});
-	$(document).on('click', '.wsw-box-cancel', function(e) {
-		e.preventDefault();
-		wswBox.close();
-	});
-	$(document).live('keydown', function(e) {
-		if (wswBox.run) {
-			switch(e.keyCode) {
-				case 13: e.preventDefault(); wswBox.write(); break;
-				case 27: e.preventDefault(); wswBox.close(); break;
-				default: break;
-			}
-		}
-	});
+	$(document)
+        .on('click', '.wsw-box-submit', function(e) {
+            e.preventDefault();
+            wswBox.write();
+        })
+        .on('click', '.wsw-box-cancel', function(e) {
+            e.preventDefault();
+            wswBox.close();
+        })
+        .on('keydown', function(e) {
+            if (wswBox.run) {
+                switch(e.keyCode) {
+                    case 13: e.preventDefault(); wswBox.write(); break;
+                    case 27: e.preventDefault(); wswBox.close(); break;
+                    default: break;
+                }
+            }
+        })
+    ;
 
 
 	/* DIVERS */
-	$('.new-transaction.resources #resources-quantity').live('keyup', function() {
+	$('.new-transaction.resources #resources-quantity').on('keyup', function() {
 		var quantity  = $(this).val();
 		var rate 	  = $(this).data('rate');
 		var price 	  = quantity * rate;
@@ -939,7 +1153,7 @@ jQuery(document).ready(function($) {
 		$('.new-transaction.resources .max-price').text(utils.numberFormat(Math.floor(price + variation)));
 	});
 
-	$('.base-type .list-choice button').live('click', function() {
+	$('.base-type .list-choice button').on('click', function() {
 		var index = $('.base-type .list-choice button').index(this);
 
 		$('.base-type .desc-choice').hide();
@@ -949,7 +1163,7 @@ jQuery(document).ready(function($) {
 // ###########################
 // #### MARKET MECHANISME ####
 // ###########################
-	$('.sell-form input[name="quantity"], .sell-form .val-quantity').live('keyup', function() {
+	$('.sell-form input[name="quantity"], .sell-form .val-quantity').on('keyup', function() {
 		var box  = $(this).parents('.sell-form'),
 			maxQ = box.data('max-quantity'),
 			minP = box.data('min-price'),
@@ -989,7 +1203,7 @@ jQuery(document).ready(function($) {
 	})();
 
 	/* HIDE SPLASH-SCREEN */
-	$('.hide-slpash').live('click', function(e) {
+	$('.hide-slpash').on('click', function(e) {
 		var dom = $('.splash-screen');
 		var mod = dom.find('.modal');
 
@@ -1016,7 +1230,7 @@ jQuery(document).ready(function($) {
 	})();
 
 	/* SORTING STUFF */
-	$('.sort-button a').live('click', function(e) {
+	$('.sort-button a').on('click', function(e) {
 		e.preventDefault();
 
 		var parent = $(this).closest('.body');
@@ -1083,8 +1297,27 @@ jQuery(document).ready(function($) {
 		});
 		bull.fadeToggle(50);
 
-		$('.show-army').live('mouseout', function(e) {
+		$('.show-army').on('mouseout', function(e) {
 			$('.army-bull').remove();
 		});
 	});
+    
+    var ws = new WebSocket("wss://" + game.host);
+    ws.onmessage = function(event) {
+        var data = JSON.parse(event.data);
+        
+        switch (data.type) {
+            case 'news_creation': newsController.add(data.news); break;
+        };
+    };
+    ws.onclose = function(event) {
+        console.log('close');
+        console.log(event);
+    };
+    ws.onerror = function(event) {
+        console.log('error');
+        console.log(event);
+    };
+    
+    render.make();
 });

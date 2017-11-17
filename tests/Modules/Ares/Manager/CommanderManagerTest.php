@@ -62,15 +62,15 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Null', $commander->getId());
         $this->assertEquals('rebelle', $commander->getName());
         $this->assertEquals(ID_GAIA, $commander->getRPlayer());
-		$this->assertEquals($expected['level'], $commander->getLevel());
+        $this->assertEquals($expected['level'], $commander->getLevel());
         $this->assertEquals($expected['pev_in_begin'], $commander->getPevInBegin());
         $this->assertEquals($expected['pev'], $commander->getPev());
         $this->assertCount($expected['nb_squadrons'], $commander->squadronsIds);
     }
     
-	/**
-	 * @return array
-	 */
+    /**
+     * @return array
+     */
     public function providePlaces()
     {
         return [
@@ -86,8 +86,8 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
                 [
                     'level' => 3,
                     'pev_in_begin' => 18,
-					'pev' => 18,
-					'nb_squadrons' => 3
+                    'pev' => 18,
+                    'nb_squadrons' => 3
                 ]
             ],
             [
@@ -102,8 +102,8 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
                 [
                     'level' => 4,
                     'pev_in_begin' => 23,
-					'pev' => 23,
-					'nb_squadrons' => 4
+                    'pev' => 23,
+                    'nb_squadrons' => 4
                 ]
             ],
             [
@@ -116,10 +116,10 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
                 ->setMaxDanger(15)
                 ,
                 [
-					'level' => 5,
+                    'level' => 5,
                     'pev_in_begin' => 200,
-					'pev' => 200,
-					'nb_squadrons' => 5
+                    'pev' => 200,
+                    'nb_squadrons' => 5
                 ]
             ],
             [
@@ -132,131 +132,131 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
                 ->setMaxDanger(15)
                 ,
                 [
-					'level' => 4,
+                    'level' => 4,
                     'pev_in_begin' => 92,
-					'pev' => 92,
-					'nb_squadrons' => 4
+                    'pev' => 92,
+                    'nb_squadrons' => 4
                 ]
             ],
         ];
     }
-	
-	/**
-	 * @dataProvider provideMovements
-	 * @param array $data
-	 * @param array $expected
-	 */
-	public function testMove($data, $expected)
-	{
-		$commander = $data['commander'];
-		
-		$this->manager->move(
-			$commander,
-			$data['destination_place_id'],
-			$data['start_place_id'],
-			$data['type'],
-			$data['length'],
-			$data['duration']
-		);
-		
-		$this->assertEquals(Commander::MOVING, $commander->getStatement());
-		$this->assertEquals($data['destination_place_id'], $commander->getRPlaceDestination());
-		$this->assertEquals($data['start_place_id'], $commander->getStartPlaceId());
-		$this->assertEquals($data['type'], $commander->getTravelType());
-		$this->assertEquals($data['length'], $commander->getTravelLength());
-		
-		$date = new \DateTime($commander->getStartedAt());
-		$date->modify('+' . $data['duration'] . 'second');
-		$this->assertEquals($commander->getArrivalDate(), $date->format('Y-m-d H:i:s'));
-	}
-	
-	public function provideMovements()
-	{
-		return [
-			[
-				[
-					'commander' => $this->getCommanderMock(1),
-					'start_place_id' => 12,
-					'destination_place_id' => 156,
-					'type' => Commander::LOOT,
-					'length' => 18,
-					'duration' => 1800
-				],
-				[
-					
-				]
-			],
-			[
-				[
-					'commander' => $this->getCommanderMock(2),
-					'start_place_id' => 132,
-					'destination_place_id' => 546,
-					'type' => Commander::LOOT,
-					'length' => 24,
-					'duration' => 2400
-				],
-				[
-					
-				]
-			],
-			[
-				[
-					'commander' => $this->getCommanderMock(64),
-					'start_place_id' => 16,
-					'destination_place_id' => 653,
-					'type' => Commander::BACK,
-					'length' => 30,
-					'duration' => 3800
-				],
-				[
-					
-				]
-			],
-			[
-				[
-					'commander' => $this->getCommanderMock(12),
-					'start_place_id' => 145,
-					'destination_place_id' => 236,
-					'type' => Commander::COLO,
-					'length' => 30,
-					'duration' => 3600
-				],
-				[
-					
-				]
-			],
-		];
-	}
-	
-	public function testEndTravel()
-	{
-		$commander = $this->getCommanderMock(1);
-		
-		$this->manager->endTravel($commander, Commander::AFFECTED);
-		
-		$this->assertEquals(Commander::AFFECTED, $commander->getStatement());
-		$this->assertNull($commander->getStartPlaceId());
-		$this->assertNull($commander->getRPlaceDestination());
-		$this->assertNull($commander->getStartedAt());
-		$this->assertNull($commander->getArrivalDate());
-		$this->assertNull($commander->getTravelType());
-		$this->assertNull($commander->getTravelLength());
-	}
-	
-	public function testEndTravelToReserve()
-	{
-		$commander = $this->getCommanderMock(1);
-		
-		$this->manager->endTravel($commander, Commander::RESERVE);
-		
-		$this->assertEquals(Commander::RESERVE, $commander->getStatement());
-		$this->assertNull($commander->getStartPlaceId());
-		$this->assertNull($commander->getRPlaceDestination());
-		$this->assertNull($commander->getStartedAt());
-		$this->assertNull($commander->getArrivalDate());
-		$this->assertNull($commander->getTravelType());
-		$this->assertNull($commander->getTravelLength());
-	}
+    
+    /**
+     * @dataProvider provideMovements
+     * @param array $data
+     * @param array $expected
+     */
+    public function testMove($data, $expected)
+    {
+        $commander = $data['commander'];
+        
+        $this->manager->move(
+            $commander,
+            $data['destination_place_id'],
+            $data['start_place_id'],
+            $data['type'],
+            $data['length'],
+            $data['duration']
+        );
+        
+        $this->assertEquals(Commander::MOVING, $commander->getStatement());
+        $this->assertEquals($data['destination_place_id'], $commander->getRPlaceDestination());
+        $this->assertEquals($data['start_place_id'], $commander->getStartPlaceId());
+        $this->assertEquals($data['type'], $commander->getTravelType());
+        $this->assertEquals($data['length'], $commander->getTravelLength());
+        
+        $date = new \DateTime($commander->getStartedAt());
+        $date->modify('+' . $data['duration'] . 'second');
+        $this->assertEquals($commander->getArrivalDate(), $date->format('Y-m-d H:i:s'));
+    }
+    
+    public function provideMovements()
+    {
+        return [
+            [
+                [
+                    'commander' => $this->getCommanderMock(1),
+                    'start_place_id' => 12,
+                    'destination_place_id' => 156,
+                    'type' => Commander::LOOT,
+                    'length' => 18,
+                    'duration' => 1800
+                ],
+                [
+                    
+                ]
+            ],
+            [
+                [
+                    'commander' => $this->getCommanderMock(2),
+                    'start_place_id' => 132,
+                    'destination_place_id' => 546,
+                    'type' => Commander::LOOT,
+                    'length' => 24,
+                    'duration' => 2400
+                ],
+                [
+                    
+                ]
+            ],
+            [
+                [
+                    'commander' => $this->getCommanderMock(64),
+                    'start_place_id' => 16,
+                    'destination_place_id' => 653,
+                    'type' => Commander::BACK,
+                    'length' => 30,
+                    'duration' => 3800
+                ],
+                [
+                    
+                ]
+            ],
+            [
+                [
+                    'commander' => $this->getCommanderMock(12),
+                    'start_place_id' => 145,
+                    'destination_place_id' => 236,
+                    'type' => Commander::COLO,
+                    'length' => 30,
+                    'duration' => 3600
+                ],
+                [
+                    
+                ]
+            ],
+        ];
+    }
+    
+    public function testEndTravel()
+    {
+        $commander = $this->getCommanderMock(1);
+        
+        $this->manager->endTravel($commander, Commander::AFFECTED);
+        
+        $this->assertEquals(Commander::AFFECTED, $commander->getStatement());
+        $this->assertNull($commander->getStartPlaceId());
+        $this->assertNull($commander->getRPlaceDestination());
+        $this->assertNull($commander->getStartedAt());
+        $this->assertNull($commander->getArrivalDate());
+        $this->assertNull($commander->getTravelType());
+        $this->assertNull($commander->getTravelLength());
+    }
+    
+    public function testEndTravelToReserve()
+    {
+        $commander = $this->getCommanderMock(1);
+        
+        $this->manager->endTravel($commander, Commander::RESERVE);
+        
+        $this->assertEquals(Commander::RESERVE, $commander->getStatement());
+        $this->assertNull($commander->getStartPlaceId());
+        $this->assertNull($commander->getRPlaceDestination());
+        $this->assertNull($commander->getStartedAt());
+        $this->assertNull($commander->getArrivalDate());
+        $this->assertNull($commander->getTravelType());
+        $this->assertNull($commander->getTravelLength());
+    }
     
     public function getEntityManagerMock()
     {
@@ -321,11 +321,11 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
             (new Commander())
             ->setId($id)
             ->setName('Avla')
-			->setRPlaceDestination(15)
-			->setStartPlaceId(16)
-			->setTravelLength(18)
-			->setTravelType(Commander::LOOT)
-			->setArrivalDate((new \DateTime('+2 hours'))->format('Y-m-d H:i:s'))
+            ->setRPlaceDestination(15)
+            ->setStartPlaceId(16)
+            ->setTravelLength(18)
+            ->setTravelType(Commander::LOOT)
+            ->setArrivalDate((new \DateTime('+2 hours'))->format('Y-m-d H:i:s'))
         ;
     }
     

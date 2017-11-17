@@ -1,3 +1,29 @@
+## [Unreleased]
+### Added
+- Project management tool with feedbacks board
+- Feedbacks commentaries
+- New map configuration
+- Newspaper and gazette
+- WebSocket connection between server and clients
+- WebSocket broadcasting
+- News broadcasting
+- Optimized and animated trade routes search
+- HTTPS support
+- Budget management tool
+- Donation tool
+
+### Changed
+- The bug reporting and feature proposals are now in the project management tool instead of forum
+- Profile experience counter
+
+### Fixed
+- Faction interface when no ranking is available
+- Fleet moving to hangar and mess at arrival
+- Player bonus loading
+- Notifications cleaning
+- Trade platform transactions acceptation
+- Hourly resources gain
+
 ## [2.1.3] - 2017-08-11
 ### Added
 - Messages when a ruler keeps his role due to election without candidates

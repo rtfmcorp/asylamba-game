@@ -8,7 +8,7 @@ class ProcessGateway
 {
     /**
      * Send JSON data to a process
-     * 
+     *
      * @param Process $process
      * @param array $data
      */
@@ -16,18 +16,18 @@ class ProcessGateway
     {
         fwrite($process->getOutput(), json_encode($data) . "\n");
     }
-	
-	/**
-	 * @param array $data
-	 */
-	public function writeToMaster($data)
-	{
+    
+    /**
+     * @param array $data
+     */
+    public function writeToMaster($data)
+    {
         fwrite(STDOUT, json_encode($data) . "\n");
-	}
+    }
     
     /**
      * Get data from a process pipe
-     * 
+     *
      * @param Process $process
      * @return array
      */

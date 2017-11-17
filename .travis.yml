@@ -3,7 +3,7 @@ language: php
 sudo: false
 
 php:
-    - 7.0
+    - 7.1
 
 before_script:
     - cp config/parameters.dist.yml config/parameters.yml

@@ -13,7 +13,7 @@ $request = $this->getContainer()->get('app.request');
 $scheduler = $this->getContainer()->get('realtime_action_scheduler');
 
 if (($request->query->get('commanderid')) === null) {
-	throw new ErrorException('Manque de précision sur le commandant ou la position.');
+    throw new ErrorException('Manque de précision sur le commandant ou la position.');
 }
 $commanderId = $request->query->get('commanderid');
 
@@ -21,10 +21,10 @@ $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $session = $this->getContainer()->get('session_wrapper');
 
 if (($commander = $commanderManager->get($commanderId)) === null || $commander->rPlayer !== $session->get('playerId')) {
-	throw new ErrorException('Ce commandant ne vous appartient pas ou n\'existe pas.');
+    throw new ErrorException('Ce commandant ne vous appartient pas ou n\'existe pas.');
 }
 if ($commander->travelType == Commander::BACK) {
-	throw new ErrorException('Vous ne pouvez pas annuler un retour.');
+    throw new ErrorException('Vous ne pouvez pas annuler un retour.');
 }
 $scheduler->cancel($commander, $commander->dArrival);
 
@@ -52,16 +52,16 @@ $response = $this->getContainer()->get('app.response');
 $session->addFlashbag('Déplacement annulé.', Flashbag::TYPE_SUCCESS);
 
 if ($request->query->has('redirect')) {
-	$response->redirect('map/place-' . $request->query->get('redirect'));
+    $response->redirect('map/place-' . $request->query->get('redirect'));
 }
 $scheduler->schedule(
-	'ares.commander_manager',
-	'uReturnBase',
-	$commander,
-	$commander->dArrival, 
-	[
-		'class' => Place::class,
-		'id' => $commander->getRPlaceDestination()
-	]
+    'ares.commander_manager',
+    'uReturnBase',
+    $commander,
+    $commander->dArrival,
+    [
+        'class' => Place::class,
+        'id' => $commander->getRPlaceDestination()
+    ]
 );
 $this->getContainer()->get('entity_manager')->flush();

@@ -11,17 +11,19 @@
 */
 namespace Asylamba\Modules\Athena\Model;
 
-class ShipQueue {
-	// ATTRIBUTES
-	public $id;
-	public $rOrbitalBase;
-	public $dockType = 0;
-	public $shipNumber	= 0;
-	public $quantity = 1;
-	public $dStart;
-	public $dEnd;
+class ShipQueue
+{
+    // ATTRIBUTES
+    public $id;
+    public $rOrbitalBase;
+    public $dockType = 0;
+    public $shipNumber    = 0;
+    public $quantity = 1;
+    public $dStart;
+    public $dEnd;
 
-	public function getId() { 
-		return $this->id; 
-	}
+    public function getId()
+    {
+        return $this->id;
+    }
 }

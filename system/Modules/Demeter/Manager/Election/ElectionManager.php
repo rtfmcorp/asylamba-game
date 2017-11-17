@@ -14,44 +14,46 @@ namespace Asylamba\Modules\Demeter\Manager\Election;
 use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Modules\Demeter\Model\Election\Election;
 
-class ElectionManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-	
-	/**
-	 * @param EntityManager $entityManager
-	 */
-	public function __construct(EntityManager $entityManager) {
-		$this->entityManager = $entityManager;
-	}
-	
-	/**
-	 * @param int $id
-	 * @return Election
-	 */
-	public function get($id)
-	{
-		return $this->entityManager->getRepository(Election::class)->get($id);
-	}
-	
-	/**
-	 * @param int $factionId
-	 * @return Election
-	 */
-	public function getFactionLastElection($factionId)
-	{
-		return $this->entityManager->getRepository(Election::class)->getFactionLastElection($factionId);
-	}
+class ElectionManager
+{
+    /** @var EntityManager **/
+    protected $entityManager;
+    
+    /**
+     * @param EntityManager $entityManager
+     */
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+    
+    /**
+     * @param int $id
+     * @return Election
+     */
+    public function get($id)
+    {
+        return $this->entityManager->getRepository(Election::class)->get($id);
+    }
+    
+    /**
+     * @param int $factionId
+     * @return Election
+     */
+    public function getFactionLastElection($factionId)
+    {
+        return $this->entityManager->getRepository(Election::class)->getFactionLastElection($factionId);
+    }
 
-	/**
-	 * @param Election $election
-	 * @return int
-	 */
-	public function add(Election $election)
-	{
-		$this->entityManager->persist($election);
-		$this->entityManager->flush($election);
+    /**
+     * @param Election $election
+     * @return int
+     */
+    public function add(Election $election)
+    {
+        $this->entityManager->persist($election);
+        $this->entityManager->flush($election);
 
-		return $election->id;
-	}
+        return $election->id;
+    }
 }

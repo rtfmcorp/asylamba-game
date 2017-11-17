@@ -1,4 +1,7 @@
 ---
+parameters:
+    hephaistos.feedback.api_url: http://asylamba_feedback_manager
+
 services:
     hephaistos.technical_manager:
         class: Asylamba\Modules\Hephaistos\Manager\TechnicalManager
@@ -11,3 +14,49 @@ services:
             - "%zeus.player.global_inactive_time"
             - "%hermes.notifications.timeout.read"
             - "%hermes.notifications.timeout.unread"
+            
+    hephaistos.charge_manager:
+        class: Asylamba\Modules\Hephaistos\Manager\ChargeManager
+        arguments:
+            - "@entity_manager"
+            
+    hephaistos.donation_manager:
+        class: Asylamba\Modules\Hephaistos\Manager\DonationManager
+        arguments:
+            - "@entity_manager"
+            - "@zeus.player_manager"
+            - "@session_wrapper"
+            - "%stripe_api_key"
+            
+    hephaistos.transaction_manager:
+        class: Asylamba\Modules\Hephaistos\Manager\TransactionManager
+        arguments:
+            - "@entity_manager"
+            
+    hephaistos.feedback_gateway:
+        class: Asylamba\Modules\Hephaistos\Gateway\FeedbackGateway
+        arguments:
+            - "%hephaistos.feedback.api_url"
+            
+    hephaistos.commentary_manager:
+        class: Asylamba\Modules\Hephaistos\Manager\CommentaryManager
+        arguments:
+            - "@hephaistos.feedback_gateway"
+            - "@hermes.notification_manager"
+            - "@zeus.player_manager"
+            
+    hephaistos.bug_manager:
+        class: Asylamba\Modules\Hephaistos\Manager\BugManager
+        arguments:
+            - "@hephaistos.feedback_gateway"
+            - "@hephaistos.commentary_manager"
+            - "@hermes.notification_manager"
+            - "@zeus.player_manager"
+            
+    hephaistos.evolution_manager:
+        class: Asylamba\Modules\Hephaistos\Manager\EvolutionManager
+        arguments:
+            - "@hephaistos.feedback_gateway"
+            - "@hephaistos.commentary_manager"
+            - "@hermes.notification_manager"
+            - "@zeus.player_manager"

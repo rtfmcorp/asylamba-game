@@ -47,7 +47,7 @@ $qr->execute(array(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, $date));
 
 # génération des factions disponibles
 foreach ($availableFactions as $faction) {
-	$qr->execute(array($faction, 1, 0, 0, 0, 0, 0, ColorResource::getInfo($faction, 'regime'), 1, 0, 1, $date));
+    $qr->execute(array($faction, 1, 0, 0, 0, 0, 0, ColorResource::getInfo($faction, 'regime'), 1, 0, 1, $date));
 }
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table factionNews</h2>';
@@ -109,6 +109,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `player` (
 
 	PRIMARY KEY (`id`),
 	UNIQUE KEY `name_UNIQUE` (`name`),
+    INDEX `fkBindKey` (`bind`),
 	CONSTRAINT fkPlayerColor FOREIGN KEY (rColor) REFERENCES color(id),
 	CONSTRAINT fkPlayerPlayer FOREIGN KEY (rGodfather) REFERENCES player(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 1;");
@@ -158,14 +159,51 @@ $playerManager->add($p);
 
 # Joueurs de factions
 foreach ($availableFactions as $faction) {
-	$p = clone($p);
-	$p->bind = Utils::generateString(25);
-	$p->name = ColorResource::getInfo($faction, 'officialName');
-	$p->avatar = ('color-' . $faction);
-	$p->rColor = $faction;
-	$p->status = 6;
-	$playerManager->add($p);
+    $p = clone($p);
+    $p->bind = Utils::generateString(25);
+    $p->name = ColorResource::getInfo($faction, 'officialName');
+    $p->avatar = ('color-' . $faction);
+    $p->rColor = $faction;
+    $p->status = 6;
+    $playerManager->add($p);
 }
+
+#--------------------------------------------------------------------------------------------
+echo '<h2>Ajout de la table budget__transactions</h2>';
+
+$db->query("DROP TABLE IF EXISTS `budget__transactions`");
+$db->query("CREATE TABLE IF NOT EXISTS `budget__transactions` (
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+	`transaction_type` varchar(12) NOT NULL,
+	`amount` INT NOT NULL,
+	`created_at` datetime NOT NULL,
+
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 1;");
+
+#--------------------------------------------------------------------------------------------
+echo '<h2>Ajout de la table budget__charges</h2>';
+
+$db->query("DROP TABLE IF EXISTS `budget__charges`");
+$db->query("CREATE TABLE IF NOT EXISTS `budget__charges` (
+	`transaction_id` INT unsigned NOT NULL,
+	`category` varchar(15) NOT NULL,
+
+	CONSTRAINT fkChargeId FOREIGN KEY (transaction_id) REFERENCES budget__transactions(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+
+#--------------------------------------------------------------------------------------------
+echo '<h2>Ajout de la table budget__donations</h2>';
+
+$db->query("DROP TABLE IF EXISTS `budget__donations`");
+$db->query("CREATE TABLE IF NOT EXISTS `budget__donations` (
+	`transaction_id` INT unsigned NOT NULL,
+	`player_bind_key` varchar(50) NOT NULL,
+    `token` varchar(30) NOT NULL,
+
+	CONSTRAINT fkDonationId FOREIGN KEY (transaction_id) REFERENCES budget__transactions(id),
+	CONSTRAINT fkPlayerBindKey FOREIGN KEY (player_bind_key) REFERENCES player(bind)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table sector</h2>';
@@ -482,8 +520,64 @@ $qr = $db->prepare("INSERT INTO `transaction` (`rPlayer`, `rPlace`, `type`, `qua
 (1, 0, ?, 1, NULL, 12, 0, ?, ?, ?, ?),
 (1, 0, ?, 8, NULL, 15, 0, ?, ?, ?, ?);");
 $qr->execute(array(Transaction::TYP_RESOURCE, Transaction::ST_COMPLETED, Utils::now(), Utils::now(), 1.26,
-	Transaction::TYP_COMMANDER, Transaction::ST_COMPLETED, Utils::now(), Utils::now(), 12,
-	Transaction::TYP_SHIP, Transaction::ST_COMPLETED, Utils::now(), Utils::now(), 1.875));
+    Transaction::TYP_COMMANDER, Transaction::ST_COMPLETED, Utils::now(), Utils::now(), 12,
+    Transaction::TYP_SHIP, Transaction::ST_COMPLETED, Utils::now(), Utils::now(), 1.875));
+
+#--------------------------------------------------------------------------------------------
+echo '<h2>Ajout de la table news</h2>';
+
+$db->query("DROP TABLE IF EXISTS `news`");
+$db->query("CREATE TABLE IF NOT EXISTS `news` (
+	`id` INT unsigned NOT NULL AUTO_INCREMENT,
+    `title` VARCHAR(255) NOT NULL,
+    `content` TEXT,
+    `type` VARCHAR(15) NOT NULL,
+    `weight` TINYINT(4) NOT NULL,
+	`created_at` datetime DEFAULT NULL,
+	`updated_at` datetime DEFAULT NULL,
+
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
+
+echo '<h2>Ajout de la table news__military</h2>';
+
+$db->query("DROP TABLE IF EXISTS `news__military`");
+$db->query("CREATE TABLE IF NOT EXISTS `news__military` (
+	`news_id` INT unsigned NOT NULL,
+	`attacker_id` INT unsigned NOT NULL,
+	`defender_id` INT unsigned NOT NULL,
+	`place_id` INT unsigned NOT NULL,
+    `type` VARCHAR(15) NOT NULL,
+    `is_victory` TINYINT(4) UNSIGNED NOT NULL,
+
+	CONSTRAINT fkMilitaryNews FOREIGN KEY (news_id) REFERENCES news(id),
+	CONSTRAINT fkAttacker FOREIGN KEY (attacker_id) REFERENCES player(id),
+	CONSTRAINT fkDefender FOREIGN KEY (defender_id) REFERENCES player(id),
+	CONSTRAINT fkPlace FOREIGN KEY (place_id) REFERENCES place(id)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;");
+
+echo '<h2>Ajout de la table news__politics</h2>';
+
+$db->query("DROP TABLE IF EXISTS `news__politics`");
+$db->query("CREATE TABLE IF NOT EXISTS `news__politics` (
+	`news_id` INT unsigned NOT NULL,
+	`faction_id` INT unsigned NOT NULL,
+    `type` VARCHAR(15) NOT NULL,
+
+	CONSTRAINT fkPoliticsNews FOREIGN KEY (news_id) REFERENCES news(id),
+	CONSTRAINT fkFaction FOREIGN KEY (faction_id) REFERENCES color(id)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;");
+
+echo '<h2>Ajout de la table news__trade</h2>';
+
+$db->query("DROP TABLE IF EXISTS `news__trade`");
+$db->query("CREATE TABLE IF NOT EXISTS `news__trade` (
+	`news_id` INT unsigned NOT NULL,
+	`transaction_id` INT unsigned NOT NULL,
+
+	CONSTRAINT fkTradeNews FOREIGN KEY (news_id) REFERENCES news(id),
+	CONSTRAINT fkTransaction FOREIGN KEY (transaction_id) REFERENCES transaction(id)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;");
 
 #--------------------------------------------------------------------------------------------
 echo '<h2>Ajout de la table commercialShipping</h2>';
@@ -524,9 +618,9 @@ $qr = $db->prepare("INSERT INTO `commercialTax` (`faction`, `relatedFaction`, `e
 
 # génération des taxes
 foreach ($availableFactions as $faction) {
-	foreach ($availableFactions as $rfaction) {
-		$qr->execute(array($faction, $rfaction));
-	}
+    foreach ($availableFactions as $rfaction) {
+        $qr->execute(array($faction, $rfaction));
+    }
 }
 
 #--------------------------------------------------------------------------------------------
@@ -1021,23 +1115,23 @@ $conversationUserManager = $this->getContainer()->get('hermes.conversation_user_
 $conversationUserManager->add($user);
 
 foreach ($availableFactions as $faction) {
-	$player = $playerManager->getFactionAccount($faction);
+    $player = $playerManager->getFactionAccount($faction);
 
-	$conv = new Conversation();
-	$conv->messages = 0;
-	$conv->type = Conversation::TY_SYSTEM;
-	$conv->title = 'Communication de ' . ColorResource::getInfo($player->rColor, 'popularName');
-	$conv->dCreation = Utils::now();
-	$conv->dLastMessage = Utils::now();
-	$conversationManager->add($conv);
+    $conv = new Conversation();
+    $conv->messages = 0;
+    $conv->type = Conversation::TY_SYSTEM;
+    $conv->title = 'Communication de ' . ColorResource::getInfo($player->rColor, 'popularName');
+    $conv->dCreation = Utils::now();
+    $conv->dLastMessage = Utils::now();
+    $conversationManager->add($conv);
 
-	$user = new ConversationUser();
-	$user->rConversation = $conv->id;
-	$user->rPlayer = $player->id;
-	$user->convPlayerStatement = ConversationUser::US_ADMIN;
-	$user->convStatement = ConversationUser::CS_DISPLAY;
-	$user->dLastView = Utils::now();
-	$conversationUserManager->add($user);
+    $user = new ConversationUser();
+    $user->rConversation = $conv->id;
+    $user->rPlayer = $player->id;
+    $user->convPlayerStatement = ConversationUser::US_ADMIN;
+    $user->convStatement = ConversationUser::CS_DISPLAY;
+    $user->dLastView = Utils::now();
+    $conversationUserManager->add($user);
 }
 
 #--------------------------------------------------------------------------------------------
@@ -1217,11 +1311,11 @@ $colorManager = $this->getContainer()->get('demeter.color_manager');
 $factions = $colorManager->getAll();
 $nbFactions = count($factions);
 for ($i = 1; $i < $nbFactions; $i++) {
-	for ($j = 1; $j < $nbFactions; $j++) {
-		if (!(($i == $nbFactions - 1) && ($j == $nbFactions - 1))) {
-			$values .= '(' . $factions[$i]->id . ',' . $factions[$j]->id . ',' . 0 .'),';
-		}
-	}
+    for ($j = 1; $j < $nbFactions; $j++) {
+        if (!(($i == $nbFactions - 1) && ($j == $nbFactions - 1))) {
+            $values .= '(' . $factions[$i]->id . ',' . $factions[$j]->id . ',' . 0 .'),';
+        }
+    }
 }
 
 $values .= '(' . $factions[$nbFactions - 1]->id . ',' . $factions[$nbFactions - 1]->id . ',' . 0 .');';
@@ -1233,14 +1327,14 @@ $qr->execute();
 $db->query('SET FOREIGN_KEY_CHECKS = 1;');
 
 if (DATA_ANALYSIS) {
-	echo '<h1>Création des tables du module d\'analyse</h1>';
+    echo '<h1>Création des tables du module d\'analyse</h1>';
 
-	include 'data-analysis/player.php';
-	include 'data-analysis/playerDaily.php';
-//	include 'data-analysis/fleetMovement.php';
-	include 'data-analysis/commercialRelation.php';
-	include 'data-analysis/socialRelation.php';
-	include 'data-analysis/baseAction.php';
+    include 'data-analysis/player.php';
+    include 'data-analysis/playerDaily.php';
+    //	include 'data-analysis/fleetMovement.php';
+    include 'data-analysis/commercialRelation.php';
+    include 'data-analysis/socialRelation.php';
+    include 'data-analysis/baseAction.php';
 }
 
 echo '<h1>Génération de la galaxie</h1>';

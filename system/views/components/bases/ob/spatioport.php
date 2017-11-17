@@ -15,6 +15,7 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
+use Asylamba\Classes\Container\Params;
 
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $request = $this->getContainer()->get('app.request');
@@ -82,7 +83,7 @@ echo '<div class="component building rc">';
 
 			echo '<hr />';
 
-			echo '<div class="number-box">';
+			echo '<div id="rc-data-count" class="number-box">';
 				echo '<span class="label">routes commerciales</span>';
 				echo '<span class="value">' . $nCRInDock . ' / ' . $nMaxCR . '</span>';
 
@@ -90,23 +91,23 @@ echo '<div class="component building rc">';
 				echo '<span style="width:' . Format::percent($nCRInDock, $nMaxCR) . '%;" class="content"></span>';
 			echo '</div>';
 
-			echo '<div class="number-box ' . (($nCROperational == 0) ? 'grey' : '') . '">';
+			echo '<div id="rc-data-active" class="number-box ' . (($nCROperational == 0) ? 'grey' : '') . '">';
 				echo '<span class="label">routes commerciales actives</span>';
 				echo '<span class="value">' . $nCROperational . '</span>';
 			echo '</div>';
 
-			echo '<div class="number-box ' . (($nCRWaitingForOther == 0) ? 'grey' : '') . '">';
+			echo '<div id="rc-data-waiting" class="number-box ' . (($nCRWaitingForOther == 0) ? 'grey' : '') . '">';
 				echo '<span class="label">routes commerciales en attente</span>';
 				echo '<span class="value">' . $nCRWaitingForOther . '</span>';
 			echo '</div>';
 
-			echo '<div class="number-box ' . (($nCRWaitingForMe == 0) ? 'grey' : '') . '">';
+			echo '<div id="rc-data-proposed" class="number-box ' . (($nCRWaitingForMe == 0) ? 'grey' : '') . '">';
 				echo '<span class="label">propositions commerciales</span>';
 				echo '<span class="value">' . $nCRWaitingForMe . '</span>';
 			echo '</div>';
 
 			if ($nCRInStandBy > 0) {
-				echo '<div class="number-box">';
+				echo '<div id="rc-data-standby" class="number-box">';
 					echo '<span class="label">routes commerciales bloquées</span>';
 					echo '<span class="value">' . $nCRInStandBy . '</span>';
 				echo '</div>';
@@ -114,7 +115,7 @@ echo '<div class="component building rc">';
 
 			echo '<hr />';
 
-			echo '<div class="number-box">';
+			echo '<div id="rc-data-income" class="number-box">';
 				echo '<span class="label">revenu total de cette base</span>';
 				echo '<span class="value">';
 					echo Format::numberFormat($totalIncome);
@@ -135,11 +136,12 @@ if ($request->query->get('mode') === 'search') {
 		echo '</div>';
 		echo '<div class="fix-body">';
 			echo '<div class="body">';
-				echo '<form action="' . APP_ROOT . 'bases/view-spatioport/mode-search/show-result" method="POST" />';
+				echo '<form id="rc-search-form" onsubmit="tradeController.search(event)">';
 					echo '<h4>Chercher des partenaires commerciaux...</h4>';
+                    $configuredFactions = json_decode($request->cookies->get('p' . Params::CR_FACTIONS, json_encode($this->getContainer()->getParameter('game.available_factions'))), true);
 					foreach ($factions as $i) {
 						echo '<p><label for="ckb-faction-' . $i . '">';
-							echo '<input type="checkbox" name="faction-' . $i . '" id="ckb-faction-' . $i . '" ' . (!$request->query->has('show') || $request->request->has('faction-' . $i) ? 'checked' : NULL) . ' /> ';
+							echo '<input type="checkbox" name="faction-' . $i . '" id="ckb-faction-' . $i . '" ' . (in_array($i, $configuredFactions) ? 'checked' : NULL) . ' /> ';
 							echo ColorResource::getInfo($i, 'demonym');
 						echo '</label></p>';
 					}
@@ -147,83 +149,16 @@ if ($request->query->get('mode') === 'search') {
 					echo '<h4>A une distance...</h4>';
 
 					echo '<p><label for="search-rc-min-dist">Minimum</label></p>';
-					echo '<p class="input input-text"><input type="number" id="search-rc-min-dist" name="min-dist" value="' . ($request->request->has('min-dist') ? $request->request->get('min-dist') : 75) . '" /></p>';
+					echo '<p class="input input-text"><input type="number" id="search-rc-min-dist" name="min-dist" value="' . $request->cookies->get('p' . Params::CR_MIN, Params::$params[Params::CR_MIN]) . '" /></p>';
 
 					echo '<p><label for="search-rc-max-dist">Maximum</label></p>';
-					echo '<p class="input input-text"><input type="number" id="search-rc-max-dist" name="max-dist" value="' . ($request->request->has('max-dist') ? $request->request->get('max-dist') : 125) . '" /></p>';
+					echo '<p class="input input-text"><input type="number" id="search-rc-max-dist" name="max-dist" value="' . $request->cookies->get('p' . Params::CR_MAX, Params::$params[Params::CR_MAX]) . '" /></p>';
 
-					echo '<p><button>Rechercher</button></p>';
+					echo '<p><button type="submit" class="trade-search-button"><span>Rechercher</span></button></p>';
 				echo '</form>';
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';
-
-	if ($request->query->get('show') === 'result') {
-		$min = $request->request->has('min-dist') ? abs(intval($request->request->get('min-dist'))) : 75;
-		$max = $request->request->has('max-dist') ? abs(intval($request->request->get('max-dist'))) : 75;
-
-		$checkedFactions = [0];
-		foreach ($factions as $i) {
-			if ($request->request->has('faction-' . $i)) {
-				$checkedFactions[] = $i;
-			}
-		}
-
-		$qr = $database->prepare('SELECT 
-				pa.rColor AS playerColor,
-				pa.avatar AS playerAvatar,
-				pa.name AS playerName,
-				ob.name AS baseName,
-				ob.rPlace AS rPlace,
-				(FLOOR(SQRT(POW(? - s.xPosition, 2) + POW(? - s.yPosition, 2)))) AS distance
-			FROM orbitalBase AS ob
-			LEFT JOIN player AS pa
-				ON ob.rPlayer = pa.id
-			LEFT JOIN place AS p
-				ON ob.rPlace = p.id
-			LEFT JOIN system AS s
-				ON p.rSystem = s.id
-			LEFT JOIN sector AS se
-				ON s.rSector = se.id
-			WHERE
-				pa.id != ?
-				AND ob.levelSpatioport > 0
-				AND (FLOOR(SQRT(POW(? - s.xPosition, 2) + POW(? - s.yPosition, 2)))) >= ?
-				AND (FLOOR(SQRT(POW(? - s.xPosition, 2) + POW(? - s.yPosition, 2)))) <= ?
-				AND pa.rColor in (' . implode(',', $checkedFactions) . ')
-			ORDER BY distance DESC
-			LIMIT 0, 40'
-		);
-		$qr->execute([
-			$ob_spatioport->xSystem, $ob_spatioport->ySystem,
-			$session->get('playerId'),
-			$ob_spatioport->xSystem, $ob_spatioport->ySystem, $min,
-			$ob_spatioport->xSystem, $ob_spatioport->ySystem, $max
-		]);
-		$aw = $qr->fetchAll();
-
-		echo '<div class="component player rank">';
-			echo '<div class="head skin-2">';
-				echo '<h2>Résultats</h2>';
-			echo '</div>';
-			echo '<div class="fix-body">';
-				echo '<div class="body">';
-					foreach ($aw as $base) {
-						echo '<a href="' . APP_ROOT . 'map/place-' . $base['rPlace'] . '" class="player color' . $base['playerColor'] . '">';
-							echo '<img src="' . MEDIA . 'avatar/small/' . $base['playerAvatar'] . '.png" alt="" class="picto">';
-							echo '<span class="title">' . $base['playerName'] . '</span>';
-							echo '<strong class="name">' . $base['baseName'] . '</strong>';
-							echo '<span class="experience">' . $base['distance'] . ' al.</span>';
-						echo '</a>';
-					}
-
-					if (count($aw) == 0) {
-						echo '<p><em>Aucun partenaire commercial trouvé selon les critères de recherche fournis.</em></p>';
-					}
-				echo '</div>';
-			echo '</div>';
-		echo '</div>';
-	}
 } else {
 	$j = 0;
 	foreach ($routes as $rc) {

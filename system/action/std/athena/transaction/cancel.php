@@ -24,79 +24,78 @@ $entityManager = $this->getContainer()->get('entity_manager');
 
 $rTransaction = $request->query->get('rtransaction');
 
-if ($rTransaction !== FALSE) {
-	$transaction = $transactionManager->get($rTransaction);
+if ($rTransaction !== false) {
+    $transaction = $transactionManager->get($rTransaction);
 
-	$commercialShipping = $commercialShippingManager->getByTransactionId($rTransaction);
+    $commercialShipping = $commercialShippingManager->getByTransactionId($rTransaction);
 
-	if ($transaction !== null AND $commercialShipping !== null AND $transaction->statement == Transaction::ST_PROPOSED AND $transaction->rPlayer == $session->get('playerId')) {
-		$base = $orbitalBaseManager->get($transaction->rPlace);
+    if ($transaction !== null and $commercialShipping !== null and $transaction->statement == Transaction::ST_PROPOSED and $transaction->rPlayer == $session->get('playerId')) {
+        $base = $orbitalBaseManager->get($transaction->rPlace);
 
-		if ($session->get('playerInfo')->get('credit') >= $transaction->getPriceToCancelOffer()) {
-			if (($player = $playerManager->get($session->get('playerId'))) !== null) {
+        if ($session->get('playerInfo')->get('credit') >= $transaction->getPriceToCancelOffer()) {
+            if (($player = $playerManager->get($session->get('playerId'))) !== null) {
+                $valid = true;
 
-				$valid = TRUE;
+                switch ($transaction->type) {
+                    case Transaction::TYP_RESOURCE:
+                        $maxStorage = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $base->getLevelStorage(), 'storageSpace');
+                        $storageBonus = $session->get('playerBonus')->get(PlayerBonus::REFINERY_STORAGE);
+                        if ($storageBonus > 0) {
+                            $maxStorage += ($maxStorage * $storageBonus / 100);
+                        }
+                        $storageSpace = $maxStorage - $base->getResourcesStorage();
 
-				switch ($transaction->type) {
-					case Transaction::TYP_RESOURCE :
-						$maxStorage = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $base->getLevelStorage(), 'storageSpace');
-						$storageBonus = $session->get('playerBonus')->get(PlayerBonus::REFINERY_STORAGE);
-						if ($storageBonus > 0) {
-							$maxStorage += ($maxStorage * $storageBonus / 100);
-						}
-						$storageSpace = $maxStorage - $base->getResourcesStorage();
+                        if ($storageSpace >= $transaction->quantity) {
+                            $orbitalBaseManager->increaseResources($base, $transaction->quantity, true);
+                        } else {
+                            $valid = false;
+                            throw new ErrorException('Vous n\'avez pas assez de place dans votre Stockage pour stocker les ressources. Videz un peu le hangar et revenez plus tard pour annuler cette offre.');
+                        }
+                        break;
+                    case Transaction::TYP_SHIP:
+                        $orbitalBaseManager->addShipToDock($base, $transaction->identifier, $transaction->quantity);
+                        break;
+                    case Transaction::TYP_COMMANDER:
+                        $commander = $commanderManager->get($transaction->identifier);
+                        $commander->setStatement(Commander::RESERVE);
+                        break;
+                    default:
+                        $valid = false;
+                }
 
-						if ($storageSpace >= $transaction->quantity) {
-							$orbitalBaseManager->increaseResources($base, $transaction->quantity, TRUE);
-						} else {
-							$valid = FALSE;
-							throw new ErrorException('Vous n\'avez pas assez de place dans votre Stockage pour stocker les ressources. Videz un peu le hangar et revenez plus tard pour annuler cette offre.');
-						}
-						break;
-					case Transaction::TYP_SHIP :
-						$orbitalBaseManager->addShipToDock($base, $transaction->identifier, $transaction->quantity);
-						break;
-					case Transaction::TYP_COMMANDER :
-						$commander = $commanderManager->get($transaction->identifier);
-						$commander->setStatement(Commander::RESERVE);
-						break;
-					default :
-						$valid = FALSE;
-				}
+                if ($valid) {
+                    // débit des crédits au joueur
+                    $playerManager->decreaseCredit($player, $transaction->getPriceToCancelOffer());
 
-				if ($valid) {
-					// débit des crédits au joueur
-					$playerManager->decreaseCredit($player, $transaction->getPriceToCancelOffer());
+                    // annulation de l'envoi commercial (libération des vaisseaux de commerce)
+                    $entityManager->remove($commercialShipping);
 
-					// annulation de l'envoi commercial (libération des vaisseaux de commerce)
-					$entityManager->remove($commercialShipping);
+                    // update transaction statement
+                    $transaction->statement = Transaction::ST_CANCELED;
+                    $transaction->dValidation = Utils::now();
 
-					// update transaction statement
-					$transaction->statement = Transaction::ST_CANCELED;
-					$transaction->dValidation = Utils::now();
-
-					switch ($transaction->type) {
-						case Transaction::TYP_RESOURCE :
-							$session->addFlashbag('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et vous récupérez vos ressources.', Flashbag::TYPE_MARKET_SUCCESS);
-							break;
-						case Transaction::TYP_SHIP :
-							$session->addFlashbag('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et vous récupérez vos vaisseaux de combat.', Flashbag::TYPE_MARKET_SUCCESS);
-							break;
-						case Transaction::TYP_COMMANDER :
-							$session->addFlashbag('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et votre commandant est placé à l\'école de commandement.', Flashbag::TYPE_MARKET_SUCCESS);
-							break;
-					}
-				}
-			} else {
-				throw new ErrorException('erreur dans l\'annulation de proposition sur le marché, joueur inexistant');
-			}
-		} else {
-			throw new ErrorException('vous n\'avez pas assez de crédits pour annuler la proposition');
-		}
-	} else {
-		throw new ErrorException('impossible d\'annuler une proposition sur le marché');
-	}
+                    switch ($transaction->type) {
+                        case Transaction::TYP_RESOURCE:
+                            $session->addFlashbag('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et vous récupérez vos ressources.', Flashbag::TYPE_MARKET_SUCCESS);
+                            break;
+                        case Transaction::TYP_SHIP:
+                            $session->addFlashbag('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et vous récupérez vos vaisseaux de combat.', Flashbag::TYPE_MARKET_SUCCESS);
+                            break;
+                        case Transaction::TYP_COMMANDER:
+                            $session->addFlashbag('Annulation de la proposition commerciale. Les vaisseaux commerciaux sont à nouveau disponibles et votre commandant est placé à l\'école de commandement.', Flashbag::TYPE_MARKET_SUCCESS);
+                            break;
+                    }
+                }
+            } else {
+                throw new ErrorException('erreur dans l\'annulation de proposition sur le marché, joueur inexistant');
+            }
+        } else {
+            throw new ErrorException('vous n\'avez pas assez de crédits pour annuler la proposition');
+        }
+    } else {
+        throw new ErrorException('impossible d\'annuler une proposition sur le marché');
+    }
 } else {
-	throw new FormException('pas assez d\'informations pour annuler une proposition sur le marché');
+    throw new FormException('pas assez d\'informations pour annuler une proposition sur le marché');
 }
 $entityManager->flush();

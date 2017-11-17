@@ -2,7 +2,8 @@
 
 namespace Asylamba\Classes\Container;
 
-class Alert {
+class Alert
+{
     /** @var array **/
     private $alerts = array();
 
@@ -11,19 +12,22 @@ class Alert {
      * @param string $type
      * @return int
      */
-    public function add($message, $type = ALERT_STD_INFO) {
+    public function add($message, $type = ALERT_STD_INFO)
+    {
         $this->alerts[] = array($message, $type);
         return $this->size() - 1;
     }
 
-    public function clear() {
+    public function clear()
+    {
         $this->alerts = array();
     }
 
     /**
      * @return int
      */
-    public function size() {
+    public function size()
+    {
         return count($this->alerts);
     }
 
@@ -31,7 +35,8 @@ class Alert {
      * @param int $position
      * @return array|boolean
      */
-    public function get($position) {
+    public function get($position)
+    {
         if (isset($this->alerts[$position])) {
             return $this->alerts[$position];
         }
@@ -43,10 +48,11 @@ class Alert {
      * @param string $type
      * @return string
      */
-    public function getAlerts($tag, $type = ALERT_DEFAULT) {
+    public function getAlerts($tag, $type = ALERT_DEFAULT)
+    {
         $format = '';
         foreach ($this->alerts as $k) {
-            if ($type != ALERT_DEFAULT AND $type = $k[1]) {
+            if ($type != ALERT_DEFAULT and $type = $k[1]) {
                 $format .= '<' . $tag . ' class="alert_' . $k[1] . '">' . $k[0] . '</' . $tag . '>';
             }
         }
@@ -58,11 +64,13 @@ class Alert {
      * @param boolean $date
      * @param array $supp
      */
-    public function logAlerts($path, $date = TRUE, $supp = array()) {
-            # TODO
+    public function logAlerts($path, $date = true, $supp = array())
+    {
+        # TODO
     }
 
-    public function readUrl() {
+    public function readUrl()
+    {
         if (isset($_GET['say'])) {
             $this->alerts[] = array($_GET['say'], ALERT_URL_INFO);
         }

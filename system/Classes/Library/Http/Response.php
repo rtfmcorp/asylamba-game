@@ -25,19 +25,25 @@ class Response
     /** @var ParameterBag **/
     public $headers;
     /** @var array **/
+    public $cookies = [];
+    /** @var array **/
     protected $statuses = [
+        101 => 'Switching Protocols',
         200 => 'OK',
 		302 => 'Found',
+        400 => 'Bad Request',
 		404 => 'Not Found',
 		500 => 'Internal Server Error'
     ];
-	
-	const STATUS_OK = 200;
-	const STATUS_REDIRECT = 302;
-	const STATUS_NOT_FOUND = 404;
-	const STATUS_INTERNAL_SERVER_ERROR = 500;
+    
+    const STATUS_SWITCHING_PROTOCOLS = 101;
+    const STATUS_OK = 200;
+    const STATUS_REDIRECT = 302;
+    const STATUS_NOT_FOUND = 404;
+    const STATUS_INTERNAL_SERVER_ERROR = 500;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->headers = new ParameterBag();
     }
     
@@ -108,9 +114,10 @@ class Response
     /**
      * @param int $path
      */
-    public function redirect($path) {
+    public function redirect($path)
+    {
         $this->redirect = $path;
-		$this->statusCode = self::STATUS_REDIRECT;
+        $this->statusCode = self::STATUS_REDIRECT;
     }
 
     /**
@@ -160,15 +167,18 @@ class Response
     {
         return $this->statuses[$this->statusCode];
     }
-	
-	public function send()
-	{
+    
+    public function send()
+    {
         $this->headers->set('Content-Length', strlen($this->body));
 		$message = "{$this->protocol} {$this->statusCode} {$this->statuses[$this->statusCode]}\n";
 		
 		foreach ($this->headers->all() as $header => $value) {
 			$message .= "$header: $value\n";
 		}
+        foreach ($this->cookies as $cookie) {
+            $message .= "Set-Cookie:$cookie\n";
+        }
 		$message .= "\n";
 		$message .= $this->body;
 		return $message;

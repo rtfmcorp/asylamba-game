@@ -6,7 +6,7 @@ use Asylamba\Modules\Ares\Model\Commander;
 $commanders = $this->getContainer()->get('ares.commander_manager')->getMovingCommanders();
 
 foreach ($commanders as $commander) {
-	$commander->dArrival = $commander->dStart;
+    $commander->dArrival = $commander->dStart;
 }
 
 $this->getContainer()->get('entity_manager')->flush(Commander::class);

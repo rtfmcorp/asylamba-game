@@ -8,12 +8,11 @@ class ColorTest extends \PHPUnit\Framework\TestCase
 {
     public function testEntity()
     {
-
         $color =
             (new Color())
             ->setId(1)
-            ->setAlive(TRUE)
-            ->setisWinner(FALSE)
+            ->setAlive(true)
+            ->setisWinner(false)
             ->setCredits(1000)
             //->setPlayers()
             //->setActivePlayers()
@@ -21,41 +20,41 @@ class ColorTest extends \PHPUnit\Framework\TestCase
             ->setPoints(1200)
             //->setSectors()
             //->setElectionStatement()
-            ->setIsClosed(TRUE)
+            ->setIsClosed(true)
             ->setDescription("Descrip")
-            ->setDClaimVictory(TRUE)
+            ->setDClaimVictory(true)
             ->setDLastElection('2017-05-06 21:20:30')
-            ->setIsInGame(TRUE)
+            ->setIsInGame(true)
             ;
 
-            $this->assertEquals(1, $color->getId());
-            $this->assertEquals(TRUE, $color->getAlive());
-            $this->assertEquals(FALSE, $color->getIsWinner());
-            $this->assertEquals(1000, $color->getCredits());
-            //$this->assertEquals(, $color->getPlayers());
-            //$this->assertEquals(, $color->getActivePlayers());
-            $this->assertEquals(820, $color->getRankingPoints());
-            $this->assertEquals(1200, $color->getPoints());
-            //$this->assertEquals(, $color->getSectors());
-            //$this->assertEquals(, $color->getElectionStatement());
-            $this->assertEquals(TRUE, $color->getIsClosed());
-            $this->assertEquals("Descrip", $color->getDescription());
-            $this->assertEquals(TRUE, $color->getDClaimVictory());
-            $this->assertEquals('2017-05-06 21:20:30', $color->getDLastElection());
-            $this->assertEquals(TRUE, $color->getIsInGame());
+        $this->assertEquals(1, $color->getId());
+        $this->assertEquals(true, $color->getAlive());
+        $this->assertEquals(false, $color->getIsWinner());
+        $this->assertEquals(1000, $color->getCredits());
+        //$this->assertEquals(, $color->getPlayers());
+        //$this->assertEquals(, $color->getActivePlayers());
+        $this->assertEquals(820, $color->getRankingPoints());
+        $this->assertEquals(1200, $color->getPoints());
+        //$this->assertEquals(, $color->getSectors());
+        //$this->assertEquals(, $color->getElectionStatement());
+        $this->assertEquals(true, $color->getIsClosed());
+        $this->assertEquals("Descrip", $color->getDescription());
+        $this->assertEquals(true, $color->getDClaimVictory());
+        $this->assertEquals('2017-05-06 21:20:30', $color->getDLastElection());
+        $this->assertEquals(true, $color->getIsInGame());
     }
 
     public function testIncreaseCredit()
     {
-      $color = new color();
-      $color->setCredits(1000);
-      $this->assertEquals(2324, $color->increaseCredit(1324));
+        $color = new color();
+        $color->setCredits(1000);
+        $this->assertEquals(2324, $color->increaseCredit(1324));
     }
 
     public function testDecreaseCredit()
     {
-      $color = new color();
-      $color->setCredits(1000);
-      $this->assertEquals(505, $color->decreaseCredit(495));
+        $color = new color();
+        $color->setCredits(1000);
+        $this->assertEquals(505, $color->decreaseCredit(495));
     }
 }

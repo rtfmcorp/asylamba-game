@@ -30,21 +30,22 @@ $session->get('playerInfo')->add('status', $player->status);
 $session->get('playerInfo')->add('premium', $player->premium);
 
 if (Utils::isAdmin($player->getBind())) {
-	$session->get('playerInfo')->add('admin', TRUE);
+    $session->get('playerInfo')->add('admin', true);
 } else {
-	$session->get('playerInfo')->add('admin', FALSE);
+    $session->get('playerInfo')->add('admin', false);
 }
 
 $playerBases = $orbitalBaseManager->getPlayerBases($player->getId());
 foreach ($playerBases as $base) {
-	$session->addBase(
-		'ob', $base->getId(), 
-		$base->getName(), 
-		$base->getSector(), 
-		$base->getSystem(), 
-		'1-' . Game::getSizeOfPlanet($base->getPlanetPopulation()),
-		$base->typeOfBase
-	);
+    $session->addBase(
+        'ob',
+        $base->getId(),
+        $base->getName(),
+        $base->getSector(),
+        $base->getSystem(),
+        '1-' . Game::getSizeOfPlanet($base->getPlanetPopulation()),
+        $base->typeOfBase
+    );
 }
 # remplissage des bonus
 $bonus = $playerBonusManager->getBonusByPlayer($player);

@@ -6,10 +6,10 @@ $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get('session_wrapper');
 # bases loading
-if ($session->get('playerInfo')->get('admin') == FALSE) {
-	$session->addFlashbag('Accès non-autorisé', Flashbag::TYPE_BUG_ERROR);
-	$response->redirect('profil');
-	return;
+if ($session->get('playerInfo')->get('admin') == false) {
+    $session->addFlashbag('Accès non-autorisé', Flashbag::TYPE_BUG_ERROR);
+    $response->redirect('profil');
+    return;
 }
 
 # background paralax
@@ -21,16 +21,16 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
-	# admin component
-	if (!$request->query->has('view') OR $request->query->get('view') == 'message') {
-		# main message
-		include COMPONENT . 'admin/message/newOfficialMessage.php';
-		include COMPONENT . 'default.php';
-	} elseif ($request->query->get('view') == 'roadmap') {
-		# main roadmap
-		include COMPONENT . 'admin/roadmap/addEntry.php';
-		include COMPONENT . 'default.php';
-	} else {
-		$this->getContainer()->get('app.response')->redirect('404');
-	}
+    # admin component
+    if (!$request->query->has('view') or $request->query->get('view') == 'message') {
+        # main message
+        include COMPONENT . 'admin/message/newOfficialMessage.php';
+        include COMPONENT . 'default.php';
+    } elseif ($request->query->get('view') == 'roadmap') {
+        # main roadmap
+        include COMPONENT . 'admin/roadmap/addEntry.php';
+        include COMPONENT . 'default.php';
+    } else {
+        $this->getContainer()->get('app.response')->redirect('404');
+    }
 echo '</div>';

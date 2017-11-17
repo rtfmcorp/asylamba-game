@@ -10,110 +10,111 @@
 */
 namespace Asylamba\Modules\Gaia\Model;
 
-class Place { 
-	# CONSTANTS
-	const TYP_EMPTY = 0;
-	const TYP_MS1 = 1;
-	const TYP_MS2 = 2;
-	const TYP_MS3 = 3;
-	const TYP_ORBITALBASE = 4;
+class Place
+{
+    # CONSTANTS
+    const TYP_EMPTY = 0;
+    const TYP_MS1 = 1;
+    const TYP_MS2 = 2;
+    const TYP_MS3 = 3;
+    const TYP_ORBITALBASE = 4;
 
-	const COEFFMAXRESOURCE = 600;
-	const COEFFRESOURCE = 2;
-	const REPOPDANGER = 2;
-	const COEFFPOPRESOURCE = 50;
-	const COEFFDANGER = 5;
+    const COEFFMAXRESOURCE = 600;
+    const COEFFRESOURCE = 2;
+    const REPOPDANGER = 2;
+    const COEFFPOPRESOURCE = 50;
+    const COEFFDANGER = 5;
 
-	# typeOfPlace
-	const TERRESTRIAL = 1;
-	const EMPTYZONE = 6; # zone vide
+    # typeOfPlace
+    const TERRESTRIAL = 1;
+    const EMPTYZONE = 6; # zone vide
 
-	# CONST PNJ COMMANDER
-	const LEVELMAXVCOMMANDER = 20;
-	const POPMAX 			 = 250;
-	const DANGERMAX 		 = 100;
+    # CONST PNJ COMMANDER
+    const LEVELMAXVCOMMANDER = 20;
+    const POPMAX             = 250;
+    const DANGERMAX         = 100;
 
-	# CONST RESULT BATTLE
-	const CHANGESUCCESS 						= 10;
-	const CHANGEFAIL							= 11;
-	const CHANGELOST							= 12;
+    # CONST RESULT BATTLE
+    const CHANGESUCCESS                        = 10;
+    const CHANGEFAIL                            = 11;
+    const CHANGELOST                            = 12;
 
-	const LOOTEMPTYSSUCCESS 					= 20;
-	const LOOTEMPTYFAIL							= 21;
-	const LOOTPLAYERWHITBATTLESUCCESS			= 22;
-	const LOOTPLAYERWHITBATTLEFAIL				= 23;
-	const LOOTPLAYERWHITOUTBATTLESUCCESS		= 24;
-	const LOOTLOST								= 27;
+    const LOOTEMPTYSSUCCESS                    = 20;
+    const LOOTEMPTYFAIL                            = 21;
+    const LOOTPLAYERWHITBATTLESUCCESS            = 22;
+    const LOOTPLAYERWHITBATTLEFAIL                = 23;
+    const LOOTPLAYERWHITOUTBATTLESUCCESS        = 24;
+    const LOOTLOST                                = 27;
 
-	const CONQUEREMPTYSSUCCESS 					= 30;
-	const CONQUEREMPTYFAIL						= 31;
-	const CONQUERPLAYERWHITBATTLESUCCESS		= 32;
-	const CONQUERPLAYERWHITBATTLEFAIL			= 33;
-	const CONQUERPLAYERWHITOUTBATTLESUCCESS		= 34;
-	const CONQUERLOST							= 37;
+    const CONQUEREMPTYSSUCCESS                    = 30;
+    const CONQUEREMPTYFAIL                        = 31;
+    const CONQUERPLAYERWHITBATTLESUCCESS        = 32;
+    const CONQUERPLAYERWHITBATTLEFAIL            = 33;
+    const CONQUERPLAYERWHITOUTBATTLESUCCESS        = 34;
+    const CONQUERLOST                            = 37;
 
-	const COMEBACK 								= 40;
+    const COMEBACK                                = 40;
 
-	# constante de danger
-	const DNG_CASUAL 							= 10;
-	const DNG_EASY 								= 20;
-	const DNG_MEDIUM 							= 50;
-	const DNG_HARD 								= 75;
-	const DNG_VERY_HARD 						= 100;
+    # constante de danger
+    const DNG_CASUAL                            = 10;
+    const DNG_EASY                                = 20;
+    const DNG_MEDIUM                            = 50;
+    const DNG_HARD                                = 75;
+    const DNG_VERY_HARD                        = 100;
 
-	// PLACE
-	public $id = 0;
-	public $rPlayer = NULL;
-	public $rSystem = 0;
-	public $typeOfPlace = 0;
-	public $position = 0;
-	public $population = 0;
-	public $coefResources = 0;
-	public $coefHistory = 0;
-	public $resources = 0; 						# de la place si $typeOfBase = 0, sinon de la base
-	public $danger = 0;							# danger actuel de la place (force des flottes rebelles)
-	public $maxDanger = 0;						# danger max de la place (force des flottes rebelles)
-	public $uPlace = '';
+    // PLACE
+    public $id = 0;
+    public $rPlayer = null;
+    public $rSystem = 0;
+    public $typeOfPlace = 0;
+    public $position = 0;
+    public $population = 0;
+    public $coefResources = 0;
+    public $coefHistory = 0;
+    public $resources = 0;                        # de la place si $typeOfBase = 0, sinon de la base
+    public $danger = 0;                            # danger actuel de la place (force des flottes rebelles)
+    public $maxDanger = 0;                        # danger max de la place (force des flottes rebelles)
+    public $uPlace = '';
 
-	// SYSTEM
-	public $rSector = 0;
-	public $xSystem = 0;
-	public $ySystem = 0;
-	public $typeOfSystem = 0;
+    // SYSTEM
+    public $rSector = 0;
+    public $xSystem = 0;
+    public $ySystem = 0;
+    public $typeOfSystem = 0;
 
-	// SECTOR
-	public $tax = 0;
-	public $sectorColor = 0;
+    // SECTOR
+    public $tax = 0;
+    public $sectorColor = 0;
 
-	// PLAYER
-	public $playerColor = 0;
-	public $playerName = '';
-	public $playerAvatar = '';
-	public $playerStatus = 0;
-	public $playerLevel = 0;
+    // PLAYER
+    public $playerColor = 0;
+    public $playerName = '';
+    public $playerAvatar = '';
+    public $playerStatus = 0;
+    public $playerLevel = 0;
 
-	// BASE
-	public $typeOfBase = 0;
-	public $typeOfOrbitalBase;
-	public $baseName = '';
-	public $points = '';
+    // BASE
+    public $typeOfBase = 0;
+    public $typeOfOrbitalBase;
+    public $baseName = '';
+    public $points = '';
 
-	// OB
-	public $levelCommercialPlateforme = 0;
-	public $levelSpatioport = 0;
-	public $antiSpyInvest = 0;
+    // OB
+    public $levelCommercialPlateforme = 0;
+    public $levelSpatioport = 0;
+    public $antiSpyInvest = 0;
 
-	// COMMANDER 
-	public  $commanders = array();
+    // COMMANDER
+    public $commanders = array();
 
-	//uMode
-	public $uMode = TRUE;
+    //uMode
+    public $uMode = true;
 
     /**
      * @param int $v
      * @return $this
      */
-	public function setId($v)
+    public function setId($v)
     {
         $this->id = $v;
     
@@ -123,7 +124,7 @@ class Place {
     /**
      * @return int
      */
-	public function getId()
+    public function getId()
     {
         return $this->id;
     }
@@ -132,7 +133,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setRPlayer($v)
+    public function setRPlayer($v)
     {
         $this->rPlayer = $v;
         
@@ -142,7 +143,7 @@ class Place {
     /**
      * @return int
      */
-	public function getRPlayer()
+    public function getRPlayer()
     {
         return $this->rPlayer;
     }
@@ -151,7 +152,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setRSystem($v)
+    public function setRSystem($v)
     {
         $this->rSystem = $v;
         
@@ -161,7 +162,7 @@ class Place {
     /**
      * @return int
      */
-	public function getRSystem()
+    public function getRSystem()
     {
         return $this->rSystem;
     }
@@ -170,7 +171,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setTypeOfPlace($v)
+    public function setTypeOfPlace($v)
     {
         $this->typeOfPlace = $v;
         
@@ -180,7 +181,7 @@ class Place {
     /**
      * @return int
      */
-	public function getTypeOfPlace()
+    public function getTypeOfPlace()
     {
         return $this->typeOfPlace;
     }
@@ -189,7 +190,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setPosition($v)
+    public function setPosition($v)
     {
         $this->position = $v;
         
@@ -199,7 +200,7 @@ class Place {
     /**
      * @return int
      */
-	public function getPosition()
+    public function getPosition()
     {
         return $this->position;
     }
@@ -208,7 +209,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setPopulation($v)
+    public function setPopulation($v)
     {
         $this->population = $v;
         
@@ -218,7 +219,7 @@ class Place {
     /**
      * @return int
      */
-	public function getPopulation()
+    public function getPopulation()
     {
         return $this->population;
     }
@@ -227,7 +228,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setCoefResources($v)
+    public function setCoefResources($v)
     {
         $this->coefResources = $v;
         
@@ -237,7 +238,7 @@ class Place {
     /**
      * @return int
      */
-	public function getCoefResources()
+    public function getCoefResources()
     {
         return $this->coefResources;
     }
@@ -246,7 +247,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setCoefHistory($v)
+    public function setCoefHistory($v)
     {
         $this->coefHistory = $v;
         
@@ -256,7 +257,7 @@ class Place {
     /**
      * @return int
      */
-	public function getCoefHistory()
+    public function getCoefHistory()
     {
         return $this->coefHistory;
     }
@@ -265,7 +266,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setResources($v)
+    public function setResources($v)
     {
         $this->resources = $v;
         
@@ -275,7 +276,7 @@ class Place {
     /**
      * @return int
      */
-	public function getResources()
+    public function getResources()
     {
         return $this->resources;
     }
@@ -322,7 +323,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setRSector($v)
+    public function setRSector($v)
     {
         $this->rSector = $v;
         
@@ -332,7 +333,7 @@ class Place {
     /**
      * @return int
      */
-	public function getRSector()
+    public function getRSector()
     {
         return $this->rSector;
     }
@@ -341,7 +342,7 @@ class Place {
      * @param float $v
      * @return $this
      */
-	public function setXSystem($v)
+    public function setXSystem($v)
     {
         $this->xSystem = $v;
         
@@ -351,7 +352,7 @@ class Place {
     /**
      * @return float
      */
-	public function getXSystem()
+    public function getXSystem()
     {
         return $this->xSystem;
     }
@@ -360,7 +361,7 @@ class Place {
      * @param float $v
      * @return $this
      */
-	public function setYSystem($v)
+    public function setYSystem($v)
     {
         $this->ySystem = $v;
         
@@ -370,7 +371,7 @@ class Place {
     /**
      * @return float
      */
-	public function getYSystem()
+    public function getYSystem()
     {
         return $this->ySystem;
     }
@@ -379,7 +380,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setTypeOfSystem($v)
+    public function setTypeOfSystem($v)
     {
         $this->typeOfSystem = $v;
         
@@ -389,7 +390,7 @@ class Place {
     /**
      * @return int
      */
-	public function getTypeOfSystem()
+    public function getTypeOfSystem()
     {
         return $this->typeOfSystem;
     }
@@ -398,7 +399,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setTax($v)
+    public function setTax($v)
     {
         $this->tax = $v;
         
@@ -408,7 +409,7 @@ class Place {
     /**
      * @return int
      */
-	public function getTax()
+    public function getTax()
     {
         return $this->tax;
     }
@@ -417,7 +418,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setSectorColor($v)
+    public function setSectorColor($v)
     {
         $this->sectorColor = $v;
         
@@ -427,7 +428,7 @@ class Place {
     /**
      * @return int
      */
-	public function getSectorColor()
+    public function getSectorColor()
     {
         return $this->sectorColor;
     }
@@ -436,7 +437,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setPlayerColor($v)
+    public function setPlayerColor($v)
     {
         $this->playerColor = $v;
         
@@ -446,7 +447,7 @@ class Place {
     /**
      * @return int
      */
-	public function getPlayerColor()
+    public function getPlayerColor()
     {
         return $this->playerColor;
     }
@@ -455,7 +456,7 @@ class Place {
      * @param string $v
      * @return $this
      */
-	public function setPlayerName($v)
+    public function setPlayerName($v)
     {
         $this->playerName = $v;
         
@@ -465,7 +466,7 @@ class Place {
     /**
      * @return string
      */
-	public function getPlayerName()
+    public function getPlayerName()
     {
         return $this->playerName;
     }
@@ -474,7 +475,7 @@ class Place {
      * @param string $v
      * @return $this
      */
-	public function setPlayerAvatar($v)
+    public function setPlayerAvatar($v)
     {
         $this->playerAvatar = $v;
         
@@ -484,7 +485,7 @@ class Place {
     /**
      * @return string
      */
-	public function getPlayerAvatar()
+    public function getPlayerAvatar()
     {
         return $this->playerAvatar;
     }
@@ -493,7 +494,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setPlayerStatus($v)
+    public function setPlayerStatus($v)
     {
         $this->playerStatus = $v;
         
@@ -503,7 +504,7 @@ class Place {
     /**
      * @return int
      */
-	public function getPlayerStatus()
+    public function getPlayerStatus()
     {
         return $this->playerStatus;
     }
@@ -512,7 +513,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setTypeOfBase($v)
+    public function setTypeOfBase($v)
     {
         $this->typeOfBase = $v;
         
@@ -522,7 +523,7 @@ class Place {
     /**
      * @return int
      */
-	public function getTypeOfBase()
+    public function getTypeOfBase()
     {
         return $this->typeOfBase;
     }
@@ -531,7 +532,7 @@ class Place {
      * @param string $v
      * @return $this
      */
-	public function setBaseName($v)
+    public function setBaseName($v)
     {
         $this->baseName = $v;
         
@@ -541,7 +542,7 @@ class Place {
     /**
      * @return string
      */
-	public function getBaseName()
+    public function getBaseName()
     {
         return $this->baseName;
     }
@@ -550,7 +551,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setPoints($v)
+    public function setPoints($v)
     {
         $this->points = $v;
         
@@ -560,7 +561,7 @@ class Place {
     /**
      * @return int
      */
-	public function getPoints()
+    public function getPoints()
     {
         return $this->points;
     }
@@ -569,7 +570,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setLevelCommercialPlateforme($v)
+    public function setLevelCommercialPlateforme($v)
     {
         $this->levelCommercialPlateforme = $v;
         
@@ -579,7 +580,7 @@ class Place {
     /**
      * @return int
      */
-	public function getLevelCommercialPlateforme()
+    public function getLevelCommercialPlateforme()
     {
         return $this->levelCommercialPlateforme;
     }
@@ -588,7 +589,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setLevelSpatioport($v)
+    public function setLevelSpatioport($v)
     {
         $this->levelSpatioport = $v;
         
@@ -598,7 +599,7 @@ class Place {
     /**
      * @return int
      */
-	public function getLevelSpatioport()
+    public function getLevelSpatioport()
     {
         return $this->levelSpatioport;
     }
@@ -607,7 +608,7 @@ class Place {
      * @param int $v
      * @return $this
      */
-	public function setAntiSpyInvest($v)
+    public function setAntiSpyInvest($v)
     {
         $this->antiSpyInvest = $v;
         
@@ -617,7 +618,7 @@ class Place {
     /**
      * @return int
      */
-	public function getAntiSpyInvest()
+    public function getAntiSpyInvest()
     {
         return $this->antiSpyInvest;
     }

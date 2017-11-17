@@ -17,6 +17,7 @@ use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Modules\Demeter\Event\PutschAttemptEvent;
 
 $session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
@@ -34,77 +35,79 @@ $treasurerChoice = $request->request->get('treasurerchoice');
 $warlordChoice = $request->request->get('warlordchoice');
 $ministerChoice = $request->request->get('ministerchoice');
 
-if ($program !== FALSE) {
-	if ($session->get('playerInfo')->get('status') > Player::STANDARD && $session->get('playerInfo')->get('status') < Player::CHIEF) {
-		$faction = $colorManager->get($session->get('playerInfo')->get('color'));
+if ($program !== false) {
+    if ($session->get('playerInfo')->get('status') > Player::STANDARD && $session->get('playerInfo')->get('status') < Player::CHIEF) {
+        $faction = $colorManager->get($session->get('playerInfo')->get('color'));
 
-		if($faction->electionStatement === Color::MANDATE) {
-			if ($faction->regime == Color::ROYALISTIC) {
+        if ($faction->electionStatement === Color::MANDATE) {
+            if ($faction->regime == Color::ROYALISTIC) {
+                $election = new Election();
+                $election->rColor = $faction->id;
+                $election->dElection = (new \DateTime('+' . Color::PUTSCHTIME . ' second'))->format('Y-m-d H:i:s');
 
-				$election = new Election();
-				$election->rColor = $faction->id;
-				$election->dElection = (new \DateTime('+' . Color::PUTSCHTIME . ' second'))->format('Y-m-d H:i:s');
+                $electionManager->add($election);
 
-				$electionManager->add($election);
+                $candidate = new Candidate();
+                $candidate->rElection = $election->id;
+                $candidate->rPlayer = $session->get('playerId');
+                $candidate->name = $session->get('playerInfo')->get('name');
+                $candidate->chiefChoice = $chiefChoice;
+                $candidate->treasurerChoice = $treasurerChoice;
+                $candidate->warlordChoice = $warlordChoice;
+                $candidate->ministerChoice = $ministerChoice;
+                $candidate->dPresentation = Utils::now();
+                $candidate->program = $program;
+                $candidateManager->add($candidate);
 
-				$candidate = new Candidate();
-				$candidate->rElection = $election->id;
-				$candidate->rPlayer = $session->get('playerId');
-				$candidate->chiefChoice = $chiefChoice;
-				$candidate->treasurerChoice = $treasurerChoice;
-				$candidate->warlordChoice = $warlordChoice;
-				$candidate->ministerChoice = $ministerChoice;
-				$candidate->dPresentation = Utils::now();
-				$candidate->program = $program; 
-				$candidateManager->add($candidate);
+                $topic = new ForumTopic();
+                $topic->title = 'Candidat ' . $session->get('playerInfo')->get('name');
+                $topic->rForum = 30;
+                $topic->rPlayer = $candidate->rPlayer;
+                $topic->rColor = $session->get('playerInfo')->get('color');
+                $topic->dCreation = Utils::now();
+                $topic->dLastMessage = Utils::now();
+                $topicManager->add($topic);
 
-				$topic = new ForumTopic();
-				$topic->title = 'Candidat ' . $session->get('playerInfo')->get('name');
-				$topic->rForum = 30;
-				$topic->rPlayer = $candidate->rPlayer;
-				$topic->rColor = $session->get('playerInfo')->get('color');
-				$topic->dCreation = Utils::now();
-				$topic->dLastMessage = Utils::now();
-				$topicManager->add($topic);
+                $faction->electionStatement = Color::ELECTION;
+                $faction->dLastElection = Utils::now();
 
-				$faction->electionStatement = Color::ELECTION;
-				$faction->dLastElection = Utils::now();
+                $vote = new Vote();
+                $vote->rPlayer = $session->get('playerId');
+                $vote->rCandidate = $session->get('playerId');
+                $vote->rElection = $election->id;
+                $vote->dVotation = Utils::now();
+                $voteManager->add($vote);
 
-				$vote = new Vote();
-				$vote->rPlayer = $session->get('playerId');
-				$vote->rCandidate = $session->get('playerId');
-				$vote->rElection = $election->id;
-				$vote->dVotation = Utils::now();
-				$voteManager->add($vote);
+                $factionLeader = $playerManager->getFactionLeader($faction->getId());
+                $factionPlayers = $playerManager->getFactionPlayers($faction->id);
 
-				$factionPlayers = $playerManager->getFactionPlayers($faction->id);
-
-				foreach ($factionPlayers as $factionPlayer) {
-					if ($factionPlayer->getStatement() !== Player::ACTIVE) {
-						continue;
-					}
-					$notif = new Notification();
-					$notif->setRPlayer($factionPlayer->id);
-					$notif->setTitle('Coup d\'Etat.');
-					$notif->addBeg()
-						->addTxt('Un membre de votre Faction soulève une partie du peuple et tente un coup d\'état contre le gouvernement.')
-						->addSep()
-						->addLnk('faction/view-election', 'prendre parti sur le coup d\'état.')
-						->addEnd();
-					$notificationManager->add($notif);
-				}
-				$session->addFlashbag('Coup d\'état lancé.', Flashbag::TYPE_SUCCESS);
-				$this->getContainer()->get('realtime_action_scheduler')->schedule('demeter.color_manager', 'ballot', $faction, $election->dElection);
-				$this->getContainer()->get('entity_manager')->flush();
-			} else {
-				throw new ErrorException('Vous vivez dans une faction démocratique.');
-			}
-		} else {
-			throw new ErrorException('Un coup d\'état est déjà en cours.');
-		}
-	} else {
-		throw new ErrorException('Vous ne pouvez pas vous présenter, vous ne faite pas partie de l\'élite ou vous êtes déjà le hef de la faction.');
-	}
+                foreach ($factionPlayers as $factionPlayer) {
+                    if ($factionPlayer->getStatement() !== Player::ACTIVE) {
+                        continue;
+                    }
+                    $notif = new Notification();
+                    $notif->setRPlayer($factionPlayer->id);
+                    $notif->setTitle('Coup d\'Etat.');
+                    $notif->addBeg()
+                        ->addTxt('Un membre de votre Faction soulève une partie du peuple et tente un coup d\'état contre le gouvernement.')
+                        ->addSep()
+                        ->addLnk('faction/view-election', 'prendre parti sur le coup d\'état.')
+                        ->addEnd();
+                    $notificationManager->add($notif);
+                }
+                $this->getContainer()->get('event_dispatcher')->dispatch(new PutschAttemptEvent($faction, $factionLeader, $candidate));
+                $session->addFlashbag('Coup d\'état lancé.', Flashbag::TYPE_SUCCESS);
+                $this->getContainer()->get('realtime_action_scheduler')->schedule('demeter.color_manager', 'ballot', $faction, $election->dElection);
+                $this->getContainer()->get('entity_manager')->flush();
+            } else {
+                throw new ErrorException('Vous vivez dans une faction démocratique.');
+            }
+        } else {
+            throw new ErrorException('Un coup d\'état est déjà en cours.');
+        }
+    } else {
+        throw new ErrorException('Vous ne pouvez pas vous présenter, vous ne faite pas partie de l\'élite ou vous êtes déjà le hef de la faction.');
+    }
 } else {
-	throw new ErrorException('Informations manquantes.');
+    throw new ErrorException('Informations manquantes.');
 }

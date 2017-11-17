@@ -8,24 +8,24 @@ $session = $this->getContainer()->get('session_wrapper');
 $conversationManager = $this->getContainer()->get('hermes.conversation_manager');
 
 # liste des conv's
-$display = 
-	($request->query->get('mode') === ConversationUser::CS_ARCHIVED)
-	? ConversationUser::CS_ARCHIVED
-	: ConversationUser::CS_DISPLAY
+$display =
+    ($request->query->get('mode') === ConversationUser::CS_ARCHIVED)
+    ? ConversationUser::CS_ARCHIVED
+    : ConversationUser::CS_DISPLAY
 ;
 
-$page = $request->query->has('page') 
-	? $request->query->get('page')
-	: 1;
+$page = $request->query->has('page')
+    ? $request->query->get('page')
+    : 1;
 
 # chargement de toutes les conversations
 $conversationManager->newSession();
 $conversationManager->load(
-	['cu.rPlayer' => $session->get('playerId'), 'cu.convStatement' => $display],
-	['c.dLastMessage', 'DESC'],
-	[($page - 1) * Conversation::CONVERSATION_BY_PAGE, Conversation::CONVERSATION_BY_PAGE]
+    ['cu.rPlayer' => $session->get('playerId'), 'cu.convStatement' => $display],
+    ['c.dLastMessage', 'DESC'],
+    [($page - 1) * Conversation::CONVERSATION_BY_PAGE, Conversation::CONVERSATION_BY_PAGE]
 );
 
-$conversation_listmode = TRUE;
+$conversation_listmode = true;
 
 include COMPONENT . 'conversation/list.php';

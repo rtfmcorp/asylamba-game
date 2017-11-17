@@ -2,8 +2,8 @@
 # assign ship action
 
 # string direction 	'ctb' = commander to orbitalBase / 'btc' = orbitalBase to commander
-					# [commander] envoie [quantity] [ship] depuis son [squadron] a une [orbitalBase]
-					# [orbitalBase] envoie [quantity] [ship] a un [commander] sur son [squadron]
+                    # [commander] envoie [quantity] [ship] depuis son [squadron] a une [orbitalBase]
+                    # [orbitalBase] envoie [quantity] [ship] a un [commander] sur son [squadron]
 # int orbitalBase 			orbitalBase id
 # int ship  		ship id
 # int quantity		ship quantity
@@ -20,7 +20,7 @@ $session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 
-for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
+for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
     $verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
 }
 
@@ -50,27 +50,27 @@ $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_orbitalBase_manager');
 
 if (
-	($orbitalBase = $orbitalBaseManager->get($orbitalBaseId)) === null ||
-	($commander = $commanderManager->get($commanderId)) === null ||
-	$commander->rBase !== $orbitalBaseId
+    ($orbitalBase = $orbitalBaseManager->get($orbitalBaseId)) === null ||
+    ($commander = $commanderManager->get($commanderId)) === null ||
+    $commander->rBase !== $orbitalBaseId
 ) {
     throw new ErrorException('Erreur dans les commandants ou la base.');
 }
 
 if ($commander->statement !== Commander::AFFECTED) {
-    throw new ErrorException('Cet officier ne peut être modifié.');	
+    throw new ErrorException('Cet officier ne peut être modifié.');
 }
 
 if ($direction == 'ctb') { // commander to orbitalBase
     // if the commander has the quantity of ships required
     if ($commander->getSquadron($squadron)->getNbrShipByType($shipId) - $quantity >= 0) {
-            $orbitalBase->setShipStorage($shipId, ($orbitalBase->getShipStorage($shipId) + $quantity));
-            $commander->getSquadron($squadron)->updateShip($shipId, -$quantity);
-            # $alert->add('Vaisseau(x) envoyé(s) à la orbitalBase.', ALERT_BUG_SUCCESS);
+        $orbitalBase->setShipStorage($shipId, ($orbitalBase->getShipStorage($shipId) + $quantity));
+        $commander->getSquadron($squadron)->updateShip($shipId, -$quantity);
+        # $alert->add('Vaisseau(x) envoyé(s) à la orbitalBase.', ALERT_BUG_SUCCESS);
     } else {
-            throw new ErrorException('L\'escadrille n\'a pas autant de vaisseaux !');
+        throw new ErrorException('L\'escadrille n\'a pas autant de vaisseaux !');
     }
-} else {							// orbitalBase to commander
+} else {                            // orbitalBase to commander
     // if the orbitalBase has the quantity of ships required
     if ($orbitalBase->getShipStorage($shipId) - $quantity < 0) {
         throw new ErrorException('La base n\'a pas autant de vaisseaux !');

@@ -2,16 +2,20 @@
 
 namespace Asylamba\Classes\Daemon;
 
+use Asylamba\Classes\Library\WS\Connection;
+
 class Client
 {
     /** @var string **/
     protected $id;
-	/** @var \DateTime **/
-	protected $lastConnectedAt;
+    /** @var \DateTime **/
+    protected $lastConnectedAt;
     /** @var boolean **/
     protected $isFirstConnection;
-	/** @var int **/
-	protected $playerId;
+    /** @var int **/
+    protected $playerId;
+    /** @var Connection **/
+    protected $wsConnection;
     
     /**
      * @param int $id
@@ -31,26 +35,26 @@ class Client
     {
         return $this->id;
     }
-	
-	/**
-	 * @param \DateTime $lastConnectedAt
-	 * @return \Asylamba\Classes\Daemon\Client
-	 */
-	public function setLastConnectedAt(\DateTime $lastConnectedAt)
-	{
-		$this->lastConnectedAt = $lastConnectedAt;
-		
-		return $this;
-	}
+    
+    /**
+     * @param \DateTime $lastConnectedAt
+     * @return \Asylamba\Classes\Daemon\Client
+     */
+    public function setLastConnectedAt(\DateTime $lastConnectedAt)
+    {
+        $this->lastConnectedAt = $lastConnectedAt;
+        
+        return $this;
+    }
 
-	/**
-	 * @return \DateTime
-	 */
-	public function getLastConnectedAt()
-	{
-		return $this->lastConnectedAt;
-	}
-	
+    /**
+     * @return \DateTime
+     */
+    public function getLastConnectedAt()
+    {
+        return $this->lastConnectedAt;
+    }
+    
     /**
      * @param boolean $isFirstConnection
      * @return $this
@@ -69,23 +73,47 @@ class Client
     {
         return $this->isFirstConnection;
     }
-	
-	/**
-	 * @param int $playerId
-	 * @return Client
-	 */
-	public function setPlayerId($playerId)
-	{
-		$this->playerId = $playerId;
-		
-		return $this;
-	}
-	
-	/**
-	 * @return int
-	 */
-	public function getPlayerId()
-	{
-		return $this->playerId;
-	}
+    
+    /**
+     * @param int $playerId
+     * @return Client
+     */
+    public function setPlayerId($playerId)
+    {
+        $this->playerId = $playerId;
+        
+        return $this;
+    }
+    
+    /**
+     * @return int
+     */
+    public function getPlayerId()
+    {
+        return $this->playerId;
+    }
+    
+    /**
+     * @param Connection $connection
+     * @return $this
+     */
+    public function setWsConnection(Connection $connection)
+    {
+        $this->wsConnection = $connection;
+        
+        return $this;
+    }
+    
+    public function removeWsConnection()
+    {
+        $this->wsConnection = null;
+    }
+    
+    /**
+     * @return Connection
+     */
+    public function getWsConnection()
+    {
+        return $this->wsConnection;
+    }
 }

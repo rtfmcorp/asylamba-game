@@ -11,10 +11,9 @@ use Asylamba\Classes\Worker\Worker;
 array_shift($argv);
 
 $options = [];
-foreach($argv as $arg)
-{
-	$data = explode('=', $arg);
-	$options[substr($data[0], 2)] = $data[1];
+foreach ($argv as $arg) {
+    $data = explode('=', $arg);
+    $options[substr($data[0], 2)] = $data[1];
 }
 
 define("P_TYPE", 'worker');

@@ -13,11 +13,11 @@ $spyReportManager->load(array('rPlayer' => $session->get('playerId')));
 $nbr = $spyReportManager->deleteByRPlayer($session->get('playerId'));
 
 if ($nbr > 1) {
-	$session->addFlashbag($nbr . ' rapports ont été supprimés.', Flashbag::TYPE_SUCCESS);
-} else if ($nbr == 1) {
-	$session->addFlashbag('Un rapport a été supprimé.', Flashbag::TYPE_SUCCESS);
+    $session->addFlashbag($nbr . ' rapports ont été supprimés.', Flashbag::TYPE_SUCCESS);
+} elseif ($nbr == 1) {
+    $session->addFlashbag('Un rapport a été supprimé.', Flashbag::TYPE_SUCCESS);
 } else {
-	$session->addFlashbag('Tous vos rapports ont déjà été supprimés.', Flashbag::TYPE_SUCCESS);
+    $session->addFlashbag('Tous vos rapports ont déjà été supprimés.', Flashbag::TYPE_SUCCESS);
 }
 
 $spyReportManager->changeSession($S_SRM1);

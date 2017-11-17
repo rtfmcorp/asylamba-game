@@ -6,19 +6,19 @@ $request = $this->getContainer()->get('app.request');
 $playerManager = $this->getContainer()->get('zeus.player_manager');
 
 if ($request->query->exist('bindkey')) {
-	if (($player = $playerManager->getByBindKey($request->query->get('bindkey')))) {
-		$player->setStatement(Player::BANNED);
-		$this->getContainer()->get('entity_manager')->flush($player);
-		echo serialize(array('statement' => 'success'));
-	} else {
-		echo serialize(array(
-			'statement' => 'error',
-			'message' => 'Joueur inconnu'
-		));
-	}
+    if (($player = $playerManager->getByBindKey($request->query->get('bindkey')))) {
+        $player->setStatement(Player::BANNED);
+        $this->getContainer()->get('entity_manager')->flush($player);
+        echo serialize(array('statement' => 'success'));
+    } else {
+        echo serialize(array(
+            'statement' => 'error',
+            'message' => 'Joueur inconnu'
+        ));
+    }
 } else {
-	echo serialize(array(
-		'statement' => 'error',
-		'message' => 'Donnée manquante'
-	));
+    echo serialize(array(
+        'statement' => 'error',
+        'message' => 'Donnée manquante'
+    ));
 }

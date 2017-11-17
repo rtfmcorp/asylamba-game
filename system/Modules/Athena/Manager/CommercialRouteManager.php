@@ -15,16 +15,25 @@ use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
+use Asylamba\Classes\Library\Game;
 
 class CommercialRouteManager {
 	/** @var EntityManager **/
 	protected $entityManager;
+    /** @var float **/
+    protected $sectorBonus;
+    /** @var float **/
+    protected $factionBonus;
 	
 	/**
 	 * @param EntityManager $entityManager
+     * @param float $sectorBonus
+     * @param float $factionBonus
 	 */
-	public function __construct(EntityManager $entityManager) {
+	public function __construct(EntityManager $entityManager, $sectorBonus, $factionBonus) {
 		$this->entityManager = $entityManager;
+        $this->sectorBonus = $sectorBonus;
+        $this->factionBonus = $factionBonus;
 	}
 	
 	/**
@@ -130,6 +139,32 @@ class CommercialRouteManager {
 	{
 		return $this->entityManager->getRepository(CommercialRoute::class)->countBaseActiveRoutes($baseId);
 	}
+    
+    /**
+     * @param OrbitalBase $base
+     * @param int $playerId
+     * @param int $playerFactionId
+     * @param array $factions
+     * @param int $min
+     * @param int $max
+     * @return array
+     */
+    public function searchRoutes(OrbitalBase $base, $playerId, $playerFactionId, $factions, $min, $max)
+    {
+        $results = $this
+            ->entityManager
+            ->getRepository(CommercialRoute::class)
+            ->searchRoutes($base, $playerId, $factions, $min, $max)
+        ;
+        array_walk($results, function(&$route) use ($base, $playerFactionId) {
+            $bonusA = ($base->getSector() != $route['rSector']) ? $this->sectorBonus : 1;
+            $bonusB = ($playerFactionId) != $route['playerColor'] ? $this->factionBonus : 1;
+            
+            $route['price'] = Game::getRCPrice($route['distance']);
+            $route['income'] = Game::getRCIncome($route['distance'], $bonusA, $bonusB);
+        });
+        return $results;
+    }
 	
 	/**
 	 * @param CommercialRoute $commercialRoute
@@ -139,38 +174,40 @@ class CommercialRouteManager {
 		$this->entityManager->flush();
 	}
 
-	/**
-	 * @param CommercialRoute $commercialRoute
-	 */
-	public function remove(CommercialRoute $commercialRoute) {
-		$this->entityManager->remove($commercialRoute);
-		$this->entityManager->flush();
-	}
-	
-	public function removeBaseRoutes(OrbitalBase $orbitalBase)
-	{
-		$repository = $this->entityManager->getRepository(CommercialRoute::class);
-		
-		$routes = array_merge(
-			$repository->getByBase($orbitalBase->getId()),
-			$repository->getByDistantBase($orbitalBase->getId())
-		);
-		foreach($routes as $route) {
-			$this->entityManager->remove($route);
-			// @TODO notifications
-		}
-		$this->entityManager->flush();
-	}
+    /**
+     * @param CommercialRoute $commercialRoute
+     */
+    public function remove(CommercialRoute $commercialRoute)
+    {
+        $this->entityManager->remove($commercialRoute);
+        $this->entityManager->flush();
+    }
+    
+    public function removeBaseRoutes(OrbitalBase $orbitalBase)
+    {
+        $repository = $this->entityManager->getRepository(CommercialRoute::class);
+        
+        $routes = array_merge(
+            $repository->getByBase($orbitalBase->getId()),
+            $repository->getByDistantBase($orbitalBase->getId())
+        );
+        foreach ($routes as $route) {
+            $this->entityManager->remove($route);
+            // @TODO notifications
+        }
+        $this->entityManager->flush();
+    }
 
-	/**
-	 * @param Color $faction
-	 * @param Color $otherFaction
-	 */
-	public function freezeRoute(Color $faction, Color $otherFaction) {
-		$freeze = TRUE;
-		if (!($faction->colorLink[$otherFaction->id] == Color::ENEMY || $otherFaction->colorLink[$faction->id] == Color::ENEMY)) {
-			$freeze = FALSE;
-		}
-		$this->entityManager->getRepository(CommercialRoute::class)->freezeRoutes($faction, $otherFaction, $freeze);
-	} 
+    /**
+     * @param Color $faction
+     * @param Color $otherFaction
+     */
+    public function freezeRoute(Color $faction, Color $otherFaction)
+    {
+        $freeze = true;
+        if (!($faction->colorLink[$otherFaction->id] == Color::ENEMY || $otherFaction->colorLink[$faction->id] == Color::ENEMY)) {
+            $freeze = false;
+        }
+        $this->entityManager->getRepository(CommercialRoute::class)->freezeRoutes($faction, $otherFaction, $freeze);
+    }
 }

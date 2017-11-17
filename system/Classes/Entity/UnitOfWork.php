@@ -2,7 +2,10 @@
 
 namespace Asylamba\Classes\Entity;
 
-class UnitOfWork {
+use Asylamba\Classes\Entity\AbstractRepository;
+
+class UnitOfWork
+{
     /** @var array **/
     protected $entities = [];
     /** @var EntityManager **/
@@ -25,35 +28,35 @@ class UnitOfWork {
     
     public function addObject($object, $state = self::METADATA_PERSISTED)
     {
-		$identifier = ($object->getId() !== null) ? (int) $object->getId() : spl_object_hash($object);
-		
+        $identifier = ($object->getId() !== null) ? (int) $object->getId() : spl_object_hash($object);
+        
         $this->entities[get_class($object)][$identifier] = [
             'state' => $state,
             'instance' => $object
         ];
     }
-	
-	public function hasObject($object)
-	{
-		return isset($this->entities[get_class($object)][(int) $object->getId()]);
-	}
-	
-	public function getObject($entityClass, $id)
-	{
-		if (!isset($this->entities[$entityClass][(int) $id])) {
-			return null;
-		}
-		return $this->entities[$entityClass][(int) $id]['instance'];
-	}
+    
+    public function hasObject($object)
+    {
+        return isset($this->entities[get_class($object)][(int) $object->getId()]);
+    }
+    
+    public function getObject($entityClass, $id)
+    {
+        if (!isset($this->entities[$entityClass][(int) $id])) {
+            return null;
+        }
+        return $this->entities[$entityClass][(int) $id]['instance'];
+    }
     
     /**
      * @param object $object
      */
     public function removeObject($object)
     {
-		if (!isset($this->entities[get_class($object)][$object->getId()]['instance'])) {
-			return;
-		}
+        if (!isset($this->entities[get_class($object)][$object->getId()]['instance'])) {
+            return;
+        }
         $this->entities[get_class($object)][$object->getId()]['state'] = self::METADATA_REMOVED;
     }
     
@@ -86,18 +89,18 @@ class UnitOfWork {
      */
     public function flushObject(AbstractRepository $repository, $className, $object)
     {
-		$identifier = ($object->getId() !== null) ? $object->getId() : spl_object_hash($object);
-		if (!isset($this->entities[$className][$identifier])) {
-			return false;
-		}
-        switch($this->entities[$className][$identifier]['state']) {
+        $identifier = ($object->getId() !== null) ? $object->getId() : spl_object_hash($object);
+        if (!isset($this->entities[$className][$identifier])) {
+            return false;
+        }
+        switch ($this->entities[$className][$identifier]['state']) {
             case self::METADATA_STAGED:
                 $repository->insert($object);
-				unset($this->entities[$className][$identifier]);
-				$this->entities[$className][(int) $object->getId()] = [
-					'state' => self::METADATA_PERSISTED,
-					'instance' => $object
-				];
+                unset($this->entities[$className][$identifier]);
+                $this->entities[$className][(int) $object->getId()] = [
+                    'state' => self::METADATA_PERSISTED,
+                    'instance' => $object
+                ];
                 break;
             case self::METADATA_PERSISTED: $repository->update($object); break;
             case self::METADATA_REMOVED:
@@ -128,8 +131,17 @@ class UnitOfWork {
         $className = get_class($object);
         // It is not mandatory to test the existence of the object SPL hash in the stack
         // the unset function won't cause errors if it does not exist
-        if(isset($this->entities[$className])) {
+        if (isset($this->entities[$className])) {
             unset($this->entities[$className][spl_object_hash($object)]);
         }
+    }
+    
+    /**
+     * @param string $repository
+     * @return AbstractRepository
+     */
+    public function getRepository($repository)
+    {
+        return $this->entityManager->getRepository($repository);
     }
 }

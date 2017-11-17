@@ -1,0 +1,132 @@
+#news-container {
+    position:absolute;
+    width:250px;
+    z-index:1001;
+    right: 15px;
+    .news-alert {
+        margin-top:15px;
+        background: #000;
+        border: 5px solid #202020;
+        padding:10px;
+        border-radius:10px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .picto {
+            width:48px;
+            height:48px;
+        }
+        .title h4 {
+            padding-left: 10px;
+            margin: 10px 0px;
+        }
+    }
+}
+
+.component.news {
+    .news {
+        margin:10px;
+        .news-head {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            margin-top: 10px;
+            cursor:pointer;
+            .picto {
+                width: 56px;
+                height: 56px;
+                margin: 4px;
+            }
+            .info {
+                .title {
+                    display:block;
+                    font-weight: bold;
+                    font-size: 14px;
+                }
+                .date {
+                    display:block;
+                }
+            }
+            border: 1px solid #202020;
+            border-left: solid 10px #4F4F4F;
+
+            &.color1 { border-left-color: @light-1; }
+            &.color2 { border-left-color: @light-2; }
+            &.color3 { border-left-color: @light-3; }
+            &.color4 { border-left-color: @light-4; }
+            &.color5 { border-left-color: @light-5; }
+            &.color6 { border-left-color: @light-6; }
+            &.color7 { border-left-color: @light-7; }
+            &.color8 { border-left-color: @light-8; }
+            &.color9 { border-left-color: @light-9; }
+            &.color10 { border-left-color: @light-10; }
+            &.color11 { border-left-color: @light-11; }
+            &.color12 { border-left-color: @light-12; }
+        }
+        .hidden {
+            display:none;
+            padding:10px;
+            border:1px solid #202020;
+            border-top: none;
+        }
+    }
+    .top-new {
+        display: none;
+        &.current {
+            display:block;
+        }
+        header {
+            height:200px;
+            background-size: 100%;
+            background-position: bottom;
+            background-repeat: no-repeat;
+            .label {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                h4 {
+                    color: white;
+                    font-weight: bold;
+                    background-color: rgba(0,0,0,0.4);
+                }
+                img {
+                    border: 1px solid white;
+                    border-radius: 96px;
+                }
+            }
+            &.header-fleet {
+                background-image: url('src/desktop/screen/fleet.jpg');
+            }
+            &.header-financial {
+                background-image: url('src/desktop/screen/financial.jpg');
+            }
+            &.header-profil {
+                background-image: url('src/desktop/screen/profil.jpg');
+            }
+            
+            .flag {
+                width:80px;
+                height:120px;
+                margin-left: 20px;
+                background-repeat: no-repeat;
+                background-size: cover;
+                &.color-1 { background-image: url('src/desktop/faction/flag/flag-1.png'); }
+                &.color-2 { background-image: url('src/desktop/faction/flag/flag-2.png'); }
+                &.color-3 { background-image: url('src/desktop/faction/flag/flag-3.png'); }
+                &.color-4 { background-image: url('src/desktop/faction/flag/flag-4.png'); }
+                &.color-5 { background-image: url('src/desktop/faction/flag/flag-5.png'); }
+                &.color-6 { background-image: url('src/desktop/faction/flag/flag-6.png'); }
+                &.color-7 { background-image: url('src/desktop/faction/flag/flag-7.png'); }
+                &.color-8 { background-image: url('src/desktop/faction/flag/flag-8.png'); }
+                &.color-9 { background-image: url('src/desktop/faction/flag/flag-9.png'); }
+                &.color-10 { background-image: url('src/desktop/faction/flag/flag-10.png'); }
+                &.color-11 { background-image: url('src/desktop/faction/flag/flag-11.png'); }
+                &.color-12 { background-image: url('src/desktop/faction/flag/flag-12.png'); }
+            }
+        }
+    }
+    .top-new.show {
+        display: block;
+    }
+}

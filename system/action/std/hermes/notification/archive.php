@@ -10,12 +10,12 @@ $notificationManager = $this->getContainer()->get('hermes.notification_manager')
 $session = $this->getContainer()->get('session_wrapper');
 
 if ($id) {
-	if (($notification = $notificationManager->get($id)) !== null && $notification->rPlayer === $session->get('playerId')) {
-		$notification->setArchived(!$notification->getArchived());
-		$this->getContainer()->get('entity_manager')->flush($notification);
-	} else {
-		throw new ErrorException('Ce n\'est pas bien d\'archiver les notifications des autres.');
-	}
+    if (($notification = $notificationManager->get($id)) !== null && $notification->rPlayer === $session->get('playerId')) {
+        $notification->setArchived(!$notification->getArchived());
+        $this->getContainer()->get('entity_manager')->flush($notification);
+    } else {
+        throw new ErrorException('Ce n\'est pas bien d\'archiver les notifications des autres.');
+    }
 } else {
-	throw new ErrorException('cette notification n\'existe pas');
+    throw new ErrorException('cette notification n\'existe pas');
 }

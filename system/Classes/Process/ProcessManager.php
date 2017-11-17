@@ -19,8 +19,8 @@ class ProcessManager
     protected $processes = [];
     /** @var string **/
     protected $rootPath;
-	/** @var string **/
-	protected $logDirectory;
+    /** @var string **/
+    protected $logDirectory;
     /** @var int **/
     protected $scale;
     /** @var int **/
@@ -31,7 +31,7 @@ class ProcessManager
      * @param MemoryManager $memoryManager
      * @param ProcessGateway $gateway
      * @param string $rootPath
-	 * @param string $logDirectory
+     * @param string $logDirectory
      * @param int $scale
      */
     public function __construct(Server $server, MemoryManager $memoryManager, ProcessGateway $gateway, $rootPath, $logDirectory, $scale)
@@ -40,37 +40,36 @@ class ProcessManager
         $this->memoryManager = $memoryManager;
         $this->gateway = $gateway;
         $this->rootPath = $rootPath;
-		$this->logDirectory = $logDirectory;
+        $this->logDirectory = $logDirectory;
         $this->scale = $scale;
     }
     
     public function __destruct()
     {
-        foreach($this->processes as $process)
-        {
+        foreach ($this->processes as $process) {
             $this->removeProcess($process->getName(), "{$process->getName()} shutdown");
         }
     }
-	
-	/**
-	 * @param string $name
-	 * @return Process
-	 */
-	public function getByName($name)
-	{
-		return $this->processes[$name];
-	}
-	
-	public function affectTask(Process $process, Task $task)
-	{
-		$process->addTask($task);
-		$process->setExpectedWorkTime($process->getExpectedWorkTime() + (float) $task->getEstimatedTime());
-		
-		if ($task instanceof RealTimeTask && $task->getContext() !== null) {
-			$process->addContext($task->getContext());
-		}
-		$this->getGateway()->writeTo($process, $task);
-	}
+    
+    /**
+     * @param string $name
+     * @return Process
+     */
+    public function getByName($name)
+    {
+        return $this->processes[$name];
+    }
+    
+    public function affectTask(Process $process, Task $task)
+    {
+        $process->addTask($task);
+        $process->setExpectedWorkTime($process->getExpectedWorkTime() + (float) $task->getEstimatedTime());
+        
+        if ($task instanceof RealTimeTask && $task->getContext() !== null) {
+            $process->addContext($task->getContext());
+        }
+        $this->getGateway()->writeTo($process, $task);
+    }
     
     public function launchProcesses()
     {
@@ -104,9 +103,9 @@ class ProcessManager
                 'a+'
             ]
         ], $pipes);
-		
-		stream_set_blocking($pipes[1], 0);
-		
+        
+        stream_set_blocking($pipes[1], 0);
+        
         $this->processes[$name] =
             (new Process())
             ->setName($name)
@@ -117,25 +116,23 @@ class ProcessManager
         
         $this->server->addInput($name, $this->processes[$name]->getInput());
         
-		return $this->processes[$name];
+        return $this->processes[$name];
     }
     
     /**
      * Delete a process
      * The reason is the message which will appear in the logs
-     * 
+     *
      * @param string $name
      * @param string $reason
      * @throws \InvalidArgumentException
      */
     public function removeProcess($name, $reason, $shutdown = false)
     {
-        if(!isset($this->processes[$name]))
-        {
+        if (!isset($this->processes[$name])) {
             throw new \InvalidArgumentException("The given process $name doesn't exist.");
         }
-        if($shutdown)
-        {
+        if ($shutdown) {
             $this->shutdownProcess($this->processes[$name]);
         }
         $this->server->removeInput($name);
@@ -145,18 +142,18 @@ class ProcessManager
         proc_close($this->processes[$name]->getProcess());
         unset($this->processes[$name]);
     }
-	
-	public function updateTechnicalData(Process $process, $data)
-	{
-		$process->setMemory($data['memory']);
-		$process->setAllocatedMemory($data['allocated_memory']);
-		
-		$this->memoryManager->refreshPoolMemory($this->processes);
-	}
+    
+    public function updateTechnicalData(Process $process, $data)
+    {
+        $process->setMemory($data['memory']);
+        $process->setAllocatedMemory($data['allocated_memory']);
+        
+        $this->memoryManager->refreshPoolMemory($this->processes);
+    }
     
     /**
      * Shutdown a running process
-     * 
+     *
      * @param Process $process
      */
     public function shutdownProcess(Process $process)
@@ -168,7 +165,7 @@ class ProcessManager
     
     /**
      * The purpose of this method is to ease tests
-     * 
+     *
      * @return ProcessGateway
      */
     public function getGateway()

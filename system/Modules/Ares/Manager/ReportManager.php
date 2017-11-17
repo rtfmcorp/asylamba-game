@@ -16,49 +16,53 @@ use Asylamba\Classes\Entity\EntityManager;
 
 use Asylamba\Modules\Ares\Model\Report;
 
-class ReportManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-	
-	/**
-	 * @param EntityManager $entityManager
-	 */
-	public function __construct(EntityManager $entityManager) {
-		$this->entityManager = $entityManager;
-	}
-	
-	/**
-	 * @param int $id
-	 * @return Report
-	 */
-	public function get($id) {
-		return $this->entityManager->getRepository(Report::class)->get($id);
-	}
-	
-	/**
-	 * @param int $attackerId
-	 * @param int $placeId
-	 * @param string $dFight
-	 * @return array
-	 */
-	public function getByAttackerAndPlace($attackerId, $placeId, $dFight)
-	{
-		return $this->entityManager->getRepository(Report::class)->getByAttackerAndPlace($attackerId, $placeId, $dFight);
-	}
+class ReportManager
+{
+    /** @var EntityManager **/
+    protected $entityManager;
+    
+    /**
+     * @param EntityManager $entityManager
+     */
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+    
+    /**
+     * @param int $id
+     * @return Report
+     */
+    public function get($id)
+    {
+        return $this->entityManager->getRepository(Report::class)->get($id);
+    }
+    
+    /**
+     * @param int $attackerId
+     * @param int $placeId
+     * @param string $dFight
+     * @return array
+     */
+    public function getByAttackerAndPlace($attackerId, $placeId, $dFight)
+    {
+        return $this->entityManager->getRepository(Report::class)->getByAttackerAndPlace($attackerId, $placeId, $dFight);
+    }
 
-	/**
-	 * @param Report $report
-	 */
-	public function add(Report $report) {
-		$this->entityManager->persist($report);
-		$this->entityManager->flush($report);
-	}
-	
-	/**
-	 * @param int $playerId
-	 */
-	public function removePlayerReports($playerId)
-	{
-		$this->entityManager->getRepository(Report::class)->removePlayerReports($playerId);
-	}
+    /**
+     * @param Report $report
+     */
+    public function add(Report $report)
+    {
+        $this->entityManager->persist($report);
+        $this->entityManager->flush($report);
+    }
+    
+    /**
+     * @param int $playerId
+     */
+    public function removePlayerReports($playerId)
+    {
+        $this->entityManager->getRepository(Report::class)->removePlayerReports($playerId);
+    }
 }
