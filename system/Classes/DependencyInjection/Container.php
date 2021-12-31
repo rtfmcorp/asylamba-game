@@ -40,7 +40,7 @@ class Container {
             throw new \InvalidArgumentException("Service $key is already defined");
         }
         $this->services[$key] = [
-			'class' => ($definition['class']{0} === '%') ? $this->getParameter(ltrim($definition['class'], '%')) : $definition['class'],
+			'class' => ($definition['class'][0] === '%') ? $this->getParameter(ltrim($definition['class'], '%')) : $definition['class'],
             'arguments' => (isset($definition['arguments'])) ? $definition['arguments'] : [],
 			'tags' => [],
             'instance' => null
@@ -124,12 +124,12 @@ class Container {
      * @return mixed
      * @throws \InvalidArgumentException
      */
-    public function getParameter($key)
+    public function getParameter($key, $default = null)
     {
-        if(!$this->hasParameter($key)) {
-            throw new \InvalidArgumentException("Parameter $key not found");
+        if(!$this->hasParameter($key) && null === $default) {
+            throw new \InvalidArgumentException("Parameter \"$key\" not found");
         }
-        return $this->parameters[$key];
+        return $this->parameters[$key] ?? $default;
     }
     
     /**

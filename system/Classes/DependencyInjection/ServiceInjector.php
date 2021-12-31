@@ -76,11 +76,11 @@ class ServiceInjector {
     {
         $args = [];
         foreach ($arguments as $argument) {
-            if ($argument{0} === '%') {
+            if ($argument[0] === '%') {
                 $args[] = $this->container->getParameter(ltrim($argument, '%'));
                 continue;
             }
-            if ($argument{0} === '@') {
+            if ($argument[0] === '@') {
 				$args[] = $this->prepareServiceInjection($argument);
                 continue;
             }
@@ -140,7 +140,7 @@ class ServiceInjector {
 				// Then we loop through the service arguments looking for a match
 				foreach($dependency['arguments'] as $argument) {
 					$argumentKey =
-						($argument{0} === '@')
+						($argument[0] === '@')
 						? ltrim($argument, '@')
 						: ltrim($argument, '%')
 					;
@@ -156,7 +156,7 @@ class ServiceInjector {
 						// The $properties array are linked to the proxy object properties
 						// It is the proxy properties we are dynamically affecting here
 						$properties[$property] =
-							($argument{0} === '@')
+							($argument[0] === '@')
 							? $this->container->get($argumentKey)
 							: $this->container->getParameter($argumentKey)
 						;
