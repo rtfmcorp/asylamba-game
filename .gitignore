@@ -10,5 +10,6 @@ system/config/app.config.local.php
 config/parameters.yml
 
 /var/logs
+/var/data
 
 .idea
