@@ -7,7 +7,13 @@ require_once('vendor/autoload.php');
 
 use Asylamba\Classes\Worker\Application;
 
-define("P_TYPE", 'app');
+const P_TYPE = 'app';
 
-$application = new Application();
+$projectDir = __DIR__;
+
+$dotenv = new Symfony\Component\Dotenv\Dotenv();
+$dotenv->usePutenv(false);
+$dotenv->load($projectDir.'/.env');
+
+$application = new Application($projectDir);
 $application->boot();
