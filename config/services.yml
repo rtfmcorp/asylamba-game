@@ -1,4 +1,94 @@
 ---
+# This file is auto-generated during the composer install
+parameters:
+    session_lifetime: 1800
+    log_handler: Asylamba\Classes\Logger\FileLogger
+    log_directory: var/logs
+    log_rotation: 3
+    daily_script_hour: 3
+    worker_stats_volume: 15
+    gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV6
+    game.available_factions: 3
+    
+    
+    facebook_link: 'https://www.facebook.com/asylamba'
+    google_plus_link: 'https://plus.google.com/+Asylamba-game'
+    twitter_link: 'https://twitter.com/asylamba'
+  
+    # asm constantes
+    asm_umode: true
+  
+    # event constantes
+    event_base: 0 # correspond à une construction (batiment ou vaisseau) dans une base
+    event_outgoing_attack: 1
+    event_incoming_attack: 2
+  
+    # constante de temps pour la mise à jour des événements dans loadEvent.php
+    # 300 s = 5 minutes
+    time_event_update: 300
+  
+    # constantes pour le contre-espionnage
+    antispy_out_of_circle:	0
+    antispy_big_circle:	1
+    antispy_middle_circle: 2
+    antispy_little_circle: 3
+  
+    # pour Game::antiSpyRadius()
+    antispy_display_mode: 0
+    antispy_game_mode: 1
+
+    nb_avatar: 80
+    pam_coeftax: 1
+    rsm_researchquantity: 10
+  
+    # durée en heures avant que le classement total démarre
+    # 2 semaines = 336 h
+    # 20 jours = 480h
+    hours_before_start_of_ranking: 480
+    points_to_win: 2000
+
+
+    publicr: '/public/'
+    css: '%publicr%css/'
+    js: '%publicr%js/'
+    media: '%publicr%media/'
+    log: '%publicr%log/'
+    # active les APIs de confirmation
+    # active la création de personnage au niveau 5
+    highmode: true
+    # active les feuilles de style multiples par faction
+    # note : les style peuvent ne pas être à jour
+    colorstyle: true
+    # active l'ajout du script analytics
+    analytics: false
+    # active la captation des données d'analyse (TB)
+    data_analysis: false
+    #########
+    # INFOS #
+    #########
+    # défini le nom du tableau de session
+    # note : utile si plusieurs instances cohabitent sur la même machine
+    server_sess: 'server'
+    # défini le titre du serveur (affiché comme titre)
+    app_name: 'Asylamba'
+    # défini le sous-titre du serveur (affiché comme titre)
+    app_subname: 'Expansion Stellaire'
+    # numéro de version de l'app
+    app_version: '2.0.0'
+    # créateurs du projet
+    app_creator: 'Gil Clavien, Jacky Casas, Noé Zufferey'
+    # défini la description du serveur (affichée dans la page)
+    app_description: 'Asylamba, jeu par navigateur'
+    #################
+    # MISCELLANEOUS #
+    #################
+    # définition des ids des différants joueurs systèmes
+    id_gaia: 1
+    id_jeanmi: 2
+    shift_faction: 2
+    # date de début du serveur
+
+
 services:
     database:
         class: Asylamba\Classes\Database\Database
@@ -154,8 +244,8 @@ services:
             - "@session_wrapper"
             - "@database"
         tags:
-            - {type: "event_listener", event: "core.exception", method: "onCoreException"}
-            - {type: "event_listener", event: "core.error", method: "onCoreError"}
+            - {name: "event_listener", event: "core.exception", method: "onCoreException"}
+            - {name: "event_listener", event: "core.error", method: "onCoreError"}
             
     process_exception_listener:
         class: Asylamba\Classes\EventListener\ProcessExceptionListener
@@ -165,5 +255,5 @@ services:
             - "@process_gateway"
             - "%app.name"
         tags:
-            - {type: "event_listener", event: "core.process_exception", method: "onCoreException"}
-            - {type: "event_listener", event: "core.process_error", method: "onCoreError"}
+            - {name: "event_listener", event: "core.process_exception", method: "onCoreException"}
+            - {name: "event_listener", event: "core.process_error", method: "onCoreError"}
