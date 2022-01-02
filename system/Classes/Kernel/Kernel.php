@@ -1,12 +1,9 @@
 <?php
 
-namespace Asylamba\Classes\Worker;
+namespace Asylamba\Classes\Kernel;
 
-
-use Asylamba\Classes\Daemon\WorkerServer;
-use Asylamba\Classes\Database\Database;
-use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Classes\Library\Module;
+use Asylamba\Classes\Worker\Manager;
 use Asylamba\Modules\Ares\AresModule;
 use Asylamba\Modules\Artemis\ArtemisModule;
 use Asylamba\Modules\Athena\AthenaModule;
@@ -20,49 +17,48 @@ use Asylamba\Modules\Zeus\ZeusModule;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class Worker implements ApplicationInterface
+abstract class Kernel implements KernelInterface
 {
-    protected ContainerBuilder $container;
-    protected array $modules;
+	protected ContainerBuilder $container;
+	protected string $projectDir;
+	protected array $modules = [];
 
-    public function __construct(
-		protected string $name,
-		protected string $projectDir,
-	) {
-		define('PROCESS_NAME', $name);
-    }
-    
-    public function boot()
-    {
+	protected function buildContainer(): ContainerBuilder
+	{
 		$containerBuilder = new ContainerBuilder();
-		$containerBuilder->setParameter('root_path', $this->projectDir);
 		$containerBuilder->set('container', $containerBuilder);
+		$containerBuilder->setParameter('root_path', $this->projectDir);
+		$containerBuilder->addCompilerPass(new RegisterListenersPass());
+		$containerBuilder->register(EventDispatcher::class, EventDispatcher::class);
+		$containerBuilder->setAlias('event_dispatcher', EventDispatcher::class);
+
 		$this->loadEnvironment($containerBuilder);
+
 		$loader = new YamlFileLoader($containerBuilder, new FileLocator($this->projectDir . '/config/'));
 		$loader->load('services.yml');
 
-		$this->container = $containerBuilder;
-		$this->container->setParameter('app.name', $this->name);
-		$this->registerModules();
+		$this->registerModules($containerBuilder);
 		$containerBuilder->registerForAutoconfiguration(Manager::class)->addTag('app.stateful_manager');
-		$containerBuilder->compile(true);
-		$this->init();
-    }
 
-	public function loadEnvironment(ContainerBuilder $container): void
+		return $containerBuilder;
+	}
+
+	protected function loadEnvironment(ContainerBuilder $container): void
 	{
 		foreach(explode(',', getenv('SYMFONY_DOTENV_VARS')) as $key) {
 			$container->setParameter(strtolower($key), getenv($key));
 		}
 	}
 
-	public function registerModules()
+	protected function registerModules(ContainerBuilder $containerBuilder): void
 	{
 		foreach ($this->getRegisteredModules() as $moduleClass) {
 			/** @var Module $module */
 			$module = new $moduleClass();
-			$module->configure($this->container, $this->projectDir);
+			$module->configure($containerBuilder, $this->projectDir);
 
 			$this->modules[strtolower($module->getName())] = $module;
 		}
@@ -84,11 +80,6 @@ class Worker implements ApplicationInterface
 		];
 	}
 
-    public function getContainer(): ContainerBuilder
-    {
-        return $this->container;
-    }
-	
 	public function getModules(): array
 	{
 		return $this->modules;
@@ -98,11 +89,9 @@ class Worker implements ApplicationInterface
 	{
 		return $this->modules[$name];
 	}
-	
-	public function init()
+
+	public function getContainer(): ContainerBuilder
 	{
-		$this->container->get(Database::class)->init($this->container->getParameter('root_path') . '/build/database/structure.sql');
-		$this->container->get(EntityManager::class)->init();
-		$this->container->get(WorkerServer::class)->listen();
+		return $this->container;
 	}
 }

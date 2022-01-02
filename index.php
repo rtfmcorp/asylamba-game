@@ -5,7 +5,7 @@ ini_set('MAX_EXECUTION_TIME', -1);
 
 require_once('vendor/autoload.php');
 
-use Asylamba\Classes\Worker\Application;
+use Asylamba\Classes\Kernel\ApplicationKernel;
 
 const P_TYPE = 'app';
 const ASM_UMODE = true;
@@ -17,7 +17,7 @@ $dotenv->usePutenv(false);
 $dotenv->load($projectDir.'/.env');
 
 try {
-	$application = new Application($projectDir);
+	$application = new ApplicationKernel($projectDir);
 	$application->boot();
 } catch (\Throwable $t) {
 	dd($t);
