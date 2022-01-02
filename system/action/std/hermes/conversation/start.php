@@ -10,7 +10,7 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
 $database = $this->getContainer()->get('database');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $conversationManager = $this->getContainer()->get('hermes.conversation_manager');
 $conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
 $conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');

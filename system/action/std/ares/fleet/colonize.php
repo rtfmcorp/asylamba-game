@@ -16,7 +16,7 @@ use Asylamba\Classes\Exception\ErrorException;
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $technologyManager = $this->getContainer()->get('promethee.technology_manager');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $sectorManager = $this->getContainer()->get('gaia.sector_manager');
 $database = $this->getContainer()->get('database');

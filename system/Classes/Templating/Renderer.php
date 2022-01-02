@@ -16,7 +16,7 @@ class Renderer
 	
 	public function render(Response $response)
 	{
-		ob_start();
+		\ob_start();
 		foreach($response->getTemplates() as $template)
 		{
 			include $template;

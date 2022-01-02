@@ -103,9 +103,9 @@ class WorkerServer
 			$task = $this->taskManager->createTaskFromData(json_decode($content, true));
             $responseData = $this->taskManager->perform($task);
 		} catch (\Exception $ex) {
-			$this->eventDispatcher->dispatch($event = new ProcessExceptionEvent($ex, $task));
+			$this->eventDispatcher->dispatch($event = new ProcessExceptionEvent($ex, $task), ProcessExceptionEvent::NAME);
 		} catch (\Error $err) {
-			$this->eventDispatcher->dispatch($event = new ProcessErrorEvent($err, $task));
+			$this->eventDispatcher->dispatch($event = new ProcessErrorEvent($err, $task), ProcessErrorEvent::NAME);
 		} finally {
 			if (!empty($responseData)) {
 				$responseData['time'] = microtime(true) - $startTime;

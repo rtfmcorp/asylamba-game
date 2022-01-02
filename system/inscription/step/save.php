@@ -10,7 +10,7 @@ use Asylamba\Modules\Hermes\Model\ConversationUser;
 
 try {
 	$session = $this->getContainer()->get('session_wrapper');
-	$playerManager = $this->getContainer()->get('zeus.player_manager');
+	$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 	$notificationManager = $this->getContainer()->get('hermes.notification_manager');
 	$researchManager = $this->getContainer()->get('promethee.research_manager');
 	$researchHelper = $this->getContainer()->get('promethee.research_helper');
@@ -271,7 +271,7 @@ try {
 		$conversationManager->changeSession($S_CVM);
 	}
 	$entityManager->commit();
-	$security = $this->getContainer()->get('security');
+	$security = $this->getContainer()->get(\Asylamba\Classes\Library\Security::class);
 	# redirection vers connection
 	$this->getContainer()->get('app.response')->redirect('connection/bindkey-' . $security->crypt($security->buildBindkey($player->getBind())) . '/mode-splash');
 } catch (Exception $e) {

@@ -8,65 +8,62 @@ use Asylamba\Classes\Library\Session\SessionWrapper;
 
 class Router
 {
-	/** @var SessionWrapper **/
-	protected $sessionWrapper;
-	/** @var string **/
-	protected $getOutRoot;
-	
-	private $pageResources = array(
-		'profil' => array('profil', 'Profil'),
-		'message' => array('message', 'Messagerie'),
-		'fleet' => array('fleet', 'Flottes'),
-		'financial' => array('financial', 'Finances'),
-		'technology' => array('technology', 'Technologie'),
-		'spying' => array('spying', 'Espionnage'),
+	private array $pageResources = [
+		'profil' => ['profil', 'Profil'],
+		'message' => ['message', 'Messagerie'],
+		'fleet' => ['fleet', 'Flottes'],
+		'financial' => ['financial', 'Finances'],
+		'technology' => ['technology', 'Technologie'],
+		'spying' => ['spying', 'Espionnage'],
 
-		'diary' => array('diary', 'Journal'),
-		'embassy' => array('embassy', 'Ambassades'),
+		'diary' => ['diary', 'Journal'],
+		'embassy' => ['embassy', 'Ambassades'],
 
-		'bases' => array('bases', 'Vos Bases'),
+		'bases' => ['bases', 'Vos Bases'],
 
-		'map' => array('map', 'Carte'),
+		'map' => ['map', 'Carte'],
 
-		'faction' => array('faction', 'Votre Faction'),
-		'params' => array('params', 'Paramètres'),
-		'sponsorship' => array('sponsorship', 'Parrainage'),
-		'rank' => array('rank', 'Classements'),
+		'faction' => ['faction', 'Votre Faction'],
+		'params' => ['params', 'Paramètres'],
+		'sponsorship' => ['sponsorship', 'Parrainage'],
+		'rank' => ['rank', 'Classements'],
 
-		'admin' => array('admin', 'Administration'),
+		'admin' => ['admin', 'Administration'],
 
-		'404' => array('notfound', '404'),
+		'404' => ['notfound', '404'],
 
-		'action' => array('action', 'Action'),
-		'ajax' => array('ajax', 'Ajax'),
-		'inscription' => array('inscription', 'Inscription'),
-		'connection' => array('connection', 'Connexion'),
-		'api' => array('api', 'API'),
-		'script' => array('script', 'Script'),
-		'buffer' => array('buffer', 'Bienvenue')
-	);
-	
-	/**
-	 * @param SessionWrapper $session
-	 * @param string $getOutRoot
-	 */
-	public function __construct(SessionWrapper $session, $getOutRoot)
-	{
-		$this->sessionWrapper = $session;
-		$this->getOutRoot = $getOutRoot;
+		'action' => ['action', 'Action'],
+		'ajax' => ['ajax', 'Ajax'],
+		'inscription' => ['inscription', 'Inscription'],
+		'connection' => ['connection', 'Connexion'],
+		'api' => ['api', 'API'],
+		'script' => ['script', 'Script'],
+		'buffer' => ['buffer', 'Bienvenue']
+	];
+
+	public function __construct(
+		protected SessionWrapper $sessionWrapper,
+		protected string $rootPath,
+		protected string $getOutRoot,
+		protected string $actionPath,
+		protected string $ajaxPath,
+		protected string $connectionPath,
+		protected string $registrationPath,
+		protected string $bufferPath,
+		protected string $apiPath,
+		protected string $templatePath,
+		protected string $scriptPath,
+		protected string $pagesPath,
+		protected string $eventPath,
+	) {
 	}
-	
-	/**
-	 * @param Request $request
-	 * @param Client $client
-	 * @return Response
-	 */
-	public function processRequest(Request $request)
+
+	public function processRequest(Request $request): Response
 	{
 		$response = new Response();
 		$this->parseRoute($request, $response);
 		$this->checkPermission($request, $response);
-		
+
 		if (!empty($response->getRedirect())) {
 			return $response;
 		}
@@ -75,15 +72,17 @@ class Router
 		return $response;
 	}
 
-	/**
-	 * @param Request $request
-	 * @param Response $response
-	 */
-	protected function parseRoute(Request $request, Response $response) {
+	protected function parseRoute(Request $request, Response $response): void
+	{
 		$requestURI = array_values(array_diff(
 			explode('/', $request->getPath()),
 			explode('/', $_SERVER['SCRIPT_NAME'])
 		));
+
+		if ($this->isResource($requestURI)) {
+			$this->serveResource($response, $requestURI);
+			return;
+		}
 
 		$temp = array_keys($this->pageResources);
 		$page = (empty($requestURI)) ? $temp[0] : ((empty($requestURI[0])) ? $requestURI[1] : $requestURI[0]);
@@ -120,16 +119,36 @@ class Router
 		);
 	}
 
-	/**
-	 * @param Request $request
-	 * @param Response $response
-	 */
-	public function checkPermission(Request $request, Response $response) {
+	protected function isResource(array $requestURI): bool
+	{
+		$lastUrlPart = $requestURI[\array_key_last($requestURI)];
+		$fileParts = explode('.', $lastUrlPart);
+
+		if (2 > \count($fileParts)) {
+			return false;
+		}
+		return \in_array($fileParts[1], ['css', 'js', 'png', 'jpg']) && \is_file($this->getResourcePath($requestURI));
+	}
+
+	protected function serveResource(Response $response, array $requestURI): void
+	{
+		$response->setStatusCode(Response::STATUS_OK);
+		$response->setPage('public');
+		$response->setBody(\file_get_contents($this->getResourcePath($requestURI)));
+	}
+
+	protected function getResourcePath(array $requestURI): string
+	{
+		return \sprintf('%s%s', $this->rootPath, implode('/', $requestURI));
+	}
+
+	public function checkPermission(Request $request, Response $response): void
+	{
 		$page = $response->getPage();
-        
+
 		if ($page === 'inscription') {
 			if ($this->sessionWrapper->exist('playerId')) {
-				$response->redirect(APP_ROOT);
+				$response->redirect($this->rootPath);
 			}
 		} elseif ($page === 'connection') {
 			if (!$this->sessionWrapper->exist('playerId')) {
@@ -137,9 +156,9 @@ class Router
 					$response->redirect($this->getOutRoot . 'accueil/speak-wrongargument');
 				}
 			} else {
-				$response->redirect(APP_ROOT);
+				$response->redirect($this->rootPath);
 			}
-		} elseif (in_array($page, array('api', 'script', 'buffer'))) {
+		} elseif (\in_array($page, array('api', 'script', 'buffer', 'public'))) {
 			# doing nothing
 		} else {
 			if (!$this->sessionWrapper->exist('playerId')) {
@@ -153,46 +172,47 @@ class Router
 		$screenMode = $this->sessionWrapper->get('screenmode');
 		switch($page) {
 			case 'action':
-				$response->addTemplate(ACTION . 'main.php');
+				$response->addTemplate($this->actionPath . 'main.php');
 				break;
 			case 'ajax':
-				$response->addTemplate(AJAX . 'main.php');
+				$response->addTemplate($this->ajaxPath . 'main.php');
 				break;
 			case 'api':
-				$response->addTemplate(API . 'main.php');
+				$response->addTemplate($this->apiPath . 'main.php');
 				break;
 			case 'buffer':
-				$response->addTemplate(BUFFER . 'main.php');
+				$response->addTemplate($this->bufferPath . 'main.php');
 				break;
 			case 'script':
-				$response->addTemplate(SCRIPT . 'main.php');
+				$response->addTemplate($this->scriptPath . 'main.php');
 				break;
 			case 'connection':
-				$response->addTemplate(CONNECTION . 'main.php');
+				$response->addTemplate($this->connectionPath . 'main.php');
 				break;
 			case '404':
                 $response->setStatusCode(404);
-				$response->addTemplate(TEMPLATE . 'notfound.php');
+				$response->addTemplate($this->templatePath . 'notfound.php');
 				break;
 			case 'inscription':
-				$response->addTemplate(INSCRIPTION . 'check.php');
+				$response->addTemplate($this->registrationPath . 'check.php');
 				if (!$response->getRedirect()) {
-					$response->addTemplate(TEMPLATE . $screenMode . '/open.php');
-					$response->addTemplate(TEMPLATE . $screenMode . '/stepbar.php');
-					$response->addTemplate(INSCRIPTION . '/content.php');
-					$response->addTemplate(TEMPLATE . $screenMode . '/btmbar.php');
-					$response->addTemplate(TEMPLATE . $screenMode . '/alert.php');
-					$response->addTemplate(TEMPLATE . $screenMode . '/close.php');
+					$response->addTemplate($this->templatePath . $screenMode . '/open.php');
+					$response->addTemplate($this->templatePath . $screenMode . '/stepbar.php');
+					$response->addTemplate($this->registrationPath . '/content.php');
+					$response->addTemplate($this->templatePath . $screenMode . '/btmbar.php');
+					$response->addTemplate($this->templatePath . $screenMode . '/alert.php');
+					$response->addTemplate($this->templatePath . $screenMode . '/close.php');
 				}
 				break;
+			case 'public': break;
 			default:
-				$response->addTemplate(EVENT . 'loadEvent.php');
-				$response->addTemplate(TEMPLATE . $screenMode . '/open.php');
-				$response->addTemplate(TEMPLATE . $screenMode . '/navbar.php');
-				$response->addTemplate(PAGES . $screenMode . '/' . $page . '.php');
-				$response->addTemplate(TEMPLATE . $screenMode . '/toolbar.php');
-				$response->addTemplate(TEMPLATE . $screenMode . '/alert.php');
-				$response->addTemplate(TEMPLATE . $screenMode . '/close.php');
+				$response->addTemplate($this->eventPath . 'loadEvent.php');
+				$response->addTemplate($this->templatePath . $screenMode . '/open.php');
+				$response->addTemplate($this->templatePath . $screenMode . '/navbar.php');
+				$response->addTemplate($this->pagesPath . $screenMode . '/' . $page . '.php');
+				$response->addTemplate($this->templatePath . $screenMode . '/toolbar.php');
+				$response->addTemplate($this->templatePath . $screenMode . '/alert.php');
+				$response->addTemplate($this->templatePath . $screenMode . '/close.php');
 				break;
 		}
 	}

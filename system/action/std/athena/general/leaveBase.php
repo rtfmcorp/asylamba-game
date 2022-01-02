@@ -70,7 +70,7 @@ if (count($verif) > 1) {
 					$orbitalBaseManager->changeOwnerById($baseId, $base, ID_GAIA, $baseCommanders);
 					$place->rPlayer = ID_GAIA;
 					$entityManager->flush();
-					$eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place));
+					$eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place), PlaceOwnerChangeEvent::NAME);
 					
 					for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 						if ($verif[$i] == $baseId) {

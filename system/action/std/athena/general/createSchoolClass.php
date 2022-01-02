@@ -22,7 +22,7 @@ $session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 $entityManager = $this->getContainer()->get('entity_manager');
 

@@ -5,7 +5,7 @@ use Asylamba\Classes\Exception\ErrorException;
 
 # switch advertisement action
 $session = $this->getContainer()->get('session_wrapper');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 
 if (($player = $playerManager->get($session->get('playerId'))) !== null) {
 	if ($player->premium == 0) {

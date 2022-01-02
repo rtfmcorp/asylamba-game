@@ -7,13 +7,13 @@ use Asylamba\Classes\Exception\FormException;
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('session_wrapper');
 $response = $this->getContainer()->get('app.response');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 
 # choix des étapes
 if (!$request->query->has('step') || $request->query->get('step') == 1) {
 	if ($request->query->has('bindkey')) {
 		# extraction du bindkey
-		$security = $this->container->get('security');
+		$security = $this->container->get(\Asylamba\Classes\Library\Security::class);
 		$query  = $security->uncrypt($request->query->get('bindkey'));
 		$bindkey= $security->extractBindkey($query);
 		$time 	= $security->extractTime($query);

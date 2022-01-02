@@ -115,6 +115,7 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        public: true
         bind:
             $container: '@container'
 
@@ -145,8 +146,19 @@ services:
             
     Asylamba\Classes\Router\Router:
         arguments:
+            $rootPath: '%root_path%'
             $getOutRoot: "%getout_root%"
-        
+            $actionPath: '%action%'
+            $ajaxPath: '%ajax%'
+            $connectionPath: '%connection%'
+            $registrationPath: '%inscription%'
+            $bufferPath: '%buffer%'
+            $apiPath: '%api%'
+            $templatePath: '%template%'
+            $scriptPath: '%script%'
+            $pagesPath: '%pages%'
+            $eventPath: '%event%'
+
     Asylamba\Classes\Library\Http\RequestFactory: ~
         
     Asylamba\Classes\Library\Http\ResponseFactory:
@@ -228,6 +240,7 @@ services:
     Asylamba\Classes\EventListener\ExceptionListener:
         arguments:
             $logger: '@logger'
+            $templatePath: '%template%'
         tags:
             - { name: "kernel.event_listener", event: "core.exception", method: "onCoreException" }
             - { name: "kernel.event_listener", event: "core.error", method: "onCoreError" }

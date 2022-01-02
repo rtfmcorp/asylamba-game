@@ -11,7 +11,7 @@ use Asylamba\Classes\Exception\FormException;
 
 $session = $this->getContainer()->get('session_wrapper');
 $response = $this->getContainer()->get('app.response');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');

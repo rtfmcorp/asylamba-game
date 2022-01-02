@@ -16,7 +16,7 @@ if (!in_array($category, array('natural', 'life', 'social', 'informatic'))) {
 	throw new ErrorException('Changement d\'investissement impossible - faculté inconnue');
 }
 
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $session = $this->getContainer()->get('session_wrapper');
 
 $player = $playerManager->get($session->get('playerId'));

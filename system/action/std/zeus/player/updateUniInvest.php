@@ -10,7 +10,7 @@ use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('session_wrapper');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 
 $investment = $request->request->get('credit');

@@ -1,6 +1,6 @@
 <?php
 
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $researchManager = $this->getContainer()->get('promethee.research_manager');
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('session_wrapper');

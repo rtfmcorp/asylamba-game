@@ -24,26 +24,41 @@ class ResponseFactory
         $this->createHeaders($request, $response);
 		$this->createCookies($request, $response, $client);
 		if ($response->getStatusCode() !== 302) {
-			$response->setBody(ob_get_clean());
+			$response->setBody(\sprintf("%s\n%s", $response->getBody(), \ob_get_clean()));
 		} else {
-			ob_end_clean();
+			\ob_end_clean();
 		}
     }
     
     protected function createHeaders(Request $request, Response $response): void
     {
-        $response->headers->set('Content-Type', ($response instanceof JsonResponse) ? 'application/json' : 'text/html');
+		$contentType = ('public' === $response->getPage())
+			? $this->guessMimeType($request)
+			: (($response instanceof JsonResponse) ? 'application/json' : 'text/html');
+		$response->headers->set('Content-Type', $contentType);
         $response->headers->set('Date', gmdate('D, d M Y H:i:s T'));
         $response->headers->set('Status', $response->getStatusCode() . ' ' . $response->getStatus());
 		
 		if ($response->getStatusCode() === 302) {
 			$response->headers->set('Location',
-				(substr($response->getRedirect(), 0, 4) !== 'http')
-				? 'http://' . $request->headers->get('host') . '/' . $response->getRedirect()
+				(!\str_starts_with($response->getRedirect(), 'http'))
+				? \sprintf('http://%s%s', $request->headers->get('host'), $response->getRedirect())
 				: $response->getRedirect()
 			);
 		}
     }
+
+	protected function guessMimeType(Request $request): string
+	{
+		$fileParts = \explode('.', $request->getPath());
+
+		return match (\end($fileParts)) {
+			'css' => 'text/css',
+			'js' => 'text/javascript',
+			'png' => 'image/png',
+			'jpg' => 'image/jpeg',
+		};
+	}
 
 	protected function createCookies(Request $request, Response $response, Client $client): void
 	{

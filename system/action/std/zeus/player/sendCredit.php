@@ -19,7 +19,7 @@ use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('session_wrapper');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $creditTransactionManager = $this->getContainer()->get('zeus.credit_transaction_manager');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
 $parser = $this->getContainer()->get('parser');

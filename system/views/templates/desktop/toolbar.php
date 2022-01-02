@@ -17,7 +17,7 @@ $shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $technologyHelper = $this->getContainer()->get('promethee.technology_helper');
 $place = $this->getContainer()->get('gaia.place_manager');
-$player = $this->getContainer()->get('zeus.player_manager')->get($session->get('playerId'));
+$player = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class)->get($session->get('playerId'));
 
 $currentBase = $orbitalBaseManager->get($session->get('playerParams')->get('base'));
 

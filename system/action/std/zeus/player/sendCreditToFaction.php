@@ -9,7 +9,7 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $creditTransactionManager = $this->getContainer()->get('zeus.credit_transaction_manager');
 $request = $this->getContainer()->get('app.request');

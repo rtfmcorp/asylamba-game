@@ -5,7 +5,7 @@ use Asylamba\Classes\Library\Utils;
 $session = $this->getContainer()->get('session_wrapper');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
 $placeManager = $this->getContainer()->get('gaia.place_manager');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 
 # chargement des événements concernant les flottes qui attaquent le joueur
 if (Utils::interval($session->get('lastUpdate')->get('event'), Utils::now(), 's') > TIME_EVENT_UPDATE) {

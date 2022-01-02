@@ -7,7 +7,7 @@ use Asylamba\Modules\Zeus\Model\Player;
 
 $session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 
 if ($session->get('playerInfo')->get('status') > Player::PARLIAMENT && $session->get('playerInfo')->get('status') < Player::CHIEF) {
 	if (($minister = $playerManager->get($session->get('playerId'))) !== null) {

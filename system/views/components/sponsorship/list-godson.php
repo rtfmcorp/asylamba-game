@@ -1,6 +1,6 @@
 <?php
 
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $session = $this->getContainer()->get('session_wrapper');
 
 $godSons = $playerManager->getGodSons($session->get('playerId'));

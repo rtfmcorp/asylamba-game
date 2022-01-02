@@ -19,7 +19,7 @@ if (($commanderId = $request->query->get('commanderid')) === null || ($placeId =
 
 $response = $this->getContainer()->get('app.response');
 $commanderManager = $this->getContainer()->get('ares.commander_manager');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $sectorManager = $this->getContainer()->get('gaia.sector_manager');

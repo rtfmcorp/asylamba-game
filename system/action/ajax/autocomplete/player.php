@@ -3,7 +3,7 @@
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Zeus\Model\Player;
 
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 
 $players = $playerManager->search($this->getContainer()->get('app.request')->query->get('q'));
 

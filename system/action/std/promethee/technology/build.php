@@ -23,7 +23,7 @@ $technologyHelper = $this->getContainer()->get('promethee.technology_helper');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $researchManager = $this->getContainer()->get('promethee.research_manager');
 $technologyManager = $this->getContainer()->get('promethee.technology_manager');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 

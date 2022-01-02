@@ -721,7 +721,7 @@ class CommanderManager
 					$this->endTravel($commander, Commander::AFFECTED);
 					$commander->line = 2;
 					
-					$this->eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place));
+					$this->eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place), PlaceOwnerChangeEvent::NAME);
 
 					# PATCH DEGUEU POUR LES MUTLIS-COMBATS
 					$this->notificationManager->patchForMultiCombats($commander->rPlayer, $place->rPlayer, $commander->dArrival);
@@ -794,7 +794,7 @@ class CommanderManager
 
 				$this->placeManager->sendNotif($place, Place::CONQUEREMPTYSSUCCESS, $commander, $report->id);
 				
-				$this->eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place));
+				$this->eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place), PlaceOwnerChangeEvent::NAME);
 			
 			# défaite
 			} else {

@@ -22,7 +22,7 @@ $lawManager = $this->getContainer()->get('demeter.law_manager');
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $sectorManager = $this->getContainer()->get('gaia.sector_manager');
 $commercialTaxManager = $this->getContainer()->get('athena.commercial_tax_manager');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $parser = $this->getContainer()->get('parser');
 
 $type = $request->query->get('type');

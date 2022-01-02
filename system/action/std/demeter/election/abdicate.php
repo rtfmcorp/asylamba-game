@@ -12,7 +12,7 @@ use Asylamba\Modules\Zeus\Model\Player;
 
 $session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
 

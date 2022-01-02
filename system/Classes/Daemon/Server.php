@@ -128,11 +128,11 @@ class Server
 			$this->container->set('app.response', $response);
 			$this->responseFactory->processResponse($request, $response, $client);
 		} catch (\Exception $ex) {
-			$this->eventDispatcher->dispatch($event = new ExceptionEvent($request, $ex));
+			$this->eventDispatcher->dispatch($event = new ExceptionEvent($request, $ex), ExceptionEvent::NAME);
 			$response = $event->getResponse();
 			$this->responseFactory->processResponse($request, $response, $client);
 		} catch (\Error $err) {
-			$this->eventDispatcher->dispatch($event = new ErrorEvent($request, $err));
+			$this->eventDispatcher->dispatch($event = new ErrorEvent($request, $err), ErrorEvent::NAME);
 			$response = $event->getResponse();
 			$this->responseFactory->processResponse($request, $response, $client);
 		} finally {
@@ -158,7 +158,7 @@ class Server
 			return;
 		}
 		$data = json_decode($content, true);
-		dump($data);
+		// dump($data);
 		if (isset($data['technical'])) {
 			$this->processManager->updateTechnicalData($process, $data['technical']);
 		}

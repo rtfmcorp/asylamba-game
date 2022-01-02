@@ -15,7 +15,7 @@ use Asylamba\Classes\Exception\FormException;
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get('session_wrapper');
 $parser = $this->getContainer()->get('parser');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $conversationManager = $this->getContainer()->get('hermes.conversation_manager');
 $conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
 

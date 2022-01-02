@@ -13,7 +13,7 @@ $reportManager = $this->getContainer()->get('ares.report_manager');
 $liveReportManager = $this->getContainer()->get('ares.live_report_manager');
 $spyReportManager = $this->getContainer()->get('artemis.spy_report_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 
 # background paralax

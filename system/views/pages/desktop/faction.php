@@ -10,7 +10,7 @@ use Asylamba\Modules\Demeter\Model\Color;
 $session = $this->getContainer()->get('session_wrapper');
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 $factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
 $forumMessageManager = $this->getContainer()->get('demeter.forum_message_manager');

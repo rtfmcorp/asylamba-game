@@ -146,7 +146,7 @@ class PlaceManager
 	
 	public function turnAsSpawnPlace(int $placeId, int $playerId): bool
 	{
-		$this->eventDispatcher->dispatch(new PlaceOwnerChangeEvent($this->get($placeId)));
+		$this->eventDispatcher->dispatch(new PlaceOwnerChangeEvent($this->get($placeId)), PlaceOwnerChangeEvent::NAME);
 		
 		return $this->entityManager->getRepository(Place::class)->turnAsSpawnPlace($placeId, $playerId);
 	}

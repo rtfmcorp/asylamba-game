@@ -16,7 +16,7 @@ $session = $this->getContainer()->get('session_wrapper');
 $commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $notificationManager = $this->getContainer()->get('hermes.notification_manager');
 $colorManager = $this->getContainer()->get('demeter.color_manager');
 

@@ -25,7 +25,7 @@ $candidateManager = $this->getContainer()->get('demeter.candidate_manager');
 $topicManager = $this->getContainer()->get('demeter.forum_topic_manager');
 $voteManager = $this->getContainer()->get('demeter.vote_manager');
 $entityManager = $this->getContainer()->get('entity_manager');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 
 $rElection			 = $request->query->get('relection');
 $program			 = $request->request->get('program');

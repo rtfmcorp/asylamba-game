@@ -116,7 +116,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `player` (
 #--------------------------------------------------------------------------------------------
 echo '<h3>Ajout du Joueur Gaia</h3>';
 
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 
 $p = new Player();
 $p->status = 1;

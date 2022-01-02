@@ -19,7 +19,7 @@ $transactionManager = $this->getContainer()->get('athena.transaction_manager');
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $commercialShippingManager = $this->getContainer()->get('athena.commercial_shipping_manager');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $entityManager = $this->getContainer()->get('entity_manager');
 
 $rTransaction = $request->query->get('rtransaction');

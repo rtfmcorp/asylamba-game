@@ -13,14 +13,15 @@
 		"ext-curl": "*",
 		"ext-pdo": "*",
 		"ext-redis": "*",
+		"ext-openssl": "*",
         "phpunit/phpunit": "9.5.10",
         "symfony/config": "~6.0",
         "symfony/yaml": "~6.0",
         "symfony/dotenv": "^6.0",
         "symfony/var-dumper": "^6.0",
         "symfony/dependency-injection": "^6.0",
-        "symfony/event-dispatcher": "^6.0"
-	},
+        "symfony/event-dispatcher": "^6.0",
+    },
 
     "scripts": {
         "post-install-cmd": [

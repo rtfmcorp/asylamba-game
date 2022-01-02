@@ -21,7 +21,7 @@ $recyclingLogManager = $this->getContainer()->get('athena.recycling_log_manager'
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
 $orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
 $buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $placeManager = $this->getContainer()->get('gaia.place_manager');
 $database = $this->getContainer()->get('database');
 $request = $this->getContainer()->get('app.request');
@@ -445,4 +445,4 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 }
 $entityManager->flush();
 $entityManager->getRepository(OrbitalBase::class)->updateBuildingLevels($orbitalBase);
-$eventDispatcher->dispatch(new PlaceOwnerChangeEvent($placeManager->get($orbitalBase->getId())));
+$eventDispatcher->dispatch(new PlaceOwnerChangeEvent($placeManager->get($orbitalBase->getId())), PlaceOwnerChangeEvent::NAME);
