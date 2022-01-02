@@ -6,47 +6,39 @@ use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 
-class OrbitalBaseHelper {
-	/** @var TechnologyHelper **/
-	protected $technologyHelper;
-	
-	/**
-	 * @param TechnologyHelper $technologyHelper
-	 */
-	public function __construct(TechnologyHelper $technologyHelper)
+class OrbitalBaseHelper
+{
+	public function __construct(protected TechnologyHelper $technologyHelper)
 	{
-		$this->technologyHelper = $technologyHelper;
 	}
 	
-	public function isABuilding($building) {
-		return in_array($building, OrbitalBaseResource::$orbitalBaseBuildings);
+	public function isABuilding(int $building): bool
+	{
+		return \in_array($building, OrbitalBaseResource::$orbitalBaseBuildings);
 	}
 
-	public function isAShipFromDock1($ship) {
-		return in_array($ship, OrbitalBaseResource::$dock1Ships);
+	public function isAShipFromDock1(int $ship): bool
+	{
+		return \in_array($ship, OrbitalBaseResource::$dock1Ships);
 	}
 
-	public function isAShipFromDock2($ship) {
-		return in_array($ship, OrbitalBaseResource::$dock2Ships);
+	public function isAShipFromDock2(int $ship): bool
+	{
+		return \in_array($ship, OrbitalBaseResource::$dock2Ships);
 	}
 
-	public function isAShipFromDock3($ship) {
-		return in_array($ship, OrbitalBaseResource::$dock3Ships);
+	public function isAShipFromDock3(int $ship): bool
+	{
+		return \in_array($ship, OrbitalBaseResource::$dock3Ships);
 	}
 
-	public function fleetQuantity($typeOfBase) {
-		switch ($typeOfBase) {
-			case OrbitalBase::TYP_NEUTRAL:
-				return 2; break;
-			case OrbitalBase::TYP_COMMERCIAL:
-				return 2; break;
-			case OrbitalBase::TYP_MILITARY:
-				return 5; break;
-			case OrbitalBase::TYP_CAPITAL:
-				return 5; break;
-			default:
-				return 0; break;
-		}
+	public function fleetQuantity(int $typeOfBase): int
+	{
+		return match ($typeOfBase) {
+			OrbitalBase::TYP_NEUTRAL, OrbitalBase::TYP_COMMERCIAL => 2,
+			OrbitalBase::TYP_MILITARY, OrbitalBase::TYP_CAPITAL => 5,
+			default => 0,
+		};
 	}
 
 	public function getInfo($buildingNumber, $info, $level = 0, $sup = 'default') {
@@ -55,10 +47,10 @@ class OrbitalBaseHelper {
 	
 	public function getBuildingInfo($buildingNumber, $info, $level = 0, $sup = 'default') {
 		if($this->isABuilding($buildingNumber)) {
-			if (in_array($info, ['name', 'column', 'frenchName', 'imageLink', 'description'])) {
+			if (\in_array($info, ['name', 'column', 'frenchName', 'imageLink', 'description'])) {
 				return OrbitalBaseResource::$building[$buildingNumber][$info];
 			} elseif ($info == 'techno') {
-				if (in_array($buildingNumber, array(3,4,6,8,9))) {
+				if (\in_array($buildingNumber, array(3,4,6,8,9))) {
 					return OrbitalBaseResource::$building[$buildingNumber][$info];
 				} else {
 					return -1;
@@ -101,14 +93,14 @@ class OrbitalBaseHelper {
 					} elseif ($sup == 'nbRoutesMax' AND $buildingNumber == 9) {
 						return OrbitalBaseResource::$building[$buildingNumber][$info][$level-1][3];
 					} else {
-						throw new ErrorException('4e argument invalide dans getBuildingInfo de OrbitalBaseResource');
+						throw new \ErrorException('4e argument invalide dans getBuildingInfo de OrbitalBaseResource');
 					}
 				}
 			} else {
-				throw new ErrorException('2e argument invalide dans getBuildingInfo de OrbitalBaseResource');
+				throw new \ErrorException('2e argument invalide dans getBuildingInfo de OrbitalBaseResource');
 			}
 		} else {
-			throw new ErrorException('1er argument invalide (entre 0 et 7) dans getBuildingInfo de OrbitalBaseResource');
+			throw new \ErrorException('1er argument invalide (entre 0 et 7) dans getBuildingInfo de OrbitalBaseResource');
 		}
 		return FALSE;
 	}
@@ -162,7 +154,7 @@ class OrbitalBaseHelper {
 							$diminution = 20;
 							break;
 						default :
-							throw new ErrorException('buildingId invalide (entre 0 et 9) dans haveRights de OrbitalBaseResource');
+							throw new \ErrorException('buildingId invalide (entre 0 et 9) dans haveRights de OrbitalBaseResource');
 					}
 					if ($diminution !== NULL) {
 						if ($buildingId == OrbitalBaseResource::GENERATOR) {
@@ -196,10 +188,10 @@ class OrbitalBaseHelper {
 					}
 					break;
 				default :
-					throw new ErrorException('$type invalide (entre 1 et 4) dans haveRights de OrbitalBaseResource');
+					throw new \ErrorException('$type invalide (entre 1 et 4) dans haveRights de OrbitalBaseResource');
 			}
 		} else {
-			throw new ErrorException('buildingId invalide (entre 0 et 9) dans haveRights de OrbitalBaseResource');
+			throw new \ErrorException('buildingId invalide (entre 0 et 9) dans haveRights de OrbitalBaseResource');
 		}
 	}
 }

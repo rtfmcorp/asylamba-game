@@ -2,6 +2,7 @@
 
 namespace Asylamba\Classes\DependencyInjection;
 
+use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Classes\Worker\Manager;
 
 class Container {
@@ -15,18 +16,6 @@ class Container {
 	public function __construct()
 	{
 		$this->serviceInjector = new ServiceInjector($this);
-	}
-	
-	public function cleanApplication()
-	{
-		$this->get('entity_manager')->clear();
-		
-		foreach($this->services as $service) {
-			if ($service['instance'] instanceof Manager) {
-				$service['instance']->save();
-				$service['instance']->clean();
-			}
-		}
 	}
 	
     /**
@@ -151,7 +140,7 @@ class Container {
 		}
 	}
 	
-	function formatToSnakeCase($property) {
+	public function formatToSnakeCase($property) {
 		preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $property, $matches);
 		$ret = $matches[0];
 		foreach ($ret as &$match) {

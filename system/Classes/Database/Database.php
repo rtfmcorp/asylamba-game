@@ -2,39 +2,23 @@
 
 namespace Asylamba\Classes\Database;
 
-class Database {
-	/** @var string **/
-	protected $name;
-	/** @var string **/
-	protected $host;
-	/** @var string **/
-	protected $user;
-	/** @var string **/
-	protected $password;
-	/** @var \PDO **/
-	private $connection;
-	/** @var int **/
-	private static $nbrOfQuery = 0;
+class Database
+{
+	private ?\PDO $connection;
+	private static int $nbrOfQuery = 0;
 
-	/**
-	 * @return int
-	 */
-	public static function getNbrOfQuery() {
-		return self::$nbrOfQuery;
+	public function __construct(
+		protected string $host,
+		protected string $name,
+		protected string $user,
+		protected string $password,
+	) {
+		$this->refresh();
 	}
 
-	/**
-	 * @param string $host
-	 * @param string $name
-	 * @param string $user
-	 * @param string $password
-	 */
-	public function __construct($host, $name, $user, $password) {
-		$this->host = $host;
-		$this->name = $name;
-		$this->user = $user;
-		$this->password = $password;
-		$this->refresh();
+	public static function getNbrOfQuery(): int
+	{
+		return self::$nbrOfQuery;
 	}
 	
 	public function init($dumpFile)

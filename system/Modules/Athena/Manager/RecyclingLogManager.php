@@ -15,31 +15,19 @@ use Asylamba\Classes\Entity\EntityManager;
 
 use Asylamba\Modules\Athena\Model\RecyclingLog;
 
-class RecyclingLogManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-
-	/**
-	 * @param EntityManager $entityManager
-	 */
-	public function __construct(EntityManager $entityManager) {
-		$this->entityManager = $entityManager;
+class RecyclingLogManager
+{
+	public function __construct(protected EntityManager $entityManager)
+	{
 	}
 
-	/**
-	 * @param RecyclingLog $recyclingLog
-	 */
-	public function add(RecyclingLog $recyclingLog)
+	public function add(RecyclingLog $recyclingLog): void
 	{
 		$this->entityManager->persist($recyclingLog);
 		$this->entityManager->flush($recyclingLog);
 	}
-	
-	/**
-	 * @param int $baseId
-	 * @return array
-	 */
-	public function getBaseActiveMissionsLogs($baseId)
+
+	public function getBaseActiveMissionsLogs(int $baseId): array
 	{
 		return $this->entityManager->getRepository(RecyclingLog::class)->getBaseActiveMissionsLogs($baseId);
 	}

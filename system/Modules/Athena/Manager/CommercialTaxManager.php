@@ -17,17 +17,16 @@ use Asylamba\Classes\Database\Database;
 
 use Asylamba\Modules\Athena\Model\CommercialTax;
 
-class CommercialTaxManager extends Manager {
+class CommercialTaxManager extends Manager
+{
 	protected $managerType = '_CommercialTax';
 
-	/**
-	 * @param Database $database
-	 */
 	public function __construct(Database $database) {
 		parent::__construct($database);
 	}
 	
-	public function load($where = array(), $order = array(), $limit = array()) {
+	public function load($where = array(), $order = array(), $limit = array())
+	{
 		$formatWhere = Utils::arrayToWhere($where);
 		$formatOrder = Utils::arrayToOrder($order);
 		$formatLimit = Utils::arrayToLimit($limit);

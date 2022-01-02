@@ -15,15 +15,10 @@ use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Modules\Demeter\Model\Law\Law;
 use Asylamba\Modules\Demeter\Model\Law\VoteLaw;
 
-class VoteLawManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-
-	/**
-	 * @param EntityManager $entityManager
-	 */
-	public function __construct(EntityManager $entityManager) {
-		$this->entityManager = $entityManager;
+class VoteLawManager
+{
+	public function __construct(protected EntityManager $entityManager)
+	{
 	}
 
 	/**

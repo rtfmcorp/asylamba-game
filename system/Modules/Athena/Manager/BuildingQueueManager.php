@@ -15,40 +15,27 @@ use Asylamba\Modules\Athena\Model\BuildingQueue;
 use Asylamba\Classes\Entity\EntityManager;
 
 use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
+use Asylamba\Modules\Gaia\Model\Place;
 
-class BuildingQueueManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var RealTimeActionScheduler **/
-	protected $realtimeActionScheduler;
-	
-	/**
-	 * @param EntityManager $entityManager
-	 * @param RealTimeActionScheduler $realtimeActionScheduler
-	 */
-	public function __construct(EntityManager $entityManager, RealTimeActionScheduler $realtimeActionScheduler) {
-		$this->entityManager = $entityManager;
-		$this->realtimeActionScheduler = $realtimeActionScheduler;
+class BuildingQueueManager
+{
+	public function __construct(
+		protected EntityManager $entityManager,
+		protected RealTimeActionScheduler $realtimeActionScheduler)
+	{
 	}
 	
-	/**
-	 * @param int $id
-	 * @return BuildingQueue
-	 */
-	public function get($id)
+	public function get(int $id): BuildingQueue
 	{
 		return $this->entityManager->getRepository(BuildingQueue::class)->get($id);
 	}
 	
-	public function getBaseQueues($baseId)
+	public function getBaseQueues(int $baseId): array
 	{
 		return $this->entityManager->getRepository(BuildingQueue::class)->getBaseQueues($baseId);
 	}
 	
-	/**
-	 * @return array
-	 */
-	public function scheduleActions()
+	public function scheduleActions(): void
 	{
 		$buildingQueues = $this->entityManager->getRepository(BuildingQueue::class)->getAll();
 		
@@ -66,10 +53,8 @@ class BuildingQueueManager {
 		}
 	}
 
-	/**
-	 * @param BuildingQueue $buildingQueue
-	 */
-	public function add(BuildingQueue $buildingQueue) {
+	public function add(BuildingQueue $buildingQueue): void
+	{
 		$this->entityManager->persist($buildingQueue);
 		$this->entityManager->flush($buildingQueue);
 		$this->realtimeActionScheduler->schedule(

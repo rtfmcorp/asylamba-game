@@ -4,23 +4,18 @@ namespace Asylamba\Modules\Zeus\Helper;
 
 use Asylamba\Classes\Database\Database;
 
-class PlayerHelper {
-	/** @var Database **/
-	protected $database;
-	
-	/**
-	 * @param Database $database
-	 */
-	public function __construct(Database $database)
+class PlayerHelper
+{
+	public function __construct(protected Database $database)
 	{
-		$this->database = $database;
 	}
 	
 	/**
 	 * @param int $playerId
 	 * @return boolean
 	 */
-	public static function listOrbitalBases($playerId) {
+	public function listOrbitalBases(int $playerId): array
+	{
 		$qr = $this->database->prepare('SELECT 
 				ob.rPlace, ob.name, sy.rSector
 			FROM orbitalBase AS ob

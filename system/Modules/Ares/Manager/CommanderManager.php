@@ -38,153 +38,81 @@ use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
 use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class CommanderManager
 {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var FightManager **/
-	protected $fightManager;
-	/** @var ReportManager **/
-	protected $reportManager;
-	/** @var OrbitalBaseManager **/
-	protected $orbitalBaseManager;
-	/** @var PlayerManager **/
-	protected $playerManager;
-	/** @var PlayerBonusManager **/
-	protected $playerBonusManager;
-	/** @var PlaceManager **/
-	protected $placeManager;
-	/** @var ColorManager **/
-	protected $colorManager;
-	/** @var NotificationManager **/
-	protected $notificationManager;
-	/** @var RealTimeActionScheduler **/
-	protected $realtimeActionScheduler;
-	/** @var EventDispatcher **/
-	protected $eventDispatcher;
-	/** @var int **/
-	protected $commanderBaseLevel;
-	
-	protected $actions = [
+	protected array $actions = [
 		Commander::MOVE => 'uChangeBase',
 		Commander::LOOT => 'uLoot',
 		Commander::COLO => 'uConquer',
 		Commander::BACK => 'uReturnBase'
 	];
+	protected FightManager $fightManager;
+	protected PlayerManager $playerManager;
 
-	/**
-	 * @param EntityManager $entityManager
-	 * @param FightManager $fightManager
-	 * @param ReportManager $reportManager
-	 * @param OrbitalBaseManager $orbitalBaseManager
-	 * @param PlayerManager $playerManager
-	 * @param PlayerBonusManager $playerBonusManager
-	 * @param PlaceManager $placeManager
-	 * @param ColorManager $colorManager
-	 * @param NotificationManager $notificationManager
-	 * @param RealTimeActionScheduler $realtimeActionScheduler
-	 * @param EventDispatcher $eventDispatcher
-	 * @param int $commanderBaseLevel
-	 */
 	public function __construct(
-		EntityManager $entityManager,
-		FightManager $fightManager,
-		ReportManager $reportManager,
-		OrbitalBaseManager $orbitalBaseManager,
-		PlayerManager $playerManager,
-		PlayerBonusManager $playerBonusManager,
-		PlaceManager $placeManager,
-		ColorManager $colorManager,
-		NotificationManager $notificationManager,
-		RealTimeActionScheduler $realtimeActionScheduler,
-		EventDispatcher $eventDispatcher,
-		$commanderBaseLevel
+		protected EntityManager $entityManager,
+		protected ReportManager $reportManager,
+		protected OrbitalBaseManager $orbitalBaseManager,
+		protected PlayerBonusManager $playerBonusManager,
+		protected PlaceManager $placeManager,
+		protected ColorManager $colorManager,
+		protected NotificationManager $notificationManager,
+		protected RealTimeActionScheduler $realtimeActionScheduler,
+		protected EventDispatcher $eventDispatcher,
+		protected int $commanderBaseLevel,
 	) {
-		$this->entityManager = $entityManager;
-		$this->fightManager = $fightManager;
-		$this->reportManager = $reportManager;
-		$this->orbitalBaseManager = $orbitalBaseManager;
-		$this->playerManager = $playerManager;
-		$this->playerBonusManager = $playerBonusManager;
-		$this->placeManager = $placeManager;
-		$this->colorManager = $colorManager;
-		$this->notificationManager = $notificationManager;
-		$this->realtimeActionScheduler = $realtimeActionScheduler;
-		$this->eventDispatcher = $eventDispatcher;
-		$this->commanderBaseLevel = $commanderBaseLevel;
 	}
-	
-	/**
-	 * @param integer $id
-	 * @return Commander
-	 */
-	public function get($id)
+
+	#[Required]
+	public function setFightManager(FightManager $fightManager): void
+	{
+		$this->fightManager = $fightManager;
+	}
+
+	#[Required]
+	public function setPlayerManager(PlayerManager $playerManager): void
+	{
+		$this->playerManager = $playerManager;
+	}
+
+	public function get(int $id): Commander
 	{
 		return $this->entityManager->getRepository(Commander::class)->get($id);
 	}
-	
-	/**
-	 * @param integer $orbitalBaseId
-	 * @param array $statements
-	 * @return array
-	 */
-	public function getBaseCommanders($orbitalBaseId, $statements = [], $orderBy = [])
+
+	public function getBaseCommanders(int $orbitalBaseId, array $statements = [], array $orderBy = []): array
 	{
 		return $this->entityManager->getRepository(Commander::class)->getBaseCommanders($orbitalBaseId, $statements, $orderBy);
 	}
 	
-	/**
-	 * @param int $playerId
-	 * @param array $statements
-	 * @return array
-	 */
-	public function getPlayerCommanders($playerId, $statements = [], $orderBy = [])
+	public function getPlayerCommanders(int $playerId, array $statements = [], array $orderBy = []): array
 	{
 		return $this->entityManager->getRepository(Commander::class)->getPlayerCommanders($playerId, $statements, $orderBy);
 	}
 	
-	/**
-	 * @return array
-	 */
-	public function getMovingCommanders()
+	public function getMovingCommanders(): array
 	{
 		return $this->entityManager->getRepository(Commander::class)->getMovingCommanders();
 	}
 	
-	/**
-	 * @param array $ids
-	 * @return array
-	 */
-	public function getCommandersByIds($ids)
+	public function getCommandersByIds(array $ids): array
 	{
 		return $this->entityManager->getRepository(Commander::class)->getCommandersByIds($ids);
 	}
 	
-	/**
-	 * @param int $orbitalBaseId
-	 * @param int $line
-	 * @return array
-	 */
-	public function getCommandersByLine($orbitalBaseId, $line)
+	public function getCommandersByLine(int $orbitalBaseId, int $line): array
 	{
 		return $this->entityManager->getRepository(Commander::class)->getCommandersByLine($orbitalBaseId, $line);
 	}
 	
-	/**
-	 * @param int $playerId
-	 * @return array
-	 */
-	public function getIncomingAttacks($playerId)
+	public function getIncomingAttacks(int $playerId): array
 	{
 		return $this->entityManager->getRepository(Commander::class)->getIncomingAttacks($playerId);
 	}
 	
-	/**
-	 * @param int $playerId
-	 * @return array
-	 */
-	public function getVisibleIncomingAttacks($playerId)
+	public function getVisibleIncomingAttacks(int $playerId): array
 	{
 		$attackingCommanders = $this->getIncomingAttacks($playerId) ;
 		$incomingCommanders = [] ;
@@ -203,25 +131,17 @@ class CommanderManager
 		return $incomingCommanders;
 	}
 	
-	/**
-	 * @param int $playerId
-	 * @return array
-	 */
-	public function getOutcomingAttacks($playerId)
+	public function getOutcomingAttacks(int $playerId): array
 	{
 		return $this->entityManager->getRepository(Commander::class)->getOutcomingAttacks($playerId);
 	}
 	
-	/**
-	 * @param array $place
-	 * @return array
-	 */
-	public function getIncomingCommanders($place)
+	public function getIncomingCommanders(int $place): array
 	{
 		return $this->entityManager->getRepository(Commander::class)->getIncomingCommanders($place);
 	}
 	
-	public function scheduleMovements()
+	public function scheduleMovements(): void
 	{
 		$commanders = $this->getMovingCommanders();
 		foreach ($commanders as $commander) {
@@ -238,17 +158,13 @@ class CommanderManager
 		}
 	}
 	
-	/**
-	 * @param int $orbitalBaseId
-	 * @param int $line
-	 * @return int
-	 */
-	public function countCommandersByLine($orbitalBaseId, $line)
+	public function countCommandersByLine(int $orbitalBaseId, int $line): int
 	{
 		return $this->entityManager->getRepository(Commander::class)->countCommandersByLine($orbitalBaseId, $line);
 	}
 
-	public function setEarnedExperience(Commander $commander, Commander $enemyCommander) {
+	public function setEarnedExperience(Commander $commander, Commander $enemyCommander): void
+	{
 		$commander->setArmy();
 		$finalOwnPev = 0;
 
@@ -278,7 +194,8 @@ class CommanderManager
 		}
 	}
 
-	public function setBonus(Commander $commander) {
+	public function setBonus(Commander $commander): void
+	{
 		$commander->setArmy();
 		$playerBonus = new PlayerBonus($commander->rPlayer);
 		$playerBonus->load();

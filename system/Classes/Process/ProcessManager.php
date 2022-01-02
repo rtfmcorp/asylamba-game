@@ -9,39 +9,17 @@ use Asylamba\Classes\Memory\MemoryManager;
 
 class ProcessManager
 {
-    /** @var Server **/
-    protected $server;
-    /** @var MemoryManager **/
-    protected $memoryManager;
-    /** @var ProcessGateway **/
-    protected $gateway;
-    /** @var array **/
-    protected $processes = [];
-    /** @var string **/
-    protected $rootPath;
-	/** @var string **/
-	protected $logDirectory;
-    /** @var int **/
-    protected $scale;
-    /** @var int **/
-    protected $instanciedProcesses = 0;
-    
-    /**
-     * @param Server $server
-     * @param MemoryManager $memoryManager
-     * @param ProcessGateway $gateway
-     * @param string $rootPath
-	 * @param string $logDirectory
-     * @param int $scale
-     */
-    public function __construct(Server $server, MemoryManager $memoryManager, ProcessGateway $gateway, $rootPath, $logDirectory, $scale)
-    {
-        $this->server = $server;
-        $this->memoryManager = $memoryManager;
-        $this->gateway = $gateway;
-        $this->rootPath = $rootPath;
-		$this->logDirectory = $logDirectory;
-        $this->scale = $scale;
+    protected array $processes = [];
+    protected int $instanciedProcesses = 0;
+
+    public function __construct(
+		protected Server $server,
+		protected MemoryManager $memoryManager,
+		protected ProcessGateway $gateway,
+		protected string $rootPath,
+		protected string $logDirectory,
+		protected string $scale
+	) {
     }
     
     public function __destruct()
@@ -95,7 +73,7 @@ class ProcessManager
         ++$this->instanciedProcesses;
         $name = "process_{$this->instanciedProcesses}";
         
-        $process = proc_open("php {$this->rootPath}/worker.php --process=$name", [
+        $process = \proc_open("php {$this->rootPath}/worker.php --process=$name", [
             0 => ['pipe', 'r'],
             1 => ['pipe', 'w'],
             2 => [
@@ -105,7 +83,7 @@ class ProcessManager
             ]
         ], $pipes);
 		
-		stream_set_blocking($pipes[1], 0);
+		\stream_set_blocking($pipes[1], 0);
 		
         $this->processes[$name] =
             (new Process())

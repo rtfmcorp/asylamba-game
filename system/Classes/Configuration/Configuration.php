@@ -67,43 +67,4 @@ class Configuration {
 			$container->setServiceDefinition($key, $definition);
 		}
 	}
-	
-	public function defineOldConstants(Container $container)
-	{
-		# définition des ROOT
-		define('SYSTEMR',		$container->getParameter('root_path') . '/system/');
-		define('CLASSES',       SYSTEMR . 'Classes/');
-
-		define('MODULES', 		SYSTEMR . 'Modules/');
-		define('LIB', 			CLASSES . 'lib/');
-		define('CONFIG', 		SYSTEMR . 'config/');
-		define('EVENT', 		SYSTEMR . 'event/');
-
-		define('INSCRIPTION', 	SYSTEMR . 'inscription/');
-		define('CONNECTION', 	SYSTEMR . 'connection/');
-
-		define('ACTION', 		SYSTEMR . 'action/std/');
-		define('AJAX', 			SYSTEMR . 'action/ajax/');
-
-		define('API', 			SYSTEMR . 'api/');
-		define('SCRIPT',		SYSTEMR . 'script/');
-		define('BUFFER',		SYSTEMR . 'buffer/');
-
-		define('TEMPLATE', 		SYSTEMR . 'views/templates/');
-		define('PAGES', 		SYSTEMR . 'views/pages/');
-		define('COMPONENT', 	SYSTEMR . 'views/components/');
-
-		# inclusion des fichiers de configurations
-		require_once(CONFIG . 'app.config.local.php');
-		require_once(CONFIG . 'app.config.global.php');
-	}
-	
-	public function loadEnvironment(Container $container)
-	{
-		foreach($_ENV as $key => $value) {
-			if (substr($key, 0, 9) === 'ASYLAMBA_') {
-				$container->setParameter(strtolower(substr($key, 9)), $value);
-			}
-		}
-	}
 }

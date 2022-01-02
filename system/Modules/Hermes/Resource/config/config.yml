@@ -16,28 +16,9 @@ parameters:
     hermes.notifications.msm.step_message: 10
     
 services:
-    hermes.conversation_manager:
-        class: Asylamba\Modules\Hermes\Manager\ConversationManager
-        arguments:
-            - "@database"
-            - "@hermes.conversation_user_manager"
-            
-    hermes.conversation_message_manager:
-        class: Asylamba\Modules\Hermes\Manager\ConversationMessageManager
-        arguments:
-            - "@database"
-            
-    hermes.conversation_user_manager:
-        class: Asylamba\Modules\Hermes\Manager\ConversationUserManager
-        arguments:
-            - "@database"
-            
-    hermes.notification_manager:
-        class: Asylamba\Modules\Hermes\Manager\NotificationManager
-        arguments:
-            - "@entity_manager"
-            
-    hermes.roadmap_manager:
-        class: Asylamba\Modules\Hermes\Manager\RoadMapManager
-        arguments:
-            - "@database"
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Asylamba\Modules\Hermes\Manager\:
+        resource: '%root_path%/system/Modules/Hermes/Manager/*'

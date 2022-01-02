@@ -4,24 +4,13 @@ namespace Asylamba\Classes\Library;
 
 use Asylamba\Classes\Library\Session\SessionWrapper;
 
-class Security {
-	/** @var Session **/
-	protected $sessionWrapper;
-	/** @var string **/
-	protected $serverKey;
-	/** @var string **/
-	protected $iv;
-	
-	/**
-	 * @param SessionWrapper $session
-	 * @param string $serverKey
-	 * @param string $iv
-	 */
-	public function __construct(SessionWrapper $session, $serverKey, $iv)
-	{
-		$this->sessionWrapper = $session;
-		$this->serverKey = $serverKey;
-		$this->iv = $iv;
+class Security
+{
+	public function __construct(
+		protected SessionWrapper $sessionWrapper,
+		protected string $serverKey,
+		protected string $iv,
+	) {
 	}
 	
 	public function crypt($query, $key = null) {

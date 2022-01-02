@@ -2,77 +2,77 @@
 
 namespace Asylamba\Classes\Daemon;
 
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Classes\Event\ProcessExceptionEvent;
 use Asylamba\Classes\Event\ProcessErrorEvent;
 
 use Asylamba\Classes\DependencyInjection\Container;
 
+use Asylamba\Classes\Memory\MemoryManager;
 use Asylamba\Classes\Process\ProcessManager;
 use Asylamba\Classes\Process\ProcessGateway;
 use Asylamba\Classes\Task\TaskManager;
+use Asylamba\Classes\Worker\EventDispatcher;
+use Asylamba\Classes\Worker\Manager;
 
 class WorkerServer
 {
-	/** @var Container **/
-	protected $container;
-    /** @var TaskManager **/
-    protected $taskManager;
-	/** @var ProcessManager **/
-	protected $processManager;
-	/** @var ProcessGateway **/
-	protected $processGateway;
-    /** @var int **/
-    protected $workerCycleTimeout;
-    /** @var boolean **/
-    protected $shutdown = false;
-    /** @var array **/
-    protected $inputs = [];
-    /** @var array **/
-    protected $outputs = [];
-    /** @var int **/
-    protected $nbUncollectedCycles = 0;
-    /** @var int **/
-    protected $collectionCyclesNumber;
+    protected bool $shutdown = false;
+    protected array $inputs = [];
+    protected array $outputs = [];
+    protected int $nbUncollectedCycles = 0;
 
-    /**
-     * @param Container $container
-     * @param int $serverCycleTimeout
-     * @param int $port
-     */
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-        $this->taskManager = $container->get('task_manager');
-		$this->processGateway = $container->get('process_gateway');
-        $this->workerCycleTimeout = $container->getParameter('worker_cycle_timeout');
-        $this->collectionCyclesNumber = $container->getParameter('worker_collection_cycles_number');
+    public function __construct(
+		protected Container $container,
+		protected Database $database,
+		protected TaskManager $taskManager,
+		protected EventDispatcher $eventDispatcher,
+		protected MemoryManager $memoryManager,
+		protected ProcessManager $processManager,
+		protected ProcessGateway $processGateway,
+		protected iterable $statefulManagers,
+		protected int $workerCycleTimeout,
+		protected int $collectionCyclesNumber,
+	) {
     }
+
+	public function cleanApplication()
+	{
+		$this->container->get(EntityManager::class)->clear();
+
+		/** @var Manager $manager */
+		foreach($this->statefulManagers as $manager) {
+			$manager->save();
+			$manager->clean();
+		}
+	}
 	
-    public function shutdown()
+    public function shutdown(): void
     {
 		$this->processGateway->writeToMaster([
 			'info' => 'process shutdown'
 		]);
         $this->shutdown = true;
         foreach($this->inputs as $input) {
-            fclose($input);
+            \fclose($input);
         }
         foreach($this->outputs as $output) {
-            fclose($output);
+            \fclose($output);
         }
     }
 
-    public function listen()
+    public function listen(): void
     {
-		stream_set_blocking(STDIN, 0);
+		\stream_set_blocking(STDIN, 0);
         $this->inputs['master'] = STDIN;
         $inputs = $this->inputs;
         $outputs = $this->outputs;
         $errors = null;
-        gc_disable();
-		$this->container->get('memory_manager')->refreshNodeMemory();
+        \gc_disable();
+		$this->memoryManager->refreshNodeMemory();
 		
-        while ($this->shutdown === false && ($nbUpgradedStreams = stream_select($inputs, $outputs, $errors, $this->workerCycleTimeout)) !== false) {
+        while ($this->shutdown === false && ($nbUpgradedStreams = \stream_select($inputs, $outputs, $errors, $this->workerCycleTimeout)) !== false) {
 			$this->nbUncollectedCycles++;
 			if ($nbUpgradedStreams === 0) {
                 $this->prepareStreamsState($inputs, $outputs, $errors);
@@ -91,7 +91,7 @@ class WorkerServer
         }
     }
 	
-	protected function treatMasterInput($input)
+	protected function treatMasterInput($input): void
 	{
         $responseData = [];
 		$task = null;
@@ -104,72 +104,60 @@ class WorkerServer
 			$task = $this->taskManager->createTaskFromData(json_decode($content, true));
             $responseData = $this->taskManager->perform($task);
 		} catch (\Exception $ex) {
-			$this->container->get('event_dispatcher')->dispatch($event = new ProcessExceptionEvent($ex, $task));
+			$this->eventDispatcher->dispatch($event = new ProcessExceptionEvent($ex, $task));
 		} catch (\Error $err) {
-			$this->container->get('event_dispatcher')->dispatch($event = new ProcessErrorEvent($err, $task));
+			$this->eventDispatcher->dispatch($event = new ProcessErrorEvent($err, $task));
 		} finally {
 			if (!empty($responseData)) {
 				$responseData['time'] = microtime(true) - $startTime;
-				$responseData['technical'] = $this->container->get('memory_manager')->getNodeMemory();
+				$responseData['technical'] = $this->container->get(MemoryManager::class)->getNodeMemory();
 				$this->processGateway->writeToMaster($responseData);
 			}
 		}
 	}
 	
-	protected function treatProcessInput($name)
+	protected function treatProcessInput(string $name): void
 	{
 		//$process = $this->processManager->getByName($name);
 		
-		//$content = fgets($process->getInput(), 2048);
+		//$content = \fgets($process->getInput(), 2048);
+
+		//throw new \ErrorException('bluh');
 	}
     
-    protected function prepareStreamsState(&$inputs, &$outputs, &$errors)
+    protected function prepareStreamsState(array &$inputs, array &$outputs, array &$errors): void
     {
-		$this->container->cleanApplication();
-		$this->container->get('memory_manager')->refreshNodeMemory();
+		$this->cleanApplication();
+		$this->memoryManager->refreshNodeMemory();
 		
         $inputs = $this->inputs;
         $outputs = $this->outputs;
         $errors = null;
 		
         if ($this->nbUncollectedCycles > $this->collectionCyclesNumber) {
-			$this->container->get('database')->refresh();
-            gc_collect_cycles();
+			$this->database->refresh();
+            \gc_collect_cycles();
             $this->nbUncollectedCycles = 0;
         }
     }
     
-	/**
-	 * @param string $name
-	 * @param resource $input
-	 */
-    public function addInput($name, $input)
+    public function addInput(string $name, $input): void
     {
         $this->inputs[$name] = $input;
     }
     
-	/**
-	 * @param string $name
-	 * @param resource $output
-	 */
-    public function addOutput($name, $output)
+    public function addOutput(string $name, $output): void
     {
         $this->outputs[$name] = $output;
     }
     
-	/**
-	 * @param string $name
-	 */
-    public function removeInput($name)
+    public function removeInput(string $name): void
     {
         fclose($this->inputs[$name]);
 		unset($this->inputs[$name]);
     }
     
-	/**
-	 * @param string $name
-	 */
-    public function removeOutput($name)
+    public function removeOutput(string $name): void
     {
         fclose($this->outputs[$name]);
 		unset($this->outputs[$name]);

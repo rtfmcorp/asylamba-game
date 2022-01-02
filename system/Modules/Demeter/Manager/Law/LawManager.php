@@ -14,19 +14,12 @@ namespace Asylamba\Modules\Demeter\Manager\Law;
 use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Modules\Demeter\Model\Law\Law;
 
-class LawManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var VoteLawManager **/
-	protected $voteLawManager;
-
-	/**
-	 * @param EntityManager $entityManager
-	 * @param VoteLawManager $voteLawManager
-	 */
-	public function __construct(EntityManager $entityManager, VoteLawManager $voteLawManager) {
-		$this->entityManager = $entityManager;
-		$this->voteLawManager = $voteLawManager;
+class LawManager
+{
+	public function __construct(
+		protected EntityManager $entityManager,
+		protected VoteLawManager $voteLawManager
+	) {
 	}
 	
 	/**

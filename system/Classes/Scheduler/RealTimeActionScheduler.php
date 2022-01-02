@@ -7,44 +7,88 @@ use Asylamba\Classes\DependencyInjection\Container;
 use Asylamba\Classes\Task\TaskManager;
 use Asylamba\Classes\Process\LoadBalancer;
 use Asylamba\Classes\Process\ProcessGateway;
+use Asylamba\Modules\Ares\Manager\CommanderManager;
+use Asylamba\Modules\Athena\Manager\BuildingQueueManager;
+use Asylamba\Modules\Athena\Manager\CommercialShippingManager;
+use Asylamba\Modules\Athena\Manager\RecyclingMissionManager;
+use Asylamba\Modules\Athena\Manager\ShipQueueManager;
+use Asylamba\Modules\Athena\Model\RecyclingMission;
+use Asylamba\Modules\Demeter\Manager\ColorManager;
+use Asylamba\Modules\Promethee\Manager\TechnologyQueueManager;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class RealTimeActionScheduler
 {
-	/** @var Container **/
-	protected $container;
-    /** @var TaskManager **/
-    protected $taskManager;
-	/** @var LoadBalancer **/
-	protected $loadBalancer;
-	/** @var ProcessGateway **/
-	protected $processGateway;
-	/** @var array **/
-	protected $queue = [];
-	
-	/**
-	 * @param Container $container
-	 */
-	public function __construct(Container $container)
+	protected array $queue = [];
+	protected CommanderManager $commanderManager;
+	protected BuildingQueueManager $buildingQueueManager;
+	protected CommercialShippingManager $commercialShippingManager;
+	protected RecyclingMissionManager $recyclingMissionManager;
+	protected ShipQueueManager $shipQueueManager;
+	protected TechnologyQueueManager $technologyQueueManager;
+	protected ColorManager $factionManager;
+
+	public function __construct(
+		protected TaskManager $taskManager,
+		protected LoadBalancer $loadBalancer,
+		protected ProcessGateway $processGateway,
+	) {
+	}
+
+	#[Required]
+	public function setCommanderManager(CommanderManager $commanderManager): void
 	{
-		$this->container = $container;
-        $this->taskManager = $container->get('task_manager');
-        $this->loadBalancer = $container->get('load_balancer');
-        $this->processGateway = $container->get('process_gateway');
+		$this->commanderManager = $commanderManager;
+	}
+
+	#[Required]
+	public function setBuildingQueueManager(BuildingQueueManager $buildingQueueManager): void
+	{
+		$this->buildingQueueManager = $buildingQueueManager;
+	}
+
+	#[Required]
+	public function setCommercialShippingManager(CommercialShippingManager $commercialShippingManager): void
+	{
+		$this->commercialShippingManager = $commercialShippingManager;
+	}
+
+	#[Required]
+	public function setRecyclingMissionManager(RecyclingMissionManager $recyclingMissionManager): void
+	{
+		$this->recyclingMissionManager = $recyclingMissionManager;
+	}
+
+	#[Required]
+	public function setShipQueueManager(ShipQueueManager $shipQueueManager): void
+	{
+		$this->shipQueueManager = $shipQueueManager;
+	}
+
+	#[Required]
+	public function setTechnologyQueueManager(TechnologyQueueManager $technologyQueueManager): void
+	{
+		$this->technologyQueueManager = $technologyQueueManager;
+	}
+
+	#[Required]
+	public function setFactionManager(ColorManager $factionManager): void
+	{
+		$this->factionManager = $factionManager;
 	}
 	
 	public function init()
 	{
-		$this->container->get('ares.commander_manager')->scheduleMovements();
-		$this->container->get('athena.building_queue_manager')->scheduleActions();
-		$this->container->get('athena.commercial_shipping_manager')->scheduleShippings();
-		$this->container->get('athena.recycling_mission_manager')->scheduleMissions();
-		$this->container->get('athena.ship_queue_manager')->scheduleActions();
-		$this->container->get('promethee.technology_queue_manager')->scheduleQueues();
-		$factionManager = $this->container->get('demeter.color_manager');
-		$factionManager->scheduleSenateUpdate();
-		$factionManager->scheduleCampaigns();
-		$factionManager->scheduleElections();
-		$factionManager->scheduleBallot();
+		$this->commanderManager->scheduleMovements();
+		$this->buildingQueueManager->scheduleActions();
+		$this->commercialShippingManager->scheduleShippings();
+		$this->recyclingMissionManager->scheduleMissions();
+		$this->shipQueueManager->scheduleActions();
+		$this->technologyQueueManager->scheduleQueues();
+		$this->factionManager->scheduleSenateUpdate();
+		$this->factionManager->scheduleCampaigns();
+		$this->factionManager->scheduleElections();
+		$this->factionManager->scheduleBallot();
 		$this->execute();
 	}
 	
@@ -54,14 +98,14 @@ class RealTimeActionScheduler
 	 * 
 	 * @param string $manager
 	 * @param string $method
-	 * @param array $object
+	 * @param object $object
 	 * @param string $date
 	 * @param array $context
 	 */
-	public function schedule($manager, $method, $object, $date, $context = null)
+	public function schedule($manager, $method, $object, $date, $context = null): void
 	{
 		if (P_TYPE === 'worker') {
-			return $this->processGateway->writeToMaster([
+			$this->processGateway->writeToMaster([
 				'command' => 'schedule',
 				'data' => [
 					'manager' => $manager,
@@ -72,6 +116,8 @@ class RealTimeActionScheduler
 					'context' => $context 
 				]
 			]);
+
+			return;
 		}
 		$this->queue[$date][get_class($object) . '-' . $object->id] = $this->taskManager->createRealTimeTask(
 			$manager,
@@ -136,10 +182,10 @@ class RealTimeActionScheduler
 	 * @param object $object
 	 * @param string $date
 	 */
-	public function cancel($object, $date)
+	public function cancel($object, $date): void
 	{
 		if (P_TYPE === 'worker') {
-			return $this->processGateway->writeToMaster([
+			$this->processGateway->writeToMaster([
 				'command' => 'cancel',
 				'data' => [
 					'object_class' => get_class($object),
@@ -147,6 +193,8 @@ class RealTimeActionScheduler
 					'date' => $date
 				]
 			]);
+
+			return;
 		}
 		unset($this->queue[$date][get_class($object) . '-' . $object->id]);
 		
@@ -155,12 +203,7 @@ class RealTimeActionScheduler
 		}
 	}
     
-    /**
-     * @param string $class
-     * @param int $id
-     * @param string $date
-     */
-    public function cancelFromProcess($class, $id, $date)
+    public function cancelFromProcess(string $class, int $id, string $date): void
     {
 		unset($this->queue[$date][$class . '-' . $id]);
 		
@@ -168,11 +211,8 @@ class RealTimeActionScheduler
 			unset($this->queue[$date]);
 		}
     }
-	
-	/**
-	 * @return array
-	 */
-	public function getQueue()
+
+	public function getQueue(): array
 	{
 		return $this->queue;
 	}

@@ -2,78 +2,101 @@
 
 namespace Asylamba\Classes\Worker;
 
-use Asylamba\Classes\Configuration\Configuration;
+use Asylamba\Classes\Daemon\Server;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Entity\EntityManager;
+use Asylamba\Classes\Library\Module;
+use Asylamba\Classes\Process\ProcessManager;
+use Asylamba\Classes\Scheduler\CyclicActionScheduler;
+use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
+use Asylamba\Modules\Ares\AresModule;
+use Asylamba\Modules\Artemis\ArtemisModule;
+use Asylamba\Modules\Athena\AthenaModule;
+use Asylamba\Modules\Atlas\AtlasModule;
+use Asylamba\Modules\Demeter\DemeterModule;
+use Asylamba\Modules\Gaia\GaiaModule;
+use Asylamba\Modules\Gaia\Manager\SectorManager;
+use Asylamba\Modules\Hephaistos\HephaistosModule;
+use Asylamba\Modules\Hermes\HermesModule;
+use Asylamba\Modules\Promethee\PrometheeModule;
+use Asylamba\Modules\Zeus\ZeusModule;
 use Symfony\Component\Config\FileLocator;
-
-use Asylamba\Classes\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 class Application implements ApplicationInterface {
-    /** @var Container **/
-    protected $container;
-    /** @var array **/
-    protected $modules;
+    protected ContainerBuilder $container;
+
+    protected array $modules;
+
+	public function __construct(private string $projectDir)
+	{
+	}
     
     public function boot()
     {
 		define('PROCESS_NAME', 'application');
-		$this->container = new Container();
-		$this->container->set('app.container', $this->container);
-		$this->configure();
+		$containerBuilder = new ContainerBuilder();
+		$containerBuilder->setParameter('root_path', $this->projectDir);
+		$containerBuilder->set('container', $containerBuilder);
+		$this->loadEnvironment($containerBuilder);
+		$loader = new YamlFileLoader($containerBuilder, new FileLocator($this->projectDir . '/config/'));
+		$loader->load('services.yml');
+
+		$this->container = $containerBuilder;
 		$this->registerModules();
+		$containerBuilder->registerForAutoconfiguration(Manager::class)->addTag('app.stateful_manager');
+		$containerBuilder->compile(true);
 		$this->init();
     }
-	
-	public function configure()
+
+	public function loadEnvironment(ContainerBuilder $container): void
 	{
-		$rootPath = dirname($_SERVER['SCRIPT_NAME']);
-		$configurationFiles = [
-			$rootPath . '/config/parameters.yml',
-			$rootPath . '/config/services.yml'
-		];
-		$this->container->setParameter('root_path', $rootPath);
-		$configuration = new Configuration(new FileLocator($configurationFiles));
-		$configuration->loadEnvironment($this->container);
-		$configuration->buildContainer($this->container, $configurationFiles);
-		$configuration->defineOldConstants($this->container);
+		foreach(explode(',', getenv('SYMFONY_DOTENV_VARS')) as $key) {
+			$container->setParameter(strtolower($key), getenv($key));
+		}
 	}
-	
+
 	public function registerModules()
 	{
-		$this->modules = [
-			'ares' => new \Asylamba\Modules\Ares\AresModule($this),
-			'artemis' => new \Asylamba\Modules\Artemis\ArtemisModule($this),
-			'athena' => new \Asylamba\Modules\Athena\AthenaModule($this),
-			'atlas' => new \Asylamba\Modules\Atlas\AtlasModule($this),
-			'demeter' => new \Asylamba\Modules\Demeter\DemeterModule($this),
-			'gaia' => new \Asylamba\Modules\Gaia\GaiaModule($this),
-			'hephaistos' => new \Asylamba\Modules\Hephaistos\HephaistosModule($this),
-			'hermes' => new \Asylamba\Modules\Hermes\HermesModule($this),
-			'promethee' => new \Asylamba\Modules\Promethee\PrometheeModule($this),
-			'zeus' => new \Asylamba\Modules\Zeus\ZeusModule($this)
+		foreach ($this->getRegisteredModules() as $moduleClass) {
+			/** @var Module $module */
+			$module = new $moduleClass();
+			$module->configure($this->container, $this->projectDir);
+
+			$this->modules[strtolower($module->getName())] = $module;
+		}
+	}
+
+	protected function getRegisteredModules(): array
+	{
+		return [
+			AresModule::class,
+			ArtemisModule::class,
+			AthenaModule::class,
+			AtlasModule::class,
+			DemeterModule::class,
+			GaiaModule::class,
+			HephaistosModule::class,
+			HermesModule::class,
+			PrometheeModule::class,
+			ZeusModule::class,
 		];
 	}
     
-    /**
-     * @return Container
-     */
-    public function getContainer()
+    public function getContainer(): Container
     {
         return $this->container;
     }
 	
-	/**
-	 * @return array
-	 */
-	public function getModules()
+	public function getModules(): array
 	{
 		return $this->modules;
 	}
 	
-	/**
-	 * @param string $name
-	 * @return \Asylamba\Classes\Library\Module
-	 */
-	public function getModule($name)
+	public function getModule(string $name): Module
 	{
 		return $this->modules[$name];
 	}
@@ -85,14 +108,14 @@ class Application implements ApplicationInterface {
 				throw new \ErrorException($errstr, $errno, 1, $errfile, $errline);
 			});
 		}
-		$this->container->get('database')->init($this->container->getParameter('root_path') . '/build/database/structure.sql');
-		$this->container->get('entity_manager')->init();
-        $this->container->get('process_manager')->launchProcesses();
-		$this->container->get('realtime_action_scheduler')->init();
-		$this->container->get('cyclic_action_scheduler')->init();
-        $this->container->get('gaia.sector_manager')->initOwnershipData();
+		$this->container->get(Database::class)->init($this->container->getParameter('root_path') . '/build/database/structure.sql');
+		$this->container->get(EntityManager::class)->init();
+        $this->container->get(ProcessManager::class)->launchProcesses();
+		$this->container->get(RealTimeActionScheduler::class)->init();
+		$this->container->get(CyclicActionScheduler::class)->init();
+        $this->container->get(SectorManager::class)->initOwnershipData();
         
-		$server = $this->container->get('server');
+		$server = $this->container->get(Server::class);
 		$server->createHttpServer();
 		$server->listen();
 	}

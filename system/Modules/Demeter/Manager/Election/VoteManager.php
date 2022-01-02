@@ -18,15 +18,10 @@ use Asylamba\Modules\Demeter\Model\Election\Vote;
 
 use Asylamba\Modules\Zeus\Model\Player;
 
-class VoteManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-
-	/**
-	 * @param EntityManager $entityManager
-	 */
-	public function __construct(EntityManager $entityManager) {
-		$this->entityManager = $entityManager;
+class VoteManager
+{
+	public function __construct(protected EntityManager $entityManager)
+	{
 	}
 	
 	/**

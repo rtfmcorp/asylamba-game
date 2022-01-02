@@ -9,37 +9,27 @@ use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
 use Asylamba\Modules\Athena\Manager\ShipQueueManager;
+use Symfony\Contracts\Service\Attribute\Required;
 
-class ShipHelper {
-	/** @var SessionWrapper **/
-	protected $sessionWrapper;
-	/** @var OrbitalBaseHelper **/
-	protected $orbitalBaseHelper;
-	/** @var TechnologyHelper **/
-	protected $technologyHelper;
-	/** @var ShipQueueManager **/
-	protected $shipQueueManager;
-	
-	/**
-	 * @param SessionWrapper $session
-	 * @param OrbitalBaseHelper $orbitalBaseHelper
-	 * @param TechnologyHelper $technologyHelper
-	 * @param ShipQueueManager $shipQueueManager
-	 */
+class ShipHelper
+{
+	protected OrbitalBaseHelper $orbitalBaseHelper;
+
 	public function __construct(
-		SessionWrapper $session,
-		OrbitalBaseHelper $orbitalBaseHelper,
-		TechnologyHelper $technologyHelper,
-		ShipQueueManager $shipQueueManager
-	)
-	{
-		$this->sessionWrapper = $session;
-		$this->orbitalBaseHelper = $orbitalBaseHelper;
-		$this->technologyHelper = $technologyHelper;
-		$this->shipQueueManager = $shipQueueManager;
+		protected SessionWrapper $sessionWrapper,
+		protected TechnologyHelper $technologyHelper,
+		protected ShipQueueManager $shipQueueManager
+	) {
 	}
 
-	public function haveRights($shipId, $type, $sup, $quantity = 1) {
+	#[Required]
+	public function setOrbitalBaseHelper(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper $orbitalBaseHelper): void
+	{
+		$this->orbitalBaseHelper = $orbitalBaseHelper;
+	}
+
+	public function haveRights($shipId, $type, $sup, $quantity = 1): bool
+	{
 		if (ShipResource::isAShip($shipId)) {
 			switch ($type) {
 				// assez de ressources pour construire ?
@@ -136,10 +126,10 @@ class ShipHelper {
 					}
 					break;
 				default :
-					throw new ErrorException('type invalide dans haveRights de ShipResource');
+					throw new \ErrorException('type invalide dans haveRights de ShipResource');
 			}
 		} else {
-			throw new ErrorException('shipId invalide (entre 0 et 14) dans haveRights de ShipResource');
+			throw new \ErrorException('shipId invalide (entre 0 et 14) dans haveRights de ShipResource');
 		}
 	}
 

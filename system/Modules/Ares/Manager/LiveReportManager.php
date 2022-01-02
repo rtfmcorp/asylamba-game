@@ -18,14 +18,8 @@ use Asylamba\Modules\Ares\Model\LiveReport;
 
 class LiveReportManager
 {
-	/** @var EntityManager **/
-	protected $entityManager;
-
-	/**
-	 * @param EntityManager $entityManager
-	 */
-	public function __construct(EntityManager $entityManager) {
-		$this->entityManager = $entityManager;
+	public function __construct(protected EntityManager $entityManager)
+	{
 	}
 	
 	/**

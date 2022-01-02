@@ -16,13 +16,12 @@ use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Demeter\Model\Forum\ForumTopic;
 
-class ForumTopicManager extends Manager {
+class ForumTopicManager extends Manager
+{
 	protected $managerType ='_ForumTopic';
 
-	/**
-	 * @param Database $database
-	 */
-	public function __construct(Database $database) {
+	public function __construct(Database $database)
+	{
 		parent::__construct($database);
 	}
 	

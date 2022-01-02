@@ -22,53 +22,18 @@ use Asylamba\Modules\Gaia\Manager\SystemManager;
 
 use Asylamba\Modules\Gaia\Model\Sector;
 
-class SectorManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-    /** @var RedisManager **/
-    protected $redisManager;
-    /** @var LoadBalancer **/
-    protected $loadBalancer;
-    /** @var TaskManager **/
-    protected $taskManager;
-    /** @var OrbitalBaseManager **/
-    protected $orbitalBaseManager;
-    /** @var PlayerManager **/
-    protected $playerManager;
-    /** @var SystemManager **/
-    protected $systemManager;
-    /** @var array **/
-    protected $scores = [];
-	
-	/**
-	 * @param EntityManager $entityManager
-     * @param RedisManager $redisManager
-     * @param LoadBalancer $loadBalancer
-     * @param TaskManager $taskManager
-     * @param OrbitalBaseManager $orbitalBaseManager
-     * @param PlayerManager $playerManager
-     * @param SystemManager $systemManager
-     * @param array $scores
-	 */
+class SectorManager
+{
 	public function __construct(
-        EntityManager $entityManager,
-        RedisManager $redisManager,
-        LoadBalancer $loadBalancer,
-        TaskManager $taskManager,
-        OrbitalBaseManager $orbitalBaseManager,
-        PlayerManager $playerManager,
-        SystemManager $systemManager,
-        $scores
-    )
-	{
-		$this->entityManager = $entityManager;
-        $this->redisManager = $redisManager;
-        $this->loadBalancer = $loadBalancer;
-        $this->taskManager = $taskManager;
-        $this->orbitalBaseManager = $orbitalBaseManager;
-        $this->playerManager = $playerManager;
-        $this->systemManager = $systemManager;
-        $this->scores = $scores;
+        protected EntityManager $entityManager,
+        protected RedisManager $redisManager,
+        protected LoadBalancer $loadBalancer,
+        protected TaskManager $taskManager,
+        protected OrbitalBaseManager $orbitalBaseManager,
+        protected PlayerManager $playerManager,
+        protected SystemManager $systemManager,
+        protected array $scores = [],
+    ) {
 	}
     
     public function initOwnershipData()

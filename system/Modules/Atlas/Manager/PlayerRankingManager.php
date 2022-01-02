@@ -16,13 +16,12 @@ use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Atlas\Model\PlayerRanking;
 
-class PlayerRankingManager extends Manager {
+class PlayerRankingManager extends Manager
+{
 	protected $managerType = '_PlayerRanking';
 
-	/**
-	 * @param Database $database
-	 */
-	public function __construct(Database $database) {
+	public function __construct(Database $database)
+	{
 		parent::__construct($database);
 	}
 	

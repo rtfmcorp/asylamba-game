@@ -9,18 +9,15 @@ use Asylamba\Classes\Worker\ASM;
 
 use Asylamba\Modules\Hermes\Model\Conversation;
 
-class ConversationManager extends Manager {
+class ConversationManager extends Manager
+{
 	protected $managerType ='_Conversation';
-	/** @var ConversationUserManager **/
-	protected $conversationUserManager;
-	
-	/**
-	 * @param Database $database
-	 * @param ConversationUserManager $conversationUserManager
-	 */
-	public function __construct(Database $database, ConversationUserManager $conversationUserManager) {
+
+	public function __construct(
+		Database $database,
+		protected ConversationUserManager $conversationUserManager,
+	) {
 		parent::__construct($database);
-		$this->conversationUserManager = $conversationUserManager;
 	}
 	
 	public function load($where = array(), $order = array(), $limit = array()) {

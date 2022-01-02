@@ -20,51 +20,21 @@ use Asylamba\Modules\Athena\Manager\BuildingQueueManager;
 use Asylamba\Modules\Promethee\Manager\TechnologyQueueManager;
 use Asylamba\Modules\Promethee\Manager\TechnologyManager;
 
-class TutorialHelper {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var PlayerManager **/
-	protected $playerManager;
-	/** @var OrbitalBaseManager **/
-	protected $orbitalBaseManager;
-	/** @var BuildingQueueManager **/
-	protected $buildingQueueManager;
-	/** @var TechnologyQueueManager **/
-	protected $technologyQueueManager;
-	/** @var TechnologyManager **/
-	protected $technologyManager;
-	/** @var SessionWrapper **/
-	protected $sessionWrapper;
-	
-	/**
-	 * @param EntityManager $entityManager
-	 * @param PlayerManager $playerManager
-	 * @param OrbitalBaseManager $orbitalBaseManager
-	 * @param BuildingQueueManager $buildingQueueManager
-	 * @param TechnologyQueueManager $technologyQueueManager
-	 * @param TechnologyManager $technologyManager
-	 * @param SessionWrapper $session
-	 */
+class TutorialHelper
+{
 	public function __construct(
-		EntityManager $entityManager,
-		PlayerManager $playerManager,
-		OrbitalBaseManager $orbitalBaseManager,
-		BuildingQueueManager $buildingQueueManager,
-		TechnologyQueueManager $technologyQueueManager,
-		TechnologyManager $technologyManager,
-		SessionWrapper $session
-	)
-	{
-		$this->entityManager = $entityManager;
-		$this->playerManager = $playerManager;
-		$this->orbitalBaseManager = $orbitalBaseManager;
-		$this->buildingQueueManager = $buildingQueueManager;
-		$this->technologyQueueManager = $technologyQueueManager;
-		$this->technologyManager = $technologyManager;
-		$this->sessionWrapper = $session;
+		protected EntityManager $entityManager,
+		protected PlayerManager $playerManager,
+		protected OrbitalBaseManager $orbitalBaseManager,
+		protected BuildingQueueManager $buildingQueueManager,
+		protected TechnologyQueueManager $technologyQueueManager,
+		protected TechnologyManager $technologyManager,
+		protected SessionWrapper $sessionWrapper
+	) {
 	}
 	
-	public function checkTutorial() {
+	public function checkTutorial(): void
+	{
 		# PAS UTILISEE POUR L'INSTANT (le sera quand il y aura une étape passive dans le tutoriel)
 		$player = $this->sessionWrapper->get('playerId');
 		$stepTutorial = $this->sessionWrapper->get('playerInfo')->get('stepTutorial');

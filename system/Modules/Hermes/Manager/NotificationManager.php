@@ -14,16 +14,10 @@ namespace Asylamba\Modules\Hermes\Manager;
 use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Modules\Hermes\Model\Notification;
 
-class NotificationManager {
-    /** @var EntityManager **/
-    protected $entityManager;
-    
-    /**
-     * @param EntityManager $entityManager
-     */
-	public function __construct(EntityManager $entityManager)
+class NotificationManager
+{
+	public function __construct(protected EntityManager $entityManager)
     {
-        $this->entityManager = $entityManager;
 	}
 	
 	public function get($id)

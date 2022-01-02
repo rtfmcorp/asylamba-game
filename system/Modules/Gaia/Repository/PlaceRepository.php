@@ -82,12 +82,8 @@ class PlaceRepository extends AbstractRepository
 		}
 		return $data;
 	}
-	
-	/**
-	 * @param array $systemId
-	 * @return array
-	 */
-	public function getSystemPlaces($systemId)
+
+	public function getSystemPlaces(int $systemId): array
 	{
 		$statement = $this->select('WHERE p.rSystem = :system_id ' . $this->getOrderByClause(['position' => 'ASC']), ['system_id' => $systemId]);
 		
@@ -232,11 +228,7 @@ class PlaceRepository extends AbstractRepository
 		]);
 	}
 	
-	/**
-	 * @param int $placeId
-	 * @return bool
-	 */
-	public function turnAsEmptyPlace($placeId)
+	public function turnAsEmptyPlace(int $placeId): bool
 	{
 		$statement = $this->connection->prepare(
 			'UPDATE place SET typeOfPlace = :place_type WHERE id = :id'
@@ -247,12 +239,7 @@ class PlaceRepository extends AbstractRepository
 		]);
 	}
 	
-	/**
-	 * @param int $placeId
-	 * @param int $playerId
-	 * @return bool
-	 */
-	public function turnAsSpawnPlace($placeId, $playerId)
+	public function turnAsSpawnPlace(int $placeId, int $playerId): bool
 	{
 		$statement = $this->connection->prepare(
 			'UPDATE place SET rPlayer = :player_id, coefResources = :resources_coeff,
@@ -267,18 +254,21 @@ class PlaceRepository extends AbstractRepository
 		]);
 	}
 	
-	public function npcQuickfix()
+	public function npcQuickfix(): void
 	{
 		$this->connection->exec('UPDATE place SET danger = maxDanger WHERE danger > maxDanger');
 	}
-	
-	public function remove($place)
+
+	/**
+	 * @param Place $place
+	 */
+	public function remove($place): void
 	{
 		$statement = $this->connection->prepare('DELETE FROM place FROM id = :id');
 		$statement->execute(['id' => $place->getId()]);
 	}
 	
-	public function format($data)
+	public function format(array $data): Place
 	{
 		$place = new Place();
 
@@ -322,7 +312,7 @@ class PlaceRepository extends AbstractRepository
 				$place->setAntiSpyInvest((int) $data['antiSpyAverage']);
 				$place->setPoints((int) $data['points']);
 			} else {
-				throw new ErrorException('Problèmes d\'appartenance du lieu !');
+				throw new \ErrorException('Problèmes d\'appartenance du lieu !');
 			}
 		} else {
 			$place->setTypeOfBase(Place::TYP_EMPTY);

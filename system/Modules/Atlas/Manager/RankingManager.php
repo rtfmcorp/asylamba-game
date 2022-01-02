@@ -5,6 +5,7 @@ namespace Asylamba\Modules\Atlas\Manager;
 use Asylamba\Classes\Entity\EntityManager;
 
 use Asylamba\Modules\Demeter\Manager\ColorManager;
+use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Hermes\Manager\ConversationManager;
 use Asylamba\Modules\Hermes\Manager\ConversationMessageManager;
 
@@ -29,55 +30,21 @@ use Asylamba\Classes\Library\Utils;
 
 class RankingManager
 {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var PlayerRankingManager **/
-	protected $playerRankingManager;
-	/** @var FactionRankingManager **/
-	protected $factionRankingManager;
-	/** @var ColorManager **/
-	protected $colorManager;
-	/** @var ConversationManager **/
-	protected $conversationManager;
-	/** @var ConversationMessageManager **/
-	protected $conversationMessageManager;
-	/** @var PlayerManager **/
-	protected $playerManager;
-	/** @var OrbitalBaseHelper **/
-	protected $orbitalBaseHelper;
-	
-	/**
-	 * @param EntityManager $entityManager
-	 * @param PlayerRankingManager $playerRankingManager
-	 * @param FactionRankingManager $factionRankingManager
-	 * @param ColorManager $colorManager
-	 * @param ConversationManager $conversationManager
-	 * @param ConversationMessageManager $conversationMessageManager
-	 * @param PlayerManager $playerManager
-	 * @param OrbitalBaseHelper $orbitalBaseHelper
-	 */
 	public function __construct(
-		EntityManager $entityManager,
-		PlayerRankingManager $playerRankingManager,
-		FactionRankingManager $factionRankingManager,
-		ColorManager $colorManager,
-		ConversationManager $conversationManager,
-		ConversationMessageManager $conversationMessageManager,
-		PlayerManager $playerManager,
-		OrbitalBaseHelper $orbitalBaseHelper
-	)
-	{
-		$this->entityManager = $entityManager;
-		$this->playerRankingManager = $playerRankingManager;
-		$this->factionRankingManager = $factionRankingManager;
-		$this->colorManager = $colorManager;
-		$this->conversationManager = $conversationManager;
-		$this->conversationMessageManager = $conversationMessageManager;
-		$this->playerManager = $playerManager;
-		$this->orbitalBaseHelper = $orbitalBaseHelper;
+		protected EntityManager $entityManager,
+		protected PlayerRankingManager $playerRankingManager,
+		protected FactionRankingManager $factionRankingManager,
+		protected ColorManager $colorManager,
+		protected ConversationManager $conversationManager,
+		protected ConversationMessageManager $conversationMessageManager,
+		protected PlayerManager $playerManager,
+		protected OrbitalBaseHelper $orbitalBaseHelper,
+		protected string $pointsToWin,
+		protected int $jeanMiId
+	) {
 	}
 	
-	public function processPlayersRanking()
+	public function processPlayersRanking(): void
 	{
 		if ($this->entityManager->getRepository(Ranking::class)->hasBeenAlreadyProcessed(true, false) === true) {
 			return;
@@ -160,12 +127,12 @@ class RankingManager
 		# envoyer un message de Jean-Mi
 		$winnerName = ColorResource::getInfo($faction->id, 'officialName');
 		$content = 'Salut,<br /><br />La victoire vient d\'être remportée par : <br /><strong>' . $winnerName . '</strong><br />';
-		$content .= 'Cette faction a atteint les ' . POINTS_TO_WIN . ' points, la partie est donc terminée.<br /><br />Bravo et un grand merci à tous les participants !';
+		$content .= 'Cette faction a atteint les ' . $this->pointsToWin . ' points, la partie est donc terminée.<br /><br />Bravo et un grand merci à tous les participants !';
 
 		$S_CVM1 = $this->conversationManager->getCurrentSession();
 		$this->conversationManager->newSession();
 		$this->conversationManager->load(
-			['cu.rPlayer' => ID_JEANMI]
+			['cu.rPlayer' => $this->jeanMiId]
 		);
 
 		if ($this->conversationManager->size() == 1) {
@@ -184,7 +151,7 @@ class RankingManager
 			$message = new ConversationMessage();
 
 			$message->rConversation = $conv->id;
-			$message->rPlayer = ID_JEANMI;
+			$message->rPlayer = $this->jeanMiId;
 			$message->type = ConversationMessage::TY_STD;
 			$message->content = $content;
 			$message->dCreation = Utils::now();

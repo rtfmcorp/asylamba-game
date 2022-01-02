@@ -18,13 +18,12 @@ use Asylamba\Classes\Database\Database;
 
 use Asylamba\Modules\Artemis\Model\SpyReport;
 
-class SpyReportManager extends Manager {
+class SpyReportManager extends Manager
+{
 	protected $managerType = '_SpyReport';
 
-	/**
-	 * @param Database $database
-	 */
-	public function __construct(Database $database) {
+	public function __construct(Database $database)
+	{
 		parent::__construct($database);
 	}
 	

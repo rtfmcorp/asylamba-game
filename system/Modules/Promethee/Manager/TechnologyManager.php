@@ -10,31 +10,16 @@ use Asylamba\Modules\Promethee\Helper\TechnologyHelper;
 
 use Asylamba\Modules\Zeus\Model\Player;
 
-class TechnologyManager {
-	/** @var Database **/
-	protected $database;
-	/** @var PlayerBonusManager **/
-	protected $playerBonusManager;
-	/** @var TechnologyHelper **/
-	protected $technologyHelper;
-	
-	/**
-	 * @param Database $database
-	 * @param PlayerBonusManager $playerBonusManager
-	 * @param TechnologyHelper $technologyHelper
-	 */
-	public function __construct(Database $database, PlayerBonusManager $playerBonusManager, TechnologyHelper $technologyHelper)
-	{
-		$this->database = $database;
-		$this->playerBonusManager = $playerBonusManager;
-		$this->technologyHelper = $technologyHelper;
+class TechnologyManager
+{
+	public function __construct(
+		protected Database $database,
+		protected PlayerBonusManager $playerBonusManager,
+		protected TechnologyHelper $technologyHelper
+	) {
 	}
-	
-	/**
-	 * @param int $playerId
-	 * @return Technology
-	 */
-	public function getPlayerTechnology($playerId)
+
+	public function getPlayerTechnology(int $playerId): ?Technology
 	{
 		$technology = new Technology();
 		$technology->rPlayer = $playerId;
@@ -50,19 +35,15 @@ class TechnologyManager {
 	}
 	
 	/**
-	 * @param Technology $technology
-	 * @param int $id
-	 * @param string $value
-	 * @param Player $player
-	 * @param boolean $load
-	 * @return boolean
+	 * ajouter une entrée bdd ou modifier ligne !!!
 	 */
-	public function affectTechnology(Technology $technology, $id, $value, Player $player, $load = FALSE) { // ajouter une entrée bdd ou modifier ligne !!!
-		if($technology->setTechnology($id, $value) === false) {
+	public function affectTechnology(Technology $technology, int $id, string $value, Player $player, bool $load = false): bool
+	{
+		if ($technology->setTechnology($id, $value) === false) {
 			return false;
 		}
-		if ($load == TRUE) {
-			return TRUE;
+		if ($load === true) {
+			return true;
 		} else {
 			if ($value < 1) {
 				$this->deleteByRPlayer($technology->rPlayer, $id);
@@ -78,11 +59,12 @@ class TechnologyManager {
 					$this->playerBonusManager->updateTechnoBonus($bonus, $id, $value);
 				}
 			}
-			return TRUE;
+			return true;
 		}
 	}
 
-	public function addTech($playerId, $technology, $level) {
+	public function addTech(int $playerId, int $technology, int $level): bool
+	{
 		$statement = $this->database->prepare('INSERT INTO technology(rPlayer, technology, level) VALUES(:player_id, :technology, :level)');
 		return $statement->execute([
 			'player_id' => $playerId,
@@ -91,7 +73,8 @@ class TechnologyManager {
 		]);
 	}
 
-	public function updateTech($playerId, $technology, $level) {
+	public function updateTech(int $playerId, int $technology, int $level): bool
+	{
 		$statement = $this->database->prepare('UPDATE technology SET level = :level WHERE rPlayer = :player_id AND technology = :technology');
 		return $statement->execute([
 			'level' => $level,
@@ -100,20 +83,13 @@ class TechnologyManager {
 		]);
 	}
 
-	/**
-	 * @param Technology $technology
-	 * @param type $technologyId
-	 */
-	public function delete(Technology $technology, $technologyId) {
+	public function delete(Technology $technology, int $technologyId): void
+	{
 		$technology->setTechnology($technologyId, 0);
 	}
 
-	/**
-	 * @param int $playerId
-	 * @param int $technology
-	 * @return boolean
-	 */
-	public function deleteByRPlayer($playerId, $technology) {
+	public function deleteByRPlayer(int $playerId, int $technology): bool
+	{
 		$statement = $this->database->prepare('DELETE FROM technology WHERE rPlayer = :player_id and technology = :technology');
 		return $statement->execute([
 			'player_id' => $playerId,

@@ -2,10 +2,12 @@
 
 namespace Asylamba\Classes\Daemon;
 
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Entity\EntityManager;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 use Asylamba\Classes\Router\Router;
 use Asylamba\Classes\Library\Http\RequestFactory;
 use Asylamba\Classes\Library\Http\ResponseFactory;
-use Asylamba\Classes\Daemon\ClientManager;
 
 use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 use Asylamba\Classes\Scheduler\CyclicActionScheduler;
@@ -13,70 +15,59 @@ use Asylamba\Classes\Scheduler\CyclicActionScheduler;
 use Asylamba\Classes\Event\ExceptionEvent;
 use Asylamba\Classes\Event\ErrorEvent;
 
-use Asylamba\Classes\DependencyInjection\Container;
-
 use Asylamba\Classes\Exception\ErrorException;
 
 use Asylamba\Classes\Process\ProcessManager;
 use Asylamba\Classes\Task\TaskManager;
+use Asylamba\Classes\Worker\EventDispatcher;
+use Asylamba\Classes\Worker\Manager;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class Server
 {
-	/** @var Container **/
-	protected $container;
-    /** @var Router **/
-    protected $router;
-    /** @var RequestFactory **/
-    protected $requestFactory;
-    /** @var ResponseFactory **/
-    protected $responseFactory;
-    /** @var ClientManager **/
-    protected $clientManager;
-	/** @var RealTimeActionScheduler **/
-	protected $realTimeActionScheduler;
-	/** @var CyclicActionScheduler **/
-	protected $cyclicActionScheduler;
-	/** @var ProcessManager **/
-	protected $processManager;
-	/** @var TaskManager **/
-	protected $taskManager;
-    /** @var int **/
-    protected $serverCycleTimeout;
-    /** @var int **/
-    protected $port;
-    /** @var boolean **/
-    protected $shutdown = false;
-    /** @var array **/
-    protected $connections;
-    /** @var array **/
-    protected $inputs = [];
-    /** @var array **/
-    protected $outputs = [];
-    /** @var int **/
-    protected $nbUncollectedCycles = 0;
-    /** @var int **/
-    protected $collectionCyclesNumber;
+    protected bool $shutdown = false;
+    protected array $connections;
+    protected array $inputs = [];
+    protected array $outputs = [];
+    protected int $nbUncollectedCycles = 0;
+	protected ProcessManager $processManager;
 
-    /**
-     * @param Container $container
-     * @param int $serverCycleTimeout
-     * @param int $port
-     */
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-        $this->router = $container->get('router');
-        $this->requestFactory = $container->get('request_factory');
-        $this->responseFactory = $container->get('response_factory');
-        $this->clientManager = $container->get('client_manager');
-		$this->realTimeActionScheduler = $container->get('realtime_action_scheduler');
-		$this->cyclicActionScheduler = $container->get('cyclic_action_scheduler');
-        $this->serverCycleTimeout = $container->getParameter('server_cycle_timeout');
-        $this->port = $container->getParameter('server_port');
-        $this->collectionCyclesNumber = $container->getParameter('server_collection_cycles_number');
+    public function __construct(
+		protected Container $container,
+		protected Router $router,
+		protected RequestFactory $requestFactory,
+		protected ResponseFactory $responseFactory,
+		protected ClientManager $clientManager,
+		protected RealTimeActionScheduler $realTimeActionScheduler,
+		protected CyclicActionScheduler $cyclicActionScheduler,
+		protected TaskManager $taskManager,
+		protected EventDispatcher $eventDispatcher,
+		protected iterable $statefulManagers,
+		protected int $serverCycleTimeout,
+		protected int $port,
+		protected int $collectionCyclesNumber
+	) {
     }
+
+	#[Required]
+	public function setProcessManager(ProcessManager $processManager): void
+	{
+		$this->processManager = $processManager;
+	}
+
+	public function cleanApplication()
+	{
+		$this->container->get(EntityManager::class)->clear();
+
+		/** @var Manager $manager */
+		foreach($this->statefulManagers as $manager) {
+			$manager->save();
+			$manager->clean();
+		}
+	}
 	
-    public function shutdown()
+    public function shutdown(): void
     {
         $this->shutdown = true;
         foreach($this->inputs as $input) {
@@ -87,7 +78,7 @@ class Server
         }
     }
 
-    public function createHttpServer()
+    public function createHttpServer(): void
     {
         $stream = stream_socket_server("tcp://0.0.0.0:{$this->port}", $errno, $errstr);
         if (!$stream) {
@@ -98,21 +89,19 @@ class Server
 
     public function listen()
     {
-		$this->processManager = $this->container->get('process_manager');
-		$this->taskManager = $this->container->get('task_manager');
         $inputs = $this->inputs;
         $outputs = $this->outputs;
         $errors = null;
-        gc_disable();
-        while ($this->shutdown === false && ($nbUpgradedStreams = stream_select($inputs, $outputs, $errors, $this->serverCycleTimeout)) !== false) {
+        \gc_disable();
+        while ($this->shutdown === false && ($nbUpgradedStreams = \stream_select($inputs, $outputs, $errors, $this->serverCycleTimeout)) !== false) {
             if ($nbUpgradedStreams === 0) {
                 $this->prepareStreamsState($inputs, $outputs, $errors);
                 continue;
             }
             foreach ($inputs as $stream) {
-				$name = array_search($stream, $this->inputs);
+				$name = \array_search($stream, $this->inputs);
 				if ($name === 'http_server') {
-					$this->treatHttpInput(stream_socket_accept($stream));
+					$this->treatHttpInput(\stream_socket_accept($stream));
 				} else {
 					$this->treatProcessInput($name);
 				}
@@ -125,9 +114,9 @@ class Server
 	{
 		$client = $request = $response = null;
 		try {
-			$data = fread($input, 8192);
+			$data = \fread($input, 8192);
 			if (empty($data)) {
-				fclose($input);
+				\fclose($input);
 				return;
 			}
 			$request = $this->requestFactory->createRequestFromInput($data);
@@ -139,11 +128,11 @@ class Server
 			$this->container->set('app.response', $response);
 			$this->responseFactory->processResponse($request, $response, $client);
 		} catch (\Exception $ex) {
-			$this->container->get('event_dispatcher')->dispatch($event = new ExceptionEvent($request, $ex));
+			$this->eventDispatcher->dispatch($event = new ExceptionEvent($request, $ex));
 			$response = $event->getResponse();
 			$this->responseFactory->processResponse($request, $response, $client);
 		} catch (\Error $err) {
-			$this->container->get('event_dispatcher')->dispatch($event = new ErrorEvent($request, $err));
+			$this->eventDispatcher->dispatch($event = new ErrorEvent($request, $err));
 			$response = $event->getResponse();
 			$this->responseFactory->processResponse($request, $response, $client);
 		} finally {
@@ -153,14 +142,14 @@ class Server
 				fclose($input);
 			}
 			$this->nbUncollectedCycles++;
-			$this->container->get('session_wrapper')->clearWrapper();
+			$this->container->get(SessionWrapper::class)->clearWrapper();
 		}
 	}
 	
-	protected function treatProcessInput($name)
+	protected function treatProcessInput($name): void
 	{
 		$process = $this->processManager->getByName($name);
-		$content = fgets($process->getInput(), 1024);
+		$content = \fgets($process->getInput(), 1024);
 		if ($content === false) {
 			$this->processManager->removeProcess($name, 'The process failed');
 			return;
@@ -169,21 +158,26 @@ class Server
 			return;
 		}
 		$data = json_decode($content, true);
+		dump($data);
 		if (isset($data['technical'])) {
 			$this->processManager->updateTechnicalData($process, $data['technical']);
 		}
 		if (isset($data['command'])) {
-			return $this->treatCommand($data);
+			$this->treatCommand($data);
+
+			return;
 		}
 		if (isset($data['task'])) {
-			return $this->taskManager->validateTask($process, $data);
+			$this->taskManager->validateTask($process, $data);
+
+			return;
 		}
 	}
 	
 	/**
 	 * @param array $data
 	 */
-	public function treatCommand($data)
+	public function treatCommand($data): void
 	{
 		switch ($data['command']) {
 			case 'schedule':
@@ -205,14 +199,9 @@ class Server
 		}
 	}
     
-	/**
-	 * @param array $inputs
-	 * @param array $outputs
-	 * @param array $errors
-	 */
-    protected function prepareStreamsState(&$inputs, &$outputs, &$errors)
+    protected function prepareStreamsState(array &$inputs, array &$outputs, ?array &$errors)
     {
-		$this->container->cleanApplication();
+		$this->cleanApplication();
 		
         $inputs = $this->inputs;
         $outputs = $this->outputs;
@@ -222,51 +211,43 @@ class Server
 		$this->cyclicActionScheduler->execute();
 		
         if ($this->nbUncollectedCycles > $this->collectionCyclesNumber) {
-			$this->container->get('database')->refresh();
+			$this->container->get(Database::class)->refresh();
 			$this->clientManager->clear();
-            gc_collect_cycles();
+            \gc_collect_cycles();
             $this->nbUncollectedCycles = 0;
         }
     }
-    
+
 	/**
-	 * @param string $name
 	 * @param resource $input
 	 */
-    public function addInput($name, $input)
+    public function addInput(string $name, $input): void
     {
         $this->inputs[$name] = $input;
     }
     
 	/**
-	 * @param string $name
 	 * @param resource $output
 	 */
-    public function addOutput($name, $output)
+    public function addOutput(string $name, $output): void
     {
         $this->outputs[$name] = $output;
     }
     
-	/**
-	 * @param string $name
-	 */
-    public function removeInput($name)
+    public function removeInput(string $name): void
     {
 		unset($this->inputs[$name]);
     }
     
-	/**
-	 * @param string $name
-	 */
-    public function removeOutput($name)
+    public function removeOutput($name): void
     {
 		unset($this->outputs[$name]);
     }
     
-    public static function debug($debug)
+    public static function debug($debug): void
     {
-        ob_start();
-        var_dump($debug);
-        file_put_contents('/srv/logs/php/test.log', PROCESS_NAME . ': ' . ob_get_clean() . "\n\n", FILE_APPEND);
+        \ob_start();
+        \var_dump($debug);
+        \file_put_contents('/srv/logs/php/test.log', PROCESS_NAME . ': ' . \ob_get_clean() . "\n\n", FILE_APPEND);
     }
 }

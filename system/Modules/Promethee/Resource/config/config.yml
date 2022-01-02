@@ -8,37 +8,22 @@ parameters:
     promethee.technology_queue.credit_refund: 0.5    
     
 services:
-    promethee.research_helper:
-        class: Asylamba\Modules\Promethee\Helper\ResearchHelper
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Asylamba\Modules\Promethee\Manager\:
+        resource: '%root_path%/system/Modules/Promethee/Manager/*'
+
+    Asylamba\Modules\Promethee\Helper\ResearchHelper:
         arguments:
-            - "%promethee.research.coeff"
-            - "%promethee.research.max_diff"
+            $researchCoeff: "%promethee.research.coeff%"
+            $researchMaxDiff: "%promethee.research.max_diff%"
+
+    Asylamba\Modules\Promethee\Helper\TechnologyHelper:
+        arguments:
+            $researchQuantity: "%promethee.research.quantity%"
     
-    promethee.research_manager:
-        class: Asylamba\Modules\Promethee\Manager\ResearchManager
+    Asylamba\Modules\Promethee\Manager\ResearchManager:
         arguments:
-            - "@database"
-            - "@zeus.player_manager"
-            - "@hermes.notification_manager"
-            - "@promethee.research_helper"
-            - "%promethee.research.quantity"
-            
-    promethee.technology_helper:
-        class: Asylamba\Modules\Promethee\Helper\TechnologyHelper
-        arguments:
-            - "@athena.orbital_base_helper"
-            - "@promethee.research_helper"
-            - "%promethee.research.quantity"
-            
-    promethee.technology_manager:
-        class: Asylamba\Modules\Promethee\Manager\TechnologyManager
-        arguments:
-            - "@database"
-            - "@zeus.player_bonus_manager"
-            - "@promethee.technology_helper"
-            
-    promethee.technology_queue_manager:
-        class: Asylamba\Modules\Promethee\Manager\TechnologyQueueManager
-        arguments:
-            - "@entity_manager"
-            - "@realtime_action_scheduler"
+            $researchQuantity: "%promethee.research.quantity%"

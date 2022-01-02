@@ -4,34 +4,43 @@ namespace Asylamba\Classes\Library;
 
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Modules\Gaia\Manager\PlaceManager;
+use Symfony\Contracts\Service\Attribute\Required;
 
-class Parser {
-	/** @var PlaceManager **/
-	protected $placeManager;
-	/** @var PlayerManager **/
-	protected $playerManager;
-	
-	public $parseIcon	= TRUE;
-	public $parseLink	= TRUE;
-	public $parseSmile	= TRUE;
+class Parser
+{
+	public bool $parseIcon	= TRUE;
+	public bool $parseLink	= TRUE;
+	public bool $parseSmile	= TRUE;
 
-	public $parsePlayer	= TRUE;
-	public $parsePlace	= TRUE;
+	public bool $parsePlayer = TRUE;
+	public bool $parsePlace	= TRUE;
 
-	public $parseTag 	= TRUE;
-	public $parseBigTag = FALSE;
+	public bool $parseTag 	= TRUE;
+	public bool $parseBigTag = FALSE;
 
-	/**
-	 * @param PlaceManager $placeManager
-	 * @param PlayerManager $playerManager
-	 */
-	public function __construct(PlaceManager $placeManager, PlayerManager $playerManager)
+	protected PlaceManager $placeManager;
+	protected PlayerManager $playerManager;
+
+	public function __construct(
+		protected string $rootPath,
+		protected string $mediaPath,
+	) {
+	}
+
+	#[Required]
+	public function setPlayerManager(PlayerManager $playerManager): void
 	{
 		$this->playerManager = $playerManager;
+	}
+
+	#[Required]
+	public function setPlaceManager(PlaceManager $placeManager): void
+	{
 		$this->placeManager = $placeManager;
 	}
 	
-	public function parse($string) {
+	public function parse(string $string): string
+	{
 		$string = $this->protect($string);
 
 		if ($this->parseLink)	{ $string = $this->parseLink($string); }
@@ -45,7 +54,8 @@ class Parser {
 		return $string;
 	}
 
-	public static function protect($string) {
+	public static function protect(string $string): string
+	{
 		$string = trim($string);
 		$string = htmlspecialchars($string);
 		$string = nl2br($string);
@@ -53,7 +63,8 @@ class Parser {
 		return $string;
 	}
 
-	public function getToolbar() {
+	public function getToolbar(): string
+	{
 		$tl  = '<span class="toolbar">';
 			if ($this->parseTag) {
 				$tl .= '<button data-tag="bl">Gras</button>';
@@ -73,23 +84,25 @@ class Parser {
 		return $tl;
 	}
 
-	protected function parseIcon($string) {
-		$string = preg_replace('#\[pa\]#', '<img src="' . MEDIA . 'resources/pa.png" alt="pa" class="hb lt icon-color" title="point d\'action" />', $string);
-		$string = preg_replace('#\[pev\]#', '<img src="' . MEDIA . 'resources/pev.png" alt="pev" class="hb lt icon-color" title="point équivalent vaisseaux" />', $string);
-		$string = preg_replace('#\[credit\]#', '<img src="' . MEDIA . 'resources/credit.png" alt="credit" class="hb lt icon-color" title="crédit" />', $string);
-		$string = preg_replace('#\[ressource\]#', '<img src="' . MEDIA . 'resources/resource.png" alt="resource" class="hb lt icon-color" title="ressource" />', $string);
-		$string = preg_replace('#\[releve\]#', '<img src="' . MEDIA . 'resources/time.png" alt="time" class="hb lt icon-color" title="relève" />', $string);
+	protected function parseIcon(string $string): string
+	{
+		$string = \preg_replace('#\[pa\]#', '<img src="' . $this->mediaPath . 'resources/pa.png" alt="pa" class="hb lt icon-color" title="point d\'action" />', $string);
+		$string = \preg_replace('#\[pev\]#', '<img src="' . $this->mediaPath . 'resources/pev.png" alt="pev" class="hb lt icon-color" title="point équivalent vaisseaux" />', $string);
+		$string = \preg_replace('#\[credit\]#', '<img src="' . $this->mediaPath . 'resources/credit.png" alt="credit" class="hb lt icon-color" title="crédit" />', $string);
+		$string = \preg_replace('#\[ressource\]#', '<img src="' . $this->mediaPath . 'resources/resource.png" alt="resource" class="hb lt icon-color" title="ressource" />', $string);
+		$string = \preg_replace('#\[releve\]#', '<img src="' . $this->mediaPath . 'resources/time.png" alt="time" class="hb lt icon-color" title="relève" />', $string);
 
-		$string = preg_replace('#\[attaque\]#', '<img src="' . MEDIA . 'resources/attack.png" alt="attack" class="hb lt icon-color" title="point d\'attaque" />', $string);
-		$string = preg_replace('#\[vie\]#', '<img src="' . MEDIA . 'resources/life.png" alt="life" class="hb lt icon-color" title="point de vie" />', $string);
-		$string = preg_replace('#\[defense\]#', '<img src="' . MEDIA . 'resources/defense.png" alt="defense" class="hb lt icon-color" title="point de défense" />', $string);
-		$string = preg_replace('#\[vitesse\]#', '<img src="' . MEDIA . 'resources/speed.png" alt="speed" class="hb lt icon-color" title="point de vitesse" />', $string);
+		$string = \preg_replace('#\[attaque\]#', '<img src="' . $this->mediaPath . 'resources/attack.png" alt="attack" class="hb lt icon-color" title="point d\'attaque" />', $string);
+		$string = \preg_replace('#\[vie\]#', '<img src="' . $this->mediaPath . 'resources/life.png" alt="life" class="hb lt icon-color" title="point de vie" />', $string);
+		$string = \preg_replace('#\[defense\]#', '<img src="' . $this->mediaPath . 'resources/defense.png" alt="defense" class="hb lt icon-color" title="point de défense" />', $string);
+		$string = \preg_replace('#\[vitesse\]#', '<img src="' . $this->mediaPath . 'resources/speed.png" alt="speed" class="hb lt icon-color" title="point de vitesse" />', $string);
 
 		return $string;
 	}
 
-	protected function parseLink($string) {
-		return preg_replace_callback(
+	protected function parseLink(string $string): string
+	{
+		return \preg_replace_callback(
 			"/(?i)\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))/",
 			function($m) {
 				$url = $m[0];
@@ -102,17 +115,19 @@ class Parser {
 		);
 	}
 
-	protected function parseSmile($string) {
+	protected function parseSmile(string $string): string
+	{
 		return $string;
 	}
 
-	protected function parsePlayer($string) {
+	protected function parsePlayer(string $string): string
+	{
 		return preg_replace_callback(
 			'#\[\@(.+)\]#isU',
 			function($m) {
 				return
 					(($player = $this->playerManager->getByName($m[1])) !== null)
-					? '<a href="' . APP_ROOT . 'embassy/player-' . $player->getId() . '" class="color' . $player->getRColor() . ' hb lt" title="voir le profil">' . $player->getName() . '</a>'
+					? '<a href="' . $this->rootPath . 'embassy/player-' . $player->getId() . '" class="color' . $player->getRColor() . ' hb lt" title="voir le profil">' . $player->getName() . '</a>'
 					: $m[0]
 				;
 			},
@@ -121,14 +136,14 @@ class Parser {
 	}
 
 	protected function parsePlace($string) {
-		return preg_replace_callback(
+		return \preg_replace_callback(
 			'#\[\#(.+)\]#isU',
 			function($m) {
 				if (($place = $this->placeManager->get($m[1]))) {
 					if ($place->getTypeOfBase() > 0) {
-						return '<a href="' . APP_ROOT . 'map/place-' . $place->getId() . '" class="color' . $place->getPlayerColor() . ' hb lt" title="voir la planète">' . $place->getBaseName() . '</a>';
+						return '<a href="' . $this->rootPath . 'map/place-' . $place->getId() . '" class="color' . $place->getPlayerColor() . ' hb lt" title="voir la planète">' . $place->getBaseName() . '</a>';
 					} else {
-						return '<a href="' . APP_ROOT . 'map/place-' . $place->getId() . '" class="hb lt" title="voir la planète">planète rebelle</a>';
+						return '<a href="' . $this->rootPath . 'map/place-' . $place->getId() . '" class="hb lt" title="voir la planète">planète rebelle</a>';
 					}
 				}
 				return $m[0];
@@ -137,14 +152,16 @@ class Parser {
 		);
 	}
 
-	protected function parseTag($string) {
-		$string = preg_replace('#\[b\](.+)\[/b\]#isU', '<strong>$1</strong>', $string);
-		$string = preg_replace('#\[i\](.+)\[/i\]#isU', '<em>$1</em>', $string);
+	protected function parseTag(string $string): string
+	{
+		$string = \preg_replace('#\[b\](.+)\[/b\]#isU', '<strong>$1</strong>', $string);
+		$string = \preg_replace('#\[i\](.+)\[/i\]#isU', '<em>$1</em>', $string);
 
 		return $string;
 	}
 
-	protected function parseBigTag($string) {
+	protected function parseBigTag(string $string): string
+	{
 		return $string;
 	}
 }

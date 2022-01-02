@@ -16,13 +16,12 @@ use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Atlas\Model\FactionRanking;
 
-class FactionRankingManager extends Manager {
+class FactionRankingManager extends Manager
+{
 	protected $managerType = '_FactionRanking';
 
-	/**
-	 * @param Database $database
-	 */
-	public function __construct(Database $database) {
+	public function __construct(Database $database)
+	{
 		parent::__construct($database);
 	}
 	

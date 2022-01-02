@@ -9,15 +9,8 @@ use Asylamba\Modules\Ares\Model\Squadron;
 
 class SquadronManager
 {
-	/** @var EntityManager **/
-	protected $entityManager;
-	
-	/**
-	 * @param EntityManager $entityManager
-	 */
-	public function __construct(EntityManager $entityManager)
+	public function __construct(protected EntityManager $entityManager)
 	{
-		$this->entityManager = $entityManager;
 	}
 	
 	/**

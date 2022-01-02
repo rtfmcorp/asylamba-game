@@ -12,58 +12,19 @@ parameters:
     zeus.player.inactive_time_limit: 600    # 25 days
 
 services:
-    zeus.player_manager:
-        class: Asylamba\Modules\Zeus\Manager\PlayerManager
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Asylamba\Modules\Zeus\Helper\:
+        resource: '%root_path%/system/Modules/Zeus/Helper/*'
+
+    Asylamba\Modules\Zeus\Manager\:
+        resource: '%root_path%/system/Modules/Zeus/Manager/*'
+
+    Asylamba\Modules\Zeus\Manager\PlayerManager:
         arguments:
-            - "@entity_manager"
-            - "@gaia.galaxy_color_manager"
-            - "@gaia.sector_manager"
-            - "@hermes.notification_manager"
-            - "@athena.orbital_base_manager"
-            - "@gaia.place_manager"
-            - "@ares.commander_manager"
-            - "@demeter.color_manager"
-            - "@promethee.research_manager"
-            - "@athena.transaction_manager"
-            - "@athena.commercial_route_manager"
-            - "@promethee.technology_manager"
-            - "@zeus.player_bonus_manager"
-            - "@session_wrapper"
-            - "@api"
-            - "%zeus.player.base_level"
-            - "%zeus.player.tax_coeff"
-            - "%server_id"
-            
-    zeus.player_bonus_manager:
-        class: Asylamba\Modules\Zeus\Manager\PlayerBonusManager
-        arguments:
-            - "@demeter.law_manager"
-            - "@demeter.color_manager"
-            - "@promethee.technology_manager"
-            - "@promethee.technology_helper"
-            - "@session_wrapper"
-    
-    zeus.credit_transaction_manager:
-        class: Asylamba\Modules\Zeus\Manager\CreditTransactionManager
-        arguments:
-            - "@database"
-            
-    zeus.check_name_helper:
-        class: Asylamba\Modules\Zeus\Helper\CheckName
-        
-    zeus.player_helper:
-        class: Asylamba\Modules\Zeus\Helper\PlayerHelper
-        arguments:
-            - "@database"
-            
-    zeus.tutorial_helper:
-        class: Asylamba\Modules\Zeus\Helper\TutorialHelper
-        arguments:
-            - "@entity_manager"
-            - "@zeus.player_manager"
-            - "@athena.orbital_base_manager"
-            - "@athena.building_queue_manager"
-            - "@promethee.technology_queue_manager"
-            - "@promethee.technology_manager"
-            - "@session_wrapper"
-         
+            $playerBaseLevel: "%zeus.player.base_level%"
+            $playerTaxCoeff: "%zeus.player.tax_coeff%"
+            $serverId: "%server_id%"
+            $gaiaId: '%id_gaia%'

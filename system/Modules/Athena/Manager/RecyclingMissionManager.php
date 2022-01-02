@@ -18,22 +18,13 @@ use Asylamba\Modules\Athena\Model\RecyclingMission;
 
 class RecyclingMissionManager
 {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var RealTimeActionScheduler **/
-	protected $realtimeActionScheduler;
-
-	/**
-	 * @param EntityManager $entityManager
-	 * @param RealTimeActionScheduler $realtimeActionScheduler
-	 */
-	public function __construct(EntityManager $entityManager, RealTimeActionScheduler $realtimeActionScheduler)
-	{
-		$this->entityManager = $entityManager;
-		$this->realtimeActionScheduler = $realtimeActionScheduler;
+	public function __construct(
+		protected EntityManager $entityManager,
+		protected RealTimeActionScheduler $realtimeActionScheduler
+	) {
 	}
 	
-	public function scheduleMissions()
+	public function scheduleMissions(): void
 	{
 		$missions = $this->entityManager->getRepository(RecyclingMission::class)->getAll();
 		
@@ -46,38 +37,23 @@ class RecyclingMissionManager
 			);
 		}
 	}
-	
-	/**
-	 * @param int $id
-	 * @return RecyclingMission
-	 */
-	public function get($id)
+
+	public function get(int $id): ?RecyclingMission
 	{
 		return $this->entityManager->getRepository(RecyclingMission::class)->get($id);
 	}
-	
-	/**
-	 * @param int $baseId
-	 * @return array
-	 */
-	public function getBaseMissions($baseId)
+
+	public function getBaseMissions($baseId): array
 	{
 		return $this->entityManager->getRepository(RecyclingMission::class)->getBaseMissions($baseId);
 	}
-	
-	/**
-	 * @param int $baseId
-	 * @return array
-	 */
-	public function getBaseActiveMissions($baseId)
+
+	public function getBaseActiveMissions(int $baseId): array
 	{
 		return $this->entityManager->getRepository(RecyclingMission::class)->getBaseActiveMissions($baseId);
 	}
 
-	/**
-	 * @param RecyclingMission $recyclingMission
-	 */
-	public function add(RecyclingMission $recyclingMission)
+	public function add(RecyclingMission $recyclingMission): void
 	{
 		$this->entityManager->persist($recyclingMission);
 		$this->entityManager->flush($recyclingMission);
@@ -89,11 +65,8 @@ class RecyclingMissionManager
 			$recyclingMission->uRecycling
 		);
 	}
-	
-	/**
-	 * @param int $baseId
-	 */
-	public function removeBaseMissions($baseId)
+
+	public function removeBaseMissions(int $baseId): void
 	{
 		foreach ($this->getBaseActiveMissions($baseId) as $mission) {
 			$this->realtimeActionScheduler->cancel($mission, $mission->uRecycling);

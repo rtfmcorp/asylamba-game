@@ -2,103 +2,107 @@
 
 namespace Asylamba\Classes\Worker;
 
-use Asylamba\Classes\Configuration\Configuration;
+
+use Asylamba\Classes\Daemon\WorkerServer;
+use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Entity\EntityManager;
+use Asylamba\Classes\Library\Module;
+use Asylamba\Modules\Ares\AresModule;
+use Asylamba\Modules\Artemis\ArtemisModule;
+use Asylamba\Modules\Athena\AthenaModule;
+use Asylamba\Modules\Atlas\AtlasModule;
+use Asylamba\Modules\Demeter\DemeterModule;
+use Asylamba\Modules\Gaia\GaiaModule;
+use Asylamba\Modules\Hephaistos\HephaistosModule;
+use Asylamba\Modules\Hermes\HermesModule;
+use Asylamba\Modules\Promethee\PrometheeModule;
+use Asylamba\Modules\Zeus\ZeusModule;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-use Asylamba\Classes\DependencyInjection\Container;
+class Worker implements ApplicationInterface
+{
+    protected ContainerBuilder $container;
+    protected array $modules;
 
-class Worker implements ApplicationInterface {
-    /** @var Container **/
-    protected $container;
-    /** @var array **/
-    protected $modules;
-    /** @var string **/
-    protected $name;
-    
-    /**
-     * @param string $name
-     */
-    public function __construct($name)
-    {
-        $this->name = $name;
+    public function __construct(
+		protected string $name,
+		protected string $projectDir,
+	) {
 		define('PROCESS_NAME', $name);
     }
     
     public function boot()
     {
-		$this->container = new Container();
-		$this->container->set('app.container', $this->container);
-		$this->configure();
+		$containerBuilder = new ContainerBuilder();
+		$containerBuilder->setParameter('root_path', $this->projectDir);
+		$containerBuilder->set('container', $containerBuilder);
+		$this->loadEnvironment($containerBuilder);
+		$loader = new YamlFileLoader($containerBuilder, new FileLocator($this->projectDir . '/config/'));
+		$loader->load('services.yml');
+
+		$this->container = $containerBuilder;
+		$this->container->setParameter('app.name', $this->name);
 		$this->registerModules();
+		$containerBuilder->registerForAutoconfiguration(Manager::class)->addTag('app.stateful_manager');
+		$containerBuilder->compile(true);
 		$this->init();
     }
-	
-	public function configure()
+
+	public function loadEnvironment(ContainerBuilder $container): void
 	{
-		$rootPath = dirname($_SERVER['SCRIPT_NAME']);
-		$configurationFiles = [
-			$rootPath . '/config/parameters.yml',
-			$rootPath . '/config/services.yml'
-		];
-		$this->container->setParameter('root_path', $rootPath);
-		$configuration = new Configuration(new FileLocator($configurationFiles));
-		$configuration->loadEnvironment($this->container);
-		$configuration->buildContainer($this->container, $configurationFiles);
-		$configuration->defineOldConstants($this->container);
-		
+		foreach(explode(',', getenv('SYMFONY_DOTENV_VARS')) as $key) {
+			$container->setParameter(strtolower($key), getenv($key));
+		}
 	}
-	
+
 	public function registerModules()
 	{
-		$this->modules = [
-			'ares' => new \Asylamba\Modules\Ares\AresModule($this),
-			'artemis' => new \Asylamba\Modules\Artemis\ArtemisModule($this),
-			'athena' => new \Asylamba\Modules\Athena\AthenaModule($this),
-			'atlas' => new \Asylamba\Modules\Atlas\AtlasModule($this),
-			'demeter' => new \Asylamba\Modules\Demeter\DemeterModule($this),
-			'gaia' => new \Asylamba\Modules\Gaia\GaiaModule($this),
-			'hephaistos' => new \Asylamba\Modules\Hephaistos\HephaistosModule($this),
-			'hermes' => new \Asylamba\Modules\Hermes\HermesModule($this),
-			'promethee' => new \Asylamba\Modules\Promethee\PrometheeModule($this),
-			'zeus' => new \Asylamba\Modules\Zeus\ZeusModule($this)
+		foreach ($this->getRegisteredModules() as $moduleClass) {
+			/** @var Module $module */
+			$module = new $moduleClass();
+			$module->configure($this->container, $this->projectDir);
+
+			$this->modules[strtolower($module->getName())] = $module;
+		}
+	}
+
+	protected function getRegisteredModules(): array
+	{
+		return [
+			AresModule::class,
+			ArtemisModule::class,
+			AthenaModule::class,
+			AtlasModule::class,
+			DemeterModule::class,
+			GaiaModule::class,
+			HephaistosModule::class,
+			HermesModule::class,
+			PrometheeModule::class,
+			ZeusModule::class,
 		];
 	}
-    
-    /**
-     * @return Container
-     */
-    public function getContainer()
+
+    public function getContainer(): ContainerBuilder
     {
         return $this->container;
     }
 	
-	/**
-	 * @return array
-	 */
-	public function getModules()
+	public function getModules(): array
 	{
 		return $this->modules;
 	}
-	
-	/**
-	 * @param string $name
-	 * @return \Asylamba\Classes\Library\Module
-	 */
-	public function getModule($name)
+
+	public function getModule(string $name): Module
 	{
 		return $this->modules[$name];
 	}
 	
 	public function init()
 	{
-		if ($this->container->getParameter('environment') === 'dev') {
-			set_error_handler(function($errno, $errstr, $errfile, $errline) {
-				throw new \ErrorException($errstr, $errno, 1, $errfile, $errline);
-			});
-		}
-		$this->container->setParameter('app.name', $this->name);
-		$this->container->get('database')->init($this->container->getParameter('root_path') . '/build/database/structure.sql');
-		$this->container->get('entity_manager')->init();
-		$this->container->get('worker_server')->listen();
+		$this->container->get(Database::class)->init($this->container->getParameter('root_path') . '/build/database/structure.sql');
+		$this->container->get(EntityManager::class)->init();
+		$this->container->get(WorkerServer::class)->listen();
 	}
 }

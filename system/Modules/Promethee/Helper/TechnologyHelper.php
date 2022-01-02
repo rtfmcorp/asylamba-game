@@ -11,43 +11,43 @@ use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Modules\Promethee\Resource\TechnologyResource;
 
 use Asylamba\Classes\Exception\ErrorException;
+use Symfony\Contracts\Service\Attribute\Required;
 
-class TechnologyHelper {
-	/** @var OrbitalBaseHelper **/
-	protected $orbitalBaseHelper;
-	/** @var ResearchHelper **/
-	protected $researchHelper;
-	/** @var int **/
-	protected $researchQuantity;
-	
-	/**
-	 * @param OrbitalBaseHelper $orbitalBaseHelper
-	 * @param ResearchHelper $researchHelper
-	 * @param int $researchQuantity
-	 */
-	public function __construct(OrbitalBaseHelper $orbitalBaseHelper, ResearchHelper $researchHelper, $researchQuantity)
+class TechnologyHelper
+{
+	protected OrbitalBaseHelper $orbitalBaseHelper;
+
+	public function __construct(
+		protected ResearchHelper $researchHelper,
+		protected int $researchQuantity
+	) {
+	}
+
+	#[Required]
+	public function setOrbitalBaseHelper(OrbitalBaseHelper $orbitalBaseHelper): void
 	{
 		$this->orbitalBaseHelper = $orbitalBaseHelper;
-		$this->researchHelper = $researchHelper;
-		$this->researchQuantity = $researchQuantity;
 	}
 	
-	public function isATechnology($techno) {
-		return in_array($techno, TechnologyResource::$technologies);
+	public function isATechnology(int $techno): bool
+	{
+		return \in_array($techno, TechnologyResource::$technologies);
 	}
 
-	public function isAnUnblockingTechnology($techno) {
-		return in_array($techno, TechnologyResource::$technologiesForUnblocking);
+	public function isAnUnblockingTechnology(int $techno): bool
+	{
+		return \in_array($techno, TechnologyResource::$technologiesForUnblocking);
 	}
 
-	public function isATechnologyNotDisplayed($techno) {
-		return in_array($techno, TechnologyResource::$technologiesNotDisplayed);
+	public function isATechnologyNotDisplayed(int $techno): bool
+	{
+		return \in_array($techno, TechnologyResource::$technologiesNotDisplayed);
 	}
 
 	public function getInfo($techno, $info, $level = 0) {
 		if ($this->isATechnology($techno)) {
 			if ($this->isAnUnblockingTechnology($techno)) {
-				if(in_array($info, array('name', 'progName', 'imageLink', 'requiredTechnosphere', 'requiredResearch', 'time', 'resource', 'credit', 'points', 'column', 'shortDescription', 'description'))) {
+				if(\in_array($info, array('name', 'progName', 'imageLink', 'requiredTechnosphere', 'requiredResearch', 'time', 'resource', 'credit', 'points', 'column', 'shortDescription', 'description'))) {
 					return TechnologyResource::$technology[$techno][$info];
 				} else {
 					throw new ErrorException('2e argument faux pour getInfo() de TechnologyResource (techno ' . $techno . ', ' . $info . ')');

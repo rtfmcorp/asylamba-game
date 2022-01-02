@@ -17,7 +17,14 @@ foreach($argv as $arg)
 	$options[substr($data[0], 2)] = $data[1];
 }
 
-define("P_TYPE", 'worker');
+const P_TYPE = 'worker';
+const ASM_UMODE = true;
 
-$worker = new Worker($options['process']);
+$projectDir = __DIR__;
+
+$dotenv = new Symfony\Component\Dotenv\Dotenv();
+$dotenv->usePutenv(false);
+$dotenv->load($projectDir.'/.env');
+
+$worker = new Worker($options['process'], $projectDir);
 $worker->boot();

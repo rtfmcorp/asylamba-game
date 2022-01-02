@@ -7,28 +7,18 @@ use Asylamba\Classes\Process\LoadBalancer;
 
 class CyclicActionScheduler
 {
-    /** @var TaskManager **/
-    protected $taskManager;
-	/** @var LoadBalancer **/
-	protected $loadBalancer;
-	/** @var int **/
-	protected $lastExecutedDay;
-	/** @var int **/
-	protected $lastExecutedHour;
-	/** @var int **/
-	protected $dailyScriptHour;
+    protected TaskManager $taskManager;
+	protected LoadBalancer $loadBalancer;
+	protected ?int $lastExecutedDay = null;
+	protected ?int $lastExecutedHour = null;
+	protected ?int $dailyScriptHour = null;
 	/** @var array **/
-	protected $queue = [];
+	protected array $queue = [];
 	
 	const TYPE_HOURLY = 'hourly';
 	const TYPE_DAILY = 'daily';
-	
-	/**
-	 * @param TaskManager $taskManager
-	 * @param LoadBalancer $loadBalancer
-	 * @param int $dailyScriptHour
-	 */
-	public function __construct(TaskManager $taskManager, LoadBalancer $loadBalancer, $dailyScriptHour)
+
+	public function __construct(TaskManager $taskManager, LoadBalancer $loadBalancer, int $dailyScriptHour)
 	{
         $this->taskManager = $taskManager;
         $this->loadBalancer = $loadBalancer;
