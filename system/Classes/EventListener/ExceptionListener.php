@@ -15,24 +15,13 @@ use Asylamba\Classes\Exception\FormException;
 
 use Asylamba\Classes\Database\Database;
 
-class ExceptionListener {
-	/** @var AbstractLogger **/
-	protected $logger;
-	/** @var SessionWrapper **/
-	protected $sessionWrapper;
-	/** @var Database **/
-	protected $connection;
-	
-	/**
-	 * @param AbstractLogger $logger
-	 * @param Session $session
-	 * @param Database $database
-	 */
-	public function __construct(AbstractLogger $logger, SessionWrapper $session, Database $database)
-	{
-		$this->logger = $logger;
-		$this->sessionWrapper = $session;
-		$this->database = $database;
+class ExceptionListener
+{
+	public function __construct(
+		protected AbstractLogger $logger,
+		protected SessionWrapper $sessionWrapper,
+		protected Database $database
+	) {
 	}
 	
 	/**

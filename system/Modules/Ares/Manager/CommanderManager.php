@@ -24,8 +24,6 @@ use Asylamba\Modules\Demeter\Manager\ColorManager;
 use Asylamba\Modules\Hermes\Manager\NotificationManager;
 use Asylamba\Classes\Container\ArrayList;
 
-use Asylamba\Classes\Worker\EventDispatcher;
-
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Modules\Ares\Model\Report;
@@ -38,6 +36,7 @@ use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
 use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class CommanderManager

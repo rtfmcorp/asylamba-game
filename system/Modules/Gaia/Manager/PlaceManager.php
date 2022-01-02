@@ -25,7 +25,7 @@ use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Gaia\Model\System;
 
 use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
-use Asylamba\Classes\Worker\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class PlaceManager
 {

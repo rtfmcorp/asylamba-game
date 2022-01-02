@@ -7,14 +7,13 @@ use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Classes\Event\ProcessExceptionEvent;
 use Asylamba\Classes\Event\ProcessErrorEvent;
 
-use Asylamba\Classes\DependencyInjection\Container;
-
 use Asylamba\Classes\Memory\MemoryManager;
 use Asylamba\Classes\Process\ProcessManager;
 use Asylamba\Classes\Process\ProcessGateway;
 use Asylamba\Classes\Task\TaskManager;
-use Asylamba\Classes\Worker\EventDispatcher;
 use Asylamba\Classes\Worker\Manager;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class WorkerServer
 {

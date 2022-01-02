@@ -175,8 +175,6 @@ services:
     Asylamba\Classes\Entity\EntityManager:
         public: true
             
-    Asylamba\Classes\Worker\EventDispatcher: ~
-            
     logger:
         class: "%log_handler%"
         arguments:
@@ -228,13 +226,16 @@ services:
             $timeout: "%redis_timeout%"
         
     Asylamba\Classes\EventListener\ExceptionListener:
+        arguments:
+            $logger: '@logger'
         tags:
-            - { name: "event_listener", event: "core.exception", method: "onCoreException" }
-            - { name: "event_listener", event: "core.error", method: "onCoreError" }
+            - { name: "kernel.event_listener", event: "core.exception", method: "onCoreException" }
+            - { name: "kernel.event_listener", event: "core.error", method: "onCoreError" }
             
     Asylamba\Classes\EventListener\ProcessExceptionListener:
         arguments:
-            - "%app.name%"
+            $logger: '@logger'
+            $processName: "%app_name%"
         tags:
-            - { name: "event_listener", event: "core.process_exception", method: "onCoreException" }
-            - { name: "event_listener", event: "core.process_error", method: "onCoreError" }
+            - { name: "kernel.event_listener", event: "core.process_exception", method: "onCoreException" }
+            - { name: "kernel.event_listener", event: "core.process_error", method: "onCoreError" }

@@ -19,9 +19,9 @@ use Asylamba\Classes\Exception\ErrorException;
 
 use Asylamba\Classes\Process\ProcessManager;
 use Asylamba\Classes\Task\TaskManager;
-use Asylamba\Classes\Worker\EventDispatcher;
 use Asylamba\Classes\Worker\Manager;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class Server
@@ -138,8 +138,8 @@ class Server
 		} finally {
 			// @TODO Needs further investigation
 			if ($response !== null) {
-				fputs ($input, $response->send());
-				fclose($input);
+				\fputs($input, $response->send());
+				\fclose($input);
 			}
 			$this->nbUncollectedCycles++;
 			$this->container->get(SessionWrapper::class)->clearWrapper();

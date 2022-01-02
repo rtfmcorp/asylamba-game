@@ -41,8 +41,6 @@ class LoadBalancer
 			if ($process->getExpectedWorkTime() < $minTime || $minTime === null) {
 				$selectedProcess = $process;
 				$minTime = $process->getExpectedWorkTime();
-			} else {
-				dump($process->getExpectedWorkTime(), $minTime);
 			}
         }
 		if (null === $selectedProcess) {

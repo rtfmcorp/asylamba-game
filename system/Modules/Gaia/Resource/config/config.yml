@@ -35,12 +35,13 @@ services:
         
     Asylamba\Modules\Gaia\EventListener\SectorListener:
         arguments:
+            $scores: "%gaia.scores%"
             $sectorMinimalScore: "%gaia.sector_minimal_score%"
         tags:
-            - {name: "event_listener", event: "gaia.place_owner_change", method: "onPlaceOwnerChange", order: 2}
+            - {name: "kernel.event_listener", event: "gaia.place_owner_change", method: "onPlaceOwnerChange", priority: 1}
             
     Asylamba\Modules\Gaia\EventListener\SystemListener:
         arguments:
             $scores: "%gaia.scores%"
         tags:
-            - {name: "event_listener", event: "gaia.place_owner_change", method: "onPlaceOwnerChange", order: 1}
+            - {name: "kernel.event_listener", event: "gaia.place_owner_change", method: "onPlaceOwnerChange", priority: 2}
