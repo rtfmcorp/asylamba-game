@@ -12,12 +12,15 @@ use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Ares\Model\Commander;
 
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
 $dockStorage = $ob_commanderFleet->getShipStorage();
 $lineCoord   = $commander_commanderFleet->getFormatLineCoord();
 
 echo '<div class="component size2 commander-fleet">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'commander/medium/' . $commander_commanderDetail->avatar . '.png" alt="' . $commander_commanderDetail->getName() . '" />';
+		echo '<img src="' . $mediaPath . 'commander/medium/' . $commander_commanderDetail->avatar . '.png" alt="' . $commander_commanderDetail->getName() . '" />';
 		echo '<h2>' . $commander_commanderDetail->name . '</h2>';
 		echo '<em>' . CommanderResources::getInfo($commander_commanderDetail->level, 'grade') . '</em>';
 	echo '</div>';
@@ -94,15 +97,15 @@ if ($commander_commanderFleet->getStatement() == Commander::AFFECTED) {
 		echo 'data-commander="' . $commander_commanderFleet->getId() . '" ';
 	echo '>';
 		echo '<div class="head skin-3">';
-			echo '<img class="left" src="' . MEDIA . 'fleet/commanders.png" alt="/" />';
-			echo '<img class="right" src="' . MEDIA . 'orbitalbase/dock2.png" alt="/" />';
+			echo '<img class="left" src="' . $mediaPath . 'fleet/commanders.png" alt="/" />';
+			echo '<img class="right" src="' . $mediaPath . 'orbitalbase/dock2.png" alt="/" />';
 		echo '</div>';
 		echo '<div class="fix-body">';
 			echo '<div class="body">';
 				echo '<div class="list-ship squadron">';
 					for ($i = 0; $i < 12; $i++) { 
 						echo '<a href="#" class="empty" data-ship-id="' . $i . '">';
-							echo '<img src="' .  MEDIA . 'ship/picto/' . ShipResource::getInfo($i, 'imageLink') . '.png" alt="" />';
+							echo '<img src="' .  $mediaPath . 'ship/picto/' . ShipResource::getInfo($i, 'imageLink') . '.png" alt="" />';
 							echo '<span class="text">';
 								echo '<span class="quantity">0</span>';
 								echo '<span>' . ShipResource::getInfo($i, 'codeName') . '</span>';
@@ -113,7 +116,7 @@ if ($commander_commanderFleet->getStatement() == Commander::AFFECTED) {
 				echo '<div class="list-ship dock">';
 					for ($i = 0; $i < 12; $i++) {
 						echo '<a href="#" ' . (($dockStorage[$i] == 0) ? 'class="empty"' : '') . ' data-ship-id="' . $i . '">';
-							echo '<img src="' .  MEDIA . 'ship/picto/' . ShipResource::getInfo($i, 'imageLink') . '.png" alt="" />';
+							echo '<img src="' .  $mediaPath . 'ship/picto/' . ShipResource::getInfo($i, 'imageLink') . '.png" alt="" />';
 							echo '<span class="text">';
 								echo '<span class="quantity">' . $dockStorage[$i] . '</span>';
 								echo '<span>' . ShipResource::getInfo($i, 'codeName') . '</span>';

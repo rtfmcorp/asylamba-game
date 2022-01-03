@@ -4,8 +4,9 @@ use Asylamba\Classes\Container\ArrayList;
 use Asylamba\Modules\Zeus\Helper\CheckName;
 use Asylamba\Classes\Exception\FormException;
 
+$container = $this->getContainer();
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $response = $this->getContainer()->get('app.response');
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 
@@ -22,7 +23,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 			$session->add('prebindkey', $bindkey);
 
 			# mode de création de joueur
-			if (HIGHMODE && $request->query->has('mode')) {
+			if ($container->getParameter('highmode') && $request->query->has('mode')) {
 				$session->add('high-mode', TRUE);
 			} else {
 				$session->add('high-mode', FALSE);
@@ -70,7 +71,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 			# entre 1 et 7
 			# alliance pas défaites
 			# algorythme de fermeture automatique des alliances (auto-balancing)
-		$openFactions = $this->getContainer()->get('demeter.color_manager')->getOpenFactions();
+		$openFactions = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class)->getOpenFactions();
 
 		$ally = [];
 
@@ -95,7 +96,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 				$session->get('inscription')->add('pseudo', $request->request->get('pseudo'));
 
 				# check avatar
-				if ((int)$request->request->get('avatar') > 0 && (int)$request->request->get('avatar') <= NB_AVATAR) {
+				if ((int)$request->request->get('avatar') > 0 && (int)$request->request->get('avatar') <= $container->getParameter('nb_avatar')) {
 					$session->get('inscription')->add('avatar', $request->request->get('avatar'));
 				} elseif (!$session->get('inscription')->exist('avatar')) {
 					throw new FormException('Cet avatar n\'existe pas ou est invalide', 'inscription/step-2');
@@ -110,7 +111,8 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 		$response->redirect($this->getContainer()->getParameter('getout_root') . 'serveurs/message-forbiddenaccess');
 	}
 } elseif ($request->query->get('step') == 4) {
-	if ($playerManager->getByBindKey($session->get('bindkey')) === null) {
+	dump($session);
+	if (null === $session->get('bindkey') || $playerManager->getByBindKey($session->get('bindkey')) === null) {
 		if ($session->exist('inscription')) {
 			$check = new CheckName();
 
@@ -118,7 +120,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 				if ($check->checkChar($request->request->get('base'))) {
 					$session->get('inscription')->add('base', $request->request->get('base'));
 
-					$sectors = $this->getContainer()->get('gaia.sector_manager')->getAll();
+					$sectors = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SectorManager::class)->getAll();
 
 					$factionSectors = array();
 					foreach ($sectors as $sector) { 

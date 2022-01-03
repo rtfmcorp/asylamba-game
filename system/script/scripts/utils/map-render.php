@@ -1,6 +1,6 @@
 <?php
 
-$systems = $this->getContainer()->get('gaia.system_manager')->getAll();
+$systems = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SystemManager::class)->getAll();
 
 # functions
 function getPosition($type, $x, $y, $multiply = 4) {

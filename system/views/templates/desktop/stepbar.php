@@ -1,5 +1,6 @@
 <?php
 
+$container = $this->getContainer();
 $request = $this->getContainer()->get('app.request');
 
 echo '<div id="nav">';
@@ -21,9 +22,9 @@ echo '<div id="nav">';
 	echo '<div class="overbox" id="disconnect-box">';
 		echo '<a target="_blank" href="' . $this->getContainer()->getParameter('getout_root') . '">aller à l\'accueil</a>';
 		echo '<a target="_blank" href="' . $this->getContainer()->getParameter('getout_root') . 'blog">voir le blog</a>';
-		echo '<a target="_blank" href="' . FACEBOOK_LINK . '">rejoindre la page Facebook</a>';
-		echo '<a target="_blank" href="' . GOOGLE_PLUS_LINK . '">nous suivre sur Google+</a>';
-		echo '<a target="_blank" href="' . TWITTER_LINK . '">nous suivre sur Twitter</a>';
+		echo '<a target="_blank" href="' . $container->getParameter('facebook_link') . '">rejoindre la page Facebook</a>';
+		echo '<a target="_blank" href="' . $container->getParameter('google_plus_link') . '">nous suivre sur Google+</a>';
+		echo '<a target="_blank" href="' . $container->getParameter('twitter_link') . '">nous suivre sur Twitter</a>';
 	echo '</div>';
 echo '</div>';
 

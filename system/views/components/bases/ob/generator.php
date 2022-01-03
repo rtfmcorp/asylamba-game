@@ -15,12 +15,14 @@ use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 
-$session = $this->getContainer()->get('session_wrapper');
-$buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
-$technologyManager = $this->getContainer()->get('promethee.technology_manager');
-$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$container = $this->getContainer();
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$buildingQueueManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\BuildingQueueManager::class);
+$technologyManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\TechnologyManager::class);
+$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
 $buildingResourceRefund = $this->getContainer()->getParameter('athena.building.building_queue_resource_refund');
 $sessionToken = $session->get('token');
+$mediaPath = $container->getParameter('media');
 
 $q = '';
 $b = array('', '', '', '', '', '', '', '', '', '');
@@ -49,7 +51,7 @@ for ($i = 0; $i < $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::GENER
 		$q .= '<div class="item ' . (($realSizeQueue > 1) ? 'active' : '') . ' progress" data-progress-output="lite" data-progress-current-time="' . $nextTime . '" data-progress-total-time="' . $nextTotalTime . '">';
 		$q .= '<a href="' . Format::actionBuilder('dequeuebuilding', $sessionToken, ['baseid' => $ob_generator->getId(), 'building' => $qe->buildingNumber]) . '"' . 
 				'class="button hb lt" title="annuler la construction (attention, vous ne récupérerez que ' . $buildingResourceRefund * 100 . '% du montant investi)">×</a>';
-		$q .= '<img class="picto" src="' . MEDIA . 'orbitalbase/' . $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
+		$q .= '<img class="picto" src="' . $mediaPath . 'orbitalbase/' . $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
 		$q .= '<strong>';
 			$q .= $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'frenchName');
 			$q .= ' <span class="level">niv. ' . $qe->targetLevel . '</span>';
@@ -85,7 +87,7 @@ for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) {
 
 	$b[$i] .= ($rLevel[$i]) ? '<div class="build-item">' : '<div class="build-item disable">';
 		$b[$i] .= '<div class="name">';
-			$b[$i] .= '<img src="' . MEDIA . 'orbitalbase/' . $orbitalBaseHelper->getBuildingInfo($i, 'imageLink') . '.png" alt="" />';
+			$b[$i] .= '<img src="' . $mediaPath . 'orbitalbase/' . $orbitalBaseHelper->getBuildingInfo($i, 'imageLink') . '.png" alt="" />';
 			$b[$i] .= '<strong>' . $orbitalBaseHelper->getBuildingInfo($i, 'frenchName') . '</strong>';
 			if ($level != 0) {
 				$b[$i] .= '<span class="level hb lt" title="niveau actuel">' . $level . '</span>';
@@ -93,8 +95,8 @@ for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) {
 			$b[$i] .= '<a href="#" class="addInfoPanel info hb lt" title="plus d\'info" data-building-id="' . $i . '" data-info-type="building" data-building-current-level="' . $level . '">+</a>';
 		$b[$i] .= '</div>';
 
-		$price = Format::numberFormat($orbitalBaseHelper->getBuildingInfo($i, 'level', ($nextLevel), 'resourcePrice'), -1) . ' <img src="' .  MEDIA. 'resources/resource.png" alt="ressources" class="icon-color" />';
-		$time  = Chronos::secondToFormat($orbitalBaseHelper->getBuildingInfo($i, 'level', ($nextLevel), 'time'), 'lite') . ' <img src="' .  MEDIA. 'resources/time.png" alt="relèves" class="icon-color" />';
+		$price = Format::numberFormat($orbitalBaseHelper->getBuildingInfo($i, 'level', ($nextLevel), 'resourcePrice'), -1) . ' <img src="' .  $mediaPath. 'resources/resource.png" alt="ressources" class="icon-color" />';
+		$time  = Chronos::secondToFormat($orbitalBaseHelper->getBuildingInfo($i, 'level', ($nextLevel), 'time'), 'lite') . ' <img src="' .  $mediaPath. 'resources/time.png" alt="relèves" class="icon-color" />';
 
 		if (($answer = $orbitalBaseHelper->haveRights($i, $nextLevel, 'buildingTree', $ob_generator)) !== TRUE) {
 			if ($answer == 'niveau maximum atteint') {
@@ -148,7 +150,7 @@ for ($i = 0; $i < OrbitalBaseResource::BUILDING_QUANTITY; $i++) {
 # display
 echo '<div class="component">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'orbitalbase/generator.png" alt="" />';
+		echo '<img src="' . $mediaPath . 'orbitalbase/generator.png" alt="" />';
 		echo '<h2>' . $orbitalBaseHelper->getBuildingInfo(0, 'frenchName') . '</h2>';
 		echo '<em>niveau ' . $ob_generator->getLevelGenerator() . '</em>';
 	echo '</div>';

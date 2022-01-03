@@ -12,11 +12,13 @@
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Library\Format;
 
+$container = $this->getContainer();
 $taxCoeff = $this->getContainer()->getParameter('zeus.player.tax_coeff');
+$mediaPath = $container->getParameter('media');
 
 echo '<div class="component financial">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'financial/taxout.png" alt="" />';
+		echo '<img src="' . $mediaPath . 'financial/taxout.png" alt="" />';
 		echo '<h2>Redevances</h2>';
 		echo '<em>Redevances aux factions</em>';
 	echo '</div>';
@@ -34,7 +36,7 @@ echo '<div class="component financial">';
 						echo '<span class="label">' . $base->getName() . ' [' . $base->getTax() . '% de taxe]</span>';
 						echo '<span class="value">';
 							echo Format::numberFormat($baseTaxOut);
-							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+							echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 						echo '</span>';
 					echo '</li>';
 				}
@@ -43,7 +45,7 @@ echo '<div class="component financial">';
 					echo '<span class="label">total de la redevance</span>';
 					echo '<span class="value">';
 						echo Format::numberFormat($financial_totalTaxOut);
-						echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+						echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 					echo '</span>';
 				echo '</li>';
 			echo '</ul>';

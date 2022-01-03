@@ -15,15 +15,15 @@ use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Zeus\Model\Player;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$lawManager = $this->getContainer()->get('demeter.law_manager');
-$colorManager = $this->getContainer()->get('demeter.color_manager');
-$sectorManager = $this->getContainer()->get('gaia.sector_manager');
-$commercialTaxManager = $this->getContainer()->get('athena.commercial_tax_manager');
+$lawManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Law\LawManager::class);
+$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
+$sectorManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SectorManager::class);
+$commercialTaxManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialTaxManager::class);
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$parser = $this->getContainer()->get('parser');
+$parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
 
 $type = $request->query->get('type');
 $duration = (int) $request->request->get('duration');
@@ -352,7 +352,7 @@ if ($type !== FALSE) {
 					throw new ErrorException('Il n\'y assez pas a de crédits dans les caisses de l\'Etat.');
 				}
 			}
-			$this->getContainer()->get('entity_manager')->flush();
+			$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();
 		} else {
 			throw new ErrorException('Vous n\' avez pas le droit de proposer cette loi.');
 		}

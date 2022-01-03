@@ -3,9 +3,9 @@
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Zeus\Model\Player;
 
-$colorManager = $this->getContainer()->get('demeter.color_manager');
+$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
 
 if (($description = $request->request->get('description')) !== FALSE) {
@@ -15,7 +15,7 @@ if (($description = $request->request->get('description')) !== FALSE) {
 				$faction = $colorManager->get($player->rColor);
 				$faction->description = $description;
 				
-				$this->getContainer()->get('entity_manager')->flush($faction);
+				$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush($faction);
 			} else {
 				throw new FormException('La description est vide ou trop longue');
 			}

@@ -15,13 +15,13 @@ use Asylamba\Modules\Athena\Model\CommercialShipping;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Modules\Hermes\Model\Notification;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
-$placeManager = $this->getContainer()->get('gaia.place_manager');
-$notificationManager = $this->getContainer()->get('hermes.notification_manager');
-$commercialShippingManager = $this->getContainer()->get('athena.commercial_shipping_manager');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
+$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
+$commercialShippingManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialShippingManager::class);
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
 
 for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) {
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');

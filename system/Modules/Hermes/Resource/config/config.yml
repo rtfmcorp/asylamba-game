@@ -19,6 +19,7 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        public: true
 
     Asylamba\Modules\Hermes\Manager\:
         resource: '%root_path%/system/Modules/Hermes/Manager/*'

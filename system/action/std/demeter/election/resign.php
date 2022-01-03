@@ -5,7 +5,7 @@ use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Zeus\Model\Player;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 
@@ -14,7 +14,7 @@ if ($session->get('playerInfo')->get('status') > Player::PARLIAMENT && $session-
 		$minister->status = Player::PARLIAMENT;
 		$session->get('playerInfo')->add('status', Player::PARLIAMENT);
 		$session->addFlashbag('Vous n\'êtes plus membre du gouvernement.', Flashbag::TYPE_SUCCESS);
-		$this->getContainer()->get('entity_manager')->flush($minister);
+		$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush($minister);
 	} else {
 		throw new ErrorException('Ce joueur n\'existe pas.');
 	}

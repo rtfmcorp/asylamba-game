@@ -5,10 +5,10 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Ares\Model\Commander;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
-$placeManager = $this->getContainer()->get('gaia.place_manager');
-$galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
+$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
+$galaxyConfiguration = $this->getContainer()->get(\Asylamba\Modules\Gaia\Galaxy\GalaxyConfiguration::class);
 
 # chargement des commandants attaquants
 $attackingCommanders = array_merge(

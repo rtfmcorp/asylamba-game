@@ -91,18 +91,8 @@ class RealTimeActionScheduler
 		$this->factionManager->scheduleBallot();
 		$this->execute();
 	}
-	
-	/**
-	 * This method is meant to register a new action to schedule
-	 * The action is put in the queue to be executed
-	 * 
-	 * @param string $manager
-	 * @param string $method
-	 * @param object $object
-	 * @param string $date
-	 * @param array $context
-	 */
-	public function schedule($manager, $method, $object, $date, $context = null): void
+
+	public function schedule(string $manager, string $method, object $object, string $date, array $context = null): void
 	{
 		if (P_TYPE === 'worker') {
 			$this->processGateway->writeToMaster([

@@ -7,10 +7,10 @@ use Asylamba\Modules\Demeter\Model\Law\VoteLaw;
 use Asylamba\Modules\Demeter\Model\Law\Law;
 use Asylamba\Modules\Zeus\Model\Player;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
-$lawManager = $this->getContainer()->get('demeter.law_manager');
-$voteLawManager = $this->getContainer()->get('demeter.vote_law_manager');
+$lawManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Law\LawManager::class);
+$voteLawManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Law\VoteLawManager::class);
 
 $rLaw = $request->query->get('rlaw');
 $choice = $request->query->get('choice');

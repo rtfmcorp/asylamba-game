@@ -3,8 +3,8 @@
 
 use Asylamba\Classes\Library\Flashbag;
 
-$session = $this->getContainer()->get('session_wrapper');
-$spyReportManager = $this->getContainer()->get('artemis.spy_report_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$spyReportManager = $this->getContainer()->get(\Asylamba\Modules\Artemis\Manager\SpyReportManager::class);
 
 $S_SRM1 = $spyReportManager->getCurrentSession();
 $spyReportManager->newSession(ASM_UMODE);

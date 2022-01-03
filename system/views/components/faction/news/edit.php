@@ -2,8 +2,8 @@
 
 use Asylamba\Classes\Library\Format;
 
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
-$factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
+$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
+$factionNewsManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Forum\FactionNewsManager::class);
 $request = $this->getContainer()->get('app.request');
 
 $news = $factionNewsManager->get($request->query->get('news'));

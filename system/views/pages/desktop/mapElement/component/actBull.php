@@ -11,10 +11,13 @@ use Asylamba\Modules\Athena\Model\RecyclingMission;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 
-$session = $this->getContainer()->get('session_wrapper');
-$commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
-$recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
-$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$commercialRouteManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialRouteManager::class);
+$recyclingMissionManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\RecyclingMissionManager::class);
+$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
 $sessionToken = $session->get('token');
 $colonizationCost = $this->getContainer()->getParameter('ares.coeff.colonization_cost');
 $conquestCost = $this->getContainer()->getParameter('ares.coeff.conquest_cost');
@@ -26,20 +29,20 @@ echo '<div class="column act">';
 	echo '<div class="top">';
 		if ($place->typeOfPlace == 1) {
 			$available = (($place->rPlayer != 0 && $place->playerColor != $session->get('playerInfo')->get('color')) || ($place->rPlayer == 0 && $place->typeOfPlace == 1)) ? NULL : 'grey';
-			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="1"><img src="' . MEDIA . 'map/action/loot.png" alt="" /></a>';
-			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="2"><img src="' . MEDIA . 'map/action/colo.png" alt="" /></a>';
+			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="1"><img src="' . $mediaPath . 'map/action/loot.png" alt="" /></a>';
+			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="2"><img src="' . $mediaPath . 'map/action/colo.png" alt="" /></a>';
 
 			$available = (($place->rPlayer == $session->get('playerId') && $place->getId() != $defaultBase->getId()) || ($place->playerColor == $session->get('playerInfo')->get('color'))) ? NULL : 'grey';
-			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="3"><img src="' . MEDIA . 'map/action/move.png" alt="" /></a>';
+			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="3"><img src="' . $mediaPath . 'map/action/move.png" alt="" /></a>';
 
 			$available = ($place->rPlayer != 0 && $place->getId() != $defaultBase->getId()) ? NULL : 'grey';
-			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="4"><img src="' . MEDIA . 'map/action/rc.png" alt="" /></a>';
+			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="4"><img src="' . $mediaPath . 'map/action/rc.png" alt="" /></a>';
 
 			$available = (($place->rPlayer != 0 && $place->playerColor != $session->get('playerInfo')->get('color')) || ($place->rPlayer == 0 && $place->typeOfPlace == 1)) ? NULL : 'grey';
-			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="5"><img src="' . MEDIA . 'map/action/spy.png" alt="" /></a>';
+			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="5"><img src="' . $mediaPath . 'map/action/spy.png" alt="" /></a>';
 		} else {
 			$available = ($place->sectorColor == $session->get('playerInfo')->get('color') || $place->sectorColor == ColorResource::NO_FACTION) ? NULL : 'grey';
-			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="1"><img src="' . MEDIA . 'orbitalbase/recycler.png" alt=""></a>';
+			echo '<a href="#" class="actionbox-sh ' . $available . '" data-target="1"><img src="' . $mediaPath . 'orbitalbase/recycler.png" alt=""></a>';
 		}
 	echo '</div>';
 	
@@ -64,8 +67,8 @@ echo '<div class="column act">';
 						echo '</div>';
 						echo '<div class="item move">';
 							echo '<strong class="name"></strong><br />';
-							echo 'Temps de l\'attaque : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, $session->get('playerBonus')), 'lite') . ' <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
-							echo 'Capacité de la soute : <span class="wedge"></span> <img src="' . MEDIA . 'resources/resource.png" class="icon-color" alt="" /><br />';
+							echo 'Temps de l\'attaque : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, $session->get('playerBonus')), 'lite') . ' <img src="' . $mediaPath . 'resources/time.png" class="icon-color" alt="" /><br />';
+							echo 'Capacité de la soute : <span class="wedge"></span> <img src="' . $mediaPath . 'resources/resource.png" class="icon-color" alt="" /><br />';
 							echo '<a class="button" href="#" data-url="' . Format::actionBuilder('loot', $sessionToken, ['commanderid' => '{id}', 'placeid' => $place->id]) . '">Lancer l\'attaque</a>';
 						echo '</div>';
 					echo '</div>';
@@ -111,7 +114,7 @@ echo '<div class="column act">';
 						echo '</div>';
 						echo '<div class="item move">';
 							echo '<strong class="name"></strong><br />';
-							echo 'Temps de l\'attaque : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, $session->get('playerBonus')), 'lite') . ' <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
+							echo 'Temps de l\'attaque : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, $session->get('playerBonus')), 'lite') . ' <img src="' . $mediaPath . 'resources/time.png" class="icon-color" alt="" /><br />';
 
 							if ($place->rPlayer == 0) {
 								$price = $totalBases * $colonizationCost;
@@ -119,7 +122,7 @@ echo '<div class="column act">';
 									# bonus if the player is from Cardan
 									$price -= round($price * ColorResource::BONUS_CARDAN_COLO / 100);
 								}
-								echo 'Coût : <span class="price">' . Format::numberFormat($price) . '</span> <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /><br />';
+								echo 'Coût : <span class="price">' . Format::numberFormat($price) . '</span> <img src="' . $mediaPath . 'resources/credit.png" class="icon-color" alt="" /><br />';
 								echo '<a class="button" href="#" data-url="' . Format::actionBuilder('colonize', $sessionToken, ['commanderid' => '{id}', 'placeid' => $place->id]) . '">Lancer la colonisation</a>';
 							} else {
 								$price = $totalBases * $conquestCost;
@@ -127,7 +130,7 @@ echo '<div class="column act">';
 									# bonus if the player is from Cardan
 									$price -= round($price * ColorResource::BONUS_CARDAN_COLO / 100);
 								}
-								echo 'Coût : <span class="price">' . Format::numberFormat($price) . '</span> <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /><br />';
+								echo 'Coût : <span class="price">' . Format::numberFormat($price) . '</span> <img src="' . $mediaPath . 'resources/credit.png" class="icon-color" alt="" /><br />';
 								echo '<a class="button" href="#" data-url="' . Format::actionBuilder('conquer', $sessionToken, ['commanderid' => '{id}', 'placeid' => $place->id]) . '">Lancer la conquête</a>';
 							}
 						echo '</div>';
@@ -156,7 +159,7 @@ echo '<div class="column act">';
 						echo '</div>';
 						echo '<div class="item move">';
 							echo '<strong class="name"></strong><br />';
-							echo 'Temps du déplacement : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, $session->get('playerBonus')), 'lite') . ' <img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="" /><br />';
+							echo 'Temps du déplacement : ' . Chronos::secondToFormat(Game::getTimeTravel($defaultBase->system, $defaultBase->position, $defaultBase->xSystem, $defaultBase->ySystem, $place->rSystem, $place->position, $place->xSystem, $place->ySystem, $session->get('playerBonus')), 'lite') . ' <img src="' . $mediaPath . 'resources/time.png" class="icon-color" alt="" /><br />';
 							if ($place->rPlayer != $defaultBase->rPlayer) {
 								echo 'Attention, vous perdrez votre flotte !<br />';
 							}
@@ -213,11 +216,11 @@ echo '<div class="column act">';
 					$income = Game::getRCIncome($distance, $bonusA, $bonusB);
 
 					echo '<div class="rc">';
-						echo '<img src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '-' . Game::getSizeOfPlanet($place->population) . '.png" alt="" class="planet" />';
+						echo '<img src="' . $mediaPath . 'map/place/place' . $place->typeOfPlace . '-' . Game::getSizeOfPlanet($place->population) . '.png" alt="" class="planet" />';
 
 						echo '<span class="label-box">';
 							echo '<span class="key">Revenu par relève</span>';
-							echo '<span class="val">' . Format::numberFormat($income) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" /></span>';
+							echo '<span class="val">' . Format::numberFormat($income) . ' <img src="' . $mediaPath . 'resources/credit.png" alt="" class="icon-color" /></span>';
 						echo '</span>';
 
 						if ($session->get('playerInfo')->get('color') == ColorResource::NEGORA) {
@@ -226,13 +229,13 @@ echo '<div class="column act">';
 						}
 						echo '<span class="label-box">';
 							echo '<span class="key">Coût de construction</span>';
-							echo '<span class="val">' . Format::numberFormat($price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" /></span>';
+							echo '<span class="val">' . Format::numberFormat($price) . ' <img src="' . $mediaPath . 'resources/credit.png" alt="" class="icon-color" /></span>';
 						echo '</span>';
 
 						if ($proposed) {
-							echo '<a href="' . APP_ROOT . 'bases/view-spatioport" class="button">Annuler la proposition</a>';
+							echo '<a href="' . $appRoot . 'bases/view-spatioport" class="button">Annuler la proposition</a>';
 						} elseif ($notAccepted) {
-							echo '<a href="' . APP_ROOT . 'bases/view-spatioport" class="button">Accepter la proposition</a>';
+							echo '<a href="' . $appRoot . 'bases/view-spatioport" class="button">Accepter la proposition</a>';
 						} elseif ($standby) {
 							echo '<span class="button">C\'est la guerre.</span>';
 						} else {
@@ -273,7 +276,7 @@ echo '<div class="column act">';
 					foreach ($prices as $label => $price) { 
 						echo '<a href="' . Format::actionBuilder('spy', $sessionToken, ['rplace' => $place->getId(), 'price' => $price]) . '" class="spy-button">';
 							echo '<span class="label">' . $label . '</span>';
-							echo '<span class="price">' . Format::numberFormat($price) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="" /></span>';
+							echo '<span class="price">' . Format::numberFormat($price) . ' <img src="' . $mediaPath . 'resources/credit.png" class="icon-color" alt="" /></span>';
 						echo '</a>';
 					}
 

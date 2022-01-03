@@ -8,16 +8,18 @@ use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
-$transactionManager = $this->getContainer()->get('athena.transaction_manager');
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
+$transactionManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\TransactionManager::class);
+$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
 
 # resources current rate
 $resourcesCurrentRate = $transactionManager->getLastCompletedTransaction(Transaction::TYP_RESOURCE)->currentRate;
 
 echo '<div class="component market-sell">';
 	echo '<div class="head skin-4 sh">';
-		echo '<img src="' . MEDIA . 'resources/resource.png" alt="ressource" class="main" />';
+		echo '<img src="' . $mediaPath . 'resources/resource.png" alt="ressource" class="main" />';
 		echo '<h2>Ressources</h2>';
 		echo '<em>mettre en vente</em>';
 	echo '</div>';
@@ -27,13 +29,13 @@ echo '<div class="component market-sell">';
 				echo '<div class="label-box">';
 					echo '<span class="label">Ressources</span>';
 					echo '<span class="value">' . Format::numberFormat($ob_compPlat->resourcesStorage) . '</span>';
-					echo '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">';
+					echo '<img class="icon-color" alt="ressources" src="' . $mediaPath . 'resources/resource.png">';
 				echo '</div>';
 
 				echo '<div class="label-box sf-quantity">';
 					echo '<label for="sell-market-quantity-resources" class="label">Quantité</label>';
 					echo '<input id="sell-market-quantity-resources" class="value" type="text" name="quantity" autocomplete="off" />';
-					echo '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">';
+					echo '<img class="icon-color" alt="ressources" src="' . $mediaPath . 'resources/resource.png">';
 				echo '</div>';
 
 				echo '<hr />';
@@ -41,13 +43,13 @@ echo '<div class="component market-sell">';
 				echo '<div class="label-box sf-min-price">';
 					echo '<span class="label">Prix minimum</span>';
 					echo '<span class="value" data-price-raw="0"></span>';
-					echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
+					echo '<img class="icon-color" alt="crédits" src="' . $mediaPath . 'resources/credit.png">';
 				echo '</div>';
 
 				echo '<div class="label-box sf-price">';
 					echo '<label for="sell-market-price-resources" class="label">Prix</label>';
 					echo '<input id="sell-market-price-resources" class="value" type="text" name="price" autocomplete="off"/>';
-					echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
+					echo '<img class="icon-color" alt="crédits" src="' . $mediaPath . 'resources/credit.png">';
 				echo '</div>';
 
 				echo '<hr />';
@@ -55,7 +57,7 @@ echo '<div class="component market-sell">';
 				echo '<div class="label-box sf-comship">';
 					echo '<span class="label">Vaisseaux</span>';
 					echo '<span class="value"></span>';
-					echo '<img class="icon-color" alt="vaisseaux transports" src="' . MEDIA . 'resources/transport.png">';
+					echo '<img class="icon-color" alt="vaisseaux transports" src="' . $mediaPath . 'resources/transport.png">';
 				echo '</div>';
 
 				echo '<hr />';
@@ -73,7 +75,7 @@ $commanderCurrentRate = $transactionManager->getLastCompletedTransaction(Transac
 
 echo '<div class="component market-sell">';
 	echo '<div class="head skin-4">';
-		echo '<img src="' . MEDIA . 'orbitalbase/school.png" alt="commandants" class="main" />';
+		echo '<img src="' . $mediaPath . 'orbitalbase/school.png" alt="commandants" class="main" />';
 		echo '<h2>Commandants</h2>';
 		echo '<em>mettre en vente</em>';
 	echo '</div>';
@@ -83,7 +85,7 @@ echo '<div class="component market-sell">';
 				$commander = $commanders[$i];
 				echo '<div class="queue">';
 					echo '<div class="item sh" data-target="sell-commander-' . $i . '">';
-						echo '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
+						echo '<img class="picto" src="' . $mediaPath . 'commander/small/' . $commander->avatar . '.png" alt="" />';
 						echo '<strong>' . CommanderResources::getInfo($commander->getLevel(), 'grade') . ' ' . $commander->getName() . '</strong>';
 						echo '<em>' . Format::numberFormat($commander->getExperience()) . ' points d\'expérience</em>';
 					echo '</div>';
@@ -94,19 +96,19 @@ echo '<div class="component market-sell">';
 					echo '<div class="label-box">';
 						echo '<span class="label">Prix minimum</span>';
 						echo '<span class="value">' . Game::getMinPriceRelativeToRate(Transaction::TYP_COMMANDER, $commander->experience) . '</span>';
-						echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
+						echo '<img class="icon-color" alt="crédits" src="' . $mediaPath . 'resources/credit.png">';
 					echo '</div>';
 
 					echo '<div class="label-box">';
 						echo '<label for="sell-market-price-commander" class="label">Prix</label>';
 						echo '<input id="sell-market-price-commander" class="value" type="text" name="price" value="' . ceil($commander->experience * $commanderCurrentRate) . '" autocomplete="off" />';
-						echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
+						echo '<img class="icon-color" alt="crédits" src="' . $mediaPath . 'resources/credit.png">';
 					echo '</div>';
 
 					echo '<div class="label-box">';
 						echo '<span class="label">Vaisseaux</span>';
 						echo '<span class="value">1</span>';
-						echo '<img class="icon-color" alt="vaisseaux transports" src="' . MEDIA . 'resources/transport.png">';
+						echo '<img class="icon-color" alt="vaisseaux transports" src="' . $mediaPath . 'resources/transport.png">';
 					echo '</div>';
 
 					echo '<hr />';
@@ -129,7 +131,7 @@ $shipCurrentRate = $transactionManager->getLastCompletedTransaction(Transaction:
 
 echo '<div class="component market-sell">';
 	echo '<div class="head skin-4">';
-		echo '<img src="' . MEDIA . 'orbitalbase/dock2.png" alt="vaisseaux" class="main" />';
+		echo '<img src="' . $mediaPath . 'orbitalbase/dock2.png" alt="vaisseaux" class="main" />';
 		echo '<h2>Vaisseaux</h2>';
 		echo '<em>mettre en vente</em>';
 	echo '</div>';
@@ -139,7 +141,7 @@ echo '<div class="component market-sell">';
 				if ($ship > 0) {
 					echo '<div class="queue sh" data-target="sell-ships-' . $key . '">';
 						echo '<div class="item">';
-							echo '<img class="picto" src="' . MEDIA . 'ship/picto/ship' . $key . '.png" alt="" />';
+							echo '<img class="picto" src="' . $mediaPath . 'ship/picto/ship' . $key . '.png" alt="" />';
 							echo '<strong>' . ShipResource::getInfo($key, 'codeName') . '</strong>';
 							echo '<em>' . ShipResource::getInfo($key, 'name') . '</em>';
 							echo '<em>' . ShipResource::getInfo($key, 'pev') . ' pev</em>';
@@ -162,13 +164,13 @@ echo '<div class="component market-sell">';
 						echo '<div class="label-box sf-min-price">';
 							echo '<span class="label">Prix minimum</span>';
 							echo '<span class="value"></span>';
-							echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
+							echo '<img class="icon-color" alt="crédits" src="' . $mediaPath . 'resources/credit.png">';
 						echo '</div>';
 
 						echo '<div class="label-box sf-price">';
 							echo '<label for="sell-market-price-ship" class="label">Prix</label>';
 							echo '<input id="sell-market-price-ship" class="value" type="text" name="price" autocomplete="off" />';
-							echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png">';
+							echo '<img class="icon-color" alt="crédits" src="' . $mediaPath . 'resources/credit.png">';
 						echo '</div>';
 
 						echo '<hr />';
@@ -176,7 +178,7 @@ echo '<div class="component market-sell">';
 						echo '<div class="label-box sf-comship">';
 							echo '<span class="label">Vaisseaux</span>';
 							echo '<span class="value"></span>';
-							echo '<img class="icon-color" alt="vaisseaux transports" src="' . MEDIA . 'resources/transport.png">';
+							echo '<img class="icon-color" alt="vaisseaux transports" src="' . $mediaPath . 'resources/transport.png">';
 						echo '</div>';
 
 						echo '<hr />';

@@ -6,8 +6,8 @@ use Asylamba\Modules\Ares\Model\Report;
 use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$reportManager = $this->getContainer()->get('ares.report_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$reportManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\ReportManager::class);
 
 $id = $request->query->get('id');
 
@@ -34,4 +34,4 @@ if ($id) {
 } else {
 	throw new ErrorException('Manque de précision sur le rapport.');
 }
-$this->getContainer()->get('entity_manager')->flush();
+$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();

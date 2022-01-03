@@ -43,6 +43,7 @@ class Router
 
 	public function __construct(
 		protected SessionWrapper $sessionWrapper,
+		protected string $appRoot,
 		protected string $rootPath,
 		protected string $getOutRoot,
 		protected string $actionPath,
@@ -127,7 +128,7 @@ class Router
 		if (2 > \count($fileParts)) {
 			return false;
 		}
-		return \in_array($fileParts[1], ['css', 'js', 'png', 'jpg']) && \is_file($this->getResourcePath($requestURI));
+		return \in_array(end($fileParts), ['css', 'js', 'png', 'jpg']) && \is_file($this->getResourcePath($requestURI));
 	}
 
 	protected function serveResource(Response $response, array $requestURI): void
@@ -148,7 +149,7 @@ class Router
 
 		if ($page === 'inscription') {
 			if ($this->sessionWrapper->exist('playerId')) {
-				$response->redirect($this->rootPath);
+				$response->redirect($this->appRoot);
 			}
 		} elseif ($page === 'connection') {
 			if (!$this->sessionWrapper->exist('playerId')) {
@@ -156,7 +157,7 @@ class Router
 					$response->redirect($this->getOutRoot . 'accueil/speak-wrongargument');
 				}
 			} else {
-				$response->redirect($this->rootPath);
+				$response->redirect($this->appRoot);
 			}
 		} elseif (\in_array($page, array('api', 'script', 'buffer', 'public'))) {
 			# doing nothing

@@ -80,7 +80,7 @@ parameters:
     highmode: true
     # active les feuilles de style multiples par faction
     # note : les style peuvent ne pas être à jour
-    colorstyle: true
+    color_style: true
     # active l'ajout du script analytics
     analytics: false
     # active la captation des données d'analyse (TB)
@@ -146,6 +146,7 @@ services:
             
     Asylamba\Classes\Router\Router:
         arguments:
+            $appRoot: '%app_root%'
             $rootPath: '%root_path%'
             $getOutRoot: "%getout_root%"
             $actionPath: '%action%'
@@ -195,7 +196,7 @@ services:
             
     Asylamba\Classes\Library\Parser:
         arguments:
-            $rootPath: '%root_path%'
+            $appRoot: '%app_root%'
             $mediaPath: '%media%'
 
     Asylamba\Classes\Worker\API:

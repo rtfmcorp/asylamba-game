@@ -7,15 +7,17 @@ use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 
+$container = $this->getContainer();
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$transactionManager = $this->getContainer()->get('athena.transaction_manager');
-$commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
+$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$transactionManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\TransactionManager::class);
+$commercialRouteManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialRouteManager::class);
 $taxCoeff = $this->getContainer()->getParameter('zeus.player.tax_coeff');
-$entityManager = $this->getContainer()->get('entity_manager');
+$entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
+$componentPath = $container->getParameter('component');
 
 # background paralax
 echo '<div id="background-paralax" class="financial"></div>';
@@ -26,7 +28,7 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
-	include COMPONENT . 'publicity.php';
+	include $componentPath . 'publicity.php';
 
 	if (!$request->query->has('view') OR $request->query->get('view') == 'invest') {
 		$player = $playerManager->get($session->get('playerId'));
@@ -112,39 +114,39 @@ echo '<div id="content">';
 		$financial_remains  = round($financial_credit) + round($financial_benefice);
 
 		# generalFinancial component
-		include COMPONENT . 'financial/generalFinancial.php';
+		include $componentPath . 'financial/generalFinancial.php';
 
 		# impositionFinancial component
 		$ob_impositionFinancial = $ob_generalFinancial;
-		include COMPONENT . 'financial/impositionFinancial.php';
+		include $componentPath . 'financial/impositionFinancial.php';
 
 		# routeFinancial component
 		$ob_routeFinancial = $ob_generalFinancial;
-		include COMPONENT . 'financial/routeFinancial.php';
+		include $componentPath . 'financial/routeFinancial.php';
 
 		# investFinancial component
 		$ob_investFinancial = $ob_generalFinancial;
 		$player_investFinancial = $player;
-		include COMPONENT . 'financial/investFinancial.php';
+		include $componentPath . 'financial/investFinancial.php';
 
 		# taxOutFinancial component
 		$ob_taxOutFinancial = $ob_generalFinancial;
-		include COMPONENT . 'financial/taxOutFinancial.php';
+		include $componentPath . 'financial/taxOutFinancial.php';
 
 		# shipsFeesFinancial component
 		$commander_shipsFeesFinancial = $commander_generalFinancial;
 		$transaction_shipsFeesFinancial = $transaction_generalFinancial;
 		$ob_shipsFeesFinancial = $ob_generalFinancial;
-		include COMPONENT . 'financial/shipFeesFinancial.php';
+		include $componentPath . 'financial/shipFeesFinancial.php';
 
 		# fleetFeesFinancial component
 		$commander_fleetFeesFinancial = $commander_generalFinancial;
 		$ob_fleetFeesFinancial = $ob_generalFinancial;
-		include COMPONENT . 'financial/fleetFeesFinancial.php';
+		include $componentPath . 'financial/fleetFeesFinancial.php';
 	} elseif ($request->query->get('view') == 'send') {
-		include COMPONENT . 'financial/send-credit-player.php';
-		include COMPONENT . 'financial/send-credit-faction.php';
-		include COMPONENT . 'financial/last-send-credit.php';
-		include COMPONENT . 'financial/last-receive-credit.php';
+		include $componentPath . 'financial/send-credit-player.php';
+		include $componentPath . 'financial/send-credit-faction.php';
+		include $componentPath . 'financial/last-send-credit.php';
+		include $componentPath . 'financial/last-receive-credit.php';
 	}
 echo '</div>';

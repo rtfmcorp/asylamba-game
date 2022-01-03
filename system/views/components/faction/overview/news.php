@@ -6,6 +6,9 @@
 
 # require
 
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+
 echo '<div class="component">';
 	echo '<div class="head skin-2">';
 		echo '<h1>Faction</h1>';
@@ -17,13 +20,13 @@ echo '<div class="component">';
 					echo '<h4>' . $news->title . '</h4>';
 					echo '<p class="long-info text-bloc">' . $news->pContent . '</p>';
 				}
-				echo '<a class="more-button" href="' . APP_ROOT . 'faction/view-overview">Voir l\'annonce mise en avant</a>';
+				echo '<a class="more-button" href="' . $appRoot . 'faction/view-overview">Voir l\'annonce mise en avant</a>';
 			} else {
 				if ($factionNews !== null) {
 					echo '<h4>' . $factionNews->title . '</h4>';
 					echo '<p class="long-info text-bloc">' . $factionNews->pContent . '</p>';
 				}
-				echo '<a class="more-button" href="' . APP_ROOT . 'faction/view-overview/news-list">Voir toutes les annonces</a>';
+				echo '<a class="more-button" href="' . $appRoot . 'faction/view-overview/news-list">Voir toutes les annonces</a>';
 			}
 		echo '</div>';
 	echo '</div>';

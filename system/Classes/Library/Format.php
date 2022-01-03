@@ -94,7 +94,8 @@ class Format {
 	public static function actionBuilder($action, $token, $params = array(), $hasRoot = TRUE) {
 		$url = '';
 		if ($hasRoot) {
-			$url .= APP_ROOT;
+			// @TODO replace with app_root
+			$url .= '/';
 		}
 		$url .= 'action/';
 		$url .= 'a-' . $action . '/';

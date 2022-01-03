@@ -16,13 +16,16 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
-$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
-$shipHelper = $this->getContainer()->get('athena.ship_helper');
-$shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
-$technologyManager = $this->getContainer()->get('promethee.technology_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$shipHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\ShipHelper::class);
+$shipQueueManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\ShipQueueManager::class);
+$technologyManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\TechnologyManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
 $shipResourceRefund = $this->getContainer()->getParameter('athena.building.ship_queue_resource_refund');
+$mediaPath = $container->getParameter('media');
+$appRoot = $container->getParameter('app_root');
 
 $shipQueues = $shipQueueManager->getByBaseAndDockType($ob_dock1->rPlace, 1);
 $nbShipQueues = count($shipQueues);
@@ -55,7 +58,7 @@ for ($i = 0; $i < 6; $i++) {
 
 	# display
 	$name = ShipResource::getInfo($i, 'codeName');
-	$picto = MEDIA . 'ship/picto/' . ShipResource::getInfo($i, 'imageLink') . '.png';
+	$picto = $mediaPath . 'ship/picto/' . ShipResource::getInfo($i, 'imageLink') . '.png';
 	$disability = 'disable';
 
 	if (($answer = $shipHelper->haveRights($i, 'techno', $technology)) !== TRUE) {
@@ -77,17 +80,17 @@ for ($i = 0; $i < 6; $i++) {
 			$but = '<span class="button disable">';
 				$but .= 'file de construction pleine<br />';
 				$but .= '<span class="final-cost">' . Format::numberFormat(ShipResource::getInfo($i, 'resourcePrice')) . '</span> ';
-				$but .= '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png"> et ';
+				$but .= '<img class="icon-color" alt="ressources" src="' . $mediaPath . 'resources/resource.png"> et ';
 				$but .= '<span class="final-time">' . Chronos::secondToFormat(ShipResource::getInfo($i, 'time'), 'lite') . '</span> ';
-				$but .= '<img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
+				$but .= '<img class="icon-color" alt="relèves" src="' . $mediaPath . 'resources/time.png">';
 			$but .= '</span>';
 		} elseif ($maxShip < 1) {
 			$but = '<span class="button disable">';
 				$but .= 'pas assez de ressources / hangar plein<br />';
 				$but .= '<span class="final-cost">' . Format::numberFormat(ShipResource::getInfo($i, 'resourcePrice')) . '</span> ';
-				$but .= '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png"> et ';
+				$but .= '<img class="icon-color" alt="ressources" src="' . $mediaPath . 'resources/resource.png"> et ';
 				$but .= '<span class="final-time">' . Chronos::secondToFormat(ShipResource::getInfo($i, 'time'), 'lite') . '</span> ';
-				$but .= '<img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
+				$but .= '<img class="icon-color" alt="relèves" src="' . $mediaPath . 'resources/time.png">';
 			$but .= '</span>';
 		} else {
 			$but  = '<input class="ship-pack" type="text" maxlength="2" name="quantity" value="' . $maxShip . '" data-max-ship="' . $maxShip . '" />';
@@ -95,9 +98,9 @@ for ($i = 0; $i < 6; $i++) {
 			$but .= '<a href="' . Format::actionBuilder('buildship', $sessionToken, ['baseid' => $ob_dock1->getId(), 'ship' => $i, 'quantity' => $maxShip]) . '" class="button">';
 				$but .= 'construire <span class="final-number">' . $maxShip . '</span> ' . ShipResource::getInfo($i, 'codeName') . ' pour<br />';
 				$but .= '<span class="final-cost">' . Format::numberFormat(ShipResource::getInfo($i, 'resourcePrice') * $maxShip) . '</span> ';
-				$but .= '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png"> et ';
+				$but .= '<img class="icon-color" alt="ressources" src="' . $mediaPath . 'resources/resource.png"> et ';
 				$but .= '<span class="final-time">' . Chronos::secondToFormat(ShipResource::getInfo($i, 'time') * $maxShip, 'lite') . '</span> ';
-				$but .= '<img class="icon-color" alt="relèves" src="' . MEDIA . 'resources/time.png">';
+				$but .= '<img class="icon-color" alt="relèves" src="' . $mediaPath . 'resources/time.png">';
 			$but .= '</a>';
 		}
 	}
@@ -110,14 +113,14 @@ for ($i = 0; $i < 6; $i++) {
 			$s[$i] .= '<em>' . ShipResource::getInfo($i, 'name') . '</em>'; 
 			$s[$i] .= '<a href="#" class="addInfoPanel info hb lt" title="plus d\'info" data-ship-id="' . $i . '" data-info-type="ship">+</a>';
 		$s[$i] .= '</div>';
-		$s[$i] .= '<div class="ship-illu"><img src="' . MEDIA . 'ship/img/' . Format::paddingNumber($i + 1, 2) . '-' . Format::paddingNumber($session->get('playerInfo')->get('color'), 2) . '.png" alt="" /></div>';
+		$s[$i] .= '<div class="ship-illu"><img src="' . $mediaPath . 'ship/img/' . Format::paddingNumber($i + 1, 2) . '-' . Format::paddingNumber($session->get('playerInfo')->get('color'), 2) . '.png" alt="" /></div>';
 		$s[$i] .= $but;
 	$s[$i] .= '</div>';
 }
 
 echo '<div class="component">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'orbitalbase/dock1.png" alt="" />';
+		echo '<img src="' . $mediaPath . 'orbitalbase/dock1.png" alt="" />';
 		echo '<h2>' . $orbitalBaseHelper->getBuildingInfo(2, 'frenchName') . '</h2>';
 		echo '<em>niveau ' . $ob_dock1->getLevelDock1() . '</em>';
 	echo '</div>';
@@ -146,7 +149,7 @@ echo '<div class="component">';
 							: '<div class="item active progress" data-progress-output="lite" data-progress-current-time="' . $remainingTime . '" data-progress-total-time="' . $totalTimeShips . '">';
 						echo '<a href="' . Format::actionBuilder('dequeueship', $sessionToken, ['baseid' => $ob_dock1->getId(), 'dock' => '1', 'queue' => $queue->id]) . '"' . 
 							'class="button hb lt" title="annuler la commande (attention, vous ne récupérerez que ' . $shipResourceRefund * 100 . '% du montant investi)">×</a>';
-						echo  '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($queue->shipNumber, 'imageLink') . '.png" alt="" />';
+						echo  '<img class="picto" src="' . $mediaPath . 'ship/picto/' . ShipResource::getInfo($queue->shipNumber, 'imageLink') . '.png" alt="" />';
 						echo '<strong>' . $queue->quantity . ' ' . ShipResource::getInfo($queue->shipNumber, 'codeName') . Format::addPlural($queue->quantity) . '</strong>';
 						
 						if ($realSizeQueue > 1) {
@@ -207,7 +210,7 @@ echo '<div class="component">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="tool">';
-				echo '<span><a href="' . APP_ROOT . 'fleet/view-movement">intégrer à vos armées</a></span>';
+				echo '<span><a href="' . $appRoot . 'fleet/view-movement">intégrer à vos armées</a></span>';
 				echo '<span><a href="#" class="sh hb lt" title="information" data-target="info-dock1">?</a></span>';
 			echo '</div>';
 
@@ -223,7 +226,7 @@ echo '<div class="component">';
 				for ($i = 0; $i < 6; $i++) {
 					echo '<div class="queue sh" data-target="sell-ships-' . $i . '">';
 						echo '<div class="item">';
-							echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($i, 'imageLink') . '.png" alt="" />';
+							echo '<img class="picto" src="' . $mediaPath . 'ship/picto/' . ShipResource::getInfo($i, 'imageLink') . '.png" alt="" />';
 							echo '<strong><span class="big">' . $storage[$i] . '</span> ' . ShipResource::getInfo($i, 'codeName') . Format::addPlural($storage[$i]) . '</strong>';
 							echo '<em>' . ($storage[$i] * ShipResource::getInfo($i, 'pev')) . ' PEV</em>';
 						echo '</div>';
@@ -248,7 +251,7 @@ echo '<div class="component">';
 							echo '<div class="label-box sf-min-price">';
 								echo '<span class="label">Ressources</span>';
 								echo '<span class="value"></span>';
-								echo '<img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/resource.png">';
+								echo '<img class="icon-color" alt="crédits" src="' . $mediaPath . 'resources/resource.png">';
 							echo '</div>';
 
 							echo '<hr />';
@@ -259,9 +262,9 @@ echo '<div class="component">';
 				echo '<div class="number-box">';	
 					echo '<span class="label">capacité du hangar</span>';
 					echo '<span class="value">';
-						echo $inStorage . ' <img class="icon-color" alt="" src="' . MEDIA . 'resources/pev.png">';
+						echo $inStorage . ' <img class="icon-color" alt="" src="' . $mediaPath . 'resources/pev.png">';
 						echo ' / ';
-						echo $totalSpace . ' <img class="icon-color" alt="" src="' . MEDIA . 'resources/pev.png">';
+						echo $totalSpace . ' <img class="icon-color" alt="" src="' . $mediaPath . 'resources/pev.png">';
 					echo '</span>';
 					$percent = Format::numberFormat($inStorage / $totalSpace * 100);
 					$percent = $percent > 100 ? 100 : $percent;

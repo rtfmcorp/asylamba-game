@@ -4,8 +4,10 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-$parser = $this->getContainer()->get('parser');
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+$parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
+$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
 
 $status = ColorResource::getInfo($faction->id, 'status');
 
@@ -69,7 +71,7 @@ echo '<div class="component player profil size1">';
 			echo '</div>';
 
 			echo '<div class="profil-flag">';
-				echo '<img src="' . MEDIA . 'avatar/big/' . $candidat->avatar . '.png" alt="' . $candidat->name . '">';
+				echo '<img src="' . $mediaPath . 'avatar/big/' . $candidat->avatar . '.png" alt="' . $candidat->name . '">';
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';

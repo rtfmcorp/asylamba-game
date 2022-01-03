@@ -1,8 +1,8 @@
 <?php
 
 
-$galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
-$sectorManager = $this->getContainer()->get('gaia.sector_manager');
+$galaxyConfiguration = $this->getContainer()->get(\Asylamba\Modules\Gaia\Galaxy\GalaxyConfiguration::class);
+$sectorManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SectorManager::class);
 
 $sectors = $sectorManager->getAll();
 $rate = 750 / $galaxyConfiguration->galaxy['size'];

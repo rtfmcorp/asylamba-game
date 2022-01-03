@@ -42,7 +42,11 @@ class ResponseFactory
 		if ($response->getStatusCode() === 302) {
 			$response->headers->set('Location',
 				(!\str_starts_with($response->getRedirect(), 'http'))
-				? \sprintf('http://%s%s', $request->headers->get('host'), $response->getRedirect())
+				? \sprintf(
+					'http://%s%s',
+					$request->headers->get('host'),
+					(str_starts_with($response->getRedirect(), '/') ? $response->getRedirect() : \sprintf("/%s", $response->getRedirect())),
+				)
 				: $response->getRedirect()
 			);
 		}

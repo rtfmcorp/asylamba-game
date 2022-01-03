@@ -12,8 +12,11 @@ use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Game;
 
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
+$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
 
 echo '<div class="component">';
 	echo '<div class="head skin-1"></div>';
@@ -108,12 +111,12 @@ echo '<div class="component">';
 
 			echo '<div class="number-box grey">';
 				echo '<span class="label">Salaire de l\'officier</span>';
-				echo '<span class="value">' . Format::numberFormat($commander_commanderDetail->level * Commander::LVLINCOMECOMMANDER) . ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits"></span>';
+				echo '<span class="value">' . Format::numberFormat($commander_commanderDetail->level * Commander::LVLINCOMECOMMANDER) . ' <img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits"></span>';
 			echo '</div>';
 
 			echo '<div class="number-box grey">';
 				echo '<span class="label">Frais d\'entretien des vaisseaux</span>';
-				echo '<span class="value">' . Format::numberFormat(Game::getFleetCost($commander_commanderDetail->getNbrShipByType())) . ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits"></span>';
+				echo '<span class="value">' . Format::numberFormat(Game::getFleetCost($commander_commanderDetail->getNbrShipByType())) . ' <img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits"></span>';
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';

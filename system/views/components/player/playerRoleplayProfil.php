@@ -11,7 +11,9 @@
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Classes\Library\Format;
 
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$mediaPath = $container->getParameter('media');
 
 echo '<div class="component profil">';
 	echo '<div class="head">';
@@ -28,7 +30,7 @@ echo '<div class="component profil">';
 
 			echo '<div class="profil-flag">';
 				echo '<img ';
-					echo 'src="' . MEDIA . '/avatar/big/' . $player_playerRoleplayProfil->avatar . '.png" ';
+					echo 'src="' . $mediaPath . '/avatar/big/' . $player_playerRoleplayProfil->avatar . '.png" ';
 					echo 'alt="avatar de ' . $player_playerRoleplayProfil->name . '" ';
 				echo '/>';
 				echo '<span class="level">' . $player_playerRoleplayProfil->level . '</span>';

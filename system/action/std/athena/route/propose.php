@@ -17,16 +17,16 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$commercialRouteManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialRouteManager::class);
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$notificationManager = $this->getContainer()->get('hermes.notification_manager');
-$colorManager = $this->getContainer()->get('demeter.color_manager');
+$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
+$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
 $routeColorBonus = $this->getContainer()->getParameter('athena.trade.route.color_bonus');
 $routeSectorBonus = $this->getContainer()->getParameter('athena.trade.route.sector_bonus');
-$entityManager = $this->getContainer()->get('entity_manager');
+$entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');

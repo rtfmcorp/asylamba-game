@@ -4,7 +4,10 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Zeus\Model\Player;
 
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
 
 $status = ColorResource::getInfo($faction->id, 'status');
@@ -24,8 +27,8 @@ echo '<div class="component profil player size1">';
 				foreach ($governmentMembers as $minister) { 
 					if ($minister->status == $type) {
 						echo '<div class="player">';
-							echo '<a href="' . APP_ROOT . 'embassy/player-' .  $minister->id . '">';
-								echo '<img src="' . MEDIA . 'avatar/small/' .  $minister->avatar . '.png" alt="' .  $minister->name . '"  class="picto" />';
+							echo '<a href="' . $appRoot . 'embassy/player-' .  $minister->id . '">';
+								echo '<img src="' . $mediaPath . 'avatar/small/' .  $minister->avatar . '.png" alt="' .  $minister->name . '"  class="picto" />';
 							echo '</a>';
 							echo '<span class="title">' . $status[$minister->status - 1] . '</span>';
 							echo '<strong class="name">' .  $minister->name . '</strong>';

@@ -26,7 +26,7 @@ class GalaxyGenerator {
 	public $systemDeleted = 0;
 	public $listSector = array();
 
-	protected string $output;
+	protected string $output = '';
 	
 	public function __construct(
 		protected DatabaseAdmin $databaseAdmin,

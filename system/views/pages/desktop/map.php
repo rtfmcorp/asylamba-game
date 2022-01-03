@@ -1,12 +1,13 @@
 <?php
 
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$placeManager = $this->getContainer()->get('gaia.place_manager');
-$sectorManager = $this->getContainer()->get('gaia.sector_manager');
-$systemManager = $this->getContainer()->get('gaia.system_manager');
-$galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
+$sectorManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SectorManager::class);
+$systemManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SystemManager::class);
+$galaxyConfiguration = $this->getContainer()->get(\Asylamba\Modules\Gaia\Galaxy\GalaxyConfiguration::class);
 $sectors = $sectorManager->getAll();
 
 $playerBases = $orbitalBaseManager->getPlayerBases($session->get('playerId'));
@@ -53,7 +54,7 @@ if (!empty($system)) {
 
 	# inclusion du "composant"
 	echo '<div id="action-box" style="bottom: 0px;">';
-		include PAGES . 'desktop/mapElement/actionbox.php';
+		include $container->getParameter('pages') . 'desktop/mapElement/actionbox.php';
 	echo '</div>';
 } else {
 	echo '<div id="action-box"></div>';

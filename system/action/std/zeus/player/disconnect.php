@@ -1,7 +1,7 @@
 <?php
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $sessionId = $session->get('session_id');
 $session->destroy();
-$this->getContainer()->get('client_manager')->removeClient($sessionId);
+$this->getContainer()->get(\Asylamba\Classes\Daemon\ClientManager::class)->removeClient($sessionId);
 $this->getContainer()->get('app.response')->redirect('profil', TRUE);

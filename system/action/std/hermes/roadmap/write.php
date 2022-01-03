@@ -10,9 +10,9 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Hermes\Model\RoadMap;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$parser = $this->getContainer()->get('parser');
-$roadmapManager = $this->getContainer()->get('hermes.roadmap_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
+$roadmapManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\RoadMapManager::class);
 
 if ($session->get('playerInfo')->get('admin') == FALSE) {
 	$response->redirect('profil');

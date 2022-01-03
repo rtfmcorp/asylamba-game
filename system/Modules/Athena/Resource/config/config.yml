@@ -24,6 +24,7 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        public: true
 
     Asylamba\Modules\Athena\Helper\:
         resource: '%root_path%/system/Modules/Athena/Helper/*'

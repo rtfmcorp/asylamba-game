@@ -4,6 +4,9 @@
 
 use Asylamba\Modules\Demeter\Resource\LawResources;
 
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+
 echo '<div class="component uni">';
 	echo '<div class="head">';
 	echo '</div>';
@@ -14,7 +17,7 @@ echo '<div class="component uni">';
 			foreach ($effectiveLaws as $law) { 
 				echo '<div class="build-item">';
 					echo '<div class="name">';
-						echo '<img src="' . MEDIA . 'faction/law/common.png" alt="">';
+						echo '<img src="' . $mediaPath . 'faction/law/common.png" alt="">';
 						echo '<strong>' . LawResources::getInfo($law->type, 'name') . '</strong>';
 					echo '</div>';
 				echo '</div>';
@@ -29,7 +32,7 @@ echo '<div class="component uni">';
 			foreach ($votingLaws as $law) { 
 				echo '<div class="build-item">';
 					echo '<div class="name">';
-						echo '<img src="' . MEDIA . 'faction/law/common.png" alt="">';
+						echo '<img src="' . $mediaPath . 'faction/law/common.png" alt="">';
 						echo '<strong>' . LawResources::getInfo($law->type, 'name') . '</strong>';
 					echo '</div>';
 				echo '</div>';
@@ -45,7 +48,7 @@ echo '<div class="component uni">';
 			foreach ($bonus as $b) {
 				echo '<div class="build-item">';
 					echo '<div class="name">';
-						echo '<img src="' . MEDIA . $b['path'] . '" alt="" />';
+						echo '<img src="' . $mediaPath . $b['path'] . '" alt="" />';
 						echo '<strong>' . $b['title'] . '</strong>';
 						echo '<em>' . $b['desc'] . '</em>';
 					echo '</div>';

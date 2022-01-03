@@ -7,14 +7,16 @@
 # require
 	# _T PRM 		FACTION_RANKING_TERRITORIAL
 
-$factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+$factionRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\FactionRankingManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 $factionRankingManager->changeSession($FACTION_RANKING_TERRITORIAL);
 
 echo '<div class="component player rank">';
 	echo '<div class="head skin-4">';
-		echo '<img class="main" alt="ressource" src="' . MEDIA . 'rank/cup.png">';
+		echo '<img class="main" alt="ressource" src="' . $mediaPath . 'rank/cup.png">';
 		echo '<h2>Territorial</h2>';
 		echo '<em>Nombre de points des secteurs controlés</em>';
 	echo '</div>';

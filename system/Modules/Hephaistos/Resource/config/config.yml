@@ -3,6 +3,7 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        public: true
 
     Asylamba\Modules\Hephaistos\Manager\TechnicalManager:
         arguments:

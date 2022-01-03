@@ -9,13 +9,13 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Demeter\Model\Election\Vote;
 use Asylamba\Modules\Demeter\Model\Color;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
-$colorManager = $this->getContainer()->get('demeter.color_manager');
-$electionManager = $this->getContainer()->get('demeter.election_manager');
-$candidateManager = $this->getContainer()->get('demeter.candidate_manager');
+$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
+$electionManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Election\ElectionManager::class);
+$candidateManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Election\CandidateManager::class);
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$voteManager = $this->getContainer()->get('demeter.vote_manager');
+$voteManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Election\VoteManager::class);
 
 $rElection = $request->query->get('relection');
 $rCandidate = $request->query->get('rcandidate');

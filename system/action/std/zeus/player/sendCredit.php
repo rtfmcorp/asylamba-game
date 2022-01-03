@@ -18,11 +18,11 @@ use Asylamba\Classes\Exception\FormException;
 # [string text] 	facultative text
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$creditTransactionManager = $this->getContainer()->get('zeus.credit_transaction_manager');
-$notificationManager = $this->getContainer()->get('hermes.notification_manager');
-$parser = $this->getContainer()->get('parser');
+$creditTransactionManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\CreditTransactionManager::class);
+$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
+$parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
 
 $name = $request->request->get('name');
 $quantity = $request->request->get('quantity');

@@ -20,16 +20,16 @@ use Asylamba\Modules\Zeus\Resource\TutorialResource;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
-$technologyManager = $this->getContainer()->get('promethee.technology_manager');
-$shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
-$shipHelper = $this->getContainer()->get('athena.ship_helper');
-$colorManager = $this->getContainer()->get('demeter.color_manager');
-$database = $this->getContainer()->get('database');
-$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$technologyManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\TechnologyManager::class);
+$shipQueueManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\ShipQueueManager::class);
+$shipHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\ShipHelper::class);
+$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
+$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
+$tutorialHelper = $this->getContainer()->get(\Asylamba\Modules\Zeus\Helper\TutorialHelper::class);
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');

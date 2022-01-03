@@ -29,6 +29,10 @@ class FactionRankingManager extends Manager
 		$qr = $this->database->prepare('SELECT * FROM ranking WHERE faction = 1 ORDER BY dRanking DESC LIMIT 1');
 		$qr->execute();
 		$aw = $qr->fetch();
+
+		if (false === $aw) {
+			return;
+		}
 		$rRanking = $aw['id'];
 
 		# add the rRanking to the WHERE clause

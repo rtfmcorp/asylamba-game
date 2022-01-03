@@ -12,13 +12,13 @@ use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Athena\Model\ShipQueue;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$shipQueueManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\ShipQueueManager::class);
 $shipResourceRefund = $this->getContainer()->getParameter('athena.building.ship_queue_resource_refund');
-$scheduler = $this->getContainer()->get('realtime_action_scheduler');
-$entityManager = $this->getContainer()->get('entity_manager');
+$scheduler = $this->getContainer()->get(\Asylamba\Classes\Scheduler\RealtimeActionScheduler::class);
+$entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');

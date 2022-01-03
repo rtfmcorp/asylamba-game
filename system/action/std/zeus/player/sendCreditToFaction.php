@@ -10,10 +10,10 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$colorManager = $this->getContainer()->get('demeter.color_manager');
-$creditTransactionManager = $this->getContainer()->get('zeus.credit_transaction_manager');
+$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
+$creditTransactionManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\CreditTransactionManager::class);
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 $quantity = $request->request->get('quantity');
 
@@ -40,7 +40,7 @@ if ($quantity !== FALSE) {
 						$creditTransactionManager->add($ct);
 
 						$session->addFlashbag('Crédits envoyés', Flashbag::TYPE_SUCCESS);
-						$this->getContainer()->get('entity_manager')->flush();
+						$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();
 					} else {
 						throw new ErrorException('envoi de crédits impossible - faction introuvable');
 					}	

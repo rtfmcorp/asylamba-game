@@ -4,10 +4,10 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Classes\Container\ArrayList;
 
-$session = $this->getContainer()->get('session_wrapper');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$playerBonusManager = $this->getContainer()->get('zeus.player_bonus_manager');
-$clientManager = $this->getContainer()->get('client_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$playerBonusManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerBonusManager::class);
+$clientManager = $this->getContainer()->get(\Asylamba\Classes\Daemon\ClientManager::class);
 
 # création des tableaux de données dans le contrôler
 $session->initPlayerInfo();

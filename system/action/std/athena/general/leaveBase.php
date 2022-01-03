@@ -14,13 +14,13 @@ use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
-$placeManager = $this->getContainer()->get('gaia.place_manager');
-$commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
-$entityManager = $this->getContainer()->get('entity_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
+$commercialRouteManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialRouteManager::class);
+$entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
 $eventDispatcher = $this->getContainer()->get('event_dispatcher');
 
 $baseId = $request->query->get('id');

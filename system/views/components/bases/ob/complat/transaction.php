@@ -3,8 +3,11 @@
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Athena\Model\CommercialShipping;
 
-$commercialShippingManager = $this->getContainer()->get('athena.commercial_shipping_manager');
-$commercialTradeManager = $this->getContainer()->get('athena.commercial_tax_manager');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$commercialShippingManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialShippingManager::class);
+$commercialTradeManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialTaxManager::class);
 
 $S_CTM1 = $commercialTradeManager->getCurrentSession();
 
@@ -30,9 +33,9 @@ echo '<div class="component transaction">';
 				echo '<span class="label">Vaisseaux de commerce disponibles</span>';
 				echo '<span class="value">';
 					echo Format::numberFormat($maxShip - $usedShips);
-					echo ' <img class="icon-color" alt="vaisseaux" src="' . MEDIA . 'resources/transport.png"> / ';
+					echo ' <img class="icon-color" alt="vaisseaux" src="' . $mediaPath . 'resources/transport.png"> / ';
 					echo Format::numberFormat($maxShip);
-					echo ' <img class="icon-color" alt="vaisseaux" src="' . MEDIA . 'resources/transport.png">';
+					echo ' <img class="icon-color" alt="vaisseaux" src="' . $mediaPath . 'resources/transport.png">';
 				echo '</span>';
 
 				echo '<span class="progress-bar">';

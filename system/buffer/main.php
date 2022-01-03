@@ -30,23 +30,23 @@ if ($this->getContainer()->getParameter('environment') === 'dev' || $this->getCo
 
 	<div class="content">
 <?php
-		echo '<a href="' . $container->getParameter('root_path') . 'inscription/bindkey-' . $security->crypt($security->buildBindkey(Utils::generateString(10))) . '">';
+		echo '<a href="' . $container->getParameter('app_root') . 'inscription/bindkey-' . $security->crypt($security->buildBindkey(Utils::generateString(10))) . '">';
 			echo '<em>Créer un</em>';
 			echo '<strong>Personnage lvl. 1</strong>';
 			echo '<img src="' . $container->getParameter('media') . 'avatar/big/empty.png" alt="" />';
 		echo '</a>';
 
 		if ($container->getParameter('highmode')) {
-			echo '<a href="' . $container->getParameter('root_path') . 'inscription/bindkey-' . $security->crypt($security->buildBindkey(Utils::generateString(10))) . '/mode-high">';
+			echo '<a href="' . $container->getParameter('app_root') . 'inscription/bindkey-' . $security->crypt($security->buildBindkey(Utils::generateString(10))) . '/mode-high">';
 				echo '<em>Créer un</em>';
 				echo '<strong>Personnage lvl. 5</strong>';
-				echo '<img src="' . $container->getParameter('media') . 'avatar/big/empty.png" alt="" />';
+				echo '<img src="' . $container->getParameter('media') . 'avatar/big/empty.png" alt=œ"" />';
 				echo '<span class="number">+5</span>';
 			echo '</a>';
 		}
 
 		foreach ($activePlayers as $player) {
-			echo '<a class="color' . $player->rColor . '" href="' . $container->getParameter('root_path') . 'connection/bindkey-' . $security->crypt($security->buildBindkey($player->bind)) . '">';
+			echo '<a class="color' . $player->rColor . '" href="' . $container->getParameter('app_root') . 'connection/bindkey-' . $security->crypt($security->buildBindkey($player->bind)) . '">';
 				echo '<em>Grade ' . $player->level . '</em>';
 				echo '<strong>' . $player->name . '</strong>';
 				echo '<img src="' . $container->getParameter('media') . 'avatar/big/' . $player->avatar . '.png" alt="" />';

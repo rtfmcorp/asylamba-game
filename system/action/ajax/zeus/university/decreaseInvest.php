@@ -17,7 +17,7 @@ if (!in_array($category, array('natural', 'life', 'social', 'informatic'))) {
 }
 
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 $player = $playerManager->get($session->get('playerId'));
 
@@ -60,4 +60,4 @@ if ($oldInvest != 0) {
 	}
 }
 
-$this->getContainer()->get('entity_manager')->flush($player);
+$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush($player);

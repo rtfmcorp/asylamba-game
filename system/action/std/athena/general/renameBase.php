@@ -9,9 +9,9 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Zeus\Helper\CheckName;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -21,7 +21,7 @@ $baseId = $request->query->get('baseid');
 $name = $request->request->get('name');
 
 // protection du nouveau nom de la base
-$p = $this->getContainer()->get('parser');
+$p = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
 $name = $p->protect($name);
 
 if ($baseId !== FALSE AND $name !== FALSE AND in_array($baseId, $verif)) {
@@ -39,7 +39,7 @@ if ($baseId !== FALSE AND $name !== FALSE AND in_array($baseId, $verif)) {
 					}
 				}
 				
-				$this->getContainer()->get('entity_manager')->flush($orbitalBase);
+				$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush($orbitalBase);
 
 				$session->addFlashbag('Le nom a été changé en ' . $name . ' avec succès', Flashbag::TYPE_SUCCESS);
 			} else {

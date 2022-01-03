@@ -10,15 +10,15 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Ares\Model\Commander;
 
 $request = $this->getContainer()->get('app.request');
-$scheduler = $this->getContainer()->get('realtime_action_scheduler');
+$scheduler = $this->getContainer()->get(\Asylamba\Classes\Scheduler\RealtimeActionScheduler::class);
 
 if (($request->query->get('commanderid')) === null) {
 	throw new ErrorException('Manque de précision sur le commandant ou la position.');
 }
 $commanderId = $request->query->get('commanderid');
 
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 if (($commander = $commanderManager->get($commanderId)) === null || $commander->rPlayer !== $session->get('playerId')) {
 	throw new ErrorException('Ce commandant ne vous appartient pas ou n\'existe pas.');
@@ -64,4 +64,4 @@ $scheduler->schedule(
 		'id' => $commander->getRPlaceDestination()
 	]
 );
-$this->getContainer()->get('entity_manager')->flush();
+$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();

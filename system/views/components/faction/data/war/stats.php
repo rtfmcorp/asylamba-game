@@ -5,7 +5,9 @@ use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 
-$database = $this->getContainer()->get('database');
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
 
 $qr = $database->prepare('SELECT
 		COUNT(c.id) AS nb,
@@ -70,7 +72,7 @@ echo '<div class="component profil">';
 				echo '<span class="label">PEV totaux</span>';
 				echo '<span class="value">';
 					echo Format::number($totalPEV);
-					echo ' <img class="icon-color" src="' . MEDIA . 'resources/pev.png" alt="pev">';
+					echo ' <img class="icon-color" src="' . $mediaPath . 'resources/pev.png" alt="pev">';
 				echo '</span>';
 				echo '<span class="group-link"><a href="#" title="PEV affectés à des commandants actifs" class="hb lt">?</a></span>';
 			echo '</div>';
@@ -81,7 +83,7 @@ echo '<div class="component profil">';
 					echo (isset($aw1['nb']) AND $aw1['nb'] != 0)
 						? Format::number($totalPEV / $aw1['nb'])
 						: 0;
-					echo ' <img class="icon-color" src="' . MEDIA . 'resources/pev.png" alt="pev">';
+					echo ' <img class="icon-color" src="' . $mediaPath . 'resources/pev.png" alt="pev">';
 				echo '</span>';
 			echo '</div>';
 
@@ -89,7 +91,7 @@ echo '<div class="component profil">';
 			echo '<ul class="list-type-1">';
 			for ($i = 0; $i < 12; $i++) {
 				echo '<li>';
-					echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($i, 'imageLink') . '.png" alt="" />';
+					echo '<img class="picto" src="' . $mediaPath . 'ship/picto/' . ShipResource::getInfo($i, 'imageLink') . '.png" alt="" />';
 					echo '<span class="label">' . ShipResource::getInfo($i, 'name') . ' &laquo;' . ShipResource::getInfo($i, 'codeName') . '&raquo;</span>';
 					echo '<span class="value">' . Format::number($aw2['nbs' . $i]) . '</span>';
 				echo '</li>';

@@ -3,8 +3,11 @@
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 # statPlayer component
 # in player.demeter package
@@ -51,14 +54,14 @@ echo '<div class="component player rank">';
 				}
 
 				echo '<div class="player">';
-					echo '<a href="' . APP_ROOT . 'embassy/player-' . $p->id . '">';
-						echo '<img src="' . MEDIA . 'avatar/small/' . $p->avatar . '.png" class="picto" alt="' . $p->name . '" />';
+					echo '<a href="' . $appRoot . 'embassy/player-' . $p->id . '">';
+						echo '<img src="' . $mediaPath . 'avatar/small/' . $p->avatar . '.png" class="picto" alt="' . $p->name . '" />';
 					echo '</a>';
 					echo '<span class="title">' . $status[$p->status - 1] . '</span>';
 					echo '<strong class="name">' . $p->name . '</strong>';
 
 					if ($p->id != $session->get('playerId')) {
-						echo '<span class="experience"><a href="' . APP_ROOT . 'message/conversation-new/sendto-' . $p->id . '">Souhaiter la bienvenue</a></span>';
+						echo '<span class="experience"><a href="' . $appRoot . 'message/conversation-new/sendto-' . $p->id . '">Souhaiter la bienvenue</a></span>';
 					}
 				echo '</div>';
 			}

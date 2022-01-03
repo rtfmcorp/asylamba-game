@@ -1,8 +1,11 @@
 <?php
 
+$container = $this->getContainer();
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$cssPath = $container->getParameter('css');
+$mediaPath = $container->getParameter('media');
 
 if ($response->getPage() == 'inscription' && ($request->query->get('step') == 1 || !$request->query->has('step'))) {
 	$color = 'color0';
@@ -20,27 +23,27 @@ echo '<head>';
 		echo ($response->getPage() == 'inscription') 
 			? $response->getTitle()
 			: $response->getTitle() . ' — ' . $session->get('playerInfo')->get('name');
-		echo ' — ' . APP_SUBNAME;
-		echo ' — ' . APP_NAME;
+		echo ' — ' . $container->getParameter('app_subname');
+		echo ' — ' . $container->getParameter('app_name');
 	echo '</title>';
 
 	echo '<meta charset="utf-8" />';
-	echo '<meta name="description" content="' . APP_DESCRIPTION . '" />';
+	echo '<meta name="description" content="' . $container->getParameter('app_description') . '" />';
 
 	echo '<link href="http://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic" rel="stylesheet" type="text/css">';
 
-	if (COLORSTYLE) {
+	if ($container->getParameter('color_style')) {
 		echo ($response->getPage() == 'inscription' && !$request->query->has('step') || ($request->query->get('step') == 1))
-			? '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.v3.color1.css" />'
-			: '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.v3.' . $color . '.css" />';
+			? '<link rel="stylesheet" media="screen" type="text/css" href="' . $cssPath . 'main.desktop.v3.color1.css" />'
+			: '<link rel="stylesheet" media="screen" type="text/css" href="' . $cssPath . 'main.desktop.v3.' . $color . '.css" />';
 	} else {
-		echo '<link rel="stylesheet" media="screen" type="text/css" href="' . CSS . 'main.desktop.v3.css" />';
+		echo '<link rel="stylesheet" media="screen" type="text/css" href="' . $cssPath . 'main.desktop.v3.css" />';
 	}
 
-	echo '<link rel="icon" type="image/png" href="' . MEDIA . '/favicon/' . $color . '.png" />';
+	echo '<link rel="icon" type="image/png" href="' . $mediaPath . '/favicon/' . $color . '.png" />';
 echo '</head>';
 
-if (ANALYTICS) {
+if ($container->getParameter('analytics')) {
 ?>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

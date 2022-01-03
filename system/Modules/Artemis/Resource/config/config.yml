@@ -3,6 +3,7 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        public: true
 
     Asylamba\Modules\Artemis\Manager\:
         resource: '%root_path%/system/Modules/Artemis/Manager/*'

@@ -2,9 +2,11 @@
 
 use Asylamba\Classes\Library\Flashbag;
 
+$container = $this->getContainer();
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$componentPath = $container->getParameter('component');
 # bases loading
 if ($session->get('playerInfo')->get('admin') == FALSE) {
 	$session->addFlashbag('Accès non-autorisé', Flashbag::TYPE_BUG_ERROR);
@@ -24,12 +26,12 @@ echo '<div id="content">';
 	# admin component
 	if (!$request->query->has('view') OR $request->query->get('view') == 'message') {
 		# main message
-		include COMPONENT . 'admin/message/newOfficialMessage.php';
-		include COMPONENT . 'default.php';
+		include $componentPath . 'admin/message/newOfficialMessage.php';
+		include $componentPath . 'default.php';
 	} elseif ($request->query->get('view') == 'roadmap') {
 		# main roadmap
-		include COMPONENT . 'admin/roadmap/addEntry.php';
-		include COMPONENT . 'default.php';
+		include $componentPath . 'admin/roadmap/addEntry.php';
+		include $componentPath . 'default.php';
 	} else {
 		$this->getContainer()->get('app.response')->redirect('404');
 	}

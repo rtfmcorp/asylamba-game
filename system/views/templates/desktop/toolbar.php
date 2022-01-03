@@ -10,14 +10,17 @@ use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Ares\Model\Commander;
 
-$session = $this->getContainer()->get('session_wrapper');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
-$shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
-$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
-$technologyHelper = $this->getContainer()->get('promethee.technology_helper');
-$place = $this->getContainer()->get('gaia.place_manager');
+$container = $this->getContainer();
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$buildingQueueManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\BuildingQueueManager::class);
+$shipQueueManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\ShipQueueManager::class);
+$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$technologyHelper = $this->getContainer()->get(\Asylamba\Modules\Promethee\Helper\TechnologyHelper::class);
+$place = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
 $player = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class)->get($session->get('playerId'));
+$mediaPath = $container->getParameter('media');
+$appRoot = $container->getParameter('app_root');
 
 $currentBase = $orbitalBaseManager->get($session->get('playerParams')->get('base'));
 
@@ -39,45 +42,45 @@ echo '<div id="tools">';
 	echo '<div class="box left">';
 		echo '<a href="#" class="resource-link sh" data-target="tools-refinery">';
 			echo Format::numberFormat($currentBase->getResourcesStorage());
-			echo ' <img class="icon-color" src="' . MEDIA . 'resources/resource.png" alt="ressources" />';
+			echo ' <img class="icon-color" src="' . $mediaPath . 'resources/resource.png" alt="ressources" />';
 		echo '</a>';
 		
 		$nbBuildingQueues = count($currentBase->buildingQueues);
-		echo '<a href="#" class="square sh" data-target="tools-generator"><img src="' . MEDIA . 'orbitalbase/generator.png" alt="" />';
+		echo '<a href="#" class="square sh" data-target="tools-generator"><img src="' . $mediaPath . 'orbitalbase/generator.png" alt="" />';
 			echo ($nbBuildingQueues !== 0) ? '<span class="number">' . $nbBuildingQueues . '</span>' : NULL;
 		echo '</a>';
 
 		$nbTechnos = count($currentBase->technoQueues);
-		echo '<a href="#" class="square sh" data-target="tools-technosphere"><img src="' . MEDIA . 'orbitalbase/technosphere.png" alt="" />';
+		echo '<a href="#" class="square sh" data-target="tools-technosphere"><img src="' . $mediaPath . 'orbitalbase/technosphere.png" alt="" />';
 			echo ($nbTechnos > 0) ? '<span class="number">' . $nbTechnos . '</span>' : NULL;
 		echo '</a>';
 
 		$dock1ShipQueues = $shipQueueManager->getByBaseAndDockType($currentBase->rPlace, 1);
 		$nbDock1ShipQueues = count($dock1ShipQueues);
-		echo '<a href="#" class="square sh" data-target="tools-dock1"><img src="' . MEDIA . 'orbitalbase/dock1.png" alt="" />';
+		echo '<a href="#" class="square sh" data-target="tools-dock1"><img src="' . $mediaPath . 'orbitalbase/dock1.png" alt="" />';
 			echo ($nbDock1ShipQueues > 0) ? '<span class="number">' . $nbDock1ShipQueues . '</span>' : NULL;
 		echo '</a>';
 
 		$dock2ShipQueues = $shipQueueManager->getByBaseAndDockType($currentBase->rPlace, 2);
 		$nbDock2ShipQueues = count($dock2ShipQueues);
-		echo '<a href="#" class="square sh" data-target="tools-dock2"><img src="' . MEDIA . 'orbitalbase/dock2.png" alt="" />';
+		echo '<a href="#" class="square sh" data-target="tools-dock2"><img src="' . $mediaPath . 'orbitalbase/dock2.png" alt="" />';
 			echo ($nbDock2ShipQueues > 0) ? '<span class="number">' . $nbDock2ShipQueues . '</span>' : NULL;
 		echo '</a>';
 	echo '</div>';
 
 	# right
 	echo '<div class="box right">';
-		echo '<a href="#" class="square sh" data-target="tools-incoming-attack"><img src="' . MEDIA . 'common/nav-fleet-defense.png" alt="" />';
+		echo '<a href="#" class="square sh" data-target="tools-incoming-attack"><img src="' . $mediaPath . 'common/nav-fleet-defense.png" alt="" />';
 			echo ($nbIncomingCommanders > 0) ? '<span class="number">' . $nbIncomingCommanders . '</span>' : NULL;
 		echo '</a>';
 
-		echo '<a href="#" class="square sh" data-target="tools-outgoing-attack"><img src="' . MEDIA . 'common/nav-fleet-attack.png" alt="" />';
+		echo '<a href="#" class="square sh" data-target="tools-outgoing-attack"><img src="' . $mediaPath . 'common/nav-fleet-attack.png" alt="" />';
 			echo ($nbOutcomingCommanders > 0) ? '<span class="number">' . $nbOutcomingCommanders . '</span>' : NULL;
 		echo '</a>';
 
 		echo '<span class="resource-link" style="width: 120px;">';
 				echo Format::numberFormat($player->getCredit());
-				echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+				echo ' <img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 		echo '</span>';
 	echo '</div>';
 
@@ -101,7 +104,7 @@ echo '<div id="tools">';
 					if ($refiningBonus > 0) {
 						echo '<span class="bonus">+' . Format::numberFormat(($production * $refiningBonus / 100)) . '</span>';
 					}
-					echo ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color">';
+					echo ' <img alt="ressources" src="' . $mediaPath . 'resources/resource.png" class="icon-color">';
 				echo '</span>';
 			echo '</div>';
 
@@ -109,7 +112,7 @@ echo '<div id="tools">';
 				echo '<span class="label">ressources en stock</span>';
 				echo '<span class="value">';
 					echo Format::numberFormat($currentBase->getResourcesStorage());
-					echo ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color">';
+					echo ' <img alt="ressources" src="' . $mediaPath . 'resources/resource.png" class="icon-color">';
 				echo '</span>';
 				$storageSpace = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $currentBase->getLevelStorage(), 'storageSpace');
 				$storageBonus = $session->get('playerBonus')->get(PlayerBonus::REFINERY_STORAGE);
@@ -122,7 +125,7 @@ echo '<div id="tools">';
 				echo '</span>';
 			echo '</div>';
 				
-			echo '<a href="' . APP_ROOT . 'bases/view-refinery" class="more-link">vers la raffinerie</a>';
+			echo '<a href="' . $appRoot . 'bases/view-refinery" class="more-link">vers la raffinerie</a>';
 		echo '</div>';
 	echo '</div>';
 
@@ -133,7 +136,7 @@ echo '<div id="tools">';
 				$qe = $currentBase->buildingQueues[0];
 				echo '<div class="queue">';
 					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'level', $qe->targetLevel, 'time') . '">';
-						echo '<img class="picto" src="' . MEDIA . 'orbitalbase/' . $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
+						echo '<img class="picto" src="' . $mediaPath . 'orbitalbase/' . $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
 						echo '<strong>';
 							echo $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'frenchName');
 							echo ' <span class="level">niv. ' . $qe->targetLevel . '</span>';
@@ -151,7 +154,7 @@ echo '<div id="tools">';
 				echo '<p class="info">Aucun bâtiment en construction pour le moment.</p>';
 			}
 
-			echo '<a href="' . APP_ROOT . 'bases/view-generator" class="more-link">vers le générateur</a>';
+			echo '<a href="' . $appRoot . 'bases/view-generator" class="more-link">vers le générateur</a>';
 		echo '</div>';
 	echo '</div>';
 
@@ -162,7 +165,7 @@ echo '<div id="tools">';
 				$qe = $dock1ShipQueues[0];
 				echo '<div class="queue">';
 					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $qe->quantity * ShipResource::getInfo($qe->shipNumber, 'time') . '">';
-						echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($qe->shipNumber, 'imageLink') . '.png" alt="" />';
+						echo '<img class="picto" src="' . $mediaPath . 'ship/picto/' . ShipResource::getInfo($qe->shipNumber, 'imageLink') . '.png" alt="" />';
 						echo '<strong>';
 							echo $qe->quantity . ' ' . ShipResource::getInfo($qe->shipNumber, 'codeName') . Format::addPlural($qe->quantity);
 						echo '</strong>';
@@ -179,7 +182,7 @@ echo '<div id="tools">';
 				echo '<p class="info">Aucun vaisseau en construction pour le moment.</p>';
 			}
 
-			echo '<a href="' . APP_ROOT . 'bases/view-dock1" class="more-link">vers le chantier alpha</a>';
+			echo '<a href="' . $appRoot . 'bases/view-dock1" class="more-link">vers le chantier alpha</a>';
 		echo '</div>';
 	echo '</div>';
 
@@ -190,7 +193,7 @@ echo '<div id="tools">';
 				$qe = $dock2ShipQueues[0];
 				echo '<div class="queue">';
 					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $qe->quantity * ShipResource::getInfo($qe->shipNumber, 'time') . '">';
-						echo '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($qe->shipNumber, 'imageLink') . '.png" alt="" />';
+						echo '<img class="picto" src="' . $mediaPath . 'ship/picto/' . ShipResource::getInfo($qe->shipNumber, 'imageLink') . '.png" alt="" />';
 						echo '<strong>';
 							echo $qe->quantity . ' ' . ShipResource::getInfo($qe->shipNumber, 'codeName') . Format::addPlural($qe->quantity);
 						echo '</strong>';
@@ -207,7 +210,7 @@ echo '<div id="tools">';
 				echo '<p class="info">Aucun vaisseau en construction pour le moment.</p>';
 			}
 
-			echo '<a href="' . APP_ROOT . 'bases/view-dock2" class="more-link">vers le chantier de ligne</a>';
+			echo '<a href="' . $appRoot . 'bases/view-dock2" class="more-link">vers le chantier de ligne</a>';
 		echo '</div>';
 	echo '</div>';
 
@@ -218,7 +221,7 @@ echo '<div id="tools">';
 				$qe = $currentBase->technoQueues[0];
 				echo '<div class="queue">';
 					echo '<div class="item active progress" data-progress-no-reload="true" data-progress-output="lite" data-progress-current-time="' . Utils::interval(Utils::now(), $qe->dEnd, 's') . '" data-progress-total-time="' . $technologyHelper->getInfo($qe->technology, 'time', $qe->targetLevel) . '">';
-						echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . $technologyHelper->getInfo($qe->technology, 'imageLink') . '.png" alt="" />';
+						echo  '<img class="picto" src="' . $mediaPath . 'technology/picto/' . $technologyHelper->getInfo($qe->technology, 'imageLink') . '.png" alt="" />';
 						echo '<strong>' . $technologyHelper->getInfo($qe->technology, 'name');
 						if (!$technologyHelper->isAnUnblockingTechnology($qe->technology)) {
 							echo ' <span class="level">niv. ' . $qe->targetLevel . '</span>';
@@ -236,7 +239,7 @@ echo '<div id="tools">';
 				echo '<p class="info">Aucune recherche en cours pour le moment.</p>';
 			}
 
-			echo '<a href="' . APP_ROOT . 'bases/view-technosphere" class="more-link">vers la technosphère</a>';
+			echo '<a href="' . $appRoot . 'bases/view-technosphere" class="more-link">vers la technosphère</a>';
 		echo '</div>';
 	echo '</div>';
 
@@ -252,7 +255,7 @@ echo '<div id="tools">';
 						echo 'data-progress-output="lite" ';
 						echo 'data-progress-current-time="' . Utils::interval(Utils::now(), $commander->dArrival, 's') . '" ';
 						echo 'data-progress-total-time="' . Utils::interval($commander->dStart, $commander->dArrival, 's') . '">';
-						echo  '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
+						echo  '<img class="picto" src="' . $mediaPath . 'commander/small/' . $commander->avatar . '.png" alt="" />';
 						echo '<strong>' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->name . '</strong>';
 						echo '<em>';
 							switch ($commander->travelType) {
@@ -276,7 +279,7 @@ echo '<div id="tools">';
 				echo '<p class="info">Aucune attaques entrantes.</p>';
 			}
 		echo '</div>';
-		echo '<a href="' . APP_ROOT . 'fleet" class="more-link">vers l\'amirauté</a>';
+		echo '<a href="' . $appRoot . 'fleet" class="more-link">vers l\'amirauté</a>';
 	echo '</div>';
 
 	echo '<div class="overbox right-pic" id="tools-outgoing-attack">';
@@ -291,7 +294,7 @@ echo '<div id="tools">';
 						echo 'data-progress-output="lite" ';
 						echo 'data-progress-current-time="' . Utils::interval(Utils::now(), $commander->getArrivalDate(), 's') . '" ';
 						echo 'data-progress-total-time="' . Utils::interval($commander->getStartedAt(), $commander->getArrivalDate(), 's') . '">';
-						echo  '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->getAvatar() . '.png" alt="" />';
+						echo  '<img class="picto" src="' . $mediaPath . 'commander/small/' . $commander->getAvatar() . '.png" alt="" />';
 						echo '<strong>' . CommanderResources::getInfo($commander->getLevel(), 'grade') . ' ' . $commander->getName() . '</strong>';
 						echo '<em>';
 							switch ($commander->getTravelType()) {
@@ -314,6 +317,6 @@ echo '<div id="tools">';
 				echo '<p class="info">Aucune flotte en route.</p>';
 			}
 		echo '</div>';
-		echo '<a href="' . APP_ROOT . 'fleet" class="more-link">vers l\'amirauté</a>';
+		echo '<a href="' . $appRoot . 'fleet" class="more-link">vers l\'amirauté</a>';
 	echo '</div>';
 echo '</div>';

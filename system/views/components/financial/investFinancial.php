@@ -11,11 +11,13 @@
 
 use Asylamba\Classes\Library\Format;
 
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$container = $this->getContainer();
+$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
+$mediaPath = $container->getParameter('media');
 
 echo '<div class="component financial">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'financial/invest.png" alt="" />';
+		echo '<img src="' . $mediaPath . 'financial/invest.png" alt="" />';
 		echo '<h2>Investissements</h2>';
 		echo '<em>Investissements par planète</em>';
 	echo '</div>';
@@ -34,7 +36,7 @@ echo '<div class="component financial">';
 
 						echo '<span class="value">';
 							echo Format::numberFormat($baseInvest);
-							echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+							echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 						echo '</span>';
 
 						echo '<ul class="sub-list-type-1" id="invest-base-' . $base->getId() . '">';
@@ -76,7 +78,7 @@ echo '<div class="component financial">';
 					echo '<span class="label">total des investissements</span>';
 					echo '<span class="value">';
 						echo Format::numberFormat($financial_totalInvest);
-						echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+						echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 					echo '</span>';
 				echo '</li>';
 			echo '</ul>';

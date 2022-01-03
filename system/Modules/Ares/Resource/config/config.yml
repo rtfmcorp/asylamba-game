@@ -17,6 +17,7 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        public: true
 
     Asylamba\Modules\Ares\Manager\:
         resource: '%root_path%/system/Modules/Ares/Manager/*'

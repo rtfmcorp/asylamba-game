@@ -15,6 +15,7 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        public: true
 
     Asylamba\Modules\Zeus\Helper\:
         resource: '%root_path%/system/Modules/Zeus/Helper/*'

@@ -5,8 +5,8 @@ use Asylamba\Classes\Library\Flashbag;
 
 use Asylamba\Modules\Hermes\Model\Notification;
 
-$notificationManager = $this->getContainer()->get('hermes.notification_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 $notifications = $notificationManager->getUnreadNotifications($session->get('playerId'));
 $nbNotifications = count($notifications);
@@ -15,7 +15,7 @@ foreach ($notifications as $notification) {
 	$notification->setReaded(1);
 }
 
-$this->getContainer()->get('entity_manager')->flush(Notification::class);
+$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush(Notification::class);
 
 if ($nbNotifications > 1) {
 	$session->addFlashbag($nbNotifications . ' notifications ont été marquées comme lues.', Flashbag::TYPE_SUCCESS);

@@ -2,9 +2,11 @@
 
 use Asylamba\Modules\Atlas\Model\PlayerRanking;
 
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$playerRankingManager = $this->getContainer()->get('atlas.player_ranking_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$playerRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\PlayerRankingManager::class);
 
 $direction		= $request->query->get('dir');
 $current		= $request->query->get('current');
@@ -31,7 +33,7 @@ if ($direction !== FALSE && $current !== FALSE && $type !== FALSE) {
 			$playerRankingManager->loadLastContext(array(), array($fty . 'Position', 'ASC'), array($bot - 1, $size));
 
 			if ($direction == 'next' && $bot > 1) {
-				echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-morerank/dir-next/type-' . $type . '/current-' . $bot . '" data-dir="top">';
+				echo '<a class="more-item" href="' . $appRoot . 'ajax/a-morerank/dir-next/type-' . $type . '/current-' . $bot . '" data-dir="top">';
 					echo 'afficher les joueurs précédents';
 				echo '</a>';
 			}
@@ -41,7 +43,7 @@ if ($direction !== FALSE && $current !== FALSE && $type !== FALSE) {
 			}
 
 			if ($direction == 'prev' && $playerRankingManager->size() == PlayerRanking::PAGE) {
-				echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-morerank/dir-prev/type-' . $type . '/current-' . ($current + PlayerRanking::PAGE) . '">';
+				echo '<a class="more-item" href="' . $appRoot . 'ajax/a-morerank/dir-prev/type-' . $type . '/current-' . ($current + PlayerRanking::PAGE) . '">';
 					echo 'afficher les joueurs suivants';
 				echo '</a>';
 			}

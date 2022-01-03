@@ -9,10 +9,10 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Library\Flashbag;
 
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
 
 $rPlayer = $request->request->get('rplayer');
 $department = $request->query->get('department');
@@ -34,7 +34,7 @@ if ($rPlayer !== FALSE && $department !== FALSE) {
 								->addTxt('Vous avez été choisi pour être le ' . $statusArray[$department - 1] . ' de votre faction.');
 							$notificationManager->add($notif);
 
-							$this->getContainer()->get('entity_manager')->flush($appointee);
+							$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush($appointee);
 							$session->addFlashbag($appointee->name . ' a rejoint votre gouvernement.', Flashbag::TYPE_SUCCESS);	
 						} else {
 							throw new ErrorException('Ce département est inconnu.');

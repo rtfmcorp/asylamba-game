@@ -49,37 +49,25 @@ class Database
 			die('Erreur de connection à la base de données : ' . $e->getMessage());
 		}
 	}
-	
-	/**
-	 * @return bool
-	 */
-	public function beginTransaction()
+
+	public function beginTransaction(): bool
 	{
-		//return $this->connection->beginTransaction();
+		return $this->connection->beginTransaction();
 	}
-	
-	/**
-	 * @return bool
-	 */
-	public function inTransaction()
+
+	public function inTransaction(): bool
 	{
 		return $this->connection->inTransaction();
 	}
-	
-	/**
-	 * @return bool
-	 */
-	public function commit()
+
+	public function commit(): bool
 	{
-		// return $this->connection->commit();
+		return $this->connection->commit();
 	}
-	
-	/**
-	 * @return bool
-	 */
-	public function rollBack()
+
+	public function rollBack(): bool
 	{
-		//return $this->connection->rollBack();
+		return $this->connection->rollBack();
 	}
 
 	public function query($query) {
@@ -91,11 +79,7 @@ class Database
 		self::$nbrOfQuery++;
 		return $this->connection->prepare($query);
 	}
-	
-	/**
-	 * @param string $query
-	 * @return \PDOStatement
-	 */
+
 	public function exec($query)
 	{
 		self::$nbrOfQuery++;

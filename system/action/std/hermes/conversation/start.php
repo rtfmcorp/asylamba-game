@@ -9,14 +9,14 @@ use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
-$database = $this->getContainer()->get('database');
+$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
-$conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
-$conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
+$conversationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationManager::class);
+$conversationUserManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationUserManager::class);
+$conversationMessageManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationMessageManager::class);
 $response = $this->getContainer()->get('app.response');
 $request = $this->getContainer()->get('app.request');
-$parser = $this->getContainer()->get('parser');
+$parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
 
 $recipients = $request->request->get('recipients');
 $content = $request->request->get('content');

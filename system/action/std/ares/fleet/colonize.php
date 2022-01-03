@@ -13,14 +13,14 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Classes\Exception\ErrorException;
 
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
-$placeManager = $this->getContainer()->get('gaia.place_manager');
-$technologyManager = $this->getContainer()->get('promethee.technology_manager');
+$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
+$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
+$technologyManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\TechnologyManager::class);
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$colorManager = $this->getContainer()->get('demeter.color_manager');
-$sectorManager = $this->getContainer()->get('gaia.sector_manager');
-$database = $this->getContainer()->get('database');
-$session = $this->getContainer()->get('session_wrapper');
+$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
+$sectorManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SectorManager::class);
+$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
 $colonizationCost = $this->getContainer()->getParameter('ares.coeff.colonization_cost');
 $conquestCost = $this->getContainer()->getParameter('ares.coeff.conquest_cost');
@@ -120,4 +120,4 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	throw new ErrorException('Manque de précision sur le commandant ou la position.');
 }
 
-$this->getContainer()->get('entity_manager')->flush();
+$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();

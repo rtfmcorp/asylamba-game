@@ -1,11 +1,13 @@
 <?php
 
+$container = $this->getContainer();
+$componentPath = $container->getParameter('component');
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$technologyManager = $this->getContainer()->get('promethee.technology_manager');
-$technologyHelper = $this->getContainer()->get('promethee.technology_helper');
-$researchHelper = $this->getContainer()->get('promethee.research_helper');
-$researchManager = $this->getContainer()->get('promethee.research_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$technologyManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\TechnologyManager::class);
+$technologyHelper = $this->getContainer()->get(\Asylamba\Modules\Promethee\Helper\TechnologyHelper::class);
+$researchHelper = $this->getContainer()->get(\Asylamba\Modules\Promethee\Helper\ResearchHelper::class);
+$researchManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\ResearchManager::class);
 $researchQuantity = $this->getContainer()->getParameter('promethee.research.quantity');
 
 $tech = $request->query->get('techno');
@@ -50,5 +52,5 @@ if ($technologyHelper->isATechnology($tech) AND !$technologyHelper->isATechnolog
 	}
 
 	# component
-	include COMPONENT . 'tech/infoTech.php';
+	include $componentPath . 'tech/infoTech.php';
 }

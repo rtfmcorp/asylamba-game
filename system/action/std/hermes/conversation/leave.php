@@ -7,10 +7,10 @@ use Asylamba\Modules\Hermes\Model\ConversationMessage;
 use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
-$conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
-$conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$conversationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationManager::class);
+$conversationUserManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationUserManager::class);
+$conversationMessageManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationMessageManager::class);
 
 $conversation 	= $request->query->get('conversation');
 

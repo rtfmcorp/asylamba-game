@@ -9,7 +9,7 @@
 
 use Asylamba\Classes\Library\Format;
 
-$factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
+$factionRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\FactionRankingManager::class);
 
 $factionRankingManager->changeSession($FACTION_RANKING_POINTS);
 

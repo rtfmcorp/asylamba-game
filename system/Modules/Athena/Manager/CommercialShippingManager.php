@@ -40,7 +40,7 @@ class CommercialShippingManager
 	
 	public function scheduleShippings()
 	{
-		$shippings = $this->entityManager->getRepository(CommercialShipping::class)->getAll();
+		$shippings = $this->entityManager->getRepository(CommercialShipping::class)->getMoving();
 		
 		foreach ($shippings as $commercialShipping) {
 			$this->realtimeActionScheduler->schedule(
@@ -71,13 +71,15 @@ class CommercialShippingManager
 	{
 		$this->entityManager->persist($commercialShipping);
 		$this->entityManager->flush($commercialShipping);
-		
-		$this->realtimeActionScheduler->schedule(
-			'athena.orbital_base_manager',
-			'uCommercialShipping',
-			$commercialShipping,
-			$commercialShipping->getArrivedAt()
-		);
+
+		if (CommercialShipping::ST_WAITING !== $commercialShipping->getStatement()) {
+			$this->realtimeActionScheduler->schedule(
+				'athena.orbital_base_manager',
+				'uCommercialShipping',
+				$commercialShipping,
+				$commercialShipping->getArrivedAt()
+			);
+		}
 	}
 
 	public function deliver(CommercialShipping $commercialShipping, $transaction, $destOB, $commander) {

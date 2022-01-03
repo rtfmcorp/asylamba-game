@@ -4,7 +4,7 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Zeus\Model\Player;
 
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $response = $this->getContainer()->get('app.response');
 
 if (($player = $playerManager->get($session->get('playerId'))) !== null) {
@@ -15,7 +15,7 @@ if (($player = $playerManager->get($session->get('playerId'))) !== null) {
 		$player->bind = $player->bind . 'ABANDON';
 		$player->statement = Player::DELETED;
 		
-		$this->getContainer()->get('entity_manager')->flush($player);
+		$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush($player);
 		# clean session
 		$session->destroy();
 		$response->redirect($this->getContainer()->getParameter('getout_root') . 'serveurs', TRUE);

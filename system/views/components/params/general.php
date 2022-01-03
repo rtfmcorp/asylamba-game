@@ -1,7 +1,7 @@
 <?php
 use Asylamba\Classes\Library\Format;
 
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
 # void
 echo '<div class="component">';
 	echo '<div class="head">';

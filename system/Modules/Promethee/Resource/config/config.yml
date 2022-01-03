@@ -11,6 +11,7 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        public: true
 
     Asylamba\Modules\Promethee\Manager\:
         resource: '%root_path%/system/Modules/Promethee/Manager/*'

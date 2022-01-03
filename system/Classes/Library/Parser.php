@@ -22,7 +22,7 @@ class Parser
 	protected PlayerManager $playerManager;
 
 	public function __construct(
-		protected string $rootPath,
+		protected string $appRoot,
 		protected string $mediaPath,
 	) {
 	}
@@ -127,7 +127,7 @@ class Parser
 			function($m) {
 				return
 					(($player = $this->playerManager->getByName($m[1])) !== null)
-					? '<a href="' . $this->rootPath . 'embassy/player-' . $player->getId() . '" class="color' . $player->getRColor() . ' hb lt" title="voir le profil">' . $player->getName() . '</a>'
+					? '<a href="' . $this->appRoot . 'embassy/player-' . $player->getId() . '" class="color' . $player->getRColor() . ' hb lt" title="voir le profil">' . $player->getName() . '</a>'
 					: $m[0]
 				;
 			},
@@ -141,9 +141,9 @@ class Parser
 			function($m) {
 				if (($place = $this->placeManager->get($m[1]))) {
 					if ($place->getTypeOfBase() > 0) {
-						return '<a href="' . $this->rootPath . 'map/place-' . $place->getId() . '" class="color' . $place->getPlayerColor() . ' hb lt" title="voir la planète">' . $place->getBaseName() . '</a>';
+						return '<a href="' . $this->appRoot . 'map/place-' . $place->getId() . '" class="color' . $place->getPlayerColor() . ' hb lt" title="voir la planète">' . $place->getBaseName() . '</a>';
 					} else {
-						return '<a href="' . $this->rootPath . 'map/place-' . $place->getId() . '" class="hb lt" title="voir la planète">planète rebelle</a>';
+						return '<a href="' . $this->appRoot . 'map/place-' . $place->getId() . '" class="hb lt" title="voir la planète">planète rebelle</a>';
 					}
 				}
 				return $m[0];

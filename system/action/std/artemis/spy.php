@@ -19,15 +19,15 @@ use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get('session_wrapper');
-$placeManager = $this->getContainer()->get('gaia.place_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
-$spyReportManager = $this->getContainer()->get('artemis.spy_report_manager');
-$notificationManager = $this->getContainer()->get('hermes.notification_manager');
-$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
+$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$commercialRouteManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialRouteManager::class);
+$spyReportManager = $this->getContainer()->get(\Asylamba\Modules\Artemis\Manager\SpyReportManager::class);
+$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
+$tutorialHelper = $this->getContainer()->get(\Asylamba\Modules\Zeus\Helper\TutorialHelper::class);
 
 $rPlace = $request->query->get('rplace');
 $price 	= $request->query->has('price') ? $request->query->get('price') : $request->request->get('price');

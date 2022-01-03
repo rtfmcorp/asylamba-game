@@ -2,7 +2,8 @@
 
 namespace Asylamba\Modules\Gaia\Galaxy;
 
-class GalaxyConfigurationV6 extends GalaxyConfiguration {
+class GalaxyConfigurationV6 extends GalaxyConfiguration
+{
 	public $galaxy = [
 		'size' => 250,
 		'diag' => 177,

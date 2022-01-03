@@ -7,14 +7,17 @@
 # require
 	# _T PRM 		FACTION_RANKING_GENERAL
 
-$factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$factionRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\FactionRankingManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 $factionRankingManager->changeSession($FACTION_RANKING_GENERAL);
 
 echo '<div class="component player rank">';
 	echo '<div class="head skin-4">';
-		echo '<img class="main" alt="ressource" src="' . MEDIA . 'rank/cup.png">';
+		echo '<img class="main" alt="ressource" src="' . $mediaPath . 'rank/cup.png">';
 		echo '<h2>Général</h2>';
 		echo '<em>Somme des points des joueurs de la faction</em>';
 	echo '</div>';

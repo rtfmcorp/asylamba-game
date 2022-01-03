@@ -2,7 +2,10 @@
 use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Format;
 
-$factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$factionRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\FactionRankingManager::class);
 
 $S_FRM1 = $factionRankingManager->getCurrentSession();
 $factionRankingManager->newSession();
@@ -31,7 +34,7 @@ echo '<div class="component profil">';
 				echo '<span class="label">Fortune de la faction</span>';
 				echo '<span class="value">';
 					echo Format::number($faction->credits);
-					echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+					echo ' <img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 				echo '</span>';
 			echo '</div>';
 

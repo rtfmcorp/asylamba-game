@@ -1,5 +1,6 @@
 <?php
 
+use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
@@ -7,8 +8,9 @@ use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Modules\Hermes\Model\Conversation;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 
+$container = $this->getContainer();
 $availableFactions = $this->getContainer()->getParameter('game.available_factions');
-$db = $this->getContainer()->get('database_admin');
+$db = $this->getContainer()->get(\Asylamba\Classes\Database\DatabaseAdmin::class);
 
 $db->query('SET FOREIGN_KEY_CHECKS = 0;');
 
@@ -955,7 +957,7 @@ echo '<h1>Ajout du module de Conversation</h1>';
 
 echo '<h2>Ajout de la table Conversation</h2>';
 
-$db = $this->getContainer()->get('database');
+$db = $this->getContainer()->get(Database::class);
 $db->query("DROP TABLE IF EXISTS `conversation`");
 $qr = $db->prepare("CREATE TABLE IF NOT EXISTS `conversation` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -1008,16 +1010,16 @@ $conv->type = Conversation::TY_SYSTEM;
 $conv->title = 'Jean-Mi, administrateur système';
 $conv->dCreation = Utils::now();
 $conv->dLastMessage = Utils::now();
-$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
+$conversationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationManager::class);
 $conversationManager->add($conv);
 
 $user = new ConversationUser();
 $user->rConversation = $conv->id;
-$user->rPlayer = ID_JEANMI;
+$user->rPlayer = $container->getParameter('id_jeanmi');
 $user->convPlayerStatement = ConversationUser::US_ADMIN;
 $user->convStatement = ConversationUser::CS_DISPLAY;
 $user->dLastView = Utils::now();
-$conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
+$conversationUserManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationUserManager::class);
 $conversationUserManager->add($user);
 
 foreach ($availableFactions as $faction) {
@@ -1213,7 +1215,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `colorLink` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 $values = '';
-$colorManager = $this->getContainer()->get('demeter.color_manager');
+$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
 $factions = $colorManager->getAll();
 $nbFactions = count($factions);
 for ($i = 1; $i < $nbFactions; $i++) {
@@ -1232,7 +1234,7 @@ $qr->execute();
 
 $db->query('SET FOREIGN_KEY_CHECKS = 1;');
 
-if (DATA_ANALYSIS) {
+if ($container->getParameter('data_analysis')) {
 	echo '<h1>Création des tables du module d\'analyse</h1>';
 
 	include 'data-analysis/player.php';
@@ -1245,6 +1247,6 @@ if (DATA_ANALYSIS) {
 
 echo '<h1>Génération de la galaxie</h1>';
 
-$galaxyGenerator = $this->getContainer()->get('gaia.galaxy_generator');
+$galaxyGenerator = $this->getContainer()->get(\Asylamba\Modules\Gaia\Helper\GalaxyGenerator::class);
 $galaxyGenerator->generate();
 echo $galaxyGenerator->getLog();

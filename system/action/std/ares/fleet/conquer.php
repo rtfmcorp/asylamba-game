@@ -18,13 +18,13 @@ if (($commanderId = $request->query->get('commanderid')) === null || ($placeId =
 }
 
 $response = $this->getContainer()->get('app.response');
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
+$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$placeManager = $this->getContainer()->get('gaia.place_manager');
-$colorManager = $this->getContainer()->get('demeter.color_manager');
-$sectorManager = $this->getContainer()->get('gaia.sector_manager');
-$technologyManager = $this->getContainer()->get('promethee.technology_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
+$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
+$sectorManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SectorManager::class);
+$technologyManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\TechnologyManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $conquestCost = $this->getContainer()->getParameter('ares.coeff.conquest_cost');
 
 $place = $placeManager->get($placeId);
@@ -118,4 +118,4 @@ if ($technologies->getTechnology(Technology::CONQUEST) !== 1) {
 		} else {
 			throw new ErrorException('Vous ne pouvez pas conquérir un joueur de niveau 3 ou moins.');
 		}
-$this->getContainer()->get('entity_manager')->flush();
+$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();

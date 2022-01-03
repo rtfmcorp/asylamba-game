@@ -2,6 +2,9 @@
 
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+
 echo '<div class="component profil">';
 	echo '<div class="head skin-2">';
 		echo '<h2>A propos</h2>';
@@ -13,7 +16,7 @@ echo '<div class="component profil">';
 				echo '<span class="label">' . ColorResource::getInfo($faction->id, 'devise') . '</span>';
 			echo '</div>';
 
-			echo '<div class="profil-flag color-' . $faction->id . '"><img src="' . MEDIA . 'ally/big/color' . $faction->id . '.png" alt=""></div>';
+			echo '<div class="profil-flag color-' . $faction->id . '"><img src="' . $mediaPath . 'ally/big/color' . $faction->id . '.png" alt=""></div>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
