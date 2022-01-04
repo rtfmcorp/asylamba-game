@@ -4,6 +4,8 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
 $expLevel = Commander::CMDBASELVL;
 
 echo '<div class="component">';
@@ -24,9 +26,9 @@ echo '<div class="component">';
 
 				echo '<li>';
 					echo '<span class="label">';
-						echo Format::number($expLevel) . ' <img class="icon-color" src="' . MEDIA . 'resources/xp.png" alt="expérience">';
+						echo Format::number($expLevel) . ' <img class="icon-color" src="' . $mediaPath . 'resources/xp.png" alt="expérience">';
 						echo '&emsp;|&emsp;';
-						echo Format::number(($i * 100)) . ' <img class="icon-color" src="' . MEDIA . 'resources/pev.png" alt="points équivalents vaisseaux">';
+						echo Format::number(($i * 100)) . ' <img class="icon-color" src="' . $mediaPath . 'resources/pev.png" alt="points équivalents vaisseaux">';
 					echo '</span>';
 					echo '<span class="value">' . CommanderResources::getInfo($i, 'grade') . '</span>';
 				echo '</li>';

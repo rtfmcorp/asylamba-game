@@ -6,13 +6,13 @@ use Asylamba\Classes\Exception\ErrorException;
 
 $id = $this->getContainer()->get('app.request')->query->get('id');
 
-$notificationManager = $this->getContainer()->get('hermes.notification_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 if ($id) {
 	if (($notification = $notificationManager->get($id)) !== null && $notification->rPlayer === $session->get('playerId')) {
 		$notification->setArchived(!$notification->getArchived());
-		$this->getContainer()->get('entity_manager')->flush($notification);
+		$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush($notification);
 	} else {
 		throw new ErrorException('Ce n\'est pas bien d\'archiver les notifications des autres.');
 	}

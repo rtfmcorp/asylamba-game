@@ -1,7 +1,7 @@
 <?php
 echo '<h2>Ajout de la table DA_SocialRelation</h2>';
 
-$db = $this->getContainer()->get('database');
+$db = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
 $db->query("DROP TABLE IF EXISTS `DA_SocialRelation`");
 $db->query("CREATE TABLE IF NOT EXISTS `DA_SocialRelation` (
 	`id` INT unsigned NOT NULL AUTO_INCREMENT,

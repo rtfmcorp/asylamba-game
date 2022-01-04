@@ -8,13 +8,15 @@ use Asylamba\Classes\Database\Database;
 
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
 
-class ConversationMessageManager extends Manager {
+class ConversationMessageManager extends Manager
+{
 	protected $managerType ='_ConversationMessage';
 
 	/**
 	 * @param Database $database
 	 */
-	public function __construct(Database $database) {
+	public function __construct(Database $database)
+	{
 		parent::__construct($database);
 	}
 	

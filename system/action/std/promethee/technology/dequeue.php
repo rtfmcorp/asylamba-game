@@ -11,15 +11,15 @@ use Asylamba\Classes\Exception\FormException;
 use Asylamba\Modules\Promethee\Model\TechnologyQueue;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$technologyHelper = $this->getContainer()->get('promethee.technology_helper');
-$technologyQueueManager = $this->getContainer()->get('promethee.technology_queue_manager');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$technologyHelper = $this->getContainer()->get(\Asylamba\Modules\Promethee\Helper\TechnologyHelper::class);
+$technologyQueueManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\TechnologyQueueManager::class);
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $technologyResourceRefund = $this->getContainer()->getParameter('promethee.technology_queue.resource_refund');
 $technologyCreditRefund = $this->getContainer()->getParameter('promethee.technology_queue.credit_refund');
-$scheduler = $this->getContainer()->get('realtime_action_scheduler');
-$entityManager = $this->getContainer()->get('entity_manager');
+$scheduler = $this->getContainer()->get(\Asylamba\Classes\Scheduler\RealtimeActionScheduler::class);
+$entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
 
 for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');

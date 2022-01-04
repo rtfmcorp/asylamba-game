@@ -21,15 +21,17 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 
-$session = $this->getContainer()->get('session_wrapper');
-$commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
-$buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
-$shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
-$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$container = $this->getContainer();
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$commercialRouteManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialRouteManager::class);
+$buildingQueueManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\BuildingQueueManager::class);
+$shipQueueManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\ShipQueueManager::class);
+$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
 $buildingResourceRefund = $this->getContainer()->getParameter('athena.building.building_queue_resource_refund');
 $sessionToken = $session->get('token');
-$technologyHelper = $this->getContainer()->get('promethee.technology_helper');
-$entityManager = $this->getContainer()->get('entity_manager');
+$technologyHelper = $this->getContainer()->get(\Asylamba\Modules\Promethee\Helper\TechnologyHelper::class);
+$entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
+$mediaPath = $container->getParameter('media');
 
 // @TODO: move it to the using part of the code and remove useless data
 if ($ob_fastView->getLevelSpatioport() > 0) {
@@ -62,7 +64,7 @@ if ($ob_fastView->getLevelSpatioport() > 0) {
 echo '<div class="component">';
 	if ($fastView_profil) {
 		echo '<div class="head skin-1">';
-			echo '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($ob_fastView->getPlanetPopulation()) . '.png" alt="' . $ob_fastView->getName() . '" />';
+			echo '<img src="' . $mediaPath . 'map/place/place1-' . Game::getSizeOfPlanet($ob_fastView->getPlanetPopulation()) . '.png" alt="' . $ob_fastView->getName() . '" />';
 			echo '<h2>' . $ob_fastView->getName() . '</h2>';
 			echo '<em>';
 				echo PlaceResource::get($ob_fastView->typeOfBase, 'name') . ' — ' . $ob_fastView->getPoints() . ' points';
@@ -85,7 +87,7 @@ echo '<div class="component">';
 				echo '<span class="label">Ressources en stock</span>';
 				echo '<span class="value">';
 					echo Format::numberFormat($ob_fastView->getResourcesStorage());
-					echo ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color">';
+					echo ' <img alt="ressources" src="' . $mediaPath . 'resources/resource.png" class="icon-color">';
 				echo '</span>';
 
 				$storageSpace = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $ob_fastView->getLevelStorage(), 'storageSpace');
@@ -119,7 +121,7 @@ echo '<div class="component">';
 
 					echo '<div class="item ' . (($realSizeQueue > 1) ? 'active' : '') . ' progress" data-progress-output="lite" data-progress-no-reload="true" data-progress-current-time="' . $nextTime . '" data-progress-total-time="' . $nextTotalTime . '">';
 							'class="button hb lt" title="annuler la construction (attention, vous ne récupérerez que ' . $buildingResourceRefund * 100 . '% du montant investi)">×</a>';
-					echo '<img class="picto" src="' . MEDIA . 'orbitalbase/' . $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
+					echo '<img class="picto" src="' . $mediaPath . 'orbitalbase/' . $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'imageLink') . '.png" alt="" />';
 					echo '<strong>';
 						echo $orbitalBaseHelper->getBuildingInfo($qe->buildingNumber, 'frenchName');
 						echo ' <span class="level">niv. ' . $qe->targetLevel . '</span>';
@@ -162,7 +164,7 @@ echo '<div class="component">';
 							echo $realSizeQueue > 1
 								? '<div class="item">'
 								: '<div class="item active progress" data-progress-output="lite" data-progress-no-reload="true" data-progress-current-time="' . $remainingTime . '" data-progress-total-time="' . $totalTimeShips . '">';
-							echo  '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($queue->shipNumber, 'imageLink') . '.png" alt="" />';
+							echo  '<img class="picto" src="' . $mediaPath . 'ship/picto/' . ShipResource::getInfo($queue->shipNumber, 'imageLink') . '.png" alt="" />';
 							echo '<strong>' . $queue->quantity . ' ' . ShipResource::getInfo($queue->shipNumber, 'codeName') . Format::addPlural($queue->quantity) . '</strong>';
 							
 							if ($realSizeQueue > 1) {
@@ -203,7 +205,7 @@ echo '<div class="component">';
 							echo $realSizeQueue > 1
 								? '<div class="item">'
 								: '<div class="item active progress" data-progress-output="lite" data-progress-no-reload="true" data-progress-current-time="' . $remainingTime . '" data-progress-total-time="' . $totalTimeShips . '">';
-							echo  '<img class="picto" src="' . MEDIA . 'ship/picto/' . ShipResource::getInfo($queue->shipNumber, 'imageLink') . '.png" alt="" />';
+							echo  '<img class="picto" src="' . $mediaPath . 'ship/picto/' . ShipResource::getInfo($queue->shipNumber, 'imageLink') . '.png" alt="" />';
 							echo '<strong>' . $queue->quantity . ' ' . ShipResource::getInfo($queue->shipNumber, 'codeName') . Format::addPlural($queue->quantity) . '</strong>';
 							
 							if ($realSizeQueue > 1) {
@@ -243,7 +245,7 @@ echo '<div class="component">';
 						$remainingTotalTime = Utils::interval(Utils::now(), $queue->dEnd, 's');
 
 						echo '<div class="item active progress" data-progress-output="lite" data-progress-no-reload="true" data-progress-current-time="' . $remainingTotalTime . '" data-progress-total-time="' . $totalTimeTechno . '">';
-							echo  '<img class="picto" src="' . MEDIA . 'technology/picto/' . $technologyHelper->getInfo($queue->technology, 'imageLink') . '.png" alt="" />';
+							echo  '<img class="picto" src="' . $mediaPath . 'technology/picto/' . $technologyHelper->getInfo($queue->technology, 'imageLink') . '.png" alt="" />';
 							echo '<strong>' . $technologyHelper->getInfo($queue->technology, 'name');
 							if (!$technologyHelper->isAnUnblockingTechnology($queue->technology)) {
 								echo ' <span class="level">niv. ' . $queue->targetLevel . '</span>';

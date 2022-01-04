@@ -54,116 +54,52 @@ use Asylamba\Classes\Library\Flashbag;
 
 use Asylamba\Classes\Daemon\ClientManager;
 use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
+use Symfony\Contracts\Service\Attribute\Required;
 
-class OrbitalBaseManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var ClientManager **/
-	protected $clientManager;
-	/** @var RealTimeActionScheduler **/
-	protected $realtimeActionScheduler;
-	/** @var BuildingQueueManager **/
-	protected $buildingQueueManager;
-	/** @var ShipQueueManager **/
-	protected $shipQueueManager;
-	/** @var TechnologyQueueManager **/
-	protected $technologyQueueManager;
-	/** @var TechnologyManager **/
-	protected $technologyManager;
-	/** @var TechnologyHelper **/
-	protected $technologyHelper;
-	/** @var CommercialShippingManager **/
-	protected $commercialShippingManager;
-	/** @var CommercialRouteManager **/
-	protected $commercialRouteManager;
-	/** @var TransactionManager **/
-	protected $transactionManager;
-	/** @var PlayerManager **/
-	protected $playerManager;
-	/** @var PlayerBonusManager **/
-	protected $playerBonusManager;
-	/** @var RecyclingMissionManager **/
-	protected $recyclingMissionManager;
-	/** @var RecyclingLogManager **/
-	protected $recyclingLogManager;
-	/** @var PlaceManager **/
-	protected $placeManager;
-	/** @var CommanderManager **/
-	protected $commanderManager;
-	/** @var NotificationManager **/
-	protected $notificationManager;
-	/** @var OrbitalBaseHelper **/
-	protected $orbitalBaseHelper;
-	/** @var CTC **/
-	protected $ctc;
-	/** @var SessionWrapper **/
-	protected $sessionWrapper;
-	
-	/**
-	 * @param EntityManager $entityManager
-	 * @param ClientManager $clientManager
-	 * @param RealTimeActionScheduler $realtimeActionScheduler
-	 * @param BuildingQueueManager $buildingQueueManager
-	 * @param ShipQueueManager $shipQueueManager
-	 * @param TechnologyQueueManager $technologyQueueManager
-	 * @param TechnologyHelper $technologyHelper
-	 * @param CommercialShippingManager $commercialShippingManager
-	 * @param CommercialRouteManager $commercialRouteManager
-	 * @param TransactionManager $transactionManager
-	 * @param PlayerManager $playerManager
-	 * @param PlayerBonusManager $playerBonusManager
-	 * @param RecyclingMissionManager $recyclingMissionManager
-	 * @param PlaceManager $placeManager
-	 * @param CommanderManager $commanderManager
-	 * @param NotificationManager $notificationManager
-	 * @param OrbitalBaseHelper $orbitalBaseHelper
-	 * @param CTC $ctc
-	 * @param SessionWrapper $sessionWrapper
-	 */
+class OrbitalBaseManager
+{
+	protected CommanderManager $commanderManager;
+	protected CommercialShippingManager $commercialShippingManager;
+	protected PlayerManager $playerManager;
+
 	public function __construct(
-		EntityManager $entityManager,
-		ClientManager $clientManager,
-		RealTimeActionScheduler $realtimeActionScheduler,
-		BuildingQueueManager $buildingQueueManager,
-		ShipQueueManager $shipQueueManager,
-		TechnologyQueueManager $technologyQueueManager,
-		TechnologyManager $technologyManager,
-		TechnologyHelper $technologyHelper,
-		CommercialShippingManager $commercialShippingManager,
-		CommercialRouteManager $commercialRouteManager,
-		TransactionManager $transactionManager,
-		PlayerManager $playerManager,
-		PlayerBonusManager $playerBonusManager,
-		RecyclingMissionManager $recyclingMissionManager,
-		RecyclingLogManager $recyclingLogManager,
-		PlaceManager $placeManager,
-		CommanderManager $commanderManager,
-		NotificationManager $notificationManager,
-		OrbitalBaseHelper $orbitalBaseHelper,
-		CTC $ctc,
-		SessionWrapper $sessionWrapper
+		protected EntityManager $entityManager,
+		protected ClientManager $clientManager,
+		protected RealTimeActionScheduler $realtimeActionScheduler,
+		protected BuildingQueueManager $buildingQueueManager,
+		protected ShipQueueManager $shipQueueManager,
+		protected TechnologyQueueManager $technologyQueueManager,
+		protected TechnologyManager $technologyManager,
+		protected TechnologyHelper $technologyHelper,
+		protected CommercialRouteManager $commercialRouteManager,
+		protected TransactionManager $transactionManager,
+		protected PlayerBonusManager $playerBonusManager,
+		protected RecyclingMissionManager $recyclingMissionManager,
+		protected RecyclingLogManager $recyclingLogManager,
+		protected PlaceManager $placeManager,
+		protected NotificationManager $notificationManager,
+		protected OrbitalBaseHelper $orbitalBaseHelper,
+		protected CTC $ctc,
+		protected SessionWrapper $sessionWrapper
 	) {
-		$this->entityManager = $entityManager;
-		$this->clientManager = $clientManager;
-		$this->realtimeActionScheduler = $realtimeActionScheduler;
-		$this->buildingQueueManager = $buildingQueueManager;
-		$this->shipQueueManager = $shipQueueManager;
-		$this->technologyQueueManager = $technologyQueueManager;
-		$this->technologyManager = $technologyManager;
-		$this->technologyHelper = $technologyHelper;
-		$this->commercialShippingManager = $commercialShippingManager;
-		$this->commercialRouteManager = $commercialRouteManager;
-		$this->transactionManager = $transactionManager;
-		$this->playerManager = $playerManager;
-		$this->playerBonusManager = $playerBonusManager;
-		$this->recyclingMissionManager = $recyclingMissionManager;
-		$this->recyclingLogManager = $recyclingLogManager;
-		$this->placeManager = $placeManager;
+	}
+
+	#[Required]
+	public function setCommanderManager(CommanderManager $commanderManager): void
+	{
 		$this->commanderManager = $commanderManager;
-		$this->notificationManager = $notificationManager;
-		$this->orbitalBaseHelper = $orbitalBaseHelper;
-		$this->ctc = $ctc;
-		$this->sessionWrapper = $sessionWrapper;
+	}
+
+	#[Required]
+	public function setCommercialShippingManager(\Asylamba\Modules\Athena\Manager\CommercialShippingManager $commercialShippingManager): void
+	{
+		$this->commercialShippingManager = $commercialShippingManager;
+	}
+
+	#[Required]
+	public function setPlayerManager(PlayerManager $playerManager): void
+	{
+		$this->playerManager = $playerManager;
 	}
 	
 	/**
@@ -887,25 +823,27 @@ class OrbitalBaseManager {
 		$this->entityManager->flush();
 	}
 
-	public function addShipToDock(OrbitalBase $orbitalBase, $shipId, $quantity) {
-		if ($this->orbitalBaseHelper->isAShipFromDock1($shipId) OR $this->orbitalBaseHelper->isAShipFromDock2($shipId)) {
+	public function addShipToDock(OrbitalBase $orbitalBase, int $shipId, int $quantity): bool
+	{
+		if ($this->orbitalBaseHelper->isAShipFromDock1($shipId) || $this->orbitalBaseHelper->isAShipFromDock2($shipId)) {
 			$orbitalBase->setShipStorage($shipId, $orbitalBase->getShipStorage($shipId) + $quantity);
 			$this->entityManager->flush($orbitalBase);
-			return TRUE;
-		} else {
-			return FALSE;
+			return true;
 		}
+		return false;
 	}
 
-	public function removeShipFromDock(OrbitalBase $orbitalBase, $shipId, $quantity) {
-		if ($this->orbitalBaseHelper->isAShipFromDock1($shipId) OR $this->orbitalBaseHelper->isAShipFromDock2($shipId)) {
+	public function removeShipFromDock(OrbitalBase $orbitalBase, int $shipId, int $quantity)
+	{
+		if ($this->orbitalBaseHelper->isAShipFromDock1($shipId) || $this->orbitalBaseHelper->isAShipFromDock2($shipId)) {
 			if ($orbitalBase->getShipStorage($shipId) >= $quantity) {
 				$orbitalBase->setShipStorage($shipId, $orbitalBase->getShipStorage($shipId) - $quantity);
 				$this->entityManager->flush($orbitalBase);
-				return TRUE;
-			} else {
-				return FALSE;
+
+				return true;
 			}
+			// @TODO: Check if this return mustn't be outside the if. If so, change the return type of the method
+			return false;
 		}
 	}
 }

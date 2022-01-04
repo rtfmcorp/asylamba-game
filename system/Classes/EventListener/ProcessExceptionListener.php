@@ -11,34 +11,17 @@ use Asylamba\Classes\Process\ProcessGateway;
 
 use Asylamba\Classes\Database\Database;
 
-class ProcessExceptionListener {
-	/** @var AbstractLogger **/
-	protected $logger;
-	/** @var Database **/
-	protected $database;
-	/** @var ProcessGateway **/
-	protected $processGateway;
-	/** @var string **/
-	protected $processName;
-	
-	/**
-	 * @param AbstractLogger $logger
-	 * @param Database $database
-	 * @param ProcessGateway $gateway
-	 * @param string $processName
-	 */
-	public function __construct(AbstractLogger $logger, Database $database, ProcessGateway $gateway, $processName)
-	{
-		$this->logger = $logger;
-		$this->database = $database;
-		$this->processGateway = $gateway;
-		$this->processName = $processName;
+class ProcessExceptionListener
+{
+	public function __construct(
+		protected AbstractLogger $logger,
+		protected Database $database,
+		protected ProcessGateway $processGateway,
+		protected string $processName
+	) {
 	}
-	
-	/**
-	 * @param ProcessExceptionEvent $event
-	 */
-	public function onCoreException(ProcessExceptionEvent $event)
+
+	public function onCoreException(ProcessExceptionEvent $event): void
 	{
 		$exception = $event->getException();
 		$this->process(
@@ -50,11 +33,8 @@ class ProcessExceptionListener {
 			AbstractLogger::LOG_LEVEL_ERROR
 		);
 	}
-	
-	/**
-	 * @param ProcessErrorEvent $event
-	 */
-	public function onCoreError(ProcessErrorEvent $event)
+
+	public function onCoreError(ProcessErrorEvent $event): void
 	{
 		$error = $event->getError();
 		$this->process(
@@ -66,16 +46,8 @@ class ProcessExceptionListener {
 			AbstractLogger::LOG_LEVEL_CRITICAL
 		);
 	}
-	
-	/**
-	 * @param $event
-	 * @param string $message
-	 * @param string $file
-	 * @param int $line
-	 * @param string $trace
-	 * @param string $level
-	 */
-	public function process($event, $message, $file, $line, $trace, $level)
+
+	public function process(object $event, string $message, string $file, int $line, string $trace, string $level): void
 	{
 		$this->logger->log(json_encode([
 			'process' => $this->processName,

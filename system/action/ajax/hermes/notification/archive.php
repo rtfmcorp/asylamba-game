@@ -5,12 +5,12 @@
 use Asylamba\Classes\Exception\ErrorException;
 
 $id = $this->getContainer()->get('app.request')->request->get('id');
-$notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
 
 if ($id) {
 	$notification = $notificationManager->get($id);
 	$notification->setArchived(!$notif->getArchived());
-	$this->getContainer()->get('entity_manager')->flush($notification);
+	$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush($notification);
 } else {
 	throw new ErrorException('cette notification n\'existe pas');
 }

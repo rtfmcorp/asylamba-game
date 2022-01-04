@@ -5,11 +5,12 @@
 use Asylamba\Modules\Zeus\Model\Player;
 use Asylamba\Classes\Library\Utils;
 
-$security = $this->getContainer()->get('security');
+$container = $this->getContainer();
+$security = $this->getContainer()->get(\Asylamba\Classes\Library\Security::class);
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 # extraction du bindkey
 $query  = $security->uncrypt($request->query->get('bindkey'));
@@ -28,7 +29,7 @@ if (($player = $playerManager->getByBindKey($bindKey)) !== null && in_array($pla
 	$session->initLastUpdate();
 	$session->add('token', Utils::generateString(5));
 
-	include CONNECTION . '/create-session.php';
+	include $container->getParameter('connection') . '/create-session.php';
 
 	# mise de dLastConnection + dLastActivity
 	$player->setDLastConnection(Utils::now());
@@ -38,7 +39,7 @@ if (($player = $playerManager->getByBindKey($bindKey)) !== null && in_array($pla
 	if ($this->getContainer()->getParameter('apimode') === 'enabled') {
 		$this->getContainer()->get('api')->confirmConnection($bindKey);
 	}
-	$this->getContainer()->get('entity_manager')->flush($player);
+	$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush($player);
 	// redirection vers page de départ
 	$response->redirect(
 		($request->query->get('mode') === 'splash')

@@ -4,8 +4,8 @@ use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 
 # switch advertisement action
-$session = $this->getContainer()->get('session_wrapper');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 
 if (($player = $playerManager->get($session->get('playerId'))) !== null) {
 	if ($player->premium == 0) {
@@ -17,7 +17,7 @@ if (($player = $playerManager->get($session->get('playerId'))) !== null) {
 		$session->get('playerInfo')->add('premium', 0);
 		$session->addFlashbag('Publicitées activées. Merci beaucoup pour votre soutien. Je vous aime.', Flashbag::TYPE_SUCCESS);
 	}
-	$this->getContainer()->get('entity_manager')->flush($player);
+	$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush($player);
 } else {
 	throw new ErrorException('petit bug là, contactez un administrateur rapidement sous risque que votre ordinateur explose');
 }

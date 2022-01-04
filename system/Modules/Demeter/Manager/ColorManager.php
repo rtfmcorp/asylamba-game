@@ -38,88 +38,40 @@ use Asylamba\Modules\Demeter\Model\Election\Election;
 use Asylamba\Classes\Library\Parser;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
+use Symfony\Contracts\Service\Attribute\Required;
 
-class ColorManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var PlayerManager **/
-	protected $playerManager;
-	/** @var VoteManager **/
-	protected $voteManager;
-	/** @var ConversationManager **/
-	protected $conversationManager;
-	/** @var CandidateManager **/
-	protected $candidateManager;
-	/** @var ElectionManager **/
-	protected $electionManager;
-	/** @var LawManager **/
-	protected $lawManager;
-	/** @var NotificationManager **/
-	protected $notificationManager;
-	/** @var ConversationMessageManager **/
-	protected $conversationMessageManager;
-	/** @var CommercialTaxManager **/
-	protected $commercialTaxManager;
-	/** @var SectorManager **/
-	protected $sectorManager;
-	/** @var CommercialRouteManager **/
-	protected $commercialRouteManager;
-	/** @var Parser **/
-	protected $parser;
-	/** @var CTC **/
-	protected $ctc;
-	/** @var RealTimeActionScheduler **/
-	protected $realtimeActionScheduler;
-	
-	/**
-	 * @param EntityManager $entityManager
-	 * @param PlayerManager $playerManager
-	 * @param VoteManager $voteManager
-	 * @param ConversationManager $conversationManager
-	 * @param CandidateManager $candidateManager
-	 * @param ElectionManager $electionManager
-	 * @param LawManager $lawManager
-	 * @param NotificationManager $notificationManager
-	 * @param ConversationMessageManager $conversationMessageManager
-	 * @param CommercialTaxManager $commercialTaxManager
-	 * @param SectorManager $sectorManager
-	 * @param CommercialRouteManager $commercialRouteManager
-	 * @param Parser $parser
-	 * @param CTC $ctc
-	 * @param RealTimeActionScheduler $realtimeActionScheduler
-	 */
+class ColorManager
+{
+	protected PlayerManager $playerManager;
+	protected SectorManager $sectorManager;
+
 	public function __construct(
-		EntityManager $entityManager,
-		PlayerManager $playerManager,
-		VoteManager $voteManager,
-		ConversationManager $conversationManager,
-		CandidateManager $candidateManager,
-		ElectionManager $electionManager,
-		LawManager $lawManager,
-		NotificationManager $notificationManager,
-		ConversationMessageManager $conversationMessageManager,
-		CommercialTaxManager $commercialTaxManager,
-		SectorManager $sectorManager,
-		CommercialRouteManager $commercialRouteManager,
-		Parser $parser,
-		CTC $ctc,
-		RealTimeActionScheduler $realtimeActionScheduler
+		protected EntityManager $entityManager,
+		protected VoteManager $voteManager,
+		protected ConversationManager $conversationManager,
+		protected CandidateManager $candidateManager,
+		protected ElectionManager $electionManager,
+		protected LawManager $lawManager,
+		protected NotificationManager $notificationManager,
+		protected ConversationMessageManager $conversationMessageManager,
+		protected CommercialTaxManager $commercialTaxManager,
+		protected CommercialRouteManager $commercialRouteManager,
+		protected Parser $parser,
+		protected CTC $ctc,
+		protected RealTimeActionScheduler $realtimeActionScheduler
 	) {
-		$this->entityManager = $entityManager;
+	}
+
+	#[Required]
+	public function setPlayerManager(PlayerManager $playerManager): void
+	{
 		$this->playerManager = $playerManager;
-		$this->voteManager = $voteManager;
-		$this->conversationManager = $conversationManager;
-		$this->candidateManager = $candidateManager;
-		$this->electionManager = $electionManager;
-		$this->lawManager = $lawManager;
-		$this->notificationManager = $notificationManager;
-		$this->conversationMessageManager = $conversationMessageManager;
-		$this->commercialTaxManager = $commercialTaxManager;
+	}
+
+	#[Required]
+	public function setSectorManager(SectorManager $sectorManager): void
+	{
 		$this->sectorManager = $sectorManager;
-		$this->commercialRouteManager = $commercialRouteManager;
-		$this->parser = $parser;
-		$this->ctc = $ctc;
-		$this->realtimeActionScheduler = $realtimeActionScheduler;
 	}
 	
 	/**

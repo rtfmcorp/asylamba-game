@@ -15,7 +15,10 @@ use Asylamba\Modules\Ares\Model\Commander;
 	# {orbitalBase}		ob_obSituation
 	# [{commander}]		commanders_obSituation
 
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$container = $this->getContainer();
+$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
 
 echo '<div class="component space size3">';
 	echo '<div class="head"></div>';
@@ -23,7 +26,7 @@ echo '<div class="component space size3">';
 		echo '<div class="body">';
 			echo '<div class="situation-content place1">';
 				echo '<div class="toolbar">';
-					echo '<a href="' . APP_ROOT . 'map/place-' . $ob_obSituation->getId() . '">Centrer sur la carte</a>';
+					echo '<a href="' . $appRoot . 'map/place-' . $ob_obSituation->getId() . '">Centrer sur la carte</a>';
 					echo '<form action="' . Format::actionBuilder('renamebase', $sessionToken, ['baseid' => $ob_obSituation->getId()]) . '" method="POST">';
 						echo '<input type="text" name="name" value="' . $ob_obSituation->getName() . '" />';
 						echo '<input type="submit" class="button" value=" " />';
@@ -38,8 +41,8 @@ echo '<div class="component space size3">';
 				$rlp = PlaceResource::get($ob_obSituation->typeOfBase, 'r-line-position');
 				foreach ($commanders_obSituation as $commander) {
 					echo '<div class="commander position-' . $commander->line . '-' . ($commander->line == 1 ? $llp[$lLine] : $rlp[$rLine]) . '">';
-						echo '<a href="' . APP_ROOT . 'fleet/view-movement/commander-' . $commander->getId() . '/sftr-3" class="commander full">';
-							echo '<img src="' . MEDIA . 'map/fleet/' . (($commander->getStatement() == Commander::AFFECTED) ? 'army' : 'army-away') . '.png" alt="plein" />';
+						echo '<a href="' . $appRoot . 'fleet/view-movement/commander-' . $commander->getId() . '/sftr-3" class="commander full">';
+							echo '<img src="' . $mediaPath . 'map/fleet/' . (($commander->getStatement() == Commander::AFFECTED) ? 'army' : 'army-away') . '.png" alt="plein" />';
 							echo '<span class="info">';
 								echo CommanderResources::getInfo($commander->getLevel(), 'grade') . ' <strong>' . $commander->getName() . '</strong><br />';
 								echo $commander->getPev() . ' Pev';
@@ -66,8 +69,8 @@ echo '<div class="component space size3">';
 				}
 
 				for ($lLine; $lLine < PlaceResource::get($ob_obSituation->typeOfBase, 'l-line'); $lLine++) { 
-					echo '<a href="' . APP_ROOT . 'bases/base-' . $ob_obSituation->getId() . '/view-school" class="commander empty position-1-' . $llp[$lLine] . '">';
-						echo '<img src="' . MEDIA . 'map/fleet/army-empty.png" alt="vide" />';
+					echo '<a href="' . $appRoot . 'bases/base-' . $ob_obSituation->getId() . '/view-school" class="commander empty position-1-' . $llp[$lLine] . '">';
+						echo '<img src="' . $mediaPath . 'map/fleet/army-empty.png" alt="vide" />';
 						echo '<span class="info">';
 							echo 'Affecter<br />';
 							echo 'un officier';
@@ -76,8 +79,8 @@ echo '<div class="component space size3">';
 				}
 
 				for ($rLine; $rLine < PlaceResource::get($ob_obSituation->typeOfBase, 'r-line'); $rLine++) { 
-					echo '<a href="' . APP_ROOT . 'bases/base-' . $ob_obSituation->getId() . '/view-school" class="commander empty position-2-' . $rlp[$rLine] . '">';
-						echo '<img src="' . MEDIA . 'map/fleet/army-empty.png" alt="vide" />';
+					echo '<a href="' . $appRoot . 'bases/base-' . $ob_obSituation->getId() . '/view-school" class="commander empty position-2-' . $rlp[$rLine] . '">';
+						echo '<img src="' . $mediaPath . 'map/fleet/army-empty.png" alt="vide" />';
 						echo '<span class="info">';
 							echo 'Affecter<br />';
 							echo 'un officier';
@@ -95,7 +98,7 @@ echo '<div class="component space size3">';
 						echo 'coordonnées<br />';
 						echo '<strong>' . Game::formatCoord($ob_obSituation->getXSystem(), $ob_obSituation->getYSystem(), $ob_obSituation->getPosition(), $ob_obSituation->getSector()) . '</strong>';
 					echo '</div>';
-					echo '<img src="' . MEDIA . 'orbitalbase/place1-' . Game::getSizeOfPlanet($ob_obSituation->getPlanetPopulation()) . '.png" alt="planète" />';
+					echo '<img src="' . $mediaPath . 'orbitalbase/place1-' . Game::getSizeOfPlanet($ob_obSituation->getPlanetPopulation()) . '.png" alt="planète" />';
 
 					$science = Game::getImprovementFromScientificCoef($ob_obSituation->getPlanetHistory());
 					echo '<div class="info bottom">';

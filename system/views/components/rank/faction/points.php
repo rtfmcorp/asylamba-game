@@ -9,14 +9,16 @@
 
 use Asylamba\Classes\Library\Utils;
 
-$factionRankingManager = $this->getContainer()->get('atlas.faction_ranking_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+$factionRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\FactionRankingManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 $factionRankingManager->changeSession($FACTION_RANKING_POINTS);
 
 echo '<div class="component player profil rank">';
 	echo '<div class="head skin-4">';
-		echo '<img class="main" alt="ressource" src="' . MEDIA . 'rank/cup.png">';
+		echo '<img class="main" alt="ressource" src="' . $mediaPath . 'rank/cup.png">';
 		echo '<h2>Classement de victoire</h2>';
 		echo '<em>Classement cumulatif. La victoire est remportée à ' . POINTS_TO_WIN . ' points.</em>';
 	echo '</div>';

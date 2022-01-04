@@ -5,57 +5,32 @@ namespace Asylamba\Classes\Event;
 use Asylamba\Classes\Library\Http\Request;
 use Asylamba\Classes\Library\Http\Response;
 
-class ExceptionEvent {
-	/** @var \Exception **/
-	protected $exception;
-	/** @var Request **/
-	protected $request;
-	/** @var Response **/
-	protected $response;
+class ExceptionEvent
+{
+	protected ?Response $response = null;
 	
 	const NAME = 'core.exception';
-	
-	/**
-	 * @param Request $request
-	 * @param \Exception $exception
-	 */
-	public function __construct(Request $request, \Exception $exception)
+
+	public function __construct(protected Request $request, protected \Exception $exception)
 	{
-		$this->request = $request;
-		$this->exception = $exception;
 	}
-	
-	/**
-	 * @return Request
-	 */
-	public function getRequest()
+
+	public function getRequest(): Request
 	{
 		return $this->request;
 	}
-	
-	/**
-	 * @return \Exception
-	 */
-	public function getException()
+
+	public function getException(): \Exception
 	{
 		return $this->exception;
 	}
-	
-	/**
-	 * @param Response $response
-	 * @return \Asylamba\Classes\Event\ErrorEvent
-	 */
-	public function setResponse(Response $response)
+
+	public function setResponse(Response $response): void
 	{
 		$this->response = $response;
-		
-		return $this;
 	}
-	
-	/**
-	 * @return Response
-	 */
-	public function getResponse()
+
+	public function getResponse(): Response
 	{
 		return $this->response;
 	}

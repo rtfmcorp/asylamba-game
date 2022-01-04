@@ -27,38 +27,20 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 
 use Asylamba\Classes\Exception\ErrorException;
 
-class ResearchManager extends Manager {
+class ResearchManager extends Manager
+{
 	/** @var string **/
 	protected $managerType = '_Research';
-	/** @var PlayerManager **/
-	protected $playerManager;
-	/** @var NotificationManager **/
-	protected $notificationManager;
-	/** @var ResearchHelper **/
-	protected $researchHelper;
-	/** @var int **/
-	protected $researchQuantity;
-	
-	/**
-	 * @param Database $database
-	 * @param PlayerManager $playerManager
-	 * @param NotificationManager $notificationManager
-	 * @param ResearchHelper $researchHelper
-	 * @param int $researchQuantity
-	 */
+
 	public function __construct(
 		Database $database,
-		PlayerManager $playerManager,
-		NotificationManager $notificationManager,
-		ResearchHelper $researchHelper,
-		$researchQuantity
+		protected PlayerManager $playerManager,
+		protected NotificationManager $notificationManager,
+		protected ResearchHelper $researchHelper,
+		protected int $researchQuantity
 	)
 	{
 		parent::__construct($database);
-		$this->playerManager = $playerManager;
-		$this->notificationManager = $notificationManager;
-		$this->researchHelper = $researchHelper;
-		$this->researchQuantity = $researchQuantity;
 	}
 	
 	public function load($where = array(), $order = array(), $limit = array()) {

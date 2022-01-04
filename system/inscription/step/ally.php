@@ -2,7 +2,10 @@
 
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-$colorManager = $this->getContainer()->get('demeter.color_manager');
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+$appRoot = $container->getParameter('app_root');
+$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
 
 # background paralax
 echo '<div id="background-paralax" class="profil"></div>';
@@ -13,7 +16,7 @@ include 'inscriptionElement/subnav.php';
 
 # contenu spécifique
 echo '<div id="content">';
-	include COMPONENT . 'invisible.php';
+	include $container->getParameter('component') . 'invisible.php';
 
 	echo '<div class="component">';
 		echo '<div class="head">';
@@ -37,7 +40,7 @@ echo '<div id="content">';
 		if ($ally->id != 0) {
 			echo '<div class="component inscription color' . $ally->id . '">';
 				echo '<div class="head skin-1">';
-					echo '<img class="color' . $ally->id . '" src="' . MEDIA . 'ally/big/color' . $ally->id . '.png" alt="" />';
+					echo '<img class="color' . $ally->id . '" src="' . $mediaPath . 'ally/big/color' . $ally->id . '.png" alt="" />';
 					echo '<h2>' . ColorResource::getInfo($ally->id, 'officialName') . '</h2>';
 					echo '<em>' . ColorResource::getInfo($ally->id, 'government') . '</em>';
 				echo '</div>';
@@ -60,7 +63,7 @@ echo '<div id="content">';
 				echo '<div class="fix-body">';
 					echo '<div class="body">';
 						if (!$ally->isClosed) {
-							echo '<a href="' . APP_ROOT . 'inscription/step-2/ally-' . $ally->id . '" class="chooseLink">';
+							echo '<a href="' . $appRoot . 'inscription/step-2/ally-' . $ally->id . '" class="chooseLink">';
 								echo '<strong>Choisir cette faction</strong>';
 								if ($firstAlly) {
 									echo '<em>recommandée pour les joueurs débutants</em>';
@@ -81,7 +84,7 @@ echo '<div id="content">';
 							foreach ($ally->bonusText as $bonus) {
 								echo '<div class="build-item" style="margin: 25px 0;">';
 									echo '<div class="name">';
-										echo '<img src="' . MEDIA . $bonus['path'] . '" alt="" />';
+										echo '<img src="' . $mediaPath . $bonus['path'] . '" alt="" />';
 										echo '<strong>' . $bonus['title'] . '</strong>';
 										echo '<em>' . $bonus['desc'] . '</em>';
 									echo '</div>';

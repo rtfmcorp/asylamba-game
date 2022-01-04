@@ -5,9 +5,12 @@ use Asylamba\Modules\Hermes\Model\Conversation;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
-$conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$conversationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationManager::class);
+$conversationUserManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationUserManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
 
 echo '<div class="component player rank new-message">';
@@ -46,8 +49,8 @@ echo '<div class="component player rank new-message">';
 					$status = $status[$player->playerStatus - 1];
 
 					echo '<div class="player color' . $player->playerColor . '">';
-						echo '<a href="' . APP_ROOT . 'embassy/player-' . $player->rPlayer . '">';
-							echo '<img src="' . MEDIA . 'avatar/small/' . $player->playerAvatar . '.png" alt="' . $player->playerName . '" class="picto">';
+						echo '<a href="' . $appRoot . 'embassy/player-' . $player->rPlayer . '">';
+							echo '<img src="' . $mediaPath . 'avatar/small/' . $player->playerAvatar . '.png" alt="' . $player->playerName . '" class="picto">';
 						echo '</a>';
 
 						

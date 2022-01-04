@@ -10,6 +10,10 @@
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Classes\Library\Format;
 
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+
 echo '<div class="component profil thread">';
 	echo '<div class="head">';
 		echo '<h1>Journal</h1>';
@@ -34,12 +38,12 @@ echo '<div class="component profil thread">';
 			echo '</div>';
 
 			echo '<img ';
-				echo 'src="' . MEDIA . '/avatar/big/' . $player_diaryRoplay->getAvatar() . '.png" ';
+				echo 'src="' . $mediaPath . '/avatar/big/' . $player_diaryRoplay->getAvatar() . '.png" ';
 				echo 'alt="avatar de ' . $player_diaryRoplay->getName() . '" ';
 				echo 'class="diary-avatar color' . $player_diaryRoplay->getRColor() . '" ';
 			echo '/>';
 
-			echo '<form method="POST" action="' . Format::actionBuilder('writemessage', $this->getContainer()->get('session_wrapper')->get('token')) . '">';
+			echo '<form method="POST" action="' . Format::actionBuilder('writemessage', $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token')) . '">';
 				echo '<input type="hidden" name="name" value="' . $player_diaryRoplay->getName() . '" />';
 
 				echo '<p class="input input-area">';

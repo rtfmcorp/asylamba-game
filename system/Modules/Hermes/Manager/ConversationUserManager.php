@@ -7,13 +7,12 @@ use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Hermes\Model\ConversationUser;
 
-class ConversationUserManager extends Manager {
+class ConversationUserManager extends Manager
+{
 	protected $managerType ='_ConversationUser';
 
-	/**
-	 * @param Database $database
-	 */
-	public function __construct(Database $database) {
+	public function __construct(Database $database)
+	{
 		parent::__construct($database);
 	}
 	

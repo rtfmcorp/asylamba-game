@@ -364,7 +364,7 @@ class PlayerRepository extends AbstractRepository {
 		return $data;
 	}
 	
-	public function search($search)
+	public function search(string $search): array
 	{
 		$query = $this->connection->prepare(
 			'SELECT p.* FROM player AS p WHERE LOWER(name) LIKE LOWER(:search) ORDER BY experience DESC LIMIT 0,20'

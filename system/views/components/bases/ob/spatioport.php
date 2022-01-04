@@ -16,13 +16,17 @@ use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Classes\Library\Game;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 
-$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$componentPath = $container->getParameter('component');
+$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
 $request = $this->getContainer()->get('app.request');
-$commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
-$database = $this->getContainer()->get('database');
-$session = $this->getContainer()->get('session_wrapper');
+$commercialRouteManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialRouteManager::class);
+$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
-$entityManager = $this->getContainer()->get('entity_manager');
+$entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
 
 $nMaxCR = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $ob_spatioport->getLevelSpatioport(), 'nbRoutesMax');
 $nCRWaitingForOther = 0; $nCRWaitingForMe = 0;
@@ -50,7 +54,7 @@ if (count($routes) > 0) {
 	}
 	$nCRInDock = $nCROperational + $nCRInStandBy + $nCRWaitingForOther;
 }
-$inGameFactions = $this->getContainer()->get('demeter.color_manager')->getInGameFactions();
+$inGameFactions = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class)->getInGameFactions();
 
 $factions = [];
 foreach ($inGameFactions as $inGameFaction) { 
@@ -60,22 +64,22 @@ foreach ($inGameFactions as $inGameFaction) {
 # view
 echo '<div class="component building rc">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'orbitalbase/spatioport.png" alt="" />';
+		echo '<img src="' . $mediaPath . 'orbitalbase/spatioport.png" alt="" />';
 		echo '<h2>' . $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'frenchName') . '</h2>';
 		echo '<em>Niveau ' . $ob_spatioport->getLevelSpatioport() . '</em>';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			$active = (!$request->query->has('mode') || $request->query->get('mode') == 'list') ? 'active' : '';
-			echo '<a href="' . APP_ROOT . 'bases/view-spatioport/mode-list" class="nav-element ' . $active . '">';
-				echo '<img src="' . MEDIA . 'map/option/market.png" alt="" />';
+			echo '<a href="' . $appRoot . 'bases/view-spatioport/mode-list" class="nav-element ' . $active . '">';
+				echo '<img src="' . $mediaPath . 'map/option/market.png" alt="" />';
 				echo '<strong>Routes commerciales</strong>';
 				echo '<em>Gérez vos routes commerciales</em>';
 			echo '</a>';
 
 			$active = ($request->query->get('mode') == 'search') ? 'active' : '';
-			echo '<a href="' . APP_ROOT . 'bases/view-spatioport/mode-search" class="nav-element ' . $active . '">';
-				echo '<img src="' . MEDIA . 'map/option/radio.png" alt="" />';
+			echo '<a href="' . $appRoot . 'bases/view-spatioport/mode-search" class="nav-element ' . $active . '">';
+				echo '<img src="' . $mediaPath . 'map/option/radio.png" alt="" />';
 				echo '<strong>Recherche</strong>';
 				echo '<em>Trouvez des partenaires commerciaux</em>';
 			echo '</a>';
@@ -121,7 +125,7 @@ echo '<div class="component building rc">';
 					if ($session->get('playerBonus')->get(PlayerBonus::COMMERCIAL_INCOME) != 0) {
 						echo '<span class="bonus">+ ' .  Format::numberFormat($session->get('playerBonus')->get(PlayerBonus::COMMERCIAL_INCOME) * $totalIncome / 100)  . '</span>';
 					}
-					echo ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" />';
+					echo ' <img src="' . $mediaPath . 'resources/credit.png" class="icon-color" />';
 				echo '</span>';
 			echo '</div>';
 		echo '</div>';
@@ -135,7 +139,7 @@ if ($request->query->get('mode') === 'search') {
 		echo '</div>';
 		echo '<div class="fix-body">';
 			echo '<div class="body">';
-				echo '<form action="' . APP_ROOT . 'bases/view-spatioport/mode-search/show-result" method="POST" />';
+				echo '<form action="' . $appRoot . 'bases/view-spatioport/mode-search/show-result" method="POST" />';
 					echo '<h4>Chercher des partenaires commerciaux...</h4>';
 					foreach ($factions as $i) {
 						echo '<p><label for="ckb-faction-' . $i . '">';
@@ -209,8 +213,8 @@ if ($request->query->get('mode') === 'search') {
 			echo '<div class="fix-body">';
 				echo '<div class="body">';
 					foreach ($aw as $base) {
-						echo '<a href="' . APP_ROOT . 'map/place-' . $base['rPlace'] . '" class="player color' . $base['playerColor'] . '">';
-							echo '<img src="' . MEDIA . 'avatar/small/' . $base['playerAvatar'] . '.png" alt="" class="picto">';
+						echo '<a href="' . $appRoot . 'map/place-' . $base['rPlace'] . '" class="player color' . $base['playerColor'] . '">';
+							echo '<img src="' . $mediaPath . 'avatar/small/' . $base['playerAvatar'] . '.png" alt="" class="picto">';
 							echo '<span class="title">' . $base['playerName'] . '</span>';
 							echo '<strong class="name">' . $base['baseName'] . '</strong>';
 							echo '<span class="experience">' . $base['distance'] . ' al.</span>';
@@ -229,16 +233,16 @@ if ($request->query->get('mode') === 'search') {
 	foreach ($routes as $rc) {
 		if ($rc->getStatement() == CommercialRoute::PROPOSED && $rc->getPlayerId2() == $session->get('playerId')) {
 			$base1  = '<div class="base">';
-				$base1 .= '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation1()) . '.png" alt="' . $ob_spatioport->getName() . '" class="place" />';
-				$base1 .= '' . PlaceResource::get($rc->baseType1, 'name') . ' <a href="' . APP_ROOT . 'map/place-' . $rc->getROrbitalBase() . '">' . $rc->getBaseName1() . '</a><br />';
-				$base1 .= 'de <a href="' . APP_ROOT . 'embassy/player-' . $rc->getPlayerId1() . '">' . $rc->getPlayerName1() . '</a><br />';
+				$base1 .= '<img src="' . $mediaPath . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation1()) . '.png" alt="' . $ob_spatioport->getName() . '" class="place" />';
+				$base1 .= '' . PlaceResource::get($rc->baseType1, 'name') . ' <a href="' . $appRoot . 'map/place-' . $rc->getROrbitalBase() . '">' . $rc->getBaseName1() . '</a><br />';
+				$base1 .= 'de <a href="' . $appRoot . 'embassy/player-' . $rc->getPlayerId1() . '">' . $rc->getPlayerName1() . '</a><br />';
 				$base1 .= Format::numberFormat($rc->getPopulation1()) . ' millions de population';
 			$base1 .= '</div>';
 
 			$base2  = '<div class="base">';
-				$base2 .= '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation2()) . '.png" alt="' . $ob_spatioport->getName() . '" class="place" />';
-				$base2 .= '' . PlaceResource::get($rc->baseType2, 'name') . ' <a href="' . APP_ROOT . 'map/place-' . $rc->getROrbitalBaseLinked() . '">' . $rc->getBaseName2() . '</a><br />';
-				$base2 .= 'de <a href="' . APP_ROOT . 'embassy/player-' . $rc->getPlayerId2() . '">' . $rc->getPlayerName2() . '</a><br />';
+				$base2 .= '<img src="' . $mediaPath . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation2()) . '.png" alt="' . $ob_spatioport->getName() . '" class="place" />';
+				$base2 .= '' . PlaceResource::get($rc->baseType2, 'name') . ' <a href="' . $appRoot . 'map/place-' . $rc->getROrbitalBaseLinked() . '">' . $rc->getBaseName2() . '</a><br />';
+				$base2 .= 'de <a href="' . $appRoot . 'embassy/player-' . $rc->getPlayerId2() . '">' . $rc->getPlayerName2() . '</a><br />';
 				$base2 .= Format::numberFormat($rc->getPopulation2()) . ' millions de population';
 			$base2 .= '</div>';
 
@@ -282,14 +286,14 @@ if ($request->query->get('mode') === 'search') {
 										# bonus if the player is from Negore
 										echo '<span class="bonus">- ' .  Format::numberFormat(round(ColorResource::BONUS_NEGORA_ROUTE * $rc->getPrice() / 100))  . '</span>';
 									}
-									echo ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" />';
+									echo ' <img src="' . $mediaPath . 'resources/credit.png" class="icon-color" />';
 								echo '</strong></li>';
 								echo '<li>Estimation du revenu par relève<strong>';
 									echo Format::numberFormat($rc->getIncome());
 									if ($session->get('playerBonus')->get(PlayerBonus::COMMERCIAL_INCOME) != 0) {
 										echo '<span class="bonus">+ ' .  Format::numberFormat($session->get('playerBonus')->get(PlayerBonus::COMMERCIAL_INCOME) * $rc->getIncome() / 100)  . '</span>';
 									}
-									echo ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" />';		
+									echo ' <img src="' . $mediaPath . 'resources/credit.png" class="icon-color" />';		
 								echo '</strong></li>';
 								echo '<li>Population touchée <strong>' . Format::numberFormat($rc->getPopulation1() + $rc->getPopulation2()) . ' millions</strong></li>';
 
@@ -311,16 +315,16 @@ if ($request->query->get('mode') === 'search') {
 	foreach ($routes as $rc) {
 		if ($rc->getStatement() != CommercialRoute::PROPOSED || $rc->getPlayerId2() != $session->get('playerId')) {
 			$base1  = '<div class="base">';
-				$base1 .= '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation1()) . '.png" class="place" />';
-				$base1 .= '' . PlaceResource::get($rc->baseType1, 'name') . ' <a href="' . APP_ROOT . 'map/place-' . $rc->getROrbitalBase() . '">' . $rc->getBaseName1() . '</a><br />';
-				$base1 .= 'de <a href="' . APP_ROOT . 'embassy/player-' . $rc->getPlayerId1() . '">' . $rc->getPlayerName1() . '</a><br />';
+				$base1 .= '<img src="' . $mediaPath . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation1()) . '.png" class="place" />';
+				$base1 .= '' . PlaceResource::get($rc->baseType1, 'name') . ' <a href="' . $appRoot . 'map/place-' . $rc->getROrbitalBase() . '">' . $rc->getBaseName1() . '</a><br />';
+				$base1 .= 'de <a href="' . $appRoot . 'embassy/player-' . $rc->getPlayerId1() . '">' . $rc->getPlayerName1() . '</a><br />';
 				$base1 .= Format::numberFormat($rc->getPopulation1()) . ' millions de population';
 			$base1 .= '</div>';
 
 			$base2  = '<div class="base">';
-				$base2 .= '<img src="' . MEDIA . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation2()) . '.png" class="place" />';
-				$base2 .= '' . PlaceResource::get($rc->baseType2, 'name') . ' <a href="' . APP_ROOT . 'map/place-' . $rc->getROrbitalBaseLinked() . '">' . $rc->getBaseName2() . '</a><br />';
-				$base2 .= 'de <a href="' . APP_ROOT . 'embassy/player-' . $rc->getPlayerId2() . '">' . $rc->getPlayerName2() . '</a><br />';
+				$base2 .= '<img src="' . $mediaPath . 'map/place/place1-' . Game::getSizeOfPlanet($rc->getPopulation2()) . '.png" class="place" />';
+				$base2 .= '' . PlaceResource::get($rc->baseType2, 'name') . ' <a href="' . $appRoot . 'map/place-' . $rc->getROrbitalBaseLinked() . '">' . $rc->getBaseName2() . '</a><br />';
+				$base2 .= 'de <a href="' . $appRoot . 'embassy/player-' . $rc->getPlayerId2() . '">' . $rc->getPlayerName2() . '</a><br />';
 				$base2 .= Format::numberFormat($rc->getPopulation2()) . ' millions de population';
 			$base2 .= '</div>';
 
@@ -360,7 +364,7 @@ if ($request->query->get('mode') === 'search') {
 									if ($session->get('playerBonus')->get(PlayerBonus::COMMERCIAL_INCOME) != 0) {
 										echo '<span class="bonus">+ ' .  Format::numberFormat($session->get('playerBonus')->get(PlayerBonus::COMMERCIAL_INCOME) * $rc->getIncome() / 100)  . '</span>';
 									}
-									echo ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" />';		
+									echo ' <img src="' . $mediaPath . 'resources/credit.png" class="icon-color" />';		
 								echo '</strong></li>';
 								echo '<li>Population touchée <strong>' . Format::numberFormat($rc->getPopulation1() + $rc->getPopulation2()) . ' millions</strong></li>';
 
@@ -391,7 +395,7 @@ echo '<div class="component">';
 echo '</div>';
 
 if (count($routes) == 0) {
-	include COMPONENT . 'default.php';
+	include $componentPath . 'default.php';
 }
 
 $entityManager->clear(CommercialRoute::class);

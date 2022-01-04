@@ -1,8 +1,9 @@
 <?php
 
+$container = $this->getContainer();
 $request = $this->getContainer()->get('app.request');
-$systemManager = $this->getContainer()->get('gaia.system_manager');
-$placeManager = $this->getContainer()->get('gaia.place_manager');
+$systemManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SystemManager::class);
+$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
 
 if ($request->query->has('systemid')) {
 	$systemId = $request->query->get('systemid');
@@ -17,7 +18,7 @@ if (($system = $systemManager->get($systemId)) !== null) {
 	$places = $placeManager->getSystemPlaces($system);
 
 	# inclusion du "composant"
-	include PAGES . 'desktop/mapElement/actionbox.php';
+	include $container->getParameter('pages') . 'desktop/mapElement/actionbox.php';
 } else {
 	return FALSE;
 }

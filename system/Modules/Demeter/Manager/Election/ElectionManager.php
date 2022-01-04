@@ -14,15 +14,10 @@ namespace Asylamba\Modules\Demeter\Manager\Election;
 use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Modules\Demeter\Model\Election\Election;
 
-class ElectionManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-	
-	/**
-	 * @param EntityManager $entityManager
-	 */
-	public function __construct(EntityManager $entityManager) {
-		$this->entityManager = $entityManager;
+class ElectionManager
+{
+	public function __construct(protected EntityManager $entityManager)
+	{
 	}
 	
 	/**

@@ -6,14 +6,9 @@ use Asylamba\Classes\Redis\RedisManager;
 
 class SessionWrapper
 {
-	/** @var Session **/
-	protected $currentSession;
-	/** @var RedisManager **/
-	protected $redisManager;
-	
-	/**
-	 * @param RedisManager $redisManager
-	 */
+	protected ?Session $currentSession;
+	protected RedisManager $redisManager;
+
 	public function __construct(RedisManager $redisManager)
 	{
 		$this->redisManager = $redisManager;
@@ -24,7 +19,7 @@ class SessionWrapper
 		$this->currentSession = $session;
 	}
 	
-	public function getCurrentSession()
+	public function getCurrentSession(): Session
 	{
 		return $this->currentSession;
 	}

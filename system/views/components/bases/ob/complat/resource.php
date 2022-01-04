@@ -4,11 +4,14 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Athena\Model\CommercialShipping;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
 
 echo '<div class="component new-message market-sell">';
 	echo '<div class="head skin-4 sh">';
-		echo '<img src="' . MEDIA . 'resources/resource.png" alt="ressource" class="main" />';
+		echo '<img src="' . $mediaPath . 'resources/resource.png" alt="ressource" class="main" />';
 		echo '<h2>Envoi de ressources</h2>';
 		echo '<em>à une autre base</em>';
 	echo '</div>';
@@ -25,13 +28,13 @@ echo '<div class="component new-message market-sell">';
 					echo '<div class="label-box">';
 						echo '<span class="label">Ressources</span>';
 						echo '<span class="value">' . Format::numberFormat($ob_compPlat->resourcesStorage) . '</span>';
-						echo '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">';
+						echo '<img class="icon-color" alt="ressources" src="' . $mediaPath . 'resources/resource.png">';
 					echo '</div>';
 
 					echo '<div class="label-box sf-quantity">';
 						echo '<label for="send-resources-quantity" class="label">Quantité</label>';
 						echo '<input id="send-resources-quantity" class="value" type="text" name="quantity" autocomplete="off" />';
-						echo '<img class="icon-color" alt="ressources" src="' . MEDIA . 'resources/resource.png">';
+						echo '<img class="icon-color" alt="ressources" src="' . $mediaPath . 'resources/resource.png">';
 					echo '</div>';
 
 					echo '<hr />';
@@ -39,7 +42,7 @@ echo '<div class="component new-message market-sell">';
 					echo '<div class="label-box sf-comship">';
 						echo '<span class="label">Vaisseaux</span>';
 						echo '<span class="value"></span>';
-						echo '<img class="icon-color" alt="vaisseaux transports" src="' . MEDIA . 'resources/transport.png">';
+						echo '<img class="icon-color" alt="vaisseaux transports" src="' . $mediaPath . 'resources/transport.png">';
 					echo '</div>';
 
 					echo '<hr />';
@@ -53,7 +56,7 @@ echo '</div>';
 
 echo '<div class="component new-message market-sell">';
 	echo '<div class="head skin-4">';
-		echo '<img src="' . MEDIA . 'orbitalbase/dock2.png" alt="vaisseaux" class="main" />';
+		echo '<img src="' . $mediaPath . 'orbitalbase/dock2.png" alt="vaisseaux" class="main" />';
 		echo '<h2>Envoi de vaisseaux</h2>';
 		echo '<em>à une autre base</em>';
 	echo '</div>';
@@ -68,7 +71,7 @@ echo '<div class="component new-message market-sell">';
 					if ($ship > 0) {
 						echo '<div class="queue sh" data-target="sell-ships-' . $key . '">';
 							echo '<div class="item">';
-								echo '<img class="picto" src="' . MEDIA . 'ship/picto/ship' . $key . '.png" alt="" />';
+								echo '<img class="picto" src="' . $mediaPath . 'ship/picto/ship' . $key . '.png" alt="" />';
 								echo '<strong>' . ShipResource::getInfo($key, 'codeName') . '</strong>';
 								echo '<em>' . ShipResource::getInfo($key, 'name') . '</em>';
 								echo '<em>' . ShipResource::getInfo($key, 'pev') . ' pev</em>';
@@ -91,7 +94,7 @@ echo '<div class="component new-message market-sell">';
 							echo '<div class="label-box sf-comship">';
 								echo '<span class="label">Vaisseaux</span>';
 								echo '<span class="value"></span>';
-								echo '<img class="icon-color" alt="vaisseaux transports" src="' . MEDIA . 'resources/transport.png">';
+								echo '<img class="icon-color" alt="vaisseaux transports" src="' . $mediaPath . 'resources/transport.png">';
 							echo '</div>';
 
 							echo '<hr />';

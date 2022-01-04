@@ -6,9 +6,9 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Demeter\Resource\LawResources;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$lawManager = $this->getContainer()->get('demeter.law_manager');
-$candidateManager = $this->getContainer()->get('demeter.candidate_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$lawManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Law\LawManager::class);
+$candidateManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Election\CandidateManager::class);
 
 $rLaw = $request->query->get('rlaw');
 

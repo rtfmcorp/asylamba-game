@@ -4,10 +4,12 @@ use Asylamba\Modules\Athena\Model\CommercialShipping;
 use Asylamba\Modules\Athena\Model\Transaction;
 use Asylamba\Classes\Library\Format;
 
-$transactionManager = $this->getContainer()->get('athena.transaction_manager');
-$commercialShippingManager = $this->getContainer()->get('athena.commercial_shipping_manager');
-$commercialTradeManager = $this->getContainer()->get('athena.commercial_tax_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+$transactionManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\TransactionManager::class);
+$commercialShippingManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialShippingManager::class);
+$commercialTradeManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialTaxManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 $S_CTM1 = $commercialTradeManager->getCurrentSession();
 $S_CTM2 = $commercialTradeManager->newSession();
@@ -46,7 +48,7 @@ $resourceTransactions = $transactionManager->getProposedTransactions(Transaction
 
 echo '<div class="component transaction">';
 	echo '<div class="head skin-4">';
-		echo '<img src="' . MEDIA . 'resources/resource.png" alt="ressource" class="main" />';
+		echo '<img src="' . $mediaPath . 'resources/resource.png" alt="ressource" class="main" />';
 		echo '<h2>Ressources</h2>';
 		echo '<em>cours actuel | 1:' . Format::numberFormat($ressourceCurrentRate, 3) . '</em>';
 	echo '</div>';
@@ -54,10 +56,10 @@ echo '<div class="component transaction">';
 		echo '<div class="body">';
 			echo '<div class="tool sort-button">';
 				echo '<span>trier par</span>';
-				echo '<span><a href="#" data-sort-type="quantity" data-sort-direction="up" class="hb lt" title="quantité de ressources"><img src="' . MEDIA . 'resources/resource.png" class="icon-color" alt="ressources" /></a></span>';
-				echo '<span><a href="#" data-sort-type="price" data-sort-direction="down" class="hb lt" title="prix"><img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></a></span>';
-				echo '<span><a href="#" data-sort-type="far" data-sort-direction="down" class="hb lt" title="temps de trajet"><img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="temps" /></a></span>';
-				echo '<span><a href="#" data-sort-type="cr" data-sort-direction="down" class="hb lt" title="cours de la marchandise"><img src="' . MEDIA . 'resources/rate.png" class="icon-color" alt="cours" /></a></span>';
+				echo '<span><a href="#" data-sort-type="quantity" data-sort-direction="up" class="hb lt" title="quantité de ressources"><img src="' . $mediaPath . 'resources/resource.png" class="icon-color" alt="ressources" /></a></span>';
+				echo '<span><a href="#" data-sort-type="price" data-sort-direction="down" class="hb lt" title="prix"><img src="' . $mediaPath . 'resources/credit.png" class="icon-color" alt="crédit" /></a></span>';
+				echo '<span><a href="#" data-sort-type="far" data-sort-direction="down" class="hb lt" title="temps de trajet"><img src="' . $mediaPath . 'resources/time.png" class="icon-color" alt="temps" /></a></span>';
+				echo '<span><a href="#" data-sort-type="cr" data-sort-direction="down" class="hb lt" title="cours de la marchandise"><img src="' . $mediaPath . 'resources/rate.png" class="icon-color" alt="cours" /></a></span>';
 			echo '</div>';
 
 			echo '<div class="sort-content">';
@@ -77,7 +79,7 @@ $commanderTransactions = $transactionManager->getProposedTransactions(Transactio
 
 echo '<div class="component transaction">';
 	echo '<div class="head skin-4">';
-		echo '<img src="' . MEDIA . 'orbitalbase/school.png" alt="commandants" class="main" />';
+		echo '<img src="' . $mediaPath . 'orbitalbase/school.png" alt="commandants" class="main" />';
 		echo '<h2>Commandants</h2>';
 		echo '<em>cours actuel | 1:' . Format::numberFormat($commanderCurrentRate, 3) . '</em>';
 	echo '</div>';
@@ -85,10 +87,10 @@ echo '<div class="component transaction">';
 		echo '<div class="body">';
 			echo '<div class="tool sort-button">';
 				echo '<span>trier par</span>';
-				echo '<span><a href="#" data-sort-type="xp" data-sort-direction="up" class="hb lt" title="expérience du commandant"><img src="' . MEDIA . 'resources/xp.png" class="icon-color" alt="experience" /></a></span>';
-				echo '<span><a href="#" data-sort-type="price" data-sort-direction="down" class="hb lt" title="prix"><img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></a></span>';
-				echo '<span><a href="#" data-sort-type="far" data-sort-direction="down" class="hb lt" title="temps de trajet"><img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="temps" /></a></span>';
-				echo '<span><a href="#" data-sort-type="cr" data-sort-direction="down" class="hb lt" title="cours de la marchandise"><img src="' . MEDIA . 'resources/rate.png" class="icon-color" alt="cours" /></a></span>';
+				echo '<span><a href="#" data-sort-type="xp" data-sort-direction="up" class="hb lt" title="expérience du commandant"><img src="' . $mediaPath . 'resources/xp.png" class="icon-color" alt="experience" /></a></span>';
+				echo '<span><a href="#" data-sort-type="price" data-sort-direction="down" class="hb lt" title="prix"><img src="' . $mediaPath . 'resources/credit.png" class="icon-color" alt="crédit" /></a></span>';
+				echo '<span><a href="#" data-sort-type="far" data-sort-direction="down" class="hb lt" title="temps de trajet"><img src="' . $mediaPath . 'resources/time.png" class="icon-color" alt="temps" /></a></span>';
+				echo '<span><a href="#" data-sort-type="cr" data-sort-direction="down" class="hb lt" title="cours de la marchandise"><img src="' . $mediaPath . 'resources/rate.png" class="icon-color" alt="cours" /></a></span>';
 			echo '</div>';
 
 			echo '<div class="sort-content">';
@@ -108,7 +110,7 @@ $shipTransactions = $transactionManager->getProposedTransactions(Transaction::TY
 
 echo '<div class="component transaction">';
 	echo '<div class="head skin-4">';
-		echo '<img src="' . MEDIA . 'orbitalbase/dock2.png" alt="vaisseaux" class="main" />';
+		echo '<img src="' . $mediaPath . 'orbitalbase/dock2.png" alt="vaisseaux" class="main" />';
 		echo '<h2>Vaisseaux</h2>';
 		echo '<em>cours actuel | 1:' . Format::numberFormat($shipCurrentRate, 3) . '</em>';
 	echo '</div>';
@@ -116,10 +118,10 @@ echo '<div class="component transaction">';
 		echo '<div class="body">';
 			echo '<div class="tool sort-button">';
 				echo '<span>trier par</span>';
-				echo '<span><a href="#" data-sort-type="quantity" data-sort-direction="up" class="hb lt" title="nombre de vaisseaux"><img src="' . MEDIA . 'resources/pev.png" class="icon-color" alt="pev" /></a></span>';
-				echo '<span><a href="#" data-sort-type="price" data-sort-direction="down" class="hb lt" title="prix"><img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédit" /></a></span>';
-				echo '<span><a href="#" data-sort-type="far" data-sort-direction="down" class="hb lt" title="temps de trajet"><img src="' . MEDIA . 'resources/time.png" class="icon-color" alt="temps" /></a></span>';
-				echo '<span><a href="#" data-sort-type="cr" data-sort-direction="down" class="hb lt" title="cours de la marchandise"><img src="' . MEDIA . 'resources/rate.png" class="icon-color" alt="cours" /></a></span>';
+				echo '<span><a href="#" data-sort-type="quantity" data-sort-direction="up" class="hb lt" title="nombre de vaisseaux"><img src="' . $mediaPath . 'resources/pev.png" class="icon-color" alt="pev" /></a></span>';
+				echo '<span><a href="#" data-sort-type="price" data-sort-direction="down" class="hb lt" title="prix"><img src="' . $mediaPath . 'resources/credit.png" class="icon-color" alt="crédit" /></a></span>';
+				echo '<span><a href="#" data-sort-type="far" data-sort-direction="down" class="hb lt" title="temps de trajet"><img src="' . $mediaPath . 'resources/time.png" class="icon-color" alt="temps" /></a></span>';
+				echo '<span><a href="#" data-sort-type="cr" data-sort-direction="down" class="hb lt" title="cours de la marchandise"><img src="' . $mediaPath . 'resources/rate.png" class="icon-color" alt="cours" /></a></span>';
 			echo '</div>';
 
 			echo '<div class="sort-content">';

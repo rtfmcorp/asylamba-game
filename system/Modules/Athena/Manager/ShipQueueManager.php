@@ -16,50 +16,32 @@ use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
 use Asylamba\Modules\Athena\Model\ShipQueue;
+use Asylamba\Modules\Gaia\Model\Place;
 
-class ShipQueueManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var RealTimeActionScheduler **/
-	protected $realtimeActionScheduler;
-
-	/**
-	 * @param EntityManager $entityManager
-	 * @param RealTimeActionScheduler $realtimeActionScheduler
-	 */
-	public function __construct(EntityManager $entityManager, RealTimeActionScheduler $realtimeActionScheduler) {
-		$this->entityManager = $entityManager;
-		$this->realtimeActionScheduler = $realtimeActionScheduler;
+class ShipQueueManager
+{
+	public function __construct(
+		protected EntityManager $entityManager,
+		protected RealTimeActionScheduler $realtimeActionScheduler
+	) {
 	}
 	
 	public function get($id)
 	{
 		return $this->entityManager->getRepository(ShipQueue::class)->get($id);
 	}
-	
-	/**
-	 * @param int $orbitalBaseId
-	 * @return array
-	 */
-	public function getBaseQueues($orbitalBaseId)
+
+	public function getBaseQueues(int $orbitalBaseId): array
 	{
 		return $this->entityManager->getRepository(ShipQueue::class)->getBaseQueues($orbitalBaseId);
 	}
-	
-	/**
-	 * @param int $orbitalBaseId
-	 * @param int $dockType
-	 * @return array
-	 */
-	public function getByBaseAndDockType($orbitalBaseId, $dockType)
+
+	public function getByBaseAndDockType(int $orbitalBaseId, int $dockType): array
 	{
 		return $this->entityManager->getRepository(ShipQueue::class)->getByBaseAndDockType($orbitalBaseId, $dockType);
 	}
-	
-	/**
-	 * @param ShipQueue $shipQueue
-	 */
-	public function add(ShipQueue $shipQueue)
+
+	public function add(ShipQueue $shipQueue): void
 	{
 		$this->entityManager->persist($shipQueue);
 		$this->entityManager->flush($shipQueue);
@@ -76,7 +58,7 @@ class ShipQueueManager {
 		);
 	}
 	
-	public function scheduleActions()
+	public function scheduleActions(): void
 	{
 		$queues = $this->entityManager->getRepository(ShipQueue::class)->getAll();
 		

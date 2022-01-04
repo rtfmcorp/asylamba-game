@@ -5,73 +5,45 @@ parameters:
     gaia.sector_minimal_score: 10
     
 services:
-    gaia.action_helper:
-        class: Asylamba\Modules\Gaia\Helper\ActionHelper
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    Asylamba\Modules\Gaia\Manager\:
+        resource: '%root_path%/system/Modules/Gaia/Manager/*'
+
+    Asylamba\Modules\Gaia\Helper\ActionHelper:
         arguments:
-            - "@ares.commander_manager"
-            - "@athena.commercial_route_manager"
-            - "@athena.orbital_base_manager"
-            - "%athena.route.sector_bonus"
-            - "%athena.route.color_bonus"
-            - "@session_wrapper"
+            $rootPath: '%root_path%'
+            $mediaPath: '%media%'
+            $routeSectorBonus: "%athena.trade.route.sector_bonus%"
+            $routeColorBonus: "%athena.trade.route.color_bonus%"
+
+    Asylamba\Modules\Gaia\Helper\GalaxyGenerator: ~
             
-    gaia.galaxy_generator:
-        class: Asylamba\Modules\Gaia\Helper\GalaxyGenerator
+    Asylamba\Modules\Gaia\Manager\GalaxyColorManager:
         arguments:
-            - "@database_admin"
-            - "@gaia.galaxy_configuration"
-            
-    gaia.galaxy_color_manager:
-        class: Asylamba\Modules\Gaia\Manager\GalaxyColorManager
+            $availableFactions: "%game.available_factions%"
+            $limitConquestSector: "%gaia.limit_conquest_sector%"
+
+    Asylamba\Modules\Gaia\Manager\SectorManager:
         arguments:
-            - "@database"
-            - "%game.available_factions"
-            - "%gaia.limit_conquest_sector"
+            $scores: "%gaia.scores%"
             
-    gaia.place_manager:
-        class: Asylamba\Modules\Gaia\Manager\PlaceManager
-        arguments:
-            - "@entity_manager"
-            - "@hermes.notification_manager"
-            - "@event_dispatcher"
-            
-    gaia.sector_manager:
-        class: Asylamba\Modules\Gaia\Manager\SectorManager
-        arguments:
-            - "@entity_manager"
-            - "@redis_manager"
-            - "@load_balancer"
-            - "@task_manager"
-            - "@athena.orbital_base_manager"
-            - "@zeus.player_manager"
-            - "@gaia.system_manager"
-            - "%gaia.scores"
-            
-    gaia.system_manager:
-        class: Asylamba\Modules\Gaia\Manager\SystemManager
-        arguments:
-            - "@entity_manager"
-            
-    gaia.galaxy_configuration:
-        class: "%gaia.galaxy_configuration.class"
+    Asylamba\Modules\Gaia\Galaxy\GalaxyConfiguration:
+        public: true
+        class: "%gaia.galaxy_configuration.class%"
         
-    gaia.sector_listener:
-        class: Asylamba\Modules\Gaia\EventListener\SectorListener
+    Asylamba\Modules\Gaia\EventListener\SectorListener:
         arguments:
-            - "@gaia.sector_manager"
-            - "@gaia.system_manager"
-            - "@entity_manager"
-            - "%gaia.sector_minimal_score"
+            $scores: "%gaia.scores%"
+            $sectorMinimalScore: "%gaia.sector_minimal_score%"
         tags:
-            - {type: "event_listener", event: "gaia.place_owner_change", method: "onPlaceOwnerChange", order: 2}
+            - {name: "kernel.event_listener", event: "gaia.place_owner_change", method: "onPlaceOwnerChange", priority: 1}
             
-    gaia.system_listener:
-        class: Asylamba\Modules\Gaia\EventListener\SystemListener
+    Asylamba\Modules\Gaia\EventListener\SystemListener:
         arguments:
-            - "@gaia.system_manager"
-            - "@athena.orbital_base_manager"
-            - "@zeus.player_manager"
-            - "@entity_manager"
-            - "%gaia.scores"
+            $scores: "%gaia.scores%"
         tags:
-            - {type: "event_listener", event: "gaia.place_owner_change", method: "onPlaceOwnerChange", order: 1}
+            - {name: "kernel.event_listener", event: "gaia.place_owner_change", method: "onPlaceOwnerChange", priority: 2}

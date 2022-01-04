@@ -17,9 +17,6 @@ class Chronos {
 	const SN_SEC	= '\'\'';
 	const LN_SEC	= 'seconde';
 
-	const REAL_TIME = SERVER_START_TIME;
-	const SEG_SHIFT = SEGMENT_SHIFT;
-
 	/*
 	 * retourne le temps restant avant la prochaine relève
 	 * arg : $type
@@ -45,9 +42,9 @@ class Chronos {
 	 */
 	public static function getDate($type) {
 		$now  = time();
-		$date = strtotime(Chronos::REAL_TIME);
+		$date = strtotime($_ENV['SERVER_START_TIME']);
 		$intr = $now - $date;
-		$rel  = (floor($intr / 3600)) + (Chronos::SEG_SHIFT * Chronos::CO_SEG);
+		$rel  = (floor($intr / 3600)) + ($_ENV['SEGMENT_SHIFT'] * Chronos::CO_SEG);
 
 		if ($type == 'str') {
 			return floor($rel / Chronos::CO_STR);
@@ -61,11 +58,11 @@ class Chronos {
 	}
 
 	private static function getRel($date) {
-		$origin = strtotime(Chronos::REAL_TIME);
+		$origin = strtotime($_ENV['SERVER_START_TIME']);
 		$date 	= strtotime($date);
 		$intr 	= $date - $origin;
 
-		return (floor($intr / 3600)) + (Chronos::SEG_SHIFT * Chronos::CO_SEG);
+		return (floor($intr / 3600)) + ($_ENV['SEGMENT_SHIFT'] * Chronos::CO_SEG);
 	}
 
 	/*

@@ -11,6 +11,8 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
 $commanderByBase = array();
 
 foreach ($commander_fleetFeesFinancial as $commander) {
@@ -24,7 +26,7 @@ foreach ($commander_fleetFeesFinancial as $commander) {
 # view part
 echo '<div class="component financial">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'financial/commander.png" alt="commandants" />';
+		echo '<img src="' . $mediaPath . 'financial/commander.png" alt="commandants" />';
 		echo '<h2>Commandants</h2>';
 		echo '<em>Salaires des commandants</em>';
 	echo '</div>';
@@ -51,7 +53,7 @@ echo '<div class="component financial">';
 
 					echo '<span class="value">';
 						echo Format::numberFormat($commanderFees);
-						echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+						echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 					echo '</span>';
 
 					echo '<ul class="sub-list-type-1" id="commander-base-' . $base . '">';
@@ -71,7 +73,7 @@ echo '<div class="component financial">';
 				echo '<span class="label">total des salaires</span>';
 				echo '<span class="value">';
 					echo Format::numberFormat($financial_totalFleetFees);
-					echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+					echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 				echo '</span>';
 			echo '</li>';
 		echo '</ul>';

@@ -16,14 +16,10 @@ use Asylamba\Modules\Athena\Model\CommercialRoute;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 
-class CommercialRouteManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-	
-	/**
-	 * @param EntityManager $entityManager
-	 */
-	public function __construct(EntityManager $entityManager) {
+class CommercialRouteManager
+{
+	public function __construct(EntityManager $entityManager)
+	{
 		$this->entityManager = $entityManager;
 	}
 	

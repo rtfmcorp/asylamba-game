@@ -26,21 +26,12 @@ class GalaxyGenerator {
 	public $systemDeleted = 0;
 	public $listSector = array();
 
-	/** @var string **/
-	protected $output;
-	/** @var DatabaseAdmin **/
-	protected $databaseAdmin;
-	/** @var GalaxyConfiguration **/
-	protected $galaxyConfiguration;
+	protected string $output = '';
 	
-	/**
-	 * @param DatabaseAdmin $databaseAdmin
-	 * @param GalaxyConfiguration $galaxyConfiguration
-	 */
-	public function __construct(DatabaseAdmin $databaseAdmin, GalaxyConfiguration $galaxyConfiguration)
-	{
-		$this->databaseAdmin = $databaseAdmin;
-		$this->galaxyConfiguration = $galaxyConfiguration;
+	public function __construct(
+		protected DatabaseAdmin $databaseAdmin,
+		protected GalaxyConfiguration $galaxyConfiguration,
+	) {
 	}
 
 	public function generate() {

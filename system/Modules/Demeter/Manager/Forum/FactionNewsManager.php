@@ -15,24 +15,17 @@ use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Modules\Demeter\Model\Forum\FactionNews;
 use Asylamba\Classes\Library\Parser;
 
-class FactionNewsManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var Parser **/
-	protected $parser;
-	
-	/**
-	 * @param EntityManager $entityManager
-	 * @param Parser $parser
-	 */
-	public function __construct(EntityManager $entityManager, Parser $parser) {
-		$this->entityManager = $entityManager;
-		$this->parser = $parser;
+class FactionNewsManager
+{
+	public function __construct(
+		protected EntityManager $entityManager,
+		protected Parser $parser,
+	) {
 	}
 	
 	/**
 	 * @param int $id
-	 * @return FacionNews
+	 * @return FactionNews
 	 */
 	public function get($id)
 	{
@@ -41,7 +34,7 @@ class FactionNewsManager {
 	
 	/**
 	 * @param int $factionId
-	 * @return FacionNews
+	 * @return FactionNews
 	 */
 	public function getFactionNews($factionId)
 	{
@@ -50,7 +43,7 @@ class FactionNewsManager {
 	
 	/**
 	 * @param int $factionId
-	 * @return FacionNews
+	 * @return FactionNews
 	 */
 	public function getFactionBasicNews($factionId)
 	{
@@ -59,7 +52,7 @@ class FactionNewsManager {
 	
 	/**
 	 * @param int $factionId
-	 * @return FacionNews
+	 * @return FactionNews
 	 */
 	public function getFactionPinnedNew($factionId)
 	{

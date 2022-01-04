@@ -2,56 +2,30 @@
 
 namespace Asylamba\Classes\Task;
 
-use Asylamba\Classes\DependencyInjection\Container;
-
+use Asylamba\Classes\Process\LoadBalancer;
 use Asylamba\Classes\Process\Process;
+use Symfony\Component\DependencyInjection\Container;
 
 class TaskManager
 {
-	/** @var Container **/
-	protected $container;
-    
-	/**
-	 * @param Container $container
-	 */
-    public function __construct(Container $container)
+    public function __construct(protected Container $container)
     {
-		$this->container = $container;
     }
-	
-	/**
-	 * @param array $data
-	 * @return Task
-	 */
-	public function createTaskFromData($data)
+
+	public function createTaskFromData(array $data): Task
 	{
-		switch ($data['type']) {
-			case Task::TYPE_TECHNICAL:
-				$task = $this->createTechnicalTask($data['manager'], $data['method'], $data['id']);
-				break;
-			case Task::TYPE_REALTIME:
-				$task = $this->createRealTimeTask($data['manager'], $data['method'], $data['object_id'], $data['date'], $data['id'], ($data['context'] ?? null));
-				break;
-			case Task::TYPE_CYCLIC:
-				$task = $this->createCyclicTask($data['manager'], $data['method'], $data['id']);
-				break;
-		}
+		$task = match ($data['type']) {
+			Task::TYPE_TECHNICAL => $this->createTechnicalTask($data['manager'], $data['method'], $data['id']),
+			Task::TYPE_REALTIME => $this->createRealTimeTask($data['manager'], $data['method'], $data['object_id'], $data['date'], $data['id'], ($data['context'] ?? null)),
+			Task::TYPE_CYCLIC => $this->createCyclicTask($data['manager'], $data['method'], $data['id']),
+		};
 		if (isset($data['estimated_time'])) {
 			$task->setEstimatedTime($data['estimated_time']);
 		}
 		return $task;
 	}
-    
-    /**
-     * @param string $manager
-     * @param string $method
-     * @param int $objectId
-     * @param string $date
-	 * @param int $id
-	 * @param array $context
-     * @return Task
-     */
-    public function createRealTimeTask($manager, $method, $objectId, $date, $id = null, $context = null)
+
+    public function createRealTimeTask(string $manager, string $method, int $objectId, string $date, int $id = null, array $context = null): Task
     {
         return
             (new RealTimeTask())
@@ -63,13 +37,8 @@ class TaskManager
 			->setContext($context)
         ;
     }
-    
-    /**
-     * @param string $manager
-     * @param string $method
-     * @return Task
-     */
-    public function createCyclicTask($manager, $method, $id = null)
+
+    public function createCyclicTask(string $manager, string $method, int $id = null): Task
     {
         return
             (new CyclicTask())
@@ -78,13 +47,8 @@ class TaskManager
             ->setMethod($method)
         ;
     }
-    
-    /**
-     * @param string $manager
-     * @param string $method
-     * @return Task
-     */
-    public function createTechnicalTask($manager, $method, $id = null)
+
+    public function createTechnicalTask(string $manager, string $method, int $id = null): Task
     {
         return
             (new TechnicalTask())
@@ -93,26 +57,18 @@ class TaskManager
             ->setMethod($method)
         ;
     }
-    
-	/**
-	 * @param \Asylamba\Classes\Task\Task $task
-	 * @return array
-	 */
-    public function perform(Task $task)
+
+    public function perform(Task $task): array
     {
 		// Get the manager from the container and then execute the given method with its arguments
-		call_user_func_array(
+		\call_user_func_array(
 			[$this->container->get($task->getManager()), $task->getMethod()],
 			($task instanceof RealTimeTask) ? [$task->getObjectId()] : []
 		);
 		return ['success' => true, 'task' => $task];
     }
-	
-	/**
-	 * @param Process $process
-	 * @param array $data
-	 */
-	public function validateTask(Process $process, $data)
+
+	public function validateTask(Process $process, array $data): void
 	{
 		$task = $this->createTaskFromData($data['task']);
 		
@@ -127,11 +83,11 @@ class TaskManager
 		}
 		
 		if ($data['success'] === true) {
-			$this->container->get('load_balancer')->storeStats($task);
+			$this->container->get(LoadBalancer::class)->storeStats($task);
 		}
 	}
     
-    public function generateId()
+    public function generateId(): string
     {
         return uniqid('process_');
     }

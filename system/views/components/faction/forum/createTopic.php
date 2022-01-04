@@ -6,9 +6,11 @@
 
 use Asylamba\Classes\Library\Format;
 
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$parser = $this->getContainer()->get('parser');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
 $sessionToken = $session->get('token');
 # require
 
@@ -19,7 +21,7 @@ echo '<div class="component topic size2">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="message write">';
-				echo '<img src="' . MEDIA . 'avatar/medium/' . $session->get('playerInfo')->get('avatar') . '.png" alt="' . $session->get('playerInfo')->get('pseudo') . '" class="avatar" />';
+				echo '<img src="' . $mediaPath . 'avatar/medium/' . $session->get('playerInfo')->get('avatar') . '.png" alt="' . $session->get('playerInfo')->get('pseudo') . '" class="avatar" />';
 				echo '<div class="content">';
 					echo '<form action="' . Format::actionBuilder('createtopicforum', $sessionToken, ['rforum' => $request->query->get('forum')]) . '" method="POST">';
 						echo '<input class="title" type="text" name="title" placeholder="sujet" />';

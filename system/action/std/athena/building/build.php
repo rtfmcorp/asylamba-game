@@ -15,13 +15,14 @@ use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
-$session = $this->getContainer()->get('session_wrapper');
-$database = $this->getContainer()->get('database');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$buildingQueueManager = $this->getContainer()->get('athena.building_queue_manager');
-$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
-$technologyManager = $this->getContainer()->get('promethee.technology_manager');
-$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
+$container = $this->getContainer();
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$buildingQueueManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\BuildingQueueManager::class);
+$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$technologyManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\TechnologyManager::class);
+$tutorialHelper = $this->getContainer()->get(\Asylamba\Modules\Zeus\Helper\TutorialHelper::class);
 $request = $this->getContainer()->get('app.request');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
@@ -133,7 +134,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 				# debit resources
 				$orbitalBaseManager->decreaseResources($ob, $orbitalBaseHelper->getBuildingInfo($building, 'level', $currentLevel + 1, 'resourcePrice'));
 
-				if (DATA_ANALYSIS) {
+				if ($container->getParameter('data_analysis')) {
 					$qr = $database->prepare('INSERT INTO 
 						DA_BaseAction(`from`, type, opt1, opt2, weight, dAction)
 						VALUES(?, ?, ?, ?, ?, ?)'
@@ -142,7 +143,7 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 				}
 
 				# add the event in controller
-				$session->get('playerEvent')->add($bq->dEnd, EVENT_BASE, $baseId);
+				$session->get('playerEvent')->add($bq->dEnd, $container->getParameter('event_base'), $baseId);
 
 				$session->addFlashbag('Construction programmée', Flashbag::TYPE_SUCCESS);
 			} else {

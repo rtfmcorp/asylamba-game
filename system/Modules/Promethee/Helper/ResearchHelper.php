@@ -7,26 +7,18 @@ use Asylamba\Classes\Exception\ErrorException;
 
 class ResearchHelper
 {
-	/** @var int **/
-	protected $coeff;
-	/** @var int **/
-	protected $maxDiff;
-	
-	/**
-	 * @param int $coeff
-	 * @param int $maxDiff
-	 */
-	public function __construct($coeff, $maxDiff)
-	{
-		$this->coeff = $coeff;
-		$this->maxDiff = $maxDiff;
+	public function __construct(
+		protected int $researchCoeff,
+		protected int $researchMaxDiff
+	) {
 	}
 	
 	public function isAResearch($research) {
 		return in_array($research, ResearchResource::$availableResearch);
 	}
 
-	public function getInfo($research, $info, $level = 0, $sup = 'delfault') {
+	public function getInfo($research, $info, $level = 0, $sup = 'delfault')
+	{
 		if ($this->isAResearch($research)) {
 			if ($info == 'name' || $info == 'codeName') {
 				return ResearchResource::$research[$research][$info];
@@ -35,7 +27,7 @@ class ResearchHelper
 					return FALSE;
 				}
 				if ($sup == 'price') {
-					return $this->researchPrice($research, $level) * $this->coeff;
+					return $this->researchPrice($research, $level) * $this->researchCoeff;
 				}
 			} else {
 				throw new ErrorException('Wrong second argument for method getInfo() from ResearchResource');
@@ -46,18 +38,19 @@ class ResearchHelper
 		return FALSE;
 	}
 
-	public function isResearchPermit($firstLevel, $secondLevel, $thirdLevel = -1) {
+	public function isResearchPermit(int $firstLevel, int $secondLevel, int $thirdLevel = -1): bool
+	{
 		// compare the levels of technos and say if you can research such techno
 		if ($thirdLevel == -1) {
-			if (abs($firstLevel - $secondLevel) > $this->maxDiff) { 
+			if (abs($firstLevel - $secondLevel) > $this->researchMaxDiff) {
 				return FALSE;
 			} else { return TRUE; }
 		} else {
-			if (abs($firstLevel - $secondLevel) > $this->maxDiff) {
+			if (abs($firstLevel - $secondLevel) > $this->researchMaxDiff) {
 				return FALSE;
-			} elseif (abs($firstLevel - $thirdLevel) > $this->maxDiff) {
+			} elseif (abs($firstLevel - $thirdLevel) > $this->researchMaxDiff) {
 				return FALSE;
-			} elseif (abs($secondLevel - $thirdLevel) > $this->maxDiff) {
+			} elseif (abs($secondLevel - $thirdLevel) > $this->researchMaxDiff) {
 				return FALSE;
 			} else {
 				return TRUE;

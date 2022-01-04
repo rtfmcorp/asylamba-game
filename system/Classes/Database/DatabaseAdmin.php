@@ -2,26 +2,22 @@
 
 namespace Asylamba\Classes\Database;
 
-class DatabaseAdmin {
-	/** @var \PDO **/
-	private $connection;
-	/** @var int **/
-	private static $nbrOfQuery = 0;
+class DatabaseAdmin
+{
+	private ?\PDO $connection;
+	private static int $nbrOfQuery = 0;
 
-	/**
-	 * @return int
-	 */
-	public static function getNbrOfQuery() {
+	public static function getNbrOfQuery(): int
+	{
 		return self::$nbrOfQuery;
 	}
 
-	/**
-	 * @param string $host
-	 * @param string $name
-	 * @param string $user
-	 * @param string $password
-	 */
-	public function __construct($host, $name, $user, $password) {
+	public function __construct(
+		protected string $host,
+		protected string $name,
+		protected string $user,
+		protected string $password,
+	) {
 		try {
 			$this->connection = new \PDO("mysql:dbname=$name;host=$host;charset=utf8", $user, $password, [
 				\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,

@@ -2,50 +2,26 @@
 
 namespace Asylamba\Modules\Gaia\EventListener;
 
+use Asylamba\Classes\Redis\RedisManager;
 use Asylamba\Modules\Gaia\Manager\SectorManager;
 use Asylamba\Modules\Gaia\Manager\SystemManager;
-use Asylamba\Modules\Athena\Manager\OrbitalBaseManager;
-use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Classes\Entity\EntityManager;
 
 use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 
 class SectorListener
 {
-	/** @var SectorManager **/
-	protected $sectorManager;
-	/** @var SystemManager **/
-	protected $systemManager;
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var int **/
-	protected $minimalScore;
-	
-	/**
-	 * @param SectorManager $sectorManager
-	 * @param SystemManager $systemManager
-	 * @param EntityManager $entityManager
-     * @param RedisManager $redisManager
-	 * @param array $scores
-	 * @param int $minimalScore
-	 */
 	public function __construct(
-		SectorManager $sectorManager,
-		SystemManager $systemManager,
-		EntityManager $entityManager,
-		$minimalScore
-	)
-	{
-		$this->sectorManager = $sectorManager;
-		$this->systemManager = $systemManager;
-		$this->entityManager = $entityManager;
-		$this->minimalScore = $minimalScore;
+		protected SectorManager $sectorManager,
+		protected SystemManager $systemManager,
+		protected EntityManager $entityManager,
+		protected RedisManager $redisManager,
+		protected array $scores,
+		protected int $sectorMinimalScore,
+	) {
 	}
-	
-	/**
-	 * @param PlaceOwnerChangeEvent $event
-	 */
-	public function onPlaceOwnerChange(PlaceOwnerChangeEvent $event)
+
+	public function onPlaceOwnerChange(PlaceOwnerChangeEvent $event): void
 	{
 		$system = $this->systemManager->get($event->getPlace()->rSystem);
 		$sector = $this->sectorManager->get($system->rSector);
@@ -54,7 +30,7 @@ class SectorListener
 		$newColor = key($scores);
 		$hasEnoughPoints = false;
 		foreach ($scores as $factionId => $score) {
-			if ($factionId !== 0 && $score >= $this->minimalScore) {
+			if ($factionId !== 0 && $score >= $this->sectorMinimalScore) {
 				$hasEnoughPoints = true;
 				break;
 			}

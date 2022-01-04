@@ -19,6 +19,13 @@ class Game {
 
 	const COMMERCIAL_TIME_TRAVEL = 0.2;
 
+	// @TODO Replace by parameters
+	const ANTISPY_DISPLAY_MODE = 0;
+	const ANTISPY_LITTLE_CIRCLE = 3;
+	const ANTISPY_MIDDLE_CIRCLE = 2;
+	const ANTISPY_BIG_CIRCLE = 1;
+	const ANTISPY_OUT_OF_CIRCLE = 0;
+
 	public static function convertPlaceType($type) {
 		switch ($type) {
 			case 1 : return 'planète tellurique';
@@ -130,8 +137,8 @@ class Game {
 		return $tax;
 	}
 
-	public static function getAntiSpyRadius($investment, $mode = ANTISPY_DISPLAY_MODE) {
-		return $mode == ANTISPY_DISPLAY_MODE
+	public static function getAntiSpyRadius($investment, $mode = self::ANTISPY_DISPLAY_MODE) {
+		return $mode == self::ANTISPY_DISPLAY_MODE
 			# en pixels : sert à l'affichage
 			? sqrt($investment / 3.14) * 20
 			# en position du jeu (250x250)
@@ -141,7 +148,7 @@ class Game {
 	public static function antiSpyArea($startPlace, $destinationPlace, $arrivalDate) {
 		# dans le même système
 		if ($startPlace->getRSystem() == $destinationPlace->getRSystem()) {
-			return ANTISPY_LITTLE_CIRCLE;
+			return self::ANTISPY_LITTLE_CIRCLE;
 		} else {
 			$duration = self::getTimeToTravel($startPlace, $destinationPlace);
 
@@ -155,14 +162,14 @@ class Game {
 
 			if ($antiSpyRadius >= $distanceRemaining) {
 				if ($distanceRemaining < $antiSpyRadius / 3) {
-					return ANTISPY_LITTLE_CIRCLE;
+					return self::ANTISPY_LITTLE_CIRCLE;
 				} elseif ($distanceRemaining < $antiSpyRadius / 3 * 2) {
-					return ANTISPY_MIDDLE_CIRCLE;
+					return self::ANTISPY_MIDDLE_CIRCLE;
 				} else {
-					return ANTISPY_BIG_CIRCLE;
+					return self::ANTISPY_BIG_CIRCLE;
 				}
 			} else {
-				return ANTISPY_OUT_OF_CIRCLE;
+				return self::ANTISPY_OUT_OF_CIRCLE;
 			}
 		}
 	}

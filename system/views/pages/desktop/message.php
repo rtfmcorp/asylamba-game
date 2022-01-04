@@ -5,12 +5,14 @@ use Asylamba\Modules\Hermes\Model\ConversationUser;
 use Asylamba\Modules\Hermes\Model\Conversation;
 use Asylamba\Modules\Hermes\Model\ConversationMessage;
 
+$container = $this->getContainer();
+$componentPath = $container->getParameter('component');
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$conversationManager = $this->getContainer()->get('hermes.conversation_manager');
-$conversationUserManager = $this->getContainer()->get('hermes.conversation_user_manager');
-$conversationMessageManager = $this->getContainer()->get('hermes.conversation_message_manager');
-$notificationManager = $this->getContainer()->get('hermes.notification_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$conversationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationManager::class);
+$conversationUserManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationUserManager::class);
+$conversationMessageManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationMessageManager::class);
+$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
 
 # background paralax
 echo '<div id="background-paralax" class="message"></div>';
@@ -21,7 +23,7 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
-	include COMPONENT . 'publicity.php';
+	include $componentPath . 'publicity.php';
         # liste des conv's
 	$display = 
 		((int) $request->query->get('mode') === ConversationUser::CS_ARCHIVED)
@@ -38,11 +40,11 @@ echo '<div id="content">';
 
 	$conversation_listmode = FALSE;
 
-	include COMPONENT . 'conversation/list.php';
+	include $componentPath . 'conversation/list.php';
 
 	if ($request->query->has('conversation')) {
 		if ($request->query->get('conversation') === 'new') {
-			include COMPONENT . 'conversation/create.php';
+			include $componentPath . 'conversation/create.php';
 		} else {
 			# chargement d'une conversation
 			$conversationManager->newSession();
@@ -75,21 +77,21 @@ echo '<div id="content">';
 
 				$message_listmode = FALSE;
 
-				include COMPONENT . 'conversation/messages.php';
-				include COMPONENT . 'conversation/manage.php';
+				include $componentPath . 'conversation/messages.php';
+				include $componentPath . 'conversation/manage.php';
 			} else {
 				$this->getContainer()->get('app.response')->redirect('message');
 			}
 		}
 	} else {
-		include COMPONENT . 'conversation/new.php';
+		include $componentPath . 'conversation/new.php';
 	}
 
 	$unarchivedNotifications = $notificationManager->getPlayerNotificationsByArchive($session->get('playerId'), 0);
-	include COMPONENT . 'notif/last.php';
+	include $componentPath . 'notif/last.php';
 
 	$archivedNotifications = $notificationManager->getPlayerNotificationsByArchive($session->get('playerId'), 1);
 	if (count($archivedNotifications) > 0) {
-		include COMPONENT . 'notif/archived.php';
+		include $componentPath . 'notif/archived.php';
 	}
 echo '</div>';

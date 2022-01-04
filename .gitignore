@@ -8,3 +8,8 @@ system/config/app.config.local.php
 /node_modules/
 
 config/parameters.yml
+
+/var/logs
+/var/data
+
+.idea

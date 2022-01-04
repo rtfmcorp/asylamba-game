@@ -2,38 +2,23 @@
 
 namespace Asylamba\Classes\Library;
 
-use Asylamba\Classes\Worker\ApplicationInterface;
-use Asylamba\Classes\Worker\Container;
-use Asylamba\Classes\Configuration\Configuration;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 abstract class Module
 {
-	/** @var Container **/
-	protected $container;
-	
-	/**
-	 * @param ApplicationInterface $application
-	 */
-	public function __construct(ApplicationInterface $application)
+	public function configure(ContainerBuilder $containerBuilder, string $projectDir): void
 	{
-		$this->container = $application->getContainer();
-		$this->configure();
-	}
-	
-	public function configure()
-	{
-		$configurationFiles = [
-			"{$this->container->getParameter('root_path')}/system/Modules/{$this->getName()}/Resource/config/config.yml"
-		];
-		$configuration = new Configuration(new FileLocator($configurationFiles));
-		$configuration->buildContainer($this->container, $configurationFiles);
+		$loader = new YamlFileLoader(
+			$containerBuilder,
+			new FileLocator("{$projectDir}/system/Modules/{$this->getName()}/Resource/config/")
+		);
+		$loader->load('config.yml');
 	}
 	
 	/**
 	 * This method must return the name of the module and be the same as the module folder name
-	 * 
-	 * @return string
 	 */
-	abstract public function getName();
+	abstract public function getName(): string;
 }

@@ -3,7 +3,10 @@
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Demeter\Model\Color;
 
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 $eraseColor = isset($eraseColor)
 	? $eraseColor
@@ -29,8 +32,8 @@ echo '<div class="component player rank">';
 				foreach ($faction->colorLink as $color => $st) {
 					if ($color != 0 && $color != $eraseColor && $st == $statement) {
 						echo '<div class="player faction color' . $color . '">';
-							echo '<a href="' . APP_ROOT . 'embassy/faction-' . $color . '">';
-								echo '<img src="' . MEDIA . 'faction/flag/flag-' . $color . '.png" alt="" class="picto">';
+							echo '<a href="' . $appRoot . 'embassy/faction-' . $color . '">';
+								echo '<img src="' . $mediaPath . 'faction/flag/flag-' . $color . '.png" alt="" class="picto">';
 							echo '</a>';
 							echo '<span class="title">' . ColorResource::getInfo($color, 'government') . '</span>';
 							echo '<strong class="name">' . ColorResource::getInfo($color, 'officialName') . '</strong>';

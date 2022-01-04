@@ -15,7 +15,7 @@ echo '<div class="component new-message size2">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<form action="' . Format::actionBuilder('writeofficialconversation', $this->getContainer()->get('session_wrapper')->get('token')) . '" method="POST" />';
+			echo '<form action="' . Format::actionBuilder('writeofficialconversation', $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token')) . '" method="POST" />';
 				echo '<p><label for="new-message-message">Votre message</label></p>';
 				echo '<p class="input input-area"><textarea id="new-message-message" name="message"></textarea></p>';
 

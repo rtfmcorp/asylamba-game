@@ -16,13 +16,16 @@ use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Athena\Model\RecyclingMission;
 use Asylamba\Modules\Athena\Resource\OrbitalBaseResource;
 
-$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
-$recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$recyclingMissionManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\RecyclingMissionManager::class);
+$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
 
 echo '<div class="component building">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'orbitalbase/recycling.png" alt="" />';
+		echo '<img src="' . $mediaPath . 'orbitalbase/recycling.png" alt="" />';
 		echo '<h2>' . $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::RECYCLING, 'frenchName') . '</h2>';
 		echo '<em>Niveau ' . $ob_recycling->getLevelRecycling() . '</em>';
 	echo '</div>';
@@ -53,11 +56,11 @@ echo '<div class="component building">';
 			echo '<h4>capacité de transport d\'un recycleur</h4>';
 			echo '<div class="number-box grey">';
 				echo '<span class="label">en ressources</span>';
-				echo '<span class="value">' . Format::number(RecyclingMission::RECYCLER_CAPACTIY) . ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color"></span>';
+				echo '<span class="value">' . Format::number(RecyclingMission::RECYCLER_CAPACTIY) . ' <img alt="ressources" src="' . $mediaPath . 'resources/resource.png" class="icon-color"></span>';
 			echo '</div>';
 			echo '<div class="number-box grey">';
 				echo '<span class="label">en crédits</span>';
-				echo '<span class="value">' . Format::number(RecyclingMission::RECYCLER_CAPACTIY * 10) . ' <img alt="crédits" src="' . MEDIA . 'resources/credit.png" class="icon-color"></span>';
+				echo '<span class="value">' . Format::number(RecyclingMission::RECYCLER_CAPACTIY * 10) . ' <img alt="crédits" src="' . $mediaPath . 'resources/credit.png" class="icon-color"></span>';
 			echo '</div>';
 
 			echo '<hr />';
@@ -91,11 +94,11 @@ foreach ($baseMissions as $mission) {
 
 				echo '<div class="build-item base-type">';
 					echo '<div class="name">';
-						echo '<img src="' . MEDIA . 'orbitalbase/recycler.png" alt="">';
+						echo '<img src="' . $mediaPath . 'orbitalbase/recycler.png" alt="">';
 						echo '<strong>Mission<br /> ' . $missionID . '</strong>';
 					echo '</div>';
 
-					echo '<p class="desc">La mission recycle la <strong>' . Game::convertPlaceType($mission->typeOfPlace) . '</strong> située aux coordonnées <strong><a href="'. APP_ROOT . 'map/place-' . $mission->rTarget . '">' . Game::formatCoord($mission->xSystem, $mission->ySystem, $mission->position, $mission->sectorId) . '</a></strong>.<br /><br />
+					echo '<p class="desc">La mission recycle la <strong>' . Game::convertPlaceType($mission->typeOfPlace) . '</strong> située aux coordonnées <strong><a href="'. $appRoot . 'map/place-' . $mission->rTarget . '">' . Game::formatCoord($mission->xSystem, $mission->ySystem, $mission->position, $mission->sectorId) . '</a></strong>.<br /><br />
 					Il reste <strong>' . Format::number($mission->resources * $mission->coefResources / 100) . '</strong> ressources, <strong>' . Format::number($mission->resources * $mission->coefHistory / 100) . '</strong> débris et <strong>' . Format::number($mission->resources * $mission->population / 100) . '</strong> gaz nobles.</p>';
 
 					echo '<p>Retour ' . Chronos::transform($mission->uRecycling) . '</p>';
@@ -126,7 +129,7 @@ foreach ($baseMissions as $mission) {
 					echo '</li>';
 					echo '<li>';
 						echo '<span class="label">Soute totale de la mission</span>';
-						echo '<span class="value">' . Format::number($mission->recyclerQuantity * RecyclingMission::RECYCLER_CAPACTIY) . ' <img alt="ressources" src="' . MEDIA . 'resources/resource.png" class="icon-color"></span>';
+						echo '<span class="value">' . Format::number($mission->recyclerQuantity * RecyclingMission::RECYCLER_CAPACTIY) . ' <img alt="ressources" src="' . $mediaPath . 'resources/resource.png" class="icon-color"></span>';
 					echo '</li>';
 					echo '<li>';
 						echo '<span class="label">Durée du cycle</span>';

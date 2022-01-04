@@ -2,10 +2,10 @@
 
 use Asylamba\Classes\Library\Format;
 
-$playerManager = $this->getContainer()->get('zeus.player_manager');
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
+$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
 $request = $this->getContainer()->get('app.request');
-$parser = $this->getContainer()->get('parser');
+$parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
 
 echo '<div class="component size2 new-message">';
 	echo '<div class="head skin-5">';

@@ -8,9 +8,9 @@ use Asylamba\Classes\Exception\FormException;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Demeter\Model\Forum\FactionNews;
 
-$factionNewsManager = $this->getContainer()->get('demeter.faction_news_manager');
+$factionNewsManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Forum\FactionNewsManager::class);
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 $content = $request->request->get('content');
 $title = $request->request->get('title');

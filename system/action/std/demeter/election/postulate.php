@@ -16,16 +16,16 @@ use Asylamba\Modules\Demeter\Model\Election\Vote;
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Zeus\Model\Player;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$colorManager = $this->getContainer()->get('demeter.color_manager');
-$electionManager = $this->getContainer()->get('demeter.election_manager');
-$candidateManager = $this->getContainer()->get('demeter.candidate_manager');
-$topicManager = $this->getContainer()->get('demeter.forum_topic_manager');
-$voteManager = $this->getContainer()->get('demeter.vote_manager');
-$entityManager = $this->getContainer()->get('entity_manager');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
+$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
+$electionManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Election\ElectionManager::class);
+$candidateManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Election\CandidateManager::class);
+$topicManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Forum\ForumTopicManager::class);
+$voteManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Election\VoteManager::class);
+$entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 
 $rElection			 = $request->query->get('relection');
 $program			 = $request->request->get('program');

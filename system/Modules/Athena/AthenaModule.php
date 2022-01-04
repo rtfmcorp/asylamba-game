@@ -6,10 +6,7 @@ use Asylamba\Classes\Library\Module;
 
 class AthenaModule extends Module
 {
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getName()
+	public function getName(): string
 	{
 		return 'Athena';
 	}

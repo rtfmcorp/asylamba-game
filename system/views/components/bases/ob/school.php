@@ -15,8 +15,11 @@ use Asylamba\Modules\Athena\Resource\SchoolClassResource;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Gaia\Resource\PlaceResource;
 
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
 
 $commanders = $commanderManager->getBaseCommanders($ob_school->getId(), [Commander::INSCHOOL], ['c.experience' => 'DESC']);
@@ -34,7 +37,7 @@ $earnedExperience  = ($earnedExperience < 0)
 
 echo '<div class="component school">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'orbitalbase/school.png" alt="" />';
+		echo '<img src="' . $mediaPath . 'orbitalbase/school.png" alt="" />';
 		echo '<h2>Ecole de Cmd.</h2>';
 		echo '<em>Formation des officiers</em>';
 	echo '</div>';
@@ -44,10 +47,10 @@ echo '<div class="component school">';
 				echo '<span class="label">investissements alloués à l\'école</span>';
 				echo '<span class="value">';
 					echo Format::numberFormat($ob_school->iSchool);
-					echo ' <img alt="crédits" src="' . MEDIA . 'resources/credit.png" class="icon-color">';
+					echo ' <img alt="crédits" src="' . $mediaPath . 'resources/credit.png" class="icon-color">';
 				echo '</span>';
 				echo '<span class="group-link">';
-					echo '<a title="modifier" class="hb lt" href="' . APP_ROOT . 'financial/sftr-4">→</a>';
+					echo '<a title="modifier" class="hb lt" href="' . $appRoot . 'financial/sftr-4">→</a>';
 				echo '</span>';
 			echo '</div>';
 
@@ -64,7 +67,7 @@ echo '<div class="component school">';
 
 			echo '<form action="' . Format::actionBuilder('createschoolclass', $sessionToken, ['baseid' => $ob_school->getId(), 'school' => '0']) . '" method="post" class="build-item">';
 				echo '<div class="name">';
-					echo '<img src="' . MEDIA . 'school/school-1.png" alt="" />';
+					echo '<img src="' . $mediaPath . 'school/school-1.png" alt="" />';
 					echo '<strong>Former un nouvel officier</strong>';
 				echo '</div>';
 					echo '<input type="text" class="name-commander" name="name" value="' . CheckName::randomize() . '" />';
@@ -72,21 +75,21 @@ echo '<div class="component school">';
 					echo '<span class="button disable">';
 						echo '<span class="text">';
 							echo 'trop d\'officiers dans l\'école<br/>';
-							echo Format::numberFormat(SchoolClassResource::getInfo(0, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
+							echo Format::numberFormat(SchoolClassResource::getInfo(0, 'credit')) . ' <img src="' .  $mediaPath. 'resources/credit.png" alt="crédits" class="icon-color" />';
 						echo '</span>';
 					echo '</span>';
 				} elseif (SchoolClassResource::getInfo(0, 'credit') > $session->get('playerInfo')->get('credit')) {
 					echo '<span class="button disable">';
 						echo '<span class="text">';
 							echo 'vous ne disposez pas d\'assez de crédit<br/>';
-							echo Format::numberFormat(SchoolClassResource::getInfo(0, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
+							echo Format::numberFormat(SchoolClassResource::getInfo(0, 'credit')) . ' <img src="' .  $mediaPath. 'resources/credit.png" alt="crédits" class="icon-color" />';
 						echo '</span>';
 					echo '</span>';
 				} else {
 					echo '<button type="submit" class="button">';
 						echo '<span class="text">';
 							echo 'créer l\'officier pour<br/>';
-							echo Format::numberFormat(SchoolClassResource::getInfo(0, 'credit')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="crédits" class="icon-color" />';
+							echo Format::numberFormat(SchoolClassResource::getInfo(0, 'credit')) . ' <img src="' .  $mediaPath. 'resources/credit.png" alt="crédits" class="icon-color" />';
 						echo '</span>';
 					echo '</button>';
 				}
@@ -107,7 +110,7 @@ echo '<div class="component">';
 						$commander = $commanders[$i];
 						$expToLvlUp = $commanderManager->experienceToLevelUp($commander);
 						echo '<div class="item">';
-							echo '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
+							echo '<img class="picto" src="' . $mediaPath . 'commander/small/' . $commander->avatar . '.png" alt="" />';
 							echo '<strong>' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->getName() . '</strong>';
 							echo '<em>' . Format::numberFormat($commander->getExperience()) . ' points d\'expérience</em>';
 							echo '<em>~ ' . Format::number($earnedExperience) . 'xp/relève</em>';
@@ -144,7 +147,7 @@ echo '<div class="component">';
 				foreach ($reserveCommanders as $commander) {
 					$expToLvlUp = $commanderManager->experienceToLevelUp($commander);
 					echo '<div class="item">';
-						echo '<img class="picto" src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
+						echo '<img class="picto" src="' . $mediaPath . 'commander/small/' . $commander->avatar . '.png" alt="" />';
 						echo '<strong>' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->getName() . '</strong>';
 						echo '<em>' . Format::numberFormat($commander->getExperience()) . ' points d\'expérience</em>';
 						echo '<span class="group-link">';

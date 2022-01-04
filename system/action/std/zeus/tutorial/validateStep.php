@@ -9,12 +9,12 @@ use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Promethee\Model\Technology;
 use Asylamba\Classes\Exception\FormException;
 
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $response = $this->getContainer()->get('app.response');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
-$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$shipQueueManager = $this->getContainer()->get('athena.ship_queue_manager');
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
+$tutorialHelper = $this->getContainer()->get(\Asylamba\Modules\Zeus\Helper\TutorialHelper::class);
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$shipQueueManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\ShipQueueManager::class);
 
 $playerId = $session->get('playerId');
 $stepTutorial = $session->get('playerInfo')->get('stepTutorial');
@@ -219,7 +219,7 @@ if ($stepDone == TRUE AND TutorialResource::stepExists($stepTutorial)) {
 		}
 		$player->stepTutorial = $nextStep;
 		$session->get('playerInfo')->add('stepTutorial', $nextStep);
-		$this->getContainer()->get('entity_manager')->flush($player);
+		$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush($player);
 		if ($redirectWithoutJeanMi) {
 			$response->redirect('profil');
 		}

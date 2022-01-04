@@ -11,9 +11,12 @@
 
 use Asylamba\Modules\Hermes\Model\Notification;
 
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+
 echo '<div class="component financial">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'financial/mothership.png" alt="vaisseau mère" />';
+		echo '<img src="' . $mediaPath . 'financial/mothership.png" alt="vaisseau mère" />';
 		echo '<h2>Vaisseaux-mère</h2>';
 		echo '<em>Frais de fonctionnement des vaisseaux-mère</em>';
 	echo '</div>';

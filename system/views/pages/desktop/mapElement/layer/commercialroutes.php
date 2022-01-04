@@ -3,10 +3,10 @@
 use Asylamba\Classes\Container\Params;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 
-$session = $this->getContainer()->get('session_wrapper');
-$galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$galaxyConfiguration = $this->getContainer()->get(\Asylamba\Modules\Gaia\Galaxy\GalaxyConfiguration::class);
 
-$qr = $this->getContainer()->get('database')->query('SELECT
+$qr = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class)->query('SELECT
 		sy1.xPosition AS sy1x,
 		sy1.yPosition AS sy1y,
 		sy2.xPosition AS sy2x,

@@ -2,8 +2,8 @@
 
 use Asylamba\Classes\Library\Game;
 
-$session = $this->getContainer()->get('session_wrapper');
-$galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$galaxyConfiguration = $this->getContainer()->get(\Asylamba\Modules\Gaia\Galaxy\GalaxyConfiguration::class);
 
 echo '<div id="own-base">';
 	echo '<svg viewBox="0, 0, ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . ', ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';

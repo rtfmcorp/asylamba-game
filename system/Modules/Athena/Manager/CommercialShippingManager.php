@@ -26,42 +26,21 @@ use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
-class CommercialShippingManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var OrbitalBaseManager **/
-	protected $orbitalBaseManager;
-	/** @var NotificationManager **/
-	protected $notificationManager;
-	/** @var RealTimeActionScheduler **/
-	protected $realtimeActionScheduler;
-	/** @var SessionWrapper **/
-	protected $sessionWrapper;
-	
-	/**
-	 * @param EntityManager $entityManager
-	 * @param OrbitalBaseManager $orbitalBaseManager
-	 * @param NotificationManager $notificationManager
-	 * @param RealTimeActionScheduler $realtimeActionScheduler
-	 * @param SessionWrapper $session
-	 */
+class CommercialShippingManager
+{
 	public function __construct(
-		EntityManager $entityManager,
-		OrbitalBaseManager $orbitalBaseManager,
-		NotificationManager $notificationManager,
-		RealTimeActionScheduler $realtimeActionScheduler,
-		SessionWrapper $session
+		protected EntityManager $entityManager,
+		protected OrbitalBaseManager $orbitalBaseManager,
+		protected NotificationManager $notificationManager,
+		protected RealTimeActionScheduler $realtimeActionScheduler,
+		protected SessionWrapper $sessionWrapper,
+		protected string $mediaPath,
 	) {
-		$this->entityManager = $entityManager;
-		$this->orbitalBaseManager = $orbitalBaseManager;
-		$this->notificationManager = $notificationManager;
-		$this->realtimeActionScheduler = $realtimeActionScheduler;
-		$this->sessionWrapper = $session;
 	}
 	
 	public function scheduleShippings()
 	{
-		$shippings = $this->entityManager->getRepository(CommercialShipping::class)->getAll();
+		$shippings = $this->entityManager->getRepository(CommercialShipping::class)->getMoving();
 		
 		foreach ($shippings as $commercialShipping) {
 			$this->realtimeActionScheduler->schedule(
@@ -73,46 +52,34 @@ class CommercialShippingManager {
 		}
 	}
 	
-	/**
-	 * @param int $id
-	 * @return CommercialShipping
-	 */
-	public function get($id)
+	public function get(int $id): ?CommercialShipping
 	{
 		return $this->entityManager->getRepository(CommercialShipping::class)->get($id);
 	}
 	
-	/**
-	 * @param int $id
-	 * @return CommercialShipping
-	 */
-	public function getByTransactionId($id)
+	public function getByTransactionId(int $id): ?CommercialShipping
 	{
 		return $this->entityManager->getRepository(CommercialShipping::class)->getByTransactionId($id);
 	}
 	
-	/**
-	 * @param type $orbitalBaseId
-	 * @return array
-	 */
-	public function getByBase($orbitalBaseId)
+	public function getByBase(int $orbitalBaseId): array
 	{
 		return $this->entityManager->getRepository(CommercialShipping::class)->getByBase($orbitalBaseId);
 	}
 
-	/**
-	 * @param CommercialShipping $commercialShipping
-	 */
-	public function add(CommercialShipping $commercialShipping) {
+	public function add(CommercialShipping $commercialShipping): void
+	{
 		$this->entityManager->persist($commercialShipping);
 		$this->entityManager->flush($commercialShipping);
-		
-		$this->realtimeActionScheduler->schedule(
-			'athena.orbital_base_manager',
-			'uCommercialShipping',
-			$commercialShipping,
-			$commercialShipping->getArrivedAt()
-		);
+
+		if (CommercialShipping::ST_WAITING !== $commercialShipping->getStatement()) {
+			$this->realtimeActionScheduler->schedule(
+				'athena.orbital_base_manager',
+				'uCommercialShipping',
+				$commercialShipping,
+				$commercialShipping->getArrivedAt()
+			);
+		}
 	}
 
 	public function deliver(CommercialShipping $commercialShipping, $transaction, $destOB, $commander) {
@@ -219,24 +186,24 @@ class CommercialShippingManager {
 						echo '<a href="' . Format::actionBuilder('canceltransaction', $this->sessionWrapper->get('token'), ['rtransaction' => $commercialShipping->rTransaction]) . '" class="hb lt right-link" title="supprimer cette offre coûtera ' . Format::number(floor($commercialShipping->price * Transaction::PERCENTAGE_TO_CANCEL / 100)) . ' crédits">×</a>';
 					}
 					if ($commercialShipping->typeOfTransaction == Transaction::TYP_RESOURCE) {
-						echo '<img src="' . MEDIA . 'market/resources-pack-' . Transaction::getResourcesIcon($commercialShipping->quantity) . '.png" alt="" class="picto" />';
+						echo '<img src="' . $this->mediaPath . 'market/resources-pack-' . Transaction::getResourcesIcon($commercialShipping->quantity) . '.png" alt="" class="picto" />';
 						echo '<div class="offer">';
 							if ($commercialShipping->resourceTransported == NULL) {
 								# transaction
-								echo Format::numberFormat($commercialShipping->quantity) . ' <img src="' . MEDIA . 'resources/resource.png" alt="" class="icon-color" />';
+								echo Format::numberFormat($commercialShipping->quantity) . ' <img src="' . $this->mediaPath . 'resources/resource.png" alt="" class="icon-color" />';
 							} else {
 								# resources sending
-								echo Format::numberFormat($commercialShipping->resourceTransported) . ' <img src="' . MEDIA . 'resources/resource.png" alt="" class="icon-color" />';
+								echo Format::numberFormat($commercialShipping->resourceTransported) . ' <img src="' . $this->mediaPath . 'resources/resource.png" alt="" class="icon-color" />';
 							}
 						echo '</div>';
 					} elseif ($commercialShipping->typeOfTransaction == Transaction::TYP_COMMANDER) {
-						echo '<img src="' . MEDIA . 'commander/small/' . $commercialShipping->commanderAvatar . '.png" alt="" class="picto" />';
+						echo '<img src="' . $this->mediaPath . 'commander/small/' . $commercialShipping->commanderAvatar . '.png" alt="" class="picto" />';
 						echo '<div class="offer">';
 							echo '<strong>' . CommanderResources::getInfo($commercialShipping->commanderLevel, 'grade') . ' ' . $commercialShipping->commanderName . '</strong>';
 							echo '<em>' . Format::numberFormat($commercialShipping->commanderExperience) . ' xp | ' . $commercialShipping->commanderVictory . ' victoire' . Format::addPlural($commercialShipping->commanderVictory) . '</em>';
 						echo '</div>';
 					} elseif ($commercialShipping->typeOfTransaction == Transaction::TYP_SHIP) {
-						echo '<img src="' . MEDIA . 'ship/picto/ship' . $commercialShipping->identifier . '.png" alt="" class="picto" />';
+						echo '<img src="' . $this->mediaPath . 'ship/picto/ship' . $commercialShipping->identifier . '.png" alt="" class="picto" />';
 						echo '<div class="offer">';
 							echo '<strong>' . $commercialShipping->quantity . ' ' . ShipResource::getInfo($commercialShipping->identifier, 'codeName') . Format::plural($commercialShipping->quantity) . '</strong>';
 							echo '<em>' . ShipResource::getInfo($commercialShipping->identifier, 'name') . ' / ' . ShipResource::getInfo($commercialShipping->identifier, 'pev') . ' pev</em>';
@@ -249,7 +216,7 @@ class CommercialShippingManager {
 							echo '<span>pour</span>';
 						echo '</div>';
 						echo '<div class="price">';
-							echo Format::numberFormat($commercialShipping->price) . ' <img src="' . MEDIA . 'resources/credit.png" alt="" class="icon-color" />';
+							echo Format::numberFormat($commercialShipping->price) . ' <img src="' . $this->mediaPath . 'resources/credit.png" alt="" class="icon-color" />';
 						echo '</div>';
 					} elseif ($commercialShipping->resourceTransported == 0) {
 						# ships sending
@@ -279,7 +246,7 @@ class CommercialShippingManager {
 
 				echo '<div class="ships">';
 					echo $commercialShipping->shipQuantity;
-					echo '<img src="' . MEDIA . 'resources/transport.png" alt="" class="icon-color" />';
+					echo '<img src="' . $this->mediaPath . 'resources/transport.png" alt="" class="icon-color" />';
 				echo '</div>';
 
 				if ($commercialShipping->statement == CommercialShipping::ST_WAITING) {

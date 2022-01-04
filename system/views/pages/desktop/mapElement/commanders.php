@@ -5,11 +5,14 @@ use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Library\Game;
 
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
 $commanders = $this
 	->getContainer()
-	->get('ares.commander_manager')
+	->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class)
 	->getBaseCommanders(
-		$this->getContainer()->get('session_wrapper')->get('playerParams')->get('base'),
+		$this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('playerParams')->get('base'),
 		[Commander::AFFECTED, Commander::MOVING],
 		['c.line' => 'DESC']
 	)
@@ -26,7 +29,7 @@ echo '<div id="subnav">';
 
 			echo '<a href="#" class="item ' . ($commander->statement == Commander::MOVING ? 'striped' : NULL) . ' map-commander" data-id="' . $commander->id . '" data-color="' .$session->get('playerInfo')->get('color') . '" data-max-jump="' . Game::getMaxTravelDistance($session->get('playerBonus')) . '" data-available="' . ($commander->statement == Commander::MOVING ? 'false' : 'true') . '" data-name="' . CommanderResources::getInfo($commander->level, 'grade') . ' ' . $commander->name . '" data-wedge="' . Format::numberFormat(Commander::COEFFLOOT * $commander->getPev()) . '">';
 				echo '<span class="picto">';
-					echo '<img src="' . MEDIA . 'commander/small/' . $commander->avatar . '.png" alt="" />';
+					echo '<img src="' . $mediaPath . 'commander/small/' . $commander->avatar . '.png" alt="" />';
 					echo '<span class="number">' . $commander->level . '</span>';
 				echo '</span>';
 				echo '<span class="content skin-2">';
@@ -49,7 +52,7 @@ echo '<div id="subnav">';
 
 						foreach ($commander->getNbrShipByType() as $k => $nbr) {
 							echo '<span class="ship">';
-								echo '<img src="' . MEDIA . 'ship/picto/ship' . $k . '.png" ' . ($nbr == 0 ? 'class="zero"' : NULL) . '/>';
+								echo '<img src="' . $mediaPath . 'ship/picto/ship' . $k . '.png" ' . ($nbr == 0 ? 'class="zero"' : NULL) . '/>';
 								echo '<span class="number">' . $nbr . '</span>';
 							echo '</span>';
 						}

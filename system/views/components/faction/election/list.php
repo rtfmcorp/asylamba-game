@@ -4,7 +4,10 @@ use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Classes\Library\Format;
 
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
 
 $hasIPresented = FALSE;
@@ -23,7 +26,7 @@ echo '<div class="component">';
 
 			echo '<div class="set-item">';
 				if ($faction->electionStatement == Color::CAMPAIGN && !$hasIPresented) {
-					echo '<a class="' . (($request->query->get('candidate') === 'create')  ? 'active' : NULL) . ' item" href="' . APP_ROOT . 'faction/view-election/candidate-create">';
+					echo '<a class="' . (($request->query->get('candidate') === 'create')  ? 'active' : NULL) . ' item" href="' . $appRoot . 'faction/view-election/candidate-create">';
 						echo '<div class="left">';
 							echo '<span>+</span>';
 						echo '</div>';
@@ -40,7 +43,7 @@ echo '<div class="component">';
 
 						echo '<div class="item">';
 							echo '<div class="left">';
-								echo '<img src="' . MEDIA . 'avatar/small/' . $candidat->avatar . '.png" alt="' . $candidat->name . '" />';
+								echo '<img src="' . $mediaPath . 'avatar/small/' . $candidat->avatar . '.png" alt="' . $candidat->name . '" />';
 							echo '</div>';
 
 							echo '<div class="center">';
@@ -49,7 +52,7 @@ echo '<div class="component">';
 							echo '</div>';
 
 							echo '<div class="right">';
-								echo '<a class="' . (($request->query->get('candidate') === $candidat->id) ? 'active' : NULL) . '" href="' . APP_ROOT . 'faction/view-election/candidate-' . $candidat->id . '"></a>';
+								echo '<a class="' . (($request->query->get('candidate') === $candidat->id) ? 'active' : NULL) . '" href="' . $appRoot . 'faction/view-election/candidate-' . $candidat->id . '"></a>';
 							echo '</div>';
 						echo '</div>';
 					}

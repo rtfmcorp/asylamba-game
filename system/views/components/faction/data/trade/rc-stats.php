@@ -4,7 +4,10 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 
-$database = $this->getContainer()->get('database');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
 
 $join = 'FROM commercialRoute AS cr
 LEFT JOIN orbitalBase AS ob1
@@ -47,7 +50,7 @@ echo '<div class="component profil">';
 				echo '<span class="label">revenu total par relève</span>';
 				echo '<span class="value">';
 					echo Format::number($aw1['income']);
-					echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits">';
+					echo ' <img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits">';
 				echo '</span>';
 				echo '<span class="group-link"><a href="#" title="revenu total encaissé par les joueurs de la faction" class="hb lt">?</a></span>';
 			echo '</div>';

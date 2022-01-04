@@ -17,17 +17,16 @@ use Asylamba\Classes\Library\Utils;
 use Asylamba\Modules\Demeter\Model\Forum\ForumMessage;
 use Asylamba\Classes\Library\Parser;
 
-class ForumMessageManager extends Manager {
+class ForumMessageManager extends Manager
+{
 	protected $managerType ='_ForumMessage';
-	/** @var Parser **/
-	protected $parser;
 
-	/**
-	 * @param Database $database
-	 * @param Parser $parser
-	 */
-	public function __construct(Database $database, Parser $parser) {
+	public function __construct(
+		protected Database $database,
+		protected Parser $parser,
+	) {
 		parent::__construct($database);
+
 		$this->parser = $parser;
 	}
 	

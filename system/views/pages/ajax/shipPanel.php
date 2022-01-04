@@ -6,8 +6,11 @@ use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 $ship = $request->query->get('ship');
 
@@ -44,27 +47,27 @@ echo '<div class="component panel-info">';
 			echo '<div class="table"><table>';
 				echo '<tr>';
 					echo '<td class="hb lt" title="coût de construction en ressource">coût</td>';
-					echo '<td>' . Format::numberFormat(ShipResource::getInfo($ship, 'resourcePrice')) . ' <img src="' .  MEDIA. 'resources/resource.png" alt="ressource" class="icon-color" /></td>';
+					echo '<td>' . Format::numberFormat(ShipResource::getInfo($ship, 'resourcePrice')) . ' <img src="' .  $mediaPath. 'resources/resource.png" alt="ressource" class="icon-color" /></td>';
 				echo '</tr>';
 				echo '<tr>';
 					echo '<td class="hb lt" title="temps de construction (heures:minutes:secondes)">temps</td>';
-					echo '<td>' . Chronos::secondToFormat(ShipResource::getInfo($ship, 'time'), 'lite') . ' <img src="' .  MEDIA. 'resources/time.png" alt="relève" class="icon-color" /></td>';
+					echo '<td>' . Chronos::secondToFormat(ShipResource::getInfo($ship, 'time'), 'lite') . ' <img src="' .  $mediaPath. 'resources/time.png" alt="relève" class="icon-color" /></td>';
 				echo '</tr>';
 				echo '<tr>';
 					echo '<td class="hb lt" title="points-équivalent-vaisseau, définit la taille qu\'occupe ce vaisseau dans une escadrille">pev</td>';
-					echo '<td>' . ShipResource::getInfo($ship, 'pev') . ' <img src="' .  MEDIA. 'resources/pev.png" alt="pev" class="icon-color" /></td>';
+					echo '<td>' . ShipResource::getInfo($ship, 'pev') . ' <img src="' .  $mediaPath. 'resources/pev.png" alt="pev" class="icon-color" /></td>';
 				echo '</tr>';
 				echo '<tr>';
 					echo '<td class="hb lt" title="nombre de ressources que le vaisseau peut transporter">soute</td>';
-					echo '<td>' . Format::numberFormat(ShipResource::getInfo($ship, 'pev') * 250) . ' <img src="' .  MEDIA. 'resources/resource.png" alt="ressource" class="icon-color" /></td>';
+					echo '<td>' . Format::numberFormat(ShipResource::getInfo($ship, 'pev') * 250) . ' <img src="' .  $mediaPath. 'resources/resource.png" alt="ressource" class="icon-color" /></td>';
 				echo '</tr>';
 				echo '<tr>';
 					echo '<td class="hb lt" title="nombre de crédit par relève que coûte le vaisseau affecté à un commandant">entretien en affectation</td>';
-					echo '<td>' . Format::numberFormat(ShipResource::getInfo($ship, 'cost')) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="ressource" class="icon-color" /> / <img src="' .  MEDIA. 'resources/time.png" alt="relève" class="icon-color" /></td>';
+					echo '<td>' . Format::numberFormat(ShipResource::getInfo($ship, 'cost')) . ' <img src="' .  $mediaPath. 'resources/credit.png" alt="ressource" class="icon-color" /> / <img src="' .  $mediaPath. 'resources/time.png" alt="relève" class="icon-color" /></td>';
 				echo '</tr>';
 				echo '<tr>';
 					echo '<td class="hb lt" title="nombre de crédit par relève que coûte le vaisseau à quai ou en vente au marché">entretien à quai</td>';
-					echo '<td>' . Format::numberFormat(ceil(ShipResource::getInfo($ship, 'cost') * ShipResource::COST_REDUCTION)) . ' <img src="' .  MEDIA. 'resources/credit.png" alt="ressource" class="icon-color" /> / <img src="' .  MEDIA. 'resources/time.png" alt="relève" class="icon-color" /></td>';
+					echo '<td>' . Format::numberFormat(ceil(ShipResource::getInfo($ship, 'cost') * ShipResource::COST_REDUCTION)) . ' <img src="' .  $mediaPath. 'resources/credit.png" alt="ressource" class="icon-color" /> / <img src="' .  $mediaPath. 'resources/time.png" alt="relève" class="icon-color" /></td>';
 				echo '</tr>';
 			echo '</table></div>';
 
@@ -94,7 +97,7 @@ echo '<div class="component panel-info">';
 				}
 
 				echo '<span class="label">attaque</span>';
-				echo '<span class="value"><img src="' .  MEDIA. 'resources/attack.png" class="icon-color" /> ' . substr($value, 0, -3) . '</span>';
+				echo '<span class="value"><img src="' .  $mediaPath. 'resources/attack.png" class="icon-color" /> ' . substr($value, 0, -3) . '</span>';
 				echo '<span class="progress-bar">';
 					for ($j = 0; $j < count($attacks); $j++) {
 						$theme = (($j % 2) == 0) ? 1 : 3;
@@ -109,7 +112,7 @@ echo '<div class="component panel-info">';
 				: '<span class="bonus">' . ($bonus > 0 ? '+' : NULL) . $bonus . '</span>';
 			echo '<div class="skill-box">';
 				echo '<span class="label">défense</span>';
-				echo '<span class="value"><img src="' .  MEDIA. 'resources/defense.png" class="icon-color" /> ' . ShipResource::getInfo($ship, 'defense') . $bonus . '</span>';
+				echo '<span class="value"><img src="' .  $mediaPath. 'resources/defense.png" class="icon-color" /> ' . ShipResource::getInfo($ship, 'defense') . $bonus . '</span>';
 				echo '<span class="progress-bar"><span class="content" style="width: ' . Format::percent(ShipResource::getInfo($ship, 'defense'), $defense) . '%;"></span></span>';
 			echo '</div>';
 
@@ -119,13 +122,13 @@ echo '<div class="component panel-info">';
 				: '<span class="bonus">' . ($bonus > 0 ? '+' : NULL) . $bonus . '</span>';
 			echo '<div class="skill-box">';
 				echo '<span class="label">maniabilité</span>';
-				echo '<span class="value"><img src="' .  MEDIA. 'resources/speed.png" class="icon-color" /> ' . ShipResource::getInfo($ship, 'speed') . $bonus . '</span>';
+				echo '<span class="value"><img src="' .  $mediaPath. 'resources/speed.png" class="icon-color" /> ' . ShipResource::getInfo($ship, 'speed') . $bonus . '</span>';
 				echo '<span class="progress-bar"><span class="content" style="width: ' . Format::percent((ShipResource::getInfo($ship, 'speed') - $speeda), $speedb) . '%;"></span></span>';
 			echo '</div>';
 
 			echo '<div class="skill-box">';
 				echo '<span class="label">coque</span>';
-				echo '<span class="value"><img src="' .  MEDIA. 'resources/life.png" class="icon-color" /> ' . ShipResource::getInfo($ship, 'life') . '</span>';
+				echo '<span class="value"><img src="' .  $mediaPath. 'resources/life.png" class="icon-color" /> ' . ShipResource::getInfo($ship, 'life') . '</span>';
 				echo '<span class="progress-bar"><span class="content" style="width: ' . Format::percent(ShipResource::getInfo($ship, 'life'), $life) . '%;"></span></span>';
 			echo '</div>';
 

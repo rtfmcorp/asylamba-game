@@ -3,10 +3,12 @@
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-$galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+$galaxyConfiguration = $this->getContainer()->get(\Asylamba\Modules\Gaia\Galaxy\GalaxyConfiguration::class);
 
 echo '<div id="systems">';
-	$systems = $this->getContainer()->get('gaia.system_manager')->getAll();
+	$systems = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SystemManager::class)->getAll();
 
 	# own bases
 	$basesId = array();
@@ -22,7 +24,7 @@ echo '<div id="systems">';
 			echo 'data-system-id="' . $system->getId() . '" ';
 			echo 'data-x-position="' . $system->xPosition . '" data-y-position="' . $system->yPosition . '" ';
 			echo 'style="top: ' . ($system->yPosition * $galaxyConfiguration->scale - 10) . 'px; left: ' . ($system->xPosition * $galaxyConfiguration->scale - 10) . 'px">';
-			echo '<img src="' . MEDIA . 'map/systems/t' . $system->typeOfSystem . 'c' . $system->rColor . '.png" ' . $owner . ' />';
+			echo '<img src="' . $mediaPath . 'map/systems/t' . $system->typeOfSystem . 'c' . $system->rColor . '.png" ' . $owner . ' />';
 		echo '</a>';
 	}
 

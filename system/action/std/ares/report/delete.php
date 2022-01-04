@@ -6,8 +6,8 @@ use Asylamba\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get('session_wrapper');
-$reportManager = $this->getContainer()->get('ares.report_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$reportManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\ReportManager::class);
 
 $id = $request->query->get('id');
 
@@ -28,4 +28,4 @@ if ($id) {
 } else {
 	throw new ErrorException('veuillez indiquer le numéro du rapport');
 }
-$this->getContainer()->get('entity_manager')->flush();
+$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();

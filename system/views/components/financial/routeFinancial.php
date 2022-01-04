@@ -12,11 +12,13 @@
 use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 
-$commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
+$container = $this->getContainer();
+$commercialRouteManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialRouteManager::class);
+$mediaPath = $container->getParameter('media');
 
 echo '<div class="component financial">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'financial/commercial-route.png" alt="route commerciale" />';
+		echo '<img src="' . $mediaPath . 'financial/commercial-route.png" alt="route commerciale" />';
 		echo '<h2>Commerce</h2>';
 		echo '<em>Revenus des routes commerciales par planète</em>';
 	echo '</div>';
@@ -39,7 +41,7 @@ echo '<div class="component financial">';
 						if ($rcBonus > 0) {
 							echo '<span class="bonus">+' . Format::numberFormat($routeIncome * $rcBonus / 100) . '</span>';
 						}
-						echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+						echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 					echo '</span>';
 
 					if ($nbRoute > 0) {
@@ -57,7 +59,7 @@ echo '<div class="component financial">';
 								echo '</li>';
 							}
 						}
-						$this->getContainer()->get('entity_manager')->clear(CommercialRoute::class);
+						$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->clear(CommercialRoute::class);
 						echo '</ul>';
 					}
 				echo '</li>';
@@ -70,7 +72,7 @@ echo '<div class="component financial">';
 					if ($rcBonus > 0) {
 						echo '<span class="bonus">+' . Format::numberFormat($financial_totalRouteIncomeBonus) . '</span>';
 					}
-					echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+					echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 				echo '</span>';
 			echo '</li>';
 		echo '</ul>';

@@ -4,10 +4,12 @@ use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Modules\Athena\Model\OrbitalBase;
 use Asylamba\Classes\Library\Format;
 
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
 $minimalBaseChangeLevel = $this->getContainer()->getParameter('athena.obm.change_type_min_level');
 $capitalChangeLevel = $this->getContainer()->getParameter('athena.obm.capital_min_level');
+$mediaPath = $container->getParameter('media');
 # affichage du type de base
 
 # require
@@ -20,7 +22,7 @@ echo '<div class="component generator">';
 		echo '<div class="body">';
 			echo '<div class="build-item base-type">';
 				echo '<div class="name">';
-					echo '<img src="' . MEDIA . 'orbitalbase/base-type-' . $ob_obSituation->typeOfBase . '.jpg" alt="' . PlaceResource::get($ob_obSituation->typeOfBase, 'name') . '">';
+					echo '<img src="' . $mediaPath . 'orbitalbase/base-type-' . $ob_obSituation->typeOfBase . '.jpg" alt="' . PlaceResource::get($ob_obSituation->typeOfBase, 'name') . '">';
 					echo '<strong>' . $ob_obSituation->getName() . '</strong>';
 					echo '<em>' . PlaceResource::get($ob_obSituation->typeOfBase, 'name') . '</em>';
 				echo '</div>';
@@ -29,19 +31,19 @@ echo '<div class="component generator">';
 
 				echo '<div class="list-choice">';
 					echo '<button class="item-1 ' . ($ob_obSituation->typeOfBase == OrbitalBase::TYP_NEUTRAL ? 'done' : NULL) . '">';
-						echo '<img src="' . MEDIA . 'orbitalbase/base-type-0.jpg" alt="' . PlaceResource::get($ob_obSituation->typeOfBase, 'name') . '">';
+						echo '<img src="' . $mediaPath . 'orbitalbase/base-type-0.jpg" alt="' . PlaceResource::get($ob_obSituation->typeOfBase, 'name') . '">';
 					echo '</button>';
 
 					echo '<button class="item-2 ' . ($ob_obSituation->typeOfBase == OrbitalBase::TYP_COMMERCIAL ? 'done' : NULL) . '">';
-						echo '<img src="' . MEDIA . 'orbitalbase/base-type-1.jpg" alt="' . PlaceResource::get($ob_obSituation->typeOfBase, 'name') . '">';
+						echo '<img src="' . $mediaPath . 'orbitalbase/base-type-1.jpg" alt="' . PlaceResource::get($ob_obSituation->typeOfBase, 'name') . '">';
 					echo '</button>';
 
 					echo '<button class="item-3 ' . ($ob_obSituation->typeOfBase == OrbitalBase::TYP_MILITARY ? 'done' : NULL) . '">';
-						echo '<img src="' . MEDIA . 'orbitalbase/base-type-2.jpg" alt="' . PlaceResource::get($ob_obSituation->typeOfBase, 'name') . '">';
+						echo '<img src="' . $mediaPath . 'orbitalbase/base-type-2.jpg" alt="' . PlaceResource::get($ob_obSituation->typeOfBase, 'name') . '">';
 					echo '</button>';
 
 					echo '<button class="item-4 ' . ($ob_obSituation->typeOfBase == OrbitalBase::TYP_CAPITAL ? 'done' : NULL) . '">';
-						echo '<img src="' . MEDIA . 'orbitalbase/base-type-3.jpg" alt="' . PlaceResource::get($ob_obSituation->typeOfBase, 'name') . '">';
+						echo '<img src="' . $mediaPath . 'orbitalbase/base-type-3.jpg" alt="' . PlaceResource::get($ob_obSituation->typeOfBase, 'name') . '">';
 					echo '</button>';
 				echo '</div>';
 
@@ -58,13 +60,13 @@ echo '<div class="component generator">';
 							echo '<a href="' . Format::actionBuilder('changebasetype',  $sessionToken, ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_COMMERCIAL]) . '" class="button">';
 								echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'name') . '<br />';
 								echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price'));
-								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
+								echo ' <img class="icon-color" alt="crédits" src="' . $mediaPath . 'resources/credit.png"></span>';
 							echo '</a>';
 						} elseif (($ob_obSituation->typeOfBase == OrbitalBase::TYP_MILITARY) && $session->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price')) {
 							echo '<a href="' . Format::actionBuilder('changebasetype',  $sessionToken, ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_COMMERCIAL]) . '" class="button confirm" data-confirm-label="Transformer cette base supprimera toute la file de construction. Vos missions de recyclage seront également annulées.">';
 								echo '<span class="text">Transformer en ' . PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'name') . '<br />';
 								echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price'));
-								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
+								echo ' <img class="icon-color" alt="crédits" src="' . $mediaPath . 'resources/credit.png"></span>';
 							echo '</a>';
 						} elseif ($ob_obSituation->typeOfBase == OrbitalBase::TYP_COMMERCIAL || $ob_obSituation->typeOfBase == OrbitalBase::TYP_CAPITAL) {
 							# do nothing
@@ -72,7 +74,7 @@ echo '<div class="component generator">';
 							echo '<span class="button disable">';
 								echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'name') . '<br />';
 								echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_COMMERCIAL, 'price'));
-								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
+								echo ' <img class="icon-color" alt="crédits" src="' . $mediaPath . 'resources/credit.png"></span>';
 							echo '</span>';
 						}
 						echo '<h4>Avantages &amp; Inconvénients</h4>';
@@ -90,13 +92,13 @@ echo '<div class="component generator">';
 							echo '<a href="' . Format::actionBuilder('changebasetype',  $sessionToken, ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_MILITARY]) . '" class="button">';
 								echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_MILITARY, 'name') . '<br />';
 								echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price'));
-								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
+								echo ' <img class="icon-color" alt="crédits" src="' . $mediaPath . 'resources/credit.png"></span>';
 							echo '</a>';
 						} elseif (($ob_obSituation->typeOfBase == OrbitalBase::TYP_COMMERCIAL) && $session->get('playerInfo')->get('credit') >= PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price')) {
 							echo '<a href="' . Format::actionBuilder('changebasetype',  $sessionToken, ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_MILITARY]) . '" class="button confirm" data-confirm-label="Transformer cette base supprimera toute la file de construction.">';
 								echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_MILITARY, 'name') . '<br />';
 								echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price'));
-								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
+								echo ' <img class="icon-color" alt="crédits" src="' . $mediaPath . 'resources/credit.png"></span>';
 							echo '</a>';
 						} elseif ($ob_obSituation->typeOfBase == OrbitalBase::TYP_MILITARY || $ob_obSituation->typeOfBase == OrbitalBase::TYP_CAPITAL) {
 							# do nothing
@@ -104,7 +106,7 @@ echo '<div class="component generator">';
 							echo '<span class="button disable">';
 								echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_MILITARY, 'name') . '<br />';
 								echo  Format::numberFormat(PlaceResource::get(OrbitalBase::TYP_MILITARY, 'price'));
-								echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
+								echo ' <img class="icon-color" alt="crédits" src="' . $mediaPath . 'resources/credit.png"></span>';
 							echo '</span>';
 						}
 						echo '<h4>Avantages &amp; Inconvénients</h4>';
@@ -130,7 +132,7 @@ echo '<div class="component generator">';
 								echo '<a href="' . Format::actionBuilder('changebasetype',  $sessionToken, ['baseid' => $ob_obSituation->getId(), 'type' => OrbitalBase::TYP_CAPITAL]) . '" class="button">';
 									echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'name') . '<br />';
 									echo  Format::numberFormat($totalPrice);
-									echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
+									echo ' <img class="icon-color" alt="crédits" src="' . $mediaPath . 'resources/credit.png"></span>';
 								echo '</a>';
 							} else {
 								echo '<span class="button disable">';
@@ -144,7 +146,7 @@ echo '<div class="component generator">';
 								echo '<span class="button disable">';
 									echo '<span class="text">Evoluer en ' . PlaceResource::get(OrbitalBase::TYP_CAPITAL, 'name') . '<br />';
 									echo  Format::numberFormat($totalPrice);
-									echo ' <img class="icon-color" alt="crédits" src="' . MEDIA . 'resources/credit.png"></span>';
+									echo ' <img class="icon-color" alt="crédits" src="' . $mediaPath . 'resources/credit.png"></span>';
 								echo '</span>';
 							} else {
 								echo '<span class="button disable">';

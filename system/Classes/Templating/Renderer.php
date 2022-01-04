@@ -3,38 +3,27 @@
 namespace Asylamba\Classes\Templating;
 
 use Asylamba\Classes\Library\Http\Response;
-
-use Asylamba\Classes\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\Container;
 
 class Renderer
 {
-	/** @var Container **/
-	protected $container;
+	protected Container $container;
 	
-	/**
-	 * @param Container $container
-	 */
 	public function __construct(Container $container)
 	{
 		$this->container = $container;
 	}
 	
-	/**
-	 * @param Response $response
-	 */
 	public function render(Response $response)
 	{
-		ob_start();
+		\ob_start();
 		foreach($response->getTemplates() as $template)
 		{
 			include $template;
 		}
 	}
 	
-	/**
-	 * @return Container
-	 */
-	public function getContainer()
+	public function getContainer(): Container
 	{
 		return $this->container;
 	}

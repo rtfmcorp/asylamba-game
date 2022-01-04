@@ -1,10 +1,11 @@
 <?php
 
-use Asylamba\Classes\Worker\ASM;
 use Asylamba\Classes\Library\Format;
 
-$creditTransactionManager = $this->getContainer()->get('zeus.credit_transaction_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+$creditTransactionManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\CreditTransactionManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 # load
 $S_CRT_1 = $creditTransactionManager->getCurrentSession();
 $creditTransactionManager->newSession();
@@ -26,7 +27,7 @@ echo '<div class="component player rank">';
 
 				echo '<div class="player color' . $transaction->getFormatedReceiverColor() . '">';
 					echo '<a href="' . $transaction->getFormatedReceiverLink() . '">';
-						echo '<img src="' . MEDIA . 'avatar/small/' . $transaction->getFormatedReceiverAvatar() . '.png" alt="' . $transaction->getFormatedReceiverName() . '" class="picto" />';
+						echo '<img src="' . $mediaPath . 'avatar/small/' . $transaction->getFormatedReceiverAvatar() . '.png" alt="' . $transaction->getFormatedReceiverName() . '" class="picto" />';
 					echo '</a>';
 
 					echo '<span class="title">' . $transaction->getFormatedReceiverStatus() . '</span>';

@@ -5,16 +5,18 @@ use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Ares\Model\Report;
 use Asylamba\Classes\Exception\ErrorException;
 
+$container = $this->getContainer();
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get('session_wrapper');
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
-$reportManager = $this->getContainer()->get('ares.report_manager');
-$liveReportManager = $this->getContainer()->get('ares.live_report_manager');
-$spyReportManager = $this->getContainer()->get('artemis.spy_report_manager');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
-$placeManager = $this->getContainer()->get('gaia.place_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
+$reportManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\ReportManager::class);
+$liveReportManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\LiveReportManager::class);
+$spyReportManager = $this->getContainer()->get(\Asylamba\Modules\Artemis\Manager\SpyReportManager::class);
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
+$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
+$componentPath = $container->getParameter('component');
 
 # background paralax
 echo '<div id="background-paralax" class="fleet"></div>';
@@ -25,7 +27,7 @@ include 'defaultElement/movers.php';
 
 # contenu spécifique
 echo '<div id="content">';
-	include COMPONENT . 'publicity.php';
+	include $componentPath . 'publicity.php';
 
 	if (!$request->query->has('view') OR $request->query->get('view') == 'movement' OR $request->query->get('view') == 'main') {
 		# set d'orbitale base
@@ -49,7 +51,7 @@ echo '<div id="content">';
 		# commander manager : incoming attack
 		$commandersId = array(0);
 		for ($i = 0; $i < $session->get('playerEvent')->size(); $i++) {
-			if ($session->get('playerEvent')->get($i)->get('eventType') == EVENT_INCOMING_ATTACK) {
+			if ($session->get('playerEvent')->get($i)->get('eventType') == $container->getParameter('event_incoming_attack')) {
 				if ($session->get('playerEvent')->get($i)->get('eventInfo')->size() > 0) {
 					$commandersId[] = $session->get('playerEvent')->get($i)->get('eventId');
 				}
@@ -74,7 +76,7 @@ echo '<div id="content">';
 			}
 		}
 
-		include COMPONENT . 'fleet/listFleet.php';
+		include $componentPath . 'fleet/listFleet.php';
 
 		# commander id
 		if ($request->query->has('commander')) {
@@ -87,8 +89,8 @@ echo '<div id="content">';
 				$ob_commanderFleet = $base;
 				
 				# commanderFleet component
-				include COMPONENT . 'fleet/commanderFleet.php';
-				include COMPONENT . 'fleet/commanderDetail.php';
+				include $componentPath . 'fleet/commanderFleet.php';
+				include $componentPath . 'fleet/commanderDetail.php';
 			} else {
 				throw new ErrorException('Cet officier ne vous appartient pas ou n\'existe pas');
 				//CTR::redirect('fleet');
@@ -129,7 +131,7 @@ echo '<div id="content">';
 				}
 			}
 		}
-		include COMPONENT . 'fleet/overview.php';
+		include $componentPath . 'fleet/overview.php';
 	} elseif ($request->query->get('view') == 'spyreport') {
 		# loading des objets
 		$S_SRM1 = $spyReportManager->getCurrentSession();
@@ -141,7 +143,7 @@ echo '<div id="content">';
 		for ($i = 0; $i < $spyReportManager->size(); $i++) { 
 			$spyreport_listSpy[$i] = $spyReportManager->get($i);
 		}
-		include COMPONENT . 'fleet/listSpy.php';
+		include $componentPath . 'fleet/listSpy.php';
 
 		# report component
 		$spyReportManager->newSession();
@@ -157,14 +159,14 @@ echo '<div id="content">';
 
 			$place_spy = $placeManager->get($spyreport->rPlace);
 
-			include COMPONENT . 'fleet/spyReport.php';
+			include $componentPath . 'fleet/spyReport.php';
 		} else {
 			if ($request->query->has('report')) {
 				throw new ErrorException('Ce rapport ne vous appartient pas ou n\'existe pas');
 				//CTR::redirect('fleet/view-spyreport');
 			} else {
-				include COMPONENT . 'default.php';
-				include COMPONENT . 'default.php';
+				include $componentPath . 'default.php';
+				include $componentPath . 'default.php';
 			}
 		}
 
@@ -185,7 +187,7 @@ echo '<div id="content">';
 			: $liveReportManager->getDefenseReportsByMode($session->get('playerId'), $rebels, $archived)
 		;
 		$type_listReport = 1;
-		include COMPONENT . 'fleet/list-report.php';
+		include $componentPath . 'fleet/list-report.php';
 
 		# report component
 		if ($request->query->has('report')) {
@@ -195,36 +197,36 @@ echo '<div id="content">';
 				$attacker_report = $playerManager->get($report->rPlayerAttacker);
 				$defender_report = $playerManager->get($report->rPlayerDefender);
 
-				include COMPONENT . 'fleet/report.php';
-				include COMPONENT . 'fleet/manage-report.php';
+				include $componentPath . 'fleet/report.php';
+				include $componentPath . 'fleet/manage-report.php';
 			} else {
 				throw new ErrorException('Ce rapport ne vous appartient pas ou n\'existe pas');
 			}
 		} else {
-			include COMPONENT . 'default.php';
-			include COMPONENT . 'default.php';
+			include $componentPath . 'default.php';
+			include $componentPath . 'default.php';
 		}
 	} elseif ($request->query->get('view') == 'memorial') {
 		# loading des objets
 		$commanders = $commanderManager->getPlayerCommanders($session->get('playerId'), [Commander::DEAD], ['c.palmares' => 'DESC']);
 
 		# memorialTxt component
-		include COMPONENT . 'fleet/memorialTxt.php';
+		include $componentPath . 'fleet/memorialTxt.php';
 
 		foreach ($commanders as $commander) {
 			if ($i < 6) {
 				$commander_commanderDetail = $commander;
-				include COMPONENT . 'fleet/commanderDetail.php';
+				include $componentPath . 'fleet/commanderDetail.php';
 			} else {
 				$commander_shortMemorial = $commander;
-				include COMPONENT . 'default.php';
+				include $componentPath . 'default.php';
 			}
 		}
 
 		if (isset($commander_commanderDetail) && count($commander_commanderDetail) > 0) {
 		} else {
-			include COMPONENT . 'default.php';
-			include COMPONENT . 'default.php';
+			include $componentPath . 'default.php';
+			include $componentPath . 'default.php';
 		}
 
 		if (isset($commander_shortMemorial) && count($commander_shortMemorial) > 0) {

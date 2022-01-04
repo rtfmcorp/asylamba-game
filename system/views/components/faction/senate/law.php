@@ -8,8 +8,10 @@ use Asylamba\Modules\Demeter\Resource\LawResources;
 # require
 	# LAW/Token 		S_LAM_TOVOTE
 
-$voteLawManager = $this->getContainer()->get('demeter.vote_law_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+$voteLawManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Law\VoteLawManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
 
 # durée de la loi
@@ -24,7 +26,7 @@ echo '<div class="component">';
 
 			echo '<div class="build-item base-type">';
 				echo '<div class="name">';
-					echo '<img src="' . MEDIA . 'faction/law/common.png" alt="">';
+					echo '<img src="' . $mediaPath . 'faction/law/common.png" alt="">';
 					echo '<strong>' . LawResources::getInfo($law->type, 'name') . '</strong>';
 				echo '</div>';
 

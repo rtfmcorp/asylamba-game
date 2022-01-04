@@ -17,12 +17,10 @@ use Asylamba\Classes\Database\Database;
 
 use Asylamba\Modules\Zeus\Model\CreditTransaction;
 
-class CreditTransactionManager extends Manager {
+class CreditTransactionManager extends Manager
+{
 	protected $managerType = '_CreditTransaction';
-	
-	/**
-	 * @param Database $database
-	 */
+
 	public function __construct(Database $database)
 	{
 		parent::__construct($database);
@@ -141,12 +139,13 @@ class CreditTransactionManager extends Manager {
 		}
 	}
 
-	public static function deleteById($id) {
+	public function deleteById(int $id): bool
+	{
 		$qr = $this->database->prepare('DELETE FROM creditTransaction WHERE id = ?');
 		$qr->execute(array($id));
 
 		$this->_Remove($id);
 		
-		return TRUE;
+		return true;
 	}
 }

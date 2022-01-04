@@ -17,19 +17,9 @@ abstract class AbstractLogger {
 	const LOG_LEVEL_ERROR = 'error';
 	const LOG_LEVEL_CRITICAL = 'critical';
 	
-	/**
-	 * @param string $message
-	 * @param string $type
-	 */
-	abstract public function log($message, $type = self::LOG_TYPE_PHP);
-	
-	/**
-	 * @param string $message
-	 * @param string $level
-	 * @param \DateTime $datetime
-	 * @return string
-	 */
-	public function formatMessage($message, $level, $datetime)
+	abstract public function log(string $message, string $level = self::LOG_LEVEL_DEBUG, string $type = self::LOG_TYPE_PHP): void;
+
+	public function formatMessage(string $message, string $level, \DateTime $datetime): string
 	{
 		return "[{$datetime->format('H:i:s')}] ". strtoupper($level) . ": $message\n";
 	}

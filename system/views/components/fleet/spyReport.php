@@ -16,13 +16,16 @@ use Asylamba\Modules\Gaia\Resource\PlaceResource;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Ares\Model\Commander;
 
-$sessionToken = $this->getContainer()->get('session_wrapper')->get('token');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
 
 echo '<div class="component size3 space">';
 	echo '<div class="head skin-1">';
 		echo ($spyreport->rEnemy == 0)
-			? '<img src="' . MEDIA . 'commander/big/t1-c0.png" alt="' . $spyreport->enemyName . '" />'
-			: '<img src="' . MEDIA . 'avatar/medium/' . $spyreport->enemyAvatar . '.png" alt="' . $spyreport->enemyName . '" />';
+			? '<img src="' . $mediaPath . 'commander/big/t1-c0.png" alt="' . $spyreport->enemyName . '" />'
+			: '<img src="' . $mediaPath . 'avatar/medium/' . $spyreport->enemyAvatar . '.png" alt="' . $spyreport->enemyName . '" />';
 		echo '<h2>' . $spyreport->placeName . '</h2>';
 		echo '<em>' . $spyreport->enemyName . '</em>';
 	echo '</div>';
@@ -30,7 +33,7 @@ echo '<div class="component size3 space">';
 		echo '<div class="body">';
 			echo '<div class="situation-content color' . $spyreport->placeColor . ' place1">';
 				echo '<div class="toolbar">';
-					echo '<span>Opération de ' . Format::number($spyreport->price) . ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits"></span>';
+					echo '<span>Opération de ' . Format::number($spyreport->price) . ' <img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits"></span>';
 					echo '<span>';
 						switch ($spyreport->type) {
 							case SpyReport::TYP_NOT_CAUGHT: echo 'L\'ennemi ne sait rien'; break;
@@ -61,8 +64,8 @@ echo '<div class="component size3 space">';
 
 						echo '<span class="commander full show-army position-' . $commander['line'] . '-' . ($commander['line'] == 1 ? $llp[$lLine] : $rlp[$rLine]) . '" ' . $data . '>';
 							echo ($spyreport->success > SpyReport::STEP_MOVEMENT && $commander['statement'] != Commander::AFFECTED)
-								? '<img src="' . MEDIA . 'map/fleet/army-away.png" alt="plein" />'
-								: '<img src="' . MEDIA . 'map/fleet/army.png" alt="plein" />';
+								? '<img src="' . $mediaPath . 'map/fleet/army-away.png" alt="plein" />'
+								: '<img src="' . $mediaPath . 'map/fleet/army.png" alt="plein" />';
 							echo '<span class="info">';
 								echo $spyreport->success > SpyReport::STEP_COMMANDER
 									? CommanderResources::getInfo($commander['level'], 'grade') . ' <strong>' . $commander['name'] . '</strong><br />'
@@ -87,16 +90,16 @@ echo '<div class="component size3 space">';
 				for ($lLine; $lLine < PlaceResource::get($spyreport->typeOfOrbitalBase, 'l-line'); $lLine++) { 
 					echo '<span class="commander empty position-1-' . $llp[$lLine] . '">';
 						echo $spyreport->success > SpyReport::STEP_FLEET
-							? '<img src="' . MEDIA . 'map/fleet/army-empty.png" alt="vide" />'
-							: '<img src="' . MEDIA . 'map/fleet/army-unknow.png" alt="vide" />';
+							? '<img src="' . $mediaPath . 'map/fleet/army-empty.png" alt="vide" />'
+							: '<img src="' . $mediaPath . 'map/fleet/army-unknow.png" alt="vide" />';
 					echo '</span>';
 				}
 
 				for ($rLine; $rLine < PlaceResource::get($spyreport->typeOfOrbitalBase, 'r-line'); $rLine++) { 
 					echo '<span class="commander empty position-2-' . $rlp[$rLine] . '">';
 						echo $spyreport->success > SpyReport::STEP_FLEET
-							? '<img src="' . MEDIA . 'map/fleet/army-empty.png" alt="vide" />'
-							: '<img src="' . MEDIA . 'map/fleet/army-unknow.png" alt="vide" />';
+							? '<img src="' . $mediaPath . 'map/fleet/army-empty.png" alt="vide" />'
+							: '<img src="' . $mediaPath . 'map/fleet/army-unknow.png" alt="vide" />';
 					echo '</span>';
 				}
 
@@ -108,7 +111,7 @@ echo '<div class="component size3 space">';
 					$data .= '"';
 
 					echo '<span class="commander ' . ($spyreport->success > SpyReport::STEP_FLEET && array_sum(unserialize($spyreport->shipsInStorage)) > 0 ? 'full' : 'empty') . ' show-army position-3" ' . $data . '>';
-						echo '<img src="' . MEDIA . 'orbitalbase/dock1.png" alt="chantier" />';
+						echo '<img src="' . $mediaPath . 'orbitalbase/dock1.png" alt="chantier" />';
 					echo '</span>';
 				}
 
@@ -124,12 +127,12 @@ echo '<div class="component size3 space">';
 					echo '<div class="info middle">';
 						echo 'coordonnées<br />';
 						echo '<strong>';
-							echo '<a href="' . APP_ROOT . 'map/place-' . $spyreport->rPlace . '">';
+							echo '<a href="' . $appRoot . 'map/place-' . $spyreport->rPlace . '">';
 								echo Game::formatCoord($spyreport->xPosition, $spyreport->yPosition, $spyreport->position, $spyreport->rSector);
 							echo '</a>';
 						echo '</strong>';
 					echo '</div>';
-					echo '<img src="' . MEDIA . 'orbitalbase/place1-' . Game::getSizeOfPlanet($place_spy->population) . '.png" alt="planète" />';
+					echo '<img src="' . $mediaPath . 'orbitalbase/place1-' . Game::getSizeOfPlanet($place_spy->population) . '.png" alt="planète" />';
 
 					$science = Game::getImprovementFromScientificCoef($place_spy->coefHistory);
 					echo '<div class="info bottom">';
@@ -140,7 +143,7 @@ echo '<div class="component size3 space">';
 				echo '</div>';
 
 				echo '<div class="attack-link">';
-					echo '<a href="' . APP_ROOT . 'map/place-' . $spyreport->rPlace . '">Attaquer la planète</a>';
+					echo '<a href="' . $appRoot . 'map/place-' . $spyreport->rPlace . '">Attaquer la planète</a>';
 				echo '</div>';
 			echo '</div>';
 
@@ -151,7 +154,7 @@ echo '<div class="component size3 space">';
 						echo $spyreport->success > SpyReport::STEP_RESOURCES
 							? Format::number($spyreport->resources)
 							: '???';
-						echo ' <img class="icon-color" src="' . MEDIA . 'resources/resource.png" alt="ressources">';
+						echo ' <img class="icon-color" src="' . $mediaPath . 'resources/resource.png" alt="ressources">';
 					echo '</span>';
 				echo '</div>';
 
@@ -161,7 +164,7 @@ echo '<div class="component size3 space">';
 						echo $spyreport->success > SpyReport::STEP_ANITSPY
 							? Format::number($spyreport->antiSpyInvest)
 							: '???';
-						echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits">';
+						echo ' <img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits">';
 					echo '</span>';
 				echo '</div>';
 
@@ -171,7 +174,7 @@ echo '<div class="component size3 space">';
 						echo $spyreport->success > SpyReport::STEP_RC
 							? Format::number($spyreport->commercialRouteIncome)
 							: '???';
-						echo ' <img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits">';
+						echo ' <img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits">';
 					echo '</span>';
 				echo '</div>';
 			echo '</div>';

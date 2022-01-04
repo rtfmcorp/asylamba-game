@@ -4,7 +4,10 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Zeus\Model\CreditTransaction;
 use Asylamba\Modules\Demeter\Resource\ColorResource;
 
-$creditTransactionManager = $this->getContainer()->get('zeus.credit_transaction_manager');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$creditTransactionManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\CreditTransactionManager::class);
 
 # load
 $S_CRT_1 = $creditTransactionManager->getCurrentSession();
@@ -25,8 +28,8 @@ echo '<div class="component player rank">';
 				$transaction = $creditTransactionManager->get($i);
 
 				echo '<div class="player color' . $transaction->senderColor . '">';
-					echo '<a href="' . APP_ROOT . 'embassy/player-' . $transaction->rSender . '">';
-						echo '<img src="' . MEDIA . 'avatar/small/' . $transaction->senderAvatar . '.png" class="picto" alt="' . $transaction->senderName . '">';
+					echo '<a href="' . $appRoot . 'embassy/player-' . $transaction->rSender . '">';
+						echo '<img src="' . $mediaPath . 'avatar/small/' . $transaction->senderAvatar . '.png" class="picto" alt="' . $transaction->senderName . '">';
 					echo '</a>';
 
 					$status = ColorResource::getInfo($transaction->senderColor, 'status');
@@ -61,8 +64,8 @@ echo '<div class="component player rank">';
 				$transaction = $creditTransactionManager->get($i);
 
 				echo '<div class="player color' . $transaction->receiverColor . '">';
-					echo '<a href="' . APP_ROOT . 'embassy/player-' . $transaction->rReceiver . '">';
-						echo '<img src="' . MEDIA . 'avatar/small/' . $transaction->receiverAvatar . '.png" class="picto" alt="' . $transaction->receiverName . '">';
+					echo '<a href="' . $appRoot . 'embassy/player-' . $transaction->rReceiver . '">';
+						echo '<img src="' . $mediaPath . 'avatar/small/' . $transaction->receiverAvatar . '.png" class="picto" alt="' . $transaction->receiverName . '">';
 					echo '</a>';
 
 					$status = ColorResource::getInfo($transaction->receiverColor, 'status');

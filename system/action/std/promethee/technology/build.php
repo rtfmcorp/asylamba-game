@@ -15,16 +15,16 @@ use Asylamba\Classes\Library\Flashbag;
 use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Classes\Exception\FormException;
 
-$database = $this->getContainer()->get('database');
-$session = $this->getContainer()->get('session_wrapper');
+$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
-$technologyQueueManager = $this->getContainer()->get('promethee.technology_queue_manager');
-$technologyHelper = $this->getContainer()->get('promethee.technology_helper');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$researchManager = $this->getContainer()->get('promethee.research_manager');
-$technologyManager = $this->getContainer()->get('promethee.technology_manager');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
-$tutorialHelper = $this->getContainer()->get('zeus.tutorial_helper');
+$technologyQueueManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\TechnologyQueueManager::class);
+$technologyHelper = $this->getContainer()->get(\Asylamba\Modules\Promethee\Helper\TechnologyHelper::class);
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$researchManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\ResearchManager::class);
+$technologyManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\TechnologyManager::class);
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
+$tutorialHelper = $this->getContainer()->get(\Asylamba\Modules\Zeus\Helper\TutorialHelper::class);
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');

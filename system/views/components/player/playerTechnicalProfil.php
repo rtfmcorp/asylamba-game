@@ -9,6 +9,8 @@
 
 use Asylamba\Classes\Library\Format;
 
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
 $playerBaseLevel = $this->getContainer()->getParameter('zeus.player.base_level');
 
 echo '<div class="component">';
@@ -17,7 +19,7 @@ echo '<div class="component">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			echo '<div class="tool">';
-				echo '<span><a href="' . APP_ROOT . 'embassy/player-' . $player_playerTechnicalProfil->getId() . '">voir votre journal</a></span>';
+				echo '<span><a href="' . $appRoot . 'embassy/player-' . $player_playerTechnicalProfil->getId() . '">voir votre journal</a></span>';
 			echo '</div>';
 
 			echo '<div class="number-box">';

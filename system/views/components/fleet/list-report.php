@@ -12,7 +12,10 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Classes\Container\Params;
 use Asylamba\Classes\Library\Chronos;
 
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
 $sessionToken = $session->get('token');
 
@@ -43,7 +46,7 @@ echo '<div class="component report">';
 
 						echo '<div class="item">';
 							echo '<div class="left">';
-								echo '<img class="color' . ($type_listReport == 1 ? $r->colorD : $r->colorA) . '" src="' . MEDIA . 'map/action/' . $img . '" alt="" />';
+								echo '<img class="color' . ($type_listReport == 1 ? $r->colorD : $r->colorA) . '" src="' . $mediaPath . 'map/action/' . $img . '" alt="" />';
 							echo '</div>';
 
 							echo '<div class="center">';
@@ -52,7 +55,7 @@ echo '<div class="component report">';
 							echo '</div>';
 
 							echo '<div class="right">';
-								echo '<a class="' . ($request->query->get('report') == $r->id  ? 'active ' : NULL) . '" href="' . APP_ROOT . 'fleet/view-archive/report-' . $r->id . '"></a>';
+								echo '<a class="' . ($request->query->get('report') == $r->id  ? 'active ' : NULL) . '" href="' . $appRoot . 'fleet/view-archive/report-' . $r->id . '"></a>';
                                                               
                                                                
 							echo '</div>';
@@ -64,9 +67,9 @@ echo '<div class="component report">';
 			}
 
 			if ($request->query->get('mode') === 'archived') {
-				echo '<a class="more-button" href="' . APP_ROOT . 'fleet/view-archive">Voir tous les rapports</a>';
+				echo '<a class="more-button" href="' . $appRoot . 'fleet/view-archive">Voir tous les rapports</a>';
 			} else {
-				echo '<a class="more-button" href="' . APP_ROOT . 'fleet/view-archive/mode-archived">Voir les archives des rapports</a>';
+				echo '<a class="more-button" href="' . $appRoot . 'fleet/view-archive/mode-archived">Voir les archives des rapports</a>';
 			}
 		echo '</div>';
 	echo '</div>';

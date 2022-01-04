@@ -5,16 +5,10 @@ namespace Asylamba\Classes\Entity;
 use Asylamba\Classes\Database\Database as Connection;
 
 class EntityManager {
-    /** @var Connection **/
-    protected $connection;
-    /** @var UnitOfWork **/
-    protected $unitOfWork;
-    /** @var array **/
-    protected $repositories;
-    
-    /**
-     * @param Connection $connection
-     */
+    protected Connection $connection;
+    protected UnitOfWork $unitOfWork;
+    protected array $repositories = [];
+
     public function __construct(Connection $connection) {
         $this->connection = $connection;
     }
@@ -24,43 +18,27 @@ class EntityManager {
         $this->unitOfWork = new UnitOfWork($this);
     }
 	
-	/**
-	 * @return bool
-	 */
-	public function beginTransaction()
+	public function beginTransaction(): bool
 	{
 		return $this->connection->beginTransaction();
 	}
 	
-	/**
-	 * @return bool
-	 */
-	public function inTransaction()
+	public function inTransaction(): bool
 	{
 		return $this->connection->inTransaction();
 	}
 	
-	/**
-	 * @return bool
-	 */
-	public function commit()
+	public function commit(): bool
 	{
 		return $this->connection->commit();
 	}
 	
-	/**
-	 * @return bool
-	 */
-	public function rollBack()
+	public function rollBack(): bool
 	{
 		return $this->connection->rollBack();
 	}
 	
-    /**
-	 * @param string $entityClass
-	 * @return AbstractRepository
-	 */
-    public function getRepository($entityClass)
+    public function getRepository(string $entityClass): AbstractRepository
     {
         if (!isset($this->repositories[$entityClass])) {
 			$repositoryClass = str_replace('Model', 'Repository', $entityClass) . 'Repository';
@@ -69,26 +47,17 @@ class EntityManager {
         return $this->repositories[$entityClass];
     }
     
-    /**
-     * @param object $entity
-     */
-    public function persist($entity)
+    public function persist(object $entity): void
     {
         $this->unitOfWork->addObject($entity, UnitOfWork::METADATA_STAGED);
     }
     
-    /**
-     * @param object $entity
-     */
-    public function remove($entity)
+    public function remove(object $entity): void
     {
         $this->unitOfWork->removeObject($entity);
     }
     
-	/**
-	 * @param mixed $entity
-	 */
-    public function flush($entity = null)
+    public function flush(mixed $entity = null): void
     {
         switch(gettype($entity)) {
             case 'NULL':
@@ -104,10 +73,7 @@ class EntityManager {
         }
     }
     
-	/**
-	 * @param mixed $entity
-	 */
-    public function clear($entity = null)
+    public function clear(mixed $entity = null): void
     {
         switch(gettype($entity)) {
             case 'NULL':
@@ -122,18 +88,12 @@ class EntityManager {
         }
     }
     
-    /**
-     * @return UnitOfWork
-     */
-    public function getUnitOfWork()
+    public function getUnitOfWork(): UnitOfWork
     {
         return $this->unitOfWork;
     }
 	
-	/**
-	 * @return Connection
-	 */
-	public function getConnection()
+	public function getConnection(): Connection
 	{
 		return $this->connection;
 	}

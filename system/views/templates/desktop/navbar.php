@@ -8,13 +8,16 @@ use Asylamba\Modules\Hermes\Model\RoadMap;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Zeus\Resource\TutorialResource;
 
-$session = $this->getContainer()->get('session_wrapper');
-$notificationManager = $this->getContainer()->get('hermes.notification_manager');
-$roadmapManager = $this->getContainer()->get('hermes.roadmap_manager');
-$database = $this->getContainer()->get('database');
+$container = $this->getContainer();
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
+$roadmapManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\RoadMapManager::class);
+$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
 $sessionToken = $session->get('token');
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
 
 $notifications = $notificationManager->getUnreadNotifications($session->get('playerId'));
 $nbNotifications = count($notifications);
@@ -35,7 +38,7 @@ $qr->closeCursor();
 #################
 echo '<div id="nav">';
 	echo '<div class="box left">';
-		echo '<a href="#" class="square sh" data-target="change-bases"><img src="' . MEDIA . 'common/nav-base.png" alt="" /></a>';
+		echo '<a href="#" class="square sh" data-target="change-bases"><img src="' . $mediaPath . 'common/nav-base.png" alt="" /></a>';
 
 		# select current base name
 		$currentBaseName = NULL;
@@ -67,48 +70,48 @@ echo '<div id="nav">';
 		}
 
 		$isActive = (in_array($response->getPage(), array('bases'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'bases" class="current-base ' . $isActive . '">';
-			echo '<img src="' . MEDIA . 'map/place/place' . $currentBaseImg . '.png" alt="' . $currentBaseName . '" /> ';
+		echo '<a href="' . $appRoot . 'bases" class="current-base ' . $isActive . '">';
+			echo '<img src="' . $mediaPath . 'map/place/place' . $currentBaseImg . '.png" alt="' . $currentBaseName . '" /> ';
 			echo $currentBaseName;
 		echo '</a>';
 		echo '<a href="' . Format::actionBuilder('switchbase', $sessionToken, ['base' => $nextBaseId]) . '" class="square">';
-			echo '<img src="' . MEDIA . 'common/next-base.png" alt="base suivante" />';
+			echo '<img src="' . $mediaPath . 'common/next-base.png" alt="base suivante" />';
 		echo '</a>';
 	echo '</div>';
 
 	echo '<div class="box left-2">';
 		$isActive = (in_array($response->getPage(), array('profil'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'profil" class="square hb rb ' . $isActive . '" title="profil"><img src="' . MEDIA . 'common/nav-profil.png" alt="" /></a>';
+		echo '<a href="' . $appRoot . 'profil" class="square hb rb ' . $isActive . '" title="profil"><img src="' . $mediaPath . 'common/nav-profil.png" alt="" /></a>';
 
 		$isActive = (in_array($response->getPage(), array('fleet'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'fleet" class="square hb rb ' . $isActive . '" title="amirauté"><img src="' . MEDIA . 'common/nav-fleet.png" alt="" /></a>';
+		echo '<a href="' . $appRoot . 'fleet" class="square hb rb ' . $isActive . '" title="amirauté"><img src="' . $mediaPath . 'common/nav-fleet.png" alt="" /></a>';
 
 		$isActive = (in_array($response->getPage(), array('map'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'map" class="square hb rb ' . $isActive . '" title="galaxie"><img src="' . MEDIA . 'common/nav-map.png" alt="" /></a>';
+		echo '<a href="' . $appRoot . 'map" class="square hb rb ' . $isActive . '" title="galaxie"><img src="' . $mediaPath . 'common/nav-map.png" alt="" /></a>';
 		
 		$isActive = (in_array($response->getPage(), array('financial'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'financial" class="square hb rb ' . $isActive . '" title="finances"><img src="' . MEDIA . 'common/nav-financial.png" alt="" /></a>';
+		echo '<a href="' . $appRoot . 'financial" class="square hb rb ' . $isActive . '" title="finances"><img src="' . $mediaPath . 'common/nav-financial.png" alt="" /></a>';
 	
 		$isActive = (in_array($response->getPage(), array('technology'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'technology" class="square hb rb ' . $isActive . '" title="université"><img src="' . MEDIA . 'common/nav-techno.png" alt="" /></a>';
+		echo '<a href="' . $appRoot . 'technology" class="square hb rb ' . $isActive . '" title="université"><img src="' . $mediaPath . 'common/nav-techno.png" alt="" /></a>';
 		
 		$isActive = (in_array($response->getPage(), array('faction'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'faction" class="square hb rb ' . $isActive . '" title="faction"><img src="' . MEDIA . 'common/nav-faction.png" alt="" /></a>';
+		echo '<a href="' . $appRoot . 'faction" class="square hb rb ' . $isActive . '" title="faction"><img src="' . $mediaPath . 'common/nav-faction.png" alt="" /></a>';
 	echo '</div>';
 
 	echo '<div class="box left-3">';
 		$isActive = (in_array($response->getPage(), array('rank'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'rank" class="square hb rb ' . $isActive . '" title="classements"><img src="' . MEDIA . 'common/nav-rank.png" alt="" /></a>';
+		echo '<a href="' . $appRoot . 'rank" class="square hb rb ' . $isActive . '" title="classements"><img src="' . $mediaPath . 'common/nav-rank.png" alt="" /></a>';
 
 		$isActive = (in_array($response->getPage(), array('embassy'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'embassy" class="square hb rb ' . $isActive . '" title="ambassades"><img src="' . MEDIA . 'common/nav-embassy.png" alt="" /></a>';
+		echo '<a href="' . $appRoot . 'embassy" class="square hb rb ' . $isActive . '" title="ambassades"><img src="' . $mediaPath . 'common/nav-embassy.png" alt="" /></a>';
 
 		$isActive = (in_array($response->getPage(), array('message'))) ? 'active' : NULL;
-		echo '<a href="' . APP_ROOT . 'message" class="square hb rb ' . $isActive . '" title="messagerie"><img src="' . MEDIA . 'common/nav-message.png" alt="" />';
+		echo '<a href="' . $appRoot . 'message" class="square hb rb ' . $isActive . '" title="messagerie"><img src="' . $mediaPath . 'common/nav-message.png" alt="" />';
 			echo ($message > 0) ? '<span class="number">' . $message . '</span>' : NULL;
 		echo '</a>';
 
-		echo '<a href="' . APP_ROOT . 'message" id="general-notif-container" class="square sh" data-target="new-notifications"><img src="' . MEDIA . 'common/nav-notif.png" alt="" />';
+		echo '<a href="' . $appRoot . 'message" id="general-notif-container" class="square sh" data-target="new-notifications"><img src="' . $mediaPath . 'common/nav-notif.png" alt="" />';
 			echo ($nbNotifications > 0) ? '<span class="number">' . $nbNotifications . '</span>' : NULL;
 		echo '</a>';
 	echo '</div>';
@@ -116,23 +119,23 @@ echo '<div id="nav">';
 	echo '<div class="box right">';
 		if ($session->get('playerInfo')->get('admin') == TRUE) {
 			$isActive = (in_array($response->getPage(), array('admin'))) ? 'active' : NULL;
-			echo '<a href="' . APP_ROOT . 'admin" class="square ' . $isActive . '"><img src="' . MEDIA . 'common/tool-admin.png" alt="" /></a>';
+			echo '<a href="' . $appRoot . 'admin" class="square ' . $isActive . '"><img src="' . $mediaPath . 'common/tool-admin.png" alt="" /></a>';
 		}
 
-		echo '<a ' . ((bool)$request->cookies->get('p' . Params::REDIRECT_CHAT, Params::$params[Params::REDIRECT_CHAT]) ? 'href="https://discordapp.com/channels/132106417703354378/132106417703354378" target="_blank"' : 'href="' . APP_ROOT . 'params"') . '" class="square"><img src="' . MEDIA . 'common/nav-chat.png" alt="" /></a>';
+		echo '<a ' . ((bool)$request->cookies->get('p' . Params::REDIRECT_CHAT, Params::$params[Params::REDIRECT_CHAT]) ? 'href="https://discordapp.com/channels/132106417703354378/132106417703354378" target="_blank"' : 'href="' . $appRoot . 'params"') . '" class="square"><img src="' . $mediaPath . 'common/nav-chat.png" alt="" /></a>';
 
 		if ($session->get('playerInfo')->get('stepTutorial') > 0) {
 			echo '<a href="#" class="hide-slpash square sh ' . ($session->get('playerInfo')->get('stepDone') ? 'active flashy' : '') . '" data-target="tutorial">';
-				echo '<img src="' . MEDIA . 'common/tool-star.png" alt="tutoriel" />';
+				echo '<img src="' . $mediaPath . 'common/tool-star.png" alt="tutoriel" />';
 				echo '<span class="number">' . $session->get('playerInfo')->get('stepTutorial') . '</span>';
 			echo '</a>';
 		}
-		echo '<a href="#" class="square sh" data-target="bug-tracker"><img src="' . MEDIA . 'common/tool-bugtracker.png" alt="" /></a>';
+		echo '<a href="#" class="square sh" data-target="bug-tracker"><img src="' . $mediaPath . 'common/tool-bugtracker.png" alt="" /></a>';
 
 		$isActive = (in_array($response->getPage(), array('params'))) ? 'active' : NULL;
-		echo '<a class="square hb lb ' . $isActive . '" title="paramètres" href="' . APP_ROOT . 'params"><img src="' . MEDIA . 'common/tool-param.png" alt="" /></a>';
+		echo '<a class="square hb lb ' . $isActive . '" title="paramètres" href="' . $appRoot . 'params"><img src="' . $mediaPath . 'common/tool-param.png" alt="" /></a>';
 
-		echo '<a href="#" class="square sh" data-target="disconnect-box"><img src="' . MEDIA . 'common/tool-exit.png" alt="" /></a>';
+		echo '<a href="#" class="square sh" data-target="disconnect-box"><img src="' . $mediaPath . 'common/tool-exit.png" alt="" /></a>';
 	echo '</div>';
 
 	# DISPLAY OVERBOX NAV
@@ -164,8 +167,8 @@ echo '<div id="nav">';
 						echo '<h4 class="read-notif switch-class-parent" data-class="open">' . $n->getTitle() . '</h4>';
 						echo '<div class="content">' . $n->getContent() . '</div>';
 						echo '<div class="footer">';
-							echo '<a class="ajax-action" data-ajax-target="' . APP_ROOT . 'ajax/a-archivenotif/id-' . $n->getId() . '" href="' . Format::actionBuilder('archivenotif', $sessionToken, ['id' => $n->getId()]) . '">archiver</a> ou ';
-							echo '<a class="ajax-action" data-ajax-target="' . APP_ROOT . 'ajax/a-deletenotif/id-' . $n->getId() . '" href="' . Format::actionBuilder('deletenotif', $sessionToken, ['id' => $n->getId()]) . '">supprimer</a><br />';
+							echo '<a class="ajax-action" data-ajax-target="' . $appRoot . 'ajax/a-archivenotif/id-' . $n->getId() . '" href="' . Format::actionBuilder('archivenotif', $sessionToken, ['id' => $n->getId()]) . '">archiver</a> ou ';
+							echo '<a class="ajax-action" data-ajax-target="' . $appRoot . 'ajax/a-deletenotif/id-' . $n->getId() . '" href="' . Format::actionBuilder('deletenotif', $sessionToken, ['id' => $n->getId()]) . '">supprimer</a><br />';
 							echo '— ' . Chronos::transform($n->getDSending());
 						echo '</div>';
 					echo '</div>';
@@ -174,7 +177,7 @@ echo '<div id="nav">';
 				echo '<p class="info">Aucune nouvelle notification.</p>';
 			}
 		echo '</div>';
-		echo '<a href="' . APP_ROOT . 'message" class="more-link">toutes vos notifications</a>';
+		echo '<a href="' . $appRoot . 'message" class="more-link">toutes vos notifications</a>';
 	echo '</div>';
 
 	# ROADMAP
@@ -250,14 +253,14 @@ echo '<div id="nav">';
 		echo '<a href="' . Format::actionBuilder('disconnect', $sessionToken) . '">Se déconnecter</a>';
 		echo '<hr />';
 		echo '<a href="#" class="sh" data-target="roadmap">Dernières mises à jour</a>';
-		echo '<a href="' . APP_ROOT . 'sponsorship">Parrainage</a>';
+		echo '<a href="' . $appRoot . 'sponsorship">Parrainage</a>';
 		echo '<hr />';
 		echo '<a target="_blank" href="' . $this->getContainer()->getParameter('getout_root') . 'forum">Discuter sur le forum</a>';
 		echo '<a target="_blank" href="' . $this->getContainer()->getParameter('getout_root') . 'wiki">Consulter le wiki</a>';
 		echo '<hr />';
-		echo '<a target="_blank" href="' . FACEBOOK_LINK . '">Rejoindre la page Facebook</a>';
-		echo '<a target="_blank" href="' . GOOGLE_PLUS_LINK . '">Nous suivre sur Google+</a>';
-		echo '<a target="_blank" href="' . TWITTER_LINK . '">Nous suivre sur Twitter</a>';
+		echo '<a target="_blank" href="' . $container->getParameter('facebook_link') . '">Rejoindre la page Facebook</a>';
+		echo '<a target="_blank" href="' . $container->getParameter('google_plus_link') . '">Nous suivre sur Google+</a>';
+		echo '<a target="_blank" href="' . $container->getParameter('twitter_link') . '">Nous suivre sur Twitter</a>';
 	echo '</div>';
 echo '</div>';
 

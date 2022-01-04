@@ -2,39 +2,23 @@
 
 namespace Asylamba\Classes\Database;
 
-class Database {
-	/** @var string **/
-	protected $name;
-	/** @var string **/
-	protected $host;
-	/** @var string **/
-	protected $user;
-	/** @var string **/
-	protected $password;
-	/** @var \PDO **/
-	private $connection;
-	/** @var int **/
-	private static $nbrOfQuery = 0;
+class Database
+{
+	private ?\PDO $connection;
+	private static int $nbrOfQuery = 0;
 
-	/**
-	 * @return int
-	 */
-	public static function getNbrOfQuery() {
-		return self::$nbrOfQuery;
+	public function __construct(
+		protected string $host,
+		protected string $name,
+		protected string $user,
+		protected string $password,
+	) {
+		$this->refresh();
 	}
 
-	/**
-	 * @param string $host
-	 * @param string $name
-	 * @param string $user
-	 * @param string $password
-	 */
-	public function __construct($host, $name, $user, $password) {
-		$this->host = $host;
-		$this->name = $name;
-		$this->user = $user;
-		$this->password = $password;
-		$this->refresh();
+	public static function getNbrOfQuery(): int
+	{
+		return self::$nbrOfQuery;
 	}
 	
 	public function init($dumpFile)
@@ -65,37 +49,25 @@ class Database {
 			die('Erreur de connection à la base de données : ' . $e->getMessage());
 		}
 	}
-	
-	/**
-	 * @return bool
-	 */
-	public function beginTransaction()
+
+	public function beginTransaction(): bool
 	{
-		//return $this->connection->beginTransaction();
+		return $this->connection->beginTransaction();
 	}
-	
-	/**
-	 * @return bool
-	 */
-	public function inTransaction()
+
+	public function inTransaction(): bool
 	{
 		return $this->connection->inTransaction();
 	}
-	
-	/**
-	 * @return bool
-	 */
-	public function commit()
+
+	public function commit(): bool
 	{
-		// return $this->connection->commit();
+		return $this->connection->commit();
 	}
-	
-	/**
-	 * @return bool
-	 */
-	public function rollBack()
+
+	public function rollBack(): bool
 	{
-		//return $this->connection->rollBack();
+		return $this->connection->rollBack();
 	}
 
 	public function query($query) {
@@ -107,11 +79,7 @@ class Database {
 		self::$nbrOfQuery++;
 		return $this->connection->prepare($query);
 	}
-	
-	/**
-	 * @param string $query
-	 * @return \PDOStatement
-	 */
+
 	public function exec($query)
 	{
 		self::$nbrOfQuery++;

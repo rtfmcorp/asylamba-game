@@ -21,89 +21,22 @@ parameters:
     athena.obm.capital_min_level: 35 # minimal generator level to build a capital base
 
 services:
-    athena.building_queue_manager:
-        class: Asylamba\Modules\Athena\Manager\BuildingQueueManager
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    Asylamba\Modules\Athena\Helper\:
+        resource: '%root_path%/system/Modules/Athena/Helper/*'
+
+    Asylamba\Modules\Athena\Manager\:
+        resource: '%root_path%/system/Modules/Athena/Manager/*'
+
+    Asylamba\Modules\Athena\Manager\CommercialShippingManager:
         arguments:
-            - "@entity_manager"
-            - "@realtime_action_scheduler"
-            
-    athena.commercial_route_manager:
-        class: Asylamba\Modules\Athena\Manager\CommercialRouteManager
+            $mediaPath: '%media%'
+
+    Asylamba\Modules\Athena\Manager\TransactionManager:
         arguments:
-            - "@entity_manager"
-            
-    athena.commercial_shipping_manager:
-        class: Asylamba\Modules\Athena\Manager\CommercialShippingManager
-        arguments:
-            - "@entity_manager"
-            - "@athena.orbital_base_manager"
-            - "@hermes.notification_manager"
-            - "@realtime_action_scheduler"
-            - "@session_wrapper"
-            
-    athena.commercial_tax_manager:
-        class: Asylamba\Modules\Athena\Manager\CommercialTaxManager
-        arguments:
-            - "@database"
-            
-    athena.orbital_base_manager:
-        class: Asylamba\Modules\Athena\Manager\OrbitalBaseManager
-        arguments:
-            - "@entity_manager"
-            - "@client_manager"
-            - "@realtime_action_scheduler"
-            - "@athena.building_queue_manager"
-            - "@athena.ship_queue_manager"
-            - "@promethee.technology_queue_manager"
-            - "@promethee.technology_manager"
-            - "@promethee.technology_helper"
-            - "@athena.commercial_shipping_manager"
-            - "@athena.commercial_route_manager"
-            - "@athena.transaction_manager"
-            - "@zeus.player_manager"
-            - "@zeus.player_bonus_manager"
-            - "@athena.recycling_mission_manager"
-            - "@athena.recycling_log_manager"
-            - "@gaia.place_manager"
-            - "@ares.commander_manager"
-            - "@hermes.notification_manager"
-            - "@athena.orbital_base_helper"
-            - "@ctc"
-            - "@session_wrapper"
-            
-    athena.orbital_base_helper:
-        class: Asylamba\Modules\Athena\Helper\OrbitalBaseHelper
-        arguments:
-            - "@promethee.technology_helper"
-            
-    athena.recycling_log_manager:
-        class: Asylamba\Modules\Athena\Manager\RecyclingLogManager
-        arguments:
-            - "@entity_manager"
-            
-    athena.recycling_mission_manager:
-        class: Asylamba\Modules\Athena\Manager\RecyclingMissionManager
-        arguments:
-            - "@entity_manager"
-            - "@realtime_action_scheduler"
-            
-    athena.ship_queue_manager:
-        class: Asylamba\Modules\Athena\Manager\ShipQueueManager
-        arguments:
-            - "@entity_manager"
-            - "@realtime_action_scheduler"
-            
-    athena.ship_helper:
-        class: Asylamba\Modules\Athena\Helper\ShipHelper
-        arguments:
-            - "@session_wrapper"
-            - "@athena.orbital_base_helper"
-            - "@promethee.technology_helper"
-            - "@athena.ship_queue_manager"
-            
-    athena.transaction_manager:
-        class: Asylamba\Modules\Athena\Manager\TransactionManager
-        arguments:
-            - "@entity_manager"
-            - "@athena.commercial_tax_manager"
-            - "@session_wrapper"
+            $rootPath: '%root_path%'
+            $mediaPath: '%media%'

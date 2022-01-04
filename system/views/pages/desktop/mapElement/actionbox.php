@@ -8,14 +8,18 @@ use Asylamba\Modules\Demeter\Resource\ColorResource;
 use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Modules\Ares\Model\Commander;
 
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$pagesPath = $container->getParameter('pages');
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get('session_wrapper');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$commanderManager = $this->getContainer()->get('ares.commander_manager');
-$spyReportManager = $this->getContainer()->get('artemis.spy_report_manager');
-$recyclingMissionManager = $this->getContainer()->get('athena.recycling_mission_manager');
-$technologyManager = $this->getContainer()->get('promethee.technology_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
+$spyReportManager = $this->getContainer()->get(\Asylamba\Modules\Artemis\Manager\SpyReportManager::class);
+$recyclingMissionManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\RecyclingMissionManager::class);
+$technologyManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\TechnologyManager::class);
 
 if ($request->query->has('relatedplace')) {
 	if (($defaultBase = $orbitalBaseManager->get($request->query->get('relatedplace'))) === null) {
@@ -53,9 +57,9 @@ if (isset($defaultBase)) {
 			echo '<li>';
 				echo $system->rColor == 0
 					? 'Non revendiqué'
-					: '<img src="' . MEDIA . 'ally/big/color' . $system->rColor . '.png" alt="" /> Revendiqué par ' . ColorResource::getInfo($system->rColor, 'popularName');
+					: '<img src="' . $mediaPath . 'ally/big/color' . $system->rColor . '.png" alt="" /> Revendiqué par ' . ColorResource::getInfo($system->rColor, 'popularName');
 			echo '</li>';
-			echo '<li><img src="' . MEDIA . 'map/systems/t' . $system->typeOfSystem . 'c0.png" alt="" /> ' . SystemResource::getInfo($system->typeOfSystem, 'frenchName') . '</li>';
+			echo '<li><img src="' . $mediaPath . 'map/systems/t' . $system->typeOfSystem . 'c0.png" alt="" /> ' . SystemResource::getInfo($system->typeOfSystem, 'frenchName') . '</li>';
 		echo '</ul>';
 		echo '<a href="#" class="button closeactionbox">×</a>';
 	echo '</div>';
@@ -74,7 +78,7 @@ if (isset($defaultBase)) {
 					echo '<a href="#" class="openplace" data-target="' . $position . '">';
 						echo '<strong>' . $position . '</strong>';
 						if ($place->typeOfPlace == 1) {
-							echo '<img class="land" src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '-' . Game::getSizeOfPlanet($place->population) . '.png" />';
+							echo '<img class="land" src="' . $mediaPath . 'map/place/place' . $place->typeOfPlace . '-' . Game::getSizeOfPlanet($place->population) . '.png" />';
 						} else {
 							if ($place->resources > 10000000) {
 								$size = 3;
@@ -84,10 +88,10 @@ if (isset($defaultBase)) {
 								$size = 1;
 							}
 
-							echo '<img class="land" src="' . MEDIA . 'map/place/place' . $place->typeOfPlace . '-' . $size . '.png" />';
+							echo '<img class="land" src="' . $mediaPath . 'map/place/place' . $place->typeOfPlace . '-' . $size . '.png" />';
 						}
 						if ($place->rPlayer != 0) {
-							echo '<img class="avatar" src="' . MEDIA . '/avatar/small/' . $place->playerAvatar . '.png" />';
+							echo '<img class="avatar" src="' . $mediaPath . '/avatar/small/' . $place->playerAvatar . '.png" />';
 						}
 					echo '</a>';
 				echo '</li>';
@@ -98,7 +102,7 @@ if (isset($defaultBase)) {
 						echo '<div class="column info">';
 							for ($j = 0; $j < $spyReportManager->size(); $j++) { 
 								if ($spyReportManager->get($j)->rPlace == $place->id) {
-									echo '<a href="' . APP_ROOT . 'fleet/view-spyreport/report-' . $spyReportManager->get($j)->id . '" class="last-spy-link hb" title="voir le rapport d\'espionnage le plus récent"><img src="' . MEDIA . 'map/spy/last-spy.png" alt="" /></a>';
+									echo '<a href="' . $appRoot . 'fleet/view-spyreport/report-' . $spyReportManager->get($j)->id . '" class="last-spy-link hb" title="voir le rapport d\'espionnage le plus récent"><img src="' . $mediaPath . 'map/spy/last-spy.png" alt="" /></a>';
 									break;
 								}
 							}
@@ -113,7 +117,7 @@ if (isset($defaultBase)) {
 											$status = ColorResource::getInfo($place->playerColor, 'status');
 											echo $status[$place->playerStatus - 1] . ' ';
 											echo '<span class="player-name">';
-												echo '<a href="' . APP_ROOT . 'embassy/player-' . $place->rPlayer . '" class="color' . $place->playerColor . '">' . $place->playerName . '</a>';
+												echo '<a href="' . $appRoot . 'embassy/player-' . $place->rPlayer . '" class="color' . $place->playerColor . '">' . $place->playerName . '</a>';
 											echo '</span>';
 										} else {
 											echo 'rebelle <span class="player-name">' . $place->playerName . '</span>';
@@ -136,7 +140,7 @@ if (isset($defaultBase)) {
 											];
 											foreach ($danger as $value => $label) {
 												if ($place->maxDanger >= $value) {
-													echo '<img src="' . MEDIA . 'resources/defense.png" class="icon-color" alt="" />';
+													echo '<img src="' . $mediaPath . 'resources/defense.png" class="icon-color" alt="" />';
 												}
 											}
 										echo '</span>';
@@ -157,7 +161,7 @@ if (isset($defaultBase)) {
 										];
 										foreach ($population as $value => $label) {
 											if ($place->population >= $value) {
-												echo '<img src="' . MEDIA . 'resources/population.png" class="icon-color" alt="" />';
+												echo '<img src="' . $mediaPath . 'resources/population.png" class="icon-color" alt="" />';
 											}
 										}
 									echo '</span>';
@@ -174,7 +178,7 @@ if (isset($defaultBase)) {
 										];
 										foreach ($resources as $value => $label) {
 											if ($place->coefResources >= $value) {
-												echo '<img src="' . MEDIA . 'resources/resource.png" class="icon-color" alt="" />';
+												echo '<img src="' . $mediaPath . 'resources/resource.png" class="icon-color" alt="" />';
 											}
 										}
 									echo '</span>';
@@ -192,7 +196,7 @@ if (isset($defaultBase)) {
 										];
 										foreach ($science as $value => $label) {
 											if ($coefHistory >= $value) {
-												echo '<img src="' . MEDIA . 'resources/science.png" class="icon-color" alt="" />';
+												echo '<img src="' . $mediaPath . 'resources/science.png" class="icon-color" alt="" />';
 											}
 										}
 									echo '</span>';
@@ -222,7 +226,7 @@ if (isset($defaultBase)) {
 							echo '</p>';
 
 							if ($place->typeOfPlace == 1) {
-								$reports = $this->getContainer()->get('ares.live_report_manager')->getAttackReportsByPlaces($session->get('playerId'), $placesId);
+								$reports = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\LiveReportManager::class)->getAttackReportsByPlaces($session->get('playerId'), $placesId);
 
 								foreach ($reports as $report) { 
 									if ($report->rPlace == $place->id) {
@@ -235,7 +239,7 @@ if (isset($defaultBase)) {
 
 						echo '</div>';
 
-						include PAGES . 'desktop/mapElement/component/actBull.php';
+						include $pagesPath . 'desktop/mapElement/component/actBull.php';
 					echo '</div>';
 				echo '</li>';
 				}

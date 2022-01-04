@@ -12,13 +12,13 @@ use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Athena\Model\CommercialRoute;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get('session_wrapper');
-$commercialRouteManager = $this->getContainer()->get('athena.commercial_route_manager');
-$orbitalBaseManager = $this->getContainer()->get('athena.orbital_base_manager');
-$orbitalBaseHelper = $this->getContainer()->get('athena.orbital_base_helper');
-$playerManager = $this->getContainer()->get('zeus.player_manager');
-$notificationManager = $this->getContainer()->get('hermes.notification_manager');
-$colorManager = $this->getContainer()->get('demeter.color_manager');
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$commercialRouteManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialRouteManager::class);
+$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
+$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
+$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');

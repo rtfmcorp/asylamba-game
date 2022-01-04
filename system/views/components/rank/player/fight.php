@@ -7,14 +7,17 @@
 # require
 	# _T PRM 		PLAYER_RANKING_FIGHT
 
-$playerRankingManager = $this->getContainer()->get('atlas.player_ranking_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$playerRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\PlayerRankingManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 $playerRankingManager->changeSession($PLAYER_RANKING_FIGHT);
 
 echo '<div class="component player rank">';
 	echo '<div class="head skin-4">';
-		echo '<img class="main" alt="ressource" src="' . MEDIA . 'rank/cup.png">';
+		echo '<img class="main" alt="ressource" src="' . $mediaPath . 'rank/cup.png">';
 		echo '<h2>Combattant</h2>';
 		echo '<em>Total des victoires moins les défaites</em>';
 	echo '</div>';
@@ -24,7 +27,7 @@ echo '<div class="component player rank">';
 				$p = $playerRankingManager->get($i);
 
 				if ($i == 0 && $p->fightPosition != 1) {
-					echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-morerank/dir-next/type-fight/current-' . $p->fightPosition . '" data-dir="top">';
+					echo '<a class="more-item" href="' . $appRoot . 'ajax/a-morerank/dir-next/type-fight/current-' . $p->fightPosition . '" data-dir="top">';
 						echo 'afficher les joueurs précédents';
 					echo '</a>';
 				}
@@ -32,7 +35,7 @@ echo '<div class="component player rank">';
 				echo $p->commonRender($session->get('playerId'), 'fight');
 
 				if ($i == $playerRankingManager->size() - 1) {
-					echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-morerank/dir-prev/type-fight/current-' . $p->fightPosition . '">';
+					echo '<a class="more-item" href="' . $appRoot . 'ajax/a-morerank/dir-prev/type-fight/current-' . $p->fightPosition . '">';
 						echo 'afficher les joueurs suivants';
 					echo '</a>';
 				}

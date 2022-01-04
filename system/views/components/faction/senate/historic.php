@@ -4,6 +4,9 @@ use Asylamba\Classes\Library\Chronos;
 use Asylamba\Modules\Demeter\Resource\LawResources;
 use Asylamba\Modules\Demeter\Model\Law\Law;
 
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+
 echo '<div class="component">';
 	echo '<div class="head"></div>';
 	echo '<div class="fix-body">';
@@ -13,7 +16,7 @@ echo '<div class="component">';
 			foreach ($laws as $law) { 
 				echo '<div class="build-item base-type">';
 					echo '<div class="name">';
-						echo '<img src="' . MEDIA . 'faction/law/common.png" alt="">';
+						echo '<img src="' . $mediaPath . 'faction/law/common.png" alt="">';
 						echo '<strong>' . LawResources::getInfo($law->type, 'name') . '</strong>';
 					echo '</div>';
 

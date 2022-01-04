@@ -15,30 +15,17 @@ use Asylamba\Classes\Exception\FormException;
 
 use Asylamba\Classes\Database\Database;
 
-class ExceptionListener {
-	/** @var AbstractLogger **/
-	protected $logger;
-	/** @var SessionWrapper **/
-	protected $sessionWrapper;
-	/** @var Database **/
-	protected $connection;
-	
-	/**
-	 * @param AbstractLogger $logger
-	 * @param Session $session
-	 * @param Database $database
-	 */
-	public function __construct(AbstractLogger $logger, SessionWrapper $session, Database $database)
-	{
-		$this->logger = $logger;
-		$this->sessionWrapper = $session;
-		$this->database = $database;
+class ExceptionListener
+{
+	public function __construct(
+		protected AbstractLogger $logger,
+		protected SessionWrapper $sessionWrapper,
+		protected Database $database,
+		protected string $templatePath,
+	) {
 	}
-	
-	/**
-	 * @param ExceptionEvent $event
-	 */
-	public function onCoreException(ExceptionEvent $event)
+
+	public function onCoreException(ExceptionEvent $event): void
 	{
 		$exception = $event->getException();
 		$this->process(
@@ -52,11 +39,8 @@ class ExceptionListener {
 			($exception instanceof FormException) ? $exception->getRedirect() : null
 		);
 	}
-	
-	/**
-	 * @param ErrorEvent $event
-	 */
-	public function onCoreError(ErrorEvent $event)
+
+	public function onCoreError(ErrorEvent $event): void
 	{
 		$error = $event->getError();
 		$this->process(
@@ -135,7 +119,7 @@ class ExceptionListener {
 		// In this case, it means the user is in an error loop
 		if ($nbPaths > 3 && $redirect === $history[$nbPaths - 4]) {
 			return [
-				'template' => TEMPLATE . 'fatal.php'
+				'template' => $this->templatePath . 'fatal.php'
 			];
 		}
 		return ['redirect' => $redirect];

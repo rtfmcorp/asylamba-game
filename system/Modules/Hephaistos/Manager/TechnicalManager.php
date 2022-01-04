@@ -10,66 +10,30 @@ use Asylamba\Modules\Hephaistos\Routine\DailyRoutine;
 
 class TechnicalManager
 {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var API **/
-	protected $api;
-	/** @var string **/
-	protected $apimode;
-	/** @var PlayerManager **/
-	protected $playerManager;
-	/** @var int **/
-	protected $playerInactiveTimeLimit;
-	/** @var int **/
-	protected $playerGlobalInactiveTime;
-	/** @var int **/
-	protected $readTimeout;
-	/** @var int **/
-	protected $unreadTimeout;
-	
-	/**
-	 * @param EntityManager $entityManager
-	 * @param API $api
-	 * @param string $apimode
-	 * @param PlayerManager $playerManager
-	 * @param int $playerInactiveTimeLimit
-	 * @param int $playerGlobalInactiveTime
-	 * @param int $readTimeout
-	 * @param int $unreadTimeout
-	 */
 	public function __construct(
-		EntityManager $entityManager,
-		API $api,
-		$apimode,
-		PlayerManager $playerManager,
-		$playerInactiveTimeLimit,
-		$playerGlobalInactiveTime,
-		$readTimeout,
-		$unreadTimeout
-	)
-	{
-		$this->entityManager = $entityManager;
-		$this->api = $api;
-		$this->apimode = $apimode;
-		$this->playerManager = $playerManager;
-		$this->playerInactiveTimeLimit = $playerInactiveTimeLimit;
-		$this->playerGlobalInactiveTime = $playerGlobalInactiveTime;
-		$this->readTimeout = $readTimeout;
-		$this->unreadTimeout = $unreadTimeout;
+		protected EntityManager $entityManager,
+		protected API $api,
+		protected string $apiMode,
+		protected PlayerManager $playerManager,
+		protected int $playerInactiveTimeLimit,
+		protected int $playerGlobalInactiveTime,
+		protected int $notificationsReadTimeout,
+		protected int $notificationsUnreadTimeout
+	) {
 	}
 	
-	public function processDailyRoutine()
+	public function processDailyRoutine(): void
 	{
 		$dailyRoutine = new DailyRoutine();
 		$dailyRoutine->execute(
 			$this->entityManager,
 			$this->api,
-			$this->apimode,
+			$this->apiMode,
 			$this->playerManager,
 			$this->playerInactiveTimeLimit,
 			$this->playerGlobalInactiveTime,
-			$this->readTimeout,
-			$this->unreadTimeout
+			$this->notificationsReadTimeout,
+			$this->notificationsUnreadTimeout
 		);
 	}
 }

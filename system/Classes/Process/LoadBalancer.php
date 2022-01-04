@@ -4,38 +4,35 @@ namespace Asylamba\Classes\Process;
 
 use Asylamba\Classes\Task\Task;
 use Asylamba\Classes\Task\RealTimeTask;
-use Asylamba\Classes\DependencyInjection\Container;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class LoadBalancer
 {
-	/** @var Container **/
-	protected $container;
-    /** @var int **/
-    protected $statsVolume;
-    /** @var array **/
-    protected $stats = [];
-    
-    /**
-     * @param Container $container
-     */
-    public function __construct(Container $container)
-    {
-		$this->container = $container;
-		$this->statsVolume = $container->getParameter('worker_stats_volume');
+	protected ProcessManager $processManager;
+    protected array $stats = [];
+
+    public function __construct(
+		protected int $statsVolume
+	) {
     }
-    
-	/**
-	 * @param Task $task
-	 */
-    public function affectTask(Task $task)
+
+	#[Required]
+	public function setProcessManager(ProcessManager $processManager): void
+	{
+		$this->processManager = $processManager;
+	}
+
+    public function affectTask(Task $task): bool
     {
         $this->estimateTime($task);
         
         $selectedProcess = $minTime = null;
-		
-        $processManager = $this->container->get('process_manager');
+
+		if (0 === count($this->processManager->getProcesses())) {
+			return false;
+		}
         
-        foreach ($processManager->getProcesses() as $process) {
+        foreach ($this->processManager->getProcesses() as $process) {
 			// If the process has a task of the same context than the current one, we affect it to the process queue
 			if ($task instanceof RealTimeTask && $task->getContext() !== null && $process->hasContext($task->getContext())) {
 				$selectedProcess = $process;
@@ -46,7 +43,12 @@ class LoadBalancer
 				$minTime = $process->getExpectedWorkTime();
 			}
         }
-        $processManager->affectTask($selectedProcess, $task);
+		if (null === $selectedProcess) {
+			return false;
+		}
+        $this->processManager->affectTask($selectedProcess, $task);
+
+		return true;
     }
     
 	/**

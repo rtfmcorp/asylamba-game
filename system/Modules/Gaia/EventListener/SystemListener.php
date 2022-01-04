@@ -12,37 +12,13 @@ use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 
 class SystemListener
 {
-	/** @var SystemManager **/
-	protected $systemManager;
-	/** @var OrbitalBaseManager **/
-	protected $orbitalBaseManager;
-	/** @var PlayerManager **/
-	protected $playerManager;
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var array **/
-	protected $scores;
-	
-	/**
-	 * @param SystemManager $systemManager
-	 * @param OrbitalBaseManager $orbitalBaseManager
-	 * @param PlayerManager $playerManager
-	 * @param EntityManager $entityManager
-	 * @param array $scores
-	 */
 	public function __construct(
-		SystemManager $systemManager,
-		OrbitalBaseManager $orbitalBaseManager,
-		PlayerManager $playerManager,
-		EntityManager $entityManager,
-		$scores
-	)
-	{
-		$this->systemManager = $systemManager;
-		$this->orbitalBaseManager = $orbitalBaseManager;
-		$this->playerManager = $playerManager;
-		$this->entityManager = $entityManager;
-		$this->scores = $scores;
+		protected SystemManager $systemManager,
+		protected OrbitalBaseManager $orbitalBaseManager,
+		protected PlayerManager $playerManager,
+		protected EntityManager $entityManager,
+		protected array $scores
+	) {
 	}
 	
 	/**

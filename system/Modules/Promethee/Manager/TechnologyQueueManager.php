@@ -16,19 +16,10 @@ use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
 class TechnologyQueueManager
 {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var RealTimeActionScheduler **/
-	protected $realtimeActionScheduler;
-
-	/**
-	 * @param EntityManager $entityManager
-	 * @param RealTimeActionScheduler $realtimeActionScheduler
-	 */
-	public function __construct(EntityManager $entityManager, RealTimeActionScheduler $realtimeActionScheduler)
-	{
-		$this->entityManager = $entityManager;
-		$this->realtimeActionScheduler = $realtimeActionScheduler;
+	public function __construct(
+		protected EntityManager $entityManager,
+		protected RealTimeActionScheduler $realtimeActionScheduler
+	) {
 	}
 	
 	public function scheduleQueues()
@@ -61,38 +52,25 @@ class TechnologyQueueManager
 		return $this->entityManager->getRepository(TechnologyQueue::class)->getPlayerTechnologyQueue($playerId, $technology);
 	}
 	
-	/**
-	 * @param int $placeId
-	 * @return array
-	 */
-	public function getPlaceQueues($placeId)
+	public function getPlaceQueues(int $placeId)
 	{
 		return $this->entityManager->getRepository(TechnologyQueue::class)->getPlaceQueues($placeId);
 	}
 	
-	/**
-	 * @param int $playerId
-	 * @return array
-	 */
-	public function getPlayerQueues($playerId)
+	public function getPlayerQueues(int $playerId): array
 	{
 		return $this->entityManager->getRepository(TechnologyQueue::class)->getPlayerQueues($playerId);
 	}
 
-	/**
-	 * @param TechnologyQueue $technologyQueue
-	 */
-	public function add(TechnologyQueue $technologyQueue) {
+	public function add(TechnologyQueue $technologyQueue): void
+	{
 		$this->entityManager->persist($technologyQueue);
 		$this->entityManager->flush($technologyQueue);
 		
 		$this->realtimeActionScheduler->schedule('athena.orbital_base_manager', 'uTechnologyQueue', $technologyQueue, $technologyQueue->getEndedAt());
 	}
 	
-	/**
-	 * @param TechnologyQueue $queue
-	 */
-	public function remove(TechnologyQueue $queue)
+	public function remove(TechnologyQueue $queue): void
 	{
 		$this->realtimeActionScheduler->cancel($queue, $queue->getEndedAt());
 		

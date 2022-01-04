@@ -1,7 +1,7 @@
 <?php
 
-$galaxyConfiguration = $this->getContainer()->get('gaia.galaxy_configuration');
-$sectorManager = $this->getContainer()->get('gaia.sector_manager');
+$galaxyConfiguration = $this->getContainer()->get(\Asylamba\Modules\Gaia\Galaxy\GalaxyConfiguration::class);
+$sectorManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SectorManager::class);
 
 echo '<div id="sectors">';
 	echo '<svg viewBox="0, 0, ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . ', ' . ($galaxyConfiguration->scale * $galaxyConfiguration->galaxy['size']) . '" xmlns="http://www.w3.org/2000/svg">';

@@ -5,6 +5,9 @@ use Asylamba\Classes\Library\Format;
 use Asylamba\Modules\Athena\Resource\ShipResource;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 
+$container = $this->getContainer();
+$mediaPath = $container->getParameter('media');
+
 $commanderByBase = [];
 foreach ($commander_shipsFeesFinancial as $commander) {
 	if (!isset($commanderByBase[$commander->getRBase()])) {
@@ -16,7 +19,7 @@ foreach ($commander_shipsFeesFinancial as $commander) {
 
 echo '<div class="component financial">';
 	echo '<div class="head skin-1">';
-		echo '<img src="' . MEDIA . 'financial/fleet.png" alt="flottes" />';
+		echo '<img src="' . $mediaPath . 'financial/fleet.png" alt="flottes" />';
 		echo '<h2>Entretien</h2>';
 		echo '<em>Entretien des vaisseaux</em>';
 	echo '</div>';
@@ -47,7 +50,7 @@ echo '<div class="component financial">';
 					echo '<span class="label">' . $base->getName() . '</span>';
 					echo '<span class="value">';
 						echo Format::numberFormat($totalBase);
-						echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+						echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 					echo '</span>';
 
 					echo '<ul class="sub-list-type-1" id="ships-base-' . $base->getId() . '">';
@@ -81,7 +84,7 @@ echo '<div class="component financial">';
 				echo '<span class="label">total des coûts</span>';
 				echo '<span class="value">';
 					echo Format::numberFormat($financial_totalShipsFees);
-					echo '<img class="icon-color" src="' . MEDIA . 'resources/credit.png" alt="crédits" />';
+					echo '<img class="icon-color" src="' . $mediaPath . 'resources/credit.png" alt="crédits" />';
 				echo '</span>';
 			echo '</li>';
 		echo '</ul>';

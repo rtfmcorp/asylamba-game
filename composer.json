@@ -9,12 +9,18 @@
     },
 
     "require": {
-        "php": "~7.0",
-        "phpunit/phpunit": "6.1",
-        "symfony/config": "~2.6",
-        "symfony/yaml": "~2.6",
-        "ocramius/proxy-manager": "^2.0",
-        "incenteev/composer-parameter-handler": "~2.0"
+        "php": "~8.0",
+		"ext-curl": "*",
+		"ext-pdo": "*",
+		"ext-redis": "*",
+		"ext-openssl": "*",
+        "phpunit/phpunit": "9.5.10",
+        "symfony/config": "~6.0",
+        "symfony/yaml": "~6.0",
+        "symfony/dotenv": "^6.0",
+        "symfony/var-dumper": "^6.0",
+        "symfony/dependency-injection": "^6.0",
+        "symfony/event-dispatcher": "^6.0",
     },
 
     "scripts": {

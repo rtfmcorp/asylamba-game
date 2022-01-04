@@ -7,14 +7,17 @@
 # require
 	# _T PRM 		PLAYER_RANKING_TRADER
 
-$playerRankingManager = $this->getContainer()->get('atlas.player_ranking_manager');
-$session = $this->getContainer()->get('session_wrapper');
+$container = $this->getContainer();
+$appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
+$playerRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\PlayerRankingManager::class);
+$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 
 $playerRankingManager->changeSession($PLAYER_RANKING_TRADER);
 
 echo '<div class="component player rank">';
 	echo '<div class="head skin-4">';
-		echo '<img class="main" alt="ressource" src="' . MEDIA . 'rank/cup.png">';
+		echo '<img class="main" alt="ressource" src="' . $mediaPath . 'rank/cup.png">';
 		echo '<h2>Trader</h2>';
 		echo '<em>Revenu de toutes les routes commerciales par relève</em>';
 	echo '</div>';
@@ -24,7 +27,7 @@ echo '<div class="component player rank">';
 				$p = $playerRankingManager->get($i);
 
 				if ($i == 0 && $p->traderPosition != 1) {
-					echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-morerank/dir-next/type-trader/current-' . $p->traderPosition . '" data-dir="top">';
+					echo '<a class="more-item" href="' . $appRoot . 'ajax/a-morerank/dir-next/type-trader/current-' . $p->traderPosition . '" data-dir="top">';
 						echo 'afficher les joueurs précédents';
 					echo '</a>';
 				}
@@ -32,7 +35,7 @@ echo '<div class="component player rank">';
 				echo $p->commonRender($session->get('playerId'), 'trader');
 
 				if ($i == $playerRankingManager->size() - 1) {
-					echo '<a class="more-item" href="' . APP_ROOT . 'ajax/a-morerank/dir-prev/type-trader/current-' . $p->traderPosition . '">';
+					echo '<a class="more-item" href="' . $appRoot . 'ajax/a-morerank/dir-prev/type-trader/current-' . $p->traderPosition . '">';
 						echo 'afficher les joueurs suivants';
 					echo '</a>';
 				}

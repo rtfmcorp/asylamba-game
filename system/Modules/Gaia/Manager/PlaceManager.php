@@ -25,33 +25,19 @@ use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Gaia\Model\System;
 
 use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
-use Asylamba\Classes\Worker\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class PlaceManager {
-	/** @var EntityManager **/
-	protected $entityManager;
-	/** @var NotificationManager **/
-	protected $notificationManager;
-	/** @var EventDispatcher **/
-	protected $eventDispatcher;
-	
-	/**
-	 * @param EntityManager $entityManager
-	 * @param NotificationManager $notificationManager
-	 * @param EventDispatcher $eventDispatcher
-	 */
-	public function __construct(EntityManager $entityManager, NotificationManager $notificationManager, EventDispatcher $eventDispatcher)
-	{
-		$this->entityManager = $entityManager;
-		$this->notificationManager = $notificationManager;
-		$this->eventDispatcher = $eventDispatcher;
+class PlaceManager
+{
+	public function __construct(
+		protected EntityManager $entityManager,
+		protected NotificationManager $notificationManager,
+		protected EventDispatcher $eventDispatcher
+	) {
+
 	}
 	
-	/**
-	 * @param int $id
-	 * @return Place
-	 */
-	public function get($id)
+	public function get(int $id): ?Place
 	{
 		if(($place = $this->entityManager->getRepository(Place::class)->get($id)) !== null) {
 			return $place;
@@ -59,44 +45,33 @@ class PlaceManager {
 		return null;
 	}
 	
-	/**
-	 * @param int $ids
-	 */
-	public function getByIds($ids = [])
+	public function getByIds(array $ids = []): array
 	{
 		return $this->entityManager->getRepository(Place::class)->getByIds($ids);
 	}
 	
-	public function getSystemPlaces(System $system)
+	public function getSystemPlaces(System $system): array
 	{
 		return $this->entityManager->getRepository(Place::class)->getSystemPlaces($system->getId());
 	}
 
-	/**
-	 * @param string $search
-	 * @return array
-	 */
-	public function search($search) {
+	public function search(string $search): array
+	{
 		return $this->entityManager->getRepository(Place::class)->search($search);
 	}
 	
-	/**
-	 * @return array
-	 */
-	public function getPlayerPlaces()
+	public function getPlayerPlaces(): array
 	{
 		return $this->entityManager->getRepository(Place::class)->getPlayerPlaces();
 	}
 	
-	/**
-	 * @return array
-	 */
-	public function getNpcPlaces()
+	public function getNpcPlaces(): array
 	{
 		return $this->entityManager->getRepository(Place::class)->getNpcPlaces();
 	}
 
-	public function updateNpcPlaces() {
+	public function updateNpcPlaces(): void
+	{
 		$places = $this->getNpcPlaces();
 		$now   = Utils::now();
 		$repository = $this->entityManager->getRepository(Place::class);
@@ -135,7 +110,8 @@ class PlaceManager {
 		$this->entityManager->clear(Place::class);
 	}
 
-	public function updatePlayerPlaces() {
+	public function updatePlayerPlaces(): void
+	{
 		$places = $this->getPlayerPlaces();
 		$now   = Utils::now();
 		$repository = $this->entityManager->getRepository(Place::class);
@@ -163,29 +139,20 @@ class PlaceManager {
 		$this->entityManager->clear(Place::class);
 	}
     
-    /**
-     * @param Place $place
-     * @return bool
-     */
-    public function turnAsEmptyPlace(Place $place)
+    public function turnAsEmptyPlace(Place $place): bool
     {
         return $this->entityManager->getRepository(Place::class)->turnAsEmptyPlace($place->getId());
     }
 	
-	public function turnAsSpawnPlace($placeId, $playerId)
+	public function turnAsSpawnPlace(int $placeId, int $playerId): bool
 	{
-		$this->eventDispatcher->dispatch(new PlaceOwnerChangeEvent($this->get($placeId)));
+		$this->eventDispatcher->dispatch(new PlaceOwnerChangeEvent($this->get($placeId)), PlaceOwnerChangeEvent::NAME);
 		
 		return $this->entityManager->getRepository(Place::class)->turnAsSpawnPlace($placeId, $playerId);
 	}
 
-	/**
-	 * @param Place $place
-	 * @param string $case
-	 * @param Commander $commander
-	 * @param Report $report
-	 */
-	public function sendNotif(Place $place, $case, Commander $commander, $report = NULL) {
+	public function sendNotif(Place $place, string $case, Commander $commander, Report $report = null): void
+	{
 		switch ($case) {
 			case Place::CHANGESUCCESS:
 				$notif = new Notification();
@@ -488,13 +455,8 @@ class PlaceManager {
 		}
 	}
 
-	/**
-	 * @param Place $place
-	 * @param string $case
-	 * @param Commander $commander
-	 * @param array $reports
-	 */
-	public function sendNotifForConquest(Place $place, $case, $commander, $reports = array()) {
+	public function sendNotifForConquest(Place $place, string $case, Commander $commander, array $reports = []): void
+	{
 		$nbrBattle = count($reports);
 		switch($case) {
 			case Place::CONQUERPLAYERWHITBATTLESUCCESS:
