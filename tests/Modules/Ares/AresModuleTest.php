@@ -11,7 +11,7 @@ class AresModuleTest extends \PHPUnit\Framework\TestCase
 	/** @var AresModule **/
 	protected $module;
 	
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->module = new AresModule($this->getApplicationMock());
 	}

@@ -11,7 +11,7 @@ class GaiaModuleTest extends \PHPUnit\Framework\TestCase
 	/** @var GaiaModule **/
 	protected $module;
 	
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->module = new GaiaModule($this->getApplicationMock());
 	}

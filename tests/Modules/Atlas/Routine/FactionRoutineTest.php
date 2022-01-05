@@ -26,7 +26,7 @@ class FactionRoutineTest extends \PHPUnit\Framework\TestCase
 		5 => 135,
 	];
 	
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->routine = new FactionRoutine();
 		$this->rankings = [];

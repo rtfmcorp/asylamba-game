@@ -11,7 +11,7 @@ class ArtemisModuleTest extends \PHPUnit\Framework\TestCase
 	/** @var ArtemisModule **/
 	protected $module;
 	
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->module = new ArtemisModule($this->getApplicationMock());
 	}

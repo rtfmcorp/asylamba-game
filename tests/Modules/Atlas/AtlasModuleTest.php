@@ -11,7 +11,7 @@ class AtlasModuleTest extends \PHPUnit\Framework\TestCase
 	/** @var AtlasModule **/
 	protected $module;
 	
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->module = new AtlasModule($this->getApplicationMock());
 	}
