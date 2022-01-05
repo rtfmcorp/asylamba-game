@@ -14,7 +14,6 @@
 		"ext-pdo": "*",
 		"ext-redis": "*",
 		"ext-openssl": "*",
-        "phpunit/phpunit": "9.5.10",
         "symfony/config": "~6.0",
         "symfony/yaml": "~6.0",
         "symfony/dotenv": "^6.0",
@@ -40,6 +39,8 @@
             "file": "config/parameters.yml",
             "dist-file": "config/parameters.dist.yml"
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
     }
-
 }
