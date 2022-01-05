@@ -9,17 +9,19 @@ class FileLogger extends AbstractLogger
 		protected ?int $logRotation = null
 	) {
 	}
-	
-	/**
-	 * {@inheritdoc}
-	 */
-	public function log(string $message, string $level = self::LOG_LEVEL_DEBUG, string $type = self::LOG_TYPE_PHP): void
+
+	public function log($level, \Stringable|string $message, array $context = []): void
 	{
-		$datetime = new \DateTime();
+		$dateTime = new \DateTime();
 		\file_put_contents(
-			"{$this->logDirectory}/$type/{$datetime->format('Y-m-d')}.log",
-			$this->formatMessage($message, $level, $datetime),
+			$this->getFilePath($dateTime),
+			$this->formatMessage($level, $message, $dateTime, $context),
 			FILE_APPEND
 		);
+	}
+
+	protected function getFilePath(\DateTime $dateTime): string
+	{
+		return \sprintf('%s/%s/%s.log', $this->logDirectory, $this->getType(), $dateTime->format('Y-m-d'));
 	}
 }

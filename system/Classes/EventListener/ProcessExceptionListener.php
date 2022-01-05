@@ -2,19 +2,19 @@
 
 namespace Asylamba\Classes\EventListener;
 
-use Asylamba\Classes\Logger\AbstractLogger;
-
 use Asylamba\Classes\Event\ProcessExceptionEvent;
 use Asylamba\Classes\Event\ProcessErrorEvent;
 
 use Asylamba\Classes\Process\ProcessGateway;
 
 use Asylamba\Classes\Database\Database;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 class ProcessExceptionListener
 {
 	public function __construct(
-		protected AbstractLogger $logger,
+		protected LoggerInterface $logger,
 		protected Database $database,
 		protected ProcessGateway $processGateway,
 		protected string $processName
@@ -30,7 +30,7 @@ class ProcessExceptionListener
 			$exception->getFile(),
 			$exception->getLine(),
 			$exception->getTraceAsString(),
-			AbstractLogger::LOG_LEVEL_ERROR
+			LogLevel::ERROR,
 		);
 	}
 
@@ -43,19 +43,18 @@ class ProcessExceptionListener
 			$error->getFile(),
 			$error->getLine(),
 			$error->getTraceAsString(),
-			AbstractLogger::LOG_LEVEL_CRITICAL
+			LogLevel::CRITICAL,
 		);
 	}
 
 	public function process(object $event, string $message, string $file, int $line, string $trace, string $level): void
 	{
-		$this->logger->log(json_encode([
+		$this->logger->log($level, $message, [
 			'process' => $this->processName,
-			'message' => $message,
 			'file' => $file,
 			'line' => $line,
 			'task' => $event->getTask()
-		]), $level);
+		]);
 		
 		if ($this->database->inTransaction()) {
 			$this->database->rollBack();
