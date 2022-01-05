@@ -3,6 +3,7 @@
 namespace Asylamba\Classes\Kernel;
 
 use Asylamba\Classes\Library\Module;
+use Asylamba\Classes\Messenger\SendersLocator;
 use Asylamba\Classes\Worker\Manager;
 use Asylamba\Modules\Ares\AresModule;
 use Asylamba\Modules\Artemis\ArtemisModule;
@@ -16,9 +17,19 @@ use Asylamba\Modules\Promethee\PrometheeModule;
 use Asylamba\Modules\Zeus\ZeusModule;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpSender;
+use Symfony\Component\Messenger\Bridge\Amqp\Transport\Connection;
+use Symfony\Component\Messenger\DependencyInjection\MessengerPass;
+use Symfony\Component\Messenger\Handler\HandlersLocator;
+use Symfony\Component\Messenger\MessageBus;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Middleware\HandleMessageMiddleware;
+use Symfony\Component\Messenger\Middleware\SendMessageMiddleware;
 
 abstract class Kernel implements KernelInterface
 {
@@ -31,9 +42,8 @@ abstract class Kernel implements KernelInterface
 		$containerBuilder = new ContainerBuilder();
 		$containerBuilder->set('container', $containerBuilder);
 		$containerBuilder->setParameter('root_path', $this->projectDir);
-		$containerBuilder->addCompilerPass(new RegisterListenersPass());
-		$containerBuilder->register(EventDispatcher::class, EventDispatcher::class);
-		$containerBuilder->setAlias('event_dispatcher', EventDispatcher::class);
+		$this->buildEventDispatcher($containerBuilder);
+		$this->buildMessenger($containerBuilder);
 
 		$this->loadEnvironment($containerBuilder);
 
@@ -44,6 +54,18 @@ abstract class Kernel implements KernelInterface
 		$containerBuilder->registerForAutoconfiguration(Manager::class)->addTag('app.stateful_manager');
 
 		return $containerBuilder;
+	}
+
+	protected function buildEventDispatcher(ContainerBuilder $containerBuilder): void
+	{
+		$containerBuilder->addCompilerPass(new RegisterListenersPass());
+		$containerBuilder->register(EventDispatcherInterface::class, EventDispatcher::class);
+		$containerBuilder->setAlias('event_dispatcher', EventDispatcherInterface::class);
+	}
+
+	protected function buildMessenger(ContainerBuilder $containerBuilder): void
+	{
+		$containerBuilder->addCompilerPass(new MessengerPass());
 	}
 
 	protected function loadEnvironment(ContainerBuilder $container): void

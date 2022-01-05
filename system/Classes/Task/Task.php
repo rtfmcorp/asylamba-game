@@ -4,16 +4,11 @@ namespace Asylamba\Classes\Task;
 
 abstract class Task implements \JsonSerializable
 {
-    /** @var string **/
-    protected $id;
-    /** @var string **/
-    protected $manager;
-    /** @var string **/
-    protected $method;
-    /** @var float **/
-    protected $estimatedTime;
-    /** @var float **/
-    protected $time;
+    protected string $id;
+    protected string $manager;
+    protected string $method;
+    protected float $estimatedTime;
+    protected float $time;
     
     const TYPE_TECHNICAL = 'technical';
     const TYPE_REALTIME = 'realtime';

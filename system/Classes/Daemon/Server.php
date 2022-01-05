@@ -21,7 +21,7 @@ use Asylamba\Classes\Process\ProcessManager;
 use Asylamba\Classes\Task\TaskManager;
 use Asylamba\Classes\Worker\Manager;
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class Server
@@ -42,7 +42,7 @@ class Server
 		protected RealTimeActionScheduler $realTimeActionScheduler,
 		protected CyclicActionScheduler $cyclicActionScheduler,
 		protected TaskManager $taskManager,
-		protected EventDispatcher $eventDispatcher,
+		protected EventDispatcherInterface $eventDispatcher,
 		protected iterable $statefulManagers,
 		protected int $serverCycleTimeout,
 		protected int $port,

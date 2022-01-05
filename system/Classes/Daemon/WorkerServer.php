@@ -14,6 +14,7 @@ use Asylamba\Classes\Task\TaskManager;
 use Asylamba\Classes\Worker\Manager;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class WorkerServer
 {
@@ -26,7 +27,7 @@ class WorkerServer
 		protected Container $container,
 		protected Database $database,
 		protected TaskManager $taskManager,
-		protected EventDispatcher $eventDispatcher,
+		protected EventDispatcherInterface $eventDispatcher,
 		protected MemoryManager $memoryManager,
 		protected ProcessManager $processManager,
 		protected ProcessGateway $processGateway,

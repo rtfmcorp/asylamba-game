@@ -491,33 +491,6 @@ class OrbitalBaseManager
 		);
 	}
 
-	public function uBuildingQueue($queueId) {
-		$queue = $this->buildingQueueManager->get($queueId);
-		$orbitalBase = $this->get($queue->rOrbitalBase);
-		$player = $this->playerManager->get($orbitalBase->rPlayer);
-		# update builded building
-		$orbitalBase->setBuildingLevel($queue->buildingNumber, ($orbitalBase->getBuildingLevel($queue->buildingNumber) + 1));
-		# update the points of the orbitalBase
-		$earnedPoints = $this->updatePoints($orbitalBase);
-		$this->entityManager->getRepository(OrbitalBase::class)->increaseBuildingLevel(
-			$orbitalBase,
-			$this->orbitalBaseHelper->getBuildingInfo($queue->buildingNumber, 'column'),
-			$earnedPoints
-		);
-		# increase player experience
-		$experience = $this->orbitalBaseHelper->getBuildingInfo($queue->buildingNumber, 'level', $queue->targetLevel, 'points');
-		$this->playerManager->increaseExperience($player, $experience);
-		
-		# alert
-		if (($session = $this->clientManager->getSessionByPlayerId($player->getId())) !== null) {
-			$session->addFlashbag('Construction de votre <strong>' . $this->orbitalBaseHelper->getBuildingInfo($queue->buildingNumber, 'frenchName') . ' niveau ' . $queue->targetLevel . '</strong> sur <strong>' . $orbitalBase->name . '</strong> terminée. Vous gagnez ' . $experience . ' point' . Format::addPlural($experience) . ' d\'expérience.', Flashbag::TYPE_GENERATOR_SUCCESS);
-			$this->sessionWrapper->save($session);
-		}
-		# delete queue in database
-		$this->entityManager->remove($queue);
-		$this->entityManager->flush($queue);
-	}
-
 	public function uShipQueue1($shipQueueId) {
 		$queue = $this->shipQueueManager->get($shipQueueId);
 		$orbitalBase = $this->get($queue->rOrbitalBase);

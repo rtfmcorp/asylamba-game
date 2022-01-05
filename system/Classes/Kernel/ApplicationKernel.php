@@ -33,11 +33,11 @@ class ApplicationKernel extends Kernel
 	{
 		$this->container->get(Database::class)->init($this->container->getParameter('root_path') . '/build/database/structure.sql');
 		$this->container->get(EntityManager::class)->init();
-        $this->container->get(ProcessManager::class)->launchProcesses();
+        //$this->container->get(ProcessManager::class)->launchProcesses();
 		$this->container->get(RealTimeActionScheduler::class)->init();
 		$this->container->get(CyclicActionScheduler::class)->init();
         $this->container->get(SectorManager::class)->initOwnershipData();
-        
+
 		$server = $this->container->get(Server::class);
 		$server->createHttpServer();
 		$server->listen();

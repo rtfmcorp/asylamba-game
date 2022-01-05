@@ -37,6 +37,7 @@ use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
 use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class CommanderManager
@@ -59,7 +60,7 @@ class CommanderManager
 		protected ColorManager $colorManager,
 		protected NotificationManager $notificationManager,
 		protected RealTimeActionScheduler $realtimeActionScheduler,
-		protected EventDispatcher $eventDispatcher,
+		protected EventDispatcherInterface $eventDispatcher,
 		protected int $commanderBaseLevel,
 	) {
 	}

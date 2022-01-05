@@ -26,13 +26,14 @@ use Asylamba\Modules\Gaia\Model\System;
 
 use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class PlaceManager
 {
 	public function __construct(
 		protected EntityManager $entityManager,
 		protected NotificationManager $notificationManager,
-		protected EventDispatcher $eventDispatcher
+		protected EventDispatcherInterface $eventDispatcher
 	) {
 
 	}

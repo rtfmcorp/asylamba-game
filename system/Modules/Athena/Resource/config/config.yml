@@ -26,11 +26,19 @@ services:
         autoconfigure: true
         public: true
 
+    _instanceof:
+        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
+            tags:
+                - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
+
     Asylamba\Modules\Athena\Helper\:
         resource: '%root_path%/system/Modules/Athena/Helper/*'
 
     Asylamba\Modules\Athena\Manager\:
         resource: '%root_path%/system/Modules/Athena/Manager/*'
+
+    Asylamba\Modules\Athena\Handler\:
+        resource: '%root_path%/system/Modules/Athena/Handler/*'
 
     Asylamba\Modules\Athena\Manager\CommercialShippingManager:
         arguments:
