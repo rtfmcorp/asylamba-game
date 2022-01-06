@@ -251,44 +251,6 @@ class CommanderManager
 		}
 	}
 
-	public function uExperienceInSchool()
-	{
-		$now = Utils::now();
-		$commanders = $this->entityManager->getRepository(Commander::class)->getAllByStatements([Commander::INSCHOOL]);
-		$this->entityManager->beginTransaction();
-		
-		foreach ($commanders as $commander) {
-			// If the commander was updated recently, we skip him
-			if (Utils::interval($commander->uCommander, $now, 'h') === 0) {
-				continue;
-			}
-			
-			$nbrHours = Utils::intervalDates($now, $commander->uCommander);
-			$commander->uCommander = $now;
-			$orbitalBase = $this->orbitalBaseManager->get($commander->rBase);
-			
-			$playerBonus = $this->playerBonusManager->getBonusByPlayer($this->playerManager->get($commander->rPlayer));
-			$this->playerBonusManager->load($playerBonus);
-			$playerBonus = $playerBonus->bonus;
-			foreach ($nbrHours as $hour) {
-				$invest  = $orbitalBase->iSchool;
-				$invest += $invest * $playerBonus->get(PlayerBonus::COMMANDER_INVEST) / 100;
-
-				# xp gagnée
-				$earnedExperience  = $invest / Commander::COEFFSCHOOL;
-				$earnedExperience += (rand(0, 1) == 1) 
-					? rand(0, $earnedExperience / 20)
-					: -(rand(0, $earnedExperience / 20));
-				$earnedExperience  = round($earnedExperience);
-				$earnedExperience  = ($earnedExperience < 0)
-					? 0 : $earnedExperience;
-
-				$this->upExperience($commander, $earnedExperience);
-			}
-		}
-		$this->entityManager->commit();
-	}
-
 	public function move(Commander $commander, $rDestinationPlace, $rStartPlace, $travelType, $travelLength, $duration) {
 		$commander->rDestinationPlace = $rDestinationPlace;
 		$commander->rStartPlace = $rStartPlace;

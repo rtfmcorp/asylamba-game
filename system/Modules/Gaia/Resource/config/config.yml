@@ -10,6 +10,11 @@ services:
         autoconfigure: true
         public: true
 
+    _instanceof:
+        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
+            tags:
+                - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
+
     Asylamba\Modules\Gaia\Manager\:
         resource: '%root_path%/system/Modules/Gaia/Manager/*'
 

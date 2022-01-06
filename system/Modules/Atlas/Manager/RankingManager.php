@@ -32,94 +32,15 @@ class RankingManager
 {
 	public function __construct(
 		protected EntityManager $entityManager,
-		protected PlayerRankingManager $playerRankingManager,
-		protected FactionRankingManager $factionRankingManager,
 		protected ColorManager $colorManager,
 		protected ConversationManager $conversationManager,
 		protected ConversationMessageManager $conversationMessageManager,
-		protected PlayerManager $playerManager,
-		protected OrbitalBaseHelper $orbitalBaseHelper,
 		protected string $pointsToWin,
 		protected int $jeanMiId
 	) {
 	}
 	
-	public function processPlayersRanking(): void
-	{
-		if ($this->entityManager->getRepository(Ranking::class)->hasBeenAlreadyProcessed(true, false) === true) {
-			return;
-		}
-		$playerRoutine = new PlayerRoutine();
-		
-		$players = $this->playerManager->getByStatements([Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]);
-		
-		$playerRankingRepository = $this->entityManager->getRepository(PlayerRanking::class);
-		
-		$S_PRM1 = $this->playerRankingManager->getCurrentSession();
-		$this->playerRankingManager->newSession();
-		$this->playerRankingManager->loadLastContext();
-		
-		$ranking = $this->createRanking(true, false);
-		
-		$playerRoutine->execute(
-			$players,
-			$playerRankingRepository->getPlayersResources(),
-			$playerRankingRepository->getPlayersResourcesData(),
-			$playerRankingRepository->getPlayersGeneralData(),
-			$playerRankingRepository->getPlayersArmiesData(),
-			$playerRankingRepository->getPlayersPlanetData(),
-			$playerRankingRepository->getPlayersTradeRoutes(),
-			$playerRankingRepository->getPlayersLinkedTradeRoutes(),
-			$playerRankingRepository->getAttackersButcherRanking(),
-			$playerRankingRepository->getDefendersButcherRanking(),
-			$this->orbitalBaseHelper
-		);
-
-		$playerRoutine->processResults($ranking, $players, $this->playerRankingManager, $playerRankingRepository);
-		
-		$this->playerRankingManager->changeSession($S_PRM1);
-		
-		$this->entityManager->flush();
-	}
-	
-	public function processFactionsRanking()
-	{
-		if ($this->entityManager->getRepository(Ranking::class)->hasBeenAlreadyProcessed(false, true) === true) {
-			return;
-		}
-		$factionRoutine = new FactionRoutine();
-		
-		$factions = $this->colorManager->getInGameFactions();
-		$playerRankingRepository = $this->entityManager->getRepository(PlayerRanking::class);
-		$factionRankingRepository = $this->entityManager->getRepository(FactionRanking::class);
-		$sectors = $this->entityManager->getRepository(Sector::class)->getAll();
-		
-		$S_FRM1 = $this->factionRankingManager->getCurrentSession();
-		$this->factionRankingManager->newSession();
-		$this->factionRankingManager->loadLastContext();
-		
-		$ranking = $this->createRanking(false, true);
-		
-		foreach ($factions as $faction) {
-			$this->colorManager->updateInfos($faction);
-			
-			$routesIncome = $factionRankingRepository->getRoutesIncome($faction);
-			$playerRankings = $playerRankingRepository->getFactionPlayerRankings($faction);
-			
-			$factionRoutine->execute($faction, $playerRankings, $routesIncome, $sectors);
-		}
-		
-		$winningFactionId = $factionRoutine->processResults($ranking, $factions, $this->factionRankingManager);
-
-		$this->factionRankingManager->changeSession($S_FRM1);
-		
-		if ($winningFactionId !== null) {
-			$this->processWinningFaction($winningFactionId);
-		}
-		$this->entityManager->flush();
-	}
-	
-	protected function processWinningFaction($factionId)
+	public function processWinningFaction($factionId)
 	{
 		$faction = $this->colorManager->get($factionId);
 		$faction->isWinner = Color::WIN;
@@ -164,7 +85,7 @@ class RankingManager
 		$this->conversationManager->changeSession($S_CVM1);
 	}
 	
-	protected function createRanking($isPlayer, $isFaction)
+	public function createRanking(bool $isPlayer, bool $isFaction): Ranking
 	{
 		$ranking =
 			(new Ranking())

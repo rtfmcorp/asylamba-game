@@ -391,58 +391,6 @@ class OrbitalBaseManager
 		return $points - $initialPoints;
 	}
 	
-	public function updateBases()
-	{
-		$repository = $this->entityManager->getRepository(OrbitalBase::class);
-		$bases = $repository->getAll();
-		$this->entityManager->beginTransaction();
-		$now = Utils::now();
-		
-		foreach ($bases as $base) {
-			# update time
-			$hours = Utils::intervalDates($now, $base->uOrbitalBase);
-
-			if (count($hours) === 0) {
-				continue;
-			}
-			$player = $this->playerManager->get($base->rPlayer);
-			$playerBonus = $this->playerBonusManager->getBonusByPlayer($player);
-			$this->playerBonusManager->load($playerBonus);
-			$base->setUpdatedAt($now);
-			$initialResources = $base->resourcesStorage;
-			$initialAntiSpyAverage = $base->antiSpyAverage;
-			
-			foreach ($hours as $hour) {
-				$this->updateResources($base, $playerBonus);
-				$this->updateAntiSpy($base);
-			}
-			
-			$repository->updateBase(
-				$base,
-				$base->resourcesStorage - $initialResources,
-				$base->antiSpyAverage - $initialAntiSpyAverage
-			);
-		}
-		$this->entityManager->commit();
-	}
-	
-	/**
-	 * @param OrbitalBase $orbitalBase
-	 * @param PlayerBonus $playerBonus
-	 */
-	protected function updateResources(OrbitalBase $orbitalBase, PlayerBonus $playerBonus)
-	{
-		$addResources = Game::resourceProduction($this->orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::REFINERY, 'level', $orbitalBase->levelRefinery, 'refiningCoefficient'), $orbitalBase->planetResources);
-		$addResources += $addResources * $playerBonus->bonus->get(PlayerBonus::REFINERY_REFINING) / 100;
-
-		$this->increaseResources($orbitalBase, (int) $addResources, false, false);
-	}
-	
-	protected function updateAntiSpy(OrbitalBase $orbitalBase)
-	{
-		$orbitalBase->antiSpyAverage = round((($orbitalBase->antiSpyAverage * (24 - 1)) + ($orbitalBase->iAntiSpy)) / 24);
-	}
-	
 	/**
 	 * @param OrbitalBase $orbitalBase
 	 * @param int $resources

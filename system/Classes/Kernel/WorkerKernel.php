@@ -4,7 +4,6 @@ namespace Asylamba\Classes\Kernel;
 
 use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Entity\EntityManager;
-use Asylamba\Classes\Messenger\BusListener;
 use Symfony\Component\Messenger\Worker;
 
 class WorkerKernel extends Kernel

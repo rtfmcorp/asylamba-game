@@ -5,7 +5,12 @@ services:
         autoconfigure: true
         public: true
 
-    Asylamba\Modules\Hephaistos\Manager\TechnicalManager:
+    _instanceof:
+        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
+            tags:
+                - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
+
+    Asylamba\Modules\Hephaistos\Handler\DailyRoutineHandler:
         arguments:
             $apiMode: "%apimode%"
             $playerInactiveTimeLimit: "%zeus.player.inactive_time_limit%"

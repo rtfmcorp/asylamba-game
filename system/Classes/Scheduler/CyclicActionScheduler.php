@@ -2,57 +2,53 @@
 
 namespace Asylamba\Classes\Scheduler;
 
-use Asylamba\Classes\Task\TaskManager;
-use Asylamba\Classes\Process\LoadBalancer;
+use Asylamba\Modules\Ares\Message\CommandersExperienceMessage;
+use Asylamba\Modules\Athena\Message\Base\BasesUpdateMessage;
+use Asylamba\Modules\Atlas\Message\FactionRankingMessage;
+use Asylamba\Modules\Atlas\Message\PlayerRankingMessage;
+use Asylamba\Modules\Gaia\Message\NpcsPlacesUpdateMessage;
+use Asylamba\Modules\Gaia\Message\PlayersPlacesUpdateMessage;
+use Asylamba\Modules\Hephaistos\Message\DailyRoutineMessage;
+use Asylamba\Modules\Zeus\Message\PlayersCreditsUpdateMessage;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class CyclicActionScheduler
 {
-    protected TaskManager $taskManager;
-	protected LoadBalancer $loadBalancer;
 	protected ?int $lastExecutedDay = null;
 	protected ?int $lastExecutedHour = null;
-	protected ?int $dailyScriptHour = null;
-	/** @var array **/
-	protected array $queue = [];
+	/** @var array<string, list<class-string>> **/
+	protected array $queues = [
+		self::TYPE_DAILY => [
+			DailyRoutineMessage::class,
+			FactionRankingMessage::class,
+			PlayerRankingMessage::class,
+		],
+		self::TYPE_HOURLY => [
+			BasesUpdateMessage::class,
+			CommandersExperienceMessage::class,
+			NpcsPlacesUpdateMessage::class,
+			PlayersCreditsUpdateMessage::class,
+			PlayersPlacesUpdateMessage::class,
+		],
+	];
 	
 	const TYPE_HOURLY = 'hourly';
 	const TYPE_DAILY = 'daily';
 
-	public function __construct(TaskManager $taskManager, LoadBalancer $loadBalancer, int $dailyScriptHour)
-	{
-        $this->taskManager = $taskManager;
-        $this->loadBalancer = $loadBalancer;
-		$this->dailyScriptHour = $dailyScriptHour;
+	public function __construct(
+		protected MessageBusInterface $messageBus,
+		protected int $dailyScriptHour
+	) {
 	}
 	
-	public function init()
+	public function init(): void
 	{
-		$this->schedule('ares.commander_manager', 'uExperienceInSchool', self::TYPE_HOURLY);
-		$this->schedule('athena.orbital_base_manager', 'updateBases', self::TYPE_HOURLY);
-		$this->schedule('gaia.place_manager', 'updatePlayerPlaces', self::TYPE_HOURLY);
-		$this->schedule('gaia.place_manager', 'updateNpcPlaces', self::TYPE_HOURLY);
-		$this->schedule('zeus.player_manager', 'updatePlayersCredits', self::TYPE_HOURLY);
-		$this->schedule('atlas.ranking_manager', 'processPlayersRanking', self::TYPE_DAILY);
-		$this->schedule('atlas.ranking_manager', 'processFactionsRanking', self::TYPE_DAILY);
-		$this->schedule('hephaistos.technical_manager', 'processDailyRoutine', self::TYPE_DAILY);
 		$this->execute();
 	}
 	
-    /**
-     * @param string $manager
-     * @param string $method
-	 * @param string $type
-     */
-	public function schedule($manager, $method, $type) {
-		$this->{"{$type}Queue"}[] = $this->taskManager->createCyclicTask($manager, $method);
-	}
-	
-	/**
-	 * {@inheritdoc}
-	 */
 	public function execute()
 	{
-		if (($currentHour = date('H')) === $this->lastExecutedHour) {
+		if (($currentHour = intval(date('H'))) === $this->lastExecutedHour) {
 			return;
 		}
 		$this->executeHourly();
@@ -60,29 +56,24 @@ class CyclicActionScheduler
 		$this->lastExecutedHour = $currentHour;
 	}
 	
-	protected function executeHourly()
+	protected function executeHourly(): void
 	{
-		foreach ($this->hourlyQueue as $task) {
-            $this->loadBalancer->affectTask($task);
-		}
+		$this->processQueue(self::TYPE_HOURLY);
 	}
 	
-	protected function executeDaily($currentHour)
+	protected function executeDaily(int $currentHour): void
 	{
-		if (($currentDay = date('d')) === $this->lastExecutedDay || ($currentHour < $this->dailyScriptHour)) {
+		if (($currentDay = intval(date('d'))) === $this->lastExecutedDay || ($currentHour < $this->dailyScriptHour)) {
 			return;
 		}
-		foreach ($this->dailyQueue as $task) {
-			$this->loadBalancer->affectTask($task);
-		}
+		$this->processQueue(self::TYPE_DAILY);
 		$this->lastExecutedDay = $currentDay;
 	}
-	
-	/**
-	 * @return array
-	 */
-	public function getQueue()
+
+	protected function processQueue(string $queue): void
 	{
-		return $this->queue;
+		foreach ($this->queues[$queue] as $messageClass) {
+			$this->messageBus->dispatch(new $messageClass());
+		}
 	}
 }

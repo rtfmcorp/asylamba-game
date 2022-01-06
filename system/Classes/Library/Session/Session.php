@@ -138,7 +138,8 @@ class Session {
      * @param string $type
      * @return boolean
      */
-    public function addBase($key, $id, $name, $sector, $system, $img, $type) {
+    public function addBase($key, $id, $name, $sector, $system, $img, $type): bool
+	{
         if ($this->exist('playerBase')) {
             if ($key != 'ob' && $key != 'ms') {
                 return false;
@@ -153,7 +154,10 @@ class Session {
             $a->add('type', $type);
 
             $this->get('playerBase')->get($key)->append($a);
+
+			return true;
         }
+		return false;
     }
 
     /**
