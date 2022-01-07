@@ -86,7 +86,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 
 					$entityManager->flush();
 					$entityManager->clear(CommercialRoute::class);
-					if (DATA_ANALYSIS) {
+					if (true === $this->getContainer()->getParameter('data_analysis')) {
 						$qr = $database->prepare('INSERT INTO 
 							DA_CommercialRelation(`from`, `to`, type, weight, dAction)
 							VALUES(?, ?, ?, ?, ?)'

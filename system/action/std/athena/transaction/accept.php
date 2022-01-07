@@ -125,7 +125,7 @@ if ($rPlace !== FALSE AND $rTransaction !== FALSE AND in_array($rPlace, $verif))
 				$n->addEnd();
 				$notificationManager->add($n);
 
-				if (DATA_ANALYSIS) {
+				if (true === $this->getContainer()->getParameter('data_analysis')) {
 					$qr = $database->prepare('INSERT INTO 
 						DA_CommercialRelation(`from`, `to`, type, weight, dAction)
 						VALUES(?, ?, ?, ?, ?)'

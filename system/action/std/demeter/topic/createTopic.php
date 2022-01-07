@@ -49,7 +49,7 @@ if ($title !== FALSE AND $content !== FALSE AND $rForum !== FALSE) {
 		$tutorialHelper->setStepDone();
 	}
 
-	if (DATA_ANALYSIS) {
+	if (true === $this->getContainer()->getParameter('data_analysis')) {
 		$qr = $database->prepare('INSERT INTO 
 			DA_SocialRelation(`from`, type, message, dAction)
 			VALUES(?, ?, ?, ?)'

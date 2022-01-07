@@ -22,6 +22,7 @@ class PlayerRankingHandler implements MessageHandlerInterface
 		protected PlayerRankingManager $playerRankingManager,
 		protected RankingManager $rankingManager,
 		protected OrbitalBaseHelper $orbitalBaseHelper,
+		protected bool $dataAnalysis,
 	) {
 
 	}
@@ -31,15 +32,15 @@ class PlayerRankingHandler implements MessageHandlerInterface
 		if ($this->entityManager->getRepository(Ranking::class)->hasBeenAlreadyProcessed(true, false) === true) {
 			return;
 		}
-		$playerRoutine = new PlayerRoutine();
+		$playerRoutine = new PlayerRoutine($this->dataAnalysis);
 
 		$players = $this->playerManager->getByStatements([Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]);
 
 		$playerRankingRepository = $this->entityManager->getRepository(PlayerRanking::class);
 
-		$S_PRM1 = $this->playerRankingManager->getCurrentSession();
-		$this->playerRankingManager->newSession();
-		$this->playerRankingManager->loadLastContext();
+		//$S_PRM1 = $this->playerRankingManager->getCurrentSession();
+		//$this->playerRankingManager->newSession();
+		//$this->playerRankingManager->loadLastContext();
 
 		$ranking = $this->rankingManager->createRanking(true, false);
 
@@ -59,7 +60,7 @@ class PlayerRankingHandler implements MessageHandlerInterface
 
 		$playerRoutine->processResults($ranking, $players, $this->playerRankingManager, $playerRankingRepository);
 
-		$this->playerRankingManager->changeSession($S_PRM1);
+		//$this->playerRankingManager->changeSession($S_PRM1);
 
 		$this->entityManager->flush();
 	}

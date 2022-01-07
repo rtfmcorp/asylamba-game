@@ -120,7 +120,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND in_array($baseId, $verif)) 
 										$notificationManager->add($n);
 									}
 
-									if (DATA_ANALYSIS) {
+									if (true === $this->getContainer()->getParameter('data_analysis')) {
 										$qr = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class)->prepare('INSERT INTO 
 											DA_CommercialRelation(`from`, `to`, type, weight, dAction)
 											VALUES(?, ?, ?, ?, ?)'

@@ -91,7 +91,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND $quantity !== FALSE AND in_
 								$notificationManager->add($n);
 							}
 
-							if (DATA_ANALYSIS) {
+							if (true === $this->getContainer()->getParameter('data_analysis')) {
 								$qr = $database->prepare('INSERT INTO 
 									DA_CommercialRelation(`from`, `to`, type, weight, dAction)
 									VALUES(?, ?, ?, ?, ?)'

@@ -87,7 +87,7 @@ if (!empty($recipients) && !empty($content)) {
 
 				$conversationMessageManager->add($message);
 
-				if (DATA_ANALYSIS) {
+				if (true === $this->getContainer()->getParameter('data_analysis')) {
 					$qr = $database->prepare('INSERT INTO 
 						DA_SocialRelation(`from`, `to`, `type`, `message`, dAction)
 						VALUES(?, ?, ?, ?, ?)'

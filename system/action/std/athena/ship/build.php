@@ -112,9 +112,9 @@ if ($baseId !== FALSE AND $ship !== FALSE AND $quantity !== FALSE AND in_array($
 				$orbitalBaseManager->decreaseResources($ob, $resourcePrice);
 
 				// ajout de l'event dans le contrôleur
-				$session->get('playerEvent')->add($sq->dEnd, EVENT_BASE, $baseId);
+				$session->get('playerEvent')->add($sq->dEnd, $this->getContainer()->getParameter('event_base'), $baseId);
 
-				if (DATA_ANALYSIS) {
+				if (true === $this->getContainer()->getParameter('data_analysis')) {
 					$qr = $database->prepare('INSERT INTO 
 						DA_BaseAction(`from`, type, opt1, opt2, weight, dAction)
 						VALUES(?, ?, ?, ?, ?, ?)'

@@ -18,10 +18,14 @@ use Asylamba\Modules\Atlas\Model\PlayerRanking;
 
 class PlayerRoutine
 {
-	/** @var array **/
-	protected $results;
+	protected array $results = [];
 	
 	const COEF_RESOURCE = 0.001;
+
+	public function __construct(protected bool $dataAnalysis)
+	{
+
+	}
 	
 	public function execute(
 		$players,
@@ -34,9 +38,8 @@ class PlayerRoutine
 		\PDOStatement $linkedTradeRoutesStatement,
 		\PDOStatement $attackersStatement,
 		\PDOStatement $defendersStatement,
-		OrbitalBaseHelper $orbitalBaseHelper
-	)
-	{
+		OrbitalBaseHelper $orbitalBaseHelper,
+	) {
 		$this->results = [];
 		# create an array with all the players
 		foreach ($players as $player) {
@@ -168,7 +171,7 @@ class PlayerRoutine
 
 			$playerRankingManager->add($pr);
 
-			if (DATA_ANALYSIS) {
+			if (true === $this->dataAnalysis) {
 				$playerRankingRepository->insertDataAnalysis(
 					$player,
 					$pr,
