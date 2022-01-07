@@ -11,7 +11,7 @@ class HermesModuleTest extends \PHPUnit\Framework\TestCase
 	/** @var HermesModule **/
 	protected $module;
 	
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->module = new HermesModule($this->getApplicationMock());
 	}

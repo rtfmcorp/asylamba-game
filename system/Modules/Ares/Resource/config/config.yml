@@ -19,9 +19,18 @@ services:
         autoconfigure: true
         public: true
 
+    _instanceof:
+        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
+            tags:
+                - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
+
+    Asylamba\Modules\Ares\Handler\:
+        resource: '%root_path%/system/Modules/Ares/Handler/*'
+
     Asylamba\Modules\Ares\Manager\:
         resource: '%root_path%/system/Modules/Ares/Manager/*'
 
     Asylamba\Modules\Ares\Manager\CommanderManager:
         arguments:
             $commanderBaseLevel: "%ares.commander.base_level%"
+            $gaiaId: '%id_gaia%'

@@ -112,7 +112,7 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 					// débit des crédits
 					$playerManager->decreaseCredit($playerManager->get($session->get('playerId')), $technologyHelper->getInfo($techno, 'credit', $targetLevel));
 
-					if (DATA_ANALYSIS) {
+					if (true === $this->getContainer()->getParameter('data_analysis')) {
 						$qr = $database->prepare('INSERT INTO 
 							DA_BaseAction(`from`, type, opt1, opt2, weight, dAction)
 							VALUES(?, ?, ?, ?, ?, ?)'

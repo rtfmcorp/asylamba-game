@@ -11,7 +11,7 @@ class AthenaModuleTest extends \PHPUnit\Framework\TestCase
 	/** @var AthenaModule **/
 	protected $module;
 	
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->module = new AthenaModule($this->getApplicationMock());
 	}

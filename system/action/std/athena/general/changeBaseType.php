@@ -60,7 +60,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 									break;
 								}
 							}
-							if (DATA_ANALYSIS) {
+							if (true === $this->getContainer()->getParameter('data_analysis')) {
 								$qr = $database->prepare('INSERT INTO 
 									DA_BaseAction(`from`, type, opt1, weight, dAction)
 									VALUES(?, ?, ?, ?, ?)'
@@ -88,7 +88,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 								}
 							}
 
-							if (DATA_ANALYSIS) {
+							if (true === $this->getContainer()->getParameter('data_analysis')) {
 								$qr = $database->prepare('INSERT INTO 
 									DA_BaseAction(`from`, type, opt1, weight, dAction)
 									VALUES(?, ?, ?, ?, ?)'
@@ -132,7 +132,7 @@ if ($baseId !== FALSE AND $type !== FALSE AND in_array($baseId, $verif)) {
 								}
 							}
 
-							if (DATA_ANALYSIS) {
+							if (true === $this->getContainer()->getParameter('data_analysis')) {
 								$qr = $database->prepare('INSERT INTO 
 									DA_BaseAction(`from`, type, opt1, weight, dAction)
 									VALUES(?, ?, ?, ?, ?)'

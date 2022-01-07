@@ -14,14 +14,14 @@
 namespace Asylamba\Modules\Ares\Manager;
 
 use Asylamba\Classes\Entity\EntityManager;
+use Asylamba\Classes\Library\DateTimeConverter;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Library\Game;
+use Asylamba\Modules\Ares\Message\CommanderTravelMessage;
 use Asylamba\Modules\Athena\Manager\OrbitalBaseManager;
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
 use Asylamba\Modules\Zeus\Manager\PlayerBonusManager;
 use Asylamba\Modules\Gaia\Manager\PlaceManager;
-use Asylamba\Modules\Demeter\Manager\ColorManager;
-use Asylamba\Modules\Hermes\Manager\NotificationManager;
 use Asylamba\Classes\Container\ArrayList;
 
 use Asylamba\Modules\Athena\Model\OrbitalBase;
@@ -31,22 +31,11 @@ use Asylamba\Modules\Ares\Model\LiveReport;
 use Asylamba\Modules\Zeus\Model\PlayerBonus;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Gaia\Resource\SquadronResource;
-use Asylamba\Modules\Demeter\Model\Color;
-
-use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
-
-use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class CommanderManager
 {
-	protected array $actions = [
-		Commander::MOVE => 'uChangeBase',
-		Commander::LOOT => 'uLoot',
-		Commander::COLO => 'uConquer',
-		Commander::BACK => 'uReturnBase'
-	];
 	protected FightManager $fightManager;
 	protected PlayerManager $playerManager;
 
@@ -56,11 +45,9 @@ class CommanderManager
 		protected OrbitalBaseManager $orbitalBaseManager,
 		protected PlayerBonusManager $playerBonusManager,
 		protected PlaceManager $placeManager,
-		protected ColorManager $colorManager,
-		protected NotificationManager $notificationManager,
-		protected RealTimeActionScheduler $realtimeActionScheduler,
-		protected EventDispatcher $eventDispatcher,
+		protected MessageBusInterface $messageBus,
 		protected int $commanderBaseLevel,
+		protected int $gaiaId,
 	) {
 	}
 
@@ -90,7 +77,10 @@ class CommanderManager
 	{
 		return $this->entityManager->getRepository(Commander::class)->getPlayerCommanders($playerId, $statements, $orderBy);
 	}
-	
+
+	/**
+	 * @return list<Commander>
+	 */
 	public function getMovingCommanders(): array
 	{
 		return $this->entityManager->getRepository(Commander::class)->getMovingCommanders();
@@ -143,16 +133,11 @@ class CommanderManager
 	public function scheduleMovements(): void
 	{
 		$commanders = $this->getMovingCommanders();
+
 		foreach ($commanders as $commander) {
-			$this->realtimeActionScheduler->schedule(
-				'ares.commander_manager',
-				$this->actions[$commander->getTravelType()],
-				$commander,
-				$commander->dArrival,
-				[
-					'class' => Place::class,
-					'id' => $commander->getRPlaceDestination()
-				]
+			$this->messageBus->dispatch(
+				new CommanderTravelMessage($commander->getId()),
+				[DateTimeConverter::to_delay_stamp($commander->getArrivalDate())],
 			);
 		}
 	}
@@ -250,45 +235,8 @@ class CommanderManager
 		}
 	}
 
-	public function uExperienceInSchool()
+	public function move(Commander $commander, int $rDestinationPlace, int $rStartPlace, string $travelType, int $travelLength, int $duration): void
 	{
-		$now = Utils::now();
-		$commanders = $this->entityManager->getRepository(Commander::class)->getAllByStatements([Commander::INSCHOOL]);
-		$this->entityManager->beginTransaction();
-		
-		foreach ($commanders as $commander) {
-			// If the commander was updated recently, we skip him
-			if (Utils::interval($commander->uCommander, $now, 'h') === 0) {
-				continue;
-			}
-			
-			$nbrHours = Utils::intervalDates($now, $commander->uCommander);
-			$commander->uCommander = $now;
-			$orbitalBase = $this->orbitalBaseManager->get($commander->rBase);
-			
-			$playerBonus = $this->playerBonusManager->getBonusByPlayer($this->playerManager->get($commander->rPlayer));
-			$this->playerBonusManager->load($playerBonus);
-			$playerBonus = $playerBonus->bonus;
-			foreach ($nbrHours as $hour) {
-				$invest  = $orbitalBase->iSchool;
-				$invest += $invest * $playerBonus->get(PlayerBonus::COMMANDER_INVEST) / 100;
-
-				# xp gagnée
-				$earnedExperience  = $invest / Commander::COEFFSCHOOL;
-				$earnedExperience += (rand(0, 1) == 1) 
-					? rand(0, $earnedExperience / 20)
-					: -(rand(0, $earnedExperience / 20));
-				$earnedExperience  = round($earnedExperience);
-				$earnedExperience  = ($earnedExperience < 0)
-					? 0 : $earnedExperience;
-
-				$this->upExperience($commander, $earnedExperience);
-			}
-		}
-		$this->entityManager->commit();
-	}
-
-	public function move(Commander $commander, $rDestinationPlace, $rStartPlace, $travelType, $travelLength, $duration) {
 		$commander->rDestinationPlace = $rDestinationPlace;
 		$commander->rStartPlace = $rStartPlace;
 		$commander->travelType = $travelType;
@@ -301,16 +249,10 @@ class CommanderManager
 		$date = new \DateTime($commander->dStart);
 		$date->modify('+' . $duration . 'second');
 		$commander->dArrival = $date->format('Y-m-d H:i:s');
-		
-		$this->realtimeActionScheduler->schedule(
-			'ares.commander_manager',
-			$this->actions[$travelType],
-			$commander,
-			$commander->dArrival,
-			[
-				'class' => Place::class,
-				'id' => $commander->getRPlaceDestination()
-			]
+
+		$this->messageBus->dispatch(
+			new CommanderTravelMessage($commander->getId()),
+			[DateTimeConverter::to_delay_stamp($commander->getArrivalDate())],
 		);
 	}
 	
@@ -388,13 +330,8 @@ class CommanderManager
 		return $info;
 	}
 
-	/**
-	 * Fleet moving
-	 * 
-	 * @param int $commanderId
-	 */
-	public function uChangeBase($commanderId) {
-		$commander = $this->get($commanderId);
+	public function uChangeBase(Commander $commander): void
+	{
 		$place = $this->placeManager->get($commander->rDestinationPlace);
 		$place->commanders = $this->getBaseCommanders($place->id);
 		$commanderPlace = $this->placeManager->get($commander->rBase);
@@ -474,370 +411,6 @@ class CommanderManager
 		}
 		$this->entityManager->flush();
 	}
-
-	# pillage
-	public function uLoot($commanderId) {
-		$commander = $this->get($commanderId);
-		$place = $this->placeManager->get($commander->rDestinationPlace);
-		$place->commanders = $this->getBaseCommanders($place->id);
-		$placePlayer = $this->playerManager->get($place->rPlayer);
-		$placeBase = $this->orbitalBaseManager->get($place->id);
-		$commanderPlace = $this->placeManager->get($commander->rBase);
-		$commanderPlayer = $this->playerManager->get($commander->rPlayer);
-		$commanderColor = $this->colorManager->get($commanderPlayer->rColor);
-		$playerBonus = $this->playerBonusManager->getBonusByPlayer($commanderPlayer);
-		$this->playerBonusManager->load($playerBonus);
-		LiveReport::$type   = Commander::LOOT;
-		LiveReport::$dFight = $commander->dArrival;
-
-		# si la planète est vide
-		if ($place->rPlayer == NULL) {
-			LiveReport::$isLegal = Report::LEGAL;
-
-			# planète vide : faire un combat
-			$this->startFight($place, $commander, $commanderPlayer);
-
-			# victoire
-			if ($commander->getStatement() != Commander::DEAD) {
-				# piller la planète
-				$this->lootAnEmptyPlace($place, $commander, $playerBonus);
-				# création du rapport de combat
-				$report = $this->createReport($place);
-
-				# réduction de la force de la planète
-				$percentage = (($report->pevAtEndD + 1) / ($report->pevInBeginD + 1)) * 100;
-				$place->danger = round(($percentage * $place->danger) / 100);
-
-				$this->comeBack($place, $commander, $commanderPlace, $playerBonus);
-				$this->placeManager->sendNotif($place, Place::LOOTEMPTYSSUCCESS, $commander, $report->id);
-			} else {
-				# si il est mort
-				# enlever le commandant de la session
-				for ($i = 0; $i < count($commanderPlace->commanders); $i++) {
-					if ($commanderPlace->commanders[$i]->getId() == $commander->getId()) {
-						unset($commanderPlace->commanders[$i]);
-						$commanderPlace->commanders = array_merge($commanderPlace->commanders);
-					}
-				}
-
-				# création du rapport de combat
-				$report = $this->createReport($place);
-				$this->placeManager->sendNotif($place, Place::LOOTEMPTYFAIL, $commander, $report->id);
-
-				# réduction de la force de la planète
-				$percentage = (($report->pevAtEndD + 1) / ($report->pevInBeginD + 1)) * 100;
-				$place->danger = round(($percentage * $place->danger) / 100);
-			}
-		# si il y a une base d'un joueur
-		} else {
-			if ($commanderColor->colorLink[$place->playerColor] == Color::ALLY || $commanderColor->colorLink[$place->playerColor] == Color::PEACE) {
-				LiveReport::$isLegal = Report::ILLEGAL;
-			} else {
-				LiveReport::$isLegal = Report::LEGAL;
-			}
-
-			# planète à joueur : si $this->rColor != commandant->rColor
-			# si il peut l'attaquer
-			if (($place->playerColor != $commander->getPlayerColor() && $place->playerLevel > 1 && $commanderColor->colorLink[$place->playerColor] != Color::ALLY) || ($place->playerColor == 0)) {
-				$dCommanders = array();
-				foreach ($place->commanders as $dCommander) {
-					if ($dCommander->statement == Commander::AFFECTED && $dCommander->line == 1) {
-						$dCommanders[] = $dCommander;
-					}
-				}
-
-				# il y a des commandants en défense : faire un combat avec un des commandants
-				if (count($dCommanders) != 0) {
-					$aleaNbr = rand(0, count($dCommanders) - 1);
-					$this->startFight($place, $commander, $commanderPlayer, $dCommanders[$aleaNbr], $placePlayer, TRUE);
-
-					# victoire
-					if ($commander->getStatement() != Commander::DEAD) {
-						# piller la planète
-						$this->lootAPlayerPlace($commander, $playerBonus, $placeBase);
-						$this->comeBack($place, $commander, $commanderPlace, $playerBonus);
-	
-						# suppression des commandants						
-						unset($place->commanders[$aleaNbr]);
-						$place->commanders = array_merge($place->commanders);
-
-						# création du rapport
-						$report = $this->createReport($place);
-
-						$this->placeManager->sendNotif($place, Place::LOOTPLAYERWHITBATTLESUCCESS, $commander, $report->id);
-				
-					# défaite
-					} else {
-						# enlever le commandant de la session
-						for ($i = 0; $i < count($commanderPlace->commanders); $i++) {
-							if ($commanderPlace->commanders[$i]->getId() == $commander->getId()) {
-								unset($commanderPlace->commanders[$i]);
-								$commanderPlace->commanders = array_merge($commanderPlace->commanders);
-							}
-						}
-
-						# création du rapport
-						$report = $this->createReport($place);
-
-						# mise à jour des flottes du commandant défenseur
-						for ($j = 0; $j < count($dCommanders[$aleaNbr]->armyAtEnd); $j++) {
-							for ($i = 0; $i < 12; $i++) { 
-								$dCommanders[$aleaNbr]->armyInBegin[$j][$i] = $dCommanders[$aleaNbr]->armyAtEnd[$j][$i];
-							}
-						}
-
-						$this->placeManager->sendNotif($place, Place::LOOTPLAYERWHITBATTLEFAIL, $commander, $report->id);
-					}
-				} else {
-					$this->lootAPlayerPlace($commander, $playerBonus, $placeBase);
-					$this->comeBack($place, $commander, $commanderPlace, $playerBonus);
-					$this->placeManager->sendNotif($place, Place::LOOTPLAYERWHITOUTBATTLESUCCESS, $commander);
-				}
-
-			} else {
-				# si c'est la même couleur
-				if ($place->rPlayer == $commander->rPlayer) {
-					# si c'est une de nos planètes
-					# on tente de se poser
-					$this->uChangeBase($commander->id);
-				} else {
-					# si c'est une base alliée
-					# on repart
-					$this->comeBack($place, $commander, $commanderPlace, $playerBonus);
-					$this->placeManager->sendNotif($place, Place::CHANGELOST, $commander);
-				}
-			}
-		}
-		$this->entityManager->flush();
-	}
-
-	# conquest
-	public function uConquer($commanderId) {
-		$commander = $this->get($commanderId);
-		$place = $this->placeManager->get($commander->rDestinationPlace);
-		$place->commanders = $this->getBaseCommanders($place->id);
-		$placePlayer = $this->playerManager->get($place->rPlayer);
-		$placeBase = $this->orbitalBaseManager->get($place->id);
-		$commanderPlace = $this->placeManager->get($commander->rBase);
-		$commanderPlayer = $this->playerManager->get($commander->rPlayer);
-		$commanderColor = $this->colorManager->get($commanderPlayer->rColor);
-		$baseCommanders = $this->getBaseCommanders($place->getId());
-		$playerBonus = $this->playerBonusManager->getBonusByPlayer($commanderPlayer);
-		$this->playerBonusManager->load($playerBonus);
-		# conquete
-		if ($place->rPlayer != NULL) {
-			if (($place->playerColor != $commander->getPlayerColor() && $place->playerLevel > 3 && $commanderColor->colorLink[$place->playerColor] != Color::ALLY) || ($place->playerColor == 0)) {
-				$tempCom = array();
-
-				for ($i = 0; $i < count($place->commanders); $i++) {
-					if ($place->commanders[$i]->line <= 1) {
-						$tempCom[] = $place->commanders[$i];
-					}
-				}
-				for ($i = 0; $i < count($place->commanders); $i++) {
-					if ($place->commanders[$i]->line >= 2) {
-						$tempCom[] = $place->commanders[$i];
-					}
-				}
-
-				$place->commanders = $tempCom;
-
-				$nbrBattle = 0;
-				$reportIds   = array();
-				$reportArray = array();
-
-				while ($nbrBattle < count($place->commanders)) {
-					if ($place->commanders[$nbrBattle]->statement == Commander::AFFECTED) {
-						LiveReport::$type = Commander::COLO;
-						LiveReport::$dFight = $commander->dArrival;
-
-						if ($commanderColor->colorLink[$place->playerColor] == Color::ALLY || $commanderColor->colorLink[$place->playerColor] == Color::PEACE) {
-							LiveReport::$isLegal = Report::ILLEGAL;
-						} else {
-							LiveReport::$isLegal = Report::LEGAL;
-						}
-
-						$this->startFight($place, $commander, $commanderPlayer, $place->commanders[$nbrBattle], $placePlayer, TRUE);
-
-						$report = $this->createReport($place);
-						$reportArray[] = $report;
-						$reportIds[] = $report->id;
-						# PATCH DEGUEU POUR LES MUTLIS-COMBATS
-						$this->entityManager->clear($report);
-						$reports = $this->reportManager->getByAttackerAndPlace($commander->rPlayer, $place->id, $commander->dArrival);
-						foreach($reports as $r) {
-							if ($r->id == $report->id) {
-								continue;
-							}
-							$r->statementAttacker = Report::DELETED;
-							$r->statementDefender = Report::DELETED;
-						}
-						$this->entityManager->flush(Report::class);
-						$this->entityManager->clear(Report::class);
-						########################################
-
-						# mettre à jour armyInBegin si prochain combat pour prochain rapport
-						for ($j = 0; $j < count($commander->armyAtEnd); $j++) {
-							for ($i = 0; $i < 12; $i++) { 
-								$commander->armyInBegin[$j][$i] = $commander->armyAtEnd[$j][$i];
-							}
-						}
-						for ($j = 0; $j < count($place->commanders[$nbrBattle]->armyAtEnd); $j++) {
-							for ($i = 0; $i < 12; $i++) {
-								$place->commanders[$nbrBattle]->armyInBegin[$j][$i] = $place->commanders[$nbrBattle]->armyAtEnd[$j][$i];
-							}
-						}
-						
-						$nbrBattle++;
-						# mort du commandant
-						# arrêt des combats
-						if ($commander->getStatement() == Commander::DEAD) {
-							break;
-						}
-					} else {
-						$nbrBattle++;
-					}
-				}
-
-				# victoire
-				if ($commander->getStatement() != Commander::DEAD) {
-					if ($nbrBattle == 0) {
-						$this->placeManager->sendNotif($place, Place::CONQUERPLAYERWHITOUTBATTLESUCCESS, $commander, NULL);
-					} else {
-						$this->placeManager->sendNotifForConquest($place, Place::CONQUERPLAYERWHITBATTLESUCCESS, $commander, $reportIds);
-					}
-
-
-					#attribuer le joueur à la place
-					$place->commanders = array();
-					$place->playerColor = $commander->playerColor;
-					$place->rPlayer = $commander->rPlayer;
-
-					# changer l'appartenance de la base (et de la place)
-					$this->orbitalBaseManager->changeOwnerById($place->id, $placeBase, $commander->getRPlayer(), $baseCommanders);
-					$place->commanders[] = $commander;
-
-					$commander->rBase = $place->id;
-					$this->endTravel($commander, Commander::AFFECTED);
-					$commander->line = 2;
-					
-					$this->eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place), PlaceOwnerChangeEvent::NAME);
-
-					# PATCH DEGUEU POUR LES MUTLIS-COMBATS
-					$this->notificationManager->patchForMultiCombats($commander->rPlayer, $place->rPlayer, $commander->dArrival);
-				# défaite
-				} else {
-					for ($i = 0; $i < count($place->commanders); $i++) {
-						if ($place->commanders[$i]->statement == Commander::DEAD) {
-							unset($place->commanders[$i]);
-							$place->commanders = array_merge($place->commanders);
-						}
-					}
-
-					$this->placeManager->sendNotifForConquest($place, Place::CONQUERPLAYERWHITBATTLEFAIL, $commander, $reportIds);
-				}
-
-			} else {
-				# si c'est la même couleur
-				if ($place->rPlayer == $commander->rPlayer) {
-					# si c'est une de nos planètes
-					# on tente de se poser
-					$this->uChangeBase($commander->id);
-				} else {
-					# si c'est une base alliée
-					# on repart
-					$this->comeBack($place, $commander, $commanderPlace, $playerBonus);
-					$this->placeManager->sendNotif($place, Place::CHANGELOST, $commander);
-				}
-			}
-
-		# colonisation
-		} else {
-			# faire un combat
-			LiveReport::$type = Commander::COLO;
-			LiveReport::$dFight = $commander->dArrival;
-			LiveReport::$isLegal = Report::LEGAL;
-
-			$this->startFight($place, $commander, $commanderPlayer);
-
-			# victoire
-			if ($commander->getStatement() !== Commander::DEAD) {
-				# attribuer le rPlayer à la Place !
-				$place->rPlayer = $commander->rPlayer;
-				$place->commanders[] = $commander;
-				$place->playerColor = $commander->playerColor;
-				$place->typeOfBase = 4; 
-
-				# créer une base
-				$ob = new OrbitalBase();
-				$ob->rPlace = $place->id;
-				$ob->setRPlayer($commander->getRPlayer());
-				$ob->setName('colonie');
-				$ob->iSchool = 500;
-				$ob->iAntiSpy = 500;
-				$ob->resourcesStorage = 2000;
-				$ob->uOrbitalBase = Utils::now();
-				$ob->dCreation = Utils::now();
-				$this->orbitalBaseManager->updatePoints($ob);
-
-				$this->orbitalBaseManager->add($ob);
-
-				# attibuer le commander à la place
-				$commander->rBase = $place->id;
-				$this->endTravel($commander, Commander::AFFECTED);
-				$commander->line = 2;
-				
-				# création du rapport
-				$report = $this->createReport($place);
-
-				$place->danger = 0;
-
-				$this->placeManager->sendNotif($place, Place::CONQUEREMPTYSSUCCESS, $commander, $report->id);
-				
-				$this->eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place), PlaceOwnerChangeEvent::NAME);
-			
-			# défaite
-			} else {
-				# création du rapport
-				$report = $this->createReport($place);
-
-				# mise à jour du danger
-				$percentage = (($report->pevAtEndD + 1) / ($report->pevInBeginD + 1)) * 100;
-				$place->danger = round(($percentage * $place->danger) / 100);
-
-				$this->placeManager->sendNotif($place, Place::CONQUEREMPTYFAIL, $commander);
-
-				# enlever le commandant de la place
-				foreach ($commanderPlace->commanders as $placeCommander) {
-					if ($placeCommander->getId() == $commander->getId()) {
-						unset($placeCommander);
-						$commanderPlace->commanders = array_merge($commanderPlace->commanders);
-					}
-				}
-			}
-		}
-		$this->entityManager->flush(Commander::class);
-		$this->entityManager->flush($place);
-	}
-
-	/**
-	 * @param int $commanderId
-	 */
-	public function uReturnBase($commanderId) {
-		$commander = $this->get($commanderId);
-		$place = $this->placeManager->get($commander->rDestinationPlace);
-		$commanderBase = $this->orbitalBaseManager->get($commander->rBase);
-		
-		$this->endTravel($commander, Commander::AFFECTED);
-
-		$this->placeManager->sendNotif($place, Place::COMEBACK, $commander);
-
-		if ($commander->resources > 0) {
-			$this->orbitalBaseManager->increaseResources($commanderBase, $commander->resources, TRUE);
-			$commander->resources = 0;
-		}
-		$this->entityManager->flush($commander);
-	}
 	
 	/**
 	 * @param Commander $commander
@@ -864,7 +437,7 @@ class CommanderManager
 		$this->move($commander, $commander->rBase, $place->id, Commander::BACK, $length, $duration);
 	}
 
-	private function lootAnEmptyPlace(Place $place, $commander, $playerBonus) {
+	public function lootAnEmptyPlace(Place $place, $commander, $playerBonus) {
 		$bonus = $playerBonus->bonus->get(PlayerBonus::SHIP_CONTAINER);
 	
 		$storage = $commander->getPevToLoot() * Commander::COEFFLOOT;
@@ -879,7 +452,7 @@ class CommanderManager
 		LiveReport::$resources = $resourcesLooted;
 	}
 
-	private function lootAPlayerPlace($commander, $playerBonus, $placeBase) {
+	public function lootAPlayerPlace($commander, $playerBonus, $placeBase) {
 		$bonus = $playerBonus->bonus->get(PlayerBonus::SHIP_CONTAINER);
 
 		$resourcesToLoot = $placeBase->getResourcesStorage() - Commander::LIMITTOLOOT;
@@ -898,7 +471,7 @@ class CommanderManager
 		}
 	}
 
-	private function startFight(Place $place, $commander, $player, $enemyCommander = NULL, $enemyPlayer = NULL, $pvp = FALSE) {
+	public function startFight(Place $place, $commander, $player, $enemyCommander = NULL, $enemyPlayer = NULL, $pvp = FALSE) {
 		if ($pvp == TRUE) {
 			$commander->setArmy();
 			$enemyCommander->setArmy();
@@ -912,7 +485,7 @@ class CommanderManager
 		}
 	}
 
-	private function createReport(Place $place) {
+	public function createReport(Place $place) {
 		$report = new Report();
 
 		$report->rPlayerAttacker = LiveReport::$rPlayerAttacker;
@@ -956,7 +529,7 @@ class CommanderManager
 	public function createVirtualCommander(Place $place) {
 		$vCommander = new Commander();
 		$vCommander->id = 'Null';
-		$vCommander->rPlayer = ID_GAIA;
+		$vCommander->rPlayer = $this->gaiaId;
 		$vCommander->name = 'rebelle';
 		$vCommander->avatar = 't3-c4';
 		$vCommander->sexe = 1;

@@ -94,7 +94,10 @@ if ($program !== FALSE) {
 					$notificationManager->add($notif);
 				}
 				$session->addFlashbag('Coup d\'état lancé.', Flashbag::TYPE_SUCCESS);
-				$this->getContainer()->get(\Asylamba\Classes\Scheduler\RealTimeActionScheduler::class)->schedule('demeter.color_manager', 'ballot', $faction, $election->dElection);
+				$this->getContainer()->get(\Symfony\Component\Messenger\MessageBusInterface::class)->dispatch(
+					new \Asylamba\Modules\Demeter\Message\BallotMessage($faction->getId()),
+					[\Asylamba\Classes\Library\DateTimeConverter::to_delay_stamp($election->dElection)],
+				);
 				$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();
 			} else {
 				throw new ErrorException('Vous vivez dans une faction démocratique.');

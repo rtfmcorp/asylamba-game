@@ -49,7 +49,7 @@ if ($rTopic AND $content) {
 				$response->redirect('faction/view-forum/forum-' . $topicManager->get()->rForum . '/topic-' . $rTopic . '/sftr-2');
 			}
 
-			if (DATA_ANALYSIS) {
+			if (true === $this->getContainer()->getParameter('data_analysis')) {
 				$qr = $database->prepare('INSERT INTO 
 					DA_SocialRelation(`from`, type, message, dAction)
 					VALUES(?, ?, ?, ?)'

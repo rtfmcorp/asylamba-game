@@ -9,7 +9,6 @@ use Asylamba\Classes\Router\Router;
 use Asylamba\Classes\Library\Http\RequestFactory;
 use Asylamba\Classes\Library\Http\ResponseFactory;
 
-use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 use Asylamba\Classes\Scheduler\CyclicActionScheduler;
 
 use Asylamba\Classes\Event\ExceptionEvent;
@@ -17,12 +16,9 @@ use Asylamba\Classes\Event\ErrorEvent;
 
 use Asylamba\Classes\Exception\ErrorException;
 
-use Asylamba\Classes\Process\ProcessManager;
-use Asylamba\Classes\Task\TaskManager;
 use Asylamba\Classes\Worker\Manager;
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Contracts\Service\Attribute\Required;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Server
 {
@@ -31,7 +27,6 @@ class Server
     protected array $inputs = [];
     protected array $outputs = [];
     protected int $nbUncollectedCycles = 0;
-	protected ProcessManager $processManager;
 
     public function __construct(
 		protected Container $container,
@@ -39,22 +34,14 @@ class Server
 		protected RequestFactory $requestFactory,
 		protected ResponseFactory $responseFactory,
 		protected ClientManager $clientManager,
-		protected RealTimeActionScheduler $realTimeActionScheduler,
 		protected CyclicActionScheduler $cyclicActionScheduler,
-		protected TaskManager $taskManager,
-		protected EventDispatcher $eventDispatcher,
+		protected EventDispatcherInterface $eventDispatcher,
 		protected iterable $statefulManagers,
 		protected int $serverCycleTimeout,
 		protected int $port,
 		protected int $collectionCyclesNumber
 	) {
     }
-
-	#[Required]
-	public function setProcessManager(ProcessManager $processManager): void
-	{
-		$this->processManager = $processManager;
-	}
 
 	public function cleanApplication()
 	{
@@ -102,8 +89,6 @@ class Server
 				$name = \array_search($stream, $this->inputs);
 				if ($name === 'http_server') {
 					$this->treatHttpInput(\stream_socket_accept($stream));
-				} else {
-					$this->treatProcessInput($name);
 				}
             }
             $this->prepareStreamsState($inputs, $outputs, $errors);
@@ -145,59 +130,6 @@ class Server
 			$this->container->get(SessionWrapper::class)->clearWrapper();
 		}
 	}
-	
-	protected function treatProcessInput($name): void
-	{
-		$process = $this->processManager->getByName($name);
-		$content = \fgets($process->getInput(), 1024);
-		if ($content === false) {
-			$this->processManager->removeProcess($name, 'The process failed');
-			return;
-		}
-		if (empty($content)) {
-			return;
-		}
-		$data = json_decode($content, true);
-		// dump($data);
-		if (isset($data['technical'])) {
-			$this->processManager->updateTechnicalData($process, $data['technical']);
-		}
-		if (isset($data['command'])) {
-			$this->treatCommand($data);
-
-			return;
-		}
-		if (isset($data['task'])) {
-			$this->taskManager->validateTask($process, $data);
-
-			return;
-		}
-	}
-	
-	/**
-	 * @param array $data
-	 */
-	public function treatCommand($data): void
-	{
-		switch ($data['command']) {
-			case 'schedule':
-				$this->realTimeActionScheduler->scheduleFromProcess(
-					$data['data']['manager'],
-					$data['data']['method'],
-					$data['data']['object_class'],
-					$data['data']['object_id'],
-					$data['data']['date']
-				);
-				break;
-			case 'cancel':
-				$this->realTimeActionScheduler->cancelFromProcess(
-					$data['data']['object_class'],
-					$data['data']['object_id'],
-					$data['data']['date']
-				);
-				break;
-		}
-	}
     
     protected function prepareStreamsState(array &$inputs, array &$outputs, ?array &$errors)
     {
@@ -207,7 +139,6 @@ class Server
         $outputs = $this->outputs;
         $errors = null;
 		
-		$this->realTimeActionScheduler->execute();
 		$this->cyclicActionScheduler->execute();
 		
         if ($this->nbUncollectedCycles > $this->collectionCyclesNumber) {
@@ -242,12 +173,5 @@ class Server
     public function removeOutput($name): void
     {
 		unset($this->outputs[$name]);
-    }
-    
-    public static function debug($debug): void
-    {
-        \ob_start();
-        \var_dump($debug);
-        \file_put_contents('/srv/logs/php/test.log', PROCESS_NAME . ': ' . \ob_get_clean() . "\n\n", FILE_APPEND);
     }
 }

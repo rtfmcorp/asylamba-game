@@ -11,7 +11,9 @@
  **/
 namespace Asylamba\Modules\Athena\Manager;
 
+use Asylamba\Classes\Library\DateTimeConverter;
 use Asylamba\Modules\Athena\Manager\OrbitalBaseManager;
+use Asylamba\Modules\Athena\Message\Trade\CommercialShippingMessage;
 use Asylamba\Modules\Hermes\Manager\NotificationManager;
 use Asylamba\Classes\Library\Utils;
 use Asylamba\Classes\Entity\EntityManager;
@@ -24,7 +26,7 @@ use Asylamba\Modules\Hermes\Model\Notification;
 use Asylamba\Modules\Ares\Resource\CommanderResources;
 use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Classes\Exception\ErrorException;
-use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class CommercialShippingManager
 {
@@ -32,7 +34,7 @@ class CommercialShippingManager
 		protected EntityManager $entityManager,
 		protected OrbitalBaseManager $orbitalBaseManager,
 		protected NotificationManager $notificationManager,
-		protected RealTimeActionScheduler $realtimeActionScheduler,
+		protected MessageBusInterface $messageBus,
 		protected SessionWrapper $sessionWrapper,
 		protected string $mediaPath,
 	) {
@@ -41,13 +43,12 @@ class CommercialShippingManager
 	public function scheduleShippings()
 	{
 		$shippings = $this->entityManager->getRepository(CommercialShipping::class)->getMoving();
-		
+
+		/** @var CommercialShipping $commercialShipping */
 		foreach ($shippings as $commercialShipping) {
-			$this->realtimeActionScheduler->schedule(
-				'athena.orbital_base_manager',
-				'uCommercialShipping',
-				$commercialShipping,
-				$commercialShipping->getArrivedAt()
+			$this->messageBus->dispatch(
+				new CommercialShippingMessage($commercialShipping->getId()),
+				[DateTimeConverter::to_delay_stamp($commercialShipping->getArrivedAt())],
 			);
 		}
 	}
@@ -73,11 +74,9 @@ class CommercialShippingManager
 		$this->entityManager->flush($commercialShipping);
 
 		if (CommercialShipping::ST_WAITING !== $commercialShipping->getStatement()) {
-			$this->realtimeActionScheduler->schedule(
-				'athena.orbital_base_manager',
-				'uCommercialShipping',
-				$commercialShipping,
-				$commercialShipping->getArrivedAt()
+			$this->messageBus->dispatch(
+				new CommercialShippingMessage($commercialShipping->getId()),
+				[DateTimeConverter::to_delay_stamp($commercialShipping->getArrivedAt())],
 			);
 		}
 	}

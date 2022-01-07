@@ -2,9 +2,9 @@
 
 namespace Asylamba\Classes\Kernel;
 
-use Asylamba\Classes\Daemon\WorkerServer;
 use Asylamba\Classes\Database\Database;
 use Asylamba\Classes\Entity\EntityManager;
+use Symfony\Component\Messenger\Worker;
 
 class WorkerKernel extends Kernel
 {
@@ -27,6 +27,6 @@ class WorkerKernel extends Kernel
 	{
 		$this->container->get(Database::class)->init($this->container->getParameter('root_path') . '/build/database/structure.sql');
 		$this->container->get(EntityManager::class)->init();
-		$this->container->get(WorkerServer::class)->listen();
+		$this->container->get(Worker::class)->run();
 	}
 }

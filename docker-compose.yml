@@ -5,6 +5,11 @@ networks:
     mongo:
         driver: bridge
 
+volumes:
+    db-data:
+    rabbitmq-data:
+    redis-data:
+
 services:
     phpmyadmin:
         container_name: asylamba_phpmyadmin
@@ -32,13 +37,15 @@ services:
             - "3306:3306"
         volumes:
             # mysql
-            - "./var/data:/var/lib/mysql"
+            - db-data:/var/lib/mysql
 
     redis:
         container_name: asylamba_redis
         image: redis
         networks:
             - asylamba
+        volumes:
+            - redis-data:/data
         ports:
             - "6379:6379"
 
@@ -69,3 +76,14 @@ services:
         networks:
             - asylamba
             - mongo
+
+    rabbitmq:
+        container_name: asylamba_rabbitmq
+        image: rabbitmq:3.9-management-alpine
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        volumes:
+            - rabbitmq-data:/var/lib/rabbitmq
+        networks:
+            - asylamba

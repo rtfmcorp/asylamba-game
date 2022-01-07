@@ -10,7 +10,7 @@ use Asylamba\Classes\Exception\ErrorException;
 use Asylamba\Modules\Ares\Model\Commander;
 
 $request = $this->getContainer()->get('app.request');
-$scheduler = $this->getContainer()->get(\Asylamba\Classes\Scheduler\RealtimeActionScheduler::class);
+$messageBus = $this->getContainer()->get(\Symfony\Component\Messenger\MessageBusInterface::class);
 
 if (($request->query->get('commanderid')) === null) {
 	throw new ErrorException('Manque de précision sur le commandant ou la position.');
@@ -26,7 +26,8 @@ if (($commander = $commanderManager->get($commanderId)) === null || $commander->
 if ($commander->travelType == Commander::BACK) {
 	throw new ErrorException('Vous ne pouvez pas annuler un retour.');
 }
-$scheduler->cancel($commander, $commander->dArrival);
+// @TODO travel cancellation
+//$scheduler->cancel($commander, $commander->dArrival);
 
 $interval = Utils::interval($commander->dArrival, Utils::now(), 's');
 $dStart = new \DateTime(Utils::now());
@@ -54,14 +55,8 @@ $session->addFlashbag('Déplacement annulé.', Flashbag::TYPE_SUCCESS);
 if ($request->query->has('redirect')) {
 	$response->redirect('map/place-' . $request->query->get('redirect'));
 }
-$scheduler->schedule(
-	'ares.commander_manager',
-	'uReturnBase',
-	$commander,
-	$commander->dArrival, 
-	[
-		'class' => Place::class,
-		'id' => $commander->getRPlaceDestination()
-	]
+$messageBus->dispatch(
+	new \Asylamba\Modules\Ares\Message\CommanderTravelMessage($commander->getId()),
+	[\Asylamba\Classes\Library\DateTimeConverter::to_delay_stamp($commander->getArrivalDate())],
 );
 $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();

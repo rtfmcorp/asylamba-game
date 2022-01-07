@@ -24,11 +24,9 @@ parameters:
     pages: 		'%system_path%/views/pages/'
     component: 	'%system_path%/views/components/'
     session_lifetime: 1800
-    log_handler: Asylamba\Classes\Logger\FileLogger
     log_directory: var/logs
     log_rotation: 3
     daily_script_hour: 3
-    worker_stats_volume: 15
     gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV6
     game.available_factions: [1, 2, 3, 4, 7]
     
@@ -133,16 +131,42 @@ services:
             $name: "%database_name%"
             $user: "%database_admin_user%"
             $password: "%database_admin_password%"
-            
+
+    Asylamba\Classes\EventListener\SchedulerInitListener:
+        tags:
+            - { name: 'kernel.event_listener', event: 'app.server_init', method: 'onServerInit' }
+
+    Symfony\Component\Messenger\Bridge\Amqp\Transport\Connection:
+        factory: ['Symfony\Component\Messenger\Bridge\Amqp\Transport\Connection', 'fromDsn']
+        arguments: ['%env(RABBITMQ_DSN)%']
+
+    Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpReceiver: ~
+
+    Asylamba\Classes\Messenger\SendersLocator:
+        factory: ['Asylamba\Classes\Messenger\SendersLocator', 'instanciate']
+
+    messenger.default_bus:
+        class: Symfony\Component\Messenger\MessageBus
+        factory: ['Asylamba\Classes\Messenger\BusFactory', 'createBus']
+        arguments:
+            $handlersLocator: '@messenger.default_bus.messenger.handlers_locator'
+        tags:
+            - { name: 'messenger.bus' }
+
+    Symfony\Component\Messenger\MessageBusInterface:
+        alias: 'messenger.default_bus'
+
+    Symfony\Component\Messenger\Worker:
+        public: true
+        arguments:
+            $receivers: ['@Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpReceiver']
+
     Asylamba\Classes\Library\Session\SessionWrapper: ~
             
     Asylamba\Classes\Scheduler\CyclicActionScheduler:
         public: true
         arguments:
             $dailyScriptHour: "%daily_script_hour%"
-            
-    Asylamba\Classes\Scheduler\RealTimeActionScheduler:
-        public: true
             
     Asylamba\Classes\Router\Router:
         arguments:
@@ -177,23 +201,19 @@ services:
             $serverCycleTimeout: '%server_cycle_timeout%'
             $port: '%server_port%'
             $collectionCyclesNumber: '%server_collection_cycles_number%'
-            
-    Asylamba\Classes\Daemon\WorkerServer:
-        public: true
-        arguments:
-            $statefulManagers: !tagged_iterator app.stateful_manager
-            $workerCycleTimeout: '%worker_cycle_timeout%'
-            $collectionCyclesNumber: '%worker_collection_cycles_number%'
 
     Asylamba\Classes\Entity\EntityManager:
         public: true
-            
-    logger:
-        class: "%log_handler%"
+
+    Asylamba\Classes\Logger\ConsoleLogger: ~
+
+    Asylamba\Classes\Logger\FileLogger:
         arguments:
             $logDirectory: "%log_directory%"
             $logRotation: "%log_rotation%"
-            
+
+    Psr\Log\LoggerInterface: '@Asylamba\Classes\Logger\ConsoleLogger'
+
     Asylamba\Classes\Library\Parser:
         arguments:
             $appRoot: '%app_root%'
@@ -215,22 +235,7 @@ services:
             $logDirectory: "%log_directory%"
             
     Asylamba\Classes\Memory\MemoryManager: ~
-            
-    Asylamba\Classes\Process\ProcessManager:
-        public: true
-        arguments:
-            $rootPath: "%root_path%"
-            $logDirectory: "%log_directory%"
-            $scale: "%worker_scale%"
-            
-    Asylamba\Classes\Process\ProcessGateway: ~
-            
-    Asylamba\Classes\Process\LoadBalancer:
-        arguments:
-            $statsVolume: '%worker_stats_volume%'
-        
-    Asylamba\Classes\Task\TaskManager: ~
-            
+
     Asylamba\Classes\Redis\RedisManager:
         arguments:
             $host: '%env(REDIS_HOST)%'
@@ -240,16 +245,7 @@ services:
         
     Asylamba\Classes\EventListener\ExceptionListener:
         arguments:
-            $logger: '@logger'
             $templatePath: '%template%'
         tags:
             - { name: "kernel.event_listener", event: "core.exception", method: "onCoreException" }
             - { name: "kernel.event_listener", event: "core.error", method: "onCoreError" }
-            
-    Asylamba\Classes\EventListener\ProcessExceptionListener:
-        arguments:
-            $logger: '@logger'
-            $processName: "%app_name%"
-        tags:
-            - { name: "kernel.event_listener", event: "core.process_exception", method: "onCoreException" }
-            - { name: "kernel.event_listener", event: "core.process_error", method: "onCoreError" }

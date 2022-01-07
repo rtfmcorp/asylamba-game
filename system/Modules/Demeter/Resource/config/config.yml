@@ -5,5 +5,13 @@ services:
         autoconfigure: true
         public: true
 
+    _instanceof:
+        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
+            tags:
+                - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
+
+    Asylamba\Modules\Demeter\Handler\:
+        resource: '%root_path%/system/Modules/Demeter/Handler/*'
+
     Asylamba\Modules\Demeter\Manager\:
         resource: '%root_path%/system/Modules/Demeter/Manager/*'

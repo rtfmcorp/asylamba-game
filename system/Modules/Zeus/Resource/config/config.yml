@@ -17,6 +17,14 @@ services:
         autoconfigure: true
         public: true
 
+    _instanceof:
+        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
+            tags:
+                - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
+
+    Asylamba\Modules\Zeus\Handler\:
+        resource: '%root_path%/system/Modules/Zeus/Handler/*'
+
     Asylamba\Modules\Zeus\Helper\:
         resource: '%root_path%/system/Modules/Zeus/Helper/*'
 

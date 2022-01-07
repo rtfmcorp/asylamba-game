@@ -111,7 +111,6 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 		$response->redirect($this->getContainer()->getParameter('getout_root') . 'serveurs/message-forbiddenaccess');
 	}
 } elseif ($request->query->get('step') == 4) {
-	dump($session);
 	if (null === $session->get('bindkey') || $playerManager->getByBindKey($session->get('bindkey')) === null) {
 		if ($session->exist('inscription')) {
 			$check = new CheckName();

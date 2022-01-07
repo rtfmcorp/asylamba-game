@@ -26,13 +26,14 @@ use Asylamba\Modules\Gaia\Model\System;
 
 use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class PlaceManager
 {
 	public function __construct(
 		protected EntityManager $entityManager,
 		protected NotificationManager $notificationManager,
-		protected EventDispatcher $eventDispatcher
+		protected EventDispatcherInterface $eventDispatcher
 	) {
 
 	}
@@ -69,75 +70,6 @@ class PlaceManager
 	{
 		return $this->entityManager->getRepository(Place::class)->getNpcPlaces();
 	}
-
-	public function updateNpcPlaces(): void
-	{
-		$places = $this->getNpcPlaces();
-		$now   = Utils::now();
-		$repository = $this->entityManager->getRepository(Place::class);
-		$this->entityManager->beginTransaction();
-		
-		foreach ($places as $place) {
-			if (Utils::interval($place->uPlace, $now, 's') === 0) {
-				continue;
-			}
-			# update time
-			$hours = Utils::intervalDates($now, $place->uPlace);
-			$place->uPlace = $now;
-			$initialResources = $place->resources;
-			$initialDanger = $place->danger;
-			$maxResources = ceil($place->population / Place::COEFFPOPRESOURCE) * Place::COEFFMAXRESOURCE * ($place->maxDanger + 1);
-
-			foreach ($hours as $hour) {
-				$place->danger += Place::REPOPDANGER;
-				$place->resources += floor(Place::COEFFRESOURCE * $place->population);
-			}
-			// The repository method will add the new resources. We have to calculate how many resources have been added
-			$place->resources = abs($place->resources - $initialResources);
-			// If the max is reached, we have to add just the difference between the max and init value
-			if ($place->resources > $maxResources) {
-				$place->resources = $maxResources - $initialResources;
-			}
-			$place->danger = abs($place->danger - $initialDanger);
-			// Same thing here
-			if ($place->danger > $place->maxDanger) {
-				$place->danger = $place->maxDanger - $initialDanger;
-			}
-			$repository->updatePlace($place, true);
-		}
-		$repository->npcQuickfix();
-		$this->entityManager->commit();
-		$this->entityManager->clear(Place::class);
-	}
-
-	public function updatePlayerPlaces(): void
-	{
-		$places = $this->getPlayerPlaces();
-		$now   = Utils::now();
-		$repository = $this->entityManager->getRepository(Place::class);
-		$this->entityManager->beginTransaction();
-		
-		foreach ($places as $place) {
-			if (Utils::interval($place->uPlace, $now, 's') === 0) {
-				continue;
-			}
-			# update time
-			$hours = Utils::intervalDates($now, $place->uPlace);
-			$place->uPlace = $now;
-			$initialResources = $place->resources;
-			$maxResources = ceil($place->population / Place::COEFFPOPRESOURCE) * Place::COEFFMAXRESOURCE * ($place->maxDanger + 1);
-			foreach ($hours as $hour) {
-				$place->resources += floor(Place::COEFFRESOURCE * $place->population);
-			}
-			$place->resources = abs($place->resources - $initialResources);
-			if ($place->resources > $maxResources) {
-				$place->resources = $maxResources;
-			}
-			$repository->updatePlace($place);
-		}
-		$this->entityManager->commit();
-		$this->entityManager->clear(Place::class);
-	}
     
     public function turnAsEmptyPlace(Place $place): bool
     {
@@ -151,7 +83,7 @@ class PlaceManager
 		return $this->entityManager->getRepository(Place::class)->turnAsSpawnPlace($placeId, $playerId);
 	}
 
-	public function sendNotif(Place $place, string $case, Commander $commander, Report $report = null): void
+	public function sendNotif(Place $place, string $case, Commander $commander, int $report = null): void
 	{
 		switch ($case) {
 			case Place::CHANGESUCCESS:
