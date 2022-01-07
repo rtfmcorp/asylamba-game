@@ -425,51 +425,6 @@ class OrbitalBaseManager
 		);
 	}
 
-	public function uShipQueue1($shipQueueId) {
-		$queue = $this->shipQueueManager->get($shipQueueId);
-		$orbitalBase = $this->get($queue->rOrbitalBase);
-		$player = $this->playerManager->get($orbitalBase->rPlayer);
-		# vaisseau construit
-		$orbitalBase->setShipStorage($queue->shipNumber, $orbitalBase->getShipStorage($queue->shipNumber) + $queue->quantity);
-		# increase player experience
-		$experience = $queue->quantity * ShipResource::getInfo($queue->shipNumber, 'points');
-		$this->playerManager->increaseExperience($player, $experience);
-
-		# alert
-		if (($session = $this->clientManager->getSessionByPlayerId($player->getId())) !== null) {
-			$alt = 'Construction de ';
-			if ($queue->quantity > 1) {
-				$alt .= 'vos <strong>' . $queue->quantity . ' ' . ShipResource::getInfo($queue->shipNumber, 'codeName') . 's</strong>';
-			} else {
-				$alt .= 'votre <strong>' . ShipResource::getInfo($queue->shipNumber, 'codeName') . '</strong>';
-			}
-			$alt .= ' sur <strong>' . $orbitalBase->name . '</strong> terminée. Vous gagnez ' . $experience . ' point' . Format::addPlural($experience) . ' d\'expérience.';
-			$session->addFlashbag($alt, Flashbag::TYPE_DOCK1_SUCCESS);
-			$this->sessionWrapper->save($session);
-		}
-		$this->entityManager->remove($queue);
-		$this->entityManager->flush();
-	}
-
-	public function uShipQueue2($shipQueueId) {
-		$queue = $this->shipQueueManager->get($shipQueueId);
-		$orbitalBase = $this->get($queue->rOrbitalBase);
-		$player = $this->playerManager->get($orbitalBase->rPlayer);
-		# vaisseau construit
-		$orbitalBase->setShipStorage($queue->shipNumber, $orbitalBase->getShipStorage($queue->shipNumber) + 1);
-		# increase player experience
-		$experience = ShipResource::getInfo($queue->shipNumber, 'points');
-		$this->playerManager->increaseExperience($player, $experience);
-
-		# alert
-		if (($session = $this->clientManager->getSessionByPlayerId($player->getId())) !== null) {
-			$session->addFlashbag('Construction de votre ' . ShipResource::getInfo($queue->shipNumber, 'codeName') . ' sur ' . $orbitalBase->name . ' terminée. Vous gagnez ' . $experience . ' d\'expérience.', Flashbag::TYPE_DOCK2_SUCCESS);
-			$this->sessionWrapper->save($session);
-		}
-		$this->entityManager->remove($queue);
-		$this->entityManager->flush();
-	}
-
 	public function addShipToDock(OrbitalBase $orbitalBase, int $shipId, int $quantity): bool
 	{
 		if ($this->orbitalBaseHelper->isAShipFromDock1($shipId) || $this->orbitalBaseHelper->isAShipFromDock2($shipId)) {

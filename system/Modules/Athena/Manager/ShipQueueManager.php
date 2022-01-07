@@ -27,7 +27,7 @@ class ShipQueueManager
 	) {
 	}
 	
-	public function get($id)
+	public function get($id): ?ShipQueue
 	{
 		return $this->entityManager->getRepository(ShipQueue::class)->get($id);
 	}
