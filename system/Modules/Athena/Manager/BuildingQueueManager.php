@@ -16,8 +16,6 @@ use Asylamba\Modules\Athena\Message\Building\BuildingQueueMessage;
 use Asylamba\Modules\Athena\Model\BuildingQueue;
 use Asylamba\Classes\Entity\EntityManager;
 
-use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
-use Asylamba\Modules\Gaia\Model\Place;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class BuildingQueueManager
@@ -25,7 +23,6 @@ class BuildingQueueManager
 	public function __construct(
 		protected MessageBusInterface     $messenger,
 		protected EntityManager           $entityManager,
-		protected RealTimeActionScheduler $realtimeActionScheduler,
 	) {
 	}
 	
@@ -54,15 +51,5 @@ class BuildingQueueManager
 		$this->entityManager->persist($buildingQueue);
 		$this->entityManager->flush($buildingQueue);
 		$this->messenger->dispatch(new BuildingQueueMessage($buildingQueue->id), [DateTimeConverter::to_delay_stamp($buildingQueue->getDEnd())]);
-		$this->realtimeActionScheduler->schedule(
-			'athena.orbital_base_manager',
-			'uBuildingQueue',
-			$buildingQueue,
-			$buildingQueue->dEnd,
-			[
-				'class' => Place::class,
-				'id' => $buildingQueue->rOrbitalBase
-			]
-		);
 	}
 }

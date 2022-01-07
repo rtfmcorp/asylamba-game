@@ -17,7 +17,6 @@ $orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\
 $buildingQueueManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\BuildingQueueManager::class);
 $buildingResourceRefund = $this->getContainer()->getParameter('athena.building.building_queue_resource_refund');
 $entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
-$scheduler = $this->getContainer()->get(\Asylamba\Classes\Scheduler\RealtimeActionScheduler::class);
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -57,13 +56,15 @@ if ($baseId !== FALSE AND $building !== FALSE AND in_array($baseId, $verif)) {
 					$oldDate = $queue->dEnd;
 					$queue->dEnd = Utils::addSecondsToDate($dStart, Utils::interval($queue->dStart, $queue->dEnd, 's'));
 					$queue->dStart = $dStart;
-					
-					$scheduler->reschedule($queue, $queue->dEnd, $oldDate);
+
+					// @TODO handle rescheduling
+					// $scheduler->reschedule($queue, $queue->dEnd, $oldDate);
 
 					$dStart = $queue->dEnd;
 				}
 
-				$scheduler->cancel($buildingQueues[$index], $buildingQueues[$index]->dEnd);
+				// @TODO handle cancellation
+				// $scheduler->cancel($buildingQueues[$index], $buildingQueues[$index]->dEnd);
 				$entityManager->remove($buildingQueues[$index]);
 				$entityManager->flush(BuildingQueue::class);
 

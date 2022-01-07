@@ -83,7 +83,7 @@ class PlaceManager
 		return $this->entityManager->getRepository(Place::class)->turnAsSpawnPlace($placeId, $playerId);
 	}
 
-	public function sendNotif(Place $place, string $case, Commander $commander, Report $report = null): void
+	public function sendNotif(Place $place, string $case, Commander $commander, int $report = null): void
 	{
 		switch ($case) {
 			case Place::CHANGESUCCESS:

@@ -12,29 +12,27 @@
 namespace Asylamba\Modules\Athena\Manager;
 
 use Asylamba\Classes\Entity\EntityManager;
-use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
+use Asylamba\Classes\Library\DateTimeConverter;
+use Asylamba\Modules\Athena\Message\RecyclingMissionMessage;
 use Asylamba\Modules\Athena\Model\RecyclingMission;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class RecyclingMissionManager
 {
 	public function __construct(
 		protected EntityManager $entityManager,
-		protected RealTimeActionScheduler $realtimeActionScheduler
+		protected MessageBusInterface $messageBus,
 	) {
 	}
 	
 	public function scheduleMissions(): void
 	{
 		$missions = $this->entityManager->getRepository(RecyclingMission::class)->getAll();
-		
+
+		/** @var RecyclingMission $mission */
 		foreach ($missions as $mission) {
-			$this->realtimeActionScheduler->schedule(
-				'athena.orbital_base_manager',
-				'uRecycling',
-				$mission,
-				$mission->uRecycling
-			);
+			$this->messageBus->dispatch(new RecyclingMissionMessage($mission->id), [DateTimeConverter::to_delay_stamp($mission->uRecycling)]);
 		}
 	}
 
@@ -57,20 +55,19 @@ class RecyclingMissionManager
 	{
 		$this->entityManager->persist($recyclingMission);
 		$this->entityManager->flush($recyclingMission);
-		
-		$this->realtimeActionScheduler->schedule(
-			'athena.orbital_base_manager',
-			'uRecycling',
-			$recyclingMission,
-			$recyclingMission->uRecycling
+
+		$this->messageBus->dispatch(
+			new RecyclingMissionMessage($recyclingMission->id),
+			[DateTimeConverter::to_delay_stamp($recyclingMission->uRecycling)]
 		);
 	}
 
 	public function removeBaseMissions(int $baseId): void
 	{
-		foreach ($this->getBaseActiveMissions($baseId) as $mission) {
-			$this->realtimeActionScheduler->cancel($mission, $mission->uRecycling);
-		}
+		// @TODO handle properly cancellations
+		//foreach ($this->getBaseActiveMissions($baseId) as $mission) {
+			//$this->realtimeActionScheduler->cancel($mission, $mission->uRecycling);
+		//}
 		$this->entityManager->getRepository(RecyclingMission::class)->removeBaseMissions($baseId);
 	}
 }

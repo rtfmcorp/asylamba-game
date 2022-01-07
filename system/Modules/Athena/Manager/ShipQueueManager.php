@@ -13,16 +13,17 @@
 namespace Asylamba\Modules\Athena\Manager;
 
 use Asylamba\Classes\Entity\EntityManager;
-use Asylamba\Classes\Scheduler\RealTimeActionScheduler;
 
+use Asylamba\Classes\Library\DateTimeConverter;
+use Asylamba\Modules\Athena\Message\Ship\ShipQueueMessage;
 use Asylamba\Modules\Athena\Model\ShipQueue;
-use Asylamba\Modules\Gaia\Model\Place;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class ShipQueueManager
 {
 	public function __construct(
 		protected EntityManager $entityManager,
-		protected RealTimeActionScheduler $realtimeActionScheduler
+		protected MessageBusInterface $messageBus,
 	) {
 	}
 	
@@ -45,17 +46,8 @@ class ShipQueueManager
 	{
 		$this->entityManager->persist($shipQueue);
 		$this->entityManager->flush($shipQueue);
-		
-		$this->realtimeActionScheduler->schedule(
-			'athena.orbital_base_manager',
-			'uShipQueue' . $shipQueue->dockType,
-			$shipQueue,
-			$shipQueue->dEnd,
-			[
-				'class' => Place::class,
-				'id' => $shipQueue->rOrbitalBase
-			]
-		);
+
+		$this->messageBus->dispatch(new ShipQueueMessage($shipQueue->getId()), [DateTimeConverter::to_delay_stamp($shipQueue->dEnd)]);
 	}
 	
 	public function scheduleActions(): void
@@ -64,16 +56,7 @@ class ShipQueueManager
 		
 		foreach ($queues as $queue)
 		{
-			$this->realtimeActionScheduler->schedule(
-				'athena.orbital_base_manager',
-				'uShipQueue' . $queue->dockType,
-				$queue,
-				$queue->dEnd,
-				[
-					'class' => Place::class,
-					'id' => $queue->rOrbitalBase
-				]
-			);
+			$this->messageBus->dispatch(new ShipQueueMessage($queue->getId()), [DateTimeConverter::to_delay_stamp($queue->dEnd)]);
 		}
 	}
 }

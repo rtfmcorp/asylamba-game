@@ -164,9 +164,6 @@ services:
         arguments:
             $dailyScriptHour: "%daily_script_hour%"
             
-    Asylamba\Classes\Scheduler\RealTimeActionScheduler:
-        public: true
-            
     Asylamba\Classes\Router\Router:
         arguments:
             $appRoot: '%app_root%'
@@ -234,9 +231,7 @@ services:
             $logDirectory: "%log_directory%"
             
     Asylamba\Classes\Memory\MemoryManager: ~
-        
-    Asylamba\Classes\Task\TaskManager: ~
-            
+
     Asylamba\Classes\Redis\RedisManager:
         arguments:
             $host: '%env(REDIS_HOST)%'

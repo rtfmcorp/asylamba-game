@@ -4,7 +4,6 @@ use Asylamba\Classes\Library\Utils;
 
 $server = $this->getContainer()->get('server');
 $clientManager = $this->getContainer()->get(\Asylamba\Classes\Daemon\ClientManager::class);
-$rtc = $this->getContainer()->get(\Asylamba\Classes\Scheduler\RealtimeActionScheduler::class);
 $processManager = $this->getContainer()->get('process_manager');
 $memoryManager = $this->getContainer()->get('memory_manager');
 
@@ -34,14 +33,15 @@ foreach ($processManager->getProcesses() as $process) {
 }
 echo '</div>';
 echo '<div style="display:flex;justify-content:space-between;">';
-echo '<div><h3>Schedulers</h3><h4> Real Time Action Scheduler<ul>';
-foreach ($rtc->getQueue() as $date => $elements)
-{
-	echo '<li><pre>';
-	var_dump($date);
-	var_dump($elements);
-	echo '</pre></li>';
-}
+// @TODO refactor UI
+echo '<div><h3>Schedulers</h3><h4> Real Time Action Scheduler (unavailable, see RabbitMQ)<ul>';
+//foreach ($rtc->getQueue() as $date => $elements)
+//{
+//	echo '<li><pre>';
+//	var_dump($date);
+//	var_dump($elements);
+//	echo '</pre></li>';
+//}
 echo '</ul></div>';
 
 echo '<div><h3>Clients</h3><ul id="clients">';

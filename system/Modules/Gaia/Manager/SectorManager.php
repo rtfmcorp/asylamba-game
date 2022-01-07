@@ -13,8 +13,6 @@ namespace Asylamba\Modules\Gaia\Manager;
 
 use Asylamba\Classes\Entity\EntityManager;
 use Asylamba\Classes\Redis\RedisManager;
-use Asylamba\Classes\Process\LoadBalancer;
-use Asylamba\Classes\Task\TaskManager;
 
 use Asylamba\Modules\Athena\Manager\OrbitalBaseManager;
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
@@ -27,8 +25,6 @@ class SectorManager
 	public function __construct(
         protected EntityManager $entityManager,
         protected RedisManager $redisManager,
-        protected LoadBalancer $loadBalancer,
-        protected TaskManager $taskManager,
         protected OrbitalBaseManager $orbitalBaseManager,
         protected PlayerManager $playerManager,
         protected SystemManager $systemManager,
@@ -38,9 +34,9 @@ class SectorManager
     
     public function initOwnershipData()
     {
-        $this->loadBalancer->affectTask(
-            $this->taskManager->createTechnicalTask('gaia.sector_manager', 'calculateAllOwnerships')
-        );
+        //$this->loadBalancer->affectTask(
+        //    $this->taskManager->createTechnicalTask('gaia.sector_manager', 'calculateAllOwnerships')
+        //);
     }
 
 	/**

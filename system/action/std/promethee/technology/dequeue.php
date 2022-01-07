@@ -18,7 +18,6 @@ $technologyQueueManager = $this->getContainer()->get(\Asylamba\Modules\Promethee
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 $technologyResourceRefund = $this->getContainer()->getParameter('promethee.technology_queue.resource_refund');
 $technologyCreditRefund = $this->getContainer()->getParameter('promethee.technology_queue.credit_refund');
-$scheduler = $this->getContainer()->get(\Asylamba\Classes\Scheduler\RealtimeActionScheduler::class);
 $entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
 
 for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
@@ -62,12 +61,14 @@ if ($baseId !== FALSE AND $techno !== FALSE AND in_array($baseId, $verif)) {
 					$oldDate = $queue->dEnd;
 					$queue->dEnd = Utils::addSecondsToDate($dStart, Utils::interval($queue->dStart, $queue->dEnd, 's'));
 					$queue->dStart = $dStart;
-					$scheduler->reschedule($queue, $queue->dEnd, $oldDate);
+					// @TODO handle rescheduling
+					//$scheduler->reschedule($queue, $queue->dEnd, $oldDate);
 
 					$dStart = $queue->dEnd;
 				}
 
-				$scheduler->cancel($placeTechnologyQueues[$index], $placeTechnologyQueues[$index]->getEndedAt());
+				// @TODO handle cancellation
+				//$scheduler->cancel($placeTechnologyQueues[$index], $placeTechnologyQueues[$index]->getEndedAt());
 				$entityManager->remove($placeTechnologyQueues[$index]);
 				$entityManager->flush(TechnologyQueue::class);
 

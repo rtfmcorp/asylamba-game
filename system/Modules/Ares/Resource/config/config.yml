@@ -30,3 +30,4 @@ services:
     Asylamba\Modules\Ares\Manager\CommanderManager:
         arguments:
             $commanderBaseLevel: "%ares.commander.base_level%"
+            $gaiaId: '%id_gaia%'
