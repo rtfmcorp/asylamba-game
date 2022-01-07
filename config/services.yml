@@ -132,6 +132,10 @@ services:
             $user: "%database_admin_user%"
             $password: "%database_admin_password%"
 
+    Asylamba\Classes\EventListener\SchedulerInitListener:
+        tags:
+            - { name: 'kernel.event_listener', event: 'app.server_init', method: 'onServerInit' }
+
     Symfony\Component\Messenger\Bridge\Amqp\Transport\Connection:
         factory: ['Symfony\Component\Messenger\Bridge\Amqp\Transport\Connection', 'fromDsn']
         arguments: ['%env(RABBITMQ_DSN)%']
