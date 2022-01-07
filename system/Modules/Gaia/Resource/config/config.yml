@@ -15,6 +15,9 @@ services:
             tags:
                 - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
 
+    Asylamba\Modules\Gaia\Handler\:
+        resource: '%root_path%/system/Modules/Gaia/Handler/*'
+
     Asylamba\Modules\Gaia\Manager\:
         resource: '%root_path%/system/Modules/Gaia/Manager/*'
 

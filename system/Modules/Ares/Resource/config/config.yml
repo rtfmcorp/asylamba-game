@@ -24,6 +24,9 @@ services:
             tags:
                 - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
 
+    Asylamba\Modules\Ares\Handler\:
+        resource: '%root_path%/system/Modules/Ares/Handler/*'
+
     Asylamba\Modules\Ares\Manager\:
         resource: '%root_path%/system/Modules/Ares/Manager/*'
 

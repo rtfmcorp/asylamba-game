@@ -10,6 +10,13 @@ services:
             tags:
                 - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
 
+    Asylamba\Modules\Atlas\Handler\:
+        resource: '%root_path%/system/Modules/Atlas/Handler/*'
+
+    Asylamba\Modules\Atlas\Handler\PlayerRankingHandler:
+        arguments:
+            $dataAnalysis: '%data_analysis%'
+
     Asylamba\Modules\Atlas\Manager\:
         resource: '%root_path%/system/Modules/Atlas/Manager/*'
 

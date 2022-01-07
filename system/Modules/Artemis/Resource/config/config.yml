@@ -10,5 +10,8 @@ services:
             tags:
                 - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
 
+    #Asylamba\Modules\Artemis\Handler\:
+    #    resource: '%root_path%/system/Modules/Artemis/Handler/*'
+
     Asylamba\Modules\Artemis\Manager\:
         resource: '%root_path%/system/Modules/Artemis/Manager/*'

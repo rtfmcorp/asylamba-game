@@ -18,6 +18,9 @@ services:
             tags:
                 - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
 
+    Asylamba\Modules\Promethee\Handler\:
+        resource: '%root_path%/system/Modules/Promethee/Handler/*'
+
     Asylamba\Modules\Promethee\Manager\:
         resource: '%root_path%/system/Modules/Promethee/Manager/*'
 
