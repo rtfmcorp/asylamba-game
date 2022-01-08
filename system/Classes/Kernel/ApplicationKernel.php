@@ -9,7 +9,7 @@ use Asylamba\Classes\Event\ServerInitEvent;
 use Asylamba\Classes\Scheduler\CyclicActionScheduler;
 use Asylamba\Modules\Gaia\Manager\SectorManager;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ApplicationKernel extends Kernel
 {

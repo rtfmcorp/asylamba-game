@@ -1,22 +1,20 @@
 <?php
 
-namespace Asylamba\Classes\EventListener;
-
-use Asylamba\Classes\Library\Session\SessionWrapper;
-use Asylamba\Classes\Library\Flashbag;
-
-use Asylamba\Classes\Library\Http\Request;
-use Asylamba\Classes\Library\Http\Response;
-
-use Asylamba\Classes\Event\ExceptionEvent;
-use Asylamba\Classes\Event\ErrorEvent;
-use Asylamba\Classes\Exception\FormException;
+namespace Asylamba\Classes\EventSubscriber;
 
 use Asylamba\Classes\Database\Database;
+use Asylamba\Classes\Event\ExceptionEvent;
+use Asylamba\Classes\Exception\FormException;
+use Asylamba\Classes\Library\Flashbag;
+use Asylamba\Classes\Library\Http\Request;
+use Asylamba\Classes\Library\Http\Response;
+use Asylamba\Classes\Library\Session\SessionWrapper;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Messenger\Event\WorkerMessageFailedEvent;
 
-class ExceptionListener
+class ExceptionSubscriber implements EventSubscriberInterface
 {
 	public function __construct(
 		protected LoggerInterface $logger,
@@ -24,6 +22,18 @@ class ExceptionListener
 		protected Database $database,
 		protected string $templatePath,
 	) {
+	}
+
+	public static function getSubscribedEvents()
+	{
+		return [
+			ExceptionEvent::class => [
+				['onCoreException'],
+			],
+			WorkerMessageFailedEvent::class => [
+				['onWorkerException'],
+			],
+		];
 	}
 
 	public function onCoreException(ExceptionEvent $event): void
@@ -41,18 +51,23 @@ class ExceptionListener
 		);
 	}
 
-	public function onCoreError(ErrorEvent $event): void
+	public function onWorkerException(WorkerMessageFailedEvent $event): void
 	{
-		$error = $event->getError();
-		$this->process(
-			$event,
-			$error->getMessage(),
-			$error->getFile(),
-			$error->getLine(),
-			$error->getTraceAsString(),
+		$throwable = $event->getThrowable();
+		$this->logger->log(
 			LogLevel::CRITICAL,
-			Flashbag::TYPE_BUG_ERROR
+			'Handler failed to execute: {message} at {file}.l{line}. Trace: {trace}',
+			[
+				'message' => $throwable->getMessage(),
+				'file' => $throwable->getFile(),
+				'line' => $throwable->getLine(),
+				'trace' => $throwable->getTraceAsString(),
+			],
 		);
+
+		if ($this->database->inTransaction()) {
+			$this->database->rollBack();
+		}
 	}
 	
 	/**

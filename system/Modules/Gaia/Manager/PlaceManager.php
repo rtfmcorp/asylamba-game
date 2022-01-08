@@ -26,7 +26,7 @@ use Asylamba\Modules\Gaia\Model\System;
 
 use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class PlaceManager
 {

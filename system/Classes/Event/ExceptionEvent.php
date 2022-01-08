@@ -8,10 +8,8 @@ use Asylamba\Classes\Library\Http\Response;
 class ExceptionEvent
 {
 	protected ?Response $response = null;
-	
-	const NAME = 'core.exception';
 
-	public function __construct(protected Request $request, protected \Exception $exception)
+	public function __construct(protected Request $request, protected \Throwable $exception)
 	{
 	}
 
@@ -20,7 +18,7 @@ class ExceptionEvent
 		return $this->request;
 	}
 
-	public function getException(): \Exception
+	public function getException(): \Throwable
 	{
 		return $this->exception;
 	}

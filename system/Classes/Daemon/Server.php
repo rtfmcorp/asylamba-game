@@ -18,7 +18,7 @@ use Asylamba\Classes\Exception\ErrorException;
 
 use Asylamba\Classes\Worker\Manager;
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class Server
 {
@@ -112,12 +112,8 @@ class Server
 			$response = $this->router->processRequest($request);
 			$this->container->set('app.response', $response);
 			$this->responseFactory->processResponse($request, $response, $client);
-		} catch (\Exception $ex) {
-			$this->eventDispatcher->dispatch($event = new ExceptionEvent($request, $ex), ExceptionEvent::NAME);
-			$response = $event->getResponse();
-			$this->responseFactory->processResponse($request, $response, $client);
-		} catch (\Error $err) {
-			$this->eventDispatcher->dispatch($event = new ErrorEvent($request, $err), ErrorEvent::NAME);
+		} catch (\Throwable $ex) {
+			$this->eventDispatcher->dispatch($event = new ExceptionEvent($request, $ex));
 			$response = $event->getResponse();
 			$this->responseFactory->processResponse($request, $response, $client);
 		} finally {

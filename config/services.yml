@@ -243,9 +243,7 @@ services:
             $password: '%env(default::REDIS_PASSWORD)%'
             $timeout: "%redis_timeout%"
         
-    Asylamba\Classes\EventListener\ExceptionListener:
+    Asylamba\Classes\EventSubscriber\ExceptionSubscriber:
         arguments:
             $templatePath: '%template%'
-        tags:
-            - { name: "kernel.event_listener", event: "core.exception", method: "onCoreException" }
-            - { name: "kernel.event_listener", event: "core.error", method: "onCoreError" }
+        tags: ['kernel.event_subscriber']

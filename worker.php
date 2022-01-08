@@ -26,5 +26,5 @@ $dotenv = new Symfony\Component\Dotenv\Dotenv();
 $dotenv->usePutenv(false);
 $dotenv->load($projectDir.'/.env');
 
-$worker = new WorkerKernel($options['process'] ?? 'blabla', $projectDir);
+$worker = new WorkerKernel($options['process'] ?? 'worker', $projectDir);
 $worker->boot();

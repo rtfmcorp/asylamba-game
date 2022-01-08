@@ -17,7 +17,7 @@ use Asylamba\Modules\Gaia\Model\Place;
 use Asylamba\Modules\Hermes\Manager\NotificationManager;
 use Asylamba\Modules\Zeus\Manager\PlayerBonusManager;
 use Asylamba\Modules\Zeus\Manager\PlayerManager;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ConquestManager
 {
@@ -36,11 +36,10 @@ class ConquestManager
 
 	}
 
-	public function conquer(Commander $commander)
+	public function conquer(Commander $commander): void
 	{
 		$place = $this->placeManager->get($commander->rDestinationPlace);
 		$place->commanders = $this->commanderManager->getBaseCommanders($place->id);
-		$placePlayer = $this->playerManager->get($place->rPlayer);
 		$placeBase = $this->orbitalBaseManager->get($place->id);
 		$commanderPlace = $this->placeManager->get($commander->rBase);
 		$commanderPlayer = $this->playerManager->get($commander->rPlayer);
@@ -49,7 +48,7 @@ class ConquestManager
 		$playerBonus = $this->playerBonusManager->getBonusByPlayer($commanderPlayer);
 		$this->playerBonusManager->load($playerBonus);
 		# conquete
-		if ($place->rPlayer != NULL) {
+		if (null !== ($placePlayer = $this->playerManager->get($place->rPlayer))) {
 			if (($place->playerColor != $commander->getPlayerColor() && $place->playerLevel > 3 && $commanderColor->colorLink[$place->playerColor] != Color::ALLY) || ($place->playerColor == 0)) {
 				$tempCom = array();
 
