@@ -16,7 +16,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 		# extraction du bindkey
 		$security = $this->container->get(\Asylamba\Classes\Library\Security::class);
 		$query  = $security->uncrypt($request->query->get('bindkey'));
-		$bindkey= $security->extractBindkey($query);
+		$bindkey= $security->extractBindKey($query);
 		$time 	= $security->extractTime($query);
 		# vérification de la validité du bindkey
 		if (abs((int)$time - time()) <= 300) {

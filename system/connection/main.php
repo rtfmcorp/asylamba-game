@@ -14,7 +14,7 @@ $session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionW
 
 # extraction du bindkey
 $query  = $security->uncrypt($request->query->get('bindkey'));
-$bindKey= $security->extractBindkey($query);
+$bindKey= $security->extractBindKey($query);
 $time 	= $security->extractTime($query);
 
 # vérification de la validité du bindkey
