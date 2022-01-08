@@ -11,7 +11,7 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class NpcsPlacesUpdateHandler implements MessageHandlerInterface
 {
-	protected function __construct(
+	public function __construct(
 		protected PlaceManager $placeManager,
 		protected EntityManager $entityManager,
 	) {
