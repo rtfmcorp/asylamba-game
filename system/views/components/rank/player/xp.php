@@ -32,7 +32,7 @@ echo '<div class="component player rank">';
 					echo '</a>';
 				}
 
-				echo $p->commonRender($session->get('playerId'), 'xp');
+				echo $p->commonRender($session->get('playerId'), 'xp', $appRoot, $mediaPath);
 
 				if ($i == $playerRankingManager->size() - 1) {
 					echo '<a class="more-item" href="' . $appRoot . 'ajax/a-morerank/dir-prev/type-xp/current-' . $p->experiencePosition . '">';

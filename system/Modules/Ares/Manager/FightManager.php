@@ -18,8 +18,10 @@ use Asylamba\Modules\Athena\Resource\ShipResource;
 
 class FightManager
 {
-	public function __construct(protected CommanderManager $commanderManager)
-	{
+	public function __construct(
+		protected CommanderManager $commanderManager,
+		protected int $gaiaId,
+	) {
 		self::$currentLine = 3;
 	}
 	
@@ -289,7 +291,7 @@ class FightManager
 				$commanderD->setDDeath(Utils::now());
 				LiveReport::$rPlayerWinner = $commanderD->rPlayer;
 
-				if ($commanderD->rPlayer != ID_GAIA) {
+				if ($commanderD->rPlayer != $this->gaiaId) {
 					$playerD->increaseVictory(1);
 					$playerA->increaseDefeat(1);
 				} else{
@@ -312,7 +314,7 @@ class FightManager
 				$commanderD->setDDeath(Utils::now());
 				LiveReport::$rPlayerWinner = $commanderA->rPlayer;
 
-				if ($commanderD->rPlayer != ID_GAIA) {
+				if ($commanderD->rPlayer != $this->gaiaId) {
 					$playerA->increaseVictory(1);
 					$playerD->increaseDefeat(1);
 				} else {

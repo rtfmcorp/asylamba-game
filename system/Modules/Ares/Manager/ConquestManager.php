@@ -48,7 +48,8 @@ class ConquestManager
 		$playerBonus = $this->playerBonusManager->getBonusByPlayer($commanderPlayer);
 		$this->playerBonusManager->load($playerBonus);
 		# conquete
-		if (null !== ($placePlayer = $this->playerManager->get($place->rPlayer))) {
+		if (null !== $place->rPlayer) {
+			$placePlayer = $this->playerManager->get($place->rPlayer);
 			if (($place->playerColor != $commander->getPlayerColor() && $place->playerLevel > 3 && $commanderColor->colorLink[$place->playerColor] != Color::ALLY) || ($place->playerColor == 0)) {
 				$tempCom = array();
 

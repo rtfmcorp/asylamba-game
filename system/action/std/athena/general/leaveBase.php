@@ -14,6 +14,7 @@ use Asylamba\Modules\Ares\Model\Commander;
 use Asylamba\Modules\Gaia\Event\PlaceOwnerChangeEvent;
 
 $request = $this->getContainer()->get('app.request');
+$response = $this->getContainer()->get('app.response');
 $session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
 $orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
@@ -21,7 +22,8 @@ $orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\
 $placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
 $commercialRouteManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialRouteManager::class);
 $entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
-$eventDispatcher = $this->getContainer()->get('event_dispatcher');
+$eventDispatcher = $this->getContainer()->get(\Symfony\Contracts\EventDispatcher\EventDispatcherInterface::class);
+$gaiaId = $this->getContainer()->getParameter('id_gaia');
 
 $baseId = $request->query->get('id');
 
@@ -67,8 +69,8 @@ if (count($verif) > 1) {
 					}
 					$place = $placeManager->get($baseId);
 
-					$orbitalBaseManager->changeOwnerById($baseId, $base, ID_GAIA, $baseCommanders);
-					$place->rPlayer = ID_GAIA;
+					$orbitalBaseManager->changeOwnerById($baseId, $base, $gaiaId, $baseCommanders);
+					$place->rPlayer = $gaiaId;
 					$entityManager->flush();
 					$eventDispatcher->dispatch(new PlaceOwnerChangeEvent($place), PlaceOwnerChangeEvent::NAME);
 					

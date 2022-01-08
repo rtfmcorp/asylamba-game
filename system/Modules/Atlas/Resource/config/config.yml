@@ -17,6 +17,12 @@ services:
         arguments:
             $dataAnalysis: '%data_analysis%'
 
+    Asylamba\Modules\Atlas\Handler\FactionRankingHandler:
+        arguments:
+            $serverStartTime: '%server_start_time%'
+            $hoursBeforeStartOfRanking: '%hours_before_start_of_ranking%'
+            $pointsToWin: '%points_to_win%'
+
     Asylamba\Modules\Atlas\Manager\:
         resource: '%root_path%/system/Modules/Atlas/Manager/*'
 

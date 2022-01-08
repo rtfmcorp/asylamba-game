@@ -3,6 +3,7 @@
 
 use Asylamba\Classes\Library\Format;
 
+$appRoot = $this->getContainer()->getParameter('app_root');
 $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
 
 echo '<div class="component player rank">';
@@ -26,7 +27,7 @@ echo '<div class="component player rank">';
 
 			echo '<hr>';
 
-			echo '<a class="more-button" href="' . APP_ROOT . 'rank/mode-top">Voir le haut du classement</a>';
+			echo '<a class="more-button" href="' . $appRoot . 'rank/mode-top">Voir le haut du classement</a>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';

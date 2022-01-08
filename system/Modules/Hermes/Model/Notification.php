@@ -73,7 +73,7 @@ class Notification {
 		return $this->addContent('<strong>' . $t . '</strong>');
 	}
 	public function addLnk($path, $title) {
-		return $this->addContent('<a href="' . APP_ROOT . $path . '">' . $title . '</a>');
+		return $this->addContent('<a href="/' . $path . '">' . $title . '</a>');
 	}
 	public function addBrk() {
 		return $this->addContent('</p><p>');

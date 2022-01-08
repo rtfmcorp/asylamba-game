@@ -21,6 +21,9 @@ class FactionRankingHandler implements MessageHandlerInterface
 		protected ColorManager $colorManager,
 		protected FactionRankingManager $factionRankingManager,
 		protected RankingManager $rankingManager,
+		protected string $serverStartTime,
+		protected int $hoursBeforeStartOfRanking,
+		protected int $pointsToWin,
 	) {
 
 	}
@@ -52,7 +55,14 @@ class FactionRankingHandler implements MessageHandlerInterface
 			$factionRoutine->execute($faction, $playerRankings, $routesIncome, $sectors);
 		}
 
-		$winningFactionId = $factionRoutine->processResults($ranking, $factions, $this->factionRankingManager);
+		$winningFactionId = $factionRoutine->processResults(
+			$ranking,
+			$factions,
+			$this->factionRankingManager,
+			$this->serverStartTime,
+			$this->hoursBeforeStartOfRanking,
+			$this->pointsToWin,
+		);
 
 		$this->factionRankingManager->changeSession($S_FRM1);
 

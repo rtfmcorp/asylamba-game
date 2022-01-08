@@ -40,8 +40,14 @@ class FactionRoutine
 		$this->calculateTerritorialRanking($faction, $sectors);
 	}
 	
-	public function processResults(Ranking $ranking, $factions, $factionRankingManager)
-	{
+	public function processResults(
+		Ranking $ranking,
+		$factions,
+		$factionRankingManager,
+		$serverStartTime,
+		$hoursBeforeStartOfRanking,
+		$pointsToWin,
+	) {
 		#---------------- COMPUTING -------------------#
 
 		# copy the arrays
@@ -66,7 +72,7 @@ class FactionRoutine
 		#-------------------------------- POINTS RANKING -----------------------------#
 
 		# faire ce classement uniquement après x jours de jeu
-		if (Utils::interval(SERVER_START_TIME, Utils::now(), 'h') > HOURS_BEFORE_START_OF_RANKING) {
+		if (Utils::interval($serverStartTime, Utils::now(), 'h') > $hoursBeforeStartOfRanking) {
 			# points qu'on gagne en fonction de sa place dans le classement
 			$pointsToEarn = [40, 30, 20, 10, 0, 0, 0, 0, 0, 0, 0];
 			$coefG = 0.1; # 4 3 2 1 0 ...
@@ -155,7 +161,7 @@ class FactionRoutine
 			# check if a faction wins the game
 			$winRanking = NULL;
 			foreach ($rankings as $ranking) {
-				if ($ranking->points >= POINTS_TO_WIN) {
+				if ($ranking->points >= $pointsToWin) {
 					if ($winRanking !== NULL) {
 						if ($winRanking->points < $ranking->points) {
 							return $ranking->rFaction;

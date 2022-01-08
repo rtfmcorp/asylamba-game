@@ -90,7 +90,7 @@ class Report {
 	public function getId() { return $this->id; }
 
 	public function getTypeOfReport($playerColor) {
-		$place = '<a href="' . APP_ROOT . 'map/place-' . $this->rPlace . '">' . $this->placeName . '</a>';
+		$place = '<a href="/' . 'map/place-' . $this->rPlace . '">' . $this->placeName . '</a>';
 
 		if ($this->colorA == $playerColor) {
 			if ($this->rPlayerWinner == $this->rPlayerAttacker) {

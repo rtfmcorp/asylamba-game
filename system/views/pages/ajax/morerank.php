@@ -4,6 +4,7 @@ use Asylamba\Modules\Atlas\Model\PlayerRanking;
 
 $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
+$mediaPath = $container->getParameter('media');
 $request = $this->getContainer()->get('app.request');
 $session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
 $playerRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\PlayerRankingManager::class);
@@ -39,7 +40,7 @@ if ($direction !== FALSE && $current !== FALSE && $type !== FALSE) {
 			}
 
 			for ($i = 0; $i < $playerRankingManager->size(); $i++) {
-				echo $playerRankingManager->get($i)->commonRender($session->get('playerId'), $type);
+				echo $playerRankingManager->get($i)->commonRender($session->get('playerId'), $type, $appRoot, $mediaPath);
 			}
 
 			if ($direction == 'prev' && $playerRankingManager->size() == PlayerRanking::PAGE) {

@@ -23,7 +23,7 @@ echo '<div class="component player rank">';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
 			for ($i = 0; $i < $factionRankingManager->size(); $i++) {
-				echo $factionRankingManager->get($i)->commonRender($session->get('playerInfo'), 'territorial');
+				echo $factionRankingManager->get($i)->commonRender($session->get('playerInfo'), $mediaPath, 'territorial');
 			}
 		echo '</div>';
 	echo '</div>';

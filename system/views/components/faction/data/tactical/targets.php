@@ -3,6 +3,7 @@
 use Asylamba\Modules\Demeter\Model\Color;
 use Asylamba\Classes\Library\Format;
 
+$pointsToWin = $this->getContainer()->getParameter('points_to_win');
 $mode = isset($targetMode) ? $targetMode : FALSE;
 
 echo '<div class="component">';
@@ -14,10 +15,10 @@ echo '<div class="component">';
 			if ($faction->isWinner == Color::NOT_WIN) {
 
 				echo '<h4>Conditions de victoire</h4>';
-				echo '<p>Pour gagner, votre faction doit collecter ' . Format::number(POINTS_TO_WIN) . ' points au classement total de faction.</p>';
+				echo '<p>Pour gagner, votre faction doit collecter ' . Format::number($pointsToWin) . ' points au classement total de faction.</p>';
 				echo '<p>Vous avez actuellement ' . $faction->rankingPoints . ' points.</p>';
 
-				$percent = Format::percent($faction->rankingPoints, POINTS_TO_WIN);
+				$percent = Format::percent($faction->rankingPoints, $pointsToWin);
 				echo '<ul class="list-type-1">';
 				echo '<li>';
 					echo '<span class="label">avancement</span>';
@@ -30,7 +31,7 @@ echo '<div class="component">';
 
 			} elseif ($faction->isWinner == Color::WIN) {
 				echo '<h4>Vous avez gagné</h4>';
-				echo '<p>Vous avez atteint les ' . POINTS_TO_WIN . ', vous avez donc gagner la partie. Félicitations !</p>';
+				echo '<p>Vous avez atteint les ' . $pointsToWin . ', vous avez donc gagner la partie. Félicitations !</p>';
 			}
 
 		echo '</div>';

@@ -34,3 +34,7 @@ services:
         arguments:
             $commanderBaseLevel: "%ares.commander.base_level%"
             $gaiaId: '%id_gaia%'
+
+    Asylamba\Modules\Ares\Manager\FightManager:
+        arguments:
+            $gaiaId: '%id_gaia%'

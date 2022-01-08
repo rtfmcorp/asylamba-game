@@ -124,7 +124,7 @@ class PlayerRanking {
 		return $this->general;
 	}
 	
-	public function commonRender($playerId, $type) {
+	public function commonRender($playerId, $type, string $appRoot, string $mediaPath) {
 		$r = '';
 		$status = ColorResource::getInfo($this->color, 'status');
 
@@ -161,8 +161,8 @@ class PlayerRanking {
 		}
 
 		$r .= '<div class="player color' . $this->color . ' ' . ($playerId == $this->rPlayer ? 'active' : NULL) . '">';
-			$r .= '<a href="' . APP_ROOT . 'embassy/player-' . $this->rPlayer . '">';
-				$r .= '<img src="' . MEDIA . 'avatar/small/' . $this->avatar . '.png" alt="' . $this->name . '" class="picto" />';
+			$r .= '<a href="' . $appRoot . 'embassy/player-' . $this->rPlayer . '">';
+				$r .= '<img src="' . $mediaPath . 'avatar/small/' . $this->avatar . '.png" alt="' . $this->name . '" class="picto" />';
 			$r .= '</a>';
 
 			$r .= '<span class="title">' . $status[$this->status - 1] . '</span>';
@@ -175,12 +175,12 @@ class PlayerRanking {
 					case 'butcher': 
 						$r .= Format::numberFormat($this->butcher) . ' point' . Format::addPlural($this->butcher);
 						break;
-					case 'trader': $r .= Format::numberFormat($this->trader) . ' <img src="' . MEDIA . 'resources/credit.png" class="icon-color" alt="crédits" />'; break;
+					case 'trader': $r .= Format::numberFormat($this->trader) . ' <img src="' . $mediaPath . 'resources/credit.png" class="icon-color" alt="crédits" />'; break;
 					case 'fight': 
 						$r .= Format::numberFormat($this->fight) . ' point' . Format::addPlural($this->fight);
 						break;
 				#	case 'armies': $r .= Format::numberFormat($this->armies) . ' <img src="' . MEDIA . 'resources/pev.png" class="icon-color" alt="pev" />'; break;
-					case 'resources': $r .= Format::numberFormat($this->resources) . ' <img src="' . MEDIA . 'resources/resource.png" class="icon-color" alt="ressources" />'; break;
+					case 'resources': $r .= Format::numberFormat($this->resources) . ' <img src="' . $mediaPath . 'resources/resource.png" class="icon-color" alt="ressources" />'; break;
 					default: break;
 				}
 			$r .= '</span>';

@@ -9,6 +9,7 @@
 
 use Asylamba\Classes\Library\Format;
 
+$pointsToWin = $this->getContainer()->getParameter('points_to_win');
 $factionRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\FactionRankingManager::class);
 
 $factionRankingManager->changeSession($FACTION_RANKING_POINTS);
@@ -23,7 +24,7 @@ echo '<div class="component profil panel-info">';
 
 			echo '<div class="center-box">';
 				echo '<span class="label">Points requis pour mettre fin au serveur</span>';
-				echo '<span class="value">' . Format::number(POINTS_TO_WIN) . '</span>';
+				echo '<span class="value">' . Format::number($pointsToWin) . '</span>';
 			echo '</div>';
 
 			echo '<p>Les différents classements n\'ont pas tous le même poids. Les gain journaliers en fonction du classement et de la position dans ce dernier sont disponibles dans le tableau ci-dessous.';
