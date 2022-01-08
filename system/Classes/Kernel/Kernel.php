@@ -19,6 +19,10 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpSender;
+use Symfony\Component\Messenger\MessageBus;
+use Symfony\Component\Messenger\Middleware\SendMessageMiddleware;
+use Symfony\Component\Messenger\Worker;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Messenger\DependencyInjection\MessengerPass;
 
@@ -34,12 +38,13 @@ abstract class Kernel implements KernelInterface
 		$containerBuilder->set('container', $containerBuilder);
 		$containerBuilder->setParameter('root_path', $this->projectDir);
 		$this->buildEventDispatcher($containerBuilder);
-		$this->buildMessenger($containerBuilder);
 
 		$this->loadEnvironment($containerBuilder);
 
 		$loader = new YamlFileLoader($containerBuilder, new FileLocator($this->projectDir . '/config/'));
 		$loader->load('services.yml');
+
+		$this->buildMessenger($containerBuilder);
 
 		$this->registerModules($containerBuilder);
 		$containerBuilder->registerForAutoconfiguration(Manager::class)->addTag('app.stateful_manager');
@@ -57,6 +62,15 @@ abstract class Kernel implements KernelInterface
 	protected function buildMessenger(ContainerBuilder $containerBuilder): void
 	{
 		$containerBuilder->addCompilerPass(new MessengerPass());
+
+		$enableLogs = $containerBuilder->resolveEnvPlaceholders($containerBuilder->getParameter('messenger_logs'), true);
+
+		if (true === $enableLogs) {
+			return;
+		}
+
+		$workerDefinition = $containerBuilder->getDefinition(Worker::class);
+		$workerDefinition->setArgument('$logger', null);
 	}
 
 	protected function initSentry(string $dsn): void

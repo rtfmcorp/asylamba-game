@@ -14,13 +14,16 @@ class BusFactory
 	public static function createBus(
 		HandlersLocatorInterface $handlersLocator,
 		SendersLocator $sendersLocator,
-		LoggerInterface $logger
+		LoggerInterface $logger,
+		?bool $enableLogs,
 	): MessageBusInterface {
-		$setLogger = function ($middleware) use ($logger) {
-			$middleware->setLogger($logger);
+		$setLogger = (true === $enableLogs)
+			? function ($middleware) use ($logger) {
+				$middleware->setLogger($logger);
 
-			return $middleware;
-		};
+				return $middleware;
+			}
+			: fn ($middleware) => $middleware;
 
 		return new MessageBus([
 			$setLogger(new SendMessageMiddleware($sendersLocator)),
