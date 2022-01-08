@@ -51,11 +51,9 @@ class CommandersExperienceHandler implements MessageHandlerInterface
 				# xp gagnée
 				$earnedExperience  = $invest / Commander::COEFFSCHOOL;
 				$earnedExperience += (rand(0, 1) == 1)
-					? rand(0, $earnedExperience / 20)
-					: -(rand(0, $earnedExperience / 20));
-				$earnedExperience  = round($earnedExperience);
-				$earnedExperience  = ($earnedExperience < 0)
-					? 0 : $earnedExperience;
+					? rand(0, intval(round($earnedExperience / 20)))
+					: -(rand(0, intval(round($earnedExperience / 20))));
+				$earnedExperience  = max(round($earnedExperience), 0);
 
 				$this->commanderManager->upExperience($commander, $earnedExperience);
 			}
