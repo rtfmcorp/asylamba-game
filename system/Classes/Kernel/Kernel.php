@@ -59,6 +59,11 @@ abstract class Kernel implements KernelInterface
 		$containerBuilder->addCompilerPass(new MessengerPass());
 	}
 
+	protected function initSentry(string $dsn): void
+	{
+		\Sentry\init(['dsn' => $dsn]);
+	}
+
 	protected function loadEnvironment(ContainerBuilder $container): void
 	{
 		foreach(explode(',', getenv('SYMFONY_DOTENV_VARS')) as $key) {

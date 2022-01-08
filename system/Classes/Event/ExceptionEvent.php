@@ -9,7 +9,7 @@ class ExceptionEvent
 {
 	protected ?Response $response = null;
 
-	public function __construct(protected Request $request, protected \Throwable $exception)
+	public function __construct(protected Request $request, protected \Throwable $throwable)
 	{
 	}
 
@@ -18,9 +18,9 @@ class ExceptionEvent
 		return $this->request;
 	}
 
-	public function getException(): \Throwable
+	public function getThrowable(): \Throwable
 	{
-		return $this->exception;
+		return $this->throwable;
 	}
 
 	public function setResponse(Response $response): void

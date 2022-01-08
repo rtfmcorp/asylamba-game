@@ -25,6 +25,9 @@ class WorkerKernel extends Kernel
 	
 	public function init(): void
 	{
+		if (!empty($sentryDsn = $this->container->getParameter('sentry_dsn'))) {
+			$this->initSentry($sentryDsn);
+		}
 		$this->container->get(Database::class)->init($this->container->getParameter('root_path') . '/build/database/structure.sql');
 		$this->container->get(EntityManager::class)->init();
 		$this->container->get(Worker::class)->run();
