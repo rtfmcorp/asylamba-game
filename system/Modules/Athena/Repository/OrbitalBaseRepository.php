@@ -369,14 +369,15 @@ class OrbitalBaseRepository extends AbstractRepository {
 		$orbitalBase->setPlanetResources($data['planetResources']);
 		$orbitalBase->setPlanetHistory($data['planetHistory']);
 
-		$generatorTime = strtotime($data['termDateGenerator']) - strtotime(Utils::now());
-		$orbitalBase->setRemainingTimeGenerator(round($generatorTime, 1));
-		$dock1Time = strtotime($data['termDateDock1']) - strtotime(Utils::now());
-		$orbitalBase->setRemainingTimeDock1(round($dock1Time, 1));
-		$dock2Time = strtotime($data['termDateDock2']) - strtotime(Utils::now());
-		$orbitalBase->setRemainingTimeDock2(round($dock2Time, 1));
-		$dock3Time = strtotime($data['termDateDock3']) - strtotime(Utils::now());
-		$orbitalBase->setRemainingTimeDock3(round($dock3Time, 1));
+		$setRemainingTime = function (?string $term, callable $setter): void {
+			if (null !== $term) {
+				$setter(round(strtotime($term) - strtotime(Utils::now()), 1));
+			}
+		};
+		$setRemainingTime('termDateGenerator', fn(float $value) => $orbitalBase->setRemainingTimeGenerator($value));
+		$setRemainingTime('termDateDock1', fn(float $value) => $orbitalBase->setRemainingTimeDock1($value));
+		$setRemainingTime('termDateDock2', fn(float $value) => $orbitalBase->setRemainingTimeDock2($value));
+		$setRemainingTime('termDateDock3', fn(float $value) => $orbitalBase->setRemainingTimeDock3($value));
 
 		$orbitalBase->setRoutesNumber($data['routesNumber']);
 		return $orbitalBase;
