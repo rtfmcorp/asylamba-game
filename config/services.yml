@@ -107,6 +107,7 @@ parameters:
     id_jeanmi: 2
     shift_faction: 2
     # date de début du serveur
+    messenger_logs: '%env(default::MESSENGER_LOGS)%'
     sentry_dsn: '%env(default::SENTRY_DSN)%'
 
 services:
@@ -150,6 +151,7 @@ services:
         factory: ['Asylamba\Classes\Messenger\BusFactory', 'createBus']
         arguments:
             $handlersLocator: '@messenger.default_bus.messenger.handlers_locator'
+            $enableLogs: '%messenger_logs%'
         tags:
             - { name: 'messenger.bus' }
 
