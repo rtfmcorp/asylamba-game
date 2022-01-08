@@ -38,7 +38,10 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
 	public function onCoreException(ExceptionEvent $event): void
 	{
-		$exception = $event->getException();
+		$exception = $event->getThrowable();
+
+		\Sentry\captureException($exception);
+
 		$this->process(
 			$event,
 			$exception->getMessage(),
@@ -54,6 +57,9 @@ class ExceptionSubscriber implements EventSubscriberInterface
 	public function onWorkerException(WorkerMessageFailedEvent $event): void
 	{
 		$throwable = $event->getThrowable();
+
+		\Sentry\captureException($throwable);
+
 		$this->logger->log(
 			LogLevel::CRITICAL,
 			'Handler failed to execute: {message} at {file}.l{line}. Trace: {trace}',

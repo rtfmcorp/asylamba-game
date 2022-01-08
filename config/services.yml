@@ -107,7 +107,7 @@ parameters:
     id_jeanmi: 2
     shift_faction: 2
     # date de début du serveur
-
+    sentry_dsn: '%env(default::SENTRY_DSN)%'
 
 services:
     _defaults:
