@@ -6,30 +6,21 @@ use Asylamba\Classes\Library\ParameterBag;
 
 class Response
 {
-    /** @var string **/
-    protected $protocol;
-    /** @var int **/
-    protected $statusCode = self::STATUS_OK;
-    /** @var string **/
-    protected $title;
-    /** @var string **/
-    protected $page;
-    /** @var Request **/
-    protected $request;
-    /** @var string **/
-    protected $redirect;
-    /** @var array **/
-    protected $templates = [];
-    /** @var string **/
-    protected $body;
-    /** @var ParameterBag **/
-    public $headers;
-    /** @var array **/
-    protected $statuses = [
-        200 => 'OK',
-		302 => 'Found',
-		404 => 'Not Found',
-		500 => 'Internal Server Error'
+    protected string $protocol;
+    protected int $statusCode = self::STATUS_OK;
+    protected string $title;
+    protected string $page;
+    protected Request $request;
+    protected ?string $redirect = null;
+    protected array $templates = [];
+    protected string $body;
+    public ParameterBag $headers;
+    /** @var array<int, string> **/
+    protected array $statuses = [
+        self::STATUS_OK => 'OK',
+		self::STATUS_REDIRECT => 'Found',
+		self::STATUS_NOT_FOUND => 'Not Found',
+		self::STATUS_INTERNAL_SERVER_ERROR => 'Internal Server Error'
     ];
 	
 	const STATUS_OK = 200;
@@ -41,137 +32,93 @@ class Response
 	{
         $this->headers = new ParameterBag();
     }
-    
-    /**
-     * @param string $protocol
-     */
-    public function setProtocol($protocol)
+
+    public function setProtocol(string $protocol): void
     {
         $this->protocol = $protocol;
     }
     
-    /**
-     * @return string
-     */
-    public function getProtocol()
+    public function getProtocol(): string
     {
         return $this->protocol;
     }
     
-    /**
-     * @param int $statusCode
-     */
-    public function setStatusCode($statusCode)
+    public function setStatusCode(int $statusCode): void
     {
         $this->statusCode = $statusCode;
     }
-    
-    /**
-     * @return int
-     */
-    public function getStatusCode()
+
+    public function getStatusCode(): int
     {
         return $this->statusCode;
     }
 
-    /**
-     * @param string $title
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $page
-     */
-    public function setPage($page)
+    public function setPage(string $page): void
     {
         $this->page = $page;
     }
 
-    /**
-     * @return string
-     */
-    public function getPage()
+    public function getPage(): string
     {
         return $this->page;
     }
 
-    /**
-     * @param int $path
-     */
-    public function redirect($path) {
+    public function redirect(string $path): void
+	{
         $this->redirect = $path;
 		$this->statusCode = self::STATUS_REDIRECT;
     }
 
-    /**
-     * @return string
-     */
-    public function getRedirect()
+    public function getRedirect(): ?string
     {
         return $this->redirect;
     }
 
-    /**
-     * @param string $template
-     */
-    public function addTemplate($template)
+    public function addTemplate(string $template): void
     {
         $this->templates[] = $template;
     }
 
-    /**
-     * @return array
-     */
-    public function getTemplates()
+    public function getTemplates(): array
     {
         return $this->templates;
     }
-    
-    /**
-     * @param string $body
-     */
-    public function setBody($body)
+
+    public function setBody(string $body): void
     {
         $this->body = $body;
     }
-    
-    /**
-     * @return string
-     */
-    public function getBody()
+
+    public function getBody(): string
     {
-        return $this->body;
+        return $this->body ?? '';
     }
-    
-    /**
-     * @return string
-     */
-    public function getStatus()
+
+    public function getStatus(): string
     {
         return $this->statuses[$this->statusCode];
     }
 	
-	public function send()
+	public function send(): string
 	{
-        $this->headers->set('Content-Length', strlen($this->body));
+		$this->headers->set('Content-Length', strlen($this->getBody()));
 		$message = "{$this->protocol} {$this->statusCode} {$this->statuses[$this->statusCode]}\n";
 		
 		foreach ($this->headers->all() as $header => $value) {
 			$message .= "$header: $value\n";
 		}
 		$message .= "\n";
-		$message .= $this->body;
+		$message .= $this->getBody();
 		return $message;
 	}
 }

@@ -31,7 +31,7 @@ class Security
 	public function uncrypt(string $cipher): string|false
 	{
         $data = base64_decode(str_pad(strtr($cipher, '~_', '+/'), strlen($cipher) % 4, '=', STR_PAD_RIGHT));
-		
+
 		return openssl_decrypt(urldecode($data), self::CYPHER_ALGO, $this->serverKey, 0, $this->iv);
 	}
 

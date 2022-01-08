@@ -6,18 +6,13 @@ use Asylamba\Classes\Exception\RequestException;
 
 class RequestFactory
 {
-    /** @var string **/
-    protected $requestPart;
+    protected string $requestPart;
     
     const REQUEST_PART_PROTOCOL = 'protocol';
     const REQUEST_PART_HEADERS = 'headers';
     const REQUEST_PART_BODY = 'body';
-    
-    /**
-     * @param resource $input
-     * @return Request
-     */
-    public function createRequestFromInput($input)
+
+    public function createRequestFromInput(string $input): Request
     {
         $rows = explode("\n", $input);
         $request = new Request();
