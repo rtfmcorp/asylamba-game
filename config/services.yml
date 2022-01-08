@@ -133,9 +133,13 @@ services:
             $user: "%database_admin_user%"
             $password: "%database_admin_password%"
 
+    Asylamba\Classes\EventListener\MessengerInitListener:
+        tags:
+            - { name: 'kernel.event_listener', event: 'app.server_init', method: 'onServerInit', priority: 10 }
+
     Asylamba\Classes\EventListener\SchedulerInitListener:
         tags:
-            - { name: 'kernel.event_listener', event: 'app.server_init', method: 'onServerInit' }
+            - { name: 'kernel.event_listener', event: 'app.server_init', method: 'onServerInit', priority: 5 }
 
     Symfony\Component\Messenger\Bridge\Amqp\Transport\Connection:
         factory: ['Symfony\Component\Messenger\Bridge\Amqp\Transport\Connection', 'fromDsn']

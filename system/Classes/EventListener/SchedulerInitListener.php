@@ -10,6 +10,7 @@ use Asylamba\Modules\Athena\Manager\RecyclingMissionManager;
 use Asylamba\Modules\Athena\Manager\ShipQueueManager;
 use Asylamba\Modules\Demeter\Manager\ColorManager;
 use Asylamba\Modules\Promethee\Manager\TechnologyQueueManager;
+use Psr\Log\LoggerInterface;
 
 class SchedulerInitListener
 {
@@ -21,12 +22,15 @@ class SchedulerInitListener
 		protected ShipQueueManager $shipQueueManager,
 		protected TechnologyQueueManager $technologyQueueManager,
 		protected ColorManager $factionManager,
+		protected LoggerInterface $logger,
 	) {
 
 	}
 
 	public function onServerInit(ServerInitEvent $event): void
 	{
+		$this->logger->info('Scheduling planned tasks');
+
 		$this->commanderManager->scheduleMovements();
 		$this->buildingQueueManager->scheduleActions();
 		$this->commercialShippingManager->scheduleShippings();
