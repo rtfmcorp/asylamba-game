@@ -22,7 +22,8 @@
         "symfony/event-dispatcher": "^6.0",
         "symfony/messenger": "^6.0",
         "symfony/amqp-messenger": "^6.0",
-        "psr/log": "^3.0"
+        "psr/log": "^3.0",
+        "sentry/sdk": "^3.1"
     },
 
     "scripts": {
