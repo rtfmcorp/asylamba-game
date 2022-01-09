@@ -29,7 +29,7 @@ $session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionW
 $baseMinLevelForChange = $this->getContainer()->getParameter('athena.obm.change_type_min_level');
 $baseMinLevelForCapital = $this->getContainer()->getParameter('athena.obm.capital_min_level');
 $entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
-$eventDispatcher = $this->getContainer()->get('event_dispatcher');
+$eventDispatcher = $this->getContainer()->get(\Symfony\Contracts\EventDispatcher\EventDispatcherInterface::class);
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
