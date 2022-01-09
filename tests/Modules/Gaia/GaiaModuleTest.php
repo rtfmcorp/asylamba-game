@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Asylamba\Modules\Gaia;
+namespace Tests\App\Modules\Gaia;
 
 use App\Modules\Gaia\GaiaModule;
 use App\Classes\Worker\Application;

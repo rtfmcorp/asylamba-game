@@ -16,8 +16,8 @@ use App\Modules\Athena\Resource\ShipResource;
 $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
-$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$commanderManager = $this->getContainer()->get(\App\Modules\Ares\Manager\CommanderManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 
 echo '<div class="component report">';
 	echo '<div class="head skin-1">';

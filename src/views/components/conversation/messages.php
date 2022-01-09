@@ -9,10 +9,10 @@ use App\Modules\Demeter\Resource\ColorResource;
 $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
-$conversationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationManager::class);
-$conversationMessageManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationMessageManager::class);
-$parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$conversationManager = $this->getContainer()->get(\App\Modules\Hermes\Manager\ConversationManager::class);
+$conversationMessageManager = $this->getContainer()->get(\App\Modules\Hermes\Manager\ConversationMessageManager::class);
+$parser = $this->getContainer()->get(\App\Classes\Library\Parser::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
 
 if (!$message_listmode) {

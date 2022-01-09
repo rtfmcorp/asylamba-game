@@ -7,7 +7,7 @@ if ($this->getContainer()->get('app.response')->getRedirect() !== null) {
 
 echo '<ul id="alert"></ul>';
 
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 
 echo '<ul id="alert-content">';
 foreach ($session->getFlashbags() as $flashbag) {

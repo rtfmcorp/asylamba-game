@@ -10,8 +10,8 @@ services:
             tags:
                 - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
 
-    Asylamba\Modules\Demeter\Handler\:
-        resource: '%root_path%/system/Modules/Demeter/Handler/*'
+    App\Modules\Demeter\Handler\:
+        resource: '%kernel.project_dir%/src/Modules/Demeter/Handler/*'
 
-    Asylamba\Modules\Demeter\Manager\:
-        resource: '%root_path%/system/Modules/Demeter/Manager/*'
+    App\Modules\Demeter\Manager\:
+        resource: '%kernel.project_dir%/src/Modules/Demeter/Manager/*'

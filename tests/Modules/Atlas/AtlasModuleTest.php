@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Asylamba\Modules\Atlas;
+namespace Tests\App\Modules\Atlas;
 
 use App\Modules\Atlas\AtlasModule;
 use App\Classes\Worker\Application;

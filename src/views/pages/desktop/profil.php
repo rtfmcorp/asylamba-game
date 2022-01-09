@@ -2,9 +2,9 @@
 
 $container = $this->getContainer();
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
+$orbitalBaseManager = $this->getContainer()->get(\App\Modules\Athena\Manager\OrbitalBaseManager::class);
 $mediaPath = $container->getParameter('media');
 $componentPath = $container->getParameter('component');
 

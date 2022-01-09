@@ -8,9 +8,9 @@ use App\Modules\Demeter\Resource\ColorResource;
 $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
-$conversationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationManager::class);
-$conversationUserManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationUserManager::class);
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$conversationManager = $this->getContainer()->get(\App\Modules\Hermes\Manager\ConversationManager::class);
+$conversationUserManager = $this->getContainer()->get(\App\Modules\Hermes\Manager\ConversationUserManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
 
 echo '<div class="component player rank new-message">';

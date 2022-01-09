@@ -5,7 +5,7 @@ use App\Classes\Exception\ErrorException;
 $container = $this->getContainer();
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $actionPath = $container->getParameter('action');
 
 # démarre la redirection standard vers la page précédente

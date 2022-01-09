@@ -10,7 +10,7 @@ use App\Modules\Gaia\Resource\PlaceResource;
 $container = $this->getContainer();
 $mediaPath = $container->getParameter('media');
 $request = $this->getContainer()->get('app.request');
-$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$orbitalBaseHelper = $this->getContainer()->get(\App\Modules\Athena\Helper\OrbitalBaseHelper::class);
 
 $building 		= $request->query->get('building');
 $currentLevel 	= $request->query->get('lvl');

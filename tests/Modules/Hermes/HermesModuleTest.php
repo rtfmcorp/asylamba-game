@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Asylamba\Modules\Hermes;
+namespace Tests\App\Modules\Hermes;
 
 use App\Modules\Hermes\HermesModule;
 use App\Classes\Worker\Application;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Asylamba\Modules\Promethee;
+namespace Tests\App\Modules\Promethee;
 
 use App\Modules\Promethee\PrometheeModule;
 use App\Classes\Worker\Application;

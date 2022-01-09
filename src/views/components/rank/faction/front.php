@@ -11,7 +11,7 @@ use App\Modules\Demeter\Resource\ColorResource;
 
 $container = $this->getContainer();
 $mediaPath = $container->getParameter('media');
-$factionRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\FactionRankingManager::class);
+$factionRankingManager = $this->getContainer()->get(\App\Modules\Atlas\Manager\FactionRankingManager::class);
 
 $factionRankingManager->changeSession($FACTION_RANKING_FRONT);
 $f = $factionRankingManager->get(0);

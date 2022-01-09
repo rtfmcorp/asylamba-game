@@ -12,7 +12,7 @@
 use App\Classes\Library\Format;
 
 $container = $this->getContainer();
-$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
+$sessionToken = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class)->get('token');
 $mediaPath = $container->getParameter('media');
 
 echo '<div class="component financial">';

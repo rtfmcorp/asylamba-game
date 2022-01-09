@@ -1,7 +1,7 @@
 <?php
 
 $container = $this->getContainer();
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $appRoot = $container->getParameter('app_root');
 $componentPath = $container->getParameter('component');
 
@@ -37,8 +37,8 @@ echo '<div id="content">';
 			echo '<div class="fix-body">';
 				echo '<div class="body">';
 
-					$galaxyConfiguration = $this->getContainer()->get(\Asylamba\Modules\Gaia\Galaxy\GalaxyConfiguration::class);
-					$sectors = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SectorManager::class)->getAll();
+					$galaxyConfiguration = $this->getContainer()->get(\App\Modules\Gaia\Galaxy\GalaxyConfiguration::class);
+					$sectors = $this->getContainer()->get(\App\Modules\Gaia\Manager\SectorManager::class)->getAll();
 					$rate = 750 / $galaxyConfiguration->galaxy['size'];
 
 					echo '<div class="tactical-map reactive">';

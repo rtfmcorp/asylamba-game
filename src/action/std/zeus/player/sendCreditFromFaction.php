@@ -10,11 +10,11 @@ use App\Classes\Exception\FormException;
 use App\Classes\Library\Flashbag;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
-$creditTransactionManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\CreditTransactionManager::class);
-$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
+$colorManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\ColorManager::class);
+$creditTransactionManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\CreditTransactionManager::class);
+$notificationManager = $this->getContainer()->get(\App\Modules\Hermes\Manager\NotificationManager::class);
 $mediaPath = $this->getContainer()->getParameter('media');
 
 # give credit from faction to player action
@@ -28,7 +28,7 @@ $quantity = $request->request->get('quantity');
 $text = $request->request->get('text');
 
 // input protection
-$p = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
+$p = $this->getContainer()->get(\App\Classes\Library\Parser::class);
 $name = $p->protect($name);
 $text = $p->parse($text);
 
@@ -68,7 +68,7 @@ if ($name !== FALSE AND $quantity !== FALSE) {
 							$n->addEnd();
 							$notificationManager->add($n);
 							$session->addFlashbag('Crédits envoyés', Flashbag::TYPE_SUCCESS);
-							$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();
+							$this->getContainer()->get(\App\Classes\Entity\EntityManager::class)->flush();
 						} else {
 							throw new ErrorException('envoi de crédits impossible - vous ne pouvez pas envoyer plus que ce que vous possédez');
 						}

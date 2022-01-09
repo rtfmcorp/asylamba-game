@@ -12,11 +12,11 @@ use App\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
-$topicManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Forum\ForumTopicManager::class);
-$forumMessageManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Forum\ForumMessageManager::class);
-$tutorialHelper = $this->getContainer()->get(\Asylamba\Modules\Zeus\Helper\TutorialHelper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$database = $this->getContainer()->get(\App\Classes\Database\Database::class);
+$topicManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\Forum\ForumTopicManager::class);
+$forumMessageManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\Forum\ForumMessageManager::class);
+$tutorialHelper = $this->getContainer()->get(\App\Modules\Zeus\Helper\TutorialHelper::class);
 
 $content = $request->request->get('content');
 $rTopic  = $request->query->get('rtopic');

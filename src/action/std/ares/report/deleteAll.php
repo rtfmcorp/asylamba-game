@@ -2,11 +2,11 @@
 
 use App\Classes\Library\Flashbag;
 
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 
 $this
 	->getContainer()
-	->get(\Asylamba\Modules\Ares\Manager\ReportManager::class)
+	->get(\App\Modules\Ares\Manager\ReportManager::class)
 	->removePlayerReports(
 		$session->get('playerId')
 	)

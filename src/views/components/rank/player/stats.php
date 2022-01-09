@@ -4,7 +4,7 @@
 use App\Classes\Library\Format;
 
 $appRoot = $this->getContainer()->getParameter('app_root');
-$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
+$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
 
 echo '<div class="component player rank">';
 	echo '<div class="head"></div>';

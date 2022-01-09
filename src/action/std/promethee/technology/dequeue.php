@@ -11,14 +11,14 @@ use App\Classes\Exception\FormException;
 use App\Modules\Promethee\Model\TechnologyQueue;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
-$technologyHelper = $this->getContainer()->get(\Asylamba\Modules\Promethee\Helper\TechnologyHelper::class);
-$technologyQueueManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\TechnologyQueueManager::class);
-$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$orbitalBaseManager = $this->getContainer()->get(\App\Modules\Athena\Manager\OrbitalBaseManager::class);
+$technologyHelper = $this->getContainer()->get(\App\Modules\Promethee\Helper\TechnologyHelper::class);
+$technologyQueueManager = $this->getContainer()->get(\App\Modules\Promethee\Manager\TechnologyQueueManager::class);
+$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
 $technologyResourceRefund = $this->getContainer()->getParameter('promethee.technology_queue.resource_refund');
 $technologyCreditRefund = $this->getContainer()->getParameter('promethee.technology_queue.credit_refund');
-$entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
+$entityManager = $this->getContainer()->get(\App\Classes\Entity\EntityManager::class);
 
 for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Asylamba\Modules\Demeter\Model;
+namespace Tests\App\Modules\Demeter\Model;
 
 use App\Modules\Demeter\Model\Color;
 

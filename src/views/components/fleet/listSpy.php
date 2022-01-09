@@ -14,7 +14,7 @@ $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
 $request = $this->getContainer()->get('app.request');
-$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
+$sessionToken = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class)->get('token');
 
 $i = 0;
 

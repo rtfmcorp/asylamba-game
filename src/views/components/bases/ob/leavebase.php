@@ -14,7 +14,7 @@ use App\Classes\Library\Format;
 use App\Modules\Athena\Model\OrbitalBase;
 use App\Modules\Ares\Model\Commander;
 
-$sessiontoken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
+$sessiontoken = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class)->get('token');
 
 $onMission = FALSE;
 foreach ($commanders_obSituation as $commander) {

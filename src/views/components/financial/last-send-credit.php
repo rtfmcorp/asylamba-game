@@ -4,8 +4,8 @@ use App\Classes\Library\Format;
 
 $container = $this->getContainer();
 $mediaPath = $container->getParameter('media');
-$creditTransactionManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\CreditTransactionManager::class);
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$creditTransactionManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\CreditTransactionManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 # load
 $S_CRT_1 = $creditTransactionManager->getCurrentSession();
 $creditTransactionManager->newSession();

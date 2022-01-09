@@ -18,14 +18,14 @@ use App\Modules\Ares\Model\Commander;
 use App\Classes\Exception\ErrorException;
 use App\Classes\Exception\FormException;
 
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
-$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
-$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
-$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
-$commercialShippingManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialShippingManager::class);
-$transactionManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\TransactionManager::class);
-$entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
+$commanderManager = $this->getContainer()->get(\App\Modules\Ares\Manager\CommanderManager::class);
+$orbitalBaseManager = $this->getContainer()->get(\App\Modules\Athena\Manager\OrbitalBaseManager::class);
+$orbitalBaseHelper = $this->getContainer()->get(\App\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$commercialShippingManager = $this->getContainer()->get(\App\Modules\Athena\Manager\CommercialShippingManager::class);
+$transactionManager = $this->getContainer()->get(\App\Modules\Athena\Manager\TransactionManager::class);
+$entityManager = $this->getContainer()->get(\App\Classes\Entity\EntityManager::class);
 
 for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');

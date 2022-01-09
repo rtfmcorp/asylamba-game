@@ -9,11 +9,11 @@ use App\Classes\Library\Utils;
 use App\Classes\Exception\ErrorException;
 use App\Classes\Exception\FormException;
 
-$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
-$creditTransactionManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\CreditTransactionManager::class);
+$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
+$colorManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\ColorManager::class);
+$creditTransactionManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\CreditTransactionManager::class);
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 
 $quantity = $request->request->get('quantity');
 
@@ -40,7 +40,7 @@ if ($quantity !== FALSE) {
 						$creditTransactionManager->add($ct);
 
 						$session->addFlashbag('Crédits envoyés', Flashbag::TYPE_SUCCESS);
-						$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();
+						$this->getContainer()->get(\App\Classes\Entity\EntityManager::class)->flush();
 					} else {
 						throw new ErrorException('envoi de crédits impossible - faction introuvable');
 					}	

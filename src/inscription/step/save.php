@@ -10,16 +10,16 @@ use App\Modules\Hermes\Model\ConversationUser;
 
 try {
 	$container = $this->getContainer();
-	$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-	$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-	$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
-	$researchManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\ResearchManager::class);
-	$researchHelper = $this->getContainer()->get(\Asylamba\Modules\Promethee\Helper\ResearchHelper::class);
-	$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
-	$conversationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationManager::class);
-	$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
-	$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
-	$entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
+	$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+	$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
+	$notificationManager = $this->getContainer()->get(\App\Modules\Hermes\Manager\NotificationManager::class);
+	$researchManager = $this->getContainer()->get(\App\Modules\Promethee\Manager\ResearchManager::class);
+	$researchHelper = $this->getContainer()->get(\App\Modules\Promethee\Helper\ResearchHelper::class);
+	$database = $this->getContainer()->get(\App\Classes\Database\Database::class);
+	$conversationManager = $this->getContainer()->get(\App\Modules\Hermes\Manager\ConversationManager::class);
+	$placeManager = $this->getContainer()->get(\App\Modules\Gaia\Manager\PlaceManager::class);
+	$orbitalBaseManager = $this->getContainer()->get(\App\Modules\Athena\Manager\OrbitalBaseManager::class);
+	$entityManager = $this->getContainer()->get(\App\Classes\Entity\EntityManager::class);
 	
 	$entityManager->beginTransaction();
 	
@@ -203,7 +203,7 @@ try {
 
 	# ajout des techs haut-level
 	if ($session->get('high-mode')) {
-		$technologyManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\TechnologyManager::class);
+		$technologyManager = $this->getContainer()->get(\App\Modules\Promethee\Manager\TechnologyManager::class);
 		$technologyManager->addTech($player->id, Technology::COM_PLAT_UNBLOCK, 1);
 		$technologyManager->addTech($player->id, Technology::DOCK2_UNBLOCK, 1);
 		$technologyManager->addTech($player->id, Technology::DOCK3_UNBLOCK, 1);
@@ -266,13 +266,13 @@ try {
 			$user->convStatement = ConversationUser::CS_ARCHIVED;
 			$user->dLastView = $readingDate;
 
-			$this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationUserManager::class)->add($user);
+			$this->getContainer()->get(\App\Modules\Hermes\Manager\ConversationUserManager::class)->add($user);
 		}
 		
 		$conversationManager->changeSession($S_CVM);
 	}
 	$entityManager->commit();
-	$security = $this->getContainer()->get(\Asylamba\Classes\Library\Security::class);
+	$security = $this->getContainer()->get(\App\Classes\Library\Security::class);
 	# redirection vers connection
 	$this->getContainer()->get('app.response')->redirect('connection/bindkey-' . $security->crypt($security->buildBindkey($player->getBind())) . '/mode-splash');
 } catch (Exception $e) {

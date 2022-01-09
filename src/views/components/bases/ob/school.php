@@ -18,8 +18,8 @@ use App\Modules\Gaia\Resource\PlaceResource;
 $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
-$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$commanderManager = $this->getContainer()->get(\App\Modules\Ares\Manager\CommanderManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
 
 $commanders = $commanderManager->getBaseCommanders($ob_school->getId(), [Commander::INSCHOOL], ['c.experience' => 'DESC']);

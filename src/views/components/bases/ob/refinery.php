@@ -13,8 +13,8 @@ use App\Classes\Library\Format;
 use App\Modules\Zeus\Model\PlayerBonus;
 
 $container = $this->getContainer();
-$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$orbitalBaseHelper = $this->getContainer()->get(\App\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $mediaPath = $container->getParameter('media');
 
 echo '<div class="component building">';

@@ -16,17 +16,17 @@ use App\Modules\Athena\Model\CommercialShipping;
 use App\Modules\Hermes\Model\Notification;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
-$transactionManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\TransactionManager::class);
-$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
-$commercialShippingManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialShippingManager::class);
-$commercialTaxManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialTaxManager::class);
-$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
-$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
-$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
-$entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$database = $this->getContainer()->get(\App\Classes\Database\Database::class);
+$transactionManager = $this->getContainer()->get(\App\Modules\Athena\Manager\TransactionManager::class);
+$orbitalBaseManager = $this->getContainer()->get(\App\Modules\Athena\Manager\OrbitalBaseManager::class);
+$commercialShippingManager = $this->getContainer()->get(\App\Modules\Athena\Manager\CommercialShippingManager::class);
+$commercialTaxManager = $this->getContainer()->get(\App\Modules\Athena\Manager\CommercialTaxManager::class);
+$placeManager = $this->getContainer()->get(\App\Modules\Gaia\Manager\PlaceManager::class);
+$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
+$colorManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\ColorManager::class);
+$notificationManager = $this->getContainer()->get(\App\Modules\Hermes\Manager\NotificationManager::class);
+$entityManager = $this->getContainer()->get(\App\Classes\Entity\EntityManager::class);
 
 for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');

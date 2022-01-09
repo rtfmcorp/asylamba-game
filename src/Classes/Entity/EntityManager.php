@@ -3,16 +3,18 @@
 namespace App\Classes\Entity;
 
 use App\Classes\Database\Database as Connection;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class EntityManager {
     protected Connection $connection;
-    protected UnitOfWork $unitOfWork;
+    protected ?UnitOfWork $unitOfWork = null;
     protected array $repositories = [];
 
     public function __construct(Connection $connection) {
         $this->connection = $connection;
     }
-    
+
+	#[Required]
     public function init()
     {
         $this->unitOfWork = new UnitOfWork($this);

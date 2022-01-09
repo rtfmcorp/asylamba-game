@@ -46,7 +46,7 @@ class SessionWrapper
 	
 	/**
 	 * @param string $sessionId
-	 * @return \Asylamba\Classes\Library\Session\Session
+	 * @return \App\Classes\Library\Session\Session
 	 */
 	public function fetchSession($sessionId)
 	{

@@ -5,7 +5,7 @@ use App\Modules\Demeter\Resource\ColorResource;
 $container = $this->getContainer();
 $mediaPath = $container->getParameter('media');
 $appRoot = $container->getParameter('app_root');
-$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
+$colorManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\ColorManager::class);
 
 # background paralax
 echo '<div id="background-paralax" class="profil"></div>';

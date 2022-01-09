@@ -7,7 +7,7 @@ use App\Modules\Athena\Resource\ShipResource;
 $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
-$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
+$sessionToken = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class)->get('token');
 
 echo '<div class="component new-message market-sell">';
 	echo '<div class="head skin-4 sh">';

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Asylamba\Classes\Library;
+namespace Tests\App\Classes\Library;
 
 use App\Classes\Library\DateTimeConverter;
 use PHPUnit\Framework\TestCase;

@@ -13,11 +13,11 @@ use App\Classes\Exception\ErrorException;
 use App\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
-$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$conversationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationManager::class);
-$conversationMessageManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationMessageManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$parser = $this->getContainer()->get(\App\Classes\Library\Parser::class);
+$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
+$conversationManager = $this->getContainer()->get(\App\Modules\Hermes\Manager\ConversationManager::class);
+$conversationMessageManager = $this->getContainer()->get(\App\Modules\Hermes\Manager\ConversationMessageManager::class);
 
 # protection des inputs
 $content = $parser->parse($request->request->get('message'));

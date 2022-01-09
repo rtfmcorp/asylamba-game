@@ -4,7 +4,7 @@ namespace App\Modules\Athena\Repository;
 
 use App\Classes\Entity\AbstractRepository;
 
-use \Asylamba\Modules\Athena\Model\BuildingQueue;
+use \App\Modules\Athena\Model\BuildingQueue;
 
 class BuildingQueueRepository extends AbstractRepository
 {

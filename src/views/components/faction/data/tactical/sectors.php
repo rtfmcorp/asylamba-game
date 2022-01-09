@@ -3,8 +3,8 @@
 use App\Classes\Library\Format;
 use App\Modules\Demeter\Resource\ColorResource;
 
-$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
-$sectorManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SectorManager::class);
+$colorManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\ColorManager::class);
+$sectorManager = $this->getContainer()->get(\App\Modules\Gaia\Manager\SectorManager::class);
 $redisManager = $this->getContainer()->get('redis_manager');
 
 $sectors = $sectorManager->getAll();

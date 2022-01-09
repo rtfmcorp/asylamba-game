@@ -16,9 +16,9 @@ use App\Modules\Zeus\Resource\TutorialResource;
 use App\Classes\Exception\FormException;
 use App\Classes\Exception\ErrorException;
 
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
-$tutorialHelper = $this->getContainer()->get(\Asylamba\Modules\Zeus\Helper\TutorialHelper::class);
+$tutorialHelper = $this->getContainer()->get(\App\Modules\Zeus\Helper\TutorialHelper::class);
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
     $verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -46,7 +46,7 @@ if ($quantity === null) {
     $quantity = 1;
 }
 
-$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
+$commanderManager = $this->getContainer()->get(\App\Modules\Ares\Manager\CommanderManager::class);
 $orbitalBaseManager = $this->getContainer()->get('athena.orbital_orbitalBase_manager');
 
 if (

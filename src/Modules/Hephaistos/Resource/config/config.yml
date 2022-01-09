@@ -10,10 +10,10 @@ services:
             tags:
                 - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
 
-    Asylamba\Modules\Hephaistos\Handler\:
-        resource: '%root_path%/system/Modules/Hephaistos/Handler/*'
+    App\Modules\Hephaistos\Handler\:
+        resource: '%kernel.project_dir%/src/Modules/Hephaistos/Handler/*'
 
-    Asylamba\Modules\Hephaistos\Handler\DailyRoutineHandler:
+    App\Modules\Hephaistos\Handler\DailyRoutineHandler:
         arguments:
             $apiMode: "%apimode%"
             $playerInactiveTimeLimit: "%zeus.player.inactive_time_limit%"

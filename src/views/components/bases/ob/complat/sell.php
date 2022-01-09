@@ -10,9 +10,9 @@ use App\Modules\Athena\Resource\ShipResource;
 
 $container = $this->getContainer();
 $mediaPath = $container->getParameter('media');
-$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
-$transactionManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\TransactionManager::class);
-$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
+$commanderManager = $this->getContainer()->get(\App\Modules\Ares\Manager\CommanderManager::class);
+$transactionManager = $this->getContainer()->get(\App\Modules\Athena\Manager\TransactionManager::class);
+$sessionToken = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class)->get('token');
 
 # resources current rate
 $resourcesCurrentRate = $transactionManager->getLastCompletedTransaction(Transaction::TYP_RESOURCE)->currentRate;

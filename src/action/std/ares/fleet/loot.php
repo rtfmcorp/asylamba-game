@@ -15,13 +15,13 @@ use App\Classes\Exception\ErrorException;
 
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
-$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
-$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
-$sectorManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SectorManager::class);
-$tutorialHelper = $this->getContainer()->get(\Asylamba\Modules\Zeus\Helper\TutorialHelper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$commanderManager = $this->getContainer()->get(\App\Modules\Ares\Manager\CommanderManager::class);
+$placeManager = $this->getContainer()->get(\App\Modules\Gaia\Manager\PlaceManager::class);
+$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
+$colorManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\ColorManager::class);
+$sectorManager = $this->getContainer()->get(\App\Modules\Gaia\Manager\SectorManager::class);
+$tutorialHelper = $this->getContainer()->get(\App\Modules\Zeus\Helper\TutorialHelper::class);
 
 $commanderId = $request->query->get('commanderid');
 $placeId = $request->query->get('placeid');
@@ -81,7 +81,7 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 		} else {
 			throw new ErrorException('Ce commandant ne vous appartient pas ou n\'existe pas.');
 		}
-	} elseif ($player->level > 1 || $player->statement >= \Asylamba\Modules\Zeus\Model\Player::DELETED) {
+	} elseif ($player->level > 1 || $player->statement >= \App\Modules\Zeus\Model\Player::DELETED) {
 		if (($commander = $commanderManager->get($commanderId)) !== null && $commander->rPlayer === $session->get('playerId')) {
 			if ($place !== null) {
 				$color = $colorManager->get($session->get('playerInfo')->get('color'));
@@ -128,4 +128,4 @@ if ($commanderId !== FALSE AND $placeId !== FALSE) {
 	throw new ErrorException('Manque de précision sur le commandant ou la position.');
 }
 
-$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();
+$this->getContainer()->get(\App\Classes\Entity\EntityManager::class)->flush();

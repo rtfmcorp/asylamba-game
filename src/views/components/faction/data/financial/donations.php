@@ -7,7 +7,7 @@ use App\Modules\Demeter\Resource\ColorResource;
 $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
-$creditTransactionManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\CreditTransactionManager::class);
+$creditTransactionManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\CreditTransactionManager::class);
 
 # load
 $S_CRT_1 = $creditTransactionManager->getCurrentSession();

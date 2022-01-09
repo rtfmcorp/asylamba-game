@@ -5,11 +5,11 @@ use App\Modules\Ares\Model\Commander;
 
 $container = $this->getContainer();
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
-$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
-$recyclingMissionManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\RecyclingMissionManager::class);
-$recyclingLogManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\RecyclingLogManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$orbitalBaseManager = $this->getContainer()->get(\App\Modules\Athena\Manager\OrbitalBaseManager::class);
+$commanderManager = $this->getContainer()->get(\App\Modules\Ares\Manager\CommanderManager::class);
+$recyclingMissionManager = $this->getContainer()->get(\App\Modules\Athena\Manager\RecyclingMissionManager::class);
+$recyclingLogManager = $this->getContainer()->get(\App\Modules\Athena\Manager\RecyclingLogManager::class);
 $componentPath = $container->getParameter('component');
 
 # choix de la base

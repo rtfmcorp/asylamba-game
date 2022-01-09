@@ -11,7 +11,7 @@ use App\Modules\Demeter\Resource\ColorResource;
 $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
 # require
 	# {topic}				topic_topic
@@ -41,7 +41,7 @@ echo '<div class="component topic size2">';
 					echo '<div class="content">';
 						echo '<form action="' . Format::actionBuilder('writemessageforum', $sessionToken, ['rtopic' => $topic_topic->id]) . '" method="POST">';
 							echo '<div class="wysiwyg" data-id="new-topic-wysiwyg">';
-								$parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
+								$parser = $this->getContainer()->get(\App\Classes\Library\Parser::class);
 								echo $parser->getToolbar();
 								
 								echo '<textarea name="content" id="new-topic-wysiwyg" placeholder="Répondez"></textarea>';
@@ -74,7 +74,7 @@ echo '<div class="component topic size2">';
 						if ($canEdit) {
 							echo '<form style="display:none;" action="' . Format::actionBuilder('editmessageforum', $sessionToken, ['id' => $m->id]) . '" id="edit-m-' . $m->id . '" method="post">';
 								echo '<div class="wysiwyg" data-id="edit-wysiwyg-m-' . $m->id . '">';
-									$parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
+									$parser = $this->getContainer()->get(\App\Classes\Library\Parser::class);
 									echo $parser->getToolbar();
 									
 									echo '<textarea name="content" id="edit-wysiwyg-m-' . $m->id . '" placeholder="Répondez">' . $m->oContent . '</textarea>';

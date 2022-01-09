@@ -10,8 +10,8 @@ use App\Modules\Demeter\Resource\LawResources;
 
 $container = $this->getContainer();
 $mediaPath = $container->getParameter('media');
-$voteLawManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Law\VoteLawManager::class);
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$voteLawManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\Law\VoteLawManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
 
 # durée de la loi

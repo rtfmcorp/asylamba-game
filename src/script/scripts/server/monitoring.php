@@ -3,7 +3,7 @@
 use App\Classes\Library\Utils;
 
 $server = $this->getContainer()->get('server');
-$clientManager = $this->getContainer()->get(\Asylamba\Classes\Daemon\ClientManager::class);
+$clientManager = $this->getContainer()->get(\App\Classes\Daemon\ClientManager::class);
 $processManager = $this->getContainer()->get('process_manager');
 $memoryManager = $this->getContainer()->get('memory_manager');
 

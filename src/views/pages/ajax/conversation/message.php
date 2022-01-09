@@ -6,10 +6,10 @@ use App\Modules\Hermes\Model\ConversationMessage;
 $container = $this->getContainer();
 $componentPath = $container->getParameter('component');
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$conversationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationManager::class);
-$conversationMessageManager = $container->get(\Asylamba\Modules\Hermes\Manager\ConversationMessageManager::class);
-$conversationUserManager = $container->get(\Asylamba\Modules\Hermes\Manager\ConversationUserManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$conversationManager = $this->getContainer()->get(\App\Modules\Hermes\Manager\ConversationManager::class);
+$conversationMessageManager = $container->get(\App\Modules\Hermes\Manager\ConversationMessageManager::class);
+$conversationUserManager = $container->get(\App\Modules\Hermes\Manager\ConversationUserManager::class);
 
 $page = $request->query->has('page') 
 	? $request->query->get('page')

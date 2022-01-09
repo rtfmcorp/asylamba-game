@@ -2,8 +2,8 @@
 
 use App\Classes\Library\Format;
 
-$candidateManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Election\CandidateManager::class);
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$candidateManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\Election\CandidateManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
 
 $hasIPresented = FALSE;

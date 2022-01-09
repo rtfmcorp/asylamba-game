@@ -1,19 +1,17 @@
-{% extends '../layouts/base.html.twig' %}
-
 <!DOCTYPE html>
 <html lang="fr">
 	<head>
 		<title>
 			{%- block title -%}
-				— <?php echo $container->getParameter('app_subname') ?> — Asylamba
+				— {{ app_subname }} — Asylamba
 			{%- endblock title -%}
 		</title>
 
 		<meta charset="utf-8" />
-		<meta name="description" content="<?php echo $container->getParameter('app_description') ?>" />
+		<meta name="description" content="{{ app_description }}" />
 
-		<link rel="icon" type="image/png" href="<?php echo $container->getParameter('media') ?>/favicon/color1.png" />
-		<link rel="stylesheet" media="screen" type="text/css" href="<?php echo $container->getParameter('css') ?>buffer/main.css" />
+		<link rel="icon" type="image/png" href="{{ asset('media/favicon/color1.png') }}" />
+		<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/buffer/main.css') }}" />
 	</head>
 	<body>
 		{% block body %}{% endblock body %}

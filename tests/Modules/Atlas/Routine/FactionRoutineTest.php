@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Asylamba\Modules\Atlas\Routine;
+namespace Tests\App\Modules\Atlas\Routine;
 
 use App\Modules\Atlas\Routine\FactionRoutine;
 
@@ -155,7 +155,7 @@ class FactionRoutineTest extends \PHPUnit\Framework\TestCase
 	public function getFactionRankingManagerMock()
 	{
 		$factionRankingManager = $this
-			->getMockBuilder('Asylamba\Modules\Atlas\Manager\FactionRankingManager')
+			->getMockBuilder('App\Modules\Atlas\Manager\FactionRankingManager')
 			->disableOriginalConstructor()
 			->getMock()
 		;

@@ -1,6 +1,6 @@
 <?php
 
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
 
 $player = $request->query->has('player')

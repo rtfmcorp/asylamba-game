@@ -3,9 +3,9 @@
 $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 
-$reports = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\LiveReportManager::class)->getFactionDefenseReports($session->get('playerInfo')->get('color'));
+$reports = $this->getContainer()->get(\App\Modules\Ares\Manager\LiveReportManager::class)->getFactionDefenseReports($session->get('playerInfo')->get('color'));
 
 # work
 echo '<div class="component">';

@@ -34,7 +34,7 @@ class Client
 	
 	/**
 	 * @param \DateTime $lastConnectedAt
-	 * @return \Asylamba\Classes\Daemon\Client
+	 * @return \App\Classes\Daemon\Client
 	 */
 	public function setLastConnectedAt(\DateTime $lastConnectedAt)
 	{

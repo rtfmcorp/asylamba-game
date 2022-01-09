@@ -2,11 +2,10 @@
 
 namespace App\Classes\Entity;
 
-class UnitOfWork {
-    /** @var array **/
-    protected $entities = [];
-    /** @var EntityManager **/
-    protected $entityManager;
+class UnitOfWork
+{
+    protected array $entities = [];
+    protected EntityManager $entityManager;
     
     // Entity is not committed yet
     const METADATA_STAGED = 'staged';

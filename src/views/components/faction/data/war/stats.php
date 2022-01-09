@@ -7,7 +7,7 @@ use App\Modules\Athena\Resource\ShipResource;
 
 $container = $this->getContainer();
 $mediaPath = $container->getParameter('media');
-$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
+$database = $this->getContainer()->get(\App\Classes\Database\Database::class);
 
 $qr = $database->prepare('SELECT
 		COUNT(c.id) AS nb,

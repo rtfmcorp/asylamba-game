@@ -14,12 +14,12 @@ $mediaPath = $container->getParameter('media');
 $pagesPath = $container->getParameter('pages');
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
-$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
-$spyReportManager = $this->getContainer()->get(\Asylamba\Modules\Artemis\Manager\SpyReportManager::class);
-$recyclingMissionManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\RecyclingMissionManager::class);
-$technologyManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\TechnologyManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$orbitalBaseManager = $this->getContainer()->get(\App\Modules\Athena\Manager\OrbitalBaseManager::class);
+$commanderManager = $this->getContainer()->get(\App\Modules\Ares\Manager\CommanderManager::class);
+$spyReportManager = $this->getContainer()->get(\App\Modules\Artemis\Manager\SpyReportManager::class);
+$recyclingMissionManager = $this->getContainer()->get(\App\Modules\Athena\Manager\RecyclingMissionManager::class);
+$technologyManager = $this->getContainer()->get(\App\Modules\Promethee\Manager\TechnologyManager::class);
 
 if ($request->query->has('relatedplace')) {
 	if (($defaultBase = $orbitalBaseManager->get($request->query->get('relatedplace'))) === null) {
@@ -226,7 +226,7 @@ if (isset($defaultBase)) {
 							echo '</p>';
 
 							if ($place->typeOfPlace == 1) {
-								$reports = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\LiveReportManager::class)->getAttackReportsByPlaces($session->get('playerId'), $placesId);
+								$reports = $this->getContainer()->get(\App\Modules\Ares\Manager\LiveReportManager::class)->getAttackReportsByPlaces($session->get('playerId'), $placesId);
 
 								foreach ($reports as $report) { 
 									if ($report->rPlace == $place->id) {

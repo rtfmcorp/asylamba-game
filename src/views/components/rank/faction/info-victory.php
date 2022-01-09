@@ -10,7 +10,7 @@
 use App\Classes\Library\Format;
 
 $pointsToWin = $this->getContainer()->getParameter('points_to_win');
-$factionRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\FactionRankingManager::class);
+$factionRankingManager = $this->getContainer()->get(\App\Modules\Atlas\Manager\FactionRankingManager::class);
 
 $factionRankingManager->changeSession($FACTION_RANKING_POINTS);
 

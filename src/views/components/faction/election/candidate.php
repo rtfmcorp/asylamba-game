@@ -6,8 +6,8 @@ use App\Modules\Demeter\Resource\ColorResource;
 
 $container = $this->getContainer();
 $mediaPath = $container->getParameter('media');
-$parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
-$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
+$parser = $this->getContainer()->get(\App\Classes\Library\Parser::class);
+$sessionToken = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class)->get('token');
 
 $status = ColorResource::getInfo($faction->id, 'status');
 

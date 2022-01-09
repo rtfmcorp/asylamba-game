@@ -11,8 +11,8 @@ use App\Classes\Library\Utils;
 
 $container = $this->getContainer();
 $mediaPath = $container->getParameter('media');
-$factionRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\FactionRankingManager::class);
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$factionRankingManager = $this->getContainer()->get(\App\Modules\Atlas\Manager\FactionRankingManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $pointsToWin = $container->getParameter('points_to_win');
 $serverStartTime = $container->getParameter('server_start_time');
 $hoursBeforeStartOfRanking = $container->getParameter('hours_before_start_of_ranking');

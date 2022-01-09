@@ -18,14 +18,14 @@ use App\Classes\Exception\ErrorException;
 use App\Classes\Exception\FormException;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
-$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
-$commercialShippingManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialShippingManager::class);
-$transactionManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\TransactionManager::class);
-$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
-$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
-$entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$orbitalBaseManager = $this->getContainer()->get(\App\Modules\Athena\Manager\OrbitalBaseManager::class);
+$orbitalBaseHelper = $this->getContainer()->get(\App\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$commercialShippingManager = $this->getContainer()->get(\App\Modules\Athena\Manager\CommercialShippingManager::class);
+$transactionManager = $this->getContainer()->get(\App\Modules\Athena\Manager\TransactionManager::class);
+$placeManager = $this->getContainer()->get(\App\Modules\Gaia\Manager\PlaceManager::class);
+$notificationManager = $this->getContainer()->get(\App\Modules\Hermes\Manager\NotificationManager::class);
+$entityManager = $this->getContainer()->get(\App\Classes\Entity\EntityManager::class);
 
 for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -121,7 +121,7 @@ if ($baseId !== FALSE AND $otherBaseId !== FALSE AND in_array($baseId, $verif)) 
 									}
 
 									if (true === $this->getContainer()->getParameter('data_analysis')) {
-										$qr = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class)->prepare('INSERT INTO 
+										$qr = $this->getContainer()->get(\App\Classes\Database\Database::class)->prepare('INSERT INTO 
 											DA_CommercialRelation(`from`, `to`, type, weight, dAction)
 											VALUES(?, ?, ?, ?, ?)'
 										);

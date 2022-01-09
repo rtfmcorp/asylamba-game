@@ -4,7 +4,7 @@ use App\Modules\Athena\Resource\OrbitalBaseResource;
 
 $container = $this->getContainer();
 $request = $this->getContainer()->get('app.request');
-$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$orbitalBaseHelper = $this->getContainer()->get(\App\Modules\Athena\Helper\OrbitalBaseHelper::class);
 $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
 

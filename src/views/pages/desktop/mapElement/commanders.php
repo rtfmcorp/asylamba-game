@@ -10,9 +10,9 @@ $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
 $commanders = $this
 	->getContainer()
-	->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class)
+	->get(\App\Modules\Ares\Manager\CommanderManager::class)
 	->getBaseCommanders(
-		$this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('playerParams')->get('base'),
+		$this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class)->get('playerParams')->get('base'),
 		[Commander::AFFECTED, Commander::MOVING],
 		['c.line' => 'DESC']
 	)

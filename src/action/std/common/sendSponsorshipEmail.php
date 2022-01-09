@@ -4,7 +4,7 @@ use App\Classes\Worker\API;
 use App\Classes\Library\Flashbag;
 use App\Classes\Exception\ErrorException;
 
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
 
 $email = $request->request->get('email');

@@ -9,8 +9,8 @@ use App\Classes\Library\Format;
 $container = $this->getContainer();
 $mediaPath = $container->getParameter('media');
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$parser = $this->getContainer()->get(\App\Classes\Library\Parser::class);
 $sessionToken = $session->get('token');
 # require
 

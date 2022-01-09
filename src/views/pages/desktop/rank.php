@@ -6,9 +6,9 @@ use App\Classes\Library\Utils;
 $container = $this->getContainer();
 $componentPath = $container->getParameter('component');
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$playerRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\PlayerRankingManager::class);
-$factionRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\FactionRankingManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$playerRankingManager = $this->getContainer()->get(\App\Modules\Atlas\Manager\PlayerRankingManager::class);
+$factionRankingManager = $this->getContainer()->get(\App\Modules\Atlas\Manager\FactionRankingManager::class);
 
 # background paralax
 echo '<div id="background-paralax" class="rank"></div>';

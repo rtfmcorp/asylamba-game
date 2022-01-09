@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Asylamba\Modules\Ares\Manager;
+namespace Tests\App\Modules\Ares\Manager;
 
 use App\Modules\Ares\Manager\CommanderManager;
 
@@ -261,7 +261,7 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
     public function getEntityManagerMock()
     {
         $entityManagerMock = $this
-            ->getMockBuilder('\Asylamba\Classes\Entity\EntityManager')
+            ->getMockBuilder('\App\Classes\Entity\EntityManager')
             ->disableOriginalConstructor()
             ->getMock()
         ;
@@ -291,14 +291,14 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
     public function getRepositoryMock($repository)
     {
         return $this->{[
-            'Asylamba\Modules\Ares\Model\Commander' => 'getCommanderRepositoryMock'
+            'App\Modules\Ares\Model\Commander' => 'getCommanderRepositoryMock'
         ][$repository]}();
     }
     
     public function getCommanderRepositoryMock()
     {
         $repositoryMock = $this
-            ->getMockBuilder('\Asylamba\Modules\Ares\Repository\CommanderRepository')
+            ->getMockBuilder('\App\Modules\Ares\Repository\CommanderRepository')
             ->disableOriginalConstructor()
             ->getMock()
         ;
@@ -350,7 +350,7 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
     public function getFightManagerMock()
     {
         $fightManagerMock = $this
-            ->getMockBuilder('Asylamba\Modules\Ares\Manager\FightManager')
+            ->getMockBuilder('App\Modules\Ares\Manager\FightManager')
             ->disableOriginalConstructor()
             ->getMock()
         ;
@@ -360,7 +360,7 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
     public function getReportManagerMock()
     {
         $reportManagerMock = $this
-            ->getMockBuilder('Asylamba\Modules\Ares\Manager\ReportManager')
+            ->getMockBuilder('App\Modules\Ares\Manager\ReportManager')
             ->disableOriginalConstructor()
             ->getMock()
         ;
@@ -370,7 +370,7 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
     public function getOrbitalBaseManagerMock()
     {
         $orbitalBaseManagerMock = $this
-            ->getMockBuilder('Asylamba\Modules\Athena\Manager\OrbitalBaseManager')
+            ->getMockBuilder('App\Modules\Athena\Manager\OrbitalBaseManager')
             ->disableOriginalConstructor()
             ->getMock()
         ;
@@ -380,7 +380,7 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
     public function getPlayerManagerMock()
     {
         $playerManagerMock = $this
-            ->getMockBuilder('Asylamba\Modules\Zeus\Manager\PlayerManager')
+            ->getMockBuilder('App\Modules\Zeus\Manager\PlayerManager')
             ->disableOriginalConstructor()
             ->getMock()
         ;
@@ -402,7 +402,7 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
     public function getPlayerBonusManagerMock()
     {
         $playerBonusManagerMock = $this
-            ->getMockBuilder('Asylamba\Modules\Zeus\Manager\PlayerBonusManager')
+            ->getMockBuilder('App\Modules\Zeus\Manager\PlayerBonusManager')
             ->disableOriginalConstructor()
             ->getMock()
         ;
@@ -412,7 +412,7 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
     public function getPlaceManagerMock()
     {
         $placeManagerMock = $this
-            ->getMockBuilder('Asylamba\Modules\Gaia\Manager\PlaceManager')
+            ->getMockBuilder('App\Modules\Gaia\Manager\PlaceManager')
             ->disableOriginalConstructor()
             ->getMock()
         ;
@@ -434,7 +434,7 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
     public function getColorManagerMock()
     {
         $colorManagerMock = $this
-            ->getMockBuilder('Asylamba\Modules\Demeter\Manager\ColorManager')
+            ->getMockBuilder('App\Modules\Demeter\Manager\ColorManager')
             ->disableOriginalConstructor()
             ->getMock()
         ;
@@ -444,7 +444,7 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
     public function getNotificationManagerMock()
     {
         $notificationManagerMock = $this
-            ->getMockBuilder('Asylamba\Modules\Hermes\Manager\NotificationManager')
+            ->getMockBuilder('App\Modules\Hermes\Manager\NotificationManager')
             ->disableOriginalConstructor()
             ->getMock()
         ;
@@ -454,7 +454,7 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
     public function getSessionMock()
     {
         $sessionMock = $this
-            ->getMockBuilder('Asylamba\Classes\Library\Session\SessionWrapper')
+            ->getMockBuilder('App\Classes\Library\Session\SessionWrapper')
             ->disableOriginalConstructor()
             ->getMock()
         ;
@@ -464,7 +464,7 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
     public function getSchedulerMock()
     {
         $schedulerMock = $this
-            ->getMockBuilder('\Asylamba\Classes\Scheduler\RealTimeActionScheduler')
+            ->getMockBuilder('\App\Classes\Scheduler\RealTimeActionScheduler')
             ->disableOriginalConstructor()
             ->getMock()
         ;
@@ -479,7 +479,7 @@ class CommanderManagerTest extends \PHPUnit\Framework\TestCase
     public function getEventDispatcherMock()
     {
         $eventDispatcherMock = $this
-            ->getMockBuilder('Asylamba\Classes\Worker\EventDispatcher')
+            ->getMockBuilder('App\Classes\Worker\EventDispatcher')
             ->disableOriginalConstructor()
             ->getMock()
         ;

@@ -9,10 +9,10 @@ use App\Modules\Athena\Resource\ShipResource;
 use App\Modules\Zeus\Resource\TutorialResource;
 
 $container = $this->getContainer();
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
-$roadmapManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\RoadMapManager::class);
-$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$notificationManager = $this->getContainer()->get(\App\Modules\Hermes\Manager\NotificationManager::class);
+$roadmapManager = $this->getContainer()->get(\App\Modules\Hermes\Manager\RoadMapManager::class);
+$database = $this->getContainer()->get(\App\Classes\Database\Database::class);
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
 $sessionToken = $session->get('token');

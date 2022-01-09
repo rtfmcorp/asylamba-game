@@ -5,7 +5,7 @@ use App\Modules\Athena\Model\OrbitalBase;
 use App\Classes\Library\Format;
 
 $container = $this->getContainer();
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
 $minimalBaseChangeLevel = $this->getContainer()->getParameter('athena.obm.change_type_min_level');
 $capitalChangeLevel = $this->getContainer()->getParameter('athena.obm.capital_min_level');

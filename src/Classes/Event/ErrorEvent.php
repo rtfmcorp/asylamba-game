@@ -43,7 +43,7 @@ class ErrorEvent {
 	
 	/**
 	 * @param Response $response
-	 * @return \Asylamba\Classes\Event\ErrorEvent
+	 * @return \App\Classes\Event\ErrorEvent
 	 */
 	public function setResponse(Response $response)
 	{

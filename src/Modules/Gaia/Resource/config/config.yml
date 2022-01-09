@@ -15,46 +15,46 @@ services:
             tags:
                 - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
 
-    Asylamba\Modules\Gaia\Handler\:
-        resource: '%root_path%/system/Modules/Gaia/Handler/*'
+    App\Modules\Gaia\Handler\:
+        resource: '%kernel.project_dir%/src/Modules/Gaia/Handler/*'
 
-    Asylamba\Modules\Gaia\Manager\:
-        resource: '%root_path%/system/Modules/Gaia/Manager/*'
+    App\Modules\Gaia\Manager\:
+        resource: '%kernel.project_dir%/src/Modules/Gaia/Manager/*'
 
-    Asylamba\Modules\Gaia\Helper\ActionHelper:
+    App\Modules\Gaia\Helper\ActionHelper:
         arguments:
-            $rootPath: '%root_path%'
+            $rootPath: '%kernel.project_dir%'
             $mediaPath: '%media%'
             $routeSectorBonus: "%athena.trade.route.sector_bonus%"
             $routeColorBonus: "%athena.trade.route.color_bonus%"
 
-    Asylamba\Modules\Gaia\Helper\GalaxyGenerator: ~
+    App\Modules\Gaia\Helper\GalaxyGenerator: ~
             
-    Asylamba\Modules\Gaia\Manager\GalaxyColorManager:
+    App\Modules\Gaia\Manager\GalaxyColorManager:
         arguments:
             $availableFactions: "%game.available_factions%"
             $limitConquestSector: "%gaia.limit_conquest_sector%"
 
-    Asylamba\Modules\Gaia\Manager\PlaceManager:
+    App\Modules\Gaia\Manager\PlaceManager:
         arguments:
             $mediaPath: "%media%"
 
-    Asylamba\Modules\Gaia\Manager\SectorManager:
+    App\Modules\Gaia\Manager\SectorManager:
         arguments:
             $scores: "%gaia.scores%"
             
-    Asylamba\Modules\Gaia\Galaxy\GalaxyConfiguration:
+    App\Modules\Gaia\Galaxy\GalaxyConfiguration:
         public: true
         class: "%gaia.galaxy_configuration.class%"
         
-    Asylamba\Modules\Gaia\EventListener\SectorListener:
+    App\Modules\Gaia\EventListener\SectorListener:
         arguments:
             $scores: "%gaia.scores%"
             $sectorMinimalScore: "%gaia.sector_minimal_score%"
         tags:
             - {name: "kernel.event_listener", event: "gaia.place_owner_change", method: "onPlaceOwnerChange", priority: 1}
             
-    Asylamba\Modules\Gaia\EventListener\SystemListener:
+    App\Modules\Gaia\EventListener\SystemListener:
         arguments:
             $scores: "%gaia.scores%"
         tags:

@@ -6,8 +6,8 @@ use App\Modules\Athena\Model\CommercialShipping;
 $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
-$commercialShippingManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialShippingManager::class);
-$commercialTradeManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialTaxManager::class);
+$commercialShippingManager = $this->getContainer()->get(\App\Modules\Athena\Manager\CommercialShippingManager::class);
+$commercialTradeManager = $this->getContainer()->get(\App\Modules\Athena\Manager\CommercialTaxManager::class);
 
 $S_CTM1 = $commercialTradeManager->getCurrentSession();
 

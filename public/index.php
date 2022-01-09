@@ -1,5 +1,7 @@
 <?php
 
+use App\Kernel;
+
 const P_TYPE = 'app';
 const ASM_UMODE = true;
 

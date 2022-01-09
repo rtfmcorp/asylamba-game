@@ -22,15 +22,15 @@ use App\Modules\Zeus\Model\PlayerBonus;
 use App\Modules\Athena\Model\CommercialRoute;
 
 $container = $this->getContainer();
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$commercialRouteManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialRouteManager::class);
-$buildingQueueManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\BuildingQueueManager::class);
-$shipQueueManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\ShipQueueManager::class);
-$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$commercialRouteManager = $this->getContainer()->get(\App\Modules\Athena\Manager\CommercialRouteManager::class);
+$buildingQueueManager = $this->getContainer()->get(\App\Modules\Athena\Manager\BuildingQueueManager::class);
+$shipQueueManager = $this->getContainer()->get(\App\Modules\Athena\Manager\ShipQueueManager::class);
+$orbitalBaseHelper = $this->getContainer()->get(\App\Modules\Athena\Helper\OrbitalBaseHelper::class);
 $buildingResourceRefund = $this->getContainer()->getParameter('athena.building.building_queue_resource_refund');
 $sessionToken = $session->get('token');
-$technologyHelper = $this->getContainer()->get(\Asylamba\Modules\Promethee\Helper\TechnologyHelper::class);
-$entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
+$technologyHelper = $this->getContainer()->get(\App\Modules\Promethee\Helper\TechnologyHelper::class);
+$entityManager = $this->getContainer()->get(\App\Classes\Entity\EntityManager::class);
 $mediaPath = $container->getParameter('media');
 
 // @TODO: move it to the using part of the code and remove useless data

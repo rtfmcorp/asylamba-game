@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Asylamba\Modules\Ares;
+namespace Tests\App\Modules\Ares;
 
 use App\Modules\Ares\AresModule;
 use App\Classes\Worker\Application;

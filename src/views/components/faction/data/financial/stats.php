@@ -5,7 +5,7 @@ use App\Classes\Library\Format;
 $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
-$factionRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\FactionRankingManager::class);
+$factionRankingManager = $this->getContainer()->get(\App\Modules\Atlas\Manager\FactionRankingManager::class);
 
 $S_FRM1 = $factionRankingManager->getCurrentSession();
 $factionRankingManager->newSession();

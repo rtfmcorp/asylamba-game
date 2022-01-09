@@ -5,7 +5,7 @@ use App\Classes\Library\Flashbag;
 $container = $this->getContainer();
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $componentPath = $container->getParameter('component');
 # bases loading
 if ($session->get('playerInfo')->get('admin') == FALSE) {

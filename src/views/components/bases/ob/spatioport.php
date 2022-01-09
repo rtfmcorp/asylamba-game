@@ -20,13 +20,13 @@ $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
 $componentPath = $container->getParameter('component');
-$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$orbitalBaseHelper = $this->getContainer()->get(\App\Modules\Athena\Helper\OrbitalBaseHelper::class);
 $request = $this->getContainer()->get('app.request');
-$commercialRouteManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialRouteManager::class);
-$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$commercialRouteManager = $this->getContainer()->get(\App\Modules\Athena\Manager\CommercialRouteManager::class);
+$database = $this->getContainer()->get(\App\Classes\Database\Database::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
-$entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
+$entityManager = $this->getContainer()->get(\App\Classes\Entity\EntityManager::class);
 
 $nMaxCR = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::SPATIOPORT, 'level', $ob_spatioport->getLevelSpatioport(), 'nbRoutesMax');
 $nCRWaitingForOther = 0; $nCRWaitingForMe = 0;
@@ -54,7 +54,7 @@ if (count($routes) > 0) {
 	}
 	$nCRInDock = $nCROperational + $nCRInStandBy + $nCRWaitingForOther;
 }
-$inGameFactions = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class)->getInGameFactions();
+$inGameFactions = $this->getContainer()->get(\App\Modules\Demeter\Manager\ColorManager::class)->getInGameFactions();
 
 $factions = [];
 foreach ($inGameFactions as $inGameFaction) { 

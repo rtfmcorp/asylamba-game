@@ -10,11 +10,11 @@ use App\Modules\Athena\Resource\OrbitalBaseResource;
 use App\Classes\Exception\ErrorException;
 use App\Classes\Exception\FormException;
 
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
-$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
-$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
-$recyclingMissionManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\RecyclingMissionManager::class);
+$orbitalBaseHelper = $this->getContainer()->get(\App\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$orbitalBaseManager = $this->getContainer()->get(\App\Modules\Athena\Manager\OrbitalBaseManager::class);
+$recyclingMissionManager = $this->getContainer()->get(\App\Modules\Athena\Manager\RecyclingMissionManager::class);
 
 for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -47,7 +47,7 @@ if ($rPlace !== FALSE AND !empty($missionId) AND $quantity !== FALSE AND in_arra
 				}
 				if ($mission !== NULL) {
 					$mission->addToNextMission += $quantity;
-					$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush($mission);
+					$this->getContainer()->get(\App\Classes\Entity\EntityManager::class)->flush($mission);
 					$session->addFlashbag('Vos recycleurs ont bien été affectés, ils seront ajoutés à la prochaine mission.', Flashbag::TYPE_SUCCESS);
 				} else {
 					throw new ErrorException('Il y a un problème, la mission est introuvable. Veuillez contacter un administrateur.');

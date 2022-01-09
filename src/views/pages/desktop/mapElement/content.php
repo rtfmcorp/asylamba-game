@@ -3,7 +3,7 @@
 use App\Classes\Container\Params;
 
 $request = $this->getContainer()->get('app.request');
-$galaxyConfiguration = $this->getContainer()->get(\Asylamba\Modules\Gaia\Galaxy\GalaxyConfiguration::class);
+$galaxyConfiguration = $this->getContainer()->get(\App\Modules\Gaia\Galaxy\GalaxyConfiguration::class);
 
 $rate = 400 / $galaxyConfiguration->galaxy['size'];
 echo '<div id="map-content" ' . ($request->cookies->get('p' . Params::SHOW_MAP_MINIMAP, Params::$params[Params::SHOW_MAP_MINIMAP]) ? NULL : 'style="display:none;"') . '>';

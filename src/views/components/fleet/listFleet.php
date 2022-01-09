@@ -18,7 +18,7 @@ use App\Classes\Library\Chronos;
 
 $container = $this->getContainer();
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
 $mediaPath = $container->getParameter('media');
 $appRoot = $container->getParameter('app_root');

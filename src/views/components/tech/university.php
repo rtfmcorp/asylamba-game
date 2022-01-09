@@ -17,8 +17,8 @@ use App\Modules\Promethee\Model\Research;
 $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$researchHelper = $this->getContainer()->get(\Asylamba\Modules\Promethee\Helper\ResearchHelper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$researchHelper = $this->getContainer()->get(\App\Modules\Promethee\Helper\ResearchHelper::class);
 
 echo '<div class="component">';
 	echo '<div class="head skin-1">';

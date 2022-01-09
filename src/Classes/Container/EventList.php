@@ -27,7 +27,7 @@ class EventList {
 
     /**
      * @param string $date
-     * @return \Asylamba\Classes\Container\StackList
+     * @return \App\Classes\Container\StackList
      */
     public function getPastEvents($date) {
         $past = new StackList();

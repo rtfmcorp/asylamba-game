@@ -31,20 +31,20 @@ services:
             tags:
                 - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
 
-    Asylamba\Modules\Athena\Helper\:
-        resource: '%root_path%/system/Modules/Athena/Helper/*'
+    App\Modules\Athena\Helper\:
+        resource: '%kernel.project_dir%/src/Modules/Athena/Helper/*'
 
-    Asylamba\Modules\Athena\Manager\:
-        resource: '%root_path%/system/Modules/Athena/Manager/*'
+    App\Modules\Athena\Manager\:
+        resource: '%kernel.project_dir%/src/Modules/Athena/Manager/*'
 
-    Asylamba\Modules\Athena\Handler\:
-        resource: '%root_path%/system/Modules/Athena/Handler/*'
+    App\Modules\Athena\Handler\:
+        resource: '%kernel.project_dir%/src/Modules/Athena/Handler/*'
 
-    Asylamba\Modules\Athena\Manager\CommercialShippingManager:
+    App\Modules\Athena\Manager\CommercialShippingManager:
         arguments:
             $mediaPath: '%media%'
 
-    Asylamba\Modules\Athena\Manager\TransactionManager:
+    App\Modules\Athena\Manager\TransactionManager:
         arguments:
-            $rootPath: '%root_path%'
+            $rootPath: '%kernel.project_dir%'
             $mediaPath: '%media%'

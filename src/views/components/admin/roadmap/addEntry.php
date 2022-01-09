@@ -15,7 +15,7 @@ echo '<div class="component new-message size2">';
 	echo '</div>';
 	echo '<div class="fix-body">';
 		echo '<div class="body">';
-			echo '<form action="' . Format::actionBuilder('writeroadmap', $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token')) . '" method="POST" />';
+			echo '<form action="' . Format::actionBuilder('writeroadmap', $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class)->get('token')) . '" method="POST" />';
 				echo '<p><label for="new-message-message">Mise à jour</label></p>';
 				echo '<p class="input input-area"><textarea id="new-message-message" name="content">—</textarea></p>';
 

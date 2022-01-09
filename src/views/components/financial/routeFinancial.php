@@ -13,7 +13,7 @@ use App\Classes\Library\Format;
 use App\Modules\Athena\Model\CommercialRoute;
 
 $container = $this->getContainer();
-$commercialRouteManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialRouteManager::class);
+$commercialRouteManager = $this->getContainer()->get(\App\Modules\Athena\Manager\CommercialRouteManager::class);
 $mediaPath = $container->getParameter('media');
 
 echo '<div class="component financial">';
@@ -59,7 +59,7 @@ echo '<div class="component financial">';
 								echo '</li>';
 							}
 						}
-						$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->clear(CommercialRoute::class);
+						$this->getContainer()->get(\App\Classes\Entity\EntityManager::class)->clear(CommercialRoute::class);
 						echo '</ul>';
 					}
 				echo '</li>';

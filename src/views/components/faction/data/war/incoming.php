@@ -2,7 +2,7 @@
 
 use App\Modules\Ares\Model\Commander;
 
-$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
+$database = $this->getContainer()->get(\App\Classes\Database\Database::class);
 
 $qr = $db->prepare('SELECT
 		COUNT(c.id) AS nb

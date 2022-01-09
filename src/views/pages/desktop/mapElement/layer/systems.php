@@ -5,10 +5,10 @@ use App\Modules\Demeter\Resource\ColorResource;
 
 $container = $this->getContainer();
 $mediaPath = $container->getParameter('media');
-$galaxyConfiguration = $this->getContainer()->get(\Asylamba\Modules\Gaia\Galaxy\GalaxyConfiguration::class);
+$galaxyConfiguration = $this->getContainer()->get(\App\Modules\Gaia\Galaxy\GalaxyConfiguration::class);
 
 echo '<div id="systems">';
-	$systems = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SystemManager::class)->getAll();
+	$systems = $this->getContainer()->get(\App\Modules\Gaia\Manager\SystemManager::class)->getAll();
 
 	# own bases
 	$basesId = array();

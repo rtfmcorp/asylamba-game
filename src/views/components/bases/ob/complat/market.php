@@ -6,10 +6,10 @@ use App\Classes\Library\Format;
 
 $container = $this->getContainer();
 $mediaPath = $container->getParameter('media');
-$transactionManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\TransactionManager::class);
-$commercialShippingManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialShippingManager::class);
-$commercialTradeManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialTaxManager::class);
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$transactionManager = $this->getContainer()->get(\App\Modules\Athena\Manager\TransactionManager::class);
+$commercialShippingManager = $this->getContainer()->get(\App\Modules\Athena\Manager\CommercialShippingManager::class);
+$commercialTradeManager = $this->getContainer()->get(\App\Modules\Athena\Manager\CommercialTaxManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 
 $S_CTM1 = $commercialTradeManager->getCurrentSession();
 $S_CTM2 = $commercialTradeManager->newSession();

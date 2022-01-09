@@ -3,10 +3,10 @@
 use App\Classes\Container\Params;
 use App\Modules\Athena\Model\CommercialRoute;
 
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$galaxyConfiguration = $this->getContainer()->get(\Asylamba\Modules\Gaia\Galaxy\GalaxyConfiguration::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$galaxyConfiguration = $this->getContainer()->get(\App\Modules\Gaia\Galaxy\GalaxyConfiguration::class);
 
-$qr = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class)->query('SELECT
+$qr = $this->getContainer()->get(\App\Classes\Database\Database::class)->query('SELECT
 		sy1.xPosition AS sy1x,
 		sy1.yPosition AS sy1y,
 		sy2.xPosition AS sy2x,

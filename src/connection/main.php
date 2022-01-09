@@ -6,11 +6,11 @@ use App\Modules\Zeus\Model\Player;
 use App\Classes\Library\Utils;
 
 $container = $this->getContainer();
-$security = $this->getContainer()->get(\Asylamba\Classes\Library\Security::class);
+$security = $this->getContainer()->get(\App\Classes\Library\Security::class);
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 
 # extraction du bindkey
 $query  = $security->uncrypt($request->query->get('bindkey'));
@@ -39,7 +39,7 @@ if (($player = $playerManager->getByBindKey($bindKey)) !== null && in_array($pla
 	if ($this->getContainer()->getParameter('apimode') === 'enabled') {
 		$this->getContainer()->get('api')->confirmConnection($bindKey);
 	}
-	$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush($player);
+	$this->getContainer()->get(\App\Classes\Entity\EntityManager::class)->flush($player);
 	// redirection vers page de départ
 	$response->redirect(
 		($request->query->get('mode') === 'splash')

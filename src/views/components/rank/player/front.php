@@ -9,7 +9,7 @@
 
 use App\Modules\Demeter\Resource\ColorResource;
 
-$playerRankingManager = $this->getContainer()->get(\Asylamba\Modules\Atlas\Manager\PlayerRankingManager::class);
+$playerRankingManager = $this->getContainer()->get(\App\Modules\Atlas\Manager\PlayerRankingManager::class);
 
 $container = $this->getContainer();
 $mediaPath = $container->getParameter('media');

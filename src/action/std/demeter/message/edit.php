@@ -6,9 +6,9 @@ use App\Classes\Exception\FormException;
 use App\Classes\Library\Utils;
 
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$topicManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Forum\ForumTopicManager::class);
-$forumMessageManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Forum\ForumMessageManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$topicManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\Forum\ForumTopicManager::class);
+$forumMessageManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\Forum\ForumMessageManager::class);
 
 $content = $request->request->get('content');
 $id = $request->query->get('id');

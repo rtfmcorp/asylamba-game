@@ -16,8 +16,8 @@ if (!in_array($category, array('natural', 'life', 'social', 'informatic'))) {
 	throw new ErrorException('Changement d\'investissement impossible - faculté inconnue');
 }
 
-$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 
 $player = $playerManager->get($session->get('playerId'));
 
@@ -60,4 +60,4 @@ if ($oldInvest != 0) {
 	}
 }
 
-$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush($player);
+$this->getContainer()->get(\App\Classes\Entity\EntityManager::class)->flush($player);

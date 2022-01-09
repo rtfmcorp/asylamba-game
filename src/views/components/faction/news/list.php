@@ -4,7 +4,7 @@ use App\Classes\Library\Format;
 
 $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
-$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
+$sessionToken = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class)->get('token');
 $request = $this->getContainer()->get('app.request');
 
 echo '<div class="component">';

@@ -1,6 +1,6 @@
 <?php
 
-$sectors = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SectorManager::class)->getFactionSectors($faction->id);
+$sectors = $this->getContainer()->get(\App\Modules\Gaia\Manager\SectorManager::class)->getFactionSectors($faction->id);
 
 echo '<div class="component profil">';
 	echo '<div class="head skin-2">';

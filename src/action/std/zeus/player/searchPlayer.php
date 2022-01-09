@@ -4,7 +4,7 @@ use App\Classes\Exception\ErrorException;
 use App\Classes\Exception\FormException;
 
 # search player profile
-$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
+$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
 

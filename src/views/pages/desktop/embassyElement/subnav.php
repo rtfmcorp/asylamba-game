@@ -5,7 +5,7 @@ $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
 $request = $container->get('app.request');
-$session = $container->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $container->get(\App\Classes\Library\Session\SessionWrapper::class);
 
 echo '<div id="subnav">';
 	echo '<button class="move-side-bar top" data-dir="up"> </button>';

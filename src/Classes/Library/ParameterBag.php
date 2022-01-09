@@ -8,7 +8,7 @@ class ParameterBag {
 	
 	/**
 	 * @param mixed $value
-	 * @return \Asylamba\Classes\Library\ParameterBag
+	 * @return \App\Classes\Library\ParameterBag
 	 */
 	public function add($value)
 	{

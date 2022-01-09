@@ -5,7 +5,7 @@ use App\Modules\Demeter\Resource\ColorResource;
 $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
-$commercialTaxManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\CommercialTaxManager::class);	
+$commercialTaxManager = $this->getContainer()->get(\App\Modules\Athena\Manager\CommercialTaxManager::class);
 
 $S_CTM_T = $commercialTaxManager->getCurrentSession();
 $commercialTaxManager->newSession();

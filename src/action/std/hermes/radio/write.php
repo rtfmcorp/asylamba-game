@@ -6,8 +6,8 @@
 
 //
 //$request = $this->getContainer()->get('app.request');
-//$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-//$parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
+//$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+//$parser = $this->getContainer()->get(\App\Classes\Library\Parser::class);
 //
 //for ($i = 0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 //	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('sector');

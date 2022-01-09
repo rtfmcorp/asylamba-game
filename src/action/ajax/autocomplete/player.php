@@ -5,7 +5,7 @@ use App\Modules\Zeus\Model\Player;
 
 $container = $this->getContainer();
 $mediaPath = $container->getParameter('media');
-$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
+$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
 
 $players = $playerManager->search($this->getContainer()->get('app.request')->query->get('q'));
 

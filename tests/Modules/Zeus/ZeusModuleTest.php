@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Asylamba\Modules\Zeus;
+namespace Tests\App\Modules\Zeus;
 
 use App\Modules\Zeus\ZeusModule;
 use App\Classes\Worker\Application;

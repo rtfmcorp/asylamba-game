@@ -1,6 +1,6 @@
 <?php
 
-$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
+$colorManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\ColorManager::class);
 
 echo '<div class="component">';
 	echo '<div class="head"></div>';

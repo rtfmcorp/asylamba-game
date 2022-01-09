@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Asylamba\Modules\Ares\Model;
+namespace Tests\App\Modules\Ares\Model;
 
 use App\Modules\Ares\Model\Ship;
 

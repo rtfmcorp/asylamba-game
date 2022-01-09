@@ -11,14 +11,14 @@ use App\Modules\Zeus\Model\PlayerBonus;
 use App\Modules\Ares\Model\Commander;
 
 $container = $this->getContainer();
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
-$buildingQueueManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\BuildingQueueManager::class);
-$shipQueueManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\ShipQueueManager::class);
-$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
-$technologyHelper = $this->getContainer()->get(\Asylamba\Modules\Promethee\Helper\TechnologyHelper::class);
-$place = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
-$player = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class)->get($session->get('playerId'));
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$orbitalBaseManager = $this->getContainer()->get(\App\Modules\Athena\Manager\OrbitalBaseManager::class);
+$buildingQueueManager = $this->getContainer()->get(\App\Modules\Athena\Manager\BuildingQueueManager::class);
+$shipQueueManager = $this->getContainer()->get(\App\Modules\Athena\Manager\ShipQueueManager::class);
+$orbitalBaseHelper = $this->getContainer()->get(\App\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$technologyHelper = $this->getContainer()->get(\App\Modules\Promethee\Helper\TechnologyHelper::class);
+$place = $this->getContainer()->get(\App\Modules\Gaia\Manager\PlaceManager::class);
+$player = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class)->get($session->get('playerId'));
 $mediaPath = $container->getParameter('media');
 $appRoot = $container->getParameter('app_root');
 

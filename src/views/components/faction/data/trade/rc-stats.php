@@ -7,7 +7,7 @@ use App\Modules\Athena\Model\CommercialRoute;
 $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
-$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
+$database = $this->getContainer()->get(\App\Classes\Database\Database::class);
 
 $join = 'FROM commercialRoute AS cr
 LEFT JOIN orbitalBase AS ob1

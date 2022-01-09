@@ -15,7 +15,7 @@ use App\Classes\Library\Format;
 $container = $this->getContainer();
 $appRoot = $container->getParameter('app_root');
 $mediaPath = $container->getParameter('media');
-$token = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
+$token = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class)->get('token');
 
 echo '<div class="component size3 dock1 admin bugtracker">';
 	echo '<div class="head skin-1">';

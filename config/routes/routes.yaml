@@ -1,3 +1,13 @@
 homepage:
     path: /
-    controller: 'buffer/main.php'
+    controller: App\Shared\Controller\HomepageController
+
+registration:
+    path: /create-character/{bindKey}/{highMode}
+    controller: App\Shared\Controller\RegistrationController
+    defaults:
+        highMode: false
+
+connect:
+    path: /connect/{bindKey}
+    controller: App\Shared\Controller\ConnectController

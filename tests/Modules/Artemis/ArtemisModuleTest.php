@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Asylamba\Modules\Artemis;
+namespace Tests\App\Modules\Artemis;
 
 use App\Modules\Artemis\ArtemisModule;
 use App\Classes\Worker\Application;

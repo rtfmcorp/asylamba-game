@@ -12,7 +12,7 @@ use App\Modules\Demeter\Resource\ColorResource;
 use App\Classes\Library\Format;
 
 $container = $this->getContainer();
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $mediaPath = $container->getParameter('media');
 
 echo '<div class="component profil">';

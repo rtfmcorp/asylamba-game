@@ -2,8 +2,8 @@
 
 use App\Classes\Library\Format;
 
-$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
-$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
+$sessionToken = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class)->get('token');
+$colorManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\ColorManager::class);
 
 echo '<div class="component new-message">';
 	echo '<div class="head"></div>';

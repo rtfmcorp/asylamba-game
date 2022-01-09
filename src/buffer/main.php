@@ -7,8 +7,8 @@ use App\Modules\Zeus\Model\Player;
 $container = $this->getContainer();
 if ($this->getContainer()->getParameter('environment') === 'dev' || $this->getContainer()->get('app.request')->query->get('key') === $this->getContainer()->getParameter('security_buffer_key')) {
 
-	$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-	$security = $this->getContainer()->get(\Asylamba\Classes\Library\Security::class);
+	$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
+	$security = $this->getContainer()->get(\App\Classes\Library\Security::class);
 	
 	$activePlayers = $playerManager->getByStatements([Player::ACTIVE, Player::INACTIVE, Player::HOLIDAY]);
 ?>

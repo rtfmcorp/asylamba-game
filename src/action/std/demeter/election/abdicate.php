@@ -10,11 +10,11 @@ use App\Modules\Demeter\Model\Color;
 use App\Modules\Hermes\Model\Notification;
 use App\Modules\Zeus\Model\Player;
 
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
-$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
-$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
+$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
+$colorManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\ColorManager::class);
+$notificationManager = $this->getContainer()->get(\App\Modules\Hermes\Manager\NotificationManager::class);
 
 $rPlayer = $request->request->get('rplayer');
 
@@ -56,7 +56,7 @@ if ($statusArray = ColorResource::getInfo($session->get('playerInfo')->get('colo
 								->addTxt('Vous avez été choisi par le ' . $statusArray[5] . ' de votre faction pour être son successeur, vous prenez la tête du gouvernement immédiatement.');
 							$notificationManager->add($notif);
 
-							$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();
+							$this->getContainer()->get(\App\Classes\Entity\EntityManager::class)->flush();
 							$session->addFlashbag($heir->name . ' est désigné comme votre successeur.', Flashbag::TYPE_SUCCESS);	
 						} else {
 							throw new ErrorException('vous ne pouvez pas abdiquer pendant un putsch.');	

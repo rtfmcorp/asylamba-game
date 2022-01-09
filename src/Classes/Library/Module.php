@@ -12,7 +12,7 @@ abstract class Module
 	{
 		$loader = new YamlFileLoader(
 			$containerBuilder,
-			new FileLocator("{$projectDir}/system/Modules/{$this->getName()}/Resource/config/")
+			new FileLocator("{$projectDir}/src/Modules/{$this->getName()}/Resource/config/")
 		);
 		$loader->load('config.yml');
 	}

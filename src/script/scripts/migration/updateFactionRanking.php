@@ -1,6 +1,6 @@
 <?php
 
-$db = $this->getContainer()->get(\Asylamba\Classes\Database\DatabaseAdmin::class);
+$db = $this->getContainer()->get(\App\Classes\Database\DatabaseAdmin::class);
 
 echo '<h2>Ajout du classement total (points) dans playerRanking</h2>';
 

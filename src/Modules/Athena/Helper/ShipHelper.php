@@ -23,7 +23,7 @@ class ShipHelper
 	}
 
 	#[Required]
-	public function setOrbitalBaseHelper(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper $orbitalBaseHelper): void
+	public function setOrbitalBaseHelper(\App\Modules\Athena\Helper\OrbitalBaseHelper $orbitalBaseHelper): void
 	{
 		$this->orbitalBaseHelper = $orbitalBaseHelper;
 	}

@@ -9,19 +9,19 @@ use App\Modules\Demeter\Model\Color;
 
 $container = $this->getContainer();
 $componentPath = $container->getParameter('component');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
 $response = $this->getContainer()->get('app.response');
-$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
-$factionNewsManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Forum\FactionNewsManager::class);
-$forumMessageManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Forum\ForumMessageManager::class);
-$lawManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Law\LawManager::class);
-$voteManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Election\VoteManager::class);
-$electionManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Election\ElectionManager::class);
-$candidateManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Election\CandidateManager::class);
-$forumTopicManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Forum\ForumTopicManager::class);
-$sectorManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SectorManager::class);
+$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
+$colorManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\ColorManager::class);
+$factionNewsManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\Forum\FactionNewsManager::class);
+$forumMessageManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\Forum\ForumMessageManager::class);
+$lawManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\Law\LawManager::class);
+$voteManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\Election\VoteManager::class);
+$electionManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\Election\ElectionManager::class);
+$candidateManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\Election\CandidateManager::class);
+$forumTopicManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\Forum\ForumTopicManager::class);
+$sectorManager = $this->getContainer()->get(\App\Modules\Gaia\Manager\SectorManager::class);
 
 if (($faction = $colorManager->get($session->get('playerInfo')->get('color'))) === null) {
 	$response->redirect('profil');

@@ -6,15 +6,15 @@ use App\Classes\Exception\FormException;
 
 $container = $this->getContainer();
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $response = $this->getContainer()->get('app.response');
-$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
+$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
 
 # choix des étapes
 if (!$request->query->has('step') || $request->query->get('step') == 1) {
 	if ($request->query->has('bindkey')) {
 		# extraction du bindkey
-		$security = $this->container->get(\Asylamba\Classes\Library\Security::class);
+		$security = $this->container->get(\App\Classes\Library\Security::class);
 		$query  = $security->uncrypt($request->query->get('bindkey'));
 		$bindkey= $security->extractBindKey($query);
 		$time 	= $security->extractTime($query);
@@ -71,7 +71,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 			# entre 1 et 7
 			# alliance pas défaites
 			# algorythme de fermeture automatique des alliances (auto-balancing)
-		$openFactions = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class)->getOpenFactions();
+		$openFactions = $this->getContainer()->get(\App\Modules\Demeter\Manager\ColorManager::class)->getOpenFactions();
 
 		$ally = [];
 
@@ -119,7 +119,7 @@ if (!$request->query->has('step') || $request->query->get('step') == 1) {
 				if ($check->checkChar($request->request->get('base'))) {
 					$session->get('inscription')->add('base', $request->request->get('base'));
 
-					$sectors = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SectorManager::class)->getAll();
+					$sectors = $this->getContainer()->get(\App\Modules\Gaia\Manager\SectorManager::class)->getAll();
 
 					$factionSectors = array();
 					foreach ($sectors as $sector) { 

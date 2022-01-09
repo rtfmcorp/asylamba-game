@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Asylamba\Modules\Athena;
+namespace Tests\App\Modules\Athena;
 
 use App\Modules\Athena\AthenaModule;
 use App\Classes\Worker\Application;

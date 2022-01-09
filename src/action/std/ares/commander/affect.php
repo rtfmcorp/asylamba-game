@@ -14,10 +14,10 @@ use App\Classes\Exception\ErrorException;
 if (($commanderId = $this->getContainer()->get('app.request')->query->get('id')) === null) {
 	throw new ErrorException('erreur dans le traitement de la requête');
 }
-$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
-$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
-$tutorialHelper = $this->getContainer()->get(\Asylamba\Modules\Zeus\Helper\TutorialHelper::class);
-$session  = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$commanderManager = $this->getContainer()->get(\App\Modules\Ares\Manager\CommanderManager::class);
+$orbitalBaseManager = $this->getContainer()->get(\App\Modules\Athena\Manager\OrbitalBaseManager::class);
+$tutorialHelper = $this->getContainer()->get(\App\Modules\Zeus\Helper\TutorialHelper::class);
+$session  = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $response = $this->getContainer()->get('app.response');
 
 if (($commander = $commanderManager->get($commanderId)) === null) {
@@ -75,4 +75,4 @@ if ($commander->statement == Commander::INSCHOOL || $commander->statement == Com
 } else {
 	throw new ErrorException('Le status de votre officier ne peut pas être modifié');
 }
-$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();
+$this->getContainer()->get(\App\Classes\Entity\EntityManager::class)->flush();

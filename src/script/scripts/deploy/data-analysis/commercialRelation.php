@@ -1,7 +1,7 @@
 <?php
 echo '<h2>Ajout de la table DA_CommercialRelation</h2>';
 
-$db = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
+$db = $this->getContainer()->get(\App\Classes\Database\Database::class);
 $db->query("DROP TABLE IF EXISTS `DA_CommercialRelation`");
 $db->query("CREATE TABLE IF NOT EXISTS `DA_CommercialRelation` (
 	`id` INT unsigned NOT NULL AUTO_INCREMENT,

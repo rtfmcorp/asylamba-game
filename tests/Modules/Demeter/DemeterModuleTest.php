@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Asylamba\Modules\Demeter;
+namespace Tests\App\Modules\Demeter;
 
 use App\Modules\Demeter\DemeterModule;
 use App\Classes\Worker\Application;

@@ -70,7 +70,7 @@ class OrbitalBaseManager
 	}
 
 	#[Required]
-	public function setCommercialShippingManager(\Asylamba\Modules\Athena\Manager\CommercialShippingManager $commercialShippingManager): void
+	public function setCommercialShippingManager(\App\Modules\Athena\Manager\CommercialShippingManager $commercialShippingManager): void
 	{
 		$this->commercialShippingManager = $commercialShippingManager;
 	}

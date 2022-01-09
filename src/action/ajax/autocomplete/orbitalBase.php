@@ -2,7 +2,7 @@
 
 $container = $this->getContainer();
 $mediaPath = $container->getParameter('media');
-$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
+$placeManager = $this->getContainer()->get(\App\Modules\Gaia\Manager\PlaceManager::class);
 $request = $this->getContainer()->get('app.request');
 
 if ($request->query->has('q')) {

@@ -1,7 +1,7 @@
 <?php
 
 $container = $this->getContainer();
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $mediaPath = $container->getParameter('media');
 $componentPath = $container->getParameter('component');
 $appRoot = $container->getParameter('app_root');

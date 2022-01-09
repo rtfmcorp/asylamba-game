@@ -71,7 +71,7 @@ class Sector {
 	
 	/**
 	 * @param boolean $isPrime
-	 * @return \Asylamba\Modules\Gaia\Model\Sector
+	 * @return \App\Modules\Gaia\Model\Sector
 	 */
 	public function setPrime($isPrime)
 	{

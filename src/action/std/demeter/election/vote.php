@@ -9,13 +9,13 @@ use App\Classes\Library\Utils;
 use App\Modules\Demeter\Model\Election\Vote;
 use App\Modules\Demeter\Model\Color;
 
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
-$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
-$electionManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Election\ElectionManager::class);
-$candidateManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Election\CandidateManager::class);
-$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
-$voteManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Election\VoteManager::class);
+$colorManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\ColorManager::class);
+$electionManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\Election\ElectionManager::class);
+$candidateManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\Election\CandidateManager::class);
+$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
+$voteManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\Election\VoteManager::class);
 
 $rElection = $request->query->get('relection');
 $rCandidate = $request->query->get('rcandidate');

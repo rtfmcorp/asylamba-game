@@ -2,8 +2,8 @@
 
 use App\Classes\Library\Format;
 
-$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
-$factionNewsManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\Forum\FactionNewsManager::class);
+$sessionToken = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class)->get('token');
+$factionNewsManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\Forum\FactionNewsManager::class);
 $request = $this->getContainer()->get('app.request');
 
 $news = $factionNewsManager->get($request->query->get('news'));

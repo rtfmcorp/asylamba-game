@@ -11,12 +11,12 @@ $id = $this->getContainer()->get('app.request')->query->get('notif');
 if ($id === null) {
 	throw new FormException('Erreur dans la requête AJAX');
 }
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$notificationManager = $this->getContainer()->get(\App\Modules\Hermes\Manager\NotificationManager::class);
 
 if (($notification = $notificationManager->get($id)) !== null && $notification->rPlayer === $session->get('playerId')) {
 	$notification->setReaded(1);
-	$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush($notification);
+	$this->getContainer()->get(\App\Classes\Entity\EntityManager::class)->flush($notification);
 } else {
 	throw new FormException('Cette notification ne vous appartient pas');
 }

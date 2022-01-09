@@ -13,7 +13,7 @@ use App\Classes\Library\Format;
 use App\Modules\Ares\Resource\CommanderResources;
 
 $container = $this->getContainer();
-$sessionToken = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('token');
+$sessionToken = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class)->get('token');
 $appRoot = $container->getParameter('app_root');
 
 echo '<div class="component size3 table-fleet">';

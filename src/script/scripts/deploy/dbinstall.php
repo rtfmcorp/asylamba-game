@@ -10,7 +10,7 @@ use App\Modules\Hermes\Model\ConversationUser;
 
 $container = $this->getContainer();
 $availableFactions = $this->getContainer()->getParameter('game.available_factions');
-$db = $this->getContainer()->get(\Asylamba\Classes\Database\DatabaseAdmin::class);
+$db = $this->getContainer()->get(\App\Classes\Database\DatabaseAdmin::class);
 
 $db->query('SET FOREIGN_KEY_CHECKS = 0;');
 
@@ -118,7 +118,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `player` (
 #--------------------------------------------------------------------------------------------
 echo '<h3>Ajout du Joueur Gaia</h3>';
 
-$playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\PlayerManager::class);
+$playerManager = $this->getContainer()->get(\App\Modules\Zeus\Manager\PlayerManager::class);
 
 $p = new Player();
 $p->status = 1;
@@ -1010,7 +1010,7 @@ $conv->type = Conversation::TY_SYSTEM;
 $conv->title = 'Jean-Mi, administrateur système';
 $conv->dCreation = Utils::now();
 $conv->dLastMessage = Utils::now();
-$conversationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationManager::class);
+$conversationManager = $this->getContainer()->get(\App\Modules\Hermes\Manager\ConversationManager::class);
 $conversationManager->add($conv);
 
 $user = new ConversationUser();
@@ -1019,7 +1019,7 @@ $user->rPlayer = $container->getParameter('id_jeanmi');
 $user->convPlayerStatement = ConversationUser::US_ADMIN;
 $user->convStatement = ConversationUser::CS_DISPLAY;
 $user->dLastView = Utils::now();
-$conversationUserManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\ConversationUserManager::class);
+$conversationUserManager = $this->getContainer()->get(\App\Modules\Hermes\Manager\ConversationUserManager::class);
 $conversationUserManager->add($user);
 
 foreach ($availableFactions as $faction) {
@@ -1215,7 +1215,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `colorLink` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 $values = '';
-$colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
+$colorManager = $this->getContainer()->get(\App\Modules\Demeter\Manager\ColorManager::class);
 $factions = $colorManager->getAll();
 $nbFactions = count($factions);
 for ($i = 1; $i < $nbFactions; $i++) {
@@ -1247,6 +1247,6 @@ if ($container->getParameter('data_analysis')) {
 
 echo '<h1>Génération de la galaxie</h1>';
 
-$galaxyGenerator = $this->getContainer()->get(\Asylamba\Modules\Gaia\Helper\GalaxyGenerator::class);
+$galaxyGenerator = $this->getContainer()->get(\App\Modules\Gaia\Helper\GalaxyGenerator::class);
 $galaxyGenerator->generate();
 echo $galaxyGenerator->getLog();

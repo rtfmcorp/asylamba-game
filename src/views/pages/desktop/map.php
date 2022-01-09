@@ -1,13 +1,13 @@
 <?php
 
 $container = $this->getContainer();
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $request = $this->getContainer()->get('app.request');
-$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
-$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
-$sectorManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SectorManager::class);
-$systemManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SystemManager::class);
-$galaxyConfiguration = $this->getContainer()->get(\Asylamba\Modules\Gaia\Galaxy\GalaxyConfiguration::class);
+$orbitalBaseManager = $this->getContainer()->get(\App\Modules\Athena\Manager\OrbitalBaseManager::class);
+$placeManager = $this->getContainer()->get(\App\Modules\Gaia\Manager\PlaceManager::class);
+$sectorManager = $this->getContainer()->get(\App\Modules\Gaia\Manager\SectorManager::class);
+$systemManager = $this->getContainer()->get(\App\Modules\Gaia\Manager\SystemManager::class);
+$galaxyConfiguration = $this->getContainer()->get(\App\Modules\Gaia\Galaxy\GalaxyConfiguration::class);
 $sectors = $sectorManager->getAll();
 
 $playerBases = $orbitalBaseManager->getPlayerBases($session->get('playerId'));

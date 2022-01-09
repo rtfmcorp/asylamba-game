@@ -18,11 +18,11 @@ use App\Modules\Demeter\Resource\ColorResource;
 use App\Modules\Zeus\Model\PlayerBonus;
 
 $container = $this->getContainer();
-$orbitalBaseHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\OrbitalBaseHelper::class);
-$shipQueueManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\ShipQueueManager::class);
-$technologyManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\TechnologyManager::class);
-$shipHelper = $this->getContainer()->get(\Asylamba\Modules\Athena\Helper\ShipHelper::class);
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$orbitalBaseHelper = $this->getContainer()->get(\App\Modules\Athena\Helper\OrbitalBaseHelper::class);
+$shipQueueManager = $this->getContainer()->get(\App\Modules\Athena\Manager\ShipQueueManager::class);
+$technologyManager = $this->getContainer()->get(\App\Modules\Promethee\Manager\TechnologyManager::class);
+$shipHelper = $this->getContainer()->get(\App\Modules\Athena\Helper\ShipHelper::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 $sessionToken = $session->get('token');
 $shipResourceRefund = $this->getContainer()->getParameter('athena.building.ship_queue_resource_refund');
 $mediaPath = $container->getParameter('media');

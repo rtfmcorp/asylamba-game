@@ -18,21 +18,21 @@ services:
             tags:
                 - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
 
-    Asylamba\Modules\Promethee\Handler\:
-        resource: '%root_path%/system/Modules/Promethee/Handler/*'
+    App\Modules\Promethee\Handler\:
+        resource: '%kernel.project_dir%/src/Modules/Promethee/Handler/*'
 
-    Asylamba\Modules\Promethee\Manager\:
-        resource: '%root_path%/system/Modules/Promethee/Manager/*'
+    App\Modules\Promethee\Manager\:
+        resource: '%kernel.project_dir%/src/Modules/Promethee/Manager/*'
 
-    Asylamba\Modules\Promethee\Helper\ResearchHelper:
+    App\Modules\Promethee\Helper\ResearchHelper:
         arguments:
             $researchCoeff: "%promethee.research.coeff%"
             $researchMaxDiff: "%promethee.research.max_diff%"
 
-    Asylamba\Modules\Promethee\Helper\TechnologyHelper:
+    App\Modules\Promethee\Helper\TechnologyHelper:
         arguments:
             $researchQuantity: "%promethee.research.quantity%"
     
-    Asylamba\Modules\Promethee\Manager\ResearchManager:
+    App\Modules\Promethee\Manager\ResearchManager:
         arguments:
             $researchQuantity: "%promethee.research.quantity%"

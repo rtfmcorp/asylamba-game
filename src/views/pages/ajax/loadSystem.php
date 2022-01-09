@@ -2,8 +2,8 @@
 
 $container = $this->getContainer();
 $request = $this->getContainer()->get('app.request');
-$systemManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\SystemManager::class);
-$placeManager = $this->getContainer()->get(\Asylamba\Modules\Gaia\Manager\PlaceManager::class);
+$systemManager = $this->getContainer()->get(\App\Modules\Gaia\Manager\SystemManager::class);
+$placeManager = $this->getContainer()->get(\App\Modules\Gaia\Manager\PlaceManager::class);
 
 if ($request->query->has('systemid')) {
 	$systemId = $request->query->get('systemid');

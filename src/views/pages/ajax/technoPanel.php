@@ -3,11 +3,11 @@
 $container = $this->getContainer();
 $componentPath = $container->getParameter('component');
 $request = $this->getContainer()->get('app.request');
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
-$technologyManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\TechnologyManager::class);
-$technologyHelper = $this->getContainer()->get(\Asylamba\Modules\Promethee\Helper\TechnologyHelper::class);
-$researchHelper = $this->getContainer()->get(\Asylamba\Modules\Promethee\Helper\ResearchHelper::class);
-$researchManager = $this->getContainer()->get(\Asylamba\Modules\Promethee\Manager\ResearchManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
+$technologyManager = $this->getContainer()->get(\App\Modules\Promethee\Manager\TechnologyManager::class);
+$technologyHelper = $this->getContainer()->get(\App\Modules\Promethee\Helper\TechnologyHelper::class);
+$researchHelper = $this->getContainer()->get(\App\Modules\Promethee\Helper\ResearchHelper::class);
+$researchManager = $this->getContainer()->get(\App\Modules\Promethee\Manager\ResearchManager::class);
 $researchQuantity = $this->getContainer()->getParameter('promethee.research.quantity');
 
 $tech = $request->query->get('techno');

@@ -1,7 +1,7 @@
 <?php
 echo '<h2>Ajout de la table DA_Player</h2>';
 
-$db = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
+$db = $this->getContainer()->get(\App\Classes\Database\Database::class);
 $db->query("DROP TABLE IF EXISTS `DA_Player`");
 $db->query("CREATE TABLE IF NOT EXISTS `DA_Player` (
 	`id` INT unsigned NOT NULL,

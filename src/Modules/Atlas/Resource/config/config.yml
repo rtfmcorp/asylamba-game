@@ -10,23 +10,23 @@ services:
             tags:
                 - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
 
-    Asylamba\Modules\Atlas\Handler\:
-        resource: '%root_path%/system/Modules/Atlas/Handler/*'
+    App\Modules\Atlas\Handler\:
+        resource: '%kernel.project_dir%/src/Modules/Atlas/Handler/*'
 
-    Asylamba\Modules\Atlas\Handler\PlayerRankingHandler:
+    App\Modules\Atlas\Handler\PlayerRankingHandler:
         arguments:
             $dataAnalysis: '%data_analysis%'
 
-    Asylamba\Modules\Atlas\Handler\FactionRankingHandler:
+    App\Modules\Atlas\Handler\FactionRankingHandler:
         arguments:
             $serverStartTime: '%server_start_time%'
             $hoursBeforeStartOfRanking: '%hours_before_start_of_ranking%'
             $pointsToWin: '%points_to_win%'
 
-    Asylamba\Modules\Atlas\Manager\:
-        resource: '%root_path%/system/Modules/Atlas/Manager/*'
+    App\Modules\Atlas\Manager\:
+        resource: '%kernel.project_dir%/src/Modules/Atlas/Manager/*'
 
-    Asylamba\Modules\Atlas\Manager\RankingManager:
+    App\Modules\Atlas\Manager\RankingManager:
         arguments:
             $pointsToWin: '%points_to_win%'
             $jeanMiId: '%id_jeanmi%'

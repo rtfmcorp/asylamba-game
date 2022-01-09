@@ -17,8 +17,8 @@ if (($request->query->get('commanderid')) === null) {
 }
 $commanderId = $request->query->get('commanderid');
 
-$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
-$session = $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class);
+$commanderManager = $this->getContainer()->get(\App\Modules\Ares\Manager\CommanderManager::class);
+$session = $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class);
 
 if (($commander = $commanderManager->get($commanderId)) === null || $commander->rPlayer !== $session->get('playerId')) {
 	throw new ErrorException('Ce commandant ne vous appartient pas ou n\'existe pas.');
@@ -56,7 +56,7 @@ if ($request->query->has('redirect')) {
 	$response->redirect('map/place-' . $request->query->get('redirect'));
 }
 $messageBus->dispatch(
-	new \Asylamba\Modules\Ares\Message\CommanderTravelMessage($commander->getId()),
-	[\Asylamba\Classes\Library\DateTimeConverter::to_delay_stamp($commander->getArrivalDate())],
+	new \App\Modules\Ares\Message\CommanderTravelMessage($commander->getId()),
+	[\App\Classes\Library\DateTimeConverter::to_delay_stamp($commander->getArrivalDate())],
 );
-$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();
+$this->getContainer()->get(\App\Classes\Entity\EntityManager::class)->flush();

@@ -26,8 +26,8 @@ services:
             tags:
                 - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
 
-    #Asylamba\Modules\Hermes\Handler\:
-    #    resource: '%root_path%/system/Modules/Hermes/Handler/*'
+    #App\Modules\Hermes\Handler\:
+    #    resource: '%kernel.project_dir%/src/Modules/Hermes/Handler/*'
 
-    Asylamba\Modules\Hermes\Manager\:
-        resource: '%root_path%/system/Modules/Hermes/Manager/*'
+    App\Modules\Hermes\Manager\:
+        resource: '%kernel.project_dir%/src/Modules/Hermes/Manager/*'

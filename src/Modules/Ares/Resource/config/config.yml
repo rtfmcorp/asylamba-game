@@ -24,17 +24,17 @@ services:
             tags:
                 - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
 
-    Asylamba\Modules\Ares\Handler\:
-        resource: '%root_path%/system/Modules/Ares/Handler/*'
+    App\Modules\Ares\Handler\:
+        resource: '%kernel.project_dir%/src/Modules/Ares/Handler/*'
 
-    Asylamba\Modules\Ares\Manager\:
-        resource: '%root_path%/system/Modules/Ares/Manager/*'
+    App\Modules\Ares\Manager\:
+        resource: '%kernel.project_dir%/src/Modules/Ares/Manager/*'
 
-    Asylamba\Modules\Ares\Manager\CommanderManager:
+    App\Modules\Ares\Manager\CommanderManager:
         arguments:
             $commanderBaseLevel: "%ares.commander.base_level%"
             $gaiaId: '%id_gaia%'
 
-    Asylamba\Modules\Ares\Manager\FightManager:
+    App\Modules\Ares\Manager\FightManager:
         arguments:
             $gaiaId: '%id_gaia%'

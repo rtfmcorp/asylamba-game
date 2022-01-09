@@ -4,7 +4,7 @@ echo '<h1>Ajout du module de Conversation</h1>';
 
 echo '<h2>Ajout de la table Conversation</h2>';
 
-$database = $this->getContainer()->get(\Asylamba\Classes\Database\Database::class);
+$database = $this->getContainer()->get(\App\Classes\Database\Database::class);
 
 $qr = $database->prepare("CREATE TABLE IF NOT EXISTS `conversation` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,

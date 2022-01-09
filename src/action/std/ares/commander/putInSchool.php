@@ -13,10 +13,10 @@ $commanderId = $this->getContainer()->get('app.request')->query->get('id');
 if ($commanderId === null) {
 	throw new ErrorException('erreur dans le traitement de la requête');
 }
-$commanderManager = $this->getContainer()->get(\Asylamba\Modules\Ares\Manager\CommanderManager::class);
-$orbitalBaseManager = $this->getContainer()->get(\Asylamba\Modules\Athena\Manager\OrbitalBaseManager::class);
+$commanderManager = $this->getContainer()->get(\App\Modules\Ares\Manager\CommanderManager::class);
+$orbitalBaseManager = $this->getContainer()->get(\App\Modules\Athena\Manager\OrbitalBaseManager::class);
 
-if (($commander = $commanderManager->get($commanderId)) === null || $commander->rPlayer !== $this->getContainer()->get(\Asylamba\Classes\Library\Session\SessionWrapper::class)->get('playerId')) {
+if (($commander = $commanderManager->get($commanderId)) === null || $commander->rPlayer !== $this->getContainer()->get(\App\Classes\Library\Session\SessionWrapper::class)->get('playerId')) {
 	throw new ErrorException('Ce commandant n\'existe pas ou ne vous appartient pas');
 }
 $orbitalBase = $orbitalBaseManager->get($commander->rBase);
@@ -36,4 +36,4 @@ if ($commander->statement == Commander::RESERVE) {
 } else {
 	throw new ErrorException('Vous ne pouvez rien faire avec cet officier.');
 }
-$this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class)->flush();
+$this->getContainer()->get(\App\Classes\Entity\EntityManager::class)->flush();

@@ -549,7 +549,7 @@ class Commander
 	
 	/**
 	 * @param string $startedAt
-	 * @return \Asylamba\Modules\Ares\Model\Commander
+	 * @return \App\Modules\Ares\Model\Commander
 	 */
 	public function setStartedAt($startedAt)
 	{

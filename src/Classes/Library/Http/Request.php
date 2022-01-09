@@ -87,7 +87,7 @@ class Request {
 
     /**
      * @param string $externalDomain
-     * @return \Asylamba\Classes\Library\Http\Request
+     * @return \App\Classes\Library\Http\Request
      */
     public function setCrossDomain($externalDomain)
     {
