@@ -15,6 +15,18 @@
         <const name="SERVER_START_TIME" value="2017-07-02 14:00:00" />
         <const name="HOURS_BEFORE_START_OF_RANKING" value="3" />
         <const name="POINTS_TO_WIN" value="2000" />
+
+        <!-- ###+ symfony/messenger ### -->
+        <!-- Choose one of the transports below -->
+        <!-- MESSENGER_TRANSPORT_DSN=doctrine://default -->
+        <!-- MESSENGER_TRANSPORT_DSN=amqp://guest:guest@localhost:5672/%2f/messages -->
+        <!-- MESSENGER_TRANSPORT_DSN=redis://localhost:6379/messages -->
+        <!-- ###- symfony/messenger ### -->
+
+        <!-- ###+ symfony/framework-bundle ### -->
+        <env name="APP_ENV" value="dev"/>
+        <env name="APP_SECRET" value="f63cf78eb5afc884053c0cc7768679c9"/>
+        <!-- ###- symfony/framework-bundle ### -->
     </php>
 
     <testsuites>

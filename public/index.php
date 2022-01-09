@@ -1,16 +1,12 @@
 <?php
 
-require_once('../vendor/autoload.php');
-
-use Asylamba\Classes\Kernel\ApplicationKernel;
-
 const P_TYPE = 'app';
 const ASM_UMODE = true;
 
-$projectDir = dirname(__DIR__);
+use App\Kernel;
 
-$dotenv = new Symfony\Component\Dotenv\Dotenv();
-$dotenv->load($projectDir.'/.env');
+require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 
-$application = new ApplicationKernel($projectDir);
-$application->boot();
+return function (array $context) {
+	return new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);
+};
