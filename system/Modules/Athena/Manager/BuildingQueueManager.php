@@ -26,7 +26,7 @@ class BuildingQueueManager
 	) {
 	}
 	
-	public function get(int $id): BuildingQueue
+	public function get(int $id): ?BuildingQueue
 	{
 		return $this->entityManager->getRepository(BuildingQueue::class)->get($id);
 	}
