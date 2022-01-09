@@ -52,19 +52,13 @@ class OrbitalBaseManager
 		protected ClientManager $clientManager,
 		protected MessageBusInterface $messageBus,
 		protected BuildingQueueManager $buildingQueueManager,
-		protected ShipQueueManager $shipQueueManager,
 		protected TechnologyQueueManager $technologyQueueManager,
-		protected TechnologyManager $technologyManager,
-		protected TechnologyHelper $technologyHelper,
 		protected CommercialRouteManager $commercialRouteManager,
 		protected TransactionManager $transactionManager,
 		protected PlayerBonusManager $playerBonusManager,
 		protected RecyclingMissionManager $recyclingMissionManager,
-		protected RecyclingLogManager $recyclingLogManager,
-		protected PlaceManager $placeManager,
 		protected NotificationManager $notificationManager,
 		protected OrbitalBaseHelper $orbitalBaseHelper,
-		protected CTC $ctc,
 		protected SessionWrapper $sessionWrapper
 	) {
 	}

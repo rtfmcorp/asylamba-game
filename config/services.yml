@@ -235,10 +235,6 @@ services:
         arguments:
             $serverKey: "%security_server_key%"
             $iv: "%security_iv%"
-        
-    Asylamba\Classes\Worker\CTC:
-        arguments:
-            $logDirectory: "%log_directory%"
             
     Asylamba\Classes\Memory\MemoryManager: ~
 
