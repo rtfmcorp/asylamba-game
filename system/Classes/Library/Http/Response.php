@@ -9,7 +9,7 @@ class Response
     protected string $protocol;
     protected int $statusCode = self::STATUS_OK;
     protected string $title;
-    protected string $page;
+    protected ?string $page = null;
     protected Request $request;
     protected ?string $redirect = null;
     protected array $templates = [];
@@ -68,7 +68,7 @@ class Response
         $this->page = $page;
     }
 
-    public function getPage(): string
+    public function getPage(): ?string
     {
         return $this->page;
     }
