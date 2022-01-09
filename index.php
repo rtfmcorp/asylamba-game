@@ -16,9 +16,5 @@ $dotenv = new Symfony\Component\Dotenv\Dotenv();
 $dotenv->usePutenv(false);
 $dotenv->load($projectDir.'/.env');
 
-try {
-	$application = new ApplicationKernel($projectDir);
-	$application->boot();
-} catch (\Throwable $t) {
-	dd($t);
-}
+$application = new ApplicationKernel($projectDir);
+$application->boot();
