@@ -41,9 +41,5 @@ class ApplicationKernel extends Kernel
 		/** @var EventDispatcherInterface $eventDispatcher */
 		$eventDispatcher = $this->container->get(EventDispatcherInterface::class);
 		$eventDispatcher->dispatch(new ServerInitEvent(), ServerInitEvent::NAME);
-
-		$server = $this->container->get(Server::class);
-		$server->createHttpServer();
-		$server->listen();
 	}
 }

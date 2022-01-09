@@ -29,6 +29,8 @@ class SchedulerInitListener
 
 	public function onServerInit(ServerInitEvent $event): void
 	{
+		return;
+
 		$this->logger->info('Scheduling planned tasks');
 
 		$this->commanderManager->scheduleMovements();

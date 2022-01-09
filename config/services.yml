@@ -2,6 +2,8 @@
 # This file is auto-generated during the composer install
 parameters:
     # définition des ROOT
+    app_root: '%env(APP_ROOT)%'
+    getout_root: '%env(GETOUT_ROOT)%'
     system_path:		'%root_path%/system'
     classes_path:       '%system_path%/Classes'
     
@@ -29,8 +31,19 @@ parameters:
     daily_script_hour: 3
     gaia.galaxy_configuration.class: Asylamba\Modules\Gaia\Galaxy\GalaxyConfigurationV6
     game.available_factions: [1, 2, 3, 4, 7]
-    
-    
+
+    apimode: '%env(APIMODE)%'
+
+    server_id: '%env(SERVER_ID)%'
+    server_cycle_timeout: '%env(SERVER_CYCLE_TIMEOUT)%'
+    server_start_time: '%env(SERVER_START_TIME)%'
+
+    security_api_key: '%env(SECURITY_API_KEY)%'
+    security_server_key: '%env(SECURITY_SERVER_KEY)%'
+    security_iv: '%env(SECURITY_IV)%'
+
+    redis_timeout: '%env(REDIS_TIMEOUT)%'
+
     facebook_link: 'https://www.facebook.com/asylamba'
     google_plus_link: 'https://plus.google.com/+Asylamba-game'
     twitter_link: 'https://twitter.com/asylamba'
@@ -109,6 +122,12 @@ parameters:
     # date de début du serveur
     messenger_logs: '%env(default::MESSENGER_LOGS)%'
     sentry_dsn: '%env(default::SENTRY_DSN)%'
+    database_host: '%env(DATABASE_HOST)%'
+    database_name: '%env(DATABASE_NAME)%'
+    database_user: '%env(DATABASE_USER)%'
+    database_password: '%env(DATABASE_PASSWORD)%'
+    database_admin_user: '%env(DATABASE_ADMIN_USER)%'
+    database_admin_password: '%env(DATABASE_PASSWORD)%'
 
 services:
     _defaults:
@@ -199,14 +218,6 @@ services:
             $sessionLifetime: "%session_lifetime%"
         
     Asylamba\Classes\Templating\Renderer: ~
-            
-    Asylamba\Classes\Daemon\Server:
-        public: true
-        arguments:
-            $statefulManagers: !tagged_iterator app.stateful_manager
-            $serverCycleTimeout: '%server_cycle_timeout%'
-            $port: '%server_port%'
-            $collectionCyclesNumber: '%server_collection_cycles_number%'
 
     Asylamba\Classes\Entity\EntityManager:
         public: true
