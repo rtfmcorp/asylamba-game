@@ -28,8 +28,10 @@
         "twig/twig": "^3.3"
     },
 	"require-dev": {
-		"phpunit/phpunit": "^9.5"
-	},
+        "phpunit/phpunit": "^9.5",
+        "symfony/stopwatch": "6.0.*",
+        "symfony/web-profiler-bundle": "6.0.*"
+    },
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
