@@ -23,6 +23,7 @@ $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\Playe
 $creditTransactionManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\CreditTransactionManager::class);
 $notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
 $parser = $this->getContainer()->get(\Asylamba\Classes\Library\Parser::class);
+$mediaPath = $this->getContainer()->get('media');
 
 $name = $request->request->get('name');
 $quantity = $request->request->get('quantity');
@@ -66,7 +67,7 @@ if ($name !== FALSE AND $quantity !== FALSE) {
 					} else {
 						$n->addTxt('.');
 					}
-					$n->addBoxResource('credit', Format::numberFormat($credit), ($credit == 1 ? 'crédit reçu' : 'crédits reçus'));
+					$n->addBoxResource('credit', Format::numberFormat($credit), ($credit == 1 ? 'crédit reçu' : 'crédits reçus'), $mediaPath);
 					$n->addEnd();
 					$notificationManager->add($n);
 

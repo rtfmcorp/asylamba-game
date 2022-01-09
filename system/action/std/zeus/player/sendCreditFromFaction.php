@@ -15,6 +15,7 @@ $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\Playe
 $colorManager = $this->getContainer()->get(\Asylamba\Modules\Demeter\Manager\ColorManager::class);
 $creditTransactionManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\CreditTransactionManager::class);
 $notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
+$mediaPath = $this->getContainer()->getParameter('media');
 
 # give credit from faction to player action
 
@@ -63,7 +64,7 @@ if ($name !== FALSE AND $quantity !== FALSE) {
 							} else {
 								$n->addTxt('.');
 							}
-							$n->addBoxResource('credit', Format::numberFormat($credit), ($credit == 1 ? 'crédit reçu' : 'crédits reçus'));
+							$n->addBoxResource('credit', Format::numberFormat($credit), ($credit == 1 ? 'crédit reçu' : 'crédits reçus'), $mediaPath);
 							$n->addEnd();
 							$notificationManager->add($n);
 							$session->addFlashbag('Crédits envoyés', Flashbag::TYPE_SUCCESS);

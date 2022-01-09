@@ -27,6 +27,7 @@ $playerManager = $this->getContainer()->get(\Asylamba\Modules\Zeus\Manager\Playe
 $notificationManager = $this->getContainer()->get(\Asylamba\Modules\Hermes\Manager\NotificationManager::class);
 $routeExperienceCoeff = $this->getContainer()->getParameter('athena.trade.experience_coeff');
 $entityManager = $this->getContainer()->get(\Asylamba\Classes\Entity\EntityManager::class);
+$mediaPath = $this->getContainer()->getParameter('media');
 
 for ($i=0; $i < $session->get('playerBase')->get('ob')->size(); $i++) { 
 	$verif[] = $session->get('playerBase')->get('ob')->get($i)->get('id');
@@ -79,7 +80,7 @@ if ($base !== FALSE AND $route !== FALSE AND in_array($base, $verif)) {
 					$n->addLnk('map/place-' . $acceptorBase->getRPlace(), $acceptorBase->getName())->addTxt(' et ');
 					$n->addLnk('map/place-' . $proposerBase->getRPlace(), $proposerBase->getName());
 					$n->addSep()->addTxt('Cette route vous rapporte ' . Format::numberFormat($cr->getIncome()) . ' crédits par relève.');
-					$n->addBrk()->addBoxResource('xp', $exp, 'expérience gagnée');
+					$n->addBrk()->addBoxResource('xp', $exp, 'expérience gagnée', $mediaPath);
 					$n->addSep()->addLnk('action/a-switchbase/base-' . $proposerBase->getRPlace() . '/page-spatioport', 'En savoir plus ?');
 					$n->addEnd();
 					$notificationManager->add($n);

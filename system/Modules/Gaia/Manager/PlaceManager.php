@@ -33,7 +33,8 @@ class PlaceManager
 	public function __construct(
 		protected EntityManager $entityManager,
 		protected NotificationManager $notificationManager,
-		protected EventDispatcherInterface $eventDispatcher
+		protected EventDispatcherInterface $eventDispatcher,
+		protected string $mediaPath,
 	) {
 
 	}
@@ -137,8 +138,8 @@ class PlaceManager
 					->addLnk('map/place-' . $place->id, Game::formatCoord($place->xSystem, $place->ySystem, $place->position, $place->rSector))
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées')
-					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées', $this->mediaPath)
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier', $this->mediaPath)
 					->addSep()
 					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
 					->addEnd();
@@ -174,8 +175,8 @@ class PlaceManager
 					->addLnk('embassy/player-' . $place->rPlayer, $place->playerName)
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées')
-					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées', $this->mediaPath)
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier', $this->mediaPath)
 					->addSep()
 					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
 					->addEnd();
@@ -193,7 +194,7 @@ class PlaceManager
 					->addLnk('map/place-' . $place->id, $place->baseName)
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées')
+					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées', $this->mediaPath)
 					->addSep()
 					->addLnk('fleet/view-archive/report-' . $report, 'voir le rapport')
 					->addEnd();
@@ -249,8 +250,8 @@ class PlaceManager
 					->addLnk('embassy/player-' . $place->rPlayer, $place->playerName)
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées')
-					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées', $this->mediaPath)
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier', $this->mediaPath)
 					->addEnd();
 				$this->notificationManager->add($notif);
 
@@ -266,7 +267,7 @@ class PlaceManager
 					->addLnk('map/place-' . $place->id, $place->baseName)
 					->addTxt('. Aucune flotte n\'était en position pour la défendre. ')
 					->addSep()
-					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées')
+					->addBoxResource('resource', Format::number($commander->getResources()), 'ressources pillées', $this->mediaPath)
 					->addEnd();
 				$this->notificationManager->add($notif);
 				break;
@@ -292,7 +293,7 @@ class PlaceManager
 					->addLnk('fleet/commander-' . $commander->getId() . '/sftr-3', $commander->getName())
 					->addTxt(' a colonisé la planète rebelle située aux coordonnées ')  
 					->addLnk('map/place-' . $place->id , Game::formatCoord($place->xSystem, $place->ySystem, $place->position, $place->rSector) . '.')
-					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier', $this->mediaPath)
 					->addTxt('Votre empire s\'étend, administrez votre ')
 					->addLnk('bases/base-' . $place->id, 'nouvelle planète')
 					->addTxt('.')
@@ -331,7 +332,7 @@ class PlaceManager
 					->addLnk('embassy/player-' . $place->rPlayer, $place->playerName)
 					->addTxt('.')
 					->addSep()
-					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier', $this->mediaPath)
 					->addTxt('Elle est désormais votre, vous pouvez l\'administrer ')
 					->addLnk('bases/base-' . $place->id, 'ici')
 					->addTxt('.')
@@ -406,7 +407,7 @@ class PlaceManager
 					->addSep()
 					->addTxt($nbrBattle . Format::addPlural($nbrBattle, ' combats ont eu lieu.', ' seul combat a eu lieu'))
 					->addSep()
-					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier')
+					->addBoxResource('xp', '+ ' . Format::number($commander->earnedExperience), 'expérience de l\'officier', $this->mediaPath)
 					->addSep()
 					->addTxt('Elle est désormais vôtre, vous pouvez l\'administrer ')
 					->addLnk('bases/base-' . $place->id, 'ici')

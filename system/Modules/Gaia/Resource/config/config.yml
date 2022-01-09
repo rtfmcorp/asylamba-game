@@ -35,6 +35,10 @@ services:
             $availableFactions: "%game.available_factions%"
             $limitConquestSector: "%gaia.limit_conquest_sector%"
 
+    Asylamba\Modules\Gaia\Manager\PlaceManager:
+        arguments:
+            $mediaPath: "%media%"
+
     Asylamba\Modules\Gaia\Manager\SectorManager:
         arguments:
             $scores: "%gaia.scores%"

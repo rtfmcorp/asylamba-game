@@ -84,16 +84,16 @@ class Notification {
 	public function addEnd() {
 		return $this->addContent('</p>');
 	}
-	public function addBoxResource($type, $value, $label) {
-		switch ($type) {
-			case 'credit': $img = 'credit.png'; break;
-			case 'resource': $img = 'resource.png'; break;
-			case 'xp': $img = 'xp.png'; break;
-			case 'time': $img = 'time.png'; break;
-			case 'pev': $img = 'pev.png'; break;
-			default: $img = 'credit.png'; break;
-		}
-		return $this->addContent('<span class="box-resource"><img src="' . MEDIA . 'resources/' . $img . '" alt="" /><span class="value">' . $value . '</span><span class="label">' . $label . '</span></span>');
+	public function addBoxResource($type, $value, $label, $mediaPath) {
+		$img = match ($type) {
+			'credit' => 'credit.png',
+			'resource' => 'resource.png',
+			'xp' => 'xp.png',
+			'time' => 'time.png',
+			'pev' => 'pev.png',
+			default => 'credit.png',
+		};
+		return $this->addContent('<span class="box-resource"><img src="' . $mediaPath . 'resources/' . $img . '" alt="" /><span class="value">' . $value . '</span><span class="label">' . $label . '</span></span>');
 	}
 
 	public function setDSending($v) {
