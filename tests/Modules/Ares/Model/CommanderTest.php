@@ -2,7 +2,7 @@
 
 namespace Tests\Asylamba\Modules\Ares\Model;
 
-use Asylamba\Modules\Ares\Model\Commander;
+use App\Modules\Ares\Model\Commander;
 
 class CommanderTest extends \PHPUnit\Framework\TestCase
 {

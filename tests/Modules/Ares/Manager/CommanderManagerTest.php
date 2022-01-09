@@ -2,12 +2,12 @@
 
 namespace Tests\Asylamba\Modules\Ares\Manager;
 
-use Asylamba\Modules\Ares\Manager\CommanderManager;
+use App\Modules\Ares\Manager\CommanderManager;
 
-use Asylamba\Modules\Ares\Model\Commander;
-use Asylamba\Modules\Gaia\Model\Place;
-use Asylamba\Modules\Zeus\Model\Player;
-use Asylamba\Modules\Zeus\Model\PlayerBonus;
+use App\Modules\Ares\Model\Commander;
+use App\Modules\Gaia\Model\Place;
+use App\Modules\Zeus\Model\Player;
+use App\Modules\Zeus\Model\PlayerBonus;
 
 class CommanderManagerTest extends \PHPUnit\Framework\TestCase
 {

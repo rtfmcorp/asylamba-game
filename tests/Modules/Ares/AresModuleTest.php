@@ -2,9 +2,9 @@
 
 namespace Tests\Asylamba\Modules\Ares;
 
-use Asylamba\Modules\Ares\AresModule;
-use Asylamba\Classes\Worker\Application;
-use Asylamba\Classes\DependencyInjection\Container;
+use App\Modules\Ares\AresModule;
+use App\Classes\Worker\Application;
+use App\Classes\DependencyInjection\Container;
 
 class AresModuleTest extends \PHPUnit\Framework\TestCase
 {

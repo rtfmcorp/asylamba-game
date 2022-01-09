@@ -2,12 +2,12 @@
 
 namespace Tests\Asylamba\Modules\Demeter\Manager;
 
-use Asylamba\Modules\Demeter\Manager\ColorManager;
+use App\Modules\Demeter\Manager\ColorManager;
 
-use Asylamba\Modules\Demeter\Model\Color;
-use Asylamba\Modules\Demeter\Model\Law\Law;
-use Asylamba\Modules\Zeus\Model\Player;
-use Asylamba\Modules\Gaia\Model\Sector;
+use App\Modules\Demeter\Model\Color;
+use App\Modules\Demeter\Model\Law\Law;
+use App\Modules\Zeus\Model\Player;
+use App\Modules\Gaia\Model\Sector;
 
 class ColorManagerTest extends \PHPUnit\Framework\TestCase
 {

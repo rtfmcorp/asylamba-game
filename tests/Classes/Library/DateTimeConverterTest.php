@@ -2,7 +2,7 @@
 
 namespace Tests\Asylamba\Classes\Library;
 
-use Asylamba\Classes\Library\DateTimeConverter;
+use App\Classes\Library\DateTimeConverter;
 use PHPUnit\Framework\TestCase;
 
 class DateTimeConverterTest extends TestCase

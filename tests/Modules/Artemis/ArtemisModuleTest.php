@@ -2,9 +2,9 @@
 
 namespace Tests\Asylamba\Modules\Artemis;
 
-use Asylamba\Modules\Artemis\ArtemisModule;
-use Asylamba\Classes\Worker\Application;
-use Asylamba\Classes\DependencyInjection\Container;
+use App\Modules\Artemis\ArtemisModule;
+use App\Classes\Worker\Application;
+use App\Classes\DependencyInjection\Container;
 
 class ArtemisModuleTest extends \PHPUnit\Framework\TestCase
 {

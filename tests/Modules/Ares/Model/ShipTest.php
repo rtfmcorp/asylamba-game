@@ -2,7 +2,7 @@
 
 namespace Tests\Asylamba\Modules\Ares\Model;
 
-use Asylamba\Modules\Ares\Model\Ship;
+use App\Modules\Ares\Model\Ship;
 
 class ShipTest extends \PHPUnit\Framework\TestCase
 {

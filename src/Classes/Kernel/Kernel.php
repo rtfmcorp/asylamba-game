@@ -1,0 +1,129 @@
+<?php
+
+namespace App\Classes\Kernel;
+
+use App\Classes\Library\Module;
+use App\Classes\Worker\Manager;
+use App\Modules\Ares\AresModule;
+use App\Modules\Artemis\ArtemisModule;
+use App\Modules\Athena\AthenaModule;
+use App\Modules\Atlas\AtlasModule;
+use App\Modules\Demeter\DemeterModule;
+use App\Modules\Gaia\GaiaModule;
+use App\Modules\Hephaistos\HephaistosModule;
+use App\Modules\Hermes\HermesModule;
+use App\Modules\Promethee\PrometheeModule;
+use App\Modules\Zeus\ZeusModule;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpSender;
+use Symfony\Component\Messenger\MessageBus;
+use Symfony\Component\Messenger\Middleware\SendMessageMiddleware;
+use Symfony\Component\Messenger\Worker;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\DependencyInjection\MessengerPass;
+
+abstract class Kernel implements KernelInterface
+{
+	protected ContainerBuilder $container;
+	protected string $projectDir;
+	protected array $modules = [];
+
+	protected function buildContainer(): ContainerBuilder
+	{
+		$containerBuilder = new ContainerBuilder();
+		$containerBuilder->set('container', $containerBuilder);
+		$containerBuilder->setParameter('root_path', $this->projectDir);
+		$this->buildEventDispatcher($containerBuilder);
+
+		$this->loadEnvironment($containerBuilder);
+
+		$loader = new YamlFileLoader($containerBuilder, new FileLocator($this->projectDir . '/config/'));
+		$loader->load('services.yml');
+
+		$this->buildMessenger($containerBuilder);
+
+		$this->registerModules($containerBuilder);
+		$containerBuilder->registerForAutoconfiguration(Manager::class)->addTag('app.stateful_manager');
+
+		return $containerBuilder;
+	}
+
+	protected function buildEventDispatcher(ContainerBuilder $containerBuilder): void
+	{
+		$containerBuilder->addCompilerPass(new RegisterListenersPass());
+		$containerBuilder->register(EventDispatcherInterface::class, EventDispatcher::class);
+		$containerBuilder->setAlias('event_dispatcher', EventDispatcherInterface::class);
+	}
+
+	protected function buildMessenger(ContainerBuilder $containerBuilder): void
+	{
+		$containerBuilder->addCompilerPass(new MessengerPass());
+
+		$enableLogs = $containerBuilder->resolveEnvPlaceholders($containerBuilder->getParameter('messenger_logs'), true);
+
+		if (true === $enableLogs) {
+			return;
+		}
+
+		$workerDefinition = $containerBuilder->getDefinition(Worker::class);
+		$workerDefinition->setArgument('$logger', null);
+	}
+
+	protected function initSentry(string $dsn): void
+	{
+		\Sentry\init(['dsn' => $dsn]);
+	}
+
+	protected function loadEnvironment(ContainerBuilder $container): void
+	{
+		foreach(explode(',', getenv('SYMFONY_DOTENV_VARS')) as $key) {
+			$container->setParameter(strtolower($key), getenv($key));
+		}
+	}
+
+	protected function registerModules(ContainerBuilder $containerBuilder): void
+	{
+		foreach ($this->getRegisteredModules() as $moduleClass) {
+			/** @var Module $module */
+			$module = new $moduleClass();
+			$module->configure($containerBuilder, $this->projectDir);
+
+			$this->modules[strtolower($module->getName())] = $module;
+		}
+	}
+
+	protected function getRegisteredModules(): array
+	{
+		return [
+			AresModule::class,
+			ArtemisModule::class,
+			AthenaModule::class,
+			AtlasModule::class,
+			DemeterModule::class,
+			GaiaModule::class,
+			HephaistosModule::class,
+			HermesModule::class,
+			PrometheeModule::class,
+			ZeusModule::class,
+		];
+	}
+
+	public function getModules(): array
+	{
+		return $this->modules;
+	}
+
+	public function getModule(string $name): Module
+	{
+		return $this->modules[$name];
+	}
+
+	public function getContainer(): ContainerBuilder
+	{
+		return $this->container;
+	}
+}

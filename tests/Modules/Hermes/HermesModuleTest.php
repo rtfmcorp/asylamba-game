@@ -2,9 +2,9 @@
 
 namespace Tests\Asylamba\Modules\Hermes;
 
-use Asylamba\Modules\Hermes\HermesModule;
-use Asylamba\Classes\Worker\Application;
-use Asylamba\Classes\DependencyInjection\Container;
+use App\Modules\Hermes\HermesModule;
+use App\Classes\Worker\Application;
+use App\Classes\DependencyInjection\Container;
 
 class HermesModuleTest extends \PHPUnit\Framework\TestCase
 {

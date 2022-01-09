@@ -2,9 +2,9 @@
 
 namespace Tests\Asylamba\Modules\Promethee;
 
-use Asylamba\Modules\Promethee\PrometheeModule;
-use Asylamba\Classes\Worker\Application;
-use Asylamba\Classes\DependencyInjection\Container;
+use App\Modules\Promethee\PrometheeModule;
+use App\Classes\Worker\Application;
+use App\Classes\DependencyInjection\Container;
 
 class PrometheeModuleTest extends \PHPUnit\Framework\TestCase
 {

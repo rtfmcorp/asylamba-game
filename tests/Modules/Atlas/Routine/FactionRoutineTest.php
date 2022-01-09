@@ -2,15 +2,15 @@
 
 namespace Tests\Asylamba\Modules\Atlas\Routine;
 
-use Asylamba\Modules\Atlas\Routine\FactionRoutine;
+use App\Modules\Atlas\Routine\FactionRoutine;
 
-use Asylamba\Modules\Demeter\Model\Color;
-use Asylamba\Modules\Gaia\Model\Sector;
-use Asylamba\Modules\Atlas\Model\PlayerRanking;
-use Asylamba\Modules\Atlas\Model\FactionRanking;
-use Asylamba\Modules\Zeus\Model\Player;
-use Asylamba\Modules\Demeter\Resource\ColorResource;
-use Asylamba\Modules\Atlas\Model\Ranking;
+use App\Modules\Demeter\Model\Color;
+use App\Modules\Gaia\Model\Sector;
+use App\Modules\Atlas\Model\PlayerRanking;
+use App\Modules\Atlas\Model\FactionRanking;
+use App\Modules\Zeus\Model\Player;
+use App\Modules\Demeter\Resource\ColorResource;
+use App\Modules\Atlas\Model\Ranking;
 
 class FactionRoutineTest extends \PHPUnit\Framework\TestCase
 {

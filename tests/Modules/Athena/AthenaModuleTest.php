@@ -2,9 +2,9 @@
 
 namespace Tests\Asylamba\Modules\Athena;
 
-use Asylamba\Modules\Athena\AthenaModule;
-use Asylamba\Classes\Worker\Application;
-use Asylamba\Classes\DependencyInjection\Container;
+use App\Modules\Athena\AthenaModule;
+use App\Classes\Worker\Application;
+use App\Classes\DependencyInjection\Container;
 
 class AthenaModuleTest extends \PHPUnit\Framework\TestCase
 {

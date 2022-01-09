@@ -2,9 +2,9 @@
 
 namespace Tests\Asylamba\Modules\Atlas;
 
-use Asylamba\Modules\Atlas\AtlasModule;
-use Asylamba\Classes\Worker\Application;
-use Asylamba\Classes\DependencyInjection\Container;
+use App\Modules\Atlas\AtlasModule;
+use App\Classes\Worker\Application;
+use App\Classes\DependencyInjection\Container;
 
 class AtlasModuleTest extends \PHPUnit\Framework\TestCase
 {

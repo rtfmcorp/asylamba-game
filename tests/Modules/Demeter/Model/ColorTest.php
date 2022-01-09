@@ -2,7 +2,7 @@
 
 namespace Tests\Asylamba\Modules\Demeter\Model;
 
-use Asylamba\Modules\Demeter\Model\Color;
+use App\Modules\Demeter\Model\Color;
 
 class ColorTest extends \PHPUnit\Framework\TestCase
 {

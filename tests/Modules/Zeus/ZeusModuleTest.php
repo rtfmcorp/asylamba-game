@@ -2,9 +2,9 @@
 
 namespace Tests\Asylamba\Modules\Zeus;
 
-use Asylamba\Modules\Zeus\ZeusModule;
-use Asylamba\Classes\Worker\Application;
-use Asylamba\Classes\DependencyInjection\Container;
+use App\Modules\Zeus\ZeusModule;
+use App\Classes\Worker\Application;
+use App\Classes\DependencyInjection\Container;
 
 class ZeusModuleTest extends \PHPUnit\Framework\TestCase
 {
