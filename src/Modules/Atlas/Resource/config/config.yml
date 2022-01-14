@@ -3,15 +3,14 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: true
 
-    _instanceof:
-        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
-            tags:
-                - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
-
-    App\Modules\Atlas\Handler\:
-        resource: '%kernel.project_dir%/src/Modules/Atlas/Handler/*'
+    App\Modules\Atlas\:
+        resource: '%kernel.project_dir%/src/Modules/Atlas/'
+        exclude:
+            - '../../Message'
+            - '../../Model'
+            - '../../Repository'
+            - '../../Resource'
 
     App\Modules\Atlas\Handler\PlayerRankingHandler:
         arguments:

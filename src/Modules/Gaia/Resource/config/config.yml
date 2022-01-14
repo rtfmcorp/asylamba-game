@@ -8,18 +8,14 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: true
 
-    _instanceof:
-        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
-            tags:
-                - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
-
-    App\Modules\Gaia\Handler\:
-        resource: '%kernel.project_dir%/src/Modules/Gaia/Handler/*'
-
-    App\Modules\Gaia\Manager\:
-        resource: '%kernel.project_dir%/src/Modules/Gaia/Manager/*'
+    App\Modules\Gaia\:
+        resource: '%kernel.project_dir%/src/Modules/Gaia/'
+        exclude:
+            - '../../Message'
+            - '../../Model'
+            - '../../Repository'
+            - '../../Resource'
 
     App\Modules\Gaia\Helper\ActionHelper:
         arguments:

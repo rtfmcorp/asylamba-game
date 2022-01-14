@@ -1,0 +1,3 @@
+fleet:
+    path: /fleet
+    controller: App\Modules\Ares\Infrastructure\Controller\FleetController

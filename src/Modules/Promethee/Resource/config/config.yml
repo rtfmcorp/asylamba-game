@@ -11,18 +11,14 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: true
 
-    _instanceof:
-        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
-            tags:
-                - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
-
-    App\Modules\Promethee\Handler\:
-        resource: '%kernel.project_dir%/src/Modules/Promethee/Handler/*'
-
-    App\Modules\Promethee\Manager\:
-        resource: '%kernel.project_dir%/src/Modules/Promethee/Manager/*'
+    App\Modules\Promethee\:
+        resource: '%kernel.project_dir%/src/Modules/Promethee/'
+        exclude:
+            - '../../Message'
+            - '../../Model'
+            - '../../Repository'
+            - '../../Resource'
 
     App\Modules\Promethee\Helper\ResearchHelper:
         arguments:

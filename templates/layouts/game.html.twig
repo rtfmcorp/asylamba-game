@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<title>
+			{%- block title -%}
+				— {{ app_subname }} — Asylamba
+			{%- endblock title -%}
+		</title>
+
+		<meta charset="utf-8" />
+		<meta name="description" content="{{ app_description }}" />
+
+		<link href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic" rel="stylesheet" type="text/css">
+		{% if color_style %}
+			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/main.desktop.v3.color' ~ current_player_faction_id ~ '.css') }}" />
+		{% else %}
+			<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/main.desktop.v3.css') }}" />
+		{% endif %}
+
+		<link rel="icon" type="image/png" href="{{ asset('media/favicon/color' ~ current_player_faction_id ~ '.png') }}" />
+		<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/main.desktop.v3.css') }}" />
+
+	</head>
+	<body class="color{{ current_player_faction_id }} no-scrolling" data-init-sftr="2">
+
+		{{ include('components/common/navbar.html.twig') }}
+
+		<div id="container">
+			{% block body %}{% endblock body %}
+		</div>
+
+		<script type="text/javascript" src="{{ asset('js/jquery1.8.2.min.js') }}"></script>
+		<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				game = {
+					path: '{{ get_api_endpoint() }}',
+					shipsName: [{{ get_ship_names()|join(',')|raw }}],
+					shipsPev: [{{ get_ship_pevs()|join(',') }}]
+				};
+			});
+			</script>
+		<script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('js/main.desktop.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('js/autocomplete.module.js') }}"></script>
+	</body>
+</html>

@@ -15,21 +15,14 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: true
 
-    _instanceof:
-        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
-            tags:
-                - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
-
-    App\Modules\Zeus\Handler\:
-        resource: '%kernel.project_dir%/src/Modules/Zeus/Handler/*'
-
-    App\Modules\Zeus\Helper\:
-        resource: '%kernel.project_dir%/src/Modules/Zeus/Helper/*'
-
-    App\Modules\Zeus\Manager\:
-        resource: '%kernel.project_dir%/src/Modules/Zeus/Manager/*'
+    App\Modules\Zeus\:
+        resource: '%kernel.project_dir%/src/Modules/Zeus/'
+        exclude:
+            - '../../Message'
+            - '../../Model'
+            - '../../Repository'
+            - '../../Resource'
 
     App\Modules\Zeus\Manager\PlayerManager:
         arguments:

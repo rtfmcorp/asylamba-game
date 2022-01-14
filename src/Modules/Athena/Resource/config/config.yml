@@ -24,21 +24,14 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: true
 
-    _instanceof:
-        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
-            tags:
-                - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
-
-    App\Modules\Athena\Helper\:
-        resource: '%kernel.project_dir%/src/Modules/Athena/Helper/*'
-
-    App\Modules\Athena\Manager\:
-        resource: '%kernel.project_dir%/src/Modules/Athena/Manager/*'
-
-    App\Modules\Athena\Handler\:
-        resource: '%kernel.project_dir%/src/Modules/Athena/Handler/*'
+    App\Modules\Athena\:
+        resource: '%kernel.project_dir%/src/Modules/Athena/'
+        exclude:
+            - '../../Message'
+            - '../../Model'
+            - '../../Repository'
+            - '../../Resource'
 
     App\Modules\Athena\Manager\CommercialShippingManager:
         arguments:

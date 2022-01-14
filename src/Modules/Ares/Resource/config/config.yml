@@ -17,18 +17,14 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: true
 
-    _instanceof:
-        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
-            tags:
-                - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
-
-    App\Modules\Ares\Handler\:
-        resource: '%kernel.project_dir%/src/Modules/Ares/Handler/*'
-
-    App\Modules\Ares\Manager\:
-        resource: '%kernel.project_dir%/src/Modules/Ares/Manager/*'
+    App\Modules\Ares\:
+        resource: '%kernel.project_dir%/src/Modules/Ares/'
+        exclude:
+            - '../../Message'
+            - '../../Model'
+            - '../../Repository'
+            - '../../Resource'
 
     App\Modules\Ares\Manager\CommanderManager:
         arguments:

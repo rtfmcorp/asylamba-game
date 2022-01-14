@@ -81,7 +81,7 @@ class PlayerManager
 		$this->researchManager = $researchManager;
 	}
 
-	public function get(int $playerId): Player
+	public function get(int $playerId): ?Player
 	{
 		if(($player = $this->entityManager->getRepository(Player::class)->get($playerId)) !== null) {
 			if ($this->sessionWrapper->get('playerId') === $player->id) {

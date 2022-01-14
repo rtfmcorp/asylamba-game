@@ -1,0 +1,230 @@
+<div class="component">
+	{% if fast_view_profile %}
+		<div class="head skin-1">
+			<img src="{{ asset('media/map/place/place1-' ~ orbital_base|base_demography ~ '.png') }}" alt=" {{ orbital_base.name }}" />
+			<h2>{{ orbital_base.name }}</h2>
+			<em>
+				{{ orbital_base|base_type }} — {{ orbital_base.points}} points
+			</em>
+		</div>
+	{% else %}
+		<div class="head skin-2">
+			<h2>Vue de situation</h2>
+		</div>
+	{% endif %}
+	<div class="fix-body">
+		<div class="body">
+			{# pending commercial routes display #}
+			{% if orbital_base.levelSpatioport > 0 and orbital_base.commercialRouteData.waiting_for_me is defined and orbital_base.commercialRouteData.waiting_for_me != 0 %}
+				<a href="{{ path('switchbase', {'baseId': orbital_base.id, 'page': 'spatioport'}) }}" class="alert">
+					{% set plural = orbital_base.commercialRouteData.waiting_for_me|plural %}
+					Vous avez {{ orbital_base.commercialRouteData.waiting_for_me }} proposition{{ plural }} commerciale{{ plural }}
+				</a>
+			{% endif %}
+
+			{# resources display #}
+			<div class="number-box">
+				<span class="label">Ressources en stock</span>
+				<span class="value">
+					{{ orbital_base.resourcesStorage|number }}
+				 	<img alt="ressources" src="{{ asset('media/resources/resource.png') }}" class="icon-color">
+				</span>
+
+				<span class="progress-bar hb bl" title="remplissage : {{ orbital_base.storagePercent }}%">
+					<span style="width: {{ orbital_base.storagePercent }}%;" class="content"></span>
+				</span>
+				<span class="group-link">
+					<a href="{{ path('switchbase', {'baseId': orbital_base.id, 'page': 'refinery'}) }}" class="link hb lt" title="vers la raffinerie">→</a>
+				</span>
+			</div>
+
+			<h4>Générateur</h4>
+
+			{% set nextTime = 0 %}
+			{% set nextTotalTime = 0 %}
+			{% set realSizeQueue = 0 %}
+
+			<div class="queue">
+				{% for building_queue in orbital_base.buildingQueues %}
+					{% set realSizeQueue = realSizeQueue + 1 %}
+					{% set nextTime = building_queue|building_queue_duration  %}
+					{% set nextTotalTime = nextTotalTime + building_queue|building_queue_time %}
+
+					<div class="item {% if realSizeQueue > 1 %}active{% endif %} progress" data-progress-output="lite" data-progress-no-reload="true" data-progress-current-time="{{ nextTime }}" data-progress-total-time="{{ nextTotalTime }}">
+						<a class="button hb lt" title="annuler la construction (attention, vous ne récupérerez que {{ building_resource_refund * 100 }}% du montant investi)">×</a>
+						<img class="picto" src="{{ asset('media/orbitalbase/' ~  building_queue|building_queue_picture ~ '.png') }}" alt="" />
+						<strong>
+							{{ building_queue|building_queue_name }}
+							 <span class="level">niv. {{ building_queue.targetLevel }}</span>
+						</strong>
+						<em>
+							<span class="progress-text">{{ nextTime|lite_seconds }}</span>
+						</em>
+						{% if realSizeQueue > 1 %}
+							<span class="progress-container"></span>
+						{% else %}
+							<span class="progress-container">
+								<span style="width: {{ (nextTotalTime - nextTime)|percent(nextTotalTime) }}%;" class="progress-bar"></span>
+							</span>
+						{% endif %}
+					</div>
+				{% endfor %}
+				{% if orbital_base|base_max_building_queues > orbital_base.buildingQueues|length %}
+					<a href="{{ path('switchbase', { 'baseId': orbital_base.id, 'page': 'generator'}) }}" class="item link">
+						Construire un bâtiment
+					</a>
+				{% endif %}
+			</div>
+
+			{% if orbital_base.levelDock1 > 0 %}
+				<h4>Chantier Alpha</h4>
+
+				{% set realSizeQueue = 0 %}
+
+				<div class="queue">
+					{% for ship_queue in orbital_base.dock1ShipQueues %}
+						{% set realSizeQueue = realSizeQueue + 1 %}
+						{% set totalTimeShips = ship_queue|ship_queue_time %}
+						{% set remainingTime = ship_queue|ship_queue_duration %}
+
+						{% if realSizeQueue > 1 %}
+							<div class="item">
+						{% else %}
+							<div class="item active progress" data-progress-output="lite" data-progress-no-reload="true" data-progress-current-time="{{ remainingTime }}" data-progress-total-time="{{ totalTimeShips }}">
+						{% endif %}
+
+						<img class="picto" src="{{ asset('media/ship/picto/' ~ ship_queue|ship_queue_picture ~ '.png') }}" alt="" />
+						<strong>
+							{{ ship_queue.quantity }} {{ ship_queue|ship_queue_name }}{{ ship_queue.quantity|plural }}
+						</strong>
+
+						{% if realSizeQueue > 1 %}
+							<span class="progress-container"></span>
+						{% else %}
+							<em>
+								<span class="progress-text">{{ remainingTime|lite_seconds }}</span>
+							</em>
+							<span class="progress-container">
+								<span style="width: {{ (totalTimeShips - remainingTime)|percent(totalTimeShips) }}%;" class="progress-bar">
+								</span>
+							</span>
+						{% endif %}
+						</div>
+					{% endfor %}
+					{% if orbital_base|base_max_dock1_ship_queues > orbital_base.dock1ShipQueues|length %}
+						<a href="{{ path('switchbase', {'baseId': orbital_base.id, 'page': 'dock1'}) }}" class="item link">
+							Lancer la production
+						</a>
+					{% endif %}
+				</div>
+			{% endif %}
+
+			{% if orbital_base.levelDock2 > 0 %}
+				<h4>Chantier de Ligne</h4>
+
+				{% set realSizeQueue = 0 %}
+
+				<div class="queue">
+					{% for ship_queue in orbital_base.dock1ShipQueues %}
+						{% set realSizeQueue = realSizeQueue + 1 %}
+						{% set totalTimeShips = ship_queue|ship_queue_time %}
+						{% set remainingTime = ship_queue|ship_queue_duration %}
+
+						{% if realSizeQueue > 1 %}
+							<div class="item">
+						{% else %}
+							<div class="item active progress" data-progress-output="lite" data-progress-no-reload="true" data-progress-current-time="{{ remainingTime }}" data-progress-total-time="{{ totalTimeShips }}">
+						{% endif %}
+
+						<img class="picto" src="{{ asset('media/ship/picto/' ~ ship_queue|ship_queue_picture ~ '.png') }}" alt="" />
+						<strong>
+							{{ ship_queue.quantity }} {{ ship_queue|ship_queue_name }}{{ ship_queue.quantity|plural }}
+						</strong>
+
+						{% if realSizeQueue > 1 %}
+							<span class="progress-container"></span>
+						{% else %}
+							<em>
+								<span class="progress-text">{{ remainingTime|lite_seconds }}</span>
+							</em>
+							<span class="progress-container">
+								<span style="width: {{ (totalTimeShips - remainingTime)|percent(totalTimeShips) }}%;" class="progress-bar">
+								</span>
+							</span>
+						{% endif %}
+						</div>
+					{% endfor %}
+					{% if orbital_base|base_max_dock1_ship_queues > orbital_base.dock1ShipQueues|length %}
+						<a href="{{ path('switchbase', {'baseId': orbital_base.id, 'page': 'dock1'}) }}" class="item link">
+							Lancer la production
+						</a>
+					{% endif %}
+				</div>
+			{% endif %}
+
+			{% if orbital_base.levelTechnosphere > 0 %}
+				<h4>Technosphère</h4>
+
+				{% set realSizeQueue = 0 %}
+				{% set remainingTotalTime = 0 %}
+				{% set totalTimeTechno = 0 %}
+
+				<div class="queue">
+					{% for technology_queue in orbital_base.technoQueues %}
+						{% set realSizeQueue = realSizeQueue + 1 %}
+						{% set totalTimeTechno = totalTimeTechno + technology_queue|technology_queue_time %}
+						{% set remainingTotalTime = technology_queue|technology_queue_duration %}
+
+						<div class="item active progress" data-progress-output="lite" data-progress-no-reload="true" data-progress-current-time="{{ remainingTotalTime }}" data-progress-total-time="{{ totalTimeTechno }}">
+							<img class="picto" src="{{ asset('media/technology/picto/' ~ technology_queue|technology_queue_picture ~ '.png') }}" alt="" />
+							<strong>
+								{% if technology_queue|is_unblocking_technology %}
+								 	<span class="level">niv. {{ technology_queue.targetLevel }}</span>
+								{% endif %}
+							</strong>
+
+							<em>
+								<span class="progress-text">
+									{{ remainingTotalTime|lite_seconds }}
+								</span>
+							</em>
+							{% if realSizeQueue > 1 %}
+								<span class="progress-container"></span>
+							{% else %}
+								<span class="progress-container">
+									<span style="width: {{ (totalTimeTechno - remainingTotalTime)|percent(totalTimeTechno) }}%;" class="progress-bar">
+									</span>
+								</span>
+							{% endif %}
+						</div>
+					{% endfor %}
+					{% if orbital_base|base_max_technology_queues > orbital_base.technoQueues|length %}
+						<a href="{{ path('switchbase', {'baseId': orbital_base.id, 'page': 'technosphere'}) }}" class="item link">
+							Développer une technologie
+						</a>
+					{% endif %}
+				</div>
+			{% endif %}
+
+			{% if orbital_base.levelSpatioport > 0 %}
+				<h4>Spatioport</h4>
+
+				<div class="number-box">
+					<span class="label">Routes commerciales</span>
+					<span class="value">
+						{{ orbital_base.commercialRouteData.operational }} / {{ orbital_base.commercialRouteData.max }}
+					</span>
+
+					{% set percent = ((orbital_base.commercialRouteData.operational / orbital_base.commercialRouteData.max) * 100)|number %}
+					<span class="progress-bar hb bl" title="remplissage : {{ percent }}%">
+						<span style="width:{{ percent }}%;" class="content"></span>
+					</span>
+
+					<span class="group-link">
+						<a href="{{ path('switchbase', {'baseId': orbital_base.id, 'page': 'spatioport'}) }}" class="link hb lt" title="vers le spatioport">→</a>
+					</span>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</div>

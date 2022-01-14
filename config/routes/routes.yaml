@@ -1,13 +1,21 @@
 homepage:
     path: /
-    controller: App\Shared\Controller\HomepageController
+    controller: App\Shared\Infrastructure\Controller\HomepageController
 
 registration:
     path: /create-character/{bindKey}/{highMode}
-    controller: App\Shared\Controller\RegistrationController
+    controller: App\Shared\Infrastructure\Controller\RegistrationController
     defaults:
         highMode: false
 
 connect:
     path: /connect/{bindKey}
-    controller: App\Shared\Controller\ConnectController
+    controller: App\Shared\Infrastructure\Controller\ConnectController
+
+logout:
+    path: /logout
+    controller: App\Shared\Infrastructure\Controller\LogoutController
+
+params:
+    path: /params
+    controller: App\Shared\Infrastructure\Controller\ParamsController

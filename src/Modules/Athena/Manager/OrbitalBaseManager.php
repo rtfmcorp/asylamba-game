@@ -106,10 +106,9 @@ class OrbitalBaseManager
 	}
 	
 	/**
-	 * @param int $playerId
-	 * @return array
+	 * @return list<OrbitalBase>
 	 */
-	public function getPlayerBases($playerId)
+	public function getPlayerBases(int $playerId): array
 	{
 		$bases = $this->entityManager->getRepository(OrbitalBase::class)->getPlayerBases($playerId);
 		foreach($bases as $base) {
@@ -119,10 +118,9 @@ class OrbitalBaseManager
 	}
 	
 	/**
-	 * @param int $sectorId
-	 * @return array
+	 * @return list<OrbitalBase>
 	 */
-	public function getSectorBases($sectorId)
+	public function getSectorBases(int $sectorId): array
 	{
 		$bases = $this->entityManager->getRepository(OrbitalBase::class)->getSectorBases($sectorId);
 		foreach($bases as $base) {

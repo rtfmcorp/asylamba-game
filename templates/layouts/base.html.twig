@@ -12,8 +12,25 @@
 
 		<link rel="icon" type="image/png" href="{{ asset('media/favicon/color1.png') }}" />
 		<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/buffer/main.css') }}" />
+		<link rel="stylesheet" media="screen" type="text/css" href="{{ asset('css/main.desktop.v3.css') }}" />
+
 	</head>
 	<body>
 		{% block body %}{% endblock body %}
+
+		<script type="text/javascript" src="{{ asset('js/jquery1.8.2.min.js') }}"></script>
+
+		<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				game = {
+					path: '{{ get_api_endpoint() }}',
+					shipsName: [{{ get_ship_names()|join(',')|raw }}],
+					shipsPev: [{{ get_ship_pevs()|join(',') }}]
+				};
+			});
+			</script>
+		<script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('js/main.desktop.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('js/autocomplete.module.js') }}"></script>
 	</body>
 </html>

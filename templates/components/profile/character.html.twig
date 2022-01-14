@@ -1,0 +1,38 @@
+<div class="component profil">
+	<div class="head">
+		<h1>Votre profil</h1>
+	</div>
+	<div class="fix-body">
+		<div class="body">
+			<div class="center-box">
+				<span class="label">
+					{{ get_faction_statuses(current_player_faction_id)[player.status - 1] }}
+					de
+					{{  get_faction_name(current_player_faction_id) }}
+				</span>
+				<span class="value">{{ player.name }}</span>
+			</div>
+
+			<div class="profil-flag">
+				<img
+					src="{{ asset('media/avatar/big/' ~ player.avatar ~ '.png') }}"
+					alt="avatar de {{ player.name }}"
+				/>
+				<span class="level">{{ player.level }}</span>
+			</div>
+
+			<div class="number-box">
+				<span class="label">expérience</span>
+				<span class="value">{{ player_experience|number }}</span>
+			</div>
+
+			<div class="number-box grey">
+				<span class="label">expérience nécessaire pour le prochain niveau</span>
+				<span class="value">{{ player_missing_experience|number }}</span>
+				<span class="progress-bar">
+					<span style="width: {{ player_experience_progress }}%;" class="content"></span>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>

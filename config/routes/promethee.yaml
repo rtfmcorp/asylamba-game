@@ -1,0 +1,3 @@
+technology:
+    path: /technology
+    controller: App\Modules\Promethee\Infrastructure\Controller\TechnologyController

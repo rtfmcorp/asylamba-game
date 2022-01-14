@@ -1,0 +1,43 @@
+{% extends 'layouts/game.html.twig' %}
+
+{% block body %}
+	{% if has_splash_mode %}
+		<div class="splash-screen">
+			<div class="modal">
+				<img src="{{ asset('avatar/big/jm-' ~ current_player_faction_id ~ '.png') }} . " alt="" />
+				<h1>Bienvenue sur Asylamba</h1>
+				<h2>Afin de bien commencer le jeu, cliquez sur l\'icône du tutoriel. Celui-ci vous guidera dans les premières étapes du jeu.</h2>
+			</div>
+		</div>
+	{% endif %}
+
+	<div id="background-paralax" class="profil"></div>
+
+	{{ include('molecules/profile/subnav.html.twig') }}
+	{{ include('molecules/common/movers.html.twig') }}
+
+	<div id="content">
+		{{ include('molecules/common/advertising.html.twig') }}
+
+		{{ include('components/profile/character.html.twig', {
+			player,
+			player_experience,
+			player_missing_experience,
+			player_experience_progress,
+		}) }}
+
+		{# obFastView component #}
+		{% for orbital_base in player_bases %}
+			{{ include('components/base/fast_view.html.twig', { orbital_base, 'index': loop.index, 'fast_view_profile': true }) }}
+		{% endfor %}
+
+		{% if 1 == player_bases|length %}
+			<div class="component">
+				<div class="head"></div>
+				<div class="fix-body">
+					<div class="body"></div>
+				</div>
+			</div>
+		{% endif %}
+	</div>
+{% endblock body %}

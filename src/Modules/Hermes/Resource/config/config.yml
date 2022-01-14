@@ -19,15 +19,13 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: true
 
-    _instanceof:
-        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
-            tags:
-                - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
+    App\Modules\Hermes\:
+        resource: '%kernel.project_dir%/src/Modules/Hermes/'
+        exclude:
+            - '../../Message'
+            - '../../Model'
+            - '../../Repository'
+            - '../../Resource'
 
-    #App\Modules\Hermes\Handler\:
-    #    resource: '%kernel.project_dir%/src/Modules/Hermes/Handler/*'
-
-    App\Modules\Hermes\Manager\:
-        resource: '%kernel.project_dir%/src/Modules/Hermes/Manager/*'
+    App\Hermes\Domain\Repository\ConversationRepositoryInterface: '@App\Hermes\Infrastructure\Repository\ConversationRepository'

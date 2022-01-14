@@ -19,6 +19,7 @@ use App\Modules\Promethee\Helper\TechnologyHelper;
 use App\Classes\Library\Session\SessionWrapper;
 
 use App\Modules\Demeter\Resource\ColorResource;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class PlayerBonusManager
@@ -29,7 +30,6 @@ class PlayerBonusManager
 
 	public function __construct(
 		protected LawManager $lawManager,
-		protected SessionWrapper $sessionWrapper
 	) {
 	}
 
@@ -61,7 +61,7 @@ class PlayerBonusManager
 		return $playerBonus;
 	}
 
-	public function initialize(PlayerBonus $playerBonus) {
+	public function initialize(SessionInterface $session, PlayerBonus $playerBonus) {
 		# remplissage des bonus avec les technologies
 		$playerBonus->technology = $this->technologyManager->getPlayerTechnology($playerBonus->rPlayer);
 		
@@ -71,7 +71,7 @@ class PlayerBonusManager
 
 		if ($playerBonus->synchronized) {
 			for ($i = 0; $i < PlayerBonus::BONUS_QUANTITY; $i++) { 
-				$this->sessionWrapper->get('playerBonus')->add($i, ($playerBonus->bonus->exist($i)) ? $playerBonus->bonus->get($i) : 0);
+				$session->get('playerBonus')->add($i, ($playerBonus->bonus->exist($i)) ? $playerBonus->bonus->get($i) : 0);
 			}
 		}
 	}

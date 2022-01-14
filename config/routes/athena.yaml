@@ -1,0 +1,13 @@
+switchbase:
+    path: /switchbase/{baseId}/{page}
+    controller: App\Modules\Athena\Infrastructure\Controller\SwitchBaseController
+    defaults:
+        page: 'current'
+
+bases:
+    path: /bases
+    controller: App\Modules\Athena\Infrastructure\Controller\BasesController
+
+financial:
+    path: /financial
+    controller: App\Modules\Athena\Infrastructure\Controller\FinancialController

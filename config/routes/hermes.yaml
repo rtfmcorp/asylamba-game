@@ -1,0 +1,12 @@
+read_all_notifications:
+    path: /notifications/read-all
+
+archive_notification:
+    path: /notifications/{id}/archive
+
+delete_notification:
+    path: /notifications/{id}/delete
+
+list_conversations:
+    path: /messages
+    controller: App\Modules\Hermes\Infrastructure\Controller\Conversation\ListController

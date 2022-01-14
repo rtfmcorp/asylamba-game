@@ -3,15 +3,14 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: true
 
-    _instanceof:
-        Symfony\Component\Messenger\Handler\MessageHandlerInterface:
-            tags:
-                - { name: 'messenger.message_handler', bus: 'messenger.default_bus' }
-
-    App\Modules\Hephaistos\Handler\:
-        resource: '%kernel.project_dir%/src/Modules/Hephaistos/Handler/*'
+    App\Modules\Hephaistos\:
+        resource: '%kernel.project_dir%/src/Modules/Hephaistos/'
+        exclude:
+            - '../../Message'
+            - '../../Model'
+            - '../../Repository'
+            - '../../Resource'
 
     App\Modules\Hephaistos\Handler\DailyRoutineHandler:
         arguments:

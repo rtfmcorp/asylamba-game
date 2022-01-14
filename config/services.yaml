@@ -163,13 +163,9 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\Shared\Controller\:
-        resource: '../src/Shared/Controller/'
+    App\Shared\Infrastructure\Controller\:
+        resource: '../src/Shared/Infrastructure/Controller/'
         tags: ['controller.service_arguments']
-
-    App\Shared\Controller\HomepageController:
-        arguments:
-            $highMode: '%highmode%'
 
     App\Classes\Database\Database:
         public: true

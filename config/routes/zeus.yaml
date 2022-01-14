@@ -1,0 +1,11 @@
+profile:
+    path: /profile
+    controller: App\Modules\Zeus\Infrastructure\Controller\ProfileController
+
+tutorial_validatestep:
+    path: /tutorial/validate-step
+    controller: App\Modules\Zeus\Infrastructure\Controller\Tutorial\StepValidationController
+
+sponsorship:
+    path: /sponsorship
+    controller: App\Modules\Zeus\Infrastracture\Controller\SponsorController

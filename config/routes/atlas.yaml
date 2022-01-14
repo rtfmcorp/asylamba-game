@@ -1,0 +1,7 @@
+map:
+    path: /map
+    controller: App\Modules\Atlas\Infrastructure\Controller\MapController
+
+rank:
+    path: /rankings
+    controller: App\Modules\Atlas\Infrastructure\Controller\RankingsController

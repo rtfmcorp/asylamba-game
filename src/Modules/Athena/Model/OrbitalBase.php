@@ -84,6 +84,10 @@ class OrbitalBase {
 	public $routeManager;
 	public $technoQueues = [];
 	public $commercialShippings = [];
+	public array|null $commercialRoutesData = null;
+	public float|null $storagePercent = null;
+	public array|null $dock1ShipQueues = null;
+	public array|null $dock2ShipQueues = null;
 
 	//GETTERS
 	public function getId() { return $this->rPlace; }
