@@ -30,8 +30,8 @@
 				 	<img alt="ressources" src="{{ asset('media/resources/resource.png') }}" class="icon-color">
 				</span>
 
-				<span class="progress-bar hb bl" title="remplissage : {{ orbital_base.storagePercent }}%">
-					<span style="width: {{ orbital_base.storagePercent }}%;" class="content"></span>
+				<span class="progress-bar hb bl" title="remplissage : {{ orbital_base|base_storage_percent }}%">
+					<span style="width: {{ orbital_base|base_storage_percent }}%;" class="content"></span>
 				</span>
 				<span class="group-link">
 					<a href="{{ path('switchbase', {'baseId': orbital_base.id, 'page': 'refinery'}) }}" class="link hb lt" title="vers la raffinerie">→</a>

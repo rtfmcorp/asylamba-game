@@ -3,7 +3,6 @@
 namespace App\Modules\Zeus\Infrastructure\Controller;
 
 use App\Classes\Entity\EntityManager;
-use App\Classes\Library\Format;
 use App\Modules\Athena\Helper\OrbitalBaseHelper;
 use App\Modules\Athena\Manager\BuildingQueueManager;
 use App\Modules\Athena\Manager\CommercialRouteManager;
@@ -14,7 +13,6 @@ use App\Modules\Athena\Model\OrbitalBase;
 use App\Modules\Athena\Resource\OrbitalBaseResource;
 use App\Modules\Promethee\Helper\TechnologyHelper;
 use App\Modules\Zeus\Manager\PlayerManager;
-use App\Modules\Zeus\Model\PlayerBonus;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -58,14 +56,6 @@ class ProfileController extends AbstractController
 			if ($orbitalBase->getLevelSpatioport() > 0) {
 				$orbitalBase->commercialRouteData = $this->getCommercialRouteNumbers($session, $orbitalBaseHelper, $commercialRouteManager, $orbitalBase);
 			}
-
-			// @TODO Move to dedicated service
-			$storageSpace = $orbitalBaseHelper->getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $orbitalBase->getLevelStorage(), 'storageSpace');
-			$storageBonus = $session->get('playerBonus')->get(PlayerBonus::REFINERY_STORAGE);
-			if ($storageBonus > 0) {
-				$storageSpace += ($storageSpace * $storageBonus / 100);
-			}
-			$orbitalBase->storagePercent = Format::numberFormat($orbitalBase->getResourcesStorage() / $storageSpace * 100);
 
 			// @TODO Move to dedicated service
 			$orbitalBase->dock1ShipQueues = $shipQueueManager->getByBaseAndDockType($orbitalBase->rPlace, 1);

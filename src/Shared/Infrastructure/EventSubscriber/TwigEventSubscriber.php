@@ -50,9 +50,9 @@ class TwigEventSubscriber implements EventSubscriberInterface
 			return;
 		}
 		$currentBase = $this->orbitalBaseManager->get($this->session->get('playerParams')->get('base'));
-		$this->twig->addGlobal('current_orbital_base', $currentBase);
+		$this->twig->addGlobal('current_base', $currentBase);
 		$this->twig->addGlobal('incoming_commanders', $this->commanderManager->getVisibleIncomingAttacks($playerId));
-		$this->twig->addGlobal('outcoming_commanders', $this->commanderManager->getPlayerCommanders($playerId, [Commander::MOVING]));
+		$this->twig->addGlobal('outgoing_commanders', $this->commanderManager->getPlayerCommanders($playerId, [Commander::MOVING]));
 		$this->twig->addGlobal('current_dock1_ship_queues',  $this->shipQueueManager->getByBaseAndDockType($currentBase->rPlace, 1));
 		$this->twig->addGlobal('current_dock2_ship_queues',  $this->shipQueueManager->getByBaseAndDockType($currentBase->rPlace, 2));
 	}

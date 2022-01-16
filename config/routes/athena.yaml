@@ -11,3 +11,23 @@ bases:
 financial:
     path: /financial
     controller: App\Modules\Athena\Infrastructure\Controller\FinancialController
+
+generator:
+    path: /generator
+    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+
+refinery:
+    path: /refinery
+    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+
+dock1:
+    path: /dock1
+    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+
+dock2:
+    path: /dock2
+    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController
+
+technosphere:
+    path: /technosphere
+    controller: App\Modules\Athena\Infrastructure\Controller\RefineryController

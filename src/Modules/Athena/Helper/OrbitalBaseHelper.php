@@ -2,14 +2,20 @@
 
 namespace App\Modules\Athena\Helper;
 
+use App\Classes\Library\Format;
 use App\Modules\Promethee\Helper\TechnologyHelper;
 use App\Modules\Athena\Model\OrbitalBase;
 use App\Modules\Athena\Resource\OrbitalBaseResource;
+use App\Modules\Zeus\Model\PlayerBonus;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class OrbitalBaseHelper
 {
-	public function __construct(protected TechnologyHelper $technologyHelper)
-	{
+	public function __construct(
+		protected TechnologyHelper $technologyHelper,
+		protected RequestStack $requestStack,
+	) {
+
 	}
 	
 	public function isABuilding(int $building): bool
@@ -39,6 +45,16 @@ class OrbitalBaseHelper
 			OrbitalBase::TYP_MILITARY, OrbitalBase::TYP_CAPITAL => 5,
 			default => 0,
 		};
+	}
+
+	public function getStoragePercent(OrbitalBase $orbitalBase): float
+	{
+		$storageSpace = $this->getBuildingInfo(OrbitalBaseResource::STORAGE, 'level', $orbitalBase->getLevelStorage(), 'storageSpace');
+		$storageBonus = $this->requestStack->getSession()->get('playerBonus')->get(PlayerBonus::REFINERY_STORAGE);
+		if ($storageBonus > 0) {
+			$storageSpace += ($storageSpace * $storageBonus / 100);
+		}
+		return Format::numberFormat($orbitalBase->getResourcesStorage() / $storageSpace * 100);
 	}
 
 	// @TODO Check for the need of this method ??
