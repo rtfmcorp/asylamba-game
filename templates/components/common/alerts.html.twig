@@ -1,0 +1,11 @@
+<ul id="alert"></ul>
+
+<ul id="alert-content">
+	{% set flashMessages = app.session.flashBag.all() %}
+	{% for type in flashMessages|keys %}
+		{% for message in flashMessages[type] %}
+		<li data-type='{{ type }}'>
+			{{ message }}
+		</li>
+	{% endfor %}
+</ul>
