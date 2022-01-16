@@ -11,7 +11,10 @@
 */
 namespace App\Modules\Promethee\Model;
 
-class TechnologyQueue {
+use App\Shared\Domain\Model\QueueableInterface;
+
+class TechnologyQueue implements QueueableInterface
+{
 	/** @var int **/
 	public $id;
 	/** @var int **/
@@ -158,5 +161,15 @@ class TechnologyQueue {
 	public function getEndedAt()
 	{
 		return $this->dEnd;
+	}
+
+	public function getEndDate(): string
+	{
+		return $this->dEnd;
+	}
+
+	public function getResourceIdentifier(): int
+	{
+		return $this->technology;
 	}
 }

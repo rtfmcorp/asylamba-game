@@ -55,12 +55,10 @@ class ShipResource {
 		if(self::isAShip($shipNumber)) {
 			if(in_array($info, array('codeName', 'name', 'class', 'pev', 'life', 'speed', 'defense', 'attack', 'cost', 'time', 'resourcePrice', 'points', 'imageLink', 'techno', 'description'))) {
 				return self::$ship[$shipNumber][$info];
-			} else {
-				throw new ErrorException('info inconnue dans getInfo de ShipResource');
 			}
-		} else {
-			throw new ErrorException('shipId inconnu (entre 0 et 14) dans getInfo de ShipResource');
+			throw new \ErrorException('info inconnue dans getInfo de ShipResource');
 		}
+		throw new \ErrorException('shipId inconnu (entre 0 et 14) dans getInfo de ShipResource');
 	}
 
 	private static $ship = array(

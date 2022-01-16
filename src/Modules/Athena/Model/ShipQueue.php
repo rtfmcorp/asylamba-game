@@ -11,7 +11,10 @@
 */
 namespace App\Modules\Athena\Model;
 
-class ShipQueue {
+use App\Shared\Domain\Model\QueueableInterface;
+
+class ShipQueue implements QueueableInterface
+{
 	// ATTRIBUTES
 	public $id;
 	public $rOrbitalBase;
@@ -23,5 +26,15 @@ class ShipQueue {
 
 	public function getId() { 
 		return $this->id; 
+	}
+
+	public function getEndDate(): string
+	{
+		return $this->dEnd;
+	}
+
+	public function getResourceIdentifier(): int
+	{
+		return $this->shipNumber;
 	}
 }

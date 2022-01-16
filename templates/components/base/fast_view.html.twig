@@ -47,14 +47,14 @@
 			<div class="queue">
 				{% for building_queue in orbital_base.buildingQueues %}
 					{% set realSizeQueue = realSizeQueue + 1 %}
-					{% set nextTime = building_queue|building_queue_duration  %}
+					{% set nextTime = building_queue|queue_duration  %}
 					{% set nextTotalTime = nextTotalTime + building_queue|building_queue_time %}
 
 					<div class="item {% if realSizeQueue > 1 %}active{% endif %} progress" data-progress-output="lite" data-progress-no-reload="true" data-progress-current-time="{{ nextTime }}" data-progress-total-time="{{ nextTotalTime }}">
 						<a class="button hb lt" title="annuler la construction (attention, vous ne récupérerez que {{ building_resource_refund * 100 }}% du montant investi)">×</a>
-						<img class="picto" src="{{ asset('media/orbitalbase/' ~  building_queue|building_queue_picture ~ '.png') }}" alt="" />
+						<img class="picto" src="{{ asset('media/orbitalbase/' ~  building_queue|queue_picture ~ '.png') }}" alt="" />
 						<strong>
-							{{ building_queue|building_queue_name }}
+							{{ building_queue|queue_name }}
 							 <span class="level">niv. {{ building_queue.targetLevel }}</span>
 						</strong>
 						<em>
@@ -85,7 +85,7 @@
 					{% for ship_queue in orbital_base.dock1ShipQueues %}
 						{% set realSizeQueue = realSizeQueue + 1 %}
 						{% set totalTimeShips = ship_queue|ship_queue_time %}
-						{% set remainingTime = ship_queue|ship_queue_duration %}
+						{% set remainingTime = ship_queue|queue_duration %}
 
 						{% if realSizeQueue > 1 %}
 							<div class="item">
@@ -128,7 +128,7 @@
 					{% for ship_queue in orbital_base.dock1ShipQueues %}
 						{% set realSizeQueue = realSizeQueue + 1 %}
 						{% set totalTimeShips = ship_queue|ship_queue_time %}
-						{% set remainingTime = ship_queue|ship_queue_duration %}
+						{% set remainingTime = ship_queue|queue_duration %}
 
 						{% if realSizeQueue > 1 %}
 							<div class="item">
@@ -173,10 +173,10 @@
 					{% for technology_queue in orbital_base.technoQueues %}
 						{% set realSizeQueue = realSizeQueue + 1 %}
 						{% set totalTimeTechno = totalTimeTechno + technology_queue|technology_queue_time %}
-						{% set remainingTotalTime = technology_queue|technology_queue_duration %}
+						{% set remainingTotalTime = technology_queue|queue_duration %}
 
 						<div class="item active progress" data-progress-output="lite" data-progress-no-reload="true" data-progress-current-time="{{ remainingTotalTime }}" data-progress-total-time="{{ totalTimeTechno }}">
-							<img class="picto" src="{{ asset('media/technology/picto/' ~ technology_queue|technology_queue_picture ~ '.png') }}" alt="" />
+							<img class="picto" src="{{ asset('media/technology/picto/' ~ technology_queue|queue_picture ~ '.png') }}" alt="" />
 							<strong>
 								{% if technology_queue|is_unblocking_technology %}
 								 	<span class="level">niv. {{ technology_queue.targetLevel }}</span>

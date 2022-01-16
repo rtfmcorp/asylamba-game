@@ -11,7 +11,10 @@
 */
 namespace App\Modules\Athena\Model;
 
-class BuildingQueue {
+use App\Shared\Domain\Model\QueueableInterface;
+
+class BuildingQueue implements QueueableInterface
+{
 	// ATTRIBUTES
 	public $id;
 	public $rOrbitalBase;
@@ -19,6 +22,16 @@ class BuildingQueue {
 	public $targetLevel;
 	public $dStart;
 	public $dEnd;
+
+	public function getEndDate(): string
+	{
+		return $this->dEnd;
+	}
+
+	public function getResourceIdentifier(): int
+	{
+		return $this->buildingNumber;
+	}
 
 	public function getId() {
 		return $this->id;

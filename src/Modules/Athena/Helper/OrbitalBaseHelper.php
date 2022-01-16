@@ -41,10 +41,12 @@ class OrbitalBaseHelper
 		};
 	}
 
+	// @TODO Check for the need of this method ??
 	public function getInfo($buildingNumber, $info, $level = 0, $sup = 'default') {
 		return $this->getBuildingInfo($buildingNumber, $info, $level, $sup);
 	}
-	
+
+	// @TODO Separate building logic from orbital-ase logic in a dedicated helper (for now)
 	public function getBuildingInfo($buildingNumber, $info, $level = 0, $sup = 'default') {
 		if($this->isABuilding($buildingNumber)) {
 			if (\in_array($info, ['name', 'column', 'frenchName', 'imageLink', 'description'])) {
